@@ -79,6 +79,7 @@
 
 	var/check_mutations=0 // Check mutations on next life tick
 
+	var/last_shush = 0 // disarm intent shushing cooldown
 	var/lastFart = 0 // Toxic fart cooldown.
 	var/last_emote_sound = 0 // Prevent scream spam in some situations
 
@@ -89,3 +90,7 @@
 	fire_dmi = 'icons/mob/OnFire.dmi'
 	fire_sprite = "Standing"
 	plane = HUMAN_PLANE
+
+	var/show_client_status_on_examine = TRUE //If false, don't display catatonic/braindead messages to non-admins
+
+	var/become_zombie_after_death = FALSE

@@ -181,7 +181,7 @@ var/global/list/battery_online =	list(
 	add_fingerprint(user)
 	ui_interact(user)
 
-/obj/machinery/power/battery/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/power/battery/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 
 	if(stat & BROKEN)
 		return
@@ -200,7 +200,7 @@ var/global/list/battery_online =	list(
 	data["outputLoad"] = round(loaddemand)
 
 	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
@@ -282,9 +282,7 @@ var/global/list/battery_online =	list(
 			return
 		else if(prob(15)) //Power drain
 			message_admins("<span class='warning'>SMES power drain in [get_area(src)]</span>")
-			var/datum/effect/effect/system/spark_spread/s = new
-			s.set_up(3, 1, src)
-			s.start()
+			spark(src)
 			if(prob(50))
 				emp_act(1)
 			else

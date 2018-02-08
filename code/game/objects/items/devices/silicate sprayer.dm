@@ -164,16 +164,16 @@
 	if(get_dist(A, user) > 1) // I purposely don't use proximity_flag so you can get to windows without needing adjacency. (window behind another window for example.)
 		return
 
-	if(!get_amount())
-		to_chat(user, "<span class='notice'>\The [src] is out of silicate!</span>")
-		return 1
-
 	if(iswindow(A))
 		return preattack_window(A, user)
 	else if(istype(A, /turf/simulated/floor/glass))
 		return preattack_glassfloor(A, user)
 
 /obj/item/device/silicate_sprayer/advanced/preattack_window(var/atom/A, var/mob/user)
+	if(!get_amount())
+		to_chat(user, "<span class='notice'>\The [src] is out of silicate!</span>")
+		return 1
+
 	var/obj/structure/window/W = A
 	var/initial_health = initial(W.health)
 
@@ -199,6 +199,10 @@
 	return 1
 
 /obj/item/device/silicate_sprayer/advanced/preattack_glassfloor(var/atom/A, var/mob/user)
+	if(!get_amount())
+		to_chat(user, "<span class='notice'>\The [src] is out of silicate!</span>")
+		return 1
+
 	var/turf/simulated/floor/glass/G = A
 	var/initial_health = initial(G.health)
 

@@ -63,6 +63,10 @@
 		if(!(src.syndie))
 			return -1//Prevents broadcast of messages over devices lacking the encryption
 
+	if(freq == RAID_FREQ)
+		if(!(src.raider))
+			return -1//Prevents broadcast of messages over devices lacking the encryption, birb edition
+
 	return canhear_range
 
 
@@ -102,7 +106,7 @@
 						wires.UpdateCut(i,1)
 				return 1
 		if(1)
-			if(iscoil(W))
+			if(iscablecoil(W))
 				var/obj/item/stack/cable_coil/coil = W
 				if(coil.amount < 5)
 					to_chat(user, "<span class='warning'>You need more cable for this!</span>")

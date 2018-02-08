@@ -265,9 +265,7 @@ By design, d1 is the smallest direction and d2 is the highest
 			return 0
 
 		if(electrocute_mob(user, powernet, src, siemens_coeff))
-			var/datum/effect/effect/system/spark_spread/s = new
-			s.set_up(5,1,src)
-			s.start()
+			spark(src, 5)
 			return 1
 
 	return 0

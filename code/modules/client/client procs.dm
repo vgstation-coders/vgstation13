@@ -460,10 +460,11 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 		if(parallax_initialized)
 			mob.hud_used.update_parallax_values()
 
-	for(var/obj/structure/window/W in one_way_windows)
-		if(((W.x >= (mob.x - view)) && (W.x <= (mob.x + view))) && ((W.y >= (mob.y - view)) && (W.y <= (mob.y + view))))
-			update_one_way_windows(view(view,mob))	//Updating the one-way window overlay if the client has one in the range of its view.
-			break
+	if(!istype(mob, /mob/dead/observer))	//If they are neither an observer nor someone with X-ray vision
+		for(var/obj/structure/window/W in one_way_windows)
+			if(((W.x >= (mob.x - view)) && (W.x <= (mob.x + view))) && ((W.y >= (mob.y - view)) && (W.y <= (mob.y + view))))
+				update_one_way_windows(view(view,mob))	//Updating the one-way window overlay if the client has one in the range of its view.
+				break
 
 /client/proc/update_one_way_windows(var/list/v)		//Needed for one-way windows to work.
 	var/Image										//Code heavily cannibalized from a demo made by Byond member Shadowdarke.

@@ -11,7 +11,7 @@
 * around us, then checks the difference.
 */
 /proc/getOPressureDifferential(var/turf/loc)
-	var/minp=16777216; //What is even the significance of this number?
+	var/minp=SHORT_REAL_LIMIT;
 	var/maxp=0;
 	for(var/dir in cardinal)
 		var/turf/simulated/T=get_turf(get_step(loc,dir))
@@ -33,7 +33,7 @@
 * around us, then checks the difference.
 */
 /proc/getPressureDifferentialFromTurfList(var/list/turf/simulated/turf_list)
-	var/minp=16777216; // Lowest recorded pressure.
+	var/minp=SHORT_REAL_LIMIT; // Lowest recorded pressure.
 	var/maxp=0;        // Highest recorded pressure.
 	for(var/turf/simulated/T in turf_list)
 		var/cp = 0

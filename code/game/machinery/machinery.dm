@@ -382,6 +382,7 @@ Class Procs:
 				to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
 				return 1
 		if ((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
+			to_chat(usr, "<span class='warning'>WARNING: Connection failure. Reduce range.</span>")
 			return 1
 	else if(!custom_aghost_alerts)
 		log_adminghost("[key_name(usr)] screwed with [src] ([href])!")
@@ -580,8 +581,7 @@ Class Procs:
 				to_chat(user, "\The [src] has to be unwelded from the floor first.")
 				return -1 //state set to 2, can't do it
 			else
-				// wrenchAnchor returns -1 on check failures, for some reason.
-				if(wrenchAnchor(user) == 1 && machine_flags & FIXED2WORK) //wrenches/unwrenches into place if possible, then updates the power and state if necessary
+				if(wrenchAnchor(user) && machine_flags & FIXED2WORK) //wrenches/unwrenches into place if possible, then updates the power and state if necessary
 					state = anchored
 					power_change() //updates us to turn on or off as necessary
 					return 1
@@ -637,9 +637,7 @@ Class Procs:
 		return 0
 	if(!prob(prb))
 		return 0
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(5, 1, src)
-	s.start()
+	spark(src, 5)
 	if(siemenspassed == -1) //this means it hasn't been set by proc arguments, so we can set it ourselves safely
 		siemenspassed = 0.7
 	if (electrocute_mob(user, get_area(src), src, siemenspassed))
@@ -717,6 +715,11 @@ Class Procs:
 
 
 /obj/machinery/kick_act(mob/living/carbon/human/H)
+	if(H.locked_to && isobj(H.locked_to) && H.locked_to != src)
+		var/obj/O = H.locked_to
+		if(O.onBuckledUserKick(H, src))
+			return //don't return 1! we will do the normal "touch" action if so!
+
 	playsound(get_turf(src), 'sound/effects/grillehit.ogg', 50, 1) //Zth: I couldn't find a proper sound, please replace it
 
 	H.visible_message("<span class='danger'>[H] kicks \the [src].</span>", "<span class='danger'>You kick \the [src].</span>")

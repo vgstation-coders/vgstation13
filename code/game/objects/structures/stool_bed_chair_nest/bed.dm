@@ -29,6 +29,13 @@
 	I.dir = dir
 	. = ..()
 
+/obj/structure/bed/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(air_group || (height==0))
+		return 1
+	if(istype(mover) && mover.checkpass(PASSTABLE)) //NOTE: This includes ALL chairs as well! Vehicles have their own override.
+		return 1
+	return ..()
+
 /obj/structure/bed/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
@@ -115,6 +122,9 @@
 
 	lock_atom(M, lock_type)
 
+	if(M.pulledby)
+		M.pulledby.start_pulling(src)
+
 /*
  * Roller beds
  */
@@ -138,6 +148,8 @@
 	desc = "A collapsed roller bed that can be carried around."
 	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "folded"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/lokiamis.dmi', "right_hand" = 'icons/mob/in-hand/right/lokiamis.dmi')
+	item_state = "folded"
 	var/bed_type = /obj/structure/bed/roller
 	w_class = W_CLASS_LARGE // Can't be put in backpacks. Oh well.
 
@@ -243,6 +255,22 @@
 	down_state = "borgbed_down"
 	roller_type = /obj/item/roller/borg
 
+//A surgical roller bed that allows you to do surgery on it 100% of the time in place of the 75% chance of the normal one.
+/obj/item/roller/surgery
+	name = "mobile operating table"
+	desc = "A collapsed mobile operating table that can be carried around."
+	icon = 'icons/obj/rollerbed.dmi'
+	icon_state = "adv_folded"
+	bed_type = /obj/structure/bed/roller/surgery
+
+/obj/structure/bed/roller/surgery
+	name = "mobile operating table"
+	desc = "A new meaning to saving people in the hall. It's much more stable than a regular roller bed."
+	icon = 'icons/obj/rollerbed.dmi'
+	icon_state = "adv_down"
+	up_state ="adv_up"
+	down_state = "adv_down"
+	roller_type = /obj/item/roller/surgery
 
 /datum/locking_category/buckle/bed
 	flags = LOCKED_SHOULD_LIE

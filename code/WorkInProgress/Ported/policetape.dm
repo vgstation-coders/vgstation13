@@ -5,6 +5,7 @@
 	icon_state = "rollstart"
 	flags = FPRINT
 	w_class = W_CLASS_TINY
+	restraint_resist_time = 20 SECONDS
 	var/turf/start
 	var/turf/end
 	var/tape_type = /obj/item/tape

@@ -36,7 +36,7 @@
 	projectilesound = 'sound/weapons/Gunshot.ogg'
 	casingtype = /obj/item/ammo_casing/c9mm
 
-	environment_smash = 0
+	environment_smash_flags = 0
 
 	var/ammo = 8
 	var/reloads = 1
@@ -332,7 +332,7 @@
 	casingtype = null
 	ranged_cooldown_cap = 1
 
-	environment_smash = 3
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | SMASH_RWALLS
 
 	min_oxy = 0
 	max_oxy = 0

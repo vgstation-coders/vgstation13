@@ -276,6 +276,19 @@
 	syllables = list("squeak")
 	flags = RESTRICTED
 
+/datum/language/martian
+	name = LANGUAGE_MARTIAN
+	desc = "Complex warbles and burbles used by the odd squid people."
+	speech_verb = "burbles"
+	ask_verb = "blorbles"
+	exclaim_verb = "blurbs"
+	key = "@"
+	colour = "grey"
+	space_chance = 35
+	native = 1
+	flags = RESTRICTED
+	syllables = list("khah","kig","kitol","kaor","bar","dar","dator","lok","ma","mu","o","och","gort","gal")
+
 // Language handling.
 /mob/proc/add_language(var/language)
 

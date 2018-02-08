@@ -1,0 +1,76 @@
+<!--
+Title: R-UST fuel injector
+Used In File(s): /code/WorkInProgress/Cael_Aislinn/Rust/fuel_injector.dm
+-->
+{{if data.locked}}
+	<div class="notice">Swipe card to unlock.</div>
+{{else}}
+	<div class="notice">Remember to lock with ID card after use.</div>
+
+    <div class="statusDisplay">
+        <div class="line">
+            <div class="statusLabel">ID tag:</div>
+            <div class="statusValue">
+                {{:helper.link(data.id_tag, 'pencil', {'modify_tag': 1})}}
+            </div>
+        </div>
+    </div>
+
+    <div class="statusDisplay">
+        <div class="line">
+            <div class="statusLabel">Power status:</div>
+            <div class="statusValue">
+                <span class="{{:data.power_status_class}}">{{:data.active_power_usage}}/{{:data.cached_power_avail}} W</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="statusDisplay">
+        <div class="line">
+            <div class="statusLabel">Injector status:</div>
+            <div class="statusValue">
+                {{:helper.link(data.injecting ? 'Injecting' : 'Standby', 'power', {'toggle_injecting': 1}, null, data.injecting ? 'linkOn' : null)}}
+            </div>
+        </div>
+        <div class="line">
+            <div class="statusLabel">Remote control:</div>
+            <div class="statusValue">
+                {{:helper.link(data.remote_access_enabled ? 'Enabled' : 'Disabled', 'gear', {'toggle_remote': 1}, null, data.remote_access_enabled ? 'linkOn' : null)}}
+            </div>
+        </div>
+    </div>
+          
+    <div class="statusDisplay">
+        <div class="line">
+            <div class="statusLabel">Fuel consumption:</div>
+            <div class="statusValue">
+                {{:helper.precisionRound(data.fuel_usage, 4)}}%
+                {{:helper.link('Change', 'pencil', {'fuel_usage': 1}, null, null)}}
+            </div>
+        </div>
+    </div>
+
+    <div class="statusDisplay">
+        <div class="line">
+            <div class="statusLabel">Fuel assembly port status:</div>
+            <div class="statusValue">
+            {{if data.has_assembly}}
+                <span class="good">Found</span>
+                {{:helper.link('Emergency eject', 'eject', {'emergency_fuel_assembly': 1}, null, null)}}
+            {{else}}
+                <span class="bad">Not found</span>
+                {{:helper.link(
+                    data.emergency_insert_ready ? 'Cancel emergency insertion' : 'Begin emergency insertion',
+                    data.emergency_insert_ready ? 'close' : 'transfer-e-w',
+                    {'emergency_fuel_assembly': 1}, null, null)
+                }}
+            {{/if}}
+            {{:helper.link(
+                data.has_assembly ? 'Eject assembly to port' : 'Draw assembly from port',
+                data.has_assembly ? 'eject' : 'arrowstop-1-s',
+                {'fuel_assembly': 1}, null, null)
+            }}
+            </div>
+        </div>
+    </div>
+{{/if}}

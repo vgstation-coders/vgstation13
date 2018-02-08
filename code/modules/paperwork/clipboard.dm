@@ -36,3 +36,14 @@
 	if(istype(W,/obj/item/weapon/paper))
 		toppaper = W
 	..() //also calls update_icon()
+
+/obj/item/weapon/storage/bag/clipboard/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0)
+	..()
+	for(var/i = contents.len; i>0; i--)
+		if(istype(contents[i],/obj/item/weapon/paper))
+			toppaper = W
+			update_icon()
+			return
+	//If we looped through everything and there's still no paper
+	toppaper = null
+	update_icon()

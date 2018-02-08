@@ -1,118 +1,65 @@
-
-
-
-/*
-
-	All telecommunications interactions:
-
-*/
+#define TELECOMMS_MAX_INTEGRITY 100
 
 /obj/machinery/telecomms
 	var/temp = "" // output message
-	var/construct_op = 0
-	machine_flags = MULTITOOL_MENU
+	machine_flags = MULTITOOL_MENU | SCREWTOGGLE | CROWDESTROY
 
+/obj/item/weapon/circuitboard/telecomms
+	var/integrity = TELECOMMS_MAX_INTEGRITY
 
-/obj/machinery/telecomms/attackby(obj/item/P as obj, mob/user as mob)
+/obj/machinery/telecomms/proc/get_integrity()
+	var/obj/item/weapon/circuitboard/telecomms/C = locate() in component_parts
+	if(istype(C))
+		return C.integrity
+	. = TELECOMMS_MAX_INTEGRITY // If there's no circuitboard (allinone.dm) just treat it as maximum integrity
 
-	// Using a multitool lets you access the receiver's interface
+/obj/machinery/telecomms/proc/set_integrity(var/new_integrity)
+	var/obj/item/weapon/circuitboard/telecomms/C = locate() in component_parts
+	if (!istype(C))
+		return
+	C.integrity = Clamp(new_integrity, 0, TELECOMMS_MAX_INTEGRITY)
+
+/obj/item/weapon/circuitboard/telecomms/attackby(var/obj/item/W, var/mob/user, var/params)
+	if(issolder(W))
+		if(integrity >= TELECOMMS_MAX_INTEGRITY)
+			to_chat(user, "It's not damaged.")
+			return
+		var/obj/item/weapon/solder/S = W
+		if (!S.remove_fuel(2, user))
+			to_chat(user, "You need more fuel.")
+			return
+		playsound(get_turf(user), 'sound/items/Welder.ogg', 100, 1)
+		integrity = TELECOMMS_MAX_INTEGRITY
+		to_chat(user, "<span class='notice'>You repair the damaged internals of \the [src].</span>")
+		updateUsrDialog()
+		return 1
+
+/obj/machinery/telecomms/attackby(var/obj/item/W, var/mob/user)
 	. = ..()
 	if(.)
-		return .
+		return
+	if(issolder(W))
+		. = TRUE
+		if(!panel_open)
+			to_chat(user, "You need to open the maintenance panel first!")
+			return
+		var/obj/item/weapon/circuitboard/telecomms/C = locate() in component_parts
+		if(istype(C))
+			C.attackby(W, user)
+	update_power_and_icon()
 
-	switch(construct_op)
-		if(0)
-			if(isscrewdriver(P))
-				to_chat(user, "You unfasten the bolts.")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-				construct_op ++
-		if(1)
-			if(isscrewdriver(P))
-				to_chat(user, "You fasten the bolts.")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-				construct_op --
-			if(iswrench(P))
-				to_chat(user, "You dislodge the external plating.")
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
-				construct_op ++
-		if(2)
-			if(iswrench(P))
-				to_chat(user, "You secure the external plating.")
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
-				construct_op --
-			if(iswirecutter(P))
-				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
-				to_chat(user, "You remove the cables.")
-				construct_op ++
-				var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil( user.loc )
-				A.amount = 5
-				stat |= BROKEN // the machine's been borked!
-		if(3)
-			if(istype(P, /obj/item/stack/cable_coil))
-				var/obj/item/stack/cable_coil/A = P
-				if(A.amount >= 5)
-					to_chat(user, "You insert the cables.")
-					A.amount -= 5
-					if(A.amount <= 0)
-						user.drop_item(A, force_drop = 1)
-						returnToPool(A)
-					construct_op --
-					stat &= ~BROKEN // the machine's not borked anymore!
-				else
-					to_chat(user, "You need more cable")
-			if(iscrowbar(P))
-				to_chat(user, "You begin prying out the circuit board and components...")
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				if(do_after(user, src,60))
-					to_chat(user, "You finish prying out the components.")
-
-					// Drop all the component stuff
-					if(contents.len > 0)
-						for(var/obj/x in src)
-							x.forceMove(user.loc)
-					else
-
-						// If the machine wasn't made during runtime, probably doesn't have components:
-						// manually find the components and drop them!
-						var/newpath = text2path(circuitboard)
-						var/obj/item/weapon/circuitboard/C = new newpath
-						for(var/I in C.req_components)
-							for(var/i = 1, i <= C.req_components[I], i++)
-								newpath = text2path(I)
-								var/obj/item/s = new newpath
-								s.forceMove(user.loc)
-								if(istype(s, /obj/item/stack/cable_coil))
-									var/obj/item/stack/cable_coil/A = s
-									A.amount = 1
-
-						// Drop a circuit board too
-						C.forceMove(user.loc)
-
-					// Create a machine frame and delete the current machine
-					var/obj/machinery/constructable_frame/machine_frame/F = new
-					F.set_build_state(2)
-					F.forceMove(src.loc)
-					qdel(src)
-
-
-/obj/machinery/telecomms/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	attack_hand(user)
-
-/obj/machinery/telecomms/attack_hand(var/mob/user as mob)
+/obj/machinery/telecomms/attack_hand(var/mob/user)
 	update_multitool_menu(user)
 
-/obj/machinery/telecomms/proc/formatInput(var/label,var/varname, var/input)
-	var/value = vars[varname]
-	if(!value || value=="")
-		value="-----"
+/obj/machinery/telecomms/proc/formatInput(var/label, var/varname, var/input)
+	var/value = vars[varname] ||  "-----"
 	return "<b>[label]:</b> <a href=\"?src=\ref[src];input=[varname]\">[value]</a>"
 
-/obj/machinery/telecomms/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
+/obj/machinery/telecomms/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	// You need a multitool to use this, or be silicon
 	if(!issilicon(user))
 		// istype returns false if the value is null
-		if(!istype(user.get_active_hand(), /obj/item/device/multitool))
+		if(!ismultitool(user.get_active_hand()))
 			return
 
 	if(stat & (BROKEN|NOPOWER))
@@ -122,7 +69,9 @@
 
 	dat = {"
 		<p>[temp]</p>
-		<p><b>Power Status:</b> <a href='?src=\ref[src];input=toggle'>[src.toggled ? "On" : "Off"]</a></p>"}
+		<p><b>Power Status:</b> <a href='?src=\ref[src];input=toggle'>[toggled ? "On" : "Off"]</a></p>
+		<p><b>Integrity:</b> [Clamp(get_integrity(), 0, TELECOMMS_MAX_INTEGRITY)]%</p>
+	"}
 	if(on && toggled)
 		dat += {"
 			<p>[formatInput("Identification String","id","id")]</p>
@@ -130,7 +79,7 @@
 			<p><b>Prefabrication:</b> [autolinkers.len ? "TRUE" : "FALSE"]</p>
 		"}
 		if(hide)
-			dat += "<p>Shadow Link: ACTIVE</p>"
+			dat += "<p><b>Shadow Link: ACTIVE</b></p>"
 
 		//Show additional options for certain machines.
 		dat += Options_Menu()
@@ -284,7 +233,7 @@
 			if("toggle")
 				src.toggled = !src.toggled
 				temp = "<font color = #666633>-% [src] has been [src.toggled ? "activated" : "deactivated"].</font color>"
-				update_power()
+				update_power_and_icon()
 
 			/*
 			if("hide")
@@ -299,11 +248,11 @@
 					temp = "<font color = #666633>-% New ID assigned: \"[id]\" %-</font color>"
 
 			if("network")
-				var/newnet = input(usr, "Specify the new network for this machine. This will break all current links.", src, network) as null|text
+				var/newnet = reject_bad_text(input(usr, "Specify the new network for this machine. This will break all current links.", src, network) as null|text)
 				if(newnet && canAccess(usr))
 
 					if(length(newnet) > 15)
-						temp = "<font color = #666633>-% Too many characters in new network tag %-</font color>"
+						temp = "<font color = #666633>-% Too many characters in new network tag (15 max) %-</font color>"
 
 					else
 						for(var/obj/machinery/telecomms/T in links)
@@ -319,7 +268,7 @@
 				if(newfreq && canAccess(usr))
 					if(findtext(num2text(newfreq), "."))
 						newfreq *= 10 // shift the decimal one place
-					if (newfreq != SYND_FREQ)
+					if(!(newfreq == SYND_FREQ || newfreq == RAID_FREQ))
 						if(!(newfreq in freq_listening) && newfreq < 10000)
 							freq_listening.Add(newfreq)
 							temp = "<font color = #666633>-% New frequency filter assigned: \"[newfreq] GHz\" %-</font color>"
@@ -338,17 +287,21 @@
 	usr.set_machine(src)
 	updateUsrDialog()
 
-/obj/machinery/telecomms/unlinkFrom(var/mob/user, var/mob/O)
+// NOTE: A user won't be provided if unlinked by deletion!
+/obj/machinery/telecomms/unlinkFrom(var/mob/user, var/obj/O)
+	var/obj/machinery/telecomms/T=O
 	if(O && O in links)
-		var/obj/machinery/telecomms/T=O
 		if(T.links)
 			T.links.Remove(src)
 		links.Remove(O)
-		temp = "<font color = #666633>-% Removed \ref[T] [T.name] from linked entities. %-</font color>"
-		return 1
+		. = 1
 	else
-		temp = "<font color = #666633>-% Unable to locate machine to unlink from, try again. %-</font color>"
-		return 0
+		. = 0
+	if(user) // This was a manual unlink, update the status display
+		if(.)
+			temp = "<font color = #666633>-% Removed \ref[T] [T.name] from linked entities. %-</font color>"
+		else
+			temp = "<font color = #666633>-% Unable to locate machine to unlink from, try again. %-</font color>"
 
 /obj/machinery/telecomms/linkWith(var/mob/user, var/mob/O)
 	if(O && O != src && istype(O, /obj/machinery/telecomms))
@@ -369,6 +322,8 @@
 		return 0
 
 /obj/machinery/telecomms/proc/canAccess(var/mob/user)
-	if(issilicon(user) || in_range(src,user))
-		return 1
-	return 0
+	if(!issilicon(user) && !in_range(src, user))
+		return FALSE
+	return !user.incapacitated()
+
+#undef TELECOMMS_MAX_INTEGRITY

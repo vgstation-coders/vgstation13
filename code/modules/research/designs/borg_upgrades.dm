@@ -22,19 +22,19 @@
 	name = "medical module board"
 	desc = "Used to give a medical cyborg surgery tools."
 	id = "medical_module_surgery"
-	req_tech = list(Tc_BIOTECH = 3, Tc_ENGINEERING = 3)
+	req_tech = list(Tc_BIOTECH = 3, Tc_ENGINEERING = 3, Tc_ANOMALY = 2)
 	build_type = MECHFAB
-	materials = list(MAT_IRON = 80000, MAT_GLASS = 20000)
+	materials = list(MAT_IRON = 80000, MAT_GLASS = 20000, MAT_SILVER=5000)
 	build_path = /obj/item/borg/upgrade/medical/surgery
 	category = "Robotic_Upgrade_Modules"
 
 /datum/design/borg_service_upgrade
-	name = "service module board"
+	name = "service module cooking upgrade board"
 	desc = "Used to give a service cyborg cooking tools."
 	id = "borg_service_module"
-	req_tech = list(Tc_BIOTECH = 2, Tc_ENGINEERING = 3, Tc_PROGRAMMING = 2)
+	req_tech = list(Tc_BIOTECH = 2, Tc_ENGINEERING = 3, Tc_PROGRAMMING = 2, Tc_ANOMALY = 2)
 	build_type = MECHFAB
-	materials = list(MAT_IRON = 60000, MAT_GLASS = 10000)
+	materials = list(MAT_IRON = 60000, MAT_GLASS = 10000, MAT_GOLD=5000)
 	build_path = /obj/item/borg/upgrade/service
 	category = "Robotic_Upgrade_Modules"
 
@@ -97,3 +97,23 @@
 	build_path = /obj/item/borg/upgrade/jetpack
 	category = "Robotic_Upgrade_Modules"
 	materials = list(MAT_IRON=10000,MAT_PLASMA=15000,MAT_URANIUM = 20000)
+
+/datum/design/borg_organ_gripper_board
+	name = "cyborg organ gripper module"
+	desc = "Used to give a medical cyborg a organ gripper."
+	id = "borg_organ_gripper_board"
+	req_tech = list(Tc_BIOTECH = 5, Tc_ENGINEERING = 4, Tc_ANOMALY = 3)
+	build_type = MECHFAB
+	build_path = /obj/item/borg/upgrade/organ_gripper
+	category = "Robotic_Upgrade_Modules"
+	materials = list(MAT_IRON=80000 , MAT_PLASMA=50000 , MAT_SILVER=5000 , MAT_GOLD=5000 , MAT_PLASTIC=5000)
+
+/datum/design/borg_magnetic_gripper_board
+	name = "cyborg magnetic gripper module"
+	desc = "Used to give a engineering cyborg a magnetic gripper."
+	id = "borg_magnetic_gripper_board"
+	req_tech = list(Tc_MAGNETS = 5, Tc_ENGINEERING = 5, Tc_ANOMALY = 3)
+	build_type = MECHFAB
+	build_path = /obj/item/borg/upgrade/magnetic_gripper
+	category = "Robotic_Upgrade_Modules"
+	materials = list(MAT_IRON=80000 , MAT_PLASMA=50000 , MAT_URANIUM=5000 , MAT_DIAMOND=5000, MAT_PLASTIC=5000)

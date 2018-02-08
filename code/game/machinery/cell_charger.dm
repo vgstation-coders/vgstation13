@@ -10,7 +10,7 @@
 	active_power_usage = 10 //Power is already drained to charge batteries
 	power_channel = EQUIP
 	var/obj/item/weapon/cell/charging = null
-	var/transfer_rate = 200 //How much power do we output every process tick ?
+	var/transfer_rate = 1500 //How much power do we output every process tick ?
 	var/transfer_efficiency = 0.7 //How much power ends up in the battery in percentage ?
 	var/transfer_rate_coeff = 1 //What is the quality of the parts that transfer energy (capacitators) ?
 	var/transfer_efficiency_bonus = 0 //What is the efficiency "bonus" (additive to percentage) from the parts used (scanning module) ?
@@ -62,7 +62,7 @@
 	..()
 	to_chat(user, "There's [charging ? "a" : "no"] cell in the charger.")
 	if(charging)
-		to_chat(user, "Current charge: [charging.charge]")
+		to_chat(user, "Current charge: [round(charging.percent() )]%")
 
 /obj/machinery/cell_charger/attackby(obj/item/weapon/W, mob/user)
 	if(stat & BROKEN)
@@ -99,9 +99,7 @@
 /obj/machinery/cell_charger/attack_hand(mob/user)
 	if(charging)
 		if(emagged) //Oh shit nigger what are you doing
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(5, 1, src)
-			s.start()
+			spark(src, 5)
 			spawn(15)
 				explosion(src.loc, -1, 1, 3, adminlog = 0) //Overload
 				Destroy(src) //It exploded, rip
@@ -114,11 +112,11 @@
 		chargelevel = -1
 		updateicon()
 
-/obj/machinery/cell_charger/wrenchAnchor(mob/user)
+/obj/machinery/cell_charger/wrenchAnchor(var/mob/user)
 	if(charging)
 		to_chat(user, "<span class='warning'>Remove the cell first!</span>")
-		return
-	..()
+		return FALSE
+	. = ..()
 
 /obj/machinery/cell_charger/attack_ai(mob/user)
 	return
@@ -144,12 +142,12 @@
 		charging.give(transfer_rate*transfer_rate_coeff*(transfer_efficiency+transfer_efficiency_bonus)) //Inefficiency (Joule effect + other shenanigans)
 
 	updateicon()
-	
+
 //Emergency Charger
 //craftable by combining an APC frame, metal rod, cables, and wirecutter
 /datum/construction/reversible/crank_charger
 	result = /obj/item/device/crank_charger
-	steps = list(	
+	steps = list(
 					//1
 					list(Co_DESC="The cabling is messily strewn throughout.",
 						Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
@@ -249,7 +247,7 @@
 		update_icon()
 	else
 		..()
-		
+
 /obj/item/device/crank_charger/Destroy()
 	if(stored)
 		qdel(stored)

@@ -49,7 +49,7 @@
 	throw_speed = 5
 	throw_range = 20
 	flags = FPRINT
-	siemens_coefficient = 1
+	siemens_coefficient = 0 //no conduct
 	max_amount = 60
 	origin_tech = Tc_BIOTECH + "=1"
 
@@ -69,7 +69,7 @@
 	throw_speed = 5
 	throw_range = 20
 	flags = FPRINT
-	siemens_coefficient = 1
+	siemens_coefficient = 0 //no conduct
 	max_amount = 60
 
 	material = "wood"
@@ -123,7 +123,7 @@
 	throw_speed = 5
 	throw_range = 20
 	flags = FPRINT
-	siemens_coefficient = 1
+	siemens_coefficient = 0 //no conduct
 	max_amount = 60
 
 	material = "fabric"
@@ -139,7 +139,7 @@
 	throw_speed = 5
 	throw_range = 20
 	flags = FPRINT
-	siemens_coefficient = 1
+	siemens_coefficient = 0 //no conduct
 	max_amount = 60
 
 	material = "fabric"

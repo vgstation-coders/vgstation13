@@ -64,7 +64,7 @@
 	var/frequency = 1439
 	var/id_tag
 	var/datum/radio_frequency/radio_connection
-	
+
 	//Add types to this list so it doesn't make a message or get desroyed by the Supermatter on touch.
 	var/list/message_exclusions = list(/obj/effect/effect/sparks)
 	machine_flags = MULTITOOL_MENU
@@ -124,13 +124,15 @@
 			return explode()
 
 /obj/machinery/power/supermatter/shard/singularity_act(current_size, obj/machinery/singularity/S)
+	var/super = FALSE
 	var/prints = ""
 	if(src.fingerprintshidden)
 		prints = ", all touchers: [list2params(src.fingerprintshidden)]"
 	if(current_size == STAGE_FIVE)
 		S.expand(STAGE_SUPER, 1)
-		log_admin("New super singularity made by eating a SM crystal[prints]. Last touched by [src.fingerprintslast].")
-		message_admins("New super singularity made by eating a SM crystal[prints]. Last touched by [src.fingerprintslast].")
+		super = TRUE
+	log_admin("[super ? "New super singularity made" : "Singularity gained 15000 energy"] by eating a SM shard with prints: [prints]. Last touched by [src.fingerprintslast].")
+	message_admins("[super ? "New super singularity made" : "Singularity gained 15000 energy"] by eating a SM shard with prints: [prints]. Last touched by [src.fingerprintslast].")
 	qdel(src)
 	return 15000
 
@@ -140,8 +142,8 @@
 		prints = ", all touchers: [list2params(src.fingerprintshidden)]"
 	SetUniversalState(/datum/universal_state/supermatter_cascade)
 	S.expand(STAGE_SUPER, 1)
-	log_admin("New super singularity made by eating a SM crystal[prints]. Last touched by [src.fingerprintslast].")
-	message_admins("New super singularity made by eating a SM crystal[prints]. Last touched by [src.fingerprintslast].")
+	log_admin("New super singularity made by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
+	message_admins("New super singularity made by eating a SM crystal with prints: [prints]. Last touched by [src.fingerprintslast].")
 	qdel(src)
 	return 20000
 

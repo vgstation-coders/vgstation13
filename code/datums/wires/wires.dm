@@ -121,7 +121,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 			var/obj/item/I = L.get_active_hand()
 			holder.add_hiddenprint(L)
 			if(href_list["cut"]) // Toggles the cut/mend status
-				if(iswirecutter(I))
+				if(iswirecutter(I) || isswitchtool(I))
 					var/colour = href_list["cut"]
 					CutWireColour(colour)
 					holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire [IsColourCut(colour) ? "cut" : "mended"] by [key_name(usr)] ([src.type])")
@@ -129,7 +129,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 					to_chat(L, "<span class='error'>You need wirecutters!</span>")
 
 			else if(href_list["pulse"])
-				if(istype(I, /obj/item/device/multitool))
+				if(ismultitool(I) || isswitchtool(I))
 					var/colour = href_list["pulse"]
 					PulseColour(colour)
 					holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire pulsed by [key_name(usr)] ([src.type])")

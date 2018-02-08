@@ -14,11 +14,12 @@
 		var/reagentDatum = input(usr,"Reagent","Insert Reagent","") as text|null
 		if(reagentDatum)
 			var/reagentAmount = input(usr, "Amount", "Insert Amount", "") as num
-			if(A.reagents.add_reagent(reagentDatum, reagentAmount))
+			var/reagentTemp = input(usr, "Temperature", "Insert Temperature (As Kelvin)", "") as num
+			if(A.reagents.add_reagent(reagentDatum, reagentAmount, reagtemp = reagentTemp))
 				to_chat(usr, "<span class='warning'>[reagentDatum] doesn't exist.</span>")
 				return
-			log_admin("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] ")
-			message_admins("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] ")
+			log_admin("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] at [reagentTemp]K temperature.")
+			message_admins("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] at [reagentTemp]K temperature.")
 
 /client/proc/debug_variables(datum/D in world)
 	set category = "Debug"
@@ -504,7 +505,7 @@ body
 		var/original_name = "[D]"
 		var/edited_variable = href_list["varnameedit"]
 		var/new_value = variable_set(src, D, edited_variable, TRUE)
-		message_admins("[key_name_admin(src)] modified [original_name]'s [edited_variable] to [new_value]", 1)
+		message_admins("[key_name_admin(src)] modified [original_name]'s [edited_variable] to [html_encode(new_value)]", 1)
 		world.log << "### VarEdit by [src]: [D.type] [edited_variable]=[html_encode("[new_value]")]"
 	else if(href_list["togbit"])
 		if(!check_rights(R_VAREDIT))
@@ -533,7 +534,7 @@ body
 		var/original_name = "[D]"
 		var/edited_variable = href_list["varnamechange"]
 		var/new_value = variable_set(src, D, edited_variable)
-		message_admins("[key_name_admin(src)] modified [original_name]'s [edited_variable] to [new_value]", 1)
+		message_admins("[key_name_admin(src)] modified [original_name]'s [edited_variable] to [html_encode(new_value)]", 1)
 		world.log << "### VarEdit by [src]: [D.type] [edited_variable]=[html_encode("[new_value]")]"
 	else if(href_list["varnamemass"] && href_list["datummass"])
 		if(!check_rights(R_VAREDIT))

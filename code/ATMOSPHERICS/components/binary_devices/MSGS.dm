@@ -200,6 +200,14 @@
 /obj/machinery/atmospherics/binary/msgs/attack_ai(var/mob/user)
 	. = attack_hand(user)
 
+/obj/machinery/atmospherics/binary/msgs/attackby(var/obj/item/W, var/mob/user)
+	. = ..()
+	if(.)
+		return
+	if(istype(W, /obj/item/device/analyzer))
+		var/obj/item/device/analyzer/A = W
+		user.show_message(A.output_gas_scan(air, src, FALSE))
+
 /obj/machinery/atmospherics/binary/msgs/power_change()
 	. = ..()
 	update_icon()
@@ -238,8 +246,10 @@
 		if(on)
 			overlays += image(icon = icon, icon_state = "i")
 
-/obj/machinery/atmospherics/binary/msgs/wrenchAnchor(mob/user)
-	..()
+/obj/machinery/atmospherics/binary/msgs/wrenchAnchor(var/mob/user) 
+	. = ..()
+	if(!.)
+		return
 	if(anchored)
 		if(dir & (NORTH|SOUTH))
 			initialize_directions = NORTH|SOUTH

@@ -8,8 +8,12 @@
 	if(ismob(mover))
 		var/mob/moving_mob = mover
 
-		if ((other_mobs && moving_mob.other_mobs))
+		if ((other_mobs && moving_mob.other_mobs)) //I have no fucking idea what this is. I think it's for dragging via grab, but only if 2+ mobs are being grabbed?
 			return 1
+
+	for(var/atom/movable/passenger in mover.locked_atoms) //If we're being crossed by something with locked atoms, like a chair or something, have ALL of them try to cross us.
+		if(!Cross(passenger, target, height, air_group))
+			return 0
 
 	return (!mover.density || !density || lying)
 
@@ -48,9 +52,9 @@
 			if(pai_override)
 				pai_container.throwkey_integrated_pai(pai_override)
 				return
-			if(iscarbon(usr))
-				var/mob/living/carbon/C = usr
-				C.toggle_throw_mode()
+			if(isliving(usr))
+				var/mob/living/L = usr
+				L.toggle_throw_mode()
 			else
 				to_chat(usr, "<span class='warning'>This mob type cannot throw items.</span>")
 		if(NORTHWEST)
@@ -60,7 +64,7 @@
 			if(mob.remove_spell_channeling()) //Interrupt to remove spell channeling on dropping
 				to_chat(usr, "<span class='notice'>You cease waiting to use your power")
 				return
-			if(iscarbon(usr))
+			if(iscarbon(usr) || ishologram(usr))
 				var/mob/living/carbon/C = usr
 				if(!C.get_active_hand())
 					to_chat(usr, "<span class='warning'>You have nothing to drop in your hand.</span>")
@@ -120,8 +124,6 @@
 
 /client/verb/swap_hand()
 	set hidden = 1
-	if(istype(mob, /mob/living/carbon))
-		mob:swap_hand()
 	if(istype(mob,/mob/living/silicon/robot/mommi))
 		return // MoMMIs only have one tool slot.
 	if(istype(mob,/mob/living/silicon/robot))//Oh nested logic loops, is there anything you can't do? -Sieve
@@ -191,8 +193,7 @@
 					R:module_active = R:module_state_1
 			else
 				return
-	return
-
+	mob.swap_hand()
 
 
 /client/verb/attack_self() //Called when pagedown or Z is pressed

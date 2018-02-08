@@ -1,5 +1,17 @@
 //handles setting lastKnownIP and computer_id for use by the ban systems as well as checking for multikeying
 /mob/proc/update_Login_details()
+	if(!client)
+		WARNING("update_Login_details(): client for [src] is [client]!")
+		message_admins("<span class='warning'><B>WARNING:</B> <A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has a null .client (BYOND issue, not malicious)!</span>", 1)
+
+	else
+		if(!client.address)
+			WARNING("update_Login_details(): client.address for [src] is [client.address]!")
+			message_admins("<span class='warning'><B>WARNING:</B> <A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has a null .client.address (BYOND issue, not malicious)!</span>", 1)
+		if(!client.computer_id)
+			WARNING("update_Login_details(): client.computer_id for [src] is [client.computer_id]!")
+			message_admins("<span class='warning'><B>WARNING:</B> <A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has a null .client.computer_id (BYOND issue, not malicious)!</span>", 1)
+
 	//Multikey checks and logging
 	lastKnownIP	= client.address
 	computer_id	= client.computer_id

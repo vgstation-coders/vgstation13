@@ -812,18 +812,12 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		WARNING("SelectPlayerLimbsForSave: Error #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 
-	check.Add("DELETE FROM client_roles WHERE ckey=? AND slot=?", ckey, slot)
-	if(!check.Execute(db))
-		message_admins("ClientRoleDelete: Error #: [check.Error()] - [check.ErrorMsg()]")
-		WARNING("ClientRoleDelete: Error #:[q.Error()] - [q.ErrorMsg()]")
-		return 0
-
 	for(var/role_id in roles)
 		if(!(roles[role_id] & ROLEPREF_SAVE))
 			continue
 		q = new
-		q.Add("INSERT INTO client_roles (ckey, slot, role, preference) VALUES (?,?,?,?)", ckey, slot, role_id, (roles[role_id] & ROLEPREF_VALMASK))
-		//testing("INSERT INTO client_roles (ckey, slot, role, preference) VALUES ('[ckey]',[slot],'[role_id]',[roles[role_id] & ROLEPREF_VALMASK])")
+		q.Add("INSERT OR REPLACE INTO client_roles (ckey, slot, role, preference) VALUES (?,?,?,?)", ckey, slot, role_id, (roles[role_id] & ROLEPREF_VALMASK))
+		//testing("INSERT OR REPLACE INTO client_roles (ckey, slot, role, preference) VALUES ('[ckey]',[slot],'[role_id]',[roles[role_id] & ROLEPREF_VALMASK])")
 		if(!q.Execute(db)) // This never triggers on error, for some reason.
 			message_admins("ClientRoleInsert: Error #: [q.Error()] - [q.ErrorMsg()]")
 			WARNING("ClientRoleInsert: Error #:[q.Error()] - [q.ErrorMsg()]")

@@ -19,6 +19,18 @@ var/list/ladders = list()
 	spawn(10)
 		update_links()
 
+/obj/structure/ladder/spawned_by_map_element(datum/map_element/ME, list/objects)
+	..()
+	update_links()
+
+/obj/structure/ladder/variable_edited(variable_name, old_value, new_value)
+	..()
+
+	switch(variable_name)
+		if("down", "up", "height", "id")
+			spawn()
+				update_links()
+
 /obj/structure/ladder/Destroy()
 	..()
 
@@ -37,9 +49,11 @@ var/list/ladders = list()
 
 		if(L.id == id)
 			if(L.height == (height - 1))
-				down = L
+				src.down = L
+				L.up = src
 			else if(L.height == (height + 1))
-				up = L
+				src.up = L
+				L.down = src
 
 		if(up && down)	//if both our connections are filled
 			break

@@ -381,7 +381,7 @@ its easier to just keep the beam vertical.
 
 //Woo hoo. Overtime
 //All atoms
-/atom/proc/examine(mob/user, var/size = "")
+/atom/proc/examine(mob/user, var/size = "", var/show_name = TRUE)
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src]."
 	if(src.blood_DNA && src.blood_DNA.len)
@@ -391,7 +391,8 @@ its easier to just keep the beam vertical.
 			f_name = "a "
 		f_name += "<span class='danger'>blood-stained</span> [name]!"
 
-	to_chat(user, "[bicon(src)] That's [f_name]" + size)
+	if(show_name)
+		to_chat(user, "[bicon(src)] That's [f_name]" + size)
 	if(desc)
 		to_chat(user, desc)
 
@@ -427,12 +428,38 @@ its easier to just keep the beam vertical.
 			to_chat(user, harm_label_examine[1])
 		else
 			to_chat(user, harm_label_examine[2])
-	return
+
+	var/obj/item/device/camera_bug/bug = locate() in src
+	if(bug)
+		var/this_turf = get_turf(src)
+		var/user_turf = get_turf(user)
+		var/distance = get_dist(this_turf, user_turf)
+		if(Adjacent(user))
+			to_chat(user, "<a href='?src=\ref[src];bug=\ref[bug]'>There's something hidden in there.</a>")
+		else if(isobserver(user) || prob(100 / (distance + 2)))
+			to_chat(user, "There's something hidden in there.")
+
+/atom/Topic(href, href_list)
+	. = ..()
+	if(.)
+		return
+	var/obj/item/device/camera_bug/bug = locate(href_list["bug"])
+	if(istype(bug))
+		. = 1
+		if(isAdminGhost(usr))
+			bug.removed(null, null, FALSE)
+		if(ishuman(usr) && !usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
+			bug.removed(usr)
 
 // /atom/proc/MouseDrop_T()
 // 	return
 
 /atom/proc/relaymove()
+	return
+
+// Try to override a mob's eastface(), westface() etc. (CTRL+RIGHTARROW, CTRL+LEFTARROW). Return 1 if successful, which blocks the mob's own eastface() etc.
+// Called first on the mob's loc (turf, locker, mech), then on whatever the mob is buckled to, if anything.
+/atom/proc/relayface()
 	return
 
 // Severity is actually "distance".
@@ -558,8 +585,9 @@ its easier to just keep the beam vertical.
 	qdel(src)
 	return 1
 
-/atom/proc/hitby(atom/movable/AM as mob|obj)
-	return
+// Returns TRUE if it's been handled, children should return if parent has already handled
+/atom/proc/hitby(var/atom/movable/AM)
+	. = isobserver(AM)
 
 /*
 /atom/proc/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -797,8 +825,12 @@ its easier to just keep the beam vertical.
 		investigation_log(I_GHOST, "|| was Boo!'d by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 	return 1
 
-/atom/proc/can_spook()
-	return !blessed
+/atom/proc/can_spook(var/msg = 1)
+	if(blessed)
+		if(msg)
+			to_chat(usr, "Your hand goes right through \the [src]... Is that some holy water dripping from it?")
+		return FALSE
+	return TRUE
 
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()
@@ -846,3 +878,8 @@ its easier to just keep the beam vertical.
 
 /atom/proc/to_bump()
 	return
+
+/atom/proc/get_last_player_touched()	//returns a reference to the mob of the ckey that last touched the atom
+	for(var/client/C in clients)
+		if(uppertext(C.ckey) == uppertext(fingerprintslast))
+			return C.mob

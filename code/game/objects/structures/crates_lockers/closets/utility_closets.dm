@@ -21,7 +21,6 @@
 
 /obj/structure/closet/emcloset/New()
 	..()
-	new /obj/item/weapon/tank/emergency_nitrogen(src)
 	switch (pickweight(list("small" = 55, "aid" = 25, "tank" = 10, "both" = 10, "nothing" = 0, "delete" = 0)))
 		if ("small")
 			new /obj/item/weapon/tank/emergency_oxygen(src)
@@ -159,6 +158,7 @@
 	..()
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
+	new /obj/item/device/geiger_counter(src)
 
 /*
  * Bombsuit closet

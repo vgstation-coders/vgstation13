@@ -202,7 +202,7 @@ var/global/list/rnd_machines = list()
 
 		var/obj/item/stack/sheet/stack = O
 		var/amount = round(input("How many sheets do you want to add? (0 - [stack.amount])") as num)//No decimals
-		if(!O || !O.loc || O.loc != user)
+		if(!O || !O.loc || (O.loc != user && !isgripper(O.loc)))
 			busy = 0
 			return
 		if(amount < 0)//No negative numbers

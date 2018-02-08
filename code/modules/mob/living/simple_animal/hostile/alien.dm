@@ -32,7 +32,7 @@ var/list/nest_locations = list()
 	max_n2 = 0
 	unsuitable_atoms_damage = 15
 	faction = "alien"
-	environment_smash = 2
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
 	status_flags = CANPUSH
 	minbodytemp = 0
 	heat_damage_per_tick = 20
@@ -78,7 +78,7 @@ var/list/nest_locations = list()
 				stop_pulling()
 
 /mob/living/simple_animal/hostile/alien/DestroySurroundings()
-	if(environment_smash)
+	if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 		EscapeConfinement()
 		for(var/dir in cardinal)
 			var/turf/T = get_step(src, dir)

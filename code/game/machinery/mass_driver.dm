@@ -18,6 +18,16 @@ var/list/mass_drivers = list()
 /obj/machinery/mass_driver/New()
 	..()
 	mass_drivers += src
+	check_competition()
+
+/obj/machinery/mass_driver/proc/check_competition(var/turf/T = get_turf(src))
+	for(var/obj/machinery/mass_driver/M in T)
+		if(M == src)
+			continue
+		else
+			message_admins("Two mass drivers were placed on the same tile. This should not happen.(<A href='?_src_=holder;jumpto=\ref[T]'><b>Jump to</b></A>)")
+			qdel(src)
+			break
 
 /obj/machinery/mass_driver/Destroy()
 	mass_drivers -= src
@@ -110,6 +120,17 @@ var/list/mass_drivers = list()
 	anchored = 0
 	var/build = 0
 
+/obj/machinery/mass_driver_frame/proc/check_competition(var/turf/T = get_turf(src))
+	var/competition_found = 0
+	for(var/obj/machinery/M in T)
+		if(M == src)
+			continue
+		if(istype(M, /obj/machinery/mass_driver_frame) || istype(M, /obj/machinery/mass_driver))
+			competition_found=1
+			break
+
+	return competition_found
+
 /obj/machinery/mass_driver_frame/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	switch(build)
 		if(0) // Loose frame
@@ -126,6 +147,9 @@ var/list/mass_drivers = list()
 					qdel(src)
 				return 1
 			if(iswrench(W))
+				if(check_competition())
+					to_chat(user, "<span class = 'notice'>You can't anchor \the [src], as there's a mass driver in that location already.</span>")
+					return
 				to_chat(user, "You begin to anchor \the [src] on the floor.")
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 				if(do_after(user, src, 10) && (build == 0))

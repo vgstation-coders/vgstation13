@@ -197,7 +197,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 					count++
 				else
 					to_chat(user, "A figure floats in the depths, they appear to be [floater.name]")
-			
+
 			if (count)
 				// Let's just assume you can only have observers if there's a mob too.
 				to_chat(user, "<i>...[count] shape\s float behind them...</i>")
@@ -228,7 +228,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
   *
   * @return nothing
   */
-/obj/machinery/atmospherics/unary/cryo_cell/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/atmospherics/unary/cryo_cell/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 
 	if(user == occupant || (user.stat && !isobserver(user)))
 		return
@@ -283,7 +283,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 				data["beakerVolume"] += R.volume
 
 	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
@@ -332,9 +332,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 /obj/machinery/atmospherics/unary/cryo_cell/proc/detach()
 	if(beaker)
 		beaker.forceMove(get_step(loc, SOUTH))
-		if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-			var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = beaker
-			borgbeak.return_to_modules()
 		beaker = null
 
 /obj/machinery/atmospherics/unary/cryo_cell/crowbarDestroy(mob/user)
@@ -601,26 +598,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	set name = "Eject occupant"
 	set category = "Object"
 	set src in oview(1)
-	if(panel_open)
-		to_chat(usr, "<span class='bnotice'>Close the maintenance panel first.</span>")
-		return
-	if(usr == occupant)//If the user is inside the tube...
-		if (usr.isDead())//and he's not dead....
-			return
-		to_chat(usr, "<span class='notice'>Release sequence activated. This will take thirty seconds.</span>")
-		sleep(300)
-		if(!src || !usr || !occupant || (occupant != usr)) //Check if someone's released/replaced/bombed him already
-			return
-		go_out()//and release him from the eternal prison.
-	else
-		if (usr.isUnconscious() || istype(usr, /mob/living/simple_animal))
-			return
-		go_out()
-	add_fingerprint(usr)
-	return
+	AltClick(usr)
 
 /obj/machinery/atmospherics/unary/cryo_cell/verb/move_inside()
-	set name = "Move Inside"
+	set name = "Move inside"
 	set category = "Object"
 	set src in oview(1)
 	if(usr.incapacitated() || usr.lying || usr.locked_to) //are you cuffed, dying, lying, stunned or other
@@ -635,7 +616,12 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if (usr.isUnconscious() || stat & (NOPOWER|BROKEN))
 		return
 	put_mob(usr)
-	return
+
+/obj/machinery/atmospherics/unary/cryo_cell/verb/remove_beaker()
+	set name = "Remove beaker"
+	set category = "Object"
+	set src in oview(1)
+	CtrlClick(usr)
 
 /obj/machinery/atmospherics/unary/cryo_cell/return_air()
 	return air_contents
@@ -653,6 +639,35 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		message_admins("[key_name(L)] has ejected [occupant] from \the [src]! [formatJumpTo(src)]")
 		go_out()
 
+/obj/machinery/atmospherics/unary/cryo_cell/AltClick(mob/user) // AltClick = most common action = removing the patient
+	if(!Adjacent(user))
+		return
+	if(panel_open)
+		to_chat(user, "<span class='bnotice'>Close the maintenance panel first.</span>")
+		return
+	if(user == occupant)//If the user is inside the tube...
+		if (user.isDead())//and he's not dead....
+			return
+		to_chat(user, "<span class='notice'>Release sequence activated. This will take thirty seconds.</span>")
+		sleep(300)
+		if(!src || !user || !occupant || (occupant != user)) //Check if someone's released/replaced/bombed him already
+			return
+		go_out()//and release him from the eternal prison.
+	else
+		if (user.isUnconscious() || istype(user, /mob/living/simple_animal))
+			return
+		go_out()
+	add_fingerprint(user)
+
+/obj/machinery/atmospherics/unary/cryo_cell/CtrlClick(mob/user) // CtrlClick = less common action = retrieving the beaker
+	if(!Adjacent(user) || user.incapacitated() || user.lying || user.locked_to || user == occupant || !(iscarbon(user) || issilicon(user))) //are you cuffed, dying, lying, stunned or other
+		return
+	if(panel_open)
+		to_chat(user, "<span class='bnotice'>Close the maintenance panel first.</span>")
+		return
+	if(beaker)// If there is, effectively, a beaker
+		detach()
+	add_fingerprint(user)
 
 /datum/data/function/proc/reset()
 	return
@@ -662,4 +677,3 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 /datum/data/function/proc/display()
 	return
-

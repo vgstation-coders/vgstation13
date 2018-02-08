@@ -231,11 +231,12 @@
 
 	msg += "</span>"
 
-	if(has_brain() && stat != DEAD)
-		if(!key)
-			msg += "<span class='deadsay'>[t_He] [t_is] totally catatonic. The stresses of life in deep space must have been too much for [t_him]. Any recovery is unlikely.</span>\n"
-		else if(!client)
-			msg += "[t_He] [t_has] a vacant, braindead stare...\n"
+	if(show_client_status_on_examine || isAdminGhost(user))
+		if(has_brain() && stat != DEAD)
+			if(!key)
+				msg += "<span class='deadsay'>[t_He] [t_is] totally catatonic. The stresses of life in deep space must have been too much for [t_him]. Any recovery is unlikely.</span>\n"
+			else if(!client)
+				msg += "[t_He] [t_has] a vacant, braindead stare...\n"
 
 	var/list/wound_flavor_text = list()
 	var/list/is_destroyed = list()
@@ -472,9 +473,8 @@
 		msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n
 			<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]</a> <a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>\n"}
 
-	if(print_flavor_text(user))
-		msg += "[print_flavor_text(user)]\n"
-
+	if(flavor_text && can_show_flavor_text())
+		msg += "[print_flavor_text()]\n"
 
 	msg += "*---------*</span>"
 

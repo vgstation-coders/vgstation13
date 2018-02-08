@@ -4,6 +4,7 @@
 	var/sharpness_on = 1.5 //so badmins can VV this!
 	sharpness_flags = SHARP_BLADE | HOT_EDGE
 	heat_production = 3500
+	source_temperature = TEMPERATURE_PLASMA
 
 /obj/item/weapon/melee/energy/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>", \
@@ -12,7 +13,7 @@
 
 /obj/item/weapon/melee/energy/is_hot()
 	if(active)
-		return heat_production
+		return source_temperature
 	return 0
 
 /obj/item/weapon/melee/energy/is_sharp()

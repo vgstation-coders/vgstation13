@@ -5,7 +5,7 @@
 
 	emote_type = 2		// pAIs emotes are heard, not seen, so they can be seen through a container (eg. person)
 
-	var/network = list("SS13")
+	var/network = list(CAMERANET_SS13)
 	var/obj/machinery/camera/current = null
 
 	var/ram = 100	// Used as currency to purchase different abilities

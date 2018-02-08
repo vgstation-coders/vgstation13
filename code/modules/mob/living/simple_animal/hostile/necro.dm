@@ -6,13 +6,14 @@
 
 /mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, datum/mind/Controller)
 	..()
+	if(Controller)
+		mind = Controller
+		ckey = ckey(mind.key)
 	if(Owner)
 		faction = "\ref[Owner]"
 		friends.Add(Owner)
 		creator = Owner
 		if(Controller)
-			mind = Controller
-			ckey = ckey(mind.key)
 			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner]. Do his bidding so long as he lives, for when he falls so do you.</span></big>")
 
 	if(name == initial(name) && !unique_name)
@@ -54,7 +55,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	meat_type = null
 /*
 #define EVOLVING 1
@@ -104,7 +105,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 
 	var/times_revived //Tracks how many times the zombie has regenerated from death
 	var/times_eaten //Tracks how many times the zombie has chewed on a human corpse

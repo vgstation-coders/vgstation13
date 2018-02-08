@@ -197,6 +197,7 @@
 /datum/surgery_step/open_encased/mend
 	allowed_tools = list(
 		/obj/item/weapon/bonegel = 100,
+		/obj/item/weapon/bonesetter/bone_mender = 100,
 		/obj/item/weapon/screwdriver = 75,
 		)
 

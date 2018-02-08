@@ -209,6 +209,7 @@
 /datum/surgery_step/butt_replace/hips
 	allowed_tools = list(
 		/obj/item/weapon/bonegel = 100,
+		/obj/item/weapon/bonesetter/bone_mender = 100,
 		/obj/item/weapon/screwdriver = 75,
 		)
 

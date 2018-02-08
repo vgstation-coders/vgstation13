@@ -15,7 +15,6 @@
 	var/status = 0
 	var/obj/item/weapon/cell/bcell = null
 	var/hitcost = 100 // 10 hits on crap cell
-	var/mob/foundmob = "" //Used in throwing proc.
 
 /obj/item/weapon/melee/baton/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is putting the live [src.name] in \his mouth! It looks like \he's trying to commit suicide.</span>")
@@ -209,38 +208,37 @@
 			M.LAssailant = user
 
 /obj/item/weapon/melee/baton/throw_impact(atom/hit_atom)
-	foundmob = directory[ckey(fingerprintslast)]
-	if (prob(50))
-		if(istype(hit_atom, /mob/living))
-			var/mob/living/L = hit_atom
-			if(status)
-				if(foundmob)
-					foundmob.lastattacked = L
-					L.lastattacker = foundmob
+	if(prob(50))
+		return ..()
+	if(!isliving(hit_atom) || !status)
+		return
+	var/client/foundclient = directory[ckey(fingerprintslast)]
+	var/mob/foundmob = foundclient.mob
+	var/mob/living/L = hit_atom
+	if(foundmob && ismob(foundmob))
+		foundmob.lastattacked = L
+		L.lastattacker = foundmob
 
-				L.Stun(stunforce)
-				L.Knockdown(stunforce)
-				L.apply_effect(STUTTER, stunforce)
+	L.Stun(stunforce)
+	L.Knockdown(stunforce)
+	L.apply_effect(STUTTER, stunforce)
 
-				L.visible_message("<span class='danger'>[L] has been stunned with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
-				playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+	L.visible_message("<span class='danger'>[L] has been stunned with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
+	playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
 
-				deductcharge(hitcost)
+	deductcharge(hitcost)
 
-				if(ishuman(L))
-					var/mob/living/carbon/human/H = L
-					H.forcesay(hit_appends)
+	if(ishuman(L))
+		var/mob/living/carbon/human/H = L
+		H.forcesay(hit_appends)
 
-				foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
-				L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by thrown [src] by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""])</font>"
-				log_attack("<font color='red'>Flying [src.name], thrown by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) stunned [L.name] ([L.ckey])</font>" )
-				if(!iscarbon(foundmob))
-					L.LAssailant = null
-				else
-					L.LAssailant = foundmob
-
-				return
-	return ..()
+	foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
+	L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by thrown [src] by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""])</font>"
+	log_attack("<font color='red'>Flying [src.name], thrown by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) stunned [L.name] ([L.ckey])</font>" )
+	if(!iscarbon(foundmob))
+		L.LAssailant = null
+	else
+		L.LAssailant = foundmob
 
 /obj/item/weapon/melee/baton/emp_act(severity)
 	if(bcell)

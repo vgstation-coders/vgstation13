@@ -53,9 +53,11 @@ dmm_suite{
 
 		*/
 
-	verb/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null){
+	verb/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null, var/fast_load as null){
 		// dmm_file: A .dmm file to load (Required).
 		// z_offset: A number representing the z-level on which to start loading the map (Optional).
+		// map_element: The map element that the .dmm file belongs to (Optional).
+		// fast_load: If true,
 		}
 	verb/write_map(var/turf/t1 as turf, var/turf/t2 as turf, var/flags as num){
 		// t1: A turf representing one corner of a three dimensional grid (Required).

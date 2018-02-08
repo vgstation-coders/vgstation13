@@ -9,7 +9,7 @@ var/global/list/tv_monitors = list()
 	circuit = "/obj/item/weapon/circuitboard/security"
 	var/obj/machinery/camera/current = null
 	var/last_pic = 1.0
-	var/list/network = list("SS13")
+	var/list/network = list(CAMERANET_SS13)
 	var/mapping = 0//For the overview file, interesting bit of code.
 
 	light_color = LIGHT_COLOR_RED
@@ -99,7 +99,7 @@ var/global/list/tv_monitors = list()
 	desc = "Used for watching arena fights and variety shows."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "telescreen"
-	network = list("thunder")
+	network = list(CAMERANET_THUNDER)
 	density = 0
 	circuit = null
 
@@ -120,7 +120,7 @@ var/global/list/tv_monitors = list()
 	desc = "Damn, they better have chicken-channel on these things."
 	icon = 'icons/obj/status_display.dmi'
 	icon_state = "entertainment"
-	network = list("thunder", "courtroom")
+	network = list(CAMERANET_THUNDER, CAMERANET_COURTROOM)
 	density = 0
 	circuit = null
 
@@ -137,7 +137,7 @@ var/global/list/tv_monitors = list()
 	name = "Outpost Cameras"
 	desc = "Used to access the various cameras on the outpost."
 	icon_state = "miningcameras"
-	network = list("MINE")
+	network = list(CAMERANET_MINE)
 	circuit = "/obj/item/weapon/circuitboard/mining"
 
 	light_color = LIGHT_COLOR_PINK
@@ -146,7 +146,7 @@ var/global/list/tv_monitors = list()
 	name = "Engineering Cameras"
 	desc = "Used to monitor fires and breaches."
 	icon_state = "engineeringcameras"
-	network = list("Power Alarms","Atmosphere Alarms","Fire Alarms")
+	network = list(CAMERANET_POWERALARMS,CAMERANET_ATMOSALARMS,CAMERANET_FIREALARMS)
 	circuit = "/obj/item/weapon/circuitboard/security/engineering"
 
 	light_color = LIGHT_COLOR_YELLOW

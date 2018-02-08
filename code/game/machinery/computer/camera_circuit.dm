@@ -11,28 +11,28 @@
 
 //when adding a new camera network, you should only need to update these two procs
 	New()
-		possibleNets["Engineering"] = access_ce
-		possibleNets["SS13"] = access_hos
-		possibleNets["Mining"] = access_mining
-		possibleNets["Cargo"] = access_qm
-		possibleNets["Research"] = access_rd
-		possibleNets["Medbay"] = access_cmo
+		possibleNets[CAMERANET_ENGI] = access_ce
+		possibleNets[CAMERANET_SS13] = access_hos
+		possibleNets[CAMERANET_MINE] = access_mining
+		possibleNets[CAMERANET_CARGO] = access_qm
+		possibleNets[CAMERANET_SCIENCE] = access_rd
+		possibleNets[CAMERANET_MEDBAY] = access_cmo
 
 	proc/updateBuildPath()
 		build_path = ""
 		if(authorised && secured)
 			switch(network)
-				if("SS13")
+				if(CAMERANET_SS13)
 					build_path = "/obj/machinery/computer/security"
-				if("Engineering")
+				if(CAMERANET_ENGI)
 					build_path = "/obj/machinery/computer/security/engineering"
-				if("Mining")
+				if(CAMERANET_MINE)
 					build_path = "/obj/machinery/computer/security/mining"
-				if("Research")
+				if(CAMERANET_SCIENCE)
 					build_path = "/obj/machinery/computer/security/research"
-				if("Medbay")
+				if(CAMERANET_MEDBAY)
 					build_path = "/obj/machinery/computer/security/medbay"
-				if("Cargo")
+				if(CAMERANET_CARGO)
 					build_path = "/obj/machinery/computer/security/cargo"
 
 	attackby(var/obj/item/I, var/mob/user)//if(health > 50)

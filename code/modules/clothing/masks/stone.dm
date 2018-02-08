@@ -35,17 +35,25 @@
 		if(H.wear_mask == src) //the mob is wearing this mask
 			if(H.mind)
 				var/datum/mind/M = H.mind
+				if(jobban_isbanned(M, "Syndicate") || jobban_isbanned(H, "vampire"))
+					to_chat(H, "<span class='danger'>[src] seems to actively reject your advances. You are cursed!</span>")
+					H.sleeping+=rand(20, 50)
+					H.hallucination+=rand(100,500)
+					H.u_equip(src, 1)
+					return
 				if(!isvampire(H)) //They are not already a vampire
 					to_chat(H, "<span class='danger'>The mask's stone spikes pierce your skull and enter your brain!</span>")
 					M.make_new_vampire()
 					log_admin("[H] has become a vampire using a stone mask.")
-					H.mind.vampire.bloodtotal = blood_to_give
-					H.mind.vampire.bloodusable = blood_to_give
-					to_chat(H, "<span class='notice'>You have accumulated [H.mind.vampire.bloodtotal] [H.mind.vampire.bloodtotal > 1 ? "units" : "unit"] of blood and have [H.mind.vampire.bloodusable] left to use.</span>")
-					H.check_vampire_upgrade(H.mind)
+					spawn(10)	//Unlocking their abilities produces a lot of text, I want to give them a chance to see that they have objectives
+						H.mind.vampire.bloodtotal = blood_to_give
+						H.mind.vampire.bloodusable = blood_to_give
+						to_chat(H, "<span class='notice'>You have accumulated [H.mind.vampire.bloodtotal] [H.mind.vampire.bloodtotal > 1 ? "units" : "unit"] of blood and have [H.mind.vampire.bloodusable] left to use.</span>")
+						H.check_vampire_upgrade(H.mind)
 					if(!infinite)
 						crumble()
 						return
+
 				else
 					to_chat(H, "<span class='notice'>The stone spikes pierce your skull, but nothing happens. Perhaps vampires cannot benefit further from use of the mask.</span>")
 	else

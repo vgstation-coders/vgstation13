@@ -146,3 +146,50 @@ obj/item/clothing/mask/joy
 	name = "joy mask"
 	desc = "Express your happiness or hide your sorrows with this laughing face with crying tears of joy cutout."
 	icon_state = "joy"
+
+/obj/item/clothing/mask/vamp_fangs
+	name = "false fangs"
+	desc = "For when you want people to think you're a vampire. Glows in the dark!"
+	icon_state = "fangs"
+	item_state = "fangs"
+	var/light_absorbed = 0
+	var/glowy_fangs
+	var/image/glow_fangs
+
+/obj/item/clothing/mask/vamp_fangs/New()
+	..()
+	glow_fangs = image("icon" = 'icons/mob/mask.dmi',"icon_state" = "fangs_glow", "layer" = ABOVE_LIGHTING_LAYER)
+	glow_fangs.plane = LIGHTING_PLANE
+
+/obj/item/clothing/mask/vamp_fangs/equipped(mob/M, var/slot)
+	..()
+	var/mob/living/carbon/human/H = M
+	if(!istype(H))
+		return
+	if(slot == slot_wear_mask && light_absorbed > 1)
+		glowy_fangs = TRUE
+		if(icon_state != "fangs_glow")
+			icon_state = "fangs_glow"
+		H.overlays += glow_fangs
+
+/obj/item/clothing/mask/vamp_fangs/unequipped(mob/living/carbon/human/user, var/from_slot = null)
+	if(from_slot == slot_wear_mask)
+		user.overlays -= glow_fangs
+
+/obj/item/clothing/mask/vamp_fangs/OnMobLife(var/mob/living/carbon/human/wearer)
+	var/turf/T = get_turf(wearer)
+	var/light_amount = T.get_lumcount()
+	if(light_amount < 0)
+		light_absorbed = max(0, light_absorbed/1.25)
+	else
+		light_absorbed = min(10, light_absorbed+=light_amount/2)
+
+	if(light_absorbed < 1 && glowy_fangs)
+		glowy_fangs = FALSE
+		icon_state = "fangs"
+		wearer.overlays -= glow_fangs
+
+	if(light_absorbed >= 1 && !glowy_fangs)
+		glowy_fangs = TRUE
+		icon_state = "fangs_glow"
+		wearer.overlays += glow_fangs

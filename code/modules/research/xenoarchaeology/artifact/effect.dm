@@ -77,7 +77,7 @@
 			if(activated)
 				display_msg = pick("rumbles slightly for a moment!","begins to shake!","blinks slightly!","starts to whirr!","sparks!")
 			else
-				display_msg = pick("quietens down!","settles to a stop!","lets out a single beep!","goes dark!")
+				display_msg = pick("quiets down!","settles to a stop!","lets out a single beep!","goes dark!")
 			var/atom/toplevelholder = get_holder_at_turf_level(holder)
 			toplevelholder.visible_message("<span class='warning'>[bicon(toplevelholder)] [toplevelholder] [display_msg]</span>")
 
@@ -108,6 +108,8 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 	if(istype(H.wear_suit,/obj/item/clothing/suit/bio_suit/anomaly))
 		protected += 0.6
 	else if(istype(H.wear_suit,/obj/item/clothing/suit/space/anomaly))
+		protected += 0.5
+	else if(istype(H.wear_suit,/obj/item/clothing/suit/storage/labcoat/rd))
 		protected += 0.5
 
 	if(istype(H.head,/obj/item/clothing/head/bio_hood/anomaly))

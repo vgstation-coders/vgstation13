@@ -2,6 +2,7 @@
 	name = "alien larva" //The alien larva, not 'Alien Larva'
 	real_name = "alien larva"
 	icon_state = "larva0"
+	status_flags = CANSTUN
 	pass_flags = PASSTABLE
 
 	maxHealth = 25
@@ -46,21 +47,21 @@
 		return
 
 	if(!blinded)
-		flash_eyes(visual = 1)
+		flash_eyes(visual = TRUE)
 
 	var/b_loss = null
 	var/f_loss = null
 	switch (severity)
-		if(1.0)
+		if(1)
 			b_loss += 500
 			gib()
 			return
-		if(2.0)
+		if(2)
 			b_loss += 60
 			f_loss += 60
 			ear_damage += 30
 			ear_deaf += 120
-		if(3.0)
+		if(3)
 			b_loss += 30
 			if(prob(50))
 				Paralyse(1)
@@ -78,10 +79,10 @@
 		return
 	..()
 	playsound(loc, 'sound/effects/blobattack.ogg',50,1)
-	var/shielded = 0
+	var/shielded = FALSE
 
 	var/damage = null
-	if(stat != 2)
+	if(stat != DEAD)
 		damage = rand(10,30)
 
 	if(shielded)
@@ -136,9 +137,9 @@
 
 /mob/living/carbon/alien/larva/restrained()
 	if(timestopped)
-		return 1 //under effects of time magick
+		return TRUE //under effects of time magick
 
-	return 0
+	return FALSE
 
 /mob/living/carbon/alien/larva/var/co2overloadtime = null
 /mob/living/carbon/alien/larva/var/temperature_resistance = T0C+75
@@ -146,25 +147,19 @@
 // new damage icon system
 // now constructs damage icon for each organ from mask * damage field
 
-
 /mob/living/carbon/alien/larva/show_inv(mob/user as mob)
-
 	user.set_machine(src)
-	var/dat = {"
-	<B><HR><FONT size=3>[name]</FONT></B>
-	<BR><HR><BR>
+	var/dat
+	if(handcuffed)
+		dat += "<BR><B>Bodycuffed:</B> <A href='?src=\ref[src];item=[slot_handcuffed]'>Remove</A>"
+	dat += {"
+	<BR>
 	<BR><A href='?src=\ref[user];mach_close=mob[name]'>Close</A>
-	<BR>"}
-	user << browse(dat, text("window=mob[name];size=340x480"))
-	onclose(user, "mob[name]")
-	return
+	"}
 
-/* Why?
-/mob/living/carbon/alien/larva/say_understands(var/mob/other,var/datum/language/speaking = null)
-	if(speaking && speaking.name == LANGUAGE_GALACTIC_COMMON)
-		return 1
-	return ..()
-*/
+	var/datum/browser/popup = new(user, "mob\ref[src]", "[src]", 340, 500)
+	popup.set_content(dat)
+	popup.open()
 
 /mob/living/carbon/alien/larva/reset_layer()
 	if(stat == DEAD)

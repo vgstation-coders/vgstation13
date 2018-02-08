@@ -35,6 +35,9 @@
 #define MINIMUM_TEMPERATURE_DELTA_TO_SUSPEND 4 //Minimum temperature difference before group processing is suspended
 #define MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER 0.5 //Minimum temperature difference before the gas temperatures are just set to be equal
 
+#define MINIMUM_PRESSURE_DELTA_TO_SUSPEND 0.1 //The minimum pressure difference required for groups to remain separate (unless they meet other conditions). Chosen arbitrarily.
+#define MINIMUM_PRESSURE_RATIO_TO_SUSPEND 0.05 //Minimum RELATIVE difference in pressure for groups to stay separate (unless they meet other conditions). Also chosen arbitrarily.
+
 #define MINIMUM_TEMPERATURE_FOR_SUPERCONDUCTION		T20C+10
 #define MINIMUM_TEMPERATURE_START_SUPERCONDUCTION	T20C+200
 

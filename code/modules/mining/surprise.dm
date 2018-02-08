@@ -182,7 +182,7 @@ var/global/list/mining_surprises = typesof(/mining_surprise)-/mining_surprise
 		var/list/candidates[0]
 		for(var/dir in cardinal)
 			var/di = "[dir]"
-			if(!di in opt_nt)
+			if(!(di in opt_nt))
 				opt_nt[di]=list()
 				opt_nnt[di]=list()
 			for(var/t in next_to)

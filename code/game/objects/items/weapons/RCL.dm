@@ -86,7 +86,7 @@
 
 /obj/item/weapon/rcl/proc/is_empty(mob/user)
 	update_icon()
-	if(!loaded.amount)
+	if(loaded && !loaded.amount)
 		to_chat(user, "<span class='notice'>The last of the cables unreel from \the [src].</span>")
 		returnToPool(loaded)
 		loaded = null

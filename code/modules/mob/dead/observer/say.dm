@@ -33,9 +33,8 @@
 
 	say_testing(src, "/mob/dead/observer/Hear(): source=[source], frequency=[speech.frequency], source_turf=[formatJumpTo(source_turf)]")
 
-	if (get_dist(source_turf, src) <= world.view) // If this isn't true, we can't be in view, so no need for costlier proc.
-		if (source_turf in view(src))
-			rendered_speech = "<B>[rendered_speech]</B>"
+	if (get_dist(source_turf, src) <= get_view_range())
+		rendered_speech = "<B>[rendered_speech]</B>"
 	else
 		if(client && client.prefs)
 			if (!speech.frequency)

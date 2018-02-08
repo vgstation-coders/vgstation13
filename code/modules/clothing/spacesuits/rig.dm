@@ -20,9 +20,8 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/space/rig/New()
+	check_light() //Needed to properly handle helmets with no lights
 	..()
-	//Needed to properly handle helmets with no lights
-	check_light()
 	//Useful for helmets with special starting conditions (namely, starts lit)
 	update_brightness()
 	update_icon()
@@ -152,7 +151,7 @@
 		..(user)
 	else
 		camera = new /obj/machinery/camera(src)
-		camera.network = list("NUKE")
+		camera.network = list(CAMERANET_NUKE)
 		cameranet.removeCamera(camera)
 		camera.c_tag = user.name
 		to_chat(user, "<span class='notice'>User scanned as [camera.c_tag]. Camera activated.</span>")
@@ -264,7 +263,7 @@
 	item_state = "medical_hardsuit"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical, /obj/item/roller)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 

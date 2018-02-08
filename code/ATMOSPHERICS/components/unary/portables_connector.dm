@@ -43,6 +43,12 @@
 
 	..()
 
+/obj/machinery/atmospherics/unary/portables_connector/Uncrossed(var/atom/movable/AM)
+	if(!connected_device)
+		return
+	if(AM == connected_device)
+		connected_device.disconnect()
+
 /obj/machinery/atmospherics/unary/portables_connector/return_network(obj/machinery/atmospherics/reference)
 	build_network()
 

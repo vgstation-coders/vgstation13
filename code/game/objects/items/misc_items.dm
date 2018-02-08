@@ -49,10 +49,25 @@
 
 /obj/item/red_ribbon_arm/equipped(mob/living/carbon/human/H, equipped_slot)
 	..()
-	if(istype(H) && H.get_item_by_slot(slot_belt) == src)
+	if(istype(H) && H.get_item_by_slot(slot_belt) == src && equipped_slot != null)
 		H.set_hand_amount(H.held_items.len + 1)
 
 /obj/item/red_ribbon_arm/unequipped(mob/living/carbon/human/user, var/from_slot = null)
 	..()
 	if(from_slot == slot_belt && istype(user))
 		user.set_hand_amount(user.held_items.len - 1)
+
+
+/obj/item/folded_bag
+	name = "folded plastic bag"
+	desc = "A neatly folded-up plastic bag, making it easier to store."
+	icon_state = "folded_bag"
+	w_class = W_CLASS_TINY
+
+/obj/item/folded_bag/attack_self(mob/user)
+	to_chat(user, "<span class = 'notice'>You unfold \the [src].</span>")
+	var/bag = new/obj/item/weapon/storage/bag/plasticbag(user.loc)
+	user.u_equip(src)
+	transfer_fingerprints_to(bag)
+	user.put_in_hands(bag)
+	qdel(src)

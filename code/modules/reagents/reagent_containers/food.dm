@@ -5,6 +5,7 @@
 //Food is basically a glorified beaker with a lot of fancy coding. Now you know, and knowing is half the battle
 /obj/item/weapon/reagent_containers/food
 	icon = 'icons/obj/food.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
 	possible_transfer_amounts = null
 	volume = 50 //Food can contain a beaker's worth of reagents unless specified otherwise. Do note large servings of complex food items can contain well over 50 reagents total
 
