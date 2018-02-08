@@ -59,7 +59,7 @@
 "bg" = (/obj/structure/window/reinforced{dir = 8},/obj/effect/decal/cleanable/spiderling_remains,/obj/effect/spider/stickyweb,/turf/simulated/floor/plating,/area/vault/asteroid)
 "bh" = (/obj/structure/window/reinforced/plasma{dir = 4},/obj/effect/spider/stickyweb,/obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg,/obj/effect/decal/cleanable/cockroach_remains,/turf/simulated/floor/plating,/area/vault/asteroid)
 "bi" = (/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area)
-"bj" = (/turf/simulated/floor{dir = 5; icon_state = "stage_stairs"; tag = "icon-whitegreen (NORTHEAST)"},/area/vault/asteroid)
+"bj" = (/turf/simulated/floor{dir = 5; icon_state = "stage_stairs"},/area/vault/asteroid)
 "bk" = (/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 8},/turf/space,/area)
 "bl" = (/obj/structure/window/reinforced/plasma,/obj/structure/cage,/turf/simulated/floor/plating,/area/vault/asteroid)
 "bm" = (/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/wall/r_wall,/area/vault/asteroid)
