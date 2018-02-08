@@ -170,10 +170,11 @@
 	required_pref = ROLE_CHANGELING
 	desc = "An almost parasitic, shapeshifting entity that assumes the identity of its victims. Commonly used as smart bioweapons by the syndicate,\
 	or simply wandering malignant vagrants happening upon a meal of identity that can carry them to further feeding grounds."
+	roletype = /datum/role/changeling
 
 /datum/faction/changeling/GetObjectivesMenuHeader()
-	var/icon/logo_left = icon('icons/mob/mob.dmi', "changelogoa")
-	var/icon/logo_right = icon('icons/mob/mob.dmi', "changelogob")
+	var/icon/logo_left = icon('icons/mob/mob.dmi', "change-logoa")
+	var/icon/logo_right = icon('icons/mob/mob.dmi', "change-logob")
 	var/header = {"<img src='data:image/png;base64,[icon2base64(logo_left)]'> <FONT size = 2><B>Changelings Hivemind</B></FONT> <img src='data:image/png;base64,[icon2base64(logo_right)]'>"}
 	return header
 
