@@ -14,7 +14,7 @@
 			to_chat(H, "<span class='warning'>You are unable to equip that.</span>")
 
 /mob/living/carbon/human/get_all_slots()
-	. = get_head_slots() | get_body_slots()
+	. = held_items + get_head_slots() | get_body_slots()
 
 /mob/living/carbon/human/proc/get_body_slots()
 	return list(
