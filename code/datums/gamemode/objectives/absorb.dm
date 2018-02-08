@@ -1,0 +1,15 @@
+/datum/objective/absorb
+	explanation_text = "Absorb a number of genomes."
+	var/genomes_to_absorb
+/datum/objective/absorb/New()
+	..()
+	genomes_to_absorb = rand(2,3)
+	explanation_text = "Absorb [genomes_to_absorb] genomes."
+
+/datum/objective/absorb/IsFulfilled()
+	. = ..()
+	if(owner)
+		var/datum/role/changeling/C = owner.GetRole(CHANGELING)
+		if(C && C.absorbedcount >= genomes_to_absorb)
+			return TRUE
+	return FALSE

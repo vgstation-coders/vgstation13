@@ -197,31 +197,31 @@
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define iscult(H) H.mind && (iscultist(H) || isculthead(H) || faction == "cult")
+#define iscult(H) (H.mind && (iscultist(H) || isculthead(H) || faction == "cult"))
 
-#define iscultist(H) H.mind && H.mind.GetRole(CULTIST)
+#define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
 
-#define isculthead(H) H.mind && H.mind && H.mind.GetRole(HEADCULTIST)
+#define isculthead(H) (H.mind && H.mind.GetRole(HEADCULTIST))
 
-#define ischangeling(H) H.mind && H.mind.GetRole(CHANGELING)
+#define ischangeling(H) (H.mind && H.mind.GetRole(CHANGELING))
 
-#define isrev(H) H.mind && (H.mind.GetRole(REV) || isrevhead(H))
+#define isrev(H) (H.mind && (H.mind.GetRole(REV) || isrevhead(H)))
 
-#define isrevhead(H) H.mind && H.mind.GetRole(HEADREV)
+#define isrevhead(H) (H.mind && H.mind.GetRole(HEADREV))
 
-#define istraitor(H) H.mind && H.mind.GetRole(TRAITOR)
+#define istraitor(H) (H.mind && H.mind.GetRole(TRAITOR))
 
-#define ismalf(H) H.mind && H.mind.GetRole(MALF)
+#define ismalf(H) (H.mind && H.mind.GetRole(MALF))
 
-#define isnukeop(H) H.mind && H.mind.GetRole(NUKE_OP)
+#define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
 
-#define iswizard(H) H.mind && H.mind.GetRole(WIZARD)
+#define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
 
-#define isapprentice(H) H.mind && H.mind.GetRole(WIZAPP)
+#define isapprentice(H) (H.mind && H.mind.GetRole(WIZAPP))
 
 #define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || (H.mind && H.mind.GetRole(MADMONKEY)))
 
-#define isdeathsquad(H) H.mind && H.mind.GetRole(DEATHSQUAD)
+#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUAD))
 
 
 
