@@ -196,7 +196,7 @@
 	if(..())
 		return FAILED_TO_ADD
 	else
-		T.recharge_time = max(2 , T.recharge_time - 4)
+		T.recharge_time = max(2 , T.recharge_time - 6)
 
 /obj/item/borg/upgrade/jetpack
 	name = "cyborg jetpack module board"

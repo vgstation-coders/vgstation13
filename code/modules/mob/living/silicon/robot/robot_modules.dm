@@ -305,6 +305,23 @@
 
 	fix_modules()
 
+
+/obj/item/weapon/robot_module/security/respawn_consumable(var/mob/living/silicon/robot/R)
+	for(var/T in modules)
+		if(!(locate(T) in modules)) //Remove nulls
+			modules -= null
+
+	if(R.module && R.module.modules)
+		var/list/um = R.contents|R.module.modules
+		// ^ makes single list of active (R.contents) and inactive modules (R.module.modules)
+		for(var/obj/item/weapon/gun/energy/taser/cyborg/I in um)
+			I.restock()
+		if(R)
+			if(R.module)
+				R.module.respawn_consumable(R)
+				R.module.fix_modules()
+
+
 /obj/item/weapon/robot_module/janitor
 	name = "janitorial robot module"
 
