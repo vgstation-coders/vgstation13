@@ -227,6 +227,8 @@
 			nutrilevel = max(15,nutrilevel+15)
 	else
 		worker_bees_inside++
+	if (!species)
+		species = B.species
 	B.home = src
 	B.state = null
 	B.health = B.maxHealth

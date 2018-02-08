@@ -30,6 +30,13 @@
 												/obj/item/weapon/reagent_containers/food/condiment,
 												/obj/item/weapon/reagent_containers/dropper)
 
+	component_parts = newlist(\
+		/obj/item/weapon/circuitboard/microwave,\
+		/obj/item/weapon/stock_parts/micro_laser,\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/stock_parts/console_screen\
+	)
+
 // see code/modules/food/recipes_microwave.dm for recipes
 //Cannot use tools - screwdriver and crowbar for recipes. Or at least fix things before you do
 //TODO - Get a maint panel sprite and J-J-Jam it in.
@@ -44,13 +51,6 @@
 
 /obj/machinery/microwave/New()
 	. = ..()
-
-	component_parts = newlist(\
-		/obj/item/weapon/circuitboard/microwave,\
-		/obj/item/weapon/stock_parts/micro_laser,\
-		/obj/item/weapon/stock_parts/scanning_module,\
-		/obj/item/weapon/stock_parts/console_screen\
-	)
 
 	RefreshParts()
 	create_reagents(100)

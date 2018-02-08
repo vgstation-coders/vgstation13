@@ -69,9 +69,13 @@
 		return
 	if(query_get_id.NextRow())
 		pollid = query_get_id.item[1]
-	if(polltype == "TEXT")
-		return
+
+	log_admin("[key_name(src)] created the poll with id [pollid].")
+	message_admins("<span class='notice'>[key_name_admin(src)] created the poll with id [pollid].</span>")
+
 	var/add_option = 1
+	if(polltype == "TEXT")
+		add_option = 0
 	while(add_option)
 		var/option = input("Write your option","Option") as message
 		if(!option)
@@ -114,10 +118,8 @@
 			var/err = query_polladd_option.ErrorMsg()
 			log_game("SQL ERROR adding new poll option to table. Error : \[[err]\]\n")
 			return
-		switch(alert(" ",,"Add option","Finish","Cancel"))
+		switch(alert(" ",,"Add option","Finish"))
 			if("Add option")
 				add_option = 1
 			if("Finish")
 				add_option = 0
-			else
-				return

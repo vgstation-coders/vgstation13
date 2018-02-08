@@ -37,6 +37,8 @@ var/list/ai_list = list()
 	var/obj/item/device/station_map/station_holomap = null
 	var/custom_sprite = FALSE //For our custom sprites
 	var/obj/item/device/camera/ai_camera/aicamera = null
+	var/busy = FALSE //Toggle Floor Bolt busy var.
+
 //Hud stuff
 
 	//MALFUNCTION
@@ -58,7 +60,15 @@ var/list/ai_list = list()
 	var/can_shunt = TRUE
 	var/last_announcement = ""
 
+	// The AI's "eye". Described on the top of the page in eye.dm
+
+	var/mob/camera/aiEye/eyeobj
+	var/sprint = 10
+	var/cooldown = 0
+	var/acceleration = 1
+
 /mob/living/silicon/ai/New(loc, var/datum/ai_laws/L, var/obj/item/device/mmi/B, var/safety = TRUE)
+
 	var/list/possibleNames = ai_names
 
 	var/pickedName = null
@@ -87,6 +97,8 @@ var/list/ai_list = list()
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 	real_name = pickedName
 	name = real_name
+	view_core()
+	anchored = TRUE
 	canmove = FALSE
 	setDensity(TRUE)
 	loc = loc
@@ -142,6 +154,19 @@ var/list/ai_list = list()
 	ai_list += src
 	..()
 	return
+
+/mob/living/silicon/ai/verb/toggle_anchor()
+	set category = "AI Commands"
+	set name = "Toggle Floor Bolts"
+
+	if(incapacitated() || aiRestorePowerRoutine || !isturf(loc) || busy)
+		return
+	busy = TRUE
+	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	if(do_after(src, src, 30))
+		anchored = !anchored
+		to_chat(src, "You are now <b>[anchored ? "" : "un"]anchored</b>.")
+	busy = FALSE
 
 /mob/living/silicon/ai/verb/radio_interact()
 	set category = "AI Commands"
@@ -367,6 +392,8 @@ var/list/ai_list = list()
 			return
 
 	var/justification = stripped_input(usr, "Please input a concise justification for the shuttle call. Note that failure to properly justify a shuttle call may lead to recall or termination.", "Nanotrasen Anti-Comdom Systems")
+	if(!justification)
+		return
 	var/confirm = alert("Are you sure you want to call the shuttle?", "Confirm Shuttle Call", "Yes", "Cancel")
 	if(confirm == "Yes")
 		call_shuttle_proc(src, justification)

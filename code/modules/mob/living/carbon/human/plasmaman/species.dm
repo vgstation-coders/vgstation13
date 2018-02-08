@@ -7,6 +7,7 @@
 
 	flags = IS_WHITELISTED | PLASMA_IMMUNE
 	anatomy_flags = NO_BLOOD
+	chem_flags = NO_EAT | NO_HUNGER
 
 	//default_mutations=list(SKELETON) // This screws things up
 	primitive = /mob/living/carbon/monkey/skellington/plasma

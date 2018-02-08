@@ -447,6 +447,7 @@
 	modules += new /obj/item/weapon/pen/robopen(src)
 	modules += new /obj/item/weapon/dice/borg(src)
 	modules += new /obj/item/device/rcd/borg/rsf(src)
+	modules += new /obj/item/device/rcd/tile_painter(src)
 	modules += new /obj/item/weapon/lighter/zippo(src)
 	modules += new /obj/item/device/instrument/instrument_synth(src)
 	modules += new /obj/item/weapon/tray/robotray(src)

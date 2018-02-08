@@ -509,7 +509,7 @@
 			else
 				var/list/nearbyPlants = list()
 				for(var/obj/machinery/portable_atmospherics/hydroponics/H in view(src,2))
-					if (!H.dead && H.seed)
+					if (!H.dead && H.seed && !H.closed_system)
 						nearbyPlants += H
 				nearbyPlants.Remove(visited_plants)
 				if (nearbyPlants.len > 0)
@@ -553,9 +553,13 @@
 					walk_to(src,move_to)
 
 				if(src.loc == target_turf)
-					for(var/datum/bee/B in bees)
-						home.enterHive(B)
-					qdel(src)
+					if (!home.species || bee_species == home.species)
+						for(var/datum/bee/B in bees)
+							home.enterHive(B)
+						qdel(src)
+					else
+						home = null
+						state = BEE_ROAMING
 			else
 				state = BEE_ROAMING
 

@@ -4,6 +4,7 @@
 	origin_tech = Tc_BIOTECH + "=4;" + Tc_PROGRAMMING + "=4"
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "mami_empty"
+	robotic = TRUE
 	var/obj/item/device/mmi/posibrain/posibrain = null
 
 /obj/item/organ/internal/brain/mami/attackby(obj/item/O, mob/user)
