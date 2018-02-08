@@ -237,3 +237,11 @@ What is the naming convention for planes or layers?
 	plane = BASE_PLANE
 
 var/obj/abstract/screen/plane_master/clickmaster/clickmaster = new()
+
+/obj/abstract/screen/plane_master/clickmaster_dummy
+	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
+	alpha = 0
+	appearance_flags = 0
+	plane = BASE_PLANE
+
+var/obj/abstract/screen/plane_master/clickmaster_dummy/clickmaster_dummy = new()
