@@ -171,7 +171,7 @@
 					to_chat(user, "<span class='warning'>[src] buzzes: Defibrillation failed. Vital signs are too weak, please try again in five seconds.</span>")
 					return
 			//we couldn't find a suitable ghost.
-			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No brain waves detected..</span>")
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No brain waves detected.</span>")
 			return
 		if(prob(25))
 			heart.damage += 5 //Allow the defibrilator to possibly worsen heart damage. Still rare enough to just be the "clone damage" of the defib
