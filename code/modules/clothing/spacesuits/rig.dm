@@ -133,7 +133,7 @@
 //Syndicate rig
 /obj/item/clothing/head/helmet/space/rig/syndi
 	name = "blood-red hardsuit helmet"
-	desc = "An advanced helmet designed for work in special operations. Property of Gorlex Marauders."
+	desc = "An advanced helmet designed for work in special operations. A tag on it says \"Property of Gorlex Marauders\"."
 	icon_state = "rig0-syndi"
 	item_state = "syndie_helm"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)

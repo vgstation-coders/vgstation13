@@ -60,6 +60,13 @@ var/list/ai_list = list()
 	var/can_shunt = 1
 	var/last_announcement = ""
 
+	// The AI's "eye". Described on the top of the page in eye.dm
+
+	var/mob/camera/aiEye/eyeobj
+	var/sprint = 10
+	var/cooldown = 0
+	var/acceleration = 1
+
 /mob/living/silicon/ai/New(loc, var/datum/ai_laws/L, var/obj/item/device/mmi/B, var/safety = 0)
 	var/list/possibleNames = ai_names
 
@@ -89,6 +96,7 @@ var/list/ai_list = list()
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 	real_name = pickedName
 	name = real_name
+	view_core()
 	anchored = 1
 	canmove = 0
 	setDensity(TRUE)

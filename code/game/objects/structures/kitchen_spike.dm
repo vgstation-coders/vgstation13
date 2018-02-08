@@ -82,7 +82,6 @@
 
 	if(occupant)
 		if(occupant.meat_amount > occupant.meat_taken)
-			occupant.meat_taken++
 			occupant.drop_meat(get_turf(src))
 
 			if(occupant.meat_amount > occupant.meat_taken)

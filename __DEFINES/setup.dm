@@ -13,6 +13,7 @@
 #define PROFILE_MACHINES // Disable when not debugging.
 
 #define ARBITRARILY_LARGE_NUMBER 10000 //Used in delays.dm and vehicle.dm. Upper limit on delays
+#define ARBITRARILY_PLANCK_NUMBER 1.417*(10**32) //1.417×10^32. Because ARBITRARILY_LARGE_NUMBER is too small and INF is too large
 #define MAX_VALUE 65535
 
 #ifdef PROFILE_MACHINES
@@ -945,6 +946,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define NO_SPLASH 4
 #define NO_INJECT 8
 #define NO_CRYO 16
+#define NO_HUNGER 32
 
 
 // from bay station

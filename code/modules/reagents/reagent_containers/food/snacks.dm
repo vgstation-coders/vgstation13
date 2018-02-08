@@ -218,6 +218,17 @@
 
 	if(ishuman(eater))
 		var/mob/living/carbon/human/H = eater
+		if((H.species.chem_flags & NO_EAT) && (isplasmaman(H)))
+			if(ismob(loc))
+				var/mob/M = loc
+				M.drop_from_inventory(src)
+			src.forceMove(get_turf(H))
+			if(H.is_wearing_item(/obj/item/clothing/head/helmet,slot_head))
+				H.visible_message("<span class='warning'>\The [src] slides off of the sealed helmet, falling to the floor below you.</span>", "<span class='notice'>\The [src] slides off of the sealed helmet and falls to the floor below you.</span>")
+				return
+				
+			H.visible_message("<span class='warning'>\The [src] falls out of the putrid jaw and tumbles down onto the floor, gross. </span>", "<span class='notice'>\The [src] falls out of the putrid jaw and onto the ground below you.</span>")
+			return
 		if((H.species.chem_flags & NO_EAT) && !(src.food_flags & FOOD_SKELETON_FRIENDLY))
 			if(ismob(loc))
 				var/mob/M = loc

@@ -1077,6 +1077,16 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 			if(h.set_species("Tajaran"))
 				h.regenerate_icons()
 
+/datum/disease2/effect/zombie
+	name = "Stubborn brain syndrome"
+	stage = 4
+	badness = 2
+
+/datum/disease2/effect/zombie/activate(var/mob/living/carbon/mob)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/h = mob
+		h.become_zombie_after_death = 1
+
 
 /datum/disease2/effect/voxpox
 	name = "Vox Pox"

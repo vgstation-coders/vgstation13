@@ -509,7 +509,7 @@
 			else
 				var/list/nearbyPlants = list()
 				for(var/obj/machinery/portable_atmospherics/hydroponics/H in view(src,2))
-					if (!H.dead && H.seed)
+					if (!H.dead && H.seed && !H.closed_system)
 						nearbyPlants += H
 				nearbyPlants.Remove(visited_plants)
 				if (nearbyPlants.len > 0)

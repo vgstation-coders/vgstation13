@@ -506,8 +506,7 @@
 		dat += "Large growth detected in left leg, possibly cancerous. Surgical removal is recommended.<br>"
 
 	dat += text("[]\tBlood Level %: [] ([] units)</FONT><BR>", (occ["blood_amount"] > 448 ?"<font color='blue'>" : "<font color='red'>"), occ["blood_amount"]*100 / 560, occ["blood_amount"])
-	if(connected.scanning>=2)
-		dat += text("<font color='blue'>\tBlood Type: []</FONT><BR>", occ["btype"])
+	dat += text("<font color='blue'>\tBlood Type: []</FONT><BR>", occ["btype"])
 
 	dat += text("Inaprovaline: [] units<BR>", occ["inaprovaline_amount"])
 	dat += text("Soporific: [] units<BR>", occ["stoxin_amount"])

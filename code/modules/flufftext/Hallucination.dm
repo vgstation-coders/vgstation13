@@ -233,7 +233,7 @@ mob/living/carbon/proc/handle_hallucinations()
 					src << sound('sound/AI/shuttledock.ogg')
 				else
 					var/txt_verb = pick("go to","die in","stay in","avoid")
-					var/location = pick("security","arrivals","bridge","your old house","the escape shuttle hallway","deep space","the DJ satelite","science")
+					var/location = pick("security","arrivals","bridge","your old house","the escape shuttle hallway","deep space","the DJ satellite","science")
 					to_chat(src, "<i>You feel a sudden urge to [txt_verb] [location][pick("...","!",".")]</i>")
 			if(77) //Sillycone
 				if(prob(5))
