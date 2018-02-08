@@ -39,7 +39,7 @@ var/list/wood_icons = list("wood","wood-broken")
 
 	melt_temperature = 1643.15 // Melting point of steel
 
-	plane = TURF_PLANE
+	plane = FLOOR_PLANE
 
 /turf/simulated/floor/New()
 	..()

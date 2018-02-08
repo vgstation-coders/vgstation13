@@ -11,8 +11,8 @@ var/area/space_area
 	var/list/area_turfs
 	var/turret_protected = 0
 	var/list/turretTargets = list()
-	plane = BASE_PLANE
-	layer = AREA_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
+	plane = AREA_PLANE
+	layer = MAPPING_AREA_LAYER
 	var/base_turf_type = null
 	var/shuttle_can_crush = TRUE
 
