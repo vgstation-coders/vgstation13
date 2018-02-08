@@ -1396,8 +1396,8 @@ proc/clear_memory(var/silent = 1)
 
 // --
 /datum/mind/proc/GetRole(var/role_id)
-	if (role_id in antag_roles)
-		return antag_roles[role_id]
+	if (role_id in src.antag_roles)
+		return src.antag_roles[role_id]
 	return FALSE
 
 //Initialisation procs
