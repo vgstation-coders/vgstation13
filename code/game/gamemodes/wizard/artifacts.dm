@@ -139,11 +139,11 @@
 	name = "Summon Swords"
 	desc = "Launch a crusade or just spark a blood bath. Either way there will be limbs flying and blood spraying."
 	abbreviation = "SS"
-
+/*
 /datum/spellbook_artifact/summon_magic/can_buy()
 	//Can't summon swords during ragin' mages
 	return !ticker.mode.rage
-
+*/
 /datum/spellbook_artifact/summon_swords/purchased(mob/living/carbon/human/H)
 	..()
 

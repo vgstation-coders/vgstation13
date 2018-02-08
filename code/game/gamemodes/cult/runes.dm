@@ -969,7 +969,7 @@
 			var/obj/item/organ/external/head/H = A
 			var/mob/living/carbon/brain/N = H.brainmob
 			if(N)//the brain is a player's
-				if(cult_round && (N.mind == cult_round.sacrifice_target))
+				if(cult_round && cult_round.is_sacrifice_target(N.mind))
 					ritualresponse += "You need to place that head back on a body before you can complete your objective."
 				else
 					ritualresponse += "The Geometer of Blood accepts to destroy the head."
