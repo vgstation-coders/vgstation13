@@ -141,8 +141,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(!targets && (spell_flags & WAIT_FOR_CLICK))
 		channel_spell(user, skipcharge)
 		return
-	if(cast_check(1, user))
-		if(gradual_casting)
+	if(gradual_casting)
+		if(cast_check(1, user))
 			gradual_casting = FALSE
 			stop_casting(targets, user)
 			return

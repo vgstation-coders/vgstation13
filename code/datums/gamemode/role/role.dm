@@ -51,7 +51,10 @@
 	var/flags = 0
 
 	// Jobs that cannot be this antag.
-	var/list/protected_jobs=list()
+	var/list/restricted_jobs = list()
+
+	// Jobs that have a much lower chance to be this antag.
+	var/list/protected_jobs = list()
 
 	// Jobs that can only be this antag
 	var/list/required_jobs=list()
@@ -184,6 +187,7 @@
 /datum/role/proc/OnPostSetup()
 	ForgeObjectives()
 	Greet(1)
+	MemorizeObjectives()
 	return 1
 
 /datum/role/proc/process()
@@ -218,7 +222,7 @@
 	return {"
 [name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == DEAD ? " <b><font color=red>(DEAD)</font></b>" : ""]
 <a href='?src=\ref[usr];priv_msg=\ref[M]'>PM</a>
-<a href='?_src_=holder;traitor=\ref[M]'>TP</a>"}
+<a href='?_src_=holder;traitor=\ref[M]'>TP</a> <br/>"}
 
 /datum/role/proc/Greet(var/you_are=1)
 	if(you_are) //Getting a bit philosphical, but there we go
@@ -344,11 +348,11 @@
 
 
 /datum/role/proc/MemorizeObjectives()
-	var/text="<b>[name] Objectives:</b><ul>"
+	var/text="<b>[name] objectives:</b><ul>"
 	var/list/current_objectives = objectives.GetObjectives()
 	for(var/obj_count = 1 to current_objectives.len)
 		var/datum/objective/O = current_objectives[obj_count]
-		text +=  "<B>Objective #[obj_count]</B>: [O.explanation_text]"
+		text +=  "<B>Objective #[obj_count]</B>: [O.explanation_text] <br/>"
 	to_chat(antag.current, text)
 	antag.memory += "[text]<BR>"
 
