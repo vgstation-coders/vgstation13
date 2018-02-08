@@ -87,7 +87,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 		"<div id='switches'><a href=\"javascript:switchTo(0);\">Switch to mini map</a> \
 		<a href=\"javascript:switchTo(1);\">Switch to text-based</a> \
 		[get_zlevel_ui_buttons_js()] \
-		<a href='byond://?src=\ref[hi]&cancel=1'>Cancel Viewing</a></div> \
+		<a href='byond://?src=[REF(hi)]&cancel=1'>Cancel Viewing</a></div> \
 		<div id=\"uiMapContainer\"><div id=\"uiMap\" unselectable=\"on\"></div></div>\
 		<div id=\"textbased\"></div>")
 
@@ -175,7 +175,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 		if(!C.can_use() || C.network.len < 1) //I originally checked if CAMERANET_SS13 was in the camera's networks but apparently sec cameras can see into engi cameras just fine or whatever.
 			deleting = TRUE
 
-		ID = "\ref[C]"
+		ID = "[REF(C)]"
 
 		if(deleting == TRUE)
 			if(ID in data["[zz]"])

@@ -73,7 +73,7 @@
 			if(selection == P && dir == selected_dir)
 				selected = " class='selected'"
 
-			. += "<a href='?src=\ref[master.interface];select_paint=[our_list.Find(P)];set_dir=[dir]'[selected]><img src='[P.file_name][P.icon_state]_[dir].png'/></a>"
+			. += "<a href='?src=[REF(master.interface)];select_paint=[our_list.Find(P)];set_dir=[dir]'[selected]><img src='[P.file_name][P.icon_state]_[dir].png'/></a>"
 
 	. += "</p>"
 	. = jointext(.,"")

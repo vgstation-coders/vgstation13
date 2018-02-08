@@ -142,14 +142,14 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	text += "<br>"
 
 	if(area_type in can_create_areas_in)
-		text += "<p><a href='?src=\ref[src];action=create_room'>Create a new room</a></p>"
-		text += "<p><a href='?src=\ref[src];action=create_area'>Start a new drawing</a></p>"
+		text += "<p><a href='?src=[REF(src)];action=create_room'>Create a new room</a></p>"
+		text += "<p><a href='?src=[REF(src)];action=create_area'>Start a new drawing</a></p>"
 	if(area_type in can_rename_areas)
-		text += "<p><a href='?src=\ref[src];action=rename_area'>Change the drawing's name</a></p>"
+		text += "<p><a href='?src=[REF(src)];action=rename_area'>Change the drawing's name</a></p>"
 	if(area_type in can_edit_areas)
-		text += "<p><a href='?src=\ref[src];action=edit_area'>Move an amendment to the drawing</a></p>"
+		text += "<p><a href='?src=[REF(src)];action=edit_area'>Move an amendment to the drawing</a></p>"
 	if(area_type in can_delete_areas)
-		text += "<p><a href='?src=\ref[src];action=delete_area'>Erase this drawing</a></p>"
+		text += "<p><a href='?src=[REF(src)];action=delete_area'>Erase this drawing</a></p>"
 
 	text += "</BODY></HTML>"
 	usr << browse(text, "window=blueprints")

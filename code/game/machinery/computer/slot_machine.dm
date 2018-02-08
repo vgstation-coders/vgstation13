@@ -274,13 +274,13 @@
 
 	if(stored_money > 0)
 		dat += {"There are <span style="color:[stored_money<spin_cost?"red":"green"]"><b>$[num2septext(stored_money)]</b>
-			space credits inserted. <span style="color:blue"><a href='?src=\ref[src];reclaim=1'>Reclaim</a></span><br>"}
+			space credits inserted. <span style="color:blue"><a href='?src=[REF(src)];reclaim=1'>Reclaim</a></span><br>"}
 	else
 		dat += {"You need at least <b>$[spin_cost]</b> credits to play. Use a nearby ATM and retrieve some cash from your money account!<br>"}
 
 	if(can_play())
 		if(stored_money >= spin_cost)
-			dat += {"<span style="color:yellow"><a href='?src=\ref[src];spin=1'>Play! (<b>$[spin_cost]</b>)</a></span><br>"}
+			dat += {"<span style="color:yellow"><a href='?src=[REF(src)];spin=1'>Play! (<b>$[spin_cost]</b>)</a></span><br>"}
 
 	else
 		dat += {"<b>OUT OF SERVICE</b><br>"}

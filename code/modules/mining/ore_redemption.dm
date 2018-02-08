@@ -98,15 +98,15 @@
 	dat += text("Current unclaimed credits: $[num2septext(credits)]<br>")
 
 	if(istype(inserted_id))
-		dat += "You have [inserted_id.GetBalance(format=1)] credits in your bank account. <A href='?src=\ref[src];choice=eject'>Eject ID.</A><br>"
-		dat += "<A href='?src=\ref[src];choice=claim'>Claim points.</A><br>"
+		dat += "You have [inserted_id.GetBalance(format=1)] credits in your bank account. <A href='?src=[REF(src)];choice=eject'>Eject ID.</A><br>"
+		dat += "<A href='?src=[REF(src)];choice=claim'>Claim points.</A><br>"
 	else
-		dat += text("No ID inserted.  <A href='?src=\ref[src];choice=insert'>Insert ID.</A><br>")
+		dat += text("No ID inserted.  <A href='?src=[REF(src)];choice=insert'>Insert ID.</A><br>")
 
 	for(var/O in materials.storage)
 		if(materials.storage[O] > 0)
 			var/datum/material/mat = materials.getMaterial(O)
-			dat += text("[capitalize(mat.processed_name)]: [materials.storage[O]] <A href='?src=\ref[src];release=[mat.id]'>Release</A><br>")
+			dat += text("[capitalize(mat.processed_name)]: [materials.storage[O]] <A href='?src=[REF(src)];release=[mat.id]'>Release</A><br>")
 
 	dat += text("<br>This unit can hold stacks of [stack_amt] sheets of each mineral type.<br><br>")
 

@@ -464,7 +464,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	var/dat = {"
 	<B><HR><FONT size=3>[name]</FONT></B>
 	<BR><HR><BR>
-	<BR><A href='?src=\ref[user];mach_close=mob[name]'>Close</A>
+	<BR><A href='?src=[REF(user)];mach_close=mob[name]'>Close</A>
 	<BR>"}
 	user << browse(dat, text("window=mob[name];size=340x480"))
 	onclose(user, "mob[name]")
@@ -1007,7 +1007,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		if(O.client)
 			var/area/A = get_area(src)
 			if(A)
-				to_chat(O, "<span class=\"recruit\">Golem rune created in [A.name]. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>")
+				to_chat(O, "<span class=\"recruit\">Golem rune created in [A.name]. (<a href='?src=[REF(O)];jump=[REF(src)]'>Teleport</a> | <a href='?src=[REF(src)];signup=[REF(O)]'>Sign Up</a>)</span>")
 
 /obj/effect/golem_rune/Topic(href,href_list)
 	if("signup" in href_list)

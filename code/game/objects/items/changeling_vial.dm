@@ -22,7 +22,7 @@
 				sleep(100)
 				to_chat(H, "<B><font color='red'>Finally, we once again have a suitable body. We are once again a proper changeling!</font></B>")
 				var/wikiroute = role_wiki[ROLE_CHANGELING]
-				to_chat(H, "<span class='info'><a HREF='?src=\ref[H];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+				to_chat(H, "<span class='info'><a HREF='?src=[REF(H)];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 				M.make_new_changeling(0,1)
 				H.mind.changeling.geneticpoints = Clamp(genomes_to_give, 0, 100)
 				log_admin("[H] has become a changeling using a changeling vial.")

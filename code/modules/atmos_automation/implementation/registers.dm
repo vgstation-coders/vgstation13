@@ -23,7 +23,7 @@
 /datum/automation/get_register_data/GetText()
 	var/datum/automation/field = children[1]
 
-	var/out = "Value from register: <a href='?src=\ref[src];setfield=1'>(Set Field)</a> ("
+	var/out = "Value from register: <a href='?src=[REF(src)];setfield=1'>(Set Field)</a> ("
 	if(field == null)
 		out += "-----"
 	else
@@ -70,12 +70,12 @@
 	var/datum/automation/idfield = children[1]
 	var/datum/automation/valuefield = children[2]
 
-	var/out = "Set register: <a href='?src=\ref[src];setfield=1'>(Set Field)</a> ("
+	var/out = "Set register: <a href='?src=[REF(src)];setfield=1'>(Set Field)</a> ("
 	if(idfield == null)
 		out += "-----"
 	else
 		out += idfield.GetText()
-	out += ") to value: <a href='?src=\ref[src];setfield=2'>(Set Field)</a> ("
+	out += ") to value: <a href='?src=[REF(src)];setfield=2'>(Set Field)</a> ("
 	if(valuefield == null)
 		out += "-----"
 	else

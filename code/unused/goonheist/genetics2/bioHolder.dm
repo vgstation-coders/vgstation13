@@ -187,7 +187,7 @@ var/list/bioEffectList = null
 		var/list/filteredList = list()
 
 		if (!bioEffectList || !bioEffectList.len)
-			debug_log.Add("<b>Genetics:</b> Tried to add new random effect to pool for [owner ? "\ref[owner] [owner.name]" : "*NULL*"], but bioEffectList is empty!")
+			debug_log.Add("<b>Genetics:</b> Tried to add new random effect to pool for [owner ? "[REF(owner)] [owner.name]" : "*NULL*"], but bioEffectList is empty!")
 			return 0
 
 		for(var/T in bioEffectList)
@@ -198,7 +198,7 @@ var/list/bioEffectList = null
 			filteredList[instance] = instance.probability
 
 		if(!filteredList.len)
-			debug_log.Add("<b>Genetics:</b> Unable to get effects for new random effect for [owner ? "\ref[owner] [owner.name]" : "*NULL*"]. (filteredList.len = [filteredList.len])")
+			debug_log.Add("<b>Genetics:</b> Unable to get effects for new random effect for [owner ? "[REF(owner)] [owner.name]" : "*NULL*"]. (filteredList.len = [filteredList.len])")
 			return 0
 
 		var/datum/bioEffect/selectedG = pickweight(filteredList)
@@ -220,7 +220,7 @@ var/list/bioEffectList = null
 		effectPool.len = 0
 
 		if (!bioEffectList || !bioEffectList.len)
-			debug_log.Add("<b>Genetics:</b> Tried to build effect pool for [owner ? "\ref[owner] [owner.name]" : "*NULL*"], but bioEffectList is empty!")
+			debug_log.Add("<b>Genetics:</b> Tried to build effect pool for [owner ? "[REF(owner)] [owner.name]" : "*NULL*"], but bioEffectList is empty!")
 
 		for(var/T in bioEffectList)
 			var/datum/bioEffect/instance = bioEffectList[T]
@@ -239,7 +239,7 @@ var/list/bioEffectList = null
 				filteredGood[instance] = instance.probability
 
 		if(!filteredGood.len || !filteredBad.len)
-			debug_log.Add("<b>Genetics:</b> Unable to build effect pool for [owner ? "\ref[owner] [owner.name]" : "*NULL*"]. (filteredGood.len = [filteredGood.len], filteredBad.len = [filteredBad.len])")
+			debug_log.Add("<b>Genetics:</b> Unable to build effect pool for [owner ? "[REF(owner)] [owner.name]" : "*NULL*"]. (filteredGood.len = [filteredGood.len], filteredBad.len = [filteredBad.len])")
 			return
 
 		for(var/g=0, g<5, g++)

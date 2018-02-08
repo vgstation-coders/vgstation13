@@ -80,13 +80,13 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	if(screen == 1)
 
 		dat += {"Select an event to trigger:<ul>
-			<li><A href='?src=\ref[src];triggerevent=Red alert'>Red alert</A></li>"}
+			<li><A href='?src=[REF(src)];triggerevent=Red alert'>Red alert</A></li>"}
 		if((get_security_level() in list("red", "delta")))
-			dat += "<li><A href='?src=\ref[src];triggerevent=Emergency Response Team'>Emergency Response Team</A></li>"
+			dat += "<li><A href='?src=[REF(src)];triggerevent=Emergency Response Team'>Emergency Response Team</A></li>"
 		else
 			dat += "<li>Emergency Response Team (Disabled while below Code Red)</li>"
-		dat += {"<li><A href='?src=\ref[src];triggerevent=Grant Emergency Maintenance Access'>Grant Emergency Maintenance Access</A></li>
-			<li><A href='?src=\ref[src];triggerevent=Revoke Emergency Maintenance Access'>Revoke Emergency Maintenance Access</A></li>
+		dat += {"<li><A href='?src=[REF(src)];triggerevent=Grant Emergency Maintenance Access'>Grant Emergency Maintenance Access</A></li>
+			<li><A href='?src=[REF(src)];triggerevent=Revoke Emergency Maintenance Access'>Revoke Emergency Maintenance Access</A></li>
 			</ul>"}
 		user << browse(dat, "window=keycard_auth;size=500x300")
 	if(screen == 2)
@@ -95,7 +95,7 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 		if(event == "Emergency Response Team")
 			dat += "<p>Given reason for ERT request: '[ert_reason]'"
 
-		dat += "<p><A href='?src=\ref[src];reset=1'>Back</A>"
+		dat += "<p><A href='?src=[REF(src)];reset=1'>Back</A>"
 		user << browse(dat, "window=keycard_auth;size=500x300")
 	return
 

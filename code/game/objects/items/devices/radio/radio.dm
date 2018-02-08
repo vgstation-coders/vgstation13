@@ -93,16 +93,16 @@
 	var/dat = "<html><head><title>[src]</title></head><body><TT>"
 
 	if(!istype(src, /obj/item/device/radio/headset)) //Headsets dont get a mic button
-		dat += "Microphone: [broadcasting ? "<A href='byond://?src=\ref[src];talk=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];talk=1'>Disengaged</A>"]<BR>"
+		dat += "Microphone: [broadcasting ? "<A href='byond://?src=[REF(src)];talk=0'>Engaged</A>" : "<A href='byond://?src=[REF(src)];talk=1'>Disengaged</A>"]<BR>"
 
 	dat += {"
-				Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>
+				Speaker: [listening ? "<A href='byond://?src=[REF(src)];listen=0'>Engaged</A>" : "<A href='byond://?src=[REF(src)];listen=1'>Disengaged</A>"]<BR>
 				Frequency:
-				<A href='byond://?src=\ref[src];freq=-10'>-</A>
-				<A href='byond://?src=\ref[src];freq=-2'>-</A>
+				<A href='byond://?src=[REF(src)];freq=-10'>-</A>
+				<A href='byond://?src=[REF(src)];freq=-2'>-</A>
 				[format_frequency(frequency)]
-				<A href='byond://?src=\ref[src];freq=2'>+</A>
-				<A href='byond://?src=\ref[src];freq=10'>+</A><BR>
+				<A href='byond://?src=[REF(src)];freq=2'>+</A>
+				<A href='byond://?src=[REF(src)];freq=10'>+</A><BR>
 				"}
 
 	for (var/ch_name in channels)
@@ -121,7 +121,7 @@
 /obj/item/device/radio/proc/text_sec_channel(var/chan_name, var/chan_stat)
 	var/list = !!(chan_stat&FREQ_LISTENING)!=0
 	return {"
-			<B>[chan_name]</B>: <A href='byond://?src=\ref[src];ch_name=[chan_name];listen=[!list]'>[list ? "Engaged" : "Disengaged"]</A><BR>
+			<B>[chan_name]</B>: <A href='byond://?src=[REF(src)];ch_name=[chan_name];listen=[!list]'>[list ? "Engaged" : "Disengaged"]</A><BR>
 			"}
 
 /obj/item/device/radio/Topic(href, href_list)

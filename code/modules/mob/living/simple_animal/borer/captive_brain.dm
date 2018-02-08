@@ -23,9 +23,9 @@
 			if(istype(M, /mob/new_player))
 				continue
 			if(istype(M,/mob/dead/observer)  && (M.client && M.client.prefs.toggles & CHAT_GHOSTEARS))
-				var/controls = "<a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>Follow</a>"
+				var/controls = "<a href='byond://?src=[REF(M)];follow2=[REF(M)];follow=[REF(src)]'>Follow</a>"
 				if(M.client.holder)
-					controls+= " | <A HREF='?_src_=holder;adminmoreinfo=\ref[src]'>?</A>"
+					controls+= " | <A HREF='?_src_=holder;adminmoreinfo=[REF(src)]'>?</A>"
 				var/rendered="<span class='thoughtspeech'>Thought-speech, <b>[src.name]</b> ([controls]) -> <b>[B.truename]:</b> [message]</span>"
 				M.show_message(rendered, 2) //Takes into account blindness and such.
 

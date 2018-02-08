@@ -496,7 +496,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 	if(key)
 		if(include_link && C)
-			. += "<a href='?priv_msg=\ref[C]'>"
+			. += "<a href='?priv_msg=[REF(C)]'>"
 
 		if(C && C.holder && C.holder.fakekey && !include_name)
 			. += "Administrator"
@@ -518,7 +518,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 			. += "/([M.name])"
 
 	if(more_info && M)
-		. += "(<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
+		. += "(<A HREF='?_src_=holder;adminplayeropts=[REF(M)]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=[REF(M)]'>?</A>)"
 
 /proc/key_name_admin(var/whom, var/include_name = 1)
 	return key_name(whom, 1, include_name)
@@ -545,7 +545,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		return
 	var/param = "null"
 	if(ref)
-		param = "\ref[ref]"
+		param = "[REF(ref)]"
 
 	winset(user, windowid, "on-close=\".windowclose [param]\"")
 
@@ -1695,6 +1695,16 @@ Game Mode config tags:
 		T2 = get_turf(B)
 	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))
 
+/proc/REF(input)
+	if(istype(input, /datum))
+		var/datum/thing = input
+		if(thing.use_tag)
+			if(!thing.tag)
+				WARNING("A ref was requested of an object with use_tag set but no tag: [thing]")
+			else
+				return thing.tag
+	return "\ref[input]"
+
 /proc/seedify(obj/item/O, obj/machinery/seed_extractor/extractor = null, mob/living/user = null)
 	if(!O)
 		CRASH("Something called seedify() without anything to make seeds of.")
@@ -1713,17 +1723,17 @@ Game Mode config tags:
 
 	if(user)
 		user.drop_item(O, force_drop = TRUE)
-	
+
 	if(istype(O, /obj/item/weapon/grown))
 		var/obj/item/weapon/grown/F = O
 		if(F.plantname)
 			new_seed_type = plant_controller.seeds[F.plantname]
-	else 
+	else
 		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
 			var/obj/item/weapon/reagent_containers/food/snacks/grown/F = O
 			if(F.plantname)
 				new_seed_type = plant_controller.seeds[F.plantname]
-		else 
+		else
 			var/obj/item/F = O
 			if(F.nonplant_seed_type)
 				while(min_seeds <= produce)

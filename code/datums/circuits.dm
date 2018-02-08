@@ -91,7 +91,7 @@
 		<td[row_options1]><font color='blue'>[fusepoint]</font>
 		</td>
 		<td[row_options2]>
-		<A href='?src=\ref[src];action=1;fuse=[fuse_point_names[fusepoint]]'>[checkfuse(text2num(fuse_point_names[fusepoint])) ? "Melt" :  "Fuse"]</A></td></tr>"}
+		<A href='?src=[REF(src)];action=1;fuse=[fuse_point_names[fusepoint]]'>[checkfuse(text2num(fuse_point_names[fusepoint])) ? "Melt" :  "Fuse"]</A></td></tr>"}
 	html += "</table>"
 	html += "</div>"
 

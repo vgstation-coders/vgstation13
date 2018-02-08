@@ -404,7 +404,7 @@ rcd light flash thingy on matter drain
 			<B>Install Module:</B><BR>
 			<I>The number afterwards is the amount of processing time it consumes.</I><BR>"}
 	for(var/datum/AI_Module/module in src.possible_modules)
-		dat += "<A href='byond://?src=\ref[src];buy=1;module=\ref[module]'>[module.module_name]</A> <A href='byond://?src=\ref[src];desc=1;module=\ref[module]'>?</A>([module.cost])<BR>"
+		dat += "<A href='byond://?src=[REF(src)];buy=1;module=[REF(module)]'>[module.module_name]</A> <A href='byond://?src=[REF(src)];desc=1;module=[REF(module)]'>?</A>([module.cost])<BR>"
 	dat += "<HR>"
 	if (src.temp)
 		dat += "[src.temp]"

@@ -114,22 +114,22 @@
 	else
 		dat = "<TT><b>Thinktronic BIOS V1.4</b><br><br>"
 
-		dat += "Current ID: <a href='?src=\ref[src];id=auth'>[src.authid ? "[src.authid.name]" : "----------"]</a><br>"
-		dat += "Auxiliary ID: <a href='?src=\ref[src];id=aux'>[src.auxid ? "[src.auxid.name]" : "----------"]</a><br><br>"
+		dat += "Current ID: <a href='?src=[REF(src)];id=auth'>[src.authid ? "[src.authid.name]" : "----------"]</a><br>"
+		dat += "Auxiliary ID: <a href='?src=[REF(src)];id=aux'>[src.auxid ? "[src.auxid.name]" : "----------"]</a><br><br>"
 
 		var/progdat
 		if((src.hd) && (src.hd.root))
 			for(var/datum/computer/file/computer_program/P in src.hd.root.contents)
 				progdat += "<tr><td>[P.name]</td><td>Size: [P.size]</td>"
 
-				progdat += "<td><a href='byond://?src=\ref[src];prog=\ref[P];function=run'>Run</a></td>"
+				progdat += "<td><a href='byond://?src=[REF(src)];prog=[REF(P)];function=run'>Run</a></td>"
 
 				if(P in src.processing_programs)
-					progdat += "<td><a href='byond://?src=\ref[src];prog=\ref[P];function=unload'>Halt</a></td>"
+					progdat += "<td><a href='byond://?src=[REF(src)];prog=[REF(P)];function=unload'>Halt</a></td>"
 				else
-					progdat += "<td><a href='byond://?src=\ref[src];prog=\ref[P];function=load'>Load</a></td>"
+					progdat += "<td><a href='byond://?src=[REF(src)];prog=[REF(P)];function=load'>Load</a></td>"
 
-				progdat += "<td><a href='byond://?src=\ref[src];file=\ref[P];function=delete'>Del</a></td></tr>"
+				progdat += "<td><a href='byond://?src=[REF(src)];file=[REF(P)];function=delete'>Del</a></td></tr>"
 
 				continue
 
@@ -150,18 +150,18 @@
 		progdat = null
 		if((src.diskette) && (src.diskette.root))
 
-			dat += "<font size=1><a href='byond://?src=\ref[src];disk=1'>Eject</a></font><br>"
+			dat += "<font size=1><a href='byond://?src=[REF(src)];disk=1'>Eject</a></font><br>"
 
 			for(var/datum/computer/file/computer_program/P in src.diskette.root.contents)
 				progdat += "<tr><td>[P.name]</td><td>Size: [P.size]</td>"
-				progdat += "<td><a href='byond://?src=\ref[src];prog=\ref[P];function=run'>Run</a></td>"
+				progdat += "<td><a href='byond://?src=[REF(src)];prog=[REF(P)];function=run'>Run</a></td>"
 
 				if(P in src.processing_programs)
-					progdat += "<td><a href='byond://?src=\ref[src];prog=\ref[P];function=unload'>Halt</a></td>"
+					progdat += "<td><a href='byond://?src=[REF(src)];prog=[REF(P)];function=unload'>Halt</a></td>"
 				else
-					progdat += "<td><a href='byond://?src=\ref[src];prog=\ref[P];function=load'>Load</a></td>"
+					progdat += "<td><a href='byond://?src=[REF(src)];prog=[REF(P)];function=load'>Load</a></td>"
 
-				progdat += "<td><a href='byond://?src=\ref[src];file=\ref[P];function=install'>Install</a></td></tr>"
+				progdat += "<td><a href='byond://?src=[REF(src)];file=[REF(P)];function=install'>Install</a></td></tr>"
 
 				continue
 

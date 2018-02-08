@@ -11,17 +11,17 @@
 		if(..())
 			return
 
-		var/dat = "<a href='byond://?src=\ref[src];close=1'>Close</a> | "
-		dat += "<a href='byond://?src=\ref[src];quit=1'>Quit</a><br>"
+		var/dat = "<a href='byond://?src=[REF(src)];close=1'>Close</a> | "
+		dat += "<a href='byond://?src=[REF(src)];quit=1'>Quit</a><br>"
 
 		dat += "<b>SpaceMessenger V4.1.2</b><br>"
 
-		dat += "<a href='byond://?src=\ref[src];send_msg=1'>Send Message</a>"
+		dat += "<a href='byond://?src=[REF(src)];send_msg=1'>Send Message</a>"
 
-		dat += " | <a href='byond://?src=\ref[src];func_msg=clear'>Clear</a>"
-		dat += " | <a href='byond://?src=\ref[src];func_msg=print'>Print</a>"
+		dat += " | <a href='byond://?src=[REF(src)];func_msg=clear'>Clear</a>"
+		dat += " | <a href='byond://?src=[REF(src)];func_msg=print'>Print</a>"
 
-		dat += " | Name:<a href='byond://?src=\ref[src];set_name=1'>[src.screen_name]</a><hr>"
+		dat += " | Name:<a href='byond://?src=[REF(src)];set_name=1'>[src.screen_name]</a><hr>"
 
 		dat += messages
 

@@ -265,9 +265,9 @@ var/global/list/loopModeNames=list(
 	if(panel_open)
 		wires.Interact(user)
 	var/t = "<div class=\"navbar\">"
-	t += "<a href=\"?src=\ref[src];screen=[JUKEBOX_SCREEN_MAIN]\">Main</a>"
+	t += "<a href=\"?src=[REF(src)];screen=[JUKEBOX_SCREEN_MAIN]\">Main</a>"
 	if(allowed(user)|| access_unlocked)
-		t += " | <a href=\"?src=\ref[src];screen=[JUKEBOX_SCREEN_SETTINGS]\">Settings</a>"
+		t += " | <a href=\"?src=[REF(src)];screen=[JUKEBOX_SCREEN_SETTINGS]\">Settings</a>"
 	t += "</div>"
 	switch(screen)
 		if(JUKEBOX_SCREEN_MAIN)
@@ -286,10 +286,10 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/proc/ScreenMain(var/mob/user)
 	var/t = list()
 	t += "<h1>Jukebox Interface</h1>"
-	t += "<b>Power:</b> <a href='?src=\ref[src];power=1'>[playing?"On":"Off"]</a><br />"
-	t += "<b>Play Mode:</b> <a href='?src=\ref[src];mode=1'>[allowed_modes[loop_mode]]</a><br />"
+	t += "<b>Power:</b> <a href='?src=[REF(src)];power=1'>[playing?"On":"Off"]</a><br />"
+	t += "<b>Play Mode:</b> <a href='?src=[REF(src)];mode=1'>[allowed_modes[loop_mode]]</a><br />"
 	if(isAdminGhost(user))
-		t += "<a href='?src=\ref[src];add_custom=1'>Add new song</a><br>"
+		t += "<a href='?src=[REF(src)];add_custom=1'>Add new song</a><br>"
 
 	if(playlist == null)
 		t += "\[DOWNLOADING PLAYLIST, PLEASE WAIT\]"
@@ -298,7 +298,7 @@ var/global/list/loopModeNames=list(
 			if(check_reload())
 				t += "<b>Playlist:</b> "
 				for(var/plid in playlists)
-					t += "<a href='?src=\ref[src];playlist=[plid]'>[playlists[plid]]</a>"
+					t += "<a href='?src=[REF(src)];playlist=[plid]'>[playlists[plid]]</a>"
 			else
 				t += "<i>Please wait before changing playlists.</i>"
 		else
@@ -328,7 +328,7 @@ var/global/list/loopModeNames=list(
 			var/datum/song_info/song=playlist[i]
 			t += "<tr><th>#[i]</th><td>"
 			if(can_change)
-				t += "<A href='?src=\ref[src];song=[i]' class='nobg'>"
+				t += "<A href='?src=[REF(src)];song=[i]' class='nobg'>"
 			t += song.displaytitle()
 			if(can_change)
 				t += "</A>"
@@ -344,7 +344,7 @@ var/global/list/loopModeNames=list(
 	<center>
 		<p>You've selected <b>[song.displaytitle()]</b>.</p>
 		<p><b>Swipe ID card</b> or <b>insert cash</b> to play this song next! ($[num2septext(change_cost)])</p>
-		\[ <a href='?src=\ref[src];cancelbuy=1'>Cancel</a> \]
+		\[ <a href='?src=[REF(src)];cancelbuy=1'>Cancel</a> \]
 	</center>"}
 	return t
 
@@ -352,8 +352,8 @@ var/global/list/loopModeNames=list(
 	if(!linked_account)
 		linked_account = station_account
 	var/dat={"<h1>Settings</h1>
-		<form action="?src=\ref[src]" method="get">
-		<input type="hidden" name="src" value="\ref[src]" />
+		<form action="?src=[REF(src)]" method="get">
+		<input type="hidden" name="src" value="[REF(src)]" />
 		<fieldset>
 			<legend>Banking</legend>
 			<div>
@@ -808,7 +808,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/superjuke/adminbus/attack_hand(var/mob/user)
 	var/t = "<div class=\"navbar\">"
-	t += "<a href=\"?src=\ref[src];screen=[JUKEBOX_SCREEN_MAIN]\">Main</a>"
+	t += "<a href=\"?src=[REF(src)];screen=[JUKEBOX_SCREEN_MAIN]\">Main</a>"
 	t += "</div>"
 	t += ScreenMain(user)
 

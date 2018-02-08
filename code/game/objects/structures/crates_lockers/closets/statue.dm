@@ -54,7 +54,7 @@
 		//Monsters with animated icons look bad as statues!
 		var/icon/static_icon = icon(L.icon)
 		var/icon/original = icon(L.icon, L.icon_state, frame = 1)
-		var/new_iconstate = "[L.icon_state]\ref[L]" //to avoid conflict with other icon states eh
+		var/new_iconstate = "[L.icon_state][REF(L)]" //to avoid conflict with other icon states eh
 		static_icon.Insert(original, new_iconstate)
 
 		icon = static_icon

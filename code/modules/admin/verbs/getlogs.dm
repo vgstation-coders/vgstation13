@@ -116,7 +116,7 @@
 		to_chat(usr, "That's not a valid mob!")
 		return
 
-	var/datum/browser/clean/popup = new (usr, "\ref[M]_admin_log_viewer", "Attack logs of [M]", 300, 300)
+	var/datum/browser/clean/popup = new (usr, "[REF(M)]_admin_log_viewer", "Attack logs of [M]", 300, 300)
 	popup.set_content(jointext(M.attack_log, "<br/>"))
 	popup.open()
 

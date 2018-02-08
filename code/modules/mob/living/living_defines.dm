@@ -80,5 +80,5 @@
 	var/thermal_loss_multiplier = 1				//The heat the mob loses to the environment is multiplied by this value.
 
 /mob/living/proc/unsubLife(datum/sub)
-	while("\ref[sub]" in callOnLife)
-		callOnLife -= "\ref[sub]"
+	while("[REF(sub)]" in callOnLife)
+		callOnLife -= "[REF(sub)]"

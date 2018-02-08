@@ -54,7 +54,7 @@
 	var/output = {"<div class='wr'>
 						<div class='header'>Special</div>
 						<div class='links'>
-						<a href='?src=\ref[src];phasing=1'><span id="phasing_command">[phasing?"Dis":"En"]able phasing</span></a>
+						<a href='?src=[REF(src)];phasing=1'><span id="phasing_command">[phasing?"Dis":"En"]able phasing</span></a>
 						</div>
 						</div>
 						"}

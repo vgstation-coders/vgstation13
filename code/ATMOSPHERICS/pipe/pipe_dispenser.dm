@@ -37,54 +37,54 @@
 	var/dat = {"
 <b>Regular pipes:</b>
 <ul>
-	<li><a href='?src=\ref[src];make=[PIPE_SIMPLE_STRAIGHT];dir=1'>Pipe</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_SIMPLE_BENT];dir=5'>Bent Pipe</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_MANIFOLD];dir=1'>Manifold</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_MVALVE];dir=1'>Manual Valve</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_DVALVE];dir=1'>Digital Valve</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_CAP];dir=1'>Pipe Cap</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_MANIFOLD4W];dir=1'>4-Way Manifold</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_MTVALVE];dir=1'>Manual T-Valve</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_MTVALVE];dir=9'>Manual T-Valve \[M]</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_DTVALVE];dir=1'>Digital T-Valve</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_DTVALVE];dir=9'>Digital T-Valve \[M]</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_LAYER_MANIFOLD];dir=1'>Layer Manifold</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_LAYER_ADAPTER];dir=1'>Layer Adapter</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_SIMPLE_STRAIGHT];dir=1'>Pipe</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_SIMPLE_BENT];dir=5'>Bent Pipe</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_MANIFOLD];dir=1'>Manifold</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_MVALVE];dir=1'>Manual Valve</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_DVALVE];dir=1'>Digital Valve</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_CAP];dir=1'>Pipe Cap</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_MANIFOLD4W];dir=1'>4-Way Manifold</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_MTVALVE];dir=1'>Manual T-Valve</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_MTVALVE];dir=9'>Manual T-Valve \[M]</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_DTVALVE];dir=1'>Digital T-Valve</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_DTVALVE];dir=9'>Digital T-Valve \[M]</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_LAYER_MANIFOLD];dir=1'>Layer Manifold</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_LAYER_ADAPTER];dir=1'>Layer Adapter</a></li>
 </ul>
 <b>Devices:</b>
 <ul>
-	<li><a href='?src=\ref[src];make=[PIPE_CONNECTOR];dir=1'>Connector</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_UVENT];dir=1'>Unary Vent</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_PASV_VENT];dir=1'>Passive Vent</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_PUMP];dir=1'>Gas Pump</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_PASSIVE_GATE];dir=1'>Passive Gate</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_VOLUME_PUMP];dir=1'>Volume Pump</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_SCRUBBER];dir=1'>Scrubber</a></li>
-	<li><a href='?src=\ref[src];makemeter=1'>Meter</a></li>
-	<li><a href='?src=\ref[src];makegsensor=1'>Gas Sensor</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_GAS_FILTER];dir=1'>Gas Filter</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_GAS_FILTER];dir=9'>Gas Filter \[M]</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_GAS_MIXER];dir=1'>Gas Mixer</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_GAS_MIXER];dir=9'>Gas Mixer \[M]</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_THERMAL_PLATE];dir=1'>Thermal Plate</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_INJECTOR];dir=1'>Injector</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_DP_VENT];dir=1'>Dual-Port Vent</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_CONNECTOR];dir=1'>Connector</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_UVENT];dir=1'>Unary Vent</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_PASV_VENT];dir=1'>Passive Vent</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_PUMP];dir=1'>Gas Pump</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_PASSIVE_GATE];dir=1'>Passive Gate</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_VOLUME_PUMP];dir=1'>Volume Pump</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_SCRUBBER];dir=1'>Scrubber</a></li>
+	<li><a href='?src=[REF(src)];makemeter=1'>Meter</a></li>
+	<li><a href='?src=[REF(src)];makegsensor=1'>Gas Sensor</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_GAS_FILTER];dir=1'>Gas Filter</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_GAS_FILTER];dir=9'>Gas Filter \[M]</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_GAS_MIXER];dir=1'>Gas Mixer</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_GAS_MIXER];dir=9'>Gas Mixer \[M]</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_THERMAL_PLATE];dir=1'>Thermal Plate</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_INJECTOR];dir=1'>Injector</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_DP_VENT];dir=1'>Dual-Port Vent</a></li>
 </ul>
 <b>Heat exchange:</b>
 <ul>
-	<li><a href='?src=\ref[src];make=[PIPE_HE_STRAIGHT];dir=1'>Pipe</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_HE_BENT];dir=5'>Bent Pipe</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_JUNCTION];dir=1'>Junction</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_HEAT_EXCHANGE];dir=1'>Heat Exchanger</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_HE_STRAIGHT];dir=1'>Pipe</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_HE_BENT];dir=5'>Bent Pipe</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_JUNCTION];dir=1'>Junction</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_HEAT_EXCHANGE];dir=1'>Heat Exchanger</a></li>
 </ul>
 <b>Insulated pipes:</b>
 <ul>
-	<li><a href='?src=\ref[src];make=[PIPE_INSULATED_STRAIGHT];dir=1'>Pipe</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_INSULATED_BENT];dir=5'>Bent Pipe</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_INSUL_MANIFOLD];dir=1'>Manifold</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_INSUL_MANIFOLD4W];dir=1'>4-Way Manifold</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_INSULATED_STRAIGHT];dir=1'>Pipe</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_INSULATED_BENT];dir=5'>Bent Pipe</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_INSUL_MANIFOLD];dir=1'>Manifold</a></li>
+	<li><a href='?src=[REF(src)];make=[PIPE_INSUL_MANIFOLD4W];dir=1'>4-Way Manifold</a></li>
 </ul>
-<b> Currently aligned at: [layer_to_make] \[ <a href='?src=\ref[src];editlayer=1'>EDIT</a> \]</b></li>
+<b> Currently aligned at: [layer_to_make] \[ <a href='?src=[REF(src)];editlayer=1'>EDIT</a> \]</b></li>
 "}
 //What number the make points to is in the define # at the top of construction.dm in same folder
 
@@ -210,14 +210,14 @@ Nah
 		return
 
 	var/dat = {"<b>Disposal Pipes</b><br><br>
-<A href='?src=\ref[src];dmake=[DISP_PIPE_STRAIGHT]'>Pipe</A><BR>
-<A href='?src=\ref[src];dmake=[DISP_PIPE_BENT]'>Bent Pipe</A><BR>
-<A href='?src=\ref[src];dmake=[DISP_JUNCTION]'>Junction</A><BR>
-<A href='?src=\ref[src];dmake=[DISP_YJUNCTION]'>Y-Junction</A><BR>
-<A href='?src=\ref[src];dmake=[DISP_END_TRUNK]'>Trunk</A><BR>
-<A href='?src=\ref[src];dmake=[DISP_END_BIN]'>Bin</A><BR>
-<A href='?src=\ref[src];dmake=[DISP_END_OUTLET]'>Outlet</A><BR>
-<A href='?src=\ref[src];dmake=[DISP_END_CHUTE]'>Chute</A><BR>
+<A href='?src=[REF(src)];dmake=[DISP_PIPE_STRAIGHT]'>Pipe</A><BR>
+<A href='?src=[REF(src)];dmake=[DISP_PIPE_BENT]'>Bent Pipe</A><BR>
+<A href='?src=[REF(src)];dmake=[DISP_JUNCTION]'>Junction</A><BR>
+<A href='?src=[REF(src)];dmake=[DISP_YJUNCTION]'>Y-Junction</A><BR>
+<A href='?src=[REF(src)];dmake=[DISP_END_TRUNK]'>Trunk</A><BR>
+<A href='?src=[REF(src)];dmake=[DISP_END_BIN]'>Bin</A><BR>
+<A href='?src=[REF(src)];dmake=[DISP_END_OUTLET]'>Outlet</A><BR>
+<A href='?src=[REF(src)];dmake=[DISP_END_CHUTE]'>Chute</A><BR>
 "}
 
 	user << browse("<HEAD><TITLE>[src]</TITLE></HEAD><TT>[dat]</TT>", "window=pipedispenser")

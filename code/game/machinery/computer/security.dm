@@ -66,10 +66,10 @@
 </table>
 <table style="text-align:center;" border="1" cellspacing="0" width="100%">
 <tr>
-<th><A href='?src=\ref[src];choice=Sorting;sort=name'>Name</A></th>
-<th><A href='?src=\ref[src];choice=Sorting;sort=id'>ID</A></th>
-<th><A href='?src=\ref[src];choice=Sorting;sort=rank'>Rank</A></th>
-<th><A href='?src=\ref[src];choice=Sorting;sort=fingerprint'>Fingerprints</A></th>
+<th><A href='?src=[REF(src)];choice=Sorting;sort=name'>Name</A></th>
+<th><A href='?src=[REF(src)];choice=Sorting;sort=id'>ID</A></th>
+<th><A href='?src=[REF(src)];choice=Sorting;sort=rank'>Rank</A></th>
+<th><A href='?src=[REF(src)];choice=Sorting;sort=fingerprint'>Fingerprints</A></th>
 <th>Criminal Status</th>
 </tr>"}
 					if(!isnull(data_core.general))
@@ -104,7 +104,7 @@
 				if(2.0)
 
 					dat += {"<B>Records Maintenance</B><HR>
-						<BR><A href='?src=\ref[src];choice=Delete All Records'>Delete All Records</A><BR><BR><A href='?src=\ref[src];choice=Return'>Back</A>"}
+						<BR><A href='?src=[REF(src)];choice=Delete All Records'>Delete All Records</A><BR><BR><A href='?src=[REF(src)];choice=Return'>Back</A>"}
 				if(3.0)
 					dat += "<CENTER><B>Security Record</B></CENTER><BR>"
 					if ((istype(active1, /datum/data/record) && data_core.general.Find(active1)))
@@ -113,12 +113,12 @@
 						user << browse_rsc(front, "front.png")
 						user << browse_rsc(side, "side.png")
 						dat += text("<table><tr><td>	\
-						Name: <A href='?src=\ref[src];choice=Edit Field;field=name'>[active1.fields["name"]]</A><BR> \
-						ID: <A href='?src=\ref[src];choice=Edit Field;field=id'>[active1.fields["id"]]</A><BR>\n	\
-						Sex: <A href='?src=\ref[src];choice=Edit Field;field=sex'>[active1.fields["sex"]]</A><BR>\n	\
-						Age: <A href='?src=\ref[src];choice=Edit Field;field=age'>[active1.fields["age"]]</A><BR>\n	\
-						Rank: <A href='?src=\ref[src];choice=Edit Field;field=rank'>[active1.fields["rank"]]</A><BR>\n	\
-						Fingerprint: <A href='?src=\ref[src];choice=Edit Field;field=fingerprint'>[active1.fields["fingerprint"]]</A><BR>\n	\
+						Name: <A href='?src=[REF(src)];choice=Edit Field;field=name'>[active1.fields["name"]]</A><BR> \
+						ID: <A href='?src=[REF(src)];choice=Edit Field;field=id'>[active1.fields["id"]]</A><BR>\n	\
+						Sex: <A href='?src=[REF(src)];choice=Edit Field;field=sex'>[active1.fields["sex"]]</A><BR>\n	\
+						Age: <A href='?src=[REF(src)];choice=Edit Field;field=age'>[active1.fields["age"]]</A><BR>\n	\
+						Rank: <A href='?src=[REF(src)];choice=Edit Field;field=rank'>[active1.fields["rank"]]</A><BR>\n	\
+						Fingerprint: <A href='?src=[REF(src)];choice=Edit Field;field=fingerprint'>[active1.fields["fingerprint"]]</A><BR>\n	\
 						Physical Status: [active1.fields["p_stat"]]<BR>\n	\
 						Mental Status: [active1.fields["m_stat"]]<BR></td>	\
 						<td align = center valign = top>Photo:<br><img src=front.png height=80 width=80 border=4>	\
@@ -345,8 +345,8 @@ What a mess.*/
 
 				temp = {"
 					Are you sure you wish to delete all Security records?<br>
-					<a href='?src=\ref[src];choice=Purge All Records'>Yes</a><br>
-					<a href='?src=\ref[src];choice=Clear Screen'>No</a>"}
+					<a href='?src=[REF(src)];choice=Purge All Records'>Yes</a><br>
+					<a href='?src=[REF(src)];choice=Clear Screen'>No</a>"}
 			if ("Purge All Records")
 				for(var/datum/data/record/R in data_core.security)
 					qdel(R)
@@ -369,14 +369,14 @@ What a mess.*/
 				if (active1)
 
 					temp = {"<h5>Are you sure you wish to delete the record (ALL)?</h5>
-						<a href='?src=\ref[src];choice=Delete Record (ALL) Execute'>Yes</a><br>
-						<a href='?src=\ref[src];choice=Clear Screen'>No</a>"}
+						<a href='?src=[REF(src)];choice=Delete Record (ALL) Execute'>Yes</a><br>
+						<a href='?src=[REF(src)];choice=Clear Screen'>No</a>"}
 			if ("Delete Record (Security)")
 				if (active2)
 
 					temp = {"<h5>Are you sure you wish to delete the record (Security Portion Only)?</h5>
-						<a href='?src=\ref[src];choice=Delete Record (Security) Execute'>Yes</a><br>
-						<a href='?src=\ref[src];choice=Clear Screen'>No</a>"}
+						<a href='?src=[REF(src)];choice=Delete Record (Security) Execute'>Yes</a><br>
+						<a href='?src=[REF(src)];choice=Clear Screen'>No</a>"}
 			if ("Delete Entry")
 				if ((istype(active2, /datum/data/record) && active2.fields[text("com_[]", href_list["del_c"])]))
 					active2.fields[text("com_[]", href_list["del_c"])] = "<B>Deleted</B>"
@@ -455,11 +455,11 @@ What a mess.*/
 
 							temp = {"<h5>Criminal Status:</h5>
 								<ul>
-								<li><a href='?src=\ref[src];choice=Change Criminal Status;criminal2=none'>None</a></li>
-								<li><a href='?src=\ref[src];choice=Change Criminal Status;criminal2=arrest'>*Arrest*</a></li>
-								<li><a href='?src=\ref[src];choice=Change Criminal Status;criminal2=incarcerated'>Incarcerated</a></li>
-								<li><a href='?src=\ref[src];choice=Change Criminal Status;criminal2=parolled'>Parolled</a></li>
-								<li><a href='?src=\ref[src];choice=Change Criminal Status;criminal2=released'>Released</a></li>
+								<li><a href='?src=[REF(src)];choice=Change Criminal Status;criminal2=none'>None</a></li>
+								<li><a href='?src=[REF(src)];choice=Change Criminal Status;criminal2=arrest'>*Arrest*</a></li>
+								<li><a href='?src=[REF(src)];choice=Change Criminal Status;criminal2=incarcerated'>Incarcerated</a></li>
+								<li><a href='?src=[REF(src)];choice=Change Criminal Status;criminal2=parolled'>Parolled</a></li>
+								<li><a href='?src=[REF(src)];choice=Change Criminal Status;criminal2=released'>Released</a></li>
 								</ul>"}
 					if("rank")
 						var/list/L = list( "Head of Personnel", "Captain", "AI" )
@@ -469,7 +469,7 @@ What a mess.*/
 							temp = {"<h5>Rank:</h5>
 								<ul>"}
 							for(var/rank in get_all_jobs())
-								temp += "<li><a href='?src=\ref[src];choice=Change Rank;rank=[rank]'>[rank]</a></li>"
+								temp += "<li><a href='?src=[REF(src)];choice=Change Rank;rank=[rank]'>[rank]</a></li>"
 							temp += "</ul>"
 						else
 							alert(usr, "You do not have the required rank to do this!")

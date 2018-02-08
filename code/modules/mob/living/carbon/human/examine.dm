@@ -437,11 +437,12 @@
 		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
 		if(sec_record)
 			criminal = sec_record.fields["criminal"]
-
-			msg += {"<span class = 'deptradio'>Criminal status:</span> <a href='?src=\ref[src];criminal=1'>\[[criminal]\]</a>
-<span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]\n</a>"}
+			msg += {"<span class = 'deptradio'>Criminal status:</span> <a href='?src=[REF(src)];criminal=1'>\[[criminal]\]</a>
+<span class = 'deptradio'>Security records:</span> <a href='?src=[REF(src)];secrecord=`'>\[View\]\n</a>"}
 			if(!isjustobserver(user))
-				msg += "<a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"
+
+				msg += "<a href='?src=[REF(src)];secrecordadd=`'>\[Add comment\]\n</a>\n"
+
 			msg += {"[wpermit(src) ? "<span class = 'deptradio'>Has weapon permit.</span>\n" : ""]"}
 
 	if(user.hasHUD(HUD_MEDICAL))
@@ -452,10 +453,10 @@
 		if(gen_record)
 			medical = gen_record.fields["p_stat"]
 
-		msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n
-			<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]\n</a>"}
+		msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=[REF(src)];medical=1'>\[[medical]\]</a>\n
+			<span class = 'deptradio'>Medical records:</span> <a href='?src=[REF(src)];medrecord=`'>\[View\]\n</a>"}
 		if(!isjustobserver(user))
-			msg += "<a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>\n"
+			msg += "<a href='?src=[REF(src)];medrecordadd=`'>\[Add comment\]</a>\n"
 
 	if(flavor_text && can_show_flavor_text())
 		msg += "[print_flavor_text()]\n"

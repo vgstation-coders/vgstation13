@@ -20,7 +20,7 @@
 	return 0
 
 /datum/automation/set_volume_pump_power/GetText()
-	return "Set volume pump <a href=\"?src=\ref[src];set_pump=1\">[fmtString(pump)]</a> power to <a href=\"?src=\ref[src];toggle_state=1\">[state ? "on" : "off"]</a>."
+	return "Set volume pump <a href=\"?src=[REF(src)];set_pump=1\">[fmtString(pump)]</a> power to <a href=\"?src=[REF(src)];toggle_state=1\">[state ? "on" : "off"]</a>."
 
 /datum/automation/set_volume_pump_power/Topic(href, href_list)
 	. = ..()
@@ -64,7 +64,7 @@
 	return 0
 
 /datum/automation/set_volume_pump_rate/GetText()
-	return "Set volume pump <a href=\"?src=\ref[src];set_pump=1\">[fmtString(pump)]</a> transfer rate to <a href=\"?src=\ref[src];set_rate=1\">[rate]</a> L/s."
+	return "Set volume pump <a href=\"?src=[REF(src)];set_pump=1\">[fmtString(pump)]</a> transfer rate to <a href=\"?src=[REF(src)];set_rate=1\">[rate]</a> L/s."
 
 /datum/automation/set_volume_pump_rate/Topic(href,href_list)
 	. = ..()

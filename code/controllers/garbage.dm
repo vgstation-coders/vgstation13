@@ -41,7 +41,7 @@ var/soft_dels = 0
 		dels_count++
 		return
 
-	queue["\ref[D]"] = world.timeofday
+	queue["[REF(D)]"] = world.timeofday
 
 #ifdef GC_FINDREF
 world/loop_checks = 0

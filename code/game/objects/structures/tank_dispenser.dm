@@ -55,8 +55,8 @@
 	user.set_machine(src)
 	var/dat = "[src]<br><br>"
 
-	dat += {"Oxygen tanks: [oxytanks.len] - [oxytanks.len ? "<A href='?src=\ref[src];oxygen=1'>Dispense</A>" : "empty"]<br>
-		Plasma tanks: [platanks.len] - [platanks.len ? "<A href='?src=\ref[src];plasma=1'>Dispense</A>" : "empty"]"}
+	dat += {"Oxygen tanks: [oxytanks.len] - [oxytanks.len ? "<A href='?src=[REF(src)];oxygen=1'>Dispense</A>" : "empty"]<br>
+		Plasma tanks: [platanks.len] - [platanks.len ? "<A href='?src=[REF(src)];plasma=1'>Dispense</A>" : "empty"]"}
 	user << browse(dat, "window=dispenser")
 	onclose(user, "dispenser")
 	return

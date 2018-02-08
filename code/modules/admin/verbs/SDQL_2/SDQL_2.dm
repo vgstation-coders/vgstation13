@@ -105,7 +105,7 @@
 				if("select")
 					var/text = ""
 					for(var/datum/t in objs)
-						text += "<A HREF='?_src_=vars;Vars=\ref[t]'>\ref[t]</A>"
+						text += "<A HREF='?_src_=vars;Vars=[REF(t)]'>[REF(t)]</A>"
 						if(istype(t, /atom))
 							var/atom/a = t
 

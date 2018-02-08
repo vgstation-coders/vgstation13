@@ -34,33 +34,33 @@
 	user.set_machine(src)
 	var/dat = "<TT><B>Personal AI Device</B><BR>"
 	if(pai && (!pai.master_dna || !pai.master))
-		dat += "<a href='byond://?src=\ref[src];setdna=1'>Imprint Master DNA</a><br>"
+		dat += "<a href='byond://?src=[REF(src)];setdna=1'>Imprint Master DNA</a><br>"
 	if(pai)
 
 		dat += {"Installed Personality: [pai.name]<br>
 			Prime directive: <br>[pai.pai_law0]<br>
 			Additional directives: <br>[pai.pai_laws]<br>
-			<a href='byond://?src=\ref[src];setlaws=1'>Configure Directives</a><br>
+			<a href='byond://?src=[REF(src)];setlaws=1'>Configure Directives</a><br>
 			<br>
 			<h3>Device Settings</h3><br>"}
 		if(pai.radio)
 			dat += "<b>Radio Uplink</b><br>"
-			dat += "Transmit: <A href='byond://?src=\ref[src];wires=[WIRE_TRANSMIT]'>[(pai.radio.wires.IsIndexCut(WIRE_TRANSMIT)) ? "Disabled" : "Enabled"]</A><br>"
-			dat += "Receive: <A href='byond://?src=\ref[src];wires=[WIRE_RECEIVE]'>[(pai.radio.wires.IsIndexCut(WIRE_RECEIVE)) ? "Disabled" : "Enabled"]</A><br>"
+			dat += "Transmit: <A href='byond://?src=[REF(src)];wires=[WIRE_TRANSMIT]'>[(pai.radio.wires.IsIndexCut(WIRE_TRANSMIT)) ? "Disabled" : "Enabled"]</A><br>"
+			dat += "Receive: <A href='byond://?src=[REF(src)];wires=[WIRE_RECEIVE]'>[(pai.radio.wires.IsIndexCut(WIRE_RECEIVE)) ? "Disabled" : "Enabled"]</A><br>"
 		else
 
 			dat += {"<b>Radio Uplink</b><br>
 				<font color=red><i>Radio firmware not loaded. Please install a pAI personality to load firmware.</i></font><br>"}
-		dat += "<A href='byond://?src=\ref[src];wipe=1'>\[Wipe current pAI personality\]</a><br>"
+		dat += "<A href='byond://?src=[REF(src)];wipe=1'>\[Wipe current pAI personality\]</a><br>"
 	else
 		if(looking_for_personality)
 
 			dat += {"Searching for a personality...
-				<A href='byond://?src=\ref[src];request=1'>\[View available personalities\]</a><br>"}
+				<A href='byond://?src=[REF(src)];request=1'>\[View available personalities\]</a><br>"}
 		else
 
 			dat += {"No personality is installed.<br>
-				<A href='byond://?src=\ref[src];request=1'>\[Request personal AI personality\]</a><br>
+				<A href='byond://?src=[REF(src)];request=1'>\[Request personal AI personality\]</a><br>
 				Each time this button is pressed, a request will be sent out to any available personalities. Check back often and alot time for personalities to respond. This process could take anywhere from 15 seconds to several minutes, depending on the available personalities' timeliness."}
 	user << browse(dat, "window=paicard")
 	onclose(user, "paicard")

@@ -89,10 +89,10 @@
 /obj/item/device/transfer_valve/attack_self(mob/user as mob)
 	user.set_machine(src)
 	var/dat = {"<B> Valve properties: </B>
-	<BR> <B> Attachment one:</B> [tank_one] [tank_one ? "<A href='?src=\ref[src];tankone=1'>Remove</A>" : ""]
-	<BR> <B> Attachment two:</B> [tank_two] [tank_two ? "<A href='?src=\ref[src];tanktwo=1'>Remove</A>" : ""]
-	<BR> <B> Valve attachment:</B> [attached_device ? "<A href='?src=\ref[src];device=1'>[attached_device]</A>" : "None"] [attached_device ? "<A href='?src=\ref[src];rem_device=1'>Remove</A>" : ""]
-	<BR> <B> Valve status: </B> [ valve_open ? "<A href='?src=\ref[src];open=1'>Closed</A> <B>Open</B>" : "<B>Closed</B> <A href='?src=\ref[src];open=1'>Open</A>"]"}
+	<BR> <B> Attachment one:</B> [tank_one] [tank_one ? "<A href='?src=[REF(src)];tankone=1'>Remove</A>" : ""]
+	<BR> <B> Attachment two:</B> [tank_two] [tank_two ? "<A href='?src=[REF(src)];tanktwo=1'>Remove</A>" : ""]
+	<BR> <B> Valve attachment:</B> [attached_device ? "<A href='?src=[REF(src)];device=1'>[attached_device]</A>" : "None"] [attached_device ? "<A href='?src=[REF(src)];rem_device=1'>Remove</A>" : ""]
+	<BR> <B> Valve status: </B> [ valve_open ? "<A href='?src=[REF(src)];open=1'>Closed</A> <B>Open</B>" : "<B>Closed</B> <A href='?src=[REF(src)];open=1'>Open</A>"]"}
 
 	user << browse(dat, "window=trans_valve;size=600x300")
 	onclose(user, "trans_valve")
@@ -184,12 +184,12 @@
 		if(attached_device && attacher && whodunnit == attached_device)
 			log_str += "opened by \a [attached_device] attached by [key_name(attacher)]. "
 		else if(isliving(whodunnit))
-			log_str += "opened by [key_name(whodunnit)](<A HREF='?_src_=holder;adminmoreinfo=\ref[whodunnit]'>?</A>). "
+			log_str += "opened by [key_name(whodunnit)](<A HREF='?_src_=holder;adminmoreinfo=[REF(whodunnit)]'>?</A>). "
 
 		var/mob/mob = get_mob_by_key(src.fingerprintslast)
 		var/last_touch_info = ""
 		if(mob)
-			last_touch_info = "(<A HREF='?_src_=holder;adminmoreinfo=\ref[mob]'>?</A>)"
+			last_touch_info = "(<A HREF='?_src_=holder;adminmoreinfo=[REF(mob)]'>?</A>)"
 		log_str += "Last touched by: [src.fingerprintslast][last_touch_info] - Last user processed: [key_name(usr)]"
 
 		bombers += log_str

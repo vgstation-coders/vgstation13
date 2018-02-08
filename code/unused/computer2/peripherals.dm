@@ -14,7 +14,7 @@
 			if(istype(src.loc,/obj/machinery/computer2))
 				host = src.loc
 				host.peripherals.Add(src)
-//			var/setup_id = "\ref[src]"
+//			var/setup_id = "[REF(src)]"
 //			src.id = copytext(setup_id,4,(length(setup_id)-1) )
 
 	Del()
@@ -190,7 +190,7 @@
 		if(..())
 			return
 
-		if(!signal || (signal.data["ref_id"] != "\ref[src]") )
+		if(!signal || (signal.data["ref_id"] != "[REF(src)]") )
 			return
 
 		switch(command)

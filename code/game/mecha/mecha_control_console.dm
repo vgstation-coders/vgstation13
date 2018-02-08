@@ -28,19 +28,19 @@
 			var/answer = TR.get_mecha_info()
 			if(answer)
 				dat += {"<hr>[answer]<br/>
-						  <a href='?src=\ref[src];send_message=\ref[TR]'>Send message</a><br/>
-						  <a href='?src=\ref[src];get_log=\ref[TR]'>Show exosuit log</a> |
-						  <a style='color: #A66300;' href='?src=\ref[src];lockdown=\ref[TR]'>(Lockdown)</a> |
-						  <a style='color: #f00;' href='?src=\ref[src];shock=\ref[TR]'>(Detonate Beacon)</a><br>"}
+						  <a href='?src=[REF(src)];send_message=[REF(TR)]'>Send message</a><br/>
+						  <a href='?src=[REF(src)];get_log=[REF(TR)]'>Show exosuit log</a> |
+						  <a style='color: #A66300;' href='?src=[REF(src)];lockdown=[REF(TR)]'>(Lockdown)</a> |
+						  <a style='color: #f00;' href='?src=[REF(src)];shock=[REF(TR)]'>(Detonate Beacon)</a><br>"}
 
 	if(screen==1)
 
 		dat += {"<h3>Log contents</h3>
-			<a href='?src=\ref[src];return=1'>Return</a><hr>
+			<a href='?src=[REF(src)];return=1'>Return</a><hr>
 			[stored_data]"}
 
 
-	dat += {"<A href='?src=\ref[src];refresh=1'>(Refresh)</A><BR>
+	dat += {"<A href='?src=[REF(src)];refresh=1'>(Refresh)</A><BR>
 		</body></html>"}
 	user << browse(dat, "window=computer;size=400x500")
 	onclose(user, "computer")
@@ -49,16 +49,16 @@
 /obj/machinery/computer/mecha/Topic(href, href_list)
 	if(..())
 		return
-	var/datum/topic_input/filter = new /datum/topic_input(href,href_list)
+	var/datum/topic_input/topic_filter = new /datum/topic_input(href,href_list)
 	if(href_list["send_message"])
-		var/obj/item/mecha_parts/mecha_tracking/MT = filter.getObj("send_message")
+		var/obj/item/mecha_parts/mecha_tracking/MT = topic_filter.getObj("send_message")
 		var/message = strip_html_simple(input(usr,"Input message","Transmit message") as text)
 		var/obj/mecha/M = MT.in_mecha()
 		if(trim(message) && M)
 			M.occupant_message(message)
 		return
 	if(href_list["lockdown"])
-		var/obj/item/mecha_parts/mecha_tracking/MT = filter.getObj("lockdown")
+		var/obj/item/mecha_parts/mecha_tracking/MT = topic_filter.getObj("lockdown")
 		var/obj/mecha/M = MT.in_mecha()
 		if(M.state)
 			to_chat(usr, "That exosuit is already under lockdown!")
@@ -72,7 +72,7 @@
 	if(href_list["shock"])
 		switch(alert("Are you sure? This cannot be undone.","Transmit Beacon Self-Destruct Code","Yes","No"))
 			if ("Yes")
-				var/obj/item/mecha_parts/mecha_tracking/MT = filter.getObj("shock")
+				var/obj/item/mecha_parts/mecha_tracking/MT = topic_filter.getObj("shock")
 				var/obj/mecha/M = MT.in_mecha()
 				MT.shock()
 				message_admins("[key_name_admin(usr)] detonated \a [MT] in [M] via exosuit control console.")
@@ -80,7 +80,7 @@
 			if ("No")
 				to_chat(usr, "You have second thoughts.")
 	if(href_list["get_log"])
-		var/obj/item/mecha_parts/mecha_tracking/MT = filter.getObj("get_log")
+		var/obj/item/mecha_parts/mecha_tracking/MT = topic_filter.getObj("get_log")
 		stored_data = MT.get_mecha_log()
 		screen = 1
 	if(href_list["return"])

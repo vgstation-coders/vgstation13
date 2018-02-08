@@ -80,7 +80,7 @@
 		dat += "\The [src] is empty."
 	for (var/obj/item/weapon/reagent_containers/food/snacks/E in contents)
 		counter++
-		dat += "Slot [counter]: [getProgress(E)]% grown. <A href='?src=\ref[src];slot=\ref[E]'>(Eject)</A><BR>"
+		dat += "Slot [counter]: [getProgress(E)]% grown. <A href='?src=[REF(src)];slot=[REF(E)]'>(Eject)</A><BR>"
 
 	user << browse("<HEAD><TITLE>[capitalize(name)]</TITLE></HEAD><TT>[dat]</TT>", "window=egg_incubator")
 	onclose(user, "egg_incubator")

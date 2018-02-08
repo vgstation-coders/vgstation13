@@ -145,7 +145,7 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 	if(cache!=0) // If cache is NOT disabled
 		// Create a hash value to represent this specific flattened icon
 		for(var/I in layers)
-			hash += "\ref[I:icon],[I:icon_state],[I:dir != SOUTH ? I:dir : dir],[I:pixel_x],[I:pixel_y];_;"
+			hash += "[REF(I:icon)],[I:icon_state],[I:dir != SOUTH ? I:dir : dir],[I:pixel_x],[I:pixel_y];_;"
 		hash=md5(hash)
 
 		if(cache!=2) // If NOT overriding cache

@@ -23,7 +23,7 @@
 			ticker.mode.update_all_synd_icons()
 		if((mind in ticker.mode.wizards) || (mind in ticker.mode.apprentices))
 			ticker.mode.update_all_wizard_icons()
-		var/ref = "\ref[mind]"
+		var/ref = "[REF(mind)]"
 		if(ref in ticker.mode.implanter)
 			ticker.mode.update_traitor_icons_added(mind)
 		if(mind in ticker.mode.implanted)

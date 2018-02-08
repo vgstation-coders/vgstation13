@@ -94,7 +94,7 @@
 	var/log_str = "Bomb fuse lit in <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name]</a> by [demoman_name]"
 
 	if(user)
-		log_str += "(<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>)"
+		log_str += "(<A HREF='?_src_=holder;adminmoreinfo=[REF(user)]'>?</A>)"
 
 	bombers += log_str
 	message_admins(log_str, 0, 1)
@@ -113,7 +113,7 @@
 	var/log_str = "Bomb fuse lit in <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name]</a> by [demoman_name]"
 
 	if(user)
-		log_str += "(<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>)"
+		log_str += "(<A HREF='?_src_=holder;adminmoreinfo=[REF(user)]'>?</A>)"
 
 	bombers += log_str
 	log_game(log_str)

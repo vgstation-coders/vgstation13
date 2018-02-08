@@ -158,10 +158,10 @@ var/const/INGEST = 2
 	if(log_transfer && logged_message.len)
 		var/turf/T = get_turf(my_atom)
 		minimal_investigation_log(I_CHEMS, "[whodunnit ? "[key_name(whodunnit)]" : "(N/A, last user processed: [usr.ckey])"] \
-		transferred [english_list(logged_message)] from \a [my_atom] \ref[my_atom] to \a [R.my_atom] \ref[R.my_atom].", prefix=" ([T.x],[T.y],[T.z])")
+		transferred [english_list(logged_message)] from \a [my_atom] [REF(my_atom)] to \a [R.my_atom] [REF(R.my_atom)].", prefix=" ([T.x],[T.y],[T.z])")
 		if(adminwarn_message.len)
 			message_admins("[whodunnit ? "[key_name_and_info(whodunnit)] " : "(unknown whodunnit, last whodunnit processed: [usr.ckey])"]\
-			has transferred [english_list(adminwarn_message)] from \a [my_atom] (<A HREF='?_src_=vars;Vars=\ref[my_atom]'>VV</A>) to \a [R.my_atom] (<A HREF='?_src_=vars;Vars=\ref[R.my_atom]'>VV</A>).\
+			has transferred [english_list(adminwarn_message)] from \a [my_atom] (<A HREF='?_src_=vars;Vars=[REF(my_atom)]'>VV</A>) to \a [R.my_atom] (<A HREF='?_src_=vars;Vars=[REF(R.my_atom)]'>VV</A>).\
 			[whodunnit ? " [formatJumpTo(whodunnit)]" : ""]")
 
 	return amount

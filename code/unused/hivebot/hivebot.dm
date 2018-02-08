@@ -291,14 +291,14 @@
 		src.pick_module()
 		return
 	var/dat = "<HEAD><TITLE>Modules</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n"
-	dat += {"<A HREF='?src=\ref[src];mach_close=robotmod'>Close</A>
+	dat += {"<A HREF='?src=[REF(src)];mach_close=robotmod'>Close</A>
 	<BR>
 	<BR>
 	<B>Activated Modules</B>
 	<BR>
-	Module 1: [module_state_1 ? "<A HREF=?src=\ref[src];mod=\ref[module_state_1]>[module_state_1]<A>" : "No Module"]<BR>
-	Module 2: [module_state_2 ? "<A HREF=?src=\ref[src];mod=\ref[module_state_2]>[module_state_2]<A>" : "No Module"]<BR>
-	Module 3: [module_state_3 ? "<A HREF=?src=\ref[src];mod=\ref[module_state_3]>[module_state_3]<A>" : "No Module"]<BR>
+	Module 1: [module_state_1 ? "<A HREF=?src=[REF(src)];mod=[REF(module_state_1)]>[module_state_1]<A>" : "No Module"]<BR>
+	Module 2: [module_state_2 ? "<A HREF=?src=[REF(src)];mod=[REF(module_state_2)]>[module_state_2]<A>" : "No Module"]<BR>
+	Module 3: [module_state_3 ? "<A HREF=?src=[REF(src)];mod=[REF(module_state_3)]>[module_state_3]<A>" : "No Module"]<BR>
 	<BR>
 	<B>Installed Modules</B><BR><BR>"}
 
@@ -306,12 +306,12 @@
 		if(src.activated(obj))
 			dat += text("[obj]: <B>Activated</B><BR>")
 		else
-			dat += text("[obj]: <A HREF=?src=\ref[src];act=\ref[obj]>Activate</A><BR>")
+			dat += text("[obj]: <A HREF=?src=[REF(src)];act=[REF(obj)]>Activate</A><BR>")
 /*
 		if(src.activated(obj))
-			dat += text("[obj]: \[<B>Activated</B> | <A HREF=?src=\ref[src];deact=\ref[obj]>Deactivate</A>\]<BR>")
+			dat += text("[obj]: \[<B>Activated</B> | <A HREF=?src=[REF(src)];deact=[REF(obj)]>Deactivate</A>\]<BR>")
 		else
-			dat += text("[obj]: \[<A HREF=?src=\ref[src];act=\ref[obj]>Activate</A> | <B>Deactivated</B>\]<BR>")
+			dat += text("[obj]: \[<A HREF=?src=[REF(src)];act=[REF(obj)]>Activate</A> | <B>Deactivated</B>\]<BR>")
 */
 	src << browse(dat, "window=robotmod&can_close=0")
 
@@ -407,14 +407,14 @@
 /mob/living/silicon/hivebot/proc/radio_menu()
 	var/dat = {"
 <TT>
-Microphone: [src.radio.broadcasting ? "<A href='byond://?src=\ref[src.radio];talk=0'>Engaged</A>" : "<A href='byond://?src=\ref[src.radio];talk=1'>Disengaged</A>"]<BR>
-Speaker: [src.radio.listening ? "<A href='byond://?src=\ref[src.radio];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src.radio];listen=1'>Disengaged</A>"]<BR>
+Microphone: [src.radio.broadcasting ? "<A href='byond://?src=[REF(src.radio)];talk=0'>Engaged</A>" : "<A href='byond://?src=[REF(src.radio)];talk=1'>Disengaged</A>"]<BR>
+Speaker: [src.radio.listening ? "<A href='byond://?src=[REF(src.radio)];listen=0'>Engaged</A>" : "<A href='byond://?src=[REF(src.radio)];listen=1'>Disengaged</A>"]<BR>
 Frequency:
-<A href='byond://?src=\ref[src.radio];freq=-10'>-</A>
-<A href='byond://?src=\ref[src.radio];freq=-2'>-</A>
+<A href='byond://?src=[REF(src.radio)];freq=-10'>-</A>
+<A href='byond://?src=[REF(src.radio)];freq=-2'>-</A>
 [format_frequency(src.radio.frequency)]
-<A href='byond://?src=\ref[src.radio];freq=2'>+</A>
-<A href='byond://?src=\ref[src.radio];freq=10'>+</A><BR>
+<A href='byond://?src=[REF(src.radio)];freq=2'>+</A>
+<A href='byond://?src=[REF(src.radio)];freq=10'>+</A><BR>
 -------
 </TT>"}
 	src << browse(dat, "window=radio")

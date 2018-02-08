@@ -91,8 +91,8 @@
 	user.set_machine(src)
 	var/dat = "<TITLE>Telecommunication Traffic Control</TITLE><center><b>Telecommunications Traffic Control</b></center>"
 
-	dat += {"<br><b><font color='[(auth ? "green" : "red")]'>[(auth ? "AUTHED" : "NOT AUTHED")]:</font></b> <A href='?src=\ref[src];auth=1'>[(!auth ? "Insert ID" : auth.registered_name)]</A><BR>
-		<A href='?src=\ref[src];print=1'>View System Log</A><HR>"}
+	dat += {"<br><b><font color='[(auth ? "green" : "red")]'>[(auth ? "AUTHED" : "NOT AUTHED")]:</font></b> <A href='?src=[REF(src)];auth=1'>[(!auth ? "Insert ID" : auth.registered_name)]</A><BR>
+		<A href='?src=[REF(src)];print=1'>View System Log</A><HR>"}
 	if(issilicon(user) || auth)
 
 		switch(screen)
@@ -103,16 +103,16 @@
 			if(0)
 
 				dat += {"<br>[temp]<br>
-					<br>Current Network: <a href='?src=\ref[src];network=1'>[network]</a><br>"}
+					<br>Current Network: <a href='?src=[REF(src)];network=1'>[network]</a><br>"}
 				if(servers.len)
 					dat += "<br>Detected Telecommunication Servers:<ul>"
 					for(var/obj/machinery/telecomms/T in servers)
-						dat += "<li><a href='?src=\ref[src];viewserver=[T.id]'>\ref[T] [T.name]</a> ([T.id])</li>"
+						dat += "<li><a href='?src=[REF(src)];viewserver=[T.id]'>[REF(T)] [T.name]</a> ([T.id])</li>"
 
 					dat += {"</ul>
-						<br><a href='?src=\ref[src];operation=release'>\[Flush Buffer\]</a>"}
+						<br><a href='?src=[REF(src)];operation=release'>\[Flush Buffer\]</a>"}
 				else
-					dat += "<br>No servers detected. Scan for servers: <a href='?src=\ref[src];operation=scan'>\[Scan\]</a>"
+					dat += "<br>No servers detected. Scan for servers: <a href='?src=[REF(src)];operation=scan'>\[Scan\]</a>"
 
 
 		  // --- Viewing Server ---
@@ -121,15 +121,15 @@
 				if(SelectedServer)
 
 					dat += {"<br>[temp]<br>
-						<center><a href='?src=\ref[src];operation=mainmenu'>\[Main Menu\]</a>     <a href='?src=\ref[src];operation=refresh'>\[Refresh\]</a></center>
+						<center><a href='?src=[REF(src)];operation=mainmenu'>\[Main Menu\]</a>     <a href='?src=[REF(src)];operation=refresh'>\[Refresh\]</a></center>
 						<br>Current Network: [network]
 						<br>Selected Server: [SelectedServer.id]<br><br>
-						<br><a href='?src=\ref[src];operation=editcode'>\[Edit Code\]</a>
+						<br><a href='?src=[REF(src)];operation=editcode'>\[Edit Code\]</a>
 						<br>Signal Execution: "}
 					if(SelectedServer.autoruncode)
-						dat += "<a href='?src=\ref[src];operation=togglerun'>ALWAYS</a>"
+						dat += "<a href='?src=[REF(src)];operation=togglerun'>ALWAYS</a>"
 					else
-						dat += "<a href='?src=\ref[src];operation=togglerun'>NEVER</a>"
+						dat += "<a href='?src=[REF(src)];operation=togglerun'>NEVER</a>"
 				else
 					screen = 0
 					return

@@ -5,7 +5,7 @@
 	multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 		return {"
 		<ul>
-		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1449]">Reset</a>)</li>
+		<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=[1449]">Reset</a>)</li>
 		<li>[format_tag("ID Tag","id_tag")]</li>
 		<li>[format_tag("Pump ID","tag_airpump")]</li>
 		</ul>
@@ -74,14 +74,14 @@
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/linkMenu(var/obj/O)
 	var/dat = ""
 	if(istype(O, /obj/machinery/airlock_sensor))
-		dat += "<a href='?src=\ref[src];link=1;slot=ext'>\[Link @ exterior\]</a><br>"
-		dat += "<a href='?src=\ref[src];link=1;slot=chamber'>\[Link @ chamber\]</a><br>"
-		dat += "<a href='?src=\ref[src];link=1;slot=int'>\[Link @ interior\]</a>"
+		dat += "<a href='?src=[REF(src)];link=1;slot=ext'>\[Link @ exterior\]</a><br>"
+		dat += "<a href='?src=[REF(src)];link=1;slot=chamber'>\[Link @ chamber\]</a><br>"
+		dat += "<a href='?src=[REF(src)];link=1;slot=int'>\[Link @ interior\]</a>"
 	else if(istype(O, /obj/machinery/atmospherics/unary/vent_pump))
-		dat += "<a href='?src=\ref[src];link=1'>\[Link @ pump\]</a>"
+		dat += "<a href='?src=[REF(src)];link=1'>\[Link @ pump\]</a>"
 	else if(istype(O, /obj/machinery/door/airlock))
-		dat += "<a href='?src=\ref[src];link=1;slot=ext'>\[Link @ exterior\]</a><br>"
-		dat += "<a href='?src=\ref[src];link=1;slot=int'>\[Link @ interior\]</a>"
+		dat += "<a href='?src=[REF(src)];link=1;slot=ext'>\[Link @ exterior\]</a><br>"
+		dat += "<a href='?src=[REF(src)];link=1;slot=int'>\[Link @ interior\]</a>"
 	return dat
 
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/canLink(var/obj/O, var/list/context)
@@ -195,7 +195,7 @@
 	multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 		return {"
 		<ul>
-		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1449]">Reset</a>)</li>
+		<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=[1449]">Reset</a>)</li>
 		<li>[format_tag("ID Tag","id_tag")]</li>
 		<li>[format_tag("Pump ID","tag_airpump")]</li>
 		</ul>
@@ -256,12 +256,12 @@
 /obj/machinery/embedded_controller/radio/airlock_controller/linkMenu(var/obj/O)
 	var/dat = ""
 	if(istype(O, /obj/machinery/airlock_sensor))
-		dat += "<a href='?src=\ref[src];link=1;slot=chamber'>\[Link @ chamber\]</a><br>"
+		dat += "<a href='?src=[REF(src)];link=1;slot=chamber'>\[Link @ chamber\]</a><br>"
 	else if(istype(O, /obj/machinery/atmospherics/unary/vent_pump))
-		dat += "<a href='?src=\ref[src];link=1'>\[Link @ pump\]</a>"
+		dat += "<a href='?src=[REF(src)];link=1'>\[Link @ pump\]</a>"
 	else if(istype(O, /obj/machinery/door/airlock))
-		dat += "<a href='?src=\ref[src];link=1;slot=ext'>\[Link @ exterior\]</a><br>"
-		dat += "<a href='?src=\ref[src];link=1;slot=int'>\[Link @ interior\]</a>"
+		dat += "<a href='?src=[REF(src)];link=1;slot=ext'>\[Link @ exterior\]</a><br>"
+		dat += "<a href='?src=[REF(src)];link=1;slot=int'>\[Link @ interior\]</a>"
 	return dat
 
 /obj/machinery/embedded_controller/radio/airlock_controller/canLink(var/obj/O, var/list/context)
@@ -358,7 +358,7 @@
 	multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 		return {"
 		<ul>
-		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1449]">Reset</a>)</li>
+		<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=[1449]">Reset</a>)</li>
 		<li>[format_tag("ID Tag","id_tag")]</li>
 		</ul>
 		<b>Doors:</b>
@@ -423,8 +423,8 @@
 /obj/machinery/embedded_controller/radio/access_controller/linkMenu(var/obj/O)
 	var/dat = ""
 	if(istype(O, /obj/machinery/door/airlock))
-		dat += "<a href='?src=\ref[src];link=1;slot=ext'>\[Link @ exterior\]</a><br>"
-		dat += "<a href='?src=\ref[src];link=1;slot=int'>\[Link @ interior\]</a>"
+		dat += "<a href='?src=[REF(src)];link=1;slot=ext'>\[Link @ exterior\]</a><br>"
+		dat += "<a href='?src=[REF(src)];link=1;slot=int'>\[Link @ interior\]</a>"
 	return dat
 
 /obj/machinery/embedded_controller/radio/access_controller/canLink(var/obj/O, var/list/context)
@@ -479,7 +479,7 @@
 	multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 		return {"
 		<ul>
-		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1449]">Reset</a>)</li>
+		<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=[1449]">Reset</a>)</li>
 		<li>[format_tag("ID Tag","id_tag")]</li>
 		<li>[format_tag("Pump ID","tag_airpump")]</li>
 		</ul>
@@ -531,9 +531,9 @@
 /obj/machinery/embedded_controller/radio/pressure_regulator/linkMenu(var/obj/O)
 	var/dat = ""
 	if(istype(O, /obj/machinery/airlock_sensor))
-		dat += "<a href='?src=\ref[src];link=1;slot=chamber'>\[Link @ chamber\]</a><br>"
+		dat += "<a href='?src=[REF(src)];link=1;slot=chamber'>\[Link @ chamber\]</a><br>"
 	else if(istype(O, /obj/machinery/atmospherics/unary/vent_pump))
-		dat += "<a href='?src=\ref[src];link=1'>\[Link @ pump\]</a>"
+		dat += "<a href='?src=[REF(src)];link=1'>\[Link @ pump\]</a>"
 	return dat
 
 /obj/machinery/embedded_controller/radio/pressure_regulator/canLink(var/obj/O, var/list/context)

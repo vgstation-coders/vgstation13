@@ -61,7 +61,7 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/process()
 	var/lastposition = loc
-	var/reference = "\ref[src]" //So we do not have to recalculate it a ton
+	var/reference = "[REF(src)]" //So we do not have to recalculate it a ton
 
 	target = get_turf(original)
 	dist_x = abs(target.x - src.x)
@@ -202,7 +202,7 @@ var/list/beam_master = list()
 
 
 /obj/item/projectile/beam/dumbfire(var/dir)
-	var/reference = "\ref[src]" // So we do not have to recalculate it a ton.
+	var/reference = "[REF(src)]" // So we do not have to recalculate it a ton.
 
 	spawn(0)
 		var/target_dir = dir ? dir : src.dir// TODO: remove dir arg. Or don't because the way this was set up without it broke spacepods.

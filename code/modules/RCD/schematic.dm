@@ -109,22 +109,22 @@ params:
 	// Important distinction: being favorited vs being rendered for the favorited list.
 	// The fav parameter means the latter.
 	if (master.favorites.Find(src))
-		fav_html = "<a href='?src=\ref[interface];schematic=\ref[src];act=defav' class='fav' title='Unfavorite'>\[X]</a>"
+		fav_html = "<a href='?src=[REF(interface)];schematic=[REF(src)];act=defav' class='fav' title='Unfavorite'>\[X]</a>"
 
 		if (fav)
 			var/index = master.favorites.Find(src)
 			fav_html += "<span class='fav'>"
-			fav_html += index != master.favorites.len ? "<a href='?src=\ref[interface];schematic=\ref[src];act=favorder;order=down'>&#8743;</a>" : "&nbsp;"
-			fav_html += index != 1                    ? "<a href='?src=\ref[interface];schematic=\ref[src];act=favorder;order=up'>&#8744;</a>" : "&nbsp;"
+			fav_html += index != master.favorites.len ? "<a href='?src=[REF(interface)];schematic=[REF(src)];act=favorder;order=down'>&#8743;</a>" : "&nbsp;"
+			fav_html += index != 1                    ? "<a href='?src=[REF(interface)];schematic=[REF(src)];act=favorder;order=up'>&#8744;</a>" : "&nbsp;"
 			fav_html += "</span>"
 
 	else
-		fav_html = "<a href='?src=\ref[interface];schematic=\ref[src];act=fav' class='fav' title='Favorite'>\[F]</a>"
+		fav_html = "<a href='?src=[REF(interface)];schematic=[REF(src)];act=fav' class='fav' title='Favorite'>\[F]</a>"
 
 	var/class = ""
 	if (fav && master.selected == src)
 		class = "class='schematic_selected'"
 
-	return "<li>[fav_html]<a href='?src=\ref[interface];schematic=\ref[src];act=select' [class]>[name]</a></li>"
+	return "<li>[fav_html]<a href='?src=[REF(interface)];schematic=[REF(src)];act=select' [class]>[name]</a></li>"
 
 /datum/rcd_schematic/proc/MouseWheeled(var/mob/user, var/delta_x, var/delta_y, var/params)

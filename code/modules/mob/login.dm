@@ -2,15 +2,15 @@
 /mob/proc/update_Login_details()
 	if(!client)
 		WARNING("update_Login_details(): client for [src] is [client]!")
-		message_admins("<span class='warning'><B>WARNING:</B> <A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has a null .client (BYOND issue, not malicious)!</span>", 1)
+		message_admins("<span class='warning'><B>WARNING:</B> <A href='?src=[REF(usr)];priv_msg=[REF(src)]'>[key_name_admin(src)]</A> has a null .client (BYOND issue, not malicious)!</span>", 1)
 
 	else
 		if(!client.address)
 			WARNING("update_Login_details(): client.address for [src] is [client.address]!")
-			message_admins("<span class='warning'><B>WARNING:</B> <A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has a null .client.address (BYOND issue, not malicious)!</span>", 1)
+			message_admins("<span class='warning'><B>WARNING:</B> <A href='?src=[REF(usr)];priv_msg=[REF(src)]'>[key_name_admin(src)]</A> has a null .client.address (BYOND issue, not malicious)!</span>", 1)
 		if(!client.computer_id)
 			WARNING("update_Login_details(): client.computer_id for [src] is [client.computer_id]!")
-			message_admins("<span class='warning'><B>WARNING:</B> <A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has a null .client.computer_id (BYOND issue, not malicious)!</span>", 1)
+			message_admins("<span class='warning'><B>WARNING:</B> <A href='?src=[REF(usr)];priv_msg=[REF(src)]'>[key_name_admin(src)]</A> has a null .client.computer_id (BYOND issue, not malicious)!</span>", 1)
 
 	//Multikey checks and logging
 	lastKnownIP	= client.address
@@ -31,10 +31,10 @@
 					spawn() alert("You have logged in already with another key this round, please log out of this one NOW or risk being banned!")
 				if(matches)
 					if(M.client)
-						message_admins("<font color='red'><B>Notice: </B><font color='blue'><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has the same [matches] as <A href='?src=\ref[usr];priv_msg=\ref[M]'>[key_name_admin(M)]</A>.</font>", 1)
+						message_admins("<font color='red'><B>Notice: </B><font color='blue'><A href='?src=[REF(usr)];priv_msg=[REF(src)]'>[key_name_admin(src)]</A> has the same [matches] as <A href='?src=[REF(usr)];priv_msg=[REF(M)]'>[key_name_admin(M)]</A>.</font>", 1)
 						log_access("Notice: [key_name(src)] has the same [matches] as [key_name(M)].")
 					else
-						message_admins("<font color='red'><B>Notice: </B><font color='blue'><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has the same [matches] as [key_name_admin(M)] (no longer logged in). </font>", 1)
+						message_admins("<font color='red'><B>Notice: </B><font color='blue'><A href='?src=[REF(usr)];priv_msg=[REF(src)]'>[key_name_admin(src)]</A> has the same [matches] as [key_name_admin(M)] (no longer logged in). </font>", 1)
 						log_access("Notice: [key_name(src)] has the same [matches] as [key_name(M)] (no longer logged in).")
 
 /mob/Login()

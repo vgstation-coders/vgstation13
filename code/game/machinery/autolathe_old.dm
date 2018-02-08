@@ -124,7 +124,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 	var/dat as text
 	dat += "Autolathe Wires:<BR>"
 	for(var/wire in src.wires)
-		dat += text("[wire] Wire: <A href='?src=\ref[src];wire=[wire];act=wire'>[src.wires[wire] ? "Mend" : "Cut"]</A> <A href='?src=\ref[src];wire=[wire];act=pulse'>Pulse</A><BR>")
+		dat += text("[wire] Wire: <A href='?src=[REF(src)];wire=[wire];act=wire'>[src.wires[wire] ? "Mend" : "Cut"]</A> <A href='?src=[REF(src)];wire=[wire];act=pulse'>Pulse</A><BR>")
 	dat += text("The red light is [src.disabled ? "off" : "on"].<BR>")
 	dat += text("The green light is [src.shocked ? "off" : "on"].<BR>")
 	dat += text("The blue light is [src.hacked ? "off" : "on"].<BR>")
@@ -143,18 +143,18 @@ var/global/list/autolathe_recipes_hidden = list( \
 		if(m_amount < t.m_amt || g_amount < t.g_amt)
 			dat += title + "<br>"
 			continue
-		dat += "<A href='?src=\ref[src];make=\ref[t]'>[title]</A>"
+		dat += "<A href='?src=[REF(src)];make=[REF(t)]'>[title]</A>"
 		if(istype(t, /obj/item/stack))
 			var/obj/item/stack/S = t
 			var/max_multiplier = min(S.max_amount, S.m_amt ? round(m_amount/S.m_amt):INFINITY, S.g_amt ? round(g_amount/S.g_amt):INFINITY)
 			if(max_multiplier > 1)
 				dat += " |"
 			if(max_multiplier > 10)
-				dat += " <A href='?src=\ref[src];make=\ref[t];multiplier=[10]'>x[10]</A>"
+				dat += " <A href='?src=[REF(src)];make=[REF(t)];multiplier=[10]'>x[10]</A>"
 			if(max_multiplier > 25)
-				dat += " <A href='?src=\ref[src];make=\ref[t];multiplier=[25]'>x[25]</A>"
+				dat += " <A href='?src=[REF(src)];make=[REF(t)];multiplier=[25]'>x[25]</A>"
 			if(max_multiplier > 1)
-				dat += " <A href='?src=\ref[src];make=\ref[t];multiplier=[max_multiplier]'>x[max_multiplier]</A>"
+				dat += " <A href='?src=[REF(src)];make=[REF(t)];multiplier=[max_multiplier]'>x[max_multiplier]</A>"
 		dat += "<br>"
 	user << browse("<HTML><HEAD><TITLE>Autolathe Control Panel</TITLE></HEAD><BODY><TT>[dat]</TT></BODY></HTML>", "window=autolathe_regular")
 	onclose(user, "autolathe_regular")
@@ -278,7 +278,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 			else // somebody is trying to exploit, alert admins -walter0o
 
 				var/turf/LOC = get_turf(usr)
-				message_admins("[key_name_admin(usr)] tried to exploit an autolathe to duplicate <a href='?_src_=vars;Vars=\ref[attempting_to_build]'>[attempting_to_build]</a> ! ([LOC ? "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[LOC.x];Y=[LOC.y];Z=[LOC.z]'>JMP</a>" : "null"])", 0)
+				message_admins("[key_name_admin(usr)] tried to exploit an autolathe to duplicate <a href='?_src_=vars;Vars=[REF(attempting_to_build)]'>[attempting_to_build]</a> ! ([LOC ? "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[LOC.x];Y=[LOC.y];Z=[LOC.z]'>JMP</a>" : "null"])", 0)
 				log_admin("EXPLOIT : [key_name(usr)] tried to exploit an autolathe to duplicate [attempting_to_build] !")
 				return
 

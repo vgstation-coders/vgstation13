@@ -39,7 +39,7 @@
 	var/dat = "<table style='width:100%; padding:4px;'><tr>"
 
 	for (var/i = 1, i <= destinations.len, i++)
-		dat += "<td><a href='?src=\ref[src];nextTag=[i]'>[destinations[i]]</a>[mode ? "<a href='?src=\ref[src];remove_dest=[i]' class='linkDanger'>\[X\]</a>" : ""]</td>"
+		dat += "<td><a href='?src=[REF(src)];nextTag=[i]'>[destinations[i]]</a>[mode ? "<a href='?src=[REF(src)];remove_dest=[i]' class='linkDanger'>\[X\]</a>" : ""]</td>"
 
 		if (i % 4 == 0)
 			dat += "</tr><tr>"
@@ -47,7 +47,7 @@
 	dat += "</tr></table><br>Current Selection: [currTag ? destinations[currTag] : "None"].<hr><br>"
 
 	if(mode)
-		dat += "<a href='?src=\ref[src];new_dest=1'>Add destination</a>"
+		dat += "<a href='?src=[REF(src)];new_dest=1'>Add destination</a>"
 
 	var/datum/browser/popup = new(user, "destTagger", name, 380, 350, src)
 	popup.add_stylesheet("shared", 'nano/css/shared.css')
@@ -326,9 +326,9 @@
 	return {"
 		<ul>
 			<li><b>Sorting directions:</b></li>
-			<li><b>Input: </b><a href='?src=\ref[src];changedir=1'>[capitalize(dir2text(input_dir))]</a></li>
-			<li><b>Output: </b><a href='?src=\ref[src];changedir=2'>[capitalize(dir2text(output_dir))]</a></li>
-			<li><b>Selected: </b><a href='?src=\ref[src];changedir=3'>[capitalize(dir2text(filter_dir))]</a></li>
+			<li><b>Input: </b><a href='?src=[REF(src)];changedir=1'>[capitalize(dir2text(input_dir))]</a></li>
+			<li><b>Output: </b><a href='?src=[REF(src)];changedir=2'>[capitalize(dir2text(output_dir))]</a></li>
+			<li><b>Selected: </b><a href='?src=[REF(src)];changedir=3'>[capitalize(dir2text(filter_dir))]</a></li>
 		</ul>
 	"}
 
@@ -432,7 +432,7 @@
 		var/selected = (types[i] in selected_types)
 		var/cssclass = selected ? "linkOn" : "linkDanger"//Fancy coloured buttons
 
-		dat += "<a href='?src=\ref[src];toggle_types=[i]' class='[cssclass]'>[types[i]]</a><br>"
+		dat += "<a href='?src=[REF(src)];toggle_types=[i]' class='[cssclass]'>[types[i]]</a><br>"
 
 	var/datum/browser/popup = new(user, "recycksortingmachine", name, 320, 200, src)
 	popup.add_stylesheet("shared", 'nano/css/shared.css')
@@ -479,11 +479,11 @@
 		var/selected = (destinations[i] in sorting)
 		var/cssclass = selected ? "linkOn" : "linkDanger" //Fancy coloured buttons
 
-		dat += "<a href='?src=\ref[src];toggle_dest=[i]' class='[cssclass]'>[destinations[i]]</a> <a href='?src=\ref[src];remove_dest=[i]' class='linkDanger'>\[X\]</a><br>"
+		dat += "<a href='?src=[REF(src)];toggle_dest=[i]' class='[cssclass]'>[destinations[i]]</a> <a href='?src=[REF(src)];remove_dest=[i]' class='linkDanger'>\[X\]</a><br>"
 
-	dat += "<a href='?src=\ref[src];add_dest=1'>Add a new destination</a> <hr><br>"
+	dat += "<a href='?src=[REF(src)];add_dest=1'>Add a new destination</a> <hr><br>"
 
-	dat += "<a href='?src=\ref[src];toggle_wrapped=1' class='[unwrapped ? "linkOn" : "LinkDanger"]'>Filter unwrapped packages</a>"
+	dat += "<a href='?src=[REF(src)];toggle_wrapped=1' class='[unwrapped ? "linkOn" : "LinkDanger"]'>Filter unwrapped packages</a>"
 
 	var/datum/browser/popup = new(user, "destsortingmachine", name, 320, 200, src)
 	popup.add_stylesheet("shared", 'nano/css/shared.css')

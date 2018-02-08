@@ -119,7 +119,7 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 	return text
 
 /datum/ai_laws/proc/adminLink(var/mob/living/silicon/S,var/law_type,var/index,var/label)
-	return "<a href=\"?src=\ref[src];set_law=[law_type];index=[index];mob=\ref[S]\">[label]</a> (<a href=\"?src=\ref[src];rm_law=[law_type];index=[index];mob=\ref[S]\" style=\"color:red\">Remove</a>)"
+	return "<a href=\"?src=[REF(src)];set_law=[law_type];index=[index];mob=[REF(S)]\">[label]</a> (<a href=\"?src=[REF(src)];rm_law=[law_type];index=[index];mob=[REF(S)]\" style=\"color:red\">Remove</a>)"
 
 /datum/ai_laws/Topic(href,href_list)
 	if(!usr.client || !usr.client.holder)

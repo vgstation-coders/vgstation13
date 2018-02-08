@@ -100,7 +100,7 @@ var/global/list/atmos_controllers = list()
 	data["alarm"]=null
 	if(current)
 		data += current.get_nano_data(user,TRUE)
-		data["alarm"] = "\ref[current]"
+		data["alarm"] = "[REF(current)]"
 
 	var/list/alarms=list()
 	for(var/obj/machinery/alarm/alarm in sortNames(machines)) // removing sortAtom because nano updates it just enough for the lag to happen
@@ -108,7 +108,7 @@ var/global/list/atmos_controllers = list()
 			continue // NO ACCESS 4 U
 		var/turf/pos = get_turf(alarm)
 		var/list/alarm_data=list()
-		alarm_data["ID"]="\ref[alarm]"
+		alarm_data["ID"]="[REF(alarm)]"
 		alarm_data["danger"] = max(alarm.local_danger_level, alarm.areaMaster.atmosalm-1)
 		alarm_data["name"] = "[alarm]"
 		alarm_data["area"] = get_area(alarm)

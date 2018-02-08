@@ -143,7 +143,7 @@ obj/machinery/shipcore/attack_hand(user as mob)
 		dat += "Autolathe Wires:<BR>"
 		var/wire
 		for(wire in src.wires)
-			dat += text("[wire] Wire: <A href='?src=\ref[src];wire=[wire];act=wire'>[src.wires[wire] ? "Mend" : "Cut"]</A> <A href='?src=\ref[src];wire=[wire];act=pulse'>Pulse</A><BR>")
+			dat += text("[wire] Wire: <A href='?src=[REF(src)];wire=[wire];act=wire'>[src.wires[wire] ? "Mend" : "Cut"]</A> <A href='?src=[REF(src)];wire=[wire];act=pulse'>Pulse</A><BR>")
 
 		dat += text("The red light is [src.disabled ? "off" : "on"].<BR>")
 		dat += text("The green light is [src.shocked ? "off" : "on"].<BR>")
@@ -152,10 +152,10 @@ obj/machinery/shipcore/attack_hand(user as mob)
 		switch(src.build_status)
 			if("unbuilt")
 				dat += "<h3>Core Status: <font color =#FF3300>Undeployed</font></h3><BR>"
-				dat += "<A href='?src=\ref[src];groupself=1'>Build Ship</A><BR>"
+				dat += "<A href='?src=[REF(src)];groupself=1'>Build Ship</A><BR>"
 			if("built")
 				dat += "<h3>Core Status: <font color =#00CC00>Deployed</font></h3><BR>"
-				dat += "<A href='?src=\ref[src];move=1'>Move</A><BR>"
+				dat += "<A href='?src=[REF(src)];move=1'>Move</A><BR>"
 			if("rebuilding")
 				dat += "<h3>Core Status: <font color =#FFCC00>Recalibrating</font></h3><BR>"
 		user << browse("<HEAD><TITLE>Ship Core</TITLE></HEAD>[dat]","window=shipcore")

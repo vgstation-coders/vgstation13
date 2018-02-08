@@ -148,8 +148,8 @@
 			if(B == dish)
 				dat += "<td></td>"
 			else
-				dat += "<td><A href='?src=\ref[src];eject=1;name=["[ID]"];'>Eject</a>"
-				dat += "<br>[B.analysed ? "<A href='?src=\ref[src];print=1;name=["[ID]"];'>Print</a>" : ""]</td>"
+				dat += "<td><A href='?src=[REF(src)];eject=1;name=["[ID]"];'>Eject</a>"
+				dat += "<br>[B.analysed ? "<A href='?src=[REF(src)];print=1;name=["[ID]"];'>Print</a>" : ""]</td>"
 			dat += "</tr>"
 		dat += "</table>"
 	dat = jointext(dat,"")

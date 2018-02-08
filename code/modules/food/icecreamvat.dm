@@ -72,7 +72,7 @@
 	user.set_machine(src)
 	var/dat = ""
 	if(src.beaker)
-		dat += "<A href='?src=\ref[src];eject=1'>Eject container and end transfer.</A><BR>"
+		dat += "<A href='?src=[REF(src)];eject=1'>Eject container and end transfer.</A><BR>"
 		if(!src.beaker.reagents.total_volume)
 			dat += "Container is empty.<BR><HR>"
 		else
@@ -83,7 +83,7 @@
 		dat += "No container is loaded into the machine, external transfer offline.<BR>"
 		dat += src.showReagents(2)
 		dat += src.showToppings()
-		dat += "<A href='?src=\ref[src];close=1'>Close</A>"
+		dat += "<A href='?src=[REF(src)];close=1'>Close</A>"
 	var/datum/browser/popup = new(user,"cream_master","Cream-Master Deluxe",700,400,src)
 	popup.set_content(dat)
 	popup.open()
@@ -157,14 +157,14 @@
 	if(src.reagents.total_volume <= 500)
 		dat += "<HR>"
 		dat += "<strong>Add fillings:</strong><BR>"
-		dat += "<A href='?src=\ref[src];synthcond=1;type=2'>Soda</A><BR>"
-		dat += "<A href='?src=\ref[src];synthcond=1;type=3'>Alcohol</A><BR>"
+		dat += "<A href='?src=[REF(src)];synthcond=1;type=2'>Soda</A><BR>"
+		dat += "<A href='?src=[REF(src)];synthcond=1;type=3'>Alcohol</A><BR>"
 		dat += "<strong>Finish With:</strong><BR>"
-		dat += "<A href='?src=\ref[src];synthcond=1;type=4'>Cream</A><BR>"
-		dat += "<A href='?src=\ref[src];synthcond=1;type=5'>Water</A><BR>"
+		dat += "<A href='?src=[REF(src)];synthcond=1;type=4'>Cream</A><BR>"
+		dat += "<A href='?src=[REF(src)];synthcond=1;type=5'>Water</A><BR>"
 		dat += "<strong>Dispense in:</strong><BR>"
-		dat += "<A href='?src=\ref[src];createcup=1'>Chocolate Cone</A><BR>"
-		dat += "<A href='?src=\ref[src];createcone=1'>Cone</A><BR>"
+		dat += "<A href='?src=[REF(src)];createcup=1'>Chocolate Cone</A><BR>"
+		dat += "<A href='?src=[REF(src)];createcone=1'>Cone</A><BR>"
 	dat += "</center>"
 	return dat
 
@@ -175,20 +175,20 @@
 		dat += "The container has:<BR>"
 		for(var/datum/reagent/R in src.beaker.reagents.reagent_list)
 			dat += "[R.volume] unit(s) of [R.name] | "
-			dat += "<A href='?src=\ref[src];add=[R.id];amount=5'>(5)</A> "
-			dat += "<A href='?src=\ref[src];add=[R.id];amount=10'>(10)</A> "
-			dat += "<A href='?src=\ref[src];add=[R.id];amount=15'>(15)</A> "
-			dat += "<A href='?src=\ref[src];add=[R.id];amount=[R.volume]'>(All)</A>"
+			dat += "<A href='?src=[REF(src)];add=[R.id];amount=5'>(5)</A> "
+			dat += "<A href='?src=[REF(src)];add=[R.id];amount=10'>(10)</A> "
+			dat += "<A href='?src=[REF(src)];add=[R.id];amount=15'>(15)</A> "
+			dat += "<A href='?src=[REF(src)];add=[R.id];amount=[R.volume]'>(All)</A>"
 			dat += "<BR>"
 	else if(container == 2)
 		dat += "<BR>The Cream-Master has:<BR>"
 		if(src.reagents.total_volume)
 			for(var/datum/reagent/R in src.reagents.reagent_list)
 				dat += "[R.volume] unit(s) of [R.name] | "
-				dat += "<A href='?src=\ref[src];remove=[R.id];amount=5'>(5)</A> "
-				dat += "<A href='?src=\ref[src];remove=[R.id];amount=10'>(10)</A> "
-				dat += "<A href='?src=\ref[src];remove=[R.id];amount=15'>(15)</A> "
-				dat += "<A href='?src=\ref[src];remove=[R.id];amount=[R.volume]'>(All)</A>"
+				dat += "<A href='?src=[REF(src)];remove=[R.id];amount=5'>(5)</A> "
+				dat += "<A href='?src=[REF(src)];remove=[R.id];amount=10'>(10)</A> "
+				dat += "<A href='?src=[REF(src)];remove=[R.id];amount=15'>(15)</A> "
+				dat += "<A href='?src=[REF(src)];remove=[R.id];amount=[R.volume]'>(All)</A>"
 				dat += "<BR>"
 		else
 			dat += "No reagents. <BR>"

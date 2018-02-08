@@ -88,7 +88,7 @@
 			O = null
 
 
-#define buy_href_link(obj, price, txt) ((price > uses) ? "Price: [price] point\s" : "<a href='?src=\ref[src];spell=[obj];buy=1'>[txt]</a>")
+#define buy_href_link(obj, price, txt) ((price > uses) ? "Price: [price] point\s" : "<a href='?src=[REF(src)];spell=[obj];buy=1'>[txt]</a>")
 #define book_background_color "#F1F1D4"
 #define book_window_size "550x600"
 
@@ -104,7 +104,7 @@
 	var/dat
 	dat += "<head><title>Spellbook ([uses] REMAINING)</title></head><body style=\"background-color:[book_background_color]\">"
 	dat += "<h1>A Wizard's Catalogue Of Spells And Artifacts</h1><br>"
-	dat += "<h2>[uses] point\s remaining (<a href='?src=\ref[src];refund=1'>Get a refund</a>)</h2><br>"
+	dat += "<h2>[uses] point\s remaining (<a href='?src=[REF(src)];refund=1'>Get a refund</a>)</h2><br>"
 	dat += "<em>This book contains a list of many useful things that you'll need in your journey.</em><br>"
 	dat += "<strong>KNOWN SPELLS:</strong><br><br>"
 
@@ -146,7 +146,7 @@
 				if(!max)
 					continue
 
-				upgrade_data += "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] (<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade=1'>upgrade ([spell.get_upgrade_price(upgrade)] points)</a>)  "
+				upgrade_data += "<a href='?src=[REF(src)];spell=[REF(spell)];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] (<a href='?src=[REF(src)];spell=[REF(spell)];upgrade_type=[upgrade];upgrade=1'>upgrade ([spell.get_upgrade_price(upgrade)] points)</a>)  "
 
 			if(upgrade_data)
 				dat += "[upgrade_data]<br><br>"
@@ -194,7 +194,7 @@
 		//<b>Staff of Change</b> (buy for 1 point)
 		//<i>(description)</i>
 
-		dat += "<strong>[artifact_name]</strong> ([buy_href_link("\ref[A]", artifact_price, "buy for [artifact_price] point\s")])<br>"
+		dat += "<strong>[artifact_name]</strong> ([buy_href_link("[REF(A)]", artifact_price, "buy for [artifact_price] point\s")])<br>"
 		dat += "<em>[artifact_desc]</em><br><br>"
 
 	dat += "<hr><strong>POTIONS<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"

@@ -37,15 +37,15 @@
 			// Main Menu
 
 			dat += {"<ol>
-				<li><A href='?src=\ref[src];switchscreen=1'>View General Inventory</A></li>
-				<li><A href='?src=\ref[src];switchscreen=2'>View Checked Out Inventory</A></li>
-				<li><A href='?src=\ref[src];switchscreen=3'>Check out a Book</A></li>
-				<li><A href='?src=\ref[src];switchscreen=4'>Connect to External Archive</A></li>
-				<li><A href='?src=\ref[src];switchscreen=5'>Upload New Title to Archive</A></li>
-				<li><A href='?src=\ref[src];switchscreen=6'>Print a Bible</A></li>
-				<li><A href='?src=\ref[src];switchscreen=7'>Print a Manual</A></li>"}
+				<li><A href='?src=[REF(src)];switchscreen=1'>View General Inventory</A></li>
+				<li><A href='?src=[REF(src)];switchscreen=2'>View Checked Out Inventory</A></li>
+				<li><A href='?src=[REF(src)];switchscreen=3'>Check out a Book</A></li>
+				<li><A href='?src=[REF(src)];switchscreen=4'>Connect to External Archive</A></li>
+				<li><A href='?src=[REF(src)];switchscreen=5'>Upload New Title to Archive</A></li>
+				<li><A href='?src=[REF(src)];switchscreen=6'>Print a Bible</A></li>
+				<li><A href='?src=[REF(src)];switchscreen=7'>Print a Manual</A></li>"}
 			if(src.emagged)
-				dat += "<li><A href='?src=\ref[src];switchscreen=8'>Access the Forbidden Lore Vault</A></li>"
+				dat += "<li><A href='?src=[REF(src)];switchscreen=8'>Access the Forbidden Lore Vault</A></li>"
 			dat += "</ol>"
 
 			if(src.arcanecheckout)
@@ -57,8 +57,8 @@
 			// Inventory
 			dat += "<h3>Inventory</h3>"
 			for(var/obj/item/weapon/book/b in inventory)
-				dat += "[b.name] <A href='?src=\ref[src];delbook=\ref[b]'>(Delete)</A><BR>"
-			dat += "<A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"
+				dat += "[b.name] <A href='?src=[REF(src)];delbook=[REF(b)]'>(Delete)</A><BR>"
+			dat += "<A href='?src=[REF(src)];switchscreen=0'>(Return to main menu)</A><BR>"
 		if(2)
 			// Checked Out
 			dat += "<h3>Checked Out Books</h3><BR>"
@@ -76,21 +76,21 @@
 					timedue = round(timedue)
 
 				dat += {"\"[b.bookname]\", Checked out to: [b.mobname]<BR>--- Taken: [timetaken] minutes ago, Due: in [timedue] minutes<BR>
-					<A href='?src=\ref[src];checkin=\ref[b]'>(Check In)</A><BR><BR>"}
-			dat += "<A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"
+					<A href='?src=[REF(src)];checkin=[REF(b)]'>(Check In)</A><BR><BR>"}
+			dat += "<A href='?src=[REF(src)];switchscreen=0'>(Return to main menu)</A><BR>"
 		if(3)
 			// Check Out a Book
 
 			dat += {"<h3>Check Out a Book</h3><BR>
 				Book: [src.buffer_book]
-				<A href='?src=\ref[src];editbook=1'>\[Edit\]</A><BR>
+				<A href='?src=[REF(src)];editbook=1'>\[Edit\]</A><BR>
 				Recipient: [src.buffer_mob]
-				<A href='?src=\ref[src];editmob=1'>\[Edit\]</A><BR>
+				<A href='?src=[REF(src)];editmob=1'>\[Edit\]</A><BR>
 				Checkout Date : [world.time/600]<BR>
 				Due Date: [(world.time + checkoutperiod)/600]<BR>
-				(Checkout Period: [checkoutperiod] minutes) (<A href='?src=\ref[src];increasetime=1'>+</A>/<A href='?src=\ref[src];decreasetime=1'>-</A>)
-				<A href='?src=\ref[src];checkout=1'>(Commit Entry)</A><BR>
-				<A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"}
+				(Checkout Period: [checkoutperiod] minutes) (<A href='?src=[REF(src)];increasetime=1'>+</A>/<A href='?src=[REF(src)];decreasetime=1'>-</A>)
+				<A href='?src=[REF(src)];checkout=1'>(Commit Entry)</A><BR>
+				<A href='?src=[REF(src)];switchscreen=0'>(Return to main menu)</A><BR>"}
 		if(4)
 			dat += "<h3>External Archive</h3>"
 			if(!dbcon_old.IsConnected())
@@ -99,19 +99,19 @@
 				num_results = src.get_num_results()
 				num_pages = Ceiling(num_results/LIBRARY_BOOKS_PER_PAGE)
 				dat += {"<ul>
-					<li><A href='?src=\ref[src];id=-1'>(Order book by SS<sup>13</sup>BN)</A></li>
+					<li><A href='?src=[REF(src)];id=-1'>(Order book by SS<sup>13</sup>BN)</A></li>
 				</ul>"}
 				var/pagelist = get_pagelist()
 
 				dat += {"<h2>Search Settings</h2><br />
-					<A href='?src=\ref[src];settitle=1'>Filter by Title: [query.title]</A><br />
-					<A href='?src=\ref[src];setcategory=1'>Filter by Category: [query.category]</A><br />
-					<A href='?src=\ref[src];setauthor=1'>Filter by Author: [query.author]</A><br />
-					<A href='?src=\ref[src];search=1'>\[Start Search\]</A><br />"}
+					<A href='?src=[REF(src)];settitle=1'>Filter by Title: [query.title]</A><br />
+					<A href='?src=[REF(src)];setcategory=1'>Filter by Category: [query.category]</A><br />
+					<A href='?src=[REF(src)];setauthor=1'>Filter by Author: [query.author]</A><br />
+					<A href='?src=[REF(src)];search=1'>\[Start Search\]</A><br />"}
 				dat += pagelist
 
-				dat += {"<form name='pagenum' action='?src=\ref[src]' method='get'>
-										<input type='hidden' name='src' value='\ref[src]'>
+				dat += {"<form name='pagenum' action='?src=[REF(src)]' method='get'>
+										<input type='hidden' name='src' value='[REF(src)]'>
 										<input type='text' name='pagenum' value='[page_num]' maxlength="5" size="5">
 										<input type='submit' value='Jump To Page'>
 							</form>"}
@@ -126,10 +126,10 @@
 
 				for(var/datum/cachedbook/CB in get_page(page_num))
 					var/author = CB.author
-					var/controls =  "<A href='?src=\ref[src];id=[CB.id]'>\[Order\]</A>"
+					var/controls =  "<A href='?src=[REF(src)];id=[CB.id]'>\[Order\]</A>"
 					if(user.check_rights(R_ADMIN))
-						controls +=  " <A style='color:red' href='?src=\ref[src];del=[CB.id]'>\[Delete\]</A>"
-						author += " (<A style='color:red' href='?src=\ref[src];delbyckey=[ckey(CB.ckey)]'>[ckey(CB.ckey)])</A>)"
+						controls +=  " <A style='color:red' href='?src=[REF(src)];del=[CB.id]'>\[Delete\]</A>"
+						author += " (<A style='color:red' href='?src=[REF(src)];delbyckey=[ckey(CB.ckey)]'>[ckey(CB.ckey)])</A>)"
 					dat += {"<tr>
 						<td>[author]</td>
 						<td>[CB.title]</td>
@@ -141,7 +141,7 @@
 
 				dat += "</table><br />[pagelist]"
 
-			dat += "<br /><A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"
+			dat += "<br /><A href='?src=[REF(src)];switchscreen=0'>(Return to main menu)</A><BR>"
 		if(5)
 			dat += "<h3>Upload a New Title</h3>"
 			if(!scanner)
@@ -159,10 +159,10 @@
 				if(!scanner.cache.author)
 					scanner.cache.author = "Anonymous"
 
-				dat += {"<TT>Author: </TT><A href='?src=\ref[src];uploadauthor=1'>[scanner.cache.author]</A><BR>
-					<TT>Category: </TT><A href='?src=\ref[src];uploadcategory=1'>[upload_category]</A><BR>
-					<A href='?src=\ref[src];upload=1'>\[Upload\]</A><BR>"}
-			dat += "<A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"
+				dat += {"<TT>Author: </TT><A href='?src=[REF(src)];uploadauthor=1'>[scanner.cache.author]</A><BR>
+					<TT>Category: </TT><A href='?src=[REF(src)];uploadcategory=1'>[upload_category]</A><BR>
+					<A href='?src=[REF(src)];upload=1'>\[Upload\]</A><BR>"}
+			dat += "<A href='?src=[REF(src)];switchscreen=0'>(Return to main menu)</A><BR>"
 		if(7)
 			dat += "<H3>Print a Manual</H3>"
 			dat += "<table>"
@@ -180,19 +180,19 @@
 			for(var/manual_type in typesof(/obj/item/weapon/book/manual))
 				if (!(manual_type in forbidden))
 					M = new manual_type()
-					dat += "<tr><td><A href='?src=\ref[src];manual=[manualcount]'>[M.title]</A></td></tr>"
+					dat += "<tr><td><A href='?src=[REF(src)];manual=[manualcount]'>[M.title]</A></td></tr>"
 					qdel(M)
 					M = null
 				manualcount++
 			dat += "</table>"
-			dat += "<BR><A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"
+			dat += "<BR><A href='?src=[REF(src)];switchscreen=0'>(Return to main menu)</A><BR>"
 
 		if(8)
 
 			dat += {"<h3>Accessing Forbidden Lore Vault v 1.3</h3>
 				Are you absolutely sure you want to proceed? EldritchTomes Inc. takes no responsibilities for loss of sanity resulting from this action.<p>
-				<A href='?src=\ref[src];arccheckout=1'>Yes.</A><BR>
-				<A href='?src=\ref[src];switchscreen=0'>No.</A><BR>"}
+				<A href='?src=[REF(src)];arccheckout=1'>Yes.</A><BR>
+				<A href='?src=[REF(src)];switchscreen=0'>No.</A><BR>"}
 
 	var/datum/browser/B = new /datum/browser/clean(user, "library", "Book Inventory Management")
 	B.set_content(dat)

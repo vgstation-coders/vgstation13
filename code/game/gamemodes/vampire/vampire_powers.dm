@@ -440,7 +440,7 @@
 				enthrall_safe = 1
 				break
 	if(!C)
-		world.log << "something bad happened on enthralling a mob src is [src] [src.key] \ref[src]"
+		world.log << "something bad happened on enthralling a mob src is [src] [src.key] [REF(src)]"
 		return 0
 	if(!C.mind)
 		to_chat(src, "<span class='warning'>[C.name]'s mind is not there for you to enthrall.</span>")
@@ -461,7 +461,7 @@
 	if(!istype(H))
 		to_chat(src, "<b><span class='warning'>SOMETHING WENT WRONG, YELL AT POMF OR NEXIS</b>")
 		return 0
-	var/ref = "\ref[src.mind]"
+	var/ref = "[REF(src.mind)]"
 	if(!(ref in ticker.mode.thralls))
 		ticker.mode.thralls[ref] = list(H.mind)
 	else

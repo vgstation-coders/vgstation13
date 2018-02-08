@@ -15,10 +15,10 @@
 		if(0)
 
 			dat += {"<h2>Search Settings</h2><br />
-				<A href='?src=\ref[src];settitle=1'>Filter by Title: [query.title]</A><br />
-				<A href='?src=\ref[src];setcategory=1'>Filter by Category: [query.category]</A><br />
-				<A href='?src=\ref[src];setauthor=1'>Filter by Author: [query.author]</A><br />
-				<A href='?src=\ref[src];search=1'>\[Start Search\]</A><br />"}
+				<A href='?src=[REF(src)];settitle=1'>Filter by Title: [query.title]</A><br />
+				<A href='?src=[REF(src)];setcategory=1'>Filter by Category: [query.category]</A><br />
+				<A href='?src=[REF(src)];setauthor=1'>Filter by Author: [query.author]</A><br />
+				<A href='?src=[REF(src)];search=1'>\[Start Search\]</A><br />"}
 		if(1)
 			establish_old_db_connection()
 			if(!dbcon_old.IsConnected())
@@ -29,8 +29,8 @@
 				var/pagelist = get_pagelist()
 
 				dat += pagelist
-				dat += {"<form name='pagenum' action='?src=\ref[src]' method='get'>
-										<input type='hidden' name='src' value='\ref[src]'>
+				dat += {"<form name='pagenum' action='?src=[REF(src)]' method='get'>
+										<input type='hidden' name='src' value='[REF(src)]'>
 										<input type='text' name='pagenum' value='[page_num]' maxlength="5" size="5">
 										<input type='submit' value='Jump To Page'>
 							</form>"}
@@ -50,7 +50,7 @@
 					</tr>"}
 
 				dat += "</table><br />[pagelist]"
-			dat += "<A href='?src=\ref[src];back=1'>\[Go Back\]</A><br />"
+			dat += "<A href='?src=[REF(src)];back=1'>\[Go Back\]</A><br />"
 	var/datum/browser/B = new /datum/browser/clean(user, "library", "Library Visitor")
 	B.set_content(dat)
 	B.open()

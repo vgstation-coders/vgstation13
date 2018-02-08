@@ -273,15 +273,15 @@ var/list/camera_messages = list()
 			if(!O.client)
 				continue
 			if(U.name == "Unknown")
-				to_chat( O, "<span class='name'>[U]</span> holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
+				to_chat( O, "<span class='name'>[U]</span> holds a <a href='byond://?src=[REF(src)];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
 			else
-				to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
+				to_chat(O, "<span class='name'><a href='byond://?src=[REF(O)];track2=[REF(O)];track=[REF(U)]'>[U]</a></span> holds a <a href='byond://?src=[REF(src)];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
 
 		for(var/mob/O in player_list)
 			if (istype(O.machine, /obj/machinery/computer/security))
 				var/obj/machinery/computer/security/S = O.machine
 				if (S.current == src)
-					to_chat(O, "[U] holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of the cameras ...")
+					to_chat(O, "[U] holds a <a href='byond://?src=[REF(src)];picturename=[html_encode(W.name)]'>[W]</a> up to one of the cameras ...")
 	else
 		..()
 	return

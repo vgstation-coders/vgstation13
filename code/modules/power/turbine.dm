@@ -157,8 +157,8 @@
 
 	t += {"Generated power : [round(lastgen)] W<BR><BR>
 		Turbine: [round(compressor.rpm)] RPM<BR>
-		Starter: [ compressor.starter ? "<A href='?src=\ref[src];str=1'>Off</A> <B>On</B>" : "<B>Off</B> <A href='?src=\ref[src];str=1'>On</A>"]
-		</PRE><HR><A href='?src=\ref[src];close=1'>Close</A>
+		Starter: [ compressor.starter ? "<A href='?src=[REF(src)];str=1'>Off</A> <B>On</B>" : "<B>Off</B> <A href='?src=[REF(src)];str=1'>On</A>"]
+		</PRE><HR><A href='?src=[REF(src)];close=1'>Close</A>
 		</TT>"}
 	user << browse(t, "window=turbine")
 	onclose(user, "turbine")
@@ -257,14 +257,14 @@
 	var/dat
 	if(src.compressor)
 		dat += {"<BR><B>Gas turbine remote control system</B><HR>
-		\nTurbine status: [ src.compressor.starter ? "<A href='?src=\ref[src];str=1'>Off</A> <B>On</B>" : "<B>Off</B> <A href='?src=\ref[src];str=1'>On</A>"]
+		\nTurbine status: [ src.compressor.starter ? "<A href='?src=[REF(src)];str=1'>Off</A> <B>On</B>" : "<B>Off</B> <A href='?src=[REF(src)];str=1'>On</A>"]
 		\n<BR>
 		\nTurbine speed: [src.compressor.rpm]rpm<BR>
 		\nPower currently being generated: [src.compressor.turbine.lastgen]W<BR>
 		\nInternal gas temperature: [src.compressor.gas_contained.temperature]K<BR>
-		\nVent doors: [ src.door_status ? "<A href='?src=\ref[src];doors=1'>Closed</A> <B>Open</B>" : "<B>Closed</B> <A href='?src=\ref[src];doors=1'>Open</A>"]
-		\n</PRE><HR><A href='?src=\ref[src];view=1'>View</A>
-		\n</PRE><HR><A href='?src=\ref[src];close=1'>Close</A>
+		\nVent doors: [ src.door_status ? "<A href='?src=[REF(src)];doors=1'>Closed</A> <B>Open</B>" : "<B>Closed</B> <A href='?src=[REF(src)];doors=1'>Open</A>"]
+		\n</PRE><HR><A href='?src=[REF(src)];view=1'>View</A>
+		\n</PRE><HR><A href='?src=[REF(src)];close=1'>Close</A>
 		\n<BR>
 		\n"}
 	else

@@ -4,17 +4,17 @@
 
 		dat += {"Current Game Mode: <B>[ticker.mode.name]</B><BR>
 			Round Duration: <B>[round(world.time / 36000)]:[add_zero("[world.time / 600 % 60]", 2)]:[world.time / 100 % 6][world.time / 100 % 10]</B><BR>
-			<A HREF='?src=\ref[src];emergency_shuttle_panel=1'><B>Emergency Shuttle Panel</B></A><BR>"}
+			<A HREF='?src=[REF(src)];emergency_shuttle_panel=1'><B>Emergency Shuttle Panel</B></A><BR>"}
 
-		dat += "<a href='?src=\ref[src];delay_round_end=1'>[ticker.delay_end ? "End Round Normally" : "Delay Round End"]</a><br>"
+		dat += "<a href='?src=[REF(src)];delay_round_end=1'>[ticker.delay_end ? "End Round Normally" : "Delay Round End"]</a><br>"
 		if(ticker.mode.syndicates.len)
 			dat += "<br><table cellspacing=5><tr><td><B>Syndicates</B></td><td></td></tr>"
 			for(var/datum/mind/N in ticker.mode.syndicates)
 				var/mob/M = N.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td></tr>"}
 				else
 					dat += "<tr><td><i>Nuclear Operative not found!</i></td></tr>"
 			dat += "</table><br><table><tr><td><B>Nuclear Disk(s)</B></td></tr>"
@@ -25,7 +25,7 @@
 				while(!istype(disk_loc, /turf))
 					if(istype(disk_loc, /mob))
 						var/mob/M = disk_loc
-						dat += "carried by <a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a> "
+						dat += "carried by <a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a> "
 					if(istype(disk_loc, /obj))
 						var/obj/O = disk_loc
 						dat += "in \a [O.name] "
@@ -41,21 +41,21 @@
 					dat += "<tr><td><i>Head Revolutionary not found!</i></td></tr>"
 				else
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a> <b>(Leader)</b>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a> <b>(Leader)</b>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td></tr>"}
 			for(var/datum/mind/N in ticker.mode.revolutionaries)
 				var/mob/M = N.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td></tr>"}
 			dat += "</table><table cellspacing=5><tr><td><B>Target(s)</B></td><td></td><td><B>Location</B></td></tr>"
 			for(var/datum/mind/N in ticker.mode.get_living_heads())
 				var/mob/M = N.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td>"}
 					var/turf/mob_loc = get_turf(M)
 					dat += "<td>[mob_loc.loc]</td></tr>"
 				else
@@ -68,9 +68,9 @@
 				var/mob/M = changeling.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td>
+						<td><A HREF='?src=[REF(src)];traitor=[REF(M)]'>Show Objective</A></td></tr>"}
 				else
 					dat += "<tr><td><i>Changeling not found!</i></td></tr>"
 			dat += "</table>"
@@ -81,9 +81,9 @@
 				var/mob/M = wizard.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td>
+						<td><A HREF='?src=[REF(src)];traitor=[REF(M)]'>Show Objective</A></td></tr>"}
 				else
 					dat += "<tr><td><i>Wizard not found!</i></td></tr>"
 			dat += "</table>"
@@ -94,9 +94,9 @@
 				var/mob/M = apprentice.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td>
+						<td><A HREF='?src=[REF(src)];traitor=[REF(M)]'>Show Objective</A></td></tr>"}
 				else
 					dat += "<tr><td><i>Apprentice not found!</i></td></tr>"
 			dat += "</table>"
@@ -108,9 +108,9 @@
 				var/mob/M = raider.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td>
+						<td><A HREF='?src=[REF(src)];traitor=[REF(M)]'>Show Objective</A></td></tr>"}
 			dat += "</table>"
 		*/
 
@@ -121,9 +121,9 @@
 				var/mob/M = ninja.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td>
+						<td><A HREF='?src=[REF(src)];traitor=[REF(M)]'>Show Objective</A></td></tr>"}
 				else
 					dat += "<tr><td><i>Ninja not found!</i></td></tr>"
 			dat += "</table>"
@@ -135,9 +135,9 @@
 				var/mob/M = N.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A href='?src=\ref[src];cult_privatespeak=\ref[M]'>Nar-Speak</A></td></tr>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td>
+						<td><A href='?src=[REF(src)];cult_privatespeak=[REF(M)]'>Nar-Speak</A></td></tr>"}
 			dat += "</table>"
 
 			var/living_crew = 0
@@ -150,7 +150,7 @@
 						if(istype(L, /mob/living/carbon))
 							living_crew++
 
-			dat += "<br>[living_cultists] living cultists. (use <a href='?src=\ref[src];cult_mindspeak=\ref[src]'>Voice of Nar-Sie</a>)"
+			dat += "<br>[living_cultists] living cultists. (use <a href='?src=[REF(src)];cult_mindspeak=[REF(src)]'>Voice of Nar-Sie</a>)"
 			dat += "<br>[living_crew] living non-cultists."
 			dat += "<br>"
 
@@ -179,7 +179,7 @@
 					dat += "<br><B>Objective #[obj_count]</B>: [explanation]"
 
 				if(!cult_round.narsie_condition_cleared)
-					dat += "<br><a href='?src=\ref[src];cult_nextobj=\ref[src]'>complete objective (debug)</a>"
+					dat += "<br><a href='?src=[REF(src)];cult_nextobj=[REF(src)]'>complete objective (debug)</a>"
 
 		/*if(istype(ticker.mode, /datum/game_mode/anti_revolution) && ticker.mode:heads.len)	//comment out anti-revolution
 			dat += "<br><table cellspacing=5><tr><td><B>Corrupt Heads</B></td><td></td></tr>"
@@ -187,8 +187,8 @@
 				var/mob/M = N.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td></tr>"}
 			dat += "</table>"
 */
 
@@ -198,9 +198,9 @@
 				var/mob/M = vampire.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td>
+						<td><A HREF='?src=[REF(src)];traitor=[REF(M)]'>Show Objective</A></td></tr>"}
 				else
 					dat += "<tr><td><i>Vampire not found!</i></td></tr>"
 
@@ -210,9 +210,9 @@
 				var/mob/M = Mind.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td>
+						<td><A HREF='?src=[REF(src)];traitor=[REF(M)]'>Show Objective</A></td></tr>"}
 				else
 					dat += "<tr><td><i>Enthralled not found!</i></td></tr>"
 
@@ -222,9 +222,9 @@
 				var/mob/M = traitor.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td>
+						<td><A HREF='?src=[REF(src)];traitor=[REF(M)]'>Show Objective</A></td></tr>"}
 				else
 					dat += "<tr><td><i>Traitor not found!</i></td></tr>"
 			dat += "</table>"
@@ -238,8 +238,8 @@
 				var/mob/M = blob.current
 				if(M)
 
-					dat += {"<tr><td><a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?priv_msg=\ref[M]'>PM</A></td>"}
+					dat += {"<tr><td><a href='?_src_=holder;adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?priv_msg=[REF(M)]'>PM</A></td>"}
 				else
 					dat += "<tr><td><i>Blob not found!</i></td></tr>"
 			dat += "</table>"
@@ -248,16 +248,16 @@
 			for(var/mob/M in mob_list)
 				if(istype(M, /mob/camera/blob))
 
-					dat += {"<tr><td><a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?priv_msg=\ref[M]'>PM</A></td>"}
+					dat += {"<tr><td><a href='?_src_=holder;adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?priv_msg=[REF(M)]'>PM</A></td>"}
 			dat += "</table>"
 		if(ticker.mode.raiders.len)
 			dat += "<br><table cellspacing=5><tr><td><B>Raiders</B></td><td></td><td></td></tr>"
 			for(var/datum/mind/vox in ticker.mode.raiders)
 				var/mob/M = vox.current
 				if(M)
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td></tr>"}
 				else
 					dat += "<tr><td><i>Vox Raider not found!</i></td></tr>"
 			dat += "</table>"
@@ -274,8 +274,8 @@
 				var/mob/M = ert.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td>"}
 
 				else
 					dat += "<tr><td><i>Emergency Responder not found!</i></td></tr>"
@@ -292,8 +292,8 @@
 				var/mob/M = deathsquad.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td>"}
 
 				else
 					dat += "<tr><td><i>Death Commando not found!</i></td></tr>"
@@ -310,8 +310,8 @@
 				var/mob/M = elite_syndie.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td>"}
 
 				else
 					dat += "<tr><td><i>Elite Squadie not found!</i></td></tr>"
@@ -328,8 +328,8 @@
 				var/mob/M = custom_team.current
 				if(M)
 
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"}
+					dat += {"<tr><td><a href='?src=[REF(src)];adminplayeropts=[REF(M)]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
+						<td><A href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</A></td>"}
 
 				else
 					dat += "<tr><td><i>Team member not found!</i></td></tr>"

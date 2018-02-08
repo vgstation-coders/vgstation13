@@ -62,13 +62,13 @@ var/global/vox_shuttle_location
 	var/dat = {"
 		Location: [areaMaster]<br>
 		Ready to move[max(lastMove + VOX_SHUTTLE_COOLDOWN - world.time, 0) ? " in [max(round((lastMove + VOX_SHUTTLE_COOLDOWN - world.time) * 0.1), 0)] seconds" : ": now"]<br>
-		<a href='?src=\ref[src];move=start'>Return to dark space</a><br>
-		<a href='?src=\ref[src];move=solars_fore_port'>Fore port solar</a> |
-		<a href='?src=\ref[src];move=solars_aft_port'>Aft port solar</a> |
-		<a href='?src=\ref[src];move=solars_fore_starboard'>Fore starboard solar</a><br>
-		<a href='?src=\ref[src];move=solars_aft_starboard'>Aft starboard solar</a> |
-		<a href='?src=\ref[src];move=mining'>Mining Asteroid</a><br>
-		<a href='?src=\ref[user];mach_close=computer'>Close</a>
+		<a href='?src=[REF(src)];move=start'>Return to dark space</a><br>
+		<a href='?src=[REF(src)];move=solars_fore_port'>Fore port solar</a> |
+		<a href='?src=[REF(src)];move=solars_aft_port'>Aft port solar</a> |
+		<a href='?src=[REF(src)];move=solars_fore_starboard'>Fore starboard solar</a><br>
+		<a href='?src=[REF(src)];move=solars_aft_starboard'>Aft starboard solar</a> |
+		<a href='?src=[REF(src)];move=mining'>Mining Asteroid</a><br>
+		<a href='?src=[REF(user)];mach_close=computer'>Close</a>
 	"}
 
 	user << browse(dat, "window=computer;size=575x450")

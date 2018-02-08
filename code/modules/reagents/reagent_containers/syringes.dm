@@ -160,7 +160,7 @@
 			var/mob/living/carbon/T = target
 			if (!T.dna)
 				to_chat(user, "<span class='warning'>You are unable to locate any blood.</span>")
-				warning("Tried to draw blood or equivalent from [target] (\ref[target]) but it's missing their DNA datum!")
+				warning("Tried to draw blood or equivalent from [target] ([REF(target)]) but it's missing their DNA datum!")
 				return
 
 			if (M_NOCLONE in T.mutations) // Target has been husked

@@ -127,7 +127,7 @@ obj/item/device/mmi/Destroy()
 					to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] seems slow to respond. Try again in a few seconds.</span>")
 					ghostmob << 'sound/effects/adminhelp.ogg'
 					to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is trying to put your brain in a MMI. Return to your body if you want to be resurrected!</span> \
-						(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+						(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=[REF(ghost)];reentercorpse=1'>click here!</a>)</span>")
 					return TRUE
 			to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] is completely unresponsive; there's no point.</span>")
 			return TRUE

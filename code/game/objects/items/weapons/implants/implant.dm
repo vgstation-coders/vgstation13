@@ -313,7 +313,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 /obj/item/weapon/implant/traitor/implanted(mob/M, mob/user)
 	var/list/implanters
-	var/ref = "\ref[user.mind]"
+	var/ref = "[REF(user.mind)]"
 	if(!iscarbon(M))
 		return 0
 	if(!M.mind)

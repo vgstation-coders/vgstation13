@@ -483,7 +483,7 @@
 	return 0
 
 /obj/machinery/portable_atmospherics/canister/apply_beam_damage(var/obj/effect/beam/B)
-	var/lastcheck=last_beamchecks["\ref[B]"]
+	var/lastcheck=last_beamchecks["[REF(B)]"]
 
 	var/damage = ((world.time - lastcheck)/10)  * (B.get_damage()/2)
 
@@ -491,17 +491,17 @@
 	health -= damage
 
 	// Update check time.
-	last_beamchecks["\ref[B]"]=world.time
+	last_beamchecks["[REF(B)]"]=world.time
 
 // Apply connect damage
 /obj/machinery/portable_atmospherics/canister/beam_connect(var/obj/effect/beam/B)
 	..()
-	last_beamchecks["\ref[B]"]=world.time
+	last_beamchecks["[REF(B)]"]=world.time
 
 /obj/machinery/portable_atmospherics/canister/beam_disconnect(var/obj/effect/beam/B)
 	..()
 	apply_beam_damage(B)
-	last_beamchecks.Remove("\ref[B]") // RIP
+	last_beamchecks.Remove("[REF(B)]") // RIP
 
 /obj/machinery/portable_atmospherics/canister/handle_beams()
 	// New beam damage code (per-tick)

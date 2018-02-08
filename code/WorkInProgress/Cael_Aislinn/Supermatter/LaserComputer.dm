@@ -27,11 +27,11 @@
 		var/t = "<TT><B>Laser status monitor</B><HR>"
 		for(var/obj/machinery/zero_point_emitter/laser in lasers)
 			t += "Zero Point Laser<br>"
-			t += "Power level: <A href = '?src=\ref[laser];input=-0.005'>-</A> <A href = '?src=\ref[laser];input=-0.001'>-</A> <A href = '?src=\ref[laser];input=-0.0005'>-</A> <A href = '?src=\ref[laser];input=-0.0001'>-</A> [laser.energy]MeV <A href = '?src=\ref[laser];input=0.0001'>+</A> <A href = '?src=\ref[laser];input=0.0005'>+</A> <A href = '?src=\ref[laser];input=0.001'>+</A> <A href = '?src=\ref[laser];input=0.005'>+</A><BR>"
-			t += "Frequency: <A href = '?src=\ref[laser];freq=-10000'>-</A> <A href = '?src=\ref[laser];freq=-1000'>-</A> [laser.freq] <A href = '?src=\ref[laser];freq=1000'>+</A> <A href = '?src=\ref[laser];freq=10000'>+</A><BR>"
-			t += "Output: [laser.active ? "<B>Online</B> <A href = '?src=\ref[laser];online=1'>Offline</A>" : "<A href = '?src=\ref[laser];online=1'>Online</A> <B>Offline</B> "]<BR>"
+			t += "Power level: <A href = '?src=[REF(laser)];input=-0.005'>-</A> <A href = '?src=[REF(laser)];input=-0.001'>-</A> <A href = '?src=[REF(laser)];input=-0.0005'>-</A> <A href = '?src=[REF(laser)];input=-0.0001'>-</A> [laser.energy]MeV <A href = '?src=[REF(laser)];input=0.0001'>+</A> <A href = '?src=[REF(laser)];input=0.0005'>+</A> <A href = '?src=[REF(laser)];input=0.001'>+</A> <A href = '?src=[REF(laser)];input=0.005'>+</A><BR>"
+			t += "Frequency: <A href = '?src=[REF(laser)];freq=-10000'>-</A> <A href = '?src=[REF(laser)];freq=-1000'>-</A> [laser.freq] <A href = '?src=[REF(laser)];freq=1000'>+</A> <A href = '?src=[REF(laser)];freq=10000'>+</A><BR>"
+			t += "Output: [laser.active ? "<B>Online</B> <A href = '?src=[REF(laser)];online=1'>Offline</A>" : "<A href = '?src=[REF(laser)];online=1'>Online</A> <B>Offline</B> "]<BR>"
 		t += "<hr>"
-		t += "<A href='?src=\ref[src];close=1'>Close</A><BR>"
+		t += "<A href='?src=[REF(src)];close=1'>Close</A><BR>"
 		user << browse(t, "window=laser_control;size=500x800")
 		user.machine = src
 
@@ -56,13 +56,13 @@
 	else
 
 
-		t += "Power level:  <A href = '?src=\ref[src];input=-4'>-</A> <A href = '?src=\ref[src];input=-3'>-</A> <A href = '?src=\ref[src];input=-2'>-</A> <A href = '?src=\ref[src];input=-1'>-</A> [add_lspace(laser.power,5)] <A href = '?src=\ref[src];input=1'>+</A> <A href = '?src=\ref[src];input=2'>+</A> <A href = '?src=\ref[src];input=3'>+</A> <A href = '?src=\ref[src];input=4'>+</A><BR>"
+		t += "Power level:  <A href = '?src=[REF(src)];input=-4'>-</A> <A href = '?src=[REF(src)];input=-3'>-</A> <A href = '?src=[REF(src)];input=-2'>-</A> <A href = '?src=[REF(src)];input=-1'>-</A> [add_lspace(laser.power,5)] <A href = '?src=[REF(src)];input=1'>+</A> <A href = '?src=[REF(src)];input=2'>+</A> <A href = '?src=[REF(src)];input=3'>+</A> <A href = '?src=[REF(src)];input=4'>+</A><BR>"
 		if(advanced)
-			t += "Frequency:  <A href = '?src=\ref[src];freq=-10000'>-</A> <A href = '?src=\ref[src];freq=-1000'>-</A> [add_lspace(laser.freq,5)] <A href = '?src=\ref[src];freq=1000'>+</A> <A href = '?src=\ref[src];freq=10000'>+</A><BR>"
+			t += "Frequency:  <A href = '?src=[REF(src)];freq=-10000'>-</A> <A href = '?src=[REF(src)];freq=-1000'>-</A> [add_lspace(laser.freq,5)] <A href = '?src=[REF(src)];freq=1000'>+</A> <A href = '?src=[REF(src)];freq=10000'>+</A><BR>"
 
-		t += "Output: [laser.on ? "<B>Online</B> <A href = '?src=\ref[src];online=1'>Offline</A>" : "<A href = '?src=\ref[src];online=1'>Online</A> <B>Offline</B> "]<BR>"
+		t += "Output: [laser.on ? "<B>Online</B> <A href = '?src=[REF(src)];online=1'>Offline</A>" : "<A href = '?src=[REF(src)];online=1'>Online</A> <B>Offline</B> "]<BR>"
 
-		t += "<BR><HR><A href='?src=\ref[src];close=1'>Close</A></TT>"
+		t += "<BR><HR><A href='?src=[REF(src)];close=1'>Close</A></TT>"
 
 	user << browse(t, "window=lascomp;size=420x700")
 	onclose(user, "lascomp")

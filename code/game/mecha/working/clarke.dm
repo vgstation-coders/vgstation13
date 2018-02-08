@@ -57,7 +57,7 @@
 	var/output = {"<div class='wr'>
 						<div class='header'>Special</div>
 						<div class='links'>
-						<a href='?src=\ref[src];scrubbing=1'><span id="scrubbing_command">[scrubber.on?"Deactivate":"Activate"] scrubber</span></a>
+						<a href='?src=[REF(src)];scrubbing=1'><span id="scrubbing_command">[scrubber.on?"Deactivate":"Activate"] scrubber</span></a>
 						</div>
 						</div>
 						"}

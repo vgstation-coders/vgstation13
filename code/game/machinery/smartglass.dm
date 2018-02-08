@@ -66,7 +66,7 @@
 	return {"
 		<ul>
 			<li>[format_tag("ID Tag", "id_tag","set_id")]</a></li>
-			<li><a href='?src=\ref[src];transparentoggle=1'>Toggle Transparency</a></li>
+			<li><a href='?src=[REF(src)];transparentoggle=1'>Toggle Transparency</a></li>
 		</ul>
 		"}	
 		

@@ -41,31 +41,31 @@
 		dat += "Please insert a beaker.<BR>"
 	else
 		var/datum/reagents/R = beaker.reagents
-		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker and Clear Buffer</A><BR>"
+		dat += "<A href='?src=[REF(src)];eject=1'>Eject beaker and Clear Buffer</A><BR>"
 		if(!R.total_volume)
 			dat += "Beaker is empty."
 		else
 			dat += "Add to buffer:<BR>"
 			for(var/datum/reagent/G in R.reagent_list)
 				dat += {"[G.name] , [G.volume] Units -
-					<A href='?src=\ref[src];analyze=1;desc=[G.description];name=[G.name]'>(Analyze)</A>
-					<A href='?src=\ref[src];add=[G.id];amount=1'>(1)</A>
-					<A href='?src=\ref[src];add=[G.id];amount=5'>(5)</A>
-					<A href='?src=\ref[src];add=[G.id];amount=10'>(10)</A>
-					<A href='?src=\ref[src];add=[G.id];amount=[G.volume]'>(All)</A>
-					<A href='?src=\ref[src];addcustom=[G.id]'>(Custom)</A><BR>"}
+					<A href='?src=[REF(src)];analyze=1;desc=[G.description];name=[G.name]'>(Analyze)</A>
+					<A href='?src=[REF(src)];add=[G.id];amount=1'>(1)</A>
+					<A href='?src=[REF(src)];add=[G.id];amount=5'>(5)</A>
+					<A href='?src=[REF(src)];add=[G.id];amount=10'>(10)</A>
+					<A href='?src=[REF(src)];add=[G.id];amount=[G.volume]'>(All)</A>
+					<A href='?src=[REF(src)];addcustom=[G.id]'>(Custom)</A><BR>"}
 
-		dat += "<HR>Transfer to <A href='?src=\ref[src];toggle=1'>[(!mode ? "disposal" : "beaker")]:</A><BR>"
+		dat += "<HR>Transfer to <A href='?src=[REF(src)];toggle=1'>[(!mode ? "disposal" : "beaker")]:</A><BR>"
 		if(reagents.total_volume)
 			for(var/datum/reagent/N in reagents.reagent_list)
 				dat += {"[N.name] , [N.volume] Units -
-					<A href='?src=\ref[src];analyze=1;desc=[N.description];name=[N.name]'>(Analyze)</A>
-					<A href='?src=\ref[src];remove=[N.id];amount=1'>(1)</A>
-					<A href='?src=\ref[src];remove=[N.id];amount=5'>(5)</A>
-					<A href='?src=\ref[src];remove=[N.id];amount=10'>(10)</A>
-					<A href='?src=\ref[src];remove=[N.id];amount=[N.volume]'>(All)</A>
-					<A href='?src=\ref[src];removecustom=[N.id]'>(Custom)</A><BR>"}
-			dat += "<A href='?src=\ref[src];createbar=1'>Create snack bar (10 units max)</A>"
+					<A href='?src=[REF(src)];analyze=1;desc=[N.description];name=[N.name]'>(Analyze)</A>
+					<A href='?src=[REF(src)];remove=[N.id];amount=1'>(1)</A>
+					<A href='?src=[REF(src)];remove=[N.id];amount=5'>(5)</A>
+					<A href='?src=[REF(src)];remove=[N.id];amount=10'>(10)</A>
+					<A href='?src=[REF(src)];remove=[N.id];amount=[N.volume]'>(All)</A>
+					<A href='?src=[REF(src)];removecustom=[N.id]'>(Custom)</A><BR>"}
+			dat += "<A href='?src=[REF(src)];createbar=1'>Create snack bar (10 units max)</A>"
 		else
 			dat += "Buffer is empty.<BR>"
 	dat = jointext(dat,"")

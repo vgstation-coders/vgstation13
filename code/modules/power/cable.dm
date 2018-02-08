@@ -246,12 +246,12 @@ By design, d1 is the smallest direction and d2 is the highest
 		var/turf/Z = get_turf(A)
 		var/area/my_area = get_area(Z)
 
-		message += {"in [my_area.name]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</A>) (<A HREF='?_src_=vars;Vars=\ref[A]'>VV</A>)"}
+		message += {"in [my_area.name]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</A>) (<A HREF='?_src_=vars;Vars=[REF(A)]'>VV</A>)"}
 
 		var/mob/M = get_holder_of_type(A, /mob) //Why is this here? The use already IS a mob...
 
 		if(M)
-			message += " - Cut By: [M.real_name] ([M.key]) (<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
+			message += " - Cut By: [M.real_name] ([M.key]) (<A HREF='?_src_=holder;adminplayeropts=[REF(M)]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=[REF(M)]'>?</A>)"
 			log_game("[M.real_name] ([M.key]) cut a wire in [my_area.name] ([T.x],[T.y],[T.z])")
 
 	message_admins(message, 0, 1)

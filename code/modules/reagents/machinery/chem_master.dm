@@ -181,7 +181,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 					if(istype(reagent, /datum/reagent/blood))
 						dat += "Blood type: [reagent.data["blood_type"] || "Unknown"]<BR>Blood DNA: [reagent.data["blood_DNA"] || "Unable to determine"]<BR><BR>"
 					dat += "Density:<BR>[reagent.density]<BR><BR>Specific heat capacity:<BR>[reagent.specheatcap]<BR><BR><BR>"
-				dat += "<A href='?src=\ref[src];main=1'>(Back)</A>"
+				dat += "<A href='?src=[REF(src)];main=1'>(Back)</A>"
 
 			dat = jointext(dat,"")
 			var/datum/browser/popup = new(usr, "[windowtype]", "[name]", 585, 400, src)
@@ -365,7 +365,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				if ( i%4==1 )
 					dat += "<tr>"
 
-				dat += "<td><a href=\"?src=\ref[src]&bottle_sprite=[i]\"><img src=\"bottle[i].png\" /></a></td>"
+				dat += "<td><a href=\"?src=[REF(src)]&bottle_sprite=[i]\"><img src=\"bottle[i].png\" /></a></td>"
 
 				if ( i%4==0 )
 					dat +="</tr>"
@@ -424,15 +424,15 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		dat += "Please insert a beaker.<BR>"
 		if(!condi)
 			if(src.loaded_pill_bottle)
-				dat += "<A href='?src=\ref[src];ejectp=1'>Eject Pill Bottle \[[loaded_pill_bottle.contents.len]/[loaded_pill_bottle.storage_slots]\]</A><BR><BR>"
+				dat += "<A href='?src=[REF(src)];ejectp=1'>Eject Pill Bottle \[[loaded_pill_bottle.contents.len]/[loaded_pill_bottle.storage_slots]\]</A><BR><BR>"
 			else
 				dat += "No pill bottle inserted.<BR><BR>"
 	else
 		var/datum/reagents/R = beaker.reagents
-		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker and Clear Buffer</A><BR>"
+		dat += "<A href='?src=[REF(src)];eject=1'>Eject beaker and Clear Buffer</A><BR>"
 
 		if(src.loaded_pill_bottle)
-			dat += "<A href='?src=\ref[src];ejectp=1'>Eject Pill Bottle \[[loaded_pill_bottle.contents.len]/[loaded_pill_bottle.storage_slots]\]</A><BR><BR>"
+			dat += "<A href='?src=[REF(src)];ejectp=1'>Eject Pill Bottle \[[loaded_pill_bottle.contents.len]/[loaded_pill_bottle.storage_slots]\]</A><BR><BR>"
 		else if(windowtype == "chem_master")
 			dat += "No pill bottle inserted.<BR><BR>"
 
@@ -449,10 +449,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 						Add to buffer:
 					</td>
 					<td class="column2">
-						<A href='?src=\ref[src];addall=1;percent=[100/3]'>33%</A>
-						<A href='?src=\ref[src];addall=1;percent=50'>50%</A>
-						<A href='?src=\ref[src];addallcustom=1'>Custom</A>
-						<A href='?src=\ref[src];addall=1;amount=[R.total_volume]'>All</A>
+						<A href='?src=[REF(src)];addall=1;percent=[100/3]'>33%</A>
+						<A href='?src=[REF(src)];addall=1;percent=50'>50%</A>
+						<A href='?src=[REF(src)];addallcustom=1'>Custom</A>
+						<A href='?src=[REF(src)];addall=1;amount=[R.total_volume]'>All</A>
 					</td>
 				</table>
 			"}
@@ -462,14 +462,14 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "<tr>"
 				dat += {"
 					<td class="column1">
-						[G.name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[G]'>(?)</A>
+						[G.name] , [round(G.volume, 0.01)] Units - <A href='?src=[REF(src)];analyze=[REF(G)]'>(?)</A>
 					</td>
 					<td class="column2">
-						<A href='?src=\ref[src];add=[G.id];amount=1'>1u</A>
-						<A href='?src=\ref[src];add=[G.id];amount=5'>5u</A>
-						<A href='?src=\ref[src];add=[G.id];amount=10'>10u</A>
-						<A href='?src=\ref[src];addcustom=[G.id]'>Custom</A>
-						<A href='?src=\ref[src];add=[G.id];amount=[G.volume]'>All</A>
+						<A href='?src=[REF(src)];add=[G.id];amount=1'>1u</A>
+						<A href='?src=[REF(src)];add=[G.id];amount=5'>5u</A>
+						<A href='?src=[REF(src)];add=[G.id];amount=10'>10u</A>
+						<A href='?src=[REF(src)];addcustom=[G.id]'>Custom</A>
+						<A href='?src=[REF(src)];add=[G.id];amount=[G.volume]'>All</A>
 					</td>
 				"}
 				dat += "</tr>"
@@ -484,13 +484,13 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			dat += {"
 				<table>
 					<td class="column1">
-						Transfer to <A href='?src=\ref[src];toggle=1'>[(!mode ? "disposal" : "beaker")]:</A>
+						Transfer to <A href='?src=[REF(src)];toggle=1'>[(!mode ? "disposal" : "beaker")]:</A>
 					</td>
 					<td class="column2">
-						<A href='?src=\ref[src];removeall=1;percent=[100/3]'>33%</A>
-						<A href='?src=\ref[src];removeall=1;percent=50'>50%</A>
-						<A href='?src=\ref[src];removeallcustom=1'>Custom</A>
-						<A href='?src=\ref[src];removeall=1;amount=[reagents.total_volume]'>All</A>
+						<A href='?src=[REF(src)];removeall=1;percent=[100/3]'>33%</A>
+						<A href='?src=[REF(src)];removeall=1;percent=50'>50%</A>
+						<A href='?src=[REF(src)];removeallcustom=1'>Custom</A>
+						<A href='?src=[REF(src)];removeall=1;amount=[reagents.total_volume]'>All</A>
 					</td>
 				</table>
 			"}
@@ -500,14 +500,14 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "<tr>"
 				dat += {"
 					<td class="column1">
-						[N.name] , [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[N]'>(?)</A>
+						[N.name] , [round(N.volume, 0.01)] Units - <A href='?src=[REF(src)];analyze=[REF(N)]'>(?)</A>
 					</td>
 					<td class="column2">
-						<A href='?src=\ref[src];remove=[N.id];amount=1'>1u</A>
-						<A href='?src=\ref[src];remove=[N.id];amount=5'>5u</A>
-						<A href='?src=\ref[src];remove=[N.id];amount=10'>10u</A>
-						<A href='?src=\ref[src];removecustom=[N.id]'>Custom</A>
-						<A href='?src=\ref[src];remove=[N.id];amount=[N.volume]'>All</A>
+						<A href='?src=[REF(src)];remove=[N.id];amount=1'>1u</A>
+						<A href='?src=[REF(src)];remove=[N.id];amount=5'>5u</A>
+						<A href='?src=[REF(src)];remove=[N.id];amount=10'>10u</A>
+						<A href='?src=[REF(src)];removecustom=[N.id]'>Custom</A>
+						<A href='?src=[REF(src)];remove=[N.id];amount=[N.volume]'>All</A>
 					</td>
 				"}
 				dat += "</tr>"
@@ -516,7 +516,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			dat += "Buffer is empty.<BR>"
 
 		if(condi)
-			dat += "<A href='?src=\ref[src];createbottle=1'>Create bottle (50 units max)</A>"
+			dat += "<A href='?src=[REF(src)];createbottle=1'>Create bottle (50 units max)</A>"
 		else
 			//
 			// PILL ICONS
@@ -524,7 +524,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			dat += "<HR>"
 			dat += "<div class='pillIconsContainer'>"
 			for(var/i = 1 to MAX_PILL_SPRITE)
-				dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" class="pillIconWrapper[i == text2num(pillsprite) ? " linkOnMinimal" : ""]">
+				dat += {"<a href="?src=[REF(src)]&pill_sprite=[i]" class="pillIconWrapper[i == text2num(pillsprite) ? " linkOnMinimal" : ""]">
 							<div class="pillIcon">
 								[pill_icon_cache[i]]
 							</div>
@@ -535,11 +535,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			//
 			// BUTTONS
 			//
-			dat += {"<HR><A href='?src=\ref[src];createpill=1'>Create single pill ([max_pill_size] units max)</A><BR>
-					<A href='?src=\ref[src];createpill_multiple=1'>Create multiple pills ([max_pill_size] units max each; [max_pill_count] max)</A><BR>
-					<A href='?src=\ref[src];createpill_multiple=1;createempty=1'>Create empty pills</A><BR>
-					<A href='?src=\ref[src];createbottle=1'>Create bottle ([max_bottle_size] units max)</A><BR>
-					<A href='?src=\ref[src];createbottle_multiple=1'>Create multiple bottles ([max_bottle_size] units max each; 4 max)</A><BR>"}
+			dat += {"<HR><A href='?src=[REF(src)];createpill=1'>Create single pill ([max_pill_size] units max)</A><BR>
+					<A href='?src=[REF(src)];createpill_multiple=1'>Create multiple pills ([max_pill_size] units max each; [max_pill_count] max)</A><BR>
+					<A href='?src=[REF(src)];createpill_multiple=1;createempty=1'>Create empty pills</A><BR>
+					<A href='?src=[REF(src)];createbottle=1'>Create bottle ([max_bottle_size] units max)</A><BR>
+					<A href='?src=[REF(src)];createbottle_multiple=1'>Create multiple bottles ([max_bottle_size] units max each; 4 max)</A><BR>"}
 
 	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 475, 500, src)

@@ -63,16 +63,16 @@
 
 	var/dat = {"Location: [curr_location]<br>
 	Ready to move[max(lastMove + SYNDICATE_SHUTTLE_COOLDOWN - world.time, 0) ? " in [max(round((lastMove + SYNDICATE_SHUTTLE_COOLDOWN - world.time) * 0.1), 0)] seconds" : ": now"]<br>
-	<a href='?src=\ref[src];syndicate=1'>Syndicate Space</a><br>
-	<a href='?src=\ref[src];station_nw=1'>North West of SS13</a> |
-	<a href='?src=\ref[src];station_n=1'>North of SS13</a> |
-	<a href='?src=\ref[src];station_ne=1'>North East of SS13</a><br>
-	<a href='?src=\ref[src];station_sw=1'>South West of SS13</a> |
-	<a href='?src=\ref[src];station_s=1'>South of SS13</a> |
-	<a href='?src=\ref[src];station_se=1'>South East of SS13</a><br>
-	<a href='?src=\ref[src];commssat=1'>South of the Communication Satellite</a> |
-	<a href='?src=\ref[src];mining=1'>North East of the Mining Asteroid</a><br>
-	<a href='?src=\ref[user];mach_close=computer'>Close</a>"}
+	<a href='?src=[REF(src)];syndicate=1'>Syndicate Space</a><br>
+	<a href='?src=[REF(src)];station_nw=1'>North West of SS13</a> |
+	<a href='?src=[REF(src)];station_n=1'>North of SS13</a> |
+	<a href='?src=[REF(src)];station_ne=1'>North East of SS13</a><br>
+	<a href='?src=[REF(src)];station_sw=1'>South West of SS13</a> |
+	<a href='?src=[REF(src)];station_s=1'>South of SS13</a> |
+	<a href='?src=[REF(src)];station_se=1'>South East of SS13</a><br>
+	<a href='?src=[REF(src)];commssat=1'>South of the Communication Satellite</a> |
+	<a href='?src=[REF(src)];mining=1'>North East of the Mining Asteroid</a><br>
+	<a href='?src=[REF(user)];mach_close=computer'>Close</a>"}
 
 	user << browse(dat, "window=computer;size=575x450")
 	onclose(user, "computer")

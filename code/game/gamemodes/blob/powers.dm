@@ -246,7 +246,7 @@
 	for(var/mob/camera/blob/O in blob_overminds)
 		if(O != src)
 			they_exist++
-			to_chat(O,"<span class='notice'>[src] is calling for your attention!</span> <b><a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></b>")
+			to_chat(O,"<span class='notice'>[src] is calling for your attention!</span> <b><a href='?src=[REF(O)];blobjump=[REF(loc)]'>(JUMP)</a></b>")
 
 	if(they_exist)
 		to_chat(src,"<span class='notice'>...[they_exist] overmind\s heard your call!</span>")

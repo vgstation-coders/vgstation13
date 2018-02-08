@@ -39,7 +39,7 @@
 		if(materials.storage[ore_id] > 0)
 			dat += "<li><b>[mat.name]:</b> [materials.storage[ore_id]]</li>"
 
-	dat += "</ul><A href='?src=\ref[src];removeall=1'>Empty box</A>"
+	dat += "</ul><A href='?src=[REF(src)];removeall=1'>Empty box</A>"
 	user << browse("[dat]", "window=orebox")
 	return
 

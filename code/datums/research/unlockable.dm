@@ -69,7 +69,7 @@
 	return {"
 	<tr>
 		<th>
-			<a href="?src=\ref[tree];user=\ref[user];unlock=[id]">[name]</a>
+			<a href="?src=[REF(tree)];user=[REF(user)];unlock=[id]">[name]</a>
 		</th>
 		<th>
 			[cost][cost_units]

@@ -84,7 +84,7 @@
 	if(linked_core)
 		. = {"
 			<b>Linked R-UST Mk. 7 pattern Electromagnetic Field Generator:<br>
-			[linked_core.id_tag] <a href='?src=\ref[src];unlink=1'>\[X\]</a></b>
+			[linked_core.id_tag] <a href='?src=[REF(src)];unlink=1'>\[X\]</a></b>
 		"}
 	else
 		. = {"
@@ -93,7 +93,7 @@
 
 /obj/machinery/computer/rust_core_monitor/linkMenu(var/obj/machinery/power/rust_core/O)
 	if(istype(O))
-		. = "<a href='?src=\ref[src];link=1'>\[LINK\]</a> "
+		. = "<a href='?src=[REF(src)];link=1'>\[LINK\]</a> "
 
 /obj/machinery/computer/rust_core_monitor/canLink(var/obj/machinery/power/rust_core/O, var/list/context)
 	if(istype(O) && !linked_core)

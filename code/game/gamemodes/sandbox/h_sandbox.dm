@@ -99,12 +99,12 @@ datum/hSB
 			if(admin)
 
 				hsbpanel += {"<b>Administration Tools:</b><br>
-					- <a href=\"?\ref[src];hsb=hsbtobj\">Toggle Object Spawning</a><br><br>"}
+					- <a href=\"?[REF(src)];hsb=hsbtobj\">Toggle Object Spawning</a><br><br>"}
 			hsbpanel += "<b>Regular Tools:</b><br>"
 			for(var/T in hrefs)
-				hsbpanel += "- <a href=\"?\ref[src];hsb=[T]\">[hrefs[T]]</a><br>"
+				hsbpanel += "- <a href=\"?[REF(src)];hsb=[T]\">[hrefs[T]]</a><br>"
 			if(hsboxspawn)
-				hsbpanel += "- <a href=\"?\ref[src];hsb=hsbobj\">Spawn Object</a><br><br>"
+				hsbpanel += "- <a href=\"?[REF(src)];hsb=hsbobj\">Spawn Object</a><br><br>"
 			usr << browse(hsbpanel, "window=hsbpanel")
 	Topic(href, href_list)
 		if(!(src.owner == usr.ckey))

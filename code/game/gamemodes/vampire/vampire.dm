@@ -311,7 +311,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	if(!mind.vampire)
 		mind.vampire = new /datum/vampire(gender)
 		mind.vampire.owner = src
-	callOnLife += list("\ref[mind.vampire]" = "OnLife")
+	callOnLife += list("[REF(mind.vampire)]" = "OnLife")
 	verbs += /client/proc/vampire_rejuvinate
 	verbs += /client/proc/vampire_hypnotise
 	verbs += /client/proc/vampire_glare
@@ -556,7 +556,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 
 //prepare for copypaste
 /datum/game_mode/proc/update_vampire_icons_added(datum/mind/vampire_mind)
-	var/ref = "\ref[vampire_mind]"
+	var/ref = "[REF(vampire_mind)]"
 	if(ref in thralls)
 		if(vampire_mind.current)
 			if(vampire_mind.current.client)
@@ -619,7 +619,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			if(findtextEx(P.explanation_text,"You have been Enthralled by"))
 				headvamp = P.target //can't think of any better way to find them
 				enthralled_mind.objectives -= P
-	var/ref = "\ref[headvamp]"
+	var/ref = "[REF(headvamp)]"
 	if(ref in thralls)
 		thralls[ref] -= enthralled_mind
 	enthralled -= enthralled_mind
@@ -779,7 +779,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		if(show_message)
 			to_chat(current, "<B><font color='red'>Your powers are awoken. Your lust for blood grows... You are a Vampire!</font></B>")
 			var/wikiroute = role_wiki[ROLE_VAMPIRE]
-			to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+			to_chat(current, "<span class='info'><a HREF='?src=[REF(current)];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 		if(generate_objectives)
 			ticker.mode.forge_vampire_objectives(src)
 			var/obj_count = 1

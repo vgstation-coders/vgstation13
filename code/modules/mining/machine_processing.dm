@@ -69,20 +69,20 @@
 	var/dat = {"
 	<div style="overflow:hidden;">
 	<div class="block">
-	The ore processor is currently <A href='?src=\ref[src];toggle_power=1' class='[smelter_data["on"] ? "linkOn" : "linkDanger"]'>[smelter_data["on"] ? "processing" : "disabled"]</a>
+	The ore processor is currently <A href='?src=[REF(src)];toggle_power=1' class='[smelter_data["on"] ? "linkOn" : "linkDanger"]'>[smelter_data["on"] ? "processing" : "disabled"]</a>
 	"}
 
 	if(smelter_data["credits"] != -1)
 		dat += "<br>Current unclaimed credits: $[num2septext(smelter_data["credits"])]<br>"
 
 		if(istype(id))
-			dat += "You have [id.GetBalance(format = 1)] credits in your bank account. <A href='?src=\ref[src];eject=1'>Eject ID.</A><br>"
-			dat += "<A href='?src=\ref[src];claim=1'>Claim points.</A><br>"
+			dat += "You have [id.GetBalance(format = 1)] credits in your bank account. <A href='?src=[REF(src)];eject=1'>Eject ID.</A><br>"
+			dat += "<A href='?src=[REF(src)];claim=1'>Claim points.</A><br>"
 		else
-			dat += text("No ID inserted. <A href='?src=\ref[src];insert=1'>Insert ID.</A><br>")
+			dat += text("No ID inserted. <A href='?src=[REF(src)];insert=1'>Insert ID.</A><br>")
 
 	else if(id)	//I don't care but the ID got in there in some way, allow them to eject it atleast.
-		dat += "<br><A href='?src=\ref[src];eject=1'>Eject ID.</A>"
+		dat += "<br><A href='?src=[REF(src)];eject=1'>Eject ID.</A>"
 	
 	dat += {"</div>
 	<div style="float:left;" class="block">
@@ -123,12 +123,12 @@
 
 		if(idx != 1)
 			dat += {"
-			<td><a href='?src=\ref[src];inc_priority=[idx]'>+</a></td>
+			<td><a href='?src=[REF(src)];inc_priority=[idx]'>+</a></td>
 			"}
 
 		if(idx != recipes.len)
 			dat += {"
-			<td><a href='?src=\ref[src];dec_priority=[idx]'>-</a></td>
+			<td><a href='?src=[REF(src)];dec_priority=[idx]'>-</a></td>
 			"}
 
 		dat += {"
@@ -249,7 +249,7 @@
 /obj/machinery/computer/smelting/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return {"
 	<ul>
-		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1439]">Reset</a>)</li>
+		<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=[1439]">Reset</a>)</li>
 		<li>[format_tag("ID Tag","smelter_tag")]</li>
 	</ul>
 	"}
@@ -483,10 +483,10 @@
 /obj/machinery/mineral/processing_unit/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return {"
 	<ul>
-		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[1439]">Reset</a>)</li>
+		<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=[1439]">Reset</a>)</li>
 		<li>[format_tag("ID Tag","id_tag")]</li>
-		<li><b>Input: </b><a href='?src=\ref[src];changedir=1'>[capitalize(dir2text(in_dir))]</a></li>
-		<li><b>Output: </b><a href='?src=\ref[src];changedir=2'>[capitalize(dir2text(out_dir))]</a></li>
+		<li><b>Input: </b><a href='?src=[REF(src)];changedir=1'>[capitalize(dir2text(in_dir))]</a></li>
+		<li><b>Output: </b><a href='?src=[REF(src)];changedir=2'>[capitalize(dir2text(out_dir))]</a></li>
 	</ul>
 	"}
 

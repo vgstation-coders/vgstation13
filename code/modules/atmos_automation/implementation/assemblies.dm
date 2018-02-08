@@ -28,7 +28,7 @@
 		if(istype(A))
 			T = A
 
-	return "Pulse assembly #<a href=\"?src=\ref[src];set_ass_num=1\">[assembly_num]</a>[T ? "- [T]" : ""]." //Pulse assembly #3 - remote signaling device
+	return "Pulse assembly #<a href=\"?src=[REF(src)];set_ass_num=1\">[assembly_num]</a>[T ? "- [T]" : ""]." //Pulse assembly #3 - remote signaling device
 
 /datum/automation/pulse_assembly/Topic(href,href_list)
 	. = ..()

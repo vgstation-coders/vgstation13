@@ -29,21 +29,21 @@
 		return
 	var/dat
 	if (src.temp)
-		dat = text("<TT>[src.temp]</TT><BR><BR><A href='?src=\ref[src];temp=1'>Clear Screen</A>")
+		dat = text("<TT>[src.temp]</TT><BR><BR><A href='?src=[REF(src)];temp=1'>Clear Screen</A>")
 	else
 		dat = text("Confirm Identity: <A href='?src=\ref[];scan=1'>[]</A><HR>", src, (src.scan ? text("[]", src.scan.name) : "----------"))
 		if (src.authenticated)
 			switch(src.screen)
 				if(1.0)
 					dat += {"
-<A href='?src=\ref[src];search=1'>Search Records</A>
-<BR><A href='?src=\ref[src];screen=2'>List Records</A>
+<A href='?src=[REF(src)];search=1'>Search Records</A>
+<BR><A href='?src=[REF(src)];screen=2'>List Records</A>
 <BR>
-<BR><A href='?src=\ref[src];screen=5'>Virus Database</A>
-<BR><A href='?src=\ref[src];screen=6'>Medbot Tracking</A>
+<BR><A href='?src=[REF(src)];screen=5'>Virus Database</A>
+<BR><A href='?src=[REF(src)];screen=6'>Medbot Tracking</A>
 <BR>
-<BR><A href='?src=\ref[src];screen=3'>Record Maintenance</A>
-<BR><A href='?src=\ref[src];logout=1'>{Log Out}</A><BR>
+<BR><A href='?src=[REF(src)];screen=3'>Record Maintenance</A>
+<BR><A href='?src=[REF(src)];logout=1'>{Log Out}</A><BR>
 "}
 				if(2.0)
 					dat += "<B>Record List</B>:<HR>"
@@ -63,11 +63,11 @@
 					if ((istype(src.active1, /datum/data/record) && data_core.general.Find(src.active1)))
 						dat += "<table><tr><td>Name: [active1.fields["name"]] \
 								ID: [active1.fields["id"]]<BR>\n	\
-								Sex: <A href='?src=\ref[src];field=sex'>[active1.fields["sex"]]</A><BR>\n	\
-								Age: <A href='?src=\ref[src];field=age'>[active1.fields["age"]]</A><BR>\n	\
-								Fingerprint: <A href='?src=\ref[src];field=fingerprint'>[active1.fields["fingerprint"]]</A><BR>\n	\
-								Physical Status: <A href='?src=\ref[src];field=p_stat'>[active1.fields["p_stat"]]</A><BR>\n	\
-								Mental Status: <A href='?src=\ref[src];field=m_stat'>[active1.fields["m_stat"]]</A><BR></td><td align = center valign = top> \
+								Sex: <A href='?src=[REF(src)];field=sex'>[active1.fields["sex"]]</A><BR>\n	\
+								Age: <A href='?src=[REF(src)];field=age'>[active1.fields["age"]]</A><BR>\n	\
+								Fingerprint: <A href='?src=[REF(src)];field=fingerprint'>[active1.fields["fingerprint"]]</A><BR>\n	\
+								Physical Status: <A href='?src=[REF(src)];field=p_stat'>[active1.fields["p_stat"]]</A><BR>\n	\
+								Mental Status: <A href='?src=[REF(src)];field=m_stat'>[active1.fields["m_stat"]]</A><BR></td><td align = center valign = top> \
 								Photo:<br><img src=front.png height=64 width=64 border=5><img src=side.png height=64 width=64 border=5></td></tr></table>"
 					else
 						dat += "<B>General Record Lost!</B><BR>"
@@ -81,7 +81,7 @@
 						dat += text("<A href='?src=\ref[];del_r=1'>Delete Record (Medical Only)</A><BR><BR>", src)
 					else
 						dat += "<B>Medical Record Lost!</B><BR>"
-						dat += text("<A href='?src=\ref[src];new=1'>New Record</A><BR><BR>")
+						dat += text("<A href='?src=[REF(src)];new=1'>New Record</A><BR><BR>")
 					dat += text("\n<A href='?src=\ref[];print_p=1'>Print Record</A><BR>\n<A href='?src=\ref[];screen=2'>Back</A><BR>", src, src)
 				if(5.0)
 					dat += "<CENTER><B>Virus Database</B></CENTER>"
@@ -92,17 +92,17 @@
 							continue // TODO (tm): Add advance diseases to the virus database which no one uses.
 						if(!Dis.desc)
 							continue
-						dat += "<br><a href='?src=\ref[src];vir=[Dt]'>[Dis.name]</a>"
+						dat += "<br><a href='?src=[REF(src)];vir=[Dt]'>[Dis.name]</a>"
 					*/
 					for (var/ID in virusDB)
 						var/datum/data/record/v = virusDB[ID]
-						dat += "<br><a href='?src=\ref[src];vir=\ref[v]'>[v.fields["name"]]</a>"
+						dat += "<br><a href='?src=[REF(src)];vir=[REF(v)]'>[v.fields["name"]]</a>"
 
-					dat += "<br><a href='?src=\ref[src];screen=1'>Back</a>"
+					dat += "<br><a href='?src=[REF(src)];screen=1'>Back</a>"
 				if(6.0)
 
 					dat += {"<center><b>Medical Robot Monitor</b></center>
-						<a href='?src=\ref[src];screen=1'>Back</a>
+						<a href='?src=[REF(src)];screen=1'>Back</a>
 						<br><b>Medical Robots:</b>"}
 					var/bdat = null
 					for(var/obj/machinery/bot/medbot/M in machines)
@@ -202,10 +202,10 @@
 			if(href_list["vir"])
 				var/datum/data/record/v = locate(href_list["vir"])
 				src.temp = "<center>GNAv2 based virus lifeform V-[v.fields["id"]]</center>"
-				src.temp += "<br><b>Name:</b> <A href='?src=\ref[src];field=vir_name;edit_vir=\ref[v]'>[v.fields["name"]]</A>"
+				src.temp += "<br><b>Name:</b> <A href='?src=[REF(src)];field=vir_name;edit_vir=[REF(v)]'>[v.fields["name"]]</A>"
 				src.temp += "<br><b>Antigen:</b> [v.fields["antigen"]]"
 				src.temp += "<br><b>Spread:</b> [v.fields["spread type"]] "
-				src.temp += "<br><b>Details:</b><br> <A href='?src=\ref[src];field=vir_desc;edit_vir=\ref[v]'>[v.fields["description"]]</A>"
+				src.temp += "<br><b>Details:</b><br> <A href='?src=[REF(src)];field=vir_desc;edit_vir=[REF(v)]'>[v.fields["description"]]</A>"
 
 			if (href_list["del_all"])
 				src.temp = text("Are you sure you wish to delete all records?<br>\n\t<A href='?src=\ref[];temp=1;del_all2=1'>Yes</A><br>\n\t<A href='?src=\ref[];temp=1'>No</A><br>", src, src)

@@ -207,9 +207,9 @@
 
 /obj/item/weapon/hand/proc/update_conceal()
 	if (src.concealed)
-		src.hi.updateContent("headbar", "You are currently concealing your hand. <a href=\"byond://?src=\ref[hi]&action=toggle_conceal\">Reveal your hand.</a>")
+		src.hi.updateContent("headbar", "You are currently concealing your hand. <a href=\"byond://?src=[REF(hi)]&action=toggle_conceal\">Reveal your hand.</a>")
 	else
-		src.hi.updateContent("headbar", "You are currently revealing your hand. <a href=\"byond://?src=\ref[hi]&action=toggle_conceal\">Conceal your hand.</a>")
+		src.hi.updateContent("headbar", "You are currently revealing your hand. <a href=\"byond://?src=[REF(hi)]&action=toggle_conceal\">Conceal your hand.</a>")
 
 /obj/item/weapon/hand/update_icon()
 	if (!cards.len)
@@ -249,7 +249,7 @@
 	var/html                    = ""
 
 	for(var/datum/playingcard/card in cards)
-		html                    = html + "<a href=\"byond://?src=\ref[src.hi]&action=play_card&card=\ref[card]\" class=\"card [card.suit] [card.number]\"></a>"
+		html                    = html + "<a href=\"byond://?src=[REF(src.hi)]&action=play_card&card=[REF(card)]\" class=\"card [card.suit] [card.number]\"></a>"
 
 	src.hi.updateContent("hand", html)
 

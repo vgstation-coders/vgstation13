@@ -184,8 +184,8 @@
 	Glass storage: [glass_stor]/[glass_stor_max]<br>Cardboard Sheets: [cardboard_stor]/[cardboard_stor_max]<br>"}
 
 	if(supply)
-		dat += {"<a href='?src=\ref[src];build=tube'>Fabricate Tube</a>
-		<a href='?src=\ref[src];build=bulb'>Fabricate Bulb</a>
+		dat += {"<a href='?src=[REF(src)];build=tube'>Fabricate Tube</a>
+		<a href='?src=[REF(src)];build=bulb'>Fabricate Bulb</a>
 
 
 
@@ -212,26 +212,26 @@
 			to_dump_5 = list()
 			to_dump_all = list()
 			for(var/light_to_ref in light_type_cur)
-				to_dump_all += "\ref[light_to_ref]"
+				to_dump_all += "[REF(light_to_ref)]"
 			to_dump_5 = to_dump_all.Copy(1, min(6, to_dump_all.len + 1))
-			dat += "<br><b>[T]: </b>[light_type_cur.len] | Dump to Waste: <a href='?src=\ref[src];dump=\ref[light_type_cur[1]]'>1</a><a href='?src=\ref[src];dump=[jointext(to_dump_5, ", ")]'>5</a><a href='?src=\ref[src];dump=[jointext(to_dump_all, ", ")]'>All</a>"
+			dat += "<br><b>[T]: </b>[light_type_cur.len] | Dump to Waste: <a href='?src=[REF(src)];dump=\ref[light_type_cur[1]]'>1</a><a href='?src=[REF(src)];dump=[jointext(to_dump_5, ", ")]'>5</a><a href='?src=[REF(src)];dump=[jointext(to_dump_all, ", ")]'>All</a>"
 
-		dat += "<br><b><a href='?src=\ref[src];eject=supply'>Eject Supply Container</a></b>"
+		dat += "<br><b><a href='?src=[REF(src)];eject=supply'>Eject Supply Container</a></b>"
 
 	else
-		dat += "<h3>No supply container inserted</h3><br><a href='?src=\ref[src];fold=supply'>Construct Supply Box</a>"
+		dat += "<h3>No supply container inserted</h3><br><a href='?src=[REF(src)];fold=supply'>Construct Supply Box</a>"
 
 	if(supply || waste)
-		dat += "<br><br><a href='?src=\ref[src];swap=1'>Swap Supply and Waste Containers</a>"
+		dat += "<br><br><a href='?src=[REF(src)];swap=1'>Swap Supply and Waste Containers</a>"
 
 	if(waste)
 		dat += {"<br><br><br><h3>Waste Container:</h3>
 
 		<b>Filled: </b>[waste.contents.len]/[waste.storage_slots]<br>
-		<b><a href='?src=\ref[src];eject=waste'>Eject Waste Container</a></b>
+		<b><a href='?src=[REF(src)];eject=waste'>Eject Waste Container</a></b>
 		"}
 	else
-		dat += "<br><br><br><h3>No waste container inserted</h3><br><a href='?src=\ref[src];fold=waste'>Construct Waste Box</a>"
+		dat += "<br><br><br><h3>No waste container inserted</h3><br><a href='?src=[REF(src)];fold=waste'>Construct Waste Box</a>"
 
 	var/datum/browser/popup = new(user, "lightreplacer", "", nref = src)
 	popup.set_content(dat)
@@ -252,10 +252,10 @@
 	Glass storage: [glass_stor]/[glass_stor_max]<br>"}
 
 	if(supply)
-		dat += {"<a href='?src=\ref[src];build=tube'>Fabricate Tube</a>
-		<a href='?src=\ref[src];build=bulb'>Fabricate Bulb</a>
-		<a href='?src=\ref[src];build=tube/he'>Fabricate High Efficiency Tube</a>
-		<a href='?src=\ref[src];build=bulb/he'>Fabricate High Efficiency Bulb</a>
+		dat += {"<a href='?src=[REF(src)];build=tube'>Fabricate Tube</a>
+		<a href='?src=[REF(src)];build=bulb'>Fabricate Bulb</a>
+		<a href='?src=[REF(src)];build=tube/he'>Fabricate High Efficiency Tube</a>
+		<a href='?src=[REF(src)];build=bulb/he'>Fabricate High Efficiency Bulb</a>
 
 
 
@@ -282,21 +282,21 @@
 			to_dump_all = list()
 			light_type_cur = light_types[T] //The way you'd expect to be the good way to do this doesn't work. This is dumb, but necessary.
 			for(var/light_to_ref in light_type_cur)
-				to_dump_all += "\ref[light_to_ref]"
+				to_dump_all += "[REF(light_to_ref)]"
 			to_dump_5 = to_dump_all.Copy(1, min(6, to_dump_all.len + 1))
-			dat += "<br><b>[T]: </b>[light_type_cur.len] | Dump to Waste: <a href='?src=\ref[src];dump=\ref[light_type_cur[1]]'>1</a><a href='?src=\ref[src];dump=[jointext(to_dump_5, ", ")]'>5</a><a href='?src=\ref[src];dump=[jointext(to_dump_all, ", ")]'>All</a>"
+			dat += "<br><b>[T]: </b>[light_type_cur.len] | Dump to Waste: <a href='?src=[REF(src)];dump=\ref[light_type_cur[1]]'>1</a><a href='?src=[REF(src)];dump=[jointext(to_dump_5, ", ")]'>5</a><a href='?src=[REF(src)];dump=[jointext(to_dump_all, ", ")]'>All</a>"
 
 	else
 		dat += "<h3>No supply container inserted. This should be impossible. Please ahelp this.</h3>"
 
 	if(supply || waste)
-		dat += "<br><br><a href='?src=\ref[src];swap=1'>Swap Supply and Waste Containers</a>"
+		dat += "<br><br><a href='?src=[REF(src)];swap=1'>Swap Supply and Waste Containers</a>"
 
 	if(waste)
 		dat += {"<br><br><br><h3>Waste Container:</h3>
 
 		<b>Filled: </b>[waste.contents.len]/[waste.storage_slots]<br>
-		<b><a href='?src=\ref[src];recycle=1'>Recycle Contents</a></b>
+		<b><a href='?src=[REF(src)];recycle=1'>Recycle Contents</a></b>
 		"}
 	else
 		dat += "<br><br><br><h3>No waste container inserted. This should be impossible. Please ahelp this.</h3>"

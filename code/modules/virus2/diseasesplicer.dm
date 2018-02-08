@@ -57,14 +57,14 @@
 
 		dat += "<BR>Current DNA strand : "
 		if(memorybank)
-			dat += "<A href='?src=\ref[src];splice=1'>"
+			dat += "<A href='?src=[REF(src)];splice=1'>"
 			if(analysed)
 				dat += "[memorybank.name] ([memorybank.stage])"
 			else
 				dat += "Unknown DNA strand ([memorybank.stage])"
 			dat += "</a>"
 
-			dat += "<BR><A href='?src=\ref[src];disk=1'>Burn DNA Sequence to data storage disk</a>"
+			dat += "<BR><A href='?src=[REF(src)];disk=1'>Burn DNA Sequence to data storage disk</a>"
 		else
 			dat += "Empty."
 
@@ -74,7 +74,7 @@
 			if(dish.virus2)
 				if(dish.growth >= 50)
 					for(var/datum/disease2/effect/e in dish.virus2.effects)
-						dat += "<BR><A href='?src=\ref[src];grab=\ref[e]'> DNA strand"
+						dat += "<BR><A href='?src=[REF(src)];grab=[REF(e)]'> DNA strand"
 						if(dish.analysed)
 							dat += ": [e.name]"
 						dat += " ([e.stage])</a>"
@@ -83,7 +83,7 @@
 			else
 				dat += "<BR>No virus found in dish."
 
-			dat += "<BR><BR><A href='?src=\ref[src];eject=1'>Eject disk</a>"
+			dat += "<BR><BR><A href='?src=[REF(src)];eject=1'>Eject disk</a>"
 		else
 			dat += "<BR>Please insert dish."
 	dat = jointext(dat,"")

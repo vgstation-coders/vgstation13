@@ -210,13 +210,13 @@
 	if(B)
 		html +="<h2>Borer:</h2> [B] ("
 		if(B.controlling)
-			html += "<a style='color:red;font-weight:bold;' href='?src=\ref[B]&act=release'>Controlling</a>"
+			html += "<a style='color:red;font-weight:bold;' href='?src=[REF(B)]&act=release'>Controlling</a>"
 		else if(B.host_brain.ckey)
-			html += "<a style='color:red;font-weight:bold;' href='?src=\ref[B]&act=release'>!HOST BRAIN BUGGED!</a>"
+			html += "<a style='color:red;font-weight:bold;' href='?src=[REF(B)]&act=release'>!HOST BRAIN BUGGED!</a>"
 		else
 			html += "Not Controlling"
-		html += " | <a href='?src=\ref[B]&act=detach'>Detach</a>"
-		html += " | <a href='?_src_=holder;adminmoreinfo=\ref[B]'>?</a> | <a href='?_src_=vars;mob_player_panel=\ref[B]'>PP</a>"
+		html += " | <a href='?src=[REF(B)]&act=detach'>Detach</a>"
+		html += " | <a href='?_src_=holder;adminmoreinfo=[REF(B)]'>?</a> | <a href='?_src_=vars;mob_player_panel=[REF(B)]'>PP</a>"
 		html += ")"
 
 	return html
@@ -399,62 +399,62 @@
 
 	for(var/i = 1 to held_items.len) //Hands
 		var/obj/item/I = held_items[i]
-		dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];hands=[i]'>[makeStrippingButton(I)]</A><BR>"
+		dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=[REF(src)];hands=[i]'>[makeStrippingButton(I)]</A><BR>"
 
-	dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=[slot_back]'>[makeStrippingButton(back)]</A>"
+	dat += "<BR><B>Back:</B> <A href='?src=[REF(src)];item=[slot_back]'>[makeStrippingButton(back)]</A>"
 	dat += "<BR>"
-	dat += "<BR><B>Head:</B> <A href='?src=\ref[src];item=[slot_head]'>[makeStrippingButton(head)]</A>"
+	dat += "<BR><B>Head:</B> <A href='?src=[REF(src)];item=[slot_head]'>[makeStrippingButton(head)]</A>"
 	if(slot_wear_mask in obscured)
 		dat += "<BR><font color=grey><B>Mask:</B> Obscured by [head]</font>"
 	else
-		dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
+		dat += "<BR><B>Mask:</B> <A href='?src=[REF(src)];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
 	if(has_breathing_mask())
-		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> [src.internal ? "On" : "Off"]  <A href='?src=\ref[src];internals=1'>(Toggle)</A>"
+		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> [src.internal ? "On" : "Off"]  <A href='?src=[REF(src)];internals=1'>(Toggle)</A>"
 	if(slot_glasses in obscured)
 		dat += "<BR><font color=grey><B>Eyes:</B> Obscured by [head]</font>"
 	else
-		dat += "<BR><B>Eyes:</B> <A href='?src=\ref[src];item=[slot_glasses]'>[makeStrippingButton(glasses)]</A>"
+		dat += "<BR><B>Eyes:</B> <A href='?src=[REF(src)];item=[slot_glasses]'>[makeStrippingButton(glasses)]</A>"
 	if(slot_ears in obscured)
 		dat += "<BR><font color=grey><B>Ears:</B> Obscured by [head]</font>"
 	else
-		dat += "<BR><B>Ears:</B> <A href='?src=\ref[src];item=[slot_ears]'>[makeStrippingButton(ears)]</A>"
+		dat += "<BR><B>Ears:</B> <A href='?src=[REF(src)];item=[slot_ears]'>[makeStrippingButton(ears)]</A>"
 	dat += "<BR>"
-	dat += "<BR><B>Exosuit:</B> <A href='?src=\ref[src];item=[slot_wear_suit]'>[makeStrippingButton(wear_suit)]</A>"
+	dat += "<BR><B>Exosuit:</B> <A href='?src=[REF(src)];item=[slot_wear_suit]'>[makeStrippingButton(wear_suit)]</A>"
 	if(wear_suit)
-		dat += "<BR>[HTMLTAB]&#8627;<B>Suit Storage:</B> <A href='?src=\ref[src];item=[slot_s_store]'>[makeStrippingButton(s_store)]</A>"
+		dat += "<BR>[HTMLTAB]&#8627;<B>Suit Storage:</B> <A href='?src=[REF(src)];item=[slot_s_store]'>[makeStrippingButton(s_store)]</A>"
 	if(slot_shoes in obscured)
 		dat += "<BR><font color=grey><B>Shoes:</B> Obscured by [wear_suit]</font>"
 	else
-		dat += "<BR><B>Shoes:</B> <A href='?src=\ref[src];item=[slot_shoes]'>[makeStrippingButton(shoes)]</A>"
+		dat += "<BR><B>Shoes:</B> <A href='?src=[REF(src)];item=[slot_shoes]'>[makeStrippingButton(shoes)]</A>"
 	if(slot_gloves in obscured)
 		dat += "<BR><font color=grey><B>Gloves:</B> Obscured by [wear_suit]</font>"
 	else
-		dat += "<BR><B>Gloves:</B> <A href='?src=\ref[src];item=[slot_gloves]'>[makeStrippingButton(gloves)]</A>"
+		dat += "<BR><B>Gloves:</B> <A href='?src=[REF(src)];item=[slot_gloves]'>[makeStrippingButton(gloves)]</A>"
 	if(slot_w_uniform in obscured)
 		dat += "<BR><font color=grey><B>Uniform:</B> Obscured by [wear_suit]</font>"
 	else
-		dat += "<BR><B>Uniform:</B> <A href='?src=\ref[src];item=[slot_w_uniform]'>[makeStrippingButton(w_uniform)]</A>"
+		dat += "<BR><B>Uniform:</B> <A href='?src=[REF(src)];item=[slot_w_uniform]'>[makeStrippingButton(w_uniform)]</A>"
 		if(w_uniform)
-			dat += "<BR>[HTMLTAB]&#8627;<B>Suit Sensors:</B> <A href='?src=\ref[src];sensors=1'>Set</A>"
+			dat += "<BR>[HTMLTAB]&#8627;<B>Suit Sensors:</B> <A href='?src=[REF(src)];sensors=1'>Set</A>"
 	if(w_uniform)
-		dat += "<BR>[HTMLTAB]&#8627;<B>Belt:</B> <A href='?src=\ref[src];item=[slot_belt]'>[makeStrippingButton(belt)]</A>"
+		dat += "<BR>[HTMLTAB]&#8627;<B>Belt:</B> <A href='?src=[REF(src)];item=[slot_belt]'>[makeStrippingButton(belt)]</A>"
 		if(pickpocket)
-			dat += "<BR>[HTMLTAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? l_store : "<font color=grey>Left (Empty)</font>"]</A>"
-			dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(src.r_store.abstract)) ? r_store : "<font color=grey>Right (Empty)</font>"]</A>"
+			dat += "<BR>[HTMLTAB]&#8627;<B>Pockets:</B> <A href='?src=[REF(src)];pockets=left'>[(l_store && !(src.l_store.abstract)) ? l_store : "<font color=grey>Left (Empty)</font>"]</A>"
+			dat += " <A href='?src=[REF(src)];pockets=right'>[(r_store && !(src.r_store.abstract)) ? r_store : "<font color=grey>Right (Empty)</font>"]</A>"
 		else
-			dat += "<BR>[HTMLTAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? "Left (Full)" : "<font color=grey>Left (Empty)</font>"]</A>"
-			dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(src.r_store.abstract)) ? "Right (Full)" : "<font color=grey>Right (Empty)</font>"]</A>"
-		dat += "<BR>[HTMLTAB]&#8627;<B>ID:</B> <A href='?src=\ref[src];id=1'>[makeStrippingButton(wear_id)]</A>"
+			dat += "<BR>[HTMLTAB]&#8627;<B>Pockets:</B> <A href='?src=[REF(src)];pockets=left'>[(l_store && !(src.l_store.abstract)) ? "Left (Full)" : "<font color=grey>Left (Empty)</font>"]</A>"
+			dat += " <A href='?src=[REF(src)];pockets=right'>[(r_store && !(src.r_store.abstract)) ? "Right (Full)" : "<font color=grey>Right (Empty)</font>"]</A>"
+		dat += "<BR>[HTMLTAB]&#8627;<B>ID:</B> <A href='?src=[REF(src)];id=1'>[makeStrippingButton(wear_id)]</A>"
 	dat += "<BR>"
 	if(handcuffed)
-		dat += "<BR><B>Handcuffed:</B> <A href='?src=\ref[src];item=[slot_handcuffed]'>Remove</A>"
+		dat += "<BR><B>Handcuffed:</B> <A href='?src=[REF(src)];item=[slot_handcuffed]'>Remove</A>"
 	if(legcuffed)
-		dat += "<BR><B>Legcuffed:</B> <A href='?src=\ref[src];item=[slot_legcuffed]'>Remove</A>"
+		dat += "<BR><B>Legcuffed:</B> <A href='?src=[REF(src)];item=[slot_legcuffed]'>Remove</A>"
 	dat += {"
 	<BR>
-	<BR><A href='?src=\ref[user];mach_close=mob\ref[src]'>Close</A>
+	<BR><A href='?src=[REF(user)];mach_close=mob[REF(src)]'>Close</A>
 	"}
-	var/datum/browser/popup = new(user, "mob\ref[src]", "[src]", 340, 500)
+	var/datum/browser/popup = new(user, "mob[REF(src)]", "[src]", 340, 500)
 	popup.set_content(dat)
 	popup.open()
 
@@ -509,7 +509,7 @@
 		if(counter == 1)
 			to_chat(usr, "No comments found.")
 		if(!isjustobserver(usr))
-			to_chat(usr, "<a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>")
+			to_chat(usr, "<a href='?src=[REF(src)];secrecordadd=`'>\[Add comment\]</a>")
 	else if (href_list["secrecordadd"])
 		if(!usr.hasHUD(HUD_SECURITY) || isjustobserver(usr))
 			return
@@ -551,7 +551,7 @@
 		to_chat(usr, "<b>Major disabilities:</b> [med_record.fields["ma_dis"]]")
 		to_chat(usr, "<b>Details:</b> [med_record.fields["ma_dis_d"]]")
 		to_chat(usr, "<b>Notes:</b> [med_record.fields["notes"]]")
-		to_chat(usr, "<a href='?src=\ref[src];medrecordComment=`'>\[View Comment Log\]</a>")
+		to_chat(usr, "<a href='?src=[REF(src)];medrecordComment=`'>\[View Comment Log\]</a>")
 	else if (href_list["medrecordComment"])
 		if(!usr.hasHUD(HUD_MEDICAL))
 			return
@@ -567,7 +567,7 @@
 		if (counter == 1)
 			to_chat(usr, "No comment found.")
 		if(!isjustobserver(usr))
-			to_chat(usr, "<a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>")
+			to_chat(usr, "<a href='?src=[REF(src)];medrecordadd=`'>\[Add comment\]</a>")
 	else if (href_list["medrecordadd"])
 		if(!usr.hasHUD(HUD_MEDICAL) || isjustobserver(usr))
 			return
@@ -594,7 +594,7 @@
 						to_chat(usr, "<span class='info'>[bicon(J)] \A [J].</span>")
 	else if (href_list["show_flavor_text"])
 		if(can_show_flavor_text())
-			var/datum/browser/popup = new(usr, "\ref[src]", name, 500, 200)
+			var/datum/browser/popup = new(usr, "[REF(src)]", name, 500, 200)
 			popup.set_content(strip_html(flavor_text))
 			popup.open()
 	/*else if (href_list["lookmob"])

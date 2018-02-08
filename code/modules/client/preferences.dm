@@ -249,15 +249,15 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=all'>Always Random Body: [be_random_body ? "Yes" : "No"]</A><br>
 	<table width='100%'><tr><td width='24%' valign='top'>
 	<b>Species:</b> <a href='?_src_=prefs;preference=species;task=input'>[species]</a><BR>
-	<b>Secondary Language:</b> <a href='byond://?src=\ref[user];preference=language;task=input'>[language]</a><br>
+	<b>Secondary Language:</b> <a href='byond://?src=[REF(user)];preference=language;task=input'>[language]</a><br>
 	<b>Skin Tone:</b> <a href='?_src_=prefs;preference=s_tone;task=input'>[species == "Human" ? "[-s_tone + 35]/220" : "[s_tone]"]</a><br><BR>
-	<b>Handicaps:</b> <a href='byond://?src=\ref[user];task=input;preference=disabilities'><b>Set</a></b><br>
-	<b>Limbs:</b> <a href='byond://?src=\ref[user];preference=limbs;task=input'>Set</a><br>
-	<b>Organs:</b> <a href='byond://?src=\ref[user];preference=organs;task=input'>Set</a><br>
+	<b>Handicaps:</b> <a href='byond://?src=[REF(user)];task=input;preference=disabilities'><b>Set</a></b><br>
+	<b>Limbs:</b> <a href='byond://?src=[REF(user)];preference=limbs;task=input'>Set</a><br>
+	<b>Organs:</b> <a href='byond://?src=[REF(user)];preference=organs;task=input'>Set</a><br>
 	<b>Underwear:</b> [gender == MALE ? "<a href ='?_src_=prefs;preference=underwear;task=input'><b>[underwear_m[underwear]]</a>" : "<a href ='?_src_=prefs;preference=underwear;task=input'><b>[underwear_f[underwear]]</a>"]<br>
 	<b>Backpack:</b> <a href ='?_src_=prefs;preference=bag;task=input'><b>[backbaglist[backbag]]</a><br>
 	<b>Nanotrasen Relation</b>:<br><a href ='?_src_=prefs;preference=nt_relation;task=input'><b>[nanotrasen_relation]</b></a><br>
-	<b>Flavor Text:</b><a href='byond://?src=\ref[user];preference=flavor_text;task=input'>Set</a><br>
+	<b>Flavor Text:</b><a href='byond://?src=[REF(user)];preference=flavor_text;task=input'>Set</a><br>
 	</td><td valign='top' width='21%'>
 	<h3>Hair Style</h3>
 	<a href='?_src_=prefs;preference=h_style;task=input'>[h_style]</a><BR>
@@ -356,7 +356,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<b>Adminhelp Special Tab:</b>
 	<a href='?_src_=prefs;preference=special_popup'><b>[special_popup ? "Yes" : "No"]</b></a><br>
 	<b>Character Records:<b>
-	[jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=\ref[user];preference=records;record=1\">Set</a></b><br>"]
+	[jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=[REF(user)];preference=records;record=1\">Set</a></b><br>"]
 	<b>Attack Animations:<b>
 	<a href='?_src_=prefs;preference=attack_animation'><b>[attack_animation ? (attack_animation == ITEM_ANIMATION? "Item Anim." : "Person Anim.") : "No"]</b></a><br>
   </div>
@@ -476,12 +476,12 @@ var/const/MAX_SAVE_SLOTS = 8
 			continue
 		if((rank in command_positions) || (rank == "AI"))//Bold head jobs
 			if(job.alt_titles)
-				HTML += "<b><span class='dark'><a href=\"byond://?src=\ref[user];preference=job;task=alt_title;job=\ref[job]\">[GetPlayerAltTitle(job)]</a></span></b>"
+				HTML += "<b><span class='dark'><a href=\"byond://?src=[REF(user)];preference=job;task=alt_title;job=[REF(job)]\">[GetPlayerAltTitle(job)]</a></span></b>"
 			else
 				HTML += "<b><span class='dark'>[rank]</span></b>"
 		else
 			if(job.alt_titles)
-				HTML += "<span class='dark'><a href=\"byond://?src=\ref[user];preference=job;task=alt_title;job=\ref[job]\">[GetPlayerAltTitle(job)]</a></span>"
+				HTML += "<span class='dark'><a href=\"byond://?src=[REF(user)];preference=job;task=alt_title;job=[REF(job)]\">[GetPlayerAltTitle(job)]</a></span>"
 			else
 				HTML += "<span class='dark'>[rank]</span>"
 
@@ -540,7 +540,7 @@ var/const/MAX_SAVE_SLOTS = 8
 			HTML += "</a></td></tr>"
 			continue
 		//if(job.alt_titles)
-			//HTML += "</a></td></tr><tr bgcolor='[lastJob.selection_color]'><td width='60%' align='center'><a>&nbsp</a></td><td><a href=\"byond://?src=\ref[user];preference=job;task=alt_title;job=\ref[job]\">\[[GetPlayerAltTitle(job)]\]</a></td></tr>"
+			//HTML += "</a></td></tr><tr bgcolor='[lastJob.selection_color]'><td width='60%' align='center'><a>&nbsp</a></td><td><a href=\"byond://?src=[REF(user)];preference=job;task=alt_title;job=[REF(job)]\">\[[GetPlayerAltTitle(job)]\]</a></td></tr>"
 		HTML += "<font color=[prefLevelColor]>[prefLevelLabel]</font>"
 		HTML += "</a></td></tr>"
 
@@ -581,9 +581,9 @@ var/const/MAX_SAVE_SLOTS = 8
 
 		dat += {"<center>
 			Slot <b>[slot_name]</b> -
-			<a href=\"byond://?src=\ref[user];preference=open_load_dialog\">Load slot</a> -
-			<a href=\"byond://?src=\ref[user];preference=save\">Save slot</a> -
-			<a href=\"byond://?src=\ref[user];preference=reload\">Reload slot</a>
+			<a href=\"byond://?src=[REF(user)];preference=open_load_dialog\">Load slot</a> -
+			<a href=\"byond://?src=[REF(user)];preference=save\">Save slot</a> -
+			<a href=\"byond://?src=[REF(user)];preference=reload\">Reload slot</a>
 			</center><hr>"}
 	else
 		dat += "Please create an account to save your preferences."
@@ -654,20 +654,20 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	HTML += {"<tt><center>
 		<b>Set Character Records</b><br>
-		<a href=\"byond://?src=\ref[user];preference=records;task=med_record\">Medical Records</a><br>"}
+		<a href=\"byond://?src=[REF(user)];preference=records;task=med_record\">Medical Records</a><br>"}
 	if(length(med_record) <= 40)
 		HTML += "[med_record]"
 	else
 		HTML += "[copytext(med_record, 1, 37)]..."
 
-	HTML += "<br><br><a href=\"byond://?src=\ref[user];preference=records;task=gen_record\">Employment Records</a><br>"
+	HTML += "<br><br><a href=\"byond://?src=[REF(user)];preference=records;task=gen_record\">Employment Records</a><br>"
 
 	if(length(gen_record) <= 40)
 		HTML += "[gen_record]"
 	else
 		HTML += "[copytext(gen_record, 1, 37)]..."
 
-	HTML += "<br><br><a href=\"byond://?src=\ref[user];preference=records;task=sec_record\">Security Records</a><br>"
+	HTML += "<br><br><a href=\"byond://?src=[REF(user)];preference=records;task=sec_record\">Security Records</a><br>"
 
 	if(length(sec_record) <= 40)
 		HTML += "[sec_record]<br>"
@@ -676,7 +676,7 @@ var/const/MAX_SAVE_SLOTS = 8
 
 
 	HTML += {"<br>
-		<a href=\"byond://?src=\ref[user];preference=records;records=-1\">\[Done\]</a>
+		<a href=\"byond://?src=[REF(user)];preference=records;records=-1\">\[Done\]</a>
 		</center></tt>"}
 	user << browse(null, "window=preferences")
 	user << browse(HTML, "window=records;size=350x300")
@@ -1704,7 +1704,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 /datum/preferences/proc/configure_special_roles(var/dat, var/mob/user)
 	dat+={"<form method="get">
-	<input type="hidden" name="src" value="\ref[src]" />
+	<input type="hidden" name="src" value="[REF(src)]" />
 	<input type="hidden" name="preference" value="set_roles" />
 	<h1>Special Role Preferences</h1>
 	<p>Please note that this also handles in-round polling for things like Raging Mages and Borers.</p>
@@ -1756,7 +1756,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				else
 					var/wikiroute = role_wiki[role_id]
 					var/desire = get_role_desire_str(roles[role_id])
-					dat += {"<td class='column'>[wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>Role Wiki</a>" : "None"]</td>
+					dat += {"<td class='column'>[wikiroute ? "<a HREF='?src=[REF(user)];getwiki=[wikiroute]'>Role Wiki</a>" : "None"]</td>
 							<td class='column clmNever'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_NEVER|ROLEPREF_SAVE]" title="Never"[desire=="Never"?" checked='checked'":""]/></label></td>
 							<td class='column clmNo'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_NO|ROLEPREF_SAVE]" title="No"[desire=="No"?" checked='checked'":""] /></label></td>
 							<td class='column clmYes'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_YES|ROLEPREF_SAVE]" title="Yes"[desire=="Yes"?" checked='checked'":""] /></label></td>
@@ -1786,7 +1786,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 			else
 				var/wikiroute = role_wiki[role_id]
 				var/desire = get_role_desire_str(roles[role_id])
-				dat += {"<td class='column'>[wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>Role Wiki</a>" : ""]</td>
+				dat += {"<td class='column'>[wikiroute ? "<a HREF='?src=[REF(user)];getwiki=[wikiroute]'>Role Wiki</a>" : ""]</td>
 						<td class='column clmNever'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_NEVER|ROLEPREF_SAVE]" title="Never"[desire=="Never"?" checked='checked'":""]/></label></td>
 						<td class='column clmNo'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_NO|ROLEPREF_SAVE]" title="No"[desire=="No"?" checked='checked'":""] /></label></td>
 						<td class='column clmYes'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_YES|ROLEPREF_SAVE]" title="Yes"[desire=="Yes"?" checked='checked'":""] /></label></td>

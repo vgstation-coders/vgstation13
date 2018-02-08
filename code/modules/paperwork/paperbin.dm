@@ -120,7 +120,7 @@
 				else
 					to_chat(user, "<span class='info'>The paper on top has some bloody markings on it.</span>")
 			else if(P.info)
-				to_chat(user, "<span class='info'>You notice some writings on the top paper. <a HREF='?src=\ref[user];lookitem=\ref[P]'>Take a closer look.</a></span>")
+				to_chat(user, "<span class='info'>You notice some writings on the top paper. <a HREF='?src=[REF(user)];lookitem=[REF(P)]'>Take a closer look.</a></span>")
 	else
 		to_chat(user, "<span class='info'>There are no papers in the bin.</span>")
 

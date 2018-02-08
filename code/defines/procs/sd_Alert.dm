@@ -72,7 +72,7 @@ proc/sd_Alert(client/who, message, title, buttons = list("Ok"),	default, duratio
 		var/mob/M = who
 		who = M.client
 	if(!istype(who))
-		CRASH("sd_Alert: Invalid target:[who] (\ref[who])")
+		CRASH("sd_Alert: Invalid target:[who] ([REF(who)])")
 
 	var/sd_alert/T = locate(tag)
 	if(T)
@@ -98,7 +98,7 @@ sd_alert
 		list/validation
 
 	Del()
-		target << browse(null,"window=\ref[src]")
+		target << browse(null,"window=[REF(src)]")
 		..()
 
 	New(who, tag)
@@ -122,14 +122,14 @@ sd_alert
 			validation = buttons.Copy()
 
 		var/html = {"<head><title>[title]</title>[style]<script>\
-		function c(x) {document.location.href='BYOND://?src=\ref[src];'+x;}\
+		function c(x) {document.location.href='BYOND://?src=[REF(src)];'+x;}\
 		</script></head><body onLoad="fcs.focus();"\
 		[(flags&SD_ALERT_SCROLL)?"":" scroll=no"]><table [table]><tr>\
 		<td>[message]</td></tr><tr><th>"}
 
 		if(select || (flags & SD_ALERT_SELECT_MULTI))	// select style choices
 			html += {"<FORM ID=fcs ACTION='BYOND://?' METHOD=GET>\
-				<INPUT TYPE=HIDDEN NAME=src VALUE='\ref[src]'>
+				<INPUT TYPE=HIDDEN NAME=src VALUE='[REF(src)]'>
 				<SELECT NAME=clk SIZE=[select]\
 				[(flags & SD_ALERT_SELECT_MULTI)?" MULTIPLE":""]>"}
 			for(var/b in buttons)
@@ -159,7 +159,7 @@ sd_alert
 
 		html += "</th></tr></table></body>"
 
-		target << browse(html,"window=\ref[src];size=[size];can_close=0")
+		target << browse(html,"window=[REF(src)];size=[size];can_close=0")
 
 	proc/Response()
 		var/validated

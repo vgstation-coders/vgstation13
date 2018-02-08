@@ -32,7 +32,7 @@ var/list/obj/machinery/prism/prism_list = list()
 
 /obj/machinery/prism/proc/check_rotation()
 	for(var/obj/effect/beam/emitter/B in beams)
-		to_chat(world, "[src] \ref[src] found [get_dir(src, B)] its dir is [dir]")
+		to_chat(world, "[src] [REF(src)] found [get_dir(src, B)] its dir is [dir]")
 		if(get_dir(src, B) != dir)
 			return 1
 /obj/machinery/prism/verb/rotate_cw()

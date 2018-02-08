@@ -66,23 +66,23 @@
 		if (!ishuman(user))
 			return ..(user)
 		var/t = "<B>Circuitboard Console - Camera Monitoring Computer</B><BR>"
-		t += "<A href='?src=\ref[src];close=1'>Close</A><BR>"
+		t += "<A href='?src=[REF(src)];close=1'>Close</A><BR>"
 		t += "<hr> Please select a camera network:<br>"
 
 		for(var/curNet in possibleNets)
 			if(network == curNet)
 				t += "- [curNet]<br>"
 			else
-				t += "- <A href='?src=\ref[src];net=[curNet]'>[curNet]</A><BR>"
+				t += "- <A href='?src=[REF(src)];net=[curNet]'>[curNet]</A><BR>"
 		t += "<hr>"
 		if(network)
 			if(authorised)
-				t += "Authenticated <A href='?src=\ref[src];removeauth=1'>(Clear Auth)</A><BR>"
+				t += "Authenticated <A href='?src=[REF(src)];removeauth=1'>(Clear Auth)</A><BR>"
 			else
-				t += "<A href='?src=\ref[src];auth=1'><b>*Authenticate*</b></A> (Requires an appropriate access ID)<br>"
+				t += "<A href='?src=[REF(src)];auth=1'><b>*Authenticate*</b></A> (Requires an appropriate access ID)<br>"
 		else
-			t += "<A href='?src=\ref[src];auth=1'>*Authenticate*</A> (Requires an appropriate access ID)<BR>"
-		t += "<A href='?src=\ref[src];close=1'>Close</A><BR>"
+			t += "<A href='?src=[REF(src)];auth=1'>*Authenticate*</A> (Requires an appropriate access ID)<BR>"
+		t += "<A href='?src=[REF(src)];close=1'>Close</A><BR>"
 		user << browse(t, "window=camcircuit;size=500x400")
 		onclose(user, "camcircuit")
 

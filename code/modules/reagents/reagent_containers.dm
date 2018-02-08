@@ -163,7 +163,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	else
 		//ASSERT(istype(source.reagents))
 		source_empty = source.reagents.is_empty()
-		//warning("Called transfer_sub() with a non-compatible source type ([source.type], [source], \ref[source])")
+		//warning("Called transfer_sub() with a non-compatible source type ([source.type], [source], [REF(source)])")
 		//return
 
 
@@ -181,7 +181,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		if(!istype(target.reagents))
 			return
 		target_full = target.reagents.is_full()
-		//warning("Called transfer_sub() with a non-compatible target type ([target.type], [target], \ref[target])")
+		//warning("Called transfer_sub() with a non-compatible target type ([target.type], [target], [REF(target)])")
 		//return
 
 	// Actual transfer checks
@@ -208,7 +208,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 	if (amount > 0)
 		if(user)
-			user.investigation_log(I_CHEMS, "has splashed [amount]u of [reagents.get_reagent_ids()] from \a [reagents.my_atom] \ref[reagents.my_atom] onto \the [target].")
+			user.investigation_log(I_CHEMS, "has splashed [amount]u of [reagents.get_reagent_ids()] from \a [reagents.my_atom] [REF(reagents.my_atom)] onto \the [target].")
 		reagents.remove_any(amount)
 		if(user)
 			if(user.Adjacent(target))
@@ -216,7 +216,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			                     "<span class='notice'>You splash some of the solution onto \the [target].</span>")
 	else
 		if(user)
-			user.investigation_log(I_CHEMS, "has splashed [reagents.get_reagent_ids(1)] from \a [reagents.my_atom] \ref[reagents.my_atom] onto \the [target].")
+			user.investigation_log(I_CHEMS, "has splashed [reagents.get_reagent_ids(1)] from \a [reagents.my_atom] [REF(reagents.my_atom)] onto \the [target].")
 		reagents.clear_reagents()
 		if(user)
 			if(user.Adjacent(target))

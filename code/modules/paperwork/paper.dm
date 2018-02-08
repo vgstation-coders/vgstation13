@@ -53,7 +53,7 @@
 
 	if(img)
 		user << browse_rsc(img.img, "tmp_photo.png")
-		info_image = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
+		info_image = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=[REF(src)];picture=1'>Remove</a><br>"
 	user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_image][info_text][stamps]</BODY></HTML>", "window=[name]")
 	onclose(user, "[name]")
 
@@ -173,10 +173,10 @@
 			break //abandon ship
 		if(i%25 == 0)
 			sleep(1)
-		addtofield(i, "<A href='?src=\ref[src];write=[i]'>write</A> ", 1)
-		addtofield(i, "<A href='?src=\ref[src];help=[i]'>help</A> ", 1)
-	info_links +="<A href='?src=\ref[src];write=end'>write</A> "
-	info_links +="<A href='?src=\ref[src];help=end'>help</A> "
+		addtofield(i, "<A href='?src=[REF(src)];write=[i]'>write</A> ", 1)
+		addtofield(i, "<A href='?src=[REF(src)];help=[i]'>help</A> ", 1)
+	info_links +="<A href='?src=[REF(src)];write=end'>write</A> "
+	info_links +="<A href='?src=[REF(src)];help=end'>help</A> "
 
 /obj/item/weapon/paper/proc/clearpaper()
 	info = null

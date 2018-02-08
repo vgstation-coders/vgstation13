@@ -296,7 +296,7 @@ var/list/datum/power/changeling/powerinstances = list()
 
 					if(!ownsthis)
 					{
-						body += "<a href='?src=\ref[src];P="+power+"'>Evolve</a>"
+						body += "<a href='?src=[REF(src)];P="+power+"'>Evolve</a>"
 					}
 
 

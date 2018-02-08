@@ -48,53 +48,53 @@ var/global/floorIsLava = 0
 	if(M.client)
 
 		body += {"played by <b>[M.client]</b>
-			\[<A href='?src=\ref[src];editrights=show'>[M.client.holder ? M.client.holder.rank : "Player"]</A>\]"}
+			\[<A href='?src=[REF(src)];editrights=show'>[M.client.holder ? M.client.holder.rank : "Player"]</A>\]"}
 	if(istype(M, /mob/new_player))
 		body += " <B>Hasn't Entered Game</B> "
 	else
-		body += " \[<A href='?src=\ref[src];revive=\ref[M]'>Heal</A>\] "
+		body += " \[<A href='?src=[REF(src)];revive=[REF(M)]'>Heal</A>\] "
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		species_description = "[H.species ? H.species.name : "<span class='danger'><b>No Species</b></span>"]"
 	body += {"
 		<br><br>\[
-		<a href='?_src_=vars;Vars=\ref[M]'>VV</a> -
-		<a href='?src=\ref[src];traitor=\ref[M]'>TP</a> -
-		<a href='?src=\ref[src];rapsheet=1;rsckey=[M.ckey]'>Bans</a> -
-		<a href='?src=\ref[usr];priv_msg=\ref[M]'>PM</a> -
-		<a href='?src=\ref[src];subtlemessage=\ref[M]'>SM</a> -
-		<a href='?src=\ref[src];adminplayerobservejump=\ref[M]'>JMP</a>\] </b><br>
+		<a href='?_src_=vars;Vars=[REF(M)]'>VV</a> -
+		<a href='?src=[REF(src)];traitor=[REF(M)]'>TP</a> -
+		<a href='?src=[REF(src)];rapsheet=1;rsckey=[M.ckey]'>Bans</a> -
+		<a href='?src=[REF(usr)];priv_msg=[REF(M)]'>PM</a> -
+		<a href='?src=[REF(src)];subtlemessage=[REF(M)]'>SM</a> -
+		<a href='?src=[REF(src)];adminplayerobservejump=[REF(M)]'>JMP</a>\] </b><br>
 		<b>Mob type</b> = [M.type][species_description ? " - Species = [species_description]" : ""]<br><br>
-		<A href='?src=\ref[src];boot2=\ref[M]'>Kick</A> |
+		<A href='?src=[REF(src)];boot2=[REF(M)]'>Kick</A> |
 		<A href='?_src_=holder;warn=[M.ckey]'>Warn</A> |
 		<A href='?_src_=holder;unwarn=[M.ckey]'>UNWarn</A> |
-		<A href='?src=\ref[src];newban=\ref[M]'>Ban</A> |
-		<A href='?src=\ref[src];jobban2=\ref[M]'>Jobban</A> |
-		<A href='?src=\ref[src];oocban=\ref[M]'>OOC Ban</A> |
-		<A href='?_src_=holder;appearanceban=\ref[M]'>Identity Ban</A> |
-		<A href='?src=\ref[src];notes=show;mob=\ref[M]'>Notes</A>
+		<A href='?src=[REF(src)];newban=[REF(M)]'>Ban</A> |
+		<A href='?src=[REF(src)];jobban2=[REF(M)]'>Jobban</A> |
+		<A href='?src=[REF(src)];oocban=[REF(M)]'>OOC Ban</A> |
+		<A href='?_src_=holder;appearanceban=[REF(M)]'>Identity Ban</A> |
+		<A href='?src=[REF(src)];notes=show;mob=[REF(M)]'>Notes</A>
 	"}
 
 	if(M.client)
-		body += "| <A HREF='?src=\ref[src];sendtoprison=\ref[M]'>Prison</A> | "
+		body += "| <A HREF='?src=[REF(src)];sendtoprison=[REF(M)]'>Prison</A> | "
 		var/muted = M.client.prefs.muted
 		body += {"<br><b>Mute: </b>
-			\[<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_IC]'><font color='[(muted & MUTE_IC)?"red":"blue"]'>IC</font></a> |
-			<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_OOC]'><font color='[(muted & MUTE_OOC)?"red":"blue"]'>OOC</font></a> |
-			<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_PRAY]'><font color='[(muted & MUTE_PRAY)?"red":"blue"]'>PRAY</font></a> |
-			<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_ADMINHELP]'><font color='[(muted & MUTE_ADMINHELP)?"red":"blue"]'>ADMINHELP</font></a> |
-			<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_DEADCHAT]'><font color='[(muted & MUTE_DEADCHAT)?"red":"blue"]'>DEADCHAT</font></a>\]
-			(<A href='?src=\ref[src];mute=\ref[M];mute_type=[MUTE_ALL]'><font color='[(muted & MUTE_ALL)?"red":"blue"]'>toggle all</font></a>)
+			\[<A href='?src=[REF(src)];mute=[REF(M)];mute_type=[MUTE_IC]'><font color='[(muted & MUTE_IC)?"red":"blue"]'>IC</font></a> |
+			<A href='?src=[REF(src)];mute=[REF(M)];mute_type=[MUTE_OOC]'><font color='[(muted & MUTE_OOC)?"red":"blue"]'>OOC</font></a> |
+			<A href='?src=[REF(src)];mute=[REF(M)];mute_type=[MUTE_PRAY]'><font color='[(muted & MUTE_PRAY)?"red":"blue"]'>PRAY</font></a> |
+			<A href='?src=[REF(src)];mute=[REF(M)];mute_type=[MUTE_ADMINHELP]'><font color='[(muted & MUTE_ADMINHELP)?"red":"blue"]'>ADMINHELP</font></a> |
+			<A href='?src=[REF(src)];mute=[REF(M)];mute_type=[MUTE_DEADCHAT]'><font color='[(muted & MUTE_DEADCHAT)?"red":"blue"]'>DEADCHAT</font></a>\]
+			(<A href='?src=[REF(src)];mute=[REF(M)];mute_type=[MUTE_ALL]'><font color='[(muted & MUTE_ALL)?"red":"blue"]'>toggle all</font></a>)
 		"}
 
 	body += {"<br><br>
-		<A href='?src=\ref[src];jumpto=\ref[M]'><b>Jump to</b></A> |
-		<A href='?src=\ref[src];getmob=\ref[M]'>Get</A> |
-		<A href='?src=\ref[src];sendmob=\ref[M]'>Send To</A>
+		<A href='?src=[REF(src)];jumpto=[REF(M)]'><b>Jump to</b></A> |
+		<A href='?src=[REF(src)];getmob=[REF(M)]'>Get</A> |
+		<A href='?src=[REF(src)];sendmob=[REF(M)]'>Send To</A>
 		<br><br>
-		<A href='?src=\ref[src];traitor=\ref[M]'>Traitor panel</A> |
-		<A href='?src=\ref[src];narrateto=\ref[M]'>Narrate to</A> |
-		<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A>
+		<A href='?src=[REF(src)];traitor=[REF(M)]'>Traitor panel</A> |
+		<A href='?src=[REF(src)];narrateto=[REF(M)]'>Narrate to</A> |
+		<A href='?src=[REF(src)];subtlemessage=[REF(M)]'>Subtle message</A>
 	"}
 
 	if(istype(M, /mob/living/carbon/human))
@@ -102,12 +102,12 @@ var/global/floorIsLava = 0
 			<b>Punishments:</b>
 			<br>"}
 		body += {"
-			<A href='?src=\ref[src];BlueSpaceArtillery=\ref[M]'>BSA</A> |
-			<A href='?src=\ref[src];addcancer=\ref[M]'>Inflict Cancer</A> |
-			<A href='?src=\ref[src];makecatbeast=\ref[M]'>Make Catbeast</A> |
-			<A href='?src=\ref[src];makecluwne=\ref[M]'>Make Cluwne</A> |
-			<A href='?src=\ref[src];Assplode=\ref[M]'>Assplode</A> |
-			<A href='?src=\ref[src];DealBrainDam=\ref[M]'>Deal brain damage</A> |
+			<A href='?src=[REF(src)];BlueSpaceArtillery=[REF(M)]'>BSA</A> |
+			<A href='?src=[REF(src)];addcancer=[REF(M)]'>Inflict Cancer</A> |
+			<A href='?src=[REF(src)];makecatbeast=[REF(M)]'>Make Catbeast</A> |
+			<A href='?src=[REF(src)];makecluwne=[REF(M)]'>Make Cluwne</A> |
+			<A href='?src=[REF(src)];Assplode=[REF(M)]'>Assplode</A> |
+			<A href='?src=[REF(src)];DealBrainDam=[REF(M)]'>Deal brain damage</A> |
 		"}
 
 	// Mob-specific controls.
@@ -123,34 +123,34 @@ var/global/floorIsLava = 0
 			if(ismonkey(M))
 				body += "<B>Monkeyized</B> | "
 			else
-				body += "<A href='?src=\ref[src];monkeyone=\ref[M]'>Monkeyize</A> | "
+				body += "<A href='?src=[REF(src)];monkeyone=[REF(M)]'>Monkeyize</A> | "
 
 			//Corgi
 			if(iscorgi(M))
 				body += "<B>Corgized</B> | "
 			else
-				body += "<A href='?src=\ref[src];corgione=\ref[M]'>Corgize</A> | "
+				body += "<A href='?src=[REF(src)];corgione=[REF(M)]'>Corgize</A> | "
 
 			//AI / Cyborg
 			if(isAI(M))
 				body += "<B>Is an AI</B> | "
 			else if(ishuman(M))
-				body += {"<A href='?src=\ref[src];makeai=\ref[M]'>Make AI</A> |
-					<A href='?src=\ref[src];makerobot=\ref[M]'>Make Robot</A> |
-					<A href='?src=\ref[src];makemommi=\ref[M]'>Make MoMMI</A> |
-					<A href='?src=\ref[src];makealien=\ref[M]'>Make Alien</A> |
-					<A href='?src=\ref[src];makeslime=\ref[M]'>Make slime</A> |
+				body += {"<A href='?src=[REF(src)];makeai=[REF(M)]'>Make AI</A> |
+					<A href='?src=[REF(src)];makerobot=[REF(M)]'>Make Robot</A> |
+					<A href='?src=[REF(src)];makemommi=[REF(M)]'>Make MoMMI</A> |
+					<A href='?src=[REF(src)];makealien=[REF(M)]'>Make Alien</A> |
+					<A href='?src=[REF(src)];makeslime=[REF(M)]'>Make slime</A> |
 				"}
 
 			//Simple Animals
 			if(isanimal(M))
-				body += "<A href='?src=\ref[src];makeanimal=\ref[M]'>Re-Animalize</A> | "
+				body += "<A href='?src=[REF(src)];makeanimal=[REF(M)]'>Re-Animalize</A> | "
 			else
-				body += "<A href='?src=\ref[src];makeanimal=\ref[M]'>Animalize</A> | "
+				body += "<A href='?src=[REF(src)];makeanimal=[REF(M)]'>Animalize</A> | "
 
 			//Hands
 			if(ishuman(M))
-				body += "<A href='?src=\ref[src];changehands=\ref[M]'>Change amount of hands (current: [M.held_items.len])</A> | "
+				body += "<A href='?src=[REF(src)];changehands=[REF(M)]'>Change amount of hands (current: [M.held_items.len])</A> | "
 
 			// DNA2 - Admin Hax
 			if(ishuman(M) || ismonkey(M))
@@ -165,7 +165,7 @@ var/global/floorIsLava = 0
 					if(bname)
 						var/bstate=M.dna.GetSEState(block)
 						var/bcolor="[(bstate)?"#006600":"#ff0000"]"
-						body += "<A href='?src=\ref[src];togmutate=\ref[M];block=[block]' style='color:[bcolor];'>[bname]</A><sub>[block]</sub>"
+						body += "<A href='?src=[REF(src)];togmutate=[REF(M)];block=[block]' style='color:[bcolor];'>[bname]</A><sub>[block]</sub>"
 					else
 						body += "[block]"
 					body+="</td>"
@@ -177,36 +177,36 @@ var/global/floorIsLava = 0
 				body += "<b>Laws:</b><br />"
 				var/datum/ai_laws/L = M:laws
 				body += L.display_admin_tools(M)
-				body += "<br /><a href='?src=\ref[src];mob=\ref[M];add_law=1'>Add Law</a>"
-				body += " | <a href='?src=\ref[src];mob=\ref[M];clear_laws=1'>Clear Laws</a>"
-				body += " | <a href='?src=\ref[src];mob=\ref[M];reset_laws=1'>Reset Lawset</a>"
-				body += "<br /><a href='?src=\ref[src];mob=\ref[M];announce_laws=1'><b>Send Laws</b></a> - User is not notified of changes until this button pushed!<br />"
+				body += "<br /><a href='?src=[REF(src)];mob=[REF(M)];add_law=1'>Add Law</a>"
+				body += " | <a href='?src=[REF(src)];mob=[REF(M)];clear_laws=1'>Clear Laws</a>"
+				body += " | <a href='?src=[REF(src)];mob=[REF(M)];reset_laws=1'>Reset Lawset</a>"
+				body += "<br /><a href='?src=[REF(src)];mob=[REF(M)];announce_laws=1'><b>Send Laws</b></a> - User is not notified of changes until this button pushed!<br />"
 
 			body += {"<br><br>
 				<b>Rudimentary transformation:</b><font size=2><br>These transformations only create a new mob type and copy stuff over. They do not take into account MMIs and similar mob-specific things. The buttons in 'Transformations' are preferred, when possible.</font><br>
-				<A href='?src=\ref[src];simplemake=observer;mob=\ref[M]'>Observer</A> |
-				<A href='?src=\ref[src];simplemake=human;mob=\ref[M]'>Human</A> |
-				<A href='?src=\ref[src];simplemake=monkey;mob=\ref[M]'>Monkey</A> |
-				<A href='?src=\ref[src];simplemake=cat;mob=\ref[M]'>Cat</A> |
-				<A href='?src=\ref[src];simplemake=runtime;mob=\ref[M]'>Runtime</A> |
-				<A href='?src=\ref[src];simplemake=corgi;mob=\ref[M]'>Corgi</A> |
-				<A href='?src=\ref[src];simplemake=ian;mob=\ref[M]'>Ian</A> |
-				<A href='?src=\ref[src];simplemake=crab;mob=\ref[M]'>Crab</A> |
-				<A href='?src=\ref[src];simplemake=coffee;mob=\ref[M]'>Coffee</A>
-				<A href='?src=\ref[src];simplemake=blob;mob=\ref[M]'>BLOB</A>
-				<br>\[ Silicon: <A href='?src=\ref[src];simplemake=ai;mob=\ref[M]'>AI</A>, |
-				<A href='?src=\ref[src];simplemake=robot;mob=\ref[M]'>Cyborg</A> \]
-				<br>\[ Alien: <A href='?src=\ref[src];simplemake=drone;mob=\ref[M]'>Drone</A>,
-				<A href='?src=\ref[src];simplemake=hunter;mob=\ref[M]'>Hunter</A>,
-				<A href='?src=\ref[src];simplemake=queen;mob=\ref[M]'>Queen</A>,
-				<A href='?src=\ref[src];simplemake=sentinel;mob=\ref[M]'>Sentinel</A>,
-				<A href='?src=\ref[src];simplemake=larva;mob=\ref[M]'>Larva</A> \]
-				<br>\[ Slime: <A href='?src=\ref[src];simplemake=slime;mob=\ref[M]'>Baby</A>,
-				<A href='?src=\ref[src];simplemake=adultslime;mob=\ref[M]'>Adult</A> \]
-				<br>\[ Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Armoured</A>,
-				<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Builder</A>,
-				<A href='?src=\ref[src];simplemake=constructwraith;mob=\ref[M]'>Wraith</A>,
-				<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A> \]
+				<A href='?src=[REF(src)];simplemake=observer;mob=[REF(M)]'>Observer</A> |
+				<A href='?src=[REF(src)];simplemake=human;mob=[REF(M)]'>Human</A> |
+				<A href='?src=[REF(src)];simplemake=monkey;mob=[REF(M)]'>Monkey</A> |
+				<A href='?src=[REF(src)];simplemake=cat;mob=[REF(M)]'>Cat</A> |
+				<A href='?src=[REF(src)];simplemake=runtime;mob=[REF(M)]'>Runtime</A> |
+				<A href='?src=[REF(src)];simplemake=corgi;mob=[REF(M)]'>Corgi</A> |
+				<A href='?src=[REF(src)];simplemake=ian;mob=[REF(M)]'>Ian</A> |
+				<A href='?src=[REF(src)];simplemake=crab;mob=[REF(M)]'>Crab</A> |
+				<A href='?src=[REF(src)];simplemake=coffee;mob=[REF(M)]'>Coffee</A>
+				<A href='?src=[REF(src)];simplemake=blob;mob=[REF(M)]'>BLOB</A>
+				<br>\[ Silicon: <A href='?src=[REF(src)];simplemake=ai;mob=[REF(M)]'>AI</A>, |
+				<A href='?src=[REF(src)];simplemake=robot;mob=[REF(M)]'>Cyborg</A> \]
+				<br>\[ Alien: <A href='?src=[REF(src)];simplemake=drone;mob=[REF(M)]'>Drone</A>,
+				<A href='?src=[REF(src)];simplemake=hunter;mob=[REF(M)]'>Hunter</A>,
+				<A href='?src=[REF(src)];simplemake=queen;mob=[REF(M)]'>Queen</A>,
+				<A href='?src=[REF(src)];simplemake=sentinel;mob=[REF(M)]'>Sentinel</A>,
+				<A href='?src=[REF(src)];simplemake=larva;mob=[REF(M)]'>Larva</A> \]
+				<br>\[ Slime: <A href='?src=[REF(src)];simplemake=slime;mob=[REF(M)]'>Baby</A>,
+				<A href='?src=[REF(src)];simplemake=adultslime;mob=[REF(M)]'>Adult</A> \]
+				<br>\[ Construct: <A href='?src=[REF(src)];simplemake=constructarmoured;mob=[REF(M)]'>Armoured</A>,
+				<A href='?src=[REF(src)];simplemake=constructbuilder;mob=[REF(M)]'>Builder</A>,
+				<A href='?src=[REF(src)];simplemake=constructwraith;mob=[REF(M)]'>Wraith</A>,
+				<A href='?src=[REF(src)];simplemake=shade;mob=[REF(M)]'>Shade</A> \]
 				<br>
 			"}
 
@@ -214,11 +214,11 @@ var/global/floorIsLava = 0
 		body += {"<br><br>
 			<b>Other actions:</b>
 			<br>
-			<A href='?src=\ref[src];forcespeech=\ref[M]'>Forcesay</A> |
-			<A href='?src=\ref[src];tdome1=\ref[M]'>Thunderdome Green</A> |
-			<A href='?src=\ref[src];tdome2=\ref[M]'>Thunderdome Red</A> |
-			<A href='?src=\ref[src];tdomeadmin=\ref[M]'>Thunderdome Admin</A> |
-			<A href='?src=\ref[src];tdomeobserve=\ref[M]'>Thunderdome Observer</A> |
+			<A href='?src=[REF(src)];forcespeech=[REF(M)]'>Forcesay</A> |
+			<A href='?src=[REF(src)];tdome1=[REF(M)]'>Thunderdome Green</A> |
+			<A href='?src=[REF(src)];tdome2=[REF(M)]'>Thunderdome Red</A> |
+			<A href='?src=[REF(src)];tdomeadmin=[REF(M)]'>Thunderdome Admin</A> |
+			<A href='?src=[REF(src)];tdomeobserve=[REF(M)]'>Thunderdome Observer</A> |
 		"}
 
 	// language toggles
@@ -231,15 +231,15 @@ var/global/floorIsLava = 0
 		else
 			f = 0
 		if(L in M.languages)
-			body += "<a href='?src=\ref[src];toglang=\ref[M];lang=[html_encode(k)]' style='color:#006600'>[k]</a>"
+			body += "<a href='?src=[REF(src)];toglang=[REF(M)];lang=[html_encode(k)]' style='color:#006600'>[k]</a>"
 		else
-			body += "<a href='?src=\ref[src];toglang=\ref[M];lang=[html_encode(k)]' style='color:#ff0000'>[k]</a>"
+			body += "<a href='?src=[REF(src)];toglang=[REF(M)];lang=[html_encode(k)]' style='color:#ff0000'>[k]</a>"
 
 	body += {"<br>
 		</body></html>
 	"}
 
-	usr << browse(body, "window=adminplayeropts-\ref[M];size=550x515")
+	usr << browse(body, "window=adminplayeropts-[REF(M)];size=550x515")
 	feedback_add_details("admin_verb","SPP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
@@ -320,7 +320,7 @@ var/global/floorIsLava = 0
 		upper_bound = min(upper_bound, note_keys.len)
 		for(var/index = lower_bound, index <= upper_bound, index++)
 			var/t = note_keys[index]
-			dat += "<tr><td><a href='?src=\ref[src];notes=show;ckey=[t]'>[t]</a></td></tr>"
+			dat += "<tr><td><a href='?src=[REF(src)];notes=show;ckey=[t]'>[t]</a></td></tr>"
 
 		dat += "</table><br>"
 
@@ -328,7 +328,7 @@ var/global/floorIsLava = 0
 		for(var/index = 1, index <= number_pages, index++)
 			if(index == page)
 				dat += "<b>"
-			dat += "<a href='?src=\ref[src];notes=list;index=[index]'>[index]</a> "
+			dat += "<a href='?src=[REF(src)];notes=list;index=[index]'>[index]</a> "
 			if(index == page)
 				dat += "</b>"
 
@@ -399,13 +399,13 @@ var/global/floorIsLava = 0
 				update_file = 1
 			dat += "<font color=#008800>[I.content]</font> <i>by [I.author] ([I.rank])</i> on <i><font color=blue>[I.timestamp]</i></font> "
 			if(I.author == usr.key || check_rights(R_PERMISSIONS, show_msg = 0))
-				dat += "<A href='?src=\ref[src];remove_player_info=[key];remove_index=[i]'>Remove</A>"
+				dat += "<A href='?src=[REF(src)];remove_player_info=[key];remove_index=[i]'>Remove</A>"
 			dat += "<br><br>"
 		if(update_file)
 			info << infos
 
 	dat += {"<br>
-		<A href='?src=\ref[src];add_player_info=[key]'>Add Comment</A><br>
+		<A href='?src=[REF(src)];add_player_info=[key]'>Add Comment</A><br>
 		</body></html>"}
 
 	usr << browse(dat, "window=adminplayerinfo;size=480x480")
@@ -430,12 +430,12 @@ var/global/floorIsLava = 0
 				<BR>Note that this panel allows full freedom over the news network, there are no constrictions except the few basic ones. Don't break things!</FONT>
 			"}
 			if(news_network.wanted_issue)
-				dat+= "<HR><A href='?src=\ref[src];ac_view_wanted=1'>Read Wanted Issue</A>"
+				dat+= "<HR><A href='?src=[REF(src)];ac_view_wanted=1'>Read Wanted Issue</A>"
 
-			dat+= {"<HR><BR><A href='?src=\ref[src];ac_create_channel=1'>Create Feed Channel</A>
-				<BR><A href='?src=\ref[src];ac_view=1'>View Feed Channels</A>
-				<BR><A href='?src=\ref[src];ac_create_feed_story=1'>Submit new Feed story</A>
-				<BR><BR><A href='?src=\ref[usr];mach_close=newscaster_main'>Exit</A>
+			dat+= {"<HR><BR><A href='?src=[REF(src)];ac_create_channel=1'>Create Feed Channel</A>
+				<BR><A href='?src=[REF(src)];ac_view=1'>View Feed Channels</A>
+				<BR><A href='?src=[REF(src)];ac_create_feed_story=1'>Submit new Feed story</A>
+				<BR><BR><A href='?src=[REF(usr)];mach_close=newscaster_main'>Exit</A>
 			"}
 
 			var/wanted_already = 0
@@ -443,10 +443,10 @@ var/global/floorIsLava = 0
 				wanted_already = 1
 
 			dat+={"<HR><B>Feed Security functions:</B><BR>
-				<BR><A href='?src=\ref[src];ac_menu_wanted=1'>[(wanted_already) ? ("Manage") : ("Publish")] \"Wanted\" Issue</A>
-				<BR><A href='?src=\ref[src];ac_menu_censor_story=1'>Censor Feed Stories</A>
-				<BR><A href='?src=\ref[src];ac_menu_censor_channel=1'>Mark Feed Channel with Nanotrasen D-Notice (disables and locks the channel.</A>
-				<BR><HR><A href='?src=\ref[src];ac_set_signature=1'>The newscaster recognises you as:<BR> <FONT COLOR='green'>[src.admincaster_signature]</FONT></A>
+				<BR><A href='?src=[REF(src)];ac_menu_wanted=1'>[(wanted_already) ? ("Manage") : ("Publish")] \"Wanted\" Issue</A>
+				<BR><A href='?src=[REF(src)];ac_menu_censor_story=1'>Censor Feed Stories</A>
+				<BR><A href='?src=[REF(src)];ac_menu_censor_channel=1'>Mark Feed Channel with Nanotrasen D-Notice (disables and locks the channel.</A>
+				<BR><HR><A href='?src=[REF(src)];ac_set_signature=1'>The newscaster recognises you as:<BR> <FONT COLOR='green'>[src.admincaster_signature]</FONT></A>
 			"}
 		if(1)
 			dat+= "Station Feed Channels<HR>"
@@ -455,38 +455,38 @@ var/global/floorIsLava = 0
 			else
 				for(var/datum/feed_channel/CHANNEL in news_network.network_channels)
 					if(CHANNEL.is_admin_channel)
-						dat+="<B><FONT style='BACKGROUND-COLOR: LightGreen'><A href='?src=\ref[src];ac_show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A></FONT></B><BR>"
+						dat+="<B><FONT style='BACKGROUND-COLOR: LightGreen'><A href='?src=[REF(src)];ac_show_channel=[REF(CHANNEL)]'>[CHANNEL.channel_name]</A></FONT></B><BR>"
 					else
-						dat+="<B><A href='?src=\ref[src];ac_show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR></B>"
-			dat+={"<BR><HR><A href='?src=\ref[src];ac_refresh=1'>Refresh</A>
-				<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Back</A>
+						dat+="<B><A href='?src=[REF(src)];ac_show_channel=[REF(CHANNEL)]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR></B>"
+			dat+={"<BR><HR><A href='?src=[REF(src)];ac_refresh=1'>Refresh</A>
+				<BR><A href='?src=[REF(src)];ac_setScreen=[0]'>Back</A>
 			"}
 
 		if(2)
 			dat+={"
 				Creating new Feed Channel...
-				<HR><B><A href='?src=\ref[src];ac_set_channel_name=1'>Channel Name</A>:</B> [src.admincaster_feed_channel.channel_name]<BR>
-				<B><A href='?src=\ref[src];ac_set_signature=1'>Channel Author</A>:</B> <FONT COLOR='green'>[src.admincaster_signature]</FONT><BR>
-				<B><A href='?src=\ref[src];ac_set_channel_lock=1'>Will Accept Public Feeds</A>:</B> [(src.admincaster_feed_channel.locked) ? ("NO") : ("YES")]<BR><BR>
-				<BR><A href='?src=\ref[src];ac_submit_new_channel=1'>Submit</A><BR><BR><A href='?src=\ref[src];ac_setScreen=[0]'>Cancel</A><BR>
+				<HR><B><A href='?src=[REF(src)];ac_set_channel_name=1'>Channel Name</A>:</B> [src.admincaster_feed_channel.channel_name]<BR>
+				<B><A href='?src=[REF(src)];ac_set_signature=1'>Channel Author</A>:</B> <FONT COLOR='green'>[src.admincaster_signature]</FONT><BR>
+				<B><A href='?src=[REF(src)];ac_set_channel_lock=1'>Will Accept Public Feeds</A>:</B> [(src.admincaster_feed_channel.locked) ? ("NO") : ("YES")]<BR><BR>
+				<BR><A href='?src=[REF(src)];ac_submit_new_channel=1'>Submit</A><BR><BR><A href='?src=[REF(src)];ac_setScreen=[0]'>Cancel</A><BR>
 			"}
 		if(3)
 			dat+={"
 				Creating new Feed Message...
-				<HR><B><A href='?src=\ref[src];ac_set_channel_receiving=1'>Receiving Channel</A>:</B> [src.admincaster_feed_channel.channel_name]<BR>" //MARK
+				<HR><B><A href='?src=[REF(src)];ac_set_channel_receiving=1'>Receiving Channel</A>:</B> [src.admincaster_feed_channel.channel_name]<BR>" //MARK
 				<B>Message Author:</B> <FONT COLOR='green'>[src.admincaster_signature]</FONT><BR>
-				<B><A href='?src=\ref[src];ac_set_new_message=1'>Message Body</A>:</B> [src.admincaster_feed_message.body] <BR>
-				<BR><A href='?src=\ref[src];ac_submit_new_message=1'>Submit</A><BR><BR><A href='?src=\ref[src];ac_setScreen=[0]'>Cancel</A><BR>
+				<B><A href='?src=[REF(src)];ac_set_new_message=1'>Message Body</A>:</B> [src.admincaster_feed_message.body] <BR>
+				<BR><A href='?src=[REF(src)];ac_submit_new_message=1'>Submit</A><BR><BR><A href='?src=[REF(src)];ac_setScreen=[0]'>Cancel</A><BR>
 			"}
 		if(4)
 			dat+={"
 					Feed story successfully submitted to [src.admincaster_feed_channel.channel_name].<BR><BR>
-					<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Return</A><BR>
+					<BR><A href='?src=[REF(src)];ac_setScreen=[0]'>Return</A><BR>
 				"}
 		if(5)
 			dat+={"
 				Feed Channel [src.admincaster_feed_channel.channel_name] created successfully.<BR><BR>
-				<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Return</A><BR>
+				<BR><A href='?src=[REF(src)];ac_setScreen=[0]'>Return</A><BR>
 			"}
 		if(6)
 			dat+="<B><FONT COLOR='maroon'>ERROR: Could not submit Feed story to Network.</B></FONT><HR><BR>"
@@ -494,7 +494,7 @@ var/global/floorIsLava = 0
 				dat+="<FONT COLOR='maroon'>�Invalid receiving channel name.</FONT><BR>"
 			if(src.admincaster_feed_message.body == "" || src.admincaster_feed_message.body == "\[REDACTED\]")
 				dat+="<FONT COLOR='maroon'>�Invalid message body.</FONT><BR>"
-			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[3]'>Return</A><BR>"
+			dat+="<BR><A href='?src=[REF(src)];ac_setScreen=[3]'>Return</A><BR>"
 		if(7)
 			dat+="<B><FONT COLOR='maroon'>ERROR: Could not submit Feed Channel to Network.</B></FONT><HR><BR>"
 			if(src.admincaster_feed_channel.channel_name =="" || src.admincaster_feed_channel.channel_name == "\[REDACTED\]")
@@ -506,7 +506,7 @@ var/global/floorIsLava = 0
 					break
 			if(check)
 				dat+="<FONT COLOR='maroon'>�Channel name already in use.</FONT><BR>"
-			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[2]'>Return</A><BR>"
+			dat+="<BR><A href='?src=[REF(src)];ac_setScreen=[2]'>Return</A><BR>"
 		if(9)
 			dat+="<B>[src.admincaster_feed_channel.channel_name]: </B><FONT SIZE=1>\[created by: <FONT COLOR='maroon'>[src.admincaster_feed_channel.author]</FONT>\]</FONT><HR>"
 			if(src.admincaster_feed_channel.censored)
@@ -527,8 +527,8 @@ var/global/floorIsLava = 0
 							dat+="<img src='tmp_photo[i].png' width = '180'><BR><BR>"
 						dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
 			dat+={"
-				<BR><HR><A href='?src=\ref[src];ac_refresh=1'>Refresh</A>
-				<BR><A href='?src=\ref[src];ac_setScreen=[1]'>Back</A>
+				<BR><HR><A href='?src=[REF(src)];ac_refresh=1'>Refresh</A>
+				<BR><A href='?src=[REF(src)];ac_setScreen=[1]'>Back</A>
 			"}
 		if(10)
 			dat+={"
@@ -541,8 +541,8 @@ var/global/floorIsLava = 0
 				dat+="<I>No feed channels found active...</I><BR>"
 			else
 				for(var/datum/feed_channel/CHANNEL in news_network.network_channels)
-					dat+="<A href='?src=\ref[src];ac_pick_censor_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
-			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Cancel</A>"
+					dat+="<A href='?src=[REF(src)];ac_pick_censor_channel=[REF(CHANNEL)]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
+			dat+="<BR><A href='?src=[REF(src)];ac_setScreen=[0]'>Cancel</A>"
 		if(11)
 			dat+={"
 				<B>Nanotrasen D-Notice Handler</B><HR>
@@ -554,13 +554,13 @@ var/global/floorIsLava = 0
 				dat+="<I>No feed channels found active...</I><BR>"
 			else
 				for(var/datum/feed_channel/CHANNEL in news_network.network_channels)
-					dat+="<A href='?src=\ref[src];ac_pick_d_notice=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
+					dat+="<A href='?src=[REF(src)];ac_pick_d_notice=[REF(CHANNEL)]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
 
-			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Back</A>"
+			dat+="<BR><A href='?src=[REF(src)];ac_setScreen=[0]'>Back</A>"
 		if(12)
 			dat+={"
 				<B>[src.admincaster_feed_channel.channel_name]: </B><FONT SIZE=1>\[ created by: <FONT COLOR='maroon'>[src.admincaster_feed_channel.author]</FONT> \]</FONT><BR>
-				<FONT SIZE=2><A href='?src=\ref[src];ac_censor_channel_author=\ref[src.admincaster_feed_channel]'>[(src.admincaster_feed_channel.author=="\[REDACTED\]") ? ("Undo Author censorship") : ("Censor channel Author")]</A></FONT><HR>
+				<FONT SIZE=2><A href='?src=[REF(src)];ac_censor_channel_author=[REF(src.admincaster_feed_channel)]'>[(src.admincaster_feed_channel.author=="\[REDACTED\]") ? ("Undo Author censorship") : ("Censor channel Author")]</A></FONT><HR>
 			"}
 			if( isemptylist(src.admincaster_feed_channel.messages) )
 				dat+="<I>No feed messages found in channel...</I><BR>"
@@ -568,13 +568,13 @@ var/global/floorIsLava = 0
 				for(var/datum/feed_message/MESSAGE in src.admincaster_feed_channel.messages)
 					dat+={"
 						-[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>
-						<FONT SIZE=2><A href='?src=\ref[src];ac_censor_channel_story_body=\ref[MESSAGE]'>[(MESSAGE.body == "\[REDACTED\]") ? ("Undo story censorship") : ("Censor story")]</A>  -  <A href='?src=\ref[src];ac_censor_channel_story_author=\ref[MESSAGE]'>[(MESSAGE.author == "\[REDACTED\]") ? ("Undo Author Censorship") : ("Censor message Author")]</A></FONT><BR>
+						<FONT SIZE=2><A href='?src=[REF(src)];ac_censor_channel_story_body=[REF(MESSAGE)]'>[(MESSAGE.body == "\[REDACTED\]") ? ("Undo story censorship") : ("Censor story")]</A>  -  <A href='?src=[REF(src)];ac_censor_channel_story_author=[REF(MESSAGE)]'>[(MESSAGE.author == "\[REDACTED\]") ? ("Undo Author Censorship") : ("Censor message Author")]</A></FONT><BR>
 					"}
-			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[10]'>Back</A>"
+			dat+="<BR><A href='?src=[REF(src)];ac_setScreen=[10]'>Back</A>"
 		if(13)
 			dat+={"
 				<B>[src.admincaster_feed_channel.channel_name]: </B><FONT SIZE=1>\[ created by: <FONT COLOR='maroon'>[src.admincaster_feed_channel.author]</FONT> \]</FONT><BR>
-				Channel messages listed below. If you deem them dangerous to the station, you can <A href='?src=\ref[src];ac_toggle_d_notice=\ref[src.admincaster_feed_channel]'>Bestow a D-Notice upon the channel</A>.<HR>
+				Channel messages listed below. If you deem them dangerous to the station, you can <A href='?src=[REF(src)];ac_toggle_d_notice=[REF(src.admincaster_feed_channel)]'>Bestow a D-Notice upon the channel</A>.<HR>
 			"}
 			if(src.admincaster_feed_channel.censored)
 				dat+={"
@@ -588,7 +588,7 @@ var/global/floorIsLava = 0
 					for(var/datum/feed_message/MESSAGE in src.admincaster_feed_channel.messages)
 						dat+="-[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
 
-			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[11]'>Back</A>"
+			dat+="<BR><A href='?src=[REF(src)];ac_setScreen=[11]'>Back</A>"
 		if(14)
 			dat+="<B>Wanted Issue Handler:</B>"
 			var/wanted_already = 0
@@ -600,21 +600,21 @@ var/global/floorIsLava = 0
 				dat+="<FONT SIZE=2><BR><I>A wanted issue is already in Feed Circulation. You can edit or cancel it below.</FONT></I>"
 			dat+={"
 				<HR>
-				<A href='?src=\ref[src];ac_set_wanted_name=1'>Criminal Name</A>: [src.admincaster_feed_message.author] <BR>
-				<A href='?src=\ref[src];ac_set_wanted_desc=1'>Description</A>: [src.admincaster_feed_message.body] <BR>
+				<A href='?src=[REF(src)];ac_set_wanted_name=1'>Criminal Name</A>: [src.admincaster_feed_message.author] <BR>
+				<A href='?src=[REF(src)];ac_set_wanted_desc=1'>Description</A>: [src.admincaster_feed_message.body] <BR>
 			"}
 			if(wanted_already)
 				dat+="<B>Wanted Issue created by:</B><FONT COLOR='green'> [news_network.wanted_issue.backup_author]</FONT><BR>"
 			else
 				dat+="<B>Wanted Issue will be created under prosecutor:</B><FONT COLOR='green'> [src.admincaster_signature]</FONT><BR>"
-			dat+="<BR><A href='?src=\ref[src];ac_submit_wanted=[end_param]'>[(wanted_already) ? ("Edit Issue") : ("Submit")]</A>"
+			dat+="<BR><A href='?src=[REF(src)];ac_submit_wanted=[end_param]'>[(wanted_already) ? ("Edit Issue") : ("Submit")]</A>"
 			if(wanted_already)
-				dat+="<BR><A href='?src=\ref[src];ac_cancel_wanted=1'>Take down Issue</A>"
-			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Cancel</A>"
+				dat+="<BR><A href='?src=[REF(src)];ac_cancel_wanted=1'>Take down Issue</A>"
+			dat+="<BR><A href='?src=[REF(src)];ac_setScreen=[0]'>Cancel</A>"
 		if(15)
 			dat+={"
 				<FONT COLOR='green'>Wanted issue for [src.admincaster_feed_message.author] is now in Network Circulation.</FONT><BR><BR>
-				<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Return</A><BR>
+				<BR><A href='?src=[REF(src)];ac_setScreen=[0]'>Return</A><BR>
 			"}
 		if(16)
 			dat+="<B><FONT COLOR='maroon'>ERROR: Wanted Issue rejected by Network.</B></FONT><HR><BR>"
@@ -622,11 +622,11 @@ var/global/floorIsLava = 0
 				dat+="<FONT COLOR='maroon'>�Invalid name for person wanted.</FONT><BR>"
 			if(src.admincaster_feed_message.body == "" || src.admincaster_feed_message.body == "\[REDACTED\]")
 				dat+="<FONT COLOR='maroon'>�Invalid description.</FONT><BR>"
-			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Return</A><BR>"
+			dat+="<BR><A href='?src=[REF(src)];ac_setScreen=[0]'>Return</A><BR>"
 		if(17)
 			dat+={"
 				<B>Wanted Issue successfully deleted from Circulation</B><BR>
-				<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Return</A><BR>
+				<BR><A href='?src=[REF(src)];ac_setScreen=[0]'>Return</A><BR>
 			"}
 		if(18)
 			dat+={"
@@ -640,11 +640,11 @@ var/global/floorIsLava = 0
 				dat+="<BR><img src='tmp_photow.png' width = '180'>"
 			else
 				dat+="None"
-			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Back</A><BR>"
+			dat+="<BR><A href='?src=[REF(src)];ac_setScreen=[0]'>Back</A><BR>"
 		if(19)
 			dat+={"
 				<FONT COLOR='green'>Wanted issue for [src.admincaster_feed_message.author] successfully edited.</FONT><BR><BR>
-				<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Return</A><BR>
+				<BR><A href='?src=[REF(src)];ac_setScreen=[0]'>Return</A><BR>
 			"}
 		else
 			dat+="Something bad happened. More accurately, this broke. Please make a bug report."
@@ -665,7 +665,7 @@ var/global/floorIsLava = 0
 		var/r = t
 		if( findtext(r,"##") )
 			r = copytext( r, 1, findtext(r,"##") )//removes the description
-		dat += text("<tr><td>[t] (<A href='?src=\ref[src];removejobban=[r]'>unban</A>)</td></tr>")
+		dat += text("<tr><td>[t] (<A href='?src=[REF(src)];removejobban=[r]'>unban</A>)</td></tr>")
 	dat += "</table>"
 	usr << browse(dat, "window=ban;size=400x400")
 
@@ -675,37 +675,37 @@ var/global/floorIsLava = 0
 
 	var/dat = {"
 		<center><B>Game Panel</B></center><hr>\n
-		<A href='?src=\ref[src];c_mode=1'>Change Game Mode</A><br>
+		<A href='?src=[REF(src)];c_mode=1'>Change Game Mode</A><br>
 		"}
 	if(master_mode == "secret")
-		dat += "<A href='?src=\ref[src];f_secret=1'>(Force Secret Mode)</A><br>"
+		dat += "<A href='?src=[REF(src)];f_secret=1'>(Force Secret Mode)</A><br>"
 
 	dat += {"
 		<hr />
 		<ul>
 			<li>
-				<a href="?src=\ref[src];set_base_laws=ai"><b>Default Cyborg/AI Laws:</b>[base_law_type]</a>
+				<a href="?src=[REF(src)];set_base_laws=ai"><b>Default Cyborg/AI Laws:</b>[base_law_type]</a>
 			</li>
 			<li>
-				<a href="?src=\ref[src];set_base_laws=mommi"><b>Default MoMMI Laws:</b>[mommi_base_law_type]</a>
+				<a href="?src=[REF(src)];set_base_laws=mommi"><b>Default MoMMI Laws:</b>[mommi_base_law_type]</a>
 			</li>
 		</ul>
 		<hr />
-		<A href='?src=\ref[src];create_object=1'>Create Object</A><br>
-		<A href='?src=\ref[src];quick_create_object=1'>Quick Create Object</A><br>
-		<A href='?src=\ref[src];create_turf=1'>Create Turf</A><br>
-		<A href='?src=\ref[src];create_mob=1'>Create Mob</A><br>
+		<A href='?src=[REF(src)];create_object=1'>Create Object</A><br>
+		<A href='?src=[REF(src)];quick_create_object=1'>Quick Create Object</A><br>
+		<A href='?src=[REF(src)];create_turf=1'>Create Turf</A><br>
+		<A href='?src=[REF(src)];create_mob=1'>Create Mob</A><br>
 		<hr />
-		<A href='?src=\ref[src];vsc=airflow'>Edit ZAS Settings</A><br>
-		<A href='?src=\ref[src];vsc=default'>Choose a default ZAS setting</A><br>
+		<A href='?src=[REF(src)];vsc=airflow'>Edit ZAS Settings</A><br>
+		<A href='?src=[REF(src)];vsc=default'>Choose a default ZAS setting</A><br>
 		"}
 
 	if(wages_enabled)
-		dat += "<A href='?src=\ref[src];wages_enabled=disable'>Disable wages</A><br>"
+		dat += "<A href='?src=[REF(src)];wages_enabled=disable'>Disable wages</A><br>"
 	else
-		dat += "<A href='?src=\ref[src];wages_enabled=enable'>Enable wages</A><br>"
-	dat += "<A href ='?src=\ref[src];econ_panel=open'>Manage accounts database</A><br>"
-	dat += "<A href ='?src=\ref[src];religions=1&display=1'>Manage religions</A><br>"
+		dat += "<A href='?src=[REF(src)];wages_enabled=enable'>Enable wages</A><br>"
+	dat += "<A href ='?src=[REF(src)];econ_panel=open'>Manage accounts database</A><br>"
+	dat += "<A href ='?src=[REF(src)];religions=1&display=1'>Manage religions</A><br>"
 
 	usr << browse(dat, "window=admin2;size=280x370")
 	return
@@ -723,11 +723,11 @@ var/global/floorIsLava = 0
 			"}
 	if(check_rights(R_ADMINBUS,0))
 		dat += {"
-			<A href='?src=\ref[src];secretsfun=spawnadminbus'>Spawn an Adminbus</A><BR>
+			<A href='?src=[REF(src)];secretsfun=spawnadminbus'>Spawn an Adminbus</A><BR>
 			"}
 	if(check_rights(R_FUN,0))
 		dat += {"
-			<A href='?src=\ref[src];secretsfun=spawnselfdummy'>Spawn yourself as a Test Dummy</A><BR>
+			<A href='?src=[REF(src)];secretsfun=spawnselfdummy'>Spawn yourself as a Test Dummy</A><BR>
 			<BR>
 			<BR>
 			"}
@@ -736,18 +736,18 @@ var/global/floorIsLava = 0
 		dat += {"
 			<B>Admin Secrets</B><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsadmin=manifest'>Show Crew Manifest</A><BR>
-			<A href='?src=\ref[src];secretsadmin=showgm'>Show Game Mode</A><BR>
-			<A href='?src=\ref[src];secretsadmin=check_antagonist'>Show current traitors and objectives</A><BR>
+			<A href='?src=[REF(src)];secretsadmin=manifest'>Show Crew Manifest</A><BR>
+			<A href='?src=[REF(src)];secretsadmin=showgm'>Show Game Mode</A><BR>
+			<A href='?src=[REF(src)];secretsadmin=check_antagonist'>Show current traitors and objectives</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsadmin=DNA'>List DNA (Blood)</A><BR>
-			<A href='?src=\ref[src];secretsadmin=fingerprints'>List Fingerprints</A><BR>
+			<A href='?src=[REF(src)];secretsadmin=DNA'>List DNA (Blood)</A><BR>
+			<A href='?src=[REF(src)];secretsadmin=fingerprints'>List Fingerprints</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsadmin=clear_bombs'>Remove all bombs currently in existence</A><BR>
-			<A href='?src=\ref[src];secretsadmin=list_bombers'>Bombing List</A><BR>
+			<A href='?src=[REF(src)];secretsadmin=clear_bombs'>Remove all bombs currently in existence</A><BR>
+			<A href='?src=[REF(src)];secretsadmin=list_bombers'>Bombing List</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsadmin=showailaws'>Show AI Laws</A><BR>
-			<A href='?src=\ref[src];secretsadmin=list_lawchanges'>Show last [length(lawchanges)] law changes</A><BR>
+			<A href='?src=[REF(src)];secretsadmin=showailaws'>Show AI Laws</A><BR>
+			<A href='?src=[REF(src)];secretsadmin=list_lawchanges'>Show last [length(lawchanges)] law changes</A><BR>
 			<BR>
 			<BR>
 			"}
@@ -757,10 +757,10 @@ var/global/floorIsLava = 0
 		dat += {"
 			<B>Strike Teams</B><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=striketeam-deathsquad'>Send in a Death Squad!</A><BR>
-			<A href='?src=\ref[src];secretsfun=striketeam-ert'>Send in an Emergency Response Team!</A><BR>
-			<A href='?src=\ref[src];secretsfun=striketeam-syndi'>Send in a Syndicate Elite Strike Team!</A><BR>
-			<A href='?src=\ref[src];secretsfun=striketeam-custom'>Send in a Custom Strike Team! (Work in Progress!)</A><BR>
+			<A href='?src=[REF(src)];secretsfun=striketeam-deathsquad'>Send in a Death Squad!</A><BR>
+			<A href='?src=[REF(src)];secretsfun=striketeam-ert'>Send in an Emergency Response Team!</A><BR>
+			<A href='?src=[REF(src)];secretsfun=striketeam-syndi'>Send in a Syndicate Elite Strike Team!</A><BR>
+			<A href='?src=[REF(src)];secretsfun=striketeam-custom'>Send in a Custom Strike Team! (Work in Progress!)</A><BR>
 			<BR>
 			<BR>
 			"}
@@ -770,89 +770,89 @@ var/global/floorIsLava = 0
 		dat += {"
 			<B>'Random' Events</B><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=wave'>Spawn a wave of meteors (aka lagocolyptic shower)</A><BR>
-			<A href='?src=\ref[src];secretsfun=silent_meteors'>Spawn a wave of meteors with no warning</A><BR>
-			<A href='?src=\ref[src];secretsfun=gravity'>Toggle station artificial gravity</A><BR>
-			<A href='?src=\ref[src];secretsfun=gravanomalies'>Spawn a gravitational anomaly (aka lagitational anomolag)</A><BR>
-			<A href='?src=\ref[src];secretsfun=timeanomalies'>Spawn wormholes</A><BR>
-			<A href='?src=\ref[src];secretsfun=immovable'>Spawn an Immovable Rod</A><BR>
-			<A href='?src=\ref[src];secretsfun=immovablebig'>Spawn an Immovable Pillar</A><BR>
-			<A href='?src=\ref[src];secretsfun=immovablehyper'>Spawn an Immovable Monolith (highly destructive!)</A><BR>
-			<A href='?src=\ref[src];secretsfun=meaty_gores'>Trigger an Organic Debris Field</A><BR>
-			<A href='?src=\ref[src];secretsfun=fireworks'>Send some fireworks at the station</A><BR>
+			<A href='?src=[REF(src)];secretsfun=wave'>Spawn a wave of meteors (aka lagocolyptic shower)</A><BR>
+			<A href='?src=[REF(src)];secretsfun=silent_meteors'>Spawn a wave of meteors with no warning</A><BR>
+			<A href='?src=[REF(src)];secretsfun=gravity'>Toggle station artificial gravity</A><BR>
+			<A href='?src=[REF(src)];secretsfun=gravanomalies'>Spawn a gravitational anomaly (aka lagitational anomolag)</A><BR>
+			<A href='?src=[REF(src)];secretsfun=timeanomalies'>Spawn wormholes</A><BR>
+			<A href='?src=[REF(src)];secretsfun=immovable'>Spawn an Immovable Rod</A><BR>
+			<A href='?src=[REF(src)];secretsfun=immovablebig'>Spawn an Immovable Pillar</A><BR>
+			<A href='?src=[REF(src)];secretsfun=immovablehyper'>Spawn an Immovable Monolith (highly destructive!)</A><BR>
+			<A href='?src=[REF(src)];secretsfun=meaty_gores'>Trigger an Organic Debris Field</A><BR>
+			<A href='?src=[REF(src)];secretsfun=fireworks'>Send some fireworks at the station</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=blobwave'>Spawn a blob cluster</A><BR>
-			<A href='?src=\ref[src];secretsfun=blobstorm'>Spawn a blob conglomerate</A><BR>
-			<A href='?src=\ref[src];secretsfun=aliens'>Trigger an Alien infestation</A><BR>
-			<A href='?src=\ref[src];secretsfun=alien_silent'>Spawn an Alien silently</A><BR>
-			<A href='?src=\ref[src];secretsfun=spiders'>Trigger a Spider infestation</A><BR>
-			<A href='?src=\ref[src];secretsfun=vermin_infestation'>Spawn a vermin infestation</A><BR>
-			<A href='?src=\ref[src];secretsfun=hostile_infestation'>Spawn a hostile creature infestation</A><BR>
-			<A href='?src=\ref[src];secretsfun=carp'>Trigger a Carp migration</A><BR>
-			<A href='?src=\ref[src];secretsfun=mobswarm'>Trigger mobs of your choice appearing out of thin air</A><BR>
+			<A href='?src=[REF(src)];secretsfun=blobwave'>Spawn a blob cluster</A><BR>
+			<A href='?src=[REF(src)];secretsfun=blobstorm'>Spawn a blob conglomerate</A><BR>
+			<A href='?src=[REF(src)];secretsfun=aliens'>Trigger an Alien infestation</A><BR>
+			<A href='?src=[REF(src)];secretsfun=alien_silent'>Spawn an Alien silently</A><BR>
+			<A href='?src=[REF(src)];secretsfun=spiders'>Trigger a Spider infestation</A><BR>
+			<A href='?src=[REF(src)];secretsfun=vermin_infestation'>Spawn a vermin infestation</A><BR>
+			<A href='?src=[REF(src)];secretsfun=hostile_infestation'>Spawn a hostile creature infestation</A><BR>
+			<A href='?src=[REF(src)];secretsfun=carp'>Trigger a Carp migration</A><BR>
+			<A href='?src=[REF(src)];secretsfun=mobswarm'>Trigger mobs of your choice appearing out of thin air</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=spacevines'>Spawn Space-Vines</A><BR>
-			<A href='?src=\ref[src];secretsfun=radiation'>Irradiate the station</A><BR>
-			<A href='?src=\ref[src];secretsfun=virus'>Trigger a Virus Outbreak</A><BR>
-			<A href='?src=\ref[src];secretsfun=mass_hallucination'>Cause the crew to hallucinate</A><BR>
+			<A href='?src=[REF(src)];secretsfun=spacevines'>Spawn Space-Vines</A><BR>
+			<A href='?src=[REF(src)];secretsfun=radiation'>Irradiate the station</A><BR>
+			<A href='?src=[REF(src)];secretsfun=virus'>Trigger a Virus Outbreak</A><BR>
+			<A href='?src=[REF(src)];secretsfun=mass_hallucination'>Cause the crew to hallucinate</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=lightsout'>Toggle a "lights out" event</A><BR>
-			<A href='?src=\ref[src];secretsfun=prison_break'>Trigger a Prison Break</A><BR>
-			<A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
-			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
-			<A href='?src=\ref[src];secretsfun=pda_spam'>Trigger a wave of PDA spams</A><BR>
-			<a href='?src=\ref[src];secretsfun=pick_event'>Pick a random event from all possible random events (WARNING, NOT ALL ARE GUARANTEED TO WORK).</A><BR>
+			<A href='?src=[REF(src)];secretsfun=lightsout'>Toggle a "lights out" event</A><BR>
+			<A href='?src=[REF(src)];secretsfun=prison_break'>Trigger a Prison Break</A><BR>
+			<A href='?src=[REF(src)];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
+			<A href='?src=[REF(src)];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
+			<A href='?src=[REF(src)];secretsfun=pda_spam'>Trigger a wave of PDA spams</A><BR>
+			<a href='?src=[REF(src)];secretsfun=pick_event'>Pick a random event from all possible random events (WARNING, NOT ALL ARE GUARANTEED TO WORK).</A><BR>
 			<BR>
 			<B>Fun Secrets</B><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=hardcore_mode'>[ticker&&ticker.hardcore_mode ? "Disable" : "Enable"] hardcore mode (makes starvation kill!)</A><BR>
-			<A href='?src=\ref[src];secretsfun=tripleAI'>Triple AI mode (needs to be used in the lobby)</A><BR>
-			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode (removes access on doors except for Command and Security)</A><BR>
+			<A href='?src=[REF(src)];secretsfun=hardcore_mode'>[ticker&&ticker.hardcore_mode ? "Disable" : "Enable"] hardcore mode (makes starvation kill!)</A><BR>
+			<A href='?src=[REF(src)];secretsfun=tripleAI'>Triple AI mode (needs to be used in the lobby)</A><BR>
+			<A href='?src=[REF(src)];secretsfun=eagles'>Egalitarian Station Mode (removes access on doors except for Command and Security)</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=power'>Make all areas powered</A><BR>
-			<A href='?src=\ref[src];secretsfun=unpower'>Make all areas unpowered</A><BR>
-			<A href='?src=\ref[src];secretsfun=quickpower'>Power all SMES</A><BR>
-			<A href='?src=\ref[src];secretsfun=breaklink'>Break the station's link with Central Command</A><BR>
-			<A href='?src=\ref[src];secretsfun=makelink'>Fix the station's link with Central Command</A><BR>
-			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
-			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
-			<A href='?src=\ref[src];secretsfun=create_artifact'>Create custom artifact</A><BR>
+			<A href='?src=[REF(src)];secretsfun=power'>Make all areas powered</A><BR>
+			<A href='?src=[REF(src)];secretsfun=unpower'>Make all areas unpowered</A><BR>
+			<A href='?src=[REF(src)];secretsfun=quickpower'>Power all SMES</A><BR>
+			<A href='?src=[REF(src)];secretsfun=breaklink'>Break the station's link with Central Command</A><BR>
+			<A href='?src=[REF(src)];secretsfun=makelink'>Fix the station's link with Central Command</A><BR>
+			<A href='?src=[REF(src)];secretsfun=blackout'>Break all lights</A><BR>
+			<A href='?src=[REF(src)];secretsfun=whiteout'>Fix all lights</A><BR>
+			<A href='?src=[REF(src)];secretsfun=create_artifact'>Create custom artifact</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
+			<A href='?src=[REF(src)];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=fakealerts'>Trigger a fake alert</A><BR>
-			<A href='?src=\ref[src];secretsfun=fakebooms'>Adds in some Micheal Bay to the shift without major destruction</A><BR>
+			<A href='?src=[REF(src)];secretsfun=fakealerts'>Trigger a fake alert</A><BR>
+			<A href='?src=[REF(src)];secretsfun=fakebooms'>Adds in some Micheal Bay to the shift without major destruction</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
+			<A href='?src=[REF(src)];secretsfun=placeturret'>Create a turret</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=traitor_all'>Make everyone traitors</A><BR>
-			<A href='?src=\ref[src];secretsfun=onlyone'>Highlander/Wizard Wars Mode (There can be only one!)</A><BR>
-			<A href='?src=\ref[src];secretsfun=experimentalguns'>Distribute experimental guns to the crew</A><BR>
-			<A href='?src=\ref[src];secretsfun=flicklights'>Ghost Mode</A><BR>
-			<A href='?src=\ref[src];secretsfun=monkey'>Turn all humans into monkeys</A><BR>
+			<A href='?src=[REF(src)];secretsfun=traitor_all'>Make everyone traitors</A><BR>
+			<A href='?src=[REF(src)];secretsfun=onlyone'>Highlander/Wizard Wars Mode (There can be only one!)</A><BR>
+			<A href='?src=[REF(src)];secretsfun=experimentalguns'>Distribute experimental guns to the crew</A><BR>
+			<A href='?src=[REF(src)];secretsfun=flicklights'>Ghost Mode</A><BR>
+			<A href='?src=[REF(src)];secretsfun=monkey'>Turn all humans into monkeys</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=sec_all_clothes'>Remove ALL clothing</A><BR>
-			<A href='?src=\ref[src];secretsfun=retardify'>Make all players retarded</A><BR>
-			<A href='?src=\ref[src];secretsfun=fakeguns'>Make all items look like guns (traitor revolvers)</A><BR>
-			<A href='?src=\ref[src];secretsfun=schoolgirl'>Japanese Animes Mode</A><BR>
+			<A href='?src=[REF(src)];secretsfun=sec_all_clothes'>Remove ALL clothing</A><BR>
+			<A href='?src=[REF(src)];secretsfun=retardify'>Make all players retarded</A><BR>
+			<A href='?src=[REF(src)];secretsfun=fakeguns'>Make all items look like guns (traitor revolvers)</A><BR>
+			<A href='?src=[REF(src)];secretsfun=schoolgirl'>Japanese Animes Mode</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=thebees'>Unleash THE BEES onto the crew</A><BR>
-			<A href='?src=\ref[src];secretsfun=floorlava'>The floor is lava! (WARNING: extremely lame and DANGEROUS!)</A><BR>
+			<A href='?src=[REF(src)];secretsfun=thebees'>Unleash THE BEES onto the crew</A><BR>
+			<A href='?src=[REF(src)];secretsfun=floorlava'>The floor is lava! (WARNING: extremely lame and DANGEROUS!)</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=massbomber'>Turn all players into Bomberman</A><BR>
-			<A href='?src=\ref[src];secretsfun=bomberhurt'>Make Bomberman Bombs actually hurt players</A><BR>
-			<A href='?src=\ref[src];secretsfun=bomberdestroy'>Make Bomberman Bombs actually destroy structures</A><BR>
-			<A href='?src=\ref[src];secretsfun=bombernohurt'>Make Bomberman Bombs harmless to players (default)</A><BR>
-			<A href='?src=\ref[src];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environment (default)</A><BR>
+			<A href='?src=[REF(src)];secretsfun=massbomber'>Turn all players into Bomberman</A><BR>
+			<A href='?src=[REF(src)];secretsfun=bomberhurt'>Make Bomberman Bombs actually hurt players</A><BR>
+			<A href='?src=[REF(src)];secretsfun=bomberdestroy'>Make Bomberman Bombs actually destroy structures</A><BR>
+			<A href='?src=[REF(src)];secretsfun=bombernohurt'>Make Bomberman Bombs harmless to players (default)</A><BR>
+			<A href='?src=[REF(src)];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environment (default)</A><BR>
 			<BR>
 			<B>Final Solutions</B><BR>
 			<I>(Warning, these will end the round!)</I><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=hellonearth'>Summon Nar-Sie</A><BR>
-			<A href='?src=\ref[src];secretsfun=supermattercascade'>Start a Supermatter Cascade</A><BR>
-			<A href='?src=\ref[src];secretsfun=meteorstorm'>Trigger an undending Meteor Storm</A><BR>
-			<A href='?src=\ref[src];secretsfun=halloween'>Awaken the damned for some spooky shenanigans</A><BR>
-			<A href='?src=\ref[src];secretsfun=christmas_vic'>Make the station christmasy</A><BR>
+			<A href='?src=[REF(src)];secretsfun=hellonearth'>Summon Nar-Sie</A><BR>
+			<A href='?src=[REF(src)];secretsfun=supermattercascade'>Start a Supermatter Cascade</A><BR>
+			<A href='?src=[REF(src)];secretsfun=meteorstorm'>Trigger an undending Meteor Storm</A><BR>
+			<A href='?src=[REF(src)];secretsfun=halloween'>Awaken the damned for some spooky shenanigans</A><BR>
+			<A href='?src=[REF(src)];secretsfun=christmas_vic'>Make the station christmasy</A><BR>
 			"}
 
 	if(check_rights(R_SERVER,0))
@@ -861,8 +861,8 @@ var/global/floorIsLava = 0
 			<BR>
 			<B>Server</B><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=togglebombcap'>Toggle bomb cap</A><BR>
-			<A href='?src=\ref[src];secretsfun=togglebombmethod'>Toggle explosion method</A><BR>
+			<A href='?src=[REF(src)];secretsfun=togglebombcap'>Toggle bomb cap</A><BR>
+			<A href='?src=[REF(src)];secretsfun=togglebombmethod'>Toggle explosion method</A><BR>
 			"}
 
 	dat += "<BR>"
@@ -871,17 +871,17 @@ var/global/floorIsLava = 0
 		dat += {"
 			<B>Security Level Elevated</B><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=maint_access_engiebrig'>Change all maintenance doors to engie/brig access only</A><BR>
-			<A href='?src=\ref[src];secretsfun=maint_access_brig'>Change all maintenance doors to brig access only</A><BR>
-			<A href='?src=\ref[src];secretsfun=infinite_sec'>Remove cap on security officers</A><BR>
-			<a href='?src=\ref[src];secretsfun=virus_custom'>Custom Virus Outbreak</a><BR>
+			<A href='?src=[REF(src)];secretsfun=maint_access_engiebrig'>Change all maintenance doors to engie/brig access only</A><BR>
+			<A href='?src=[REF(src)];secretsfun=maint_access_brig'>Change all maintenance doors to brig access only</A><BR>
+			<A href='?src=[REF(src)];secretsfun=infinite_sec'>Remove cap on security officers</A><BR>
+			<a href='?src=[REF(src)];secretsfun=virus_custom'>Custom Virus Outbreak</a><BR>
 			<BR>
 			"}
 	dat +=	{"
 		<B>Coder Secrets</B><BR>
 		<BR>
-		<A href='?src=\ref[src];secretsadmin=list_job_debug'>Show Job Debug</A><BR>
-		<A href='?src=\ref[src];secretsadmin=show_admin_log'>Admin Log</A><BR>
+		<A href='?src=[REF(src)];secretsadmin=list_job_debug'>Show Job Debug</A><BR>
+		<A href='?src=[REF(src)];secretsadmin=show_admin_log'>Admin Log</A><BR>
 		<BR>
 		"}
 
@@ -894,36 +894,36 @@ var/global/floorIsLava = 0
 	var/dat = "<b>WARNING:</b> server may explode!<hr><br>"
 
 	if(!istype(selected_shuttle))
-		dat += "<a href='?src=\ref[src];shuttle_select=1'>Select a shuttle</a><hr>"
+		dat += "<a href='?src=[REF(src)];shuttle_select=1'>Select a shuttle</a><hr>"
 	else
 		dat += {"Selected shuttle: <b>[selected_shuttle.name]</b> (<i>[selected_shuttle.type]</i>)<br>
-		<a href='?_src_=vars;Vars=\ref[selected_shuttle]'>view variables</A> | <a href='?src=\ref[src];shuttle_teleport_to=1'>teleport to</a> | <a href='?src=\ref[src];shuttle_select=1'>select another shuttle</a><br>
+		<a href='?_src_=vars;Vars=[REF(selected_shuttle)]'>view variables</A> | <a href='?src=[REF(src)];shuttle_teleport_to=1'>teleport to</a> | <a href='?src=[REF(src)];shuttle_select=1'>select another shuttle</a><br>
 		cooldown: [selected_shuttle.cooldown] | pre-flight delay: [selected_shuttle.pre_flight_delay] | transit delay: [selected_shuttle.transit_delay]<br>
 		rotation [selected_shuttle.can_rotate ? "<b>ENABLED</b>" : "<b>DISABLED</b>"] | transit [selected_shuttle.use_transit ? "ENABLED" : "DISABLED"]<hr>
 
-		<a href='?src=\ref[src];shuttle_create_destination=1'>Create a destination docking port</a><br>
-		<a href='?src=\ref[src];shuttle_modify_destination=1'>Add a destination docking port</a><br>
-		<a href='?src=\ref[src];shuttle_set_transit=1'>Modify transit area</a><br>
-		<a href='?src=\ref[src];shuttle_generate_transit=1'>Generate new transit area</a><br>
-		<a href='?src=\ref[src];shuttle_get_console=1'>Get control console</a><br>
-		<a href='?src=\ref[src];shuttle_edit=1'>Modify parameters[selected_shuttle.is_special() ? " and pre-defined areas" : ""]</a>
+		<a href='?src=[REF(src)];shuttle_create_destination=1'>Create a destination docking port</a><br>
+		<a href='?src=[REF(src)];shuttle_modify_destination=1'>Add a destination docking port</a><br>
+		<a href='?src=[REF(src)];shuttle_set_transit=1'>Modify transit area</a><br>
+		<a href='?src=[REF(src)];shuttle_generate_transit=1'>Generate new transit area</a><br>
+		<a href='?src=[REF(src)];shuttle_get_console=1'>Get control console</a><br>
+		<a href='?src=[REF(src)];shuttle_edit=1'>Modify parameters[selected_shuttle.is_special() ? " and pre-defined areas" : ""]</a>
 		<hr>
-		<a href='?src=\ref[src];shuttle_move_to=1'>Send</a><br>
-		<a href='?src=\ref[src];shuttle_forcemove=1'>Teleport</a><br>
-		<a href='?src=\ref[src];shuttle_supercharge=1'>Make movement instant</a><br>
-		<a href='?src=\ref[src];shuttle_show_overlay=1'>Draw outline</a>
+		<a href='?src=[REF(src)];shuttle_move_to=1'>Send</a><br>
+		<a href='?src=[REF(src)];shuttle_forcemove=1'>Teleport</a><br>
+		<a href='?src=[REF(src)];shuttle_supercharge=1'>Make movement instant</a><br>
+		<a href='?src=[REF(src)];shuttle_show_overlay=1'>Draw outline</a>
 		<hr>
-		<a href='?src=\ref[src];shuttle_lockdown=1'>[selected_shuttle.lockdown ? "Lift lockdown" : "Lock down"]</a><br>
-		<a href='?src=\ref[src];shuttle_reset=1'>Reset</a><br>
-		<a href='?src=\ref[src];shuttle_delete=1'>Delete</a>
+		<a href='?src=[REF(src)];shuttle_lockdown=1'>[selected_shuttle.lockdown ? "Lift lockdown" : "Lock down"]</a><br>
+		<a href='?src=[REF(src)];shuttle_reset=1'>Reset</a><br>
+		<a href='?src=[REF(src)];shuttle_delete=1'>Delete</a>
 		<hr>
 		"}
 
 	//The following commands don't need a selected shuttle
 	dat += {"
-	<a href='?src=\ref[src];shuttle_shuttlify=1'>Turn current area into a shuttle</a><br>
-	<a href='?src=\ref[src];shuttle_add_docking_port=1'>Create a shuttle docking port</a><br>
-	<a href='?src=\ref[src];shuttle_mass_lockdown=1'>Lock down all shuttles</a><br>
+	<a href='?src=[REF(src)];shuttle_shuttlify=1'>Turn current area into a shuttle</a><br>
+	<a href='?src=[REF(src)];shuttle_add_docking_port=1'>Create a shuttle docking port</a><br>
+	<a href='?src=[REF(src)];shuttle_mass_lockdown=1'>Lock down all shuttles</a><br>
 	"}
 	usr << browse(dat, "window=shuttlemagic")
 
@@ -1488,7 +1488,7 @@ proc/formatLocation(location)
 	return answer
 
 proc/formatPlayerPanel(var/mob/U,var/text="PP")
-	return "<A HREF='?_src_=holder;adminplayeropts=\ref[U]'>[text]</A>"
+	return "<A HREF='?_src_=holder;adminplayeropts=[REF(U)]'>[text]</A>"
 
 //Credit to MrStonedOne from TG for this QoL improvement
 //returns 1 to let the dragdrop code know we are trapping this event

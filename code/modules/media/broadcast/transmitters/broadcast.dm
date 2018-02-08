@@ -132,8 +132,8 @@
 	var/screen = {"
 	<h2>Settings</h2>
 	<ul>
-		<li><b>Power:</b> <a href="?src=\ref[src];power=1">[on?"On":"Off"]</a></li>
-		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(media_frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(media_frequency)]">Reset</a>)</li>
+		<li><b>Power:</b> <a href="?src=[REF(src)];power=1">[on?"On":"Off"]</a></li>
+		<li><b>Frequency:</b> <a href="?src=[REF(src)];set_freq=-1">[format_frequency(media_frequency)] GHz</a> (<a href="?src=[REF(src)];set_freq=[initial(media_frequency)]">Reset</a>)</li>
 	</ul>
 	<h2>Media Sources</h2>"}
 	if(!sources.len)
@@ -142,7 +142,7 @@
 		screen += "<ol>"
 		for(var/i=1;i<=sources.len;i++)
 			var/obj/machinery/media/source=sources[i]
-			screen += "<li>\ref[source] [source.name] ([source.id_tag])  <a href='?src=\ref[src];unlink=[i]'>\[X\]</a></li>"
+			screen += "<li>[REF(source)] [source.name] ([source.id_tag])  <a href='?src=[REF(src)];unlink=[i]'>\[X\]</a></li>"
 		screen += "</ol>"
 	return screen
 

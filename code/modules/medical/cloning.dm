@@ -267,11 +267,11 @@
 		ticker.mode.update_all_cult_icons() //So the icon actually appears
 	if(iswizard(H) || isapprentice(H))
 		ticker.mode.update_all_wizard_icons()
-	if(("\ref[H.mind]" in ticker.mode.necromancer) || (H.mind in ticker.mode.risen))
+	if(("[REF(H.mind)]" in ticker.mode.necromancer) || (H.mind in ticker.mode.risen))
 		ticker.mode.update_all_necro_icons()
-	if(("\ref[H.mind]" in ticker.mode.implanter) || (H.mind in ticker.mode.implanted))
+	if(("[REF(H.mind)]" in ticker.mode.implanter) || (H.mind in ticker.mode.implanted))
 		ticker.mode.update_traitor_icons_added(H.mind) //So the icon actually appears
-	if(("\ref[H.mind]" in ticker.mode.thralls) || (H.mind in ticker.mode.enthralled))
+	if(("[REF(H.mind)]" in ticker.mode.thralls) || (H.mind in ticker.mode.enthralled))
 		ticker.mode.update_vampire_icons_added(H.mind)
 	if(H.mind && H.mind.wizard_spells)
 		for(var/spell/spell_to_add in H.mind.wizard_spells)

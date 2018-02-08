@@ -20,7 +20,7 @@
 	return 0
 
 /datum/automation/set_gas_pump_power/GetText()
-	return "Set gas pump <a href=\"?src=\ref[src];set_pump=1\">[fmtString(pump)]</a> power to <a href=\"?src=\ref[src];toggle_state=1\">[state ? "on" : "off"]</a>."
+	return "Set gas pump <a href=\"?src=[REF(src)];set_pump=1\">[fmtString(pump)]</a> power to <a href=\"?src=[REF(src)];toggle_state=1\">[state ? "on" : "off"]</a>."
 
 /datum/automation/set_gas_pump_power/Topic(href, href_list)
 	. = ..()
@@ -64,7 +64,7 @@
 	return 0
 
 /datum/automation/set_gas_pump_pressure/GetText()
-	return "Set gas pump <a href=\"?src=\ref[src];set_pump=1\">[fmtString(pump)]</a> target pressure to <a href=\"?src=\ref[src];set_pressure=1\">[pressure]</a> kPa."
+	return "Set gas pump <a href=\"?src=[REF(src)];set_pump=1\">[fmtString(pump)]</a> target pressure to <a href=\"?src=[REF(src)];set_pressure=1\">[pressure]</a> kPa."
 
 /datum/automation/set_gas_pump_pressure/Topic(href,href_list)
 	. = ..()

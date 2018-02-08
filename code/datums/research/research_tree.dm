@@ -33,8 +33,8 @@
 			continue
 		U.set_context(src)
 		if(!U.unlocked && U.can_buy(src) && U.check_prerequisites(src) && U.check_antirequisites(src))
-			usable_unlocks[U.id]="\ref[U]"
-		avail_unlocks[U.id]="\ref[U]"
+			usable_unlocks[U.id]="[REF(U)]"
+		avail_unlocks[U.id]="[REF(U)]"
 
 /datum/research_tree/proc/start_table()
 	return "<table class=\"prettytable\"><thead><th>Name</th><th>Cost</th><th>Time</th></thead>"
@@ -53,12 +53,12 @@
 		html += U.toTableRow(src,user)
 	html += end_table()
 
-	popup = new /datum/browser/clean(user, "\ref[src]_research", "Research Tree", 300, 300)
+	popup = new /datum/browser/clean(user, "[REF(src)]_research", "Research Tree", 300, 300)
 	popup.set_content(html)
 	popup.open()
 
 /datum/research_tree/proc/close(var/mob/user)
-	user << browse(null,"window=\ref[src]_research")
+	user << browse(null,"window=[REF(src)]_research")
 
 /datum/research_tree/Topic(href, href_list)
 	if("unlock" in href_list)

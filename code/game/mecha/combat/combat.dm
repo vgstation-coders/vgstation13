@@ -239,7 +239,7 @@
 							<div id="wrapper"><div id="target"></div>
 							<form id="form" name="form" action="byond://" method="get">
 							<label for="input">&gt;</label><input name="saminput" type="text" id="input" value="" />
-							<input type=\"hidden\" name=\"src\" value=\"\ref[src]\">
+							<input type=\"hidden\" name=\"src\" value=\"[REF(src)]\">
 							</form>
 							</div>
 							</body>
@@ -274,8 +274,8 @@
 
 /obj/mecha/combat/Topic(href,href_list)
 	..()
-	var/datum/topic_input/filter = new (href,href_list)
-	if(filter.get("close"))
+	var/datum/topic_input/topic_filter = new (href,href_list)
+	if(topic_filter.get("close"))
 		am = null
 		return
 	/*

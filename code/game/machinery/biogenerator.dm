@@ -9,14 +9,14 @@
 	var/result=null
 
 /datum/biogen_recipe/proc/Render(var/context)
-	var/html = "<li><a href='?src=\ref[context];action=create;item=[id];num=1'>[amount_per_unit==1?"":"[amount_per_unit] "][name]</a> <FONT COLOR=blue>([cost])</FONT>"
+	var/html = "<li><a href='?src=[REF(context)];action=create;item=[id];num=1'>[amount_per_unit==1?"":"[amount_per_unit] "][name]</a> <FONT COLOR=blue>([cost])</FONT>"
 	if(other_amounts.len)
 		var/first=1
 		html += " ("
 		for(var/amount in other_amounts)
 			if(!first)
 				html +=" "
-			html +="<A href='?src=\ref[context];action=create;item=[id];num=[amount]'>x[amount*amount_per_unit]</A>"
+			html +="<A href='?src=[REF(context)];action=create;item=[id];num=[amount]'>x[amount*amount_per_unit]</A>"
 			first=0
 		html += ")"
 	html += "</li>"
@@ -422,11 +422,11 @@
 			if("menu")
 				if (beaker)
 
-					dat += {"<A href='?src=\ref[src];action=activate'>Activate Biogenerator!</A><BR>
-						<A href='?src=\ref[src];action=detach'>Detach Container</A><BR>"}
+					dat += {"<A href='?src=[REF(src)];action=activate'>Activate Biogenerator!</A><BR>
+						<A href='?src=[REF(src)];action=detach'>Detach Container</A><BR>"}
 
 					if(has_produce_loaded())
-						dat += "<A href='?src=\ref[src];action=eject'>Eject Produce</A><BR>"
+						dat += "<A href='?src=[REF(src)];action=eject'>Eject Produce</A><BR>"
 					dat += "<BR>"
 
 					for(var/cat in recipe_categories)
@@ -441,15 +441,15 @@
 			if("nopoints")
 
 				dat += {"You do not have biomass to create products.<BR>Please, put growns into reactor and activate it.<BR>
-					<A href='?src=\ref[src];action=menu'>Return to menu</A>"}
+					<A href='?src=[REF(src)];action=menu'>Return to menu</A>"}
 			if("complete")
 
 				dat += {"Operation complete.<BR>
-					<A href='?src=\ref[src];action=menu'>Return to menu</A>"}
+					<A href='?src=[REF(src)];action=menu'>Return to menu</A>"}
 			if("void")
 
 				dat += {"<FONT COLOR=red>Error: No growns inside.</FONT><BR>Please, put growns into reactor.<BR>
-					<A href='?src=\ref[src];action=menu'>Return to menu</A>"}
+					<A href='?src=[REF(src)];action=menu'>Return to menu</A>"}
 	user << browse(dat, "window=biogenerator")
 	onclose(user, "biogenerator")
 	return

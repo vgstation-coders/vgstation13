@@ -26,7 +26,7 @@
 	handlers = null
 
 /event/proc/Add(var/objectRef,var/procName)
-	var/key="\ref[objectRef]:[procName]"
+	var/key="[REF(objectRef)]:[procName]"
 	handlers[key]=list(EVENT_OBJECT_INDEX=objectRef,EVENT_PROC_INDEX=procName)
 	return key
 

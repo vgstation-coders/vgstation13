@@ -56,16 +56,16 @@
 
 					dat += "<h4>General Functions</h4>"
 					dat += "<ul>"
-					dat += "<li><a href='byond://?src=\ref[src];mode=1'>Notekeeper</a></li>"
-					dat += "<li><a href='byond://?src=\ref[src];mode=2'>Messenger</a></li>"
-					dat += "<li><a href='byond://?src=\ref[src];mode=3'>File Browser</a></li>"
+					dat += "<li><a href='byond://?src=[REF(src)];mode=1'>Notekeeper</a></li>"
+					dat += "<li><a href='byond://?src=[REF(src)];mode=2'>Messenger</a></li>"
+					dat += "<li><a href='byond://?src=[REF(src)];mode=3'>File Browser</a></li>"
 					dat += "</ul>"
 
 					dat += "<h4>Utilities</h4>"
 					dat += "<ul>"
-					dat += "<li><a href='byond://?src=\ref[src];mode=4'>Atmospheric Scan</a></li>"
-					dat += "<li>Scanner: [src.master.scan_program ? "<a href='byond://?src=\ref[src];scanner=1'>[src.master.scan_program.name]</a>" : "None loaded"]</li>"
-					dat += "<li><a href='byond://?src=\ref[src];flight=1'>[src.master.fon ? "Disable" : "Enable"] Flashlight</a></li>"
+					dat += "<li><a href='byond://?src=[REF(src)];mode=4'>Atmospheric Scan</a></li>"
+					dat += "<li>Scanner: [src.master.scan_program ? "<a href='byond://?src=[REF(src)];scanner=1'>[src.master.scan_program.name]</a>" : "None loaded"]</li>"
+					dat += "<li><a href='byond://?src=[REF(src)];flight=1'>[src.master.fon ? "Disable" : "Enable"] Flashlight</a></li>"
 
 					dat += "</ul>"
 
@@ -74,19 +74,19 @@
 					dat += "<h4>Notekeeper V2.5</h4>"
 
 					if(!src.note_mode)
-						dat += "<a href='byond://?src=\ref[src];input=note'>Edit</a>"
-						dat += " | <a href='byond://?src=\ref[src];note_func=new'>New File</a>"
-						dat += " | <a href='byond://?src=\ref[src];note_func=save'>Save</a>"
-						dat += " | <a href='byond://?src=\ref[src];note_func=switchmenu'>Load</a><br>"
+						dat += "<a href='byond://?src=[REF(src)];input=note'>Edit</a>"
+						dat += " | <a href='byond://?src=[REF(src)];note_func=new'>New File</a>"
+						dat += " | <a href='byond://?src=[REF(src)];note_func=save'>Save</a>"
+						dat += " | <a href='byond://?src=[REF(src)];note_func=switchmenu'>Load</a><br>"
 
 						dat += src.note
 					else
-						dat += " <a href='byond://?src=\ref[src];note_func=switchmenu'>Back</a>"
+						dat += " <a href='byond://?src=[REF(src)];note_func=switchmenu'>Back</a>"
 						dat += " | \[[src.holding_folder.holder.file_amount - src.holding_folder.holder.file_used]\] Free<br>"
 						dat += "<table cellspacing=5>"
 
 						for(var/datum/computer/file/text/T in src.holding_folder.contents)
-							dat += "<tr><td><a href='byond://?src=\ref[src];target=\ref[T];note_func=load'>[T.name]</a></td>"
+							dat += "<tr><td><a href='byond://?src=[REF(src)];target=[REF(T)];note_func=load'>[T.name]</a></td>"
 							dat += "<td>[T.extension]</td>"
 							dat += "<td>Length: [T.data ? (length(T.data)) : "0"]</td></tr>"
 
@@ -100,12 +100,12 @@
 
 					if (!src.message_mode)
 
-						dat += "<a href='byond://?src=\ref[src];message_func=ringer'>Ringer: [src.message_silent == 1 ? "Off" : "On"]</a> | "
-						dat += "<a href='byond://?src=\ref[src];message_func=on'>Send / Receive: [src.message_on == 1 ? "On" : "Off"]</a> | "
-						dat += "<a href='byond://?src=\ref[src];input=tone'>Set Ringtone</a> | "
-						dat += "<a href='byond://?src=\ref[src];message_mode=1'>Messages</a><br>"
+						dat += "<a href='byond://?src=[REF(src)];message_func=ringer'>Ringer: [src.message_silent == 1 ? "Off" : "On"]</a> | "
+						dat += "<a href='byond://?src=[REF(src)];message_func=on'>Send / Receive: [src.message_on == 1 ? "On" : "Off"]</a> | "
+						dat += "<a href='byond://?src=[REF(src)];input=tone'>Set Ringtone</a> | "
+						dat += "<a href='byond://?src=[REF(src)];message_mode=1'>Messages</a><br>"
 
-						dat += "<font size=2><a href='byond://?src=\ref[src];message_func=scan'>Scan</a></font><br>"
+						dat += "<font size=2><a href='byond://?src=[REF(src)];message_func=scan'>Scan</a></font><br>"
 						dat += "<b>Detected PDAs</b><br>"
 
 						dat += "<ul>"
@@ -121,7 +121,7 @@
 									src.detected_pdas -= P
 									continue
 
-								dat += "<li><a href='byond://?src=\ref[src];input=message;target=\ref[P]'>[P]</a>"
+								dat += "<li><a href='byond://?src=[REF(src)];input=message;target=[REF(P)]'>[P]</a>"
 
 								dat += "</li>"
 								count++
@@ -132,8 +132,8 @@
 							dat += "None detected.<br>"
 
 					else
-						dat += "<a href='byond://?src=\ref[src];message_func=clear'>Clear</a> | "
-						dat += "<a href='byond://?src=\ref[src];message_mode=0'>Back</a><br>"
+						dat += "<a href='byond://?src=[REF(src)];message_func=clear'>Clear</a> | "
+						dat += "<a href='byond://?src=[REF(src)];message_mode=0'>Back</a><br>"
 
 						dat += "<h4>Messages</h4>"
 
@@ -147,9 +147,9 @@
 					if((!src.browse_folder) || !(src.browse_folder.holder in src.master))
 						src.browse_folder = src.holding_folder
 
-					dat += " | <a href='byond://?src=\ref[src];target=\ref[src.browse_folder];browse_func=paste'>Paste</a>"
+					dat += " | <a href='byond://?src=[REF(src)];target=[REF(src.browse_folder)];browse_func=paste'>Paste</a>"
 					dat += " | Drive: "
-					dat += "\[<a href='byond://?src=\ref[src];browse_func=drive'>[src.browse_folder.holder == src.master.hd ? "MAIN" : "CART"]</a>\]<br>"
+					dat += "\[<a href='byond://?src=[REF(src)];browse_func=drive'>[src.browse_folder.holder == src.master.hd ? "MAIN" : "CART"]</a>\]<br>"
 
 					dat += "<b>Contents of [browse_folder] | Drive ID:\[[src.browse_folder.holder.title]]</b><br>"
 					dat += "<b>Used: \[[src.browse_folder.holder.file_used]/[src.browse_folder.holder.file_amount]\]</b><hr>"
@@ -159,15 +159,15 @@
 						if(F == src)
 							dat += "<tr><td>System</td><td>Size: [src.size]</td><td>SYSTEM</td></tr>"
 							continue
-						dat += "<tr><td><a href='byond://?src=\ref[src];target=\ref[F];browse_func=open'>[F.name]</a></td>"
+						dat += "<tr><td><a href='byond://?src=[REF(src)];target=[REF(F)];browse_func=open'>[F.name]</a></td>"
 						dat +=  "<td>Size: [F.size]</td>"
 
 						dat += "<td>[F.extension]</td>"
 
-						dat += "<td><a href='byond://?src=\ref[src];target=\ref[F];browse_func=delete'>Del</a></td>"
-						dat += "<td><a href='byond://?src=\ref[src];target=\ref[F];input=rename'>Rename</a></td>"
+						dat += "<td><a href='byond://?src=[REF(src)];target=[REF(F)];browse_func=delete'>Del</a></td>"
+						dat += "<td><a href='byond://?src=[REF(src)];target=[REF(F)];input=rename'>Rename</a></td>"
 
-						dat += "<td><a href='byond://?src=\ref[src];target=\ref[F];browse_func=copy'>Copy</a></td>"
+						dat += "<td><a href='byond://?src=[REF(src)];target=[REF(F)];browse_func=copy'>Copy</a></td>"
 
 						dat += "</tr>"
 
@@ -278,7 +278,7 @@
 						signal.data["command"] = "text message"
 						signal.data["message"] = t
 						signal.data["sender"] = src.master.owner
-						signal.data["tag"] = "\ref[P]"
+						signal.data["tag"] = "[REF(P)]"
 						src.post_signal(signal)
 						src.message_note += "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
 						log_pda("[key_name(usr)] sent [t] to [P.owner]")
@@ -401,7 +401,7 @@
 					if(!sender)
 						sender = "!Unknown!"
 
-					src.message_note += "<i><b>&larr; From <a href='byond://?src=\ref[src];input=message;target=\ref[signal.source]'>[sender]</a>:</b></i><br>[signal.data["message"]]<br>"
+					src.message_note += "<i><b>&larr; From <a href='byond://?src=[REF(src)];input=message;target=[REF(signal.source)]'>[sender]</a>:</b></i><br>[signal.data["message"]]<br>"
 					var/alert_beep = null //Don't beep if set to silent.
 					if(!src.message_silent)
 						alert_beep = src.message_tone
@@ -415,7 +415,7 @@
 
 					var/datum/signal/newsignal = new
 					newsignal.data["command"] = "reporting pda"
-					newsignal.data["tag"] = "\ref[signal.source]"
+					newsignal.data["tag"] = "[REF(signal.source)]"
 					src.post_signal(newsignal)
 
 				if("reporting pda")
@@ -436,11 +436,11 @@
 			var/dat
 
 			if(src.mode)
-				dat += " | <a href='byond://?src=\ref[src];mode=0'>Main Menu</a>"
+				dat += " | <a href='byond://?src=[REF(src)];mode=0'>Main Menu</a>"
 
 			else if (!isnull(src.master.cartridge))
-				dat += " | <a href='byond://?src=\ref[src.master];eject_cart=1'>Eject [src.master.cartridge]</a>"
+				dat += " | <a href='byond://?src=[REF(src.master)];eject_cart=1'>Eject [src.master.cartridge]</a>"
 
-			dat += " | <a href='byond://?src=\ref[src.master];refresh=1'>Refresh</a>"
+			dat += " | <a href='byond://?src=[REF(src.master)];refresh=1'>Refresh</a>"
 
 			return dat

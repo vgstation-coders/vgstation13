@@ -66,13 +66,13 @@
 			dat += "<b>AI nonfunctional</b>"
 		else
 			if (!src.flush)
-				dat += {"<A href='byond://?src=\ref[src];choice=Wipe'>Wipe AI</A>"}
+				dat += {"<A href='byond://?src=[REF(src)];choice=Wipe'>Wipe AI</A>"}
 			else
 				dat += "<b>Wipe in progress</b>"
 			dat += "<br>"
-			dat += {"<a href='byond://?src=\ref[src];choice=Wireless'>[A.control_disabled ? "Enable" : "Disable"] Wireless Activity</a>"}
+			dat += {"<a href='byond://?src=[REF(src)];choice=Wireless'>[A.control_disabled ? "Enable" : "Disable"] Wireless Activity</a>"}
 			dat += "<br>"
-			dat += {"<a href='byond://?src=\ref[src];choice=Close'> Close</a>"}
+			dat += {"<a href='byond://?src=[REF(src)];choice=Close'> Close</a>"}
 	user << browse(dat, "window=aicard")
 	onclose(user, "aicard")
 	return

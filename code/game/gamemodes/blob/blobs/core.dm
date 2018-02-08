@@ -42,9 +42,9 @@
 
 	for(var/mob/camera/blob/O in blob_overminds)
 		if(overmind && (O != overmind))
-			to_chat(O,"<span class='danger'>A blob core has been destroyed! [overmind] lost his life!</span> <b><a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></b>")
+			to_chat(O,"<span class='danger'>A blob core has been destroyed! [overmind] lost his life!</span> <b><a href='?src=[REF(O)];blobjump=[REF(loc)]'>(JUMP)</a></b>")
 		else
-			to_chat(O,"<span class='warning'>A blob core has been destroyed. It had no overmind in control.</span> <b><a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></b>")
+			to_chat(O,"<span class='warning'>A blob core has been destroyed. It had no overmind in control.</span> <b><a href='?src=[REF(O)];blobjump=[REF(loc)]'>(JUMP)</a></b>")
 
 	if(overmind)
 		for(var/obj/effect/blob/resource/R in blob_resources)
@@ -64,7 +64,7 @@
 		overmind.update_health()
 		if((health < previous_health) && (core_warning_delay <= world.time))
 			resource_delay = world.time + (3 SECONDS)
-			to_chat(overmind,"<span class='danger'>YOUR CORE IS UNDER ATTACK!</span> <b><a href='?src=\ref[overmind];blobjump=\ref[loc]'>(JUMP)</a></b>")
+			to_chat(overmind,"<span class='danger'>YOUR CORE IS UNDER ATTACK!</span> <b><a href='?src=[REF(overmind)];blobjump=[REF(loc)]'>(JUMP)</a></b>")
 
 	previous_health = health
 	..()
@@ -153,7 +153,7 @@
 			B.real_name = new_name
 			for(var/mob/camera/blob/O in blob_overminds)
 				if(O != B)
-					to_chat(O,"<span class='notice'>[B] has appeared and just started a new blob! <a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></span>")
+					to_chat(O,"<span class='notice'>[B] has appeared and just started a new blob! <a href='?src=[REF(O)];blobjump=[REF(loc)]'>(JUMP)</a></span>")
 
 			B.verbs += /mob/camera/blob/proc/create_core
 			spawn()
@@ -171,7 +171,7 @@
 			B.gui_icons.blob_spawncore.name = ""
 			for(var/mob/camera/blob/O in blob_overminds)
 				if(O != B)
-					to_chat(O,"<span class='notice'>A new blob cerebrate has started thinking inside a blob core! [B] joins the blob! <a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></span>")
+					to_chat(O,"<span class='notice'>A new blob cerebrate has started thinking inside a blob core! [B] joins the blob! <a href='?src=[REF(O)];blobjump=[REF(loc)]'>(JUMP)</a></span>")
 
 
 

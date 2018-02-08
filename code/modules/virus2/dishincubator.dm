@@ -143,11 +143,11 @@
 	var/string = "Off"
 	if(on)
 		string = "On"
-	dat += "Power status: <A href='?src=\ref[src];power=1'>[string]</a>"
+	dat += "Power status: <A href='?src=[REF(src)];power=1'>[string]</a>"
 	dat += "<BR>"
 	dat += "Food supply: [foodsupply]"
 	dat += "<BR>"
-	dat += "Radiation levels: [radiation] RADS (<A href='?src=\ref[src];rad=1'>Radiate</a>)"
+	dat += "Radiation levels: [radiation] RADS (<A href='?src=[REF(src)];rad=1'>Radiate</a>)"
 	dat += "<BR>"
 	dat += "Toxins: [toxins]"
 	if(dish)
@@ -155,15 +155,15 @@
 		dat += "Growth level: [dish.growth]"
 	dat += "<BR><BR>"
 	if(beaker)
-		dat += "Eject chemicals: <A href='?src=\ref[src];ejectchem=1'> Eject</a>"
+		dat += "Eject chemicals: <A href='?src=[REF(src)];ejectchem=1'> Eject</a>"
 		dat += "<BR>"
 	if(dish)
-		dat += "Eject Virus dish: <A href='?src=\ref[src];ejectdish=1'> Eject</a>"
+		dat += "Eject Virus dish: <A href='?src=[REF(src)];ejectdish=1'> Eject</a>"
 		dat += "<BR>"
 		if(beaker)
-			dat += "Breed viral culture in beaker: <A href='?src=\ref[src];virus=1'> Start</a>"
+			dat += "Breed viral culture in beaker: <A href='?src=[REF(src)];virus=1'> Start</a>"
 			dat += "<BR>"
-	dat += "<br><hr><A href='?src=\ref[src];flush=1'>Flush system</a><BR>"
+	dat += "<br><hr><A href='?src=[REF(src)];flush=1'>Flush system</a><BR>"
 	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "\ref[src]", "Pathogenic Incubator", 575, 400, src)
 	popup.set_content(dat)

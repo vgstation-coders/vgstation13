@@ -72,7 +72,7 @@
 <B>Suffocation Damage:</B> [src.victim.getOxyLoss()]<BR>
 <B>Patient Status:</B> [src.victim.stat ? "Non-Responsive" : "Stable"]<BR>
 <BR>
-<A HREF='?src=\ref[user];mach_close=op'>Close</A>"}
+<A HREF='?src=[REF(user)];mach_close=op'>Close</A>"}
 	else
 		src.victim = null
 		dat += {"
@@ -80,7 +80,7 @@
 <BR>
 <B>No Patient Detected</B><BR>
 <BR>
-<A HREF='?src=\ref[user];mach_close=op'>Close</A>"}
+<A HREF='?src=[REF(user)];mach_close=op'>Close</A>"}
 	user << browse(dat, "window=op")
 	user.set_machine(src)
 	onclose(user, "op")

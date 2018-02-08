@@ -90,16 +90,16 @@
 				if (B.data["antibodies"])
 					dat += "</td></tr><tr><td>"
 					dat += "Antibodies: [antigens2string(B.data["antibodies"])]"
-					dat += "</td><td><A href='?src=\ref[src];action=antibody'>Isolate</a>"
+					dat += "</td><td><A href='?src=[REF(src)];action=antibody'>Isolate</a>"
 
 				var/list/virus = B.data["virus2"]
 				for (var/ID in virus)
 					var/datum/disease2/disease/V = virus[ID]
 					dat += " </td></tr><tr><td> pathogen [V.name()]"
-					dat += "</td><td><A href='?src=\ref[src];action=isolate;isolate=[V.uniqueID]'>Isolate</a>"
+					dat += "</td><td><A href='?src=[REF(src)];action=isolate;isolate=[V.uniqueID]'>Isolate</a>"
 			else
 				dat += "Please check container contents."
-			dat += "</td></tr><tr><td><A href='?src=\ref[src];action=sample'>Eject container</a>"
+			dat += "</td></tr><tr><td><A href='?src=[REF(src)];action=sample'>Eject container</a>"
 		else
 			dat += "Please insert a container."
 		dat += "</td></tr></table><br>"

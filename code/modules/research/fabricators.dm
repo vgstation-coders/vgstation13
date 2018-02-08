@@ -442,14 +442,14 @@
 		if(!silent)
 			temp = "Processed [i] equipment designs.<br>"
 			temp += tech_output
-			temp += "<a href='?src=\ref[src];clear_temp=1'>Return</a>"
+			temp += "<a href='?src=[REF(src)];clear_temp=1'>Return</a>"
 			src.updateUsrDialog()
 		if(i || tech_output)
 			new_data=1
 	if(new_data)
 		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Successfully synchronized with R&D server. New data processed.\"")
 	if(!silent && !found)
-		temp = "Unable to connect to local R&D Database.<br>Please check your connections and try again.<br><a href='?src=\ref[src];clear_temp=1'>Return</a>"
+		temp = "Unable to connect to local R&D Database.<br>Please check your connections and try again.<br><a href='?src=[REF(src)];clear_temp=1'>Return</a>"
 	src.updateUsrDialog()
 
 /obj/machinery/r_n_d/fabricator/kick_act(mob/living/H)
@@ -544,10 +544,10 @@
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
-	var/datum/topic_input/filter = new /datum/topic_input(href,href_list)
+	var/datum/topic_input/topic_filter = new /datum/topic_input(href,href_list)
 
 	if(href_list["remove_from_queue"])
-		remove_from_queue(filter.getNum("remove_from_queue"))
+		remove_from_queue(topic_filter.getNum("remove_from_queue"))
 		return 1
 
 	if(href_list["eject"])
@@ -680,10 +680,10 @@
 		if(part)
 			temp = {"<h1>[part] description:</h1>
 						[part.desc]<br>
-						<a href='?src=\ref[src];clear_temp=1'>Return</a>
+						<a href='?src=[REF(src)];clear_temp=1'>Return</a>
 						"}
 	if(href_list["remove_mat"] && href_list["material"])
-		temp = "Ejected [remove_material(href_list["material"],text2num(href_list["remove_mat"]))] of [href_list["material"]]<br><a href='?src=\ref[src];clear_temp=1'>Return</a>"
+		temp = "Ejected [remove_material(href_list["material"],text2num(href_list["remove_mat"]))] of [href_list["material"]]<br><a href='?src=[REF(src)];clear_temp=1'>Return</a>"
 	src.updateUsrDialog()
 	return
 */

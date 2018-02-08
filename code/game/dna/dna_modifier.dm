@@ -286,7 +286,7 @@
 					if(ghostmob)
 						ghostmob << 'sound/effects/adminhelp.ogg'
 						to_chat(ghostmob, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
-							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=[REF(ghost)];reentercorpse=1'>click here!</a>)</span>")
 				break
 			break
 	return
@@ -337,7 +337,7 @@
 			if(ghostmob)
 				ghostmob << 'sound/effects/adminhelp.ogg'
 				to_chat(ghostmob, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
-					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=[REF(ghost)];reentercorpse=1'>click here!</a>)</span>")
 
 /obj/machinery/dna_scannernew/ex_act(severity)
 	//This is by far the oldest code I have ever seen, please appreciate how it's preserved in comments for distant posterity. Have some perspective of where we came from.

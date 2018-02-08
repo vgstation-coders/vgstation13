@@ -21,8 +21,8 @@
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 /obj/item/device/maracas/pickup(mob/user)
-	user.callOnFace |= "\ref[src]"
-	user.callOnFace["\ref[src]"] = "chickchicky"
+	user.callOnFace |= "[REF(src)]"
+	user.callOnFace["[REF(src)]"] = "chickchicky"
 	chickchicky()
 
 /obj/item/device/maracas/throw_impact(atom/hit_atom)
@@ -31,7 +31,7 @@
 		qdel(src)
 
 /obj/item/device/maracas/dropped(mob/user)
-	user.callOnFace -= "\ref[src]"
+	user.callOnFace -= "[REF(src)]"
 	spawn(3)
 		chickchicky()
 

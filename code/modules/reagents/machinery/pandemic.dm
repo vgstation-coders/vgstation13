@@ -174,11 +174,11 @@
 	user.set_machine(src)
 	var/dat = ""
 	if(src.temphtml)
-		dat = "[src.temphtml]<BR><BR><A href='?src=\ref[src];clear=1'>Main Menu</A>"
+		dat = "[src.temphtml]<BR><BR><A href='?src=[REF(src)];clear=1'>Main Menu</A>"
 	else if(!beaker)
 
 		dat += {"Please insert beaker.<BR>
-			<A href='?src=\ref[user];mach_close=pandemic'>Close</A>"}
+			<A href='?src=[REF(user)];mach_close=pandemic'>Close</A>"}
 	else
 		var/datum/reagents/R = beaker.reagents
 		var/datum/reagent/blood/Blood = null
@@ -211,13 +211,13 @@
 								D = archive_diseases[A.GetDiseaseID()]
 								disease_creation = A.GetDiseaseID()
 								if(D.name == "Unknown")
-									dat += "<b><a href='?src=\ref[src];name_disease=[A.GetDiseaseID()]'>Name Disease</a></b><BR>"
+									dat += "<b><a href='?src=[REF(src)];name_disease=[A.GetDiseaseID()]'>Name Disease</a></b><BR>"
 
 							if(!D)
 								CRASH("We weren't able to get the advance disease from the archive.")
 
 
-							dat += {"<b>Disease Agent:</b> [D?"[D.agent] - <A href='?src=\ref[src];create_virus_culture=[disease_creation]'>Create virus culture bottle</A>":"none"]<BR>
+							dat += {"<b>Disease Agent:</b> [D?"[D.agent] - <A href='?src=[REF(src)];create_virus_culture=[disease_creation]'>Create virus culture bottle</A>":"none"]<BR>
 								<b>Common name:</b> [(D.name||"none")]<BR>
 								<b>Description: </b> [(D.desc||"none")]<BR>
 								<b>Spread:</b> [(D.spread||"none")]<BR>
@@ -247,15 +247,15 @@
 							var/datum/disease/D = new type(0, null)
 							disease_name = D.name
 
-						dat += "<li>[disease_name] - <A href='?src=\ref[src];create_vaccine=[type]'>Create vaccine bottle</A></li>"
+						dat += "<li>[disease_name] - <A href='?src=[REF(src)];create_vaccine=[type]'>Create vaccine bottle</A></li>"
 					dat += "</ul><BR>"
 				else
 					dat += "nothing<BR>"
 			else
 				dat += "nothing<BR>"
 
-		dat += {"<BR><A href='?src=\ref[src];eject=1'>Eject beaker</A>[((R.total_volume&&R.reagent_list.len) ? "-- <A href='?src=\ref[src];empty_beaker=1'>Empty beaker</A>":"")]<BR>
-			<A href='?src=\ref[user];mach_close=pandemic'>Close</A>"}
+		dat += {"<BR><A href='?src=[REF(src)];eject=1'>Eject beaker</A>[((R.total_volume&&R.reagent_list.len) ? "-- <A href='?src=[REF(src)];empty_beaker=1'>Empty beaker</A>":"")]<BR>
+			<A href='?src=[REF(user)];mach_close=pandemic'>Close</A>"}
 	user << browse("<TITLE>[src.name]</TITLE><BR>[dat]", "window=pandemic;size=575x400")
 	onclose(user, "pandemic")
 	return

@@ -63,7 +63,7 @@
 <i>This terminal is</i> [machine_id]. <i>Report this code when contacting Nanotrasen IT Support</i><br>"}
 		if(transaction_locked)
 
-			dat += {"<a href='?src=\ref[src];choice=toggle_lock'>Reset[transaction_paid ? "" : " (authentication required)"]</a><br><br>
+			dat += {"<a href='?src=[REF(src)];choice=toggle_lock'>Reset[transaction_paid ? "" : " (authentication required)"]</a><br><br>
 				Transaction purpose: <b>[transaction_purpose]</b><br>
 				Value: <b>$[transaction_amount]</b><br>
 				Linked account: <b>[linked_account ? linked_account.owner_name : "None"]</b><hr>"}
@@ -72,16 +72,16 @@
 			else
 
 				dat += {"<i>Swipe your card below the line to finish this transaction.</i><hr>
-					<a href='?src=\ref[src];choice=scan_card'>\[------\]</a>"}
+					<a href='?src=[REF(src)];choice=scan_card'>\[------\]</a>"}
 		else
 
-			dat += {"<a href='?src=\ref[src];choice=toggle_lock'>Lock in new transaction</a><br><br>
-				Transaction purpose: <a href='?src=\ref[src];choice=trans_purpose'>[transaction_purpose]</a><br>
-				Value: <a href='?src=\ref[src];choice=trans_value'>$[transaction_amount]</a><br>
-				Linked account: <a href='?src=\ref[src];choice=link_account'>[linked_account ? linked_account.owner_name : "None"]</a><hr>
-				<a href='?src=\ref[src];choice=change_code'>Change access code</a><br>
-				<a href='?src=\ref[src];choice=change_id'>Change EFTPOS ID</a><br>
-				Scan card to reset access code <a href='?src=\ref[src];choice=reset'>\[------\]</a>"}
+			dat += {"<a href='?src=[REF(src)];choice=toggle_lock'>Lock in new transaction</a><br><br>
+				Transaction purpose: <a href='?src=[REF(src)];choice=trans_purpose'>[transaction_purpose]</a><br>
+				Value: <a href='?src=[REF(src)];choice=trans_value'>$[transaction_amount]</a><br>
+				Linked account: <a href='?src=[REF(src)];choice=link_account'>[linked_account ? linked_account.owner_name : "None"]</a><hr>
+				<a href='?src=[REF(src)];choice=change_code'>Change access code</a><br>
+				<a href='?src=[REF(src)];choice=change_id'>Change EFTPOS ID</a><br>
+				Scan card to reset access code <a href='?src=[REF(src)];choice=reset'>\[------\]</a>"}
 		user << browse(dat,"window=eftpos")
 	else
 		user << browse(null,"window=eftpos")

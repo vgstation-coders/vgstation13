@@ -41,7 +41,7 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 /obj/item/device/assembly/math/interact(mob/user as mob)
 	var/dat = ""
 
-	dat += "<tt>Math circuit</tt> <small>\[<a href='?src=\ref[src];help=1'>?</a>\]</small><BR><BR>"
+	dat += "<tt>Math circuit</tt> <small>\[<a href='?src=[REF(src)];help=1'>?</a>\]</small><BR><BR>"
 
 	dat += "<b>VALUE</b> = "
 
@@ -91,7 +91,7 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 		for(var/i = 1 to last_written_value)
 			var/A = values[i]
 
-			dat += "<a href='?src=\ref[src];change_value=[i]'><b>[A]"
+			dat += "<a href='?src=[REF(src)];change_value=[i]'><b>[A]"
 
 			if(!isnum(A)) //Variable (assembly) - write which of the assembly's value is used in the calculation (its time, frequency or whatever)
 				dat += " ([values[A]])"
@@ -102,9 +102,9 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 				dat += operation_sign //If we're writing the last value, skip the sign (to avoid the extra sign at the end, like VALUE == 6 + 12 + 51 +)
 
 	dat += "<BR>"
-	dat += "<p><a href='?src=\ref[src];add_const=1'>Add constant</a></p>"
-	dat += "<p>Operation: <a href='?src=\ref[src];change_operation=1'>[operation]</a></p>"
-	dat += "<p><a href='?src=\ref[src];output_value=1'>Output value</a></p><BR>"
+	dat += "<p><a href='?src=[REF(src)];add_const=1'>Add constant</a></p>"
+	dat += "<p>Operation: <a href='?src=[REF(src)];change_operation=1'>[operation]</a></p>"
+	dat += "<p><a href='?src=[REF(src)];output_value=1'>Output value</a></p><BR>"
 	dat += "All operations are done left-to-right. All trigonometric functions use degrees."
 
 	var/datum/browser/popup = new(user, "circuit3", "[src]", 500, 300, src)

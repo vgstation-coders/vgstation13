@@ -13,16 +13,16 @@
 		if((!src.current_folder) || !(src.current_folder.holder in src.master))
 			src.current_folder = src.holder.root
 
-		var/dat = "<a href='byond://?src=\ref[src];close=1'>Close</a> | "
-		dat += "<a href='byond://?src=\ref[src];quit=1'>Quit</a>"
+		var/dat = "<a href='byond://?src=[REF(src)];close=1'>Close</a> | "
+		dat += "<a href='byond://?src=[REF(src)];quit=1'>Quit</a>"
 
 		switch(mode)
 			if(0)
-				dat += " |<a href='byond://?src=\ref[src];create=folder'>Create Folder</a>"
-				//dat += " | <a href='byond://?src=\ref[src];create=file'>Create File</a>"
-				dat += " | <a href='byond://?src=\ref[src];file=\ref[src.current_folder];function=paste'>Paste</a>"
-				dat += " | <a href='byond://?src=\ref[src];top_folder=1'>Root</a>"
-				dat += " | <a href='byond://?src=\ref[src];mode=1'>Drive</a><br>"
+				dat += " |<a href='byond://?src=[REF(src)];create=folder'>Create Folder</a>"
+				//dat += " | <a href='byond://?src=[REF(src)];create=file'>Create File</a>"
+				dat += " | <a href='byond://?src=[REF(src)];file=[REF(src.current_folder)];function=paste'>Paste</a>"
+				dat += " | <a href='byond://?src=[REF(src)];top_folder=1'>Root</a>"
+				dat += " | <a href='byond://?src=[REF(src)];mode=1'>Drive</a><br>"
 
 				dat += "<b>Contents of [current_folder] | Drive:\[[src.current_folder.holder.title]]</b><br>"
 				dat += "<b>Used: \[[src.current_folder.holder.file_used]/[src.current_folder.holder.file_amount]\]</b><hr>"
@@ -32,31 +32,31 @@
 					if(P == src)
 						dat += "<tr><td>System</td><td>Size: [src.size]</td><td>SYSTEM</td></tr>"
 						continue
-					dat += "<tr><td><a href='byond://?src=\ref[src];file=\ref[P];function=open'>[P.name]</a></td>"
+					dat += "<tr><td><a href='byond://?src=[REF(src)];file=[REF(P)];function=open'>[P.name]</a></td>"
 					dat +=  "<td>Size: [P.size]</td>"
 
 					dat += "<td>[(istype(P,/datum/computer/folder)) ? "FOLDER" : "[P:extension]"]</td>"
 
-					dat += "<td><a href='byond://?src=\ref[src];file=\ref[P];function=delete'>Del</a></td>"
-					dat += "<td><a href='byond://?src=\ref[src];file=\ref[P];function=rename'>Rename</a></td>"
+					dat += "<td><a href='byond://?src=[REF(src)];file=[REF(P)];function=delete'>Del</a></td>"
+					dat += "<td><a href='byond://?src=[REF(src)];file=[REF(P)];function=rename'>Rename</a></td>"
 
 
 					if(istype(P,/datum/computer/file))
-						dat += "<td><a href='byond://?src=\ref[src];file=\ref[P];function=copy'>Copy</a></td>"
+						dat += "<td><a href='byond://?src=[REF(src)];file=[REF(P)];function=copy'>Copy</a></td>"
 
 					dat += "</tr>"
 
 				dat += "</table>"
 
 			if(1)
-				dat += " | <a href='byond://?src=\ref[src];mode=0'>Main</a>"
-				dat += " | <a href='byond://?src=\ref[master];disk=1'>Eject</a><br>"
+				dat += " | <a href='byond://?src=[REF(src)];mode=0'>Main</a>"
+				dat += " | <a href='byond://?src=[REF(master)];disk=1'>Eject</a><br>"
 
 				for(var/obj/item/weapon/disk/data/D in src.master)
 					if(D == current_folder.holder)
 						dat += "[D.name]<br>"
 					else
-						dat += "<a href='byond://?src=\ref[src];drive=\ref[D]'>[D.title]</a><br>"
+						dat += "<a href='byond://?src=[REF(src)];drive=[REF(D)]'>[D.title]</a><br>"
 
 
 		return dat

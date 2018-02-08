@@ -97,13 +97,13 @@
 
 	var/dat = "<html><head><title>Personal Data Assistant</title></head><body>"
 
-	dat += "<a href='byond://?src=\ref[src];close=1'>Close</a>"
+	dat += "<a href='byond://?src=[REF(src)];close=1'>Close</a>"
 
 	if (!src.owner)
 		if(src.cartridge)
-			dat += " | <a href='byond://?src=\ref[src];eject_cart=1'>Eject [src.cartridge]</a>"
+			dat += " | <a href='byond://?src=[REF(src)];eject_cart=1'>Eject [src.cartridge]</a>"
 		dat += "<br>Warning: No owner information entered.  Please swipe card.<br><br>"
-		dat += "<a href='byond://?src=\ref[src];refresh=1'>Retry</a>"
+		dat += "<a href='byond://?src=[REF(src)];refresh=1'>Retry</a>"
 	else
 		if(src.active_program)
 			dat += src.active_program.return_text()
@@ -113,7 +113,7 @@
 				dat += src.active_program.return_text()
 			else
 				if(src.cartridge)
-					dat += " | <a href='byond://?src=\ref[src];eject_cart=1'>Eject [src.cartridge]</a><br>"
+					dat += " | <a href='byond://?src=[REF(src)];eject_cart=1'>Eject [src.cartridge]</a><br>"
 				dat += "<center><font color=red>Fatal Error 0x17<br>"
 				dat += "No System Software Loaded</font></center>"
 					//To-do: System recovery shit (maybe have a dedicated computer for this kind of thing)
@@ -170,7 +170,7 @@
 	if(!signal || signal.encryption || !src.owner)
 		return
 
-	if(signal.data["tag"] && signal.data["tag"] != "\ref[src]")
+	if(signal.data["tag"] && signal.data["tag"] != "[REF(src)]")
 		return
 
 	if(src.host_program)

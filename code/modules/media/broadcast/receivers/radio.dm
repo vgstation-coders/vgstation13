@@ -22,9 +22,9 @@
 /obj/machinery/media/receiver/boombox/interact(var/mob/user)
 	var/dat = "<html><head><title>[src]</title></head><body><TT>"
 	dat += {"
-				Power: <a href="?src=\ref[src];power=1">[on ? "On" : "Off"]</a><BR>
-				Frequency: <A href='byond://?src=\ref[src];set_freq=-1'>[format_frequency(media_frequency)]</a><BR>
-				Volume: <A href='byond://?src=\ref[src];set_volume=-1'>[volume*100]%</a><BR>
+				Power: <a href="?src=[REF(src)];power=1">[on ? "On" : "Off"]</a><BR>
+				Frequency: <A href='byond://?src=[REF(src)];set_freq=-1'>[format_frequency(media_frequency)]</a><BR>
+				Volume: <A href='byond://?src=[REF(src)];set_volume=-1'>[volume*100]%</a><BR>
 				"}
 	dat+={"</TT></body></html>"}
 	user << browse(dat, "window=radio-recv")

@@ -45,7 +45,7 @@
 	else
 		dat += text("<b><font color='red'>NOT CONNECTED</font></b>")
 
-	dat += text("<br><br><A href='?src=\ref[src];extract=[input]'>Extract gas</A>")
+	dat += text("<br><br><A href='?src=[REF(src)];extract=[input]'>Extract gas</A>")
 
 	dat += text("<br><br>Message: [message]")
 

@@ -140,10 +140,10 @@
 	var/dat = text("<TT><B>Proximity Sensor</B>\n[] []:[]\n<A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT>", (timing ? text("<A href='?src=\ref[];time=0'>Arming</A>", src) : text("<A href='?src=\ref[];time=1'>Not Arming</A>", src)), minute, second, src, src, src, src)
 	dat += text("<BR>Range: <A href='?src=\ref[];range=-1'>-</A> [] <A href='?src=\ref[];range=1'>+</A>", src, range, src)
 
-	dat += {"<BR><A href='?src=\ref[src];scanning=1'>[scanning?"Armed":"Unarmed"]</A> (Movement sensor active when armed!)
-		<BR><BR><A href='?src=\ref[src];set_default_time=1'>After countdown, reset time to [(default_time - default_time%60)/60]:[(default_time % 60)]</A>
-		<BR><BR><A href='?src=\ref[src];refresh=1'>Refresh</A>
-		<BR><BR><A href='?src=\ref[src];close=1'>Close</A>"}
+	dat += {"<BR><A href='?src=[REF(src)];scanning=1'>[scanning?"Armed":"Unarmed"]</A> (Movement sensor active when armed!)
+		<BR><BR><A href='?src=[REF(src)];set_default_time=1'>After countdown, reset time to [(default_time - default_time%60)/60]:[(default_time % 60)]</A>
+		<BR><BR><A href='?src=[REF(src)];refresh=1'>Refresh</A>
+		<BR><BR><A href='?src=[REF(src)];close=1'>Close</A>"}
 	user << browse(dat, "window=prox")
 	onclose(user, "prox")
 	return

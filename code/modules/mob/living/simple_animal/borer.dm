@@ -240,16 +240,16 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 /mob/living/simple_animal/borer/player_panel_controls(var/mob/user)
 	var/html="<h2>[src] Controls</h2>"
 	if(host)
-		html +="<b>Host:</b> [host] (<A HREF='?_src_=holder;adminmoreinfo=\ref[host]'>?</A> | <a href='?_src_=vars;mob_player_panel=\ref[host]'>PP</a>)"
+		html +="<b>Host:</b> [host] (<A HREF='?_src_=holder;adminmoreinfo=[REF(host)]'>?</A> | <a href='?_src_=vars;mob_player_panel=[REF(host)]'>PP</a>)"
 	else
 		html += "<em>No host</em>"
 	html += "<ul>"
 	if(user.check_rights(R_ADMIN))
-		html += "<li><a href=\"?src=\ref[src]&act=add_chem\">Give Chem</a></li>" // PARTY SLUG
-		html += "<li><a href=\"?src=\ref[src]&act=detach\">Detach</a></li>"
-		html += "<li><a href=\"?src=\ref[src]&act=verbs\">Resend Verbs</a></li>"
+		html += "<li><a href=\"?src=[REF(src)]&act=add_chem\">Give Chem</a></li>" // PARTY SLUG
+		html += "<li><a href=\"?src=[REF(src)]&act=detach\">Detach</a></li>"
+		html += "<li><a href=\"?src=[REF(src)]&act=verbs\">Resend Verbs</a></li>"
 		if(host)
-			html += "<li><a href=\"?src=\ref[src]&act=release\">Release Control</a></li>"
+			html += "<li><a href=\"?src=[REF(src)]&act=release\">Release Control</a></li>"
 	return html + "</ul>"
 
 /mob/living/simple_animal/borer/Topic(href, href_list)
@@ -332,9 +332,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		if(istype(M, /mob/new_player))
 			continue
 		if(istype(M,/mob/dead/observer)  && (M.client && M.client.prefs.toggles & CHAT_GHOSTEARS || (get_turf(src) in view(M))))
-			var/controls = "<a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>Follow</a>"
+			var/controls = "<a href='byond://?src=[REF(M)];follow2=[REF(M)];follow=[REF(src)]'>Follow</a>"
 			if(M.client.holder)
-				controls+= " | <A HREF='?_src_=holder;adminmoreinfo=\ref[src]'>?</A>"
+				controls+= " | <A HREF='?_src_=holder;adminmoreinfo=[REF(src)]'>?</A>"
 			var/rendered="<span class='thoughtspeech'>Thought-speech, <b>[truename]</b> ([controls]) in <b>[host]</b>'s [limb_to_name(hostlimb)]: [encoded_message]</span>"
 			M.show_message(rendered, 2) //Takes into account blindness and such.
 
@@ -387,9 +387,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		if( isborer(M) || (istype(M,/mob/dead/observer) && M.client && M.client.prefs.toggles & CHAT_GHOSTEARS))
 			var/controls = ""
 			if(isobserver(M))
-				controls = " (<a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>Follow</a>"
+				controls = " (<a href='byond://?src=[REF(M)];follow2=[REF(M)];follow=[REF(src)]'>Follow</a>"
 				if(M.client.holder)
-					controls+= " | <A HREF='?_src_=holder;adminmoreinfo=\ref[src]'>?</A>"
+					controls+= " | <A HREF='?_src_=holder;adminmoreinfo=[REF(src)]'>?</A>"
 				controls += ") in [host]"
 
 			to_chat(M, "<span class='cortical'>Cortical link, <b>[truename]</b>[controls]: [message]</span>")

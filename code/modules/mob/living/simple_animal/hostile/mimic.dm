@@ -553,7 +553,7 @@ var/global/list/protected_objects = list(
 	if(owner != creator)
 		LoseTarget()
 		creator = owner
-		faction = "\ref[owner]"
+		faction = "[REF(owner)]"
 
 /mob/living/simple_animal/hostile/mimic/copy/proc/CheckObject(var/obj/O)
 	if((istype(O, /obj/item) || istype(O, /obj/structure)) && !is_type_in_list(O, protected_objects))
@@ -615,7 +615,7 @@ var/global/list/protected_objects = list(
 
 		if(creator)
 			src.creator = creator
-			faction = "\ref[creator]" // very unique
+			faction = "[REF(creator)]" // very unique
 		if(destroy_original)
 			qdel(O)
 		return 1

@@ -133,7 +133,7 @@
 		if(tobeopened)
 			switch(alert(src, "Do you want to open \the [tobeopened] for [target]?","Doorknob_v2a.exe","Yes","No"))
 				if("Yes")
-					var/nhref = "src=\ref[tobeopened];aiEnable=7"
+					var/nhref = "src=[REF(tobeopened)];aiEnable=7"
 					tobeopened.Topic(nhref, params2list(nhref), tobeopened, 1)
 					to_chat(src, "<span class='notice'>You've opened \the [tobeopened] for [target].</span>")
 				if("No")

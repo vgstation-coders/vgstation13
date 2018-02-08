@@ -42,9 +42,9 @@
 	var/dat = "<TT><B>Soul Stone</B><BR>"
 	for(var/mob/living/simple_animal/shade/A in src)
 		dat += "Captured Soul: [A.name]<br>"
-		dat += {"<A href='byond://?src=\ref[src];choice=Summon'>Summon Shade</A>"}
+		dat += {"<A href='byond://?src=[REF(src)];choice=Summon'>Summon Shade</A>"}
 		dat += "<br>"
-		dat += {"<a href='byond://?src=\ref[src];choice=Close'> Close</a>"}
+		dat += {"<a href='byond://?src=[REF(src)];choice=Close'> Close</a>"}
 	user << browse(dat, "window=aicard")
 	onclose(user, "aicard")
 	return
@@ -290,7 +290,7 @@
 	to_chat(user, "<span class='notice'>[true_name]'s soul has been ripped from their body and stored within the soul stone.</span>")
 
 	//Necromancer stuff
-	var/ref = "\ref[user.mind]"
+	var/ref = "[REF(user.mind)]"
 	var/list/necromancers
 	if(!(user.mind in ticker.mode.necromancer))
 		ticker.mode:necromancer[ref] = list()
@@ -409,7 +409,7 @@
 						Z.cancel_camera()
 						deleteafter = 1
 				if(Z && Z.mind && !iscultist(Z))
-					var/ref = "\ref[U.mind]"
+					var/ref = "[REF(U.mind)]"
 					var/list/necromancers
 					if(!(U.mind in ticker.mode.necromancer))
 						ticker.mode:necromancer[ref] = list()

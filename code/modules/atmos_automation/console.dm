@@ -92,34 +92,34 @@
 	var/out=..()
 
 	if(on)
-		out += "<a href=\"?src=\ref[src];on=1\" style=\"font-size:large;font-weight:bold;color:red;\">RUNNING</a>"
+		out += "<a href=\"?src=[REF(src)];on=1\" style=\"font-size:large;font-weight:bold;color:red;\">RUNNING</a>"
 	else
-		out += "<a href=\"?src=\ref[src];on=1\" style=\"font-size:large;font-weight:bold;color:green;\">STOPPED</a>"
-	out += " | <a href=\"?src=\ref[src];runonce=1\" style=\"font-size:large;font-weight:bold;color:green;\">RUN ONCE</a>"
+		out += "<a href=\"?src=[REF(src)];on=1\" style=\"font-size:large;font-weight:bold;color:green;\">STOPPED</a>"
+	out += " | <a href=\"?src=[REF(src)];runonce=1\" style=\"font-size:large;font-weight:bold;color:green;\">RUN ONCE</a>"
 
-	out += "<p><a href=\"?src=\ref[src];view_assemblies=1\">View connected assemblies</a></p>"
+	out += "<p><a href=\"?src=[REF(src)];view_assemblies=1\">View connected assemblies</a></p>"
 
 	out += {"
 		<h2>Automations</h2>
 		<p>\[
-		<a href="?src=\ref[src];add=1">
+		<a href="?src=[REF(src)];add=1">
 			Add
 		</a>
 		|
-		<a href="?src=\ref[src];reset=*">
+		<a href="?src=[REF(src)];reset=*">
 			Reset All
 		</a>
 		|
-		<a href="?src=\ref[src];remove=*">
+		<a href="?src=[REF(src)];remove=*">
 			Clear
 		</a>
 		\]</p>
 		<p>\[
-		<a href="?src=\ref[src];dump=1">
+		<a href="?src=[REF(src)];dump=1">
 			Export
 		</a>
 		|
-		<a href="?src=\ref[src];read=1">
+		<a href="?src=[REF(src)];read=1">
 			Import
 		</a>
 		\]</p>"}
@@ -130,9 +130,9 @@
 			out += {"
 				<fieldset>
 					<legend>
-						<a href="?src=\ref[src];label=\ref[A]">[A.label]</a>
-						(<a href="?src=\ref[src];reset=\ref[A]">Reset</a> |
-						<a href="?src=\ref[src];remove=\ref[A]">&times;</a>)
+						<a href="?src=[REF(src)];label=[REF(A)]">[A.label]</a>
+						(<a href="?src=[REF(src)];reset=[REF(A)]">Reset</a> |
+						<a href="?src=[REF(src)];remove=[REF(A)]">&times;</a>)
 					</legend>
 					[A.GetText()]
 				</fieldset>
@@ -145,7 +145,7 @@
 				<legend>
 					Register [i]
 				</legend>
-				<a href="?src=\ref[src];editregister=[i]">[registers[i] == null ? 0 : registers[i]]</a>
+				<a href="?src=[REF(src)];editregister=[i]">[registers[i] == null ? 0 : registers[i]]</a>
 			</fieldset>
 		"}
 
@@ -289,7 +289,7 @@
 	if(href_list["view_assemblies"]) //Open a separate window that lists connected assemblies
 		var/dat = "<h2>Connected assemblies</h2>"
 		for(var/i = 1 to max_linked_assembly_amount)
-			dat += "<p>[i]) <a href=\"?src=\ref[src];connect_assembly=[i]\">[isnull(linked_assemblies[i]) ? "-click to insert-" : linked_assemblies[i]]</a></p>"
+			dat += "<p>[i]) <a href=\"?src=[REF(src)];connect_assembly=[i]\">[isnull(linked_assemblies[i]) ? "-click to insert-" : linked_assemblies[i]]</a></p>"
 
 		var/datum/browser/popup = new(usr, "AAC_assemblies", "[src]", 500, 300, src)
 		popup.set_content(dat)

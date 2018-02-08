@@ -60,53 +60,53 @@
 
 	dat += {"<B>Holodeck Control System</B><BR>"}
 //	if(isobserver(user))
-//		dat += {"<HR><A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram\]</font></A><BR>"}
+//		dat += {"<HR><A href='?src=[REF(src)];spawn_holoperson=1'>\[Become Advanced Hologram\]</font></A><BR>"}
 	dat += {"<HR>Current Loaded Programs:<BR>
-		<A href='?src=\ref[src];basketball=1'>((Basketball Court)</font>)</A><BR>
-		<A href='?src=\ref[src];beach=1'>((Beach)</font>)</A><BR>
-		<A href='?src=\ref[src];boxingcourt=1'>((Boxing Court)</font>)</A><BR>
-		<A href='?src=\ref[src];checkers=1'>((Checkers Board)</font>)</A><BR>
-		<A href='?src=\ref[src];chess=1'>((Chess Board)</font>)</A><BR>
-		<A href='?src=\ref[src];desert=1'>((Desert)</font>)</A><BR>
-		<A href='?src=\ref[src];dining=1'>((Dining Hall)</font>)</A><BR>
-		<A href='?src=\ref[src];emptycourt=1'>((Empty Court)</font>)</A><BR>
-		<A href='?src=\ref[src];firingrange=1'>((Firing Range)</font>)</A><BR>
-		<A href='?src=\ref[src];gym=1'>((Gym)</font>)</A><BR>
-		<A href='?src=\ref[src];lasertag=1'>((Laser Tag Arena)</font>)</A><BR>
-		<A href='?src=\ref[src];maze=1'>((Maze)</font>)</A><BR>
-		<A href='?src=\ref[src];meetinghall=1'>((Meeting Hall)</font>)</A><BR>
-		<A href='?src=\ref[src];panic=1'>((Panic Bunker)</font>)</A><BR>
-		<A href='?src=\ref[src];picnicarea=1'>((Picnic Area)</font>)</A><BR>
-		<A href='?src=\ref[src];snowfield=1'>((Snow Field)</font>)</A><BR>
-		<A href='?src=\ref[src];theatre=1'>((Theatre)</font>)</A><BR>
-		<A href='?src=\ref[src];thunderdomecourt=1'>((Thunderdome Court)</font>)</A><BR>
-		<A href='?src=\ref[src];wildride=1'>((Wild Ride)</font>)</A><BR>
-		<A href='?src=\ref[src];zoo=1'>((Zoo)</font>)</A><BR>"}
-//	dat += "<A href='?src=\ref[src];turnoff=1'>((Shutdown System)</font>)</A><BR>"
+		<A href='?src=[REF(src)];basketball=1'>((Basketball Court)</font>)</A><BR>
+		<A href='?src=[REF(src)];beach=1'>((Beach)</font>)</A><BR>
+		<A href='?src=[REF(src)];boxingcourt=1'>((Boxing Court)</font>)</A><BR>
+		<A href='?src=[REF(src)];checkers=1'>((Checkers Board)</font>)</A><BR>
+		<A href='?src=[REF(src)];chess=1'>((Chess Board)</font>)</A><BR>
+		<A href='?src=[REF(src)];desert=1'>((Desert)</font>)</A><BR>
+		<A href='?src=[REF(src)];dining=1'>((Dining Hall)</font>)</A><BR>
+		<A href='?src=[REF(src)];emptycourt=1'>((Empty Court)</font>)</A><BR>
+		<A href='?src=[REF(src)];firingrange=1'>((Firing Range)</font>)</A><BR>
+		<A href='?src=[REF(src)];gym=1'>((Gym)</font>)</A><BR>
+		<A href='?src=[REF(src)];lasertag=1'>((Laser Tag Arena)</font>)</A><BR>
+		<A href='?src=[REF(src)];maze=1'>((Maze)</font>)</A><BR>
+		<A href='?src=[REF(src)];meetinghall=1'>((Meeting Hall)</font>)</A><BR>
+		<A href='?src=[REF(src)];panic=1'>((Panic Bunker)</font>)</A><BR>
+		<A href='?src=[REF(src)];picnicarea=1'>((Picnic Area)</font>)</A><BR>
+		<A href='?src=[REF(src)];snowfield=1'>((Snow Field)</font>)</A><BR>
+		<A href='?src=[REF(src)];theatre=1'>((Theatre)</font>)</A><BR>
+		<A href='?src=[REF(src)];thunderdomecourt=1'>((Thunderdome Court)</font>)</A><BR>
+		<A href='?src=[REF(src)];wildride=1'>((Wild Ride)</font>)</A><BR>
+		<A href='?src=[REF(src)];zoo=1'>((Zoo)</font>)</A><BR>"}
+//	dat += "<A href='?src=[REF(src)];turnoff=1'>((Shutdown System)</font>)</A><BR>"
 	dat += "Please ensure that only holographic weapons are used in the holodeck if a combat simulation has been loaded.<BR>"
 
 	if(emagged)
-		dat += {"<A href='?src=\ref[src];burntest=1'>(<font color=red>Begin Atmospheric Burn Simulation</font>)</A><BR>
+		dat += {"<A href='?src=[REF(src)];burntest=1'>(<font color=red>Begin Atmospheric Burn Simulation</font>)</A><BR>
 			Ensure the holodeck is empty before testing.<BR>
 			<BR>
-			<A href='?src=\ref[src];wildlifecarp=1'>(<font color=red>Begin Wildlife Simulation</font>)</A><BR>
+			<A href='?src=[REF(src)];wildlifecarp=1'>(<font color=red>Begin Wildlife Simulation</font>)</A><BR>
 			Ensure the holodeck is empty before testing.<BR>
 			<BR>
-			<A href='?src=\ref[src];catnip=1'>(<font color=red>Club Catnip</font>)</A><BR>
+			<A href='?src=[REF(src)];catnip=1'>(<font color=red>Club Catnip</font>)</A><BR>
 			Ensure the holodeck is full before testing.<BR>
 			<BR>
-			<A href='?src=\ref[src];ragecage=1'>(<font color=red>Combat Arena</font>)</A><BR>
+			<A href='?src=[REF(src)];ragecage=1'>(<font color=red>Combat Arena</font>)</A><BR>
 			Safety protocols disabled - weapons are not for recreation.<BR>
 			<BR>
-			<A href='?src=\ref[src];medieval=1'>(<font color=red>Medieval Tournament</font>)</A><BR>
+			<A href='?src=[REF(src)];medieval=1'>(<font color=red>Medieval Tournament</font>)</A><BR>
 			Safety protocols disabled - weapons are not for recreation.<BR>
 			<BR>"}
 		if(issilicon(user))
-			dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=green>Re-Enable Safety Protocols?</font>)</A><BR>"
+			dat += "<A href='?src=[REF(src)];AIoverride=1'>(<font color=green>Re-Enable Safety Protocols?</font>)</A><BR>"
 		dat += "Safety Protocols are <font color=red> DISABLED </font><BR>"
 	else
 		if(issilicon(user))
-			dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=red>Override Safety Protocols?</font>)</A><BR>"
+			dat += "<A href='?src=[REF(src)];AIoverride=1'>(<font color=red>Override Safety Protocols?</font>)</A><BR>"
 
 		dat += {"<BR>
 			Safety Protocols are <font color=green> ENABLED </font><BR>"}

@@ -8,23 +8,23 @@
 		if(..())
 			return
 
-		var/dat = "<a href='byond://?src=\ref[src];close=1'>Close</a> | "
-		dat += "<a href='byond://?src=\ref[src];quit=1'>Quit</a>"
+		var/dat = "<a href='byond://?src=[REF(src)];close=1'>Close</a> | "
+		dat += "<a href='byond://?src=[REF(src)];quit=1'>Quit</a>"
 
 		/*
 		dat += "<br><TT>Frequency: "
-		dat += "<a href='?src=\ref[src];adj_freq=-10'>--</a> "
-		dat += "<a href='?src=\ref[src];adj_freq=-2'>-</a> "
+		dat += "<a href='?src=[REF(src)];adj_freq=-10'>--</a> "
+		dat += "<a href='?src=[REF(src)];adj_freq=-2'>-</a> "
 		dat += "[format_frequency(src.master.frequency)] "
-		dat += "<a href='?src=\ref[src];adj_freq=2'>+</a> "
-		dat += "<a href='?src=\ref[src];adj_freq=10'>++</a>"
+		dat += "<a href='?src=[REF(src)];adj_freq=2'>+</a> "
+		dat += "<a href='?src=[REF(src)];adj_freq=10'>++</a>"
 		dat += "</TT><br>"
 		*/
 
 
-		dat += "<br>ID:<a href='byond://?src=\ref[src];set_tag=1'>[src.id_tag]</a><br>"
+		dat += "<br>ID:<a href='byond://?src=[REF(src)];set_tag=1'>[src.id_tag]</a><br>"
 
-		dat += "<a href='byond://?src=\ref[src];send_command=cycle'>Cycle</a>"
+		dat += "<a href='byond://?src=[REF(src)];send_command=cycle'>Cycle</a>"
 
 
 		dat += "</b></center>"

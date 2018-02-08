@@ -405,17 +405,17 @@ var/list/genescanner_addresses = list()
 
 			dat += "<table><tr><td>"
 			dat += "<b>Appearance:</b><br>"
-			dat += "<a href='byond://?src=\ref[src];s_tone=input'><b>Skin Tone:</b></a> [-src.s_tone + 35]/220<br>"
-			dat += "<a href='byond://?src=\ref[src];eyes=input'><b>Eye Color:</b> <font face=\"fixedsys\" size=\"3\" color=\"#[num2hex(src.r_eyes, 2)][num2hex(src.g_eyes, 2)][num2hex(src.b_eyes, 2)]\"><b>#</b></font></a><br>"
+			dat += "<a href='byond://?src=[REF(src)];s_tone=input'><b>Skin Tone:</b></a> [-src.s_tone + 35]/220<br>"
+			dat += "<a href='byond://?src=[REF(src)];eyes=input'><b>Eye Color:</b> <font face=\"fixedsys\" size=\"3\" color=\"#[num2hex(src.r_eyes, 2)][num2hex(src.g_eyes, 2)][num2hex(src.b_eyes, 2)]\"><b>#</b></font></a><br>"
 
-			dat += "<a href='byond://?src=\ref[src];h_style=input'><b>Hair:</b></a> [src.h_style] "
-			dat += "<a href='byond://?src=\ref[src];hair=input'><font face=\"fixedsys\" size=\"3\" color=\"#[num2hex(src.r_hair, 2)][num2hex(src.g_hair, 2)][num2hex(src.b_hair, 2)]\"><b>#</b></font></a><br>"
+			dat += "<a href='byond://?src=[REF(src)];h_style=input'><b>Hair:</b></a> [src.h_style] "
+			dat += "<a href='byond://?src=[REF(src)];hair=input'><font face=\"fixedsys\" size=\"3\" color=\"#[num2hex(src.r_hair, 2)][num2hex(src.g_hair, 2)][num2hex(src.b_hair, 2)]\"><b>#</b></font></a><br>"
 
-			dat += "<a href='byond://?src=\ref[src];f_style=input'><b>Facial Hair:</b></a> [src.f_style] "
-			dat += "<a href='byond://?src=\ref[src];facial=input'><font face=\"fixedsys\" size=\"3\" color=\"#[num2hex(src.r_facial, 2)][num2hex(src.g_facial, 2)][num2hex(src.b_facial, 2)]\"><b>#</b></font></a><br>"
+			dat += "<a href='byond://?src=[REF(src)];f_style=input'><b>Facial Hair:</b></a> [src.f_style] "
+			dat += "<a href='byond://?src=[REF(src)];facial=input'><font face=\"fixedsys\" size=\"3\" color=\"#[num2hex(src.r_facial, 2)][num2hex(src.g_facial, 2)][num2hex(src.b_facial, 2)]\"><b>#</b></font></a><br>"
 
-			dat += "<a href='byond://?src=\ref[src];d_style=input'><b>Detail:</b></a> [src.d_style] "
-			dat += "<a href='byond://?src=\ref[src];detail=input'><font face=\"fixedsys\" size=\"3\" color=\"#[num2hex(src.r_detail, 2)][num2hex(src.g_detail, 2)][num2hex(src.b_detail, 2)]\"><b>#</b></font></a><br>"
+			dat += "<a href='byond://?src=[REF(src)];d_style=input'><b>Detail:</b></a> [src.d_style] "
+			dat += "<a href='byond://?src=[REF(src)];detail=input'><font face=\"fixedsys\" size=\"3\" color=\"#[num2hex(src.r_detail, 2)][num2hex(src.g_detail, 2)][num2hex(src.b_detail, 2)]\"><b>#</b></font></a><br>"
 
 			dat += "</td><td>"
 			dat += "<center><b>Preview</b>:<br>"
@@ -423,7 +423,7 @@ var/list/genescanner_addresses = list()
 			dat += "</td></tr></table>"
 			dat += "<hr>"
 
-			dat += "<a href='byond://?src=\ref[src];apply=1'>Apply</a><br>"
+			dat += "<a href='byond://?src=[REF(src)];apply=1'>Apply</a><br>"
 			dat += "</body></html>"
 
 			user << browse(dat, "window=geneticsappearance;size=300x250;can_resize=0;can_minimize=0")

@@ -397,7 +397,7 @@
 	else
 		if(src.connected) //Is something connected?
 			dat = format_occupant_data(src.connected.get_occupant_data())
-			dat += "<HR><A href='?src=\ref[src];print=1'>Print</A><BR>"
+			dat += "<HR><A href='?src=[REF(src)];print=1'>Print</A><BR>"
 		else
 			dat = "<font color='red'>Error: No Body Scanner connected.</font>"
 

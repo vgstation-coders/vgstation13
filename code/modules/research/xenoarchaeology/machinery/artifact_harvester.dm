@@ -54,28 +54,28 @@
 				dat += "Please wait. Harvesting in progress ([(inserted_battery.stored_charge/inserted_battery.capacity)*100]%).<br>"
 			else
 				dat += "Please wait. Energy dump in progress ([(inserted_battery.stored_charge/inserted_battery.capacity)*100]%).<br>"
-			dat += "<A href='?src=\ref[src];stopharvest=1'>Halt early</A><BR>"
+			dat += "<A href='?src=[REF(src)];stopharvest=1'>Halt early</A><BR>"
 		else
 			if(artifact_field)
-				dat += "<A href='?src=\ref[src];alockoff=1'>Deactivate containment field</a><BR>"
+				dat += "<A href='?src=[REF(src)];alockoff=1'>Deactivate containment field</a><BR>"
 				dat += "<b>Artifact energy signature ID:</b>[cur_artifact.artifact_id == "" ? "???" : "[cur_artifact.artifact_id]"]<BR>"
-				dat += "<A href='?src=\ref[src];isolateeffect=1'>Isolate exotic particles</a><BR>"
+				dat += "<A href='?src=[REF(src)];isolateeffect=1'>Isolate exotic particles</a><BR>"
 				if(isolated_primary)
 					dat += "<b>Isolated energy signature ID:</b>[isolated_primary.artifact_id == "" ? "???" : "[isolated_primary.artifact_id]"]<BR>"
 				if(isolated_secondary)
 					dat += "<b>Isolated energy signature ID:</b>[isolated_secondary.artifact_id == "" ? "???" : "[isolated_secondary.artifact_id]"]<BR>"
 			else
-				dat += "<A href='?src=\ref[src];alockon=1'>Activate containment field</a><BR>"
+				dat += "<A href='?src=[REF(src)];alockon=1'>Activate containment field</a><BR>"
 
 			if(inserted_battery)
 				dat += "<b>[inserted_battery.name]</b> inserted, charge level: [inserted_battery.stored_charge]/[inserted_battery.capacity] ([(inserted_battery.stored_charge/inserted_battery.capacity)*100]%)<BR>"
 				dat += "<b>Battery energy signature ID:</b>[inserted_battery.battery_effect.artifact_id == "" ? "???" : "[inserted_battery.battery_effect.artifact_id]"]<BR>"
-				dat += "<A href='?src=\ref[src];ejectbattery=1'>Eject battery</a><BR>"
-				dat += "<A href='?src=\ref[src];drainbattery=1'>Drain battery of all charge</a><BR>"
+				dat += "<A href='?src=[REF(src)];ejectbattery=1'>Eject battery</a><BR>"
+				dat += "<A href='?src=[REF(src)];drainbattery=1'>Drain battery of all charge</a><BR>"
 				if(isolated_primary)
-					dat += "<A href='?src=\ref[src];harvestprimary=1'>Harvest signature ID: [isolated_primary.artifact_id]</a><BR>"
+					dat += "<A href='?src=[REF(src)];harvestprimary=1'>Harvest signature ID: [isolated_primary.artifact_id]</a><BR>"
 				if(isolated_secondary)
-					dat += "<A href='?src=\ref[src];harvestsecondary=1'>Harvest signature ID: [isolated_secondary.artifact_id]</a><BR>"
+					dat += "<A href='?src=[REF(src)];harvestsecondary=1'>Harvest signature ID: [isolated_secondary.artifact_id]</a><BR>"
 
 			else
 				dat += "No battery inserted.<BR>"
@@ -84,7 +84,7 @@
 		dat += "<B><font color=red>Unable to locate analysis pad.</font><BR></b>"
 	//
 	dat += "<HR>"
-	dat += "<A href='?src=\ref[src];refresh=1'>Refresh</A> <A href='?src=\ref[src];close=1'>Close<BR>"
+	dat += "<A href='?src=[REF(src)];refresh=1'>Refresh</A> <A href='?src=[REF(src)];close=1'>Close<BR>"
 	user << browse(dat, "window=artharvester;size=450x500")
 	onclose(user, "artharvester")
 

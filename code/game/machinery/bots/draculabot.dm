@@ -77,9 +77,9 @@
 			dat += "WARNING: No blood detected. Ineligible for blood donation.<BR>"
 		else
 			dat += {"Welcome [H]! Your blood level is [round(B.volume/560*100)]%, and your blood type is [B.data["blood_type"]].<BR>
-				You must have at least [round(509/560*100)]% to donate blood. <a href='?src=\ref[src];donate=[1]'>Donate now!</a><BR>
+				You must have at least [round(509/560*100)]% to donate blood. <a href='?src=[REF(src)];donate=[1]'>Donate now!</a><BR>
 				The next reward will be dispensed after [55 - since_last_reward] units of blood are donated.<BR>"}
-	dat += {"Status: <A href='?src=\ref[src];power=1'>[src.on ? "On" : "Off"]</A><BR>
+	dat += {"Status: <A href='?src=[REF(src)];power=1'>[src.on ? "On" : "Off"]</A><BR>
 			The maintenance panel is [src.open ? "opened" : "closed"]<BR>"}
 	if(!src.locked || issilicon(user))
 		dat += "<TT>Blood Storage:<BR>"
@@ -88,11 +88,11 @@
 			dat += "There are no blood packs available.<BR>"
 		for (var/obj/item/weapon/reagent_containers/blood/E in contained_bags)
 			counter++
-			dat += "Slot [counter]: [E] ([100 * E.reagents.total_volume / E.reagents.maximum_volume]% filled)<A href='?src=\ref[src];slot=\ref[E]'>(Eject)</A><BR>"
-		dat += "</TT>The speaker switch is [src.quiet ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>Toggle</a><br>"
+			dat += "Slot [counter]: [E] ([100 * E.reagents.total_volume / E.reagents.maximum_volume]% filled)<A href='?src=[REF(src)];slot=[REF(E)]'>(Eject)</A><BR>"
+		dat += "</TT>The speaker switch is [src.quiet ? "off" : "on"]. <a href='?src=[REF(src)];togglevoice=[1]'>Toggle</a><br>"
 
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(usr, "\ref[src]", "[name]", 575, 400)
+	var/datum/browser/popup = new(usr, "[REF(src)]", "[name]", 575, 400)
 	popup.set_content(dat)
 	popup.open()
 

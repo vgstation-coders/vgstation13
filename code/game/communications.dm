@@ -352,10 +352,10 @@ var/list/pointers = list()
 
 /datum/signal/New()
 	..()
-	pointers += "\ref[src]"
+	pointers += "[REF(src)]"
 
 /datum/signal/Destroy()
-	pointers -= "\ref[src]"
+	pointers -= "[REF(src)]"
 
 /datum/signal/resetVariables()
 	. = ..("data")

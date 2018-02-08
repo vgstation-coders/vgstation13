@@ -16,21 +16,21 @@
 		return
 	var/dat
 	if (src.temp)
-		dat = text("<TT>[src.temp]</TT><BR><BR><A href='?src=\ref[src];temp=1'>Clear Screen</A>")
+		dat = text("<TT>[src.temp]</TT><BR><BR><A href='?src=[REF(src)];temp=1'>Clear Screen</A>")
 	else
 		dat = text("Confirm Identity: <A href='?src=\ref[];id=auth'>[]</A><HR>", master, (src.master.authid ? text("[]", src.master.authid.name) : "----------"))
 		if (src.authenticated)
 			switch(src.screen)
 				if(1.0)
 					dat += {"
-<A href='?src=\ref[src];search=1'>Search Records</A>
-<BR><A href='?src=\ref[src];screen=2'>List Records</A>
+<A href='?src=[REF(src)];search=1'>Search Records</A>
+<BR><A href='?src=[REF(src)];screen=2'>List Records</A>
 <BR>
-<BR><A href='?src=\ref[src];screen=5'>Virus Database</A>
-<BR><A href='?src=\ref[src];screen=6'>Medbot Tracking</A>
+<BR><A href='?src=[REF(src)];screen=5'>Virus Database</A>
+<BR><A href='?src=[REF(src)];screen=6'>Medbot Tracking</A>
 <BR>
-<BR><A href='?src=\ref[src];screen=3'>Record Maintenance</A>
-<BR><A href='?src=\ref[src];logout=1'>{Log Out}</A><BR>
+<BR><A href='?src=[REF(src)];screen=3'>Record Maintenance</A>
+<BR><A href='?src=[REF(src)];logout=1'>{Log Out}</A><BR>
 "}
 				if(2.0)
 					dat += "<B>Record List</B>:<HR>"
@@ -56,22 +56,22 @@
 						dat += text("<A href='?src=\ref[];del_r=1'>Delete Record (Medical Only)</A><BR><BR>", src)
 					else
 						dat += "<B>Medical Record Lost!</B><BR>"
-						dat += text("<A href='?src=\ref[src];new=1'>New Record</A><BR><BR>")
+						dat += text("<A href='?src=[REF(src)];new=1'>New Record</A><BR><BR>")
 					dat += text("\n<A href='?src=\ref[];print_p=1'>Print Record</A><BR>\n<A href='?src=\ref[];screen=2'>Back</A><BR>", src, src)
 				if(5.0)
 					dat += {"<CENTER><B>Virus Database</B></CENTER>
-					<br><a href='?src=\ref[src];vir=gbs'>GBS</a>
-					<br><a href='?src=\ref[src];vir=cc'>Common Cold</a>
-					<br><a href='?src=\ref[src];vir=f'>Flu</A>
-					<br><a href='?src=\ref[src];vir=jf'>Jungle Fever</a>
-					<br><a href='?src=\ref[src];vir=ca'>Clowning Around</a>
-					<br><a href='?src=\ref[src];vir=p'>Plasmatoid</a>
-					<br><a href='?src=\ref[src];vir=dna'>Space Rhinovirus</a>
-					<br><a href='?src=\ref[src];vir=bot'>Robot Transformation</a>
-					<br><a href='?src=\ref[src];screen=1'>Back</a>"}
+					<br><a href='?src=[REF(src)];vir=gbs'>GBS</a>
+					<br><a href='?src=[REF(src)];vir=cc'>Common Cold</a>
+					<br><a href='?src=[REF(src)];vir=f'>Flu</A>
+					<br><a href='?src=[REF(src)];vir=jf'>Jungle Fever</a>
+					<br><a href='?src=[REF(src)];vir=ca'>Clowning Around</a>
+					<br><a href='?src=[REF(src)];vir=p'>Plasmatoid</a>
+					<br><a href='?src=[REF(src)];vir=dna'>Space Rhinovirus</a>
+					<br><a href='?src=[REF(src)];vir=bot'>Robot Transformation</a>
+					<br><a href='?src=[REF(src)];screen=1'>Back</a>"}
 				if(6.0)
 					dat += "<center><b>Medical Robot Monitor</b></center>"
-					dat += "<a href='?src=\ref[src];screen=1'>Back</a>"
+					dat += "<a href='?src=[REF(src)];screen=1'>Back</a>"
 					dat += "<br><b>Medical Robots:</b>"
 					var/bdat = null
 					for(var/obj/machinery/bot/medbot/M in machines)
@@ -90,7 +90,7 @@
 				else
 		else
 			dat += text("<A href='?src=\ref[];login=1'>{Log In}</A>", src)
-			dat += "<br><a href='byond://?src=\ref[src];quit=1'>{Quit}</a>"
+			dat += "<br><a href='byond://?src=[REF(src)];quit=1'>{Quit}</a>"
 
 	return dat
 
@@ -358,7 +358,7 @@
 
 		if (href_list["del_r"])
 			if (src.active2)
-				src.temp = "Are you sure you wish to delete the record (Medical Portion Only)?<br>\n\t<A href='?src=\ref[src];temp=1;del_r2=1'>Yes</A><br>\n\t<A href='?src=\ref[src];temp=1'>No</A><br>"
+				src.temp = "Are you sure you wish to delete the record (Medical Portion Only)?<br>\n\t<A href='?src=[REF(src)];temp=1;del_r2=1'>Yes</A><br>\n\t<A href='?src=[REF(src)];temp=1'>No</A><br>"
 
 		if (href_list["del_r2"])
 			if (src.active2)

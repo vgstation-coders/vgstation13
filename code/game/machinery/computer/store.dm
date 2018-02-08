@@ -78,7 +78,7 @@
 		for(var/store_item in category_items)
 			var/datum/storeitem/SI = new store_item()
 			dat += {"
-				<tr><td><A href='?src=\ref[src];choice=buy;chosen_item=[store_item]'>[get_display_name(SI)]</A></td></tr>
+				<tr><td><A href='?src=[REF(src)];choice=buy;chosen_item=[store_item]'>[get_display_name(SI)]</A></td></tr>
 				<tr><td><i>[SI.desc]</i></td></tr>
 				"}
 
