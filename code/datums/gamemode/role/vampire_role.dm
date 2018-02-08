@@ -263,7 +263,7 @@
 
 /datum/role/vampire/process()
 	var/mob/living/carbon/human/H = antag.current
-	if (!isype(H))
+	if (!istype(H))
 		return FALSE // The life() procs only work on humans.
 	handle_cloak(H)
 	handle_menace(H)
