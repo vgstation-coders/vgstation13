@@ -35,6 +35,7 @@
 	var/datum/objective_holder/objective_holder
 	var/datum/role/roletype = /datum/role
 
+
 /datum/faction/proc/OnPostSetup()
 	objective_holder = new
 	forgeObjectives()
@@ -44,7 +45,6 @@
 //Initialization proc, checks if the faction can be made given the current amount of players and/or other possibilites
 /datum/faction/proc/can_setup()
 	return TRUE
-
 
 //For when you want your faction to have specific objectives (Vampire, suck blood. Cult, sacrifice the head of personnel's dog, etc.)
 /datum/faction/proc/forgeObjectives()
@@ -230,17 +230,6 @@
 				dat += "<tr><td><i>Apprentice not found!</i></td></tr>"
 		dat += "</table>"*/
 	return dat
-
-
-/datum/faction/vampire
-	name = "Space Vampires"
-	ID = VAMPIRE
-	initial_role = VAMPIRE
-	late_role = VAMPIRE
-	required_pref = ROLE_VAMPIRE
-	desc = "Beings cursed to wander the galaxy to satiate their lust for blood, \
-	usually pointed towards NT station by the syndicate in exchange for causing chaos and completing objectives for them.\
-	Vampirism is still not fully understood, but those afflicted can quickly become a force to be reckoned with if allowed to indulge."
 
 /datum/faction/vampire/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/mob.dmi', "vampire-logo")

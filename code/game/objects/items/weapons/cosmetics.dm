@@ -442,10 +442,11 @@
 
 	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
-		/*if (isvampire(H))
-			if (!(VAMP_MATURE in H.mind.vampire.powers))
+		if (isvampire(H))
+			var/datum/role/vampire/V = H.mind.GetRole(VAMPIRE)
+			if (!(VAMP_MATURE in V.powers))
 				to_chat(H, "<span class='notice'>You don't see anything.</span>")
-				return*/
+				return
 
 		if (user.hallucinating())
 			switch(rand(1,100))
