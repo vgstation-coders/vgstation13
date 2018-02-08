@@ -132,6 +132,12 @@
 /datum/gamemode/proc/latespawn(var/mob/mob) //Check factions, see if anyone wants a latejoiner
 	var/list/possible_factions = list()
 	for(var/datum/faction/F in factions)
+		if(F.max_roles && F.members.len >= F.max_roles)
+			continue
+		if(!mob.client || !mob.mind)
+			continue
+		if(!mob.client.desires_role(F.required_pref) || jobban_isbanned(mob, F.required_pref))
+			continue
 		if(F.accept_latejoiners)
 			possible_factions.Add(F)
 	if(possible_factions.len)
