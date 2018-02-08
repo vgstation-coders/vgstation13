@@ -82,7 +82,7 @@
 				update_inv_wear_suit()
 
 	//Nutrition decrease
-	if(stat != DEAD && !(species.chem_flags & NO_HUNGER))
+	if(stat != DEAD)
 		var/reduce_nutrition_by = HUNGER_FACTOR
 		if(sleeping)
 			reduce_nutrition_by *= 0.75 //Reduce hunger factor by 25%
