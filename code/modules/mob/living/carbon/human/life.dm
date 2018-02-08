@@ -181,8 +181,6 @@ var/global/list/organ_damage_overlays = list(
 	pulse = handle_pulse()
 	for(var/obj/item/weapon/grab/G in src)
 		G.process()
-	/*if(mind && mind.vampire)
-		handle_vampire()*/
 	handle_alpha()
 	if(update_overlays)
 		update_overlays = 0

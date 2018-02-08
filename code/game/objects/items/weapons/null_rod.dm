@@ -42,16 +42,18 @@
 		user.Stun(5)
 		return
 
-	/*if(ishuman(M)) //Typecasting, only humans can be vampires
+	if(ishuman(M)) //Typecasting, only humans can be vampires
 		var/mob/living/carbon/human/H = M
 
-		if(isvampire(H) && user.mind && (user.mind.assigned_role == "Chaplain")) //Fuck up vampires by smithing the shit out of them. Shock and Awe!
-			if(!(VAMP_MATURE in H.mind.vampire.powers))
+		var/datum/role/vampire/V = isvampire(H)
+
+		if(V && user.mind && (user.mind.assigned_role == "Chaplain")) //Fuck up vampires by smithing the shit out of them. Shock and Awe!
+			if(!(VAMP_MATURE in V.powers))
 				to_chat(H, "<span class='warning'>\The [src]'s power violently interferes with your own!</span>")
-				if(H.mind.vampire.nullified < 5) //Don't actually reduce their debuff if it's over 5
-					H.mind.vampire.nullified = max(5, H.mind.vampire.nullified + 2)
-				H.mind.vampire.smitecounter += 30 //Smithe the shit out of him. Four strikes and he's out
-		*/
+				if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
+					V.nullified = max(5, V.nullified + 2)
+				V.smitecounter += 30 //Smithe the shit out of him. Four strikes and he's out
+
 
 	//A 25% chance to de-cult per hit that bypasses all protections? Is this some kind of joke? The last thing cult needs right now is that kind of nerfs. Jesus dylan.
 	/*
@@ -78,12 +80,12 @@
 	if(user.mind)
 		if(user.mind.assigned_role == "Chaplain")
 			to_chat(user, "<span class='notice'>The obsidian rod is teeming with divine power. You feel like you could pulverize a horde of undead with this.</span>")
-		/*if(ishuman(user)) //Typecasting, only humans can be vampires
-			var/mob/living/carbon/human/H = user
-			if(isvampire(H) && !(VAMP_UNDYING in H.mind.vampire.powers))
-				H.mind.vampire.smitecounter += 60
-				to_chat(H, "<span class='danger'>You feel an unwanted presence as you pick up the rod. Your body feels like it is burning from the inside!</span>")
-		*/
+		if(ishuman(user)) //Typecasting, only humans can be vampires
+			var/datum/role/vampire/V = isvampire(user)
+			if(V && !(VAMP_UNDYING in V.powers))
+				V.smitecounter += 60
+				to_chat(user, "<span class='danger'>You feel an unwanted presence as you pick up the rod. Your body feels like it is burning from the inside!</span>")
+
 /obj/item/weapon/nullrod/attack_self(mob/user)
 	if(reskinned)
 		return
