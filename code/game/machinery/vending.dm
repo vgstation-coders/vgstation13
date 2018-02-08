@@ -1786,7 +1786,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/legcuffs/bolas = 8,
 		)
 	contraband = list(
-		/obj/item/clothing/glasses/sunglasses/red = 2,
+		/obj/item/clothing/glasses/sunglasses/security = 2,
 		/obj/item/weapon/storage/fancy/donut_box = 2,
 		)
 	premium = list(

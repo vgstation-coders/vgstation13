@@ -125,6 +125,12 @@
 	
 /obj/item/clothing/glasses/sunglasses/red
 	name = "red sunglasses"
+	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes, and the colored lenses let you see the world in red."
+	icon_state = "sunred"
+	item_state = "sunred"
+	
+/obj/item/clothing/glasses/sunglasses/security
+	name = "security sunglasses"
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes. Often worn by budget security officers."
 	icon_state = "sunhud"
 
