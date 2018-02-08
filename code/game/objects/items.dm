@@ -1199,10 +1199,6 @@ var/global/list/image/blood_overlays = list()
 			return
 		feedback_add_details("handcuffs", "[name]")
 
-		if(clumsy_check(user) && prob(50))
-			to_chat(user, "<span class='warning'>Uh... how is this done?!</span>")
-			C = user
-
 		user.visible_message("<span class='danger'>\The [user] has restrained \the [C] with \the [src]!</span>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has restrained [C.name] ([C.ckey]) with \the [src].</font>")
 		C.attack_log += text("\[[time_stamp()]\] <font color='red'>Restrained with \the [src] by [user.name] ([user.ckey])</font>")
