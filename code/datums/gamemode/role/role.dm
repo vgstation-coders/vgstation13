@@ -213,10 +213,11 @@
 		return 1
 	return 0
 
-/datum/role/proc/ReturnObjectivesString(var/check_success = FALSE)
+/datum/role/proc/ReturnObjectivesString(var/check_success = FALSE, var/check_name = TRUE)
 	var/dat = ""
-	var/datum/mind/N = antag
-	dat += "<br>[N] - [N.name]<br>"
+	if(check_name)
+		var/datum/mind/N = antag
+		dat += "<br>[N] - [N.name]<br>"
 	dat += objectives.GetObjectiveString(check_success)
 	return dat
 
@@ -230,8 +231,8 @@
 /datum/role/proc/Greet(var/you_are=1)
 	if(you_are) //Getting a bit philosphical, but there we go
 		to_chat(antag.current, "<B>You are \a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
-	to_chat(antag.current, "[ReturnObjectivesString()]")
-	antag.store_memory("[ReturnObjectivesString()]")
+	to_chat(antag.current, "[ReturnObjectivesString(check_name = FALSE)]")
+	antag.store_memory("[ReturnObjectivesString(check_name = FALSE)]")
 
 
 /datum/role/proc/PreMindTransfer(var/datum/mind/M)

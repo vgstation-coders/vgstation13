@@ -41,8 +41,8 @@
 		to_chat(antag.current, "You have evolved beyond your clownish nature, allowing you to wield weapons without harming yourself.")
 		antag.current.mutations.Remove(M_CLUMSY)
 	to_chat(antag.current, "<B>You must complete the following tasks:</B>")
-	to_chat(antag.current, "[ReturnObjectivesString()]")
-	antag.store_memory("[ReturnObjectivesString()]")
+	to_chat(antag.current, "[ReturnObjectivesString(check_name = FALSE)]")
+	antag.store_memory("[ReturnObjectivesString(check_name = FALSE)]")
 
 /datum/role/changeling/ForgeObjectives()
 	AppendObjective(/datum/objective/absorb)
