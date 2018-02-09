@@ -1182,6 +1182,7 @@
 #include "code\modules\clothing\masks\miscellaneous.dm"
 #include "code\modules\clothing\masks\mystic.dm"
 #include "code\modules\clothing\masks\necklaces.dm"
+#include "code\modules\clothing\masks\stone.dm"
 #include "code\modules\clothing\masks\transmog.dm"
 #include "code\modules\clothing\monkeyclothes\monkeyclothes.dm"
 #include "code\modules\clothing\shoes\colour.dm"

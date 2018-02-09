@@ -141,8 +141,7 @@
 	abbreviation = "SS"
 
 /datum/spellbook_artifact/summon_magic/can_buy()
-	//Can't summon swords during ragin' mages
-	return !ticker.mode.rage
+	return TRUE
 
 /datum/spellbook_artifact/summon_swords/purchased(mob/living/carbon/human/H)
 	..()
