@@ -197,7 +197,7 @@
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define iscult(H) (H.mind && (iscultist(H) || isculthead(H) || faction == "cult"))
+#define iscult(H) (H.mind && (iscultist(H) || isculthead(H)))
 
 #define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
 

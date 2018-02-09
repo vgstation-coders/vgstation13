@@ -27,7 +27,6 @@
 		return
 	c_animation = new /atom/movable/overlay(src.loc)
 	c_animation.name = "cultification"
-	c_animation.setDensity(FALSE)
 	c_animation.anchored = 1
 	c_animation.icon = 'icons/effects/effects.dmi'
 	c_animation.plane = EFFECTS_PLANE
@@ -205,8 +204,8 @@
 			to_chat(M, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 			to_chat(M, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
 			M.add_language(LANGUAGE_CULT)
-			log_admin("[usr]([ckey(usr.key)]) has converted [M] ([ckey(M.key)]) to the cult at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.loc.x];Y=[M.loc.y];Z=[M.loc.z]'>([M.loc.x], [M.loc.y], [M.loc.z])</a>")
-			add_attacklogs(usr, M, "converted to the Cult of Nar'Sie!")
+			log_admin("[usr]([ckey(usr.key)]) has converted [M] ([ckey(M.key)]) to the [cult.deity_name] cult at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.loc.x];Y=[M.loc.y];Z=[M.loc.z]'>([M.loc.x], [M.loc.y], [M.loc.z])</a>")
+			add_attacklogs(usr, M, "converted to the Cult of [cult.deity_name]!")
 			stat_collection.cult_converted++
 			if(M.client)
 				spawn(600)
@@ -545,7 +544,7 @@
 		"<span class='warning'>Life? I'm alive? I live, again!.</span>", \
 		"<span class='warning'>You hear a faint, slightly familiar whisper.</span>")
 		body_to_sacrifice.visible_message("<span class='warning'>[body_to_sacrifice] is torn apart, a black smoke swiftly dissipating from his remains!</span>", \
-		"<span class='sinister'>You are engulfed in pain as your blood boils, tearing you apart.</span>", \
+		"<span class='sinister'>You are ingulfed by pain as your blood boils, tearing you apart.</span>", \
 		"<span class='sinister'>You hear a thousand voices, all crying in pain.</span>")
 		body_to_sacrifice.gib()
 	if(cult_round)
@@ -964,14 +963,14 @@
 					ritualresponse += "The Geometer of Blood accepts to destroy that brain."
 					sacrificedone = 1
 					invocation("rune_sac")
-					R.on_fire = 1
-					R.ashify()
+					B.on_fire = 1
+					B.ashify()
 
 		else if(istype(A, /obj/item/organ/external/head/)) //Literally the same as the brain check
 			var/obj/item/organ/external/head/H = A
 			var/mob/living/carbon/brain/N = H.brainmob
 			if(N)//the brain is a player's
-				if(cult_round && (N.mind == cult_round.sacrifice_target))
+				if(cult_round && cult_round.is_sacrifice_target(N.mind))
 					ritualresponse += "You need to place that head back on a body before you can complete your objective."
 				else
 					ritualresponse += "The Geometer of Blood accepts to destroy the head."
@@ -1053,7 +1052,7 @@
 
 /obj/effect/rune/proc/wall()
 	usr.say("Khari[pick("'","`")]d! Eske'te tannin!")
-	setDensity(!density)
+	src.density = !src.density
 	var/mob/living/user = usr
 	user.take_organ_damage(2, 0)
 	if(src.density)
