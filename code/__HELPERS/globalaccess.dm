@@ -1845,8 +1845,6 @@
 			return global.alldepartments;
 		if("atmos_controllers")
 			return global.atmos_controllers;
-		if("ul_FastRoot")
-			return global.ul_FastRoot;
 		if("sharing_lookup_table")
 			return global.sharing_lookup_table;
 		if("assigned")
@@ -3740,8 +3738,6 @@
 			global.alldepartments=newval
 		if("atmos_controllers")
 			global.atmos_controllers=newval
-		if("ul_FastRoot")
-			global.ul_FastRoot=newval
 		if("sharing_lookup_table")
 			global.sharing_lookup_table=newval
 		if("assigned")
