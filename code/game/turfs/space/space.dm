@@ -4,7 +4,7 @@
 	desc = "The final frontier."
 	icon_state = "0"
 
-	plane = PLANE_SPACE_BACKGROUND
+	plane = SPACE_BACKGROUND_PLANE
 
 	temperature = TCMB
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
@@ -20,7 +20,7 @@
 		A.area_turfs += src
 	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
 	var/image/I = image('icons/turf/space_parallax1.dmi',"[icon_state]")
-	I.plane = PLANE_SPACE_DUST
+	I.plane = SPACE_DUST_PLANE
 	I.alpha = 80
 	I.blend_mode = BLEND_ADD
 	overlays += I
@@ -180,7 +180,7 @@
 	name = "the void"
 	icon_state = "void"
 	desc = "The final final frontier."
-	plane = PLANE_ABOVE_PARALLAX
+	plane = ABOVE_PARALLAX_PLANE
 
 /turf/space/void/New()
 	return

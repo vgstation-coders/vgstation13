@@ -482,7 +482,7 @@
 	else if (href_list["criminal"])
 		if(!usr.hasHUD(HUD_SECURITY) || isjustobserver(usr))
 			return
-		var/perpname = get_id_name("wot")
+		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
 		if(!sec_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
@@ -490,11 +490,11 @@
 		var/setcriminal = input(usr, "Specify a new criminal status for this person.", "Security HUD", sec_record.fields["criminal"]) as null|anything in list("None", "*Arrest*", "Incarcerated", "Parolled", "Released")
 		if(!setcriminal || (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_SECURITY))
 			return
-		sec_record.fields["criminal"] = setcriminal	
+		sec_record.fields["criminal"] = setcriminal
 	else if (href_list["secrecord"])
 		if(!usr.hasHUD(HUD_SECURITY))
 			return
-		var/perpname = get_id_name("wot")
+		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
 		if(!sec_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
@@ -513,7 +513,7 @@
 	else if (href_list["secrecordadd"])
 		if(!usr.hasHUD(HUD_SECURITY) || isjustobserver(usr))
 			return
-		var/perpname = get_id_name("wot")
+		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
 		if(!sec_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
@@ -525,7 +525,7 @@
 	else if (href_list["medical"])
 		if(!usr.hasHUD(HUD_MEDICAL) || isjustobserver(usr))
 			return
-		var/perpname = get_id_name("wot")
+		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
 		if(!gen_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
@@ -539,7 +539,7 @@
 	else if (href_list["medrecord"])
 		if(!usr.hasHUD(HUD_MEDICAL))
 			return
-		var/perpname = get_id_name("wot")
+		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/med_record = data_core.find_medical_record_by_name(perpname)
 		if(!med_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
@@ -555,7 +555,7 @@
 	else if (href_list["medrecordComment"])
 		if(!usr.hasHUD(HUD_MEDICAL))
 			return
-		var/perpname = get_id_name("wot")
+		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/med_record = data_core.find_medical_record_by_name(perpname)
 		if(!med_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
@@ -571,7 +571,7 @@
 	else if (href_list["medrecordadd"])
 		if(!usr.hasHUD(HUD_MEDICAL) || isjustobserver(usr))
 			return
-		var/perpname = get_id_name("wot")
+		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/med_record = data_core.find_medical_record_by_name(perpname)
 		if(!med_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
@@ -1750,8 +1750,8 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 
-/mob/living/carbon/human/proc/make_zombie(mob/master)
-	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, mind)
+/mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE)
+	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? mind : null))
 	T.get_clothes(src, T)
 	T.name = real_name
 	T.host = src

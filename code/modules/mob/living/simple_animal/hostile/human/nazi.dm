@@ -369,6 +369,7 @@
 	say("Eva, auf wiedersehen!")
 	ranged = 0
 	sleep(10)
-	explosion(loc,1,2,3)
-	new/obj/item/weapon/gun/gatling(loc)
+	var/turf/eloc = get_turf(loc)
 	qdel(src)
+	explosion(eloc,1,2,3)
+	new /obj/item/weapon/gun/gatling(eloc)
