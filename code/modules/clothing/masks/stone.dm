@@ -41,15 +41,16 @@
 					H.hallucination+=rand(100,500)
 					H.u_equip(src, 1)
 					return
-				if(!isvampire(H)) //They are not already a vampire
+				var/datum/role/vampire/V = isvampire(H)
+				if(!V) //They are not already a vampire
 					to_chat(H, "<span class='danger'>The mask's stone spikes pierce your skull and enter your brain!</span>")
-					M.make_new_vampire()
+					M.make_new_vampire() // TODO rolefix
 					log_admin("[H] has become a vampire using a stone mask.")
 					spawn(10)	//Unlocking their abilities produces a lot of text, I want to give them a chance to see that they have objectives
-						H.mind.vampire.bloodtotal = blood_to_give
-						H.mind.vampire.bloodusable = blood_to_give
-						to_chat(H, "<span class='notice'>You have accumulated [H.mind.vampire.bloodtotal] [H.mind.vampire.bloodtotal > 1 ? "units" : "unit"] of blood and have [H.mind.vampire.bloodusable] left to use.</span>")
-						H.check_vampire_upgrade(H.mind)
+						V.blood_total = blood_to_give
+						V.blood_usable = blood_to_give
+						to_chat(H, "<span class='notice'>You have accumulated [V.blood_total] [V.blood_total > 1 ? "units" : "unit"] of blood and have [V.blood_usable] left to use.</span>")
+						V.check_vampire_upgrade()
 					if(!infinite)
 						crumble()
 						return

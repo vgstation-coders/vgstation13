@@ -22,13 +22,11 @@
 				sleep(100)
 				var/datum/role/changeling/C = new(M)
 				if(C)
-					C.geneticpoints+=genomes_to_give
+					C.geneticpoints = Clamp(genomes_to_give, 0, 100)
 					C.OnPostSetup()
 				to_chat(H, "<B><font color='red'>Finally, we once again have a suitable body. We are once again a proper changeling!</font></B>")
 				var/wikiroute = role_wiki[ROLE_CHANGELING]
 				to_chat(H, "<span class='info'><a HREF='?src=\ref[H];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-				M.make_new_changeling(0,1)
-				H.mind.changeling.geneticpoints = Clamp(genomes_to_give, 0, 100)
 				log_admin("[H] has become a changeling using a changeling vial.")
 			else
 				to_chat(user, "[H.mind ? 1 : 0] && [H.mind.GetRole(CHANGELING)]")

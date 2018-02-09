@@ -358,7 +358,6 @@
 				return 0
 	return 1
 
-/*
 /datum/reagent/blood/reaction_obj(var/obj/O, var/volume)
 
 	if(..())
@@ -367,7 +366,6 @@
 	if(istype(O, /obj/item/clothing/mask/stone))
 		var/obj/item/clothing/mask/stone/S = O
 		S.spikes()
-*/
 
 //Data must contain virus type
 /datum/reagent/vaccine
@@ -914,7 +912,6 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		/*
 		if(iscult(H))
 			if(prob(10)) //1/10 chance of removing cultist status, so 50 units on average to uncult (half a holy water bottle)
 				ticker.mode.remove_cultist(H.mind)
@@ -922,23 +919,20 @@
 				"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 			else //Warn the Cultist that it is fucking him up
 				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your arcane knowledge is becoming obscure again.</span>")
-			*/
 		//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
 		var/datum/role/vampire/V = isvampire(H)
 		if(V)
 			if(!(VAMP_MATURE in V.powers))
 				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric powers fade and your insides burn.</span>")
-				H.take_organ_damage(0, 5) //FIRE
+				H.take_organ_damage(0, 5) //FIRE, MAGIC FIRE THAT BURNS ROBOTIC LIMBS TOO!
 				V.smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
 			else
 				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. Your vampiric powers counter most of the damage.</span>")
 				V.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
-		var/datum/role/thrall/T = isthrall(H)
-		if(T)
-			T.Drop()
-			H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
-			"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
-
+		// if(H.mind && H.mind.special_role == "VampThrall")
+		// 	ticker.mode.remove_thrall(H.mind)
+		// 	H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
+		// 	"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 
 /datum/reagent/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
 
@@ -963,12 +957,12 @@
 
 					if(H.acidable())
 						if(prob(15) && volume >= 30)
-							var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-							if(affecting)
+							var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+							if(head_organ)
 								if(!(VAMP_MATURE in V.powers))
 									to_chat(H, "<span class='danger'>A freezing liquid covers your face. Its melting!</span>")
 									V.smitecounter += 60 //Equivalent from metabolizing all this holy water normally
-									if(affecting.take_damage(30, 0))
+									if(head_organ.take_damage(30, 0))
 										H.UpdateDamageIcon(1)
 									head_organ.disfigure("burn")
 									H.emote("scream",,, 1)

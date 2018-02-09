@@ -46,7 +46,7 @@
 	to_chat(world, {"<FONT size = 3><B>The AI has won!</B></FONT><br>
 <B>It has fully taken control of [station_name()]'s systems.</B>"})
 
-	stat_collection.malf.malf_wins = 1
+	stat_collection.malf_won = 1
 
 	to_nuke_or_not_to_nuke = 1
 	for(var/datum/role/malfAI in members)

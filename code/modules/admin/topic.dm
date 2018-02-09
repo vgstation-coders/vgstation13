@@ -2083,9 +2083,10 @@
 	else if(href_list["emergency_shuttle_panel"])
 		emergency_shuttle_panel()
 
-	// else if(href_list["check_antagonist"])
-	// 	check_antagonists()
+	else if(href_list["check_antagonist"])
+		check_antagonists()
 
+	/*
 	else if(href_list["cult_nextobj"])
 		if(alert(usr, "Validate the current Cult objective and unlock the next one?", "Cult Cheat Code", "Yes", "No") != "Yes")
 			return
