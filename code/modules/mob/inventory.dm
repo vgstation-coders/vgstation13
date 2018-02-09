@@ -175,7 +175,6 @@
 	if(!put_in_hand_check(W, index))
 		return 0
 
-
 	if(W.prepickup(src))
 		return 0
 
@@ -230,8 +229,11 @@
 	return put_in_hand(active_hand, W)
 
 //Puts the item into our inactive hand if possible. returns 1 on success.
-/mob/proc/put_in_inactive_hand(var/obj/item/W)
-	return put_in_hand(get_inactive_hand_index(), W)
+/mob/proc/put_in_inactive_hand(var/obj/item/W) // The technology has advanced, we can now handle lifeforms with more than 2 hands.
+	for (var/i = held_items.len; i > 0; i--) // held_items.len returns us to the last available hand. We iterate until we come to 0.
+		if (i != active_hand && put_in_hand(i, W))
+			return 1
+	return 0
 
 //Puts the item our active hand if possible. Failing that it tries our inactive hand. Returns 1 on success.
 //If both fail it drops it on the floor and returns 0.
@@ -239,6 +241,9 @@
 /mob/proc/put_in_hands(var/obj/item/W)
 	if(!W)
 		return 0
+	for (var/i = 1 to held_items.len)
+		if (held_items[i] == W)
+			return 0 // If it's already in your hands and you move it, it's in a superposition and breaks everything.
 	if(put_in_active_hand(W))
 		return 1
 	else if(put_in_inactive_hand(W))

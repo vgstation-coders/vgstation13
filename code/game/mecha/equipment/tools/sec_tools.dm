@@ -144,7 +144,8 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/jail/Topic(href,href_list)
-	..()
+	if(..())
+		return TRUE
 	var/datum/topic_input/filter = new /datum/topic_input(href,href_list)
 	for(var/cell in cells)
 		if(filter.get("eject[cell]"))

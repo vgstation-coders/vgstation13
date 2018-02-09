@@ -83,8 +83,8 @@ rcd light flash thingy on matter drain
 /spell/aoe_turf/disable_rcd/cast(list/targets, mob/user)
 	for(var/obj/item/device/rcd/matter/engineering/rcd in world)
 		rcd.disabled = 1
-	for(var/obj/item/mecha_parts/mecha_equipment/tool/rcd/rcd in world)
-		rcd.disabled = 1
+	for(var/obj/item/mecha_parts/mecha_equipment/tool/red/red in world)
+		red.disabled = 1
 	to_chat(src, "RCD-disabling pulse emitted.")
 
 /datum/AI_Module/small/overload_machine

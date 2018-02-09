@@ -348,3 +348,13 @@
 		to_chat(user, "<span class='notice'>Sprayer refilled.</span>")
 		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
 		return 1
+
+/obj/structure/reagent_dispensers/degreaser
+	name = "ethanol tank"
+	desc = "A tank filled with ethanol, used in the degreasing of engines."
+	icon_state = "degreasertank"
+	amount_per_transfer_from_this = 5
+
+/obj/structure/reagent_dispensers/degreaser/New()
+	. = ..()
+	reagents.add_reagent(ETHANOL, 1000)

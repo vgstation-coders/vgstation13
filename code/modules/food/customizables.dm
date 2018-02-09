@@ -269,6 +269,7 @@
 	icon_state = "breadcustom"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/slices/breadslice
 	slices_num = 5
+	storage_slots = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/slices/breadslice
 	name = "slice"
@@ -288,6 +289,7 @@
 	icon_state = "cakecustom"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/slices/cakeslicecustom
 	slices_num = 5
+	storage_slots = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/slices/cakeslicecustom
 	name = "slice"

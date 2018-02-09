@@ -477,7 +477,7 @@
 /obj/machinery/r_n_d/fabricator/proc/get_construction_time_w_coeff(var/datum/design/part as obj, var/roundto=1)
 	return round(/*TechTotal(part)*/(part.MatTotal()/FAB_MAT_BASEMOD)*build_time*time_coeff, roundto)
 
-/obj/machinery/r_n_d/fabricator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/r_n_d/fabricator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(stat & (BROKEN|NOPOWER))
 		return
 	if(user.stat || user.restrained())
@@ -516,7 +516,7 @@
 		parts_list[set_name] = set_name_list
 	data["parts"] = parts_list // assigning the parts data to the data sent to UI
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, nano_file, name, FAB_SCREEN_WIDTH, FAB_SCREEN_HEIGHT)
 		ui.set_initial_data(data)

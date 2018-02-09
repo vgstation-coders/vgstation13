@@ -1,4 +1,17 @@
 #define HTMLTAB "&nbsp;&nbsp;&nbsp;&nbsp;"
+
+//Loops through every line in (text). The 'line' variable holds the current line
+//Example use:
+/*
+var/text = {"Line 1
+Line 2
+Line 3
+"}
+forLineInText(text)
+	world.log << line
+*/
+#define forLineInText(text) for({var/__index=1;var/line=copytext(text, __index, findtext(text, "\n", __index))} ; {__index != 0} ; {__index = findtext(text, "\n", __index+1) ; line = copytext(text, __index+1, findtext(text, "\n", __index+1))})
+
 /*
  * Holds procs designed to help with filtering text
  * Contains groups:
@@ -291,11 +304,11 @@ proc/checkhtml(var/t)
 
 	return ""
 
-//Returns a string with double spaces removed	
-/proc/trimcenter(text) 
+//Returns a string with double spaces removed
+/proc/trimcenter(text)
 	var/regex/trimcenterregex = regex("\\s{2,}","g")
 	return trimcenterregex.Replace(text," ")
-	
+
 //Returns a string with reserved characters and spaces before the first word and after the last word removed.
 /proc/trim(text)
 	return trim_left(trim_right(text))
@@ -380,17 +393,21 @@ proc/checkhtml(var/t)
 	if(parts.len==2)
 		. += ".[parts[2]]"
 
-var/global/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW")
+var/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW")
 /proc/format_watts(var/number)
-	if(number<0)
-		return "-[format_watts(number)]"
-	if(number==0)
+	if (number<0)
+		return "-[format_watts(abs(number))]"
+	if (number==0)
 		return "0 W"
 
+	var/max_watt_suffix = watt_suffixes.len
 	var/i=1
 	while (round(number/1000) >= 1)
 		number/=1000
 		i++
+		if (i == max_watt_suffix)
+			break
+
 	return "[format_num(number)] [watt_suffixes[i]]"
 
 //Returns 1 if [text] ends with [suffix]
@@ -449,6 +466,9 @@ var/list/number_units=list(
 	"million",
 	"billion"
 )
+
+// The " character
+var/quote = ascii2text(34)
 
 /proc/num2words(var/number, var/zero="zero", var/minus="minus", var/hundred="hundred", var/list/digits=number_digits, var/list/tens=number_tens, var/list/units=number_units, var/recursion=0)
 	if(!isnum(number))

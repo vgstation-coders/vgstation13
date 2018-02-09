@@ -30,7 +30,7 @@
 
 	a_intent = I_HURT //so they don't get pushed around
 
-	environment_smash = 2
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
 
 	speed = 1
 

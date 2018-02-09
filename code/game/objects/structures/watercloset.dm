@@ -276,6 +276,7 @@
 	overlays.len = 0 //Once it's been on for a while, in addition to handling the water overlay.
 	if(mymist)
 		returnToPool(mymist)
+		mymist = null
 
 	if(on)
 		var/image/water = image('icons/obj/watercloset.dmi', src, "water", BELOW_OBJ_LAYER, dir)
@@ -297,6 +298,7 @@
 		spawn(250)
 			if(src && !on)
 				returnToPool(mymist)
+				mymist = null
 				ismist = 0
 
 /obj/machinery/shower/Crossed(atom/movable/O)

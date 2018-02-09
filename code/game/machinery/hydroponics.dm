@@ -866,7 +866,7 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(!ishuman(user) && !ismonkey(user))
 		return
 	if(harvest)
-		if(!user in range(1,src))
+		if(!(user in range(1,src)))
 			return
 		myseed.harvest()
 	else if(dead)

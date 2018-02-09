@@ -34,14 +34,14 @@
 	var/obj/item/weapon/cell/cell
 	var/state = STATE_BOLTSHIDDEN
 	var/list/log = new
-	var/last_message = 0
+	var/last_message = 0 // Used in occupant_message()
 	var/add_req_access = 1
 	var/maint_access = 1
 	var/dna	//dna-locking the mech
 	var/list/proc_res = list() //stores proc owners, like proc_res["functionname"] = owner reference
-	var/datum/effect/effect/system/spark_spread/spark_system = new
 	var/lights = 0
 	var/lights_power = 6
+	var/rad_protection = 50 	//How much the mech shields its pilot from radiation.
 
 	//inner atmos
 	var/use_internal_tank = 0
@@ -82,7 +82,8 @@
 						/obj/item/mecha_parts,
 						/obj/item/device/mmi,
 						/obj/item/mecha_parts/mecha_tracking,
-						/obj/item/device/radio/electropack)
+						/obj/item/device/radio/electropack,
+						/obj/machinery/portable_atmospherics/scrubber/mech)
 
 /obj/mecha/New()
 	..()
@@ -92,8 +93,6 @@
 	if(!add_airtank()) //we check this here in case mecha does not have an internal tank available by default - WIP
 		removeVerb(/obj/mecha/verb/connect_to_port)
 		removeVerb(/obj/mecha/verb/toggle_internal_tank)
-	spark_system.set_up(2, 0, src)
-	spark_system.attach(src)
 	add_cell()
 	if(starts_with_tracking_beacon)
 		add_tracking_beacon()
@@ -107,7 +106,7 @@
 	return
 
 /obj/mecha/Destroy()
-	src.go_out()
+	src.go_out(loc, TRUE)
 	mechas_list -= src //global mech list
 	..()
 	return
@@ -298,14 +297,12 @@
 		to_chat(user, "You climb out from [src]")
 		return 0
 	if(connected_port)
-		if(world.time - last_message > 20)
-			src.occupant_message("Unable to move while connected to the air system port")
-			last_message = world.time
+		occupant_message("Unable to move while connected to the air system port.", TRUE)
 		return 0
 	if(throwing)
 		return 0
 	if(state)
-		occupant_message("<font color='red'>Maintenance protocols in effect.</font>")
+		occupant_message("<font color='red'>Maintenance protocols in effect.</font>", TRUE)
 		return
 	return domove(direction)
 
@@ -322,13 +319,20 @@
 		return 0
 	var/move_result = 0
 	startMechWalking()
+	var/stepped = TRUE
 	if(hasInternalDamage(MECHA_INT_CONTROL_LOST))
 		move_result = mechsteprand()
 	else if(src.dir!=direction)
 		move_result = mechturn(direction)
+		stepped = FALSE
 	else
 		move_result	= mechstep(direction)
 	if(move_result)
+		for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
+			if(stepped)
+				ME.on_mech_step()
+			else
+				ME.on_mech_turn()
 		can_move = 0
 		use_power(step_energy_drain)
 		if(istype(src.loc, /turf/space))
@@ -512,7 +516,7 @@
 
 /obj/mecha/proc/update_health()
 	if(src.health > 0)
-		src.spark_system.start()
+		spark(src, 2, FALSE)
 	else
 		src.destroy()
 	return
@@ -574,9 +578,11 @@
 	user.delayNextAttack(10)
 
 /obj/mecha/hitby(atom/movable/A as mob|obj) //wrapper
+	. = ..()
+	if(.)
+		return
 	src.log_message("Hit by [A].",1)
 	call((proc_res["dynhitby"]||src), "dynhitby")(A)
-	return
 
 /obj/mecha/proc/dynhitby(atom/movable/A)
 	if(istype(A, /obj/item/mecha_parts/mecha_tracking) && !tracking && prob(25))
@@ -624,7 +630,7 @@
 
 /obj/mecha/proc/destroy()
 	spawn()
-		go_out()
+		go_out(loc, TRUE)
 		var/turf/T = get_turf(src)
 		tag = "\ref[src]" //better safe then sorry
 		if(loc)
@@ -757,11 +763,14 @@
 /obj/mecha/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 
-	if(istype(W, /obj/item/device/mmi) || istype(W, /obj/item/device/mmi/posibrain))
-		if(mmi_move_inside(W,user))
-			to_chat(user, "[src]-MMI interface initialized successfuly")
+	if(istype(W, /obj/item/device/mmi))
+		var/device_name = "MMI"
+		if(istype(W, /obj/item/device/mmi/posibrain))
+			device_name = "positronic"
+		if(mmi_move_inside(W, user))
+			to_chat(user, "[src]-[device_name] interface initialized successfully")
 		else
-			to_chat(user, "[src]-MMI interface initialization failed.")
+			to_chat(user, "[src]-[device_name] interface initialization failed.")
 		return
 
 	if(istype(W, /obj/item/mecha_parts/mecha_equipment))
@@ -1176,7 +1185,7 @@
 	//Added a message here since people assume their first click failed or something./N
 //	to_chat(user, "Installing MMI, please stand by.")
 
-	visible_message("<span class='notice'>[usr] starts to insert an MMI into [src.name]</span>")
+	visible_message("<span class='notice'>\The [user] starts to insert \the [mmi_as_oc] into \the [src].</span>")
 
 	if(enter_after(40,user))
 		if(!occupant)
@@ -1184,7 +1193,7 @@
 		else
 			to_chat(user, "Occupant detected.")
 	else
-		to_chat(user, "You stop inserting the MMI.")
+		to_chat(user, "You stop inserting \the [mmi_as_oc].")
 	return 0
 
 /obj/mecha/proc/mmi_moved_inside(var/obj/item/device/mmi/mmi_as_oc as obj,mob/user as mob)
@@ -1272,9 +1281,17 @@
 			O.forceMove(src.loc)
 	return
 
-/obj/mecha/proc/go_out(var/exit = loc)
+/obj/mecha/proc/go_out(var/exit = loc, var/exploding = FALSE)
 	if(!src.occupant)
 		return
+
+	if(!exploding && exit == loc) //We don't actually want to eject our occupant on the same tile that we are, that puts them "under" us, which lets them use the mech like a personal forcefield they can shoot out of.
+		var/list/turf_candidates = list(get_step(loc, dir)) + trange(1, loc) //Evaluate all 9 turfs around us, but put "directly in front of us" as the first choice.
+		for(var/turf/simulated/T in turf_candidates)
+			if(!is_blocked_turf(T) && Adjacent(T))
+				exit = T
+				break
+
 	var/atom/movable/mob_container
 	if(ishuman(occupant))
 		mob_container = src.occupant
@@ -1342,7 +1359,7 @@
 	return
 
 /obj/mecha/proc/shock_n_boot(var/exit = loc)
-	spark_system.start()
+	spark(src, 2, FALSE)
 	if (occupant)
 		to_chat(occupant, "<span class='danger'>You feel a sharp shock!</span>")
 		occupant.Knockdown(10)
@@ -1500,6 +1517,7 @@
 						<span id="rfreq">[format_frequency(radio.frequency)]</span>
 						<a href='?src=\ref[src];rfreq=2'>+</a>
 						<a href='?src=\ref[src];rfreq=10'>+</a><br>
+						Subspace transmission: <a href='?src=\ref[src];subtoggle=1'><span id="substate">[radio.subspace_transmission?"Enabled":"Disabled"]</span></a><br>
 						</div>
 						</div>
 						<div class='wr'>
@@ -1613,11 +1631,20 @@
 /////// Messages and Log ///////
 ////////////////////////////////
 
-/obj/mecha/proc/occupant_message(message as text)
-	if(message)
-		if(src.occupant && src.occupant.client)
-			to_chat(src.occupant, "[bicon(src)] [message]")
-	return
+#define OCCUPANT_MESSAGE_INTERVAL 0.5 SECONDS
+
+/obj/mecha/proc/occupant_message(var/message, var/prevent_spam = FALSE)
+	if(!message)
+		return
+	if(!occupant || !occupant.client)
+		return
+	if(prevent_spam)
+		if(world.time - last_message <= OCCUPANT_MESSAGE_INTERVAL)
+			return
+	to_chat(occupant, "[bicon(src)] [message]")
+	last_message = world.time
+
+#undef OCCUPANT_MESSAGE_INTERVAL
 
 /obj/mecha/proc/log_message(message as text,red=null)
 	log.len++
@@ -1691,6 +1718,12 @@
 			new_frequency = sanitize_frequency(new_frequency)
 		radio.set_frequency(new_frequency)
 		send_byjax(src.occupant,"exosuit.browser","rfreq","[format_frequency(radio.frequency)]")
+		return
+	if (href_list["subtoggle"])
+		if(usr != src.occupant)
+			return
+		radio.subspace_transmission = !radio.subspace_transmission
+		send_byjax(src.occupant,"exosuit.browser","substate",(radio.subspace_transmission?"Enabled":"Disabled"))
 		return
 	if(href_list["port_disconnect"])
 		if(usr != src.occupant)
@@ -2004,7 +2037,7 @@
 					leaked_gas = null
 		if(mecha.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
 			if(mecha.get_charge())
-				mecha.spark_system.start()
+				spark(mecha, 2, FALSE)
 				mecha.cell.charge -= min(20,mecha.cell.charge)
 				mecha.cell.maxcharge -= min(20,mecha.cell.maxcharge)
 		return

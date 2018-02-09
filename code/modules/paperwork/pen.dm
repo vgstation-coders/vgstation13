@@ -148,7 +148,15 @@ var/paperwork_library
 					sleep(1) //too much for us.
 		t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
 		t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
-	return "<span style=\"[style];color:[P.color]\">[t]</span>"
+
+	var/text_color
+	if(istype(P, /obj/item/weapon/pen))
+		text_color = P.color
+	else if(istype(P, /obj/item/toy/crayon))
+		var/obj/item/toy/crayon/C = P
+		text_color = C.colour
+
+	return "<span style=\"[style];color:[text_color]\">[t]</span>"
 
 /datum/writing_style/pen/New()
 	addReplacement(REG_BBTAG("\\*"), "<li>")

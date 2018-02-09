@@ -329,8 +329,6 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=wmp'><b>[(usewmp) ? "WMP (compatibility)" : "VLC (requires plugin)"]</b></a><br>
 	<b>Streaming Volume</b>
 	<a href='?_src_=prefs;preference=volume'><b>[volume]</b></a><br>
-	<b>UI Display:</b>
-	<a href='?_src_=prefs;preference=nanoui'><b>[(usenanoui) ? "NanoUI" : "HTML"]</b></a><br>
 	<b>Progress Bars:</b>
 	<a href='?_src_=prefs;preference=progbar'><b>[(progress_bars) ? "Yes" : "No"]</b></a><br>
 	<b>Pause after first step:</b>
@@ -638,6 +636,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_DEAF,       "Deaf")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_BLIND,      "Blind")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_MUTE,       "Mute")
+	HTML += ShowDisabilityState(user,DISABILITY_FLAG_VEGAN,      "Vegan")
 	/*HTML += ShowDisabilityState(user,DISABILITY_FLAG_COUGHING,   "Coughing")
 	HTML += ShowDisabilityState(user,DISABILITY_FLAG_TOURETTES,   "Tourettes") Still working on it! -Angelite*/
 
@@ -942,7 +941,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 /datum/preferences/proc/process_link(mob/user, list/href_list)
 	if(!user)
 		return
-
+	//testing("preference=[href_list["preference"]]")
 	if(href_list["preference"] == "job")
 		switch(href_list["task"])
 			if("close")
@@ -1261,10 +1260,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("flavor_text")
 					var/msg = input(usr,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message
-					if(msg != null)
-						msg = copytext(msg, 1, MAX_MESSAGE_LEN)
-						msg = html_encode(msg)
-
+					if(msg)
 						flavor_text = msg
 				if("limbs")
 					var/list/limb_input = list(
@@ -1473,8 +1469,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						user.client.media.open()
 						user.client.media.update_music()
 
-				if("nanoui")
-					usenanoui = !usenanoui
 				if("tooltips")
 					tooltips = !tooltips
 				if("progbar")
@@ -1505,6 +1499,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("save")
 					if(world.timeofday >= (lastPolled + POLLED_LIMIT))
+						SetRoles(user,href_list)
 						save_preferences_sqlite(user, user.ckey)
 						save_character_sqlite(user.ckey, user, default_slot)
 						lastPolled = world.timeofday
@@ -1519,6 +1514,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				if("open_load_dialog")
 					if(!IsGuestKey(user.key))
 						open_load_dialog(user)
+						// DO NOT update window as it'd steal focus.
+						return
 
 				if("close_load_dialog")
 					close_load_dialog(user)
@@ -1674,8 +1671,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 			character.setGender(MALE)
 
 /datum/preferences/proc/open_load_dialog(mob/user)
-
-
 	var/database/query/q = new
 	var/list/name_list[MAX_SAVE_SLOTS]
 
@@ -1687,8 +1682,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 		message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 		warning("Error #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
-	var/dat = {"<body><tt><center>"}
-	dat += "<b>Select a character slot to load</b><hr>"
+	var/dat = "<center><b>Select a character slot to load</b><hr>"
 	var/counter = 1
 	while(counter <= MAX_SAVE_SLOTS)
 		if(counter==default_slot)
@@ -1700,10 +1694,11 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				dat += "<a href='?_src_=prefs;preference=changeslot;num=[counter];'>[name_list[counter]]</a><br>"
 		counter++
 
-	dat += {"<hr>
-		<a href='byond://?src=\ref[user];preference=close_load_dialog'>Close</a><br>
-		</center></tt>"}
-	user << browse(dat, "window=saves;size=300x390")
+	dat += "</center>"
+
+	var/datum/browser/browser = new(user, "saves", null, 300, 340)
+	browser.set_content(dat)
+	browser.open(use_onclose=FALSE)
 
 /datum/preferences/proc/close_load_dialog(mob/user)
 	user << browse(null, "window=saves")

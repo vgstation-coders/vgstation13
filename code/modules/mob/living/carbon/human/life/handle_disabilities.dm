@@ -61,6 +61,9 @@
 						"Don't tell Chase", \
 						"not so tough now huh", \
 						"WERE NOT BAY!!", \
+						"IF YOU DONT LIKE THE CYBORGS OR SLIMES WHY DONT YU O JUST MAKE YORE OWN!", \
+						"DONT TALK TO ME ABOUT BALANCE!!!!", \
+						"YOU AR JUS LAZY AND DUMB JAMITORS AND SERVICE ROLLS", \
 						"BLAME HOSHI!!!", \
 						"ARRPEE IZ DED!!!", \
 						"THERE ALL JUS MEATAFRIENDS!", \

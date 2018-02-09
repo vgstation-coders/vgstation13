@@ -187,7 +187,7 @@
 		src.visible_message("You need to link this machine to a research console first!")
 
 
-/obj/machinery/r_n_d/reverse_engine/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/r_n_d/reverse_engine/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(src.stat & (BROKEN|NOPOWER))
 		return
 	if((user.stat && !isobserver(user)) || user.restrained() || !allowed(user) || !Adjacent(user))
@@ -210,7 +210,7 @@
 	data["research_queue"] = todo_queue
 	data["ready_queue"] = done_queue
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "rev-engine.tmpl", name, REV_ENG_WIDTH, REV_ENG_HEIGHT)
 		ui.set_initial_data(data)

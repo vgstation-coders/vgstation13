@@ -90,18 +90,18 @@ var/global/list/rad_collectors = list()
 	else
 		return
 
-/obj/machinery/power/rad_collector/wrenchAnchor(mob/user)
+/obj/machinery/power/rad_collector/wrenchAnchor(var/mob/user)
 	if(P)
 		to_chat(user, "<span class='warning'>Remove the plasma tank first.</span>")
+		return FALSE
+	. = ..()
+	if(!.)
 		return
-	if(..() == 1)
-		if(anchored)
-			connect_to_network()
-		else
-			disconnect_from_network()
-			last_power = 0
-		return 1
-	return -1
+	if(anchored)
+		connect_to_network()
+	else
+		disconnect_from_network()
+		last_power = 0
 
 /obj/machinery/power/rad_collector/ex_act(severity)
 	switch(severity)
@@ -156,3 +156,29 @@ var/global/list/rad_collectors = list()
 
 /obj/machinery/power/rad_collector/npc_tamper_act(mob/living/L)
 	attack_hand(L)
+
+/obj/machinery/power/rad_collector/mech
+	machine_flags = 0
+	var/obj/item/mecha_parts/mecha_equipment/tool/collector/connected_module
+
+/obj/machinery/power/rad_collector/mech/Destroy()
+	connected_module = null
+	..()
+
+/obj/machinery/power/rad_collector/mech/process()
+	if(P)
+		if(!active)
+			return
+		if(P.air_contents.toxins <= 0)
+			connected_module.occupant_message("<span class='warning>Warning: Radiation collector array tank empty.</span>")
+			P.air_contents.toxins = 0
+			toggle_power()
+			connected_module.update_equip_info()
+		else
+			P.air_contents.toxins -= (0.001 * drain_ratio)
+			P.air_contents.update_values()
+
+/obj/machinery/power/rad_collector/mech/receive_pulse(const/pulse_strength)
+	if(P && active)
+		var/power_produced = (P.air_contents.toxins * pulse_strength * 3.5)/100 // original was 20, nerfed to 2 now 3.5 should get you about 500kw
+		connected_module.chassis.cell.charge = min(connected_module.chassis.cell.charge + power_produced, connected_module.chassis.cell.maxcharge)

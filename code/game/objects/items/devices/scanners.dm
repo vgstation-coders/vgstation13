@@ -305,6 +305,27 @@ Subject's pulse: ??? BPM"})
 	src.add_fingerprint(user)
 	return
 
+/obj/item/device/analyzer/scope
+	desc = "A hand-held environment scanner which can gather data about gas mixtures at a distance by analyzing how light travels through the gases."
+	name = "atmospheric analysis scope"
+	icon_state = "atmos_scope"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=3"
+
+/obj/item/device/analyzer/scope/afterattack(atom/A, mob/user)
+	. = ..()
+	if(.)
+		return
+	if(!isturf(A))
+		return
+
+	if(!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return
+	var/turf/T = A
+	var/datum/gas_mixture/environment = T.return_air()
+	to_chat(user, output_gas_scan(environment, T, 1))
+	add_fingerprint(user)
+
 //If human_standard is enabled, the message will be formatted to show which values are dangerous
 /obj/item/device/analyzer/proc/output_gas_scan(var/datum/gas_mixture/scanned, var/atom/container, human_standard = 1)
 	if(!scanned)
@@ -328,13 +349,13 @@ Subject's pulse: ??? BPM"})
 		var/unknown_concentration =  1 - (o2_concentration + n2_concentration + co2_concentration + plasma_concentration)
 
 		if(n2_concentration > 0.01)
-			message += "<br>[human_standard && abs(n2_concentration - N2STANDARD) > 20 ? "<span class='bad'>" : "<span class='notice'>"] Nitrogen: [round(scanned.nitrogen, 0.1)] mol, [round(n2_concentration*100)]%</span>"
+			message += "<br>[human_standard && abs(n2_concentration - N2STANDARD) > 20 ? "<span class='bad'>" : "<span class='notice'>"] Nitrogen: [round(scanned.nitrogen / scanned.volume * CELL_VOLUME, 0.1)] mol, [round(n2_concentration*100)]%</span>"
 		if(o2_concentration > 0.01)
-			message += "<br>[human_standard && abs(o2_concentration - O2STANDARD) > 2 ? "<span class='bad'>" : "<span class='notice'>"] Oxygen: [round(scanned.oxygen, 0.1)] mol, [round(o2_concentration*100)]%</span>"
+			message += "<br>[human_standard && abs(o2_concentration - O2STANDARD) > 2 ? "<span class='bad'>" : "<span class='notice'>"] Oxygen: [round(scanned.oxygen / scanned.volume * CELL_VOLUME, 0.1)] mol, [round(o2_concentration*100)]%</span>"
 		if(co2_concentration > 0.01)
-			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] CO2: [round(scanned.carbon_dioxide, 0.1)] mol, [round(co2_concentration*100)]%</span>"
+			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] CO2: [round(scanned.carbon_dioxide / scanned.volume * CELL_VOLUME, 0.1)] mol, [round(co2_concentration*100)]%</span>"
 		if(plasma_concentration > 0.01)
-			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] Plasma: [round(scanned.toxins, 0.1)] mol, [round(plasma_concentration*100)]%</span>"
+			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] Plasma: [round(scanned.toxins / scanned.volume * CELL_VOLUME, 0.1)] mol, [round(plasma_concentration*100)]%</span>"
 		if(unknown_concentration > 0.01)
 			message += "<br><span class='notice'>Unknown: [round(unknown_concentration*100)]%</span>"
 

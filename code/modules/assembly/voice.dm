@@ -17,7 +17,7 @@
 
 	accessible_values = list(\
 		VALUE_RECORDING = "listening;"+VT_NUMBER,\
-		VALUE_ACTIVATION_MESSAGE = "recorded;"+VT_NUMBER,\
+		VALUE_ACTIVATION_MESSAGE = "recorded;"+VT_TEXT,\
 		VALUE_MUTED = "muted;"+VT_NUMBER)
 
 /obj/item/device/assembly/voice/Hear(var/datum/speech/speech, var/rendered_speech="")

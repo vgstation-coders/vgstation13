@@ -3,6 +3,27 @@
 	var/icon_exploded = "fridge_exploded"
 	var/exploded = 0
 
+/obj/structure/closet/secure_closet/freezer/New()
+	..()
+	processing_objects.Add(src)
+
+/obj/structure/closet/secure_closet/freezer/process()
+	if(exploded)
+		processing_objects.Remove(src)
+		return
+
+	for(var/obj/item/weapon/reagent_containers/R in contents)
+		if(R.reagents)
+			R.reagents.heating(rand(-200,-800), T0C)
+
+/obj/structure/closet/secure_closet/freezer/open()
+	if(..())
+		processing_objects.Remove(src)
+
+/obj/structure/closet/secure_closet/freezer/close()
+	if(..())
+		processing_objects.Add(src)
+
 /obj/structure/closet/secure_closet/freezer/update_icon()
 	overlays.len = 0
 	if(broken)

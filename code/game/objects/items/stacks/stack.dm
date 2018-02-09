@@ -26,7 +26,7 @@
 	if (amount)
 		src.amount=amount
 	update_materials()
-	return
+	//forceMove(loc) // So that Crossed gets called, so that stacks can be merged
 
 /obj/item/stack/Destroy()
 	if (usr && usr.machine==src)
@@ -302,9 +302,11 @@
 	return ..()
 
 /obj/item/stack/hitby(atom/movable/AM) //Doesn't seem to ever be called since stacks are not dense but whatever
+	. = ..()
+	if(.)
+		return
 	if(src != AM && istype(AM, src.type))
 		merge(AM)
-	return ..()
 
 /obj/item/stack/proc/copy_evidences(obj/item/stack/from as obj)
 	src.blood_DNA = from.blood_DNA

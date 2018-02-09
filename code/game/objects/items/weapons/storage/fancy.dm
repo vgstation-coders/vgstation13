@@ -434,6 +434,7 @@
 	desc = "Now we're doing it!"
 	icon_state = "kfc_drumsticks"
 	item_state = "kfc_bucket"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
 	icon_type = "drumstick"
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick")
 	starting_materials = list(MAT_CARDBOARD = 3750)

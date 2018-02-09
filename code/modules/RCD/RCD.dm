@@ -32,7 +32,6 @@
 	var/tmp/next_spark  = 0
 
 	var/datum/html_interface/rcd/interface
-	var/datum/effect/effect/system/spark_spread/spark_system
 
 	var/obj/abstract/screen/close/closer
 
@@ -46,10 +45,6 @@
 
 	init_schematics()
 	rebuild_ui()
-
-	spark_system = new
-	spark_system.set_up(5, 0, src)
-	spark_system.attach(src)
 
 //create and organize the schematics
 /obj/item/device/rcd/proc/init_schematics()
@@ -70,11 +65,9 @@
 
 
 	qdel(interface)
-	qdel(spark_system)
 
 	schematics   = null
 	interface    = null
-	spark_system = null
 	data         = null
 
 	. = ..()
@@ -186,7 +179,7 @@
 	if (!C.select(usr, selected))
 		return 1
 
-	spark()
+	do_spark()
 
 	selected = C
 	update_options_menu()
@@ -227,9 +220,9 @@
 
 	return 1
 
-/obj/item/device/rcd/proc/spark()
+/obj/item/device/rcd/proc/do_spark()
 	if (sparky && next_spark < world.time)
-		spark_system.start()
+		spark(src, 5, FALSE)
 		next_spark = world.time + 0.5 SECONDS
 
 /obj/item/device/rcd/proc/get_energy(var/mob/user)
@@ -345,3 +338,15 @@
 		if(selected.show(user,1))
 			return
 	user.hud_used.toggle_show_schematics_display(null, 1, src)
+
+/obj/item/device/rcd/mech
+	schematics = list(
+	/datum/rcd_schematic/decon,
+	/datum/rcd_schematic/con_floors,
+	/datum/rcd_schematic/con_walls,
+	/datum/rcd_schematic/con_airlock
+	)
+
+/obj/item/device/rcd/mech/attack_self(var/mob/living/user)
+	if(!selected || user.shown_schematics_background || !selected.show(user))
+		user.hud_used.toggle_show_schematics_display(schematics["Construction"], 0, src)

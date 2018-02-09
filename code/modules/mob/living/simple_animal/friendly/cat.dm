@@ -127,7 +127,7 @@
 /mob/living/simple_animal/cat/snek/corpus
 	name = "Corpus"
 
-var/list/wizard_snakes
+var/list/wizard_snakes = list()
 
 /mob/living/simple_animal/cat/snek/wizard
 	health = 5
@@ -135,8 +135,6 @@ var/list/wizard_snakes
 
 /mob/living/simple_animal/cat/snek/wizard/New(turf/T, var/spell_holder)	//For the snake spell
 	..(T)
-	if(!wizard_snakes)
-		wizard_snakes = list()
 	if(spell_holder)
 		wizard_snakes[src] = spell_holder
 

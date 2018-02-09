@@ -691,3 +691,10 @@
 					 		Co_VIS_MSG = "{USER} connect{s} {HOLDER} hydraulic systems.")
 					 	)
 					)
+
+/datum/construction/reversible/mecha/clarke
+	result = "/obj/mecha/working/clarke"
+	base_icon = "clarke"
+
+	mainboard = /obj/item/weapon/circuitboard/mecha/clarke/main
+	peripherals = /obj/item/weapon/circuitboard/mecha/clarke/peripherals

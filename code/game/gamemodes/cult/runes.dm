@@ -951,7 +951,7 @@
 					invocation("rune_sac")
 					I.on_fire = 1
 					I.ashify()
-//Brain
+//Brain & Head
 		else if(istype(A, /obj/item/organ/internal/brain))
 			var/obj/item/organ/internal/brain/B = A
 			var/mob/living/carbon/brain/N = B.brainmob
@@ -964,6 +964,19 @@
 					invocation("rune_sac")
 					B.on_fire = 1
 					B.ashify()
+
+		else if(istype(A, /obj/item/organ/external/head/)) //Literally the same as the brain check
+			var/obj/item/organ/external/head/H = A
+			var/mob/living/carbon/brain/N = H.brainmob
+			if(N)//the brain is a player's
+				if(cult_round && cult_round.is_sacrifice_target(N.mind))
+					ritualresponse += "You need to place that head back on a body before you can complete your objective."
+				else
+					ritualresponse += "The Geometer of Blood accepts to destroy the head."
+					sacrificedone = 1
+					invocation("rune_sac")
+					H.on_fire = 1
+					H.ashify()
 //Carded AIs
 		else if(istype(A, /obj/item/device/aicard))
 			var/obj/item/device/aicard/D = A

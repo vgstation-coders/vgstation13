@@ -14,6 +14,7 @@
 		var/obj/item/stack/sheet/S = getFromPool(frame_material, get_turf(src))
 		S.amount = sheets_refunded
 		qdel(src)
+		return TRUE
 
 /obj/item/mounted/frame/try_build(turf/on_wall, mob/user)
 	if(..()) //if we pass the parent tests

@@ -395,6 +395,24 @@
 			SetLuminosity(1)
 			valid = 1
 		*/
+		if(/obj/item/clothing/head/alien_antenna)
+			name = "Al-Ian"
+			desc = "Take us to your dog biscuits!"
+			valid = 1
+
+		if(/obj/item/clothing/head/franken_bolt)
+			name = "Corgenstein's monster"
+			desc = "We can rebuild him, we have the technology!"
+			valid = 1
+
+		if(/obj/item/clothing/mask/vamp_fangs)
+			var/obj/item/clothing/mask/vamp_fangs/V = item_to_add
+			if(!V.glowy_fangs)
+				name = "Vlad the Ianpaler"
+				desc = "Listen to them, the children of the night. What music they make!"
+				valid = 1
+			else
+				to_chat(usr, "<span class = 'notice'>The glow of /the [V] startles [real_name]!</span>")
 
 	if(valid)
 		if(usr)

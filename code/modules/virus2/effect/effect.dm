@@ -550,6 +550,14 @@
 		var/mob/M = touched
 		add_attacklogs(mob, M, "damaged with keratin spikes",addition = "([M] bumped into [mob])", admin_warn = FALSE)
 
+/datum/disease2/effect/vegan
+	name = "Vegan Syndrome"
+	stage = 2
+
+/datum/disease2/effect/vegan/activate(var/mob/living/carbon/mob)
+	mob.dna.check_integrity()
+	mob.dna.SetSEState(VEGANBLOCK,1)
+	domutcheck(mob, null)
 
 ////////////////////////STAGE 3/////////////////////////////////
 
@@ -580,7 +588,6 @@
 	mob.dna.check_integrity()
 	mob.dna.SetSEState(REMOTETALKBLOCK,1)
 	domutcheck(mob, null)
-
 
 /datum/disease2/effect/mind
 	name = "Lazy Mind Syndrome"
@@ -1483,7 +1490,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 			var/mob/living/simple_animal/hostile/heart_attack = new(pick(spawn_turfs))
 			heart_attack.appearance = blown_heart.appearance
 			heart_attack.icon_dead = "heart-off"
-			heart_attack.environment_smash = 0
+			heart_attack.environment_smash_flags = 0
 			heart_attack.melee_damage_lower = 15
 			heart_attack.melee_damage_upper = 15
 			heart_attack.health = 50

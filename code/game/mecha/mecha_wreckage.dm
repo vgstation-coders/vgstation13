@@ -14,6 +14,13 @@
 	var/list/wirecutters_salvage = list(/obj/item/stack/cable_coil)
 	var/list/crowbar_salvage
 
+/obj/effect/decal/mecha_wreckage/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(air_group)
+		return 1
+	if(istype(mover) && mover.checkpass(PASSTABLE))
+		return 1
+	return ..()
+
 /obj/effect/decal/mecha_wreckage/New()
 	..()
 	crowbar_salvage = new
@@ -125,15 +132,15 @@
 	name = "Gygax wreckage"
 	icon_state = "gygax-broken"
 
-	New()
-		..()
-		var/list/parts = list(/obj/item/mecha_parts/part/gygax_torso,
-									/obj/item/mecha_parts/part/gygax_head,
-									/obj/item/mecha_parts/part/gygax_left_arm,
-									/obj/item/mecha_parts/part/gygax_right_arm,
-									/obj/item/mecha_parts/part/gygax_left_leg,
-									/obj/item/mecha_parts/part/gygax_right_leg)
-		welder_salvage += pick_random_loot(parts)
+/obj/effect/decal/mecha_wreckage/gygax/New()
+	..()
+	var/list/parts = list(/obj/item/mecha_parts/part/gygax_torso,
+								/obj/item/mecha_parts/part/gygax_head,
+								/obj/item/mecha_parts/part/gygax_left_arm,
+								/obj/item/mecha_parts/part/gygax_right_arm,
+								/obj/item/mecha_parts/part/gygax_left_leg,
+								/obj/item/mecha_parts/part/gygax_right_leg)
+	welder_salvage += pick_random_loot(parts)
 
 /obj/effect/decal/mecha_wreckage/gygax/dark
 	name = "Dark Gygax wreckage"
@@ -169,28 +176,28 @@
 	name = "Ripley wreckage"
 	icon_state = "ripley-broken"
 
-	New()
-		..()
-		var/list/parts = list(/obj/item/mecha_parts/part/ripley_torso,
-									/obj/item/mecha_parts/part/ripley_left_arm,
-									/obj/item/mecha_parts/part/ripley_right_arm,
-									/obj/item/mecha_parts/part/ripley_left_leg,
-									/obj/item/mecha_parts/part/ripley_right_leg)
-		welder_salvage += pick_random_loot(parts)
+/obj/effect/decal/mecha_wreckage/ripley/New()
+	..()
+	var/list/parts = list(/obj/item/mecha_parts/part/ripley_torso,
+								/obj/item/mecha_parts/part/ripley_left_arm,
+								/obj/item/mecha_parts/part/ripley_right_arm,
+								/obj/item/mecha_parts/part/ripley_left_leg,
+								/obj/item/mecha_parts/part/ripley_right_leg)
+	welder_salvage += pick_random_loot(parts)
 
 /obj/effect/decal/mecha_wreckage/ripley/firefighter
 	name = "Firefighter wreckage"
 	icon_state = "firefighter-broken"
 
-	New()
-		..()
-		var/list/parts = list(/obj/item/mecha_parts/part/ripley_torso,
-									/obj/item/mecha_parts/part/ripley_left_arm,
-									/obj/item/mecha_parts/part/ripley_right_arm,
-									/obj/item/mecha_parts/part/ripley_left_leg,
-									/obj/item/mecha_parts/part/ripley_right_leg,
-									/obj/item/clothing/suit/fire)
-		welder_salvage += pick_random_loot(parts)
+/obj/effect/decal/mecha_wreckage/ripley/firefighter/New()
+	..()
+	var/list/parts = list(/obj/item/mecha_parts/part/ripley_torso,
+								/obj/item/mecha_parts/part/ripley_left_arm,
+								/obj/item/mecha_parts/part/ripley_right_arm,
+								/obj/item/mecha_parts/part/ripley_left_leg,
+								/obj/item/mecha_parts/part/ripley_right_leg,
+								/obj/item/clothing/suit/fire)
+	welder_salvage += pick_random_loot(parts)
 
 /obj/effect/decal/mecha_wreckage/ripley/deathripley
 	name = "Death-Ripley wreckage"
@@ -200,32 +207,32 @@
 	name = "Honker wreckage"
 	icon_state = "honker-broken"
 
-	New()
-		..()
-		var/list/parts = list(
-								/obj/item/mecha_parts/chassis/honker,
-								/obj/item/mecha_parts/part/honker_torso,
-								/obj/item/mecha_parts/part/honker_head,
-								/obj/item/mecha_parts/part/honker_left_arm,
-								/obj/item/mecha_parts/part/honker_right_arm,
-								/obj/item/mecha_parts/part/honker_left_leg,
-								/obj/item/mecha_parts/part/honker_right_leg)
-		welder_salvage += pick_random_loot(parts)
+/obj/effect/decal/mecha_wreckage/honker/New()
+	..()
+	var/list/parts = list(
+							/obj/item/mecha_parts/chassis/honker,
+							/obj/item/mecha_parts/part/honker_torso,
+							/obj/item/mecha_parts/part/honker_head,
+							/obj/item/mecha_parts/part/honker_left_arm,
+							/obj/item/mecha_parts/part/honker_right_arm,
+							/obj/item/mecha_parts/part/honker_left_leg,
+							/obj/item/mecha_parts/part/honker_right_leg)
+	welder_salvage += pick_random_loot(parts)
 
 /obj/effect/decal/mecha_wreckage/durand
 	name = "Durand wreckage"
 	icon_state = "durand-broken"
 
-	New()
-		..()
-		var/list/parts = list(
-									/obj/item/mecha_parts/part/durand_torso,
-									/obj/item/mecha_parts/part/durand_head,
-									/obj/item/mecha_parts/part/durand_left_arm,
-									/obj/item/mecha_parts/part/durand_right_arm,
-									/obj/item/mecha_parts/part/durand_left_leg,
-									/obj/item/mecha_parts/part/durand_right_leg)
-		welder_salvage += pick_random_loot(parts)
+/obj/effect/decal/mecha_wreckage/durand/New()
+	..()
+	var/list/parts = list(
+								/obj/item/mecha_parts/part/durand_torso,
+								/obj/item/mecha_parts/part/durand_head,
+								/obj/item/mecha_parts/part/durand_left_arm,
+								/obj/item/mecha_parts/part/durand_right_arm,
+								/obj/item/mecha_parts/part/durand_left_leg,
+								/obj/item/mecha_parts/part/durand_right_leg)
+	welder_salvage += pick_random_loot(parts)
 
 
 /obj/effect/decal/mecha_wreckage/durand/old
@@ -241,16 +248,31 @@
 	name = "Odysseus wreckage"
 	icon_state = "odysseus-broken"
 
-	New()
-		..()
-		var/list/parts = list(
-									/obj/item/mecha_parts/part/odysseus_torso,
-									/obj/item/mecha_parts/part/odysseus_head,
-									/obj/item/mecha_parts/part/odysseus_left_arm,
-									/obj/item/mecha_parts/part/odysseus_right_arm,
-									/obj/item/mecha_parts/part/odysseus_left_leg,
-									/obj/item/mecha_parts/part/odysseus_right_leg)
-		welder_salvage += pick_random_loot(parts)
+/obj/effect/decal/mecha_wreckage/odysseus/New()
+	..()
+	var/list/parts = list(
+								/obj/item/mecha_parts/part/odysseus_torso,
+								/obj/item/mecha_parts/part/odysseus_head,
+								/obj/item/mecha_parts/part/odysseus_left_arm,
+								/obj/item/mecha_parts/part/odysseus_right_arm,
+								/obj/item/mecha_parts/part/odysseus_left_leg,
+								/obj/item/mecha_parts/part/odysseus_right_leg)
+	welder_salvage += pick_random_loot(parts)
+
+/obj/effect/decal/mecha_wreckage/clarke
+	name = "Clarke wreckage"
+	icon_state = "clarke-broken"
+
+/obj/effect/decal/mecha_wreckage/clarke/New()
+	..()
+	var/list/parts = list(
+								/obj/item/mecha_parts/part/clarke_torso,
+								/obj/item/mecha_parts/part/clarke_head,
+								/obj/item/mecha_parts/part/clarke_left_arm,
+								/obj/item/mecha_parts/part/clarke_right_arm,
+								/obj/item/mecha_parts/part/clarke_left_tread,
+								/obj/item/mecha_parts/part/clarke_right_tread)
+	welder_salvage += pick_random_loot(parts)
 
 /obj/effect/decal/mecha_wreckage/vehicle
 	name = "(BUG) BASE VEHICLE WRECKAGE"

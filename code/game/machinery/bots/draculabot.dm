@@ -176,7 +176,7 @@
 		return
 	if(!emagged) //In a normal situation, the bloodbot just loiters around instead of seeking out targets
 		if(!quiet && prob(5))
-			speak(pick("Donate blood here!","I'm going to want another blood sample.","Give blood so others may live.","Share life. Donate blood.","C’mon! We know you’ve got it in you!","Hey -- you're somebody's type!"))
+			speak(pick("Donate blood here!","I'm going to want another blood sample.","Give blood so others may live.","Share life. Donate blood.","C'mon! We know you've got it in you!","Hey -- you're somebody's type!"))
 		if(!currently_drawing_blood && prob(5)) //Wander
 			Move(get_step(src, pick(cardinal)))
 	else //First priority: drink an adjacent target. Otherwise, pick a target and move toward it if we have none.
@@ -277,7 +277,5 @@
 
 /obj/machinery/bot/bloodbot/explode()
 	visible_message("<span class='danger'>[src] blows apart!</span>", 1)
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(3, 1, src)
-	s.start()
+	spark(src)
 	..()

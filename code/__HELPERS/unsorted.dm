@@ -755,6 +755,8 @@ proc/GaussRandRound(var/sigma,var/roundto)
 
 	var/delayfraction = round(delay/numticks)
 	var/Location
+	if(istype(user.loc, /obj/mecha))
+		use_user_turf = TRUE
 	if(use_user_turf)	//When this is true, do_after() will check whether the user's turf has changed, rather than the user's loc.
 		Location = get_turf(user)
 	else
@@ -802,7 +804,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					if(progbar)
 						progbar.loc = null
 			return 0
-		if(needhand && !(user.get_active_hand() == holding))	//Sometimes you don't want the user to have to keep their active hand
+		if(needhand && !user.do_after_hand_check(holding))	//Sometimes you don't want the user to have to keep their active hand
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
@@ -1196,7 +1198,7 @@ var/global/list/common_tools = list(
 	if(U == M)
 		return 0
 	if(ishuman(M) && M.lying)
-		if(locate(/obj/machinery/optable,M.loc))
+		if(locate(/obj/machinery/optable,M.loc) || locate(/obj/structure/bed/roller/surgery, M.loc))
 			return 1
 		if(locate(/obj/structure/bed/roller, M.loc) && prob(75))
 			return 1
@@ -1628,6 +1630,12 @@ Game Mode config tags:
 
 /proc/sentStrikeTeams(var/team)
 	return (team in sent_strike_teams)
+
+
+/proc/area_in_map(var/area/A)
+	for (var/turf/T in A.area_turfs)
+		return TRUE
+	return FALSE
 
 
 /proc/get_exact_dist(atom/A, atom/B)	//returns the coordinate distance between the coordinates of the turfs of A and B

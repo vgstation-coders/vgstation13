@@ -8,6 +8,7 @@ var/list/datum/map_element/map_elements = list()
 	var/type_abbreviation //Very short string that determines the map element's type (whether it's an away mission, a small vault, or something else)
 
 	var/file_path = "maps/randomvaults/new.dmm"
+	var/load_at_once = FALSE //If true, lag reduction methods will not be applied when this is loaded, freezing atmos and mob simulations until the map element is loaded.
 
 	var/turf/location //Lower left turf of the map element
 
@@ -51,6 +52,12 @@ var/list/datum/map_element/map_elements = list()
 		return maploader.get_map_dimensions(file)
 
 	return list(width, height)
+
+/datum/map_element/proc/assign_dimensions()
+	var/list/dimensions = get_dimensions()
+
+	width = dimensions[1]
+	height = dimensions[2]
 
 //Return a list with strings associated with points
 //For example: list("Discovered a vault!" = 500) will add 500 points to the crew's score for discovering a vault

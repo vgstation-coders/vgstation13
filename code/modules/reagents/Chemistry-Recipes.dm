@@ -16,8 +16,12 @@
 	var/result_amount = 0
 	var/secondary = 0 //Set to nonzero if secondary reaction
 	var/list/secondary_results = list() //Additional reagents produced by the reaction
-	var/requires_heating = 0
+	var/is_cold_recipe = 0
+	var/required_temp = 0
+	var/react_discretely = FALSE //Handle_reactions() won't find the maximum number of times the chemicals can react. Use only if it shouldn't react more than once at a time.
+	var/reaction_temp_cost = 0 //How much to lower temperature of the result chemical after the reaction
 	var/alert_admins = 0 //1 to alert admins with name and amount, 2 to alert with name and amount of all reagents
+	var/quiet = 0
 
 /datum/chemical_reaction/proc/log_reaction(var/datum/reagents/holder, var/amt)
 	var/datum/log_controller/I = investigations[I_CHEMS]
@@ -66,7 +70,7 @@
 
 /datum/chemical_reaction/explosion_potassium/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/datum/effect/effect/system/reagents_explosion/e = new()
-	e.set_up(round (created_volume/10, 1), holder.my_atom, 0, 0)
+	e.set_up(min(round (created_volume/10, 1), 15), holder.my_atom, 0, 0)
 	e.holder_damage(holder.my_atom)
 	if(isliving(holder.my_atom))
 		e.amount *= 0.5
@@ -232,6 +236,23 @@
 	result = LUBE
 	required_reagents = list(WATER = 1, SILICON = 1, OXYGEN = 1)
 	result_amount = 4
+
+/datum/chemical_reaction/sludge
+	name = "Sludge"
+	id = TOXICWASTE
+	result = TOXICWASTE
+	required_reagents = list(LUBE = 1)
+	result_amount = 0.2
+	required_temp = 3500
+	react_discretely = TRUE
+	reaction_temp_cost = 3500
+
+/datum/chemical_reaction/degrease
+	name = "Degrease"
+	id = "degrease"
+	result = null
+	required_reagents = list(TOXICWASTE = 1, ETHANOL = 1) //Turns out it really WAS an engine degreaser
+	result_amount = 0
 
 /datum/chemical_reaction/pacid
 	name = "Polytrinic acid"
@@ -408,7 +429,7 @@
 	name = "Glycerol"
 	id = GLYCEROL
 	result = GLYCEROL
-	required_reagents = list(CORNOIL = 3, SACID = 1)
+	required_reagents = list(CORNOIL = 3, FORMIC_ACID = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/nitroglycerin
@@ -448,15 +469,12 @@
 /datum/chemical_reaction/flash_powder/on_reaction(var/datum/reagents/holder, var/created_volume)
 	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 		var/location = get_turf(holder.my_atom)
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(2, 1, location)
-		s.start()
+		spark(location, 2)
 
 		playsound(get_turf(src), 'sound/effects/phasein.ogg', 25, 1)
 
-		var/eye_safety = 0
-
 		for(var/mob/living/M in viewers(get_turf(holder.my_atom), null))
+			var/eye_safety = 0
 			if(iscarbon(M))
 				eye_safety = M.eyecheck()
 
@@ -766,6 +784,34 @@
 	required_reagents = list(NANOBOTS = 1, MUTAGEN = 5, SILICATE = 5, IRON = 10)
 	result_amount = 2.5
 
+//Surgery tools from chemicals because why not? Requires a vial to make them and consumes it as a part of making the tool.
+//DO NOT COPY PASTE THESE WITHOUT SOME KIND OF CONTAINER/HOLDER CHECK BECAUSE qdel WILL DELETE ANY REAGENT CONTAINER WITHOUT IT. IE PLAYERS
+/datum/chemical_reaction/fixoveinmake
+	name = "FixOVein"
+	id = "fixovein"
+	result = null
+	required_reagents = list(BICARIDINE = 10, CLONEXADONE = 10)
+	result_amount = 1
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/vial //safety net and a case for the "crafting" of the tool
+
+/datum/chemical_reaction/fixoveinmake/on_reaction(var/datum/reagents/holder)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/weapon/FixOVein(location)
+	qdel(holder.my_atom)
+
+/datum/chemical_reaction/bonegelmake
+	name = "Bone Gel"
+	id = "bonegel"
+	result = null
+	required_reagents = list(MILK = 10, CRYOXADONE = 10) //milk is good for the bones
+	result_amount = 1
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/vial
+
+/datum/chemical_reaction/bonegelmake/on_reaction(var/datum/reagents/holder)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/weapon/bonegel(location)
+	qdel(holder.my_atom)
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 //Foam and foam precursor
@@ -896,14 +942,46 @@
 	result = LEFT4ZED
 	required_reagents = list(EZNUTRIENT = 1)
 	required_catalysts = list(RADIUM = 5)
-	result_amount = 1	
-	
+	result_amount = 1
+
 /datum/chemical_reaction/plantbgone
 	name = "Plant-B-Gone"
 	id = PLANTBGONE
 	result = PLANTBGONE
 	required_reagents = list(TOXIN = 1, WATER = 4)
 	result_amount = 5
+
+/datum/chemical_reaction/plantbgonesolanine
+	name = "Plant-B-Gone"
+	id = PLANTBGONE
+	result = PLANTBGONE
+	required_reagents = list(SOLANINE = 1, WATER = 4)
+	result_amount = 5
+
+// Special Reactions for Plasma Beaker
+/datum/chemical_reaction/plasmabeakerdexalin
+	name = "Plasma Beaker Dexalin"
+	id = DEXALIN
+	result = DEXALIN
+	required_reagents = list(OXYGEN = 2)
+	result_amount = 1
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+
+/datum/chemical_reaction/plasmabeakerleporazine
+	name = "Leporazine"
+	id = LEPORAZINE
+	result = LEPORAZINE
+	required_reagents = list(SILICON = 1, COPPER = 1)
+	result_amount = 2
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+
+/datum/chemical_reaction/plasmabeakerclonexadone
+	name = "Clonexadone"
+	id = CLONEXADONE
+	result = CLONEXADONE
+	required_reagents = list(CRYOXADONE = 1, SODIUM = 1)
+	result_amount = 2
+	required_container = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
 
 //Special reaction for mimic meat: injecting it with 5 units of blood causes it to turn into a random food item. Makes more sense than hitting it with a fking rolling pin
 /datum/chemical_reaction/mimicshift
@@ -1257,6 +1335,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks,
 		/obj/item/weapon/reagent_containers/food/snacks/snackbar,
 		/obj/item/weapon/reagent_containers/food/snacks/grown,
+		/obj/item/weapon/reagent_containers/food/snacks/deepfryholder
 		)
 	blocked += typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) //Silver-slime spawned customizable food is borked
 
@@ -1961,7 +2040,7 @@
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	playsound(get_turf(holder.my_atom), 'sound/effects/theworld3.ogg', 100, 1)
 	timestop(get_turf(holder.my_atom), 25,5)
-	
+
 //Pyrite
 /datum/chemical_reaction/slimepaint
 	name = "Slime Paint"
@@ -2126,6 +2205,7 @@
 	result = HOT_RAMEN
 	required_reagents = list(WATER = 1, DRY_RAMEN = 3)
 	result_amount = 3
+	required_temp = 100+T0C
 
 /datum/chemical_reaction/hell_ramen
 	name = "Hell Ramen"
@@ -2141,6 +2221,25 @@
 	required_reagents = list(WATER = 10)
 	required_catalysts = list(FROSTOIL = 5)
 	result_amount = 11
+
+/datum/chemical_reaction/ice2
+	name = "Frozen water"
+	id = ICE
+	result = ICE
+	required_reagents = list(WATER = 1)
+	is_cold_recipe = 1
+	result_amount = 1
+	quiet = 1
+	required_temp = T0C
+
+/datum/chemical_reaction/ice_to_water
+	name = "Melted ice"
+	id = WATER
+	result = WATER
+	required_reagents = list(ICE = 1)
+	required_temp = T20C+5
+	result_amount = 1
+	quiet = 1
 
 ////////////////////////////////////////// COCKTAILS //////////////////////////////////////
 
@@ -2521,6 +2620,13 @@
 	required_reagents = list(BLEACH = 1, DISCOUNT = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/pintpointer
+	name = "Pintpointer"
+	id = PINTPOINTER
+	result = PINTPOINTER
+	required_reagents = list(ATOMICBOMB = 1, SYNDICATEBOMB = 1)
+	result_amount = 2
+
 
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 
@@ -2704,7 +2810,7 @@
 	name = "Brown Star"
 	id = BROWNSTAR
 	result = BROWNSTAR
-	required_reagents = list(KAHLUA = 1, "irish_cream" = 4)
+	required_reagents = list(KAHLUA = 1, IRISHCREAM = 4)
 	result_amount = 5
 
 /datum/chemical_reaction/milkshake

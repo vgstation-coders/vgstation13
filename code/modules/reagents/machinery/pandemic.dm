@@ -11,7 +11,6 @@
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 
 	light_color = LIGHT_COLOR_BLUE
-	var/targetMoveKey
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -24,21 +23,6 @@
 	)
 
 	RefreshParts()
-
-/obj/machinery/computer/pandemic/proc/user_moved(var/list/args)
-	var/event/E = args["event"]
-	if(!targetMoveKey)
-		E.handlers.Remove("\ref[src]:user_moved")
-		return
-
-	var/turf/T = args["loc"]
-
-	if(!Adjacent(T))
-		if(E.holder)
-			var/atom/movable/holder = E.holder
-			holder.on_moved.Remove(targetMoveKey)
-		detach()
-
 
 /obj/machinery/computer/pandemic/set_broken()
 	icon_state = "mixer_b"
@@ -171,9 +155,6 @@
 
 /obj/machinery/computer/pandemic/proc/detach()
 	beaker.forceMove(src.loc)
-	if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-		var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = beaker
-		borgbeak.return_to_modules()
 	beaker = null
 	overlays -= image(icon = icon, icon_state = "mixer_overlay")
 	src.updateUsrDialog()
@@ -295,11 +276,6 @@
 			return
 
 		src.beaker =  I
-		if(user.type == /mob/living/silicon/robot)
-			var/mob/living/silicon/robot/R = user
-			R.uneq_active()
-			targetMoveKey =  R.on_moved.Add(src, "user_moved")
-
 		to_chat(user, "You add the beaker to the machine!")
 
 		src.updateUsrDialog()

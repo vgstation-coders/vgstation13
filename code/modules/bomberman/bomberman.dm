@@ -800,8 +800,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		C.name = name
 		C.c_tag = name
 		C.network = list(
-			"thunder",	//entertainment monitors
-			"SS13",		//security monitors
+			CAMERANET_THUNDER,	//entertainment monitors
+			CAMERANET_SS13,		//security monitors
 			)
 
 		var/obj/structure/planner/pencil = new(center, src)

@@ -64,7 +64,7 @@
 					buildstage = 0
 				return
 		if(0)
-			if(iscoil(W))
+			if(iscablecoil(W))
 				var/obj/item/stack/cable_coil/coil = W
 				if(coil.amount < 3)
 					to_chat(user, "<span class='warning'>You need at least two wire pieces for this!</span>")
@@ -89,12 +89,11 @@
 	src.attack_hand(user)
 
 /obj/machinery/light_switch/attack_ghost(var/mob/dead/observer/ghost)
-	if(blessed)
-		to_chat(ghost, "Your hand goes right through the switch...Is that some holy water dripping from it?")
-		return 0
+	if(!can_spook())
+		return FALSE
 	if(!ghost.can_poltergeist())
 		to_chat(ghost, "Your poltergeist abilities are still cooling down.")
-		return 0
+		return FALSE
 	investigation_log(I_GHOST, "|| was switched [on ? "off" : "on"] by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 	return ..()
 

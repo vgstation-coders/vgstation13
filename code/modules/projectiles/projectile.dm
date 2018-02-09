@@ -504,9 +504,8 @@ var/list/impact_master = list()
 	return
 
 /obj/item/projectile/proc/bullet_die()
-	spawn()
-		OnDeath()
-		returnToPool(src)
+	OnDeath()
+	returnToPool(src)
 
 /obj/item/projectile/proc/bump_original_check()
 	if(!bumped && !isturf(original))

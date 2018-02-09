@@ -53,10 +53,6 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 
 /mob/living/silicon/robot/mommi/New(loc)
-	spark_system = new /datum/effect/effect/system/spark_spread()
-	spark_system.set_up(5, 0, src)
-	spark_system.attach(src)
-
 	ident = rand(1, 999)
 	updatename()
 	updateicon()
@@ -88,7 +84,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(!scrambledcodes && !camera)
 		camera = new /obj/machinery/camera(src)
 		camera.c_tag = real_name
-		camera.network = list("SS13")
+		camera.network = list(CAMERANET_SS13,CAMERANET_ROBOTS)
 		if(wires.IsCameraCut()) // 5 = BORG CAMERA
 			camera.status = 0
 
@@ -313,7 +309,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 	else
 		user.do_attack_animation(src, W)
-		spark_system.start()
+		spark(src, 5, FALSE)
 		return ..()
 
 /mob/living/silicon/robot/mommi/attack_hand(mob/user)
@@ -419,7 +415,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 	if (href_list["mod"])
 		var/obj/item/O = locate(href_list["mod"])
-		if (O)
+		if (O && O == tool_state)
 			O.attack_self(src)
 
 	if (href_list["act"])

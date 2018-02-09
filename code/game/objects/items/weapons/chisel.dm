@@ -24,15 +24,15 @@
 
 /obj/item/weapon/chisel/attack(mob/M as mob, mob/user as mob)
 	..()
-	if(istype(M, /mob/living/simple_animal/sculpture))
-		var/engraving = sanitize(input(usr, "What do you want to write on the [M.real_name]?") as text)
+	if(istype(M, /mob/living/simple_animal/scp_173))
+		var/engraving = sanitize(input(usr, "What do you want to write on \the [M.real_name]?") as text)
 		var/turf/ST = user.loc
 
 		sleep( 10 + length(engraving) * 10)
 
 		if( !(user.loc == ST && user.get_active_hand() == src) )
 			return
-		if( !istype(M, /mob/living/simple_animal/sculpture) || !user || !src || !M )
+		if( !istype(M, /mob/living/simple_animal/scp_173) || !user || !src || !M )
 			return
 
 		M.desc += engraving

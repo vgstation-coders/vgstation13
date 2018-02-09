@@ -191,6 +191,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/callatomproc,
 	/client/proc/view_runtimes,
 	/client/proc/cmd_mass_modify_object_variables,
+	/client/proc/emergency_shuttle_panel,
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,

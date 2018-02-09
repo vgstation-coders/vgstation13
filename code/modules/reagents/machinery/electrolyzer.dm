@@ -8,17 +8,8 @@
 	force = 2.0
 	var/list/beakers = new/list()
 	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/)
-	var/datum/effect/effect/system/spark_spread/spark_system
 
 /obj/item/weapon/electrolyzer/New()
-	. = ..()
-	spark_system = new
-	spark_system.set_up(5, 0, src)
-	spark_system.attach(src)
-
-/obj/item/weapon/electrolyzer/Destroy()
-	qdel(spark_system)
-	spark_system	= null
 	. = ..()
 
 /obj/item/weapon/electrolyzer/attack_self(mob/user as mob)
@@ -111,7 +102,7 @@
 				empty.reagents.add_reagent(E, unreaction.required_reagents[E]*total_reactions)
 		investigation_log(I_CHEMS, "was used by [key_name(user)] to electrolyze [amount_to_electrolyze]u of [unreaction.result].")
 		to_chat(user, "<span class='warning'>The system electrolyzes!</span>")
-		spark_system.start()
+		spark(src, 5, FALSE)
 	else
 		..()
 

@@ -58,7 +58,7 @@
 	prints_prosthetics = 1
 
 /obj/machinery/bioprinter/attack_hand(mob/user)
-	if(!ishuman(user))
+	if(!ishigherbeing(user) && !issilicon(user))
 		return
 
 	var/choice = input("What would you like to print?") as null|anything in products

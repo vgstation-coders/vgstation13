@@ -232,7 +232,9 @@ var/global/list/crate_mimic_disguises = list(\
 		icon_state = initial(icon_state)
 
 /mob/living/simple_animal/hostile/mimic/crate/hitby() //This is called when the mimic is hit by a thrown object
-	..()
+	. = ..()
+	if(.)
+		return
 
 	if(!angry)
 		anger(berserk = 1) //Go berserk because some asshole tried to snipe us

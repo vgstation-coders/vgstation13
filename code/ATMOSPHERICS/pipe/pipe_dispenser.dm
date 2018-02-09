@@ -147,15 +147,17 @@
 	else
 		return ..()
 
-/obj/machinery/pipedispenser/wrenchAnchor(mob/user)
-	if(..() == 1)
-		if(anchored)
-			src.stat &= ~MAINT
-			power_change()
-		else
-			src.stat |= MAINT
-			if (user.machine==src)
-				user << browse(null, "window=pipedispenser")
+/obj/machinery/pipedispenser/wrenchAnchor(var/mob/user)
+	. = ..()
+	if(!.)
+		return
+	if(anchored)
+		src.stat &= ~MAINT
+		power_change()
+	else
+		src.stat |= MAINT
+		if (user.machine==src)
+			user << browse(null, "window=pipedispenser")
 
 
 /obj/machinery/pipedispenser/disposal

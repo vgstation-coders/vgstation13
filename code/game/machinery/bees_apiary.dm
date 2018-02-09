@@ -125,7 +125,9 @@
 		return
 
 /obj/machinery/apiary/hitby(AM as mob|obj)
-	..()
+	. = ..()
+	if(.)
+		return
 	visible_message("<span class='warning'>\The [src] was hit by \the [AM].</span>", 1)
 	angry_swarm()
 

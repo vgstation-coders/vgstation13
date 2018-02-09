@@ -152,7 +152,7 @@
 	melee_damage_upper = 30
 	attacktext = "smashes their armoured gauntlet into"
 	speed = 4
-	environment_smash = 2
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	status_flags = 0
 	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
@@ -213,7 +213,7 @@
 	melee_damage_upper = 25
 	attacktext = "slashes"
 	speed = 1
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/targeted/ethereal_jaunt/shift)
@@ -239,7 +239,7 @@
 	melee_damage_upper = 5
 	attacktext = "rams"
 	speed = 1
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/aoe_turf/conjure/construct/lesser,
 							/spell/aoe_turf/conjure/wall,
@@ -269,7 +269,7 @@
 	melee_damage_upper = 50
 	attacktext = "brutally crushes"
 	speed = 6
-	environment_smash = 2
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	var/energy = 0
 	var/max_energy = 1000
@@ -314,7 +314,7 @@
 	melee_damage_upper = 25
 	attacktext = "violently stabs"
 	speed = 1
-	environment_smash = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/pierce.ogg'
 

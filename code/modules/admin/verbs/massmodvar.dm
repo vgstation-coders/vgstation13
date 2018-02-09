@@ -44,7 +44,7 @@
 	//Log the action before actually performing it, in case it crashes the server
 	feedback_add_details("admin_verb","MEV")
 	log_admin("[key_name(src)] mass modified [target_type]'s [variable_name] to [reset_to_initial ? "its initial value" : " [new_value] "]")
-	message_admins("[key_name_admin(src)] mass modified [target_type]'s [variable_name] to [reset_to_initial ? "its initial value" : " [new_value] "]", 1)
+	message_admins("[key_name_admin(src)] mass modified [target_type]'s [variable_name] to [reset_to_initial ? "its initial value" : " [html_encode(new_value)] "]", 1)
 
 	mass_modify_variable(target_type, variable_name, new_value, reset_to_initial, include_subtypes)
 

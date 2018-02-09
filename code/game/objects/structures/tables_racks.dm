@@ -280,7 +280,7 @@
 	destroy()
 
 /obj/structure/table/attack_animal(mob/living/simple_animal/user)
-	if(user.environment_smash>0)
+	if(user.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()
@@ -364,6 +364,7 @@
 			return
 		var/mob/living/carbon/M = user
 		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
+		M.adjustBrainLoss(5)
 		M.Knockdown(1)
 		if (prob(50))
 			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
@@ -810,7 +811,7 @@
 	destroy()
 
 /obj/structure/rack/attack_animal(mob/living/simple_animal/user)
-	if(user.environment_smash>0)
+	if(user.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		destroy()

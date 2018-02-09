@@ -521,9 +521,7 @@
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 		if (do_after(user, src, 50) && opened && terminal && has_electronics != 2 && !T.intact)
 			if (prob(50) && electrocute_mob(usr, terminal.get_powernet(), terminal))
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(5, 1, src)
-				s.start()
+				spark(src, 5)
 				return
 			getFromPool(/obj/item/stack/cable_coil, get_turf(user), 10)
 			user.visible_message(\
@@ -705,7 +703,7 @@
 	else
 		return 0 // 0 = User is not a Malf AI
 
-/obj/machinery/power/apc/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/power/apc/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(!user)
 		return
 
@@ -756,7 +754,7 @@
 	)
 
 	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
@@ -1022,9 +1020,7 @@
 				smoke.set_up(3, 0, src.loc)
 				smoke.attach(src)
 				smoke.start()
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(3, 1, src)
-				s.start()
+				spark(src)
 				for(var/mob/M in viewers(src))
 					M.show_message("<span class='warning'>The [src.name] suddenly lets out a blast of smoke and some sparks!</span>", 1, "<span class='warning'>You hear sizzling electronics.</span>", 2)
 

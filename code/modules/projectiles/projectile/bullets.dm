@@ -838,3 +838,9 @@
 
 /obj/item/projectile/bullet/buckshot/bullet_storm/get_radius_turfs(turf/T)
 	return circlerangeturfs(original,5)
+
+/obj/item/projectile/bullet/faggot
+	name = "high-speed faggot"
+	icon = 'icons/obj/food.dmi'
+	icon_state = "faggot"
+	damage = 10

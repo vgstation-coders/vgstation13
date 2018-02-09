@@ -24,6 +24,7 @@
 			P.roll_and_drop(src)
 
 	ChangeTurf(dismantle_type)
+	update_near_walls()
 
 /turf/simulated/wall/cult/attack_construct(mob/user as mob)
 	if(istype(user,/mob/living/simple_animal/construct/builder) && user.Adjacent(src))

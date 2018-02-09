@@ -216,8 +216,8 @@
 /datum/design/rust_core
 	name = "Internal circuitry (R-UST Mk. 7 tokamak core)"
 	desc = "The circuit board that for a RUST-pattern tokamak fusion core."
-	id = "pacman"
-	req_tech = list(bluespace = 3, plasmatech = 4, magnets = 5, powerstorage = 6)
+	id = "rust_core"
+	req_tech = list(Tc_BLUESPACE = 3, Tc_PLASMATECH = 4, Tc_MAGNETS = 5, Tc_POWERSTORAGE = 6)
 	build_type = IMPRINTER
 	reliability_base = 79
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 3000, MAT_DIAMOND = 2000)
@@ -225,15 +225,15 @@
 	build_path = "/obj/item/weapon/circuitboard/rust_core"
 
 /datum/design/rust_injector
-	name = "Internal circuitry (R-UST Mk. 7 tokamak core)"
+	name = "Internal circuitry (R-UST Mk. 7 fuel injector)"
 	desc = "The circuit board that for a RUST-pattern particle accelerator."
-	id = "pacman"
-	req_tech = list(powerstorage = 3, engineering = 4, plasmatech = 4, materials = 6)
+	id = "rust_fuel_injector"
+	req_tech = list(Tc_POWERSTORAGE = 3, Tc_ENGINEERING = 4, Tc_PLASMATECH = 4, Tc_MATERIALS = 6)
 	build_type = IMPRINTER
 	reliability_base = 79
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 3000, MAT_URANIUM = 2000)
 	category = "Misc"
-	build_path = "/obj/item/weapon/circuitboard/rust_core"
+	build_path = "/obj/item/weapon/circuitboard/rust_injector"
 
 //Cael shield gen designs.
 

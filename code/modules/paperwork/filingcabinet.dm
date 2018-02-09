@@ -37,10 +37,16 @@
 	if(istype(P, /obj/item/weapon/paper) || istype(P, /obj/item/weapon/folder) || istype(P, /obj/item/weapon/photo))
 		if(user.drop_item(P, src))
 			to_chat(user, "<span class='notice'>You put [P] in [src].</span>")
-			icon_state = "[initial(icon_state)]-open"
-			sleep(5)
-			icon_state = initial(icon_state)
+			flick("[initial(icon_state)]-open",src)
 			updateUsrDialog()
+	else if(istype(P, /obj/item/weapon/storage/bag/clipboard))
+		for(var/obj/item/I in P)
+			if(!istype(I, /obj/item/weapon/pen))
+				user.drop_item(I,src)
+		P.update_icon()
+		flick("[initial(icon_state)]-open",src)
+		to_chat(user, "<span class='notice'>You empty the [P] into \the [src].</span>")
+		updateUsrDialog()
 	else if(iswrench(P))
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 		anchored = !anchored
@@ -75,9 +81,7 @@
 		if(P && (P.loc == src) && in_range(src, usr))
 			usr.put_in_hands(P)
 			updateUsrDialog()
-			icon_state = "[initial(icon_state)]-open"
-			sleep(5)
-			icon_state = initial(icon_state)
+			flick("[initial(icon_state)]-open",src)
 
 
 /*

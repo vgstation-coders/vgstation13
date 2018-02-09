@@ -56,7 +56,7 @@
 				else
 					*/
 					//Not enough air around, take a percentage of what's there to model this properly
-				breath_moles = environment.total_moles() * BREATH_PERCENTAGE
+				breath_moles = (environment.total_moles() / environment.volume * CELL_VOLUME) * BREATH_PERCENTAGE
 
 				breath = loc.remove_air(breath_moles)
 

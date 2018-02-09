@@ -1,7 +1,7 @@
 //on aggro, these decoys delete themselves and spawn a given replacement atom
 /mob/living/simple_animal/hostile/decoy
 	wander = 0
-	environment_smash = 0
+	environment_smash_flags = 0
 	faction = "decoy"
 	vision_range = 5	//no point in having the decoy if it aggros before the player sees it
 	min_oxy = 0

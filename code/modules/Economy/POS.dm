@@ -440,7 +440,7 @@ var/const/POS_HEADER = {"<html>
 			if("Add Product")
 				var/line_item/LI = new
 				LI.name=sanitize(href_list["name"])
-				LI.price=text2num(href_list["price"])
+				LI.price=max(1, text2num(href_list["price"]))
 				products["[products.len+1]"]=LI
 			if("Add to Order")
 				AddToOrder(href_list["preset"],text2num(href_list["units"]))
@@ -453,7 +453,7 @@ var/const/POS_HEADER = {"<html>
 						return
 					var/line_item/LI = new
 					LI.name=sanitize(cells[1])
-					LI.price=text2num(cells[2])
+					LI.price=max(1, text2num(cells[2]))
 					products["[products.len+1]"]=LI
 			if("Export Products")
 				screen=POS_SCREEN_EXPORT
@@ -491,7 +491,7 @@ var/const/POS_HEADER = {"<html>
 			products[pid]=LI
 	else if("setprice" in href_list)
 		var/newprice = input(usr,"Enter the product's price.") as num
-		if(!newprice)
+		if(newprice<=0)
 			return
 		var/pid = href_list["setprice"]
 		var/line_item/LI = products[pid]
@@ -503,7 +503,8 @@ var/const/POS_HEADER = {"<html>
 	if(istype(A,/obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/I = A
 		if(!logged_in)
-			user.visible_message("<span class='notice'>The machine beeps, and logs you in</span>","You hear a beep.")
+			// /atom/mob/visible_message(all_message, self_message, blind_message,...)
+			user.visible_message("<span class='notice'>The machine beeps, and logs [user] in.</span>", "<span class='notice'>The machine beeps, and logs you in.</span>", "You hear a beep.")
 			logged_in = user
 			screen=POS_SCREEN_ORDER
 			update_icon()
@@ -544,6 +545,7 @@ var/const/POS_HEADER = {"<html>
 			return
 		var/obj/item/weapon/spacecash/C=A
 		credits_held += C.worth*C.amount
+		qdel(C)
 		if(credits_held >= credits_needed)
 			visible_message("<span class='notice'>The machine beeps, and begins printing a receipt</span>","You hear a beep and the sound of paper being shredded.")
 			PrintReceipt()
@@ -551,7 +553,7 @@ var/const/POS_HEADER = {"<html>
 			credits_held -= credits_needed
 			credits_needed=0
 			screen=POS_SCREEN_ORDER
-			if(credits_held)
+			if(credits_held>0)
 				var/obj/item/weapon/storage/box/B = new(loc)
 				dispense_cash(credits_held,B)
 				B.name="change"

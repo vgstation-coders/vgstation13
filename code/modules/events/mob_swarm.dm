@@ -44,9 +44,7 @@
         var/mob/M = new mob_to_spawn(targetTurf)
         if(!mob_name)
             mob_name = M.name
-        var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
-        sparks.set_up(3,0,targetTurf)
-        sparks.start()
+        spark(targetTurf, 3, FALSE)
     message_admins("Mob swarm of [spawn_amount] [mob_to_spawn] at [target_area].")
 
 
