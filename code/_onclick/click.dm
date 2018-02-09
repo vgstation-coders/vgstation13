@@ -16,7 +16,7 @@
 	usr.ClickOn(src, params)
 
 /mob/living/Click()
-	if(isAI(usr)) //IDK why this is needed
+	if(isAI(usr)) //So AIs don't click on mobs while taking photos of them... Is this really an issue?
 		var/mob/living/silicon/ai/A = usr
 		if(!A.aicamera.in_camera_mode) //Fix for taking photos of mobs
 			return
