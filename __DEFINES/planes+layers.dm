@@ -204,7 +204,7 @@ What is the naming convention for planes or layers?
 	#define SUPER_PORTAL_LAYER		6
 	#define NARSIE_GLOW 			7
 
-#define AREA_PLANE				20
+#define ABOVE_LIGHTING_PLANE		20
 	#define MAPPING_AREA_LAYER	999
 
 #define STATIC_PLANE 			21		// For AI's static.
