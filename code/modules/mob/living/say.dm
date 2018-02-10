@@ -453,7 +453,7 @@ var/list/department_radio_keys = list(
 			display_bubble_to_clientlist(image('icons/mob/talk.dmi', get_holder_at_turf_level(src), "h[bubble_type][say_test(message)]",MOB_LAYER+1), tracking_speech_bubble_recipients)
 
 /proc/display_bubble_to_clientlist(var/image/speech_bubble, var/clientlist)
-	speech_bubble.plane = BASE_PLANE
+	speech_bubble.plane = ABOVE_LIGHTING_PLANE
 	speech_bubble.appearance_flags = RESET_COLOR
 	flick_overlay(speech_bubble, clientlist, 30)
 

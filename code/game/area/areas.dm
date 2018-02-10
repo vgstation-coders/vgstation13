@@ -11,7 +11,7 @@ var/area/space_area
 	var/list/area_turfs
 	var/turret_protected = 0
 	var/list/turretTargets = list()
-	plane = AREA_PLANE
+	plane = ABOVE_LIGHTING_PLANE
 	layer = MAPPING_AREA_LAYER
 	var/base_turf_type = null
 	var/shuttle_can_crush = TRUE
