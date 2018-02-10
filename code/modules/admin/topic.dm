@@ -3690,12 +3690,8 @@
 					alert("For some reason there's a ticker, but not a game mode")
 			if("manifest")
 				var/dat = "<B>Showing Crew Manifest.</B><HR>"
-				dat += "<table cellspacing=5><tr><th>Name</th><th>Position</th></tr>"
-				for(var/mob/living/carbon/human/H in mob_list)
-					if(H.ckey)
-						dat += text("<tr><td>[]</td><td>[]</td></tr>", H.name, H.get_assignment())
-				dat += "</table>"
-				usr << browse(dat, "window=manifest;size=440x410")
+				dat += data_core.get_manifest(OOC = 1)
+				usr << browse(dat, "window=manifest;size=370x420;can_close=1")
 			if("check_antagonist")
 				check_antagonists()
 			if("emergency_shuttle_panel")
