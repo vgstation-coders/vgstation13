@@ -1,0 +1,24 @@
+diff a/code/modules/clothing/spacesuits/alien.dm b/code/modules/clothing/spacesuits/alien.dm	(rejected hunks)
+@@ -392,22 +392,6 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
+ 	var/up = TRUE
+ 	eyeprot = 0
+ 
+-/obj/item/clothing/head/helmet/space/vox/civ/science/roboticist/attack_self(var/mob/user)
+-	toggle(user)
+-
+-/obj/item/clothing/head/helmet/space/vox/civ/science/roboticist/proc/toggle(var/mob/user)
+-	if(!user)
+-		return //PANIC
+-	if(!user.incapacitated())
+-		to_chat(user, "You toggle the built-in welding mask [src.up ? "on" : "off"].")
+-		src.up = !src.up
+-		if(src.up)
+-			eyeprot = 0
+-			body_parts_covered &= ~EYES
+-		else
+-			eyeprot = 3
+-			body_parts_covered |= EYES
+-
+ //Med/Sci
+ /obj/item/clothing/suit/space/vox/civ/medical
+ 	name = "vox medical pressure suit"

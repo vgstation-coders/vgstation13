@@ -1,0 +1,15 @@
+diff a/code/modules/clothing/spacesuits/plasmamen.dm b/code/modules/clothing/spacesuits/plasmamen.dm	(rejected hunks)
+@@ -257,6 +257,13 @@
+ 	icon_state = "plasmamanScience_helmet0"
+ 	base_state = "plasmamanScience_helmet"
+ 
++	var/up = TRUE
++	eyeprot = 0
++
++/obj/item/clothing/head/helmet/space/plasmaman/science/New()
++	actions_types += /datum/action/item_action/toggle_helmet_mask
++	..()
++
+ /obj/item/clothing/suit/space/plasmaman/science/rd
+ 	name = "plasmaman research director suit"
+ 	icon_state = "plasmaman_RD"

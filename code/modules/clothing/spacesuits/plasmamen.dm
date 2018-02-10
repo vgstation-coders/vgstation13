@@ -257,6 +257,10 @@
 	icon_state = "plasmamanScience_helmet0"
 	base_state = "plasmamanScience_helmet"
 
+/obj/item/clothing/head/helmet/space/plasmaman/science/New()
+	actions_types += /datum/action/item_action/toggle_helmet_mask
+	..()
+
 /obj/item/clothing/suit/space/plasmaman/science/rd
 	name = "plasmaman research director suit"
 	icon_state = "plasmaman_RD"
