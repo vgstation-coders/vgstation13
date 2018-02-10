@@ -236,7 +236,9 @@
 		sensor = null
 
 /proc/getAvailableRobotModules()
-	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Security")
+	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service")
+	if (security_level >= SEC_LEVEL_BLUE)
+		modules += "Security"
 	if(security_level == SEC_LEVEL_RED) //Add crisis to this check if you want to make it available at an admin's whim
 		modules+="Combat"
 	return modules
