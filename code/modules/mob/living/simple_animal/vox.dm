@@ -26,6 +26,7 @@
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS // WALLS
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	status_flags = 0
+	max_oxy = 0
 
 	var/armour = null
 	var/amp = null
