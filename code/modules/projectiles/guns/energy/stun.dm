@@ -21,7 +21,7 @@
 	projectile_type = "/obj/item/projectile/energy/electrode"
 	cell_type = "/obj/item/weapon/cell/secborg"
 	var/charge_tick = 0
-	var/recharge_time = 10 //Time it takes for shots to recharge (in ticks)
+	var/recharge_time = 20 //Time it takes for shots to recharge (in ticks)
 
 /obj/item/weapon/gun/energy/taser/cyborg/New()
 	..()
