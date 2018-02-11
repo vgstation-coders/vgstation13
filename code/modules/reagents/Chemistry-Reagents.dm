@@ -914,7 +914,7 @@
 		var/mob/living/carbon/human/H = M
 		if(iscult(H))
 			if(prob(10)) //1/10 chance of removing cultist status, so 50 units on average to uncult (half a holy water bottle)
-				//ticker.mode.remove_cultist(H.mind)
+				ticker.mode.remove_cultist(H.mind)
 				H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, his eyes clear up.</span>",
 				"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 			else //Warn the Cultist that it is fucking him up

@@ -120,13 +120,13 @@
 				to_chat(H, "<span class='notice'>The power of [my_rel.deity_name] suddenly clears your mind of heresy. Your allegiance to Nar'Sie wanes!</span>")
 				to_chat(user, "<span class='notice'>You see [H]'s eyes become clear. Nar'Sie no longer controls his mind, [my_rel.deity_name] saved \him!</span>")
 				add_attacklogs(user, H, "de-converted from the Cult of Nar'Sie!")
-				//ticker.mode.remove_cultist(H.mind) // TODO rolefix
+				ticker.mode.remove_cultist(H.mind) // TODO rolefix
 			else //We aren't deconverting him this time, give the Cultist a fair warning
 				to_chat(H, "<span class='warning'>The power of [my_rel.deity_name] is overwhelming you. Your mind feverishly questions Nar'Sie's teachings!</span>")
 			return 1 //Don't heal the mob
 		var/datum/role/thrall/T = isthrall(H)
 		if(T && isChaplain(user))
-			//ticker.mode.remove_thrall(H.mind) // TODO rolefix
+			T.Drop() // Remove the thrall using the Drop() function to leave the role.
 			H.visible_message("<span class='big danger'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
 			"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 			return 1 //That's it, game over
