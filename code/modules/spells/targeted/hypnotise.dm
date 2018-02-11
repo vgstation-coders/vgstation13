@@ -15,9 +15,6 @@
 	cooldown_min = 5 MINUTES
 	selection_type = "range"
 
-	amt_paralysis = 20
-	amt_stuttering = 50
-
 	hud_state = ""
 
 	var/blood_cost = 10
