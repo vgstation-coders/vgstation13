@@ -1,5 +1,14 @@
-/mob/living/simple_animal/vox/armalis/
+/mob/living/simple_animal/vox
+	min_oxy = 0
+	max_oxy = 1
+	min_tox = 0
+	max_tox = 1
+	min_co2 = 0
+	max_co2 = 5
+	min_n2 = 5 //breathe N2
+	max_n2 = 0
 
+/mob/living/simple_animal/vox/armalis
 	name = "serpentine alien"
 	real_name = "serpentine alien"
 	desc = "A one-eyed, serpentine creature, half-machine, easily nine feet from tail to beak!"
