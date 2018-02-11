@@ -88,6 +88,9 @@ emp_act
 			var/obj/item/clothing/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.get_armor(type)
+			for(var/obj/item/clothing/accessory/A in C.accessories)
+				if(A.body_parts_covered & def_zone.body_part)
+					protection += A.get_armor(type)
 	if(istype(loc, /obj/mecha))
 		var/obj/mecha/M = loc
 		protection += M.rad_protection
@@ -103,6 +106,9 @@ emp_act
 			var/obj/item/clothing/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
 				protection += C.get_armor_absorb(type)
+			for(var/obj/item/clothing/accessory/A in C.accessories)
+				if(A.body_parts_covered & def_zone.body_part)
+					protection += A.get_armor_absorb(type)
 	return protection
 
 
