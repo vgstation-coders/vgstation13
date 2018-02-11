@@ -521,13 +521,13 @@ Subject's pulse: ??? BPM"})
 	..()
 
 /obj/item/device/breathalyzer/attack_self(mob/user)
-	var/I = input("Set the legal limit of ethanol.", "Legal Limit", legal_limit) as num
+	var/I = input("Set the legal limit of ethanol.", "Legal Limit", legal_limit) as null|num
 
 	if(I)
 		legal_limit = max(0, I)
 		to_chat(user, "<span class='notice'>You successfully set the legal limit of the breathalyzer.</span>")
 
-/obj/item/device/breathalyzer/attack(mob/living/M as mob, mob/living/user as mob)
+/obj/item/device/breathalyzer/attack(mob/living/M, mob/living/user)
 	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
@@ -545,9 +545,8 @@ Subject's pulse: ??? BPM"})
 
 	var/alcohol = 0
 
-	for(var/datum/reagent/R in C.reagents.reagent_list)
-		if(istype(R, /datum/reagent/ethanol))
-			alcohol += R.volume
+	for(var/datum/reagent/ethanol/E in C.reagents.reagent_list)
+		alcohol += E.volume
 
 	var/dat = "<span class='notice'>The breathalyzer reports that [C] has [alcohol] units of ethanol in their blood.</span>"
 
@@ -555,3 +554,7 @@ Subject's pulse: ??? BPM"})
 		dat += "<br><span class='warning'>This is above the legal limit of [legal_limit]!</span>"
 
 	to_chat(user, dat)
+
+/obj/item/device/breathalyzer/examine(mob/user)
+	..()
+	to_chat(user, "<span class='notice'>Its legal limit is set to [legal_limit] units.</span>")
