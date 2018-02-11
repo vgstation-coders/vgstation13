@@ -630,7 +630,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 /obj/machinery/chem_master/chemical_manipulator
 	name = "\improper Chemical Manipulator"
 	icon_state = "manipulator"
-	/obj/item/weapon/circuitboard/chemical_manipulator
+	chem_board = /obj/item/weapon/circuitboard/chemical_manipulator
 	clear_reagents = 0
 
 /obj/machinery/chem_master/chemical_manipulator/update_icon()
