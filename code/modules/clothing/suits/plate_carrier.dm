@@ -42,12 +42,6 @@
 		P = W
 		to_chat(user, "<span class = 'notice'>You install \the [W] into \the [src].</span>")
 
-/obj/item/clothing/suit/armor/plate_carrier/examine(var/mob/user)
-	..()
-	if(P)
-		to_chat(user, "[P.examine_detail()]")
-
-
 /obj/item/clothing/suit/armor/plate_carrier/proc/handle_user_damage(list/arguments)
 	var/amount = arguments["amount"]
 	if(amount <= 0)
