@@ -1,0 +1,106 @@
+/**
+	Plate Carrier armor.
+		Armor that accepts an armored plate, that takes the brunt of the damage and steadily ablates to nothing.
+*/
+
+/obj/item/clothing/suit/armor/plate_carrier
+	var/event_key
+	var/obj/item/weapon/armor_plate/P
+
+/obj/item/clothing/suit/armor/plate_carrier/get_armor(var/type)
+	var/armor_value = armor[type]
+	if(P)
+		armor_value = armor[type] <= 0 ? P.armor[type] : Clamp((armor[type]+P.armor[type])/2, armor[type], 100)
+	return armor_value
+
+/obj/item/clothing/suit/armor/plate_carrier/get_armor_absorb(var/type)
+	var/armor_value = armor_absorb[type]
+	if(P)
+		armor_value = armor_absorb[type] <= 0 ? P.armor_absorb[type] : Clamp((armor_absorb[type]+P.armor_absorb[type])/2, armor_absorb[type], 100)
+	return armor_value
+
+/obj/item/clothing/suit/armor/plate_carrier/equipped(var/mob/user, var/slot)
+	..()
+	if(slot == slot_wear_suit)
+		event_key = user.on_damaged.Add(src, "handle_user_damage")
+
+
+/obj/item/clothing/suit/armor/plate_carrier/unequipped(mob/user, var/from_slot = null)
+	if(from_slot == slot_wear_suit)
+		user.on_damaged.Remove(event_key)
+		event_key = null
+	..()
+
+/obj/item/clothing/suit/armor/plate_carrier/attack_self(mob/user)
+	if(P)
+		user.put_in_hands(P)
+		P = null
+
+/obj/item/clothing/suit/armor/plate_carrier/attackby(obj/item/W,mob/user)
+	..()
+	if(istype(W, /obj/item/weapon/armor_plate) && !P && user.drop_item(W, src))
+		P = W
+		to_chat(user, "<span class = 'notice'>You install \the [W] into \the [src].</span>")
+
+/obj/item/clothing/suit/armor/plate_carrier/examine(var/mob/user)
+	..()
+	if(P)
+		to_chat(user, "[P.examine_detail()]")
+
+
+/obj/item/clothing/suit/armor/plate_carrier/proc/handle_user_damage(list/arguments)
+	var/amount = arguments["amount"]
+	if(amount <= 0)
+		return
+	var/type = arguments["type"]
+
+	if(!P)
+		return
+	P.receive_damage(type, amount)
+	if(P.gcDestroyed)
+		P = null
+
+/obj/item/clothing/suit/armor/plate_carrier/security
+	name = "security plate armor"
+	icon_state = "security_armor"
+	item_state = "security_armor"
+
+/obj/item/weapon/armor_plate
+	icon = 'icons/obj/items.dmi'
+	icon_state = "plate_1"
+	name = "ceramic armor plate"
+	health = 50
+	armor = list(melee = 25, bullet = 7, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
+	armor_absorb = list(melee = 25, bullet = 20, laser = 20, energy = -5, bomb = 0, bio = 0, rad = 0)
+
+
+/obj/item/weapon/armor_plate/proc/receive_damage(var/type, var/amount)
+	if(type == BRUTE || type == BURN)
+		health -= amount
+	if(health <= 0)
+		visible_message("<span class = 'warning'>\The [src] breaks apart!</span>")
+		qdel(src)
+
+/obj/item/weapon/armor_plate/examine(var/mob/user)
+	..()
+	switch(health)
+		if(initial(health) to initial(health)/2)
+			to_chat(user, "<span class = 'notice'>\The [src] is hard.</span>")
+		if(initial(health)/2-1 to initial(health)/4)
+			to_chat(user, "<span class = 'warning'>\The [src] is brittle.</span>")
+		if(initial(health)/4-1 to 0)
+			to_chat(user, "<span class = 'warning'>\The [src] is falling apart!</span>")
+
+/obj/item/weapon/armor_plate/bullet_resistant
+	name = "plasteel armor plate"
+	icon_state = "plate_2"
+	health = 75
+	armor = list(melee = 50, bullet = 80, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
+	armor_absorb = list(melee = 25, bullet = 40, laser = 10, energy = -5, bomb = 35, bio = 0, rad = 0)
+
+/obj/item/weapon/armor_plate/laser_resistant
+	name = "ceramite armor plate"
+	icon_state = "plate_3"
+	health = 60
+	armor = list(melee = 10, bullet = 10, laser = 80, energy = 50, bomb = 0, bio = 0, rad = 0)
+	armor_absorb = list(melee = 25, bullet = 20, laser = 40, energy = -5, bomb = 0, bio = 0, rad = 0)

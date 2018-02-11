@@ -1181,6 +1181,7 @@
 #include "code\modules\clothing\suits\labcoat.dm"
 #include "code\modules\clothing\suits\leather.dm"
 #include "code\modules\clothing\suits\miscellaneous.dm"
+#include "code\modules\clothing\suits\plate_carrier.dm"
 #include "code\modules\clothing\suits\slimecoat.dm"
 #include "code\modules\clothing\suits\utility.dm"
 #include "code\modules\clothing\suits\wintercoat.dm"
