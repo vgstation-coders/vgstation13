@@ -58,6 +58,16 @@
 	category = "Robotic_Upgrade_Modules"
 	materials = list(MAT_IRON=10000, MAT_PLASMA=15000, MAT_URANIUM=20000)
 
+/datum/design/borg_taser_board
+	name = "Security cyborg taser module board"
+	desc = "Used to give security cyborgs a taser module."
+	id = "borg_taser_board"
+	req_tech = list(Tc_COMBAT = 3)
+	build_type = MECHFAB
+	build_path = /obj/item/borg/upgrade/tasermodule
+	category = "Robotic_Upgrade_Modules"
+	materials = list(MAT_IRON=50000, MAT_GLASS=6000, MAT_GOLD=1000, MAT_DIAMOND=500)
+
 /datum/design/borg_tasercooler_board
 	name = "Security cyborg rapid taser cooling upgrade"
 	desc = "Used to upgrade cyborg taser cooling."

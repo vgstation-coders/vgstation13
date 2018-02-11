@@ -174,6 +174,17 @@
 
 	R.movement_speed_modifier += vtec_bonus
 
+/obj/item/borg/upgrade/tasermodule
+	name = "security cyborg taser module board"
+	desc = "Used to provide security cyborgs with a taser module, improving their combat capabilities."
+	icon_state = "cyborg_upgrade3"
+	required_module = list(/obj/item/weapon/robot_module/security)
+	modules_to_add = list(/obj/item/weapon/gun/energy/taser/cyborg)
+
+/obj/item/borg/upgrade/tasermodule/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+
+	if(..())
+		return FAILED_TO_ADD
 
 /obj/item/borg/upgrade/tasercooler
 	name = "security cyborg rapid taser cooling upgrade board"
@@ -181,7 +192,6 @@
 	icon_state = "cyborg_upgrade3"
 	required_module = list(/obj/item/weapon/robot_module/security)
 	multi_upgrades = TRUE
-
 
 /obj/item/borg/upgrade/tasercooler/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	var/obj/item/weapon/gun/energy/taser/cyborg/T = locate_component(/obj/item/weapon/gun/energy/taser/cyborg, R, user)
