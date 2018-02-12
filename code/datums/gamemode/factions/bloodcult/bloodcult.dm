@@ -1,3 +1,6 @@
+//CULT 3.0 BY DEITY LINK (2018)
+//BASED ON THE ORIGINAL GAME MODE BY URIST MCDORF
+
 /datum/faction/cult
 	ID = CULT
 	var/eldergod
