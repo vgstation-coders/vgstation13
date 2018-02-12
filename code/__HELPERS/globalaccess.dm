@@ -1025,14 +1025,6 @@
 			return global.narsie_list;
 		if("mr_clean_targets")
 			return global.mr_clean_targets;
-		if("cultwords")
-			return global.cultwords;
-		if("runedec")
-			return global.runedec;
-		if("engwords")
-			return global.engwords;
-		if("rnwords")
-			return global.rnwords;
 		if("rune_list")
 			return global.rune_list;
 		if("halloween_spawns")
@@ -1187,8 +1179,6 @@
 			return global.message_delay;
 		if("telecomms_list")
 			return global.telecomms_list;
-		if("word_to_uristrune_table")
-			return global.word_to_uristrune_table;
 		if("uristrune_cache")
 			return global.uristrune_cache;
 		if("explosion_shake_message_cooldown")
@@ -2902,12 +2892,6 @@
 			global.mr_clean_targets=newval
 		if("cultwords")
 			global.cultwords=newval
-		if("runedec")
-			global.runedec=newval
-		if("engwords")
-			global.engwords=newval
-		if("rnwords")
-			global.rnwords=newval
 		if("rune_list")
 			global.rune_list=newval
 		if("halloween_spawns")
@@ -3062,8 +3046,6 @@
 			global.message_delay=newval
 		if("telecomms_list")
 			global.telecomms_list=newval
-		if("word_to_uristrune_table")
-			global.word_to_uristrune_table=newval
 		if("uristrune_cache")
 			global.uristrune_cache=newval
 		if("explosion_shake_message_cooldown")

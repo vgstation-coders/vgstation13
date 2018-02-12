@@ -375,7 +375,7 @@
 						Z.cancel_camera()
 						deleteafter = 1
 				if(iscultist(U))
-					var/datum/faction/cult/cult_round = find_active_faction(CULT_NARSIE)
+					var/datum/faction/bloodcult/cult_round = find_active_faction(BLOODCULT)
 					if(cult_round)
 						cult_round.HandleRecruitedMind(Z.mind)
 

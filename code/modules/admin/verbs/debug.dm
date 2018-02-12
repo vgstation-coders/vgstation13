@@ -1192,7 +1192,7 @@ client/proc/check_convertables()
 	set category = "Debug"
 	if(!holder || !ticker || !ticker.mode)
 		return
-	var/datum/faction/cult = find_active_faction(CULT)
+	var/datum/faction/cult = find_active_faction(BLOODCULT)
 	var/dat = ""
 	for(var/mob/M in player_list)
 		if(!M.mind)

@@ -408,9 +408,6 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		if(!(R && R.word1 == cultwords["hell"] && R.word2 == cultwords["travel"] && R.word3 == cultwords["self"]))	//astral journeying rune
 			to_chat(usr, "<span class='warning'>The astral cord that ties your body and your spirit has been severed. You are likely to wander the realm beyond until your body is finally dead and thus reunited with you.</span>")
 			return
-	if(mind && mind.current && mind.current.ajourn)
-		mind.current.ajourn.ajourn = null
-		mind.current.ajourn = null
 	completely_untransmogrify()
 	mind.current.key = key
 	mind.isScrying = 0
@@ -757,7 +754,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return 0 //something is terribly wrong
 
 	var/ghosts_can_write
-	var/datum/faction/C = find_active_faction(CULT_NARSIE)
+	var/datum/faction/C = find_active_faction(BLOODCULT)
 	if(C && C.members.len > config.cult_ghostwriter_req_cultists)
 		ghosts_can_write = 1
 

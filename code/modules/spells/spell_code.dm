@@ -89,6 +89,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/gradual_casting = FALSE //equals TRUE while a Sp_GRADUAL spell is actively being cast
 
 	var/list/holiday_required = list() // The holiday this spell is restricted to ! Leave empty if none.
+	var/block = 0//prevents some spells from being spamed
 
 ///////////////////////
 ///SETUP AND PROCESS///
@@ -149,7 +150,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(!cast_check(skipcharge, user))
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
+		block = 0
 		return
+	block = 0
 	if(before_target(user))
 		return
 
@@ -507,18 +510,48 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(!user || isnull(user))
 		return 0
 	if(numticks == 0)
-		return 1
+		return 0
 
 	var/delayfraction = round(delay/numticks)
-	var/Location = user.loc
 	var/originalstat = user.stat
 
-	for(var/i = 0, i<numticks, i++)
+	var/Location = user.loc
+	var/image/progbar
+	if(user && user.client && user.client.prefs.progress_bars)
+		if(!progbar)
+			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "prog_bar_0")
+			progbar.pixel_z = WORLD_ICON_SIZE
+			progbar.plane = HUD_PLANE
+			progbar.layer = HUD_ABOVE_ITEM_LAYER
+			progbar.appearance_flags = RESET_COLOR
+
+	for (var/i = 1 to numticks)
+		if(user && user.client && user.client.prefs.progress_bars)
+			if(!progbar)
+				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "prog_bar_0")
+				progbar.pixel_z = WORLD_ICON_SIZE
+				progbar.plane = HUD_PLANE
+				progbar.layer = HUD_ABOVE_ITEM_LAYER
+				progbar.appearance_flags = RESET_COLOR
+			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
+			user.client.images |= progbar
+
 		sleep(delayfraction)
 
-
 		if(!user || (!(spell_flags & (STATALLOWED|GHOSTCAST)) && user.stat != originalstat)  || !(user.loc == Location))
+			if(progbar)
+				progbar.icon_state = "prog_bar_stopped"
+				spawn(2)
+					if(user && user.client)
+						user.client.images -= progbar
+					if(progbar)
+						progbar.loc = null
 			return 0
+
+	if(user && user.client)
+		user.client.images -= progbar
+	if(progbar)
+		progbar.loc = null
 	return 1
 
 //UPGRADES

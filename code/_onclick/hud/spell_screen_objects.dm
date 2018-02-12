@@ -191,6 +191,15 @@
 
 	screen_loc = ui_alien_master
 
+/obj/abstract/screen/movable/spell_master/bloodcult
+	name = "Blood Magic"
+	icon_state = "cult_spell_ready"
+
+	open_state = "cult_open"
+	closed_state = "cult_closed"
+
+	screen_loc = ui_alien_master
+
 //////////////ACTUAL SPELLS//////////////
 //This is what you click to cast things//
 /////////////////////////////////////////

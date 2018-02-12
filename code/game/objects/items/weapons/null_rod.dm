@@ -67,7 +67,7 @@
 	*/
 
 	..() //Whack their shit regardless. It's an obsidian rod, it breaks skulls
-
+/*
 /obj/item/weapon/nullrod/afterattack(atom/A, mob/user as mob, prox_flag, params)
 	if(!prox_flag)
 		return
@@ -75,7 +75,7 @@
 	if(istype(A, /turf/simulated/floor))
 		to_chat(user, "<span class='notice'>You hit the floor with the [src].</span>")
 		call(/obj/effect/rune/proc/revealrunes)(src)
-
+*/
 /obj/item/weapon/nullrod/pickup(mob/living/user as mob)
 	if(user.mind)
 		if(user.mind.assigned_role == "Chaplain")

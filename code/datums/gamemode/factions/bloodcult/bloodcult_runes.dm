@@ -23,6 +23,8 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	layer = RUNE_LAYER
 	plane = ABOVE_TURF_PLANE
 
+	var/animated = 0
+
 	//A rune is made of up to 3 words
 	var/datum/cultword/word1
 	var/datum/cultword/word2
@@ -35,6 +37,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	var/datum/reagent/blood/blood1
 	var/datum/reagent/blood/blood2
 	var/datum/reagent/blood/blood3
+	var/list/datum/disease2/disease/virus2 = list()
 
 	//Used when a nullrod is preventing a rune's activation
 	var/nullblock = 0
@@ -61,21 +64,33 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	qdel(blood_image)
 	blood_image = null
 
+	word1 = null
+	word2 = null
+	word3 = null
+
+	blood1 = null
+	blood2 = null
+	blood3 = null
+
+	if (active_spell)
+		active_spell.abort()
+		active_spell = null
+
 	rune_list.Remove(src)
 	..()
 
 /obj/effect/rune/examine(var/mob/user)
 	..()
-	var/rune_name = get_rune_spell(null, null, "examine", word1,word2,word3)
+	var/datum/rune_spell/rune_name = get_rune_spell(null, null, "examine", word1,word2,word3)
 
 	//cultists can read the words, and be informed if it calls a spell
 	if (iscultist(user))
 		to_chat(user, "<span class='info'>It reads: <i>[word1.rune] [word2.rune] [word3.rune]</i>.[rune_name ? " That's \a <b>[rune_name.name]</b> rune." : "It doesn't match any rune spells."]</span>")
 	if (rune_name)
-		if (rune_name.Act_restriction <= TODO INSERT CULT CHECK HERE)
-			to_chat(user, "<span class='info'>[rune_name.desc]</span>")
+		if (rune_name.Act_restriction <= 1000)
+			to_chat(user, rune_name.desc)
 		else
-			to_chat(user, "<span class='warning'>The veil is still too thick for you to draw power from this rune.</span>")
+			to_chat(user, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
 
 	//so do observers
 	else if (isobserver(user))
@@ -89,7 +104,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 			to_chat(user, "<span class='info'>It reads: <i>[word1.rune] [word2.rune] [word3.rune]</i>. What spell was that already?...</span>")
 			if (prob(5))
 				spawn(50)
-					to_chat(O, "<span class='game say'><span class='danger'>???-???</span> murmurs, <span class='sinister'>[pick(\
+					to_chat(user, "<span class='game say'><span class='danger'>???-???</span> murmurs, <span class='sinister'>[pick(\
 							"Your toys won't get you much further",\
 							"Bitter that you weren't chosen?",\
 							"I dig your style, but I crave for your blood.",\
@@ -99,21 +114,43 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		else if (religion_name in cult_clock_chaplain)
 			to_chat(user, "<span class='info'>It reads a bunch of stupid shit.</span>")
 			if (prob(5))
-				spawn(50)=
-					to_chat(O, "<span class='game say'><span class='danger'>???-???</span> murmurs, <span class='sinister'>[pick(\
+				spawn(50)
+					to_chat(user, "<span class='game say'><span class='danger'>???-???</span> murmurs, <span class='sinister'>[pick(\
 							"Oh just fuck off",)].</span></span>")
 
+
+/obj/effect/rune/cultify()
+	return
+
+/obj/effect/rune/ex_act(var/severity)
+	switch (severity)
+		if (1)
+			qdel(src)
+		if (2)
+			if (prob(15))
+				qdel(src)
+
+/obj/effect/rune/emp_act()
+	return
+
+/obj/effect/rune/blob_act()
+	return
 
 /obj/effect/rune/update_icon()
 	var/datum/rune_spell/spell = get_rune_spell(null, null, "examine", word1, word2, word3)
 
-	var/animated = 0
-	if(spell && spell.Act_restriction <= TODO INSERT CULT CHECK HERE)
+	if(spell && spell.Act_restriction <= 1000)
 		animated = 1
 	else
 		animated = 0
 
-	var/lookup = "[word1.icon_state]-[animated]-[blood1.data["blood_colour"]]-[word2.icon_state]-[animated]-[blood2.data["blood_colour"]]-[word3.icon_state]-[animated]-[blood3.data["blood_colour"]]"
+	var/lookup = ""
+	if (word1)
+		lookup += "[word1.icon_state]-[animated]-[blood1.data["blood_colour"]]-"
+	if (word2)
+		lookup += "[word2.icon_state]-[animated]-[blood2.data["blood_colour"]]-"
+	if (word3)
+		lookup += "[word3.icon_state]-[animated]-[blood3.data["blood_colour"]]"
 
 	if (lookup in uristrune_cache)
 		icon = uristrune_cache[lookup]
@@ -129,7 +166,85 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 			I3 = make_uristword(word3,blood3,animated)
 
 		var/icon/I = icon('icons/effects/uristrunes.dmi', "")
-		I.Blend(I1.Blend(I2.Blend(I3, ICON_OVERLAY), ICON_OVERLAY), ICON_OVERLAY)
+		I.Blend(I1, ICON_OVERLAY)
+		I.Blend(I2, ICON_OVERLAY)
+		I.Blend(I3, ICON_OVERLAY)
+		icon = I
+
+	if(animated)
+		idle_pulse()
+	else
+		animate(src)
+
+
+/obj/effect/rune/proc/idle_pulse()
+	//This masterpiece of a color matrix stack produces a nice animation no matter which color was the blood used for the rune.
+	animate(src, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)//1
+	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)//2
+	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 2)//3
+	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1.5)//4
+	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1.5)//5
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)//6
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)//7
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)//8
+	animate(color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5)//9
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)//8
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)//7
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)//6
+	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1)//5
+	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)//4
+	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)//3
+	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)//2
+
+
+/obj/effect/rune/proc/one_pulse()
+	animate(src, color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 2)
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 0.75)
+	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 0.75)
+	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 0.5)
+	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 0.5)
+	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 0.25)
+	animate(color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 1)
+
+	spawn (10)
+		if(animated)
+			idle_pulse()
+		else
+			animate(src)
+
+/obj/effect/rune/proc/quick_pulse()
+	animate(src, color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5, loop = -1)
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
+
+
+/obj/effect/rune/proc/make_uristword(var/datum/cultword/word, var/datum/reagent/blood/blood, var/animated)
+	var/icon/I = icon('icons/effects/uristrunes.dmi', "")
+	var/lookupword = "[word.icon_state]-[animated]-[blood.data["blood_colour"]]"
+	if(lookupword in uristrune_cache)
+		I = uristrune_cache[lookupword]
+	else
+		I.Blend(icon('icons/effects/uristrunes.dmi', word.icon_state), ICON_OVERLAY)
+		var/finalblood = blood.data["blood_colour"]
+		var/list/blood_hsl = rgb2hsl(GetRedPart(finalblood),GetGreenPart(finalblood),GetBluePart(finalblood))
+		if(blood_hsl.len)
+			var/list/blood_rgb = hsl2rgb(blood_hsl[1],blood_hsl[2],50)//producing a color that is neither too bright nor too dark
+			if(blood_rgb.len)
+				finalblood = rgb(blood_rgb[1],blood_rgb[2],blood_rgb[3])
+
+		var/bc1 = finalblood
+		var/bc2 = finalblood
+		bc1 += "C8"
+		bc2 += "64"
+
+		I.SwapColor(rgb(0, 0, 0, 100), bc1)
+		I.SwapColor(rgb(0, 0, 0, 50), bc1)
 
 		for(var/x = 1, x <= WORLD_ICON_SIZE, x++)
 			for(var/y = 1, y <= WORLD_ICON_SIZE, y++)
@@ -154,48 +269,6 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 							I.DrawBox(bc2, x, y)
 
 		I.MapColors(0.5,0,0,0,0.5,0,0,0,0.5)//we'll darken that color a bit
-
-		icon = I
-
-	if(animated)//This masterpiece of a color matrix stack produces a nice animation no matter which color was the blood used for the rune.
-		animate(src, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)//1
-		animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)//2
-		animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 2)//3
-		animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1.5)//4
-		animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1.5)//5
-		animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)//6
-		animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)//7
-		animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)//8
-		animate(color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5)//9
-		animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)//8
-		animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)//7
-		animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)//6
-		animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1)//5
-		animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)//4
-		animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)//3
-		animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)//2
-
-/obj/effect/rune/proc/make_uristword(var/datum/cultword/word, var/datum/reagent/blood/blood, var/animated)
-	var/icon/I = icon('icons/effects/uristrunes.dmi', "")
-	var/lookupword = "[word.icon_state]-[animated]-[blood.data["blood_colour"]]"
-	if(lookupword in uristrune_cache)
-		I = uristrune_cache[lookupword]
-	else
-		I.Blend(icon('icons/effects/uristrunes.dmi', word.icon_state), ICON_OVERLAY)
-		var/finalblood = blood.data["blood_colour"]
-		var/list/blood_hsl = rgb2hsl(GetRedPart(finalblood),GetGreenPart(finalblood),GetBluePart(finalblood))
-		if(blood_hsl.len)
-			var/list/blood_rgb = hsl2rgb(blood_hsl[1],blood_hsl[2],50)//producing a color that is neither too bright nor too dark
-			if(blood_rgb.len)
-				finalblood = rgb(blood_rgb[1],blood_rgb[2],blood_rgb[3])
-
-		var/bc1 = finalblood
-		var/bc2 = finalblood
-		bc1 += "C8"
-		bc2 += "64"
-
-		I.SwapColor(rgb(0, 0, 0, 100), bc1)
-		I.SwapColor(rgb(0, 0, 0, 50), bc1)
 	return I
 
 
@@ -206,85 +279,151 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		return
 	return
 
-/proc/write_rune_word(var/turf/T,var/datum/reagent/blood/source,var/word = "")
+/proc/write_rune_word(var/turf/T,var/datum/reagent/blood/source,var/word = null)
 	if (!word)
 		return 0
 
 	//Is there already a rune on the turf? if yes, let's try adding a word to it.
-	var/obj/effect/rune/R = locate() in T
-	if (!R)
-		R = new/obj/effect/rune(T)
+	var/obj/effect/rune/rune = locate() in T
+	if (!rune)
+		rune = new/obj/effect/rune(T)
+
+	if (rune.word1 && rune.word2 && rune.word3)
+		return 0
 
 	//Let's add a word at the end of the pile. This way each world could technically have its own color.
-	if (!word1)
-		word1 = word
-		blood1 = new()
+	if (!rune.word1)
+		rune.word1 = word
+		rune.blood1 = new()
 		if (source.data["blood_colour"])
-		blood1.data["blood_colour"] = source.data["blood_colour"]
-		if (source.data["blood_type"])
-			blood1.data["blood_DNA"] = source.data["blood_type"]
+			rune.blood1.data["blood_colour"] = source.data["blood_colour"]
 		else
-			blood1.data["blood_DNA"] = "O+"
+			rune.blood1.data["blood_colour"] = DEFAULT_BLOOD
+		if (source.data["blood_type"])
+			rune.blood1.data["blood_DNA"] = source.data["blood_type"]
+		else
+			rune.blood1.data["blood_DNA"] = "O+"
 		if (source.data["virus2"])
-			blood1.data["virus2"] = virus_copylist(source.data["virus2"])
+			rune.blood1.data["virus2"] = virus_copylist(source.data["virus2"])
 
-	else if (!word2)
-		word2 = word
-		blood2 = new()
+	else if (!rune.word2)
+		rune.word2 = word
+		rune.blood2 = new()
 		if (source.data["blood_colour"])
-		blood2.data["blood_colour"] = source.data["blood_colour"]
-		if (source.data["blood_type"])
-			blood2.data["blood_DNA"] = source.data["blood_type"]
+			rune.blood2.data["blood_colour"] = source.data["blood_colour"]
 		else
-			blood2.data["blood_DNA"] = "O+"
+			rune.blood1.data["blood_colour"] = DEFAULT_BLOOD
+		if (source.data["blood_type"])
+			rune.blood2.data["blood_DNA"] = source.data["blood_type"]
+		else
+			rune.blood2.data["blood_DNA"] = "O+"
 		if (source.data["virus2"])
-			blood2.data["virus2"] = virus_copylist(source.data["virus2"])
+			rune.blood2.data["virus2"] = virus_copylist(source.data["virus2"])
 
-	else if (!word3)
-		word3 = word
-		blood3 = new()
+	else if (!rune.word3)
+		rune.word3 = word
+		rune.blood3 = new()
 		if (source.data["blood_colour"])
-		blood3.data["blood_colour"] = source.data["blood_colour"]
-		if (source.data["blood_type"])
-			blood3.data["blood_DNA"] = source.data["blood_type"]
+			rune.blood3.data["blood_colour"] = source.data["blood_colour"]
 		else
-			blood3.data["blood_DNA"] = "O+"
+			rune.blood1.data["blood_colour"] = DEFAULT_BLOOD
+		if (source.data["blood_type"])
+			rune.blood3.data["blood_DNA"] = source.data["blood_type"]
+		else
+			rune.blood3.data["blood_DNA"] = "O+"
 		if (source.data["virus2"])
-			blood3.data["virus2"] = virus_copylist(source.data["virus2"])
+			rune.blood3.data["virus2"] = virus_copylist(source.data["virus2"])
 
 	//think twice before touching runes made with contaminated blood
-	virus2 = blood1.data["virus2"] | blood2.data["virus2"] | blood3.data["virus2"]
+	if (rune.blood3)
+		rune.virus2 = rune.blood1.data["virus2"] | rune.blood2.data["virus2"] | rune.blood3.data["virus2"]
+		rune.update_icon()
+		return 1
+	else if (rune.blood2)
+		rune.virus2 = rune.blood1.data["virus2"] | rune.blood2.data["virus2"]
+	else if (rune.blood1)
+		rune.virus2 = rune.blood1.data["virus2"]
+
+	rune.update_icon()
+	return 2
+
+/proc/erase_rune_word(var/turf/T)
+	var/obj/effect/rune/rune = locate() in T
+	if (!rune)
+		return null
+
+	var/rune_erased
+
+	if (rune.word3)
+		rune_erased = rune.word3.rune
+		rune.word3 = null
+		rune.blood3 = null
+	else if (rune.word2)
+		rune_erased = rune.word2.rune
+		rune.word2 = null
+		rune.blood2 = null
+	else if (rune.word1)
+		rune_erased = rune.word1.rune
+		rune.word1 = null
+		rune.blood1 = null
+		qdel(rune)
+	else
+		message_admins("Error! Trying to erase a word from a rune with no words!")
+		qdel(rune)
+		return null
+
+	rune.update_icon()
+
+	if (rune.active_spell)
+		rune.active_spell.abort()
+		rune.active_spell = null
+
+	return rune_erased
+
+
 
 /obj/effect/rune/attack_animal(var/mob/living/simple_animal/user)
 	if(istype(user, /mob/living/simple_animal/construct/harvester))
 		trigger(user)
 
 /obj/effect/rune/attack_paw(var/mob/living/user)
-	if(ismonkey(M))
+	if(ismonkey(user))
 		trigger(user)
 
 /obj/effect/rune/attack_hand(var/mob/living/user)
 	trigger(user)
 
-/obj/effect/rune/trigger(var/mob/living/user)
-	user.delayNextAttack(5)
-	if(!iscultist(user))
-		to_chat(user, "You can't mouth the arcane scratchings without fumbling over them.")
+/obj/effect/rune/proc/trigger(var/mob/living/user)
+	if (active_spell)//for now. gotta add a mid_cast() proc.
 		return
 
+	user.delayNextAttack(5)
+	if(!iscultist(user))
+		to_chat(user, "<span class='danger'>You can't mouth the arcane scratchings without fumbling over them.</span>")
+		return
+
+	if(iscarbon(user))
+		var/mob/living/carbon/C = user
+		if (C.muted())
+			to_chat(user, "<span class='danger'>You find yourself unable to focus your mind on the arcane words of the rune.</span>")
+			return
+
 	if(istype(user.wear_mask, /obj/item/clothing/mask/muzzle))
-		to_chat(user, "You are unable to speak the words of the rune.")//TODO; SILENT CASTING ALLOWS MUZZLED CAST
+		to_chat(user, "<span class='danger'>You are unable to speak the words of the rune because of \the [user.wear_mask].</span>")//TODO; SILENT CASTING ALLOWS MUZZLED CAST
 		return
 
 	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss()))
-		return fizzle()
+		return fizzle(user)
 
 	active_spell = get_rune_spell(user, src, "ritual" , word1, word2, word3)
 
 	if (!active_spell)
-		return fizzle()
+		return fizzle(user)
 
 
 /obj/effect/rune/proc/fizzle(var/mob/living/user)
 	user.say(pick("B'ADMINES SP'WNIN SH'T","IC'IN O'OC","RO'SHA'M I'SA GRI'FF'N ME'AI","TOX'IN'S O'NM FI'RAH","IA BL'AME TOX'IN'S","FIR'A NON'AN RE'SONA","A'OI I'RS ROUA'GE","LE'OAN JU'STA SP'A'C Z'EE SH'EF","IA PT'WOBEA'RD, IA A'DMI'NEH'LP"))
-	visible_message("<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>","<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>", "<span class='warning'>You hear a faint fizzle.</span>")
+	one_pulse()
+	visible_message("<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\
+	"<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\
+	"<span class='warning'>You hear a faint fizzle.</span>")
