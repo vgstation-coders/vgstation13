@@ -936,6 +936,7 @@
 		// 	ticker.mode.remove_thrall(H.mind)
 		// 	H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
 		// 	"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
+	*/
 
 /datum/reagent/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
 

@@ -499,7 +499,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	var/list/L = list()
 	var/holyblock = 0
 
-	if((usr.invisibility == 0) || iscult(usr))
+	if((usr.invisibility == 0) || iscultist(usr))
 		for(var/turf/T in get_area_turfs(thearea.type))
 			if(!T.holy)
 				L+=T
@@ -545,7 +545,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
 			to_chat(usr, "<span class='sinister'>You can sense a sinister force surrounding that mob, your spooky body itself refuses to follow it.</span>")
 			return
-		if(targetloc && targetloc.holy && (!invisibility || iscult(src)))
+		if(targetloc && targetloc.holy && (!invisibility || iscultist(src)))
 			to_chat(usr, "<span class='warning'>You cannot follow a mob standing on holy grounds!</span>")
 			return
 		if(target != src)
@@ -587,7 +587,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
 				to_chat(usr, "<span class='sinister'>You can sense a sinister force surrounding that mob, your spooky body itself refuses to jump to it.</span>")
 				return
-			if(targetloc && targetloc.holy && ((src.invisibility == 0) || iscult(src)))
+			if(targetloc && targetloc.holy && ((src.invisibility == 0) || iscultist(src)))
 				to_chat(usr, "<span class='warning'>The mob that you are trying to follow is standing on holy grounds, you cannot reach him!</span>")
 				return
 			var/mob/M = dest[target] //Destination mob
