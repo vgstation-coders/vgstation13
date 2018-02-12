@@ -85,9 +85,9 @@ var/global/num_vending_terminals = 1
 
 	var/machine_id = "#"
 
-	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK | SECUREDPANEL
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK
 
-	var/account_first_linked = 0
+	var/account_first_linked = 1
 	var/is_being_filled = FALSE // `in_use` from /obj is already used for tracking users of this machine's UI
 
 /obj/machinery/vending/cultify()
@@ -133,12 +133,15 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/initialize()
 	..()
-	linked_account = department_accounts["Cargo"]
 	product_records = new/list()
 	build_inventory(products)
 	build_inventory(contraband, 1)
 	build_inventory(premium, 0, 1)
 	build_inventory(vouched, 0, 0, 1)
+	link_to_account()
+
+/obj/machinery/vending/proc/link_to_account()
+	linked_account = department_accounts["Cargo"]
 
 /obj/machinery/vending/RefreshParts()
 	var/manipcount = 0
@@ -3049,9 +3052,14 @@ var/global/num_vending_terminals = 1
 	//vend_reply = "Insert another joke here"
 	//product_ads = "Another joke here"
 	//product_slogans = "Jokes"
+	account_first_linked = 0
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK | SECUREDPANEL
 	products = list()
 
 	pack = /obj/structure/vendomatpack/custom
+
+/obj/machinery/vending/sale/link_to_account()
+	return
 
 /obj/machinery/vending/toggleSecuredPanelOpen(var/obj/toggleitem, var/mob/user)
 	if(!account_first_linked)
