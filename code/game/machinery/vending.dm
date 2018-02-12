@@ -133,6 +133,7 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/initialize()
 	..()
+	linked_account = department_accounts["Cargo"]
 	product_records = new/list()
 	build_inventory(products)
 	build_inventory(contraband, 1)
@@ -3126,15 +3127,3 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/mining
-
-//Note : Snowflake, but I don't care. Rework the fucking economy
-/obj/machinery/vending/mining/New()
-	..()
-
-	if(ticker)
-		initialize()
-
-/obj/machinery/vending/mining/initialize()
-	..()
-
-	linked_account = department_accounts["Cargo"]
