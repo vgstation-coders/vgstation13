@@ -516,8 +516,8 @@ Subject's pulse: ??? BPM"})
 	var/legal_limit
 
 /obj/item/device/breathalyzer/New()
-	var/datum/reagent/ethanol/E = new
-	legal_limit = E.slur_start //inb4 shitcurity arrests people for being over the legal limit
+	var/datum/reagent/ethanol/E = /datum/reagent/ethanol
+	legal_limit = initial(E.slur_start) //inb4 shitcurity arrests people for being over the legal limit
 	..()
 
 /obj/item/device/breathalyzer/attack_self(mob/user)
