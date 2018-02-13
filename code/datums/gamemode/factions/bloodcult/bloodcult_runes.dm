@@ -85,18 +85,18 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 
 	//cultists can read the words, and be informed if it calls a spell
 	if (iscultist(user))
-		to_chat(user, "<span class='info'>It reads: <i>[word1.rune] [word2.rune] [word3.rune]</i>.[rune_name ? " That's \a <b>[rune_name.name]</b> rune." : "It doesn't match any rune spells."]</span>")
+		to_chat(user, "<span class='info'>It reads: <i>[word1.rune] [word2.rune] [word3.rune]</i>.[rune_name ? " That's \a <b>[initial(rune_name.name)]</b> rune." : "It doesn't match any rune spells."]</span>")
 	if (rune_name)
-		if (rune_name.Act_restriction <= 1000)
-			to_chat(user, rune_name.desc)
+		if (initial(rune_name.Act_restriction) <= 1000)//TODO: SET TO CURRENT CULT FACTION ACT
+			to_chat(user, initial(rune_name.desc))
 		else
 			to_chat(user, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
 
 	//so do observers
 	else if (isobserver(user))
-		to_chat(user, "<span class='info'>[rune_name ? "That's \a <b>[rune_name.name]</b> rune." : "It doesn't match any rune spell."]</span>")
+		to_chat(user, "<span class='info'>[rune_name ? "That's \a <b>[initial(rune_name.name)]</b> rune." : "It doesn't match any rune spell."]</span>")
 
-	//cultists can read the words, but not the meaning (though they can always check it up). Also has a chance to trigger a taunt from Nar-Sie.
+	//"cult" chaplains can read the words, but not understand the meaning (though they can always check it up). Also has a chance to trigger a taunt from Nar-Sie.
 	else if(istype(user, /mob/living/carbon/human) && (user.mind.assigned_role == "Chaplain"))
 		var/list/cult_blood_chaplain = list("cult", "narsie", "nar'sie", "narnar", "nar-sie")
 		var/list/cult_clock_chaplain = list("ratvar", "clockwork", "ratvarism")
@@ -118,7 +118,6 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 					to_chat(user, "<span class='game say'><span class='danger'>???-???</span> murmurs, <span class='sinister'>[pick(\
 							"Oh just fuck off",)].</span></span>")
 
-
 /obj/effect/rune/cultify()
 	return
 
@@ -139,7 +138,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 /obj/effect/rune/update_icon()
 	var/datum/rune_spell/spell = get_rune_spell(null, null, "examine", word1, word2, word3)
 
-	if(spell && spell.Act_restriction <= 1000)
+	if(spell && initial(spell.Act_restriction) <= 1000)//TODO: SET TO CURRENT CULT FACTION ACT
 		animated = 1
 	else
 		animated = 0
@@ -175,7 +174,6 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		idle_pulse()
 	else
 		animate(src)
-
 
 /obj/effect/rune/proc/idle_pulse()
 	//This masterpiece of a color matrix stack produces a nice animation no matter which color was the blood used for the rune.
@@ -352,18 +350,23 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	if (!rune)
 		return null
 
-	var/rune_erased
+	var/word_erased
 
 	if (rune.word3)
-		rune_erased = rune.word3.rune
+		word_erased = rune.word3.rune
 		rune.word3 = null
 		rune.blood3 = null
+		rune.update_icon()
+		if (rune.active_spell)
+			rune.active_spell.abort()
+			rune.active_spell = null
 	else if (rune.word2)
-		rune_erased = rune.word2.rune
+		word_erased = rune.word2.rune
 		rune.word2 = null
 		rune.blood2 = null
+		rune.update_icon()
 	else if (rune.word1)
-		rune_erased = rune.word1.rune
+		word_erased = rune.word1.rune
 		rune.word1 = null
 		rune.blood1 = null
 		qdel(rune)
@@ -371,14 +374,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		message_admins("Error! Trying to erase a word from a rune with no words!")
 		qdel(rune)
 		return null
-
-	rune.update_icon()
-
-	if (rune.active_spell)
-		rune.active_spell.abort()
-		rune.active_spell = null
-
-	return rune_erased
+	return word_erased
 
 
 

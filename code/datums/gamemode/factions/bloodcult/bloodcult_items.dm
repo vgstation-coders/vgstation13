@@ -13,7 +13,7 @@
 	icon_state = "paper_talisman"
 
 /obj/item/weapon/melee/cultblade
-	name = "Cult Blade"
+	name = "cult blade"
 	desc = "An arcane weapon wielded by the followers of Nar-Sie."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "cultblade"

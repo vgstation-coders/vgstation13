@@ -17,9 +17,6 @@
 	activator = user
 
 	switch (use)
-		if ("examine")//we only need the datum to exist for the time it takes someproc to get its vars.
-			spawn(10)
-				qdel(src)
 		if ("ritual")
 			cast()
 
@@ -54,16 +51,21 @@
 	if (!word1 || !word2 || !word3)
 		return
 
-	for(var/subtype in typesof(/datum/rune_spell)-/datum/rune_spell)
-		var/datum/rune_spell/instance = new subtype()
-		if (instance.teleporter && word1.type == instance.word1 && word2.type == instance.word2)
-			qdel(instance)
-			return new subtype(user, spell_holder, use, word3)
-		else if (word1.type == instance.word1 && word2.type == instance.word2 && word3.type == instance.word3)
-			qdel(instance)
+	for(var/subtype in subtypesof(/datum/rune_spell))
+		var/datum/rune_spell/instance = subtype
+		if (initial(instance.teleporter) && word1.type == initial(instance.word1) && word2.type == initial(instance.word2))
+			switch (use)
+				if ("ritual")
+					return new subtype(user, spell_holder, use, word3)
+				if ("examine")
+					return instance
+		else if (word1.type == initial(instance.word1) && word2.type == initial(instance.word2) && word3.type == initial(instance.word3))
+			switch (use)
+				if ("ritual")
+					return new subtype(user, spell_holder, use)
+				if ("examine")
+					return instance
 			return new subtype(user, spell_holder, use)
-		else
-			qdel(instance)
 	return null
 
 //RUNE I
@@ -84,7 +86,7 @@
 	desc = "Speak so that every cultists may hear your voice."
 	Act_restriction = CULT_PROLOGUE
 	invocation = "O bidai nabora se'sma!"
-	var/obj/effect/cult_communication/comms = null
+	var/obj/effect/cult_ritual/cult_communication/comms = null
 	var/destroying_self = 0
 
 /datum/rune_spell/communication/New()
@@ -100,7 +102,7 @@
 	if (user.loc != spell_holder.loc)
 		abort("too far")
 	else
-		comms = new /obj/effect/cult_communication(spell_holder.loc,user,src)
+		comms = new /obj/effect/cult_ritual/cult_communication(spell_holder.loc,user,src)
 
 /datum/rune_spell/communication/abort(var/cause = "erased")
 	switch (cause)
@@ -119,7 +121,7 @@
 	comms = null
 	..()
 
-/obj/effect/cult_communication
+/obj/effect/cult_ritual/cult_communication
 	anchored = 1
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "rune_communication"
@@ -134,18 +136,18 @@
 	var/ending = ""
 
 
-/obj/effect/cult_communication/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/communication/runespell)
+/obj/effect/cult_ritual/cult_communication/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/communication/runespell)
 	..()
 	caster = user
 	source = runespell
 
-/obj/effect/cult_communication/Destroy()
+/obj/effect/cult_ritual/cult_communication/Destroy()
 	caster = null
 	source.abort(ending)
 	source = null
 	..()
 
-/obj/effect/cult_communication/Hear(var/datum/speech/speech, var/rendered_message="")
+/obj/effect/cult_ritual/cult_communication/Hear(var/datum/speech/speech, var/rendered_message="")
 	if(speech.speaker && speech.speaker.loc == loc)//&& iscultist DUH
 		var/speaker_name = speech.speaker.name
 		if (ishuman(speech.speaker))
@@ -158,20 +160,20 @@
 			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinister'>[rendered_message]</span></span>")
 		log_cultspeak("[key_name(speech.speaker)] Cult Communicate Rune: [rendered_message]")
 
-/obj/effect/cult_communication/HasProximity(var/atom/movable/AM)
+/obj/effect/cult_ritual/cult_communication/HasProximity(var/atom/movable/AM)
 	if (!caster || caster.loc != loc)
 		qdel(src)
 
-/obj/effect/cult_communication/cultify()
+/obj/effect/cult_ritual/cultify()
 	return
 
-/obj/effect/cult_communication/ex_act(var/severity)
+/obj/effect/cult_ritual/ex_act(var/severity)
 	return
 
-/obj/effect/cult_communication/emp_act()
+/obj/effect/cult_ritual/emp_act()
 	return
 
-/obj/effect/cult_communication/blob_act()
+/obj/effect/cult_ritual/blob_act()
 	return
 
 

@@ -1,6 +1,6 @@
 // Faction IDs
 
-#define BLOODCULT "Cult of Nar-sie"
+#define BLOODCULT "Cult of Nar-Sie"
 #define CHANGELING "changeling"
 #define SYNDICATE "syndicate"
 #define NUKE_OP "nuclear operative"
