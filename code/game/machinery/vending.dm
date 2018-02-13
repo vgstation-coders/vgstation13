@@ -827,8 +827,8 @@ var/global/num_vending_terminals = 1
 			dat += "Insert items mode is [inserting_mode ? "on" : "off"]. <a href='?src=\ref[src];toggle_insert_mode=[1]'>Toggle</a>"
 			dat += "<br>"
 			dat += "The prices edit mode is [edit_mode ? "on" : "off"]. <a href='?src=\ref[src];toggle_edit_mode=[1]'>Toggle</a>"
-			dat += "<br>"
-			dat += "Note: Remember to slide your ID on this machine if you don't want random people to change your prices."
+			dat += "<br><br>"
+			dat += "<i>Note: Remember to slide your ID on this machine if you don't want random people to change your prices.</i>"
 
 	user << browse(dat, "window=vending;size=400x[vertical]")
 	onclose(user, "vending")
