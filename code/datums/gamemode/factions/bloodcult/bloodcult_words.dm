@@ -14,7 +14,7 @@ var/list/cultwords_icons = list("rune-1","rune-2","rune-4","rune-8","rune-16","r
 /proc/initialize_cultwords()
 	if (cultwords_initialized)
 		return
-	for(var/subtype in typesof(/datum/cultword)-/datum/cultword)
+	for(var/subtype in subtypesof(/datum/cultword))
 		var/datum/cultword/new_word = new subtype()
 		cultwords[new_word.english] = new_word
 	cultwords_initialized = 1
