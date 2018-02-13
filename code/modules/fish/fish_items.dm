@@ -201,6 +201,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	icon_state = "clownfish"
 	throwforce = 1
 	force = 1
+	hitsound = 'sound/items/bikehorn.ogg'
 	attack_verb = list("slapped", "humiliated", "hit", "rubbed")
 
 /obj/item/weapon/fish/attackby(var/obj/item/O, var/mob/user)

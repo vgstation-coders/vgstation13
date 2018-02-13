@@ -5279,6 +5279,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/sushi_avocado
 	name = "Avocado Sushi"
 	desc = "A simple sushi consisting of avocado and rice."
+	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_avocado"
 	bitesize = 3
 
@@ -5289,6 +5290,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/friedshrimp
 	name = "fried shrimp"
 	desc = "For such a little dish, it's surprisingly high calorie."
+	icon = 'icons/obj/seafood.dmi'
 	icon_state = "friedshrimp"
 	bitesize = 3
 	food_flags = FOOD_MEAT
@@ -5300,6 +5302,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/soyscampi
 	name = "soy scampi"
 	desc = "A simple shrimp dish presented bathed in soy sauce."
+	icon = 'icons/obj/seafood.dmi'
 	icon_state = "soyscampi"
 	bitesize = 3
 	food_flags = FOOD_MEAT
@@ -5312,6 +5315,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/shrimpcocktail
 	name = "shrimp cocktail"
 	desc = "An hors d'oeuvre which has traditionally swung like a pendulum between the height of fashion and ironically passe."
+	icon = 'icons/obj/seafood.dmi'
 	icon_state = "shrimpcocktail"
 	bitesize = 3
 	food_flags = FOOD_MEAT
@@ -5329,6 +5333,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/friedcatfish
 	name = "fried catfish"
 	desc = "A traditional catfish fry. It's positively coated in oils."
+	icon = 'icons/obj/seafood.dmi'
 	icon_state = "friedcatfish"
 	bitesize = 3
 	food_flags = FOOD_MEAT
@@ -5340,6 +5345,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/catfishgumbo
 	name = "catfish gumbo"
 	desc = "A traditional, thick cajun broth. Made with bottom-feeders for bottom-feeders."
+	icon = 'icons/obj/seafood.dmi'
 	icon_state = "catfishgumbo"
 	bitesize = 3
 	food_flags = FOOD_MEAT
@@ -5351,6 +5357,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/catfishcourtbouillon
 	name = "catfish courtbouillon"
 	desc = "A lightly breaded catfish fillet poached in a spicy hot-sauce short broth."
+	icon = 'icons/obj/seafood.dmi'
 	icon_state = "catfishcourtbouillon"
 	bitesize = 3
 	food_flags = FOOD_MEAT
@@ -5374,6 +5381,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/planksalmon
 	name = "plank-grilled salmon"
 	desc = "A simple dish that grills the flavor of wood into the meat, leaving you with a charred but workable plate in the process."
+	icon = 'icons/obj/seafood.dmi'
 	icon_state = "planksalmon"
 	bitesize = 3
 	food_flags = FOOD_MEAT
@@ -5397,6 +5405,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/salmonavocado
 	name = "salmon avocado salad"
 	desc = "The creamy, buttery taste of the avocado brings unity to the nutty, meaty taste of the mushrooms and the fatty, rich taste of the salmon."
+	icon = 'icons/obj/seafood.dmi'
 	icon_state = "salmonavocado"
 	bitesize = 3
 	food_flags = FOOD_MEAT
@@ -5408,6 +5417,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/rumshark
 	name = "spiced rum shark supreme"
 	desc = "When you really need something to get this party started. A savory dish enriched by alcohol."
+	icon = 'icons/obj/seafood.dmi'
 	icon_state = "rumshark"
 	bitesize = 3
 	food_flags = FOOD_MEAT
@@ -5421,6 +5431,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/akutaq
 	name = "glofish akutaq"
 	desc = "This eskimo dish literally means 'something mixed'. The fat of glowish is rendered down and mixed with milk and glowberries to make a surprisingly tasty dessert dish."
+	icon = 'icons/obj/seafood.dmi'
 	icon_state = "akutaq"
 	bitesize = 3
 	food_flags = FOOD_MEAT | FOOD_SWEET
@@ -5433,6 +5444,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/carpcurry
 	name = "golden carp curry"
 	desc = "A simple traditional Space Japan curry with tangy golden carp meat."
+	icon = 'icons/obj/seafood.dmi'
 	icon_state = "carpcurry"
 	bitesize = 3
 	food_flags = FOOD_MEAT
@@ -5444,6 +5456,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/carpconsomme
 	name = "golden carp consomme"
 	desc = "A clear soup made from a concentrated broth of fish and egg whites. It's light on calories and makes you feel much more cultured."
+	icon = 'icons/obj/seafood.dmi'
 	icon_state = "carpconsomme"
 	bitesize = 3
 	food_flags = FOOD_MEAT

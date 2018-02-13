@@ -783,7 +783,6 @@
 		multiplier = initial(multiplier) + (C.rating*0.1) //1 to 1.2
 
 /obj/machinery/power/conduction_plate/process()
-	..()
 	if(check_tank())
 		var/power = 0
 		for(var/fish in attached_tank.fish_list)
