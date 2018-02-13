@@ -1,5 +1,6 @@
 /datum/gamemode/sandbox
 	name = "sandbox"
+	factions_allowed = list(/datum/faction/bloodcult)
 
 
 /datum/gamemode/sandbox/Setup()

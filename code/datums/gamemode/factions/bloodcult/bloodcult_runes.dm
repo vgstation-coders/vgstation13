@@ -338,14 +338,14 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	if (rune.blood3)
 		rune.virus2 = rune.blood1.data["virus2"] | rune.blood2.data["virus2"] | rune.blood3.data["virus2"]
 		rune.update_icon()
-		return 1
+		return 1//That rune now has 3 words, that's a wrap.
 	else if (rune.blood2)
 		rune.virus2 = rune.blood1.data["virus2"] | rune.blood2.data["virus2"]
 	else if (rune.blood1)
 		rune.virus2 = rune.blood1.data["virus2"]
 
 	rune.update_icon()
-	return 2
+	return 2//There's room for more words on this rune, let's immediately prompt the player to write another one.
 
 /proc/erase_rune_word(var/turf/T)
 	var/obj/effect/rune/rune = locate() in T
@@ -408,7 +408,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 			to_chat(user, "<span class='danger'>You find yourself unable to focus your mind on the arcane words of the rune.</span>")
 			return
 
-	if(istype(user.wear_mask, /obj/item/clothing/mask/muzzle))
+	if(user.is_wearing_item(/obj/item/clothing/mask/muzzle, slot_wear_mask))
 		to_chat(user, "<span class='danger'>You are unable to speak the words of the rune because of \the [user.wear_mask].</span>")//TODO; SILENT CASTING ALLOWS MUZZLED CAST
 		return
 

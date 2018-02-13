@@ -41,10 +41,10 @@
 /proc/is_convertable_to_cult(datum/mind/mind)
 	if(!istype(mind))
 		return 0
-	if(istype(mind.current, /mob/living/carbon/human) && (mind.assigned_role == "Chaplain"))
+	if(ishuman(mind.current) && (mind.assigned_role == "Chaplain"))
 		return 0
 	for(var/obj/item/weapon/implant/loyalty/L in mind.current)
-		if(L && (L.imp_in == mind.current))//Checks to see if the person contains an implant, then checks that the implant is actually inside of them
+		if(L.imp_in == mind.current)//Checks to see if the person contains an implant, then checks that the implant is actually inside of them
 			return 0
 	return 1
 
@@ -87,12 +87,10 @@
 	//Is there blood on our hands?
 	var/mob/living/carbon/human/H_user = user
 	if (istype (H_user) && H_user.bloody_hands)
-		var/blood_volume = H_user.bloody_hands
-		if (blood_volume)
-			data["hands"] = H_user
-			var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-			data["hands_amount"] = blood_gathered
-			amount_gathered += blood_gathered
+		data["hands"] = H_user
+		var/blood_gathered = min(amount_needed,H_user.bloody_hands)
+		data["hands_amount"] = blood_gathered
+		amount_gathered += blood_gathered
 
 	if (amount_gathered >= amount_needed)
 		data["result"] = "hands"
@@ -249,14 +247,14 @@
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if ("grabbed")
 			var/mob/living/carbon/human/H = data["grabbed"]
-			blood = H.get_blood(H.vessel)
+			blood = get_blood(H.vessel)
 			if (previous_result != "user")
 				user.visible_message("<span class='warning'>\The [user] stabs their nails inside \the [data["grabbed"]], drawing blood from them!</span>",
 									"<span class='rose'>You stab your nails inside \the [data["grabbed"]] to draw some blood from them.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if ("bleeder")
 			var/mob/living/carbon/human/H = data["bleeder"]
-			blood = H.get_blood(H.vessel)
+			blood = get_blood(H.vessel)
 			if (previous_result != "user")
 				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data["bleeder"]]'s wounds!</span>",
 									"<span class='rose'>You dip your fingers inside \the [data["bleeder"]]'s wounds to draw some blood from them.</span>",
@@ -290,7 +288,7 @@
 			else if (data["container_lid"])
 				to_chat(user, "<span class='warning'>Remove \the [data["held"]]'s lid first!</span>")
 			var/mob/living/carbon/human/H = user
-			blood = H.get_blood(H.vessel)
+			blood = get_blood(H.vessel)
 			if (previous_result != "user")
 				if(istype(H))
 					var/obj/item/weapon/W = H.get_active_hand()

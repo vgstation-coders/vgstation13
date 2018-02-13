@@ -1,6 +1,6 @@
 /datum/role/cultist
 	name = "Cultist"
-	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain")
+	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
 
 /datum/role/cultist/OnPostSetup()
 	. = ..()
