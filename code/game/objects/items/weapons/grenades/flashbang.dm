@@ -67,7 +67,7 @@
 		M.Stun(FL)
 		M.Knockdown(FL)
 		M.eye_blind = max(FL + 2, M.eye_blind)
-		M.eye_blurry += max((FL + 2) * 2, M.eye_blurry)
+		M.eye_blurry = max((FL + 2) * 2, M.eye_blurry)
 
 //Now applying sound
 	if(!ear_safety)
