@@ -900,7 +900,7 @@ var/global/num_vending_terminals = 1
 			message_admins("Invalid vend request by [formatJumpTo(src.loc)]: [href]")
 			return
 
-		var/new_price = input("Enter a price", "Price tagger", R.price) as null|num
+		var/new_price = input("Enter a price", "Change price", R.price) as null|num
 		if(new_price == null || new_price < 0)
 			new_price = R.price
 		R.price = new_price
