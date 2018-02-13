@@ -1023,12 +1023,12 @@
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 	else if(istype(W, /obj/item/device/toner))
 		if(toner >= tonermax)
-			to_chat(user, "The toner level of [src] is at it's highest level possible")
+			to_chat(user, "The toner level of [src] is at its highest level possible")
 		else
-			toner = CYBORG_MAX_TONER
-			user.drop_item()
-			qdel(W)
-			to_chat(user, "You fill the toner level of [src] to it's max capacity")
+			if(user.drop_item())
+				toner = CYBORG_MAX_TONER
+				qdel(W)
+				to_chat(user, "You fill the toner level of [src] to its max capacity")
 	else if(istype(W, /obj/item/borg/upgrade/))
 		var/obj/item/borg/upgrade/U = W
 		if (U.attempt_action(src,user))

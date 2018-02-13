@@ -665,14 +665,6 @@
 
 /obj/item/device/camera/silicon/proc/sync(var/mob/living/silicon/robot/R)
 	if(R.connected_ai && R.connected_ai.aicamera && R.aicamera) // Send images the Cyborg has taken to the AI's album upon sync.
-		if(R.aicamera.aipictures.len)
-			for(var/i in R.aicamera.aipictures)
-				if(!i in R.connected_ai.aicamera.aipictures)
-					var/datum/picture/p = i
-					R.connected_ai.aicamera.aipictures += p
-			to_chat(R, "<span class='notice'>Locally saved images synced with [R.connected_ai.name]. Images were retained in local database in case of loss of connection with the AI.</span>")
-
-		for(var/datum/picture/z in R.connected_ai.aicamera.aipictures) //Hopefully to prevent someone spamming images to silicons, by spamming this wire
-			if(!z in R.aicamera.aipictures)
-				var/datum/picture/p = z
-				R.aicamera.aipictures += p
+		R.connected_ai.aicamera.aipictures |= R.aicamera.aipictures
+		R.aicamera.aipictures = R.connected_ai.aicamera.aipictures
+		to_chat(R, "<span class='notice'>Photo database synced with [R.connected_ai.name].</span>")
