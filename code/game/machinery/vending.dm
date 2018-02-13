@@ -87,9 +87,10 @@ var/global/num_vending_terminals = 1
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK | SECUREDPANEL
 
-	var/has_prices_edit_mode = 0 // true if this vendor supports editing the prices
-	var/edit_mode = 0 // Used for editing prices
-	var/account_first_linked = 0
+	var/inserting_mode = FALSE // insert items directly into the machine (used for custom vending machines)
+	var/has_prices_edit_mode = FALSE // true if this vendor supports editing the prices
+	var/edit_mode = FALSE // Used for editing prices
+	var/account_first_linked = FALSE
 	var/is_being_filled = FALSE // `in_use` from /obj is already used for tracking users of this machine's UI
 
 /obj/machinery/vending/cultify()
@@ -513,6 +514,10 @@ var/global/num_vending_terminals = 1
 
 		else
 			to_chat(usr, "[bicon(src)]<span class='warning'>Unable to connect to linked account. Please contact a god.</span>")
+	else if(istype(W, /obj/item/) && inserting_mode)
+		if(user.drop_item(W, src))
+			products += W
+			initialize()
 
 //H.wear_id
 
@@ -804,7 +809,10 @@ var/global/num_vending_terminals = 1
 		dat += wires()
 
 		if(has_prices_edit_mode)
-			dat += "The prices edit mode is [edit_mode ? "off" : "on"]. <a href='?src=\ref[src];toggle_edit_mode=[1]'>Toggle</a>"
+			dat += "Insert items mode is enabled/disabled."
+			dat += "<br>"
+			dat += "The prices edit mode is [edit_mode ? "on" : "off"]. <a href='?src=\ref[src];toggle_edit_mode=[1]'>Toggle</a>"
+			dat += "<br>"
 
 		if(product_slogans != "")
 			dat += "The speaker switch is [shut_up ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>Toggle</a>"
@@ -3073,7 +3081,7 @@ var/global/num_vending_terminals = 1
 	name = "Sales"
 	desc = "Buy, sell, repeat."
 	icon_state = "sale"
-	has_prices_edit_mode = 1
+	has_prices_edit_mode = TRUE
 	//vend_reply = "Insert another joke here"
 	//product_ads = "Another joke here"
 	//product_slogans = "Jokes"
