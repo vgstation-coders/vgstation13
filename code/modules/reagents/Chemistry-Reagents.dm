@@ -912,14 +912,14 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		//if (iscultist(H))
-		H.Dizzy(6)
-		H.Jitter(12)
-		if (prob(20))
-			H.Knockdown(1)
-		else if (prob(30))
-			H.confused = 2
-		H.eye_blurry = max(H.eye_blurry, 3)
+		if (iscultist(H))
+			H.Dizzy(6)
+			H.Jitter(12)
+			if (prob(20))
+				H.Knockdown(1)
+			else if (prob(30))
+				H.confused = 2
+			H.eye_blurry = max(H.eye_blurry, 3)
 
 	/*
 		//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
@@ -945,12 +945,12 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		//if (iscultist(H))
-		H.Dizzy(12)
-		H.Jitter(24)
-		H.Knockdown(3)
-		H.confused = 3
-		H.eye_blurry = max(H.eye_blurry, 6)
+		if (iscultist(H))
+			H.Dizzy(12)
+			H.Jitter(24)
+			H.Knockdown(3)
+			H.confused = 3
+			H.eye_blurry = max(H.eye_blurry, 6)
 
 
 	/*

@@ -251,7 +251,7 @@
 	return header
 
 /datum/faction/strike_team
-	name = "Strike Team 6"
+	name = "Custom Strike Team"//obviously this name is a placeholder getting replaced by the admin setting up the squad
 	required_pref = ROLE_STRIKE
 	ID = CUSTOMSQUAD
 
@@ -264,5 +264,5 @@
 	ID = DEATHSQUAD
 
 /datum/faction/strike_team/syndiesquad
-	name = "Syndicate Deep-strike squad"
+	name = "Syndicate Deep-Strike squad"
 	ID = SYNDIESQUAD

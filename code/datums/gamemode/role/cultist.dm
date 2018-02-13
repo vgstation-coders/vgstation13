@@ -26,9 +26,4 @@
 		return
 
 /mob/living/carbon/proc/muted()
-	if (mind)
-		var/datum/role/cultist = mind.GetRole(CULTIST)
-		if (cultist)
-			if (reagents && reagents.has_reagent(HOLYWATER))
-				return 1
-	return 0
+	return (iscultist(src) && reagents && reagents.has_reagent(HOLYWATER))
