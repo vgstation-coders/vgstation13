@@ -207,6 +207,7 @@
 		if (health <= 0)
 			getFromPool(shard, loc)
 			getFromPool(/obj/item/stack/cable_coil, loc, 2)
+			eject_electronics()
 			qdel(src)
 	else
 		return attack_hand(user)
@@ -226,6 +227,7 @@
 	if (health <= 0)
 		getFromPool(shard, loc)
 		getFromPool(/obj/item/stack/cable_coil, loc, 2)
+		eject_electronics()
 		qdel(src)
 
 
@@ -283,6 +285,7 @@
 		if (health <= 0)
 			getFromPool(shard, loc)
 			getFromPool(/obj/item/stack/cable_coil, loc, 2)
+			eject_electronics()
 			qdel(src)
 		return
 
