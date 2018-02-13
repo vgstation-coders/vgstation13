@@ -111,7 +111,7 @@
 	return ui_interact(user)
 
 /obj/machinery/vaporizer/attackby(obj/item/weapon/W, mob/living/user)
-	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda) && (emagged || allowed(user)))
+	if(isID(W)||isPDA(W) && (emagged || allowed(user)))
 		unlocked = !unlocked
 		to_chat(user,"<span class='notice'>\The [src] is now [unlocked ? "unlocked" : "locked"].</span>")
 		update_icon()
@@ -230,6 +230,5 @@
 		folded = new /obj/machinery/vaporizer(src)
 	folded.forceMove(get_turf(src))
 	folded.power_change()
-	folded.update_icon()
 	folded = null
 	qdel(src)
