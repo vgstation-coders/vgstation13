@@ -87,10 +87,12 @@ var/global/num_vending_terminals = 1
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK | SECUREDPANEL
 
+
+	var/account_first_linked = 0
+
 	var/inserting_mode = FALSE // insert items directly into the machine (used for custom vending machines)
 	var/is_custom_machine = FALSE // true if this vendor supports editing the prices
 	var/edit_mode = FALSE // Used for editing prices
-	var/account_first_linked = 1
 	var/is_being_filled = FALSE // `in_use` from /obj is already used for tracking users of this machine's UI
 
 /obj/machinery/vending/cultify()
