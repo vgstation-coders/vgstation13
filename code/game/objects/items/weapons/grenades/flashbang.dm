@@ -83,13 +83,13 @@
 		if(ear_safety > 0)
 			M.Stun(2)
 			M.Knockdown(2)
-			M.Stuttering += 4
+			M.stuttering += 4
 			M.ear_deaf = max(M.ear_deaf, 3)
 		else
 			BL = rand(7, 11)
 			M.Stun(BL)
 			M.Knockdown(BL)
-			M.Stuttering += 20
+			M.stuttering += 20
 			if ((prob(14) || (M == src.loc && prob(70))))
 				M.ear_damage += rand(1, 10)
 			else
@@ -101,7 +101,7 @@
 			BL = rand(4, 8)
 			M.Stun(BL)
 			M.Knockdown(BL)
-			M.Stuttering += 12
+			M.stuttering += 12
 			M.ear_damage += rand(0, 3)
 			M.ear_deaf = max(M.ear_deaf,10)
 
@@ -109,7 +109,7 @@
 		BL = rand (2, 4)
 		M.Stun(BL)
 		M.Knockdown(BL)
-		M.Stuttering += 7
+		M.stuttering += 7
 		M.ear_damage += rand(0, 1)
 		M.ear_deaf = max(M.ear_deaf,5)
 
