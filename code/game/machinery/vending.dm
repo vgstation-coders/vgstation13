@@ -128,6 +128,7 @@ var/global/num_vending_terminals = 1
 
 	if(ticker)
 		initialize()
+		link_to_account()
 
 	return
 
@@ -138,7 +139,6 @@ var/global/num_vending_terminals = 1
 	build_inventory(contraband, 1)
 	build_inventory(premium, 0, 1)
 	build_inventory(vouched, 0, 0, 1)
-	link_to_account()
 
 /obj/machinery/vending/proc/link_to_account()
 	linked_account = department_accounts["Cargo"]
