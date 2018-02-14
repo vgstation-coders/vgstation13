@@ -384,11 +384,11 @@
 			AppendObjective(/datum/objective/hijack)
 	return
 
-/datum/role/cult/narsie
+/datum/role/bloodcult
 	name = "cultist of Nar-Sie"
 	special_role = "cultist of Nar-Sie"
 
-/datum/role/cult/narsie/AdminPanelEntry()
+/datum/role/bloodcult/AdminPanelEntry()
 	var/list/dat = ..()
 	dat += "<a href='?_src_=holder;cult_privatespeak=\ref[antag.current]'>Send message from Nar-Sie.</a>"
 	return dat

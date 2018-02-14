@@ -732,12 +732,12 @@
 	H.equip_or_collect(new /obj/item/clothing/head/syndicatefake(H), slot_head)
 
 /datum/religion/cult
-	name = "The Cult of Nar'Sie"
-	deity_name = "Nar'Sie"
+	name = "The Cult of Nar-Sie"
+	deity_name = "Nar-Sie"
 	bible_name = "The Arcane Tome"
 	male_adept = "Cultist"
 	female_adept = "Cultist"
-	keys = list("cult", "narsie", "nar'sie", "narnar")
+	keys = list("cult", "narsie", "nar'sie", "narnar", "nar-sie")
 
 /datum/religion/changeling
 	name = "The Religion" // A la "The Thing"

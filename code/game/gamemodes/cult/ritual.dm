@@ -45,35 +45,6 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	var/summoning = 0
 	var/list/summonturfs = list()
 
-// Places these combos are mentioned: this file - twice in the rune code, once in imbued tome, once in tome's HTML runes.dm - in the imbue rune code. If you change a combination - dont forget to change it everywhere.
-
-// travel self [word] - Teleport to random [rune with word destination matching]
-// travel other [word] - Portal to rune with word destination matching - kinda doesnt work. At least the icon. No idea why.
-// see blood Hell - Create a new tome
-// join blood self - Incorporate person over the rune into the group
-// Hell join self - Summon TERROR
-// destroy see technology - EMP rune
-// travel blood self - Drain blood
-// see Hell join - See invisible
-// blood join Hell - Raise dead
-
-// hide see blood - Hide nearby runes
-// blood see hide - Reveal nearby runes  - The point of this rune is that its reversed obscure rune. So you always know the words to reveal the rune once oyu have obscured it.
-
-// Hell travel self - Leave your body and ghost around
-// blood see travel - Manifest a ghost into a mortal body
-// Hell tech join - Imbue a rune into a talisman
-// Hell blood join - Sacrifice rune
-// destroy travel self - Wall rune
-// join other self - Summon cultist rune
-// travel technology other - Freeing rune    //    other blood travel was freedom join other
-
-// hide other see - Deafening rune     //     was destroy see hear
-// destroy see other - Blinding rune
-// destroy see blood - BLOOD BOIL
-
-// self other technology - Communication rune  //was other hear blood
-// join hide technology - stun rune. Rune color: bright pink.
 /obj/effect/rune/New()
 	..()
 	blood_image = image(loc = src)
@@ -480,6 +451,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 			R.check_icon(H)
 			R.blood_DNA = list()
 			R.blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
+			R.blood_color = H.species.blood_color
 		return
 	else
 		to_chat(user, "The book seems full of illegible scribbles. Is this a joke?")
@@ -523,6 +495,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				var/mob/living/carbon/human/H = user
 				R.blood_DNA = list()
 				R.blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
+				R.blood_color = H.species.blood_color
 			switch(r)
 				if("teleport")
 					var/list/words = list("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "balaq", "mgar", "karazet", "geeri")
