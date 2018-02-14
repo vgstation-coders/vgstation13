@@ -4470,10 +4470,10 @@
 
 
 /datum/reagent/drink/milk/bonezone
-	name = "Plasteel bone reinforcement"
+	name = "Boneazone"
 	id = BONEZONE
 	color = "#C0C0C0" //rgb(192,192,192)
-	description = "Reinforces bone structure, to help aid against breaks. Extended effects undocumented."
+	description = "Reinforces bone structure to help aid against breaks. Extended effects undocumented."
 	alpha = 100
 	density = 63.416
 	specheatcap = 25.83
