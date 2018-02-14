@@ -126,8 +126,6 @@
 
 	if (!OnPreSetup())
 		return FALSE
-	if (!OnPostSetup())
-		return FALSE
 	return 1
 
 /datum/role/proc/RemoveFromRole(var/datum/mind/M) //Called on deconvert

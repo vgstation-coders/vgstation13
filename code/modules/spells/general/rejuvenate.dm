@@ -13,7 +13,8 @@
 	spell_flags = STATALLOWED | NEEDSHUMAN
 	cooldown_min = 20 SECONDS
 
-	hud_state = ""
+	override_base = "vamp"
+	hud_state = "vampire_rejuv"
 
 	var/blood_cost = 1
 

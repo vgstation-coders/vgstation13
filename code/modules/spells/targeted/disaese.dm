@@ -15,10 +15,8 @@
 	cooldown_min = 3 MINUTES
 	selection_type = "range"
 
-	amt_paralysis = 20
-	amt_stuttering = 50
-
-	hud_state = ""
+	override_base = "vamp"
+	hud_state = "vampire_disaese"
 
 	var/blood_cost = 50
 

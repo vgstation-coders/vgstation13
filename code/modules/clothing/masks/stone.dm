@@ -45,6 +45,7 @@
 				if(!V) //They are not already a vampire
 					to_chat(H, "<span class='danger'>The mask's stone spikes pierce your skull and enter your brain!</span>")
 					var/datum/role/vampire/vamp = new(H.mind) // Creates a vamp.
+					vamp.OnPostSetup() // TODO rolefix ! This should be part of a bigger makeNewAntag() proc.
 					log_admin("[H] has become a vampire using a stone mask.")
 					spawn(10)	//Unlocking their abilities produces a lot of text, I want to give them a chance to see that they have objectives
 						vamp.blood_total = blood_to_give

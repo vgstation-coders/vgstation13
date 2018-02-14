@@ -37,7 +37,7 @@
 /datum/power/vampire/glare
 	blood_threeshold = 0
 	id = VAMP_GLARE
-	spell_path = null // TODO
+	spell_path = /spell/glare
 
 /datum/power/vampire/hypnotise
 	blood_threeshold = 0

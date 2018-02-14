@@ -2155,6 +2155,7 @@
 #include "code\modules\spells\aoe_turf\conjure\snowmobile.dm"
 #include "code\modules\spells\aoe_turf\conjure\spares.dm"
 #include "code\modules\spells\general\area_teleport.dm"
+#include "code\modules\spells\general\glare.dm"
 #include "code\modules\spells\general\lightning.dm"
 #include "code\modules\spells\general\reflect_pain.dm"
 #include "code\modules\spells\general\rejuvenate.dm"
