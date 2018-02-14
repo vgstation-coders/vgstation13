@@ -20,9 +20,12 @@
 	icon_living = "spiderbot-chassis"
 	icon_dead = "spiderbot-smashed"
 	wander = 0
+	voice_name = "synthesized voice"
 
 	health = 10
 	maxHealth = 10
+
+	mob_property_flags = MOB_ROBOTIC
 
 	attacktext = "shocks"
 	melee_damage_lower = 1
@@ -287,3 +290,39 @@
 
 /mob/living/simple_animal/spiderbot/CheckSlip()
 	return -1
+
+/mob/living/simple_animal/spiderbot/say(var/message)
+	return ..(message, "R")
+
+/mob/living/simple_animal/spiderbot/radio(var/datum/speech/speech, var/message_mode)
+	. = ..()
+	if(. != 0)
+		return .
+	if(message_mode == "robot")
+		if(radio)
+			radio.talk_into(speech)
+		return REDUCE_RANGE
+
+	else if(message_mode in radiochannels)
+		if(radio)
+			radio.talk_into(speech, message_mode)
+			return ITALICS | REDUCE_RANGE
+	return 0
+
+/mob/living/simple_animal/spiderbot/get_message_mode(message)
+	. = ..()
+	if(..() == MODE_HEADSET)
+		return MODE_ROBOT
+	else
+		return .
+
+/mob/living/simple_animal/spiderbot/verb/Toggle_Listening()
+	set name = "Toggle Listening"
+	set desc = "Toggle listening channel on or off."
+	set category = "Spiderbot"
+
+	if(stat)
+		to_chat(src, "Can't do that while incapacitated or dead.")
+
+	radio.listening = !radio.listening
+	to_chat(src, "<span class='notice'>Radio is [radio.listening ? "" : "no longer"] receiving broadcasts.</span>")
