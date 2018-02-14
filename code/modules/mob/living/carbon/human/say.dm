@@ -46,6 +46,10 @@
 					temp_message[H] = "HONK"
 					pick_list -= H //Make sure that you dont HONK the same word twice
 				speech.message = jointext(temp_message, " ")
+	if(iscultist(src))
+		var/obj/effect/cult_ritual/cult_communication/comms = locate() in loc
+		if (comms && comms.caster == src)
+			speech.language = all_languages[LANGUAGE_CULT]
 	if(virus2.len)
 		for(var/ID in virus2)
 			var/datum/disease2/disease/V = virus2[ID]

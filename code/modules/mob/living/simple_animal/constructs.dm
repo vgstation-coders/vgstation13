@@ -42,8 +42,8 @@
 /mob/living/simple_animal/construct/construct_chat_check(setting)
 	if(!mind)
 		return
-	var/datum/faction/cult = find_active_faction(CULT_NARSIE)
-	if(mind in cult.members)
+	var/datum/faction/bloodcult = find_active_faction(BLOODCULT)
+	if(mind in bloodcult.members)
 		return 1
 
 /mob/living/simple_animal/construct/handle_inherent_channels(var/datum/speech/speech, var/message_mode)

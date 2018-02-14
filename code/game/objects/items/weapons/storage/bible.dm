@@ -63,7 +63,7 @@
 			user.IgniteMob()
 			user.emote("scream",,, 1)
 			V.smitecounter += 50 //Once we are extinguished, we will be quite vulnerable regardless
-		else if(iscult(user)) //Cultist trying to use it
+		else if(iscultist(user)) //Cultist trying to use it
 			to_chat(user, "<span class='danger'>[my_rel.deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
 			user.fire_stacks += 5
 			user.IgniteMob()
@@ -114,19 +114,9 @@
 				V.nullified = max(5, V.nullified + 2)
 			V.smitecounter += 10 //Better get out of here quickly before the problem shows. Ten hits and you are literal toast
 			return 1 //Don't heal the mob
-
-		if(iscult(H) && isChaplain(user)) //The user is a Cultist. We are thus deconverting him
-			if(prob(20))
-				to_chat(H, "<span class='notice'>The power of [my_rel.deity_name] suddenly clears your mind of heresy. Your allegiance to Nar'Sie wanes!</span>")
-				to_chat(user, "<span class='notice'>You see [H]'s eyes become clear. Nar'Sie no longer controls his mind, [my_rel.deity_name] saved \him!</span>")
-				add_attacklogs(user, H, "de-converted from the Cult of Nar'Sie!")
-				ticker.mode.remove_cultist(H.mind) // TODO rolefix
-			else //We aren't deconverting him this time, give the Cultist a fair warning
-				to_chat(H, "<span class='warning'>The power of [my_rel.deity_name] is overwhelming you. Your mind feverishly questions Nar'Sie's teachings!</span>")
-			return 1 //Don't heal the mob
 		var/datum/role/thrall/T = isthrall(H)
 		if(T && isChaplain(user))
-			ticker.mode.remove_thrall(H.mind) // TODO rolefix
+			//ticker.mode.remove_thrall(H.mind) // TODO rolefix
 			H.visible_message("<span class='big danger'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
 			"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 			return 1 //That's it, game over
@@ -172,13 +162,12 @@
 	if(ishuman(user)) //We are checking for antagonists, only humans can be antagonists
 		var/mob/living/carbon/human/H = user
 		var/datum/role/vampire/V = isvampire(H)
-		var/datum/role/cult/C = iscult(H)
+		var/datum/role/cultist/C = iscultist(H)
 		if(V && (!(VAMP_UNDYING in V.powers))) //We are a Vampire, we aren't very smart
 			to_chat(H, "<span class ='danger'>[my_rel.deity_name]'s power channels through \the [src]. You feel extremely uneasy as you grab it!</span>")
 			V.smitecounter += 10
 		if(C) //We are a Cultist, we aren't very smart either, but at least there will be no consequences for us
-			var/datum/faction/cult/cult = find_active_faction_by_member(C)
-			to_chat(H, "<span class ='danger'>[my_rel.deity_name]'s power channels through \the [src]. You feel uneasy as you grab it, but [cult.deity_name] protects you from its influence!</span>")
+			to_chat(H, "<span class ='danger'>[my_rel.deity_name]'s power channels through \the [src]. You feel uneasy as you grab it, but Nar-Sie protects you from its influence!</span>")
 
 /obj/item/weapon/storage/bible/proc/isReligiousLeader(var/mob/living/user)
 	return (user.mind && user.mind == my_rel.religiousLeader)

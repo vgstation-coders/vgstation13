@@ -463,7 +463,7 @@ var/list/department_radio_keys = list(
 
 	if(setting == 0) //overridden for constructs
 		return
-	var/datum/faction/cult = find_active_faction(CULT_NARSIE)
+	var/datum/faction/cult = find_active_faction(BLOODCULT)
 	if(setting == 1)
 		if(mind in cult.members && universal_cult_chat == 1)
 			return 1

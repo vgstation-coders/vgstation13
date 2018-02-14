@@ -197,11 +197,7 @@
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define iscult(H) (H.mind && (iscultist(H) || isculthead(H)))
-
 #define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
-
-#define isculthead(H) (H.mind && H.mind.GetRole(HEADCULTIST))
 
 #define ischangeling(H) (H.mind && H.mind.GetRole(CHANGELING))
 
