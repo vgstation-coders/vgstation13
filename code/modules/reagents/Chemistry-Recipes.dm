@@ -833,6 +833,47 @@
 	new /obj/item/weapon/bonegel(location)
 	qdel(holder.my_atom)
 
+/datum/chemical_reaction/bonemilk
+	name = "Bone fixer"
+	id = BONEFIXER
+	result = BONEFIXER
+	required_reagents = list(MILK = 10, CLONEXADONE = 10, PHOSPHORUS = 10)
+	result_amount = 5
+
+/datum/chemical_reaction/bonezone
+	name = "Calcium-plasteel reinforcement"
+	id = BONEZONE
+	result = BONEZONE
+	required_reagents = list(BONEFIXER = 10, IRON = 30, PLASMA = 10)
+	result_amount = 5
+
+/datum/chemical_reaction/bonezone/on_reaction(var/datum/reagents/holder)
+	if(!ismob(holder.my_atom) && holder.has_reagent(BONEFIXER, 5) && prob(5)) //nat 20
+		var/atom/movable/newthing
+		var/location = get_turf(holder.my_atom)
+		var/datum/effect/effect/system/smoke_spread/chem/S = new /datum/effect/effect/system/smoke_spread/chem
+		S.attach(location)
+		S.set_up(holder, 10, 0, location)
+		playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
+
+		if(prob(5)) //double nat 20, go get a lottery ticket
+			holder.my_atom.visible_message("<span class = 'notice'>Something rattles from within \the [holder.my_atom]!</span>")
+
+			if(holder.has_reagent(PLASMA, 20))
+				newthing = new /mob/living/carbon/monkey/skellington/plasma
+				holder.remove_reagent(PLASMA, 20)
+
+			else
+				newthing = new /mob/living/carbon/monkey/skellington
+
+			var/song = pick('sound/effects/xylophone1.ogg','sound/effects/xylophone2.ogg','sound/effects/xylophone3.ogg')
+			playsound(location, song, 50, 1, -1)
+
+		else
+			newthing = new /obj/item/weapon/skull
+
+		holder.remove_reagent(BONEFIXER, 5)
+		newthing.forceMove(location)
 ///////////////////////////////////////////////////////////////////////////////////
 
 //Foam and foam precursor

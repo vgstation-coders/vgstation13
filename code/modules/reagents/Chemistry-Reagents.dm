@@ -4426,6 +4426,7 @@
 	if(prob(50))
 		M.heal_organ_damage(1, 0)
 
+
 /datum/reagent/drink/milk/soymilk
 	name = "Soy Milk"
 	id = SOYMILK
@@ -4441,6 +4442,86 @@
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	density = 2.37
 	specheatcap = 1.38
+
+/datum/reagent/drink/milk/bonefixer
+	name = "Calcium-Perphosphoclonex Acid"
+	id = BONEFIXER
+	color = "#7F7FFF" //rgb: 127, 127, 255
+	description = "An off-blue permutation of milk that aids in the recovery of broken bones."
+	alpha = 70
+	density = 8.086
+	specheatcap = 3.28
+
+/datum/reagent/drink/milk/bonefixer/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M) && M.reagents.has_reagent(BONEFIXER, 10))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/external/organ = pick(H.organs)
+		if(organ.is_organic() && organ.is_existing() && organ.status & ORGAN_BROKEN)
+			H.custom_pain("Something in your [organ.display_name] is causing you a lot of pain as it cracks back together!")
+			if(H.feels_pain())
+				H.emote("scream", , , 1)
+			playsound(H.loc, "fracture", 100, 1, -2)
+			H.pain_level += rand(3,18)*H.reagents.has_reagent(BONEFIXER)
+			organ.status &= ~ORGAN_BROKEN
+			H.reagents.remove_reagent(BONEFIXER, 10)
+
+
+/datum/reagent/drink/milk/bonezone
+	name = "Plasteel bone reinforcement"
+	id = BONEZONE
+	color = "#C0C0C0" //rgb(192,192,192)
+	description = "Reinforces bone structure, to help aid against breaks. Extended effects undocumented."
+	alpha = 100
+	density = 63.416
+	specheatcap = 25.83
+	overdose_am = 10
+	overdose_tick = 35
+
+/datum/reagent/drink/milk/bonezone/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M) && M.reagents.has_reagent(BONEZONE, 1) && prob(30))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/external/organ = pick(H.organs)
+		if(organ.is_organic() && organ.is_existing())
+			H.custom_pain("Something in your [organ.display_name] feels like it's burning away!")
+			H.pain_level += rand(30,90)
+			organ.min_broken_damage+=rand(5,10)
+			organ.max_damage+=rand(3,6)
+			H.reagents.remove_reagent(BONEZONE, 1)
+
+
+/datum/reagent/drink/milk/bonezone/on_overdose(var/mob/living/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/list/candidates = list()
+		for(var/datum/organ/external/O in H.organs)
+			if(!O.is_organic() || !O.is_existing())
+				continue
+			candidates.Add(O)
+		var/datum/organ/external/organ = pick(candidates)
+		//Let's play bone-break roulette!
+		if(prob(5) && !organ.vital)
+			H.custom_pain("Your [organ.display_name] is trying to tear itself off of you!")
+			spawn(rand(5,10))
+				organ.droplimb(1)
+		else
+			if(prob(80))
+				H.custom_pain("Your [organ.display_name] twists and contorts in strange directions!")
+				H.pain_level += rand(30,90)
+				organ.take_damage(rand(3,12)*H.reagents.has_reagent(BONEZONE))
+			else
+				H.pain_level += rand(70,100)
+				organ.skeletify()
+
+		if(H.feels_pain())
+			H.emote("scream", , , 1)
+		playsound(H.loc, "fracture", 100, 1, -2)
+
 
 /datum/reagent/drink/hot_coco
 	name = "Hot Chocolate"

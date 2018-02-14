@@ -149,6 +149,8 @@
 #define MOONROCKS 			"moonrocks"
 #define OFFCOLORCHEESE 			"offcolorcheese"
 #define BONEMARROW 			"bonemarrow"
+#define BONEFIXER			"bonefixer"
+#define BONEZONE			"bonezone"
 #define GREENRAMEN 			"greenramen"
 #define GLOWINGRAMEN 			"glowingramen"
 #define DEEPFRIEDRAMEN 			"deepfriedramen"
