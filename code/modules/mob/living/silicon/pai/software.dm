@@ -243,8 +243,8 @@
 
 		// Accessing medical records
 		if("medicalsupplement")
-			secHUD = 0 // Can't have both of them at the same time
-			medHUD = 1
+			secHUD = FALSE // Can't have both of them at the same time
+			medHUD = TRUE
 			if(subscreen == 1)
 				var/datum/data/record/record = locate(href_list["med_rec"])
 				if(record)
@@ -259,8 +259,8 @@
 						medicalActive1 = R
 						medicalActive2 = M
 		if("securitysupplement")
-			medHUD = 0 // Can't have both of them at the same time
-			secHUD = 1
+			medHUD = FALSE // Can't have both of them at the same time
+			secHUD = TRUE
 			if(subscreen == 1)
 				var/datum/data/record/record = locate(href_list["sec_rec"])
 				if(record)
