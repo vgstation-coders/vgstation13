@@ -10,6 +10,10 @@
 	keytype = /obj/item/key/tractor
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/tractor
 
+/obj/structure/bed/chair/vehicle/tractor/New()
+	..()
+	new /obj/item/key/tractor(get_turf(src)) //spawn some keys
+
 /obj/structure/bed/chair/vehicle/tractor/update_mob()
 	if(!occupant)
 		return

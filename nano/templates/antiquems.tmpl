@@ -1,0 +1,34 @@
+<div class="item">
+	<div class="itemLabel">
+		Stored Capacity:
+	</div>
+	<div class="itemContent">
+		{{:helper.displayBar(data.charge, 0, 2000, data.active ? 'good' : 'average')}}
+		<div class="statusValue">
+			{{:helper.round(data.charge)}} Megawatts
+		</div>
+	</div>
+	<div class="itemLabel">
+		Power Management:
+	</div>
+	<div class="itemContent">
+		{{:helper.link('Toggle Power', 'power', {'toggle' : 1})}}
+		{{:helper.link('Set Consumption', 'battery-3', {'set_draw' : 1})}}
+	</div>
+	<div class="itemLabel">
+		Consumption:
+	</div>
+	<div class="itemContent">
+		{{:data.consumption}} Megawatts 
+		{{if data.active}}
+			<span class='good'>On</span>
+		{{else}}
+			<span class='average'>Off</span>
+		{{/if}}
+	</div>
+</div>
+{{for data.synthList}}
+<div class="item">
+	{{:helper.link(value.name, 'gear', {'synth' : value.name})}} {{:value.cost}} Megawatts
+</div>
+{{for}}
