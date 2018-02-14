@@ -6,7 +6,7 @@
 	@name: String: Name of the faction
 	@ID: List(String): Identifying strings for shorthand finding this faction.
 	@desc: String: Description of the faction, their intentions, how they do things, etc. Something for lorewriters to use.
-	@initial_role: String(DEFINE): On initial setup via gamemode or faction creation, set the new minds role ID to this. HEADCULTIST for example
+	@initial_role: String(DEFINE): On initial setup via gamemode or faction creation, set the new minds role ID to this.
 	@late_role: String(DEFINE): On later recruitment, set the new minds role ID to this. TRAITOR for example
 	@required_pref: String(DEFINE): What preference is required to be recruited to this faction.
 	@restricted_species: list(String): Only species on this list can be part of this faction
@@ -251,7 +251,7 @@
 	return header
 
 /datum/faction/strike_team
-	name = "Strike Team 6"
+	name = "Custom Strike Team"//obviously this name is a placeholder getting replaced by the admin setting up the squad
 	required_pref = ROLE_STRIKE
 	ID = CUSTOMSQUAD
 
@@ -264,5 +264,5 @@
 	ID = DEATHSQUAD
 
 /datum/faction/strike_team/syndiesquad
-	name = "Syndicate Deep-strike squad"
+	name = "Syndicate Deep-Strike squad"
 	ID = SYNDIESQUAD

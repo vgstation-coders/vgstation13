@@ -315,7 +315,7 @@
 				return
 
 			var/mob/living/T = target
-			for(var/datum/faction/cult/C in ticker.mode.factions)
+			for(var/datum/faction/bloodcult/C in ticker.mode.factions)
 				if(C.is_sacrifice_target(T.mind))
 					to_chat(U, "<span class='warning'>The soul stone is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
 					return
@@ -375,7 +375,7 @@
 						Z.cancel_camera()
 						deleteafter = 1
 				if(iscultist(U))
-					var/datum/faction/cult/cult_round = find_active_faction(CULT_NARSIE)
+					var/datum/faction/bloodcult/cult_round = find_active_faction(BLOODCULT)
 					if(cult_round)
 						cult_round.HandleRecruitedMind(Z.mind)
 

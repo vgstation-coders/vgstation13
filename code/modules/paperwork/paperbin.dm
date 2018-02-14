@@ -87,6 +87,7 @@
 	..()
 	if(amount)
 		to_chat(user, "<span class='info'>There " + (amount > 1 ? "are [amount] papers" : "is one paper") + " in the bin.</span>")
+		/*
 		if(papers.len > 0)
 			var/obj/item/weapon/paper/P = papers[papers.len]
 			if(istype(P,/obj/item/weapon/paper/talisman))
@@ -121,6 +122,7 @@
 					to_chat(user, "<span class='info'>The paper on top has some bloody markings on it.</span>")
 			else if(P.info)
 				to_chat(user, "<span class='info'>You notice some writings on the top paper. <a HREF='?src=\ref[user];lookitem=\ref[P]'>Take a closer look.</a></span>")
+			*/
 	else
 		to_chat(user, "<span class='info'>There are no papers in the bin.</span>")
 

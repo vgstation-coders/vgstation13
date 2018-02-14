@@ -35,7 +35,7 @@
 		D.holder = null
 
 	if(counts_as_blood)
-		var/datum/faction/cult/narsie/blood_cult = find_active_faction(CULT_NARSIE)
+		var/datum/faction/bloodcult/blood_cult = find_active_faction(BLOODCULT)
 		if(blood_cult)
 			var/turf/T = get_turf(src)
 			if(T && (T.z == map.zMainStation))
@@ -92,7 +92,7 @@
 	update_icon()
 
 	if(counts_as_blood)
-		var/datum/faction/cult/narsie/blood_cult = find_active_faction(CULT_NARSIE)
+		var/datum/faction/bloodcult/blood_cult = find_active_faction(BLOODCULT)
 		if(blood_cult)
 			var/turf/T = get_turf(src)
 			if(T && (T.z == map.zMainStation))//F I V E   T I L E S
