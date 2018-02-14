@@ -294,27 +294,9 @@
 /mob/living/simple_animal/spiderbot/say(var/message)
 	return ..(message, "R")
 
-/mob/living/simple_animal/spiderbot/radio(var/datum/speech/speech, var/message_mode)
-	. = ..()
-	if(. != 0)
-		return .
-	if(message_mode == "robot")
-		if(radio)
-			radio.talk_into(speech)
-		return REDUCE_RANGE
-
-	else if(message_mode in radiochannels)
-		if(radio)
-			radio.talk_into(speech, message_mode)
-			return ITALICS | REDUCE_RANGE
-	return 0
-
-/mob/living/simple_animal/spiderbot/get_message_mode(message)
-	. = ..()
-	if(..() == MODE_HEADSET)
-		return MODE_ROBOT
-	else
-		return .
+/mob/living/simple_animal/spiderbot/treat_speech(var/datum/speech/speech, genesay = 0)
+	..(speech)
+	speech.message_classes.Add("siliconsay")
 
 /mob/living/simple_animal/spiderbot/verb/Toggle_Listening()
 	set name = "Toggle Listening"
