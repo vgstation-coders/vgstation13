@@ -56,8 +56,18 @@
 //Flashing everyone
 	if(eye_safety < 1)
 		M.flash_eyes(visual = 1, affect_silicon = 1)
-		M.Stun(10)
-		M.Knockdown(10)
+		/var/FL = 0
+		if((get_dist(M, T) <= 4 || src.loc == M.loc || src.loc == M))
+			FL = rand(6, 10)
+		else if(get_dist(M,T) <= 6)
+			FL = rand(3, 6)
+		else					//very edge of the screen
+			FL = rand(0, 3)
+
+		M.Stun(FL)
+		M.Knockdown(FL)
+		M.eye_blind = max(FL + 2, M.eye_blind)
+		M.eye_blurry = max((FL + 2) * 2, M.eye_blurry)
 
 //Now applying sound
 	if(!ear_safety)
@@ -67,13 +77,19 @@
 		to_chat(M, "<span class='danger'>BANG</span>")
 		playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
 
+	var/BL = 0
+
 	if((get_dist(M, T) <= 2 || src.loc == M.loc || src.loc == M))
 		if(ear_safety > 0)
 			M.Stun(2)
 			M.Knockdown(2)
+			M.stuttering += 4
+			M.ear_deaf = max(M.ear_deaf, 3)
 		else
-			M.Stun(10)
-			M.Knockdown(10)
+			BL = rand(7, 11)
+			M.Stun(BL)
+			M.Knockdown(BL)
+			M.stuttering += 20
 			if ((prob(14) || (M == src.loc && prob(70))))
 				M.ear_damage += rand(1, 10)
 			else
@@ -82,14 +98,18 @@
 
 	else if(get_dist(M, T) <= 5)
 		if(!ear_safety)
-			M.Stun(8)
-			M.Knockdown(8)
+			BL = rand(4, 8)
+			M.Stun(BL)
+			M.Knockdown(BL)
+			M.stuttering += 12
 			M.ear_damage += rand(0, 3)
 			M.ear_deaf = max(M.ear_deaf,10)
 
 	else if(!ear_safety)
-		M.Stun(4)
-		M.Knockdown(4)
+		BL = rand (2, 4)
+		M.Stun(BL)
+		M.Knockdown(BL)
+		M.stuttering += 7
 		M.ear_damage += rand(0, 1)
 		M.ear_deaf = max(M.ear_deaf,5)
 
