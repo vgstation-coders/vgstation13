@@ -200,6 +200,8 @@
 
 /obj/machinery/sleeper/New()
 	..()
+	if(map.nameShort == "deff")
+		icon = 'maps/defficiency/medbay.dmi'
 	RefreshParts()
 
 	spawn( 5 )

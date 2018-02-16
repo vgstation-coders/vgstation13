@@ -27,6 +27,8 @@
 
 /obj/machinery/bodyscanner/New()
 	..()
+	if(map.nameShort == "deff")
+		icon = 'maps/defficiency/medbay.dmi'
 	RefreshParts()
 	spawn( 5 )
 		var/turf/t

@@ -493,7 +493,7 @@ var/global/num_vending_terminals = 1
 			to_chat(user, "<span class='info'>[src] responds with a soft beep.</span>")
 		else
 			to_chat(user, "<span class='info'>Nothing happens.</span>")
-				
+
 	else if(istype(W, /obj/item/weapon/card))
 		if(currently_vending) //We're trying to pay, not set the account
 			connect_account(user, W)
@@ -1523,6 +1523,11 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/medical
+
+/obj/machinery/vending/medical/New()
+	..()
+	if(map.nameShort == "deff")
+		icon = 'maps/defficiency/medbay.dmi'
 
 //This one's from bay12
 /obj/machinery/vending/plasmaresearch

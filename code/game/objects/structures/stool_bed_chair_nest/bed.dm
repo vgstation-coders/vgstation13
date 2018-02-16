@@ -143,6 +143,11 @@
 	lockflags = DENSE_WHEN_LOCKED
 	lock_type = /datum/locking_category/buckle/bed/roller
 
+/obj/structure/bed/roller/New()
+	..()
+	if(map.nameShort == "deff")
+		icon = 'maps/defficiency/medbay.dmi'
+
 /obj/item/roller
 	name = "roller bed"
 	desc = "A collapsed roller bed that can be carried around."
