@@ -235,6 +235,9 @@
 
 	accepted_types = list(/obj/item/weapon/reagent_containers/blood)
 
+/obj/machinery/smartfridge/bloodbank/deff
+	icon = 'maps/defficiency/medbay.dmi'
+
 /obj/machinery/smartfridge/bloodbank/New()
 	. = ..()
 

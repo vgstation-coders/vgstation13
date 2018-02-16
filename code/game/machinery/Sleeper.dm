@@ -76,7 +76,7 @@
 			dat += "<span class='[toxloss < 60 ? "" : "average"]'>\t-Toxin content: [round(toxloss, 0.1)]</span><br>"
 			var/fireloss = occupant.getFireLoss()
 			dat += "<span class='[fireloss < 60 ? "" : "average"]'>\t-Burn severity: [round(fireloss, 0.1)]</span><br>"
-			
+
 			var/sleepytime = max(occupant.paralysis, occupant.sleeping)
 			dat += "<hr>Paralysis summary: [sleepytime] ([round(sleepytime * 2)] seconds left!)<br>"
 			dat += "<a href='?src=\ref[src];wakeup=1'>Begin wake-up cycle</a><br>"
