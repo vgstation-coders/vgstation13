@@ -36,6 +36,7 @@
 	response_harm   = "stomps on"
 
 	var/obj/item/held_item = null //Storage for single item they can hold.
+	var/lob_range = 3
 	var/emagged = 0               //IS WE EXPLODEN?
 	var/syndie = 0                //IS WE SYNDICAT? (currently unused)
 	speed = 1                    //Spiderbots gotta go fast.
@@ -238,8 +239,19 @@
 	if(istype(held_item, /obj/item/weapon/grenade))
 		visible_message("<span class='warning'>[src] launches \the [held_item]!</span>", "<span class='warning'>You launch \the [held_item]!</span>", "You hear a skittering noise and a thump!")
 		var/obj/item/weapon/grenade/G = held_item
-		G.forceMove(src.loc)
-		G.prime()
+
+		//Make a dumbfire throw
+		var/turf/lob_target
+		var/lob_dir = dir
+		var/turf/start_turf = get_turf(src)
+		var/current_turf = start_turf
+		for(var/i = 1; i <= lob_range; i++)
+			current_turf = get_step(current_turf, lob_dir)
+		lob_target = current_turf
+
+		throw_item(lob_target, G)
+
+		G.activate(src)
 		held_item = null
 		return 1
 
