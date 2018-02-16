@@ -912,13 +912,14 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(iscult(H))
-			if(prob(10)) //1/10 chance of removing cultist status, so 50 units on average to uncult (half a holy water bottle)
-				//ticker.mode.remove_cultist(H.mind)
-				H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, his eyes clear up.</span>",
-				"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
-			else //Warn the Cultist that it is fucking him up
-				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your arcane knowledge is becoming obscure again.</span>")
+		if (iscultist(H))
+			H.Dizzy(6)
+			H.Jitter(12)
+			if (prob(20))
+				H.Knockdown(1)
+			else if (prob(30))
+				H.confused = 2
+			H.eye_blurry = max(H.eye_blurry, 3)
 		//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
 		var/datum/role/vampire/V = isvampire(H)
 		if(V)
@@ -929,19 +930,27 @@
 			else
 				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. Your vampiric powers counter most of the damage.</span>")
 				V.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
-		// if(H.mind && H.mind.special_role == "VampThrall")
-		// 	ticker.mode.remove_thrall(H.mind)
-		// 	H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
-		// 	"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
+		var/datum/role/thrall/T = isthrall(H)
+		if(T)
+			T.Drop()
 
 /datum/reagent/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
 
 	if(..())
 		return 1
 
-	//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
+		if (iscultist(H))
+			H.Dizzy(12)
+			H.Jitter(24)
+			H.Knockdown(3)
+			H.confused = 3
+			H.eye_blurry = max(H.eye_blurry, 6)
+
+
+	/*
+	//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
 		var/datum/role/vampire/V = isvampire(H)
 		if(V)
 			if(!(VAMP_UNDYING in V.powers))
@@ -981,7 +990,8 @@
 				else
 					if(H.acidable())
 						H.take_organ_damage(min(15, volume * 2))
-						V.smitecounter += 5
+						H.mind.vampire.smitecounter += 5
+	*/
 
 /datum/reagent/holywater/reaction_turf(var/turf/simulated/T, var/volume)
 

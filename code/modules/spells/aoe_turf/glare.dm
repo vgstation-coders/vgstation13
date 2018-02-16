@@ -1,4 +1,4 @@
-/spell/glare
+/spell/aoe_turf/glare
 	name = "Glare"
 	desc = "A scary glare that incapacitates people for a short while around you."
 	abbreviation = "GL"
@@ -7,37 +7,37 @@
 	user_type = USER_TYPE_VAMPIRE
 
 	charge_type = Sp_RECHARGE
-	charge_max = 30 SECONDS
+	charge_max = 3 MINUTES
 	invocation_type = SpI_NONE
 	range = 0
 	spell_flags = NEEDSHUMAN
-	cooldown_min = 20 SECONDS
+	cooldown_min = 3 MINUTES
 
 	override_base = "vamp"
 	hud_state = "vampire_glare"
 
+	inner_radius = 3
+
 	var/blood_cost = 1
 
-/spell/glare/cast_check(var/skipcharge = 0, var/mob/user = usr)
+/spell/aoe_turf/glare/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	if (!user.vampire_power(blood_cost, 0))
-		to_chat(world, "vampire_power failed.")
 		return FALSE
 	if (istype(user.get_item_by_slot(slot_glasses), /obj/item/clothing/glasses/sunglasses/blindfold))
 		to_chat(user, "<span class='warning'>You're blindfolded!</span>")
 		return FALSE
-	. = ..()
-	if (!.)
-		to_chat(world, "cast_check() failed.")
+	return ..()
 
-/spell/glare/choose_targets(var/mob/user = usr)
+/spell/aoe_turf/glare/choose_targets(var/mob/user = usr)
 	var/list/targets = list()
-	for(var/mob/living/carbon/C in view(3))
+	for(var/mob/living/carbon/C in oview(inner_radius))
 		if(!C.vampire_affected(user.mind))
 			continue
 		targets += C
 	return targets
 
-/spell/glare/cast(var/list/targets, var/mob/user)
+/spell/aoe_turf/glare/cast(var/list/targets, var/mob/user)
+	to_chat(world, "cast()")
 	var/datum/role/vampire/V = isvampire(user) // Shouldn't ever be null, as cast_check checks if we're a vamp.
 	user.visible_message("<span class='danger'>\The [user]'s eyes emit a blinding flash!</span>")
 	for (var/T in targets)

@@ -39,6 +39,7 @@
 
 /datum/role/vampire/OnPostSetup()
 	. = ..()
+
 	update_vamp_hud()
 
 	for(var/type_VP in roundstart_powers)

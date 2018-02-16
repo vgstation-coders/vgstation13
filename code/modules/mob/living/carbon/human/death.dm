@@ -44,9 +44,9 @@
 
 /mob/living/carbon/human/Destroy()
 	if(mind && species && (species.name == "Manifested"))
-		var/datum/role/cult = mind.GetRole(CULTIST)
-		if(cult)//manifested ghosts are removed from the cult once their bodies are destroyed
-			cult.RemoveFromRole(mind)
+		var/datum/role/cultist = mind.GetRole(CULTIST)
+		if(cultist)//manifested ghosts are removed from the cult once their bodies are destroyed
+			cultist.RemoveFromRole(mind)
 
 	if(species)
 		qdel(species)
