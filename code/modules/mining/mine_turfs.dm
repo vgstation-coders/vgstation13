@@ -4,6 +4,7 @@
 	name = "Rock"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "rock"
+	var/base_icon_state = "rock" // above is for mappers.
 	oxygen = 0
 	nitrogen = 0
 	opacity = 1
@@ -23,9 +24,25 @@
 	var/datum/artifact_find/artifact_find
 	var/scan_state = null //Holder for the image we display when we're pinged by a mining scanner
 	var/busy = 0 //Used for a bunch of do_after actions, because we can walk into the rock to trigger them
-
+	var/mineral_overlay
 	var/mined_type = /turf/unsimulated/floor/asteroid
-	var/global/image/rock_overlay = image('icons/turf/rock_overlay.dmi',"rock_overlay")
+	var/overlay_state = "rock_overlay"
+
+
+/turf/unsimulated/mineral/snow
+	icon_state = "snow_rock"
+	base_icon_state = "snow_rock"
+	mined_type = /turf/unsimulated/floor/snow
+	overlay_state = "snow_rock_overlay"
+
+/turf/unsimulated/mineral/snow/New()
+	base_icon_state = pick("snow_rock","snow_rock1","snow_rock2","snow_rock3","snow_rock4")
+	..()
+
+/turf/unsimulated/mineral/underground
+	icon_state = "cave_wall"
+	base_icon_state = "cave_wall"
+	mined_type = /turf/unsimulated/floor/asteroid/underground
 
 /turf/unsimulated/mineral/air
 	oxygen = MOLES_O2STANDARD
@@ -39,23 +56,37 @@
 /turf/unsimulated/mineral/Destroy()
 	return
 
-var/list/icon_state_to_appearance = list()
-
 /turf/unsimulated/mineral/New()
-	if(!(mineral_turfs.len))
-		rock_overlay.pixel_x = -4
-		rock_overlay.pixel_y = -4
-		rock_overlay.plane = BELOW_TURF_PLANE
 	mineral_turfs += src
 	. = ..()
 	MineralSpread()
+	update_icon()
 
-	if(icon_state_to_appearance[icon_state])
-		appearance = icon_state_to_appearance[icon_state]
+var/list/icon_state_to_appearance = list()
+
+/turf/unsimulated/mineral/update_icon(var/mineral_name = "empty") // feed in a mineral name to 'force' its appearance on an object.
+	if(mineral && mineral_name == "empty")
+		mineral_name = mineral.display_name
+	if(icon_state_to_appearance["[base_icon_state]-[mineral_name]"])
+		appearance = icon_state_to_appearance["[base_icon_state]-[mineral_name]"]
 	else
-		overlays += rock_overlay
-		icon_state_to_appearance[icon_state] = appearance
+		overlays.Cut()
+		if(mineral)
+			mineral_overlay = image('icons/turf/mine_overlays.dmi', mineral_name)
+			overlays += mineral_overlay
+		icon_state = base_icon_state
+		add_rock_overlay()
+		icon_state_to_appearance["[base_icon_state]-[mineral_name]"] = appearance
 
+/turf/unsimulated/mineral/proc/add_rock_overlay(var/image/img = image('icons/turf/rock_overlay.dmi', overlay_state,layer = SIDE_LAYER),var/offset=-4)
+	img.pixel_x = offset*PIXEL_MULTIPLIER
+	img.pixel_y = offset*PIXEL_MULTIPLIER
+	img.plane = BELOW_TURF_PLANE
+	overlays += img
+
+/turf/unsimulated/mineral/underground/add_rock_overlay()
+	..(img = image('icons/turf/spookycave.dmi', "spooky_cave",layer = SIDE_LAYER),offset=-16)
+	..(img = image('icons/turf/spookycave.dmi', "spooky_cave_corners",layer = CORNER_LAYER),offset = -16)
 
 turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	mineral_turfs -= src
@@ -113,7 +144,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		name = "\improper Rock"
 		return
 	name = "\improper [mineral.display_name] deposit"
-	icon_state = "rock_[mineral.name]"
+	update_icon()
 
 /turf/unsimulated/mineral/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
@@ -410,11 +441,24 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	temperature = TCMB
 	//icon_plating = "asteroid"
 	var/dug = 0       //0 = has not yet been dug, 1 = has already been dug
+	var/sand_type = /obj/item/weapon/ore/glass
 
 /turf/unsimulated/floor/asteroid/air
 	oxygen = MOLES_O2STANDARD
 	nitrogen = MOLES_N2STANDARD
 	temperature = T20C
+
+/turf/unsimulated/floor/asteroid/underground
+	name = "cave floor"
+	temperature = T0C-150
+	oxygen = MOLES_O2STANDARD_ARCTIC
+	nitrogen = MOLES_N2STANDARD_ARCTIC
+	icon_state = "cavefl_1"
+	sand_type = /obj/item/weapon/ore/glass/cave
+
+/turf/unsimulated/floor/asteroid/underground/New()
+	..()
+	icon_state = pick("cavefl_1","cavefl_2","cavefl_3","cavefl_4")
 
 /turf/unsimulated/floor/asteroid/New()
 	var/proper_name = name
@@ -468,18 +512,18 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		..(W,user)
 	return
 
+/turf/unsimulated/floor/asteroid/update_icon()
+	if(dug && istype(sand_type,/obj/item/weapon/ore/glass))
+		icon_state = "asteroid_dug"
+
 /turf/unsimulated/floor/asteroid/proc/gets_dug()
 	if(dug)
 		return
-	new/obj/item/weapon/ore/glass(src)
-	new/obj/item/weapon/ore/glass(src)
-	new/obj/item/weapon/ore/glass(src)
-	new/obj/item/weapon/ore/glass(src)
-	new/obj/item/weapon/ore/glass(src)
+	for(var/i = 1 to 5)
+		new sand_type(src)
 	dug = 1
 	//icon_plating = "asteroid_dug"
-	icon_state = "asteroid_dug"
-	return
+	update_icon()
 
 /turf/unsimulated/mineral/random
 	name = "Mineral deposit"
@@ -718,9 +762,13 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	var/activated_name = null
 
 /turf/unsimulated/mineral/gibtonite/New()
-	icon_state="rock_Diamond"
 	det_time = rand(8,10) //So you don't know exactly when the hot potato will explode
 	..()
+
+/turf/unsimulated/mineral/gibtonite/update_icon(var/mineral_name = "empty")
+	if(mineral_name == "empty" && !stage)
+		..("Diamond")
+	else ..(mineral_name)
 
 /turf/unsimulated/mineral/gibtonite/Bumped(AM)
 	var/bump_reject = 0
@@ -758,7 +806,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/gibtonite/proc/explosive_reaction()
 	if(stage == 0)
-		icon_state = "rock_Gibtonite_active"
+		update_icon("Gibtonite_active")
 		name = "Gibtonite deposit"
 		desc = "An active gibtonite reserve. Run!"
 		stage = 1
@@ -783,7 +831,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/gibtonite/proc/defuse()
 	if(stage == 1)
-		icon_state = "rock_Gibtonite" //inactive does not exist. The other icon is active.
+		update_icon("Gibtonite") //inactive does not exist. The other icon is active.
 		desc = "An inactive gibtonite reserve. The ore can be extracted."
 		stage = 2
 		if(det_time < 0)
@@ -894,7 +942,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 	SpawnMonster(T)
 
-	new /turf/unsimulated/floor/asteroid(T)
+	new /turf/unsimulated/floor/asteroid(T) // TODO: FIX THIS
 
 /turf/unsimulated/floor/asteroid/cave/proc/SpawnMonster(var/turf/T)
 	if(prob(2))
