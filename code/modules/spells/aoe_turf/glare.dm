@@ -37,11 +37,9 @@
 	return targets
 
 /spell/aoe_turf/glare/cast(var/list/targets, var/mob/user)
-	to_chat(world, "cast()")
 	var/datum/role/vampire/V = isvampire(user) // Shouldn't ever be null, as cast_check checks if we're a vamp.
 	user.visible_message("<span class='danger'>\The [user]'s eyes emit a blinding flash!</span>")
 	for (var/T in targets)
-		to_chat(world, "Target : [T]")
 		var/mob/living/carbon/C = T
 		var/dist = get_dist(user, C)
 		switch (dist)
