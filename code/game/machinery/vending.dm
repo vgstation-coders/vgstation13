@@ -85,14 +85,12 @@ var/global/num_vending_terminals = 1
 
 	var/machine_id = "#"
 
-	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK | SECUREDPANEL
-
-
-	var/account_first_linked = 0
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK
 
 	var/inserting_mode = FALSE // insert items directly into the machine (used for custom vending machines)
 	var/is_custom_machine = FALSE // true if this vendor supports editing the prices
 	var/edit_mode = FALSE // Used for editing prices
+	var/account_first_linked = 1
 	var/is_being_filled = FALSE // `in_use` from /obj is already used for tracking users of this machine's UI
 
 /obj/machinery/vending/cultify()
@@ -133,6 +131,7 @@ var/global/num_vending_terminals = 1
 
 	if(ticker)
 		initialize()
+		link_to_account()
 
 	return
 
@@ -143,6 +142,9 @@ var/global/num_vending_terminals = 1
 	build_inventory(contraband, 1)
 	build_inventory(premium, 0, 1)
 	build_inventory(vouched, 0, 0, 1)
+
+/obj/machinery/vending/proc/link_to_account()
+	linked_account = department_accounts["Cargo"]
 
 /obj/machinery/vending/RefreshParts()
 	var/manipcount = 0
@@ -370,12 +372,12 @@ var/global/num_vending_terminals = 1
 //		to_chat(world, "Added: [R.product_name]] - [R.amount] - [R.product_path]")
 
 /obj/machinery/vending/emag(mob/user)
-	if(!emagged)
+	if(!emagged || !extended_inventory || scan_id)
 		emagged = 1
-		if(user)
-			to_chat(user, "You short out the product lock on \the [src]")
+		extended_inventory = 1
+		scan_id = 0
 		return 1
-	return -1 //Fucking gross
+	return 0 //Fucking gross
 
 /obj/machinery/vending/npc_tamper_act(mob/living/L)
 	if(!panel_open)
@@ -487,6 +489,14 @@ var/global/num_vending_terminals = 1
 		if(user.drop_item(W, src))
 			add_item(W)
 			src.updateUsrDialog()
+	else if(istype(W, /obj/item/weapon/card/emag))
+		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")
+		to_chat(user, "<span class='notice'>You swipe \the [W] through [src]</span>")
+		if (emag())
+			to_chat(user, "<span class='info'>[src] responds with a soft beep.</span>")
+		else
+			to_chat(user, "<span class='info'>Nothing happens.</span>")
+				
 	else if(istype(W, /obj/item/weapon/card))
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(linked_account)
@@ -1838,7 +1848,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/legcuffs/bolas = 8,
 		)
 	contraband = list(
-		/obj/item/clothing/glasses/sunglasses = 2,
+		/obj/item/clothing/glasses/sunglasses/security = 2,
 		/obj/item/weapon/storage/fancy/donut_box = 2,
 		)
 	premium = list(
@@ -2964,6 +2974,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/glass/bottle/rezadone,
 		/obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall,
 		/obj/item/clothing/shoes/clown_shoes/advanced,
+		/obj/item/fish_eggs/seadevil,
 		)
 
 /obj/machinery/vending/trader/New()
@@ -3101,9 +3112,14 @@ var/global/num_vending_terminals = 1
 	//vend_reply = "Insert another joke here"
 	//product_ads = "Another joke here"
 	//product_slogans = "Jokes"
+	account_first_linked = 0
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK | SECUREDPANEL
 	products = list()
 
 	pack = /obj/structure/vendomatpack/custom
+
+/obj/machinery/vending/sale/link_to_account()
+	return
 
 /obj/machinery/vending/toggleSecuredPanelOpen(var/obj/toggleitem, var/mob/user)
 	if(!account_first_linked)
@@ -3179,15 +3195,3 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/mining
-
-//Note : Snowflake, but I don't care. Rework the fucking economy
-/obj/machinery/vending/mining/New()
-	..()
-
-	if(ticker)
-		initialize()
-
-/obj/machinery/vending/mining/initialize()
-	..()
-
-	linked_account = department_accounts["Cargo"]

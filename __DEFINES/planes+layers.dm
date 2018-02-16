@@ -165,6 +165,7 @@ What is the naming convention for planes or layers?
 
 #define ABOVE_HUMAN_PLANE 		16			// For things that should appear above humans.
 
+	#define SHADOW_LAYER			0
 	#define VEHICLE_LAYER 			0
 	#define CHAIR_ARMREST_LAYER 	0
 	#define WINDOOR_LAYER 			1
