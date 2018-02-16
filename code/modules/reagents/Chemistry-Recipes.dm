@@ -837,7 +837,7 @@
 	name = "Bone fixer"
 	id = BONEFIXER
 	result = BONEFIXER
-	required_reagents = list(MILK = 10, CLONEXADONE = 10, PHOSPHORUS = 10)
+	required_reagents = list(MILK = 10, CARPOTOXIN = 5, CLONEXADONE = 10, PHOSPHORUS = 10)
 	result_amount = 5
 
 /datum/chemical_reaction/bonezone
