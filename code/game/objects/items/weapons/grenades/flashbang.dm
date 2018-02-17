@@ -23,7 +23,7 @@
 		var/turf/T = get_turf(M)
 		var/D = round(cheap_pythag(T.x - x0, T.y - y0), 1)
 		if(D > 8)
-			if(eye_safety < 1)
+			if(M.eyecheck() < 1)
 				M.flash_eyes(visual = 1, affect_silicon = 1)
 			to_chat(M, "<span class='danger'>BANG</span>")
 			playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
