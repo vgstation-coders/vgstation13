@@ -163,14 +163,12 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	if(isrobot(holder))
 		var/mob/living/silicon/robot/S = holder
 		if(locate(src) in S.get_all_slots())
-			if(handling)
-				auto_collect()
-				auto_fill(holder)
+			auto_collect()
+			auto_fill(holder)
 	else 
 		if(holder.is_holding_item(src))
-			if(handling)
-				auto_collect()
-				auto_fill(holder)
+			auto_collect()
+			auto_fill(holder)
 
 /obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
 	if(event_key)
