@@ -214,8 +214,17 @@ Doesn't work on other aliens/AI.*/
 	range = 1
 
 /spell/alienacid/is_valid_target(var/atom/target, mob/user)
-	if(get_dist(user, target) > range) //Shouldn't be necessary but a good check in case of overrides
+	return is_valid_target_to_acid(target,user,range)
+
+/proc/is_valid_target_to_acid(var/atom/target, mob/user,var/range=1)
+	if(get_dist(user, target) > range) 
+		to_chat(usr, "<span class='alien'>Target is too far away!</span>")
 		return FALSE
+	if(target.isacidhardened())
+		if(!do_after(usr,target,3 SECONDS))
+			to_chat(usr, "<span class='alien'>You have to stay next to the object to acid it!</span>")
+			return FALSE
+		return TRUE
 	if(!ismob(target) && target.acidable())
 		return TRUE
 	to_chat(user, "<span class='alien'>You cannot dissolve this object.</span>")
@@ -225,31 +234,21 @@ Doesn't work on other aliens/AI.*/
 	acidify(targets[1], user)
 
 /mob/living/carbon/alien/humanoid/proc/corrosive_acid(atom/O as obj|turf in oview(1)) //If they right click to corrode, an error will flash if its an invalid target./N
-    set name = "Corrosive Acid (200)"
-    set desc = "Drench an object in acid, destroying it over time."
-    set category = null
- 
-    if(ismob(O)) //This sort of thing may be possible by manually calling the verb, not sure
-        return
- 
-    if(powerc(200))
-        if(O in oview(1))
-            if(acidify(O, usr))
-                AdjustPlasma(-200)
-        else
-            to_chat(usr, "<span class='alien'>Target is too far away.</span>")
- 
+	set name = "Corrosive Acid (200)"
+	set desc = "Drench an object in acid, destroying it over time."
+	set category = null
+
+	if(ismob(O)) //This sort of thing may be possible by manually calling the verb, not sure
+		return
+
+	if(powerc(200))
+		if(is_valid_target_to_acid(O,usr))
+			acidify(O, usr)
+			AdjustPlasma(-200)
+
 /proc/acidify(atom/O, mob/user)
-    if(O.isacidhardened())
-        if(!do_after(usr,O,3 SECONDS))
-            to_chat(usr, "<span class='alien'>You have to stay next to the object to acid it!</span>")
-            return FALSE
-    if(O.acidable() && !O.isacidhardened())
-        new /obj/effect/alien/acid(get_turf(O), O)
-        user.visible_message("<span class='alien'>\The [usr] vomits globs of vile stuff all over [O]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
-        return TRUE
-    else
-        to_chat(user, "<span class='alien'>You cannot dissolve this object.</span>")
+	new /obj/effect/alien/acid(get_turf(O), O)
+	user.visible_message("<span class='alien'>\The [usr] vomits globs of vile stuff all over [O]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
 
 /spell/aoe_turf/alienregurgitate
 	name = "Regurgitate"
