@@ -148,6 +148,7 @@ var/list/SPS_list = list()
 	desc = "A mining cyborg internal positioning system. Used as a recovery beacon for damaged silicons, or a collaboration tool for mining teams."
 	icon_state = "gps-b"
 	base_tag = "BORG"
+	builtin = TRUE
 
 /obj/item/device/gps/pai
 	base_name = "pAI positioning system"
