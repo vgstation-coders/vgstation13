@@ -1113,7 +1113,7 @@ function loadPage(list) {
 		if (!istype(L))
 			return FALSE
 
-		var/index = href_list["index"]
+		var/index = text2num(href_list["index"])
 
 		if (!isnum(index) || index < 1)
 			return FALSE
