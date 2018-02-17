@@ -92,7 +92,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];getmob=\ref[M]'>Get</A> |
 		<A href='?src=\ref[src];sendmob=\ref[M]'>Send To</A>
 		<br><br>
-		<A href='?src=\ref[src];traitor=\ref[M]'>Traitor panel</A> |
+		<A href='?src=\ref[src];traitor=\ref[M]'>Role panel</A> |
 		<A href='?src=\ref[src];narrateto=\ref[M]'>Narrate to</A> |
 		<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A>
 	"}
@@ -1323,10 +1323,10 @@ var/global/floorIsLava = 0
 	log_admin("[key_name(usr)] spawned [chosen] at ([usr.x],[usr.y],[usr.z])")
 	feedback_add_details("admin_verb","SA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/datum/admins/proc/show_traitor_panel(var/mob/M in mob_list)
+/datum/admins/proc/show_role_panel(var/mob/M in mob_list)
 	set category = "Admin"
-	set desc = "Edit mobs's memory and role"
-	set name = "Show Traitor Panel"
+	set desc = "Edit mobs's Job, Roles, and Factions"
+	set name = "Show Role Panel"
 
 	if(!istype(M))
 		to_chat(usr, "This can only be used on instances of type /mob")
