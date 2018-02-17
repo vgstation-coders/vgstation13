@@ -165,6 +165,7 @@ What is the naming convention for planes or layers?
 
 #define ABOVE_HUMAN_PLANE 		16			// For things that should appear above humans.
 
+	#define SHADOW_LAYER			0
 	#define VEHICLE_LAYER 			0
 	#define CHAIR_ARMREST_LAYER 	0
 	#define WINDOOR_LAYER 			1
@@ -204,7 +205,7 @@ What is the naming convention for planes or layers?
 	#define SUPER_PORTAL_LAYER		6
 	#define NARSIE_GLOW 			7
 
-#define AREA_PLANE				20
+#define ABOVE_LIGHTING_PLANE		20
 	#define MAPPING_AREA_LAYER	999
 
 #define STATIC_PLANE 			21		// For AI's static.
@@ -237,3 +238,11 @@ What is the naming convention for planes or layers?
 	plane = BASE_PLANE
 
 var/obj/abstract/screen/plane_master/clickmaster/clickmaster = new()
+
+/obj/abstract/screen/plane_master/clickmaster_dummy
+	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
+	alpha = 0
+	appearance_flags = 0
+	plane = BASE_PLANE
+
+var/obj/abstract/screen/plane_master/clickmaster_dummy/clickmaster_dummy = new()

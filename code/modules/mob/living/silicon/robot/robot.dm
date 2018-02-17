@@ -85,6 +85,11 @@
 // Used to store the associations between sprite names and sprite index.
 	var/module_sprites[0]
 
+//Photography
+	var/obj/item/device/camera/silicon/aicamera = null
+	var/toner = CYBORG_STARTING_TONER
+	var/tonermax = CYBORG_MAX_TONER
+
 /mob/living/silicon/robot/New(loc, var/unfinished = FALSE)
 	ident = rand(1, 999)
 	updatename("Default")
@@ -107,7 +112,9 @@
 	station_holomap = new(src)
 
 	radio = new /obj/item/device/radio/borg(src)
-	if(!camera)
+	aicamera = new/obj/item/device/camera/silicon/robot_camera(src)
+
+	if(!scrambledcodes && !camera)
 		camera = new /obj/machinery/camera(src)
 		camera.c_tag = real_name
 		if(!scrambledcodes)
@@ -803,7 +810,14 @@
 				updateicon()
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
-
+	else if(istype(W, /obj/item/device/toner))
+		if(toner >= tonermax)
+			to_chat(user, "The toner level of [src] is at its highest level possible")
+		else
+			if(user.drop_item())
+				toner = CYBORG_MAX_TONER
+				qdel(W)
+				to_chat(user, "You fill the toner level of [src] to its max capacity")
 	else if(istype(W, /obj/item/borg/upgrade/))
 		var/obj/item/borg/upgrade/U = W
 		if(U.attempt_action(src,user))

@@ -20,13 +20,14 @@
 		else
 			chosen = living.static_overlays[1]
 		static_overlays.Add(chosen)
-		client.images.Add(chosen)
+		if(client)
+			client.images.Add(chosen)
 
 /mob/living/silicon/robot/mommi/proc/remove_static_overlays()
 	if(client)
 		for(var/image/I in static_overlays)
 			client.images.Remove(I)
-	static_overlays.len = 0
+	static_overlays.Cut()
 
 /mob/living/silicon/robot/mommi/verb/toggle_statics()
 	set name = "Change Vision Filter"

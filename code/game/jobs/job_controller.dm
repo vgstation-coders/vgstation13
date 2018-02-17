@@ -492,6 +492,12 @@ var/global/datum/controller/occupations/job_master
 		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
 		W.buckle_mob(H,H)
 
+	if(H.disabilities & ASTHMA)
+		if(H.backbag == 1)
+			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/device/inhaler(H))
+		else
+			H.equip_or_collect(new /obj/item/device/inhaler(H), slot_in_backpack)
+		
 	return 1
 
 

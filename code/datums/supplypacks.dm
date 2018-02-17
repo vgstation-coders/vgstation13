@@ -508,6 +508,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	/obj/item/clothing/glasses/sunglasses/purple,
 	/obj/item/clothing/glasses/sunglasses/rockstar,
 	/obj/item/clothing/glasses/sunglasses/star,
+	/obj/item/clothing/glasses/sunglasses/red,
+	/obj/item/clothing/glasses/sunglasses/security,
 	)
 
 /datum/supply_packs/formal_wear
@@ -647,6 +649,20 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "russian clothing crate"
 	group = "Clothing"
 	contraband = 1
+
+/datum/supply_packs/contacts
+	name = "Contact lenses"
+	contains = list(/obj/item/clothing/glasses/contacts,
+					/obj/item/clothing/glasses/contacts,
+					/obj/item/clothing/glasses/contacts,
+					/obj/item/clothing/glasses/contacts,
+					/obj/item/weapon/nanitecontacts,
+					/obj/item/weapon/nanitecontacts)
+	cost = 150
+	containertype = /obj/structure/closet/crate
+	containername = "contacts crate"
+	group = "Clothing"
+
 //////SECURITY//////
 
 /datum/supply_packs/specialops
@@ -1789,6 +1805,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/fish_eggs/glofish,
 					/obj/item/weapon/circuitboard/fishwall,
 					/obj/item/weapon/circuitboard/fishwall,
+					/obj/item/weapon/circuitboard/conduction_plate
 					)
 	cost = 40
 	containertype = /obj/structure/closet/crate/hydroponics

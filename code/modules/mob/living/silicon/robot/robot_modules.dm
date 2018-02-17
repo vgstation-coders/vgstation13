@@ -102,7 +102,7 @@
 				R.hands.icon_state = module_holder
 
 /obj/item/weapon/robot_module/proc/AddCameraNetworks(var/mob/living/silicon/robot/R)
-	if(R.camera && CAMERANET_ROBOTS in R.camera.network)
+	if(R.camera)
 		for(var/network in networks)
 			if(!(network in R.camera.network))
 				R.camera.network.Add(network)
@@ -197,7 +197,7 @@
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
-	modules += new /obj/item/weapon/extinguisher(src)
+	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
 	modules += new /obj/item/weapon/wrench(src)
 	modules += new /obj/item/device/healthanalyzer(src)
@@ -398,6 +398,7 @@
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/soap/nanotrasen(src)
 	modules += new /obj/item/weapon/storage/bag/trash(src)
 	modules += new /obj/item/weapon/mop(src)
@@ -443,6 +444,7 @@
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/gripper/service(src)
 	modules += new /obj/item/weapon/pen/robopen(src)
 	modules += new /obj/item/weapon/dice/borg(src)
@@ -483,6 +485,8 @@
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
+	modules += new /obj/item/weapon/extinguisher/mini(src)
+	modules += new /obj/item/weapon/storage/bag/ore/auto(src)
 	modules += new /obj/item/weapon/pickaxe/drill/borg(src)
 	modules += new /obj/item/weapon/storage/bag/ore(src)
 	modules += new /obj/item/weapon/storage/bag/sheetsnatcher/borg(src)
@@ -490,6 +494,7 @@
 	modules += new /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg(src)
 	modules += new /obj/item/weapon/gripper/no_use/inserter(src)
 	modules += new /obj/item/device/destTagger/cyborg(src)
+	modules += new /obj/item/device/gps/cyborg(src)
 	var/obj/item/stack/package_wrap/W = new /obj/item/stack/package_wrap(src)
 	W.amount = SUPPLY_MAX_WRAP
 	W.max_amount = SUPPLY_MAX_WRAP
@@ -569,7 +574,7 @@
 /obj/item/weapon/robot_module/tg17355/New()
 	..()
 
-	modules += new /obj/item/weapon/extinguisher(src)
+	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/cookiesynth(src)
 	modules += new /obj/item/device/harmalarm(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/peace(src)

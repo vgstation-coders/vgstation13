@@ -218,17 +218,6 @@
 
 	if(ishuman(eater))
 		var/mob/living/carbon/human/H = eater
-		if((H.species.chem_flags & NO_EAT) && (isplasmaman(H)))
-			if(ismob(loc))
-				var/mob/M = loc
-				M.drop_from_inventory(src)
-			src.forceMove(get_turf(H))
-			if(H.is_wearing_item(/obj/item/clothing/head/helmet,slot_head))
-				H.visible_message("<span class='warning'>\The [src] slides off of the sealed helmet, falling to the floor below you.</span>", "<span class='notice'>\The [src] slides off of the sealed helmet and falls to the floor below you.</span>")
-				return
-				
-			H.visible_message("<span class='warning'>\The [src] falls out of the putrid jaw and tumbles down onto the floor, gross. </span>", "<span class='notice'>\The [src] falls out of the putrid jaw and onto the ground below you.</span>")
-			return
 		if((H.species.chem_flags & NO_EAT) && !(src.food_flags & FOOD_SKELETON_FRIENDLY))
 			if(ismob(loc))
 				var/mob/M = loc
@@ -5068,6 +5057,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "fishfillet"
 	filling_color = "#FFDEFE"
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/salmonmeat/New()
 	..()
@@ -5081,7 +5071,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "salmonsteak"
 	trash = /obj/item/trash/plate
 	filling_color = "#7A3D11"
-
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/salmonsteak/New()
 	..()
@@ -5094,6 +5084,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "fishfillet"
 	filling_color = "#FFDEFE"
+	food_flags = FOOD_MEAT
 
 
 /obj/item/weapon/reagent_containers/food/snacks/catfishmeat/New()
@@ -5101,11 +5092,38 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 6
 
+/obj/item/weapon/reagent_containers/food/snacks/glofishmeat
+	name = "raw glofish"
+	desc = "A fillet of raw glofish. The bioluminescence glands have been removed."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "fishfillet"
+	filling_color = "#FFDEFE"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/glofishmeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/goldfishmeat
+	name = "raw goldfish"
+	desc = "A fillet of raw goldfish, the golden carp."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "fishfillet"
+	filling_color = "#FFDEFE"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/goldfishmeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/fried_shrimp
 	name = "fried shrimp"
 	desc = "Just one of the many things you can do with shrimp!"
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "shrimp_fried"
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/fried_shrimp/New()
 	..()
@@ -5117,6 +5135,8 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "Just one of the many things you can do with shrimp!"
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "shrimp_cooked"
+	food_flags = FOOD_MEAT
+
 /obj/item/weapon/reagent_containers/food/snacks/boiled_shrimp/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
@@ -5127,6 +5147,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A simple sushi consisting of cooked shrimp and rice."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Ebi"
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Ebi/New()
 	..()
@@ -5138,6 +5159,8 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A simple sushi consisting of salmon roe."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Ikura"
+	food_flags = FOOD_MEAT
+
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Ikura/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
@@ -5148,6 +5171,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A simple sushi consisting of raw salmon and rice."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Sake"
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Sake/New()
 	..()
@@ -5159,6 +5183,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A simple sushi consisting of cooked salmon and rice."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_SmokedSalmon"
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_SmokedSalmon/New()
 	..()
@@ -5170,6 +5195,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A simple sushi consisting of egg and rice."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Tamago"
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Tamago/New()
 	..()
@@ -5181,6 +5207,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A piece of fried tofu stuffed with rice."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Inari"
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Inari/New()
 	..()
@@ -5192,6 +5219,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A simple sushi consisting of goldfish roe."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Masago"
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Masago/New()
 	..()
@@ -5203,6 +5231,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A simple sushi consisting of shark roe."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Masago"
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Tobiko/New()
 	..()
@@ -5214,6 +5243,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A sushi consisting of shark roe and an egg."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_TobikoEgg"
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_TobikoEgg/New()
 	..()
@@ -5226,6 +5256,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Tai"
 	bitesize = 3
+	food_flags = FOOD_MEAT
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Tai/New()
 	..()
@@ -5237,9 +5268,200 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A simple sushi consisting of eel and rice."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_Hokki"
+	food_flags = FOOD_MEAT
 
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi_Unagi/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_avocado
+	name = "Avocado Sushi"
+	desc = "A simple sushi consisting of avocado and rice."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "sushi_avocado"
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi_avocado/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/friedshrimp
+	name = "fried shrimp"
+	desc = "For such a little dish, it's surprisingly high calorie."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "friedshrimp"
+	bitesize = 3
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/friedshrimp/New()
+	..()
+	reagents.add_reagent(CORNOIL, 3)
+
+/obj/item/weapon/reagent_containers/food/snacks/soyscampi
+	name = "soy scampi"
+	desc = "A simple shrimp dish presented bathed in soy sauce."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "soyscampi"
+	bitesize = 3
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/soyscampi/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
+	reagents.add_reagent(SOYSAUCE, 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/shrimpcocktail
+	name = "shrimp cocktail"
+	desc = "An hors d'oeuvre which has traditionally swung like a pendulum between the height of fashion and ironically passe."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "shrimpcocktail"
+	bitesize = 3
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/shrimpcocktail/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	if(prob(50))
+		desc += " This one is ironic."
+		reagents.add_reagent(HONKSERUM, 1)
+	else
+		desc += " This one is high fashion."
+		reagents.add_reagent(MINTTOXIN, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/friedcatfish
+	name = "fried catfish"
+	desc = "A traditional catfish fry. It's positively coated in oils."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "friedcatfish"
+	bitesize = 3
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/friedcatfish/New()
+	..()
+	reagents.add_reagent(CORNOIL, 3)
+
+/obj/item/weapon/reagent_containers/food/snacks/catfishgumbo
+	name = "catfish gumbo"
+	desc = "A traditional, thick cajun broth. Made with bottom-feeders for bottom-feeders."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "catfishgumbo"
+	bitesize = 3
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/catfishgumbo/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+
+/obj/item/weapon/reagent_containers/food/snacks/catfishcourtbouillon
+	name = "catfish courtbouillon"
+	desc = "A lightly breaded catfish fillet poached in a spicy hot-sauce short broth."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "catfishcourtbouillon"
+	bitesize = 3
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/catfishcourtbouillon/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(CAPSAICIN, 3)
+
+/obj/item/weapon/reagent_containers/food/snacks/smokedsalmon
+	name = "smoked salmon"
+	desc = "Perhaps the best known method of preparing salmon, smoking has been used to preserve fish for most of recorded history. The subtleties of avoiding overpowering the fatty, rich flavor of the salmon with the smoke make this a difficult dish to master."
+	icon_state = "smokedsalmon"
+	bitesize = 3
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/smokedsalmon/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+
+/obj/item/weapon/reagent_containers/food/snacks/planksalmon
+	name = "plank-grilled salmon"
+	desc = "A simple dish that grills the flavor of wood into the meat, leaving you with a charred but workable plate in the process."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "planksalmon"
+	bitesize = 3
+	food_flags = FOOD_MEAT
+	trash = /obj/item/stack/sheet/wood
+
+/obj/item/weapon/reagent_containers/food/snacks/planksalmon/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+
+/obj/item/weapon/reagent_containers/food/snacks/citrussalmon
+	name = "citrus-baked salmon"
+	desc = "The piquant, almost sour flavor of the citrus fruit is baked into the fish under dry heat, to give it powerful attaque to balance its rich aftertaste."
+	icon_state = "citrussalmon"
+	bitesize = 3
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/citrussalmon/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+
+/obj/item/weapon/reagent_containers/food/snacks/salmonavocado
+	name = "salmon avocado salad"
+	desc = "The creamy, buttery taste of the avocado brings unity to the nutty, meaty taste of the mushrooms and the fatty, rich taste of the salmon."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "salmonavocado"
+	bitesize = 3
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/salmonavocado/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+
+/obj/item/weapon/reagent_containers/food/snacks/rumshark
+	name = "spiced rum shark supreme"
+	desc = "When you really need something to get this party started. A savory dish enriched by alcohol."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "rumshark"
+	bitesize = 3
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/rumshark/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(RUM, 15)
+
+
+/obj/item/weapon/reagent_containers/food/snacks/akutaq
+	name = "glofish akutaq"
+	desc = "This eskimo dish literally means 'something mixed'. The fat of glowish is rendered down and mixed with milk and glowberries to make a surprisingly tasty dessert dish."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "akutaq"
+	bitesize = 3
+	food_flags = FOOD_MEAT | FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/akutaq/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
+	reagents.add_reagent(SUGAR, 6)
+
+/obj/item/weapon/reagent_containers/food/snacks/carpcurry
+	name = "golden carp curry"
+	desc = "A simple traditional Space Japan curry with tangy golden carp meat."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "carpcurry"
+	bitesize = 3
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/carpcurry/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+
+/obj/item/weapon/reagent_containers/food/snacks/carpconsomme
+	name = "golden carp consomme"
+	desc = "A clear soup made from a concentrated broth of fish and egg whites. It's light on calories and makes you feel much more cultured."
+	icon = 'icons/obj/seafood.dmi'
+	icon_state = "carpconsomme"
+	bitesize = 3
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/carpconsomme/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(METHYLIN,5)

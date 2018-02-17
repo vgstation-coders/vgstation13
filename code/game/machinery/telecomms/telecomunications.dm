@@ -97,7 +97,8 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 				"lquote" = signal.data["lquote"],
 				"rquote" = signal.data["rquote"],
 				"message_classes" = signal.data["message_classes"],
-				"wrapper_classes" = signal.data["wrapper_classes"]
+				"wrapper_classes" = signal.data["wrapper_classes"],
+				"trace" = signal.data["trace"]
 			)
 
 			// Keep the "original" signal constant
@@ -131,7 +132,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 /obj/machinery/telecomms/proc/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
 	// receive information from linked machinery
-	..()
+	return
 
 /obj/machinery/telecomms/proc/is_freq_listening(datum/signal/signal)
 	// return 1 if found, 0 if not found
@@ -169,6 +170,11 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 		unlinkFrom(null, link)
 	telecomms_list -= src
 	..()
+
+/obj/machinery/telecomms/unlinkFrom(var/mob/user, var/obj/buffer)
+	..()
+	for(var/obj/machinery/computer/telecomms/monitor/M in range(25,src))
+		M.notify_unlinked()
 
 // Used in auto linking
 /obj/machinery/telecomms/proc/add_link(var/obj/machinery/telecomms/T)
@@ -314,9 +320,14 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	if(!check_receive_level(signal))
 		return
 	say_testing(mob, "[src] is on, has signal, and receive is good")
+
 	if(signal.transmission_method == 2)
 
 		if(is_freq_listening(signal)) // detect subspace signals
+			signal.data["traffic"] += 1 //Valid step point.
+			if(signal.data["trace"])
+				var/obj/machinery/computer/telecomms/monitor/M = signal.data["trace"]
+				M.receive_trace(src, "Hub or Bus")
 
 			//Remove the level and then start adding levels that it is being broadcasted in.
 			signal.data["level"] = list()
@@ -324,6 +335,8 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 			var/can_send = relay_information(signal, "/obj/machinery/telecomms/hub") // ideally relay the copied information to relays
 			if(!can_send)
 				relay_information(signal, "/obj/machinery/telecomms/bus") // Send it to a bus instead, if it's linked to one
+
+
 		else
 			say_testing(mob, "[src] is not listening")
 	else
@@ -384,10 +397,17 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 /obj/machinery/telecomms/hub/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
 	if(is_freq_listening(signal))
+		signal.data["traffic"] += 1 //Valid step point.
 		if(istype(machine_from, /obj/machinery/telecomms/receiver))
+			if(signal.data["trace"])
+				var/obj/machinery/computer/telecomms/monitor/M = signal.data["trace"]
+				M.receive_trace(src, "Bus")
 			//If the signal is compressed, send it to the bus.
 			relay_information(signal, "/obj/machinery/telecomms/bus", 1) // ideally relay the copied information to bus units
 		else
+			if(signal.data["trace"])
+				var/obj/machinery/computer/telecomms/monitor/M = signal.data["trace"]
+				M.receive_trace(src, "Broadcaster")
 			// Get a list of relays that we're linked to, then send the signal to their levels.
 			relay_information(signal, "/obj/machinery/telecomms/relay", 1)
 			relay_information(signal, "/obj/machinery/telecomms/broadcaster", 1) // Send it to a broadcaster.
@@ -431,7 +451,9 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	RefreshParts()
 
 /obj/machinery/telecomms/relay/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
-
+	/*var/obj/machinery/computer/telecomms/monitor/M = signal.data["trace"]
+	if(M) Don't really care about relays
+		M.receive_trace(src, "None")*/
 	// Add our level and send it back
 	if(can_send(signal))
 		signal.data["level"] |= listening_level
@@ -493,12 +515,16 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 /obj/machinery/telecomms/bus/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
 
 	if(is_freq_listening(signal))
+		signal.data["traffic"] += 1 //Valid step point.
+		var/obj/machinery/computer/telecomms/monitor/M = signal.data["trace"]
 
 		if(change_frequency)
 			signal.frequency = change_frequency
 
 		if(!istype(machine_from, /obj/machinery/telecomms/processor) && machine_from != src) // Signal must be ready (stupid assuming machine), let's send it
 			// send to one linked processor unit
+			if(M)
+				M.receive_trace(src, "Processor")
 			var/send_to_processor = relay_information(signal, "/obj/machinery/telecomms/processor")
 
 			if(send_to_processor)
@@ -508,6 +534,8 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 			src.receive_information(signal, src)
 
 		// Try sending it!
+		if(M)
+			M.receive_trace(src, "Server, Hub, Broadcaster, or Bus")
 		var/list/try_send = list("/obj/machinery/telecomms/server", "/obj/machinery/telecomms/hub", "/obj/machinery/telecomms/broadcaster", "/obj/machinery/telecomms/bus")
 		var/i = 0
 		for(var/send in try_send)
@@ -560,6 +588,10 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 
 /obj/machinery/telecomms/processor/receive_information(datum/signal/signal, obj/machinery/telecomms/machine_from)
 	if(is_freq_listening(signal))
+		signal.data["traffic"] += 1 //Valid step point.
+		if(signal.data["trace"])
+			var/obj/machinery/computer/telecomms/monitor/M = signal.data["trace"]
+			M.receive_trace(src, "Bus")
 
 		if(process_mode)
 			signal.data["compression"] = 0 // uncompress subspace signal
@@ -636,6 +668,10 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	if(signal.data["message"])
 
 		if(is_freq_listening(signal))
+			signal.data["traffic"] += 1 //Valid step point.
+			if(signal.data["trace"])
+				var/obj/machinery/computer/telecomms/monitor/monitor = signal.data["trace"]
+				monitor.receive_trace(src, "Hub or Broadcaster")
 
 			if(traffic > 0)
 				totaltraffic += traffic // add current traffic to total traffic

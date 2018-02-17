@@ -1,4 +1,4 @@
-/mob/living/silicon/robot/Process_Spaceslipping(var/prob_slip=5)
+/mob/living/silicon/robot/Process_Spaceslipping(var/prob_slip = 5)
 	if(module && module.no_slip) //	The magic of magnets.
 		return FALSE
 	..()
@@ -11,7 +11,7 @@
 		for(var/obj/item/weapon/tank/jetpack/J in module.modules)
 			if(J && istype(J, /obj/item/weapon/tank/jetpack))
 				if(((!check_drift) || (check_drift && J.stabilization_on)) && (J.allow_thrust(0.01, src)))
-					inertia_dir = 0
+					inertia_dir = FALSE
 					return TRUE
 				if((!check_drift && J.allow_thrust(0.01)))
 					return TRUE

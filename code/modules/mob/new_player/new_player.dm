@@ -462,6 +462,9 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	if(client.prefs.disabilities & DISABILITY_FLAG_VEGAN)
 		new_character.dna.SetSEState(VEGANBLOCK, 1, 1)
+		
+	if(client.prefs.disabilities & DISABILITY_FLAG_ASTHMA)
+		new_character.dna.SetSEState(ASTHMABLOCK, 1, 1)
 
 	chosen_species = all_species[client.prefs.species]
 	if( (client.prefs.disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
