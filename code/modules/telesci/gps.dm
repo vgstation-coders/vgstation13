@@ -151,7 +151,7 @@ var/list/SPS_list = list()
 
 /obj/item/device/gps/pai
 	base_name = "pAI positioning system"
-  icon_state = "gps-b"
+  	icon_state = "gps-b"
 	base_tag = "PAI"
 	builtin = TRUE
 
