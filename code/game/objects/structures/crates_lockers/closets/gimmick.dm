@@ -4,12 +4,71 @@
 	icon_state = "cabinet_closed"
 	icon_closed = "cabinet_closed"
 	icon_opened = "cabinet_open"
+	autoignition_temperature = AUTOIGNITION_WOOD
+	fire_fuel = 3
 
-/obj/structure/closet/cabinet/update_icon()
-	if(!opened)
-		icon_state = icon_closed
-	else
-		icon_state = icon_opened
+/obj/structure/closet/cabinet/canweld()
+	return 0
+
+/obj/structure/closet/cabinet/snow
+	name = "snow gear cabinet"
+	desc = "A cabinet filled with snow gear for extra-station activity."
+	var/obj/structure/hanger_rail/hanger_rail
+
+/obj/structure/closet/cabinet/snow/New()
+	..()
+	hanger_rail = new (src)
+
+/obj/structure/closet/cabinet/snow/close()
+	. = ..()
+	if(.)
+		unlock_atom(hanger_rail)
+		hanger_rail.forceMove(src)
+
+/obj/structure/closet/cabinet/snow/open()
+	. = ..()
+	if(.)
+		hanger_rail.forceMove(get_turf(src))
+		lock_atom(hanger_rail)
+
+/obj/structure/closet/cabinet/snow/Destroy()
+	..()
+	qdel(hanger_rail)
+	hanger_rail = null
+
+/obj/structure/hanger_rail
+	icon = 'icons/obj/closet.dmi'
+	icon_state = "hanger_rail"
+	name = "hanger rail"
+	desc = "This rail is for holding NT standard-issue winter coats."
+	var/coats = 4
+	density = 0
+	anchored = 1
+	flags = FPRINT
+	layer = ABOVE_OBJ_LAYER
+
+/obj/structure/hanger_rail/attack_hand(var/mob/user,params,proximity)
+	..()
+	if(!proximity)
+		return
+	if(coats)
+		to_chat(user,"<span class='notice'>You remove a pair of boots and a coat from the hanger.</span>")
+		add_fingerprint(user)
+		var/winterboots = new /obj/item/clothing/shoes/winterboots(get_turf(src))
+		user.put_in_inactive_hand(winterboots)
+		var/wintercoat = new /obj/item/clothing/suit/wintercoat(get_turf(src))
+		user.put_in_active_hand(wintercoat)
+		coats--
+		update_icon()
+
+/obj/structure/hanger_rail/update_icon()
+	overlays.Cut()
+	for(var/i = 1 to coats)
+		overlays += image(icon,"coat[i]")
+
+/obj/structure/hanger_rail/New()
+	..()
+	update_icon()
 
 /obj/structure/closet/cabinet/medivault
 	name = "old cabinet"
