@@ -495,6 +495,10 @@ var/global/num_vending_terminals = 1
 			to_chat(user, "<span class='info'>Nothing happens.</span>")
 				
 	else if(istype(W, /obj/item/weapon/card))
+		if(currently_vending) //We're trying to pay, not set the account
+			connect_account(user, W)
+			src.updateUsrDialog()
+			return
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(linked_account)
 			if(account_first_linked)
@@ -897,6 +901,8 @@ var/global/num_vending_terminals = 1
 		var/obj/item/weapon/card/card = usr.get_id_card()
 		if(card)
 			connect_account(usr, card)
+		else
+			to_chat(usr, "<span class='warning'>Please present a valid ID.</span>")
 		src.updateUsrDialog()
 		return
 
