@@ -1401,6 +1401,13 @@
 	Paralyse(paralyse_duration)
 	Jitter(jitter_duration)
 
+/mob/living/carbon/human/proc/asthma_attack()
+	if(disabilities & ASTHMA && !(M_NO_BREATH in mutations) && !(has_reagent_in_blood(ALBUTEROL)))
+		forcesay("-")
+		visible_message("<span class='danger'>\The [src] begins wheezing and grabbing at their throat!</span>", \
+									"<span class='warning'>You begin wheezing and grabbing at your throat!</span>")
+		src.reagents.add_reagent(MUCUS, 10)
+
 // Makes all robotic limbs organic.
 /mob/living/carbon/human/proc/make_robot_limbs_organic()
 	for(var/datum/organ/external/O in src.organs)

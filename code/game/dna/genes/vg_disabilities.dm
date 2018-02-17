@@ -117,3 +117,17 @@
 				else
 					H.vomit()
 				break
+
+/datum/dna/gene/disability/asthma
+	name = "Asthma"
+	desc = "A condition in which a person's airways become inflamed, narrow and swell, and produce extra mucus, which makes it difficult to breathe."
+	activation_message = "You feel short of breath."
+	deactivation_message = "You can breathe normally again."
+	disability= ASTHMA
+	
+	mutation = M_ASTHMA
+	
+/datum/dna/gene/disability/asthma/New()
+	..()
+	block = ASTHMABLOCK
+	
