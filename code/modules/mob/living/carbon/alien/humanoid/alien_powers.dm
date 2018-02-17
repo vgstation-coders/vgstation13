@@ -218,7 +218,7 @@ Doesn't work on other aliens/AI.*/
 
 /proc/is_valid_target_to_acid(var/atom/target, mob/user,var/range=1)
 	if(get_dist(user, target) > range) 
-		to_chat(usr, "<span class='alien'>Target is too far away!</span>")
+		to_chat(user, "<span class='alien'>Target is too far away!</span>")
 		return FALSE
 	if(target.isacidhardened())
 		if(!do_after(user,target,3 SECONDS))
