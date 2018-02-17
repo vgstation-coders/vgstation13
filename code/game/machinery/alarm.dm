@@ -95,7 +95,8 @@
 
 /obj/machinery/alarm/vox
 	preset = AALARM_PRESET_VOX
-	req_access = list()
+	req_one_access = list()
+	req_access = list(access_trade)
 
 /obj/machinery/alarm/proc/apply_preset(var/no_cycle_after=0)
 	// Propogate settings.
