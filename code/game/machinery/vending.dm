@@ -493,7 +493,7 @@ var/global/num_vending_terminals = 1
 			to_chat(user, "<span class='info'>[src] responds with a soft beep.</span>")
 		else
 			to_chat(user, "<span class='info'>Nothing happens.</span>")
-				
+
 	else if(istype(W, /obj/item/weapon/card))
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(linked_account)
@@ -2914,15 +2914,12 @@ var/global/num_vending_terminals = 1
 	accepted_coins = list(/obj/item/weapon/coin/trader)
 
 	premium = list(
-		/obj/item/weapon/storage/trader_marauder,
-		//obj/item/weapon/storage/backpack/holding, //Players did exactly what you would expect and bought them for their own use.  Keep in mind that an obj should be good but not so good they want it for themselves
+		/obj/item/weapon/storage/trader_chemistry,
+		/obj/structure/closet/secure_closet/wonderful,
+		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard,
 		/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
 		/obj/item/weapon/storage/bluespace_crystal,
-		//obj/item/clothing/shoes/magboots/elite,
 		/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
-		/obj/item/weapon/reagent_containers/glass/bottle/peridaxon,
-		/obj/item/weapon/reagent_containers/glass/bottle/rezadone,
-		/obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall,
 		/obj/item/clothing/shoes/clown_shoes/advanced,
 		/obj/item/fish_eggs/seadevil,
 		)
@@ -2933,6 +2930,9 @@ var/global/num_vending_terminals = 1
 
 	for(var/random_items = 1 to premium.len - 5)
 		premium.Remove(pick(premium))
+
+	if(premium.Find(/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard))
+		load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
 	..()
 
 /obj/machinery/vending/barber
