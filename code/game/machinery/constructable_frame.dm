@@ -914,6 +914,16 @@ obj/item/weapon/circuitboard/rdserver
 
 // Telecomms circuit boards:
 
+/obj/item/weapon/circuitboard/telecomms/pda_multicaster
+	name = "Circuit Board (PDA multicaster)"
+	desc = "A circuit board used to run a machine that resends messages."
+	build_path = "/obj/machinery/telecomms/pda_multicaster"
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=2"
+	req_components = list(
+							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
+							"/obj/item/weapon/stock_parts/manipulator" = 1)
+
 /obj/item/weapon/circuitboard/telecomms/receiver
 	name = "Circuit Board (telecommunications subspace receiver)"
 	desc = "A circuit board used to run a machine that receives subspace transmissions in telecommunications systems."
