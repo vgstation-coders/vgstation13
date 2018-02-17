@@ -614,12 +614,13 @@
 				H.take_overall_damage(20, 0, "Blunt Trauma")//horribly maim any living creature jumping down disposals.  c'est la vie
 				*/
 
-		if(prob(2) && has_fat_guy()) // chance of becoming stuck per segment if contains a fat guy
-			active = 0
+		if(prob(2) // chance of becoming stuck per segment if contains a fat guy
+			if(has_fat_guy())
+				active = 0
 			// find the fat guys
-			for(var/mob/living/carbon/human/H in src)
+				for(var/mob/living/carbon/human/H in src)
 
-			break
+				break
 		sleep(1)		// was 1
 		if(!loc || isnull(loc))
 			qdel(src)
