@@ -859,6 +859,9 @@ its easier to just keep the beam vertical.
 /atom/proc/acidable()
 	return 0
 
+/atom/proc/isacidhardened()
+	return FALSE
+	
 /atom/proc/holomapAlwaysDraw()
 	return 1
 
