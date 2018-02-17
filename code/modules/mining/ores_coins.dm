@@ -40,7 +40,8 @@
 /obj/item/weapon/ore/glass/throw_impact(atom/hit_atom)
 	//Intentionally not calling ..()
 	if(isturf(hit_atom))
-		new/obj/effect/decal/cleanable/scattered_sand(hit_atom)
+		if(!locate(/obj/effect/decal/cleanable/scattered_sand) in hit_atom)
+			new/obj/effect/decal/cleanable/scattered_sand(hit_atom)
 		qdel(src)
 	else if(ishuman(hit_atom))
 		var/mob/living/carbon/human/H = hit_atom
