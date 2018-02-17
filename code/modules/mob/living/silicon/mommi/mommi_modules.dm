@@ -64,9 +64,11 @@
 		"RuskieBot" = "ruskiebot"
 		)
 
-/obj/item/weapon/robot_module/mommi/soviet/New(var/mob/living/silicon/robot/R)
+/obj/item/weapon/robot_module/mommi/soviet/New(var/mob/living/silicon/robot/R) //Powercreep!
 	..()
-	//Powercreep, YEAH!
-	modules += new /obj/item/device/rcd/borg(src)
-	modules += new /obj/item/device/lightreplacer/borg(src)
+	modules += new /obj/item/device/rcd/borg/engineering(src)
+	modules += new /obj/item/device/instrument/instrument_synth(src)
+	modules += new /obj/item/device/rcd/borg/rsf/soviet(src)
+	modules += new /obj/item/weapon/soap/syndie(src)
 	modules += new /obj/item/weapon/pickaxe/plasmacutter(src)
+	modules += new /obj/item/weapon/storage/bag/ore/auto(src)

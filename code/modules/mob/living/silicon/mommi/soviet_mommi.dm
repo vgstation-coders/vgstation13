@@ -11,8 +11,15 @@
 /mob/living/silicon/robot/mommi/soviet/updatename() // Fuck individualism
   name = "[prefix] [num2text(ident)]"
 
+/mob/living/silicon/robot/identification_string()
+  return name
+
+/mob/living/silicon/robot/mommi/soviet/can_see_static() //Fuck the config i told you we were hardcore.
+  if(emagged || syndicate)
+    return FALSE
+  return TRUE
+
 /mob/living/silicon/robot/mommi/soviet/New()
   ..()
   pick_module("Soviet")
   generate_static_overlay()
-  add_static_overlays()  //I SAID FUCK INDIVIDUALISM

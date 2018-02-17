@@ -316,9 +316,9 @@
 
 	modules += new /obj/item/weapon/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher(src)
+	modules += new /obj/item/weapon/extinguisher/foam(src)
 	modules += new /obj/item/device/rcd/borg/engineering(src)
 	modules += new /obj/item/device/rcd/rpd(src) //What could possibly go wrong?
-	modules += new /obj/item/weapon/extinguisher/foam(src)
 	modules += new /obj/item/weapon/weldingtool/largetank(src)
 	modules += new /obj/item/weapon/screwdriver(src)
 	modules += new /obj/item/weapon/wrench(src)
@@ -488,7 +488,6 @@
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/storage/bag/ore/auto(src)
 	modules += new /obj/item/weapon/pickaxe/drill/borg(src)
-	modules += new /obj/item/weapon/storage/bag/ore(src)
 	modules += new /obj/item/weapon/storage/bag/sheetsnatcher/borg(src)
 	modules += new /obj/item/device/mining_scanner(src)
 	modules += new /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg(src)
