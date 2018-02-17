@@ -9,8 +9,8 @@ var/list/forbidden_varedit_object_types = list(
 //If called with just [user] argument, it allows you to create a value such as a string, a number, an empty list, a nearby object, etc...
 //If called with [edited_datum] and [edited_variable], you gain the ability to get the variable's initial value.
 
-// recursive : if we're setting a variable in a list
-/proc/variable_set(mob/user, datum/edited_datum = null, edited_variable = null, autoselect_var_type = FALSE, value_override = null, logging = TRUE, var/recursive = TRUE)
+// acceptsLists : if we're setting a variable in a list
+/proc/variable_set(mob/user, datum/edited_datum = null, edited_variable = null, autoselect_var_type = FALSE, value_override = null, logging = TRUE, var/acceptsLists = TRUE)
 	var/client/C
 
 	if(ismob(user))
@@ -122,6 +122,10 @@ var/list/forbidden_varedit_object_types = list(
 		"null"   = V_NULL,
 		)
 
+		if (!acceptsLists)
+			choices -= V_LIST
+			choices -= V_LIST_EMPTY
+
 		if(C.holder.marked_datum) //Add the marked datum option
 			var/list_item_name
 			if(isdatum(C.holder.marked_datum))
@@ -162,10 +166,12 @@ var/list/forbidden_varedit_object_types = list(
 				new_value = input("Select type", window_title) as null|anything in matches
 
 			if(V_LIST_EMPTY)
-				new_value = list()
+				if (acceptsLists)
+					new_value = list()
 
 			if(V_LIST)
-				new_value = C.populate_list()
+				if (acceptsLists)
+					new_value = C.populate_list()
 
 			if(V_OBJECT)
 				new_value = input("Select reference:", window_title, old_value) as mob|obj|turf|area in range(8, get_turf(user))
@@ -238,7 +244,7 @@ var/list/forbidden_varedit_object_types = list(
 	var/to_continue = TRUE
 	var/list/things_to_return = list()
 	while (to_continue)
-		things_to_return += variable_set(src, recursive = FALSE)
+		things_to_return += variable_set(src, acceptsLists = FALSE)
 		to_continue = (alert("Do you want to add another item to the list? It has currently [things_to_return.len] items.", "Filling a list", "Yes", "No") == "Yes")
 
 	return things_to_return
