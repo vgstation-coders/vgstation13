@@ -3,7 +3,7 @@
 	flag = TRADER
 	department_flag = CIVILIAN
 	faction = "Station"
-	total_positions = 0
+	total_positions = 3
 	spawn_positions = 3
 	supervisors = "nobody"
 	selection_color = "#dddddd"
@@ -24,6 +24,8 @@
 	idtype = /obj/item/weapon/card/id/vox
 
 	no_headset = 1
+
+	//Throwing latejoin is handled in new_player, list of jobs at line 312
 
 /datum/job/trader/equip(var/mob/living/carbon/human/H)
 	if(!H)

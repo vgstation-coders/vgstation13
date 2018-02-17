@@ -309,6 +309,7 @@
 		if(prob(10)) // 10% of those have a good mut.
 			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
 
+var/global/list/meteor_spawn = list("Trader")
 
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
@@ -329,11 +330,15 @@
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
 
-	// TODO:  Job-specific latejoin overrides.
-	character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
-
 	job_master.EquipRank(character, rank, 1)					//equips the human
 	EquipCustomItems(character)
+
+	// TODO:  Job-specific latejoin overrides.
+	if(meteor_spawn.Find(character.mind.assigned_role))
+		character.Meteortype_Latejoin(rank)
+	else
+		character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
+
 
 	character.store_position()
 
@@ -363,11 +368,27 @@
 	if(character.mind.assigned_role != "Cyborg")
 		data_core.manifest_inject(character)
 		ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
-		AnnounceArrival(character, rank)
+		if(!meteor_spawn.Find(character.mind.assigned_role))
+			AnnounceArrival(character, rank)
 		FuckUpGenes(character)
 	else
 		character.Robotize()
 	qdel(src)
+
+/mob/living/carbon/human/proc/Meteortype_Latejoin(rank)
+	var/obj/effect/landmark/start/endpoint = null
+	for(var/obj/effect/landmark/start/S in landmarks_list)
+		if(S.name == rank)
+			endpoint = S
+			break
+	if(!endpoint)
+		message_admins("ERROR - NO VALID TRADER SPAWN. Here's what I've got: [json_encode(landmarks_list)]")
+		//Error! We have no targetable spawn!
+		return
+	var/turf/start_point = locate(TRANSITIONEDGE + 2, rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2)), endpoint.z)
+	forceMove(start_point)
+	throw_at(endpoint)
+
 
 /proc/AnnounceArrival(var/mob/living/carbon/human/character, var/rank)
 	if (ticker.current_state == GAME_STATE_PLAYING)
@@ -462,7 +483,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	if(client.prefs.disabilities & DISABILITY_FLAG_VEGAN)
 		new_character.dna.SetSEState(VEGANBLOCK, 1, 1)
-		
+
 	if(client.prefs.disabilities & DISABILITY_FLAG_ASTHMA)
 		new_character.dna.SetSEState(ASTHMABLOCK, 1, 1)
 
