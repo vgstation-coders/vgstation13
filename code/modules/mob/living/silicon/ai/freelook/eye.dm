@@ -79,11 +79,6 @@
 			if (isturf(src.loc) || isturf(src))
 				AI.eyeobj.forceMove(src)
 
-/mob/living/silicon/ai/Click()
-	if(!aicamera.in_camera_mode) //Fix for taking photos of mobs
-		return
-	..()
-
 // This will move the AIEye. It will also cause lights near the eye to light up, if toggled.
 // This is handled in the proc below this one.
 

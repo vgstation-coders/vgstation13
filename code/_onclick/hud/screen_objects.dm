@@ -453,12 +453,18 @@
 		if("Take Image")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
-				AI.aicamera.toggle_camera_mode()
+				AI.aicamera.toggle_camera_mode(AI)
+			else if(isrobot(usr))
+				var/mob/living/silicon/robot/R = usr
+				R.aicamera.toggle_camera_mode(R)
 
 		if("View Images")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
-				AI.aicamera.viewpictures()
+				AI.aicamera.viewpictures(AI)
+			else if(isrobot(usr))
+				var/mob/living/silicon/robot/R = usr
+				R.aicamera.viewpictures(R)
 
 		if("Configure Radio")
 			if(isAI(usr))

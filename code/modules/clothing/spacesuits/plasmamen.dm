@@ -19,14 +19,19 @@
 	var/next_extinguish=0
 	var/extinguish_cooldown=10 SECONDS
 
-/obj/item/clothing/suit/space/plasmaman/proc/Extinguish(var/mob/user)
-	var/mob/living/carbon/human/H=user
+/obj/item/clothing/suit/space/plasmaman/proc/Extinguish(var/mob/living/carbon/human/H)
 	if(next_extinguish > world.time)
 		return
 
 	next_extinguish = world.time + extinguish_cooldown
 	to_chat(H, "<span class='warning'>Your suit automatically extinguishes the fire.</span>")
 	H.ExtinguishMob()
+
+/obj/item/clothing/suit/space/plasmaman/proc/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
+	if(H.bodytemperature < T0C+37)
+		H.bodytemperature = min(H.bodytemperature+5,T0C+37)
+	else
+		H.bodytemperature = max(H.bodytemperature-5,T0C+37)
 
 /obj/item/clothing/head/helmet/space/plasmaman
 	name = "plasmaman helmet"

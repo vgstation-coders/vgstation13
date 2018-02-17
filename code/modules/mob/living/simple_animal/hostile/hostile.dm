@@ -299,6 +299,8 @@
 		ranged_cooldown = ranged_cooldown_cap
 		if(ranged_message)
 			visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
+		if(ckey)
+			add_attacklogs(src, target, "[ranged_message ? ranged_message : "shot"] at")
 		if(casingtype)
 			new casingtype(get_turf(src),1)// empty casing
 

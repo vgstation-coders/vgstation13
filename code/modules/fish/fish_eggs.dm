@@ -20,7 +20,10 @@ var/list/fish_eggs_list = list("dud" = /obj/item/fish_eggs,
 									"shrimp" = /obj/item/fish_eggs/shrimp,
 									"electric eel" = /obj/item/fish_eggs/electric_eel,
 									"glofish" = /obj/item/fish_eggs/glofish,
+									"sea devil" = /obj/item/fish_eggs/seadevil
 									)
+
+var/list/nonhatching_types = list("sea devil") //If you ever want to create another no-egg fish, add it here.
 
 /obj/item/fish_eggs/goldfish
 	name = "goldfish eggs"
@@ -81,3 +84,17 @@ var/list/fish_eggs_list = list("dud" = /obj/item/fish_eggs,
 	desc = "A cluster of bright neon eggs belonging to a bio-luminescent species of fish."
 	icon_state = "glofish_eggs"
 	fish_type = "glofish"
+
+/obj/item/fish_eggs/seadevil
+	name = "sea devil"
+	desc = "An aquatic offshoot of gremlins that engage in the peculiar behavior of hatching fish eggs to eat mature adults."
+	icon_state = "seadevil"
+	fish_type = "sea devil"
+
+/obj/item/fish_eggs/seadevil/New()
+	..()
+	processing_objects += src
+
+/obj/item/fish_eggs/seadevil/process()
+	if(istype(loc, /turf) && prob(60))
+		Move(get_step(loc, pick(cardinal)))

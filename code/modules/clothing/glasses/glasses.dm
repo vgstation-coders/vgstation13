@@ -122,6 +122,17 @@
 	name = "red star-shaped sunglasses"
 	desc = "Novelty sunglasses with a fancy silver frame and two red-tinted star-shaped lenses. You should probably stomp on them and get a pair of normal ones."
 	icon_state = "sun_star_silver"
+	
+/obj/item/clothing/glasses/sunglasses/red
+	name = "red sunglasses"
+	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes, and the colored lenses let you see the world in red."
+	icon_state = "sunred"
+	item_state = "sunred"
+	
+/obj/item/clothing/glasses/sunglasses/security
+	name = "security sunglasses"
+	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes. Often worn by budget security officers."
+	icon_state = "sunhud"
 
 /obj/item/clothing/glasses/virussunglasses
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."

@@ -508,6 +508,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	/obj/item/clothing/glasses/sunglasses/purple,
 	/obj/item/clothing/glasses/sunglasses/rockstar,
 	/obj/item/clothing/glasses/sunglasses/star,
+	/obj/item/clothing/glasses/sunglasses/red,
+	/obj/item/clothing/glasses/sunglasses/security,
 	)
 
 /datum/supply_packs/formal_wear
@@ -1789,6 +1791,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/fish_eggs/glofish,
 					/obj/item/weapon/circuitboard/fishwall,
 					/obj/item/weapon/circuitboard/fishwall,
+					/obj/item/weapon/circuitboard/conduction_plate
 					)
 	cost = 40
 	containertype = /obj/structure/closet/crate/hydroponics
