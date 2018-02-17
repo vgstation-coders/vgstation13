@@ -221,8 +221,8 @@ Doesn't work on other aliens/AI.*/
 		to_chat(usr, "<span class='alien'>Target is too far away!</span>")
 		return FALSE
 	if(target.isacidhardened())
-		if(!do_after(usr,target,3 SECONDS))
-			to_chat(usr, "<span class='alien'>You have to stay next to the object to acid it!</span>")
+		if(!do_after(user,target,3 SECONDS))
+			to_chat(user, "<span class='alien'>You have to stay next to the object to acid it!</span>")
 			return FALSE
 		return TRUE
 	if(!ismob(target) && target.acidable())
@@ -248,7 +248,7 @@ Doesn't work on other aliens/AI.*/
 
 /proc/acidify(atom/O, mob/user)
 	new /obj/effect/alien/acid(get_turf(O), O)
-	user.visible_message("<span class='alien'>\The [usr] vomits globs of vile stuff all over [O]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
+	user.visible_message("<span class='alien'>\The [user] vomits globs of vile stuff all over [O]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
 
 /spell/aoe_turf/alienregurgitate
 	name = "Regurgitate"
