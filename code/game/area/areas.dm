@@ -418,7 +418,7 @@ var/area/space_area
 
 	if(project_shadows)
 		Obj.update_shadow()
-	else if(oldArea.project_shadows)
+	else if(istype(oldArea) && oldArea.project_shadows)
 		Obj.underlays -= Obj.shadow
 
 	for(var/mob/mob_in_obj in Obj.contents)
