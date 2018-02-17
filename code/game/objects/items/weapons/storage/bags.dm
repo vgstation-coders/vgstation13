@@ -125,6 +125,38 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg", "/obj/item/weapon/reagent_containers/food/snacks/honeycomb")
 
+/obj/item/weapon/storage/bag/plants/portactor
+	name = "portable seed extractor"
+	desc = "A heavy-duty, yet portable seed extractor. Less efficient than the stationary machine, this version can extract at most two seeds per sample."
+	icon_state = "portaseeder"
+	actions_types = list(/datum/action/item_action/dissolve_contents)
+
+/datum/action/item_action/dissolve_contents
+	name = "Dissolve Contents"
+	desc = "Activate to convert the harvested contents into plantable seeds."
+
+/datum/action/item_action/dissolve_contents/Trigger()
+	var/obj/item/weapon/storage/bag/plants/portactor/P = target
+	var/mob/user = usr
+
+	if(!usr)
+		if(!ismob(P.loc))
+			return
+		user = P.loc
+
+	if(!istype(P) || !user)
+		return
+
+	if(P.contents)
+		var/played = FALSE
+		for(var/obj/item/I in P.contents)
+			if(seedify(I) && !played)
+				playsound(get_turf(P), 'sound/machines/juicerfast.ogg', 50, 1)
+				played = TRUE
+		P.orient2hud(user)
+		if(user.s_active)
+			user.s_active.show_to(user)
+
 // -----------------------------
 //          Food bag
 // -----------------------------

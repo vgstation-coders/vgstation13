@@ -417,7 +417,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 							preserved_data = get_data(B)
 						remove_reagent(B, (multiplier * C.required_reagents[B]), safety = 1)
 
-					chem_temp -= C.reaction_temp_cost
+					chem_temp += C.reaction_temp_change
 
 					var/created_volume = C.result_amount*multiplier
 					if(C.result)

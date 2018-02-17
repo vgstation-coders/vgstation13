@@ -142,3 +142,15 @@
 	if (selected)
 		return selected.Topic(href, href_list)
 
+/obj/item/device/rcd/rpd/admin
+	name = "experimental Rapid-Piping-Device (RPD)"
+
+/obj/item/device/rcd/rpd/admin/afterattack(var/atom/A, var/mob/user)
+	if(!user.check_rights(R_ADMIN))
+		visible_message("\The [src] disappears into nothing.")
+		qdel(src)
+		return
+	return ..()
+
+/obj/item/device/rcd/rpd/admin/delay(var/mob/user, var/atom/target, var/amount)
+	return TRUE

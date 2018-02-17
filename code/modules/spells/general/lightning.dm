@@ -103,6 +103,8 @@
 /spell/lightning/cast(var/list/targets, mob/user)
 	var/mob/living/L = targets[1]
 	if(istype(L))
+		if (user.is_pacified(VIOLENCE_DEFAULT,L))
+			return
 		zapzap--
 		if(zapzap)
 			to_chat(user, "<span class='info'>You can throw lightning [zapzap] more time\s</span>")
@@ -161,7 +163,8 @@
 			target.emp_act(2)
 			target.apply_damage((issilicon(target) ? basedamage*0.66 : basedamage), BURN, LIMB_CHEST, "blocked" = 0)
 	else if(target)
-		var/obj/item/projectile/beam/B = getFromPool(/obj/item/projectile/beam/lightning/spell)
+		var/obj/item/projectile/beam/lightning/spell/B = getFromPool(/obj/item/projectile/beam/lightning/spell)
+		B.our_spell = src
 		B.damage = basedamage
 		target.bullet_act(B)
 		returnToPool(B)

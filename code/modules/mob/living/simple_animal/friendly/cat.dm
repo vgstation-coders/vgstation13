@@ -16,6 +16,9 @@
 	turns_per_move = 5
 	see_in_dark = 6
 
+	speak_override = TRUE
+
+
 	can_breed = 1
 	species_type = /mob/living/simple_animal/cat
 	childtype = /mob/living/simple_animal/cat/kitten

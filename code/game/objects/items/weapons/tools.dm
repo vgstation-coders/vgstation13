@@ -724,8 +724,8 @@
 	to_chat(user, "It contains [reagents.get_reagent_amount(SACID) + reagents.get_reagent_amount(FORMIC_ACID)]/[src.max_fuel] units of fuel!")
 
 /obj/item/weapon/solder/attackby(obj/item/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/reagent_containers/glass/))
-		var/obj/item/weapon/reagent_containers/glass/G = W
+	if(istype(W,/obj/item/weapon/reagent_containers/) && W.flags & OPENCONTAINER)
+		var/obj/item/weapon/reagent_containers/G = W
 		if(G.reagents.reagent_list.len>1)
 			user.simple_message("<span class='warning'>The mixture is rejected by the tool.</span>",
 				"<span class='warning'>The tool isn't THAT thirsty.</span>")

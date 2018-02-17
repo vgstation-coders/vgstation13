@@ -91,6 +91,8 @@
 	icon_state = "album"
 	item_state = "briefcase"
 	can_only_hold = list("/obj/item/weapon/photo",)
+	storage_slots = 50
+	max_combined_w_class = 200
 
 
 /*

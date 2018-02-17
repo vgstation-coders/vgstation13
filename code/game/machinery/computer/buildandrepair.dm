@@ -474,6 +474,9 @@
 				return 1
 			if(isscrewdriver(P))
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				if(!circuit.build_path) // the board has been soldered away!
+					to_chat(user, "<span class='warning'>You connect the monitor, but nothing turns on!</span>")
+					return
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
 				var/B = new src.circuit.build_path ( src.loc )
 				if(circuit.powernet)

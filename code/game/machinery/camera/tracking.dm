@@ -186,6 +186,7 @@
 		return
 
 	if(!can_track_atom(target))
+		to_chat(src, "Target is not near any active camera.")
 		return
 
 	cameraFollow = target

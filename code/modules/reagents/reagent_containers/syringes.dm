@@ -107,6 +107,8 @@
 		overlays.len = 0
 		return
 	var/rounded_vol = round(reagents.total_volume,5)
+	if(0 < reagents.total_volume && reagents.total_volume < 5)
+		rounded_vol = 5
 	overlays.len = 0
 	if(ismob(loc))
 		var/injoverlay

@@ -13,6 +13,7 @@
 #define PROFILE_MACHINES // Disable when not debugging.
 
 #define ARBITRARILY_LARGE_NUMBER 10000 //Used in delays.dm and vehicle.dm. Upper limit on delays
+#define ARBITRARILY_PLANCK_NUMBER 1.417*(10**32) //1.417×10^32. Because ARBITRARILY_LARGE_NUMBER is too small and INF is too large
 #define MAX_VALUE 65535
 
 #ifdef PROFILE_MACHINES
@@ -990,6 +991,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VAMP_CHARISMA 16
 #define VAMP_UNDYING  17
 
+#define STARTING_BLOOD 10
+
 // Moved from machine_interactions.dm
 #define STATION_Z  1
 #define CENTCOMM_Z 2
@@ -1556,6 +1559,14 @@ var/proccalls = 1
 
 
 #define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
+
+#define BEESPECIES_NORMAL	"bees"
+#define BEESPECIES_VOX		"chill bugs"
+
+//mob/proc/is_pacified()
+#define VIOLENCE_SILENT		0
+#define VIOLENCE_DEFAULT	1
+#define VIOLENCE_GUN		2
 
 // Used to determine which HUD is in use
 #define HUD_NONE 0

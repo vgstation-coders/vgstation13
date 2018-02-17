@@ -10,7 +10,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 									"shrimp" = /obj/item/weapon/reagent_containers/food/snacks/shrimp,
 									"electric eel" = /obj/item/weapon/fish/electric_eel,
 									"glofish" = /obj/item/weapon/fish/glofish
-,
+,									"sea devil" = /obj/item/fish_eggs/seadevil //You can fish a sea devil straight back out and stick it in another tank.
 									)
 
 //////////////////////////////////////////////
@@ -137,7 +137,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	if(istype(O, /obj/item/weapon/wirecutters))
 		to_chat(user, "You rip out the teeth of \the [src]!")
 		new /obj/item/weapon/fish/toothless_shark(get_turf(src))
-		new /obj/item/stack/teeth/shark(get_turf(src))
+		new /obj/item/stack/teeth/shark(get_turf(src), 10)
 		qdel(src)
 		return
 	..()
@@ -201,6 +201,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	icon_state = "clownfish"
 	throwforce = 1
 	force = 1
+	hitsound = 'sound/items/bikehorn.ogg'
 	attack_verb = list("slapped", "humiliated", "hit", "rubbed")
 
 /obj/item/weapon/fish/attackby(var/obj/item/O, var/mob/user)

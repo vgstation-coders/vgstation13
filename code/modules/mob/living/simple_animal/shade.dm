@@ -22,19 +22,19 @@
 	max_co2 = 0
 	max_tox = 0
 	speed = 1
-	stop_automated_movement = 1
+	stop_automated_movement = TRUE
 	status_flags = 0
 	faction = "cult"
 	status_flags = CANPUSH
-	supernatural = 1
-	flying = 1
+	supernatural = TRUE
+	flying = TRUE
 	meat_type = /obj/item/weapon/ectoplasm
 	mob_property_flags = MOB_SUPERNATURAL
 
 /mob/living/simple_animal/shade/gib()
-	death(1)
-	monkeyizing = 1
-	canmove = 0
+	death(TRUE)
+	monkeyizing = TRUE
+	canmove = FALSE
 	icon = null
 	invisibility = 101
 
@@ -47,15 +47,13 @@
 
 /mob/living/simple_animal/shade/Life()
 	if(timestopped)
-		return 0 //under effects of time magick
+		return FALSE //under effects of time magick
 	..()
-	if(stat == 2)
+	if(isDead())
 		for(var/i=0;i<3;i++)
 			new /obj/item/weapon/ectoplasm (src.loc)
-		for(var/mob/M in viewers(src, null))
-			if((M.client && !( M.blinded )))
-				M.show_message("<span class='warning'> [src] lets out a contented sigh as their form unwinds.</span>")
-				ghostize()
+		visible_message("<span class='warning'> [src] lets out a contented sigh as their form unwinds.</span>")
+		ghostize()
 		qdel (src)
 		return
 
@@ -129,3 +127,29 @@
 	transmogrify()
 	if(!gcDestroyed)
 		qdel(src)
+
+/mob/living/simple_animal/shade/sword/attempt_suicide(forced = FALSE, suicide_set = TRUE)
+	if(!forced)
+		var/confirm = alert("Are you sure you want to seal your ego? This action cannot be undone and your current knowledge will be lost forever.", "Confirm Suicide", "Yes", "No")
+
+		if(!confirm == "Yes")
+			return
+
+		if(stat != CONSCIOUS)
+			to_chat(src, "<span class='warning'>You can't perform the sealing ritual in this state!</span>")
+			return
+
+		log_attack("<span class='danger'>[key_name(src)] has sealed itself via the suicide verb.</span>")
+
+	if(suicide_set)
+		suiciding = TRUE
+
+	visible_message("<span class='danger'>[src] shudders violently for a moment, then becomes motionless, its aura fading and eyes slowly darkening.</span>")
+	Die()
+
+/mob/living/simple_animal/shade/sword/Die()
+	if(istype(loc, /obj/item/weapon/nullrod/sword/chaos))
+		var/obj/item/weapon/nullrod/sword/chaos/C = loc
+		C.possessed = FALSE
+		C.icon_state = "talking_sword"
+	..()

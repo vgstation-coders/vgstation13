@@ -725,3 +725,10 @@
 
 /obj/item/clothing/under/elf/stickymagic
 	canremove = 0
+
+/obj/item/clothing/under/police
+	name = "police uniform"
+	desc = "A policeman's lot is not a happy one."
+	icon_state = "britpolice"
+	item_state = "britpolice"
+	_color = "britpolice"

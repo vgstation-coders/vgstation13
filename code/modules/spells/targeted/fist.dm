@@ -18,4 +18,6 @@
 	var/mob/living/L = holder
 	if(istype(L))
 		for(var/mob/living/target in targets)
+			if (L.is_pacified(1,target))
+				return
 			L.unarmed_attack_mob(target)

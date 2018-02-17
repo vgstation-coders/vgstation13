@@ -9,7 +9,6 @@
 	name = "A borg upgrade module."
 	desc = "Protected by FRM."
 	icon = 'icons/obj/module.dmi'
-	icon_state = "cyborg_upgrade"
 	var/locked = FALSE
 	var/list/required_module = list()
 	var/add_to_mommis = FALSE
@@ -150,15 +149,27 @@
 
 
 /obj/item/borg/upgrade/restart/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	playsound(get_turf(R), "sound/machines/click.ogg", 20, 1)
+	to_chat(user, "You plug the board into the robot's core circuitry.")
+
+	sleep(5)
+
 	if(R.health < 0)
+		playsound(get_turf(R), "sound/machines/buzz-two.ogg", 50, 0)
 		to_chat(user, "You have to repair the robot before using this module!")
 		return FALSE
+
+	playsound(get_turf(R), "sound/machines/paistartup.ogg", 50, 1)
+	to_chat(user, "<span style=\"font-family:Courier\">Systems reboot initialized successfully.</span>")
+
+	sleep(5)
 
 	if(!R.key)
 		for(var/mob/dead/observer/ghost in player_list)
 			if(ghost.mind && ghost.mind.current == R)
 				R.key = ghost.key
 
+	playsound(get_turf(R), "sound/voice/liveagain.ogg", 75, 1)
 	R.stat = CONSCIOUS
 	R.resurrect()
 
@@ -292,7 +303,7 @@
 	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds and glass containers."
 	icon_state = "cyborg_upgrade"
 	required_module = list(/obj/item/weapon/robot_module/butler)
-	modules_to_add = list(/obj/item/weapon/minihoe, /obj/item/weapon/wirecutters/clippers, /obj/item/weapon/storage/bag/plants, /obj/item/device/analyzer/plant_analyzer)
+	modules_to_add = list(/obj/item/weapon/minihoe, /obj/item/weapon/wirecutters/clippers, /obj/item/weapon/storage/bag/plants/portactor, /obj/item/device/analyzer/plant_analyzer)
 
 /obj/item/borg/upgrade/hydro/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
