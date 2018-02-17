@@ -15,6 +15,7 @@ var/list/SPS_list = list()
 	var/gpstag = "COM0"
 	var/emped = FALSE
 	var/autorefreshing = FALSE
+	var/builtin = FALSE
 
 /obj/item/device/gps/proc/gen_id()
 	return GPS_list.len
@@ -43,11 +44,11 @@ var/list/SPS_list = list()
 	..()
 
 /obj/item/device/gps/emp_act(severity)
-	emped = 1
+	emped = TRUE
 	overlays -= image(icon = icon, icon_state = "working")
 	overlays += image(icon = icon, icon_state = "emp")
 	spawn(30 SECONDS)
-		emped = 0
+		emped = FALSE
 		overlays -= image(icon = icon, icon_state = "emp")
 		overlays += image(icon = icon, icon_state = "working")
 
@@ -55,8 +56,8 @@ var/list/SPS_list = list()
 	ui_interact(user)
 
 /obj/item/device/gps/examine(mob/user)
-	if (Adjacent(user) || isobserver(user))
-		src.attack_self(user)
+	if(Adjacent(user) || isobserver(user))
+		attack_self(user)
 	else
 		..()
 
@@ -74,14 +75,9 @@ var/list/SPS_list = list()
 			var/area/device_area = get_area(D)
 			var/device_tag = null
 			var/device_rip = null
-			if(ispAI(D))
-				var/mob/living/silicon/pai/P = D
-				device_tag = P.ppstag
-				device_rip = P.silence_time
-			else
-				var/obj/item/device/gps/G = D
-				device_tag = G.gpstag
-				device_rip = G.emped
+			var/obj/item/device/gps/G = D
+			device_tag = G.gpstag
+			device_rip = G.emped
 			device_data["tag"] = device_tag
 			if(device_rip)
 				device_data["location_text"] = "ERROR"
@@ -102,34 +98,34 @@ var/list/SPS_list = list()
 	ui.set_auto_update(autorefreshing)
 
 /obj/item/device/gps/Topic(href, href_list)
-	if(..())
-		return 0
-
 	if(href_list["tag"])
-		if (isobserver(usr))
+		if(isobserver(usr))
 			to_chat(usr, "No way.")
-			return 0
-		if (usr.get_active_hand() != src || usr.stat) //no silicons allowed
+			return FALSE
+		if(!builtin && (usr.get_active_hand() != src || usr.incapacitated())) //no silicons allowed
 			to_chat(usr, "<span class = 'caution'>You need to have the GPS in your hand to do that!</span>")
-			return 1
+			return TRUE
 
 		var/a = input("Please enter desired tag.", name, gpstag) as text|null
-		if (!a) //what a check
-			return 1
+		if(!a) //what a check
+			return TRUE
 
-		if (usr.get_active_hand() != src || usr.stat) //second check in case some chucklefuck drops the GPS while typing the tag
+		if(!builtin && (usr.get_active_hand() != src || usr.incapacitated())) //second check in case some chucklefuck drops the GPS while typing the tag
 			to_chat(usr, "<span class = 'caution'>The GPS needs to be kept in your active hand!</span>")
-			return 1
+			return TRUE
 		a = strict_ascii(a)
 		if(length(a) < 4 || length(a) > 5)
 			to_chat(usr, "<span class = 'caution'>The tag must be between four and five characters long!</span>")
 		else
 			gpstag = a
 			update_name()
-		return 1
+		return TRUE
 	if(href_list["toggle_refresh"])
 		autorefreshing = !autorefreshing
-		return 1
+		return TRUE
+
+	if(..())
+		return FALSE
 
 /obj/item/device/gps/science
 	icon_state = "gps-s"
@@ -147,6 +143,11 @@ var/list/SPS_list = list()
 	desc = "A more rugged looking GPS device. Useful for finding miners. Or their corpses."
 	icon_state = "gps-m"
 	base_tag = "MIN"
+
+/obj/item/device/gps/pai
+	base_name = "pAI positioning system"
+	base_tag = "PAI"
+	builtin = TRUE
 
 /obj/item/device/gps/secure
 	base_name = "secure positioning system"
@@ -185,5 +186,5 @@ var/list/SPS_list = list()
 	var/mob/living/L = get_holder_of_type(src, /mob/living/)
 	if(L)
 		L.show_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>", MESSAGE_HEAR)
-	else if(isturf(src.loc))
-		src.visible_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>")
+	else if(isturf(loc))
+		visible_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>")
