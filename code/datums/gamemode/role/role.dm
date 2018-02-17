@@ -94,6 +94,8 @@
 	// Objectives
 	var/datum/objective_holder/objectives=new
 
+	var/icon/logo_state = "synd-logo"
+
 /datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	// Link faction.
 	faction=fac
@@ -112,11 +114,11 @@
 
 	return 1
 
-/datum/role/proc/AssignToRole(var/datum/mind/M)
-	if(!istype(M))
+/datum/role/proc/AssignToRole(var/datum/mind/M,var/override = 0)
+	if(!istype(M) && !override)
 		WARNING("M is [M.type]!")
 		return 0
-	if(!CanBeAssigned(M))
+	if(!CanBeAssigned(M) && !override)
 		WARNING("[M] was to be assigned to [name] but failed CanBeAssigned!")
 		return 0
 
@@ -129,11 +131,12 @@
 
 /datum/role/proc/RemoveFromRole(var/datum/mind/M) //Called on deconvert
 	M.antag_roles[id] = null
+	M.antag_roles.Remove(id)
 	antag = null
 
 // Destroy this role
 /datum/role/proc/Drop()
-	if(faction && src in faction.members)
+	if(faction && (src in faction.members))
 		faction.members.Remove(src)
 
 	if(!faction)
@@ -279,11 +282,33 @@
 
 	to_chat(world, text)
 
-/datum/role/proc/GetMemory()
-	var/text = "<br/><B>A [name] of the [faction.GetObjectivesMenuHeader()]</B>"
-	text += ReturnObjectivesString()
+/datum/role/proc/GetMemory(var/datum/mind/M, var/admin_edit = 0)
+	var/icon/logo = icon('icons/mob/mob.dmi', logo_state)
+	var/text = "<b><img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [name]</b>"
+	if (admin_edit)
+		text += " - <a href='?src=\ref[M];role_edit=\ref[src];remove_role=1'>(remove)</a>"
+	text += "<br>faction: "
+	if (faction)
+		text += faction.name
+	else
+		text += "<i>none</i>"
+	if (admin_edit)
+		text += " - "
+		if (faction)
+			text += "<a href='?src=\ref[M];role_edit=\ref[src];remove_from_faction=1'>(remove)</a>"
+		else
+			text += "<a href='?src=\ref[M];role_edit=\ref[src];add_to_faction=1'>(add)</a>"
+	text += "<br>"
+	if (objectives.objectives.len)
+		text += "<b>personnal objectives</b><br>"
+	text += objectives.GetObjectiveString(0,admin_edit)
+	if (faction && faction.objective_holder.objectives.len)
+		if (faction.objective_holder.objectives.len)
+			text += "<b>faction objectives</b><br>"
+		text += faction.objective_holder.GetObjectiveString(0,admin_edit)
+	text += "<br><br>"
 	return text
-
+/*
 /datum/role_controls
 	var/list/controls[0] // Associative, Label = html
 	var/list/warnings[0] // Just a list
@@ -322,16 +347,16 @@
 	[RC.Render()]
 </fieldset>
 "}
-
+*/
 /datum/role/proc/GetScoreboard()
 	//If you've gotten here to find what the hell this proc is for, you've hit a dead end. We don't know either.
 
 // DO NOT OVERRIDE
 /datum/role/Topic(href, href_list)
+
 	if(!href_list["mind"])
 		to_chat(usr, "<span class='warning'>BUG: mind variable not specified in Topic([href])!</span>")
 		return 1
-
 	var/datum/mind/M = locate(href_list["mind"])
 	if(!M)
 		return
@@ -340,11 +365,17 @@
 
 // USE THIS INSTEAD (global)
 /datum/role/proc/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
+
+	if(!check_rights(R_ADMIN))
+		log_admin("[key_name(usr)] tried to use the role panel without authorization.")
+		message_admins("[usr.key] has attempted to override the role panel!")
+		return
+
 	if(admin_auth && !check_rights(R_ADMIN))
 		message_admins("<span class='warning'>Something fucky is going on. [usr] has admin_auth 1 on their RoleTopic, but failed actual check_rights(R_ADMIN)!</span>")
 		return 1
 
-	if("auto_objectives" in href_list && admin_auth)
+	else if(href_list["auto_objectives"])//what's that even for actually? Might want to get rid of it later
 		var/datum/role/R = M.GetRole(href_list["auto_objectives"])
 		R.ForgeObjectives()
 		to_chat(usr, "<span class='info'>The objectives for [M.key] have been generated. You can edit them. Remember to announce their objectives.</span>")
@@ -367,6 +398,7 @@
 	name = "wizard"
 	special_role = "Wizard"
 	disallow_job = TRUE
+	logo_state = "wizard-logo"
 
 /datum/role/wizard/ForgeObjectives()
 	switch(rand(1,100))
@@ -383,16 +415,6 @@
 		else
 			AppendObjective(/datum/objective/hijack)
 	return
-
-/datum/role/bloodcult
-	name = "cultist of Nar-Sie"
-	special_role = "cultist of Nar-Sie"
-
-/datum/role/bloodcult/AdminPanelEntry()
-	var/list/dat = ..()
-	dat += "<a href='?_src_=holder;cult_privatespeak=\ref[antag.current]'>Send message from Nar-Sie.</a>"
-	return dat
-
 /datum/role/wish_granter_avatar
 	name = "avatar of the Wish Granter"
 	special_role = "avatar of the Wish Granter"

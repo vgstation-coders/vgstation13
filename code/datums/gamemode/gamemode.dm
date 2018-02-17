@@ -53,14 +53,15 @@
 		CreateFaction(Fac, pc)
 	return PopulateFactions()
 
-/datum/gamemode/proc/CreateFaction(var/Fac, var/population)
+/datum/gamemode/proc/CreateFaction(var/Fac, var/population, var/override = 0)
 	var/datum/faction/F = new Fac
-	if(F.can_setup(population))
+	if(F.can_setup(population) || override)
 		factions += F
 		factions_allowed -= F
+		return F
 	else
 		qdel(F)
-
+		return null
 /*
 	Get list of available players
 	Get list of active factions

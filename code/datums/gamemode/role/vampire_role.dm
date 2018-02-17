@@ -9,6 +9,7 @@
 	special_role = "vampire"
 	disallow_job = FALSE
 	restricted_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain")
+	logo_state = "vampire-logo"
 
 
 	// -- Vampire mechanics --
