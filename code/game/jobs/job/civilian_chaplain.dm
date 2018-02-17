@@ -108,7 +108,7 @@
 			if(!B)
 				break //Prevents possible runtime errors
 			new_book_style = input(H, "Which bible style would you like?") in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "[B.name == "clockwork slab" ? "Slab":"Tome"]", "The King in Yellow", "Ithaqua", "Scientology", \
-																				   "the bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
+																				   "The Bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
 			switch(new_book_style)
 				if("Koran")
 					B.icon_state = "koran"
@@ -156,7 +156,7 @@
 						for(var/turf/T in A.contents)
 							if(T.icon_state == "carpetsymbol")
 								T.dir = 8
-				if("the bible melts")
+				if("The Bible melts")
 					B.icon_state = "melted"
 					B.item_state = "melted"
 				if("Unaussprechlichen Kulten")
