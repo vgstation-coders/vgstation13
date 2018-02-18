@@ -7,7 +7,6 @@
 	maxHealth = 100
 	health = 100
 
-	speed = 1
 	harm_intent_damage = 10
 	melee_damage_lower = 8
 	melee_damage_upper = 13
@@ -20,50 +19,53 @@
 	//corpse = /obj/effect/landmark/corpse/surgeon
 	items_to_drop = list(/obj/item/weapon/circular_saw/plasmasaw)
 
-/mob/living/simple_animal/hostile/humanoid/surgeon/normal
-	name = "Doctor Sawyer"
+/mob/living/simple_animal/hostile/humanoid/surgeon/boss
+	name = "Doctor Placeholder" //I can't think of a good name
 	desc = "A deranged surgeon lost deep in space."
 	icon_dead = null //this isn't even his final form
-	maxHealth = 200
-	health = 200
+	maxHealth = 80
+	health = 80
 
-	speed = 1
-	harm_intent_damage = 20
-	melee_damage_lower = 17
-	melee_damage_upper = 23
+	harm_intent_damage = 15
+	melee_damage_lower = 13
+	melee_damage_upper = 20
 
 	corpse = null //he isn't dead yet
 
-	faction = "skeleton" //don't want him to get killed by skeletons before his transformation
+	faction = "necro" //don't want him to get killed by skeletons before his transformation
 
-/mob/living/simple_animal/hostile/humanoid/surgeon/normal/Die()
-	src.say("[pick("YOU CAN'T KILL ME THAT EASILY!", "I WONT LET YOU STOP ME!", "GET OUT OF MY FACILITY!", "I MUST CONTINUE MY RESEARCH!", "I'M GONNA WRECK IT!", "I'VE GOT A BONE TO PICK WITH YOU!")]")
+/mob/living/simple_animal/hostile/humanoid/surgeon/boss/Die()
+	visible_message("<span class=danger><B>Before he can die, the mad surgeon takes a drink of a foul-smelling concoction and begins to mutate! </span></B>")
+	say("[pick("YOU CAN'T KILL ME THAT EASILY!", "I WONT LET YOU STOP ME!", "GET OUT OF MY FACILITY!", "I MUST CONTINUE MY RESEARCH!", "I'M GONNA WRECK IT!", "I'VE GOT A BONE TO PICK WITH YOU!")]")
 	var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(get_turf(src))
-	to_chat("<span class=danger><B>Before he can die, the mad surgeon takes a drink of a foul-smelling concoction and begins to mutate! </span></B>")
 	S.time_to_live = 20
-	src.
-
+	new /mob/living/simple_animal/hostile/humanoid/surgeon/skeleton/(get_turf(src))
 	..()
 	return qdel(src)
 
 /mob/living/simple_animal/hostile/humanoid/surgeon/skeleton
-	name = "Skeletal Strongman"
+	name = "\improper Skeletal Surgeon"
 	desc = "He wont be pushed around any longer"
-	//icon_state = "skeletonboss"
-	//icon_living = "skeletonboss"
-	maxHealth = 1000
-	health = 1000
+	icon = 'icons/mob/surgeon.dmi'
+	icon_state = "skelesurgeon"
+	icon_living = "skelesurgeon"
+	maxHealth = 400
+	health = 400
 
-	speed = 5
-	harm_intent_damage = 40
-	melee_damage_lower = 35
-	melee_damage_upper = 45
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
+	move_to_delay = 5 //slow
+	harm_intent_damage = 30
+	melee_damage_lower = 25
+	melee_damage_upper = 35
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS //he will smash through most barriers, but the walls of his vault are rwalls
 	attacktext = "crushes"
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 
 	//corpse = /obj/effect/landmark/corpse/surgeon/skeleton
 
-	faction = "skeleton"
+	faction = "necro"
+	mob_property_flags = MOB_UNDEAD
 	items_to_drop = list()
 
+/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton/New()
+	..()
+	flick("skelesurgeon_laugh", src)
