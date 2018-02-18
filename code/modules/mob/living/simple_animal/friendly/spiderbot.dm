@@ -200,6 +200,23 @@
 	robogibs(src.loc, viruses)
 	qdel(src)
 
+/mob/living/simple_animal/spiderbot/emp_act(severity)
+	if(flags & INVULNERABLE)
+		return ..()
+
+	switch(severity)
+		if(1)
+			if(prob(5))
+				explode()
+				return
+			adjustBruteLoss(rand(4,5))
+		if(2)
+			adjustBruteLoss(rand(2,3))
+	flash_eyes(visual = 1, type = /obj/abstract/screen/fullscreen/flash/noise)
+	to_chat(src, "<span class='danger'>*BZZZT*</span>")
+	to_chat(src, "<span class='warning'>Warning: Electromagnetic pulse detected.</span>")
+	..()
+
 //copy paste from alien/larva, if that func is updated please update this one also
 /mob/living/simple_animal/spiderbot/verb/ventcrawl()
 	set name = "Crawl through Vent"
@@ -245,7 +262,7 @@
 		var/lob_dir = dir
 		var/turf/start_turf = get_turf(src)
 		var/current_turf = start_turf
-		for(var/i = 1; i <= lob_range; i++)
+		for(var/i in 1 to lob_range)
 			current_turf = get_step(current_turf, lob_dir)
 		lob_target = current_turf
 
@@ -322,4 +339,4 @@
 		to_chat(src, "Can't do that while incapacitated or dead.")
 
 	radio.listening = !radio.listening
-	to_chat(src, "<span class='notice'>Radio is [radio.listening ? "" : "no longer"] receiving broadcasts.</span>")
+	to_chat(src, "<span class='notice'>Radio is [radio.listening ? "" : " no longer "]receiving broadcasts.</span>")
