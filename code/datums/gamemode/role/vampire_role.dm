@@ -46,6 +46,15 @@
 		var/spell/S = new type_S
 		antag.current.add_spell(S)
 
+/datum/role/vampire/RemoveFromRole(var/datum/mind/M)
+	for(var/spell/spell in antag.current.spell_list)
+		if (is_type_in_list(spell,roundstart_spells))//TODO: HAVE A LIST WITH EVERY VAMPIRE SPELLS
+			antag.current.remove_spell(spell)
+	if(antag.current.client && antag.current.hud_used)
+		if(antag.current.hud_used.vampire_blood_display)
+			antag.current.client.screen -= list(antag.current.hud_used.vampire_blood_display)
+	..()
+
 /* we're gonna have procedural faction generation to handle thralls and apprentices
 /datum/role/vampire/AdminPanelEntry()
 	. = ..()

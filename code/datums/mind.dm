@@ -475,6 +475,8 @@
 		if(!newRole.AssignToRole(src,1))//it shouldn't fail since we're using our admin powers to force the role
 			newRole.Drop()//but just in case
 
+		newRole.OnPostSetup(FALSE)//later we might make custom Greet() for admin-designated antags.
+
 	else if(href_list["role_edit"])
 		var/datum/role/R = locate(href_list["role_edit"])
 
