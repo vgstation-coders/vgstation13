@@ -339,4 +339,4 @@
 		to_chat(src, "Can't do that while incapacitated or dead.")
 
 	radio.listening = !radio.listening
-	to_chat(src, "<span class='notice'>Radio is [radio.listening ? "" : " no longer "]receiving broadcasts.</span>")
+	to_chat(src, "<span class='notice'>Radio is [radio.listening ? "" : "no longer "]receiving broadcasts.</span>")
