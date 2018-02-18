@@ -1,16 +1,23 @@
 // Faction IDs
-
 #define BLOODCULT "cult of Nar-Sie"
 #define REVOLUTION "revolution"
 #define ERT "emergency response team"
 #define DEATHSQUAD "Nanotrasen deathsquad"
-#define SYNDICATE "Syndicate"
-#define SYNDIOPS "Syndicate operatives"
-#define SYNDIESQUAD "Syndicate elite strike team"
-#define CUSTOMSQUAD "Custom Squad"
+#define SYNDICATE "syndicate"
+#define SYNDITRAITORS "syndicate agents"
+#define SYNDIOPS "syndicate operatives"
+#define SYNDIESQUAD "syndicate elite strike team"
+#define CUSTOMSQUAD "custom squad"
+#define VOXSHOAL "vox Shoal"
+#define BLOBCONGLOMERATE "blob conglomerate"
+//-------
+#define HIVEMIND "changeling hivemind"
+#define WIZFEDERATION "wizard federation"
+#define VAMPIRELORDS "vampire lords"
 
 // Role IDs
 #define TRAITOR "traitor"
+#define ROGUE "rogue agent"//double agents
 #define CHANGELING "changeling"
 #define VAMPIRE "vampire"
 #define WIZARD "wizard"
@@ -26,8 +33,9 @@
 #define SYNDIESQUADIE "syndicate commando"
 #define RESPONDER "emergency responder"
 #define MALF "malfunctioning AI"
-//Changeling, nuke op, traitor, wizard, vampire, rev, all the same as above
-
+#define VOXRAIDER "vox raider"
+#define BLOBOVERMIND "blob overmind"
+#define HIGHLANDER "highlander"
 
 
 #define CULT_PROLOGUE	0

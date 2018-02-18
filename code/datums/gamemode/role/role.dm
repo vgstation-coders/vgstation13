@@ -229,9 +229,9 @@
 /datum/role/proc/AdminPanelEntry()
 	var/mob/M = antag.current
 	return {"
-[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == DEAD ? " <b><font color=red>(DEAD)</font></b>" : ""]
-<a href='?src=\ref[usr];priv_msg=\ref[M]'>PM</a>
-<a href='?_src_=holder;traitor=\ref[M]'>TP</a> <br/>"}
+[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
+ - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
+ - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a> <br/>"}
 
 /datum/role/proc/Greet(var/you_are=1)
 	if(you_are) //Getting a bit philosphical, but there we go
@@ -391,9 +391,115 @@
 /datum/role/proc/GetMemoryHeader()
 	return name
 
+
+/////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
+
+/datum/role/traitor
+	name = TRAITOR
+	id = TRAITOR
+	logo_state = "synd-logo"
+
+//________________________________________________
+
+
+/datum/role/rogue//double agent
+	name = ROGUE
+	id = ROGUE
+	logo_state = "synd-logo"
+
+//________________________________________________
+
+/datum/role/nuclear_operative
+	name = NUKE_OP
+	id = NUKE_OP
+	logo_state = "nuke-logo"
+
+//________________________________________________
+
+
+/datum/role/revolutionary_leader
+	name = HEADREV
+	id = HEADREV
+	logo_state = "rev_head-logo"
+
+//________________________________________________
+
+/datum/role/revolutionary
+	name = REV
+	id = REV
+	logo_state = "rev-logo"
+
+//________________________________________________
+
+/datum/role/wizard_apprentice
+	name = WIZAPP
+	id = WIZAPP
+	special_role = WIZAPP
+	logo_state = "apprentice-logo"
+
+//________________________________________________
+
+
+/datum/role/madmonkey
+	name = MADMONKEY
+	id = MADMONKEY
+	special_role = MADMONKEY
+	logo_state = "monkey-logo"
+
+//________________________________________________
+
+/datum/role/bomberman
+	name = BOMBERMAN
+	id = BOMBERMAN
+	special_role = BOMBERMAN
+	logo_state = "bomb-logo"
+
+//________________________________________________
+
+/datum/role/death_commando
+	name = DEATHSQUADIE
+	id = DEATHSQUADIE
+	special_role = DEATHSQUADIE
+	logo_state = "death-logo"
+
+//________________________________________________
+
+/datum/role/syndicate_elite_commando
+	name = SYNDIESQUADIE
+	id = SYNDIESQUADIE
+	special_role = SYNDIESQUADIE
+	logo_state = "elite-logo"
+
+//________________________________________________
+
+
+/datum/role/emergency_responder
+	name = RESPONDER
+	id = RESPONDER
+	special_role = RESPONDER
+	logo_state = "ert-logo"
+
+//________________________________________________
+
+/datum/role/vox_raider
+	name = VOXRAIDER
+	id = VOXRAIDER
+	special_role = VOXRAIDER
+	logo_state = "vox-logo"
+
+//________________________________________________
+
+/datum/role/blob_overmind
+	name = BLOBOVERMIND
+	id = BLOBOVERMIND
+	logo_state = "blob-logo"
+
+//________________________________________________
+
 /datum/role/wizard
-	name = "wizard"
-	special_role = "Wizard"
+	name = WIZARD
+	id = WIZARD
+	special_role = WIZARD
 	disallow_job = TRUE
 	logo_state = "wizard-logo"
 
@@ -412,16 +518,25 @@
 		else
 			AppendObjective(/datum/objective/hijack)
 	return
+
+//________________________________________________
+
 /datum/role/wish_granter_avatar
-	name = "avatar of the Wish Granter"
-	special_role = "avatar of the Wish Granter"
+	name = WISHGRANTERAVATAR
+	id = WISHGRANTERAVATAR
+	special_role = WISHGRANTERAVATAR
+	logo_state = "wish-logo"
 
 /datum/role/wish_granter_avatar/ForgeObjectives()
 	AppendObjective(/datum/objective/silence)
 
+//________________________________________________
+
 /datum/role/highlander
-	name = "highlander"
-	special_role = "highlander"
+	name = HIGHLANDER
+	special_role = HIGHLANDER
+	id = HIGHLANDER
+	logo_state = "high-logo"
 
 /datum/role/highlander/ForgeObjectives()
 	AppendObjective(/datum/objective/hijack)
@@ -432,9 +547,13 @@
 		return
 	equip_highlander(antag.current)
 
+//________________________________________________
+
 /datum/role/malfAI
-	name = "Malfunctioning AI"
+	name = MALF
+	id = MALF
 	required_jobs = list("AI")
+	logo_state = "malf-logo"
 
 /datum/role/malfAI/OnPostSetup()
 	. = ..()

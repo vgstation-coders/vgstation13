@@ -93,14 +93,14 @@
 	for(var/datum/role/R in members)
 		R.Declare()
 
-/datum/faction/proc/AdminPanelEntry()
-	var/dat = list()
+/datum/faction/proc/AdminPanelEntry(var/datum/admins/A)
+	var/dat = ""
 	dat += GetObjectivesMenuHeader()
-	dat += "<h2>Faction objectives</h2>"
-	dat += CheckObjectives()
-	dat += "<h2>Members</h2><br>"
+	dat += "<br><b>Faction objectives</b><br>"
+	dat += objective_holder.GetObjectiveString(0,1,A)
+	dat += "<br><b>Members</b><br>"
 	if(!members.len)
-		dat += "<b>Unpopulated</b>"
+		dat += "<i>Unpopulated</i>"
 	else
 		for(var/datum/role/R in members)
 			dat += R.AdminPanelEntry()
@@ -112,6 +112,8 @@
 /datum/faction/proc/check_win()
 	return
 
+
+/////////////////////////////THESE FACTIONS SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 /datum/faction/syndicate
 	name = "The Syndicate"
 	ID = SYNDICATE
@@ -121,12 +123,14 @@
 
 /datum/faction/syndicate/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/mob.dmi', "synd-logo")
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Syndicate</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'> <FONT size = 2><B>Syndicate</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'>"}
 	return header
 
+//________________________________________________
+
 /datum/faction/syndicate/traitor
-	name = "Traitors to NT"
-	ID = TRAITOR
+	name = "Syndicate agents"
+	ID = SYNDITRAITORS
 	initial_role = TRAITOR
 	late_role = TRAITOR
 	desc = "Operatives of the syndicate, implanted into the crew in one way or another."
@@ -136,9 +140,11 @@
 	desc = "Anyone could be a deep cover operative. It could be you, it could be me, it could even be that guy!"
 	accept_latejoiners = TRUE
 
+//________________________________________________
+
 /datum/faction/syndicate/nuke_op
 	name = "Syndicate nuclear operatives"
-	ID = NUKE_OP
+	ID = SYNDIOPS
 	required_pref = ROLE_OPERATIVE
 	initial_role = NUKE_OP
 	late_role = NUKE_OP
@@ -166,9 +172,11 @@
 		dat += "in [disk_loc.loc] at ([disk_loc.x], [disk_loc.y], [disk_loc.z]) [formatJumpTo(nukedisk, "Jump")]"
 	return dat
 
+//________________________________________________
+
 /datum/faction/changeling
 	name = "Changeling Hivemind"
-	ID = CHANGELING
+	ID = HIVEMIND
 	initial_role = CHANGELING
 	late_role = CHANGELING
 	required_pref = ROLE_CHANGELING
@@ -179,12 +187,14 @@
 /datum/faction/changeling/GetObjectivesMenuHeader()
 	var/icon/logo_left = icon('icons/mob/mob.dmi', "change-logoa")
 	var/icon/logo_right = icon('icons/mob/mob.dmi', "change-logob")
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo_left)]'> <FONT size = 2><B>Changelings Hivemind</B></FONT> <img src='data:image/png;base64,[icon2base64(logo_right)]'>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo_left)]' style='position: relative; top: 10;'> <FONT size = 2><B>Changelings Hivemind</B></FONT> <img src='data:image/png;base64,[icon2base64(logo_right)]' style='position: relative; top: 10;'>"}
 	return header
+
+//________________________________________________
 
 /datum/faction/wizard
 	name = "Wizard Federation"
-	ID = WIZARD
+	ID = WIZFEDERATION
 	initial_role = WIZARD
 	late_role = WIZARD
 	required_pref = ROLE_WIZARD
@@ -215,7 +225,7 @@
 
 /datum/faction/wizard/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/mob.dmi', "wizard-logo")
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Wizard Federation</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'> <FONT size = 2><B>Wizard Federation</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'>"}
 	return header
 
 /datum/faction/wizard/AdminPanelEntry()
@@ -236,14 +246,18 @@
 		dat += "</table>"*/
 	return dat
 
+//________________________________________________
+
 /datum/faction/vampire/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/mob.dmi', "vampire-logo")
 	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Vampiric wanderers</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
 	return header
 
+//________________________________________________
+
 /datum/faction/revolution
 	name = "Revolutionaries"
-	ID = REV
+	ID = REVOLUTION
 	required_pref = ROLE_REV
 	initial_role = REV
 	late_role = REV
@@ -251,21 +265,29 @@
 
 /datum/faction/revolution/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/mob.dmi', "rev-logo")
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Revolutionaries</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'> <FONT size = 2><B>Revolutionaries</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'>"}
 	return header
+
+//________________________________________________
 
 /datum/faction/strike_team
 	name = "Custom Strike Team"//obviously this name is a placeholder getting replaced by the admin setting up the squad
 	required_pref = ROLE_STRIKE
 	ID = CUSTOMSQUAD
 
+//________________________________________________
+
 /datum/faction/strike_team/ert
 	name = "Emergency Response Team"
 	ID = ERT
 
+//________________________________________________
+
 /datum/faction/strike_team/deathsquad
 	name = "Nanotrasen Deathsquad"
 	ID = DEATHSQUAD
+
+//________________________________________________
 
 /datum/faction/strike_team/syndiesquad
 	name = "Syndicate Deep-Strike squad"
