@@ -36,8 +36,12 @@
 	var/datum/role/roletype = /datum/role
 
 
-/datum/faction/proc/OnPostSetup()
+/datum/faction/New()
+	..()
 	objective_holder = new
+	objective_holder.faction = src
+
+/datum/faction/proc/OnPostSetup()
 	forgeObjectives()
 	for(var/datum/role/R in members)
 		R.OnPostSetup()
@@ -64,7 +68,7 @@
 	members.Add(R)
 	return 1
 
-/datum/faction/proc/appendObjective(var/datum/objective/O)
+/datum/faction/proc/AppendObjective(var/datum/objective/O)
 	ASSERT(O)
 	objective_holder.AddObjective(O)
 
@@ -260,7 +264,7 @@
 	ID = ERT
 
 /datum/faction/strike_team/deathsquad
-	name = "Nanotransen Deathsquad"
+	name = "Nanotrasen Deathsquad"
 	ID = DEATHSQUAD
 
 /datum/faction/strike_team/syndiesquad

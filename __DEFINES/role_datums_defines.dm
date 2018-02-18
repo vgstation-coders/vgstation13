@@ -1,27 +1,31 @@
 // Faction IDs
 
-#define BLOODCULT "Cult of Nar-Sie"
-#define CHANGELING "changeling"
-#define SYNDICATE "syndicate"
-#define NUKE_OP "nuclear operative"
-#define TRAITOR "traitor"
-#define WIZARD "wizard"
-#define VAMPIRE "vampire"
-#define REV "revolution"
-#define MALF "malfunctioning_AI"
-#define ERT "Emergency Response Team"
-#define DEATHSQUAD "Deathsquad"
-#define SYNDIESQUAD "Syndicate Deathsquad"
+#define BLOODCULT "cult of Nar-Sie"
+#define REVOLUTION "revolution"
+#define ERT "emergency response team"
+#define DEATHSQUAD "Nanotrasen deathsquad"
+#define SYNDICATE "Syndicate"
+#define SYNDIOPS "Syndicate operatives"
+#define SYNDIESQUAD "Syndicate elite strike team"
 #define CUSTOMSQUAD "Custom Squad"
 
 // Role IDs
-
+#define TRAITOR "traitor"
+#define CHANGELING "changeling"
+#define VAMPIRE "vampire"
+#define WIZARD "wizard"
 #define CULTIST "cultist"
-#define HEADREV "Head Revolutionary"
-#define WIZAPP "Wizards Apprentice"
-#define MADMONKEY "Monkey Madness"
+#define NUKE_OP "nuclear operative"
+#define HEADREV "head revolutionary"
+#define REV "revolutionary"
+#define WIZAPP "wizard's apprentice"
+#define MADMONKEY "monkey fever infected"
 #define WISHGRANTERAVATAR "avatar of the Wish Granter"
 #define HIGHLANDER "highlander"
+#define DEATHSQUADIE "death commando"
+#define SYNDIESQUADIE "syndicate commando"
+#define RESPONDER "emergency responder"
+#define MALF "malfunctioning AI"
 //Changeling, nuke op, traitor, wizard, vampire, rev, all the same as above
 
 

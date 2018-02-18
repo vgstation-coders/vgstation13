@@ -466,6 +466,7 @@
 	id = THRALL
 	name = "thrall"
 	special_role = "thrall"
+	logo_state = "thrall-logo"
 	var/datum/role/vampire/master
 
 /datum/role/thrall/AdminPanelEntry()

@@ -1,6 +1,6 @@
 /**
 * Used in Mixed Mode, also simplifies equipping antags for other gamemodes and
-* for the traitor panel.
+* for the role panel.
 
 		###VARS###
 	===Static Vars===
@@ -112,6 +112,8 @@
 	if(!plural_name)
 		plural_name="[name]s"
 
+	objectives.owner = src
+
 	return 1
 
 /datum/role/proc/AssignToRole(var/datum/mind/M,var/override = 0)
@@ -205,7 +207,7 @@
 
 /datum/role/proc/AppendObjective(var/objective_type,var/duplicates=0,var/text=null)
 	if(!duplicates && locate(objective_type) in objectives)
-		return 0
+		return FALSE
 	var/datum/objective/O
 	if(text)
 		O = new objective_type(text)
@@ -213,8 +215,8 @@
 		O = new objective_type()
 	if(O.PostAppend())
 		objectives.AddObjective(O, antag)
-		return 1
-	return 0
+		return TRUE
+	return FALSE
 
 /datum/role/proc/ReturnObjectivesString(var/check_success = FALSE, var/check_name = TRUE)
 	var/dat = ""
@@ -301,11 +303,12 @@
 	text += "<br>"
 	if (objectives.objectives.len)
 		text += "<b>personnal objectives</b><br>"
-	text += objectives.GetObjectiveString(0,admin_edit)
-	if (faction && faction.objective_holder.objectives.len)
+	text += objectives.GetObjectiveString(0,admin_edit,M)
+	text += "<br>"
+	if (faction && faction.objective_holder)
 		if (faction.objective_holder.objectives.len)
 			text += "<b>faction objectives</b><br>"
-		text += faction.objective_holder.GetObjectiveString(0,admin_edit)
+		text += faction.objective_holder.GetObjectiveString(0,admin_edit,M)
 	text += "<br><br>"
 	return text
 /*
@@ -365,12 +368,6 @@
 
 // USE THIS INSTEAD (global)
 /datum/role/proc/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
-
-	if(!check_rights(R_ADMIN))
-		log_admin("[key_name(usr)] tried to use the role panel without authorization.")
-		message_admins("[usr.key] has attempted to override the role panel!")
-		return
-
 	if(admin_auth && !check_rights(R_ADMIN))
 		message_admins("<span class='warning'>Something fucky is going on. [usr] has admin_auth 1 on their RoleTopic, but failed actual check_rights(R_ADMIN)!</span>")
 		return 1

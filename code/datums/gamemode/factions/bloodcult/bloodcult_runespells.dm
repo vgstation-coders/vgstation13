@@ -50,20 +50,25 @@
 /proc/get_rune_spell(var/mob/user, var/obj/spell_holder, var/use = "ritual", var/datum/cultword/word1, var/datum/cultword/word2, var/datum/cultword/word3)
 	if (!word1 || !word2 || !word3)
 		return
-
+	to_chat(world,"1")
 	for(var/subtype in subtypesof(/datum/rune_spell))
+		to_chat(world,"2")
 		var/datum/rune_spell/instance = subtype
 		if (initial(instance.teleporter) && word1.type == initial(instance.word1) && word2.type == initial(instance.word2))
 			switch (use)
 				if ("ritual")
+					to_chat(world,"3")
 					return new subtype(user, spell_holder, use, word3)
 				if ("examine")
+					to_chat(world,"4")
 					return instance
 		else if (word1.type == initial(instance.word1) && word2.type == initial(instance.word2) && word3.type == initial(instance.word3))
 			switch (use)
 				if ("ritual")
+					to_chat(world,"3b")
 					return new subtype(user, spell_holder, use)
 				if ("examine")
+					to_chat(world,"4b")
 					return instance
 			return new subtype(user, spell_holder, use)
 	return null

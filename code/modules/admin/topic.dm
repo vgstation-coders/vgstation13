@@ -2513,7 +2513,7 @@
 		if(!ismob(M))
 			to_chat(usr, "This can only be used on instances of type /mob.")
 			return
-		show_traitor_panel(M)
+		show_role_panel(M)
 
 	// /vg/
 	else if(href_list["set_base_laws"])

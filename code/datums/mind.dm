@@ -118,8 +118,8 @@
 		return
 
 	var/out = {"<TITLE>Role Panel</TITLE><B>[name]</B>[(current&&(current.real_name!=name))?" (as [current.real_name])":""] - key=<b>[key]</b> [active?"(synced)":"(not synced)"]<br>
-		Assigned job: [assigned_role] - <a href='?src=\ref[src];job_edit=1'>(edit)</a><hr>
-		<h3>Roles and Factions</h3>"}
+		Assigned job: [assigned_role] - <a href='?src=\ref[src];job_edit=1'>(edit)</a><hr>"}
+	out += "<font size='5'><b>Roles and Factions</b></font><br>"
 
 	if(!antag_roles.len)
 		out += "<i>This mob has no roles.</i><br>"
@@ -452,6 +452,11 @@
 				available_roles.Add(initial(R.id))
 				available_roles[initial(R.id)] = R
 
+
+		if(!available_roles.len)
+			alert("This mob already has every available roles! Geez, calm down!", "Assigned role")
+			return
+
 		var/new_role = input("Select new role", "Assigned role", null) as null|anything in available_roles
 		if (!new_role)
 			return
@@ -476,6 +481,7 @@
 				to_chat(usr, "<span class='warning'>Can't leave a faction when you already don't belong to any! (This message shouldn't have to appear. Tell a coder.)</span>")
 			else if(R in R.faction.members)
 				R.faction.members.Remove(R)
+				R.faction = null
 				ticker.mode.orphaned_roles.Add(R)
 
 		else if(href_list["add_to_faction"])
@@ -486,36 +492,69 @@
 				for(var/datum/faction/F in ticker.mode.factions)
 					all_factions.Add(F.name)
 					all_factions[F.name] = F
-				for(var/datum/faction/F in subtypesof(/datum/faction))
-					to_chat(world,"6")
-					if (!initial(F.name) in all_factions)
-						to_chat(world,"7")
+				all_factions += "-----"
+				for(var/factiontype in subtypesof(/datum/faction))
+					var/datum/faction/F = factiontype
+					if (!(initial(F.name) in all_factions))
 						all_factions.Add(initial(F.name))
-						all_factions[F.name] = F
+						all_factions[initial(F.name)] = F
+				all_factions += "-----"
 				all_factions += "NEW CUSTOM FACTION"
 				var/join_faction = input("Select new faction", "Assigned faction", null) as null|anything in all_factions
-				if (!join_faction)
+				if (!join_faction || join_faction == "-----")
 					return
 				else if (join_faction == "NEW CUSTOM FACTION")
-					//TODO
+					to_chat(usr, "<span class='danger'>Sorry, that feature is not coded yet. - Deity Link</span>")
 				else if (istype(all_factions[join_faction], /datum/faction))//we got an existing faction
 					var/datum/faction/joined = all_factions[join_faction]
 					ticker.mode.orphaned_roles.Remove(R)
 					joined.members.Add(R)
+					R.faction = joined
 				else //we got an inexisting faction, gotta create it first!
-					var/datum/faction/joined = ticker.mode.CreateFaction(all_factions[join_faction], null, 1)//Cannot create objects of type null.
+					var/datum/faction/joined = ticker.mode.CreateFaction(all_factions[join_faction], null, 1)
 					if (joined)
 						ticker.mode.orphaned_roles.Remove(R)
 						joined.members.Add(R)
+						R.faction = joined
 
-	role_panel()
-/*
-	else if (href_list["memory_edit"])
-		var/new_memo = copytext(sanitize(input("Write new memory", "Memory", memory) as null|message),1,MAX_MESSAGE_LEN)
-		if (isnull(new_memo))
+	else if (href_list["obj_add"])
+		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
+
+		var/list/available_objectives = list()
+
+		for(var/objective_type in subtypesof(/datum/objective))
+			var/datum/objective/O = objective_type
+			available_objectives.Add(initial(O.name))
+			available_objectives[initial(O.name)] = O
+
+		var/new_obj = input("Select a new objective", "New Objective", null) as null|anything in available_objectives
+		var/obj_type = available_objectives[new_obj]
+
+		var/datum/objective/new_objective = new obj_type(null,FALSE)
+
+		if (obj_holder.owner)//so objectives won't target their owners.
+			new_objective.owner = obj_holder.owner
+
+		var/setup = TRUE
+		if (istype(new_objective,/datum/objective/target))
+			var/datum/objective/target/new_O = new_objective
+			if (alert("Do you want to specify a target?", "New Objective", "Yes", "No") == "No")
+				setup = new_O.find_target()
+			else
+				setup = new_O.select_target()
+
+		if(!setup)
+			alert("Couldn't set-up a proper target.", "New Objective")
 			return
-		memory = new_memo
 
+		if (obj_holder.owner)
+			obj_holder.AddObjective(new_objective, src)
+			log_admin("[usr.key]/([usr.name]) gave [key]/([name]) the objective: [new_objective.explanation_text]")
+		else if (obj_holder.faction)
+			obj_holder.faction.AppendObjective(new_objective)
+			log_admin("[usr.key]/([usr.name]) gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
+
+/*
 	else if (href_list["obj_edit"] || href_list["obj_add"])
 		var/datum/objective/objective
 		var/objective_pos
@@ -648,19 +687,36 @@
 			objectives += new_objective
 			log_admin("[usr.key]/([usr.name]) gave [key]/([name]) the objective: [new_objective.explanation_text]")
 
+*/
 	else if (href_list["obj_delete"])
 		var/datum/objective/objective = locate(href_list["obj_delete"])
-		if(!istype(objective))
-			return
-		objectives -= objective
-		log_admin("[usr.key]/([usr.name]) removed [key]/([name])'s objective ([objective.explanation_text])")
+		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
+
+		ASSERT(istype(objective) && istype(obj_holder))
+
+		obj_holder.objectives.Remove(objective)
+
+		if (obj_holder.owner)
+			log_admin("[usr.key]/([usr.name]) removed [key]/([name])'s objective ([objective.explanation_text])")
+		else if (obj_holder.faction)
+			log_admin("[usr.key]/([usr.name]) removed \the [obj_holder.faction.ID]'s objective ([objective.explanation_text])")
 
 	else if(href_list["obj_completed"])
 		var/datum/objective/objective = locate(href_list["obj_completed"])
-		if(!istype(objective))
+
+		ASSERT(istype(objective))
+
+		objective.force_success = !objective.force_success
+		log_admin("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
+
+
+	role_panel()
+/*
+	else if (href_list["memory_edit"])
+		var/new_memo = copytext(sanitize(input("Write new memory", "Memory", memory) as null|message),1,MAX_MESSAGE_LEN)
+		if (isnull(new_memo))
 			return
-		objective.completed = !objective.completed
-		log_admin("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.completed ? "completed" : "incomplete"]")
+		memory = new_memo
 
 	else if (href_list["revolution"])
 		switch(href_list["revolution"])
