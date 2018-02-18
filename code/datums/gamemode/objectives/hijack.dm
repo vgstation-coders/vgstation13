@@ -1,8 +1,10 @@
 /datum/objective/hijack
 	explanation_text = "Hijack the emergency shuttle by escaping without any organic life-forms other than yourself."
+	name = "Hijack the shuttle"
 
 /datum/objective/hijack/IsFulfilled()
-	..()
+	if (..())
+		return TRUE
 	if(!owner.current || owner.current.stat)
 		return FALSE
 	if(emergency_shuttle.location != CENTCOMM_Z)

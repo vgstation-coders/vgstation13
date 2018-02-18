@@ -1,6 +1,8 @@
 /datum/role/cultist
+	id = CULTIST
 	name = "Cultist"
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
+	logo_state = "cult-logo"
 
 /datum/role/cultist/OnPostSetup()
 	. = ..()
@@ -20,10 +22,17 @@
 	Meet up with them. Raise an altar in my name. <span class='danger'>Blood Technology Join</span>!<br>
 	</span>"})
 
+/*
 /datum/role/cultist/RoleTopic(href, href_list)
-
+	..()
 	if(!ismob(usr))
 		return
+*/
 
 /mob/living/carbon/proc/muted()
 	return (iscultist(src) && reagents && reagents.has_reagent(HOLYWATER))
+
+/datum/role/cultist/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
+	var/dat = ..()
+	dat += " - <a href='?src=\ref[A];cult_privatespeak=\ref[antag.current]'>(Nar-Sie whispers)</a>"
+	return dat

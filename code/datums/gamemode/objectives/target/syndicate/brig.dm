@@ -1,4 +1,8 @@
-// Similar to the anti-rev objective, but for traitors
+
+/datum/objective/target/brig
+	name = "\[Syndicate\] Brig <target>"
+
+	// Similar to the anti-rev objective, but for traitors
 /datum/objective/target/brig
 	var/already_completed = FALSE
 
@@ -6,17 +10,20 @@
 	..()
 	if(target && target.current)
 		explanation_text = "Have [target.current.real_name], the [target.assigned_role] brigged for 5 minutes."
-	return target
+		return TRUE
+	return FALSE
 
 
 /datum/objective/target/brig/find_target_by_role(role, role_type=0)
 	..(role, role_type)
 	if(target && target.current)
 		explanation_text = "Have [target.current.real_name], the [!role_type ? target.assigned_role : target.special_role] brigged for 10 minutes."
-	return target
+		return TRUE
+	return FALSE
 
 /datum/objective/target/brig/IsFulfilled()
-	..()
+	if (..())
+		return TRUE
 	if(already_completed)
 		return TRUE
 	if(target && target.current)

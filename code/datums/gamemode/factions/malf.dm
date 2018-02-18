@@ -6,6 +6,7 @@
 	initial_role = MALF
 	late_role = MALF //There shouldn't really be any late roles for malfunction, but just in case we can corrupt an AI in the future, let's keep this
 	roletype = /datum/role/malfAI
+	logo_state = "malf-logo"
 	var/apcs
 	var/AI_win_timeleft = 1800
 	var/malf_mode_declared //Boolean
