@@ -286,6 +286,9 @@
 	if(selection)
 		for(var/obj/item/I in view(1, src))
 			if(selection == I)
+				if(selection.anchored)
+					to_chat(src, "<span class='warning'>It's fastened down!</span>")
+					return 0
 				held_item = selection
 				selection.forceMove(src)
 				visible_message("<span class='notice'>[src] scoops up \the [held_item]!</span>", "<span class='notice'>You grab \the [held_item]!</span>", "You hear a skittering noise and a clink.")
