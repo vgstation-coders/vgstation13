@@ -246,7 +246,7 @@
 	set category = "Spiderbot"
 	set desc = "Drop the item you're holding."
 
-	if(stat)
+	if(incapacitated())
 		return
 
 	if(!held_item)
@@ -286,7 +286,7 @@
 	set category = "Spiderbot"
 	set desc = "Allows you to take a nearby small item."
 
-	if(stat)
+	if(incapacitated())
 		return -1
 
 	if(held_item)
@@ -335,7 +335,7 @@
 	set desc = "Toggle listening channel on or off."
 	set category = "Spiderbot"
 
-	if(stat)
+	if(incapacitated())
 		to_chat(src, "Can't do that while incapacitated or dead.")
 
 	radio.listening = !radio.listening
