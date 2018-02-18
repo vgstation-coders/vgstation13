@@ -34,7 +34,7 @@
 	var/accept_latejoiners = FALSE
 	var/datum/objective_holder/objective_holder
 	var/datum/role/roletype = /datum/role
-
+	var/logo_state = "synd-logo"
 
 /datum/faction/New()
 	..()
@@ -88,17 +88,21 @@
 	return score_results
 
 /datum/faction/proc/GetObjectivesMenuHeader() //Returns what will show when the factions objective completion is summarized
+	var/icon/logo = icon('icons/mob/mob.dmi', logo_state)
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'>"}
+	return header
+
 
 /datum/faction/proc/DeclareAll()
 	for(var/datum/role/R in members)
 		R.Declare()
 
 /datum/faction/proc/AdminPanelEntry(var/datum/admins/A)
-	var/dat = ""
+	var/dat = "<br>"
 	dat += GetObjectivesMenuHeader()
 	dat += "<br><b>Faction objectives</b><br>"
 	dat += objective_holder.GetObjectiveString(0,1,A)
-	dat += "<br><b>Members</b><br>"
+	dat += "<br> - <b>Members</b> - <br>"
 	if(!members.len)
 		dat += "<i>Unpopulated</i>"
 	else
@@ -112,19 +116,13 @@
 /datum/faction/proc/check_win()
 	return
 
-
 /////////////////////////////THESE FACTIONS SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 /datum/faction/syndicate
 	name = "The Syndicate"
 	ID = SYNDICATE
 	required_pref = ROLE_TRAITOR
 	desc = "A coalition of companies that actively work against Nanotrasen's intentions. Seen as Freedom fighters by some, Rebels and Malcontents by others."
-
-
-/datum/faction/syndicate/GetObjectivesMenuHeader()
-	var/icon/logo = icon('icons/mob/mob.dmi', "synd-logo")
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'> <FONT size = 2><B>Syndicate</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'>"}
-	return header
+	logo_state = "synd-logo"
 
 //________________________________________________
 
@@ -134,11 +132,7 @@
 	initial_role = TRAITOR
 	late_role = TRAITOR
 	desc = "Operatives of the syndicate, implanted into the crew in one way or another."
-
-/datum/faction/syndicate/traitor/auto
-	name = "Deep cover operatives"
-	desc = "Anyone could be a deep cover operative. It could be you, it could be me, it could even be that guy!"
-	accept_latejoiners = TRUE
+	logo_state = "synd-logo"
 
 //________________________________________________
 
@@ -150,6 +144,7 @@
 	late_role = NUKE_OP
 	desc = "The culmination of succesful NT traitors, who have managed to steal a nuclear device.\
 	Load up, grab the nuke, don't forget where you've parked, find the nuclear auth disk, and give them hell."
+	logo_state = "nuke-logo"
 
 /datum/faction/syndicate/nuke_op/AdminPanelEntry()
 	var/list/dat = ..()
@@ -183,11 +178,12 @@
 	desc = "An almost parasitic, shapeshifting entity that assumes the identity of its victims. Commonly used as smart bioweapons by the syndicate,\
 	or simply wandering malignant vagrants happening upon a meal of identity that can carry them to further feeding grounds."
 	roletype = /datum/role/changeling
+	logo_state = "change-logoa"
 
 /datum/faction/changeling/GetObjectivesMenuHeader()
 	var/icon/logo_left = icon('icons/mob/mob.dmi', "change-logoa")
 	var/icon/logo_right = icon('icons/mob/mob.dmi', "change-logob")
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo_left)]' style='position: relative; top: 10;'> <FONT size = 2><B>Changelings Hivemind</B></FONT> <img src='data:image/png;base64,[icon2base64(logo_right)]' style='position: relative; top: 10;'>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo_left)]' style='position: relative; top: 10;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo_right)]' style='position: relative; top: 10;'>"}
 	return header
 
 //________________________________________________
@@ -202,6 +198,7 @@
 	Their motivations for attacking seemingly peaceful enclaves or operations are as yet unknown, but they do so without respite or remorse.\
 	This has led to them being identified as enemies of humanity, and should be treated as such."
 	roletype = /datum/role/wizard
+	logo_state = "wizard-logo"
 
 /datum/faction/wizard/HandleNewMind(var/datum/mind/M)
 	..()
@@ -222,37 +219,6 @@
 		equip_wizard(wwizard.antag.current)
 		name_wizard(wwizard.antag.current)
 
-
-/datum/faction/wizard/GetObjectivesMenuHeader()
-	var/icon/logo = icon('icons/mob/mob.dmi', "wizard-logo")
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'> <FONT size = 2><B>Wizard Federation</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'>"}
-	return header
-
-/datum/faction/wizard/AdminPanelEntry()
-	var/list/dat = ..()
-	dat += "<h2>Wizard's apprentices</h2><br>To be implemented."
-
-	// TODO: FIXME: probably don't need this
-	/*
-		for(var/datum/mind/apprentice in ticker.mode.apprentices)
-			var/mob/M = apprentice.current
-			if(M)
-
-				dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-					<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-					<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
-			else
-				dat += "<tr><td><i>Apprentice not found!</i></td></tr>"
-		dat += "</table>"*/
-	return dat
-
-//________________________________________________
-
-/datum/faction/vampire/GetObjectivesMenuHeader()
-	var/icon/logo = icon('icons/mob/mob.dmi', "vampire-logo")
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Vampiric wanderers</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
-	return header
-
 //________________________________________________
 
 /datum/faction/revolution
@@ -262,33 +228,33 @@
 	initial_role = REV
 	late_role = REV
 	desc = "Viva!"
+	logo_state = "rev-logo"
 
-/datum/faction/revolution/GetObjectivesMenuHeader()
-	var/icon/logo = icon('icons/mob/mob.dmi', "rev-logo")
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'> <FONT size = 2><B>Revolutionaries</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'>"}
-	return header
-
-//________________________________________________
+//____________________{"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Cult of Nar-Sie</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}____________________________
 
 /datum/faction/strike_team
 	name = "Custom Strike Team"//obviously this name is a placeholder getting replaced by the admin setting up the squad
 	required_pref = ROLE_STRIKE
 	ID = CUSTOMSQUAD
+	logo_state = "nano-logo"
 
 //________________________________________________
 
 /datum/faction/strike_team/ert
 	name = "Emergency Response Team"
 	ID = ERT
+	logo_state = "ert-logo"
 
 //________________________________________________
 
 /datum/faction/strike_team/deathsquad
 	name = "Nanotrasen Deathsquad"
 	ID = DEATHSQUAD
+	logo_state = "death-logo"
 
 //________________________________________________
 
 /datum/faction/strike_team/syndiesquad
 	name = "Syndicate Deep-Strike squad"
 	ID = SYNDIESQUAD
+	logo_state = "elite-logo"

@@ -41,7 +41,7 @@
 		for(var/datum/objective/O in objectives)
 			var/current_completion = O.IsFulfilled()
 			dat += {"<b>Objective #[obj_count++]</b>: [O.explanation_text]
-				[admin_edit ? " - <a href='?src=\ref[M];obj_delete=\ref[O];obj_holder=\ref[src]'>(remove)</a> - <a href='?src=\ref[M];obj_completed=\ref[O]'>(toggle:[current_completion ? "<font color='green'>SUCCESS" : "<font color='red'>FAILURE" ]</font>)</a>" : ""]
+				[admin_edit ? " - <a href='?src=\ref[M];obj_delete=\ref[O];obj_holder=\ref[src]'>(remove)</a> - <a href='?src=\ref[M];obj_completed=\ref[O];obj_holder=\ref[src]'>(toggle:[current_completion ? "<font color='green'>SUCCESS" : "<font color='red'>FAILURE" ]</font>)</a>" : ""]
 				<br>"}
 			if(check_success)
 				dat += {"<BR>[current_completion ? "Success" : "Failed"]"}

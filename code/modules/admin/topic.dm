@@ -4608,6 +4608,7 @@
 
 		if (obj_holder.faction)
 			obj_holder.faction.AppendObjective(new_objective)
+			check_antagonists()
 			log_admin("[usr.key]/([usr.name]) gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
 
 	if (href_list["obj_delete"])
@@ -4617,18 +4618,19 @@
 		ASSERT(istype(objective) && istype(obj_holder))
 
 		obj_holder.objectives.Remove(objective)
-
+		check_antagonists()
 		if (obj_holder.faction)
 			log_admin("[usr.key]/([usr.name]) removed \the [obj_holder.faction.ID]'s objective ([objective.explanation_text])")
 
 	if(href_list["obj_completed"])
 		var/datum/objective/objective = locate(href_list["obj_completed"])
+		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
 
 		ASSERT(istype(objective))
 
 		objective.force_success = !objective.force_success
-		log_admin("[usr.key]/([usr.name]) toggled [objective.faction.ID] [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
-
+		check_antagonists()
+		log_admin("[usr.key]/([usr.name]) toggled [obj_holder.faction.ID] [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
 
 	if(href_list["wages_enabled"])
 		if(check_rights(R_ADMIN))

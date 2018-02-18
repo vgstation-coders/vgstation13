@@ -32,8 +32,7 @@
 /mob/living/carbon/proc/muted()
 	return (iscultist(src) && reagents && reagents.has_reagent(HOLYWATER))
 
-
-/datum/role/cultist/AdminPanelEntry()
+/datum/role/cultist/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
 	var/dat = ..()
-	dat += " - <a href='?_src_=holder;cult_privatespeak=\ref[antag.current]'>(Nar-Sie whispers)</a>"
+	dat += " - <a href='?src=\ref[A];cult_privatespeak=\ref[antag.current]'>(Nar-Sie whispers)</a>"
 	return dat

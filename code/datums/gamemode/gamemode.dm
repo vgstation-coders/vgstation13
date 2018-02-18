@@ -199,18 +199,3 @@
 			return 1
 
 /datum/gamemode/proc/declare_completion()
-
-/datum/gamemode/proc/AdminPanelEntry()
-	var/list/dat = list("<h2>Factions</h2><br>")
-	if(factions.len)
-		for(var/datum/faction/F in factions)
-			dat += F.AdminPanelEntry()
-	else
-		dat += "No faction is currently active."
-	dat += "<br><h2>Roles</h2><br>"
-	if(orphaned_roles.len)
-		for(var/datum/role/R in orphaned_roles)
-			dat += R.AdminPanelEntry()
-	else
-		dat += "No orphaned role is currently active."
-	return dat

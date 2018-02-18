@@ -95,12 +95,17 @@
 	memory += "[new_text]<BR>"
 
 /datum/mind/proc/show_memory(mob/recipient)
-	var/output = "<B>[current.real_name]'s Memory</B><HR>"
-	output += memory
+	var/output = "<TITLE>Your memory</TITLE><B>[current.real_name]'s memory</B><HR>"
+
+	if (memory)
+		output += memory
+		output += "<hr>"
 
 	if(antag_roles.len)
-		for(var/datum/role/R in antag_roles)
-			output += R.GetMemory()
+		for(var/role in antag_roles)
+			var/datum/role/R = antag_roles[role]
+			output += R.GetMemory(src,FALSE)//preventing edits
+		output += "<hr>"
 
 	// -- Religions --
 	if (faith) // This way they can get their religion changed
@@ -109,7 +114,7 @@
 
 		if (faith.religiousLeader == src)
 			output += "You can convert people by [faith.convert_method] <br />"
-	recipient << browse(output,"window=memory")
+	recipient << browse(output,"window=memory;size=700x500")
 
 
 /datum/mind/proc/role_panel()
@@ -126,13 +131,13 @@
 	else
 		for(var/role in antag_roles)
 			var/datum/role/R = antag_roles[role]
-			out += R.GetMemory(src,1)//allowing edits
+			out += R.GetMemory(src,TRUE)//allowing edits
 
 	out += "<br><a href='?src=\ref[src];add_role=1'>(add a new role)</a>"
 
 	//<a href='?src=\ref[src];obj_announce=1'>Announce objectives</a><br><br>"} TODO: make sure that works
 
-	usr << browse(out, "window=role_panel[src]")
+	usr << browse(out, "window=role_panel[src];size=700x500")
 
 
 	/*if (istype(current, /mob/living/carbon/human) || istype(current, /mob/living/carbon/monkey) || istype(current, /mob/living/simple_animal/construct))

@@ -13,19 +13,22 @@
 
 	//dat += ticker.mode.AdminPanelEntry()
 
-	dat += "<h3><b>Factions</b></h3><br>"
+	dat += "<h3><b>Factions</b></h3>"
 	if(ticker.mode.factions.len)
 		for(var/datum/faction/F in ticker.mode.factions)
 			dat += F.AdminPanelEntry(src)
 	else
-		dat += "No faction is currently active."
-	dat += "<br><h3>Roles</h3><br>"
+		dat += "<i>No factions are currently active.</i>"
+	dat += "<h3>Other Roles</h3>"
 	if(ticker.mode.orphaned_roles.len)
 		for(var/datum/role/R in ticker.mode.orphaned_roles)
-			dat += R.AdminPanelEntry(src)
+			dat += R.AdminPanelEntry(TRUE,src)//show logos
+			dat += "<br>"
 	else
-		dat += "No orphaned role is currently active."
+		dat += "<i>No orphaned roles are currently active.</i>"
 
+	dat += "</body></html>"
+	usr << browse(dat, "window=roundstatus;size=700x500")
 
 /*
 
@@ -94,9 +97,6 @@
 		dat += "</table>"
 
 */
-
-	dat += "</body></html>"
-	usr << browse(dat, "window=roundstatus;size=440x500")
 
 	//var/datum/browser/popup = new(usr, "\ref[src]-round_status", "Round status", 600, 700, src)
 	//popup.set_content(jointext(dat, ""))

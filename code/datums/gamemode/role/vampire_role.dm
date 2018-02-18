@@ -46,6 +46,7 @@
 		var/spell/S = new type_S
 		antag.current.add_spell(S)
 
+/* we're gonna have procedural faction generation to handle thralls and apprentices
 /datum/role/vampire/AdminPanelEntry()
 	. = ..()
 	if (thralls.len)
@@ -54,6 +55,7 @@
 		for (var/datum/role/thrall/T in thralls)
 			. += T.AdminPanelEntry()
 		. += "</ul>"
+*/
 
 // -- Not sure if this is meant to work like that.
 // I just put what I expect to see in the "The vampires were..."
@@ -468,13 +470,6 @@
 	special_role = "thrall"
 	logo_state = "thrall-logo"
 	var/datum/role/vampire/master
-
-/datum/role/thrall/AdminPanelEntry()
-	var/mob/M = antag.current
-	return {"<li>
-[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == DEAD ? " <b><font color=red>(DEAD)</font></b>" : ""]
-<a href='?src=\ref[usr];priv_msg=\ref[M]'>PM</a>
-<a href='?_src_=holder;traitor=\ref[M]'>TP</a></li>"}
 
 /datum/role/thrall/Greet(var/you_are = TRUE)
 	var/dat
