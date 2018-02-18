@@ -1,8 +1,10 @@
 /datum/objective/escape
 	explanation_text = "Escape on the shuttle or an escape pod alive and free."
+	name = "Escape"
 
 /datum/objective/escape/IsFulfilled()
-	..()
+	if (..())
+		return TRUE
 	if(issilicon(owner.current))
 		return FALSE
 	if(isbrain(owner.current) || isborer(owner.current))

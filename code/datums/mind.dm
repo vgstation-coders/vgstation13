@@ -95,12 +95,17 @@
 	memory += "[new_text]<BR>"
 
 /datum/mind/proc/show_memory(mob/recipient)
-	var/output = "<B>[current.real_name]'s Memory</B><HR>"
-	output += memory
+	var/output = "<TITLE>Your memory</TITLE><B>[current.real_name]'s memory</B><HR>"
+
+	if (memory)
+		output += memory
+		output += "<hr>"
 
 	if(antag_roles.len)
-		for(var/datum/role/R in antag_roles)
-			output += R.GetMemory()
+		for(var/role in antag_roles)
+			var/datum/role/R = antag_roles[role]
+			output += R.GetMemory(src,FALSE)//preventing edits
+		output += "<hr>"
 
 	// -- Religions --
 	if (faith) // This way they can get their religion changed
@@ -109,37 +114,32 @@
 
 		if (faith.religiousLeader == src)
 			output += "You can convert people by [faith.convert_method] <br />"
-	recipient << browse(output,"window=memory")
+	recipient << browse(output,"window=memory;size=700x500")
 
-/datum/mind/proc/edit_memory()
+
+/datum/mind/proc/role_panel()
 	if(!ticker || !ticker.mode)
-		alert("Not before round-start!", "Alert")
+		alert("Ticker and Game Mode aren't initialized yet!", "Alert")
 		return
 
-	var/out = "<B>[name]</B>[(current&&(current.real_name!=name))?" (as [current.real_name])":""]<br>"
+	var/out = {"<TITLE>Role Panel</TITLE><B>[name]</B>[(current&&(current.real_name!=name))?" (as [current.real_name])":""] - key=<b>[key]</b> [active?"(synced)":"(not synced)"]<br>
+		Assigned job: [assigned_role] - <a href='?src=\ref[src];job_edit=1'>(edit)</a><hr>"}
+	out += "<font size='5'><b>Roles and Factions</b></font><br>"
 
-	out += {"Mind currently owned by key: [key] [active?"(synced)":"(not synced)"]<br>
-		Assigned role: [assigned_role]. <a href='?src=\ref[src];role_edit=1'>Edit</a><br>
-		Factions and special roles:<br>"}
-	/*var/list/sections = list(
-		"revolution",
-		"cult",
-		"wizard",
-		"apprentice",
-		"changeling",
-		"vampire",
-		"nuclear",
-		"traitor", // "traitorchan",
-		"monkey",
-		"malfunction",
-		"resteam",
-		"dsquad",
-		"elite",
-		"custom",
-	)*/
-	if(antag_roles.len)
-		for(var/datum/role/R in antag_roles)
-			out += R.GetMemory()
+	if(!antag_roles.len)
+		out += "<i>This mob has no roles.</i><br>"
+	else
+		for(var/role in antag_roles)
+			var/datum/role/R = antag_roles[role]
+			out += R.GetMemory(src,TRUE)//allowing edits
+
+	out += "<br><a href='?src=\ref[src];add_role=1'>(add a new role)</a>"
+
+	//<a href='?src=\ref[src];obj_announce=1'>Announce objectives</a><br><br>"} TODO: make sure that works
+
+	usr << browse(out, "window=role_panel[src];size=700x500")
+
+
 	/*if (istype(current, /mob/living/carbon/human) || istype(current, /mob/living/carbon/monkey) || istype(current, /mob/living/simple_animal/construct))
 		* REVOLUTION **
 		text = "revolution"
@@ -438,26 +438,128 @@
 			out += "<B>[obj_count]</B>: [objective.explanation_text] <a href='?src=\ref[src];obj_edit=\ref[objective]'>Edit</a> <a href='?src=\ref[src];obj_delete=\ref[objective]'>Delete</a> <a href='?src=\ref[src];obj_completed=\ref[objective]'><font color=[objective.IsFulfilled() ? "green" : "red"]>Toggle Completion</font></a><br>"
 			obj_count++
 	*/
-	out += {"<a href='?src=\ref[src];obj_add=1'>Add objective</a><br><br>
-		<a href='?src=\ref[src];obj_announce=1'>Announce objectives</a><br><br>"}
-	usr << browse(out, "window=edit_memory[src]")
 
-/*/datum/mind/Topic(href, href_list)
+/datum/mind/Topic(href, href_list)
 	if(!check_rights(R_ADMIN))
 		return
 
-	if (href_list["role_edit"])
-		var/new_role = input("Select new role", "Assigned role", assigned_role) as null|anything in get_all_jobs()
+	if (href_list["job_edit"])
+		var/new_job = input("Select new job", "Assigned job", assigned_role) as null|anything in get_all_jobs()
+		if (!new_job)
+			return
+		assigned_role = new_job
+
+	if (href_list["add_role"])
+		var/list/available_roles = list()
+		for(var/role in subtypesof(/datum/role))
+			var/datum/role/R = role
+			if (initial(R.id) && !(initial(R.id) in antag_roles))
+				available_roles.Add(initial(R.id))
+				available_roles[initial(R.id)] = R
+
+
+		if(!available_roles.len)
+			alert("This mob already has every available roles! Geez, calm down!", "Assigned role")
+			return
+
+		var/new_role = input("Select new role", "Assigned role", null) as null|anything in available_roles
 		if (!new_role)
 			return
-		assigned_role = new_role
 
-	else if (href_list["memory_edit"])
-		var/new_memo = copytext(sanitize(input("Write new memory", "Memory", memory) as null|message),1,MAX_MESSAGE_LEN)
-		if (isnull(new_memo))
+		var/role_type = available_roles[new_role]
+		var/datum/role/newRole = new role_type
+		if(!newRole)
+			WARNING("Role killed itself or was otherwise missing!")
 			return
-		memory = new_memo
 
+		if(!newRole.AssignToRole(src,1))//it shouldn't fail since we're using our admin powers to force the role
+			newRole.Drop()//but just in case
+
+	else if(href_list["role_edit"])
+		var/datum/role/R = locate(href_list["role_edit"])
+
+		if(href_list["remove_role"])
+			R.Drop()
+
+		else if(href_list["remove_from_faction"])
+			if(!R.faction)
+				to_chat(usr, "<span class='warning'>Can't leave a faction when you already don't belong to any! (This message shouldn't have to appear. Tell a coder.)</span>")
+			else if(R in R.faction.members)
+				R.faction.members.Remove(R)
+				R.faction = null
+				ticker.mode.orphaned_roles.Add(R)
+
+		else if(href_list["add_to_faction"])
+			if(R.faction)
+				to_chat(usr, "<span class='warning'>A role can only belong to one faction! (This message shouldn't have to appear. Tell a coder.)</span>")
+			else
+				var/list/all_factions = list()
+				for(var/datum/faction/F in ticker.mode.factions)
+					all_factions.Add(F.name)
+					all_factions[F.name] = F
+				all_factions += "-----"
+				for(var/factiontype in subtypesof(/datum/faction))
+					var/datum/faction/F = factiontype
+					if (!(initial(F.name) in all_factions))
+						all_factions.Add(initial(F.name))
+						all_factions[initial(F.name)] = F
+				all_factions += "-----"
+				all_factions += "NEW CUSTOM FACTION"
+				var/join_faction = input("Select new faction", "Assigned faction", null) as null|anything in all_factions
+				if (!join_faction || join_faction == "-----")
+					return
+				else if (join_faction == "NEW CUSTOM FACTION")
+					to_chat(usr, "<span class='danger'>Sorry, that feature is not coded yet. - Deity Link</span>")
+				else if (istype(all_factions[join_faction], /datum/faction))//we got an existing faction
+					var/datum/faction/joined = all_factions[join_faction]
+					ticker.mode.orphaned_roles.Remove(R)
+					joined.members.Add(R)
+					R.faction = joined
+				else //we got an inexisting faction, gotta create it first!
+					var/datum/faction/joined = ticker.mode.CreateFaction(all_factions[join_faction], null, 1)
+					if (joined)
+						ticker.mode.orphaned_roles.Remove(R)
+						joined.members.Add(R)
+						R.faction = joined
+
+	else if (href_list["obj_add"])
+		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
+
+		var/list/available_objectives = list()
+
+		for(var/objective_type in subtypesof(/datum/objective))
+			var/datum/objective/O = objective_type
+			available_objectives.Add(initial(O.name))
+			available_objectives[initial(O.name)] = O
+
+		var/new_obj = input("Select a new objective", "New Objective", null) as null|anything in available_objectives
+		var/obj_type = available_objectives[new_obj]
+
+		var/datum/objective/new_objective = new obj_type(null,FALSE)
+
+		if (obj_holder.owner)//so objectives won't target their owners.
+			new_objective.owner = obj_holder.owner
+
+		var/setup = TRUE
+		if (istype(new_objective,/datum/objective/target))
+			var/datum/objective/target/new_O = new_objective
+			if (alert("Do you want to specify a target?", "New Objective", "Yes", "No") == "No")
+				setup = new_O.find_target()
+			else
+				setup = new_O.select_target()
+
+		if(!setup)
+			alert("Couldn't set-up a proper target.", "New Objective")
+			return
+
+		if (obj_holder.owner)
+			obj_holder.AddObjective(new_objective, src)
+			log_admin("[usr.key]/([usr.name]) gave [key]/([name]) the objective: [new_objective.explanation_text]")
+		else if (obj_holder.faction)
+			obj_holder.faction.AppendObjective(new_objective)
+			log_admin("[usr.key]/([usr.name]) gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
+
+/*
 	else if (href_list["obj_edit"] || href_list["obj_add"])
 		var/datum/objective/objective
 		var/objective_pos
@@ -590,19 +692,36 @@
 			objectives += new_objective
 			log_admin("[usr.key]/([usr.name]) gave [key]/([name]) the objective: [new_objective.explanation_text]")
 
+*/
 	else if (href_list["obj_delete"])
 		var/datum/objective/objective = locate(href_list["obj_delete"])
-		if(!istype(objective))
-			return
-		objectives -= objective
-		log_admin("[usr.key]/([usr.name]) removed [key]/([name])'s objective ([objective.explanation_text])")
+		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
+
+		ASSERT(istype(objective) && istype(obj_holder))
+
+		obj_holder.objectives.Remove(objective)
+
+		if (obj_holder.owner)
+			log_admin("[usr.key]/([usr.name]) removed [key]/([name])'s objective ([objective.explanation_text])")
+		else if (obj_holder.faction)
+			log_admin("[usr.key]/([usr.name]) removed \the [obj_holder.faction.ID]'s objective ([objective.explanation_text])")
 
 	else if(href_list["obj_completed"])
 		var/datum/objective/objective = locate(href_list["obj_completed"])
-		if(!istype(objective))
+
+		ASSERT(istype(objective))
+
+		objective.force_success = !objective.force_success
+		log_admin("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
+
+
+	role_panel()
+/*
+	else if (href_list["memory_edit"])
+		var/new_memo = copytext(sanitize(input("Write new memory", "Memory", memory) as null|message),1,MAX_MESSAGE_LEN)
+		if (isnull(new_memo))
 			return
-		objective.completed = !objective.completed
-		log_admin("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.completed ? "completed" : "incomplete"]")
+		memory = new_memo
 
 	else if (href_list["revolution"])
 		switch(href_list["revolution"])
@@ -1154,10 +1273,9 @@
 					assigned_role = "MODE"
 					special_role = "Custom Team"
 					log_admin("[key_name(usr)] has striketeam'ed [key_name(current)].")
-
-
-	edit_memory()
 */
+
+
 /*
 proc/clear_memory(var/silent = 1)
 	var/datum/game_mode/current_mode = ticker.mode
