@@ -532,7 +532,7 @@
 		spawn(0)
 			M.take_damage(100, "brute")
 
-/turf/proc/Bless()
+/turf/proc/bless()
 	turf_flags |= NOJAUNT
 
 /////////////////////////////////////////////////////////////////////////
