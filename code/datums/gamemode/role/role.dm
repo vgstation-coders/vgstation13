@@ -521,6 +521,18 @@
 			AppendObjective(/datum/objective/hijack)
 	return
 
+/datum/role/wizard/OnPostSetup()
+	..()
+	if(wizardstart.len == 0)
+		to_chat( antag.current, "<span class='danger'>A starting location for you could not be found, please report this bug!</span>")
+		log_admin("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
+		message_admins("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
+		return 0 //Critical failure.
+
+	antag.current.forceMove(pick(wizardstart))
+	equip_wizard(antag.current)
+	name_wizard(antag.current)
+
 //________________________________________________
 
 /datum/role/wish_granter_avatar

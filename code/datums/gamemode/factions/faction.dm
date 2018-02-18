@@ -205,20 +205,6 @@
 	M.special_role = "Wizard"
 	M.original = M.current
 
-/datum/faction/wizard/OnPostSetup()
-	..()
-	if(wizardstart.len == 0)
-		for(var/datum/role/wizard in members)
-			to_chat(wizard.antag.current, "<span class='danger'>A starting location for you could not be found, please report this bug!</span>")
-		log_admin("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
-		message_admins("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
-		return 0 //Critical failure.
-
-	for(var/datum/role/wwizard in members)
-		wwizard.antag.current.forceMove(pick(wizardstart))
-		equip_wizard(wwizard.antag.current)
-		name_wizard(wwizard.antag.current)
-
 //________________________________________________
 
 /datum/faction/revolution
