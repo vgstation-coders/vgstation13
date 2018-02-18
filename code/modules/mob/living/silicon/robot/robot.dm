@@ -626,6 +626,7 @@
 				C.wrapped = W
 				C.electronics_damage = I.electronics_damage
 				C.brute_damage = I.brute_damage
+				C.resistance = I.resistance
 				C.install()
 				user.drop_item(W)
 				W.forceMove(null)

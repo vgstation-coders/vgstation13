@@ -6,6 +6,7 @@
 /datum/robot_component/var/toggled = TRUE
 /datum/robot_component/var/brute_damage = 0
 /datum/robot_component/var/electronics_damage = 0
+/datum/robot_component/var/resistance = 1
 /datum/robot_component/var/energy_consumption = 0
 /datum/robot_component/var/max_damage = 30 //WHY THE FUCK IS THE DEFAULT MAX DAMAGE 30 ARE YOU STUPID
 /datum/robot_component/var/mob/living/silicon/robot/owner
@@ -38,8 +39,8 @@
 	if(installed != COMPONENT_INSTALLED)
 		return
 
-	brute_damage += brute
-	electronics_damage += electronics
+	brute_damage += brute * resistance
+	electronics_damage += electronics * resistance
 
 	if(brute_damage + electronics_damage >= max_damage)
 		destroy()
@@ -68,14 +69,14 @@
 
 /datum/robot_component/armour
 	name = "armour plating"
-	energy_consumption = 0
 	external_type = /obj/item/robot_parts/robot_component/armour
+	energy_consumption = 0
 	max_damage = 60
 
 /datum/robot_component/actuator
 	name = "actuator"
-	energy_consumption = 0 // seeing as we can move without any charge...
 	external_type = /obj/item/robot_parts/robot_component/actuator
+	energy_consumption = 0 // seeing as we can move without any charge...
 	max_damage = 50
 
 /datum/robot_component/cell
@@ -107,8 +108,8 @@
 
 /datum/robot_component/diagnosis_unit
 	name = "self-diagnosis unit"
-	energy_consumption = 0
 	external_type = /obj/item/robot_parts/robot_component/diagnosis_unit
+	energy_consumption = 0
 	max_damage = 30
 
 /mob/living/silicon/robot/proc/initialize_components()
@@ -119,7 +120,7 @@
 	components["power cell"] = new/datum/robot_component/cell(src)
 	components["diagnosis unit"] = new/datum/robot_component/diagnosis_unit(src)
 	components["camera"] = new/datum/robot_component/camera(src)
-	components["comms"] = new/datum/robot_component/binary_communication(src)
+	components["binary comms"] = new/datum/robot_component/binary_communication(src)
 	components["armour"] = new/datum/robot_component/armour(src)
 
 /mob/living/silicon/robot/proc/is_component_functioning(module_name)
@@ -137,30 +138,61 @@
 	icon_state = "working"
 	var/brute_damage = 0
 	var/electronics_damage = 0
+	var/resistance = 1 //Multiplies the damage taken by this ammount.
 
 /obj/item/robot_parts/robot_component/binary_communication_device
 	name = "binary communication device"
 	icon_state = "binary_translator"
 
+/obj/item/robot_parts/robot_component/binary_communication_device/reinforced
+	name = "reinforced binary communication device"
+	icon_state = "ref_binary_translator"
+	resistance = 0.5
+
 /obj/item/robot_parts/robot_component/actuator
 	name = "actuator"
 	icon_state = "actuator"
+
+/obj/item/robot_parts/robot_component/actuator/reinforced
+	name = "reinforced actuator"
+	icon_state = "ref_actuator"
+	resistance = 0.5
 
 /obj/item/robot_parts/robot_component/armour
 	name = "armour plating"
 	icon_state = "armor_plating"
 
+/obj/item/robot_parts/robot_component/armour/reinforced
+	name = "reinforced armour plating"
+	icon_state = "ref_armor_plating"
+	resistance = 0.5
+
 /obj/item/robot_parts/robot_component/camera
 	name = "camera"
 	icon_state = "camera"
+
+/obj/item/robot_parts/robot_component/camera/reinforced
+	name = "reinforced camera"
+	icon_state = "ref_camera"
+	resistance = 0.5
 
 /obj/item/robot_parts/robot_component/diagnosis_unit
 	name = "diagnosis unit"
 	icon_state = "diagnosis_unit"
 
+/obj/item/robot_parts/robot_component/diagnosis_unit/reinforced
+	name = "reinforced diagnosis unit"
+	icon_state = "ref_diagnosis_unit"
+	resistance = 0.5
+
 /obj/item/robot_parts/robot_component/radio
 	name = "radio"
 	icon_state = "radio"
+
+/obj/item/robot_parts/robot_component/radio/reinforced
+	name = "reinforced radio"
+	icon_state = "ref_radio"
+	resistance = 0.5
 
 /obj/item/broken_device/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W, /obj/item/stack/nanopaste))
