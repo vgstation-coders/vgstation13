@@ -96,20 +96,13 @@
 	if(!istype(to_drop))
 		to_drop = tool_state
 	if(to_drop)
-		//var/obj/item/found = locate(tool_state) in src.module.modules
 		if(is_in_modules(to_drop))
 			if((to_drop in contents) && (to_drop in src.module.modules))
 				to_chat(src, "<span class='warning'>This item cannot be dropped.</span>")
 				return 0
-		if(client)
-			client.screen -= to_drop
 
+		remove_from_mob(to_drop) //clean out any refs
 		to_drop.forceMove(Target)
-
-		//this all should be using remove_from_mob() but I couldn't get it to work for some reason so for now it continues to be copypasted ass
-		to_drop.dropped(src)
-
-		u_equip(to_drop)
 		update_items()
 		return 1
 	return 0
