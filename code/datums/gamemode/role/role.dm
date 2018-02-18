@@ -113,7 +113,6 @@
 		plural_name="[name]s"
 
 	objectives.owner = src
-
 	return 1
 
 /datum/role/proc/AssignToRole(var/datum/mind/M,var/override = 0)
@@ -189,6 +188,8 @@
 		antag.special_role=special_role
 	if(disallow_job)
 		antag.assigned_role="MODE"
+	if(world.has_round_started()) //We missed roundstart
+		OnPostSetup()
 	return 1
 
 // Return 1 on success, 0 on failure.
