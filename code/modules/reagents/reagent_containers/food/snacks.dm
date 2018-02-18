@@ -5291,7 +5291,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	name = "fried shrimp"
 	desc = "For such a little dish, it's surprisingly high calorie."
 	icon = 'icons/obj/seafood.dmi'
-	icon_state = "friedshrimp"
+	icon_state = "shrimp_fried"
 	bitesize = 3
 	food_flags = FOOD_MEAT
 
@@ -5370,6 +5370,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/smokedsalmon
 	name = "smoked salmon"
 	desc = "Perhaps the best known method of preparing salmon, smoking has been used to preserve fish for most of recorded history. The subtleties of avoiding overpowering the fatty, rich flavor of the salmon with the smoke make this a difficult dish to master."
+	icon = 'icons/obj/seafood.dmi'
 	icon_state = "smokedsalmon"
 	bitesize = 3
 	food_flags = FOOD_MEAT
@@ -5394,6 +5395,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/citrussalmon
 	name = "citrus-baked salmon"
 	desc = "The piquant, almost sour flavor of the citrus fruit is baked into the fish under dry heat, to give it powerful attaque to balance its rich aftertaste."
+	icon = 'icons/obj/seafood.dmi'
 	icon_state = "citrussalmon"
 	bitesize = 3
 	food_flags = FOOD_MEAT
