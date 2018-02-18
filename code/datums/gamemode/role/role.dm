@@ -1,6 +1,6 @@
 /**
 * Used in Mixed Mode, also simplifies equipping antags for other gamemodes and
-* for the traitor panel.
+* for the role panel.
 
 		###VARS###
 	===Static Vars===
@@ -94,6 +94,8 @@
 	// Objectives
 	var/datum/objective_holder/objectives=new
 
+	var/icon/logo_state = "synd-logo"
+
 /datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	// Link faction.
 	faction=fac
@@ -110,13 +112,15 @@
 	if(!plural_name)
 		plural_name="[name]s"
 
+	objectives.owner = src
+
 	return 1
 
-/datum/role/proc/AssignToRole(var/datum/mind/M)
-	if(!istype(M))
+/datum/role/proc/AssignToRole(var/datum/mind/M,var/override = 0)
+	if(!istype(M) && !override)
 		WARNING("M is [M.type]!")
 		return 0
-	if(!CanBeAssigned(M))
+	if(!CanBeAssigned(M) && !override)
 		WARNING("[M] was to be assigned to [name] but failed CanBeAssigned!")
 		return 0
 
@@ -129,11 +133,12 @@
 
 /datum/role/proc/RemoveFromRole(var/datum/mind/M) //Called on deconvert
 	M.antag_roles[id] = null
+	M.antag_roles.Remove(id)
 	antag = null
 
 // Destroy this role
 /datum/role/proc/Drop()
-	if(faction && src in faction.members)
+	if(faction && (src in faction.members))
 		faction.members.Remove(src)
 
 	if(!faction)
@@ -202,7 +207,7 @@
 
 /datum/role/proc/AppendObjective(var/objective_type,var/duplicates=0,var/text=null)
 	if(!duplicates && locate(objective_type) in objectives)
-		return 0
+		return FALSE
 	var/datum/objective/O
 	if(text)
 		O = new objective_type(text)
@@ -210,8 +215,8 @@
 		O = new objective_type()
 	if(O.PostAppend())
 		objectives.AddObjective(O, antag)
-		return 1
-	return 0
+		return TRUE
+	return FALSE
 
 /datum/role/proc/ReturnObjectivesString(var/check_success = FALSE, var/check_name = TRUE)
 	var/dat = ""
@@ -221,12 +226,13 @@
 	dat += objectives.GetObjectiveString(check_success)
 	return dat
 
-/datum/role/proc/AdminPanelEntry()
+/datum/role/proc/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
+	var/icon/logo = icon('icons/mob/mob.dmi', logo_state)
 	var/mob/M = antag.current
-	return {"
-[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == DEAD ? " <b><font color=red>(DEAD)</font></b>" : ""]
-<a href='?src=\ref[usr];priv_msg=\ref[M]'>PM</a>
-<a href='?_src_=holder;traitor=\ref[M]'>TP</a> <br/>"}
+	return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
+[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
+ - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
+ - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
 
 /datum/role/proc/Greet(var/you_are=1)
 	if(you_are) //Getting a bit philosphical, but there we go
@@ -279,11 +285,34 @@
 
 	to_chat(world, text)
 
-/datum/role/proc/GetMemory()
-	var/text = "<br/><B>A [name] of the [faction.GetObjectivesMenuHeader()]</B>"
-	text += ReturnObjectivesString()
+/datum/role/proc/GetMemory(var/datum/mind/M, var/admin_edit = FALSE)
+	var/icon/logo = icon('icons/mob/mob.dmi', logo_state)
+	var/text = "<b><img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [name]</b>"
+	if (admin_edit)
+		text += " - <a href='?src=\ref[M];role_edit=\ref[src];remove_role=1'>(remove)</a>"
+	text += "<br>faction: "
+	if (faction)
+		text += faction.name
+	else
+		text += "<i>none</i>"
+	if (admin_edit)
+		text += " - "
+		if (faction)
+			text += "<a href='?src=\ref[M];role_edit=\ref[src];remove_from_faction=1'>(remove)</a>"
+		else
+			text += "<a href='?src=\ref[M];role_edit=\ref[src];add_to_faction=1'>(add)</a>"
+	text += "<br>"
+	if (objectives.objectives.len)
+		text += "<b>personnal objectives</b><br>"
+	text += objectives.GetObjectiveString(0,admin_edit,M)
+	text += "<br>"
+	if (faction && faction.objective_holder)
+		if (faction.objective_holder.objectives.len)
+			text += "<b>faction objectives</b><br>"
+		text += faction.objective_holder.GetObjectiveString(0,admin_edit,M)
+	text += "<br><br>"
 	return text
-
+/*
 /datum/role_controls
 	var/list/controls[0] // Associative, Label = html
 	var/list/warnings[0] // Just a list
@@ -322,16 +351,16 @@
 	[RC.Render()]
 </fieldset>
 "}
-
+*/
 /datum/role/proc/GetScoreboard()
 	//If you've gotten here to find what the hell this proc is for, you've hit a dead end. We don't know either.
 
 // DO NOT OVERRIDE
 /datum/role/Topic(href, href_list)
+
 	if(!href_list["mind"])
 		to_chat(usr, "<span class='warning'>BUG: mind variable not specified in Topic([href])!</span>")
 		return 1
-
 	var/datum/mind/M = locate(href_list["mind"])
 	if(!M)
 		return
@@ -344,7 +373,7 @@
 		message_admins("<span class='warning'>Something fucky is going on. [usr] has admin_auth 1 on their RoleTopic, but failed actual check_rights(R_ADMIN)!</span>")
 		return 1
 
-	if("auto_objectives" in href_list && admin_auth)
+	else if(href_list["auto_objectives"])//what's that even for actually? Might want to get rid of it later
 		var/datum/role/R = M.GetRole(href_list["auto_objectives"])
 		R.ForgeObjectives()
 		to_chat(usr, "<span class='info'>The objectives for [M.key] have been generated. You can edit them. Remember to announce their objectives.</span>")
@@ -363,10 +392,117 @@
 /datum/role/proc/GetMemoryHeader()
 	return name
 
+
+/////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
+
+/datum/role/traitor
+	name = TRAITOR
+	id = TRAITOR
+	logo_state = "synd-logo"
+
+//________________________________________________
+
+
+/datum/role/rogue//double agent
+	name = ROGUE
+	id = ROGUE
+	logo_state = "synd-logo"
+
+//________________________________________________
+
+/datum/role/nuclear_operative
+	name = NUKE_OP
+	id = NUKE_OP
+	logo_state = "nuke-logo"
+
+//________________________________________________
+
+
+/datum/role/revolutionary_leader
+	name = HEADREV
+	id = HEADREV
+	logo_state = "rev_head-logo"
+
+//________________________________________________
+
+/datum/role/revolutionary
+	name = REV
+	id = REV
+	logo_state = "rev-logo"
+
+//________________________________________________
+
+/datum/role/wizard_apprentice
+	name = WIZAPP
+	id = WIZAPP
+	special_role = WIZAPP
+	logo_state = "apprentice-logo"
+
+//________________________________________________
+
+
+/datum/role/madmonkey
+	name = MADMONKEY
+	id = MADMONKEY
+	special_role = MADMONKEY
+	logo_state = "monkey-logo"
+
+//________________________________________________
+
+/datum/role/bomberman
+	name = BOMBERMAN
+	id = BOMBERMAN
+	special_role = BOMBERMAN
+	logo_state = "bomb-logo"
+
+//________________________________________________
+
+/datum/role/death_commando
+	name = DEATHSQUADIE
+	id = DEATHSQUADIE
+	special_role = DEATHSQUADIE
+	logo_state = "death-logo"
+
+//________________________________________________
+
+/datum/role/syndicate_elite_commando
+	name = SYNDIESQUADIE
+	id = SYNDIESQUADIE
+	special_role = SYNDIESQUADIE
+	logo_state = "elite-logo"
+
+//________________________________________________
+
+
+/datum/role/emergency_responder
+	name = RESPONDER
+	id = RESPONDER
+	special_role = RESPONDER
+	logo_state = "ert-logo"
+
+//________________________________________________
+
+/datum/role/vox_raider
+	name = VOXRAIDER
+	id = VOXRAIDER
+	special_role = VOXRAIDER
+	logo_state = "vox-logo"
+
+//________________________________________________
+
+/datum/role/blob_overmind
+	name = BLOBOVERMIND
+	id = BLOBOVERMIND
+	logo_state = "blob-logo"
+
+//________________________________________________
+
 /datum/role/wizard
-	name = "wizard"
-	special_role = "Wizard"
+	name = WIZARD
+	id = WIZARD
+	special_role = WIZARD
 	disallow_job = TRUE
+	logo_state = "wizard-logo"
 
 /datum/role/wizard/ForgeObjectives()
 	switch(rand(1,100))
@@ -384,25 +520,24 @@
 			AppendObjective(/datum/objective/hijack)
 	return
 
-/datum/role/bloodcult
-	name = "cultist of Nar-Sie"
-	special_role = "cultist of Nar-Sie"
-
-/datum/role/bloodcult/AdminPanelEntry()
-	var/list/dat = ..()
-	dat += "<a href='?_src_=holder;cult_privatespeak=\ref[antag.current]'>Send message from Nar-Sie.</a>"
-	return dat
+//________________________________________________
 
 /datum/role/wish_granter_avatar
-	name = "avatar of the Wish Granter"
-	special_role = "avatar of the Wish Granter"
+	name = WISHGRANTERAVATAR
+	id = WISHGRANTERAVATAR
+	special_role = WISHGRANTERAVATAR
+	logo_state = "wish-logo"
 
 /datum/role/wish_granter_avatar/ForgeObjectives()
 	AppendObjective(/datum/objective/silence)
 
+//________________________________________________
+
 /datum/role/highlander
-	name = "highlander"
-	special_role = "highlander"
+	name = HIGHLANDER
+	special_role = HIGHLANDER
+	id = HIGHLANDER
+	logo_state = "high-logo"
 
 /datum/role/highlander/ForgeObjectives()
 	AppendObjective(/datum/objective/hijack)
@@ -413,9 +548,13 @@
 		return
 	equip_highlander(antag.current)
 
+//________________________________________________
+
 /datum/role/malfAI
-	name = "Malfunctioning AI"
+	name = MALF
+	id = MALF
 	required_jobs = list("AI")
+	logo_state = "malf-logo"
 
 /datum/role/malfAI/OnPostSetup()
 	. = ..()

@@ -33,9 +33,6 @@
 	..()
 
 /datum/rune_spell/proc/cast()
-	var/mob/living/user = activator
-	if (user)
-		user.say(invocation)
 	qdel(src)
 
 /datum/rune_spell/proc/abort(var/cause = "erased")
@@ -43,14 +40,13 @@
 		if ("erased")
 			if (istype (spell_holder,/obj/effect/rune))
 				spell_holder.visible_message("<span class='warning'>The rune's destruction ended the ritual.</span>")
-	qdel(src)
+	del(src)
 
 
 //Called whenever a rune gets activated or examined
 /proc/get_rune_spell(var/mob/user, var/obj/spell_holder, var/use = "ritual", var/datum/cultword/word1, var/datum/cultword/word2, var/datum/cultword/word3)
 	if (!word1 || !word2 || !word3)
 		return
-
 	for(var/subtype in subtypesof(/datum/rune_spell))
 		var/datum/rune_spell/instance = subtype
 		if (initial(instance.teleporter) && word1.type == initial(instance.word1) && word2.type == initial(instance.word2))
@@ -73,9 +69,6 @@
 	name = "Raise Structure"
 	desc = "Drag-in eldritch structures from the realm of Nar-Sie."
 	Act_restriction = CULT_PROLOGUE
-
-/datum/rune_spell/raisestructure/New()
-	..()
 	word1 = /datum/cultword/blood
 	word2 = /datum/cultword/technology
 	word3 = /datum/cultword/join
@@ -88,20 +81,16 @@
 	invocation = "O bidai nabora se'sma!"
 	var/obj/effect/cult_ritual/cult_communication/comms = null
 	var/destroying_self = 0
-
-/datum/rune_spell/communication/New()
-	..()
 	word1 = /datum/cultword/self
 	word2 = /datum/cultword/other
 	word3 = /datum/cultword/technology
 
 /datum/rune_spell/communication/cast()
 	var/mob/living/user = activator
-	if (user)
-		user.say(invocation)
 	if (user.loc != spell_holder.loc)
 		abort("too far")
 	else
+		user.say(invocation)
 		comms = new /obj/effect/cult_ritual/cult_communication(spell_holder.loc,user,src)
 
 /datum/rune_spell/communication/abort(var/cause = "erased")
@@ -183,20 +172,15 @@
 	desc = "Bring forth an arcane tome filled with Nar-Sie's knowledge."
 	Act_restriction = CULT_ACT_I
 	invocation = "N'ath reth sh'yro eth d'raggathnor!"
-
-/datum/rune_spell/summontome/New()
-	..()
 	word1 = /datum/cultword/see
 	word2 = /datum/cultword/blood
 	word3 = /datum/cultword/hell
+
 //RUNE IV
 /datum/rune_spell/conjuretalisman
 	name = "Conjure Talisman"
 	desc = "Can turn some runes into talismans."
 	invocation = "H'drak v'loso, mir'kanas verbot!"
-
-/datum/rune_spell/conjuretalisman/New()
-	..()
 	Act_restriction = CULT_ACT_I
 	word1 = /datum/cultword/hell
 	word2 = /datum/cultword/technology
@@ -208,9 +192,6 @@
 	desc = "Open the eyes of the unbelievers."
 	Act_restriction = CULT_ACT_I
 	invocation = "Mah'weyh pleggh at e'ntrath!"
-
-/datum/rune_spell/conversion/New()
-	..()
 	word1 = /datum/cultword/join
 	word2 = /datum/cultword/blood
 	word3 = /datum/cultword/self
@@ -221,9 +202,6 @@
 	desc = "Overwhelm your victim's senses with pure energy so they become catatonic for a moment."
 	Act_restriction = CULT_ACT_I
 	invocation = "Fuu ma'jin!"
-
-/datum/rune_spell/stun/New()
-	..()
 	word1 = /datum/cultword/join
 	word2 = /datum/cultword/hide
 	word3 = /datum/cultword/technology
@@ -234,11 +212,9 @@
 	desc = "Get the edge over nearby enemies by removing their senses."
 	Act_restriction = CULT_ACT_I
 	invocation = "Sti' kaliesin!"
-
-/datum/rune_spell/blind/New()
-	..()
 	word1 = /datum/cultword/destroy
 	word2 = /datum/cultword/see
+	word3 = /datum/cultword/other
 	word3 = /datum/cultword/other
 
 //RUNE VIII
@@ -247,9 +223,6 @@
 	desc = "Silence and deafen nearby enemies."
 	Act_restriction = CULT_ACT_I
 	invocation = "Sti' kaliedir!"
-
-/datum/rune_spell/mute/New()
-	..()
 	word1 = /datum/cultword/hide
 	word2 = /datum/cultword/other
 	word3 = /datum/cultword/see
@@ -260,9 +233,6 @@
 	desc = "Hide runes, blood stains, corpses, structures, and other compromising items."
 	Act_restriction = CULT_ACT_I
 	invocation = "Kla'atu barada nikt'o!"
-
-/datum/rune_spell/hide/New()
-	..()
 	word1 = /datum/cultword/hide
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/blood
@@ -273,9 +243,6 @@
 	desc = "Reveal what you have previously hidden."
 	Act_restriction = CULT_ACT_I
 	invocation = "Nikt'o barada kla'atu!"
-
-/datum/rune_spell/reveal/New()
-	..()
 	word1 = /datum/cultword/blood
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/hide
@@ -286,9 +253,6 @@
 	desc = "See the invisible, the dead, hear their voice."
 	Act_restriction = CULT_ACT_I
 	invocation = "Rash'tla sektath mal'zua. Zasan therium viortia."
-
-/datum/rune_spell/seer/New()
-	..()
 	word1 = /datum/cultword/see
 	word2 = /datum/cultword/hell
 	word3 = /datum/cultword/join
@@ -299,9 +263,6 @@
 	desc = "Wear the robes of those who follow Nar-Sie."
 	Act_restriction = CULT_ACT_II
 	invocation = "Sa tatha najin"
-
-/datum/rune_spell/summonrobes/New()
-	..()
 	word1 = /datum/cultword/hell
 	word2 = /datum/cultword/destroy
 	word3 = /datum/cultword/other
@@ -312,9 +273,6 @@
 	desc = "More obstacles for your enemies to overcome."
 	Act_restriction = CULT_ACT_II
 	invocation = "Khari'd! Eske'te tannin!"
-
-/datum/rune_spell/door/New()
-	..()
 	word1 = /datum/cultword/destroy
 	word2 = /datum/cultword/travel
 	word3 = /datum/cultword/self
@@ -325,9 +283,6 @@
 	desc = "Inspire nearby cultists to purge their stuns and raise their movement speed."
 	Act_restriction = CULT_ACT_II
 	invocation = "Khari'd! Gual'te nikka!"
-
-/datum/rune_spell/fervor/New()
-	..()
 	word1 = /datum/cultword/travel
 	word2 = /datum/cultword/technology
 	word3 = /datum/cultword/other
@@ -338,9 +293,6 @@
 	desc = "Bring forth one of your fellow believers, no matter how far they are, as long as their heart beats"
 	Act_restriction = CULT_ACT_II
 	invocation = "N'ath reth sh'yro eth d'rekkathnor!"
-
-/datum/rune_spell/summoncultist/New()
-	..()
 	word1 = /datum/cultword/join
 	word2 = /datum/cultword/other
 	word3 = /datum/cultword/self
@@ -351,11 +303,11 @@
 	desc = "Take a shortcut through the veil between this world and the other one."
 	Act_restriction = CULT_ACT_II
 	invocation = "Sas'so c'arta forbici!"
+	word1 = /datum/cultword/travel
+	word2 = /datum/cultword/self
 
 /datum/rune_spell/portalentrance/New(var/mob/user, var/obj/holder, var/datum/cultword/w3)
 	..()
-	word1 = /datum/cultword/travel
-	word2 = /datum/cultword/self
 	teleporter = 1
 	if (w3)
 		word3 = w3.type
@@ -365,11 +317,11 @@
 	name = "Portal Exit"
 	desc = "We hope you enjoyed your flight with Air Nar-Sie"//might change it later or not.
 	Act_restriction = CULT_ACT_II
+	word1 = /datum/cultword/travel
+	word2 = /datum/cultword/other
 
 /datum/rune_spell/portalexit/New(var/mob/user, var/obj/holder, var/datum/cultword/w3)
 	..()
-	word1 = /datum/cultword/travel
-	word2 = /datum/cultword/other
 	teleporter = 1
 	if (w3)
 		word3 = w3.type
@@ -380,9 +332,6 @@
 	desc = "Scramble the circuits of nearby devices"
 	Act_restriction = CULT_ACT_II
 	invocation = "Ta'gh fara'qha fel d'amar det!"
-
-/datum/rune_spell/pulse/New()
-	..()
 	word1 = /datum/cultword/destroy
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/technology
@@ -393,9 +342,6 @@
 	desc = "Leave your body so you can converse with the dead and observe your targets."
 	Act_restriction = CULT_ACT_II
 	invocation = "Fwe'sh mah erl nyag r'ya!"
-
-/datum/rune_spell/astraljourney/New()
-	..()
 	word1 = /datum/cultword/hell
 	word2 = /datum/cultword/travel
 	word3 = /datum/cultword/self
@@ -406,9 +352,6 @@
 	desc = "Create a strong body for your fallen allies to inhabit."
 	Act_restriction = CULT_ACT_III
 	invocation = "Pasnar val'keriam usinar. Savrae ines amutan. Yam'toth remium il'tarat!"
-
-/datum/rune_spell/resurrect/New()
-	..()
 	word1 = /datum/cultword/blood
 	word2 = /datum/cultword/join
 	word3 = /datum/cultword/hell

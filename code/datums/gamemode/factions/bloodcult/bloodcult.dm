@@ -10,16 +10,12 @@
 	From his teachings, they were granted the ability to perform blood magic rituals allowing them to fight and grow their ranks, and given the goal of pushing his agenda.\
 	Nar-Sie's goal is to tear open a breach through reality so he can pull the station into his realm and feast on the crew's blood and souls."
 	roletype = /datum/role/cultist
+	logo_state = "cult-logo"
 	var/list/bloody_floors = list()//to replace later on
 
-/datum/faction/bloodcult/GetObjectivesMenuHeader()
-	var/icon/logo = icon('icons/mob/mob.dmi', "cult-logo")
-	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Cult of Nar-Sie</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
-	return header
-
-/datum/faction/bloodcult/AdminPanelEntry()
+/datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
-	dat += "<a href='?_src_=holder;cult_mindspeak=\ref[src]'>Voice of Nar-Sie</a>"
+	dat += "<br><a href='?src=\ref[A];cult_mindspeak=\ref[src]'>Voice of Nar-Sie</a>"
 	return dat
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)

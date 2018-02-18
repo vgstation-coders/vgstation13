@@ -1,8 +1,10 @@
 /datum/objective/silence
 	explanation_text = "Do not allow anyone to escape the station. Only allow the shuttle to be called when everyone is dead and your story is the only one left."
+	name = "Crash with no survivor"
 
 /datum/objective/silence/IsFulfilled()
-	..()
+	if (..())
+		return TRUE
 	if(emergency_shuttle.location != map.zCentcomm)
 		return FALSE
 	for(var/mob/living/player in player_list)

@@ -53,14 +53,15 @@
 		CreateFaction(Fac, pc)
 	return PopulateFactions()
 
-/datum/gamemode/proc/CreateFaction(var/Fac, var/population)
+/datum/gamemode/proc/CreateFaction(var/Fac, var/population, var/override = 0)
 	var/datum/faction/F = new Fac
-	if(F.can_setup(population))
+	if(F.can_setup(population) || override)
 		factions += F
 		factions_allowed -= F
+		return F
 	else
 		qdel(F)
-
+		return null
 /*
 	Get list of available players
 	Get list of active factions
@@ -198,18 +199,3 @@
 			return 1
 
 /datum/gamemode/proc/declare_completion()
-
-/datum/gamemode/proc/AdminPanelEntry()
-	var/list/dat = list("<h2>Factions</h2><br>")
-	if(factions.len)
-		for(var/datum/faction/F in factions)
-			dat += F.AdminPanelEntry()
-	else
-		dat += "No faction is currently active."
-	dat += "<br><h2>Roles</h2><br>"
-	if(orphaned_roles.len)
-		for(var/datum/role/R in orphaned_roles)
-			dat += R.AdminPanelEntry()
-	else
-		dat += "No orphaned role is currently active."
-	return dat

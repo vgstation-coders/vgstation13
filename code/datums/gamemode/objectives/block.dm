@@ -1,8 +1,10 @@
 /datum/objective/block
 	explanation_text = "Do not allow any organic lifeforms to escape on the shuttle alive."
+	name = "Block the shuttle"
 
 /datum/objective/block/IsFulfilled()
-	..()
+	if (..())
+		return TRUE
 	if(!istype(owner.current, /mob/living/silicon))
 		return FALSE
 	if(emergency_shuttle.location != CENTCOMM_Z)
