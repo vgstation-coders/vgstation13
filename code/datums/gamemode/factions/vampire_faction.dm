@@ -1,7 +1,7 @@
 /datum/faction/vampire
 	name = "Vampire Lords"
 	desc = "Hailing from Space Transylvania."
-	ID = VAMPIRE
+	ID = VAMPIRELORDS
 	required_pref = ROLE_VAMPIRE
 	initial_role = VAMPIRE
 	late_role = VAMPIRE // Vampires do not change their role.

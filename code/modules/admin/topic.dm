@@ -4575,6 +4575,61 @@
 
 	//------------------------------------------------------------------Shuttle stuff end---------------------------------
 
+
+	if (href_list["obj_add"])
+		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
+
+		var/list/available_objectives = list()
+
+		for(var/objective_type in subtypesof(/datum/objective))
+			var/datum/objective/O = objective_type
+			available_objectives.Add(initial(O.name))
+			available_objectives[initial(O.name)] = O
+
+		var/new_obj = input("Select a new objective", "New Objective", null) as null|anything in available_objectives
+		var/obj_type = available_objectives[new_obj]
+
+		var/datum/objective/new_objective = new obj_type(null,FALSE)
+
+		if (obj_holder.owner)//so objectives won't target their owners.
+			new_objective.owner = obj_holder.owner
+
+		var/setup = TRUE
+		if (istype(new_objective,/datum/objective/target))
+			var/datum/objective/target/new_O = new_objective
+			if (alert("Do you want to specify a target?", "New Objective", "Yes", "No") == "No")
+				setup = new_O.find_target()
+			else
+				setup = new_O.select_target()
+
+		if(!setup)
+			alert("Couldn't set-up a proper target.", "New Objective")
+			return
+
+		if (obj_holder.faction)
+			obj_holder.faction.AppendObjective(new_objective)
+			log_admin("[usr.key]/([usr.name]) gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
+
+	if (href_list["obj_delete"])
+		var/datum/objective/objective = locate(href_list["obj_delete"])
+		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
+
+		ASSERT(istype(objective) && istype(obj_holder))
+
+		obj_holder.objectives.Remove(objective)
+
+		if (obj_holder.faction)
+			log_admin("[usr.key]/([usr.name]) removed \the [obj_holder.faction.ID]'s objective ([objective.explanation_text])")
+
+	if(href_list["obj_completed"])
+		var/datum/objective/objective = locate(href_list["obj_completed"])
+
+		ASSERT(istype(objective))
+
+		objective.force_success = !objective.force_success
+		log_admin("[usr.key]/([usr.name]) toggled [objective.faction.ID] [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
+
+
 	if(href_list["wages_enabled"])
 		if(check_rights(R_ADMIN))
 			if(ticker.current_state == 1)

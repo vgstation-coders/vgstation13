@@ -34,6 +34,6 @@
 
 
 /datum/role/cultist/AdminPanelEntry()
-	var/list/dat = ..()
-	dat += "<a href='?_src_=holder;cult_privatespeak=\ref[antag.current]'>Send message from Nar-Sie.</a>"
+	var/dat = ..()
+	dat += " - <a href='?_src_=holder;cult_privatespeak=\ref[antag.current]'>(Nar-Sie whispers)</a>"
 	return dat
