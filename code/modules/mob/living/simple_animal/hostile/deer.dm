@@ -106,17 +106,17 @@
 			if(!friends.Find(user))
 				friends.Add(user)
 				to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
-				name_mob(user)
+			name_mob(user)
 		qdel(A)
 
 		if(istype (W, /obj/item/weapon/reagent_containers/food/snacks/grown/apple/poisoned))
 			spawn(rand(50,150))
 				Die() //You dick
 
-/mob/living/simple_animal/hostile/giant_spider/update_icons()
+/mob/living/simple_animal/hostile/deer/update_icons()
 	.=..()
 
-	if(stat == DEAD && butchering_drops && delimbable_icon)
+	if(stat == DEAD && butchering_drops)
 		var/datum/butchering_product/deer_head/our_head = locate(/datum/butchering_product/deer_head) in butchering_drops
 		if(istype(our_head))
 			icon_state = "[icon_dead][(our_head.amount) ? "_headless" : ""]"

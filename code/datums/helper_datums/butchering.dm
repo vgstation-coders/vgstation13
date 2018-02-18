@@ -257,6 +257,10 @@
 	if(!amount)
 		return "Its head has been taken. "
 
+/datum/butchering_product/deer_head/spawn_result(location, mob/parent)
+	..()
+	parent.update_icons()
+
 
 #define TEETH_FEW		/datum/butchering_product/teeth/few		//4-8
 #define TEETH_BUNCH		/datum/butchering_product/teeth/bunch	//8-16

@@ -753,7 +753,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 /mob/living/simple_animal/proc/name_mob(mob/user)
-	var/n_name = copytext(sanitize(input(user, "What would you like to name \the [src]?", "[src] Name", null) as text|null), 1, MAX_NAME_LEN)
+	var/n_name = copytext(sanitize(input(user, "What would you like to name \the [src]?", "Renaming \the [src]", null) as text|null), 1, MAX_NAME_LEN)
 	if(n_name && !user.incapacitated())
 		name = "[n_name]"
 	var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
