@@ -350,7 +350,7 @@ var/global/list/whitelisted_species = list("Human")
 	known_languages = list(LANGUAGE_CLATTER)
 	flags = IS_WHITELISTED | NO_BREATHE
 	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD
-
+	meat_type = /obj/item/weapon/reagent_containers/bone
 	chem_flags = NO_EAT | NO_INJECT
 
 	default_mutations=list(SKELETON)
