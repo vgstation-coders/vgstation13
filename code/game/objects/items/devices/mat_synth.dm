@@ -42,7 +42,7 @@
 
 /obj/item/device/material_synth/robot/engiborg/New() //We have to do this during New() because BYOND can't pull a typesof() during compile time.
 	. = ..()
-	var/list/cant_scan = list(/obj/item/stack/sheet/mineral/clown, /obj/item/stack/sheet/mineral/phazon)
+	cant_scan = list(/obj/item/stack/sheet/mineral/clown, /obj/item/stack/sheet/mineral/phazon)
 
 /obj/item/device/material_synth/robot/mommi //MoMMI version, a few more materials to start with.
 	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
