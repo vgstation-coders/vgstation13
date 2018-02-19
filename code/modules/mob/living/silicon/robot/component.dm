@@ -6,7 +6,7 @@
 /datum/robot_component/var/toggled = TRUE
 /datum/robot_component/var/brute_damage = 0
 /datum/robot_component/var/electronics_damage = 0
-/datum/robot_component/var/resistance = 1
+/datum/robot_component/var/vulnerability = 1
 /datum/robot_component/var/energy_consumption = 0
 /datum/robot_component/var/max_damage = 30 //WHY THE FUCK IS THE DEFAULT MAX DAMAGE 30 ARE YOU STUPID
 /datum/robot_component/var/mob/living/silicon/robot/owner
@@ -39,8 +39,8 @@
 	if(installed != COMPONENT_INSTALLED)
 		return
 
-	brute_damage += brute * resistance
-	electronics_damage += electronics * resistance
+	brute_damage += brute * vulnerability
+	electronics_damage += electronics * vulnerability
 
 	if(brute_damage + electronics_damage >= max_damage)
 		destroy()
@@ -138,7 +138,7 @@
 	icon_state = "working"
 	var/brute_damage = 0
 	var/electronics_damage = 0
-	var/resistance = 1 //Multiplies the damage taken by this ammount.
+	var/vulnerability = 1 //Multiplies the damage taken by this ammount.
 
 /obj/item/robot_parts/robot_component/binary_communication_device
 	name = "binary communication device"
@@ -147,7 +147,7 @@
 /obj/item/robot_parts/robot_component/binary_communication_device/reinforced
 	name = "reinforced binary communication device"
 	icon_state = "ref_binary_translator"
-	resistance = 0.5
+	vulnerability = 0.5
 
 /obj/item/robot_parts/robot_component/actuator
 	name = "actuator"
@@ -156,7 +156,7 @@
 /obj/item/robot_parts/robot_component/actuator/reinforced
 	name = "reinforced actuator"
 	icon_state = "ref_actuator"
-	resistance = 0.5
+	vulnerability = 0.5
 
 /obj/item/robot_parts/robot_component/armour
 	name = "armour plating"
@@ -165,7 +165,7 @@
 /obj/item/robot_parts/robot_component/armour/reinforced
 	name = "reinforced armour plating"
 	icon_state = "ref_armor_plating"
-	resistance = 0.5
+	vulnerability = 0.5
 
 /obj/item/robot_parts/robot_component/camera
 	name = "camera"
@@ -174,7 +174,7 @@
 /obj/item/robot_parts/robot_component/camera/reinforced
 	name = "reinforced camera"
 	icon_state = "ref_camera"
-	resistance = 0.5
+	vulnerability = 0.5
 
 /obj/item/robot_parts/robot_component/diagnosis_unit
 	name = "diagnosis unit"
@@ -183,7 +183,7 @@
 /obj/item/robot_parts/robot_component/diagnosis_unit/reinforced
 	name = "reinforced diagnosis unit"
 	icon_state = "ref_diagnosis_unit"
-	resistance = 0.5
+	vulnerability = 0.5
 
 /obj/item/robot_parts/robot_component/radio
 	name = "radio"
@@ -192,7 +192,7 @@
 /obj/item/robot_parts/robot_component/radio/reinforced
 	name = "reinforced radio"
 	icon_state = "ref_radio"
-	resistance = 0.5
+	vulnerability = 0.5
 
 /obj/item/broken_device/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W, /obj/item/stack/nanopaste))

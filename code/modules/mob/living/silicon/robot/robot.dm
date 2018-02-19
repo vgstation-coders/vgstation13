@@ -50,6 +50,8 @@
 
 	// Components are basically robot organs.
 	var/list/components = list()
+	var/component_extension = null
+
 	var/obj/item/device/mmi/mmi = null
 	var/obj/item/device/pda/ai/rbPDA = null
 	var/datum/wires/robot/wires = null
@@ -103,7 +105,7 @@
 	station_holomap = new(src)
 	radio = new /obj/item/device/radio/borg(src)
 	aicamera = new/obj/item/device/camera/silicon/robot_camera(src)
-	
+
 	if(AIlink)
 		connected_ai = select_active_ai_with_fewest_borgs()
 
@@ -157,6 +159,16 @@
 	if(!rbPDA)
 		rbPDA = new/obj/item/device/pda/ai(src)
 	rbPDA.set_name_and_job(custom_name,braintype)
+
+/mob/living/silicon/robot/proc/upgrade_components()
+	if(component_extension)
+		for(var/V in components) if(V != "power cell")
+			var/datum/robot_component/C = components[V]
+			var/P = text2path("[C.external_type][component_extension]")
+			var/obj/item/robot_parts/robot_component/I = new P
+			C.installed = 1
+			C.wrapped = I
+			C.vulnerability = I.vulnerability
 
 //If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
 //Improved /N
@@ -626,7 +638,7 @@
 				C.wrapped = W
 				C.electronics_damage = I.electronics_damage
 				C.brute_damage = I.brute_damage
-				C.resistance = I.resistance
+				C.vulnerability = I.vulnerability
 				C.install()
 				user.drop_item(W)
 				W.forceMove(null)

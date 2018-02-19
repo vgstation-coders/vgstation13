@@ -68,6 +68,18 @@
 	category = "Robot"
 	materials = list(MAT_IRON=25000)
 
+/datum/design/robot/ref_torso
+	name = "Cyborg Component (Reinforced robot torso)"
+	desc = "Used to build a reinforced Robot torso."
+	id = "ref_robot_torso"
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
+	build_type = MECHFAB
+	build_path = /obj/item/robot_parts/chest/reinforced
+	category = "Robot"
+	materials = list(MAT_IRON=40000, MAT_SILVER=10000, MAT_GOLD=5000, MAT_URANIUM=5000, MAT_DIAMOND=5000, MAT_PLASMA=5000)
+
+
+//Components
 /datum/design/robot/binary_commucation_device
 	name = "Cyborg Component (Binary Communication Device)"
 	desc = "Used to build a binary communication device."

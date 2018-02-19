@@ -56,6 +56,12 @@
 	icon_state = LIMB_CHEST
 	var/wires = 0.0
 	var/obj/item/weapon/cell/cell = null
+	var/extension = null //For making borgs start with pre-installed better components. Make the var the end of the path including the "/".
+
+/obj/item/robot_parts/chest/reinforced
+	name = "reinforced robot torso"
+	desc = "A heavily reinforced case containing cyborg logic boards, space for a standard power cell, and several pre-installed reinforced robot components."
+	extension = "/reinforced"
 
 /obj/item/robot_parts/head
 	name = "robot head"
@@ -231,7 +237,9 @@
 				O.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
 
 			O.job = "Cyborg"
-
+			if(chest.extension)
+				O.component_extension = chest.extension
+				O.upgrade_components()
 			O.cell = chest.cell
 			O.cell.forceMove(O)
 			W.forceMove(O) //Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
