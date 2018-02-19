@@ -242,11 +242,11 @@
 	if(copytext(M,1,2) == "$")
 		if(src.research_flags & IGNORE_MATS)
 			return 1
-		return round(materials.storage[M] / get_resource_cost_w_coeff(being_built, M), 1)
+		return round(materials.storage[M] / get_resource_cost_w_coeff(being_built, M), 0)
 	else
 		if(src.research_flags & IGNORE_CHEMS)
 			return 1
-		return round(reagents.get_reagent_amount(M) / get_resource_cost_w_coeff(being_built, M), 1)
+		return round(reagents.get_reagent_amount(M) / get_resource_cost_w_coeff(being_built, M), 0)
 	return 0
 
 /obj/machinery/r_n_d/fabricator/proc/build_part(var/datum/design/part)
