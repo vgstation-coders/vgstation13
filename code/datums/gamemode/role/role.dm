@@ -113,7 +113,6 @@
 		plural_name="[name]s"
 
 	objectives.owner = src
-
 	return 1
 
 /datum/role/proc/AssignToRole(var/datum/mind/M,var/override = 0)
@@ -189,6 +188,8 @@
 		antag.special_role=special_role
 	if(disallow_job)
 		antag.assigned_role="MODE"
+	if(world.has_round_started()) //We missed roundstart
+		OnPostSetup()
 	return 1
 
 // Return 1 on success, 0 on failure.
@@ -519,6 +520,18 @@
 		else
 			AppendObjective(/datum/objective/hijack)
 	return
+
+/datum/role/wizard/OnPostSetup()
+	..()
+	if(wizardstart.len == 0)
+		to_chat( antag.current, "<span class='danger'>A starting location for you could not be found, please report this bug!</span>")
+		log_admin("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
+		message_admins("Failed to set-up a round of wizard. Couldn't find any wizard spawn points.")
+		return 0 //Critical failure.
+
+	antag.current.forceMove(pick(wizardstart))
+	equip_wizard(antag.current)
+	name_wizard(antag.current)
 
 //________________________________________________
 
