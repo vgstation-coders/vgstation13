@@ -45,7 +45,7 @@
 /obj/item/weapon/photo/proc/photocreate(var/inicon, var/inimg, var/ininfo, var/inblueprints)
 	icon = inicon
 	img = inimg
-	desc = ininfo
+	info = ininfo
 	blueprints = inblueprints
 
 /obj/item/weapon/photo/attackby(obj/item/weapon/P, mob/user)
