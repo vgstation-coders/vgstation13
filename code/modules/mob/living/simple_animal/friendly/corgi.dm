@@ -677,59 +677,37 @@
 	if(!barrel)
 		barrel = new /obj/item/weapon/reagent_containers/glass/replenishing/rescue(src)
 	barrel.attack(M,src)
-	say(pick(speak))
 
 /mob/living/simple_animal/corgi/saint/proc/IsVictim(var/mob/M)
 	if(iscarbon(M))
 		var/mob/living/carbon/victim = M
-		if(victim.undergoing_hypothermia() || (victim.isUnconscious() && !victim.isDead()))
-			return TRUE // Oh shit.
+		if(victim.undergoing_hypothermia() && !victim.isDead())
+			return TRUE
 	return FALSE
 
 /mob/living/simple_animal/corgi/saint/UnarmedAttack(var/atom/A)
-	if(IsVictim(A))
+	if(client && IsVictim(A))
 		rescue(A)
 		return
 	return ..()
 
-/mob/living/simple_animal/corgi/saint/Life() //Shameless copypaste of Ian's Life()
+/mob/living/simple_animal/corgi/saint/Life()
 	if(timestopped)
 		return FALSE //under effects of time magick
 	..()
 
-	if(!incapacitated() && !resting && !locked_to && !ckey)
-		turns_since_scan++
-		if(turns_since_scan > 5)
-			turns_since_scan = 0
-			if(victim)
-				if(!IsVictim(victim) || !(isturf(victim.loc) || victim.locked_to) || !(victim.loc in oview(src,6)))
-					victim = null
-					stop_automated_movement = FALSE
-			if(!victim)
-				for(var/mob/living/carbon/M in oview(src,6))
-					if(IsVictim(M))
-						victim = M
-						break
-			if(victim)
-				spawn(0)
-					stop_automated_movement = TRUE
-					step_to(src,victim,1)
-					sleep(2)
-					step_to(src,victim,1)
-					sleep(2)
-					step_to(src,victim,1)
-
-					if(victim)	//Not redundant due to sleeps, Item can be gone in 6 decisecomds
-						if (victim.loc.x < src.x)
-							dir = WEST
-						else if (victim.loc.x > src.x)
-							dir = EAST
-						else if (victim.loc.y < src.y)
-							dir = SOUTH
-						else if (victim.loc.y > src.y)
-							dir = NORTH
-						else
-							dir = SOUTH
-
-						if((isturf(victim.loc) || victim.locked_to) && Adjacent(victim))
-							rescue(victim)
+	if(!incapacitated() && !resting && !locked_to && !client)
+		var/list/can_see() = view(src, 6) //Might need tweaking.
+		if(victim && (!IsVictim(victim) || !(victim.loc in can_see)))
+			victim = null
+			stop_automated_movement = FALSE
+		if(!victim)
+			for(var/mob/living/carbon/M in can_see)
+				if(IsVictim(M))
+					victim = M //Oh shit.
+					break
+		if(victim)
+			stop_automated_movement = TRUE
+			step_towards(src,victim)
+			if(Adjacent(victim) && IsVictim(victim)) //Seriously don't try to rescue the dead.
+				rescue(victim)
