@@ -465,13 +465,3 @@ obj/item/weapon/banhammer/admin
 //		base_overlay.appearance = appearance
 //		base_overlay.plane = FLOAT_PLANE
 //		overlays += base_overlay
-
-
-
-/obj/item/weapon/reagent_containers/bone
-	name = "bone"
-	desc = "Boney.  Probably has some marrow left"
-	icon = 'icons/obj/weapons.dmi'
-	icon_state = "bone"
-	item_state = "bone_item"
-	force = 5
