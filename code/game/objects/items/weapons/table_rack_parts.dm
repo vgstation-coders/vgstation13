@@ -50,10 +50,9 @@
 			glass.use(1)
 			qdel(src)
 /obj/item/weapon/table_parts/attack_self(mob/user)
-	for(var/atom/movable/AM in get_turf(user))
-		if(istype(AM,/obj/structure/table))
-			to_chat(user, "<span class='warning'>There is already \a [src] here!</span>")
-			return
+	if(locate(/obj/structure/table) in get_turf(user))
+		to_chat(user, "<span class='warning'>There is already a table here!</span>")
+		return
 
 	new table_type(user.loc)
 	user.drop_item(src, force_drop = 1)
@@ -105,7 +104,7 @@
 /obj/item/weapon/table_parts/wood/poker
 	name = "gambling table parts"
 	icon_state = "gambling_tableparts"
-	table_type = /obj/item/weapon/table_parts/wood/poker
+	table_type = /obj/structure/table/woodentable/poker
 
 /obj/item/weapon/table_parts/wood/poker/attackby(obj/item/weapon/W, mob/user)
 	if (iswrench(W))
