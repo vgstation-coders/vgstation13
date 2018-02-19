@@ -985,10 +985,8 @@
 
 	if(..())
 		return 1
-	if(volume >= 1)
-		T.bless()
 	if(volume >= 5)
-		T.holy = 1
+		T.bless()
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
