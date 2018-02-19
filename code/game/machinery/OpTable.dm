@@ -17,8 +17,6 @@
 
 /obj/machinery/optable/New()
 	..()
-	if(map.nameShort == "deff")
-		icon = 'maps/defficiency/medbay.dmi'
 	for(dir in list(NORTH,EAST,SOUTH,WEST))
 		computer = locate(/obj/machinery/computer/operating, get_step(src, dir))
 		if (computer)
