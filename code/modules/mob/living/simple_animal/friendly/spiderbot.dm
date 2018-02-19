@@ -337,6 +337,7 @@
 
 	if(incapacitated())
 		to_chat(src, "Can't do that while incapacitated or dead.")
+		return
 
 	radio.listening = !radio.listening
 	to_chat(src, "<span class='notice'>Radio is [radio.listening ? "" : "no longer "]receiving broadcasts.</span>")
