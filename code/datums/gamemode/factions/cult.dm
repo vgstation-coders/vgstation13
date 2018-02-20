@@ -16,7 +16,7 @@
 	var/narsie_condition_cleared
 
 /datum/faction/cult/narsie/GetObjectivesMenuHeader()
-	var/icon/logo = icon('icons/mob/mob.dmi', "cult-logo")
+	var/icon/logo = icon('icons/logos.dmi', "cult-logo")
 	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Cult of Nar-Sie</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
 	return header
 
