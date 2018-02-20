@@ -3057,8 +3057,8 @@
 	name = "Salt Water"
 	id = SALTWATER
 	result = SALTWATER
-	required_reagents = list(WATER = 1, SODIUMCHLORIDE = 1)
-	result_amount = 2
+	required_reagents = list(WATER = 10, SODIUMCHLORIDE = 1)
+	result_amount = 10
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
