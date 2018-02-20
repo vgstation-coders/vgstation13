@@ -127,10 +127,15 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/sheettype=null
 	var/cointype=null
 	var/value=0
+	var/color
+	var/alpha = 255
 
 /datum/material/New()
 	if(processed_name=="")
 		processed_name=name
+
+/datum/material/proc/on_use(obj/source, atom/target, mob/user)
+	ASSERT(source)
 
 /datum/material/iron
 	name="Iron"
@@ -140,6 +145,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/weapon/ore/iron
 	sheettype=/obj/item/stack/sheet/metal
 	cointype=/obj/item/weapon/coin/iron
+	color = "#666666" //rgb: 102, 102, 102
 
 /datum/material/glass
 	name="Sand"
@@ -149,6 +155,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	cc_per_sheet=CC_PER_SHEET_GLASS
 	oretype=/obj/item/weapon/ore/glass
 	sheettype=/obj/item/stack/sheet/glass/glass
+	color = "#6E8DA2" //rgb: 110, 141, 162
+	alpha = 122
 
 /datum/material/diamond
 	name="Diamond"
@@ -158,6 +166,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/weapon/ore/diamond
 	sheettype=/obj/item/stack/sheet/mineral/diamond
 	cointype=/obj/item/weapon/coin/diamond
+	color = "#74C6C6" //rgb: 116, 198, 198
+	alpha = 200
 
 /datum/material/plasma
 	name="Plasma"
@@ -166,6 +176,13 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/weapon/ore/plasma
 	sheettype=/obj/item/stack/sheet/mineral/plasma
 	cointype=/obj/item/weapon/coin/plasma
+	color = "#500064" //rgb: 80, 0, 100
+
+/datum/material/plasma/on_use(obj/source, atom/target, mob/user)
+	..()
+	if(isliving(target))
+		var/mob/living/L = target
+		L.adjustToxLoss(rand(1,source.quality))
 
 /datum/material/gold
 	name="Gold"
@@ -174,6 +191,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/weapon/ore/gold
 	sheettype=/obj/item/stack/sheet/mineral/gold
 	cointype=/obj/item/weapon/coin/gold
+	color = "#F7C430" //rgb: 247, 196, 48
 
 /datum/material/silver
 	name="Silver"
@@ -182,6 +200,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/weapon/ore/silver
 	sheettype=/obj/item/stack/sheet/mineral/silver
 	cointype=/obj/item/weapon/coin/silver
+	color = "#D0D0D0" //rgb: 208, 208, 208
+
 
 /datum/material/uranium
 	name="Uranium"
@@ -190,6 +210,13 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/weapon/ore/uranium
 	sheettype=/obj/item/stack/sheet/mineral/uranium
 	cointype=/obj/item/weapon/coin/uranium
+	color = "#B8B8C0" //rgb: 184, 184, 192
+
+/datum/material/uranium/on_use(obj/source, atom/target, mob/user)
+	..()
+	if(isliving(target))
+		var/mob/living/L = target
+		L.apply_radiation(rand(1,3)*source.quality, RAD_EXTERNAL)
 
 /datum/material/clown
 	name="Bananium"
@@ -199,6 +226,11 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/clown
 	cointype=/obj/item/weapon/coin/clown
 
+/datum/material/clown/on_use(obj/source) //May [ticker.deity] have mercy
+	..()
+	if(prob(2*source.quality))
+		playsound(get_turf(source), 'sound/items/bikehorn.ogg', 100, 1)
+
 /datum/material/phazon
 	name="Phazon"
 	id=MAT_PHAZON
@@ -207,6 +239,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/weapon/ore/phazon
 	sheettype=/obj/item/stack/sheet/mineral/phazon
 	cointype=/obj/item/weapon/coin/phazon
+	color = "#5E02F8" //rgb: 94, 2, 248
 
 /datum/material/plastic
 	name="Plastic"
@@ -215,6 +248,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=null
 	sheettype=/obj/item/stack/sheet/mineral/plastic
 	cointype=null
+	color = "#F8F8FF" //rgb: 248, 248, 255
 
 /datum/material/cardboard
 	name="Cardboard"
@@ -224,6 +258,17 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/cardboard
 	cointype=null
 	cc_per_sheet = CC_PER_SHEET_METAL
+
+/datum/material/wood
+	name="Wood"
+	id=MAT_WOOD
+	value=1
+	oretype=null
+	sheettype=/obj/item/stack/sheet/wood
+	cointype=null
+	cc_per_sheet = CC_PER_SHEET_METAL
+	color = "#663300" //rgb: 102, 51, 0
+
 
 /* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium

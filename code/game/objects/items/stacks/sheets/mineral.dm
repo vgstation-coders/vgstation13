@@ -114,6 +114,7 @@ var/list/datum/stack_recipe/diamond_recipes = list ( \
 var/list/datum/stack_recipe/uranium_recipes = list ( \
 	new/datum/stack_recipe("uranium floor tile", /obj/item/stack/tile/mineral/uranium, 1, 4, 20), \
 	new/datum/stack_recipe("uranium door", /obj/machinery/door/mineral/uranium, 10, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair,one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
 	)
 
 /obj/item/stack/sheet/mineral/uranium/New(var/loc, var/amount=null)
@@ -141,6 +142,7 @@ var/list/datum/stack_recipe/uranium_recipes = list ( \
 var/list/datum/stack_recipe/plasma_recipes = list ( \
 	new/datum/stack_recipe("plasma floor tile", /obj/item/stack/tile/mineral/plasma, 1, 4, 20), \
 	new/datum/stack_recipe("plasma door", /obj/machinery/door/mineral/transparent/plasma, 10, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair,one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
 	)
 
 /obj/item/stack/sheet/mineral/plasma/New(var/loc, var/amount=null)

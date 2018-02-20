@@ -69,6 +69,45 @@
 		return 0
 	return 1
 
+/datum/stack_recipe/dorf
+	var/inherit_material
+	var/gen_quality
+
+/datum/stack_recipe/dorf/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list(), inherit_material = FALSE, gen_quality = FALSE)
+	..()
+	src.inherit_material = inherit_material
+	src.gen_quality = gen_quality
+
+
+/datum/stack_recipe/dorf/finish_building(mob/usr, var/obj/item/stack/S, var/obj/R)
+	var/datum/material/mat
+	var/datum/materials/materials_list = new
+	if(istype(S, /obj/item/stack/sheet/mineral)) //With mineral, it's straight forward
+		var/obj/item/stack/sheet/mineral/M = S
+
+		mat = materials_list.getMaterial(M.recyck_mat)
+	else //Not so straight forward
+		switch(S.type)
+			if(/obj/item/stack/sheet/metal)
+				mat = materials_list.getMaterial(MAT_IRON)
+			if(/obj/item/stack/sheet/wood)
+				mat = materials_list.getMaterial(MAT_WOOD)
+		if(istype(S, /obj/item/stack/sheet/glass))
+			mat = materials_list.getMaterial(MAT_GLASS)
+	to_chat(usr, "mat = [mat], inherit_material = [inherit_material], gen_quality = [gen_quality]")
+	if(mat)
+		if(inherit_material)
+			to_chat(world, "inherit_material called by [mat]")
+			var/icon/original = icon(R.icon, R.icon_state)
+			original.ColorTone(mat.color)
+			R.icon = original
+			R.alpha = mat.alpha
+			R.material_type = mat
+			to_chat(world, "material type of R is [R.material_type]")
+		//if(gen_quality)
+		if(!findtext(lowertext(R.name), lowertext(mat.name)))
+			R.name = "[R.quality ? R.quality == NORMAL ? "": "[lowertext(getQualityString(R.quality))] ":""][lowertext(mat.name)] [R.name]"
+
 var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/plasteel, 1, 4, 60),
 	new/datum/stack_recipe("metal rod",  /obj/item/stack/rods,          1, 2, 60),
@@ -94,6 +133,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe/chair("chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("folding chair",      /obj/structure/bed/chair/folding,         one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe("bed",                      /obj/structure/bed,                    2, one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
 		)),
 	new/datum/stack_recipe_list("couch parts", list(
 		new/datum/stack_recipe/chair("beige couch left end",      /obj/structure/bed/chair/comfy/couch/left/beige,         2, one_per_turf = 1, on_floor = 1),
@@ -199,6 +239,7 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 	new/datum/stack_recipe("Fireaxe cabinet",				/obj/item/mounted/frame/fireaxe_cabinet_frame,		2,	time = 50									),
 	null,
 	new/datum/stack_recipe("Vault Door assembly",			/obj/structure/door_assembly/door_assembly_vault,	8,	time = 50,	one_per_turf = 1,	on_floor = 1),
+	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
 	)
 
 /* ====================================================================
@@ -230,6 +271,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("trophy mount",		/obj/item/mounted/frame/trophy_mount,	2,		time = 15									),
 	new/datum/stack_recipe("throne",			/obj/structure/bed/chair/wood/throne,	40,		time = 100,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("chest",				/obj/structure/closet/crate/chest,		10,		time = 50,	one_per_turf = 1,	on_floor = 1, other_reqs = list(/obj/item/stack/sheet/plasteel = 5)),
+	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
 	)
 
 /* =========================================================================

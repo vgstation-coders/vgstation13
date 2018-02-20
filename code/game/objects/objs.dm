@@ -29,7 +29,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	plane = OBJ_PLANE
 
 	var/defective = 0
-
+	var/quality = NORMAL //What leve of quality this object is.
+	var/datum/material/material_type //What material this thing is made out of
+	var/event/on_use
 	var/can_take_pai = FALSE
 	var/obj/item/device/paicard/integratedpai = null
 	var/datum/delay_controller/pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
@@ -49,6 +51,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(istype(T) && ticker && ticker.current_state != GAME_STATE_PLAYING)
 		T.add_holomap(src)
 
+/obj/New()
+	..()
+	on_use = new(owner=src)
+
 /obj/Destroy()
 	for(var/mob/user in _using)
 		user.unset_machine()
@@ -59,7 +65,11 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(integratedpai)
 		qdel(integratedpai)
 		integratedpai = null
+	if(on_use)
+		on_use.holder = null
+	qdel(on_use)
 
+	material_type = null //Don't qdel, they're held globally
 	..()
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
@@ -83,6 +93,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			install_pai(W)
 			state_controls_pai(W)
 			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
+
+	INVOKE_EVENT(W.on_use, list("user" = user, "target" = src))
 
 /obj/proc/state_controls_pai(obj/item/device/paicard/P)			//text the pAI receives when is inserted into something. EXAMPLE: to_chat(P.pai, "Welcome to your new body")
 	if(P.pai)
