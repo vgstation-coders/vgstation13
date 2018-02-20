@@ -330,6 +330,7 @@
 #define PINTPOINTER		"pintpointer"
 #define MUCUS	"mucus"
 #define ALBUTEROL		"albuterol"
+#define SALTWATER		"saltwater"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

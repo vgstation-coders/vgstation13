@@ -3052,6 +3052,13 @@
 	result = ALBUTEROL
 	required_reagents = list(HYPERZINE = 1, INAPROVALINE = 1)
 	result_amount = 2
+	
+/datum/chemical_reaction/saltwater
+	name = "Salt Water"
+	id = SALTWATER
+	result = SALTWATER
+	required_reagents = list(WATER = 1, SODIUMCHLORIDE = 1)
+	result_amount = 2
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
