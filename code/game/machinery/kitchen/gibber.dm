@@ -207,8 +207,8 @@ obj/machinery/gibber/New()
 
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
 	for (var/i=1 to totalslabs)
-		var/obj/item/weapon/newmeat		
-		if(istype(newmeat, /obj/item/weapon/reagent_containers))
+		var/obj/item/weapon/newmeat
+		if(istype(occupant.meat_type, /obj/item/weapon/reagent_containers))
 			newmeat = new occupant.meat_type(null, occupant)
 		else
 			newmeat = new occupant.meat_type()
