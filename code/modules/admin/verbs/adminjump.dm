@@ -135,8 +135,7 @@
 			to_chat(src, "[V.file_path || V.name] doesn't have a location! Report this")
 			return
 
-		usr.unlock_from()
-		usr.forceMove(V.location)
+		usr.teleport_to(V.location)
 		feedback_add_details("admin_verb","JV")
 	else
 		alert("Admin jumping disabled")
