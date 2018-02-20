@@ -207,8 +207,10 @@ obj/machinery/gibber/New()
 
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
 	for (var/i=1 to totalslabs)
-		var/obj/item/weapon/reagent_containers/food/snacks/meat/newmeat = new occupant.meat_type(null, occupant)
-		newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
+		var/obj/item/weapon/newmeat = new occupant.meat_type(null, occupant)
+
+		if(istype(newmeat, /obj/item/weapon/reagent_containers))
+			newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
 
 		if(src.occupant.reagents)
 			src.occupant.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
