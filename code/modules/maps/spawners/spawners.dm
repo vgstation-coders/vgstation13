@@ -853,7 +853,7 @@
 	icon_state = "mob_lizard"
 	amount = 2
 	chance = 50
-	to_spawn = list(/mob/living/simple_animal/lizard)
+	to_spawn = list(/mob/living/simple_animal/hostile/lizard)
 
 /obj/abstract/map/spawner/mobs/mouse
 	name = "mouse spawner"
