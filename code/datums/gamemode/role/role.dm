@@ -192,10 +192,11 @@
 	return 1
 
 // Return 1 on success, 0 on failure.
-/datum/role/proc/OnPostSetup()
-	ForgeObjectives()
-	Greet(1)
-	MemorizeObjectives()
+/datum/role/proc/OnPostSetup(var/auto_antag = TRUE)
+	if (auto_antag)
+		ForgeObjectives()
+		Greet(1)
+		MemorizeObjectives()
 	return 1
 
 /datum/role/proc/process()
