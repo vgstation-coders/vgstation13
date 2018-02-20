@@ -24,7 +24,7 @@
 	density = FALSE
 	pass_flags = PASSTABLE | PASSMOB
 
-	var/static/list/edibles = list(/mob/living/simple_animal/cockroach) //Add bugs to this as they get added in
+	var/static/list/edibles = list(/mob/living/simple_animal/cockroach, /obj/item/weapon/reagent_containers/food/snacks/roach_eggs) //Add bugs to this as they get added in
 
 /mob/living/simple_animal/hostile/lizard/CanAttack(var/atom/the_target)//Can we actually attack a possible target?
 	if(see_invisible < the_target.invisibility)//Target's invisible to us, forget it
@@ -35,7 +35,8 @@
 
 /mob/living/simple_animal/hostile/lizard/AttackingTarget()
 	if(is_type_in_list(target, edibles)) //Makes sure player lizards only consume edibles.
-		visible_message("[name] consumes [target] in a single gulp", "<span class='notice'>You consume [target] in a single gulp</span>")
+		visible_message("\The [name] consumes [target] in a single gulp", "<span class='notice'>You consume [target] in a single gulp</span>")
+		playsound(get_turf(src),'sound/items/egg_squash.ogg', rand(30,70), 1)
 		qdel(target) //Nom
 		adjustBruteLoss(-2)
 		return TRUE
