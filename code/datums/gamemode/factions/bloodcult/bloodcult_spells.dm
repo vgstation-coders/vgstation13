@@ -1,6 +1,6 @@
 
 //SPELL I
-/spell/trace_rune
+/spell/cult/trace_rune
 	name = "Trace Rune"
 	desc = "Use available blood to write down words. Three words form a rune."
 	panel = "Cult"
@@ -21,11 +21,11 @@
 	var/datum/cultword/word = null
 	var/obj/effect/rune/rune = null
 
-/spell/trace_rune/choose_targets(var/mob/user = usr)
+/spell/cult/trace_rune/choose_targets(var/mob/user = usr)
 	return list(user)
 
 
-/spell/trace_rune/before_channel(mob/user)
+/spell/cult/trace_rune/before_channel(mob/user)
 	var/mob/living/carbon/C = user
 	var/muted = C.muted()
 	if (muted)
@@ -33,7 +33,7 @@
 	return muted
 
 
-/spell/trace_rune/spell_do_after(var/mob/user, var/delay, var/numticks = 3)
+/spell/cult/trace_rune/spell_do_after(var/mob/user, var/delay, var/numticks = 3)
 
 	if(block)
 		return 0
@@ -74,7 +74,7 @@
 
 	return ..()
 
-/spell/trace_rune/cast(var/list/targets, var/mob/living/carbon/user)
+/spell/cult/trace_rune/cast(var/list/targets, var/mob/living/carbon/user)
 	..()
 	if (rune && rune.word1 && rune.word2 && rune.word3)
 		to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
@@ -83,7 +83,7 @@
 		perform(user)//imediately try writing another word
 
 //SPELL II
-/spell/erase_rune
+/spell/cult/erase_rune
 	name = "Erase Rune"
 	desc = "Remove the last word written of the rune you're standing above."
 	panel = "Cult"
@@ -100,10 +100,10 @@
 
 	cast_delay = 0
 
-/spell/erase_rune/choose_targets(var/mob/user = usr)
+/spell/cult/erase_rune/choose_targets(var/mob/user = usr)
 	return list(user)
 
-/spell/erase_rune/cast(var/list/targets, var/mob/living/carbon/user)
+/spell/cult/erase_rune/cast(var/list/targets, var/mob/living/carbon/user)
 	..()
 	var/removed_word = erase_rune_word(get_turf(user))
 	if (removed_word)
