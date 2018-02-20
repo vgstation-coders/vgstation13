@@ -1196,7 +1196,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 10
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "emitter crate"
-	access = list(access_ce)
+	access = list(access_engine)
 	group = "Engineering"
 
 /datum/supply_packs/engine/field_gen
@@ -1205,7 +1205,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/machinery/field_generator)
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "field generator crate"
-	access = list(access_ce)
+	access = list(access_engine)
 	group = "Engineering"
 
 /datum/supply_packs/engine/sing_gen
@@ -1213,7 +1213,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/machinery/the_singularitygen)
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "singularity generator crate"
-	access = list(access_ce)
+	access = list(access_engine)
 	group = "Engineering"
 
 /datum/supply_packs/engine/collector
@@ -1243,7 +1243,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/structure/particle_accelerator/end_cap)
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "particle accelerator crate"
-	access = list(access_ce)
+	access = list(access_engine)
 	group = "Engineering"
 
 /datum/supply_packs/shieldgens
@@ -1350,7 +1350,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "Starscreen shield generator crate"
 	group = "Engineering"
-	access = list(access_ce)
+	access = list(access_engine)
 
 /datum/supply_packs/shield_cap
 	contains = list(/obj/item/weapon/circuitboard/shield_cap)
@@ -1359,7 +1359,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "Starscreen shield capacitor crate"
 	group = "Engineering"
-	access = list(access_ce)
+	access = list(access_engine)
 
 /datum/supply_packs/teg
 	contains = list(/obj/machinery/power/generator)
@@ -1478,7 +1478,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 25
 	containertype = "/obj/structure/closet/crate/secure"
 	containername = "virus crate"
-	access = list(access_cmo)
+	access = list(access_medical)
 	group = "Medical"
 
 /datum/supply_packs/surgery
@@ -1553,7 +1553,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 200
 	containertype = "/obj/structure/closet/crate/secure"
 	containername = "motorized wheelchair crate"
-	access = list(access_cmo)
+	access = list(access_medical)
 	group = "Medical"
 
 /datum/supply_packs/skele_stand
