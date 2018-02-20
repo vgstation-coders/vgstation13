@@ -73,6 +73,8 @@
 						C.drop_stomach_contents()
 						user.visible_message("<span class='warning'>\The [C]'s stomach contents drop to the ground!</span>")
 
+				occupant.meat_amount++
+
 				returnToPool(G)
 				return
 
