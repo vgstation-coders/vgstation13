@@ -30,6 +30,7 @@
 	item_state = "box_of_doom"
 
 /obj/item/weapon/storage/trader_chemistry/New()
+	..()
 	new /obj/item/weapon/reagent_containers/glass/bottle/peridaxon(src)
 	new /obj/item/weapon/reagent_containers/glass/bottle/rezadone(src)
 	new /obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall(src)
@@ -59,6 +60,7 @@
 	icon_off = "cabinetdetective_broken"
 
 /obj/structure/closet/secure_closet/wonderful/New()
+	..()
 	var/random_clothes = clothing.Copy()
 	for(var/amount = 1 to 20)
 		var/path = pick_n_take(random_clothes)
