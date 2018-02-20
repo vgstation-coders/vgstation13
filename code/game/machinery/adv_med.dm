@@ -1,5 +1,3 @@
-/obj/machinery/body_scanconsole
-
 /obj/machinery/bodyscanner
 	name = "body scanner"
 	icon = 'icons/obj/cryogenics3.dmi'

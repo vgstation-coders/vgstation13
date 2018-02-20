@@ -2,8 +2,6 @@
 // THE SLEEPER ITSELF
 /////////////////////////////////////////
 
-/obj/machinery/sleep_console //Don't make the compiler shit itself
-
 /obj/machinery/sleeper
 	name = "\improper Sleeper"
 	icon = 'icons/obj/cryogenics3.dmi'
@@ -483,6 +481,7 @@
 	name = "thermal homeostasis regulator"
 	desc = "The new generation 'minicrowave' from Mancrowave Inc. It has the same satisfying ping as the classic."
 	base_icon = "mancrowave"
+	icon_state = "mancrowave_open"
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/sleeper/mancrowave,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -512,12 +511,15 @@
 /obj/machinery/sleeper/mancrowave/update_icon()
 	if(!occupant)
 		icon_state = "[base_icon]_open"
+		set_light(0)
 		return
 	if(emagged)
 		light_color = LIGHT_COLOR_RED
 		icon_state += "_emagged"
 	else
+
 		light_color = LIGHT_COLOR_ORANGE
+		icon_state += "_running"
 	if(on)
 		set_light(light_range_on, light_power_on)
 	else

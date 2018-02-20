@@ -239,11 +239,10 @@
 
 	accepted_types = list(/obj/item/weapon/reagent_containers/blood)
 
-/obj/machinery/smartfridge/bloodbank/deff
-	icon = 'maps/defficiency/medbay.dmi'
-
 /obj/machinery/smartfridge/bloodbank/New()
 	. = ..()
+	if(map.nameShort == "deff")
+		icon = 'maps/defficiency/medbay.dmi'
 
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/smartfridge/bloodbank,
