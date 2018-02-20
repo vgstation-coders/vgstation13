@@ -546,7 +546,7 @@ var/datum/controller/gameticker/ticker
 /datum/controller/gameticker/proc/ert_declare_completion()
 	var/text = ""
 	if( ticker.mode.ert.len )
-		var/icon/logo = icon('icons/mob/mob.dmi', "ert-logo")
+		var/icon/logo = icon('icons/logos.dmi', "ert-logo")
 		end_icons += logo
 		var/tempstate = end_icons.len
 		text += {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The emergency responders were:</B></FONT> <img src="logo_[tempstate].png">"}
@@ -578,7 +578,7 @@ var/datum/controller/gameticker/ticker
 /datum/controller/gameticker/proc/deathsquad_declare_completion()
 	var/text = ""
 	if( ticker.mode.deathsquad.len )
-		var/icon/logo = icon('icons/mob/mob.dmi', "death-logo")
+		var/icon/logo = icon('icons/logos.dmi', "death-logo")
 		end_icons += logo
 		var/tempstate = end_icons.len
 		text += {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The death commando were:</B></FONT> <img src="logo_[tempstate].png">"}
