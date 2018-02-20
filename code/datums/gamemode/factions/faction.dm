@@ -18,7 +18,7 @@
 
 	//TODO LATER
 	@faction_icon_state: String: The image name of the icon that appears next to people of this faction
-	@faction_icon: icon file reference: Where the icon is stored (currently most are stored in mob.dmi)
+	@faction_icon: icon file reference: Where the icon is stored (currently most are stored in logos.dmi)
 */
 
 /datum/faction
@@ -88,7 +88,7 @@
 	return score_results
 
 /datum/faction/proc/GetObjectivesMenuHeader() //Returns what will show when the factions objective completion is summarized
-	var/icon/logo = icon('icons/mob/mob.dmi', logo_state)
+	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'>"}
 	return header
 
@@ -181,8 +181,8 @@
 	logo_state = "change-logoa"
 
 /datum/faction/changeling/GetObjectivesMenuHeader()
-	var/icon/logo_left = icon('icons/mob/mob.dmi', "change-logoa")
-	var/icon/logo_right = icon('icons/mob/mob.dmi', "change-logob")
+	var/icon/logo_left = icon('icons/logos.dmi', "change-logoa")
+	var/icon/logo_right = icon('icons/logos.dmi', "change-logob")
 	var/header = {"<img src='data:image/png;base64,[icon2base64(logo_left)]' style='position: relative; top: 10;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo_right)]' style='position: relative; top: 10;'>"}
 	return header
 

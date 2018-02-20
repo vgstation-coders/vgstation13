@@ -227,7 +227,7 @@
 	return dat
 
 /datum/role/proc/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
-	var/icon/logo = icon('icons/mob/mob.dmi', logo_state)
+	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	var/mob/M = antag.current
 	return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
 [name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
@@ -286,7 +286,7 @@
 	to_chat(world, text)
 
 /datum/role/proc/GetMemory(var/datum/mind/M, var/admin_edit = FALSE)
-	var/icon/logo = icon('icons/mob/mob.dmi', logo_state)
+	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	var/text = "<b><img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [name]</b>"
 	if (admin_edit)
 		text += " - <a href='?src=\ref[M];role_edit=\ref[src];remove_role=1'>(remove)</a>"
