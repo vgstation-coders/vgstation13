@@ -91,6 +91,8 @@
 			else
 				to_chat(user, "You remove the last piece of meat from \the [src]!")
 				clean()
+		else
+			clean()
 	else
 		clean()
 
