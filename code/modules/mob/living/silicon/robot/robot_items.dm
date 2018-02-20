@@ -228,7 +228,7 @@
 
 	I.forceMove(T)
 	I.inflate()
-	user.visible_message("<span class='danger'>[user] deploy an inflatable [mode ? "door" : "wall"].</span>", \
+	user.visible_message("<span class='danger'>[user] deploys an inflatable [mode ? "door" : "wall"].</span>", \
 	"<span class='notice'>You deploy an inflatable [mode ? "door" : "wall"].</span>")
 
 /obj/item/weapon/inflatable_dispenser/proc/pick_up(var/obj/A, var/mob/living/user)
