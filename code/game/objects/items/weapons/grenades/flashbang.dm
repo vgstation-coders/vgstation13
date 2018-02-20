@@ -128,6 +128,7 @@
 	name = "clusterbang"
 	icon = 'icons/obj/grenade.dmi'
 	icon_state = "clusterbang"
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/grenade/flashbang/clusterbang/prime()
 	var/numspawned = rand(4,8)

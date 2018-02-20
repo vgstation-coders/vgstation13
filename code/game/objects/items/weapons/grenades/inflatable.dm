@@ -2,6 +2,7 @@
 	name = "inflatable barrier grenade"
 	desc = "An inflatable barrier conveniently packaged into a casing for remote delivery. Non-reusable."
 	var/deploy_path = /obj/structure/inflatable/wall
+	mech_flags = null
 
 /obj/item/weapon/grenade/inflatable/prime()
 	playsound(get_turf(src), 'sound/items/zip.ogg', 75, 1)

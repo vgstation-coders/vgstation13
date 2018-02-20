@@ -7,6 +7,7 @@
 	flags = FPRINT | TIMELESS
 	var/duration = 10 SECONDS
 	var/radius = 5		//in tiles
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/grenade/chronogrenade/prime()
 	timestop(src, duration, radius)
