@@ -91,10 +91,3 @@ turf/unsimulated/wall/splashscreen
 
 	if(prob(80))
 		icon_state = "evilwall_[rand(1,8)]"
-
-/turf/unsimulated/wall/void
-	name = "turbulent void"
-	desc = "Far too dangerous to risk crossing."
-	icon = 'icons/turf/space.dmi'
-	icon_state = "void"
-	canSmoothWith = null
