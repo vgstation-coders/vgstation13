@@ -197,5 +197,9 @@
 	for(var/datum/faction/F in factions)
 		if(F.check_win())
 			return 1
+	if(emergency_shuttle.location==2 || station_was_nuked)
+		return 1
+	return 0
+
 
 /datum/gamemode/proc/declare_completion()
