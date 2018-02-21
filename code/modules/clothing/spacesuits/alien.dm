@@ -383,12 +383,12 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "vox roboticist pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for roboticists."
 	icon_state = "vox-civ-roboticist"
-	actions_types = list(/datum/action/item_action/toggle_helmet_mask)
 
 /obj/item/clothing/head/helmet/space/vox/civ/science/roboticist
 	name = "vox roboticist pressure helmet"
 	icon_state = "vox-civ-roboticist"
 	desc = "A very alien-looking helmet for vox crewmembers. This one is for roboticists."
+	actions_types = list(/datum/action/item_action/toggle_helmet_mask)
 
 
 //Med/Sci
