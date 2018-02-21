@@ -72,7 +72,7 @@
 
 	if (plane != HIDING_MOB_PLANE)
 		plane = HIDING_MOB_PLANE
-		to_chat(src, text("<span class='notice'>You are now hiding.</span>"))
+		to_chat(src, "<span class='notice'>You are now hiding.</span>")
 	else
 		plane = MOB_PLANE
-		to_chat(src, text("<span class='notice'>You have stopped hiding.</span>"))
+		to_chat(src, "<span class='notice'>You have stopped hiding.</span>")
