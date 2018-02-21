@@ -21,13 +21,12 @@
 "u" = (/obj/item/weapon/gun/energy/laser/captain,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
 "v" = (/obj/item/weapon/gun/projectile/deagle/gold,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
 "w" = (/obj/item/weapon/sord,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"x" = (/obj/item/weapon/gun/energy/lasercannon,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"y" = (/obj/item/weapon/gun/energy/crossbow/largecrossbow,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"z" = (/obj/item/weapon/gun/energy/pulse_rifle/destroyer,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"A" = (/obj/item/toy/spinningtoy,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"B" = (/obj/item/weapon/card/id/centcom,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"C" = (/obj/item/weapon/gun/grenadelauncher,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"D" = (/obj/machinery/turret{dir = 8; lasers = 1; name = "Angry Turret"},/obj/machinery/light,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
+"x" = (/obj/item/weapon/gun/energy/crossbow/largecrossbow,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
+"y" = (/obj/item/weapon/gun/energy/pulse_rifle/destroyer,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
+"z" = (/obj/item/toy/spinningtoy,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
+"A" = (/obj/item/weapon/card/id/centcom,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
+"B" = (/obj/item/weapon/gun/grenadelauncher,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
+"C" = (/obj/machinery/turret{dir = 8; lasers = 1; name = "Angry Turret"},/obj/machinery/light,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -46,9 +45,9 @@ aaaaaaaaabcefghijklcbaaaaaaaaa
 aaaaaaaaabcemnopgqlcbaaaaaaaaa
 aaaaaaaaabcegrgstglcbaaaaaaaaa
 aaaaaaaaabceuggvgwlcbaaaaaaaaa
-aaaaaaaaabcegxygzglcbaaaaaaaaa
-aaaaaaaaabceAgBgCglcbaaaaaaaaa
-aaaaaaaaabccDDDDDDccbaaaaaaaaa
+aaaaaaaaabceggxgyglcbaaaaaaaaa
+aaaaaaaaabcezgAgBglcbaaaaaaaaa
+aaaaaaaaabccCCCCCCccbaaaaaaaaa
 aaaaaaaaabccccccccccbaaaaaaaaa
 aaaaaaaaabbbbbbbbbbbbaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
