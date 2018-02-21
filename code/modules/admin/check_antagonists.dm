@@ -3,24 +3,32 @@
 		alert("The game hasn't started yet!")
 		return
 
-	var/dat = list("<h1>Round status</h1>")
+	var/dat = "<html><head><title>Round Status</title></head><body><h2>Round Status</h2>"
 
-	dat += {"Current game mode: <b>[ticker.mode.name]</b><br>
-		Round duration: <b>[round(world.time / 36000)]:[add_zero(world.time / 600 % 60, 2)]:[world.time / 100 % 6][world.time / 100 % 10]</b><br>
-		<B>Emergency shuttle</B><BR>"}
-	if (!emergency_shuttle.online)
-		dat += "<a href='?src=\ref[src];call_shuttle=1'>Call shuttle</a><br>"
+	dat += {"Current Game Mode: <B>[ticker.mode.name]</B><BR>
+		Round Duration: <B>[round(world.time / 36000)]:[add_zero("[world.time / 600 % 60]", 2)]:[world.time / 100 % 6][world.time / 100 % 10]</B><BR>
+		<A HREF='?src=\ref[src];emergency_shuttle_panel=1'><B>Emergency Shuttle Panel</B></A><BR>"}
+
+	dat += "<a href='?src=\ref[src];delay_round_end=1'>[ticker.delay_end ? "End Round Normally" : "Delay Round End"]</a><br>"
+
+	//dat += ticker.mode.AdminPanelEntry()
+
+	dat += "<h3><b>Factions</b></h3>"
+	if(ticker.mode.factions.len)
+		for(var/datum/faction/F in ticker.mode.factions)
+			dat += F.AdminPanelEntry(src)
 	else
-		var/timeleft = emergency_shuttle.timeleft()
-		switch(emergency_shuttle.location)
-			if(0)
-				dat += {"ETA: <a href='?src=\ref[src];edit_shuttle_time=1'>[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]</a><BR>
-					<a href='?src=\ref[src];call_shuttle=2'>Send Back</a><br>"}
-			if(1)
-				dat += "ETA: <a href='?src=\ref[src];edit_shuttle_time=1'>[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]</a><BR>"
-	dat += "<a href='?src=\ref[src];delay_round_end=1'>[ticker.delay_end ? "End round normally" : "Delay round end"]</a><br>"
+		dat += "<i>No factions are currently active.</i>"
+	dat += "<h3>Other Roles</h3>"
+	if(ticker.mode.orphaned_roles.len)
+		for(var/datum/role/R in ticker.mode.orphaned_roles)
+			dat += R.AdminPanelEntry(TRUE,src)//show logos
+			dat += "<br>"
+	else
+		dat += "<i>No orphaned roles are currently active.</i>"
 
-	dat += ticker.mode.AdminPanelEntry()
+	dat += "</body></html>"
+	usr << browse(dat, "window=roundstatus;size=700x500")
 
 /*
 
@@ -89,6 +97,7 @@
 		dat += "</table>"
 
 */
-	var/datum/browser/popup = new(usr, "\ref[src]-round_status", "Round status", 600, 700, src)
-	popup.set_content(jointext(dat, ""))
-	popup.open()
+
+	//var/datum/browser/popup = new(usr, "\ref[src]-round_status", "Round status", 600, 700, src)
+	//popup.set_content(jointext(dat, ""))
+	//popup.open()

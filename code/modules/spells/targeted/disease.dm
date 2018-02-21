@@ -1,4 +1,4 @@
-/spell/targeted/disaese
+/spell/targeted/disease
 	name = "Diseased Touch (50)"
 	desc = "Touches your victim with infected blood giving them the Shutdown Syndrome which quickly shutsdown their major organs resulting in a quick painful death."
 	abbreviation = "HN"
@@ -20,12 +20,12 @@
 
 	var/blood_cost = 50
 
-/spell/targeted/disaese/cast_check(skipcharge = 0,mob/user = usr)
+/spell/targeted/disease/cast_check(skipcharge = 0,mob/user = usr)
 	if (!user.vampire_power(blood_cost, 0, 1))
 		return FALSE
 	return ..()
 
-/spell/targeted/disaese/is_valid_target(var/target, var/mob/user, var/list/options)
+/spell/targeted/disease/is_valid_target(var/target, var/mob/user, var/list/options)
 	if (!ismob(target))
 		return FALSE
 
@@ -35,7 +35,7 @@
 		return FALSE
 	return ..()
 
-/spell/targeted/disaese/cast(var/list/targets, var/mob/user)
+/spell/targeted/disease/cast(var/list/targets, var/mob/user)
 	if (targets.len > 1)
 		return FALSE
 

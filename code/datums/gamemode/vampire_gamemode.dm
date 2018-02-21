@@ -56,10 +56,10 @@
 	spell_path = null // TODO
 
 /* Tier 2 */
-/datum/power/vampire/disaese
+/datum/power/vampire/disease
 	blood_threeshold = 150
 	id = VAMP_DISEASE
-	spell_path = /spell/targeted/disaese
+	spell_path = /spell/targeted/disease
 
 /datum/power/vampire/cloak
 	blood_threeshold = 150

@@ -2167,7 +2167,7 @@
 #include "code\modules\spells\general\shapeshift.dm"
 #include "code\modules\spells\targeted\balefulmutate.dm"
 #include "code\modules\spells\targeted\buttbots_revenge.dm"
-#include "code\modules\spells\targeted\disaese.dm"
+#include "code\modules\spells\targeted\disease.dm"
 #include "code\modules\spells\targeted\disintegrate.dm"
 #include "code\modules\spells\targeted\disorient.dm"
 #include "code\modules\spells\targeted\ethereal_jaunt.dm"

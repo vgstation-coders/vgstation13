@@ -1,29 +1,41 @@
 // Faction IDs
-
-#define BLOODCULT "Cult of Nar-Sie"
-#define CHANGELING "changeling"
+#define BLOODCULT "cult of Nar-Sie"
+#define REVOLUTION "revolution"
+#define ERT "emergency response team"
+#define DEATHSQUAD "Nanotrasen deathsquad"
 #define SYNDICATE "syndicate"
-#define NUKE_OP "nuclear operative"
-#define TRAITOR "traitor"
-#define WIZARD "wizard"
-#define VAMPIRE "vampire"
-#define REV "revolution"
-#define MALF "malfunctioning_AI"
-#define ERT "Emergency Response Team"
-#define DEATHSQUAD "Deathsquad"
-#define SYNDIESQUAD "Syndicate Deathsquad"
-#define CUSTOMSQUAD "Custom Squad"
+#define SYNDITRAITORS "syndicate agents"
+#define SYNDIOPS "syndicate operatives"
+#define SYNDIESQUAD "syndicate elite strike team"
+#define CUSTOMSQUAD "custom squad"
+#define VOXSHOAL "vox Shoal"
+#define BLOBCONGLOMERATE "blob conglomerate"
+//-------
+#define HIVEMIND "changeling hivemind"
+#define WIZFEDERATION "wizard federation"
+#define VAMPIRELORDS "vampire lords"
 
 // Role IDs
-
+#define TRAITOR "traitor"
+#define ROGUE "rogue agent"//double agents
+#define CHANGELING "changeling"
+#define VAMPIRE "vampire"
+#define WIZARD "wizard"
 #define CULTIST "cultist"
-#define HEADREV "Head Revolutionary"
-#define WIZAPP "Wizards Apprentice"
-#define MADMONKEY "Monkey Madness"
+#define NUKE_OP "nuclear operative"
+#define HEADREV "head revolutionary"
+#define REV "revolutionary"
+#define WIZAPP "wizard's apprentice"
+#define MADMONKEY "monkey fever infected"
 #define WISHGRANTERAVATAR "avatar of the Wish Granter"
 #define HIGHLANDER "highlander"
-//Changeling, nuke op, traitor, wizard, vampire, rev, all the same as above
-
+#define DEATHSQUADIE "death commando"
+#define SYNDIESQUADIE "syndicate commando"
+#define RESPONDER "emergency responder"
+#define MALF "malfunctioning AI"
+#define VOXRAIDER "vox raider"
+#define BLOBOVERMIND "blob overmind"
+#define HIGHLANDER "highlander"
 
 
 #define CULT_PROLOGUE	0

@@ -144,10 +144,12 @@
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 1
 
+/*
 /obj/item/weapon/bloodcult_pamphlet/attack_self(var/mob/user)
 	initialize_cultwords()
 	var/datum/faction/bloodcult/cult = find_active_faction(BLOODCULT)
 	if (cult)
 		cult.HandleRecruitedMind(user.mind)
-	user.add_spell(new /spell/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-	user.add_spell(new /spell/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+	user.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+	user.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+*/

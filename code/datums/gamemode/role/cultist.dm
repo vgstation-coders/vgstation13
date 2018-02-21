@@ -1,14 +1,23 @@
 /datum/role/cultist
+	id = CULTIST
 	name = "Cultist"
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
+	logo_state = "cult-logo"
+
 
 /datum/role/cultist/OnPostSetup()
 	. = ..()
 	if(!.)
 		return
 
-	antag.current.add_spell(new /spell/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-	antag.current.add_spell(new /spell/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+	if(!(locate(/spell/cult) in antag.current.spell_list))
+		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+
+/datum/role/cultist/RemoveFromRole(var/datum/mind/M)
+	for(var/spell/cult/spell_to_remove in antag.current.spell_list)
+		antag.current.remove_spell(spell_to_remove)
+	..()
 
 /datum/role/cultist/Greet()
 	to_chat(antag.current, {"<span class='sinister'><font size=3>You are a cultist of <span class='danger'><font size=3>Nar-Sie</font></span>!</font><br>
@@ -20,10 +29,17 @@
 	Meet up with them. Raise an altar in my name. <span class='danger'>Blood Technology Join</span>!<br>
 	</span>"})
 
+/*
 /datum/role/cultist/RoleTopic(href, href_list)
-
+	..()
 	if(!ismob(usr))
 		return
+*/
 
 /mob/living/carbon/proc/muted()
 	return (iscultist(src) && reagents && reagents.has_reagent(HOLYWATER))
+
+/datum/role/cultist/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
+	var/dat = ..()
+	dat += " - <a href='?src=\ref[A];cult_privatespeak=\ref[antag.current]'>(Nar-Sie whispers)</a>"
+	return dat
