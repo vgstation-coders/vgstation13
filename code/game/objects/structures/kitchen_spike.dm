@@ -88,13 +88,11 @@
 
 			if(occupant.meat_amount > occupant.meat_taken)
 				to_chat(user, "You remove some meat from \the [occupant].")
+				return
 			else
 				to_chat(user, "You remove the last piece of meat from \the [src]!")
-				clean()
-		else
-			clean()
-	else
-		clean()
+
+	clean()
 
 /obj/structure/kitchenspike/proc/clean()
 	icon_state = initial(icon_state)
