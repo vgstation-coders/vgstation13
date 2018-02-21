@@ -242,7 +242,7 @@ Doesn't work on other aliens/AI.*/
 		return
 
 	if(powerc(200))
-		if(is_valid_target_to_acid(O,usr))
+		if(is_valid_target_to_acid(O,user))
 			acidify(O, usr)
 			AdjustPlasma(-200)
 
@@ -266,7 +266,7 @@ Doesn't work on other aliens/AI.*/
 /spell/aoe_turf/alienregurgitate/cast(list/targets, mob/user)
 	var/mob/living/carbon/alien/humanoid/alien = user
 	alien.drop_stomach_contents()
-	user.visible_message("<span class='alien'>\The [usr] hurls out the contents of their stomach!</span>")
+	user.visible_message("<span class='alien'>\The [user] hurls out the contents of their stomach!</span>")
 
 ///////////////////////////
 // QUEEN SPECIFIC SPELLS //
@@ -328,7 +328,7 @@ a
 	return ..()
 
 /spell/aoe_turf/evolve/drone/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
-	user.visible_message("<span class='alien'>[src] begins to violently twist and contort!</span>", "<span class='alien'>You begin to evolve, stand still for a few moments</span>")
+	user.visible_message("<span class='alien'>[user] begins to violently twist and contort!</span>", "<span class='alien'>You begin to evolve, stand still for a few moments</span>")
 	return ..()
 
 /spell/aoe_turf/evolve/drone/cast(list/targets, mob/living/carbon/user)
