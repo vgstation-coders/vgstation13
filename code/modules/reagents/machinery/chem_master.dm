@@ -162,6 +162,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	user.set_machine(src)
 
 	var/dat = list()
+	// Pill bottle stuff
+	if(loaded_pill_bottle)
+		dat += "<A href='?src=\ref[src];ejectbottle=1'>Eject pill bottle.</A><BR>"
 	// Beaker
 	if(beaker)
 		var/datum/reagents/R = beaker.reagents
@@ -172,7 +175,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			dat += {"
 				<table>
 					<td class="column1">
-						Add to reagent buffer: <A href='?src=\ref[src];beaker_addall=1;amount=[R.total_volume]'>All</A>
+						Add to reagent storage: <A href='?src=\ref[src];beaker_addall=1;amount=[R.total_volume]'>All</A>
 					</td>
 				</table>
 			"}
@@ -207,7 +210,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		dat += "<HR>"
 		dat += "<b>&ltInternal Chemical Storage&gt</b> <BR>"
 
-		dat += "Mode: <A href='?src=\ref[src];togglestorage=1'>[storage_mode]</A> <BR>"
+		dat += "Transfer Mode: <A href='?src=\ref[src];togglestorage=1'>[storage_mode]</A> <BR>"
 
 		if(storage.total_volume)
 			dat += "<table>"
@@ -235,7 +238,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	dat += "<HR>"
 	dat += "<b>&ltInternal Chemical Buffer&gt</b> <BR>"
 
-	dat += "Mode: <A href='?src=\ref[src];togglebuffer=1'>[buffer_mode]</A> <BR>"
+	dat += "Transfer Mode: <A href='?src=\ref[src];togglebuffer=1'>[buffer_mode]</A> <BR>"
 
 	if(buffer.total_volume)
 		dat += "<table>"
@@ -278,7 +281,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	if(!condi)
 		dat += "<A href='?src=\ref[src];createpill=1'>Create single pill ([max_pill_size] units max)</A><BR>"
 		dat += "<A href='?src=\ref[src];createpill_multiple=1'>Create multiple pills ([max_pill_size] units max each; [max_pill_count] max)</A><BR>"
-	dat += "<A href='?src=\ref[src];createbottle=1'>Create single bottle ([max_bottle_size] units max each; [max_bottle_count] max)</A><BR>"
+	dat += "<A href='?src=\ref[src];createbottle=1'>Create single bottle ([condi ? "50" : max_bottle_size] units max each; [max_bottle_count] max)</A><BR>"
 	dat += "<A href='?src=\ref[src];createbottle_multiple=1'>Create multiple bottles ([max_bottle_size] units max each; [max_bottle_count] max)</A><BR>"
 
 	// Make the window
@@ -296,6 +299,35 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	if(..())
 		return 1
 	usr.set_machine(src)
+
+	// Analyze
+	if(href_list["analyze"])
+		var/datum/reagent/reagent = locate(href_list["analyze"])
+		var/dat = list()
+		if(!reagent)
+			dat += "No info. Please contact technical support if you believe this is an error."
+		else
+			dat += "[condi ? "Condiment" : "Chemical"] information:<BR><BR>Name:<BR>[reagent.name]<BR><BR>Description:<BR>[reagent.description]<BR><BR>"
+			if(!condi)
+				if(istype(reagent, /datum/reagent/blood))
+					dat += "Blood type: [reagent.data["blood_type"] || "Unknown"]<BR>Blood DNA: [reagent.data["blood_DNA"] || "Unable to determine"]<BR><BR>"
+				dat += "Density:<BR>[reagent.density]<BR><BR>Specific heat capacity:<BR>[reagent.specheatcap]<BR><BR><BR>"
+			dat += "<A href='?src=\ref[src];main=1'>(Back)</A>"
+
+		dat = jointext(dat,"")
+		var/datum/browser/popup = new(usr, "[windowtype]", "[name]", 585, 400, src)
+		popup.set_content(dat)
+		popup.open()
+		return 1
+
+
+	// Pill bottle
+	if(loaded_pill_bottle)
+		if(href_list["ejectbottle"])
+			loaded_pill_bottle.forceMove(src.loc)
+			loaded_pill_bottle = null
+		src.updateUsrDialog()
+		return 1
 
 	// Beaker
 	if(beaker)
@@ -406,11 +438,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 		if(href_list["togglestorage"])
 			switch(storage_mode)
-				if(BEAKER)	
+				if(BEAKER)
 					storage_mode = BUFFER
-				if(BUFFER)	
+				if(BUFFER)
 					storage_mode = FLUSH
-				if(FLUSH)	
+				if(FLUSH)
 					storage_mode = BEAKER
 			src.updateUsrDialog()
 			return 1
@@ -473,9 +505,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				buffer_mode = STORAGE
 				if(clear_reagents)
 					buffer_mode = FLUSH
-			if(STORAGE)	
+			if(STORAGE)
 				buffer_mode = FLUSH
-			if(FLUSH)	
+			if(FLUSH)
 				buffer_mode = BEAKER
 		src.updateUsrDialog()
 		return 1
