@@ -5,7 +5,7 @@
 	<div class="itemContent">
 		{{:helper.displayBar(data.charge, 0, 2000, data.active ? 'good' : 'average')}}
 		<div class="statusValue">
-			{{:helper.round(data.charge)}} Megawatts
+			{{:helper.round(data.charge)}} megajoules
 		</div>
 	</div>
 	<div class="itemLabel">
@@ -19,7 +19,7 @@
 		Consumption:
 	</div>
 	<div class="itemContent">
-		{{:data.consumption}} Megawatts 
+		{{:data.consumption}} megawatts 
 		{{if data.active}}
 			<span class='good'>On</span>
 		{{else}}
@@ -27,8 +27,16 @@
 		{{/if}}
 	</div>
 </div>
-{{for data.synthList}}
-<div class="item">
-	{{:helper.link(value.name, 'gear', {'synth' : value.name})}} {{:value.cost}} Megawatts
-</div>
+{{for data.categories}}
+	{{:helper.link(value.category, 'folder-collapsed', {'category' : value.category}, value.category == data.selectedCategory ? 'selected' : null)}}
 {{for}}
+<div class="item">&nbsp;</div>
+<div class="statusDisplay">
+	{{for data.synthList}}
+		{{if value.category == data.selectedCategory}}
+			<div class="item">
+				{{:helper.link(value.name, 'gear', {'synth' : value.name})}} {{:value.cost}} megajoules
+			</div>
+		{{/if}}
+	{{for}}
+</div>

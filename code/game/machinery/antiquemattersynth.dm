@@ -1,27 +1,34 @@
-/*To fix:
-Charging actually needs power
-
-*/
 
 var/global/list/synth_designs = list(
-list("name" = "sulfuric acid bottle", "path" = /obj/item/weapon/reagent_containers/glass/bottle/sacid, "cost" = 100),
-list("name" = "20 iron", "path" = /obj/item/stack/sheet/metal/bigstack, "cost" = 100),
-list("name" = "20 glass", "path" = /obj/item/stack/sheet/glass/glass/bigstack, "cost" = 100),
-list("name" = "20 plasteel", "path" = /obj/item/stack/sheet/plasteel/bigstack, "cost" = 100),
-list("name" = "20 plasmaglass", "path" = /obj/item/stack/sheet/glass/plasmaglass/bigstack, "cost" = 100),
-list("name" = "metal foam grenade", "path" = /obj/item/weapon/grenade/chem_grenade/metalfoam, "cost" = 100),
-list("name" = "camera assembly", "path" = /obj/item/weapon/camera_assembly, "cost" = 100),
+list("category" = "resources", "name" = "sulfuric acid bottle", "path" = /obj/item/weapon/reagent_containers/glass/bottle/sacid, "cost" = 100),
+list("category" = "resources", "name" = "20 iron", "path" = /obj/item/stack/sheet/metal/bigstack, "cost" = 100),
+list("category" = "resources", "name" = "20 glass", "path" = /obj/item/stack/sheet/glass/glass/bigstack, "cost" = 100),
+list("category" = "resources", "name" = "20 plasteel", "path" = /obj/item/stack/sheet/plasteel/bigstack, "cost" = 100),
+list("category" = "resources", "name" = "20 plasmaglass", "path" = /obj/item/stack/sheet/glass/plasmaglass/bigstack, "cost" = 100),
+list("category" = "resources", "name" = "20 wood", "path" = /obj/item/stack/sheet/wood/bigstack, "cost" = 100),
+list("category" = "resources", "name" = "20 plastic", "path" = /obj/item/stack/sheet/mineral/plastic/bigstack, "cost" = 200),
+list("category" = "resources", "name" = "aluminum foam grenade", "path" = /obj/item/weapon/grenade/chem_grenade/metalfoam, "cost" = 100),
+list("category" = "resources", "name" = "iron foam grenade", "path" = /obj/item/weapon/grenade/chem_grenade/ironfoam, "cost" = 100),
+list("category" = "resources", "name" = "camera assembly", "path" = /obj/item/weapon/camera_assembly, "cost" = 100),
 
-list("name" = "cart", "path" = /obj/machinery/cart/cargo, "cost" = 200),
 
-list("name" = "rad collector", "path" = /obj/machinery/power/rad_collector, "cost" = 1000), //One gigawatt
-list("name" = "emitter", "path" = /obj/machinery/power/emitter, "cost" = 1000),
-list("name" = "socket wrench", "path" = /obj/item/weapon/wrench/socket, "cost" = 1000),
-list("name" = "foam extinguisher", "path" = /obj/item/weapon/extinguisher/foam, "cost" = 1000),
+list("category" = "tools", "name" = "socket wrench", "path" = /obj/item/weapon/wrench/socket, "cost" = 1000), //One gigawatt
+list("category" = "tools", "name" = "foam extinguisher", "path" = /obj/item/weapon/extinguisher/foam, "cost" = 1000),
+list("category" = "tools", "name" = "empty O2 tank", "path" = /obj/item/weapon/tank/oxygen/empty, "cost" = 1000),
+list("category" = "tools", "name" = "empty plasma tank", "path" = /obj/item/weapon/tank/plasma/empty, "cost" = 1000),
+list("category" = "tools", "name" = "flare gun ammunition", "path" =/obj/item/ammo_storage/box/flare, cost = 700),
+list("category" = "tools", "name" = "flare gun", "path" =/obj/item/weapon/gun/projectile/flare, cost = 2000),
 
-list("name" = "tractor", "path" = /obj/structure/bed/chair/vehicle/tractor, "cost" = 2000),
-list("name" = "prism", "path" = /obj/machinery/prism, "cost" = 2000),
-list("name" = "MSGS", "path" = /obj/machinery/atmospherics/binary/msgs, "cost" = 2000),
+list("category" = "machinery", "name" = "air pump", "path" = /obj/machinery/portable_atmospherics/pump, "cost" = 500),
+list("category" = "machinery", "name" = "portable scrubber", "path" = /obj/machinery/portable_atmospherics/scrubber, "cost" = 500),
+list("category" = "machinery", "name" = "space heater", "path" = /obj/machinery/space_heater, "cost" = 500),
+list("category" = "machinery", "name" = "air conditioner", "path" = /obj/machinery/space_heater/air_conditioner, "cost" = 500),
+list("category" = "machinery", "name" = "cart", "path" = /obj/machinery/cart/cargo, "cost" = 200),
+list("category" = "machinery", "name" = "tractor", "path" = /obj/structure/bed/chair/vehicle/tractor, "cost" = 2000),
+list("category" = "machinery", "name" = "rad collector", "path" = /obj/machinery/power/rad_collector, "cost" = 1000),
+list("category" = "machinery", "name" = "emitter", "path" = /obj/machinery/power/emitter, "cost" = 1000),
+list("category" = "machinery", "name" = "prism", "path" = /obj/machinery/prism, "cost" = 2000),
+list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmospherics/binary/msgs/unanchored, "cost" = 2000),
 )
 
 /obj/machinery/power/antiquesynth
@@ -40,6 +47,8 @@ list("name" = "MSGS", "path" = /obj/machinery/atmospherics/binary/msgs, "cost" =
 	var/consumption = 0 //How much are we set to draw off the net? Clamped between 0 and 2 GIGAWATT (2,000,000,000 Watts)
 	var/on = 0
 	var/charge = 0 //How much we've stored. Also capped at 2 GIGAWATT.
+	var/category = "resources" //which list to display
+	var/list/categories = list(list("category" = "resources"), list("category" = "tools"), list("category" = "machinery")) //Yes it is necessary to write the list like this
 
 /obj/machinery/power/antiquesynth/proc/toggle_power()
 	on = !on
@@ -63,7 +72,7 @@ list("name" = "MSGS", "path" = /obj/machinery/atmospherics/binary/msgs, "cost" =
 		return //We can't get more charged than this!
 	if(avail()>consumption)
 		charge += consumption
-		add_load(consumption) //There is a small niche case in that once in a while
+		add_load(consumption)
 
 /obj/machinery/power/antiquesynth/attack_ai(var/mob/user as mob)
 	to_chat(user, "<span class='warning'>You aren't equipped to interface with technology this old!</span>")
@@ -91,13 +100,15 @@ list("name" = "MSGS", "path" = /obj/machinery/atmospherics/binary/msgs, "cost" =
 	data["consumption"] = consumption/MEGAWATT //ditto
 	data["active"] = on
 	data["synthList"] = synth_designs
+	data["selectedCategory"] = category
+	data["categories"] = categories
 
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "antiquems.tmpl", "Antique Matter Synthesizer", 550, 550)
+		ui = new(user, src, ui_key, "antiquems.tmpl", "Antique Matter Synthesizer", 520, 460)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
 		// open the new ui window
@@ -115,25 +126,24 @@ list("name" = "MSGS", "path" = /obj/machinery/atmospherics/binary/msgs, "cost" =
 	if(href_list["toggle"])
 		toggle_power()
 	if(href_list["set_draw"])
-		consumption = input("Megawatts to draw per tick: ", "1MW = 1000kW = 1000000W", consumption/MEGAWATT) as num
+		consumption = input("Megajoules to draw per tick: ", "1MW = 1000kW = 1000000W", consumption/MEGAWATT) as num
 		consumption = round(Clamp(consumption*MEGAWATT, 0, 2*GIGAWATT)) //we're storing the actual number of watts but only displaying the users the mw conversion
 	if(href_list["synth"])
 		locate_data(href_list["synth"]) //Even though the list contains a path, hrefs only pass text so let's use name here instead of path
+	if(href_list["category"])
+		category = href_list["category"]
 	add_fingerprint(usr)
 	update_icon()
 	nanomanager.update_uis(src)
 	return 1
 
 /obj/machinery/power/antiquesynth/proc/locate_data(var/name)
-	visible_message("Looking for [name]")
 	for(var/element in synth_designs)
-		visible_message("Trying [element["name"]]")
 		if(element["name"] == name)
 			synth(element["path"],element["cost"])
 			return //Exit
 
 /obj/machinery/power/antiquesynth/proc/synth(var/obj/O,var/cost)
-	visible_message("Charge = [charge], Cost = [cost], [cost*MEGAWATT]")
 	if(charge >= cost*MEGAWATT)
 		charge = max(0, charge - cost*MEGAWATT)
 		new O(get_turf(src))

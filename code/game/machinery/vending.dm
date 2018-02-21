@@ -2913,17 +2913,17 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
 		/obj/item/clothing/shoes/clown_shoes/advanced,
 		/obj/item/fish_eggs/seadevil,
+		/obj/machinery/power/antiquesynth,
 		)
 
 /obj/machinery/vending/trader/New()
 
-	premium.Add(pick(existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper)) //A random borg upgrade minus the magnetic gripper. Time to jew the silicons!
-
 	for(var/random_items = 1 to premium.len - 5)
 		premium.Remove(pick(premium))
-
 	if(premium.Find(/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard))
 		load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
+	premium.Add(pick(existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper)) //A random borg upgrade minus the magnetic gripper. Time to jew the silicons!
+
 	..()
 
 /obj/machinery/vending/barber
