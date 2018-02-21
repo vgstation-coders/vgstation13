@@ -20,25 +20,32 @@
 	held_items = list()
 
 	stop_automated_movement_when_pulled = TRUE
-	environment_smash_flags = FALSE
+	environment_smash_flags = 0
 	density = FALSE
 	pass_flags = PASSTABLE | PASSMOB
 	vision_range = 6
 	aggro_vision_range = 6
 	idle_vision_range = 6
+	search_objects = 1
 
 	var/static/list/edibles = list(/mob/living/simple_animal/cockroach, /obj/item/weapon/reagent_containers/food/snacks/roach_eggs) //Add bugs to this as they get added in
 
+/mob/living/simple_animal/hostile/lizard/UnarmedAttack(var/atom/A)
+	if(is_type_in_list(A, edibles))
+		delayNextAttack(10)
+		gulp(A)
+	else return ..()
+
 /mob/living/simple_animal/hostile/lizard/proc/gulp(var/atom/eat_this)
 	visible_message("\The [name] consumes [eat_this] in a single gulp.", "<span class='notice'>You consume [eat_this] in a single gulp.</span>")
-	playsound(get_turf(src),'sound/items/egg_squash.ogg', rand(30,70), 1)
+	playsound(src,'sound/items/egg_squash.ogg', rand(30,70), 1)
 	qdel(eat_this)
 	adjustBruteLoss(-2)
 
-/mob/living/simple_animal/hostile/lizard/ListTargets()
-	var/list/L = new()
-	L.Add(oview(vision_range, src))
-	return L
+/mob/living/simple_animal/hostile/lizard/LoseAggro()
+	stop_automated_movement = 0
+	vision_range = idle_vision_range
+	search_objects = initial(search_objects)
 
 /mob/living/simple_animal/hostile/lizard/CanAttack(var/atom/the_target)//Can we actually attack a possible target?
 	if(see_invisible < the_target.invisibility)//Target's invisible to us, forget it
@@ -47,12 +54,6 @@
 		return TRUE
 	return FALSE
 
-/mob/living/simple_animal/hostile/lizard/AttackingTarget()
-	if(is_type_in_list(target, edibles))
-		return TRUE
-	else
-		return ..()
-
 /mob/living/simple_animal/hostile/lizard/verb/ventcrawl()
 	set name = "Crawl through Vent"
 	set desc = "Enter an air vent and crawl through the pipe system."
@@ -60,7 +61,6 @@
 	var/pipe = start_ventcrawl()
 	if(pipe)
 		handle_ventcrawl(pipe)
-
 
 /mob/living/simple_animal/hostile/lizard/verb/hide()
 	set name = "Hide"

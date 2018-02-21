@@ -365,11 +365,6 @@
 			reagents.trans_to(N, 0.25)
 			bitecount+= 0.25
 			after_consume(M,src.reagents)
-		else if(islizard(M))
-			M.delayNextAttack(10)
-			var/mob/living/simple_animal/hostile/lizard/L = M
-			if(is_type_in_list(src, L.edibles))
-				L.gulp(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/send_to_past(var/duration)
 	..()
