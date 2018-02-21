@@ -912,7 +912,7 @@
 		/mob/living/simple_animal/hostile/necro/zombie/leatherman,
 		/mob/living/simple_animal/hostile/necro/zombie/ghoul,
 		/mob/living/simple_animal/hostile/necro/zombie/ghoul,
-		/mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one,
+		/mob/living/simple_animal/hostile/necro/zombie/ghoul,
 		/mob/living/simple_animal/hostile/necro/zombie,
 		/mob/living/simple_animal/hostile/necro/zombie,
 		/mob/living/simple_animal/hostile/necro/zombie,
