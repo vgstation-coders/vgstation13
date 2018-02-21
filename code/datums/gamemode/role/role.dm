@@ -128,7 +128,8 @@
 	M.antag_roles.Add(id)
 	M.antag_roles[id] = src
 
-	OnPreSetup()
+	if (!OnPreSetup())
+		return FALSE
 	return 1
 
 /datum/role/proc/RemoveFromRole(var/datum/mind/M) //Called on deconvert
@@ -156,8 +157,8 @@
 // General sanity checks before assigning antag.
 // Return 1 on success, 0 on failure.
 /datum/role/proc/CanBeAssigned(var/datum/mind/M)
-	if(protected_jobs.len>0)
-		if(M.assigned_role in protected_jobs)
+	if(restricted_jobs.len>0)
+		if(M.assigned_role in restricted_jobs)
 			return 0
 
 	if(protected_antags.len>0)
