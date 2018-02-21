@@ -43,9 +43,8 @@
 	adjustBruteLoss(-2)
 
 /mob/living/simple_animal/hostile/lizard/LoseAggro()
-	stop_automated_movement = 0
-	vision_range = idle_vision_range
-	search_objects = initial(search_objects)
+	..()
+	search_objects = 1
 
 /mob/living/simple_animal/hostile/lizard/CanAttack(var/atom/the_target)//Can we actually attack a possible target?
 	if(see_invisible < the_target.invisibility)//Target's invisible to us, forget it
