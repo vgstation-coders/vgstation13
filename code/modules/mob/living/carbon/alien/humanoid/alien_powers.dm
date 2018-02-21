@@ -149,7 +149,7 @@ Doesn't work on other aliens/AI.*/
 	proj_step_delay = 0.2
 
 /spell/targeted/projectile/alienneurotoxin/is_valid_target(var/target, mob/user)
-	if(!(spell_flags & INCLUDEUSER) && target == usr)
+	if(!(spell_flags & INCLUDEUSER) && target == user)
 		return FALSE
 	if(get_dist(usr, target) > range)
 		return FALSE
@@ -242,7 +242,7 @@ Doesn't work on other aliens/AI.*/
 		return
 
 	if(powerc(200))
-		if(is_valid_target_to_acid(O,user))
+		if(is_valid_target_to_acid(O, usr))
 			acidify(O, usr)
 			AdjustPlasma(-200)
 
