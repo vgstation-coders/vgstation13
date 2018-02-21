@@ -7,13 +7,14 @@
 	user_type = USER_TYPE_VAMPIRE
 
 	charge_type = Sp_RECHARGE
-	charge_max = 20 SECONDS
+	charge_max = 3 MINUTES
 	invocation_type = SpI_NONE
 	range = 0
 	spell_flags = STATALLOWED | NEEDSHUMAN
-	cooldown_min = 20 SECONDS
+	cooldown_min = 3 MINUTES
 
-	hud_state = ""
+	override_base = "vamp"
+	hud_state = "vampire_rejuv"
 
 	var/blood_cost = 1
 
@@ -33,10 +34,11 @@
 	H.SetParalysis(0)
 	H.reagents.clear_reagents()
 	to_chat(H, "<span class='notice'>You flush your system with clean blood and remove any incapacitating effects.</span>")
-	if(V.blood_total >= 200)
-		for(var/i = 0 to 5)
-			H.adjustBruteLoss(-2)
-			H.adjustOxyLoss(-5)
-			H.adjustToxLoss(-2)
-			H.adjustFireLoss(-2)
-			sleep(3.5 SECONDS) // Before the next healing tick
+	spawn() // sleep() causes issues with cooldown.
+		if(V.blood_total >= 200)
+			for(var/i = 0 to 5)
+				H.adjustBruteLoss(-2)
+				H.adjustOxyLoss(-5)
+				H.adjustToxLoss(-2)
+				H.adjustFireLoss(-2)
+				sleep(3.5 SECONDS) // Before the next healing tick

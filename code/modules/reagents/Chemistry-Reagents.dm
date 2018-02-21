@@ -920,8 +920,6 @@
 			else if (prob(30))
 				H.confused = 2
 			H.eye_blurry = max(H.eye_blurry, 3)
-
-	/*
 		//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
 		var/datum/role/vampire/V = isvampire(H)
 		if(V)
@@ -932,11 +930,9 @@
 			else
 				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. Your vampiric powers counter most of the damage.</span>")
 				V.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
-		// if(H.mind && H.mind.special_role == "VampThrall")
-		// 	ticker.mode.remove_thrall(H.mind)
-		// 	H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
-		// 	"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
-	*/
+		var/datum/role/thrall/T = isthrall(H)
+		if(T)
+			T.Drop()
 
 /datum/reagent/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
 

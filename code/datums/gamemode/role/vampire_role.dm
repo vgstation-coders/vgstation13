@@ -26,7 +26,7 @@
 	var/blood_usable = 0
 	var/blood_total = 0
 
-	var/static/list/spell/roundstart_spells = list(/spell/targeted/hypnotise, /spell/rejuvenate)
+	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
 
 /datum/role/vampire/Greet(var/you_are = TRUE)
 	var/dat
@@ -40,15 +40,17 @@
 
 /datum/role/vampire/OnPostSetup()
 	. = ..()
-	update_vamp_hud(antag.current)
 
-	for(var/type_S in roundstart_spells)
-		var/spell/S = new type_S
-		antag.current.add_spell(S)
+	update_vamp_hud()
+
+	for(var/type_VP in roundstart_powers)
+		var/datum/power/vampire/VP = new type_VP
+		VP.Give(src)
 
 /datum/role/vampire/RemoveFromRole(var/datum/mind/M)
+	var/list/vamp_spells = getAllVampSpells()
 	for(var/spell/spell in antag.current.spell_list)
-		if (is_type_in_list(spell,roundstart_spells))//TODO: HAVE A LIST WITH EVERY VAMPIRE SPELLS
+		if (is_type_in_list(spell, vamp_spells))//TODO: HAVE A LIST WITH EVERY VAMPIRE SPELLS
 			antag.current.remove_spell(spell)
 	if(antag.current.client && antag.current.hud_used)
 		if(antag.current.hud_used.vampire_blood_display)
@@ -140,7 +142,7 @@
 			blood = min(10, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 10 blood, give them the remnant else they get 10 blood
 			blood_total += blood
 			blood_usable += blood
-			update_vamp_hud(assailant)
+			update_vamp_hud()
 			target.adjustCloneLoss(10) // beep boop 10 damage
 		else
 			blood = min(5, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 5 bloods
@@ -157,48 +159,11 @@
 /datum/role/vampire/proc/check_vampire_upgrade()
 	var/list/old_powers = powers.Copy()
 
-	switch (blood_total)
-
-		// TIER 1
-		if (100 to 150)
-			powers |= VAMP_VISION
-			powers |= VAMP_SHAPE
-
-		// TIER 2
-		if(150 to 200)
-			powers |= VAMP_CLOAK
-			powers |= VAMP_DISEASE
-
-		// TIER 3
-		if (200 to 250)
-			powers |= VAMP_BATS
-			powers |= VAMP_SCREAM
-			powers |= VAMP_HEAL
-
-		// TIER 3.5 (/vg/)
-		if(250 to 300)
-			powers |= VAMP_BLINK
-
-		// TIER 4
-		if(300 to 400)
-			powers |= VAMP_JAUNT
-			powers |= VAMP_SLAVE
-
-		// TIER 5 (/vg/)
-		if(400 to 450)
-			powers |= VAMP_MATURE
-
-		// TIER 6 (/vg/)
-		if(450 to 500)
-			powers |= VAMP_SHADOW
-
-		// TIER 66 (/vg/)
-		if(500 to 666)
-			powers |= VAMP_CHARISMA
-
-		// TIER 666 (/vg/)
-		if(666 to ARBITRARILY_LARGE_NUMBER)
-			powers |= VAMP_UNDYING
+	for (var/i in subtypesof(/datum/power/vampire))
+		var/datum/power/vampire/VP_type = i
+		if (blood_total > initial(VP_type.blood_threeshold) && !(initial(VP_type.id) in powers))
+			var/datum/power/vampire/VP = new VP_type
+			VP.Give(src)
 
 	announce_new_powers(old_powers, powers)
 
@@ -211,64 +176,51 @@
 				if(VAMP_SHAPE)
 					msg = "<span class='notice'>You have gained the shapeshifting ability, at the cost of stored blood you can change your form permanently.</span>"
 					to_chat(M, "[msg]")
-					// -- TODO : add the spell
 				if(VAMP_VISION)
 					msg = "<span class='notice'>Your vampiric vision has improved.</span>"
 					to_chat(M, "[msg]")
 					antag.store_memory("<font size = 1>[msg]</font>")
-					//no verb
 				if(VAMP_DISEASE)
 					msg = "<span class='notice'>You have gained the Diseased Touch ability which causes those you touch to die shortly after unless treated medically.</span>"
 					to_chat(M, "[msg]")
-					// -- TODO : add the spell
 				if(VAMP_CLOAK)
 					msg = "<span class='notice'>You have gained the Cloak of Darkness ability which when toggled makes you near invisible in the shroud of darkness.</span>"
 					to_chat(M, "[msg]")
-					// -- TODO : add the spell
 				if(VAMP_BATS)
 					msg = "<span class='notice'>You have gained the Summon Bats ability which allows you to summon a trio of angry space bats.</span>"
 					to_chat(M, "[msg]")
-					// -- TODO : add the spell
 				if(VAMP_SCREAM)
 					msg = "<span class='notice'>You have gained the Chiroptean Screech ability which stuns anything with ears in a large radius and shatters glass in the process.</span>"
 					to_chat(M, "[msg]")
-					// -- TODO : add the spell
 				if(VAMP_HEAL)
 					msg = "<span class=notice'>Your rejuvination abilities have improved and will now heal you over time when used.</span>"
 					to_chat(M, "[msg]")
 					antag.store_memory("<font size = 1>[msg]</font>")
-					//no verb
 				if(VAMP_JAUNT)
 					msg = "<span class='notice'>You have gained the Mist Form ability which allows you to take on the form of mist for a short period and pass over any obstacle in your path.</span>"
 					to_chat(M, "[msg]")
-					// -- TODO : add the spell
 				if(VAMP_SLAVE)
 					msg = "<span class='notice'>You have gained the Enthrall ability which at a heavy blood cost allows you to enslave a human that is not loyal to any other for a random period of time.</span>"
 					to_chat(M, "[msg]")
-					// -- TODO : add the spell
 				if(VAMP_BLINK)
 					msg = "<span class='notice'>You have gained the ability to shadowstep, which makes you disappear into nearby shadows at the cost of blood.</span>"
 					to_chat(M, "[msg]")
-					// -- TODO : add the spell
 				if(VAMP_MATURE)
 					msg = "<span class='sinister'>You have reached physical maturity. You are more resistant to holy things, and your vision has been improved greatly.</span>"
 					to_chat(M, "[msg]")
 					antag.store_memory("<font size = 1>[msg]</font>")
-					//no verb
 				if(VAMP_SHADOW)
 					msg = "<span class='notice'>You have gained mastery over the shadows. In the dark, you can mask your identity, instantly terrify non-vampires who approach you, and enter the chapel for a longer period of time.</span>"
 					to_chat(M, "[msg]")
-					// -- TODO : add the spell
 				if(VAMP_CHARISMA)
 					msg = "<span class='sinister'>You develop an uncanny charismatic aura that makes you difficult to disobey. Hypnotise and Enthrall take less time to perform, and Enthrall works on implanted targets.</span>"
 					to_chat(M, "[msg]")
 					antag.store_memory("<font size = 1>[msg]</font>")
-					//no verb
 				if(VAMP_UNDYING)
 					msg = "<span class='sinister'>You have reached the absolute peak of your power. Your abilities cannot be nullified very easily, and you may return from the grave so long as your body is not burned, destroyed or sanctified. You can also spawn a rather nice cape.</span>"
 					to_chat(M, "[msg]")
 					antag.store_memory("<font size = 1>[msg]</font>")
-					// -- TODO : add the spells
+
 /*
 -- Life() related procs --
 */
@@ -413,13 +365,14 @@
 
 /datum/role/vampire/proc/remove_blood(var/amount)
 	blood_usable = max(0, blood_usable - amount)
-	update_vamp_hud(antag.current)
+	update_vamp_hud()
 
 /*
 -- Helpers --
 */
 
-/datum/role/vampire/proc/update_vamp_hud(var/mob/M)
+/datum/role/vampire/proc/update_vamp_hud()
+	var/mob/M = antag.current
 	if(M.hud_used)
 		if(!M.hud_used.vampire_blood_display)
 			M.hud_used.vampire_hud()
