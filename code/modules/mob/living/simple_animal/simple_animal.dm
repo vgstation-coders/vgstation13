@@ -357,6 +357,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	..(act, type, desc)
 
 /mob/living/simple_animal/attack_animal(mob/living/simple_animal/M)
+	if(islizard(M))
+		var/mob/living/simple_animal/hostile/lizard/L = M
+		if(is_type_in_list(src, L.edibles))
+			L.gulp(src)
+			return
 	M.unarmed_attack_mob(src)
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)

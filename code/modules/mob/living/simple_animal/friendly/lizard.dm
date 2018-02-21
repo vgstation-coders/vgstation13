@@ -23,8 +23,22 @@
 	environment_smash_flags = FALSE
 	density = FALSE
 	pass_flags = PASSTABLE | PASSMOB
+	vision_range = 6
+	aggro_vision_range = 6
+	idle_vision_range = 6
 
 	var/static/list/edibles = list(/mob/living/simple_animal/cockroach, /obj/item/weapon/reagent_containers/food/snacks/roach_eggs) //Add bugs to this as they get added in
+
+/mob/living/simple_animal/hostile/lizard/proc/gulp(var/atom/eat_this)
+		visible_message("\The [name] consumes [eat_this] in a single gulp.", "<span class='notice'>You consume [eat_this] in a single gulp.</span>")
+		playsound(get_turf(src),'sound/items/egg_squash.ogg', rand(30,70), 1)
+		qdel(eat_this)
+		adjustBruteLoss(-2)
+
+/mob/living/simple_animal/hostile/lizard/ListTargets()
+	var/list/L = new()
+	L.Add(oview(vision_range, src))
+	return L
 
 /mob/living/simple_animal/hostile/lizard/CanAttack(var/atom/the_target)//Can we actually attack a possible target?
 	if(see_invisible < the_target.invisibility)//Target's invisible to us, forget it
@@ -34,16 +48,12 @@
 	return FALSE
 
 /mob/living/simple_animal/hostile/lizard/AttackingTarget()
-	if(is_type_in_list(target, edibles)) //Makes sure player lizards only consume edibles.
-		visible_message("\The [name] consumes [target] in a single gulp", "<span class='notice'>You consume [target] in a single gulp</span>")
-		playsound(get_turf(src),'sound/items/egg_squash.ogg', rand(30,70), 1)
-		qdel(target) //Nom
-		adjustBruteLoss(-2)
+	if(is_type_in_list(target, edibles))
 		return TRUE
 	else
 		return ..()
 
-/mob/living/simple_animal/hostile/lizard/proc/ventcrawl()
+/mob/living/simple_animal/hostile/lizard/verb/ventcrawl()
 	set name = "Crawl through Vent"
 	set desc = "Enter an air vent and crawl through the pipe system."
 	set category = "Object"
