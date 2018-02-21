@@ -532,8 +532,9 @@
 		spawn(0)
 			M.take_damage(100, "brute")
 
-/turf/proc/Bless()
-	turf_flags |= NOJAUNT
+/turf/bless()
+	holy = 1
+	..()
 
 /////////////////////////////////////////////////////////////////////////
 // Navigation procs

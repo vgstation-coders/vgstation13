@@ -985,9 +985,8 @@
 
 	if(..())
 		return 1
-
 	if(volume >= 5)
-		T.holy = 1
+		T.bless()
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
@@ -6364,7 +6363,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	spawn(volume * 10)
 		O.light_color = init_color
 		O.set_light(0)
-		
+
 /datum/reagent/mucus
 	name = "Mucus"
 	id = MUCUS
@@ -6372,12 +6371,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = LIQUID
 	color = "#13BC5E"
 	custom_metabolism = 0.01
-	
+
 /datum/reagent/mucus/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
-		
+
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(M_ASTHMA in H.mutations)
@@ -6392,7 +6391,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = LIQUID
 	color = "#C8A5DC"
 	overdose_am = REAGENTS_OVERDOSE
-	
+
 /datum/reagent/albuterol/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -6400,4 +6399,3 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(holder.has_reagent(MUCUS))
 		holder.remove_reagent(MUCUS, 10)
 
-	
