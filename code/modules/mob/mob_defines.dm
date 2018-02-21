@@ -27,6 +27,8 @@
 	var/obj/abstract/screen/bodytemp = null
 	var/obj/abstract/screen/healths = null
 	var/obj/abstract/screen/throw_icon = null
+	var/obj/abstract/screen/camera_icon = null
+	var/obj/abstract/screen/album_icon = null
 	var/obj/abstract/screen/nutrition_icon = null
 	var/obj/abstract/screen/pressure = null
 	var/obj/abstract/screen/damageoverlay = null

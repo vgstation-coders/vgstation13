@@ -325,3 +325,19 @@
 	icon_state = "kaminaglasses"
 	item_state = "kaminaglasses"
 	cover_hair = 1
+
+/obj/item/clothing/glasses/contacts
+	name = "contact lenses"
+	desc = "Only nerds wear glasses."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "contact"
+	prescription = 1
+	body_parts_covered = null
+
+/obj/item/clothing/glasses/contacts/polarized
+	name = "polarized contact lenses"
+	desc = "Protects your eyes from bright flashes of light."
+	icon_state = "polarized_contact"
+	darkness_view = -1
+	prescription = 1
+	eyeprot = 1

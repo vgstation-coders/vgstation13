@@ -649,6 +649,20 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "russian clothing crate"
 	group = "Clothing"
 	contraband = 1
+
+/datum/supply_packs/contacts
+	name = "Contact lenses"
+	contains = list(/obj/item/clothing/glasses/contacts,
+					/obj/item/clothing/glasses/contacts,
+					/obj/item/clothing/glasses/contacts,
+					/obj/item/clothing/glasses/contacts,
+					/obj/item/weapon/nanitecontacts,
+					/obj/item/weapon/nanitecontacts)
+	cost = 150
+	containertype = /obj/structure/closet/crate
+	containername = "contacts crate"
+	group = "Clothing"
+
 //////SECURITY//////
 
 /datum/supply_packs/specialops

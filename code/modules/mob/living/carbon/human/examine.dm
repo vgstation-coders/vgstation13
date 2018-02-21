@@ -430,7 +430,7 @@
 	if(butchery)
 		msg += "<span class='warning'>[butchery]</span>\n"
 
-	if(user.hasHUD(HUD_SECURITY))
+	if(istype(user) && user.hasHUD(HUD_SECURITY))
 		var/perpname = get_identification_name(get_face_name())
 		var/criminal = "None"
 
@@ -444,7 +444,7 @@
 				msg += "<a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"
 			msg += {"[wpermit(src) ? "<span class = 'deptradio'>Has weapon permit.</span>\n" : ""]"}
 
-	if(user.hasHUD(HUD_MEDICAL))
+	if(istype(user) && user.hasHUD(HUD_MEDICAL))
 		var/perpname = get_identification_name(get_face_name())
 		var/medical = "None"
 

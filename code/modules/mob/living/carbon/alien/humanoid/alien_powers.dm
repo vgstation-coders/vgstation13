@@ -149,7 +149,7 @@ Doesn't work on other aliens/AI.*/
 	proj_step_delay = 0.2
 
 /spell/targeted/projectile/alienneurotoxin/is_valid_target(var/target, mob/user)
-	if(!(spell_flags & INCLUDEUSER) && target == usr)
+	if(!(spell_flags & INCLUDEUSER) && target == user)
 		return FALSE
 	if(get_dist(usr, target) > range)
 		return FALSE
@@ -247,8 +247,12 @@ Doesn't work on other aliens/AI.*/
 			AdjustPlasma(-200)
 
 /proc/acidify(atom/O, mob/user)
-	new /obj/effect/alien/acid(get_turf(O), O)
-	user.visible_message("<span class='alien'>\The [user] vomits globs of vile stuff all over [O]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
+	if(O.acidable())
+    new /obj/effect/alien/acid(get_turf(O), O)
+	  user.visible_message("<span class='alien'>\The [user] vomits globs of vile stuff all over [O]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
+  
+  else
+		to_chat(user, "<span class='alien'>You cannot dissolve this object.</span>")
 
 /spell/aoe_turf/alienregurgitate
 	name = "Regurgitate"
@@ -266,7 +270,7 @@ Doesn't work on other aliens/AI.*/
 /spell/aoe_turf/alienregurgitate/cast(list/targets, mob/user)
 	var/mob/living/carbon/alien/humanoid/alien = user
 	alien.drop_stomach_contents()
-	user.visible_message("<span class='alien'>\The [usr] hurls out the contents of their stomach!</span>")
+	user.visible_message("<span class='alien'>\The [user] hurls out the contents of their stomach!</span>")
 
 ///////////////////////////
 // QUEEN SPECIFIC SPELLS //
@@ -328,7 +332,7 @@ a
 	return ..()
 
 /spell/aoe_turf/evolve/drone/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
-	user.visible_message("<span class='alien'>[src] begins to violently twist and contort!</span>", "<span class='alien'>You begin to evolve, stand still for a few moments</span>")
+	user.visible_message("<span class='alien'>[user] begins to violently twist and contort!</span>", "<span class='alien'>You begin to evolve, stand still for a few moments</span>")
 	return ..()
 
 /spell/aoe_turf/evolve/drone/cast(list/targets, mob/living/carbon/user)

@@ -493,8 +493,12 @@ var/global/num_vending_terminals = 1
 			to_chat(user, "<span class='info'>[src] responds with a soft beep.</span>")
 		else
 			to_chat(user, "<span class='info'>Nothing happens.</span>")
-				
+
 	else if(istype(W, /obj/item/weapon/card))
+		if(currently_vending) //We're trying to pay, not set the account
+			connect_account(user, W)
+			src.updateUsrDialog()
+			return
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(linked_account)
 			if(account_first_linked)
@@ -897,6 +901,8 @@ var/global/num_vending_terminals = 1
 		var/obj/item/weapon/card/card = usr.get_id_card()
 		if(card)
 			connect_account(usr, card)
+		else
+			to_chat(usr, "<span class='warning'>Please present a valid ID.</span>")
 		src.updateUsrDialog()
 		return
 
@@ -1517,6 +1523,11 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/medical
+
+/obj/machinery/vending/medical/New()
+	..()
+	if(map.nameShort == "deff")
+		icon = 'maps/defficiency/medbay.dmi'
 
 //This one's from bay12
 /obj/machinery/vending/plasmaresearch
@@ -2140,7 +2151,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/holomap = 2,
 		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 3,
 		/obj/item/blueprints/construction_permit = 4, // permits
-		/obj/item/vaporizer = 2,
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
@@ -2439,6 +2449,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/wizrobe/magician/fake = 3,
 		/obj/item/clothing/head/wizard/magician = 3,
 		/obj/item/clothing/suit/sakura_kimono = 3,
+		/obj/item/clothing/gloves/white = 3,
 		)
 
 	pack = /obj/structure/vendomatpack/autodrobe
@@ -2903,26 +2914,25 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/fancy/donut_box = 2,
 		/obj/item/clothing/suit/storage/trader = 3,
 		/obj/item/device/pda/trader = 3,
-		/obj/item/weapon/capsule = 60
+		/obj/item/weapon/capsule = 60,
+		/obj/item/vaporizer = 1,
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
 		/obj/item/device/pda/trader = 100,
-		/obj/item/weapon/capsule = 10
+		/obj/item/weapon/capsule = 10,
+		/obj/item/vaporizer = 100
 		)
 
 	accepted_coins = list(/obj/item/weapon/coin/trader)
 
 	premium = list(
-		/obj/item/weapon/storage/trader_marauder,
-		//obj/item/weapon/storage/backpack/holding, //Players did exactly what you would expect and bought them for their own use.  Keep in mind that an obj should be good but not so good they want it for themselves
+		/obj/item/weapon/storage/trader_chemistry,
+		/obj/structure/closet/secure_closet/wonderful,
+		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard,
 		/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
 		/obj/item/weapon/storage/bluespace_crystal,
-		//obj/item/clothing/shoes/magboots/elite,
 		/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
-		/obj/item/weapon/reagent_containers/glass/bottle/peridaxon,
-		/obj/item/weapon/reagent_containers/glass/bottle/rezadone,
-		/obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall,
 		/obj/item/clothing/shoes/clown_shoes/advanced,
 		/obj/item/fish_eggs/seadevil,
 		)
@@ -2933,6 +2943,9 @@ var/global/num_vending_terminals = 1
 
 	for(var/random_items = 1 to premium.len - 5)
 		premium.Remove(pick(premium))
+
+	if(premium.Find(/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard))
+		load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
 	..()
 
 /obj/machinery/vending/barber

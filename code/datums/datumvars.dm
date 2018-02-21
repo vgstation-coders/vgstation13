@@ -433,6 +433,7 @@ function loadPage(list) {
 					//html += debug_variable("[index]", L[index], level + 1)
 					else
 						html += debug_variable(index, L[index], level + 1)
+					html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[DA]'>(Delete)</a>"
 					index++
 				html += "</ul>"
 
@@ -1101,3 +1102,23 @@ function loadPage(list) {
 			return
 
 		DAT.vars["transform"] = modify_matrix_menu(M)
+
+	else if (href_list["delValueFromList"])
+		if (!check_rights(R_DEBUG))
+			return FALSE
+
+		var/list/L = locate(href_list["list"])
+		var/datum/D = locate(href_list["datum"])
+
+		if (!istype(L))
+			return FALSE
+
+		var/index = text2num(href_list["index"])
+
+		if (!isnum(index) || index < 1)
+			return FALSE
+
+		log_admin("[key_name(usr)] has deleted the value [L[index]] in the list [L][D ? ", belonging to the datum [D] of type [D.type]." : "."]")
+		message_admins("[key_name(usr)] has deleted the value [L[index]] in the list [L][D ? ", belonging to the datum [D] of type [D.type]." : "."]")
+
+		L -= L[index]
