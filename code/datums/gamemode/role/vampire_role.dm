@@ -48,8 +48,9 @@
 		VP.Give(src)
 
 /datum/role/vampire/RemoveFromRole(var/datum/mind/M)
+	var/list/vamp_spells = getAllVampSpells()
 	for(var/spell/spell in antag.current.spell_list)
-		if (is_type_in_list(spell,roundstart_spells))//TODO: HAVE A LIST WITH EVERY VAMPIRE SPELLS
+		if (is_type_in_list(spell, vamp_spells))//TODO: HAVE A LIST WITH EVERY VAMPIRE SPELLS
 			antag.current.remove_spell(spell)
 	if(antag.current.client && antag.current.hud_used)
 		if(antag.current.hud_used.vampire_blood_display)
