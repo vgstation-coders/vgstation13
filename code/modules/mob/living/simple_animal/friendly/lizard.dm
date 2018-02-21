@@ -30,10 +30,10 @@
 	var/static/list/edibles = list(/mob/living/simple_animal/cockroach, /obj/item/weapon/reagent_containers/food/snacks/roach_eggs) //Add bugs to this as they get added in
 
 /mob/living/simple_animal/hostile/lizard/proc/gulp(var/atom/eat_this)
-		visible_message("\The [name] consumes [eat_this] in a single gulp.", "<span class='notice'>You consume [eat_this] in a single gulp.</span>")
-		playsound(get_turf(src),'sound/items/egg_squash.ogg', rand(30,70), 1)
-		qdel(eat_this)
-		adjustBruteLoss(-2)
+	visible_message("\The [name] consumes [eat_this] in a single gulp.", "<span class='notice'>You consume [eat_this] in a single gulp.</span>")
+	playsound(get_turf(src),'sound/items/egg_squash.ogg', rand(30,70), 1)
+	qdel(eat_this)
+	adjustBruteLoss(-2)
 
 /mob/living/simple_animal/hostile/lizard/ListTargets()
 	var/list/L = new()

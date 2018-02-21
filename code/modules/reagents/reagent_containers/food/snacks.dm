@@ -371,7 +371,6 @@
 			if(is_type_in_list(src, L.edibles))
 				L.gulp(src)
 
-
 /obj/item/weapon/reagent_containers/food/snacks/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
