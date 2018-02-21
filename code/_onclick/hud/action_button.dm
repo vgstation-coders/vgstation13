@@ -35,6 +35,12 @@
 	UpdateIcon()
 	usr.update_action_buttons()
 
+/obj/abstract/screen/movable/action_button/MouseDrop(over_object, src_location, over_location, src_control, over_control, params)
+	if(istype(over_object, /obj/abstract/screen/movable/action_button))
+		var/obj/abstract/screen/movable/action_button/B = over_object
+		var/list/actions = usr.actions
+		actions.Swap(actions.Find(src.linked_action), actions.Find(B.linked_action))
+		usr.update_action_buttons()
 
 /obj/abstract/screen/movable/action_button/hide_toggle/proc/InitialiseIcon(mob/living/user)
 	if(isalien(user))
