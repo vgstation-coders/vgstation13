@@ -48,7 +48,7 @@
 /datum/power/vampire/shape
 	blood_threeshold = 100
 	id = VAMP_SHAPE
-	spell_path = null // TODO
+	spell_path = /spell/shapeshift
 
 /datum/power/vampire/vision
 	blood_threeshold = 100

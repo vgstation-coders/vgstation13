@@ -9,7 +9,7 @@
 	charge_type = Sp_RECHARGE
 	charge_max = 3 MINUTES
 	invocation_type = SpI_NONE
-	range = 0
+	range = 3
 	spell_flags = NEEDSHUMAN
 	cooldown_min = 3 MINUTES
 

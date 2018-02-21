@@ -2164,6 +2164,7 @@
 #include "code\modules\spells\general\rejuvenate.dm"
 #include "code\modules\spells\general\ring_of_fire.dm"
 #include "code\modules\spells\general\rune_write.dm"
+#include "code\modules\spells\general\shapeshift.dm"
 #include "code\modules\spells\targeted\balefulmutate.dm"
 #include "code\modules\spells\targeted\buttbots_revenge.dm"
 #include "code\modules\spells\targeted\disaese.dm"
