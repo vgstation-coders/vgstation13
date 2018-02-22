@@ -256,7 +256,7 @@
 //Oxygen indicator exists, but unused
 //	if (oxygen) oxygen.icon_state = "oxy[src.oxygen_alert ? 1 : 0]"
 
-	fire.icon_state = "fire[on_fire ? 1 : 0]"
+	fire.icon_state = "fire[fire_alert ? 1 : 0]"
 
 	if(src.eye_blind || blinded)
 		overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
@@ -319,13 +319,6 @@
 			weapon_lock = 0
 			weaponlock_time = 120
 
-//Robots on fire
-/mob/living/silicon/robot/handle_fire()
-	if(..())
-		return
-	adjustFireLoss(3)
-	return
-
 /mob/living/silicon/robot/update_fire()
 	overlays -= image("icon"='icons/mob/OnFire.dmi', "icon_state"="Standing")
 	if(on_fire)
@@ -345,6 +338,14 @@
 	else
 		canmove = 1
 	return canmove
+
+// Check if there's fire on the turf
+/mob/living/silicon/robot/handle_fire(datum/gas_mixture/environment)
+	var/turf/simulated/T = get_turf(loc)
+	if(locate(/obj/effect/fire) in T)
+		fire_alert = 1
+	else
+		fire_alert = 0
 
 // This handles the pressure sensor hud element. Values based on human values.
 /mob/living/silicon/robot/proc/handle_pressure_damage(datum/gas_mixture/environment)
