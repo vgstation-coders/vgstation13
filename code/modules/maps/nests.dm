@@ -37,7 +37,7 @@
 /obj/abstract/map/nest/lizard
 	name = "lizard breeding ground"
 	icon_state = "lizard"
-	mob_type = /mob/living/simple_animal/lizard
+	mob_type = /mob/living/simple_animal/hostile/lizard
 
 /obj/abstract/map/nest/mouse
 	name = "mouse breeding ground"

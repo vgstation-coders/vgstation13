@@ -248,7 +248,7 @@
 var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/cat						= list(/datum/butchering_product/skin/cat),
 	/mob/living/simple_animal/corgi						= list(/datum/butchering_product/skin/corgi, TEETH_FEW),
-	/mob/living/simple_animal/lizard					= list(/datum/butchering_product/skin/lizard),
+	/mob/living/simple_animal/hostile/lizard			= list(/datum/butchering_product/skin/lizard),
 	/mob/living/simple_animal/hostile/asteroid/goliath	= list(/datum/butchering_product/skin/goliath, TEETH_LOTS),
 	/mob/living/simple_animal/hostile/asteroid/basilisk	= list(/datum/butchering_product/skin/basilisk),
 	/mob/living/simple_animal/hostile/asteroid/hivelord	= list(/datum/butchering_product/hivelord_core),

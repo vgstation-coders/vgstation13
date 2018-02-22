@@ -4,6 +4,8 @@ var/global/datum/controller/occupations/job_master
 #define BE_ASSISTANT 1
 #define RETURN_TO_LOBBY 2
 
+#define JOB_CONTROLLER_DEBUG TRUE
+
 /datum/controller/occupations
 		//List of all jobs
 	var/list/occupations = list()
@@ -12,10 +14,10 @@ var/global/datum/controller/occupations/job_master
 		//Debug info
 	var/list/job_debug = list()
 
-
 /datum/controller/occupations/proc/SetupOccupations(var/faction = "Station")
 	occupations = list()
 	var/list/all_jobs = typesof(/datum/job)
+	log_admin("JOB SS debug: SetupOccupations() started.")
 	if(!all_jobs.len)
 		to_chat(world, "<span class='danger'>Error setting up jobs, no job datums found</span>")
 		return 0
@@ -39,9 +41,10 @@ var/global/datum/controller/occupations/job_master
 
 
 /datum/controller/occupations/proc/Debug(var/text)
-	if(!Debug2)
+	if(!JOB_CONTROLLER_DEBUG)
 		return 0
 	job_debug.Add(text)
+	log_admin(text) // Permanently log what happens + a timestamp. Should help with the cuck cube problem.
 	return 1
 
 
@@ -492,6 +495,12 @@ var/global/datum/controller/occupations/job_master
 		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
 		W.buckle_mob(H,H)
 
+	if(H.disabilities & ASTHMA)
+		if(H.backbag == 1)
+			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/device/inhaler(H))
+		else
+			H.equip_or_collect(new /obj/item/device/inhaler(H), slot_in_backpack)
+		
 	return 1
 
 

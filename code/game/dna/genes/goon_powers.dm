@@ -234,7 +234,7 @@
 		/mob/living/simple_animal/tomato,
 		/mob/living/simple_animal/chick,
 		/mob/living/simple_animal/chicken,
-		/mob/living/simple_animal/lizard,
+		/mob/living/simple_animal/hostile/lizard,
 		/mob/living/simple_animal/cow,
 		/mob/living/simple_animal/spiderbot
 		)

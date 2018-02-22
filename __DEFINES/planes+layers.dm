@@ -86,6 +86,8 @@ What is the naming convention for planes or layers?
 #define FLOOR_PLANE -2
 
 #define BELOW_TURF_PLANE 		-1 		// objects that are below turfs and darkness but above platings. Useful for asteroid smoothing or other such magic.
+	#define CORNER_LAYER 		2
+	#define SIDE_LAYER			3
 
 #define BASE_PLANE 				0		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
@@ -165,6 +167,7 @@ What is the naming convention for planes or layers?
 
 #define ABOVE_HUMAN_PLANE 		16			// For things that should appear above humans.
 
+	#define SHADOW_LAYER			0
 	#define VEHICLE_LAYER 			0
 	#define CHAIR_ARMREST_LAYER 	0
 	#define WINDOOR_LAYER 			1

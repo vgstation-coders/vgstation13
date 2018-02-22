@@ -221,7 +221,7 @@
 		else
 			to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
 
-	if ((message && src.stat == 0))
+	if (message && (src.stat == CONSCIOUS || act == "deathgasp"))
 		if (m_type & 1)
 			for(var/mob/O in viewers(src, null))
 				O.show_message(message, m_type)

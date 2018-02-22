@@ -85,14 +85,18 @@ var/global/num_vending_terminals = 1
 
 	var/machine_id = "#"
 
-	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK | SECUREDPANEL
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK
 
+<<<<<<< HEAD
 
 	var/account_first_linked = 0
 
 	var/inserting_mode = FALSE // insert items directly into the machine (used for custom vending machines)
 	var/is_custom_machine = FALSE // true if this vendor supports editing the prices
 	var/edit_mode = FALSE // Used for editing prices
+=======
+	var/account_first_linked = 1
+>>>>>>> d5202fd7861aecd67d48bbda32f9cef3520ae959
 	var/is_being_filled = FALSE // `in_use` from /obj is already used for tracking users of this machine's UI
 
 /obj/machinery/vending/cultify()
@@ -133,6 +137,7 @@ var/global/num_vending_terminals = 1
 
 	if(ticker)
 		initialize()
+		link_to_account()
 
 	return
 
@@ -143,6 +148,9 @@ var/global/num_vending_terminals = 1
 	build_inventory(contraband, 1)
 	build_inventory(premium, 0, 1)
 	build_inventory(vouched, 0, 0, 1)
+
+/obj/machinery/vending/proc/link_to_account()
+	linked_account = department_accounts["Cargo"]
 
 /obj/machinery/vending/RefreshParts()
 	var/manipcount = 0
@@ -370,12 +378,12 @@ var/global/num_vending_terminals = 1
 //		to_chat(world, "Added: [R.product_name]] - [R.amount] - [R.product_path]")
 
 /obj/machinery/vending/emag(mob/user)
-	if(!emagged)
+	if(!emagged || !extended_inventory || scan_id)
 		emagged = 1
-		if(user)
-			to_chat(user, "You short out the product lock on \the [src]")
+		extended_inventory = 1
+		scan_id = 0
 		return 1
-	return -1 //Fucking gross
+	return 0 //Fucking gross
 
 /obj/machinery/vending/npc_tamper_act(mob/living/L)
 	if(!panel_open)
@@ -487,7 +495,19 @@ var/global/num_vending_terminals = 1
 		if(user.drop_item(W, src))
 			add_item(W)
 			src.updateUsrDialog()
+	else if(istype(W, /obj/item/weapon/card/emag))
+		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")
+		to_chat(user, "<span class='notice'>You swipe \the [W] through [src]</span>")
+		if (emag())
+			to_chat(user, "<span class='info'>[src] responds with a soft beep.</span>")
+		else
+			to_chat(user, "<span class='info'>Nothing happens.</span>")
+
 	else if(istype(W, /obj/item/weapon/card))
+		if(currently_vending) //We're trying to pay, not set the account
+			connect_account(user, W)
+			src.updateUsrDialog()
+			return
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(linked_account)
 			if(account_first_linked)
@@ -933,15 +953,19 @@ var/global/num_vending_terminals = 1
 		var/obj/item/weapon/card/card = usr.get_id_card()
 		if(card)
 			connect_account(usr, card)
+		else
+			to_chat(usr, "<span class='warning'>Please present a valid ID.</span>")
 
 	else if ((href_list["togglevoice"]) && (src.panel_open))
 		src.shut_up = !src.shut_up
 
 	else if ((href_list["toggle_edit_mode"]))
-		edit_mode = !edit_mode
+		if(is_custom_machine)
+			edit_mode = !edit_mode
 
 	else if ((href_list["toggle_insert_mode"]))
-		inserting_mode = !inserting_mode
+		if(is_custom_machine)
+			inserting_mode = !inserting_mode
 
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
@@ -1558,6 +1582,11 @@ var/global/num_vending_terminals = 1
 
 	pack = /obj/structure/vendomatpack/medical
 
+/obj/machinery/vending/medical/New()
+	..()
+	if(map.nameShort == "deff")
+		icon = 'maps/defficiency/medbay.dmi'
+
 //This one's from bay12
 /obj/machinery/vending/plasmaresearch
 	name = "\improper Toximate 3000"
@@ -1838,7 +1867,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/legcuffs/bolas = 8,
 		)
 	contraband = list(
-		/obj/item/clothing/glasses/sunglasses = 2,
+		/obj/item/clothing/glasses/sunglasses/security = 2,
 		/obj/item/weapon/storage/fancy/donut_box = 2,
 		)
 	premium = list(
@@ -2180,7 +2209,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/holomap = 2,
 		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 3,
 		/obj/item/blueprints/construction_permit = 4, // permits
-		/obj/item/vaporizer = 2,
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
@@ -2479,6 +2507,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/wizrobe/magician/fake = 3,
 		/obj/item/clothing/head/wizard/magician = 3,
 		/obj/item/clothing/suit/sakura_kimono = 3,
+		/obj/item/clothing/gloves/white = 3,
 		)
 
 	pack = /obj/structure/vendomatpack/autodrobe
@@ -2943,27 +2972,27 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/fancy/donut_box = 2,
 		/obj/item/clothing/suit/storage/trader = 3,
 		/obj/item/device/pda/trader = 3,
-		/obj/item/weapon/capsule = 60
+		/obj/item/weapon/capsule = 60,
+		/obj/item/vaporizer = 1,
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
 		/obj/item/device/pda/trader = 100,
-		/obj/item/weapon/capsule = 10
+		/obj/item/weapon/capsule = 10,
+		/obj/item/vaporizer = 100
 		)
 
 	accepted_coins = list(/obj/item/weapon/coin/trader)
 
 	premium = list(
-		/obj/item/weapon/storage/trader_marauder,
-		//obj/item/weapon/storage/backpack/holding, //Players did exactly what you would expect and bought them for their own use.  Keep in mind that an obj should be good but not so good they want it for themselves
+		/obj/item/weapon/storage/trader_chemistry,
+		/obj/structure/closet/secure_closet/wonderful,
+		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard,
 		/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
 		/obj/item/weapon/storage/bluespace_crystal,
-		//obj/item/clothing/shoes/magboots/elite,
 		/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
-		/obj/item/weapon/reagent_containers/glass/bottle/peridaxon,
-		/obj/item/weapon/reagent_containers/glass/bottle/rezadone,
-		/obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall,
 		/obj/item/clothing/shoes/clown_shoes/advanced,
+		/obj/item/fish_eggs/seadevil,
 		)
 
 /obj/machinery/vending/trader/New()
@@ -2972,6 +3001,9 @@ var/global/num_vending_terminals = 1
 
 	for(var/random_items = 1 to premium.len - 5)
 		premium.Remove(pick(premium))
+
+	if(premium.Find(/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard))
+		load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
 	..()
 
 /obj/machinery/vending/barber
@@ -3101,9 +3133,14 @@ var/global/num_vending_terminals = 1
 	//vend_reply = "Insert another joke here"
 	//product_ads = "Another joke here"
 	//product_slogans = "Jokes"
+	account_first_linked = 0
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK | SECUREDPANEL
 	products = list()
 
 	pack = /obj/structure/vendomatpack/custom
+
+/obj/machinery/vending/sale/link_to_account()
+	return
 
 /obj/machinery/vending/toggleSecuredPanelOpen(var/obj/toggleitem, var/mob/user)
 	if(!account_first_linked)
@@ -3179,15 +3216,3 @@ var/global/num_vending_terminals = 1
 		)
 
 	pack = /obj/structure/vendomatpack/mining
-
-//Note : Snowflake, but I don't care. Rework the fucking economy
-/obj/machinery/vending/mining/New()
-	..()
-
-	if(ticker)
-		initialize()
-
-/obj/machinery/vending/mining/initialize()
-	..()
-
-	linked_account = department_accounts["Cargo"]

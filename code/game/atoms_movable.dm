@@ -53,6 +53,7 @@
 	var/atom/movable/tether_master
 	var/list/tether_slaves
 	var/list/current_tethers
+	var/obj/shadow/shadow
 
 /atom/movable/New()
 	. = ..()

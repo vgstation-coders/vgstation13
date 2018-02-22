@@ -149,15 +149,27 @@
 
 
 /obj/item/borg/upgrade/restart/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	playsound(get_turf(R), "sound/machines/click.ogg", 20, 1)
+	to_chat(user, "You plug the board into the robot's core circuitry.")
+
+	sleep(5)
+
 	if(R.health < 0)
+		playsound(get_turf(R), "sound/machines/buzz-two.ogg", 50, 0)
 		to_chat(user, "You have to repair the robot before using this module!")
 		return FALSE
+
+	playsound(get_turf(R), "sound/machines/paistartup.ogg", 50, 1)
+	to_chat(user, "<span style=\"font-family:Courier\">Systems reboot initialized successfully.</span>")
+
+	sleep(5)
 
 	if(!R.key)
 		for(var/mob/dead/observer/ghost in player_list)
 			if(ghost.mind && ghost.mind.current == R)
 				R.key = ghost.key
 
+	playsound(get_turf(R), "sound/voice/liveagain.ogg", 75, 1)
 	R.stat = CONSCIOUS
 	R.resurrect()
 
@@ -212,10 +224,6 @@
 
 	for(var/obj/item/weapon/tank/jetpack/carbondioxide in R.module.modules)
 		R.internals = src
-		if(isMoMMI(R))
-			for(var/X in carbondioxide.actions)
-				var/datum/action/A = X
-				A.Grant(R)
 
 /obj/item/borg/upgrade/syndicate/
 	name = "cyborg illegal equipment board"
