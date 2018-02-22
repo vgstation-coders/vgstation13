@@ -148,8 +148,8 @@
 	if (R.isReligiousLeader(M))
 		to_chat(M, "<span class='warning'>You are the leader of this flock and cannot forsake them. If you have to, pray to the Gods for release.</span>")
 		return FALSE
-	Remove(owner)
 	R.renounce(owner)
+	Remove(owner)
 
 /proc/chooseBible(var/datum/religion/R, var/mob/user)
 
