@@ -115,7 +115,7 @@
 	..(loc)
 
 	if(areaMaster.areaapc)
-		world.log << "Second APC detected in area: [areaMaster.name]. Deleting the second APC."
+		world.log << "Second APC detected in area: [areaMaster.name] [loc]. Deleting the second APC."
 		qdel(src)
 		return
 
