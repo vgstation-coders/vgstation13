@@ -47,6 +47,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	var/consumption = 0 //How much are we set to draw off the net? Clamped between 0 and 2 GIGAWATT (2,000,000,000 Watts)
 	var/on = 0
 	var/charge = 0 //How much we've stored. Also capped at 2 GIGAWATT.
+	var/charged_last_tick = 0
 	var/category = "resources" //which list to display
 	var/list/categories = list(list("category" = "resources"), list("category" = "tools"), list("category" = "machinery")) //Yes it is necessary to write the list like this
 
@@ -62,26 +63,25 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	//Maybe I'll add more?
 
 /obj/machinery/power/antiquesynth/process()
+	charged_last_tick = 0
 	if(!on)
 		return
 	if(!anchored || !get_powernet())
 		toggle_power()
 		return
-	if(charge >= GIGAWATT)
-		charge = min(charge, GIGAWATT)
+	if(charge >= 2*GIGAWATT)
+		charge = min(charge, 2*GIGAWATT)
 		return //We can't get more charged than this!
 	if(avail()>consumption)
+		charged_last_tick = 1
 		charge += consumption
 		add_load(consumption)
+		nanomanager.update_uis(src)
 
-/obj/machinery/power/antiquesynth/attack_ai(var/mob/user as mob)
+/obj/machinery/power/antiquesynth/attack_ai(mob/user)
 	to_chat(user, "<span class='warning'>You aren't equipped to interface with technology this old!</span>")
-	return 0
 
-/obj/machinery/power/antiquesynth/attack_paw(var/mob/user as mob)
-	return attack_hand(user)
-
-/obj/machinery/power/antiquesynth/attack_hand(var/mob/user as mob)
+/obj/machinery/power/antiquesynth/attack_hand(mob/user)
 	return ui_interact(user)
 
 /obj/machinery/power/antiquesynth/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
@@ -97,7 +97,8 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	data["name"] = name
 	data["powered"] = !(stat & NOPOWER)
 	data["charge"] = charge/MEGAWATT //Charge given in megawatts not watts
-	data["consumption"] = consumption/MEGAWATT //ditto
+	data["charging"] = charged_last_tick
+	data["consumption"] = round(consumption/MEGAWATT,0.1) //ditto
 	data["active"] = on
 	data["synthList"] = synth_designs
 	data["selectedCategory"] = category
@@ -119,8 +120,13 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 /obj/machinery/power/antiquesynth/Topic(href, href_list)
 	if(..())
 		return
+	if(usr.incapacitated() || !Adjacent(usr) || !usr.dexterity_check())
+		return
 	if(!allowed(usr) && !emagged)
 		to_chat(usr,"<span class='warning'>Access denied.</span>")
+		return
+	if(issilicon(usr))
+		to_chat(usr,"<span class='warning'>You are not compatible with this device.</span>")
 		return
 
 	if(href_list["toggle"])
@@ -132,9 +138,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 		locate_data(href_list["synth"]) //Even though the list contains a path, hrefs only pass text so let's use name here instead of path
 	if(href_list["category"])
 		category = href_list["category"]
-	add_fingerprint(usr)
 	update_icon()
-	nanomanager.update_uis(src)
 	return 1
 
 /obj/machinery/power/antiquesynth/proc/locate_data(var/name)
@@ -146,6 +150,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 /obj/machinery/power/antiquesynth/proc/synth(var/obj/O,var/cost)
 	if(charge >= cost*MEGAWATT)
 		charge = max(0, charge - cost*MEGAWATT)
+		nanomanager.update_uis(src)
 		new O(get_turf(src))
 	else
 		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)

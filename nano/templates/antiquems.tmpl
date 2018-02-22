@@ -19,9 +19,15 @@
 		Consumption:
 	</div>
 	<div class="itemContent">
-		{{:data.consumption}} megawatts 
+		{{:helper.precisionRound(data.consumption,1)}} megawatts 
+	</div>
+	<div class="itemContent"> 
 		{{if data.active}}
-			<span class='good'>On</span>
+			{{if data.charging}}
+				<span class='good'>Charging</span>
+			{{else}}
+				<span class='bad'>Insufficient Power</span>
+			{{/if}}
 		{{else}}
 			<span class='average'>Off</span>
 		{{/if}}
