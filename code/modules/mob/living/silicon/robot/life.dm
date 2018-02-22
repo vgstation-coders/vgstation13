@@ -340,7 +340,7 @@
 	return canmove
 
 // Check if there's fire on the turf
-/mob/living/silicon/robot/handle_fire(datum/gas_mixture/environment)
+/mob/living/silicon/robot/handle_fire()
 	var/turf/simulated/T = get_turf(loc)
 	if(locate(/obj/effect/fire) in T)
 		fire_alert = 1
