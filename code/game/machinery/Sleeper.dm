@@ -515,11 +515,11 @@
 		return
 	if(emagged)
 		light_color = LIGHT_COLOR_RED
-		icon_state += "_emagged"
+		icon_state = "[base_icon]_emagged"
 	else
 
 		light_color = LIGHT_COLOR_ORANGE
-		icon_state += "_running"
+		icon_state = "[base_icon]_running"
 	if(on)
 		set_light(light_range_on, light_power_on)
 	else
