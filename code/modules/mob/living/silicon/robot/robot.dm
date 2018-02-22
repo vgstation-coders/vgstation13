@@ -1217,6 +1217,8 @@
 
 
 	overlays.len = 0
+	update_fire()
+
 	if(stat == 0 && cell != null)
 		var/image/eyes = image(icon,"eyes-[icon_state]", ABOVE_LIGHTING_LAYER)
 		eyes.plane = LIGHTING_PLANE
