@@ -15,6 +15,7 @@
 	var/custom_sprite = 0 //Due to all the sprites involved, a var for our custom borgs may be best
 	var/pressure_alert = 0
 	var/temp_alert = 0
+	var/fire_alert = 0
 	//var/crisis //Admin-settable for combat module use.
 
 	var/obj/item/device/station_map/station_holomap = null
