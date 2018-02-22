@@ -84,7 +84,6 @@
 	var/datum/materials/materials_list = new
 	if(istype(S, /obj/item/stack/sheet/mineral)) //With mineral, it's straight forward
 		var/obj/item/stack/sheet/mineral/M = S
-
 		mat = materials_list.getMaterial(M.recyck_mat)
 	else //Not so straight forward
 		switch(S.type)
@@ -94,19 +93,21 @@
 				mat = materials_list.getMaterial(MAT_WOOD)
 		if(istype(S, /obj/item/stack/sheet/glass))
 			mat = materials_list.getMaterial(MAT_GLASS)
-	to_chat(usr, "mat = [mat], inherit_material = [inherit_material], gen_quality = [gen_quality]")
 	if(mat)
 		if(inherit_material)
-			to_chat(world, "inherit_material called by [mat]")
 			var/icon/original = icon(R.icon, R.icon_state)
-			original.ColorTone(mat.color)
+			if(mat.color)
+				original.ColorTone(mat.color)
+			else if(mat.color_matrix)
+				R.color = mat.color_matrix
 			R.icon = original
 			R.alpha = mat.alpha
 			R.material_type = mat
-			to_chat(world, "material type of R is [R.material_type]")
-		//if(gen_quality)
+			R.gen_quality()
+			if(R.quality > SUPERIOR)
+				R.gen_description()
 		if(!findtext(lowertext(R.name), lowertext(mat.name)))
-			R.name = "[R.quality ? R.quality == NORMAL ? "": "[lowertext(getQualityString(R.quality))] ":""][lowertext(mat.name)] [R.name]"
+			R.name = "[R.quality == NORMAL ? "": "[lowertext(getQualityString(R.quality))]"] [lowertext(mat.name)] [R.name]"
 
 var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/plasteel, 1, 4, 60),
@@ -224,6 +225,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	null,
 	new/datum/stack_recipe("iron door", /obj/machinery/door/mineral/iron, 					20, 			one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("stove", /obj/machinery/space_heater/campfire/stove, 			5, time = 25, 	one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE)
 	)
 
 /* ========================================================================
@@ -272,6 +274,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("throne",			/obj/structure/bed/chair/wood/throne,	40,		time = 100,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("chest",				/obj/structure/closet/crate/chest,		10,		time = 50,	one_per_turf = 1,	on_floor = 1, other_reqs = list(/obj/item/stack/sheet/plasteel = 5)),
 	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE)
 	)
 
 /* =========================================================================

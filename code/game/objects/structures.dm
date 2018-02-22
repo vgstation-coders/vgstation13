@@ -48,6 +48,7 @@ obj/structure/ex_act(severity)
 					if(!Move(get_step(loc, kick_dir)))
 						break
 					sleep(3)
-
+	if(material_type)
+		material_type.on_use(H,src,null)
 /obj/structure/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)

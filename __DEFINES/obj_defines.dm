@@ -1,32 +1,32 @@
 //Quality
 
-#define AWFUL 0
-#define SHODDY 1
-#define POOR 2
-#define NORMAL 3
-#define GOOD 4
-#define SUPERIOR 5
-#define EXCELLENT 6
-#define MASTERWORK 7
-#define LEGENDARY 8
+#define AWFUL 1
+#define SHODDY 2
+#define POOR 3
+#define NORMAL 4
+#define GOOD 5
+#define SUPERIOR 6
+#define EXCELLENT 7
+#define MASTERWORK 8
+#define LEGENDARY 9
 
 /proc/getQualityString(var/quality)
 	switch(quality)
-		if(0)
+		if(AWFUL)
 			return "awful"
-		if(1)
+		if(SHODDY)
 			return "shoddy"
-		if(2)
+		if(POOR)
 			return "poor"
-		if(3)
+		if(NORMAL)
 			return "normal"
-		if(4)
+		if(GOOD)
 			return "good"
-		if(5)
+		if(SUPERIOR)
 			return "superior"
-		if(6)
+		if(EXCELLENT)
 			return "excellent"
-		if(7)
+		if(MASTERWORK)
 			return "masterwork"
-		if(8)
+		if(LEGENDARY)
 			return "legendary"

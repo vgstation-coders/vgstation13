@@ -128,7 +128,12 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/cointype=null
 	var/value=0
 	var/color
+	var/color_matrix
 	var/alpha = 255
+	//Modifier multipliers.
+	var/brunt_damage_mod = 1
+	var/sharpness_mod = 1
+	var/quality_mod = 1
 
 /datum/material/New()
 	if(processed_name=="")
@@ -136,6 +141,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 /datum/material/proc/on_use(obj/source, atom/target, mob/user)
 	ASSERT(source)
+	if(isobserver(user))
+		return
+	to_chat(world, "[src].on_use called, source is [source], target is [target], user is [user]")
 
 /datum/material/iron
 	name="Iron"
@@ -146,6 +154,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/metal
 	cointype=/obj/item/weapon/coin/iron
 	color = "#666666" //rgb: 102, 102, 102
+	brunt_damage_mod = 1.1
+	sharpness_mod = 0.8
+	quality_mod = 1.1
 
 /datum/material/glass
 	name="Sand"
@@ -157,6 +168,16 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/glass/glass
 	color = "#6E8DA2" //rgb: 110, 141, 162
 	alpha = 122
+	brunt_damage_mod = 0.7
+	sharpness_mod = 1.4
+
+/datum/material/glass/on_use(obj/source)
+	..()
+	if(prob(25/source.quality))
+		source.visible_message("<span class = 'warning'>\The [source] shatters!</span>")
+		new /obj/item/weapon/shard(get_turf(source))
+		playsound(get_turf(source), "shatter", 70, 1)
+		qdel(source)
 
 /datum/material/diamond
 	name="Diamond"
@@ -168,6 +189,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	cointype=/obj/item/weapon/coin/diamond
 	color = "#74C6C6" //rgb: 116, 198, 198
 	alpha = 200
+	brunt_damage_mod = 1.4
+	sharpness_mod = 1.6
+	quality_mod = 2
 
 /datum/material/plasma
 	name="Plasma"
@@ -177,6 +201,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/plasma
 	cointype=/obj/item/weapon/coin/plasma
 	color = "#500064" //rgb: 80, 0, 100
+	brunt_damage_mod = 1.2
+	sharpness_mod = 1.4
+	quality_mod = 1.3
 
 /datum/material/plasma/on_use(obj/source, atom/target, mob/user)
 	..()
@@ -192,6 +219,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/gold
 	cointype=/obj/item/weapon/coin/gold
 	color = "#F7C430" //rgb: 247, 196, 48
+	brunt_damage_mod = 0.5
+	sharpness_mod = 0.5
+	quality_mod = 1.7
 
 /datum/material/silver
 	name="Silver"
@@ -201,6 +231,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/silver
 	cointype=/obj/item/weapon/coin/silver
 	color = "#D0D0D0" //rgb: 208, 208, 208
+	brunt_damage_mod = 0.7
+	sharpness_mod = 0.7
+	quality_mod = 1.5
 
 
 /datum/material/uranium
@@ -210,7 +243,11 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/weapon/ore/uranium
 	sheettype=/obj/item/stack/sheet/mineral/uranium
 	cointype=/obj/item/weapon/coin/uranium
-	color = "#B8B8C0" //rgb: 184, 184, 192
+	color = "#247124" //rgb: 36, 113, 36
+	brunt_damage_mod = 1.8
+	sharpness_mod = 0.2
+	quality_mod = 1.4
+
 
 /datum/material/uranium/on_use(obj/source, atom/target, mob/user)
 	..()
@@ -226,6 +263,18 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/clown
 	cointype=/obj/item/weapon/coin/clown
 
+/datum/material/clown/New()
+	..()
+	brunt_damage_mod = rand(1,2)/rand(1,8)
+	sharpness_mod = rand(1,2)/rand(1,8)
+	quality_mod = rand(1,2)/rand(1,8)
+
+	color_matrix = list(rand(),rand(),rand(),0,
+						rand(),rand(),rand(),0,
+						rand(),rand(),rand(),0,
+						0,0,0,1,
+						0,0,0,0)
+
 /datum/material/clown/on_use(obj/source) //May [ticker.deity] have mercy
 	..()
 	if(prob(2*source.quality))
@@ -240,6 +289,23 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/phazon
 	cointype=/obj/item/weapon/coin/phazon
 	color = "#5E02F8" //rgb: 94, 2, 248
+	brunt_damage_mod = 1.4
+	sharpness_mod = 1.8
+	quality_mod = 2.2
+
+/datum/material/phazon/on_use(obj/source, atom/target, mob/user)
+	..()
+	if(prob(0.5*source.quality))
+		switch(rand(1,2))
+			if(1) //EMP
+				empulse(get_turf(pick(source,target,user)), 0.25*source.quality, 0.5*source.quality, 1)
+			if(2)
+				var/atom/movable/victim = pick(target,user)
+				if(victim)
+					do_teleport(victim, get_turf(victim), 1*source.quality, asoundin = 'sound/effects/phasein.ogg')
+		if(prob(20*source.quality))
+			to_chat(user, "<span class = 'warning'>\The [source] phases out of this place of existence!</span>")
+			qdel(source)
 
 /datum/material/plastic
 	name="Plastic"
