@@ -314,7 +314,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		desc = "makes a loud and pained whimper"  //ugly hack to stop animals screaming when crushed :P
 		act = "me"
 	if(!desc)
-		desc = act
+		desc = "[act]."
 		act = "me"
 	..(act, type, desc)
 
