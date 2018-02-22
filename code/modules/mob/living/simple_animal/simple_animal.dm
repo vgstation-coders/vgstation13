@@ -313,7 +313,36 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(act == "scream")
 		desc = "makes a loud and pained whimper"  //ugly hack to stop animals screaming when crushed :P
 		act = "me"
+	if(!desc)
+		desc = act
+		act = "me"
 	..(act, type, desc)
+
+/mob/living/simple_animal/proc/handle_automated_speech()
+
+	var/someone_in_earshot=0
+	if(!client && speak_chance && (ckey == null)) // Remove this if earshot is used elsewhere.
+		// All we're doing here is seeing if there's any CLIENTS nearby.
+		for(var/mob/M in get_hearers_in_view(7, src))
+			if(M.client)
+				someone_in_earshot=1
+				break
+
+	if(!client && speak_chance && ckey == null && someone_in_earshot)
+		if(rand(0,200) < speak_chance)
+			var/mode = pick(
+			speak.len;      1,
+			emote_hear.len; 2,
+			emote_see.len;  3
+			)
+
+			switch(mode)
+				if(1)
+					say(pick(speak))
+				if(2)
+					emote("me", MESSAGE_HEAR, "[pick(emote_hear)].")
+				if(3)
+					emote("me", MESSAGE_SEE, "[pick(emote_see)].")
 
 /mob/living/simple_animal/attack_animal(mob/living/simple_animal/M)
 	M.unarmed_attack_mob(src)
@@ -542,32 +571,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		Die()
-
-/mob/living/simple_animal/proc/handle_automated_speech()
-
-	var/someone_in_earshot=0
-	if(!client && speak_chance && (ckey == null)) // Remove this if earshot is used elsewhere.
-		// All we're doing here is seeing if there's any CLIENTS nearby.
-		for(var/mob/M in get_hearers_in_view(7, src))
-			if(M.client)
-				someone_in_earshot=1
-				break
-
-	if(!client && speak_chance && ckey == null && someone_in_earshot)
-		if(rand(0,200) < speak_chance)
-			var/mode = pick(
-			speak.len;      1,
-			emote_hear.len; 2,
-			emote_see.len;  3
-			)
-
-			switch(mode)
-				if(1)
-					say(pick(speak))
-				if(2)
-					emote("me", MESSAGE_HEAR, "[pick(emote_hear)].")
-				if(3)
-					emote("me", MESSAGE_SEE, "[pick(emote_see)].")
 
 /mob/living/simple_animal/proc/skinned()
 	if(butchering_drops)

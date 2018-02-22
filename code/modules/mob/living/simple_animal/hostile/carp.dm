@@ -86,7 +86,7 @@
 /mob/living/simple_animal/hostile/carp/FindTarget()
 	. = ..()
 	if(.)
-		emote("me", MESSAGE_SEE, "gnashes at [.]!")
+		emote("me",, "gnashes at [.]!")
 
 /mob/living/simple_animal/hostile/carp/AttackingTarget()
 	if(!target)
