@@ -320,6 +320,8 @@
 			weaponlock_time = 120
 
 /mob/living/silicon/robot/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(!module)
+		..()
 	if(locate(/obj/item/borg/fire_shield, module.modules))
 		return
 	..()
