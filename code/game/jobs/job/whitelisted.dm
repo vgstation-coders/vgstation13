@@ -21,6 +21,8 @@
 	no_starting_money = 1
 	no_pda = 1
 
+	spawns_from_edge = 1
+
 	idtype = /obj/item/weapon/card/id/vox
 
 	no_headset = 1

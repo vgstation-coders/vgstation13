@@ -333,8 +333,8 @@ var/global/list/meteor_spawn = list("Trader")
 	job_master.EquipRank(character, rank, 1)					//equips the human
 	EquipCustomItems(character)
 
-	// TODO:  Job-specific latejoin overrides.
-	if(meteor_spawn.Find(character.mind.assigned_role))
+	var/datum/job/J = GetJob(rank)
+	if(J.spawns_from_edge)
 		character.Meteortype_Latejoin(rank)
 	else
 		character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
@@ -368,7 +368,18 @@ var/global/list/meteor_spawn = list("Trader")
 	if(character.mind.assigned_role != "Cyborg")
 		data_core.manifest_inject(character)
 		ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
-		if(!meteor_spawn.Find(character.mind.assigned_role))
+		if(character.mind.assigned_role == "Trader")
+			//If we're a trader, instead send a message to PDAs with the trader cartridge
+			for (var/obj/item/device/pda/P in PDAs)
+				if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
+					var/mob/living/L = get_holder_of_type(P,/mob/living)
+					if(L)
+						L.show_message("[bicon(P)] <b>Message from U¶ü…8•E1¿”–ã (T•u1B§’), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
+			for(var/mob/dead/observer/M in player_list)
+				if(M.stat == DEAD && M.client)
+					handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character] has arrived in the sector from space.</span></span>",character) //This should generate a Follow link
+
+		else
 			AnnounceArrival(character, rank)
 		FuckUpGenes(character)
 	else
