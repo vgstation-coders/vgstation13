@@ -647,7 +647,7 @@ a {
 		additional_description = "On \the [src] is a carving, it depicts:\n"
 		var/list/characters = list()
 		for(var/i = 1 to material_mod)
-			characters.Add(pick("captain","clown","mime","\improper CMO","cargo technician","medical doctor","[user ? user : "stranger"]","baby","corgi","octopus","space carp","changeling","\improper Nuclear Operative", "[pick("greyshirt", "greytide", "assistant")]", "xenomorph","catbeast","[user && user.mind && user.mind.heard_before.len ? pick(user.mind.heard_before) : "something strange"]","\improper Central Command","\improper Ian","\improper [ticker.Bible_deity_name]","\improper Nar-Sie","\improper Poly the Parrot","Wizard","swarm of bees"))
+			characters.Add(pick("captain","clown","mime","\improper CMO","cargo technician","medical doctor","[user ? user : "stranger"]","baby","corgi","octopus","space carp","changeling","\improper Nuclear Operative", "[pick("greyshirt", "greytide", "assistant")]", "xenomorph","catbeast","[user && user.mind && user.mind.heard_before.len ? pick(user.mind.heard_before) : "something strange"]","Central Command","\improper Ian","[ticker.Bible_deity_name]","Nar-Sie","\improper Poly the Parrot","\improper Wizard","swarm of bees"))
 			additional_description += "[i == material_mod ? " & \a " : "[i > 1 ? ", ": "\A "]"][characters[i]]"
 		additional_description += ". They are in \the [pick("captains office","Space","mining outpost","vox outpost","a space station","[station_name()]","bar","kitchen","library","Science","void","bluespace","Hell","Central Command")]"
 		if(material_mod > 1)

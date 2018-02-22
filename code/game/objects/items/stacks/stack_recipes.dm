@@ -107,7 +107,7 @@
 			if(R.quality > SUPERIOR)
 				R.gen_description()
 		if(!findtext(lowertext(R.name), lowertext(mat.name)))
-			R.name = "[R.quality == NORMAL ? "": "[lowertext(getQualityString(R.quality))]"] [lowertext(mat.name)] [R.name]"
+			R.name = "[R.quality == NORMAL ? "": "[lowertext(qualityByString[R.quality])]"] [lowertext(mat.name)] [R.name]"
 
 var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/plasteel, 1, 4, 60),

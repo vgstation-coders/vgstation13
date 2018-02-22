@@ -10,23 +10,13 @@
 #define MASTERWORK 8
 #define LEGENDARY 9
 
-/proc/getQualityString(var/quality)
-	switch(quality)
-		if(AWFUL)
-			return "awful"
-		if(SHODDY)
-			return "shoddy"
-		if(POOR)
-			return "poor"
-		if(NORMAL)
-			return "normal"
-		if(GOOD)
-			return "good"
-		if(SUPERIOR)
-			return "superior"
-		if(EXCELLENT)
-			return "excellent"
-		if(MASTERWORK)
-			return "masterwork"
-		if(LEGENDARY)
-			return "legendary"
+var/list/qualityByString = list(
+		AWFUL = "Awful",
+		SHODDY = "Shoddy",
+		POOR = "Poor",
+		NORMAL = "Normal",
+		GOOD = "Good",
+		SUPERIOR = "Superior",
+		EXCELLENT = "Excellent",
+		MASTERWORK = "Masterwork",
+		LEGENDARY = "Legendary")
