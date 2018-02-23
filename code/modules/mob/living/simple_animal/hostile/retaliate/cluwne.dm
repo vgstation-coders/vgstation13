@@ -300,7 +300,7 @@
 		return //under effects of time magick
 
 	var/msg = pick("quietly sobs into a dirty handkerchief","cries into [gender==MALE?"his":"her"] hands","bawls like a cow")
-	return ..("me",, msg)
+	return ..(msg)
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
