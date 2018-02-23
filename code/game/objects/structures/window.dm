@@ -17,6 +17,7 @@ var/list/one_way_windows
 	density = 1
 	layer = SIDE_WINDOW_LAYER
 	pressure_resistance = 4*ONE_ATMOSPHERE
+	var/pressure_mod = 100
 	anchored = 1
 	var/health = 10 //This window is so bad blowing on it would break it, sucks for it
 	var/ini_dir = null //This really shouldn't exist, but it does and I don't want to risk deleting it because it's likely mapping-related
@@ -36,6 +37,7 @@ var/list/one_way_windows
 
 	var/one_way = 0 //If set to 1, it will act as a one-way window.
 	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
+	var/list/window_connections = list()
 
 /obj/structure/window/New(loc)
 
@@ -566,6 +568,11 @@ var/list/one_way_windows
 	if(one_way)
 		one_way_windows.Remove(src)
 		update_oneway_nearby_clients()
+	for(var/window_connection/wc in window_connections)
+		wc.shared_windows -= src
+	var/turf/simulated/S = get_turf(src)
+	if(istype(S) && S.zone)
+		S.zone.windows -= src
 	..()
 
 /obj/structure/window/proc/spawnBrokenPieces()
@@ -623,12 +630,19 @@ var/list/one_way_windows
 	return
 
 /obj/structure/window/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-
-	if(exposed_temperature > T0C + fire_temp_threshold)
+	..()
+	/*if(exposed_temperature > T0C + fire_temp_threshold)
 		health -= round(exposed_volume/fire_volume_mod)
 		healthcheck(sound = 0)
-	..()
+	..()*/
 
+/obj/structure/window/proc/pressure_act(differential, direction, ignore_dir = 0)
+	if(!ignore_dir)
+		if(direction && dir != direction && (istype(get_turf(src), /turf/simulated) && !loc:zone)) return 0
+	if(pressure_resistance >= differential) return 0
+	health -= round((differential - pressure_resistance) / pressure_mod)
+	healthcheck(sound = 1)
+	
 /obj/structure/window/reinforced
 	name = "reinforced window"
 	desc = "A window with a rod matrice. It looks more solid than the average window."
@@ -638,6 +652,8 @@ var/list/one_way_windows
 	d_state = WINDOWSECURE
 	reinforced = 1
 	penetration_dampening = 3
+	pressure_resistance = 130*ONE_ATMOSPHERE
+	pressure_mod = 200
 
 /obj/structure/window/reinforced/loose
 	anchored = 0
@@ -655,6 +671,9 @@ var/list/one_way_windows
 
 	fire_temp_threshold = 32000
 	fire_volume_mod = 1000
+	
+	pressure_resistance = 500*ONE_ATMOSPHERE
+	pressure_mod = 300
 
 /obj/structure/window/reinforced/plasma
 
@@ -665,6 +684,8 @@ var/list/one_way_windows
 	sheettype = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
 	penetration_dampening = 7
+	pressure_resistance = 2500*ONE_ATMOSPHERE
+	pressure_mod = 800
 
 /obj/structure/window/reinforced/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	return
