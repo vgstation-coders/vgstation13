@@ -2253,28 +2253,6 @@ var/global/num_vending_terminals = 1
 
 	pack = /obj/structure/vendomatpack/building
 
-/obj/item/stack/sheet/metal/bigstack/New()
-	getFromPool(/obj/item/stack/sheet/metal, loc, 20)
-	qdel(src)
-/obj/item/stack/sheet/glass/glass/bigstack/New()
-	getFromPool(/obj/item/stack/sheet/glass/glass, loc, 20)
-	qdel(src)
-/obj/item/stack/sheet/glass/plasmaglass/bigstack/New()
-	getFromPool(/obj/item/stack/sheet/glass/plasmaglass, loc, 20)
-	qdel(src)
-/obj/item/stack/sheet/wood/bigstack/New()
-	getFromPool(/obj/item/stack/sheet/wood, loc, 20)
-	qdel(src)
-/obj/item/stack/tile/carpet/bigstack/New()
-	getFromPool(/obj/item/stack/tile/carpet, loc, 20)
-	qdel(src)
-/obj/item/stack/tile/arcade/bigstack/New()
-	getFromPool(/obj/item/stack/tile/arcade, loc, 20)
-	qdel(src)
-/obj/item/stack/sheet/mineral/plastic/bigstack/New()
-	getFromPool(/obj/item/stack/sheet/mineral/plastic, loc, 20)
-	qdel(src)
-
 //This one's from bay12
 /obj/machinery/vending/engineering
 	name = "\improper Robco Tool Maker"
@@ -2987,17 +2965,17 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
 		/obj/item/clothing/shoes/clown_shoes/advanced,
 		/obj/item/fish_eggs/seadevil,
+		/obj/machinery/power/antiquesynth,
 		)
 
 /obj/machinery/vending/trader/New()
 
-	premium.Add(pick(existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper)) //A random borg upgrade minus the magnetic gripper. Time to jew the silicons!
-
 	for(var/random_items = 1 to premium.len - 5)
 		premium.Remove(pick(premium))
-
 	if(premium.Find(/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard))
 		load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
+	premium.Add(pick(existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper)) //A random borg upgrade minus the magnetic gripper. Time to jew the silicons!
+
 	..()
 
 /obj/machinery/vending/barber
