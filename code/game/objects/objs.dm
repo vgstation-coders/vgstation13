@@ -32,6 +32,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/quality = NORMAL //What level of quality this object is.
 	var/datum/material/material_type //What material this thing is made out of
 	var/event/on_use
+	var/sheet_type = /obj/item/stack/sheet/metal
+	var/sheet_amt = 1
 	var/can_take_pai = FALSE
 	var/obj/item/device/paicard/integratedpai = null
 	var/datum/delay_controller/pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
