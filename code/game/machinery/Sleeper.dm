@@ -63,7 +63,7 @@
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol")
 
 /obj/machinery/sleeper/interact(var/mob/user)
-	if(user.loc == src || !Adjacent(user) || user.lying || user.incapacitated() || !usr.dexterity_check())
+	if(user.loc == src || !Adjacent(user) || user.lying || user.incapacitated() || !user.dexterity_check())
 		return
 	var/dat = list()
 	if(on)
@@ -541,6 +541,8 @@
 /obj/machinery/sleeper/mancrowave/RefreshParts()
 
 /obj/machinery/sleeper/mancrowave/interact(var/mob/user)
+	if(user.loc == src || !Adjacent(user) || user.lying || user.incapacitated() || !user.dexterity_check())
+		return
 	var/dat = "<font color='blue'><B>Occupant Statistics:</B></FONT><BR>"
 	if (occupant)
 		var/t1
