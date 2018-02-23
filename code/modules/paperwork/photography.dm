@@ -588,7 +588,6 @@
 	P.pixel_y = selection.fields["pixel_y"]
 
 	P.show(usr)
-	to_chat(usr, P.info)
 	qdel(P)    //so 10 thousdand pictures items are not left in memory should an AI take them and then view them all.
 
 /obj/item/device/camera/silicon/proc/viewpictures(var/mob/user)
