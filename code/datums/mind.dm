@@ -487,9 +487,7 @@
 			if(!R.faction)
 				to_chat(usr, "<span class='warning'>Can't leave a faction when you already don't belong to any! (This message shouldn't have to appear. Tell a coder.)</span>")
 			else if(R in R.faction.members)
-				R.faction.members.Remove(R)
-				R.faction = null
-				ticker.mode.orphaned_roles.Add(R)
+				R.faction.HandleRemovedRole(R)
 
 		else if(href_list["add_to_faction"])
 			if(R.faction)
@@ -514,15 +512,11 @@
 					to_chat(usr, "<span class='danger'>Sorry, that feature is not coded yet. - Deity Link</span>")
 				else if (istype(all_factions[join_faction], /datum/faction))//we got an existing faction
 					var/datum/faction/joined = all_factions[join_faction]
-					ticker.mode.orphaned_roles.Remove(R)
-					joined.members.Add(R)
-					R.faction = joined
+					joined.HandleRecruitedRole(R)
 				else //we got an inexisting faction, gotta create it first!
 					var/datum/faction/joined = ticker.mode.CreateFaction(all_factions[join_faction], null, 1)
 					if (joined)
-						ticker.mode.orphaned_roles.Remove(R)
-						joined.members.Add(R)
-						R.faction = joined
+						joined.HandleRecruitedRole(R)
 
 	else if (href_list["obj_add"])
 		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
