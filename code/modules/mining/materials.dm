@@ -143,7 +143,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	ASSERT(source)
 	if(isobserver(user))
 		return
-	to_chat(world, "[src].on_use called, source is [source], target is [target], user is [user]")
+
 
 /datum/material/iron
 	name="Iron"
