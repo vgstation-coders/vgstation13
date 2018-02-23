@@ -37,6 +37,10 @@
 	slot_flags = SLOT_POCKET
 	throw_range = 1 //It just scatters to the ground as soon as you throw it.
 
+/obj/item/weapon/ore/glass/cave
+	name = "cave sand"
+	icon_state = "cavesand"
+
 /obj/item/weapon/ore/glass/throw_impact(atom/hit_atom)
 	//Intentionally not calling ..()
 	if(isturf(hit_atom))

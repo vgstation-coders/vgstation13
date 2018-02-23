@@ -13,12 +13,22 @@
 	linked_action.Trigger()
 	return 1
 
+/obj/abstract/screen/movable/action_button/MouseDrop(over_object, src_location, over_location, src_control, over_control, params)
+	if(istype(over_object, /obj/abstract/screen/movable/action_button) && !istype(over_object, /obj/abstract/screen/movable/action_button/hide_toggle))
+		var/obj/abstract/screen/movable/action_button/B = over_object
+		var/list/actions = usr.actions
+		actions.Swap(actions.Find(src.linked_action), actions.Find(B.linked_action))
+		usr.update_action_buttons()
+
 //Hide/Show Action Buttons ... Button
 /obj/abstract/screen/movable/action_button/hide_toggle
 	name = "Hide Buttons"
 	icon = 'icons/mob/actions.dmi'
 	icon_state = "bg_default"
 	var/hidden = 0
+
+/obj/abstract/screen/movable/action_button/hide_toggle/MouseDrop(over_object, src_location, over_location, src_control, over_control, params)
+	return
 
 /obj/abstract/screen/movable/action_button/hide_toggle/Click(location,control,params)
 	var/list/modifiers = params2list(params)
@@ -34,7 +44,6 @@
 		name = "Hide Buttons"
 	UpdateIcon()
 	usr.update_action_buttons()
-
 
 /obj/abstract/screen/movable/action_button/hide_toggle/proc/InitialiseIcon(mob/living/user)
 	if(isalien(user))

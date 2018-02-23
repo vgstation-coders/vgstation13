@@ -176,7 +176,8 @@
 		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
 		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
 	if(!skipnaming)
-		O.Namepick()
+		spawn()
+			O.Namepick()
 	qdel(src)
 	return O
 
@@ -206,7 +207,8 @@
 		O.self_destruct()
 		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
 		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
-	O.Namepick()
+	spawn()
+		O.Namepick()
 	qdel(src)
 	return O
 

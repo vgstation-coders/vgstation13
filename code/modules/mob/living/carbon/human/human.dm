@@ -346,9 +346,9 @@
 	return
 //repurposed proc. Now it combines get_id_name() and get_face_name() to determine a mob's name variable. Made into a seperate proc as it'll be useful elsewhere
 /mob/living/carbon/human/proc/get_visible_name()
-	if( wear_mask && (is_slot_hidden(wear_mask.body_parts_covered,HIDEFACE)))	//Wearing a mask which hides our face, use id-name if possible
+	if( wear_mask && wear_mask.is_hidden_identity())	//Wearing a mask which hides our face, use id-name if possible
 		return get_id_name("Unknown")
-	if( head && (is_slot_hidden(head.body_parts_covered,HIDEFACE)))
+	if( head && head.is_hidden_identity())
 		return get_id_name("Unknown")	//Likewise for hats
 	if(mind && mind.vampire && (VAMP_SHADOW in mind.vampire.powers) && mind.vampire.ismenacing)
 		return get_id_name("Unknown")
@@ -360,7 +360,7 @@
 //Returns "Unknown" if facially disfigured and real_name if not. Useful for setting name when polyacided or when updating a human's name variable
 /mob/living/carbon/human/proc/get_face_name()
 	var/datum/organ/external/head/head_organ = get_organ(LIMB_HEAD)
-	if((wear_mask && (is_slot_hidden(wear_mask.body_parts_covered,HIDEFACE))) || ( head && (is_slot_hidden(head.body_parts_covered,HIDEFACE))) || !head_organ || head_organ.disfigured || (head_organ.status & ORGAN_DESTROYED) || !real_name || (M_HUSK in mutations) )	//Wearing a mask which hides our face, use id-name if possible
+	if((wear_mask && wear_mask.is_hidden_identity() ) || ( head && head.is_hidden_identity() ) || !head_organ || head_organ.disfigured || (head_organ.status & ORGAN_DESTROYED) || !real_name || (M_HUSK in mutations) )	//Wearing a mask which hides our face, use id-name if possible
 		return "Unknown"
 	return real_name
 
@@ -1744,10 +1744,10 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 
 /mob/living/carbon/human/can_show_flavor_text()
 	// Wearing a mask...
-	if(wear_mask && is_slot_hidden(wear_mask.body_parts_covered, HIDEFACE))
+	if(wear_mask && wear_mask.is_hidden_identity())
 		return FALSE
 	// Or having a headpiece that protects your face...
-	if(head && is_slot_hidden(head.body_parts_covered, HIDEFACE))
+	if(head && head.is_hidden_identity())
 		return FALSE
 	// Or lacking a head, or being disfigured...
 	var/datum/organ/external/head/limb_head = get_organ(LIMB_HEAD)

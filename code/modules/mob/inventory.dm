@@ -513,7 +513,7 @@
 	return equipped
 
 /mob/proc/get_id_card()
-	for(var/obj/item/I in src.get_all_slots())
+	for(var/obj/item/I in src.get_all_slots() + held_items)
 		. = I.GetID()
 		if(.)
 			break
