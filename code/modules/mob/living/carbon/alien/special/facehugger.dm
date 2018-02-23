@@ -52,12 +52,13 @@
 /obj/item/clothing/mask/facehugger/process()
 	healthcheck()
 	followtarget()
+	spreadout()
 
 /obj/item/clothing/mask/facehugger/proc/findtarget()
 	if(!real)
 		return
 	for(var/mob/living/carbon/T in hearers(src,4))
-		if(!ishuman(T) && !ismonkey(T))
+		if(!ishuman(T) && !ismonkey(T) && !iscorgi(T))
 			continue
 		if(!CanHug(T))
 			continue
@@ -94,6 +95,13 @@
 					walk(src,0)
 					findtarget()
 					return
+
+/obj/item/clothing/mask/facehugger/proc/spreadout()
+	if(!target && isturf(loc))
+		for(var/obj/item/clothing/mask/facehugger/F in loc)
+			if(F != src)
+				step(src, pick(1,2,4,8), 0)
+				break
 
 //END HUGGER MOVEMENT AI
 
@@ -314,6 +322,7 @@
 		stat_collection.xeno_faces_hugged++
 
 		Die()
+		target.drop_from_inventory(src)
 		icon_state = "[initial(icon_state)]_impregnated"
 
 		if(iscorgi(target))
