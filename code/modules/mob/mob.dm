@@ -1843,7 +1843,6 @@ mob/proc/on_foot()
 		alpha = lowest_alpha
 
 /mob/proc/teleport_to(var/atom/A)
-	unlock_from()
 	forceMove(get_turf(A))
 
 /mob/proc/nuke_act() //Called when caught in a nuclear blast
