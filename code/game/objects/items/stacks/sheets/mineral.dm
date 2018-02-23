@@ -83,6 +83,7 @@ var/list/datum/stack_recipe/sandstone_recipes = list ( \
 	sheettype = "diamond"
 	melt_temperature = 3820 // In a vacuum, but fuck dat
 	recyck_mat = MAT_DIAMOND
+	mat_type = MAT_DIAMOND
 
 var/list/datum/stack_recipe/diamond_recipes = list ( \
 	new/datum/stack_recipe("diamond floor tile", /obj/item/stack/tile/mineral/diamond, 1, 4, 20), \
@@ -112,6 +113,7 @@ var/list/datum/stack_recipe/diamond_recipes = list ( \
 	sheettype = "uranium"
 	melt_temperature = 1132+T0C
 	recyck_mat = MAT_URANIUM
+	mat_type = MAT_DIAMOND
 
 var/list/datum/stack_recipe/uranium_recipes = list ( \
 	new/datum/stack_recipe("uranium floor tile", /obj/item/stack/tile/mineral/uranium, 1, 4, 20), \
@@ -141,6 +143,7 @@ var/list/datum/stack_recipe/uranium_recipes = list ( \
 	sheettype = "plasma"
 	melt_temperature = MELTPOINT_STEEL + 500
 	recyck_mat = MAT_PLASMA
+	mat_type = MAT_PLASMA
 
 var/list/datum/stack_recipe/plasma_recipes = list ( \
 	new/datum/stack_recipe("plasma floor tile", /obj/item/stack/tile/mineral/plasma, 1, 4, 20), \
@@ -168,6 +171,7 @@ var/list/datum/stack_recipe/plasma_recipes = list ( \
 	melt_temperature = MELTPOINT_PLASTIC
 	sheettype = "plastic"
 	recyck_mat = MAT_PLASTIC
+	mat_type = MAT_PLASTIC
 
 var/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("plastic floor tile", /obj/item/stack/tile/mineral/plastic, 1, 4, 20), \
@@ -215,6 +219,7 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 	melt_temperature = 1064+T0C
 	sheettype = "gold"
 	recyck_mat = MAT_GOLD
+	mat_type = MAT_GOLD
 
 var/list/datum/stack_recipe/gold_recipes = list ( \
 	new/datum/stack_recipe("golden floor tile", /obj/item/stack/tile/mineral/gold, 1, 4, 20), \
@@ -251,6 +256,7 @@ var/list/datum/stack_recipe/phazon_recipes = list( \
 	siemens_coefficient = 1
 	origin_tech = Tc_MATERIALS + "=9"
 	recyck_mat = MAT_PHAZON
+	mat_type = MAT_PHAZON
 
 /obj/item/stack/sheet/mineral/phazon/New(var/loc, var/amount=null)
 		recipes = phazon_recipes
@@ -272,6 +278,7 @@ var/list/datum/stack_recipe/phazon_recipes = list( \
 	perunit = 2000
 	sheettype = "silver"
 	recyck_mat = MAT_SILVER
+	mat_type = MAT_SILVER
 
 var/list/datum/stack_recipe/silver_recipes = list ( \
 	new/datum/stack_recipe("silver floor tile", /obj/item/stack/tile/mineral/silver, 1, 4, 20), \
@@ -300,6 +307,7 @@ var/list/datum/stack_recipe/silver_recipes = list ( \
 	perunit = 2000
 	sheettype = "clown"
 	recyck_mat = MAT_CLOWN
+	mat_type = MAT_CLOWN
 
 var/list/datum/stack_recipe/clown_recipes = list ( \
 	new/datum/stack_recipe("bananium floor tile", /obj/item/stack/tile/mineral/clown, 1, 40, 20), \

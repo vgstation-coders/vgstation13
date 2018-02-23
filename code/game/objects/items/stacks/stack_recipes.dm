@@ -80,21 +80,13 @@
 
 
 /datum/stack_recipe/dorf/finish_building(mob/usr, var/obj/item/stack/S, var/obj/R)
-	var/datum/material/mat
-	var/datum/materials/materials_list = new
-	if(istype(S, /obj/item/stack/sheet/mineral)) //With mineral, it's straight forward
-		var/obj/item/stack/sheet/mineral/M = S
-		mat = materials_list.getMaterial(M.recyck_mat)
-	else //Not so straight forward
-		switch(S.type)
-			if(/obj/item/stack/sheet/metal)
-				mat = materials_list.getMaterial(MAT_IRON)
-			if(/obj/item/stack/sheet/wood)
-				mat = materials_list.getMaterial(MAT_WOOD)
-		if(istype(S, /obj/item/stack/sheet/glass))
-			mat = materials_list.getMaterial(MAT_GLASS)
-	if(mat)
-		if(inherit_material)
+	if(inherit_material)
+		var/datum/material/mat
+		var/datum/materials/materials_list = new
+		if(istype(S, /obj/item/stack/sheet/))
+			var/obj/item/stack/sheet/SS = S
+			mat = materials_list.getMaterial(SS.mat_type)
+		if(mat)
 			var/icon/original = icon(R.icon, R.icon_state)
 			if(mat.color)
 				original.ColorTone(mat.color)
