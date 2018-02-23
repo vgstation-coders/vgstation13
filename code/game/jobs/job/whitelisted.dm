@@ -27,8 +27,6 @@
 
 	no_headset = 1
 
-	//Throwing latejoin is handled in new_player, list of jobs at line 312
-
 /datum/job/trader/equip(var/mob/living/carbon/human/H)
 	if(!H)
 		return 0

@@ -309,8 +309,6 @@
 		if(prob(10)) // 10% of those have a good mut.
 			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
 
-var/global/list/meteor_spawn = list("Trader")
-
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
 		return 0
