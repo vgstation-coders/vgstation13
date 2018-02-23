@@ -63,6 +63,8 @@
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol")
 
 /obj/machinery/sleeper/interact(var/mob/user)
+	if(user.loc == src || !Adjacent(user) || user.lying || user.incapacitated() || !usr.dexterity_check())
+		return
 	var/dat = list()
 	if(on)
 		dat += "<B>Performing anaesthesic emergence...</B>" //Best I could come up with
