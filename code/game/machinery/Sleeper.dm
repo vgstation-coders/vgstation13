@@ -63,7 +63,7 @@
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol")
 
 /obj/machinery/sleeper/interact(var/mob/user)
-	if(user.loc == src || !Adjacent(user) || user.lying || user.incapacitated() || !user.dexterity_check())
+	if(user.loc == src || (!Adjacent(user)&&!issilicon(user)) || user.lying || user.incapacitated() || !user.dexterity_check())
 		return
 	var/dat = list()
 	if(on)
@@ -112,6 +112,8 @@
 
 /obj/machinery/sleeper/Topic(href, href_list)
 	if(..())
+		return 1
+	else if(usr.loc == src || (!Adjacent(usr)&&!issilicon(usr)) || usr.lying || usr.incapacitated() || !usr.dexterity_check())
 		return 1
 	else
 		usr.set_machine(src)
@@ -576,6 +578,8 @@
 
 /obj/machinery/sleeper/mancrowave/Topic(href, href_list)
 	if(..())
+		return 1
+	if(usr.loc == src || (!Adjacent(usr)&&!issilicon(usr)) || usr.lying || usr.incapacitated() || !usr.dexterity_check())
 		return 1
 	usr.set_machine(src)
 	if (href_list["cook"])

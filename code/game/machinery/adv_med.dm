@@ -276,7 +276,7 @@
 		to_chat(user, "<span class='warning'>This device can only scan compatible lifeforms.</span>")
 		return
 
-	if(user.loc == src || !Adjacent(user) || user.lying || user.incapacitated() || !user.dexterity_check())
+	if(user.loc == src || (!Adjacent(user)&&!issilicon(user)) || user.lying || user.incapacitated() || !user.dexterity_check())
 		return
 
 	var/dat
@@ -295,6 +295,9 @@
 
 /obj/machinery/bodyscanner/Topic(href, href_list)
 	if(..())
+		return
+
+	if(usr.loc == src || (!Adjacent(usr)&&!issilicon(usr)) || usr.lying || usr.incapacitated() || !usr.dexterity_check())
 		return
 
 	if(href_list["print"])
