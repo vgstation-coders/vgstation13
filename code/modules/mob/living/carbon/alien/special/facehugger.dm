@@ -218,11 +218,11 @@
 
 /obj/item/clothing/mask/facehugger/proc/Attach(mob/living/M as mob)
 	var/preggers = rand(MIN_IMPREGNATION_TIME,MAX_IMPREGNATION_TIME)
-	if(!CanHug(M))
-		return FALSE
-	if(iscarbon(M) && M.status_flags & XENO_HOST)
+	if(M.status_flags & XENO_HOST)
 		visible_message("<span class='danger'>An alien tries to place a facehugger on [M] but it refuses sloppy seconds!</span>")
 		return
+	if(!CanHug(M))
+		return FALSE
 	if(attached)
 		return FALSE
 	if(!Adjacent(M))
