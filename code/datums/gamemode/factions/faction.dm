@@ -21,6 +21,8 @@
 	@faction_icon: icon file reference: Where the icon is stored (currently most are stored in logos.dmi)
 */
 
+var/list/factions_with_hud_icons = list()
+
 /datum/faction
 	var/name = "unknown faction"
 	var/ID = null
@@ -41,9 +43,11 @@
 	..()
 	objective_holder = new
 	objective_holder.faction = src
-	for (var/datum/faction/F in ticker.mode.factions)
-		if (F != src)
-			update_hud_icons()
+	if (hud_icons.len)
+		factions_with_hud_icons.Add(src)
+
+	for (var/datum/faction/F in factions_with_hud_icons)
+		update_hud_icons()
 
 /datum/faction/proc/OnPostSetup()
 	forgeObjectives()
@@ -138,66 +142,64 @@
 		return
 
 	var/offset = 0
+	var/list/factions_with_icons = list()
 	for (var/datum/faction/F in ticker.mode.factions)
 		if (F.hud_icons.len)
-			F.update_hud_icons(offset)
+			factions_with_icons.Add(F)
+			factions_with_icons[F] = offset
 			offset++
 
+	for (var/datum/faction/F in factions_with_icons)
+		F.update_hud_icons(factions_with_icons[F],factions_with_icons.len)
+
 #define HUDICON_BLINKDURATION 10//the smaller, the faster icons swap to one another
-/datum/faction/proc/update_hud_icons(var/offset = 0)
+/datum/faction/proc/update_hud_icons(var/offset = 0,var/factions_with_icons = 0)
 	//lets ignore this proc if our faction has no icons (for factions where we don't want its members to know each others by default)
 	if (!hud_icons.len)
 		return
 
-	var/factions_with_icons = 0
-	for (var/datum/faction/F in ticker.mode.factions)
-		if (F.hud_icons.len)
-			factions_with_icons++
+	//let's remove every icons
+	for(var/datum/role/R in members)
+		if(R.antag && R.antag.current && R.antag.current.client)
+			for(var/image/I in R.antag.current.client.images)
+				if(I.icon_state in hud_icons)
+					R.antag.current.client.images -= I
 
-	spawn(0)
-		//let's remove every icons
-		for(var/datum/role/R in members)
-			if(R.antag && R.antag.current && R.antag.current.client)
-				for(var/image/I in R.antag.current.client.images)
-					if(I.icon_state in hud_icons)
-						R.antag.current.client.images -= I
-
-		//then re-add them
-		for(var/datum/role/R in members)
-			if(R.antag && R.antag.current && R.antag.current.client)
-				for(var/datum/role/R_target in members)
-					if(R_target.antag && R_target.antag.current)
-						var/imageloc = R_target.antag.current
-						if(istype(R_target.antag.current.loc,/obj/mecha))
-							imageloc = R_target.antag.current.loc
-						var/hud_icon = R_target.logo_state//the icon is based on the member's role
-						if (!(R_target.logo_state in hud_icons))
-							hud_icon = hud_icons[1]//if the faction doesn't recognize the role, it'll just give it a default one.
-						var/image/I = image('icons/role_HUD_icons.dmi', loc = imageloc, icon_state = hud_icon)
-						I.pixel_x = 20 * PIXEL_MULTIPLIER
-						I.pixel_y = 20 * PIXEL_MULTIPLIER
-						I.plane = ANTAG_HUD_PLANE
-						if (factions_with_icons > 1)
-							animate(I, layer = 1, time = 0.1 + offset * HUDICON_BLINKDURATION, loop = -1)
-							animate(layer = 0, time = 0.1)
-							animate(layer = 0, time = HUDICON_BLINKDURATION)
-							animate(layer = 1, time = 0.1)
-							animate(layer = 1, time = 0.1 + HUDICON_BLINKDURATION*(factions_with_icons - 1 - offset))
-						R.antag.current.client.images += I
+	//then re-add them
+	for(var/datum/role/R in members)
+		if(R.antag && R.antag.current && R.antag.current.client)
+			for(var/datum/role/R_target in members)
+				if(R_target.antag && R_target.antag.current)
+					var/imageloc = R_target.antag.current
+					if(istype(R_target.antag.current.loc,/obj/mecha))
+						imageloc = R_target.antag.current.loc
+					var/hud_icon = R_target.logo_state//the icon is based on the member's role
+					if (!(R_target.logo_state in hud_icons))
+						hud_icon = hud_icons[1]//if the faction doesn't recognize the role, it'll just give it a default one.
+					var/image/I = image('icons/role_HUD_icons.dmi', loc = imageloc, icon_state = hud_icon)
+					I.pixel_x = 20 * PIXEL_MULTIPLIER
+					I.pixel_y = 20 * PIXEL_MULTIPLIER
+					I.plane = ANTAG_HUD_PLANE
+					if (factions_with_icons > 1)
+						animate(I, layer = 1, time = 0.1 + offset * HUDICON_BLINKDURATION, loop = -1)
+						animate(layer = 0, time = 0.1)
+						animate(layer = 0, time = HUDICON_BLINKDURATION)
+						animate(layer = 1, time = 0.1)
+						animate(layer = 1, time = 0.1 + HUDICON_BLINKDURATION*(factions_with_icons - 1 - offset))
+					R.antag.current.client.images += I
 #undef HUDICON_BLINKDURATION
 
 /datum/faction/proc/update_hud_removed(var/datum/role/Removed_R)
-	spawn(0)
-		for(var/datum/role/R in members)
-			if(R.antag && R.antag.current && R.antag.current.client)
-				for(var/image/I in R.antag.current.client.images)
-					if(I.icon_state in hud_icons && ((I.loc == Removed_R.antag.current) || (I.loc == Removed_R.antag.current.loc)))
-						R.antag.current.client.images -= I
+	for(var/datum/role/R in members)
+		if(R.antag && R.antag.current && R.antag.current.client)
+			for(var/image/I in R.antag.current.client.images)
+				if(I.icon_state in hud_icons && ((I.loc == Removed_R.antag.current) || (I.loc == Removed_R.antag.current.loc)))
+					R.antag.current.client.images -= I
 
-		if(Removed_R.antag && Removed_R.antag.current && Removed_R.antag.current.client)
-			for(var/image/I in Removed_R.antag.current.client.images)
-				if(I.icon_state in hud_icons)
-					Removed_R.antag.current.client.images -= I
+	if(Removed_R.antag && Removed_R.antag.current && Removed_R.antag.current.client)
+		for(var/image/I in Removed_R.antag.current.client.images)
+			if(I.icon_state in hud_icons)
+				Removed_R.antag.current.client.images -= I
 
 
 /////////////////////////////THESE FACTIONS SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////

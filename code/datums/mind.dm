@@ -98,7 +98,7 @@
 /datum/mind/proc/hasFactionsWithHUDIcons()
 	for(var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
-		if (R.faction && R.faction.hud_icons.len)
+		if (R.faction in factions_with_hud_icons)
 			return 1
 	return 0
 
