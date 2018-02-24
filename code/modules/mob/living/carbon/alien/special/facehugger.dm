@@ -38,7 +38,7 @@
 	var/target_time = 0.5 // seconds
 	var/walk_speed = 1
 	var/nextwalk = FALSE
-	var/mob/living/carbon/target = null
+	var/mob/living/target = null
 
 /obj/item/clothing/mask/facehugger/can_contaminate()
 	return FALSE
@@ -60,7 +60,7 @@
 	for(var/mob/living/T in hearers(src,4))
 		if(!CanHug(T))
 			continue
-		if(T && (T.stat != DEAD && T.stat != UNCONSCIOUS) )
+		if(T && (!T.isDead() && !T.isUnconscious() ) )
 
 			if(get_dist(loc, T.loc) <= 4)
 				target = T
@@ -69,7 +69,7 @@
 /obj/item/clothing/mask/facehugger/proc/followtarget()
 	if(!real)
 		return // Why are you trying to path stupid toy
-	if(!target || target.stat == DEAD || target.stat == UNCONSCIOUS || target.status_flags & XENO_HOST)
+	if(!target || target.isDead() || target.isUnconscious() || target.status_flags & XENO_HOST)
 		findtarget()
 		return
 	if(loc && isturf(loc) && !attached && !stat && nextwalk <= world.time)
@@ -97,8 +97,8 @@
 /obj/item/clothing/mask/facehugger/proc/spreadout()
 	if(!target && isturf(loc))
 		for(var/obj/item/clothing/mask/facehugger/F in loc)
-			if(F != src)
-				step(src, pick(cardinal), 0)
+			if(F != src && F.stat != DEAD)
+				step(src, pick(alldirs), 0)
 				break
 
 //END HUGGER MOVEMENT AI
@@ -263,7 +263,7 @@
 				GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
 				return
 			else
-				H.visible_message("<span class='danger'>\The [src] bounces off of the [mouth_protection]!</span>")
+				H.visible_message("<span class='danger'>\The [src] bounces off of \the [mouth_protection]!</span>")
 				if(prob(CHANCE_TO_DIE_AFTER_HEAD_DENIED) && !sterile)
 					Die()
 					return
@@ -312,7 +312,7 @@
 				GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
 				return
 			else
-				C.visible_message("<span class='danger'>\The [src] bounces off of the [headwear]!</span>")
+				C.visible_message("<span class='danger'>\The [src] bounces off of \the [headwear]!</span>")
 				if(prob(CHANCE_TO_DIE_AFTER_HEAD_DENIED) && !sterile)
 					Die()
 					return
@@ -398,6 +398,9 @@
 
 /proc/CanHug(var/mob/M)
 
+	if(M.status_flags & XENO_HOST)
+		return FALSE
+
 	if(iscorgi(M))
 		var/mob/living/simple_animal/corgi/corgi = M
 		if(corgi.facehugger && !corgi.facehugger.sterile)
@@ -412,9 +415,6 @@
 	var/obj/item/clothing/mask/facehugger/F = C.is_wearing_item(/obj/item/clothing/mask/facehugger, slot_wear_mask)
 
 	if(F && !F.sterile)
-		return FALSE
-
-	if(C.status_flags & XENO_HOST)
 		return FALSE
 
 	return TRUE
