@@ -516,17 +516,6 @@ proc/move_mining_shuttle()
 	//tint = 3 //Makes it feel more authentic when it latches on
 	real = FALSE
 
-/*
-/obj/item/clothing/mask/facehugger/toy/spreadout()
-	if(!target && isturf(loc))
-		for(var/obj/item/clothing/mask/facehugger/F in loc)
-			if(F != src)
-				step(src, pick(alldirs), 0)
-				break
-
-/obj/item/clothing/mask/facehugger/toy/Die()
-	return
-*/
 /**********************Mining drone cube**********************/
 
 /obj/item/weapon/mining_drone_cube

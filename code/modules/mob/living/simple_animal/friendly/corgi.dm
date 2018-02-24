@@ -142,7 +142,6 @@
 			return
 	..()
 
-
 /mob/living/simple_animal/corgi/Topic(href, href_list)
 	if(usr.stat)
 		return
