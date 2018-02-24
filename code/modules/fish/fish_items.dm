@@ -116,6 +116,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	name = "glofish"
 	desc = "A small bio-luminescent fish. Not very bright, but at least it's pretty!"
 	icon_state = "glofish"
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/glofishmeat
 
 /obj/item/weapon/fish/glofish/New()
 	..()
@@ -171,6 +172,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	name = "goldfish"
 	desc = "A goldfish, just like the one you never won at the county fair."
 	icon_state = "goldfish"
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/goldfishmeat
 
 /obj/item/weapon/fish/salmon
 	name = "salmon"

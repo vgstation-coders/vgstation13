@@ -154,6 +154,7 @@
 	desc = "Utilizes a non-slip technology that allows you to never drop your precious bottles of vodka."
 	icon_state = "nr_gloves"
 	item_state = "nr_gloves"
+	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/gloves/neorussian/fingerless
 	name = "neo-Russian fingerless gloves"

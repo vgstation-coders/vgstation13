@@ -74,7 +74,7 @@
 	if((src.loc) && isturf(src.loc))
 		if(!stat && !resting && !locked_to)
 			for(var/mob/living/simple_animal/mouse/M in view(1,src))
-				if(!M.stat)
+				if(!M.stat && Adjacent(M))
 					M.splat()
 					emote("<span class='warning'>[pick(kill_verbs)] \the [M]!</span>")
 					movement_target = null

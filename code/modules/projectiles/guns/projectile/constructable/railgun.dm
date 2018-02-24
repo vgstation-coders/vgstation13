@@ -1,8 +1,3 @@
-#define MEGAWATT 1000000
-#define TEN_MEGAWATTS 10000000
-#define HUNDRED_MEGAWATTS 100000000
-#define GIGAWATT 1000000000
-
 /obj/item/weapon/gun/projectile/railgun
 	name = "railgun"
 	desc = "A weapon that uses the Lorentz force to propel an armature carrying a projectile to incredible velocities."

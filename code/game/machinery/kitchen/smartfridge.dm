@@ -135,7 +135,9 @@
 							/obj/item/weapon/reagent_containers/pill)
 
 /obj/machinery/smartfridge/medbay/New()
-	. = ..()
+	..()
+	if(map.nameShort == "deff")
+		icon = 'maps/defficiency/medbay.dmi'
 
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/smartfridge/medbay,
@@ -160,7 +162,9 @@
 							/obj/item/weapon/reagent_containers)
 
 /obj/machinery/smartfridge/chemistry/New()
-	. = ..()
+	..()
+	if(map.nameShort == "deff")
+		icon = 'maps/defficiency/medbay.dmi'
 
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/smartfridge/chemistry,
@@ -237,6 +241,8 @@
 
 /obj/machinery/smartfridge/bloodbank/New()
 	. = ..()
+	if(map.nameShort == "deff")
+		icon = 'maps/defficiency/medbay.dmi'
 
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/smartfridge/bloodbank,

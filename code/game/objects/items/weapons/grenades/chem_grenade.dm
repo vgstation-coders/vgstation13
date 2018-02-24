@@ -407,6 +407,27 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 	beakers += B2
 	icon_state = initial(icon_state) +"_locked"
 
+/obj/item/weapon/grenade/chem_grenade/ironfoam
+	name = "Iron-Foam Grenade"
+	desc = "Used for emergency sealing of air breaches."
+	path = 1
+	stage = 2
+
+/obj/item/weapon/grenade/chem_grenade/ironfoam/New()
+	..()
+	var/obj/item/weapon/reagent_containers/glass/beaker/B1 = new(src)
+	var/obj/item/weapon/reagent_containers/glass/beaker/B2 = new(src)
+
+	B1.reagents.add_reagent(IRON, 30)
+	B2.reagents.add_reagent(FOAMING_AGENT, 10)
+	B2.reagents.add_reagent(PACID, 10)
+
+	detonator = new/obj/item/device/assembly_holder/timer_igniter(src)
+
+	beakers += B1
+	beakers += B2
+	icon_state = initial(icon_state) +"_locked"
+
 /obj/item/weapon/grenade/chem_grenade/incendiary
 	name = "Incendiary Grenade"
 	desc = "Used for clearing rooms of living things."

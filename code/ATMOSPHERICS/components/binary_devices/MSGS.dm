@@ -23,6 +23,9 @@
 	var/tmp/update_flags
 	var/tmp/last_pressure
 
+/obj/machinery/atmospherics/binary/msgs/unanchored
+	anchored = 0
+
 /obj/machinery/atmospherics/binary/msgs/New()
 	html_machines += src
 
@@ -246,7 +249,7 @@
 		if(on)
 			overlays += image(icon = icon, icon_state = "i")
 
-/obj/machinery/atmospherics/binary/msgs/wrenchAnchor(var/mob/user) 
+/obj/machinery/atmospherics/binary/msgs/wrenchAnchor(var/mob/user)
 	. = ..()
 	if(!.)
 		return

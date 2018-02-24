@@ -22,7 +22,8 @@
 	M.icon_state = burger
 	M.updateicon()
 	M.ckey = candidate.ckey
-	M.Namepick()
+	spawn()
+		M.Namepick()
 	M.updatename()
 	src.investigation_log(I_ARTIFACT, "|| [key_name(M)] spawned as TG17355 Cyborg.")
 	qdel(src)
