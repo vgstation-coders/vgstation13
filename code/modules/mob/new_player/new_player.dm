@@ -331,7 +331,7 @@
 	job_master.EquipRank(character, rank, 1)					//equips the human
 	EquipCustomItems(character)
 
-	var/datum/job/J = GetJob(rank)
+	var/datum/job/J = job_master.GetJob(rank)
 	if(J.spawns_from_edge)
 		character.Meteortype_Latejoin(rank)
 	else
