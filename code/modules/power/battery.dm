@@ -59,8 +59,8 @@ var/global/list/battery_online =	list(
 	var/loaddemand = 0
 	var/capacity = 5e6 //Max stored charge
 	var/charge = 1e6 //Stored charge
-	var/charging = BATTERY_NO_CHARGE //Are we currently taking charge in?
-	var/chargemode = 0 //Are we set to charge or not? Not the same as charging
+	var/charging = FALSE //Are we currently taking charge in?
+	var/chargemode = BATTERY_NO_CHARGE //Are we set to charge or not? Not the same as charging
 	var/chargecount = 0 //How long we've spent since not charging
 	var/chargelevel = 50000
 	var/online = 1
@@ -204,7 +204,7 @@ var/global/list/battery_online =	list(
 	data["outputLevel"] = output
 	data["outputMax"] = max_output
 	data["outputLoad"] = round(loaddemand)
-	data["hasInput"] = terminal ? 1 : 0;
+	data["hasInput"] = get_terminal() ? 1 : 0;
 	data["hasOutput"] = powernet ? 1 : 0;
 
 	// update the ui if it exists, returns null if no ui is passed/found
@@ -329,3 +329,6 @@ var/global/list/battery_online =	list(
 	if(Limit)
 		return "[href]=-[Limit]'>-</A>"+rate+"[href]=[Limit]'>+</A>"
 	return rate
+
+/obj/machinery/power/battery/proc/get_terminal()
+	return terminal
