@@ -439,6 +439,21 @@
 			obj_count++
 	*/
 
+/datum/mind/proc/get_faction_list()
+	var/list/all_factions = list()
+	for(var/datum/faction/F in ticker.mode.factions)
+		all_factions.Add(F.name)
+		all_factions[F.name] = F
+	all_factions += "-----"
+	for(var/factiontype in subtypesof(/datum/faction))
+		var/datum/faction/F = factiontype
+		if (!(initial(F.name) in all_factions))
+			all_factions.Add(initial(F.name))
+			all_factions[initial(F.name)] = F
+	all_factions += "-----"
+	all_factions += "NEW CUSTOM FACTION"
+	return all_factions
+
 /datum/mind/Topic(href, href_list)
 	if(!check_rights(R_ADMIN))
 		return
@@ -466,14 +481,39 @@
 		if (!new_role)
 			return
 
+		var/joined_faction
+		var/list/all_factions = list()
+		if (alert("Do you want that role to be part of a faction?", "Assigned role", "Yes", "No") == "Yes")
+			all_factions = get_faction_list()
+			var/join_faction = input("Select new faction", "Assigned faction", null) as null|anything in all_factions
+
+
 		var/role_type = available_roles[new_role]
 		var/datum/role/newRole = new role_type
 		if(!newRole)
 			WARNING("Role killed itself or was otherwise missing!")
 			return
 
+		if (alert("Do you want to greet them as their new role?", "Assigned role", "Yes", "No") == "Yes")
+			var/
+
 		if(!newRole.AssignToRole(src,1))//it shouldn't fail since we're using our admin powers to force the role
 			newRole.Drop()//but just in case
+
+		if (joined_faction && joined_faction != "-----")
+			if (joined_faction == "NEW CUSTOM FACTION")
+				to_chat(usr, "<span class='danger'>Sorry, that feature is not coded yet. - Deity Link</span>")
+			else if (istype(all_factions[joined_faction], /datum/faction))//we got an existing faction
+				var/datum/faction/joined = all_factions[joined_faction]
+				ticker.mode.orphaned_roles.Remove(newRole)
+				joined.members.Add(newRole)
+				newRole.faction = joined
+			else //we got an inexisting faction, gotta create it first!
+				var/datum/faction/joined = ticker.mode.CreateFaction(all_factions[joined_faction], null, 1)
+				if (joined)
+					ticker.mode.orphaned_roles.Remove(newRole)
+					joined.members.Add(newRole)
+					newRole.faction = joined
 
 		newRole.OnPostSetup(FALSE)//later we might make custom Greet() for admin-designated antags.
 
@@ -495,18 +535,7 @@
 			if(R.faction)
 				to_chat(usr, "<span class='warning'>A role can only belong to one faction! (This message shouldn't have to appear. Tell a coder.)</span>")
 			else
-				var/list/all_factions = list()
-				for(var/datum/faction/F in ticker.mode.factions)
-					all_factions.Add(F.name)
-					all_factions[F.name] = F
-				all_factions += "-----"
-				for(var/factiontype in subtypesof(/datum/faction))
-					var/datum/faction/F = factiontype
-					if (!(initial(F.name) in all_factions))
-						all_factions.Add(initial(F.name))
-						all_factions[initial(F.name)] = F
-				all_factions += "-----"
-				all_factions += "NEW CUSTOM FACTION"
+				var/list/all_factions = get_faction_list()
 				var/join_faction = input("Select new faction", "Assigned faction", null) as null|anything in all_factions
 				if (!join_faction || join_faction == "-----")
 					return
@@ -561,6 +590,29 @@
 			obj_holder.faction.AppendObjective(new_objective)
 			log_admin("[usr.key]/([usr.name]) gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
 
+	else if (href_list["obj_delete"])
+		var/datum/objective/objective = locate(href_list["obj_delete"])
+		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
+
+		ASSERT(istype(objective) && istype(obj_holder))
+
+		obj_holder.objectives.Remove(objective)
+
+		if (obj_holder.owner)
+			log_admin("[usr.key]/([usr.name]) removed [key]/([name])'s objective ([objective.explanation_text])")
+		else if (obj_holder.faction)
+			log_admin("[usr.key]/([usr.name]) removed \the [obj_holder.faction.ID]'s objective ([objective.explanation_text])")
+
+	else if(href_list["obj_completed"])
+		var/datum/objective/objective = locate(href_list["obj_completed"])
+
+		ASSERT(istype(objective))
+
+		objective.force_success = !objective.force_success
+		log_admin("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
+
+
+	role_panel()
 /*
 	else if (href_list["obj_edit"] || href_list["obj_add"])
 		var/datum/objective/objective
@@ -695,29 +747,6 @@
 			log_admin("[usr.key]/([usr.name]) gave [key]/([name]) the objective: [new_objective.explanation_text]")
 
 */
-	else if (href_list["obj_delete"])
-		var/datum/objective/objective = locate(href_list["obj_delete"])
-		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
-
-		ASSERT(istype(objective) && istype(obj_holder))
-
-		obj_holder.objectives.Remove(objective)
-
-		if (obj_holder.owner)
-			log_admin("[usr.key]/([usr.name]) removed [key]/([name])'s objective ([objective.explanation_text])")
-		else if (obj_holder.faction)
-			log_admin("[usr.key]/([usr.name]) removed \the [obj_holder.faction.ID]'s objective ([objective.explanation_text])")
-
-	else if(href_list["obj_completed"])
-		var/datum/objective/objective = locate(href_list["obj_completed"])
-
-		ASSERT(istype(objective))
-
-		objective.force_success = !objective.force_success
-		log_admin("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
-
-
-	role_panel()
 /*
 	else if (href_list["memory_edit"])
 		var/new_memo = copytext(sanitize(input("Write new memory", "Memory", memory) as null|message),1,MAX_MESSAGE_LEN)

@@ -96,6 +96,8 @@
 
 	var/icon/logo_state = "synd-logo"
 
+	var/list/greets = list()
+
 /datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	// Link faction.
 	faction=fac
