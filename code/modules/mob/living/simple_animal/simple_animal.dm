@@ -321,14 +321,14 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/proc/handle_automated_speech()
 
 	var/someone_in_earshot=0
-	if(!client && speak_chance && (ckey == null)) // Remove this if earshot is used elsewhere.
+	if(!client && speak_chance && ckey == null) // Remove this if earshot is used elsewhere.
 		// All we're doing here is seeing if there's any CLIENTS nearby.
 		for(var/mob/M in get_hearers_in_view(7, src))
 			if(M.client)
 				someone_in_earshot=1
 				break
 
-	if(!client && speak_chance && ckey == null && someone_in_earshot)
+	if(someone_in_earshot)
 		if(rand(0,200) < speak_chance)
 			var/mode = pick(
 			speak.len;      1,
