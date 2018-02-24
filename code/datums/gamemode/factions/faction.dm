@@ -132,7 +132,7 @@
 /datum/faction/proc/check_win()
 	return
 
-
+//updating every icons at the same time allows their animate() to be sync'd, so we can alternate the one on top without any additional proc calls.
 /proc/update_faction_icons()
 	if (!ticker || !ticker.mode)
 		return
@@ -143,7 +143,7 @@
 			F.update_hud_icons(offset)
 			offset++
 
-#define HUDICON_BLINKDURATION 10
+#define HUDICON_BLINKDURATION 10//the smaller, the faster icons swap to one another
 /datum/faction/proc/update_hud_icons(var/offset = 0)
 	//lets ignore this proc if our faction has no icons (for factions where we don't want its members to know each others by default)
 	if (!hud_icons.len)
@@ -177,7 +177,6 @@
 						I.pixel_x = 20 * PIXEL_MULTIPLIER
 						I.pixel_y = 20 * PIXEL_MULTIPLIER
 						I.plane = ANTAG_HUD_PLANE
-						to_chat(world,"[hud_icon] pause_before=[offset * HUDICON_BLINKDURATION];pause_after=[HUDICON_BLINKDURATION*(factions_with_icons - 1 - offset)]")
 						if (factions_with_icons > 1)
 							animate(I, layer = 1, time = 0.1 + offset * HUDICON_BLINKDURATION, loop = -1)
 							animate(layer = 0, time = 0.1)
