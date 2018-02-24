@@ -57,9 +57,7 @@
 /obj/item/clothing/mask/facehugger/proc/findtarget()
 	if(!real)
 		return
-	for(var/mob/living/carbon/T in hearers(src,4))
-		if(!ishuman(T) && !ismonkey(T) && !iscorgi(T))
-			continue
+	for(var/mob/living/T in hearers(src,4))
 		if(!CanHug(T))
 			continue
 		if(T && (T.stat != DEAD && T.stat != UNCONSCIOUS) )
@@ -74,20 +72,20 @@
 	if(!target || target.stat == DEAD || target.stat == UNCONSCIOUS || target.status_flags & XENO_HOST)
 		findtarget()
 		return
-	if(loc && loc == get_turf(src) && !attached && !stat && nextwalk <= world.time)
+	if(loc && isturf(loc) && !attached && !stat && nextwalk <= world.time)
 		nextwalk = world.time + walk_speed
 		var/dist = get_dist(loc, target.loc)
 		if(dist > 4)
 			return //We'll let the facehugger do nothing for a bit, since it's fucking up.
 
 		var/obj/item/clothing/mask/facehugger/F = target.is_wearing_item(/obj/item/clothing/mask/facehugger, slot_wear_mask)
-		if(F && F.sterile) // Toy's won't prevent real huggers
+		if(F && !F.sterile) // Toy's won't prevent real huggers
 			findtarget()
 			return
 		else
 			step_towards(src, target, 0)
 			if(dist <= 1)
-				if(CanHug(target))
+				if(CanHug(target) && isturf(target.loc)) //Fix for hugging through mechs and closets
 					Attach(target)
 					return
 				else
@@ -100,7 +98,7 @@
 	if(!target && isturf(loc))
 		for(var/obj/item/clothing/mask/facehugger/F in loc)
 			if(F != src)
-				step(src, pick(1,2,4,8), 0)
+				step(src, pick(cardinal), 0)
 				break
 
 //END HUGGER MOVEMENT AI
@@ -220,7 +218,7 @@
 
 /obj/item/clothing/mask/facehugger/proc/Attach(mob/living/M as mob)
 	var/preggers = rand(MIN_IMPREGNATION_TIME,MAX_IMPREGNATION_TIME)
-	if( (!iscorgi(M) && !iscarbon(M)) || isalien(M))
+	if(!CanHug(M))
 		return FALSE
 	if(iscarbon(M) && M.status_flags & XENO_HOST)
 		visible_message("<span class='danger'>An alien tries to place a facehugger on [M] but it refuses sloppy seconds!</span>")
@@ -251,7 +249,7 @@
 		if(!real && mouth_protection)
 			return //Toys really shouldn't be forcefully removing gear
 		var/obj/item/clothing/mask/facehugger/hugger = H.get_item_by_slot(slot_wear_mask)
-		if(istype(hugger) && !hugger.sterile && !sterile) // Lamarr won't fight over faces and neither will normal huggers.
+		if(istype(hugger) && (!hugger.sterile || sterile)) // Lamarr won't fight over faces and neither will normal huggers.
 			return
 
 		if(mouth_protection && mouth_protection != H.wear_mask) //can't be protected with your own mask, has to be a hat
@@ -295,10 +293,38 @@
 			L.Paralyse((preggers/10)+10) //something like 25 ticks = 20 seconds with the default settings
 	else if (iscorgi(M))
 		var/mob/living/simple_animal/corgi/C = M
+		var/obj/item/clothing/head/headwear = C.inventory_head
+		var/rng = 100
+		var/obj/item/clothing/mask/facehugger/hugger = C.facehugger
+
+		if(hugger && !hugger.sterile)
+			return
+
+		if(headwear)
+			if(istype(headwear, /obj/item/clothing/head/cardborg))
+				rng = CHANCE_TO_REMOVE_HEADWEAR
+			else if(istype(headwear, /obj/item/clothing/head/helmet/space/rig))
+				rng = CHANCE_TO_REMOVE_SPECIAL_HEADWEAR
+
+			if(prob(rng))
+				C.visible_message("<span class='danger'>\The [src] smashes against [C]'s \the [headwear], and rips it off in the process!</span>")
+				C.drop_from_inventory(headwear)
+				GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
+				return
+			else
+				C.visible_message("<span class='danger'>\The [src] bounces off of the [headwear]!</span>")
+				if(prob(CHANCE_TO_DIE_AFTER_HEAD_DENIED) && !sterile)
+					Die()
+					return
+				else
+					GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
+					return
+			return
+
 		forceMove(C)
 		C.facehugger = src
 		C.wear_mask = src
-		//C.regenerate_icons()
+		C.regenerate_icons()
 
 	GoIdle(TIME_IDLE_AFTER_ATTACH_DENIED) //so it doesn't jump the people that tear it off
 
@@ -329,6 +355,7 @@
 			var/mob/living/simple_animal/corgi/C = target
 			forceMove(get_turf(C))
 			C.facehugger = null
+			C.regenerate_icons()
 	else
 		target.visible_message("<span class='danger'>\The [src] violates [target]'s face !</span>")
 	return
@@ -371,16 +398,25 @@
 
 /proc/CanHug(var/mob/M)
 
-
 	if(iscorgi(M))
+		var/mob/living/simple_animal/corgi/corgi = M
+		if(corgi.facehugger && !corgi.facehugger.sterile)
+			return FALSE
+
 		return TRUE
 
-	if(!iscarbon(M) || isalien(M) || isslime(M))
+	if(!ishuman(M) && !ismonkey(M))
 		return FALSE
 
 	var/mob/living/carbon/C = M
-	if(C && (istype(C.wear_mask, /obj/item/clothing/mask/facehugger) || C.status_flags & XENO_HOST))
+	var/obj/item/clothing/mask/facehugger/F = C.is_wearing_item(/obj/item/clothing/mask/facehugger, slot_wear_mask)
+
+	if(F && !F.sterile)
 		return FALSE
+
+	if(C.status_flags & XENO_HOST)
+		return FALSE
+
 	return TRUE
 
 /obj/item/clothing/mask/facehugger/acidable()
