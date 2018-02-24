@@ -94,6 +94,14 @@
 /datum/mind/proc/store_memory(new_text)
 	memory += "[new_text]<BR>"
 
+
+/datum/mind/proc/hasFactionsWithHUDIcons()
+	for(var/role in antag_roles)
+		var/datum/role/R = antag_roles[role]
+		if (R.faction && R.faction.hud_icons.len)
+			return 1
+	return 0
+
 /datum/mind/proc/show_memory(mob/recipient)
 	var/output = "<TITLE>Your memory</TITLE><B>[current.real_name]'s memory</B><HR>"
 

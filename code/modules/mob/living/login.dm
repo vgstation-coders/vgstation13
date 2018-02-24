@@ -16,7 +16,7 @@
 			if("sandbox")
 				CanBuild()
 
-		if (iscultist(src) || iswizard(src) || isnukeop(src))
+		if (hasFactionIcons(src))
 			update_faction_icons()
 		/*
 		if((mind in ticker.mode.revolutionaries) || (mind in ticker.mode.head_revolutionaries))
