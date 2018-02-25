@@ -12,6 +12,7 @@
 	roletype = /datum/role/cultist
 	logo_state = "cult-logo"
 	var/list/bloody_floors = list()//to replace later on
+	hud_icons = list("cult-logo")
 
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()

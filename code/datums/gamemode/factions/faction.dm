@@ -21,9 +21,11 @@
 	@faction_icon: icon file reference: Where the icon is stored (currently most are stored in logos.dmi)
 */
 
+var/list/factions_with_hud_icons = list()
+
 /datum/faction
 	var/name = "unknown faction"
-	var/list/ID = list("unknown")
+	var/ID = null
 	var/desc = "This faction is bound to do something nefarious"
 	var/initial_role
 	var/late_role
@@ -35,11 +37,17 @@
 	var/datum/objective_holder/objective_holder
 	var/datum/role/roletype = /datum/role
 	var/logo_state = "synd-logo"
+	var/list/hud_icons = list()
 
 /datum/faction/New()
 	..()
 	objective_holder = new
 	objective_holder.faction = src
+	if (hud_icons.len)
+		factions_with_hud_icons.Add(src)
+
+	for (var/datum/faction/F in factions_with_hud_icons)
+		update_hud_icons()
 
 /datum/faction/proc/OnPostSetup()
 	forgeObjectives()
@@ -67,6 +75,18 @@
 		return 0
 	members.Add(R)
 	return 1
+
+/datum/faction/proc/HandleRecruitedRole(var/datum/role/R)
+	ticker.mode.orphaned_roles.Remove(R)
+	members.Add(R)
+	R.faction = src
+	update_faction_icons()
+
+/datum/faction/proc/HandleRemovedRole(var/datum/role/R)
+	R.faction.members.Remove(R)
+	R.faction = null
+	ticker.mode.orphaned_roles.Add(R)
+	update_hud_removed(R)
 
 /datum/faction/proc/AppendObjective(var/datum/objective/O)
 	ASSERT(O)
@@ -116,6 +136,72 @@
 /datum/faction/proc/check_win()
 	return
 
+//updating every icons at the same time allows their animate() to be sync'd, so we can alternate the one on top without any additional proc calls.
+/proc/update_faction_icons()
+	if (!ticker || !ticker.mode)
+		return
+
+	var/offset = 0
+	var/list/factions_with_icons = list()
+	for (var/datum/faction/F in ticker.mode.factions)
+		if (F.hud_icons.len)
+			factions_with_icons.Add(F)
+			factions_with_icons[F] = offset
+			offset++
+
+	for (var/datum/faction/F in factions_with_icons)
+		F.update_hud_icons(factions_with_icons[F],factions_with_icons.len)
+
+#define HUDICON_BLINKDURATION 10//the smaller, the faster icons swap to one another
+/datum/faction/proc/update_hud_icons(var/offset = 0,var/factions_with_icons = 0)
+	//lets ignore this proc if our faction has no icons (for factions where we don't want its members to know each others by default)
+	if (!hud_icons.len)
+		return
+
+	//let's remove every icons
+	for(var/datum/role/R in members)
+		if(R.antag && R.antag.current && R.antag.current.client)
+			for(var/image/I in R.antag.current.client.images)
+				if(I.icon_state in hud_icons)
+					R.antag.current.client.images -= I
+
+	//then re-add them
+	for(var/datum/role/R in members)
+		if(R.antag && R.antag.current && R.antag.current.client)
+			for(var/datum/role/R_target in members)
+				if(R_target.antag && R_target.antag.current)
+					var/imageloc = R_target.antag.current
+					if(istype(R_target.antag.current.loc,/obj/mecha))
+						imageloc = R_target.antag.current.loc
+					var/hud_icon = R_target.logo_state//the icon is based on the member's role
+					if (!(R_target.logo_state in hud_icons))
+						hud_icon = hud_icons[1]//if the faction doesn't recognize the role, it'll just give it a default one.
+					var/image/I = image('icons/role_HUD_icons.dmi', loc = imageloc, icon_state = hud_icon)
+					I.pixel_x = 20 * PIXEL_MULTIPLIER
+					I.pixel_y = 20 * PIXEL_MULTIPLIER
+					I.plane = ANTAG_HUD_PLANE
+					if (factions_with_icons > 1)
+						animate(I, layer = 1, time = 0.1 + offset * HUDICON_BLINKDURATION, loop = -1)
+						animate(layer = 0, time = 0.1)
+						animate(layer = 0, time = HUDICON_BLINKDURATION)
+						animate(layer = 1, time = 0.1)
+						animate(layer = 1, time = 0.1 + HUDICON_BLINKDURATION*(factions_with_icons - 1 - offset))
+					R.antag.current.client.images += I
+#undef HUDICON_BLINKDURATION
+
+/datum/faction/proc/update_hud_removed(var/datum/role/Removed_R)
+	for(var/datum/role/R in members)
+		if(R.antag && R.antag.current && R.antag.current.client)
+			for(var/image/I in R.antag.current.client.images)
+				if(I.icon_state in hud_icons && ((I.loc == Removed_R.antag.current) || (I.loc == Removed_R.antag.current.loc)))
+					R.antag.current.client.images -= I
+
+	if(Removed_R.antag && Removed_R.antag.current && Removed_R.antag.current.client)
+		for(var/image/I in Removed_R.antag.current.client.images)
+			if(I.icon_state in hud_icons)
+				Removed_R.antag.current.client.images -= I
+
+
 /////////////////////////////THESE FACTIONS SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 /datum/faction/syndicate
 	name = "The Syndicate"
@@ -145,6 +231,7 @@
 	desc = "The culmination of succesful NT traitors, who have managed to steal a nuclear device.\
 	Load up, grab the nuke, don't forget where you've parked, find the nuclear auth disk, and give them hell."
 	logo_state = "nuke-logo"
+	hud_icons = list("nuke-logo")
 
 /datum/faction/syndicate/nuke_op/AdminPanelEntry()
 	var/list/dat = ..()
@@ -199,6 +286,7 @@
 	This has led to them being identified as enemies of humanity, and should be treated as such."
 	roletype = /datum/role/wizard
 	logo_state = "wizard-logo"
+	hud_icons = list("wizard-logo","apprentice-logo")
 
 /datum/faction/wizard/HandleNewMind(var/datum/mind/M)
 	..()
