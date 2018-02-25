@@ -115,7 +115,8 @@
 	..(loc)
 
 	if(areaMaster.areaapc)
-		world.log << "Second APC detected in area: [areaMaster.name] [loc]. Deleting the second APC."
+		var/turf/T = get_turf(src)
+		world.log << "Second APC detected in area: [areaMaster.name] [T.x], [T.y], [T.z]. Deleting the second APC."
 		qdel(src)
 		return
 
