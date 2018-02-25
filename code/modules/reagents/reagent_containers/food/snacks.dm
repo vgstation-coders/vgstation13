@@ -80,6 +80,9 @@
 					var/obj/item/I = trash
 					I.forceMove(old_loc)
 
+		else if(istype(loc, /obj/item/weapon/storage/fancy))
+			loc:update_icon(1)
+
 		qdel(src) //Remove the item, we consumed it
 
 	return
