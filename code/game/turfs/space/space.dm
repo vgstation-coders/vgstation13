@@ -25,15 +25,14 @@
 		parallax_appearances = list()
 		for(var/i in 0 to 25)
 			var/I = "[i]"
-			var/image/base_image = image(icon = icon, icon_state = I) //only because byond will not create an image if you do not give it some values
-			base_image.appearance = appearance
-			base_image.icon_state = I
+			icon_state = I
 			var/image/parallax_overlay = image('icons/turf/space_parallax1.dmi', I)
 			parallax_overlay.plane = SPACE_DUST_PLANE
 			parallax_overlay.alpha = 80
 			parallax_overlay.blend_mode = BLEND_ADD
-			base_image.overlays += parallax_overlay
-			parallax_appearances[I] = base_image
+			overlays += parallax_overlay
+			parallax_appearances[I] = appearance
+			overlays.Cut()
 	appearance = parallax_appearances["[((x + y) ^ ~(x * y) + z) % 26]"]
 
 /turf/space/spawned_by_map_element(var/datum/map_element/ME, var/list/objects)
