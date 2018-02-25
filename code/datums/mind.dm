@@ -471,8 +471,10 @@
 		if (R.greets.len)
 			chosen_greeting = input("Choose a greeting", "Assigned role", null) as null|anything in R.greets
 			if (chosen_greeting == "custom")
-				custom_greeting = input("Choose a custom greeting", "Assigned role", "")
-			R.Greet(chosen_greeting,custom_greeting)
+				custom_greeting = input("Choose a custom greeting", "Assigned role", "") as null|text
+
+			if ((chosen_greeting && chosen_greeting != "custom") || (chosen_greeting == "custom" && custom_greeting))
+				R.Greet(chosen_greeting,custom_greeting)
 
 	if (href_list["add_role"])
 		var/list/available_roles = list()
@@ -510,7 +512,7 @@
 			if (alert("Do you want to greet them as their new role?", "Assigned role", "Yes", "No") == "Yes")
 				chosen_greeting = input("Choose a greeting", "Assigned role", null) as null|anything in newRole.greets
 				if (chosen_greeting == "custom")
-					custom_greeting = input("Choose a custom greeting", "Assigned role", "")
+					custom_greeting = input("Choose a custom greeting", "Assigned role", "") as null|text
 
 		if(!newRole.AssignToRole(src,1))//it shouldn't fail since we're using our admin powers to force the role
 			newRole.Drop()//but just in case
@@ -531,7 +533,7 @@
 					newRole.faction = joined
 
 		newRole.OnPostSetup(FALSE)
-		if (chosen_greeting)
+		if ((chosen_greeting && chosen_greeting != "custom") || (chosen_greeting == "custom" && custom_greeting))
 			newRole.Greet(chosen_greeting,custom_greeting)
 
 	else if(href_list["role_edit"])
