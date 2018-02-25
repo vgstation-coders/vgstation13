@@ -18,7 +18,7 @@ var/list/processing_objects = list()
 
 
 /datum/subsystem/obj/Initialize()
-	for(var/atom/movable/object in world)
+	for(var/atom/object in world)
 		object.initialize()
 
 	..()

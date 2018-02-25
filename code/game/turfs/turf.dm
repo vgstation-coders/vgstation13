@@ -85,9 +85,6 @@
 			src.Entered(AM)
 			return
 
-/turf/proc/initialize()
-	return
-
 /turf/ex_act(severity)
 	return 0
 
