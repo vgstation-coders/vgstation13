@@ -1503,8 +1503,8 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/butter
-	name = "Butter"
-	desc = "Today we feast"
+	name = "butter"
+	desc = "Today we feast."
 	icon_state = "butter"
 
 /obj/item/weapon/reagent_containers/food/snacks/butter/New()
@@ -1520,7 +1520,7 @@
 
 		H.stop_pulling()
 		to_chat(H, "<SPAN CLASS='notice'>You slipped on the [name]!</SPAN>")
-		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+		playsound((src), 'sound/misc/slip.ogg', 50, 1, -3)
 		H.Stun(4)
 		H.Knockdown(3)
 		new/obj/effect/decal/cleanable/smashed_butter(src.loc)
@@ -5494,7 +5494,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 obj/item/weapon/reagent_containers/food/snacks/butterstick
 	name = "butter on a stick"
-	desc = "The clown told You to make this"
+	desc = "The clown told you to make this."
 	icon_state = "butter_stick"
 	bitesize = 3
 	food_flags = FOOD_ANIMAL
@@ -5507,7 +5507,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterstick
 
 		H.stop_pulling()
 		to_chat(H, "<SPAN CLASS='notice'>You slipped on the [name]!</SPAN>")
-		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+		playsound((src), 'sound/misc/slip.ogg', 50, 1, -3)
 		H.Stun(4)
 		H.Knockdown(3)
 		new/obj/effect/decal/cleanable/smashed_butter(src.loc)
@@ -5519,7 +5519,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterstick
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/ambrosia_brownies
 	name = "brownie sheet"
-	desc = "Give them to your friends"
+	desc = "Give them to your friends."
 	icon_state = "ambrosia_brownies"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/ambrosia_brownie
 	slices_num = 6
@@ -5542,7 +5542,7 @@ obj/item/weapon/reagent_containers/food/snacks/butterstick
 
 /obj/item/weapon/reagent_containers/food/snacks/ambrosia_brownie
 	name = "brownie"
-	desc = "A brownie that may or may not get you sky high "
+	desc = "A brownie that may or may not get you sky high."
 	icon_state = "ambrosia_brownie"
 	bitesize = 2
 	food_flags = FOOD_SWEET
