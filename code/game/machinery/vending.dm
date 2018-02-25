@@ -10,11 +10,27 @@ var/global/num_vending_terminals = 1
 	var/product_path = null
 	var/original_amount = 0
 	var/amount = 0
+	var/stack_amount = 0 //only used when we're dealing with /obj/item/stack
 	var/price = 0
 	var/display_color = "blue"
 	var/category = CAT_NORMAL//available by default, contraband, or premium (requires a coin)
 	var/subcategory = null
 	var/mini_icon = null
+
+/datum/data/vending_product/New(var/obj/item/item)
+	if(istype(item, /obj/item/stack))
+		var/obj/item/stack/S = item
+		stack_amount = S.amount
+	else
+		product_name = item.name
+	mini_icon = costly_bicon(item)
+	display_color = pick("red", "blue", "green")
+	product_path = item
+	amount += 1
+	if(stack_amount)
+		product_name = "A stack of [stack_amount] [item.product_name]"
+	else
+		product_name = "[item.product_name]"
 
 /* TODO: Add this to deconstruction for vending machines
 /obj/item/compressed_vend
@@ -131,12 +147,14 @@ var/global/num_vending_terminals = 1
 
 	if(ticker)
 		initialize()
-		link_to_account()
 
 	return
 
 /obj/machinery/vending/initialize()
-	..()
+	build_inventories()
+	link_to_account()
+
+/obj/machinery/vending/proc/build_inventories()
 	product_records = new/list()
 	build_inventory(products)
 	build_inventory(contraband, 1)
@@ -144,6 +162,7 @@ var/global/num_vending_terminals = 1
 	build_inventory(vouched, 0, 0, 1)
 
 /obj/machinery/vending/proc/link_to_account()
+	reconnect_database()
 	linked_account = department_accounts["Cargo"]
 
 /obj/machinery/vending/RefreshParts()
@@ -213,7 +232,7 @@ var/global/num_vending_terminals = 1
 					newmachine.product_records = P.product_records
 					newmachine.hidden_records = P.hidden_records
 					newmachine.coin_records = P.coin_records
-					newmachine.initialize()
+					newmachine.build_inventories()
 				qdel(P)
 				if(user.machine==src)
 					newmachine.attack_hand(user)
@@ -282,7 +301,7 @@ var/global/num_vending_terminals = 1
 				I.forceMove(src)
 		products += P.stock
 		product_records += P.product_records
-		initialize()
+		build_inventories()
 	getFromPool(/obj/item/stack/sheet/cardboard, P.loc, 4)
 	qdel(P)
 
@@ -532,18 +551,20 @@ var/global/num_vending_terminals = 1
 			to_chat(usr, "[bicon(src)]<span class='warning'>Unable to connect to linked account. Please contact a god.</span>")
 	else if(istype(W, /obj/item/) && inserting_mode)
 		if(user.drop_item(W, src))
-			for(var/datum/data/vending_product/VP in product_records)
-				if(VP.product_path == W)
-					VP.amount += 1
-					return
-			var/datum/data/vending_product/R = new()
-			R.product_name = W.name
-			R.mini_icon = costly_bicon(W)
-			R.display_color = pick("red", "blue", "green")
-			R.product_path = W
-			product_records += R
-			products += W
+			insert_item(W)
 
+
+/obj/machinery/vending/proc/insert_item(var/obj/item/item)
+	for(var/datum/data/vending_product/VP in product_records)
+		if(VP.product_path == item)
+			VP.amount += 1
+			if(istype(item, /obj/item/stack))
+				var/obj/item/stack/S = item
+				VP.product_name = "A stack of [S.amount] [S.name]"
+			return
+	var/datum/data/vending_product/R = new(item)
+	product_records += R
+	products += item
 //H.wear_id
 
 /**
