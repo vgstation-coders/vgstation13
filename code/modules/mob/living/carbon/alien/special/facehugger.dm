@@ -57,6 +57,7 @@
 /obj/item/clothing/mask/facehugger/proc/findtarget()
 	if(!real)
 		return
+	target = null
 	for(var/mob/living/T in hearers(src,4))
 		if(!CanHug(T))
 			continue
@@ -76,10 +77,11 @@
 		nextwalk = world.time + walk_speed
 		var/dist = get_dist(loc, target.loc)
 		if(dist > 4)
+			target = null
 			return //We'll let the facehugger do nothing for a bit, since it's fucking up.
 
 		var/obj/item/clothing/mask/facehugger/F = target.is_wearing_item(/obj/item/clothing/mask/facehugger, slot_wear_mask)
-		if(F && !F.sterile) // Toy's won't prevent real huggers
+		if(F && !F.sterile) // Toys won't prevent real huggers
 			findtarget()
 			return
 		else
@@ -89,7 +91,6 @@
 					Attach(target)
 					return
 				else
-					target = null
 					walk(src,0)
 					findtarget()
 					return
@@ -198,8 +199,9 @@
 	return FALSE
 
 /obj/item/clothing/mask/facehugger/HasProximity(atom/movable/AM as mob|obj)
-	if(CanHug(AM))
-		return Attach(AM)
+	if(istype(AM, /mob/living))
+		if(CanHug(AM))
+			return Attach(AM)
 	return FALSE
 
 /obj/item/clothing/mask/facehugger/throw_at(atom/target, range, speed)
@@ -216,24 +218,21 @@
 		icon_state = "[initial(icon_state)]"
 		Attach(hit_atom)
 
-/obj/item/clothing/mask/facehugger/proc/Attach(mob/living/M as mob)
+/obj/item/clothing/mask/facehugger/proc/Attach(mob/living/L)
 	var/preggers = rand(MIN_IMPREGNATION_TIME,MAX_IMPREGNATION_TIME)
-	if(M.status_flags & XENO_HOST)
-		visible_message("<span class='danger'>An alien tries to place a facehugger on [M] but it refuses sloppy seconds!</span>")
-		return
-	if(!CanHug(M))
+	if(isalien(L))
+		return FALSE
+	if(L.status_flags & XENO_HOST)
+		visible_message("<span class='danger'>An alien tries to place a facehugger on [L] but it refuses sloppy seconds!</span>")
 		return FALSE
 	if(attached)
 		return FALSE
-	if(!Adjacent(M))
+	if(!Adjacent(L))
 		return FALSE
 	else
 		attached++
 		spawn(MAX_IMPREGNATION_TIME)
 			attached = FALSE
-
-	var/mob/living/L = M //just so I don't need to use :
-
 	if(loc == L)
 		return FALSE
 	if(stat != CONSCIOUS)
@@ -243,14 +242,14 @@
 
 	L.visible_message("<span class='danger'>\The [src] leaps at [L]'s face!</span>")
 
+	if(!CanHug(L))
+		return FALSE
+
 	if(ishuman(L))
 		var/mob/living/carbon/human/H = L
 		var/obj/item/mouth_protection = H.get_body_part_coverage(MOUTH)
 		if(!real && mouth_protection)
 			return //Toys really shouldn't be forcefully removing gear
-		var/obj/item/clothing/mask/facehugger/hugger = H.get_item_by_slot(slot_wear_mask)
-		if(istype(hugger) && (!hugger.sterile || sterile)) // Lamarr won't fight over faces and neither will normal huggers.
-			return
 
 		if(mouth_protection && mouth_protection != H.wear_mask) //can't be protected with your own mask, has to be a hat
 			stat_collection.xeno_faces_protected++
@@ -272,13 +271,13 @@
 					return
 			return
 
-	if(iscarbon(M))
+	if(iscarbon(L))
 		var/mob/living/carbon/target = L
+		var/obj/item/clothing/W = target.get_item_by_slot(slot_wear_mask)
 
-		if(target.get_item_by_slot(slot_wear_mask))
+		if(W && W != src)
 			if(prob(CHANCE_TO_NOT_REMOVE_MASKS))
 				return FALSE
-			var/obj/item/clothing/W = target.wear_mask
 			if(!W.canremove)
 				return FALSE
 			target.drop_from_inventory(W)
@@ -291,8 +290,8 @@
 
 		if(!sterile)
 			L.Paralyse((preggers/10)+10) //something like 25 ticks = 20 seconds with the default settings
-	else if (iscorgi(M))
-		var/mob/living/simple_animal/corgi/C = M
+	else if (iscorgi(L))
+		var/mob/living/simple_animal/corgi/C = L
 		var/obj/item/clothing/head/headwear = C.inventory_head
 		var/rng = 100
 		var/obj/item/clothing/mask/facehugger/hugger = C.facehugger
@@ -396,7 +395,7 @@
 
 	return
 
-/proc/CanHug(var/mob/M)
+/obj/item/clothing/mask/facehugger/proc/CanHug(var/mob/living/M)
 
 	if(M.status_flags & XENO_HOST)
 		return FALSE
@@ -414,7 +413,7 @@
 	var/mob/living/carbon/C = M
 	var/obj/item/clothing/mask/facehugger/F = C.is_wearing_item(/obj/item/clothing/mask/facehugger, slot_wear_mask)
 
-	if(F && !F.sterile)
+	if(F && (!F.sterile || src.sterile) && F != src) // Lamarr won't fight over faces and neither will normal huggers.
 		return FALSE
 
 	return TRUE

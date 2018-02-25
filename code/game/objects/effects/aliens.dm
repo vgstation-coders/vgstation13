@@ -499,7 +499,7 @@
 	new /obj/item/clothing/mask/facehugger(src)
 
 	for(var/mob/M in range(2,src))
-		if(CanHug(M))
+		if(GetFacehugger().CanHug(M))
 			Burst(0)
 			break
 
@@ -522,7 +522,7 @@
 				child.Die()
 			else
 				for(var/mob/M in range(1,src))
-					if(CanHug(M))
+					if(child.CanHug(M))
 						child.Attach(M)
 						break
 				if(!ismob(child.loc))
@@ -573,7 +573,7 @@
 
 /obj/effect/alien/egg/HasProximity(atom/movable/AM as mob|obj)
 	if(status == GROWN)
-		if(!CanHug(AM))
+		if(!GetFacehugger().CanHug(AM))
 			return
 
 		var/mob/living/carbon/C = AM
