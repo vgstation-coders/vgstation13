@@ -21,7 +21,6 @@
 		A.area_turfs += src
 
 /turf/space/initialize()
-	icon_state = "[((x + y) ^ ~(x * y) + z) % 26]"
 	if(!parallax_appearances)
 		parallax_appearances = list()
 		for(var/i in 0 to 25)
