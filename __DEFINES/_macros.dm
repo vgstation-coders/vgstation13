@@ -197,6 +197,8 @@
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
+#define hasFactionIcons(H) (H.mind && H.mind.hasFactionsWithHUDIcons())
+
 #define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
 
 #define ischangeling(H) (H.mind && H.mind.GetRole(CHANGELING))
