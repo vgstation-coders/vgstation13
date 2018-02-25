@@ -33,10 +33,10 @@
 	switch(greeting)
 		if ("roundstart")
 			to_chat(antag.current, {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'><font size=3>You are a cultist of <span class='danger'><font size=3>Nar-Sie</font></span>!</font><br>
-				I, the Geometer of Blood want you to thin the veil between reality and his realm<br>
+				I, the Geometer of Blood, want you to thin the veil between reality and his realm<br>
 				so I can pull this place onto my plane of existence.<br>
 				You've managed to get a job here, and the time has come to put our plan into motion.<br>
-				However the veil is currently so thick that I can barely bestow any power to you.<br>
+				However, the veil is currently so thick that I can barely bestow any power to you.<br>
 				Other cultists made their way into the crew. Talk to them. <span class='danger'>Self Other Technology</span>!<br>
 				Meet up with them. Raise an altar in my name. <span class='danger'>Blood Technology Join</span>!<br>
 				</span>"})
