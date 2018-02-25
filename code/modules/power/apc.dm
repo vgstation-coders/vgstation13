@@ -173,9 +173,6 @@
 
 	update_icon()
 
-	spawn(5)
-		update()
-
 /obj/machinery/power/apc/examine(mob/user)
 	..()
 	if(stat & BROKEN)
