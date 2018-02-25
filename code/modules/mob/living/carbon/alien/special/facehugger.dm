@@ -59,7 +59,7 @@
 		return
 	target = null
 	for(var/mob/living/T in hearers(src,4))
-		if(!CanHug(T))
+		if(!CanHug(T, src))
 			continue
 		if(T && (!T.isDead() && !T.isUnconscious() ) )
 
@@ -87,7 +87,7 @@
 		else
 			step_towards(src, target, 0)
 			if(dist <= 1)
-				if(CanHug(target) && isturf(target.loc)) //Fix for hugging through mechs and closets
+				if(CanHug(target, src) && isturf(target.loc)) //Fix for hugging through mechs and closets
 					Attach(target)
 					return
 				else
@@ -199,9 +199,10 @@
 	return FALSE
 
 /obj/item/clothing/mask/facehugger/HasProximity(atom/movable/AM as mob|obj)
-	if(istype(AM, /mob/living))
-		if(CanHug(AM))
-			return Attach(AM)
+	if(isliving(AM))
+		var/mob/living/L = AM
+		if(CanHug(L, src))
+			return Attach(L)
 	return FALSE
 
 /obj/item/clothing/mask/facehugger/throw_at(atom/target, range, speed)
@@ -242,7 +243,7 @@
 
 	L.visible_message("<span class='danger'>\The [src] leaps at [L]'s face!</span>")
 
-	if(!CanHug(L))
+	if(!CanHug(L, src))
 		return FALSE
 
 	if(ishuman(L))
@@ -395,7 +396,9 @@
 
 	return
 
-/obj/item/clothing/mask/facehugger/proc/CanHug(var/mob/living/M)
+/proc/CanHug(mob/living/M, obj/item/clothing/mask/facehugger/hugger = null)
+	if(isalien(M))
+		return FALSE
 
 	if(M.status_flags & XENO_HOST)
 		return FALSE
@@ -413,7 +416,7 @@
 	var/mob/living/carbon/C = M
 	var/obj/item/clothing/mask/facehugger/F = C.is_wearing_item(/obj/item/clothing/mask/facehugger, slot_wear_mask)
 
-	if(F && (!F.sterile || src.sterile) && F != src) // Lamarr won't fight over faces and neither will normal huggers.
+	if(F && (!F.sterile || hugger.sterile) && F != hugger) // Lamarr won't fight over faces and neither will normal huggers.
 		return FALSE
 
 	return TRUE
