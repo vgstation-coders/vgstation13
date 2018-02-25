@@ -14,7 +14,11 @@
 	if(ticker && ticker.mode)
 		switch(ticker.mode.name)
 			if("sandbox")
-		/*		CanBuild()
+				CanBuild()
+
+		if (hasFactionIcons(src))
+			update_faction_icons()
+		/*
 		if((mind in ticker.mode.revolutionaries) || (mind in ticker.mode.head_revolutionaries))
 			ticker.mode.update_rev_icons_added(src.mind)
 		if(mind in ticker.mode.cult)
