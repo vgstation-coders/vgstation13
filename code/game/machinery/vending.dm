@@ -21,16 +21,13 @@ var/global/num_vending_terminals = 1
 	if(istype(item, /obj/item/stack))
 		var/obj/item/stack/S = item
 		stack_amount = S.amount
+		product_name = "A stack of [stack_amount] [item.name]"
 	else
 		product_name = item.name
 	mini_icon = costly_bicon(item)
 	display_color = pick("red", "blue", "green")
 	product_path = item
 	amount += 1
-	if(stack_amount)
-		product_name = "A stack of [stack_amount] [item.product_name]"
-	else
-		product_name = "[item.product_name]"
 
 /* TODO: Add this to deconstruction for vending machines
 /obj/item/compressed_vend
