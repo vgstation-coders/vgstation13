@@ -217,7 +217,8 @@
 	..()
 	if(stat == CONSCIOUS)
 		icon_state = "[initial(icon_state)]"
-		Attach(hit_atom)
+		if(isliving(hit_atom))
+			Attach(hit_atom)
 
 /obj/item/clothing/mask/facehugger/proc/Attach(mob/living/L)
 	var/preggers = rand(MIN_IMPREGNATION_TIME,MAX_IMPREGNATION_TIME)
@@ -289,7 +290,7 @@
 		target.equip_to_slot(src, slot_wear_mask)
 		target.update_inv_wear_mask()
 
-		if(!sterile)
+		if(!sterile && target.hasmouth)
 			L.Paralyse((preggers/10)+10) //something like 25 ticks = 20 seconds with the default settings
 	else if (iscorgi(L))
 		var/mob/living/simple_animal/corgi/C = L
@@ -337,7 +338,9 @@
 	if(!target || target.wear_mask != src || target.stat == DEAD) //was taken off or something
 		return
 
-	if(!sterile)
+	var/mob/living/carbon/CA = target
+
+	if(!sterile && !(istype(CA) && !CA.hasmouth))
 		var/obj/item/alien_embryo/E = new (target)
 		target.status_flags |= XENO_HOST
 		if(istype(target, /mob/living/carbon/human))
