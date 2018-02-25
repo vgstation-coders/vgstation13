@@ -1501,6 +1501,30 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 2
+	
+/obj/item/weapon/reagent_containers/food/snacks/butter
+	name = "Butter"
+	desc = "Today we feast"
+	icon_state = "butter"
+
+/obj/item/weapon/reagent_containers/food/snacks/butter/New()
+	..()
+	reagents.add_reagent(LIQUIDBUTTER, 10)
+	bitesize = 5
+	
+/obj/item/weapon/reagent_containers/food/snacks/butter/Crossed(atom/movable/O) //exactly the same as soap
+	if (istype(O, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = O
+		if (H.CheckSlip() < 1)
+			return
+
+		H.stop_pulling()
+		to_chat(H, "<SPAN CLASS='notice'>You slipped on the [name]!</SPAN>")
+		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+		H.Stun(4)
+		H.Knockdown(3)
+		new/obj/effect/decal/cleanable/smashed_butter(src.loc)
+		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/spaghetti
 	name = "Spaghetti"
