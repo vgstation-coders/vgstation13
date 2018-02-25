@@ -13,7 +13,7 @@
 	dynamic_lighting = 0
 	luminosity = 1
 	can_border_transition = 1
-	var/static/list/parallax_overlays
+	var/static/list/parallax_appearances
 
 /turf/space/New()
 	if(loc)
@@ -22,15 +22,20 @@
 
 /turf/space/initialize()
 	icon_state = "[((x + y) ^ ~(x * y) + z) % 26]"
-	if(!parallax_overlays)
-		parallax_overlays = list()
+	if(!parallax_appearances)
+		parallax_appearances = list()
 		for(var/i in 0 to 25)
-			var/image/parallax_overlay = image('icons/turf/space_parallax1.dmi', "[i]")
+			var/I = "[i]"
+			var/image/base_image = image(icon = icon, icon_state = I) //only because byond will not create an image if you do not give it some values
+			base_image.appearance = appearance
+			base_image.icon_state = I
+			var/image/parallax_overlay = image('icons/turf/space_parallax1.dmi', I)
 			parallax_overlay.plane = SPACE_DUST_PLANE
 			parallax_overlay.alpha = 80
 			parallax_overlay.blend_mode = BLEND_ADD
-			parallax_overlays["[i]"] = parallax_overlay
-	overlays += parallax_overlays[icon_state]
+			base_image.overlays += parallax_overlay
+			parallax_appearances[I] = base_image
+	appearance = parallax_appearances[icon_state]
 
 /turf/space/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
