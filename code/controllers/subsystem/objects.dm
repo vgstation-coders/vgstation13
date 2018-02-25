@@ -20,6 +20,7 @@ var/list/processing_objects = list()
 /datum/subsystem/obj/Initialize()
 	for(var/atom/object in world)
 		object.initialize()
+		CHECK_TICK
 
 	..()
 
