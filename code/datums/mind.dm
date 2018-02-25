@@ -464,6 +464,16 @@
 			return
 		assigned_role = new_job
 
+	if (href_list["greet_role"])
+		var/datum/role/R = locate(href_list["greet_role"])
+		var/chosen_greeting
+		var/custom_greeting
+		if (R.greets.len)
+			chosen_greeting = input("Choose a greeting", "Assigned role", null) as null|anything in R.greets
+			if (chosen_greeting == "custom")
+				custom_greeting = input("Choose a custom greeting", "Assigned role", "")
+			R.Greet(chosen_greeting,custom_greeting)
+
 	if (href_list["add_role"])
 		var/list/available_roles = list()
 		for(var/role in subtypesof(/datum/role))
@@ -485,7 +495,7 @@
 		var/list/all_factions = list()
 		if (alert("Do you want that role to be part of a faction?", "Assigned role", "Yes", "No") == "Yes")
 			all_factions = get_faction_list()
-			var/join_faction = input("Select new faction", "Assigned faction", null) as null|anything in all_factions
+			joined_faction = input("Select new faction", "Assigned faction", null) as null|anything in all_factions
 
 
 		var/role_type = available_roles[new_role]
@@ -494,8 +504,13 @@
 			WARNING("Role killed itself or was otherwise missing!")
 			return
 
-		if (alert("Do you want to greet them as their new role?", "Assigned role", "Yes", "No") == "Yes")
-			var/
+		var/chosen_greeting
+		var/custom_greeting
+		if (newRole.greets.len)
+			if (alert("Do you want to greet them as their new role?", "Assigned role", "Yes", "No") == "Yes")
+				chosen_greeting = input("Choose a greeting", "Assigned role", null) as null|anything in newRole.greets
+				if (chosen_greeting == "custom")
+					custom_greeting = input("Choose a custom greeting", "Assigned role", "")
 
 		if(!newRole.AssignToRole(src,1))//it shouldn't fail since we're using our admin powers to force the role
 			newRole.Drop()//but just in case
@@ -515,7 +530,9 @@
 					joined.members.Add(newRole)
 					newRole.faction = joined
 
-		newRole.OnPostSetup(FALSE)//later we might make custom Greet() for admin-designated antags.
+		newRole.OnPostSetup(FALSE)
+		if (chosen_greeting)
+			newRole.Greet(chosen_greeting,custom_greeting)
 
 	else if(href_list["role_edit"])
 		var/datum/role/R = locate(href_list["role_edit"])
