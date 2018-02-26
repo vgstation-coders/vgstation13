@@ -5529,20 +5529,45 @@ obj/item/weapon/reagent_containers/food/snacks/butterstick
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/ambrosia_brownies/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
-	switch(rand(1,4))
-		if(1)
-			reagents.add_reagent(SPACE_DRUGS, 1)
-		if(2)
-			reagents.add_reagent(SPACE_DRUGS, 5)
-		if(3)
-			reagents.add_reagent(SPACE_DRUGS, 10)
-		if(4)
-			reagents.add_reagent(SPACE_DRUGS, 25)
+	reagents.add_reagent(NUTRIMENT, 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/ambrosia_brownie
 	name = "brownie"
 	desc = "A brownie that may or may not get you sky high."
 	icon_state = "ambrosia_brownie"
-	bitesize = 2
 	food_flags = FOOD_SWEET
+	
+obj/item/weapon/reagent_containers/food/snacks/butterfingers_r
+	name = "butter fingers"
+	desc = "It's a microwaved hand slathered in butter!"
+	icon_state = "butterfingers_r"
+	trash = /obj/item/trash/plate
+	food_flags = FOOD_ANIMAL
+	
+/obj/item/weapon/reagent_containers/food/snacks/butterfingers_r/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	
+obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
+	name = "butter fingers"
+	desc = "It's a microwaved hand slathered in butter!"
+	icon_state = "butterfingers_l"
+	trash = /obj/item/trash/plate
+	food_flags = FOOD_ANIMAL
+	
+/obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	
+obj/item/weapon/reagent_containers/food/snacks/butteredtoast
+	name = "buttered toast"
+	desc = "Toasted bread with butter on it."
+	icon_state = "butteredtoast"
+	
+/obj/item/weapon/reagent_containers/food/snacks/butterfedtoast/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	
+	
+
+	
