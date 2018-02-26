@@ -144,9 +144,9 @@
 			speaker_name = H.real_name
 		rendered_message = speech.render_message()
 		for(var/mob/living/L in player_list)//&& iscultist DUH
-			to_chat(L, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinister'>[rendered_message]</span></B></span>")
+			to_chat(L, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinister'>[speech.message]</span></B></span>")
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinister'>[rendered_message]</span></span>")
+			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinister'>[speech.message]</span></span>")
 		log_cultspeak("[key_name(speech.speaker)] Cult Communicate Rune: [rendered_message]")
 
 /obj/effect/cult_ritual/cult_communication/HasProximity(var/atom/movable/AM)
