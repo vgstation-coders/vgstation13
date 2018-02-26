@@ -119,7 +119,7 @@
 	if(stat == DEAD && butchering_drops)
 		var/datum/butchering_product/deer_head/our_head = locate(/datum/butchering_product/deer_head) in butchering_drops
 		if(istype(our_head))
-			icon_state = "[icon_dead][(our_head.amount) ? "_headless" : ""]"
+			icon_state = "[icon_dead][(our_head.amount) ? "" : "_headless"]"
 
 /mob/living/simple_animal/hostile/deer/cultify()
 	new /mob/living/simple_animal/hostile/deer/flesh(get_turf(src))

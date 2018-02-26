@@ -258,8 +258,23 @@
 		return "Its head has been taken. "
 
 /datum/butchering_product/deer_head/spawn_result(location, mob/parent)
-	..()
-	parent.update_icons()
+	if(isliving(parent))
+		var/mob/living/L = parent
+		L.update_icons()
+		L.mob_property_flags |= MOB_NO_LAZ
+
+	if(amount > 0)
+		amount--
+		var/obj/I = new result(location)
+
+		if(istype(parent, /mob/living/simple_animal/hostile/deer))
+			var/mob/living/simple_animal/hostile/deer/D = parent
+
+			if(D.icon_living == "deer_flower")
+				I.icon_state = "deer-head-flower"
+			else if(istype(D, /mob/living/simple_animal/hostile/deer/flesh))
+				I.icon_state = "deer-head-flesh"
+
 
 
 #define TEETH_FEW		/datum/butchering_product/teeth/few		//4-8
@@ -282,6 +297,7 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/hostile/creature			= list(TEETH_LOTS),
 	/mob/living/simple_animal/hostile/frog				= list(/datum/butchering_product/frog_leg),
 	/mob/living/simple_animal/hostile/deer				= list(/datum/butchering_product/skin/deer, /datum/butchering_product/deer_head),
+	/mob/living/simple_animal/hostile/deer/flesh		= list(/datum/butchering_product/skin/deer, /datum/butchering_product/deer_head),
 	/mob/living/carbon/monkey							= list(/datum/butchering_product/skin/monkey, TEETH_FEW),
 
 	/mob/living/carbon/human							= list(TEETH_HUMAN, /datum/butchering_product/skin/human),
