@@ -198,5 +198,8 @@
 /turf/space/void/New()
 	return
 
+/turf/space/void/initialize()
+	return
+
 /turf/space/has_gravity()
 	return 0

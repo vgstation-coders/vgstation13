@@ -238,6 +238,7 @@ What is the naming convention for planes or layers?
 
 /obj/abstract/screen/plane_master/clickmaster
 	plane = BASE_PLANE
+	mouse_opacity = 0
 
 var/obj/abstract/screen/plane_master/clickmaster/clickmaster = new()
 
