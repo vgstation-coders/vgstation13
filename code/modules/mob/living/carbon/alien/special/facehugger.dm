@@ -96,7 +96,7 @@
 					return
 
 /obj/item/clothing/mask/facehugger/proc/spreadout()
-	if(!target && isturf(loc))
+	if(!target && isturf(loc) && stat == CONSCIOUS)
 		for(var/obj/item/clothing/mask/facehugger/F in loc)
 			if(F != src && F.stat != DEAD)
 				step(src, pick(alldirs), 0)
