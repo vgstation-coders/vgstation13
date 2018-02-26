@@ -45,7 +45,7 @@ datum/emergency_shuttle/proc/init()
 	var/list/pods_to_test = list ("1","2","3","5")//ADD NEW PODS HERE
 	for (var/i in pods_to_test)
 		var/area/pod_test = locate(text2path("/area/shuttle/escape_pod[i]/station"))
-		if (area_in_map(pod_test))
+		if (pod_test.x)
 			escape_pods[i] = "station"
 
 

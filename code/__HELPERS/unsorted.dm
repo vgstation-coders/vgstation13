@@ -1679,13 +1679,6 @@ Game Mode config tags:
 /proc/sentStrikeTeams(var/team)
 	return (team in sent_strike_teams)
 
-
-/proc/area_in_map(var/area/A)
-	for (var/turf/T in A.area_turfs)
-		return TRUE
-	return FALSE
-
-
 /proc/get_exact_dist(atom/A, atom/B)	//returns the coordinate distance between the coordinates of the turfs of A and B
 	var/turf/T1 = A
 	var/turf/T2 = B
@@ -1713,17 +1706,17 @@ Game Mode config tags:
 
 	if(user)
 		user.drop_item(O, force_drop = TRUE)
-	
+
 	if(istype(O, /obj/item/weapon/grown))
 		var/obj/item/weapon/grown/F = O
 		if(F.plantname)
 			new_seed_type = plant_controller.seeds[F.plantname]
-	else 
+	else
 		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
 			var/obj/item/weapon/reagent_containers/food/snacks/grown/F = O
 			if(F.plantname)
 				new_seed_type = plant_controller.seeds[F.plantname]
-		else 
+		else
 			var/obj/item/F = O
 			if(F.nonplant_seed_type)
 				while(min_seeds <= produce)
