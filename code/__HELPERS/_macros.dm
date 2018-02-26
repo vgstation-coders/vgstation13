@@ -269,3 +269,6 @@ proc/get_space_area()
 #define subtypesof(A) (typesof(A) - A)
 
 #define LIBVG(function, arguments...) call("./libvg.[world.system_type == UNIX ? "so" : "dll"]", function)(arguments)
+
+// For areas that are on the map, `x` is the coordinate of the turf with the lowest z, y, and x coordinate (in that order) that is contained by the area.
+#define is_area_in_map(A) (A.x)
