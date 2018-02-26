@@ -1713,17 +1713,17 @@ Game Mode config tags:
 
 	if(user)
 		user.drop_item(O, force_drop = TRUE)
-	
+
 	if(istype(O, /obj/item/weapon/grown))
 		var/obj/item/weapon/grown/F = O
 		if(F.plantname)
 			new_seed_type = plant_controller.seeds[F.plantname]
-	else 
+	else
 		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
 			var/obj/item/weapon/reagent_containers/food/snacks/grown/F = O
 			if(F.plantname)
 				new_seed_type = plant_controller.seeds[F.plantname]
-		else 
+		else
 			var/obj/item/F = O
 			if(F.nonplant_seed_type)
 				while(min_seeds <= produce)
@@ -1743,3 +1743,14 @@ Game Mode config tags:
 
 	qdel(O)
 	return TRUE
+
+//Same as block(Start, End), but only returns the border turfs
+//'Start' must be lower-left, 'End' must be upper-right
+/proc/block_borders(turf/Start, turf/End)
+	ASSERT(istype(Start))
+	ASSERT(istype(End))
+
+	//i'm a lazy cunt and I don't feel like making this work
+	ASSERT(Start.x < End.x && Start.y < End.y)
+
+	return block(Start, End) - block(locate(Start.x + 1, Start.y + 1, Start.z), locate(End.x - 1, End.y - 1, End.z))
