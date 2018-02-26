@@ -145,6 +145,7 @@
 
 	if(ticker)
 		initialize()
+		update()
 
 /obj/machinery/power/apc/proc/init()
 	has_electronics = 2 //installed and secured
