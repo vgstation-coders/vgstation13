@@ -80,10 +80,10 @@
 		#endif
 		if(zone)
 			var/zone/z = zone
-			if(locate(/obj/machinery/door/airlock) in src) //Hacky, but prevents normal airlocks from rebuilding zones all the time
+			/*if(locate(/obj/machinery/door/airlock) in src) //Hacky, but prevents normal airlocks from rebuilding zones all the time
 				z.remove(src)
-			else
-				z.rebuild()
+			else*/
+			z.rebuild()
 
 		return 1
 
