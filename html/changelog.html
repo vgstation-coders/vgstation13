@@ -97,6 +97,15 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="bugfix">Fixed a bug where the hyperspace at the Mecha Graveyard would not throw you, allowing you to reach CentComm.</li>
 				<li class="bugfix">Increased the size of the Mecha Graveyard dock to accommodate the larger Defficiency cargo/research shuttle.</li>
 			</ul>
+			<h3 class="author">Tehsapper updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">added automatic charge mode for SMES, allowing them to charge using any amount of available power that is less or equal to their input level. The old ("manual") mode is still there.</li>
+				<li class="tweak">upgraded SMES have better capacity and max input/output.</li>
+				<li class="tweak">SMES UI now shows if input terminal or output power cable are missing.</li>
+				<li class="bugfix">fixed being able to reconstruct SMES for free power. New SMES start out with zero charge (roundstart SMES are not affected).</li>
+				<li class="bugfix">fixed SMES not connecting to output powernet upon construction.</li>
+				<li class="bugfix">fixed SMES being able to output (and lose) charge even if there is no powernet.</li>
+			</ul>
 			<h3 class="author">jknpj updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscdel">The mysterious/cursed dice can't be scanned by device analysers anymore.</li>
