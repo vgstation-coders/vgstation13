@@ -110,3 +110,8 @@
 
 	if(_chargedisplay != chargedisplay()) // If needed updates the icons overlay
 		update_icon()
+
+/obj/machinery/power/battery/portable/get_terminal()
+	if(connected_to)
+		return connected_to.terminal
+	return null
