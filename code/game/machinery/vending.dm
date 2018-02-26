@@ -17,7 +17,8 @@ var/global/num_vending_terminals = 1
 	var/subcategory = null
 	var/mini_icon = null
 
-/datum/data/vending_product/New(var/obj/item/item)
+//this proc is only used when an item is inserted into a custom vending machine.
+/datum/data/vending_product/proc/custom_entry(var/obj/item/item)
 	if(istype(item, /obj/item/stack))
 		var/obj/item/stack/S = item
 		stack_amount = S.amount
@@ -253,7 +254,7 @@ var/global/num_vending_terminals = 1
 				if(do_after_many(user, list(src, P), 3 SECONDS))
 					to_chat(user, "<span class='notice'>[bicon(src)] You finish refilling the vending machine.</span>")
 					playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
-					if(check_for_custom_vendor())
+					if(is_custom_machine)
 						custom_refill(P, user)
 					else
 						normal_refill(P, user)
@@ -263,16 +264,6 @@ var/global/num_vending_terminals = 1
 
 			else
 				to_chat(user, "<span class='warning'>This recharge pack isn't meant for this kind of vending machines.</span>")
-
-/obj/machinery/vending/proc/check_for_custom_vendor()
-	//We check if there's an in-game object instead of a typepath inside the vending machine.
-	for(var/item in products) //We only support the product list for the moment. This means no custom premium/contraband products
-		if(!ispath(item))
-			return TRUE
-	if(!products.len)
-		return TRUE
-
-	return FALSE
 
 /obj/machinery/vending/proc/normal_refill(obj/structure/vendomatpack/P, mob/user)
 	for (var/datum/data/vending_product/D in product_records)
@@ -349,9 +340,7 @@ var/global/num_vending_terminals = 1
 		R.original_amount = amount
 		R.price = price
 		R.display_color = pick("red", "blue", "green")
-		var/is_custom = FALSE
-		if(check_for_custom_vendor())
-			is_custom = TRUE
+		if(is_custom_machine)
 			var/obj/O = R.product_path
 			R.price = O.price
 			R.product_name = "[O.name]"
@@ -370,7 +359,7 @@ var/global/num_vending_terminals = 1
 			product_records.Add(R)
 
 		var/obj/item/initializer = typepath
-		if(!is_custom)
+		if(!is_custom_machine)
 			R.product_name = initial(initializer.name)
 		R.subcategory = initial(initializer.vending_cat)
 
@@ -559,7 +548,8 @@ var/global/num_vending_terminals = 1
 				var/obj/item/stack/S = item
 				VP.product_name = "A stack of [S.amount] [S.name]"
 			return
-	var/datum/data/vending_product/R = new(item)
+	var/datum/data/vending_product/R = new()
+	R.custom_entry(item)
 	product_records += R
 	products += item
 //H.wear_id
@@ -1146,7 +1136,13 @@ var/global/num_vending_terminals = 1
 			continue
 
 		R.amount--
-		throw_item = new dump_path(src.loc)
+
+		if(is_custom_machine)
+			products.Remove(throw_item)
+			throw_item = dump_path
+			throw_item.forceMove(get_turf(src))
+		else
+			throw_item = new dump_path(src.loc)
 
 		if (!throw_item)
 			return 0
