@@ -96,6 +96,10 @@
 
 	var/icon/logo_state = "synd-logo"
 
+	var/list/greets = list("default","custom")
+
+	var/wikiroute
+
 /datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	// Link faction.
 	faction=fac
@@ -236,12 +240,19 @@
  - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
  - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
 
-/datum/role/proc/Greet(var/you_are=1)
-	if(you_are) //Getting a bit philosphical, but there we go
-		to_chat(antag.current, "<B>You are \a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
-	to_chat(antag.current, "[ReturnObjectivesString(check_name = FALSE)]")
-	antag.store_memory("[ReturnObjectivesString(check_name = FALSE)]")
+/datum/role/proc/Greet(var/greeting,var/custom)
+	if(!greeting)
+		return
 
+	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	switch(greeting)
+		if ("custom")
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <B>[custom]</B>")
+		else
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <B>You are \a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
+
+/datum/role/proc/AnnounceObjectives()
+	to_chat(antag.current, "[ReturnObjectivesString(check_name = FALSE)]")
 
 /datum/role/proc/PreMindTransfer(var/datum/mind/M)
 	return
@@ -287,11 +298,17 @@
 
 	to_chat(world, text)
 
+/datum/role/proc/extraPanelButtons()
+	var/dat = ""
+	//example:
+	//dat = " - <a href='?src=\ref[M];spawnpoint=\ref[src]'>(move to spawn)</a>"
+	return dat
+
 /datum/role/proc/GetMemory(var/datum/mind/M, var/admin_edit = FALSE)
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	var/text = "<b><img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [name]</b>"
 	if (admin_edit)
-		text += " - <a href='?src=\ref[M];role_edit=\ref[src];remove_role=1'>(remove)</a>"
+		text += " - <a href='?src=\ref[M];role_edit=\ref[src];remove_role=1'>(remove)</a> - <a href='?src=\ref[M];greet_role=\ref[src]'>(greet)</a>[extraPanelButtons()]"
 	text += "<br>faction: "
 	if (faction)
 		text += faction.name

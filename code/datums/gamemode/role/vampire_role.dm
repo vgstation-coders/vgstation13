@@ -10,6 +10,7 @@
 	disallow_job = FALSE
 	restricted_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain")
 	logo_state = "vampire-logo"
+	greets = list("default","custom","admintoggle")
 
 
 	// -- Vampire mechanics --
@@ -28,14 +29,28 @@
 
 	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
 
-/datum/role/vampire/Greet(var/you_are = TRUE)
-	var/dat
-	if (you_are)
-		dat = "<span class='danger'>You are a Vampire!</br></span>"
-	dat += {"To drink blood from somebody, just bite their head (switch to harm intent, enable biting and attack the victim in the head with an empty hand). Drink blood to gain new powers and use coffins to regenerate your body if injured.
-	You are weak to holy things and starlight. Don't go into space and avoid the Chaplain, the chapel, and especially Holy Water."}
-	to_chat(antag.current, dat)
-	to_chat(antag.current, "<B>You must complete the following tasks:</B>")
+/datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
+	..()
+	wikiroute = role_wiki[ROLE_VAMPIRE]
+
+/datum/role/vampire/Greet(var/greeting,var/custom)
+	if(!greeting)
+		return
+
+	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	switch(greeting)
+		if ("custom")
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [custom]")
+		if ("admintoggle")
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>Your powers are awoken. Your lust for blood grows... You are a Vampire!</span></B>")
+		else
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Vampire!</br></span>")
+			to_chat(antag.current, "To drink blood from somebody, just bite their head (switch to harm intent, enable biting and attack the victim in the head with an empty hand).\
+				 Drink blood to gain new powers and use coffins to regenerate your body if injured.\
+				 You are weak to holy things and starlight.\
+				 Don't go into space and avoid the Chaplain, the chapel, and especially Holy Water.")
+
+	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
 /datum/role/vampire/OnPostSetup()
