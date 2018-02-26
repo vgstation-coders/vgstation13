@@ -269,7 +269,7 @@
 		H.g_hair = color_g
 		H.b_hair = color_b
 	H.update_hair()
-	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
+	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
 /obj/item/weapon/invisible_spray
 	name = "can of invisible spray"
@@ -341,7 +341,7 @@
 		to_chat(user, "You spray yourself with \the [src].")
 	else
 		to_chat(user, "You spray \the [target] with \the [src].")
-	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
+	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 	sprays_left--
 	if(istype(target, /obj/machinery/power/supermatter))
 		return 0

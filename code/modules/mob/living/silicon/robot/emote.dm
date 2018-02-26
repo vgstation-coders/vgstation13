@@ -152,7 +152,7 @@
 				message = "<B>[src]</B> beeps at [param]."
 			else
 				message = "<B>[src]</B> beeps."
-			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 50, 0)
+			playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
 			m_type = VISIBLE
 
 		if("ping")
@@ -169,7 +169,7 @@
 				message = "<B>[src]</B> pings at [param]."
 			else
 				message = "<B>[src]</B> pings."
-			playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 0)
+			playsound(src, 'sound/machines/ping.ogg', 50, 0)
 			m_type = VISIBLE
 
 		if("buzz")
@@ -186,14 +186,14 @@
 				message = "<B>[src]</B> buzzes at [param]."
 			else
 				message = "<B>[src]</B> buzzes."
-			playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
+			playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 			m_type = VISIBLE
 
 		if("law")
 			if (istype(module,/obj/item/weapon/robot_module/security))
 				message = "<B>[src]</B> shows its legal authorization barcode."
 
-				playsound(get_turf(src), 'sound/voice/biamthelaw.ogg', 50, 0)
+				playsound(src, 'sound/voice/biamthelaw.ogg', 50, 0)
 				m_type = HEARABLE
 			else
 				to_chat(src, "You are not THE LAW, pal.")
@@ -202,7 +202,7 @@
 			if (istype(module,/obj/item/weapon/robot_module/security))
 				message = "<B>[src]</B>'s speakers skreech, \"Halt! Security!\"."
 
-				playsound(get_turf(src), 'sound/voice/halt.ogg', 50, 0)
+				playsound(src, 'sound/voice/halt.ogg', 50, 0)
 				m_type = HEARABLE
 			else
 				to_chat(src, "You are not security.")

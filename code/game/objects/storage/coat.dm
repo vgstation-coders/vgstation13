@@ -44,7 +44,7 @@
 		var/mob/M = usr
 		if(istype(over_object, /obj/abstract/screen/inventory)) //was clickdragged to an inventory slot, we want to be able to take our coat off
 			if(!M.incapacitated() && is_holder_of(M, src))
-				playsound(get_turf(src), "rustle", 50, 1, -5)
+				playsound(src, "rustle", 50, 1, -5)
 				var/obj/abstract/screen/inventory/OI = over_object
 
 				if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))

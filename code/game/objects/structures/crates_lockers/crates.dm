@@ -399,7 +399,7 @@
 		return 0
 	if(!src.can_open())
 		return 0
-	playsound(get_turf(src), sound_effect_open, 15, 1, -3)
+	playsound(src, sound_effect_open, 15, 1, -3)
 
 	dump_contents()
 
@@ -413,7 +413,7 @@
 		return 0
 	if(!src.can_close())
 		return 0
-	playsound(get_turf(src), sound_effect_close, 15, 1, -3)
+	playsound(src, sound_effect_close, 15, 1, -3)
 
 	take_contents()
 
@@ -488,7 +488,7 @@
 		overlays += emag
 		overlays += sparks
 		spawn(6) overlays -= sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
-		playsound(get_turf(src), "sparks", 60, 1)
+		playsound(src, "sparks", 60, 1)
 		src.locked = 0
 		src.broken = 1
 		to_chat(user, "<span class='notice'>You unlock \the [src].</span>")
@@ -541,7 +541,7 @@
 			overlays += emag
 			overlays += sparks
 			spawn(6) overlays -= sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
-			playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+			playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 			src.locked = 0
 	if(!opened && prob(20/severity))
 		if(!locked)

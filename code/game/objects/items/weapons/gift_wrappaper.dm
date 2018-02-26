@@ -325,6 +325,6 @@
 
 /obj/item/weapon/winter_gift/dorkcube/attack_self(mob/user)
 	user.say("Loot get!")
-	playsound(get_turf(src), 'sound/misc/achievement.ogg', 30, 1)
+	playsound(src, 'sound/misc/achievement.ogg', 30, 1)
 	user.gib()
 	qdel(src)

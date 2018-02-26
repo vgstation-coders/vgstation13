@@ -242,7 +242,7 @@
 	src.visible_message("<span class='warning'>\The [src] groans from the pressure!</span>");
 
 	// Need SFX for groaning metal.
-	//playsound(get_turf(src), 'sound/effects/groan.ogg', 25, 1)
+	//playsound(src, 'sound/effects/groan.ogg', 25, 1)
 
 
 /obj/machinery/atmospherics/pipe/simple/proc/burst()

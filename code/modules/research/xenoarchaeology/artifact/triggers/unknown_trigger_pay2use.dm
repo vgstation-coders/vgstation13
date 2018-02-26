@@ -80,7 +80,7 @@
 				my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) || [item] inserted to ([my_effect.trigger]) || used by [key_name(toucher)].")
 				my_artifact.visible_message("<span class='info'>[toucher] inserts a coin into [my_artifact].</span>")
 				if(istype(item, /obj/item/weapon/coin/clown))
-					playsound(get_turf(my_artifact), 'sound/items/bikehorn.ogg', 50, 1)
+					playsound(my_artifact, 'sound/items/bikehorn.ogg', 50, 1)
 					time_left += 150
 				else if(istype(item, /obj/item/weapon/coin/iron))
 					time_left += 10

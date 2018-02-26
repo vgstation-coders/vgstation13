@@ -54,7 +54,7 @@
 			to_chat(user, "<span class='notice'>You can't secure \the [src] to [istype(src.loc,/turf/space) ? "space" : "this"]!</span>")
 			return
 		to_chat(user, "You discharge \the [src] and secure it to the floor.")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		switch(src.type)
 			if(/obj/item/weapon/stock_parts/capacitor)
 				new /obj/machinery/power/secured_capacitor(get_turf(src.loc))

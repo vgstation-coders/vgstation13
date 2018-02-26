@@ -126,7 +126,7 @@
 /obj/structure/trophy_mount/attackby(obj/item/weapon/W, mob/user)
 	if(iscrowbar(W))
 		to_chat(user, "You begin prying \the [initial(name)] off the wall.")
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src,10))
 			to_chat(user, "You pry \the [initial(name)] off of the wall.")
 			add_fingerprint(user)

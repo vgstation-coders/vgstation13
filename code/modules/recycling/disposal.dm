@@ -102,12 +102,12 @@
 				return
 			if(mode==0) // It's off but still not unscrewed
 				mode=-1 // Set it to doubleoff l0l
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "You remove the screws around the power connection.")
 				return
 			else if(mode==-1)
 				mode=0
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "You attach the screws around the power connection.")
 				return
 		else if(istype(I,/obj/item/weapon/weldingtool) && mode==-1)
@@ -116,7 +116,7 @@
 				return
 			var/obj/item/weapon/weldingtool/W = I
 			if(W.remove_fuel(0,user))
-				playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
+				playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 				to_chat(user, "You start slicing the floorweld off the disposal unit.")
 
 				if(do_after(user, src,20))
@@ -682,7 +682,7 @@
 			//testing("SENDING CLONG")
 			to_chat(M, "<FONT size=[max(0, 5 - get_dist(src, M))]>CLONG, clong!</FONT>")
 
-	playsound(get_turf(src), 'sound/effects/clang.ogg', 50, 0, 0)
+	playsound(src, 'sound/effects/clang.ogg', 50, 0, 0)
 
 /obj/machinery/disposal/is_airtight() //No polyacid smoke while inside the pipes. The disposals bins, inlets/outlets and such aren't counted for this purpose
 	return 1
@@ -935,7 +935,7 @@
 		var/obj/item/weapon/weldingtool/W = I
 
 		if(W.remove_fuel(0,user))
-			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
+			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 			to_chat(user, "You start slicing the disposal pipe.")
 			if(do_after(user, src, 3 SECONDS))
 				if(gcDestroyed || !W.isOn())
@@ -1087,7 +1087,7 @@
 
 		if(O.currTag)// Tag set
 			sort_tag = uppertext(O.destinations[O.currTag])
-			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
+			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
 			to_chat(user, "<span class='notice'>Changed filter to [sort_tag]</span>")
 			updatedesc()
 		return 1
@@ -1440,7 +1440,7 @@
 		var/obj/item/weapon/weldingtool/W = I
 
 		if(W.remove_fuel(0,user))
-			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
+			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 			to_chat(user, "You start slicing the disposal pipe.")
 			if(do_after(user, src, 3 SECONDS))
 				if(gcDestroyed || !W.isOn())
@@ -1577,18 +1577,18 @@
 	if(isscrewdriver(I))
 		if(mode==0)
 			mode=1
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "You remove the screws around the power connection.")
 			return
 		else if(mode==1)
 			mode=0
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "You attach the screws around the power connection.")
 			return
 	else if(istype(I,/obj/item/weapon/weldingtool) && mode==1)
 		var/obj/item/weapon/weldingtool/W = I
 		if(W.remove_fuel(0,user))
-			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
+			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 			to_chat(user, "You start slicing the floorweld off the disposal outlet.")
 			if(do_after(user, src, 20))
 				if(gcDestroyed || !W.isOn())

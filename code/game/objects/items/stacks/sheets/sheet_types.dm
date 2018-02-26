@@ -103,7 +103,7 @@
 			if(T.canBuildLattice(src))
 				if(src.use(1))
 					to_chat(user, "<span class='notice'>Constructing some foundations ...</span>")
-					playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
+					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 					new /obj/structure/lattice/wood(T)
 
 /obj/item/stack/sheet/wood/cultify()

@@ -450,7 +450,7 @@ proc/move_mining_shuttle()
 
 /obj/item/weapon/resonator/proc/CreateResonance(var/target, var/creator)
 	if(cooldown <= 0)
-		playsound(get_turf(src),'sound/effects/stealthoff.ogg',50,1)
+		playsound(src,'sound/effects/stealthoff.ogg',50,1)
 		var/obj/effect/resonance/R = new /obj/effect/resonance(get_turf(target))
 		R.creator = creator
 		cooldown = 1

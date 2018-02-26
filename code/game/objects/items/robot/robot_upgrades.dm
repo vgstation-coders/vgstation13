@@ -149,17 +149,17 @@
 
 
 /obj/item/borg/upgrade/restart/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	playsound(get_turf(R), "sound/machines/click.ogg", 20, 1)
+	playsound(R, "sound/machines/click.ogg", 20, 1)
 	to_chat(user, "You plug the board into the robot's core circuitry.")
 
 	sleep(5)
 
 	if(R.health < 0)
-		playsound(get_turf(R), "sound/machines/buzz-two.ogg", 50, 0)
+		playsound(R, "sound/machines/buzz-two.ogg", 50, 0)
 		to_chat(user, "You have to repair the robot before using this module!")
 		return FALSE
 
-	playsound(get_turf(R), "sound/machines/paistartup.ogg", 50, 1)
+	playsound(R, "sound/machines/paistartup.ogg", 50, 1)
 	to_chat(user, "<span style=\"font-family:Courier\">Systems reboot initialized successfully.</span>")
 
 	sleep(5)
@@ -169,7 +169,7 @@
 			if(ghost.mind && ghost.mind.current == R)
 				R.key = ghost.key
 
-	playsound(get_turf(R), "sound/voice/liveagain.ogg", 75, 1)
+	playsound(R, "sound/voice/liveagain.ogg", 75, 1)
 	R.stat = CONSCIOUS
 	R.resurrect()
 
@@ -325,4 +325,4 @@
 	if(istype(R.module,/obj/item/weapon/robot_module/tg17355) && R.icon_state == "peaceborg") //Honk!
 		R.icon_state = "clownegg"
 		R.update_icons()
-	playsound(get_turf(R), 'sound/items/AirHorn.ogg', 50, 1)
+	playsound(R, 'sound/items/AirHorn.ogg', 50, 1)

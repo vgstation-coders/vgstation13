@@ -110,7 +110,7 @@
 /turf/unsimulated/floor/snow/Entered(mob/user)
 	..()
 	if(isliving(user) && !user.locked_to && !user.lying && !user.flying)
-		playsound(get_turf(src), pick(snowsound), 10, 1, -1, channel = 123)
+		playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
 
 //This shit's fucked, should use relativewall. Problem is, relativewall is terrible and doesn't include diagonal directions
 //So in short relativewall needs to be reworked, along with all things relying on it. Fun times ahead

@@ -48,7 +48,7 @@
 		user.delayNextAttack(10)
 		health -= 2
 		healthcheck()
-		//playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
+		//playsound(src, 'sound/effects/glassknock.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] bangs against \the [src]!</span>", \
 		"<span class='warning'>You bang against \the [src]!</span>", \
 		"You hear banging.")
@@ -56,7 +56,7 @@
 	//Knock against it
 	else
 		user.delayNextAttack(10)
-		//playsound(get_turf(src), 'sound/effects/glassknock.ogg', 50, 1)
+		//playsound(src, 'sound/effects/glassknock.ogg', 50, 1)
 		user.visible_message("<span class='notice'>[user] knocks on \the [src].</span>", \
 		"<span class='notice'>You knock on \the [src].</span>", \
 		"You hear knocking.")
