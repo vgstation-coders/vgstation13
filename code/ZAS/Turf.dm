@@ -67,23 +67,20 @@
 
 				SSair.connect(sim, src)
 
-/turf/simulated/update_air_properties()
+/turf/simulated/update_air_properties(var/verbose = TRUE)
 	if(zone && zone.invalid)
 		c_copy_air()
 		zone = null //Easier than iterating through the list at the zone.
 
 	var/s_block = c_airblock(src)
-	if(s_block & AIR_BLOCKED)
+	if(s_block & AIR_BLOCKED && !locate(/obj/machinery/door/airlock) in src)
 		#ifdef ZASDBG
-		to_chat(if(verbose) world, "Self-blocked.")
+		if(verbose)
+			to_chat( world, "Self-blocked.")
 		//dbg(blocked)
 		#endif
 		if(zone)
-			var/zone/z = zone
-			/*if(locate(/obj/machinery/door/airlock) in src) //Hacky, but prevents normal airlocks from rebuilding zones all the time
-				z.remove(src)
-			else*/
-			z.rebuild()
+			zone.rebuild()
 
 		return 1
 
@@ -106,7 +103,8 @@
 		if(block & AIR_BLOCKED)
 
 			#ifdef ZASDBG
-			to_chat(if(verbose) world, "[d] is blocked.")
+			if(verbose)
+				to_chat(world, "[d] is blocked.")
 			//unsim.dbg(air_blocked, turn(180,d))
 			#endif
 
@@ -116,7 +114,8 @@
 		if(r_block & AIR_BLOCKED)
 
 			#ifdef ZASDBG
-			to_chat(if(verbose) world, "[d] is blocked.")
+			if(verbose)
+				to_chat( world, "[d] is blocked.")
 			//dbg(air_blocked, d)
 			#endif
 
@@ -143,7 +142,8 @@
 					//if((block & ZONE_BLOCKED) || (r_block & ZONE_BLOCKED && !(s_block & ZONE_BLOCKED)))
 					if(((block & ZONE_BLOCKED) && !(r_block & ZONE_BLOCKED)) || (r_block & ZONE_BLOCKED && !(s_block & ZONE_BLOCKED)))
 						#ifdef ZASDBG
-						to_chat(if(verbose) world, "[d] is zone blocked.")
+						if(verbose)
+							to_chat(world, "[d] is zone blocked.")
 						//dbg(zone_blocked, d)
 						#endif
 
@@ -158,22 +158,26 @@
 
 						#ifdef ZASDBG
 						dbg(assigned)
-						to_chat(if(verbose) world, "Added to [zone]")
+						if(verbose)
+							to_chat(world, "Added to [zone]")
 						#endif
 
 				else if(sim.zone != zone)
 
 					#ifdef ZASDBG
-					to_chat(if(verbose) world, "Connecting to [sim.zone]")
+					if(verbose)
+						to_chat(world, "Connecting to [sim.zone]")
 					#endif
 
 					SSair.connect(src, sim)
 
 
 			#ifdef ZASDBG
-				to_chat(else if(verbose) world, "[d] has same zone.")
+				else if(verbose)
+					to_chat(world, "[d] has same zone.")
 
-			to_chat(else if(verbose) world, "[d] has invalid zone.")
+			else if(verbose)
+				to_chat(world, "[d] has invalid zone.")
 			#endif
 
 		else
