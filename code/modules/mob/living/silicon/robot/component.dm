@@ -140,6 +140,11 @@
 	var/electronics_damage = 0
 	var/vulnerability = 1 //Multiplies the damage taken by this ammount.
 
+/obj/item/robot_parts/robot_component/examine(mob/user)
+	..()
+	if(brute_damage || electronics_damage)
+		to_chat(user, text("<span class='warning'>It looks[brute_damage ? " dented" : ""][(brute_damage && electronics_damage) ? " and" : ""][electronics_damage ? " charred" : ""].</span>"))
+
 /obj/item/robot_parts/robot_component/binary_communication_device
 	name = "binary communication device"
 	icon_state = "binary_translator"

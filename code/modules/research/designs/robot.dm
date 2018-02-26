@@ -75,7 +75,7 @@
 	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
 	build_type = MECHFAB
 	build_path = /obj/item/robot_parts/chest/reinforced
-	category = "Robot"
+	category = "Robot_Part"
 	materials = list(MAT_IRON=40000, MAT_SILVER=10000, MAT_GOLD=5000, MAT_URANIUM=5000, MAT_DIAMOND=5000, MAT_PLASMA=5000)
 
 
