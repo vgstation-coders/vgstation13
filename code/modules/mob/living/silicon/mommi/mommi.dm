@@ -12,41 +12,46 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	icon_state = "mommi"
 	maxHealth = 60
 	health = 60
+
+	speed = 0
+
 	pass_flags = PASSTABLE
+	mob_bump_flag = ROBOT
+	mob_swap_flags = ALLMOBS
+	mob_push_flags = 0
 
+	modtype = "MoMMI"
+
+	//New() stuff
 	startup_sound = 'sound/misc/interference.ogg'
-	cell_type = "/obj/item/weapon/cell"
 
-	scrambledcodes = TRUE //Don't appear on the SS13/ROBOTS cameranet.
-	var/keeper= TRUE // FALSE = No, TRUE = Yes (Disables speech and common radio.)
+	//This is no cyborg boy, no cyborg!
+	cell_type = /obj/item/weapon/cell/crepe/mommi //The secret behind MoMMIs, literal powercreep.
+	wiring_type = /datum/wires/robot/mommi
+
+	AIlink = FALSE //Fuck AIs, you're a crab.
+	lawupdate = FALSE //This is already set to FALSE thanks to no AIlink but eh, it won't hurt to set it to FALSE by default.
+	scrambledcodes = TRUE //Don't appear on the SS13/ROBOTS cameranet, you're not supposed to be a ventcrawling security camera.
+
+	//MoMMI stuff
 	var/picked_icon = FALSE
-	var/obj/abstract/screen/inv_tool = null
+
+	var/keeper= TRUE // FALSE = No, TRUE = Yes (Disables speech and common radio.)
 	var/prefix = "Mobile MMI"
 	var/damage_control_network = "Damage Control"
 
 	var/static_choice = "static"
 	var/list/static_choices = list("static", "letter", "blank")
 
-	mob_bump_flag = ROBOT
-	mob_swap_flags = ALLMOBS
-	mob_push_flags = 0
-
+	var/obj/abstract/screen/inv_tool = null
 	var/obj/item/tool_state = null
 	var/obj/item/head_state = null
 
-	modtype = "MoMMI"
-	lawupdate = FALSE //Cyborgs will sync their laws with their AI by default, but we may want MoMMIs to be mute independents at some point, kinda like the Keepers in Ass Effect.
-
-	speed = 0
-
-/proc/getAvailableMoMMIModules()
-	var/list/modules = list("Nanotrasen", "Soviet")
-	return modules
 
 /mob/living/silicon/robot/mommi/pick_module(var/forced_module = null)
 	if(module)
 		return
-	var/list/modules = getAvailableMoMMIModules()
+	var/list/modules = mommi_modules
 
 	if(forced_module)
 		modtype = forced_module
@@ -100,7 +105,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		if(module)
 			var/obj/item/weapon/robot_module/mommi/mymodule = module
 			to_chat(user, "<span class='warning'>[mymodule.ae_type] anti-emancipation override initiated.</span>")
-		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
+		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return TRUE
 	if(..())
 		return TRUE

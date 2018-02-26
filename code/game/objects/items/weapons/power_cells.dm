@@ -70,6 +70,10 @@
 	maxcharge = 10000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 60)
 
+/obj/item/weapon/cell/high/cyborg
+	name = "cyborg rechargeable power cell"
+	maxcharge = 7500
+
 /obj/item/weapon/cell/high/empty/New()
 	..()
 	charge = 0
@@ -108,6 +112,11 @@
 	w_type = RECYK_BIOLOGICAL
 	minor_fault = 1
 
+/obj/item/weapon/cell/potato/soviet
+	charge = 15000
+	maxcharge = 15000
+	minor_fault = 0
+
 /obj/item/weapon/cell/crepe
 	name = "power crêpe"
 	desc = "Warning: May contain dairy products, 12,000kJ of searing death, gluten."
@@ -117,6 +126,11 @@
 	charge = 12000
 	w_type = RECYK_BIOLOGICAL
 	minor_fault = 1
+
+/obj/item/weapon/cell/crepe/mommi
+	maxcharge = 10000
+	charge = 10000
+	minor_fault = 0
 
 /obj/item/weapon/cell/crepe/attack_self(var/mob/living/user)
 	if(charge)

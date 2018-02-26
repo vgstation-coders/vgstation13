@@ -14,7 +14,7 @@ var/list/ai_list = list()
 
 /mob/living/silicon/ai
 	name = "AI"
-	icon = 'icons/mob/AI.dmi'//
+	icon = 'icons/mob/AI.dmi'
 	icon_state = "ai"
 	anchored = TRUE // -- TLE
 	density = TRUE
@@ -25,8 +25,7 @@ var/list/ai_list = list()
 	var/list/network = list(CAMERANET_SS13)
 	var/obj/machinery/camera/current = null
 	var/list/connected_robots = list()
-	var/aiRestorePowerRoutine = FALSE
-	//var/list/laws = list()
+	var/aiRestorePowerRoutine = 0
 	var/alarms = list("Motion"=list(), "Fire"=list(), "Atmosphere"=list(), "Power"=list(), "Camera"=list())
 	var/viewalerts = FALSE
 	var/lawcheck[1]

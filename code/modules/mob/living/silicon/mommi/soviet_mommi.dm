@@ -6,7 +6,7 @@
   namepick_uses = 0 
 
   startup_sound = 'sound/misc/soviet.ogg'
-  cell_type = "/obj/item/weapon/cell/potato"
+  cell_type = /obj/item/weapon/cell/potato/soviet
 
 /mob/living/silicon/robot/mommi/soviet/updatename() // Fuck individualism
   name = "[prefix] [num2text(ident)]"
@@ -24,4 +24,4 @@
   pick_module("Soviet")
   var/obj/item/clothing/head/ushanka/soviet_hat = new /obj/item/clothing/head/ushanka(src)
   equip_to_slot(soviet_hat, slot_head, TRUE)
-  generate_static_overlay()  
+  generate_static_overlay()

@@ -16,7 +16,6 @@
 
 	//New() stuff
 	var/startup_sound = 'sound/voice/liveagain.ogg'
-	var/cell_type = /obj/item/weapon/cell
 
 	// Alerts
 	var/pressure_alert = FALSE
@@ -42,7 +41,11 @@
 	var/module_state_3 = null
 
 	var/mob/living/silicon/ai/connected_ai = null
+	var/AIlink = TRUE //Do we start linked to an AI?
+
 	var/obj/item/weapon/cell/cell = null
+	var/cell_type = /obj/item/weapon/cell/high/cyborg //The cell_type we're actually using.
+
 	var/obj/machinery/camera/camera = null
 
 	// Components are basically robot organs.
@@ -50,6 +53,7 @@
 	var/obj/item/device/mmi/mmi = null
 	var/obj/item/device/pda/ai/rbPDA = null
 	var/datum/wires/robot/wires = null
+	var/wiring_type = /datum/wires/robot
 
 	mob_bump_flag = ROBOT
 	mob_swap_flags = ROBOT|MONKEY|SLIME|SIMPLE_ANIMAL
@@ -96,23 +100,20 @@
 	updateicon()
 
 	laws = getLawset(src)
-
-	if(isMoMMI(src))
-		wires = new /datum/wires/robot/mommi(src)
-	else
-		wires = new(src)
+	wires = new wiring_type(src)
+	station_holomap = new(src)
+	radio = new /obj/item/device/radio/borg(src)
+	aicamera = new/obj/item/device/camera/silicon/robot_camera(src)
+	
+	if(AIlink)
 		connected_ai = select_active_ai_with_fewest_borgs()
+
 	if(connected_ai)
 		connected_ai.connected_robots += src
 		lawsync()
 		lawupdate = TRUE
 	else
 		lawupdate = FALSE
-
-	station_holomap = new(src)
-
-	radio = new /obj/item/device/radio/borg(src)
-	aicamera = new/obj/item/device/camera/silicon/robot_camera(src)
 
 	if(!scrambledcodes && !camera)
 		camera = new /obj/machinery/camera(src)
@@ -131,8 +132,6 @@
 
 	if(!cell)
 		cell = new cell_type(src)
-		cell.maxcharge = 7500
-		cell.charge = 7500
 
 	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
 	hud_list[DIAG_CELL_HUD] = image('icons/mob/hud.dmi', src, "hudbattmax")
@@ -236,7 +235,7 @@
 	updatename()
 
 	if(modtype == ("Security" || "Combat" || "Syndicate"))
-		to_chat(src, "<span class='warning'><big><b>Regardless of your module, your wishes, or the needs of the beings around you, absolutely nothing takes higher priority than following your silicon lawset.</b></big></span>")
+		to_chat(src, "<span class='big warning'><b>Regardless of your module, your wishes, or the needs of the beings around you, absolutely nothing takes higher priority than following your silicon lawset.</b></span>")
 
 	set_module_sprites(module.sprites)
 
@@ -290,9 +289,9 @@
 
 	var/newname
 	for(var/i = 1 to 3)
-		newname = trimcenter(trim(stripped_input(src,"You are a robot. Enter a name, or leave blank for the default name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN))
+		newname = trimcenter(trim(stripped_input(src,"You are a <b>[braintype]</b>. Enter a name, or leave blank for the default name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN))
 		if(newname == null)
-			if(alert(src,"Are you sure you want a default borg name?",,"Yes","No") == "Yes")
+			if(alert(src,"Are you sure you want the default name?",,"Yes","No") == "Yes")
 				break
 		else
 			if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
@@ -1373,49 +1372,53 @@
 /mob/living/silicon/robot/identification_string()
 	return "[name] ([modtype] [braintype])"
 
+/mob/living/silicon/robot/proc/UpgradeSelf(var/obj/item/borg/upgrade/upgrade = null)
+	if(!upgrade)
+		return
+	var/obj/item/borg/upgrade/new_upgrade = new upgrade(src)
+	new_upgrade.attempt_action(src, src, TRUE)
+	qdel(new_upgrade)
+
 //Combat module debug subtype.
+/mob/living/silicon/robot/debug_droideka
+	cell_type = /obj/item/weapon/cell/hyper
+
 /mob/living/silicon/robot/debug_droideka/New()
 	..()
 
 	UnlinkSelf()
 	laws = new /datum/ai_laws/ntmov()
-	cell.maxcharge = 30000
-	cell.charge = 30000
-
 	pick_module("Combat")
 	set_module_sprites(list("Droid" = "droid-combat"))
 
 //Syndicate subtype because putting this on new() is fucking retarded.
+/mob/living/silicon/robot/syndie
+	cell_type = /obj/item/weapon/cell/hyper
+
 /mob/living/silicon/robot/syndie/New()
 	..()
 
 	UnlinkSelf()
 	laws = new /datum/ai_laws/syndicate_override()
-	cell.maxcharge = 25000
-	cell.charge = 25000
-	
 	pick_module("Syndicate")
 
 //Moving hugborgs to an easy-to-spawn subtype because they were as retarded as the syndie one.
+/mob/living/silicon/robot/hugborg
+	cell_type = /obj/item/weapon/cell/super
+
 /mob/living/silicon/robot/hugborg/New()
 	..()
 
 	UnlinkSelf()
 	laws = new /datum/ai_laws/asimov()
-	cell.maxcharge = 15000
-	cell.charge = 15000
 
 	pick_module("TG17355")
 	set_module_sprites(list("Peacekeeper" = "peaceborg"))
 
 /mob/living/silicon/robot/hugborg/clown/New()
 	..()
-
-	var/obj/item/borg/upgrade/honk/upgrade = new /obj/item/borg/upgrade/honk(src)
-	upgrade.attempt_action(src, src, TRUE)
-	upgrade = null
+	UpgradeSelf(/obj/item/borg/upgrade/honk)
 
 /mob/living/silicon/robot/hugborg/ball/New()
 	..()
-
 	set_module_sprites(list("Omoikane" = "omoikane"))
