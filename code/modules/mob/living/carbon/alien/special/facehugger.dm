@@ -276,6 +276,7 @@
 	if(iscarbon(L))
 		var/mob/living/carbon/target = L
 		var/obj/item/clothing/W = target.get_item_by_slot(slot_wear_mask)
+		var/obj/item/weapon/tank/had_internal = target.internal
 
 		if(W && W != src)
 			if(prob(CHANCE_TO_NOT_REMOVE_MASKS))
@@ -289,6 +290,8 @@
 		forceMove(target)
 		target.equip_to_slot(src, slot_wear_mask)
 		target.update_inv_wear_mask()
+		target.internal = had_internal //Try to keep the host ALIVE
+		target.update_internals()
 
 		if(!sterile && target.hasmouth)
 			L.Paralyse((preggers/10)+10) //something like 25 ticks = 20 seconds with the default settings
@@ -351,7 +354,7 @@
 		stat_collection.xeno_faces_hugged++
 
 		Die()
-		target.drop_from_inventory(src)
+		//target.drop_from_inventory(src)
 		icon_state = "[initial(icon_state)]_impregnated"
 
 		if(iscorgi(target))
