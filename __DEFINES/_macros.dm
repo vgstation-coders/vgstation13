@@ -1,4 +1,3 @@
-///MACRO FILE//
 //Define your macros here if they're used in general code
 
 //Typechecking macros
