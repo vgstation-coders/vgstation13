@@ -262,6 +262,10 @@ var/global/list/dockinglights = list()
 /obj/machinery/docklight/New()
 	..()
 	dockinglights += src
+	
+/obj/machinery/docklight/Destroy()
+	dockinglights -= src
+	..()
 
 /obj/machinery/docklight/update_icon()
 	if(triggered)
