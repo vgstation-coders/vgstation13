@@ -214,9 +214,6 @@ obj/machinery/gibber/New()
 		else
 			newmeat = new occupant.meat_type()
 
-	//	if(istype(newmeat, /obj/item/weapon/reagent_containers))
-
-
 		if(src.occupant.reagents)
 			src.occupant.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
 
