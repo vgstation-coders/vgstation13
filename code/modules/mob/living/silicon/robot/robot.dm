@@ -1371,8 +1371,6 @@
 
 /mob/living/silicon/robot/identification_string()
 	return "[name] ([modtype] [braintype])"
-<<<<<<< HEAD
-=======
 
 /mob/living/silicon/robot/proc/install_upgrade(var/mob/user = null, var/obj/item/borg/upgrade/upgrade = null)
 	if(!user || !upgrade)
