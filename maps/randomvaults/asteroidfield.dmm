@@ -1,7 +1,7 @@
 "a" = (/turf/space,/area)
-"b" = (/turf/unsimulated/mineral/random/high_chance_clown,/area/vault/clownasteroid)
-"c" = (/obj/item/weapon/pickaxe/diamond,/obj/item/weapon/storage/belt/mining,/obj/item/weapon/storage/bag/ore,/turf/unsimulated/floor/asteroid/air,/area/vault/clownasteroid)
-"d" = (/obj/effect/landmark/corpse/clown,/turf/unsimulated/floor/asteroid/air,/area/vault/clownasteroid)
+"b" = (/turf/unsimulated/mineral/random/high_chance_clown,/area/vault/asteroidfield)
+"c" = (/obj/item/weapon/pickaxe/diamond,/obj/item/weapon/storage/belt/mining,/obj/item/weapon/storage/bag/ore,/turf/unsimulated/floor/asteroid/air,/area/vault/asteroidfield)
+"d" = (/obj/effect/landmark/corpse/clown,/turf/unsimulated/floor/asteroid/air,/area/vault/asteroidfield)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaabbaaaaa
