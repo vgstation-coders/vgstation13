@@ -1412,12 +1412,19 @@ Thanks.
 		return
 
 	if(!can_butcher)
-		if(meat_taken)
-			to_chat(user, "<span class='notice'>[src] has already been butchered.</span>")
-			return
-		else
-			to_chat(user, "<span class='notice'>You can't butcher [src]!")
-			return
+		to_chat(user, "<span class='notice'>You can't butcher [src]!")
+		return
+
+	var/drops_remain = FALSE
+
+	if(butchering_drops && butchering_drops.len)
+		for(var/datum/butchering_product/P in butchering_drops)
+			if(P.amount > 0)
+				drops_remain = TRUE
+				break
+
+	if(meat_taken >= meat_amount && !drops_remain)
+		to_chat(user, "<span class='notice'>[src] has already been butchered.</span>")
 		return
 
 	var/obj/item/tool = null	//The tool that is used for butchering
@@ -1463,7 +1470,8 @@ Thanks.
 
 	if(src.butchering_drops && src.butchering_drops.len)
 		var/list/actions = list()
-		actions += "Butcher"
+		if(meat_taken < meat_amount)
+			actions += "Butcher"
 		for(var/datum/butchering_product/B in src.butchering_drops)
 			if(B.amount <= 0)
 				continue
@@ -1517,7 +1525,6 @@ Thanks.
 		return
 
 	to_chat(user, "<span class='info'>You butcher \the [src].</span>")
-	can_butcher = 0
 
 	if(istype(src, /mob/living/simple_animal)) //Animals can be butchered completely, humans - not so
 		if(src.size > SIZE_TINY) //Tiny animals don't produce gibs
