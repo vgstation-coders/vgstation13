@@ -77,6 +77,6 @@
 
 /obj/effect/mine/stun/trigger(mob/AM)
 	if(ismob(AM))
-		AM.Stun(30)
+		AM.Knockdown(10)
 	spark(src)
 	qdel(src)

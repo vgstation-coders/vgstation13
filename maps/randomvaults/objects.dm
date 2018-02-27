@@ -253,6 +253,9 @@
 /area/vault/icecomet
 	jammed = 2
 
+/area/vault/assistantlair
+	jammed = 2
+
 
 /area/vault/research
 
