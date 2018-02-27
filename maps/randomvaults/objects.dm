@@ -46,6 +46,8 @@
 
 /area/vault/asteroid
 
+/area/vault/asteroidfield
+
 /area/vault/tommyboyasteroid
 	requires_power = 1
 
