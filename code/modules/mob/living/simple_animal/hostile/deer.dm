@@ -88,8 +88,6 @@
 
 
 /mob/living/simple_animal/hostile/deer/attackby(obj/W, mob/user)
-	..()
-
 	if(!isDead() && (istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/apple) || (istype (W, /obj/item/weapon/reagent_containers/food/snacks/grown/goldapple))))
 		var/obj/item/weapon/reagent_containers/food/snacks/grown/apple/A = W
 
@@ -112,6 +110,8 @@
 		if(istype (W, /obj/item/weapon/reagent_containers/food/snacks/grown/apple/poisoned))
 			spawn(rand(50,150))
 				Die() //You dick
+		return
+	..()
 
 /mob/living/simple_animal/hostile/deer/update_icons()
 	.=..()
