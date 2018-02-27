@@ -102,6 +102,7 @@
 				return 0
 
 		remove_from_mob(to_drop) //clean out any refs
+		to_drop.dropped(src)
 		to_drop.forceMove(Target)
 		update_items()
 		return 1

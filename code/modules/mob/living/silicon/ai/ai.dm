@@ -95,7 +95,6 @@ var/list/ai_list = list()
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 	real_name = pickedName
 	name = real_name
-	view_core()
 	anchored = TRUE
 	canmove = FALSE
 	setDensity(TRUE)

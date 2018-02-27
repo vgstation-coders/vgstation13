@@ -181,8 +181,8 @@ var/datum/controller/gameticker/ticker
 		mode.post_setup()
 		//Cleanup some stuff
 		for(var/obj/effect/landmark/start/S in landmarks_list)
-			//Deleting Startpoints but we need the ai point to AI-ize people later
-			if (S.name != "AI")
+			//Deleting Startpoints but we need the ai point to AI-ize people later and the Trader point to throw new ones
+			if (S.name != "AI" && S.name != "Trader")
 				qdel(S)
 		var/list/obj/effect/landmark/spacepod/random/L = list()
 		for(var/obj/effect/landmark/spacepod/random/SS in landmarks_list)

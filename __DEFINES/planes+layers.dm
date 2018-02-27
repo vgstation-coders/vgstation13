@@ -195,6 +195,7 @@ What is the naming convention for planes or layers?
 	#define SINGULARITY_LAYER 		6
 	#define ABOVE_SINGULO_LAYER 	7
 	#define GRAVITYGRID_LAYER 		8
+	#define SNOW_OVERLAY_LAYER		9
 
 #define LIGHTING_PLANE 			19
 
@@ -238,6 +239,7 @@ What is the naming convention for planes or layers?
 
 /obj/abstract/screen/plane_master/clickmaster
 	plane = BASE_PLANE
+	mouse_opacity = 0
 
 var/obj/abstract/screen/plane_master/clickmaster/clickmaster = new()
 

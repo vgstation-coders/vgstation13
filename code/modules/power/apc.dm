@@ -115,7 +115,8 @@
 	..(loc)
 
 	if(areaMaster.areaapc)
-		world.log << "Second APC detected in area: [areaMaster.name]. Deleting the second APC."
+		var/turf/T = get_turf(src)
+		world.log << "Second APC detected in area: [areaMaster.name] [T.x], [T.y], [T.z]. Deleting the second APC."
 		qdel(src)
 		return
 
@@ -145,6 +146,7 @@
 
 	if(ticker)
 		initialize()
+		update()
 
 /obj/machinery/power/apc/proc/init()
 	has_electronics = 2 //installed and secured
@@ -172,9 +174,6 @@
 	name = "[areaMaster.name] APC"
 
 	update_icon()
-
-	spawn(5)
-		update()
 
 /obj/machinery/power/apc/examine(mob/user)
 	..()
