@@ -404,6 +404,7 @@
 /obj/item/weapon/weldingtool/proc/setWelding(var/temp_welding)
 	//If we're turning it on
 	if(temp_welding > 0)
+		src.welding = 1
 		if (remove_fuel(1))
 			to_chat(usr, "<span class='notice'>\The [src] switches on.</span>")
 			src.force = 15

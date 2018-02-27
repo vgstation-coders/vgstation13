@@ -386,16 +386,16 @@
 	if(istype(deployed, /obj/item/device/flashlight))
 		set_light(brightness_max)
 
-	//Since you can't turn off the welder inside the tool, I'm using the unused welder that very slowly regens fuel, looks like 1u per 5 byond seconds, thanks byond.
+//Since you can't turn off the welder inside the tool, I'm using the unused welder that very slowly regens fuel, 5 fuel per process().
 //It can be refulled manually, but since it starts active you will blow up welder tanks if deployed and then put to a tank.
 	if(istype(deployed, /obj/item/weapon/weldingtool/experimental))
 		var/obj/item/weapon/weldingtool/experimental/weldingtool = deployed
-		weldingtool.welding = 1
-		weldingtool.status = 1
-		weldingtool.max_fuel = 50
-		weldingtool.start_fueled = 1
+		weldingtool.setWelding(1)
 
 /obj/item/weapon/switchtool/holo/undeploy()
+	if(istype(deployed, /obj/item/weapon/weldingtool/experimental))
+		var/obj/item/weapon/weldingtool/experimental/weldingtool = deployed
+		weldingtool.setWelding(0)
 	..()
 	set_light(0)
 
