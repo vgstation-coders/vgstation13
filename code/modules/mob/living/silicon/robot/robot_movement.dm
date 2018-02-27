@@ -1,3 +1,11 @@
+/mob/living/silicon/robot/Process_Spaceslipping(var/prob_slip = 5)
+	if(module && module.no_slip) //	The magic of magnets.
+		return FALSE
+	..()
+
+/mob/living/silicon/robot/CheckSlip()
+	return ((module && module.no_slip)? -1 : 0)
+
 /mob/living/silicon/robot/Process_Spacemove(var/check_drift = FALSE)
 	if(module)
 		for(var/obj/item/weapon/tank/jetpack/J in module.modules)
@@ -11,13 +19,15 @@
 		return TRUE
 	return FALSE
 
- //No longer needed, but I'll leave it here incase we plan to re-use it.
 /mob/living/silicon/robot/movement_tally_multiplier()
 	. = ..()
 	if(is_component_functioning("power cell") && cell)
 		if(module_active && istype(module_active,/obj/item/borg/combat/mobility))
-			. *= CYBORG_MOBILITY_MODULE_MODIFIER
-		if(src.cell.charge <= 0)
-			. += CYBORG_NO_CHARGE_SLOWDOWN
+			. *= SILICON_MOBILITY_MODULE_SPEED_MODIFIER
+		if(cell.charge <= 0)
+			. *= SILICON_NO_CHARGE_SLOWDOWN
+		else
+			if(module)
+				. *= module.speed_modifier
 	else
-		. += CYBORG_NO_CELL_SLOWDOWN
+		. *= SILICON_NO_CELL_SLOWDOWN

@@ -386,3 +386,21 @@ var/list/blacklisted_mobs = list(
 		/mob/living/adamantine_dust // Ditto
 		)
 
+//Global list of all Cyborg/MoMMI modules.
+var/global/list/robot_modules = list(
+	"Standard"		= /obj/item/weapon/robot_module/standard,
+	"Service" 		= /obj/item/weapon/robot_module/butler,
+	"Supply" 		= /obj/item/weapon/robot_module/miner,
+	"Medical" 		= /obj/item/weapon/robot_module/medical,
+	"Security" 		= /obj/item/weapon/robot_module/security,
+	"Engineering"	= /obj/item/weapon/robot_module/engineering,
+	"Janitor" 		= /obj/item/weapon/robot_module/janitor,
+	"Combat" 		= /obj/item/weapon/robot_module/combat,
+	"Syndicate"		= /obj/item/weapon/robot_module/syndicate,
+	"TG17355"		= /obj/item/weapon/robot_module/tg17355
+    )
+
+var/global/list/mommi_modules = list(
+	"Nanotrasen"    = /obj/item/weapon/robot_module/mommi/nt,
+	"Soviet" 	    = /obj/item/weapon/robot_module/mommi/soviet
+	)
