@@ -1415,18 +1415,6 @@ Thanks.
 		to_chat(user, "<span class='notice'>You can't butcher [src]!")
 		return
 
-	var/drops_remain = FALSE
-
-	if(butchering_drops && butchering_drops.len)
-		for(var/datum/butchering_product/P in butchering_drops)
-			if(P.amount > 0)
-				drops_remain = TRUE
-				break
-
-	if(meat_taken >= meat_amount && !drops_remain)
-		to_chat(user, "<span class='notice'>[src] has already been butchered.</span>")
-		return
-
 	var/obj/item/tool = null	//The tool that is used for butchering
 	var/speed_mod = 1.0			//The higher it is, the faster you butcher
 	var/butchering_time = 20 * size //2 seconds for tiny animals, 4 for small ones, 6 for normal sized ones (+ humans), 8 for big guys and 10 for biggest guys
@@ -1475,9 +1463,11 @@ Thanks.
 		for(var/datum/butchering_product/B in src.butchering_drops)
 			if(B.amount <= 0)
 				continue
-
 			actions |= capitalize(B.verb_name)
 			actions[capitalize(B.verb_name)] = B
+		if(!actions.len)
+			to_chat(user, "<span class='notice'>[src] has already been butchered.</span>")
+			return
 		actions += "Cancel"
 
 		var/choice = input(user,"What would you like to do with \the [src]?","Butchering") in actions
