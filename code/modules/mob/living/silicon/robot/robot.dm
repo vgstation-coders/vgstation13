@@ -1424,4 +1424,3 @@
 /mob/living/silicon/robot/hugborg/ball/New()
 	..()
 	set_module_sprites(list("Omoikane" = "omoikane"))
->>>>>>> Bleeding-Edge
