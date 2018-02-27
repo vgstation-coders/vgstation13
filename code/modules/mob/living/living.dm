@@ -1494,6 +1494,10 @@ Thanks.
 				src.update_icons()
 			return
 
+	else if(meat_taken >= meat_amount)
+		to_chat(user, "<span class='notice'>[src] has already been butchered.</span>")
+		return
+
 	user.visible_message("<span class='notice'>[user] starts butchering \the [src][tool ? " with \the [tool]" : ""].</span>",\
 		"<span class='info'>You start butchering \the [src].</span>")
 	src.being_butchered = 1
