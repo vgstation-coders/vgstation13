@@ -99,8 +99,12 @@
 	volume=0.25 // 25% of user's set volume.
 	var/buildstage = 0
 
-	holomap = TRUE
-	auto_holomap = TRUE
+/obj/machinery/media/receiver/boombox/wallmount/supports_holomap()
+	return TRUE
+
+/obj/machinery/media/receiver/boombox/wallmount/initialize()
+	..()
+	add_self_to_holomap()
 
 /obj/machinery/media/receiver/boombox/wallmount/New(turf/loc,var/ndir=0,var/building=2)
 	..()

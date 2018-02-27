@@ -134,8 +134,8 @@ var/global/list/obj/machinery/light/alllights = list()
 
 	var/idle = 0 // For process().
 
-	holomap = TRUE
-	auto_holomap = TRUE
+/obj/machinery/light/supports_holomap()
+	return TRUE
 
 /obj/machinery/light/spook(mob/dead/observer/ghost)
 	if(..(ghost, TRUE))
@@ -189,11 +189,15 @@ var/global/list/obj/machinery/light/alllights = list()
 	update(0)
 	..()
 
+/obj/machinery/light/initialize()
+	..()
+	add_self_to_holomap()
+
 // create a new lighting fixture
 /obj/machinery/light/New()
 	..()
 	alllights += src
-
+	
 	spawn(2)
 		var/area/A = get_area(src)
 		if(A && !A.requires_power)
