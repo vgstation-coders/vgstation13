@@ -468,7 +468,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 	if(prob(20))
 		icon_state = "asteroid[rand(0,12)]"
-	initialize()
 
 
 /turf/unsimulated/floor/asteroid/ex_act(severity)

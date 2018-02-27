@@ -696,7 +696,9 @@ proc/move_mining_shuttle()
 	if(istype(target, /mob/living) && proximity_flag)
 		if(istype(target, /mob/living/simple_animal))
 			var/mob/living/simple_animal/M = target
-
+			if(M.mob_property_flags & MOB_NO_LAZ)
+				to_chat(user, "<span class='warning'>\The [src] is incapable of reviving \the [M].</span>")
+				return
 			if(M.stat == DEAD)
 
 				M.faction = "lazarus \ref[user]"

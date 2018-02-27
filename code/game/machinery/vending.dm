@@ -88,6 +88,9 @@ var/global/num_vending_terminals = 1
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK
 
 	var/account_first_linked = 1
+	var/inserting_mode = FALSE // insert items directly into the machine (used for custom vending machines)
+	var/is_custom_machine = FALSE // true if this vendor supports editing the prices
+	var/edit_mode = FALSE // Used for editing prices
 	var/is_being_filled = FALSE // `in_use` from /obj is already used for tracking users of this machine's UI
 
 /obj/machinery/vending/cultify()
@@ -527,6 +530,19 @@ var/global/num_vending_terminals = 1
 
 		else
 			to_chat(usr, "[bicon(src)]<span class='warning'>Unable to connect to linked account. Please contact a god.</span>")
+	else if(istype(W, /obj/item/) && inserting_mode)
+		if(user.drop_item(W, src))
+			for(var/datum/data/vending_product/VP in product_records)
+				if(VP.product_path == W)
+					VP.amount += 1
+					return
+			var/datum/data/vending_product/R = new()
+			R.product_name = W.name
+			R.mini_icon = costly_bicon(W)
+			R.display_color = pick("red", "blue", "green")
+			R.product_path = W
+			product_records += R
+			products += W
 
 //H.wear_id
 
@@ -642,6 +658,8 @@ var/global/num_vending_terminals = 1
 	if (P.amount > 0)
 		var/idx=GetProductIndex(P)
 		dat += " <a href='byond://?src=\ref[src];vend=[idx];cat=[P.category]'>(Vend)</A>"
+		if (edit_mode)
+			dat += " <a href='byond://?src=\ref[src];set_price=[idx];cat=[P.category]'>(Set Price)</A>"
 	else
 		dat += " <span class='warning'>SOLD OUT</span>"
 	dat += "<br>"
@@ -817,6 +835,14 @@ var/global/num_vending_terminals = 1
 
 		if(product_slogans != "")
 			dat += "The speaker switch is [shut_up ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>Toggle</a>"
+			dat += "<br>"
+
+		if(is_custom_machine)
+			dat += "Insert items mode is [inserting_mode ? "on" : "off"]. <a href='?src=\ref[src];toggle_insert_mode=[1]'>Toggle</a>"
+			dat += "<br>"
+			dat += "The prices edit mode is [edit_mode ? "on" : "off"]. <a href='?src=\ref[src];toggle_edit_mode=[1]'>Toggle</a>"
+			dat += "<br><br>"
+			dat += "<i>Note: Remember to slide your ID on this machine if you don't want random people to change your prices.</i>"
 
 	user << browse(dat, "window=vending;size=400x[vertical]")
 	onclose(user, "vending")
@@ -892,10 +918,30 @@ var/global/num_vending_terminals = 1
 
 		return
 
+	else if (href_list["set_price"] && src.vend_ready && !currently_vending)
+		//testing("vend: [href]")
+
+		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
+			to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
+
+			flick(src.icon_deny,src)
+			return
+
+		var/idx=text2num(href_list["set_price"])
+		var/cat=text2num(href_list["cat"])
+
+		var/datum/data/vending_product/R = GetProductByID(idx,cat)
+		if (!R || !istype(R) || !R.product_path || R.amount <= 0)
+			message_admins("Invalid vend request by [formatJumpTo(src.loc)]: [href]")
+			return
+
+		var/new_price = input("Enter a price", "Change price", R.price) as null|num
+		if(new_price == null || new_price < 0)
+			new_price = R.price
+		R.price = new_price
+
 	else if (href_list["cancel_buying"])
 		src.currently_vending = null
-		src.updateUsrDialog()
-		return
 
 	else if (href_list["buy"])
 		var/obj/item/weapon/card/card = usr.get_id_card()
@@ -903,11 +949,17 @@ var/global/num_vending_terminals = 1
 			connect_account(usr, card)
 		else
 			to_chat(usr, "<span class='warning'>Please present a valid ID.</span>")
-		src.updateUsrDialog()
-		return
 
 	else if ((href_list["togglevoice"]) && (src.panel_open))
 		src.shut_up = !src.shut_up
+
+	else if ((href_list["toggle_edit_mode"]))
+		if(is_custom_machine)
+			edit_mode = !edit_mode
+
+	else if ((href_list["toggle_insert_mode"]))
+		if(is_custom_machine)
+			inserting_mode = !inserting_mode
 
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
@@ -2201,28 +2253,6 @@ var/global/num_vending_terminals = 1
 
 	pack = /obj/structure/vendomatpack/building
 
-/obj/item/stack/sheet/metal/bigstack/New()
-	getFromPool(/obj/item/stack/sheet/metal, loc, 20)
-	qdel(src)
-/obj/item/stack/sheet/glass/glass/bigstack/New()
-	getFromPool(/obj/item/stack/sheet/glass/glass, loc, 20)
-	qdel(src)
-/obj/item/stack/sheet/glass/plasmaglass/bigstack/New()
-	getFromPool(/obj/item/stack/sheet/glass/plasmaglass, loc, 20)
-	qdel(src)
-/obj/item/stack/sheet/wood/bigstack/New()
-	getFromPool(/obj/item/stack/sheet/wood, loc, 20)
-	qdel(src)
-/obj/item/stack/tile/carpet/bigstack/New()
-	getFromPool(/obj/item/stack/tile/carpet, loc, 20)
-	qdel(src)
-/obj/item/stack/tile/arcade/bigstack/New()
-	getFromPool(/obj/item/stack/tile/arcade, loc, 20)
-	qdel(src)
-/obj/item/stack/sheet/mineral/plastic/bigstack/New()
-	getFromPool(/obj/item/stack/sheet/mineral/plastic, loc, 20)
-	qdel(src)
-
 //This one's from bay12
 /obj/machinery/vending/engineering
 	name = "\improper Robco Tool Maker"
@@ -2935,17 +2965,17 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
 		/obj/item/clothing/shoes/clown_shoes/advanced,
 		/obj/item/fish_eggs/seadevil,
+		/obj/machinery/power/antiquesynth,
 		)
 
 /obj/machinery/vending/trader/New()
 
-	premium.Add(pick(existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper)) //A random borg upgrade minus the magnetic gripper. Time to jew the silicons!
-
 	for(var/random_items = 1 to premium.len - 5)
 		premium.Remove(pick(premium))
-
 	if(premium.Find(/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard))
 		load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
+	premium.Add(pick(existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper)) //A random borg upgrade minus the magnetic gripper. Time to jew the silicons!
+
 	..()
 
 /obj/machinery/vending/barber
@@ -3071,6 +3101,7 @@ var/global/num_vending_terminals = 1
 	name = "Sales"
 	desc = "Buy, sell, repeat."
 	icon_state = "sale"
+	is_custom_machine = TRUE
 	//vend_reply = "Insert another joke here"
 	//product_ads = "Another joke here"
 	//product_slogans = "Jokes"

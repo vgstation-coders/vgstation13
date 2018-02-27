@@ -56,6 +56,9 @@
 		else if(ismob(loc))
 			var/mob/holder = loc
 			holder.drop_from_inventory(src)
+		else if(istype(loc, /obj/item/weapon/storage))
+			var/obj/item/weapon/storage/S = loc
+			S.remove_from_storage(src)
 
 		if(trash) //Do we have somehing defined as trash for our snack item ?
 			//Note : This makes sense in some way, or at least this works, just don't mess with it

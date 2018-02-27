@@ -243,9 +243,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	else
 		return null
 
-/atom/movable/proc/initialize()
-	return
-
 /obj/proc/updateUsrDialog()
 	if(in_use)
 		var/is_in_use = 0

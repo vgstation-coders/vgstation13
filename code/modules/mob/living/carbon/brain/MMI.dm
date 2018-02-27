@@ -65,7 +65,7 @@ obj/item/device/mmi/Destroy()
 		//canmove = 0
 		icon = null
 		invisibility = 101
-		var/mob/living/silicon/robot/mommi/M = new /mob/living/silicon/robot/mommi(get_turf(loc))
+		var/mob/living/silicon/robot/mommi/M = new /mob/living/silicon/robot/mommi/nt(get_turf(loc))
 		if(!M)
 			return
 		M.invisibility = 0

@@ -86,6 +86,117 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 		-->
 		<div class="commit sansserif">
 
+			<h2 class="date">2018.02.27</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Lots of automated NPC emotes will display correctly now.</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Custom trade ship for Packed Station.</li>
+				<li class="bugfix">Skellingtons stuffed into the gibber now produce bones instead of human meat.  Credit to NigglyWiggly for the sprites.</li>
+				<li class="rscadd">There are now sheets of bones that can be ground up into bone marrow.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Fixes AI starting with their cameras stuck in the roundstart cuck cube</li>
+				<li class="bugfix">Fixed ushankas having no initial icon.</li>
+				<li class="tweak">Borgs with no MMI/Posibrain are now registered as 'Robot' in their PDAs.</li>
+				<li class="tweak">Borgs with damaged/broken cell/actuator can't get up by themselves after being tipped.</li>
+				<li class="tweak">Hitting a cyborg/mommi with objects that do no damage won't create sparks anymore.</li>
+				<li class="rscadd">The old "Hydrobot" icon is now available for Service Cyborgs.</li>
+				<li class="rscadd">Revived the Soviet MoMMI subtype and created a NT subtype.</li>
+				<li class="rscadd">Derelict MoMMIs now spawn as Soviet MoMMIs: They can't change their names, don't appear on cameras, see static on top of mobs and also come with an RCD, RSF(Rapid-Soviet-Fabricator), instrument synth, soap bar, plasma cutter and automatic ore loader on top of their default MoMMI loadout.</li>
+				<li class="tweak">Roundstart/built/transformed MoMMIs are now NT MoMMIs: They start on the engineering camera network and can hear engineering radio.</li>
+				<li class="rscadd">Made the Dorf MoMMI Spawner spawn NT MoMMIs with the dorf lawset.</li>
+				<li class="bugfix">Fixed MoMMIs being able to hide their eyes using Hide when emagged.</li>
+			</ul>
+
+			<h2 class="date">2018.02.26</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug that prevented the Blind and Mutate spells from appearing in wizard spellbooks.</li>
+				<li class="tweak">Multitooling a power cable will now show network load in addition to available power.</li>
+				<li class="bugfix">Fixed implant lockboxes and shotgun shell boxes having the wrong number of slots.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug where the hyperspace at the Mecha Graveyard would not throw you, allowing you to reach CentComm.</li>
+				<li class="bugfix">Increased the size of the Mecha Graveyard dock to accommodate the larger Defficiency cargo/research shuttle.</li>
+			</ul>
+			<h3 class="author">Tehsapper updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">added automatic charge mode for SMES, allowing them to charge using any amount of available power that is less or equal to their input level. The old ("manual") mode is still there.</li>
+				<li class="tweak">upgraded SMES have better capacity and max input/output.</li>
+				<li class="tweak">SMES UI now shows if input terminal or output power cable are missing.</li>
+				<li class="bugfix">fixed being able to reconstruct SMES for free power. New SMES start out with zero charge (roundstart SMES are not affected).</li>
+				<li class="bugfix">fixed SMES not connecting to output powernet upon construction.</li>
+				<li class="bugfix">fixed SMES being able to output (and lose) charge even if there is no powernet.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">The mysterious/cursed dice can't be scanned by device analysers anymore.</li>
+			</ul>
+
+			<h2 class="date">2018.02.25</h2>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">From now on most grenades will only be scannable the the traitor device analyser.</li>
+				<li class="rscdel">the device analyser(both normal and traitor versions) can't scan chrono grenades anymore.</li>
+				<li class="tweak">Inflatables and smoke grenades can still be scanned by normal device analysers.</li>
+			</ul>
+
+			<h2 class="date">2018.02.24</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Internal Affair Agents no longer have maintenance access.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug that let people interact with sleepers from the inside, and others.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes the unreported bug of changeling monkeys not getting their powers</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Bagel now has a unique vox tradeship.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes MoMMIs phantom action buttons</li>
+				<li class="bugfix">Fixes silicon album showing duplicated info when examining a photo</li>
+			</ul>
+
+			<h2 class="date">2018.02.23</h2>
+			<h3 class="author">DrCelt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds the security ushanka - it goes extremely well with the warden winter coat. (should have been in the winterjacket PR)</li>
+				<li class="tweak">Rejiggles a couple of heat conductivities with neorussian outfits; fixes some wintercoats not properly displaying stuff under it,</li>
+				<li class="rscadd">adds ski mask (literally the same as a balaclava but a different name and can protect you from the cold)</li>
+				<li class="tweak">changes balaclava to have the correct flags for covering the full head except eyes.</li>
+			</ul>
+			<h3 class="author">HarseTheef updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Makes the shuttle-related sounds 25% quieter.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds the Antique Matter Synthesizer, an item engineers can buy to convert massive amounts of power into items.</li>
+				<li class="rscadd">Traders can now latejoin (up to three slots). Doing so will hurl them through space toward the outpost, so be sure you can navigate the asteroid if you choose this option!</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed cats magically killing mice through solid objects.</li>
+			</ul>
+			<h3 class="author">Zth-- updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added a prices mode for the custom vending machine that allows you to modify the machines' prices on the fly. This feature can be toggled from the panel (where the wires are).</li>
+				<li class="rscadd">Added a insert items mode. Same as prices mode, it lets you add items by slapping them on the machine. You can also toggle this from the panel.</li>
+				<li class="rscadd">Remember that the panel can be secured by slapping your ID on the machine and linking it to your account.</li>
+			</ul>
+
 			<h2 class="date">2018.02.22</h2>
 			<h3 class="author">DamianX updated:</h3>
 			<ul class="changes bgimages16">
@@ -111,6 +222,7 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<h3 class="author">jknpj updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Fixes the supply cyborg automatic ore loader missing its icon</li>
+				<li class="rscdel">Removed the pre-roundstart bite/kick simulator</li>
 			</ul>
 
 			<h2 class="date">2018.02.21</h2>
@@ -1486,105 +1598,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 			<h3 class="author">Unknown-as-Captain updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Fixed rollerbeds stopping bullets if someone was buckled in.</li>
-			</ul>
-
-			<h2 class="date">2017.09.25</h2>
-			<h3 class="author">CptWad updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">New Chapel sprites/stuff available on bagelstation! Other stations soon(tm)</li>
-				<li class="bugfix">Bagelstations ore processors and vox shuttle should now work properly despite cursed issues</li>
-			</ul>
-			<h3 class="author">DamianX updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Moving or destroying an object wrenched on a connector port will now properly disconnect the two.</li>
-				<li class="bugfix">Vampires can no longer enthrall implanted people unless they have accumulated 500 blood.</li>
-				<li class="bugfix">Vampires will now be properly smitten by God when picking up the bible.</li>
-			</ul>
-			<h3 class="author">DrSnips updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">NASA voidsuit lockers now have a pair of red magboots in them.</li>
-				<li class="bugfix">Things with hot edges can light your candles and smokes for sure now.</li>
-			</ul>
-			<h3 class="author">Duny updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">(Deff) Added scrubbers to the research outpost. The waste pipes empty directly in space by default, the pump can be found in the atmospherics room.</li>
-			</ul>
-			<h3 class="author">HarseTheef updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="spellcheck">Fixes the Captain's Greaves examination text</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Clipboard sprites should now properly update when you do anything like take out paper, stamp paper, etc.</li>
-				<li class="rscadd">You can now click a filing cabinet with a clipboard to dump the contents within.</li>
-			</ul>
-			<h3 class="author">PromethTK11 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Fixed the packed cell lockers not working propetly.</li>
-				<li class="rscadd">Aaand more packed misc. tweaks.</li>
-			</ul>
-
-			<h2 class="date">2017.09.24</h2>
-			<h3 class="author">Cyadox updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Allows you to remove peg limbs as intended</li>
-			</ul>
-			<h3 class="author">DrSnips updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscdel">Slimes (the mob) can no longer be phazon junkies and get phazon mutations.</li>
-				<li class="rscadd">MoMMI material synth can now scan/produce more materials.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">You can now view the supply console even without an ID, but using most of the buttons requires access.</li>
-				<li class="rscadd">The supply console now has a QM-PIN restricted permissions screen that allows you to set auto-approval, restrict orders from silicons, or require the PIN for any action.</li>
-				<li class="rscadd">Permissions screen also has a requisitions function to allow approved orders to be paid from the Cargo account.</li>
-				<li class="bugfix">Removed the long-defunct "supply tax" calculation in ordering crates, meaning you can now order as much as you have money for with no phantom tax on top</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">you can now make plant-b-gone with solanine</li>
-			</ul>
-			<h3 class="author">jknpj updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes an ancient bug that prevented big xenos and larva from being handcuffed/bodycuffed. Big xenos can break cuffs as fast as a hulk while larva take the same amount of time as other carbons.</li>
-				<li class="bugfix">Fixes an ancient bug that prevented xeno larva from being stunned.</li>
-				<li class="bugfix">Also fixes larvae hide spell.</li>
-				<li class="rscdel">Removes non-used head and chest slot from big xenos.</li>
-				<li class="tweak">Big xenos and larva can't ventcrawl or evolve while cuffed.</li>
-				<li class="tweak">Updates xeno inventory window.</li>
-			</ul>
-
-			<h2 class="date">2017.09.23</h2>
-			<h3 class="author">DamianX updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Changed the telecommunications machines construction/deconstruction/repair procedures. See wiki.</li>
-				<li class="bugfix">Fixed the telecommunications machines not degrading at high temperatures.</li>
-				<li class="bugfix">Fixed the telecommunications machines not removing the links between them upon deletion.</li>
-				<li class="tweak">Allowed the telecommunications machines to be scanned by the device analyzer</li>
-				<li class="bugfix">Fixed bananium, uranium floors activating when they shouldn't.</li>
-			</ul>
-			<h3 class="author">Unknown-as-Captain updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Delivery chutes don't accept anchored items. Please report if this breaks any intended Cargo delivery methods.</li>
-			</ul>
-
-			<h2 class="date">2017.09.21</h2>
-			<h3 class="author">DrSnips updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Roboticist's pda now come with the R.O.B.U.T.T. pda cartridge. Allowing you to use your pda as a cyborg analyzer when enabled.</li>
-				<li class="rscadd">Plasma saw added to the protolathe, comes in your favorite color for plasma related things. Definitely only to be used for medical purposes.</li>
-				<li class="rscadd">Bone mender added to the protolathe, it fixes broken bones completely in one step.</li>
-			</ul>
-
-			<h2 class="date">2017.09.19</h2>
-			<h3 class="author">Commandersand updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Phazon mechs no longer break immersions</li>
-			</ul>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="experiment">Admins now have a panel that allows them to easily control the Emergency Shuttle, its docking ports, as well as the Escape Pods.</li>
 			</ul>
 		</div>
 		<!--
