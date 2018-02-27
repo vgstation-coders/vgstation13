@@ -185,3 +185,24 @@
 			health = maxHealth - getOxyLoss() - getToxLoss() - getBruteLoss()
 		else
 			health = maxHealth - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()
+
+/mob/living/silicon/ai/Stat()
+	..()
+	if(statpanel("Status"))
+		if(incapacitated() || aiRestorePowerRoutine)
+			stat(null, text("Slave Status Subsystem Offline"))
+			return
+		show_borg_info()
+
+/mob/living/silicon/ai/proc/show_borg_info()
+	stat(null, text("Slaved Silicons: [connected_robots.len]"))
+	for(var/mob/living/silicon/robot/R in connected_robots)
+		var/robot_status = "Nominal"
+		if(R.incapacitated() || !R.client)
+			robot_status = "OFFLINE"
+		else if(!R.cell || R.cell.charge <= 0)
+			robot_status = "DEPOWERED"
+		// Name, Health, Battery, Module, Area, and Status! Everything an AI wants to know about its borgies!
+		var/area/A = get_area(R)
+		stat(null, text("[R.name] | Integrity: [R.health/initial(R.health)*100]% | Cell: [R.cell ? "[R.cell.charge] / [R.cell.maxcharge]" : "No Cell"] | \
+		Module: [R.modtype] | Loc: [sanitize(A.name)] | Status: [robot_status]"))
