@@ -80,7 +80,6 @@
 	var/weaponlock_time = 120
 	var/lawupdate = TRUE //Cyborgs will sync their laws with their AI by default
 	var/lockcharge //Used when locking down a borg to preserve cell charge
-	var/speed = DEFAULT_CYBORG_SPEED
 	var/scrambledcodes = FALSE // Used to determine if a borg shows up on the robotics console.  Setting to one hides them.
 	var/braintype = "Cyborg"
 	var/lawcheck[1]
@@ -289,7 +288,7 @@
 
 	var/newname
 	for(var/i = 1 to 3)
-		newname = trimcenter(trim(stripped_input(src,"You are a <b>[braintype]</b>. Enter a name, or leave blank for the default name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN))
+		newname = trimcenter(trim(stripped_input(src,"You are a [braintype]. Enter a name, or leave blank for the default name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN))
 		if(newname == null)
 			if(alert(src,"Are you sure you want the default name?",,"Yes","No") == "Yes")
 				break
@@ -1372,11 +1371,11 @@
 /mob/living/silicon/robot/identification_string()
 	return "[name] ([modtype] [braintype])"
 
-/mob/living/silicon/robot/proc/UpgradeSelf(var/obj/item/borg/upgrade/upgrade = null)
-	if(!upgrade)
+/mob/living/silicon/robot/proc/install_upgrade(var/mob/user = null, var/obj/item/borg/upgrade/upgrade = null)
+	if(!user || !upgrade)
 		return
 	var/obj/item/borg/upgrade/new_upgrade = new upgrade(src)
-	new_upgrade.attempt_action(src, src, TRUE)
+	new_upgrade.attempt_action(src, user, TRUE)
 	qdel(new_upgrade)
 
 //Combat module debug subtype.
@@ -1390,6 +1389,7 @@
 	laws = new /datum/ai_laws/ntmov()
 	pick_module("Combat")
 	set_module_sprites(list("Droid" = "droid-combat"))
+	install_upgrade(src, /obj/item/borg/upgrade/vtec)
 
 //Syndicate subtype because putting this on new() is fucking retarded.
 /mob/living/silicon/robot/syndie
@@ -1401,6 +1401,7 @@
 	UnlinkSelf()
 	laws = new /datum/ai_laws/syndicate_override()
 	pick_module("Syndicate")
+	install_upgrade(src, /obj/item/borg/upgrade/vtec)
 
 //Moving hugborgs to an easy-to-spawn subtype because they were as retarded as the syndie one.
 /mob/living/silicon/robot/hugborg
@@ -1417,7 +1418,7 @@
 
 /mob/living/silicon/robot/hugborg/clown/New()
 	..()
-	UpgradeSelf(/obj/item/borg/upgrade/honk)
+	install_upgrade(src, /obj/item/borg/upgrade/honk)
 
 /mob/living/silicon/robot/hugborg/ball/New()
 	..()

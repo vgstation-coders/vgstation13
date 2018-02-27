@@ -13,14 +13,13 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	maxHealth = 60
 	health = 60
 
-	speed = 0
-
 	pass_flags = PASSTABLE
 	mob_bump_flag = ROBOT
 	mob_swap_flags = ALLMOBS
 	mob_push_flags = 0
 
-	modtype = "MoMMI"
+	modtype = "Nanotrasen"
+	braintype = "Mobile MMI"
 
 	//New() stuff
 	startup_sound = 'sound/misc/interference.ogg'
@@ -30,7 +29,6 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	wiring_type = /datum/wires/robot/mommi
 
 	AIlink = FALSE //Fuck AIs, you're a crab.
-	lawupdate = FALSE //This is already set to FALSE thanks to no AIlink but eh, it won't hurt to set it to FALSE by default.
 	scrambledcodes = TRUE //Don't appear on the SS13/ROBOTS cameranet, you're not supposed to be a ventcrawling security camera.
 
 	//MoMMI stuff
@@ -51,13 +49,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 /mob/living/silicon/robot/mommi/pick_module(var/forced_module = null)
 	if(module)
 		return
-	var/list/modules = mommi_modules
 
 	if(forced_module)
 		modtype = forced_module
 	else
-		if(modules.len)
-			modtype = input("Please, select a module!", "Nanotrasen", null, null) as null|anything in modules
+		if(mommi_modules.len)
+			modtype = input("Please, select a module!", "Nanotrasen", null, null) as null|anything in mommi_modules
 		else
 			modtype=modules[0]
 
