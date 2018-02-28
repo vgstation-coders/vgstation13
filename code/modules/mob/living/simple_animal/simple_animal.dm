@@ -208,48 +208,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 					wander_move(destination)
 					turns_since_move = 0
 
-	var/someone_in_earshot=0
-	if(!client && speak_chance && (ckey == null)) // Remove this if earshot is used elsewhere.
-		// All we're doing here is seeing if there's any CLIENTS nearby.
-		for(var/mob/M in get_hearers_in_view(7, src))
-			if(M.client)
-				someone_in_earshot=1
-				break
-
-	//Speaking
-	if(!client && speak_chance && (ckey == null) && someone_in_earshot)
-		if(speak && speak.len)
-			if(rand(0,200) < speak_chance)
-				if((emote_hear && emote_hear.len) || (emote_see && emote_see.len))
-					var/length = speak.len
-					if(emote_hear && emote_hear.len)
-						length += emote_hear.len
-					if(emote_see && emote_see.len)
-						length += emote_see.len
-					var/randomValue = rand(1,length)
-					if(randomValue <= speak.len)
-						say(pick(speak))
-					else
-						randomValue -= speak.len
-						if(emote_see && randomValue <= emote_see.len)
-							emote(pick(emote_see),1)
-						else
-							emote(pick(emote_hear),2)
-				else
-					say(pick(speak))
-			else
-				if(!(emote_hear && emote_hear.len) && (emote_see && emote_see.len))
-					emote(pick(emote_see),1)
-				if((emote_hear && emote_hear.len) && !(emote_see && emote_see.len))
-					emote(pick(emote_hear),2)
-				if((emote_hear && emote_hear.len) && (emote_see && emote_see.len))
-					var/length = emote_hear.len + emote_see.len
-					var/pick = rand(1,length)
-					if(pick <= emote_see.len)
-						emote(pick(emote_see),1)
-					else
-						emote(pick(emote_hear),2)
-
+	handle_automated_speech()
 
 	//Atmos
 	if(flags & INVULNERABLE)
@@ -354,7 +313,36 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(act == "scream")
 		desc = "makes a loud and pained whimper"  //ugly hack to stop animals screaming when crushed :P
 		act = "me"
+	if(!desc)
+		desc = "[act]."
+		act = "me"
 	..(act, type, desc)
+
+/mob/living/simple_animal/proc/handle_automated_speech()
+
+	var/someone_in_earshot=0
+	if(!client && speak_chance && ckey == null) // Remove this if earshot is used elsewhere.
+		// All we're doing here is seeing if there's any CLIENTS nearby.
+		for(var/mob/M in get_hearers_in_view(7, src))
+			if(M.client)
+				someone_in_earshot=1
+				break
+
+	if(someone_in_earshot)
+		if(rand(0,200) < speak_chance)
+			var/mode = pick(
+			speak.len;      1,
+			emote_hear.len; 2,
+			emote_see.len;  3
+			)
+
+			switch(mode)
+				if(1)
+					say(pick(speak))
+				if(2)
+					emote("me", MESSAGE_HEAR, "[pick(emote_hear)].")
+				if(3)
+					emote("me", MESSAGE_SEE, "[pick(emote_see)].")
 
 /mob/living/simple_animal/attack_animal(mob/living/simple_animal/M)
 	M.unarmed_attack_mob(src)
@@ -750,6 +738,15 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return ..(pick(speak))
 	else
 		return ..()
+
+
+/mob/living/simple_animal/proc/name_mob(mob/user)
+	var/n_name = copytext(sanitize(input(user, "What would you like to name \the [src]?", "Renaming \the [src]", null) as text|null), 1, MAX_NAME_LEN)
+	if(n_name && !user.incapacitated())
+		name = "[n_name]"
+	var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+	heart.plane = ABOVE_HUMAN_PLANE
+	flick_overlay(heart, list(user.client), 20)
 
 
 /datum/locking_category/simple_animal

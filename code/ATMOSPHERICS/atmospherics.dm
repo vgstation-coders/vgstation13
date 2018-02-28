@@ -349,12 +349,16 @@ Pipelines + Other Objects -> Pipe network
 	var/obj/machinery/atmospherics/target_move = findConnecting(direction, user.ventcrawl_layer)
 	if(target_move)
 		if(is_type_in_list(target_move, ventcrawl_machinery) && target_move.can_crawl_through())
+			if(user.special_delayer.blocked())
+				return
+			user.delayNextSpecial(10)
 			user.visible_message("Something is squeezing through the ducts...", "You start crawling out the ventilation system.")
 			target_move.shake(2, 3)
-			if(do_after(user, target_move, 10))
-				user.remove_ventcrawl()
-				user.forceMove(target_move.loc) //handles entering and so on
-				user.visible_message("You hear something squeeze through the ducts.", "You climb out the ventilation system.")
+			spawn(0)
+				if(do_after(user, target_move, 10))
+					user.remove_ventcrawl()
+					user.forceMove(target_move.loc) //handles entering and so on
+					user.visible_message("You hear something squeeze through the ducts.", "You climb out the ventilation system.")
 		else if(target_move.can_crawl_through())
 			if(target_move.return_network(target_move) != return_network(src))
 				user.remove_ventcrawl()

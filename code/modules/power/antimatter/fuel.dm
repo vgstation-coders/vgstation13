@@ -73,7 +73,7 @@
 	..()
 	to_chat(user, "<span class='info'>A magnetic storage ring, it contains [fuel]kg of [content ? content : "nothing"].</span>")
 
-/obj/item/weapon/fuel/proc/injest(mob/M as mob)
+/obj/item/weapon/fuel/proc/ingest(mob/M as mob)
 	switch(content)
 		if("Anti-Hydrogen")
 			M.gib()
@@ -99,4 +99,4 @@
 	else
 		for(var/mob/O in viewers(M, null))
 			O.show_message(text("<span class='warning'>[M] ate the [content ? content : "empty canister"]!</span>"), 1)
-		src.injest(M)
+		src.ingest(M)

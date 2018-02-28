@@ -102,6 +102,7 @@
 				return 0
 
 		remove_from_mob(to_drop) //clean out any refs
+		to_drop.dropped(src)
 		to_drop.forceMove(Target)
 		update_items()
 		return 1
@@ -326,3 +327,7 @@
 			update_items()
 		else
 			to_chat(M, "<span class='warning'>You are unable to equip that.</span>")
+
+/mob/living/carbon/can_use_hands()
+	return TRUE
+
