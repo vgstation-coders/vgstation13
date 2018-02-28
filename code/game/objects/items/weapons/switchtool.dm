@@ -58,6 +58,7 @@
 		return
 
 	if(deployed)
+		edit_deploy(0)
 		to_chat(user, "You store \the [deployed].")
 		undeploy()
 	else
@@ -107,7 +108,7 @@
 					return TRUE
 
 /obj/item/weapon/switchtool/proc/remove_module(mob/user)
-	deployed.cant_drop = 0
+	edit_deploy(0)
 	deployed.forceMove(get_turf(user))
 	for(var/module in stored_modules)
 		if(stored_modules[module] == deployed)
@@ -120,7 +121,7 @@
 
 /obj/item/weapon/switchtool/proc/undeploy()
 	playsound(get_turf(src), undeploy_sound, 10, 1)
-	deployed.cant_drop = 0
+	edit_deploy(0)
 	deployed = null
 	overlays.len = 0
 	w_class = initial(w_class)
@@ -129,7 +130,6 @@
 /obj/item/weapon/switchtool/proc/deploy(var/module)
 	if(!(module in stored_modules))
 		return FALSE
-
 	if(!stored_modules[module])
 		return FALSE
 	if(deployed)
@@ -138,11 +138,24 @@
 	playsound(get_turf(src), deploy_sound, 10, 1)
 	deployed = stored_modules[module]
 	hmodule = get_module_name(module)
-	deployed.cant_drop = 1
 	overlays += get_module_name(module)
 	w_class = max(w_class, deployed.w_class)
 	update_icon()
 	return TRUE
+
+/obj/item/weapon/switchtool/proc/edit_deploy(var/doedit)
+	if(doedit) //Makes the deployed item take on the features of the switchtool. This is for attack animations and attack text.
+		deployed.name = name
+		deployed.icon = icon
+		deployed.icon_state = icon_state
+		deployed.overlays = overlays
+		deployed.cant_drop = TRUE
+	else //Revert the changes to the deployed item.
+		deployed.name = initial(deployed.name)
+		deployed.icon = initial(deployed.icon)
+		deployed.icon_state = initial(deployed.icon_state)
+		deployed.overlays = initial(deployed.overlays)
+		deployed.cant_drop = FALSE
 
 /obj/item/weapon/switchtool/proc/choose_deploy(mob/user)
 	var/list/potential_modules = list()
@@ -157,6 +170,7 @@
 	else if(potential_modules.len == 1)
 		deploy(potential_modules[1])
 		to_chat(user, "You deploy \the [potential_modules[1]]")
+		edit_deploy(1)
 		return TRUE
 
 	else
@@ -169,6 +183,7 @@
 					break
 			if(deploy(true_module))
 				to_chat(user, "You deploy \the [deployed].")
+				edit_deploy(1)
 			return TRUE
 		return
 
@@ -363,7 +378,6 @@
 /obj/item/weapon/switchtool/holo/update_icon()
 	if(deployed)
 		item_state = "[hmodule]"
-		deployed.appearance = appearance
 	else
 		item_state = "Hswitchtool"
 
@@ -383,6 +397,7 @@
 		return FALSE
 	set_light(brightness_min)
 	overlays += "[hmodule]"
+	edit_deploy(1)
 	if(istype(deployed, /obj/item/device/flashlight))
 		set_light(brightness_max)
 
