@@ -140,31 +140,6 @@
 							dizzy_effect_in_loop = FALSE
 					dizzy_effect_in_loop = FALSE
 
-	/*		if(C)
-				var/oldsrc = src
-				var/amplitude = dizziness * (sin(dizziness * 0.044 * world.time) + 1) / 70 //This shit is annoying at high strength
-				src = null
-				spawn(0)
-					if(C)
-						temp = amplitude * sin(0.008 * saved_dizz * world.time)
-						pixel_x_diff += temp
-						C.pixel_x += temp * PIXEL_MULTIPLIER
-						temp = amplitude * cos(0.008 * saved_dizz * world.time)
-						pixel_y_diff += temp
-						C.pixel_y += temp * PIXEL_MULTIPLIER
-						sleep(3)
-						if(C)
-							temp = amplitude * sin(0.008 * saved_dizz * world.time)
-							pixel_x_diff += temp
-							C.pixel_x += temp * PIXEL_MULTIPLIER
-							temp = amplitude * cos(0.008 * saved_dizz * world.time)
-							pixel_y_diff += temp
-							C.pixel_y += temp * PIXEL_MULTIPLIER
-						sleep(3)
-						if(C)
-							C.pixel_x -= pixel_x_diff * PIXEL_MULTIPLIER
-							C.pixel_y -= pixel_y_diff * PIXEL_MULTIPLIER
-				src = oldsrc*/
 			if(!wasdizzy)
 				dizziness = 0
 
