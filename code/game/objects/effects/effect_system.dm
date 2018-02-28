@@ -446,7 +446,8 @@ steam.start() -- spawns the effect
 			n = 20
 		number = n
 		cardinals = c
-		carry.copy_to(chemholder, carry.total_volume)
+		if(carry)
+			carry.copy_to(chemholder, carry.total_volume)
 
 
 		if(istype(loca, /turf/))
