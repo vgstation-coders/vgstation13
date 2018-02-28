@@ -1,4 +1,4 @@
-var/global/datum/shuttle/voxresearch/voxresearch_shuttle = new(starting_area = /area/shuttle/voxresearch/station)
+/*var/global/datum/shuttle/voxresearch/voxresearch_shuttle = new(starting_area = /area/shuttle/voxresearch/station)
 
 /datum/shuttle/voxresearch
 	name = "Research Shuttle"
@@ -20,4 +20,4 @@ var/global/datum/shuttle/voxresearch/voxresearch_shuttle = new(starting_area = /
 	areaname = "Genetic Research Station"
 
 /obj/docking_port/destination/voxresearch/outpost
-	areaname = "Asteroid"
+	areaname = "Asteroid"*/
