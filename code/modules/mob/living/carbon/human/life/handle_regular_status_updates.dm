@@ -121,10 +121,6 @@
 				dizziness = 120
 				wasdizzy = 0
 			var/client/C = client
-			var/pixel_x_diff = 0
-			var/pixel_y_diff = 0
-			var/temp
-			var/saved_dizz = dizziness
 			dizziness = max(dizziness - 1, 0)
 			if(!dizzy_effect_in_loop)
 				spawn()
@@ -140,7 +136,9 @@
 								C.pixel_x = rand(x - offset, x + offset)
 								C.pixel_y = rand(y - offset, y + offset)
 								sleep(1)
-					running_loop = FALSE
+						else
+							dizzy_effect_in_loop = FALSE
+					dizzy_effect_in_loop = FALSE
 
 	/*		if(C)
 				var/oldsrc = src
