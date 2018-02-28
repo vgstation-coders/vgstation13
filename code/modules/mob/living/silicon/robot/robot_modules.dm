@@ -144,7 +144,7 @@
 		I.mouse_opacity = 2
 
 /obj/item/weapon/robot_module/proc/respawn_consumable(var/mob/living/silicon/robot/R)
-	if(respawnables.len)
+	if(respawnables && respawnables.len)
 		for(var/T in respawnables)
 			if(!(locate(T) in modules))
 				modules -= null
