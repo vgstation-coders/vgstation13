@@ -12,7 +12,7 @@ var/turf/dungeon_area = null
 
 	//If not null, spawn these objects at the border of the dungeon
 	//By default, random teleporters are created (making escaping to Z-2 impossible)
-	var/border_type = /obj/effect/step_trigger/teleporter/random
+	var/border_type = /obj/effect/step_trigger/teleporter/random/shuttle_transit
 
 /datum/map_element/dungeon/load(x,y,z)
 	.=..()
