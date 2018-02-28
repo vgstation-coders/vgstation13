@@ -381,7 +381,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	desc = "The light inside is out, but it still works."
 
 	icon = 'icons/mob/robots.dmi'
-	icon_state = "Service"
+	icon_state = "servbot_f"
 
 	anchored = 1
 

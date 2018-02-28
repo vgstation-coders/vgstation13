@@ -190,6 +190,7 @@
 
 
 		<h3>Supply Container:</h3>"} //It's not clear here, but the argument to build is the part of the typepath after /obj/item/weapon/light/
+		dat += {"<b>Filled: </b>[supply.contents.len]/[supply.storage_slots]"}
 		var/list/light_types = new()
 		var/lightname
 		for(var/obj/item/weapon/light/L in supply)
@@ -260,6 +261,7 @@
 
 
 		<h3>Supply Container:</h3>"}
+		dat += {"<b>Filled: </b>[supply.contents.len]/[supply.storage_slots]"}
 		var/list/light_types = new()
 		var/lightname
 		for(var/obj/item/weapon/light/L in supply)

@@ -272,3 +272,6 @@ proc/get_space_area()
 
 // For areas that are on the map, `x` is the coordinate of the turf with the lowest z, y, and x coordinate (in that order) that is contained by the area.
 #define is_area_in_map(A) (A.x)
+
+#define SNOW_THEME (map.snow_theme || Holiday == "Christmas Eve" || Holiday == "Christmas")
+
