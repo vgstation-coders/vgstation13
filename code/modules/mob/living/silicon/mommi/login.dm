@@ -34,7 +34,7 @@
 	static_overlays.Cut()
 
 /mob/living/silicon/robot/mommi/examination(atom/A as mob|obj|turf in view()) //It used to be oview(12), but I can't really say why
-	if(ismob(A) && can_see_static()) //can't examine what you can't catch!
+	if(ismob(A) && !issilicon(A) && can_see_static()) //can't examine what you can't catch!
 		to_chat(usr, "Your vision module can't determine any of [A]'s features.")
 		return
 	..()
