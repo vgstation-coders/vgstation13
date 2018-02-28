@@ -129,6 +129,8 @@
 						if(C)
 							//https://en.wikipedia.org/wiki/Rose_(mathematics) with 3 petals
 							for(var/i=30; i <= 390; i+=(360/100))
+								if(!C)
+									break
 								var/r = cos(3*i) * min(dizziness/2, 50)
 								var/x = r * cos(i)
 								var/y = r * sin(i)
@@ -137,7 +139,7 @@
 								C.pixel_y = rand(y - offset, y + offset)
 								sleep(1)
 						else
-							dizzy_effect_in_loop = FALSE
+							break
 					dizzy_effect_in_loop = FALSE
 
 			if(!wasdizzy)
