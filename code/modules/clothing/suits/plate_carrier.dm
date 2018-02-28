@@ -4,6 +4,9 @@
 */
 
 /obj/item/clothing/suit/armor/plate_carrier
+	name = "tactical plate armor"
+	icon_state = "tactical_armor"
+	item_state = "tactical_armor"
 	var/event_key
 	var/obj/item/weapon/armor_plate/P
 
@@ -58,12 +61,13 @@
 	name = "security plate armor"
 	icon_state = "security_armor"
 	item_state = "security_armor"
+	armor = list(melee = 10, bullet = 15, laser = 25, energy = 15, bomb = 5, bio = 0, rad = 0)
 
 /obj/item/weapon/armor_plate
 	icon = 'icons/obj/items.dmi'
 	icon_state = "plate_1"
 	name = "ceramic armor plate"
-	health = 50
+	health = 20
 	armor = list(melee = 25, bullet = 7, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	armor_absorb = list(melee = 25, bullet = 20, laser = 20, energy = -5, bomb = 0, bio = 0, rad = 0)
 
@@ -71,8 +75,16 @@
 /obj/item/weapon/armor_plate/proc/receive_damage(var/type, var/amount)
 	if(type == BRUTE || type == BURN)
 		health -= amount
+	playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 70, 1)
 	if(health <= 0)
 		visible_message("<span class = 'warning'>\The [src] breaks apart!</span>")
+		var/turf/T = get_turf(src)
+		playsound(T, "shatter", 70, 1)
+		getFromPool(/obj/effect/decal/cleanable/dirt,T)
+		if(prob(75))
+			var/obj/item/weapon/shard/shrapnel/S = new(T)
+			S.name = "[src] shrapnel"
+			S.desc = "[S.desc] It looks like it's from a broken [src]."
 		qdel(src)
 
 /obj/item/weapon/armor_plate/examine(var/mob/user)
@@ -88,13 +100,13 @@
 /obj/item/weapon/armor_plate/bullet_resistant
 	name = "plasteel armor plate"
 	icon_state = "plate_2"
-	health = 75
+	health = 30
 	armor = list(melee = 50, bullet = 80, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	armor_absorb = list(melee = 25, bullet = 40, laser = 10, energy = -5, bomb = 35, bio = 0, rad = 0)
 
 /obj/item/weapon/armor_plate/laser_resistant
 	name = "ceramite armor plate"
 	icon_state = "plate_3"
-	health = 60
+	health = 30
 	armor = list(melee = 10, bullet = 10, laser = 80, energy = 50, bomb = 0, bio = 0, rad = 0)
 	armor_absorb = list(melee = 25, bullet = 20, laser = 40, energy = -5, bomb = 0, bio = 0, rad = 0)

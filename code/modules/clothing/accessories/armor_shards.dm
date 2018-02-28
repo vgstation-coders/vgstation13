@@ -2,6 +2,12 @@
 /obj/item/clothing/accessory/armor_shard
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 0, bomb = 0, bio = 0, rad = 0)
 
+/obj/item/clothing/accessory/armor_shard/can_attach_to(obj/item/clothing/C)
+	. = ..()
+	for(var/obj/item/clothing/accessory in C.accessories)
+		if(accessory.type == type)
+			return 0
+
 /obj/item/clothing/accessory/armor_shard/shoulder
 	name = "shoulder pads"
 	desc = "Has clips to attach to a jumpsuit. Makes you feel like you're playing a fantasy MMO."

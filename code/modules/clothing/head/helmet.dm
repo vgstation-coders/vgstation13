@@ -10,6 +10,48 @@
 	siemens_coefficient = 0.7
 	species_fit = list(GREY_SHAPED)
 
+/obj/item/clothing/head/helmet/visor
+	name = "visor helmet"
+	desc = "For when you need to protect your face from the backblast of your pepperspray"
+	icon_state = "riot_helm"
+	item_state = "riot_helm"
+	armor = list(melee = 50, bullet = 25, laser = 45, energy = 15, bomb = 30, bio = 0, rad = 0)
+	actions_types = list(/datum/action/item_action/toggle_helmet)
+	body_parts_covered = FACE
+	var/state = 1
+
+/obj/item/clothing/head/helmet/visor/New()
+	..()
+	update_icon()
+
+/obj/item/clothing/head/helmet/visor/attack_self(mob/user)
+	state = !state
+	to_chat(user, "<span class = 'notice'>You flick \the [src] [state ? "down" : "up"].</span>")
+	switch(state)
+		if(1) //FACE COVERED
+			body_parts_covered = FACE
+		if(0) //VISOR UP
+			body_parts_covered = HEAD|EARS
+	update_icon(user)
+
+/obj/item/clothing/head/helmet/visor/update_icon(mob/user)
+	switch(state)
+		if(1) //FACE COVERED
+			armor = initial(armor)
+			icon_state = "[initial(icon_state)]_down"
+			item_state = "[initial(item_state)]_down"
+		if(0)
+			armor = list(melee = 50, bullet = 10, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
+			icon_state = "[initial(icon_state)]_up"
+			item_state = "[initial(item_state)]_down"
+	if(user)
+		user.update_inv_head()
+		usr.update_inv_wear_mask()
+		usr.update_inv_glasses()
+		usr.update_hair()
+		usr.update_inv_ears()
+
+
 /obj/item/clothing/head/helmet/siren
 	name = "siren helmet"
 	desc = "For the officer that's off patrolling all the nation."
