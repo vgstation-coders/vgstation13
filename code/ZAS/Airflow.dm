@@ -43,7 +43,7 @@ atom/movable/GotoAirflowDest(n)
 /mob/proc/airflow_stun()
 	if(isDead() || (flags & INVULNERABLE) || (status_flags & GODMODE))
 		return FALSE
-	if(world.time < last_airflow_stun + zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
+	if(world.time < (last_airflow_stun + zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown) + 50))
 		return FALSE
 //	if(!zas_settings.Get(/datum/ZAS_Setting/airflow_push) || !(M_HARDCORE in mutations)) //This block was added in the original XGM PR, but, again, I don't want to bundle balance with system.
 //		return FALSE
