@@ -299,7 +299,7 @@
 					enable_mask = !action.up
 				else
 					var/obj/item/clothing/head/welding/O = head
-					enable_mask = O.up
+					enable_mask = !O.up
 
 				if(enable_mask && tinted_weldhelh)
 					overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
