@@ -258,7 +258,7 @@
 /mob/living/silicon/robot/proc/set_module_sprites(var/list/new_sprites)
 	if(new_sprites && new_sprites.len)
 		module_sprites = new_sprites.Copy()
-	
+
 	if(module_sprites.len)
 		var/picked = pick(module_sprites)
 		icon_state = module_sprites[picked]
@@ -776,6 +776,7 @@
 			C.install()
 			if(can_diagnose())
 				to_chat(src, "<span class='info' style=\"font-family:Courier\">New cell installed. Type: [cell.name]. Charge: [cell.charge].</span>")
+		updateicon()
 
 	else if(iswiretool(W))
 		if(wiresexposed)
