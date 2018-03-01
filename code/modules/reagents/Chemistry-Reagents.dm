@@ -6429,7 +6429,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#FFFFFF" //rgb: 255, 255, 255
 	density = 1.122
 	specheatcap = 6.9036
-	
+
 /datum/reagent/saltwater/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -6440,12 +6440,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		H.vomit()
 		M.adjustToxLoss(2 * REM)
 
-/datum/reagent/saline
+/datum/reagent/saltwater/saline
 	name = "Saline"
 	id = SALINE
 	description = "A solution composed of salt, water, and ammonia. Used in pickling and preservation"
 	reagent_state = LIQUID
 	color = "#DEF7F5" //rgb: 192, 227, 233
 	alpha = 64
-	density = 2.22
-	specheatcap = 23.727
+	density = 0.622
+	specheatcap = 99.27
