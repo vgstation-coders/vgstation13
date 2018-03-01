@@ -205,7 +205,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	// Can flush, move to beaker or move to buffer
 	if(!clear_reagents) // Don't display this part of the UI at all
 		dat += "<HR>"
-		dat += "<b>&ltInternal Chemical Storage&gt</b> <BR>"
+		dat += "<b>Internal Chemical Storage</b> <BR>"
 
 		dat += "Transfer Mode: <A href='?src=\ref[src];togglestorage=1'>[storage_mode]</A> <BR>"
 
@@ -233,7 +233,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	// Buffer - Like normal chem masters, except retains without a beaker.
 	// Makes pills. Can flush or move to internal storage
 	dat += "<HR>"
-	dat += "<b>&ltInternal Chemical Buffer&gt</b> <BR>"
+	dat += "<b>Internal Chemical Buffer</b> <BR>"
 
 	dat += "Transfer Mode: <A href='?src=\ref[src];togglebuffer=1'>[buffer_mode]</A> <BR>"
 
