@@ -86,6 +86,7 @@
 
 /datum/map_element/dungeon/mecha_graveyard
 	file_path = "maps/randomvaults/dungeons/mecha_graveyard.dmm"
+	unique = TRUE
 
 /obj/effect/decal/mecha_wreckage/graveyard_ripley
 	name = "Ripley wreckage"

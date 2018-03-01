@@ -25,8 +25,12 @@
 	var/template_path = "disposalsbin.tmpl"
 	var/deconstructable = TRUE	//Set to FALSE for disposal machinery that can be used for transporting players or things, but not tinkered with by players.
 
-	holomap = TRUE
-	auto_holomap = TRUE
+/obj/machinery/disposal/supports_holomap()
+	return TRUE
+
+/obj/machinery/disposal/initialize()
+	..()
+	add_self_to_holomap()
 
 /obj/machinery/disposal/no_deconstruct
 	deconstructable = FALSE
@@ -701,8 +705,6 @@
 	anchored = 1
 	density = 0
 
-	holomap = TRUE
-	auto_holomap = TRUE
 	level = LEVEL_BELOW_FLOOR			// underfloor only
 	var/dpdir = 0		// bitmask of pipe directions
 	dir = 0				// dir will contain dominant direction for junction pipes
@@ -712,7 +714,14 @@
 	var/base_icon_state	// initial icon state on map
 	var/deconstructable = TRUE
 
-	// new pipe, set the icon_state as on map
+/obj/structure/disposalpipe/supports_holomap()
+	return TRUE
+
+/obj/structure/disposalpipe/initialize()
+	..()
+	add_self_to_holomap()
+
+// new pipe, set the icon_state as on map
 /obj/structure/disposalpipe/New()
 	..()
 	base_icon_state = icon_state
@@ -1516,8 +1525,12 @@
 	var/obj/structure/disposalpipe/trunk/trunk
 	var/deconstructable = TRUE
 
-	holomap = TRUE
-	auto_holomap = TRUE
+/obj/structure/disposaloutlet/supports_holomap()
+	return TRUE
+
+/obj/structure/disposaloutlet/initialize()
+	..()
+	add_self_to_holomap()
 
 /obj/structure/disposaloutlet/no_deconstruct
 	deconstructable = FALSE

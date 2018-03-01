@@ -564,6 +564,12 @@
 		/obj/item/weapon/circuitboard/borgupload
 		)
 
+/obj/item/borg/fire_shield
+	name = "fire shield"
+	desc = "A shield that makes you immune to fire."
+	icon = 'icons/obj/decals.dmi'
+	icon_state = "fire"
+
 //Cyborg Instrument Synth. Remember to always play REMOVE KEBAB on malf rounds.
 /obj/item/device/instrument/instrument_synth
 	name = "instrument synthesizer"

@@ -706,11 +706,6 @@
 		holomap_data = list()
 	holomap_data += I
 
-// Calls the above, but only if the game has not yet started.
-/turf/proc/soft_add_holomap(var/atom/movable/AM)
-	if (!ticker || ticker.current_state != GAME_STATE_PLAYING)
-		add_holomap(AM)
-
 // Goddamnit BYOND.
 // So for some reason, I incurred a rendering issue with the usage of FLOAT_PLANE for the holomap plane.
 //   (For some reason the existance of underlays prevented the main icon and overlays to render)

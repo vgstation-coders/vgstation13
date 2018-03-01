@@ -14,6 +14,7 @@
 #define MOB_HOLOGRAPHIC 16 //holocarps
 #define MOB_SUPERNATURAL 32
 #define MOB_NO_PETRIFY 64 //can't get petrified
+#define MOB_NO_LAZ 128 //Can not be revived via lazarus injector
 
 #define BACKPACK 2
 #define SATCHEL_NORM 3
