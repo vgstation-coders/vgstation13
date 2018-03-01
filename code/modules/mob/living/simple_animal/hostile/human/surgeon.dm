@@ -1,4 +1,4 @@
-/mob/living/simple_animal/hostile/humanoid/surgeon/
+//mob/living/simple_animal/hostile/humanoid/surgeon/
 	name = "\improper Surgeon"
 	desc = "Don't interfere with his work!"
 	icon = 'icons/mob/hostile_humanoid.dmi'
@@ -19,7 +19,7 @@
 	//corpse = /obj/effect/landmark/corpse/surgeon
 	items_to_drop = list(/obj/item/weapon/circular_saw/plasmasaw)
 
-/mob/living/simple_animal/hostile/humanoid/surgeon/boss
+//mob/living/simple_animal/hostile/humanoid/surgeon/boss
 	name = "Doctor Placeholder" //I can't think of a good name
 	desc = "A deranged surgeon lost deep in space."
 	icon_dead = null //this isn't even his final form
@@ -34,7 +34,7 @@
 
 	faction = "necro" //don't want him to get killed by skeletons before his transformation
 
-/mob/living/simple_animal/hostile/humanoid/surgeon/boss/Die()
+//mob/living/simple_animal/hostile/humanoid/surgeon/boss/Die()
 	visible_message("<span class=danger><B>Before he can die, the mad surgeon takes a drink of a foul-smelling concoction and begins to mutate! </span></B>")
 	say("[pick("YOU CAN'T KILL ME THAT EASILY!", "I WONT LET YOU STOP ME!", "GET OUT OF MY FACILITY!", "I MUST CONTINUE MY RESEARCH!", "I'M GONNA WRECK IT!", "I'VE GOT A BONE TO PICK WITH YOU!")]")
 	var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(get_turf(src))
@@ -43,7 +43,7 @@
 	..()
 	return qdel(src)
 
-/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton
+//mob/living/simple_animal/hostile/humanoid/surgeon/skeleton
 	name = "\improper Skeletal Surgeon"
 	desc = "He wont be pushed around any longer"
 	icon = 'icons/mob/surgeon.dmi'
@@ -66,6 +66,6 @@
 	mob_property_flags = MOB_UNDEAD
 	items_to_drop = list()
 
-/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton/New()
+//mob/living/simple_animal/hostile/humanoid/surgeon/skeleton/New()
 	..()
 	flick("skelesurgeon_laugh", src)

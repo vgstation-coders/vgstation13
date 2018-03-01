@@ -55,7 +55,7 @@
 "bc" = (/obj/abstract/map/spawner/misc/medivault,/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/research)
 "bd" = (/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/research)
 "be" = (/obj/machinery/door/airlock/vault,/obj/structure/window/barricade/full/block,/turf/simulated/floor{icon_state = "white"},/area/vault/research)
-"bf" = (/obj/item/organ/internal/eyes/tajaran,/mob/living/simple_animal/hostile/humanoid/surgeon/boss,/turf/simulated/floor{icon_state = "white"},/area/vault/research)
+"bf" = (/obj/item/organ/internal/eyes/tajaran,/turf/simulated/floor{icon_state = "white"},/area/vault/research)
 "bg" = (/obj/item/weapon/scalpel/laser/tier2,/obj/item/weapon/storage/box/monkeycubes,/turf/simulated/floor{icon_state = "white"},/area/vault/research)
 "bh" = (/turf/simulated/floor{icon_state = "white"},/area/vault/research)
 "bi" = (/obj/structure/table,/obj/item/weapon/storage/firstaid/regular{pixel_x = 6; pixel_y = 2},/obj/item/weapon/storage/firstaid/internalbleed,/turf/simulated/floor{icon_state = "white"},/area/vault/research)
