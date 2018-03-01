@@ -3,9 +3,9 @@
 	desc = "A large pad sunk into the ground."
 	icon = 'icons/obj/robotics.dmi'
 	icon_state = "mommispawner-idle"
-	density = 1
-	anchored = 1
-	var/building=0
+	density = TRUE
+	anchored = TRUE
+	var/building=FALSE
 	var/metal=0
 	var/const/metalPerMoMMI=10
 	var/const/metalPerTick=1
@@ -14,10 +14,12 @@
 	active_power_usage = 5000
 	var/recharge_time=600 // 60s
 	var/locked_to_zlevel = 0 // Whether to lock the spawned MoMMIs to the z-level
+	var/dorf = FALSE
 
 /obj/machinery/mommi_spawner/dorf
 	machine_flags = WRENCHMOVE
 	desc = "A large pad mounted to the ground with large bolts."
+	dorf = TRUE
 
 /obj/machinery/mommi_spawner/dorf/attack_ghost(var/mob/dead/observer/user)
 	if(stat & NOPOWER|BROKEN)
@@ -142,12 +144,20 @@
 
 		// Make the MoMMI!
 		var/turf/T = get_turf(src)
+		var/mob/living/silicon/robot/mommi/M = null
 
-		var/mob/living/silicon/robot/mommi/M = new /mob/living/silicon/robot/mommi(T)
+		if(dorf)
+			M = new /mob/living/silicon/robot/mommi/nt(T)
+			M.laws = new /datum/ai_laws/dorf
+			M.keeper = FALSE
+		else
+			M = new /mob/living/silicon/robot/mommi/soviet(T)
+
 		if(!M)
 			return
 
 		M.invisibility = 0
+
 		if (locked_to_zlevel)
 			M.add_ion_law("You belong to the station where you were created; do not leave it.")
 			M.locked_to_z = T.z

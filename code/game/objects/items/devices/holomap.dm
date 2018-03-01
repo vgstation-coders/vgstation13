@@ -74,7 +74,7 @@
 		target.holomap_data.Cut()
 
 	for (var/obj/O in target)
-		if (O.holomap)
+		if (O.supports_holomap())
 			target.add_holomap(O)
 
 	to_chat(user, "You reset the holomap data.")

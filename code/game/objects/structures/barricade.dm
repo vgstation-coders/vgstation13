@@ -14,6 +14,7 @@
 	anchored = 1
 	opacity = 1 //Wood isn't transparent, the last time I checked
 	health = 60 //Fairly strong
+	layer = ABOVE_DOOR_LAYER
 	var/busy = 0 //Oh god fucking do_after's
 	var/materialtype = /obj/item/stack/sheet/wood
 

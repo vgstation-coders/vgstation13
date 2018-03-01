@@ -103,6 +103,7 @@
 	desc = "It's fossilised plant remains."
 
 /obj/item/weapon/fossil/plant/New()
+	..()
 	icon_state = "plant[rand(1,4)]"
 	var/prehistoric_plants = list(
 		/obj/item/seeds/telriis,

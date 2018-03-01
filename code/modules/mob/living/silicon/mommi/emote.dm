@@ -63,16 +63,16 @@
 			m_type = VISIBLE
 
 		if ("clap")
-			if (!src.restrained())
+			if (!incapacitated())
 				message = "<B>[src]</B> clangs \his utility claws together in a crude simulation of applause."
 				m_type = HEARABLE
 		if ("flap")
-			if (!src.restrained())
+			if (!incapacitated())
 				message = "<B>[src]</B> flaps \his utility arms as through they were wings."
 				m_type = HEARABLE
 
 		if ("aflap")
-			if (!src.restrained())
+			if (!incapacitated())
 				message = "<B>[src]</B> flaps his utility arms ANGRILY!"
 				m_type = HEARABLE
 

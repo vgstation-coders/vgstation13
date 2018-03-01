@@ -93,3 +93,15 @@
 /datum/rcd_schematic/rsf/fork
 	name		= "Fork"
 	spawn_type	= /obj/item/weapon/kitchen/utensil/fork
+
+/datum/rcd_schematic/rsf/vodka
+	name		= "Tunguska Triple Distilled"
+	spawn_type	= /obj/item/weapon/reagent_containers/food/drinks/bottle/vodka
+
+/datum/rcd_schematic/rsf/greyshit_vodka
+	name		= "Greyshit Vodka"
+	spawn_type	= /obj/item/weapon/reagent_containers/food/drinks/bottle/greyvodka
+
+/datum/rcd_schematic/rsf/ushanka
+	name		= "Ushanka"
+	spawn_type	= /obj/item/clothing/head/ushanka

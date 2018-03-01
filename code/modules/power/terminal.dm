@@ -13,9 +13,12 @@
 	anchored = 1
 	layer = WIRE_TERMINAL_LAYER
 
-	holomap = TRUE
-	auto_holomap = TRUE
+/obj/machinery/power/terminal/supports_holomap()
+	return TRUE
 
+/obj/machinery/power/terminal/initialize()
+	..()
+	add_self_to_holomap()
 
 /obj/machinery/power/terminal/New()
 	..()

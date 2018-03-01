@@ -8,10 +8,12 @@
 	anchored = 1.0
 	var/buildstage = 2
 	var/on = 0
-	//	luminosity = 1
 
-	holomap = TRUE
-	auto_holomap = TRUE
+/obj/machinery/light_switch/supports_holomap()
+	return TRUE
+
+/obj/machinery/light_switch/initialize()
+	add_self_to_holomap()
 
 /obj/machinery/light_switch/New(var/loc, var/ndir, var/building = 2)
 	..()
