@@ -431,6 +431,9 @@
 		return L
 
 /mob/living/proc/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
+	if(status_flags & GODMODE || M_NO_SHOCK in src.mutations)
+		return 0
+
 	var/damage = shock_damage * siemens_coeff
 
 	if(damage <= 0)
@@ -1375,6 +1378,7 @@ Thanks.
 		M = new meat_type(location, src)
 	else
 		M = new meat_type(location)
+	meat_taken++
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
 
 	if(istype(A))
@@ -1501,7 +1505,6 @@ Thanks.
 		src.being_butchered = 0
 		return
 
-	src.meat_taken++
 	src.drop_meat(get_turf(src))
 	src.being_butchered = 0
 	if(tool_name)

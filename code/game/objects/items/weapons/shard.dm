@@ -65,6 +65,7 @@
 	starting_materials = list(MAT_IRON = 5)
 	w_type=RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
+	glass = /obj/item/stack/sheet/metal
 
 /obj/item/weapon/shard/shrapnel/New()
 	..()

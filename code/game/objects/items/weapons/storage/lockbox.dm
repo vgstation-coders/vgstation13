@@ -166,6 +166,7 @@
 /obj/item/weapon/storage/lockbox/tracking
 	name = "lockbox (tracking implants)"
 	req_one_access = list(access_security)
+	storage_slots = 5
 
 /obj/item/weapon/storage/lockbox/tracking/New()
 	..()
@@ -178,6 +179,7 @@
 /obj/item/weapon/storage/lockbox/chem
 	name = "lockbox (chemical implants)"
 	req_one_access = list(access_security)
+	storage_slots = 5
 
 /obj/item/weapon/storage/lockbox/chem/New()
 	..()

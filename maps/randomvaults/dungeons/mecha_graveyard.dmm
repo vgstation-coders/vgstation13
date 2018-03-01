@@ -1,0 +1,131 @@
+"aa" = (/obj/effect/step_trigger/teleporter/random{affect_ghosts = 1; name = "escapeshuttle_leave"; teleport_x = 25; teleport_x_offset = 245; teleport_y = 25; teleport_y_offset = 245; teleport_z = 6; teleport_z_offset = 6},/turf/space/transit/north,/area)
+"ab" = (/obj/effect/step_trigger/teleporter/random{affect_ghosts = 1; name = "escapeshuttle_leave"; teleport_x = 25; teleport_x_offset = 245; teleport_y = 25; teleport_y_offset = 245; teleport_z = 6; teleport_z_offset = 6},/turf/space/transit/west,/area)
+"ac" = (/turf/space/transit/west,/area)
+"ad" = (/turf/space/transit/north,/area)
+"ae" = (/turf/space/transit/east,/area)
+"af" = (/obj/effect/step_trigger/teleporter/random{affect_ghosts = 1; name = "escapeshuttle_leave"; teleport_x = 25; teleport_x_offset = 245; teleport_y = 25; teleport_y_offset = 245; teleport_z = 6; teleport_z_offset = 6},/turf/space/transit/east,/area)
+"ag" = (/obj/effect/step_trigger/thrower/north{affect_ghosts = 1; name = "north_shuttle"; tiles = 0},/turf/space/transit/north,/area)
+"ah" = (/turf/space,/area)
+"ai" = (/obj/effect/step_trigger/thrower/west{affect_ghosts = 1; name = "west_shuttle"; tiles = 0},/turf/space/transit/west,/area)
+"aj" = (/obj/effect/step_trigger/thrower/east{affect_ghosts = 1; name = "east_shuttle"; tiles = 0},/turf/space/transit/east,/area)
+"ak" = (/turf/simulated/wall,/area/vault/mecha_graveyard)
+"al" = (/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"am" = (/turf/unsimulated/mineral/random,/area/vault/mecha_graveyard)
+"an" = (/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"ao" = (/obj/item/stack/rods,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"ap" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"aq" = (/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
+"ar" = (/obj/effect/decal/cleanable/blood/gibs/robot,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"as" = (/obj/structure/hanging_lantern{dir = 1},/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"at" = (/obj/effect/decal/cleanable/blood/gibs/robot/limb,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"au" = (/obj/item/weapon/ore/glass,/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
+"av" = (/obj/effect/decal/mecha_wreckage/graveyard_ripley,/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
+"aw" = (/obj/effect/decal/cleanable/soot,/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
+"ax" = (/obj/item/weapon/ore/iron,/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
+"ay" = (/obj/structure/hanging_lantern,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"az" = (/obj/effect/decal/mecha_wreckage/graveyard_ripley,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"aA" = (/obj/structure/girder,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"aB" = (/obj/structure/girder,/obj/item/stack/rods,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"aC" = (/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 1},/area/vault/mecha_graveyard)
+"aD" = (/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 5},/area/vault/mecha_graveyard)
+"aE" = (/obj/effect/decal/cleanable/blood/gibs/robot/down,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"aF" = (/obj/effect/decal/cleanable/ash,/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
+"aG" = (/obj/effect/decal/cleanable/blood/gibs/robot,/turf/unsimulated/floor/asteroid{icon_state = "asteroid_dug"},/area/vault/mecha_graveyard)
+"aH" = (/obj/machinery/status_display{pixel_y = 32},/obj/effect/decal/mecha_wreckage/durand,/obj/effect/decal/cleanable/soot,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"aI" = (/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 4},/area/vault/mecha_graveyard)
+"aJ" = (/obj/item/stack/sheet/plasteel,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"aK" = (/obj/effect/decal/mecha_wreckage/marauder,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"aL" = (/obj/item/mecha_parts/mecha_equipment/repair_droid,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"aM" = (/obj/effect/decal/cleanable/blood/gibs/robot,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"aN" = (/obj/item/weapon/ore/slag,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"aO" = (/obj/effect/decal/cleanable/soot,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"aP" = (/obj/effect/decal/mecha_wreckage/durand,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"aQ" = (/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 10},/area/vault/mecha_graveyard)
+"aR" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"},/area/vault/mecha_graveyard)
+"aS" = (/obj/effect/decal/mecha_wreckage/gygax,/obj/effect/decal/cleanable/soot,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"aT" = (/obj/effect/decal/cleanable/ash,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"aU" = (/obj/structure/grille/broken,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"aV" = (/obj/structure/hanging_lantern{dir = 8},/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"aW" = (/obj/effect/decal/cleanable/blood/oil,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"aX" = (/obj/structure/disposalpipe/segment{dir = 4},/obj/item/weapon/broken_pipe_tomahawk,/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 4},/area/vault/mecha_graveyard)
+"aY" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/unsimulated/floor/asteroid/plating,/area/vault/mecha_graveyard)
+"aZ" = (/obj/effect/decal/cleanable/blood/gibs/robot/up,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"ba" = (/obj/item/broken_device,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"bb" = (/obj/structure/hanging_lantern{dir = 4},/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 9},/area/vault/mecha_graveyard)
+"bc" = (/obj/structure/reagent_dispensers/fueltank,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"bd" = (/obj/structure/ore_box,/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 8},/area/vault/mecha_graveyard)
+"be" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/mecha_graveyard)
+"bf" = (/obj/effect/decal/remains/human,/turf/simulated/floor/airless{icon_state = "damaged5"},/area/vault/mecha_graveyard)
+"bg" = (/obj/effect/decal/mecha_wreckage/graveyard_clarke,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"bh" = (/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/vault/mecha_graveyard)
+"bi" = (/obj/effect/decal/cleanable/blood/gibs/robot/limb,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"bj" = (/obj/item/weapon/broken_bottle,/turf/unsimulated/floor/airless{icon_state = "asteroidwarning"; dir = 8},/area/vault/mecha_graveyard)
+"bk" = (/obj/machinery/door/airlock/external,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"bl" = (/obj/item/weapon/screwdriver,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"bm" = (/obj/machinery/mech_bay_recharge_port,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"bn" = (/obj/machinery/mech_bay_recharge_floor{icon_state = "recharge_floor_asteroid"},/turf/simulated/floor,/area/vault/mecha_graveyard)
+"bo" = (/obj/machinery/computer/mech_bay_power_console,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"bp" = (/obj/item/clothing/glasses/scanner/meson,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"bq" = (/obj/structure/girder/displaced,/turf/unsimulated/floor/asteroid,/area/vault/mecha_graveyard)
+"br" = (/obj/item/clothing/shoes/galoshes/broken,/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/vault/mecha_graveyard)
+"bs" = (/obj/machinery/mineral/unloading_machine,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"bt" = (/obj/machinery/conveyor{dir = 4; id_tag = "mining_west"},/obj/item/stack/sheet/plasteel,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"bu" = (/obj/machinery/conveyor{dir = 4; id_tag = "mining_west"},/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"bv" = (/obj/item/weapon/shard,/turf/unsimulated/floor/airless{icon_state = "asteroidplating"},/area/vault/mecha_graveyard)
+"bw" = (/obj/item/weapon/shard{icon_state = "small"},/turf/space,/area)
+"bx" = (/obj/structure/lattice,/turf/space,/area)
+"by" = (/obj/docking_port/destination/vault/mecha_graveyard{dir = 2},/obj/machinery/door/airlock/external,/turf/unsimulated/floor/airless{icon_state = "asteroidfloor"},/area/vault/mecha_graveyard)
+"bz" = (/obj/item/weapon/shard{icon_state = "medium"},/turf/space,/area)
+"bA" = (/obj/item/weapon/shard{icon_state = "medium"},/obj/item/weapon/shard,/turf/space,/area)
+"bB" = (/obj/structure/lattice,/obj/structure/girder,/turf/space,/area)
+"bC" = (/obj/effect/step_trigger/thrower{affect_ghosts = 1; name = "thrower_throwdown"; stopper = 0; tiles = 0},/turf/space/transit/south,/area)
+"bD" = (/turf/space/transit/south,/area)
+"bE" = (/obj/effect/step_trigger/teleporter/random{affect_ghosts = 1; name = "escapeshuttle_leave"; teleport_x = 25; teleport_x_offset = 245; teleport_y = 25; teleport_y_offset = 245; teleport_z = 6; teleport_z_offset = 6},/turf/space/transit/south,/area)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+abacacadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadaeaf
+abacacacadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadaeaeaf
+abacacacacacadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadaeaeaf
+abacacacacacacadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadaeaeaeaeaf
+abacacacacacacacadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadadaeaeaeaeaf
+abacacacacacacacadadadadagagagagagagagagagagagagagagagagagagagagagagagadadadadaeaeaeaeaeaf
+abacacacacacacacacacagagagahahahahahahahahahahahahahahahahahahahahahagagadadaeaeaeaeaeaeaf
+abacacacacacacacacaiaiahahahahahahahahahahahahahahahahahahahahahahahahajajaeaeaeaeaeaeaeaf
+abacacacacacacacaiaiahahahahahahahakakakalalalalamamamamahahahahahahahahajajaeaeaeaeaeaeaf
+abacacacacacacacaiahahahahahahahahananakalalalalamamamamahahahahahahahahahajaeaeaeaeaeaeaf
+abacacacacacacaiaiahahahahahahahaoalapakalalalaqamamamamamamamamahahahahahajaeaeaeaeaeaeaf
+abacacacacacacaiahahahahahahahalalalarasalalaqaqaqaqamamamamamamahahahahahajaeaeaeaeaeaeaf
+abacacacacacacaiahahahahahalalalatalalalalalauauaqaqaqavamamamamamamamahahajaeaeaeaeaeaeaf
+abacacacacacacaiahahahahalalalalalalalaoalalaqauaqawaqaxaqaqaqaqaqalalahahajaeaeaeaeaeaeaf
+abacacacacacacaiahahahahalalanalalalalalalamaqaxaxaqauauaqaqaqaxaqalalahahajaeaeaeaeaeaeaf
+abacacacacacacaiahahahalalalanayalalalalamamamamazaxauauaqaxaqauaralalahahajaeaeaeaeaeaeaf
+abacacacacacaiaiahahahaAalaBakakakaCaDaEalamamamamaxaqaFaqaGaqaqaqaqaqahahajaeaeaeaeaeaeaf
+abacacacacacaiahahahalalaCalaHanananaIalalaJamamamaqalaqauaqaqaqaqaqaqahahajaeaeaeaeaeaeaf
+abacacacacacaiahahahaKalapaLananaMapaIaoalanamamaNalalalaOalalalaqamahahahajaeaeaeaeaeaeaf
+abacacacacacaiahahahalaPaQaRananaSanaIalalalalaTalalalalalalalalamamahahahajaeaeaeaeaeaeaf
+abacacacacacaiahahahahalalaUakakaVaWaXaYalaZanbaalbbakakakalalalahahahahahajaeaeaeaeaeaeaf
+abacacacacacaiahahahahahaAalaoaJaAbcalalaoalanalanbdbebfbgalahahahahahahahajaeaeaeaeaeaeaf
+abacacacacacaiahahahahahahalalalakbhbhbhbhalanalbibjbkaWblahahahahahahahahajaeaeaeaeaeaeaf
+abacacacacacaiahahahahahahahahahahbhbmbnboalanalbpaQbqaoarahahahahahahahahajaeaeaeaeaeaeaf
+abacacacacacaiaiahahahahahahahahahbhbrbhbhanaZalbsbtbubqalahahahahahahahahajaeaeaeaeaeaeaf
+abacacacacacacaiaiahahahahahahahahahahaoalanalalalbhbvahbwahahahahahahahahajaeaeaeaeaeaeaf
+abacacacacacacacaiahahahahahahahahahbxalakakbyakaAbxbxbzahbAahahahahahahahajaeaeaeaeaeaeaf
+abacacacacacacacaiaiahahahahahahahahbxahahahahahahahbxahbwahahahahahahajajajaeaeaeaeaeaeaf
+abacacacacacacacacaiahahahahahahahahbxahahahahahahahbxahahahahahahahahajaeaeaeaeaeaeaeaeaf
+abacacacacacacacacaiahahahahahahahahbxahahahahahahahbBahahahahahahajajajaeaeaeaeaeaeaeaeaf
+abacacacacacacacacaiaiahahahahahahahbxahahahahahahahbxahahahahbCbCajaeaeaeaeaeaeaeaeaeaeaf
+abacacacacacacacacacaiahahahahahahahbBahahahahahahahbxahahahahbCbDbDbDaeaeaeaeaeaeaeaeaeaf
+abacacacacacacacacacaiaiahahahahahahbxbxahahahahahbxbxahahahahbCbDbDbDaeaeaeaeaeaeaeaeaeaf
+abacacacacacacacacacacbCahahahahahahahbxahahahahahbxahahahahbCbCbDbDbDbDaeaeaeaeaeaeaeaeaf
+abacacacacacacacacacbDbCbCbCahahahahahbxbxbBbxbxbxbxahahahahbCbDbDbDbDbDaeaeaeaeaeaeaeaeaf
+abacacacacacacacacacbDbDbDbCbCahahahahahahahahahahahahahahbCbCbDbDbDbDbDbDbDaeaeaeaeaeaeaf
+abacacacacacacacacacbDbDbDbDbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbCbDbDbDbDbDbDbDbDaeaeaeaeaeaeaf
+abacacacacacacbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDaeaeaeaeaeaeaf
+abacacacacacbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDaeaeaeaeaeaf
+abacacacacacbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDaeaeaeaf
+abacacbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDaeaeaeaf
+abacacbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDaeaf
+abacacbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDbDaf
+bEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbEbE
+"}

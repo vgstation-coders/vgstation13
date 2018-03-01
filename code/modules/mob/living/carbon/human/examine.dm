@@ -239,7 +239,7 @@
 				msg += "[t_He] [t_has] a vacant, braindead stare...\n"
 
 	// Religions
-	if (user.mind && user.mind.faith && user.mind.faith.isReligiousLeader(user) && mind)
+	if (ismob(user) && user.mind && user.mind.faith && user.mind.faith.isReligiousLeader(user) && mind)
 		if (src.mind.faith == user.mind.faith)
 			msg += "<span class='notice'>You recognise [t_him] as a follower of [user.mind.faith.name].</span><br/>"
 
@@ -430,8 +430,8 @@
 	if(butchery)
 		msg += "<span class='warning'>[butchery]</span>\n"
 
-	if(user.hasHUD(HUD_SECURITY))
-		var/perpname = get_id_name("wot")
+	if(istype(user) && user.hasHUD(HUD_SECURITY))
+		var/perpname = get_identification_name(get_face_name())
 		var/criminal = "None"
 
 		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
@@ -441,11 +441,11 @@
 			msg += {"<span class = 'deptradio'>Criminal status:</span> <a href='?src=\ref[src];criminal=1'>\[[criminal]\]</a>
 <span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]\n</a>"}
 			if(!isjustobserver(user))
-				msg += "<a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]\n</a>\n"
+				msg += "<a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"
 			msg += {"[wpermit(src) ? "<span class = 'deptradio'>Has weapon permit.</span>\n" : ""]"}
 
-	if(user.hasHUD(HUD_MEDICAL))
-		var/perpname = get_id_name("wot")
+	if(istype(user) && user.hasHUD(HUD_MEDICAL))
+		var/perpname = get_identification_name(get_face_name())
 		var/medical = "None"
 
 		var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)

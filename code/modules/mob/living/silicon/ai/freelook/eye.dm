@@ -63,22 +63,6 @@
 
 // AI MOVEMENT
 
-// The AI's "eye". Described on the top of the page.
-
-/mob/living/silicon/ai
-	var/mob/camera/aiEye/eyeobj = new()
-	var/sprint = 10
-	var/cooldown = 0
-	var/acceleration = 1
-
-
-// Intiliaze the eye by assigning it's "ai" variable to us. Then set it's loc to us.
-/mob/living/silicon/ai/New()
-	..()
-	eyeobj.ai = src
-	eyeobj.name = "[src.name] (AI Eye)" // Give it a name
-	spawn(5)
-		eyeobj.forceMove(src.loc)
 
 /mob/living/silicon/ai/Destroy()
 	eyeobj.ai = null
@@ -94,13 +78,6 @@
 			//AI.eyeobj.forceMove(src)
 			if (isturf(src.loc) || isturf(src))
 				AI.eyeobj.forceMove(src)
-
-/mob/living/Click()
-	if(isAI(usr)) //IDK why this is needed
-		var/mob/living/silicon/ai/A = usr
-		if(!A.aicamera.in_camera_mode) //Fix for taking photos of mobs
-			return
-	..()
 
 // This will move the AIEye. It will also cause lights near the eye to light up, if toggled.
 // This is handled in the proc below this one.
@@ -146,7 +123,6 @@
 		//src.eyeobj.loc = src.loc
 		src.eyeobj.forceMove(src.loc)
 	else
-		to_chat(src, "ERROR: Eyeobj not found. Creating new eye...")
 		src.eyeobj = new(src.loc)
 		src.eyeobj.ai = src
 		src.eyeobj.name = "[src.name] (AI Eye)" // Give it a name

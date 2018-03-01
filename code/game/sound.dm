@@ -28,7 +28,7 @@ var/list/machete_throw_hit_sound = list('sound/weapons/hfmachete_throw_hit01.ogg
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
 //space sounds have no gas modification, for example. Though >space sounds
-/proc/playsound(var/atom/source, soundin, vol as num, vary, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0)
+/proc/playsound(var/atom/source, soundin, vol as num, vary, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE)
 	var/turf/turf_source = get_turf(source)
 
 	ASSERT(!isnull(turf_source))
@@ -79,13 +79,13 @@ var/list/machete_throw_hit_sound = list('sound/weapons/hfmachete_throw_hit01.ogg
 
 		if (player_turf && turf_source && player_turf.z == turf_source.z)
 			if(get_dist(player_turf, turf_source) <= Dist)
-				player.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, gas_modified, channel)
+				player.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, gas_modified, channel,wait)
 
 var/const/FALLOFF_SOUNDS = 1
 var/const/SURROUND_CAP = 7
 
 #define MIN_SOUND_PRESSURE	2 //2 kPa of pressure required to at least hear sound
-/mob/proc/playsound_local(var/turf/turf_source, soundin, vol as num, vary, frequency, falloff, gas_modified, var/channel = 0)
+/mob/proc/playsound_local(var/turf/turf_source, soundin, vol as num, vary, frequency, falloff, gas_modified, var/channel = 0,var/wait = FALSE)
 	if(!src.client)
 		return
 
@@ -111,7 +111,7 @@ var/const/SURROUND_CAP = 7
 
 	soundin = get_sfx(soundin)
 
-	var/sound/S = sound(soundin, 0, 0, channel, vol)
+	var/sound/S = sound(soundin, 0, wait, channel, vol,)
 
 	if (vary)
 		if(frequency)

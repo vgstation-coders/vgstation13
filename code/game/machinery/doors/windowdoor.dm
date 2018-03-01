@@ -201,16 +201,11 @@
 			return
 		user.delayNextAttack(8)
 		user.do_attack_animation(src, user)
-		health = max(0, health - 25)
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
 		visible_message("<span class='warning'>\The [user] smashes against \the [name].</span>", 1)
-		if (health <= 0)
-			getFromPool(shard, loc)
-			getFromPool(/obj/item/stack/cable_coil, loc, 2)
-			qdel(src)
+		take_damage(25)
 	else
 		return attack_hand(user)
-
 
 /obj/machinery/door/window/attack_animal(mob/living/user as mob)
 	if(operating)
@@ -220,14 +215,9 @@
 		return
 	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)
-	health = max(0, health - M.melee_damage_upper)
 	playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
 	visible_message("<span class='warning'>\The [M] [M.attacktext] against \the [name].</span>", 1)
-	if (health <= 0)
-		getFromPool(shard, loc)
-		getFromPool(/obj/item/stack/cable_coil, loc, 2)
-		qdel(src)
-
+	take_damage(M.melee_damage_upper)
 
 /obj/machinery/door/window/attack_hand(mob/user as mob)
 	return attackby(user, user)
@@ -276,14 +266,10 @@
 		var/aforce = I.force
 		user.do_attack_animation(src, I)
 		user.delayNextAttack(8)
-		if(I.damtype == BRUTE || I.damtype == BURN)
-			health = max(0, health - aforce)
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
 		visible_message("<span class='danger'>[src] was hit by [I].</span>")
-		if (health <= 0)
-			getFromPool(shard, loc)
-			getFromPool(/obj/item/stack/cable_coil, loc, 2)
-			qdel(src)
+		if(I.damtype == BRUTE || I.damtype == BURN)
+			take_damage(aforce)
 		return
 
 	add_fingerprint(user)

@@ -146,13 +146,16 @@ obj/structure/windoor_assembly/Destroy()
 
 			//Adding cable to the assembly. Step 5 complete.
 			else if(istype(W, /obj/item/stack/cable_coil) && anchored)
+				var/obj/item/stack/cable_coil/CC = W
+				if(CC.amount < 2)
+					to_chat(user, "<span class='rose'>You need more cable for this!</span>")
+					return
 				user.visible_message("[user] wires the windoor assembly.", "You start to wire the windoor assembly.")
 
 				if(do_after(user, src, 40))
 					if(!src)
 						return
-					var/obj/item/stack/cable_coil/CC = W
-					CC.use(1)
+					CC.use(2)
 					to_chat(user, "<span class='notice'>You wire the windoor!</span>")
 					src.state = "02"
 					if(src.secure)
@@ -239,10 +242,15 @@ obj/structure/windoor_assembly/Destroy()
 						windoor.icon_state = "right[secure]open"
 						windoor.base_state = "right[secure]"
 					windoor.dir = src.dir
-					windoor.setDensity(FALSE) 
-					
-					windoor.req_access = src.electronics.conf_access
-					windoor.electronics = src.electronics
+					windoor.setDensity(FALSE)
+					windoor.fingerprints += src.fingerprints
+					windoor.fingerprintshidden += src.fingerprintshidden
+					windoor.fingerprintslast = user.ckey
+					if(src.electronics.one_access)
+						windoor.req_access = null
+						windoor.req_one_access = src.electronics.conf_access
+					else
+						windoor.req_access = src.electronics.conf_access
 					src.electronics.forceMove(windoor)
 					qdel(src)
 

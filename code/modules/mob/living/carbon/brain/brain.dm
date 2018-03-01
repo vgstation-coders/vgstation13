@@ -71,3 +71,6 @@
 
 /mob/living/carbon/brain/proc/brain_dead_chat()
 	return !(container && (istype(container, /obj/item/device/mmi)))
+
+/mob/living/carbon/brain/dexterity_check()
+	return 1 //This is so certain mech tools work for MMIs and posibrains.

@@ -11,11 +11,11 @@ var/area/space_area
 	var/list/area_turfs
 	var/turret_protected = 0
 	var/list/turretTargets = list()
-	plane = BASE_PLANE
-	layer = AREA_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
+	plane = ABOVE_LIGHTING_PLANE
+	layer = MAPPING_AREA_LAYER
 	var/base_turf_type = null
 	var/shuttle_can_crush = TRUE
-
+	var/project_shadows = FALSE
 	var/obj/effect/narration/narrator = null
 
 	flags = 0
@@ -416,7 +416,13 @@ var/area/space_area
 	var/area/oldArea = Obj.areaMaster
 	Obj.areaMaster = src
 
+	if(project_shadows)
+		Obj.update_shadow()
+	else if(istype(oldArea) && oldArea.project_shadows)
+		Obj.underlays -= Obj.shadow
+
 	for(var/mob/mob_in_obj in Obj.contents)
+
 		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = Obj.areaMaster, "old" = oldArea))
 
 	var/mob/M = Obj

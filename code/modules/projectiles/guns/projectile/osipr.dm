@@ -4,7 +4,7 @@
 
 /obj/item/weapon/gun/osipr
 	name = "\improper Overwatch Standard Issue Pulse Rifle"
-	desc = "Centuries ago those weapons striked fear in all of humanity when the Combine attacked the Earth. Nowadays these are just the best guns that the Syndicate can provide to its Elite Troops with its tight budget."
+	desc = "Centuries ago those weapons struck fear in all of humanity when the Combine attacked the Earth. Nowadays these are just the best guns that the Syndicate can provide to its Elite Troops with its tight budget."
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "osipr"
 	item_state = "osipr"

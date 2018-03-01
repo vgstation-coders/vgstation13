@@ -991,9 +991,8 @@
 
 	if(..())
 		return 1
-
 	if(volume >= 5)
-		T.holy = 1
+		T.bless()
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
@@ -3088,7 +3087,7 @@
 		return 1
 
 	if((prob(10) && method == TOUCH) || method == INGEST)
-		M.contract_disease(new diseasetype)
+		M.contract_disease(new diseasetype, 1)
 
 /datum/reagent/nanites/autist
 	name = "Autist nanites"
@@ -6386,6 +6385,60 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	spawn(volume * 10)
 		O.light_color = init_color
 		O.set_light(0)
+
+/datum/reagent/mucus
+	name = "Mucus"
+	id = MUCUS
+	description = "A slippery aqueous secretion produced by, and covering, mucous membranes.  Problematic for Asthmatics."
+	reagent_state = LIQUID
+	color = "#13BC5E"
+	custom_metabolism = 0.01
+
+/datum/reagent/mucus/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(M_ASTHMA in H.mutations)
+			H.adjustOxyLoss(2)
+			if(prob(30))
+				H.emote("gasp")
+
+/datum/reagent/albuterol
+	name = "Albuterol"
+	id = ALBUTEROL
+	description = "A bronchodilator that relaxes muscles in the airways and increases air flow to the lungs."
+	reagent_state = LIQUID
+	color = "#C8A5DC"
+	overdose_am = REAGENTS_OVERDOSE
+
+/datum/reagent/albuterol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	if(holder.has_reagent(MUCUS))
+		holder.remove_reagent(MUCUS, 10)
+
+/datum/reagent/saltwater
+	name = "Salt Water"
+	id = SALTWATER
+	description = "It's water mixed with salt. It's probably not healthy to drink."
+	reagent_state = LIQUID
+	color = "#FFFFFF" //rgb: 255, 255, 255
+	density = 1.122
+	specheatcap = 6.9036
+	
+/datum/reagent/saltwater/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(ishuman(M) && prob(20))
+		var/mob/living/carbon/human/H = M
+		H.vomit()
+		M.adjustToxLoss(2 * REM)
 
 /datum/reagent/saline
 	name = "Saline"

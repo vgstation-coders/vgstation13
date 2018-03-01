@@ -19,9 +19,10 @@
 	var/is_cold_recipe = 0
 	var/required_temp = 0
 	var/react_discretely = FALSE //Handle_reactions() won't find the maximum number of times the chemicals can react. Use only if it shouldn't react more than once at a time.
-	var/reaction_temp_cost = 0 //How much to lower temperature of the result chemical after the reaction
+	var/reaction_temp_change = 0 //How much to change the temperature of the result chemical after the reaction
 	var/alert_admins = 0 //1 to alert admins with name and amount, 2 to alert with name and amount of all reagents
 	var/quiet = 0
+	
 
 /datum/chemical_reaction/proc/log_reaction(var/datum/reagents/holder, var/amt)
 	var/datum/log_controller/I = investigations[I_CHEMS]
@@ -266,7 +267,7 @@
 	result_amount = 0.2
 	required_temp = 3500
 	react_discretely = TRUE
-	reaction_temp_cost = 3500
+	reaction_temp_change = -3500
 
 /datum/chemical_reaction/degrease
 	name = "Degrease"
@@ -2239,9 +2240,14 @@
 	name = "Ice"
 	id = ICE
 	result = ICE
-	required_reagents = list(WATER = 10)
-	required_catalysts = list(FROSTOIL = 5)
-	result_amount = 11
+	required_reagents = list(WATER = 10, FROSTOIL = 1)
+	result_amount = 10
+	reaction_temp_change = -30
+
+/datum/chemical_reaction/ice/on_reaction(var/datum/reagents/holder, var/created_volume)
+	if(ismob(holder.my_atom))
+		var/mob/M = holder.my_atom
+		M.bodytemperature -= rand(10,20)
 
 /datum/chemical_reaction/ice2
 	name = "Frozen water"
@@ -3040,6 +3046,20 @@
 	required_reagents = list(CARBON = 1, SACID = 2)
 	required_temp = T0C + 450
 	result_amount = 1
+	
+/datum/chemical_reaction/albuterol
+	name = "Albuterol"
+	id = ALBUTEROL
+	result = ALBUTEROL
+	required_reagents = list(HYPERZINE = 1, INAPROVALINE = 1)
+	result_amount = 2
+	
+/datum/chemical_reaction/saltwater
+	name = "Salt Water"
+	id = SALTWATER
+	result = SALTWATER
+	required_reagents = list(WATER = 50, SODIUMCHLORIDE = 5)
+	result_amount = 50
 
 /datum/chemical_reaction/saline
 	name = "Saline"

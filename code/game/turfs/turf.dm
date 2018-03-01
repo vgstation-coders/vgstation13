@@ -85,9 +85,6 @@
 			src.Entered(AM)
 			return
 
-/turf/proc/initialize()
-	return
-
 /turf/ex_act(severity)
 	return 0
 
@@ -414,6 +411,7 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/W = new N(src)
+		W.initialize()
 
 		if(tell_universe)
 			universe.OnTurfChange(W)
@@ -532,8 +530,9 @@
 		spawn(0)
 			M.take_damage(100, "brute")
 
-/turf/proc/Bless()
-	turf_flags |= NOJAUNT
+/turf/bless()
+	holy = 1
+	..()
 
 /////////////////////////////////////////////////////////////////////////
 // Navigation procs

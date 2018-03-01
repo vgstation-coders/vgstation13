@@ -41,8 +41,14 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	if(signal.data["reject"])
 		return
 
-	if(signal.data["message"])
+	signal.data["traffic"] += 1 //Valid step point.
 
+	if(signal.data["trace"])
+		var/obj/machinery/computer/telecomms/monitor/M = signal.data["trace"]
+		M.receive_trace(src, "None. The operation contained [signal.data["traffic"]] steps")
+
+
+	if(signal.data["message"])
 		// Prevents massive radio spam
 		signal.data["done"] = 1 // mark the signal as being broadcasted
 		// Search for the original signal and mark it as done as well
@@ -150,7 +156,6 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		return
 
 	if(is_freq_listening(signal)) // detect subspace signals
-
 		signal.data["done"] = 1 // mark the signal as being broadcasted
 		signal.data["compression"] = 0
 

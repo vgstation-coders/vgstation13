@@ -426,8 +426,8 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/smes
 	name = "Circuit Board (SMES)"
-	desc = "A circuit board used to run a gas freezer."
-	build_path = "/obj/machinery/power/battery/smes"
+	desc = "A circuit board used to run a giant battery."
+	build_path = "/obj/machinery/power/battery/smes/pristine"
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=4;" + Tc_PROGRAMMING + "=4"
 	req_components = list(
@@ -465,6 +465,26 @@ obj/item/weapon/circuitboard/rdserver
 	req_components = list (
 							"/obj/item/weapon/stock_parts/capacitor" = 4,
 							"/obj/item/weapon/stock_parts/console_screen" = 1)
+
+/obj/item/weapon/circuitboard/chemheater
+	name = "Circuit Board (Directed Laser Heater)"
+	desc = "A circuit board used to run a container heating device."
+	build_path = "/obj/machinery/chemheater"
+	board_type = MACHINE
+	origin_tech = Tc_BIOTECH + "=4;" + Tc_ENGINEERING + "=3;" + Tc_POWERSTORAGE + "=4"
+	req_components = list (
+							"/obj/item/weapon/stock_parts/micro_laser" = 1,
+							"/obj/item/weapon/stock_parts/capacitor" = 1)
+
+/obj/item/weapon/circuitboard/chemcooler
+	name = "Circuit Board (Cryonic Wave Projector)"
+	desc = "A circuit board used to run a container cooling device."
+	build_path = "/obj/machinery/chemcooler"
+	board_type = MACHINE
+	origin_tech = Tc_BIOTECH + "=4;" + Tc_ENGINEERING + "=3;" + Tc_POWERSTORAGE + "=4"
+	req_components = list (
+							"/obj/item/weapon/stock_parts/scanning_module" = 1,
+							"/obj/item/weapon/stock_parts/capacitor" = 1)
 
 /obj/item/weapon/circuitboard/chem_dispenser
 	name = "Circuit Board (Chemistry Dispenser)"
@@ -894,6 +914,16 @@ obj/item/weapon/circuitboard/rdserver
 
 // Telecomms circuit boards:
 
+/obj/item/weapon/circuitboard/telecomms/pda_multicaster
+	name = "Circuit Board (PDA multicaster)"
+	desc = "A circuit board used to run a machine that resends messages."
+	build_path = "/obj/machinery/telecomms/pda_multicaster"
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=2"
+	req_components = list(
+							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
+							"/obj/item/weapon/stock_parts/manipulator" = 1)
+
 /obj/item/weapon/circuitboard/telecomms/receiver
 	name = "Circuit Board (telecommunications subspace receiver)"
 	desc = "A circuit board used to run a machine that receives subspace transmissions in telecommunications systems."
@@ -1287,3 +1317,11 @@ obj/item/weapon/circuitboard/rdserver
 	origin_tech = Tc_PROGRAMMING + "=1"
 	req_components = list (
 	"/obj/item/stack/sheet/glass/glass" = 10)
+
+/obj/item/weapon/circuitboard/conduction_plate
+	name = "Circuit Board (Conduction Plate)"
+	build_path = "/obj/machinery/power/conduction_plate"
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=1;" + Tc_ENGINEERING + "=4"
+	req_components = list(
+							"/obj/item/weapon/stock_parts/capacitor" = 1)

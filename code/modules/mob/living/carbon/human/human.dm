@@ -346,9 +346,9 @@
 	return
 //repurposed proc. Now it combines get_id_name() and get_face_name() to determine a mob's name variable. Made into a seperate proc as it'll be useful elsewhere
 /mob/living/carbon/human/proc/get_visible_name()
-	if( wear_mask && (is_slot_hidden(wear_mask.body_parts_covered,HIDEFACE)))	//Wearing a mask which hides our face, use id-name if possible
+	if( wear_mask && wear_mask.is_hidden_identity())	//Wearing a mask which hides our face, use id-name if possible
 		return get_id_name("Unknown")
-	if( head && (is_slot_hidden(head.body_parts_covered,HIDEFACE)))
+	if( head && head.is_hidden_identity())
 		return get_id_name("Unknown")	//Likewise for hats
 	if(mind && mind.vampire && (VAMP_SHADOW in mind.vampire.powers) && mind.vampire.ismenacing)
 		return get_id_name("Unknown")
@@ -360,7 +360,7 @@
 //Returns "Unknown" if facially disfigured and real_name if not. Useful for setting name when polyacided or when updating a human's name variable
 /mob/living/carbon/human/proc/get_face_name()
 	var/datum/organ/external/head/head_organ = get_organ(LIMB_HEAD)
-	if((wear_mask && (is_slot_hidden(wear_mask.body_parts_covered,HIDEFACE))) || ( head && (is_slot_hidden(head.body_parts_covered,HIDEFACE))) || !head_organ || head_organ.disfigured || (head_organ.status & ORGAN_DESTROYED) || !real_name || (M_HUSK in mutations) )	//Wearing a mask which hides our face, use id-name if possible
+	if((wear_mask && wear_mask.is_hidden_identity() ) || ( head && head.is_hidden_identity() ) || !head_organ || head_organ.disfigured || (head_organ.status & ORGAN_DESTROYED) || !real_name || (M_HUSK in mutations) )	//Wearing a mask which hides our face, use id-name if possible
 		return "Unknown"
 	return real_name
 
@@ -482,7 +482,7 @@
 	else if (href_list["criminal"])
 		if(!usr.hasHUD(HUD_SECURITY) || isjustobserver(usr))
 			return
-		var/perpname = get_id_name("wot")
+		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
 		if(!sec_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
@@ -490,11 +490,11 @@
 		var/setcriminal = input(usr, "Specify a new criminal status for this person.", "Security HUD", sec_record.fields["criminal"]) as null|anything in list("None", "*Arrest*", "Incarcerated", "Parolled", "Released")
 		if(!setcriminal || (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_SECURITY))
 			return
-		sec_record.fields["criminal"] = setcriminal	
+		sec_record.fields["criminal"] = setcriminal
 	else if (href_list["secrecord"])
 		if(!usr.hasHUD(HUD_SECURITY))
 			return
-		var/perpname = get_id_name("wot")
+		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
 		if(!sec_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
@@ -513,7 +513,7 @@
 	else if (href_list["secrecordadd"])
 		if(!usr.hasHUD(HUD_SECURITY) || isjustobserver(usr))
 			return
-		var/perpname = get_id_name("wot")
+		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
 		if(!sec_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
@@ -525,7 +525,7 @@
 	else if (href_list["medical"])
 		if(!usr.hasHUD(HUD_MEDICAL) || isjustobserver(usr))
 			return
-		var/perpname = get_id_name("wot")
+		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
 		if(!gen_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
@@ -539,7 +539,7 @@
 	else if (href_list["medrecord"])
 		if(!usr.hasHUD(HUD_MEDICAL))
 			return
-		var/perpname = get_id_name("wot")
+		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/med_record = data_core.find_medical_record_by_name(perpname)
 		if(!med_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
@@ -555,7 +555,7 @@
 	else if (href_list["medrecordComment"])
 		if(!usr.hasHUD(HUD_MEDICAL))
 			return
-		var/perpname = get_id_name("wot")
+		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/med_record = data_core.find_medical_record_by_name(perpname)
 		if(!med_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
@@ -571,7 +571,7 @@
 	else if (href_list["medrecordadd"])
 		if(!usr.hasHUD(HUD_MEDICAL) || isjustobserver(usr))
 			return
-		var/perpname = get_id_name("wot")
+		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/med_record = data_core.find_medical_record_by_name(perpname)
 		if(!med_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
@@ -1401,6 +1401,13 @@
 	Paralyse(paralyse_duration)
 	Jitter(jitter_duration)
 
+/mob/living/carbon/human/proc/asthma_attack()
+	if(disabilities & ASTHMA && !(M_NO_BREATH in mutations) && !(has_reagent_in_blood(ALBUTEROL)))
+		forcesay("-")
+		visible_message("<span class='danger'>\The [src] begins wheezing and grabbing at their throat!</span>", \
+									"<span class='warning'>You begin wheezing and grabbing at your throat!</span>")
+		src.reagents.add_reagent(MUCUS, 10)
+
 // Makes all robotic limbs organic.
 /mob/living/carbon/human/proc/make_robot_limbs_organic()
 	for(var/datum/organ/external/O in src.organs)
@@ -1536,6 +1543,8 @@
 		plane = LYING_HUMAN_PLANE
 	else
 		plane = HUMAN_PLANE
+	if(istype(areaMaster) && areaMaster.project_shadows)
+		update_shadow()
 
 /mob/living/carbon/human/set_hand_amount(new_amount) //Humans need hand organs to use the new hands. This proc will give them some
 	if(new_amount > held_items.len)
@@ -1735,10 +1744,10 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 
 /mob/living/carbon/human/can_show_flavor_text()
 	// Wearing a mask...
-	if(wear_mask && is_slot_hidden(wear_mask.body_parts_covered, HIDEFACE))
+	if(wear_mask && wear_mask.is_hidden_identity())
 		return FALSE
 	// Or having a headpiece that protects your face...
-	if(head && is_slot_hidden(head.body_parts_covered, HIDEFACE))
+	if(head && head.is_hidden_identity())
 		return FALSE
 	// Or lacking a head, or being disfigured...
 	var/datum/organ/external/head/limb_head = get_organ(LIMB_HEAD)
@@ -1750,8 +1759,8 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 
-/mob/living/carbon/human/proc/make_zombie(mob/master)
-	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, mind)
+/mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE)
+	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? mind : null))
 	T.get_clothes(src, T)
 	T.name = real_name
 	T.host = src

@@ -333,7 +333,7 @@ var/list/uplink_items = list()
 	name = "Lethal Speed Chemical"
 	desc = "30 units of Hypozine, a chemical that causes the body to synthesize hyperzine, but also causes increases in muscle speed at levels that tear the body apart. Metabolizes quite slowly."
 	item = /obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
-	cost = 12
+	cost = 4
 	job = list("Chemist", "Medical Doctor", "Chief Medical Officer")
 
 //Engineer
@@ -463,6 +463,12 @@ var/list/uplink_items = list()
 	desc = "A single grenade containing a pair of incredibly destructive viscerators. Be aware that they will attack any nearby targets, including yourself. Emits a blinding flash upon detonation."
 	item = /obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate
 	cost = 6
+
+/datum/uplink_item/dangerous/butterfly
+	name = "Butterfly Knife"
+	desc = "A butterfly knife containing a deadly viscerator. It can be flipped to conceal the blade and deploy a stored viscerator. The viscerator will self destruct after 20 seconds but the knife will renew it's storage every 25 seconds automatically."
+	item = /obj/item/weapon/butterflyknife/viscerator
+	cost = 7
 
 /datum/uplink_item/dangerous/gatling
 	name = "Gatling Gun"

@@ -1187,6 +1187,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 /mob/living/simple_animal/borer/ClickOn( var/atom/A, var/params )
 	..()
+	if(params2list(params)["shift"])
+		return
 	if(host)
 		if(extend_o_arm_unlocked)
 			if(hostlimb == LIMB_RIGHT_ARM || hostlimb == LIMB_LEFT_ARM)
