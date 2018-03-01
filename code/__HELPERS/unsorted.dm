@@ -1736,3 +1736,14 @@ Game Mode config tags:
 
 	qdel(O)
 	return TRUE
+
+//Same as block(Start, End), but only returns the border turfs
+//'Start' must be lower-left, 'End' must be upper-right
+/proc/block_borders(turf/Start, turf/End)
+	ASSERT(istype(Start))
+	ASSERT(istype(End))
+
+	//i'm a lazy cunt and I don't feel like making this work
+	ASSERT(Start.x < End.x && Start.y < End.y)
+
+	return block(Start, End) - block(locate(Start.x + 1, Start.y + 1, Start.z), locate(End.x - 1, End.y - 1, End.z))
