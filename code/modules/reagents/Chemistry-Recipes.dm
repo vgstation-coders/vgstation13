@@ -22,6 +22,7 @@
 	var/reaction_temp_change = 0 //How much to change the temperature of the result chemical after the reaction
 	var/alert_admins = 0 //1 to alert admins with name and amount, 2 to alert with name and amount of all reagents
 	var/quiet = 0
+	
 
 /datum/chemical_reaction/proc/log_reaction(var/datum/reagents/holder, var/amt)
 	var/datum/log_controller/I = investigations[I_CHEMS]
@@ -3057,7 +3058,7 @@
 	name = "Salt Water"
 	id = SALTWATER
 	result = SALTWATER
-	required_reagents = list(WATER = 10, SODIUMCHLORIDE = 1)
+	required_reagents = list(WATER = 50, SODIUMCHLORIDE = 5)
 	result_amount = 10
 
 #undef ALERT_AMOUNT_ONLY
