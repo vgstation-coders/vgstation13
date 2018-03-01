@@ -10,7 +10,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 
 /obj/machinery/chem_master
-	name = "\improper Chem Master"
+	name = "\improper Chem Master 3000"
 	density = 1
 	anchored = 1
 	icon = 'icons/obj/chemical.dmi'
@@ -49,9 +49,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 	var/chem_board = /obj/item/weapon/circuitboard/chemmaster3000
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
-
-
-// A new, better chem master. Unlike the normal chem master, this variant is able to hold reagents in it regardless of having a beaker.
 
 /obj/machinery/chem_master/New()
 	. = ..()
@@ -164,11 +161,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/dat = list()
 	// Pill bottle stuff
 	if(loaded_pill_bottle)
-		dat += "<A href='?src=\ref[src];ejectbottle=1'>Eject pill bottle.</A><BR>"
+		dat += "<A href='?src=\ref[src];ejectbottle=1'>Eject pill bottle</A><BR>"
 	// Beaker
 	if(beaker)
 		var/datum/reagents/R = beaker.reagents
-		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker.</A><BR>"
+		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker</A><BR>"
 
 		if(R.total_volume)
 			// Beaker buttons
@@ -199,9 +196,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "</tr>"
 			dat += "</table>"
 		else
-			dat += "Beaker is empty."
+			dat += "Beaker is empty"
 	else
-		dat += "No beaker inserted."
+		dat += "No beaker inserted"
 
 
 	// Internal Storage - Just storage. Moves to either buffer or beaker, has a flush mode.
@@ -231,7 +228,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				dat += "</tr>"
 			dat += "</table>"
 		else
-			dat += "No reagents in internal storage."
+			dat += "No reagents in internal storage"
 
 	// Buffer - Like normal chem masters, except retains without a beaker.
 	// Makes pills. Can flush or move to internal storage
@@ -281,6 +278,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	if(!condi)
 		dat += "<A href='?src=\ref[src];createpill=1'>Create single pill ([max_pill_size] units max)</A><BR>"
 		dat += "<A href='?src=\ref[src];createpill_multiple=1'>Create multiple pills ([max_pill_size] units max each; [max_pill_count] max)</A><BR>"
+		dat += "<A href='?src=\ref[src];createpill_multiple=1;createempty=1'>Create empty pills</A><BR>"
 	dat += "<A href='?src=\ref[src];createbottle=1'>Create single bottle ([condi ? "50" : max_bottle_size] units max each; [max_bottle_count] max)</A><BR>"
 	dat += "<A href='?src=\ref[src];createbottle_multiple=1'>Create multiple bottles ([max_bottle_size] units max each; [max_bottle_count] max)</A><BR>"
 
@@ -320,6 +318,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		popup.open()
 		return 1
 
+	if(href_list["main"])
+		attack_hand(usr)
+		src.updateUsrDialog()
+		return 1
 
 	// Pill bottle
 	if(loaded_pill_bottle)
@@ -567,6 +569,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		var/amount_per_pill = reagents.total_volume/count
 		if(amount_per_pill > max_pill_size)
 			amount_per_pill = max_pill_size
+		if(href_list["createempty"])
+			amount_per_pill = 0 // If "createempty" is 1, pills are empty and no reagents are used.
+
 		var/name = reject_bad_text(input(usr,"Name:","Name your pill!","[reagents.get_master_reagent_name()] ([amount_per_pill] units)") as null|text)
 		if(!name)
 			return
@@ -638,25 +643,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 /obj/machinery/chem_master/on_reagent_change()
 	update_icon()
-
-// Other
-/obj/machinery/chem_master/blob_act()
-	if(prob(50))
-		qdel(src)
-
-/obj/machinery/chem_master/blob_act()
-	if(prob(50))
-		qdel(src)
-
-/obj/machinery/chem_master/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if(prob(50))
-				qdel(src)
-				return
 
 // Chem master 4000
 /obj/machinery/chem_master/chemical_manipulator
