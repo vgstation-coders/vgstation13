@@ -3059,7 +3059,7 @@
 	id = SALTWATER
 	result = SALTWATER
 	required_reagents = list(WATER = 50, SODIUMCHLORIDE = 5)
-	result_amount = 10
+	result_amount = 50
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
