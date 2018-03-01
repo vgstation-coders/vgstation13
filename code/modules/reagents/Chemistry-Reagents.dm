@@ -3065,7 +3065,7 @@
 		return 1
 
 	if((prob(10) && method == TOUCH) || method == INGEST)
-		M.contract_disease(new diseasetype)
+		M.contract_disease(new diseasetype, 1)
 
 /datum/reagent/nanites/autist
 	name = "Autist nanites"
