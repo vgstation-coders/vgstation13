@@ -6399,3 +6399,22 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(holder.has_reagent(MUCUS))
 		holder.remove_reagent(MUCUS, 10)
 
+/datum/reagent/saltwater
+	name = "Salt Water"
+	id = SALTWATER
+	description = "It's water mixed with salt. It's probably not healthy to drink."
+	reagent_state = LIQUID
+	color = "#FFFFFF" //rgb: 255, 255, 255
+	density = 1.122
+	specheatcap = 6.9036
+	
+/datum/reagent/saltwater/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(ishuman(M) && prob(20))
+		var/mob/living/carbon/human/H = M
+		H.vomit()
+		M.adjustToxLoss(2 * REM)
+	
