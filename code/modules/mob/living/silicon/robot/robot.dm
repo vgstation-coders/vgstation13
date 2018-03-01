@@ -1010,6 +1010,7 @@
 
 /mob/living/silicon/robot/proc/updateicon(var/overlay_layer = ABOVE_LIGHTING_LAYER, var/overlay_plane = LIGHTING_PLANE)
 	overlays.Cut()
+	update_fire()
 	if(!stat && cell != null)
 		eyes = image(icon,"eyes-[icon_state]", ABOVE_LIGHTING_LAYER)
 		overlays += eyes

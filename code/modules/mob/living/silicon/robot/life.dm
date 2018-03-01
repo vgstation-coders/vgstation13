@@ -231,7 +231,7 @@
 					cells.icon_state = "charge0"
 		else
 			cells.icon_state = "charge-empty"
-	
+
 	if(bodytemp) //actually environment temperature but fuck it
 		bodytemp.icon_state = "temp[temp_alert]"
 	if(pressure)
@@ -241,8 +241,7 @@
 
 	update_pull_icon()
 
-	if(on_fire) 
-		fire.icon_state = "fire[on_fire ? 1 : 0]"
+	fire.icon_state = "fire[on_fire ? 1 : 0]"
 
 	if(eye_blind || blinded)
 		overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
@@ -305,6 +304,14 @@
 			weapon_lock = 0
 			weaponlock_time = 120
 
+/mob/living/silicon/robot/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(!module)
+		..()
+		return
+	if(locate(/obj/item/borg/fire_shield, module.modules))
+		return
+	..()
+
 //Robots on fire
 /mob/living/silicon/robot/handle_fire()
 	if(..())
@@ -318,12 +325,6 @@
 		overlays += image("icon"='icons/mob/OnFire.dmi', "icon_state"="Standing")
 	update_icons()
 	return
-
-/mob/living/silicon/robot/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(!on_fire) //Silicons don't gain stacks from hotspots, but hotspots can ignite them
-		IgniteMob()
-
-// end robots on fire
 
 /mob/living/silicon/robot/update_canmove()
 	if(paralysis || stunned || knockdown || locked_to || lockcharge)
@@ -339,33 +340,33 @@
 	var/adjusted_pressure = localpressure - ONE_ATMOSPHERE //REAL pressure
 	if(localpressure)
 		if(adjusted_pressure >= HAZARD_HIGH_PRESSURE)
-			pressure_alert = 2 
+			pressure_alert = 2
 		else if(localpressure >= WARNING_HIGH_PRESSURE && localpressure < WARNING_HIGH_PRESSURE)
-			pressure_alert = 1 
+			pressure_alert = 1
 		else if(localpressure <= WARNING_LOW_PRESSURE && localpressure > HAZARD_LOW_PRESSURE)
-			pressure_alert = -1 
+			pressure_alert = -1
 		else if(localpressure <= HAZARD_LOW_PRESSURE)
-			pressure_alert = -2 
-		else 
-			pressure_alert = 0 
+			pressure_alert = -2
+		else
+			pressure_alert = 0
 	else //there ain't no air, we're in a vacuum
-		pressure_alert = -2 
-	
+		pressure_alert = -2
+
 // This handles the temp sensor hud element
 /mob/living/silicon/robot/proc/handle_heat_damage(datum/gas_mixture/environment)
 	var/envirotemp = environment.return_temperature()
 	if(environment)
-		if(envirotemp)	
-			if(envirotemp >= 1000 ) //1000 is the heat_level_3 for humans
+		if(envirotemp)
+			if (envirotemp >= 1000 ) //1000 is the heat_level_3 for humans
 				temp_alert = 2
-			else if(envirotemp >= BODYTEMP_HEAT_DAMAGE_LIMIT && envirotemp < 1000 )
-				temp_alert = 1 
-			else if(envirotemp <= T0C && envirotemp > BODYTEMP_COLD_DAMAGE_LIMIT) 
-				temp_alert = -1 
-			else if(envirotemp <= BODYTEMP_COLD_DAMAGE_LIMIT ) //space is cold
+			else if (envirotemp >= BODYTEMP_HEAT_DAMAGE_LIMIT && envirotemp < 1000 )
+				temp_alert = 1
+			else if (envirotemp <= T0C && envirotemp > BODYTEMP_COLD_DAMAGE_LIMIT)
+				temp_alert = -1
+			else if (envirotemp <= BODYTEMP_COLD_DAMAGE_LIMIT ) //space is cold
 				temp_alert = -2
-			else 
-				temp_alert = 0 
+			else
+				temp_alert = 0
 				return 0
 	else //vacuums are cold
 		temp_alert = -2

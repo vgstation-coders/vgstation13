@@ -28,6 +28,8 @@
 	modules += new /obj/item/device/holomap(src)
 	modules += new /obj/item/device/station_map(src)
 	modules += new /obj/item/device/silicate_sprayer(src)
+	modules += new /obj/item/borg/fire_shield
+
 	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
 	W.amount = MOMMI_MAX_COIL
 	W.max_amount = MOMMI_MAX_COIL
