@@ -26,8 +26,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	// Shit for mechanics. (MECH_*)
 	var/mech_flags=0
 
-	var/holomap = FALSE // Whether we should be on the holomap.
-	var/auto_holomap = FALSE // Whether we automatically soft-add ourselves to the holomap in New(), make sure this is false is something does it manually.
 	plane = OBJ_PLANE
 
 	var/defective = 0
@@ -42,12 +40,14 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	var/has_been_invisible_sprayed = FALSE
 
-/obj/New()
-	..()
-	if (auto_holomap && isturf(loc))
-		var/turf/T = loc
-		T.soft_add_holomap(src)
-	verbs -= /obj/verb/remove_pai
+// Whether this object can appear in holomaps
+/obj/proc/supports_holomap()
+	return FALSE
+
+/obj/proc/add_self_to_holomap()
+	var/turf/T = loc
+	if(istype(T) && ticker && ticker.current_state != GAME_STATE_PLAYING)
+		T.add_holomap(src)
 
 /obj/Destroy()
 	for(var/mob/user in _using)
@@ -59,7 +59,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(integratedpai)
 		qdel(integratedpai)
 		integratedpai = null
-		verbs -= /obj/verb/remove_pai
 
 	..()
 
@@ -71,8 +70,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return 0
 	P.forceMove(src)
 	integratedpai = P
-	verbs += /obj/verb/remove_pai
-
+	verbs += /obj/proc/remove_pai
 
 /obj/attackby(obj/item/weapon/W, mob/user)
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
@@ -145,7 +143,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(istype(A,/obj/machinery)||(istype(A,/mob)&&user.secHUD))
 		A.attack_pai(user)
 
-/obj/verb/remove_pai()
+/obj/proc/remove_pai()
 	set name = "Remove pAI"
 	set category = "Object"
 	set src in range(1)
@@ -167,7 +165,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/eject_integratedpai_if_present()
 	if(integratedpai)
 		integratedpai.forceMove(get_turf(src))
-		verbs -= /obj/verb/remove_pai
+		verbs -= /obj/proc/remove_pai
 		var/obj/item/device/paicard/P = integratedpai
 		integratedpai = null
 		return P
