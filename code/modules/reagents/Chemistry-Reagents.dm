@@ -3603,6 +3603,7 @@
 	description = "A salt made of sodium chloride. Commonly used to season food."
 	reagent_state = SOLID
 	color = "#FFFFFF" //rgb: 255, 255, 255
+	overdose_am = REAGENTS_OVERDOSE/6
 	density = 2.09
 	specheatcap = 1.65
 
