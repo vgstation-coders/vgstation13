@@ -125,16 +125,18 @@
 			if(!dizzy_effect_in_loop)
 				spawn()
 					while(dizziness)
+						C = client
 						dizzy_effect_in_loop = TRUE
 						if(C)
 							//https://en.wikipedia.org/wiki/Rose_(mathematics) with 3 petals
 							for(var/i=30; i <= 390; i+=(360/100))
+								C = client
 								if(!C)
 									break
-								var/r = cos(3*i) * min(dizziness/2, 50)
+								var/r = cos(3*i) * min(dizziness/5, 50)
 								var/x = r * cos(i)
 								var/y = r * sin(i)
-								var/offset = round(dizziness/50, 1)
+								var/offset = round(dizziness/50, 1) // offset starts applying after the player has a high dizziness value
 								C.pixel_x = rand(x - offset, x + offset)
 								C.pixel_y = rand(y - offset, y + offset)
 								sleep(1)
