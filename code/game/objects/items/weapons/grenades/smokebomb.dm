@@ -16,7 +16,7 @@
 	smoke.attach(src)
 
 /obj/item/weapon/grenade/smokebomb/prime()
-	playsound(get_turf(src), 'sound/effects/smoke.ogg', 50, 1, -3)
+	playsound(src, 'sound/effects/smoke.ogg', 50, 1, -3)
 	smoke.set_up(10, 0, usr.loc)
 	spawn(0)
 		smoke.start()

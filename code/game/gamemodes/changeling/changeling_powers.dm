@@ -291,12 +291,12 @@
 			if(2)
 				to_chat(src, "<span class='notice'>We extend a proboscis.</span>")
 				src.visible_message("<span class='warning'>[src] extends a proboscis!</span>")
-				playsound(get_turf(src), 'sound/effects/lingextends.ogg', 50, 1)
+				playsound(src, 'sound/effects/lingextends.ogg', 50, 1)
 			if(3)
 				to_chat(src, "<span class='notice'>We stab [T] with the proboscis.</span>")
 				src.visible_message("<span class='danger'>[src] stabs [T] with the proboscis!</span>")
 				to_chat(T, "<span class='danger'>You feel a sharp stabbing pain!</span>")
-				playsound(get_turf(src), 'sound/effects/lingstabs.ogg', 50, 1)
+				playsound(src, 'sound/effects/lingstabs.ogg', 50, 1)
 				var/datum/organ/external/affecting = T.get_organ(src.zone_sel.selecting)
 				if(affecting.take_damage(39,0,1,"large organic needle"))
 					T:UpdateDamageIcon(1)
@@ -311,7 +311,7 @@
 	to_chat(src, "<span class='notice'>We have absorbed [T]!</span>")
 	src.visible_message("<span class='danger'>[src] sucks the fluids from [T]!</span>")
 	to_chat(T, "<span class='danger'>You have been absorbed by the changeling!</span>")
-	playsound(get_turf(src), 'sound/effects/lingabsorbs.ogg', 50, 1)
+	playsound(src, 'sound/effects/lingabsorbs.ogg', 50, 1)
 	add_attacklogs(src, T, "absorbed")
 
 	T.dna.real_name = T.real_name //Set this again, just to be sure that it's properly set.

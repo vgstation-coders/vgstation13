@@ -125,7 +125,7 @@ var/list/all_doors = list()
 
 		if (H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
 			// TODO: analyze the called proc
-			playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
+			playsound(src, 'sound/effects/bang.ogg', 25, 1)
 
 			if (!istype(H.head, /obj/item/clothing/head/helmet))
 				visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
@@ -228,7 +228,7 @@ var/list/all_doors = list()
 		operating = 1
 
 	if(makes_noise)
-		playsound(get_turf(src), soundeffect, soundpitch, 1)
+		playsound(src, soundeffect, soundpitch, 1)
 
 	set_opacity(0)
 	door_animate("opening")
@@ -260,7 +260,7 @@ var/list/all_doors = list()
 	layer = closed_layer
 
 	if (makes_noise)
-		playsound(get_turf(src), soundeffect, soundpitch, 1)
+		playsound(src, soundeffect, soundpitch, 1)
 
 	setDensity(TRUE)
 	door_animate("closing")

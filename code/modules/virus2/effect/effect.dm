@@ -417,7 +417,7 @@
 			to_chat(H, "<span class='warning'>Your [glass_hand.display_name] resonates with the glass in \the [glass_to_shatter], shattering it to bits!</span>")
 			glass_to_shatter.reagents.reaction(H.loc, TOUCH)
 			new/obj/effect/decal/cleanable/generic(get_turf(H))
-			playsound(get_turf(H), 'sound/effects/Glassbr1.ogg', 25, 1)
+			playsound(H, 'sound/effects/Glassbr1.ogg', 25, 1)
 			spawn(1 SECONDS)
 				if (H && glass_hand)
 					if (prob(50 * multiplier))

@@ -17,7 +17,7 @@
 
 /datum/rcd_schematic/clear_decals/attack(var/turf/A, var/mob/user)
 	to_chat(user, "Clearing decals...")
-	playsound(get_turf(master), 'sound/effects/spray3.ogg', 15, 1)
+	playsound(master, 'sound/effects/spray3.ogg', 15, 1)
 
 	A.ClearDecals()
 
@@ -112,8 +112,8 @@
 		ndesc = sanitize(input(user, "What do you want to be described on this [nname]?", "[capitalize(nname)] description"))
 
 	to_chat(user, "Painting floor...")
-	//playsound(get_turf(master), 'sound/AI/animes.ogg', 50, 1)
-	playsound(get_turf(master), 'sound/effects/spray3.ogg', 15, 1)
+	//playsound(master, 'sound/AI/animes.ogg', 50, 1)
+	playsound(master, 'sound/effects/spray3.ogg', 15, 1)
 
 	selection.apply(A, nname, ndesc, thisdir)
 

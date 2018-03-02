@@ -160,7 +160,7 @@
 	user.visible_message("<span class='warning'>[target] lets out a small fart, which gets set alight with [user]'s [tool]!</span>" , \
 	"<span class='warning'>[target] farts into the open flame, burning his anus!</span>" )
 	target.apply_damage(max(10, tool.force), BURN, LIMB_GROIN)
-	playsound(get_turf(target), 'sound/effects/holler.ogg', 50, 1)
+	playsound(target, 'sound/effects/holler.ogg', 50, 1)
 
 
 //////////////////////////////////////////////////////////////////

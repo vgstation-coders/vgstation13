@@ -220,7 +220,7 @@
 	if(isscrewdriver(used_item) && cauterymode)
 		if(held)
 			to_chat(user, "<span class='notice'>You detach \the [held] and \the [src] switches to cutting mode.</span>")
-			playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
+			playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 			held.add_fingerprint(user)
 			held.forceMove(get_turf(src))
 			held = null
@@ -233,7 +233,7 @@
 			to_chat(user, "<span class='notice'>There's already a cautery attached to \the [src].</span>")
 		else if(!held && user.drop_item(used_item, src))
 			to_chat(user, "<span class='notice'>You attach \the [used_item] to \the [src].</span>")
-			playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
+			playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 			src.held = used_item
 		else
 			to_chat(user, "<span class='danger'>You can't let go of \the [used_item]!</span>")
@@ -380,7 +380,7 @@
 		target.AdjustParalysis(-3)
 		target.AdjustStunned(-3)
 		target.AdjustKnockdown(-3)
-		playsound(get_turf(target), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+		playsound(target, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 		target.visible_message(
 			"<span class='notice'>[user] prods [target] trying to wake \him up!</span>",
 			"<span class='notice'>You prod [target] trying to wake \him up!</span>",

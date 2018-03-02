@@ -318,7 +318,7 @@
 
 		qdel(W)
 		matter += 10
-		playsound(get_turf(src), 'sound/machines/click.ogg', 20, 1)
+		playsound(src, 'sound/machines/click.ogg', 20, 1)
 		to_chat(user, "<span class='notice'>\the [src] now holds [matter]/[max_matter] matter-units.</span>")
 		return 1
 

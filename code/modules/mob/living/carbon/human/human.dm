@@ -721,7 +721,7 @@
 					src.visible_message("<span class='warning'>[src] throws up!</span>","<span class='danger'>You throw up!</span>")
 					spawn_vomit_on_floor = 1
 
-			playsound(get_turf(loc), 'sound/effects/splat.ogg', 50, 1)
+			playsound(loc, 'sound/effects/splat.ogg', 50, 1)
 
 			if(spawn_vomit_on_floor)
 				if(istype(location, /turf/simulated))

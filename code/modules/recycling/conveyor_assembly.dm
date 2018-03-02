@@ -106,7 +106,7 @@
 
 /obj/structure/conveyor_assembly/attackby(obj/item/P, mob/user)
 	if(iscrowbar(P))
-		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 75, 1)
+		playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
 		if(do_after(user, src, 10))
 			to_chat(user, "<span class='notice'>You unhinge the frame.</span>")
 			getFromPool(/obj/item/stack/conveyor_assembly, src.loc)
@@ -115,7 +115,7 @@
 	else if(istype(P, /obj/item/stack/sheet/metal))
 		var/obj/item/stack/S = P
 		if(S.amount > 4)
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 			if(do_after(user, src, 30) && S.amount > 4)
 				S.use(4)
 				to_chat(user, "<span class='notice'>You add the plates to \the [src].</span>")

@@ -115,12 +115,12 @@
 			stored_modules[module] = null
 			break
 	to_chat(user, "You successfully remove \the [deployed] from \the [src].")
-	playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
+	playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 	undeploy()
 	return TRUE
 
 /obj/item/weapon/switchtool/proc/undeploy()
-	playsound(get_turf(src), undeploy_sound, 10, 1)
+	playsound(src, undeploy_sound, 10, 1)
 	edit_deploy(0)
 	deployed = null
 	overlays.len = 0
@@ -135,7 +135,7 @@
 	if(deployed)
 		return FALSE
 
-	playsound(get_turf(src), deploy_sound, 10, 1)
+	playsound(src, deploy_sound, 10, 1)
 	deployed = stored_modules[module]
 	hmodule = get_module_name(module)
 	overlays += get_module_name(module)

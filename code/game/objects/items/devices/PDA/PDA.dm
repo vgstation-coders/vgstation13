@@ -444,7 +444,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 /obj/item/device/pda/trader
 	name = "Trader PDA"
 	desc = "Much good for trade."
-	note = "Congratulations, your station ãplU‰%ZÃ’67ÕEz4Æ¦U¦ŸÉ8¥E1ÀÓÐ‹îöÈ~±šÞ@¡ÐT¥u1B¤Õkñ@iž8÷NJŠó"
+	note = "Congratulations, your station ï¿½plUï¿½%ZÃ’67ï¿½Ez4Æ¦Uï¿½ï¿½ï¿½8ï¿½E1ï¿½ï¿½Ð‹ï¿½ï¿½ï¿½~ï¿½ï¿½ï¿½@ï¿½ï¿½Tï¿½u1Bï¿½ï¿½kï¿½@iï¿½8ï¿½NJï¿½ï¿½"
 	icon_state = "pda-trader"
 	default_cartridge = /obj/item/weapon/cartridge/trader
 
@@ -1480,9 +1480,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				id.virtual_wallet.money -= amount
 				withdraw_arbitrary_sum(user,amount)
 				if(prob(50))
-					playsound(get_turf(src), 'sound/items/polaroid1.ogg', 50, 1)
+					playsound(src, 'sound/items/polaroid1.ogg', 50, 1)
 				else
-					playsound(get_turf(src), 'sound/items/polaroid2.ogg', 50, 1)
+					playsound(src, 'sound/items/polaroid2.ogg', 50, 1)
 
 				var/datum/transaction/T = new()
 				T.target_name = user.name

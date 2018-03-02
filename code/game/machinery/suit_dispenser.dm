@@ -70,11 +70,11 @@ var/list/dispenser_presets = list()
 		return 0
 	if ((dispenser_flags & SD_NOGREED) && (user in used_by) && !emagged)
 		to_chat(user,"<span class='warning'>You've already picked up your suit!</span>")
-		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
+		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return 0
 	else if(emagged)
 		say("!'^&YouVE alreaDY pIC&$!Ked UP yOU%r Su^!it.")
-		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 100, 0)
+		playsound(src, 'sound/machines/buzz-sigh.ogg', 100, 0)
 		return 1
 	return 1
 
@@ -111,7 +111,7 @@ var/list/dispenser_presets = list()
 		emagged = TRUE
 		if(user)
 			user.visible_message("<span class='warning'>\The [user] slides a weird looking ID into \the [src], and sparks come flying out!</span>","<span class='warning'>You temporarily short the safety mechanisms.</span>")
-		playsound(get_turf(src), pick(spark_sound), 75, 1)
+		playsound(src, pick(spark_sound), 75, 1)
 		spark(src,4)
 
 /obj/machinery/suit_dispenser/proc/promptfornum(var/mob/user)

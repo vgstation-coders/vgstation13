@@ -136,7 +136,7 @@
 
 	spawn(10)
 
-		playsound(get_turf(src), 'sound/effects/party_horn.ogg', 50, 1)
+		playsound(src, 'sound/effects/party_horn.ogg', 50, 1)
 
 		sleep(10)
 

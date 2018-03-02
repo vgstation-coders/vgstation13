@@ -278,7 +278,7 @@
 			if(0)
 				if(iswrench(W))
 					to_chat(user, "<span class='notice'>You deconstruct \the [src].</span>")
-					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+					playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 					//new /obj/item/stack/sheet/metal( get_turf(src.loc), 2)
 					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 					M.amount = 2
@@ -289,7 +289,7 @@
 					user.visible_message(
 						"<span class='warning'>[user.name] has added cables to \the [src]!</span>",
 						"You add cables to \the [src].")
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					C.use(1)
 					build_step++
 					update_icon()

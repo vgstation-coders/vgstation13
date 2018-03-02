@@ -85,7 +85,7 @@
 	if(user.spell_channeling && !force_remove)
 		user.overlays += chargeoverlay
 		if(world.time >= last_active_sound + 50)
-			playsound(get_turf(user), 'sound/effects/lightning/chainlightning_activate.ogg', 100, 1, "vary" = 0)
+			playsound(user, 'sound/effects/lightning/chainlightning_activate.ogg', 100, 1, "vary" = 0)
 			last_active_sound = world.time
 		zapzap = multicast
 		//give user overlay
@@ -126,7 +126,7 @@
 	if(!oursound)
 		oursound = pick(lightning_sound)
 	L.our_spell = src
-	playsound(get_turf(user), oursound, 100, 1, "vary" = 0)
+	playsound(user, oursound, 100, 1, "vary" = 0)
 	L.tang = adjustAngle(get_angle(U,T))
 	L.icon = midicon
 	L.icon_state = "[L.tang]"

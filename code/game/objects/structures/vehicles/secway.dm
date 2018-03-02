@@ -58,7 +58,7 @@
 				return
 	occupant.Knockdown(2)
 	occupant.Stun(2)
-	playsound(get_turf(src), "sound/effects/meteorimpact.ogg", 25, 1)
+	playsound(src, "sound/effects/meteorimpact.ogg", 25, 1)
 	occupant.visible_message("<span class='danger'>[occupant] crashes into \the [obstacle]!</span>", "<span class='danger'>You crash into \the [obstacle]!</span>")
 
 	if(istype(obstacle, /mob/living))

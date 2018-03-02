@@ -315,6 +315,9 @@
 
 	var/annoyed = 0
 
+/mob/living/simple_animal/hostile/gremlin/greytide/attack_icon()
+	return image(icon = 'icons/obj/storage/storage.dmi', icon_state = "toolbox_blue")
+
 /mob/living/simple_animal/hostile/gremlin/greytide/electrocute_act()
 	return //Gremtide cometh
 
@@ -561,7 +564,7 @@
 				continue
 			if(S.health < maxHealth)
 				if(prob(10))
-					playsound(get_turf(S), get_sfx("soulstone"), 50,1)
+					playsound(S, get_sfx("soulstone"), 50,1)
 				if(prob(35))
 					make_tracker_effects(src, S)
 				S.health = max(S.maxHealth, S.health+rand(3,6))
@@ -570,7 +573,7 @@
 				visible_message("<span class = 'warning'>\The [src] makes a fist with its skeletal hands, and [S] turns to dust.</span>")
 				health = max(maxHealth, health+S.health)
 				make_tracker_effects(S, src)
-				playsound(get_turf(S), get_sfx("soulstone"), 50,1)
+				playsound(S, get_sfx("soulstone"), 50,1)
 				S.dust()
 
 			if(target && S.target != target)

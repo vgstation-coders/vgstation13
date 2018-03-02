@@ -74,7 +74,7 @@
 		return 0
 
 	to_chat(user, "<span class='notice'>You start adding cable to \the [src].</span>")
-	playsound(get_turf(src), 'sound/items/zip.ogg', 100, 1)
+	playsound(src, 'sound/items/zip.ogg', 100, 1)
 	if (do_after(user, src, 100) && !T.intact && can_attach_terminal(user))
 
 		//Shock chance

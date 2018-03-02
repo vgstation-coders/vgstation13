@@ -21,7 +21,7 @@
 		return 1
 
 	to_chat(user, "Dispensing [lowertext(name)]")
-	playsound(get_turf(user), 'sound/machines/click.ogg', 10, 1)
+	playsound(user, 'sound/machines/click.ogg', 10, 1)
 	new spawn_type(get_turf(A))
 
 /datum/rcd_schematic/rsf/dosh

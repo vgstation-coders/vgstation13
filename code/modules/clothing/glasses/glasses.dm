@@ -50,7 +50,7 @@
 
 /obj/item/clothing/glasses/regular/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
-	playsound(get_turf(src), "shatter", 50, 1)
+	playsound(src, "shatter", 50, 1)
 
 	var/obj/item/weapon/shard/S = new(get_turf(src))
 	S.Crossed()
@@ -93,7 +93,7 @@
 
 /obj/item/clothing/glasses/sunglasses/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
-	playsound(get_turf(src), "shatter", 50, 1)
+	playsound(src, "shatter", 50, 1)
 
 	var/obj/item/weapon/shard/S = new(get_turf(src))
 	S.Crossed()
@@ -103,7 +103,7 @@
 
 /obj/item/clothing/glasses/sunglasses/holo/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them and making them fade away!</span>", "<span class='danger'>You crush \the [src] under your foot, which takes less effort than you realized as they fade from existence.</span>")
-	playsound(get_turf(src), "shatter", 50, 1)
+	playsound(src, "shatter", 50, 1)
 
 	qdel(src)
 	return SPECIAL_ATTACK_FAILED
@@ -227,12 +227,12 @@
 		..()
 		if(prob(15))
 			new /obj/item/weapon/shard(loc)
-			playsound(get_turf(src), "shatter", 50, 1)
+			playsound(src, "shatter", 50, 1)
 			qdel(src)
 			return
 		if(prob(15))
 			new/obj/item/clothing/glasses/sunglasses(get_turf(src))
-			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
+			playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
 			qdel(src)
 			return
 		if(prob(55))

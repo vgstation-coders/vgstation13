@@ -94,7 +94,7 @@
 			src.shot_number = 0
 		use_power(1000)
 		var/obj/item/projectile/beam/emitter/A = getFromPool(/obj/item/projectile/beam/emitter, loc)
-		playsound(get_turf(src), 'sound/weapons/emitter.ogg', 25, 1)
+		playsound(src, 'sound/weapons/emitter.ogg', 25, 1)
 		if(prob(35))
 			spark(src, 5)
 		A.dir = src.dir

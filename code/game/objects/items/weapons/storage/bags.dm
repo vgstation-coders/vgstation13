@@ -37,6 +37,8 @@
 	storage_slots = 21
 	can_only_hold = list() // any
 	cant_hold = list("/obj/item/weapon/disk/nuclear", "/obj/item/weapon/pinpointer") //No janiborg, stop stealing the pinpointer with your bag.
+	slot_flags = SLOT_BELT | SLOT_OCLOTHING
+	no_storage_slot = list(slot_wear_suit) //when worn on the suit slot it will function purely as a suit and will not store items
 
 /obj/item/weapon/storage/bag/trash/update_icon()
 	if(contents.len == 0)
@@ -67,6 +69,7 @@
 	body_parts_covered = FULL_HEAD|BEARD
 	slot_flags = SLOT_BELT | SLOT_HEAD
 	clothing_flags = BLOCK_BREATHING | BLOCK_GAS_SMOKE_EFFECT
+	no_storage_slot = list(slot_head)
 	foldable = /obj/item/folded_bag
 
 obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
@@ -74,20 +77,6 @@ obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
 
 obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	return handle_item_insertion(I,0)
-
-/obj/item/weapon/storage/bag/plasticbag/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
-	//Forbid wearing bags with something inside!
-	.=..()
-	if(contents.len && (slot == slot_head))
-		return CANNOT_EQUIP
-
-/obj/item/weapon/storage/bag/plasticbag/can_be_inserted()
-	if(isliving(loc))
-		var/mob/living/L = loc
-		if(L.is_wearing_item(src, slot_head)) //Wearing the bag on the head
-			return FALSE
-
-	return ..()
 
 /obj/item/weapon/storage/bag/plasticbag/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] puts the [src.name] over \his head and tightens the handles around \his neck! It looks like \he's trying to commit suicide.</span>")
@@ -165,7 +154,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		if(locate(src) in S.get_all_slots())
 			auto_collect()
 			auto_fill(holder)
-	else 
+	else
 		if(holder.is_holding_item(src))
 			auto_collect()
 			auto_fill(holder)
@@ -215,7 +204,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		var/played = FALSE
 		for(var/obj/item/I in P.contents)
 			if(seedify(I) && !played)
-				playsound(get_turf(P), 'sound/machines/juicerfast.ogg', 50, 1)
+				playsound(P, 'sound/machines/juicerfast.ogg', 50, 1)
 				played = TRUE
 		P.orient2hud(user)
 		if(user.s_active)
