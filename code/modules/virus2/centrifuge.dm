@@ -162,7 +162,7 @@
 
 			else
 				curing = delay
-				playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1)
+				playsound(src, 'sound/machines/juicer.ogg', 50, 1)
 				update_icon()
 
 		if("isolate")

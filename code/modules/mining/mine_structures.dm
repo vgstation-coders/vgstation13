@@ -39,7 +39,7 @@
 	if(lantern)
 		user.visible_message("<span class='notice'>[user] takes \the [lantern] off of the \the [src].</span>", \
 		"<span class='notice'>You take \the [lantern] off of the \the [src].</span>")
-		playsound(get_turf(src), 'sound/machines/click.ogg', 20, 1)
+		playsound(src, 'sound/machines/click.ogg', 20, 1)
 		lantern.forceMove(user.loc)
 		lantern.add_fingerprint(user)
 		user.put_in_hands(lantern)
@@ -63,7 +63,7 @@
 			user << "<span class='warning'>Remove \the [lantern] from \the [src] first.</span>"
 			return
 		busy = 1
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 		user.visible_message("<span class='warning'>[user] begins deconstructing \the [src].</span>", \
 		"<span class='notice'>You begin deconstructing \the [src].</span>")
 		if(do_after(user, src, 30))
@@ -82,7 +82,7 @@
 		if(user.drop_item(W, src))
 			user.visible_message("<span class='notice'>[user] puts \a [W.name] on the \the [src].</span>", \
 			"<span class='notice'>You put \a [W.name] on the \the [src].</span>")
-			playsound(get_turf(src), 'sound/machines/click.ogg', 20, 1)
+			playsound(src, 'sound/machines/click.ogg', 20, 1)
 			lantern = W
 			update()
 			return 1

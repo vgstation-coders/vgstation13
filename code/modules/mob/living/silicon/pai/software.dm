@@ -289,7 +289,7 @@
 					var/mob/M = get_holder_of_type(loc, /mob)
 					if(M) //Sanity
 						M.reagents.add_reagent(href_list["chem"], 15)
-						playsound(get_turf(loc), 'sound/effects/bubbles.ogg', 50, 1)
+						playsound(loc, 'sound/effects/bubbles.ogg', 50, 1)
 				else
 					to_chat(src, "<span class='warning'>Charge interrupted.</span>")
 		if("foodsynth")
@@ -305,7 +305,7 @@
 				var/mob/M = get_holder_of_type(loc, /mob)
 				if(M)
 					M.put_in_hands(F)
-				playsound(get_turf(loc), 'sound/machines/foodsynth.ogg', 50, 1)
+				playsound(loc, 'sound/machines/foodsynth.ogg', 50, 1)
 		if("flashlight")
 			if(href_list["toggle"])
 				lighted = !lighted
@@ -652,7 +652,7 @@ Target Machine: "}
 		if(hackprogress >= 100)
 			hackprogress = 0
 			hacktarget = null
-			playsound(get_turf(loc), 'sound/machines/ding.ogg', 50, 1)
+			playsound(loc, 'sound/machines/ding.ogg', 50, 1)
 			return 1
 		sleep(10)			// Update every 1 second
 

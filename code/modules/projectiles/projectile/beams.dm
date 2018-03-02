@@ -935,7 +935,7 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/bullwhip/OnDeath()
 	if(!has_played_sound && get_turf(src))
-		playsound(get_turf(src), bounce_sound, 30, 1)
+		playsound(src, bounce_sound, 30, 1)
 		user.delayNextAttack(2)
 
 /obj/item/projectile/beam/liquid_stream

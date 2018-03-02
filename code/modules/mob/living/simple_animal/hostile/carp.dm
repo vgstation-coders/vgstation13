@@ -145,7 +145,7 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/F = W
 
 		if((F.food_flags & FOOD_MEAT) && (growth_stage < req_growth_to_grow_up)) //Any meaty dish goes!
-			playsound(get_turf(src),'sound/items/eatfood.ogg', rand(10,50), 1)
+			playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='info'>\The [src] gobbles up \the [W]!")
 			user.drop_item(F, force_drop = 1)
 

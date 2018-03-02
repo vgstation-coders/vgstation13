@@ -70,7 +70,7 @@
 			A.forceMove(src)
 			magazine = A
 			update_icon()
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
 			to_chat(user, "<span class='info'>You insert a new magazine.</span>")
 			user.regenerate_icons()
 
@@ -81,7 +81,7 @@
 			user.u_equip(A,1)
 			qdel(A)
 			energy_balls++
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
 			to_chat(user, "<span class='info'>You insert \the [A].</span>")
 	else
 		..()
@@ -92,7 +92,7 @@
 		user.put_in_hands(magazine)
 		magazine = null
 		update_icon()
-		playsound(get_turf(src), 'sound/machines/click.ogg', 25, 1)
+		playsound(src, 'sound/machines/click.ogg', 25, 1)
 		to_chat(user, "<span class='info'>You remove the magazine.</span>")
 		user.regenerate_icons()
 	else

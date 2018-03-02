@@ -219,7 +219,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	return
 
 /obj/machinery/computer/rdconsole/emag(mob/user)
-	playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+	playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 	emagged = 1
 	if(user)
 		to_chat(user, "<span class='notice'>You disable the security protocols</span>")

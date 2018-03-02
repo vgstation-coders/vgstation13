@@ -179,9 +179,9 @@
 
 		if(prob(15))
 			if(prob(50))
-				playsound(get_turf(src), 'sound/effects/turret/move1.wav', 60, 1)
+				playsound(src, 'sound/effects/turret/move1.wav', 60, 1)
 			else
-				playsound(get_turf(src), 'sound/effects/turret/move2.wav', 60, 1)
+				playsound(src, 'sound/effects/turret/move2.wav', 60, 1)
 	else if(!isPopping())//else, pop down
 		if(!isDown())
 			popDown()
@@ -244,7 +244,7 @@
 	if ((!isPopping()) || src.popping==-1)
 		invisibility = 0
 		popping = 1
-		playsound(get_turf(src), 'sound/effects/turret/open.wav', 60, 1)
+		playsound(src, 'sound/effects/turret/open.wav', 60, 1)
 		if (src.cover!=null)
 			flick("popup", src.cover)
 			src.cover.icon_state = "openTurretCover"
@@ -255,7 +255,7 @@
 /obj/machinery/turret/proc/popDown()
 	if ((!isPopping()) || src.popping==1)
 		popping = -1
-		playsound(get_turf(src), 'sound/effects/turret/open.wav', 60, 1)
+		playsound(src, 'sound/effects/turret/open.wav', 60, 1)
 		if (src.cover!=null)
 			flick("popdown", src.cover)
 			src.cover.icon_state = "turretCover"
@@ -279,7 +279,7 @@
 	user.delayNextAttack(10)
 	if(..())
 		return 1
-	playsound(get_turf(src), 'sound/weapons/smash.ogg', 60, 1)
+	playsound(src, 'sound/weapons/smash.ogg', 60, 1)
 	spark(src, 5, FALSE)
 	src.health -= W.force * 0.5
 	visible_message("<span class='danger'>[user] attacked \the [src] with \the [W]!</span>")
@@ -433,7 +433,7 @@
 /obj/machinery/turret/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	if(!(stat & BROKEN))
 		M.do_attack_animation(src, M)
-		playsound(get_turf(src), 'sound/weapons/slash.ogg', 25, 1, -1)
+		playsound(src, 'sound/weapons/slash.ogg', 25, 1, -1)
 		visible_message("<span class='danger'>[] has slashed at []!</span>", M, src)
 		src.health -= 15
 		if (src.health <= 0)

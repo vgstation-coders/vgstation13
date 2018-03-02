@@ -49,7 +49,7 @@
 		if(!(src.loc == usr) || (src.loc && src.loc.loc == usr))
 			return
 
-		playsound(get_turf(src), "rustle", 50, 1, -5)
+		playsound(src, "rustle", 50, 1, -5)
 		if(!( M.restrained() ) && !( M.stat ))
 			var/obj/abstract/screen/inventory/OI = over_object
 
@@ -456,7 +456,7 @@
 	return
 
 /obj/item/weapon/storage/attack_hand(mob/user as mob)
-	playsound(get_turf(src), "rustle", 50, 1, -5)
+	playsound(src, "rustle", 50, 1, -5)
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user

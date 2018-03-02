@@ -423,6 +423,10 @@
 			And there's nothing I can do.
 			"}
 
+/obj/item/weapon/paper/asteroidfield
+	name = "dear diary"
+	info = {"It's all HONKING HONKED.  I left for bananium and it HONKED itself to pieces!  Our planet is HONKED!  What am I going to do?"}
+
 /obj/machinery/atmospherics/binary/msgs/rust_vault
 	name = "\improper Magnitno Priostanovleno Blok Khraneniya Gaza"
 

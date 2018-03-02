@@ -52,7 +52,7 @@
 
 /obj/item/device/soundsynth/attack_self(mob/user as mob)
 	if(spam_flag + 2 SECONDS < world.timeofday)
-		playsound(get_turf(src), selected_sound, volume, shiftpitch)
+		playsound(src, selected_sound, volume, shiftpitch)
 		spam_flag = world.timeofday
 
 /obj/item/device/soundsynth/attack(mob/living/M as mob, mob/living/user as mob, def_zone)

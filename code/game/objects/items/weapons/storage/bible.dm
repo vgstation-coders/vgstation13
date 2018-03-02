@@ -94,7 +94,7 @@
 	if(M.stat == DEAD) //Our target is dead. RIP in peace
 		user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s lifeless body with \the [src].</span>",
 		"<span class='warning'>You bless [M]'s lifeless body with \the [src], trying to conjure [my_rel.deity_name]'s mercy on them.</span>")
-		playsound(get_turf(src), "punch", 25, 1, -1)
+		playsound(src, "punch", 25, 1, -1)
 
 		//TODO : Way to bring people back from death if they are your followers
 		return 1 //Otherwise, there's so little we can do
@@ -102,7 +102,7 @@
 	//Our target is alive, prepare the blessing
 	user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s head with \the [src].</span>",
 	"<span class='warning'>You bless [M]'s head with \the [src]. In the name of [my_rel.deity_name], bless thee!</span>")
-	playsound(get_turf(src), "punch", 25, 1, -1)
+	playsound(src, "punch", 25, 1, -1)
 
 	if(ishuman(M)) //Only humans can be vampires or cultists. isChaplain() checks are here to ensure only the proper chaplain has the gameplay-related interactions.
 		var/mob/living/carbon/human/H = M
@@ -161,7 +161,7 @@
 			A.reagents.add_reagent(HOLYWATER, water2holy)
 
 /obj/item/weapon/storage/bible/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	playsound(get_turf(src), "rustle", 50, 1, -5)
+	playsound(src, "rustle", 50, 1, -5)
 	. = ..()
 
 /obj/item/weapon/storage/bible/pickup(mob/living/user as mob)

@@ -5,7 +5,7 @@
 	mech_flags = null
 
 /obj/item/weapon/grenade/inflatable/prime()
-	playsound(get_turf(src), 'sound/items/zip.ogg', 75, 1)
+	playsound(src, 'sound/items/zip.ogg', 75, 1)
 	var/obj/structure/inflatable/R = new deploy_path(get_turf(src))
 	R.spawn_undeployed = FALSE
 	qdel(src)

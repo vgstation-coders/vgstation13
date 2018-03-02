@@ -88,7 +88,7 @@ var/list/smes_list = list()
 				to_chat(user, "<span class='warning'>You must remove the floor plating in front of the SMES first.</span>")
 				return
 			to_chat(user, "You begin to dismantle the SMES terminal...")
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			if (do_after(user, src, 50) && panel_open && terminal && !T.intact)
 				if (prob(50) && electrocute_mob(usr, terminal.get_powernet(), terminal))
 					spark(src, 5)

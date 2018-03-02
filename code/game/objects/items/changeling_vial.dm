@@ -14,7 +14,7 @@
 			var/datum/mind/M = H.mind
 			if(!ischangeling(H))
 				user.visible_message("<span class='warning'>As [user] crushes the vial, a mass of black goo leaps at \his face!.</span>","<span class='warning'>As you try to remove the cap, you crush the vial in your hand!</span> <span class='danger'>A mass of black goo leaps at you from the vial!</span>")
-				playsound(get_turf(src), "shatter", 20, 1)
+				playsound(src, "shatter", 20, 1)
 				qdel(src)
 				H.sleeping += 10
 				sleep(100)

@@ -51,7 +51,7 @@
 
 /obj/item/weapon/gun/stickybomb/attack_self(mob/user)
 	if(fired.len)
-		playsound(get_turf(src), 'sound/weapons/stickybomb_det.ogg', 30, 1)
+		playsound(src, 'sound/weapons/stickybomb_det.ogg', 30, 1)
 		for(var/obj/item/stickybomb/B in fired)
 			spawn()
 				if(B.live)

@@ -91,7 +91,7 @@
 			to_chat(user, "<span class='info'>You start securing \the [src] to \the [loc].</span>")
 
 		spawn()
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 			if(do_after(user, src, 50))
 				anchored = !anchored
 				to_chat(user, "<span class='info'>[anchored ? "You successfully secure \the [src] to \the [loc]." : "You successfully unsecure \the [src] from \the [loc]."]")
@@ -217,7 +217,7 @@
 			door_state = C_OPENED
 			setDensity(FALSE)
 
-	playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	update_icon()
 
 /obj/structure/cage/proc/add_mob(mob/victim)

@@ -42,7 +42,7 @@
 		if(2)
 			if(isscrewdriver(W))
 				to_chat(user, "You begin unscrewing \the [src].")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, src,10) && buildstage == 2)
 					to_chat(user, "<span class='notice'>You unscrew the cover blocking the inner wiring of \the [src].</span>")
 					buildstage = 1
@@ -51,7 +51,7 @@
 		if(1)
 			if(isscrewdriver(W))
 				to_chat(user, "You begin screwing closed \the [src].")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, src,10) && buildstage == 1)
 					to_chat(user, "<span class='notice'>You tightly screw closed the cover of \the [src].</span>")
 					buildstage = 2
@@ -59,7 +59,7 @@
 				return
 			if(iswirecutter(W))
 				to_chat(user, "You begin cutting the wiring from \the [src].")
-				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
 				if(do_after(user, src,10) && buildstage == 1)
 					to_chat(user, "<span class='notice'>You cut the wiring to the lighting power line.</span>")
 					new /obj/item/stack/cable_coil(get_turf(src),3)
@@ -79,7 +79,7 @@
 				return
 			if(iscrowbar(W))
 				to_chat(user, "You begin prying \the [src] off the wall.")
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 				if(do_after(user, src,10) && buildstage == 0)
 					to_chat(user, "<span class='notice'>You pry the frame off of the wall.</span>")
 					new /obj/item/mounted/frame/light_switch(get_turf(user))

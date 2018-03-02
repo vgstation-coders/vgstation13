@@ -140,7 +140,7 @@ var/global/list/pda_app_menus = list(
 	game_update(user)
 
 	if(snake_game.head.next_full)
-		playsound(get_turf(pda_device), 'sound/misc/pda_snake_eat.ogg', volume * 5, 1)
+		playsound(pda_device, 'sound/misc/pda_snake_eat.ogg', volume * 5, 1)
 
 	if(!paused)
 		if(!snake_game.gameover)
@@ -173,7 +173,7 @@ var/global/list/pda_app_menus = list(
 		pause(user)
 
 /datum/pda_app/snake/proc/game_over(var/mob/user)
-	playsound(get_turf(pda_device), 'sound/misc/pda_snake_over.ogg', volume * 5, 0)
+	playsound(pda_device, 'sound/misc/pda_snake_over.ogg', volume * 5, 0)
 	for(var/i=1;i <= 4;i++)
 		for(var/datum/snake/body/B in snake_game.snakeparts)
 			B.flicking = 1

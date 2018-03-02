@@ -293,7 +293,7 @@
 			time_mult += 1
 	stop_automated_movement = 1
 	D.visible_message("<span class='warning'>\The [D]'s motors whine as something attempts to brute force their way through it!</span>")
-	playsound(get_turf(D), 'sound/effects/grillehit.ogg', 50, 1)
+	playsound(D, 'sound/effects/grillehit.ogg', 50, 1)
 	D.shake(1, 8)
 	busy = TRUE
 	var/target_loc = D.loc
@@ -316,7 +316,7 @@
 						D.open(1)
 					else
 						to_chat(src, "<span class = 'notice'>You fail to open \the [D]</span>")
-						playsound(get_turf(D), 'sound/effects/grillehit.ogg', 50, 1)
+						playsound(D, 'sound/effects/grillehit.ogg', 50, 1)
 						D.shake(1, 8)
 		busy = FALSE
 	stop_automated_movement = 0
@@ -338,7 +338,7 @@
 	//Deal a random amount of brute damage to the corpse in question, heal the zombie by the damage dealt halved
 	visible_message("<span class='warning'>\The [src] takes a bite out of \the [target].</span>")
 	stop_automated_movement = 1
-	playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
+	playsound(src, 'sound/weapons/bite.ogg', 50, 1)
 	var/damage = rand(melee_damage_lower, melee_damage_upper)
 	target.adjustBruteLoss(damage)
 	if(maxHealth < health_cap)

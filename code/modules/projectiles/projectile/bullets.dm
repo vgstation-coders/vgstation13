@@ -498,7 +498,7 @@
 /obj/item/projectile/bullet/vial/OnDeath()
 	if(!hit_mob)
 		src.visible_message("<span class='warning'>The vial shatters!</span>")
-	playsound(get_turf(src), "shatter", 20, 1)
+	playsound(src, "shatter", 20, 1)
 
 /obj/item/projectile/bullet/blastwave
 	name = "blast wave"
@@ -763,7 +763,7 @@
 
 /obj/item/projectile/bullet/liquid_blob/OnDeath()
 	if(get_turf(src))
-		playsound(get_turf(src), 'sound/effects/slosh.ogg', 20, 1)
+		playsound(src, 'sound/effects/slosh.ogg', 20, 1)
 
 /obj/item/projectile/bullet/buckshot
 	name = "buckshot pellet"

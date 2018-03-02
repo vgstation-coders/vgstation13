@@ -28,7 +28,7 @@
 		active = TRUE
 		workdisk()
 		to_chat(usr,"<span class='notice'>You activate \the [src]</span>")
-		playsound(get_turf(src), 'sound/items/healthanalyzer.ogg', 30, 1)
+		playsound(src, 'sound/items/healthanalyzer.ogg', 30, 1)
 		fast_objects += src
 	else
 		active = FALSE

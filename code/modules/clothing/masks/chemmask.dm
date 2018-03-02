@@ -325,7 +325,7 @@
 	var/obj/item/weapon/reagent_containers/glass/B = P.beaker
 	if (B.is_empty() && firstalert_beaker == 0)
 		firstalert_beaker = 1
-		playsound(get_turf(src),'sound/mecha/internaldmgalarm.ogg', 100, 1)
+		playsound(src,'sound/mecha/internaldmgalarm.ogg', 100, 1)
 		to_chat(user, "<span class='warning'>The auxiliary beaker is empty!</span>")
 	else if (!B.is_empty())
 		firstalert_beaker = 0
