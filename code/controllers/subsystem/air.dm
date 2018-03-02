@@ -163,11 +163,9 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 		for(var/turf/simulated/T in Z.contents)
 			var/list/tempwin_turf = list()
 			var/list/tempwin_nextturf = list()
-
 			for(var/obj/structure/window/w in T.contents)
 				tempwin_turf |= w
 			Z.windows |= tempwin_turf
-			//world.log << "SUBSYSTEM INIT beginning to process \ref[T] for zone \ref[Z]"
 			for(var/D in cardinal)
 				var/turf/simulated/floor/NT = get_step(T,D)
 				if(istype(NT, /turf/simulated))
@@ -182,69 +180,41 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 										for(var/obj/structure/window/w in tempwin_turf)
 											if((get_dir(w.loc, NT) == w.dir) && w.loc != NT)
 												wc.shared_windows |= w
-												//world.log << "SSAIR adding \ref[w] to \ref[wc] because direction \ref[NT] NT [get_dir(w.loc, NT)] matches window dir [w.dir]"
 												w.window_connections |= wc
-											else
-												//world.log << "SSAIR skipping \ref[w] to \ref[wc] list because direction to \ref[NT] NT [get_dir(w.loc, NT)] does not match window dir [w.dir]"
 										Z.window_connections |= wc
-										//world.log << "SUBSYSTEM INIT FOUND zone [Z] in zone [NZ] window connection [wc] merging window list."
 								for(var/window_connection/wc in Z.window_connections)
 									if(NZ in wc.bordering_zones)
 										found_border_zone = 1
 										for(var/obj/structure/window/w in NT.contents)
 											if((get_dir(w.loc, T) == w.dir) && w.loc != NT)
 												wc.shared_windows |= w
-												//world.log << "SSAIR adding \ref[w] to \ref[wc] because direction \ref[T] T [get_dir(w.loc, T)] matches window dir [w.dir]"
 												w.window_connections |= wc
-											else
-												//world.log << "SSAIR skipping \ref[w] to \ref[wc] list because direction to \ref[T] T [get_dir(w.loc, T)] does not match window dir [w.dir]"
-
 										NZ.window_connections |= wc
-										//world.log << "SUBSYSTEM INIT FOUND zone [Z] in zone [NZ] window connection [wc] merging window list."
 							if(!found_border_zone) //make a new window connection if there are windows guess
 								for(var/obj/structure/window/w in NT.contents)
 									if((get_dir(w.loc, T) == w.dir) && w.loc != T)
 										tempwin_nextturf |= w
-										//world.log << "SSAIR adding \ref[w] to tempwin_nextturf list because direction \ref[T] T [get_dir(w.loc, T)] matches window dir [w.dir]"
 								if(tempwin_turf.len || tempwin_nextturf.len)
-
 									var/window_connection/wc = new()
-
 									for(var/obj/structure/window/w in tempwin_nextturf)
 										if((get_dir(w.loc, T) == w.dir) && w.loc != T)
-											//world.log << "SSAIR adding \ref[w] to \ref[wc] list because direction to \ref[T] T [get_dir(w.loc, T)] matches window dir [w.dir]"
 											wc.shared_windows |= w
 											w.window_connections |= wc
-										else
-											//world.log << "SSAIR skipping \ref[w] to \ref[wc] list because direction to \ref[T] T [get_dir(w.loc, T)] does not match window dir [w.dir]"
-
 									for(var/obj/structure/window/w in tempwin_turf)
 										if((get_dir(w.loc, NT) == w.dir) && w.loc != NT)
-											//world.log << "SSAIR adding \ref[w] to \ref[wc] list because direction to \ref[NT] NT [get_dir(w.loc, NT)] matches window dir [w.dir]"
 											wc.shared_windows |= w
 											w.window_connections |= wc
-										else
-											//world.log << "SSAIR skipping \ref[w] to \ref[wc] list because direction to \ref[NT] NT [get_dir(w.loc, NT)] does not match window dir [w.dir]"
 									wc.bordering_zones.Add(Z, NZ)
 									Z.window_connections += wc
 									NZ.window_connections += wc
 									global_window_connections += wc
-									//world.log << "SUBSYSTEM INIT ADDING NEW  \ref[wc] WINDOW CONNECTION FOR [Z] [NZ]"
-									//for(var/thing in Z.window_connections)
-										//world.log << "\ref[thing]"
-									//for(var/thing in NZ.window_connections)
-										//world.log << "\ref[thing]"
 							tempwin_nextturf.len = 0
 					else
-						//world.log << "SUBSYSTEM INIT \ref[NT] has no zone, checking for windows!"
 						var/list/obj/structure/window/nozonewindows = list()
 						for(var/obj/structure/window/w in NT.contents)
 							nozonewindows += w
-							//world.log << "SUBSYSTEM INIT ADDING \ref[w] to nozonewindows list for turf \ref[NT]"
 						//now lets walk and find all of our connected full windows!
-
 						if(nozonewindows.len)
-							//world.log << "SUBSYSTEM INIT \ref[NT] has windows in its contents, checking for bordering zones"
 							var/found_or_made
 							for(var/ND in cardinal)
 								var/turf/WT = get_step(NT, ND)
@@ -253,11 +223,7 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 								if(istype(WT, /turf/simulated/floor))
 									var/turf/simulated/floor/ST = WT
 									if(ST.zone && ST.zone != T.zone)
-										//dostuff
-										//world.log << "SUBSYSTEM INIT found a connecting zone for \ref[NT] ADDING wc for turf \ref[T] and \ref[WT]"
-										//make_window_connections(Z, ST.zone, T, WT, nozonewindows)
 										var/foundbz = 0
-										//world.log << "SUBSYSTEM INIT found a nearby zone \ref[ST.zone] in WT \ref[WT]"
 										for(var/window_connection/wc in Z.window_connections)
 											if(foundbz) break
 											if(ST.zone in wc.bordering_zones)
@@ -266,7 +232,6 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 												wc.shared_windows |= nozonewindows
 												for(var/obj/structure/window/w in nozonewindows)
 													w.window_connections |= wc
-
 												wc.directions = list( get_dir(NT,ST),reverse_direction(get_dir(NT,ST)))
 												wc.bordering_zones.len = 0
 												wc.bordering_zones += list(ST.zone, T.zone)
@@ -287,7 +252,6 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 											wc.shared_windows |= nozonewindows
 											for(var/obj/structure/window/w in nozonewindows)
 												w.window_connections |= wc
-
 											wc.bordering_zones += list(ST.zone, Z)
 											ST.zone.window_connections += wc
 											Z.window_connections += wc
@@ -297,20 +261,12 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 									else
 										continue
 								else
-									//world.log << "SUBSYSTEM INIT NZW turf WT \ref[WT] is not a floor turf, skipping" 
 									continue
 							if(!found_or_made)
 								Z.windows |= nozonewindows
 				else
-					/*if(istype(NT, /turf/space))
-						//do stuff
-						//Nevermind don't
-					*/
 					continue
-
-
 	init_done = 1
-
 	..()
 
 
