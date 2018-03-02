@@ -315,6 +315,9 @@
 
 	var/annoyed = 0
 
+/mob/living/simple_animal/hostile/gremlin/greytide/attack_icon()
+	return image(icon = 'icons/obj/storage/storage.dmi', icon_state = "toolbox_blue")
+
 /mob/living/simple_animal/hostile/gremlin/greytide/electrocute_act()
 	return //Gremtide cometh
 
