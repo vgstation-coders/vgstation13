@@ -32,7 +32,7 @@
 	var/icon/img		//Big photo image
 	var/scribble		//Scribble on the back.
 	var/blueprints = FALSE	//Does it include the blueprints?
-	var/info 			//Info on the camera about mobs or some shit 
+	var/info 			//Info on the camera about mobs or some shit
 
 	autoignition_temperature = 530 // Kelvin
 	fire_fuel = TRUE
@@ -259,21 +259,9 @@
 				continue
 			atoms.Add(A)
 
-	var/list/sorted = list()
-	var/j
-	for(var/i = 1 to atoms.len)
-		var/atom/c = atoms[i]
-		for(j = sorted.len, j > 0, --j)
-			var/atom/c2 = sorted[j]
-			if(c2.plane < c.plane)
-				break
-			else if((c2.plane == c.plane) && (c2.layer <= c.layer))
-				break
-		sorted.Insert(j+1, c)
-
 	var/icon/res = get_base_photo_icon()
 
-	for(var/atom/A in sorted)
+	for(var/atom/A in plane_layer_sort(atoms))
 		var/icon/img = getFlatIcon(A,A.dir,0)
 		if(istype(A, /mob/living) && A:lying)
 			img.Turn(A:lying)
@@ -310,21 +298,9 @@
 			else
 				atoms.Add(A)
 
-	var/list/sorted = list()
-	var/j
-	for(var/i = 1 to atoms.len)
-		var/atom/c = atoms[i]
-		for(j = sorted.len, j > 0, --j)
-			var/atom/c2 = sorted[j]
-			if(c2.plane < c.plane)
-				break
-			else if((c2.plane == c.plane) && (c2.layer <= c.layer))
-				break
-		sorted.Insert(j+1, c)
-
 	var/icon/res = get_base_photo_icon()
 
-	for(var/atom/A in sorted)
+	for(var/atom/A in plane_layer_sort(atoms))
 		var/icon/img = getFlatIcon(A,A.dir,0)
 		if(istype(A, /mob/living) && A:lying)
 			img.Turn(A:lying)

@@ -250,3 +250,17 @@ var/obj/abstract/screen/plane_master/clickmaster/clickmaster = new()
 	plane = BASE_PLANE
 
 var/obj/abstract/screen/plane_master/clickmaster_dummy/clickmaster_dummy = new()
+
+// returns a list with the objects sorted depending on their layer, with the lowest objects being the first in the list and the highest objects being last
+/proc/plane_layer_sort(var/list/to_sort)
+	var/list/sorted = list()
+	for(var/current_atom in to_sort)
+		var/compare_index
+		for(compare_index = sorted.len, compare_index > 0, --compare_index) // count down from the length of the list to zero.
+			var/atom/compare_atom = sorted[compare_index] // compare to the next object down the list.
+			if(compare_atom.plane < current_atom:plane) // is this object below our current atom?
+				break
+			else if((compare_atom.plane == current_atom:plane) && (compare_atom.layer <= current_atom:layer))	// is this object below our current atom?
+				break
+		sorted.Insert(compare_index+1, current_atom) // insert it just above the atom it was higher than - or at the bottom if it was higher than nothing.
+	return sorted // return the sorted list.
