@@ -59,6 +59,10 @@
 	if(!job_title)
 		job_title = src.title
 
+	if(!trader_account)
+		trader_account = create_account("Trader Shoal", 0, null, 0) //Starts 0 credits, not sourced from any database, earns 0 credits
+	M.mind.store_memory("<b>The joint trader account is:</b> #[trader_account.account_number]<br><b>Your shared account pin is:</b> [trader_account.remote_access_pin]<br>")
+
 	to_chat(M, "<B>You are a [job_title].</B>")
 
 	to_chat(M, "<b>You've finally got your equipment together, such as it is. Now it's time for action and adventure! In the rush of excitement, you've forgotten where you were going to go. If only you had any friends that could remind you...</b>")
