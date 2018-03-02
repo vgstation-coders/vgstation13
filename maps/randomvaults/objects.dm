@@ -253,7 +253,9 @@
 /area/vault/icecomet
 	jammed = 2
 
-//research facility
+/area/vault/assistantlair
+	jammed = 2
+
 
 /area/vault/research
 	requires_power = 1
