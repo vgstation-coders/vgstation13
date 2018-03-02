@@ -15,7 +15,7 @@
 
 /obj/effect/mine/Crossed(mob/living/carbon/AM)
 	if(istype(AM))
-		visible_message("<font color='red'>[AM] triggered the [bicon(src)] [src]</font>")
+		visible_message("<span class='warning'>[AM] triggered \the [bicon(src)] [src]</span>")
 		trigger(AM)
 
 /obj/effect/mine/proc/trigger(mob/living/carbon/AM)
@@ -77,6 +77,6 @@
 
 /obj/effect/mine/stun/trigger(mob/AM)
 	if(ismob(AM))
-		AM.Stun(30)
+		AM.Knockdown(30)
 	spark(src)
 	qdel(src)
