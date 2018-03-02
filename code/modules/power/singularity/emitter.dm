@@ -233,7 +233,7 @@
 
 		//beam = getFromPool(/obj/item/projectile/beam/emitter, loc)
 		//beam.dir = dir
-		//playsound(get_turf(src), 'sound/weapons/emitter.ogg', 25, 1)
+		//playsound(src, 'sound/weapons/emitter.ogg', 25, 1)
 
 		if(prob(35))
 			spark(src, 5)

@@ -86,19 +86,19 @@
 			stack.use(2)
 			shattered = 0
 			icon_state = "mirror"
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 80, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
 
 	else
 		user.do_attack_animation(src, I)
 		if(shattered)
-			playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+			playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 			return
 		else if(prob(I.force * 2))
 			visible_message("<span class='warning'>[user] smashes [src] with [I]!</span>")
 			shatter()
 		else
 			visible_message("<span class='warning'>[user] hits [src] with [I]!</span>")
-			playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 70, 1)
+			playsound(src, 'sound/effects/Glasshit.ogg', 70, 1)
 
 
 /obj/structure/mirror/attack_alien(mob/living/user as mob)
@@ -106,7 +106,7 @@
 		return
 	user.do_attack_animation(src, user)
 	if(shattered)
-		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
 	user.visible_message("<span class='danger'>[user] smashes [src]!</span>")
 	shatter()
@@ -120,7 +120,7 @@
 		return
 	user.do_attack_animation(src, user)
 	if(shattered)
-		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
 	user.visible_message("<span class='danger'>[user] smashes [src]!</span>")
 	shatter()
@@ -131,7 +131,7 @@
 		return
 	user.do_attack_animation(src, user)
 	if(shattered)
-		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
 	user.visible_message("<span class='danger'>[user] smashes [src]!</span>")
 	shatter()

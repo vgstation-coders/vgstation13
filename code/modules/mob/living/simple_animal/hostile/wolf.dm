@@ -156,7 +156,7 @@
 				var/self_loc = src.loc
 				spawn(5 SECONDS)
 					if(mob_target.loc == target_loc && self_loc == src.loc) //Not moved
-						playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
+						playsound(src, 'sound/weapons/bite.ogg', 50, 1)
 						var/damage = rand(melee_damage_lower, melee_damage_upper)
 						mob_target.adjustBruteLoss(damage)
 						nutrition += damage*3
@@ -170,7 +170,7 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/F = W
 
 		if(F.food_flags & FOOD_MEAT) //Any meaty dish goes!
-			playsound(get_turf(src),'sound/items/eatfood.ogg', rand(10,50), 1)
+			playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='info'>\The [src] gobbles up \the [W]!")
 			nutrition += 15
 			if(prob(25))

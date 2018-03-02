@@ -16,7 +16,7 @@
 		if(do_after(user, src,20))
 			anchored=!anchored
 			user.visible_message("<span class='info'>You unfasten \the [src]'s bolts.</span>", "[user] unfastens the [src]'s bolts.","You hear a ratchet.")
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 
 	if(istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
@@ -25,7 +25,7 @@
 			if(do_after(user, src, 20))
 				if(!src || !WT.isOn())
 					return
-				playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
+				playsound(src, 'sound/items/Welder2.ogg', 50, 1)
 				user.visible_message("<span class='warning'>[user] cuts the [src] apart.</span>", "<span class='warning'>You cut the [src] apart.</span>", "You hear welding.")
 				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 				M.amount = 5

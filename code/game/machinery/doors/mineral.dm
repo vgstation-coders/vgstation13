@@ -64,11 +64,11 @@
 		return open()
 
 /obj/machinery/door/mineral/open()
-	playsound(get_turf(src), soundeffect, 100, 1)
+	playsound(src, soundeffect, 100, 1)
 	return ..()
 
 /obj/machinery/door/mineral/close()
-	playsound(get_turf(src), soundeffect, 100, 1)
+	playsound(src, soundeffect, 100, 1)
 	return ..()
 
 /obj/machinery/door/mineral/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -235,7 +235,7 @@
 	return
 
 /obj/machinery/door/mineral/resin/CheckHardness()
-	playsound(get_turf(src), soundeffect, 100, 1)
+	playsound(src, soundeffect, 100, 1)
 	return ..()
 
 /obj/machinery/door/mineral/resin/acidable()

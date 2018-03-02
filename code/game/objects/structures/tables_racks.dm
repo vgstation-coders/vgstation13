@@ -50,7 +50,7 @@
 
 /obj/structure/table/glass/proc/checkhealth()
 	if(health <= 0)
-		playsound(get_turf(src), "shatter", 50, 1)
+		playsound(src, "shatter", 50, 1)
 		new /obj/item/weapon/shard(src.loc)
 		new /obj/item/weapon/table_parts(src.loc)
 		qdel(src)
@@ -398,7 +398,7 @@
 						M.Knockdown(5)
 					M.apply_damage(8,def_zone = LIMB_HEAD)
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
-					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
+					playsound(src, 'sound/weapons/tablehit1.ogg', 50, 1)
 				else
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
@@ -412,7 +412,7 @@
 	if (iswrench(W) && can_disassemble())
 		//if(!params_list.len || text2num(params_list["icon-y"]) < 8) //8 above the bottom of the icon
 		to_chat(user, "<span class='notice'>Now disassembling table</span>")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src,50))
 			destroy()
 		return
@@ -593,7 +593,7 @@
 
 /obj/structure/table/reinforced/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	if(istype(W,/obj/item/weapon/stock_parts/scanning_module))
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 40))
 			if(user.drop_item(W))
 				var/obj/machinery/optable/OPT = new /obj/machinery/optable(src.loc)
@@ -615,7 +615,7 @@
 		if(WT.remove_fuel(0, user))
 			if(src.status == 2)
 				to_chat(user, "<span class='notice'>Now weakening the reinforced table.</span>")
-				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+				playsound(src, 'sound/items/Welder.ogg', 50, 1)
 				if (do_after(user, src, 50))
 					if(!src || !WT.isOn())
 						return
@@ -623,7 +623,7 @@
 					src.status = 1
 			else
 				to_chat(user, "<span class='notice'>Now strengthening the reinforced table.</span>")
-				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+				playsound(src, 'sound/items/Welder.ogg', 50, 1)
 				if (do_after(user, src, 50))
 					if(!src || !WT.isOn())
 						return
@@ -656,8 +656,8 @@
 						M.Knockdown(5)
 					M.apply_damage(15,def_zone = LIMB_HEAD)
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
-					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
-					playsound(get_turf(src), "shatter", 50, 1) //WRESTLEMANIA tax
+					playsound(src, 'sound/weapons/tablehit1.ogg', 50, 1)
+					playsound(src, "shatter", 50, 1) //WRESTLEMANIA tax
 					new /obj/item/weapon/shard(src.loc)
 					new /obj/item/weapon/table_parts(src.loc)
 					qdel(src)
@@ -676,7 +676,7 @@
 		health -= W.force
 		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>", \
 		"<span class='warning'>You hit \the [src] with \the [W].</span>")
-		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 50, 1)
+		playsound(src, 'sound/effects/Glasshit.ogg', 50, 1)
 		checkhealth()
 
 	else
@@ -771,7 +771,7 @@
 
 /obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iswrench(W) && can_disassemble())
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		destroy(TRUE)
 		return
 

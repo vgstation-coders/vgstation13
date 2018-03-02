@@ -72,7 +72,7 @@
 		if(user.drop_item(W))
 			current_ammo++
 			chamber_if_possible()
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
 			qdel(W)
 			update_icon()
 			

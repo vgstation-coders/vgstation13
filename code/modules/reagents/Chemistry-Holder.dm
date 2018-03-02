@@ -451,7 +451,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 							ME2.desc = "This extract has been used up."
 
 					if(!quiet)
-						playsound(get_turf(my_atom), 'sound/effects/bubbles.ogg', 80, 1)
+						playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
 
 					C.on_reaction(src, created_volume)
 					if(C.react_discretely)

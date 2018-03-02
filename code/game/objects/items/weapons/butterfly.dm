@@ -56,7 +56,7 @@
 					handle_faction(X,L)
 			bug = null
 			counting = world.time
-	playsound(get_turf(src),'sound/items/zippo_open.ogg', 50, 1)
+	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
 
 /obj/item/weapon/butterflyknife/preattack(var/mob/living/target, mob/user) //"Putting away" a butterfly early.
 	if((istype(target, /mob/living/simple_animal/hostile/viscerator/butterfly)) && (knifetype != "plain"))

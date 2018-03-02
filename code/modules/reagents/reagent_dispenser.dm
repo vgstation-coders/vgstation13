@@ -346,7 +346,7 @@
 		reagents.trans_to(S, S.max_silicate)
 		S.update_icon()
 		to_chat(user, "<span class='notice'>Sprayer refilled.</span>")
-		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		return 1
 
 /obj/structure/reagent_dispensers/degreaser

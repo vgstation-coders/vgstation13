@@ -613,7 +613,7 @@
 				to_chat(user, "<span class='danger'>\The [C] needs at least two wrists before you can cuff them together!</span>")
 				return
 
-		playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
+		playsound(src, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
 		user.visible_message("<span class='danger'>\The [M] is trying to handcuff \the [C]!</span>",
 							 "<span class='danger'>You try to handcuff \the [C]!</span>")
 

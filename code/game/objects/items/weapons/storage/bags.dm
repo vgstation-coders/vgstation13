@@ -204,7 +204,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		var/played = FALSE
 		for(var/obj/item/I in P.contents)
 			if(seedify(I) && !played)
-				playsound(get_turf(P), 'sound/machines/juicerfast.ogg', 50, 1)
+				playsound(P, 'sound/machines/juicerfast.ogg', 50, 1)
 				played = TRUE
 		P.orient2hud(user)
 		if(user.s_active)

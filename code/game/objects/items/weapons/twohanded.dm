@@ -129,7 +129,7 @@
 	hitsound = wielded ? "sound/weapons/blade1.ogg" : "sound/weapons/empty.ogg"
 	if(user)
 		user.update_inv_hands()
-	playsound(get_turf(src), wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
+	playsound(src, wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
 	return
 
 /obj/item/weapon/dualsaber/attack(target as mob, mob/living/user as mob)
@@ -183,7 +183,7 @@
 	hitsound = wielded ? "sound/weapons/blade1.ogg" : "sound/weapons/empty.ogg"
 	if(user)
 		user.update_inv_hands()
-	playsound(get_turf(src), wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
+	playsound(src, wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
 	return
 
 /obj/item/weapon/dualsaber/bananabunch/attack(target as mob, mob/living/user as mob)

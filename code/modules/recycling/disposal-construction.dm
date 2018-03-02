@@ -211,7 +211,7 @@
 			else
 				setDensity(TRUE)
 			to_chat(user, "You detach the [nicetype] from the underfloor.")
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 			update()
 			return
 		else
@@ -231,7 +231,7 @@
 			else
 				setDensity(TRUE) // We don't want disposal bins or outlets to go density 0
 			to_chat(user, "You attach the [nicetype] to the underfloor.")
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 			update()
 
 	else if(iswelder(I))
@@ -250,7 +250,7 @@
 				return
 			var/obj/item/weapon/weldingtool/W = I
 			if(W.remove_fuel(0,user))
-				playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
+				playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 				to_chat(user, "Welding the [nicetype] in place.")
 				if(do_after(user, src, 20))
 					if(gcDestroyed || !W.isOn())

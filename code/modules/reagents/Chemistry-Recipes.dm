@@ -493,7 +493,7 @@
 		var/location = get_turf(holder.my_atom)
 		spark(location, 2)
 
-		playsound(get_turf(src), 'sound/effects/phasein.ogg', 25, 1)
+		playsound(src, 'sound/effects/phasein.ogg', 25, 1)
 
 		for(var/mob/living/M in viewers(get_turf(holder.my_atom), null))
 			var/eye_safety = 0
@@ -1220,7 +1220,7 @@
 
 	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - blocked //List of possible hostile mobs
 
-	playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+	playsound(holder.my_atom, 'sound/effects/phasein.ogg', 100, 1)
 
 	for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 		if(ishuman(O))
@@ -1271,7 +1271,7 @@
 		) + typesof(/mob/living/simple_animal/hostile/humanoid) + typesof(/mob/living/simple_animal/hostile/asteroid) //Exclusion list for things you don't want the reaction to create.
 	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - blocked //List of possible hostile mobs
 
-	playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+	playsound(holder.my_atom, 'sound/effects/phasein.ogg', 100, 1)
 
 	for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 		if(ishuman(O))
@@ -1364,7 +1364,7 @@
 	var/list/borks = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - blocked
 
 	//BORK BORK BORK
-	playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+	playsound(holder.my_atom, 'sound/effects/phasein.ogg', 100, 1)
 
 	for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 		if(ishuman(O))
@@ -1418,7 +1418,7 @@
 	var/list/borks = existing_typesof(/obj/item/weapon/reagent_containers/food/drinks) - blocked
 
 	//BORK BORK BORK
-	playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+	playsound(holder.my_atom, 'sound/effects/phasein.ogg', 100, 1)
 
 	for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 		if(ishuman(O))
@@ -1501,7 +1501,7 @@
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently!</span>")
 		sleep(50)
 
-	playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
+	playsound(holder.my_atom, 'sound/effects/phasein.ogg', 100, 1)
 
 	for(var/mob/living/M in range (get_turf(holder.my_atom), 7))
 		M.bodytemperature -= 6
@@ -2060,7 +2060,7 @@
 
 /datum/chemical_reaction/slimestop/on_reaction(var/datum/reagents/holder, var/created_volume)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
-	playsound(get_turf(holder.my_atom), 'sound/effects/theworld3.ogg', 100, 1)
+	playsound(holder.my_atom, 'sound/effects/theworld3.ogg', 100, 1)
 	timestop(get_turf(holder.my_atom), 25,5)
 
 //Pyrite

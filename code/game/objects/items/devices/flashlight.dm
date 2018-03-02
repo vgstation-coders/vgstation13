@@ -34,12 +34,12 @@
 		set_light(brightness_on)
 		if(playsound && has_sound)
 			if(get_turf(src))
-				playsound(get_turf(src), sound_on, 50, 1)
+				playsound(src, sound_on, 50, 1)
 	else
 		icon_state = initial(icon_state)
 		set_light(0)
 		if(playsound && has_sound)
-			playsound(get_turf(src), sound_off, 50, 1)
+			playsound(src, sound_off, 50, 1)
 
 /obj/item/device/flashlight/attack_self(mob/user)
 	if(!isturf(user.loc))

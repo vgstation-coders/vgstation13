@@ -241,7 +241,7 @@
 			return
 		H.vessel.remove_reagent(BLOOD,DANGER_DRINK_RATE)
 		getFromPool(/obj/effect/decal/cleanable/blood, get_turf(src))
-		playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
+		playsound(src, 'sound/effects/splat.ogg', 50, 1)
 		spawn(1 SECONDS)
 			drink(H)
 

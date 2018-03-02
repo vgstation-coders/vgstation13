@@ -327,7 +327,7 @@ obj/machinery/gibber/New()
 	else
 		victim.ghostize(0)
 	qdel(victim)
-	playsound(get_turf(src), 'sound/effects/gib2.ogg', 50, 1)
+	playsound(src, 'sound/effects/gib2.ogg', 50, 1)
 	for (var/i=1 to totalslabs)
 		var/obj/item/meatslab = allmeat[i]
 		var/turf/Tx = locate(src.x - i, src.y, src.z)

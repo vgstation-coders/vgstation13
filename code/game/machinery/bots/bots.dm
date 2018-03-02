@@ -85,7 +85,7 @@
 	user.do_attack_animation(src, user)
 	src.health -= rand(15,30)*brute_dam_coeff
 	src.visible_message("<span class='danger'>[user] has slashed [src]!</span>")
-	playsound(get_turf(src), 'sound/weapons/slice.ogg', 25, 1, -1)
+	playsound(src, 'sound/weapons/slice.ogg', 25, 1, -1)
 	if(prob(10))
 		//new /obj/effect/decal/cleanable/blood/oil(src.loc)
 		var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)

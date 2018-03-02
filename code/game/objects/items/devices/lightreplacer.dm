@@ -325,7 +325,7 @@
 
 
 	to_chat(user, "<span class='notice'>You replace the [target.fitting] with \the [src].</span>")
-	playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+	playsound(src, 'sound/machines/click.ogg', 50, 1)
 
 	supply.remove_from_storage(best_light)
 
@@ -368,7 +368,7 @@
 
 /obj/item/device/lightreplacer/proc/Emag()
 	emagged = !emagged
-	playsound(get_turf(src), "sparks", 100, 1)
+	playsound(src, "sparks", 100, 1)
 	if(emagged)
 		name = "Shortcircuited [initial(name)]"
 	else

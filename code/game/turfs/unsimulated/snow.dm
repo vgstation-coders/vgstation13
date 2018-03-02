@@ -110,7 +110,7 @@
 /turf/unsimulated/floor/snow/Entered(mob/user)
 	..()
 	if(isliving(user) && !user.locked_to && !user.lying && !user.flying)
-		playsound(get_turf(src), pick(snowsound), 10, 1, -1, channel = 123)
+		playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
 
 /turf/unsimulated/floor/snow/permafrost
 	icon_state = "permafrost_full"

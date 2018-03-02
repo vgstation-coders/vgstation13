@@ -203,9 +203,9 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			hitstaken++
 			if(hitstaken>=3 && !(stat & BROKEN))
 				stat |= BROKEN
-				playsound(get_turf(src), 'sound/effects/Glassbr3.ogg', 100, 1)
+				playsound(src, 'sound/effects/Glassbr3.ogg', 100, 1)
 			else
-				playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 100, 1)
+				playsound(src, 'sound/effects/Glasshit.ogg', 100, 1)
 			update_icon()
 
 /obj/machinery/newscaster/attack_ai(mob/user as mob)
@@ -883,7 +883,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	switch(buildstage)
 		if(0)
 			if(iscrowbar(I))
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 				user.visible_message("<span class='notice'>[user] begins prying off the [src]!</span>", "<span class='notice'>You begin prying off the [src]</span>")
 				if(do_after(user, src,10))
 					to_chat(user, "<span class='notice'>You pry off the [src]!.</span>")
@@ -893,13 +893,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 			if(isscrewdriver(I) && !(stat & BROKEN))
 				user.visible_message("<span class='notice'>[user] screws in the [src]!</span>", "<span class='notice'>You screw in the [src]</span>")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 				buildstage = 1
 
 		if(1)
 			if(isscrewdriver(I) && !(stat & BROKEN))
 				user.visible_message("<span class='notice'>[user] unscrews the [src]!</span>", "<span class='notice'>You unscrew the [src]</span>")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 				buildstage = 0
 				update_icon()
 				return
@@ -912,10 +912,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					stack.use(2)
 					hitstaken = 0
 					stat &= ~BROKEN
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 80, 1)
+					playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
 
 			else if (stat & BROKEN)
-				playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 100, 1)
+				playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 100, 1)
 				visible_message("<EM>[user.name]</EM> further abuses the shattered [src].")
 
 			else
@@ -929,17 +929,17 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					var/obj/item/weapon/W = I
 					if(W.force <15)
 						visible_message("[user.name] hits the [src] with the [W] with no visible effect." )
-						playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 100, 1)
+						playsound(src, 'sound/effects/Glasshit.ogg', 100, 1)
 					else
 						user.do_attack_animation(src, W)
 						hitstaken++
 						if(hitstaken==3)
 							visible_message("[user.name] smashes the [src]!")
 							stat |= BROKEN
-							playsound(get_turf(src), 'sound/effects/Glassbr3.ogg', 100, 1)
+							playsound(src, 'sound/effects/Glassbr3.ogg', 100, 1)
 						else
 							visible_message("[user.name] forcefully slams the [name] with the [I.name]!")
-							playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 100, 1)
+							playsound(src, 'sound/effects/Glasshit.ogg', 100, 1)
 				else
 					to_chat(user, "<span class='notice'>This does nothing.</span>")
 	update_icon()
@@ -1115,7 +1115,7 @@ obj/item/weapon/newspaper/Topic(href, href_list)
 				if(curr_page == 0) //We're at the start, get to the middle
 					screen = NEWSPAPER_CONTENT_PAGE
 			curr_page++
-			playsound(get_turf(src), "pageturn", 50, 1)
+			playsound(src, "pageturn", 50, 1)
 
 		else if(href_list["prev_page"])
 			if(curr_page == 0)
@@ -1127,7 +1127,7 @@ obj/item/weapon/newspaper/Topic(href, href_list)
 				if(curr_page == pages+1) //we're at the end, let's go back to the middle.
 					screen = NEWSPAPER_CONTENT_PAGE
 			curr_page--
-			playsound(get_turf(src), "pageturn", 50, 1)
+			playsound(src, "pageturn", 50, 1)
 
 		if (istype(loc, /mob))
 			attack_self(loc)
@@ -1212,11 +1212,11 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		spawn(300)
 			alert = FALSE
 			update_icon()
-		playsound(get_turf(src), 'sound/machines/twobeep.ogg', 75, 1)
+		playsound(src, 'sound/machines/twobeep.ogg', 75, 1)
 	else
 		for(var/mob/O in hearers(world.view-1, T))
 		say("Attention! Wanted issue distributed!")
-		playsound(get_turf(src), 'sound/machines/warning-buzzer.ogg', 75, 1)
+		playsound(src, 'sound/machines/warning-buzzer.ogg', 75, 1)
 	return
 
 /obj/machinery/newscaster/say_quote(text)

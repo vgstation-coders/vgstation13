@@ -648,7 +648,7 @@
 				occupant = null
 				var/obj/effect/decal/cleanable/ash/ashed = new /obj/effect/decal/cleanable/ash(loc)
 				ashed.layer = src.layer + 0.01
-		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
+		playsound(src, 'sound/machines/ding.ogg', 50, 1)
 		on = 0
 		if(occupant)
 			if(ishuman(occupant))
@@ -656,7 +656,7 @@
 				if(isdiona(H))
 					if(H.h_style != "Popped Hair")
 						to_chat(H, "<span class = 'notice'>Your head pops!</span>")
-						playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 1)
+						playsound(src, 'sound/effects/pop.ogg', 50, 1)
 						H.h_style = "Popped Hair"
 						H.update_hair()
 			go_out()
