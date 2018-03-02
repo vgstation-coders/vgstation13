@@ -2291,7 +2291,6 @@
 #include "maps\randomvaults\dance_revolution.dm"
 #include "maps\randomvaults\objects.dm"
 #include "maps\randomvaults\spessmart.dm"
-#include "maps\randomvaults\assistantslair.dmm"
 #include "maps\RandomZLevels\Academy.dm"
 #include "maps\RandomZLevels\challenge.dm"
 #include "maps\RandomZLevels\hive.dm"
