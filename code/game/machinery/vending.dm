@@ -10,11 +10,25 @@ var/global/num_vending_terminals = 1
 	var/product_path = null
 	var/original_amount = 0
 	var/amount = 0
+	var/stack_amount = 0 //only used when we're dealing with /obj/item/stack
 	var/price = 0
 	var/display_color = "blue"
 	var/category = CAT_NORMAL//available by default, contraband, or premium (requires a coin)
 	var/subcategory = null
 	var/mini_icon = null
+
+//this proc is only used when an item is inserted into a custom vending machine.
+/datum/data/vending_product/proc/custom_entry(var/obj/item/item)
+	if(istype(item, /obj/item/stack))
+		var/obj/item/stack/S = item
+		stack_amount = S.amount
+		product_name = "A stack of [stack_amount] [item.name]"
+	else
+		product_name = item.name
+	mini_icon = costly_bicon(item)
+	display_color = pick("red", "blue", "green")
+	product_path = item
+	amount += 1
 
 /* TODO: Add this to deconstruction for vending machines
 /obj/item/compressed_vend
@@ -131,12 +145,14 @@ var/global/num_vending_terminals = 1
 
 	if(ticker)
 		initialize()
-		link_to_account()
 
 	return
 
 /obj/machinery/vending/initialize()
-	..()
+	build_inventories()
+	link_to_account()
+
+/obj/machinery/vending/proc/build_inventories()
 	product_records = new/list()
 	build_inventory(products)
 	build_inventory(contraband, 1)
@@ -144,6 +160,7 @@ var/global/num_vending_terminals = 1
 	build_inventory(vouched, 0, 0, 1)
 
 /obj/machinery/vending/proc/link_to_account()
+	reconnect_database()
 	linked_account = department_accounts["Cargo"]
 
 /obj/machinery/vending/RefreshParts()
@@ -213,7 +230,7 @@ var/global/num_vending_terminals = 1
 					newmachine.product_records = P.product_records
 					newmachine.hidden_records = P.hidden_records
 					newmachine.coin_records = P.coin_records
-					newmachine.initialize()
+					newmachine.build_inventories()
 				qdel(P)
 				if(user.machine==src)
 					newmachine.attack_hand(user)
@@ -237,7 +254,7 @@ var/global/num_vending_terminals = 1
 				if(do_after_many(user, list(src, P), 3 SECONDS))
 					to_chat(user, "<span class='notice'>[bicon(src)] You finish refilling the vending machine.</span>")
 					playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
-					if(check_for_custom_vendor())
+					if(is_custom_machine)
 						custom_refill(P, user)
 					else
 						normal_refill(P, user)
@@ -247,16 +264,6 @@ var/global/num_vending_terminals = 1
 
 			else
 				to_chat(user, "<span class='warning'>This recharge pack isn't meant for this kind of vending machines.</span>")
-
-/obj/machinery/vending/proc/check_for_custom_vendor()
-	//We check if there's an in-game object instead of a typepath inside the vending machine.
-	for(var/item in products) //We only support the product list for the moment. This means no custom premium/contraband products
-		if(!ispath(item))
-			return TRUE
-	if(!products.len)
-		return TRUE
-
-	return FALSE
 
 /obj/machinery/vending/proc/normal_refill(obj/structure/vendomatpack/P, mob/user)
 	for (var/datum/data/vending_product/D in product_records)
@@ -282,7 +289,7 @@ var/global/num_vending_terminals = 1
 				I.forceMove(src)
 		products += P.stock
 		product_records += P.product_records
-		initialize()
+		build_inventories()
 	getFromPool(/obj/item/stack/sheet/cardboard, P.loc, 4)
 	qdel(P)
 
@@ -333,9 +340,7 @@ var/global/num_vending_terminals = 1
 		R.original_amount = amount
 		R.price = price
 		R.display_color = pick("red", "blue", "green")
-		var/is_custom = FALSE
-		if(check_for_custom_vendor())
-			is_custom = TRUE
+		if(is_custom_machine)
 			var/obj/O = R.product_path
 			R.price = O.price
 			R.product_name = "[O.name]"
@@ -354,7 +359,7 @@ var/global/num_vending_terminals = 1
 			product_records.Add(R)
 
 		var/obj/item/initializer = typepath
-		if(!is_custom)
+		if(!is_custom_machine)
 			R.product_name = initial(initializer.name)
 		R.subcategory = initial(initializer.vending_cat)
 
@@ -532,18 +537,21 @@ var/global/num_vending_terminals = 1
 			to_chat(usr, "[bicon(src)]<span class='warning'>Unable to connect to linked account. Please contact a god.</span>")
 	else if(istype(W, /obj/item/) && inserting_mode)
 		if(user.drop_item(W, src))
-			for(var/datum/data/vending_product/VP in product_records)
-				if(VP.product_path == W)
-					VP.amount += 1
-					return
-			var/datum/data/vending_product/R = new()
-			R.product_name = W.name
-			R.mini_icon = costly_bicon(W)
-			R.display_color = pick("red", "blue", "green")
-			R.product_path = W
-			product_records += R
-			products += W
+			insert_item(W)
 
+
+/obj/machinery/vending/proc/insert_item(var/obj/item/item)
+	for(var/datum/data/vending_product/VP in product_records)
+		if(VP.product_path == item)
+			VP.amount += 1
+			if(istype(item, /obj/item/stack))
+				var/obj/item/stack/S = item
+				VP.product_name = "A stack of [S.amount] [S.name]"
+			return
+	var/datum/data/vending_product/R = new()
+	R.custom_entry(item)
+	product_records += R
+	products += item
 //H.wear_id
 
 /**
@@ -1126,7 +1134,13 @@ var/global/num_vending_terminals = 1
 			continue
 
 		R.amount--
-		throw_item = new dump_path(src.loc)
+
+		if(is_custom_machine)
+			products.Remove(throw_item)
+			throw_item = dump_path
+			throw_item.forceMove(get_turf(src))
+		else
+			throw_item = new dump_path(src.loc)
 
 		if (!throw_item)
 			return 0
