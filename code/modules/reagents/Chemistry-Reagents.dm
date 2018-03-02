@@ -5921,6 +5921,26 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Lifeline"
 	id = MEDCOFFEE
 	description = "Tastes like it's got iron in it or something."
+	
+/datum/reagent/drink/coffee/medcoffee/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.nutrition += nutriment_factor
+	if(M.getOxyLoss() && prob(25))
+		M.adjustOxyLoss(-1)
+	if(M.getBruteLoss() && prob(30))
+		M.heal_organ_damage(1, 0)
+	if(M.getFireLoss() && prob(25))
+		M.heal_organ_damage(0, 1)
+	if(M.getToxLoss() && prob(25))
+		M.adjustToxLoss(-1)
+	if(M.dizziness != 0)
+		M.dizziness = max(0, M.dizziness - 15)
+	if(M.confused != 0)
+		M.confused = max(0, M.confused - 5)
+	M.reagents.add_reagent ("iron", 0.1)
 
 /datum/reagent/drink/coffee/detcoffee
 	name = "Joe"
