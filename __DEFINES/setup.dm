@@ -1576,8 +1576,13 @@ var/proccalls = 1
 #define HUD_MEDICAL 1
 #define HUD_SECURITY 2
 
-#define INERTIA_MOVEDELAY 5
+//Cyborg components
+#define COMPONENT_BROKEN -1
+#define COMPONENT_MISSING 0
+#define COMPONENT_INSTALLED 1
 
+//Glidesize
+#define INERTIA_MOVEDELAY 5
 #define FRACTIONAL_GLIDESIZES 1
 #ifdef FRACTIONAL_GLIDESIZES
 #define DELAY2GLIDESIZE(delay) (WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1))

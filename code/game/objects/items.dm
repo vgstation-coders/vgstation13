@@ -92,6 +92,9 @@
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
 
+/obj/item/proc/is_hidden_identity()
+	return is_slot_hidden(body_parts_covered,HIDEFACE)
+
 /obj/item/ex_act(severity)
 	switch(severity)
 		if(1.0)

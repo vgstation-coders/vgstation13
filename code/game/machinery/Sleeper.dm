@@ -63,6 +63,8 @@
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol")
 
 /obj/machinery/sleeper/interact(var/mob/user)
+	if(user.loc == src || (!Adjacent(user)&&!issilicon(user)) || user.lying || user.incapacitated() || !user.dexterity_check())
+		return
 	var/dat = list()
 	if(on)
 		dat += "<B>Performing anaesthesic emergence...</B>" //Best I could come up with
@@ -110,6 +112,8 @@
 
 /obj/machinery/sleeper/Topic(href, href_list)
 	if(..())
+		return 1
+	else if(usr.loc == src || (!Adjacent(usr)&&!issilicon(usr)) || usr.lying || usr.incapacitated() || !usr.dexterity_check())
 		return 1
 	else
 		usr.set_machine(src)
@@ -515,11 +519,11 @@
 		return
 	if(emagged)
 		light_color = LIGHT_COLOR_RED
-		icon_state += "_emagged"
+		icon_state = "[base_icon]_emagged"
 	else
 
 		light_color = LIGHT_COLOR_ORANGE
-		icon_state += "_running"
+		icon_state = "[base_icon]_running"
 	if(on)
 		set_light(light_range_on, light_power_on)
 	else
@@ -539,6 +543,8 @@
 /obj/machinery/sleeper/mancrowave/RefreshParts()
 
 /obj/machinery/sleeper/mancrowave/interact(var/mob/user)
+	if(user.loc == src || !Adjacent(user) || user.lying || user.incapacitated() || !user.dexterity_check())
+		return
 	var/dat = "<font color='blue'><B>Occupant Statistics:</B></FONT><BR>"
 	if (occupant)
 		var/t1
@@ -572,6 +578,8 @@
 
 /obj/machinery/sleeper/mancrowave/Topic(href, href_list)
 	if(..())
+		return 1
+	if(usr.loc == src || (!Adjacent(usr)&&!issilicon(usr)) || usr.lying || usr.incapacitated() || !usr.dexterity_check())
 		return 1
 	usr.set_machine(src)
 	if (href_list["cook"])

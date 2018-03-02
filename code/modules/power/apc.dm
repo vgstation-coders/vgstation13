@@ -98,8 +98,9 @@
 	var/make_alerts = TRUE // Should this APC make power alerts to the area?
 
 	machine_flags = WIREJACK
-	holomap = TRUE
-	auto_holomap = TRUE
+
+/obj/machinery/power/apc/supports_holomap()
+	return TRUE
 
 /obj/machinery/power/apc/no_alerts
 	make_alerts = FALSE
@@ -115,7 +116,8 @@
 	..(loc)
 
 	if(areaMaster.areaapc)
-		world.log << "Second APC detected in area: [areaMaster.name]. Deleting the second APC."
+		var/turf/T = get_turf(src)
+		world.log << "Second APC detected in area: [areaMaster.name] [T.x], [T.y], [T.z]. Deleting the second APC."
 		qdel(src)
 		return
 
@@ -143,8 +145,9 @@
 		operating = 0
 		stat |= MAINT
 
-	if(ticker)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
+		update()
 
 /obj/machinery/power/apc/proc/init()
 	has_electronics = 2 //installed and secured
@@ -159,12 +162,10 @@
 /obj/machinery/power/apc/finalise_terminal()
 	// create a terminal object at the same position as original turf loc
 	// wires will attach to this
-	terminal = new/obj/machinery/power/terminal {auto_holomap = 0} (src.loc)
+	terminal = new/obj/machinery/power/terminal(src.loc)
 	terminal.dir = tdir
 	terminal.master = src
-	var/turf/T = loc
-	if (istype(T))
-		T.soft_add_holomap(terminal)
+	terminal.add_self_to_holomap()
 
 /obj/machinery/power/apc/initialize()
 	..()
@@ -172,9 +173,7 @@
 	name = "[areaMaster.name] APC"
 
 	update_icon()
-
-	spawn(5)
-		update()
+	add_self_to_holomap()
 
 /obj/machinery/power/apc/examine(mob/user)
 	..()

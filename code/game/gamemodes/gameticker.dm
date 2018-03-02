@@ -65,7 +65,16 @@ var/datum/controller/gameticker/ticker
 		"sound/music/dawsonschristian.ogg",
 		"sound/music/carmenmirandasghost.ogg",
 		))
-	login_music = fcopy_rsc(oursong)
+
+	if(SNOW_THEME)
+		var/path = "sound/music/xmas/"
+		var/list/filenames = flist(path)
+		for(var/filename in filenames)
+			if(copytext(filename, length(filename)) == "/")
+				filenames -= filename
+		login_music = file("[path][pick(filenames)]")
+	else
+		login_music = fcopy_rsc(oursong)
 
 	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`")
 
@@ -181,8 +190,8 @@ var/datum/controller/gameticker/ticker
 		mode.post_setup()
 		//Cleanup some stuff
 		for(var/obj/effect/landmark/start/S in landmarks_list)
-			//Deleting Startpoints but we need the ai point to AI-ize people later
-			if (S.name != "AI")
+			//Deleting Startpoints but we need the ai point to AI-ize people later and the Trader point to throw new ones
+			if (S.name != "AI" && S.name != "Trader")
 				qdel(S)
 		var/list/obj/effect/landmark/spacepod/random/L = list()
 		for(var/obj/effect/landmark/spacepod/random/SS in landmarks_list)

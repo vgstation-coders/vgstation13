@@ -63,7 +63,7 @@
 	hud_used.update_robot_modules_display()
 
 /mob/living/silicon/robot/proc/activate_module(var/obj/item/I)
-	if(!(locate(I) in src.module.modules) && I != src.module.emag)
+	if(!(locate(I) in module.modules))
 		return
 	if(activated(I))
 		to_chat(src, "<span class='notice'>Already activated</span>")
@@ -252,8 +252,8 @@
 
 /mob/living/silicon/robot/before_take_item(var/obj/item/W)
 	..()
-	if(W.loc == src.module)
-		src.module.modules -= W //maybe fix the cable issues.
+	if(W.loc == module)
+		module.modules -= W //maybe fix the cable issues.
 
 //Grippershit
 
@@ -301,3 +301,9 @@
 
 /mob/living/silicon/robot/put_in_active_hand(var/obj/item/W)
 	return put_in_hands(W)
+
+/mob/living/silicon/robot/put_in_inactive_hand(var/obj/item/W)
+	return FALSE
+
+/mob/living/silicon/robot/get_inactive_hand(var/obj/item/W)
+	return FALSE

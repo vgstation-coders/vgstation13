@@ -294,6 +294,7 @@
 	desc = "Tovarish, no one will realize you stepped on a pile of shit if your pair already looks like shit."
 	icon_state = "nr_boots"
 	item_state = "nr_boots"
+	heat_conductivity = INS_ARMOUR_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/shoes/cult
 	name = "boots"

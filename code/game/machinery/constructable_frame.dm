@@ -426,8 +426,8 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/smes
 	name = "Circuit Board (SMES)"
-	desc = "A circuit board used to run a gas freezer."
-	build_path = "/obj/machinery/power/battery/smes"
+	desc = "A circuit board used to run a giant battery."
+	build_path = "/obj/machinery/power/battery/smes/pristine"
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=4;" + Tc_PROGRAMMING + "=4"
 	req_components = list(
@@ -913,6 +913,16 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/subspace/analyzer" = 4)
 
 // Telecomms circuit boards:
+
+/obj/item/weapon/circuitboard/telecomms/pda_multicaster
+	name = "Circuit Board (PDA multicaster)"
+	desc = "A circuit board used to run a machine that resends messages."
+	build_path = "/obj/machinery/telecomms/pda_multicaster"
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=2"
+	req_components = list(
+							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
+							"/obj/item/weapon/stock_parts/manipulator" = 1)
 
 /obj/item/weapon/circuitboard/telecomms/receiver
 	name = "Circuit Board (telecommunications subspace receiver)"

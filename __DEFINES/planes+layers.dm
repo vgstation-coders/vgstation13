@@ -195,6 +195,7 @@ What is the naming convention for planes or layers?
 	#define SINGULARITY_LAYER 		6
 	#define ABOVE_SINGULO_LAYER 	7
 	#define GRAVITYGRID_LAYER 		8
+	#define SNOW_OVERLAY_LAYER		9
 
 #define LIGHTING_PLANE 			19
 
@@ -238,6 +239,7 @@ What is the naming convention for planes or layers?
 
 /obj/abstract/screen/plane_master/clickmaster
 	plane = BASE_PLANE
+	mouse_opacity = 0
 
 var/obj/abstract/screen/plane_master/clickmaster/clickmaster = new()
 
@@ -248,3 +250,17 @@ var/obj/abstract/screen/plane_master/clickmaster/clickmaster = new()
 	plane = BASE_PLANE
 
 var/obj/abstract/screen/plane_master/clickmaster_dummy/clickmaster_dummy = new()
+
+// returns a list with the objects sorted depending on their layer, with the lowest objects being the first in the list and the highest objects being last
+/proc/plane_layer_sort(var/list/to_sort)
+	var/list/sorted = list()
+	for(var/current_atom in to_sort)
+		var/compare_index
+		for(compare_index = sorted.len, compare_index > 0, --compare_index) // count down from the length of the list to zero.
+			var/atom/compare_atom = sorted[compare_index] // compare to the next object down the list.
+			if(compare_atom.plane < current_atom:plane) // is this object below our current atom?
+				break
+			else if((compare_atom.plane == current_atom:plane) && (compare_atom.layer <= current_atom:layer))	// is this object below our current atom?
+				break
+		sorted.Insert(compare_index+1, current_atom) // insert it just above the atom it was higher than - or at the bottom if it was higher than nothing.
+	return sorted // return the sorted list.

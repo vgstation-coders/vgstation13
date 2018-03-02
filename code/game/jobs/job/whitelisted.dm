@@ -3,7 +3,7 @@
 	flag = TRADER
 	department_flag = CIVILIAN
 	faction = "Station"
-	total_positions = 0
+	total_positions = 3
 	spawn_positions = 3
 	supervisors = "nobody"
 	selection_color = "#dddddd"
@@ -20,6 +20,8 @@
 	//Don't spawn with any of the average crew member's luxuries (only an ID)
 	no_starting_money = 1
 	no_pda = 1
+
+	spawns_from_edge = 1
 
 	idtype = /obj/item/weapon/card/id/vox
 

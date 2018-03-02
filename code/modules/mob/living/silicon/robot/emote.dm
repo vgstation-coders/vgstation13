@@ -2,7 +2,7 @@
 	if(timestopped)
 		return //under effects of time magick
 	var/param = null
-	if (findtext(act, "-", 1, null))
+	if(findtext(act, "-", 1, null))
 		var/t1 = findtext(act, "-", 1, null)
 		param = copytext(act, t1 + 1, length(act) + 1)
 		act = copytext(act, 1, t1)
@@ -11,128 +11,136 @@
 		act = copytext(act,1,length(act))
 
 	switch(act)
-		if ("me")
-			if (src.client)
+		if("me")
+			if(client)
 				if(client.prefs.muted & MUTE_IC)
 					to_chat(src, "You cannot send IC messages (muted).")
 					return
-				if (src.client.handle_spam_prevention(message,MUTE_IC))
+				if(client.handle_spam_prevention(message,MUTE_IC))
 					return
-			if (stat)
+			if(stat)
 				return
 			if(!(message))
 				return
 			else
 				return custom_emote(m_type, message)
 
-		if ("custom")
+		if("custom")
 			return custom_emote(m_type, message)
 
-		if ("salute")
-			if (!src.locked_to)
+		if("salute")
+			if(!locked_to)
 				var/M = null
-				if (param)
+				if(param)
 					for (var/mob/A in view(null, null))
-						if (param == A.name)
+						if(param == A.name)
 							M = A
 							break
-				if (!M)
+				if(!M)
 					param = null
 
-				if (param)
+				if(param)
 					message = "<B>[src]</B> salutes to [param]."
 				else
 					message = "<B>[src]</b> salutes."
 			m_type = VISIBLE
-		if ("bow")
-			if (!src.locked_to)
+		if("bow")
+			if(!locked_to)
 				var/M = null
-				if (param)
+				if(param)
 					for (var/mob/A in view(null, null))
-						if (param == A.name)
+						if(param == A.name)
 							M = A
 							break
-				if (!M)
+				if(!M)
 					param = null
 
-				if (param)
+				if(param)
 					message = "<B>[src]</B> bows to [param]."
 				else
 					message = "<B>[src]</B> bows."
 			m_type = VISIBLE
 
-		if ("clap")
-			if (!src.restrained())
-				message = "<B>[src]</B> claps."
+		if("clap")
+			if(incapacitated())
+				message = "<B>[src]</B> clangs its modules together in a crude simulation of applause."
 				m_type = HEARABLE
-		if ("flap")
-			if (!src.restrained())
-				message = "<B>[src]</B> flaps his wings."
-				m_type = HEARABLE
+		if("flap")
+			if(incapacitated())
+				if(module_active)
+					var/obj/item/I = module_active
+					message = "<B>[src]</B> flaps its [I.name]."
+				else
+					message = "<B>[src]</B> flaps its modules as though they were wings."
+				m_type = VISIBLE
 
-		if ("aflap")
-			if (!src.restrained())
-				message = "<B>[src]</B> flaps his wings ANGRILY!"
-				m_type = HEARABLE
+		if("aflap")
+			if(!incapacitated())
+				if(module_active)
+					var/obj/item/I = module_active
+					message = "<B>[src]</B> flaps its [I.name] ANGRILY!"
+				else
+					message = "<B>[src]</B> flaps its modules ANGRILY!"
+				m_type = VISIBLE
 
-		if ("twitch")
+		if("twitch")
 			message = "<B>[src]</B> twitches violently."
 			m_type = VISIBLE
 
-		if ("twitch_s")
+		if("twitch_s")
 			message = "<B>[src]</B> twitches."
 			m_type = VISIBLE
 
-		if ("nod")
+		if("nod")
 			message = "<B>[src]</B> nods."
 			m_type = VISIBLE
 
-		if ("deathgasp")
+		if("deathgasp")
 			message = "<B>[src]</B> shudders violently for a moment, then becomes motionless, its eyes slowly darkening."
 			m_type = VISIBLE
 
-		if ("glare")
+		if("glare")
 			var/M = null
-			if (param)
+			if(param)
 				for (var/mob/A in view(null, null))
-					if (param == A.name)
+					if(param == A.name)
 						M = A
 						break
-			if (!M)
+			if(!M)
 				param = null
 
-			if (param)
+			if(param)
 				message = "<B>[src]</B> glares at [param]."
 			else
 				message = "<B>[src]</B> glares."
 
-		if ("stare")
+		if("stare")
 			var/M = null
-			if (param)
+			if(param)
 				for (var/mob/A in view(null, null))
-					if (param == A.name)
+					if(param == A.name)
 						M = A
 						break
-			if (!M)
+			if(!M)
 				param = null
 
-			if (param)
+			if(param)
 				message = "<B>[src]</B> stares at [param]."
 			else
 				message = "<B>[src]</B> stares."
 
-		if ("look")
+		if("look")
 			var/M = null
-			if (param)
+			if(param)
 				for (var/mob/A in view(null, null))
-					if (param == A.name)
+					if(param == A.name)
 						M = A
 						break
 
-			if (!M)
+			if(!M)
 				param = null
 
-			if (param)
+			if(param)
 				message = "<B>[src]</B> looks at [param]."
 			else
 				message = "<B>[src]</B> looks."
@@ -142,13 +150,13 @@
 			var/M = null
 			if(param)
 				for (var/mob/A in view(null, null))
-					if (param == A.name)
+					if(param == A.name)
 						M = A
 						break
 			if(!M)
 				param = null
 
-			if (param)
+			if(param)
 				message = "<B>[src]</B> beeps at [param]."
 			else
 				message = "<B>[src]</B> beeps."
@@ -159,13 +167,13 @@
 			var/M = null
 			if(param)
 				for (var/mob/A in view(null, null))
-					if (param == A.name)
+					if(param == A.name)
 						M = A
 						break
 			if(!M)
 				param = null
 
-			if (param)
+			if(param)
 				message = "<B>[src]</B> pings at [param]."
 			else
 				message = "<B>[src]</B> pings."
@@ -176,13 +184,13 @@
 			var/M = null
 			if(param)
 				for (var/mob/A in view(null, null))
-					if (param == A.name)
+					if(param == A.name)
 						M = A
 						break
 			if(!M)
 				param = null
 
-			if (param)
+			if(param)
 				message = "<B>[src]</B> buzzes at [param]."
 			else
 				message = "<B>[src]</B> buzzes."
@@ -190,7 +198,7 @@
 			m_type = VISIBLE
 
 		if("law")
-			if (istype(module,/obj/item/weapon/robot_module/security))
+			if(istype(module,/obj/item/weapon/robot_module/security))
 				message = "<B>[src]</B> shows its legal authorization barcode."
 
 				playsound(get_turf(src), 'sound/voice/biamthelaw.ogg', 50, 0)
@@ -199,7 +207,7 @@
 				to_chat(src, "You are not THE LAW, pal.")
 
 		if("halt")
-			if (istype(module,/obj/item/weapon/robot_module/security))
+			if(istype(module,/obj/item/weapon/robot_module/security))
 				message = "<B>[src]</B>'s speakers skreech, \"Halt! Security!\"."
 
 				playsound(get_turf(src), 'sound/voice/halt.ogg', 50, 0)
@@ -207,21 +215,12 @@
 			else
 				to_chat(src, "You are not security.")
 
-		/*
-		if ("fart")
-			var/list/robotfarts = list("makes a farting noise","vents excess methane","shakes violently, then vents methane.")
-			var/robofart = pick(robotfarts)
-			message = "<B>[src]</B> [robofart]."
-			m_type = VISIBLE
-
-		*/
-
-		if ("help")
+		if("help")
 			to_chat(src, "salute, bow-(none)/mob, clap, flap, aflap, twitch, twitch_s, nod, deathgasp, glare-(none)/mob, stare-(none)/mob, look, beep, ping, \nbuzz, law, halt")
 		else
 			to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
 
-	if ((message && src.stat == 0))
+	if (message && (src.stat == CONSCIOUS || act == "deathgasp"))
 		if (m_type & 1)
 			for(var/mob/O in viewers(src, null))
 				O.show_message(message, m_type)
