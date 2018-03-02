@@ -420,14 +420,14 @@ var/global/num_vending_terminals = 1
 	return 1
 
 /obj/machinery/vending/attackby(obj/item/W, mob/user)
-	if(stat & (BROKEN))
+	if(stat & (BROKEN) && !iswrench(W))
 		if(istype(W, /obj/item/stack/sheet/glass/rglass))
 			var/obj/item/stack/sheet/glass/rglass/G = W
 			to_chat(user, "<span class='notice'>You replace the broken glass.</span>")
 			G.use(1)
 			stat &= ~BROKEN
 			src.health = 100
-			src.update_vicon()
+			power_change()
 			getFromPool(/obj/item/weapon/shard, loc)
 		else
 			to_chat(user, "<span class='notice'>The glass in \the [src] is broken! Fix it first.</span>")
@@ -701,9 +701,7 @@ var/global/num_vending_terminals = 1
 
 	spawn(ticks)
 
-	if(stat & (NOPOWER)) //Make another check just in case something goes weird
-		stat &= ~NOPOWER
-		src.update_vicon()
+	power_change()
 
 /obj/machinery/vending/proc/update_vicon()
 	if(stat & (BROKEN))

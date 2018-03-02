@@ -106,6 +106,10 @@
 		interact(usr)
 		return 1
 
+/obj/item/device/destTagger/cyborg
+	name = "cyborg destination tagger"
+	mode = TRUE
+
 /obj/machinery/disposal/deliveryChute
 	name = "Delivery chute"
 	desc = "A chute for big and small packages alike!"

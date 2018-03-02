@@ -1,7 +1,7 @@
 /mob/living/silicon/robot/gib()
 	//robots don't die when gibbed. instead they drop their MMI'd brain
-	monkeyizing = 1
-	canmove = 0
+	monkeyizing = TRUE
+	canmove = FALSE
 	icon = null
 	invisibility = 101
 
@@ -18,8 +18,8 @@
 
 /mob/living/silicon/robot/dust()
 	death(1)
-	monkeyizing = 1
-	canmove = 0
+	monkeyizing = TRUE
+	canmove = FALSE
 	icon = null
 	invisibility = 101
 
@@ -42,13 +42,13 @@
 		emote("deathgasp")
 		updateicon() //Don't call updateicon if you're already null.
 	if(camera)
-		camera.status = 0
+		camera.status = FALSE
 
 	if(in_contents_of(/obj/machinery/recharge_station))//exit the recharge station
 		var/obj/machinery/recharge_station/RC = loc
 		if(RC.upgrading)
-			RC.upgrading = 0
-			RC.upgrade_finished = -1
+			RC.upgrading = FALSE
+			RC.upgrade_finished = -1 //WHY
 		RC.go_out()
 
 	handle_sensor_modes()

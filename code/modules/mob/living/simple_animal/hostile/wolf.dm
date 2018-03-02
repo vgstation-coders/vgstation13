@@ -177,12 +177,7 @@
 				if(!pack_alpha)
 					pack_alpha = user
 					to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
-					var/n_name = copytext(sanitize(input(user, "What would you like to name your new friend?", "Wolf Name", null) as text|null), 1, MAX_NAME_LEN)
-					if(n_name && !user.incapacitated())
-						name = n_name
-					var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-					heart.plane = ABOVE_HUMAN_PLANE
-					flick_overlay(heart, list(user.client), 20)
+					name_mob(user)
 				else
 					if(istype(pack_alpha, /mob/living/simple_animal/hostile/wolf))
 						var/mob/living/simple_animal/hostile/wolf/alpha = pack_alpha
