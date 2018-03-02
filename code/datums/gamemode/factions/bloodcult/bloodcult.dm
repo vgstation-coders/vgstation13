@@ -77,6 +77,7 @@
 		"user" = null,
 		"user_amount" = 0,
 		"result" = "",
+		"total" = 0,
 		)
 	var/turf/T = get_turf(user)
 	var/amount_gathered = 0
@@ -228,7 +229,7 @@
 			blood = new()
 			blood.data["blood_colour"] = H.hand_blood_color
 			blood.data["blood_DNA"] = H.blood_DNA
-			if (previous_result != "user")
+			if (previous_result != "hands")
 				user.visible_message("<span class='warning'>The blood on \the [user]'s hands drips onto the floor!</span>",
 									"<span class='rose'>You let the blood smeared on your hands join the pool of your summoning.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
@@ -238,42 +239,42 @@
 			blood.data["blood_colour"] = B.basecolor
 			blood.data["blood_DNA"] = B.blood_DNA
 			blood.data["virus2"] = B.virus2
-			if (previous_result != "user")
+			if (previous_result != "splatter")
 				user.visible_message("<span class='warning'>The blood on the floor bellow \the [user] starts moving!</span>",
 									"<span class='rose'>You redirect the flow of blood inside the splatters on the floor toward the pool of your summoning.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if ("grabbed")
 			var/mob/living/carbon/human/H = data["grabbed"]
 			blood = get_blood(H.vessel)
-			if (previous_result != "user")
+			if (previous_result != "grabbed")
 				user.visible_message("<span class='warning'>\The [user] stabs their nails inside \the [data["grabbed"]], drawing blood from them!</span>",
 									"<span class='rose'>You stab your nails inside \the [data["grabbed"]] to draw some blood from them.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if ("bleeder")
 			var/mob/living/carbon/human/H = data["bleeder"]
 			blood = get_blood(H.vessel)
-			if (previous_result != "user")
+			if (previous_result != "bleeder")
 				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data["bleeder"]]'s wounds!</span>",
 									"<span class='rose'>You dip your fingers inside \the [data["bleeder"]]'s wounds to draw some blood from them.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if ("held")
 			var/obj/item/weapon/reagent_containers/glass/G = data["held"]
 			blood = locate() in G.reagents.reagent_list
-			if (previous_result != "user")
+			if (previous_result != "held")
 				user.visible_message("<span class='warning'>\The [user] tips \the [data["held"]], pouring blood!</span>",
 									"<span class='rose'>You tip \the [data["held"]] to pour the blood contained inside.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if ("bloodpack")
 			var/obj/item/weapon/reagent_containers/blood/B = data["bloodpack"]
 			blood = locate() in B.reagents.reagent_list
-			if (previous_result != "user")
+			if (previous_result != "bloodpack")
 				user.visible_message("<span class='warning'>\The [user] squeezes \the [data["bloodpack"]], pouring blood!</span>",
 									"<span class='rose'>You squeeze \the [data["bloodpack"]] to pour the blood contained inside.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if ("container")
 			var/obj/item/weapon/reagent_containers/glass/G = data["container"]
 			blood = locate() in G.reagents.reagent_list
-			if (previous_result != "user")
+			if (previous_result != "container")
 				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data["container"]], covering them in blood!</span>",
 									"<span class='rose'>You dip your fingers inside \the [data["container"]], covering them in blood.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
@@ -310,29 +311,36 @@
 	//Blood is only consumed if there is enough of it
 	if (!data["failure"])
 		if (data["hands"])
+			data["total"] += data["hands_amount"]
 			var/mob/living/carbon/human/H = user
 			H.bloody_hands = max(0, H.bloody_hands - data["hands_amount"])
 			if (!H.bloody_hands)
 				H.clean_blood()
 				H.update_inv_gloves()
 		if (data["splatter"])
+			data["total"] += data["splatter_amount"]
 			var/obj/effect/decal/cleanable/blood/B = data["splatter"]
 			B.amount = max(0 , B.amount - data["splatter_amount"])
 		if (data["grabbed"])
+			data["total"] += data["grabbed_amount"]
 			var/mob/living/carbon/human/H = data["grabbed"]
 			H.vessel.remove_reagent(BLOOD, data["grabbed_amount"])
 			H.take_overall_damage(data["grabbed_amount"] ? 0.1 : 0)
 		if (data["bleeder"])
+			data["total"] += data["bleeder_amount"]
 			var/mob/living/carbon/human/H = data["bleeder"]
 			H.vessel.remove_reagent(BLOOD, data["bleeder_amount"])
 			H.take_overall_damage(data["bleeder_amount"] ? 0.1 : 0)
 		if (data["held"])
+			data["total"] += data["held_amount"]
 			var/obj/item/weapon/reagent_containers/glass/G = data["held"]
 			G.reagents.remove_reagent(BLOOD, data["held_amount"])
 		if (data["container"])
+			data["total"] += data["container_amount"]
 			var/obj/item/weapon/reagent_containers/glass/G = data["container"]
 			G.reagents.remove_reagent(BLOOD, data["container_amount"])
 		if (data["user"])
+			data["total"] += data["user_amount"]
 			var/mob/living/carbon/human/H = user
 			H.vessel.remove_reagent(BLOOD, data["user_amount"])
 			H.take_overall_damage(data["user_amount"] ? 0.1 : 0)
