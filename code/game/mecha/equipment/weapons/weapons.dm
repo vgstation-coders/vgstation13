@@ -132,8 +132,8 @@
 				continue
 		to_chat(M, "<font color='red' size='7'>HONK</font>")
 		M.sleeping = 0
-		M.stuttering += 20
-		M.ear_deaf += 30
+		M.stuttering = max(M.stuttering, 60)
+		M.ear_deaf = max(M.ear_deaf, 60)
 		M.Knockdown(3)
 		if(prob(30))
 			M.Stun(10)
