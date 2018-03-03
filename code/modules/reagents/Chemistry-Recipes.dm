@@ -3058,8 +3058,8 @@
 	name = "Salt Water"
 	id = SALTWATER
 	result = SALTWATER
-	required_reagents = list(WATER = 50, SODIUMCHLORIDE = 5)
-	result_amount = 50
+	required_reagents = list(WATER = 20, SODIUMCHLORIDE = 5)
+	result_amount = 20
 
 /datum/chemical_reaction/saline
 	name = "Saline"
