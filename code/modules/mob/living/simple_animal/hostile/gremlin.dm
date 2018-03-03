@@ -95,7 +95,7 @@ var/list/bad_gremlin_items = list()
 	M.add_custom_fibers("Hairs from a gremlin.", 0)
 	return TRUE
 
-/mob/living/simple_animal/hostile/gremlin/proc/stay_still(var/tick_amount)
+/mob/living/simple_animal/hostile/gremlin/proc/stand_still(var/tick_amount)
 	time_chasing_target -= tick_amount
 
 /mob/living/simple_animal/hostile/gremlin/CanAttack(atom/new_target)
