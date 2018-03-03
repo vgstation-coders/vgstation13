@@ -172,7 +172,7 @@
 			// Database
 
 			dat += {"<h4>Database Functions</h4>
-				<a href='byond://?src=\ref[src];menu=2'>View Records</a><br>"}
+				<a href='byond://?src=\ref[src];menu=2'>View Records[records.len?"([records.len])":""]</a><br>"}
 			if (src.diskette)
 				dat += "<a href='byond://?src=\ref[src];disk=eject'>Eject Disk</a>"
 
