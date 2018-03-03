@@ -41,18 +41,27 @@
 
 /obj/item/clothing/suit/armor/plate_carrier/attackby(obj/item/W,mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/armor_plate) && !P && user.drop_item(W, src))
-		P = W
-		to_chat(user, "<span class = 'notice'>You install \the [W] into \the [src].</span>")
+	if(istype(W, /obj/item/weapon/armor_plate))
+		if(P)
+			to_chat(user, "<span class = 'notice'>There is already \a [P] installed on \the [src].</span>")
+			return
+		if(user.drop_item(W, src))
+			P = W
+			to_chat(user, "<span class = 'notice'>You install \the [W] into \the [src].</span>")
+
+/obj/item/clothing/suit/armor/plate_carrier/examine(mob/user)
+	..()
+	if(P)
+		to_chat(user, "<span class = 'notice'>It has \a [P] attached to it. <a HREF='?src=\ref[user];lookitem=\ref[P]'>Take a closer look.</a></span>")
 
 /obj/item/clothing/suit/armor/plate_carrier/proc/handle_user_damage(list/arguments)
+	if(!P)
+		return
 	var/amount = arguments["amount"]
 	if(amount <= 0)
 		return
 	var/type = arguments["type"]
 
-	if(!P)
-		return
 	P.receive_damage(type, amount)
 	if(P.gcDestroyed)
 		P = null
@@ -84,7 +93,7 @@
 		if(prob(75))
 			var/obj/item/weapon/shard/shrapnel/S = new(T)
 			S.name = "[src] shrapnel"
-			S.desc = "[S.desc] It looks like it's from a broken [src]."
+			S.desc = "[S.desc] It looks like it's from \a [src]."
 		qdel(src)
 
 /obj/item/weapon/armor_plate/examine(var/mob/user)
@@ -101,7 +110,7 @@
 	name = "plasteel armor plate"
 	icon_state = "plate_2"
 	health = 30
-	armor = list(melee = 50, bullet = 80, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
+	armor = list(melee = 50, bullet = 50, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	armor_absorb = list(melee = 25, bullet = 40, laser = 10, energy = -5, bomb = 35, bio = 0, rad = 0)
 
 /obj/item/weapon/armor_plate/laser_resistant
