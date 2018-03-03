@@ -103,7 +103,7 @@
 			spawn owner.emote("me", 1, "gasps for air!")
 			if (owner.losebreath <= 30)
 				owner.losebreath += 5
-		else if(prob(chance))
+		else if(prob(chance) && !(owner.species && owner.species.anatomy_flags & NO_BLOOD))
 			spawn owner.emote("me", 1, "coughs up blood!")
 			owner.drip(10)
 
