@@ -195,4 +195,8 @@
 	"<span class='danger'>\The [user] grabs \a nearby [tool] and contemplates using it on \the [victim]!</span>",
 	"<span class='danger'>\The [user]'s eyes light up as \he tries to use \the [tool] to operate on \the [victim]</span>",
 	"<span class='danger'>\The [user] rubs its hands devilishly and attempts to operate on \the [victim] with \the [tool].</span>"))
+	if(isgremlin(user))
+		var/mob/living/simple_animal/hostile/gremlin/G = user
+		G.stand_still(4)
+
 	global.do_surgery(victim, user, tool)
