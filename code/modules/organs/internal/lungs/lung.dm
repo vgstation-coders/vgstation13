@@ -90,6 +90,9 @@
 
 /datum/organ/internal/lungs/process()
 	..()
+	if((owner.species && owner.species.flags & NO_BREATHE) || M_NO_BREATH in owner.mutations)
+		return
+
 	if (germ_level > INFECTION_LEVEL_ONE)
 		if(prob(5))
 			owner.audible_cough()		//respitory tract infection
