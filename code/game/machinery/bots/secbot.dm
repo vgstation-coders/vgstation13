@@ -270,7 +270,7 @@ Auto Patrol: []"},
 					return
 				if(get_dist(src, src.target) <= 1)		// if right next to perp
 					if(istype(src.target,/mob/living/carbon))
-						playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
+						playsound(src, 'sound/weapons/Egloves.ogg', 50, 1, -1)
 						src.icon_state = "[src.icon_initial]-c"
 						spawn(2)
 							src.icon_state = "[icon_initial][src.on]"
@@ -306,7 +306,7 @@ Auto Patrol: []"},
 						//just harmbaton them until dead
 						if(world.time > next_harm_time)
 							next_harm_time = world.time + 15
-							playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
+							playsound(src, 'sound/weapons/Egloves.ogg', 50, 1, -1)
 							visible_message("<span class='danger'>[src] beats [src.target] with the stun baton!</span>")
 							src.icon_state = "[src.icon_initial]-c"
 							spawn(2)
@@ -318,7 +318,7 @@ Auto Patrol: []"},
 								S.adjustBruteLoss(15)
 								if(S.stat)
 									src.frustration = 8
-									playsound(get_turf(src), pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
+									playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
 
 				else								// not next to perp
 					var/turf/olddist = get_dist(src, src.target)
@@ -341,7 +341,7 @@ Auto Patrol: []"},
 			if(istype(src.target,/mob/living/carbon) && !isalien(target))
 				var/mob/living/carbon/C = target
 				if(!C.handcuffed && !src.arrest_type)
-					playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
+					playsound(src, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
 					mode = SECBOT_ARREST
 					visible_message("<span class='danger'>[src] is trying to put handcuffs on [src.target]!</span>",\
 						"<span class='danger'>[src] is trying to cut [src.target]'s hands off!</span>")
@@ -363,7 +363,7 @@ Auto Patrol: []"},
 							src.last_found = world.time
 							src.frustration = 0
 
-							playsound(get_turf(src), pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
+							playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
 		//					var/arrest_message = pick("Have a secure day!","I AM THE LAW.", "God made tomorrow for the crooks we don't catch today.","You can't outrun a radio.")
 		//					src.speak(arrest_message)
 
@@ -689,7 +689,7 @@ Auto Patrol: []"},
 			src.target = M
 			src.oldtarget_name = M.name
 			src.speak("Level [src.threatlevel] infraction alert!")
-			playsound(get_turf(src), pick('sound/voice/bcriminal.ogg', 'sound/voice/bjustice.ogg', 'sound/voice/bfreeze.ogg'), 50, 0)
+			playsound(src, pick('sound/voice/bcriminal.ogg', 'sound/voice/bjustice.ogg', 'sound/voice/bfreeze.ogg'), 50, 0)
 			src.visible_message("<b>[src]</b> points at [M.name]!")
 			mode = SECBOT_HUNT
 			spawn(0)

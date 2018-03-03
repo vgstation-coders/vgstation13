@@ -86,7 +86,7 @@
 	return
 
 /obj/structure/morgue/proc/open_up()
-	playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	connected = new /obj/structure/m_tray(loc)
 	connected.layer = OBJ_LAYER
 	step(connected, src.dir)
@@ -126,12 +126,12 @@
 		user.visible_message("<span class='notice'>\The [user] begins dismantling \the [src].</span>", "<span class='notice'>You begin dismantling \the [src].</span>")
 		if(do_after(user, src,50))
 			user.visible_message("<span class='notice'>\The [user] dismantles \the [src].</span>", "<span class='notice'>You dismantle \the [src].</span>")
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			new /obj/structure/closet/body_bag(src.loc)
 			new /obj/item/stack/sheet/metal(src.loc,5)
 			qdel(src)
 	if(iswrench(P))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		if(dir==4)
 			dir=8
 		else
@@ -272,11 +272,11 @@
 		for(var/atom/movable/A as mob|obj in src.connected.loc)
 			if (!( A.anchored ))
 				A.forceMove(src)
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		qdel(src.connected)
 		src.connected = null
 	else if (src.locked == 0)
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		src.connected = new /obj/structure/c_tray( src.loc )
 		step(src.connected, SOUTH)
 		src.connected.layer = OBJ_LAYER
@@ -370,7 +370,7 @@
 		cremating = 0
 		update()
 		locked = 0
-		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
+		playsound(src, 'sound/machines/ding.ogg', 50, 1)
 
 
 /*

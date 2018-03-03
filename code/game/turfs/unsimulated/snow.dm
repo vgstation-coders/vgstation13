@@ -1,6 +1,6 @@
 //Arctic atmospheric defines
 
-#define ARCTIC_ATMOSPHERE 68.13 //Pretty low pressure, very thin air, might be hard to breathe, but not enough for pressure damage
+#define ARCTIC_ATMOSPHERE 90.13
 #define T_ARCTIC 223.65 //- 49.5 Celcius, taken from South Pole averages
 #define MOLES_ARCTICSTANDARD (ARCTIC_ATMOSPHERE*CELL_VOLUME/(T_ARCTIC*R_IDEAL_GAS_EQUATION)) //Note : Open air tiles obviously aren't 2.5 meters in height, but abstracted for now with infinite atmos
 #define MOLES_O2STANDARD_ARCTIC MOLES_ARCTICSTANDARD*O2STANDARD	//O2 standard value (21%)
@@ -18,25 +18,25 @@
 	can_border_transition = 1
 	dynamic_lighting = 0
 	luminosity = 1
-
+	plane = PLATING_PLANE
 	var/snowballs = 0
-	var/global/list/snow_layers = list()
-	var/global/list/dirt_layers = list()
+	var/global/list/icon_state_to_appearance = list()
 
 /turf/unsimulated/floor/snow/New()
 
 	..()
-
 	icon_state = "snow[rand(0, 6)]"
-	relativewall_neighbours()
+	if(icon_state_to_appearance[icon_state])
+		appearance = icon_state_to_appearance[icon_state]
+	else
+		var/image/snowfx1 = image('icons/turf/snowfx.dmi', "snowlayer1",SNOW_OVERLAY_LAYER)
+		var/image/snowfx2 = image('icons/turf/snowfx.dmi', "snowlayer2",SNOW_OVERLAY_LAYER)
+		snowfx1.plane = EFFECTS_PLANE
+		snowfx2.plane = EFFECTS_PLANE
+		overlays += snowfx1
+		overlays += snowfx2
+		icon_state_to_appearance[icon_state] = appearance
 	snowballs = rand(5, 10) //Used to be (30, 50). A quick way to overload the server with atom instances.
-	update_icon()
-
-/turf/unsimulated/floor/snow/relativewall_neighbours()
-	for(var/direction in alldirs)
-		var/turf/adj_tile = get_step(src, direction)
-		if(istype(adj_tile, /turf/unsimulated/floor/snow))
-			adj_tile.update_icon()
 
 /turf/unsimulated/floor/snow/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
@@ -49,7 +49,7 @@
 		if(do_after(user, src, 20))
 			user.visible_message("<span class='notice'>[user] digs out some snow with \the [W].</span>", \
 			"<span class='notice'>You dig out some snow with \the [W].</span>")
-			extract_snowballs(5, 0, user)
+			extract_snowballs(5, FALSE, user)
 
 /turf/unsimulated/floor/snow/attack_hand(mob/user as mob)
 
@@ -60,11 +60,11 @@
 	if(do_after(user, src, 5))
 		user.visible_message("<span class='notice'>[user] finishes forming a snowball.</span>", \
 		"<span class='notice'>You finish forming a snowball.</span>")
-		extract_snowballs(1, 1, user)
+		extract_snowballs(1, TRUE, user)
 
 	..()
 
-/turf/unsimulated/floor/snow/proc/extract_snowballs(var/snowball_amount = 0, var/pick_up = 0, var/mob/user)
+/turf/unsimulated/floor/snow/proc/extract_snowballs(var/snowball_amount = 0, var/pick_up = FALSE, var/mob/user)
 
 	if(!snowball_amount)
 		return
@@ -81,15 +81,15 @@
 
 		snowballs--
 
-	if(!snowballs) //We're out of snow, turn into a permafrost tile
-		ChangeTurf(/turf/unsimulated/floor/snow/permafrost)
+	if(!snowballs)
+		return
 
 //In the future, catwalks should be the base to build in the arctic, not lattices
 //This would however require a decent rework of floor construction and deconstruction
-/turf/unsimulated/floor/snow/permafrost/canBuildCatwalk()
+/turf/unsimulated/floor/snow/canBuildCatwalk()
 	return BUILD_FAILURE
 
-/turf/unsimulated/floor/snow/permafrost/canBuildLattice()
+/turf/unsimulated/floor/snow/canBuildLattice()
 	if(x >= (world.maxx - TRANSITIONEDGE) || x <= TRANSITIONEDGE)
 		return BUILD_FAILURE
 	else if (y >= (world.maxy - TRANSITIONEDGE || y <= TRANSITIONEDGE ))
@@ -98,7 +98,7 @@
 		return BUILD_SUCCESS
 	return BUILD_FAILURE
 
-/turf/unsimulated/floor/snow/permafrost/canBuildPlating()
+/turf/unsimulated/floor/snow/canBuildPlating()
 	if(x >= (world.maxx - TRANSITIONEDGE) || x <= TRANSITIONEDGE)
 		return BUILD_FAILURE
 	else if (y >= (world.maxy - TRANSITIONEDGE || y <= TRANSITIONEDGE ))
@@ -110,116 +110,7 @@
 /turf/unsimulated/floor/snow/Entered(mob/user)
 	..()
 	if(isliving(user) && !user.locked_to && !user.lying && !user.flying)
-		playsound(get_turf(src), pick(snowsound), 10, 1, -1, channel = 123)
+		playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
 
-//This shit's fucked, should use relativewall. Problem is, relativewall is terrible and doesn't include diagonal directions
-//So in short relativewall needs to be reworked, along with all things relying on it. Fun times ahead
-/turf/unsimulated/floor/snow/update_icon()
-	if(overlays.len > 2) //?
-		overlays.Cut()
-	if(!snow_layers.len)
-		snow_layers["1"] = image('icons/turf/snowfx.dmi', "snowlayer1", 17)
-		snow_layers["2"] = image('icons/turf/snowfx.dmi', "snowlayer2", 17)
-	if(!dirt_layers.len)
-		for(var/dirtdir in alldirs)
-			dirt_layers["side[dirtdir]"] = image('icons/turf/new_snow.dmi', "permafrost_side" ,dir = dirtdir)
-		for(var/diagdir in diagonal)
-			dirt_layers["diag[diagdir]"] = image('icons/turf/new_snow.dmi', "permafrost_corner", dir = diagdir, layer = 2.1)
-			dirt_layers["snow[diagdir]"] = image('icons/turf/new_snow.dmi', "permafrost", dir = diagdir)
-		for(var/dirtdir in cardinal)
-			dirt_layers["snow[dirtdir]"] = image('icons/turf/new_snow.dmi', "permafrost_half", dir = dirtdir)
-			var/realdir = null
-			switch(dirtdir)
-				if(NORTH)
-					realdir = EAST|SOUTH|WEST
-				if(SOUTH)
-					realdir = WEST|NORTH|EAST
-				if(EAST)
-					realdir = SOUTH|WEST|NORTH
-				if(WEST)
-					realdir = NORTH|EAST|SOUTH
-			dirt_layers["snow[realdir]"] = image('icons/turf/new_snow.dmi', "permafrost_tjunction", dir = dirtdir)
-		dirt_layers["snow15"] = image('icons/turf/new_snow.dmi', "permafrost_crossroads")
-		dirt_layers["snow0"] = image('icons/turf/new_snow.dmi', "permafrost_circle")
-		dirt_layers["snow3"] = image('icons/turf/new_snow.dmi', "permafrost", dir = NORTH)
-		dirt_layers["snow12"] = image('icons/turf/new_snow.dmi', "permafrost", dir = WEST)
-
-	//Projecting snowfall on adjacent tiles, might remove this eventually
-	var/lights_on = 0
-	for(var/direction in alldirs)
-		if(!istype(get_step(src, direction), /turf/unsimulated/floor/snow))
-			if(istype(get_step(src, direction), /turf/simulated/floor)) //Luminosity on tiles adjacent to snow
-				lights_on = 1
-			overlays += dirt_layers["side[direction]"]
-			var/image/snow1 = snow_layers["1"]
-			var/image/snow2 = snow_layers["2"]
-			snow1.alpha = 255
-			snow2.alpha = 255
-			switch(direction)
-				if(1)
-					snow1.pixel_y = WORLD_ICON_SIZE
-					overlays += snow1
-					snow2.pixel_y = WORLD_ICON_SIZE
-					overlays += snow2
-				if(2)
-					snow1.pixel_y = -WORLD_ICON_SIZE
-					overlays += snow1
-					snow2.pixel_y = -WORLD_ICON_SIZE
-					overlays += snow2
-				if(4)
-					snow1.pixel_x = WORLD_ICON_SIZE
-					overlays += snow1
-					snow2.pixel_x = WORLD_ICON_SIZE
-					overlays += snow2
-				if(8)
-					snow1.pixel_x = -WORLD_ICON_SIZE
-					overlays += snow1
-					snow2.pixel_x = -WORLD_ICON_SIZE
-					overlays += snow2
-			snow1.alpha = 64
-			snow2.alpha = 64
-			snow1.pixel_x = 0
-			snow2.pixel_x = 0
-			snow1.pixel_y = 0
-			snow2.pixel_y = 0
-	if(lights_on)
-		set_light(5, 0.5)
-	else
-		set_light(0, 0)
-	overlays += snow_layers["1"]
-	overlays += snow_layers["2"]
-
-//Permafrost is frozen dirt, this shows up below the snow tiles when you dig them out
 /turf/unsimulated/floor/snow/permafrost
-
-	name = "permafrost"
-	desc = "A layer of dirt permanently exposed to temperatures below freezing. If exposed to snow fall, it will likely be covered in snow again given a few days."
 	icon_state = "permafrost_full"
-	canSmoothWith = "/turf/unsimulated/floor/snow/permafrost"
-
-/turf/unsimulated/floor/snow/permafrost/New()
-
-	..()
-
-	snowballs = 0
-
-/turf/unsimulated/floor/snow/permafrost/update_icon()
-
-	..()
-
-	var/junction = findSmoothingNeighbors()
-	var/dircount = 0
-	for(var/direction in diagonal)
-		if(istype(get_step(src, direction), /turf/unsimulated/floor/snow/permafrost))
-			if((direction & junction) == direction)
-				overlays += dirt_layers["diag[direction]"]
-				dircount++
-	if(dircount == 4)
-		overlays.Cut()
-		icon_state = "permafrost_full"
-		overlays += snow_layers["1"]
-		overlays += snow_layers["2"]
-	else if(junction)
-		overlays += dirt_layers["snow[junction]"]
-	else
-		overlays += dirt_layers["snow0"]

@@ -112,9 +112,13 @@
 					adjust_fire_stacks(0.5)
 					IgniteMob()
 		else
-			if(fire_stacks > 0)
-				var/obj/item/clothing/suit/space/plasmaman/PS=wear_suit
-				PS.Extinguish(src)
+			var/obj/item/clothing/suit/space/plasmaman/PS=wear_suit
+			if(istype(PS))
+				if(fire_stacks > 0)
+					PS.Extinguish(src)
+				else
+					PS.regulate_temp_of_wearer(src)
+
 
 	if(breath)
 		loc.assume_air(breath)

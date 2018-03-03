@@ -102,7 +102,7 @@
 			upgrading = 0
 			upgrade_finished = -1
 			to_chat(occupant, "<span class='notice'>Upgrade completed.</span>")
-			playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 0)
+			playsound(src, 'sound/machines/ping.ogg', 50, 0)
 
 /obj/machinery/recharge_station/attackby(var/obj/item/W, var/mob/living/user)
 	if(is_type_in_list(W, acceptable_upgradeables))

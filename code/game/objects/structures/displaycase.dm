@@ -21,14 +21,14 @@
 					circuit=W
 					circuit.installed = 1
 					state++
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			if(iscrowbar(W))
 				var/obj/machinery/constructable_frame/machine_frame/MF = new /obj/machinery/constructable_frame/machine_frame(T)
 				MF.state = 1
 				MF.set_build_state(1)
 				new /obj/item/stack/sheet/glass/glass(T)
 				qdel(src)
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
 				return
 
 		if(1)
@@ -40,7 +40,7 @@
 				else
 					C.req_access = circuit.conf_access
 					C.req_one_access = null
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				qdel(src)
 				return
 			if(iscrowbar(W))
@@ -48,7 +48,7 @@
 				circuit.installed = 0
 				circuit=null
 				state--
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
 	if(pstate!=state)
 		pstate=state
 		update_icon()
@@ -158,10 +158,10 @@
 			setDensity(FALSE)
 			src.destroyed = 1
 			getFromPool(/obj/item/weapon/shard, loc)
-			playsound(get_turf(src), "shatter", 70, 1)
+			playsound(src, "shatter", 70, 1)
 			update_icon()
 	else
-		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 	return
 
 /obj/structure/displaycase/update_icon()

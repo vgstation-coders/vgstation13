@@ -28,7 +28,6 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	appearance_flags = PLANE_MASTER
 	screen_loc = "CENTER,CENTER"
 	globalscreen = 1
-	mouse_opacity = 0
 
 /obj/abstract/screen/plane_master/parallax_master
 	plane = SPACE_PARALLAX_PLANE

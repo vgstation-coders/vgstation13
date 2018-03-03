@@ -108,12 +108,12 @@
 /obj/item/weapon/shard/Crossed(mob/living/AM)
 	if(istype(AM))
 		if(AM.locked_to) //Mob is locked to something, so it's not actually stepping on the glass
-			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1) //Make noise
+			playsound(src, 'sound/effects/glass_step.ogg', 50, 1) //Make noise
 			return //Stop here
 		if(AM.flying) //We don't check for lying yet because it's intended to hurt
 			return
 		else //Stepping on the glass
-			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
+			playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
 			if(ishuman(AM))
 				var/mob/living/carbon/human/H = AM
 				var/danger = FALSE

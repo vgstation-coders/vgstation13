@@ -1,6 +1,10 @@
 //Refer to life.dm for caller
 
 /mob/living/carbon/human/proc/handle_disabilities()
+	if(disabilities & ASTHMA)
+		if(prob(0.2))
+			asthma_attack()
+
 	if(disabilities & EPILEPSY)
 		if((prob(1)) && (paralysis < 1))
 			seizure(10, 1000)

@@ -676,7 +676,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		fuel += O.reagents.remove_any(initial(fuel) - fuel)
 		user.visible_message("<span class='notice'>[user] refuels \the [src].</span>", \
 		"<span class='notice'>You refuel \the [src].</span>")
-		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		return
 
 /obj/item/weapon/lighter/attack_self(mob/living/user)
@@ -688,7 +688,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		"<span class='notice'>You try to light \the [src], but no flame appears.</span>")
 		return
 	if(!lit) //Lighting the lighter
-		playsound(get_turf(src), pick(lightersound), 50, 1)
+		playsound(src, pick(lightersound), 50, 1)
 		if(fuel >= initial(fuel) - 5 || prob(100 * (fuel/initial(fuel)))) //Strike, but fail to light it
 			user.visible_message("<span class='notice'>[user] manages to light \the [src].</span>", \
 			"<span class='notice'>You manage to light \the [src].</span>")
@@ -769,13 +769,13 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return
 	lit = !lit
 	if(lit) //Was lit
-		playsound(get_turf(src), pick(open_sound), 50, 1)
+		playsound(src, pick(open_sound), 50, 1)
 		user.visible_message("<span class='rose'>Without even breaking stride, [user] flips open and lights \the [src] in one smooth movement.</span>", \
 		"<span class='rose'>Without even breaking stride, you flip open and light \the [src] in one smooth movement.</span>")
 		--fuel
 	else //Was shut off
 		fueltime = null
-		playsound(get_turf(src), pick(close_sound), 50, 1)
+		playsound(src, pick(close_sound), 50, 1)
 		user.visible_message("<span class='rose'>You hear a quiet click as [user] shuts off \the [src] without even looking at what they're doing. Wow.</span>", \
 		"<span class='rose'>You hear a quiet click as you shut off \the [src] without even looking at what you are doing.</span>")
 	update_brightness()

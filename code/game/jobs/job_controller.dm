@@ -439,7 +439,7 @@ var/global/datum/controller/occupations/job_master
 					H.Robotize()
 				return 1
 			if("Mobile MMI")
-				H.MoMMIfy(1)
+				H.MoMMIfy()
 				return 1
 			if("AI","Clown")	//don't need bag preference stuff!
 				if(rank=="Clown") // Clowns DO need to breathe, though - N3X
@@ -492,6 +492,12 @@ var/global/datum/controller/occupations/job_master
 		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
 		W.buckle_mob(H,H)
 
+	if(H.disabilities & ASTHMA)
+		if(H.backbag == 1)
+			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/device/inhaler(H))
+		else
+			H.equip_or_collect(new /obj/item/device/inhaler(H), slot_in_backpack)
+		
 	return 1
 
 

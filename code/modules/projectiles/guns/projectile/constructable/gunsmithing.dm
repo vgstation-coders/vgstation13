@@ -409,7 +409,7 @@
 		if("stock_reservoir_assembly")
 			if(iswrench(W))
 				to_chat(user, "You securely fasten the fuel reservoir to \the [src].")
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 				state = "stock_reservoir"
 				update_assembly()
 		if("stock_reservoir")
@@ -429,7 +429,7 @@
 				C.use(5)
 			if(iswrench(W))
 				to_chat(user, "You loosen the fuel reservoir on \the [src].")
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 				state = "stock_reservoir_assembly"
 				update_assembly()
 
@@ -456,7 +456,7 @@
 		if("blunderbuss_assembly")
 			if(isscrewdriver(W))
 				to_chat(user, "You tighten the igniter to \the [src].")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(src.loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/blunderbuss/I = new (get_turf(user))
@@ -470,7 +470,7 @@
 		if("stock_capacitorbank_assembly")
 			if(isscrewdriver(W))
 				to_chat(user, "You tighten the wires in \the [src]'s capacitor bank.")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				state = "stock_capacitorbank"
 				update_assembly()
 			if(iswirecutter(W))
@@ -488,7 +488,7 @@
 				qdel(W)
 			if(isscrewdriver(W))
 				to_chat(user, "You loosen the wires in \the [src]'s capacitor bank.")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				state = "stock_capacitorbank_assembly"
 				update_assembly()
 		if("stock_capacitorbank_barrel_assembly")
@@ -513,7 +513,7 @@
 		if("railgun_assembly")
 			if(isscrewdriver(W))
 				to_chat(user, "You secure \the [src]'s triggering mechanism.")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(src.loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/gun/projectile/railgun/I = new (get_turf(user))
@@ -593,7 +593,7 @@
 		if("stock_ansible_amplifier_assembly")
 			if(isscrewdriver(W))
 				to_chat(user, "You secure \the [src]'s subspace amplifier.")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				state = "stock_ansible_amplifier"
 				update_assembly()
 		if("stock_ansible_amplifier")
@@ -605,7 +605,7 @@
 		if("stock_ansible_amplifier_transmitter_assembly")
 			if(isscrewdriver(W))
 				to_chat(user, "You secure \the [src]'s subspace transmitter.")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				state = "subspacetunneler_assembly"
 				update_assembly()
 		if("subspacetunneler_assembly")
@@ -813,7 +813,7 @@
 			to_chat(user, "<span class='warning'>\The [src.name] needs to be turned off first.</span>")
 			return
 		to_chat(user, "You unsecure \the [src.name] from the floor.")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		power_machines.Remove(src)
 		switch(name)
 			if("capacitor")

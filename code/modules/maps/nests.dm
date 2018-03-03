@@ -37,7 +37,7 @@
 /obj/abstract/map/nest/lizard
 	name = "lizard breeding ground"
 	icon_state = "lizard"
-	mob_type = /mob/living/simple_animal/lizard
+	mob_type = /mob/living/simple_animal/hostile/lizard
 
 /obj/abstract/map/nest/mouse
 	name = "mouse breeding ground"
@@ -55,6 +55,11 @@
 	icon_state = "spider"
 	mob_type = /mob/living/simple_animal/hostile/giant_spider
 	pop_max = 10
+
+/obj/abstract/map/nest/spider/limited
+	name = "spider breeding ground"
+	pop = 2
+	pop_max = 2
 
 /obj/abstract/map/nest/carp
 	name = "carp breeding ground"

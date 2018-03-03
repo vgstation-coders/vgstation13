@@ -24,7 +24,7 @@
 /obj/item/clothing/head/helmet/siren/attack_self(mob/user)
 	if(spamcheck)
 		return
-	playsound(get_turf(src), 'sound/voice/woopwoop.ogg', 100, 1, vary = 0)
+	playsound(src, 'sound/voice/woopwoop.ogg', 100, 1, vary = 0)
 	user.visible_message("<span class='warning'>[user]'s [name] rasps, \"WOOP WOOP!\"</span>", \
 						"<span class='warning'>Your [name] rasps, \"WOOP WOOP!\"</span>", \
 						"<span class='warning'>You hear a siren: \"WOOP WOOP!\"</span>")
@@ -209,6 +209,7 @@
 	icon_state = "nr_helmet"
 	item_state = "nr_helmet"
 	body_parts_covered = EARS|HEAD
+	heat_conductivity = INS_HELMET_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/head/helmet/police
 	name = "police custodian helmet"

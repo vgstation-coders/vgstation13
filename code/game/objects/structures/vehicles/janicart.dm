@@ -64,7 +64,7 @@
 		if(reagents.total_volume >= 2)
 			reagents.trans_to(M, 3)
 			to_chat(user, "<span class='notice'>You wet the mop in \the [nick].</span>")
-			playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+			playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 		if(reagents.total_volume < 1)
 			to_chat(user, "<span class='notice'>\The [nick] is out of water!</span>")
 	return 1

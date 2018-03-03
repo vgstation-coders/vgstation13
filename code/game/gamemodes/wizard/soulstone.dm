@@ -270,7 +270,7 @@
 			new /obj/item/weapon/skull(get_turf(target))
 
 	//Scary sound
-	playsound(get_turf(src), get_sfx("soulstone"), 50,1)
+	playsound(src, get_sfx("soulstone"), 50,1)
 
 	//Creating a shade inside the stone and putting the victim in control
 	var/mob/living/simple_animal/shade/shadeMob = new(src)//put shade in stone

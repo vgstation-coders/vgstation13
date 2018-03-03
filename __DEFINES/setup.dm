@@ -375,6 +375,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define DISABILITY_FLAG_BLIND       16
 #define DISABILITY_FLAG_MUTE		32
 #define DISABILITY_FLAG_VEGAN		64
+#define DISABILITY_FLAG_ASTHMA 128
 
 ///////////////////////////////////////
 // MUTATIONS
@@ -447,6 +448,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_FARSIGHT	212		// Increases mob's view range by 2
 #define M_NOIR		213		// aww yis detective noir
 #define M_VEGAN		214
+#define M_ASTHMA		215
 
 var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 				 				  0.33,0.33,0.33,0,\
@@ -464,6 +466,7 @@ var/global/list/bad_changing_colour_ckeys = list()
 #define COUGHING		4
 #define TOURETTES		8
 #define NERVOUS			16
+#define ASTHMA		32
 
 //sdisabilities
 #define BLIND			1
@@ -990,6 +993,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VAMP_SHADOW   15
 #define VAMP_CHARISMA 16
 #define VAMP_UNDYING  17
+
+#define STARTING_BLOOD 10
 
 // Moved from machine_interactions.dm
 #define STATION_Z  1
@@ -1571,8 +1576,13 @@ var/proccalls = 1
 #define HUD_MEDICAL 1
 #define HUD_SECURITY 2
 
-#define INERTIA_MOVEDELAY 5
+//Cyborg components
+#define COMPONENT_BROKEN -1
+#define COMPONENT_MISSING 0
+#define COMPONENT_INSTALLED 1
 
+//Glidesize
+#define INERTIA_MOVEDELAY 5
 #define FRACTIONAL_GLIDESIZES 1
 #ifdef FRACTIONAL_GLIDESIZES
 #define DELAY2GLIDESIZE(delay) (WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1))

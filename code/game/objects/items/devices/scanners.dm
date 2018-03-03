@@ -414,7 +414,7 @@ Subject's pulse: ??? BPM"})
 			update_icon()
 			user.visible_message("<span class='warning'>[user] takes a blood sample from [C].</span>", \
 			"<span class='notice'>You take a blood sample from [C]</span>")
-			playsound(get_turf(src), 'sound/items/hypospray.ogg', 50, 1) //It uses the same thing as the hypospray, in reverse. SCIENCE!
+			playsound(src, 'sound/items/hypospray.ogg', 50, 1) //It uses the same thing as the hypospray, in reverse. SCIENCE!
 
 /obj/item/device/mass_spectrometer/attack_self(mob/user as mob)
 	. = ..()

@@ -148,8 +148,8 @@
 	if (R.isReligiousLeader(M))
 		to_chat(M, "<span class='warning'>You are the leader of this flock and cannot forsake them. If you have to, pray to the Gods for release.</span>")
 		return FALSE
-	Remove(owner)
 	R.renounce(owner)
+	Remove(owner)
 
 /proc/chooseBible(var/datum/religion/R, var/mob/user)
 
@@ -162,7 +162,7 @@
 	var/book_style = "Bible"
 
 	book_style = input(user, "Which bible style would you like?") as null|anything in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "[R.holy_book.name == "clockwork slab" ? "Slab":"Tome"]", "The King in Yellow", "Ithaqua", "Scientology", \
-																		   "the bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
+																		   "The Bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
 	switch(book_style)
 		if("Koran")
 			R.holy_book.icon_state = "koran"
@@ -194,7 +194,7 @@
 		if("Scientology")
 			R.holy_book.icon_state = "scientology"
 			R.holy_book.item_state = "scientology"
-		if("the bible melts")
+		if("The Bible melts")
 			R.holy_book.icon_state = "melted"
 			R.holy_book.item_state = "melted"
 		if("Unaussprechlichen Kulten")

@@ -317,7 +317,7 @@
 			if(do_after(user, src, 20))
 				if(!src || !WT.isOn())
 					return
-				playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
+				playsound(src, 'sound/items/Welder2.ogg', 50, 1)
 				if(!welded)
 					user.visible_message("[user] welds the scrubber shut.", "You weld the vent scrubber.", "You hear welding.")
 					investigation_log(I_ATMOS, "has been welded shut by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")

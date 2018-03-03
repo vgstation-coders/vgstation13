@@ -40,7 +40,7 @@
 			playsound(user, 'sound/weapons/empty.ogg', 100, 1)
 		else
 			src.visible_message("*click click*")
-			playsound(get_turf(src), 'sound/weapons/empty.ogg', 100, 1)
+			playsound(src, 'sound/weapons/empty.ogg', 100, 1)
 		return
 
 	if(cell)
@@ -48,7 +48,7 @@
 		if(C.charge < powercost)
 			user.visible_message("[user] presses the button on \the [src], but the flash bulb merely flickers.","You press the button on \the [src], but the flash bulb merely flickers.")
 			to_chat(user, "<span class='warning'>There's not enough energy in the cell to power the flash bulb!</span>")
-			playsound(get_turf(src), 'sound/weapons/empty.ogg', 100, 1)
+			playsound(src, 'sound/weapons/empty.ogg', 100, 1)
 			return
 
 		var/flash_turf = get_turf(src)
@@ -67,7 +67,7 @@
 		update_verbs()
 
 /obj/item/device/blinder/proc/flash(var/turf/T , var/mob/living/M)
-	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
+	playsound(src, 'sound/weapons/flash.ogg', 100, 1)
 
 	M.flash_eyes(visual = 1)
 

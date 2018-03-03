@@ -551,7 +551,7 @@ obj/structure/bomberflame/Destroy()
 	..()
 
 /obj/structure/powerup/proc/apply_power(var/obj/item/weapon/bomberman/dispenser)
-	playsound(get_turf(src), 'sound/bomberman/powerup.ogg', 50, 1)
+	playsound(src, 'sound/bomberman/powerup.ogg', 50, 1)
 	qdel(src)
 	return
 
@@ -594,7 +594,7 @@ obj/structure/bomberflame/Destroy()
 	return
 
 /obj/structure/powerup/skull/apply_power(var/obj/item/weapon/bomberman/dispenser)
-	playsound(get_turf(src), 'sound/bomberman/disease.ogg', 50, 1)
+	playsound(src, 'sound/bomberman/disease.ogg', 50, 1)
 	var/list/diseases = list(
 		"Low Power Disease",
 		"Constipation ",

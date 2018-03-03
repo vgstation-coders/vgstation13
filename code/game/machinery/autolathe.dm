@@ -54,6 +54,7 @@
 		new /obj/item/weapon/reagent_containers/glass/beaker/vial(), \
 		new /obj/item/weapon/reagent_containers/food/drinks/mug(), \
 		new /obj/item/weapon/storage/toolbox(), \
+		new /obj/item/weapon/reagent_containers/glass/jar(), \
 		),
 		"Assemblies"=list(
 		new /obj/item/device/assembly/igniter(), \

@@ -234,7 +234,8 @@
 			stored.charge += 100
 			state = !state
 			update_icon()
-			playsound(get_turf(src), 'sound/items/crank.ogg',50,1)
+			stored.updateicon()
+			playsound(src, 'sound/items/crank.ogg',50,1)
 			if(stored.charge>stored.maxcharge)
 				stored.charge = stored.maxcharge
 	else

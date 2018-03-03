@@ -454,9 +454,9 @@ Status: []<BR>"},
 				spawn() shootAt(M) // shoot the target, finally
 		if(prob(15))
 			if(prob(50))
-				playsound(get_turf(src), 'sound/effects/turret/move1.wav', 60, 1)
+				playsound(src, 'sound/effects/turret/move1.wav', 60, 1)
 			else
-				playsound(get_turf(src), 'sound/effects/turret/move2.wav', 60, 1)
+				playsound(src, 'sound/effects/turret/move2.wav', 60, 1)
 
 	else if(secondarytargets.len>0) // if there are no primary targets, go for secondary targets
 		var/mob/t = pick(secondarytargets)
@@ -467,9 +467,9 @@ Status: []<BR>"},
 				shootAt(t)
 		if(prob(15))
 			if(prob(50))
-				playsound(get_turf(src), 'sound/effects/turret/move1.wav', 60, 1)
+				playsound(src, 'sound/effects/turret/move1.wav', 60, 1)
 			else
-				playsound(get_turf(src), 'sound/effects/turret/move2.wav', 60, 1)
+				playsound(src, 'sound/effects/turret/move2.wav', 60, 1)
 	else
 		spawn()
 			popDown()
@@ -485,7 +485,7 @@ Status: []<BR>"},
 	invisibility=0
 	raising=1
 	flick("popup",cover)
-	playsound(get_turf(src), 'sound/effects/turret/open.wav', 60, 1)
+	playsound(src, 'sound/effects/turret/open.wav', 60, 1)
 	sleep(5)
 	sleep(5)
 	raising=0
@@ -503,7 +503,7 @@ Status: []<BR>"},
 	layer = OBJ_LAYER
 	raising=1
 	flick("popdown",cover)
-	playsound(get_turf(src), 'sound/effects/turret/open.wav', 60, 1)
+	playsound(src, 'sound/effects/turret/open.wav', 60, 1)
 	sleep(10)
 	raising=0
 	cover.icon_state="turretCover"
@@ -608,7 +608,7 @@ Status: []<BR>"},
 	use_power(reqpower)
 
 //		 //Shooting Code:
-	playsound(get_turf(src), installed.fire_sound, 75, 1)
+	playsound(src, installed.fire_sound, 75, 1)
 	var/obj/item/projectile/A
 	A = new installed.projectile_type(loc)
 	A.original = target
@@ -660,7 +660,7 @@ Status: []<BR>"},
 				return
 
 			else if(iscrowbar(W) && !anchored)
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 75, 1)
+				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
 				to_chat(user, "You dismantle the turret construction.")
 				getFromPool(/obj/item/stack/sheet/metal, loc, 5)
 				qdel(src)
@@ -686,7 +686,7 @@ Status: []<BR>"},
 
 		if(2)
 			if(iswrench(W))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 				to_chat(user, "<span class='notice'>You bolt the metal armor into place.</span>")
 				build_step = 3
 				return
@@ -699,7 +699,7 @@ Status: []<BR>"},
 					to_chat(user, "<span class='warning'>You need more fuel to complete this task.</span>")
 					return
 
-				playsound(get_turf(src), pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
+				playsound(src, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
 				if(do_after(user, src, 20))
 					if(!src || !WT.remove_fuel(5, user))
 						return
@@ -715,14 +715,14 @@ Status: []<BR>"},
 				if(!user.drop_item(W, src))
 					to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 					return
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 100, 1)
+				playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
 				installed = W
 				to_chat(user, "<span class='notice'>You add \the [W] to the turret.</span>")
 				build_step = 4
 				return
 
 			else if(iswrench(W))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 				to_chat(user, "You remove the turret's metal armor bolts.")
 				build_step = 2
 				return
@@ -732,7 +732,7 @@ Status: []<BR>"},
 				if(!user.drop_item(W, src))
 					to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 					return
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 100, 1)
+				playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
 				build_step = 5
 				to_chat(user, "<span class='notice'>You add the prox sensor to the turret.</span>")
 				qdel(W)
@@ -742,7 +742,7 @@ Status: []<BR>"},
 
 		if(5)
 			if(isscrewdriver(W))
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 				build_step = 6
 				to_chat(user, "<span class='notice'>You close the internal access hatch.</span>")
 				return
@@ -761,7 +761,7 @@ Status: []<BR>"},
 					return
 
 			else if(isscrewdriver(W))
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 				build_step = 5
 				to_chat(user, "You open the internal access hatch.")
 				return
@@ -774,7 +774,7 @@ Status: []<BR>"},
 				if (WT.get_fuel() < 5)
 					to_chat(user, "<span class='warning'>You need more fuel to complete this task.</span>")
 
-				playsound(get_turf(src), pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
+				playsound(src, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
 				if(do_after(user, src, 30))
 					if(!src || !WT.remove_fuel(5, user))
 						return
@@ -790,7 +790,7 @@ Status: []<BR>"},
 					qdel(src)
 
 			else if(iscrowbar(W))
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 75, 1)
+				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
 				to_chat(user, "You pry off the turret's exterior armor.")
 				getFromPool(/obj/item/stack/sheet/metal, loc, 2)
 				build_step = 6

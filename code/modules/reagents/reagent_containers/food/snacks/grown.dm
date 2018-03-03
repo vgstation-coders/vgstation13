@@ -694,7 +694,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper/spook()
 	visible_message("<span class='warning'>A specter takes a bite of \the [src] from beyond the grave!</span>")
-	playsound(get_turf(src),'sound/items/eatfood.ogg', rand(10,50), 1)
+	playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
 	bitecount++
 	reagents.remove_any(bitesize)
 	if(!reagents.total_volume)
@@ -872,7 +872,7 @@ var/list/special_fruits = list()
 		if(C.CheckSlip() < 1)
 			continue
 		C.Knockdown(5)
-	playsound(get_turf(src), 'sound/effects/bang.ogg', 10, 1)
+	playsound(src, 'sound/effects/bang.ogg', 10, 1)
 	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit
@@ -938,11 +938,11 @@ var/list/special_fruits = list()
 	if(get_turf(user))
 		switch(N)
 			if(1)
-				playsound(get_turf(user), 'sound/weapons/genhit1.ogg', 50, 1)
+				playsound(user, 'sound/weapons/genhit1.ogg', 50, 1)
 			if(2)
-				playsound(get_turf(user), 'sound/weapons/genhit2.ogg', 50, 1)
+				playsound(user, 'sound/weapons/genhit2.ogg', 50, 1)
 			if(3)
-				playsound(get_turf(user), 'sound/weapons/genhit3.ogg', 50, 1)
+				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
 	if(W)
 		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
 	else

@@ -167,7 +167,7 @@
 		location.assume_air(air_contents)
 
 		src.destroyed = 1
-		playsound(get_turf(src), 'sound/effects/spray.ogg', 10, 1, -3)
+		playsound(src, 'sound/effects/spray.ogg', 10, 1, -3)
 		setDensity(FALSE)
 		update_icon()
 		investigation_log(I_ATMOS, "was destoyed by excessive damage.")
@@ -303,7 +303,7 @@
 						 "<span class='danger'>You slash away at \the [src]!</span>")
 	user.delayNextAttack(10) //Hold on there amigo
 	investigation_log(I_ATMOS, "<span style='danger'>was slashed at by alien [key_name(user)]</span>")
-	playsound(get_turf(src), 'sound/weapons/slice.ogg', 25, 1, -1)
+	playsound(src, 'sound/weapons/slice.ogg', 25, 1, -1)
 	healthcheck()
 
 /obj/machinery/portable_atmospherics/canister/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
@@ -471,7 +471,7 @@
 
 	// Do after stuff here
 	to_chat(user, "<span class='notice'>You start to slice away at \the [src]...</span>")
-	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+	playsound(src, 'sound/items/Welder.ogg', 50, 1)
 	WT.eyecheck(user)
 	busy = 1
 	if(do_after(user, src, 50))

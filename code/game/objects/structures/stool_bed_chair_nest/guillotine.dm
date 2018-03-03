@@ -207,7 +207,7 @@
 					var/datum/organ/external/head/H = victim.get_organ(LIMB_HEAD)
 					if(istype(H) && ~H.status & ORGAN_DESTROYED)
 						H.droplimb(1)
-						playsound(get_turf(src), 'sound/weapons/bloodyslice.ogg', 100, 1)
+						playsound(src, 'sound/weapons/bloodyslice.ogg', 100, 1)
 						blood_splatter(get_turf(src),victim,1)
 			bladedown = TRUE
 			update_icon()
