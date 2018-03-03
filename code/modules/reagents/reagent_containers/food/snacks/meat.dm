@@ -198,7 +198,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 		to_chat(target, "<span class='danger'>Sweet Jesus! That's not [name]!</span>")
 		revert()
 
-		spawn(25)
+		spawn(10)
 			to_chat(target, "<span class='danger'>You're eating [name]!</span>")
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/proc/shapeshift(atom/atom_to_copy = null)
