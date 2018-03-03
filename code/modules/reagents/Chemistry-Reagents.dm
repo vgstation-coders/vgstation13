@@ -6440,6 +6440,25 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 	if(holder.has_reagent(MUCUS))
 		holder.remove_reagent(MUCUS, 10)
+		
+/datum/reagent/liquidbutter
+	name ="Liquid Butter"
+	id = LIQUIDBUTTER
+	description = "A lipid heavy liquid, that's likely to make your fad lipozine diet fail."
+	color = "#DFDFDF" 
+	nutriment_factor = 25 * REAGENTS_METABOLISM
+	
+/datum/reagent/liquidbutter/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+		
+	if(holder.has_reagent(LIPOZINE))
+		holder.remove_reagent(LIPOZINE, 50)
+
+	M.nutrition += nutriment_factor
+	
+	
 
 /datum/reagent/saltwater
 	name = "Salt Water"
