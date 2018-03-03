@@ -68,21 +68,20 @@
 "bp" = (/obj/structure/sign/vacuum,/turf/simulated/shuttle/wall{tag = "icon-bswall8"; icon_state = "bswall8"},/area/vault/syndiecargo)
 "bq" = (/obj/structure/sign/vacuum,/turf/simulated/shuttle/wall{tag = "icon-bswall4"; icon_state = "bswall4"},/area/vault/syndiecargo)
 "br" = (/obj/machinery/sleeper,/turf/simulated/shuttle/floor{tag = "icon-floor3"; icon_state = "floor3"},/area/vault/syndiecargo)
-"bs" = (/obj/machinery/sleep_console,/turf/simulated/shuttle/floor{tag = "icon-floor3"; icon_state = "floor3"},/area/vault/syndiecargo)
-"bt" = (/obj/machinery/optable,/turf/simulated/shuttle/floor{tag = "icon-floor3"; icon_state = "floor3"},/area/vault/syndiecargo)
-"bu" = (/obj/structure/bed/chair/office/dark,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
-"bv" = (/obj/structure/bed/chair/office/dark,/mob/living/simple_animal/hostile/humanoid/syndicate/ranged/laser,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
-"bw" = (/obj/machinery/door_control{id_tag = 350; name = "Shutter Controll"; pixel_x = 32},/mob/living/simple_animal/hostile/humanoid/syndicate/melee,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
-"bx" = (/obj/structure/closet/crate/bin,/obj/machinery/light/small{tag = "icon-lbulb1 (WEST)"; icon_state = "lbulb1"; dir = 8},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
-"by" = (/obj/structure/closet/emcloset,/obj/machinery/light/small{tag = "icon-lbulb1 (EAST)"; icon_state = "lbulb1"; dir = 4},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
-"bz" = (/obj/machinery/computer/message_monitor,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
-"bA" = (/obj/machinery/computer/crew,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
-"bB" = (/obj/machinery/computer/fluff/shuttle_control/syndicate,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
-"bC" = (/obj/machinery/computer/security/advanced,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
-"bD" = (/turf/simulated/shuttle/wall{tag = "icon-bswall_f5"; icon_state = "bswall_f5"},/area/vault/syndiecargo)
-"bE" = (/obj/machinery/door/airlock/external{icon_state = "door_locked"; locked = 1},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
-"bF" = (/turf/simulated/shuttle/wall{tag = "icon-bswall_f9"; icon_state = "bswall_f9"},/area/vault/syndiecargo)
-"bG" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (EAST)"; icon_state = "plasmarwindow"; dir = 4},/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (NORTH)"; icon_state = "plasmarwindow"; dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (WEST)"; icon_state = "plasmarwindow"; dir = 8},/obj/structure/window/full/reinforced/plasma,/obj/machinery/door/poddoor{id_tag = 350; name = "Shutters"},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"bs" = (/obj/machinery/optable,/turf/simulated/shuttle/floor{tag = "icon-floor3"; icon_state = "floor3"},/area/vault/syndiecargo)
+"bt" = (/obj/structure/bed/chair/office/dark,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bu" = (/obj/structure/bed/chair/office/dark,/mob/living/simple_animal/hostile/humanoid/syndicate/ranged/laser,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bv" = (/obj/machinery/door_control{id_tag = 350; name = "Shutter Controll"; pixel_x = 32},/mob/living/simple_animal/hostile/humanoid/syndicate/melee,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bw" = (/obj/structure/closet/crate/bin,/obj/machinery/light/small{tag = "icon-lbulb1 (WEST)"; icon_state = "lbulb1"; dir = 8},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"bx" = (/obj/structure/closet/emcloset,/obj/machinery/light/small{tag = "icon-lbulb1 (EAST)"; icon_state = "lbulb1"; dir = 4},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"by" = (/obj/machinery/computer/message_monitor,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bz" = (/obj/machinery/computer/crew,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bA" = (/obj/machinery/computer/fluff/shuttle_control/syndicate,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bB" = (/obj/machinery/computer/security/advanced,/turf/simulated/shuttle/floor{tag = "icon-floor4"; icon_state = "floor4"},/area/vault/syndiecargo)
+"bC" = (/turf/simulated/shuttle/wall{tag = "icon-bswall_f5"; icon_state = "bswall_f5"},/area/vault/syndiecargo)
+"bD" = (/obj/machinery/door/airlock/external{icon_state = "door_locked"; locked = 1},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
+"bE" = (/turf/simulated/shuttle/wall{tag = "icon-bswall_f9"; icon_state = "bswall_f9"},/area/vault/syndiecargo)
+"bF" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (EAST)"; icon_state = "plasmarwindow"; dir = 4},/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (NORTH)"; icon_state = "plasmarwindow"; dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{tag = "icon-plasmarwindow (WEST)"; icon_state = "plasmarwindow"; dir = 8},/obj/structure/window/full/reinforced/plasma,/obj/machinery/door/poddoor{id_tag = 350; name = "Shutters"},/turf/simulated/shuttle/plating,/area/vault/syndiecargo)
 
 (1,1,1) = {"
 aaabacacacadaaaaaaabacacacadaa
@@ -99,7 +98,7 @@ aeaMawaXawbbbcbdbeaeaIawawaIae
 aebfawawawbgawawbhaeawbibjawae
 aeawawbkawblbmawawbnawawawawae
 aeaVawawaVaeawawawboaQawaTawae
-aibpaCaCbqakbrbsbtaebubvbubwae
-aebxamambyaiajajajakbzbAbBbCae
-bDaEbEbEajbFaaaaaabDbGbGbGbGbF
+aibpaCaCbqakbrbrbsaebtbubtbvae
+aebwamambxaiajajajakbybzbAbBae
+bCaEbDbDajbEaaaaaabCbFbFbFbFbE
 "}

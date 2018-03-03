@@ -60,7 +60,7 @@
 
 /turf/simulated/floor/glass/proc/break_turf(var/no_teleport=FALSE)
 	if(loc)
-		playsound(get_turf(src), "shatter", 70, 1)
+		playsound(src, "shatter", 70, 1)
 	//ReplaceWithLattice()
 	// TODO: Break all pipes/wires?
 	// FIXME: Animations are fucked, controversial, I want to move on to other shit.
@@ -215,7 +215,7 @@
 	else if(usr.a_intent == I_HURT)
 		user.do_attack_animation(src, user)
 		user.delayNextAttack(10)
-		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
+		playsound(src, 'sound/effects/glassknock.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] bangs against \the [src]!</span>", \
 		"<span class='warning'>You bang against \the [src]!</span>", \
 		"You hear banging.")
@@ -224,7 +224,7 @@
 	//Knock against it
 	else
 		user.delayNextAttack(10)
-		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 50, 1)
+		playsound(src, 'sound/effects/glassknock.ogg', 50, 1)
 		user.visible_message("<span class='notice'>[user] knocks on \the [src].</span>", \
 		"<span class='notice'>You knock on \the [src].</span>", \
 		"You hear knocking.")

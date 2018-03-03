@@ -189,12 +189,12 @@
 				if(user.drop_item(AC, src))
 					chambered = AC
 					num_loaded++
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+					playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
 			else if(getAmmo() < max_shells && load_method != MAGAZINE)
 				if(user.drop_item(AC, src))
 					loaded += AC
 					num_loaded++
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+					playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
 
 	if(num_loaded)
 		to_chat(user, "<span class='notice'>You load [num_loaded] shell\s into \the [src]!</span>")

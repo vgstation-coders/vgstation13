@@ -77,7 +77,7 @@
 			to_chat(user, "<span class='warning'>*click* *click*</span>")
 			return
 
-	playsound(get_turf(user), 'sound/weapons/flash.ogg', 100, 1)
+	playsound(user, 'sound/weapons/flash.ogg', 100, 1)
 
 	if(isrobot(user))
 		spawn(0)
@@ -165,7 +165,7 @@
 		else	//can only use it  5 times a minute
 			user.show_message("<span class='warning'>*click* *click*</span>", 2)
 			return
-	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
+	playsound(src, 'sound/weapons/flash.ogg', 100, 1)
 	if(harm_labeled >= min_harm_label)
 		return //Act as if the flash was activated except the useful part.
 	flick("flash2", src)

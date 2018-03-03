@@ -77,7 +77,7 @@
 			"<span class='notice'>[M] unbuckled \himself!</span>",\
 			"You unbuckle yourself from \the [src].",\
 			"You hear metal clanking.")
-	playsound(get_turf(src), 'sound/misc/buckle_unclick.ogg', 50, 1)
+	playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
 	unlock_atom(M)
 
 	add_fingerprint(user)
@@ -117,7 +117,7 @@
 			"You are buckled in to [src] by [user.name].",\
 			"You hear metal clanking.")
 
-	playsound(get_turf(src), 'sound/misc/buckle_click.ogg', 50, 1)
+	playsound(src, 'sound/misc/buckle_click.ogg', 50, 1)
 	add_fingerprint(user)
 
 	lock_atom(M, lock_type)
@@ -143,6 +143,10 @@
 	lockflags = DENSE_WHEN_LOCKED
 	lock_type = /datum/locking_category/buckle/bed/roller
 
+/obj/structure/bed/roller/deff
+	icon = 'maps/defficiency/medbay.dmi'
+	roller_type = /obj/item/roller/deff
+
 /obj/item/roller
 	name = "roller bed"
 	desc = "A collapsed roller bed that can be carried around."
@@ -152,6 +156,10 @@
 	item_state = "folded"
 	var/bed_type = /obj/structure/bed/roller
 	w_class = W_CLASS_LARGE // Can't be put in backpacks. Oh well.
+
+/obj/item/roller/deff
+	icon = 'maps/defficiency/medbay.dmi'
+	bed_type = /obj/structure/bed/roller/deff
 
 /obj/item/roller/attack_self(mob/user)
 	var/obj/structure/bed/roller/R = new bed_type(user.loc)
@@ -191,7 +199,7 @@
 	if(istype(W,/obj/item/roller_holder))
 		manual_unbuckle(user)
 	if(iswrench(W))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		drop_stack(sheet_type, loc, 2, user)
 		qdel(src)
 		return

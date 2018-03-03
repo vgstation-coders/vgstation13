@@ -107,6 +107,7 @@
 #define FLUOROSURFACTANT 			"fluorosurfactant"
 #define NICOTINE 			"nicotine"
 #define AMMONIA 			"ammonia"
+#define SALINE				"saline"
 #define GLUE 			"glue"
 #define DIETHYLAMINE 			"diethylamine"
 #define ETHYLREDOXRAZINE 			"ethylredoxrazine"

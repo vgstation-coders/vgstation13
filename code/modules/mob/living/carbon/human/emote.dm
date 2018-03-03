@@ -193,7 +193,7 @@
 							if (src.gender == FEMALE) //Females have their own coughes
 								coughSound = "femalecough"
 
-							playsound(get_turf(src), coughSound, 20, 0)
+							playsound(src, coughSound, 20, 0)
 							last_emote_sound = world.time
 
 						msg = "<B>[src]</B> coughs!"
@@ -586,7 +586,7 @@
 								if (src.gender == FEMALE) //Females have their own screams. Trannys be damned.
 									screamSound = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
 								var/scream = pick(screamSound)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
-								playsound(get_turf(src), scream, 50, 0)
+								playsound(src, scream, 50, 0)
 								m_type = HEARABLE
 								last_emote_sound = world.time
 						else
@@ -640,9 +640,9 @@
 					if(!miming)
 						msg = "<b>[src]</b> [fart]."
 						if(mind && mind.assigned_role == "Clown")
-							playsound(get_turf(src), pick('sound/items/bikehorn.ogg','sound/items/AirHorn.ogg'), 50, 1)
+							playsound(src, pick('sound/items/bikehorn.ogg','sound/items/AirHorn.ogg'), 50, 1)
 						else
-							playsound(get_turf(src), 'sound/misc/fart.ogg', 50, 1)
+							playsound(src, 'sound/misc/fart.ogg', 50, 1)
 					else
 						msg = "<b>[src]</b> [fart]"
 						//Mimes can't fart.
@@ -663,7 +663,7 @@
 					// Process toxic farts first.
 					if(M_TOXIC_FARTS in mutations)
 						msg=""
-						playsound(get_turf(src), 'sound/effects/superfart.ogg', 50, 1)
+						playsound(src, 'sound/effects/superfart.ogg', 50, 1)
 						if(wearing_suit)
 							if(!wearing_mask)
 								to_chat(src, "<span class = 'warning'>You gas yourself!</span>")

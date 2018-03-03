@@ -1,0 +1,2 @@
+#define HYDRO_PREHISTORIC 1
+#define HYDRO_VOX 2

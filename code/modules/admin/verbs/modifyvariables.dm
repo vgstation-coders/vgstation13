@@ -8,7 +8,9 @@ var/list/forbidden_varedit_object_types = list(
 //Interface for editing a variable. It returns its new value. If edited_datum, it automatically changes the edited datum's value
 //If called with just [user] argument, it allows you to create a value such as a string, a number, an empty list, a nearby object, etc...
 //If called with [edited_datum] and [edited_variable], you gain the ability to get the variable's initial value.
-/proc/variable_set(mob/user, datum/edited_datum = null, edited_variable = null, autoselect_var_type = FALSE, value_override = null, logging = TRUE)
+
+// acceptsLists : if we're setting a variable in a list
+/proc/variable_set(mob/user, datum/edited_datum = null, edited_variable = null, autoselect_var_type = FALSE, value_override = null, logging = TRUE, var/acceptsLists = TRUE)
 	var/client/C
 
 	if(ismob(user))
@@ -50,6 +52,7 @@ var/list/forbidden_varedit_object_types = list(
 	#define V_TEXT "text"
 	#define V_NUM "num"
 	#define V_TYPE "type"
+	#define V_LIST_EMPTY "empty_list"
 	#define V_LIST "list"
 	#define V_OBJECT "object"
 	#define V_ICON "icon"
@@ -109,7 +112,8 @@ var/list/forbidden_varedit_object_types = list(
 		"text" = V_TEXT,
 		"num"  = V_NUM,
 		"type" = V_TYPE,
-		"empty list"      = V_LIST,
+		"empty list"      = V_LIST_EMPTY,
+		"list"  = V_LIST,
 		"object (nearby)" = V_OBJECT,
 		"icon"   = V_ICON,
 		"file"   = V_FILE,
@@ -117,6 +121,10 @@ var/list/forbidden_varedit_object_types = list(
 		"matrix" = V_MATRIX,
 		"null"   = V_NULL,
 		)
+
+		if (!acceptsLists)
+			choices -= V_LIST
+			choices -= V_LIST_EMPTY
 
 		if(C.holder.marked_datum) //Add the marked datum option
 			var/list_item_name
@@ -137,7 +145,7 @@ var/list/forbidden_varedit_object_types = list(
 		choices["CANCEL"] = V_CANCEL
 
 		if(!new_variable_type)
-			new_variable_type = input("What kind of variable?","Variable Type") in choices
+			new_variable_type = input("What kind of variable?","Variable Type") as null|anything in choices
 		var/selected_type = choices[new_variable_type]
 		var/window_title = "Varedit [edited_datum]"
 
@@ -157,8 +165,13 @@ var/list/forbidden_varedit_object_types = list(
 				var/list/matches = get_matching_types(partial_type, /datum)
 				new_value = input("Select type", window_title) as null|anything in matches
 
+			if(V_LIST_EMPTY)
+				if (acceptsLists)
+					new_value = list()
+
 			if(V_LIST)
-				new_value = list()
+				if (acceptsLists)
+					new_value = C.populate_list()
 
 			if(V_OBJECT)
 				new_value = input("Select reference:", window_title, old_value) as mob|obj|turf|area in range(8, get_turf(user))
@@ -219,12 +232,22 @@ var/list/forbidden_varedit_object_types = list(
 	#undef V_TEXT
 	#undef V_NUM
 	#undef V_TYPE
+	#undef V_LIST_EMPTY
 	#undef V_LIST
 	#undef V_OBJECT
 	#undef V_ICON
 	#undef V_FILE
 	#undef V_CLIENT
 	#undef V_NULL
+
+/client/proc/populate_list()
+	var/to_continue = TRUE
+	var/list/things_to_return = list()
+	while (to_continue)
+		things_to_return += variable_set(src, acceptsLists = FALSE)
+		to_continue = (alert("Do you want to add another item to the list? It has currently [things_to_return.len] items.", "Filling a list", "Yes", "No") == "Yes")
+
+	return things_to_return
 
 /client/proc/cmd_modify_ticker_variables()
 	set category = "Debug"

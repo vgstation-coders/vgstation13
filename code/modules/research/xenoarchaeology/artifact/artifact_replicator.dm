@@ -90,7 +90,7 @@
 				use_power = 1
 				icon_state = "borgcharger0(old)"
 
-			playsound(get_turf(src), 'sound/machines/heps.ogg', 50, 0)
+			playsound(src, 'sound/machines/heps.ogg', 50, 0)
 
 		else if(prob(5))
 			src.visible_message("<span class='notice'>[bicon(src)] [src] [pick("clicks","whizzes","whirrs","whooshes","clanks","clongs","clonks","bangs")].</span>")
@@ -148,4 +148,4 @@
 			spawn_progress = 0
 			use_power = 2
 			icon_state = "borgcharger1(old)"
-			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 0)
+			playsound(src, 'sound/machines/click.ogg', 50, 0)

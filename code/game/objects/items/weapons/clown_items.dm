@@ -101,7 +101,7 @@
 
 /obj/item/weapon/bikehorn/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] places the [src.name] into \his mouth and honks the horn. </span>")
-	playsound(get_turf(user), hitsound, 100, vary_pitch)
+	playsound(user, hitsound, 100, vary_pitch)
 	user.gib()
 
 /obj/item/weapon/bikehorn/attack_self(mob/user as mob)
@@ -133,7 +133,7 @@
 /obj/item/weapon/bikehorn/proc/honk()
 	if(world.time - last_honk_time >= honk_delay)
 		last_honk_time = world.time
-		playsound(get_turf(src), hitsound, 50, vary_pitch)
+		playsound(src, hitsound, 50, vary_pitch)
 		return 1
 	return 0
 

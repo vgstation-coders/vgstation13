@@ -21,11 +21,10 @@
 				new/obj/item/clothing/suit/leather/corgi(get_turf(src))
 				user.drop_item(src, force_drop = 1)
 				qdel(src)
-			/* DEERS TO BE IMPLEMENTED
 			if(istype (S, /obj/item/stack/sheet/animalhide/deer))
 				new/obj/item/clothing/suit/leather/deer(get_turf(src))
 				user.drop_item(src, force_drop = 1)
-				qdel(src)*/
+				qdel(src)
 			if(istype (S, /obj/item/stack/sheet/animalhide/xeno))
 				new/obj/item/clothing/suit/leather/xeno(get_turf(src))
 				user.drop_item(src, force_drop = 1)
@@ -38,12 +37,11 @@
 	icon_state = "suit_leather_corgi"
 	item_state = "suit_leather_corgi"
 
-/* DEERS TO BE IMPLEMENTED
 /obj/item/clothing/suit/leather/deer
 	name = "deer-leather suit"
 	desc = "Coated in deer hide, smells just as bad as you'd think."
 	icon_state = "suit_leather_deer"
-	item_state = "suit_leather_deer"*/
+	item_state = "suit_leather_deer"
 
 /obj/item/clothing/suit/leather/xeno
 	name = "xeno-hide suit"

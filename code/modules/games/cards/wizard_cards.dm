@@ -100,7 +100,7 @@ var/global/list/wizard_cards_normal = list(
 		to_chat(user, "Honkmother is not ready yet!")
 		return
 
-	playsound(get_turf(src), 'sound/items/AirHorn.ogg', 50, 1)
+	playsound(src, 'sound/items/AirHorn.ogg', 50, 1)
 
 /obj/item/toy/singlecard/wizard/legendary/honkmother/pickup(mob/living/user as mob)
 	if(user.mind && user.mind.assigned_role == "Clown")
@@ -139,7 +139,7 @@ var/global/list/wizard_cards_normal = list(
 		to_chat(user, "The clown is not ready yet!")
 		return
 
-	playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
+	playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 
 /obj/item/toy/singlecard/wizard/bomberman
 	name = "bomberman wizard card"

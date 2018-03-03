@@ -2,7 +2,7 @@
 
 	var/msg = "<span class='info'>*---------*\nThis is [bicon(src)] \a <EM>[src]</EM>!\n"
 
-	msg += {"<p>It's like a crab, but it has a utility tool on one arm and a crude metal claw on the other.  That, and you doubt it'd survive in an ocean for very long.</p>"}
+	msg += {"<p>[desc]</p>"}
 
 	msg += "<span class='warning'>"
 	if (getBruteLoss())

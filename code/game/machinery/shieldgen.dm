@@ -54,7 +54,7 @@
 		src.health -= aforce
 
 	//Play a fitting sound
-	playsound(get_turf(src), 'sound/effects/EMPulse.ogg', 75, 1)
+	playsound(src, 'sound/effects/EMPulse.ogg', 75, 1)
 
 
 	if (src.health <= 0)
@@ -124,7 +124,7 @@
 	src.health -= tforce
 
 	//This seemed to be the best sound for hitting a force field.
-	playsound(get_turf(src), 'sound/effects/EMPulse.ogg', 100, 1)
+	playsound(src, 'sound/effects/EMPulse.ogg', 100, 1)
 
 	//Handle the destruction of the shield
 	if (src.health <= 0)

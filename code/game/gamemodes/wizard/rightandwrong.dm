@@ -94,7 +94,7 @@
 					new /obj/item/weapon/gun/projectile/nagant(get_turf(H))
 				if("beegun")
 					new /obj/item/weapon/gun/gatling/beegun(get_turf(H))
-			playsound(get_turf(H),'sound/effects/summon_guns.ogg', 50, 1)
+			playsound(H,'sound/effects/summon_guns.ogg', 50, 1)
 
 		else if(summon_type == "magic")
 			switch (randomizemagic)
@@ -273,4 +273,4 @@
 							new /obj/item/weapon/switchtool/surgery(get_turf(H))
 					else
 						new /obj/item/weapon/switchtool/swiss_army_knife(get_turf(H))
-			playsound(get_turf(H),'sound/items/zippo_open.ogg', 50, 1)
+			playsound(H,'sound/items/zippo_open.ogg', 50, 1)

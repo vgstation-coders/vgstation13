@@ -418,7 +418,7 @@
 
 		//NOISE
 		if(prob(2))
-			playsound(get_turf(src), 'sound/effects/bees.ogg', min(20+(reagents.total_volume),100), 1)
+			playsound(src, 'sound/effects/bees.ogg', min(20+(reagents.total_volume),100), 1)
 
 		update_icon()
 
@@ -475,7 +475,10 @@
 	reagents.add_reagent(NUTRIMENT, 4)
 	reagents.add_reagent(SUGAR, 16)
 	update_icon()
+	initialize()
 
+/obj/machinery/apiary/wild/initialize()
+	species = bees_species[BEESPECIES_NORMAL]
 
 /obj/machinery/apiary/wild/bullet_act(var/obj/item/projectile/P)
 	..()
@@ -496,7 +499,7 @@
 		if(queen_bees_inside || worker_bees_inside)
 			angry_swarm(user)
 
-		playsound(get_turf(src), O.hitsound, 50, 1, -1)
+		playsound(src, O.hitsound, 50, 1, -1)
 		health -= O.force
 		updateHealth()
 
@@ -524,7 +527,7 @@
 
 		//making noise
 		if(prob(10))
-			playsound(get_turf(src), 'sound/effects/bees.ogg', min(20+(reagents.total_volume),100), 1)
+			playsound(src, 'sound/effects/bees.ogg', min(20+(reagents.total_volume),100), 1)
 
 		//sending out bees to KILL
 		if(worker_bees_inside >= 10 && bees_outside_hive.len < 15)

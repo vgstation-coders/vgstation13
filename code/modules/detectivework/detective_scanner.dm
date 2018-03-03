@@ -130,7 +130,7 @@
 	//PRINTS
 	if(fingerprints_found.len>0)
 		to_chat(user, "<span class='notice'>Isolated [fingerprints_found.len] fingerprints: Data Stored: Scan with Hi-Res Forensic Scanner to retrieve.</span>")
-		playsound(get_turf(src), 'sound/items/detscan.ogg', 50, 1)
+		playsound(src, 'sound/items/detscan.ogg', 50, 1)
 
 		var/list/complete_prints = list()
 		for(var/i in fingerprints_found)
@@ -148,7 +148,7 @@
 	//FIBERS
 	if(fibers_found.len)
 		to_chat(user, "<span class='notice'>Fibers/Materials Data Stored: Scan with Hi-Res Forensic Scanner to retrieve.</span>")
-		playsound(get_turf(src), 'sound/items/detscan.ogg', 50, 1)
+		playsound(src, 'sound/items/detscan.ogg', 50, 1)
 
 	//Blood
 	if (blood_DNA_found.len)

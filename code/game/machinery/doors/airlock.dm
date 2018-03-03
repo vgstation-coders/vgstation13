@@ -1042,7 +1042,7 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(!operating)
 		panel_open = !panel_open
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 25, 1, -6)
+		playsound(src, 'sound/items/Screwdriver.ogg', 25, 1, -6)
 		update_icon()
 		return 1
 	return
@@ -1064,15 +1064,15 @@ About the new airlock wires panel:
 		if(welded)
 			breaktime += 30 //Welding buys you a little time
 		src.visible_message("<span class='warning'>[user] is battering down [src]!</span>", "<span class='warning'>You begin to batter [src].</span>")
-		playsound(get_turf(src), 'sound/effects/shieldbash.ogg', 50, 1)
+		playsound(src, 'sound/effects/shieldbash.ogg', 50, 1)
 		if(do_after(user,src, breaktime))
 			//Calculate bolts separtely, in case they dropped in the last 6-9 seconds.
 			if(src.locked == 1)
-				playsound(get_turf(src), 'sound/effects/shieldbash.ogg', 50, 1)
+				playsound(src, 'sound/effects/shieldbash.ogg', 50, 1)
 				src.visible_message("<span class='warning'>[user] is battering the bolts!</span>", "<span class='warning'>You begin to smash the bolts...</span>")
 				if(!do_after(user, src,190)) //Same amount as drilling an R-wall, longer if it was welded
 					return //If they moved, cancel us out
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			src.visible_message("<span class='warning'>[user] broke down the door!</span>", "<span class='warning'>You broke the door!</span>")
 			bashed_in(user)
 		return
@@ -1155,7 +1155,7 @@ About the new airlock wires panel:
 	return
 
 /obj/machinery/door/airlock/proc/bashed_in(var/mob/user)
-	playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	operating = -1
 	var/obj/structure/door_assembly/DA = revert(user,user.dir)
 	DA.anchored = 0
@@ -1215,7 +1215,7 @@ About the new airlock wires panel:
 		if( !arePowerSystemsOn() || (stat & NOPOWER) || isWireCut(AIRLOCK_WIRE_OPEN_DOOR) )
 			return 0
 	use_power(50)
-	playsound(get_turf(src), soundeffect, pitch, 1)
+	playsound(src, soundeffect, pitch, 1)
 	if(src.closeOther != null && istype(src.closeOther, /obj/machinery/door/airlock/) && !src.closeOther.density)
 		src.closeOther.close()
 	// This worries me - N3X
@@ -1245,7 +1245,7 @@ About the new airlock wires panel:
 				return
 
 			if (locate(/mob/living) in T)
-				playsound(get_turf(src), 'sound/machines/buzz-two.ogg', 50, 0)
+				playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 				if(autoclose  && normalspeed)
 					spawn(150)
 						autoclose()
@@ -1277,7 +1277,7 @@ About the new airlock wires panel:
 				if (istype(loc, /turf/simulated))
 					T.add_blood(L)
 
-	playsound(get_turf(src),soundeffect, 30, 1)
+	playsound(src,soundeffect, 30, 1)
 
 	for(var/turf/T in loc)
 		var/obj/structure/window/W = locate(/obj/structure/window) in T

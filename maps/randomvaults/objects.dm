@@ -253,8 +253,23 @@
 /area/vault/icecomet
 	jammed = 2
 
+/area/vault/assistantlair
+	jammed = 2
+
 
 /area/vault/research
+	requires_power = 1
+	name = "\improper Medical Research Facility"
+
+/obj/machinery/power/apc/frame/research_vault
+	make_alerts = FALSE
+
+/obj/docking_port/destination/vault/research
+	valid_random_destination = FALSE
+	areaname = "Medicial Research Facility"
+
+/obj/item/weapon/disk/shuttle_coords/vault/research
+	destination = /obj/docking_port/destination/vault/research
 
 /area/vault/satelite
 
@@ -409,6 +424,10 @@
 			Planet Earth is blue<br>
 			And there's nothing I can do.
 			"}
+
+/obj/item/weapon/paper/asteroidfield
+	name = "dear diary"
+	info = {"It's all HONKING HONKED.  I left for bananium and it HONKED itself to pieces!  Our planet is HONKED!  What am I going to do?"}
 
 /obj/machinery/atmospherics/binary/msgs/rust_vault
 	name = "\improper Magnitno Priostanovleno Blok Khraneniya Gaza"

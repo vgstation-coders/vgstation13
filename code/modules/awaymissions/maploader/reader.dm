@@ -152,7 +152,10 @@ var/list/map_dimension_cache = list()
 
 		if(map_element)
 			map_element.height = y_depth
-			map_element.location = locate(x_offset + 1, y_offset + 1, z_offset) //Set location to the upper left corner
+
+			if(!map_element.location)
+				//Set location to the lower left corner, if it hasn't already been set
+				map_element.location = locate(x_offset + 1, y_offset + 1, z_offset)
 
 		//reached End Of File
 		if(findtext(tfile,quote+"}",zpos,0)+2==tfile_len)

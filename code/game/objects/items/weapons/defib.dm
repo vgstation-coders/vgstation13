@@ -22,7 +22,7 @@
 
 /obj/item/weapon/melee/defibrillator/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='warning'>[user] is putting the live paddles on \his chest! It looks like \he's trying to commit suicide.</span>")
-	playsound(get_turf(src),'sound/items/defib.ogg',50,1)
+	playsound(src,'sound/items/defib.ogg',50,1)
 	return (FIRELOSS)
 
 /obj/item/weapon/melee/defibrillator/update_icon()
@@ -47,7 +47,7 @@
 		if(clumsy_check(user) && prob(50) && charges)
 			to_chat(user, "<span class='warning'>You touch the paddles together, shorting the device.</span>")
 			spark(src, 5)
-			playsound(get_turf(src),'sound/items/defib.ogg',50,1)
+			playsound(src,'sound/items/defib.ogg',50,1)
 			user.Knockdown(5)
 			var/mob/living/carbon/human/H = user
 			if(ishuman(user))
@@ -57,7 +57,7 @@
 		else
 			ready = !ready
 			to_chat(user, "<span class='notice'>You turn [src] [ready? "on and take the paddles out" : "off and put the paddles back in"].</span>")
-			playsound(get_turf(src),"sparks",75,1,-1)
+			playsound(src,"sparks",75,1,-1)
 			update_icon()
 	else
 		to_chat(user, "<span class='warning'>[src] is out of charges.</span>")
@@ -120,7 +120,7 @@
 		else
 			target.LAssailant = user
 	spark(src, 5, FALSE)
-	playsound(get_turf(src),'sound/items/defib.ogg',50,1)
+	playsound(src,'sound/items/defib.ogg',50,1)
 	charges--
 	update_icon()
 	return
@@ -130,7 +130,7 @@
 	"<span class='notice'>You start setting up the paddles on [target]'s chest</span>")
 	if(do_after(user,target,30))
 		spark(src, 5, FALSE)
-		playsound(get_turf(src),'sound/items/defib.ogg',50,1)
+		playsound(src,'sound/items/defib.ogg',50,1)
 		charges--
 		update_icon()
 		to_chat(user, "<span class='notice'>You shock [target] with the paddles.</span>")
@@ -156,7 +156,7 @@
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
-		if(istype(target.w_uniform,/obj/item/clothing/under) && (target.wear_suit.body_parts_covered & UPPER_TORSO) && prob(50))
+		if(istype(target.w_uniform,/obj/item/clothing/under) && (target.w_uniform.body_parts_covered & UPPER_TORSO) && prob(50))
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return

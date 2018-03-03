@@ -43,7 +43,7 @@
 		if(L.damage <= 0)
 			returnToPool(L)
 		else
-			playsound(get_turf(src), 'sound/effects/eleczap.ogg', 75, 1)
+			playsound(src, 'sound/effects/eleczap.ogg', 75, 1)
 			L.tang = adjustAngle(get_angle(U,T))
 			L.icon = midicon
 			L.icon_state = "[L.tang]"

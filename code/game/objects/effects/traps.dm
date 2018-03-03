@@ -51,4 +51,4 @@
 		else
 			S = sound_to_play
 
-		playsound(get_turf(src), S, volume, vary)
+		playsound(src, S, volume, vary)

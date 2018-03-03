@@ -8,17 +8,23 @@
 // Use in chem.flags.
 #define CHEMFLAG_DISHONORABLE 1
 
-//The reaction procs must ALWAYS set src = null, this detaches the proc from the object (the reagent)
-//so that it can continue working when the reagent is deleted while the proc is still active.
+/*	The reaction procs must ALWAYS set src = null, this detaches the proc from the object (the reagent)
+	so that it can continue working when the reagent is deleted while the proc is still active.
 
-//Always call parent on reaction_mob, reaction_obj, reaction_turf, on_mob_life and Destroy() so that the sanities can be handled
-//Failure to do so will lead to serious problems
+	Always call parent on reaction_mob, reaction_obj, reaction_turf, on_mob_life and Destroy() so that the sanities can be handled
+	Failure to do so will lead to serious problems
 
-//Are you adding a toxic reagent? Remember to update bees_apiary.dm 's lists of toxic reagents accordingly.
+	Are you adding a toxic reagent? Remember to update bees_apiary.dm 's lists of toxic reagents accordingly.
 
-//Not sure what to have your density and SHC as? Use the components of the reagent
-//density = (for(components of recipe) total_mass += component density* component volume)/volume of result
-//SHC = (for(components of recipe) total_SHC *= component SHC)
+	Not sure what to have your density and SHC as? No IRL equivalent you can google? Use the components of the reagent
+		density = (for(components of recipe) total_mass += component density* component volume)/volume of result. E.G
+			6 SALINE = 3 SODIUMCHLORIDE, 5 WATER, 1 AMMONIA
+				density = ((1 + (2.09*3) + (1*5) + (0.51*1))/6) = 2.22 (rounded to 2dp)
+
+		SHC = (for(components of recipe) total_SHC *= component SHC)
+
+
+*/
 
 /datum/reagent
 	var/name = "Reagent"
@@ -985,9 +991,8 @@
 
 	if(..())
 		return 1
-
 	if(volume >= 5)
-		T.holy = 1
+		T.bless()
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
@@ -2620,6 +2625,22 @@
 			if(I.damage > 0)
 				I.damage = max(0,I.damage-0.2)
 
+
+/datum/reagent/peridaxon/reaction_obj(var/obj/O, var/volume)
+
+	if(..())
+		return 1
+
+	if(istype(O, /obj/item/organ/internal))
+		var/obj/item/organ/internal/I = O
+		if(I.health < initial(I.health))
+			I.health = min(I.health+rand(1,3), initial(I.health))
+		if(I.organ_data)
+			var/datum/organ/internal/OD = I.organ_data
+			if(OD.damage > 0)
+				OD.damage = max(0, OD.damage-0.4)
+
+
 /datum/reagent/bicaridine
 	name = "Bicaridine"
 	id = BICARIDINE
@@ -3066,7 +3087,7 @@
 		return 1
 
 	if((prob(10) && method == TOUCH) || method == INGEST)
-		M.contract_disease(new diseasetype)
+		M.contract_disease(new diseasetype, 1)
 
 /datum/reagent/nanites/autist
 	name = "Autist nanites"
@@ -5900,6 +5921,26 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Lifeline"
 	id = MEDCOFFEE
 	description = "Tastes like it's got iron in it or something."
+	
+/datum/reagent/drink/coffee/medcoffee/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.nutrition += nutriment_factor
+	if(M.getOxyLoss() && prob(25))
+		M.adjustOxyLoss(-1)
+	if(M.getBruteLoss() && prob(30))
+		M.heal_organ_damage(1, 0)
+	if(M.getFireLoss() && prob(25))
+		M.heal_organ_damage(0, 1)
+	if(M.getToxLoss() && prob(25))
+		M.adjustToxLoss(-1)
+	if(M.dizziness != 0)
+		M.dizziness = max(0, M.dizziness - 15)
+	if(M.confused != 0)
+		M.confused = max(0, M.confused - 5)
+	M.reagents.add_reagent (IRON, 0.1)
 
 /datum/reagent/drink/coffee/detcoffee
 	name = "Joe"
@@ -6364,7 +6405,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	spawn(volume * 10)
 		O.light_color = init_color
 		O.set_light(0)
-		
+
 /datum/reagent/mucus
 	name = "Mucus"
 	id = MUCUS
@@ -6372,12 +6413,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = LIQUID
 	color = "#13BC5E"
 	custom_metabolism = 0.01
-	
+
 /datum/reagent/mucus/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
-		
+
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(M_ASTHMA in H.mutations)
@@ -6392,7 +6433,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = LIQUID
 	color = "#C8A5DC"
 	overdose_am = REAGENTS_OVERDOSE
-	
+
 /datum/reagent/albuterol/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -6408,7 +6449,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#FFFFFF" //rgb: 255, 255, 255
 	density = 1.122
 	specheatcap = 6.9036
-	
+  
 /datum/reagent/saltwater/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -6418,7 +6459,13 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		var/mob/living/carbon/human/H = M
 		H.vomit()
 		M.adjustToxLoss(2 * REM)
-	
-	
-	
-	
+    
+/datum/reagent/saltwater/saline
+	name = "Saline"
+	id = SALINE
+	description = "A solution composed of salt, water, and ammonia. Used in pickling and preservation"
+	reagent_state = LIQUID
+	color = "#DEF7F5" //rgb: 192, 227, 233
+	alpha = 64
+	density = 0.622
+	specheatcap = 99.27
