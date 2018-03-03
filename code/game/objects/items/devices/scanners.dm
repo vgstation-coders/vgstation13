@@ -499,7 +499,8 @@ Subject's pulse: ??? BPM"})
 
 /obj/item/device/breathalyzer
 	name = "breathalyzer"
-	icon_state = "health"
+	icon = 'icons/obj/breathalyzer.dmi'
+	icon_state = "idle"
 	item_state = "analyzer"
 	desc = "A hand-held scanner that is able to determine the amount of ethanol in the breath of the subject."
 	flags = FPRINT
@@ -552,6 +553,9 @@ Subject's pulse: ??? BPM"})
 
 	if(alcohol >= legal_limit)
 		dat += "<br><span class='warning'>This is above the legal limit of [legal_limit]!</span>"
+		flick("DRUNK", src)
+	else
+		flick("SOBER", src)
 
 	to_chat(user, dat)
 
