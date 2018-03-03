@@ -6449,7 +6449,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#FFFFFF" //rgb: 255, 255, 255
 	density = 1.122
 	specheatcap = 6.9036
-
+  
 /datum/reagent/saltwater/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -6459,7 +6459,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		var/mob/living/carbon/human/H = M
 		H.vomit()
 		M.adjustToxLoss(2 * REM)
-
+    
 /datum/reagent/saltwater/saline
 	name = "Saline"
 	id = SALINE
