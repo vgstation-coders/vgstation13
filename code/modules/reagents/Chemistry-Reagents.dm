@@ -5940,7 +5940,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		M.dizziness = max(0, M.dizziness - 15)
 	if(M.confused != 0)
 		M.confused = max(0, M.confused - 5)
-	M.reagents.add_reagent ("iron", 0.1)
+	M.reagents.add_reagent (IRON, 0.1)
 
 /datum/reagent/drink/coffee/detcoffee
 	name = "Joe"
