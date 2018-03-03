@@ -125,19 +125,20 @@
 
 /datum/rune_spell/raisestructure/cast()
 	var/mob/living/user = activator
-	user.say(invocation)
 	contributors.Add(user)
 	contributors[user] = ""
 	update_progbar()
 	if (user.client)
 		user.client.images |= progbar
 	spell_holder.overlays += image('icons/obj/cult.dmi',"runetrigger-build")
+	to_chat(activator, "<span class='rose'>This ritual's blood toll can be substantially reduced by having multiple cultists partake in it.</span>")
 	spawn()
 		payment()
 
 /datum/rune_spell/raisestructure/midcast(var/mob/add_cultist)
 	if (add_cultist in contributors)
 		return
+	add_cultist.say(invocation)
 	contributors.Add(add_cultist)
 	contributors[add_cultist] = ""
 	if (add_cultist.client)
@@ -148,60 +149,63 @@
 	..()
 
 /datum/rune_spell/raisestructure/proc/payment()
-	//are our payers still here and about?
-	var/summoners = 0
-	for(var/mob/living/L in contributors)
-		if (iscultist(L) && (L in range(spell_holder,1)) && (L.stat == CONSCIOUS))
-			summoners++
-		else
-			if (L.client)
-				L.client.images -= progbar
-			contributors.Remove(L)
-	//alright then, time to pay in blood
-	var/amount_paid = 0
-	for(var/mob/living/L in contributors)
-		var/data = use_available_blood(L, cost_upkeep,contributors[L])
-		if (data["result"] == "failure")//out of blood are we?
-			contributors.Remove(L)
-		else
-			amount_paid += data["total"]
-			contributors[L] = data["result"]
-			make_tracker_effects(L.loc,spell_holder, 1, "soul", 3, /obj/effect/tracker/drain, 1)//visual feedback
+	var/failsafe = 0
+	while(failsafe < 1000)
+		failsafe++
+		//are our payers still here and about?
+		var/summoners = 0
+		for(var/mob/living/L in contributors)
+			if (iscultist(L) && (L in range(spell_holder,1)) && (L.stat == CONSCIOUS))
+				summoners++
+			else
+				if (L.client)
+					L.client.images -= progbar
+				contributors.Remove(L)
+		//alright then, time to pay in blood
+		var/amount_paid = 0
+		for(var/mob/living/L in contributors)
+			var/data = use_available_blood(L, cost_upkeep,contributors[L])
+			if (data["result"] == "failure")//out of blood are we?
+				contributors.Remove(L)
+			else
+				amount_paid += data["total"]
+				contributors[L] = data["result"]
+				make_tracker_effects(L.loc,spell_holder, 1, "soul", 3, /obj/effect/tracker/drain, 1)//visual feedback
 
-	accumulated_blood += amount_paid
+		accumulated_blood += amount_paid
 
-	//if there's no blood for over 3 seconds, the channeling fails
-	if (amount_paid)
-		cancelling = 3
-	else
-		cancelling--
-		if (cancelling <= 0)
-			if(accumulated_blood && !(locate(/obj/effect/decal/cleanable/blood/splatter) in spell_holder.loc))
-				var/obj/effect/decal/cleanable/blood/splatter/S = new(spell_holder.loc)//splash
-				S.amount = 2
-			abort("channel cancel")
+		//if there's no blood for over 3 seconds, the channeling fails
+		if (amount_paid)
+			cancelling = 3
+		else
+			cancelling--
+			if (cancelling <= 0)
+				if(accumulated_blood && !(locate(/obj/effect/decal/cleanable/blood/splatter) in spell_holder.loc))
+					var/obj/effect/decal/cleanable/blood/splatter/S = new(spell_holder.loc)//splash
+					S.amount = 2
+				abort("channel cancel")
+				return
+
+		//do we have multiple cultists? let's reward their cooperation
+		switch(summoners)
+			if (1)
+				remaining_cost = 300
+			if (2)
+				remaining_cost = 120
+			if (3)
+				remaining_cost = 18
+			if (4 to INFINITY)
+				remaining_cost = 0
+
+
+		if (accumulated_blood >= remaining_cost)
+			success()
 			return
 
-	//do we have multiple cultists? let's reward their cooperation
-	switch(summoners)
-		if (1)
-			remaining_cost = 300
-		if (2)
-			remaining_cost = 120
-		if (3)
-			remaining_cost = 18
-		if (4 to INFINITY)
-			remaining_cost = 0
+		update_progbar()
 
-
-	if (accumulated_blood >= remaining_cost)
-		success()
-		return
-
-	update_progbar()
-
-	sleep(10)
-	payment()
+		sleep(10)
+	message_admins("A rune ritual has iterated for over 1000 blood payment procs. Something's wrong there.")
 
 /datum/rune_spell/raisestructure/proc/success()
 	new /obj/structure/cult/altar(spell_holder.loc)

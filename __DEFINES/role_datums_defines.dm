@@ -38,6 +38,7 @@
 #define HIGHLANDER "highlander"
 
 
+#define CULT_MENDED		-1
 #define CULT_PROLOGUE	0
 #define CULT_ACT_I		1
 #define CULT_ACT_II		2

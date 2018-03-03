@@ -1,6 +1,16 @@
 //CULT 3.0 BY DEITY LINK (2018)
 //BASED ON THE ORIGINAL GAME MODE BY URIST MCDORF
 
+var/veil_thickness = CULT_PROLOGUE
+
+//CULT_PROLOGUE		Default thickness, only communication and raise structure runes enabled
+//CULT_ACT_I		Altar raised. cultists can now convert.
+//CULT_ACT_II		Cultist amount reached. cultists are now looking for the sacrifice
+//CULT_ACT_III		Sacrifice complete. cult is now going loud, spreading blood and protecting bloodstones while the crew tries to destroy them
+//CULT_ACT_IV		Bloodspill threshold reached. bloodstones become indestructible, rift opens above one of them. cultists must open it, crew must close it.
+//CULT_EPILOGUE		The cult succeeded. The station is no longer reachable from space or through teleportation, and is now part of hell. Nar-Sie hunts the survivors.
+//CULT_MENDED		The cult failed (bloodstones all destroyed or rift closed). cult magic permanently disabled, living cultists progressively die by themselves.
+
 /datum/faction/bloodcult
 	name = "Cult of Nar-Sie"
 	ID = BLOODCULT
@@ -284,7 +294,7 @@
 			else if (data["held_lid"])
 				to_chat(user, "<span class='warning'>Remove \the [data["held"]]'s lid first!</span>")
 			else if (data["container_lid"])
-				to_chat(user, "<span class='warning'>Remove \the [data["held"]]'s lid first!</span>")
+				to_chat(user, "<span class='warning'>Remove \the [data["container"]]'s lid first!</span>")
 			var/mob/living/carbon/human/H = user
 			blood = get_blood(H.vessel)
 			if (previous_result != "user")
@@ -342,7 +352,19 @@
 		if (data["user"])
 			data["total"] += data["user_amount"]
 			var/mob/living/carbon/human/H = user
+			var/blood_before = H.vessel.get_reagent_amount(BLOOD)
 			H.vessel.remove_reagent(BLOOD, data["user_amount"])
+			var/blood_after = H.vessel.get_reagent_amount(BLOOD)
+			if (blood_before > BLOOD_VOLUME_SAFE && blood_after < BLOOD_VOLUME_SAFE)
+				to_chat(user, "<span class='sinister'>You start looking pale.</span>")
+			else if (blood_before > BLOOD_VOLUME_WARN && blood_after < BLOOD_VOLUME_WARN)
+				to_chat(user, "<span class='sinister'>You feel weak from the lack of blood.</span>")
+			else if (blood_before > BLOOD_VOLUME_OKAY && blood_after < BLOOD_VOLUME_OKAY)
+				to_chat(user, "<span class='sinister'>You are about to pass out from the lack of blood.</span>")
+			else if (blood_before > BLOOD_VOLUME_BAD && blood_after < BLOOD_VOLUME_BAD)
+				to_chat(user, "<span class='sinister'>You have trouble focusing, things will go bad if you keep using your blood.</span>")
+			else if (blood_before > BLOOD_VOLUME_SURVIVE && blood_after < BLOOD_VOLUME_SURVIVE)
+				to_chat(user, "<span class='sinister'>It will be all over soon.</span>")
 			H.take_overall_damage(data["user_amount"] ? 0.1 : 0)
 
 	data["blood"] = blood

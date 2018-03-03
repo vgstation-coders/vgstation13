@@ -35,7 +35,7 @@
 
 	return "slashes at"
 
-/mob/living/carbon/alien/humanoid/get_unarmed_damage(mob/living/target)
+/mob/living/carbon/alien/humanoid/get_unarmed_damage(var/atom/target)
 	if(isalien(target))
 		return rand(1,3)
 
