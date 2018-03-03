@@ -56,6 +56,9 @@
 		else if(ismob(loc))
 			var/mob/holder = loc
 			holder.drop_from_inventory(src)
+		else if(istype(loc, /obj/item/weapon/storage))
+			var/obj/item/weapon/storage/S = loc
+			S.remove_from_storage(src)
 
 		if(trash) //Do we have somehing defined as trash for our snack item ?
 			//Note : This makes sense in some way, or at least this works, just don't mess with it
@@ -176,7 +179,7 @@
 
 	var/datum/reagents/reagentreference = reagents //Even when the object is qdeleted, the reagents exist until this ref gets removed
 	if(reagentreference)	//Handle ingestion of any reagents (Note : Foods always have reagents)
-		playsound(get_turf(eater), 'sound/items/eatfood.ogg', rand(10,50), 1)
+		playsound(eater, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		if(reagentreference.total_volume)
 			reagentreference.reaction(eater, INGEST)
 			spawn() //WHY IS THIS SPAWN() HERE
@@ -4041,7 +4044,7 @@
 
 		H.stop_pulling()
 		to_chat(H, "<SPAN CLASS='notice'>You slipped on the [name]!</SPAN>")
-		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 		H.Stun(3)
 		H.Knockdown(2)
 

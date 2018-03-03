@@ -212,7 +212,7 @@
 			AdjustParalysis(-3)
 			AdjustStunned(-3)
 			AdjustKnockdown(-3)
-			playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			playsound(src, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			M.visible_message( \
 				"<span class='notice'>[M] shakes [src] trying to wake [t_him] up!</span>", \
 				"<span class='notice'>You shake [src] trying to wake [t_him] up!</span>", \
@@ -272,13 +272,13 @@
 					if (U && U.wired && U.cell && U.cell.charge >= STUNGLOVES_CHARGE_COST && T.siemens_coefficient == 0)
 						to_chat(M, "<span class='notice'>\The [src]'s insulated gloves prevent them from being shocked.</span>")
 
-					playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+					playsound(src, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 					M.visible_message( \
 						"<span class='notice'>[M] shakes [ismartian(M) ? "tentacles" : "hands"] with [src].</span>", \
 						"<span class='notice'>You shake [ismartian(M) ? "tentacles" : "hands"] with [src].</span>", \
 						)
 			else
-				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+				playsound(src, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 				M.visible_message( \
 					"<span class='notice'>[M] gives [src] a [pick("hug","warm embrace")].</span>", \
 					"<span class='notice'>You hug [src].</span>", \
@@ -511,7 +511,7 @@
 	Stun(stun_amount)
 	Knockdown(weaken_amount)
 
-	playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+	playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 
 	return 1
 

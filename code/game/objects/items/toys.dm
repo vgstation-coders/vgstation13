@@ -572,7 +572,7 @@
 		reagents.log_bad_reagents(user, src)
 		user.investigation_log(I_CHEMS, "sprayed 1u from \a [src] ([type]) containing [reagents.get_reagent_ids(1)] towards [A] ([A.x], [A.y], [A.z]).")
 		src.reagents.trans_to(D, 1)
-		playsound(get_turf(src), 'sound/effects/spray3.ogg', 50, 1, -6)
+		playsound(src, 'sound/effects/spray3.ogg', 50, 1, -6)
 
 		spawn(0)
 			for(var/i=0, i<1, i++)
@@ -763,7 +763,7 @@
 		to_chat(user, "<span class='warning'>You turned the toy into a bomb!</span>")
 		emagged = 1
 
-		playsound(get_turf(src), 'sound/effects/kirakrik.ogg', 100, 1)
+		playsound(src, 'sound/effects/kirakrik.ogg', 100, 1)
 
 		sleep(50)
 		say("Someone pass the boombox.")

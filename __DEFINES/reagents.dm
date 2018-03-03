@@ -107,6 +107,7 @@
 #define FLUOROSURFACTANT 			"fluorosurfactant"
 #define NICOTINE 			"nicotine"
 #define AMMONIA 			"ammonia"
+#define SALINE				"saline"
 #define GLUE 			"glue"
 #define DIETHYLAMINE 			"diethylamine"
 #define ETHYLREDOXRAZINE 			"ethylredoxrazine"
@@ -331,6 +332,7 @@
 #define MUCUS			"mucus"
 #define ALBUTEROL		"albuterol"
 #define LIQUIDBUTTER	"liquidbutter"
+#define SALTWATER		"saltwater"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

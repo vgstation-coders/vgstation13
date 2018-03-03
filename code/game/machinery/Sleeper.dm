@@ -63,6 +63,8 @@
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol")
 
 /obj/machinery/sleeper/interact(var/mob/user)
+	if(user.loc == src || (!Adjacent(user)&&!issilicon(user)) || user.lying || user.incapacitated() || !user.dexterity_check())
+		return
 	var/dat = list()
 	if(on)
 		dat += "<B>Performing anaesthesic emergence...</B>" //Best I could come up with
@@ -110,6 +112,8 @@
 
 /obj/machinery/sleeper/Topic(href, href_list)
 	if(..())
+		return 1
+	else if(usr.loc == src || (!Adjacent(usr)&&!issilicon(usr)) || usr.lying || usr.incapacitated() || !usr.dexterity_check())
 		return 1
 	else
 		usr.set_machine(src)
@@ -539,6 +543,8 @@
 /obj/machinery/sleeper/mancrowave/RefreshParts()
 
 /obj/machinery/sleeper/mancrowave/interact(var/mob/user)
+	if(user.loc == src || !Adjacent(user) || user.lying || user.incapacitated() || !user.dexterity_check())
+		return
 	var/dat = "<font color='blue'><B>Occupant Statistics:</B></FONT><BR>"
 	if (occupant)
 		var/t1
@@ -572,6 +578,8 @@
 
 /obj/machinery/sleeper/mancrowave/Topic(href, href_list)
 	if(..())
+		return 1
+	if(usr.loc == src || (!Adjacent(usr)&&!issilicon(usr)) || usr.lying || usr.incapacitated() || !usr.dexterity_check())
 		return 1
 	usr.set_machine(src)
 	if (href_list["cook"])
@@ -640,7 +648,7 @@
 				occupant = null
 				var/obj/effect/decal/cleanable/ash/ashed = new /obj/effect/decal/cleanable/ash(loc)
 				ashed.layer = src.layer + 0.01
-		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
+		playsound(src, 'sound/machines/ding.ogg', 50, 1)
 		on = 0
 		if(occupant)
 			if(ishuman(occupant))
@@ -648,7 +656,7 @@
 				if(isdiona(H))
 					if(H.h_style != "Popped Hair")
 						to_chat(H, "<span class = 'notice'>Your head pops!</span>")
-						playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 1)
+						playsound(src, 'sound/effects/pop.ogg', 50, 1)
 						H.h_style = "Popped Hair"
 						H.update_hair()
 			go_out()

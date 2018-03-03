@@ -294,7 +294,7 @@
 				glo_light++
 			if("clownfish")
 				if(prob(10))
-					playsound(get_turf(src),'sound/items/bikehorn.ogg', 80, 1)
+					playsound(src,'sound/items/bikehorn.ogg', 80, 1)
 			if("sea devil")
 				if(fish_list.len > 1 && prob(5))
 					//Small chance to eat a random fish that isn't itself.

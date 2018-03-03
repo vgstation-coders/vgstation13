@@ -236,7 +236,7 @@
 		user.visible_message("<span class='notice'>[user] turns on [src]</span>.", \
 			"You turn on \a [src].", \
 			"You hear [src] start")
-		playsound(get_turf(src), 'sound/machines/blender.ogg', 50, 1)
+		playsound(src, 'sound/machines/blender.ogg', 50, 1)
 		use_power(500)
 		sleep(P.time*time_coeff)
 		P.process(src.loc, O)

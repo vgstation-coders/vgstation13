@@ -85,9 +85,6 @@
 			src.Entered(AM)
 			return
 
-/turf/proc/initialize()
-	return
-
 /turf/ex_act(severity)
 	return 0
 
@@ -414,6 +411,7 @@
 		//		zone.SetStatus(ZONE_ACTIVE)
 
 		var/turf/W = new N(src)
+		W.initialize()
 
 		if(tell_universe)
 			universe.OnTurfChange(W)
@@ -707,11 +705,6 @@
 	if (!holomap_data)
 		holomap_data = list()
 	holomap_data += I
-
-// Calls the above, but only if the game has not yet started.
-/turf/proc/soft_add_holomap(var/atom/movable/AM)
-	if (!ticker || ticker.current_state != GAME_STATE_PLAYING)
-		add_holomap(AM)
 
 // Goddamnit BYOND.
 // So for some reason, I incurred a rendering issue with the usage of FLOAT_PLANE for the holomap plane.

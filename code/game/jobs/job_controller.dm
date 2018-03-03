@@ -4,8 +4,6 @@ var/global/datum/controller/occupations/job_master
 #define BE_ASSISTANT 1
 #define RETURN_TO_LOBBY 2
 
-#define JOB_CONTROLLER_DEBUG TRUE
-
 /datum/controller/occupations
 		//List of all jobs
 	var/list/occupations = list()
@@ -14,10 +12,10 @@ var/global/datum/controller/occupations/job_master
 		//Debug info
 	var/list/job_debug = list()
 
+
 /datum/controller/occupations/proc/SetupOccupations(var/faction = "Station")
 	occupations = list()
 	var/list/all_jobs = typesof(/datum/job)
-	log_admin("JOB SS debug: SetupOccupations() started.")
 	if(!all_jobs.len)
 		to_chat(world, "<span class='danger'>Error setting up jobs, no job datums found</span>")
 		return 0
@@ -41,10 +39,9 @@ var/global/datum/controller/occupations/job_master
 
 
 /datum/controller/occupations/proc/Debug(var/text)
-	if(!JOB_CONTROLLER_DEBUG)
+	if(!Debug2)
 		return 0
 	job_debug.Add(text)
-	log_admin(text) // Permanently log what happens + a timestamp. Should help with the cuck cube problem.
 	return 1
 
 
@@ -442,7 +439,7 @@ var/global/datum/controller/occupations/job_master
 					H.Robotize()
 				return 1
 			if("Mobile MMI")
-				H.MoMMIfy(1)
+				H.MoMMIfy()
 				return 1
 			if("AI","Clown")	//don't need bag preference stuff!
 				if(rank=="Clown") // Clowns DO need to breathe, though - N3X

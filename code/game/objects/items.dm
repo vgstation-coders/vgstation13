@@ -1192,7 +1192,7 @@ var/global/list/image/blood_overlays = list()
 			return
 
 	if(restraint_apply_sound)
-		playsound(get_turf(src), restraint_apply_sound, 30, 1, -2)
+		playsound(src, restraint_apply_sound, 30, 1, -2)
 	user.visible_message("<span class='danger'>[user] is trying to restrain \the [C] with \the [src]!</span>",
 						 "<span class='danger'>You try to restrain \the [C] with \the [src]!</span>")
 

@@ -208,7 +208,7 @@
 
 	L.visible_message("<span class='danger'>The reactive teleport system flings [L] clear of [attack_text]!</span>", "<span class='notice'>The reactive teleport system flings you clear of [attack_text].</span>")
 
-	playsound(get_turf(L), 'sound/effects/teleport.ogg', 30, 1)
+	playsound(L, 'sound/effects/teleport.ogg', 30, 1)
 
 	L.forceMove(picked)
 

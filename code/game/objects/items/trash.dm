@@ -124,6 +124,7 @@
 	icon_state = "kfc_bucket"
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
+	slot_flags = SLOT_HEAD
 
 /obj/item/trash/mannequin/cultify()
 	if(icon_state != "mannequin_cult_empty")

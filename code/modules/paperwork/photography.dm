@@ -32,7 +32,7 @@
 	var/icon/img		//Big photo image
 	var/scribble		//Scribble on the back.
 	var/blueprints = FALSE	//Does it include the blueprints?
-	var/info 			//Info on the camera about mobs or some shit 
+	var/info 			//Info on the camera about mobs or some shit
 
 	autoignition_temperature = 530 // Kelvin
 	fire_fuel = TRUE
@@ -215,7 +215,7 @@
 	if(isscrewdriver(I))
 		to_chat(user, "You [panelopen ? "close" : "open"] the panel on the side of \the [src].")
 		panelopen = !panelopen
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 
 	if(istype(I, /obj/item/stack/cable_coil))
 		if(!panelopen)
@@ -259,21 +259,9 @@
 				continue
 			atoms.Add(A)
 
-	var/list/sorted = list()
-	var/j
-	for(var/i = 1 to atoms.len)
-		var/atom/c = atoms[i]
-		for(j = sorted.len, j > 0, --j)
-			var/atom/c2 = sorted[j]
-			if(c2.plane < c.plane)
-				break
-			else if((c2.plane == c.plane) && (c2.layer <= c.layer))
-				break
-		sorted.Insert(j+1, c)
-
 	var/icon/res = get_base_photo_icon()
 
-	for(var/atom/A in sorted)
+	for(var/atom/A in plane_layer_sort(atoms))
 		var/icon/img = getFlatIcon(A,A.dir,0)
 		if(istype(A, /mob/living) && A:lying)
 			img.Turn(A:lying)
@@ -310,21 +298,9 @@
 			else
 				atoms.Add(A)
 
-	var/list/sorted = list()
-	var/j
-	for(var/i = 1 to atoms.len)
-		var/atom/c = atoms[i]
-		for(j = sorted.len, j > 0, --j)
-			var/atom/c2 = sorted[j]
-			if(c2.plane < c.plane)
-				break
-			else if((c2.plane == c.plane) && (c2.layer <= c.layer))
-				break
-		sorted.Insert(j+1, c)
-
 	var/icon/res = get_base_photo_icon()
 
-	for(var/atom/A in sorted)
+	for(var/atom/A in plane_layer_sort(atoms))
 		var/icon/img = getFlatIcon(A,A.dir,0)
 		if(istype(A, /mob/living) && A:lying)
 			img.Turn(A:lying)
@@ -588,7 +564,6 @@
 	P.pixel_y = selection.fields["pixel_y"]
 
 	P.show(usr)
-	to_chat(usr, P.info)
 	qdel(P)    //so 10 thousdand pictures items are not left in memory should an AI take them and then view them all.
 
 /obj/item/device/camera/silicon/proc/viewpictures(var/mob/user)

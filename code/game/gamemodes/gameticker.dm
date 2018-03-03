@@ -1,11 +1,5 @@
 var/datum/controller/gameticker/ticker
 
-#define GAME_STATE_PREGAME		1
-#define GAME_STATE_SETTING_UP	2
-#define GAME_STATE_PLAYING		3
-#define GAME_STATE_FINISHED		4
-
-
 /datum/controller/gameticker
 	var/remaining_time = 0
 	var/const/restart_timeout = 600
@@ -65,7 +59,16 @@ var/datum/controller/gameticker/ticker
 		"sound/music/dawsonschristian.ogg",
 		"sound/music/carmenmirandasghost.ogg",
 		))
-	login_music = fcopy_rsc(oursong)
+
+	if(SNOW_THEME)
+		var/path = "sound/music/xmas/"
+		var/list/filenames = flist(path)
+		for(var/filename in filenames)
+			if(copytext(filename, length(filename)) == "/")
+				filenames -= filename
+		login_music = file("[path][pick(filenames)]")
+	else
+		login_music = fcopy_rsc(oursong)
 
 	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`")
 

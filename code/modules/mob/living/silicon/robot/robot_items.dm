@@ -91,7 +91,7 @@
 	var/mode = 1
 
 /obj/item/weapon/pen/robopen/attack_self(mob/user as mob)
-	playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+	playsound(src, 'sound/effects/pop.ogg', 50, 0)
 	if (mode == 1)
 		mode = 2
 		to_chat(user, "Changed printing mode to 'Rename Paper'")
@@ -563,6 +563,12 @@
 		/obj/item/weapon/circuitboard/aiupload,
 		/obj/item/weapon/circuitboard/borgupload
 		)
+
+/obj/item/borg/fire_shield
+	name = "fire shield"
+	desc = "A shield that makes you immune to fire."
+	icon = 'icons/obj/decals.dmi'
+	icon_state = "fire"
 
 //Cyborg Instrument Synth. Remember to always play REMOVE KEBAB on malf rounds.
 /obj/item/device/instrument/instrument_synth

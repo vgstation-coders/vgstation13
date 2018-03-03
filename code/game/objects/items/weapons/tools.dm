@@ -341,7 +341,7 @@
 	if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && !src.welding)
 		O.reagents.trans_to(src, max_fuel)
 		to_chat(user, "<span class='notice'>Welder refueled</span>")
-		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		return
 	else if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && src.welding)
 		message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
@@ -404,6 +404,7 @@
 /obj/item/weapon/weldingtool/proc/setWelding(var/temp_welding)
 	//If we're turning it on
 	if(temp_welding > 0)
+		src.welding = 1
 		if (remove_fuel(1))
 			to_chat(usr, "<span class='notice'>\The [src] switches on.</span>")
 			src.force = 15

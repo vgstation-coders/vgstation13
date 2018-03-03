@@ -160,10 +160,10 @@
 		if(rails)
 			if(rails_secure)
 				to_chat(user, "You loosen the rail assembly within \the [src].")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			else
 				to_chat(user, "You tighten the rail assembly inside \the [src].")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			rails_secure = !rails_secure
 
 	else if(istype(W, /obj/item/stack/rods))

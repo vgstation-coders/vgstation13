@@ -98,7 +98,7 @@
 			else
 				user.visible_message("<span class='warning'>[user] found \himself unable to drop \the [src] after setting the timer on them!</span>")
 
-			playsound(get_turf(target), 'sound/weapons/c4armed.ogg', 60, 1)
+			playsound(target, 'sound/weapons/c4armed.ogg', 60, 1)
 			if(!iscarbon(user))
 				M.LAssailant = null
 			else

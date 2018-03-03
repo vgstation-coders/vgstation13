@@ -184,7 +184,7 @@
 		if(ismob(loc))
 			var/mob/M = loc
 			M.drop_from_inventory(src)
-		playsound(get_turf(src), 'sound/weapons/orb_activate.ogg', 50,1)
+		playsound(src, 'sound/weapons/orb_activate.ogg', 50,1)
 		flick("glow_stone_activate", src)
 		spawn(10)
 			new/mob/living/simple_animal/hostile/glow_orb(get_turf(src))
@@ -195,7 +195,7 @@
 	crit_failure = 1
 	spawn(1 SECONDS)
 		visible_message("<span class = 'warning>...and vibrate violently!</span>")
-	playsound(get_turf(src),'sound/weapons/inc_tone.ogg', 50, 1)
+	playsound(src,'sound/weapons/inc_tone.ogg', 50, 1)
 	spawn(2 SECONDS)
 		explosion(loc, 0, 1, 2, 3)
 		qdel(src)

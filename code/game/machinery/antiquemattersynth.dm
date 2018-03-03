@@ -153,7 +153,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 		nanomanager.update_uis(src)
 		new O(get_turf(src))
 	else
-		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
+		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 	spark(src, 10, FALSE)
 
 

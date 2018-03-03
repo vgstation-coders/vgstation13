@@ -161,7 +161,7 @@
 					if(T.organs["head"])
 						affecting = T.organs["head"]
 					affecting.take_damage(rand(1,7), 0)
-					playsound(get_turf(src), 'sound/items/eatfood.ogg', 50, 1)
+					playsound(src, 'sound/items/eatfood.ogg', 50, 1)
 					if(prob(25))
 						target.contract_disease(new/datum/disease/z_virus)
 					src.add_blood(src.target)

@@ -284,7 +284,7 @@
 			if(!T)
 				return
 			T.assume_air(air_contents)
-			playsound(get_turf(src), 'sound/effects/spray.ogg', 10, 1, -3)
+			playsound(src, 'sound/effects/spray.ogg', 10, 1, -3)
 
 			qdel(src)
 

@@ -54,7 +54,7 @@
 			if(istype(P, /obj/item/stack/cable_coil))
 				var/obj/item/stack/cable_coil/C = P
 				if(C.amount >= 5)
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					to_chat(user, "<span class='notice'>You start to add cables to the frame.</span>")
 					if(do_after(user, src, 20))
 						if(C && C.amount >= 5) // Check again
@@ -68,13 +68,13 @@
 					return
 				G.use(1)
 				to_chat(user, "<span class='notice'>You add the glass to the frame.</span>")
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 				new /obj/structure/displaycase_frame(src.loc)
 				qdel(src)
 				return
 			else
 				if(iswrench(P))
-					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+					playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 					to_chat(user, "<span class='notice'>You dismantle the frame.</span>")
 					drop_stack(/obj/item/stack/sheet/metal, get_turf(src), 5, user)
 					qdel(src)
@@ -87,7 +87,7 @@
 							user << "<span class='warning'>You can't let go of \the [B]!</span>"
 							return
 
-						playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+						playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 						to_chat(user, "<span class='notice'>You add the circuit board to the frame.</span>")
 						circuit = P
 						set_build_state(3)
@@ -111,7 +111,7 @@
 						to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
 				else
 					if(iswirecutter(P))
-						playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+						playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
 						to_chat(user, "<span class='notice'>You remove the cables.</span>")
 						set_build_state(1)
 						var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil( src.loc )
@@ -120,7 +120,7 @@
 		if(3)
 			if(!..())
 				if(iscrowbar(P))
-					playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
 					set_build_state(2)
 					circuit.forceMove(src.loc)
 					circuit = null
@@ -141,7 +141,7 @@
 								component_check = 0
 								break
 						if(component_check)
-							playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+							playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
 							for(var/obj/O in new_machine.component_parts)
 								returnToPool(O)
@@ -189,7 +189,7 @@
 							if(istype(P, /obj/item/weapon) || istype(P, /obj/item/stack))
 								for(var/I in req_components)
 									if(istype(P, text2path(I)) && (req_components[I] > 0))
-										playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+										playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 										if(istype(P, /obj/item/stack))
 											var/obj/item/stack/CP = P
 											if(CP.amount >= req_components[I])
@@ -426,8 +426,8 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/smes
 	name = "Circuit Board (SMES)"
-	desc = "A circuit board used to run a gas freezer."
-	build_path = "/obj/machinery/power/battery/smes"
+	desc = "A circuit board used to run a giant battery."
+	build_path = "/obj/machinery/power/battery/smes/pristine"
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=4;" + Tc_PROGRAMMING + "=4"
 	req_components = list(

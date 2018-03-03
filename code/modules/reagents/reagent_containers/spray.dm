@@ -107,7 +107,7 @@
 
 		returnToPool(D)
 
-	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
+	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
 //space cleaner
 /obj/item/weapon/reagent_containers/spray/cleaner
@@ -199,4 +199,4 @@
 
 			returnToPool(D)
 
-	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
+	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)

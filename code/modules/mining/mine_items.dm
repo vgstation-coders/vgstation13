@@ -450,7 +450,7 @@ proc/move_mining_shuttle()
 
 /obj/item/weapon/resonator/proc/CreateResonance(var/target, var/creator)
 	if(cooldown <= 0)
-		playsound(get_turf(src),'sound/effects/stealthoff.ogg',50,1)
+		playsound(src,'sound/effects/stealthoff.ogg',50,1)
 		var/obj/effect/resonance/R = new /obj/effect/resonance(get_turf(target))
 		R.creator = creator
 		cooldown = 1
@@ -696,7 +696,9 @@ proc/move_mining_shuttle()
 	if(istype(target, /mob/living) && proximity_flag)
 		if(istype(target, /mob/living/simple_animal))
 			var/mob/living/simple_animal/M = target
-
+			if(M.mob_property_flags & MOB_NO_LAZ)
+				to_chat(user, "<span class='warning'>\The [src] is incapable of reviving \the [M].</span>")
+				return
 			if(M.stat == DEAD)
 
 				M.faction = "lazarus \ref[user]"

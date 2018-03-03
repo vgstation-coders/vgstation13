@@ -12,11 +12,15 @@
 	var/last_tick //used to delay the powercheck
 	var/buildstage = 0
 
-	holomap = TRUE
-	auto_holomap = TRUE
+/obj/item/device/radio/intercom/supports_holomap()
+	return TRUE
 
 /obj/item/device/radio/intercom/universe/New()
 	return ..()
+
+/obj/item/device/radio/intercom/initialize()
+	..()
+	add_self_to_holomap()
 
 /obj/item/device/radio/intercom/New(turf/loc, var/ndir = 0, var/building = 3)
 	..()
@@ -79,7 +83,7 @@
 		if(3)
 			if(iswirecutter(W) && b_stat && wires.IsAllCut())
 				to_chat(user, "<span class='notice'>You cut out the intercoms wiring and disconnect its electronics.</span>")
-				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
 				if(do_after(user, src, 10))
 					new /obj/item/stack/cable_coil(get_turf(src),5)
 					on = 0
@@ -92,7 +96,7 @@
 				return ..()
 		if(2)
 			if(isscrewdriver(W))
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 				if(do_after(user, src, 10))
 					update_icon()
 					on = 1
@@ -117,7 +121,7 @@
 				return 1
 			if(iscrowbar(W))
 				to_chat(user, "<span class='notice'>You begin removing the electronics...</span>")
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 				if(do_after(user, src, 10))
 					new /obj/item/weapon/intercom_electronics(get_turf(src))
 					to_chat(user, "<span class='notice'>The circuitboard pops out!</span>")
@@ -125,7 +129,7 @@
 				return 1
 		if(0)
 			if(istype(W,/obj/item/weapon/intercom_electronics))
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 				if(do_after(user, src, 10))
 					qdel(W)
 					to_chat(user, "<span class='notice'>You insert \the [W] into \the [src]!</span>")
@@ -133,7 +137,7 @@
 				return 1
 			if(iswelder(W))
 				var/obj/item/weapon/weldingtool/WT=W
-				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+				playsound(src, 'sound/items/Welder.ogg', 50, 1)
 				if(!WT.remove_fuel(3, user))
 					to_chat(user, "<span class='warning'>You're out of welding fuel.</span>")
 					return 1

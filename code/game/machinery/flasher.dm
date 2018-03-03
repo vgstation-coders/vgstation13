@@ -77,7 +77,7 @@ var/list/obj/machinery/flasher/flashers = list()
 	if ((src.disable) || (src.last_flash && world.time < src.last_flash + 150))
 		return
 
-	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
+	playsound(src, 'sound/weapons/flash.ogg', 100, 1)
 	src.last_flash = world.time
 	use_power(1000)
 	if(harm_labeled >= min_harm_label)
