@@ -156,7 +156,7 @@
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
-		if(istype(target.w_uniform,/obj/item/clothing/under) && (target.wear_suit.body_parts_covered & UPPER_TORSO) && prob(50))
+		if(istype(target.w_uniform,/obj/item/clothing/under) && (target.w_uniform.body_parts_covered & UPPER_TORSO) && prob(50))
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
