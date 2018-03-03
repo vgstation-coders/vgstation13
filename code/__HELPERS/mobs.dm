@@ -283,3 +283,12 @@ proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var
 			L.Remove(organ)
 
 	return L
+
+/proc/adjacent_atoms(atom/center)
+	var/list/L = list()
+
+	for(var/atom/A in range(1, center))
+		if(center.Adjacent(A))
+			L.Add(A)
+
+	return L
