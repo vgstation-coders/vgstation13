@@ -195,11 +195,30 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/before_consume(mob/target)
 	if(transformed)
-		to_chat(target, "<span class='danger'>Sweet Jesus! That's not [name]!</span>")
+		//Reference to that winnie pooh comic
+		to_chat(target, "<span class='danger'>Sweet Jesus[target.hallucinating() ? ", Pooh" : ""]! That's not [name]!</span>")
 		revert()
 
 		spawn(10)
 			to_chat(target, "<span class='danger'>You're eating [name]!</span>")
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/preattack(atom/movable/target, mob/user, proximity_flag)
+	if(!proximity_flag)
+		return
+
+	//Forbid creation of custom foods with mimic meat
+	if(transformed)
+		if(istype(target, /obj/item/trash/plate) || istype(target, /obj/item/weapon/reagent_containers/food/snacks))
+			to_chat(user, "<span class='danger'>\The [name] shapeshifts as it touches \the [target]!</span>")
+			revert()
+
+	return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/forceMove(atom/destination)
+	if(transformed && istype(destination, /obj/machinery/cooking))
+		revert()
+
+	return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/proc/shapeshift(atom/atom_to_copy = null)
 	if(!atom_to_copy)
