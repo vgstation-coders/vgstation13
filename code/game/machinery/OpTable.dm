@@ -186,7 +186,7 @@
 		pickable_items.Add(I)
 
 	if(!pickable_items.len)
-		user.visible_message("<span class='notice'>\The [user] tries to think of a way to screw \the [victum] up without any tools nearby, but fails miserably.</span>")
+		user.visible_message("<span class='notice'>\The [user] tries to think of a way to screw \the [victim] up without any tools nearby, but fails miserably.</span>")
 		return
 
 	var/obj/item/tool = pick(pickable_items)
