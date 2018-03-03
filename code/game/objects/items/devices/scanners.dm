@@ -5,6 +5,7 @@ HEALTH ANALYZER
 GAS ANALYZER
 MASS SPECTROMETER
 REAGENT SCANNER
+BREATHALYZER
 */
 
 /obj/item/device/t_scanner
@@ -495,3 +496,69 @@ Subject's pulse: ??? BPM"})
 	icon_state = "adv_spectrometer"
 	details = 1
 	origin_tech = Tc_MAGNETS + "=4;" + Tc_BIOTECH + "=2"
+
+/obj/item/device/breathalyzer
+	name = "breathalyzer"
+	icon = 'icons/obj/breathalyzer.dmi'
+	icon_state = "idle"
+	item_state = "analyzer"
+	desc = "A hand-held scanner that is able to determine the amount of ethanol in the breath of the subject."
+	flags = FPRINT
+	siemens_coefficient = 1
+	slot_flags = SLOT_BELT
+	throwforce = 3
+	w_class = W_CLASS_TINY
+	throw_speed = 5
+	starting_materials = list(MAT_IRON = 50)
+	w_type = RECYK_ELECTRONIC
+	melt_temperature = MELTPOINT_PLASTIC
+	origin_tech = Tc_ENGINEERING + "=1;" + Tc_BIOTECH + "=1"
+
+	var/legal_limit
+
+/obj/item/device/breathalyzer/New()
+	var/datum/reagent/ethanol/E = /datum/reagent/ethanol
+	legal_limit = initial(E.slur_start) //inb4 shitcurity arrests people for being over the legal limit
+	..()
+
+/obj/item/device/breathalyzer/attack_self(mob/user)
+	var/I = input("Set the legal limit of ethanol.", "Legal Limit", legal_limit) as null|num
+
+	if(I)
+		legal_limit = max(0, I)
+		to_chat(user, "<span class='notice'>You successfully set the legal limit of the breathalyzer.</span>")
+
+/obj/item/device/breathalyzer/attack(mob/living/M, mob/living/user)
+	if(!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return
+
+	if(!ishuman(M))
+		return
+
+	var/mob/living/carbon/human/C = M
+
+	if(!C.check_body_part_coverage(MOUTH))
+		to_chat(src, "<span class='notice'><B>Remove their [C.get_body_part_coverage(MOUTH)] before using the breathalyzer.</B></span>")
+		return
+
+	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
+
+	var/alcohol = 0
+
+	for(var/datum/reagent/ethanol/E in C.reagents.reagent_list)
+		alcohol += E.volume
+
+	var/dat = "<span class='notice'>The breathalyzer reports that [C] has [alcohol] units of ethanol in their blood.</span>"
+
+	if(alcohol >= legal_limit)
+		dat += "<br><span class='warning'>This is above the legal limit of [legal_limit]!</span>"
+		flick("DRUNK", src)
+	else
+		flick("SOBER", src)
+
+	to_chat(user, dat)
+
+/obj/item/device/breathalyzer/examine(mob/user)
+	..()
+	to_chat(user, "<span class='notice'>Its legal limit is set to [legal_limit] units.</span>")
