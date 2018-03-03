@@ -6406,8 +6406,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "It's water mixed with salt. It's probably not healthy to drink."
 	reagent_state = LIQUID
 	color = "#FFFFFF" //rgb: 255, 255, 255
-	density = 1.5
-	specheatcap = 4.184
+	density = 1.122
+	specheatcap = 6.9036
 	
 /datum/reagent/saltwater/on_mob_life(var/mob/living/M)
 
@@ -6417,7 +6417,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(ishuman(M) && prob(20))
 		var/mob/living/carbon/human/H = M
 		H.vomit()
-		M.adjustToxLoss(4)
+		M.adjustToxLoss(2 * REM)
+	
 	
 	
 	
