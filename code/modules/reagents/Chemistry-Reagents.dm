@@ -1202,6 +1202,8 @@
 		return 1
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
+		if((H.species && H.species.flags & NO_BREATHE) || M_NO_BREATH in H.mutations)
+			return
 		for(var/datum/organ/internal/lungs/L in H.internal_organs)
 			L.take_damage(REM, 1)
 
