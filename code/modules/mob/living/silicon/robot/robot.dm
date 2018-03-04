@@ -166,7 +166,7 @@
 			var/datum/robot_component/C = components[V]
 			var/P = text2path("[C.external_type][component_extension]")
 			var/obj/item/robot_parts/robot_component/I = new P
-			C.installed = 1
+			C.installed = COMPONENT_INSTALLED
 			C.wrapped = I
 			C.vulnerability = I.vulnerability
 
