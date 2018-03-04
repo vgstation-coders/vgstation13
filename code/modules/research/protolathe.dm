@@ -29,6 +29,7 @@ it creates. All the menus and other manipulation commands are in the R&D console
 		"Data" = list(),
 		"Engineering" = list(),
 		"Medical" = list(),
+		"Surgery" = list(),
 		"Mining" = list(),
 		"Robotics" = list(),
 		"Weapons" = list(),
