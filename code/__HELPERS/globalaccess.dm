@@ -1357,8 +1357,6 @@
 			return global.trade_shuttle;
 		if("vox_shuttle")
 			return global.vox_shuttle;
-		//if("voxresearch_shuttle")
-		//	return global.voxresearch_shuttle;
 		if("response_team_members")
 			return global.response_team_members;
 		if("sent_strike_teams")
@@ -3272,8 +3270,6 @@
 			global.trade_shuttle=newval
 		if("vox_shuttle")
 			global.vox_shuttle=newval
-		//if("voxresearch_shuttle")
-		//	global.voxresearch_shuttle=newval
 		if("response_team_members")
 			global.response_team_members=newval
 		if("sent_strike_teams")
