@@ -45,7 +45,7 @@
 		fold()
 		to_chat(L, "You flip \the [src] closed.")
 		if(bug)
-			if(bug == (/mob/living/simple_animal/hostile/viscerator/butterfly || /mob/living/simple_animal/hostile/viscerator/butterfly/magic))
+			if((bug == /mob/living/simple_animal/hostile/viscerator/butterfly) || (bug == /mob/living/simple_animal/hostile/viscerator/butterfly/magic))
 				var/mob/living/simple_animal/hostile/viscerator/butterfly/X = new bug(get_turf(src))
 				X.autodie = TRUE
 				if(istype(L))
