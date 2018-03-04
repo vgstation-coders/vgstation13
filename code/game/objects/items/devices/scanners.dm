@@ -538,7 +538,7 @@ Subject's pulse: ??? BPM"})
 
 	var/mob/living/carbon/human/C = M
 
-	if(!C.check_body_part_coverage(MOUTH))
+	if(C.check_body_part_coverage(MOUTH))
 		to_chat(src, "<span class='notice'><B>Remove their [C.get_body_part_coverage(MOUTH)] before using the breathalyzer.</B></span>")
 		return
 
