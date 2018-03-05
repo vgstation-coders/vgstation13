@@ -23,7 +23,7 @@
 
 // Made by FalseIncarnate on Paradise
 // Ported to /vg/ by Shifty and jakmak(s)
-// Fish Bowl construction moved to code/game/machinery/constructable_frame.dm (05032018-Oculus)
+// Fish Bowl construction moved to code/game/machinery/constructable_frame.dm
 
 /obj/machinery/fishtank
 	name = "placeholder tank"

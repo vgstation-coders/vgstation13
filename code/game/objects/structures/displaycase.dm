@@ -1,4 +1,4 @@
-//Construction handled in code/game/machinery/constructable_frame.dm (05032018-Oculus)
+//Construction handled in code/game/machinery/constructable_frame.dm
 
 /obj/structure/displaycase
 	name = "display case"
