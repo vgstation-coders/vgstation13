@@ -45,15 +45,12 @@
 		fold()
 		to_chat(L, "You flip \the [src] closed.")
 		if(bug)
-			if(bug == (/mob/living/simple_animal/hostile/viscerator/butterfly || /mob/living/simple_animal/hostile/viscerator/butterfly/magic))
-				var/mob/living/simple_animal/hostile/viscerator/butterfly/X = new bug(get_turf(src))
-				X.autodie = TRUE
-				if(istype(L))
-					handle_faction(X,L)
-			else //In case someone decides to make a knife spawn something other than a viscerator.
-				var/mob/living/simple_animal/X = new bug(get_turf(src))
-				if(istype(L))
-					handle_faction(X,L)
+			var/mob/living/simple_animal/X = new bug(get_turf(src))
+			if(istype(L))
+				handle_faction(X,L)
+			if(istype(X, /mob/living/simple_animal/hostile/viscerator/butterfly))
+				var/mob/living/simple_animal/hostile/viscerator/butterfly/B = X
+				B.autodie = TRUE
 			bug = null
 			counting = world.time
 	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
