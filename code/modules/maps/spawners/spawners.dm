@@ -207,7 +207,6 @@
 		/obj/machinery/vending/sovietsoda,
 		/obj/structure/AIcore,
 		/obj/structure/piano,
-		/obj/structure/displaycase_frame,
 		/obj/structure/particle_accelerator/fuel_chamber,
 		/obj/structure/reagent_dispensers/fueltank,
 		/obj/structure/reagent_dispensers/water_cooler,

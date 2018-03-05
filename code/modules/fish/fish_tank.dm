@@ -23,7 +23,7 @@
 
 // Made by FalseIncarnate on Paradise
 // Ported to /vg/ by Shifty and jakmak(s)
-
+// Fish Bowl construction moved to code/game/machinery/constructable_frame.dm (05032018-Oculus)
 
 /obj/machinery/fishtank
 	name = "placeholder tank"
@@ -740,16 +740,6 @@
 		user.visible_message("<span class='danger'>\The [src] has been attacked by \the [user] with \the [O]!</span>")
 		hit(O, user)
 	return TRUE
-
-/* tank construction */
-
-/obj/structure/displaycase_frame/attackby(var/obj/item/weapon/F, var/mob/user) // FISH BOWL
-	if (iswelder(F))
-		to_chat(user, "<span class='notice'>You use the machine frame as a vice and shape the glass with the welder into a fish bowl.</span>")
-		getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
-		new /obj/machinery/fishtank/bowl(get_turf(src))
-		qdel(src)
-		return TRUE
 
 //Conduction plate for electric eels
 
