@@ -256,8 +256,10 @@ proc/get_space_area()
 //Yes, this is the fastest known way to do it.
 #define get_turf(A) (get_step(A, 0))
 
-//HARDCORE MODE STUFF (mainly hunger)
+//Helper to if two things are in the same z-level
+#define	atoms_share_level(A, B) (A && B && A.z == B.z)
 
+//HARDCORE MODE STUFF (mainly hunger)
 #define hardcore_mode_on (hardcore_mode)//((ticker) && (ticker.hardcore_mode))
 #define eligible_for_hardcore_mode(M) (M.ckey && M.client)
 
@@ -273,4 +275,3 @@ proc/get_space_area()
 #define is_area_in_map(A) (A.x)
 
 #define SNOW_THEME (map.snow_theme || Holiday == "Christmas Eve" || Holiday == "Christmas")
-
