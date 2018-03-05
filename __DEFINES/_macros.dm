@@ -257,7 +257,7 @@ proc/get_space_area()
 #define get_turf(A) (get_step(A, 0))
 
 //Helper to if two things are in the same z-level
-#define	atoms_share_level(A, B) (A && B && A.z == B.z)
+#define atoms_share_level(A, B) (A && B && A.z == B.z)
 
 //HARDCORE MODE STUFF (mainly hunger)
 #define hardcore_mode_on (hardcore_mode)//((ticker) && (ticker.hardcore_mode))
