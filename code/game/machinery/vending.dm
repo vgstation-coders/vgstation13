@@ -508,37 +508,42 @@ var/global/num_vending_terminals = 1
 			src.updateUsrDialog()
 			return
 		//attempt to connect to a new db, and if that doesn't work then fail
-		if(linked_account)
-			if(account_first_linked)
-				if(!user.Adjacent(src))
-					return 0
-				var/account_try = input(user,"Please enter the already connected account number","Security measure") as num
-				if(!user.Adjacent(src))
-					return 0
-				if(account_try != linked_account.account_number)
-					to_chat(user, "[bicon(src)]<span class='warning'>Access denied. Your input doesn't match the vending machine's connected account.</span>")
-					return
-			if(!user.Adjacent(src))
-				return 0
-			var/new_account = input(user,"Please enter the account to connect to.","New account link") as num
-			if(!user.Adjacent(src))
-				return 0
-			for(var/datum/money_account/D in all_money_accounts)
-				if(D.account_number == new_account)
-					linked_account = D
-					if(!account_first_linked)
-						account_first_linked = 1
-					playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
-					to_chat(user, "[bicon(src)]<span class='notice'>New connection established: [D.owner_name].</span>")
-					return
-			to_chat(user, "[bicon(src)]<span class='warning'>The specified account doesn't exist.</span>")
+		if(!linked_account)
+			connect_to_user_account(user)
+			return
 
-		else
-			to_chat(usr, "[bicon(src)]<span class='warning'>Unable to connect to linked account. Please contact a god.</span>")
+		if(account_first_linked)
+			if(!user.Adjacent(src))
+				return 0
+			var/account_try = input(user,"Please enter the already connected account number","Security measure") as num
+			if(!user.Adjacent(src))
+				return 0
+			if(account_try != linked_account.account_number)
+				to_chat(user, "[bicon(src)]<span class='warning'>Access denied. Your input doesn't match the vending machine's connected account.</span>")
+				return 0
+		if(!user.Adjacent(src))
+			return 0
+		connect_to_user_account(user)
+		return
+
 	else if(istype(W, /obj/item/) && inserting_mode)
 		if(user.drop_item(W, src))
 			insert_item(W)
 
+/obj/machinery/vending/proc/connect_to_user_account(mob/user)
+	var/new_account = input(user,"Please enter the account to connect to.","New account link") as num
+	if(!user.Adjacent(src) || !new_account)
+		return FALSE
+	for(var/datum/money_account/D in all_money_accounts)
+		if(D.account_number == new_account)
+			linked_account = D
+			if(!account_first_linked)
+				account_first_linked = 1
+			playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
+			to_chat(user, "[bicon(src)]<span class='notice'>New connection established: [D.owner_name].</span>")
+			return TRUE
+	to_chat(user, "[bicon(src)]<span class='warning'>The specified account doesn't exist.</span>")
+	return FALSE
 
 /obj/machinery/vending/proc/insert_item(var/obj/item/item)
 	for(var/datum/data/vending_product/VP in product_records)
