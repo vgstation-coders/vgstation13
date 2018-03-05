@@ -94,6 +94,7 @@
 	if(world.timeofday >= upgrade_finished && upgrade_finished != -1)
 		if(istype(upgrading, /obj/item/weapon/cell))
 			if(occupant:cell)
+				occupant:cell.updateicon()
 				occupant:cell.forceMove(get_turf(src))
 			upgrade_holder -= upgrading
 			upgrading:forceMove(occupant)
@@ -133,6 +134,9 @@
 		var/obj/removed = input(user, "Choose an item to remove.",upgrade_holder[1]) as null|anything in upgrade_holder
 		if(!removed || upgrading)
 			return
+		var/obj/item/weapon/cell/rcell = removed
+		if(istype(rcell))
+			rcell.updateicon()
 		user.put_in_hands(removed)
 		if(removed.loc == src)
 			removed.forceMove(get_turf(src))
