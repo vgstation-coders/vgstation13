@@ -981,7 +981,6 @@
 #include "code\game\shuttles\taxi.dm"
 #include "code\game\shuttles\trade.dm"
 #include "code\game\shuttles\vox.dm"
-#include "code\game\shuttles\voxresearch_shuttle.dm"
 #include "code\game\striketeams\emergency_response_team.dm"
 #include "code\game\striketeams\nanotrasen_deathsquad.dm"
 #include "code\game\striketeams\striketeam_datums.dm"
