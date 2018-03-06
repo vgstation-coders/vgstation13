@@ -187,7 +187,7 @@
 "dE" = (/obj/structure/bed,/obj/item/weapon/bedsheet/green,/obj/machinery/light/small{dir = 4},/turf/simulated/floor/carpet,/area/vault/research)
 "dF" = (/obj/machinery/door/window/plasma,/turf/simulated/floor/wood,/area/vault/research)
 "dG" = (/turf/simulated/floor/carpet,/area/vault/research)
-"dH" = (/obj/item/weapon/stool,/obj/effect/landmark/corpse/commander,/turf/simulated/floor/carpet,/area/vault/research)
+"dH" = (/obj/item/weapon/stool,/obj/effect/landmark/corpse/commander/noallaccess,/turf/simulated/floor/carpet,/area/vault/research)
 "dI" = (/obj/structure/table/woodentable,/turf/simulated/floor/carpet,/area/vault/research)
 "dJ" = (/obj/machinery/suit_storage_unit/security,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
 "dK" = (/obj/machinery/suit_storage_unit/security,/obj/machinery/light,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
