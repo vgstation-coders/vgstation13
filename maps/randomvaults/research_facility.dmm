@@ -13,20 +13,20 @@
 "am" = (/obj/machinery/power/am_control_unit,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/research)
 "an" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; pixel_y = 0},/turf/simulated/floor/plating,/area/vault/research)
 "ao" = (/turf/simulated/floor/plating,/area/vault/research)
-"ap" = (/obj/machinery/vending/engivend,/turf/simulated/floor/plating,/area/vault/research)
-"aq" = (/obj/abstract/map/spawner/mobs/medivault,/turf/simulated/floor/plating,/area/vault/research)
-"ar" = (/obj/abstract/map/spawner/misc/medivault,/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor/plating,/area/vault/research)
-"as" = (/obj/abstract/map/spawner/mobs/medivault,/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/plating,/area/vault/research)
-"at" = (/obj/item/toy/gasha/clown,/obj/machinery/power/apc/frame/research_vault{pixel_x = 24},/turf/simulated/floor/plating,/area/vault/research)
-"au" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor/plating,/area/vault/research)
-"av" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_y = 0},/turf/simulated/floor/plating,/area/vault/research)
-"aw" = (/obj/abstract/map/spawner/mobs/medivault,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_y = 0},/turf/simulated/floor/plating,/area/vault/research)
-"ax" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"; tag = ""},/turf/simulated/floor/plating,/area/vault/research)
-"ay" = (/obj/abstract/map/spawner/mobs/medivault,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/research)
-"az" = (/obj/item/toy/syndicateballoon,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/research)
-"aA" = (/obj/machinery/power/port_gen/pacman/super,/obj/structure/cable,/turf/simulated/floor/plating,/area/vault/research)
-"aB" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor/plating,/area/vault/research)
-"aC" = (/obj/machinery/vending/tool,/turf/simulated/floor/plating,/area/vault/research)
+"ap" = (/obj/abstract/map/spawner/mobs/medivault,/turf/simulated/floor/plating,/area/vault/research)
+"aq" = (/obj/abstract/map/spawner/misc/medivault,/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor/plating,/area/vault/research)
+"ar" = (/obj/abstract/map/spawner/mobs/medivault,/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/plating,/area/vault/research)
+"as" = (/obj/item/toy/gasha/clown,/obj/machinery/power/apc/frame/research_vault{dir = 4; pixel_x = 24},/turf/simulated/floor/plating,/area/vault/research)
+"at" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor/plating,/area/vault/research)
+"au" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_y = 0},/turf/simulated/floor/plating,/area/vault/research)
+"av" = (/obj/abstract/map/spawner/mobs/medivault,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_y = 0},/turf/simulated/floor/plating,/area/vault/research)
+"aw" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"; tag = ""},/turf/simulated/floor/plating,/area/vault/research)
+"ax" = (/obj/abstract/map/spawner/mobs/medivault,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/research)
+"ay" = (/obj/item/toy/syndicateballoon,/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/research)
+"az" = (/obj/machinery/power/port_gen/pacman/super,/obj/structure/cable,/turf/simulated/floor/plating,/area/vault/research)
+"aA" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor/plating,/area/vault/research)
+"aB" = (/obj/machinery/vending/tool,/turf/simulated/floor/plating,/area/vault/research)
+"aC" = (/obj/machinery/vending/engivend,/turf/simulated/floor/plating,/area/vault/research)
 "aD" = (/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor/plating,/area/vault/research)
 "aE" = (/obj/machinery/vending/wallmed1{pixel_y = 0},/turf/simulated/wall/r_wall,/area/vault/research)
 "aF" = (/obj/machinery/light{dir = 8},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor{icon_state = "dark vault full"},/area/vault/research)
@@ -164,78 +164,85 @@
 "dh" = (/turf/simulated/floor{icon_state = "red"; dir = 5},/area/vault/research)
 "di" = (/obj/machinery/door/airlock/security{name = "Armory"; req_access = null; req_access_txt = "3"},/turf/simulated/floor,/area/vault/research)
 "dj" = (/obj/structure/closet/secure_closet/security,/obj/machinery/light{dir = 4},/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
-"dk" = (/obj/machinery/door/airlock/glass_science,/turf/simulated/floor/wood,/area/vault/research)
-"dl" = (/obj/structure/mirror,/turf/simulated/wall/r_wall,/area/vault/research)
-"dm" = (/obj/machinery/light/small{dir = 8},/turf/simulated/floor,/area/vault/research)
-"dn" = (/obj/structure/sign/biohazard,/turf/simulated/wall/r_wall,/area/vault/research)
-"do" = (/turf/simulated/floor{icon_state = "red"; dir = 4},/area/vault/research)
-"dp" = (/obj/structure/table,/obj/item/weapon/storage/lockbox/loyalty,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
-"dq" = (/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/carpet,/area/vault/research)
-"dr" = (/obj/effect/landmark/corpse/doctor,/turf/simulated/floor/carpet,/area/vault/research)
-"ds" = (/obj/structure/closet/cabinet/medivault,/turf/simulated/floor/carpet,/area/vault/research)
-"dt" = (/obj/structure/rack,/obj/item/clothing/suit/bio_suit/virology,/obj/item/clothing/head/bio_hood/virology,/turf/simulated/floor,/area/vault/research)
-"du" = (/obj/structure/flora/pottedplant,/turf/simulated/floor,/area/vault/research)
-"dv" = (/obj/machinery/light,/turf/simulated/floor,/area/vault/research)
-"dw" = (/obj/effect/landmark/corpse/engineer,/turf/simulated/floor,/area/vault/research)
-"dx" = (/obj/structure/flora/pottedplant,/turf/simulated/floor{icon_state = "red"; dir = 6},/area/vault/research)
-"dy" = (/obj/abstract/map/spawner/misc/medivault,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
-"dz" = (/obj/item/weapon/storage/box/emps,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
-"dA" = (/obj/machinery/door/airlock/maintenance,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
-"dB" = (/obj/machinery/door/airlock/research,/turf/simulated/floor/carpet,/area/vault/research)
-"dC" = (/obj/abstract/map/spawner/mobs/medivault,/turf/simulated/floor/carpet,/area/vault/research)
-"dD" = (/obj/item/weapon/storage/pill_bottle/dice,/turf/simulated/floor/carpet,/area/vault/research)
-"dE" = (/obj/structure/bed,/obj/item/weapon/bedsheet/green,/obj/machinery/light/small{dir = 4},/turf/simulated/floor/carpet,/area/vault/research)
-"dF" = (/obj/machinery/door/window/plasma,/turf/simulated/floor/wood,/area/vault/research)
-"dG" = (/turf/simulated/floor/carpet,/area/vault/research)
-"dH" = (/obj/item/weapon/stool,/obj/effect/landmark/corpse/commander,/turf/simulated/floor/carpet,/area/vault/research)
-"dI" = (/obj/structure/table/woodentable,/turf/simulated/floor/carpet,/area/vault/research)
-"dJ" = (/obj/machinery/suit_storage_unit/security,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
-"dK" = (/obj/machinery/suit_storage_unit/security,/obj/machinery/light,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
-"dL" = (/obj/machinery/light{dir = 8},/turf/simulated/floor/wood,/area/vault/research)
-"dM" = (/obj/structure/table/woodentable,/obj/item/weapon/phone,/turf/simulated/floor/carpet,/area/vault/research)
-"dN" = (/turf/simulated/floor/wood{broken = 1; icon_state = "wood-broken3"},/area/vault/research)
-"dO" = (/obj/structure/rack,/obj/item/clothing/suit/space/ancient,/obj/item/clothing/head/helmet/space/ancient,/obj/effect/decal/cleanable/cobweb,/obj/machinery/light/small{dir = 1},/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/research)
-"dP" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/research)
-"dQ" = (/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor,/area/vault/research)
-"dR" = (/obj/machinery/light/small{dir = 1},/obj/structure/sink{dir = 4; pixel_x = 11},/obj/structure/mirror{pixel_x = 30},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/research)
-"dS" = (/obj/item/weapon/storage/toolbox/syndicate,/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/carpet,/area/vault/research)
-"dT" = (/obj/effect/decal/cleanable/blood,/turf/simulated/floor/carpet,/area/vault/research)
-"dU" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/wood,/area/vault/research)
-"dV" = (/obj/machinery/door/airlock/external,/turf/simulated/floor,/area/vault/research)
-"dW" = (/obj/item/weapon/soap/nanotrasen,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/research)
-"dX" = (/obj/machinery/door/airlock/maintenance,/obj/structure/window/barricade/full/block,/turf/simulated/floor/plating,/area/vault/research)
-"dY" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor/plating,/area/vault/research)
-"dZ" = (/obj/item/clothing/under/rank/centcom/officer,/obj/item/clothing/head/beret/centcom/officer,/turf/simulated/floor/carpet,/area/vault/research)
-"ea" = (/obj/abstract/map/spawner/misc/medivault,/turf/simulated/floor/carpet,/area/vault/research)
-"eb" = (/obj/structure/flora/pottedplant,/obj/machinery/light,/turf/simulated/floor/wood,/area/vault/research)
-"ec" = (/turf/simulated/floor{tag = "icon-warning"; icon_state = "warning"},/area/vault/research)
-"ed" = (/obj/structure/toilet{tag = "icon-toilet00 (NORTH)"; icon_state = "toilet00"; dir = 1},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/research)
-"ee" = (/obj/machinery/door/airlock/external,/obj/docking_port/destination/vault/research{dir = 2},/turf/simulated/floor/plating,/area/vault/research)
+"dk" = (/obj/item/clothing/suit/space/ancient,/obj/effect/landmark/corpse/civilian,/obj/item/weapon/gun/projectile/pistol/empty,/turf/simulated/floor/plating,/area/vault/research)
+"dl" = (/obj/machinery/door/airlock/glass_science,/turf/simulated/floor/wood,/area/vault/research)
+"dm" = (/obj/structure/mirror,/turf/simulated/wall/r_wall,/area/vault/research)
+"dn" = (/obj/machinery/light/small{dir = 8},/turf/simulated/floor,/area/vault/research)
+"do" = (/obj/structure/sign/biohazard,/turf/simulated/wall/r_wall,/area/vault/research)
+"dp" = (/obj/item/ammo_casing/c9mm/empty,/turf/simulated/floor,/area/vault/research)
+"dq" = (/turf/simulated/floor{icon_state = "red"; dir = 4},/area/vault/research)
+"dr" = (/obj/structure/table,/obj/item/weapon/storage/lockbox/loyalty,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
+"ds" = (/obj/item/ammo_storage/magazine/mc9mm/empty,/turf/simulated/floor/plating,/area/vault/research)
+"dt" = (/obj/item/ammo_casing/c9mm/empty,/turf/simulated/floor/plating,/area/vault/research)
+"du" = (/obj/structure/reagent_dispensers/watertank,/turf/simulated/floor/plating,/area/vault/research)
+"dv" = (/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/carpet,/area/vault/research)
+"dw" = (/obj/effect/landmark/corpse/doctor,/turf/simulated/floor/carpet,/area/vault/research)
+"dx" = (/obj/structure/closet/cabinet/medivault,/turf/simulated/floor/carpet,/area/vault/research)
+"dy" = (/obj/structure/rack,/obj/item/clothing/suit/bio_suit/virology,/obj/item/clothing/head/bio_hood/virology,/turf/simulated/floor,/area/vault/research)
+"dz" = (/obj/structure/flora/pottedplant,/turf/simulated/floor,/area/vault/research)
+"dA" = (/obj/machinery/light,/obj/item/ammo_casing/c9mm/empty,/turf/simulated/floor,/area/vault/research)
+"dB" = (/obj/effect/landmark/corpse/engineer,/turf/simulated/floor,/area/vault/research)
+"dC" = (/obj/structure/flora/pottedplant,/turf/simulated/floor{icon_state = "red"; dir = 6},/area/vault/research)
+"dD" = (/obj/abstract/map/spawner/misc/medivault,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
+"dE" = (/obj/item/weapon/storage/box/emps,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
+"dF" = (/obj/machinery/door/airlock/maintenance,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
+"dG" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor/plating,/area/vault/research)
+"dH" = (/obj/machinery/door/airlock/research,/turf/simulated/floor/carpet,/area/vault/research)
+"dI" = (/obj/abstract/map/spawner/mobs/medivault,/turf/simulated/floor/carpet,/area/vault/research)
+"dJ" = (/obj/item/weapon/storage/pill_bottle/dice,/turf/simulated/floor/carpet,/area/vault/research)
+"dK" = (/obj/structure/bed,/obj/item/weapon/bedsheet/green,/obj/machinery/light/small{dir = 4},/turf/simulated/floor/carpet,/area/vault/research)
+"dL" = (/obj/machinery/door/window/plasma,/turf/simulated/floor/wood,/area/vault/research)
+"dM" = (/turf/simulated/floor/carpet,/area/vault/research)
+"dN" = (/obj/item/weapon/stool,/turf/simulated/floor/carpet,/area/vault/research)
+"dO" = (/obj/structure/table/woodentable,/turf/simulated/floor/carpet,/area/vault/research)
+"dP" = (/obj/item/ammo_casing/c9mm/empty,/turf/simulated/floor/wood,/area/vault/research)
+"dQ" = (/obj/machinery/suit_storage_unit/security,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
+"dR" = (/obj/machinery/suit_storage_unit/security,/obj/machinery/light,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
+"dS" = (/obj/structure/rack,/obj/abstract/map/spawner/maint,/obj/abstract/map/spawner/maint,/turf/simulated/floor/plating,/area/vault/research)
+"dT" = (/obj/machinery/light{dir = 8},/turf/simulated/floor/wood,/area/vault/research)
+"dU" = (/obj/structure/table/woodentable,/obj/item/weapon/phone,/turf/simulated/floor/carpet,/area/vault/research)
+"dV" = (/obj/item/ammo_casing/c9mm/empty,/turf/simulated/floor/wood{broken = 1; icon_state = "wood-broken3"},/area/vault/research)
+"dW" = (/obj/structure/rack,/obj/item/clothing/head/helmet/space/ancient,/obj/effect/decal/cleanable/cobweb,/obj/machinery/light/small{dir = 1},/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/research)
+"dX" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/research)
+"dY" = (/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor,/area/vault/research)
+"dZ" = (/obj/machinery/light/small{dir = 1},/obj/structure/sink{dir = 4; pixel_x = 11},/obj/structure/mirror{pixel_x = 30},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/research)
+"ea" = (/obj/item/weapon/storage/toolbox/syndicate,/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/carpet,/area/vault/research)
+"eb" = (/obj/effect/decal/cleanable/blood,/turf/simulated/floor/carpet,/area/vault/research)
+"ec" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/wood,/area/vault/research)
+"ed" = (/obj/machinery/door/airlock/external,/turf/simulated/floor,/area/vault/research)
+"ee" = (/obj/item/weapon/soap/nanotrasen,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/research)
+"ef" = (/obj/machinery/door/airlock/maintenance,/obj/structure/window/barricade/full/block,/turf/simulated/floor/plating,/area/vault/research)
+"eg" = (/obj/item/clothing/under/rank/centcom/officer,/obj/item/clothing/head/beret/centcom/officer,/turf/simulated/floor/carpet,/area/vault/research)
+"eh" = (/obj/abstract/map/spawner/misc/medivault,/turf/simulated/floor/carpet,/area/vault/research)
+"ei" = (/obj/structure/flora/pottedplant,/obj/machinery/light,/turf/simulated/floor/wood,/area/vault/research)
+"ej" = (/turf/simulated/floor{tag = "icon-warning"; icon_state = "warning"},/area/vault/research)
+"ek" = (/obj/structure/toilet{tag = "icon-toilet00 (NORTH)"; icon_state = "toilet00"; dir = 1},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/research)
+"el" = (/obj/machinery/door/airlock/external,/obj/docking_port/destination/vault/research{dir = 2},/turf/simulated/floor/plating,/area/vault/research)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaabababababababababababaaaaaaaaaaaaaaaaaaaaaaaaabababababababab
-aaabacadaeabafagahaiaiababababababababababababababajakakakalamab
-aaabanaoanabapaqarasatabauavavawavavavavavawavaxabakakayakakazab
-aaabaAauaBabaCaoanaoaDabanabababababababaEababanabaFaGakakakaHab
-abababaIaJabababaIabababanabaKaLaMabaNaOaPaQabaRaSaTakakakakakab
-abaUaoaVawavaWaXaYaZavavaBbabbbcbdbebfbgbhbiabaoabakakakakakakab
-abbjabababbaababababababababababababbkblbmbnabboabababababababab
-abaoabbpbqbrbsbsabbtbuabbvbwabbxbuabbebybzbAabaoaobBaoaqaobBaoab
-abaoabbCbDbEbEbFabbxbGabbHbIabbJbKabbLbMbNbOababababaDaDaDabaoab
-abaoabababbPabababbQbRabbQbRabbQbRabbSbhbTbUbVbWbXabababababaoab
-abaoabbYbZcacbccabcdcdcecdcdcdcdcdcfbhcgchciabcjckabbxclcmabaoab
-abaobacacncacocaabbQbRabbQbRabbQbRabbhcpcqbhcrcgcsabbGbJctabaoab
-abaoabcucvcwcxcaabbxcyabbxbGabbGczabcAchcBcgabbScCabcfbRababaoab
-abaoabcDcEcEcEcaabbKcFabcGcFabbxcFabcHbhcIcJabcKcLabcdcMcNabaqab
-abaoabcOcacPcQcaabababababababababababcRbyabababababcScdcTabaoab
-abaoabcacUcVcWcacXcYcZdadbdccYbQddcYbQcYdedfdgdedhdicecMdjabboab
-abaoabdkababdlababcYcYddcYcYcYbzdmcYdncYddcYcYcYdoabdpcdcTabaoab
-abaqabcaabdqdrdsabbQababababbQabdtdtabdudvcYdddwdxabdycddzdAaoab
-abaoabcadBdCdDdEabcadFdGdHdIcaababababababababbaababdJdKdJabaoab
-abaobacVababdlababdLcadIdIdMdNabdOdPabcYdedQabbDdRabababababaoab
-abaoabcaabdSdTdsabcacacacQcacadUcYcYdVcYddcYabdWbEdXaoaoaoaoaqab
-abdYabcadBdZeadEabebcccacVcaebababababecececabededababababababab
-ababababababababababababababababaaaaababeeabababababaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaabababababababababababababababaaaaaaaaaaaaaaaaaaaa
+aaaaabababababababababababababababababababababababababababababababaaaa
+aaaaabacadaeabafagahaiaiababababababababababababababajakakakalamababaa
+aaaaabanaoanabaoapaqarasabatauauavauauauauauavauawabakakaxakakayababaa
+aaaaabazataAabaBaCanaoaDabanabababababababaEababanabaFaGakakakaHababaa
+aaabababaIaJabababaIabababanabaKaLaMabaNaOaPaQabaRaSaTakakakakakababaa
+aaabaUaoaVavauaWaXaYaZauauaAbabbbcbdbebfbgbhbiabaoabakakakakakakababaa
+aaabbjabababbaababababababababababababbkblbmbnabboabababababababababaa
+aaabaoabbpbqbrbsbsabbtbuabbvbwabbxbuabbebybzbAabaoaobBaoapaobBaoababaa
+aaabaoabbCbDbEbEbFabbxbGabbHbIabbJbKabbLbMbNbOababababaDaDaDabaoababaa
+aaabaoabababbPabababbQbRabbQbRabbQbRabbSbhbTbUbVbWbXabababababaoababaa
+aaabaoabbYbZcacbccabcdcdcecdcdcdcdcdcfbhcgchciabcjckabbxclcmabaoababaa
+aaabaobacacncacocaabbQbRabbQbRabbQbRabbhcpcqbhcrcgcsabbGbJctabaoababaa
+aaabaoabcucvcwcxcaabbxcyabbxbGabbGczabcAchcBcgabbScCabcfbRababaoababaa
+aaabaoabcDcEcEcEcaabbKcFabcGcFabbxcFabcHbhcIcJabcKcLabcdcMcNabapababaa
+aaabaoabcOcacPcQcaabababababababababababcRbyabababababcScdcTabaoababab
+aaabaoabcacUcVcWcacXcYcZdadbdccYbQddcYbQcYdedfdgdedhdicecMdjabbodkabab
+aaabaoabdlababdmababcYcYddcYcYcYbzdncYdodpddcYcYcYdqabdrcdcTabdsdtduab
+ababapabcaabdvdwdxabbQababababbQabdydyabdzdAcYdddBdCabdDcddEdFaodtdGab
+ababaoabcadHdIdJdKabcadLdMdNdOdPababababababababbaababdQdRdQabaoaodSab
+ababaobacVababdmababdTcadOdOdUdVabdWdXabcYdedYabbDdZabababababdtaodSab
+ababaoabcaabeaebdxabcacacacQdPcaeccYcYedcYddcYabeebEefaoaoaoaoapababab
+ababdGabcadHegehdKabeicccacVcaeiababababejejejabekekabababababababaaaa
+aaababababababababababababababababaaaaababelabababababaaaaaaaaaaaaaaaa
+aaaaababababababababababababababaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 "}

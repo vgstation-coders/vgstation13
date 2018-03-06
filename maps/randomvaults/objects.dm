@@ -271,6 +271,13 @@
 /obj/item/weapon/disk/shuttle_coords/vault/research
 	destination = /obj/docking_port/destination/vault/research
 
+/obj/item/weapon/gun/projectile/pistol/empty
+	max_shells = 0
+	spawn_mag = FALSE
+
+/obj/item/ammo_casing/c9mm/empty
+	projectile_type = null
+
 /area/vault/satelite
 
 /area/vault/spy_sat
