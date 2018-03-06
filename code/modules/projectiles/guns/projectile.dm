@@ -21,7 +21,7 @@
 	var/mag_type = ""
 	var/mag_drop_sound ='sound/weapons/magdrop_1.ogg'
 	var/automagdrop_delay_time = 5 // delays the automagdrop
-
+	var/spawn_mag = TRUE
 	var/gun_flags = EMPTYCASINGS	//Yay, flags
 
 /obj/item/weapon/gun/projectile/isHandgun() //fffuuuuuuck non-abstract base types
@@ -29,7 +29,7 @@
 
 /obj/item/weapon/gun/projectile/New()
 	..()
-	if(mag_type && load_method == 2)
+	if(mag_type && load_method == 2 && spawn_mag)
 		stored_magazine = new mag_type(src)
 		chamber_round()
 	else
@@ -146,13 +146,13 @@
 /obj/item/weapon/gun/projectile/can_discharge()
 	var/obj/item/ammo_casing/AC = getAC()
 	if(in_chamber)
-		return 1 
+		return 1
 	if(isnull(AC) || !istype(AC))
 		return 0
 	else
 		return 1
-	
-	
+
+
 /obj/item/weapon/gun/projectile/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(istype(A, /obj/item/gun_part/silencer) && src.gun_flags &SILENCECOMP)
 		if(!user.is_holding_item(src))	//if we're not in his hands
