@@ -17,6 +17,7 @@
 	var/list/req_component_names = null
 	var/list/components_in_use = null
 	var/build_state = 1
+	var/build_path = 0 //0 = Default path. 1 = Glass Frame
 
 	// For pods
 	var/list/connected_parts = list()
@@ -49,6 +50,52 @@
 	if(P.crit_fail)
 		to_chat(user, "<span class='warning'>This part is faulty, you cannot add this to the machine!</span>")
 		return
+
+	if (build_path == 1)
+		var/obj/item/weapon/circuitboard/airlock/C = circuit
+		switch(build_state)
+			if(1)
+				if(iscrowbar(P))
+					build_path = 0
+					new /obj/item/stack/sheet/glass/glass(get_turf(src))
+					icon_state = "box_0"
+					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				if(istype(P, /obj/item/weapon/circuitboard/airlock) && P:icon_state != "door_electronics_smoked")
+					if (!C)
+						if(user.drop_item(P, src))
+							build_state++
+							C = P
+							circuit = C
+							C.installed = 1
+							icon_state="box_glass_circuit"
+				if (iswelder(P))
+					to_chat(user, "<span class='notice'>You use the machine frame as a vice and shape the glass with the welder into a fish bowl.</span>")
+					getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
+					new /obj/machinery/fishtank/bowl(get_turf(src))
+					qdel(src)
+				return
+			if (2)
+				if(iscrowbar(P))
+					if (C != null)
+						C.forceMove(get_turf(src))
+						C.installed = 0
+						C = null
+						circuit = null
+					build_state--
+					icon_state = "box_glass"
+					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				if(isscrewdriver(P) && C)
+					var/obj/structure/displaycase/new_display_case = new(get_turf(src))
+					new_display_case.circuit = C
+					C.forceMove(new_display_case)
+					circuit = null
+					C = null
+					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					qdel(src)
+				return
+		return
+
+
 	switch(build_state)
 		if(1)
 			if(istype(P, /obj/item/stack/cable_coil))
@@ -64,13 +111,12 @@
 			else if(istype(P, /obj/item/stack/sheet/glass/glass))
 				var/obj/item/stack/sheet/glass/glass/G=P
 				if(G.amount<1)
-					to_chat(user, "<span class='warning'>How...?</span>")
 					return
 				G.use(1)
 				to_chat(user, "<span class='notice'>You add the glass to the frame.</span>")
 				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-				new /obj/structure/displaycase_frame(src.loc)
-				qdel(src)
+				build_path = 1
+				icon_state="box_glass"
 				return
 			else
 				if(iswrench(P))
