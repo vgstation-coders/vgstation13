@@ -243,6 +243,7 @@
 
 /obj/item/device/crank_charger/attack_hand(mob/user)
 	if(stored && user.get_inactive_hand() == src)
+		stored.updateicon()
 		user.put_in_hands(stored)
 		stored = null
 		update_icon()
