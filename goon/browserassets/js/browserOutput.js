@@ -20,7 +20,7 @@ window.onerror = function(msg, url, line, col, error) {
 
 //Globals
 window.status = 'Output';
-var $messages, $subOptions, $contextMenu, $filterMessages;
+var $messages, $subOptions, $contextMenu, $filterMessages, $last_message;
 var opts = {
 	//General
 	'messageCount': 0, //A count...of messages...
@@ -65,7 +65,10 @@ var opts = {
 	'macros': {},
 
 	// index in the color presets list.
-	'colorPreset': 0
+	'colorPreset': 0,
+
+	// Whether to combine consecutive repeated messages into one, showing a counter
+	'messageCombining': true
 };
 
 // Array of names for colorblind presets.
@@ -277,26 +280,58 @@ function output(message, flag) {
 		opts.messageCount--; //I guess the count should only ever equal the limit
 	}
 
-	//Actually append the message
-	var entry = document.createElement('div');
-	entry.className = 'entry';
-
-	if (filteredOut) {
-		entry.className += ' hidden';
-		entry.setAttribute('data-filter', filteredOut);
+	var handled = false;
+	var trimmed_message = message.trim();
+	var lastmessages = $messages.children('div.entry:last-child');
+	if(opts.messageCombining && lastmessages.length && $last_message)
+	{
+		if($last_message == trimmed_message)
+		{
+			if(lastmessages.children('span.repeat').length)
+			{
+				var current_value = parseInt(lastmessages.children('span.repeat').text());
+				lastmessages.children('span.repeat').text(current_value + 1);
+			}
+			else
+			{
+				lastmessages.append($('<span/>', { 'class': 'repeat', 'text': 2}));
+			}
+			var insertedBadge = $(lastmessages).find('.repeat');
+			insertedBadge.animate({
+				"font-size": "0.9em"
+			}, 100, function() {
+				insertedBadge.animate({
+					"font-size": "0.7em"
+				}, 100);
+			});
+			opts.messageCounts--;
+			handled = true;
+		}
 	}
 
-	entry.innerHTML = message;
-	$messages[0].appendChild(entry);
+	if(!handled)
+	{
+		var entry = document.createElement('div');
+		entry.className = 'entry';
+
+		if(filteredOut) {
+			entry.className += ' hidden';
+			entry.setAttribute('data-filter', filteredOut);
+		}
+
+		$last_message = trimmed_message;
+		entry.innerHTML = trimmed_message;
+		$messages[0].appendChild(entry);
+
+		// Stuff we can do after the message shows can go here, in the interest of responsiveness
+		if(opts.highlightTerms && opts.highlightTerms.length > 0) {
+			highlightTerms(entry);
+		}
+	}
 
 	//Actually do the snap
 	if (!filteredOut && atBottom) {
 		$('body,html').scrollTop($messages.outerHeight());
-	}
-
-	//Stuff we can do after the message shows can go here, in the interests of responsiveness
-	if (opts.highlightTerms && opts.highlightTerms.length > 0) {
-		highlightTerms(entry);
 	}
 }
 
@@ -544,7 +579,8 @@ $(function() {
 		'spingDisabled': getCookie('pingdisabled'),
 		'shighlightTerms': getCookie('highlightterms'),
 		'shighlightColor': getCookie('highlightcolor'),
-		'scolorPreset': getCookie('colorpreset')
+		'scolorPreset': getCookie('colorpreset'),
+		'smessageCombining': getCookie('messagecombining')
 	};
 
 	if (savedConfig.sfontSize) {
@@ -585,6 +621,14 @@ $(function() {
 		opts.colorPreset = Number(savedConfig.scolorPreset);
 		updateColorPreset();
 		internalOutput('<span class="internal boldnshit">Loaded color preset of: '+colorPresets[opts.colorPreset]+'</span>', 'internal');
+	}
+
+	if (savedConfig.smessageCombining) {
+		if (savedConfig.smessageCombining == 'false') {
+			opts.messageCombining = false;
+		} else {
+			opts.messageCombining = true;
+		}
 	}
 
 	(function() {
@@ -955,6 +999,11 @@ $(function() {
 		setCookie('colorpreset', opts.colorPreset, 365);
 		internalOutput('<span class="internal boldnshit">Changed color preset to: '+colorPresets[opts.colorPreset]);
 	});
+
+	$('#toggleCombine').click(function(e) {
+		opts.messageCombining = !opts.messageCombining;
+		setCookie('messagecombining', opts.messageCombining, 365);
+	})
 
 	// Tell BYOND to give us a macro list.
 	// I don't know why but for some retarded reason,
