@@ -156,11 +156,16 @@
 
 	return 0
 
+/obj/item/weapon/reagent_containers/food/snacks/proc/before_consume(mob/living/carbon/eater)
+	return
+
 /obj/item/weapon/reagent_containers/food/snacks/proc/consume(mob/living/carbon/eater, messages = 0)
 	if(!istype(eater))
 		return
 	if(!eatverb)
 		eatverb = pick("bite", "chew", "nibble", "gnaw", "gobble", "chomp")
+
+	before_consume(eater)
 
 	if(messages)
 		var/fullness = eater.nutrition + (eater.reagents.get_reagent_amount(NUTRIMENT) * 25)
