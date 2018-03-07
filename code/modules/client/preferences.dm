@@ -1500,8 +1500,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				if("save")
 					if(world.timeofday >= (lastPolled + POLLED_LIMIT))
 						SetRoles(user,href_list)
-						save_preferences_sqlite(user, user.ckey)
-						save_character_sqlite(user.ckey, user, default_slot)
 						lastPolled = world.timeofday
 					else
 						to_chat(user, "You need to wait [round((((lastPolled + POLLED_LIMIT) - world.timeofday) / 10))] seconds before you can save again.")
