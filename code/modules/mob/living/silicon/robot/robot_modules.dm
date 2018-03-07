@@ -468,7 +468,7 @@
 	radio_key = /obj/item/device/encryptionkey/headset_mining
 	sprites = list(
 		"Default" = "minerbot",
-		"Treadhead" = "Miner",
+		"Treadhead" = "miner",
 		"Wall-A" = "wall-a",
 		"Droid" = "droid-miner",
 		"Marina" = "marinaMN",
