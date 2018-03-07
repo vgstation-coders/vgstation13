@@ -61,7 +61,7 @@
 	for(var/mob/living/T in hearers(src,4))
 		if(!CanHug(T, src))
 			continue
-		if(T && (!T.isDead() && !T.isUnconscious() ) )
+		if(T && (!T.isUnconscious() ) )
 
 			if(get_dist(loc, T.loc) <= 4)
 				target = T
@@ -70,7 +70,7 @@
 /obj/item/clothing/mask/facehugger/proc/followtarget()
 	if(!real)
 		return // Why are you trying to path stupid toy
-	if(!target || target.isDead() || target.isUnconscious() || target.status_flags & XENO_HOST)
+	if(!target || target.isUnconscious() || target.status_flags & XENO_HOST)
 		findtarget()
 		return
 	if(loc && isturf(loc) && !attached && !stat && nextwalk <= world.time)
@@ -200,9 +200,8 @@
 
 /obj/item/clothing/mask/facehugger/HasProximity(atom/movable/AM as mob|obj)
 	if(isliving(AM))
-		var/mob/living/L = AM
-		if(CanHug(L, src))
-			return Attach(L)
+		if(CanHug(AM, src))
+			return Attach(AM)
 	return FALSE
 
 /obj/item/clothing/mask/facehugger/throw_at(atom/target, range, speed)
