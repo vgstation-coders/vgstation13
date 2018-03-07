@@ -1969,6 +1969,7 @@
 #include "code\modules\research\designs\robot.dm"
 #include "code\modules\research\designs\robotics.dm"
 #include "code\modules\research\designs\stock_parts.dm"
+#include "code\modules\research\designs\surgery.dm"
 #include "code\modules\research\designs\weapons.dm"
 #include "code\modules\research\designs\boards\computer_command.dm"
 #include "code\modules\research\designs\boards\computer_engie.dm"
