@@ -384,7 +384,7 @@
 
 /obj/item/weapon/gripper/Destroy()
 	if(gripper_sanity_check(src))
-		drop_item(force_drop = 1)
+		drop_item(force_drop = 1, dontsay = TRUE)
 	..()
 
 /obj/item/weapon/gripper/update_icon()

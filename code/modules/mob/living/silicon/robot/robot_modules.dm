@@ -50,6 +50,8 @@
 		R.remove_module() //Helps remove screen references on robot end
 
 	for(var/obj/A in modules)
+		if(istype(A, /obj/item/weapon/storage))
+			A:empty_contents_to(loc)
 		qdel(A)
 	modules = null
 	if(emag)
