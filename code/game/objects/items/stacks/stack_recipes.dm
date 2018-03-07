@@ -95,6 +95,8 @@
 			R.icon = original
 			R.alpha = mat.alpha
 			R.material_type = mat
+			R.sheet_type = mat.sheettype
+			//if(gen_quality)
 			R.gen_quality()
 			if(R.quality > SUPERIOR)
 				R.gen_description()

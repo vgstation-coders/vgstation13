@@ -299,12 +299,12 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 		switch(rand(1,2))
 			if(1) //EMP
 				empulse(get_turf(pick(source,target,user)), 0.25*source.quality, 0.5*source.quality, 1)
-			if(2)
+			if(2) //Teleport
 				var/atom/movable/victim = pick(target,user)
 				if(victim)
 					do_teleport(victim, get_turf(victim), 1*source.quality, asoundin = 'sound/effects/phasein.ogg')
 		if(prob(20*source.quality))
-			to_chat(user, "<span class = 'warning'>\The [source] phases out of this place of existence!</span>")
+			to_chat(user, "<span class = 'warning'>\The [source] phases out of reality!</span>")
 			qdel(source)
 
 /datum/material/plastic
