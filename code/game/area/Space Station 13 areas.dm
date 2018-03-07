@@ -2432,6 +2432,10 @@ proc/process_adminbus_teleport_locs()
 	name = "Leviathan"
 	icon_state = "mining_production"
 
+/area/awaymission/snowplanet
+	name = "snowplanet"
+	icon_state = "mining_production"
+
 /////////////////////////////////////////////////////////////////////
 /*
  Lists of areas to be used with is_type_in_list.
