@@ -294,7 +294,8 @@
 		/obj/item/ammo_storage,
 		/obj/item/ammo_casing,
 		/obj/item/weapon/handcuffs,
-		/obj/item/weapon/bikehorn/baton)
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/blunderbuss)
 	siemens_coefficient = 0.7
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
