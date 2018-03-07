@@ -469,7 +469,7 @@ var/global/ingredientLimit = 10
 	//Deepfry a random nearby item
 	var/list/pickable_items = list()
 
-	for(var/obj/item/I in range(1, L))
+	for(var/obj/item/I in adjacent_atoms(L))
 		pickable_items.Add(I)
 
 	if(!pickable_items.len)

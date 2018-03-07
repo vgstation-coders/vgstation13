@@ -140,6 +140,9 @@
 /obj/abstract/screen/gun/MouseExited()
 	closeToolTip(usr)
 
+/proc/get_random_zone_sel()
+	return pick("l_foot", "r_foot", "l_leg", "r_leg", "l_hand", "r_hand", "l_arm", "r_arm", "chest", "groin", "eyes", "mouth", "head")
+
 /obj/abstract/screen/zone_sel
 	name = "damage zone"
 	icon_state = "zone_sel"
