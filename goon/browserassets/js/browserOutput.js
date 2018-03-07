@@ -304,7 +304,7 @@ function output(message, flag) {
 					"font-size": "0.7em"
 				}, 100);
 			});
-			opts.messageCounts--;
+			opts.messageCount--;
 			handled = true;
 		}
 	}
