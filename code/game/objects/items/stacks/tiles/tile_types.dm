@@ -102,7 +102,6 @@
 	if(iswrench(W))
 		if(use(4))
 			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			drop_stack(sheet_type, get_turf(user), 1, user)
 		else
 			to_chat(user, "<span class='warning'>You need at least 4 [src]\s to get a wooden plank back!</span>")
