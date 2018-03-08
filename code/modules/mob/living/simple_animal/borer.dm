@@ -301,7 +301,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			return
 
 	if (copytext(message, 1, 2) == "*")
-		return emote(copytext(message, 2))
+		to_chat(src, "<span class = 'notice'>This type of mob doesn't support this. Use the Me verb instead.</span>")
+		return
 
 	if (copytext(message, 1, 2) == ";") //Brain borer hivemind.
 		return borer_speak(copytext(message,2))

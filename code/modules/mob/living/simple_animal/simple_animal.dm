@@ -311,7 +311,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(stat)
 		return
 	if(act == "scream")
-		desc = "makes a loud and pained whimper"  //ugly hack to stop animals screaming when crushed :P
+		desc = "makes a loud and pained whimper!"  //ugly hack to stop animals screaming when crushed :P
 		act = "me"
 	if(!desc && act != "me")
 		desc = "[act]."
