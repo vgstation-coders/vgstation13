@@ -41,9 +41,7 @@
 	if (antag.current.mind && antag.current.mind.assigned_role == "Clown")
 		to_chat(antag.current, "You have evolved beyond your clownish nature, allowing you to wield weapons without harming yourself.")
 		antag.current.mutations.Remove(M_CLUMSY)
-	to_chat(antag.current, "<B>You must complete the following tasks:</B>")
-	to_chat(antag.current, "[ReturnObjectivesString(check_name = FALSE)]")
-	antag.store_memory("[ReturnObjectivesString(check_name = FALSE)]")
+	antag.current << sound('sound/effects/ling_intro.ogg')
 
 /datum/role/changeling/ForgeObjectives()
 	AppendObjective(/datum/objective/absorb)
@@ -54,9 +52,10 @@
 	else
 		AppendObjective(/datum/objective/hijack)
 
-/datum/role/changeling/proc/regenerate()
+/datum/role/changeling/proc/changelingRegen()
 	chem_charges = Clamp(chem_charges + chem_recharge_rate, 0, chem_storage)
 	geneticdamage = max(0, geneticdamage-1)
+	antag.current.updateChangelingHUD()
 
 /datum/role/changeling/proc/GetDNA(var/dna_owner)
 	var/datum/dna/chosen_dna
@@ -65,6 +64,9 @@
 			chosen_dna = DNA
 			break
 	return chosen_dna
+
+/datum/role/changeling/process()
+	changelingRegen()
 
 // READ: Don't use the apostrophe in name or desc. Causes script errors.
 
