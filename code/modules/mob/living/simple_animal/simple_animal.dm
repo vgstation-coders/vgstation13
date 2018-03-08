@@ -313,10 +313,15 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(act == "scream")
 		desc = "makes a loud and pained whimper"  //ugly hack to stop animals screaming when crushed :P
 		act = "me"
-	if(!desc)
+	if(!desc && act != "me")
 		desc = "[act]."
 		act = "me"
 	..(act, type, desc)
+
+/mob/living/simple_animal/check_emote(message)
+	if(copytext(message, 1, 2) == "*")
+		to_chat(src, "<span class = 'notice'>This type of mob doesn't support this. Use the Me verb instead.</span>")
+		return 1
 
 /mob/living/simple_animal/proc/handle_automated_speech()
 
