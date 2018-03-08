@@ -14,7 +14,7 @@
 
 /mob/living/simple_animal/hostile/wendigo
 	name = "wendigo"
-	desc = "Thought to be just a cautionary tale, now moreso than ever."
+	desc = "Standing tall, deep sunken eyes, and a voracious appetite. This individual has seen better days."
 	icon_state = "wendigo"
 	icon_living = "wendigo"
 	icon_dead = "wendigo_dead"
@@ -33,6 +33,7 @@
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo
 	var/list/names = list() //List of names of the people it's eaten
 	var/consumes = 0 //How many people it has eaten
+	speak_chance = 15
 	speak = list("Help!","Help me!","Somebody help!","Get over here, quickly!")
 
 
@@ -72,7 +73,8 @@
 						visible_message("<span class = 'warning'>\The [src] is trying to consume \the [mob_target]!</span>","<span class = 'warning'>You hear crunching.</span>")
 						if(do_after(src, mob_target, 50, needhand = FALSE))
 							consumes += 1
-							names += mob_target.real_name
+							if(!names.Find(mob_target.real_name))
+								names.Add(mob_target.real_name)
 							mob_target.gib()
 
 			return
@@ -94,16 +96,11 @@
 				walk_away(src,fire,(fire.light_range*2),move_to_delay)
 
 
-		if(names.len)
-			speak_chance = 15
-
-
 /mob/living/simple_animal/hostile/wendigo/GetVoice()
 	if(names.len)
 		return pick(names)
 	else
-		speak_chance = 0
-		return name
+		return "unknown"
 
 /mob/living/simple_animal/hostile/wendigo/proc/check_evolve()
 	return
@@ -169,7 +166,7 @@
 /mob/living/simple_animal/hostile/wendigo/alpha/Life()
 	..()
 	if(health < (maxHealth/2) && enraged == 0)
-		visible_message("<span class = 'warning'>\The [src] seems to slow down, but looks angrier</span>","You're not sure what that sound was, but it didn't sound good at all")
+		visible_message("<span class = 'warning'>\The [src] seems to slow down, but looks angrier.</span>","<span class = 'warning'>You're not sure what that sound was, but it didn't sound good at all.</span>")
 		enraged = 1
 		speed = 7
 		melee_damage_lower = 50
