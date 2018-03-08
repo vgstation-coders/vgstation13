@@ -192,6 +192,8 @@
 /datum/gamemode/proc/process()
 	for(var/datum/faction/F in factions)
 		F.process()
+	for(var/datum/role/R in orphaned_roles)
+		R.process()
 
 /datum/gamemode/proc/check_finished()
 	for(var/datum/faction/F in factions)
