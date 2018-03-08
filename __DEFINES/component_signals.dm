@@ -107,3 +107,9 @@
  */
 #define COMSIG_EQUIPACTVHAND "equipactvhand"
 
+/** Sent when a mob is attacking the controller.
+ * @param assailant /mob: The mob attacking the controller
+ * @param damage int: Damage done in this attack
+ */
+
+#define COMSIG_ATTACKEDBY "attacked_by"

@@ -25,7 +25,8 @@
 			I.attack(src, user, null, originator)
 		else
 			I.attack(src, user)
-
+	if(BrainContainer)
+		BrainContainer.SendSignal(COMSIG_ATTACKEDBY, list("assailant"=user,"damage"=I.force))
 
 // Proximity_flag is 1 if this afterattack was called on something adjacent, in your square, or on your person.
 // Click parameters is the params string from byond Click() code, see that documentation.
