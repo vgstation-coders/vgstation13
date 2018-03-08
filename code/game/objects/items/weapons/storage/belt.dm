@@ -329,6 +329,8 @@
 /obj/item/weapon/storage/belt/lazarus/antag/New(loc, mob/user)
 	var/blocked = list(
 	/mob/living/simple_animal/hostile/hivebot/tele,
+	/mob/living/simple_animal/hostile/wendigo/evolved,
+	/mob/living/simple_animal/hostile/wendigo/alpha,
 	)
 	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
 	critters = shuffle(critters)
