@@ -96,7 +96,7 @@
 		R.movement_speed_modifier -= SILICON_VTEC_SPEED_BONUS
 
 	qdel(R.module)
-
+	R.mutations = initial(R.mutations)
 	R.set_module_sprites(list("Default" = "robot"))
 	R.updatename("Default")
 
@@ -317,5 +317,41 @@
 	if(check_icon(R.icon, "[R.base_icon]-clown")) //Honk!
 		R.set_module_sprites(list("Honk" = "[R.base_icon]-clown"))
 	playsound(R, 'sound/items/AirHorn.ogg', 50, 1)
+
+/obj/item/borg/upgrade/noir
+	name = "security cyborg N.O.I.R. upgrade board"
+	desc = "So that's the way you scientific detectives work. My god! for a fat, middle-aged, hard-boiled, pig-headed guy, you've got the vaguest way of doing things I ever heard of."
+	icon_state = "cyborg_upgrade3"
+	required_module = list(/obj/item/weapon/robot_module/security, /obj/item/weapon/robot_module/tg17355)
+	modules_to_add = list(/obj/item/binoculars, /obj/item/device/detective_scanner, /obj/item/device/taperecorder, /obj/item/weapon/gun/projectile/detective, /obj/item/ammo_storage/speedloader/c38/cyborg)
+
+/obj/item/borg/upgrade/noir/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+
+	if(check_icon(R.icon, "[R.base_icon]-noir"))
+		R.set_module_sprites(list("Noir" = "[R.base_icon]-noir"))
+
+/obj/item/borg/upgrade/warden
+	name = "security cyborg warden upgrade board"
+	desc = "Used to give a security cyborg warding tools."
+	icon_state = "cyborg_upgrade3"
+	required_module = list(/obj/item/weapon/robot_module/security, /obj/item/weapon/robot_module/tg17355)
+	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/loyalty/cyborg, /obj/item/weapon/wrench)
+
+/obj/item/borg/upgrade/warden/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+
+	if(check_icon(R.icon, "[R.base_icon]-warden"))
+		R.set_module_sprites(list("Warden" = "[R.base_icon]-warden"))
+	//If they have no sec key, give them one.
+	if(!istype(R.module.radio_key, /obj/item/device/encryptionkey/headset_sec))
+		R.module.ResetEncryptionKey(R)
+		R.module.radio_key = /obj/item/device/encryptionkey/headset_sec
+		R.module.AddEncryptionKey(R)
+	//If they don't have a SECHUD, give them one.
+	R.module.sensor_augs |= list("Security")
+
 
 #undef FAILED_TO_ADD

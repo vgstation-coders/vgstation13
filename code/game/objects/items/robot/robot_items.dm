@@ -164,13 +164,13 @@ obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
 /obj/item/device/harmalarm/attack_self(mob/user)
 	var/safety = TRUE
 	if(cooldown > world.time)
-		to_chat(user,"<span class='warning'>The device is still recharging!</font>")
+		to_chat(user,"<span class='warning'>The device is still recharging!</span>")
 		return
 
 	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
 		if(R.cell.charge < 1200)
-			to_chat(user, "<span class='warning'>You don't have enough charge to do this!</font>")
+			to_chat(user, "<span class='warning'>You don't have enough charge to do this!</span>")
 			return
 		R.cell.charge -= 1000
 		if(R.emagged)
@@ -179,13 +179,13 @@ obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
 			to_chat(R.connected_ai,"<br><span class='bnotice'>NOTICE - [src] used by: [user]</span><br>")
 
 	if(safety == TRUE)
-		user.visible_message("<span class='big danger'>HUMAN HARM</font>")
+		user.visible_message("<span class='big danger'>HUMAN HARM</span>")
 		playsound(src, 'sound/AI/harmalarm.ogg', 70, 3)
 		add_gamelogs(user, "used \the [src]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "notice")
 		for(var/mob/living/carbon/M in hearers(9, user))
 			if(M.earprot())
 				continue
-			to_chat(M, "<span class='warning'>[user] blares out a near-deafening siren from its speakers!</font>")
+			to_chat(M, "<span class='warning'>[user] blares out a near-deafening siren from its speakers!</span>")
 			to_chat(M, "<span class='danger'>The siren pierces your hearing!</span>")
 			M.stuttering += 5
 			M.ear_deaf += 1
@@ -197,7 +197,7 @@ obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
 		return
 
 	if(safety == FALSE)
-		user.visible_message("<span class='big danger'>BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZT</font>")
+		user.visible_message("<span class='big danger'>BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZT</span>")
 		playsound(src, 'sound/machines/warning-buzzer.ogg', 130, 3)
 		add_gamelogs(user, "used an emagged [name]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
 		for(var/mob/living/carbon/M in hearers(6, user))
@@ -210,3 +210,34 @@ obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
 			M.Jitter(30)
 			add_gamelogs(user, "knocked out [key_name(M)] with an emagged [name]", admin = FALSE, tp_link = FALSE)
 		cooldown = world.time + 1 MINUTES
+
+//Noir upgrade modules
+#define NEEDED_CHARGE_TO_RESTOCK_AMMO 5
+
+/obj/item/ammo_storage/speedloader/c38/cyborg
+	desc = "The echo of the first shot, like the first sip of whiskey, burning..."
+	var/charge = 0
+
+/obj/item/ammo_storage/speedloader/c38/cyborg/restock()
+	charge++
+	if(charge >= NEEDED_CHARGE_TO_RESTOCK_AMMO && stored_ammo.len < max_ammo) //takes about 10 seconds.
+		stored_ammo += new ammo_type(src)
+		update_icon()
+		charge = initial(charge)
+
+#undef NEEDED_CHARGE_TO_RESTOCK_AMMO
+
+//Warden upgrade modules
+#define NEEDED_CHARGE_TO_RESTOCK_IMP 30
+
+/obj/item/weapon/implanter/loyalty/cyborg
+	var/charge = 0
+
+/obj/item/weapon/implanter/loyalty/cyborg/restock()
+	charge++
+	if(charge >= NEEDED_CHARGE_TO_RESTOCK_IMP && !imp) //takes about 60 seconds.
+		imp = new /obj/item/weapon/implant/loyalty(src)
+		update_icon()
+		charge = initial(charge)
+
+#undef NEEDED_CHARGE_TO_RESTOCK_IMP
