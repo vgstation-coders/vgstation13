@@ -872,7 +872,7 @@
 	return
 
 /mob/living/silicon/robot/proc/tip(var/rotate = dir)
-	lying = TRUE
+	src.lying = TRUE
 	uneq_all()
 	AdjustKnockdown(5)
 	animate(src, transform = turn(matrix(), 90), pixel_y -= 6 * PIXEL_MULTIPLIER, dir = rotate, time = 2, easing = EASE_IN | EASE_OUT)
@@ -887,24 +887,23 @@
 /mob/living/silicon/robot/proc/self_righting(var/knockdown = 0)
 	to_chat(src, "<span class='info' style=\"font-family:Courier\"'>Starting self-righting mechanism.</span>")
 	spawn(knockdown SECONDS)
-		if(!isDead() && is_component_functioning("actuator") && is_component_functioning("cell"))
-			untip()
-		else
+		if(isDead() || !is_component_functioning("actuator") || !is_component_functioning("power cell"))
 			to_chat(src, "<span class='danger'>ERROR. Self-righting mechanism damaged or unpowered.</span>")
-
+			return
+		untip()
 
 /mob/living/silicon/robot/proc/untip()
-	if(lying)
+	if(src.lying)
 		animate(src, transform = matrix(), pixel_y += 6 * PIXEL_MULTIPLIER, dir = dir, time = 2, easing = EASE_IN | EASE_OUT)
 		playsound(loc, 'sound/machines/ping.ogg', 50, 0)
-		lying = FALSE
+		src.lying = FALSE
 
 /mob/living/silicon/robot/disarm_mob(mob/living/disarmer)
 	var/rotate = dir
 
 	if(lying)
 		return
-	if(!flashed || !isDead())
+	if(!flashed && !isDead())
 		return
 	if(get_dir(disarmer, src) in(list(4,8)))
 		rotate = pick(1,2)
