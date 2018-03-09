@@ -30,12 +30,9 @@
 
 	message = utf8_sanitize(message, usr, MAX_MESSAGE_LEN)
 
-	if(!message)
-		return
-
 	if(usr.stat == DEAD)
 		usr.emote_dead(message)
-	else
+	else if(message)
 		usr.emote("me",usr.emote_type,message)
 
 /mob/proc/say_dead(var/message)
