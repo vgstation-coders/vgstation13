@@ -69,8 +69,6 @@ mob/living/carbon/proc/handle_hallucinations()
 								halitem.icon = 'icons/obj/assemblies.dmi'
 								halitem.icon_state = "plastic-explosive0"
 								halitem.name = "Mysterious Package"
-								if(prob(25))
-									halitem.icon_state = "c4small_1"
 							if(3) //sword
 								halitem.icon = 'icons/obj/weapons.dmi'
 								halitem.icon_state = "sword1"
