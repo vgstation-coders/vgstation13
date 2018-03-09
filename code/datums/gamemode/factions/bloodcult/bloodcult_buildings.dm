@@ -53,8 +53,9 @@
 
 /obj/structure/cult/attackby(var/obj/item/weapon/W, var/mob/user)
 	if (istype(W, /obj/item/weapon/grab))
-		if(iscarbon(W:affecting))
-			MouseDrop_T(W:affecting,user)
+		var/obj/item/weapon/grab/G = W
+		if(iscarbon(G.affecting))
+			MouseDrop_T(G.affecting,user)
 			returnToPool(W)
 	else if (istype(W, /obj/item/weapon))
 		if(user.a_intent == I_HURT)
