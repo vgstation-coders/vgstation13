@@ -126,8 +126,7 @@
 	desc = "The secret meaning of what mag stands for."
 	name = "magnificent mag boots"
 	icon_state = "MAGNIFICENTboots0"
-	base_state = "MAGNIFICENTboots"
-	anchoring_system_examine = "Impressive!"
+	base_state = "MAGNIFICENTboots1"
 
 /obj/item/clothing/shoes/magboots/captain/toggle()
 	//set name = "Toggle Floor Grip"
