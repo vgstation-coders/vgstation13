@@ -333,7 +333,8 @@
 /obj/item/clothing/mask/chemmask/proc/mask_shutdown(mob/user) //Removes most verbs upon toggling the mask off, but not all. The user keeps access to the verbs to toggle connection to the tank and beaker.
 	power = 0
 	icon_state = "chemmask0"
-	user.update_inv_wear_mask()
+	if(istype(user))
+		user.update_inv_wear_mask()
 	update_verbs()
 
 /obj/item/clothing/mask/chemmask/process()
