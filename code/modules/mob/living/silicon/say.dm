@@ -33,6 +33,9 @@
 /mob/living/silicon/binarycheck()
 	return 1
 
+/mob/living/silicon/robot/binarycheck()
+	return is_component_functioning("binary communication device")
+
 /mob/living/silicon/lingcheck()
 	return 0 //Borged or AI'd lings can't speak on the ling channel.
 
