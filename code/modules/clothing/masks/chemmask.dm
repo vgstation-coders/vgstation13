@@ -287,7 +287,7 @@
 
 /obj/item/clothing/mask/chemmask/proc/pack_check(mob/user) //Shuts off mask if the user is not wearing a chempack.
 	var/mob/living/M = user
-	if (!(M && M.back && istype(M.back,/obj/item/weapon/reagent_containers/chempack)))
+	if (!(istype(M) && M.back && istype(M.back,/obj/item/weapon/reagent_containers/chempack)))
 		mask_shutdown(user)
 		to_chat(user, "<span class='notice'>\The [src] shuts off!</span>")
 		return 0
