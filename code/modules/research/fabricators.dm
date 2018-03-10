@@ -63,23 +63,13 @@
 
 	T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
- 	T += Ma.rating //T is the ammount of stock parts grade. 1 tier 1 part is a  T=1,  2 tier 2 parts is a T=4, 1 tier 1 and 1 tier 3 part is a T=5
- 	if(T >= 2) // this removes 1 part tier level. This is to account for the fact that machines like the protolathe have 1 micro manip in them by default which means 1 tier level
- 		T -= 2
-
-	var/diff
-	diff = round(initial(resource_coeff) - (initial(resource_coeff)*(T * 3))/25,0.01)
-	if(resource_coeff!=diff)
-		resource_coeff = diff
+		T += Ma.rating - 1
+	resource_coeff = round(initial(resource_coeff) - (initial(resource_coeff)*(T * 3))/25,0.01)
 
 	T = 0
 	for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
-		T += Ml.rating
-	if(T>= 2)  // same idea for the formula for above
-		T -= 2
-	diff = round(initial(time_coeff) - (initial(time_coeff)*(T *5))/25,0.01)
-	if(time_coeff!=diff)
-		time_coeff = diff
+		T += Ml.rating - 1
+	time_coeff = round(initial(time_coeff) - (initial(time_coeff)*(T * 5))/25,0.01)
 
 /obj/machinery/r_n_d/fabricator/emag()
 	sleep()
