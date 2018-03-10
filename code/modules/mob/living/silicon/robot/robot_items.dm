@@ -541,7 +541,7 @@
 		/obj/item/stack/sheet
 		)
 
-/obj/item/weapon/gripper/magnetic //No use because they don't need to open held tanks.
+/obj/item/weapon/gripper/magnetic
 	name = "magnetic gripper"
 	desc = "A simple grasping tool specialized in construction and engineering work."
 	icon_state = "gripper"
