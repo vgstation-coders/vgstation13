@@ -287,7 +287,7 @@
 
 /obj/item/clothing/mask/chemmask/proc/pack_check(mob/user) //Shuts off mask if the user is not wearing a chempack.
 	var/mob/living/M = user
-	if (!(M && M.back && istype(M.back,/obj/item/weapon/reagent_containers/chempack)))
+	if (!(istype(M) && M.back && istype(M.back,/obj/item/weapon/reagent_containers/chempack)))
 		mask_shutdown(user)
 		to_chat(user, "<span class='notice'>\The [src] shuts off!</span>")
 		return 0
@@ -333,7 +333,8 @@
 /obj/item/clothing/mask/chemmask/proc/mask_shutdown(mob/user) //Removes most verbs upon toggling the mask off, but not all. The user keeps access to the verbs to toggle connection to the tank and beaker.
 	power = 0
 	icon_state = "chemmask0"
-	user.update_inv_wear_mask()
+	if(istype(user))
+		user.update_inv_wear_mask()
 	update_verbs()
 
 /obj/item/clothing/mask/chemmask/process()
