@@ -541,7 +541,7 @@
 		/obj/item/stack/sheet
 		)
 
-/obj/item/weapon/gripper/no_use/magnetic //No use because they don't need to open held tanks.
+/obj/item/weapon/gripper/magnetic //No use because they don't need to open held tanks.
 	name = "magnetic gripper"
 	desc = "A simple grasping tool specialized in construction and engineering work."
 	icon_state = "gripper"
@@ -552,7 +552,11 @@
 		/obj/item/weapon/tank,
 		/obj/item/weapon/circuitboard,
 		/obj/item/weapon/am_containment,
-		/obj/item/device/am_shielding_container
+		/obj/item/device/am_shielding_container,
+		/obj/item/weapon/table_parts,
+		/obj/item/weapon/rack_parts,
+		/obj/item/mounted/frame,
+		/obj/item/weapon/intercom_electronics
 		)
 
 	blacklist = list(
