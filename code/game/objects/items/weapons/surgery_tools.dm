@@ -351,10 +351,7 @@
 
 /obj/item/weapon/FixOVein/clot/examine(mob/user)
 	..()
-	if(foam)
-		to_chat(user, "\The [src] contains [foam] unit[foam > 1 ? "s" : ""] of biofoam.")
-	else
-		to_chat(user, "\The [src] contains [foam] units of biofoam.")
+	to_chat(user, "<span class='notice'>\The [src] contains [foam] unit[foam > 1 ? "s" : ""][foam == 0 ? "s" : ""] of biofoam.</span>")
 
 /obj/item/weapon/FixOVein/clot/attack_self(mob/user)
 	if(foam)
