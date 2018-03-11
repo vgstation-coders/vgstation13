@@ -67,33 +67,3 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/confectionator
-
-/datum/design/fishtank
-	name = "Circuit Design (Fishtank Filter)"
-	desc = "Allows for the construction of circuit boards used to build a fishtank."
-	id = "fishtank"
-	req_tech = list(Tc_PROGRAMMING = 1)
-	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 3)
-	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/fishtank
-
-/datum/design/fishwall
-	name = "Circuit Design (Large Fishtank Filter)"
-	desc = "Allows for the construction of circuit boards used to build a large fishtank."
-	id = "fishwall"
-	req_tech = list(Tc_PROGRAMMING = 1)
-	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 3)
-	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/fishwall
-
-/datum/design/conduction_plate
-	name = "Circuit Design (Conduction Plate)"
-	desc = "Allows for the construction of circuit boards used to build a conduction plate."
-	id = "conductionplate"
-	req_tech = list(Tc_PROGRAMMING = 1, Tc_ENGINEERING = 4)
-	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
-	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/conduction_plate
