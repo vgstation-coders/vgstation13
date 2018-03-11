@@ -205,9 +205,8 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 					{{for data.parts.Robot_Part}}
 						<div class="line">
 							<div class="statusValue">
-								{{:helper.link(value.name, 'gear', null, null, null, 'misc')}}
+								{{:helper.link(value.name, 'gear', value.command2, null, null, 'misc')}}
 								{{:helper.link(value.cost, null, null, null, null, 'cost')}}
-								{{:helper.link('Build', 'gear', value.command2, null, 'fixedLeft')}}
 								{{:helper.link('Queue', 'gear', value.command1, null, 'fixedLeft')}}
 							</div>
 						</div>
