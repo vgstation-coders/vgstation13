@@ -481,13 +481,19 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		if(!src.allowed(usr))
 			to_chat(usr, "Unauthorized Access.")
 			return
-		linked_imprinter.reagents.del_reagent(href_list["dispose"])
+		var/obj/item/weapon/reagent_containers/RC = locate(href_list["beakerI"])
+		if(RC && RC in linked_imprinter.component_parts)
+			RC.reagents.del_reagent(href_list["disposeI"])
+		linked_imprinter.update_buffer_size()
 
 	else if(href_list["disposeallI"] && linked_imprinter) //Causes the circuit imprinter to dispose of all it's reagents.
 		if(!src.allowed(usr))
 			to_chat(usr, "Unauthorized Access.")
 			return
-		linked_imprinter.reagents.clear_reagents()
+		if(alert("Are you sure you want to flush all reagents?", "Reagents Purge Confirmation", "Continue", "Cancel") == "Continue")
+			for(var/obj/item/weapon/reagent_containers/RC in linked_imprinter.component_parts)
+				RC.reagents.clear_reagents()
+			linked_imprinter.update_buffer_size()
 
 	else if(href_list["removeQItem"]) //Causes the protolathe to dispose of all it's reagents.
 		var/i=text2num(href_list["removeQItem"])
@@ -926,7 +932,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += {"[CircuitImprinterHeader()]
 				Circuit Imprinter Menu \[<A href='?src=\ref[src];toggleAutoRefresh=1'>Auto-Refresh: [autorefresh ? "ON" : "OFF"]</A>\]<BR>
 				<b>Material Amount:</b> [linked_imprinter.TotalMaterials()] cm<sup>3</sup><BR>
-				<b>Chemical Volume:</b> [linked_imprinter.reagents.total_volume]<HR>"}
+				<b>Chemical Volume:</b> [linked_imprinter.get_total_volume()] units<HR>"}
 			dat += "Filter: "
 			for(var/name_set in linked_imprinter.part_sets)
 				if (name_set in filtered["imprinter"])
@@ -966,11 +972,21 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 			dat += {"[CircuitImprinterHeader()]
 				Chemical Storage<HR>"}
-			for(var/datum/reagent/R in linked_imprinter.reagents.reagent_list)
 
-				dat += {"Name: [R.name] | Units: [R.volume]
-					<A href='?src=\ref[src];disposeI=[R.id]'>(Purge)</A><BR>
-					<A href='?src=\ref[src];disposeallI=1'><U>Disposal All Chemicals in Storage</U></A><BR>"}
+			/var/beaker_index
+			beaker_index = 0 //Need to do it this way or it doesn't reset properly on refresh
+			for(var/obj/item/weapon/reagent_containers/RC in linked_imprinter.component_parts)
+				beaker_index++
+				dat += "<b>Reservoir [beaker_index] - [RC.name]:</b><BR>"
+				if(RC.reagents.reagent_list && RC.reagents.reagent_list.len)
+					for(var/datum/reagent/R in RC.reagents.reagent_list)
+						dat += {"[R.name] | Units: [R.volume]
+							<A href='?src=\ref[src];disposeI=[R.id];beakerI=\ref[RC]'>(Purge)</A><BR>"}
+				else
+					dat += "<em>(Empty)</em><BR>"
+				dat += "<BR>"
+			dat += "<A href='?src=\ref[src];disposeallI=1'><U>Disposal All Chemicals in Storage</U></A><BR>"
+
 		if(4.3)
 
 			dat += {"[CircuitImprinterHeader()]

@@ -63,9 +63,9 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/RefreshParts()
 	var/T = 0
 	for(var/obj/item/weapon/reagent_containers/glass/G in component_parts)
-		T += G.reagents.maximum_volume
+		T += G.reagents.maximum_volume - G.reagents.total_volume
+	create_reagents(T) // This is only a buffer for handling reagents poured into the imprinter before they flow into the beakers
 
-	create_reagents(T) // Holder for the reagents used as materials.
 	T = 0
 	for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
 		T += M.rating
@@ -75,3 +75,36 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	..()
 	if (O.is_open_container())
 		return 0
+
+/obj/machinery/r_n_d/fabricator/circuit_imprinter/process()
+	if(reagents && reagents.reagent_list.len)
+		for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+			var/empty_volume = RC.reagents.maximum_volume - RC.reagents.total_volume
+			if(empty_volume <= 0)
+				continue
+			reagents.trans_to(RC, empty_volume)
+
+		update_buffer_size()
+
+	..()
+
+/obj/machinery/r_n_d/fabricator/circuit_imprinter/update_buffer_size()
+	var/total_empty_volume = 0
+	for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+		total_empty_volume += RC.reagents.maximum_volume - RC.reagents.total_volume
+	reagents.maximum_volume = total_empty_volume
+
+/obj/machinery/r_n_d/fabricator/circuit_imprinter/proc/get_total_volume()
+	var/all_volume = 0
+	for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+		all_volume += RC.reagents.total_volume
+	return all_volume
+/*
+/obj/machinery/r_n_d/fabricator/circuit_imprinter/examine(mob/user)
+	..()
+	for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+		to_chat(user, "<span class='info'>There is \a [RC.name] inside.</span>")
+		RC.show_list_of_reagents(user)
+*/
+/obj/machinery/r_n_d/fabricator/circuit_imprinter/hide_our_reagents()
+	return TRUE

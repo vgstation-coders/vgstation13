@@ -234,8 +234,17 @@
 	for(var/M in part.materials)
 		if(copytext(M,1,2) == "$" && !(research_flags & IGNORE_MATS))
 			materials.removeAmount(M, get_resource_cost_w_coeff(part, M))
+
 		else if(!(research_flags & IGNORE_CHEMS))
-			reagents.remove_reagent(M, get_resource_cost_w_coeff(part, M))
+			var/left_to_remove = get_resource_cost_w_coeff(part, M)
+			for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+				var/remove_amount = min(RC.reagents.get_reagent_amount(M), left_to_remove)
+				RC.reagents.remove_reagent(M, remove_amount)
+				left_to_remove -= remove_amount
+				if(left_to_remove <= 0)
+					break
+			update_buffer_size()
+
 	return 1
 
 /obj/machinery/r_n_d/fabricator/proc/check_mat(var/datum/design/being_built, var/M)
@@ -246,7 +255,10 @@
 	else
 		if(src.research_flags & IGNORE_CHEMS)
 			return 1
-		return round(reagents.get_reagent_amount(M) / get_resource_cost_w_coeff(being_built, M))
+		var/reagent_total = 0
+		for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+			reagent_total += RC.reagents.get_reagent_amount(M)
+		return round(reagent_total / get_resource_cost_w_coeff(being_built, M))
 	return 0
 
 /obj/machinery/r_n_d/fabricator/proc/build_part(var/datum/design/part)
@@ -713,3 +725,6 @@
 			mats.forceMove(src.loc)
 		return total_amount
 	return 0
+
+/obj/machinery/r_n_d/fabricator/proc/update_buffer_size()
+	return
