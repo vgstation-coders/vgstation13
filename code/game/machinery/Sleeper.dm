@@ -63,8 +63,6 @@
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol")
 
 /obj/machinery/sleeper/interact(var/mob/user)
-	if(user.loc == src || (!Adjacent(user)&&!issilicon(user)) || user.lying || user.incapacitated() || !user.dexterity_check())
-		return
 	var/dat = list()
 	if(on)
 		dat += "<B>Performing anaesthesic emergence...</B>" //Best I could come up with
@@ -113,7 +111,7 @@
 /obj/machinery/sleeper/Topic(href, href_list)
 	if(..())
 		return 1
-	else if(usr.loc == src || (!Adjacent(usr)&&!issilicon(usr)) || usr.lying || usr.incapacitated() || !usr.dexterity_check())
+	if(usr.loc == src)
 		return 1
 	else
 		usr.set_machine(src)
@@ -301,6 +299,8 @@
 	return
 
 /obj/machinery/sleeper/attack_hand(mob/user)
+	if(!isobserver(user) && (user.loc == src || (!Adjacent(user)&&!issilicon(user)) || user.incapacitated()))
+		return
 	interact(user)
 
 /obj/machinery/sleeper/ex_act(severity)
@@ -543,8 +543,6 @@
 /obj/machinery/sleeper/mancrowave/RefreshParts()
 
 /obj/machinery/sleeper/mancrowave/interact(var/mob/user)
-	if(user.loc == src || !Adjacent(user) || user.lying || user.incapacitated() || !user.dexterity_check())
-		return
 	var/dat = "<font color='blue'><B>Occupant Statistics:</B></FONT><BR>"
 	if (occupant)
 		var/t1
@@ -579,9 +577,6 @@
 /obj/machinery/sleeper/mancrowave/Topic(href, href_list)
 	if(..())
 		return 1
-	if(usr.loc == src || (!Adjacent(usr)&&!issilicon(usr)) || usr.lying || usr.incapacitated() || !usr.dexterity_check())
-		return 1
-	usr.set_machine(src)
 	if (href_list["cook"])
 		if (on)
 			to_chat(usr, "<span class='danger'>\The [src] is already turned on!</span>")
