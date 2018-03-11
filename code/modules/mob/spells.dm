@@ -53,12 +53,15 @@
 	if(!spell_masters || !spell_masters.len)
 		return
 
+	var/obj/abstract/screen/movable/spell_master/master = spell_to_remove.connected_button.spellmaster
+	if(!(master in spell_masters))
+		return
+	master.remove_spell(spell_to_remove)
+
 	spell_to_remove.on_removed(src)
 	if(mind && mind.wizard_spells)
 		mind.wizard_spells.Remove(spell_to_remove)
 	spell_list.Remove(spell_to_remove)
-	for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
-		spell_master.remove_spell(spell_to_remove)
 	return 1
 
 /mob/proc/silence_spells(var/amount = 0)
