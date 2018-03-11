@@ -270,13 +270,11 @@
 /obj/machinery/bodyscanner/attack_hand(mob/user)
 	if(..())
 		return
-	if(stat & (NOPOWER|BROKEN))
-		return
 	if(!ishuman(occupant))
 		to_chat(user, "<span class='warning'>This device can only scan compatible lifeforms.</span>")
 		return
 
-	if(user.loc == src || (!Adjacent(user)&&!issilicon(user)) || user.lying || user.incapacitated() || !user.dexterity_check())
+	if(!isobserver(user) && (user.loc == src || (!Adjacent(user)&&!issilicon(user)) || user.incapacitated()))
 		return
 
 	var/dat
@@ -297,7 +295,7 @@
 	if(..())
 		return
 
-	if(usr.loc == src || (!Adjacent(usr)&&!issilicon(usr)) || usr.lying || usr.incapacitated() || !usr.dexterity_check())
+	if(usr.loc == src)
 		return
 
 	if(href_list["print"])
