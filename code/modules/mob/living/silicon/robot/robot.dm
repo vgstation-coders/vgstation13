@@ -103,7 +103,7 @@
 	station_holomap = new(src)
 	radio = new /obj/item/device/radio/borg(src)
 	aicamera = new/obj/item/device/camera/silicon/robot_camera(src)
-	
+
 	if(AIlink)
 		connected_ai = select_active_ai_with_fewest_borgs()
 
@@ -246,7 +246,7 @@
 /mob/living/silicon/robot/proc/set_module_sprites(var/list/new_sprites)
 	if(new_sprites && new_sprites.len)
 		module_sprites = new_sprites.Copy()
-	
+
 	if(module_sprites.len)
 		var/picked = pick(module_sprites)
 		icon_state = module_sprites[picked]
@@ -642,11 +642,14 @@
 			return
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0))
+			var/starting_health = health
 			adjustBruteLoss(-30)
 			updatehealth()
+			if(health != starting_health)
+				visible_message("<span class='attack'>[user] fixes some dents on [src]!</span>")
+			else
+				to_chat(user, "<span class='warning'>[src] is far too damaged for [WT] to have any effect!</span>")
 			add_fingerprint(user)
-			for(var/mob/O in viewers(user, null))
-				O.show_message(text("<span class='attack'>[user] has fixed some of the dents on [src]!</span>"), 1)
 		else
 			to_chat(user, "Need more welding fuel!")
 			return
