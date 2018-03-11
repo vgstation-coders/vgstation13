@@ -99,12 +99,6 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	for(var/obj/item/weapon/reagent_containers/RC in component_parts)
 		all_volume += RC.reagents.total_volume
 	return all_volume
-/*
-/obj/machinery/r_n_d/fabricator/circuit_imprinter/examine(mob/user)
-	..()
-	for(var/obj/item/weapon/reagent_containers/RC in component_parts)
-		to_chat(user, "<span class='info'>There is \a [RC.name] inside.</span>")
-		RC.show_list_of_reagents(user)
-*/
-/obj/machinery/r_n_d/fabricator/circuit_imprinter/hide_our_reagents()
+
+/obj/machinery/r_n_d/fabricator/circuit_imprinter/hide_own_reagents()
 	return TRUE

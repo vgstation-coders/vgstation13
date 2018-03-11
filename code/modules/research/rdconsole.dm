@@ -973,8 +973,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += {"[CircuitImprinterHeader()]
 				Chemical Storage<HR>"}
 
-			/var/beaker_index
-			beaker_index = 0 //Need to do it this way or it doesn't reset properly on refresh
+			var/beaker_index = 0
 			for(var/obj/item/weapon/reagent_containers/RC in linked_imprinter.component_parts)
 				beaker_index++
 				dat += "<b>Reservoir [beaker_index] - [RC.name]:</b><BR>"

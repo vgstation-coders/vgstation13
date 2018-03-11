@@ -220,7 +220,7 @@ var/global/list/ghdel_profiling = list()
 	return flags & OPENCONTAINER
 
 // For when we want an open container that doesn't show its reagents on examine
-/atom/proc/hide_our_reagents()
+/atom/proc/hide_own_reagents()
 	return FALSE
 
 // As a rule of thumb, should smoke be able to pop out from inside this object?
@@ -418,7 +418,7 @@ its easier to just keep the beam vertical.
 	if(desc)
 		to_chat(user, desc)
 
-	if(reagents && is_open_container() && !ismob(src) && !hide_our_reagents()) //is_open_container() isn't really the right proc for this, but w/e
+	if(reagents && is_open_container() && !ismob(src) && !hide_own_reagents()) //is_open_container() isn't really the right proc for this, but w/e
 		if(get_dist(user,src) > 3)
 			to_chat(user, "<span class='info'>You can't make out the contents.</span>")
 		else
