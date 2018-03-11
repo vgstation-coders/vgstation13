@@ -1235,8 +1235,12 @@
 		return
 
 /mob/living/silicon/robot/proc/self_destruct()
+	if(mind && mind.special_role && emagged)
+		to_chat(src, "<span class='danger'>Termination signal detected. Scrambling security and identification codes.</span>")
+		UnlinkSelf()
+		return FALSE
 	gib()
-	return
+	return TRUE
 
 /mob/living/silicon/robot/proc/UnlinkSelf()
 	if(connected_ai)
@@ -1260,7 +1264,7 @@
 
 	if(R)
 		R.UnlinkSelf()
-		to_chat(R, "Buffers flushed and reset. Camera system shutdown.  All systems operational.")
+		to_chat(R, "Buffers flushed and reset. Camera system shutdown. All systems operational.")
 		verbs -= /mob/living/silicon/robot/proc/ResetSecurityCodes
 
 /mob/living/silicon/robot/mode()
