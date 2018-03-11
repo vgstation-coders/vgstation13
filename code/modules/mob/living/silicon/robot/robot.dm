@@ -348,12 +348,28 @@
 	if(!can_diagnose())
 		return null
 
-	var/dat = "<HEAD><TITLE>[name] Self-Diagnosis Report</TITLE></HEAD><BODY>\n"
+	var/list/dat = list({"<table>
+	<tr>
+		<th>Component</th>
+		<th>Energy consumption</th>
+		<th>Brute damage</th>
+		<th>Electronics damage</th>
+		<th>Powered</th>
+		<th>Toggled</th>
+	</tr>"})
 	for (var/V in components)
 		var/datum/robot_component/C = components[V]
-		dat += "<b>[C.name]</b><br><table><tr><td>Power consumption</td><td>[C.energy_consumption]</td></tr><tr><td>Brute Damage:</td><td>[C.brute_damage]</td></tr><tr><td>Electronics Damage:</td><td>[C.electronics_damage]</td></tr><tr><td>Powered:</td><td>[(!C.energy_consumption || C.is_powered()) ? "Yes" : "No"]</td></tr><tr><td>Toggled:</td><td>[ C.toggled ? "Yes" : "No"]</td></table><br>"
+		dat += {"<tr>
+		<td>[C.name]</td>
+		<td>[C.energy_consumption]W</td>
+		<td>[C.brute_damage || "None"]</td>
+		<td>[C.electronics_damage || "None"]</td>
+		<td>[(!C.energy_consumption || C.is_powered()) ? "Yes" : "No"]</td>
+		<td>[C.toggled ? "On" : "Off"]</td>
+		</tr>"}
 
-	return dat
+	dat += "</table>"
+	return jointext(dat, "")
 
 
 /mob/living/silicon/robot/verb/self_diagnosis_verb()
@@ -364,7 +380,9 @@
 		to_chat(src, "<span class='warning'>Your self-diagnosis component isn't functioning.</span>")
 
 	var/dat = self_diagnosis()
-	src << browse(dat, "window=robotdiagnosis")
+	var/datum/browser/popup = new(src, "\ref[src]-robotdiagnosis", "Self diagnosis", 730, 270)
+	popup.set_content(dat)
+	popup.open()
 
 
 /mob/living/silicon/robot/verb/toggle_component()
