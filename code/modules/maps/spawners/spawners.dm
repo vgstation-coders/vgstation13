@@ -603,6 +603,7 @@
 		/obj/item/device/powersink,
 		/obj/item/weapon/gun/projectile/flamethrower/full,
 		/obj/item/weapon/gun/projectile/deagle/gold,
+		/obj/item/clothing/shoes/magboots/magnificent,
 		/obj/item/weapon/gun/projectile/russian,
 	)
 
