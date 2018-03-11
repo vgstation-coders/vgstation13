@@ -527,7 +527,7 @@
 	start_fueled = 0
 
 /obj/item/weapon/weldingtool/largetank
-	name = "Industrial Welding Tool"
+	name = "industrial welding tool"
 	desc = "The cutting edge between portability and tank size."
 	icon_state = "welder_large"
 	max_fuel = 40
@@ -538,7 +538,7 @@
 	start_fueled = 0
 
 /obj/item/weapon/weldingtool/hugetank
-	name = "Upgraded Welding Tool"
+	name = "upgraded welding tool"
 	desc = "A large tank for a large job."
 	icon_state = "welder_larger"
 	max_fuel = 80
@@ -567,7 +567,7 @@
 
 
 /obj/item/weapon/weldingtool/experimental
-	name = "Experimental Welding Tool"
+	name = "experimental welding tool"
 	max_fuel = 40
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
