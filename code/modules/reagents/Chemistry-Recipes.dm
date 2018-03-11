@@ -85,7 +85,7 @@
 	name = "Creatine"
 	id = CREATINE
 	result = CREATINE
-	required_reagents = list(NUTRIMENT = 1, BICARIDINE = 1, HYPERZINE = 1, MUTAGEN = 1)
+	required_reagents = list(NUTRIMENT = 1, BICARIDINE = 1, SUGAR = 1, MUTAGEN = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/discount
@@ -382,14 +382,14 @@
 	result = BICARIDINE
 	required_reagents = list(INAPROVALINE = 1, CARBON = 1)
 	result_amount = 2
-
+/*
 /datum/chemical_reaction/hyperzine
 	name = "Hyperzine"
 	id = HYPERZINE
 	result = HYPERZINE
 	required_reagents = list(SUGAR = 1, PHOSPHORUS = 1, SULFUR = 1,)
 	result_amount = 3
-
+*/
 /datum/chemical_reaction/ryetalyn
 	name = "Ryetalyn"
 	id = RYETALYN
@@ -3005,7 +3005,7 @@
 	name = "hardcore induced heart attack"
 	id = MEDCORES
 	result = CHEESYGLOOP
-	required_reagents = list(MEDCORES = 0.1, HYPERZINE = 0.1)
+	required_reagents = list(MEDCORES = 0.1, SUGAR = 0.1)
 	result_amount = 2
 
 /datum/chemical_reaction/lithotorcrazine
@@ -3063,7 +3063,7 @@
 	name = "Albuterol"
 	id = ALBUTEROL
 	result = ALBUTEROL
-	required_reagents = list(HYPERZINE = 1, INAPROVALINE = 1)
+	required_reagents = list(SUGAR = 1, INAPROVALINE = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/saltwater
