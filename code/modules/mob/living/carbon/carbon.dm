@@ -625,7 +625,7 @@
 
 /mob/living/carbon/movement_tally_multiplier()
 	. = ..()
-	if(!istype(loc, /turf/space) && !reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+	if(!istype(loc, /turf/space))
 		for(var/obj/item/I in get_clothing_items())
 			if(I.slowdown <= 0)
 				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
@@ -635,6 +635,11 @@
 		for(var/obj/item/I in held_items)
 			if(I.flags & SLOWDOWN_WHEN_CARRIED)
 				. *= I.slowdown
+
+		if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+			. *= 0.4
+			if(. < 1)//we don't want to move faster than the base speed
+				. = 1
 
 /mob/living/carbon/base_movement_tally()
 	. = ..()
