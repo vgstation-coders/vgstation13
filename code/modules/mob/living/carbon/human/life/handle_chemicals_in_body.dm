@@ -44,7 +44,8 @@
 				nutrition = 500
 			if(light_amount >= 3) //If there's enough light, heal
 				adjustBruteLoss(-(light_amount))
-				adjustToxLoss(-(light_amount))
+				if(!reagents.has_reagent(HYPERZINE))
+					adjustToxLoss(-(light_amount))
 				adjustOxyLoss(-(light_amount))
 				//TODO: heal wounds, heal broken limbs.
 
