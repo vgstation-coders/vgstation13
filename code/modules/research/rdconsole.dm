@@ -976,7 +976,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			var/beaker_index = 0
 			for(var/obj/item/weapon/reagent_containers/RC in linked_imprinter.component_parts)
 				beaker_index++
-				dat += "<b>Reservoir [beaker_index] - [RC.name]:</b><BR>"
+				dat += "<b>Reservoir [beaker_index] &mdash; [RC.name]:</b><BR>"
 				if(RC.reagents.reagent_list && RC.reagents.reagent_list.len)
 					for(var/datum/reagent/R in RC.reagents.reagent_list)
 						dat += {"[R.name] | Units: [R.volume]
