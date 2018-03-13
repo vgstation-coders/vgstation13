@@ -53,6 +53,8 @@
 		qdel(reagents)
 	..()
 
+
+//Tracking Implant
 var/global/tracking_implants = list() //fuck me
 
 /obj/item/weapon/implant/tracking
@@ -101,7 +103,8 @@ Implant Specifics:<BR>"}
 	spawn(delay)
 		malfunction--
 
-//BS12 Explosive
+
+//BS12 Explosive Implant
 /obj/item/weapon/implant/explosive
 	name = "explosive implant"
 	desc = "A military grade micro bio-explosive. Highly dangerous."
@@ -202,6 +205,8 @@ Implant Specifics:<BR>"}
 /obj/item/weapon/implant/explosive/nuclear/emp_act(severity)
 	return
 
+
+//Chemical Implant
 /obj/item/weapon/implant/chem
 	name = "chem"
 	desc = "Injects things."
@@ -293,6 +298,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards Nanotrasen.</span>")
 	return 1
 
+
+//Greytide Implant
 /obj/item/weapon/implant/traitor
 	name = "Greytide Implant"
 	desc = "Greytide Station wide"
@@ -372,7 +379,6 @@ the implant may become unstable and either pre-maturely inject the subject or si
 <b>Integrity:</b> Implant can only be used three times before the nanobots are depleted."}
 		return dat
 
-
 /obj/item/weapon/implant/adrenalin/trigger(emote, mob/source as mob)
 	if (src.uses < 1)
 		return 0
@@ -385,13 +391,14 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 	return
 
-
 /obj/item/weapon/implant/adrenalin/implanted(mob/source)
 		source.mind.store_memory("A implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.", 0, 0)
 		to_chat(source, "The implanted freedom implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.")
 		return 1
 
 
+
+//Death Alarm Implant
 /obj/item/weapon/implant/death_alarm
 	name = "death alarm implant"
 	desc = "An alarm which monitors host vital signs and transmits a radio message upon death."
@@ -474,6 +481,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	processing_objects.Add(src)
 	return 1
 
+
+//Compressed Matter Implant
 /obj/item/weapon/implant/compressed
 	name = "compressed matter implant"
 	desc = "Based on compressed matter technology, can store a single item."
@@ -520,6 +529,56 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/compressed/islegal()
 	return 0
 
+
+//Cortical Implant
 /obj/item/weapon/implant/cortical
 	name = "cortical stack"
 	desc = "A fist-sized mass of biocircuits and chips."
+
+
+//Pax(Peace) Implant
+/obj/item/weapon/implant/peace
+	name = "pax implant"
+	desc = "A bean-shaped implant with a single embossed word - PAX - on it."
+	var/imp_alive = 0
+	var/msg_debounce = 0
+	var/imp_data = {"
+<b>Implant Specifications:</b><BR>
+<b>Name:</b> Pax Implant<BR>
+<b>Manufacturer:</b> Ouroboros Medical<BR>
+<b>Effect:</b> Makes the host incapable of committing violent acts.
+<b>Important Notes:</b> Effect accomplished via a chemical secreted by the implant. This chemical is neutralized by anti-toxin.<BR>
+<b>Life:</b> Sustained as long as it remains within a host. Survives on the host's nutrition. Dies upon removal.<BR>
+"}
+
+/obj/item/weapon/implant/peace/process()
+	var/mob/living/carbon/host = imp_in
+	if (isnull(host))
+		if (imp_alive == 1)
+			Destroy()
+			return 0
+	else
+		if (imp_alive == 0)
+			imp_alive = 1
+		if (!host.reagents.has_reagent(CHILLWAX,1) && !host.reagents.has_reagent(ANTI_TOXIN))
+			if (msg_debounce == 1)
+				msg_debounce = 0
+				to_chat(host, "<span class = 'notice'>Your rage bubbles, your Pax implant is no longer suppressed!</span>")
+			host.reagents.add_reagent(CHILLWAX,2)
+		if (host.reagents.has_reagent(ANTI_TOXIN) && msg_debounce == 0)
+			msg_debounce = 1
+			to_chat(host, "<span class = 'notice'>Your rage cools as the Pax implant inside you is suppressed!</span>")
+		host.nutrition -= 2
+
+/obj/item/weapon/implant/peace/implanted(mob/host)
+	processing_objects.Add(src)
+	to_chat(host, "<span class = 'notice'>You feel your desire to harm anyone slowly drift away...</span>")
+	return 1
+
+/obj/item/weapon/implant/peace/Destroy()
+	processing_objects.Remove(src)
+	..()
+	return
+
+/obj/item/weapon/implant/peace/get_data()
+	return imp_data

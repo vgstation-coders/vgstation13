@@ -121,3 +121,15 @@
 		src.imp = new /obj/item/weapon/implant/death_alarm( src )
 		..()
 		return
+
+//Pax(Peace) Implant Case
+/obj/item/weapon/implantcase/peace
+	name = "Glass Case- 'Pax'"
+	desc = "A case containing a peace implant."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "implantcase-b"
+
+	New()
+		src.imp = new /obj/item/weapon/implant/peace(src)
+		..()
+		return
