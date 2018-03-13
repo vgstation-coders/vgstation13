@@ -1,0 +1,51 @@
+"a" = (/obj/structure/table/reinforced,/turf/simulated/floor{icon_state = "cafeteria"; dir = 5},/area)
+"b" = (/turf/simulated/wall/invulnerable/r_wall,/area)
+"c" = (/turf/simulated/wall,/area)
+"d" = (/turf/simulated/floor/plating,/area)
+"e" = (/obj/structure/altar,/turf/simulated/floor/mineral/uranium,/area)
+"f" = (/turf/unsimulated/floor/airless,/area)
+"g" = (/turf/simulated/wall/invulnerable/r_wall,/area/maintenance/aft)
+"h" = (/turf/simulated/floor/carpet,/area)
+"i" = (/turf/simulated/floor,/area)
+"j" = (/turf/simulated/floor{icon_state = "whitehall"},/area)
+"k" = (/turf/simulated/floor{icon_state = "whitegreen"},/area)
+"l" = (/turf/simulated/floor{icon_state = "cafeteria"; dir = 5},/area)
+"m" = (/obj/structure/ladder/mutant_den/bottom,/turf/unsimulated/floor/airless,/area)
+"n" = (/obj/structure/bed,/turf/simulated/floor/carpet,/area)
+"o" = (/turf/simulated/floor/wood,/area)
+"p" = (/turf/simulated/wall/mineral/uranium,/area)
+"q" = (/turf/simulated/floor{icon_state = "whitebluecorner"; dir = 1},/area)
+"r" = (/turf/simulated/floor/mineral/uranium,/area)
+
+(1,1,1) = {"
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bhnchnchnciiichhhciiickkkkkkkkkclllllaooooooooooob
+bhhchhchhciiihhhnciiickkkkkkkkkllllllaooooooooooob
+bhcchcchcciiichhhciiickkkkkkkkkclllllaooooooooooob
+biiiiiiiiiiiiccccciiickkkkkkkkkclllllaooooooooooob
+biiiiiiiiiiiicnhnciiickkkkkkkkkclllllaooooooooooob
+bhcchcchcciiicnhnciiickkkkkkkkklllllllooooooooooob
+bhhchhchhciiicnhnciiickkkkkkkkkclllllaooooooooooob
+bhnchnchnciiichhhciiickkkkkkkkkclllllaooooooooooob
+bccccccccciiihhhhhiiiccccccccccccccccccccccccccccb
+bhnchnchnciiichhhciiiiiiiiiiiiiiiiiiiiiiiiiiiiiiib
+bhhchhchhciiicnhnciiiiiiiiiiiiiiiiiiiiiiiiiiiiiiib
+bhcchcchcciiicnhnciiiiiiiiiiiiiiiiiiiiiiiiiiiiiiib
+biiiiiiiiiiiicnhnciiiccccccccccccccccccccccccdcccb
+biiiiiiiiiiiiccccciiicdddccdcdddcdcdddcddddcdddccb
+biiiiiiiiiiiiiiiiiiiicdddccdddddcddddddddddcdddccb
+bcchcchcchcchcchcciiiccdcccdcdddcdccddcddddcdddccb
+bichhchhchhchhchhciiidddddcdcccccdcddccdcddccdcccb
+bichnchnchnchnchnciiiccccdcdddddddccdccdcddccdcccb
+bccccccccccccccccciiicddcdcdcccccdcccccdcddcdddccb
+biiiiiiiiiiiiiiiiiiiicddddcdcdddcdcdddcddddcdddccb
+biiiiiiiiiiiiiiiiiiiicddcdcdddddcdcdddcdcddcdddccb
+bjjjjjjjjjjjjjjjjjiiiccccdcdcdddcdcdddcdcppppdpppb
+bccqccccqcccccqccciiicddddddcccccdcdddddcprrrrrrrb
+bqqqqqcqqqcqqqqqqciiicddccddcdddddcccccdcprrrrrrrb
+bqqqqccqqqccqqqqcccdcccccccdcddddccdccddcprrrerrrb
+bqqqqcqqqqqqqqqqcfffffcdddddcddddcdddcdccprrrrrrrb
+bqqqqqqqqqqcqqqqcffmffcdddddcddddcdddddccprrrrrrrb
+bqqqqcqqqqqcqqqqcfffffcddddccddddddddcdccprrrrrrrb
+bbbbbbbbbbbbbbbbbbgbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+"}

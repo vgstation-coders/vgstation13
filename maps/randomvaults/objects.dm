@@ -491,6 +491,17 @@
 	id = "spacepond"
 	height = 0
 
+
+/obj/structure/ladder/mutant_den/top
+	name = "ladder down"
+	id = "mutant_den"
+	height = 1
+
+/obj/structure/ladder/mutant_den/bottom
+	name = "ladder up"
+	id = "mutant_den"
+	height = 0
+
 /mob/living/silicon/decoy/AIvault/New()
 	name = pick(ai_names)
 	icon_state = "ai-malf"

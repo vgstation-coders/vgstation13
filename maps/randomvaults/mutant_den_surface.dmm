@@ -1,0 +1,58 @@
+"a" = (/turf/space,/area)
+"b" = (/turf/unsimulated/floor/airless,/area)
+"c" = (/turf/simulated/wall/r_wall,/area)
+"d" = (/obj/structure/lattice,/turf/space,/area)
+"e" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/turf/unsimulated/floor/airless,/area)
+"f" = (/obj/structure/girder,/turf/unsimulated/floor/airless,/area)
+"g" = (/obj/structure/lattice,/obj/structure/lattice,/turf/space,/area)
+"h" = (/obj/structure/grille/broken,/turf/unsimulated/floor/airless,/area)
+"i" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/unsimulated/floor/airless,/area)
+"j" = (/obj/item/weapon/shard,/turf/unsimulated/floor/airless,/area)
+"k" = (/obj/item/weapon/shard{icon_state = "medium"},/obj/structure/grille/broken,/turf/unsimulated/floor/airless,/area)
+"l" = (/obj/item/weapon/shard{icon_state = "medium"},/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/turf/unsimulated/floor/airless,/area)
+"m" = (/obj/item/weapon/shard{icon_state = "medium"},/turf/unsimulated/floor/airless,/area)
+"n" = (/turf/simulated/wall,/area)
+"o" = (/obj/item/weapon/shard{icon_state = "small"},/turf/unsimulated/floor/airless,/area)
+"p" = (/obj/item/weapon/shard,/obj/structure/grille/broken,/turf/unsimulated/floor/airless,/area)
+"q" = (/obj/structure/lattice,/turf/unsimulated/floor/airless,/area)
+"r" = (/obj/item/weapon/shard,/obj/structure/grille/broken,/obj/structure/window/reinforced{dir = 8},/turf/unsimulated/floor/airless,/area)
+"s" = (/obj/item/stack/cable_coil/random,/turf/unsimulated/floor/airless,/area)
+"t" = (/obj/structure/girder,/turf/simulated/wall,/area)
+"u" = (/obj/structure/ladder/mutant_den/top,/turf/unsimulated/floor/airless,/area)
+"v" = (/obj/structure/lattice,/obj/structure/grille/broken,/turf/space,/area)
+"w" = (/obj/item/weapon/shard,/obj/structure/grille,/turf/unsimulated/floor/airless,/area)
+"x" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/turf/unsimulated/floor/airless,/area)
+"y" = (/obj/structure/lattice,/obj/item/stack/cable_coil/random,/turf/space,/area)
+"z" = (/obj/item/weapon/shard,/obj/structure/window/reinforced{dir = 1},/turf/unsimulated/floor/airless,/area)
+"A" = (/obj/item/weapon/shard,/obj/structure/window/reinforced{dir = 8},/turf/unsimulated/floor/airless,/area)
+"B" = (/obj/item/weapon/shard{icon_state = "medium"},/obj/structure/grille,/obj/structure/window/reinforced,/turf/unsimulated/floor/airless,/area)
+"C" = (/obj/item/weapon/shard{icon_state = "small"},/obj/structure/grille/broken,/obj/structure/window/reinforced{dir = 8},/turf/unsimulated/floor/airless,/area)
+"D" = (/obj/item/weapon/shard{icon_state = "medium"},/obj/structure/grille,/turf/unsimulated/floor/airless,/area)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaaaaaa
+aabbcdaaaddaaefaaaabaaaaa
+aabbbdadddgdahiaaaabdaaaa
+aaafbdaddddaabdcdabbfaaaa
+aaajbdddaddadadbdakaaaaaa
+aaalbddaaaddamdnadoopaaaa
+aaaaaaaaaaaaabjnadpbbaaaa
+aaaaaaaaaaaaabbbaabbfaaaa
+aaaaaapmbbbbddddqodaaaaaa
+daaardsbbnnnbbbbbmdafaaaa
+daaadabqabbdbbbbtnbbbddaa
+aaaaaaaabbbbbnanndaacaaaa
+aaadaaaabbubnbbbbaaabavaa
+aaadaaaabbbbnbbbsbbabodaa
+daadaaaabbffndbadbjdbbjaa
+daadaadabbadaabbabmdbbbka
+daaaaadbbdadddbadbpabdbba
+aaawbaaadaaadaaadbbbadaaa
+aaaobaadddadadandddfadaaa
+aaarbddabbbbaadxadadadaaa
+aaafdaaabbbbaaacaadadaaaa
+aaadaaabdbbbadysaaadaaaaa
+aaazpadbabbdaaafaafjkfaaa
+aaaAbadjBpoaaaaaaaCoDcaaa
+aaaaaaaaaaaaaaaaaaaaaaaaa
+"}
