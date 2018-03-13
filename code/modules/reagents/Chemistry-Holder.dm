@@ -493,15 +493,10 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	amount_cache.len = 0
 	for(var/datum/reagent/R in reagent_list)
 		if(R.volume < R.custom_metabolism/2) //Used to be 0.1, changing this to custom_metabolism/2 to alter balance as little as possible since the default metabolism is 0.2
-			if(R.id == BLOOD && ishuman(my_atom)) //Don't delete human blood datums.
-				if(R.volume < 0.1) //Safety in case REAGENTS_METABOLISM is messed with. This is the base human blood regen amount.
-					R.volume = 0
-					continue
-			else
-				del_reagent(R.id,update_totals=0)
-				continue
-		total_volume += R.volume
-		amount_cache += list(R.id = R.volume)
+			del_reagent(R.id,update_totals=0)
+		else
+			total_volume += R.volume
+			amount_cache += list(R.id = R.volume)
 	return 0
 
 /datum/reagents/proc/clear_reagents()
