@@ -54,7 +54,7 @@
 	..()
 
 
-//Tracking Implant
+
 var/global/tracking_implants = list() //fuck me
 
 /obj/item/weapon/implant/tracking
@@ -104,7 +104,7 @@ Implant Specifics:<BR>"}
 		malfunction--
 
 
-//BS12 Explosive Implant
+
 /obj/item/weapon/implant/explosive
 	name = "explosive implant"
 	desc = "A military grade micro bio-explosive. Highly dangerous."
@@ -206,7 +206,7 @@ Implant Specifics:<BR>"}
 	return
 
 
-//Chemical Implant
+
 /obj/item/weapon/implant/chem
 	name = "chem"
 	desc = "Injects things."
@@ -299,7 +299,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	return 1
 
 
-//Greytide Implant
+
 /obj/item/weapon/implant/traitor
 	name = "Greytide Implant"
 	desc = "Greytide Station wide"
@@ -398,7 +398,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 
 
-//Death Alarm Implant
+
 /obj/item/weapon/implant/death_alarm
 	name = "death alarm implant"
 	desc = "An alarm which monitors host vital signs and transmits a radio message upon death."
@@ -482,7 +482,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	return 1
 
 
-//Compressed Matter Implant
+
 /obj/item/weapon/implant/compressed
 	name = "compressed matter implant"
 	desc = "Based on compressed matter technology, can store a single item."
@@ -530,55 +530,76 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	return 0
 
 
-//Cortical Implant
+
 /obj/item/weapon/implant/cortical
 	name = "cortical stack"
 	desc = "A fist-sized mass of biocircuits and chips."
 
 
-//Pax(Peace) Implant
+
 /obj/item/weapon/implant/peace
 	name = "pax implant"
 	desc = "A bean-shaped implant with a single embossed word - PAX - on it."
 	var/imp_alive = 0
-	var/msg_debounce = 0
+	var/imp_msg_debounce = 0
 	var/imp_data = {"
 <b>Implant Specifications:</b><BR>
 <b>Name:</b> Pax Implant<BR>
 <b>Manufacturer:</b> Ouroboros Medical<BR>
 <b>Effect:</b> Makes the host incapable of committing violent acts.
-<b>Important Notes:</b> Effect accomplished via a chemical secreted by the implant. This chemical is neutralized by anti-toxin.<BR>
+<b>Important Notes:</b> Effect accomplished via a chemical secreted by the implant. This chemical is neutralized by 15u or greater of Methylin.<BR>
 <b>Life:</b> Sustained as long as it remains within a host. Survives on the host's nutrition. Dies upon removal.<BR>
 "}
 
+/obj/item/weapon/implant/peace/meltdown()
+	for (var/mob/msg_viewer in viewers(src, null))
+		msg_viewer.show_message("<span class='warning'>The [name] releases a dying hiss as it denatures!</span>", 1)
+	name = "denatured implant"
+	desc = "A dead, hollow implant. Wonder what it used to be..."
+	icon_state = "implant_melted"
+	malfunction = MALFUNCTION_PERMANENT
+
 /obj/item/weapon/implant/peace/process()
 	var/mob/living/carbon/host = imp_in
+
+	if (malfunction == MALFUNCTION_PERMANENT)//Just in case something external acts on the implant.
+		host = null
+		imp_alive = 1
+
 	if (isnull(host))
-		if (imp_alive == 1)
-			Destroy()
-			return 0
+		if (imp_alive)
+			meltdown()
+			processing_objects.Remove(src)
+			return
 	else
-		if (imp_alive == 0)
+		if (!imp_alive)
 			imp_alive = 1
-		if (!host.reagents.has_reagent(CHILLWAX,1) && !host.reagents.has_reagent(ANTI_TOXIN))
-			if (msg_debounce == 1)
-				msg_debounce = 0
-				to_chat(host, "<span class = 'notice'>Your rage bubbles, your Pax implant is no longer suppressed!</span>")
-			host.reagents.add_reagent(CHILLWAX,2)
-		if (host.reagents.has_reagent(ANTI_TOXIN) && msg_debounce == 0)
-			msg_debounce = 1
-			to_chat(host, "<span class = 'notice'>Your rage cools as the Pax implant inside you is suppressed!</span>")
-		host.nutrition -= 2
+
+		if (host.nutrition <= 0 || host.reagents.has_reagent(METHYLIN, 15))
+			malfunction = MALFUNCTION_TEMPORARY
+		else
+			malfunction = 0
+
+		if (!imp_msg_debounce && malfunction == MALFUNCTION_TEMPORARY)
+			imp_msg_debounce = 1
+			to_chat(host, "<span class = 'warning'>Your rage bubbles, the [name] inside you is being suppressed!</span>")
+
+		if (imp_msg_debounce && !malfunction)
+			imp_msg_debounce = 0
+			to_chat(host, "<span class = 'warning'>Your rage cools, the [name] inside you is active!</span>")
+
+		if (!malfunction)
+			if (!host.reagents.has_reagent(CHILLWAX,1))
+				host.reagents.add_reagent(CHILLWAX,2)
+			host.nutrition = max(host.nutrition - 4.15,0)//Chill Wax: host.nutrition += 4/tick. Total: host.nutrition -= 0.15/tick.
 
 /obj/item/weapon/implant/peace/implanted(mob/host)
-	processing_objects.Add(src)
-	to_chat(host, "<span class = 'notice'>You feel your desire to harm anyone slowly drift away...</span>")
-	return 1
-
-/obj/item/weapon/implant/peace/Destroy()
-	processing_objects.Remove(src)
-	..()
-	return
+	if (!imp_alive && !malfunction)
+		processing_objects.Add(src)
+		to_chat(host, "<span class = 'warning'>You feel your desire to harm anyone slowly drift away...</span>")
+		return 1
+	else
+		return 0
 
 /obj/item/weapon/implant/peace/get_data()
 	return imp_data

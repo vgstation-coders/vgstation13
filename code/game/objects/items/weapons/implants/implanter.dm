@@ -10,15 +10,12 @@
 
 /obj/item/weapon/implanter/proc/update()
 
-
-
 /obj/item/weapon/implanter/update()
 	if (src.imp)
 		src.icon_state = "implanter1"
 	else
 		src.icon_state = "implanter0"
 	return
-
 
 /obj/item/weapon/implanter/attack(mob/M as mob, mob/user as mob)
 	if (!istype(M, /mob/living/carbon))
@@ -63,6 +60,7 @@
 	update()
 	return
 
+
 /obj/item/weapon/implanter/loyalty
 	name = "implanter-loyalty"
 
@@ -71,6 +69,7 @@
 	..()
 	update()
 	return
+
 
 /obj/item/weapon/implanter/explosive
 	name = "implanter (E)"
@@ -81,6 +80,7 @@
 	update()
 	return
 
+
 /obj/item/weapon/implanter/adrenalin
 	name = "implanter-adrenalin"
 
@@ -89,6 +89,7 @@
 	..()
 	update()
 	return
+
 
 /obj/item/weapon/implanter/compressed
 	name = "implanter (C)"
