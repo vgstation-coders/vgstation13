@@ -823,7 +823,7 @@ var/global/list/whitelisted_species = list("Human")
 	has_mutant_race = 0
 	burn_mod = 2.5 //treeeeees
 
-	move_speed_mod = 7
+	move_speed_mod = 4
 
 /datum/species/golem
 	name = "Golem"
