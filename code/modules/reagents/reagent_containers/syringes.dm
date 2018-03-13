@@ -417,7 +417,34 @@
 	mode = SYRINGE_INJECT
 	update_icon()
 
+/obj/item/weapon/reagent_containers/syringe/hyronalin
+	name = "Syringe (hyronalin)"
+	desc = "Mild antiradiation medication."
+/obj/item/weapon/reagent_containers/syringe/hyronalin/New()
+	..()
+	reagents.add_reagent(HYRONALIN, 15)
+	mode = SYRINGE_INJECT
+	update_icon()
 
+/obj/item/weapon/reagent_containers/syringe/arithrazine
+	name = "Syringe (arithrazine)"
+	desc = "Severe antiradiation medication."
+/obj/item/weapon/reagent_containers/syringe/arithrazine/New()
+	..()
+	reagents.add_reagent(ARITHRAZINE, 15)
+	mode = SYRINGE_INJECT
+	update_icon()
+
+/obj/item/weapon/reagent_containers/syringe/lithotorcrazine
+	name = "Syringe (lithotorcrazine)"
+	desc = "Radiation prevention medicine."
+/obj/item/weapon/reagent_containers/syringe/lithotorcrazine/New()
+	..()
+	reagents.add_reagent(LITHOTORCRAZINE, 15)
+	mode = SYRINGE_INJECT
+	update_icon()
+	
+	
 //Robot syringes
 //Not special in any way, code wise. They don't have added variables or procs.
 /obj/item/weapon/reagent_containers/syringe/robot/antitoxin
