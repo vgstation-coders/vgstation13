@@ -144,6 +144,7 @@
 // Destroy this role
 /datum/role/proc/Drop()
 	if(faction && (src in faction.members))
+		faction.update_hud_removed(src)
 		faction.members.Remove(src)
 
 	if(!faction)
