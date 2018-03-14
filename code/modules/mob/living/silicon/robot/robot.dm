@@ -1205,6 +1205,11 @@
 		handle_sensor_modes()
 		update_sight_hud()
 
+/mob/living/silicon/robot/area_entered(area/A)
+	if(A.flags & NO_MESONS && sensor_mode == MESON_VISION)
+		to_chat(src, "<span class='warning'>Your Meson Vision augmentation [pick("force-quits","shuts down unexpectedly","has received an update and needs to close")]!</span>")
+		unequip_sight()
+
 /mob/living/silicon/robot/proc/unequip_sight()
 	sensor_mode = 0
 	update_sight_hud()
