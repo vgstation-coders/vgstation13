@@ -34,9 +34,11 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 
 /datum/hud/New(mob/owner)
 	mymob = owner
-	instantiate()
+
 	hide_actions_toggle = new
 	hide_actions_toggle.InitialiseIcon(mymob)
+
+	instantiate()
 	..()
 
 /datum/hud/Destroy()
