@@ -33,14 +33,14 @@
 		if(iscarbon(M))
 			apply_color(M)
 	..()
-	
+
 /obj/item/clothing/glasses/scanner/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_glasses)
 		if(on)
 			if(iscarbon(user))
 				remove_color(user)
 	..()
-	
+
 /obj/item/clothing/glasses/scanner/update_icon()
 	icon_state = initial(icon_state)
 
@@ -133,6 +133,10 @@
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/glasses/scanner/meson/enable(var/mob/C)
+	var/area/A = get_area(src)
+	if(A.flags & NO_MESONS)
+		to_chat(C, "<span class = 'warning'>\The [src] flickers, but refuses to come online!</span>")
+		return
 	eyeprot = initial(eyeprot)
 	vision_flags |= SEE_TURFS
 	see_invisible |= SEE_INVISIBLE_MINIMUM
@@ -145,6 +149,11 @@
 	vision_flags &= ~SEE_TURFS
 	see_invisible &= ~SEE_INVISIBLE_MINIMUM
 	..()
+
+/obj/item/clothing/glasses/scanner/meson/area_entered(area/A)
+	if(A.flags & NO_MESONS && on)
+		visible_message("<span class = 'warning'>\The [src] sputter out.</span>")
+		disable()
 
 /obj/item/clothing/glasses/scanner/material
 	name = "optical material scanner"

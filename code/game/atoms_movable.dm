@@ -966,3 +966,6 @@
 
 /atom/movable/proc/on_tether_broken(atom/movable/other_end)	//To allow for code based on when a tether with a specific thing is broken
 	return
+
+/atom/movable/proc/area_entered(var/area/A)
+	return
