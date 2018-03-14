@@ -530,15 +530,11 @@
 				to_chat(usr, "<span class='danger'>Sorry, that feature is not coded yet. - Deity Link</span>")
 			else if (istype(all_factions[joined_faction], /datum/faction))//we got an existing faction
 				var/datum/faction/joined = all_factions[joined_faction]
-				ticker.mode.orphaned_roles.Remove(newRole)
-				joined.members.Add(newRole)
-				newRole.faction = joined
+				joined.HandleRecruitedRole(newRole)
 			else //we got an inexisting faction, gotta create it first!
 				var/datum/faction/joined = ticker.mode.CreateFaction(all_factions[joined_faction], null, 1)
 				if (joined)
-					ticker.mode.orphaned_roles.Remove(newRole)
-					joined.members.Add(newRole)
-					newRole.faction = joined
+					joined.HandleRecruitedRole(newRole)
 
 		newRole.OnPostSetup(FALSE)
 		if ((chosen_greeting && chosen_greeting != "custom") || (chosen_greeting == "custom" && custom_greeting))
