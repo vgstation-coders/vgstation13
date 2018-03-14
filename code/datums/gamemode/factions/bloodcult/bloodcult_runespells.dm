@@ -1,16 +1,25 @@
 //THE SPELLS PROC'D BY THE RUNES
 
+#define RUNE_STAND	1
+
 /datum/rune_spell
 	var/name = "default name"
 	var/desc = "default description"
 	var/Act_restriction = CULT_PROLOGUE
-	var/obj/spell_holder = null
-	var/mob/activator = null
+	var/obj/spell_holder = null//the rune or talisman
+	var/mob/activator = null//the original mob that proc'd the spell
 	var/datum/cultword/word1 = null
 	var/datum/cultword/word2 = null
 	var/datum/cultword/word3 = null
 	var/teleporter = 0//teleporter runes only need the first two words to be valid
 	var/invocation = "Lo'Rem Ip'Sum"
+	var/cost_invoke = 0//blood cost upon cast
+	var/cost_upkeep = 0//blood cost upon upkeep proc
+	var/rune_flags = null //RUNE_STAND
+	var/list/contributors = list()//multiple cultists can join a single summoning
+	var/image/progbar = null
+	var/remaining_cost = 0
+	var/accumulated_blood = 0
 
 /datum/rune_spell/New(var/mob/user, var/obj/holder, var/use = "ritual")
 	spell_holder = holder
@@ -18,7 +27,7 @@
 
 	switch (use)
 		if ("ritual")
-			cast()
+			pre_cast()
 
 /datum/rune_spell/Destroy()
 	if (spell_holder)
@@ -32,7 +41,19 @@
 	activator = null
 	..()
 
+/datum/rune_spell/proc/pre_cast()
+	var/mob/living/user = activator
+	if ((rune_flags & RUNE_STAND) && (user.loc != spell_holder.loc))
+		abort("too far")
+	else
+		user.say(invocation)
+		cast()
+
+/datum/rune_spell/proc/midcast(var/mob/add_cultist)
+	return
+
 /datum/rune_spell/proc/cast()
+	spell_holder.visible_message("<span class='warning'>This rune wasn't properly set up, tell a coder.</span>")
 	qdel(src)
 
 /datum/rune_spell/proc/abort(var/cause = "erased")
@@ -40,8 +61,33 @@
 		if ("erased")
 			if (istype (spell_holder,/obj/effect/rune))
 				spell_holder.visible_message("<span class='warning'>The rune's destruction ended the ritual.</span>")
+		if ("too far")
+			if (activator)
+				to_chat(activator, "<span class='warning'>The [name] ritual requires you to stand on top of the rune.</span>")
+		if ("moved away")
+			if (activator)
+				to_chat(activator, "<span class='warning'>The ritual ends as you move away from the rune.</span>")
+		if ("channel cancel")
+			spell_holder.visible_message("<span class='warning'>Deprived of blood, the channeling is disrupted.</span>")
+
+	for(var/mob/living/L in contributors)
+		if (L.client)
+			L.client.images -= progbar
+		contributors.Remove(L)
+	if (progbar)
+		progbar.loc = null
+
 	del(src)
 
+/datum/rune_spell/proc/update_progbar()
+	if (!progbar)
+		progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = spell_holder, "icon_state" = "prog_bar_0")
+		progbar.pixel_z = WORLD_ICON_SIZE
+		progbar.plane = HUD_PLANE
+		progbar.layer = HUD_ABOVE_ITEM_LAYER
+		progbar.appearance_flags = RESET_COLOR
+	progbar.icon_state = "prog_bar_[round((min(1, accumulated_blood / remaining_cost) * 100), 10)]"
+	return
 
 //Called whenever a rune gets activated or examined
 /proc/get_rune_spell(var/mob/user, var/obj/spell_holder, var/use = "ritual", var/datum/cultword/word1, var/datum/cultword/word2, var/datum/cultword/word3)
@@ -72,6 +118,98 @@
 	word1 = /datum/cultword/blood
 	word2 = /datum/cultword/technology
 	word3 = /datum/cultword/join
+	cost_upkeep = 1
+	remaining_cost = 300
+	accumulated_blood = 0
+	var/cancelling = 3
+
+/datum/rune_spell/raisestructure/cast()
+	var/mob/living/user = activator
+	contributors.Add(user)
+	contributors[user] = ""
+	update_progbar()
+	if (user.client)
+		user.client.images |= progbar
+	spell_holder.overlays += image('icons/obj/cult.dmi',"runetrigger-build")
+	to_chat(activator, "<span class='rose'>This ritual's blood toll can be substantially reduced by having multiple cultists partake in it.</span>")
+	spawn()
+		payment()
+
+/datum/rune_spell/raisestructure/midcast(var/mob/add_cultist)
+	if (add_cultist in contributors)
+		return
+	add_cultist.say(invocation)
+	contributors.Add(add_cultist)
+	contributors[add_cultist] = ""
+	if (add_cultist.client)
+		add_cultist.client.images |= progbar
+
+/datum/rune_spell/raisestructure/abort(var/cause = "erased")
+	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
+	..()
+
+/datum/rune_spell/raisestructure/proc/payment()
+	var/failsafe = 0
+	while(failsafe < 1000)
+		failsafe++
+		//are our payers still here and about?
+		var/summoners = 0
+		for(var/mob/living/L in contributors)
+			if (iscultist(L) && (L in range(spell_holder,1)) && (L.stat == CONSCIOUS))
+				summoners++
+			else
+				if (L.client)
+					L.client.images -= progbar
+				contributors.Remove(L)
+		//alright then, time to pay in blood
+		var/amount_paid = 0
+		for(var/mob/living/L in contributors)
+			var/data = use_available_blood(L, cost_upkeep,contributors[L])
+			if (data["result"] == "failure")//out of blood are we?
+				contributors.Remove(L)
+			else
+				amount_paid += data["total"]
+				contributors[L] = data["result"]
+				make_tracker_effects(L.loc,spell_holder, 1, "soul", 3, /obj/effect/tracker/drain, 1)//visual feedback
+
+		accumulated_blood += amount_paid
+
+		//if there's no blood for over 3 seconds, the channeling fails
+		if (amount_paid)
+			cancelling = 3
+		else
+			cancelling--
+			if (cancelling <= 0)
+				if(accumulated_blood && !(locate(/obj/effect/decal/cleanable/blood/splatter) in spell_holder.loc))
+					var/obj/effect/decal/cleanable/blood/splatter/S = new(spell_holder.loc)//splash
+					S.amount = 2
+				abort("channel cancel")
+				return
+
+		//do we have multiple cultists? let's reward their cooperation
+		switch(summoners)
+			if (1)
+				remaining_cost = 300
+			if (2)
+				remaining_cost = 120
+			if (3)
+				remaining_cost = 18
+			if (4 to INFINITY)
+				remaining_cost = 0
+
+
+		if (accumulated_blood >= remaining_cost)
+			success()
+			return
+
+		update_progbar()
+
+		sleep(10)
+	message_admins("A rune ritual has iterated for over 1000 blood payment procs. Something's wrong there.")
+
+/datum/rune_spell/raisestructure/proc/success()
+	new /obj/structure/cult/altar(spell_holder.loc)
+	qdel(spell_holder)//this will cause this datum to del as well
 
 //RUNE II
 /datum/rune_spell/communication
@@ -79,6 +217,7 @@
 	desc = "Speak so that every cultists may hear your voice."
 	Act_restriction = CULT_PROLOGUE
 	invocation = "O bidai nabora se'sma!"
+	rune_flags = RUNE_STAND
 	var/obj/effect/cult_ritual/cult_communication/comms = null
 	var/destroying_self = 0
 	word1 = /datum/cultword/self
@@ -87,20 +226,7 @@
 
 /datum/rune_spell/communication/cast()
 	var/mob/living/user = activator
-	if (user.loc != spell_holder.loc)
-		abort("too far")
-	else
-		user.say(invocation)
-		comms = new /obj/effect/cult_ritual/cult_communication(spell_holder.loc,user,src)
-
-/datum/rune_spell/communication/abort(var/cause = "erased")
-	switch (cause)
-		if ("too far")
-			spell_holder.visible_message("<span class='warning'>The [name] ritual requires you to stand on top of the rune.</span>")
-		if ("moved away")
-			spell_holder.visible_message("<span class='warning'>The ritual ends as you move away from the rune.</span>")
-	..()
-
+	comms = new /obj/effect/cult_ritual/cult_communication(spell_holder.loc,user,src)
 
 /datum/rune_spell/communication/Destroy()
 	if (destroying_self)
@@ -137,14 +263,19 @@
 	..()
 
 /obj/effect/cult_ritual/cult_communication/Hear(var/datum/speech/speech, var/rendered_message="")
-	if(speech.speaker && speech.speaker.loc == loc)//&& iscultist DUH
+	if(speech.speaker && speech.speaker.loc == loc)
 		var/speaker_name = speech.speaker.name
+		if (isliving(speech.speaker))
+			var/mob/living/L = speech.speaker
+			if (!iscultist(L))//geez we don't want that now do we
+				return
 		if (ishuman(speech.speaker))
 			var/mob/living/carbon/human/H = speech.speaker
 			speaker_name = H.real_name
 		rendered_message = speech.render_message()
-		for(var/mob/living/L in player_list)//&& iscultist DUH
-			to_chat(L, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinister'>[speech.message]</span></B></span>")
+		for(var/mob/living/L in player_list)
+			if (iscultist(L))
+				to_chat(L, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinister'>[speech.message]</span></B></span>")
 		for(var/mob/dead/observer/O in player_list)
 			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinister'>[speech.message]</span></span>")
 		log_cultspeak("[key_name(speech.speaker)] Cult Communicate Rune: [rendered_message]")
@@ -413,3 +544,5 @@
 	else
 		return null
 */
+
+#undef RUNE_STAND

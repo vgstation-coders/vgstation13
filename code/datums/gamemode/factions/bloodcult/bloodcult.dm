@@ -1,6 +1,16 @@
 //CULT 3.0 BY DEITY LINK (2018)
 //BASED ON THE ORIGINAL GAME MODE BY URIST MCDORF
 
+var/veil_thickness = CULT_PROLOGUE
+
+//CULT_PROLOGUE		Default thickness, only communication and raise structure runes enabled
+//CULT_ACT_I		Altar raised. cultists can now convert.
+//CULT_ACT_II		Cultist amount reached. cultists are now looking for the sacrifice
+//CULT_ACT_III		Sacrifice complete. cult is now going loud, spreading blood and protecting bloodstones while the crew tries to destroy them
+//CULT_ACT_IV		Bloodspill threshold reached. bloodstones become indestructible, rift opens above one of them. cultists must open it, crew must close it.
+//CULT_EPILOGUE		The cult succeeded. The station is no longer reachable from space or through teleportation, and is now part of hell. Nar-Sie hunts the survivors.
+//CULT_MENDED		The cult failed (bloodstones all destroyed or rift closed). cult magic permanently disabled, living cultists progressively die by themselves.
+
 /datum/faction/bloodcult
 	name = "Cult of Nar-Sie"
 	ID = BLOODCULT
@@ -77,6 +87,7 @@
 		"user" = null,
 		"user_amount" = 0,
 		"result" = "",
+		"total" = 0,
 		)
 	var/turf/T = get_turf(user)
 	var/amount_gathered = 0
@@ -228,7 +239,7 @@
 			blood = new()
 			blood.data["blood_colour"] = H.hand_blood_color
 			blood.data["blood_DNA"] = H.blood_DNA
-			if (previous_result != "user")
+			if (previous_result != "hands")
 				user.visible_message("<span class='warning'>The blood on \the [user]'s hands drips onto the floor!</span>",
 									"<span class='rose'>You let the blood smeared on your hands join the pool of your summoning.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
@@ -238,42 +249,42 @@
 			blood.data["blood_colour"] = B.basecolor
 			blood.data["blood_DNA"] = B.blood_DNA
 			blood.data["virus2"] = B.virus2
-			if (previous_result != "user")
+			if (previous_result != "splatter")
 				user.visible_message("<span class='warning'>The blood on the floor bellow \the [user] starts moving!</span>",
 									"<span class='rose'>You redirect the flow of blood inside the splatters on the floor toward the pool of your summoning.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if ("grabbed")
 			var/mob/living/carbon/human/H = data["grabbed"]
 			blood = get_blood(H.vessel)
-			if (previous_result != "user")
+			if (previous_result != "grabbed")
 				user.visible_message("<span class='warning'>\The [user] stabs their nails inside \the [data["grabbed"]], drawing blood from them!</span>",
 									"<span class='rose'>You stab your nails inside \the [data["grabbed"]] to draw some blood from them.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if ("bleeder")
 			var/mob/living/carbon/human/H = data["bleeder"]
 			blood = get_blood(H.vessel)
-			if (previous_result != "user")
+			if (previous_result != "bleeder")
 				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data["bleeder"]]'s wounds!</span>",
 									"<span class='rose'>You dip your fingers inside \the [data["bleeder"]]'s wounds to draw some blood from them.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if ("held")
 			var/obj/item/weapon/reagent_containers/glass/G = data["held"]
 			blood = locate() in G.reagents.reagent_list
-			if (previous_result != "user")
+			if (previous_result != "held")
 				user.visible_message("<span class='warning'>\The [user] tips \the [data["held"]], pouring blood!</span>",
 									"<span class='rose'>You tip \the [data["held"]] to pour the blood contained inside.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if ("bloodpack")
 			var/obj/item/weapon/reagent_containers/blood/B = data["bloodpack"]
 			blood = locate() in B.reagents.reagent_list
-			if (previous_result != "user")
+			if (previous_result != "bloodpack")
 				user.visible_message("<span class='warning'>\The [user] squeezes \the [data["bloodpack"]], pouring blood!</span>",
 									"<span class='rose'>You squeeze \the [data["bloodpack"]] to pour the blood contained inside.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if ("container")
 			var/obj/item/weapon/reagent_containers/glass/G = data["container"]
 			blood = locate() in G.reagents.reagent_list
-			if (previous_result != "user")
+			if (previous_result != "container")
 				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data["container"]], covering them in blood!</span>",
 									"<span class='rose'>You dip your fingers inside \the [data["container"]], covering them in blood.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
@@ -283,7 +294,7 @@
 			else if (data["held_lid"])
 				to_chat(user, "<span class='warning'>Remove \the [data["held"]]'s lid first!</span>")
 			else if (data["container_lid"])
-				to_chat(user, "<span class='warning'>Remove \the [data["held"]]'s lid first!</span>")
+				to_chat(user, "<span class='warning'>Remove \the [data["container"]]'s lid first!</span>")
 			var/mob/living/carbon/human/H = user
 			blood = get_blood(H.vessel)
 			if (previous_result != "user")
@@ -310,31 +321,50 @@
 	//Blood is only consumed if there is enough of it
 	if (!data["failure"])
 		if (data["hands"])
+			data["total"] += data["hands_amount"]
 			var/mob/living/carbon/human/H = user
 			H.bloody_hands = max(0, H.bloody_hands - data["hands_amount"])
 			if (!H.bloody_hands)
 				H.clean_blood()
 				H.update_inv_gloves()
 		if (data["splatter"])
+			data["total"] += data["splatter_amount"]
 			var/obj/effect/decal/cleanable/blood/B = data["splatter"]
 			B.amount = max(0 , B.amount - data["splatter_amount"])
 		if (data["grabbed"])
+			data["total"] += data["grabbed_amount"]
 			var/mob/living/carbon/human/H = data["grabbed"]
 			H.vessel.remove_reagent(BLOOD, data["grabbed_amount"])
 			H.take_overall_damage(data["grabbed_amount"] ? 0.1 : 0)
 		if (data["bleeder"])
+			data["total"] += data["bleeder_amount"]
 			var/mob/living/carbon/human/H = data["bleeder"]
 			H.vessel.remove_reagent(BLOOD, data["bleeder_amount"])
 			H.take_overall_damage(data["bleeder_amount"] ? 0.1 : 0)
 		if (data["held"])
+			data["total"] += data["held_amount"]
 			var/obj/item/weapon/reagent_containers/glass/G = data["held"]
 			G.reagents.remove_reagent(BLOOD, data["held_amount"])
 		if (data["container"])
+			data["total"] += data["container_amount"]
 			var/obj/item/weapon/reagent_containers/glass/G = data["container"]
 			G.reagents.remove_reagent(BLOOD, data["container_amount"])
 		if (data["user"])
+			data["total"] += data["user_amount"]
 			var/mob/living/carbon/human/H = user
+			var/blood_before = H.vessel.get_reagent_amount(BLOOD)
 			H.vessel.remove_reagent(BLOOD, data["user_amount"])
+			var/blood_after = H.vessel.get_reagent_amount(BLOOD)
+			if (blood_before > BLOOD_VOLUME_SAFE && blood_after < BLOOD_VOLUME_SAFE)
+				to_chat(user, "<span class='sinister'>You start looking pale.</span>")
+			else if (blood_before > BLOOD_VOLUME_WARN && blood_after < BLOOD_VOLUME_WARN)
+				to_chat(user, "<span class='sinister'>You feel weak from the lack of blood.</span>")
+			else if (blood_before > BLOOD_VOLUME_OKAY && blood_after < BLOOD_VOLUME_OKAY)
+				to_chat(user, "<span class='sinister'>You are about to pass out from the lack of blood.</span>")
+			else if (blood_before > BLOOD_VOLUME_BAD && blood_after < BLOOD_VOLUME_BAD)
+				to_chat(user, "<span class='sinister'>You have trouble focusing, things will go bad if you keep using your blood.</span>")
+			else if (blood_before > BLOOD_VOLUME_SURVIVE && blood_after < BLOOD_VOLUME_SURVIVE)
+				to_chat(user, "<span class='sinister'>It will be all over soon.</span>")
 			H.take_overall_damage(data["user_amount"] ? 0.1 : 0)
 
 	data["blood"] = blood

@@ -390,7 +390,8 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	trigger(user)
 
 /obj/effect/rune/proc/trigger(var/mob/living/user)
-	if (active_spell)//for now. gotta add a mid_cast() proc.
+	if (active_spell)
+		active_spell.midcast(user)
 		return
 
 	user.delayNextAttack(5)
