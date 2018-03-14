@@ -57,7 +57,7 @@
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_GOLD = 500, MAT_SILVER = 250)
 	category = "Surgery"
 	build_path = /obj/item/weapon/bonesetter/bone_mender
-/*
+
 /datum/design/clot
 	name = "Capillary Laying Operation Tool"
 	desc = "A canister like tool that has two containers on it that stores synthetic vein or biofoam. There's a small processing port on the side where gauze can be inserted to produce biofoam."
@@ -67,7 +67,7 @@
 	materials = list (MAT_IRON = 10000, MAT_GLASS = 8000, MAT_SILVER = 1000)
 	category = "Surgery"
 	build_path = /obj/item/weapon/FixOVein/clot
-*/
+
 /datum/design/diamond_surgicaldrill
 	name = "Diamond Surgical Drill"
 	desc = "Yours is the drill that will pierce the tiny heavens!"
