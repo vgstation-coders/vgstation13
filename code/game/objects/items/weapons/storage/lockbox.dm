@@ -83,7 +83,6 @@
 	..()
 	if(health <= 0)
 		for(var/atom/movable/A in src)
-			for(var/obj/O in src)
 			remove_from_storage(A, get_turf(src))
 
 		qdel(src)
@@ -96,14 +95,12 @@
 		if(2)
 			if(prob(80))
 				for(var/atom/movable/A in src)
-					for(var/obj/O in src)
 					remove_from_storage(A, get_turf(src))
 					A.ex_act(3)
 				qdel(src)
 		if(3)
 			if(prob(50))
 				for(var/atom/movable/A in src)
-					for(var/obj/O in src)
 					remove_from_storage(A, get_turf(src))
 				qdel(src)
 
@@ -120,8 +117,8 @@
 			locked = !locked
 			src.update_icon()
 			if(!locked)
-				for(var/obj/O in src)
-					remove_from_storage(O, get_turf(src))
+				for(var/atom/movable/A in src)
+					remove_from_storage(A, get_turf(src))
 				if(oneuse)
 					qdel(src)
 
