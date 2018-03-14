@@ -18,16 +18,17 @@
 "r" = (/obj/item/weapon/shard,/obj/structure/grille/broken,/obj/structure/window/reinforced{dir = 8},/turf/unsimulated/floor/airless,/area)
 "s" = (/obj/item/stack/cable_coil/random,/turf/unsimulated/floor/airless,/area)
 "t" = (/obj/structure/girder,/turf/simulated/wall,/area)
-"u" = (/obj/structure/ladder/mutant_den/top,/turf/unsimulated/floor/airless,/area)
-"v" = (/obj/structure/lattice,/obj/structure/grille/broken,/turf/space,/area)
-"w" = (/obj/item/weapon/shard,/obj/structure/grille,/turf/unsimulated/floor/airless,/area)
-"x" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/turf/unsimulated/floor/airless,/area)
-"y" = (/obj/structure/lattice,/obj/item/stack/cable_coil/random,/turf/space,/area)
-"z" = (/obj/item/weapon/shard,/obj/structure/window/reinforced{dir = 1},/turf/unsimulated/floor/airless,/area)
-"A" = (/obj/item/weapon/shard,/obj/structure/window/reinforced{dir = 8},/turf/unsimulated/floor/airless,/area)
-"B" = (/obj/item/weapon/shard{icon_state = "medium"},/obj/structure/grille,/obj/structure/window/reinforced,/turf/unsimulated/floor/airless,/area)
-"C" = (/obj/item/weapon/shard{icon_state = "small"},/obj/structure/grille/broken,/obj/structure/window/reinforced{dir = 8},/turf/unsimulated/floor/airless,/area)
-"D" = (/obj/item/weapon/shard{icon_state = "medium"},/obj/structure/grille,/turf/unsimulated/floor/airless,/area)
+"u" = (/obj/effect/landmark/corpse/scientist,/turf/unsimulated/floor/airless,/area)
+"v" = (/obj/structure/ladder/mutant_den/top,/turf/unsimulated/floor/airless,/area)
+"w" = (/obj/structure/lattice,/obj/structure/grille/broken,/turf/space,/area)
+"x" = (/obj/item/weapon/shard,/obj/structure/grille,/turf/unsimulated/floor/airless,/area)
+"y" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/turf/unsimulated/floor/airless,/area)
+"z" = (/obj/structure/lattice,/obj/item/stack/cable_coil/random,/turf/space,/area)
+"A" = (/obj/item/weapon/shard,/obj/structure/window/reinforced{dir = 1},/turf/unsimulated/floor/airless,/area)
+"B" = (/obj/item/weapon/shard,/obj/structure/window/reinforced{dir = 8},/turf/unsimulated/floor/airless,/area)
+"C" = (/obj/item/weapon/shard{icon_state = "medium"},/obj/structure/grille,/obj/structure/window/reinforced,/turf/unsimulated/floor/airless,/area)
+"D" = (/obj/item/weapon/shard{icon_state = "small"},/obj/structure/grille/broken,/obj/structure/window/reinforced{dir = 8},/turf/unsimulated/floor/airless,/area)
+"E" = (/obj/item/weapon/shard{icon_state = "medium"},/obj/structure/grille,/turf/unsimulated/floor/airless,/area)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaa
@@ -42,17 +43,17 @@ aaaaaapmbbbbddddqodaaaaaa
 daaardsbbnnnbbbbbmdafaaaa
 daaadabqabbdbbbbtnbbbddaa
 aaaaaaaabbbbbnanndaacaaaa
-aaadaaaabbubnbbbbaaabavaa
+aaadaaaabuvbnbbbbaaabawaa
 aaadaaaabbbbnbbbsbbabodaa
 daadaaaabbffndbadbjdbbjaa
 daadaadabbadaabbabmdbbbka
 daaaaadbbdadddbadbpabdbba
-aaawbaaadaaadaaadbbbadaaa
+aaaxbaaadaaadaaadbbbadaaa
 aaaobaadddadadandddfadaaa
-aaarbddabbbbaadxadadadaaa
+aaarbddabbbbaadyadadadaaa
 aaafdaaabbbbaaacaadadaaaa
-aaadaaabdbbbadysaaadaaaaa
-aaazpadbabbdaaafaafjkfaaa
-aaaAbadjBpoaaaaaaaCoDcaaa
+aaadaaabdbbbadzsaaadaaaaa
+aaaApadbabbdaaafaafjkfaaa
+aaaBbadjCpoaaaaaaaDoEcaaa
 aaaaaaaaaaaaaaaaaaaaaaaaa
 "}

@@ -945,9 +945,19 @@
 	/obj/item/weapon/gun/energy/laser/pistol,
 	/obj/item/weapon/gun/energy/laser/pistol,
 	/obj/item/weapon/gun/projectile/shotgun/pump/combat,
+	)
 
 
-)
+/obj/abstract/map/spawner/misc/trash
+	name = "trash spawner"
+	icon_state = "loot_trash"
+	chance = 30
+	amount = 1
+	jiggle = 5
+	to_spawn = list(//obj/item/trash - /obj/item/trash,
+	/obj/item/weapon/shard
+	)
+
 
 // Robutts /////////////////////////////////////////////////////
 
