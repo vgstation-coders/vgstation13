@@ -120,7 +120,7 @@
 	components["power cell"] = new/datum/robot_component/cell(src)
 	components["diagnosis unit"] = new/datum/robot_component/diagnosis_unit(src)
 	components["camera"] = new/datum/robot_component/camera(src)
-	components["binary comms"] = new/datum/robot_component/binary_communication(src)
+	components["comms"] = new/datum/robot_component/binary_communication(src)
 	components["armour"] = new/datum/robot_component/armour(src)
 
 /mob/living/silicon/robot/proc/is_component_functioning(module_name)
@@ -139,6 +139,7 @@
 	var/brute_damage = 0
 	var/electronics_damage = 0
 	var/vulnerability = 1 //Multiplies the damage taken by this ammount.
+	var/isupgrade = FALSE
 
 /obj/item/robot_parts/robot_component/examine(mob/user)
 	..()
@@ -153,6 +154,7 @@
 	name = "reinforced binary communication device"
 	icon_state = "ref_binary_translator"
 	vulnerability = 0.5
+	isupgrade = TRUE
 
 /obj/item/robot_parts/robot_component/actuator
 	name = "actuator"
@@ -162,6 +164,7 @@
 	name = "reinforced actuator"
 	icon_state = "ref_actuator"
 	vulnerability = 0.5
+	isupgrade = TRUE
 
 /obj/item/robot_parts/robot_component/armour
 	name = "armour plating"
@@ -171,6 +174,7 @@
 	name = "reinforced armour plating"
 	icon_state = "ref_armor_plating"
 	vulnerability = 0.5
+	isupgrade = TRUE
 
 /obj/item/robot_parts/robot_component/camera
 	name = "camera"
@@ -180,6 +184,7 @@
 	name = "reinforced camera"
 	icon_state = "ref_camera"
 	vulnerability = 0.5
+	isupgrade = TRUE
 
 /obj/item/robot_parts/robot_component/diagnosis_unit
 	name = "diagnosis unit"
@@ -189,6 +194,7 @@
 	name = "reinforced diagnosis unit"
 	icon_state = "ref_diagnosis_unit"
 	vulnerability = 0.5
+	isupgrade = TRUE
 
 /obj/item/robot_parts/robot_component/radio
 	name = "radio"
@@ -198,6 +204,7 @@
 	name = "reinforced radio"
 	icon_state = "ref_radio"
 	vulnerability = 0.5
+	isupgrade = TRUE
 
 /obj/item/broken_device/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W, /obj/item/stack/nanopaste))

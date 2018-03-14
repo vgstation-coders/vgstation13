@@ -162,13 +162,16 @@
 
 /mob/living/silicon/robot/proc/upgrade_components()
 	if(component_extension)
-		for(var/V in components) if(V != "power cell")
+		for(var/V in components)
 			var/datum/robot_component/C = components[V]
-			var/P = text2path("[C.external_type][component_extension]")
-			var/obj/item/robot_parts/robot_component/I = new P
-			C.installed = COMPONENT_INSTALLED
-			C.wrapped = I
-			C.vulnerability = I.vulnerability
+			var/NC = text2path("[C.external_type][component_extension]")
+			var/obj/item/robot_parts/robot_component/I = new NC
+			if(I.isupgrade)
+				C.installed = COMPONENT_INSTALLED
+				C.wrapped = I
+				C.vulnerability = I.vulnerability
+			else
+				qdel(I)
 
 //If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
 //Improved /N
