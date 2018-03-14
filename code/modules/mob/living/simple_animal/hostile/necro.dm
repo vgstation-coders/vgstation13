@@ -4,28 +4,30 @@
 	faction = "necro"
 	mob_property_flags = MOB_UNDEAD
 
-/mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, datum/mind/Controller)
+/mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, var/mob/living/Victim, datum/mind/Controller)
 	..()
-	if(Controller)
-		mind = Controller
-		ckey = ckey(mind.key)
+	if(Victim && Victim.mind)
+		Victim.mind.transfer_to(src)
+		var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
+		if(ghost && ghost.can_reenter_corpse)
+			key = mind.key // Force the ghost in here
 	if(Owner)
 		faction = "\ref[Owner]"
 		friends.Add(Owner)
 		creator = Owner
-		if(Controller)
+		if(client)
 			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner]. Do his bidding so long as he lives, for when he falls so do you.</span></big>")
 		var/ref = "\ref[Owner.mind]"
 		var/list/necromancers
 		if(!(Owner.mind in ticker.mode.necromancer))
 			ticker.mode:necromancer[ref] = list()
 		necromancers = ticker.mode:necromancer[ref]
-		necromancers.Add(Controller)
+		necromancers.Add(Victim.mind)
 		ticker.mode:necromancer[ref] = necromancers
 		ticker.mode.update_necro_icons_added(Owner.mind)
-		ticker.mode.update_necro_icons_added(Controller)
+		ticker.mode.update_necro_icons_added(Victim.mind)
 		ticker.mode.update_all_necro_icons()
-		ticker.mode.risen.Add(Controller)
+		ticker.mode.risen.Add(Victim.mind)
 
 	if(name == initial(name) && !unique_name)
 		name += " ([rand(1,1000)])"
@@ -506,10 +508,12 @@
 						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/proc/unzombify()
-	if(host)
+	if(host && mind)
 		host.loc = get_turf(src)
-		if(!host.mind && src.mind) //This is assuming that, somehow, the host lost their soul, and it ended up in the zombie
-			mind.transfer_to(host)
+		mind.transfer_to(host)
+		var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
+		if(ghost && ghost.can_reenter_corpse)
+			key = mind.key
 		host.resurrect() //It's a miracle!
 		host.revive()
 		visible_message("<span class='notice'>\The [src]'s eyes regain focus, the smell of decay vanishing, [host] has come back to their senses!.</span>")
