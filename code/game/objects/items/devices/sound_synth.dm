@@ -45,6 +45,7 @@
 	"Neck Snap" = "selected_sound=sound/scp/firstpersonsnap3.ogg&shiftpitch=0&volume=60",
 	"Click" = "selected_sound=sound/effects/kirakrik.ogg&shiftpitch=0&volume=80"
 	)
+
 /obj/item/device/soundsynth/verb/pick_sound()
 	set category = "Object"
 	set name = "Select Sound Playback"
