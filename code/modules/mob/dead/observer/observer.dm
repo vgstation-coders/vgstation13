@@ -1008,3 +1008,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		if(HUD_SECURITY)
 			return selectedHUD == HUD_SECURITY
 	return
+
+/mob/dead/observer/proc/can_reenter_corpse()
+	var/mob/M = get_top_transmogrification()
+	return (M && M.client && can_reenter_corpse)
+
