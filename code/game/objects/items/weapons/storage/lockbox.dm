@@ -121,7 +121,7 @@
 			src.update_icon()
 			if(!locked)
 				for(var/obj/O in src)
-					remove_from_storage(A, get_turf(src))
+					remove_from_storage(O, get_turf(src))
 				if(oneuse)
 					qdel(src)
 
