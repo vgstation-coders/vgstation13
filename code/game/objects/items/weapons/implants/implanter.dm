@@ -146,3 +146,13 @@
 		c.scanned = I
 		c.scanned.forceMove(c)
 		update()
+
+
+/obj/item/weapon/implanter/peace
+	name = "implanter-pax"
+	desc = "An implanter containing a pax implant"
+
+/obj/item/weapon/implanter/peace/New()
+	src.imp = new /obj/item/weapon/implant/peace(src)
+	..()
+	update()

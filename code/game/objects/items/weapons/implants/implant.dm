@@ -547,13 +547,12 @@ the implant may become unstable and either pre-maturely inject the subject or si
 <b>Name:</b> Pax Implant<BR>
 <b>Manufacturer:</b> Ouroboros Medical<BR>
 <b>Effect:</b> Makes the host incapable of committing violent acts.
-<b>Important Notes:</b> Effect accomplished via a chemical secreted by the implant. This chemical is neutralized by 15u or greater of Methylin.<BR>
+<b>Important Notes:</b> Effect accomplished by paralyzing parts of the brain. This effect is neutralized by 15u or greater of Methylin.<BR>
 <b>Life:</b> Sustained as long as it remains within a host. Survives on the host's nutrition. Dies upon removal.<BR>
 "}
 
 /obj/item/weapon/implant/peace/meltdown()
-	for (var/mob/msg_viewer in viewers(src, null))
-		msg_viewer.show_message("<span class='warning'>The [name] releases a dying hiss as it denatures!</span>", 1)
+	visible_message("<span class='warning'>\The [src] releases a dying hiss as it denatures!</span>", 1)
 	name = "denatured implant"
 	desc = "A dead, hollow implant. Wonder what it used to be..."
 	icon_state = "implant_melted"
@@ -562,36 +561,33 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/peace/process()
 	var/mob/living/carbon/host = imp_in
 
-	if (malfunction == MALFUNCTION_PERMANENT)//Just in case something external acts on the implant.
-		host = null
+	if (isnull(host) && imp_alive)
+		malfunction = MALFUNCTION_PERMANENT
+
+	if (malfunction == MALFUNCTION_PERMANENT)
+		meltdown()
+		processing_objects.Remove(src)
+		return
+
+	if (!isnull(host) && !imp_alive)
 		imp_alive = 1
 
-	if (isnull(host))
-		if (imp_alive)
-			meltdown()
-			processing_objects.Remove(src)
-			return
+	if (host.nutrition <= 0 || host.reagents.has_reagent(METHYLIN, 15))
+		malfunction = MALFUNCTION_TEMPORARY
 	else
-		if (!imp_alive)
-			imp_alive = 1
+		malfunction = 0
 
-		if (host.nutrition <= 0 || host.reagents.has_reagent(METHYLIN, 15))
-			malfunction = MALFUNCTION_TEMPORARY
-		else
-			malfunction = 0
+	if (!imp_msg_debounce && malfunction == MALFUNCTION_TEMPORARY)
+		imp_msg_debounce = 1
+		to_chat(host, "<span class = 'warning'>Your rage bubbles, \the [src] inside you is being suppressed!</span>")
 
-		if (!imp_msg_debounce && malfunction == MALFUNCTION_TEMPORARY)
-			imp_msg_debounce = 1
-			to_chat(host, "<span class = 'warning'>Your rage bubbles, the [name] inside you is being suppressed!</span>")
+	if (imp_msg_debounce && !malfunction)
+		imp_msg_debounce = 0
+		to_chat(host, "<span class = 'warning'>Your rage cools, \the [src] inside you is active!</span>")
 
-		if (imp_msg_debounce && !malfunction)
-			imp_msg_debounce = 0
-			to_chat(host, "<span class = 'warning'>Your rage cools, the [name] inside you is active!</span>")
+	if (!malfunction)
+		host.nutrition = max(host.nutrition - 0.15,0)
 
-		if (!malfunction)
-			if (!host.reagents.has_reagent(CHILLWAX,1))
-				host.reagents.add_reagent(CHILLWAX,2)
-			host.nutrition = max(host.nutrition - 4.15,0)//Chill Wax: host.nutrition += 4/tick. Total: host.nutrition -= 0.15/tick.
 
 /obj/item/weapon/implant/peace/implanted(mob/host)
 	if (!imp_alive && !malfunction)
