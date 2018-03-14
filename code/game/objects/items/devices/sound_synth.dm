@@ -37,11 +37,9 @@
 	"Short Slide Whistle" = "selected_sound=sound/effects/slide_whistle_short.ogg&shiftpitch=1&volume=50",
 	"Long Slide Whistle" = "selected_sound=sound/effects/slide_whistle_long.ogg&shiftpitch=1&volume=50",
 	"Supermatter" = "selected_sound=sound/effects/suppermatter.ogg&shiftpitch=1&volume=80",
-	"Blood!" = "selected_sound=sound/effects/vampire_intro.ogg&shiftpitch=1&volume=75",
+	"Vampire" = "selected_sound=sound/effects/vampire_intro.ogg&shiftpitch=1&volume=75",
 	"Proboscis" = "selected_sound=sound/effects/lingextends.ogg&shiftpitch=1&volume=90",
-//	"Bwoink" = "selected_sound=sound/effects/adminhelp.ogg&shiftpitch=0&volume=100",
-//	"Malfunction" = "selected_sound=sound/effects/aimalf.ogg&shiftpitch=0&volume=100", too fun
-	"Time Stop" = "selected_sound=sound/effects/zaowlrd.ogg&shiftpitch=0&volume=90",
+	"Time Stop" = "selected_sound=sound/effects/theworld3.ogg&shiftpitch=0&volume=80",
 	"Neck Snap" = "selected_sound=sound/scp/firstpersonsnap3.ogg&shiftpitch=0&volume=60",
 	"Click" = "selected_sound=sound/effects/kirakrik.ogg&shiftpitch=0&volume=80"
 	)
