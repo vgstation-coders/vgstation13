@@ -1,10 +1,4 @@
-/obj/structure/cult
-	density = 1
-	anchored = 1
-	icon = 'icons/obj/cult.dmi'
 
-/obj/structure/cult/cultify()
-	return
 
 /obj/structure/cult/talisman
 	name = "Altar"
