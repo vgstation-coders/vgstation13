@@ -49,7 +49,7 @@
 		if(L.isDead())
 			return
 
-	return ..(the_target)
+	return ..()
 
 /mob/living/simple_animal/hostile/wendigo/AttackingTarget()
 	if(!target)
@@ -73,12 +73,11 @@
 						visible_message("<span class = 'warning'>\The [src] is trying to consume \the [mob_target]!</span>","<span class = 'warning'>You hear crunching.</span>")
 						if(do_after(src, mob_target, 50, needhand = FALSE))
 							consumes += 1
-							if(!names.Find(mob_target.real_name))
-								names.Add(mob_target.real_name)
+							names |= mob_target.real_name
 							mob_target.gib()
 
 			return
-	. =..()
+	return ..()
 
 /mob/living/simple_animal/hostile/wendigo/Life()
 	/*Check evolve like zombies, run away from fire,
@@ -86,7 +85,8 @@
 	*/
 	..()
 	if(!isDead())
-		check_evolve()
+		if(check_evolve())
+			return
 
 		var/list/can_see = view(src, vision_range)
 
@@ -103,7 +103,7 @@
 		return "unknown"
 
 /mob/living/simple_animal/hostile/wendigo/proc/check_evolve()
-	return
+	return 0
 
 /mob/living/simple_animal/hostile/wendigo/human
 	icon_state = "wendigo"
@@ -121,6 +121,7 @@
 		var/mob/living/simple_animal/hostile/wendigo/evolved/new_wendigo = new /mob/living/simple_animal/hostile/wendigo/evolved(src.loc)
 		new_wendigo.names = names
 		qdel(src)
+		return 1
 
 /mob/living/simple_animal/hostile/wendigo/evolved
 	icon = 'icons/48x48/48x48mob.dmi'
@@ -139,6 +140,7 @@
 		var/mob/living/simple_animal/hostile/wendigo/alpha/new_wendigo = new /mob/living/simple_animal/hostile/wendigo/alpha(src.loc)
 		new_wendigo.names = names
 		qdel(src)
+		return 1
 
 /mob/living/simple_animal/hostile/wendigo/alpha
 	desc = "You can't help but feel that, no matter what, you should have brought a bigger gun."
@@ -165,6 +167,8 @@
 
 /mob/living/simple_animal/hostile/wendigo/alpha/Life()
 	..()
+	if(isDead())
+		return
 	if(health < (maxHealth/2) && enraged == 0)
 		visible_message("<span class = 'warning'>\The [src] seems to slow down, but looks angrier.</span>","<span class = 'warning'>You're not sure what that sound was, but it didn't sound good at all.</span>")
 		enraged = 1
@@ -207,10 +211,11 @@
 
 /mob/living/simple_animal/hostile/wendigo/skifree
 	name = "yeti"
-	desc = "holding F might not work this time"
+	desc = "Holding F might not work this time."
 	icon_state = "yeti"
 	icon_living = "yeti"
 	speed = -1
+	move_to_delay = 1 //RUN
 	health = 150
 	maxHealth = 150
 	melee_damage_lower = 20

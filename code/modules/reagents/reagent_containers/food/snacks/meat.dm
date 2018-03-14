@@ -239,14 +239,15 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	name = "strange meat"
 	desc = "Doesn't look very appetizing, but if you're considerably hungry..."
 	icon_state = "wendigo_meat"
+	bitesize = 30
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/New()
 	..()
-	reagents.add_reagent("nutriment", rand(10,25))
-	src.bitesize = 30
+	reagents.add_reagent(NUTRIMENT, rand(10,25))
+
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/consume(mob/living/carbon/eater, messages = 0)
-	..()
+	. = ..()
 	if(ishuman(eater))
 		eater.contract_disease(new /datum/disease/wendigo_transformation)
 
