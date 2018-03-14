@@ -120,9 +120,8 @@
 			locked = !locked
 			src.update_icon()
 			if(!locked)
-				for(var/atom/movable/A in src)
-					for(var/obj/O in src)
-						remove_from_storage(A, get_turf(src))
+				for(var/obj/O in src)
+					remove_from_storage(A, get_turf(src))
 				if(oneuse)
 					qdel(src)
 
