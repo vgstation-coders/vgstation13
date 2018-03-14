@@ -35,9 +35,14 @@
     "Welding Noises" = "selected_sound=sound/items/Welder.ogg&shiftpitch=1&volume=55",
 	"Quack" = "selected_sound=sound/items/quack.ogg&shiftpitch=1&volume=50",
 	"Short Slide Whistle" = "selected_sound=sound/effects/slide_whistle_short.ogg&shiftpitch=1&volume=50",
-	"Long Slide Whistle" = "selected_sound=sound/effects/slide_whistle_long.ogg&shiftpitch=1&volume=50"
+	"Long Slide Whistle" = "selected_sound=sound/effects/slide_whistle_long.ogg&shiftpitch=1&volume=50",
+	"Supermatter" = "selected_sound=sound/effects/suppermatter.ogg&shiftpitch=1&volume=70",
+	"Blood" = "selected_sound=sound/effects/vampire_intro.ogg&shiftpitch=1&volume=60",
+	"Extend" = "selected_sound=sound/effects/lingextends.ogg&shiftpitch=1&volume=80",
+	"Bwoink" = "selected_sound=sound/effects/adminhelp.ogg&shiftpitch=0&volume=70",
+	"Time Stop" = "selected_sound=sound/effects/zaowlrd.ogg&shiftpitch=0&volume=60",
+	"Neck Snap" = "selected_sound=sound/scp/firstpersonsnap3.ogg&shiftpitch=0&volume=50"
 	)
-
 /obj/item/device/soundsynth/verb/pick_sound()
 	set category = "Object"
 	set name = "Select Sound Playback"
