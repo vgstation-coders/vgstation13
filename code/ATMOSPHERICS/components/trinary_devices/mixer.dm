@@ -105,14 +105,14 @@ obj/machinery/atmospherics/trinary/mixer/attack_hand(user as mob)
 				<b>Desirable output pressure: </b>
 				[target_pressure]kPa | <a href='?src=\ref[src];set_press=1'>Change</a>
 				<br>
-				<b>Node 1 Concentration:</b>
+				<b>Node 1 ([dir2text(pipe_flags & IS_MIRROR ? dir : turn(dir, -180))]) Concentration:</b>
 				<a href='?src=\ref[src];node1_c=-0.1'><b>-</b></a>
 				<a href='?src=\ref[src];node1_c=-0.01'>-</a>
 				[node1_concentration]([node1_concentration*100]%)
 				<a href='?src=\ref[src];node1_c=0.01'><b>+</b></a>
 				<a href='?src=\ref[src];node1_c=0.1'>+</a>
 				<br>
-				<b>Node 2 Concentration:</b>
+				<b>Node 2 ([dir2text(turn(dir, -90))]) Concentration:</b>
 				<a href='?src=\ref[src];node2_c=-0.1'><b>-</b></a>
 				<a href='?src=\ref[src];node2_c=-0.01'>-</a>
 				[node2_concentration]([node2_concentration*100]%)
@@ -120,7 +120,7 @@ obj/machinery/atmospherics/trinary/mixer/attack_hand(user as mob)
 				<a href='?src=\ref[src];node2_c=0.1'>+</a>
 				"}
 
-	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_mixer")
+	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_mixer;size=450x110")
 	onclose(user, "atmo_mixer")
 	return
 
