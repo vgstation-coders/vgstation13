@@ -716,16 +716,20 @@ var/global/list/floorbot_targets=list()
 	qdel(src)
 	return
 
+/obj/item/weapon/storage/toolbox/proc/floorbot_type()
+	return "no_build"
+
+/obj/item/weapon/storage/toolbox/mechanical/floorbot_type()
+	return null
+
+/obj/item/weapon/storage/toolbox/emergency/floorbot_type()
+	return "r"
+
+/obj/item/weapon/storage/toolbox/electrical/floorbot_type()
+	return "y"
 
 /obj/item/weapon/storage/toolbox/attackby(var/obj/item/stack/tile/plasteel/T, mob/user as mob)
-	if(!istype(T, /obj/item/stack/tile/plasteel) || src.contents.len >= 1) //Only do this if the thing is empty
-		return ..()
-	var/list/allowed_types = list(
-		/obj/item/weapon/storage/toolbox/mechanical,
-		/obj/item/weapon/storage/toolbox/emergency,
-		/obj/item/weapon/storage/toolbox/electrical
-	)
-	if(!(type in allowed_types))
+	if(!istype(T, /obj/item/stack/tile/plasteel) || src.contents.len >= 1 || floorbot_type() == "no_build") //Only do this if the thing is empty
 		return ..()
 	/*if(user.s_active)
 		user.s_active.close(user)*/
@@ -733,10 +737,7 @@ var/global/list/floorbot_targets=list()
 	qdel(T)
 	T = null
 	var/obj/item/weapon/toolbox_tiles/B = new /obj/item/weapon/toolbox_tiles
-	if(istype(src, /obj/item/weapon/storage/toolbox/emergency))
-		B.skin = "r"
-	else if(istype(src, /obj/item/weapon/storage/toolbox/electrical))
-		B.skin = "y"
+	B.skin = floorbot_type()
 	B.icon_state = "[B.skin]toolbox_tiles"
 	user.put_in_hands(B)
 	to_chat(user, "<span class='notice'>You add the tiles into the empty toolbox. They protrude from the top.</span>")
