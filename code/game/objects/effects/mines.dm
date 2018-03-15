@@ -65,10 +65,13 @@
 			var/datum/gas_mixture/payload = new
 			var/datum/gas/sleeping_agent/trace_gas = new
 
-			trace_gas.moles = 30
+			trace_gas.moles = 187 // total mols of a n2o canister 1870.81
 			payload += trace_gas
 
 			target.zone.air.merge(payload)
+
+			if (target(istype(M, /mob) && !M.is_wearing_mask)
+				add_reagent.target(STOXIN, 1) //For consistency it will always sleep you for a bit.
 
 	qdel(src)
 
