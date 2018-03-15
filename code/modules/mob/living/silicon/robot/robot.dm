@@ -162,7 +162,7 @@
 
 /mob/living/silicon/robot/proc/upgrade_components()
 	if(component_extension)
-		for(var/V in components)
+		for(var/V in components) if(V != "power cell")
 			var/datum/robot_component/C = components[V]
 			var/NC = text2path("[C.external_type][component_extension]")
 			var/obj/item/robot_parts/robot_component/I = new NC

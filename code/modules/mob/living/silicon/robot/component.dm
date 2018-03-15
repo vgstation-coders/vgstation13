@@ -139,7 +139,7 @@
 	var/brute_damage = 0
 	var/electronics_damage = 0
 	var/vulnerability = 1 //Multiplies the damage taken by this ammount.
-	var/isupgrade = FALSE
+	var/isupgrade = FALSE //Set this to true for any parts that are children of the basic ones. Required for auto upgrading with upgrade_components() in \silicon\robot\robot.dm
 
 /obj/item/robot_parts/robot_component/examine(mob/user)
 	..()
