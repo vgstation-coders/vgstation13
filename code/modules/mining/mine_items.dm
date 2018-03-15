@@ -617,6 +617,10 @@ proc/move_mining_shuttle()
 		return
 	..()
 
+/mob/living/simple_animal/hostile/mining_drone/LoseAggro()
+	stop_automated_movement = 0
+	vision_range = idle_vision_range
+
 /mob/living/simple_animal/hostile/mining_drone/proc/SetCollectBehavior()
 	stop_automated_movement_when_pulled = 1
 	idle_vision_range = 9
