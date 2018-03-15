@@ -327,7 +327,7 @@
 	else
 		to_chat(H, "<span class='info'>Your self-preservation instinct prevents you from breaking your teeth on \the [src].</span>")
 
-/mob/living/silicon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/abstract/screen/fullscreen/flash/noise)
+/mob/living/silicon/flash_eyes(var/intensity = 1, var/override_blindness_check = 0, var/affect_silicon = 0, var/visual = 0, var/type = /obj/abstract/screen/fullscreen/flash/noise,var/time_flashed = 50)
 	if(affect_silicon)
 		return ..()
 

@@ -1569,10 +1569,17 @@ Thanks.
 	affect_silicon = 0 means that the flash won't affect silicons at all.
 
 */
-/mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/abstract/screen/fullscreen/flash)
+/mob/living/proc/flash_eyes(var/intensity = 1, var/override_blindness_check = 0, var/affect_silicon = 0, var/visual = 0, var/type = null, var/time_flashed = 50)
 	if(override_blindness_check || !(disabilities & BLIND))
-		// flick("e_flash", flash)
-		overlay_fullscreen("flash", type)
+		if(client && !type)
+			client.color = list(1,1,1,1,
+								1,1,1,1,
+								1,1,1,1)
+			client.colour_transition(get_screen_colour(),time=time_flashed,easing_type=LINEAR_EASING)
+			client.motion_blur_planes(time_flashed)
+		else if(type)
+			overlay_fullscreen("flash", type)
+
 		return 1
 
 /mob/living/proc/advanced_mutate()

@@ -52,10 +52,8 @@
 			ear_safety += 1
 		if(istype(M.loc, /obj/mecha))
 			ear_safety += 1
-
 //Flashing everyone
 	if(eye_safety < 1)
-		M.flash_eyes(visual = 1, affect_silicon = 1)
 		M.Stun(10)
 		M.Knockdown(10)
 
@@ -112,6 +110,7 @@
 		if (M.ear_damage >= 5)
 			to_chat(M, "<span class='warning'>Your ears start to ring!</span>")
 	M.update_icons()
+	M.flash_eyes(intensity = 2,visual = 1, affect_silicon = 1, time_flashed = M.stunned * SS_WAIT_MOB)
 
 /obj/effect/effect/smoke/flashbang
 	name = "illumination"

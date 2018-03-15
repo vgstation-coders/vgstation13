@@ -572,7 +572,7 @@
 			src.stomach_contents.Remove(O)
 			O.forceMove(target)
 
-/mob/living/carbon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
+/mob/living/carbon/flash_eyes(var/intensity = 1, var/override_blindness_check = 0, var/affect_silicon = 0, var/visual = 0,var/type = null,var/time_flashed = 50)
 	if(eyecheck() < intensity)
 		..()
 

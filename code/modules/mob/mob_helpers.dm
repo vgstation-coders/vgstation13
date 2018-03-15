@@ -101,7 +101,7 @@ mob/proc/remove_internal_organ()
 				client.updating_colour = 0
 				difference = difflist(client.color,get_screen_colour())
 				if((difference || !(client.color) || !istype(difference) || !difference.len) && !forceupdate) // panic panic panic
-					src.update_colour(forceupdate = 1)
+					update_colour(forceupdate = 1)
 			else
 				bad_changing_colour_ckeys["[cached_ckey]"] = 1
 
