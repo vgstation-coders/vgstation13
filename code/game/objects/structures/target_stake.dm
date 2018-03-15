@@ -9,7 +9,7 @@
 	siemens_coefficient = 1
 	var/obj/item/target/pinned_target // the current pinned target
 
-	Move()
+	Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 		..()
 		// Move the pinned target along with the stake
 		if(pinned_target in view(3, src))
