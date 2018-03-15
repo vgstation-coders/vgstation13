@@ -156,11 +156,16 @@
 
 	return 0
 
+/obj/item/weapon/reagent_containers/food/snacks/proc/before_consume(mob/living/carbon/eater)
+	return
+
 /obj/item/weapon/reagent_containers/food/snacks/proc/consume(mob/living/carbon/eater, messages = 0)
 	if(!istype(eater))
 		return
 	if(!eatverb)
 		eatverb = pick("bite", "chew", "nibble", "gnaw", "gobble", "chomp")
+
+	before_consume(eater)
 
 	if(messages)
 		var/fullness = eater.nutrition + (eater.reagents.get_reagent_amount(NUTRIMENT) * 25)
@@ -1504,6 +1509,32 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/butter
+	name = "butter"
+	desc = "Today we feast."
+	icon_state = "butter"
+	food_flags = FOOD_ANIMAL
+	
+
+/obj/item/weapon/reagent_containers/food/snacks/butter/New()
+	..()
+	reagents.add_reagent(LIQUIDBUTTER, 10)
+	bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/butter/Crossed(atom/movable/O) 
+	if (istype(O, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = O
+		if (H.CheckSlip() < 1)
+			return
+
+		H.stop_pulling()
+		to_chat(H, "<SPAN CLASS='notice'>You slipped on the [name]!</SPAN>")
+		playsound((src), 'sound/misc/slip.ogg', 50, 1, -3)
+		H.Stun(4)
+		H.Knockdown(3)
+		new/obj/effect/decal/cleanable/smashed_butter(src.loc)
+		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/spaghetti
 	name = "Spaghetti"
@@ -5470,3 +5501,84 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(METHYLIN,5)
+
+obj/item/weapon/reagent_containers/food/snacks/butterstick
+	name = "butter on a stick"
+	desc = "The clown told you to make this."
+	icon_state = "butter_stick"
+	bitesize = 3
+	food_flags = FOOD_ANIMAL
+	
+/obj/item/weapon/reagent_containers/food/snacks/butterstick/Crossed(atom/movable/O) 
+	if (istype(O, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = O
+		if (H.CheckSlip() < 1)
+			return
+
+		H.stop_pulling()
+		to_chat(H, "<SPAN CLASS='notice'>You slipped on the [name]!</SPAN>")
+		playsound((src), 'sound/misc/slip.ogg', 50, 1, -3)
+		H.Stun(4)
+		H.Knockdown(3)
+		new/obj/effect/decal/cleanable/smashed_butter(src.loc)
+		qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/butterstick/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/ambrosia_brownies
+	name = "brownie sheet"
+	desc = "Give them to your friends."
+	icon_state = "ambrosia_brownies"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/ambrosia_brownie
+	slices_num = 6
+	storage_slots = 3
+	w_class = W_CLASS_MEDIUM
+	food_flags = FOOD_SWEET | FOOD_ANIMAL
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/ambrosia_brownies/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/ambrosia_brownie
+	name = "brownie"
+	desc = "A brownie that may or may not get you sky high."
+	icon_state = "ambrosia_brownie"
+	food_flags = FOOD_SWEET | FOOD_ANIMAL
+	
+obj/item/weapon/reagent_containers/food/snacks/butterfingers_r
+	name = "butter fingers"
+	desc = "It's a microwaved hand slathered in butter!"
+	icon_state = "butterfingers_r"
+	trash = /obj/item/trash/plate
+	food_flags = FOOD_ANIMAL | FOOD_MEAT
+	
+/obj/item/weapon/reagent_containers/food/snacks/butterfingers_r/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	
+obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
+	name = "butter fingers"
+	desc = "It's a microwaved hand slathered in butter!"
+	icon_state = "butterfingers_l"
+	trash = /obj/item/trash/plate
+	food_flags = FOOD_ANIMAL | FOOD_MEAT
+	
+/obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	
+obj/item/weapon/reagent_containers/food/snacks/butteredtoast
+	name = "buttered toast"
+	desc = "Toasted bread with butter on it."
+	icon_state = "butteredtoast"
+	food_flags = FOOD_ANIMAL
+	
+/obj/item/weapon/reagent_containers/food/snacks/butterfedtoast/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	
+	
+
+	

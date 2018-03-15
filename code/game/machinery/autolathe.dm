@@ -110,7 +110,7 @@
 		new /obj/item/device/rcd/matter/rsf(), \
 		new /obj/item/device/destTagger, \
 		new /obj/item/device/priceTagger, \
-
+		new /obj/item/device/breathalyzer, \
 		),
 		"Misc_Other"=list(
 		new /obj/item/weapon/rcd_ammo(), \

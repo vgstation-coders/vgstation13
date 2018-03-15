@@ -2201,6 +2201,18 @@
 /datum/chemical_reaction/cheesewheel/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
 	new /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel(location)
+	
+/datum/chemical_reaction/butter
+	name = "Butter"
+	id = "butter"
+	result = null
+	required_reagents = list(MILK = 20, CREAM = 20, SODIUMCHLORIDE = 5)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/butter/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/weapon/reagent_containers/food/snacks/butter(location)
 
 //Jesus christ how horrible
 /datum/chemical_reaction/cream
@@ -3058,8 +3070,8 @@
 	name = "Salt Water"
 	id = SALTWATER
 	result = SALTWATER
-	required_reagents = list(WATER = 50, SODIUMCHLORIDE = 5)
-	result_amount = 50
+	required_reagents = list(WATER = 20, SODIUMCHLORIDE = 5)
+	result_amount = 20
 
 /datum/chemical_reaction/saline
 	name = "Saline"

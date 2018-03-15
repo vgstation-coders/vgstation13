@@ -61,6 +61,7 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 
 
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/RefreshParts()
+	..()
 	var/T = 0
 	for(var/obj/item/weapon/reagent_containers/glass/G in component_parts)
 		T += G.reagents.maximum_volume

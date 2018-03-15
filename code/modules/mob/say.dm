@@ -32,7 +32,7 @@
 
 	if(usr.stat == DEAD)
 		usr.emote_dead(message)
-	else
+	else if(message)
 		usr.emote("me",usr.emote_type,message)
 
 /mob/proc/say_dead(var/message)

@@ -514,9 +514,7 @@ proc/move_mining_shuttle()
 	throwforce = 0
 	sterile = 1
 	//tint = 3 //Makes it feel more authentic when it latches on
-
-/obj/item/clothing/mask/facehugger/toy/Die()
-	return
+	real = FALSE
 
 /**********************Mining drone cube**********************/
 

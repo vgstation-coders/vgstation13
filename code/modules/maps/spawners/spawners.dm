@@ -207,7 +207,6 @@
 		/obj/machinery/vending/sovietsoda,
 		/obj/structure/AIcore,
 		/obj/structure/piano,
-		/obj/structure/displaycase_frame,
 		/obj/structure/particle_accelerator/fuel_chamber,
 		/obj/structure/reagent_dispensers/fueltank,
 		/obj/structure/reagent_dispensers/water_cooler,
@@ -604,6 +603,7 @@
 		/obj/item/device/powersink,
 		/obj/item/weapon/gun/projectile/flamethrower/full,
 		/obj/item/weapon/gun/projectile/deagle/gold,
+		/obj/item/clothing/shoes/magboots/magnificent,
 		/obj/item/weapon/gun/projectile/russian,
 	)
 

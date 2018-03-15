@@ -74,7 +74,7 @@
 	if(!hud_used || !client)
 		return
 
-	if(hud_used.hud_shown != 1)
+	if(hud_used.hud_shown != 1 || !hud_used.hide_actions_toggle)
 		return
 
 	var/button_number = 0
@@ -99,8 +99,10 @@
 		if(!button_number)
 			hud_used.hide_actions_toggle.screen_loc = null
 			return
+
 	if(!hud_used.hide_actions_toggle.screen_loc)
 		reload_screen = 1
+
 	if(!hud_used.hide_actions_toggle.moved)
 		hud_used.hide_actions_toggle.screen_loc = hud_used.ButtonNumberToScreenCoords(button_number+1)
 	else

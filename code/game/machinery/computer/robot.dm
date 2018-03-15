@@ -164,14 +164,9 @@
 					var/choice = input("Are you certain you wish to detonate [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R && istype(R))
-							if(R.mind && R.mind.special_role && R.emagged)
-								to_chat(R, "Extreme danger.  Termination codes detected.  Scrambling security codes and automatic AI unlink triggered.")
-								R.ResetSecurityCodes()
-
-							else
+							if(R.self_destruct())
 								message_admins("<span class='notice'>[key_name_admin(usr)] detonated [R.name]!</span>")
 								log_game("<span class='notice'>[key_name_admin(usr)] detonated [R.name]!</span>")
-								R.self_destruct()
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 

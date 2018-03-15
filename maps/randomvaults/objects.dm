@@ -253,7 +253,9 @@
 /area/vault/icecomet
 	jammed = 2
 
-//research facility
+/area/vault/assistantlair
+	jammed = 2
+
 
 /area/vault/research
 	requires_power = 1
@@ -268,6 +270,13 @@
 
 /obj/item/weapon/disk/shuttle_coords/vault/research
 	destination = /obj/docking_port/destination/vault/research
+
+/obj/item/weapon/gun/projectile/pistol/empty
+	max_shells = 0
+	spawn_mag = FALSE
+
+/obj/item/ammo_casing/c9mm/empty
+	projectile_type = null
 
 /area/vault/satelite
 
@@ -709,13 +718,6 @@
 		stat |= NOPOWER
 		update_icon()
 
-
-/obj/machinery/power/battery/magtape_deck/surplus()
-	if(terminal)
-		return terminal.surplus()
-	return 0
-
-
 /obj/machinery/power/magtape_deck/update_icon()
 	if(stat & (BROKEN|NOPOWER))
 		icon_state = "[initial(icon_state)]0"
@@ -752,21 +754,34 @@
 	desc = "A primitive way of storing information. Used because of its longevity over most digital counterparts.\
 	It appears to have a microphone and speaker attached."
 	var/codephrase
+	var/list/potential_codewords = list()
 	var/encrypted_codephrase
 	var/triggered
 	flags = FPRINT | HEAR
 
 /obj/machinery/power/magtape_deck/syndicate/New()
 	..()
+	potential_codewords = adjectives.Copy()
+	for(var/i in potential_codewords)
+		if(length(i) > 6)
+			potential_codewords.Remove(i)
+			continue
+		var/noti = lowertext(i)
+		for(var/ii = 1 to length(noti))
+			var/asciichar = text2ascii(noti,ii)
+			if(asciichar < 97 && asciichar > 122)
+				potential_codewords.Remove(i)
+				break
 	generate_codephrase()
 
 /obj/machinery/power/magtape_deck/syndicate/proc/generate_codephrase()
 	triggered = 0
-	codephrase = pick(adjectives) //Picks a word, long or short
+	codephrase = lowertext(pick(potential_codewords)) //Picks a word, long or short
+	encrypted_codephrase = ""
 	var/offset = rand(1,5) //Picks the offset
-	for(var/i = 1;i < length(codephrase)+1; i++) //Goes through each character
-		var/char_value = (text2ascii(codephrase,i)|0x20) - 96 //Find the value of the character at that point, between a and z respectively (Converts to lower case)
-		var/new_char = ascii2text(((char_value+offset)%25)+96) //Adds the offset to the value, then converts it back to a character
+	for(var/i = 1 to length(codephrase)) //Goes through each character
+		var/char_value = text2ascii(codephrase,i)-97 //Find the value of the character at that point, between a and z respectively (Converts to lower case)
+		var/new_char = ascii2text(((char_value+offset)%26)+97) //Adds the offset to the value, then converts it back to a character
 		encrypted_codephrase += new_char //Then adds it to the codephrase
 
 /obj/machinery/power/magtape_deck/syndicate/Hear(var/datum/speech/speech, var/rendered_speech="")

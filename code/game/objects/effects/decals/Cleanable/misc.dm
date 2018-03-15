@@ -224,3 +224,9 @@
 	desc = "Looks unfinished."
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "wizrune"
+	
+/obj/effect/decal/cleanable/smashed_butter 
+	name = "smashed butter"
+	desc = "Looks like some one has butter fingers."
+	icon = 'icons/effects/tomatodecal.dmi'
+	icon_state = "smashed_butter"

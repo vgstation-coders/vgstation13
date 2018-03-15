@@ -6,6 +6,7 @@
 	sprites = list("Basic" = "mommi")
 	respawnables = list (/obj/item/stack/cable_coil)
 	respawnables_max_amount = MOMMI_MAX_COIL
+	default_modules = FALSE
 	var/ae_type = "Default" //Anti-emancipation override type, pretty much just fluffy.
 
 /obj/item/weapon/robot_module/mommi/New(var/mob/living/silicon/robot/R)

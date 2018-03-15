@@ -34,7 +34,7 @@
 
 	var/obj/item/inventory_head
 	var/obj/item/inventory_back
-	var/facehugger
+	var/obj/item/clothing/mask/facehugger/facehugger
 	var/list/spin_emotes = list("dances around","chases its tail")
 //	colourmatrix = list(1,0.0,0.0,0,\
 						0,0.5,0.5,0,\
@@ -133,6 +133,12 @@
 					M.show_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
 			if(health>0 && prob(15))
 				emote("looks at [user] with [pick("an amused","an annoyed","a confused","a resentful", "a happy", "an excited")] expression")
+			return
+	else
+		var/obj/item/clothing/mask/facehugger/F = O
+		if(istype(F))
+			user.drop_from_inventory(F)
+			F.Attach(src)
 			return
 	..()
 

@@ -8,6 +8,7 @@
 	var/speed_modifier = CYBORG_STANDARD_SPEED_MODIFIER
 	var/can_be_pushed = TRUE
 	var/no_slip = FALSE
+	var/default_modules = TRUE //Do we start with a flash/light?
 
 	var/list/sprites = list()
 
@@ -50,6 +51,9 @@
 		R.remove_module() //Helps remove screen references on robot end
 
 	for(var/obj/A in modules)
+		if(istype(A, /obj/item/weapon/storage) && loc)
+			var/obj/item/weapon/storage/S = A
+			S.empty_contents_to(loc)
 		qdel(A)
 	modules = null
 	if(emag)
@@ -77,12 +81,12 @@
 		emag.emp_act(severity)
 	..()
 
-/obj/item/weapon/robot_module/New(var/mob/living/silicon/robot/R, var/default = TRUE)
+/obj/item/weapon/robot_module/New(var/mob/living/silicon/robot/R)
 	..()
 	added_languages = list()
 	add_languages(R)
 	AddToProfiler()
-	if(default)
+	if(default_modules)
 		AddDefaultModules()
 	UpdateModuleHolder(R)
 	AddCameraNetworks(R)
@@ -468,7 +472,7 @@
 	radio_key = /obj/item/device/encryptionkey/headset_mining
 	sprites = list(
 		"Default" = "minerbot",
-		"Treadhead" = "Miner",
+		"Treadhead" = "miner",
 		"Wall-A" = "wall-a",
 		"Droid" = "droid-miner",
 		"Marina" = "marinaMN",

@@ -103,7 +103,7 @@
 	station_holomap = new(src)
 	radio = new /obj/item/device/radio/borg(src)
 	aicamera = new/obj/item/device/camera/silicon/robot_camera(src)
-	
+
 	if(AIlink)
 		connected_ai = select_active_ai_with_fewest_borgs()
 
@@ -246,7 +246,7 @@
 /mob/living/silicon/robot/proc/set_module_sprites(var/list/new_sprites)
 	if(new_sprites && new_sprites.len)
 		module_sprites = new_sprites.Copy()
-	
+
 	if(module_sprites.len)
 		var/picked = pick(module_sprites)
 		icon_state = module_sprites[picked]
@@ -348,12 +348,28 @@
 	if(!can_diagnose())
 		return null
 
-	var/dat = "<HEAD><TITLE>[name] Self-Diagnosis Report</TITLE></HEAD><BODY>\n"
+	var/list/dat = list({"<table>
+	<tr>
+		<th>Component</th>
+		<th>Energy consumption</th>
+		<th>Brute damage</th>
+		<th>Electronics damage</th>
+		<th>Powered</th>
+		<th>Toggled</th>
+	</tr>"})
 	for (var/V in components)
 		var/datum/robot_component/C = components[V]
-		dat += "<b>[C.name]</b><br><table><tr><td>Power consumption</td><td>[C.energy_consumption]</td></tr><tr><td>Brute Damage:</td><td>[C.brute_damage]</td></tr><tr><td>Electronics Damage:</td><td>[C.electronics_damage]</td></tr><tr><td>Powered:</td><td>[(!C.energy_consumption || C.is_powered()) ? "Yes" : "No"]</td></tr><tr><td>Toggled:</td><td>[ C.toggled ? "Yes" : "No"]</td></table><br>"
+		dat += {"<tr>
+		<td>[C.name]</td>
+		<td>[C.energy_consumption]W</td>
+		<td>[C.brute_damage || "None"]</td>
+		<td>[C.electronics_damage || "None"]</td>
+		<td>[(!C.energy_consumption || C.is_powered()) ? "Yes" : "No"]</td>
+		<td>[C.toggled ? "On" : "Off"]</td>
+		</tr>"}
 
-	return dat
+	dat += "</table>"
+	return jointext(dat, "")
 
 
 /mob/living/silicon/robot/verb/self_diagnosis_verb()
@@ -364,7 +380,9 @@
 		to_chat(src, "<span class='warning'>Your self-diagnosis component isn't functioning.</span>")
 
 	var/dat = self_diagnosis()
-	src << browse(dat, "window=robotdiagnosis")
+	var/datum/browser/popup = new(src, "\ref[src]-robotdiagnosis", "Self diagnosis", 730, 270)
+	popup.set_content(dat)
+	popup.open()
 
 
 /mob/living/silicon/robot/verb/toggle_component()
@@ -642,11 +660,14 @@
 			return
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0))
+			var/starting_health = health
 			adjustBruteLoss(-30)
 			updatehealth()
+			if(health != starting_health)
+				visible_message("<span class='attack'>[user] fixes some dents on [src]!</span>")
+			else
+				to_chat(user, "<span class='warning'>[src] is far too damaged for [WT] to have any effect!</span>")
 			add_fingerprint(user)
-			for(var/mob/O in viewers(user, null))
-				O.show_message(text("<span class='attack'>[user] has fixed some of the dents on [src]!</span>"), 1)
 		else
 			to_chat(user, "Need more welding fuel!")
 			return
@@ -872,7 +893,7 @@
 	return
 
 /mob/living/silicon/robot/proc/tip(var/rotate = dir)
-	lying = TRUE
+	src.lying = TRUE
 	uneq_all()
 	AdjustKnockdown(5)
 	animate(src, transform = turn(matrix(), 90), pixel_y -= 6 * PIXEL_MULTIPLIER, dir = rotate, time = 2, easing = EASE_IN | EASE_OUT)
@@ -887,24 +908,23 @@
 /mob/living/silicon/robot/proc/self_righting(var/knockdown = 0)
 	to_chat(src, "<span class='info' style=\"font-family:Courier\"'>Starting self-righting mechanism.</span>")
 	spawn(knockdown SECONDS)
-		if(!isDead() && is_component_functioning("actuator") && is_component_functioning("cell"))
-			untip()
-		else
+		if(isDead() || !is_component_functioning("actuator") || !is_component_functioning("power cell"))
 			to_chat(src, "<span class='danger'>ERROR. Self-righting mechanism damaged or unpowered.</span>")
-
+			return
+		untip()
 
 /mob/living/silicon/robot/proc/untip()
-	if(lying)
+	if(src.lying)
 		animate(src, transform = matrix(), pixel_y += 6 * PIXEL_MULTIPLIER, dir = dir, time = 2, easing = EASE_IN | EASE_OUT)
 		playsound(loc, 'sound/machines/ping.ogg', 50, 0)
-		lying = FALSE
+		src.lying = FALSE
 
 /mob/living/silicon/robot/disarm_mob(mob/living/disarmer)
 	var/rotate = dir
 
 	if(lying)
 		return
-	if(!flashed || !isDead())
+	if(!flashed && !isDead())
 		return
 	if(get_dir(disarmer, src) in(list(4,8)))
 		rotate = pick(1,2)
@@ -1236,8 +1256,12 @@
 		return
 
 /mob/living/silicon/robot/proc/self_destruct()
+	if(mind && mind.special_role && emagged)
+		to_chat(src, "<span class='danger'>Termination signal detected. Scrambling security and identification codes.</span>")
+		UnlinkSelf()
+		return FALSE
 	gib()
-	return
+	return TRUE
 
 /mob/living/silicon/robot/proc/UnlinkSelf()
 	if(connected_ai)
@@ -1261,7 +1285,7 @@
 
 	if(R)
 		R.UnlinkSelf()
-		to_chat(R, "Buffers flushed and reset. Camera system shutdown.  All systems operational.")
+		to_chat(R, "Buffers flushed and reset. Camera system shutdown. All systems operational.")
 		verbs -= /mob/living/silicon/robot/proc/ResetSecurityCodes
 
 /mob/living/silicon/robot/mode()

@@ -62,11 +62,11 @@
 			m_type = VISIBLE
 
 		if("clap")
-			if(incapacitated())
+			if(!incapacitated())
 				message = "<B>[src]</B> clangs its modules together in a crude simulation of applause."
 				m_type = HEARABLE
 		if("flap")
-			if(incapacitated())
+			if(!incapacitated())
 				if(module_active)
 					var/obj/item/I = module_active
 					message = "<B>[src]</B> flaps its [I.name]."

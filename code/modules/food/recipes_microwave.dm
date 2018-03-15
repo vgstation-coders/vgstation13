@@ -2548,3 +2548,41 @@
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/carpconsomme
+
+/datum/recipe/butterstick
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/butter,
+	/obj/item/stack/rods
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/butterstick
+
+/datum/recipe/ambrosia_brownies
+	reagents = list(COCO = 10, SUGAR = 10, FLOUR = 15)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/butter,
+	/obj/item/weapon/reagent_containers/food/snacks/egg,
+	/obj/item/weapon/reagent_containers/food/snacks/egg,
+	/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris,
+	/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris,
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/ambrosia_brownies
+	
+/datum/recipe/butterfingers_r
+	items = list(/obj/item/organ/external/r_hand,
+	/obj/item/weapon/reagent_containers/food/snacks/butter,
+	)
+
+ result = /obj/item/weapon/reagent_containers/food/snacks/butterfingers_r/
+ 
+/datum/recipe/butterfingers_l
+	items = list(/obj/item/organ/external/l_hand,
+	/obj/item/weapon/reagent_containers/food/snacks/butter,
+	)
+
+ result = /obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/
+ 
+/datum/recipe/butteredtoast
+	reagents = list(LIQUIDBUTTER = 2)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+	)
+
+ result = /obj/item/weapon/reagent_containers/food/snacks/butteredtoast

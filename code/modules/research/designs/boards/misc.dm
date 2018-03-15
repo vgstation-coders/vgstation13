@@ -4,7 +4,7 @@
 	id = "air_alarm"
 	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/circuitboard/air_alarm
 
@@ -14,7 +14,7 @@
 	id = "fire_alarm"
 	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/circuitboard/fire_alarm
 
@@ -24,7 +24,7 @@
 	id = "airlock"
 	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/circuitboard/airlock
 
@@ -34,7 +34,7 @@
 	id = "intercom"
 	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/intercom_electronics
 
@@ -44,7 +44,7 @@
 	id = "apc_board"
 	req_tech = list(Tc_POWERSTORAGE = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/circuitboard/power_control
 
@@ -54,7 +54,7 @@
 	id = "station_map"
 	req_tech = list(Tc_MAGNETS = 2, Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/circuitboard/station_map
 

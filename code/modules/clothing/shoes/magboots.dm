@@ -120,6 +120,13 @@
 	icon_state = "capboots0"
 	base_state = "capboots"
 	anchoring_system_examine = "Its anchoring spikes appear to be"
+	
+//Magnificent
+/obj/item/clothing/shoes/magboots/magnificent
+	desc = "The secret meaning of what mag stands for."
+	name = "magnificent mag boots"
+	icon_state = "MAGNIFICENTboots0"
+	base_state = "MAGNIFICENTboots1"
 
 /obj/item/clothing/shoes/magboots/captain/toggle()
 	//set name = "Toggle Floor Grip"

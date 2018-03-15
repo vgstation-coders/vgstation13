@@ -42,7 +42,7 @@
 		explode()
 		return 0
 
-	if(maxcharge < amount)
+	if(maxcharge <= charge)
 		return 0
 	var/power_used = min(maxcharge-charge,amount)
 	if(crit_fail)

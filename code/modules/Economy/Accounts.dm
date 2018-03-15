@@ -10,6 +10,7 @@ var/global/next_account_number = 0
 var/global/obj/machinery/account_database/centcomm_account_db
 var/global/datum/money_account/vendor_account
 var/global/list/all_money_accounts = list()
+var/global/datum/money_account/trader_account
 
 /proc/create_station_account()
 	if(!station_account)

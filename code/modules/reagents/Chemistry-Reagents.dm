@@ -1202,6 +1202,8 @@
 		return 1
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
+		if((H.species && H.species.flags & NO_BREATHE) || M_NO_BREATH in H.mutations)
+			return
 		for(var/datum/organ/internal/lungs/L in H.internal_organs)
 			L.take_damage(REM, 1)
 
@@ -2583,9 +2585,9 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
-		if(E && istype(E))
+		if(istype(E) && !E.robotic)
 			if(E.damage > 0)
-				E.damage--
+				E.damage = max(0, E.damage - 1)
 
 /datum/reagent/inacusiate
 	name = "Inacusiate"
@@ -5922,6 +5924,26 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = MEDCOFFEE
 	description = "Tastes like it's got iron in it or something."
 
+/datum/reagent/drink/coffee/medcoffee/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.nutrition += nutriment_factor
+	if(M.getOxyLoss() && prob(25))
+		M.adjustOxyLoss(-1)
+	if(M.getBruteLoss() && prob(30))
+		M.heal_organ_damage(1, 0)
+	if(M.getFireLoss() && prob(25))
+		M.heal_organ_damage(0, 1)
+	if(M.getToxLoss() && prob(25))
+		M.adjustToxLoss(-1)
+	if(M.dizziness != 0)
+		M.dizziness = max(0, M.dizziness - 15)
+	if(M.confused != 0)
+		M.confused = max(0, M.confused - 5)
+	M.reagents.add_reagent (IRON, 0.1)
+
 /datum/reagent/drink/coffee/detcoffee
 	name = "Joe"
 	id = DETCOFFEE
@@ -6420,6 +6442,25 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 	if(holder.has_reagent(MUCUS))
 		holder.remove_reagent(MUCUS, 10)
+
+/datum/reagent/liquidbutter
+	name ="Liquid Butter"
+	id = LIQUIDBUTTER
+	description = "A lipid heavy liquid, that's likely to make your fad lipozine diet fail."
+	color = "#DFDFDF"
+	nutriment_factor = 25 * REAGENTS_METABOLISM
+
+/datum/reagent/liquidbutter/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(holder.has_reagent(LIPOZINE))
+		holder.remove_reagent(LIPOZINE, 50)
+
+	M.nutrition += nutriment_factor
+
+
 
 /datum/reagent/saltwater
 	name = "Salt Water"
