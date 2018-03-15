@@ -954,7 +954,7 @@
 	chance = 30
 	amount = 1
 	jiggle = 5
-	to_spawn = pick(existing_typesof(/obj/item/trash))
+	to_spawn = list(/obj/item/trash/)
 
 
 // Robutts /////////////////////////////////////////////////////
