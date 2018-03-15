@@ -142,8 +142,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/proc/on_use(obj/source, atom/target, mob/user)
 	ASSERT(source)
 	if(isobserver(user))
-		return
-
+		return FALSE
+	return TRUE
 
 /datum/material/iron
 	name="Iron"
@@ -172,7 +172,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 1.4
 
 /datum/material/glass/on_use(obj/source)
-	..()
+	if(!..())
+		return
 	if(prob(25/source.quality))
 		source.visible_message("<span class = 'warning'>\The [source] shatters!</span>")
 		new /obj/item/weapon/shard(get_turf(source))
@@ -206,7 +207,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	quality_mod = 1.3
 
 /datum/material/plasma/on_use(obj/source, atom/target, mob/user)
-	..()
+	if(!..())
+		return
 	if(isliving(target))
 		var/mob/living/L = target
 		L.adjustToxLoss(rand(1,source.quality))
@@ -250,7 +252,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 
 /datum/material/uranium/on_use(obj/source, atom/target, mob/user)
-	..()
+	if(!..())
+		return
 	if(isliving(target))
 		var/mob/living/L = target
 		L.apply_radiation(rand(1,3)*source.quality, RAD_EXTERNAL)
@@ -264,7 +267,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	cointype=/obj/item/weapon/coin/clown
 
 /datum/material/clown/New()
-	..()
+	if(!..())
+		return
 	brunt_damage_mod = rand(1,2)/rand(1,8)
 	sharpness_mod = rand(1,2)/rand(1,8)
 	quality_mod = rand(1,2)/rand(1,8)
@@ -276,7 +280,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 						0,0,0,0)
 
 /datum/material/clown/on_use(obj/source) //May [ticker.deity] have mercy
-	..()
+	if(!..())
+		return
 	if(prob(2*source.quality))
 		playsound(get_turf(source), 'sound/items/bikehorn.ogg', 100, 1)
 
@@ -294,7 +299,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	quality_mod = 2.2
 
 /datum/material/phazon/on_use(obj/source, atom/target, mob/user)
-	..()
+	if(!..())
+		return
 	if(prob(0.5*source.quality))
 		switch(rand(1,2))
 			if(1) //EMP
