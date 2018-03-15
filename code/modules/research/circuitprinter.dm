@@ -40,6 +40,8 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 						MAT_SILVER
 	)
 
+	var/draining = FALSE
+
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/New()
 	. = ..()
 
@@ -76,17 +78,22 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	if (O.is_open_container())
 		return 0
 
-/obj/machinery/r_n_d/fabricator/circuit_imprinter/process()
-	if(reagents && reagents.reagent_list.len)
-		for(var/obj/item/weapon/reagent_containers/RC in component_parts)
-			var/empty_volume = RC.reagents.maximum_volume - RC.reagents.total_volume
-			if(empty_volume <= 0)
-				continue
-			reagents.trans_to(RC, empty_volume)
+/obj/machinery/r_n_d/fabricator/circuit_imprinter/on_reagent_change()
+	if(!draining)
+		drain_to_beakers()
 
-		update_buffer_size()
-
-	..()
+/obj/machinery/r_n_d/fabricator/circuit_imprinter/proc/drain_to_beakers()
+	draining = TRUE
+	for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+		if(RC.reagents.is_full())
+			continue
+		var/empty_volume = RC.reagents.maximum_volume - RC.reagents.total_volume
+		reagents.trans_to(RC, empty_volume)
+		if(reagents.is_empty())
+			break
+	reagents.clear_reagents()
+	update_buffer_size()
+	draining = FALSE
 
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/update_buffer_size()
 	var/total_empty_volume = 0
