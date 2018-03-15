@@ -36,11 +36,8 @@
 	"Quack" = "selected_sound=sound/items/quack.ogg&shiftpitch=1&volume=50",
 	"Short Slide Whistle" = "selected_sound=sound/effects/slide_whistle_short.ogg&shiftpitch=1&volume=50",
 	"Long Slide Whistle" = "selected_sound=sound/effects/slide_whistle_long.ogg&shiftpitch=1&volume=50",
-	"Supermatter" = "selected_sound=sound/effects/suppermatter.ogg&shiftpitch=1&volume=80",
 	"YEET" = "selected_sound=sound/effects/yeet.ogg&shiftpitch=1&volume=50",
-	"Proboscis" = "selected_sound=sound/effects/lingextends.ogg&shiftpitch=1&volume=90",
 	"Time Stop" = "selected_sound=sound/effects/theworld3.ogg&shiftpitch=0&volume=80",
-	"Neck Snap" = "selected_sound=sound/scp/firstpersonsnap3.ogg&shiftpitch=0&volume=60",
 	"Click" = "selected_sound=sound/effects/kirakrik.ogg&shiftpitch=0&volume=80"
 	)
 
