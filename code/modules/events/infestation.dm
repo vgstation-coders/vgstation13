@@ -94,14 +94,19 @@
 
 	var/number = rand(2, max_number)
 
-	for(var/i = 0, i <= number, i++)
-		var/area/A = locate(spawn_area_type)
-		var/list/turf/simulated/floor/valid = list()
-		//Loop through each floor in the supply drop area
-		for(var/turf/simulated/floor/F in A)
-			if(!F.has_dense_content())
-				valid.Add(F)
+	var/area/A = locate(spawn_area_type)
+	var/list/turf/simulated/floor/valid = list()
+	//Loop through each floor in the supply drop area
+	for(var/turf/simulated/floor/F in A)
+		if(!F.has_dense_content())
+			valid.Add(F)
+	if(!valid.len)
+		message_admins("Infestation event failed! Could not find any valid spawn locations in [spawn_area_type].")
+		announceWhen = -1
+		endWhen = 0
+		return
 
+	for(var/i = 0, i <= number, i++)
 		var/picked = pick(valid)
 		if(vermin == VERM_SPIDERS)
 			var/mob/living/simple_animal/hostile/giant_spider/spiderling/S = new(picked)
