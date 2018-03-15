@@ -57,7 +57,7 @@
 		Move(A, get_dir(src,A), glide_size_override = crawldelay)
 		delayNextMove(crawldelay, additive=1)
 
-	if(isobj(A))
+	if(proximity && isobj(A))
 		var/obj/O = A
 		if(O.material_type)
 			O.material_type.on_use(O, src, null)
