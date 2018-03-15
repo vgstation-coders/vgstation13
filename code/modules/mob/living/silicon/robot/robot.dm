@@ -1194,8 +1194,12 @@
 				sensor_mode = NIGHT
 				to_chat(src, "<span class='notice'>Light amplification mode enabled.</span>")
 			if("Mesons")
-				sensor_mode = MESON_VISION
-				to_chat(src, "<span class='notice'>Meson Vison augmentation enabled.</span>")
+				var/area/A = get_area(src)
+				if(A.flags & NO_MESONS)
+					to_chat(src, "<span class = 'warning'>Unable to initialize Meson Vision. Probable cause: [pick("Atmospheric anomaly","Poor boot paramater","Bulb burn-out")]</span>")
+				else
+					sensor_mode = MESON_VISION
+					to_chat(src, "<span class='notice'>Meson Vision augmentation enabled.</span>")
 			if("Thermal")
 				sensor_mode = THERMAL_VISION
 				to_chat(src, "<span class='notice'>Thermal Optics augmentation enabled.</span>")
