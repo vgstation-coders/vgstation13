@@ -46,10 +46,10 @@
 			item_state = "[initial(item_state)]_down"
 	if(user)
 		user.update_inv_head()
-		usr.update_inv_wear_mask()
-		usr.update_inv_glasses()
-		usr.update_hair()
-		usr.update_inv_ears()
+		user.update_inv_wear_mask()
+		user.update_inv_glasses()
+		user.update_hair()
+		user.update_inv_ears()
 
 
 /obj/item/clothing/head/helmet/siren
