@@ -3564,6 +3564,7 @@
 					"incinerator" = LOC_INCIN,
 					"chapel" = LOC_CHAPEL,
 					"library" = LOC_LIBRARY,
+					"hydroponics" = LOC_HYDRO,
 					"vault" = LOC_VAULT,
 					"technical storage" = LOC_TECH,
 					)

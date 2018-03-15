@@ -101,7 +101,7 @@
 		if(!F.has_dense_content())
 			valid.Add(F)
 	if(!valid.len)
-		message_admins("Infestation event failed! Could not find any valid spawn locations in [spawn_area_type].")
+		message_admins("Infestation event failed! Could not find any viable turfs in [spawn_area_type] at which to spawn [number + 1] [vermstring].")
 		announceWhen = -1
 		endWhen = 0
 		return
@@ -113,7 +113,12 @@
 			S.amount_grown = 0
 		else
 			var/spawn_type = pick(spawn_types)
-			new spawn_type(picked)
+			var/mob/M = new spawn_type(picked)
+			if(M.density)
+				valid -= picked
+		if(!valid.len)
+			message_admins("Infestation event could not find enough viable turfs in [spawn_area_type] to spawn all vermin. [number - i] [vermstring] were unable to spawn!")
+			break
 
 /datum/event/infestation/announce()
 	var/warning = "Clear them out, before this starts to affect productivity."
