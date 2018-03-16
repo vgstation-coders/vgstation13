@@ -165,13 +165,13 @@
 		for(var/V in components) if(V != "power cell")
 			var/datum/robot_component/C = components[V]
 			var/NC = text2path("[C.external_type][component_extension]")
-			var/obj/item/robot_parts/robot_component/I = new NC
-			if(I.isupgrade)
+			var/obj/item/robot_parts/robot_component/I = NC
+			if(initial(I.isupgrade))
+				I = new NC
 				C.installed = COMPONENT_INSTALLED
+				qdel(C.wrapped)
 				C.wrapped = I
 				C.vulnerability = I.vulnerability
-			else
-				qdel(I)
 
 //If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
 //Improved /N

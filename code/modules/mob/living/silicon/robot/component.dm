@@ -144,7 +144,7 @@
 /obj/item/robot_parts/robot_component/examine(mob/user)
 	..()
 	if(brute_damage || electronics_damage)
-		to_chat(user, text("<span class='warning'>It looks[brute_damage ? " dented" : ""][(brute_damage && electronics_damage) ? " and" : ""][electronics_damage ? " charred" : ""].</span>"))
+		to_chat(user, "<span class='warning'>It looks[brute_damage ? " dented" : ""][(brute_damage && electronics_damage) ? " and" : ""][electronics_damage ? " charred" : ""].</span>")
 
 /obj/item/robot_parts/robot_component/binary_communication_device
 	name = "binary communication device"
