@@ -323,7 +323,7 @@
 	desc = "So that's the way you scientific detectives work. My god! for a fat, middle-aged, hard-boiled, pig-headed guy, you've got the vaguest way of doing things I ever heard of."
 	icon_state = "cyborg_upgrade3"
 	required_module = list(/obj/item/weapon/robot_module/security, /obj/item/weapon/robot_module/tg17355)
-	modules_to_add = list(/obj/item/binoculars, /obj/item/device/detective_scanner, /obj/item/device/taperecorder, /obj/item/weapon/gun/projectile/detective, /obj/item/ammo_storage/speedloader/c38/cyborg)
+	modules_to_add = list(/obj/item/weapon/gripper/service/noir, /obj/item/cyborglens, /obj/item/device/taperecorder, /obj/item/weapon/gun/projectile/detective, /obj/item/ammo_storage/speedloader/c38/cyborg)
 
 /obj/item/borg/upgrade/noir/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
