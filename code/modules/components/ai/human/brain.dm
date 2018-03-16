@@ -36,6 +36,7 @@
 
 	if(H.stat != CONSCIOUS || !H.canmove || !isturf(H.loc))
 		SendSignal(COMSIG_MOVE, list("dir" = 0))
+		return
 
 	current_target = target_holder.GetBestTarget(src, "target_evaluator")
 	if(!isnull(current_target))
@@ -117,7 +118,7 @@
 						continue
 					switch(D)
 						if(DESIRE_HAVE_WEAPON)
-							if((!goal && I.force > 2) || (goal && (I.force > goal.force || (I.force == goal.force && I.sharpness > goal.sharpness))))
+							if(IsBetterWeapon(I))
 								goal = I
 						if(DESIRE_CONFLICT)
 							break processing_desires
@@ -176,6 +177,8 @@
 	return TRUE
 
 /datum/component/ai/human_brain/proc/WieldBestWeapon(mob/living/carbon/human/H, var/list/excluded)
+	if(H.isStunned()) //We're on the floor, nothing we can do
+		return 0
 	SendSignal(COMSIG_ACTVEMPTYHAND, list())
 	if(H.get_active_hand())
 		SendSignal(COMSIG_DROP, list())
@@ -201,10 +204,14 @@
 	else
 		return 0
 
-/datum/component/ai/human_brain/proc/IsBetterWeapon(mob/living/carbon/human/H, var/list/search_location)
-	if(!search_location)
-		search_location = view(H)
+/datum/component/ai/human_brain/proc/IsBetterWeapon(mob/living/carbon/human/H, var/list/search_location, var/obj/item/comparison)
 	var/obj/item/O = H.get_active_hand()
+	if(!search_location && !comparison)
+		search_location = view(H)
+	else if (comparison)
+		if((!O && comparison.force > 2) || (O && (comparison.force > O.force || (comparison.force == O.force && comparison.sharpness > O.sharpness))))
+			return 1
+		return 0
 	for(var/obj/item/I in search_location)
 		if((!O && I.force > 2) || (O && (I.force > O.force || (I.force == O.force && I.sharpness > O.sharpness))))
 			return 1

@@ -17,14 +17,14 @@
 		user.do_attack_animation(src, W)
 		visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
 
-/mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null)
+/mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null, var/def_zone = null)
 	if(!no_delay)
 		user.delayNextAttack(10)
 	if(istype(I) && ismob(user))
 		if(originator)
-			I.attack(src, user, null, originator)
+			I.attack(src, user, def_zone, originator)
 		else
-			I.attack(src, user)
+			I.attack(src, user, def_zone)
 	if(BrainContainer)
 		BrainContainer.SendSignal(COMSIG_ATTACKEDBY, list("assailant"=user,"damage"=I.force))
 

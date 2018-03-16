@@ -1773,6 +1773,9 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	BrainContainer.AddComponent(/datum/component/ai/target_finder/human)
 	BrainContainer.AddComponent(/datum/component/ai/target_holder/prioritizing)
 	BrainContainer.AddComponent(/datum/component/ai/melee/attack_human)
+	BrainContainer.AddComponent(/datum/component/ai/crowd_attack)
+	BrainContainer.AddComponent(pick(typesof(/datum/component/ai/targetting_handler)))
+	BrainContainer.AddComponent(/datum/component/debugger) //REMEMBER TO REMOVE THIS
 
 /mob/living/carbon/human/can_show_flavor_text()
 	// Wearing a mask...

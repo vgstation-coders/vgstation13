@@ -8,7 +8,11 @@
 		switch(message_type)
 			if(COMSIG_CLICKON)
 				var/atom/A = args["target"]
-				M.ClickOn(A)
+				var/params
+				if(args["def_zone"])
+					var/list/L = list("def_zone" = args["def_zone"])
+					params = list2params(L)
+				M.ClickOn(A, params)
 
 			if(COMSIG_MOVE) // list("loc"=turf)
 	               // list("dir"=NORTH)

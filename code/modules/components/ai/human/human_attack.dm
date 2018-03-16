@@ -5,6 +5,7 @@
 	if(..(target))
 		var/mob/living/carbon/human/H = container.holder
 		H.a_intent = I_HURT
-		SendSignal(COMSIG_CLICKON, list("target" = target))
+		SendSignal(COMSIG_GETDEFZONE, list("target" = target, "damage_type" = "melee"))
+		SendSignal(COMSIG_CLICKON, list("target" = target, "def_zone" = def_zone))
 		return 1 // Accepted
 	return 0 // Unaccepted

@@ -113,3 +113,16 @@
  */
 
 #define COMSIG_ATTACKEDBY "attacked_by"
+
+/** Sent when a mob wants to update their current target zone.
+ * @param target /mob: What the mob wants to attack
+ * @param damagetype string: What damagetype will be used (melee, bullet, laser, etc.)
+ */
+
+#define COMSIG_GETDEFZONE "get_def_zone"
+
+/** Sent to update a mobs target zone
+ * @param def_zone string (DEFINE): What def_zone is to be targetted.
+ */
+
+#define COMSIG_SETDEFZONE "set_def_zone"
