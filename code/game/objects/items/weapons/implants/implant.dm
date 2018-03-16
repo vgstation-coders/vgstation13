@@ -552,7 +552,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 "}
 
 /obj/item/weapon/implant/peace/meltdown()
-	visible_message("<span class='warning'>\The [src] releases a dying hiss as it denatures!</span>", 1)
+	visible_message("<span class='warning'>\The [src] releases a dying hiss as it denatures!</span>")
 	name = "denatured implant"
 	desc = "A dead, hollow implant. Wonder what it used to be..."
 	icon_state = "implant_melted"
