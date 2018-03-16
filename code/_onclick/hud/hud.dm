@@ -54,6 +54,7 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 	move_intent = null
 	adding = null
 	other = null
+	qdel(hide_actions_toggle)
 	hide_actions_toggle = null
 	hotkeybuttons = null
 	mymob = null

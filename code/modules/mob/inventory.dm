@@ -326,8 +326,6 @@
 			var/mob/living/carbon/C = M
 			C.stomach_contents.Add(to_drop)
 
-	to_drop.dropped(src)
-
 	if(to_drop && to_drop.loc)
 		return 1
 	return 0
