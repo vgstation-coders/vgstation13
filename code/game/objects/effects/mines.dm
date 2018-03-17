@@ -70,8 +70,7 @@
 
 			target.zone.air.merge(payload)
 
-			if (target(istype(M, /mob) && !M.is_wearing_mask)
-				add_reagent.target(STOXIN, 1) //For consistency it will always sleep you for a bit.
+			var/mob/living/carbon/human/H = AM
 
 	qdel(src)
 
