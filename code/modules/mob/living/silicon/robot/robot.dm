@@ -569,12 +569,12 @@
 				L -= I
 	if(cleared)
 		queueAlarm(text("--- [class] alarm in [A.name] has been cleared."), class, 0)
-//		if(viewalerts) robot_alerts()
 	return !cleared
 
 
 /mob/living/silicon/robot/emag_act(mob/user as mob)
 	if(user != src)
+		spark(src, 5, FALSE)
 		if(!opened)
 			if(locked)
 				if(prob(90))
