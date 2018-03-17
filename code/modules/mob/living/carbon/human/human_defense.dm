@@ -49,7 +49,6 @@ emp_act
 /mob/living/carbon/human/getarmorabsorb(var/def_zone, var/type)
 	var/armorval = 0
 	var/organnum = 0
-
 	if(def_zone)
 		if(isorgan(def_zone))
 			return checkarmorabsorb(def_zone, type)
@@ -88,7 +87,10 @@ emp_act
 		if(bp && istype(bp ,/obj/item/clothing))
 			var/obj/item/clothing/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
-				protection += C.armor[type]
+				protection += C.get_armor(type)
+			for(var/obj/item/clothing/accessory/A in C.accessories)
+				if(A.body_parts_covered & def_zone.body_part)
+					protection += A.get_armor(type)
 	if(istype(loc, /obj/mecha))
 		var/obj/mecha/M = loc
 		protection += M.rad_protection
@@ -103,7 +105,10 @@ emp_act
 		if(istype(bp, /obj/item/clothing))
 			var/obj/item/clothing/C = bp
 			if(C.body_parts_covered & def_zone.body_part)
-				protection += C.armor_absorb[type]
+				protection += C.get_armor_absorb(type)
+			for(var/obj/item/clothing/accessory/A in C.accessories)
+				if(A.body_parts_covered & def_zone.body_part)
+					protection += A.get_armor_absorb(type)
 	return protection
 
 
@@ -242,14 +247,15 @@ emp_act
 		knock_teeth = 1
 
 	var/armor = run_armor_check(affecting, "melee", quiet = 1)
+	var/final_force = run_armor_absorb(affecting, "melee", I.force)
 	if(knock_teeth) //You can't actually hit people in the mouth - this checks if the user IS targetting mouth, and if he didn't miss!
-		if((!armor) && (I.force >= 8 || I.w_class >= W_CLASS_SMALL) && (I.is_sharp() < 1))//Minimum force=8, minimum w_class=2. Sharp items can't knock out teeth. Armor prevents this completely!
-			var/chance = min(I.force * I.w_class, 40) //an item with w_class = W_CLASS_MEDIUM and force of 10 has a 30% chance of knocking a few teeth out. Chance is capped at 40%
+		if((!armor) && (final_force >= 8 || I.w_class >= W_CLASS_SMALL) && (I.is_sharp() < 1))//Minimum force=8, minimum w_class=2. Sharp items can't knock out teeth. Armor prevents this completely!
+			var/chance = min(final_force * I.w_class, 40) //an item with w_class = W_CLASS_MEDIUM and force of 10 has a 30% chance of knocking a few teeth out. Chance is capped at 40%
 			if(prob(chance))
 				knock_out_teeth(user)
 
 	var/bloody = FALSE
-	if(I.force && ((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (I.force * 2)))
+	if(final_force && ((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (final_force * 2)))
 		I.add_blood(src)	//Make the weapon bloody, not the person.
 		if(prob(33))
 			bloody = TRUE
@@ -264,7 +270,7 @@ emp_act
 
 		switch(hit_area)
 			if(LIMB_HEAD)//Harder to score a stun but if you do it lasts a bit longer
-				if(prob(I.force))
+				if(prob(final_force))
 					if(apply_effect(20, PARALYZE, armor))
 						visible_message("<span class='danger'>[src] has been knocked unconscious!</span>")
 						if(src != user && I.damtype == BRUTE && isrev(src))
@@ -283,7 +289,7 @@ emp_act
 						update_inv_glasses(0)
 
 			if(LIMB_CHEST)//Easier to score a stun but lasts less time
-				if(prob((I.force + 10)))
+				if(prob((final_force + 10)))
 					apply_effect(5, WEAKEN, armor)
 					visible_message("<span class='danger'>[src] has been knocked down!</span>")
 
@@ -474,5 +480,6 @@ emp_act
 			show_message("<span class='warning'>The blob attacks you!</span>")
 			var/dam_zone = pick(organs_by_name)
 			var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
-			apply_damage(rand(30,40), BRUTE, affecting, run_armor_check(affecting, "melee"))
+
+			apply_damage(run_armor_absorb(affecting, "melee", rand(30,40)), BRUTE, affecting, run_armor_check(affecting, "melee"))
 	return

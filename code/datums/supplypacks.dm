@@ -810,6 +810,29 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_armory)
 	group = "Security"
 
+/datum/supply_packs/tactical
+	name = "Tactical Assault gear"
+	contains = list(/obj/item/clothing/suit/armor/plate_carrier,
+					/obj/item/clothing/suit/armor/plate_carrier,
+					/obj/item/clothing/suit/armor/plate_carrier,
+					/obj/item/weapon/armor_plate,
+					/obj/item/weapon/armor_plate,
+					/obj/item/weapon/armor_plate/bullet_resistant,
+					/obj/item/weapon/armor_plate/bullet_resistant,
+					/obj/item/weapon/armor_plate/laser_resistant,
+					/obj/item/weapon/armor_plate/laser_resistant,
+					/obj/item/clothing/head/helmet/visor,
+					/obj/item/clothing/head/helmet/visor,
+					/obj/item/clothing/head/helmet/visor,
+					/obj/item/weapon/shield/riot,
+					/obj/item/weapon/shield/riot,
+					/obj/item/weapon/shield/riot)
+	cost = 120
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
+	containername = "tactical assault gear crate"
+	access = list(access_armory)
+	group = "Security"
+
 /datum/supply_packs/loyalty
 	name = "Loyalty implants"
 	contains = list (/obj/item/weapon/storage/lockbox/loyalty)

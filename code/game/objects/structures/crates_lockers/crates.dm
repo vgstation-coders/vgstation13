@@ -271,6 +271,22 @@
 	locked = 1
 	health = 1000
 
+/obj/structure/closet/crate/secure/anti_tamper
+	name = "Extra-secure crate"
+
+/obj/structure/closet/crate/secure/anti_tamper/Destroy()
+	if(locked)
+		visible_message("<span class = 'warning'>Something bursts open from within \the [src]!</span>")
+		var/datum/effect/effect/system/smoke_spread/chem/S = new //Surprise!
+		S.attach(get_turf(src))
+		S.chemholder.reagents.add_reagent(CAPSAICIN, 40)
+		S.chemholder.reagents.add_reagent(CONDENSEDCAPSAICIN, 16)
+		S.chemholder.reagents.add_reagent(SACID, 12)
+		S.set_up(src, 10, 0, loc)
+		spawn(0)
+			S.start()
+	..()
+
 /obj/structure/closet/crate/large
 	name = "large crate"
 	desc = "A hefty metal crate."
