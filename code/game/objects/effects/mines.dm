@@ -70,8 +70,6 @@
 
 			target.zone.air.merge(payload)
 
-			var/mob/living/carbon/human/H = AM
-
 	qdel(src)
 
 /obj/effect/mine/stun
