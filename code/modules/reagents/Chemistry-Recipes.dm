@@ -3087,6 +3087,7 @@
 	required_reagents = list(WATER = 1, CALCIUMOXIDE = 1)
 	result_amount = 1
 	reaction_temp_change = 47
+	react_discretely = TRUE
 
 
 #undef ALERT_AMOUNT_ONLY
