@@ -1647,7 +1647,7 @@ Thanks.
 
 /mob/living/throw_item(var/atom/target,var/atom/movable/what=null)
 	src.throw_mode_off()
-	if(usr.stat || !target)
+	if(src.stat || !target)
 		return FAILED_THROW
 
 	if(!istype(loc,/turf))

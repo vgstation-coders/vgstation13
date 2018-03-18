@@ -1218,6 +1218,7 @@
 #include "code\modules\components\ai\human\human_attack.dm"
 #include "code\modules\components\ai\human\human_target_finder.dm"
 #include "code\modules\components\ai\human\retaliate.dm"
+#include "code\modules\components\ai\human\throw_attack.dm"
 #include "code\modules\components\ai\mobs\component_mob.dm"
 #include "code\modules\components\ai\mobs\giant_spider.dm"
 #include "code\modules\components\ai\target_finders\simple_view.dm"
