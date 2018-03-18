@@ -1114,3 +1114,43 @@ var/list/has_died_as_golem = list()
 
 				to_chat(user, "<span class='notice'>You place \the [O] into \the [src].</span>")
 				qdel(O)
+
+
+/datum/species/mushroom
+	name = "Mushroom"
+	//icobase = 'icons/mob/human_races/r_slime.dmi'
+	//deform = 'icons/mob/human_races/r_def_slime.dmi'
+	known_languages = list()
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice
+
+	flags = IS_WHITELISTED | NO_BREATHE | IS_PLANT | REQUIRE_DARK | IS_SPECIES_MUTE
+
+	gender = NEUTER
+
+	darksight = 5
+	tox_mod = 2
+	brute_mod = 1.4
+	burn_mod = 0.8
+
+	primitive = /mob/living/carbon/monkey/mushroom
+
+	default_mutations=list(M_REMOTE_TALK)
+	default_block_names=list("REMOTETALK")
+
+	blood_color = "#D3D3D3"
+	flesh_color = "#D3D3D3"
+
+	//Copypaste of Dionae
+	cold_level_1 = 50
+	cold_level_2 = -1
+	cold_level_3 = -1
+
+	heat_level_1 = T0C + 50
+	heat_level_2 = T0C + 75
+	heat_level_3 = T0C + 100
+
+	has_mutant_race = 0
+
+	has_organ = list(
+		"brain" =    /datum/organ/internal/brain/mushroom_brain,
+		)

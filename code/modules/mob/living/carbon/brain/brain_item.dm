@@ -89,3 +89,11 @@
 
 /obj/item/organ/internal/brain/slime_core/process()
 	processing_objects -= src
+
+/obj/item/organ/internal/brain/mushroom
+	name = "plump helmet brain"
+	desc = "At first glance, it looks like a popular miner delicacy, but is in fact the primary function of thought for a mushroom person."
+	icon_state = "plump_pie"
+	icon = 'icons/obj/food.dmi'
+	health = 600
+	origin_tech = Tc_BIOTECH + "=4"

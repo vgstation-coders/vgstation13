@@ -443,3 +443,22 @@
 	//used for making wield exceptions for 2 handed items
 	if (istype(I,/obj/item/device/instrument/drum/drum_makeshift/bongos))
 		return 1
+
+
+/mob/living/carbon/monkey/mushroom
+	name = "walking mushroom"
+	icon = 'icons/mob/animal.dmi'
+	icon_state = "mushroom"
+
+	canWearClothes = 0
+	canWearHats = 0
+	canWearGlasses = 0
+	canWearMasks = 0
+	canWearBack = 0
+	held_items = list()
+
+/mob/living/carbon/monkey/mushroom/say()
+	return 0
+
+/mob/living/carbon/monkey/mushroom/put_in_hand_check(var/obj/item/W)
+	return 0

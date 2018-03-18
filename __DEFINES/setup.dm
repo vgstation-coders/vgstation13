@@ -923,6 +923,8 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define PLASMA_IMMUNE 512
 #define RAD_GLOW 1024
 #define ELECTRIC_HEAL 2048
+#define IS_SPECIES_MUTE 4096
+#define REQUIRE_DARK 8192
 
 //Species anatomical flags.
 #define HAS_SKIN_TONE 1
