@@ -1766,6 +1766,7 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	BrainContainer = new (src)
 	BrainContainer.AddComponent(/datum/component/controller/mob)
 	BrainContainer.AddComponent(/datum/component/ai/hand_control)
+	BrainContainer.AddComponent(/datum/component/controller/movement/astar)
 
 /mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
 	initialize_barebones_NPC_components()
@@ -1776,7 +1777,7 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	BrainContainer.AddComponent(/datum/component/ai/melee/throw_attack)
 	BrainContainer.AddComponent(/datum/component/ai/crowd_attack)
 	BrainContainer.AddComponent(pick(typesof(/datum/component/ai/targetting_handler)))
-	BrainContainer.AddComponent(/datum/component/debugger) //REMEMBER TO REMOVE THIS
+	//BrainContainer.AddComponent(/datum/component/debugger) //REMEMBER TO REMOVE THIS
 
 /mob/living/carbon/human/can_show_flavor_text()
 	// Wearing a mask...

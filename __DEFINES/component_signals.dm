@@ -121,8 +121,10 @@
 
 #define COMSIG_GETDEFZONE "get_def_zone"
 
-/** Sent to update a mobs target zone
- * @param def_zone string (DEFINE): What def_zone is to be targetted.
+/** Sent when a mob wants whatever damage type (according to the armor list values) they may be wanting to use.
+ * @param user /mob: What mob in question is asking for a damage type
+ * @return a damage type ("melee","laser","energy", etc.)
  */
 
-#define COMSIG_SETDEFZONE "set_def_zone"
+#define COMSIG_GETDAMTYPE "get_dam_type"
+
