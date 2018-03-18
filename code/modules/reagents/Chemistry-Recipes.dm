@@ -2201,7 +2201,7 @@
 /datum/chemical_reaction/cheesewheel/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
 	new /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel(location)
-	
+
 /datum/chemical_reaction/butter
 	name = "Butter"
 	id = "butter"
@@ -3079,6 +3079,15 @@
 	result = SALINE
 	required_reagents = list(SALTWATER = 10, AMMONIA = 1)
 	result_amount = 10
+
+/datum/chemical_reaction/calciumhydroxide
+	name = "Calcium Hydroxide"
+	id = CALCIUMHYDROXIDE
+	result = CALCIUMHYDROXIDE
+	required_reagents = list(WATER = 1, CALCIUMOXIDE = 1)
+	result_amount = 1
+	reaction_temp_change = 47
+
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
