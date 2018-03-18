@@ -2692,9 +2692,9 @@
 		M.emote(pick("twitch","blink_r","shiver"))
 
 /datum/reagent/hypozine //syndie hyperzine
-	name = "Hypozine"
+	name = "Hyperzine"
 	id = HYPOZINE
-	description = "Hypozine is an extremely effective, short lasting, muscle stimulant."
+	description = "Upon close analysis this chemical is identified to be Hypozine. Hypozine is an extremely effective, short lasting, muscle stimulant. Unlike the similar drug Hyperzine, Hypozine puts much greater strain on the heart of its user."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	var/has_been_hypozined = 0
@@ -3034,7 +3034,7 @@
 	M.adjustBrainLoss(1)
 
 /datum/reagent/bicarodyne
-	name = "Bicarodyne"
+	name = "Bicaridine"
 	id = BICARODYNE
 	description = "Not to be confused with Bicaridine, Bicarodyne is a volatile chemical that reacts violently in the presence of most human endorphins."
 	reagent_state = LIQUID
