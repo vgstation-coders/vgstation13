@@ -6,13 +6,15 @@
 	wire_names=list(
 		"[RND_WIRE_DISABLE]"	= "Disable",
 		"[RND_WIRE_SHOCK]" 		= "Shock",
-		"[RND_WIRE_HACK]" 		= "Hack"
+		"[RND_WIRE_HACK]" 		= "Hack",
+		"[RND_WIRE_AUTOMAKE]"	= "Automake"
 	)
 	..()
 
 var/const/RND_WIRE_DISABLE = 1
 var/const/RND_WIRE_SHOCK = 2
 var/const/RND_WIRE_HACK = 4
+var/const/RND_WIRE_AUTOMAKE = 8
 
 /datum/wires/rnd/CanUse(var/mob/living/L)
 	if(!..())
@@ -28,6 +30,7 @@ var/const/RND_WIRE_HACK = 4
 	. += "The red light is [rnd.disabled ? "off" : "on"].<BR>"
 	. += "The green light is [rnd.shocked ? "off" : "on"].<BR>"
 	. += "The blue light is [rnd.hacked ? "off" : "on"].<BR>"
+	. += "The yellow light is [rnd.auto_make ? "on": "off"].<BR>"
 
 /datum/wires/rnd/UpdatePulsed(var/index)
 	var/obj/machinery/r_n_d/rnd = holder
@@ -39,6 +42,8 @@ var/const/RND_WIRE_HACK = 4
 		if(RND_WIRE_HACK)
 			rnd.hacked = !rnd.hacked
 			rnd.update_hacked()
+		if(RND_WIRE_AUTOMAKE)
+			rnd.auto_make = !rnd.auto_make
 
 /datum/wires/rnd/UpdateCut(var/index, var/mended)
 	var/obj/machinery/r_n_d/rnd = holder
@@ -50,3 +55,5 @@ var/const/RND_WIRE_HACK = 4
 		if(RND_WIRE_HACK)
 			rnd.hacked = 0
 			rnd.update_hacked()
+		if(RND_WIRE_AUTOMAKE)
+			rnd.auto_make = 0

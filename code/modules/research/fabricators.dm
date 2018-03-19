@@ -29,7 +29,7 @@
 	var/screen = 0
 	var/temp
 	var/list/part_sets = list()
-
+	var/datum/design/last_made
 	var/start_end_anims = 0
 
 	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
@@ -156,8 +156,14 @@
 
 /obj/machinery/r_n_d/fabricator/process()
 	..()
-	if(busy || stopped || being_built)
+	if(busy || being_built)
 		return
+	if(stopped)
+		if(auto_make && !queue.len)
+			add_to_queue(last_made)
+			start_processing_queue()
+		else
+			return
 	if(queue.len==0)
 		stopped=1
 		return
@@ -294,6 +300,7 @@
 		being_built.forceMove(get_turf(output))
 		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
 		src.being_built = null
+		last_made = part
 	src.updateUsrDialog()
 	src.busy = 0
 	return 1
