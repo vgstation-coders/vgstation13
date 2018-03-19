@@ -498,6 +498,7 @@
 	automatic = 1
 	drag_delay = 0
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EMAGGABLE | EJECTNOTDEL
+	var/finishing_sound = 'sound/machines/ding.ogg'
 
 /obj/machinery/sleeper/mancrowave/New()
 	..()
@@ -643,7 +644,7 @@
 				occupant = null
 				var/obj/effect/decal/cleanable/ash/ashed = new /obj/effect/decal/cleanable/ash(loc)
 				ashed.layer = src.layer + 0.01
-		playsound(src, 'sound/machines/ding.ogg', 50, 1)
+		playsound(src, finishing_sound, 50, 1)
 		on = 0
 		if(occupant)
 			if(ishuman(occupant))
@@ -654,5 +655,15 @@
 						playsound(src, 'sound/effects/pop.ogg', 50, 1)
 						H.h_style = "Popped Hair"
 						H.update_hair()
+				else
+					//GO TO DA SALON AND GET DAT TAN.
+					H.s_tone = -150
+					
+					//YEAH, GAL-O-SENGEN.
+					H.b_hair = 0
+					H.g_hair = 255
+					H.r_hair = 255
+					H.h_style = "Toriyama 2"
+					H.update_hair()
 			go_out()
 		update_icon()
