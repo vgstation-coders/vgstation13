@@ -165,3 +165,35 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 	new_id.assignment = "Highlander"
 	new_id.registered_name = highlander_human.real_name
 	highlander_human.equip_to_slot_or_del(new_id, slot_wear_id)
+
+
+///////////////////////////////////
+//Keeps track of all living heads//
+///////////////////////////////////
+/proc/get_living_heads()
+	var/list/heads = list()
+	for(var/client/C in clients)
+		var/mob/living/carbon/human/player = C.mob
+		if(istype(player) && player.stat!=2 && player.mind && (player.mind.assigned_role in command_positions))
+			heads += player.mind
+	return heads
+
+
+////////////////////////////
+//Keeps track of all heads//
+////////////////////////////
+/proc/get_all_heads()
+	var/list/heads = list()
+	for(var/client/C in clients)
+		var/mob/living/carbon/human/player = C.mob
+		if(istype(player) && player.mind && (player.mind.assigned_role in command_positions))
+			heads += player.mind
+	return heads
+
+/proc/get_assigned_head_roles()
+	var/list/roles = list()
+	for(var/client/C in clients)
+		var/mob/living/carbon/human/player = C.mob
+		if(istype(player) && player.mind && (player.mind.assigned_role in command_positions))
+			roles += player.mind.assigned_role
+	return roles

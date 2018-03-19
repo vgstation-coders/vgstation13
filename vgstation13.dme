@@ -319,6 +319,7 @@
 #include "code\datums\gamemode\objectives\target\syndicate\steal.dm"
 #include "code\datums\gamemode\role\changeling.dm"
 #include "code\datums\gamemode\role\cultist.dm"
+#include "code\datums\gamemode\role\rev.dm"
 #include "code\datums\gamemode\role\role.dm"
 #include "code\datums\gamemode\role\vampire_role.dm"
 #include "code\datums\helper_datums\butchering.dm"
