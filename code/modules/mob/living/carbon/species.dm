@@ -1121,16 +1121,16 @@ var/list/has_died_as_golem = list()
 	//icobase = 'icons/mob/human_races/r_slime.dmi'
 	//deform = 'icons/mob/human_races/r_def_slime.dmi'
 	known_languages = list()
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
 
 	flags = IS_WHITELISTED | NO_BREATHE | IS_PLANT | REQUIRE_DARK | IS_SPECIES_MUTE
 
 	gender = NEUTER
 
 	darksight = 5
-	tox_mod = 2
-	brute_mod = 1.4
-	burn_mod = 0.8
+	tox_mod = 0.8
+	brute_mod = 1.8
+	burn_mod = 0.6
 
 	primitive = /mob/living/carbon/monkey/mushroom
 

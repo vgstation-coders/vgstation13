@@ -775,6 +775,10 @@
 	reagents.add_reagent(PSILOCYBIN, 3)
 	src.bitesize = 6
 
+/obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man/New()
+	..()
+	reagents.add_reagent(TRICORDRAZINE, rand(1,5))
+
 /obj/item/weapon/reagent_containers/food/snacks/tomatomeat
 	name = "tomato slice"
 	desc = "A slice from a huge tomato"
@@ -1515,14 +1519,14 @@
 	desc = "Today we feast."
 	icon_state = "butter"
 	food_flags = FOOD_ANIMAL
-	
+
 
 /obj/item/weapon/reagent_containers/food/snacks/butter/New()
 	..()
 	reagents.add_reagent(LIQUIDBUTTER, 10)
 	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/butter/Crossed(atom/movable/O) 
+/obj/item/weapon/reagent_containers/food/snacks/butter/Crossed(atom/movable/O)
 	if (istype(O, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = O
 		if (H.CheckSlip() < 1)
@@ -5508,8 +5512,8 @@ obj/item/weapon/reagent_containers/food/snacks/butterstick
 	icon_state = "butter_stick"
 	bitesize = 3
 	food_flags = FOOD_ANIMAL
-	
-/obj/item/weapon/reagent_containers/food/snacks/butterstick/Crossed(atom/movable/O) 
+
+/obj/item/weapon/reagent_containers/food/snacks/butterstick/Crossed(atom/movable/O)
 	if (istype(O, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = O
 		if (H.CheckSlip() < 1)
@@ -5546,39 +5550,39 @@ obj/item/weapon/reagent_containers/food/snacks/butterstick
 	desc = "A brownie that may or may not get you sky high."
 	icon_state = "ambrosia_brownie"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL
-	
+
 obj/item/weapon/reagent_containers/food/snacks/butterfingers_r
 	name = "butter fingers"
 	desc = "It's a microwaved hand slathered in butter!"
 	icon_state = "butterfingers_r"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_MEAT
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/butterfingers_r/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
-	
+
 obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	name = "butter fingers"
 	desc = "It's a microwaved hand slathered in butter!"
 	icon_state = "butterfingers_l"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_ANIMAL | FOOD_MEAT
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
-	
+
 obj/item/weapon/reagent_containers/food/snacks/butteredtoast
 	name = "buttered toast"
 	desc = "Toasted bread with butter on it."
 	icon_state = "butteredtoast"
 	food_flags = FOOD_ANIMAL
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/butterfedtoast/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
-	
-	
 
-	
+
+
+

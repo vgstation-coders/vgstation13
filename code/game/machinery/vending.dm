@@ -2031,7 +2031,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/aloe = 3,
 		/obj/item/seeds/pitcher = 3,
 		/obj/item/seeds/vaporsac = 3,
-		/obj/item/seeds/dionanode = 3
+		/obj/item/seeds/mushroommanspore = 3
 		)
 	contraband = list(
 		/obj/item/seeds/eggyseed = 2,

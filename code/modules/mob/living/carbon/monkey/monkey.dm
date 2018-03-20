@@ -449,16 +449,44 @@
 	name = "walking mushroom"
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "mushroom"
-
+	greaterform = "Mushroom"
+	species_type = /mob/living/carbon/monkey/mushroom
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
 	canWearClothes = 0
 	canWearHats = 0
 	canWearGlasses = 0
 	canWearMasks = 0
 	canWearBack = 0
 	held_items = list()
+	flag = NO_BREATHE
+	var/growth = 0
 
 /mob/living/carbon/monkey/mushroom/say()
 	return 0
 
 /mob/living/carbon/monkey/mushroom/put_in_hand_check(var/obj/item/W)
 	return 0
+
+/mob/living/carbon/monkey/mushroom/Life()
+	..()
+	if(!isDead())
+		var/light_amount = 0
+		if(isturf(loc))
+			var/turf/T = loc
+			light_amount = T.get_lumcount() * 10
+
+		growth = Clamp(growth + rand(1,3)/(light_amount ? light_amount : 1),0,100)
+
+		if(growth >= 100)
+
+			if(locate(/datum/dna/gene/monkey) in active_genes)
+				var/datum/dna/gene/gene = dna_genes[/datum/dna/gene/monkey]
+				if(gene.can_deactivate(src, 0))
+					gene.deactivate(src, 0, 0)
+					visible_message("<span class = 'notice'>\The [src] grows rapidly into a fully grown [greaterform]!</span>")
+
+
+/mob/living/carbon/monkey/mushroom/Stat()
+	..()
+	if(statpanel("Status"))
+		stat(null, "Growth completing: [growth]%")
