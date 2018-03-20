@@ -287,7 +287,7 @@ to destroy them and players will be able to make replacements.
 	icon = 'icons/obj/module.dmi'
 	icon_state = "blank_mod"
 	//var/datum/circuits/local_fuses = null
-	var/list/allowed_boards = list("autolathe"=/obj/item/weapon/circuitboard/autolathe,"intercom"=/obj/item/weapon/intercom_electronics,"air alarm"=/obj/item/weapon/circuitboard/air_alarm,"fire alarm"=/obj/item/weapon/circuitboard/fire_alarm,"airlock"=/obj/item/weapon/circuitboard/airlock,"APC"=/obj/item/weapon/circuitboard/power_control,"vendomat"=/obj/item/weapon/circuitboard/vendomat,"microwave"=/obj/item/weapon/circuitboard/microwave,"station map"=/obj/item/weapon/circuitboard/station_map,"cell charger"=/obj/item/weapon/circuitboard/cell_charger,"fishtank filter"=/obj/item/weapon/circuitboard/fishtank,"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall)
+	var/list/allowed_boards = list("autolathe"=/obj/item/weapon/circuitboard/autolathe,"intercom"=/obj/item/weapon/intercom_electronics,"air alarm"=/obj/item/weapon/circuitboard/air_alarm,"fire alarm"=/obj/item/weapon/circuitboard/fire_alarm,"airlock"=/obj/item/weapon/circuitboard/airlock,"APC"=/obj/item/weapon/circuitboard/power_control,"vendomat"=/obj/item/weapon/circuitboard/vendomat,"microwave"=/obj/item/weapon/circuitboard/microwave,"station map"=/obj/item/weapon/circuitboard/station_map,"cell charger"=/obj/item/weapon/circuitboard/cell_charger,"recharger"=/obj/item/weapon/circuitboard/recharger,"fishtank filter"=/obj/item/weapon/circuitboard/fishtank,"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall)
 	var/soldering = 0 //Busy check
 
 /obj/item/weapon/circuitboard/blank/New()
@@ -1342,6 +1342,15 @@ obj/item/weapon/circuitboard/rdserver
 						"/obj/item/weapon/stock_parts/matter_bin" = 1,
 						"/obj/item/weapon/stock_parts/scanning_module" = 1,
 						"/obj/item/weapon/stock_parts/micro_laser" = 1)
+
+/obj/item/weapon/circuitboard/recharger
+	name = "circuit board (recharger)"
+	desc = "A circuit board used to run a machine that replenishes energy weapon charge"
+	board_type = MACHINE
+	build_path = "/obj/machinery/recharger"
+	req_components = list(
+						"/obj/item/weapon/stock_parts/scanning_module" = 1,
+						"/obj/item/weapon/stock_parts/capacitor" = 2)
 
 /*
  * Fishtanks

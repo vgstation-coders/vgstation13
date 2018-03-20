@@ -8,23 +8,45 @@
 	idle_power_usage = 4
 	active_power_usage = 250
 
+
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
 
 	var/self_powered = 0
+	var/charging_speed_modifier = 1 //The higher this value is, the faster the charging (increases energy used and deposited to gun each process() call, multiplier)
+	var/efficiency_modifier = 1 // This value is the multiplier of excess power loss, the closer it is to zero, the less energy is wasted, min cap is 50% of usual loss
 
 	var/obj/item/weapon/charging = null
 
 	var/appearance_backup = null
 
-	machine_flags = WRENCHMOVE | FIXED2WORK
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY
 
 /obj/machinery/recharger/New()
-	..()
+	. = ..()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/recharger,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/capacitor
+	) // Fashioned from the cell charger, they both serve a similar purpose
+	RefreshParts()
 	if(self_powered)
 		use_power = 0
 		idle_power_usage = 0
 		active_power_usage = 0
+
+/obj/machinery/recharger/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts) // 1x - 0.5x loss multiplier
+		T += SM.rating
+	efficiency_modifier = 0.25*(5-T)
+	T = 0
+	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts) // 1x - 3x charging multiplier
+		T += C.rating
+	charging_speed_modifier = round(T/2) // rounds down because fractional speed modifiers can cause problems with weapons that have clearly defined "energy units" such as the lawgiver and the pulse rifle, it is unlikely that someone's not going to muster up two of the same capacitor when modifying the charger
+	T = 0
+
 
 /obj/machinery/recharger/Destroy()
 	if(charging)
@@ -120,60 +142,69 @@
 		return
 
 	if(charging)
-		if(istype(charging, /obj/item/weapon/gun/energy))
+		var/charge_unit
+		if(istype(charging, /obj/item/weapon/gun/energy)) // Original values: 100e charged, 150e wasted,
 			var/obj/item/weapon/gun/energy/E = charging
-			if((E.power_supply.charge + 100) < E.power_supply.maxcharge)
-				E.power_supply.give(100)
+			charge_unit = 100 * charging_speed_modifier
+			if((E.power_supply.charge + charge_unit) < E.power_supply.maxcharge)
+				E.power_supply.give(charge_unit)
 				icon_state = "recharger1"
 				if(!self_powered)
-					use_power(250)
+					use_power(charge_unit + 150 * efficiency_modifier * charging_speed_modifier)
 				update_icon()
 			else
 				E.power_supply.charge = E.power_supply.maxcharge
 				update_icon()
 				icon_state = "recharger2"
 			return
-		else if(istype(charging, /obj/item/energy_magazine))//pulse bullet casings
+		else if(istype(charging, /obj/item/energy_magazine))//pulse rifle rounds, Original values: 3rnd charged, 250e consumed, let's say 50e per round + 100e waste
 			var/obj/item/energy_magazine/M = charging
-			if((M.bullets + 3) < M.max_bullets)
-				M.bullets = min(M.max_bullets,M.bullets+3)
+			charge_unit = 3 * charging_speed_modifier
+			if((M.bullets + charge_unit) < M.max_bullets)
+				M.bullets = min(M.max_bullets,M.bullets+charge_unit)
 				icon_state = "recharger1"
 				if(!self_powered)
-					use_power(250)
+					use_power(150 * charging_speed_modifier + 100 * efficiency_modifier * charging_speed_modifier)
 				update_icon()
 			else
 				M.bullets = M.max_bullets
 				update_icon()
 				icon_state = "recharger2"
 			return
-		else if(istype(charging, /obj/item/ammo_storage/magazine/lawgiver))
+		else if(istype(charging, /obj/item/ammo_storage/magazine/lawgiver)) // Original values: lawgiver charges 1/5 of of one ammo type for 200e, 100e + 100e excess sounds palatable
 			var/obj/item/ammo_storage/magazine/lawgiver/L = charging
 			if(!L.isFull())
+				var/charged_amount
 				if(L.stuncharge != 100)
-					L.stuncharge += 20
+					charged_amount = 20 * charging_speed_modifier
+					L.stuncharge = min(L.stuncharge + charged_amount, 100)
 				else if(L.lasercharge != 100)
-					L.lasercharge += 20
+					charged_amount = 20 * charging_speed_modifier
+					L.lasercharge = min(L.lasercharge + charged_amount, 100)
 				else if(L.rapid_ammo_count != 5)
-					L.rapid_ammo_count++
+					charged_amount = charging_speed_modifier
+					L.rapid_ammo_count = min(L.rapid_ammo_count + charged_amount, 5)
 				else if(L.flare_ammo_count != 5)
-					L.flare_ammo_count++
+					charged_amount = charging_speed_modifier
+					L.flare_ammo_count = min(L.flare_ammo_count + charged_amount, 5)
 				else if(L.ricochet_ammo_count != 5)
-					L.ricochet_ammo_count++
+					charged_amount = charging_speed_modifier
+					L.ricochet_ammo_count = min(L.ricochet_ammo_count + charged_amount, 5)
 				icon_state = "recharger1"
 				if(!self_powered)
-					use_power(200)
+					use_power(100 * charging_speed_modifier + 100 * charging_speed_modifier * efficiency_modifier) // could make this more compressed but didn't for better readability
 				update_icon()
 			else
 				update_icon()
 				icon_state = "recharger2"
 			return
-		else if(istype(charging, /obj/item/weapon/melee/baton))
+		else if(istype(charging, /obj/item/weapon/melee/baton)) //25e power loss is so minor that the game shouldn't bother calculating the efficiency of better parts for it
 			var/obj/item/weapon/melee/baton/B = charging
 			if(B.bcell)
-				if(B.bcell.give(175))
+				if(B.bcell.give(175*charging_speed_modifier))
 					icon_state = "recharger1"
 					if(!self_powered)
-						use_power(200)
+						use_power(200*charging_speed_modifier)
 				else
 					icon_state = "recharger2"
 			else
@@ -182,10 +213,10 @@
 		else if(istype(charging, /obj/item/weapon/rcs))
 			var/obj/item/weapon/rcs/rcs = charging
 			if(rcs.cell)
-				if(rcs.cell.give(175))
+				if(rcs.cell.give(175*charging_speed_modifier))
 					icon_state = "recharger1"
 					if(!self_powered)
-						use_power(200)
+						use_power(200*charging_speed_modifier)
 				else
 					icon_state = "recharger2"
 			else
@@ -220,10 +251,16 @@
 /obj/machinery/recharger/self_powered	//ideal for the Thunderdome
 	self_powered = 1
 
-/obj/machinery/recharger/wallcharger
+/obj/machinery/recharger/wallcharger // Does this object even show up anywhere?
 	name = "wall recharger"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "wrecharger0"
+	machine_flags = WRENCHMOVE | FIXED2WORK // Added this just in case someone tries to poke around with a screwdriver
+
+/obj/machinery/recharger/wallcharger/
+
+
+
 
 /obj/machinery/recharger/wallcharger/process()
 	if(stat & (NOPOWER|BROKEN) || !anchored)
