@@ -67,16 +67,13 @@
 		to_chat(user, "<span class='notice'>[src] isn't connected to a power source.</span>")
 		return 1
 	if(panel_open)
-		to_chat(user, "<span class = 'warning'>You can't insert anything into the charger while the maintenance panel is open!</span>")
+		to_chat(user, "You can't insert anything into \the [src] while the maintenance panel is open.</span>")
 		return 1
 	if(charging)
 		to_chat(user, "<span class='warning'>There's \a [charging] already charging inside!</span>")
 		return 1
 	if(!anchored)
 		to_chat(user, "<span class='warning'>You must secure \the [src] before you can make use of it!</span>")
-		return 1
-	if(panel_open)
-		to_chat(user, "<span class = 'warning'>You can't insert anything into the machine while the maintenance panel is open!</span>")
 		return 1
 	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G, /obj/item/energy_magazine) || istype(G, /obj/item/ammo_storage/magazine/lawgiver) || istype(G, /obj/item/weapon/rcs))
 		if (istype(G, /obj/item/weapon/gun/energy/gun/nuclear) || istype(G, /obj/item/weapon/gun/energy/crossbow))
@@ -102,9 +99,8 @@
 /obj/machinery/recharger/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(charging)
 		to_chat(user, "The maintenance panel is blocked by \the [charging]!")
-		return null
+		return 1
 	return ..()
-
 
 
 /obj/machinery/recharger/wrenchAnchor(var/mob/user)
