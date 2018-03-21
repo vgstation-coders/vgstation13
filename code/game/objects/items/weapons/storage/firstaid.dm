@@ -84,6 +84,29 @@
 	new /obj/item/device/healthanalyzer(src)
 	return
 
+/obj/item/weapon/storage/firstaid/radiation
+	name = "radiation first-aid kit"
+	desc = "For the treatment of radiation exposure."
+	icon_state = "radfirstaid"
+	item_state = "firstaid-rad"
+
+/obj/item/weapon/storage/firstaid/radiation/empty
+	empty = 1
+
+/obj/item/weapon/storage/firstaid/radiation/New()
+	..()
+	if (empty)
+		return
+
+	new /obj/item/weapon/reagent_containers/pill/antitox(src)
+	new /obj/item/weapon/reagent_containers/syringe/hyronalin(src)
+	new /obj/item/weapon/reagent_containers/syringe/hyronalin(src)
+	new /obj/item/weapon/reagent_containers/syringe/arithrazine(src)
+	new /obj/item/weapon/reagent_containers/syringe/arithrazine(src)
+	new /obj/item/weapon/reagent_containers/syringe/lithotorcrazine(src)
+	new /obj/item/device/healthanalyzer(src)
+	return
+
 /obj/item/weapon/storage/firstaid/o2
 	name = "oxygen deprivation first-aid kit"
 	desc = "A box full of oxygen goodies."
