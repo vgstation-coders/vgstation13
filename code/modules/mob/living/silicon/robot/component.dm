@@ -138,7 +138,7 @@
 	icon_state = "working"
 	var/brute_damage = 0
 	var/electronics_damage = 0
-	var/vulnerability = 1 //Multiplies the damage taken by this ammount.
+	var/vulnerability = 1 //Multiplies the damage taken by this ammount. 0.35 is a MAGIC NUMBER.
 	var/isupgrade = FALSE //Set this to true for any parts that are children of the basic ones. Required for auto upgrading with upgrade_components() in \silicon\robot\robot.dm
 
 /obj/item/robot_parts/robot_component/examine(mob/user)
@@ -153,7 +153,7 @@
 /obj/item/robot_parts/robot_component/binary_communication_device/reinforced
 	name = "reinforced binary communication device"
 	icon_state = "ref_binary_translator"
-	vulnerability = 0.5
+	vulnerability = 0.35
 	isupgrade = TRUE
 
 /obj/item/robot_parts/robot_component/actuator
@@ -163,7 +163,7 @@
 /obj/item/robot_parts/robot_component/actuator/reinforced
 	name = "reinforced actuator"
 	icon_state = "ref_actuator"
-	vulnerability = 0.5
+	vulnerability = 0.35
 	isupgrade = TRUE
 
 /obj/item/robot_parts/robot_component/armour
@@ -173,7 +173,7 @@
 /obj/item/robot_parts/robot_component/armour/reinforced
 	name = "reinforced armour plating"
 	icon_state = "ref_armor_plating"
-	vulnerability = 0.5
+	vulnerability = 0.35
 	isupgrade = TRUE
 
 /obj/item/robot_parts/robot_component/camera
@@ -183,7 +183,7 @@
 /obj/item/robot_parts/robot_component/camera/reinforced
 	name = "reinforced camera"
 	icon_state = "ref_camera"
-	vulnerability = 0.5
+	vulnerability = 0.35
 	isupgrade = TRUE
 
 /obj/item/robot_parts/robot_component/diagnosis_unit
@@ -193,7 +193,7 @@
 /obj/item/robot_parts/robot_component/diagnosis_unit/reinforced
 	name = "reinforced diagnosis unit"
 	icon_state = "ref_diagnosis_unit"
-	vulnerability = 0.5
+	vulnerability = 0.35
 	isupgrade = TRUE
 
 /obj/item/robot_parts/robot_component/radio
@@ -203,7 +203,7 @@
 /obj/item/robot_parts/robot_component/radio/reinforced
 	name = "reinforced radio"
 	icon_state = "ref_radio"
-	vulnerability = 0.5
+	vulnerability = 0.35
 	isupgrade = TRUE
 
 /obj/item/broken_device/attackby(var/obj/item/weapon/W, var/mob/user)
