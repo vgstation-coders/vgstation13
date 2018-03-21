@@ -35,6 +35,7 @@ var/list/factions_with_hud_icons = list()
 	var/max_roles = 0
 	var/accept_latejoiners = FALSE
 	var/datum/objective_holder/objective_holder
+	var/datum/role/initroletype = /datum/role
 	var/datum/role/roletype = /datum/role
 	var/logo_state = "synd-logo"
 	var/list/hud_icons = list()
@@ -62,7 +63,7 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/forgeObjectives()
 
 /datum/faction/proc/HandleNewMind(var/datum/mind/M) //Used on faction creation
-	var/newRole = new roletype(M, src, initial_role)
+	var/newRole = new initroletype(M, src, initial_role)
 	if(!newRole)
 		WARNING("Role killed itself or was otherwise missing!")
 		return 0
@@ -310,14 +311,45 @@ var/list/factions_with_hud_icons = list()
 
 //________________________________________________
 
+#define ADD_REVOLUTIONARY_FAIL_IS_COMMAND -1
+#define ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED -2
+#define ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED -3
+#define ADD_REVOLUTIONARY_FAIL_IS_REV -4
+
 /datum/faction/revolution
 	name = "Revolutionaries"
 	ID = REVOLUTION
 	required_pref = ROLE_REV
-	initial_role = REV
+	initial_role = HEADREV
 	late_role = REV
 	desc = "Viva!"
 	logo_state = "rev-logo"
+	initroletype = /datum/role/revolutionary/leader
+
+/datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)
+	if(M.assigned_role in command_positions)
+		return ADD_REVOLUTIONARY_FAIL_IS_COMMAND
+
+	var/mob/living/carbon/human/H = M.current
+
+	if(jobban_isbanned(H, "revolutionary"))
+		return ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED
+
+	for(var/obj/item/weapon/implant/loyalty/L in H) // check loyalty implant in the contents
+		if(L.imp_in == H) // a check if it's actually implanted
+			return ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED
+
+	if(isrev(H)) //HOW DO YOU FUCK UP THIS BADLY.
+		return ADD_REVOLUTIONARY_FAIL_IS_REV
+
+	return ..()
+
+/datum/faction/revolution/forgeObjectives()
+	var/list/heads = get_living_heads()
+	for(var/datum/mind/head_mind in heads)
+		var/datum/objective/target/assassinate/A = new(auto_target = FALSE)
+		if(A.set_target(head_mind))
+			AppendObjective(A)
 
 //____________________{"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Cult of Nar-Sie</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}____________________________
 
