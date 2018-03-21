@@ -927,7 +927,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/gun/projectile/sec,
 					/obj/item/voucher/free_item/glockammo,
 					/obj/item/voucher/free_item/glockammo)
-	cost = 200
+	cost = 60
 	containertype = /obj/structure/closet/crate/secure/weapon
 	containername = ".45 pistols crate"
 	access = list(access_armory)
