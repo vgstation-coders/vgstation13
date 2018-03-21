@@ -66,11 +66,17 @@
 	if(stat & (NOPOWER | BROKEN))
 		to_chat(user, "<span class='notice'>[src] isn't connected to a power source.</span>")
 		return 1
+	if(panel_open)
+		to_chat(user, "<span class = 'warning'>You can't insert anything into the charger while the maintenance panel is open!</span>")
+		return 1
 	if(charging)
 		to_chat(user, "<span class='warning'>There's \a [charging] already charging inside!</span>")
 		return 1
 	if(!anchored)
 		to_chat(user, "<span class='warning'>You must secure \the [src] before you can make use of it!</span>")
+		return 1
+	if(panel_open)
+		to_chat(user, "<span class = 'warning'>You can't insert anything into the machine while the maintenance panel is open!</span>")
 		return 1
 	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G, /obj/item/energy_magazine) || istype(G, /obj/item/ammo_storage/magazine/lawgiver) || istype(G, /obj/item/weapon/rcs))
 		if (istype(G, /obj/item/weapon/gun/energy/gun/nuclear) || istype(G, /obj/item/weapon/gun/energy/crossbow))
@@ -92,6 +98,14 @@
 			use_power = 2
 		update_icon()
 		return 1
+
+/obj/machinery/recharger/togglePanelOpen(var/obj/toggleitem, mob/user)
+	if(charging)
+		to_chat(user, "The maintenance panel is blocked by \the [charging]!")
+		return null
+	return ..()
+
+
 
 /obj/machinery/recharger/wrenchAnchor(var/mob/user)
 	if(charging)
@@ -239,11 +253,15 @@
 	..(severity)
 
 /obj/machinery/recharger/update_icon()	//we have an update_icon() in addition to the stuff in process to make it feel a tiny bit snappier.
+
 	if(charging)
 		overlays.len = 0
 		charging.update_icon()
 		overlays += charging.appearance
 		icon_state = "recharger1"
+	else if(!anchored)
+		overlays.len = 0
+		icon_state = "recharger4"
 	else
 		overlays.len = 0
 		icon_state = "recharger0"
@@ -251,15 +269,10 @@
 /obj/machinery/recharger/self_powered	//ideal for the Thunderdome
 	self_powered = 1
 
-/obj/machinery/recharger/wallcharger // Does this object even show up anywhere?
+/obj/machinery/recharger/wallcharger
 	name = "wall recharger"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "wrecharger0"
-	machine_flags = WRENCHMOVE | FIXED2WORK // Added this just in case someone tries to poke around with a screwdriver
-
-/obj/machinery/recharger/wallcharger/
-
-
 
 
 /obj/machinery/recharger/wallcharger/process()
