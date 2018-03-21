@@ -1574,6 +1574,12 @@ proc/clear_memory(var/silent = 1)
 		return antag_roles[role_id]
 	return FALSE
 
+/datum/mind/proc/GetFactionFromRole(var/role_id)
+	var/datum/role/R = GetRole(role_id)
+	if(R)
+		return R.GetFaction()
+	return FALSE
+
 //Initialisation procs
 /mob/proc/mind_initialize() // vgedit: /mob instead of /mob/living
 	if(mind)
