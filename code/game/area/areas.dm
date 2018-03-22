@@ -421,7 +421,9 @@ var/area/space_area
 	else if(istype(oldArea) && oldArea.project_shadows)
 		Obj.underlays -= Obj.shadow
 
+	Obj.area_entered(src)
 	for(var/atom/movable/thing in get_contents_in_object(Obj))
+		thing.area_entered(src)
 		thing.areaMaster = src
 
 	for(var/mob/mob_in_obj in Obj.contents)
