@@ -929,7 +929,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/voucher/free_item/glockammo)
 	cost = 200
 	containertype = /obj/structure/closet/crate/secure/weapon
-	containername = ".45 pistols crate"
+	containername = ".380 pistols crate"
 	access = list(access_armory)
 	group = "Security"
 
@@ -941,7 +941,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/ammo_storage/magazine/m380auto)
 	cost = 50
 	containertype = /obj/structure/closet/crate/secure/gear
-	containername = ".45 pistol lethal ammo crate"
+	containername = ".380 pistol lethal ammo crate"
 	access = list(access_armory)
 	group = "Security"
 
@@ -953,7 +953,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/ammo_storage/magazine/m380auto/practice)
 	cost = 10
 	containertype = /obj/structure/closet/crate/secure/gear
-	containername = ".45 pistol practice ammo crate"
+	containername = ".380 pistol practice ammo crate"
 	access = list(access_security)
 	group = "Security"
 
@@ -965,7 +965,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/ammo_storage/magazine/m380auto/rubber)
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/gear
-	containername = ".45 pistol rubber ammo crate"
+	containername = ".380 pistol rubber ammo crate"
 	access = list(access_security)
 	group = "Security"
 
