@@ -10,8 +10,7 @@
 /datum/gamemode/traitor/da/SetupFactions()
 	factions_allowed = subtypesof(/datum/faction/syndicate/traitor)
 
-/* autotators are just tators ffs!
+// autotators are just tators ffs! //No, it spawns a faction that has midround recruit enabled ye grot
 /datum/gamemode/autotraitor
 	name = "Autotraitor"
 	factions_allowed=  list(/datum/faction/syndicate/traitor/auto)
-*/
