@@ -20,4 +20,3 @@
 #define SATCHEL_NORM 3
 #define SATCHEL_ALT 4
 #define MESSENGER_BAG 5
-
