@@ -504,9 +504,9 @@
 		if(ismob(O.loc))
 			var/mob/M = O.loc
 			M.regenerate_icons()
-
-	var/turf/T = get_turf(O)
-	self.reaction_turf(T, volume)
+	if(isturf(O.loc))
+		var/turf/T = get_turf(O)
+		self.reaction_turf(T, volume)
 
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/monkeycube))
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cube = O
@@ -1911,9 +1911,9 @@
 	var/datum/reagent/self = src
 	if(..())
 		return 1
-
-	var/turf/T = get_turf(O)
-	self.reaction_turf(T, volume)
+	if(isturf(O.loc))
+		var/turf/T = get_turf(O)
+		self.reaction_turf(T, volume)
 
 
 /datum/reagent/fuel/reaction_turf(var/turf/simulated/T, var/volume)
