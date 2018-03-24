@@ -50,6 +50,8 @@
 
 	// Components are basically robot organs.
 	var/list/components = list()
+	var/component_extension = null
+
 	var/obj/item/device/mmi/mmi = null
 	var/obj/item/device/pda/ai/rbPDA = null
 	var/datum/wires/robot/wires = null
@@ -157,6 +159,19 @@
 	if(!rbPDA)
 		rbPDA = new/obj/item/device/pda/ai(src)
 	rbPDA.set_name_and_job(custom_name,braintype)
+
+/mob/living/silicon/robot/proc/upgrade_components()
+	if(component_extension)
+		for(var/V in components) if(V != "power cell")
+			var/datum/robot_component/C = components[V]
+			var/NC = text2path("[C.external_type][component_extension]")
+			var/obj/item/robot_parts/robot_component/I = NC
+			if(initial(I.isupgrade))
+				I = new NC
+				C.installed = COMPONENT_INSTALLED
+				qdel(C.wrapped)
+				C.wrapped = I
+				C.vulnerability = I.vulnerability
 
 //If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
 //Improved /N
@@ -644,6 +659,7 @@
 				C.wrapped = W
 				C.electronics_damage = I.electronics_damage
 				C.brute_damage = I.brute_damage
+				C.vulnerability = I.vulnerability
 				C.install()
 				user.drop_item(W)
 				W.forceMove(null)
@@ -784,6 +800,7 @@
 			C.install()
 			if(can_diagnose())
 				to_chat(src, "<span class='info' style=\"font-family:Courier\">New cell installed. Type: [cell.name]. Charge: [cell.charge].</span>")
+		updateicon()
 
 	else if(iswiretool(W))
 		if(wiresexposed)

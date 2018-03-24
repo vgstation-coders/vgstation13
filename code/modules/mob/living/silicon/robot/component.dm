@@ -6,6 +6,7 @@
 /datum/robot_component/var/toggled = TRUE
 /datum/robot_component/var/brute_damage = 0
 /datum/robot_component/var/electronics_damage = 0
+/datum/robot_component/var/vulnerability = 1
 /datum/robot_component/var/energy_consumption = 0
 /datum/robot_component/var/max_damage = 30 //WHY THE FUCK IS THE DEFAULT MAX DAMAGE 30 ARE YOU STUPID
 /datum/robot_component/var/mob/living/silicon/robot/owner
@@ -38,8 +39,8 @@
 	if(installed != COMPONENT_INSTALLED)
 		return
 
-	brute_damage += brute
-	electronics_damage += electronics
+	brute_damage += brute * vulnerability
+	electronics_damage += electronics * vulnerability
 
 	if(brute_damage + electronics_damage >= max_damage)
 		destroy()
@@ -68,14 +69,14 @@
 
 /datum/robot_component/armour
 	name = "armour plating"
-	energy_consumption = 0
 	external_type = /obj/item/robot_parts/robot_component/armour
+	energy_consumption = 0
 	max_damage = 60
 
 /datum/robot_component/actuator
 	name = "actuator"
-	energy_consumption = 0 // seeing as we can move without any charge...
 	external_type = /obj/item/robot_parts/robot_component/actuator
+	energy_consumption = 0 // seeing as we can move without any charge...
 	max_damage = 50
 
 /datum/robot_component/cell
@@ -107,8 +108,8 @@
 
 /datum/robot_component/diagnosis_unit
 	name = "self-diagnosis unit"
-	energy_consumption = 0
 	external_type = /obj/item/robot_parts/robot_component/diagnosis_unit
+	energy_consumption = 0
 	max_damage = 30
 
 /mob/living/silicon/robot/proc/initialize_components()
@@ -137,30 +138,73 @@
 	icon_state = "working"
 	var/brute_damage = 0
 	var/electronics_damage = 0
+	var/vulnerability = 1 //Multiplies the damage taken by this ammount. 0.35 is a MAGIC NUMBER.
+	var/isupgrade = FALSE //Set this to true for any parts that are children of the basic ones. Required for auto upgrading with upgrade_components() in \silicon\robot\robot.dm
+
+/obj/item/robot_parts/robot_component/examine(mob/user)
+	..()
+	if(brute_damage || electronics_damage)
+		to_chat(user, "<span class='warning'>It looks[brute_damage ? " dented" : ""][(brute_damage && electronics_damage) ? " and" : ""][electronics_damage ? " charred" : ""].</span>")
 
 /obj/item/robot_parts/robot_component/binary_communication_device
 	name = "binary communication device"
 	icon_state = "binary_translator"
 
+/obj/item/robot_parts/robot_component/binary_communication_device/reinforced
+	name = "reinforced binary communication device"
+	icon_state = "ref_binary_translator"
+	vulnerability = 0.35
+	isupgrade = TRUE
+
 /obj/item/robot_parts/robot_component/actuator
 	name = "actuator"
 	icon_state = "actuator"
+
+/obj/item/robot_parts/robot_component/actuator/reinforced
+	name = "reinforced actuator"
+	icon_state = "ref_actuator"
+	vulnerability = 0.35
+	isupgrade = TRUE
 
 /obj/item/robot_parts/robot_component/armour
 	name = "armour plating"
 	icon_state = "armor_plating"
 
+/obj/item/robot_parts/robot_component/armour/reinforced
+	name = "reinforced armour plating"
+	icon_state = "ref_armor_plating"
+	vulnerability = 0.35
+	isupgrade = TRUE
+
 /obj/item/robot_parts/robot_component/camera
 	name = "camera"
 	icon_state = "camera"
+
+/obj/item/robot_parts/robot_component/camera/reinforced
+	name = "reinforced camera"
+	icon_state = "ref_camera"
+	vulnerability = 0.35
+	isupgrade = TRUE
 
 /obj/item/robot_parts/robot_component/diagnosis_unit
 	name = "diagnosis unit"
 	icon_state = "diagnosis_unit"
 
+/obj/item/robot_parts/robot_component/diagnosis_unit/reinforced
+	name = "reinforced diagnosis unit"
+	icon_state = "ref_diagnosis_unit"
+	vulnerability = 0.35
+	isupgrade = TRUE
+
 /obj/item/robot_parts/robot_component/radio
 	name = "radio"
 	icon_state = "radio"
+
+/obj/item/robot_parts/robot_component/radio/reinforced
+	name = "reinforced radio"
+	icon_state = "ref_radio"
+	vulnerability = 0.35
+	isupgrade = TRUE
 
 /obj/item/broken_device/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W, /obj/item/stack/nanopaste))
