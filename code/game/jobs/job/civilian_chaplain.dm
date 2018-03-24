@@ -222,7 +222,8 @@
 			ticker.Bible_icon_state = B.icon_state
 			ticker.Bible_item_state = B.item_state
 			ticker.Bible_name = B.name
-			ticker.Bible_deity_name = B.my_rel.deity_name
+			ticker.Bible_deity_name = chap_religion.deity_name
+			ticker.chap_rel = chap_religion
 			ticker.religions += chap_religion
 		feedback_set_details("religion_deity","[new_deity]")
 		feedback_set_details("religion_book","[new_book_style]")
