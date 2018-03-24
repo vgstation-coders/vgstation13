@@ -159,7 +159,7 @@
 	if(busy || being_built)
 		return
 	if(stopped)
-		if(auto_make && !queue.len)
+		if(auto_make && last_made && !queue.len)
 			add_to_queue(last_made)
 			start_processing_queue()
 		else
@@ -301,6 +301,7 @@
 		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
 		src.being_built = null
 		last_made = part
+		wires.SignalIndex(RND_WIRE_JOBFINISHED)
 	src.updateUsrDialog()
 	src.busy = 0
 	return 1

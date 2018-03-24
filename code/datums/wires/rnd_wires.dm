@@ -7,7 +7,8 @@
 		"[RND_WIRE_DISABLE]"	= "Disable",
 		"[RND_WIRE_SHOCK]" 		= "Shock",
 		"[RND_WIRE_HACK]" 		= "Hack",
-		"[RND_WIRE_AUTOMAKE]"	= "Automake"
+		"[RND_WIRE_AUTOMAKE]"	= "Automake",
+		"[RND_WIRE_JOBFINISHED]"= "Job finished"
 	)
 	..()
 
@@ -15,6 +16,7 @@ var/const/RND_WIRE_DISABLE = 1
 var/const/RND_WIRE_SHOCK = 2
 var/const/RND_WIRE_HACK = 4
 var/const/RND_WIRE_AUTOMAKE = 8
+var/const/RND_WIRE_JOBFINISHED = 16
 
 /datum/wires/rnd/CanUse(var/mob/living/L)
 	if(!..())
