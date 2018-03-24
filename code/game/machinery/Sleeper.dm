@@ -335,24 +335,6 @@
 		go_out()
 	..(severity)
 
-/obj/machinery/sleeper/alter_health(mob/living/M as mob) //Long since unused.
-	if(M.health > 0)
-		if(M.getOxyLoss() >= 10)
-			var/amount = max(0.15, 1)
-			M.adjustOxyLoss(-amount)
-		else
-			M.adjustOxyLoss(-12)
-		M.updatehealth()
-	M.AdjustParalysis(-4)
-	M.AdjustKnockdown(-4)
-	M.AdjustStunned(-4)
-	M.Paralyse(1)
-	M.Knockdown(1)
-	M.Stun(1)
-	if(M:reagents.get_reagent_amount(INAPROVALINE) < 5)
-		M:reagents.add_reagent(INAPROVALINE, 5)
-	return
-
 /obj/machinery/sleeper/proc/cook(var/cook_setting)
 	if(!(cook_setting in available_options))
 		return
@@ -654,15 +636,7 @@
 						playsound(src, 'sound/effects/pop.ogg', 50, 1)
 						H.h_style = "Popped Hair"
 						H.update_hair()
-				else if(isjusthuman(H) && IS_APRIL_FOOLS)
-					H.s_tone = 100 //Nichi saro ni itte hada o yaku
-
-					if(H.gender == MALE && H.h_style != "Toriyama 2")
-						H.h_style = "Toriyama 2" //Yeah, gyaru otoko sengen
-					H.r_facial = H.r_hair = 255
-					H.g_facial = H.g_hair = 255
-					H.b_facial = H.b_hair = 0
-					H.update_hair()
-					playsound(src, 'sound/misc/gal-o-sengen.ogg', 50, 1)// GO GO GO GO GO GO GAL-O-SENGEN
+				else if(isjusthuman(H) && Holiday == "April Fool's Day")
+					H.GALize()
 			go_out()
 		update_icon()

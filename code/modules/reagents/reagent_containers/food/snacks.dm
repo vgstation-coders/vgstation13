@@ -545,7 +545,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/New()
 	..()
-	if(IS_VALENTINES)
+	if(Holiday != "Valentine's Day")
 		new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
 		qdel(src)
 
