@@ -184,7 +184,7 @@
 		if(!M.get_active_hand())
 			var/obj/item/weapon/gun/projectile/handgun/G = new
 			current_gun = G
-			if(!M.miming) //nonmimes get a loud version
+			if(!issilent(M)) //nonmimes get a loud version
 				G.silenced = FALSE
 				G.fire_sound = 'sound/weapons/Gunshot.ogg'
 			M.put_in_active_hand(G)

@@ -79,10 +79,11 @@ mob/proc/remove_internal_organ()
 	else
 		return default_colour_matrix
 
-/mob/proc/update_colour(var/time = 50,var/forceupdate = 0)
+/mob/proc/update_colour(var/time = 50,var/forceupdate = 0, var/list/colour_to_apply)
 	if(!client || (client.updating_colour && !forceupdate))
 		return
-	var/list/colour_to_apply = get_screen_colour()
+	if(!colour_to_apply)
+		colour_to_apply = get_screen_colour()
 	var/list/difference = difflist(client.color,colour_to_apply)
 	if(difference || !(client.color) || !istype(difference) || !difference.len)
 		client.updating_colour = 1

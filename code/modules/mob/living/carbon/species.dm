@@ -1118,8 +1118,8 @@ var/list/has_died_as_golem = list()
 
 /datum/species/mushroom
 	name = "Mushroom"
-	//icobase = 'icons/mob/human_races/r_slime.dmi'
-	//deform = 'icons/mob/human_races/r_def_slime.dmi'
+	icobase = 'icons/mob/human_races/r_mushman.dmi'
+	deform = 'icons/mob/human_races/r_mushman.dmi'
 	known_languages = list()
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
 
@@ -1133,6 +1133,8 @@ var/list/has_died_as_golem = list()
 	burn_mod = 0.6
 
 	primitive = /mob/living/carbon/monkey/mushroom
+
+	spells = list(/spell/targeted/genetic/invert_eyes)
 
 	default_mutations=list(M_REMOTE_TALK)
 	default_block_names=list("REMOTETALK")

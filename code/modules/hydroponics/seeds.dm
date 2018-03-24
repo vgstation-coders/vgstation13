@@ -1590,6 +1590,7 @@
 	production = 10
 	yield = 2
 	potency = 30
+	ideal_light = 0
 
 
 /datum/seed/test

@@ -469,7 +469,7 @@
 
 /mob/living/carbon/monkey/mushroom/Life()
 	..()
-	if(!isDead())
+	if(!isDead() && !gcDestroyed)
 		var/light_amount = 0
 		if(isturf(loc))
 			var/turf/T = loc
@@ -478,13 +478,36 @@
 		growth = Clamp(growth + rand(1,3)/(light_amount ? light_amount : 1),0,100)
 
 		if(growth >= 100)
+			growth = 0
+			var/mob/living/carbon/human/adult = new(get_turf(src.loc))
+			adult.alpha = 0
+			var/matrix/smol = matrix()
+			smol.Scale(0)
+			var/matrix/large = matrix()
+			var/matrix/M = adult.transform
+			M.Scale(0)
+			animate(src, alpha = 0, transform = smol, time = 3 SECONDS, easing = SINE_EASING)
+			animate(adult, alpha = 255, transform = large, time = 3 SECONDS, easing = SINE_EASING)
+			adult.set_species("Mushroom")
 
-			if(locate(/datum/dna/gene/monkey) in active_genes)
-				var/datum/dna/gene/gene = dna_genes[/datum/dna/gene/monkey]
-				if(gene.can_deactivate(src, 0))
-					gene.deactivate(src, 0, 0)
-					visible_message("<span class = 'notice'>\The [src] grows rapidly into a fully grown [greaterform]!</span>")
+			transferImplantsTo(adult)
+			transferBorers(adult)
 
+			if(istype(loc,/obj/item/weapon/holder))
+				var/obj/item/weapon/holder/L = loc
+				src.forceMove(get_turf(L))
+				L = null
+				qdel(L)
+
+			for(var/datum/language/L in languages)
+				adult.add_language(L.name)
+
+			adult.regenerate_icons()
+			if(mind)
+				src.mind.transfer_to(adult)
+			adult.fully_replace_character_name(newname = src.real_name)
+			src.drop_all()
+			qdel(src)
 
 /mob/living/carbon/monkey/mushroom/Stat()
 	..()
