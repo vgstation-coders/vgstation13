@@ -451,6 +451,7 @@
 		return 0
 	if(!C.vampire_affected(mind))
 		C.visible_message("<span class='warning'>[C] seems to resist the takeover!</span>", "<span class='notice'>Your faith of [ticker.Bible_deity_name] has kept your mind clear of all evil</span>")
+		return 0
 	if(!ishuman(C))
 		to_chat(src, "<span class='warning'>You can only enthrall humanoids!</span>")
 		return 0
