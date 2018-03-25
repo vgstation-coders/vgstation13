@@ -15,7 +15,7 @@
 
 /obj/effect/mine/Crossed(mob/living/carbon/AM)
 	if(istype(AM))
-		visible_message("<font color='red'>[AM] triggered the [bicon(src)] [src]</font>")
+		visible_message("<span class='warning'>[AM] triggered \the [bicon(src)] [src]</span>")
 		trigger(AM)
 
 /obj/effect/mine/proc/trigger(mob/living/carbon/AM)
@@ -65,7 +65,7 @@
 			var/datum/gas_mixture/payload = new
 			var/datum/gas/sleeping_agent/trace_gas = new
 
-			trace_gas.moles = 30
+			trace_gas.moles = 187 // total mols of a n2o canister 1870.81
 			payload += trace_gas
 
 			target.zone.air.merge(payload)
@@ -77,6 +77,6 @@
 
 /obj/effect/mine/stun/trigger(mob/AM)
 	if(ismob(AM))
-		AM.Stun(30)
+		AM.Knockdown(10)
 	spark(src)
 	qdel(src)
