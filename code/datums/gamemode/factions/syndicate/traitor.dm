@@ -17,11 +17,6 @@
 	roletype = /datum/role/traitor
 	initroletype = /datum/role/traitor
 
-/datum/faction/syndicate/traitor/OnPostSetup()
-	..()
-	for(var/datum/mind/M in members)
-		equip_traitor(M.current, 20)
-
 /datum/faction/syndicate/traitor/auto
 	accept_latejoiners = TRUE
 

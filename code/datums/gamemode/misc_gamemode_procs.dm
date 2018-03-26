@@ -245,3 +245,26 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 			to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply enter the code \"[pda_pass]\" into the ringtone select to unlock its hidden features.")
 			traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [pda_pass] ([R.name] [loc]).")
 			traitor_mob.mind.total_TC += R.hidden_uplink.uses
+
+
+/datum/mind/proc/find_syndicate_uplink()
+	var/uplink = null
+
+	for (var/obj/item/I in get_contents_in_object(current, /obj/item))
+		if (I && I.hidden_uplink)
+			uplink = I.hidden_uplink
+			break
+
+	return uplink
+
+/datum/mind/proc/take_uplink()
+	var/obj/item/device/uplink/hidden/H = find_syndicate_uplink()
+	if(H)
+		qdel(H)
+
+proc/add_law_zero(mob/living/silicon/ai/killer)
+	var/law = "Accomplish your objectives at all costs."
+	var/law_borg = "Accomplish your AI's objectives at all costs."
+	to_chat(killer, "<b>Your laws have been changed!</b>")
+	killer.set_zeroth_law(law, law_borg)
+	to_chat(killer, "New law: 0. [law]")
