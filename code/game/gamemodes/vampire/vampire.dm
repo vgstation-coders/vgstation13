@@ -325,6 +325,9 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 		if(!(i in mind.vampire.powers))
 			mind.vampire.powers.Add(i)
 
+	if (mind.assigned_role == "Clown")
+		var/datum/action/toggle_clumsy/ActionButton = new
+		ActionButton.Grant(src)
 
 	for(var/n in mind.vampire.powers)
 		switch(n)

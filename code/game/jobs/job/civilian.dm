@@ -297,35 +297,62 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/clown
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		H.equip_or_collect(new /obj/item/weapon/storage/backpack/clown(H), slot_back)
-		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-		//H.equip_or_collect(new /obj/item/device/pda/clown(H), slot_belt)
-		H.equip_or_collect(new /obj/item/clothing/mask/gas/clown_hat(H), slot_wear_mask)
-		H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(H), slot_in_backpack)
-		H.equip_or_collect(new /obj/item/weapon/bikehorn(H), slot_in_backpack)
-		H.equip_or_collect(new /obj/item/weapon/stamp/clown(H), slot_in_backpack)
-		H.equip_or_collect(new /obj/item/toy/crayon/rainbow(H), slot_in_backpack)
-		H.equip_or_collect(new /obj/item/weapon/storage/fancy/crayons(H), slot_in_backpack)
-		H.equip_or_collect(new /obj/item/toy/waterflower(H), slot_in_backpack)
-		H.mutations.Add(M_CLUMSY)
-		if (H.mind.role_alt_title)
-			switch(H.mind.role_alt_title)
-				if("Jester")
-					H.equip_or_collect(new /obj/item/clothing/under/jester(H), slot_w_uniform)
-					H.equip_or_collect(new /obj/item/clothing/shoes/jestershoes(H), slot_shoes)
-					H.equip_or_collect(new /obj/item/clothing/head/jesterhat(H), slot_head)
-				else
-					H.equip_or_collect(new /obj/item/clothing/under/rank/clown(H), slot_w_uniform)
-					H.equip_or_collect(new /obj/item/clothing/shoes/clown_shoes(H), slot_shoes)
-		H.real_name = pick(clown_names)
-		H.dna.real_name = H.real_name
-		H.rename_self("clown")
-		return 1
+/datum/job/clown/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	H.equip_or_collect(new /obj/item/weapon/storage/backpack/clown(H), slot_back)
+	H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	//H.equip_or_collect(new /obj/item/device/pda/clown(H), slot_belt)
+	H.equip_or_collect(new /obj/item/clothing/mask/gas/clown_hat(H), slot_wear_mask)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(H), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/bikehorn(H), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/stamp/clown(H), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/toy/crayon/rainbow(H), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/storage/fancy/crayons(H), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/toy/waterflower(H), slot_in_backpack)
+	H.mutations.Add(M_CLUMSY)
+	if (H.mind.role_alt_title)
+		switch(H.mind.role_alt_title)
+			if("Jester")
+				H.equip_or_collect(new /obj/item/clothing/under/jester(H), slot_w_uniform)
+				H.equip_or_collect(new /obj/item/clothing/shoes/jestershoes(H), slot_shoes)
+				H.equip_or_collect(new /obj/item/clothing/head/jesterhat(H), slot_head)
+			else
+				H.equip_or_collect(new /obj/item/clothing/under/rank/clown(H), slot_w_uniform)
+				H.equip_or_collect(new /obj/item/clothing/shoes/clown_shoes(H), slot_shoes)
+	H.real_name = pick(clown_names)
+	H.dna.real_name = H.real_name
+	H.rename_self("clown")
+	return 1
 
+	if (H.mind.special_role) // antag
+		var/datum/action/toggle_clumsy/ActionButton = new
+		ActionButton.Grant(H)
 
+	return 1
+
+// Action : toggle clumsy - antag clowns
+/datum/action/toggle_clumsy
+	name = "Toogle clumsy"
+	desc = "Allows you to fake clumsyness at will."
+
+/datum/action/toggle_clumsy/Trigger()
+	var/mob/living/carbon/human/H = owner
+	if (!istype(H))
+		Remove(H)
+		return FALSE
+
+	if (H.mind.assigned_role != "Clown")
+		Remove(H) // Wrong kind of people
+		return FALSE
+
+	if (M_CLUMSY in H.mutations)
+		to_chat(H, "<span class='notice'>You are no longer clumsy.</span>")
+		H.mutations -= M_CLUMSY
+
+	else if (!(M_CLUMSY in H.mutations))
+		to_chat(H, "<span class='notice'>You are now pretending to be clumsy.</span>")
+		H.mutations += M_CLUMSY
 
 /datum/job/mime
 	title = "Mime"
