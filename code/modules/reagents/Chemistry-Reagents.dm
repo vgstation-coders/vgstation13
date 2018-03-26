@@ -3469,7 +3469,6 @@
 
 	if(method == TOUCH)
 		if(ishuman(M))
-			var/mob/living/carbon/human/H = M
 			M.SetKnockdown(max(M.knockdown, 30))
 			M.silent = max(M.silent, 30)
 			visible_message("<span class='danger'>[src] collapses on the floor as blood spews out of \his mouth.</span>")
