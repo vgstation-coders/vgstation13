@@ -200,7 +200,7 @@
 
 				if (character.mind.assigned_role == "Clown")
 					var/datum/action/toggle_clumsy/ActionButton = new
-				ActionButton.Grant(character)
+					ActionButton.Grant(character)
 
 				var/wikiroute = role_wiki[ROLE_TRAITOR]
 				to_chat(character, "<span class='danger'>You are the traitor.</span> <span class='info'><a HREF='?src=\ref[character];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
