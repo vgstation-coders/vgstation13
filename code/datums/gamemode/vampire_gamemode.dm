@@ -53,7 +53,7 @@
 /datum/power/vampire/vision
 	blood_threeshold = 100
 	id = VAMP_VISION
-	spell_path = null // TODO
+	spell_path = null // No spell for night vision.
 
 /* Tier 2 */
 /datum/power/vampire/disease

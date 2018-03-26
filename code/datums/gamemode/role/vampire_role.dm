@@ -65,7 +65,7 @@
 /datum/role/vampire/RemoveFromRole(var/datum/mind/M)
 	var/list/vamp_spells = getAllVampSpells()
 	for(var/spell/spell in antag.current.spell_list)
-		if (is_type_in_list(spell, vamp_spells))//TODO: HAVE A LIST WITH EVERY VAMPIRE SPELLS
+		if (is_type_in_list(spell, vamp_spells))
 			antag.current.remove_spell(spell)
 	if(antag.current.client && antag.current.hud_used)
 		if(antag.current.hud_used.vampire_blood_display)
@@ -264,6 +264,17 @@
 				I.status &= ~ORGAN_SPLINTED
 				I.status &= ~ORGAN_BLEEDING
 	nullified = max(0, nullified - 1)
+
+	if (!H.druggy)
+		H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+
+	if (VAMP_MATURE in powers)
+		H.change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
+		H.see_in_dark = 8
+		H.see_invisible = SEE_INVISIBLE_MINIMUM
+
+	else if (VAMP_VISION in powers)
+		antag.current.change_sight(adding = SEE_MOBS)
 
 /datum/role/vampire/proc/handle_cloak(var/mob/living/carbon/human/H)
 	var/turf/T = get_turf(H)
