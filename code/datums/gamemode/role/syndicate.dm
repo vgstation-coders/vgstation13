@@ -28,18 +28,18 @@
 		AppendObjective(/datum/objective/target/steal)
 		switch(rand(1,100))
 			if(1 to 30) // Die glorious death
-				if(!locate(/datum/objective/die) in objectives.objectives && !locate(/datum/objective/target/steal) in objectives.objectives)
+				if(!locate(/datum/objective/die) in objectives.GetObjectives() && !locate(/datum/objective/target/steal) in objectives.GetObjectives())
 					AppendObjective(/datum/objective/die)
 				else
 					if(prob(85))
-						if (!(locate(/datum/objective/escape) in objectives.objectives))
+						if (!(locate(/datum/objective/escape) in objectives.GetObjectives()))
 							AppendObjective(/datum/objective/escape)
 					else
 						if(prob(50))
-							if (!(locate(/datum/objective/hijack) in objectives.objectives))
+							if (!(locate(/datum/objective/hijack) in objectives.GetObjectives()))
 								AppendObjective(/datum/objective/hijack)
 						else
-							if (!(locate(/datum/objective/minimize_casualties) in objectives.objectives))
+							if (!(locate(/datum/objective/minimize_casualties) in objectives.GetObjectives()))
 								AppendObjective(/datum/objective/minimize_casualties)
 			if(31 to 90)
 				if (!(locate(/datum/objective/escape) in objectives.objectives))
@@ -49,7 +49,7 @@
 					if (!(locate(/datum/objective/hijack) in objectives.objectives))
 						AppendObjective(/datum/objective/hijack)
 				else // Honk
-					if (!(locate(/datum/objective/minimize_casualties) in objectives.objectives))
+					if (!(locate(/datum/objective/minimize_casualties) in objectives.GetObjectives()))
 						AppendObjective(/datum/objective/minimize_casualties)
 
 /datum/role/traitor/extraPanelButtons()
@@ -61,7 +61,7 @@
 	return dat
 
 /datum/role/traitor/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
-	..()
+	.=..()
 	if(href_list["giveuplink"] && admin_auth)
 		equip_traitor(antag.current, 20)
 	if(href_list["removeuplink"] && admin_auth)
@@ -76,6 +76,56 @@
 	name = ROGUE
 	id = ROGUE
 	logo_state = "synd-logo"
+
+/datum/role/traitor/rogue/ForgeObjectives()
+	var/datum/role/traitor/rogue/rival
+	var/list/potential_rivals = list()
+	if(faction && faction.members)
+		potential_rivals = faction.members-src
+	else
+		for(var/datum/role/traitor/rogue/R in ticker.mode.orphaned_roles) //It'd be awkward if you ended up with your rival being a vampire.
+			if(R != src)
+				potential_rivals.Add(R)
+	if(potential_rivals.len)
+		rival = pick(potential_rivals)
+	if(!rival) //Fuck it, you're now a regular traitor
+		return ..()
+
+	var/datum/objective/target/assassinate/kill_rival = new(auto_target = FALSE)
+	if(kill_rival.set_target(rival.antag))
+		AppendObjective(kill_rival)
+	else
+		qdel(kill_rival)
+
+	if(prob(70)) //Your target knows!
+		var/datum/objective/target/assassinate/kill_new_rival = new(auto_target = FALSE)
+		if(kill_new_rival.set_target(antag))
+			rival.AppendObjective(kill_new_rival)
+		else
+			qdel(kill_new_rival)
+
+	if(prob(50)) //Spy v Spy
+		var/datum/objective/target/assassinate/A = new()
+		if(A.target)
+			AppendObjective(A)
+
+			var/datum/objective/target/protect/P = new(auto_target = FALSE)
+			if(P.set_target(A.target))
+				rival.AppendObjective(P)
+
+	if(prob(30))
+		AppendObjective(/datum/objective/target/steal)
+
+	switch(rand(1,3))
+		if(1)
+			if(!locate(/datum/objective/target/steal) in objectives.GetObjectives())
+				AppendObjective(/datum/objective/die)
+			else
+				AppendObjective(/datum/objective/escape)
+		if(2)
+			AppendObjective(/datum/objective/hijack)
+		else
+			AppendObjective(/datum/objective/escape)
 
 //________________________________________________
 
