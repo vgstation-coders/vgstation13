@@ -6,13 +6,13 @@
 	name = "\improper Sleeper"
 	icon = 'icons/obj/cryogenics3.dmi'
 	icon_state = "sleeper_0"
-	density = 1
-	anchored = 1
+	density = TRUE
+	anchored = TRUE
 	var/base_icon = "sleeper"
 	var/mob/living/occupant = null
 	var/available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
 	var/amounts = list(5, 10)
-	var/sedativeblock = 0 //To prevent people from being surprisesoporific'd
+	var/sedativeblock = FALSE //To prevent people from being surprisesoporific'd
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/sleeper,
@@ -29,10 +29,10 @@
 			set_light(light_range_on, light_power_on)
 		else
 			set_light(0)
-	var/on = 0
+	var/on = FALSE
 	var/target_time = 0
 	var/setting
-	var/automatic = 0
+	var/automatic = FALSE
 	var/auto_eject_after = 1 //Boot the mooch off after waking 'em up
 	var/drag_delay = 20
 	var/cools = 0
@@ -69,7 +69,7 @@
 		dat += "<HR><A href='?src=\ref[src];toggle_autoeject=1'>Auto-eject occupant: [auto_eject_after ? "Yes" : "No"]</A><BR>"
 	else
 		dat += "<b>Occupant statistics:</b><BR>"
-		if (occupant)
+		if(occupant)
 			var/occupant_status = "???"
 			switch(occupant.stat)
 				if(CONSCIOUS)
@@ -110,14 +110,14 @@
 
 /obj/machinery/sleeper/Topic(href, href_list)
 	if(..())
-		return 1
+		return TRUE
 	if(usr.loc == src)
-		return 1
+		return TRUE
 	else
 		usr.set_machine(src)
-		if (href_list["chemical"])
-			if (occupant)
-				if (occupant.stat == DEAD)
+		if(href_list["chemical"])
+			if(occupant)
+				if(occupant.stat == DEAD)
 					to_chat(usr, "<span class='danger'>This person has no life for to preserve anymore. Take them to a department capable of reanimating them.</span>")
 				else if(href_list["chemical"] == STOXIN && sedativeblock)
 					if(sedativeblock < 3)
@@ -140,13 +140,13 @@
 						to_chat(usr,"<span class='warning'>That's odd. You could've sworn the [href_list["chemical"]] button was there just a second ago!")
 					else
 						inject_chemical(usr,href_list["chemical"],text2num(href_list["amount"]))
-		if (href_list["wakeup"])
+		if(href_list["wakeup"])
 			wakeup(usr)
-		if (href_list["toggle_autoeject"])
+		if(href_list["toggle_autoeject"])
 			auto_eject_after = !auto_eject_after
-		if (href_list["refresh"])
-			src.process()
-		src.add_fingerprint(usr)
+		if(href_list["refresh"])
+			process()
+		add_fingerprint(usr)
 	return
 
 /obj/machinery/sleeper/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
@@ -191,20 +191,20 @@
 
 	L.forceMove(src)
 	L.reset_view()
-	src.occupant = L
+	occupant = L
 	to_chat(L, "<span class='notice'><b>You feel an anaesthetising air surround you. You go numb as your senses turn inward.</b></span>")
 	process()
 	for(var/obj/OO in src)
-		OO.forceMove(src.loc)
-	src.add_fingerprint(user)
+		OO.forceMove(loc)
+	add_fingerprint(user)
 	if(user.pulling == L)
 		user.stop_pulling()
 	if(!(stat & (BROKEN|NOPOWER)))
 		set_light(light_range_on, light_power_on)
-	sedativeblock = 1
+	sedativeblock = TRUE
 	update_icon()
 	sleep(drag_delay)
-	sedativeblock = 0
+	sedativeblock = FALSE
 	return
 
 
@@ -237,17 +237,17 @@
 	go_out(over_location)
 
 /obj/machinery/sleeper/allow_drop()
-	return 0
+	return FALSE
 
 /obj/machinery/sleeper/process()
-	src.updateDialog()
+	updateDialog()
 	return
 
 
 /obj/machinery/sleeper/blob_act()
 	if(prob(75))
 		for(var/atom/movable/A as mob|obj in src)
-			A.forceMove(src.loc)
+			A.forceMove(loc)
 			A.blob_act()
 		qdel(src)
 	return
@@ -260,13 +260,13 @@
 
 /obj/machinery/sleeper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(..())
-		return 1
+		return TRUE
 	if(!istype(W, /obj/item/weapon/grab))
 		return ..()
 	var/obj/item/weapon/grab/G = W
 	if(!(ismob(G.affecting)) || G.affecting.locked_to)
 		return
-	if(src.occupant)
+	if(occupant)
 		to_chat(user, "<span class='notice'><B>The sleeper is already occupied!</B></span>")
 		return
 
@@ -282,20 +282,20 @@
 		return
 	M.forceMove(src)
 	M.reset_view()
-	src.occupant = M
+	occupant = M
 
 	to_chat(M, "<span class='notice'><b>You feel an anaesthetising air surround you. You go numb as your senses turn inward.</b></span>")
 	process()
 	for(var/obj/O in src)
-		O.forceMove(src.loc)
-	src.add_fingerprint(user)
+		O.forceMove(loc)
+	add_fingerprint(user)
 	qdel(G)
 	if(!(stat & (BROKEN|NOPOWER)))
 		set_light(light_range_on, light_power_on)
 	update_icon()
-	sedativeblock = 1
+	sedativeblock = TRUE
 	spawn(drag_delay)
-	sedativeblock = 0
+	sedativeblock = FALSE
 	return
 
 /obj/machinery/sleeper/attack_hand(mob/user)
@@ -307,21 +307,21 @@
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/A as mob|obj in src)
-				A.forceMove(src.loc)
+				A.forceMove(loc)
 				ex_act(severity)
 			qdel(src)
 			return
 		if(2.0)
 			if(prob(50))
 				for(var/atom/movable/A as mob|obj in src)
-					A.forceMove(src.loc)
+					A.forceMove(loc)
 					ex_act(severity)
 				qdel(src)
 				return
 		if(3.0)
 			if(prob(25))
 				for(var/atom/movable/A as mob|obj in src)
-					A.forceMove(src.loc)
+					A.forceMove(loc)
 					ex_act(severity)
 				qdel(src)
 				return
@@ -335,88 +335,70 @@
 		go_out()
 	..(severity)
 
-/obj/machinery/sleeper/alter_health(mob/living/M as mob) //Long since unused.
-	if (M.health > 0)
-		if (M.getOxyLoss() >= 10)
-			var/amount = max(0.15, 1)
-			M.adjustOxyLoss(-amount)
-		else
-			M.adjustOxyLoss(-12)
-		M.updatehealth()
-	M.AdjustParalysis(-4)
-	M.AdjustKnockdown(-4)
-	M.AdjustStunned(-4)
-	M.Paralyse(1)
-	M.Knockdown(1)
-	M.Stun(1)
-	if (M:reagents.get_reagent_amount(INAPROVALINE) < 5)
-		M:reagents.add_reagent(INAPROVALINE, 5)
-	return
-
 /obj/machinery/sleeper/proc/cook(var/cook_setting)
-	if (!(cook_setting in available_options))
+	if(!(cook_setting in available_options))
 		return
 	var/cooktime = available_options[cook_setting]
 	target_time = world.time + cooktime
-	on = 1
+	on = TRUE
 	setting = cook_setting
 	update_icon()
 
 /obj/machinery/sleeper/proc/wakeup(mob/living/user)
-	if(src.on)
+	if(on)
 		to_chat(user, "<span class='warning'>\The [src] is busy.</span>")
-		return 0
+		return FALSE
 	if(!occupant)
 		to_chat(user, "<span class='warning'>There's no occupant in \the [src]!</span>")
-		return 0
+		return FALSE
 	if(occupant.stat == CONSCIOUS)
 		to_chat(user, "<span class='warning'>The occupant is already awake.</span>")
-		return 0
+		return FALSE
 	if(occupant.stat == DEAD)
 		to_chat(user, "<span class='warning'>Can't wake up.</span>")
-		return 0
-	. = 1 //Returning 1 means we successfully began the wake-up cycle. We will return immediately as the spawn() begins, not at the end.
-	on = 1
+		return FALSE
+	. = TRUE //Returning TRUE means we successfully began the wake-up cycle. We will return immediately as the spawn() begins, not at the end.
+	on = TRUE
 	process()
 	var/sleeptime = min(5 SECONDS, 4*max(occupant.sleeping, occupant.paralysis))
 	spawn(sleeptime)
-		if(!src || !src.on) //the !src check is redundant from the nature of spawn() if I understand correctly, but better be safe than sorry
+		if(!src || !on) //the !src check is redundant from the nature of spawn() if I understand correctly, but better be safe than sorry
 			return 0
 		if(occupant)
 			occupant.sleeping = 0
 			occupant.paralysis = 0
 			occupant.resting = 0
-		src.on = 0
+		on = FALSE
 		if(auto_eject_after)
-			src.go_out()
+			go_out()
 		process()
 
-/obj/machinery/sleeper/proc/go_out(var/exit = src.loc)
+/obj/machinery/sleeper/proc/go_out(var/exit = loc)
 	if(!occupant)
-		return 0
-	for (var/atom/movable/x in src.contents)
+		return FALSE
+	for (var/atom/movable/x in contents)
 		if(x in component_parts)
 			continue
-		x.forceMove(src.loc)
+		x.forceMove(loc)
 	if(!occupant.gcDestroyed)
 		occupant.forceMove(exit)
 		occupant.reset_view()
 	occupant = null
 	update_icon()
-	return 1
+	return TRUE
 
 /obj/machinery/sleeper/proc/inject_chemical(mob/living/user as mob, chemical, amount)
-	if(!src.occupant)
+	if(!occupant)
 		to_chat(user, "<span class='warning'>There's no occupant in the sleeper!</span>")
 		return
-	if(isnull(src.occupant.reagents))
+	if(isnull(occupant.reagents))
 		to_chat(user, "<span class='warning'>The occupant appears to somehow lack a bloodstream. Please consult a shrink.</span>")
 		return
-	if(src.occupant.reagents.get_reagent_amount(chemical) + amount > 20)
+	if(occupant.reagents.get_reagent_amount(chemical) + amount > 20)
 		to_chat(user, "<span class='warning'>Overdose Prevention System: The occupant already has enough [available_options[chemical]] in their system.</span>")
 		return
-	src.occupant.reagents.add_reagent(chemical, amount)
-	to_chat(user, "<span class='notice'>Occupant now has [src.occupant.reagents.get_reagent_amount(chemical)] units of [available_options[chemical]] in their bloodstream.</span>")
+	occupant.reagents.add_reagent(chemical, amount)
+	to_chat(user, "<span class='notice'>Occupant now has [occupant.reagents.get_reagent_amount(chemical)] units of [available_options[chemical]] in their bloodstream.</span>")
 	return
 
 /obj/machinery/sleeper/verb/eject()
@@ -425,7 +407,7 @@
 	set src in oview(1)
 	if(usr.isUnconscious())
 		return
-	src.go_out()
+	go_out()
 	add_fingerprint(usr)
 	set_light(0)
 	return
@@ -437,7 +419,7 @@
 	if(usr.isUnconscious() || !(ishuman(usr) || ismonkey(usr)))
 		return
 
-	if(src.occupant)
+	if(occupant)
 		to_chat(usr, "<span class='notice'><B>\The [src] is already occupied!</B></span>")
 		return
 	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
@@ -450,7 +432,7 @@
 		return
 	visible_message("[usr] starts climbing into \the [src].")
 	if(do_after(usr, src, drag_delay))
-		if(src.occupant)
+		if(occupant)
 			to_chat(usr, "<span class='notice'><B>The sleeper is already occupied!</B></span>")
 			return
 		if(usr.locked_to)
@@ -462,7 +444,7 @@
 		process()
 		for(var/obj/O in src)
 			qdel(O)
-		src.add_fingerprint(usr)
+		add_fingerprint(usr)
 		if(!(stat & (BROKEN|NOPOWER)))
 			set_light(light_range_on, light_power_on)
 		update_icon()
@@ -495,7 +477,7 @@
 	setting = "Thermoregulate"
 	available_options = list("Thermoregulate" = 50)
 	light_color = LIGHT_COLOR_ORANGE
-	automatic = 1
+	automatic = TRUE
 	drag_delay = 0
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EMAGGABLE | EJECTNOTDEL
 
@@ -505,11 +487,11 @@
 		icon = 'maps/defficiency/medbay.dmi'
 	update_icon()
 
-/obj/machinery/sleeper/mancrowave/go_out(var/exit = src.loc)
+/obj/machinery/sleeper/mancrowave/go_out(var/exit = loc)
 	if(on && !emagged)
-		return 0
+		return FALSE
 	else
-		on = 0
+		on = FALSE
 		..()
 
 /obj/machinery/sleeper/mancrowave/update_icon()
@@ -531,27 +513,27 @@
 
 /obj/machinery/sleeper/mancrowave/emag(mob/user)
 	if(!emagged)
-		emagged = 1
+		emagged = TRUE
 		if(user)
 			to_chat(user, "<span class='warning'>You short out the safety features of \the [src], and feel like a MAN!	</span>")
 		available_options = list("Thermoregulate" = 50,"Rare" = 500,"Medium" = 600,"Well Done" = 700)
 		update_icon()
 		name = "THE MANCROWAVE"
 		return 1
-	return -1
+	return -1 //WHY DO YOU DO THIS TO ME
 
 /obj/machinery/sleeper/mancrowave/RefreshParts()
 
 /obj/machinery/sleeper/mancrowave/interact(var/mob/user)
 	var/dat = "<font color='blue'><B>Occupant Statistics:</B></FONT><BR>"
-	if (occupant)
+	if(occupant)
 		var/t1
 		switch(occupant.stat)
-			if(0)
+			if(CONSCIOUS)
 				t1 = "Conscious"
-			if(1)
+			if(UNCONSCIOUS)
 				t1 = "<font color='blue'>Unconscious</font>"
-			if(2)
+			if(DEAD)
 				t1 = "<font color='red'>*dead*</font>"
 			else
 		dat += text("[]\tHealth %: [] ([])</FONT><BR>", (occupant.health > 50 ? "<font color='blue'>" : "<font color='red'>"), occupant.health, t1)
@@ -576,29 +558,29 @@
 
 /obj/machinery/sleeper/mancrowave/Topic(href, href_list)
 	if(..())
-		return 1
-	if (href_list["cook"])
-		if (on)
+		return TRUE
+	if(href_list["cook"])
+		if(on)
 			to_chat(usr, "<span class='danger'>\The [src] is already turned on!</span>")
 			return
 		if(occupant)
-			if ((locate(/obj/item/weapon/disk/nuclear) in get_contents_in_object(occupant)) && href_list["cook"] != "Thermoregulate" )
+			if((locate(/obj/item/weapon/disk/nuclear) in get_contents_in_object(occupant)) && href_list["cook"] != "Thermoregulate" )
 				to_chat(usr, "<span class='danger'>Even with the safety features turned off, \the [src] refuses to cook something inside of it!</span>")
 			else
 				cook(href_list["cook"])
-	if (href_list["refresh"])
+	if(href_list["refresh"])
 		updateUsrDialog()
 	if(href_list["auto"])
 		automatic = !automatic
 	if(href_list["turnoff"])
-		on = 0
+		on = FALSE
 		go_out()
 		update_icon()
 	if(href_list["security"])
 		if(on)
 			to_chat(usr, "<span class='danger'>The security features of \the [src] cannot be re-enabled when it is on!</span>")
 			return
-		emagged = 0
+		emagged = FALSE
 		name = "thermal homeostasis regulator"
 		available_options = list("Thermoregulate" = 50)
 		update_icon()
@@ -642,17 +624,19 @@
 				qdel(occupant)
 				occupant = null
 				var/obj/effect/decal/cleanable/ash/ashed = new /obj/effect/decal/cleanable/ash(loc)
-				ashed.layer = src.layer + 0.01
+				ashed.layer = layer + 0.01
 		playsound(src, 'sound/machines/ding.ogg', 50, 1)
-		on = 0
+		on = FALSE
 		if(occupant)
 			if(ishuman(occupant))
 				var/mob/living/carbon/human/H = occupant
-				if(isdiona(H))
+				if(isdiona(H)) 
 					if(H.h_style != "Popped Hair")
 						to_chat(H, "<span class = 'notice'>Your head pops!</span>")
 						playsound(src, 'sound/effects/pop.ogg', 50, 1)
 						H.h_style = "Popped Hair"
 						H.update_hair()
+				else if(isjusthuman(H) && Holiday == APRIL_FOOLS_DAY)
+					H.GALize()
 			go_out()
 		update_icon()

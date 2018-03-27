@@ -308,4 +308,15 @@
 	to_chat(new_mob, "You feel more... animalistic")
 	return new_mob
 
+/mob/living/carbon/human/proc/GALize()
+	s_tone = -100 //Nichi saro ni itte hada o yaku
+	update_body()
+	if(gender == MALE && h_style != "Toriyama 2")
+		h_style = "Toriyama 2" //Yeah, gyaru otoko sengen
+	r_facial = r_hair = 255
+	g_facial = g_hair = 255
+	b_facial = b_hair = 0
+	update_hair()
+	playsound(src, 'sound/misc/gal-o-sengen.ogg', 50, 1)// GO GO GO GO GO GO GAL-O-SENGEN
+
 #undef MONKEY_ANIM_TIME
