@@ -244,6 +244,17 @@
 				display_name = "Turnovers"
 				items_measures[display_name] = "turnover"
 				items_measures_p[display_name] = "turnovers"
+			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans))
+				items_measures[display_name] = "soybean"
+				items_measures_p[display_name] = "soybeans"
+			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/grapes))
+				display_name = "Grapes"
+				items_measures[display_name] = "bunch of grapes"
+				items_measures_p[display_name] = "bunches of grapes"
+			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes))
+				display_name = "Green Grapes"
+				items_measures[display_name] = "bunch of green grapes"
+				items_measures_p[display_name] = "bunches of green grapes"
 			items_counts[display_name]++
 		for (var/O in items_counts)
 			var/N = items_counts[O]
