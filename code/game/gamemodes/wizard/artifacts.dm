@@ -158,7 +158,7 @@
 
 /datum/spellbook_artifact/butterflyknife
 	name = "Crystal Butterfly Knife"
-	desc = "A butterfly knife made of colored crystals. It�s infused with summoning magic so when it's flipped it will summon a crystal butterfly that attacks anything but it's summoner."
+	desc = "A butterfly knife made of colored crystals. It's infused with summoning magic so when it's flipped it will summon a crystal butterfly that attacks anything but it's summoner."
 	abbreviation = "BK"
 	spawned_items = list(/obj/item/weapon/butterflyknife/viscerator/magic)
 
