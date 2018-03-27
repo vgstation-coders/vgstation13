@@ -2257,7 +2257,7 @@
 	description = "Cryptobiolin causes confusion and dizzyness."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
-	custom_metabolism = 0.5
+	custom_metabolism = 0.2
 	density = 1.21
 	specheatcap = 0.85
 
