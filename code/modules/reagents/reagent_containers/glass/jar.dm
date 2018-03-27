@@ -7,7 +7,7 @@
 	possible_transfer_amounts = list(5,10,15,25,30)
 	flags = FPRINT  | OPENCONTAINER
 	volume = 250
-	starting_materials = list(MAT_GLASS = 1000)
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS+250)
 	w_type = RECYK_GLASS
 	w_class = W_CLASS_MEDIUM
 	melt_temperature = MELTPOINT_GLASS
@@ -76,6 +76,10 @@
 		to_chat(user, "<span class = 'info'>It has \a [held_item] floating within.</span>")
 		to_chat(user, "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[held_item]'>Take a closer look.</a></span>")
 
+/obj/item/weapon/reagent_containers/glass/jar/recyclable()
+	if(held_item)
+		return FALSE
+	return TRUE
 
 /obj/item/weapon/reagent_containers/glass/jar/on_reagent_change()
 	update_icon()

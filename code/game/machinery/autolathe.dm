@@ -188,6 +188,9 @@
 			else
 				to_chat(user, "You cannot recycle your built in tools.")
 				return 1
+		else if(!I.recyclable())
+			to_chat(user, "<span class = 'notice'>You can not recycle /the [I] at this time.</span>")
+			return 1
 
 		if(user.drop_item(I, src))
 			materials.removeFrom(I.materials)
