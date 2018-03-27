@@ -636,7 +636,7 @@
 						playsound(src, 'sound/effects/pop.ogg', 50, 1)
 						H.h_style = "Popped Hair"
 						H.update_hair()
-				else if(isjusthuman(H) && Holiday == "April Fool's Day")
+				else if(isjusthuman(H) && Holiday == APRIL_FOOLS_DAY)
 					H.GALize()
 			go_out()
 		update_icon()

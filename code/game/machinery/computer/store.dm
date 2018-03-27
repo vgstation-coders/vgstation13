@@ -40,7 +40,7 @@
 
 /obj/machinery/computer/merch/New()
 	..()
-	if(Holiday == "Valentine's Day")
+	if(Holiday == VALENTINES_DAY)
 		var/valentines = list("Valentine's Day" = list(/datum/storeitem/valentinechocolatebar,),)
 		categories += valentines
 
