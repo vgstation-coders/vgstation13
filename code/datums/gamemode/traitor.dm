@@ -5,10 +5,7 @@
 
 /datum/gamemode/traitor/da
 	name = "Double Agent"
-
-
-/datum/gamemode/traitor/da/SetupFactions()
-	factions_allowed = subtypesof(/datum/faction/syndicate/traitor)
+	factions_allowed = list(/datum/faction/syndicate/traitor/dagent)
 
 // autotators are just tators ffs! //No, it spawns a faction that has midround recruit enabled ye grot
 /datum/gamemode/autotraitor

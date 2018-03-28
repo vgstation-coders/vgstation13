@@ -294,6 +294,7 @@
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_spells.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_tattoos.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_words.dm"
+#include "code\datums\gamemode\factions\syndicate\nukeops.dm"
 #include "code\datums\gamemode\factions\syndicate\traitor.dm"
 #include "code\datums\gamemode\objectives\absorb.dm"
 #include "code\datums\gamemode\objectives\acquire_blood.dm"
