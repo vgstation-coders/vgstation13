@@ -405,7 +405,7 @@
 		if(prob(1))
 			if(prob(50))
 				src.visible_message("<span class='notice'>[pick("Buzzzz.","Hmmmmm.","Bzzz.")]</span>")
-			playsound(get_turf(src), 'sound/effects/bees.ogg', min(20 * bees.len, 100), 1)
+			playsound(src, 'sound/effects/bees.ogg', min(20 * bees.len, 100), 1)
 
 
 		//GROUPING WITH OTHER BEES
@@ -509,7 +509,7 @@
 			else
 				var/list/nearbyPlants = list()
 				for(var/obj/machinery/portable_atmospherics/hydroponics/H in view(src,2))
-					if (!H.dead && H.seed)
+					if (!H.dead && H.seed && !H.closed_system)
 						nearbyPlants += H
 				nearbyPlants.Remove(visited_plants)
 				if (nearbyPlants.len > 0)

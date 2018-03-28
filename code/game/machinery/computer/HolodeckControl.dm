@@ -281,7 +281,7 @@
 	return
 
 /obj/machinery/computer/HolodeckControl/emag(mob/user as mob)
-	playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+	playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 	if(emagged)
 		return //No spamming
 	emagged = 1

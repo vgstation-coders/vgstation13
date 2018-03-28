@@ -69,7 +69,7 @@
 		pod.dir = src.dir
 		to_chat(user, "<span class='notice'>You strut the pod frame together.</span>")
 		R.use(10)
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		for(var/obj/item/pod_parts/pod_frame/F in linkedparts)
 			if(1 == turn(F.dir, -F.link_angle)) //if the part links north during construction, as the bottom left part always does
 				//log_admin("Repositioning")
@@ -79,7 +79,7 @@
 		to_chat(user, "<span class='notice'>You [!anchored ? "secure \the [src] in place."  : "remove the securing bolts."]</span>")
 		anchored = !anchored
 		setDensity(anchored)
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 
 /obj/item/pod_parts/pod_frame/verb/rotate()
 	set name = "Rotate Frame"

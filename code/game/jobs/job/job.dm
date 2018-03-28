@@ -56,6 +56,7 @@
 	var/no_id = 0 //If 1, don't spawn with an ID
 	var/no_pda= 0 //If 1, don't spawn with a PDA
 	var/no_headset = 0 //If 1, don't spawn with a headset
+	var/spawns_from_edge = 0 //Instead of spawning on the shuttle, spawns in space and gets thrown
 
 	var/no_random_roll = 0 //If 1, don't select this job randomly!
 

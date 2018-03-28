@@ -356,7 +356,7 @@
 		"<span class=\"danger\">You reach out and touch \the [src]. Everything starts burning and all you can hear is ringing. Your last thought is \"That was not a wise decision.\"</span>",\
 		"<span class=\"warning\">You hear an unearthly noise as a wave of heat washes over you.</span>")
 
-	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
+	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 
 	Consume(user)
 
@@ -377,7 +377,7 @@
 		"<span class='danger'>You touch \the [W] to \the [src] when everything suddenly goes silent.</span>\n<span class='notice'>\The [W] flashes into dust as you flinch away from \the [src].</span>",\
 		"<span class='warning'>Everything suddenly goes silent.</span>")
 
-	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
+	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 
 	user.drop_from_inventory(W)
 	Consume(W)
@@ -389,7 +389,7 @@
 	if(istype(AM, /obj/machinery/power/supermatter))
 		AM.visible_message("<span class='sinister'>As \the [src] bumps into \the [AM] an otherworldly resonance ringing begins to shake the room, you ponder for a moment all the incorrect choices in your life that led you here, to this very moment, to witness this. You take one final sigh before it all ends.</span>")
 		sleep(10) //Adds to the hilarity
-		playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
+		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 		explode()
 		return
 	if(istype(AM, /mob/living))
@@ -402,7 +402,7 @@
 	else
 		return ..()
 
-	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
+	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 
 	Consume(AM)
 

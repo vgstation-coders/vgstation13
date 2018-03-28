@@ -28,136 +28,136 @@ var/global/Holiday = null
 		if(1) // Jan
 			switch(DD)
 				if(1)
-					Holiday = "New Year's Day"
+					Holiday = NEW_YEARS_DAY
 
 		if(2) // Feb
 			switch(DD)
 				if(2)
-					Holiday = "Groundhog Day"
+					Holiday = GROUNDHOG_DAY
 				if(14)
-					Holiday = "Valentine's Day"
+					Holiday = VALENTINES_DAY
 				if(17)
-					Holiday = "Random Acts of Kindness Day"
+					Holiday = RANDOM_ACTS_OF_KINDNESS_DAY
 
 		if(3) // Mar
 			switch(DD)
 				if(14)
-					Holiday = "Pi Day"
+					Holiday = PI_DAY
 				if(17)
-					Holiday = "St. Patrick's Day"
+					Holiday = ST_PATRICKS_DAY
 				if(27)
 					if(YY == 16)
-						Holiday = "Easter"
+						Holiday = EASTER
 				if(31)
 					if(YY == 13)
-						Holiday = "Easter"
+						Holiday = EASTER
 
 		if(4) // Apr
 			switch(DD)
 				if(1)
-					Holiday = "April Fool's Day"
+					Holiday = APRIL_FOOLS_DAY
 					if(YY == 18 && prob(50))
-						Holiday = "Easter"
+						Holiday = EASTER
 				if(2)
-					Holiday = "Autism Awareness Day"
+					Holiday = AUTISM_AWARENESS_DAY
 				if(5)
 					if(YY == 15)
-						Holiday = "Easter"
+						Holiday = EASTER
 				if(16)
 					if(YY == 17)
-						Holiday = "Easter"
+						Holiday = EASTER
 				if(20)
-					Holiday = "Four-Twenty"
+					Holiday = FOUR_TWENTY
 					if(YY == 14 && prob(50))
-						Holiday = "Easter"
+						Holiday = EASTER
 				if(22)
-					Holiday = "Earth Day"
+					Holiday = EARTH_DAY
 
 		if(5) // May
 			switch(DD)
 				if(1)
-					Holiday = "Labour Day"
+					Holiday = LABOUR_DAY
 				if(4)
-					Holiday = "FireFighter's Day"
+					Holiday = FIREFIGHTERS_DAY
 				if(12)
-					Holiday = "Owl and Pussycat Day" // what a dumb day of observence...but we -do- have costumes already :3
+					Holiday = OWL_AND_PUSSYCAT_DAY // what a dumb day of observence...but we -do- have costumes already :3
 
 		if(6) // Jun
 			switch(DD)
 				if(18)
-					Holiday = "International Picnic Day"
+					Holiday = INTERNATIONAL_PICNIC_DAY
 				if(21)
-					Holiday = "Summer Solstice" // its not always the 21 but sue me
+					Holiday = SUMMER_SOLSTICE // its not always the 21 but sue me
 
 		if(7) // Jul
 			switch(DD)
 				if(1)
-					Holiday = "Doctor's Day"
+					Holiday = DOCTORS_DAY
 				if(2)
-					Holiday = "UFO Day"
+					Holiday = UFO_DAY
 				if(8)
-					Holiday = "Writer's Day"
+					Holiday = WRITERS_DAY
 				if(30)
-					Holiday = "Friendship Day"
+					Holiday = FRIENDSHIP_DAY
 
 		if(8) // Aug
 			switch(DD)
 				if(5)
-					Holiday = "Beer Day"
+					Holiday = BEER_DAY
 
 		if(9) // sep
 			switch(DD)
 				if(19)
-					Holiday = "Talk-Like-a-Pirate Day"
+					Holiday = TALK_LIKE_A_PIRATE_DAY
 				if(28)
-					Holiday = "Stupid-Questions Day"
+					Holiday = STUPID_QUESTIONS_DAY
 
 		if(10) // Oct
 			switch(DD)
 				if(4)
-					Holiday = "Animal's Day"
+					Holiday = ANIMALS_DAY
 				if(7)
-					Holiday = "Smiling Day"
+					Holiday = SMILING_DAY
 				if(16)
-					Holiday = "Boss' Day"
+					Holiday = BOSS_DAY
 				if(31)
-					Holiday = "Halloween"
+					Holiday = HALLOWEEN
 
 		if(11) // Nov
 			switch(DD)
 				if(1)
-					Holiday = "Vegan Day"
+					Holiday = VEGAN_DAY
 				if(13)
-					Holiday = "Kindness Day"
+					Holiday = KINDNESS_DAY
 				if(19)
-					Holiday = "Flowers Day"
+					Holiday = FLOWERS_DAY
 				if(21)
-					Holiday = "Saying-'Hello' Day"
+					Holiday = SAYING_HELLO_DAY
 
 		if(12) // Dec
 			switch(DD)
 				if(10)
-					Holiday = "Human-Rights Day"
+					Holiday = HUMAN_RIGHTS_DAY
 				if(14)
-					Holiday = "Monkey Day"
+					Holiday = MONKEY_DAY
 				if(21)
 					if(YY==12)
-						Holiday = "End of the World"
+						Holiday = END_OF_THE_WORLD
 				if(22)
-					Holiday = "Orgasming Day"		//lol. These all actually exist
+					Holiday = ORGASMING_DAY	//lol. These all actually exist
 				if(24)
-					Holiday = "Christmas Eve"
+					Holiday = XMAS_EVE
 				if(25)
-					Holiday = "Christmas"
+					Holiday = XMAS
 				if(26)
-					Holiday = "Boxing Day"
+					Holiday = BOXING_DAY
 				if(31)
-					Holiday = "New Year's Eve"
+					Holiday = NEW_YEARS_EVE
 	if(!Holiday)
 		// Friday the 13th
 		if(DD == 13)
 			if(time2text(world.timeofday, "DDD") == "Fri")
-				Holiday = "Friday the 13th"
+				Holiday = FRIDAY_THE_13TH
 
 //Allows GA and GM to set the Holiday variable
 /client/proc/Set_Holiday(T as text|null)
@@ -183,17 +183,9 @@ var/global/Holiday = null
 /proc/Holiday_Game_Start()
 	if(Holiday)
 		to_chat(world, "<font color='blue'>and...</font>")
-		if(Holiday == "Autism Awareness Day")
-			to_chat(world, "<h4>Happy <span class='sans'>Autism Awareness Day</span> Everybody!</h4>")// Together we can finish the puzzle.
-
-		else
-			to_chat(world, "<h4>Happy [Holiday] Everybody!</h4>")
-		switch(Holiday) // special holidays
-			if("Easter")
-				//do easter stuff
-			if("Christmas Eve","Christmas")
-				Christmas_Game_Start()
-	return
+		to_chat(world, "<h4>Happy [Holiday] Everybody!</h4>")
+		if(Holiday == XMAS_EVE || Holiday == XMAS)
+			Christmas_Game_Start()
 
 // Nested in the random events loop. Will be triggered every 2 minutes
 /proc/Holiday_Random_Event()
@@ -201,33 +193,10 @@ var/global/Holiday = null
 		if("",null)	// no Holiday today! Back to work!
 			return
 
-		if("Easter") // I'll make this into some helper procs at some point
-
-/*			var/list/turf/simulated/floor/Floorlist = list()
-			for(var/turf/simulated/floor/T)
-				if(T.contents)
-					Floorlist += T
-			var/turf/simulated/floor/F = Floorlist[rand(1,Floorlist.len)]
-			Floorlist = null
-			var/obj/structure/closet/C = locate(/obj/structure/closet) in F
-			var/obj/item/weapon/reagent_containers/food/snacks/chocolateegg/wrapped/Egg
-			if( C )
-				Egg = new(C)
-			else
-				Egg = new(F)
-
-			var/list/obj/containers = list()
-			for(var/obj/item/weapon/storage/S in world)
-				if(S.z != map.zMainStation)
-					continue
-				containers += S
-
-			message_admins("<span class='notice'>DEBUG: Event: Egg spawned at [Egg.loc] ([Egg.x],[Egg.y],[Egg.z])</span>")*/
-
-		if("End of the World")
+		if(END_OF_THE_WORLD) //2012 is long gone, not clue why this is still a thing.
 			if(prob(eventchance))
 				GameOver()
 
-		if("Christmas","Christmas Eve")
+		if(XMAS_EVE,XMAS)
 			if(prob(eventchance))
 				ChristmasEvent()

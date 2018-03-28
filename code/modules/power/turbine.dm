@@ -221,7 +221,7 @@
 
 /obj/machinery/computer/turbine_computer/attackby(I as obj, user as mob)
 	if(isscrewdriver(I))
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 20))
 			if (src.stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")

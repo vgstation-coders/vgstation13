@@ -1,3 +1,8 @@
+/*CONTAINS
+- Docking Port
+- Shuttle and Destination subtypes
+- Docking Lights */
+
 var/global/list/all_docking_ports = list()
 
 /obj/docking_port
@@ -85,11 +90,19 @@ var/global/list/all_docking_ports = list()
 		if(!A.shuttle_warning_lights)
 			A.shuttle_warning_lights = image('icons/obj/doors/Doorint.dmi', src, "warning_lights")
 		A.overlays += A.shuttle_warning_lights
+	for(var/obj/machinery/docklight/D in dockinglights)
+		if(D.id_tag == areaname)
+			D.triggered = 1
+			D.update_icon()
 
 /obj/docking_port/destination/proc/stop_warning_lights()
 	for(var/obj/machinery/door/airlock/A in range(1,src))
 		if(A.shuttle_warning_lights)
 			A.overlays -= A.shuttle_warning_lights
+	for(var/obj/machinery/docklight/D in dockinglights)
+		if(D.id_tag == areaname)
+			D.triggered = 0
+			D.update_icon()
 
 //SHUTTLE PORTS
 
@@ -232,3 +245,39 @@ var/global/list/all_docking_ports = list()
 	if(istype(D))
 		return D
 	return 0
+
+var/global/list/dockinglights = list()
+
+/obj/machinery/docklight
+	name = "docking light"
+	desc = "A light designed to warn of dangerous docking conditions. Exercise caution while flashing."
+	icon = 'icons/obj/stationobjs.dmi'
+	icon_state = "docklight"
+	light_color = LIGHT_COLOR_ORANGE
+	machine_flags = MULTITOOL_MENU
+	var/triggered = 0
+	var/id_tag = "" //Mappers: This should match the areaname of the target destination port.
+	//Examples: "main research department", "research outpost", "deep space", "station auxillary docking", "north of the station", etc.
+
+/obj/machinery/docklight/New()
+	..()
+	dockinglights += src
+	
+/obj/machinery/docklight/Destroy()
+	dockinglights -= src
+	..()
+
+/obj/machinery/docklight/update_icon()
+	if(triggered)
+		icon_state = "docklight_triggered"
+		set_light(2)
+	else
+		icon_state = "docklight"
+		set_light(0)
+
+/obj/machinery/docklight/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
+	return {"
+	<b>Main</b>
+	<ul>
+		<li>[format_tag("ID Tag","id_tag")]</li>
+	</ul>"}

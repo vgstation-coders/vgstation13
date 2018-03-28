@@ -13,13 +13,13 @@
 			return "it cannot deconstruct reinforced walls!"
 
 		to_chat(user, "Deconstructing \the [T]...")
-		playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
+		playsound(master, 'sound/machines/click.ogg', 50, 1)
 
 		if(master.delay(user, T, 4 SECONDS))
 			if(master.get_energy(user) < energy_cost)
 				return 1
 
-			playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 			T.ChangeTurf(T.dismantle_type)
 			return 0
 
@@ -30,7 +30,7 @@
 			if(master.get_energy(user) < energy_cost)
 				return 1
 
-			playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 			add_gamelogs(user, "deconstructed \the [T] with \the [master]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
 			T.ChangeTurf(T.get_underlying_turf())
 			return 0
@@ -42,7 +42,7 @@
 			if(master.get_energy(user) < energy_cost)
 				return 1
 
-			playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 			qdel(D)
 			return 0
 
@@ -66,7 +66,7 @@
 	var/turf/space/S = A
 
 	to_chat(user, "Building floor...")
-	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 	S.ChangeTurf(floor_type)
 	return 0
 
@@ -85,12 +85,12 @@
 
 	var/turf/simulated/floor/T = A
 	to_chat(user, "Building wall")
-	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
+	playsound(master, 'sound/machines/click.ogg', 50, 1)
 	if(master.delay(user, A, 2 SECONDS))
 		if(master.get_energy(user) < energy_cost)
 			return 1
 
-		playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 		T.ChangeTurf(wall_type)
 		return 0
 
@@ -354,7 +354,7 @@
 	for(var/obj/machinery/door/airlock/D in A)
 		return "there is already an airlock on this spot!"
 
-	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 
 	var/obj/machinery/door/airlock/D = new selected.build_type(A)
 	if(capitalize(selected_name) == selected_name)	//The name inputted is capitalized, so we add \improper.

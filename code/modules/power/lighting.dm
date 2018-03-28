@@ -34,7 +34,7 @@
 	src.add_fingerprint(user)
 	if (iswrench(W))
 		if (src.stage == 1)
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 			to_chat(usr, "You begin deconstructing [src].")
 			if (!do_after(usr, src, 30))
 				return
@@ -42,7 +42,7 @@
 			M.amount = sheets_refunded
 			user.visible_message("[user.name] deconstructs [src].", \
 				"You deconstruct [src].", "You hear a noise.")
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 75, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 75, 1)
 			qdel(src)
 			return
 		if (src.stage == 2)
@@ -134,8 +134,8 @@ var/global/list/obj/machinery/light/alllights = list()
 
 	var/idle = 0 // For process().
 
-	holomap = TRUE
-	auto_holomap = TRUE
+/obj/machinery/light/supports_holomap()
+	return TRUE
 
 /obj/machinery/light/spook(mob/dead/observer/ghost)
 	if(..(ghost, TRUE))
@@ -189,11 +189,15 @@ var/global/list/obj/machinery/light/alllights = list()
 	update(0)
 	..()
 
+/obj/machinery/light/initialize()
+	..()
+	add_self_to_holomap()
+
 // create a new lighting fixture
 /obj/machinery/light/New()
 	..()
 	alllights += src
-
+	
 	spawn(2)
 		var/area/A = get_area(src)
 		if(A && !A.requires_power)
@@ -365,7 +369,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	// attempt to deconstruct / stick weapon into light socket
 	else if(status == LIGHT_EMPTY)
 		if(iswirecutter(W)) //If it's a wirecutter take out the wires
-			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 75, 1)
+			playsound(src, 'sound/items/Wirecutter.ogg', 75, 1)
 			user.visible_message("[user.name] removes \the [src]'s wires.", \
 				"You remove \the [src]'s wires.", "You hear a noise.")
 			var/obj/machinery/light_construct/newlight = null
@@ -530,7 +534,7 @@ var/global/list/obj/machinery/light/alllights = list()
 
 	if(!skip_sound_and_sparks)
 		if(status == LIGHT_OK || status == LIGHT_BURNED)
-			playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+			playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 		if(on)
 			spark(src)
 	status = LIGHT_BROKEN
@@ -735,5 +739,5 @@ var/global/list/obj/machinery/light/alllights = list()
 		src.visible_message("<span class='warning'>[name] shatters.</span>","<span class='warning'>You hear a small glass object shatter.</span>")
 		status = LIGHT_BROKEN
 		force = 5
-		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 		update()

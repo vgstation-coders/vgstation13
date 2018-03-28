@@ -29,7 +29,7 @@
 	var/screen = 0
 	var/temp
 	var/list/part_sets = list()
-
+	var/datum/design/last_made
 	var/start_end_anims = 0
 
 	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
@@ -63,23 +63,13 @@
 
 	T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
- 	T += Ma.rating //T is the ammount of stock parts grade. 1 tier 1 part is a  T=1,  2 tier 2 parts is a T=4, 1 tier 1 and 1 tier 3 part is a T=5
- 	if(T >= 2) // this removes 1 part tier level. This is to account for the fact that machines like the protolathe have 1 micro manip in them by default which means 1 tier level
- 		T -= 2
-
-	var/diff
-	diff = round(initial(resource_coeff) - (initial(resource_coeff)*(T * 3))/25,0.01)
-	if(resource_coeff!=diff)
-		resource_coeff = diff
+		T += Ma.rating - 1
+	resource_coeff = round(initial(resource_coeff) - (initial(resource_coeff)*(T * 3))/25,0.01)
 
 	T = 0
 	for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
-		T += Ml.rating
-	if(T>= 2)  // same idea for the formula for above
-		T -= 2
-	diff = round(initial(time_coeff) - (initial(time_coeff)*(T *5))/25,0.01)
-	if(time_coeff!=diff)
-		time_coeff = diff
+		T += Ml.rating - 1
+	time_coeff = round(initial(time_coeff) - (initial(time_coeff)*(T * 5))/25,0.01)
 
 /obj/machinery/r_n_d/fabricator/emag()
 	sleep()
@@ -166,8 +156,14 @@
 
 /obj/machinery/r_n_d/fabricator/process()
 	..()
-	if(busy || stopped || being_built)
+	if(busy || being_built)
 		return
+	if(stopped)
+		if(auto_make && last_made && !queue.len)
+			add_to_queue(last_made)
+			start_processing_queue()
+		else
+			return
 	if(queue.len==0)
 		stopped=1
 		return
@@ -234,19 +230,31 @@
 	for(var/M in part.materials)
 		if(copytext(M,1,2) == "$" && !(research_flags & IGNORE_MATS))
 			materials.removeAmount(M, get_resource_cost_w_coeff(part, M))
+
 		else if(!(research_flags & IGNORE_CHEMS))
-			reagents.remove_reagent(M, get_resource_cost_w_coeff(part, M))
+			var/left_to_remove = get_resource_cost_w_coeff(part, M)
+			for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+				var/remove_amount = min(RC.reagents.get_reagent_amount(M), left_to_remove)
+				RC.reagents.remove_reagent(M, remove_amount)
+				left_to_remove -= remove_amount
+				if(left_to_remove <= 0)
+					break
+			update_buffer_size()
+
 	return 1
 
 /obj/machinery/r_n_d/fabricator/proc/check_mat(var/datum/design/being_built, var/M)
 	if(copytext(M,1,2) == "$")
 		if(src.research_flags & IGNORE_MATS)
 			return 1
-		return round(materials.storage[M] / get_resource_cost_w_coeff(being_built, M), 1)
+		return round(materials.storage[M] / get_resource_cost_w_coeff(being_built, M))
 	else
 		if(src.research_flags & IGNORE_CHEMS)
 			return 1
-		return round(reagents.get_reagent_amount(M) / get_resource_cost_w_coeff(being_built, M), 1)
+		var/reagent_total = 0
+		for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+			reagent_total += RC.reagents.get_reagent_amount(M)
+		return round(reagent_total / get_resource_cost_w_coeff(being_built, M))
 	return 0
 
 /obj/machinery/r_n_d/fabricator/proc/build_part(var/datum/design/part)
@@ -304,6 +312,8 @@
 		being_built.forceMove(get_turf(output))
 		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
 		src.being_built = null
+		last_made = part
+		wires.SignalIndex(RND_WIRE_JOBFINISHED)
 	src.updateUsrDialog()
 	src.busy = 0
 	return 1
@@ -544,10 +554,10 @@
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
-	var/datum/topic_input/filter = new /datum/topic_input(href,href_list)
+	var/datum/topic_input/topic_filter = new /datum/topic_input(href,href_list)
 
 	if(href_list["remove_from_queue"])
-		remove_from_queue(filter.getNum("remove_from_queue"))
+		remove_from_queue(topic_filter.getNum("remove_from_queue"))
 		return 1
 
 	if(href_list["eject"])
@@ -653,8 +663,8 @@
 		src.screen = href_list["screen"]
 
 	if(href_list["queue_move"] && href_list["index"])
-		var/index = filter.getNum("index")
-		var/new_index = index + filter.getNum("queue_move")
+		var/index = topic_filter.getNum("index")
+		var/new_index = index + topic_filter.getNum("queue_move")
 		if(isnum(index) && isnum(new_index))
 			if(IsInRange(new_index,1,queue.len))
 				queue.Swap(index,new_index)
@@ -671,7 +681,7 @@
 			src.sync()
 		return update_queue_on_page()
 	if(href_list["part_desc"])
-		var/obj/part = filter.getObj("part_desc")
+		var/obj/part = topic_filter.getObj("part_desc")
 
 		// critical exploit prevention, do not remove unless you replace it -walter0o
 		if(src.exploit_prevention(part, usr, 1))
@@ -713,3 +723,6 @@
 			mats.forceMove(src.loc)
 		return total_amount
 	return 0
+
+/obj/machinery/r_n_d/fabricator/proc/update_buffer_size()
+	return

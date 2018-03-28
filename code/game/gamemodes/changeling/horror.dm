@@ -12,7 +12,7 @@
 	// Yep.
 	default_mutations=list(M_HULK)
 
-	cold_level_1 = 0 //Default 260 - Lower is better
+	cold_level_1 = 0 //Default 220 - Lower is better
 	cold_level_2 = 10 //Default 200
 	cold_level_3 = 20 //Default 120
 

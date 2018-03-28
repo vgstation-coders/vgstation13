@@ -53,6 +53,7 @@
 	var/atom/movable/tether_master
 	var/list/tether_slaves
 	var/list/current_tethers
+	var/obj/shadow/shadow
 
 /atom/movable/New()
 	. = ..()
@@ -964,4 +965,7 @@
 			T.break_tether()
 
 /atom/movable/proc/on_tether_broken(atom/movable/other_end)	//To allow for code based on when a tether with a specific thing is broken
+	return
+
+/atom/movable/proc/area_entered(var/area/A)
 	return

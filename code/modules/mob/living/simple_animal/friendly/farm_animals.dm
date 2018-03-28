@@ -22,6 +22,7 @@
 	melee_damage_upper = 2
 	size = SIZE_BIG
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES
+	speak_override = TRUE
 
 	var/datum/reagents/udder = null
 
@@ -106,6 +107,7 @@
 	response_harm   = "kicks"
 	attacktext = "kicks"
 	health = 50
+	speak_override = TRUE
 
 	size = SIZE_BIG
 	holder_type = /obj/item/weapon/holder/animal/cow
@@ -176,6 +178,7 @@
 	var/amount_grown = 0
 	pass_flags = PASSTABLE | PASSGRILLE
 	size = SIZE_TINY
+	speak_override = TRUE
 
 /mob/living/simple_animal/chick/New()
 	..()
@@ -216,6 +219,7 @@
 	var/body_color
 	pass_flags = PASSTABLE
 	size = SIZE_SMALL
+	speak_override = TRUE
 
 /mob/living/simple_animal/chicken/New()
 	if(prob(5))
@@ -292,6 +296,7 @@
 	max_n2 = 0
 	treadmill_speed = 1.5
 	var/fat = 0
+	speak_override = TRUE
 
 /mob/living/simple_animal/hostile/retaliate/box/New()
 	..()

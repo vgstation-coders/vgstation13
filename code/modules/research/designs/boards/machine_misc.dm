@@ -82,7 +82,7 @@
 	id = "vendomat"
 	req_tech = list(Tc_MATERIALS = 1, Tc_ENGINEERING = 1, Tc_POWERSTORAGE = 1)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Misc"
 	build_path = /obj/item/weapon/circuitboard/vendomat
 

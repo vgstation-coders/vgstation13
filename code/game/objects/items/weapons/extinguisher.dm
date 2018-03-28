@@ -90,13 +90,13 @@
 			user.visible_message("[user] begins to unwrench the fill cap on \the [src].","<span class='notice'>You begin to unwrench the fill cap on \the [src].</span>")
 			if(do_after(user, src, 25))
 				user.visible_message("[user] removes the fill cap on \the [src].","<span class='notice'>You remove the fill cap on \the [src].</span>")
-				playsound(get_turf(src),'sound/items/Ratchet.ogg', 100, 1)
+				playsound(src,'sound/items/Ratchet.ogg', 100, 1)
 				flags |= OPENCONTAINER
 		else
 			user.visible_message("[user] begins to seal the fill cap on \the [src].","<span class='notice'>You begin to seal the fill cap on \the [src].</span>")
 			if(do_after(user, src, 25))
 				user.visible_message("[user] fastens the fill cap on \the [src].","<span class='notice'>You fasten the fill cap on \the [src].</span>")
-				playsound(get_turf(src),'sound/items/Ratchet.ogg', 100, 1)
+				playsound(src,'sound/items/Ratchet.ogg', 100, 1)
 				flags &= ~OPENCONTAINER
 		return
 
@@ -121,7 +121,7 @@
 		if((istype(target, /obj/structure/reagent_dispensers)))
 			target.reagents.trans_to(src, 50, log_transfer = TRUE, whodunnit = user)
 			to_chat(user, "<span class='notice'>\The [src] is now refilled</span>")
-			playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 			return
 
 		if(is_open_container() && reagents.total_volume)
@@ -151,7 +151,7 @@
 
 		src.last_use = world.time
 
-		playsound(get_turf(src), 'sound/effects/extinguish.ogg', 75, 1, -3)
+		playsound(src, 'sound/effects/extinguish.ogg', 75, 1, -3)
 
 		var/direction = get_dir(src,target)
 
@@ -224,7 +224,7 @@
 			var/obj/o = target
 			o.reagents.trans_to(src, 50)
 			to_chat(user, "<span class='notice'>\The [src] is now refilled</span>")
-			playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 			return
 
 	if (!safety && !is_open_container())
@@ -241,7 +241,7 @@
 		user.delayNextAttack(5, 1)
 		src.last_use = world.time
 
-		playsound(get_turf(src), 'sound/effects/extinguish.ogg', 75, 1, -3)
+		playsound(src, 'sound/effects/extinguish.ogg', 75, 1, -3)
 
 		var/direction = get_dir(src,target)
 

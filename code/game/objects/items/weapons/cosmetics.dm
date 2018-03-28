@@ -269,7 +269,7 @@
 		H.g_hair = color_g
 		H.b_hair = color_b
 	H.update_hair()
-	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
+	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
 /obj/item/weapon/invisible_spray
 	name = "can of invisible spray"
@@ -341,7 +341,7 @@
 		to_chat(user, "You spray yourself with \the [src].")
 	else
 		to_chat(user, "You spray \the [target] with \the [src].")
-	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
+	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 	sprays_left--
 	if(istype(target, /obj/machinery/power/supermatter))
 		return 0
@@ -491,3 +491,70 @@
 		return
 	if (prob(25))
 		shatter()
+
+/obj/item/weapon/nanitecontacts
+	name = "nanite contacts"
+	desc = "Deploys nanobots to your eyes to change their color."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "nanite_contact"
+	flags = FPRINT
+	w_class = W_CLASS_TINY
+	var/color_r = 255
+	var/color_g = 255
+	var/color_b = 255
+
+/obj/item/weapon/nanitecontacts/New()
+	..()
+	color_r = rand(0,255)
+	color_g = rand(0,255)
+	color_b = rand(0,255)
+	update_icon()
+
+/obj/item/weapon/nanitecontacts/update_icon()
+	overlays.len = 0
+	var/image/I = image(icon = 'icons/obj/items.dmi', icon_state = "contacts_overlay")
+	I.color = rgb(color_r, color_g, color_b)
+	overlays += I
+
+/obj/item/weapon/nanitecontacts/attack_self(mob/user)
+	var/new_color = input(user, "Choose the contact's color:", "Color Select") as color|null
+	if(new_color)
+		color_r = hex2num(copytext(new_color, 2, 4))
+		color_g = hex2num(copytext(new_color, 4, 6))
+		color_b = hex2num(copytext(new_color, 6, 8))
+	update_icon()
+
+/obj/item/weapon/nanitecontacts/attack(mob/M, mob/user)
+	if(!istype(M))
+		return
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/area = user.zone_sel.selecting
+		if(area == "eyes")
+			var/obj/item/clothing/cover = H.get_body_part_coverage(EYES)
+			if(cover)
+				to_chat(user, "<span class='notice'>You can't color [H == user ? "your" : "\the [H]'s"] eyes through that [cover.name]!</span>")
+				return
+		if(H == user)
+			user.visible_message("<span class='notice'>[user] colors their eyes with \the [src].</span>", \
+								 "<span class='notice'>You color your eyes with \the [src].</span>")
+			color_eyes(H)
+		else
+			user.visible_message("<span class='warning'>[user] begins to color \the [H]'s eyes with \the [src].</span>", \
+								 "<span class='notice'>You begin to color \the [H]'s eyes with \the [src].</span>")
+			if(do_after(user,H, 20))	//user needs to keep their active hand, H does not.
+				user.visible_message("<span class='notice'>[user] colors [H]'s eyes with \the [src].</span>", \
+									 "<span class='notice'>You color [H]'s eyes with \the [src].</span>")
+				color_eyes(H)
+	else
+		to_chat(user, "<span class='notice'>\The [M]'s eyes don't fit in the contacts!</span>")
+
+/obj/item/weapon/nanitecontacts/proc/color_eyes(mob/living/carbon/human/H)
+	if(!H)
+		return
+	else
+		H.r_eyes = color_r
+		H.g_eyes = color_g
+		H.b_eyes = color_b
+	H.update_body()

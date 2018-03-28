@@ -165,13 +165,13 @@
 
 /client/proc/vampire_hypnotise()
 	set category = "Vampire"
-	set name = "Hypnotise"
+	set name = "Hypnotise (10)"
 	set desc= "A piercing stare that incapacitates your victim for a good length of time."
 	var/datum/mind/M = usr.mind
 	if(!M)
 		return
 
-	var/mob/living/carbon/C = M.current.vampire_active(0, 0, 1)
+	var/mob/living/carbon/C = M.current.vampire_active(10, 0, 1)
 	if(!C)
 		return
 
@@ -185,6 +185,7 @@
 			M.current.verbs += /client/proc/vampire_hypnotise
 	var/enhancements = ((C.knockdown ? 2 : 0) + (C.stunned ? 1 : 0) + (C.sleeping || C.paralysis ? 3 : 0))
 	if(do_mob(M.current, C, 10 - enhancements))
+		M.current.remove_vampire_blood(10)
 		if(C.mind && C.mind.vampire)
 			to_chat(M.current, "<span class='warning'>Your piercing gaze fails to knock out [C.name].</span>")
 			to_chat(C, "<span class='notice'>[M.current.name]'s feeble gaze is ineffective.</span>")
@@ -450,6 +451,7 @@
 		return 0
 	if(!C.vampire_affected(mind))
 		C.visible_message("<span class='warning'>[C] seems to resist the takeover!</span>", "<span class='notice'>Your faith of [ticker.Bible_deity_name] has kept your mind clear of all evil</span>")
+		return 0
 	if(!ishuman(C))
 		to_chat(src, "<span class='warning'>You can only enthrall humanoids!</span>")
 		return 0

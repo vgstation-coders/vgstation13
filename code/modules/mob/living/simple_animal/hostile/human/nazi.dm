@@ -9,8 +9,8 @@
 
 	speak = list("Schweinhunds!","Can you feel ze Schadenfreude?","Ach, was ist los?")
 	speak_emote = list("says")
-	emote_hear = list("says")
-	emote_see = list("hums")
+	emote_hear = list("hums")
+	emote_see = list("goose-steps", "heils")
 	attacktext = "punches"
 	attack_sound = "punch"
 	speak_chance = 5
@@ -309,8 +309,8 @@
 
 	speak = list("Die, Allied schweinhund!","Die Welt ist unser!","Guten Tag!" ,"Scheise!")
 	speak_emote = list("says")
-	emote_hear = list("says")
-	emote_see = list("hums")
+	emote_hear = list("hums")
+	emote_see = list("stomps")
 	attacktext = "crushes"
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	speak_chance = 20
@@ -369,6 +369,7 @@
 	say("Eva, auf wiedersehen!")
 	ranged = 0
 	sleep(10)
-	explosion(loc,1,2,3)
-	new/obj/item/weapon/gun/gatling(loc)
+	var/turf/eloc = get_turf(loc)
 	qdel(src)
+	explosion(eloc,1,2,3)
+	new /obj/item/weapon/gun/gatling(eloc)

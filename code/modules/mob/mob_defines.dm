@@ -27,6 +27,8 @@
 	var/obj/abstract/screen/bodytemp = null
 	var/obj/abstract/screen/healths = null
 	var/obj/abstract/screen/throw_icon = null
+	var/obj/abstract/screen/camera_icon = null
+	var/obj/abstract/screen/album_icon = null
 	var/obj/abstract/screen/nutrition_icon = null
 	var/obj/abstract/screen/pressure = null
 	var/obj/abstract/screen/damageoverlay = null
@@ -126,6 +128,7 @@
 	var/bodytemperature = 310.055	//98.7 F
 	var/drowsyness = 0.0//Carbon
 	var/dizziness = 0//Carbon
+	var/dizzy_effect_in_loop = FALSE
 	var/jitteriness = 0//Carbon
 	var/flying = 0
 	var/charges = 0.0

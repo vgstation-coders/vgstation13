@@ -67,10 +67,8 @@ mob/living/carbon/proc/handle_hallucinations()
 								halitem.name = "Revolver"
 							if(2) //c4
 								halitem.icon = 'icons/obj/assemblies.dmi'
-								halitem.icon_state = "plastic-explosive0"
+								halitem.icon_state = pick("plastic-explosive0", "plastic-explosive2")
 								halitem.name = "Mysterious Package"
-								if(prob(25))
-									halitem.icon_state = "c4small_1"
 							if(3) //sword
 								halitem.icon = 'icons/obj/weapons.dmi'
 								halitem.icon_state = "sword1"
@@ -233,7 +231,7 @@ mob/living/carbon/proc/handle_hallucinations()
 					src << sound('sound/AI/shuttledock.ogg')
 				else
 					var/txt_verb = pick("go to","die in","stay in","avoid")
-					var/location = pick("security","arrivals","bridge","your old house","the escape shuttle hallway","deep space","the DJ satelite","science")
+					var/location = pick("security","arrivals","bridge","your old house","the escape shuttle hallway","deep space","the DJ satellite","science")
 					to_chat(src, "<i>You feel a sudden urge to [txt_verb] [location][pick("...","!",".")]</i>")
 			if(77) //Sillycone
 				if(prob(5))

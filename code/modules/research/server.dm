@@ -311,7 +311,7 @@
 
 /obj/machinery/computer/rdservercontrol/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
 	if(isscrewdriver(D))
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 20))
 			if (src.stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
@@ -337,7 +337,7 @@
 				A.anchored = 1
 				qdel(src)
 	else if(istype(D, /obj/item/weapon/card/emag) && !emagged)
-		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
 		to_chat(user, "<span class='notice'>You you disable the security protocols</span>")
 	src.updateUsrDialog()

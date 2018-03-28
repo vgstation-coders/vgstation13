@@ -89,7 +89,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		lit = -1
 		update_brightness()
 		return
-	if(env.oxygen < 5)
+	if(env.oxygen / env.volume * CELL_VOLUME < 5)
 		lit = -1
 		update_brightness()
 		if(M)
@@ -342,7 +342,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		M.IgniteMob()
 	smoketime--
 	var/datum/gas_mixture/env = location.return_air()
-	if(smoketime <= 0 | env.oxygen < 5)
+	if(smoketime <= 0 | env.oxygen / env.volume * CELL_VOLUME < 5)
 		if(!inside_item)
 			var/atom/new_butt = new type_butt(location) //Spawn the cigarette butt
 			transfer_fingerprints_to(new_butt)
@@ -676,19 +676,19 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		fuel += O.reagents.remove_any(initial(fuel) - fuel)
 		user.visible_message("<span class='notice'>[user] refuels \the [src].</span>", \
 		"<span class='notice'>You refuel \the [src].</span>")
-		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		return
 
 /obj/item/weapon/lighter/attack_self(mob/living/user)
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy
-	if(!fuel | env.oxygen < 5)
+	if(!fuel | env.oxygen / env.volume * CELL_VOLUME < 5)
 		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \
 		"<span class='notice'>You try to light \the [src], but no flame appears.</span>")
 		return
 	if(!lit) //Lighting the lighter
-		playsound(get_turf(src), pick(lightersound), 50, 1)
+		playsound(src, pick(lightersound), 50, 1)
 		if(fuel >= initial(fuel) - 5 || prob(100 * (fuel/initial(fuel)))) //Strike, but fail to light it
 			user.visible_message("<span class='notice'>[user] manages to light \the [src].</span>", \
 			"<span class='notice'>You manage to light \the [src].</span>")
@@ -740,7 +740,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			visible_message("<span class='warning'>Without warning, \the [src] suddenly shuts off.</span>")
 			fueltime = null
 	var/datum/gas_mixture/env = location.return_air()
-	if(env.oxygen < 5)
+	if(env.oxygen / env.volume * CELL_VOLUME < 5)
 		lit = 0
 		update_brightness()
 		visible_message("<span class='warning'>Without warning, the flame on \the [src] suddenly goes out in a weak fashion.</span>")
@@ -763,19 +763,19 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy
-	if(!fuel | env.oxygen < 5)
+	if(!fuel | env.oxygen / env.volume * CELL_VOLUME < 5)
 		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \
 		"<span class='notice'>You try to light \the [src], but no flame appears.</span>")
 		return
 	lit = !lit
 	if(lit) //Was lit
-		playsound(get_turf(src), pick(open_sound), 50, 1)
+		playsound(src, pick(open_sound), 50, 1)
 		user.visible_message("<span class='rose'>Without even breaking stride, [user] flips open and lights \the [src] in one smooth movement.</span>", \
 		"<span class='rose'>Without even breaking stride, you flip open and light \the [src] in one smooth movement.</span>")
 		--fuel
 	else //Was shut off
 		fueltime = null
-		playsound(get_turf(src), pick(close_sound), 50, 1)
+		playsound(src, pick(close_sound), 50, 1)
 		user.visible_message("<span class='rose'>You hear a quiet click as [user] shuts off \the [src] without even looking at what they're doing. Wow.</span>", \
 		"<span class='rose'>You hear a quiet click as you shut off \the [src] without even looking at what you are doing.</span>")
 	update_brightness()

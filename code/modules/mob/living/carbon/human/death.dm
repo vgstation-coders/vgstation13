@@ -115,10 +115,10 @@
 		sql_report_death(src)
 		ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
 	species.handle_death(src)
-	if(become_zombie_after_death)
+	if(become_zombie_after_death && isjusthuman(src)) //2 if they retain their mind, 1 if they don't
 		spawn(30 SECONDS)
 			if(!gcDestroyed)
-				make_zombie()
+				make_zombie(retain_mind = become_zombie_after_death-1)
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()

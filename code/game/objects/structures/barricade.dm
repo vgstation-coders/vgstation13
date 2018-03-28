@@ -14,6 +14,7 @@
 	anchored = 1
 	opacity = 1 //Wood isn't transparent, the last time I checked
 	health = 60 //Fairly strong
+	layer = ABOVE_DOOR_LAYER
 	var/busy = 0 //Oh god fucking do_after's
 	var/materialtype = /obj/item/stack/sheet/wood
 
@@ -48,7 +49,7 @@
 		user.delayNextAttack(10)
 		health -= 2
 		healthcheck()
-		//playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
+		//playsound(src, 'sound/effects/glassknock.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] bangs against \the [src]!</span>", \
 		"<span class='warning'>You bang against \the [src]!</span>", \
 		"You hear banging.")
@@ -56,7 +57,7 @@
 	//Knock against it
 	else
 		user.delayNextAttack(10)
-		//playsound(get_turf(src), 'sound/effects/glassknock.ogg', 50, 1)
+		//playsound(src, 'sound/effects/glassknock.ogg', 50, 1)
 		user.visible_message("<span class='notice'>[user] knocks on \the [src].</span>", \
 		"<span class='notice'>You knock on \the [src].</span>", \
 		"You hear knocking.")

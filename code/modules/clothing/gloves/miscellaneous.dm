@@ -154,6 +154,7 @@
 	desc = "Utilizes a non-slip technology that allows you to never drop your precious bottles of vodka."
 	icon_state = "nr_gloves"
 	item_state = "nr_gloves"
+	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/gloves/neorussian/fingerless
 	name = "neo-Russian fingerless gloves"
@@ -257,7 +258,7 @@
 /obj/item/clothing/gloves/powerfist/on_punch(mob/user, mob/living/victim)
 	if(istype(victim) && use_fuel(fuel_cost))
 		to_chat(user, "<span class='notice'>As \the [src] activate, you feel a truly powerful force assisting your punch.</span>")
-		playsound(get_turf(src), 'sound/mecha/mechentry.ogg', 100, 1)
+		playsound(src, 'sound/mecha/mechentry.ogg', 100, 1)
 
 		victim.throw_at(get_edge_target_turf(loc, loc.dir), 5, 1)
 		victim.Stun(stunforce)

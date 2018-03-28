@@ -74,7 +74,7 @@
 		if(flying)
 			animate(remains, pixel_y = pixel_y - 8 * PIXEL_MULTIPLIER, 5, 1) //Fall down gracefully
 
-		playsound(get_turf(src), pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat
+		playsound(src, pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat
 
 		..()
 
@@ -286,7 +286,7 @@
 	if(size >= H.size)
 		return
 
-	playsound(get_turf(H),'sound/items/eatfood.ogg', rand(10,50), 1)
+	playsound(H,'sound/items/eatfood.ogg', rand(10,50), 1)
 	H.visible_message("<span class='notice'>[H] eats \the [src]!</span>", "<span class='notice'>You eat \the [src]!</span>")
 
 	Die(gore = 1)

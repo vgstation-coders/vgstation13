@@ -33,6 +33,7 @@
 	maxbodytemp = 323	//Above 50 Degrees Celcius
 	universal_speak = 0
 	treadmill_speed = 0.2 //You can still do it, but you're not going to generate much power.
+	speak_override = FALSE
 
 	size = SIZE_TINY
 	holder_type = /obj/item/weapon/holder/animal/mouse

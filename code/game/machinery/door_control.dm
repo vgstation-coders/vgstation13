@@ -48,7 +48,7 @@
 /obj/machinery/door_control/emag(mob/user)
 	req_access = list()
 	req_one_access = list()
-	playsound(get_turf(src), "sparks", 100, 1)
+	playsound(src, "sparks", 100, 1)
 
 /obj/machinery/door_control/attackby(obj/item/weapon/W, mob/user as mob)
 	..()
@@ -147,7 +147,7 @@
 		return
 
 	if(iswrench(W))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src, 30))
 			to_chat(user, "<span class='notice'>You detach \the [src] from the wall.</span>")
 			new/obj/item/mounted/frame/driver_button(get_turf(src))

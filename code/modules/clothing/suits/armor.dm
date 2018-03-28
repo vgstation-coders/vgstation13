@@ -1,5 +1,18 @@
 /obj/item/clothing/suit/armor
-	allowed = list(/obj/item/weapon/gun/energy,/obj/item/weapon/reagent_containers/spray/pepper,/obj/item/weapon/gun/projectile,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/gun/lawgiver,/obj/item/weapon/gun/siren,/obj/item/weapon/gun/mahoguny,/obj/item/weapon/bikehorn/baton)
+	allowed = list(
+		/obj/item/weapon/gun/energy,
+		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/weapon/gun/projectile,
+		/obj/item/ammo_storage,
+		/obj/item/ammo_casing,
+		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/gun/lawgiver,
+		/obj/item/weapon/gun/siren,
+		/obj/item/weapon/gun/mahoguny,
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/blunderbuss
+		)
 	body_parts_covered = FULL_TORSO
 	flags = FPRINT
 	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
@@ -208,7 +221,7 @@
 
 	L.visible_message("<span class='danger'>The reactive teleport system flings [L] clear of [attack_text]!</span>", "<span class='notice'>The reactive teleport system flings you clear of [attack_text].</span>")
 
-	playsound(get_turf(L), 'sound/effects/teleport.ogg', 30, 1)
+	playsound(L, 'sound/effects/teleport.ogg', 30, 1)
 
 	L.forceMove(picked)
 

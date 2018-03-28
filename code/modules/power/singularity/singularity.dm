@@ -111,7 +111,7 @@
 							new /obj/effect/gibspawner/generic(get_turf(user))
 							qdel(user)
 					else
-						playsound(get_turf(user), get_sfx("soulstone"), 50,1)
+						playsound(user, get_sfx("soulstone"), 50,1)
 						make_tracker_effects(get_turf(user), get_turf(src))
 						user.dust()
 				else

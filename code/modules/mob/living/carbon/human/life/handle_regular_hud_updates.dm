@@ -288,11 +288,22 @@
 			clear_fullscreen("high")
 
 		var/masked = 0
-		if(istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/unathi))
-			var/obj/item/clothing/head/welding/O = head
-			if(!O.up && tinted_weldhelh)
-				overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
-				masked = 1
+
+		if(head)
+			if(istype(head, /obj/item/clothing/head/welding) || istype(head, /obj/item/clothing/head/helmet/space/unathi) || (/datum/action/item_action/toggle_helmet_mask in head.actions_types))
+				var/enable_mask = TRUE
+
+				var/datum/action/item_action/toggle_helmet_mask/action = locate(/datum/action/item_action/toggle_helmet_mask) in head.actions
+
+				if(action)
+					enable_mask = !action.up
+				else
+					var/obj/item/clothing/head/welding/O = head
+					enable_mask = !O.up
+
+				if(enable_mask && tinted_weldhelh)
+					overlay_fullscreen("tint", /obj/abstract/screen/fullscreen/impaired, 2)
+					masked = 1
 
 		if(!masked && istype(glasses, /obj/item/clothing/glasses/welding) && !istype(glasses, /obj/item/clothing/glasses/welding/superior))
 			var/obj/item/clothing/glasses/welding/O = glasses

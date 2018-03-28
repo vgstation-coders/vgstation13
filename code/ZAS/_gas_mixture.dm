@@ -54,7 +54,7 @@
 
 	var/volume = CELL_VOLUME
 
-	var/temperature = 0 //in Kelvin, use calculate_temperature() to modify
+	var/temperature = 0 //in Kelvin
 
 	var/graphics=0
 

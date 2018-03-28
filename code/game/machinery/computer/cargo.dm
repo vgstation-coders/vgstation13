@@ -25,6 +25,9 @@ For vending packs, see vending_packs.dm*/
 	acc_info["account"] = account
 	return acc_info
 
+#define SCR_MAIN 1
+#define SCR_CENTCOM 2
+
 /obj/machinery/computer/supplycomp
 	name = "Supply shuttle console"
 	icon = 'icons/obj/computer.dmi'
@@ -37,8 +40,17 @@ For vending packs, see vending_packs.dm*/
 	var/permissions_screen = FALSE
 	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
 	var/datum/money_account/current_acct
-
+	var/screen = SCR_MAIN
 	light_color = LIGHT_COLOR_BROWN
+
+/obj/machinery/computer/supplycomp/New()
+	..()
+	supply_shuttle.supply_consoles.Add(src)
+
+/obj/machinery/computer/supplycomp/Destroy()
+	supply_shuttle.supply_consoles.Remove(src)
+	..()
+
 
 /obj/machinery/computer/supplycomp/attack_ai(var/mob/user as mob)
 	add_hiddenprint(user)
@@ -163,6 +175,12 @@ For vending packs, see vending_packs.dm*/
 		if(SO)
 			orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name, "orderedby" = SO.orderedby, "comment" = SO.comment)))
 	data["orders"] = orders_list
+
+	var/centcomm_list[0]
+	for(var/datum/centcomm_order/O in supply_shuttle.centcomm_orders)
+		centcomm_list.Add(list(list("id" = O.id, "requested" = O.getRequestsByName(), "fulfilled" = O.getFulfilledByName(), "name" = O.name, "worth" = O.worth, "to" = O.acct_by_string)))
+	data["centcomm_orders"] = centcomm_list
+
 	data["money"] = current_acct.fmtBalance()
 	data["send"] = list("send" = 1)
 	data["moving"] = supply_shuttle.moving
@@ -170,6 +188,8 @@ For vending packs, see vending_packs.dm*/
 	data["show_permissions"] = permissions_screen
 	data["restriction"] = supply_shuttle.restriction
 	data["requisition"] = supply_shuttle.requisition
+
+	data["screen"] = screen
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
@@ -322,6 +342,13 @@ For vending packs, see vending_packs.dm*/
 		if(!check_restriction(usr))
 			return
 		supply_shuttle.requisition = text2num(href_list["requisition_status"])
+		return 1
+	else if (href_list["screen"])
+		if(!check_restriction(usr))
+			return
+		var/result = text2num(href_list["screen"])
+		if(result == SCR_MAIN || result == SCR_CENTCOM)
+			screen = result
 		return 1
 	else if (href_list["close"])
 		if(usr.machine == src)
@@ -525,3 +552,6 @@ For vending packs, see vending_packs.dm*/
 		return 1
 
 	add_fingerprint(usr)
+
+#undef SCR_MAIN
+#undef SCR_CENTCOM

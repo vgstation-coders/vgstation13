@@ -62,10 +62,10 @@
 //Now applying sound
 	if(!ear_safety)
 		to_chat(M, "<span class='userdanger'>BANG</span>")
-		playsound(get_turf(src), 'sound/effects/bang.ogg', 60, 1)
+		playsound(src, 'sound/effects/bang.ogg', 60, 1)
 	else
 		to_chat(M, "<span class='danger'>BANG</span>")
-		playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
+		playsound(src, 'sound/effects/bang.ogg', 25, 1)
 
 	if((get_dist(M, T) <= 2 || src.loc == M.loc || src.loc == M))
 		if(ear_safety > 0)
@@ -140,12 +140,12 @@
 	for(,numspawned > 0, numspawned--)
 		spawn(0)
 			new /obj/item/weapon/grenade/flashbang/cluster(src.loc)//Launches flashbangs
-			playsound(get_turf(src), 'sound/weapons/armbomb.ogg', 75, 1, -3)
+			playsound(src, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 
 	for(,again > 0, again--)
 		spawn(0)
 			new /obj/item/weapon/grenade/flashbang/clusterbang/segment(src.loc)//Creates a 'segment' that launches a few more flashbangs
-			playsound(get_turf(src), 'sound/weapons/armbomb.ogg', 75, 1, -3)
+			playsound(src, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 	spawn(0)
 		qdel(src)
 		return
@@ -177,7 +177,7 @@
 	for(,numspawned > 0, numspawned--)
 		spawn(0)
 			new /obj/item/weapon/grenade/flashbang/cluster(src.loc)
-			playsound(get_turf(src), 'sound/weapons/armbomb.ogg', 75, 1, -3)
+			playsound(src, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 	spawn(0)
 		qdel(src)
 		return

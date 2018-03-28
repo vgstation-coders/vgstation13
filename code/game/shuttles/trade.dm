@@ -14,7 +14,7 @@ var/global/datum/shuttle/trade/trade_shuttle = new(starting_area = /area/shuttle
 	stable = 0 //Don't stun everyone and don't throw anything when moving
 	can_rotate = 0 //Sleepers, body scanners and multi-tile airlocks aren't rotated properly
 
-	
+
 
 /datum/shuttle/trade/initialize()
 	.=..()
@@ -43,3 +43,6 @@ var/global/datum/shuttle/trade/trade_shuttle = new(starting_area = /area/shuttle
 
 /obj/docking_port/destination/trade/transit
 	areaname = "hyperspace (trade shuttle)"
+
+/obj/docking_port/destination/trade/extra
+	areaname = "Casino"

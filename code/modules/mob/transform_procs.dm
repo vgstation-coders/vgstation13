@@ -80,7 +80,7 @@
 	return Mo
 
 /mob/living/carbon/human/monkeyize(ignore_primitive = FALSE)
-	..()
+	.=..()
 
 /mob/proc/Cluwneize()
 	if(!Premorph())
@@ -137,14 +137,6 @@
 		O.forceMove(loc_landmark.loc)
 		for (var/obj/item/device/radio/intercom/comm in O.loc)
 			comm.ai += O
-	to_chat(O, "<B>You are playing the station's AI. The AI cannot move, but can interact with many objects while viewing them (through cameras).</B>")
-	to_chat(O, "<B>To look at other parts of the station, click on yourself to get a camera menu.</B>")
-	to_chat(O, "<B>While observing through a camera, you can use most (networked) devices which you can see, such as computers, APCs, intercoms, doors, etc.</B>")
-	to_chat(O, "To use something, simply click on it.")
-	to_chat(O, {"Use say ":b to speak to your cyborgs through binary."})
-	if (!(ticker && ticker.mode && (O.mind in ticker.mode.malf_ai)))
-		O.show_laws()
-		to_chat(O, "<b>These laws may be changed by other players, or by you being the traitor.</b>")
 	O.verbs += /mob/living/silicon/ai/proc/show_laws_verb
 	O.verbs += /mob/living/silicon/ai/proc/ai_statuschange
 	O.job = "AI"
@@ -176,19 +168,16 @@
 		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
 		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
 	if(!skipnaming)
-		O.Namepick()
+		spawn()
+			O.Namepick()
 	qdel(src)
 	return O
 
-/mob/proc/MoMMIfy(round_start = FALSE)
+/mob/proc/MoMMIfy()
 	if(!Premorph())
 		return
-	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi(get_turf(src))
+	var/mob/living/silicon/robot/mommi/O = new /mob/living/silicon/robot/mommi/nt(get_turf(src))
 	. = O
-	if(!O.cell) // MoMMIs' New() is suposed to give them a battery but JUST TO BE SURE.
-		O.cell = new(O)
-	O.cell.maxcharge = (round_start ? 10000 : 15000)
-	O.cell.charge = (round_start ? 10000 : 15000)
 	if(mind)		//TODO
 		mind.transfer_to(O)
 		if(O.mind.assigned_role == "Cyborg")
@@ -206,7 +195,8 @@
 		O.self_destruct()
 		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
 		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
-	O.Namepick()
+	spawn()
+		O.Namepick()
 	qdel(src)
 	return O
 
@@ -317,5 +307,16 @@
 	Postmorph(new_mob)
 	to_chat(new_mob, "You feel more... animalistic")
 	return new_mob
+
+/mob/living/carbon/human/proc/GALize()
+	s_tone = -100 //Nichi saro ni itte hada o yaku
+	update_body()
+	if(gender == MALE && h_style != "Toriyama 2")
+		h_style = "Toriyama 2" //Yeah, gyaru otoko sengen
+	r_facial = r_hair = 255
+	g_facial = g_hair = 255
+	b_facial = b_hair = 0
+	update_hair()
+	playsound(src, 'sound/misc/gal-o-sengen.ogg', 50, 1)// GO GO GO GO GO GO GAL-O-SENGEN
 
 #undef MONKEY_ANIM_TIME

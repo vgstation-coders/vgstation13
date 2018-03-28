@@ -21,11 +21,10 @@
 				new/obj/item/clothing/head/leather/corgi(get_turf(src))
 				user.drop_item(src, force_drop = 1)
 				qdel(src)
-			/* DEERS TO BE IMPLEMENTED
 			if(istype (S, /obj/item/stack/sheet/animalhide/deer))
 				new/obj/item/clothing/head/leather/deer(get_turf(src))
 				user.drop_item(src, force_drop = 1)
-				qdel(src)*/
+				qdel(src)
 			if(istype (S, /obj/item/stack/sheet/animalhide/xeno))
 				new/obj/item/clothing/head/leather/xeno(get_turf(src))
 				user.drop_item(src, force_drop = 1)
@@ -37,7 +36,6 @@
 	icon_state = "helmet_leather_corgi"
 	item_state = "helmet_leather_corgi"
 
-/* DEERS TO BE IMPLEMENTED
 /obj/item/clothing/head/leather/deer
 	name = "deer pelt head cover"
 	desc = "Made to help you blend in and stalk deer. Sadly lacking the horns."
@@ -52,7 +50,7 @@
 		user.drop_item(W, force_drop = 1)
 		user.drop_item(src, force_drop = 1)
 		qdel(W)
-		qdel(src)*/
+		qdel(src)
 
 /obj/item/clothing/head/leather/deer/horned
 	name = "horned deer pelt head cover"

@@ -236,7 +236,7 @@
 
 
 	flick("[base_state]_flash", src)
-	playsound(get_turf(src), sndstr, 100, 1)
+	playsound(src, sndstr, 100, 1)
 
 
 /obj/machinery/detector/proc/check_for_weapons(var/obj/item/slot_item) //Unused anywhere, copypasted in secbot.dm

@@ -54,6 +54,7 @@
 		new /obj/item/weapon/reagent_containers/glass/beaker/vial(), \
 		new /obj/item/weapon/reagent_containers/food/drinks/mug(), \
 		new /obj/item/weapon/storage/toolbox(), \
+		new /obj/item/weapon/reagent_containers/glass/jar(), \
 		),
 		"Assemblies"=list(
 		new /obj/item/device/assembly/igniter(), \
@@ -109,7 +110,7 @@
 		new /obj/item/device/rcd/matter/rsf(), \
 		new /obj/item/device/destTagger, \
 		new /obj/item/device/priceTagger, \
-
+		new /obj/item/device/breathalyzer, \
 		),
 		"Misc_Other"=list(
 		new /obj/item/weapon/rcd_ammo(), \
@@ -187,6 +188,9 @@
 			else
 				to_chat(user, "You cannot recycle your built in tools.")
 				return 1
+		else if(!I.recyclable())
+			to_chat(user, "<span class = 'notice'>You can not recycle /the [I] at this time.</span>")
+			return 1
 
 		if(user.drop_item(I, src))
 			materials.removeFrom(I.materials)

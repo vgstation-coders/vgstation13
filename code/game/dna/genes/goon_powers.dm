@@ -234,7 +234,7 @@
 		/mob/living/simple_animal/tomato,
 		/mob/living/simple_animal/chick,
 		/mob/living/simple_animal/chicken,
-		/mob/living/simple_animal/lizard,
+		/mob/living/simple_animal/hostile/lizard,
 		/mob/living/simple_animal/cow,
 		/mob/living/simple_animal/spiderbot
 		)
@@ -382,14 +382,14 @@
 		else
 			user.visible_message("<span class='danger'>[user] eats [the_item]'s [limb.display_name].</span>", \
 			"<span class='danger'>You eat [the_item]'s [limb.display_name].</span>")
-			playsound(get_turf(user), 'sound/items/eatfood.ogg', 50, 0)
+			playsound(user, 'sound/items/eatfood.ogg', 50, 0)
 			message_admins("[user] ate [the_item]'s [limb]: (<A href='?_src_=holder;jumpto=\ref[user]'><b>Jump to</b></A>)")
 			log_game("[user] ate \the [the_item]'s [limb] at [user.x], [user.y], [user.z]")
 			limb.droplimb("override" = 1, "spawn_limb" = 0)
 			doHeal(user)
 	else
 		user.visible_message("<span class='warning'>[usr] eats \the [the_item].")
-		playsound(get_turf(user), 'sound/items/eatfood.ogg', 50, 0)
+		playsound(user, 'sound/items/eatfood.ogg', 50, 0)
 		message_admins("[user] ate \the [the_item]: (<A href='?_src_=holder;jumpto=\ref[user]'><b>Jump to</b></A>)")
 		log_game("[user] ate \the [the_item] at [user.x], [user.y], [user.z]")
 		qdel(the_item)

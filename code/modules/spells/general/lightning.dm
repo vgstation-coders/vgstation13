@@ -85,7 +85,7 @@
 	if(user.spell_channeling && !force_remove)
 		user.overlays += chargeoverlay
 		if(world.time >= last_active_sound + 50)
-			playsound(get_turf(user), 'sound/effects/lightning/chainlightning_activate.ogg', 100, 1, "vary" = 0)
+			playsound(user, 'sound/effects/lightning/chainlightning_activate.ogg', 100, 1, "vary" = 0)
 			last_active_sound = world.time
 		zapzap = multicast
 		//give user overlay
@@ -126,7 +126,7 @@
 	if(!oursound)
 		oursound = pick(lightning_sound)
 	L.our_spell = src
-	playsound(get_turf(user), oursound, 100, 1, "vary" = 0)
+	playsound(user, oursound, 100, 1, "vary" = 0)
 	L.tang = adjustAngle(get_angle(U,T))
 	L.icon = midicon
 	L.icon_state = "[L.tang]"
@@ -163,7 +163,8 @@
 			target.emp_act(2)
 			target.apply_damage((issilicon(target) ? basedamage*0.66 : basedamage), BURN, LIMB_CHEST, "blocked" = 0)
 	else if(target)
-		var/obj/item/projectile/beam/B = getFromPool(/obj/item/projectile/beam/lightning/spell)
+		var/obj/item/projectile/beam/lightning/spell/B = getFromPool(/obj/item/projectile/beam/lightning/spell)
+		B.our_spell = src
 		B.damage = basedamage
 		target.bullet_act(B)
 		returnToPool(B)

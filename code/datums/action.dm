@@ -182,3 +182,23 @@
 
 /datum/action/item_action/toggle_hood
 	name = "Toggle Hood"
+
+//toggle_helmet_mask has to have its own functions as to not conflict with plasmamen lights
+/datum/action/item_action/toggle_helmet_mask
+	name = "Toggle Helmet Mask"
+	var/up = TRUE
+
+/datum/action/item_action/toggle_helmet_mask/Trigger()
+	if(IsAvailable() && owner && target)
+		var/obj/item/clothing/I = target
+		to_chat(owner, "You toggle the built-in welding mask [src.up ? "on" : "off"].")
+		src.up = !src.up
+		if(src.up)
+			I.eyeprot = 0
+			I.body_parts_covered &= ~EYES
+		else
+			I.eyeprot = 3
+			I.body_parts_covered |= EYES
+		return 1
+
+	return 0

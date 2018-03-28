@@ -234,7 +234,8 @@
 			stored.charge += 100
 			state = !state
 			update_icon()
-			playsound(get_turf(src), 'sound/items/crank.ogg',50,1)
+			stored.updateicon()
+			playsound(src, 'sound/items/crank.ogg',50,1)
 			if(stored.charge>stored.maxcharge)
 				stored.charge = stored.maxcharge
 	else
@@ -242,6 +243,7 @@
 
 /obj/item/device/crank_charger/attack_hand(mob/user)
 	if(stored && user.get_inactive_hand() == src)
+		stored.updateicon()
 		user.put_in_hands(stored)
 		stored = null
 		update_icon()

@@ -18,6 +18,25 @@
 	..()
 	handle_layer()
 
+/obj/structure/bed/chair/lock_atom(var/atom/movable/AM)
+	. = ..()
+	update_icon()
+
+/obj/structure/bed/chair/unlock_atom(var/atom/movable/AM)
+	. = ..()
+	update_icon()
+
+/obj/structure/bed/chair/update_icon()
+	..()
+	if(is_locking(lock_type))
+		overlays += buckle_overlay
+		overlays += secondary_buckle_overlay
+	else
+		overlays -= buckle_overlay
+		overlays -= secondary_buckle_overlay
+
+	handle_layer() 				         // part of layer fix
+
 /obj/structure/bed/chair/can_spook()
 	. = ..()
 	if(.)
@@ -28,7 +47,7 @@
 		var/obj/item/assembly/shock_kit/SK = W
 		if(user.drop_item(W))
 			var/obj/structure/bed/chair/e_chair/E = new /obj/structure/bed/chair/e_chair(src.loc)
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			E.dir = dir
 			E.part = SK
 			SK.forceMove(E)
@@ -37,7 +56,7 @@
 			return
 
 	if(iswrench(W))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		drop_stack(sheet_type, loc, sheet_amt, user)
 		qdel(src)
 		return
@@ -151,6 +170,26 @@
 /obj/structure/bed/chair/wood/wings/cultify()
 	return
 
+/obj/structure/bed/chair/wood/throne
+	icon = 'icons/obj/stationobjs_64x64.dmi'
+	icon_state = "throne"
+	name = "throne"
+	desc = "A throne fitting for a royal behind."
+	sheet_amt = 40
+	anchored = 1
+	pixel_x = -1*WORLD_ICON_SIZE/2
+	pixel_y = -1*WORLD_ICON_SIZE/2
+
+/obj/structure/bed/chair/wood/throne/cultify()
+	icon_state = "skullthrone"
+	name = "skull throne"
+	desc = pick("Put Khorny pun here.","Well, now what?","Now all that is required is a goblet made from your 'other' enemies' skulls.")
+
+/obj/structure/bed/chair/wood/throne/New()
+	..()
+	buckle_overlay = image("icons/obj/stools-chairs-beds.dmi", "[icon_state]_arm", CHAIR_ARMREST_LAYER)
+	buckle_overlay.plane = ABOVE_HUMAN_PLANE
+
 /obj/structure/bed/chair/holowood/normal
 	icon_state = "wooden_chair"
 	name = "wooden chair"
@@ -180,24 +219,6 @@
 	buckle_overlay = image("icons/obj/objects.dmi", "[icon_state]_armrest", CHAIR_ARMREST_LAYER)
 	buckle_overlay.plane = ABOVE_HUMAN_PLANE
 
-/obj/structure/bed/chair/comfy/lock_atom(var/atom/movable/AM)
-	..()
-	update_icon()
-
-/obj/structure/bed/chair/comfy/unlock_atom(var/atom/movable/AM)
-	..()
-	update_icon()
-
-/obj/structure/bed/chair/comfy/update_icon()
-	..()
-	if(is_locking(lock_type))
-		overlays += buckle_overlay
-		if(secondary_buckle_overlay)
-			overlays += secondary_buckle_overlay
-	else
-		overlays -= buckle_overlay
-		if(secondary_buckle_overlay)
-			overlays -= secondary_buckle_overlay
 
 /obj/structure/bed/chair/comfy/attackby(var/obj/item/W, var/mob/user)
 	if (iswrench(W))
@@ -253,23 +274,6 @@
 	..()
 	buckle_overlay = image("icons/obj/objects.dmi", "[icon_state]-overlay", CHAIR_ARMREST_LAYER)
 	buckle_overlay.plane = ABOVE_HUMAN_PLANE
-
-/obj/structure/bed/chair/office/lock_atom(var/atom/movable/AM)
-	. = ..()
-	update_icon()
-
-/obj/structure/bed/chair/office/unlock_atom(var/atom/movable/AM)
-	..()
-	update_icon()
-
-/obj/structure/bed/chair/office/update_icon()
-	..()
-	if(is_locking(lock_type))
-		overlays += buckle_overlay
-	else
-		overlays -= buckle_overlay
-
-	handle_layer() 				         // part of layer fix
 
 
 /obj/structure/bed/chair/office/handle_layer() // Fixes layer problem when and office chair is buckled and facing north

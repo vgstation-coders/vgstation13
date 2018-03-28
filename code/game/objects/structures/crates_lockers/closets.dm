@@ -25,6 +25,8 @@
 	w_type = RECYK_METAL
 	ignoreinvert = 1
 
+/obj/structure/closet/proc/canweld()
+	return 1
 
 /obj/structure/closet/initialize()
 	..()
@@ -281,7 +283,7 @@
 		if(istype(W,/obj/item/tk_grab))
 			return 0
 
-		if(istype(W, /obj/item/weapon/weldingtool))
+		if(istype(W, /obj/item/weapon/weldingtool) && canweld())
 			var/obj/item/weapon/weldingtool/WT = W
 			if(!WT.remove_fuel(0,user))
 				to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
@@ -296,7 +298,7 @@
 
 	else if(istype(W, /obj/item/stack/package_wrap))
 		return
-	else if(istype(W, /obj/item/weapon/weldingtool))
+	else if(istype(W, /obj/item/weapon/weldingtool) && canweld())
 		var/obj/item/weapon/weldingtool/WT = W
 		if(!WT.remove_fuel(0,user))
 			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")

@@ -552,12 +552,12 @@
 	if(!prob(src.deflect_chance))
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-		playsound(get_turf(src), 'sound/weapons/slash.ogg', 50, 1, -1)
+		playsound(src, 'sound/weapons/slash.ogg', 50, 1, -1)
 		to_chat(user, "<span class='warning'>You slash at the armored suit!</span>")
 		visible_message("<span class='warning'>The [user] slashes at [src.name]'s armor!</span>")
 	else
 		src.log_append_to_last("Armor saved.")
-		playsound(get_turf(src), 'sound/weapons/slash.ogg', 50, 1, -1)
+		playsound(src, 'sound/weapons/slash.ogg', 50, 1, -1)
 		to_chat(user, "<span class='good'>Your claws had no effect!</span>")
 		src.occupant_message("<span class='notice'>The [user]'s claws are stopped by the armor.</span>")
 		visible_message("<span class='notice'>The [user] rebounds off [src.name]'s armor!</span>")
@@ -579,7 +579,7 @@
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
 		else
 			src.log_append_to_last("Armor saved.")
-			playsound(get_turf(src), 'sound/weapons/slash.ogg', 50, 1, -1)
+			playsound(src, 'sound/weapons/slash.ogg', 50, 1, -1)
 			src.occupant_message("<span class='notice'>The [user]'s attack is stopped by the armor.</span>")
 			visible_message("<span class='notice'>The [user] rebounds off [src.name]'s armor!</span>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
@@ -710,14 +710,14 @@
 	if(!prob(src.deflect_chance))
 		src.take_damage(6)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-		playsound(get_turf(src), 'sound/effects/blobattack.ogg', 50, 1, -1)
+		playsound(src, 'sound/effects/blobattack.ogg', 50, 1, -1)
 		to_chat(user, "<span class='warning'>You smash at the armored suit!</span>")
 		for (var/mob/V in viewers(src))
 			if(V.client && !(V.blinded))
 				V.show_message("<span class='warning'>The [user] smashes against [src.name]'s armor!</span>", 1)
 	else
 		src.log_append_to_last("Armor saved.")
-		playsound(get_turf(src), 'sound/effects/blobattack.ogg', 50, 1, -1)
+		playsound(src, 'sound/effects/blobattack.ogg', 50, 1, -1)
 		to_chat(user, "<span class='good'>Your attack had no effect!</span>")
 		src.occupant_message("<span class='notice'>The [user]'s attack is stopped by the armor.</span>")
 		for (var/mob/V in viewers(src))
@@ -788,7 +788,7 @@
 				if(user.drop_item(W))
 					E.attach(src)
 					user.visible_message("[user] attaches [W] to [src]", "You attach [W] to [src]")
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			else
 				to_chat(user, "You were unable to attach [W] to [src]")
 		return
@@ -839,7 +839,7 @@
 				if ("electropack")
 					electropack.forceMove(src.loc)
 					electropack = null
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			to_chat(user, "<span class='notice'>You pry out \the [remove] from \the [src].</span>")
 			src.log_message("Internal component removed - [remove]")
 		return
@@ -1687,11 +1687,11 @@
 		return
 	if(usr.isUnconscious())
 		return
-	var/datum/topic_input/filter = new /datum/topic_input(href,href_list)
+	var/datum/topic_input/topic_filter = new /datum/topic_input(href,href_list)
 	if(href_list["select_equip"])
 		if(usr != src.occupant)
 			return
-		var/obj/item/mecha_parts/mecha_equipment/equip = filter.getObj("select_equip")
+		var/obj/item/mecha_parts/mecha_equipment/equip = topic_filter.getObj("select_equip")
 		if(equip)
 			src.selected = equip
 			src.occupant_message("You switch to [equip]")
@@ -1728,7 +1728,7 @@
 	if(href_list["rfreq"])
 		if(usr != src.occupant)
 			return
-		var/new_frequency = (radio.frequency + filter.getNum("rfreq"))
+		var/new_frequency = (radio.frequency + topic_filter.getNum("rfreq"))
 		if (!radio.freerange || (radio.frequency < 1200 || radio.frequency > 1600))
 			new_frequency = sanitize_frequency(new_frequency)
 		radio.set_frequency(new_frequency)
@@ -1783,12 +1783,12 @@
 	if(href_list["req_access"] && add_req_access)
 		if(!in_range(src, usr))
 			return
-		output_access_dialog(filter.getObj("id_card"),filter.getMob("user"))
+		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
 		return
 	if(href_list["maint_access"] && maint_access)
 		if(!in_range(src, usr))
 			return
-		var/mob/user = filter.getMob("user")
+		var/mob/user = topic_filter.getMob("user")
 		if(user)
 			if(state==STATE_BOLTSHIDDEN)
 				state = STATE_BOLTSEXPOSED
@@ -1806,34 +1806,34 @@
 					occupant << sound('sound/mecha/mechentry.ogg',wait=0)
 			else
 				to_chat(user, "You can't toggle maintenance mode with the securing bolts unfastened.")
-			output_maintenance_dialog(filter.getObj("id_card"),user)
+			output_maintenance_dialog(topic_filter.getObj("id_card"),user)
 		return
 	if(href_list["set_internal_tank_valve"] && state >=STATE_BOLTSEXPOSED)
 		if(!in_range(src, usr))
 			return
-		var/mob/user = filter.getMob("user")
+		var/mob/user = topic_filter.getMob("user")
 		if(user)
 			var/new_pressure = input(user,"Input new output pressure","Pressure setting",internal_tank_valve) as num
 			if(new_pressure)
 				internal_tank_valve = new_pressure
 				to_chat(user, "The internal pressure valve has been set to [internal_tank_valve]kPa.")
-	if(href_list["add_req_access"] && add_req_access && filter.getObj("id_card"))
+	if(href_list["add_req_access"] && add_req_access && topic_filter.getObj("id_card"))
 		if(!in_range(src, usr))
 			return
-		operation_req_access += filter.getNum("add_req_access")
-		output_access_dialog(filter.getObj("id_card"),filter.getMob("user"))
+		operation_req_access += topic_filter.getNum("add_req_access")
+		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
 		return
-	if(href_list["del_req_access"] && add_req_access && filter.getObj("id_card"))
+	if(href_list["del_req_access"] && add_req_access && topic_filter.getObj("id_card"))
 		if(!in_range(src, usr))
 			return
-		operation_req_access -= filter.getNum("del_req_access")
-		output_access_dialog(filter.getObj("id_card"),filter.getMob("user"))
+		operation_req_access -= topic_filter.getNum("del_req_access")
+		output_access_dialog(topic_filter.getObj("id_card"),topic_filter.getMob("user"))
 		return
 	if(href_list["finish_req_access"])
 		if(!in_range(src, usr))
 			return
 		add_req_access = 0
-		var/mob/user = filter.getMob("user")
+		var/mob/user = topic_filter.getMob("user")
 		user << browse(null,"window=exosuit_add_access")
 		return
 	if(href_list["dna_lock"])
@@ -1866,9 +1866,9 @@
 	/*
 	if(href_list["debug"])
 		if(href_list["set_i_dam"])
-			setInternalDamage(filter.getNum("set_i_dam"))
+			setInternalDamage(topic_filter.getNum("set_i_dam"))
 		if(href_list["clear_i_dam"])
-			clearInternalDamage(filter.getNum("clear_i_dam"))
+			clearInternalDamage(topic_filter.getNum("clear_i_dam"))
 		return
 	*/
 

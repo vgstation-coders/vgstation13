@@ -40,7 +40,7 @@
 				to_chat(T, "<span class='sinister'>An unholy charm binds your life to [L]. While the spell is active, any pain \he receive\s will be redirected to you.</span>")
 		var/event_key = L.on_damaged.Add(src, "reflect")
 		L.overlays.Add(user_overlay)
-		playsound(get_turf(L), 'sound/effects/vampire_intro.ogg', 80, 1, "vary" = 0)
+		playsound(L, 'sound/effects/vampire_intro.ogg', 80, 1, "vary" = 0)
 
 		spawn(duration)
 			to_chat(L, "<span class='sinister'>Your life essence is no longer bound to this plane. You won't reflect received damage to your enemies anymore.</span>")

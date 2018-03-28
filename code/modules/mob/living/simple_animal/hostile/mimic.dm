@@ -247,7 +247,7 @@ var/global/list/crate_mimic_disguises = list(\
 		if(!angry)
 			anger(berserk = 1)
 			visible_message("<span class='danger'>\The [src] roars in rage!</span>")
-			playsound(get_turf(src), 'sound/hallucinations/growl1.ogg', 50, 1)
+			playsound(src, 'sound/hallucinations/growl1.ogg', 50, 1)
 
 // Chest mimic - more robust than crate mimic
 // Does more damage, has a robust tongue that it uses to grab things

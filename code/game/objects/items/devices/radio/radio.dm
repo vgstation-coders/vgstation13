@@ -305,7 +305,7 @@
 		speech.job = "Personal AI"
 
 	// --- Cold, emotionless machines. ---
-	else if(isobj(speech.speaker))
+	else if(isobj(speech.speaker) || istype(speech.speaker, /mob/living/simple_animal/spiderbot))
 		speech.job = "Machine"
 
 	// --- Unidentifiable mob ---

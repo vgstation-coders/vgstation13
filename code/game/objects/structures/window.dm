@@ -161,7 +161,7 @@ var/list/one_way_windows
 		if(O.onBuckledUserKick(H, src))
 			return //don't return 1! we will do the normal "touch" action if so!
 
-	playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
+	playsound(src, 'sound/effects/glassknock.ogg', 100, 1)
 
 	H.do_attack_animation(src, H)
 	H.visible_message("<span class='danger'>\The [H] kicks \the [src].</span>", \
@@ -227,7 +227,7 @@ var/list/one_way_windows
 	else if(usr.a_intent == I_HURT)
 		user.do_attack_animation(src, user)
 		user.delayNextAttack(10)
-		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
+		playsound(src, 'sound/effects/glassknock.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] bangs against \the [src]!</span>", \
 		"<span class='warning'>You bang against \the [src]!</span>", \
 		"You hear banging.")
@@ -235,7 +235,7 @@ var/list/one_way_windows
 	//Knock against it
 	else
 		user.delayNextAttack(10)
-		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 50, 1)
+		playsound(src, 'sound/effects/glassknock.ogg', 50, 1)
 		user.visible_message("<span class='notice'>[user] knocks on \the [src].</span>", \
 		"<span class='notice'>You knock on \the [src].</span>", \
 		"You hear knocking.")
@@ -561,7 +561,7 @@ var/list/one_way_windows
 	update_nearby_icons()
 	if(brokenup) //If the instruction we were sent clearly states we're breaking the window, not deleting it !
 		if(loc)
-			playsound(get_turf(src), "shatter", 70, 1)
+			playsound(src, "shatter", 70, 1)
 		spawnBrokenPieces()
 	if(one_way)
 		one_way_windows.Remove(src)

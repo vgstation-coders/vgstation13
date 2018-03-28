@@ -477,7 +477,7 @@
 		processing = 1
 		update_icon()
 		updateUsrDialog()
-		playsound(get_turf(src), 'sound/machines/blender.ogg', 50, 1)
+		playsound(src, 'sound/machines/blender.ogg', 50, 1)
 		use_power(S*30)
 		sleep(speed_coefficient*(S+15))
 		processing = 0

@@ -40,7 +40,7 @@
 
 /obj/machinery/computer/merch/New()
 	..()
-	if(time2text(world.realtime, "MM/DD") == "02/14")
+	if(Holiday == VALENTINES_DAY)
 		var/valentines = list("Valentine's Day" = list(/datum/storeitem/valentinechocolatebar,),)
 		categories += valentines
 

@@ -19,9 +19,9 @@
 "s" = (/obj/item/beacon,/obj/item/weapon/caution,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
 "t" = (/obj/item/organ/internal/brain,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
 "u" = (/obj/item/weapon/gun/energy/laser/captain,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"v" = (/obj/item/weapon/gun/projectile/deagle/gold,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"w" = (/obj/item/weapon/sord,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
-"x" = (/obj/item/weapon/gun/energy/lasercannon,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
+"v" = (/obj/item/weapon/gun/energy/laser/cannon,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
+"w" = (/obj/item/weapon/gun/projectile/deagle/gold,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
+"x" = (/obj/item/weapon/sord,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
 "y" = (/obj/item/weapon/gun/energy/crossbow/largecrossbow,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
 "z" = (/obj/item/weapon/gun/energy/pulse_rifle/destroyer,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
 "A" = (/obj/item/toy/spinningtoy,/turf/simulated/floor{icon_state = "white"},/area/awaymission)
@@ -45,8 +45,8 @@ aaaaaaaaabccddddddccbaaaaaaaaa
 aaaaaaaaabcefghijklcbaaaaaaaaa
 aaaaaaaaabcemnopgqlcbaaaaaaaaa
 aaaaaaaaabcegrgstglcbaaaaaaaaa
-aaaaaaaaabceuggvgwlcbaaaaaaaaa
-aaaaaaaaabcegxygzglcbaaaaaaaaa
+aaaaaaaaabceugvwgxlcbaaaaaaaaa
+aaaaaaaaabceggygzglcbaaaaaaaaa
 aaaaaaaaabceAgBgCglcbaaaaaaaaa
 aaaaaaaaabccDDDDDDccbaaaaaaaaa
 aaaaaaaaabccccccccccbaaaaaaaaa

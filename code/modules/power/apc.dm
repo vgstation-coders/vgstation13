@@ -98,8 +98,9 @@
 	var/make_alerts = TRUE // Should this APC make power alerts to the area?
 
 	machine_flags = WIREJACK
-	holomap = TRUE
-	auto_holomap = TRUE
+
+/obj/machinery/power/apc/supports_holomap()
+	return TRUE
 
 /obj/machinery/power/apc/no_alerts
 	make_alerts = FALSE
@@ -115,7 +116,8 @@
 	..(loc)
 
 	if(areaMaster.areaapc)
-		world.log << "Second APC detected in area: [areaMaster.name]. Deleting the second APC."
+		var/turf/T = get_turf(src)
+		world.log << "Second APC detected in area: [areaMaster.name] [T.x], [T.y], [T.z]. Deleting the second APC."
 		qdel(src)
 		return
 
@@ -143,8 +145,9 @@
 		operating = 0
 		stat |= MAINT
 
-	if(ticker)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
+		update()
 
 /obj/machinery/power/apc/proc/init()
 	has_electronics = 2 //installed and secured
@@ -159,12 +162,10 @@
 /obj/machinery/power/apc/finalise_terminal()
 	// create a terminal object at the same position as original turf loc
 	// wires will attach to this
-	terminal = new/obj/machinery/power/terminal {auto_holomap = 0} (src.loc)
+	terminal = new/obj/machinery/power/terminal(src.loc)
 	terminal.dir = tdir
 	terminal.master = src
-	var/turf/T = loc
-	if (istype(T))
-		T.soft_add_holomap(terminal)
+	terminal.add_self_to_holomap()
 
 /obj/machinery/power/apc/initialize()
 	..()
@@ -172,9 +173,7 @@
 	name = "[areaMaster.name] APC"
 
 	update_icon()
-
-	spawn(5)
-		update()
+	add_self_to_holomap()
 
 /obj/machinery/power/apc/examine(mob/user)
 	..()
@@ -389,7 +388,7 @@
 			if (terminal)
 				to_chat(user, "<span class='warning'>Disconnect wires first.</span>")
 				return
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+			playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
 			to_chat(user, "You are trying to remove the power control board...")//lpeters - fixed grammar issues
 
 			if (do_after(user, src, 50) && opened && !terminal && has_electronics == 1)
@@ -448,12 +447,12 @@
 				if (has_electronics==1 && terminal)
 					has_electronics = 2
 					stat &= ~MAINT
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 					to_chat(user, "You screw the circuit electronics into place.")
 				else if (has_electronics==2)
 					has_electronics = 1
 					stat |= MAINT
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 					to_chat(user, "You unfasten the electronics.")
 				else /* has_electronics==0 */
 					to_chat(user, "<span class='warning'>There is nothing to secure.</span>")
@@ -518,7 +517,7 @@
 			to_chat(user, "<span class='warning'>You must remove the floor plating in front of the APC first.</span>")
 			return
 		to_chat(user, "You begin to cut the cables...")
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if (do_after(user, src, 50) && opened && terminal && has_electronics != 2 && !T.intact)
 			if (prob(50) && electrocute_mob(usr, terminal.get_powernet(), terminal))
 				spark(src, 5)
@@ -531,7 +530,7 @@
 			terminal = null
 	else if (istype(W, /obj/item/weapon/circuitboard/power_control) && opened && has_electronics==0 && !((stat & BROKEN) || malfhack))
 		to_chat(user, "You begin to insert the power control board into the frame...")
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if (do_after(user, src, 10) && opened && has_electronics == 0 && !((stat & BROKEN) || malfhack))
 			has_electronics = 1
 			to_chat(user, "You place the power control board inside the frame.")
@@ -546,7 +545,7 @@
 			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 			return
 		to_chat(user, "You start welding the APC frame...")
-		playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+		playsound(src, 'sound/items/Welder.ogg', 50, 1)
 		if (do_after(user, src, 50))
 			if(!src || !WT.remove_fuel(3, user))
 				return
@@ -658,7 +657,7 @@
 	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user.name] slashes at the [src.name]!</span>", "<span class='notice'>You slash at the [src.name]!</span>")
-	playsound(get_turf(src), 'sound/weapons/slash.ogg', 100, 1)
+	playsound(src, 'sound/weapons/slash.ogg', 100, 1)
 
 	var/allcut = wires.IsAllCut()
 

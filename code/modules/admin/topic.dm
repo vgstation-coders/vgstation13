@@ -2338,7 +2338,7 @@
 			to_chat(H, "<span class='warning'>Your ass was just blown off by an unknown force!</span>")
 			log_admin("[key_name(H)] was buttblasted by [src.owner]")
 			message_admins("[key_name(H)] was buttblasted by [src.owner]")
-			playsound(get_turf(H), 'sound/effects/superfart.ogg', 50, 1)
+			playsound(H, 'sound/effects/superfart.ogg', 50, 1)
 			H.apply_damage(40, BRUTE, LIMB_GROIN)
 			H.apply_damage(10, BURN, LIMB_GROIN)
 			H.Knockdown(8)
@@ -3321,8 +3321,12 @@
 				feedback_add_details("admin_secrets_fun_used","HW")
 				var/choice = input("Are you sure you want to wake up the space indian burial ground?. Misuse of this could result in removal of flags or hilarity.") in list("Get our spook on", "Cancel")
 				if(choice != "Cancel")
-					SetUniversalState(/datum/universal_state/halloween, 1, 1)
-					message_admins("[key_name_admin(usr)] has pressed the halloween fun button. Truly [key_name_admin(usr)] is the spookiest.")
+					var/list/given_args = list()
+					var/number = input("How many mobs do you want per area?", 10) as num
+					if(number)
+						given_args["mobs"] = number
+					SetUniversalState(/datum/universal_state/halloween, 1, 1, given_args)
+					message_admins("[key_name_admin(usr)] has pressed the halloween fun button with [number] amount of mobs per area. Truly [key_name_admin(usr)] is the spookiest.")
 			if("christmas_vic")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","XMS")
@@ -3564,6 +3568,7 @@
 					"incinerator" = LOC_INCIN,
 					"chapel" = LOC_CHAPEL,
 					"library" = LOC_LIBRARY,
+					"hydroponics" = LOC_HYDRO,
 					"vault" = LOC_VAULT,
 					"technical storage" = LOC_TECH,
 					)

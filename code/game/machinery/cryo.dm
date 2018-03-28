@@ -533,7 +533,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		boot_contents(exit, regulatetemp = 0) //No temperature regulation cycle required
 	else
 		ejecting = 1
-		playsound(get_turf(src), 'sound/machines/pressurehiss.ogg', 40, 1)
+		playsound(src, 'sound/machines/pressurehiss.ogg', 40, 1)
 		modify_occupant_bodytemp() //Start to heat them up a little bit immediately
 		nanomanager.update_uis(src)
 		spawn(4 SECONDS)

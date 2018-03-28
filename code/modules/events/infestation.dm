@@ -59,7 +59,7 @@
 			max_number = 12
 			vermstring = "mice"
 		if(VERM_LIZARDS)
-			spawn_types = list(/mob/living/simple_animal/lizard)
+			spawn_types = list(/mob/living/simple_animal/hostile/lizard)
 			max_number = 6
 			vermstring = "lizards"
 		if(VERM_SPIDERS)
@@ -94,21 +94,31 @@
 
 	var/number = rand(2, max_number)
 
-	for(var/i = 0, i <= number, i++)
-		var/area/A = locate(spawn_area_type)
-		var/list/turf/simulated/floor/valid = list()
-		//Loop through each floor in the supply drop area
-		for(var/turf/simulated/floor/F in A)
-			if(!F.has_dense_content())
-				valid.Add(F)
+	var/area/A = locate(spawn_area_type)
+	var/list/turf/simulated/floor/valid = list()
+	//Loop through each floor in the supply drop area
+	for(var/turf/simulated/floor/F in A)
+		if(!F.has_dense_content())
+			valid.Add(F)
+	if(!valid.len)
+		message_admins("Infestation event failed! Could not find any viable turfs in [spawn_area_type] at which to spawn [number + 1] [vermstring].")
+		announceWhen = -1
+		endWhen = 0
+		return
 
+	for(var/i = 0, i <= number, i++)
 		var/picked = pick(valid)
 		if(vermin == VERM_SPIDERS)
 			var/mob/living/simple_animal/hostile/giant_spider/spiderling/S = new(picked)
 			S.amount_grown = 0
 		else
 			var/spawn_type = pick(spawn_types)
-			new spawn_type(picked)
+			var/mob/M = new spawn_type(picked)
+			if(M.density)
+				valid -= picked
+		if(!valid.len)
+			message_admins("Infestation event could not find enough viable turfs in [spawn_area_type] to spawn all vermin. [number - i] [vermstring] were unable to spawn!")
+			break
 
 /datum/event/infestation/announce()
 	var/warning = "Clear them out, before this starts to affect productivity."

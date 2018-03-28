@@ -148,11 +148,6 @@ var/savefile/panicfile
 	spawn(10)
 		Master.Setup()
 
-	for(var/plugin_type in typesof(/plugin))
-		var/plugin/P = new plugin_type()
-		plugins[P.name] = P
-		P.on_world_loaded()
-
 	process_teleport_locs()				//Sets up the wizard teleport locations
 	process_ghost_teleport_locs()		//Sets up ghost teleport locations.
 	process_adminbus_teleport_locs()	//Sets up adminbus teleport locations.

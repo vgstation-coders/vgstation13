@@ -91,7 +91,7 @@
 	var/mode = 1
 
 /obj/item/weapon/pen/robopen/attack_self(mob/user as mob)
-	playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+	playsound(src, 'sound/effects/pop.ogg', 50, 0)
 	if (mode == 1)
 		mode = 2
 		to_chat(user, "Changed printing mode to 'Rename Paper'")
@@ -228,7 +228,7 @@
 
 	I.forceMove(T)
 	I.inflate()
-	user.visible_message("<span class='danger'>[user] deploy an inflatable [mode ? "door" : "wall"].</span>", \
+	user.visible_message("<span class='danger'>[user] deploys an inflatable [mode ? "door" : "wall"].</span>", \
 	"<span class='notice'>You deploy an inflatable [mode ? "door" : "wall"].</span>")
 
 /obj/item/weapon/inflatable_dispenser/proc/pick_up(var/obj/A, var/mob/living/user)
@@ -384,7 +384,7 @@
 
 /obj/item/weapon/gripper/Destroy()
 	if(gripper_sanity_check(src))
-		drop_item(force_drop = 1)
+		drop_item(force_drop = 1, dontsay = TRUE)
 	..()
 
 /obj/item/weapon/gripper/update_icon()
@@ -541,7 +541,7 @@
 		/obj/item/stack/sheet
 		)
 
-/obj/item/weapon/gripper/no_use/magnetic //No use because they don't need to open held tanks.
+/obj/item/weapon/gripper/magnetic
 	name = "magnetic gripper"
 	desc = "A simple grasping tool specialized in construction and engineering work."
 	icon_state = "gripper"
@@ -552,7 +552,11 @@
 		/obj/item/weapon/tank,
 		/obj/item/weapon/circuitboard,
 		/obj/item/weapon/am_containment,
-		/obj/item/device/am_shielding_container
+		/obj/item/device/am_shielding_container,
+		/obj/item/weapon/table_parts,
+		/obj/item/weapon/rack_parts,
+		/obj/item/mounted/frame,
+		/obj/item/weapon/intercom_electronics
 		)
 
 	blacklist = list(
@@ -563,6 +567,12 @@
 		/obj/item/weapon/circuitboard/aiupload,
 		/obj/item/weapon/circuitboard/borgupload
 		)
+
+/obj/item/borg/fire_shield
+	name = "fire shield"
+	desc = "A shield that makes you immune to fire."
+	icon = 'icons/obj/decals.dmi'
+	icon_state = "fire"
 
 //Cyborg Instrument Synth. Remember to always play REMOVE KEBAB on malf rounds.
 /obj/item/device/instrument/instrument_synth

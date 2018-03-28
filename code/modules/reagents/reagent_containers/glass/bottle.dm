@@ -30,7 +30,7 @@
 			else
 				src.reagents.trans_to(M, 1)
 				to_chat(user, "<span class='notice'>You barely manage to wet [M]</span>")
-				playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+				playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 		else
 			to_chat(user, "<span class='notice'>Nothing left to wet [M] with!</span>")
 		return 1

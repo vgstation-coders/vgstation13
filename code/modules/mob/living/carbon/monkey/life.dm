@@ -520,7 +520,7 @@
 		if(isturf(loc)) //else, there's considered to be no light
 			var/turf/T = loc
 			if(T.dynamic_lighting)
-				light_amount = T.get_lumcount() * 10
+				light_amount = (T.get_lumcount() * 10) - 5
 			else
 				light_amount = 5
 		nutrition += light_amount

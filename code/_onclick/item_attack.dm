@@ -234,4 +234,4 @@ obj/item/proc/get_clamped_volume()
 	I.add_fingerprint(user)
 
 	if(hitsound)
-		playsound(get_turf(M.loc), I.hitsound, 50, 1, -1)
+		playsound(M.loc, I.hitsound, 50, 1, -1)

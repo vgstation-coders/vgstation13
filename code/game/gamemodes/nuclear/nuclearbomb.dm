@@ -351,6 +351,9 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 
 	reset_vars_after_duration(resettable_vars, duration)
 
+/obj/machinery/nuclearbomb/isacidhardened() // Requires Aliens to channel acidspit on the nuke.
+	return TRUE
+	
 /obj/item/weapon/disk/nuclear
 	name = "nuclear authentication disk"
 	desc = "Better keep this safe."

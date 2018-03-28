@@ -1,11 +1,5 @@
 var/datum/controller/gameticker/ticker
 
-#define GAME_STATE_PREGAME		1
-#define GAME_STATE_SETTING_UP	2
-#define GAME_STATE_PLAYING		3
-#define GAME_STATE_FINISHED		4
-
-
 /datum/controller/gameticker
 	var/remaining_time = 0
 	var/const/restart_timeout = 600
@@ -23,7 +17,8 @@ var/datum/controller/gameticker/ticker
 	var/Bible_icon_state	// icon_state the OFFICIAL chaplain has chosen for his bible
 	var/Bible_item_state	// item_state the OFFICIAL chaplain has chosen for his bible
 	var/Bible_name			// name of the bible
-	var/Bible_deity_name = "Space Jesus"
+	var/Bible_deity_name = "Space Jesus" 	// Default deity
+	var/datum/religion/chap_rel 			// Official religion of chappy
 	var/list/datum/religion/religions = list() // Religion(s) in the game
 
 	var/random_players = 0 	// if set to nonzero, ALL players who latejoin or declare-ready join will have random appearances/genders
@@ -65,7 +60,16 @@ var/datum/controller/gameticker/ticker
 		"sound/music/dawsonschristian.ogg",
 		"sound/music/carmenmirandasghost.ogg",
 		))
-	login_music = fcopy_rsc(oursong)
+
+	if(SNOW_THEME)
+		var/path = "sound/music/xmas/"
+		var/list/filenames = flist(path)
+		for(var/filename in filenames)
+			if(copytext(filename, length(filename)) == "/")
+				filenames -= filename
+		login_music = file("[path][pick(filenames)]")
+	else
+		login_music = fcopy_rsc(oursong)
 
 	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`")
 
@@ -181,8 +185,8 @@ var/datum/controller/gameticker/ticker
 		mode.post_setup()
 		//Cleanup some stuff
 		for(var/obj/effect/landmark/start/S in landmarks_list)
-			//Deleting Startpoints but we need the ai point to AI-ize people later
-			if (S.name != "AI")
+			//Deleting Startpoints but we need the ai point to AI-ize people later and the Trader point to throw new ones
+			if (S.name != "AI" && S.name != "Trader")
 				qdel(S)
 		var/list/obj/effect/landmark/spacepod/random/L = list()
 		for(var/obj/effect/landmark/spacepod/random/SS in landmarks_list)

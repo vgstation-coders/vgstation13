@@ -149,7 +149,7 @@ Doesn't work on other aliens/AI.*/
 	proj_step_delay = 0.2
 
 /spell/targeted/projectile/alienneurotoxin/is_valid_target(var/target, mob/user)
-	if(!(spell_flags & INCLUDEUSER) && target == usr)
+	if(!(spell_flags & INCLUDEUSER) && target == user)
 		return FALSE
 	if(get_dist(usr, target) > range)
 		return FALSE
@@ -214,8 +214,17 @@ Doesn't work on other aliens/AI.*/
 	range = 1
 
 /spell/alienacid/is_valid_target(var/atom/target, mob/user)
-	if(get_dist(user, target) > range) //Shouldn't be necessary but a good check in case of overrides
+	return is_valid_target_to_acid(target,user,range)
+
+/proc/is_valid_target_to_acid(var/atom/target, mob/user,var/range=1)
+	if(get_dist(user, target) > range)
+		to_chat(user, "<span class='alien'>Target is too far away!</span>")
 		return FALSE
+	if(target.isacidhardened())
+		if(!do_after(user,target,3 SECONDS))
+			to_chat(user, "<span class='alien'>You have to stay next to the object to acid it!</span>")
+			return FALSE
+		return TRUE
 	if(!ismob(target) && target.acidable())
 		return TRUE
 	to_chat(user, "<span class='alien'>You cannot dissolve this object.</span>")
@@ -233,21 +242,13 @@ Doesn't work on other aliens/AI.*/
 		return
 
 	if(powerc(200))
-		if(O in oview(1))
-			if(!O.acidable())
-				to_chat(usr, "<span class='alien'>You cannot dissolve this object.</span>")
-				return FALSE
-			AdjustPlasma(-200)
+		if(is_valid_target_to_acid(O, usr))
 			acidify(O, usr)
-		else
-			to_chat(usr, "<span class='alien'>Target is too far away.</span>")
+			AdjustPlasma(-200)
 
 /proc/acidify(atom/O, mob/user)
-	if(O.acidable())
-		new /obj/effect/alien/acid(get_turf(O), O)
-		user.visible_message("<span class='alien'>\The [usr] vomits globs of vile stuff all over [O]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
-	else
-		to_chat(user, "<span class='alien'>You cannot dissolve this object.</span>")
+	new /obj/effect/alien/acid(get_turf(O), O)
+	user.visible_message("<span class='alien'>\The [user] vomits globs of vile stuff all over [O]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
 
 /spell/aoe_turf/alienregurgitate
 	name = "Regurgitate"
@@ -265,7 +266,7 @@ Doesn't work on other aliens/AI.*/
 /spell/aoe_turf/alienregurgitate/cast(list/targets, mob/user)
 	var/mob/living/carbon/alien/humanoid/alien = user
 	alien.drop_stomach_contents()
-	user.visible_message("<span class='alien'>\The [usr] hurls out the contents of their stomach!</span>")
+	user.visible_message("<span class='alien'>\The [user] hurls out the contents of their stomach!</span>")
 
 ///////////////////////////
 // QUEEN SPECIFIC SPELLS //
@@ -327,7 +328,7 @@ a
 	return ..()
 
 /spell/aoe_turf/evolve/drone/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
-	user.visible_message("<span class='alien'>[src] begins to violently twist and contort!</span>", "<span class='alien'>You begin to evolve, stand still for a few moments</span>")
+	user.visible_message("<span class='alien'>[user] begins to violently twist and contort!</span>", "<span class='alien'>You begin to evolve, stand still for a few moments</span>")
 	return ..()
 
 /spell/aoe_turf/evolve/drone/cast(list/targets, mob/living/carbon/user)

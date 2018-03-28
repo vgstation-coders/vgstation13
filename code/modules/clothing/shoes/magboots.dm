@@ -40,12 +40,12 @@
 
 			victim.visible_message("<span class='danger'>\The [user] [stomp_hit] \the [victim] with the activated [src.name]!", "<span class='userdanger'>\The [user] [stomp_hit] you with \his [src.name]!</span>")
 			victim.apply_damage(stomp_attack_power, BRUTE, affecting)
-			playsound(get_turf(victim), 'sound/effects/gib3.ogg', 100, 1)
+			playsound(victim, 'sound/effects/gib3.ogg', 100, 1)
 		else
 			return
 
 		toggle()
-		playsound(get_turf(victim), 'sound/mecha/mechstep.ogg', 100, 1)
+		playsound(victim, 'sound/mecha/mechstep.ogg', 100, 1)
 
 /obj/item/clothing/shoes/magboots/proc/toggle()
 	if(usr.isUnconscious())
@@ -120,6 +120,13 @@
 	icon_state = "capboots0"
 	base_state = "capboots"
 	anchoring_system_examine = "Its anchoring spikes appear to be"
+	
+//Magnificent
+/obj/item/clothing/shoes/magboots/magnificent
+	desc = "The secret meaning of what mag stands for."
+	name = "magnificent mag boots"
+	icon_state = "MAGNIFICENTboots0"
+	base_state = "MAGNIFICENTboots1"
 
 /obj/item/clothing/shoes/magboots/captain/toggle()
 	//set name = "Toggle Floor Grip"
