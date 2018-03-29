@@ -682,7 +682,7 @@
 			to_chat(src, "Interference is disrupting the connection with the mind of [M].")
 			return 0
 	if(ismartian(M))
-		var/mob/living/carbon/martian/MR = M
+		var/mob/living/carbon/not_human/martian/MR = M
 		if(MR.head)
 			if(istype(MR.head, /obj/item/clothing/head/helmet/space/martian) || istype(MR.head,/obj/item/clothing/head/tinfoil))
 				to_chat(src, "Interference is disrupting the connection with the mind of [M].")

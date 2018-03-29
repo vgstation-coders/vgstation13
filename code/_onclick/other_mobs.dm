@@ -218,12 +218,12 @@
 	return 0
 
 //Martians
-/mob/living/carbon/martian/UnarmedAttack(atom/A)
+/mob/living/carbon/not_human/martian/UnarmedAttack(atom/A)
 	if(ismob(A))
 		delayNextAttack(10)
 	A.attack_martian(src)
 
-/mob/living/carbon/martian/RangedAttack(atom/A)
+/mob/living/carbon/not_human/martian/RangedAttack(atom/A)
 	if(mutations.len)
 		if((M_LASER in mutations) && a_intent == I_HURT)
 			LaserEyes(A) // moved into a proc below

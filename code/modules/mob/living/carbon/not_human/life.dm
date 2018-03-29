@@ -1,16 +1,4 @@
-
-/mob/living/carbon/martian
-	var/oxygen_alert = 0
-	var/toxins_alert = 0
-	var/fire_alert = 0
-	var/pressure_alert = 0
-	base_insulation = 0.5
-	var/temperature_alert = 0
-	var/safe_oxygen_min = 16 // Minimum safe partial pressure of O2, in kPa
-	var/co2overloadtime = null
-
-
-/mob/living/carbon/martian/Life()
+/mob/living/carbon/not_human/Life()
 	set invisibility = 0
 
 	if(timestopped)
@@ -61,7 +49,7 @@
 
 // ATMOSPHERE, BREATHING, ALL THINGS INVOLVING AIR//
 
-/mob/living/carbon/martian/proc/breathe() //This proc's used so many different times, you would think it would be under /carbon by now
+/mob/living/carbon/not_human/proc/breathe() //This proc's used so many different times, you would think it would be under /carbon by now
 	if(flags & INVULNERABLE)
 		return
 
@@ -96,21 +84,6 @@
 				var/breath_moles = environment.total_moles()/environment.volume*CELL_VOLUME*BREATH_PERCENTAGE
 				breath = loc.remove_air(breath_moles)
 
-				var/block = 0
-				if(head)
-					if(istype(head, /obj/item/clothing/head/helmet/space/martian))
-						block = 1
-
-				if(!block)
-					for(var/obj/effect/effect/smoke/chem/smoke in view(1, src))
-						if(smoke.reagents.total_volume)
-							smoke.reagents.reaction(src, INGEST)
-							spawn(5)
-								if(smoke)
-									smoke.reagents.copy_to(src, 10) // I dunno, maybe the reagents enter the blood stream through the lungs?
-							break // If they breathe in the nasty stuff once, no need to continue checking
-
-
 		else //Still give containing object the chance to interact
 			if(istype(loc, /obj/))
 				var/obj/location_as_object = loc
@@ -120,17 +93,11 @@
 	if(breath)
 		loc.assume_air(breath)
 
-/mob/living/carbon/martian/proc/get_breath_from_internal(volume_needed)
-	//As this is a race that can only wear helmets, we'll have a fishbowl helmet that can accept tanks in place of having gas mask setups
-	if(head && istype(head, /obj/item/clothing/head/helmet/space/martian))
-		var/obj/item/clothing/head/helmet/space/martian/fishbowl = head
-		if(fishbowl.tank && istype(fishbowl.tank, /obj/item/weapon/tank))
-			var/obj/item/weapon/tank/internals = fishbowl.tank
-			return internals.remove_air_volume(volume_needed)
+/mob/living/carbon/not_human/proc/get_breath_from_internal(volume_needed)
 	return null
 
 
-/mob/living/carbon/martian/proc/handle_breath(datum/gas_mixture/breath)
+/mob/living/carbon/not_human/proc/handle_breath(datum/gas_mixture/breath)
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
 		return
 
@@ -228,13 +195,11 @@
 
 	return 1
 
-/mob/living/carbon/martian/proc/handle_environment(datum/gas_mixture/environment)
+/mob/living/carbon/not_human/proc/handle_environment(datum/gas_mixture/environment)
 	if(!environment || (flags & INVULNERABLE))
 		return
-	var/spaceproof = 0
-	if(head && istype(head, /obj/item/clothing/head/helmet/space/martian))
-		spaceproof = 1	//quick and dirt cheap.
 	var/loc_temp = get_loc_temp(environment)
+	var/spaceproof = is_spaceproof()
 	var/environment_heat_capacity = environment.heat_capacity()
 	if(istype(get_turf(src), /turf/space))
 		var/turf/heat_turf = get_turf(src)
@@ -248,12 +213,11 @@
 			var/thermal_protection = get_thermal_protection(get_heat_protection_flags(loc_temp)) //This returns a 0 - 1 value, which corresponds to the percentage of protection based on what you're wearing and what you're exposed to.
 			if(thermal_protection < 1)
 				bodytemperature += min((1 - thermal_protection) * ((loc_temp - get_skin_temperature()) / BODYTEMP_HEAT_DIVISOR), BODYTEMP_HEATING_MAX)
-
 	if(stat==DEAD)
 		bodytemperature += 0.1*(environment.temperature - bodytemperature)*environment_heat_capacity/(environment_heat_capacity + 270000)
 
-	//Account for massive pressure differences
 
+	//Account for massive pressure differences
 	var/pressure = environment.return_pressure()
 	var/adjusted_pressure = calculate_affecting_pressure(pressure) //Returns how much pressure actually affects the mob.
 	switch(adjusted_pressure)
@@ -275,35 +239,32 @@
 				else
 					pressure_alert = -1
 
-	return
-
-/mob/living/carbon/martian/get_thermal_protection_flags()
-	var/thermal_protection_flags = 0
-	if(head)
-		thermal_protection_flags |= head.body_parts_covered
-	return thermal_protection_flags
+/mob/living/carbon/not_human/proc/is_spaceproof()
+	if(flags & INVULNERABLE)
+		return TRUE
+	return FALSE
 
 
-/mob/living/carbon/martian/calculate_affecting_pressure(var/pressure)
+/mob/living/carbon/not_human/get_thermal_protection_flags()
+	return 0
+
+/mob/living/carbon/not_human/calculate_affecting_pressure(var/pressure)
 	..()
 	return pressure
 
-/mob/living/carbon/martian/get_cold_protection()
+/mob/living/carbon/not_human/get_cold_protection()
 
 	if(M_RESIST_COLD in mutations)
 		return 1 //Fully protected from the cold.
 
 	var/thermal_protection = 0.0
 
-	if(head)
-		thermal_protection += head.return_thermal_protection()
-
 	var/max_protection = get_thermal_protection(get_thermal_protection_flags())
 	return min(thermal_protection,max_protection)
 
 
 
-mob/living/carbon/martian/proc/handle_regular_status_updates()
+mob/living/carbon/not_human/proc/handle_regular_status_updates()
 	updatehealth()
 
 	if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP
@@ -391,7 +352,7 @@ mob/living/carbon/martian/proc/handle_regular_status_updates()
 			druggy = max(druggy-1, 0)
 	return 1
 
-/mob/living/carbon/martian/proc/handle_chemicals_in_body()
+/mob/living/carbon/not_human/proc/handle_chemicals_in_body()
 
 	burn_calories(HUNGER_FACTOR,1)
 	if(reagents)
@@ -415,7 +376,7 @@ mob/living/carbon/martian/proc/handle_regular_status_updates()
 	return //TODO: DEFERRED
 
 
-/mob/living/carbon/martian/proc/handle_regular_hud_updates()
+/mob/living/carbon/not_human/proc/handle_regular_hud_updates()
 	if(!client)
 		return
 
@@ -516,7 +477,7 @@ mob/living/carbon/martian/proc/handle_regular_status_updates()
 
 	return 1
 
-/mob/living/carbon/martian/undergoing_hypothermia()
+/mob/living/carbon/not_human/undergoing_hypothermia()
 	if((status_flags & GODMODE) || (flags & INVULNERABLE) || istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
 		return NO_HYPOTHERMIA
 

@@ -257,7 +257,7 @@
 /mob/proc/Martianize()
 	if(!Premorph())
 		return
-	var/mob/living/carbon/martian/new_aunt = new /mob/living/carbon/martian(get_turf(src))
+	var/mob/living/carbon/not_human/martian/new_aunt = new /mob/living/carbon/not_human/martian(get_turf(src))
 	Postmorph(new_aunt)
 	return new_aunt
 

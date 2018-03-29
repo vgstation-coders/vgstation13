@@ -50,7 +50,7 @@
 			building = FALSE
 			return FALSE
 
-		var/mob/living/carbon/martian/M = new(get_turf(src))
+		var/mob/living/carbon/not_human/martian/M = new(get_turf(src))
 
 		M.ckey = user.ckey
 		qdel(user)
