@@ -1037,7 +1037,12 @@
 	smashtext = ""
 /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing/New()
 	..()
-	reagents.add_reagent(NOTHING, 100)
+	if(Holiday == APRIL_FOOLS_DAY)
+		name = "Bottle of Something"
+		desc = "A bottle filled with something"
+		reagents.add_reagent(pick(BEER, VOMIT, ZOMBIEPOWDER, SOYSAUCE, KETCHUP, HONEY, BANANA, ABSINTHE, SALTWATER, WATER, BLOOD, LUBE, MUTATIONTOXIN, AMUTATIONTOXIN, GOLD, TRICORDRAZINE, GRAVY), 100)
+	else
+		reagents.add_reagent(NOTHING, 100)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/patron
 	name = "Wrapp Artiste Patron"
