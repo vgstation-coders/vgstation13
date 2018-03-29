@@ -1,4 +1,4 @@
-/mob/living/carbon/not_human/examine(mob/user)
+/mob/living/carbon/complex/examine(mob/user)
 
 	var/msg = "<span class='info'>*---------*\nThis is [bicon(src)] \a <EM>[src]</EM>!\n"
 

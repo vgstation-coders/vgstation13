@@ -311,7 +311,7 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/carbon/human/tajaran					= list(TEETH_HUMAN, /datum/butchering_product/skin/cat/lots),
 	/mob/living/carbon/human/dummy						= list(TEETH_HUMAN),
 
-	/mob/living/carbon/not_human/gondola				= list(/datum/butchering_product/skin/gondola, TEETH_FEW),
+	/mob/living/carbon/complex/gondola				= list(/datum/butchering_product/skin/gondola, TEETH_FEW),
 )
 
 #undef TEETH_FEW

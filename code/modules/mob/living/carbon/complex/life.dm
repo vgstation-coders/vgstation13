@@ -1,4 +1,4 @@
-/mob/living/carbon/not_human/Life()
+/mob/living/carbon/complex/Life()
 	set invisibility = 0
 
 	if(timestopped)
@@ -49,7 +49,7 @@
 
 // ATMOSPHERE, BREATHING, ALL THINGS INVOLVING AIR//
 
-/mob/living/carbon/not_human/proc/breathe() //This proc's used so many different times, you would think it would be under /carbon by now
+/mob/living/carbon/complex/proc/breathe() //This proc's used so many different times, you would think it would be under /carbon by now
 	if(flags & INVULNERABLE)
 		return
 
@@ -93,11 +93,11 @@
 	if(breath)
 		loc.assume_air(breath)
 
-/mob/living/carbon/not_human/proc/get_breath_from_internal(volume_needed)
+/mob/living/carbon/complex/proc/get_breath_from_internal(volume_needed)
 	return null
 
 
-/mob/living/carbon/not_human/proc/handle_breath(datum/gas_mixture/breath)
+/mob/living/carbon/complex/proc/handle_breath(datum/gas_mixture/breath)
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
 		return
 
@@ -195,7 +195,7 @@
 
 	return 1
 
-/mob/living/carbon/not_human/proc/handle_environment(datum/gas_mixture/environment)
+/mob/living/carbon/complex/proc/handle_environment(datum/gas_mixture/environment)
 	if(!environment || (flags & INVULNERABLE))
 		return
 	var/loc_temp = get_loc_temp(environment)
@@ -239,20 +239,20 @@
 				else
 					pressure_alert = -1
 
-/mob/living/carbon/not_human/proc/is_spaceproof()
+/mob/living/carbon/complex/proc/is_spaceproof()
 	if(flags & INVULNERABLE)
 		return TRUE
 	return FALSE
 
 
-/mob/living/carbon/not_human/get_thermal_protection_flags()
+/mob/living/carbon/complex/get_thermal_protection_flags()
 	return 0
 
-/mob/living/carbon/not_human/calculate_affecting_pressure(var/pressure)
+/mob/living/carbon/complex/calculate_affecting_pressure(var/pressure)
 	..()
 	return pressure
 
-/mob/living/carbon/not_human/get_cold_protection()
+/mob/living/carbon/complex/get_cold_protection()
 
 	if(M_RESIST_COLD in mutations)
 		return 1 //Fully protected from the cold.
@@ -264,7 +264,7 @@
 
 
 
-mob/living/carbon/not_human/proc/handle_regular_status_updates()
+/mob/living/carbon/complex/proc/handle_regular_status_updates()
 	updatehealth()
 
 	if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP
@@ -352,7 +352,7 @@ mob/living/carbon/not_human/proc/handle_regular_status_updates()
 			druggy = max(druggy-1, 0)
 	return 1
 
-/mob/living/carbon/not_human/proc/handle_chemicals_in_body()
+/mob/living/carbon/complex/proc/handle_chemicals_in_body()
 
 	burn_calories(HUNGER_FACTOR,1)
 	if(reagents)
@@ -376,7 +376,7 @@ mob/living/carbon/not_human/proc/handle_regular_status_updates()
 	return //TODO: DEFERRED
 
 
-/mob/living/carbon/not_human/proc/handle_regular_hud_updates()
+/mob/living/carbon/complex/proc/handle_regular_hud_updates()
 	if(!client)
 		return
 
@@ -477,7 +477,7 @@ mob/living/carbon/not_human/proc/handle_regular_status_updates()
 
 	return 1
 
-/mob/living/carbon/not_human/undergoing_hypothermia()
+/mob/living/carbon/complex/undergoing_hypothermia()
 	if((status_flags & GODMODE) || (flags & INVULNERABLE) || istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
 		return NO_HYPOTHERMIA
 

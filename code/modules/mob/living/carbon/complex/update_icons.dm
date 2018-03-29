@@ -1,4 +1,4 @@
-/mob/living/carbon/not_human/update_icons()
+/mob/living/carbon/complex/update_icons()
 	update_hud()
 
 	lying_prev = lying
@@ -10,7 +10,7 @@
 	else
 		icon_state = icon_state_standing
 
-/mob/living/carbon/not_human/regenerate_icons()
+/mob/living/carbon/complex/regenerate_icons()
 	..()
 
 	for(var/i = 1 to held_items.len)

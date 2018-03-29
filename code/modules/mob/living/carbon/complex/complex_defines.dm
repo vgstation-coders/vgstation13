@@ -1,4 +1,4 @@
-/mob/living/carbon/not_human
+/mob/living/carbon/complex
 	var/icon_state_standing
 	var/icon_state_lying
 	var/icon_state_dead
@@ -12,6 +12,6 @@
 	var/safe_oxygen_min = 16 // Minimum safe partial pressure of O2, in kPa
 	var/co2overloadtime = null
 
-/mob/living/carbon/not_human/New()
+/mob/living/carbon/complex/New()
 	create_reagents(200)
 	..()

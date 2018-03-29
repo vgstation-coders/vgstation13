@@ -1,4 +1,4 @@
-/mob/living/carbon/not_human/equip_to_slot(obj/item/W, slot, redraw_mob = 1)
+/mob/living/carbon/complex/equip_to_slot(obj/item/W, slot, redraw_mob = 1)
 	if(!istype(W))
 		return
 

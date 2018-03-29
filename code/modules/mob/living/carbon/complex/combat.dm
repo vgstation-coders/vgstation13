@@ -1,16 +1,16 @@
-/mob/living/carbon/not_human/get_unarmed_damage_zone(mob/living/victim)
+/mob/living/carbon/complex/get_unarmed_damage_zone(mob/living/victim)
 	return zone_sel.selecting
 
-/mob/living/carbon/not_human/knockout_chance_modifier()
+/mob/living/carbon/complex/knockout_chance_modifier()
 	return 0 //Punches don't stun
 
-/mob/living/carbon/not_human/bullet_act(var/obj/item/projectile/P, var/def_zone)
+/mob/living/carbon/complex/bullet_act(var/obj/item/projectile/P, var/def_zone)
 	if(check_shields(P.damage, "the [P.name]"))
 		P.on_hit(src, 2)
 		return 2
 	return (..(P , def_zone))
 
-/mob/living/carbon/not_human/attack_hand(mob/living/M)
+/mob/living/carbon/complex/attack_hand(mob/living/M)
 	switch(M.a_intent)
 		if(I_HELP)
 			help_shake_act(M)
@@ -24,7 +24,7 @@
 		if(I_DISARM)
 			M.disarm_mob(src)
 
-/mob/living/carbon/not_human/attack_alien(mob/living/M)
+/mob/living/carbon/complex/attack_alien(mob/living/M)
 	switch(M.a_intent)
 		if (I_HELP)
 			visible_message("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>")
@@ -38,16 +38,16 @@
 		if (I_DISARM)
 			return M.disarm_mob(src)
 
-/mob/living/carbon/not_human/attack_slime(mob/living/carbon/slime/M)
+/mob/living/carbon/complex/attack_slime(mob/living/carbon/slime/M)
 	M.unarmed_attack_mob(src)
 
-/mob/living/carbon/not_human/attack_martian(mob/M)
+/mob/living/carbon/complex/attack_martian(mob/M)
 	return attack_hand(M)
 
-/mob/living/carbon/not_human/attack_paw(mob/M)
+/mob/living/carbon/complex/attack_paw(mob/M)
 	return attack_hand(M)
 
-/mob/living/carbon/not_human/disarm_mob(mob/living/target)
+/mob/living/carbon/complex/disarm_mob(mob/living/target)
 	add_logs(src, target, "disarmed", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
 
 	if(target.disarmed_by(src))
