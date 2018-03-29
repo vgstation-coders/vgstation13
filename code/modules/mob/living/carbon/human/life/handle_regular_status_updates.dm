@@ -127,7 +127,7 @@
 					while(dizziness)
 						C = client
 						dizzy_effect_in_loop = TRUE
-						if(C)
+						if(C && (dizziness >= 120))
 							//https://en.wikipedia.org/wiki/Rose_(mathematics) with 3 petals
 							for(var/i=30; i <= 390; i+=(360/100))
 								C = client
