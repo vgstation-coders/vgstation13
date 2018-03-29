@@ -175,6 +175,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	..()
 	flags |= NOREACT // so it doesn't react until you light it
 	create_reagents(chem_volume) // making the cigarrete a chemical holder with a maximum volume of 15
+	if(Holiday == APRIL_FOOLS_DAY)
+		reagents.add_reagent(DANBACCO, 5)
+	else
+		reagents.add_reagent(TOBACCO, 5)
 	update_brightness()
 
 /obj/item/clothing/mask/cigarette/Destroy()
