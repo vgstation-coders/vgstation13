@@ -309,6 +309,17 @@
 		if(prob(10)) // 10% of those have a good mut.
 			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
 
+	if(Holiday == APRIL_FOOLS_DAY)
+		if(H.mind.assigned_role in science_positions) //NERDS
+			if(prob(15))
+				H.dna.SetSEState(ASTHMABLOCK, 1, 1)
+			if(prob(20))
+				H.dna.SetSEState(GLASSESBLOCK,1,1)
+				H.disabilities |= NEARSIGHTED
+
+		if(prob(5))
+			H.mutations.Add(M_CLUMSY)
+
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
 		return 0
