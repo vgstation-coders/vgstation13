@@ -53,10 +53,26 @@
 		A.attack_stump(src, params)
 
 	if(src.lying && !(isUnconscious() || stunned || paralysis) && check_crawl_ability() && isfloor(A) && isfloor(get_turf(src)) && proximity && !pulledby && !locked_to && !client.move_delayer.blocked())
-		var/delay = round(1 + base_movement_tally()/5) * 1 SECONDS
-		if (do_after(src, A, delay))
-			Move(A, get_dir(src,A), glide_size_override = delay) // So that we're still smooth
-			delayNextMove(delay, additive=1)
+		var/crawldelay = movement_delay()*3
+		Move(A, get_dir(src,A), glide_size_override = crawldelay)
+		delayNextMove(crawldelay, additive=1)
+		if (prob(15))
+			adjustBrainLoss(5)
+			say(pick("CRAAWLING IN MY SKIIIN!!!",
+			"THESE WOUNDS, THEY WILL NOT HEEEAL!!!",
+			"FEAR IS HOW I FAAAALL!!!",
+			"CONFUSING WHAT IS REEEEEAL!!!!",
+
+			"CRAWLING IN MY BRIG!!!!",
+
+			"It's actually about the spirit of a cheeky crawling with the lads",
+
+			"Try to crawl FREELY and AUTOMATICALLY good bye",
+
+			"SNEAKY CR*WLERS!",
+
+			"It's an feature")
+			)
 
 /atom/proc/attack_hand(mob/user as mob, params, var/proximity)
 	return
