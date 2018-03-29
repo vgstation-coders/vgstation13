@@ -162,8 +162,11 @@ var/datum/controller/gameticker/ticker
 		for (var/datum/game_mode/M in runnable_modes)
 			modes+=M.name
 		modes = sortList(modes)
-		to_chat(world, "<B>The current game mode is - Secret!</B>")
-		to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
+		if(Holiday == APRIL_FOOLS_DAY)
+			to_chat(world, "<B>The current game mode is - [pick("Chivalry","Crab Battle","Bay Transfer","Dwarf Fortress","Ian Says","Admins Funhouse","Meteor","Xenoarchaeology Appreciation","Clowns versus [pick("Mimes","Assistants","the Universe")]")]!</B>")
+		else
+			to_chat(world, "<B>The current game mode is - Secret!</B>")
+			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 	else
 		src.mode.announce()
 
