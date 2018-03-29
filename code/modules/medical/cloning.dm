@@ -227,6 +227,15 @@
 
 	var/mob/living/carbon/human/H = new /mob/living/carbon/human(src, R.dna.species, delay_ready_dna = TRUE)
 	occupant = H
+	H.times_cloned = R.times_cloned +1
+	if(Holiday == APRIL_FOOLS_DAY && prob(H.times_cloned**2))
+		visible_message("<span class='warning'>\the [src] judders for a moment, as a mass begins to grow out of control from it!</span>")
+		qdel(H)
+		var/obj/effect/blob/node/N = new(get_turf(src))
+		var/matrix/M = N.transform
+		M.Scale(0)
+		animate(N, transform = matrix(), time = 3 SECONDS, easing = SINE_EASING)
+
 
 	if(!connected.emagged)
 		icon_state = "pod_1"
