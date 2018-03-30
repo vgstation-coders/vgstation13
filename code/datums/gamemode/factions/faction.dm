@@ -39,6 +39,7 @@ var/list/factions_with_hud_icons = list()
 	var/datum/role/roletype = /datum/role
 	var/logo_state = "synd-logo"
 	var/list/hud_icons = list()
+	var/datum/role/leader
 
 /datum/faction/New()
 	..()
@@ -87,6 +88,8 @@ var/list/factions_with_hud_icons = list()
 	R.faction.members.Remove(R)
 	R.faction = null
 	ticker.mode.orphaned_roles.Add(R)
+	if(leader == R)
+		leader = null
 	update_hud_removed(R)
 
 /datum/faction/proc/AppendObjective(var/datum/objective/O)

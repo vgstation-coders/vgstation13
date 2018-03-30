@@ -262,9 +262,11 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 	if(H)
 		qdel(H)
 
-proc/add_law_zero(mob/living/silicon/ai/killer)
+/proc/add_law_zero(mob/living/silicon/ai/killer)
 	var/law = "Accomplish your objectives at all costs."
 	var/law_borg = "Accomplish your AI's objectives at all costs."
 	to_chat(killer, "<b>Your laws have been changed!</b>")
 	killer.set_zeroth_law(law, law_borg)
 	to_chat(killer, "New law: 0. [law]")
+
+
