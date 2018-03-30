@@ -9,6 +9,9 @@
 	logo_state = "nuke-logo"
 	hud_icons = list("nuke-logo")
 
+/datum/faction/syndicate/nuke_op/forgeObjectives()
+	AppendObjective(/datum/objective/nuclear)
+
 /datum/faction/syndicate/nuke_op/AdminPanelEntry()
 	var/list/dat = ..()
 	dat += "<br><h2>Nuclear disk</h2>"
