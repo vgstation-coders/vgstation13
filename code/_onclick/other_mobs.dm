@@ -71,7 +71,9 @@
 
 			"SNEAKY CR*WLERS!",
 
-			"It's an feature")
+			"It's an feature",
+
+			"AND YOU FALL AND YOU CRAWL AND YOU BREAK AND YOU TAKE WHAT YOU TAKE AND YOU FALL AND YOU CRAWL AND YOU-")
 			)
 
 /atom/proc/attack_hand(mob/user as mob, params, var/proximity)
