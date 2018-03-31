@@ -1,7 +1,7 @@
 // -- Helpers for vampires spells.
 
 
-/mob/proc/vampire_power(var/required_blood = 0, var/max_stat = 0)
+/mob/proc/vampire_power(var/required_blood = 0, var/max_stat = 0, var/remove_blood = TRUE)
 
 	var/datum/role/vampire/vampire = isvampire(src)
 
@@ -32,6 +32,10 @@
 		if((T.get_lumcount() * 10) > 2)
 			to_chat(src, "<span class='warning'>This ground has been blessed and illuminated, suppressing your abilities.</span>")
 			return 0
+
+	if (remove_blood)
+		vampire.remove_blood(required_blood)
+
 	return 1
 
 /mob/proc/vampire_affected(var/datum/mind/M) // M is the attacker, src is the target.
