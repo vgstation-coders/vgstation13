@@ -1,4 +1,3 @@
-
 /*
  -- Vampires --
  */
@@ -172,70 +171,14 @@
 	return TRUE
 
 /datum/role/vampire/proc/check_vampire_upgrade()
-	var/list/old_powers = powers.Copy()
 
 	for (var/i in subtypesof(/datum/power/vampire))
 		var/datum/power/vampire/VP_type = i
 		if (blood_total > initial(VP_type.blood_threeshold) && !(initial(VP_type.id) in powers))
 			var/datum/power/vampire/VP = new VP_type
-			VP.Give(src)
-
-	announce_new_powers(old_powers, powers)
-
-/datum/role/vampire/proc/announce_new_powers(var/old_powers, var/new_powers)
-	var/msg = ""
-	var/mob/M = antag.current
-	for(var/n in new_powers)
-		if(!(n in old_powers))
-			switch(n)
-				if(VAMP_SHAPE)
-					msg = "<span class='notice'>You have gained the shapeshifting ability, at the cost of stored blood you can change your form permanently.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_VISION)
-					msg = "<span class='notice'>Your vampiric vision has improved.</span>"
-					to_chat(M, "[msg]")
-					antag.store_memory("<font size = 1>[msg]</font>")
-				if(VAMP_DISEASE)
-					msg = "<span class='notice'>You have gained the Diseased Touch ability which causes those you touch to die shortly after unless treated medically.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_CLOAK)
-					msg = "<span class='notice'>You have gained the Cloak of Darkness ability which when toggled makes you near invisible in the shroud of darkness.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_BATS)
-					msg = "<span class='notice'>You have gained the Summon Bats ability which allows you to summon a trio of angry space bats.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_SCREAM)
-					msg = "<span class='notice'>You have gained the Chiroptean Screech ability which stuns anything with ears in a large radius and shatters glass in the process.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_HEAL)
-					msg = "<span class=notice'>Your rejuvination abilities have improved and will now heal you over time when used.</span>"
-					to_chat(M, "[msg]")
-					antag.store_memory("<font size = 1>[msg]</font>")
-				if(VAMP_JAUNT)
-					msg = "<span class='notice'>You have gained the Mist Form ability which allows you to take on the form of mist for a short period and pass over any obstacle in your path.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_SLAVE)
-					msg = "<span class='notice'>You have gained the Enthrall ability which at a heavy blood cost allows you to enslave a human that is not loyal to any other for a random period of time.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_BLINK)
-					msg = "<span class='notice'>You have gained the ability to shadowstep, which makes you disappear into nearby shadows at the cost of blood.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_MATURE)
-					msg = "<span class='sinister'>You have reached physical maturity. You are more resistant to holy things, and your vision has been improved greatly.</span>"
-					to_chat(M, "[msg]")
-					antag.store_memory("<font size = 1>[msg]</font>")
-				if(VAMP_SHADOW)
-					msg = "<span class='notice'>You have gained mastery over the shadows. In the dark, you can mask your identity, instantly terrify non-vampires who approach you, and enter the chapel for a longer period of time.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_CHARISMA)
-					msg = "<span class='sinister'>You develop an uncanny charismatic aura that makes you difficult to disobey. Hypnotise and Enthrall take less time to perform, and Enthrall works on implanted targets.</span>"
-					to_chat(M, "[msg]")
-					antag.store_memory("<font size = 1>[msg]</font>")
-				if(VAMP_UNDYING)
-					msg = "<span class='sinister'>You have reached the absolute peak of your power. Your abilities cannot be nullified very easily, and you may return from the grave so long as your body is not burned, destroyed or sanctified. You can also spawn a rather nice cape.</span>"
-					to_chat(M, "[msg]")
-					antag.store_memory("<font size = 1>[msg]</font>")
-
+			if (!(VP.id in powers))
+				VP.Give(src)
+			
 /*
 -- Life() related procs --
 */
@@ -279,17 +222,22 @@
 /datum/role/vampire/proc/handle_cloak(var/mob/living/carbon/human/H)
 	var/turf/T = get_turf(H)
 
+	to_chat(world, "handle_cloak")
+
 	if(!iscloaking)
+		to_chat(world, "not cloaking")
 		H.alphas["vampire_cloak"] = 255
 		H.color = "#FFFFFF"
 		return FALSE
 
 	if((T.get_lumcount() * 10) <= 2)
+		to_chat(world, "cloaking, low lumcount")
 		H.alphas["vampire_cloak"] = round((255 * 0.15))
 		if(VAMP_SHADOW in powers)
 			H.color = "#000000"
 		return TRUE
 	else
+		to_chat(world, "cloaking, high lumcount")
 		if(VAMP_SHADOW in powers)
 			H.alphas["vampire_cloak"] = round((255 * 0.15))
 		else

@@ -21,9 +21,9 @@
 	var/blood_cost = 50
 
 /spell/targeted/disease/cast_check(skipcharge = 0,mob/user = usr)
+	. = ..()
 	if (!user.vampire_power(blood_cost, 0, 1))
 		return FALSE
-	return ..()
 
 /spell/targeted/disease/is_valid_target(var/target, var/mob/user, var/list/options)
 	if (!ismob(target))

@@ -21,12 +21,11 @@
 	var/blood_cost = 1
 
 /spell/aoe_turf/glare/cast_check(var/skipcharge = 0, var/mob/user = usr)
+	. = ..()
 	if (!user.vampire_power(blood_cost, 0))
 		return FALSE
 	if (istype(user.get_item_by_slot(slot_glasses), /obj/item/clothing/glasses/sunglasses/blindfold))
 		to_chat(user, "<span class='warning'>You're blindfolded!</span>")
-		return FALSE
-	return ..()
 
 /spell/aoe_turf/glare/choose_targets(var/mob/user = usr)
 	var/list/targets = list()
@@ -34,6 +33,11 @@
 		if(!C.vampire_affected(user.mind))
 			continue
 		targets += C
+	
+	if (!targets.len)
+		to_chat(user, "<span class='warning'>There are no targets.</span>")
+		return FALSE
+	
 	return targets
 
 /spell/aoe_turf/glare/cast(var/list/targets, var/mob/user)
