@@ -207,7 +207,7 @@
 
 /proc/getAvailableRobotModules()
 	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service")
-	if (holiday == APRIL_FOOLS_DAY)
+	if (Holiday == APRIL_FOOLS_DAY)
 		if (security_level == SEC_LEVEL_BLUE)
 			modules += "Security"
 	else
