@@ -53,10 +53,14 @@
 		A.attack_stump(src, params)
 
 	if(src.lying && !(isUnconscious() || stunned || paralysis) && check_crawl_ability() && isfloor(A) && isfloor(get_turf(src)) && proximity && !pulledby && !locked_to && !client.move_delayer.blocked())
-		var/crawldelay = movement_delay()*3
+		var/crawldelay
+		if (Holiday == APRIL_FOOLS_DAY)
+			crawldelay = movement_delay()*3
+		else
+			crawldelay = round(1 + base_movement_tally()/5) * 1 SECONDS
 		Move(A, get_dir(src,A), glide_size_override = crawldelay)
 		delayNextMove(crawldelay, additive=1)
-		if (prob(15))
+		if (prob(15) && Holiday == APRIL_FOOLS_DAY)
 			adjustBrainLoss(5)
 			say(pick("CRAAWLING IN MY SKIIIN!!!",
 			"THESE WOUNDS, THEY WILL NOT HEEEAL!!!",
