@@ -3460,6 +3460,18 @@
 	reagent_state = LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
+	
+/datum/reagent/ketchup/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+
+	if(..())
+		return 1
+
+	if(method == TOUCH && Holiday == APRIL_FOOLS_DAY)
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			M.SetKnockdown(max(M.knockdown, 30))
+			M.silent = max(M.silent, 30)
+			visible_message("<span class='danger'>[src] collapses on the floor as blood spews out of \his mouth.</span>")	
 
 /datum/reagent/dipping_sauce
 	name = "Dipping Sauce"
