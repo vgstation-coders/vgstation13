@@ -1030,8 +1030,8 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing
 	name = "Bottle of Nothing"
-	desc = "A bottle filled with nothing"
 	icon_state = "bottleofnothing"
+	desc = ""
 	isGlass = 1
 	molotov = -1
 	smashtext = ""
@@ -1042,6 +1042,7 @@
 		desc = "A bottle filled with something"
 		reagents.add_reagent(pick(BEER, VOMIT, ZOMBIEPOWDER, SOYSAUCE, KETCHUP, HONEY, BANANA, ABSINTHE, SALTWATER, WATER, BLOOD, LUBE, MUTATIONTOXIN, AMUTATIONTOXIN, GOLD, TRICORDRAZINE, GRAVY), 100)
 	else
+		desc = "A bottle filled with nothing"
 		reagents.add_reagent(NOTHING, 100)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/patron
