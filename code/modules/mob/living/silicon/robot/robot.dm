@@ -207,7 +207,10 @@
 
 /proc/getAvailableRobotModules()
 	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service")
-	if (security_level == SEC_LEVEL_BLUE)
+	if (holiday == APRIL_FOOLS_DAY)
+		if (security_level == SEC_LEVEL_BLUE)
+			modules += "Security"
+	else
 		modules += "Security"
 	if (security_level == SEC_LEVEL_RED)
 		modules+="Combat"
