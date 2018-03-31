@@ -5,6 +5,10 @@
 #define COMM_SCREEN_SECLEVEL	4
 #define COMM_SCREEN_ERT			5
 
+#define UNAUTH 0
+#define AUTH_HEAD 1
+#define AUTH_CAPT 2
+
 var/shuttle_call/shuttle_calls[0]
 var/global/ports_open = TRUE
 
@@ -42,7 +46,7 @@ var/global/ports_open = TRUE
 	req_access = list(access_heads)
 	circuit = "/obj/item/weapon/circuitboard/communications"
 	var/prints_intercept = 1
-	var/authenticated = 0 //1 = normal login, 2 = emagged or had access_captain, 0 = logged out. Gremlins can set to 1 or 0.
+	var/authenticated = UNAUTH //1 = normal login, 2 = emagged or had access_captain, 0 = logged out. Gremlins can set to 1 or 0.
 	var/list/messagetitle = list()
 	var/list/messagetext = list()
 	var/currmsg = 0
@@ -91,11 +95,11 @@ var/global/ports_open = TRUE
 				emag(usr)
 			if (I && istype(I))
 				if(src.check_access(I))
-					authenticated = 1
+					authenticated = AUTH_HEAD
 				if(access_captain in I.access)
-					authenticated = 2
+					authenticated = AUTH_CAPT
 		if("logout")
-			authenticated = 0
+			authenticated = UNAUTH
 			setMenuState(usr,COMM_SCREEN_MAIN)
 		// ALART LAVUL
 		if("changeseclevel")
@@ -110,8 +114,8 @@ var/global/ports_open = TRUE
 			if (istype(I, /obj/item/device/pda))
 				var/obj/item/device/pda/pda = I
 				I = pda.id
-			if (I && istype(I))
-				if(access_heads in I.access) //Let heads change the alert level.
+			if (isAdminGhost(usr) || (I && istype(I)))
+				if(isAdminGhost(usr) || (access_heads in I.access)) //Let heads change the alert level.
 					var/old_level = security_level
 					if(!tmp_alertlevel)
 						tmp_alertlevel = SEC_LEVEL_GREEN
@@ -139,7 +143,7 @@ var/global/ports_open = TRUE
 				to_chat(usr, "You need to swipe your ID.")
 
 		if("announce")
-			if(src.authenticated==2 && !issilicon(usr))
+			if(authenticated==AUTH_CAPT && !issilicon(usr))
 				if(message_cooldown)
 					return
 				var/input = stripped_input(usr, "Please choose a message to announce to the station crew.", "What?")
@@ -154,14 +158,6 @@ var/global/ports_open = TRUE
 					message_cooldown = 0
 
 		if("emergency_screen")
-			var/mob/M = usr
-			var/obj/item/weapon/card/id/I = M.get_active_hand()
-			if (istype(I, /obj/item/device/pda))
-				var/obj/item/device/pda/pda = I
-				I = pda.id
-			//if (I && istype(I))
-			//	if(access_captain in I.access)
-			//		authenticated = 2
 			if(!authenticated)
 				to_chat(usr, "<span class='warning'>You do not have clearance to use this function.</span>")
 				return
@@ -189,13 +185,6 @@ var/global/ports_open = TRUE
 				to_chat(usr, "<span class='notice'>Central Command has already dispatched a Response Team to [station_name()]</span>")
 				return
 
-			//if(world.time < 6000)
-			//	to_chat(usr, "<span class='notice'>The emergency response team is away on another mission, Please wait another [round((6000-world.time)/600)] minute\s before trying again.</span>")
-			//	return
-
-			//if(emergency_shuttle.online)
-			//	to_chat(usr, "The emergency shuttle is already on its way.")
-			//	return
 			if(!(get_security_level() in list("red", "delta")))
 				to_chat(usr, "<span class='notice'>The station must be in an emergency to request a Response Team.</span>")
 				return
@@ -221,8 +210,8 @@ var/global/ports_open = TRUE
 			return
 
 		if("callshuttle")
-			if(src.authenticated)
-				if(!map.linked_to_centcomm)
+			if(authenticated || isAdminGhost(usr))
+				if(!map.linked_to_centcomm && !isAdminGhost(usr)) //We don't need a connection if we're an admin
 					to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
 					return
 				var/justification = stripped_input(usr, "Please input a concise justification for the shuttle call. Note that failure to properly justify a shuttle call may lead to recall or termination.", "Nanotrasen Anti-Comdom Systems")
@@ -235,12 +224,12 @@ var/global/ports_open = TRUE
 						post_status("shuttle")
 			setMenuState(usr,COMM_SCREEN_MAIN)
 		if("cancelshuttle")
-			if(!map.linked_to_centcomm)
+			if(!map.linked_to_centcomm && !isAdminGhost(usr))
 				to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
 				return
 			if(issilicon(usr))
 				return
-			if(src.authenticated)
+			if(authenticated || isAdminGhost(usr))
 				var/response = alert("Are you sure you wish to recall the shuttle?", "Confirm", "Yes", "No")
 				if(response == "Yes")
 					recall_shuttle(usr)
@@ -294,7 +283,7 @@ var/global/ports_open = TRUE
 
 		// OMG CENTCOMM LETTERHEAD
 		if("MessageCentcomm")
-			if(src.authenticated==2)
+			if(authenticated==AUTH_CAPT)
 				if(!map.linked_to_centcomm)
 					to_chat(usr, "<span class='danger'>Error: No connection can be made to central command.</span>")
 					return
@@ -316,7 +305,7 @@ var/global/ports_open = TRUE
 
 		// OMG SYNDICATE ...LETTERHEAD
 		if("MessageSyndicate")
-			if((src.authenticated==2) && (src.emagged))
+			if(src.authenticated==AUTH_CAPT && emagged)
 				if(!map.linked_to_centcomm)
 					to_chat(usr, "<span class='danger'>Error: No connection can be made to \[ABNORMAL ROUTING CORDINATES\] .</span>")
 					return
@@ -346,8 +335,8 @@ var/global/ports_open = TRUE
 				return
 			var/mob/M = usr
 			var/obj/item/weapon/card/id/I = M.get_id_card()
-			if (I)
-				if((access_hos in I.access) || (access_heads in I.access && security_level >= SEC_LEVEL_RED))
+			if (I || isAdminGhost(usr))
+				if(isAdminGhost(usr) || (access_hos in I.access) || (access_heads in I.access && security_level >= SEC_LEVEL_RED))
 					if(ports_open)
 						var/reason = stripped_input(usr, "Please input a concise justification for port closure. This reason will be transmitted to the trader shuttle.", "Nanotrasen Anti-Comdom Systems") as null|text
 						if(!reason || !(usr in view(1,src)))
@@ -400,7 +389,7 @@ var/global/ports_open = TRUE
 
 
 /obj/machinery/computer/communications/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(user.stat)
+	if(user.stat && !isAdminGhost(user))
 		return
 
 	// this is the data which will be sent to the ui
@@ -408,7 +397,7 @@ var/global/ports_open = TRUE
 	data["is_ai"] = issilicon(user)
 	data["menu_state"] = data["is_ai"] ? ai_menu_state : menu_state
 	data["emagged"] = emagged
-	data["authenticated"] = authenticated
+	data["authenticated"] = (isAdminGhost(user) ? AUTH_CAPT : authenticated)
 	data["screen"] = getMenuState(usr)
 
 	data["stat_display"] = list(
@@ -476,7 +465,7 @@ var/global/ports_open = TRUE
 			to_chat(user, "Syndicate routing data uploaded!")
 		new/obj/effect/effect/sparks(get_turf(src))
 		playsound(loc,"sparks",50,1)
-		authenticated = 2
+		authenticated = AUTH_CAPT
 		setMenuState(usr,COMM_SCREEN_MAIN)
 		update_icon()
 		return 1
@@ -646,11 +635,11 @@ var/global/ports_open = TRUE
 /obj/machinery/computer/communications/npc_tamper_act(mob/living/user)
 	if(!authenticated)
 		if(prob(20)) //20% chance to log in
-			authenticated = TRUE
+			authenticated = AUTH_HEAD
 
 	else //Already logged in
 		if(prob(50)) //50% chance to log off
-			authenticated = FALSE
+			authenticated = UNAUTH
 		else if(isgremlin(user)) //make a hilarious public message
 			var/mob/living/simple_animal/hostile/gremlin/G = user
 			var/result = G.generate_markov_chain()
