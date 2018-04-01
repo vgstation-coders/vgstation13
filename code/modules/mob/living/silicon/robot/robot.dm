@@ -498,6 +498,13 @@
 	for(var/obj/item/stack/S in module.modules)
 		stat(null, text("[S.name]: [S.amount]/[S.max_amount]"))
 
+/mob/living/silicon/robot/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
+	if(!(Holiday == APRIL_FOOLS_DAY))
+		return 0
+	if(..())
+		spark(src, 5, FALSE)
+		return 1
+
 // update the status screen display
 /mob/living/silicon/robot/Stat()
 	..()
