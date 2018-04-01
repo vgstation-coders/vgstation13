@@ -1,38 +1,61 @@
-mob/living/carbon/proc/dream()
-	dreaming = 1
-	var/list/dreams = list(
-		"an ID card","a bottle","a familiar face","a crewmember","a toolbox","a security officer","the captain",
-		"deep space","a doctor","the engine","a traitor","an ally","darkness","light","a scientist","a monkey",
-		"a loved one","warmth","the sun","a hat","the Luna","a planet","plasma","air","the medical bay","the bridge",
-		"blinking lights","a blue light","Nanotrasen","healing","power","respect","riches","space","happiness","pride",
-		"water","melons","flying","the eggs","money","the head of personnel","the head of security","a chief engineer",
-		"a research director","a chief medical officer","the detective","the warden","a member of the internal affairs",
-		"a station engineer","the janitor","atmospheric technician","the quartermaster","a cargo technician","the botanist",
-		"a shaft miner","a psychologist","the chemist","the geneticist","the virologist","the roboticist","the chef","the bartender",
-		"the chaplain","the librarian","a mouse","an ert member","a beach","the holodeck","a smokey room","a mouse","the bar",
-		"the rain","the ai core","the mining station","the research station","a beaker of strange liquid","a team","a man with a bad haircut",
-		"the moons of jupiter","an old malfunctioning AI","a ship full of spiders","bork","a chicken","a supernova","lockers","ninjas",
-		"chickens","the oven","euphoria","space god","farting","bones burning","flesh evaporating","distant worlds","skeletons",
-		"voices everywhere","death","a traitor","dark allyways","darkness","a catastrophe","a gun","freezing","a ruined station","plasma fires",
-		"an abandoned laboratory","The Syndicate","blood","falling","flames","ice","the cold","an operating table","a war","red men","malfunctioning robots",
-		"a ship full of spiders","valids","hardcore","your mom","lewd","explosions","broken bones","clowns everywhere","features","a crash","a skrell","a unathi","a tajaran",
-		"a vox","a plasmaman","a skellington","a diona","the derelict","the end of the world","the thunderdome","a ship full of dead clowns","a chicken with godlike powers",
-		"a red bus that drives through space",
-		)
-	spawn(0)
-		for(var/i = rand(1,4),i > 0, i--)
-			var/dream_image = pick(dreams)
-			dreams -= dream_image
-			to_chat(src, "<span class='notice'><i>... [dream_image] ...</i></span>")
-			sleep(rand(40,70))
-			if(paralysis <= 0)
-				dreaming = 0
-				return 0
-		dreaming = 0
-		return 1
-
-mob/living/carbon/proc/handle_dreams()
-	if(prob(5) && !dreaming)
+/mob/living/carbon/proc/handle_dreams()
+	if(prob(10) && !dreaming)
 		dream()
 
-mob/living/carbon/var/dreaming = 0
+/mob/living/carbon/proc/dream()
+	set waitfor = FALSE
+	var/list/dream_fragments = list()
+	var/fragment = ""
+
+	dream_fragments += "you see"
+
+	//Subject
+	fragment += pick(GLOB.dream_strings)
+	if(prob(50))
+		fragment = replacetext(fragment, "%ADJECTIVE%", pick(GLOB.adjectives))
+	else
+		fragment = replacetext(fragment, "%ADJECTIVE% ", "")
+	if(findtext(fragment, "%A% "))
+		fragment = "\a [replacetext(fragment, "%A% ", "")]"
+	dream_fragments += fragment
+
+	//Verb
+	fragment = ""
+	if(prob(50))
+		if(prob(35))
+			fragment += "[pick(GLOB.adverbs)] "
+		fragment += pick(GLOB.ing_verbs)
+	else
+		fragment += "will "
+		fragment += pick(GLOB.verbs)
+	dream_fragments += fragment
+
+	if(prob(25))
+		dream_sequence(dream_fragments)
+		return
+
+	//Object
+	fragment = ""
+	fragment += pick(GLOB.dream_strings)
+	if(prob(50))
+		fragment = replacetext(fragment, "%ADJECTIVE%", pick(GLOB.adjectives))
+	else
+		fragment = replacetext(fragment, "%ADJECTIVE% ", "")
+	if(findtext(fragment, "%A% "))
+		fragment = "\a [replacetext(fragment, "%A% ", "")]"
+	dream_fragments += fragment
+
+	dreaming = TRUE
+	dream_sequence(dream_fragments)
+
+/mob/living/carbon/proc/dream_sequence(list/dream_fragments)
+	if(stat != UNCONSCIOUS || InCritical())
+		dreaming = FALSE
+		return
+	var/next_message = dream_fragments[1]
+	dream_fragments.Cut(1,2)
+	to_chat(src, "<span class='notice'><i>... [next_message] ...</i></span>")
+	if(LAZYLEN(dream_fragments))
+		addtimer(CALLBACK(src, .proc/dream_sequence, dream_fragments), rand(10,30))
+	else
+		dreaming = FALSE

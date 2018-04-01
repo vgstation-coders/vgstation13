@@ -14,7 +14,7 @@ hr
 	height: 1px;
 }
 
-a, a:link, a:visited, a:active, .linkOn, .linkOff
+a, button, a:link, a:visited, a:active, .linkOn, .linkOff
 {
 	color: #ffffff;
 	text-decoration: none;
@@ -23,22 +23,6 @@ a, a:link, a:visited, a:active, .linkOn, .linkOff
 	padding: 1px 4px 1px 4px;
 	margin: 0 2px 0 0;
 	cursor:default;
-}
-
-a.nobg, a.nobg:link, a.nobg:visited, a.nobg:active
-{
-	color: #ffffff;
-	text-decoration: none;
-	background: transparent;
-	border: none;
-	padding: 0px;
-	margin: 0px;
-	cursor:default;
-	font-weight:bold;
-}
-a.nobg:hover
-{
-	color:#40628a;
 }
 
 a:hover
@@ -71,11 +55,6 @@ a.white:hover
 	border-color: #24722e;
 }
 
-.linkOnMinimal, a.linkOnMinimal:link, a.linkOnMinimal:visited, a.linkOnMinimal:active, a.linkOnMinimal:hover
-{
-	background: #2f943c;
-}
-
 .linkOff, a.linkOff:link, a.linkOff:visited, a.linkOff:active, a.linkOff:hover
 {
 	color: #ffffff;
@@ -83,18 +62,13 @@ a.white:hover
 	border-color: #666666;
 }
 
-.linkOffMinimal, a.linkOffMinimal:link, a.linkOffMinimal:visited, a.linkOffMinimal:active, a.linkOffMinimal:hover
-{
-	background: #999999;
-}
-
-a.icon, .linkOn.icon, .linkOnMinimal.icon, .linkOff.icon, .linkOffMinimal.icon
+a.icon, .linkOn.icon, .linkOff.icon
 {
 	position: relative;
 	padding: 1px 4px 2px 20px;
 }
 
-a.icon img, .linkOn.icon img, .linkOnMinimal.icon img
+a.icon img, .linkOn.icon img
 {
 	position: absolute;
 	top: 0;
@@ -332,35 +306,93 @@ div.notice
 }
 
 
-.charPreview{
-	-ms-interpolation-mode: nearest-neighbor;
-	width: 64px;
-	height:64px;
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
 }
 
-td.column {
-    width: 60px;
-    text-align: center;
-}
-td.clmNever {
-    background: #ffcccc;
+.switch input {display:none;}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #383838;
+  transition: .4s;
 }
 
-td.clmNo {
-    background: #ffeeee;
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #98B0C3;
+  transition: .4s;
 }
 
-td.clmYes {
-    background: #eeffee;
+.slider.red:before {
+  background-color: #d6858b;
 }
 
-td.clmAlways {
-    background: #ccffcc;
+.slider.locked:before {
+  content: url("padlock.png");
+  background-color: #b4b4b4;
 }
 
-label.fullsize
-{
-    width: 100%;
-    height: 100%;
-    display: inline-block;
+input:checked + .slider {
+  background-color: #40628a;
+}
+
+input:checked + .slider.red {
+  background-color: #a92621;
+}
+
+input:checked + .slider.locked {
+  background-color: #707070;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:focus + .slider.red {
+  box-shadow: 0 0 1px #f3212d;
+}
+
+input:focus + .slider.locked {
+  box-shadow: 0 0 1px #979797;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+.switch span {
+  display: inline-block;
+  position: relative;
+  width: 60px;
+  margin-left: 60px;
+}
+
+ul.sparse {
+	padding-bottom:20px;
+}
+
+.sparse li {
+  margin-top: 2px;
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }

@@ -1,7 +1,7 @@
 /*
   HOW IT WORKS
 
-  The radio_controller is a global object maintaining all radio transmissions, think about it as about "ether".
+  The SSradio is a global object maintaining all radio transmissions, think about it as about "ether".
   Note that walkie-talkie, intercoms and headsets handle transmission using nonstandard way.
   procs:
 
@@ -40,7 +40,7 @@
 
   obj/proc/receive_signal(datum/signal/signal, var/receive_method as num, var/receive_param)
     Handler from received signals. By default does nothing. Define your own for your object.
-    Avoid of sending signals directly from this proc, use spawn(-1). Do not use sleep() here please.
+    Avoid of sending signals directly from this proc, use spawn(0). Do not use sleep() here please.
       parameters:
         signal - see description below. Extract all needed data from the signal before doing sleep(), spawn() or return!
         receive_method - may be TRANSMISSION_WIRE or TRANSMISSION_RADIO.
@@ -60,330 +60,140 @@
       If receiving object don't know right key, it must ignore encrypted signal in its receive_signal.
 
 */
-var/list/all_radios = list()
-/proc/add_radio(var/obj/item/radio, freq)
+/*	the radio controller is a confusing piece of shit and didnt work
+	so i made radios not use the radio controller.
+*/
+GLOBAL_LIST_EMPTY(all_radios)
+/proc/add_radio(obj/item/radio, freq)
 	if(!freq || !radio)
 		return
-	if(!all_radios["[freq]"])
-		all_radios["[freq]"] = list(radio)
+	if(!GLOB.all_radios["[freq]"])
+		GLOB.all_radios["[freq]"] = list(radio)
 		return freq
 
-	all_radios["[freq]"] |= radio
+	GLOB.all_radios["[freq]"] |= radio
 	return freq
 
-/proc/remove_radio(var/obj/item/radio, freq)
+/proc/remove_radio(obj/item/radio, freq)
 	if(!freq || !radio)
 		return
-	if(!all_radios["[freq]"])
+	if(!GLOB.all_radios["[freq]"])
 		return
 
-	all_radios["[freq]"] -= radio
+	GLOB.all_radios["[freq]"] -= radio
 
-/proc/remove_radio_all(var/obj/item/radio)
-	for(var/freq in all_radios)
-		all_radios["[freq]"] -= radio
-/*
-Frequency range: 1200 to 1600
-Radiochat range: 1441 to 1489 (most devices refuse to be tune to other frequency, even during mapmaking)
+/proc/remove_radio_all(obj/item/radio)
+	for(var/freq in GLOB.all_radios)
+		GLOB.all_radios["[freq]"] -= radio
 
-Radio:
-1459 - standard radio chat
-1351 - Science
-1353 - Command
-1355 - Medical
-1357 - Engineering
-1359 - Security
-1441 - death squad
-1443 - Confession Intercom
-1349 - Botany, chef, bartender
-1347 - Cargo techs
+// For information on what objects or departments use what frequencies,
+// see __DEFINES/radio.dm. Mappers may also select additional frequencies for
+// use in maps, such as in intercoms.
 
-Devices:
-1451 - tracking implant
-1457 - RSD default
+GLOBAL_LIST_INIT(radiochannels, list(
+	"Common" = FREQ_COMMON,
+	"Science" = FREQ_SCIENCE,
+	"Command" = FREQ_COMMAND,
+	"Medical" = FREQ_MEDICAL,
+	"Engineering" = FREQ_ENGINEERING,
+	"Security" = FREQ_SECURITY,
+	"CentCom" = FREQ_CENTCOM,
+	"Syndicate" = FREQ_SYNDICATE,
+	"Supply" = FREQ_SUPPLY,
+	"Service" = FREQ_SERVICE,
+	"AI Private" = FREQ_AI_PRIVATE,
+	"Red Team" = FREQ_CTF_RED,
+	"Blue Team" = FREQ_CTF_BLUE
+))
 
-On the map:
-1311 for prison shuttle console (in fact, it is not used)
-1367 for recycling/mining processing machinery and conveyors
-1435 for status displays
-1437 for atmospherics/fire alerts
-1439 for engine components
-1439 for air pumps, air scrubbers, atmo control
-1441 for atmospherics - supply tanks
-1443 for atmospherics - distribution loop/mixed air tank
-1445 for bot nav beacons
-1447 for mulebot, secbot and ed209 control
-1449 for airlock controls, electropack, magnets
-1451 for toxin lab access
-1453 for engineering access
-1455 for AI access
-*/
-
-var/list/radiochannels = list(
-	"Common" = 1459,
-	"AI Private" = 1447,
-	"Deathsquad" = 1441,
-	"Security" = 1359,
-	"Engineering" = 1357,
-	"Command" = 1353,
-	"Medical" = 1355,
-	"Science" = 1351,
-	"Service" = 1349,
-	"Supply" = 1347,
-	"Response Team" = 1345,
-	"Raider" = 1215,
-	"Syndicate" = 1213,
-	"DJ" = 1201
-)
-
-var/list/radiochannelsreverse = list(
-	"1201" = "DJ",
-	"1213" = "Syndicate",
-	"1215" = "Raider",
-	"1345" = "Response Team",
-	"1347" = "Supply",
-	"1349" = "Service",
-	"1351" = "Science",
-	"1355" = "Medical",
-	"1353" = "Command",
-	"1357" = "Engineering",
-	"1359" = "Security",
-	"1441" = "Deathsquad",
-	"1447" = "AI Private",
-	"1459" = "Common"
-)
-
-
-//depenging helpers
-var/const/SUPP_FREQ = 1347 //supply, coloured light brown in chat window
-var/const/SERV_FREQ = 1349 //service, coloured green in chat window
-var/const/DSQUAD_FREQ = 1441 //death squad frequency, coloured grey in chat window
-var/const/RESTEAM_FREQ = 1345 //response team frequency, uses the deathsquad color at the moment.
-var/const/AIPRIV_FREQ = 1447 //AI private, colored magenta in chat window
-var/const/DJ_FREQ = 1201 //Media
-var/const/COMMON_FREQ = 1459
-
-// central command channels, i.e deathsquid & response teams
-var/list/CENT_FREQS = list(1345, 1441)
-
-var/const/COMM_FREQ = 1353 //command, colored gold in chat window
-var/const/SYND_FREQ = 1213
-var/const/RAID_FREQ = 1215 // for raiders
-
-// department channels
-var/const/SEC_FREQ = 1359
-var/const/ENG_FREQ = 1357
-var/const/SCI_FREQ = 1351
-var/const/MED_FREQ = 1355
-var/const/SUP_FREQ = 1347
-var/const/SER_FREQ = 1349
-
-#define TRANSMISSION_WIRE	0
-#define TRANSMISSION_RADIO	1
-
-/* filters */
-var/const/RADIO_TO_AIRALARM = "1"
-var/const/RADIO_FROM_AIRALARM = "2"
-var/const/RADIO_CHAT = "3" //deprecated
-var/const/RADIO_ATMOSIA = "4"
-var/const/RADIO_NAVBEACONS = "5"
-var/const/RADIO_AIRLOCK = "6"
-var/const/RADIO_SECBOT = "7"
-var/const/RADIO_MULEBOT = "8"
-var/const/RADIO_MAGNETS = "9"
-var/const/RADIO_CONVEYORS = "10"
-
-var/global/datum/controller/radio/radio_controller
-
-/datum/controller/radio
-	var/list/datum/radio_frequency/frequencies = new
-
-/datum/controller/radio/proc/add_object(const/obj/device, const/_frequency, var/filter = null as text|null)
-	var/datum/radio_frequency/frequency = return_frequency(_frequency)
-
-	if(isnull(frequency))
-		frequency = new
-		frequency.frequency = _frequency
-		frequencies[num2text(_frequency)] = frequency
-
-	frequency.add_listener(device, filter)
-	return frequency
-
-/datum/controller/radio/proc/remove_object(const/obj/device, const/_frequency)
-	var/datum/radio_frequency/frequency = return_frequency(_frequency)
-
-	if(frequency)
-		frequency.remove_listener(device)
-
-		if(frequency.devices.len <= 0)
-			frequencies.Remove(num2text(_frequency))
-
-	return 1
-
-/datum/controller/radio/proc/return_frequency(const/_frequency)
-	return frequencies[num2text(_frequency)]
+GLOBAL_LIST_INIT(reverseradiochannels, list(
+	"[FREQ_COMMON]" = "Common",
+	"[FREQ_SCIENCE]" = "Science",
+	"[FREQ_COMMAND]" = "Command",
+	"[FREQ_MEDICAL]" = "Medical",
+	"[FREQ_ENGINEERING]" = "Engineering",
+	"[FREQ_SECURITY]" = "Security",
+	"[FREQ_CENTCOM]" = "CentCom",
+	"[FREQ_SYNDICATE]" = "Syndicate",
+	"[FREQ_SUPPLY]" = "Supply",
+	"[FREQ_SERVICE]" = "Service",
+	"[FREQ_AI_PRIVATE]" = "AI Private",
+	"[FREQ_CTF_RED]" = "Red Team",
+	"[FREQ_CTF_BLUE]" = "Blue Team"
+))
 
 /datum/radio_frequency
 	var/frequency as num
 	var/list/list/obj/devices = list()
 
-/datum/radio_frequency/proc/post_signal(obj/source as obj|null, datum/signal/signal, var/filter = null as text|null, var/range = null as num|null)
-	//log_admin("DEBUG \[[world.timeofday]\]: post_signal {source=\"[source]\", [signal.debug_print()], filter=[filter]}")
-	//var/N_f=0
-	//var/N_nf=0
-	//var/Nt=0
+/datum/radio_frequency/New(freq)
+	frequency = freq
+
+//If range > 0, only post to devices on the same z_level and within range
+//Use range = -1, to restrain to the same z_level without limiting range
+/datum/radio_frequency/proc/post_signal(obj/source as obj|null, datum/signal/signal, filter = null as text|null, range = null as num|null)
+	// Ensure the signal's data is fully filled
+	signal.source = source
+	signal.frequency = frequency
+
+	//Apply filter to the signal. If none supply, broadcast to every devices
+	//_default channel is always checked
+	var/list/filter_list
+
+	if(filter)
+		filter_list = list(filter,"_default")
+	else
+		filter_list = devices
+
+	//If checking range, find the source turf
 	var/turf/start_point
 	if(range)
 		start_point = get_turf(source)
 		if(!start_point)
-			returnToPool(signal)
 			return 0
 
-	if (filter) //here goes some copypasta. It is for optimisation. -rastaf0
-		for(var/obj/device in devices[filter])
+	//Send the data
+	for(var/current_filter in filter_list)
+		for(var/obj/device in devices[current_filter])
 			if(device == source)
 				continue
 			if(range)
 				var/turf/end_point = get_turf(device)
 				if(!end_point)
 					continue
-				//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
-				if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
+				if(start_point.z != end_point.z || (range > 0 && get_dist(start_point, end_point) > range))
 					continue
-			device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
-		for(var/obj/device in devices["_default"])
-			if(device == source)
-				continue
-			if(range)
-				var/turf/end_point = get_turf(device)
-				if(!end_point)
-					continue
-				//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
-				if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
-					continue
-			device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
-			//N_f++
+			device.receive_signal(signal)
 
-	else
-		for (var/next_filter in devices)
-			//var/list/obj/DDD = devices[next_filter]
-			//Nt+=DDD.len
-			for(var/obj/device in devices[next_filter])
-				if(device == source)
-					continue
-				if(range)
-					var/turf/end_point = get_turf(device)
-					if(!end_point)
-						continue
-					//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
-					if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
-						continue
-				device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
-				//N_nf++
-
-	//log_admin("DEBUG: post_signal(source=[source] ([source.x], [source.y], [source.z]),filter=[filter]) frequency=[frequency], N_f=[N_f], N_nf=[N_nf]")
-
-
-	returnToPool(signal)
-
-/datum/radio_frequency/proc/add_listener(const/obj/device, var/filter)
-	if(!filter) // FIXME
+/datum/radio_frequency/proc/add_listener(obj/device, filter as text|null)
+	if (!filter)
 		filter = "_default"
 
-	var/list/devices_at_filter = devices[filter]
+	var/list/devices_line = devices[filter]
+	if(!devices_line)
+		devices[filter] = devices_line = list()
+	devices_line += device
 
-	if(isnull(devices_at_filter))
-		devices_at_filter = new
-		devices[filter] = devices_at_filter
 
-	devices_at_filter.Add(device)
+/datum/radio_frequency/proc/remove_listener(obj/device)
+	for(var/devices_filter in devices)
+		var/list/devices_line = devices[devices_filter]
+		if(!devices_line)
+			devices -= devices_filter
+		devices_line -= device
+		if(!devices_line.len)
+			devices -= devices_filter
 
-/datum/radio_frequency/proc/remove_listener(const/obj/device, const/filter)
-	var/list/devices_at_filter = devices[filter]
 
-	// 1. check if it's an object
-	// 2. check if it has contents
-	// 3. check if the device is in contents
-	if(devices_at_filter && devices_at_filter.len && devices_at_filter.Find(device))
-		devices_at_filter.Remove(device)
-
-		if(devices_at_filter.len <= 0)
-			devices.Remove(filter)
-
-/datum/radio_frequency/remove_listener(const/obj/device)
-	for(var/filter in devices)
-		..(device, filter)
-
-var/list/pointers = list()
-
-/client/proc/print_pointers()
-	set name = "Debug Signals"
-	set category = "Debug"
-
-	if(!holder)
-		return
-
-	to_chat(src, "There are [pointers.len] pointers:")
-	for(var/p in pointers)
-		to_chat(src, p)
-		var/datum/signal/S = locate(p)
-		if(istype(S))
-			to_chat(src, S.debug_print())
-
-/obj/proc/receive_signal(datum/signal/signal, receive_method, receive_param)
+/obj/proc/receive_signal(datum/signal/signal)
 	return
-
-#define SIGNAL_WIRE     0
-#define SIGNAL_RADIO    1
-#define SIGNAL_SUBSPACE 2
 
 /datum/signal
 	var/obj/source
-
-	var/transmission_method = SIGNAL_WIRE
-	//0 = wire
-	//1 = radio transmission
-	//2 = subspace transmission
-
-	var/data = list()
-	var/encryption
-
 	var/frequency = 0
+	var/transmission_method
+	var/list/data
 
-/datum/signal/New()
-	..()
-	pointers += "\ref[src]"
-
-/datum/signal/Destroy()
-	pointers -= "\ref[src]"
-
-/datum/signal/resetVariables()
-	. = ..("data")
-
-	source = null
-	data = list()
-
-/datum/signal/proc/copy_from(datum/signal/model)
-	source = model.source
-	transmission_method = model.transmission_method
-	data = model.data
-	encryption = model.encryption
-	frequency = model.frequency
-
-/datum/signal/proc/debug_print()
-	if (source)
-		. = "signal = {source = '[source]' ([source:x],[source:y],[source:z])\n"
-	else
-		. = "signal = {source = '[source]' ()\n"
-	for (var/i in data)
-		. += "data\[\"[i]\"\] = \"[data[i]]\"\n"
-		if(islist(data[i]))
-			var/list/L = data[i]
-			for(var/t in L)
-				. += "data\[\"[i]\"\] list has: [t]"
-
-/datum/signal/proc/sanitize_data()
-	for(var/d in data)
-		var/val = data[d]
-		if(istext(val))
-			data[d] = strip_html_simple(val)
+/datum/signal/New(data, transmission_method = TRANSMISSION_RADIO)
+	src.data = data || list()
+	src.transmission_method = transmission_method

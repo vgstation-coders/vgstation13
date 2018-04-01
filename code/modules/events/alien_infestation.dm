@@ -1,43 +1,76 @@
-/var/global/sent_aliens_to_station = 0
+/datum/round_event_control/alien_infestation
+	name = "Alien Infestation"
+	typepath = /datum/round_event/ghost_role/alien_infestation
+	weight = 5
 
-/datum/event/alien_infestation
-	announceWhen	= 450
+	min_players = 10
+	max_occurrences = 1
 
+/datum/round_event/ghost_role/alien_infestation
+	announceWhen	= 400
+
+	minimum_required = 1
+	role_name = "alien larva"
+
+	// 50% chance of being incremented by one
 	var/spawncount = 1
 	var/successSpawn = 0	//So we don't make a command report if nothing gets spawned.
-	var/player_factor = 1
+	fakeable = TRUE
 
 
-/datum/event/alien_infestation/setup()
-	announceWhen = rand(1500, 3000)
-	player_factor = round(player_list.len/10) //One bonus starting alium for 10 players
-	spawncount = rand(1, 2)+player_factor
-	sent_aliens_to_station = 1
+/datum/round_event/ghost_role/alien_infestation/setup()
+	announceWhen = rand(announceWhen, announceWhen + 50)
+	if(prob(50))
+		spawncount++
 
-/datum/event/alien_infestation/announce()
-	if(successSpawn)
-		command_alert(/datum/command_alert/xenomorphs)
+/datum/round_event/ghost_role/alien_infestation/kill()
+	if(!successSpawn && control)
+		// This never happened, so let's not deny the future of this round
+		// some xenolovin
+		control.occurrences--
+	return ..()
+
+/datum/round_event/ghost_role/alien_infestation/announce(fake)
+	if(successSpawn || fake)
+		priority_announce("Unidentified lifesigns detected coming aboard [station_name()]. Secure any exterior access, including ducting and ventilation.", "Lifesign Alert", 'sound/ai/aliens.ogg')
 
 
-/datum/event/alien_infestation/start()
+/datum/round_event/ghost_role/alien_infestation/spawn_role()
 	var/list/vents = list()
-	for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
-		if(temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network)
-			if(temp_vent.network.normal_members.len > 50)	//Stops Aliens getting stuck in small networks. See: Security, Virology
+	for(var/obj/machinery/atmospherics/components/unary/vent_pump/temp_vent in GLOB.machines)
+		if(QDELETED(temp_vent))
+			continue
+		if(is_station_level(temp_vent.loc.z) && !temp_vent.welded)
+			var/datum/pipeline/temp_vent_parent = temp_vent.parents[1]
+			//Stops Aliens getting stuck in small networks.
+			//See: Security, Virology
+			if(temp_vent_parent.other_atmosmch.len > 20)
 				vents += temp_vent
 
-	var/list/candidates = get_active_candidates(ROLE_ALIEN, buffer=ALIEN_SELECT_AFK_BUFFER, poll="HEY KID, YOU WANNA BE AN ALIEN LARVA?")
+	if(!vents.len)
+		message_admins("An event attempted to spawn an alien but no suitable vents were found. Shutting down.")
+		return MAP_ERROR
+
+	var/list/candidates = get_candidates(ROLE_ALIEN, null, ROLE_ALIEN)
+
+	if(!candidates.len)
+		return NOT_ENOUGH_PLAYERS
 
 	while(spawncount > 0 && vents.len && candidates.len)
-		var/obj/vent = pick(vents)
-		var/mob/candidate = pick(candidates)
+		var/obj/vent = pick_n_take(vents)
+		var/client/C = pick_n_take(candidates)
 
 		var/mob/living/carbon/alien/larva/new_xeno = new(vent.loc)
-		new_xeno.key = candidate.key
-		new_xeno << sound('sound/voice/alienspawn.ogg')
+		new_xeno.key = C.key
 
-		candidates -= candidate
-		vents -= vent
 		spawncount--
-		successSpawn = 1
-	return successSpawn
+		successSpawn = TRUE
+		message_admins("[key_name_admin(new_xeno)] has been made into an alien by an event.")
+		log_game("[key_name(new_xeno)] was spawned as an alien by an event.")
+		spawned_mobs += new_xeno
+
+	if(successSpawn)
+		return SUCCESSFUL_SPAWN
+	else
+		// Like how did we get here?
+		return FALSE

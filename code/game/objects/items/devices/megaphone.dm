@@ -3,70 +3,48 @@
 	desc = "A device used to project your voice. Loudly."
 	icon_state = "megaphone"
 	item_state = "radio"
-	w_class = W_CLASS_TINY
-	flags = FPRINT
+	lefthand_file = 'icons/mob/inhands/misc/devices_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/misc/devices_righthand.dmi'
+	w_class = WEIGHT_CLASS_SMALL
 	siemens_coefficient = 1
-
 	var/spamcheck = 0
-	var/emagged = 0
-	var/insults = 0
-	var/list/insultmsg = list("FUCK EVERYONE!", "I'M A TATER!", "ALL SECURITY TO SHOOT ME ON SIGHT!", "I HAVE A BOMB!", "CAPTAIN IS A COMDOM!", "FOR THE SYNDICATE!")
+	var/list/voicespan = list(SPAN_COMMAND)
 
-/obj/item/device/megaphone/attack_self(mob/living/user as mob)
-	if(!can_use(user))
-		return
+/obj/item/device/megaphone/suicide_act(mob/living/carbon/user)
+	user.visible_message("<span class='suicide'>[user] is uttering [user.p_their()] last words into \the [src]! It looks like [user.p_theyre()] trying to commit suicide!</span>")
+	spamcheck = 0//so they dont have to worry about recharging
+	user.say("AAAAAAAAAAAARGHHHHH")//he must have died while coding this
+	return OXYLOSS
 
-	var/message = copytext(sanitize(input(user, "Shout a message?", "Megaphone", null)  as text),1,MAX_MESSAGE_LEN)
-	if(!message)
-		return
-	message = capitalize(message)
-	if ((src.loc == user && usr.stat == 0))
-		if(emagged)
-			if(insults)
-				for(var/mob/O in (viewers(user)))
-					O.show_message("<B>[user]</B> broadcasts, <FONT size=3>\"[pick(insultmsg)]\"</FONT>",2) // 2 stands for hearable message
-				insults--
-			else
-				to_chat(user, "<span class='warning'>*BZZZZzzzzzt*</span>")
-		else
-			for(var/mob/O in (viewers(user)))
-				O.show_message("<B>[user]</B> broadcasts, <FONT size=3>\"[message]\"</FONT>",2) // 2 stands for hearable message
-
-		spamcheck = 1
-		spawn(20)
-			spamcheck = 0
-		return
-
-/obj/item/device/megaphone/proc/can_use(mob/living/user)
-	if (user.client)
-		if(user.client.prefs.muted & MUTE_IC)
-			to_chat(src, "<span class='warning'>You cannot speak in IC (muted).</span>")
-			return 0
-	if(user.silent)
-		to_chat(user, "<span class='warning'>You find yourself unable to speak at all.</span>")
-		return 0
-	if(spamcheck)
+/obj/item/device/megaphone/get_held_item_speechspans(mob/living/carbon/user)
+	if(spamcheck > world.time)
 		to_chat(user, "<span class='warning'>\The [src] needs to recharge!</span>")
-		return 0
-	if(ishuman(user)) //humans can use it, borgs can, mommis can't
-		to_chat(user, "<span class='warning'>You don't know how to use this!</span>")
-		var/mob/living/carbon/human/H = user
-		if(istype(H) && (H.miming)) //Humans get their muteness checked
-			to_chat(user, "<span class='warning'>You find yourself unable to speak at all.</span>")
-			return 0
-		return 1
+	else
+		playsound(loc, 'sound/items/megaphone.ogg', 100, 0, 1)
+		spamcheck = world.time + 50
+		return voicespan
 
-	if(isrobot(user) && !isMoMMI(user))
-		return 1
-	if(ismartian(user))
-		return 1
-	return 0
-
-
-/obj/item/device/megaphone/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
-		to_chat(user, "<span class='warning'>You overload \the [src]'s voice synthesizer.</span>")
-		emagged = 1
-		insults = rand(1, 3)//to prevent dickflooding
+/obj/item/device/megaphone/emag_act(mob/user)
+	if(obj_flags & EMAGGED)
 		return
-	return
+	to_chat(user, "<span class='warning'>You overload \the [src]'s voice synthesizer.</span>")
+	obj_flags |= EMAGGED
+	voicespan = list(SPAN_REALLYBIG, "userdanger")
+
+/obj/item/device/megaphone/sec
+	name = "security megaphone"
+	icon_state = "megaphone-sec"
+
+/obj/item/device/megaphone/command
+	name = "command megaphone"
+	icon_state = "megaphone-command"
+
+/obj/item/device/megaphone/cargo
+	name = "supply megaphone"
+	icon_state = "megaphone-cargo"
+
+/obj/item/device/megaphone/clown
+	name = "clown's megaphone"
+	desc = "Something that should not exist."
+	icon_state = "megaphone-clown"
+	voicespan = list(SPAN_CLOWN)

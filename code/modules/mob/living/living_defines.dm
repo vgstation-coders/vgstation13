@@ -1,13 +1,17 @@
 /mob/living
 	see_invisible = SEE_INVISIBLE_LIVING
+	sight = 0
+	see_in_dark = 2
+	hud_possible = list(HEALTH_HUD,STATUS_HUD,ANTAG_HUD)
+	pressure_resistance = 10
+
+	var/resize = 1 //Badminnery resize
+	var/lastattacker = null
+	var/lastattackerckey = null
 
 	//Health and life related vars
 	var/maxHealth = 100 //Maximum health that should be possible.
 	var/health = 100 	//A mob's health
-
-	var/hud_updateflag = 0
-
-	size = SIZE_NORMAL
 
 	//Damage related vars, NOTE: THESE SHOULD ONLY BE MODIFIED BY PROCS
 	var/bruteloss = 0	//Brutal damage caused by brute force (punching, being clubbed by a toolbox ect... this also accounts for pressure damage)
@@ -15,70 +19,95 @@
 	var/toxloss = 0		//Toxic damage caused by being poisoned or radiated
 	var/fireloss = 0	//Burn damage caused by being way too hot, too cold or burnt.
 	var/cloneloss = 0	//Damage caused by being cloned or ejected from the cloner early. slimes also deal cloneloss damage to victims
-	var/brainloss = 0	//'Retardation' damage caused by someone hitting you in the head with a bible or being infected with brainrot.
-	var/halloss = 0		//Hallucination damage. 'Fake' damage obtained through hallucinating or the holodeck. Sleeping should cause it to wear off.
+	var/staminaloss = 0		//Stamina damage, or exhaustion. You recover it slowly naturally, and are knocked down if it gets too high. Holodeck and hallucinations deal this.
+
+	var/confused = 0	//Makes the mob move in random directions.
 
 	var/hallucination = 0 //Directly affects how long a mob will hallucinate for
-	var/list/atom/hallucinations = list() //A list of hallucinated people that try to attack the mob. See /obj/effect/fake_attacker in hallucinations.dm
 
-	var/can_butcher = 1 //Whether it's possible to butcher this mob manually
-	var/meat_taken = 0 //How much meat has been taken from this mob by butchering
-	var/meat_amount = 0 //How much meat can you take from this mob. Default value (0) will change to be the mob's size
-	var/meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
-	var/being_butchered = 0 //To prevent butchering an animal almost instantly
-	var/list/butchering_drops //See code/datums/butchering.dm, stuff like skinning goes here
+	var/last_special = 0 //Used by the resist verb, likely used to prevent players from bypassing next_move by logging in/out.
+	var/timeofdeath = 0
 
-	var/mob_property_flags
+	//Allows mobs to move through dense areas without restriction. For instance, in space or out of holder objects.
+	var/incorporeal_move = FALSE //FALSE is off, INCORPOREAL_MOVE_BASIC is normal, INCORPOREAL_MOVE_SHADOW is for ninjas
+								 //and INCORPOREAL_MOVE_JAUNT is blocked by holy water/salt
 
-	var/list/image/static_overlays
+	var/list/status_traits = list()
 
-	var/t_plasma = null
-	var/t_oxygen = null
-	var/t_sl_gas = null
-	var/t_n2 = null
+	var/list/roundstart_traits = list()
 
-	var/now_pushing = null
-	var/mob_bump_flag = 0
-	var/mob_swap_flags = 0
-	var/mob_push_flags = 0
+	var/list/surgeries = list()	//a list of surgery datums. generally empty, they're added when the player wants them.
+
+	var/now_pushing = null //used by living/Collide() and living/PushAM() to prevent potential infinite loop.
 
 	var/cameraFollow = null
 
 	var/tod = null // Time of death
-	var/update_slimes = 1
 
-	on_fire = 0 //The "Are we on fire?" var
+	var/on_fire = 0 //The "Are we on fire?" var
 	var/fire_stacks = 0 //Tracks how many stacks of fire we have on, max is usually 20
 
-	var/specialsauce = 0 //Has this person consumed enough special sauce? IF so they're a ticking time bomb of death.
+	var/bloodcrawl = 0 //0 No blood crawling, BLOODCRAWL for bloodcrawling, BLOODCRAWL_EAT for crawling+mob devour
+	var/holder = null //The holder for blood crawling
+	var/ventcrawler = 0 //0 No vent crawling, 1 vent crawling in the nude, 2 vent crawling always
+	var/limb_destroyer = 0 //1 Sets AI behavior that allows mobs to target and dismember limbs with their basic attack.
 
-	var/implanting = 0 //Used for the mind-slave implant
-	var/silent = null 		//Can't talk. Value goes down every life proc.
+	var/mob_size = MOB_SIZE_HUMAN
+	var/metabolism_efficiency = 1 //more or less efficiency to metabolize helpful/harmful reagents and regulate body temperature..
+	var/list/image/staticOverlays = list()
+	var/has_limbs = 0 //does the mob have distinct limbs?(arms,legs, chest,head)
 
-	var/locked_to_z = 0 // Locked to a Z-level if nonzero.
-
-	// Fix ashifying in hot fires.
-	//autoignition_temperature=0
-	//fire_fuel=0
-
-	var/list/icon/pipes_shown = list()
+	var/list/pipes_shown = list()
 	var/last_played_vent
-	var/is_ventcrawling = 0
 
-	var/species_type
-	var/holder_type = /obj/item/weapon/holder/animal	//When picked up, put us into a holder of this type. Dionae use /obj/item/weapon/holder/diona, others - the default one
-														//Set to null to prevent people from picking this mob up!
-	//
-	var/list/callOnLife = list() //
-	var/obj/abstract/screen/schematics_background
-	var/shown_schematics_background = 0
+	var/smoke_delay = 0 //used to prevent spam with smoke reagent reaction on mob.
 
-	var/list/advanced_butchery //Includes a list of the tools used to butcher the mob, detectable via autopsy scanner rather than examine.
+	var/bubble_icon = "default" //what icon the mob uses for speechbubbles
 
-	var/cap_calorie_burning_bodytemp = TRUE
-	var/calorie_burning_heat_multiplier = 1		//The heat generated from burning calories is multiplied by this value.
-	var/thermal_loss_multiplier = 1				//The heat the mob loses to the environment is multiplied by this value.
+	var/last_bumped = 0
+	var/unique_name = 0 //if a mob's name should be appended with an id when created e.g. Mob (666)
 
-/mob/living/proc/unsubLife(datum/sub)
-	while("\ref[sub]" in callOnLife)
-		callOnLife -= "\ref[sub]"
+	var/list/butcher_results = null //these will be yielded from butchering with a probability chance equal to the butcher item's effectiveness
+	var/list/guaranteed_butcher_results = null //these will always be yielded from butchering
+	var/butcher_difficulty = 0 //effectiveness prob. is modified negatively by this amount; positive numbers make it more difficult, negative ones make it easier
+
+	var/hellbound = 0 //People who've signed infernal contracts are unrevivable.
+
+	var/list/weather_immunities = list()
+
+	var/stun_absorption = null //converted to a list of stun absorption sources this mob has when one is added
+
+	var/blood_volume = 0 //how much blood the mob has
+	var/obj/effect/proc_holder/ranged_ability //Any ranged ability the mob has, as a click override
+
+	var/see_override = 0 //0 for no override, sets see_invisible = see_override in silicon & carbon life process via update_sight()
+
+	var/list/status_effects //a list of all status effects the mob has
+	var/druggy = 0
+
+	//Speech
+	var/stuttering = 0
+	var/slurring = 0
+	var/cultslurring = 0
+	var/derpspeech = 0
+
+	var/list/implants = null
+
+	var/datum/riding/riding_datum
+
+	var/datum/language/selected_default_language
+
+	var/last_words	//used for database logging
+
+	var/list/obj/effect/proc_holder/abilities = list()
+
+	var/registered_z
+	var/can_be_held = FALSE	//whether this can be picked up and held.
+
+	var/radiation = 0 //If the mob is irradiated.
+	var/ventcrawl_layer = PIPING_LAYER_DEFAULT
+	var/losebreath = 0
+
+	//List of active diseases
+	var/list/diseases = list() // list of all diseases in a mob
+	var/list/disease_resistances = list()

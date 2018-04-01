@@ -1,149 +1,59 @@
 /datum/game_mode/meteor
 	name = "meteor"
 	config_tag = "meteor"
-
-	var/const/waittime_l = 600 //Lower interval on time before intercept arrives (in tenths of seconds)
-	var/const/waittime_h = 1800 //Upper interval on time before intercept arrives (in tenths of seconds)
-
-	var/const/meteor_announce_delay_l = 2100 //Lower interval on announcement, here 3 minutes and 30 seconds
-	var/const/meteor_announce_delay_h = 3000 //Upper interval on announcement, here 5 minutes
-	var/meteor_announce_delay = 2400 //Default final announcement delay
-
+	false_report_weight = 1
+	var/meteordelay = 2000
+	var/nometeors = 0
+	var/rampupdelta = 5
 	required_players = 0
-	required_players_secret = 20
 
-	uplink_welcome = "EVIL METEOR Uplink Console:"
-	uplink_uses = 20
+	announce_span = "danger"
+	announce_text = "A major meteor shower is bombarding the station! The crew needs to evacuate or survive the onslaught."
 
-/datum/game_mode/meteor/announce()
-	to_chat(world, "<B>The current game mode is - Meteor!</B>")
-	to_chat(world, "<B>The space station is about to be struck by a major meteor shower. You must hold out until the escape shuttle arrives.</B>")
 
-/datum/game_mode/meteor/pre_setup()
-	log_admin("Starting a round of meteor.")
-	message_admins("Starting a round of meteor.")
-	return 1
-
-/datum/game_mode/meteor/post_setup()
-
-	//Let's set up the announcement and meteor delay immediatly to send to the admins and use later
-	meteor_announce_delay = rand((meteor_announce_delay_l/600), (meteor_announce_delay_h/600)) * 600 //Minute interval for simplicity
-
-	spawn(300) //Give everything 30 seconds to initialize, this does not delay the rest of post_setup() nor the game and ensures deadmins aren't aware in advance and the admins are
-		message_admins("Meteor storm confirmed by Space Weather Incorporated. Announcement arrives in approximately [round((meteor_announce_delay-200)/600)] minutes, further information will be given then.")
-
-	spawn(rand(waittime_l, waittime_h))
-		if(!mixed)
-			send_intercept()
-
-	spawn(meteor_announce_delay)
-
-		SetUniversalState(/datum/universal_state/meteor_storm, 1, 1)
-
-/datum/universal_state/meteor_storm
-	name = "Meteor Storm"
-	desc = "A meteor storm is currently wrecking havoc around this sector. Duck and cover."
-
-	decay_rate = 0 //Just to make sure
-
-	var/meteor_extra_announce_delay = 0 //Independent from the gamemode delay. Delay from firing universal state before stuff happens
-
-	var/supply_delay = 100 //Delay before meteor supplies are spawned in tenth of seconds
-
-	var/meteor_shuttle_multiplier = 3 //How much more will we need to hold out ? Here 30 minutes until the shuttle arrives. Multiplies by 10
-
-	var/const/meteor_delay_l = 4500 //Lower interval to meteor wave arrival, here 7.5 minutes
-	var/const/meteor_delay_h = 6000 //Higher interval to meteor wave arrival, here 10 minutes
-	var/meteor_delay = 0 //Final meteor delay, must be defined as 0 to automatically generate
-
-	var/meteors_allowed = 0 //Can we send the meteors ?
-
-	var/meteor_wave_size_l = 150 //Lower interval to meteor wave size
-	var/meteor_wave_size_h = 200 //Higher interval to meteor wave size
-
-/datum/universal_state/meteor_storm/OnShuttleCall(var/mob/user)
-	if(user)
-		to_chat(user, "<span class='sinister'>You hear an automatic dispatch from Nanotrasen. It states that Centcomm is being shielded due to an incoming meteor storm and that regular shuttle service has been interrupted.</span>")
-	return 0
-
-/datum/universal_state/meteor_storm/OnEnter()
-
-	sleep(meteor_extra_announce_delay) //Pause everything as according to the extra delay
-
-	world << sound('sound/machines/warning.ogg') //The same chime as the Delta countdown, just twice
-
-	if(!meteor_delay)
-		meteor_delay = rand((meteor_delay_l/600), (meteor_delay_h/600))*600 //Let's set up the meteor delay in here
-
-	sleep(20) //Two seconds for warning to play
-
-	var/datum/command_alert/meteor_round/CA = new()
-	CA.meteor_delay = meteor_delay
-	CA.supply_delay = supply_delay
-	command_alert(CA)
-
-	message_admins("Meteor Storm announcement given. Meteors will arrive in approximately [round(meteor_delay/600)] minutes. Shuttle will take [10*meteor_shuttle_multiplier] minutes to arrive and supplies are about to be dispatched in the Bar.")
-
-	spawn(100) //Time for the announcement to spell out)
-
-		emergency_shuttle.incall(meteor_shuttle_multiplier)
-		captain_announce("A backup emergency shuttle has been called. It will arrive in [round((emergency_shuttle.timeleft())/60)] minutes. Justification : 'Major meteor storm inbound. Evacuation procedures deferred to Space Weather Inc. THIS IS NOT A DRILL'")
-		world << sound('sound/AI/shuttlecalled.ogg')
-
-	spawn(supply_delay) //Panic inverval
-
-		meteor_initial_supply() //Handled in meteor_supply.dm
-
-		ticker.StartThematic("endgame") //We can start building up now and then. If someone feels like this gamemode deserves a unique music playlist, they can go ahead and do that
-
-		spawn(meteor_delay)
-			meteors_allowed = 1
-			check_meteor_storm()
-
-//This proc needs to be called every time meteors_allowed is set to 1, aka when starting the mayhem. Obviously, do not call it in repeating procs
-/datum/universal_state/meteor_storm/proc/check_meteor_storm()
-
-	if(!meteors_allowed)
+/datum/game_mode/meteor/process()
+	if(nometeors || meteordelay > world.time - SSticker.round_start_time)
 		return
 
-	spawn()
-		while(meteors_allowed && src == global.universe)
-			var/meteors_in_wave = rand(meteor_wave_size_l, meteor_wave_size_h)
-			meteor_wave(meteors_in_wave, 3)
-			sleep(10)
+	var/list/wavetype = GLOB.meteors_normal
+	var/meteorminutes = (world.time - SSticker.round_start_time - meteordelay) / 10 / 60
 
-//Important note : This will only fire if the Meteors gamemode was fired
-/datum/game_mode/meteor/declare_completion()
-	var/text
-	var/escapees = 0
+
+	if (prob(meteorminutes))
+		wavetype = GLOB.meteors_threatening
+
+	if (prob(meteorminutes/2))
+		wavetype = GLOB.meteors_catastrophic
+
+	var/ramp_up_final = CLAMP(round(meteorminutes/rampupdelta), 1, 10)
+
+	spawn_meteors(ramp_up_final, wavetype)
+
+
+/datum/game_mode/meteor/special_report()
 	var/survivors = 0
-	for(var/mob/living/player in player_list)
+	var/list/survivor_list = list()
+
+	for(var/mob/living/player in GLOB.player_list)
 		if(player.stat != DEAD)
-			var/turf/location = get_turf(player.loc)
-			if(!location)
-				continue
-			switch(location.loc.type)
-				if(/area/shuttle/escape/centcom)
-					text += "<br><b><font size=2>[player.real_name] escaped on the emergency shuttle</font></b>"
-					escapees++
-					survivors++
-				if(/area/shuttle/escape_pod1/centcom, /area/shuttle/escape_pod2/centcom, /area/shuttle/escape_pod3/centcom, /area/shuttle/escape_pod5/centcom)
-					text += "<br><font size=2>[player.real_name] escaped in a life pod.</font>"
-					escapees++
-					survivors++
-				else
-					text += "<br><font size=1>[player.real_name] is stranded in outer space without any hope of rescue.</font>"
-					survivors++
+			++survivors
 
-	if(escapees)
-		to_chat(world, "<span class='info'><B>The following escaped from the meteor storm</B>:[text]</span>")
-	else if(survivors)
-		to_chat(world, "<span class='info'><B>No-one escaped the meteor storm. The following are still alive for now</B>:[text]</span>")
+			if(player.onCentCom())
+				survivor_list += "<span class='greentext'>[player.real_name] escaped to the safety of CentCom.</span>"
+			else if(player.onSyndieBase())
+				survivor_list += "<span class='greentext'>[player.real_name] escaped to the (relative) safety of Syndicate Space.</span>"
+			else
+				survivor_list += "<span class='neutraltext'>[player.real_name] survived but is stranded without any hope of rescue.</span>"
+
+	if(survivors)
+		return "<div class='panel greenborder'><span class='header'>The following survived the meteor storm:</span><br>[survivor_list.Join("<br>")]</div>"
 	else
-		to_chat(world, "<span class='info'><B>The meteor storm crashed this station with no survivors!</B></span>")
+		return "<div class='panel redborder'><span class='redtext big'>Nobody survived the meteor storm!</span></div>"
 
-	feedback_set_details("round_end_result", "end - evacuation")
-	feedback_set("round_end_result", survivors)
-
+/datum/game_mode/meteor/set_round_result()
 	..()
-	return 1
+	SSticker.mode_result = "end - evacuation"
+
+/datum/game_mode/meteor/generate_report()
+	return "[pick("Asteroids have", "Meteors have", "Large rocks have", "Stellar minerals have", "Space hail has", "Debris has")] been detected near your station, and a collision is possible, \
+			though unlikely.  Be prepared for largescale impacts and destruction.  Please note that the debris will prevent the escape shuttle from arriving quickly."

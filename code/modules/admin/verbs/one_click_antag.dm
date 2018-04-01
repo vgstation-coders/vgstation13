@@ -1,7 +1,8 @@
-client/proc/one_click_antag()
+/client/proc/one_click_antag()
 	set name = "Create Antagonist"
 	set desc = "Auto-create an antagonist of your choice"
 	set category = "Admin"
+
 	if(holder)
 		holder.one_click_antag()
 	return
@@ -9,107 +10,89 @@ client/proc/one_click_antag()
 
 /datum/admins/proc/one_click_antag()
 
-
-	var/dat = {"<B>One-click Antagonist</B><br>
-		<a href='?src=\ref[src];makeAntag=1'>Make Traitors</a><br>
-		<a href='?src=\ref[src];makeAntag=2'>Make Changlings</a><br>
-		<a href='?src=\ref[src];makeAntag=3'>Make Revs</a><br>
-		<a href='?src=\ref[src];makeAntag=4'>Make Cult</a><br>
-		<a href='?src=\ref[src];makeAntag=5'>Make Malf AI</a><br>
-		<a href='?src=\ref[src];makeAntag=6'>Make Wizard (Requires Ghosts)</a><br>
-		<a href='?src=\ref[src];makeAntag=11'>Make Vox Raiders (Requires Ghosts)</a><br>
-		<a href='?src=\ref[src];makeAntag=7'>Make Nuke Team (Requires Ghosts)</a><br>
-		<a href='?src=\ref[src];makeAntag=9'>Make Aliens (Requires Ghosts)</a><br>
-		<a href='?src=\ref[src];makeAntag=10'>Make Deathsquad (Syndicate) (Requires Ghosts)</a><br>
+	var/dat = {"
+		<a href='?src=[REF(src)];[HrefToken()];makeAntag=traitors'>Make Traitors</a><br>
+		<a href='?src=[REF(src)];[HrefToken()];makeAntag=changelings'>Make Changelings</a><br>
+		<a href='?src=[REF(src)];[HrefToken()];makeAntag=revs'>Make Revs</a><br>
+		<a href='?src=[REF(src)];[HrefToken()];makeAntag=cult'>Make Cult</a><br>
+		<a href='?src=[REF(src)];[HrefToken()];makeAntag=clockcult'>Make Clockwork Cult</a><br>
+		<a href='?src=[REF(src)];[HrefToken()];makeAntag=blob'>Make Blob</a><br>
+		<a href='?src=[REF(src)];[HrefToken()];makeAntag=wizard'>Make Wizard (Requires Ghosts)</a><br>
+		<a href='?src=[REF(src)];[HrefToken()];makeAntag=nukeops'>Make Nuke Team (Requires Ghosts)</a><br>
+		<a href='?src=[REF(src)];[HrefToken()];makeAntag=centcom'>Make CentCom Response Team (Requires Ghosts)</a><br>
+		<a href='?src=[REF(src)];[HrefToken()];makeAntag=abductors'>Make Abductor Team (Requires Ghosts)</a><br>
+		<a href='?src=[REF(src)];[HrefToken()];makeAntag=revenant'>Make Revenant (Requires Ghost)</a><br>
 		"}
 
-	usr << browse(dat, "window=oneclickantag;size=400x400")
-	return
+	var/datum/browser/popup = new(usr, "oneclickantag", "Quick-Create Antagonist", 400, 400)
+	popup.set_content(dat)
+	popup.open()
 
-
-/datum/admins/proc/makeMalfAImode()
-
-
-	var/list/mob/living/silicon/AIs = list()
-	var/mob/living/silicon/malfAI = null
-	var/datum/mind/themind = null
-
-	for(var/mob/living/silicon/ai/ai in player_list)
-		if(ai.client)
-			AIs += ai
-
-	if(AIs.len)
-		malfAI = pick(AIs)
-
-	if(malfAI)
-		themind = malfAI.mind
-		themind.make_AI_Malf()
-		return 1
-
-	return 0
+/datum/admins/proc/isReadytoRumble(mob/living/carbon/human/applicant, targetrole, onstation = TRUE, conscious = TRUE)
+	if(applicant.mind.special_role)
+		return FALSE
+	if(!(targetrole in applicant.client.prefs.be_special))
+		return FALSE
+	if(onstation)
+		var/turf/T = get_turf(applicant)
+		if(!is_station_level(T.z))
+			return FALSE
+	if(conscious && applicant.stat) //incase you don't care about a certain antag being unconcious when made, ie if they have selfhealing abilities.
+		return FALSE
+	if(!considered_alive(applicant.mind) || considered_afk(applicant.mind)) //makes sure the player isn't a zombie, brain, or just afk all together
+		return FALSE
+	return (!jobban_isbanned(applicant, targetrole) && !jobban_isbanned(applicant, ROLE_SYNDICATE))
 
 
 /datum/admins/proc/makeTraitors()
 	var/datum/game_mode/traitor/temp = new
 
-	if(config.protect_roles_from_antagonist)
+	if(CONFIG_GET(flag/protect_roles_from_antagonist))
 		temp.restricted_jobs += temp.protected_jobs
 
+	if(CONFIG_GET(flag/protect_assistant_from_antagonist))
+		temp.restricted_jobs += "Assistant"
+
 	var/list/mob/living/carbon/human/candidates = list()
+	var/mob/living/carbon/human/H = null
 
-	for(var/mob/living/carbon/human/applicant in player_list)
-		if(applicant.client.desires_role(ROLE_TRAITOR))
-			if(!applicant.stat)
-				if(applicant.mind)
-					if (!applicant.mind.special_role)
-						if(!jobban_isbanned(applicant, "traitor") && !jobban_isbanned(applicant, "Syndicate"))
-							if(!(applicant.job in temp.restricted_jobs))
-								candidates += applicant
+	for(var/mob/living/carbon/human/applicant in GLOB.player_list)
+		if(isReadytoRumble(applicant, ROLE_TRAITOR, FALSE))
+			if(temp.age_check(applicant.client))
+				if(!(applicant.job in temp.restricted_jobs))
+					candidates += applicant
 
-	if (candidates.len)
-		candidates = shuffle(candidates)
+	if(candidates.len)
+		var/numTraitors = min(candidates.len, 3)
 
-		var/mob/living/carbon/human/candidate
-
-		var/antag_number = input("How many antags would you like to create?","Create Antagonists") as num|null
-
-		if (!antag_number)
-			to_chat(usr, "<span class='warning'>0 traitors selected. Aborting.</span>")
-			return
-
-		for (var/i = 1 to min(candidates.len, antag_number))
-			candidate = pick_n_take(candidates)
-
-			if (candidate)
-				var/datum/mind/candidate_mind = candidate.mind
-
-				if (candidate_mind)
-					if (candidate_mind.make_traitor())
-						log_admin("[key_name(owner)] has traitor'ed [key_name(candidate)] via create antagonist verb.")
+		for(var/i = 0, i<numTraitors, i++)
+			H = pick(candidates)
+			H.mind.make_Traitor()
+			candidates.Remove(H)
 
 		return 1
+
 
 	return 0
 
 
 /datum/admins/proc/makeChanglings()
 
-
 	var/datum/game_mode/changeling/temp = new
-	if(config.protect_roles_from_antagonist)
+	if(CONFIG_GET(flag/protect_roles_from_antagonist))
 		temp.restricted_jobs += temp.protected_jobs
+
+	if(CONFIG_GET(flag/protect_assistant_from_antagonist))
+		temp.restricted_jobs += "Assistant"
 
 	var/list/mob/living/carbon/human/candidates = list()
 	var/mob/living/carbon/human/H = null
 
-	for(var/mob/living/carbon/human/applicant in player_list)
-		if(applicant.client.desires_role(ROLE_CHANGELING))
-			if(!applicant.stat)
-				if(applicant.mind)
-					if (!applicant.mind.special_role)
-						if(!jobban_isbanned(applicant, "changeling") && !jobban_isbanned(applicant, "Syndicate"))
-							if(!(applicant.job in temp.restricted_jobs))
-								candidates += applicant
+	for(var/mob/living/carbon/human/applicant in GLOB.player_list)
+		if(isReadytoRumble(applicant, ROLE_CHANGELING))
+			if(temp.age_check(applicant.client))
+				if(!(applicant.job in temp.restricted_jobs))
+					candidates += applicant
 
 	if(candidates.len)
 		var/numChanglings = min(candidates.len, 3)
@@ -125,24 +108,21 @@ client/proc/one_click_antag()
 
 /datum/admins/proc/makeRevs()
 
-
 	var/datum/game_mode/revolution/temp = new
-	if(config.protect_roles_from_antagonist)
+	if(CONFIG_GET(flag/protect_roles_from_antagonist))
 		temp.restricted_jobs += temp.protected_jobs
+
+	if(CONFIG_GET(flag/protect_assistant_from_antagonist))
+		temp.restricted_jobs += "Assistant"
 
 	var/list/mob/living/carbon/human/candidates = list()
 	var/mob/living/carbon/human/H = null
 
-	for(var/mob/living/carbon/human/applicant in player_list)
-		if(!applicant.client)
-			continue
-		if(applicant.client.desires_role(ROLE_REV))
-			if(applicant.stat == CONSCIOUS)
-				if(applicant.mind)
-					if(!applicant.mind.special_role)
-						if(!jobban_isbanned(applicant, "revolutionary") && !jobban_isbanned(applicant, "Syndicate"))
-							if(!(applicant.job in temp.restricted_jobs))
-								candidates += applicant
+	for(var/mob/living/carbon/human/applicant in GLOB.player_list)
+		if(isReadytoRumble(applicant, ROLE_REV))
+			if(temp.age_check(applicant.client))
+				if(!(applicant.job in temp.restricted_jobs))
+					candidates += applicant
 
 	if(candidates.len)
 		var/numRevs = min(candidates.len, 3)
@@ -156,47 +136,32 @@ client/proc/one_click_antag()
 	return 0
 
 /datum/admins/proc/makeWizard()
-	var/list/mob/dead/observer/candidates = list()
-	var/mob/dead/observer/theghost = null
 
-	for(var/mob/dead/observer/G in get_active_candidates(ROLE_WIZARD,poll="Do you wish to be considered for the Space Wizard Federation \"Ambassador\"?"))
-		if(!jobban_isbanned(G, "wizard") && !jobban_isbanned(G, "Syndicate"))
-			candidates += G
+	var/list/mob/dead/observer/candidates = pollGhostCandidates("Do you wish to be considered for the position of a Wizard Foundation 'diplomat'?", ROLE_WIZARD, null)
 
-	if(candidates.len)
-		shuffle(candidates)
-		for(var/mob/i in candidates)
-			if(!i || !i.client)
-				continue //Dont bother removing them from the list since we only grab one wizard
+	var/mob/dead/observer/selected = pick_n_take(candidates)
 
-			theghost = i
-			break
-
-	if(theghost)
-		var/mob/living/carbon/human/new_character=makeBody(theghost)
-		new_character.mind.make_Wizard()
-		return 1
-
-	return 0
+	var/mob/living/carbon/human/new_character = makeBody(selected)
+	new_character.mind.make_Wizard()
+	return TRUE
 
 
 /datum/admins/proc/makeCult()
-
-
 	var/datum/game_mode/cult/temp = new
-	if(config.protect_roles_from_antagonist)
+	if(CONFIG_GET(flag/protect_roles_from_antagonist))
 		temp.restricted_jobs += temp.protected_jobs
+
+	if(CONFIG_GET(flag/protect_assistant_from_antagonist))
+		temp.restricted_jobs += "Assistant"
 
 	var/list/mob/living/carbon/human/candidates = list()
 	var/mob/living/carbon/human/H = null
 
-	for(var/mob/living/carbon/human/applicant in get_active_candidates(ROLE_CULTIST))
-		if(applicant.stat == CONSCIOUS)
-			if(applicant.mind)
-				if(!applicant.mind.special_role)
-					if(!jobban_isbanned(applicant, "cultist") && !jobban_isbanned(applicant, "Syndicate"))
-						if(!(applicant.job in temp.restricted_jobs))
-							candidates += applicant
+	for(var/mob/living/carbon/human/applicant in GLOB.player_list)
+		if(isReadytoRumble(applicant, ROLE_CULTIST))
+			if(temp.age_check(applicant.client))
+				if(!(applicant.job in temp.restricted_jobs))
+					candidates += applicant
 
 	if(candidates.len)
 		var/numCultists = min(candidates.len, 4)
@@ -205,7 +170,41 @@ client/proc/one_click_antag()
 			H = pick(candidates)
 			H.mind.make_Cultist()
 			candidates.Remove(H)
-			temp.grant_runeword(H)
+
+		return 1
+
+	return 0
+
+
+/datum/admins/proc/makeClockCult()
+	var/datum/game_mode/clockwork_cult/temp = new
+	if(CONFIG_GET(flag/protect_roles_from_antagonist))
+		temp.restricted_jobs += temp.protected_jobs
+
+	if(CONFIG_GET(flag/protect_assistant_from_antagonist))
+		temp.restricted_jobs += "Assistant"
+
+	var/list/mob/living/carbon/human/candidates = list()
+	var/mob/living/carbon/human/H = null
+
+	for(var/mob/living/carbon/human/applicant in GLOB.player_list)
+		if(isReadytoRumble(applicant, ROLE_SERVANT_OF_RATVAR))
+			if(temp.age_check(applicant.client))
+				if(!(applicant.job in temp.restricted_jobs))
+					candidates += applicant
+
+	if(candidates.len)
+		var/numCultists = min(candidates.len, 4)
+
+		for(var/i = 0, i<numCultists, i++)
+			H = pick(candidates)
+			to_chat(H, "<span class='heavy_brass'>The world before you suddenly glows a brilliant yellow. You hear the whooshing steam and clanking cogs of a billion billion machines, and all at once \
+			you see the truth. Ratvar, the Clockwork Justiciar, lies derelict and forgotten in an unseen realm, and he has selected you as one of his harbringers. You are now a servant of \
+			Ratvar, and you will bring him back.</span>")
+			H.playsound_local(get_turf(H), 'sound/ambience/antag/clockcultalr.ogg', 100, FALSE, pressure_affected = FALSE)
+			add_servant_of_ratvar(H, TRUE)
+			SSticker.mode.equip_servant(H)
+			candidates.Remove(H)
 
 		return 1
 
@@ -214,22 +213,17 @@ client/proc/one_click_antag()
 
 
 /datum/admins/proc/makeNukeTeam()
-
-
-	var/list/mob/dead/observer/candidates = list()
+	var/datum/game_mode/nuclear/temp = new
+	var/list/mob/dead/observer/candidates = pollGhostCandidates("Do you wish to be considered for a nuke team being sent in?", ROLE_OPERATIVE, temp)
+	var/list/mob/dead/observer/chosen = list()
 	var/mob/dead/observer/theghost = null
-	var/list/mob/dead/observer/picked = list()
-
-	for(var/mob/dead/observer/G in get_active_candidates(ROLE_OPERATIVE,poll="Do you wish to be considered for a nuke team being sent in?"))
-		if(!jobban_isbanned(G, "operative") && !jobban_isbanned(G, "Syndicate"))
-			candidates += G
 
 	if(candidates.len)
 		var/numagents = 5
 		var/agentcount = 0
 
 		for(var/i = 0, i<numagents,i++)
-			shuffle(candidates) //More shuffles means more randoms
+			shuffle_inplace(candidates) //More shuffles means more randoms
 			for(var/mob/j in candidates)
 				if(!j || !j.client)
 					candidates.Remove(j)
@@ -237,247 +231,228 @@ client/proc/one_click_antag()
 
 				theghost = j
 				candidates.Remove(theghost)
-/* Seeing if we have enough agents before we make the nuke team
-				var/mob/living/carbon/human/new_character=makeBody(theghost)
-				new_character.mind.make_Nuke()
-*/
-				picked += theghost
+				chosen += theghost
 				agentcount++
 				break
-//This is so we don't get a nuke team with only 1 or 2 people
+		//Making sure we have atleast 3 Nuke agents, because less than that is kinda bad
 		if(agentcount < 3)
 			return 0
-		else
-			for(var/mob/j in picked)
-				theghost = j
-				var/mob/living/carbon/human/new_character=makeBody(theghost)
-				new_character.mind.make_Nuke()
 
-		var/obj/effect/landmark/nuke_spawn = locate("landmark*Nuclear-Bomb")
-		var/obj/effect/landmark/closet_spawn = locate("landmark*Syndicate-Uplink")
+		//Let's find the spawn locations
+		var/leader_chosen = FALSE
+		var/datum/team/nuclear/nuke_team
+		for(var/mob/c in chosen)
+			var/mob/living/carbon/human/new_character=makeBody(c)
+			if(!leader_chosen)
+				leader_chosen = TRUE
+				var/datum/antagonist/nukeop/N = new_character.mind.add_antag_datum(/datum/antagonist/nukeop/leader)
+				nuke_team = N.nuke_team
+			else
+				new_character.mind.add_antag_datum(/datum/antagonist/nukeop,nuke_team)
+		return 1
+	else
+		return 0
 
-		var/nuke_code = "[rand(10000, 99999)]"
 
-		if(nuke_spawn)
-			var/obj/item/weapon/paper/P = new
-			P.info = "Sadly, the Syndicate could not get you a nuclear bomb.  We have, however, acquired the arming code for the station's onboard nuke.  The nuclear authorization code is: <b>[nuke_code]</b>"
-			P.name = "nuclear bomb code and instructions"
-			P.forceMove(nuke_spawn.loc)
-
-		if(closet_spawn)
-			new /obj/structure/closet/syndicate/nuclear(closet_spawn.loc)
-
-		for (var/obj/effect/landmark/A in /area/syndicate_station/start)//Because that's the only place it can BE -Sieve
-			if (A.name == "Syndicate-Gear-Closet")
-				new /obj/structure/closet/syndicate/personal(A.loc)
-				del(A)
-				continue
-
-			if (A.name == "Syndicate-Bomb")
-				new /obj/effect/spawner/newbomb/timer/syndicate(A.loc)
-				del(A)
-				continue
-
-		for(var/datum/mind/synd_mind in ticker.mode.syndicates)
-			if(synd_mind.current)
-				if(synd_mind.current.client)
-					for(var/image/I in synd_mind.current.client.images)
-						if(I.icon_state == "synd")
-							//del(I)
-							synd_mind.current.client.images -= I
-
-		for(var/datum/mind/synd_mind in ticker.mode.syndicates)
-			if(synd_mind.current)
-				if(synd_mind.current.client)
-					for(var/datum/mind/synd_mind_1 in ticker.mode.syndicates)
-						if(synd_mind_1.current)
-							var/I = image('icons/mob/mob.dmi', loc = synd_mind_1.current, icon_state = "synd")
-							synd_mind.current.client.images += I
-
-		for (var/obj/machinery/nuclearbomb/bomb in machines)
-			bomb.r_code = nuke_code						// All the nukes are set to this code.
-	return 1
 
 
 
 /datum/admins/proc/makeAliens()
-	return alien_infestation(3)
+	var/datum/round_event/ghost_role/alien_infestation/E = new(FALSE)
+	E.spawncount = 3
+	// TODO The fact we have to do this rather than just have events start
+	// when we ask them to, is bad.
+	E.processing = TRUE
+	return TRUE
 
+/datum/admins/proc/makeSpaceNinja()
+	new /datum/round_event/ghost_role/ninja()
+	return 1
 
+// DEATH SQUADS
 /datum/admins/proc/makeDeathsquad()
-	var/list/mob/dead/observer/candidates = list()
-	var/mob/dead/observer/theghost = null
-	var/input = "Purify the station."
-	if(prob(10))
-		input = "Save Runtime and any other cute things on the station."
+	return makeEmergencyresponseteam(/datum/ert/deathsquad)
 
-	var/syndicate_leader_selected = 0 //when the leader is chosen. The last person spawned.
+// CENTCOM RESPONSE TEAM
 
-	//Generates a list of commandos from active ghosts. Then the user picks which characters to respawn as the commandos.
-	for(var/mob/dead/observer/G in get_active_candidates(ROLE_COMMANDO, poll="Do you wish to be considered for an elite syndicate strike team being sent in?"))
-		if(!jobban_isbanned(G, "operative") && !jobban_isbanned(G, "Syndicate"))
-			candidates += G
-
-	for(var/mob/dead/observer/G in candidates)
-		if(!G.key)
-			candidates.Remove(G)
-
-	if(candidates.len)
-		var/numagents = 6
-		//Spawns commandos and equips them.
-		for (var/obj/effect/landmark/L in /area/syndicate_mothership/elite_squad)
-			if(numagents<=0)
-				break
-			if (L.name == "Syndicate-Commando")
-				syndicate_leader_selected = numagents == 1?1:0
-
-				var/mob/living/carbon/human/new_syndicate_commando = create_syndicate_death_commando(L, syndicate_leader_selected)
-
-
-				while((!theghost || !theghost.client) && candidates.len)
-					theghost = pick(candidates)
-					candidates.Remove(theghost)
-
-				if(!theghost)
-					qdel(new_syndicate_commando)
-					break
-
-				new_syndicate_commando.key = theghost.key
-				new_syndicate_commando.internal = new_syndicate_commando.s_store
-				new_syndicate_commando.internals.icon_state = "internal1"
-
-				//So they don't forget their code or mission.
-
-
-				to_chat(new_syndicate_commando, "<span class='notice'>You are an Elite Syndicate. [!syndicate_leader_selected?"commando":"<B>LEADER</B>"] in the service of the Syndicate. \nYour current mission is: <span class='danger'> [input]</span></span>")
-
-				numagents--
-		if(numagents >= 6)
-			return 0
-
-		for (var/obj/effect/landmark/L in /area/shuttle/syndicate_elite)
-			if (L.name == "Syndicate-Commando-Bomb")
-				new /obj/effect/spawner/newbomb/timer/syndicate(L.loc)
-
-	return 1
-
-
-/proc/makeBody(var/mob/dead/observer/G_found) // Uses stripped down and bastardized code from respawn character
-	if(!G_found || !G_found.key)
+/datum/admins/proc/makeERTTemplateModified(list/settings)
+	. = settings
+	var/datum/ert/newtemplate = settings["mainsettings"]["template"]["value"]
+	if (isnull(newtemplate))
 		return
-
-	//First we spawn a dude.
-	var/mob/living/carbon/human/new_character = new(pick(latejoin))//The mob being spawned.
-
-	new_character.gender = pick(MALE,FEMALE)
-
-	var/datum/preferences/A = new()
-	A.randomize_appearance_for(new_character)
-	new_character.generate_name()
-	new_character.age = rand(17,45)
-
-	new_character.dna.ready_dna(new_character)
-	new_character.key = G_found.key
-
-	return new_character
-
-/datum/admins/proc/create_syndicate_death_commando(obj/spawn_location, syndicate_leader_selected = 0)
-	var/mob/living/carbon/human/new_syndicate_commando = new(spawn_location.loc)
-	var/syndicate_commando_leader_rank = pick("Lieutenant", "Captain", "Major")
-	var/syndicate_commando_rank = pick("Corporal", "Sergeant", "Staff Sergeant", "Sergeant 1st Class", "Master Sergeant", "Sergeant Major")
-	var/syndicate_commando_name = pick(last_names)
-
-	new_syndicate_commando.gender = pick(MALE, FEMALE)
-
-	var/datum/preferences/A = new()//Randomize appearance for the commando.
-	A.randomize_appearance_for(new_syndicate_commando)
-
-	new_syndicate_commando.real_name = "[!syndicate_leader_selected ? syndicate_commando_rank : syndicate_commando_leader_rank] [syndicate_commando_name]"
-	new_syndicate_commando.name = new_syndicate_commando.real_name
-	new_syndicate_commando.age = !syndicate_leader_selected ? rand(23,35) : rand(35,45)
-
-	new_syndicate_commando.dna.ready_dna(new_syndicate_commando)//Creates DNA.
-
-	//Creates mind stuff.
-	new_syndicate_commando.mind_initialize()
-	new_syndicate_commando.mind.assigned_role = "MODE"
-	new_syndicate_commando.mind.special_role = "Syndicate Commando"
-
-	//Adds them to current traitor list. Which is really the extra antagonist list.
-	ticker.mode.traitors += new_syndicate_commando.mind
-	new_syndicate_commando.equip_syndicate_commando(syndicate_leader_selected)
-
-	return new_syndicate_commando
-
-/datum/admins/proc/makeVoxRaiders()
+	if (!ispath(newtemplate))
+		newtemplate = text2path(newtemplate)
+	newtemplate = new newtemplate
+	.["mainsettings"]["teamsize"]["value"] = newtemplate.teamsize
+	.["mainsettings"]["mission"]["value"] = newtemplate.mission
+	.["mainsettings"]["polldesc"]["value"] = newtemplate.polldesc
+	.["mainsettings"]["open_armory"]["value"] = newtemplate.opendoors ? "Yes" : "No"
 
 
-	var/list/mob/dead/observer/candidates = list()
-	var/mob/dead/observer/theghost = null
-	var/input = "Disregard shinies, acquire hardware."
+/datum/admins/proc/equipAntagOnDummy(mob/living/carbon/human/dummy/mannequin, datum/antagonist/antag)
+	for(var/I in mannequin.get_equipped_items())
+		qdel(I)
+	if (ispath(antag, /datum/antagonist/ert))
+		var/datum/antagonist/ert/ert = antag
+		mannequin.equipOutfit(initial(ert.outfit), TRUE)
+	else if (ispath(antag, /datum/antagonist/official))
+		mannequin.equipOutfit(/datum/outfit/centcom_official, TRUE)
 
-	var/leader_chosen = 0 //when the leader is chosen. The last person spawned.
+/datum/admins/proc/makeERTPreviewIcon(list/settings)
+	// Set up the dummy for its photoshoot
+	var/mob/living/carbon/human/dummy/mannequin = generate_or_wait_for_human_dummy(DUMMY_HUMAN_SLOT_ADMIN)
 
-	//Generates a list of candidates from active ghosts.
-	for(var/mob/dead/observer/G in get_active_candidates(ROLE_VOXRAIDER, poll="Do you wish to be considered for a vox raiding party arriving on the station?"))
-		candidates += G
+	var/prefs = settings["mainsettings"]
+	var/datum/ert/template = prefs["template"]["value"]
+	if (isnull(template))
+		return null
+	if (!ispath(template))
+		template = text2path(prefs["template"]["value"]) // new text2path ... doesn't compile in 511
 
-	for(var/mob/dead/observer/G in candidates)
-		if(!G.key)
-			candidates.Remove(G)
+	template = new template
+	var/datum/antagonist/ert/ert = template.leader_role
 
-	if(candidates.len)
-		var/max_raiders = 1
-		var/raiders = max_raiders
-		//Spawns vox raiders and equips them.
-		for (var/obj/effect/landmark/L in landmarks_list)
-			if(L.name == "voxstart")
-				if(raiders<=0)
-					break
+	equipAntagOnDummy(mannequin, ert)
 
-				var/mob/living/carbon/human/new_vox = create_vox_raider(L, leader_chosen)
+	COMPILE_OVERLAYS(mannequin)
+	CHECK_TICK
+	var/icon/preview_icon = icon('icons/effects/effects.dmi', "nothing")
+	preview_icon.Scale(48+32, 16+32)
+	CHECK_TICK
+	mannequin.setDir(NORTH)
+	var/icon/stamp = getFlatIcon(mannequin)
+	CHECK_TICK
+	preview_icon.Blend(stamp, ICON_OVERLAY, 25, 17)
+	CHECK_TICK
+	mannequin.setDir(WEST)
+	stamp = getFlatIcon(mannequin)
+	CHECK_TICK
+	preview_icon.Blend(stamp, ICON_OVERLAY, 1, 9)
+	CHECK_TICK
+	mannequin.setDir(SOUTH)
+	stamp = getFlatIcon(mannequin)
+	CHECK_TICK
+	preview_icon.Blend(stamp, ICON_OVERLAY, 49, 1)
+	CHECK_TICK
+	preview_icon.Scale(preview_icon.Width() * 2, preview_icon.Height() * 2) // Scaling here to prevent blurring in the browser.
+	CHECK_TICK
+	unset_busy_human_dummy(DUMMY_HUMAN_SLOT_ADMIN)
+	return preview_icon
 
-				while((!theghost || !theghost.client) && candidates.len)
-					theghost = pick(candidates)
-					candidates.Remove(theghost)
-
-				if(!theghost)
-					qdel(new_vox)
-					break
-
-				new_vox.key = theghost.key
-				to_chat(new_vox, "<span class='notice'>You are a Vox Primalis, fresh out of the Shoal. Your ship has arrived at the Tau Ceti system hosting the NSV Exodus... or was it the Luna? NSS? Utopia? Nobody is really sure, but everyong is raring to start pillaging! Your current goal is: <span class='danger'> [input]</span></span>")
-				to_chat(new_vox, "<span class='warning'>Don't forget to turn on your nitrogen internals!</span>")
-
-				raiders--
-			if(raiders > max_raiders)
-				return 0
+/datum/admins/proc/makeEmergencyresponseteam(var/datum/ert/ertemplate = null)
+	if (ertemplate)
+		ertemplate = new ertemplate
 	else
-		return 0
+		ertemplate = new /datum/ert/centcom_official
+
+	var/list/settings = list(
+		"preview_callback" = CALLBACK(src, .proc/makeERTPreviewIcon),
+		"mainsettings" = list(
+		"template" = list("desc" = "Template", "callback" = CALLBACK(src, .proc/makeERTTemplateModified), "type" = "datum", "path" = "/datum/ert", "subtypesonly" = TRUE, "value" = ertemplate.type),
+		"teamsize" = list("desc" = "Team Size", "type" = "number", "value" = ertemplate.teamsize),
+		"mission" = list("desc" = "Mission", "type" = "string", "value" = ertemplate.mission),
+		"polldesc" = list("desc" = "Ghost poll description", "string" = "text", "value" = ertemplate.polldesc),
+		"enforce_human" = list("desc" = "Enforce human authority", "type" = "boolean", "value" = "[(CONFIG_GET(flag/enforce_human_authority) ? "Yes" : "No")]"),
+		"open_armory" = list("desc" = "Open armory doors", "type" = "boolean", "value" = "[(ertemplate.opendoors ? "Yes" : "No")]"),
+		)
+	)
+
+	var/list/prefreturn = presentpreflikepicker(usr,"Customize ERT", "Customize ERT", Button1="Ok", width = 600, StealFocus = 1,Timeout = 0, settings=settings)
+
+	if (isnull(prefreturn))
+		return FALSE
+
+	if (prefreturn["button"] == 1)
+		var/list/prefs = settings["mainsettings"]
+
+		var/templtype = prefs["template"]["value"]
+		if (!ispath(prefs["template"]["value"]))
+			templtype = text2path(prefs["template"]["value"]) // new text2path ... doesn't compile in 511
+
+		if (ertemplate.type != templtype)
+			ertemplate = new templtype
+
+		ertemplate.teamsize = prefs["teamsize"]["value"]
+		ertemplate.mission = prefs["mission"]["value"]
+		ertemplate.polldesc = prefs["polldesc"]["value"]
+		ertemplate.enforce_human = prefs["enforce_human"]["value"] == "Yes" ? TRUE : FALSE
+		ertemplate.opendoors = prefs["open_armory"]["value"] == "Yes" ? TRUE : FALSE
+
+		var/list/mob/dead/observer/candidates = pollGhostCandidates("Do you wish to be considered for [ertemplate.polldesc] ?", "deathsquad", null)
+		var/teamSpawned = FALSE
+
+		if(candidates.len > 0)
+			//Pick the (un)lucky players
+			var/numagents = min(ertemplate.teamsize,candidates.len)
+
+			//Create team
+			var/datum/team/ert/ert_team = new ertemplate.team
+			if(ertemplate.rename_team)
+				ert_team.name = ertemplate.rename_team
+
+			//Asign team objective
+			var/datum/objective/missionobj = new
+			missionobj.team = ert_team
+			missionobj.explanation_text = ertemplate.mission
+			missionobj.completed = TRUE
+			ert_team.objectives += missionobj
+			ert_team.mission = missionobj
+
+			var/list/spawnpoints = GLOB.emergencyresponseteamspawn
+			while(numagents && candidates.len)
+				if (numagents > spawnpoints.len)
+					numagents--
+					continue // This guy's unlucky, not enough spawn points, we skip him.
+				var/spawnloc = spawnpoints[numagents]
+				var/mob/dead/observer/chosen_candidate = pick(candidates)
+				candidates -= chosen_candidate
+				if(!chosen_candidate.key)
+					continue
+
+				//Spawn the body
+				var/mob/living/carbon/human/ERTOperative = new ertemplate.mobtype(spawnloc)
+				chosen_candidate.client.prefs.copy_to(ERTOperative)
+				ERTOperative.key = chosen_candidate.key
+
+				if(ertemplate.enforce_human || ERTOperative.dna.species.dangerous_existence) // Don't want any exploding plasmemes
+					ERTOperative.set_species(/datum/species/human)
+
+				//Give antag datum
+				var/datum/antagonist/ert/ert_antag
+
+				if(numagents == 1)
+					ert_antag = new ertemplate.leader_role
+				else
+					ert_antag = ertemplate.roles[WRAP(numagents,1,length(ertemplate.roles) + 1)]
+					ert_antag = new ert_antag
+
+				ERTOperative.mind.add_antag_datum(ert_antag,ert_team)
+				ERTOperative.mind.assigned_role = ert_antag.name
+
+				//Logging and cleanup
+				log_game("[key_name(ERTOperative)] has been selected as an [ert_antag.name]")
+				numagents--
+				teamSpawned++
+
+			if (teamSpawned)
+				message_admins("[ertemplate.polldesc] has spawned with the mission: [ertemplate.mission]")
+
+			//Open the Armory doors
+			if(ertemplate.opendoors)
+				for(var/obj/machinery/door/poddoor/ert/door in GLOB.airlocks)
+					door.open()
+					CHECK_TICK
+			return TRUE
+		else
+			return FALSE
+
+	return
+
+//Abductors
+/datum/admins/proc/makeAbductorTeam()
+	new /datum/round_event/ghost_role/abductor
 	return 1
 
-/datum/admins/proc/create_vox_raider(obj/spawn_location, leader_chosen = 0)
-
-
-	var/mob/living/carbon/human/new_vox = new(spawn_location.loc)
-
-	new_vox.setGender(pick(MALE, FEMALE))
-	new_vox.h_style = "Short Vox Quills"
-	new_vox.regenerate_icons()
-
-	new_vox.age = rand(12,20)
-
-	new_vox.dna.ready_dna(new_vox) // Creates DNA.
-	new_vox.dna.mutantrace = "vox"
-	new_vox.set_species("Vox") // Actually makes the vox! How about that.
-	new_vox.generate_name()
-	//new_vox.add_language(LANGUAGE_VOX)
-	new_vox.mind_initialize()
-	new_vox.mind.assigned_role = "MODE"
-	new_vox.mind.special_role = "Vox Raider"
-	new_vox.mutations |= M_NOCLONE //Stops the station crew from messing around with their DNA.
-
-	ticker.mode.traitors += new_vox.mind
-	new_vox.equip_vox_raider()
-
-	return new_vox
+/datum/admins/proc/makeRevenant()
+	new /datum/round_event/ghost_role/revenant(TRUE, TRUE)
+	return 1

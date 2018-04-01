@@ -7,7 +7,7 @@
 /mob/proc/update_icons()
 	return
 
-/mob/proc/update_hud()
+/mob/proc/update_transform()
 	return
 
 /mob/proc/update_inv_handcuffed()
@@ -19,20 +19,13 @@
 /mob/proc/update_inv_back()
 	return
 
-/mob/proc/update_inv_hand(index)
+/mob/proc/update_inv_hands()
 	return
 
-/mob/proc/update_inv_l_hand()
-	return update_inv_hand(GRASP_LEFT_HAND)
-
-/mob/proc/update_inv_r_hand()
-	return update_inv_hand(GRASP_RIGHT_HAND)
-
-/mob/proc/update_inv_hands(update_icons = 1)
-	for(var/i = 1 to held_items.len)
-		update_inv_hand(i, update_icons)
-
 /mob/proc/update_inv_wear_mask()
+	return
+
+/mob/proc/update_inv_neck()
 	return
 
 /mob/proc/update_inv_wear_suit()
@@ -47,10 +40,16 @@
 /mob/proc/update_inv_head()
 	return
 
-/mob/proc/update_inv_gloves()
+/mob/proc/update_body()
 	return
 
-/mob/proc/update_mutations()
+/mob/proc/update_hair()
+	return
+
+/mob/proc/update_fire()
+	return
+
+/mob/proc/update_inv_gloves()
 	return
 
 /mob/proc/update_inv_wear_id()
@@ -62,9 +61,6 @@
 /mob/proc/update_inv_glasses()
 	return
 
-/mob/proc/update_hair()
-	return
-
 /mob/proc/update_inv_s_store()
 	return
 
@@ -73,8 +69,3 @@
 
 /mob/proc/update_inv_ears()
 	return
-
-/mob/proc/update_targeted()
-	return
-
-/mob/proc/update_transform()

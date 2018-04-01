@@ -1,436 +1,397 @@
-#define SSAIR_TILES     1
-#define SSAIR_DEFERRED  2
-#define SSAIR_EDGES     3
-//#define SSAIR_FIRE_ZONE 4 //This involves behavior to be added in a future PR.
-#define SSAIR_HOTSPOT   4 //These two should each be increased by one once that one is uncommented.
-#define SSAIR_ZONE      5 //These two should each be increased by one once that one is uncommented.
+#define SSAIR_PIPENETS 1
+#define SSAIR_ATMOSMACHINERY 2
+#define SSAIR_ACTIVETURFS 3
+#define SSAIR_EXCITEDGROUPS 4
+#define SSAIR_HIGHPRESSURE 5
+#define SSAIR_HOTSPOTS 6
+#define SSAIR_SUPERCONDUCTIVITY 7
 
-#define SSAIR_FIRST_PART SSAIR_TILES //The first part to be processed.
-#define SSAIR_LAST_PART  SSAIR_ZONE  //The last part to be processed.
+SUBSYSTEM_DEF(air)
+	name = "Atmospherics"
+	init_order = INIT_ORDER_AIR
+	priority = FIRE_PRIORITY_AIR
+	wait = 5
+	flags = SS_BACKGROUND
+	runlevels = RUNLEVEL_GAME | RUNLEVEL_POSTGAME
 
-#define SSAIR_PROCESS_UPDATE SSAIR_TILES, SSAIR_DEFERRED, SSAIR_ZONE //The lists corresponding to these parts are cleared when processed.
-                                                                     //In other words, these are only processed each time they are marked for an update.
-                                                                     //The default behavior is not clearing the list, meaning the corresponding objects are processed every tick.
+	var/cost_turfs = 0
+	var/cost_groups = 0
+	var/cost_highpressure = 0
+	var/cost_hotspots = 0
+	var/cost_superconductivity = 0
+	var/cost_pipenets = 0
+	var/cost_atmos_machinery = 0
 
-var/datum/subsystem/air/SSair
-var/tick_multiplier = 2
-
-/*
-Overview:
-	The air controller does everything. There are tons of procs in here.
-Class Vars:
-	zones - All zones currently holding one or more turfs.
-	edges - All processing edges.
-	processing_parts[SSAIR_TILES] - Tiles scheduled to update next tick.
-	processing_parts[SSAIR_ZONE] - Zones which have had their air changed and need air archival.
-	processing_parts[SSAIR_HOTSPOT] - All processing fire objects.
-	active_zones - The number of zones which were archived last tick. Used in debug verbs.
-	next_id - The next UID to be applied to a zone. Mostly useful for debugging purposes as zones do not need UIDs to function.
-Class Procs:
-	mark_for_update(turf/T)
-		Adds the turf to the update list. When updated, update_air_properties() will be called.
-		When stuff changes that might affect airflow, call this. It's basically the only thing you need.
-	add_zone(zone/Z) and remove_zone(zone/Z)
-		Adds zones to the zones list. Does not mark them for update.
-	air_blocked(turf/A, turf/B)
-		Returns a bitflag consisting of:
-		AIR_BLOCKED - The connection between turfs is physically blocked. No air can pass.
-		ZONE_BLOCKED - There is a door between the turfs, so zones cannot cross. Air may or may not be permeable.
-	has_valid_zone(turf/T)
-		Checks the presence and validity of T's zone.
-		May be called on unsimulated turfs, returning 0.
-	merge(zone/A, zone/B)
-		Called when zones have a direct connection and equivalent pressure and temperature.
-		Merges the zones to create a single zone.
-	connect(turf/simulated/A, turf/B)
-		Called by turf/update_air_properties(). The first argument must be simulated.
-		Creates a connection between A and B.
-	mark_zone_update(zone/Z)
-		Adds zone to the update list. Unlike mark_for_update(), this one is called automatically whenever
-		air is returned from a simulated turf.
-	equivalent_pressure(zone/A, zone/B)
-		Currently identical to A.air.compare(B.air). Returns 1 when directly connected zones are ready to be merged.
-	get_edge(zone/A, zone/B)
-	get_edge(zone/A, turf/B)
-		Gets a valid connection_edge between A and B, creating a new one if necessary.
-	has_same_air(turf/A, turf/B)
-		Used to determine if an unsimulated edge represents a specific turf.
-		Simulated edges use connection_edge/contains_zone() for the same purpose.
-		Returns 1 if A has identical gases and temperature to B.
-	remove_edge(connection_edge/edge)
-		Called when an edge is erased. Removes it from processing.
-*/
-
-/datum/subsystem/air
-	name          = "Air"
-	init_order    = SS_INIT_AIR
-	priority      = SS_PRIORITY_AIR
-	wait          = 2 SECONDS
-	display_order = SS_DISPLAY_AIR
-
-	var/list/currentrun
-	var/currentpart = SSAIR_TILES
-
-	var/list/cost_parts = list(SSAIR_TILES     = 0,\
-	                           SSAIR_DEFERRED  = 0,\
-	                           SSAIR_EDGES     = 0,\
-/*	                           SSAIR_FIRE_ZONE = 0,*/\
-	                           SSAIR_HOTSPOT   = 0,\
-	                           SSAIR_ZONE      = 0)
-
-	var/list/zones = list()
-	var/list/edges = list()
-
-	//Geometry process lists
-	var/list/processing_parts = list(SSAIR_TILES     = list(),\
-	                                 SSAIR_DEFERRED  = list(),\
-	                                 SSAIR_EDGES     = list(),\
-/*	                                 SSAIR_FIRE_ZONE = list(),*/\
-	                                 SSAIR_HOTSPOT   = list(),\
-	                                 SSAIR_ZONE      = list())
-
-	var/active_zones = 0
-
-	var/current_cycle = 0
-	var/update_delay = 5 //How long between check should it try to process atmos again.
-	var/failed_ticks = 0 //How many ticks have runtimed?
-
-	var/next_id = 1 //Used to keep track of zone UIDs.
+	var/list/excited_groups = list()
+	var/list/active_turfs = list()
+	var/list/hotspots = list()
+	var/list/networks = list()
+	var/list/obj/machinery/atmos_machinery = list()
+	var/list/pipe_init_dirs_cache = list()
 
 
 
-/datum/subsystem/air/New()
-	NEW_SS_GLOBAL(SSair)
+	//Special functions lists
+	var/list/turf/active_super_conductivity = list()
+	var/list/turf/open/high_pressure_delta = list()
 
 
-/datum/subsystem/air/stat_entry(msg)
-	var/list/p_tiles = processing_parts[SSAIR_TILES]
-	var/list/p_zone = processing_parts[SSAIR_ZONE]
-//	var/list/p_fire_zone = processing_parts[SSAIR_FIRE_ZONE]
-	var/list/p_hotspot = processing_parts[SSAIR_HOTSPOT]
-	var/list/p_edges = processing_parts[SSAIR_EDGES]
+	var/list/currentrun = list()
+	var/currentpart = SSAIR_PIPENETS
 
-	msg += "C:{\
-	        T:[round(cost_parts[SSAIR_TILES], 1)]|\
-	        D:[round(cost_parts[SSAIR_DEFERRED], 1)]|\
-	        E:[round(cost_parts[SSAIR_EDGES], 1)]|\
-"/*	        F:[round(cost_parts[SSAIR_FIRE_ZONE], 1)]|*/+"\
-	        H:[round(cost_parts[SSAIR_HOTSPOT], 1)]|\
-	        Z:[round(cost_parts[SSAIR_ZONE], 1)]|\
-	        } T:{\
-	        Z:[zones.len]|\
-	        E:[edges.len]\
-	        } \
-	        T:[p_tiles.len]|\
-	        Z:[p_zone.len]|\
-"/*	        F:[p_fire_zone.len]|*/+"\
-	        H:[p_hotspot.len]|\
-	        E:[p_edges.len]|\
-	        A:[active_zones]"
-	..(msg) //Note to self: Don't fuck that up when uncommenting after adding fire zones
+	var/map_loading = TRUE
+	var/list/queued_for_activation
+
+/datum/controller/subsystem/air/stat_entry(msg)
+	msg += "C:{"
+	msg += "AT:[round(cost_turfs,1)]|"
+	msg += "EG:[round(cost_groups,1)]|"
+	msg += "HP:[round(cost_highpressure,1)]|"
+	msg += "HS:[round(cost_hotspots,1)]|"
+	msg += "SC:[round(cost_superconductivity,1)]|"
+	msg += "PN:[round(cost_pipenets,1)]|"
+	msg += "AM:[round(cost_atmos_machinery,1)]"
+	msg += "} "
+	msg += "AT:[active_turfs.len]|"
+	msg += "EG:[excited_groups.len]|"
+	msg += "HS:[hotspots.len]|"
+	msg += "PN:[networks.len]|"
+	msg += "HP:[high_pressure_delta.len]|"
+	msg += "AS:[active_super_conductivity.len]|"
+	msg += "AT/MS:[round((cost ? active_turfs.len/cost : 0),0.1)]"
+	..(msg)
 
 
-/datum/subsystem/air/Initialize(timeofday)
-	#ifndef ZASDBG
-	set background = 1 //The for loop later is sufficiently long to trip BYOND's infinite loop detection.
-	#endif
-
-	to_chat(world, "<span class='danger'>Processing Geometry...</span>")
-	sleep(-1)
-
-	var/simulated_turf_count = 0
-
-	for(var/turf/simulated/S in world)
-		simulated_turf_count++
-		S.update_air_properties()
-
-	to_chat(world, {"<span class='info'>Total Simulated Turfs: [simulated_turf_count]
-Total Zones: [zones.len]
-Total Edges: [edges.len]
-Total Active Edges: [length(processing_parts[SSAIR_EDGES]) ? "<span class='danger'>[length(processing_parts[SSAIR_EDGES])]</span>" : "None"]
-Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_count]</span>"})
-
+/datum/controller/subsystem/air/Initialize(timeofday)
+	map_loading = FALSE
+	setup_allturfs()
+	setup_atmos_machinery()
+	setup_pipenets()
+	gas_reactions = init_gas_reactions()
 	..()
 
 
-/datum/subsystem/air/fire(resumed = FALSE)
-	if (!resumed)
-		current_cycle++
-		currentpart = SSAIR_FIRST_PART
+/datum/controller/subsystem/air/fire(resumed = 0)
+	var/timer = TICK_USAGE_REAL
 
-	var/timer
-
-	while(currentpart <= SSAIR_LAST_PART)
-		timer = world.tick_usage
-
-		if(!resumed)
-			switch(currentpart)
-				if(SSAIR_PROCESS_UPDATE)
-					currentrun = processing_parts[currentpart]
-					processing_parts[currentpart] = list()
-				else
-					currentrun = processing_parts[currentpart]
-					currentrun = currentrun.Copy() //Thanks, list aliasing
-
-		process_part(currentpart)
-
-		cost_parts[currentpart] = MC_AVERAGE(cost_parts[currentpart], TICK_DELTA_TO_MS(world.tick_usage - timer))
-
+	if(currentpart == SSAIR_PIPENETS || !resumed)
+		process_pipenets(resumed)
+		cost_pipenets = MC_AVERAGE(cost_pipenets, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
 		if(state != SS_RUNNING)
 			return
+		resumed = 0
+		currentpart = SSAIR_ATMOSMACHINERY
 
-		resumed = FALSE
-		currentpart++
-
-/datum/subsystem/air/proc/process_part(part = currentpart) //This whole proc is pretty disgusting, but I don't want to fuck EVERYTHING up at the same time. Rewrite later, maybe.
-	var/list/currentrun = src.currentrun //Accessing a proc var is faster than acccessing an object var. In the unlikely event Lummox ever fixes this, delete this line.
-
-	#define LOOP_DECLARATION(iter_type, iterator) for(var/iter_type/iterator;currentrun.len && !(MC_TICK_CHECK) && (iterator = currentrun[currentrun.len]);currentrun.len--)
-		//The loop declaration is a macro so it can be duplicated without just copying+pasting. This removes the need for the following switch() to be evaluated every iteration.
-		//It also contains EXTREME quantities of bullshit in order to have all the checks and list manipulation built in. I strongly recommend you don't actually read it.
-
-	switch(part)
-		if(SSAIR_TILES)
-			LOOP_DECLARATION(turf, T)
-				if(T.c_airblock(T) & ZONE_BLOCKED)
-					processing_parts[SSAIR_DEFERRED] += T
-					continue
-
-				T.update_air_properties()
-				T.post_update_air_properties()
-				T.needs_air_update = 0
-				#ifdef ZASDBG
-				T.overlays -= mark
-				updated++
-				#endif
-				//sleep(1)
-
-		if(SSAIR_DEFERRED)
-			LOOP_DECLARATION(turf, T)
-				T.update_air_properties()
-				T.post_update_air_properties()
-				T.needs_air_update = 0
-				#ifdef ZASDBG
-				T.overlays -= mark
-				updated++
-				#endif
-
-		if(SSAIR_EDGES)
-			LOOP_DECLARATION(connection_edge, edge)
-				edge.tick()
-
-//		if(SSAIR_FIRE_ZONE)
-//			LOOP_DECLARATION(zone, Z)
-//				Z.process_fire()
-
-		if(SSAIR_HOTSPOT)
-			LOOP_DECLARATION(obj/effect/fire, fire)
-				fire.process()
-
-		if(SSAIR_ZONE)
-			LOOP_DECLARATION(zone, zone)
-				zone.tick()
-				zone.needs_update = 0
-
-#undef LOOP_DECLARATION //Let's pretend that never existed now
-
-/datum/subsystem/air/proc/add_zone(zone/z)
-	zones.Add(z)
-	z.name = "Zone [next_id++]"
-	mark_zone_update(z)
-
-
-/datum/subsystem/air/proc/remove_zone(zone/z)
-	zones.Remove(z)
-	processing_parts[SSAIR_ZONE] -= z
-
-
-/datum/subsystem/air/proc/air_blocked(turf/A, turf/B)
-	#ifdef ZASDBG
-	ASSERT(isturf(A))
-	ASSERT(isturf(B))
-	#endif
-	var/ablock = A.c_airblock(B)
-	if(ablock == BLOCKED)
-		return BLOCKED
-	return ablock | B.c_airblock(A)
-
-
-/datum/subsystem/air/proc/has_valid_zone(turf/simulated/T)
-	#ifdef ZASDBG
-	ASSERT(istype(T))
-	#endif
-	return istype(T) && T.zone && !T.zone.invalid
-
-
-/datum/subsystem/air/proc/merge(zone/A, zone/B)
-	#ifdef ZASDBG
-	ASSERT(istype(A))
-	ASSERT(istype(B))
-	ASSERT(!A.invalid)
-	ASSERT(!B.invalid)
-	ASSERT(A != B)
-	#endif
-	if(A.contents.len < B.contents.len)
-		A.c_merge(B)
-		mark_zone_update(B)
-	else
-		B.c_merge(A)
-		mark_zone_update(A)
-
-
-/datum/subsystem/air/proc/connect(turf/simulated/A, turf/simulated/B)
-	#ifdef ZASDBG
-	ASSERT(istype(A))
-	ASSERT(isturf(B))
-	ASSERT(A.zone)
-	ASSERT(!A.zone.invalid)
-	//ASSERT(B.zone)
-	ASSERT(A != B)
-	#endif
-
-	var/block = SSair.air_blocked(A,B)
-	if(block & AIR_BLOCKED)
-		return
-
-	var/direct = !(block & ZONE_BLOCKED)
-	var/space = !istype(B)
-
-	if(!space)
-//		if(min(A.zone.contents.len, B.zone.contents.len) < ZONE_MIN_SIZE || (direct && (equivalent_pressure(A.zone,B.zone) || current_cycle == 0))) //This is the new behavior, but I don't want to include a balance change with a system change where avoidable. To be uncommented later.
-		if(direct && (equivalent_pressure(A.zone,B.zone) || current_cycle == 0)) //This is the old behavior, albeit with one check moved down an if().
-			merge(A.zone,B.zone)
+	if(currentpart == SSAIR_ATMOSMACHINERY)
+		timer = TICK_USAGE_REAL
+		process_atmos_machinery(resumed)
+		cost_atmos_machinery = MC_AVERAGE(cost_atmos_machinery, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
+		if(state != SS_RUNNING)
 			return
+		resumed = 0
+		currentpart = SSAIR_ACTIVETURFS
 
-	var/a_to_b = get_dir(A,B)
-	var/b_to_a = get_dir(B,A)
+	if(currentpart == SSAIR_ACTIVETURFS)
+		timer = TICK_USAGE_REAL
+		process_active_turfs(resumed)
+		cost_turfs = MC_AVERAGE(cost_turfs, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
+		if(state != SS_RUNNING)
+			return
+		resumed = 0
+		currentpart = SSAIR_EXCITEDGROUPS
 
-	if(!A.connections)
-		A.connections = new
-	if(!B.connections)
-		B.connections = new
+	if(currentpart == SSAIR_EXCITEDGROUPS)
+		timer = TICK_USAGE_REAL
+		process_excited_groups(resumed)
+		cost_groups = MC_AVERAGE(cost_groups, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
+		if(state != SS_RUNNING)
+			return
+		resumed = 0
+		currentpart = SSAIR_HIGHPRESSURE
 
-	if(A.connections.get(a_to_b))
-		return
-	if(B.connections.get(b_to_a))
-		return
-	if(!space)
-		if(A.zone == B.zone)
+	if(currentpart == SSAIR_HIGHPRESSURE)
+		timer = TICK_USAGE_REAL
+		process_high_pressure_delta(resumed)
+		cost_highpressure = MC_AVERAGE(cost_highpressure, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
+		if(state != SS_RUNNING)
+			return
+		resumed = 0
+		currentpart = SSAIR_HOTSPOTS
+
+	if(currentpart == SSAIR_HOTSPOTS)
+		timer = TICK_USAGE_REAL
+		process_hotspots(resumed)
+		cost_hotspots = MC_AVERAGE(cost_hotspots, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
+		if(state != SS_RUNNING)
+			return
+		resumed = 0
+		currentpart = SSAIR_SUPERCONDUCTIVITY
+
+	if(currentpart == SSAIR_SUPERCONDUCTIVITY)
+		timer = TICK_USAGE_REAL
+		process_super_conductivity(resumed)
+		cost_superconductivity = MC_AVERAGE(cost_superconductivity, TICK_DELTA_TO_MS(TICK_USAGE_REAL - timer))
+		if(state != SS_RUNNING)
+			return
+		resumed = 0
+	currentpart = SSAIR_PIPENETS
+
+
+
+/datum/controller/subsystem/air/proc/process_pipenets(resumed = 0)
+	if (!resumed)
+		src.currentrun = networks.Copy()
+	//cache for sanic speed (lists are references anyways)
+	var/list/currentrun = src.currentrun
+	while(currentrun.len)
+		var/datum/thing = currentrun[currentrun.len]
+		currentrun.len--
+		if(thing)
+			thing.process()
+		else
+			networks.Remove(thing)
+		if(MC_TICK_CHECK)
 			return
 
 
-	var/connection/c = new /connection(A,B)
+/datum/controller/subsystem/air/proc/process_atmos_machinery(resumed = 0)
+	var/seconds = wait * 0.1
+	if (!resumed)
+		src.currentrun = atmos_machinery.Copy()
+	//cache for sanic speed (lists are references anyways)
+	var/list/currentrun = src.currentrun
+	while(currentrun.len)
+		var/obj/machinery/M = currentrun[currentrun.len]
+		currentrun.len--
+		if(!M || (M.process_atmos(seconds) == PROCESS_KILL))
+			atmos_machinery.Remove(M)
+		M.SendSignal(COMSIG_MACHINE_PROCESS_ATMOS)
+		if(MC_TICK_CHECK)
+			return
 
-	A.connections.place(c, a_to_b)
-	B.connections.place(c, b_to_a)
 
-	if(direct)
-		c.mark_direct()
+/datum/controller/subsystem/air/proc/process_super_conductivity(resumed = 0)
+	if (!resumed)
+		src.currentrun = active_super_conductivity.Copy()
+	//cache for sanic speed (lists are references anyways)
+	var/list/currentrun = src.currentrun
+	while(currentrun.len)
+		var/turf/T = currentrun[currentrun.len]
+		currentrun.len--
+		T.super_conduct()
+		if(MC_TICK_CHECK)
+			return
+
+/datum/controller/subsystem/air/proc/process_hotspots(resumed = 0)
+	if (!resumed)
+		src.currentrun = hotspots.Copy()
+	//cache for sanic speed (lists are references anyways)
+	var/list/currentrun = src.currentrun
+	while(currentrun.len)
+		var/obj/effect/hotspot/H = currentrun[currentrun.len]
+		currentrun.len--
+		if (H)
+			H.process()
+		else
+			hotspots -= H
+		if(MC_TICK_CHECK)
+			return
 
 
-/datum/subsystem/air/proc/mark_for_update(turf/T)
-	#ifdef ZASDBG
-	ASSERT(isturf(T))
+/datum/controller/subsystem/air/proc/process_high_pressure_delta(resumed = 0)
+	while (high_pressure_delta.len)
+		var/turf/open/T = high_pressure_delta[high_pressure_delta.len]
+		high_pressure_delta.len--
+		T.high_pressure_movements()
+		T.pressure_difference = 0
+		if(MC_TICK_CHECK)
+			return
+
+/datum/controller/subsystem/air/proc/process_active_turfs(resumed = 0)
+	//cache for sanic speed
+	var/fire_count = times_fired
+	if (!resumed)
+		src.currentrun = active_turfs.Copy()
+	//cache for sanic speed (lists are references anyways)
+	var/list/currentrun = src.currentrun
+	while(currentrun.len)
+		var/turf/open/T = currentrun[currentrun.len]
+		currentrun.len--
+		if (T)
+			T.process_cell(fire_count)
+		if (MC_TICK_CHECK)
+			return
+
+/datum/controller/subsystem/air/proc/process_excited_groups(resumed = 0)
+	if (!resumed)
+		src.currentrun = excited_groups.Copy()
+	//cache for sanic speed (lists are references anyways)
+	var/list/currentrun = src.currentrun
+	while(currentrun.len)
+		var/datum/excited_group/EG = currentrun[currentrun.len]
+		currentrun.len--
+		EG.breakdown_cooldown++
+		EG.dismantle_cooldown++
+		if(EG.breakdown_cooldown >= EXCITED_GROUP_BREAKDOWN_CYCLES)
+			EG.self_breakdown()
+		else if(EG.dismantle_cooldown >= EXCITED_GROUP_DISMANTLE_CYCLES)
+			EG.dismantle()
+		if (MC_TICK_CHECK)
+			return
+
+
+/datum/controller/subsystem/air/proc/remove_from_active(turf/open/T)
+	active_turfs -= T
+	if(currentpart == SSAIR_ACTIVETURFS)
+		currentrun -= T
+	#ifdef VISUALIZE_ACTIVE_TURFS
+	T.remove_atom_colour(TEMPORARY_COLOUR_PRIORITY, "#00ff00")
 	#endif
-	if(T.needs_air_update)
+	if(istype(T))
+		T.excited = 0
+		if(T.excited_group)
+			T.excited_group.garbage_collect()
+
+/datum/controller/subsystem/air/proc/add_to_active(turf/open/T, blockchanges = 1)
+	if(istype(T) && T.air)
+		#ifdef VISUALIZE_ACTIVE_TURFS
+		T.add_atom_colour("#00ff00", TEMPORARY_COLOUR_PRIORITY)
+		#endif
+		T.excited = 1
+		active_turfs |= T
+		if(currentpart == SSAIR_ACTIVETURFS)
+			currentrun |= T
+		if(blockchanges && T.excited_group)
+			T.excited_group.garbage_collect()
+	else if(T.initialized)
+		for(var/turf/S in T.atmos_adjacent_turfs)
+			add_to_active(S)
+	else if(map_loading)
+		if(queued_for_activation)
+			queued_for_activation[T] = T
 		return
-	processing_parts[SSAIR_TILES] |= T
-	#ifdef ZASDBG
-	T.overlays += mark
-	#endif
-	T.needs_air_update = 1
-
-
-/datum/subsystem/air/proc/mark_zone_update(zone/Z)
-	#ifdef ZASDBG
-	ASSERT(istype(Z))
-	#endif
-	if(Z.needs_update)
-		return
-	processing_parts[SSAIR_ZONE] |= Z
-	Z.needs_update = 1
-
-
-/datum/subsystem/air/proc/mark_edge_sleeping(connection_edge/E)
-	#ifdef ZASDBG
-	ASSERT(istype(E))
-	#endif
-	if(E.sleeping)
-		return
-	processing_parts[SSAIR_EDGES] -= E
-	E.sleeping = 1
-
-
-/datum/subsystem/air/proc/mark_edge_active(connection_edge/E)
-	#ifdef ZASDBG
-	ASSERT(istype(E))
-	#endif
-	if(!E.sleeping)
-		return
-	processing_parts[SSAIR_EDGES] |= E
-	E.sleeping = 0
-	#ifdef ZASDBG
-	if(istype(E, /connection_edge/zone/))
-		var/connection_edge/zone/ZE = E
-		world << "ZASDBG: Active edge! Areas: [get_area(pick(ZE.A.contents))] / [get_area(pick(ZE.B.contents))]"
 	else
-		world << "ZASDBG: Active edge! Area: [get_area(pick(E.A.contents))]"
-	#endif
+		T.requires_activation = TRUE
 
+/datum/controller/subsystem/air/StartLoadingMap()
+	LAZYINITLIST(queued_for_activation)
+	map_loading = TRUE
 
-/datum/subsystem/air/proc/equivalent_pressure(zone/A, zone/B)
-	return A.air.compare(B.air)
+/datum/controller/subsystem/air/StopLoadingMap()
+	map_loading = FALSE
+	for(var/T in queued_for_activation)
+		add_to_active(T)
+	queued_for_activation.Cut()
 
+/datum/controller/subsystem/air/proc/setup_allturfs()
+	var/list/turfs_to_init = block(locate(1, 1, 1), locate(world.maxx, world.maxy, world.maxz))
+	var/list/active_turfs = src.active_turfs
+	var/times_fired = ++src.times_fired
 
-/datum/subsystem/air/proc/get_edge(zone/A, zone/B)
+	for(var/thing in turfs_to_init)
+		var/turf/T = thing
+		active_turfs -= T
+		if (T.blocks_air)
+			continue
+		T.Initalize_Atmos(times_fired)
+		CHECK_TICK
 
-	if(istype(B))
-		for(var/connection_edge/zone/edge in A.edges)
-			if(edge.contains_zone(B))
-				return edge
-		var/connection_edge/edge = new/connection_edge/zone(A,B)
-		edges.Add(edge)
-		edge.recheck()
-		return edge
-	else
-		for(var/connection_edge/unsimulated/edge in A.edges)
-			if(has_same_air(edge.B,B))
-				return edge
-		var/connection_edge/edge = new/connection_edge/unsimulated(A,B)
-		edges.Add(edge)
-		edge.recheck()
-		return edge
+	if(active_turfs.len)
+		var/starting_ats = active_turfs.len
+		sleep(world.tick_lag)
+		var/timer = world.timeofday
+		warning("There are [starting_ats] active turfs at roundstart, this is a mapping error caused by a difference of the air between the adjacent turfs. You can see its coordinates using \"Mapping -> Show roundstart AT list\" verb (debug verbs required)")
+		for(var/turf/T in active_turfs)
+			GLOB.active_turfs_startlist += T
 
+		//now lets clear out these active turfs
+		var/list/turfs_to_check = active_turfs.Copy()
+		do
+			var/list/new_turfs_to_check = list()
+			for(var/turf/open/T in turfs_to_check)
+				new_turfs_to_check += T.resolve_active_graph()
+			CHECK_TICK
 
-/datum/subsystem/air/proc/has_same_air(turf/A, turf/B)
-	if(A.oxygen != B.oxygen)
-		return 0
-	if(A.nitrogen != B.nitrogen)
-		return 0
-	if(A.toxins != B.toxins)
-		return 0
-	if(A.carbon_dioxide != B.carbon_dioxide)
-		return 0
-	if(A.temperature != B.temperature)
-		return 0
-	return 1
+			active_turfs += new_turfs_to_check
+			turfs_to_check = new_turfs_to_check
 
+		while (turfs_to_check.len)
+		var/ending_ats = active_turfs.len
+		for(var/thing in excited_groups)
+			var/datum/excited_group/EG = thing
+			EG.self_breakdown(space_is_all_consuming = 1)
+			EG.dismantle()
+			CHECK_TICK
 
-/datum/subsystem/air/proc/remove_edge(connection_edge/E)
-	edges.Remove(E)
-	if(!E.sleeping)
-		processing_parts[SSAIR_EDGES] -= E
+		var/msg = "HEY! LISTEN! [DisplayTimeText(world.timeofday - timer)] were wasted processing [starting_ats] turf(s) (connected to [ending_ats] other turfs) with atmos differences at round start."
+		to_chat(world, "<span class='boldannounce'>[msg]</span>")
+		warning(msg)
 
+/turf/open/proc/resolve_active_graph()
+	. = list()
+	var/datum/excited_group/EG = excited_group
+	if (blocks_air || !air)
+		return
+	if (!EG)
+		EG = new
+		EG.add_turf(src)
 
-/datum/subsystem/air/proc/add_hotspot(var/obj/effect/fire/H)
-	#ifdef ZASDBG
-	ASSERT(istype(H))
-	#endif
-	processing_parts[SSAIR_HOTSPOT] |= H
+	for (var/turf/open/ET in atmos_adjacent_turfs)
+		if ( ET.blocks_air || !ET.air)
+			continue
 
+		var/ET_EG = ET.excited_group
+		if (ET_EG)
+			if (ET_EG != EG)
+				EG.merge_groups(ET_EG)
+				EG = excited_group //merge_groups() may decide to replace our current EG
+		else
+			EG.add_turf(ET)
+		if (!ET.excited)
+			ET.excited = 1
+			. += ET
+/turf/open/space/resolve_active_graph()
+	return list()
 
-/datum/subsystem/air/proc/remove_hotspot(var/obj/effect/fire/H)
-	#ifdef ZASDBG
-	ASSERT(istype(H))
-	#endif
-	processing_parts[SSAIR_HOTSPOT] -= H
+/datum/controller/subsystem/air/proc/setup_atmos_machinery()
+	for (var/obj/machinery/atmospherics/AM in atmos_machinery)
+		AM.atmosinit()
+		CHECK_TICK
+
+//this can't be done with setup_atmos_machinery() because
+//	all atmos machinery has to initalize before the first
+//	pipenet can be built.
+/datum/controller/subsystem/air/proc/setup_pipenets()
+	for (var/obj/machinery/atmospherics/AM in atmos_machinery)
+		AM.build_network()
+		CHECK_TICK
+
+/datum/controller/subsystem/air/proc/setup_template_machinery(list/atmos_machines)
+	for(var/A in atmos_machines)
+		var/obj/machinery/atmospherics/AM = A
+		AM.atmosinit()
+		CHECK_TICK
+
+	for(var/A in atmos_machines)
+		var/obj/machinery/atmospherics/AM = A
+		AM.build_network()
+		CHECK_TICK
+
+/datum/controller/subsystem/air/proc/get_init_dirs(type, dir)
+	if(!pipe_init_dirs_cache[type])
+		pipe_init_dirs_cache[type] = list()
+
+	if(!pipe_init_dirs_cache[type]["[dir]"])
+		var/obj/machinery/atmospherics/temp = new type(null, FALSE, dir)
+		pipe_init_dirs_cache[type]["[dir]"] = temp.GetInitDirections()
+		qdel(temp)
+
+	return pipe_init_dirs_cache[type]["[dir]"]
+
+#undef SSAIR_PIPENETS
+#undef SSAIR_ATMOSMACHINERY
+#undef SSAIR_ACTIVETURFS
+#undef SSAIR_EXCITEDGROUPS
+#undef SSAIR_HIGHPRESSURE
+#undef SSAIR_HOTSPOT
+#undef SSAIR_SUPERCONDUCTIVITY

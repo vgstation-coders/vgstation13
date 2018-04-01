@@ -19,48 +19,69 @@
 //- Identify how hard it is to break into the area and where the weak points are
 //- Check if the area has too much empty space. If so, make it smaller and replace the rest with maintenance tunnels.
 
-var/camera_range_display_status = 0
-var/intercom_range_display_status = 0
+GLOBAL_PROTECT(admin_verbs_debug_mapping)
+GLOBAL_LIST_INIT(admin_verbs_debug_mapping, list(
+	/client/proc/camera_view, 				//-errorage
+	/client/proc/sec_camera_report, 		//-errorage
+	/client/proc/intercom_view, 			//-errorage
+	/client/proc/air_status, //Air things
+	/client/proc/Cell, //More air things
+	/client/proc/atmosscan, //check plumbing
+	/client/proc/powerdebug, //check power
+	/client/proc/count_objects_on_z_level,
+	/client/proc/count_objects_all,
+	/client/proc/cmd_assume_direct_control,	//-errorage
+	/client/proc/startSinglo,
+	/client/proc/set_server_fps,	//allows you to set the ticklag.
+	/client/proc/cmd_admin_grantfullaccess,
+	/client/proc/cmd_admin_areatest_all,
+	/client/proc/cmd_admin_areatest_station,
+	/client/proc/cmd_admin_test_atmos_controllers,
+	/client/proc/cmd_admin_rejuvenate,
+	/datum/admins/proc/show_traitor_panel,
+	/client/proc/disable_communication,
+	/client/proc/cmd_show_at_list,
+	/client/proc/cmd_show_at_markers,
+	/client/proc/manipulate_organs,
+	/client/proc/start_line_profiling,
+	/client/proc/stop_line_profiling,
+	/client/proc/show_line_profiling,
+	/client/proc/create_mapping_job_icons,
+	/client/proc/debug_z_levels,
+))
 
-/obj/effect/debugging/camera_range
-	icon = 'icons/480x480.dmi'
-	icon_state = "25percent"
-
-	New()
-		src.pixel_x = -224 * PIXEL_MULTIPLIER
-		src.pixel_y = -224 * PIXEL_MULTIPLIER
+/obj/effect/debugging/mapfix_marker
+	name = "map fix marker"
+	icon = 'icons/mob/screen_gen.dmi'
+	icon_state = "mapfixmarker"
+	desc = "I am a mappers mistake."
 
 /obj/effect/debugging/marker
 	icon = 'icons/turf/areas.dmi'
 	icon_state = "yellow"
 
-/obj/effect/debugging/marker/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+/obj/effect/debugging/marker/Move()
 	return 0
-
-/client/proc/do_not_use_these()
-	set category = "Mapping"
-	set name = "-None of these are for ingame use!!"
-
-	..()
 
 /client/proc/camera_view()
 	set category = "Mapping"
 	set name = "Camera Range Display"
 
-	if(camera_range_display_status)
-		camera_range_display_status = 0
-	else
-		camera_range_display_status = 1
+	var/on = FALSE
+	for(var/turf/T in world)
+		if(T.maptext)
+			on = TRUE
+		T.maptext = null
 
-
-
-	for(var/obj/effect/debugging/camera_range/C in world)
-		del(C)
-
-	if(camera_range_display_status)
-		for(var/obj/machinery/camera/C in cameranet.cameras)
-			new/obj/effect/debugging/camera_range(C.loc)
-	feedback_add_details("admin_verb","mCRD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	if(!on)
+		var/list/seen = list()
+		for(var/obj/machinery/camera/C in GLOB.cameranet.cameras)
+			for(var/turf/T in C.can_see())
+				seen[T]++
+		for(var/turf/T in seen)
+			T.maptext = "[seen[T]]"
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Show Camera Range") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Show Camera Range")
 
 
 
@@ -74,110 +95,110 @@ var/intercom_range_display_status = 0
 
 	var/list/obj/machinery/camera/CL = list()
 
-	for(var/obj/machinery/camera/C in cameranet.cameras)
+	for(var/obj/machinery/camera/C in GLOB.cameranet.cameras)
 		CL += C
 
-	var/output = {"<B>CAMERA ANOMALIES REPORT</B><HR>
-<B>The following anomalies have been detected. The ones in red need immediate attention: Some of those in black may be intentional.</B><BR><ul>"}
+	var/output = {"<B>Camera Abnormalities Report</B><HR>
+<B>The following abnormalities have been detected. The ones in red need immediate attention: Some of those in black may be intentional.</B><BR><ul>"}
 
 	for(var/obj/machinery/camera/C1 in CL)
 		for(var/obj/machinery/camera/C2 in CL)
 			if(C1 != C2)
 				if(C1.c_tag == C2.c_tag)
-					output += "<li><font color='red'>c_tag match for sec. cameras at \[[C1.x], [C1.y], [C1.z]\] ([C1.loc.loc]) and \[[C2.x], [C2.y], [C2.z]\] ([C2.loc.loc]) - c_tag is [C1.c_tag]</font></li>"
+					output += "<li><font color='red'>c_tag match for cameras at [ADMIN_COORDJMP(C1)] ([C1.loc.loc]) and [ADMIN_COORDJMP(C2)] ([C2.loc.loc]) - c_tag is [C1.c_tag]</font></li>"
 				if(C1.loc == C2.loc && C1.dir == C2.dir && C1.pixel_x == C2.pixel_x && C1.pixel_y == C2.pixel_y)
-					output += "<li><font color='red'>FULLY overlapping sec. cameras at \[[C1.x], [C1.y], [C1.z]\] ([C1.loc.loc]) Networks: [C1.network] and [C2.network]</font></li>"
+					output += "<li><font color='red'>FULLY overlapping cameras at [ADMIN_COORDJMP(C1)] ([C1.loc.loc]) Networks: [json_encode(C1.network)] and [json_encode(C2.network)]</font></li>"
 				if(C1.loc == C2.loc)
-					output += "<li>overlapping sec. cameras at \[[C1.x], [C1.y], [C1.z]\] ([C1.loc.loc]) Networks: [C1.network] and [C2.network]</font></li>"
+					output += "<li>Overlapping cameras at [ADMIN_COORDJMP(C1)] ([C1.loc.loc]) Networks: [json_encode(C1.network)] and [json_encode(C2.network)]</li>"
 		var/turf/T = get_step(C1,turn(C1.dir,180))
 		if(!T || !isturf(T) || !T.density )
-			if(!(locate(/obj/structure/grille,T)))
+			if(!(locate(/obj/structure/grille) in T))
 				var/window_check = 0
 				for(var/obj/structure/window/W in T)
-					if (W.dir == turn(C1.dir,180) || W.is_fulltile() )
+					if (W.dir == turn(C1.dir,180) || W.dir in list(5,6,9,10) )
 						window_check = 1
 						break
 				if(!window_check)
-					output += "<li><font color='red'>Camera not connected to wall at \[[C1.x], [C1.y], [C1.z]\] ([C1.loc.loc]) Network: [C1.network]</color></li>"
+					output += "<li><font color='red'>Camera not connected to wall at [ADMIN_COORDJMP(C1)] ([C1.loc.loc]) Network: [json_encode(C1.network)]</font></li>"
 
 	output += "</ul>"
 	usr << browse(output,"window=airreport;size=1000x500")
-	feedback_add_details("admin_verb","mCRP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Show Camera Report") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/intercom_view()
 	set category = "Mapping"
 	set name = "Intercom Range Display"
 
-	if (intercom_range_display_status)
-		intercom_range_display_status = FALSE
-	else
-		intercom_range_display_status = TRUE
+	var/static/intercom_range_display_status = FALSE
+	intercom_range_display_status = !intercom_range_display_status //blame cyberboss if this breaks something
 
-	for (var/obj/effect/debugging/marker/M in world)
+	for(var/obj/effect/debugging/marker/M in world)
 		qdel(M)
 
-	if (intercom_range_display_status)
-		for (var/obj/item/device/radio/intercom/I in world)
-			for (var/turf/T in view(I.canhear_range, I))
-				new /obj/effect/debugging/marker(T)
+	if(intercom_range_display_status)
+		for(var/obj/item/device/radio/intercom/I in world)
+			for(var/turf/T in orange(7,I))
+				var/obj/effect/debugging/marker/F = new/obj/effect/debugging/marker(T)
+				if (!(F in view(7,I.loc)))
+					qdel(F)
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Show Intercom Range") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-	feedback_add_details("admin_verb","mIRD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+/client/proc/cmd_show_at_list()
+	set category = "Mapping"
+	set name = "Show roundstart AT list"
+	set desc = "Displays a list of active turfs coordinates at roundstart"
+
+	var/dat = {"<b>Coordinate list of Active Turfs at Roundstart</b>
+	 <br>Real-time Active Turfs list you can see in Air Subsystem at active_turfs var<br>"}
+
+	for(var/t in GLOB.active_turfs_startlist)
+		var/turf/T = t
+		dat += "[ADMIN_COORDJMP(T)]\n"
+		dat += "<br>"
+
+	usr << browse(dat, "window=at_list")
+
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Show Roundstart Active Turfs") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/client/proc/cmd_show_at_markers()
+	set category = "Mapping"
+	set name = "Show roundstart AT markers"
+	set desc = "Places a marker on all active-at-roundstart turfs"
+
+	var/count = 0
+	for(var/obj/effect/abstract/marker/at/AT in GLOB.all_abstract_markers)
+		qdel(AT)
+		count++
+
+	if(count)
+		to_chat(usr, "[count] AT markers removed.")
+	else
+		for(var/t in GLOB.active_turfs_startlist)
+			new /obj/effect/abstract/marker/at(t)
+			count++
+		to_chat(usr, "[count] AT markers placed.")
+
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Show Roundstart Active Turf Markers")
 
 /client/proc/enable_debug_verbs()
 	set category = "Debug"
-	set name = "Debug verbs"
-
+	set name = "Debug verbs - Enable"
 	if(!check_rights(R_DEBUG))
 		return
+	verbs -= /client/proc/enable_debug_verbs
+	verbs.Add(/client/proc/disable_debug_verbs, GLOB.admin_verbs_debug_mapping)
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Enable Debug Verbs") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-	src.verbs += /client/proc/do_not_use_these 			//-errorage
-	src.verbs += /client/proc/camera_view 				//-errorage
-	src.verbs += /client/proc/sec_camera_report 		//-errorage
-	src.verbs += /client/proc/intercom_view 			//-errorage
-	src.verbs += /client/proc/air_status //Air things
-	src.verbs += /client/proc/Cell //More air things
-	src.verbs += /client/proc/pdiff //Antigriff testing - N3X
-	src.verbs += /client/proc/atmosscan //check plumbing
-	src.verbs += /client/proc/powerdebug //check power
-	src.verbs += /client/proc/count_objects_on_z_level
-	src.verbs += /client/proc/count_objects_all
-	src.verbs += /client/proc/cmd_assume_direct_control	//-errorage
-	src.verbs += /client/proc/jump_to_dead_group
-	src.verbs += /client/proc/startSinglo
-	src.verbs += /client/proc/cheat_power // Because the above doesn't work off-station.  Or at all, occasionally - N3X
-	src.verbs += /client/proc/setup_atmos // Laziness during atmos testing - N3X
-	src.verbs += /client/proc/ticklag	//allows you to set the ticklag.
-	src.verbs += /client/proc/cmd_admin_grantfullaccess
-	src.verbs += /client/proc/kaboom
-	src.verbs += /client/proc/splash
-	src.verbs += /client/proc/cmd_admin_areatest
-	src.verbs += /client/proc/cmd_admin_rejuvenate
-	src.verbs += /datum/admins/proc/show_traitor_panel
-	src.verbs += /client/proc/print_jobban_old
-	src.verbs += /client/proc/print_jobban_old_filter
-	src.verbs += /client/proc/forceEvent
-	//src.verbs += /client/proc/break_all_air_groups
-	//src.verbs += /client/proc/regroup_all_air_groups
-	//src.verbs += /client/proc/kill_pipe_processing
-	//src.verbs += /client/proc/kill_air_processing
-	//src.verbs += /client/proc/disable_communication
-	//src.verbs += /client/proc/disable_movement
-	src.verbs += /client/proc/Zone_Info
-	src.verbs += /client/proc/Test_ZAS_Connection
-	src.verbs += /client/proc/SDQL2_query
-	src.verbs += /client/proc/check_sim_unsim
-	src.verbs += /proc/generateMiniMaps
-	src.verbs += /client/proc/maprender
-	//src.verbs += /client/proc/cmd_admin_rejuvenate
-	src.verbs += /client/proc/start_line_profiling
-	src.verbs += /client/proc/stop_line_profiling
-	src.verbs += /client/proc/show_line_profiling
-	feedback_add_details("admin_verb","mDV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+/client/proc/disable_debug_verbs()
+	set category = "Debug"
+	set name = "Debug verbs - Disable"
+	verbs.Remove(/client/proc/disable_debug_verbs, GLOB.admin_verbs_debug_mapping)
+	verbs += /client/proc/enable_debug_verbs
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Disable Debug Verbs") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/count_objects_on_z_level()
 	set category = "Mapping"
 	set name = "Count Objects On Level"
-
 	var/level = input("Which z-level?","Level?") as text
 	if(!level)
 		return
@@ -210,21 +231,11 @@ var/intercom_range_display_status = 0
 				if(B.z == num_level)
 					count++
 					atom_list += A
-	/*
-	var/atom/temp_atom
-	for(var/i = 0; i <= (atom_list.len/10); i++)
-		var/line = ""
-		for(var/j = 1; j <= 10; j++)
-			if(i*10+j <= atom_list.len)
-				temp_atom = atom_list[i*10+j]
-				line += " no.[i+10+j]@\[[temp_atom.x], [temp_atom.y], [temp_atom.z]\]; "
-		to_chat(world, line)*/
 
 	to_chat(world, "There are [count] objects of type [type_path] on z-level [num_level]")
-	feedback_add_details("admin_verb","mOBJZ") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Count Objects Zlevel") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/count_objects_all()
-	set background = 1
 	set category = "Mapping"
 	set name = "Count Objects All"
 
@@ -240,171 +251,107 @@ var/intercom_range_display_status = 0
 	for(var/atom/A in world)
 		if(istype(A,type_path))
 			count++
-	/*
-	var/atom/temp_atom
-	for(var/i = 0; i <= (atom_list.len/10); i++)
-		var/line = ""
-		for(var/j = 1; j <= 10; j++)
-			if(i*10+j <= atom_list.len)
-				temp_atom = atom_list[i*10+j]
-				line += " no.[i+10+j]@\[[temp_atom.x], [temp_atom.y], [temp_atom.z]\]; "
-		to_chat(world, line)*/
 
-	to_chat(usr, "There are [count] objects of type [type_path] in the game world")
-	feedback_add_details("admin_verb","mOBJ") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/client/proc/check_sim_unsim()
-	set category = "Mapping"
-	set name = "Check Sim/Unsim Bounds"
-	set background = 1
-
-	// this/can/be/next/to = list(these)
-	var/list/acceptable_types=list(
-		/turf/simulated/wall = list(
-			/turf/simulated,
-			// Asteroid shit
-			/turf/unsimulated/mineral,
-			/turf/unsimulated/floor/airless,
-			/turf/unsimulated/floor/asteroid,
-			// Space is okay for walls
-			/turf/space
-		),
-		/turf/simulated/shuttle/floor = list(
-			/turf/simulated/shuttle,
-			/turf/space
-		),
-		/turf/simulated/shuttle/floor4 = list(
-			/turf/simulated/shuttle,
-			/turf/space
-		),
-		/turf/simulated/floor/plating/airless = list(
-			/turf/simulated/floor/plating/airless,
-			/turf/simulated/floor/airless,
-			/turf/simulated/wall,
-			/turf/space
-		),
-		/turf/simulated/floor/airless = list(
-			/turf/simulated/floor/airless,
-			/turf/simulated/floor/plating/airless,
-			/turf/simulated/wall,
-			/turf/space
-		),
-		/turf/simulated/floor = list(
-			/turf/simulated/floor,
-			/turf/simulated/wall,
-			/turf/simulated/shuttle/wall
-		),
-	)
-
-	// Actually a "wall" if we have this shit on the tile:
-	var/list/wallify=list(
-		/turf/simulated/wall,
-		/obj/structure/window,
-		/obj/structure/shuttle,
-		/obj/machinery/door
-	)
-
-	for(var/turf/T in world)
-		for(var/basetype in acceptable_types)
-			var/list/badtiles[0]
-			if(istype(T,basetype))
-				for(var/atom/A in T)
-					if(is_type_in_list(A,wallify))
-						basetype = /turf/simulated/wall
-						break
-				for(var/D in cardinal)
-					var/turf/AT = get_step(T,D)
-					if(!is_type_in_list(AT, acceptable_types[basetype]))
-						badtiles += AT.type
-				var/oldcolor = initial(T.color)
-				var/newcolor = oldcolor
-				if(badtiles.len>0)
-					message_admins("Tile [formatJumpTo(T)] (BT: [basetype]) is next to: [jointext(badtiles,", ")]")
-					newcolor="#ff0000"
-				if(newcolor!=oldcolor)
-					T.color=newcolor
-				break
-
-	feedback_add_details("admin_verb","mSIM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	to_chat(world, "There are [count] objects of type [type_path] in the game world")
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Count Objects All") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
-var/global/prevent_airgroup_regroup = 0
-
-/*
-/client/proc/break_all_air_groups()
-	set category = "Mapping"
-	set name = "Break All Airgroups"
-
-	/*prevent_airgroup_regroup = 1
-	for(var/datum/air_group/AG in SSair.air_groups)
-		AG.suspend_group_processing()
-	message_admins("[src.ckey] used 'Break All Airgroups'")*/
-
-/client/proc/regroup_all_air_groups()
-	set category = "Mapping"
-	set name = "Regroup All Airgroups Attempt"
-
-	to_chat(usr, "<span class='warning'>Proc disabled.</span>")
-
-	/*prevent_airgroup_regroup = 0
-	for(var/datum/air_group/AG in SSair.air_groups)
-		AG.check_regroup()
-	message_admins("[src.ckey] used 'Regroup All Airgroups Attempt'")*/
-
-/client/proc/kill_pipe_processing()
-	set category = "Mapping"
-	set name = "Kill pipe processing"
-
-	to_chat(usr, "<span class='warning'>Proc disabled.</span>")
-
-	/*pipe_processing_killed = !pipe_processing_killed
-	if(pipe_processing_killed)
-		message_admins("[src.ckey] used 'kill pipe processing', stopping all pipe processing.")
-	else
-		message_admins("[src.ckey] used 'kill pipe processing', restoring all pipe processing.")*/
-
-/client/proc/kill_air_processing()
-	set category = "Mapping"
-	set name = "Kill air processing"
-
-	to_chat(usr, "<span class='warning'>Proc disabled.</span>")
-
-	/*air_processing_killed = !air_processing_killed
-	if(air_processing_killed)
-		message_admins("[src.ckey] used 'kill air processing', stopping all air processing.")
-	else
-		message_admins("[src.ckey] used 'kill air processing', restoring all air processing.")*/
-*/
 //This proc is intended to detect lag problems relating to communication procs
-var/global/say_disabled = 0
-/*
+GLOBAL_VAR_INIT(say_disabled, FALSE)
 /client/proc/disable_communication()
 	set category = "Mapping"
 	set name = "Disable all communication verbs"
 
-	to_chat(usr, "<span class='warning'>Proc disabled.</span>")
-
-	/*say_disabled = !say_disabled
-	if(say_disabled)
+	GLOB.say_disabled = !GLOB.say_disabled
+	if(GLOB.say_disabled)
 		message_admins("[src.ckey] used 'Disable all communication verbs', killing all communication methods.")
 	else
-		message_admins("[src.ckey] used 'Disable all communication verbs', restoring all communication methods.")*/
+		message_admins("[src.ckey] used 'Disable all communication verbs', restoring all communication methods.")
 
-//This proc is intended to detect lag problems relating to movement
-*/
-var/global/movement_disabled = 0
-var/global/movement_disabled_exception //This is the client that calls the proc, so he can continue to run around to gauge any change to lag.
-/*
-/client/proc/disable_movement()
+//This generates the icon states for job starting location landmarks.
+/client/proc/create_mapping_job_icons()
+	set name = "Generate job landmarks icons"
 	set category = "Mapping"
-	set name = "Disable all movement"
+	var/icon/final = icon()
+	var/mob/living/carbon/human/dummy/D = new(locate(1,1,1)) //spawn on 1,1,1 so we don't have runtimes when items are deleted
+	D.setDir(SOUTH)
+	for(var/job in subtypesof(/datum/job))
+		var/datum/job/JB = new job
+		switch(JB.title)
+			if("AI")
+				final.Insert(icon('icons/mob/ai.dmi', "ai", SOUTH, 1), "AI")
+			if("Cyborg")
+				final.Insert(icon('icons/mob/robots.dmi', "robot", SOUTH, 1), "Cyborg")
+			else
+				for(var/obj/item/I in D)
+					qdel(I)
+				randomize_human(D)
+				JB.equip(D, TRUE, FALSE)
+				COMPILE_OVERLAYS(D)
+				var/icon/I = icon(getFlatIcon(D), frame = 1)
+				final.Insert(I, JB.title)
+	qdel(D)
+	//Also add the x
+	for(var/x_number in 1 to 4)
+		final.Insert(icon('icons/mob/screen_gen.dmi', "x[x_number == 1 ? "" : x_number]"), "x[x_number == 1 ? "" : x_number]")
+	fcopy(final, "icons/mob/landmarks.dmi")
 
-	to_chat(usr, "<span class='warning'>Proc disabled.</span>")
+/client/proc/debug_z_levels()
+	set name = "Debug Z-Levels"
+	set category = "Mapping"
 
-	/*movement_disabled = !movement_disabled
-	if(movement_disabled)
-		message_admins("[src.ckey] used 'Disable all movement', killing all movement.")
-		movement_disabled_exception = usr.ckey
-	else
-		message_admins("[src.ckey] used 'Disable all movement', restoring all movement.")*/
-*/
+	var/list/z_list = SSmapping.z_list
+	var/list/messages = list()
+	messages += "<b>World</b>: [world.maxx] x [world.maxy] x [world.maxz]<br>"
+
+	var/list/linked_levels = list()
+	var/min_x = INFINITY
+	var/min_y = INFINITY
+	var/max_x = -INFINITY
+	var/max_y = -INFINITY
+
+	for(var/z in 1 to max(world.maxz, z_list.len))
+		if (z > z_list.len)
+			messages += "<b>[z]</b>: Unmanaged (out of bounds)<br>"
+			continue
+		var/datum/space_level/S = z_list[z]
+		if (!S)
+			messages += "<b>[z]</b>: Unmanaged (null)<br>"
+			continue
+		var/linkage
+		switch (S.linkage)
+			if (UNAFFECTED)
+				linkage = "no linkage"
+			if (SELFLOOPING)
+				linkage = "self-looping"
+			if (CROSSLINKED)
+				linkage = "linked at ([S.xi], [S.yi])"
+				linked_levels += S
+				min_x = min(min_x, S.xi)
+				min_y = min(min_y, S.yi)
+				max_x = max(max_x, S.xi)
+				max_y = max(max_y, S.yi)
+			else
+				linkage = "unknown linkage '[S.linkage]'"
+
+		messages += "<b>[z]</b>: [S.name], [linkage], traits: [json_encode(S.traits)]<br>"
+		if (S.z_value != z)
+			messages += "-- z_value is [S.z_value], should be [z]<br>"
+		if (S.name == initial(S.name))
+			messages += "-- name not set<br>"
+		if (z > world.maxz)
+			messages += "-- exceeds max z"
+
+	var/grid[max_x - min_x + 1][max_y - min_y + 1]
+	for(var/datum/space_level/S in linked_levels)
+		grid[S.xi - min_x + 1][S.yi - min_y + 1] = S.z_value
+
+	messages += "<table border='1'>"
+	for(var/y in max_y to min_y step -1)
+		var/list/part = list()
+		for(var/x in min_x to max_x)
+			part += "[grid[x - min_x + 1][y - min_y + 1]]"
+		messages += "<tr><td>[part.Join("</td><td>")]</td></tr>"
+	messages += "</table>"
+
+	to_chat(src, messages.Join(""))

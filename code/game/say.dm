@@ -1,454 +1,213 @@
-var/global/nextDecTalkDelay = 5 //seconds
-var/global/lastDecTalkUse = 0
-
-/proc/dectalk(msg)
-	if(!msg)
-		return 0
-	if (world.timeofday > (lastDecTalkUse + (nextDecTalkDelay * 10)))
-		lastDecTalkUse = world.timeofday
-		msg = copytext(msg, 1, 2000)
-		var/res[] = world.Export("[config.tts_server]?tts=[url_encode(msg)]")
-		//var/res[] = world.Export("http://localhost:1203/?tts=[url_encode(msg)]") //change server
-		if(!res || !res["CONTENT"])
-			return 0
-
-		var/audio = file2text(res["CONTENT"])
-		return list("audio" = audio, "message" = msg)
-	else
-		return list("cooldown" = 1)
-
 /*
  	Miauw's big Say() rewrite.
 	This file has the basic atom/movable level speech procs.
 	And the base of the send_speech() proc, which is the core of saycode.
 */
-var/list/freqtospan = list(
-	"1459" = "commonradio",
-	"1351" = "sciradio",
-	"1355" = "medradio",
-	"1357" = "engradio",
-	"1347" = "supradio",
-	"1349" = "serradio",
-	"1359" = "secradio",
-	"1353" = "comradio",
-	"1447" = "aiprivradio",
-	"1213" = "syndradio",
-	"1441" = "dsquadradio",
-	"1345" = "resteamradio",
-	"1215" = "raiderradio",
-	)
+GLOBAL_LIST_INIT(freqtospan, list(
+	"[FREQ_SCIENCE]" = "sciradio",
+	"[FREQ_MEDICAL]" = "medradio",
+	"[FREQ_ENGINEERING]" = "engradio",
+	"[FREQ_SUPPLY]" = "suppradio",
+	"[FREQ_SERVICE]" = "servradio",
+	"[FREQ_SECURITY]" = "secradio",
+	"[FREQ_COMMAND]" = "comradio",
+	"[FREQ_AI_PRIVATE]" = "aiprivradio",
+	"[FREQ_SYNDICATE]" = "syndradio",
+	"[FREQ_CENTCOM]" = "centcomradio",
+	"[FREQ_CTF_RED]" = "redteamradio",
+	"[FREQ_CTF_BLUE]" = "blueteamradio"
+	))
 
-var/list/freqtoname = list(
-	"1459" = "Common",
-	"1351" = "Science",
-	"1353" = "Command",
-	"1355" = "Medical",
-	"1357" = "Engineering",
-	"1359" = "Security",
-	"1441" = "Deathsquad",
-	"1213" = "Syndicate",
-	"1347" = "Supply",
-	"1349" = "Service",
-	"1447" = "AI Private",
-	"1345" = "Response Team",
-	"1215" = "Raider",
-)
-
-/atom/movable/proc/say(message, var/datum/language/speaking, var/atom/movable/radio=src, var/class) //so we can force nonmobs to speak a certain language
+/atom/movable/proc/say(message, datum/language/language = null)
 	if(!can_speak())
 		return
 	if(message == "" || !message)
 		return
-	var/datum/speech/speech = create_speech(message, null, radio)
-	speech.language=speaking
-	if(class)
-		speech.message_classes.Add(class)
-	send_speech(speech, world.view)
-	returnToPool(speech)
+	var/list/spans = get_spans()
+	if(!language)
+		language = get_default_language()
+	send_speech(message, 7, src, , spans, message_language=language)
 
-/atom/movable/proc/Hear(var/datum/speech/speech, var/rendered_speech="")
+/atom/movable/proc/Hear(message, atom/movable/speaker, message_language, raw_message, radio_freq, list/spans, message_mode)
 	return
 
 /atom/movable/proc/can_speak()
 	return 1
 
-/atom/movable/proc/send_speech(var/datum/speech/speech, var/range=7)
-	say_testing(src, "/atom/movable/proc/send_speech() start, msg = [speech.message]; message_range = [range]; language = [speech.language ? speech.language.name : "None"];")
-	if(isnull(range))
-		range = 7
-	var/rendered = render_speech(speech)
-	for(var/atom/movable/AM in get_hearers_in_view(range, src))
-		AM.Hear(speech, rendered)
+/atom/movable/proc/send_speech(message, range = 7, obj/source = src, bubble_type, list/spans, datum/language/message_language = null, message_mode)
+	var/rendered = compose_message(src, message_language, message, , spans, message_mode)
+	for(var/_AM in get_hearers_in_view(range, source))
+		var/atom/movable/AM = _AM
+		AM.Hear(rendered, src, message_language, message, , spans, message_mode)
 
-/atom/movable/proc/create_speech(var/message, var/frequency=0, var/atom/movable/transmitter=null)
-	if(!transmitter)
-		transmitter=GetDefaultRadio()
-	var/datum/speech/speech = getFromPool(/datum/speech)
-	speech.message = message
-	speech.frequency = frequency
-	speech.job = get_job(speech)
-	speech.radio = transmitter
-	speech.speaker = src
+//To get robot span classes, stuff like that.
+/atom/movable/proc/get_spans()
+	return list()
 
-	speech.name = GetVoice()
-	speech.as_name = get_alt_name()
-	return speech
+/atom/movable/proc/compose_message(atom/movable/speaker, datum/language/message_language, raw_message, radio_freq, list/spans, message_mode, face_name = FALSE)
+	//This proc uses text() because it is faster than appending strings. Thanks BYOND.
+	//Basic span
+	var/spanpart1 = "<span class='[radio_freq ? get_radio_span(radio_freq) : "game say"]'>"
+	//Start name span.
+	var/spanpart2 = "<span class='name'>"
+	//Radio freq/name display
+	var/freqpart = radio_freq ? "\[[get_radio_name(radio_freq)]\] " : ""
+	//Speaker name
+	var/namepart = "[speaker.GetVoice()][speaker.get_alt_name()]"
+	if(face_name && ishuman(speaker))
+		var/mob/living/carbon/human/H = speaker
+		namepart = "[H.get_face_name()]" //So "fake" speaking like in hallucinations does not give the speaker away if disguised
+	//End name span.
+	var/endspanpart = "</span>"
 
-/atom/movable/proc/render_speech_name(var/datum/speech/speech)
-	// old getVoice-based shit
-	//return "[speech.speaker.GetVoice()][speech.speaker.get_alt_name()]"
-	return "[speech.name][speech.render_as_name()]"
+	//Message
+	var/messagepart = " <span class='message'>[lang_treat(speaker, message_language, raw_message, spans, message_mode)]</span></span>"
 
-/atom/movable/proc/render_speech(var/datum/speech/speech)
-	say_testing(src, "render_speech() - Freq: [speech.frequency], radio=\ref[speech.radio]")
-	var/freqpart = ""
-	var/radioicon = ""
-	if(speech.frequency)
-		if(speech.radio)
-			radioicon = "[bicon(speech.radio)]"
-		freqpart = " [radioicon]\[[get_radio_name(speech.frequency)]\]"
-		speech.wrapper_classes.Add(get_radio_span(speech.frequency))
-	var/pooled=0
-	var/datum/speech/filtered_speech
-	if(speech.language)
-		filtered_speech = speech.language.filter_speech(speech.clone())
+	var/languageicon = ""
+	var/datum/language/D = GLOB.language_datum_instances[message_language]
+	if(istype(D) && D.display_icon(src))
+		languageicon = "[D.get_icon()] "
+
+	return "[spanpart1][spanpart2][freqpart][languageicon][compose_track_href(speaker, namepart)][namepart][compose_job(speaker, message_language, raw_message, radio_freq)][endspanpart][messagepart]"
+
+/atom/movable/proc/compose_track_href(atom/movable/speaker, message_langs, raw_message, radio_freq)
+	return ""
+
+/atom/movable/proc/compose_job(atom/movable/speaker, message_langs, raw_message, radio_freq)
+	return ""
+
+/atom/movable/proc/say_mod(input, message_mode)
+	var/ending = copytext(input, length(input))
+	if(copytext(input, length(input) - 1) == "!!")
+		return verb_yell
+	else if(ending == "?")
+		return verb_ask
+	else if(ending == "!")
+		return verb_exclaim
 	else
-		filtered_speech = speech
+		return verb_say
 
-	var/atom/movable/source = speech.speaker.GetSource()
-	say_testing(speech.speaker, "Checking if [src]([type]) understands [source]([source.type])")
-	if(!say_understands(source, speech.language))
-		say_testing(speech.speaker," We don't understand this fuck, adding stars().")
-		filtered_speech=filtered_speech.scramble()
-		pooled=1
-	else
-		say_testing(speech.speaker," We <i>do</i> understand this gentle\[wo\]man.")
+/atom/movable/proc/say_quote(input, list/spans=list(), message_mode)
+	if(!input)
+		input = "..."
 
-#ifdef SAY_DEBUG
-	var/enc_wrapclass=jointext(filtered_speech.wrapper_classes, ", ")
-	say_testing(src, "render_speech() - wrapper_classes = \[[enc_wrapclass]\]")
-#endif
-	// Below, but formatted nicely.
-	/*
-	return {"
-		<span class='[filtered_speech.render_wrapper_classes()]'>
-			<span class='name'>
-				[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)]
-				[freqpart]
-				[render_job(filtered_speech)]
-			</span>
-			[filtered_speech.render_message()]
-		</span>"}
-	*/
-	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message()]</span>"
-	say_testing(src, html_encode(.))
-	if(pooled)
-		returnToPool(filtered_speech)
+	if(copytext(input, length(input) - 1) == "!!")
+		spans |= SPAN_YELL
 
+	var/spanned = attach_spans(input, spans)
+	return "[say_mod(input, message_mode)], \"[spanned]\""
 
-/atom/movable/proc/render_speaker_track_start(var/datum/speech/speech)
-	return ""
-
-/atom/movable/proc/render_speaker_track_end(var/datum/speech/speech)
-	return ""
-
-/atom/movable/proc/get_job(var/datum/speech/speech)
-	return ""
-
-/atom/movable/proc/render_job(var/datum/speech/speech)
-	if(speech.job)
-		return " ([speech.job])"
-	return ""
-
-/atom/movable/proc/say_quote(var/text)
-	if(!text)
-		return "says, \"...\""	//not the best solution, but it will stop a large number of runtimes. The cause is somewhere in the Tcomms code
-	var/ending = copytext(text, length(text))
-	if (ending == "?")
-		return "asks, [text]"
-	if (ending == "!")
-		return "exclaims, [text]"
-
-	return "says, [text]"
-
-
-var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost")
-/atom/movable/proc/render_lang(var/datum/speech/speech)
-	var/raw_message=speech.message
-	if(speech.language)
-		//var/overRadio = (istype(speech.speaker, /obj/item/device/radio) || istype(speech.speaker.GetSource(), /obj/item/device/radio))
-		var/atom/movable/AM = speech.speaker.GetSource()
-		if(say_understands((istype(AM) ? AM : speech.speaker),speech.language))
-			return render_speech(speech)
-			//if(overRadio)
-			//	return speech.language.format_message_radio(speech.speaker, raw_message)
-			//return speech.language.format_message(speech.speaker, raw_message)
+/atom/movable/proc/lang_treat(atom/movable/speaker, datum/language/language, raw_message, list/spans, message_mode)
+	if(has_language(language))
+		var/atom/movable/AM = speaker.GetSource()
+		if(AM) //Basically means "if the speaker is virtual"
+			return AM.say_quote(raw_message, spans, message_mode)
 		else
-			return render_speech(speech.scramble())
-			//if(overRadio)
-			//	return speech.language.format_message_radio(speech.speaker, speech.language.scramble(raw_message))
-			//return speech.language.format_message(speech.speaker, speech.language.scramble(raw_message))
-
-	else
-		var/atom/movable/AM = speech.speaker.GetSource()
-		var/atom/movable/source = istype(AM) ? AM : speech.speaker
-
-		var/rendered = raw_message
-
-		say_testing(speech.speaker, "Checking if [src]([type]) understands [source]([source.type])")
-		if(!say_understands(source))
-			say_testing(speech.speaker," We don't understand this fuck, adding stars().")
-			rendered = stars(rendered)
-		else
-			say_testing(speech.speaker," We <i>do</i> understand this gentle\[wo\]man.")
-
-		rendered="[speech.lquote][html_encode(rendered)][speech.rquote]"
-
+			return speaker.say_quote(raw_message, spans, message_mode)
+	else if(language)
+		var/atom/movable/AM = speaker.GetSource()
+		var/datum/language/D = GLOB.language_datum_instances[language]
+		raw_message = D.scramble(raw_message)
 		if(AM)
-			return AM.say_quote(rendered)
+			return AM.say_quote(raw_message, spans, message_mode)
 		else
-			return speech.speaker.say_quote(rendered)
-	/*else if(message_langs & SPOOKY)
-		return "[bicon(ghostimg)] <span class='sinister'>Too spooky...</span> [bicon(ghostimg)]"
-	else if(message_langs & MONKEY)
-		return "chimpers."
-	else if(message_langs & ALIEN)
-		return "hisses."
-	else if(message_langs & ROBOT)
-		return "beeps rapidly."
-	else if(message_langs & SIMPLE_ANIMAL)
-		var/mob/living/simple_animal/SA = speaker.GetSource()
-		if(!SA || !istype(SA))
-			SA = speaker
-		if(istype(SA))
-			return "[pick(SA.speak_emote)]."
-		else
-			return "makes a strange sound."
+			return speaker.say_quote(raw_message, spans, message_mode)
 	else
-		return "makes a strange sound."*/
-
+		return "makes a strange sound."
 
 /proc/get_radio_span(freq)
-	var/returntext = freqtospan["[freq]"]
+	var/returntext = GLOB.freqtospan["[freq]"]
 	if(returntext)
 		return returntext
 	return "radio"
 
 /proc/get_radio_name(freq)
-	var/returntext = radiochannelsreverse["[freq]"]
+	var/returntext = GLOB.reverseradiochannels["[freq]"]
 	if(returntext)
 		return returntext
 	return "[copytext("[freq]", 1, 4)].[copytext("[freq]", 4, 5)]"
 
-/* NO YOU FOOL
 /proc/attach_spans(input, list/spans)
-	return "[message_spans(spans)][input]</span>"
+	return "[message_spans_start(spans)][input]</span>"
 
-/proc/message_spans(list/spans)
-	var/output = "<SPAN CLASS='"
-
-	for(var/span in spans)
-		output = "[output][span] "
-
+/proc/message_spans_start(list/spans)
+	var/output = "<span class='"
+	for(var/S in spans)
+		output = "[output][S] "
 	output = "[output]'>"
 	return output
-*/
 
+/proc/say_test(text)
+	var/ending = copytext(text, length(text))
+	if (ending == "?")
+		return "1"
+	else if (ending == "!")
+		return "2"
+	return "0"
 
-/**
- * The "voice" of the thing that's speaking.  Shows up as name.
- */
 /atom/movable/proc/GetVoice()
-	return name
+	return "[src]"	//Returns the atom's name, prepended with 'The' if it's not a proper noun
 
 /atom/movable/proc/IsVocal()
 	return 1
 
-/**
- * The "voice" of the thing that's speaking.  Shows up as name.
- */
 /atom/movable/proc/get_alt_name()
-	return
 
+//HACKY VIRTUALSPEAKER STUFF BEYOND THIS POINT
 //these exist mostly to deal with the AIs hrefs and job stuff.
-/atom/movable/proc/GetJob()
-	return
 
-/**
- * Probably used for getting tracking coordinates?
- * TODO: verify
- */
-/atom/movable/proc/GetTrack()
-	return
+/atom/movable/proc/GetJob() //Get a job, you lazy butte
 
-/**
- * What is speaking for us?  Usually src.
- */
 /atom/movable/proc/GetSource()
-	return src
 
-// GetRadio() removed because which radio is used can be different per message. (such as when using :L :R :I macros)
-//  - N3X
-/atom/movable/proc/GetDefaultRadio()
-	return null
+/atom/movable/proc/GetRadio()
 
+//VIRTUALSPEAKERS
 /atom/movable/virtualspeaker
 	var/job
-	var/faketrack
 	var/atom/movable/source
 	var/obj/item/device/radio/radio
+
+INITIALIZE_IMMEDIATE(/atom/movable/virtualspeaker)
+/atom/movable/virtualspeaker/Initialize(mapload, atom/movable/M, radio)
+	. = ..()
+	radio = radio
+	source = M
+	if (istype(M))
+		name = M.GetVoice()
+		verb_say = M.verb_say
+		verb_ask = M.verb_ask
+		verb_exclaim = M.verb_exclaim
+		verb_yell = M.verb_yell
+
+	// The mob's job identity
+	if(ishuman(M))
+		// Humans use their job as seen on the crew manifest. This is so the AI
+		// can know their job even if they don't carry an ID.
+		var/datum/data/record/findjob = find_record("name", name, GLOB.data_core.general)
+		if(findjob)
+			job = findjob.fields["rank"]
+		else
+			job = "Unknown"
+	else if(iscarbon(M))  // Carbon nonhuman
+		job = "No ID"
+	else if(isAI(M))  // AI
+		job = "AI"
+	else if(iscyborg(M))  // Cyborg
+		var/mob/living/silicon/robot/B = M
+		job = "[B.designation] Cyborg"
+	else if(istype(M, /mob/living/silicon/pai))  // Personal AI (pAI)
+		job = "Personal AI"
+	else if(isobj(M))  // Cold, emotionless machines
+		job = "Machine"
+	else  // Unidentifiable mob
+		job = "Unknown"
 
 /atom/movable/virtualspeaker/GetJob()
 	return job
 
-/atom/movable/virtualspeaker/GetTrack()
-	return faketrack
-
 /atom/movable/virtualspeaker/GetSource()
 	return source
 
-/atom/movable/virtualspeaker/GetDefaultRadio()
+/atom/movable/virtualspeaker/GetRadio()
 	return radio
-
-/atom/movable/virtualspeaker/resetVariables()
-	job = null
-	faketrack = null
-	source = null
-	radio = null
-
-	..("job", "faketrack", "source", "radio")
-
-proc/handle_render(var/mob,var/message,var/speaker)
-	if(istype(mob, /mob/new_player))
-		return //One extra layer of sanity
-	if(istype(mob,/mob/dead/observer))
-		var/reference = "<a href='?src=\ref[mob];follow=\ref[speaker]'>(Follow)</a> "
-		message = reference+message
-		to_chat(mob, message)
-	else
-		to_chat(mob, message)
-
-var/global/resethearers = 0
-
-/proc/sethearing()
-	for(var/mob/virtualhearer/VH in movable_hearers)
-		VH.loc = get_turf(VH.attached)
-	resethearers = world.time + 2
-
-// Returns a list of hearers in range of R from source. Used in saycode.
-/proc/get_hearers_in_view(var/R, var/atom/source)
-	if(world.time>resethearers)
-		sethearing()
-
-	var/turf/T = get_turf(source)
-	. = new/list()
-
-	if(!T)
-		return
-
-	for(var/mob/virtualhearer/VH in hearers(R, T))
-		var/can_hear = 1
-		if(istype(VH.attached, /mob))			//The virtualhearer is attached to a mob.
-			var/mob/M = VH.attached
-			if(M.client)						//The mob has a client.
-				var/client/C = M.client
-				if(C.ObscuredTurfs.len)			//The client is in range of something that is artificially obscuring its view.
-					if(T in C.ObscuredTurfs)	//The source's turf is one that is being artificially obscured.
-						can_hear = 0
-		if(can_hear)
-			. += VH.attached
-
-/**
- * Returns a list of mobs who can hear any of the radios given in @radios.
- */
-/proc/get_mobs_in_radio_ranges(list/obj/item/device/radio/radios)
-	if(world.time>resethearers)
-		sethearing()
-
-	. = new/list()
-
-	for(var/obj/item/device/radio/radio in radios)
-		if(radio)
-			var/turf/turf = get_turf(radio)
-
-			if(turf)
-				for(var/mob/virtualhearer/VH in hearers(radio.canhear_range, turf))
-					. |= VH.attached
-
-/* Unused
-/proc/get_movables_in_radio_ranges(var/list/obj/item/device/radio/radios)
-	. = new/list()
-	// Returns a list of mobs who can hear any of the radios given in @radios
-	for(var/i = 1; i <= radios.len; i++)
-		var/obj/item/device/radio/R = radios[i]
-		if(R)
-			. |= get_hearers_in_view(R)
-	. |= get_mobs_in_radio_ranges(radios)
-
-//But I don't want to check EVERYTHING to find a hearer you say? I agree
-//This is the new version of recursive_mob_check, used for say().
-//The other proc was left intact because morgue trays use it.
-/proc/recursive_hear_check(atom/O)
-	var/list/processing_list = list(O)
-	var/list/processed_list = list()
-	var/found_atoms = list()
-
-	while (processing_list.len)
-		var/atom/A = processing_list[1]
-
-		if (A.flags & HEAR)
-			found_atoms |= A
-
-		for (var/atom/B in A)
-			if (!processed_list[B])
-				processing_list |= B
-
-		processing_list.Cut(1, 2)
-		processed_list[A] = A
-
-	return found_atoms
-
-Even further legacy saycode
-// Will recursively loop through an atom's contents and check for mobs, then it will loop through every atom in that atom's contents.
-// It will keep doing this until it checks every content possible. This will fix any problems with mobs, that are inside objects,
-// being unable to hear people due to being in a box within a bag.
-
-/proc/recursive_mob_check(var/atom/O,var/client_check=1,var/sight_check=1,var/include_radio=1)
-
-
-	var/list/processing_list = list(O)
-	var/list/processed_list = list()
-	var/list/found_mobs = list()
-
-	while(processing_list.len)
-
-		var/atom/A = processing_list[1]
-		var/passed = 0
-
-		if(ismob(A))
-			var/mob/A_tmp = A
-			passed=1
-
-			if(client_check && !A_tmp.client)
-				passed=0
-
-			if(sight_check && !isInSight(A_tmp, O))
-				passed=0
-
-		else if(include_radio && istype(A, /obj/item/device/radio))
-			passed=1
-
-			if(sight_check && !isInSight(A, O))
-				passed=0
-
-		if(passed)
-			found_mobs |= A
-
-		for(var/atom/B in A)
-			if(!processed_list[B])
-				processing_list |= B
-
-		processing_list.Cut(1, 2)
-		processed_list[A] = A
-
-	return found_mobs*/

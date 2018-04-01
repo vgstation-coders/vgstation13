@@ -1,154 +1,98 @@
 /obj/effect/decal/cleanable
+	gender = PLURAL
+	layer = ABOVE_NORMAL_TURF_LAYER
 	var/list/random_icon_states = list()
-	var/targeted_by = null	//Used so cleanbots can claim a mess.
-	mouse_opacity = 0 //N3X made this 0, which made it impossible to click things, and in the current 510 version right-click things.
-	w_type = NOT_RECYCLABLE
-	anchored = 1
+	var/blood_state = "" //I'm sorry but cleanable/blood code is ass, and so is blood_DNA
+	var/bloodiness = 0 //0-100, amount of blood in this decal, used for making footprints and affecting the alpha of bloody footprints
+	var/mergeable_decal = TRUE //when two of these are on a same tile or do we need to merge them into just one?
+	var/beauty
 
-	// For tracking shit across the floor.
-	var/amount = 0 // 0 = don't track
-	var/counts_as_blood = 0 // Cult
-	var/transfers_dna = 0
-	var/list/viruses = list()
-	blood_DNA = list()
-	var/basecolor = DEFAULT_BLOOD // Color when wet.
-	var/list/datum/disease2/disease/virus2 = list()
-	var/list/absorbs_types = list() // Types to aggregate.
+/obj/effect/decal/cleanable/Initialize(mapload, list/datum/disease/diseases)
+	. = ..()
+	if (random_icon_states && length(random_icon_states) > 0)
+		icon_state = pick(random_icon_states)
+	create_reagents(300)
+	if(loc && isturf(loc))
+		for(var/obj/effect/decal/cleanable/C in loc)
+			if(C != src && C.type == type && !QDELETED(C))
+				if (replace_decal(C))
+					return INITIALIZE_HINT_QDEL
 
-	var/on_wall = 0 //Wall on which this decal is placed on
+	if(LAZYLEN(diseases))
+		var/list/datum/disease/diseases_to_add = list()
+		for(var/datum/disease/D in diseases)
+			if(D.spread_flags & DISEASE_SPREAD_CONTACT_FLUIDS)
+				diseases_to_add += D
+		if(LAZYLEN(diseases_to_add))
+			AddComponent(/datum/component/infective, diseases_to_add)
 
-/obj/effect/decal/cleanable/New()
-	if(random_icon_states && length(src.random_icon_states) > 0)
-		src.icon_state = pick(src.random_icon_states)
-	..()
+/obj/effect/decal/cleanable/ComponentInitialize()
+	. = ..()
+	addtimer(CALLBACK(src, /datum.proc/AddComponent, /datum/component/beauty, beauty), 0) //inb4 i get yelled at for using the beauty var on cleanable instead of calling this proc on every subtype which would be pedantic and actually run worse.
 
+/obj/effect/decal/cleanable/proc/replace_decal(obj/effect/decal/cleanable/C) // Returns true if we should give up in favor of the pre-existing decal
+	if(mergeable_decal)
+		return TRUE
 
-/obj/effect/decal/cleanable/attackby(obj/item/O as obj, mob/user as mob)
-	if(istype(O,/obj/item/weapon/mop))
-		return ..()
-	return 0 //No more "X HITS THE BLOOD WITH AN RCD"
-
-/obj/effect/decal/cleanable/Destroy()
-	blood_list -= src
-	for(var/datum/disease/D in viruses)
-		D.cure(0)
-		D.holder = null
-
-	if(counts_as_blood)
-		var/datum/game_mode/cult/cult_round = find_active_mode("cult")
-		if(cult_round)
-			var/turf/T = get_turf(src)
-			if(T && (T.z == map.zMainStation))
-				cult_round.bloody_floors -= T
-				cult_round.blood_check()
-	..()
-
-/obj/effect/decal/cleanable/proc/dry()
-	name = "dried [src.name]"
-	desc = "It's dry and crusty. Someone is not doing their job."
-	color = adjust_brightness(color, -50)
-	amount = 0
-
-/obj/effect/decal/cleanable/Crossed(mob/living/carbon/human/perp)
-	if(amount > 0)
-		add_blood_to(perp, amount)
-
-//With "mouse_opacity = 0", this kinda makes no sense.
-//And also, the bloody hands thing does not work properly.
-//
-//obj/effect/decal/cleanable/attack_hand(mob/living/carbon/human/user)
-//	..()
-//	if (amount && istype(user))
-//		add_fingerprint(user)
-//		if (user.gloves)
-//			return
-//		var/taken = rand(1,amount)
-//		amount -= taken
-//		to_chat(user, "<span class='notice'>You get some of \the [src] on your hands.</span>")
-//
-//		user.bloody_hands(src, taken)
-//		user.hand_blood_color = basecolor
-//		user.update_inv_gloves(1)
-
-//		if(transfers_dna)
-//			if (!user.blood_DNA)
-//				user.blood_DNA = list()
-//			user.blood_DNA |= blood_DNA.Copy()
-//		user.add_blood()
-//		user.bloody_hands += taken
-//		user.hand_blood_color = basecolor
-//		user.update_inv_gloves(1)
-//		user.verbs += /mob/living/carbon/human/proc/bloody_doodle
-//
-/obj/effect/decal/cleanable/resetVariables()
-	Destroy()
-	..("viruses","virus2", "blood_DNA", "random_icon_states", args)
-	viruses = list()
-	virus2 = list()
-	blood_DNA = list()
-
-/obj/effect/decal/cleanable/New()
-	..()
-	blood_list += src
-	update_icon()
-
-	if(counts_as_blood)
-		var/datum/game_mode/cult/cult_round = find_active_mode("cult")
-		if(cult_round)
-			var/turf/T = get_turf(src)
-			if(T && (T.z == map.zMainStation))//F I V E   T I L E S
-				if(!(locate("\ref[T]") in cult_round.bloody_floors))
-					cult_round.bloody_floors += T
-					cult_round.bloody_floors[T] = T
-					cult_round.blood_check()
-		if(src.loc && isturf(src.loc))
-			for(var/obj/effect/decal/cleanable/C in src.loc)
-				if(C.type in absorbs_types && C != src)
-					// Transfer DNA, if possible.
-					if (transfers_dna && C.blood_DNA)
-						blood_DNA |= C.blood_DNA.Copy()
-					amount += C.amount
-					returnToPool(C)
-
-/obj/effect/decal/cleanable/proc/messcheck(var/obj/effect/decal/cleanable/M)
-	return 1
-
-
-/obj/effect/decal/cleanable/proc/add_blood_to(var/mob/living/carbon/human/perp, var/amount)
-	if (!istype(perp))
-		return
-	if(amount < 1)
-		return
-	if(perp.shoes)
-		var/obj/item/clothing/shoes/S = perp.shoes
-		S.track_blood = max(0, amount, S.track_blood)                //Adding blood to shoes
-
-		if(!blood_overlays[S.type]) //If there isn't a precreated blood overlay make one
-			S.generate_blood_overlay()
-
-		if(S.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
-			S.overlays.Remove(S.blood_overlay)
+/obj/effect/decal/cleanable/attackby(obj/item/W, mob/user, params)
+	if(istype(W, /obj/item/reagent_containers/glass) || istype(W, /obj/item/reagent_containers/food/drinks))
+		if(src.reagents && W.reagents)
+			. = 1 //so the containers don't splash their content on the src while scooping.
+			if(!src.reagents.total_volume)
+				to_chat(user, "<span class='notice'>[src] isn't thick enough to scoop up!</span>")
+				return
+			if(W.reagents.total_volume >= W.reagents.maximum_volume)
+				to_chat(user, "<span class='notice'>[W] is full!</span>")
+				return
+			to_chat(user, "<span class='notice'>You scoop up [src] into [W]!</span>")
+			reagents.trans_to(W, reagents.total_volume)
+			if(!reagents.total_volume) //scooped up all of it
+				qdel(src)
+				return
+	if(W.is_hot()) //todo: make heating a reagent holder proc
+		if(istype(W, /obj/item/clothing/mask/cigarette))
+			return
 		else
-			S.blood_overlay = blood_overlays[S.type]
-
-		S.blood_overlay.color = basecolor
-		S.overlays += S.blood_overlay
-		S.blood_color=basecolor
-
-		if(!S.blood_DNA)
-			S.blood_DNA = list()
-		if(blood_DNA)
-			S.blood_DNA |= blood_DNA.Copy()
-		perp.update_inv_shoes(1)
-
+			var/hotness = W.is_hot()
+			reagents.expose_temperature(hotness)
+			to_chat(user, "<span class='notice'>You heat [name] with [W]!</span>")
 	else
-		perp.track_blood = max(amount, 0, perp.track_blood)                                //Or feet
-		if(!perp.feet_blood_DNA)
-			perp.feet_blood_DNA = list()
-		if(!istype(blood_DNA, /list))
-			blood_DNA = list()
-		else
-			perp.feet_blood_DNA |= blood_DNA.Copy()
-		perp.feet_blood_color=basecolor
+		return ..()
 
-	amount--
+/obj/effect/decal/cleanable/ex_act()
+	if(reagents)
+		for(var/datum/reagent/R in reagents.reagent_list)
+			R.on_ex_act()
+	..()
+
+/obj/effect/decal/cleanable/fire_act(exposed_temperature, exposed_volume)
+	if(reagents)
+		reagents.expose_temperature(exposed_temperature)
+	..()
+
+
+//Add "bloodiness" of this blood's type, to the human's shoes
+//This is on /cleanable because fuck this ancient mess
+/obj/effect/decal/cleanable/Crossed(atom/movable/O)
+	..()
+	if(ishuman(O))
+		var/mob/living/carbon/human/H = O
+		if(H.shoes && blood_state && bloodiness)
+			var/obj/item/clothing/shoes/S = H.shoes
+			var/add_blood = 0
+			if(bloodiness >= BLOOD_GAIN_PER_STEP)
+				add_blood = BLOOD_GAIN_PER_STEP
+			else
+				add_blood = bloodiness
+			bloodiness -= add_blood
+			S.bloody_shoes[blood_state] = min(MAX_SHOE_BLOODINESS,S.bloody_shoes[blood_state]+add_blood)
+			S.add_blood_DNA(return_blood_DNA())
+			S.blood_state = blood_state
+			update_icon()
+			H.update_inv_shoes()
+
+/obj/effect/decal/cleanable/proc/can_bloodcrawl_in()
+	if((blood_state != BLOOD_STATE_OIL) && (blood_state != BLOOD_STATE_NOT_BLOODY))
+		return bloodiness
+	else
+		return 0

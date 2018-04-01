@@ -1,45 +1,47 @@
 /obj/item/clothing/under/syndicate
 	name = "tactical turtleneck"
-	desc = "A non-descript, slightly suspicious piece of civilian clothing."
+	desc = "A non-descript and slightly suspicious looking turtleneck with digital camouflage cargo pants."
 	icon_state = "syndicate"
 	item_state = "bl_suit"
-	_color = "syndicate"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	siemens_coefficient = 0.9
-
-//We want our sensors to be off, sensors are not tactical
-/obj/item/clothing/under/syndicate/New()
-	..()
-	sensor_mode = 0
-
-/obj/item/clothing/under/syndicate/combat
-	name = "combat turtleneck"
-
-/obj/item/clothing/under/syndicate/holomap
-	name = "tactical holosuit"
-	desc = "It's been fitted with some holographic localization devices. A measure the Syndicate judged necessary to improve teamwork among operatives."
-
-/obj/item/clothing/under/syndicate/holomap/New()
-	..()
-	attach_accessory(new/obj/item/clothing/accessory/holomap_chip/operative(src))
-
-/obj/item/clothing/under/syndicate/commando/New()
-	..()
-	attach_accessory(new/obj/item/clothing/accessory/holomap_chip/elite(src))
+	item_color = "syndicate"
+	has_sensor = NO_SENSORS
+	armor = list("melee" = 10, "bullet" = 0, "laser" = 0,"energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 40)
+	alt_covers_chest = TRUE
 
 /obj/item/clothing/under/syndicate/tacticool
-	name = "\improper Tacticool turtleneck"
+	name = "tacticool turtleneck"
 	desc = "Just looking at it makes you want to buy an SKS, go into the woods, and -operate-."
 	icon_state = "tactifool"
 	item_state = "bl_suit"
-	_color = "tactifool"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-	siemens_coefficient = 1
+	item_color = "tactifool"
+	armor = list("melee" = 0, "bullet" = 0, "laser" = 0,"energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 40)
 
-/obj/item/clothing/under/syndicate/executive
-	name = "syndicate executive suit"
-	desc = "A snappy black suit worn by syndicate executives. The shirt is either a tacky red or soaked in blood. Or possibly both."
-	icon_state = "exec"
-	_color = "exec"
-	species_fit = list(GREY_SHAPED)
+/obj/item/clothing/under/syndicate/sniper
+	name = "Tactical turtleneck suit"
+	desc = "A double seamed tactical turtleneck disguised as a civilian grade silk suit. Intended for the most formal operator. The collar is really sharp."
+	icon_state = "really_black_suit"
+	item_state = "bl_suit"
+	item_color = "black_suit"
+
+/obj/item/clothing/under/syndicate/camo
+	name = "camouflage fatigues"
+	desc = "A green military camouflage uniform."
+	icon_state = "camogreen"
+	item_state = "g_suit"
+	item_color = "camogreen"
+
+/obj/item/clothing/under/syndicate/soviet
+	name = "Ratnik 5 tracksuit"
+	desc = "Badly translated labels tell you to clean this in Vodka. Great for squatting in."
+	icon_state = "trackpants"
+	item_color = "trackpants"
+	can_adjust = FALSE
+	armor = list("melee" = 10, "bullet" = 0, "laser" = 0,"energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 0)
+	resistance_flags = NONE
+
+/obj/item/clothing/under/syndicate/combat
+	name = "combat uniform"
+	desc = "With a suit lined with this many pockets, you are ready to operate."
+	icon_state = "syndicate_combat"
+	item_color = "syndicate_combat"
+	can_adjust = FALSE

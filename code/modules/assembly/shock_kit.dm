@@ -1,28 +1,22 @@
 /obj/item/assembly/shock_kit
 	name = "electrohelmet assembly"
 	desc = "This appears to be made from both an electropack and a helmet."
+	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "shock_kit"
 	var/obj/item/clothing/head/helmet/part1 = null
-	var/obj/item/device/radio/electropack/part2 = null
-	w_class = W_CLASS_HUGE
-	flags = FPRINT
-	siemens_coefficient = 1
+	var/obj/item/device/electropack/part2 = null
+	w_class = WEIGHT_CLASS_HUGE
+	flags_1 = CONDUCT_1
 
 /obj/item/assembly/shock_kit/Destroy()
 	qdel(part1)
-	part1 = null
 	qdel(part2)
-	part2 = null
-	..()
-	return
+	return ..()
 
-/obj/item/assembly/shock_kit/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W))
-		var/turf/T = loc
-		if(ismob(T))
-			T = T.loc
-		part1.forceMove(T)
-		part2.forceMove(T)
+/obj/item/assembly/shock_kit/attackby(obj/item/W, mob/user, params)
+	if(istype(W, /obj/item/wrench))
+		part1.forceMove(drop_location())
+		part2.forceMove(drop_location())
 		part1.master = null
 		part2.master = null
 		part1 = null
@@ -32,17 +26,14 @@
 	add_fingerprint(user)
 	return
 
-/obj/item/assembly/shock_kit/attack_self(mob/user as mob)
+/obj/item/assembly/shock_kit/attack_self(mob/user)
 	part1.attack_self(user)
 	part2.attack_self(user)
 	add_fingerprint(user)
 	return
 
-//I guess at some point, this shock kit thing was meant to be an /obj/item/DEVICE/assembly/ with it's own radio_frequency datum,
-//but honestly I think just using the electropack for the whole signal-receiving thing works out much better.
-//This proc never ever gets called unless the electropack calls it directly, see electropack.dm
 /obj/item/assembly/shock_kit/receive_signal()
-	if(istype(loc, /obj/structure/bed/chair/e_chair))
-		var/obj/structure/bed/chair/e_chair/C = loc
+	if(istype(loc, /obj/structure/chair/e_chair))
+		var/obj/structure/chair/e_chair/C = loc
 		C.shock()
 	return

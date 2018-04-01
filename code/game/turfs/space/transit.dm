@@ -1,89 +1,109 @@
-/turf/space/transit
-	var/pushdirection // push things that get caught in the transit tile this direction
-	plane = TURF_PLANE
+/turf/open/space/transit
+	icon_state = "black"
+	dir = SOUTH
+	baseturfs = /turf/open/space/transit
+	flags_1 = NOJAUNT_1 //This line goes out to every wizard that ever managed to escape the den. I'm sorry.
+	explosion_block = INFINITY
 
-/turf/space/transit/New()
-	if(loc)
-		var/area/A = loc
-		A.area_turfs += src
+/turf/open/space/transit/get_smooth_underlay_icon(mutable_appearance/underlay_appearance, turf/asking_turf, adjacency_dir)
+	. = ..()
+	underlay_appearance.icon_state = "speedspace_ns_[get_transit_state(asking_turf)]"
+	underlay_appearance.transform = turn(matrix(), get_transit_angle(asking_turf))
 
-	update_icon()
+/turf/open/space/transit/south
+	dir = SOUTH
 
-/turf/space/transit/initialize()
-	return
+/turf/open/space/transit/north
+	dir = NORTH
 
-/turf/space/transit/update_icon()
-	icon_state = ""
+/turf/open/space/transit/horizontal
+	dir = WEST
 
-	var/dira=""
-	var/i=0
-	switch(pushdirection)
-		if(SOUTH) // North to south
-			dira="ns"
-			i=1+(abs((x^2)-y)%15) // Vary widely across X, but just decrement across Y
+/turf/open/space/transit/west
+	dir = WEST
 
-		if(NORTH) // South to north  I HAVE NO IDEA HOW THIS WORKS I'M SORRY.  -Probe
-			dira="ns"
-			i=1+(abs((x^2)-y)%15) // Vary widely across X, but just decrement across Y
+/turf/open/space/transit/east
+	dir = EAST
 
-		if(WEST) // East to west
-			dira="ew"
-			i=1+(((y^2)+x)%15) // Vary widely across Y, but just increment across X
+/turf/open/space/transit/Entered(atom/movable/AM, atom/OldLoc)
+	..()
+	if(!locate(/obj/structure/lattice) in src)
+		throw_atom(AM)
 
-		if(EAST) // West to east
-			dira="ew"
-			i=1+(((y^2)-x)%15) // Vary widely across Y, but just increment across X
+/turf/open/space/transit/proc/throw_atom(atom/movable/AM)
+	set waitfor = FALSE
+	if(!AM || istype(AM, /obj/docking_port))
+		return
+	if(AM.loc != src) 	// Multi-tile objects are "in" multiple locs but its loc is it's true placement.
+		return			// Don't move multi tile objects if their origin isnt in transit
+	var/max = world.maxx-TRANSITIONEDGE
+	var/min = 1+TRANSITIONEDGE
 
+	var/list/possible_transtitons = list()
+	for(var/A in SSmapping.z_list)
+		var/datum/space_level/D = A
+		if (D.linkage == CROSSLINKED)
+			possible_transtitons += D.z_value
+	var/_z = pick(possible_transtitons)
 
-		/*
-		if(NORTH) // South to north (SPRITES DO NOT EXIST!)
-			dira="sn"
-			i=1+(((x^2)+y)%15) // Vary widely across X, but just increment across Y
-
-		if(EAST) // West to east (SPRITES DO NOT EXIST!)
-			dira="we"
-			i=1+(abs((y^2)-x)%15) // Vary widely across X, but just increment across Y
-		*/
-
+	//now select coordinates for a border turf
+	var/_x
+	var/_y
+	switch(dir)
+		if(SOUTH)
+			_x = rand(min,max)
+			_y = max
+		if(WEST)
+			_x = max
+			_y = rand(min,max)
+		if(EAST)
+			_x = min
+			_y = rand(min,max)
 		else
-			icon_state="black"
-	if(icon_state != "black")
-		icon_state = "speedspace_[dira]_[i]"
+			_x = rand(min,max)
+			_y = min
 
-/turf/space/transit/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 0)
-	return ..(N, tell_universe, 1, allow)
-
-//Overwrite because we dont want people building rods in space.
-/turf/space/transit/attackby(obj/O as obj, mob/user as mob)
-	return
-
-/turf/space/transit/canBuildCatwalk()
-	return BUILD_FAILURE
-
-/turf/space/transit/canBuildLattice()
-	return BUILD_FAILURE
-
-/turf/space/transit/canBuildPlating()
-	return BUILD_SILENT_FAILURE
-
-/turf/space/transit/north // moving to the north
-
-	pushdirection = SOUTH  // south because the space tile is scrolling south
-	icon_state="debug-north"
-
-/turf/space/transit/south // moving to the south
-
-	pushdirection = NORTH
-	icon_state="debug-south"
-
-/turf/space/transit/east // moving to the east
-
-	pushdirection = WEST
-	icon_state="debug-east"
-
-/turf/space/transit/west // moving to the west
-
-	pushdirection = EAST
-	icon_state="debug-west"
+	var/turf/T = locate(_x, _y, _z)
+	AM.forceMove(T)
 
 
+/turf/open/space/transit/CanBuildHere()
+	return SSshuttle.is_in_shuttle_bounds(src)
+
+
+/turf/open/space/transit/Initialize()
+	. = ..()
+	update_icon()
+	for(var/atom/movable/AM in src)
+		throw_atom(AM)
+
+/turf/open/space/transit/proc/update_icon()
+	icon_state = "speedspace_ns_[get_transit_state(src)]"
+	transform = turn(matrix(), get_transit_angle(src))
+
+/proc/get_transit_state(turf/T)
+	var/p = 9
+	. = 1
+	switch(T.dir)
+		if(NORTH)
+			. = ((-p*T.x+T.y) % 15) + 1
+			if(. < 1)
+				. += 15
+		if(EAST)
+			. = ((T.x+p*T.y) % 15) + 1
+		if(WEST)
+			. = ((T.x-p*T.y) % 15) + 1
+			if(. < 1)
+				. += 15
+		else
+			. = ((p*T.x+T.y) % 15) + 1
+
+/proc/get_transit_angle(turf/T)
+	. = 0
+	switch(T.dir)
+		if(NORTH)
+			. = 180
+		if(EAST)
+			. = 90
+		if(WEST)
+			. = -90

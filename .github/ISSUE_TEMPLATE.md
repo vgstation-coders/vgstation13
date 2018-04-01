@@ -1,48 +1,9 @@
-<!--
-	If a specific field doesn't apply, remove it!
-	Anything inside tags like these is a comment and will not be displayed in the final issue.
-	Be careful not to write inside them!
-	Joke or spammed issues can and will result in punishment. Don't be a dick.
--->
+[Round ID]: # (If you discovered this issue from playing tgstation hosted servers:)
+[Round ID]: # (**INCLUDE THE ROUND ID**)
+[Round ID]: # (It can be found in the Status panel or retrieved from https://atlantaned.space/statbus/round.php ! The round id let's us look up valuable information and logs for the round the bug happened.)
 
-#### Description of issue
+[Testmerges]: # (If you believe the issue to be caused by a test merge [OOC tab -> Show Server Revision], report it in the pull request's comment section instead.)
 
+[Reproduction]: # (Explain your issue in detail, including the steps to reproduce it. Issues without proper reproduction steps or explanation are open to being ignored/closed by maintainers.)
 
-
-#### Difference between expected and actual behavior
-
-
-
-#### Steps to reproduce 
-
-
-
-#### Specific information for locating
-<!-- e.g. an object name, paste specific message outputs... -->
-
-
-
-#### Length of time in which bug has been known to occur
-<!--
-	Be specific if you approximately know the time it's been occurring
-	for—this can speed up finding the source. If you're not sure
-	about it, tell us too!
--->
-
-
-
-#### Server revision
-<!-- Found with the "Show server revision" verb in the OOC tab in game. -->
-
-
-
-#### Issue bingo
-
-Please check whatever applies. More checkboxes checked increase your chances of not being yelled at by every contributor.
-
-<!-- Check these by writing an x inside the [ ] (like this: [x])-->
-- [ ] Issue could be reproduced at least once
-- [ ] Issue could be reproduced by different players
-- [ ] Issue could be reproduced in multiple rounds
-- [ ] Issue happened in a recent (less than 7 days ago) round
-- [ ] [Couldn't find an existing issue about this](https://github.com/d3athrow/vgstation13/issues)
+[For Admins]: # (Oddities induced by var-edits and other admin tools are not necessarily bugs. Verify that your issues occur under regular circumstances before reporting them.)

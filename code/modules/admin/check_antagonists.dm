@@ -1,346 +1,215 @@
-/datum/admins/proc/check_antagonists()
-	if (ticker && ticker.current_state >= GAME_STATE_PLAYING)
-		var/dat = "<html><head><title>Round Status</title></head><body><h1><B>Round Status</B></h1>"
+//I wish we had interfaces sigh, and i'm not sure giving team and antag common root is a better solution here
 
-		dat += {"Current Game Mode: <B>[ticker.mode.name]</B><BR>
-			Round Duration: <B>[round(world.time / 36000)]:[add_zero("[world.time / 600 % 60]", 2)]:[world.time / 100 % 6][world.time / 100 % 10]</B><BR>
-			<A HREF='?src=\ref[src];emergency_shuttle_panel=1'><B>Emergency Shuttle Panel</B></A><BR>"}
-
-		dat += "<a href='?src=\ref[src];delay_round_end=1'>[ticker.delay_end ? "End Round Normally" : "Delay Round End"]</a><br>"
-		if(ticker.mode.syndicates.len)
-			dat += "<br><table cellspacing=5><tr><td><B>Syndicates</B></td><td></td></tr>"
-			for(var/datum/mind/N in ticker.mode.syndicates)
-				var/mob/M = N.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
-				else
-					dat += "<tr><td><i>Nuclear Operative not found!</i></td></tr>"
-			dat += "</table><br><table><tr><td><B>Nuclear Disk(s)</B></td></tr>"
-			var/obj/item/weapon/disk/nuclear/N = locate()
-			if(N)
-				dat += "<tr><td>[N.name], "
-				var/atom/disk_loc = N.loc
-				while(!istype(disk_loc, /turf))
-					if(istype(disk_loc, /mob))
-						var/mob/M = disk_loc
-						dat += "carried by <a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a> "
-					if(istype(disk_loc, /obj))
-						var/obj/O = disk_loc
-						dat += "in \a [O.name] "
-					disk_loc = disk_loc.loc
-				dat += "in [disk_loc.loc] at ([disk_loc.x], [disk_loc.y], [disk_loc.z])</td></tr>"
-			dat += "</table>"
-
-		if(ticker.mode.head_revolutionaries.len || ticker.mode.revolutionaries.len)
-			dat += "<br><table cellspacing=5><tr><td><B>Revolutionaries</B></td><td></td></tr>"
-			for(var/datum/mind/N in ticker.mode.head_revolutionaries)
-				var/mob/M = N.current
-				if(!M)
-					dat += "<tr><td><i>Head Revolutionary not found!</i></td></tr>"
-				else
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a> <b>(Leader)</b>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
-			for(var/datum/mind/N in ticker.mode.revolutionaries)
-				var/mob/M = N.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
-			dat += "</table><table cellspacing=5><tr><td><B>Target(s)</B></td><td></td><td><B>Location</B></td></tr>"
-			for(var/datum/mind/N in ticker.mode.get_living_heads())
-				var/mob/M = N.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"}
-					var/turf/mob_loc = get_turf(M)
-					dat += "<td>[mob_loc.loc]</td></tr>"
-				else
-					dat += "<tr><td><i>Head not found!</i></td></tr>"
-			dat += "</table>"
-
-		if(ticker.mode.changelings.len > 0)
-			dat += "<br><table cellspacing=5><tr><td><B>Changelings</B></td><td></td><td></td></tr>"
-			for(var/datum/mind/changeling in ticker.mode.changelings)
-				var/mob/M = changeling.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
-				else
-					dat += "<tr><td><i>Changeling not found!</i></td></tr>"
-			dat += "</table>"
-
-		if(ticker.mode.wizards.len > 0)
-			dat += "<br><table cellspacing=5><tr><td><B>Wizards</B></td><td></td><td></td></tr>"
-			for(var/datum/mind/wizard in ticker.mode.wizards)
-				var/mob/M = wizard.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
-				else
-					dat += "<tr><td><i>Wizard not found!</i></td></tr>"
-			dat += "</table>"
-
-		if(ticker.mode.apprentices.len > 0)
-			dat += "<br><table cellspacing=5><tr><td><B>Wizard's apprentices</B></td><td></td><td></td></tr>"
-			for(var/datum/mind/apprentice in ticker.mode.apprentices)
-				var/mob/M = apprentice.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
-				else
-					dat += "<tr><td><i>Apprentice not found!</i></td></tr>"
-			dat += "</table>"
-
-		/* REMOVED as requested
-		if(ticker.mode.raiders.len > 0)
-			dat += "<br><table cellspacing=5><tr><td><B>Raiders</B></td><td></td><td></td></tr>"
-			for(var/datum/mind/raider in ticker.mode.raiders)
-				var/mob/M = raider.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
-			dat += "</table>"
-		*/
-
-		/*
-		if(ticker.mode.ninjas.len > 0)
-			dat += "<br><table cellspacing=5><tr><td><B>Ninjas</B></td><td></td><td></td></tr>"
-			for(var/datum/mind/ninja in ticker.mode.ninjas)
-				var/mob/M = ninja.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
-				else
-					dat += "<tr><td><i>Ninja not found!</i></td></tr>"
-			dat += "</table>"
-		*/
-
-		if(ticker.mode.cult.len)
-			dat += "<br><table cellspacing=5><tr><td><B>Cultists</B></td><td></td></tr>"
-			for(var/datum/mind/N in ticker.mode.cult)
-				var/mob/M = N.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A href='?src=\ref[src];cult_privatespeak=\ref[M]'>Nar-Speak</A></td></tr>"}
-			dat += "</table>"
-
-			var/living_crew = 0
-			var/living_cultists = 0
-			for(var/mob/living/L in player_list)
-				if(L.stat != DEAD)
-					if(L.mind in ticker.mode.cult)
-						living_cultists++
-					else
-						if(istype(L, /mob/living/carbon))
-							living_crew++
-
-			dat += "<br>[living_cultists] living cultists. (use <a href='?src=\ref[src];cult_mindspeak=\ref[src]'>Voice of Nar-Sie</a>)"
-			dat += "<br>[living_crew] living non-cultists."
-			dat += "<br>"
-
-			var/datum/game_mode/cult/cult_round = find_active_mode("cult")
-			if(cult_round)
-				dat += "<br><B>Cult Objectives:</B>"
-
-				for(var/obj_count=1, obj_count <= cult_round.objectives.len, obj_count++)
-					var/explanation
-					switch(cult_round.objectives[obj_count])
-						if("convert")
-							explanation = "Reach a total of [cult_round.convert_target] cultists.[(obj_count < cult_round.objectives.len) ? "<font color='green'><B>Success!</B></font>" : "(currently [cult_round.cult.len] cultists)"]"
-						if("bloodspill")
-							explanation = "Cover [cult_round.spilltarget] tiles in blood.[(obj_count < cult_round.objectives.len) ? "<font color='green'><B>Success!</B></font>" : "(currently [cult_round.bloody_floors.len] bloody floors)"]"
-						if("sacrifice")
-							explanation = "Sacrifice [cult_round.sacrifice_target.name], the [cult_round.sacrifice_target.assigned_role].[(obj_count < cult_round.objectives.len) ? "<font color='green'><B>Success!</B></font>" : ""]"
-						if("eldergod")
-							explanation = "Summon Nar-Sie.[(obj_count < cult_round.objectives.len) ? "<font color='green'><B>Success!</B></font>" : ""]"
-						if("harvest")
-							explanation = "Bring [cult_round.harvest_target] humans directly to Nar-Sie.[cult_round.bonus ? "<font color='green'><B>Success!</B></font>" : "(currently [cult_round.harvested] sacrifices)"]"
-						if("hijack")
-							explanation = "Don't let any non-cultist escape on the Shuttle alive.[cult_round.bonus ? "<font color='green'><B>Success!</B></font>" : ""]"
-						if("massacre")
-							explanation = "Massacre the crew until there are less than [cult_round.massacre_target] people left on the station.[cult_round.bonus ? "<font color='green'><B>Success!</B></font>" : ""]"
-
-					dat += "<br><B>Objective #[obj_count]</B>: [explanation]"
-
-				if(!cult_round.narsie_condition_cleared)
-					dat += "<br><a href='?src=\ref[src];cult_nextobj=\ref[src]'>complete objective (debug)</a>"
-
-		/*if(istype(ticker.mode, /datum/game_mode/anti_revolution) && ticker.mode:heads.len)	//comment out anti-revolution
-			dat += "<br><table cellspacing=5><tr><td><B>Corrupt Heads</B></td><td></td></tr>"
-			for(var/datum/mind/N in ticker.mode:heads)
-				var/mob/M = N.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
-			dat += "</table>"
-*/
-
-		if(ticker.mode.vampires.len > 0)
-			dat += "<br><table cellspacing=5><tr><td><B>Vampires</B></td><td></td><td></td></tr>"
-			for(var/datum/mind/vampire in ticker.mode.vampires)
-				var/mob/M = vampire.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
-				else
-					dat += "<tr><td><i>Vampire not found!</i></td></tr>"
-
-		if(ticker.mode.enthralled.len > 0)
-			dat += "<br><table cellspacing=5><tr><td><B>Thralls</B></td><td></td><td></td></tr>"
-			for(var/datum/mind/Mind in ticker.mode.enthralled)
-				var/mob/M = Mind.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
-				else
-					dat += "<tr><td><i>Enthralled not found!</i></td></tr>"
-
-		if(ticker.mode.traitors.len > 0)
-			dat += "<br><table cellspacing=5><tr><td><B>Traitors</B></td><td></td><td></td></tr>"
-			for(var/datum/mind/traitor in ticker.mode.traitors)
-				var/mob/M = traitor.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
-						<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"}
-				else
-					dat += "<tr><td><i>Traitor not found!</i></td></tr>"
-			dat += "</table>"
-
-		if(istype(ticker.mode, /datum/game_mode/blob))
-			var/datum/game_mode/blob/mode = ticker.mode
-
-			dat += {"<br><table cellspacing=5><tr><td><B>Blob</B></td><td></td><td></td></tr>
-				<tr><td><i>Progress: [blobs.len]/[mode.blobwincount]</i></td></tr>"}
-			for(var/datum/mind/blob in mode.infected_crew)
-				var/mob/M = blob.current
-				if(M)
-
-					dat += {"<tr><td><a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?priv_msg=\ref[M]'>PM</A></td>"}
-				else
-					dat += "<tr><td><i>Blob not found!</i></td></tr>"
-			dat += "</table>"
-		else if(locate(/mob/camera/blob) in mob_list)
-			dat += "<br><table cellspacing=5><tr><td><B>Blob</B></td><td></td><td></td></tr>"
-			for(var/mob/M in mob_list)
-				if(istype(M, /mob/camera/blob))
-
-					dat += {"<tr><td><a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?priv_msg=\ref[M]'>PM</A></td>"}
-			dat += "</table>"
-		if(ticker.mode.raiders.len)
-			dat += "<br><table cellspacing=5><tr><td><B>Raiders</B></td><td></td><td></td></tr>"
-			for(var/datum/mind/vox in ticker.mode.raiders)
-				var/mob/M = vox.current
-				if(M)
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td></tr>"}
-				else
-					dat += "<tr><td><i>Vox Raider not found!</i></td></tr>"
-			dat += "</table>"
-		if(istype(ticker.mode, /datum/game_mode/heist))
-			var/datum/game_mode/heist/mode_ticker = ticker.mode
-			var/objective_count = 1
-			dat += "<br><B>Raider Objectives:</B>"
-			for(var/datum/objective/objective in mode_ticker.raid_objectives)
-				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
-
-		if(ticker.mode.ert.len > 0)
-			dat += "<br><table cellspacing=5><tr><td><B>[TEAM_ERT]</B></td><td></td><td></td></tr>"
-			for(var/datum/mind/ert in ticker.mode.ert)
-				var/mob/M = ert.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"}
-
-				else
-					dat += "<tr><td><i>Emergency Responder not found!</i></td></tr>"
-			dat += "</table>"
-			dat += "<br><B>ERT Objectives:</B>"
-			var/datum/striketeam/team = sent_strike_teams[TEAM_ERT]
-			var/objective_count = 1
-			for(var/datum/objective/objective in team.objectives)
-				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
-
-		if(ticker.mode.deathsquad.len > 0)
-			dat += "<br><table cellspacing=5><tr><td><B>[TEAM_DEATHSQUAD]</B></td><td></td><td></td></tr>"
-			for(var/datum/mind/deathsquad in ticker.mode.deathsquad)
-				var/mob/M = deathsquad.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"}
-
-				else
-					dat += "<tr><td><i>Death Commando not found!</i></td></tr>"
-			dat += "</table>"
-			dat += "<br><B>Deathsquad Objectives:</B>"
-			var/datum/striketeam/team = sent_strike_teams[TEAM_DEATHSQUAD]
-			var/objective_count = 1
-			for(var/datum/objective/objective in team.objectives)
-				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
-
-		if(ticker.mode.elite_syndie.len > 0)
-			dat += "<br><table cellspacing=5><tr><td><B>[TEAM_ELITE_SYNDIE]</B></td><td></td><td></td></tr>"
-			for(var/datum/mind/elite_syndie in ticker.mode.elite_syndie)
-				var/mob/M = elite_syndie.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"}
-
-				else
-					dat += "<tr><td><i>Elite Squadie not found!</i></td></tr>"
-			dat += "</table>"
-			dat += "<br><B>Elite Syndie Objectives:</B>"
-			var/datum/striketeam/team = sent_strike_teams[TEAM_ELITE_SYNDIE]
-			var/objective_count = 1
-			for(var/datum/objective/objective in team.objectives)
-				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
-
-		if(ticker.mode.custom_team.len > 0)
-			dat += "<br><table cellspacing=5><tr><td><B>[TEAM_CUSTOM]</B></td><td></td><td></td></tr>"
-			for(var/datum/mind/custom_team in ticker.mode.custom_team)
-				var/mob/M = custom_team.current
-				if(M)
-
-					dat += {"<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.real_name]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>
-						<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"}
-
-				else
-					dat += "<tr><td><i>Team member not found!</i></td></tr>"
-			dat += "</table>"
-			dat += "<br><B>Team Objectives:</B>"
-			var/datum/striketeam/team = sent_strike_teams[TEAM_CUSTOM]
-			var/objective_count = 1
-			for(var/datum/objective/objective in team.objectives)
-				dat += "<BR><B>Objective #[objective_count++]</B>: [objective.explanation_text]</td></tr>"
-
-		dat += "</body></html>"
-		usr << browse(dat, "window=roundstatus;size=440x500")
+//Name shown on antag list
+/datum/antagonist/proc/antag_listing_name()
+	if(!owner)
+		return "Unassigned"
+	if(owner.current)
+		return "<a href='?_src_=holder;[HrefToken()];adminplayeropts=[REF(owner.current)]'>[owner.current.real_name]</a> "
 	else
+		return "<a href='?_src_=vars;[HrefToken()];Vars=[REF(owner)]'>[owner.name]</a> "
+
+//Whatever interesting things happened to the antag admins should know about
+//Include additional information about antag in this part
+/datum/antagonist/proc/antag_listing_status()
+	if(!owner)
+		return "(Unassigned)"
+	if(!owner.current)
+		return "<font color=red>(Body destroyed)</font>"
+	else
+		if(owner.current.stat == DEAD)
+			return "<font color=red>(DEAD)</font>"
+		else if(!owner.current.client)
+			return "(No client)"
+
+//Builds the common FLW PM TP commands part
+//Probably not going to be overwritten by anything but you never know
+/datum/antagonist/proc/antag_listing_commands()
+	if(!owner)
+		return
+	var/list/parts = list()
+	parts += "<a href='?priv_msg=[ckey(owner.key)]'>PM</a>"
+	if(owner.current) //There's body to follow
+		parts += "<a href='?_src_=holder;[HrefToken()];adminplayerobservefollow=[REF(owner.current)]'>FLW</a>"
+	else
+		parts += ""
+	parts += "<a href='?_src_=holder;[HrefToken()];traitor=[REF(owner)]'>Show Objective</a>"
+	return parts //Better as one cell or two/three
+
+//Builds table row for the antag
+// Jim (Status) FLW PM TP
+/datum/antagonist/proc/antag_listing_entry()
+	var/list/parts = list()
+	if(show_name_in_check_antagonists)
+		parts += "[antag_listing_name()]([name])"
+	else
+		parts += antag_listing_name()
+	parts += antag_listing_status()
+	parts += antag_listing_commands()
+	return "<tr><td>[parts.Join("</td><td>")]</td></tr>"
+
+
+/datum/team/proc/get_team_antags(antag_type,specific = FALSE)
+	. = list()
+	for(var/datum/antagonist/A in GLOB.antagonists)
+		if(A.get_team() == src && (!antag_type || !specific && istype(A,antag_type) || specific && A.type == antag_type))
+			. += A
+
+//Builds section for the team
+/datum/team/proc/antag_listing_entry()
+	//NukeOps:
+	// Jim (Status) FLW PM TP
+	// Joe (Status) FLW PM TP
+	//Disk:
+	// Deep Space FLW
+	var/list/parts = list()
+	parts += "<b>[antag_listing_name()]</b><br>"
+	parts += "<table cellspacing=5>"
+	for(var/datum/antagonist/A in get_team_antags())
+		parts += A.antag_listing_entry()
+	parts += "</table>"
+	parts += antag_listing_footer()
+	return parts.Join()
+
+/datum/team/proc/antag_listing_name()
+	return name
+
+/datum/team/proc/antag_listing_footer()
+	return
+
+//Moves them to the top of the list if TRUE
+/datum/antagonist/proc/is_gamemode_hero()
+	return FALSE
+
+/datum/team/proc/is_gamemode_hero()
+	return FALSE
+
+/datum/admins/proc/build_antag_listing()
+	var/list/sections = list()
+	var/list/priority_sections = list()
+
+	var/list/all_teams = list()
+	var/list/all_antagonists = list()
+
+	for(var/datum/antagonist/A in GLOB.antagonists)
+		if(!A.owner)
+			continue
+		all_teams |= A.get_team()
+		all_antagonists += A
+
+	for(var/datum/team/T in all_teams)
+		for(var/datum/antagonist/X in all_antagonists)
+			if(X.get_team() == T)
+				all_antagonists -= X
+		if(T.is_gamemode_hero())
+			priority_sections += T.antag_listing_entry()
+		else
+			sections += T.antag_listing_entry()
+
+	sortTim(all_antagonists, /proc/cmp_antag_category)
+
+	var/current_category
+	var/list/current_section = list()
+	for(var/i in 1 to all_antagonists.len)
+		var/datum/antagonist/current_antag = all_antagonists[i]
+		var/datum/antagonist/next_antag
+		if(i < all_antagonists.len)
+			next_antag = all_antagonists[i+1]
+		if(!current_category)
+			current_category = current_antag.roundend_category
+			current_section += "<b>[capitalize(current_category)]</b><br>"
+			current_section += "<table cellspacing=5>"
+		current_section += current_antag.antag_listing_entry() // Name - (Traitor) - FLW | PM | TP
+
+		if(!next_antag || next_antag.roundend_category != current_antag.roundend_category) //End of section
+			current_section += "</table>"
+			if(current_antag.is_gamemode_hero())
+				priority_sections += current_section.Join()
+			else
+				sections += current_section.Join()
+			current_section.Cut()
+			current_category = null
+	var/list/all_sections = priority_sections + sections
+	return all_sections.Join("<br>")
+
+/datum/admins/proc/check_antagonists()
+	if(!SSticker.HasRoundStarted())
 		alert("The game hasn't started yet!")
+		return
+	var/list/dat = list("<html><head><title>Round Status</title></head><body><h1><B>Round Status</B></h1>")
+	if(SSticker.mode.replacementmode)
+		dat += "Former Game Mode: <B>[SSticker.mode.name]</B><BR>"
+		dat += "Replacement Game Mode: <B>[SSticker.mode.replacementmode.name]</B><BR>"
+	else
+		dat += "Current Game Mode: <B>[SSticker.mode.name]</B><BR>"
+	dat += "Round Duration: <B>[DisplayTimeText(world.time - SSticker.round_start_time)]</B><BR>"
+	dat += "<B>Emergency shuttle</B><BR>"
+	if(EMERGENCY_IDLE_OR_RECALLED)
+		dat += "<a href='?_src_=holder;[HrefToken()];call_shuttle=1'>Call Shuttle</a><br>"
+	else
+		var/timeleft = SSshuttle.emergency.timeLeft()
+		if(SSshuttle.emergency.mode == SHUTTLE_CALL)
+			dat += "ETA: <a href='?_src_=holder;[HrefToken()];edit_shuttle_time=1'>[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]</a><BR>"
+			dat += "<a href='?_src_=holder;[HrefToken()];call_shuttle=2'>Send Back</a><br>"
+		else
+			dat += "ETA: <a href='?_src_=holder;[HrefToken()];edit_shuttle_time=1'>[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]</a><BR>"
+	dat += "<B>Continuous Round Status</B><BR>"
+	dat += "<a href='?_src_=holder;[HrefToken()];toggle_continuous=1'>[CONFIG_GET(keyed_flag_list/continuous)[SSticker.mode.config_tag] ? "Continue if antagonists die" : "End on antagonist death"]</a>"
+	if(CONFIG_GET(keyed_flag_list/continuous)[SSticker.mode.config_tag])
+		dat += ", <a href='?_src_=holder;[HrefToken()];toggle_midround_antag=1'>[CONFIG_GET(keyed_flag_list/midround_antag)[SSticker.mode.config_tag] ? "creating replacement antagonists" : "not creating new antagonists"]</a><BR>"
+	else
+		dat += "<BR>"
+	if(CONFIG_GET(keyed_flag_list/midround_antag)[SSticker.mode.config_tag])
+		dat += "Time limit: <a href='?_src_=holder;[HrefToken()];alter_midround_time_limit=1'>[CONFIG_GET(number/midround_antag_time_check)] minutes into round</a><BR>"
+		dat += "Living crew limit: <a href='?_src_=holder;[HrefToken()];alter_midround_life_limit=1'>[CONFIG_GET(number/midround_antag_life_check) * 100]% of crew alive</a><BR>"
+		dat += "If limits past: <a href='?_src_=holder;[HrefToken()];toggle_noncontinuous_behavior=1'>[SSticker.mode.round_ends_with_antag_death ? "End The Round" : "Continue As Extended"]</a><BR>"
+	dat += "<a href='?_src_=holder;[HrefToken()];end_round=[REF(usr)]'>End Round Now</a><br>"
+	dat += "<a href='?_src_=holder;[HrefToken()];delay_round_end=1'>[SSticker.delay_end ? "End Round Normally" : "Delay Round End"]</a>"
+	var/connected_players = GLOB.clients.len
+	var/lobby_players = 0
+	var/observers = 0
+	var/observers_connected = 0
+	var/living_players = 0
+	var/living_players_connected = 0
+	var/living_players_antagonist = 0
+	var/brains = 0
+	var/other_players = 0
+	var/living_skipped = 0
+	var/drones = 0
+	for(var/mob/M in GLOB.mob_list)
+		if(M.ckey)
+			if(isnewplayer(M))
+				lobby_players++
+				continue
+			else if(M.stat != DEAD && M.mind && !isbrain(M))
+				if(isdrone(M))
+					drones++
+					continue
+				if(is_centcom_level(M.z))
+					living_skipped++
+					continue
+				living_players++
+				if(M.mind.special_role)
+					living_players_antagonist++
+				if(M.client)
+					living_players_connected++
+			else if(M.stat == DEAD || isobserver(M))
+				observers++
+				if(M.client)
+					observers_connected++
+			else if(isbrain(M))
+				brains++
+			else
+				other_players++
+	dat += "<BR><b><font color='blue' size='3'>Players:|[connected_players - lobby_players] ingame|[connected_players] connected|[lobby_players] lobby|</font></b>"
+	dat += "<BR><b><font color='green'>Living Players:|[living_players_connected] active|[living_players - living_players_connected] disconnected|[living_players_antagonist] antagonists|</font></b>"
+	dat += "<BR><b><font color='#bf42f4'>SKIPPED \[On centcom Z-level\]: [living_skipped] living players|[drones] living drones|</font></b>"
+	dat += "<BR><b><font color='red'>Dead/Observing players:|[observers_connected] active|[observers - observers_connected] disconnected|[brains] brains|</font></b>"
+	if(other_players)
+		dat += "<BR><span class='userdanger'>[other_players] players in invalid state or the statistics code is bugged!</span>"
+	dat += "<br><br>"
+
+	dat += build_antag_listing()
+
+	dat += "</body></html>"
+	usr << browse(dat.Join(), "window=roundstatus;size=500x500")

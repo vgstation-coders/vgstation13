@@ -1,145 +1,169 @@
-/obj/item/weapon/paper_bin
+/obj/item/paper_bin
 	name = "paper bin"
+	desc = "Contains all the paper you'll never need."
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "paper_bin1"
 	item_state = "sheet-metal"
-	throwforce = 1
-	w_class = W_CLASS_MEDIUM
+	lefthand_file = 'icons/mob/inhands/misc/sheets_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/misc/sheets_righthand.dmi'
+	throwforce = 0
+	w_class = WEIGHT_CLASS_NORMAL
 	throw_speed = 3
 	throw_range = 7
-	pressure_resistance = 10
-	var/amount = 30					//How much paper is in the bin.
-	var/list/papers = new/list()	//List of papers put in the bin for reference.
+	pressure_resistance = 8
+	var/papertype = /obj/item/paper
+	var/total_paper = 30
+	var/list/papers = list()
+	var/obj/item/pen/bin_pen
 
-	autoignition_temperature = 519.15 // Kelvin
+/obj/item/paper_bin/Initialize(mapload)
+	. = ..()
+	if(!mapload)
+		return
+	var/obj/item/pen/P = locate(/obj/item/pen) in src.loc
+	if(P && !bin_pen)
+		P.forceMove(src)
+		bin_pen = P
+		update_icon()
 
+/obj/item/paper_bin/Destroy()
+	if(papers)
+		for(var/i in papers)
+			qdel(i)
+		papers = null
+	. = ..()
 
-/obj/item/weapon/paper_bin/ashify()
-	var/ashtype = ashtype()
-	new ashtype(src.loc)
-	papers=0
-	amount=0
-	update_icon()
+/obj/item/paper_bin/fire_act(exposed_temperature, exposed_volume)
+	if(total_paper)
+		total_paper = 0
+		update_icon()
+	..()
 
-/obj/item/weapon/paper_bin/getFireFuel()
-	return amount
+/obj/item/paper_bin/MouseDrop(atom/over_object)
+	. = ..()
+	var/mob/living/M = usr
+	if(!istype(M) || M.incapacitated() || !Adjacent(M))
+		return
 
-/obj/item/weapon/paper_bin/MouseDrop(over_object)
-	if(!usr.incapacitated() && (usr.contents.Find(src) || Adjacent(usr)))
-		if(!istype(usr, /mob/living/carbon/slime) && !istype(usr, /mob/living/simple_animal))
-			if(istype(over_object,/obj/abstract/screen/inventory)) //We're being dragged into the user's UI...
-				var/obj/abstract/screen/inventory/OI = over_object
+	if(over_object == M)
+		M.put_in_hands(src)
 
-				if(OI.hand_index && usr.put_in_hand_check(src, OI.hand_index))
-					usr.u_equip(src, 0)
-					usr.put_in_hand(OI.hand_index, src)
-					src.add_fingerprint(usr)
+	else if(istype(over_object, /obj/screen/inventory/hand))
+		var/obj/screen/inventory/hand/H = over_object
+		M.putItemFromInventoryInHandIfPossible(src, H.held_index)
 
-			else if(istype(over_object,/mob/living)) //We're being dragged on a living mob's sprite...
-				if(usr == over_object) //It's the user!
-					if( !usr.get_active_hand() )		//if active hand is empty
-						usr.put_in_hands(src)
-						usr.visible_message("<span class='notice'>[usr] picks up the [src].</span>", "<span class='notice'>You pick up \the [src].</span>")
-	return
+	add_fingerprint(M)
 
-
-/obj/item/weapon/paper_bin/attack_paw(mob/user as mob)
+/obj/item/paper_bin/attack_paw(mob/user)
 	return attack_hand(user)
 
-
-/obj/item/weapon/paper_bin/attack_hand(mob/user as mob)
-	if(amount >= 1)
-		amount--
-
-		var/obj/item/weapon/paper/P
-		if(papers.len > 0)	//If there's any custom paper on the stack, use that instead of creating a new paper.
+//ATTACK HAND IGNORING PARENT RETURN VALUE
+/obj/item/paper_bin/attack_hand(mob/user)
+	if(user.lying)
+		return
+	user.changeNext_move(CLICK_CD_MELEE)
+	if(bin_pen)
+		var/obj/item/pen/P = bin_pen
+		P.forceMove(user.loc)
+		user.put_in_hands(P)
+		to_chat(user, "<span class='notice'>You take [P] out of \the [src].</span>")
+		bin_pen = null
+		update_icon()
+	else if(total_paper >= 1)
+		total_paper--
+		update_icon()
+		// If there's any custom paper on the stack, use that instead of creating a new paper.
+		var/obj/item/paper/P
+		if(papers.len > 0)
 			P = papers[papers.len]
 			papers.Remove(P)
 		else
-			P = new /obj/item/weapon/paper
-			if(Holiday == APRIL_FOOLS_DAY)
+			P = new papertype(src)
+			if(SSevents.holidays && SSevents.holidays[APRIL_FOOLS])
 				if(prob(30))
-					P.info = "<font face=\"MS Comic Sans\" color=\"red\"><b>HONK HONK HONK HONK HONK HONK HONK<br>HOOOOOOOOOOOOOOOOOOOOOONK<br>APRIL FOOLS</b></font>"
+					P.info = "<font face=\"[CRAYON_FONT]\" color=\"red\"><b>HONK HONK HONK HONK HONK HONK HONK<br>HOOOOOOOOOOOOOOOOOOOOOONK<br>APRIL FOOLS</b></font>"
 					P.rigged = 1
 					P.updateinfolinks()
-		update_icon()
+
 		P.forceMove(user.loc)
 		user.put_in_hands(P)
-		to_chat(user, "<span class='notice'>You take [P] out of the [src].</span>")
+		to_chat(user, "<span class='notice'>You take [P] out of \the [src].</span>")
 	else
-		to_chat(user, "<span class='notice'>[src] is empty!</span>")
-
+		to_chat(user, "<span class='warning'>[src] is empty!</span>")
 	add_fingerprint(user)
-	return
+	return ..()
 
-
-/obj/item/weapon/paper_bin/attackby(obj/item/weapon/paper/i as obj, mob/user as mob)
-	if(!istype(i))
-		return
-
-	if(user.drop_item(i, src))
-		to_chat(user, "<span class='notice'>You put [i] in [src].</span>")
-		papers.Add(i)
-		amount++
+/obj/item/paper_bin/attackby(obj/item/I, mob/user, params)
+	if(istype(I, /obj/item/paper))
+		var/obj/item/paper/P = I
+		if(!user.transferItemToLoc(P, src))
+			return
+		to_chat(user, "<span class='notice'>You put [P] in [src].</span>")
+		papers.Add(P)
+		total_paper++
 		update_icon()
+	else if(istype(I, /obj/item/pen) && !bin_pen)
+		var/obj/item/pen/P = I
+		if(!user.transferItemToLoc(P, src))
+			return
+		to_chat(user, "<span class='notice'>You put [P] in [src].</span>")
+		bin_pen = P
+		update_icon()
+	else
+		return ..()
 
-/obj/item/weapon/paper_bin/examine(mob/user)
+/obj/item/paper_bin/examine(mob/user)
 	..()
-	if(amount)
-		to_chat(user, "<span class='info'>There " + (amount > 1 ? "are [amount] papers" : "is one paper") + " in the bin.</span>")
-		if(papers.len > 0)
-			var/obj/item/weapon/paper/P = papers[papers.len]
-			if(istype(P,/obj/item/weapon/paper/talisman))
-				if(iscultist(user) || isobserver(user))
-					var/obj/item/weapon/paper/talisman/T = P
-					switch(T.imbue)
-						if("newtome")
-							to_chat(user, "<span class='info'>You spot a Spawn Arcane Tome talisman on top.</span>")
-						if("armor")
-							to_chat(user, "<span class='info'>You spot a Cult Armor talisman on top.</span>")
-						if("emp")
-							to_chat(user, "<span class='info'>You spot an EMP talisman on top.</span>")
-						if("conceal")
-							to_chat(user, "<span class='info'>You spot an Hide Runes talisman on top.</span>")
-						if("revealrunes")
-							to_chat(user, "<span class='info'>You spot a Reveal Runes talisman on top.</span>")
-						if("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "balaq", "mgar", "karazet", "geeri")
-							to_chat(user, "<span class='info'>You spot a Teleport talisman on top, linked to <i>[T.imbue]</i></span>")
-						if("communicate")
-							to_chat(user, "<span class='info'>You spot a Communicate talisman on top.</span>")
-						if("deafen")
-							to_chat(user, "<span class='info'>You spot a Deafen talisman on top.</span>")
-						if("blind")
-							to_chat(user, "<span class='info'>You spot a Blind talisman on top.</span>")
-						if("runestun")
-							to_chat(user, "<span class='info'>You spot a Stun talisman on top.</span>")
-						if("supply")
-							to_chat(user, "<span class='info'>You spot a Supply talisman on top.</span>")
-						else
-							to_chat(user, "<span class='info'>You spot a weird talisman on top.</span>")
-				else
-					to_chat(user, "<span class='info'>The paper on top has some bloody markings on it.</span>")
-			else if(P.info)
-				to_chat(user, "<span class='info'>You notice some writings on the top paper. <a HREF='?src=\ref[user];lookitem=\ref[P]'>Take a closer look.</a></span>")
+	if(total_paper)
+		to_chat(user, "It contains " + (total_paper > 1 ? "[total_paper] papers" : " one paper")+".")
 	else
-		to_chat(user, "<span class='info'>There are no papers in the bin.</span>")
+		to_chat(user, "It doesn't contain anything.")
 
 
-/obj/item/weapon/paper_bin/update_icon()
-	if(amount > 0)
-		if(papers.len > 0)
-			var/obj/item/weapon/paper/P = papers[papers.len]
-			if(istype(P,/obj/item/weapon/paper/talisman))
-				icon_state = "paper_bin3"
-			else if(P.info)
-				icon_state = "paper_bin2"
-			else
-				icon_state = "paper_bin1"
-		else
-			icon_state = "paper_bin1"
-	else
+/obj/item/paper_bin/update_icon()
+	if(total_paper < 1)
 		icon_state = "paper_bin0"
+	else
+		icon_state = "[initial(icon_state)]"
+	cut_overlays()
+	if(bin_pen)
+		add_overlay(mutable_appearance(bin_pen.icon, bin_pen.icon_state))
 
-/obj/item/weapon/paper_bin/empty
-	icon_state = "paper_bin0"
-	amount = 0
+/obj/item/paper_bin/construction
+	name = "construction paper bin"
+	desc = "Contains all the paper you'll never need, IN COLOR!"
+	icon_state = "paper_binc"
+	papertype = /obj/item/paper/construction
+
+/obj/item/paper_bin/bundlenatural
+	name = "natural paper bundle"
+	desc = "A bundle of paper created using traditional methods."
+	icon_state = "paper_bundle"
+	papertype = /obj/item/paper/natural
+	resistance_flags = FLAMMABLE
+
+/obj/item/paper_bin/bundlenatural/attack_hand(mob/user)
+	..()
+	if(total_paper < 1)
+		qdel(src)
+
+/obj/item/paper_bin/bundlenatural/fire_act(exposed_temperature, exposed_volume)
+	qdel(src)
+
+/obj/item/paper_bin/bundlenatural/attackby(obj/item/W, mob/user)
+	if(W.is_sharp())
+		to_chat(user, "<span class='notice'>You snip \the [src], spilling paper everywhere.</span>")
+		var/turf/T = get_turf(src.loc)
+		while(total_paper > 0)
+			total_paper--
+			var/obj/item/paper/P
+			if(papers.len > 0)
+				P = papers[papers.len]
+				papers -= P
+			else
+				P = new papertype()
+				P.forceMove(T)
+			CHECK_TICK
+		qdel(src)
+	else
+		..()

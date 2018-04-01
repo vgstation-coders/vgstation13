@@ -1,403 +1,494 @@
 /obj/machinery/door/window
-	name = "Window Door"
-	desc = "A sliding glass door."
+	name = "interior door"
+	desc = "A strong door."
 	icon = 'icons/obj/doors/windoor.dmi'
 	icon_state = "left"
+	layer = ABOVE_WINDOW_LAYER
+	closingLayer = ABOVE_WINDOW_LAYER
+	resistance_flags = ACID_PROOF
 	var/base_state = "left"
-	var/health = 100
-	visible = 0.0
-	use_power = 0
-	flow_flags = ON_BORDER
-	plane = ABOVE_HUMAN_PLANE //Make it so it appears above all mobs (AI included), it's a border object anyway
-	layer = WINDOOR_LAYER //Below curtains
+	max_integrity = 150 //If you change this, consider changing ../door/window/brigdoor/ max_integrity at the bottom of this .dm file
+	integrity_failure = 0
+	armor = list("melee" = 20, "bullet" = 50, "laser" = 50, "energy" = 50, "bomb" = 10, "bio" = 100, "rad" = 100, "fire" = 70, "acid" = 100)
+	visible = FALSE
+	flags_1 = ON_BORDER_1
 	opacity = 0
-	var/obj/item/weapon/circuitboard/airlock/electronics = null
-	var/dismantled = 0 // To avoid playing the glass shatter sound on Destroy()
-	var/secure = 0
-	explosion_resistance = 5
-	air_properties_vary_with_direction = 1
-	ghost_read=0
-	machine_flags = EMAGGABLE
-	soundeffect = 'sound/machines/windowdoor.ogg'
-	var/shard = /obj/item/weapon/shard
-	penetration_dampening = 2
-	animation_delay = 7
-	var/obj/machinery/smartglass_electronics/smartwindow
-	var/window_is_opaque = TRUE //The var that helps darken the glass when the door opens/closes
+	CanAtmosPass = ATMOS_PASS_PROC
+	var/obj/item/electronics/airlock/electronics = null
+	var/reinf = 0
+	var/shards = 2
+	var/rods = 2
+	var/cable = 1
+	var/list/debris = list()
 
-/obj/machinery/door/window/New()
-	..()
-	if ((istype(req_access) && req_access.len) || istext(req_access))
-		icon_state = "[icon_state]"
-		base_state = icon_state
-	return
+/obj/machinery/door/window/Initialize(mapload, set_dir)
+	. = ..()
+	if(set_dir)
+		setDir(set_dir)
+	if(src.req_access && src.req_access.len)
+		src.icon_state = "[src.icon_state]"
+		src.base_state = src.icon_state
+	for(var/i in 1 to shards)
+		debris += new /obj/item/shard(src)
+	if(rods)
+		debris += new /obj/item/stack/rods(src, rods)
+	if(cable)
+		debris += new /obj/item/stack/cable_coil(src, cable)
 
 /obj/machinery/door/window/Destroy()
-	setDensity(FALSE)
-	if (!dismantled)
+	density = FALSE
+	for(var/I in debris)
+		qdel(I)
+	if(obj_integrity == 0)
 		playsound(src, "shatter", 70, 1)
-	..()
+	electronics = null
+	return ..()
 
-/obj/machinery/door/window/proc/smart_toggle() //For "smart" windows
-	if(window_is_opaque) //Start with coloring the windoor. Always.
-		animate(src, color="#FFFFFF", time=5)
+/obj/machinery/door/window/update_icon()
+	if(density)
+		icon_state = base_state
 	else
-		animate(src, color="#222222", time=5)
+		icon_state = "[src.base_state]open"
 
-	if(density) //window is CLOSED
-		if(window_is_opaque) //Is it dark?
-			set_opacity(0) //Make it light.
-			window_is_opaque = TRUE
-		else
-			set_opacity(1) // Else, make it dark.
-			window_is_opaque = FALSE
-	else //Window is OPEN!
-		window_is_opaque = !window_is_opaque //We pass on that we've been toggled.
-	return opacity
+/obj/machinery/door/window/proc/open_and_close()
+	open()
+	if(src.check_access(null))
+		sleep(50)
+	else //secure doors close faster
+		sleep(20)
+	close()
 
-/obj/machinery/door/window/examine(mob/user as mob)
-	..()
-	if(smartwindow)
-		to_chat(user, "It's NT-15925 SmartGlass™ compliant.")
-	if(secure)
-		to_chat(user, "It is a secure windoor, it is stronger and closes more quickly.")
-
-/obj/machinery/door/window/Bumped(atom/movable/AM as mob|obj)
-	if (!ismob(AM))
-		var/obj/machinery/bot/bot = AM
-		if(istype(bot))
-			if(density && check_access(bot.botcard))
-				open()
-				sleep(50)
-				close()
-		else if(istype(AM, /obj/mecha))
+/obj/machinery/door/window/CollidedWith(atom/movable/AM)
+	if( operating || !src.density )
+		return
+	if (!( ismob(AM) ))
+		if(ismecha(AM))
 			var/obj/mecha/mecha = AM
-			if(density)
-				if(mecha.occupant && allowed(mecha.occupant))
-					open()
-					sleep(50)
-					close()
+			if(mecha.occupant && src.allowed(mecha.occupant))
+				open_and_close()
+			else
+				do_animate("deny")
 		return
-	if (!( ticker ))
+	if (!( SSticker ))
 		return
-	if (operating)
+	var/mob/M = AM
+	if(M.restrained() || ((isdrone(M) || iscyborg(M)) && M.stat))
 		return
-	if (density && allowed(AM))
-		open()
-		// What.
-		if(check_access(null))
-			sleep(50)
-		else //secure doors close faster
-			sleep(20)
-		close()
+	bumpopen(M)
+
+/obj/machinery/door/window/bumpopen(mob/user)
+	if( operating || !src.density )
+		return
+	src.add_fingerprint(user)
+	if(!src.requiresID())
+		user = null
+
+	if(allowed(user))
+		open_and_close()
+	else
+		do_animate("deny")
 	return
 
-/obj/machinery/door/window/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
+/obj/machinery/door/window/CanPass(atom/movable/mover, turf/target)
+	if(istype(mover) && (mover.pass_flags & PASSGLASS))
 		return 1
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-		if(air_group)
-			return 0
+	if(get_dir(loc, target) == dir) //Make sure looking at appropriate border
+		return !density
+	if(istype(mover, /obj/structure/window))
+		var/obj/structure/window/W = mover
+		if(!valid_window_location(loc, W.ini_dir))
+			return FALSE
+	else if(istype(mover, /obj/structure/windoor_assembly))
+		var/obj/structure/windoor_assembly/W = mover
+		if(!valid_window_location(loc, W.ini_dir))
+			return FALSE
+	else if(istype(mover, /obj/machinery/door/window) && !valid_window_location(loc, mover.dir))
+		return FALSE
+	else
+		return 1
+
+/obj/machinery/door/window/CanAtmosPass(turf/T)
+	if(get_dir(loc, T) == dir)
 		return !density
 	else
 		return 1
 
 //used in the AStar algorithm to determinate if the turf the door is on is passable
-/obj/machinery/door/window/CanAStarPass(var/obj/item/weapon/card/id/ID, var/to_dir)
-	return !density || (dir != to_dir) || check_access(ID)
+/obj/machinery/door/window/CanAStarPass(obj/item/card/id/ID, to_dir)
+	return !density || (dir != to_dir) || (check_access(ID) && hasPower())
 
-
-/obj/machinery/door/window/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
+/obj/machinery/door/window/CheckExit(atom/movable/mover as mob|obj, turf/target)
+	if(istype(mover) && (mover.pass_flags & PASSGLASS))
 		return 1
-	if(flow_flags & ON_BORDER) //but it will always be on border tho
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.to_bump(src)
-			return !density
-	return 1
+	if(get_dir(loc, target) == dir)
+		return !density
+	else
+		return 1
 
-/obj/machinery/door/window/open()
-	if (!density) //it's already open you silly cunt
+/obj/machinery/door/window/open(forced=0)
+	if (src.operating == 1) //doors can still open when emag-disabled
 		return 0
-	if (operating == 1) //doors can still open when emag-disabled
-		return 0
-	if (!ticker)
-		return 0
-	if(!operating) //in case of emag
-		operating = 1
-	flick(text("[]opening", base_state), src)
-	playsound(src, soundeffect, 100, 1)
-	icon_state = text("[]open", base_state)
-	sleep(animation_delay)
+	if(!forced)
+		if(!hasPower())
+			return 0
+	if(forced < 2)
+		if(obj_flags & EMAGGED)
+			return 0
+	if(!src.operating) //in case of emag
+		operating = TRUE
+	do_animate("opening")
+	playsound(src.loc, 'sound/machines/windowdoor.ogg', 100, 1)
+	src.icon_state ="[src.base_state]open"
+	sleep(10)
 
-	explosion_resistance = 0
-	setDensity(FALSE)
-	if (smartwindow && window_is_opaque)
-		set_opacity(0) //You can see through open windows
-	update_nearby_tiles()
+	density = FALSE
+//	src.sd_set_opacity(0)	//TODO: why is this here? Opaque windoors? ~Carn
+	air_update_turf(1)
+	update_freelook_sight()
 
 	if(operating == 1) //emag again
-		operating = 0
+		operating = FALSE
 	return 1
 
-/obj/machinery/door/window/close()
-	if (operating)
+/obj/machinery/door/window/close(forced=0)
+	if (src.operating)
 		return 0
-	operating = 1
-	flick(text("[]closing", base_state), src)
-	playsound(src, soundeffect, 100, 1)
-	icon_state = base_state
+	if(!forced)
+		if(!hasPower())
+			return 0
+	if(forced < 2)
+		if(obj_flags & EMAGGED)
+			return 0
+	operating = TRUE
+	do_animate("closing")
+	playsound(src.loc, 'sound/machines/windowdoor.ogg', 100, 1)
+	src.icon_state = src.base_state
 
-	setDensity(TRUE)
-	explosion_resistance = initial(explosion_resistance)
-	if (smartwindow && window_is_opaque)
-		set_opacity(1)
-	update_nearby_tiles()
+	density = TRUE
+	air_update_turf(1)
+	update_freelook_sight()
+	sleep(10)
 
-	sleep(animation_delay)
-
-	operating = 0
+	operating = FALSE
 	return 1
 
-/obj/machinery/door/window/proc/take_damage(var/damage)
-	health = max(0, health - damage)
-	if (health <= 0)
-		getFromPool(shard, loc)
-		getFromPool(/obj/item/stack/cable_coil,loc,2)
-		eject_electronics()
-		qdel(src)
-		return
+/obj/machinery/door/window/play_attack_sound(damage_amount, damage_type = BRUTE, damage_flag = 0)
+	switch(damage_type)
+		if(BRUTE)
+			playsound(loc, 'sound/effects/glasshit.ogg', 90, 1)
+		if(BURN)
+			playsound(src.loc, 'sound/items/welder.ogg', 100, 1)
 
-/obj/machinery/door/window/bullet_act(var/obj/item/projectile/Proj)
-	if(Proj.damage)
-		take_damage(round(Proj.damage / 2))
+
+/obj/machinery/door/window/deconstruct(disassembled = TRUE)
+	if(!(flags_1 & NODECONSTRUCT_1) && !disassembled)
+		for(var/obj/fragment in debris)
+			fragment.forceMove(get_turf(src))
+			transfer_fingerprints_to(fragment)
+			debris -= fragment
+	qdel(src)
+
+/obj/machinery/door/window/narsie_act()
+	add_atom_colour("#7D1919", FIXED_COLOUR_PRIORITY)
+
+/obj/machinery/door/window/ratvar_act()
+	var/obj/machinery/door/window/clockwork/C = new(loc, dir)
+	C.name = name
+	qdel(src)
+
+/obj/machinery/door/window/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(exposed_temperature > T0C + (reinf ? 1600 : 800))
+		take_damage(round(exposed_volume / 200), BURN, 0, 0)
 	..()
 
-//When an object is thrown at the window
-/obj/machinery/door/window/hitby(AM as mob|obj)
-	. = ..()
-	if(.)
-		return
-	visible_message("<span class='warning'>The glass door was hit by [AM].</span>", 1)
-	var/tforce = 0
-	if(ismob(AM))
-		tforce = 40
-	else
-		tforce = AM:throwforce
-	playsound(src, 'sound/effects/Glasshit.ogg', 100, 1)
-	take_damage(tforce)
+/obj/machinery/door/window/emag_act(mob/user)
+	if(!operating && density && !(obj_flags & EMAGGED))
+		obj_flags |= EMAGGED
+		operating = TRUE
+		flick("[src.base_state]spark", src)
+		playsound(src, "sparks", 75, 1)
+		sleep(6)
+		operating = FALSE
+		desc += "<BR><span class='warning'>Its access panel is smoking slightly.</span>"
+		open(2)
 
-/obj/machinery/door/window/attack_ai(mob/user as mob)
-	add_hiddenprint(user)
-	return attack_hand(user)
+/obj/machinery/door/window/attackby(obj/item/I, mob/living/user, params)
 
-/obj/machinery/door/window/attack_paw(mob/living/user as mob)
-	if(istype(user, /mob/living/carbon/alien/humanoid) || istype(user, /mob/living/carbon/slime/adult))
-		if(operating)
-			return
-		user.delayNextAttack(8)
-		user.do_attack_animation(src, user)
-		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
-		visible_message("<span class='warning'>\The [user] smashes against \the [name].</span>", 1)
-		take_damage(25)
-	else
-		return attack_hand(user)
-
-/obj/machinery/door/window/attack_animal(mob/living/user as mob)
 	if(operating)
-		return
-	var/mob/living/simple_animal/M = user
-	if(M.melee_damage_upper <= 0)
-		return
-	user.do_attack_animation(src, user)
-	user.delayNextAttack(8)
-	playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
-	visible_message("<span class='warning'>\The [M] [M.attacktext] against \the [name].</span>", 1)
-	take_damage(M.melee_damage_upper)
-
-/obj/machinery/door/window/attack_hand(mob/user as mob)
-	return attackby(user, user)
-
-/obj/machinery/door/window/attackby(obj/item/weapon/I as obj, mob/living/user as mob)
-	// Make emagged/open doors able to be deconstructed
-	if (!density && operating != 1 && iscrowbar(I))
-		user.visible_message("[user] removes the electronics from the windoor assembly.", "You start to remove the electronics from the windoor assembly.")
-		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
-		if (do_after(user, src, 40) && src && !density && operating != 1)
-			to_chat(user, "<span class='notice'>You removed the windoor electronics!</span>")
-			make_assembly(user)
-			dismantled = 1 // Don't play the glass shatter sound
-			if(smartwindow)
-				qdel(smartwindow)
-				smartwindow = null
-				if (window_is_opaque)
-					window_is_opaque = !window_is_opaque
-					smart_toggle()
-				drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
-			qdel(src)
-		return
-
-	//If it's in the process of opening/closing or emagged, ignore the click
-	if (operating)
-		return
-
-	//If it's Smartglass shit, smartglassify it.
-	if(istype(I, /obj/item/stack/light_w) && !operating)
-		var/obj/item/stack/light_w/LT = I
-		if (smartwindow)
-			to_chat(user, "<span class='notice'>This windoor already has electronics in it.</span>")
-			return 0
-		LT.use(1)
-		to_chat(user, "<span class='notice'>You add some electronics to the windoor.</span>")
-		smartwindow = new /obj/machinery/smartglass_electronics(src)
-		return smartwindow
-
-	//If its a multitool and our windoor is smart, open the menu
-	if(ismultitool(I) && smartwindow)
-		smartwindow.update_multitool_menu(user)
-		return
-
-	//If it's a weapon, smash windoor. Unless it's an id card, agent card, ect.. then ignore it (Cards really shouldnt damage a door anyway)
-	if(density && istype(I, /obj/item/weapon) && !istype(I, /obj/item/weapon/card))
-		var/aforce = I.force
-		user.do_attack_animation(src, I)
-		user.delayNextAttack(8)
-		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
-		visible_message("<span class='danger'>[src] was hit by [I].</span>")
-		if(I.damtype == BRUTE || I.damtype == BURN)
-			take_damage(aforce)
 		return
 
 	add_fingerprint(user)
-	if (!requiresID())
-		//don't care who they are or what they have, act as if they're NOTHING
-		user = null
+	if(!(flags_1&NODECONSTRUCT_1))
+		if(istype(I, /obj/item/screwdriver))
+			if(density || operating)
+				to_chat(user, "<span class='warning'>You need to open the door to access the maintenance panel!</span>")
+				return
+			I.play_tool_sound(src)
+			panel_open = !panel_open
+			to_chat(user, "<span class='notice'>You [panel_open ? "open":"close"] the maintenance panel of the [src.name].</span>")
+			return
 
-	if (isrobot(user))
-		if (density)
-			return open()
-		else
-			return close()
+		if(istype(I, /obj/item/crowbar))
+			if(panel_open && !density && !operating)
+				user.visible_message("[user] removes the electronics from the [src.name].", \
+									 "<span class='notice'>You start to remove electronics from the [src.name]...</span>")
+				if(I.use_tool(src, user, 40, volume=50))
+					if(panel_open && !density && !operating && src.loc)
+						var/obj/structure/windoor_assembly/WA = new /obj/structure/windoor_assembly(src.loc)
+						switch(base_state)
+							if("left")
+								WA.facing = "l"
+							if("right")
+								WA.facing = "r"
+							if("leftsecure")
+								WA.facing = "l"
+								WA.secure = TRUE
+							if("rightsecure")
+								WA.facing = "r"
+								WA.secure = TRUE
+						WA.anchored = TRUE
+						WA.state= "02"
+						WA.setDir(src.dir)
+						WA.ini_dir = src.dir
+						WA.update_icon()
+						WA.created_name = src.name
 
-	if (!allowed(user) && density)
-		flick(text("[]deny", base_state), src)
+						if(obj_flags & EMAGGED)
+							to_chat(user, "<span class='warning'>You discard the damaged electronics.</span>")
+							qdel(src)
+							return
 
+						to_chat(user, "<span class='notice'>You remove the airlock electronics.</span>")
+
+						var/obj/item/electronics/airlock/ae
+						if(!electronics)
+							ae = new/obj/item/electronics/airlock( src.loc )
+							if(req_one_access)
+								ae.one_access = 1
+								ae.accesses = src.req_one_access
+							else
+								ae.accesses = src.req_access
+						else
+							ae = electronics
+							electronics = null
+							ae.forceMove(drop_location())
+
+						qdel(src)
+				return
 	return ..()
 
-/obj/machinery/door/window/emag(mob/user)
-	if(user)
-		var/used_emag = (/obj/item/weapon/card/emag in user.contents) //TODO: Find a better way of checking this
-		return hackOpen(used_emag, user)
-
-/obj/machinery/door/window/proc/hackOpen(obj/item/I, mob/user)
-	operating = -1
-
-	if (electronics)
-		electronics.icon_state = "door_electronics_smoked"
-
-	flick("[base_state]spark", src)
-	sleep(6)
-	open()
-	return 1
-
-/obj/machinery/door/window/npc_tamper_act(mob/living/L)
-	hackOpen(null, L)
-
-/**
- * Returns whether the door opens to the left. This is counter-clockwise
- * w.r.t. the tile it is on.
- */
-/obj/machinery/door/window/proc/is_left_opening()
-	return base_state == "left" || base_state == "leftsecure"
-
-/**
- * Deconstructs a windoor properly. You probably want to delete
- * the windoor after calling this.
- * @return The new /obj/structure/windoor_assembly created.
- */
-/obj/machinery/door/window/proc/make_assembly(mob/user as mob)
-	// Windoor assembly
-	var/obj/structure/windoor_assembly/WA = new /obj/structure/windoor_assembly(loc)
-	set_assembly(user, WA)
-	return WA
-
-/obj/machinery/door/window/proc/set_assembly(mob/user as mob, var/obj/structure/windoor_assembly/WA)
-	WA.name = "Near finished Windoor Assembly"
-	WA.dir = dir
-	WA.anchored = 1
-	WA.facing = (is_left_opening() ? "l" : "r")
-	WA.secure = ""
-	WA.state = "02"
-	WA.update_icon()
-
-	WA.fingerprints += fingerprints
-	WA.fingerprintshidden += fingerprints
-	WA.fingerprintslast = user.ckey
-
-	// Pop out electronics
-	eject_electronics()
-
-/obj/machinery/door/window/proc/eject_electronics()
-	var/obj/item/weapon/circuitboard/airlock/AE = (electronics ? electronics : new /obj/item/weapon/circuitboard/airlock(loc))
-	if (electronics)
-		electronics = null
-		AE.installed = 0
+/obj/machinery/door/window/try_to_crowbar(obj/item/I, mob/user)
+	if(!hasPower())
+		if(density)
+			open(2)
+		else
+			close(2)
 	else
-		if(operating == -1)
-			AE.icon_state = "door_electronics_smoked"
-		// Straight from /obj/machinery/door/airlock/attackby()
-		if (req_access && req_access.len > 0)
-			AE.conf_access = req_access
-		else if (req_one_access && req_one_access.len > 0)
-			AE.conf_access = req_one_access
-			AE.one_access = 1
-	AE.forceMove(loc)
+		to_chat(user, "<span class='warning'>The door's motors resist your efforts to force it!</span>")
+
+/obj/machinery/door/window/do_animate(animation)
+	switch(animation)
+		if("opening")
+			flick("[src.base_state]opening", src)
+		if("closing")
+			flick("[src.base_state]closing", src)
+		if("deny")
+			flick("[src.base_state]deny", src)
+
 
 /obj/machinery/door/window/brigdoor
-	name = "Secure Window Door"
-	icon = 'icons/obj/doors/windoor.dmi'
+	name = "secure door"
 	icon_state = "leftsecure"
 	base_state = "leftsecure"
-	req_access = list(access_security)
-	secure = 1
-	var/id_tag = null
-	health = 200
-	penetration_dampening = 4
+	var/id = null
+	max_integrity = 300 //Stronger doors for prison (regular window door health is 200)
+	reinf = 1
+	explosion_block = 1
 
-/obj/machinery/door/window/brigdoor/make_assembly(mob/user as mob)
-	var/obj/structure/windoor_assembly/WA = ..(user)
-	WA.secure = "secure_"
-	WA.update_icon()
-	return WA
+/obj/machinery/door/window/brigdoor/security/cell
+	name = "cell door"
+	desc = "For keeping in criminal scum."
+	req_access = list(ACCESS_BRIG)
 
-/obj/machinery/door/window/plasma
-	name = "Plasma Window Door"
-	desc = "A sliding glass door strengthened by plasma."
-	icon = 'icons/obj/doors/plasmawindoor.dmi'
-	health = 300
-	shard = /obj/item/weapon/shard/plasma
-	penetration_dampening = 6
+/obj/machinery/door/window/brigdoor/security/holding
+	name = "holding cell door"
+	req_one_access = list(ACCESS_SEC_DOORS, ACCESS_LAWYER) //love for the lawyer
 
-/obj/machinery/door/window/plasma/make_assembly(mob/user as mob)
-	// Windoor assembly
-	var/obj/structure/windoor_assembly/plasma/WA = new /obj/structure/windoor_assembly/plasma(loc)
-	set_assembly(user, WA)
-	return WA
+/obj/machinery/door/window/clockwork
+	name = "brass windoor"
+	desc = "A thin door with translucent brass paneling."
+	icon_state = "clockwork"
+	base_state = "clockwork"
+	shards = 0
+	rods = 0
+	resistance_flags = FIRE_PROOF | ACID_PROOF
+	var/made_glow = FALSE
 
-/obj/machinery/door/window/plasma/secure
-	name = "Secure Plasma Window Door"
-	icon_state = "leftsecure"
-	base_state = "leftsecure"
-	health = 400
-	secure = 1
-	penetration_dampening = 8
+/obj/machinery/door/window/clockwork/Initialize(mapload, set_dir)
+	. = ..()
+	for(var/i in 1 to 2)
+		debris += new/obj/item/clockwork/alloy_shards/medium/gear_bit/large(src)
+	change_construction_value(2)
 
-/obj/machinery/door/window/plasma/secure/make_assembly(mob/user as mob)
-	var/obj/structure/windoor_assembly/plasma/WA = ..(user)
-	WA.secure = "secure_"
-	WA.update_icon()
-	return WA
+/obj/machinery/door/window/clockwork/setDir(direct)
+	if(!made_glow)
+		var/obj/effect/E = new /obj/effect/temp_visual/ratvar/door/window(get_turf(src))
+		E.setDir(direct)
+		made_glow = TRUE
+	..()
+
+/obj/machinery/door/window/clockwork/Destroy()
+	change_construction_value(-2)
+	return ..()
+
+/obj/machinery/door/window/clockwork/emp_act(severity)
+	if(prob(80/severity))
+		open()
+
+/obj/machinery/door/window/clockwork/ratvar_act()
+	if(GLOB.ratvar_awakens)
+		obj_integrity = max_integrity
+
+/obj/machinery/door/window/clockwork/hasPower()
+	return TRUE //yup that's power all right
+
+/obj/machinery/door/window/clockwork/narsie_act()
+	take_damage(rand(30, 60), BRUTE)
+	if(src)
+		var/previouscolor = color
+		color = "#960000"
+		animate(src, color = previouscolor, time = 8)
+		addtimer(CALLBACK(src, /atom/proc/update_atom_colour), 8)
+
+/obj/machinery/door/window/clockwork/allowed(mob/M)
+	if(is_servant_of_ratvar(M))
+		return 1
+	return 0
+
+/obj/machinery/door/window/northleft
+	dir = NORTH
+
+/obj/machinery/door/window/eastleft
+	dir = EAST
+
+/obj/machinery/door/window/westleft
+	dir = WEST
+
+/obj/machinery/door/window/southleft
+	dir = SOUTH
+
+/obj/machinery/door/window/northright
+	dir = NORTH
+	icon_state = "right"
+	base_state = "right"
+
+/obj/machinery/door/window/eastright
+	dir = EAST
+	icon_state = "right"
+	base_state = "right"
+
+/obj/machinery/door/window/westright
+	dir = WEST
+	icon_state = "right"
+	base_state = "right"
+
+/obj/machinery/door/window/southright
+	dir = SOUTH
+	icon_state = "right"
+	base_state = "right"
+
+/obj/machinery/door/window/brigdoor/northleft
+	dir = NORTH
+
+/obj/machinery/door/window/brigdoor/eastleft
+	dir = EAST
+
+/obj/machinery/door/window/brigdoor/westleft
+	dir = WEST
+
+/obj/machinery/door/window/brigdoor/southleft
+	dir = SOUTH
+
+/obj/machinery/door/window/brigdoor/northright
+	dir = NORTH
+	icon_state = "rightsecure"
+	base_state = "rightsecure"
+
+/obj/machinery/door/window/brigdoor/eastright
+	dir = EAST
+	icon_state = "rightsecure"
+	base_state = "rightsecure"
+
+/obj/machinery/door/window/brigdoor/westright
+	dir = WEST
+	icon_state = "rightsecure"
+	base_state = "rightsecure"
+
+/obj/machinery/door/window/brigdoor/southright
+	dir = SOUTH
+	icon_state = "rightsecure"
+	base_state = "rightsecure"
+
+/obj/machinery/door/window/brigdoor/security/cell/northleft
+	dir = NORTH
+
+/obj/machinery/door/window/brigdoor/security/cell/eastleft
+	dir = EAST
+
+/obj/machinery/door/window/brigdoor/security/cell/westleft
+	dir = WEST
+
+/obj/machinery/door/window/brigdoor/security/cell/southleft
+	dir = SOUTH
+
+/obj/machinery/door/window/brigdoor/security/cell/northright
+	dir = NORTH
+	icon_state = "rightsecure"
+	base_state = "rightsecure"
+
+/obj/machinery/door/window/brigdoor/security/cell/eastright
+	dir = EAST
+	icon_state = "rightsecure"
+	base_state = "rightsecure"
+
+/obj/machinery/door/window/brigdoor/security/cell/westright
+	dir = WEST
+	icon_state = "rightsecure"
+	base_state = "rightsecure"
+
+/obj/machinery/door/window/brigdoor/security/cell/southright
+	dir = SOUTH
+	icon_state = "rightsecure"
+	base_state = "rightsecure"
+
+/obj/machinery/door/window/brigdoor/security/holding/northleft
+	dir = NORTH
+
+/obj/machinery/door/window/brigdoor/security/holding/eastleft
+	dir = EAST
+
+/obj/machinery/door/window/brigdoor/security/holding/westleft
+	dir = WEST
+
+/obj/machinery/door/window/brigdoor/security/holding/southleft
+	dir = SOUTH
+
+/obj/machinery/door/window/brigdoor/security/holding/northright
+	dir = NORTH
+	icon_state = "rightsecure"
+	base_state = "rightsecure"
+
+/obj/machinery/door/window/brigdoor/security/holding/eastright
+	dir = EAST
+	icon_state = "rightsecure"
+	base_state = "rightsecure"
+
+/obj/machinery/door/window/brigdoor/security/holding/westright
+	dir = WEST
+	icon_state = "rightsecure"
+	base_state = "rightsecure"
+
+/obj/machinery/door/window/brigdoor/security/holding/southright
+	dir = SOUTH
+	icon_state = "rightsecure"
+	base_state = "rightsecure"

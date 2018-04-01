@@ -2,181 +2,148 @@
 	name = "station intercom"
 	desc = "Talk through this."
 	icon_state = "intercom"
-	anchored = 1
-	w_class = W_CLASS_LARGE
+	anchored = TRUE
+	w_class = WEIGHT_CLASS_BULKY
 	canhear_range = 2
 	var/number = 0
 	var/anyai = 1
-	var/circuitry_installed=1
 	var/mob/living/silicon/ai/ai = list()
 	var/last_tick //used to delay the powercheck
-	var/buildstage = 0
+	dog_fashion = null
+	var/unfastened = FALSE
 
-/obj/item/device/radio/intercom/supports_holomap()
-	return TRUE
+/obj/item/device/radio/intercom/unscrewed
+	unfastened = TRUE
 
-/obj/item/device/radio/intercom/universe/New()
-	return ..()
+/obj/item/device/radio/intercom/ratvar
+	name = "hierophant intercom"
+	desc = "A modified intercom that uses the Hierophant network instead of subspace tech. Can listen to and broadcast on any frequency."
+	icon_state = "intercom_ratvar"
+	freerange = TRUE
 
-/obj/item/device/radio/intercom/initialize()
-	..()
-	add_self_to_holomap()
+/obj/item/device/radio/intercom/ratvar/attackby(obj/item/I, mob/living/user, params)
+	if(istype(I, /obj/item/screwdriver))
+		to_chat(user, "<span class='danger'>[src] is fastened to the wall with [is_servant_of_ratvar(user) ? "replicant alloy" : "some material you've never seen"], and can't be removed.</span>")
+		return //no unfastening!
+	. = ..()
 
-/obj/item/device/radio/intercom/New(turf/loc, var/ndir = 0, var/building = 3)
-	..()
-	buildstage = building
-	if(buildstage)
-		processing_objects.Add(src)
+/obj/item/device/radio/intercom/ratvar/process()
+	if(!istype(SSticker.mode, /datum/game_mode/clockwork_cult))
+		invisibility = INVISIBILITY_OBSERVER
+		alpha = 125
+		emped = TRUE
 	else
-		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER)
-		pixel_y = (ndir & 3)? (ndir ==1 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER) : 0
-		dir=ndir
-		b_stat=1
-		on = 0
-	update_icon()
+		invisibility = initial(invisibility)
+		alpha = initial(alpha)
+		emped = FALSE
+	..()
+
+/obj/item/device/radio/intercom/Initialize(mapload, ndir, building)
+	. = ..()
+	if(building)
+		setDir(ndir)
+	START_PROCESSING(SSobj, src)
 
 /obj/item/device/radio/intercom/Destroy()
-	processing_objects.Remove(src)
+	STOP_PROCESSING(SSobj, src)
+	return ..()
+
+/obj/item/device/radio/intercom/examine(mob/user)
 	..()
+	if(!unfastened)
+		to_chat(user, "<span class='notice'>It's <b>screwed</b> and secured to the wall.</span>")
+	else
+		to_chat(user, "<span class='notice'>It's <i>unscrewed</i> from the wall, and can be <b>detached</b>.</span>")
 
-/obj/item/device/radio/intercom/attack_ai(mob/user as mob)
-	add_hiddenprint(user)
-	add_fingerprint(user)
-	spawn (0)
-		attack_self(user)
+/obj/item/device/radio/intercom/attackby(obj/item/I, mob/living/user, params)
+	if(istype(I, /obj/item/screwdriver))
+		if(unfastened)
+			user.visible_message("<span class='notice'>[user] starts tightening [src]'s screws...</span>", "<span class='notice'>You start screwing in [src]...</span>")
+			if(I.use_tool(src, user, 30, volume=50))
+				user.visible_message("<span class='notice'>[user] tightens [src]'s screws!</span>", "<span class='notice'>You tighten [src]'s screws.</span>")
+				unfastened = FALSE
+		else
+			user.visible_message("<span class='notice'>[user] starts loosening [src]'s screws...</span>", "<span class='notice'>You start unscrewing [src]...</span>")
+			if(I.use_tool(src, user, 40, volume=50))
+				user.visible_message("<span class='notice'>[user] loosens [src]'s screws!</span>", "<span class='notice'>You unscrew [src], loosening it from the wall.</span>")
+				unfastened = TRUE
+		return
+	else if(istype(I, /obj/item/wrench))
+		if(!unfastened)
+			to_chat(user, "<span class='warning'>You need to unscrew [src] from the wall first!</span>")
+			return
+		user.visible_message("<span class='notice'>[user] starts unsecuring [src]...</span>", "<span class='notice'>You start unsecuring [src]...</span>")
+		I.play_tool_sound(src)
+		if(I.use_tool(src, user, 80))
+			user.visible_message("<span class='notice'>[user] unsecures [src]!</span>", "<span class='notice'>You detach [src] from the wall.</span>")
+			playsound(src, 'sound/items/deconstruct.ogg', 50, 1)
+			new/obj/item/wallframe/intercom(get_turf(src))
+			qdel(src)
+		return
+	return ..()
 
-/obj/item/device/radio/intercom/attack_paw(mob/user as mob)
-	return attack_hand(user)
+/obj/item/device/radio/intercom/attack_ai(mob/user)
+	interact(user)
 
-/obj/item/device/radio/intercom/attack_hand(mob/user as mob)
-	add_fingerprint(user)
-	spawn (0)
-		attack_self(user)
+/obj/item/device/radio/intercom/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
+	interact(user)
 
-/obj/item/device/radio/intercom/receive_range(freq, level)
-	if (!on || b_stat || isWireCut(WIRE_RECEIVE))
-		return -1
+/obj/item/device/radio/intercom/interact(mob/user)
+	..()
+	ui_interact(user, state = GLOB.default_state)
+
+/obj/item/device/radio/intercom/can_receive(freq, level)
+	if(!on)
+		return FALSE
+	if(wires.is_cut(WIRE_RX))
+		return FALSE
 	if(!(0 in level))
 		var/turf/position = get_turf(src)
 		if(isnull(position) || !(position.z in level))
-			return -1
-	if (!src.listening)
-		return -1
-	if(freq == SYND_FREQ)
+			return FALSE
+	if(!src.listening)
+		return FALSE
+	if(freq == FREQ_SYNDICATE)
 		if(!(src.syndie))
-			return -1//Prevents broadcast of messages over devices lacking the encryption
+			return FALSE//Prevents broadcast of messages over devices lacking the encryption
 
-	if(freq == RAID_FREQ)
-		if(!(src.raider))
-			return -1//Prevents broadcast of messages over devices lacking the encryption, birb edition
-
-	return canhear_range
+	return TRUE
 
 
-/obj/item/device/radio/intercom/Hear(var/datum/speech/speech, var/rendered_speech="")
-	if(speech.speaker && !src.anyai && !(speech.speaker in src.ai))
+/obj/item/device/radio/intercom/Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq, list/spans, message_mode)
+	if (message_mode == MODE_INTERCOM)
+		return  // Avoid hearing the same thing twice
+	if(!anyai && !(speaker in ai))
 		return
 	..()
-
-/obj/item/device/radio/intercom/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	switch(buildstage)
-		if(3)
-			if(iswirecutter(W) && b_stat && wires.IsAllCut())
-				to_chat(user, "<span class='notice'>You cut out the intercoms wiring and disconnect its electronics.</span>")
-				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
-				if(do_after(user, src, 10))
-					new /obj/item/stack/cable_coil(get_turf(src),5)
-					on = 0
-					b_stat = 1
-					buildstage = 1
-					update_icon()
-					processing_objects.Remove(src)
-				return 1
-			else
-				return ..()
-		if(2)
-			if(isscrewdriver(W))
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
-				if(do_after(user, src, 10))
-					update_icon()
-					on = 1
-					b_stat = 0
-					buildstage = 3
-					to_chat(user, "<span class='notice'>You secure the electronics!</span>")
-					update_icon()
-					processing_objects.Add(src)
-					for(var/i, i<= 5, i++)
-						wires.UpdateCut(i,1)
-				return 1
-		if(1)
-			if(iscablecoil(W))
-				var/obj/item/stack/cable_coil/coil = W
-				if(coil.amount < 5)
-					to_chat(user, "<span class='warning'>You need more cable for this!</span>")
-					return
-				if(do_after(user, src, 10))
-					coil.use(5)
-					to_chat(user, "<span class='notice'>You wire \the [src]!</span>")
-					buildstage = 2
-				return 1
-			if(iscrowbar(W))
-				to_chat(user, "<span class='notice'>You begin removing the electronics...</span>")
-				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-				if(do_after(user, src, 10))
-					new /obj/item/weapon/intercom_electronics(get_turf(src))
-					to_chat(user, "<span class='notice'>The circuitboard pops out!</span>")
-					buildstage = 0
-				return 1
-		if(0)
-			if(istype(W,/obj/item/weapon/intercom_electronics))
-				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-				if(do_after(user, src, 10))
-					qdel(W)
-					to_chat(user, "<span class='notice'>You insert \the [W] into \the [src]!</span>")
-					buildstage = 1
-				return 1
-			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT=W
-				playsound(src, 'sound/items/Welder.ogg', 50, 1)
-				if(!WT.remove_fuel(3, user))
-					to_chat(user, "<span class='warning'>You're out of welding fuel.</span>")
-					return 1
-				if(do_after(user, src, 10))
-					to_chat(user, "<span class='notice'>You cut the intercom frame from the wall!</span>")
-					new /obj/item/mounted/frame/intercom(get_turf(src))
-					qdel(src)
-					return 1
-
-/obj/item/device/radio/intercom/update_icon()
-	if(!circuitry_installed)
-		icon_state="intercom-frame"
-		return
-	icon_state = "intercom[!on?"-p":""][b_stat ? "-open":""]"
 
 /obj/item/device/radio/intercom/process()
 	if(((world.timeofday - last_tick) > 30) || ((world.timeofday - last_tick) < 0))
 		last_tick = world.timeofday
-		if(!areaMaster)
-			on = 0
-			update_icon()
-			return
-		on = areaMaster.powered(EQUIP) // set "on" to the power status
-		update_icon()
 
-/obj/item/weapon/intercom_electronics
-	name = "intercom electronics"
-	icon = 'icons/obj/doors/door_assembly.dmi'
-	icon_state = "door_electronics"
-	desc = "Looks like a circuit. Probably is."
-	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 50)
-	w_type = RECYK_ELECTRONIC
-	melt_temperature = MELTPOINT_SILICON
+		var/area/A = get_area(src)
+		if(!A || emped)
+			on = FALSE
+		else
+			on = A.powered(EQUIP) // set "on" to the power status
 
-/obj/item/device/radio/intercom/medbay
-	name = "station intercom (Medbay)"
-	frequency = 1485
+		if(!on)
+			icon_state = "intercom-p"
+		else
+			icon_state = initial(icon_state)
 
-/obj/item/device/radio/intercom/medbay/broadcast_nospeaker
-	broadcasting = 1
-	listening = 0
+/obj/item/device/radio/intercom/add_blood_DNA(list/blood_dna)
+	return FALSE
+
+//Created through the autolathe or through deconstructing intercoms. Can be applied to wall to make a new intercom on it!
+/obj/item/wallframe/intercom
+	name = "intercom frame"
+	desc = "A ready-to-go intercom. Just slap it on a wall and screw it in!"
+	icon_state = "intercom"
+	result_path = /obj/item/device/radio/intercom/unscrewed
+	pixel_shift = 29
+	inverse = TRUE
+	materials = list(MAT_METAL = 75, MAT_GLASS = 25)

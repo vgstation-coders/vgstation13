@@ -1,89 +1,48 @@
-// All mobs should have custom emote, really..
-/mob/proc/custom_emote(var/m_type=1,var/message = null)
+//The code execution of the emote datum is located at code/datums/emotes.dm
+/mob/proc/emote(act, m_type = null, message = null)
+	act = lowertext(act)
+	var/param = message
+	var/custom_param = findchar(act, " ")
+	if(custom_param)
+		param = copytext(act, custom_param + 1, length(act) + 1)
+		act = copytext(act, 1, custom_param)
 
-
-	if(stat || !use_me && usr == src)
-		to_chat(usr, "You are unable to emote.")
+	var/datum/emote/E
+	E = E.emote_list[act]
+	if(!E)
+		to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
 		return
+	E.run_emote(src, param, m_type)
 
-	var/muzzled = istype(src.wear_mask, /obj/item/clothing/mask/muzzle)
-	if(m_type == 2 && muzzled)
-		return
+/datum/emote/flip
+	key = "flip"
+	key_third_person = "flips"
+	restraint_check = TRUE
+	mob_type_allowed_typecache = list(/mob/living, /mob/dead/observer)
+	mob_type_ignore_stat_typecache = list(/mob/dead/observer)
 
-	var/input
-	if(!message)
-		input = copytext(sanitize(input(src,"Choose an emote to display.") as text|null),1,MAX_MESSAGE_LEN)
-	else
-		input = message
-	if(input)
-		message = "<B>[src]</B> [input]"
-	else
-		return
+/datum/emote/flip/run_emote(mob/user, params)
+	. = ..()
+	if(.)
+		user.SpinAnimation(7,1)
 
+/datum/emote/spin
+	key = "spin"
+	key_third_person = "spins"
+	restraint_check = TRUE
+	mob_type_allowed_typecache = list(/mob/living, /mob/dead/observer)
+	mob_type_ignore_stat_typecache = list(/mob/dead/observer)
 
-	if (message)
-		log_emote("[name]/[key] (@[x],[y],[z]): [message]")
+/datum/emote/spin/run_emote(mob/user)
+	. = ..()
+	if(.)
+		user.spin(20, 1)
 
- //Hearing gasp and such every five seconds is not good emotes were not global for a reason.
- // Maybe some people are okay with that.
-
-		for(var/mob/M in player_list)
-			if (!M.client)
-				continue //skip monkeys and leavers
-			if (istype(M, /mob/new_player))
-				continue
-			if(findtext(message," snores.")) //Because we have so many sleeping people.
-				break
-			if(M.stat == DEAD && M.client && M.client.prefs && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(src,null)))
-				M.show_message(message)
-
-
-		// Type 1 (Visual) emotes are sent to anyone in view of the item
-		if (m_type & 1)
-			visible_message(message)
-
-		// Type 2 (Audible) emotes are sent to anyone in hear range
-		// of the *LOCATION* -- this is important for pAIs to be heard
-		else if (m_type & 2)
-			for(var/mob/M in get_hearers_in_view(7, src))
-				M.show_message(message, m_type)
-
-/mob/proc/emote_dead(var/message)
-
-
-	if(client.prefs.muted & MUTE_DEADCHAT)
-		to_chat(src, "<span class='warning'>You cannot send deadchat emotes (muted).</span>")
-		return
-
-	if(!(client.prefs.toggles & CHAT_DEAD))
-		to_chat(src, "<span class='warning'>You have deadchat muted.</span>")
-		return
-
-	var/input
-	if(!message)
-		input = copytext(sanitize(input(src, "Choose an emote to display.") as text|null), 1, MAX_MESSAGE_LEN)
-	else
-		input = message
-
-	if(input)
-		message = "<span class='game deadsay'><span class='prefix'>DEAD:</span> <b>[src]</b> [message]</span>"
-	else
-		return
-
-
-	if(message)
-		for(var/mob/M in player_list)
-			if(istype(M, /mob/new_player))
-				continue
-
-			if(M.client && M.client.holder && (M.client.holder.rights & R_ADMIN|R_MOD) && (M.client.prefs.toggles & CHAT_DEAD)) // Show the emote to admins/mods
-				to_chat(M, message)
-
-			else if(M.stat == DEAD && (M.client.prefs.toggles & CHAT_DEAD)) // Show the emote to regular ghosts with deadchat toggled on
-				M.show_message(message, 2)
-
-/mob/proc/audible_cough()
-	return emote("cough", auto = 1)
-
-/mob/proc/audible_scream()
-	return emote("scream", auto = 1)
+		if(iscyborg(user) && user.has_buckled_mobs())
+			var/mob/living/silicon/robot/R = user
+			GET_COMPONENT_FROM(riding_datum, /datum/component/riding, R)
+			if(riding_datum)
+				for(var/mob/M in R.buckled_mobs)
+					riding_datum.force_dismount(M)
+			else
+				R.unbuckle_all_mobs()

@@ -1,33 +1,21 @@
-/mob/living/silicon/robot/Process_Spaceslipping(var/prob_slip = 5)
-	if(module && module.no_slip) //	The magic of magnets.
-		return FALSE
-	..()
+/mob/living/silicon/robot/Process_Spacemove(movement_dir = 0)
+	if(ionpulse())
+		return 1
+	return ..()
 
-/mob/living/silicon/robot/CheckSlip()
-	return ((module && module.no_slip)? -1 : 0)
-
-/mob/living/silicon/robot/Process_Spacemove(var/check_drift = FALSE)
-	if(module)
-		for(var/obj/item/weapon/tank/jetpack/J in module.modules)
-			if(J && istype(J, /obj/item/weapon/tank/jetpack))
-				if(((!check_drift) || (check_drift && J.stabilization_on)) && (J.allow_thrust(0.01, src)))
-					inertia_dir = FALSE
-					return TRUE
-				if((!check_drift && J.allow_thrust(0.01)))
-					return TRUE
-	if(..())
-		return TRUE
-	return FALSE
-
-/mob/living/silicon/robot/movement_tally_multiplier()
+/mob/living/silicon/robot/movement_delay()
 	. = ..()
-	if(is_component_functioning("power cell") && cell)
-		if(module_active && istype(module_active,/obj/item/borg/combat/mobility))
-			. *= SILICON_MOBILITY_MODULE_SPEED_MODIFIER
-		if(cell.charge <= 0)
-			. *= SILICON_NO_CHARGE_SLOWDOWN
-		else
-			if(module)
-				. *= module.speed_modifier
-	else
-		. *= SILICON_NO_CELL_SLOWDOWN
+	var/static/config_robot_delay
+	if(isnull(config_robot_delay))
+		config_robot_delay = CONFIG_GET(number/robot_delay)
+	. += speed + config_robot_delay
+
+/mob/living/silicon/robot/mob_negates_gravity()
+	return magpulse
+
+/mob/living/silicon/robot/mob_has_gravity()
+	return ..() || mob_negates_gravity()
+
+/mob/living/silicon/robot/experience_pressure_difference(pressure_difference, direction)
+	if(!magpulse)
+		return ..()

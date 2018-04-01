@@ -1,135 +1,125 @@
-#define VALUE_REMAINING_TIME "Remaining time"
-#define VALUE_DEFAULT_TIME "Default time"
-#define VALUE_TIMING "Timing"
-
 /obj/item/device/assembly/timer
 	name = "timer"
-	desc = "Used to time things. Works well with contraptions which have to count down. Tick tock."
+	desc = "Used to time things. Works well with contraptions which has to count down. Tick tock."
 	icon_state = "timer"
-	starting_materials = list(MAT_IRON = 500, MAT_GLASS = 50)
-	w_type = RECYK_ELECTRONIC
-	origin_tech = Tc_MAGNETS + "=1"
-
-	wires = WIRE_PULSE | WIRE_RECEIVE
-
-	secured = 0
+	materials = list(MAT_METAL=500, MAT_GLASS=50)
+	attachable = 1
 
 	var/timing = 0
-	var/time = 10
+	var/time = 5
+	var/saved_time = 5
+	var/loop = 0
 
-	var/default_time = 10
+/obj/item/device/assembly/timer/suicide_act(mob/living/user)
+	user.visible_message("<span class='suicide'>[user] looks at the timer and decides [user.p_their()] fate! It looks like [user.p_theyre()] going to commit suicide!</span>")
+	activate()//doesnt rely on timer_end to prevent weird metas where one person can control the timer and therefore someone's life. (maybe that should be how it works...)
+	addtimer(CALLBACK(src, .proc/manual_suicide, user), time*10)//kill yourself once the time runs out
+	return MANUAL_SUICIDE
 
-	accessible_values = list(\
-		VALUE_REMAINING_TIME = "time;"+VT_NUMBER,\
-		VALUE_DEFAULT_TIME = "default_time;"+VT_NUMBER,\
-		VALUE_TIMING = "timing;"+VT_NUMBER)
+/obj/item/device/assembly/timer/proc/manual_suicide(mob/living/user)
+	user.visible_message("<span class='suicide'>[user]'s time is up!</span>")
+	user.adjustOxyLoss(200)
+	user.death(0)
+
+/obj/item/device/assembly/timer/New()
+	..()
+	START_PROCESSING(SSobj, src)
+
+/obj/item/device/assembly/timer/describe()
+	if(timing)
+		return "The timer is counting down from [time]!"
+	return "The timer is set for [time] seconds."
+
 
 /obj/item/device/assembly/timer/activate()
 	if(!..())
 		return 0//Cooldown check
-
 	timing = !timing
-
 	update_icon()
-	return 0
+	return 1
+
 
 /obj/item/device/assembly/timer/toggle_secure()
 	secured = !secured
 	if(secured)
-		processing_objects.Add(src)
+		START_PROCESSING(SSobj, src)
 	else
 		timing = 0
-		processing_objects.Remove(src)
+		STOP_PROCESSING(SSobj, src)
 	update_icon()
 	return secured
 
+
 /obj/item/device/assembly/timer/proc/timer_end()
-	if(!secured)
-		return 0
+	if(!secured || next_activate > world.time)
+		return FALSE
 	pulse(0)
-	if(!holder)
-		visible_message("[bicon(src)] *beep* *beep*", "*beep* *beep*")
-	cooldown = 2
-	spawn(10)
-		process_cooldown()
-	return
+	audible_message("[icon2html(src, hearers(src))] *beep* *beep*", null, 3)
+	if(loop)
+		timing = 1
+	update_icon()
+
 
 /obj/item/device/assembly/timer/process()
-	if(timing && (time > 0))
+	if(timing)
 		time--
-	if(timing && time <= 0)
-		timing = 0
-		timer_end()
-		time = default_time
-	return
+		if(time <= 0)
+			timing = 0
+			timer_end()
+			time = saved_time
 
 
 /obj/item/device/assembly/timer/update_icon()
-	overlays.len = 0
+	cut_overlays()
 	attached_overlays = list()
 	if(timing)
+		add_overlay("timer_timing")
 		attached_overlays += "timer_timing"
-		overlays += image(icon = icon, icon_state = "timer_timing")
 	if(holder)
 		holder.update_icon()
-	return
 
 
-/obj/item/device/assembly/timer/interact(mob/user as mob)//TODO: Have this use the wires
-	if(!secured)
-		user.show_message("<span class='warning'>The [name] is unsecured!</span>")
-		return 0
-	var/second = time % 60
-	var/minute = (time - second) / 60
-	var/dat = text("<TT><B>Timing Unit</B>\n[] []:[]\n<A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT>", (timing ? text("<A href='?src=\ref[];time=0'>Timing</A>", src) : text("<A href='?src=\ref[];time=1'>Not Timing</A>", src)), minute, second, src, src, src, src)
-
-	dat += "<BR><BR><A href='?src=\ref[src];set_default_time=1'>After countdown, reset time to [(default_time - default_time%60)/60]:[(default_time % 60)]</A>"
-	dat += {"<BR><BR><A href='?src=\ref[src];refresh=1'>Refresh</A>
-		<BR><BR><A href='?src=\ref[src];close=1'>Close</A>"}
-	user << browse(dat, "window=timer")
-	onclose(user, "timer")
-	return
+/obj/item/device/assembly/timer/ui_interact(mob/user)//TODO: Have this use the wires
+	. = ..()
+	if(is_secured(user))
+		var/second = time % 60
+		var/minute = (time - second) / 60
+		var/dat = "<TT><B>Timing Unit</B>\n[(timing ? "<A href='?src=[REF(src)];time=0'>Timing</A>" : "<A href='?src=[REF(src)];time=1'>Not Timing</A>")] [minute]:[second]\n<A href='?src=[REF(src)];tp=-30'>-</A> <A href='?src=[REF(src)];tp=-1'>-</A> <A href='?src=[REF(src)];tp=1'>+</A> <A href='?src=[REF(src)];tp=30'>+</A>\n</TT>"
+		dat += "<BR><BR><A href='?src=[REF(src)];repeat=[(loop ? "0'>Stop repeating" : "1'>Set to repeat")]</A>"
+		dat += "<BR><BR><A href='?src=[REF(src)];refresh=1'>Refresh</A>"
+		dat += "<BR><BR><A href='?src=[REF(src)];close=1'>Close</A>"
+		var/datum/browser/popup = new(user, "timer", name)
+		popup.set_content(dat)
+		popup.open()
 
 
 /obj/item/device/assembly/timer/Topic(href, href_list)
 	..()
-	if(usr.stat || usr.restrained() || !in_range(loc, usr) || (!usr.canmove && !usr.locked_to))
-		//If the user is handcuffed or out of range, or if they're unable to move,
-		//but NOT if they're unable to move as a result of being buckled into something, they're unable to use the device.
+	if(usr.incapacitated() || !in_range(loc, usr))
 		usr << browse(null, "window=timer")
 		onclose(usr, "timer")
 		return
 
 	if(href_list["time"])
 		timing = text2num(href_list["time"])
-		message_admins("[key_name_admin(usr)] [timing ? "started" : "stopped"] a timer at [formatJumpTo(src)]")
+		if(timing && istype(holder, /obj/item/device/transfer_valve))
+			var/timer_message = "[ADMIN_LOOKUPFLW(usr)] activated [src] attachment on [holder]."
+			message_admins(timer_message)
+			GLOB.bombers += timer_message
+			log_game("[key_name(usr)] activated [src] attachment on [holder]")
 		update_icon()
+	if(href_list["repeat"])
+		loop = text2num(href_list["repeat"])
 
 	if(href_list["tp"])
 		var/tp = text2num(href_list["tp"])
 		time += tp
-		time = min(max(round(time), 0), 600)
+		time = min(max(round(time), 1), 600)
+		saved_time = time
 
 	if(href_list["close"])
 		usr << browse(null, "window=timer")
 		return
 
-	if(href_list["set_default_time"])
-		default_time = time
-
 	if(usr)
 		attack_self(usr)
-
-	return
-
-/obj/item/device/assembly/timer/send_to_past(var/duration)
-	..()
-	var/static/list/resettable_vars = list(
-		"timing",
-		"time")
-
-	reset_vars_after_duration(resettable_vars, duration)
-
-#undef VALUE_REMAINING_TIME
-#undef VALUE_DEFAULT_TIME
-#undef VALUE_TIMING

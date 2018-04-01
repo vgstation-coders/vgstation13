@@ -9,201 +9,149 @@
 	"1:2,3:4" is the square (1,3) with pixel offsets (+2, +4); slightly right and slightly above the turf grid.
 	Pixel offsets are used so you don't perfectly hide the turf under them, that would be crappy.
 
+	In addition, the keywords NORTH, SOUTH, EAST, WEST and CENTER can be used to represent their respective
+	screen borders. NORTH-1, for example, is the row just below the upper edge. Useful if you want your
+	UI to scale with screen size.
+
 	The size of the user's screen is defined by client.view (indirectly by world.view), in our case "15x15".
 	Therefore, the top right corner (except during admin shenanigans) is at "15,15"
 */
 
-//Overlays that cover the entire screen
-#define ui_entire_screen "WEST,SOUTH TO EAST,NORTH"
+//Lower left, persistent menu
+#define ui_inventory "WEST:6,SOUTH:5"
 
-//Lower left, persistant menu
-#define ui_inventory "WEST:[6*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
+//Middle left indicators
+#define ui_lingchemdisplay "WEST,CENTER-1:15"
+#define ui_lingstingdisplay "WEST:6,CENTER-3:11"
 
-//Lower center, persistant menu
-#define ui_sstore1 "WEST+2:[10*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_id "WEST+3:[12*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_belt "WEST+4:[14*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_back "CENTER-2:[14*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_rhand "CENTER-1:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_lhand "CENTER:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_equip "CENTER-1:[16*PIXEL_MULTIPLIER],SOUTH+1:[5*PIXEL_MULTIPLIER]"
-#define ui_swaphand1 "CENTER-1:[16*PIXEL_MULTIPLIER],SOUTH+1:[5*PIXEL_MULTIPLIER]"
-#define ui_swaphand2 "CENTER:[16*PIXEL_MULTIPLIER],SOUTH+1:[5*PIXEL_MULTIPLIER]"
-#define ui_storage1 "CENTER+1:[18*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_storage2 "CENTER+2:[20*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
+#define ui_devilsouldisplay "WEST:6,CENTER-1:15"
 
-#define ui_alien_head "WEST+3:[12*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"	//aliens
-#define ui_alien_oclothing "WEST+4:[14*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"	//aliens
+//Lower center, persistent menu
+#define ui_sstore1 "CENTER-5:10,SOUTH:5"
+#define ui_id "CENTER-4:12,SOUTH:5"
+#define ui_belt "CENTER-3:14,SOUTH:5"
+#define ui_back "CENTER-2:14,SOUTH:5"
 
-#define ui_borg_sight "CENTER-3:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"	//borgs
-#define ui_inv1 "CENTER-2:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"			//borgs
-#define ui_inv2 "CENTER-1:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"			//borgs
-#define ui_inv3 "CENTER:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"			//borgs
-#define ui_borg_module "CENTER+1:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]" //borgs
-#define ui_borg_store "CENTER+2:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"	//borgs
+/proc/ui_hand_position(i) //values based on old hand ui positions (CENTER:-/+16,SOUTH:5)
+	var/x_off = -(!(i % 2))
+	var/y_off = round((i-1) / 2)
+	return"CENTER+[x_off]:16,SOUTH+[y_off]:5"
 
-#define ui_mommi_store "CENTER+1:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_mommi_module "CENTER:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_mommi_sight "CENTER-2:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_mommi_hats "CENTER-3:[16*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
+/proc/ui_equip_position(mob/M)
+	var/y_off = round((M.held_items.len-1) / 2) //values based on old equip ui position (CENTER: +/-16,SOUTH+1:5)
+	return "CENTER:-16,SOUTH+[y_off+1]:5"
 
-#define ui_monkey_uniform "WEST+2:[14*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"//monkey
-#define ui_monkey_hat "WEST+3:[14*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"	//monkey
-#define ui_monkey_glasses "WEST+1:[14*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"	//monkey
-#define ui_monkey_mask "WEST+4:[14*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"	//monkey
-#define ui_monkey_back "WEST+5:[14*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"	//monkey
+/proc/ui_swaphand_position(mob/M, which = 1) //values based on old swaphand ui positions (CENTER: +/-16,SOUTH+1:5)
+	var/x_off = which == 1 ? -1 : 0
+	var/y_off = round((M.held_items.len-1) / 2)
+	return "CENTER+[x_off]:16,SOUTH+[y_off+1]:5"
 
-//Lower right, persistant menu
-#define ui_dropbutton "EAST-4:[22*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_drop_throw "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
-#define ui_pull_resist "EAST-2:[26*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
-#define ui_kick_bite "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
-#define ui_acti "EAST-2:[26*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_movi "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_zonesel "EAST-1:28,SOUTH:5" //Used as compile time value
-#define ui_acti_alt "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]" //alternative intent switcher for when the interface is hidden (F12)
+#define ui_storage1 "CENTER+1:18,SOUTH:5"
+#define ui_storage2 "CENTER+2:20,SOUTH:5"
 
-#define ui_borg_pull "EAST-3:[24*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
-#define ui_borg_panel "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
+#define ui_borg_sensor "CENTER-3:16, SOUTH:5"		//borgs
+#define ui_borg_lamp "CENTER-4:16, SOUTH:5"			//borgs
+#define ui_borg_thrusters "CENTER-5:16, SOUTH:5"	//borgs
+#define ui_inv1 "CENTER-2:16,SOUTH:5"				//borgs
+#define ui_inv2 "CENTER-1  :16,SOUTH:5"				//borgs
+#define ui_inv3 "CENTER  :16,SOUTH:5"				//borgs
+#define ui_borg_module "CENTER+1:16,SOUTH:5"		//borgs
+#define ui_borg_store "CENTER+2:16,SOUTH:5"			//borgs
+#define ui_borg_camera "CENTER+3:21,SOUTH:5"		//borgs
+#define ui_borg_album "CENTER+4:21,SOUTH:5"			//borgs
+#define ui_borg_language_menu "CENTER+4:21,SOUTH+1:5"	//borgs
 
-//Gun buttons
-#define ui_gun1 "EAST-2:26,SOUTH+2:7" //Used as compile time value
-#define ui_gun2 "EAST-1:28, SOUTH+3:7" //Used as compile time value
-#define ui_gun3 "EAST-2:26,SOUTH+3:7" //Used as compile time value
-#define ui_gun_select "EAST-1:28,SOUTH+2:7" //Used as compile time value
+#define ui_monkey_head "CENTER-5:13,SOUTH:5"	//monkey
+#define ui_monkey_mask "CENTER-4:14,SOUTH:5"	//monkey
+#define ui_monkey_neck "CENTER-3:15,SOUTH:5"	//monkey
+#define ui_monkey_back "CENTER-2:16,SOUTH:5"	//monkey
 
-#define ui_borg_album "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+5:[7*PIXEL_MULTIPLIER]"	//borgs
-#define ui_borg_camera "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+4:[7*PIXEL_MULTIPLIER]"	//borgs
+//#define ui_alien_storage_l "CENTER-2:14,SOUTH:5"//alien
+#define ui_alien_storage_r "CENTER+1:18,SOUTH:5"//alien
+#define ui_alien_language_menu "EAST-3:26,SOUTH:5" //alien
 
-//Upper-middle right (damage indicators)
-#define ui_toxin "EAST-1:[28*PIXEL_MULTIPLIER],NORTH-2:[27*PIXEL_MULTIPLIER]"
-#define ui_fire "EAST-1:[28*PIXEL_MULTIPLIER],NORTH-3:[25*PIXEL_MULTIPLIER]"
-#define ui_oxygen "EAST-1:[28*PIXEL_MULTIPLIER],NORTH-4:[23*PIXEL_MULTIPLIER]"
-#define ui_pressure "EAST-1:[28*PIXEL_MULTIPLIER],NORTH-5:[21*PIXEL_MULTIPLIER]"
+#define ui_drone_drop "CENTER+1:18,SOUTH:5"     //maintenance drones
+#define ui_drone_pull "CENTER+2:2,SOUTH:5"      //maintenance drones
+#define ui_drone_storage "CENTER-2:14,SOUTH:5"  //maintenance drones
+#define ui_drone_head "CENTER-3:14,SOUTH:5"     //maintenance drones
 
-#define ui_alien_toxin "EAST-1:[28*PIXEL_MULTIPLIER],NORTH-2:[25*PIXEL_MULTIPLIER]"
-#define ui_alien_fire "EAST-1:[28*PIXEL_MULTIPLIER],NORTH-3:[25*PIXEL_MULTIPLIER]"
-#define ui_alien_oxygen "EAST-1:[28*PIXEL_MULTIPLIER],NORTH-4:[25*PIXEL_MULTIPLIER]"
+//Lower right, persistent menu
+#define ui_drop_throw "EAST-1:28,SOUTH+1:7"
+#define ui_pull_resist "EAST-2:26,SOUTH+1:7"
+#define ui_movi "EAST-2:26,SOUTH:5"
+#define ui_acti "EAST-3:24,SOUTH:5"
+#define ui_zonesel "EAST-1:28,SOUTH:5"
+#define ui_acti_alt "EAST-1:28,SOUTH:5"	//alternative intent switcher for when the interface is hidden (F12)
+#define ui_crafting	"EAST-4:22,SOUTH:5"
+#define ui_building "EAST-4:22,SOUTH:21"
+#define ui_language_menu "EAST-4:6,SOUTH:21"
+
+#define ui_borg_pull "EAST-2:26,SOUTH+1:7"
+#define ui_borg_radio "EAST-1:28,SOUTH+1:7"
+#define ui_borg_intents "EAST-2:26,SOUTH:5"
+
+
+//Upper-middle right (alerts)
+#define ui_alert1 "EAST-1:28,CENTER+5:27"
+#define ui_alert2 "EAST-1:28,CENTER+4:25"
+#define ui_alert3 "EAST-1:28,CENTER+3:23"
+#define ui_alert4 "EAST-1:28,CENTER+2:21"
+#define ui_alert5 "EAST-1:28,CENTER+1:19"
+
 
 //Middle right (status indicators)
-#define ui_nutrition "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-2:[11*PIXEL_MULTIPLIER]"
-#define ui_temp "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-1:[13*PIXEL_MULTIPLIER]"
-#define ui_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER:[15*PIXEL_MULTIPLIER]"
-#define ui_internal "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+1:[17*PIXEL_MULTIPLIER]"
-									//borgs
-#define ui_borg_temp "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-1:[13*PIXEL_MULTIPLIER]" //same as humans
-#define ui_borg_pressure "EAST-1:[28*PIXEL_MULTIPLIER],CENTER:[15*PIXEL_MULTIPLIER]" //borg pressure-o-meter goes in the health slot
-#define ui_borg_health "EAST-1:[28*PIXEL_MULTIPLIER],NORTH-5:[21*PIXEL_MULTIPLIER]" //borgs have the health display where humans have the pressure damage indicator.
-#define ui_alien_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-1:[13*PIXEL_MULTIPLIER]" //aliens have the health display where humans have the pressure damage indicator.
+#define ui_healthdoll "EAST-1:28,CENTER-2:13"
+#define ui_health "EAST-1:28,CENTER-1:15"
+#define ui_internal "EAST-1:28,CENTER:17"
+#define ui_mood "EAST-1:28,CENTER-3:10"
 
-#define ui_construct_health "EAST,CENTER:[15*PIXEL_MULTIPLIER]" //same height as humans, hugging the right border
-#define ui_construct_purge "EAST,CENTER-1:[15*PIXEL_MULTIPLIER]"
-#define ui_construct_fire "EAST-1:[16*PIXEL_MULTIPLIER],CENTER+1:[13*PIXEL_MULTIPLIER]" //above health, slightly to the left
-#define ui_construct_pull "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+1:[10*PIXEL_MULTIPLIER]" //above the zone_sel icon
+//borgs
+#define ui_borg_health "EAST-1:28,CENTER-1:15"		//borgs have the health display where humans have the pressure damage indicator.
 
-#define ui_spell_master "EAST-1:16,NORTH-1:16" //Used as compile time value
-#define ui_genetic_master "EAST-1:16,NORTH-3:16" //Used as compile time value
-#define ui_alien_master "EAST-0:-4,NORTH-0:-6" //Used as compile time value
-#define ui_racial_master "EAST-0:-4,NORTH-2:-6" //Used as compile time value
+//aliens
+#define ui_alien_health "EAST,CENTER-1:15"	//aliens have the health display where humans have the pressure damage indicator.
+#define ui_alienplasmadisplay "EAST,CENTER-2:15"
+#define ui_alien_queen_finder "EAST,CENTER-3:15"
+
+//constructs
+#define ui_construct_pull "EAST,CENTER-2:15"
+#define ui_construct_health "EAST,CENTER:15"  //same as borgs and humans
+
+// AI
+
+#define ui_ai_core "SOUTH:6,WEST"
+#define ui_ai_camera_list "SOUTH:6,WEST+1"
+#define ui_ai_track_with_camera "SOUTH:6,WEST+2"
+#define ui_ai_camera_light "SOUTH:6,WEST+3"
+#define ui_ai_crew_monitor "SOUTH:6,WEST+4"
+#define ui_ai_crew_manifest "SOUTH:6,WEST+5"
+#define ui_ai_alerts "SOUTH:6,WEST+6"
+#define ui_ai_announcement "SOUTH:6,WEST+7"
+#define ui_ai_shuttle "SOUTH:6,WEST+8"
+#define ui_ai_state_laws "SOUTH:6,WEST+9"
+#define ui_ai_pda_send "SOUTH:6,WEST+10"
+#define ui_ai_pda_log "SOUTH:6,WEST+11"
+#define ui_ai_take_picture "SOUTH:6,WEST+12"
+#define ui_ai_view_images "SOUTH:6,WEST+13"
+#define ui_ai_sensor "SOUTH:6,WEST+14"
 
 //Pop-up inventory
-#define ui_shoes "WEST+1:[8*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
+#define ui_shoes "WEST+1:8,SOUTH:5"
 
-#define ui_iclothing "WEST:[6*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
-#define ui_oclothing "WEST+1:[8*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
-#define ui_gloves "WEST+2:[10*PIXEL_MULTIPLIER],SOUTH+1:[7*PIXEL_MULTIPLIER]"
+#define ui_iclothing "WEST:6,SOUTH+1:7"
+#define ui_oclothing "WEST+1:8,SOUTH+1:7"
+#define ui_gloves "WEST+2:10,SOUTH+1:7"
 
-#define ui_glasses "WEST:[6*PIXEL_MULTIPLIER],SOUTH+2:[9*PIXEL_MULTIPLIER]"
-#define ui_mask "WEST+1:[8*PIXEL_MULTIPLIER],SOUTH+2:[9*PIXEL_MULTIPLIER]"
-#define ui_ears "WEST+2:[10*PIXEL_MULTIPLIER],SOUTH+2:[9*PIXEL_MULTIPLIER]"
+#define ui_glasses "WEST:6,SOUTH+3:11"
+#define ui_mask "WEST+1:8,SOUTH+2:9"
+#define ui_ears "WEST+2:10,SOUTH+2:9"
+#define ui_neck "WEST:6,SOUTH+2:9"
+#define ui_head "WEST+1:8,SOUTH+3:11"
 
-#define ui_head "WEST+1:[8*PIXEL_MULTIPLIER],SOUTH+3:[11*PIXEL_MULTIPLIER]"
+//Ghosts
 
-//Intent small buttons
-#define ui_help_small "EAST+3:[8*PIXEL_MULTIPLIER],SOUTH:[1*PIXEL_MULTIPLIER]"
-#define ui_disarm_small "EAST+3:15,SOUTH:[18*PIXEL_MULTIPLIER]"
-#define ui_grab_small "EAST+3:[32*PIXEL_MULTIPLIER],SOUTH:[18*PIXEL_MULTIPLIER]"
-#define ui_harm_small "EAST+3:[39*PIXEL_MULTIPLIER],SOUTH:[1*PIXEL_MULTIPLIER]"
-
-//#define ui_swapbutton "6:-16,1:5" //Unused
-
-//#define ui_headset "SOUTH,8"
-#define ui_hand "CENTER-1:[14*PIXEL_MULTIPLIER],SOUTH:[5*PIXEL_MULTIPLIER]"
-#define ui_hstore1 "CENTER-2,CENTER-2"
-//#define ui_resist "EAST+1,SOUTH-1"
-#define ui_sleep "EAST+1, NORTH-13"
-#define ui_rest "EAST+1, NORTH-14"
-
-
-#define ui_iarrowleft "SOUTH-1,11"
-#define ui_iarrowright "SOUTH-1,13"
-
-// AI (Ported straight from /tg/)
-
-#define ui_ai_core "SOUTH:[6*PIXEL_MULTIPLIER],WEST:[16*PIXEL_MULTIPLIER]"
-#define ui_ai_camera_list "SOUTH:[6*PIXEL_MULTIPLIER],WEST+1:[16*PIXEL_MULTIPLIER]"
-#define ui_ai_track_with_camera "SOUTH:[6*PIXEL_MULTIPLIER],WEST+2:[16*PIXEL_MULTIPLIER]"
-#define ui_ai_camera_light "SOUTH:[6*PIXEL_MULTIPLIER],WEST+3:[16*PIXEL_MULTIPLIER]"
-//#define ui_ai_crew_monitor "SOUTH:[6*PIXEL_MULTIPLIER],WEST+4:16"
-#define ui_ai_crew_manifest "SOUTH:[6*PIXEL_MULTIPLIER],WEST+4:[16*PIXEL_MULTIPLIER]"
-#define ui_ai_alerts "SOUTH:[6*PIXEL_MULTIPLIER],WEST+5:[16*PIXEL_MULTIPLIER]"
-#define ui_ai_announcement "SOUTH:[6*PIXEL_MULTIPLIER],WEST+6:[16*PIXEL_MULTIPLIER]"
-#define ui_ai_shuttle "SOUTH:[6*PIXEL_MULTIPLIER],WEST+7:[16*PIXEL_MULTIPLIER]"
-#define ui_ai_state_laws "SOUTH:[6*PIXEL_MULTIPLIER],WEST+8:[16*PIXEL_MULTIPLIER]"
-#define ui_ai_pda_send "SOUTH:[6*PIXEL_MULTIPLIER],WEST+9:[16*PIXEL_MULTIPLIER]"
-#define ui_ai_pda_log "SOUTH:[6*PIXEL_MULTIPLIER],WEST+10:[16*PIXEL_MULTIPLIER]"
-#define ui_ai_take_picture "SOUTH:[6*PIXEL_MULTIPLIER],WEST+11:[16*PIXEL_MULTIPLIER]"
-#define ui_ai_view_images "SOUTH:[6*PIXEL_MULTIPLIER],WEST+12:[16*PIXEL_MULTIPLIER]"
-#define ui_ai_config_radio "SOUTH:[6*PIXEL_MULTIPLIER],WEST+13:[16*PIXEL_MULTIPLIER]"
-
-//Adminbus HUD
-#define ui_adminbus_bg "1,1"
-#define ui_adminbus_delete "11:[31*PIXEL_MULTIPLIER],1:[6*PIXEL_MULTIPLIER]"
-#define ui_adminbus_delmobs "1:[6*PIXEL_MULTIPLIER],5:[14*PIXEL_MULTIPLIER]"
-#define ui_adminbus_spclowns "1:[8*PIXEL_MULTIPLIER],6:[14*PIXEL_MULTIPLIER]"
-#define ui_adminbus_spcarps "1:[8*PIXEL_MULTIPLIER],7:[10*PIXEL_MULTIPLIER]"
-#define ui_adminbus_spbears "1:[8*PIXEL_MULTIPLIER],8:[6*PIXEL_MULTIPLIER]"
-#define ui_adminbus_sptrees "1:[8*PIXEL_MULTIPLIER],9:[2*PIXEL_MULTIPLIER]"
-#define ui_adminbus_spspiders "1:[8*PIXEL_MULTIPLIER],9:[30*PIXEL_MULTIPLIER]"
-#define ui_adminbus_spalien "1:[5*PIXEL_MULTIPLIER],10:[26*PIXEL_MULTIPLIER]"
-#define ui_adminbus_loadsids "5,2:[9*PIXEL_MULTIPLIER]"
-#define ui_adminbus_loadsmone "5,3:[5*PIXEL_MULTIPLIER]"
-#define ui_adminbus_massrepair "6:[3*PIXEL_MULTIPLIER],2:[9*PIXEL_MULTIPLIER]"
-#define ui_adminbus_massrejuv "6:[3*PIXEL_MULTIPLIER],3:[5*PIXEL_MULTIPLIER]"
-#define ui_adminbus_hook "10,3:[7*PIXEL_MULTIPLIER]"
-#define ui_adminbus_juke "11:[11*PIXEL_MULTIPLIER],3:[7*PIXEL_MULTIPLIER]"
-#define ui_adminbus_tele "12:[22*PIXEL_MULTIPLIER],3:[7*PIXEL_MULTIPLIER]"
-#define ui_adminbus_bumpers_1 "9:[21*PIXEL_MULTIPLIER],2:[14*PIXEL_MULTIPLIER]"
-#define ui_adminbus_bumpers_2 "10:[5*PIXEL_MULTIPLIER],2:[14*PIXEL_MULTIPLIER]"
-#define ui_adminbus_bumpers_3 "10:[21*PIXEL_MULTIPLIER],2:[14*PIXEL_MULTIPLIER]"
-#define ui_adminbus_door_0 "11:[11*PIXEL_MULTIPLIER],2:[14*PIXEL_MULTIPLIER]"
-#define ui_adminbus_door_1 "11:273*PIXEL_MULTIPLIER],2:[14*PIXEL_MULTIPLIER]"
-#define ui_adminbus_roadlights_0 "12:[17*PIXEL_MULTIPLIER],2:[14*PIXEL_MULTIPLIER]"
-#define ui_adminbus_roadlights_1 "13:[1*PIXEL_MULTIPLIER],2:[14*PIXEL_MULTIPLIER]"
-#define ui_adminbus_roadlights_2 "13:[17*PIXEL_MULTIPLIER],2:[14*PIXEL_MULTIPLIER]"
-#define ui_adminbus_free "13:[9*PIXEL_MULTIPLIER],14:[20*PIXEL_MULTIPLIER]"
-#define ui_adminbus_home "14:[6*PIXEL_MULTIPLIER],14:[20*PIXEL_MULTIPLIER]"
-#define ui_adminbus_antag "15:[3*PIXEL_MULTIPLIER],14:[20*PIXEL_MULTIPLIER]"
-#define ui_adminbus_dellasers "6:[13*PIXEL_MULTIPLIER],13:[26*PIXEL_MULTIPLIER]"
-#define ui_adminbus_givelasers "6:[29*PIXEL_MULTIPLIER],13:[26*PIXEL_MULTIPLIER]"
-#define ui_adminbus_delbombs "9:[18*PIXEL_MULTIPLIER],13:[26*PIXEL_MULTIPLIER]"
-#define ui_adminbus_givebombs "10:[2*PIXEL_MULTIPLIER],13:[26*PIXEL_MULTIPLIER]"
-#define ui_adminbus_tdred "1:[18*PIXEL_MULTIPLIER],13:[26*PIXEL_MULTIPLIER]"
-#define ui_adminbus_tdarena "2:[4*PIXEL_MULTIPLIER],13:[26*PIXEL_MULTIPLIER]"
-#define ui_adminbus_tdgreen "3:[6*PIXEL_MULTIPLIER],13:[26*PIXEL_MULTIPLIER]"
-#define ui_adminbus_tdobs "2:[4*PIXEL_MULTIPLIER],14:[28*PIXEL_MULTIPLIER]"
-
-//Blob HUD
-#define ui_blob_bgLEFT "WEST,CENTER-7"
-#define ui_blob_bgRIGHT "EAST-14,CENTER-7"
-#define ui_blob_powerbar "WEST,CENTER-3"
-#define ui_blob_healthbar "EAST:[14*PIXEL_MULTIPLIER],CENTER-3"
-#define ui_blob_spawnblob "WEST:[18*PIXEL_MULTIPLIER],CENTER-3:[5*PIXEL_MULTIPLIER]"
-#define ui_blob_spawnstrong "WEST:[18*PIXEL_MULTIPLIER],CENTER-2:[9*PIXEL_MULTIPLIER]"
-#define ui_blob_spawnresource "WEST:[18*PIXEL_MULTIPLIER],CENTER-1:[13*PIXEL_MULTIPLIER]"
-#define ui_blob_spawnfactory "WEST:[18*PIXEL_MULTIPLIER],CENTER:[17*PIXEL_MULTIPLIER]"
-#define ui_blob_spawnnode "WEST:[18*PIXEL_MULTIPLIER],CENTER+1:[21*PIXEL_MULTIPLIER]"
-#define ui_blob_spawncore "WEST:[18*PIXEL_MULTIPLIER],CENTER+2:[25*PIXEL_MULTIPLIER]"
-#define ui_blob_ping "EAST-1:[24*PIXEL_MULTIPLIER],CENTER+3:[21*PIXEL_MULTIPLIER]"
-#define ui_blob_rally "EAST-1:[24*PIXEL_MULTIPLIER],CENTER+4:[25*PIXEL_MULTIPLIER]"
-#define ui_blob_taunt "EAST-1:[24*PIXEL_MULTIPLIER],CENTER+5:[29*PIXEL_MULTIPLIER]"
+#define ui_ghost_jumptomob "SOUTH:6,CENTER-2:24"
+#define ui_ghost_orbit "SOUTH:6,CENTER-1:24"
+#define ui_ghost_reenter_corpse "SOUTH:6,CENTER:24"
+#define ui_ghost_teleport "SOUTH:6,CENTER+1:24"
+#define ui_ghost_pai "SOUTH: 6, CENTER+2:24"

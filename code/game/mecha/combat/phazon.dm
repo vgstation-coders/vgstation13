@@ -1,70 +1,30 @@
 /obj/mecha/combat/phazon
-	desc = "An exosuit which can only be described as 'What the Fuck?'."
-	name = "Phazon"
+	desc = "This is a Phazon exosuit. The pinnacle of scientific research and pride of Nanotrasen, it uses cutting edge bluespace technology and expensive materials."
+	name = "\improper Phazon"
 	icon_state = "phazon"
-	initial_icon = "phazon"
-	step_in = 1
-	dir_in = 1 //Facing North.
+	step_in = 2
+	dir_in = 2 //Facing South.
 	step_energy_drain = 3
-	health = 200
+	max_integrity = 200
 	deflect_chance = 30
-	damage_absorption = list("brute"=0.7,"fire"=0.7,"bullet"=0.7,"laser"=0.7,"energy"=0.7,"bomb"=0.7)
+	armor = list("melee" = 30, "bullet" = 30, "laser" = 30, "energy" = 30, "bomb" = 30, "bio" = 0, "rad" = 0, "fire" = 100, "acid" = 100)
 	max_temperature = 25000
 	infra_luminosity = 3
-	wreckage = /obj/effect/decal/mecha_wreckage/phazon
+	wreckage = /obj/structure/mecha_wreckage/phazon
 	add_req_access = 1
-	//operation_req_access = list()
 	internal_damage_threshold = 25
 	force = 15
-	var/phasing = 0
-	var/phasing_energy_drain = 200
-	max_equip = 4
+	max_equip = 3
+	phase_state = "phazon-phase"
 
-
-/obj/mecha/combat/phazon/New()
+/obj/mecha/combat/phazon/GrantActions(mob/living/user, human_occupant = 0)
 	..()
-	var/obj/item/mecha_parts/mecha_equipment/ME = new /obj/item/mecha_parts/mecha_equipment/tool/red
-	ME.attach(src)
-	ME = new /obj/item/mecha_parts/mecha_equipment/gravcatapult
-	ME.attach(src)
-	return
+	switch_damtype_action.Grant(user, src)
+	phasing_action.Grant(user, src)
 
-/obj/mecha/combat/phazon/to_bump(var/atom/obstacle)
-	if(phasing && get_charge()>=phasing_energy_drain)
-		spawn()
-			if(can_move)
-				can_move = 0
-				flick("phazon-phase", src)
-				src.forceMove(get_step(src,src.dir))
-				src.use_power(phasing_energy_drain)
-				sleep(step_in*3)
-				can_move = 1
-	else
-		. = ..()
-	return
 
-/obj/mecha/combat/phazon/click_action(atom/target,mob/user)
-	if(phasing)
-		src.occupant_message("Unable to interact with objects while phasing")
-		return
-	else
-		return ..()
-
-/obj/mecha/combat/phazon/get_commands()
-	var/output = {"<div class='wr'>
-						<div class='header'>Special</div>
-						<div class='links'>
-						<a href='?src=\ref[src];phasing=1'><span id="phasing_command">[phasing?"Dis":"En"]able phasing</span></a>
-						</div>
-						</div>
-						"}
-	output += ..()
-	return output
-
-/obj/mecha/combat/phazon/Topic(href, href_list)
+/obj/mecha/combat/phazon/RemoveActions(mob/living/user, human_occupant = 0)
 	..()
-	if (href_list["phasing"])
-		phasing = !phasing
-		send_byjax(src.occupant,"exosuit.browser","phasing_command","[phasing?"Dis":"En"]able phasing")
-		src.occupant_message("<font color=\"[phasing?"#00f\">En":"#f00\">Dis"]abled phasing.</font>")
-	return
+	switch_damtype_action.Remove(user)
+	phasing_action.Remove(user)
+

@@ -1,180 +1,142 @@
-/* SURGERY STEPS */
+/datum/surgery
+	var/name = "surgery"
+	var/status = 1
+	var/list/steps = list()									//Steps in a surgery
+	var/step_in_progress = 0								//Actively performing a Surgery
+	var/can_cancel = 1										//Can cancel this surgery after step 1 with cautery
+	var/list/species = list(/mob/living/carbon/human)		//Acceptable Species
+	var/location = BODY_ZONE_CHEST									//Surgery location
+	var/requires_bodypart_type = BODYPART_ORGANIC			//Prevents you from performing an operation on incorrect limbs. 0 for any limb type
+	var/list/possible_locs = list() 						//Multiple locations
+	var/ignore_clothes = 0									//This surgery ignores clothes
+	var/mob/living/carbon/target							//Operation target mob
+	var/obj/item/bodypart/operated_bodypart					//Operable body part
+	var/requires_bodypart = TRUE							//Surgery available only when a bodypart is present, or only when it is missing.
+	var/success_multiplier = 0								//Step success propability multiplier
+	var/requires_real_bodypart = 0							//Some surgeries don't work on limbs that don't really exist
 
-/datum/surgery_step
-	var/priority = 0	//steps with higher priority would be attempted first
+/datum/surgery/New(surgery_target, surgery_location, surgery_bodypart)
+	..()
+	if(surgery_target)
+		target = surgery_target
+		target.surgeries += src
+		if(surgery_location)
+			location = surgery_location
+		if(surgery_bodypart)
+			operated_bodypart = surgery_bodypart
 
-	// type path referencing tools that can be used for this step, and how well are they suited for it
-	var/list/allowed_tools = null
-	// type paths referencing mutantraces that this step applies to.
-	var/list/allowed_species = null
-	var/list/disallowed_species = null
+/datum/surgery/Destroy()
+	if(target)
+		target.surgeries -= src
+	target = null
+	operated_bodypart = null
+	return ..()
 
-	// duration of the step
-	var/min_duration = 0
-	var/max_duration = 0
 
-	var/list/mob/doing_surgery = list() //who's doing this RIGHT NOW
-
-	// evil infection stuff that will make everyone hate me
-	var/can_infect = 0
-	//How much blood this step can get on surgeon. 1 - hands, 2 - full body.
-	var/blood_level = 0
-
-	//returns how well tool is suited for this step
-/datum/surgery_step/proc/tool_quality(obj/item/tool)
-	for (var/T in allowed_tools)
-		if (istype(tool,T))
-			return allowed_tools[T]
-	return 0
-
-/datum/surgery_step/proc/check_anesthesia(var/mob/living/carbon/human/target)
-	if(target.sleeping > 0 || target.stat)
-		return 1
-	if(!target.feels_pain())
-		return 1
-	if(prob(25)) // Pain is tolerable?  Pomf wanted this. - N3X
-		return 1
-	return 0
-
-	// Checks if this step applies to the mutantrace of the user.
-/datum/surgery_step/proc/is_valid_mutantrace(mob/living/carbon/human/target)
-	if(!hasorgans(target))
-		return 0
-
-	if(allowed_species)
-		for(var/species in allowed_species)
-			if(target.dna.mutantrace == species)
-				return 1
-
-	if(disallowed_species)
-		for(var/species in disallowed_species)
-			if (target.dna.mutantrace == species)
-				return 0
-
+/datum/surgery/proc/can_start(mob/user, mob/living/carbon/target)
+	// if 0 surgery wont show up in list
+	// put special restrictions here
 	return 1
 
-	// checks whether this step can be applied with the given user and target
-/datum/surgery_step/proc/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	return 0
-
-	// does stuff to begin the step, usually just printing messages. Moved germs transfering and bloodying here too
-/datum/surgery_step/proc/begin_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(!affected)
-		return 0
-	if (can_infect && affected)
-		spread_germs_to_organ(affected, user)
-	if (ishuman(user) && prob(60))
-		var/mob/living/carbon/human/H = user
-		if (blood_level)
-			H.bloody_hands(target,0)
-		if (blood_level > 1)
-			H.bloody_body(target,0)
-	if(istype(tool,/obj/item/weapon/scalpel/laser) || istype(tool,/obj/item/weapon/retractor/manager))
-		tool.icon_state = "[initial(tool.icon_state)]_on"
-		spawn(max_duration * tool.surgery_speed)//in case the player doesn't go all the way through the step (if he moves away, puts the tool away,...)
-			tool.icon_state = "[initial(tool.icon_state)]_off"
-	return
-
-	// does stuff to end the step, which is normally print a message + do whatever this step changes
-/datum/surgery_step/proc/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	if(istype(tool,/obj/item/weapon/scalpel/laser) || istype(tool,/obj/item/weapon/retractor/manager))
-		tool.icon_state = "[initial(tool.icon_state)]_off"
-	return
-
-	// stuff that happens when the step fails
-/datum/surgery_step/proc/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	return null
-
-proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
-	if(!istype(user) || !istype(E))
-		return
-
-	var/germ_level = user.germ_level
-	if(user.gloves)
-		germ_level = user.gloves.germ_level
-	if(!(E.status & (ORGAN_ROBOT|ORGAN_PEG))) //Germs on robotic limbs bad
-		E.germ_level = max(germ_level,E.germ_level) //as funny as scrubbing microbes out with clean gloves is - no.
-
-proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
-	if(!istype(M,/mob/living/carbon/human))
-		return 0
-	if (user.a_intent == I_HURT)	//check for Hippocratic Oath
-		return 0
-	var/sleep_fail = 0
-	var/clumsy = 0
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		clumsy = ((M_CLUMSY in H.mutations) && prob(50))
-
-	var/target_area = user.zone_sel ? user.zone_sel.selecting : get_random_zone_sel()
-
-	for(var/datum/surgery_step/S in surgery_steps)
-		//check if tool is right or close enough and if this step is possible
-		sleep_fail = 0
-		if(S.tool_quality(tool))
-			var/canuse = S.can_use(user, M, target_area, tool)
-			if(canuse == -1)
-				sleep_fail = 1
-			if(canuse && S.is_valid_mutantrace(M) && !(M in S.doing_surgery))
-				if(!can_operate(M, user))
-					return 1
-				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] started by [user.name] ([user.ckey])</font>")
-				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Started surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
-				log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to perform surgery type [S.type] on [M.name] ([M.ckey])</font>")
-				S.doing_surgery += M
-				S.begin_step(user, M, target_area, tool)		//start on it
-
-				var/selection = user.zone_sel ? user.zone_sel.selecting : null //Check if the zone selection hasn't changed
-				//We had proper tools! (or RNG smiled.) and user did not move or change hands.
-				if(do_mob(user, M, rand(S.min_duration, S.max_duration) * tool.surgery_speed) && (prob(S.tool_quality(tool) / (sleep_fail + clumsy + 1))) && (!user.zone_sel || selection == user.zone_sel.selecting)) //Last part checks whether the zone selection hasn't changed
-					M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] successfully completed by [user.name] ([user.ckey])</font>")
-					user.attack_log += text("\[[time_stamp()]\] <font color='red'>Successfully completed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
-					log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to successfully complete surgery type [S.type] on [M.name] ([M.ckey])</font>")
-					S.end_step(user, M, target_area, tool)		//finish successfully
-				else
-					if(sleep_fail)
-						to_chat(user, "<span class='warning'>The patient is squirming around in pain!</span>")
-						M.emote("scream",,, 1)
-					M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] failed by [user.name] ([user.ckey])</font>")
-					user.attack_log += text("\[[time_stamp()]\] <font color='red'>Failed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
-					log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to fail the surgery type [S.type] on [M.name] ([M.ckey])</font>")
-					S.fail_step(user, M, target_area, tool)		//malpractice~
-				if(M) //good, we still exist
-					S.doing_surgery -= M
-				else
-					S.doing_surgery.Remove(null) //get rid of that now null reference
-				return	1	  												//don't want to do weapony things after surgery
-	if (user.a_intent == I_HELP)
-		to_chat(user, "<span class='warning'>You can't see any useful way to use [tool] on [M].</span>")
+/datum/surgery/proc/next_step(mob/user, intent)
+	if(step_in_progress)
 		return 1
+
+	var/try_to_fail = FALSE
+	if(intent == INTENT_DISARM)
+		try_to_fail = TRUE
+
+	var/datum/surgery_step/S = get_surgery_step()
+	if(S)
+		if(S.try_op(user, target, user.zone_selected, user.get_active_held_item(), src, try_to_fail))
+			return 1
 	return 0
 
-proc/sort_surgeries()
-	var/gap = surgery_steps.len
-	var/swapped = 1
-	while (gap > 1 || swapped)
-		swapped = 0
-		if(gap > 1)
-			gap = round(gap / 1.247330950103979)
-		if(gap < 1)
-			gap = 1
-		for(var/i = 1; gap + i <= surgery_steps.len; i++)
-			var/datum/surgery_step/l = surgery_steps[i]		//Fucking hate
-			var/datum/surgery_step/r = surgery_steps[gap+i]	//how lists work here
-			if(l.priority < r.priority)
-				surgery_steps.Swap(i, gap + i)
-				swapped = 1
+/datum/surgery/proc/get_surgery_step()
+	var/step_type = steps[status]
+	return new step_type
 
-/datum/surgery_status/
-	var/eyes	=	0
-	var/face	=	0
-	var/appendix =	0
-	var/ribcage = 0
-	var/butt = 0
-	var/butt_replace = 0
-	var/genitals = 0
-	var/head_reattach = 0
-	var/tooth_replace = 0
-	var/tooth_extract = 0
-	var/current_organ
+/datum/surgery/proc/get_surgery_next_step()
+	if(status < steps.len)
+		var/step_type = steps[status + 1]
+		return new step_type
+	else
+		return null
+
+/datum/surgery/proc/complete()
+	SSblackbox.record_feedback("tally", "surgeries_completed", 1, type)
+	qdel(src)
+
+/datum/surgery/proc/get_propability_multiplier()
+	var/propability = 0.5
+	var/turf/T = get_turf(target)
+
+	if(locate(/obj/structure/table/optable, T))
+		propability = 1
+	else if(locate(/obj/structure/table, T))
+		propability = 0.8
+	else if(locate(/obj/structure/bed, T))
+		propability = 0.7
+
+	return propability + success_multiplier
+
+/datum/surgery/advanced
+	name = "advanced surgery"
+
+/datum/surgery/advanced/can_start(mob/user, mob/living/carbon/target)
+	if(!..())
+		return FALSE
+	//Abductor scientists need no instructions
+	if(isabductor(user))
+		var/mob/living/carbon/human/H = user
+		var/datum/species/abductor/S = H.dna.species
+		if(S.scientist)
+			return TRUE
+
+	var/turf/T = get_turf(target)
+	var/obj/structure/table/optable/table = locate(/obj/structure/table/optable, T)
+	if(!table || !table.computer)
+		return FALSE
+	if(table.computer.stat & (NOPOWER|BROKEN))
+		return FALSE
+	if(type in table.computer.advanced_surgeries)
+		return TRUE
+
+/obj/item/disk/surgery
+	name = "Surgery Procedure Disk"
+	desc = "A disk that contains advanced surgery procedures, must be loaded into an Operating Console."
+	icon_state = "datadisk1"
+	materials = list(MAT_METAL=300, MAT_GLASS=100)
+	var/list/surgeries
+
+/obj/item/disk/surgery/debug
+	name = "Debug Surgery Disk"
+	desc = "A disk that contains all existing surgery procedures."
+	icon_state = "datadisk1"
+	materials = list(MAT_METAL=300, MAT_GLASS=100)
+
+/obj/item/disk/surgery/debug/Initialize()
+	. = ..()
+	surgeries = subtypesof(/datum/surgery/advanced)
+
+//INFO
+//Check /mob/living/carbon/attackby for how surgery progresses, and also /mob/living/carbon/attack_hand.
+//As of Feb 21 2013 they are in code/modules/mob/living/carbon/carbon.dm, lines 459 and 51 respectively.
+//Other important variables are var/list/surgeries (/mob/living) and var/list/internal_organs (/mob/living/carbon)
+// var/list/bodyparts (/mob/living/carbon/human) is the LIMBS of a Mob.
+//Surgical procedures are initiated by attempt_initiate_surgery(), which is called by surgical drapes and bedsheets.
+
+
+//TODO
+//specific steps for some surgeries (fluff text)
+//R&D researching new surgeries (especially for non-humans)
+//more interesting failure options
+//randomised complications
+//more surgeries!
+//add a probability modifier for the state of the surgeon- health, twitching, etc. blindness, god forbid.
+//helper for converting a zone_sel.selecting to body part (for damage)
+
+
+//RESOLVED ISSUES //"Todo" jobs that have been completed
+//combine hands/feet into the arms - Hands/feet were removed - RR
+//surgeries (not steps) that can be initiated on any body part (corresponding with damage locations) - Call this one done, see possible_locs var - c0

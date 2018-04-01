@@ -1,25 +1,13 @@
-/mob/living/silicon/gib()
-	death(1)
-	monkeyizing = 1
-	canmove = 0
-	icon = null
-	invisibility = 101
+/mob/living/silicon/spawn_gibs()
+	new /obj/effect/gibspawner/robot(drop_location())
 
-//	anim(target = src, a_icon = 'icons/mob/mob.dmi', /*flick_anim = "gibbed-r"*/, sleeptime = 15)
-	robogibs(loc, viruses)
-
-	dead_mob_list -= src
-	qdel(src)
-
-/mob/living/silicon/dust()
-	death(1)
-	monkeyizing = 1
-	canmove = 0
-	icon = null
-	invisibility = 101
-
-//	anim(target = src, a_icon = 'icons/mob/mob.dmi', /*flick_anim = "dust-r"*/, sleeptime = 15)
+/mob/living/silicon/spawn_dust()
 	new /obj/effect/decal/remains/robot(loc)
 
-	dead_mob_list -= src
-	qdel(src)
+/mob/living/silicon/death(gibbed)
+	if(!gibbed)
+		emote("deathgasp")
+	diag_hud_set_status()
+	diag_hud_set_health()
+	update_health_hud()
+	. = ..()

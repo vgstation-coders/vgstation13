@@ -1,112 +1,149 @@
-/var/list/error_last_seen = list()
-// error_cooldown items will either be positive (cooldown time) or negative (silenced error)
-//  If negative, starts at -1, and goes down by 1 each time that error gets skipped
-/var/list/error_cooldown = list()
-/var/total_runtimes = 0
-/var/total_runtimes_skipped = 0
-// The ifdef needs to be down here, since the error viewer references total_runtimes
+GLOBAL_VAR_INIT(total_runtimes, GLOB.total_runtimes || 0)
+GLOBAL_VAR_INIT(total_runtimes_skipped, 0)
+
 #ifdef DEBUG
-/world/Error(var/exception/e)
-	if (!istype(e)) // Something threw an unusual exception
-		world.log << "\[[time_stamp()]] Uncaught exception: [e]"
+
+#define ERROR_USEFUL_LEN 2
+
+/world/Error(exception/E, datum/e_src)
+	GLOB.total_runtimes++
+	
+	if(!istype(E)) //Something threw an unusual exception
+		log_world("\[[time_stamp()]] Uncaught exception: [E]")
+		return ..()
+	
+	//this is snowflake because of a byond bug (ID:2306577), do not attempt to call non-builtin procs in this if
+	if(copytext(E.name,1,32) == "Maximum recursion level reached")
+		var/list/split = splittext(E.desc, "\n")
+		for (var/i in 1 to split.len)
+			if (split[i] != "")
+				split[i] = "\[[time2text(world.timeofday,"hh:mm:ss")]\][split[i]]"
+		E.desc = jointext(split, "\n")
+		//log to world while intentionally triggering the byond bug.
+		log_world("\[[time2text(world.timeofday,"hh:mm:ss")]\]runtime error: [E.name]\n[E.desc]")
+		//if we got to here without silently ending, the byond bug has been fixed.
+		log_world("The bug with recursion runtimes has been fixed. Please remove the snowflake check from world/Error in [__FILE__]:[__LINE__]")
+		return //this will never happen.
+
+	if (islist(stack_trace_storage))
+		for (var/line in splittext(E.desc, "\n"))
+			if (text2ascii(line) != 32)
+				stack_trace_storage += line
+
+	var/static/list/error_last_seen = list()
+	var/static/list/error_cooldown = list() /* Error_cooldown items will either be positive(cooldown time) or negative(silenced error)
+												If negative, starts at -1, and goes down by 1 each time that error gets skipped*/
+
+	if(!error_last_seen) // A runtime is occurring too early in start-up initialization
 		return ..()
 
-	if (!global.error_last_seen) // A runtime is occurring too early in start-up initialization
-		return ..()
+	var/erroruid = "[E.file][E.line]"
+	var/last_seen = error_last_seen[erroruid]
+	var/cooldown = error_cooldown[erroruid] || 0
 
-	global.total_runtimes++
-
-	var/erroruid = "[e.file][e.line]:[e]"
-	var/last_seen = global.error_last_seen[erroruid]
-	var/cooldown = global.error_cooldown[erroruid] || 0
-	if (last_seen == null) // A new error!
-		global.error_last_seen[erroruid] = world.time
+	if(last_seen == null)
+		error_last_seen[erroruid] = world.time
 		last_seen = world.time
 
-	if (cooldown < 0)
-		global.error_cooldown[erroruid]-- // Used to keep track of skip count for this error
-		global.total_runtimes_skipped++
-		return // Error is currently silenced, skip handling it
-
-	// Handle cooldowns and silencing spammy errors
-	var/silencing = 0
+	if(cooldown < 0)
+		error_cooldown[erroruid]-- //Used to keep track of skip count for this error
+		GLOB.total_runtimes_skipped++
+		return //Error is currently silenced, skip handling it
+	//Handle cooldowns and silencing spammy errors
+	var/silencing = FALSE
 
 	// We can runtime before config is initialized because BYOND initialize objs/map before a bunch of other stuff happens.
 	// This is a bunch of workaround code for that. Hooray!
 	var/configured_error_cooldown
 	var/configured_error_limit
 	var/configured_error_silence_time
-	if(config)
-		configured_error_cooldown = config.error_cooldown
-		configured_error_limit = config.error_limit
-		configured_error_silence_time = config.error_silence_time
+	if(config && config.entries)
+		configured_error_cooldown = CONFIG_GET(number/error_cooldown)
+		configured_error_limit = CONFIG_GET(number/error_limit)
+		configured_error_silence_time = CONFIG_GET(number/error_silence_time)
 	else
-		configured_error_cooldown = initial(config.error_cooldown)
-		configured_error_limit = initial(config.error_limit)
-		configured_error_silence_time = initial(config.error_silence_time)
+		var/datum/config_entry/CE = /datum/config_entry/number/error_cooldown
+		configured_error_cooldown = initial(CE.config_entry_value)
+		CE = /datum/config_entry/number/error_limit
+		configured_error_limit = initial(CE.config_entry_value)
+		CE = /datum/config_entry/number/error_silence_time
+		configured_error_silence_time = initial(CE.config_entry_value)
 
-	// Each occurrence of a unique error adds to its "cooldown" time...
+
+	//Each occurence of a unique error adds to its cooldown time...
 	cooldown = max(0, cooldown - (world.time - last_seen)) + configured_error_cooldown
-
-
 	// ... which is used to silence an error if it occurs too often, too fast
-	if (cooldown > configured_error_cooldown * configured_error_limit)
+	if(cooldown > configured_error_cooldown * configured_error_limit)
 		cooldown = -1
-		silencing = 1
-		spawn (0)
+		silencing = TRUE
+		spawn(0)
 			usr = null
 			sleep(configured_error_silence_time)
-			var/skipcount = abs(global.error_cooldown[erroruid]) - 1
-			global.error_cooldown[erroruid] = 0
-			if (skipcount > 0)
-				world.log << "\[[time_stamp()]] Skipped [skipcount] runtimes in [e.file],[e.line]: [e]"
-				error_cache.log_error(e, skip_count = skipcount)
+			var/skipcount = abs(error_cooldown[erroruid]) - 1
+			error_cooldown[erroruid] = 0
+			if(skipcount > 0)
+				SEND_TEXT(world.log, "\[[time_stamp()]] Skipped [skipcount] runtimes in [E.file],[E.line].")
+				GLOB.error_cache.log_error(E, skip_count = skipcount)
 
-	global.error_last_seen[erroruid] = world.time
-	global.error_cooldown[erroruid] = cooldown
+	error_last_seen[erroruid] = world.time
+	error_cooldown[erroruid] = cooldown
 
-	// The detailed error info needs some tweaking to make it look nice
 	var/list/usrinfo = null
 	var/locinfo
-	if (istype(usr))
+	if(istype(usr))
 		usrinfo = list("  usr: [datum_info_line(usr)]")
 		locinfo = atom_loc_line(usr)
-		if (locinfo)
+		if(locinfo)
 			usrinfo += "  usr.loc: [locinfo]"
 	// The proceeding mess will almost definitely break if error messages are ever changed
-	// I apologize in advance
-	var/list/splitlines = splittext(e.desc, "\n")
+	var/list/splitlines = splittext(E.desc, "\n")
 	var/list/desclines = list()
-	if (splitlines.len > ERROR_USEFUL_LEN) // If there aren't at least three lines, there's no info
-		for (var/line in splitlines)
-			if (length(line) < 3 || findtext(line, "source file:") || findtext(line, "usr.loc:"))
+	if(LAZYLEN(splitlines) > ERROR_USEFUL_LEN) // If there aren't at least three lines, there's no info
+		for(var/line in splitlines)
+			if(LAZYLEN(line) < 3 || findtext(line, "source file:") || findtext(line, "usr.loc:"))
 				continue
-
-			if (findtext(line, "usr:"))
-				if (usrinfo)
+			if(findtext(line, "usr:"))
+				if(usrinfo)
 					desclines.Add(usrinfo)
 					usrinfo = null
-
 				continue // Our usr info is better, replace it
 
-			if (copytext(line, 1, 3) != "  ")
+			if(copytext(line, 1, 3) != "  ")
 				desclines += ("  " + line) // Pad any unpadded lines, so they look pretty
 			else
 				desclines += line
-
-	if (usrinfo) // If this isn't null, it hasn't been added yet
+	if(usrinfo) //If this info isn't null, it hasn't been added yet
 		desclines.Add(usrinfo)
+	if(silencing)
+		desclines += "  (This error will now be silenced for [DisplayTimeText(configured_error_silence_time)])"
+	if(GLOB.error_cache)
+		GLOB.error_cache.log_error(E, desclines)
 
-	if (silencing)
-		desclines += "  (This error will now be silenced for [configured_error_silence_time / 600] minutes)"
+	var/main_line = "\[[time_stamp()]] Runtime in [E.file],[E.line]: [E]"
+	SEND_TEXT(world.log, main_line)
+	for(var/line in desclines)
+		SEND_TEXT(world.log, line)
 
-	// Now to actually output the error info...
-	world.log << "\[[time_stamp()]] Runtime in [e.file],[e.line]: [e]"
+#ifdef UNIT_TESTS
+	if(GLOB.current_test)
+		//good day, sir
+		GLOB.current_test.Fail("[main_line]\n[desclines.Join("\n")]")
+#endif
 
-	for (var/line in desclines)
-		world.log << line
+/* This logs the runtime in the old format */
 
-	if (global.error_cache)
-		global.error_cache.log_error(e, desclines)
+	E.name = "\n\[[time2text(world.timeofday,"hh:mm:ss")]\][E.name]"
+
+	//Original
+	//
+	var/list/split = splittext(E.desc, "\n")
+	for (var/i in 1 to split.len)
+		if (split[i] != "")
+			split[i] = "\[[time2text(world.timeofday,"hh:mm:ss")]\][split[i]]"
+	E.desc = jointext(split, "\n")
+	world.log = GLOB.world_runtime_log
+	..(E)
+
+	world.log = null
 
 #endif

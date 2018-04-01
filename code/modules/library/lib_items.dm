@@ -6,7 +6,6 @@
  *		Barcode Scanner
  */
 
-
 /*
  * Bookcase
  */
@@ -14,129 +13,132 @@
 /obj/structure/bookcase
 	name = "bookcase"
 	icon = 'icons/obj/library.dmi'
+	icon_state = "bookempty"
+	desc = "A great place for storing knowledge."
+	anchored = FALSE
+	density = TRUE
+	opacity = 0
+	resistance_flags = FLAMMABLE
+	max_integrity = 200
+	armor = list("melee" = 0, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 50, "acid" = 0)
+	var/state = 0
+	var/list/allowed_books = list(/obj/item/book, /obj/item/spellbook, /obj/item/storage/book) //Things allowed in the bookcase
+
+
+/obj/structure/bookcase/examine(mob/user)
+	..()
+	if(!anchored)
+		to_chat(user, "<span class='notice'>The <i>bolts</i> on the bottom are unsecured.</span>")
+	if(anchored)
+		to_chat(user, "<span class='notice'>It's secured in place with <b>bolts</b>.</span>")
+	switch(state)
+		if(0)
+			to_chat(user, "<span class='notice'>There's a <b>small crack</b> visible on the back panel.</span>")
+		if(1)
+			to_chat(user, "<span class='notice'>There's space inside for a <i>wooden</i> shelf.</span>")
+		if(2)
+			to_chat(user, "<span class='notice'>There's a <b>small crack</b> visible on the shelf.</span>")
+
+
+/obj/structure/bookcase/Initialize(mapload)
+	. = ..()
+	if(!mapload)
+		return
+	state = 2
 	icon_state = "book-0"
-	anchored = 1
-	density = 1
-	opacity = 1
-	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 10
-
-	var/health = 50
-	var/tmp/busy = 0
-	var/list/valid_types = list(/obj/item/weapon/book, \
-								/obj/item/weapon/tome, \
-								/obj/item/weapon/spellbook, \
-								/obj/item/weapon/storage/bible)
-
-/obj/structure/bookcase/cultify()
-	return
-
-/obj/structure/bookcase/initialize()
+	anchored = TRUE
 	for(var/obj/item/I in loc)
-		if(is_type_in_list(I, valid_types))
+		if(istype(I, /obj/item/book))
 			I.forceMove(src)
 	update_icon()
 
-/obj/structure/bookcase/proc/healthcheck()
 
-	if(health <= 0)
-		visible_message("<span class='warning'>\The [src] breaks apart!</span>")
-		getFromPool(/obj/item/stack/sheet/wood, get_turf(src), 3)
-		qdel(src)
+/obj/structure/bookcase/attackby(obj/item/I, mob/user, params)
+	switch(state)
+		if(0)
+			if(istype(I, /obj/item/wrench))
+				if(I.use_tool(src, user, 20, volume=50))
+					to_chat(user, "<span class='notice'>You wrench the frame into place.</span>")
+					anchored = TRUE
+					state = 1
+			if(istype(I, /obj/item/crowbar))
+				if(I.use_tool(src, user, 20, volume=50))
+					to_chat(user, "<span class='notice'>You pry the frame apart.</span>")
+					deconstruct(TRUE)
 
-/obj/structure/bookcase/attackby(obj/O as obj, mob/user as mob)
-	if(busy) //So that you can't mess with it while deconstructing
-		return
-	if(is_type_in_list(O, valid_types))
-		user.drop_item(O, src)
-		update_icon()
-	else if(isscrewdriver(O) && user.a_intent == I_HELP) //They're probably trying to open the "maintenance panel" to deconstruct it. Let them know what's wrong.
-		to_chat(user, "<span class='notice'>There are no screws on \the [src], it appears to be nailed together. You could probably disassemble it with just a crowbar.</span>")
-		return
-	else if(iscrowbar(O) && user.a_intent == I_HELP) //Only way to deconstruct, needs help intent
-		playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
-		user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
-		"<span class='notice'>You start disassembling \the [src].</span>")
-		busy = 1
+		if(1)
+			if(istype(I, /obj/item/stack/sheet/mineral/wood))
+				var/obj/item/stack/sheet/mineral/wood/W = I
+				if(W.get_amount() >= 2)
+					W.use(2)
+					to_chat(user, "<span class='notice'>You add a shelf.</span>")
+					state = 2
+					icon_state = "book-0"
+			if(istype(I, /obj/item/wrench))
+				I.play_tool_sound(src, 100)
+				to_chat(user, "<span class='notice'>You unwrench the frame.</span>")
+				anchored = FALSE
+				state = 0
 
-		if(do_after(user, src, 50))
-			playsound(src, 'sound/items/Deconstruct.ogg', 75, 1)
-			user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
-			"<span class='notice'>You disassemble \the [src].</span>")
-			busy = 0
-			getFromPool(/obj/item/stack/sheet/wood, get_turf(src), 5)
-			qdel(src)
-			return
-		else
-			busy = 0
-		return
-	else if(iswrench(O))
-		anchored = !anchored
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
-		user.visible_message("<span class='warning'>[user] [anchored ? "":"un"]anchors \the [src] [anchored ? "to":"from"] the floor.</span>", \
-		"<span class='notice'>You [anchored ? "":"un"]anchor the [src] [anchored ? "to":"from"] the floor.</span>")
-	else if(istype(O, /obj/item/weapon/pen))
-		set_tiny_label(user)
-	else if(O.damtype == BRUTE || O.damtype == BURN)
-		user.delayNextAttack(10) //We are attacking the bookshelf
-		health -= O.force
-		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [O].</span>", \
-		"<span class='warning'>You hit \the [src] with \the [O].</span>")
-		healthcheck()
-	else
-		return ..() //Weapon checks for weapons without brute or burn damage type and grab check
-
-//AAHHHHHHHHH HARDMAPPING
-/obj/structure/bookcase/set_labeled()
-	name = initial(name)
-	..()
-
-/obj/structure/bookcase/attack_hand(var/mob/user as mob)
-	if(contents.len)
-		var/obj/item/weapon/book/choice = input("Which book would you like to remove from \the [src]?") as null|obj in contents
-		if(choice)
-			if(user.incapacitated() || user.lying || get_dist(user, src) > 1)
-				return
-			if(!user.get_active_hand())
-				user.put_in_hands(choice)
+		if(2)
+			if(is_type_in_list(I, allowed_books))
+				if(!user.transferItemToLoc(I, src))
+					return
+				update_icon()
+			else if(istype(I, /obj/item/storage/bag/books))
+				var/obj/item/storage/bag/books/B = I
+				for(var/obj/item/T in B.contents)
+					if(istype(T, /obj/item/book) || istype(T, /obj/item/spellbook))
+						B.remove_from_storage(T, src)
+				to_chat(user, "<span class='notice'>You empty \the [I] into \the [src].</span>")
+				update_icon()
+			else if(istype(I, /obj/item/pen))
+				if(!user.is_literate())
+					to_chat(user, "<span class='notice'>You scribble illegibly on the side of [src]!</span>")
+					return
+				var/newname = stripped_input(user, "What would you like to title this bookshelf?")
+				if(!user.canUseTopic(src, BE_CLOSE))
+					return
+				if(!newname)
+					return
+				else
+					name = "bookcase ([sanitize(newname)])"
+			else if(istype(I, /obj/item/crowbar))
+				if(contents.len)
+					to_chat(user, "<span class='warning'>You need to remove the books first!</span>")
+				else
+					I.play_tool_sound(src, 100)
+					to_chat(user, "<span class='notice'>You pry the shelf out.</span>")
+					new /obj/item/stack/sheet/mineral/wood(drop_location(), 2)
+					state = 1
+					icon_state = "bookempty"
 			else
-				choice.forceMove(get_turf(src))
+				return ..()
+
+
+/obj/structure/bookcase/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
+	if(contents.len)
+		var/obj/item/book/choice = input("Which book would you like to remove from the shelf?") as null|obj in contents
+		if(choice)
+			if(!usr.canmove || usr.stat || usr.restrained() || !in_range(loc, usr))
+				return
+			if(ishuman(user))
+				if(!user.get_active_held_item())
+					user.put_in_hands(choice)
+			else
+				choice.forceMove(drop_location())
 			update_icon()
 
-/obj/structure/bookcase/attack_ghost(mob/dead/observer/user as mob)
-	if(contents.len && in_range(user, src))
-		var/obj/item/weapon/book/choice = input("Which book would you like to read?") as null|obj in contents
-		if(choice)
-			if(!istype(choice)) //spellbook, cult tome, or the one weird bible storage
-				to_chat(user,"A mysterious force is keeping you from reading that.")
-				return
-			choice.read_a_motherfucking_book(user)
 
-/obj/structure/bookcase/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			for(var/obj/item/I in contents)
-				qdel(I)
-			qdel(src)
-			return
-		if(2.0)
-			for(var/obj/item/I in contents)
-				if(prob(50))
-					qdel(I)
-			qdel(src)
-			return
-		if(3.0)
-			if(prob(50))
-				qdel(src)
-			return
-	return
+/obj/structure/bookcase/deconstruct(disassembled = TRUE)
+	new /obj/item/stack/sheet/mineral/wood(loc, 4)
+	for(var/obj/item/book/B in contents)
+		B.forceMove(get_turf(src))
+	qdel(src)
 
-/obj/structure/bookcase/Destroy()
-
-	for(var/obj/item/I in contents)
-		if(is_type_in_list(I, valid_types))
-			I.forceMove(get_turf(src))
-	..()
 
 /obj/structure/bookcase/update_icon()
 	if(contents.len < 5)
@@ -144,208 +146,172 @@
 	else
 		icon_state = "book-5"
 
-/obj/structure/bookcase/manuals/medical
-	name = "Medical Manuals bookcase"
 
-	New()
-		..()
-		new /obj/item/weapon/book/manual/medical_cloning(src)
-		update_icon()
+/obj/structure/bookcase/manuals/medical
+	name = "medical manuals bookcase"
+
+/obj/structure/bookcase/manuals/medical/Initialize()
+	. = ..()
+	new /obj/item/book/manual/medical_cloning(src)
+	update_icon()
 
 
 /obj/structure/bookcase/manuals/engineering
-	name = "Engineering Manuals bookcase"
+	name = "engineering manuals bookcase"
 
-	New()
-		..()
-		new /obj/item/weapon/book/manual/engineering_construction(src)
-		new /obj/item/weapon/book/manual/engineering_particle_accelerator(src)
-		new /obj/item/weapon/book/manual/engineering_hacking(src)
-		new /obj/item/weapon/book/manual/engineering_guide(src)
-		new /obj/item/weapon/book/manual/engineering_singularity_safety(src)
-		new /obj/item/weapon/book/manual/robotics_cyborgs(src)
-		update_icon()
+/obj/structure/bookcase/manuals/engineering/Initialize()
+	. = ..()
+	new /obj/item/book/manual/wiki/engineering_construction(src)
+	new /obj/item/book/manual/engineering_particle_accelerator(src)
+	new /obj/item/book/manual/wiki/engineering_hacking(src)
+	new /obj/item/book/manual/wiki/engineering_guide(src)
+	new /obj/item/book/manual/engineering_singularity_safety(src)
+	new /obj/item/book/manual/robotics_cyborgs(src)
+	update_icon()
+
 
 /obj/structure/bookcase/manuals/research_and_development
-	name = "R&D Manuals bookcase"
+	name = "\improper R&D manuals bookcase"
 
-	New()
-		..()
-		new /obj/item/weapon/book/manual/research_and_development(src)
-		update_icon()
+/obj/structure/bookcase/manuals/research_and_development/Initialize()
+	. = ..()
+	new /obj/item/book/manual/research_and_development(src)
+	update_icon()
 
 
 /*
  * Book
  */
-/obj/item/weapon/book
+/obj/item/book
 	name = "book"
 	icon = 'icons/obj/library.dmi'
 	icon_state ="book"
+	desc = "Crack it open, inhale the musk of its pages, and learn something new."
 	throw_speed = 1
 	throw_range = 5
-	w_class = W_CLASS_MEDIUM		 //upped to three because books are, y'know, pretty big. (and you could hide them inside eachother recursively forever)
-	flags = FPRINT
-	attack_verb = list("bashes", "whacks", "educates")
+	w_class = WEIGHT_CLASS_NORMAL		 //upped to three because books are, y'know, pretty big. (and you could hide them inside eachother recursively forever)
+	attack_verb = list("bashed", "whacked", "educated")
+	resistance_flags = FLAMMABLE
+	var/dat				//Actual page content
+	var/due_date = 0	//Game time in 1/10th seconds
+	var/author			//Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
+	var/unique = 0		//0 - Normal book, 1 - Should not be treated as normal book, unable to be copied, unable to be modified
+	var/title			//The real name of the book.
+	var/window_size = null // Specific window size for the book, i.e: "1920x1080", Size x Width
 
-	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 3
-
-	var/dat			 // Actual page content
-	var/due_date = 0 // Game time in 1/10th seconds
-	var/author		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
-	var/unique = 0   // 0 - Normal book, 1 - Should not be treated as normal book, unable to be copied, unable to be modified
-	var/title		 // The real name of the book.
-	var/carved = 0	 // Has the book been hollowed out for use as a secret storage item?
-	var/wiki_page       // Title of the book's wiki page.
-	var/forbidden = 0     // Prevent ordering of this book. (0=no, 1=yes, 2=emag only)
-	var/obj/item/store	// What's in the book?
-	var/runestun = 0	//Does it have a stun talisman in it?
-
-/obj/item/weapon/book/New()
-	..()
-	if(wiki_page)
-		dat = {"
-		<html>
-			<body>
-				<iframe width='100%' height='100%' src="http://ss13.moe/wiki/index.php?title=[wiki_page]&printable=yes"></iframe>
-			</body>
-		</html>
-		"}
-
-/obj/item/weapon/book/cultify()
-	new /obj/item/weapon/tome(loc)
-	..()
-
-/obj/item/weapon/book/proc/read_a_motherfucking_book(mob/user)
-	if(carved)
-		to_chat(user, "<span class='notice'>The pages of [title] have been cut out!</span>")
+/obj/item/book/attack_self(mob/user)
+	if(is_blind(user))
+		to_chat(user, "<span class='warning'>As you are trying to read, you suddenly feel very stupid!</span>")
 		return
-	if(src.dat)
-		user << browse("<TT><I>Penned by [author].</I></TT> <BR>" + "[dat]", "window=book")
-		if(!isobserver(user))
-			user.visible_message("[user] opens a book titled \"[src.title]\" and begins reading intently.")
+	if(ismonkey(user))
+		to_chat(user, "<span class='notice'>You skim through the book but can't comprehend any of it.</span>")
+		return
+	if(dat)
+		user << browse("<TT><I>Penned by [author].</I></TT> <BR>" + "[dat]", "window=book[window_size != null ? ";size=[window_size]" : ""]")
+		user.visible_message("[user] opens a book titled \"[title]\" and begins reading intently.")
+		user.SendSignal(COMSIG_ADD_MOOD_EVENT, "book_nerd", /datum/mood_event/book_nerd)
 		onclose(user, "book")
 	else
-		to_chat(user, "This book is completely blank!")
+		to_chat(user, "<span class='notice'>This book is completely blank!</span>")
 
-/obj/item/weapon/book/attack_self(var/mob/user as mob)
-	if(store)
-		to_chat(user, "<span class='notice'>[store] falls out of [title]!</span>")
-		store.forceMove(get_turf(src))
-		store = null
-		return
-	if(runestun)
-		var/mob/living/carbon/human/M = user
-		M.flash_eyes(visual = 1)
-		if (!(M_HULK in user.mutations))
-			M.silent += 15
-		M.Knockdown(25)
-		M.Stun(25)
-		runestun = 0
-	read_a_motherfucking_book(user)
 
-/obj/item/weapon/book/examine(mob/user)
-	if(isobserver(user) && in_range(src,user))
-		read_a_motherfucking_book(user)
-	else
-		..()
-
-/obj/item/weapon/book/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(carved)
-		if(!store)
-			if(W.w_class < W_CLASS_MEDIUM)
-				if(user.drop_item(W, src))
-					store = W
-					to_chat(user, "<span class='notice'>You put [W] in [title].</span>")
-					return
-			else
-				to_chat(user, "<span class='notice'>[W] won't fit in [title].</span>")
-				return
-		else
-			to_chat(user, "<span class='notice'>There's already something in [title]!</span>")
+/obj/item/book/attackby(obj/item/I, mob/user, params)
+	if(istype(I, /obj/item/pen))
+		if(is_blind(user))
+			to_chat(user, "<span class='warning'> As you are trying to write on the book, you suddenly feel very stupid!</span>")
 			return
-	if(istype(W, /obj/item/weapon/pen))
 		if(unique)
-			to_chat(user, "These pages don't seem to take the ink well. Looks like you can't modify it.")
+			to_chat(user, "<span class='warning'>These pages don't seem to take the ink well! Looks like you can't modify it.</span>")
+			return
+		var/literate = user.is_literate()
+		if(!literate)
+			to_chat(user, "<span class='notice'>You scribble illegibly on the cover of [src]!</span>")
 			return
 		var/choice = input("What would you like to change?") in list("Title", "Contents", "Author", "Cancel")
+		if(!user.canUseTopic(src, BE_CLOSE, literate))
+			return
 		switch(choice)
 			if("Title")
-				var/newtitle = reject_bad_text(stripped_input(usr, "Write a new title:"))
+				var/newtitle = reject_bad_text(stripped_input(user, "Write a new title:"))
+				if(!user.canUseTopic(src, BE_CLOSE, literate))
+					return
+				if (length(newtitle) > 20)
+					to_chat(user, "That title won't fit on the cover!")
+					return
 				if(!newtitle)
-					to_chat(usr, "The title is invalid.")
+					to_chat(user, "That title is invalid.")
 					return
 				else
-					src.name = newtitle
-					src.title = newtitle
+					name = newtitle
+					title = newtitle
 			if("Contents")
-				var/content = sanitize(input(usr, "Write your book's contents (HTML NOT allowed):") as message|null)
+				var/content = stripped_input(user, "Write your book's contents (HTML NOT allowed):","","",8192)
+				if(!user.canUseTopic(src, BE_CLOSE, literate))
+					return
 				if(!content)
-					to_chat(usr, "The content is invalid.")
+					to_chat(user, "The content is invalid.")
 					return
 				else
-					src.dat += content
+					dat += content
 			if("Author")
-				var/newauthor = stripped_input(usr, "Write the author's name:")
+				var/newauthor = stripped_input(user, "Write the author's name:")
+				if(!user.canUseTopic(src, BE_CLOSE, literate))
+					return
 				if(!newauthor)
-					to_chat(usr, "The name is invalid.")
+					to_chat(user, "The name is invalid.")
 					return
 				else
-					src.author = newauthor
+					author = newauthor
 			else
 				return
-	else if(istype(W, /obj/item/weapon/barcodescanner))
-		var/obj/item/weapon/barcodescanner/scanner = W
+
+	else if(istype(I, /obj/item/barcodescanner))
+		var/obj/item/barcodescanner/scanner = I
 		if(!scanner.computer)
-			to_chat(user, "[W]'s screen flashes: 'No associated computer found!'")
+			to_chat(user, "[I]'s screen flashes: 'No associated computer found!'")
 		else
 			switch(scanner.mode)
 				if(0)
 					scanner.book = src
-					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer.'")
+					to_chat(user, "[I]'s screen flashes: 'Book stored in buffer.'")
 				if(1)
 					scanner.book = src
-					scanner.computer.buffer_book = src.name
-					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Book title stored in associated computer buffer.'")
+					scanner.computer.buffer_book = name
+					to_chat(user, "[I]'s screen flashes: 'Book stored in buffer. Book title stored in associated computer buffer.'")
 				if(2)
 					scanner.book = src
 					for(var/datum/borrowbook/b in scanner.computer.checkouts)
-						if(b.bookname == src.name)
+						if(b.bookname == name)
 							scanner.computer.checkouts.Remove(b)
-							to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Book has been checked in.'")
+							to_chat(user, "[I]'s screen flashes: 'Book stored in buffer. Book has been checked in.'")
 							return
-					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. No active check-out record found for current title.'")
+					to_chat(user, "[I]'s screen flashes: 'Book stored in buffer. No active check-out record found for current title.'")
 				if(3)
 					scanner.book = src
-					for(var/obj/item/weapon/book in scanner.computer.inventory)
+					for(var/obj/item/book in scanner.computer.inventory)
 						if(book == src)
-							to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Title already present in inventory, aborting to avoid duplicate entry.'")
+							to_chat(user, "[I]'s screen flashes: 'Book stored in buffer. Title already present in inventory, aborting to avoid duplicate entry.'")
 							return
 					scanner.computer.inventory.Add(src)
-					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Title added to general inventory.'")
-	else if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large) || iswirecutter(W))
-		if(carved)
-			return
-		to_chat(user, "<span class='notice'>You begin to carve out [title].</span>")
-		if(do_after(user, src, 30))
+					to_chat(user, "[I]'s screen flashes: 'Book stored in buffer. Title added to general inventory.'")
+
+	else if(istype(I, /obj/item/kitchen/knife) || istype(I, /obj/item/wirecutters))
+		to_chat(user, "<span class='notice'>You begin to carve out [title]...</span>")
+		if(do_after(user, 30, target = src))
 			to_chat(user, "<span class='notice'>You carve out the pages from [title]! You didn't want to read it anyway.</span>")
-			carved = 1
-			return
-
-	else if(istype(W, /obj/item/weapon/paper/talisman))
-		var/obj/item/weapon/paper/talisman/talisman = W
-		if(runestun)
-			to_chat(user, "<span class='notice'>There is already a talisman between the pages.</span>")
-			return()
-		if(talisman.imbue == "runestun")
-			to_chat(user, "<span class='notice'>You slide the talisman between the pages.</span>")
-			qdel(talisman)
-			runestun = 1
-
-
-
-
+			var/obj/item/storage/book/B = new
+			B.name = src.name
+			B.title = src.title
+			B.icon_state = src.icon_state
+			if(user.is_holding(src))
+				qdel(src)
+				user.put_in_hands(B)
+				return
+			else
+				B.forceMove(drop_location())
+				qdel(src)
+				return
+		return
 	else
 		..()
 
@@ -353,38 +319,38 @@
 /*
  * Barcode Scanner
  */
-/obj/item/weapon/barcodescanner
+/obj/item/barcodescanner
 	name = "barcode scanner"
 	icon = 'icons/obj/library.dmi'
 	icon_state ="scanner"
-	throw_speed = 1
+	desc = "A fabulous tool if you need to scan a barcode."
+	throw_speed = 3
 	throw_range = 5
-	w_class = W_CLASS_TINY
-	flags = FPRINT
-	var/obj/machinery/computer/library/checkout/computer // Associated computer - Modes 1 to 3 use this
-	var/obj/item/weapon/book/book	 //  Currently scanned book
-	var/mode = 0 					// 0 - Scan only, 1 - Scan and Set Buffer, 2 - Scan and Attempt to Check In, 3 - Scan and Attempt to Add to Inventory
+	w_class = WEIGHT_CLASS_TINY
+	var/obj/machinery/computer/libraryconsole/bookmanagement/computer	//Associated computer - Modes 1 to 3 use this
+	var/obj/item/book/book			//Currently scanned book
+	var/mode = 0							//0 - Scan only, 1 - Scan and Set Buffer, 2 - Scan and Attempt to Check In, 3 - Scan and Attempt to Add to Inventory
 
-	attack_self(mob/user as mob)
-		mode += 1
-		if(mode > 3)
-			mode = 0
-		to_chat(user, "[src] Status Display:")
-		var/modedesc
-		switch(mode)
-			if(0)
-				modedesc = "Scan book to local buffer."
-			if(1)
-				modedesc = "Scan book to local buffer and set associated computer buffer to match."
-			if(2)
-				modedesc = "Scan book to local buffer, attempt to check in scanned book."
-			if(3)
-				modedesc = "Scan book to local buffer, attempt to add book to general inventory."
-			else
-				modedesc = "ERROR"
-		to_chat(user, " - Mode [mode] : [modedesc]")
-		if(src.computer)
-			to_chat(user, "<font color=green>Computer has been associated with this unit.</font>")
+/obj/item/barcodescanner/attack_self(mob/user)
+	mode += 1
+	if(mode > 3)
+		mode = 0
+	to_chat(user, "[src] Status Display:")
+	var/modedesc
+	switch(mode)
+		if(0)
+			modedesc = "Scan book to local buffer."
+		if(1)
+			modedesc = "Scan book to local buffer and set associated computer buffer to match."
+		if(2)
+			modedesc = "Scan book to local buffer, attempt to check in scanned book."
+		if(3)
+			modedesc = "Scan book to local buffer, attempt to add book to general inventory."
 		else
-			to_chat(user, "<font color=red>No associated computer found. Only local scans will function properly.</font>")
-		to_chat(user, "\n")
+			modedesc = "ERROR"
+	to_chat(user, " - Mode [mode] : [modedesc]")
+	if(computer)
+		to_chat(user, "<font color=green>Computer has been associated with this unit.</font>")
+	else
+		to_chat(user, "<font color=red>No associated computer found. Only local scans will function properly.</font>")
+	to_chat(user, "\n")

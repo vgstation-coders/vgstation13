@@ -1,50 +1,126 @@
-/obj/item/weapon/storage/bag/clipboard
+/obj/item/clipboard
 	name = "clipboard"
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "clipboard"
 	item_state = "clipboard"
 	throwforce = 0
-	w_class = W_CLASS_SMALL
+	w_class = WEIGHT_CLASS_SMALL
 	throw_speed = 3
-	throw_range = 10
-	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 3
-	storage_slots = 28
-	can_only_hold = list("/obj/item/weapon/photo", "/obj/item/weapon/paper", "/obj/item/weapon/pen")
-	var/obj/item/weapon/paper/toppaper = null
+	throw_range = 7
+	var/obj/item/pen/haspen		//The stored pen.
+	var/obj/item/paper/toppaper	//The topmost piece of paper.
+	slot_flags = SLOT_BELT
+	resistance_flags = FLAMMABLE
 
-/obj/item/weapon/storage/bag/clipboard/New()
-	. = ..()
+/obj/item/clipboard/suicide_act(mob/living/carbon/user)
+	user.visible_message("<span class='suicide'>[user] begins putting [user.p_their()] head into the clip of \the [src]! It looks like [user.p_theyre()] trying to commit suicide!</span>")
+	return BRUTELOSS//the clipboard's clip is very strong. industrial duty. can kill a man easily.
+
+/obj/item/clipboard/Initialize()
 	update_icon()
+	. = ..()
 
-/obj/item/weapon/storage/bag/clipboard/update_icon()
-	overlays.len = 0
+/obj/item/clipboard/Destroy()
+	QDEL_NULL(haspen)
+	QDEL_NULL(toppaper)	//let movable/Destroy handle the rest
+	return ..()
+
+/obj/item/clipboard/update_icon()
+	cut_overlays()
 	if(toppaper)
-		overlays += toppaper.icon_state
-		overlays += toppaper.overlays
-	else
-		var/obj/item/weapon/photo/Ph = locate(/obj/item/weapon/photo) in src
-		if(Ph)
-			overlays += image(Ph.icon)
-	if(locate(/obj/item/weapon/pen) in src)
-		overlays += image(icon, "clipboard_pen")
-	overlays += image(icon, "clipboard_over")
-	return
+		add_overlay(toppaper.icon_state)
+		copy_overlays(toppaper)
+	if(haspen)
+		add_overlay("clipboard_pen")
+	add_overlay("clipboard_over")
 
-/obj/item/weapon/storage/bag/clipboard/handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
-	//No special sanity needed since all checks handled in can_be_inserted(), see storage.dm
-	if(istype(W,/obj/item/weapon/paper))
-		toppaper = W
-	..() //also calls update_icon()
 
-/obj/item/weapon/storage/bag/clipboard/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0)
-	. = ..()
-	for(var/i = contents.len; i>0; i--)
-		if(istype(contents[i],/obj/item/weapon/paper))
-			toppaper = contents[i]
-			update_icon()
+/obj/item/clipboard/attackby(obj/item/W, mob/user, params)
+	if(istype(W, /obj/item/paper))
+		if(!user.transferItemToLoc(W, src))
 			return
-	//If we looped through everything and there's still no paper
-	toppaper = null
-	update_icon()
-	return .
+		toppaper = W
+		to_chat(user, "<span class='notice'>You clip the paper onto \the [src].</span>")
+		update_icon()
+	else if(toppaper)
+		toppaper.attackby(user.get_active_held_item(), user)
+		update_icon()
+
+
+/obj/item/clipboard/attack_self(mob/user)
+	var/dat = "<title>Clipboard</title>"
+	if(haspen)
+		dat += "<A href='?src=[REF(src)];pen=1'>Remove Pen</A><BR><HR>"
+	else
+		dat += "<A href='?src=[REF(src)];addpen=1'>Add Pen</A><BR><HR>"
+
+	//The topmost paper. You can't organise contents directly in byond, so this is what we're stuck with.	-Pete
+	if(toppaper)
+		var/obj/item/paper/P = toppaper
+		dat += "<A href='?src=[REF(src)];write=[REF(P)]'>Write</A> <A href='?src=[REF(src)];remove=[REF(P)]'>Remove</A> - <A href='?src=[REF(src)];read=[REF(P)]'>[P.name]</A><BR><HR>"
+
+		for(P in src)
+			if(P == toppaper)
+				continue
+			dat += "<A href='?src=[REF(src)];write=[REF(P)]'>Write</A> <A href='?src=[REF(src)];remove=[REF(P)]'>Remove</A> <A href='?src=[REF(src)];top=[REF(P)]'>Move to top</A> - <A href='?src=[REF(src)];read=[REF(P)]'>[P.name]</A><BR>"
+	user << browse(dat, "window=clipboard")
+	onclose(user, "clipboard")
+	add_fingerprint(usr)
+
+
+/obj/item/clipboard/Topic(href, href_list)
+	..()
+	if(usr.stat || usr.restrained())
+		return
+
+	if(usr.contents.Find(src))
+
+		if(href_list["pen"])
+			if(haspen)
+				haspen.forceMove(usr.loc)
+				usr.put_in_hands(haspen)
+				haspen = null
+
+		if(href_list["addpen"])
+			if(!haspen)
+				var/obj/item/held = usr.get_active_held_item()
+				if(istype(held, /obj/item/pen))
+					var/obj/item/pen/W = held
+					if(!usr.transferItemToLoc(W, src))
+						return
+					haspen = W
+					to_chat(usr, "<span class='notice'>You slot [W] into [src].</span>")
+
+		if(href_list["write"])
+			var/obj/item/P = locate(href_list["write"])
+			if(istype(P) && P.loc == src)
+				if(usr.get_active_held_item())
+					P.attackby(usr.get_active_held_item(), usr)
+
+		if(href_list["remove"])
+			var/obj/item/P = locate(href_list["remove"])
+			if(istype(P) && P.loc == src)
+				P.forceMove(usr.loc)
+				usr.put_in_hands(P)
+				if(P == toppaper)
+					toppaper = null
+					var/obj/item/paper/newtop = locate(/obj/item/paper) in src
+					if(newtop && (newtop != P))
+						toppaper = newtop
+					else
+						toppaper = null
+
+		if(href_list["read"])
+			var/obj/item/paper/P = locate(href_list["read"])
+			if(istype(P) && P.loc == src)
+				usr.examinate(P)
+
+		if(href_list["top"])
+			var/obj/item/P = locate(href_list["top"])
+			if(istype(P) && P.loc == src)
+				toppaper = P
+				to_chat(usr, "<span class='notice'>You move [P.name] to the top.</span>")
+
+		//Update everything
+		attack_self(usr)
+		update_icon()

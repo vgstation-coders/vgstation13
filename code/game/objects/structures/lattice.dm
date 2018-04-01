@@ -1,71 +1,135 @@
 /obj/structure/lattice
-	desc = "A lightweight support lattice."
 	name = "lattice"
-	icon = 'icons/obj/structures.dmi'
-	icon_state = "latticefull"
-	density = 0
-	anchored = 1.0
-	layer = LATTICE_LAYER
-	plane = ABOVE_PLATING_PLANE
+	desc = "A lightweight support lattice. These hold our station together."
+	icon = 'icons/obj/smooth_structures/lattice.dmi'
+	icon_state = "lattice"
+	density = FALSE
+	anchored = TRUE
+	armor = list("melee" = 50, "bullet" = 0, "laser" = 0, "energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 80, "acid" = 50)
+	max_integrity = 50
+	layer = LATTICE_LAYER //under pipes
+	var/number_of_rods = 1
+	canSmoothWith = list(/obj/structure/lattice,
+	/turf/open/floor,
+	/turf/closed/wall,
+	/obj/structure/falsewall)
+	smooth = SMOOTH_MORE
+	//	flags = CONDUCT_1
 
-	//	flags = CONDUCT
+/obj/structure/lattice/examine(mob/user)
+	..()
+	deconstruction_hints(user)
 
-	canSmoothWith = "/obj/structure/lattice=0&/obj/structure/catwalk=0&/turf=0"
+/obj/structure/lattice/proc/deconstruction_hints(mob/user)
+	to_chat(user, "<span class='notice'>The rods look like they could be <b>cut</b>. There's space for more <i>rods</i> or a <i>tile</i>.</span>")
 
-/obj/structure/lattice/New(loc)
-	..(loc)
+/obj/structure/lattice/Initialize(mapload)
+	. = ..()
+	for(var/obj/structure/lattice/LAT in loc)
+		if(LAT != src)
+			QDEL_IN(LAT, 0)
 
-	icon = 'icons/obj/smoothlattice.dmi'
+/obj/structure/lattice/blob_act(obj/structure/blob/B)
+	return
 
-	relativewall()
+/obj/structure/lattice/ratvar_act()
+	new /obj/structure/lattice/clockwork(loc)
 
-	relativewall_neighbours()
+/obj/structure/lattice/attackby(obj/item/C, mob/user, params)
+	if(resistance_flags & INDESTRUCTIBLE)
+		return
+	if(istype(C, /obj/item/wirecutters))
+		to_chat(user, "<span class='notice'>Slicing [name] joints ...</span>")
+		deconstruct()
+	else
+		var/turf/T = get_turf(src)
+		return T.attackby(C, user) //hand this off to the turf instead (for building plating, catwalks, etc)
 
-/obj/structure/lattice/relativewall()
-	var/junction = findSmoothingNeighbors()
-	icon_state = "lattice[junction]"
-
-/obj/structure/lattice/isSmoothableNeighbor(atom/A)
-	if (istype(A, /turf/space))
-		return 0
-
-	return ..()
-
-/obj/structure/lattice/blob_act()
+/obj/structure/lattice/deconstruct(disassembled = TRUE)
+	if(!(flags_1 & NODECONSTRUCT_1))
+		new /obj/item/stack/rods(get_turf(src), number_of_rods)
 	qdel(src)
 
-/obj/structure/lattice/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-		if(2.0)
-			qdel(src)
+/obj/structure/lattice/singularity_pull(S, current_size)
+	if(current_size >= STAGE_FOUR)
+		deconstruct()
 
-/obj/structure/lattice/attackby(obj/item/C as obj, mob/user as mob)
-	if(iswelder(C))
-		var/obj/item/weapon/weldingtool/WeldingTool = C
-		if(WeldingTool.remove_fuel(0, user))
-			to_chat(user, "<span class='notice'>Slicing [src] joints...</span>")
-			new/obj/item/stack/rods(loc)
-			qdel(src)
+/obj/structure/lattice/clockwork
+	name = "cog lattice"
+	desc = "A lightweight support lattice. These hold the Justicar's station together."
+	icon = 'icons/obj/smooth_structures/lattice_clockwork.dmi'
+
+/obj/structure/lattice/clockwork/Initialize(mapload)
+	canSmoothWith += /turf/open/indestructible/clock_spawn_room //list overrides are a terrible thing
+	. = ..()
+	ratvar_act()
+	if(is_reebe(z))
+		resistance_flags |= INDESTRUCTIBLE
+
+/obj/structure/lattice/clockwork/ratvar_act()
+	if(ISODD(x+y))
+		icon = 'icons/obj/smooth_structures/lattice_clockwork_large.dmi'
+		pixel_x = -9
+		pixel_y = -9
 	else
-		var/turf/T = get_turf(src)
-		T.attackby(C, user) //Attacking to the lattice will attack to the space turf
+		icon = 'icons/obj/smooth_structures/lattice_clockwork.dmi'
+		pixel_x = 0
+		pixel_y = 0
+	return TRUE
 
-/obj/structure/lattice/wood/attackby(obj/item/C as obj, mob/user as mob)
-	if(C.sharpness_flags & (CHOPWOOD|SERRATED_BLADE)) // If C is able to cut down a tree
-		new/obj/item/stack/sheet/wood(loc)
-		to_chat(user, "<span class='notice'>You chop the [src] apart!</span>")
-		qdel(src)
-	else
-		var/turf/T = get_turf(src)
-		T.attackby(C, user) //Attacking the wood will attack the turf underneath
-
-/obj/structure/lattice/wood
-	name = "wood foundations"
-	desc = "It's a foundation, for building on."
-	icon_state = "lattice-wood"
+/obj/structure/lattice/catwalk
+	name = "catwalk"
+	desc = "A catwalk for easier EVA maneuvering and cable placement."
+	icon = 'icons/obj/smooth_structures/catwalk.dmi'
+	icon_state = "catwalk"
+	number_of_rods = 2
+	smooth = SMOOTH_TRUE
 	canSmoothWith = null
 
-/obj/structure/lattice/wood/New()
-	return
+/obj/structure/lattice/catwalk/deconstruction_hints(mob/user)
+	to_chat(user, "<span class='notice'>The supporting rods look like they could be <b>cut</b>.</span>")
+
+/obj/structure/lattice/catwalk/ratvar_act()
+	new /obj/structure/lattice/catwalk/clockwork(loc)
+
+/obj/structure/lattice/catwalk/Move()
+	var/turf/T = loc
+	for(var/obj/structure/cable/C in T)
+		C.deconstruct()
+	..()
+
+/obj/structure/lattice/catwalk/deconstruct()
+	var/turf/T = loc
+	for(var/obj/structure/cable/C in T)
+		C.deconstruct()
+	..()
+
+/obj/structure/lattice/catwalk/clockwork
+	name = "clockwork catwalk"
+	icon = 'icons/obj/smooth_structures/catwalk_clockwork.dmi'
+	canSmoothWith = list(/obj/structure/lattice,
+	/turf/open/floor,
+	/turf/open/indestructible/clock_spawn_room,
+	/turf/closed/wall,
+	/obj/structure/falsewall)
+	smooth = SMOOTH_MORE
+
+/obj/structure/lattice/catwalk/clockwork/Initialize(mapload)
+	. = ..()
+	ratvar_act()
+	if(!mapload)
+		new /obj/effect/temp_visual/ratvar/floor/catwalk(loc)
+		new /obj/effect/temp_visual/ratvar/beam/catwalk(loc)
+	if(is_reebe(z))
+		resistance_flags |= INDESTRUCTIBLE
+
+/obj/structure/lattice/catwalk/clockwork/ratvar_act()
+	if(ISODD(x+y))
+		icon = 'icons/obj/smooth_structures/catwalk_clockwork_large.dmi'
+		pixel_x = -9
+		pixel_y = -9
+	else
+		icon = 'icons/obj/smooth_structures/catwalk_clockwork.dmi'
+		pixel_x = 0
+		pixel_y = 0
+	return TRUE

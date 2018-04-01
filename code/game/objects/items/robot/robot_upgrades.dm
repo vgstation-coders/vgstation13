@@ -1,321 +1,466 @@
 // robot_upgrades.dm
 // Contains various borg upgrades.
 
-#define FAILED_TO_ADD 1
-
 /obj/item/borg/upgrade
-	name = "A borg upgrade module."
+	name = "borg upgrade module."
 	desc = "Protected by FRM."
 	icon = 'icons/obj/module.dmi'
-	var/locked = FALSE
-	var/list/required_module = list()
-	var/add_to_mommis = FALSE
-	var/list/modules_to_add = list()
-	var/multi_upgrades = FALSE
-	w_type=RECYK_ELECTRONIC
-
-
-/obj/item/borg/upgrade/proc/locate_component(var/obj/item/C, var/mob/living/silicon/robot/R, var/mob/living/user)
-	if(!C || !R || !user)
-		return null
-
-	var/obj/item/I = locate(C) in R.module
-	if(!I)
-		I = locate(C) in R.module.contents
-	if(!I)
-		I = locate(C) in R.module.modules
-	if(!I)
-		to_chat(user, "This cyborg is missing one of the needed components!")
-		return null
-	return I
-
-/obj/item/borg/upgrade/proc/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user, var/ignore_cover = FALSE)
-	if(!R.module)
-		to_chat(user, "<span class='warning'>The borg must choose a module before he can be upgraded!</span>")
-		return FAILED_TO_ADD
-
-	if(isMoMMI(R))
-		if(!add_to_mommis)
-			to_chat(user, "<span class='warning'>\The [src] only functions on Cyborgs.</span>")
-			return FAILED_TO_ADD
-	else if(required_module.len)
-		if(!(R.module.type in required_module))
-			to_chat(user, "<span class='warning'>\The [src] will not fit into \the [R.module.name]!</span>")
-			return FAILED_TO_ADD
-
-	if(R.isDead())
-		to_chat(user, "<span class='warning'>\The [src] will not function on a deceased robot.</span>")
-		return FAILED_TO_ADD
-
-	if(!R.opened && !ignore_cover)
-		to_chat(user, "<span class='warning'>You must first open \the [src]'s cover!</span>")
-		return FAILED_TO_ADD
-
-	if(!multi_upgrades && (type in R.module.upgrades))
-		to_chat(user, "<span class='warning'>There is already \a [src] in [R].</span>")
-		return FAILED_TO_ADD
-
-	R.module.upgrades += type
-
-	if(modules_to_add.len)
-		for(var/module_to_add in modules_to_add)
-			R.module.modules += new module_to_add(R.module)
-
-	to_chat(user, "<span class='notice'>You successfully apply \the [src] to [R].</span>")
-	user.drop_item(src, R)
-
-// Medical Cyborg Stuff
-
-/obj/item/borg/upgrade/medical/surgery
-	name = "medical cyborg MK-2 upgrade board"
-	desc = "Used to give a medical cyborg advanced care tools and upgrade their chemistry gripper to be able to handle pills and pill bottles."
 	icon_state = "cyborg_upgrade"
-	required_module = list(/obj/item/weapon/robot_module/medical)
-	modules_to_add = list(/obj/item/weapon/melee/defibrillator,/obj/item/weapon/reagent_containers/borghypo/upgraded)
+	var/locked = FALSE
+	var/installed = 0
+	var/require_module = 0
+	var/module_type = null
+	// if true, is not stored in the robot to be ejected
+	// if module is reset
+	var/one_use = FALSE
 
-/obj/item/borg/upgrade/medical/surgery/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	if(..())
-		return FAILED_TO_ADD
-
-	var/obj/item/weapon/gripper/chemistry/G = locate_component(/obj/item/weapon/gripper/chemistry, R, user)
-	if(!G)
-		return FAILED_TO_ADD
-
-	G.can_hold.Add(/obj/item/weapon/reagent_containers/pill, /obj/item/weapon/storage/pill_bottle)
-
-/obj/item/borg/upgrade/reset
-	name = "cyborg reset board"
-	desc = "Used to reset a cyborg's module. Destroys any other upgrades applied to the robot."
-	icon_state = "cyborg_upgrade1"
-
-/obj/item/borg/upgrade/reset/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	if(..())
-		return FAILED_TO_ADD
-
-	if(/obj/item/borg/upgrade/vtec in R.module.upgrades)
-		R.movement_speed_modifier -= SILICON_VTEC_SPEED_BONUS
-
-	qdel(R.module)
-
-	R.set_module_sprites(list("Default" = "robot"))
-	R.updatename("Default")
+/obj/item/borg/upgrade/proc/action(mob/living/silicon/robot/R)
+	if(R.stat == DEAD)
+		to_chat(usr, "<span class='notice'>[src] will not function on a deceased cyborg.</span>")
+		return 1
+	if(module_type && !istype(R.module, module_type))
+		to_chat(R, "Upgrade mounting error!  No suitable hardpoint detected!")
+		to_chat(usr, "There's no mounting point for the module!")
+		return 1
 
 /obj/item/borg/upgrade/rename
-	var/heldname = ""
-	name = "cyborg rename board"
-	desc = "Used to rename a cyborg, or allow a cyborg to rename themselves."
+	name = "cyborg reclassification board"
+	desc = "Used to rename a cyborg."
 	icon_state = "cyborg_upgrade1"
+	var/heldname = ""
+	one_use = TRUE
 
-/obj/item/borg/upgrade/rename/attack_self(mob/user as mob)
-	heldname = reject_bad_name(stripped_input(user, "Enter new robot name to force, or leave clear to let the robot pick a name", "Robot Rename", heldname, MAX_NAME_LEN),1)
-	if (heldname)
-		desc = "Used to rename a cyborg, or allow a cyborg to rename themselves. Current selected name is \"[heldname]\"."
-	else
-		desc = "Used to rename a cyborg, or allow a cyborg to rename themselves."
+/obj/item/borg/upgrade/rename/attack_self(mob/user)
+	heldname = stripped_input(user, "Enter new robot name", "Cyborg Reclassification", heldname, MAX_NAME_LEN)
 
-/obj/item/borg/upgrade/rename/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+/obj/item/borg/upgrade/rename/action(mob/living/silicon/robot/R)
 	if(..())
-		return FAILED_TO_ADD
+		return
 
-	if (!heldname)
-		R.custom_name = null
-		R.updatename()
-		if(R.can_diagnose()) //Few know this verb exists, hence a message
-			to_chat(R, "<span class='info' style=\"font-family:Courier\">You may now change your name through the Namepick verb, under Robot Commands.</span>")
-		R.namepick_uses ++
-		R.module.upgrades -= /obj/item/borg/upgrade/rename //So you can rename more than once
-	else
-		R.name = heldname
-		R.custom_name = heldname
-		R.real_name = heldname
-		R.updatename()
-		R.updateicon()
-		if(R.can_diagnose())
-			to_chat(R, "<span class='info' style=\"font-family:Courier\">Your name has been changed to \"[heldname]\".</span>")
-		R.module.upgrades -= /obj/item/borg/upgrade/rename
+	var/oldname = R.real_name
+
+	R.custom_name = heldname
+	R.updatename()
+	if(oldname == R.real_name)
+		R.notify_ai(RENAME, oldname, R.real_name)
+
+	return 1
+
 
 /obj/item/borg/upgrade/restart
-	name = "cyborg emergency restart board"
-	desc = "Used to force a restart of a disabled-but-repaired robot, bringing it back online."
+	name = "cyborg emergency reboot module"
+	desc = "Used to force a reboot of a disabled-but-repaired cyborg, bringing it back online."
 	icon_state = "cyborg_upgrade1"
+	one_use = TRUE
 
-
-/obj/item/borg/upgrade/restart/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	playsound(R, "sound/machines/click.ogg", 20, 1)
-	to_chat(user, "You plug the board into the robot's core circuitry.")
-
-	sleep(5)
-
+/obj/item/borg/upgrade/restart/action(mob/living/silicon/robot/R)
 	if(R.health < 0)
-		playsound(R, "sound/machines/buzz-two.ogg", 50, 0)
-		to_chat(user, "You have to repair the robot before using this module!")
-		return FALSE
+		to_chat(usr, "<span class='warning'>You have to repair the cyborg before using this module!</span>")
+		return 0
 
-	playsound(R, "sound/machines/paistartup.ogg", 50, 1)
-	to_chat(user, "<span style=\"font-family:Courier\">Systems reboot initialized successfully.</span>")
+	if(R.mind)
+		R.mind.grab_ghost()
+		playsound(loc, 'sound/voice/liveagain.ogg', 75, 1)
 
-	sleep(5)
+	R.revive()
 
-	if(!R.key)
-		for(var/mob/dead/observer/ghost in player_list)
-			if(ghost.mind && ghost.mind.current == R)
-				R.key = ghost.key
-
-	playsound(R, "sound/voice/liveagain.ogg", 75, 1)
-	R.stat = CONSCIOUS
-	R.resurrect()
+	return 1
 
 /obj/item/borg/upgrade/vtec
-	name = "cyborg VTEC upgrade board"
-	desc = "Used to kick in a robot's VTEC systems, increasing their speed."
+	name = "cyborg VTEC module"
+	desc = "Used to kick in a cyborg's VTEC systems, increasing their speed."
 	icon_state = "cyborg_upgrade2"
-	add_to_mommis = TRUE
+	require_module = 1
 
-/obj/item/borg/upgrade/vtec/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-
+/obj/item/borg/upgrade/vtec/action(mob/living/silicon/robot/R)
 	if(..())
-		return FAILED_TO_ADD
+		return
+	if(R.speed < 0)
+		to_chat(R, "<span class='notice'>A VTEC unit is already installed!</span>")
+		to_chat(usr, "<span class='notice'>There's no room for another VTEC unit!</span>")
+		return
 
-	R.movement_speed_modifier += SILICON_VTEC_SPEED_BONUS
+	R.speed = -2 // Gotta go fast.
 
+	return 1
 
-/obj/item/borg/upgrade/tasercooler
-	name = "security cyborg rapid taser cooling upgrade board"
-	desc = "Used to cool a mounted taser, increasing the potential current in it and thus its recharge rate."
+/obj/item/borg/upgrade/disablercooler
+	name = "cyborg rapid disabler cooling module"
+	desc = "Used to cool a mounted disabler, increasing the potential current in it and thus its recharge rate."
 	icon_state = "cyborg_upgrade3"
-	required_module = list(/obj/item/weapon/robot_module/security)
-	multi_upgrades = TRUE
+	require_module = 1
+	module_type = /obj/item/robot_module/security
 
+/obj/item/borg/upgrade/disablercooler/action(mob/living/silicon/robot/R)
+	if(..())
+		return
 
-/obj/item/borg/upgrade/tasercooler/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	var/obj/item/weapon/gun/energy/taser/cyborg/T = locate_component(/obj/item/weapon/gun/energy/taser/cyborg, R, user)
+	var/obj/item/gun/energy/disabler/cyborg/T = locate() in R.module.modules
 	if(!T)
-		return FAILED_TO_ADD
+		to_chat(usr, "<span class='notice'>There's no disabler in this unit!</span>")
+		return
+	if(T.charge_delay <= 2)
+		to_chat(R, "<span class='notice'>A cooling unit is already installed!</span>")
+		to_chat(usr, "<span class='notice'>There's no room for another cooling unit!</span>")
+		return
 
-	if(T.recharge_time <= 2)
-		to_chat(R, "Maximum cooling achieved for this hardpoint!")
-		to_chat(user, "There's no room for another cooling unit!")
-		return FAILED_TO_ADD
+	T.charge_delay = max(2 , T.charge_delay - 4)
 
+	return 1
+
+/obj/item/borg/upgrade/thrusters
+	name = "ion thruster upgrade"
+	desc = "An energy-operated thruster system for cyborgs."
+	icon_state = "cyborg_upgrade3"
+
+/obj/item/borg/upgrade/thrusters/action(mob/living/silicon/robot/R)
 	if(..())
-		return FAILED_TO_ADD
+		return
+
+	if(R.ionpulse)
+		to_chat(usr, "<span class='notice'>This unit already has ion thrusters installed!</span>")
+		return
+
+	R.ionpulse = TRUE
+	return 1
+
+/obj/item/borg/upgrade/ddrill
+	name = "mining cyborg diamond drill"
+	desc = "A diamond drill replacement for the mining module's standard drill."
+	icon_state = "cyborg_upgrade3"
+	require_module = 1
+	module_type = /obj/item/robot_module/miner
+
+/obj/item/borg/upgrade/ddrill/action(mob/living/silicon/robot/R)
+	if(..())
+		return
+
+	for(var/obj/item/pickaxe/drill/cyborg/D in R.module)
+		R.module.remove_module(D, TRUE)
+	for(var/obj/item/shovel/S in R.module)
+		R.module.remove_module(S, TRUE)
+
+	var/obj/item/pickaxe/drill/cyborg/diamond/DD = new /obj/item/pickaxe/drill/cyborg/diamond(R.module)
+	R.module.basic_modules += DD
+	R.module.add_module(DD, FALSE, TRUE)
+	return 1
+
+/obj/item/borg/upgrade/soh
+	name = "mining cyborg satchel of holding"
+	desc = "A satchel of holding replacement for mining cyborg's ore satchel module."
+	icon_state = "cyborg_upgrade3"
+	require_module = 1
+	module_type = /obj/item/robot_module/miner
+
+/obj/item/borg/upgrade/soh/action(mob/living/silicon/robot/R)
+	if(..())
+		return
+
+	for(var/obj/item/storage/bag/ore/cyborg/S in R.module)
+		R.module.remove_module(S, TRUE)
+
+	var/obj/item/storage/bag/ore/holding/H = new /obj/item/storage/bag/ore/holding(R.module)
+	R.module.basic_modules += H
+	R.module.add_module(H, FALSE, TRUE)
+	return 1
+
+/obj/item/borg/upgrade/syndicate
+	name = "illegal equipment module"
+	desc = "Unlocks the hidden, deadlier functions of a cyborg."
+	icon_state = "cyborg_upgrade3"
+	require_module = 1
+
+/obj/item/borg/upgrade/syndicate/action(mob/living/silicon/robot/R)
+	if(..())
+		return
+
+	if(R.emagged)
+		return
+
+	R.SetEmagged(1)
+
+	return 1
+
+/obj/item/borg/upgrade/lavaproof
+	name = "mining cyborg lavaproof tracks"
+	desc = "An upgrade kit to apply specialized coolant systems and insulation layers to mining cyborg tracks, enabling them to withstand exposure to molten rock."
+	icon_state = "ash_plating"
+	resistance_flags = LAVA_PROOF | FIRE_PROOF
+	require_module = 1
+	module_type = /obj/item/robot_module/miner
+
+/obj/item/borg/upgrade/lavaproof/action(mob/living/silicon/robot/R)
+	if(..())
+		return
+	R.weather_immunities += "lava"
+	return 1
+
+/obj/item/borg/upgrade/selfrepair
+	name = "self-repair module"
+	desc = "This module will repair the cyborg over time."
+	icon_state = "cyborg_upgrade5"
+	require_module = 1
+	var/repair_amount = -1
+	var/repair_tick = 1
+	var/msg_cooldown = 0
+	var/on = FALSE
+	var/powercost = 10
+	var/mob/living/silicon/robot/cyborg
+	var/datum/action/toggle_action
+
+/obj/item/borg/upgrade/selfrepair/action(mob/living/silicon/robot/R)
+	if(..())
+		return
+
+	var/obj/item/borg/upgrade/selfrepair/U = locate() in R
+	if(U)
+		to_chat(usr, "<span class='warning'>This unit is already equipped with a self-repair module.</span>")
+		return 0
+
+	cyborg = R
+	icon_state = "selfrepair_off"
+	toggle_action = new /datum/action/item_action/toggle(src)
+	toggle_action.Grant(R)
+	return 1
+
+/obj/item/borg/upgrade/selfrepair/dropped()
+	addtimer(CALLBACK(src, .proc/check_dropped), 1)
+
+/obj/item/borg/upgrade/selfrepair/proc/check_dropped()
+	if(loc != cyborg)
+		toggle_action.Remove(cyborg)
+		QDEL_NULL(toggle_action)
+		cyborg = null
+		deactivate()
+
+/obj/item/borg/upgrade/selfrepair/ui_action_click()
+	on = !on
+	if(on)
+		to_chat(cyborg, "<span class='notice'>You activate the self-repair module.</span>")
+		START_PROCESSING(SSobj, src)
 	else
-		T.recharge_time = max(2 , T.recharge_time - 4)
+		to_chat(cyborg, "<span class='notice'>You deactivate the self-repair module.</span>")
+		STOP_PROCESSING(SSobj, src)
+	update_icon()
 
-/obj/item/borg/upgrade/jetpack
-	name = "cyborg jetpack module board"
-	desc = "A carbon dioxide jetpack suitable for low-gravity operations."
+/obj/item/borg/upgrade/selfrepair/update_icon()
+	if(cyborg)
+		icon_state = "selfrepair_[on ? "on" : "off"]"
+		for(var/X in actions)
+			var/datum/action/A = X
+			A.UpdateButtonIcon()
+	else
+		icon_state = "cyborg_upgrade5"
+
+/obj/item/borg/upgrade/selfrepair/proc/deactivate()
+	STOP_PROCESSING(SSobj, src)
+	on = FALSE
+	update_icon()
+
+/obj/item/borg/upgrade/selfrepair/process()
+	if(!repair_tick)
+		repair_tick = 1
+		return
+
+	if(cyborg && (cyborg.stat != DEAD) && on)
+		if(!cyborg.cell)
+			to_chat(cyborg, "<span class='warning'>Self-repair module deactivated. Please, insert the power cell.</span>")
+			deactivate()
+			return
+
+		if(cyborg.cell.charge < powercost * 2)
+			to_chat(cyborg, "<span class='warning'>Self-repair module deactivated. Please recharge.</span>")
+			deactivate()
+			return
+
+		if(cyborg.health < cyborg.maxHealth)
+			if(cyborg.health < 0)
+				repair_amount = -2.5
+				powercost = 30
+			else
+				repair_amount = -1
+				powercost = 10
+			cyborg.adjustBruteLoss(repair_amount)
+			cyborg.adjustFireLoss(repair_amount)
+			cyborg.updatehealth()
+			cyborg.cell.use(powercost)
+		else
+			cyborg.cell.use(5)
+		repair_tick = 0
+
+		if((world.time - 2000) > msg_cooldown )
+			var/msgmode = "standby"
+			if(cyborg.health < 0)
+				msgmode = "critical"
+			else if(cyborg.health < cyborg.maxHealth)
+				msgmode = "normal"
+			to_chat(cyborg, "<span class='notice'>Self-repair is active in <span class='boldnotice'>[msgmode]</span> mode.</span>")
+			msg_cooldown = world.time
+	else
+		deactivate()
+
+/obj/item/borg/upgrade/hypospray
+	name = "medical cyborg hypospray advanced synthesiser"
+	desc = "An upgrade to the Medical module cyborg's hypospray, allowing it \
+		to produce more advanced and complex medical reagents."
 	icon_state = "cyborg_upgrade3"
-	required_module = list(/obj/item/weapon/robot_module/miner,/obj/item/weapon/robot_module/engineering,/obj/item/weapon/robot_module/combat)
-	modules_to_add = list(/obj/item/weapon/tank/jetpack/carbondioxide/silicon)
-	add_to_mommis = TRUE
+	require_module = 1
+	module_type = /obj/item/robot_module/medical
+	var/list/additional_reagents = list()
 
-/obj/item/borg/upgrade/jetpack/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+/obj/item/borg/upgrade/hypospray/action(mob/living/silicon/robot/R)
 	if(..())
-		return FAILED_TO_ADD
+		return
+	for(var/obj/item/reagent_containers/borghypo/H in R.module.modules)
+		if(H.accepts_reagent_upgrades)
+			for(var/re in additional_reagents)
+				H.add_reagent(re)
 
-	for(var/obj/item/weapon/tank/jetpack/carbondioxide in R.module.modules)
-		R.internals = src
+	return 1
 
-/obj/item/borg/upgrade/syndicate/
-	name = "cyborg illegal equipment board"
-	desc = "Unlocks the hidden, deadlier functions of a robot."
+/obj/item/borg/upgrade/hypospray/expanded
+	name = "medical cyborg expanded hypospray"
+	desc = "An upgrade to the Medical module's hypospray, allowing it \
+		to treat a wider range of conditions and problems."
+	additional_reagents = list("mannitol", "oculine", "inacusiate",
+		"mutadone", "haloperidol")
+
+/obj/item/borg/upgrade/hypospray/high_strength
+	name = "medical cyborg high-strength hypospray"
+	desc = "An upgrade to the Medical module's hypospray, containing \
+		stronger versions of existing chemicals."
+	additional_reagents = list("oxandrolone", "sal_acid", "rezadone",
+		"pen_acid")
+
+/obj/item/borg/upgrade/piercing_hypospray
+	name = "cyborg piercing hypospray"
+	desc = "An upgrade to a cyborg's hypospray, allowing it to \
+		pierce armor and thick material."
 	icon_state = "cyborg_upgrade3"
 
-/obj/item/borg/upgrade/syndicate/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	if(R.illegal_weapons == TRUE)
-		return FAILED_TO_ADD
-
+/obj/item/borg/upgrade/piercing_hypospray/action(mob/living/silicon/robot/R)
 	if(..())
-		return FAILED_TO_ADD
+		return
 
-	message_admins("[key_name_admin(user)] ([user.type]) used \a [name] on [R] (a [R.type]).")
+	var/found_hypo = FALSE
+	for(var/obj/item/reagent_containers/borghypo/H in R.module.modules)
+		H.bypass_protection = TRUE
+		found_hypo = TRUE
 
-	R.illegal_weapons = TRUE
-	R.SetEmagged()
+	if(!found_hypo)
+		return
 
-/obj/item/borg/upgrade/engineering/
-	name = "engineering cyborg MK-2 upgrade board"
-	desc = "Adds several tools and materials for the robot to use."
+	return 1
+
+/obj/item/borg/upgrade/defib
+	name = "medical cyborg defibrillator"
+	desc = "An upgrade to the Medical module, installing a builtin \
+		defibrillator, for on the scene revival."
 	icon_state = "cyborg_upgrade3"
-	required_module = list(/obj/item/weapon/robot_module/engineering)
-	modules_to_add = list(/obj/item/weapon/wrench/socket)
+	require_module = 1
+	module_type = /obj/item/robot_module/medical
 
-/obj/item/borg/upgrade/engineering/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+/obj/item/borg/upgrade/defib/action(mob/living/silicon/robot/R)
 	if(..())
-		return FAILED_TO_ADD
+		return
 
-	var/obj/item/device/material_synth/S = locate_component(/obj/item/device/material_synth, R, user)
-	if(!S)
-		return FAILED_TO_ADD
+	var/obj/item/twohanded/shockpaddles/cyborg/S = new(R.module)
+	R.module.basic_modules += S
+	R.module.add_module(S, FALSE, TRUE)
 
-	S.materials_scanned |= list("plasma glass" = /obj/item/stack/sheet/glass/plasmaglass,
-								"reinforced plasma glass" = /obj/item/stack/sheet/glass/plasmarglass,
-								"carpet tiles" = /obj/item/stack/tile/carpet)
+	return 1
 
-/obj/item/borg/upgrade/service
-	name = "service cyborg cooking upgrade board"
-	desc = "Used to give a service cyborg cooking tools and upgrade their service gripper to be able to handle food."
-	icon_state = "cyborg_upgrade2"
-	required_module = list(/obj/item/weapon/robot_module/butler)
-	modules_to_add = list(/obj/item/weapon/kitchen/utensil/knife/large, /obj/item/weapon/kitchen/rollingpin, /obj/item/weapon/storage/bag/food/borg)
+/obj/item/borg/upgrade/ai
+	name = "B.O.R.I.S. module"
+	desc = "Bluespace Optimized Remote Intelligence Synchronization. An uplink device which takes the place of an MMI in cyborg endoskeletons, creating a robotic shell controlled by an AI."
+	icon_state = "boris"
 
-/obj/item/borg/upgrade/service/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+/obj/item/borg/upgrade/ai/action(mob/living/silicon/robot/R)
 	if(..())
-		return FAILED_TO_ADD
+		return
+	if(R.shell)
+		to_chat(usr, "<span class='warning'>This unit is already an AI shell!</span>")
+		return
+	if(R.key) //You cannot replace a player unless the key is completely removed.
+		to_chat(usr, "<span class='warning'>Intelligence patterns detected in this [R.braintype]. Aborting.</span>")
+		return
 
-	var/obj/item/weapon/gripper/service/G = locate_component(/obj/item/weapon/gripper/service, R, user)
-	if(!G)
-		return FAILED_TO_ADD
+	R.make_shell(src)
+	return TRUE
 
-	G.can_hold.Add(/obj/item/weapon/reagent_containers/food)
+/obj/item/borg/upgrade/expand
+	name = "borg expander"
+	desc = "A cyborg resizer, it makes a cyborg huge."
+	icon_state = "cyborg_upgrade3"
 
-/obj/item/borg/upgrade/magnetic_gripper
-	name = "engineering cyborg magnetic gripper upgrade"
-	desc = "Used to give a engineering cyborg a magnetic gripper."
+/obj/item/borg/upgrade/expand/action(mob/living/silicon/robot/R)
+	if(..())
+		return
+
+	if(R.hasExpanded)
+		to_chat(usr, "<span class='notice'>This unit already has an expand module installed!</span>")
+		return
+
+	R.notransform = TRUE
+	var/prev_lockcharge = R.lockcharge
+	R.SetLockdown(1)
+	R.anchored = TRUE
+	var/datum/effect_system/smoke_spread/smoke = new
+	smoke.set_up(1, R.loc)
+	smoke.start()
+	sleep(2)
+	for(var/i in 1 to 4)
+		playsound(R, pick('sound/items/drill_use.ogg', 'sound/items/jaws_cut.ogg', 'sound/items/jaws_pry.ogg', 'sound/items/welder.ogg', 'sound/items/ratchet.ogg'), 80, 1, -1)
+		sleep(12)
+	if(!prev_lockcharge)
+		R.SetLockdown(0)
+	R.anchored = FALSE
+	R.notransform = FALSE
+	R.resize = 2
+	R.hasExpanded = TRUE
+	R.update_transform()
+	return TRUE
+
+/obj/item/borg/upgrade/rped
+	name = "engineering cyborg RPED"
+	desc = "A rapid part exchange device for the engineering cyborg."
+	icon = 'icons/obj/storage.dmi'
+	icon_state = "borgrped"
+	require_module = TRUE
+	module_type = /obj/item/robot_module/engineering
+
+/obj/item/borg/upgrade/rped/action(mob/living/silicon/robot/R)
+	if(..())
+		return
+
+	var/obj/item/storage/part_replacer/cyborg/RPED = locate() in R
+	if(RPED)
+		to_chat(usr, "<span class='warning'>This unit is already equipped with a RPED module.</span>")
+		return FALSE
+
+	RPED = new(R.module)
+	R.module.basic_modules += RPED
+	R.module.add_module(RPED, FALSE, TRUE)
+	return TRUE
+
+/obj/item/borg/upgrade/pinpointer
+	name = "medical cyborg crew pinpointer"
+	desc = "A crew pinpointer module for the medical cyborg."
 	icon = 'icons/obj/device.dmi'
-	icon_state = "gripper"
-	required_module = list(/obj/item/weapon/robot_module/engineering)
-	modules_to_add = list(/obj/item/weapon/gripper/magnetic)
+	icon_state = "pinpointer_crew"
+	require_module = TRUE
+	module_type = /obj/item/robot_module/medical
 
-/obj/item/borg/upgrade/organ_gripper
-	name = "medical cyborg organ gripper upgrade"
-	desc = "Used to give a medical cyborg a organ gripper."
-	icon = 'icons/obj/device.dmi'
-	icon_state = "gripper-medical"
-	required_module = list(/obj/item/weapon/robot_module/medical)
-	modules_to_add = list(/obj/item/weapon/gripper/organ)
-
-/obj/item/borg/upgrade/hydro
-	name = "service cyborg H.U.E.Y. upgrade board"
-	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds and glass containers."
-	icon_state = "mainboard"
-	required_module = list(/obj/item/weapon/robot_module/butler)
-	modules_to_add = list(/obj/item/weapon/minihoe, /obj/item/weapon/wirecutters/clippers, /obj/item/weapon/storage/bag/plants/portactor, /obj/item/device/analyzer/plant_analyzer)
-
-/obj/item/borg/upgrade/hydro/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+/obj/item/borg/upgrade/pinpointer/action(mob/living/silicon/robot/R)
 	if(..())
-		return FAILED_TO_ADD
+		return
 
-	var/obj/item/weapon/gripper/service/G = locate_component(/obj/item/weapon/gripper/service, R, user)
-	if(!G)
-		return FAILED_TO_ADD
+	var/obj/item/pinpointer/crew/PP = locate() in R
+	if(PP)
+		to_chat(usr, "<span class='warning'>This unit is already equipped with a pinpointer module.</span>")
+		return FALSE
 
-	G.can_hold.Add(/obj/item/seeds, /obj/item/weapon/reagent_containers/glass)
-
-/obj/item/borg/upgrade/honk
-	name = "service cyborg H.O.N.K. upgrade board"
-	desc = "Used to give a service cyborg fun toys!"
-	icon_state = "cyborg_upgrade3"
-	required_module = list(/obj/item/weapon/robot_module/butler, /obj/item/weapon/robot_module/tg17355)
-	modules_to_add = list(/obj/item/weapon/bikehorn, /obj/item/weapon/stamp/clown, /obj/item/toy/crayon/rainbow, /obj/item/toy/waterflower, /obj/item/device/soundsynth)
-
-/obj/item/borg/upgrade/honk/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	if(..())
-		return FAILED_TO_ADD
-
-	if(check_icon(R.icon, "[R.base_icon]-clown")) //Honk!
-		R.set_module_sprites(list("Honk" = "[R.base_icon]-clown"))
-	playsound(R, 'sound/items/AirHorn.ogg', 50, 1)
-
-#undef FAILED_TO_ADD
+	PP = new(R.module)
+	R.module.basic_modules += PP
+	R.module.add_module(PP, FALSE, TRUE)
+	return TRUE

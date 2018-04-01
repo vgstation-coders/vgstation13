@@ -1,94 +1,117 @@
-/obj/item/weapon/folder
+/obj/item/folder
 	name = "folder"
 	desc = "A folder."
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "folder"
-	w_class = W_CLASS_SMALL
+	w_class = WEIGHT_CLASS_SMALL
 	pressure_resistance = 2
+	resistance_flags = FLAMMABLE
+	
+/obj/item/folder/suicide_act(mob/living/user)
+	user.visible_message("<span class='suicide'>[user] begins filing an imaginary death warrent! It looks like [user.p_theyre()] trying to commit suicide!</span>")
+	return OXYLOSS
 
-	autoignition_temperature = 522 // Kelvin
-	fire_fuel = 1
-
-/obj/item/weapon/folder/blue
+/obj/item/folder/blue
 	desc = "A blue folder."
 	icon_state = "folder_blue"
 
-/obj/item/weapon/folder/red
+/obj/item/folder/red
 	desc = "A red folder."
 	icon_state = "folder_red"
 
-/obj/item/weapon/folder/yellow
+/obj/item/folder/yellow
 	desc = "A yellow folder."
 	icon_state = "folder_yellow"
 
-/obj/item/weapon/folder/white
+/obj/item/folder/white
 	desc = "A white folder."
 	icon_state = "folder_white"
 
-/obj/item/weapon/folder/update_icon()
-	overlays.len = 0
+
+/obj/item/folder/update_icon()
+	cut_overlays()
 	if(contents.len)
-		overlays += image(icon = icon, icon_state = "folder_paper")
-	return
+		add_overlay("folder_paper")
 
-/obj/item/weapon/folder/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/weapon/photo))
-		if(user.drop_item(W, src))
-			to_chat(user, "<span class='notice'>You put the [W] into \the [src].</span>")
-			update_icon()
-	else if(istype(W, /obj/item/weapon/pen))
-		set_tiny_label(user, " - '", "'")
-	return
 
-/obj/item/weapon/folder/attack_self(mob/user as mob)
+/obj/item/folder/attackby(obj/item/W, mob/user, params)
+	if(istype(W, /obj/item/paper) || istype(W, /obj/item/photo) || istype(W, /obj/item/documents))
+		if(!user.transferItemToLoc(W, src))
+			return
+		to_chat(user, "<span class='notice'>You put [W] into [src].</span>")
+		update_icon()
+	else if(istype(W, /obj/item/pen))
+		if(!user.is_literate())
+			to_chat(user, "<span class='notice'>You scribble illegibly on the cover of [src]!</span>")
+			return
+		var/n_name = copytext(sanitize(input(user, "What would you like to label the folder?", "Folder Labelling", null) as text), 1, MAX_NAME_LEN)
+		if(user.canUseTopic(src, BE_CLOSE))
+			name = "folder[(n_name ? " - '[n_name]'" : null)]"
+
+
+/obj/item/folder/attack_self(mob/user)
 	var/dat = "<title>[name]</title>"
 
-	for(var/obj/item/weapon/paper/P in src)
-		dat += "<A href='?src=\ref[src];remove=\ref[P]'>Remove</A> - <A href='?src=\ref[src];read=\ref[P]'>[P.name]</A><BR>"
-	for(var/obj/item/weapon/photo/Ph in src)
-		dat += "<A href='?src=\ref[src];remove=\ref[Ph]'>Remove</A> - <A href='?src=\ref[src];look=\ref[Ph]'>[Ph.name]</A><BR>"
+	for(var/obj/item/I in src)
+		dat += "<A href='?src=[REF(src)];remove=[REF(I)]'>Remove</A> - <A href='?src=[REF(src)];read=[REF(I)]'>[I.name]</A><BR>"
 	user << browse(dat, "window=folder")
 	onclose(user, "folder")
 	add_fingerprint(usr)
-	return
 
-/obj/item/weapon/folder/Topic(href, href_list)
+
+/obj/item/folder/Topic(href, href_list)
 	..()
-	if((usr.stat || usr.restrained()))
+	if(usr.stat || usr.restrained())
 		return
 
 	if(usr.contents.Find(src))
 
 		if(href_list["remove"])
-			var/obj/item/P = locate(href_list["remove"])
-			if(!(istype(P, /obj/item/weapon/paper)) && !(istype(P, /obj/item/weapon/photo)))
-				var/message = "<span class='warning'>[usr]([usr.key]) has tried to remove something other than a paper/photo from a folder.<span>"
-				message_admins(message)
-				message += "[P]"
-				log_game(message)
-				admin_log.Add(message)
-				return
-			if(!(P in src.contents))
-				var/message = "<span class='warning'>[usr]([usr.key]) has tried to remove a paper/photo from a folder that didn't contain it.<span>"
-				message_admins(message)
-				message += "[P]"
-				log_game(message)
-				admin_log.Add(message)
-				return
-			if(P)
-				P.forceMove(usr.loc)
-				usr.put_in_hands(P)
+			var/obj/item/I = locate(href_list["remove"])
+			if(istype(I) && I.loc == src)
+				I.forceMove(usr.loc)
+				usr.put_in_hands(I)
 
 		if(href_list["read"])
-			var/obj/item/weapon/paper/P = locate(href_list["read"])
-			if(P)
-				P.show_text(usr)
-		if(href_list["look"])
-			var/obj/item/weapon/photo/P = locate(href_list["look"])
-			if(P)
-				P.show(usr)
+			var/obj/item/I = locate(href_list["read"])
+			if(istype(I) && I.loc == src)
+				usr.examinate(I)
 
 		//Update everything
 		attack_self(usr)
 		update_icon()
-	return
+
+/obj/item/folder/documents
+	name = "folder- 'TOP SECRET'"
+	desc = "A folder stamped \"Top Secret - Property of Nanotrasen Corporation. Unauthorized distribution is punishable by death.\""
+
+/obj/item/folder/documents/Initialize()
+	. = ..()
+	new /obj/item/documents/nanotrasen(src)
+	update_icon()
+
+/obj/item/folder/syndicate
+	icon_state = "folder_syndie"
+	name = "folder- 'TOP SECRET'"
+	desc = "A folder stamped \"Top Secret - Property of The Syndicate.\""
+
+/obj/item/folder/syndicate/red
+	icon_state = "folder_sred"
+
+/obj/item/folder/syndicate/red/Initialize()
+	. = ..()
+	new /obj/item/documents/syndicate/red(src)
+	update_icon()
+
+/obj/item/folder/syndicate/blue
+	icon_state = "folder_sblue"
+
+/obj/item/folder/syndicate/blue/Initialize()
+	. = ..()
+	new /obj/item/documents/syndicate/blue(src)
+	update_icon()
+
+/obj/item/folder/syndicate/mining/Initialize()
+	. = ..()
+	new /obj/item/documents/syndicate/mining(src)
+	update_icon()

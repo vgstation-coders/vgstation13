@@ -5,424 +5,343 @@ These are general powers. Specific powers are stored under the appropriate alien
 /*Alien spit now works like a taser shot. It won't home in on the target but will act the same once it does hit.
 Doesn't work on other aliens/AI.*/
 
-/mob/living/carbon/alien/proc/powerc(X, Y)//Y is optional, checks for weed planting. X can be null.
-	if(stat)
-		to_chat(src, "<span class='alien'>You must be conscious to do this.</span>")
-		return FALSE
-	else if(X && getPlasma() < X)
-		to_chat(src, "<span class='alien'>Not enough plasma stored.</span>")
-		return FALSE
-	else if(Y && (!isturf(src.loc) || istype(src.loc, /turf/space)))
-		to_chat(src, "<span class='alien'>Bad place for a garden!</span>")
-		return FALSE
-	else
-		return TRUE
 
-/spell/aoe_turf/conjure/alienweeds
-	name = "Plant Weeds"
-	desc = "Plants some alien weeds"
-	user_type = USER_TYPE_XENOMORPH
+/obj/effect/proc_holder/alien
+	name = "Alien Power"
 	panel = "Alien"
-	hud_state = "alien_weeds"
-	override_base = "alien"
+	var/plasma_cost = 0
+	var/check_turf = FALSE
+	has_action = TRUE
+	base_action = /datum/action/spell_action/alien
+	action_icon = 'icons/mob/actions/actions_xeno.dmi'
+	action_icon_state = "spell_default"
+	action_background_icon_state = "bg_alien"
 
-	charge_type = Sp_HOLDVAR|Sp_RECHARGE
-	holder_var_type = "plasma"
-	holder_var_amount = 50
-	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
-	spell_flags = IGNORESPACE|IGNOREDENSE|NODUPLICATE
+/obj/effect/proc_holder/alien/Initialize()
+	. = ..()
+	action = new(src)
 
-	summon_type = list(/obj/effect/alien/weeds/node)
-	override_base = "alien"
+/obj/effect/proc_holder/alien/Click()
+	if(!iscarbon(usr))
+		return 1
+	var/mob/living/carbon/user = usr
+	if(cost_check(check_turf,user))
+		if(fire(user) && user) // Second check to prevent runtimes when evolving
+			user.adjustPlasma(-plasma_cost)
+	return 1
 
-/*
-/mob/living/carbon/alien/humanoid/verb/ActivateHuggers()
-	set name = "Activate facehuggers (5)"
-	set desc = "Makes all nearby facehuggers activate"
-	set category = "Alien"
-
-	if(powerc(5))
-		AdjustPlasma(-5)
-		for(var/obj/item/clothing/mask/facehugger/F in range(8,user))
-			F.GoActive()
-		emote("roar")
+/obj/effect/proc_holder/alien/on_gain(mob/living/carbon/user)
 	return
-*/
 
-/spell/targeted/alienwhisper
-	name = "Whisper"
-	desc = "Whisper to someone"
-	user_type = USER_TYPE_XENOMORPH
-	panel = "Alien"
-	hud_state = "alien_whisper"
-	override_base = "alien"
+/obj/effect/proc_holder/alien/on_lose(mob/living/carbon/user)
+	return
 
-	charge_type = Sp_HOLDVAR
-	holder_var_type = "plasma"
-	holder_var_amount = 10
-	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
+/obj/effect/proc_holder/alien/fire(mob/living/carbon/user)
+	return 1
 
-	range = 7
-	spell_flags = WAIT_FOR_CLICK
-	var/storedmessage
+/obj/effect/proc_holder/alien/get_panel_text()
+	. = ..()
+	if(plasma_cost > 0)
+		return "[plasma_cost]"
 
-/spell/targeted/alienwhisper/channel_spell(mob/user = usr, skipcharge = FALSE, force_remove = FALSE)
-	if(!..()) //We only make it to this point if we succeeded in channeling or are removing channeling
+/obj/effect/proc_holder/alien/proc/cost_check(check_turf = FALSE, mob/living/carbon/user, silent = FALSE)
+	if(user.stat)
+		if(!silent)
+			to_chat(user, "<span class='noticealien'>You must be conscious to do this.</span>")
 		return FALSE
-	if(user.spell_channeling && !force_remove)
-		storedmessage = sanitize(input("Message:", "Alien Whisper") as text|null)
-		if(!storedmessage) //They refused to supply a spell channeling
-			channel_spell(force_remove = 1)
-			return FALSE
-	else
-		storedmessage = null
+	if(user.getPlasma() < plasma_cost)
+		if(!silent)
+			to_chat(user, "<span class='noticealien'>Not enough plasma stored.</span>")
+		return FALSE
+	if(check_turf && (!isturf(user.loc) || isspaceturf(user.loc)))
+		if(!silent)
+			to_chat(user, "<span class='noticealien'>Bad place for a garden!</span>")
+		return FALSE
 	return TRUE
 
-/spell/targeted/alienwhisper/is_valid_target(var/target)
-	if(!(spell_flags & INCLUDEUSER) && target == usr)
-		return FALSE
-	if(get_dist(usr, target) > range) //Shouldn't be necessary but a good check in case of overrides
-		return FALSE
-	return istype(target, /mob)
+/obj/effect/proc_holder/alien/proc/check_vent_block(mob/living/user)
+	var/obj/machinery/atmospherics/components/unary/atmos_thing = locate() in user.loc
+	if(atmos_thing)
+		var/rusure = alert(user, "Laying eggs and shaping resin here would block access to [atmos_thing]. Do you want to continue?", "Blocking Atmospheric Component", "Yes", "No")
+		if(rusure != "No")
+			return FALSE
+	return TRUE
 
-/spell/targeted/alienwhisper/cast(var/list/targets, mob/user)
-	var/mob/M = targets[1]
-	if(!storedmessage) //Compatibility if someone reverts this to SELECTABLE from WAIT_FOR_CLICK
-		storedmessage = sanitize(input("Message:", "Alien Whisper") as text|null)
-		if(!storedmessage)
-			return TRUE
-	if(storedmessage)
-		var/turf/T = get_turf(user)
-		log_say("[key_name(user)] (@[T.x],[T.y],[T.z]) Alien Whisper: [storedmessage]")
-		to_chat(M, "<span class='alien'>You hear a strange, alien voice in your head... <em>[storedmessage]</span></em>")
-		to_chat(user, "<span class='alien'>You said: [storedmessage] to [M]</span>")
+/obj/effect/proc_holder/alien/plant
+	name = "Plant Weeds"
+	desc = "Plants some alien weeds."
+	plasma_cost = 50
+	check_turf = TRUE
+	action_icon_state = "alien_plant"
 
-/spell/targeted/alientransferplasma
-	name = "Transfer Plasma"
-	desc = "Transfer your plasma to another alien"
-	user_type = USER_TYPE_XENOMORPH
-	panel = "Alien"
-	hud_state = "alien_transfer"
-	override_base = "alien"
+/obj/effect/proc_holder/alien/plant/fire(mob/living/carbon/user)
+	if(locate(/obj/structure/alien/weeds/node) in get_turf(user))
+		to_chat(user, "There's already a weed node here.")
+		return 0
+	user.visible_message("<span class='alertalien'>[user] has planted some alien weeds!</span>")
+	new/obj/structure/alien/weeds/node(user.loc)
+	return 1
 
-	charge_type = Sp_HOLDVAR
-	holder_var_type = "plasma"
-	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
+/obj/effect/proc_holder/alien/whisper
+	name = "Whisper"
+	desc = "Whisper to someone."
+	plasma_cost = 10
+	action_icon_state = "alien_whisper"
 
-	range = 2
-	compatible_mobs = list(/mob/living/carbon/alien)
-
-//Does it take charge before casting? How to transfer to new alien
-/spell/targeted/alientransferplasma/cast(var/list/targets, mob/user)
-	var/mob/living/carbon/alien/M = targets[1]
-	var/amount = input(user, "Amount:", "Transfer Plasma to [M]") as num
-	if(amount)
-		amount = abs(round(amount))
-		holder_var_amount = amount
-		if(check_charge(user = user) && get_dist(user, M) <= range) //Since input is a blocking operation
-			take_charge(user = user)
-			to_chat(M, "<span class='alien'>\The [user] has transfered [amount] plasma to you.</span>")
-			to_chat(user, "<span class='alien'>You have trasferred [amount] plasma to [M]</span>")
-		else
-			to_chat(user, "<span class='alien'>You need to be closer.</span>")
-	holder_var_amount = 0
-
-/spell/targeted/projectile/alienneurotoxin
-	name = "Spit Neurotoxin"
-	desc = "Spits neurotoxin at someone, paralyzing them for a short time if they are not wearing protective gear."
-	user_type = USER_TYPE_XENOMORPH
-	panel = "Alien"
-	hud_state = "alien_neurotoxin"
-	override_base = "alien"
-
-	charge_type = Sp_HOLDVAR|Sp_RECHARGE
-	holder_var_type = "plasma"
-	holder_var_amount = 50
-	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
-	still_recharging_msg = "<span class='alien'>You must regenerate your neurotoxin stores first.</span>"
-	charge_max = 50
-
-	spell_flags = WAIT_FOR_CLICK
-	proj_type = /obj/item/projectile/energy/neurotoxin
-	cast_sound = 'sound/weapons/pierce.ogg'
-	duration = 20
-	proj_step_delay = 0.2
-
-/spell/targeted/projectile/alienneurotoxin/is_valid_target(var/target, mob/user)
-	if(!(spell_flags & INCLUDEUSER) && target == user)
-		return FALSE
-	if(get_dist(usr, target) > range)
-		return FALSE
-	if(isalien(target))
-		to_chat(user, "<span class='alien'>Your allies are not valid targets.</span>")
-		return FALSE
-	return !istype(target,/area)
-
-/spell/targeted/projectile/alienneurotoxin/cast(list/targets, mob/user)
-	var/atom/target = targets[1]
-	var/turf/U = get_turf(target)
-	var/visible_message_target
-	if(!istype(target,/mob))
-		var/list/nearby_mobs = list()
-		for(var/mob/living/M in hearers(1, U))
-			if(isalien(M))
+/obj/effect/proc_holder/alien/whisper/fire(mob/living/carbon/user)
+	var/list/options = list()
+	for(var/mob/living/Ms in oview(user))
+		options += Ms
+	var/mob/living/M = input("Select who to whisper to:","Whisper to?",null) as null|mob in options
+	if(!M)
+		return 0
+	var/msg = sanitize(input("Message:", "Alien Whisper") as text|null)
+	if(msg)
+		log_talk(user,"AlienWhisper: [key_name(user)]->[M.key] : [msg]",LOGSAY)
+		to_chat(M, "<span class='noticealien'>You hear a strange, alien voice in your head...</span>[msg]")
+		to_chat(user, "<span class='noticealien'>You said: \"[msg]\" to [M]</span>")
+		for(var/ded in GLOB.dead_mob_list)
+			if(!isobserver(ded))
 				continue
-			nearby_mobs += M
-		if(nearby_mobs.len)
-			visible_message_target = pick(nearby_mobs)
+			var/follow_link_user = FOLLOW_LINK(ded, user)
+			var/follow_link_whispee = FOLLOW_LINK(ded, M)
+			to_chat(ded, "[follow_link_user] <span class='name'>[user]</span> <span class='alertalien'>Alien Whisper --> </span> [follow_link_whispee] <span class='name'>[M]</span> <span class='noticealien'>[msg]</span>")
 	else
-		visible_message_target = target
+		return 0
+	return 1
 
-	if(visible_message_target)
-		user.visible_message("<span class='alien'>\The [user] spits neurotoxin at [visible_message_target] !</span>", "<span class='alien'>You spit neurotoxin at [visible_message_target] !</span>")
-	else
-		user.visible_message("<span class='alien'>\The [user] spits a salvo of neurotoxin !</span>", "<span class='alien'>You spit out neurotoxin !</span>")
+/obj/effect/proc_holder/alien/transfer
+	name = "Transfer Plasma"
+	desc = "Transfer Plasma to another alien."
+	plasma_cost = 0
+	action_icon_state = "alien_transfer"
 
-	. = ..()
+/obj/effect/proc_holder/alien/transfer/fire(mob/living/carbon/user)
+	var/list/mob/living/carbon/aliens_around = list()
+	for(var/mob/living/carbon/A  in oview(user))
+		if(A.getorgan(/obj/item/organ/alien/plasmavessel))
+			aliens_around.Add(A)
+	var/mob/living/carbon/M = input("Select who to transfer to:","Transfer plasma to?",null) as mob in aliens_around
+	if(!M)
+		return 0
+	var/amount = input("Amount:", "Transfer Plasma to [M]") as num
+	if (amount)
+		amount = min(abs(round(amount)), user.getPlasma())
+		if (get_dist(user,M) <= 1)
+			M.adjustPlasma(amount)
+			user.adjustPlasma(-amount)
+			to_chat(M, "<span class='noticealien'>[user] has transferred [amount] plasma to you.</span>")
+			to_chat(user, "<span class='noticealien'>You transfer [amount] plasma to [M]</span>")
+		else
+			to_chat(user, "<span class='noticealien'>You need to be closer!</span>")
+	return
 
-/spell/aoe_turf/conjure/choice/alienresin
-	name = "Secrete Resin"
-	desc = "Secrete tough malleable resin."
-	user_type = USER_TYPE_XENOMORPH
-	panel = "Alien"
-	hud_state = "alien_resin"
-	override_base = "alien"
-
-	charge_type = Sp_HOLDVAR
-	holder_var_type = "plasma"
-	holder_var_amount = 75
-	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
-
-	spell_flags = IGNORESPACE|IGNOREDENSE|NODUPLICATE
-	full_list = list("Resin Door" = /obj/machinery/door/mineral/resin,"Resin Wall" = /obj/effect/alien/resin/wall,"Resin Membrane" = /obj/effect/alien/resin/membrane,"Resin Nest" = /obj/structure/bed/nest)
-
-/spell/alienacid
+/obj/effect/proc_holder/alien/acid
 	name = "Corrosive Acid"
 	desc = "Drench an object in acid, destroying it over time."
-	user_type = USER_TYPE_XENOMORPH
-	panel = "Alien"
-	hud_state = "alien_acid"
-	override_base = "alien"
+	plasma_cost = 200
+	action_icon_state = "alien_acid"
 
-	spell_flags = WAIT_FOR_CLICK
-	charge_type = Sp_HOLDVAR|Sp_RECHARGE
-	charge_max = 8 SECONDS
-	holder_var_type = "plasma"
-	holder_var_amount = 200
-	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
+/obj/effect/proc_holder/alien/acid/on_gain(mob/living/carbon/user)
+	user.verbs.Add(/mob/living/carbon/proc/corrosive_acid)
 
-	range = 1
+/obj/effect/proc_holder/alien/acid/on_lose(mob/living/carbon/user)
+	user.verbs.Remove(/mob/living/carbon/proc/corrosive_acid)
 
-/spell/alienacid/is_valid_target(var/atom/target, mob/user)
-	return is_valid_target_to_acid(target,user,range)
+/obj/effect/proc_holder/alien/acid/proc/corrode(atom/target,mob/living/carbon/user = usr)
+	if(target in oview(1,user))
+		if(target.acid_act(200, 100))
+			user.visible_message("<span class='alertalien'>[user] vomits globs of vile stuff all over [target]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
+			return 1
+		else
+			to_chat(user, "<span class='noticealien'>You cannot dissolve this object.</span>")
 
-/proc/is_valid_target_to_acid(var/atom/target, mob/user,var/range=1)
-	if(get_dist(user, target) > range)
-		to_chat(user, "<span class='alien'>Target is too far away!</span>")
-		return FALSE
-	if(target.isacidhardened())
-		if(!do_after(user,target,3 SECONDS))
-			to_chat(user, "<span class='alien'>You have to stay next to the object to acid it!</span>")
-			return FALSE
-		return TRUE
-	if(!ismob(target) && target.acidable())
-		return TRUE
-	to_chat(user, "<span class='alien'>You cannot dissolve this object.</span>")
-	return FALSE
 
-/spell/alienacid/cast(list/targets, mob/user)
-	acidify(targets[1], user)
+			return 0
+	else
+		to_chat(src, "<span class='noticealien'>Target is too far away.</span>")
+		return 0
 
-/mob/living/carbon/alien/humanoid/proc/corrosive_acid(atom/O as obj|turf in oview(1)) //If they right click to corrode, an error will flash if its an invalid target./N
-	set name = "Corrosive Acid (200)"
-	set desc = "Drench an object in acid, destroying it over time."
-	set category = null
 
-	if(ismob(O)) //This sort of thing may be possible by manually calling the verb, not sure
+/obj/effect/proc_holder/alien/acid/fire(mob/living/carbon/alien/user)
+	var/O = input("Select what to dissolve:","Dissolve",null) as obj|turf in oview(1,user)
+	if(!O || user.incapacitated())
+		return 0
+	else
+		return corrode(O,user)
+
+/mob/living/carbon/proc/corrosive_acid(O as obj|turf in oview(1)) // right click menu verb ugh
+	set name = "Corrosive Acid"
+
+	if(!iscarbon(usr))
+		return
+	var/mob/living/carbon/user = usr
+	var/obj/effect/proc_holder/alien/acid/A = locate() in user.abilities
+	if(!A)
+		return
+	if(user.getPlasma() > A.plasma_cost && A.corrode(O))
+		user.adjustPlasma(-A.plasma_cost)
+
+/obj/effect/proc_holder/alien/neurotoxin
+	name = "Spit Neurotoxin"
+	desc = "Spits neurotoxin at someone, paralyzing them for a short time."
+	action_icon_state = "alien_neurotoxin_0"
+	active = FALSE
+
+/obj/effect/proc_holder/alien/neurotoxin/fire(mob/living/carbon/user)
+	var/message
+	if(active)
+		message = "<span class='notice'>You empty your neurotoxin gland.</span>"
+		remove_ranged_ability(message)
+	else
+		message = "<span class='notice'>You prepare your neurotoxin gland. <B>Left-click to fire at a target!</B></span>"
+		add_ranged_ability(user, message, TRUE)
+
+/obj/effect/proc_holder/alien/neurotoxin/update_icon()
+	action.button_icon_state = "alien_neurotoxin_[active]"
+	action.UpdateButtonIcon()
+
+/obj/effect/proc_holder/alien/neurotoxin/InterceptClickOn(mob/living/caller, params, atom/target)
+	if(..())
+		return
+	var/p_cost = 50
+	if(!iscarbon(ranged_ability_user) || ranged_ability_user.lying || ranged_ability_user.stat)
+		remove_ranged_ability()
 		return
 
-	if(powerc(200))
-		if(is_valid_target_to_acid(O, usr))
-			acidify(O, usr)
-			AdjustPlasma(-200)
+	var/mob/living/carbon/user = ranged_ability_user
 
-/proc/acidify(atom/O, mob/user)
-	new /obj/effect/alien/acid(get_turf(O), O)
-	user.visible_message("<span class='alien'>\The [user] vomits globs of vile stuff all over [O]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
+	if(user.getPlasma() < p_cost)
+		to_chat(user, "<span class='warning'>You need at least [p_cost] plasma to spit.</span>")
+		remove_ranged_ability()
+		return
 
-/spell/aoe_turf/alienregurgitate
+	var/turf/T = user.loc
+	var/turf/U = get_step(user, user.dir) // Get the tile infront of the move, based on their direction
+	if(!isturf(U) || !isturf(T))
+		return FALSE
+
+	user.visible_message("<span class='danger'>[user] spits neurotoxin!", "<span class='alertalien'>You spit neurotoxin.</span>")
+	var/obj/item/projectile/bullet/neurotoxin/A = new /obj/item/projectile/bullet/neurotoxin(user.loc)
+	A.preparePixelProjectile(target, user, params)
+	A.fire()
+	user.newtonian_move(get_dir(U, T))
+	user.adjustPlasma(-p_cost)
+
+	return TRUE
+
+/obj/effect/proc_holder/alien/neurotoxin/on_lose(mob/living/carbon/user)
+	remove_ranged_ability()
+
+/obj/effect/proc_holder/alien/neurotoxin/add_ranged_ability(mob/living/user, msg)
+	..()
+	if(isalienadult(user))
+		var/mob/living/carbon/alien/humanoid/A = user
+		A.drooling = 1
+		A.update_icons()
+
+/obj/effect/proc_holder/alien/neurotoxin/remove_ranged_ability(mob/living/user, msg)
+	..()
+	if(isalienadult(user))
+		var/mob/living/carbon/alien/humanoid/A = user
+		A.drooling = 0
+		A.update_icons()
+
+/obj/effect/proc_holder/alien/resin
+	name = "Secrete Resin"
+	desc = "Secrete tough malleable resin."
+	plasma_cost = 55
+	check_turf = TRUE
+	var/list/structures = list(
+		"resin wall" = /obj/structure/alien/resin/wall,
+		"resin membrane" = /obj/structure/alien/resin/membrane,
+		"resin nest" = /obj/structure/bed/nest)
+
+	action_icon_state = "alien_resin"
+
+/obj/effect/proc_holder/alien/resin/fire(mob/living/carbon/user)
+	if(locate(/obj/structure/alien/resin) in user.loc)
+		to_chat(user, "<span class='danger'>There is already a resin structure there.</span>")
+		return FALSE
+
+	if(!check_vent_block(user))
+		return FALSE
+
+	var/choice = input("Choose what you wish to shape.","Resin building") as null|anything in structures
+	if(!choice)
+		return FALSE
+	if (!cost_check(check_turf,user))
+		return FALSE
+	to_chat(user, "<span class='notice'>You shape a [choice].</span>")
+	user.visible_message("<span class='notice'>[user] vomits up a thick purple substance and begins to shape it.</span>")
+
+	choice = structures[choice]
+	new choice(user.loc)
+	return TRUE
+
+/obj/effect/proc_holder/alien/regurgitate
 	name = "Regurgitate"
 	desc = "Empties the contents of your stomach."
-	user_type = USER_TYPE_XENOMORPH
-	panel = "Alien"
-	hud_state = "alien_regurgitate"
-	override_base = "alien"
+	plasma_cost = 0
+	action_icon_state = "alien_barf"
 
-/spell/aoe_turf/alienregurgitate/cast_check(skipcharge = FALSE, mob/user)
-	if(!istype(user, /mob/living/carbon/alien/humanoid)) //why do they have this shit anyway
-		return FALSE
-	return ..()
+/obj/effect/proc_holder/alien/regurgitate/fire(mob/living/carbon/user)
+	if(user.stomach_contents.len)
+		for(var/atom/movable/A in user.stomach_contents)
+			user.stomach_contents.Remove(A)
+			A.forceMove(user.drop_location())
+			if(isliving(A))
+				var/mob/M = A
+				M.reset_perspective()
+		user.visible_message("<span class='alertealien'>[user] hurls out the contents of their stomach!</span>")
+	return
 
-/spell/aoe_turf/alienregurgitate/cast(list/targets, mob/user)
-	var/mob/living/carbon/alien/humanoid/alien = user
-	alien.drop_stomach_contents()
-	user.visible_message("<span class='alien'>\The [user] hurls out the contents of their stomach!</span>")
+/obj/effect/proc_holder/alien/sneak
+	name = "Sneak"
+	desc = "Blend into the shadows to stalk your prey."
+	active = 0
 
-///////////////////////////
-// QUEEN SPECIFIC SPELLS //
-///////////////////////////
-/spell/aoe_turf/conjure/alienegg
-	name = "Lay Egg"
-	desc = "Lay an egg to produce huggers to impregnate prey with."
-	user_type = USER_TYPE_XENOMORPH
-	panel = "Alien"
-	hud_state = "alien_egg"
-	override_base = "alien"
+	action_icon_state = "alien_sneak"
 
-	charge_type = Sp_HOLDVAR
-	holder_var_type = "plasma"
-	holder_var_amount = 75
-	insufficient_holder_msg = "<span class='alien'>Not enough plasma stored.</span>"
-
-	spell_flags = IGNORESPACE|NODUPLICATE
-
-	summon_type = list(/obj/effect/alien/egg)
-a
-/spell/aoe_turf/conjure/alienegg/cast(list/targets, mob/user)
-	. = ..()
-	if(!.) //Returning 1 if we failed to cast
-		stat_collection.xeno_eggs_laid++
-
-///////////////////////////////////
-////////// DRONE BROS /////////////
-///////////////////////////////////
-
-
-/spell/aoe_turf/evolve
-	name = "Evolve"
-	panel = "Alien"
-	user_type = USER_TYPE_XENOMORPH
-	hud_state = "alien_evolve"
-	override_base = "alien"
-
-	charge_type = Sp_HOLDVAR
-	insufficient_holder_msg = "<span class='alien'>You are not ready for this kind of evolution.</span>"
-
-	cast_sound = 'sound/effects/evolve.ogg'
-	cast_delay = 50
-
-/spell/aoe_turf/evolve/drone
-	desc = "Produce an interal egg sac capable of spawning children. Only one queen can exist at a time."
-
-	holder_var_type = "plasma"
-	holder_var_amount = 500
-
-/spell/aoe_turf/evolve/drone/cast_check(skipcharge = FALSE, mob/living/carbon/alien/user)
-	if(user.handcuffed || user.locked_to)
-		to_chat(user, "<span class='danger'>You cannot evolve while you're restrained!</span>")
-		return FALSE
-	var/mob/living/carbon/alien/humanoid/queen/Q = locate(/mob/living/carbon/alien/humanoid/queen) in living_mob_list
-	if(Q && Q.key)
-		to_chat(user, "<span class='notice'>We already have an alive queen.</span>")
-		return FALSE
-	return ..()
-
-/spell/aoe_turf/evolve/drone/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
-	user.visible_message("<span class='alien'>[user] begins to violently twist and contort!</span>", "<span class='alien'>You begin to evolve, stand still for a few moments</span>")
-	return ..()
-
-/spell/aoe_turf/evolve/drone/cast(list/targets, mob/living/carbon/user)
-	..()
-	var/mob/living/carbon/alien/humanoid/queen/new_xeno = new(get_turf(user))
-	for(var/datum/language/L in user.languages)
-		new_xeno.add_language(L.name)
-	user.mind.transfer_to(new_xeno)
-	user.transferImplantsTo(new_xeno)
-	user.transferBorers(new_xeno)
-	qdel(user)
-
-////////////////////////////
-//// FOR THE LARVA BROS ////
-////////////////////////////
-
-/spell/aoe_turf/evolve/larva
-	desc = "Evolve into a fully grown Alien."
-	user_type = USER_TYPE_XENOMORPH
-	insufficient_holder_msg = "<span class='alien'>You are not fully grown yet.</span>"
-
-	holder_var_type = "growth"
-	holder_var_amount = LARVA_GROW_TIME
-
-	var/spawning
-
-/spell/aoe_turf/evolve/larva/cast_check(skipcharge = FALSE, mob/living/carbon/alien/user)
-	if(user.handcuffed || user.locked_to)
-		to_chat(user, "<span class='danger'>You cannot evolve while you're restrained!</span>")
-		return FALSE
-	return ..()
-
-/spell/aoe_turf/evolve/larva/spell_do_after(mob/living/carbon/alien/user)
-	var/explanation_message = {"<span class='notice'><B>You are growing into a beautiful alien! It is time to choose a caste.</B><br>
-	There are three castes to choose from:<br>
-	<B>Hunters</B> are strong and agile, able to hunt away from the hive and rapidly move through ventilation shafts. Hunters generate plasma slowly and have low reserves.<br>
-	<B>Sentinels</B> are tasked with protecting the hive and are deadly up close and at a range. They are not as physically imposing nor fast as the hunters.<br>
-	<B>Drones</B> are the working class, offering the largest plasma storage and generation. They are the only caste which may evolve again, turning into the dreaded alien queen."}
-	to_chat(user, explanation_message)
-	spawning = input(user, "Please choose which alien caste you shall evolve to.", "Evolving Choice Menu", null) as null|anything in list("Hunter","Sentinel","Drone","Repeat Explanation")
-	while(spawning == "Repeat Explanation")
-		to_chat(user, explanation_message)
-		spawning = input(user, "Please choose which alien caste you shall evolve to.", "Evolving Choice Menu", null) as null|anything in list("Hunter","Sentinel","Drone","Repeat Explanation")
-	if(spawning == null)
-		return FALSE
-	switch(spawning)
-		if("Hunter")
-			spawning = /mob/living/carbon/alien/humanoid/hunter
-		if("Sentinel")
-			spawning = /mob/living/carbon/alien/humanoid/sentinel
-		if("Drone")
-			spawning = /mob/living/carbon/alien/humanoid/drone
-	return ..()
-
-/spell/aoe_turf/evolve/larva/cast(list/targets, mob/living/carbon/user)
-	var/mob/living/carbon/alien/humanoid/new_xeno = new spawning(get_turf(user))
-	for(var/datum/language/L in user.languages)
-		new_xeno.add_language(L.name)
-	if(user.mind)
-		user.mind.transfer_to(new_xeno)
-	user.transferImplantsTo(new_xeno)
-	user.transferBorers(new_xeno)
-	qdel(user)
-
-/spell/aoe_turf/alien_hide
-	name = "Hide"
-	desc = "Allows you to hide beneath tables or items laid on the ground. Toggle."
-	user_type = USER_TYPE_XENOMORPH
-	panel = "Alien"
-	hud_state = "alien_hide"
-	override_base = "alien"
-
-	charge_max = 0
-
-/spell/aoe_turf/alien_hide/cast(list/targets, mob/user)
-	if(user.plane != HIDING_MOB_PLANE)
-		user.plane = HIDING_MOB_PLANE
-		user.visible_message("<span class='danger'>\The [user.name] scurries to the ground !</span>", "<span class='alien'>You are now hiding.</span>")
+/obj/effect/proc_holder/alien/sneak/fire(mob/living/carbon/alien/humanoid/user)
+	if(!active)
+		user.alpha = 75 //Still easy to see in lit areas with bright tiles, almost invisible on resin.
+		user.sneaking = 1
+		active = 1
+		to_chat(user, "<span class='noticealien'>You blend into the shadows...</span>")
 	else
-		user.plane = MOB_PLANE
-		user.visible_message("<span class='warning'>\The [user.name] slowly peeks up from the ground...</span>", "<span class='alien'>You have stopped hiding.</span>")
+		user.alpha = initial(user.alpha)
+		user.sneaking = 0
+		active = 0
+		to_chat(user, "<span class='noticealien'>You reveal yourself!</span>")
 
-/////////////////////////////////////////////
 
-/*
-/mob/living/carbon/alien/humanoid/AltClickOn(var/atom/A)
-	if(ismob(A))
-		neurotoxin(A)
-		return
+/mob/living/carbon/proc/getPlasma()
+	var/obj/item/organ/alien/plasmavessel/vessel = getorgan(/obj/item/organ/alien/plasmavessel)
+	if(!vessel)
+		return 0
+	return vessel.storedPlasma
+
+
+/mob/living/carbon/proc/adjustPlasma(amount)
+	var/obj/item/organ/alien/plasmavessel/vessel = getorgan(/obj/item/organ/alien/plasmavessel)
+	if(!vessel)
+		return 0
+	vessel.storedPlasma = max(vessel.storedPlasma + amount,0)
+	vessel.storedPlasma = min(vessel.storedPlasma, vessel.max_plasma) //upper limit of max_plasma, lower limit of 0
+	for(var/X in abilities)
+		var/obj/effect/proc_holder/alien/APH = X
+		if(APH.has_action)
+			APH.action.UpdateButtonIcon()
+	return 1
+
+/mob/living/carbon/alien/adjustPlasma(amount)
 	. = ..()
+	updatePlasmaDisplay()
 
-/mob/living/carbon/alien/humanoid/CtrlClickOn(var/atom/A)
-	if(isalien(A))
-		transfer_plasma(A)
-		return
-	. = ..()
-*/
+/mob/living/carbon/proc/usePlasma(amount)
+	if(getPlasma() >= amount)
+		adjustPlasma(-amount)
+		return 1
+
+	return 0

@@ -1,252 +1,277 @@
-/datum/hud/proc/robot_hud()
+/obj/screen/robot
+	icon = 'icons/mob/screen_cyborg.dmi'
 
-	src.adding = list()
-	src.other = list()
+/obj/screen/robot/module
+	name = "cyborg module"
+	icon_state = "nomod"
 
-	var/obj/abstract/screen/using
+/obj/screen/robot/Click()
+	if(isobserver(usr))
+		return 1
 
+/obj/screen/robot/module/Click()
+	if(..())
+		return
+	var/mob/living/silicon/robot/R = usr
+	if(R.module.type != /obj/item/robot_module)
+		R.hud_used.toggle_show_robot_modules()
+		return 1
+	R.pick_module()
+
+/obj/screen/robot/module1
+	name = "module1"
+	icon_state = "inv1"
+
+/obj/screen/robot/module1/Click()
+	if(..())
+		return
+	var/mob/living/silicon/robot/R = usr
+	R.toggle_module(1)
+
+/obj/screen/robot/module2
+	name = "module2"
+	icon_state = "inv2"
+
+/obj/screen/robot/module2/Click()
+	if(..())
+		return
+	var/mob/living/silicon/robot/R = usr
+	R.toggle_module(2)
+
+/obj/screen/robot/module3
+	name = "module3"
+	icon_state = "inv3"
+
+/obj/screen/robot/module3/Click()
+	if(..())
+		return
+	var/mob/living/silicon/robot/R = usr
+	R.toggle_module(3)
+
+/obj/screen/robot/radio
+	name = "radio"
+	icon_state = "radio"
+
+/obj/screen/robot/radio/Click()
+	if(..())
+		return
+	var/mob/living/silicon/robot/R = usr
+	R.radio.interact(R)
+
+/obj/screen/robot/store
+	name = "store"
+	icon_state = "store"
+
+/obj/screen/robot/store/Click()
+	if(..())
+		return
+	var/mob/living/silicon/robot/R = usr
+	R.uneq_active()
+
+/obj/screen/robot/lamp
+	name = "headlamp"
+	icon_state = "lamp0"
+
+/obj/screen/robot/lamp/Click()
+	if(..())
+		return
+	var/mob/living/silicon/robot/R = usr
+	R.control_headlamp()
+
+/obj/screen/robot/thrusters
+	name = "ion thrusters"
+	icon_state = "ionpulse0"
+
+/obj/screen/robot/thrusters/Click()
+	if(..())
+		return
+	var/mob/living/silicon/robot/R = usr
+	R.toggle_ionpulse()
+
+/datum/hud/robot
+	ui_style_icon = 'icons/mob/screen_cyborg.dmi'
+
+/datum/hud/robot/New(mob/owner, ui_style = 'icons/mob/screen_cyborg.dmi')
+	..()
+	var/mob/living/silicon/robot/mymobR = mymob
+	var/obj/screen/using
+
+	using = new/obj/screen/language_menu
+	using.screen_loc = ui_borg_language_menu
+	static_inventory += using
 
 //Radio
-	using = getFromPool(/obj/abstract/screen)
-	using.name = "radio"
-	using.dir = SOUTHWEST
-	using.icon = 'icons/mob/screen1_robot.dmi'
-	using.icon_state = "radio"
-	using.screen_loc = ui_movi
-	src.adding += using
+	using = new /obj/screen/robot/radio()
+	using.screen_loc = ui_borg_radio
+	static_inventory += using
 
 //Module select
-
-	using = getFromPool(/obj/abstract/screen)
-	using.name = INV_SLOT_SIGHT
-	using.dir = SOUTHWEST
-	using.icon = 'icons/mob/screen1_robot.dmi'
-	using.icon_state = "sight"
-	using.screen_loc = ui_borg_sight
-	src.adding += using
-	mymob:sensor = using
-
-	using = getFromPool(/obj/abstract/screen)
-	using.name = "module1"
-	using.dir = SOUTHWEST
-	using.icon = 'icons/mob/screen1_robot.dmi'
-	using.icon_state = "inv1"
+	using = new /obj/screen/robot/module1()
 	using.screen_loc = ui_inv1
-	src.adding += using
-	mymob:inv1 = using
+	static_inventory += using
+	mymobR.inv1 = using
 
-	using = getFromPool(/obj/abstract/screen)
-	using.name = "module2"
-	using.dir = SOUTHWEST
-	using.icon = 'icons/mob/screen1_robot.dmi'
-	using.icon_state = "inv2"
+	using = new /obj/screen/robot/module2()
 	using.screen_loc = ui_inv2
-	src.adding += using
-	mymob:inv2 = using
+	static_inventory += using
+	mymobR.inv2 = using
 
-	using = getFromPool(/obj/abstract/screen)
-	using.name = "module3"
-	using.dir = SOUTHWEST
-	using.icon = 'icons/mob/screen1_robot.dmi'
-	using.icon_state = "inv3"
+	using = new /obj/screen/robot/module3()
 	using.screen_loc = ui_inv3
-	src.adding += using
-	mymob:inv3 = using
-
-	using = getFromPool(/obj/abstract/screen)
-	using.dir = SOUTHWEST
-	using.icon = 'icons/mob/screen1.dmi'
-	using.icon_state = "block"
-	using.layer = HUD_BASE_LAYER
-	src.adding += using
-	mymob:robot_modules_background = using
+	static_inventory += using
+	mymobR.inv3 = using
 
 //End of module select
 
-//Intent
-	using = getFromPool(/obj/abstract/screen)
-	using.name = "act_intent"
-	using.dir = SOUTHWEST
-	using.icon = 'icons/mob/screen1_robot.dmi'
-	using.icon_state = (mymob.a_intent == I_HURT ? "harm" : mymob.a_intent)
-	using.screen_loc = ui_acti
-	src.adding += using
-	action_intent = using
+//Photography stuff
+	using = new /obj/screen/ai/image_take()
+	using.screen_loc = ui_borg_camera
+	static_inventory += using
 
-//Cell
-	mymob:cells = getFromPool(/obj/abstract/screen)
-	mymob:cells.icon = 'icons/mob/screen1_robot.dmi'
-	mymob:cells.icon_state = "charge-empty"
-	mymob:cells.name = "cell"
-	mymob:cells.screen_loc = ui_toxin
+	using = new /obj/screen/ai/image_view()
+	using.screen_loc = ui_borg_album
+	static_inventory += using
+
+//Sec/Med HUDs
+	using = new /obj/screen/ai/sensors()
+	using.screen_loc = ui_borg_sensor
+	static_inventory += using
+
+//Headlamp control
+	using = new /obj/screen/robot/lamp()
+	using.screen_loc = ui_borg_lamp
+	static_inventory += using
+	mymobR.lamp_button = using
+
+//Thrusters
+	using = new /obj/screen/robot/thrusters()
+	using.screen_loc = ui_borg_thrusters
+	static_inventory += using
+	mymobR.thruster_button = using
+
+//Intent
+	action_intent = new /obj/screen/act_intent/robot()
+	action_intent.icon_state = mymob.a_intent
+	static_inventory += action_intent
 
 //Health
-	mymob.healths = getFromPool(/obj/abstract/screen)
-	mymob.healths.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.healths.icon_state = "health0"
-	mymob.healths.name = "health"
-	mymob.healths.screen_loc = ui_borg_health 
+	healths = new /obj/screen/healths/robot()
+	infodisplay += healths
 
 //Installed Module
-	mymob.hands = getFromPool(/obj/abstract/screen)
-	mymob.hands.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.hands.icon_state = "nomod"
-	mymob.hands.name = "module"
-	mymob.hands.screen_loc = ui_borg_module
-
-//Module Panel
-	using = getFromPool(/obj/abstract/screen)
-	using.name = "panel"
-	using.icon = 'icons/mob/screen1_robot.dmi'
-	using.icon_state = "panel"
-	using.screen_loc = ui_borg_panel
-	using.layer = HUD_BASE_LAYER
-	src.adding += using
+	mymobR.hands = new /obj/screen/robot/module()
+	mymobR.hands.screen_loc = ui_borg_module
+	static_inventory += mymobR.hands
 
 //Store
-	mymob.throw_icon = getFromPool(/obj/abstract/screen)
-	mymob.throw_icon.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.throw_icon.icon_state = "store"
-	mymob.throw_icon.name = "store"
-	mymob.throw_icon.screen_loc = ui_borg_store
+	module_store_icon = new /obj/screen/robot/store()
+	module_store_icon.screen_loc = ui_borg_store
 
-//Temp
-	mymob.bodytemp = getFromPool(/obj/abstract/screen)
-	mymob.bodytemp.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.bodytemp.icon_state = "temp0"
-	mymob.bodytemp.name = "environment temperature"
-	mymob.bodytemp.screen_loc = ui_borg_temp
-	
-//Pressure
-	mymob.pressure = getFromPool(/obj/abstract/screen)
-	mymob.pressure.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.pressure.icon_state = "pressure0"
-	mymob.pressure.name = "environment pressure"
-	mymob.pressure.screen_loc = ui_borg_pressure
+	pull_icon = new /obj/screen/pull()
+	pull_icon.icon = 'icons/mob/screen_cyborg.dmi'
+	pull_icon.update_icon(mymob)
+	pull_icon.screen_loc = ui_borg_pull
+	hotkeybuttons += pull_icon
 
-//Photography stuff
 
-	mymob.camera_icon = getFromPool(/obj/abstract/screen)
-	mymob.camera_icon.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.camera_icon.icon_state = "camera"
-	mymob.camera_icon.name = "Take Image"
-	mymob.camera_icon.screen_loc = ui_borg_camera
+	zone_select = new /obj/screen/zone_sel/robot()
+	zone_select.update_icon(mymob)
+	static_inventory += zone_select
 
-	mymob.album_icon = getFromPool(/obj/abstract/screen)
-	mymob.album_icon.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.album_icon.icon_state = "album"
-	mymob.album_icon.name = "View Images"
-	mymob.album_icon.screen_loc = ui_borg_album
-
- //unused, go home
-	mymob.oxygen = getFromPool(/obj/abstract/screen)
-	mymob.oxygen.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.oxygen.icon_state = "oxy0"
-	mymob.oxygen.name = "oxygen"
-	mymob.oxygen.screen_loc = ui_oxygen
-
-	mymob.fire = getFromPool(/obj/abstract/screen)
-	mymob.fire.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.fire.icon_state = "fire0"
-	mymob.fire.name = "fire"
-	mymob.fire.screen_loc = ui_fire
-
-	mymob.pullin = getFromPool(/obj/abstract/screen)
-	mymob.pullin.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.pullin.icon_state = "pull0"
-	mymob.pullin.name = "pull"
-	mymob.pullin.screen_loc = ui_borg_pull
-
-	mymob.zone_sel = getFromPool(/obj/abstract/screen/zone_sel)
-	mymob.zone_sel.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.zone_sel.overlays.len = 0
-	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
-
-	//Handle the gun settings buttons
-	mymob.gun_setting_icon = getFromPool(/obj/abstract/screen/gun/mode)
-	if (mymob.client)
-		if (mymob.client.gun_mode) // If in aim mode, correct the sprite
-			mymob.gun_setting_icon.dir = 2
-	for(var/obj/item/weapon/gun/G in mymob) // If targeting someone, display other buttons
-		if (G.target)
-			mymob.item_use_icon = getFromPool(/obj/abstract/screen/gun/item)
-			if (mymob.client.target_can_click)
-				mymob.item_use_icon.dir = 1
-			src.adding += mymob.item_use_icon
-			mymob.gun_move_icon = getFromPool(/obj/abstract/screen/gun/move)
-			if (mymob.client.target_can_move)
-				mymob.gun_move_icon.dir = 1
-				mymob.gun_run_icon = getFromPool(/obj/abstract/screen/gun/run)
-				if (mymob.client.target_can_run)
-					mymob.gun_run_icon.dir = 1
-				src.adding += mymob.gun_run_icon
-			src.adding += mymob.gun_move_icon
-
-	mymob.client.reset_screen()
-
-	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.fire, mymob.pressure, mymob.bodytemp, mymob.hands, mymob.healths, mymob:cells, mymob.pullin, mymob.gun_setting_icon, mymob.camera_icon, mymob.album_icon) //, mymob.rest, mymob.sleep, mymob.mach, mymob.oxygen)
-	mymob.client.screen += src.adding + src.other
-
-	return
 
 /datum/hud/proc/toggle_show_robot_modules()
-	if(!isrobot(mymob))
+	if(!iscyborg(mymob))
 		return
 
-	var/mob/living/silicon/robot/r = mymob
+	var/mob/living/silicon/robot/R = mymob
 
-	r.shown_robot_modules = !r.shown_robot_modules
+	R.shown_robot_modules = !R.shown_robot_modules
 	update_robot_modules_display()
 
-/datum/hud/proc/update_robot_modules_display()
-	if(!isrobot(mymob) || !mymob.client)
+/datum/hud/proc/update_robot_modules_display(mob/viewer)
+	if(!iscyborg(mymob))
 		return
 
-	var/mob/living/silicon/robot/r = mymob
+	var/mob/living/silicon/robot/R = mymob
 
-	if(r.shown_robot_modules)
+	var/mob/screenmob = viewer || R
+
+	if(!R.module)
+		return
+
+	if(!R.client)
+		return
+
+	if(R.shown_robot_modules && screenmob.hud_used.hud_shown)
 		//Modules display is shown
+		screenmob.client.screen += module_store_icon	//"store" icon
 
-		if(!r.module)
-			to_chat(usr, "<span class='danger'>No module selected</span>")
-			return
-
-		if(!r.module.modules)
+		if(!R.module.modules)
 			to_chat(usr, "<span class='danger'>Selected module has no modules to select</span>")
 			return
 
-		if(!r.robot_modules_background)
+		if(!R.robot_modules_background)
 			return
 
-		var/display_rows = round((r.module.modules.len) / 8) +1 //+1 because round() returns floor of number
-		r.robot_modules_background.screen_loc = "CENTER-4:[WORLD_ICON_SIZE/2],SOUTH+1:[7*PIXEL_MULTIPLIER] to CENTER+3:[WORLD_ICON_SIZE/2],SOUTH+[display_rows]:[7*PIXEL_MULTIPLIER]"
-		r.client.screen += r.robot_modules_background
+		var/display_rows = CEILING(length(R.module.get_inactive_modules()) / 8, 1)
+		R.robot_modules_background.screen_loc = "CENTER-4:16,SOUTH+1:7 to CENTER+3:16,SOUTH+[display_rows]:7"
+		screenmob.client.screen += R.robot_modules_background
 
 		var/x = -4	//Start at CENTER-4,SOUTH+1
 		var/y = 1
 
-		for(var/atom/movable/A in r.module.modules)
-			if( (A != r.module_state_1) && (A != r.module_state_2) && (A != r.module_state_3) )
-				//Module is not currently active
-				r.client.screen += A
-				if(x < 0)
-					A.screen_loc = "CENTER[x]:[WORLD_ICON_SIZE/2],SOUTH+[y]:[7*PIXEL_MULTIPLIER]"
-				else
-					A.screen_loc = "CENTER+[x]:[WORLD_ICON_SIZE/2],SOUTH+[y]:[7*PIXEL_MULTIPLIER]"
-				A.layer = HUD_ITEM_LAYER
-				A.plane = HUD_PLANE
+		for(var/atom/movable/A in R.module.get_inactive_modules())
+			//Module is not currently active
+			screenmob.client.screen += A
+			if(x < 0)
+				A.screen_loc = "CENTER[x]:16,SOUTH+[y]:7"
+			else
+				A.screen_loc = "CENTER+[x]:16,SOUTH+[y]:7"
+			A.layer = ABOVE_HUD_LAYER
+			A.plane = ABOVE_HUD_PLANE
 
-				x++
-				if(x == 4)
-					x = -4
-					y++
+			x++
+			if(x == 4)
+				x = -4
+				y++
 
 	else
 		//Modules display is hidden
-		if(r.module)
-			for(var/atom/A in r.module.modules)
-				if( (A != r.module_state_1) && (A != r.module_state_2) && (A != r.module_state_3) )
-					//Module is not currently active
-					r.client.screen -= A
-			r.shown_robot_modules = 0
-			r.client.screen -= r.robot_modules_background
+		screenmob.client.screen -= module_store_icon	//"store" icon
+
+		for(var/atom/A in R.module.get_inactive_modules())
+			//Module is not currently active
+			screenmob.client.screen -= A
+		R.shown_robot_modules = 0
+		screenmob.client.screen -= R.robot_modules_background
+
+/mob/living/silicon/robot/create_mob_hud()
+	if(client && !hud_used)
+		hud_used = new /datum/hud/robot(src)
+
+
+/datum/hud/robot/persistent_inventory_update(mob/viewer)
+	if(!mymob)
+		return
+	var/mob/living/silicon/robot/R = mymob
+
+	var/mob/screenmob = viewer || R
+
+	if(screenmob.hud_used)
+		if(screenmob.hud_used.hud_shown)
+			for(var/i in 1 to R.held_items.len)
+				var/obj/item/I = R.held_items[i]
+				if(I)
+					switch(i)
+						if(1)
+							I.screen_loc = ui_inv1
+						if(2)
+							I.screen_loc = ui_inv2
+						if(3)
+							I.screen_loc = ui_inv3
+						else
+							return
+					screenmob.client.screen += I
+		else
+			for(var/obj/item/I in R.held_items)
+				screenmob.client.screen -= I

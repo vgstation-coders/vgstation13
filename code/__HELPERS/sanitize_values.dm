@@ -17,7 +17,7 @@
 	if(default)
 		return default
 	if(List && List.len)
-		return List[1]
+		return pick(List)
 
 
 
@@ -38,16 +38,17 @@
 				return default
 	return default
 
-/proc/sanitize_hexcolor(color, default="#000000")
+/proc/sanitize_hexcolor(color, desired_format=3, include_crunch=0, default)
+	var/crunch = include_crunch ? "#" : ""
 	if(!istext(color))
-		return default
+		color = ""
+
+	var/start = 1 + (text2ascii(color,1)==35)
 	var/len = length(color)
-	if(len != 7 && len !=4)
-		return default
-	if(text2ascii(color,1) != 35)
-		return default	//35 is the ascii code for "#"
-	. = "#"
-	for(var/i=2,i<=len,i++)
+	var/step_size = 1 + ((len+1)-start != desired_format)
+
+	. = ""
+	for(var/i=start, i<=len, i+=step_size)
 		var/ascii = text2ascii(color,i)
 		switch(ascii)
 			if(48 to 57)
@@ -57,10 +58,17 @@
 			if(65 to 70)
 				. += ascii2text(ascii+32)	//letters A to F - translates to lowercase
 			else
-				return default
-	return .
+				break
 
-//Removes lighting overlays from a list of objects
-/proc/sanitize_contents_list(list/contents)
-	for(var/atom/movable/lighting_overlay/lighting_overlay in contents)
-		contents.Remove(lighting_overlay)
+	if(length(.) != desired_format)
+		if(default)
+			return default
+		return crunch + repeat_string(desired_format, "0")
+
+	return crunch + .
+
+/proc/sanitize_ooccolor(color)
+	var/list/HSL = rgb2hsl(hex2num(copytext(color,2,4)),hex2num(copytext(color,4,6)),hex2num(copytext(color,6,8)))
+	HSL[3] = min(HSL[3],0.4)
+	var/list/RGB = hsl2rgb(arglist(HSL))
+	return "#[num2hex(RGB[1],2)][num2hex(RGB[2],2)][num2hex(RGB[3],2)]"

@@ -5,13 +5,13 @@
 This is a basic explanation of how say() works. Read this if you don't understand something.
 
 The basic "flow" of say() is that a speaker says a message, which is heard by hearers. What appears on screen
-is constructed by each hearer seperately, and not by the speaker.
+is constructed by each hearer separately, and not by the speaker.
 
 This rewrite was needed, but is far from perfect. Report any bugs you come across and feel free to fix things up.
 Radio code, while very much related to saycode, is not something I wanted to touch, so the code related to that may be messy.
 
 If you came here to see how to use saycode, all you will ever really need to call is say(message).
-To have things react when other things speak around them, add the HEAR flag to their flags variable and
+To have things react when other things speak around them, add the HEAR_1 flag to their flags variable and
 override their Hear() proc.
 
 =======================PROCS & VARIABLES=======================
@@ -28,63 +28,65 @@ global procs
 
 	recursive_hear_check(atom/O)
 		Checks for hearers by looping through the contents of O and the contents of the contents of O and etc and checking
-		each object for the HEAR flag. Returns a list of objects with the HEAR flag.
+		each object for the HEAR_1 flag. Returns a list of objects with the HEAR_1 flag.
 
 	get_hear(range, atom/source)
 		Like view(), but ignores luminosity.
 
+	message_spans_start(spans)
+		Turns each element of spans into a span class.
+
+	message_spans_end(length)
+		Returns lenght times "</span>"
+
+	attach_spans(input, spans)
+		Attaches span classes around input.
+
 /atom/movable
 	flags
-		The HEAR flag determines whether something is a hearer or not.
+		The HEAR_1 flag determines whether something is a hearer or not.
 		Hear() is only called on procs with this flag.
 
- *	No longer used
- *	languages
- *		Bitmask variable.
- *		What languages this object speaks/understands. If the languages of the speaker don't match the languages
- *		of the hearer, the message will be modified in the hearer's lang_treat().
+	languages_spoken/languages_understood
+		Bitmask variable.
+		What languages this object speaks/understands. If the languages of the speaker don't match the languages
+		of the hearer, the message will be modified in the hearer's lang_treat().
 
-	mob/languages
-		list of languages
-		What language(s) the speaker speaks, and the hearer understands. 
-		If the hearer doesn't understand it will be treated in lang_treat()
-
-	mob/universal_speak
-		Gift of Gab
-		Mainly used in non-human mobs.
-		Regardless of the language spoken this mob can understand it, and other mobs can understand it perfectly.
-
-	mob/universal_understand
-		Mainly used in non-human mobs.
-		Regardless of the language heard this mob understands it.
+	verb_say/verb_ask/verb_exclaim/verb_yell
+		These determine what the verb is for their respective action. Used in say_quote().
 
 	say(message)
 		Say() is the "mother-proc". It calls all the other procs required for speaking, but does little itself.
 		At the atom/movable level, say() just calls send_speech.
 
-	Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq)
+	Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq, spans)
 		This proc handles hearing. What it does varies. For mobs, it treats the message with hearer-specific things
 		like language and deafness, then outputs it to the hearer.
-		
+
 		IMPORTANT NOTE: If radio_freq is not null, the code will assume that the speaker is virtual! (more info on this in the Radios section below)
 
-	send_speech(message, range, datum/language/speaking)
-		This proc composes a list of hearers (things with the HEAR flag + dead people) and calls Hear() on them.
+	send_speech(message, range, source, bubble_type, spans)
+		This proc composes a list of hearers (things with the HEAR_1 flag + dead people) and calls Hear() on them.
 		Message treatment or composition of output are not done by this proc, these are handled by the rest of
 		say() and the hearer respectively.
 
-	lang_treat(message, atom/movable/speaker, message_langs, raw_message)
+	lang_treat(message, atom/movable/speaker, message_langs, raw_message, spans, message_mode)
 		Modifies the message by comparing the languages of the speaker with the languages of the hearer.
 		Called on the hearer.
+		Passes message_mode to say_quote.
 
-	say_quote(text)
-		Adds a verb and quotes to a message, according to the type of mob. Called on the speaker.
+	say_quote(input, spans, message_mode)
+		Adds a verb and quotes to a message. Also attaches span classes to a message. Verbs are determined by verb_say/verb_ask/verb_yell variables. Called on the speaker.
+
+	get_spans(input, spans)
+		Returns the list of spans that are always applied to messages of this atom.
+		Always return ..() | + youroutput when overriding this proc!
 
 /mob
 	say_dead(message)
 		Sends a message to all dead people. Does not use Hear().
 
-	compose_message(message, atom/movable/speaker, message_langs, raw_message, radio_freq)
+	compose_message(message, atom/movable/speaker, message_langs, raw_message, radio_freq, spans, message_mode)
 		Composes the message mobs see on their screen when they hear something.
 
 	compose_track_href(message, atom/movable/speaker, message_langs, raw_message, radio_freq)
@@ -104,6 +106,10 @@ global procs
 		The say() of mob_living is significantly more complex than that of objects.
 		Most of the extra code has to do with radios and message treatment.
 
+	send_speech(message, range, source, bubble_type, spans, message_mode)
+		mob/living's send_speech allows mobs one tile outside of the defined range to still hear the message,
+		but starred with the stars() proc.
+
 	check_emote(message)
 		Checks if the message begins with an * and is thus an emote.
 
@@ -116,7 +122,7 @@ global procs
 		Called right before handle_inherent_channels()
 
 	can_speak_vocal(message)
-		Checks if the mob can vocalize their message. This is seperate so, for example, muzzles don't block
+		Checks if the mob can vocalize their message. This is separate so, for example, muzzles don't block
 		hivemind chat.
 		Called right after handle_inherent_channels()
 
@@ -133,7 +139,7 @@ global procs
 		Please try to keep things in a logical order (e.g. don't have masks handled before mutations),
 		even if that means you have to call ..() in the middle of the proc.
 
-	radio(message, message_mode, raw_message, datum/language/speaking)
+	radio(message, message_mode, spans)
 		Handles talking into radios. Uses a switch to determine what radio to speak into and in which manner to do so.
 
 		Return is a bitflag.
@@ -154,7 +160,7 @@ eventually results in broadcast_message() being called.
 Broadcast_message() does NOT call say() on radios, but rather calls Hear() on everyone in range of a radio.
 This is because the system does not like repeating says.
 
-Furthermore, I changed radios to not be in the radio_controller. Instead, they are in a global list called all_radios.
+Furthermore, I changed radios to not be in the SSradio. Instead, they are in a global list called all_radios.
 This is an associative list, and the numbers as strings are the keys. The values are lists of radios that can hear said frequency.
 
 To add a radio, simply use add_radio(radio, frequency). To remove a radio, use remove_radio(radio, frequency).

@@ -1,579 +1,195 @@
-//Default list destination taggers and such can use.
+/obj/structure/bigDelivery
+	name = "large parcel"
+	desc = "A large delivery parcel."
+	icon = 'icons/obj/storage.dmi'
+	icon_state = "deliverycloset"
+	density = TRUE
+	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
+	var/giftwrapped = FALSE
+	var/sortTag = 0
+
+/obj/structure/bigDelivery/interact(mob/user)
+	playsound(src.loc, 'sound/items/poster_ripped.ogg', 50, 1)
+	qdel(src)
+
+/obj/structure/bigDelivery/Destroy()
+	var/turf/T = get_turf(src)
+	for(var/atom/movable/AM in contents)
+		AM.forceMove(T)
+	return ..()
+
+/obj/structure/bigDelivery/contents_explosion(severity, target)
+	for(var/atom/movable/AM in contents)
+		AM.ex_act()
+
+/obj/structure/bigDelivery/attackby(obj/item/W, mob/user, params)
+	if(istype(W, /obj/item/device/destTagger))
+		var/obj/item/device/destTagger/O = W
+
+		if(sortTag != O.currTag)
+			var/tag = uppertext(GLOB.TAGGERLOCATIONS[O.currTag])
+			to_chat(user, "<span class='notice'>*[tag]*</span>")
+			sortTag = O.currTag
+			playsound(loc, 'sound/machines/twobeep.ogg', 100, 1)
+
+	else if(istype(W, /obj/item/pen))
+		if(!user.is_literate())
+			to_chat(user, "<span class='notice'>You scribble illegibly on the side of [src]!</span>")
+			return
+		var/str = copytext(sanitize(input(user,"Label text?","Set label","")),1,MAX_NAME_LEN)
+		if(!user.canUseTopic(src, BE_CLOSE))
+			return
+		if(!str || !length(str))
+			to_chat(user, "<span class='warning'>Invalid text!</span>")
+			return
+		user.visible_message("[user] labels [src] as [str].")
+		name = "[name] ([str])"
+
+	else if(istype(W, /obj/item/stack/wrapping_paper) && !giftwrapped)
+		var/obj/item/stack/wrapping_paper/WP = W
+		if(WP.use(3))
+			user.visible_message("[user] wraps the package in festive paper!")
+			giftwrapped = TRUE
+			icon_state = "gift[icon_state]"
+		else
+			to_chat(user, "<span class='warning'>You need more paper!</span>")
+	else
+		return ..()
+
+/obj/structure/bigDelivery/relay_container_resist(mob/living/user, obj/O)
+	if(ismovableatom(loc))
+		var/atom/movable/AM = loc //can't unwrap the wrapped container if it's inside something.
+		AM.relay_container_resist(user, O)
+		return
+	to_chat(user, "<span class='notice'>You lean on the back of [O] and start pushing to rip the wrapping around it.</span>")
+	if(do_after(user, 50, target = O))
+		if(!user || user.stat != CONSCIOUS || user.loc != O || O.loc != src )
+			return
+		to_chat(user, "<span class='notice'>You successfully removed [O]'s wrapping !</span>")
+		O.forceMove(loc)
+		playsound(src.loc, 'sound/items/poster_ripped.ogg', 50, 1)
+		qdel(src)
+	else
+		if(user.loc == src) //so we don't get the message if we resisted multiple times and succeeded.
+			to_chat(user, "<span class='warning'>You fail to remove [O]'s wrapping!</span>")
+
+
+/obj/item/smallDelivery
+	name = "parcel"
+	desc = "A brown paper delivery parcel."
+	icon = 'icons/obj/storage.dmi'
+	icon_state = "deliverypackage3"
+	var/giftwrapped = 0
+	var/sortTag = 0
+
+/obj/item/smallDelivery/contents_explosion(severity, target)
+	for(var/atom/movable/AM in contents)
+		AM.ex_act()
+
+/obj/item/smallDelivery/attack_self(mob/user)
+	user.temporarilyRemoveItemFromInventory(src, TRUE)
+	for(var/X in contents)
+		var/atom/movable/AM = X
+		user.put_in_hands(AM)
+	playsound(src.loc, 'sound/items/poster_ripped.ogg', 50, 1)
+	qdel(src)
+
+/obj/item/smallDelivery/attack_self_tk(mob/user)
+	if(ismob(loc))
+		var/mob/M = loc
+		M.temporarilyRemoveItemFromInventory(src, TRUE)
+		for(var/X in contents)
+			var/atom/movable/AM = X
+			M.put_in_hands(AM)
+	else
+		for(var/X in contents)
+			var/atom/movable/AM = X
+			AM.forceMove(src.loc)
+	playsound(src.loc, 'sound/items/poster_ripped.ogg', 50, 1)
+	qdel(src)
+
+/obj/item/smallDelivery/attackby(obj/item/W, mob/user, params)
+	if(istype(W, /obj/item/device/destTagger))
+		var/obj/item/device/destTagger/O = W
+
+		if(sortTag != O.currTag)
+			var/tag = uppertext(GLOB.TAGGERLOCATIONS[O.currTag])
+			to_chat(user, "<span class='notice'>*[tag]*</span>")
+			sortTag = O.currTag
+			playsound(loc, 'sound/machines/twobeep.ogg', 100, 1)
+
+	else if(istype(W, /obj/item/pen))
+		if(!user.is_literate())
+			to_chat(user, "<span class='notice'>You scribble illegibly on the side of [src]!</span>")
+			return
+		var/str = copytext(sanitize(input(user,"Label text?","Set label","")),1,MAX_NAME_LEN)
+		if(!user.canUseTopic(src, BE_CLOSE))
+			return
+		if(!str || !length(str))
+			to_chat(user, "<span class='warning'>Invalid text!</span>")
+			return
+		user.visible_message("[user] labels [src] as [str].")
+		name = "[name] ([str])"
+
+	else if(istype(W, /obj/item/stack/wrapping_paper) && !giftwrapped)
+		var/obj/item/stack/wrapping_paper/WP = W
+		if(WP.use(1))
+			icon_state = "gift[icon_state]"
+			giftwrapped = 1
+			user.visible_message("[user] wraps the package in festive paper!")
+		else
+			to_chat(user, "<span class='warning'>You need more paper!</span>")
+
 
 /obj/item/device/destTagger
 	name = "destination tagger"
 	desc = "Used to set the destination of properly wrapped packages."
-	icon_state = "dest_tagger"
-	starting_materials = list(MAT_IRON = 300)
-	w_type = RECYK_METAL
-
-	var/panel = 0 //If the panel is open.
-	var/mode  = 0 //If the tagger is "hacked" so you can add extra tags.
-
+	icon_state = "cargotagger"
 	var/currTag = 0
-	var/list/destinations  = list()
+	//The whole system for the sorttype var is determined based on the order of this list,
+	//disposals must always be 1, since anything that's untagged will automatically go to disposals, or sorttype = 1 --Superxpdude
 
-	w_class = W_CLASS_TINY
+	//If you don't want to fuck up disposals, add to this list, and don't change the order.
+	//If you insist on changing the order, you'll have to change every sort junction to reflect the new order. --Pete
+
+	w_class = WEIGHT_CLASS_TINY
 	item_state = "electronic"
-	flags = FPRINT
-	siemens_coefficient = 1
+	lefthand_file = 'icons/mob/inhands/misc/devices_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/misc/devices_righthand.dmi'
+	flags_1 = CONDUCT_1
 	slot_flags = SLOT_BELT
 
-/obj/item/device/destTagger/panel
-	panel = 1
+/obj/item/device/destTagger/suicide_act(mob/living/user)
+	user.visible_message("<span class='suicide'>[user] begins tagging [user.p_their()] final destination!  It looks like [user.p_theyre()] trying to commit suicide!</span>")
+	if (islizard(user))
+		to_chat(user, "<span class='notice'>*HELL*</span>")//lizard nerf
+	else
+		to_chat(user, "<span class='notice'>*HEAVEN*</span>")
+	playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
+	return BRUTELOSS
 
-/obj/item/device/destTagger/panel/New()
-	. = ..()
-	update_icon()
+/obj/item/device/destTagger/proc/openwindow(mob/user)
+	var/dat = "<tt><center><h1><b>TagMaster 2.2</b></h1></center>"
 
-/obj/item/device/destTagger/New()
-	. = ..()
+	dat += "<table style='width:100%; padding:4px;'><tr>"
+	for (var/i = 1, i <= GLOB.TAGGERLOCATIONS.len, i++)
+		dat += "<td><a href='?src=[REF(src)];nextTag=[i]'>[GLOB.TAGGERLOCATIONS[i]]</a></td>"
 
-	// Make sure to not copy any null ones, null is for map overrides to remove.
-	for(var/dest in map.default_tagger_locations)
-		if(dest)
-			destinations += dest
-
-/obj/item/device/destTagger/interact(mob/user as mob)
-
-	var/dat = "<table style='width:100%; padding:4px;'><tr>"
-
-	for (var/i = 1, i <= destinations.len, i++)
-		dat += "<td><a href='?src=\ref[src];nextTag=[i]'>[destinations[i]]</a>[mode ? "<a href='?src=\ref[src];remove_dest=[i]' class='linkDanger'>\[X\]</a>" : ""]</td>"
-
-		if (i % 4 == 0)
+		if(i%4==0)
 			dat += "</tr><tr>"
 
-	dat += "</tr></table><br>Current Selection: [currTag ? destinations[currTag] : "None"].<hr><br>"
+	dat += "</tr></table><br>Current Selection: [currTag ? GLOB.TAGGERLOCATIONS[currTag] : "None"]</tt>"
 
-	if(mode)
-		dat += "<a href='?src=\ref[src];new_dest=1'>Add destination</a>"
+	user << browse(dat, "window=destTagScreen;size=450x350")
+	onclose(user, "destTagScreen")
 
-	var/datum/browser/popup = new(user, "destTagger", name, 380, 350, src)
-	popup.add_stylesheet("shared", 'nano/css/shared.css')
-	popup.set_content(dat)
-	popup.open()
-
-/obj/item/device/destTagger/attack_self(mob/user as mob)
-	interact(user)
-
-/obj/item/device/destTagger/attackby(obj/item/W, mob/user)
-	if(isscrewdriver(W))
-		panel = !panel
-		to_chat(user, "<span class='notify'>You [panel ? "open" : "close"] the panel on \the [src].</span>")
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
-		update_icon()
-		return 1
-
-	if(ismultitool(W) && panel)
-		mode = !mode
-		to_chat(user, "<span class='notify'>You [mode ? "disable" : "enable"] the lock on \the [src].</span>")
-		return 1
-
-	. = ..()
-
-/obj/item/device/destTagger/update_icon()
-	if(panel)
-		icon_state = "dest_tagger_p"
-		desc += "\nThe panel appears to be open."
-	else
-		icon_state = "dest_tagger"
-		desc = initial(desc)
+/obj/item/device/destTagger/attack_self(mob/user)
+	openwindow(user)
+	return
 
 /obj/item/device/destTagger/Topic(href, href_list)
-	. = ..()
-	if(.)
-		return
-
 	add_fingerprint(usr)
-
 	if(href_list["nextTag"])
-		currTag = Clamp(text2num(href_list["nextTag"]), 0, destinations.len)
-		interact(usr)
-		return 1
-
-	if(href_list["remove_dest"] && mode)
-		var/idx = Clamp(text2num(href_list["remove_dest"]), 1, destinations.len)
-		if(currTag == destinations[idx])
-			currTag = 0 // In case the index was at the end of the list
-		destinations -= destinations[idx]
-		interact(usr)
-		return 1
-
-	if(href_list["new_dest"] && mode)
-		var/newtag = uppertext(copytext(sanitize(input(usr, "Destination ID?","Add Destination") as text), 1, MAX_NAME_LEN))
-		destinations |= newtag
-		interact(usr)
-		return 1
-
-/obj/item/device/destTagger/cyborg
-	name = "cyborg destination tagger"
-	mode = TRUE
-
-/obj/machinery/disposal/deliveryChute
-	name = "Delivery chute"
-	desc = "A chute for big and small packages alike!"
-	density = 1
-	icon_state = "intake"
-	var/c_mode = 0
-	var/doFlushIn=0
-	var/num_contents=0
-
-/obj/machinery/disposal/deliveryChute/no_deconstruct
-	deconstructable = FALSE
-
-/obj/machinery/disposal/deliveryChute/New()
-	..()
-	processing_objects.Remove(src)
-	spawn(5)
-		trunk = locate() in src.loc
-		if(trunk)
-			trunk.linked = src	// link the pipe trunk to self
-
-/obj/machinery/disposal/deliveryChute/ui_interact()
-	return
-
-/obj/machinery/disposal/deliveryChute/update_icon()
-	return
-
-/obj/machinery/disposal/deliveryChute/Bumped(var/atom/movable/AM) //Go straight into the chute
-	if(AM.anchored)
-		return
-
-	if(istype(AM, /obj/item/projectile) || istype(AM, /obj/item/weapon/dummy))
-		return
-
-	if(dir != get_dir(src, AM))
-		return
-
-	//testing("[src] FUCKING BUMPED BY \a [AM]")
-
-	if(istype(AM, /obj))
-		var/obj/O = AM
-		O.forceMove(src)
-	else if(istype(AM, /mob))
-		var/mob/M = AM
-		M.forceMove(src)
-	//src.flush() This spams audio like fucking crazy.
-	// Instead, we queue up for the next process.
-	doFlushIn=5 // Ticks, adjust if delay is too long or too short
-	num_contents++
-
-/obj/machinery/disposal/deliveryChute/flush()
-	flushing = 1
-	flick("intake-closing", src)
-	var/deliveryCheck = 0
-	var/obj/structure/disposalholder/H = new()	// virtual holder object which actually
-												// travels through the pipes.
-	for(var/obj/item/delivery/large/O in src)
-		deliveryCheck = 1
-		if(O.sortTag == 0)
-			O.sortTag = "DISPOSALS"
-	for(var/obj/item/delivery/O in src)
-		deliveryCheck = 1
-		if (O.sortTag == 0)
-			O.sortTag = "DISPOSALS"
-	if(deliveryCheck == 0)
-		H.destinationTag = "DISPOSALS"
-
-	air_contents = new()		// new empty gas resv.
-
-	sleep(10)
-	playsound(src, 'sound/machines/disposalflush.ogg', 50, 0, 0)
-	sleep(5) // wait for animation to finish
-
-	H.init(src)	// copy the contents of disposer to holder
-	num_contents=0
-	doFlushIn=0
-
-	H.start(src) // start the holder processing movement
-	flushing = 0
-	// now reset disposal state
-	flush = 0
-	if(mode == 2)	// if was ready,
-		mode = 1	// switch to charging
-	update_icon()
-	return
-
-/obj/machinery/disposal/deliveryChute/attackby(var/obj/item/I, var/mob/user)
-	if(!I || !user)
-		return
-
-	if(isscrewdriver(I))
-		if(c_mode==0)
-			c_mode=1
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
-			to_chat(user, "You remove the screws around the power connection.")
-			return
-		else if(c_mode==1)
-			c_mode=0
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
-			to_chat(user, "You attach the screws around the power connection.")
-			return
-	else if(istype(I,/obj/item/weapon/weldingtool) && c_mode==1)
-		var/obj/item/weapon/weldingtool/W = I
-		if(W.remove_fuel(0,user))
-			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-			to_chat(user, "You start slicing the floorweld off the delivery chute.")
-			if(do_after(user, src,20))
-				if(!src || !W.isOn())
-					return
-				to_chat(user, "You sliced the floorweld off the delivery chute.")
-				var/obj/structure/disposalconstruct/C = new (src.loc)
-				C.ptype = 8 // 8 =  Delivery chute
-				C.update()
-				C.anchored = 1
-				C.setDensity(TRUE)
-				qdel(src)
-			return
-		else
-			to_chat(user, "You need more welding fuel to complete this task.")
-			return
-
-/obj/machinery/disposal/deliveryChute/process()
-	if(doFlushIn>0)
-		if(doFlushIn==1 || num_contents>=50)
-			//testing("[src] FLUSHING")
-			spawn(0)
-				src.flush()
-		doFlushIn--
-
-//Base framework for sorting machines.
-/obj/machinery/sorting_machine
-	name = "Sorting Machine"
-	desc = "Sorts stuff."
-	density = 1
-	icon = 'icons/obj/recycling.dmi'
-	icon_state = "grinder-b1"
-	anchored = 1
-
-	machine_flags = SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
-
-	idle_power_usage = 100 //No active power usage because this thing passively uses 100, always. Don't ask me why N3X15 coded it like this.
-
-	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
-
-	var/input_dir = EAST
-	var/output_dir = WEST
-	var/filter_dir = SOUTH
-
-	var/max_items_moved = 100
-
-/obj/machinery/sorting_machine/New()
-	. = ..()
-
-	mover = new
-
-/obj/machinery/sorting_machine/Destroy()
-	. = ..()
-
-	qdel(mover)
-	mover = null
-
-/obj/machinery/sorting_machine/RefreshParts()
-	var/T = 0
-	for(var/obj/item/weapon/stock_parts/matter_bin/bin in component_parts)
-		T += bin.rating//intentionally not doing '- 1' here, for the math below
-	max_items_moved = initial(max_items_moved) * (T / 3) //Usefull upgrade/10, that's an increase from 10 (base matter bins) to 30 (super matter bins)
-
-	T = 0//reusing T here because muh RAM
-	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
-		T += C.rating - 1
-	idle_power_usage = initial(idle_power_usage) - (T * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
-
-/obj/machinery/sorting_machine/process()
-	if(stat & (BROKEN | NOPOWER))
-		return
-
-	var/turf/in_T = get_step(src, input_dir)
-	var/turf/out_T = get_step(src, output_dir)
-	var/turf/filter_T = get_step(src, filter_dir)
-
-	if(!out_T.Cross(mover, out_T) || !out_T.Enter(mover) || !filter_T.Cross(mover, filter_T) || !filter_T.Enter(mover))
-		return
-
-	var/affecting = in_T.contents
-	var/items_moved = 0
-
-	for(var/atom/movable/A in affecting)
-		if(A.anchored)
-			continue
-
-		if(sort(A))
-			A.forceMove(filter_T)
-		else
-			A.forceMove(out_T)
-
-		items_moved++
-		if(items_moved >= max_items_moved)
-			break
-
-/obj/machinery/sorting_machine/attack_ai(mob/user)
-	interact(user)
-
-/obj/machinery/sorting_machine/attack_hand(mob/user)
-	interact(user)
-
-/obj/machinery/sorting_machine/Topic(href, href_list)
-	. = ..()
-	if(.)
-		return
-
-	if(href_list["close"])
-		if(usr.machine == src)
-			usr.unset_machine()
-		return 1
-
-	src.add_fingerprint(usr)//After close, else it wouldn't make sense.
-
-/obj/machinery/sorting_machine/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
-	return {"
-		<ul>
-			<li><b>Sorting directions:</b></li>
-			<li><b>Input: </b><a href='?src=\ref[src];changedir=1'>[capitalize(dir2text(input_dir))]</a></li>
-			<li><b>Output: </b><a href='?src=\ref[src];changedir=2'>[capitalize(dir2text(output_dir))]</a></li>
-			<li><b>Selected: </b><a href='?src=\ref[src];changedir=3'>[capitalize(dir2text(filter_dir))]</a></li>
-		</ul>
-	"}
-
-//Handles changing of the IO dirs, 'ID's: 1 is input, 2 is output, and 3 is filter, in this proc.
-
-/obj/machinery/sorting_machine/multitool_topic(var/mob/user, var/list/href_list, var/obj/item/device/multitool/P)
-	. = ..()
-	if(.)
-		return .
-
-	if("changedir" in href_list)
-		var/changingdir = text2num(href_list["changedir"])
-		changingdir = Clamp(changingdir, 1, 3)//No runtimes from HREF exploits.
-
-		var/newdir = input("Select the new direction", "MinerX SortMaster 5000", "North") as null|anything in list("North", "South", "East", "West")
-		if(!newdir)
-			return 1
-		newdir = text2dir(newdir)
-
-		var/list/dirlist = list(input_dir, output_dir, filter_dir)//Behold the idea I got on how to do this.
-		var/olddir = dirlist[changingdir]//Store this for future reference before wiping it next line
-		dirlist[changingdir] = -1//Make the dir that's being changed -1 so it doesn't see itself.
-
-		var/conflictingdir = dirlist.Find(newdir)//Check if the dir is conflicting with another one
-		if(conflictingdir)//Welp, it is.
-			dirlist[conflictingdir] = olddir//Set it to the olddir of the dir we're changing
-
-		dirlist[changingdir] = newdir//Set the changindir to the selected dir
-
-		input_dir = dirlist[1]
-		output_dir = dirlist[2]
-		filter_dir = dirlist[3]
-
-		return MT_UPDATE
-		//Honestly I didn't expect that to fit in, what, 10 lines of code?
-
-//Return 1 if the atom is to be filtered of the line.
-/obj/machinery/sorting_machine/proc/sort(var/atom/movable/A)
-	return prob(50) //Henk because the base sorting machine shouldn't ever exist anyways.
-
-//RECYCLING SORTING MACHINE.
-//AKA the old sorting machine until I decided to use the sorting machines in an OOP way for BELT HELL!
-/obj/machinery/sorting_machine/recycling
-	name = "Recycling Sorting Machine"
-
-	var/list/selected_types = list("Glasses", "Metals/Minerals", "Electronics")
-	var/list/types[6]
-
-/obj/machinery/sorting_machine/recycling/New()
-	. = ..()
-
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/sorting_machine/recycling,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/capacitor
-	)
-	RefreshParts()
-
-	// Set up types. BYOND is the dumb and won't let me do this in the var def.
-	types[RECYK_BIOLOGICAL] = "Biological"
-	types[RECYK_WOOD]		= "Wooden"
-	types[RECYK_ELECTRONIC] = "Electronics"
-	types[RECYK_GLASS]      = "Glasses"
-	types[RECYK_METAL]      = "Metals/Minerals"
-	types[RECYK_MISC]       = "Miscellaneous"
-
-/obj/machinery/sorting_machine/recycling/Topic(href, href_list)
-	. = ..()
-	if(.)
-		return
-
-	if(href_list["toggle_types"])
-		var/typeID = text2num(href_list["toggle_types"])
-
-		typeID = Clamp(typeID, 1, types.len)//No HREF exploits causing runtimes.
-
-		if(types[typeID] in selected_types)//Toggle these
-			selected_types -= types[typeID]
-		else
-			selected_types += types[typeID]
-
-		updateUsrDialog()
-		return 1
-
-/obj/machinery/sorting_machine/recycling/sort(atom/movable/A)
-	return A.w_type && (types[A.w_type] in selected_types)
-
-/obj/machinery/sorting_machine/recycling/interact(mob/user)
-	if(stat & (BROKEN | NOPOWER))
-		if(user.machine == src)
-			usr.unset_machine()
-		return
-
-	user.set_machine(src)
-
-	var/dat = "Select the desired items to sort from the line.<br>"
-
-	for (var/i = 1, i <= types.len, i++)
-		var/selected = (types[i] in selected_types)
-		var/cssclass = selected ? "linkOn" : "linkDanger"//Fancy coloured buttons
-
-		dat += "<a href='?src=\ref[src];toggle_types=[i]' class='[cssclass]'>[types[i]]</a><br>"
-
-	var/datum/browser/popup = new(user, "recycksortingmachine", name, 320, 200, src)
-	popup.add_stylesheet("shared", 'nano/css/shared.css')
-	popup.set_content(dat)
-	popup.open()
-
-//Essentially a standalone version of disposals sorting pipes.
-/obj/machinery/sorting_machine/destination
-	name = "Destination Sorting Machine"
-	desc = "Like those disposals pipes sorting machines, except not in a pipe."
-
-	var/list/destinations
-	var/list/sorting[0]
-	var/unwrapped = 0 //Whatever unwrapped packages should be picked from the line.
-
-/obj/machinery/sorting_machine/destination/New()
-	. = ..()
-
-	destinations = map.default_tagger_locations.Copy() //Here because BYOND.
-
-	for(var/i = 1, i <= destinations.len, i++)
-		destinations[i] = uppertext(destinations[i])
-
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/sorting_machine/destination,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/capacitor
-	)
-	RefreshParts()
-
-/obj/machinery/sorting_machine/destination/interact(mob/user)
-	if(stat & (BROKEN | NOPOWER))
-		if(user.machine == src)
-			usr.unset_machine()
-		return
-
-	user.set_machine(src)
-
-	var/dat = "Select the desired items to sort from the line.<br>"
-
-	for (var/i = 1, i <= destinations.len, i++)
-		var/selected = (destinations[i] in sorting)
-		var/cssclass = selected ? "linkOn" : "linkDanger" //Fancy coloured buttons
-
-		dat += "<a href='?src=\ref[src];toggle_dest=[i]' class='[cssclass]'>[destinations[i]]</a> <a href='?src=\ref[src];remove_dest=[i]' class='linkDanger'>\[X\]</a><br>"
-
-	dat += "<a href='?src=\ref[src];add_dest=1'>Add a new destination</a> <hr><br>"
-
-	dat += "<a href='?src=\ref[src];toggle_wrapped=1' class='[unwrapped ? "linkOn" : "LinkDanger"]'>Filter unwrapped packages</a>"
-
-	var/datum/browser/popup = new(user, "destsortingmachine", name, 320, 200, src)
-	popup.add_stylesheet("shared", 'nano/css/shared.css')
-	popup.set_content(dat)
-	popup.open()
-
-/obj/machinery/sorting_machine/destination/sort(atom/movable/A)
-	if(istype(A, /obj/item/delivery/large))
-		var/obj/item/delivery/large/B = A
-		return B.sortTag in sorting
-
-	if(istype(A, /obj/item/delivery))
-		var/obj/item/delivery/B = A
-		return B.sortTag in sorting
-
-	return unwrapped
-
-/obj/machinery/sorting_machine/destination/Topic(href, href_list)
-	. = ..()
-	if(.)
-		return
-
-	if(href_list["toggle_dest"])
-		var/idx = Clamp(text2num(href_list["toggle_dest"]), 0, destinations.len)
-		if(destinations[idx] in sorting)
-			sorting -= destinations[idx]
-		else
-			sorting += destinations[idx]
-		updateUsrDialog()
-		return 1
-
-	if(href_list["remove_dest"])
-		var/idx = Clamp(text2num(href_list["remove_dest"]), 0, destinations.len)
-		sorting -= destinations[idx]
-		destinations -= destinations[idx]
-		updateUsrDialog()
-		return 1
-
-	if(href_list["add_dest"])
-		var/newtag = uppertext(copytext(sanitize(input(usr, "Destination ID?","Add Destination") as text), 1, MAX_NAME_LEN))
-		destinations |= newtag
-		updateUsrDialog()
-		return 1
-
-	if(href_list["toggle_wrapped"])
-		unwrapped = !unwrapped
-		updateUsrDialog()
-		return 1
-
-/obj/machinery/sorting_machine/destination/unwrapped
-	unwrapped = 1
-
-/obj/machinery/sorting_machine/destination/taxi_engi
-	sorting = list(
-		"QM OFFICE",
-		"CARGO BAY",
-		"JANITOR CLOSET",
-		"HOP OFFICE",
-		"HYDROPONICS",
-		"KITCHEN",
-		"THEATRE",
-		"BAR",
-		"ATMOSPHERICS",
-		"CE OFFICE",
-		"ENGINEERING"
-	)
-
-/obj/machinery/sorting_machine/destination/taxi_engi/unwrapped
-	unwrapped = 1
-
-/obj/machinery/sorting_machine/destination/taxi_med
-	sorting = list(
-		"MEDBAY",
-		"CMO OFFICE",
-		"CHEMISTRY",
-		"GENETICS",
-		"RESEARCH",
-		"RD OFFICE",
-		"TELECOMMS",
-		"ROBOTICS"
-	)
-
-/obj/machinery/sorting_machine/destination/taxi_secsci
-	sorting = list(
-		"SECURITY",
-		"HOS OFFICE",
-		"CHAPEL",
-		"LIBRARY"
-	)
+		var/n = text2num(href_list["nextTag"])
+		currTag = n
+	openwindow(usr)

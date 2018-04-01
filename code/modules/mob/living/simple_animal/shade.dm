@@ -1,155 +1,63 @@
 /mob/living/simple_animal/shade
 	name = "Shade"
 	real_name = "Shade"
-	desc = "A bound spirit"
+	desc = "A bound spirit."
+	gender = PLURAL
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "shade"
 	icon_living = "shade"
-	icon_dead = "shade_dead"
-	maxHealth = 50
-	health = 50
+	maxHealth = 40
+	health = 40
+	spacewalk = TRUE
+	healable = 0
 	speak_emote = list("hisses")
-	emote_hear = list("wails","screeches")
+	emote_hear = list("wails.","screeches.")
 	response_help  = "puts their hand through"
 	response_disarm = "flails at"
 	response_harm   = "punches"
+	speak_chance = 1
 	melee_damage_lower = 5
-	melee_damage_upper = 15
-	attacktext = "drains the life from"
+	melee_damage_upper = 12
+	attacktext = "metaphysically strikes"
 	minbodytemp = 0
-	maxbodytemp = 4000
-	min_oxy = 0
-	max_co2 = 0
-	max_tox = 0
-	speed = 1
-	stop_automated_movement = TRUE
+	maxbodytemp = INFINITY
+	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
+	stop_automated_movement = 1
 	status_flags = 0
-	faction = "cult"
+	faction = list("cult")
 	status_flags = CANPUSH
-	supernatural = TRUE
-	flying = TRUE
-	meat_type = /obj/item/weapon/ectoplasm
-	mob_property_flags = MOB_SUPERNATURAL
+	movement_type = FLYING
+	loot = list(/obj/item/ectoplasm)
+	del_on_death = TRUE
+	initial_language_holder = /datum/language_holder/construct
 
-/mob/living/simple_animal/shade/gib()
-	death(TRUE)
-	monkeyizing = TRUE
-	canmove = FALSE
-	icon = null
-	invisibility = 101
-
-	dead_mob_list -= src
-
-	qdel(src)
-
-/mob/living/simple_animal/shade/cultify()
-	return
-
-/mob/living/simple_animal/shade/Life()
-	if(timestopped)
-		return FALSE //under effects of time magick
+/mob/living/simple_animal/shade/death()
+	deathmessage = "lets out a contented sigh as [p_their()] form unwinds."
 	..()
-	if(isDead())
-		for(var/i=0;i<3;i++)
-			new /obj/item/weapon/ectoplasm (src.loc)
-		visible_message("<span class='warning'> [src] lets out a contented sigh as their form unwinds.</span>")
-		ghostize()
-		qdel (src)
-		return
 
+/mob/living/simple_animal/shade/canSuicide()
+	if(istype(loc, /obj/item/device/soulstone)) //do not suicide inside the soulstone
+		return 0
+	return ..()
 
-/mob/living/simple_animal/shade/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
-	user.delayNextAttack(8)
+/mob/living/simple_animal/shade/attack_animal(mob/living/simple_animal/M)
+	if(isconstruct(M))
+		var/mob/living/simple_animal/hostile/construct/C = M
+		if(!C.can_repair_constructs)
+			return
+		if(health < maxHealth)
+			adjustHealth(-25)
+			Beam(M,icon_state="sendbeam",time=4)
+			M.visible_message("<span class='danger'>[M] heals \the <b>[src]</b>.</span>", \
+					   "<span class='cult'>You heal <b>[src]</b>, leaving <b>[src]</b> at <b>[health]/[maxHealth]</b> health.</span>")
+		else
+			to_chat(M, "<span class='cult'>You cannot heal <b>[src]</b>, as [p_they()] [p_are()] unharmed!</span>")
+	else if(src != M)
+		return ..()
+
+/mob/living/simple_animal/shade/attackby(obj/item/O, mob/user, params)  //Marker -Agouri
 	if(istype(O, /obj/item/device/soulstone))
-		O.transfer_soul("SHADE", src, user)
+		var/obj/item/device/soulstone/SS = O
+		SS.transfer_soul("SHADE", src, user)
 	else
-		if(O.force)
-			var/damage = O.force
-			if (O.damtype == HALLOSS)
-				damage = 0
-			if(istype(O,/obj/item/weapon/nullrod))
-				damage *= 2
-				purge = 3
-			health -= damage
-			for(var/mob/M in viewers(src, null))
-				if ((M.client && !( M.blinded )))
-					M.show_message("<span class='warning'> <B>[src] has been attacked with [O] by [user].</span></B>")
-		else
-			to_chat(usr, "<span class='warning'> This weapon is ineffective, it does no damage.</span>")
-			for(var/mob/M in viewers(src, null))
-				if ((M.client && !( M.blinded )))
-					M.show_message("<span class='warning'> [user] gently taps [src] with [O].</span>")
-	return
-
-/mob/living/simple_animal/shade/shuttle_act()
-	if(!(src.flags & INVULNERABLE))
-		health -= rand(5,45) //These guys are like ghosts, a collision with a shuttle wouldn't destroy one outright
-	return
-
-////////////////HUD//////////////////////
-
-/mob/living/simple_animal/shade/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-	. = ..()
-
-	regular_hud_updates()
-
-/mob/living/simple_animal/shade/regular_hud_updates()
-	update_pull_icon() //why is this here?
-
-	if(purged)
-		if(purge > 0)
-			purged.icon_state = "purge1"
-		else
-			purged.icon_state = "purge0"
-
-	if(client)
-		switch(health)
-			if(50 to INFINITY)
-				healths.icon_state = "shade_health0"
-			if(41 to 49)
-				healths.icon_state = "shade_health1"
-			if(33 to 40)
-				healths.icon_state = "shade_health2"
-			if(25 to 32)
-				healths.icon_state = "shade_health3"
-			if(17 to 24)
-				healths.icon_state = "shade_health4"
-			if(9 to 16)
-				healths.icon_state = "shade_health5"
-			if(1 to 8)
-				healths.icon_state = "shade_health6"
-			else
-				healths.icon_state = "shade_health7"
-
-/mob/living/simple_animal/shade/happiest/Die()
-	transmogrify()
-	if(!gcDestroyed)
-		qdel(src)
-
-/mob/living/simple_animal/shade/sword/attempt_suicide(forced = FALSE, suicide_set = TRUE)
-	if(!forced)
-		var/confirm = alert("Are you sure you want to seal your ego? This action cannot be undone and your current knowledge will be lost forever.", "Confirm Suicide", "Yes", "No")
-
-		if(!confirm == "Yes")
-			return
-
-		if(stat != CONSCIOUS)
-			to_chat(src, "<span class='warning'>You can't perform the sealing ritual in this state!</span>")
-			return
-
-		log_attack("<span class='danger'>[key_name(src)] has sealed itself via the suicide verb.</span>")
-
-	if(suicide_set)
-		suiciding = TRUE
-
-	visible_message("<span class='danger'>[src] shudders violently for a moment, then becomes motionless, its aura fading and eyes slowly darkening.</span>")
-	Die()
-
-/mob/living/simple_animal/shade/sword/Die()
-	if(istype(loc, /obj/item/weapon/nullrod/sword/chaos))
-		var/obj/item/weapon/nullrod/sword/chaos/C = loc
-		C.possessed = FALSE
-		C.icon_state = "talking_sword"
-	..()
+		. = ..()

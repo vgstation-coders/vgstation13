@@ -10,6 +10,7 @@
 			padding: 0;
 			overflow: hidden;
 		}
+
 		.wrap {
 			position: absolute;
 			top: 0;
@@ -17,6 +18,7 @@
 			max-width: 298px;
 			border: 2px solid #1B2967;
 		}
+
 		.content {
 			font: bold 12px Arial, 'Helvetica Neue', Helvetica, sans-serif;
 			color: #ffffff;
@@ -24,34 +26,66 @@
 			border: 2px solid #0033CC;
 			background: #005CB8;
 		}
+
 		h1 {
 			margin: -5px 0 2px 0;
 			font-size: 1.2em;
 			line-height: 1.4;
 		}
+
 		p {
 			margin: 0;
 			line-height: 1.2;
 		}
+
 		/* Custom Themes */
-		.blob .wrap {border-color: #009900;}
-		.blob .content {border-color: #66FF00; background-color: #475E13;}
+		.blob .wrap {border-color: #2E2E2E;}
+		.blob .content {color: #82ED00; border-color: #4E4C4A; background-color: #191918;}
+
+		.parasite .wrap {border-color: #88868D;}
+		.parasite .content {color: #EFEEEF; border-color: #35333A; background-color: #636169;}
+
+		.alien .wrap {border-color: #33165B;}
+		.alien .content {color: #25004A; border-color: #5A3076; background-color: #6D3A8E;}
+
 		.wraith .wrap {border-color: #492136;}
 		.wraith .content {border-color: #331726; background-color: #471962;}
+
+		.cult .wrap {border-color: #292222;}
+		.cult .content {color: #FF0000; border-color: #4C4343; background-color: #3C3434;}
+
+		.clockcult .wrap {border-color: #170800;}
+		.clockcult .content {color: #B18B25; border-color: #000000; background-color: #5F380E;}
+
 		.pod .wrap {border-color: #052401;}
 		.pod .content {border-color: #326D29; background-color: #569F4B;}
+
 		.colo-pod .wrap {border-color: #256fb9;}
 		.colo-pod .content {border-color: #000000; background-color: #000000;}
 
+		.hisgrace .wrap {border-color: #7C1414;}
+		.hisgrace .content {color: #15D512; border-color: #9D1414; background-color: #861414;}
+	
 		/* TG: Themes */
 		/* ScreenUI */
 		.midnight .wrap {border-color: #2B2B33;}
 		.midnight .content {color: #6087A0; border-color: #2B2B33; background-color: #36363C;}
-
+		
 		.plasmafire .wrap {border-color: #21213D;}
 		.plasmafire .content {color: #FFA800 ; border-color: #21213D; background-color:#1D1D36;}
+
 		.retro .wrap {border-color: #005E00;}
 		.retro .content {color: #003366; border-color: #005E00; background-color: #00BD00;}
+
+		.slimecore .wrap {border-color: #18640E;}
+		.slimecore .content {color: #6EA161; border-color: #11450B; background-color: #354E35;}
+
+		.operative .wrap {border-color: #1E0101;}
+		.operative .content {color: #FFFFFF; border-color: #750000; background-color: #350000;}
+
+		.clockwork .wrap {border-color: #170800;}
+		.clockwork .content {color: #B18B25; border-color: #000000; background-color: #5F380E;}
+		
 
 	</style>
 </head>
@@ -59,13 +93,14 @@
 	<div id="wrap" class="wrap">
 		<div id="content" class="content"></div>
 	</div>
-	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript">
 		var tooltip = {
 			'tileSize': 32,
 			'control': '',
 			'params': {},
-			'clientView': 0,
+			'client_view_w': 0,
+			'client_view_h': 0,
 			'text': '',
 			'theme': '',
 			'padding': 2,
@@ -78,19 +113,24 @@
 			},
 			updateCallback: function(map) {
 				if (typeof map === 'undefined' || !map) {return false;}
+
 				//alert(tooltip.params+' | '+tooltip.clientView+' | '+tooltip.text+' | '+tooltip.theme); //DEBUG
+
 				//Some reset stuff to avoid fringe issues with sizing
 				window.location = 'byond://winset?id='+tooltip.control+';anchor1=0,0;size=999x999';
+
 				//Get the real icon size according to the client view
 				var mapWidth 		= map['view-size'].x,
 					mapHeight 		= map['view-size'].y,
-					tilesShown 		= (tooltip.clientView * 2) + 1,
+					tilesShown 		= tooltip.client_view_w
 					realIconSize 	= mapWidth / tilesShown,
 					resizeRatio		= realIconSize / tooltip.tileSize,
-					//Calculate letterboxing offsets
+					//Calculate letterboxing offsets	
 					leftOffset 		= (map.size.x - mapWidth) / 2,
 					topOffset 		= (map.size.y - mapHeight) / 2;
+
 				//alert(realIconSize + ' | ' +tooltip.tileSize + ' | ' + resizeRatio); //DEBUG
+
 				//Parse out the tile and cursor locations from params (e.g. "icon-x=32;icon-y=29;screen-loc=3:10,15:29")
 				var paramsA = tooltip.params.cursor.split(';');
 				if (paramsA.length < 3) {return false;} //Sometimes screen-loc is never sent ahaha fuck you byond
@@ -116,9 +156,11 @@
 				screenLoc = top.split(':');
 				top = parseInt(screenLoc[0]);
 				var enteredY = parseInt(screenLoc[1]);
+
 				//Screen loc offsets on objects (e.g. "WEST+0:6,NORTH-1:26") can royally mess with positioning depending on where the cursor enters
 				//This is a giant bitch to parse. Note that it only expects screen_loc in the format <west>,<north>.
 				var oScreenLoc = tooltip.params.screenLoc.split(','); //o for original ok
+
 				var west = oScreenLoc[0].split(':');
 				if (west.length > 1) { //Only if west has a pixel offset
 					var westOffset = parseInt(west[1]);
@@ -129,6 +171,7 @@
 						leftOffset = leftOffset + (westOffset * resizeRatio);
 					}
 				}
+
 				if (oScreenLoc.length > 1) { //If north is given
 					var north = oScreenLoc[1].split(':');
 					if (north.length > 1) { //Only if north has a pixel offset
@@ -148,42 +191,55 @@
 						}
 					}
 				}
+
 				//Handle special cases (for fuck sake)
 				if (tooltip.special !== 'none') {
 					//Put yo special cases here
 				}
+
 				//Clamp values
 				left = (left < 0 ? 0 : (left > tilesShown ? tilesShown : left));
 				top = (top < 0 ? 0 : (top > tilesShown ? tilesShown : top));
+
 				//Calculate where on the screen the popup should appear (below the hovered tile)
 				var posX = Math.round(((left - 1) * realIconSize) + leftOffset + tooltip.padding); //-1 to position at the left of the target tile
 				var posY = Math.round(((tilesShown - top + 1) * realIconSize) + topOffset + tooltip.padding); //+1 to position at the bottom of the target tile
+
 				//alert(mapWidth+' | '+mapHeight+' | '+tilesShown+' | '+realIconSize+' | '+leftOffset+' | '+topOffset+' | '+left+' | '+top+' | '+posX+' | '+posY); //DEBUG
+
 				$('body').attr('class', tooltip.theme);
+
 				var $content = $('#content'),
 					$wrap 	 = $('#wrap');
 				$wrap.attr('style', '');
 				$content.off('mouseover');
 				$content.html(tooltip.text);
+
 				$wrap.width($wrap.width() + 2); //Dumb hack to fix a bizarre sizing bug
+
 				var docWidth	= $wrap.outerWidth(),
 					docHeight	= $wrap.outerHeight();
+
 				if (posY + docHeight > map.size.y) { //Is the bottom edge below the window? Snap it up if so
 					posY = (posY - docHeight) - realIconSize - tooltip.padding;
 				}
+
 				//Actually size, move and show the tooltip box
 				window.location = 'byond://winset?id='+tooltip.control+';size='+docWidth+'x'+docHeight+';pos='+posX+','+posY+';is-visible=true';
+
 				$content.on('mouseover', function() {
 					tooltip.hide();
 				});
 			},
-			update: function(params, clientView, text, theme, special) {
+			update: function(params, client_vw , clien_vh , text, theme, special) {
 				//Assign our global object
 				tooltip.params = $.parseJSON(params);
-				tooltip.clientView = parseInt(clientView);
+				tooltip.client_view_w = parseInt(client_vw);
+				tooltip.client_view_h = parseInt(clien_vh);
 				tooltip.text = text;
 				tooltip.theme = theme;
 				tooltip.special = special;
+
 				//Go get the map details
 				window.location = 'byond://winget?callback=tooltip.updateCallback;id=mapwindow.map;property=size,view-size';
 			},

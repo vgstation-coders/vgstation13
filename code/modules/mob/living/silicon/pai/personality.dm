@@ -17,12 +17,12 @@
 	var/savefile/F = new /savefile(src.savefile_path(user))
 
 
-	F["name"]        << src.name
-	F["description"] << src.description
-	F["role"]        << src.role
-	F["comments"]    << src.comments
+	WRITE_FILE(F["name"], name)
+	WRITE_FILE(F["description"], description)
+	WRITE_FILE(F["role"], role)
+	WRITE_FILE(F["comments"], comments)
 
-	F["version"]     << 1
+	WRITE_FILE(F["version"], 1)
 
 	return 1
 
@@ -31,7 +31,7 @@
 // returns 1 if loaded (or file was incompatible)
 // returns 0 if savefile did not exist
 
-/datum/paiCandidate/proc/savefile_load(mob/user, var/silent = 1)
+/datum/paiCandidate/proc/savefile_load(mob/user, silent = TRUE)
 	if (IsGuestKey(user.key))
 		return 0
 

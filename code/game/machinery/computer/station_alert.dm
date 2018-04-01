@@ -1,122 +1,67 @@
-
 /obj/machinery/computer/station_alert
-	name = "Station Alert Computer"
+	name = "station alert console"
 	desc = "Used to access the station's automated alert system."
-	icon_state = "alert:0"
-	circuit = "/obj/item/weapon/circuitboard/stationalert"
+	icon_screen = "alert:0"
+	icon_keyboard = "atmos_key"
+	circuit = /obj/item/circuitboard/computer/stationalert
+	var/alarms = list("Fire" = list(), "Atmosphere" = list(), "Power" = list())
+
 	light_color = LIGHT_COLOR_CYAN
 
-	var/alarms = list("Fire"=list(), "Atmosphere"=list(), "Power"=list())
+/obj/machinery/computer/station_alert/Initialize()
+	. = ..()
+	GLOB.alert_consoles += src
 
-	var/list/covered_areas = list()
+/obj/machinery/computer/station_alert/Destroy()
+	GLOB.alert_consoles -= src
+	return ..()
 
-	var/general_area_name = "Station"
+/obj/machinery/computer/station_alert/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, \
+									datum/tgui/master_ui = null, datum/ui_state/state = GLOB.default_state)
+	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+	if(!ui)
+		ui = new(user, src, ui_key, "station_alert", name, 300, 500, master_ui, state)
+		ui.open()
 
-/obj/machinery/computer/station_alert/New()
-	..()
-	if(src.z != map.zMainStation)
-		var/area/A = src.areaMaster
-		if(!A)
-			A = get_area(src)
-		if(!A)
-			return
-		name = "[A.general_area_name] Alert Computer"
-		general_area_name = A.general_area_name
+/obj/machinery/computer/station_alert/ui_data(mob/user)
+	. = list()
 
-		for(var/areatype in typesof(A.general_area))
-			var/area/B = locate(areatype)
+	.["alarms"] = list()
+	for(var/class in alarms)
+		.["alarms"][class] = list()
+		for(var/area in alarms[class])
+			.["alarms"][class] += area
 
-			covered_areas += B
-
-	else//very ugly fix until all the main station's areas inherit from /area/station/
-		var/blockedtypes = typesof(/area/research_outpost,/area/mine,/area/derelict,/area/djstation,/area/vox_trading_post,/area/tcommsat)
-		for(var/atype in (typesof(/area) - blockedtypes))
-			var/area/B = locate(atype)
-
-			covered_areas += B
-
-	for(var/area/A in covered_areas)
-		A.sendDangerLevel(src)
-		A.send_firealert(src)
-		A.send_poweralert(src)
-
-/obj/machinery/computer/station_alert/attack_ai(mob/user)
-	src.add_hiddenprint(user)
-	add_fingerprint(user)
-	if(stat & (BROKEN|NOPOWER))
+/obj/machinery/computer/station_alert/proc/triggerAlarm(class, area/A, O, obj/source)
+	if(source.z != z)
 		return
-	interact(user)
-	return
-
-
-/obj/machinery/computer/station_alert/attack_hand(mob/user)
-	add_fingerprint(user)
-	if(stat & (BROKEN|NOPOWER))
-		return
-	interact(user)
-	return
-
-
-/obj/machinery/computer/station_alert/interact(mob/user)
-	usr.set_machine(src)
-
-	var/dat = {"<HEAD><TITLE>Current [general_area_name] Alerts</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n
-	<A HREF='?src=\ref[user];mach_close=alerts'>Close</A><br><br>"}
-	for (var/cat in src.alarms)
-		dat += text("<B>[]</B><BR>\n", cat)
-		var/list/L = src.alarms[cat]
-		if (L.len)
-			for (var/alarm in L)
-				var/list/alm = L[alarm]
-				var/area/A = alm[1]
-				var/list/sources = alm[3]
-
-				dat += {"<NOBR>
-					&bull;
-					[A.name]"}
-				if (sources.len > 1)
-					dat += text(" - [] sources", sources.len)
-				dat += "</NOBR><BR>\n"
-		else
-			dat += "-- All Systems Nominal<BR>\n"
-		dat += "<BR>\n"
-	user << browse(dat, "window=alerts")
-	onclose(user, "alerts")
-
-
-/obj/machinery/computer/station_alert/Topic(href, href_list)
-	if(..())
-		return
-	return
-
-
-/obj/machinery/computer/station_alert/proc/triggerAlarm(var/class, area/A, var/O, var/alarmsource)
 	if(stat & (BROKEN))
 		return
-	var/list/L = src.alarms[class]
-	for (var/I in L)
+
+	var/list/L = alarms[class]
+	for(var/I in L)
 		if (I == A.name)
 			var/list/alarm = L[I]
 			var/list/sources = alarm[3]
-			if (!(alarmsource in sources))
-				sources += alarmsource
+			if (!(source in sources))
+				sources += source
 			return 1
 	var/obj/machinery/camera/C = null
 	var/list/CL = null
-	if (O && istype(O, /list))
+	if(O && islist(O))
 		CL = O
 		if (CL.len == 1)
 			C = CL[1]
-	else if (O && istype(O, /obj/machinery/camera))
+	else if(O && istype(O, /obj/machinery/camera))
 		C = O
-	L[A.name] = list(A, (C) ? C : O, list(alarmsource))
+	L[A.name] = list(A, (C ? C : O), list(source))
 	return 1
 
 
-/obj/machinery/computer/station_alert/proc/cancelAlarm(var/class, area/A as area, obj/origin)
+/obj/machinery/computer/station_alert/proc/cancelAlarm(class, area/A, obj/origin)
 	if(stat & (BROKEN))
 		return
-	var/list/L = src.alarms[class]
+	var/list/L = alarms[class]
 	var/cleared = 0
 	for (var/I in L)
 		if (I == A.name)
@@ -129,22 +74,14 @@
 				L -= I
 	return !cleared
 
-
-/obj/machinery/computer/station_alert/process()
-	if(stat & NOPOWER)
-		icon_state = "atmos0"
-		return
-	else if(stat & BROKEN)
-		icon_state = "atmosb"
-		return
-	var/active_alarms = 0
-	for (var/cat in src.alarms)
-		var/list/L = src.alarms[cat]
-		if(L.len)
-			active_alarms = 1
-	if(active_alarms)
-		icon_state = "alert:2"
-	else
-		icon_state = "alert:0"
+/obj/machinery/computer/station_alert/update_icon()
 	..()
-	return
+	if(stat & (NOPOWER|BROKEN))
+		return
+	var/active_alarms = FALSE
+	for(var/cat in alarms)
+		var/list/L = alarms[cat]
+		if(L.len)
+			active_alarms = TRUE
+	if(active_alarms)
+		add_overlay("alert:2")

@@ -1,49 +1,28 @@
-/mob/dead/observer/say(var/message)
-	message = trim(copytext(message, 1, MAX_MESSAGE_LEN))
+/mob/dead/observer/say(message)
+	message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
 
 	if (!message)
 		return
 
-	if (src.client)
-		if(src.client.prefs.muted & MUTE_DEADCHAT)
-			to_chat(src, "<span class='warning'>You cannot talk in deadchat (muted).</span>")
-			return
+	log_talk(src,"Ghost/[src.key] : [message]", LOGSAY)
 
-		if (src.client.handle_spam_prevention(message,MUTE_DEADCHAT))
-			return
-
-	. = src.say_dead(message)
-
-/mob/dead/observer/say_quote(var/text)
-	var/ending = copytext(text, length(text))
-
-	if (ending == "?")
-		return "[pick("moans", "gripes", "grumps", "murmurs", "mumbles", "bleats")], [text]";
-	else if (ending == "!")
-		return "[pick("screams", "screeches", "howls")], [text]";
-
-	return "[pick("whines", "cries", "spooks", "complains", "drones", "mutters")], [text]";
-
-/mob/dead/observer/Hear(var/datum/speech/speech, var/rendered_speech="")
-	if (isnull(client) || !speech.speaker)
+	if(check_emote(message))
 		return
 
-	var/source = speech.speaker.GetSource()
-	var/source_turf = get_turf(source)
+	. = say_dead(message)
 
-	say_testing(src, "/mob/dead/observer/Hear(): source=[source], frequency=[speech.frequency], source_turf=[formatJumpTo(source_turf)]")
+/mob/dead/observer/Hear(message, atom/movable/speaker, message_language, raw_message, radio_freq, list/spans, message_mode)
+	var/atom/movable/to_follow = speaker
+	if(radio_freq)
+		var/atom/movable/virtualspeaker/V = speaker
 
-	if (get_dist(source_turf, src) <= get_view_range())
-		rendered_speech = "<B>[rendered_speech]</B>"
-	else
-		if(client && client.prefs)
-			if (!speech.frequency)
-				if ((client.prefs.toggles & CHAT_GHOSTEARS) != CHAT_GHOSTEARS)
-					say_testing(src, "/mob/dead/observer/Hear(): CHAT_GHOSTEARS is disabled, blocking. ([client.prefs.toggles] & [CHAT_GHOSTEARS]) = [client.prefs.toggles & CHAT_GHOSTEARS]")
-					return
-			else
-				if ((client.prefs.toggles & CHAT_GHOSTRADIO) != CHAT_GHOSTRADIO)
-					say_testing(src, "/mob/dead/observer/Hear(): CHAT_GHOSTRADIO is disabled, blocking. ([client.prefs.toggles] & [CHAT_GHOSTRADIO]) = [client.prefs.toggles & CHAT_GHOSTRADIO]")
-					return
+		if(isAI(V.source))
+			var/mob/living/silicon/ai/S = V.source
+			to_follow = S.eyeobj
+		else
+			to_follow = V.source
+	var/link = FOLLOW_LINK(src, to_follow)
+	// Recompose the message, because it's scrambled by default
+	message = compose_message(speaker, message_language, raw_message, radio_freq, spans, message_mode)
+	to_chat(src, "[link] [message]")
 
-	to_chat(src, "<a href='?src=\ref[src];follow=\ref[source]'>(Follow)</a> [rendered_speech]")

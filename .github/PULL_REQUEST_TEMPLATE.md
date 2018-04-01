@@ -1,21 +1,22 @@
-<!--
-Pull requests must be atomic.  Change one set of related things at a time.  Bundling sucks for everyone.
-This means, primarily, that you shouldn't fix bugs and add content in the same PR. When we mean 'bundling', we mean making one PR for multiple, unrelated changes.
+[Changelogs]: # (Your PR should contain a detailed changelog of notable changes, titled and categorized appropriately. This includes, new features, sprites, sounds, balance changes, admin tools, map edits, removals, big refactors, config changes, hosting changes and important fixes. An example changelog has been provided below for you to edit. If you need additional help, read https://github.com/tgstation/tgstation/wiki/Changelogs)
 
-Test your changes. PRs that do not compile will not be accepted.
-Testing your changes locally is incredibly important. If you break the serb we will be very upset with you.
+:cl: optional name here
+add: Added new things
+add: Added more things
+del: Removed old things
+tweak: tweaked a few things
+balance: rebalanced something
+fix: fixed a few things
+soundadd: added a new sound thingy
+sounddel: removed an old sound thingy
+imageadd: added some icons and images
+imagedel: deleted some icons and images
+spellcheck: fixed a few typos
+code: changed some code
+refactor: refactored some code
+config: changed some config setting
+admin: messed with admin stuff
+server: something server ops should know
+/:cl:
 
-Large changes require discussion.  If you're doing a large, game-changing modification, or a new layout for something, discussion with the community is required as of 26/6/2014.  Map and sprite changes require pictures of before and after.  MAINTAINERS ARE NOT IMMUNE TO THIS.  GET YOUR ASS IN IRC.
-
-Merging your own PRs is considered bad practice, as it generally means you bypass peer review, which is a core part of how we develop.
-
-It is also suggested that you hop into irc.rizon.net #vgstation to discuss your changes, or if you need help.
-
-When working with in body changelogs, the syntax is as follows:
-:cl:
- * rscadd: Did stuff!
- * rscdel: did other stuff!
-
-for the keys you can use in a changelog, they are the same as described in html/changelogs/example.yml
-NOTE that anything *after* the :cl: will be parsed as a changelog, if it somehow manages to be parseable as such, so always put the changelog at the VERY end!
--->
+[why]: # (Please add a short description [two lines down] of why you think these changes would benefit the game. If you can't justify it in words, it might not be worth adding.)

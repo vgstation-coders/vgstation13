@@ -1,700 +1,1772 @@
 ////////////////////////////////
 ///// Construction datums //////
 ////////////////////////////////
+/datum/component/construction/mecha
+	var/base_icon
 
-#define MAINBOARD	4
-#define PERIBOARD	6
-#define TARGBOARD	8
-#define ARMOR_PLATES	17
+/datum/component/construction/mecha/spawn_result()
+	if(!result)
+		return
+	// Remove default mech power cell, as we replace it with a new one.
+	var/obj/mecha/M = new result(drop_location())
+	QDEL_NULL(M.cell)
 
-/datum/construction/reversible/mecha
-	var/base_icon = "ripley"
-	var/mainboard = /obj/item/weapon/circuitboard/mecha/ripley/main
-	var/peripherals = /obj/item/weapon/circuitboard/mecha/ripley/peripherals
+	var/atom/parent_atom = parent
+	M.CheckParts(parent_atom.contents)
 
-	steps = list(
-					//1
-					list(Co_DESC="External armor is wrenched.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/weldingtool,
-					 		Co_AMOUNT = 3,
-					 		Co_VIS_MSG = "{USER} weld{s} external armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the external armor layer.")
-					 	),
-					//2
-					 list(Co_DESC="External armor is installed.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} secure{s} external armor layer."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} prie{s} external armor layer from {HOLDER}.",
-					 		Co_START_MSG = "{USER} begin{s} removing the external reinforced armor...",
-					 		Co_DELAY = 30,)
-					 	),
-					 //3
-					 list(Co_DESC="Internal armor is welded.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/sheet/plasteel,
-					 		Co_AMOUNT = 5,
-					 		Co_VIS_MSG = "{USER} install{s} external reinforced armor layer to {HOLDER}.",
-					 		Co_START_MSG = "{USER} begin{s} installing the external reinforced armor...",
-					 		Co_DELAY = 30),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/weldingtool,
-					 		Co_AMOUNT = 3,
-					 		Co_VIS_MSG = "{USER} cut{s} internal armor layer from {HOLDER}.")
-					 	),
-					 //4
-					 list(Co_DESC="Internal armor is wrenched",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/weldingtool,
-					 		Co_AMOUNT = 3,
-					 		Co_VIS_MSG = "{USER} weld{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} unfastens the internal armor layer.")
-					 	),
-					 //5
-					 list(Co_DESC="Internal armor is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} secure{s} internal armor layer."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} prie{s} internal armor layer from {HOLDER}.")
-					 	),
-					 //6
-					 list(Co_DESC="Peripherals control module is secured",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/sheet/metal,
-					 		Co_AMOUNT = 5,
-					 		Co_VIS_MSG = "{USER} install{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the peripherals control module.")
-					 	),
-					 //7
-					 list(Co_DESC="Peripherals control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} secure{s} the peripherals control module."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} remove{s} the peripherals control module from {HOLDER}.")
-					 	),
-					 //8
-					 list(Co_DESC="Central control module is secured",
-					 	Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} the peripherals control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the mainboard.")
-					 	),
-					 //9
-					 list(Co_DESC="Central control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} secure{s} the mainboard."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} remove{s} the central control module from {HOLDER}.")
-					 	),
-					 //10
-					 list(Co_DESC="The wiring is adjusted",
-						Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} the central control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} disconnect{s} the wiring of {HOLDER}.")
-					 	),
-					 //11
-					 list(Co_DESC="The wiring is added",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wirecutters,
-					 		Co_VIS_MSG = "{USER} adjust{s} the wiring of {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} remove{s} the wiring of {HOLDER}.")
-					 	),
-					 //12
-					 list(Co_DESC="The hydraulic systems are active.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/cable_coil,
-					 		Co_AMOUNT = 10,
-					 		Co_VIS_MSG = "{USER} add{s} the wiring to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} deactivate{s} {HOLDER} hydraulic systems.")
-					 	),
-					 //13
-					 list(Co_DESC="The hydraulic systems are connected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} activate{s} {HOLDER} hydraulic systems."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} disconnect{s} {HOLDER} hydraulic systems.")
-					 	),
-					 //14
-					 list(Co_DESC="The hydraulic systems are disconnected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} connect{s} {HOLDER} hydraulic systems.")
-					 	)
-					)
+	SSblackbox.record_feedback("tally", "mechas_created", 1, M.name)
+	QDEL_NULL(parent)
 
-/datum/construction/reversible/mecha/New()
+/datum/component/construction/mecha/update_parent(step_index)
 	..()
-	if(src)
-		add_board_keys()
+	// By default, each step in mech construction has a single icon_state:
+	// "[base_icon][index - 1]"
+	// For example, Ripley's step 1 icon_state is "ripley0".
+	var/atom/parent_atom = parent
+	if(!steps[index]["icon_state"] && base_icon)
+		parent_atom.icon_state = "[base_icon][index - 1]"
 
-/datum/construction/reversible/mecha/custom_action(index, diff, atom/used_atom, mob/user)
+/datum/component/construction/unordered/mecha_chassis/custom_action(obj/item/I, mob/living/user, typepath)
+	. = user.transferItemToLoc(I, parent)
+	if(.)
+		var/atom/parent_atom = parent
+		user.visible_message("[user] has connected [I] to [parent].", "<span class='notice'>You connect [I] to [parent].</span>")
+		parent_atom.add_overlay(I.icon_state+"+o")
+		qdel(I)
+
+/datum/component/construction/unordered/mecha_chassis/spawn_result()
+	var/atom/parent_atom = parent
+	parent_atom.icon = 'icons/mecha/mech_construction.dmi'
+	parent_atom.density = TRUE
+	parent_atom.cut_overlays()
+	..()
+
+
+/datum/component/construction/unordered/mecha_chassis/ripley
+	result = /datum/component/construction/mecha/ripley
+	steps = list(
+		/obj/item/mecha_parts/part/ripley_torso,
+		/obj/item/mecha_parts/part/ripley_left_arm,
+		/obj/item/mecha_parts/part/ripley_right_arm,
+		/obj/item/mecha_parts/part/ripley_left_leg,
+		/obj/item/mecha_parts/part/ripley_right_leg
+	)
+
+/datum/component/construction/mecha/ripley
+	result = /obj/mecha/working/ripley
+	base_icon = "ripley"
+	steps = list(
+		//1
+		list(
+			"key" = TOOL_WRENCH,
+			"desc" = "The hydraulic systems are disconnected."
+		),
+
+		//2
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "The hydraulic systems are connected."
+		),
+
+		//3
+		list(
+			"key" = /obj/item/stack/cable_coil,
+			"amount" = 5,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The hydraulic systems are active."
+		),
+
+		//4
+		list(
+			"key" = TOOL_WIRECUTTER,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The wiring is added."
+		),
+
+		//5
+		list(
+			"key" = /obj/item/circuitboard/mecha/ripley/main,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The wiring is adjusted."
+		),
+
+		//6
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Central control module is installed."
+		),
+
+		//7
+		list(
+			"key" = /obj/item/circuitboard/mecha/ripley/peripherals,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Central control module is secured."
+		),
+
+		//8
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Peripherals control module is installed."
+		),
+
+		//9
+		list(
+			"key" = /obj/item/stock_parts/cell,
+			"action" = ITEM_MOVE_INSIDE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Peripherals control module is secured."
+		),
+
+		//10
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "The power cell is installed."
+		),
+
+		//11
+		list(
+			"key" = /obj/item/stack/sheet/metal,
+			"amount" = 5,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The power cell is secured."
+		),
+
+		//12
+		list(
+			"key" = TOOL_WRENCH,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Internal armor is installed."
+		),
+
+		//13
+		list(
+			"key" = TOOL_WELDER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "Internal armor is wrenched."
+		),
+
+		//14
+		list(
+			"key" = /obj/item/stack/sheet/plasteel,
+			"amount" = 5,
+			"back_key" = TOOL_WELDER,
+			"desc" = "Internal armor is welded."
+		),
+
+		//15
+		list(
+			"key" = TOOL_WRENCH,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "External armor is installed."
+		),
+
+		//16
+		list(
+			"key" = TOOL_WELDER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "External armor is wrenched."
+		),
+	)
+
+/datum/component/construction/mecha/ripley/custom_action(obj/item/I, mob/living/user, diff)
 	if(!..())
-		return 0
+		return FALSE
 
-	holder.icon_state = "[base_icon][steps.len - index - diff]"
-	return 1
+	switch(index)
+		if(1)
+			user.visible_message("[user] connects [parent] hydraulic systems", "<span class='notice'>You connect [parent] hydraulic systems.</span>")
+		if(2)
+			if(diff==FORWARD)
+				user.visible_message("[user] activates [parent] hydraulic systems.", "<span class='notice'>You activate [parent] hydraulic systems.</span>")
+			else
+				user.visible_message("[user] disconnects [parent] hydraulic systems", "<span class='notice'>You disconnect [parent] hydraulic systems.</span>")
+		if(3)
+			if(diff==FORWARD)
+				user.visible_message("[user] adds the wiring to [parent].", "<span class='notice'>You add the wiring to [parent].</span>")
+			else
+				user.visible_message("[user] deactivates [parent] hydraulic systems.", "<span class='notice'>You deactivate [parent] hydraulic systems.</span>")
+		if(4)
+			if(diff==FORWARD)
+				user.visible_message("[user] adjusts the wiring of [parent].", "<span class='notice'>You adjust the wiring of [parent].</span>")
+			else
+				user.visible_message("[user] removes the wiring from [parent].", "<span class='notice'>You remove the wiring from [parent].</span>")
+		if(5)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the central control module into [parent].", "<span class='notice'>You install the central computer mainboard into [parent].</span>")
+			else
+				user.visible_message("[user] disconnects the wiring of [parent].", "<span class='notice'>You disconnect the wiring of [parent].</span>")
+		if(6)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the mainboard.", "<span class='notice'>You secure the mainboard.</span>")
+			else
+				user.visible_message("[user] removes the central control module from [parent].", "<span class='notice'>You remove the central computer mainboard from [parent].</span>")
+		if(7)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the peripherals control module into [parent].", "<span class='notice'>You install the peripherals control module into [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the mainboard.", "<span class='notice'>You unfasten the mainboard.</span>")
+		if(8)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the peripherals control module.", "<span class='notice'>You secure the peripherals control module.</span>")
+			else
+				user.visible_message("[user] removes the peripherals control module from [parent].", "<span class='notice'>You remove the peripherals control module from [parent].</span>")
+		if(9)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the power cell into [parent].", "<span class='notice'>You install the power cell into [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the peripherals control module.", "<span class='notice'>You unfasten the peripherals control module.</span>")
+		if(10)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the power cell.", "<span class='notice'>You secure the power cell.</span>")
+			else
+				user.visible_message("[user] prys the power cell from [parent].", "<span class='notice'>You pry the power cell from [parent].</span>")
+		if(11)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the internal armor layer to [parent].", "<span class='notice'>You install the internal armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the power cell.", "<span class='notice'>You unfasten the power cell.</span>")
+		if(12)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the internal armor layer.", "<span class='notice'>You secure the internal armor layer.</span>")
+			else
+				user.visible_message("[user] pries internal armor layer from [parent].", "<span class='notice'>You pry internal armor layer from [parent].</span>")
+		if(13)
+			if(diff==FORWARD)
+				user.visible_message("[user] welds the internal armor layer to [parent].", "<span class='notice'>You weld the internal armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the internal armor layer.", "<span class='notice'>You unfasten the internal armor layer.</span>")
+		if(14)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the external reinforced armor layer to [parent].", "<span class='notice'>You install the external reinforced armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] cuts the internal armor layer from [parent].", "<span class='notice'>You cut the internal armor layer from [parent].</span>")
+		if(15)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the external armor layer.", "<span class='notice'>You secure the external reinforced armor layer.</span>")
+			else
+				user.visible_message("[user] pries external armor layer from [parent].", "<span class='notice'>You pry external armor layer from [parent].</span>")
+		if(16)
+			if(diff==FORWARD)
+				user.visible_message("[user] welds the external armor layer to [parent].", "<span class='notice'>You weld the external armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the external armor layer.", "<span class='notice'>You unfasten the external armor layer.</span>")
+	return TRUE
 
-/datum/construction/reversible/mecha/action(atom/used_atom,mob/user)
+/datum/component/construction/unordered/mecha_chassis/gygax
+	result = /datum/component/construction/mecha/gygax
+	steps = list(
+		/obj/item/mecha_parts/part/gygax_torso,
+		/obj/item/mecha_parts/part/gygax_left_arm,
+		/obj/item/mecha_parts/part/gygax_right_arm,
+		/obj/item/mecha_parts/part/gygax_left_leg,
+		/obj/item/mecha_parts/part/gygax_right_leg,
+		/obj/item/mecha_parts/part/gygax_head
+	)
+
+/datum/component/construction/mecha/gygax
+	result = /obj/mecha/combat/gygax
+	base_icon = "gygax"
+	steps = list(
+		//1
+		list(
+			"key" = TOOL_WRENCH,
+			"desc" = "The hydraulic systems are disconnected."
+		),
+
+		//2
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "The hydraulic systems are connected."
+		),
+
+		//3
+		list(
+			"key" = /obj/item/stack/cable_coil,
+			"amount" = 5,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The hydraulic systems are active."
+		),
+
+		//4
+		list(
+			"key" = TOOL_WIRECUTTER,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The wiring is added."
+		),
+
+		//5
+		list(
+			"key" = /obj/item/circuitboard/mecha/gygax/main,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The wiring is adjusted."
+		),
+
+		//6
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Central control module is installed."
+		),
+
+		//7
+		list(
+			"key" = /obj/item/circuitboard/mecha/gygax/peripherals,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Central control module is secured."
+		),
+
+		//8
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Peripherals control module is installed."
+		),
+
+		//9
+		list(
+			"key" = /obj/item/circuitboard/mecha/gygax/targeting,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Peripherals control module is secured."
+		),
+
+		//10
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Weapon control module is installed."
+		),
+
+		//11
+		list(
+			"key" = /obj/item/stock_parts/scanning_module,
+			"action" = ITEM_MOVE_INSIDE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Weapon control module is secured."
+		),
+
+		//12
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Advanced scanner module is installed."
+		),
+
+		//13
+		list(
+			"key" = /obj/item/stock_parts/capacitor,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Advanced scanner module is secured."
+		),
+
+		//14
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Advanced capacitor is installed."
+		),
+
+		//15
+		list(
+			"key" = /obj/item/stock_parts/cell,
+			"action" = ITEM_MOVE_INSIDE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Advanced capacitor is secured."
+		),
+
+		//16
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "The power cell is installed."
+		),
+
+		//17
+		list(
+			"key" = /obj/item/stack/sheet/metal,
+			"amount" = 5,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The power cell is secured."
+		),
+
+		//18
+		list(
+			"key" = TOOL_WRENCH,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Internal armor is installed."
+		),
+
+		//19
+		list(
+			"key" = TOOL_WELDER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "Internal armor is wrenched."
+		),
+
+		//20
+		list(
+			"key" = /obj/item/mecha_parts/part/gygax_armor,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_WELDER,
+			"desc" = "Internal armor is welded."
+		),
+
+		//21
+		list(
+			"key" = TOOL_WRENCH,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "External armor is installed."
+		),
+
+		//22
+		list(
+			"key" = TOOL_WELDER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "External armor is wrenched."
+		),
+
+	)
+
+/datum/component/construction/mecha/gygax/action(atom/used_atom,mob/user)
 	return check_step(used_atom,user)
 
-/datum/construction/reversible/mecha/proc/add_board_keys()
-	var/list/board_step = get_forward_step(steps.len - MAINBOARD)
-	board_step[Co_KEY] = mainboard
-
-	board_step = get_forward_step(steps.len - PERIBOARD)
-	board_step[Co_KEY] = peripherals
-
-/datum/construction/reversible/mecha/spawn_result(mob/user as mob)
-	..()
-	feedback_inc("mecha_[base_icon]_created",1)
-	return
-
-// custom_actions moved to construction_datum - N3X
-
-
-/datum/construction/reversible/mecha/ripley
-	result = "/obj/mecha/working/ripley"
-
-/datum/construction/reversible/mecha/firefighter
-	result = "/obj/mecha/working/ripley/firefighter"
-	steps = list(
-					//1
-					list(Co_DESC="External armor is wrenched.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/weldingtool,
-					 		Co_AMOUNT = 3,
-					 		Co_VIS_MSG = "{USER} weld{s} external armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the external armor layer.")
-					 	),
-					//2
-					 list(Co_DESC="External armor is installed.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} secure{s} external armor layer."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} prie{s} external armor layer from {HOLDER}.",
-					 		Co_START_MSG = "{USER} begin{s} removing the external reinforced armor...",
-					 		Co_DELAY = 50,)
-					 	),
-					 //3
-					 list(Co_DESC="Internal armor is welded.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/sheet/plasteel,
-					 		Co_AMOUNT = 10,
-					 		Co_VIS_MSG = "{USER} install{s} external reinforced armor layer to {HOLDER}.",
-					 		Co_START_MSG = "{USER} begin{s} installing the external reinforced armor...",
-					 		Co_DELAY = 50),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/weldingtool,
-					 		Co_AMOUNT = 3,
-					 		Co_VIS_MSG = "{USER} cut{s} internal armor layer from {HOLDER}.")
-					 	),
-					 //4
-					 list(Co_DESC="Internal armor is wrenched",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/weldingtool,
-					 		Co_AMOUNT = 3,
-					 		Co_VIS_MSG = "{USER} weld{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the internal armor layer.")
-					 	),
-					 //5
-					 list(Co_DESC="Internal armor is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} secure{s} internal armor layer."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} prie{s} internal armor layer from {HOLDER}.")
-					 	),
-					 //6
-					 list(Co_DESC="Peripherals control module is secured",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/sheet/metal,
-					 		Co_AMOUNT = 5,
-					 		Co_VIS_MSG = "{USER} install{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the peripherals control module.")
-					 	),
-					 //7
-					 list(Co_DESC="Peripherals control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} secure{s} the peripherals control module."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} remove{s} the peripherals control module from {HOLDER}.")
-					 	),
-					 //8
-					 list(Co_DESC="Central control module is secured",
-					 	Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} the peripherals control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the mainboard.")
-					 	),
-					 //9
-					 list(Co_DESC="Central control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} secure{s} the mainboard."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} remove{s} the central control module from {HOLDER}.")
-					 	),
-					 //10
-					 list(Co_DESC="The wiring is adjusted",
-						Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} the central control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} disconnect{s} the wiring of {HOLDER}.")
-					 	),
-					 //11
-					 list(Co_DESC="The wiring is added",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wirecutters,
-					 		Co_VIS_MSG = "{USER} adjust{s} the wiring of {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} remove{s} the wiring of {HOLDER}.")
-					 	),
-					 //12
-					 list(Co_DESC="The hydraulic systems are active.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/cable_coil,
-					 		Co_AMOUNT = 10,
-					 		Co_VIS_MSG = "{USER} add{s} the wiring to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} deactivate{s} {HOLDER} hydraulic systems.")
-					 	),
-					 //13
-					 list(Co_DESC="The hydraulic systems are connected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} activate{s} {HOLDER} hydraulic systems."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} disconnect{s} {HOLDER} hydraulic systems.")
-					 	),
-					 //14
-					 list(Co_DESC="The hydraulic systems are disconnected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} connect{s} {HOLDER} hydraulic systems.")
-					 	)
-					)
-
-
-/datum/construction/reversible/mecha/odysseus
-	result = "/obj/mecha/medical/odysseus"
-	base_icon = "odysseus"
-
-	mainboard = /obj/item/weapon/circuitboard/mecha/odysseus/main
-	peripherals = /obj/item/weapon/circuitboard/mecha/odysseus/peripherals
-
-/datum/construction/reversible/mecha/combat
-	var/targeting = /obj/item/weapon/circuitboard/mecha/gygax/targeting
-	var/armor_plates = /obj/item/mecha_parts/part/gygax_armour
-
-	steps = list(
-					//1
-					list(Co_DESC="External armor is wrenched.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/weldingtool,
-					 		Co_AMOUNT = 3,
-					 		Co_VIS_MSG = "{USER} weld{s} armor plates to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the armor plates.")
-					 	),
-					//2
-					 list(Co_DESC="External armor is installed.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} secure{s} armor plates."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} prie{s} armor plates from {HOLDER}.",
-					 		Co_DELAY = 30,
-					 		Co_START_MSG = "{USER} begin{s} removing the armor plates...")
-					 	),
-					 //3
-					 list(Co_DESC="Internal armor is welded.",
-					 	Co_NEXTSTEP = list(Co_KEY=null, //set by proc
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} armor plates to {HOLDER}.",
-					 		Co_START_MSG = "{USER} begin{s} installing the armor plates...",
-					 		Co_DELAY = 30),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/weldingtool,
-					 		Co_AMOUNT = 3,
-					 		Co_VIS_MSG = "{USER} cut{s} internal armor layer from {HOLDER}.")
-					 	),
-					 //4
-					 list(Co_DESC="Internal armor is wrenched",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/weldingtool,
-					 		Co_AMOUNT = 3,
-					 		Co_VIS_MSG = "{USER} weld{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the internal armor layer.")
-					 	),
-					 //5
-					 list(Co_DESC="Internal armor is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} secure{s} internal armor layer."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} prie{s} internal armor layer from {HOLDER}.")
-					 	),
-					 //6
-					 list(Co_DESC="Advanced capacitor is secured",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/sheet/metal,
-					 		Co_AMOUNT = 5,
-					 		Co_VIS_MSG = "{USER} install{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the advanced capacitor.")
-					 	),
-					 //7
-					 list(Co_DESC="Advanced capacitor is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} secure{s} the advanced capacitor."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} remove{s} the advanced capacitor from {HOLDER}.")
-					 	),
-					 //8
-					 list(Co_DESC="Advanced scanner module is secured",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/stock_parts/capacitor/adv,
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} advanced capacitor to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the Advanced scanner module.")
-					 	),
-					 //9
-					 list(Co_DESC="Advanced scanner module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} secure{s} the advanced scanner module."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} remove{s} the advanced scanner module from {HOLDER}.")
-					 	),
-					 //10
-					 list(Co_DESC="Targeting module is secured",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/stock_parts/scanning_module/adv,
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} advanced scanner module to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the targeting module.")
-					 	),
-					 //11
-					 list(Co_DESC="Targeting module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} secure{s} the targeting module."),
-					 	Co_BACKSTOP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} remove{s} the targeting module from {HOLDER}.")
-					 	),
-					 //12
-					 list(Co_DESC="Peripherals control module is secured",
-					 	Co_NEXTSTEP = list(Co_KEY= null, //set by proc
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} the targeting module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the peripherals control module.")
-					 	),
-					 //13
-					 list(Co_DESC="Peripherals control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} secure{s} the peripherals control module."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} remove{s} the peripherals control module from {HOLDER}.")
-					 	),
-					 //14
-					 list(Co_DESC="Central control module is secured",
-					 	Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} the peripherals control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the mainboard.")
-					 	),
-					 //15
-					 list(Co_DESC="Central control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} secure{s} the mainboard."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} remove{s} the central control module from {HOLDER}.")
-					 	),
-					 //16
-					 list(Co_DESC="The wiring is adjusted",
-						Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} the central control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} disconnect{s} the wiring of {HOLDER}.")
-					 	),
-					 //17
-					 list(Co_DESC="The wiring is added",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wirecutters,
-					 		Co_VIS_MSG = "{USER} adjust{s} the wiring of {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} remove{s} the wiring of {HOLDER}.")
-					 	),
-					 //18
-					 list(Co_DESC="The hydraulic systems are active.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/cable_coil,
-					 		Co_AMOUNT = 10,
-					 		Co_VIS_MSG = "{USER} add{s} the wiring to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} deactivate{s} {HOLDER} hydraulic systems.")
-					 	),
-					 //19
-					 list(Co_DESC="The hydraulic systems are connected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} activate{s} {HOLDER} hydraulic systems."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} disconnect{s} {HOLDER} hydraulic systems.")
-					 	),
-					 //20
-					 list(Co_DESC="The hydraulic systems are disconnected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} connect{s} {HOLDER} hydraulic systems.")
-					 	)
-					)
-
-/datum/construction/reversible/mecha/combat/add_board_keys()
-	var/list/board_step = get_forward_step(steps.len - MAINBOARD)
-	board_step[Co_KEY] = mainboard
-
-	board_step = get_forward_step(steps.len - PERIBOARD)
-	board_step[Co_KEY] = peripherals
-
-	board_step = get_forward_step(steps.len - TARGBOARD)
-	board_step[Co_KEY] = targeting
-
-	if(armor_plates)
-		board_step = get_forward_step(steps.len - ARMOR_PLATES)
-		board_step[Co_KEY] = armor_plates
-
-/datum/construction/reversible/mecha/combat/gygax
-	base_icon = "gygax"
-	mainboard = /obj/item/weapon/circuitboard/mecha/gygax/main
-	peripherals = /obj/item/weapon/circuitboard/mecha/gygax/peripherals
-	targeting = /obj/item/weapon/circuitboard/mecha/gygax/targeting
-	armor_plates = /obj/item/mecha_parts/part/gygax_armour
-	result = "/obj/mecha/combat/gygax"
-
-/datum/construction/reversible/mecha/combat/durand
-	mainboard = /obj/item/weapon/circuitboard/mecha/durand/main
-	peripherals = /obj/item/weapon/circuitboard/mecha/durand/peripherals
-	targeting = /obj/item/weapon/circuitboard/mecha/durand/targeting
-	armor_plates = /obj/item/mecha_parts/part/durand_armour
-	result = "/obj/mecha/combat/durand"
-	base_icon = "durand"
-
-/datum/construction/reversible/mecha/combat/marauder
-	mainboard = /obj/item/weapon/circuitboard/mecha/marauder/main
-	peripherals = /obj/item/weapon/circuitboard/mecha/marauder/peripherals
-	targeting = /obj/item/weapon/circuitboard/mecha/marauder/targeting
-	armor_plates = /obj/item/mecha_parts/part/marauder_armour
-	result = "/obj/mecha/combat/marauder/series"
-	base_icon = "marauder"
-
-/datum/construction/reversible/mecha/honker
-	base_icon = "honker"
-	result = "/obj/mecha/combat/honker"
-	steps = list(
-					 list(
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/bikehorn,
-					 		Co_VIS_MSG = "{USER} adds the bike horn to {HOLDER}",
-					 		Co_AMOUNT = 1),
-					 	Co_BACKSTEP = list(Co_KEY = /obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} remove{s} the clown boots from {HOLDER}.")
-					 	),//1
-					 list(
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/clothing/shoes/clown_shoes,
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} put{s} clown boots on {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY = /obj/item/weapon/bikehorn)
-					 	),//2
-					 list(
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/bikehorn),
-					 	Co_BACKSTEP = list(Co_KEY = /obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} remove{s} the clown wig and mask from {HOLDER}.")
-					 	),//3
-					 list(
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/clothing/mask/gas/clown_hat,
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} put{s} clown wig and mask on {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY = /obj/item/weapon/bikehorn)
-					 	),//4
-					 list(
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/bikehorn),
-					 	Co_BACKSTEP = list(Co_KEY = /obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} uninstall{s} the weapon control module.")
-					 	),//5
-					 list(
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/circuitboard/mecha/honker/targeting,
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} the weapon control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY = /obj/item/weapon/bikehorn)
-					 	),//6
-					 list(
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/bikehorn),
-					 	Co_BACKSTEP = list(Co_KEY = /obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} uninstall{s} the peripherals control module.")
-					 	),//7
-					 list(
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/circuitboard/mecha/honker/peripherals,
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} the peripherals control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY = /obj/item/weapon/bikehorn)
-					 	),//8
-					 list(
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/bikehorn),
-					 	Co_BACKSTEP = list(Co_KEY = /obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} uninstall{s} the central control module.")
-					 	),//9
-					 list(
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/circuitboard/mecha/honker/main,
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} the central control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY = /obj/item/weapon/bikehorn)
-					 	),//10
-					 list(
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/bikehorn)
-					 	)//11
-					 )
-
-/datum/construction/reversible/mecha/honker/set_desc()
-	return
-
-/datum/construction/reversible/mecha/honker/custom_action(index, diff, atom/used_atom, mob/user)
+/datum/component/construction/mecha/gygax/custom_action(obj/item/I, mob/living/user, diff)
 	if(!..())
-		return 0
+		return FALSE
 
-	if(istype(used_atom, /obj/item/weapon/bikehorn))
-		playsound(holder, 'sound/items/bikehorn.ogg', 50, 1)
+	switch(index)
+		if(1)
+			user.visible_message("[user] connects [parent] hydraulic systems", "<span class='notice'>You connect [parent] hydraulic systems.</span>")
+		if(2)
+			if(diff==FORWARD)
+				user.visible_message("[user] activates [parent] hydraulic systems.", "<span class='notice'>You activate [parent] hydraulic systems.</span>")
+			else
+				user.visible_message("[user] disconnects [parent] hydraulic systems", "<span class='notice'>You disconnect [parent] hydraulic systems.</span>")
+		if(3)
+			if(diff==FORWARD)
+				user.visible_message("[user] adds the wiring to [parent].", "<span class='notice'>You add the wiring to [parent].</span>")
+			else
+				user.visible_message("[user] deactivates [parent] hydraulic systems.", "<span class='notice'>You deactivate [parent] hydraulic systems.</span>")
+		if(4)
+			if(diff==FORWARD)
+				user.visible_message("[user] adjusts the wiring of [parent].", "<span class='notice'>You adjust the wiring of [parent].</span>")
+			else
+				user.visible_message("[user] removes the wiring from [parent].", "<span class='notice'>You remove the wiring from [parent].</span>")
+		if(5)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the central control module into [parent].", "<span class='notice'>You install the central computer mainboard into [parent].</span>")
+			else
+				user.visible_message("[user] disconnects the wiring of [parent].", "<span class='notice'>You disconnect the wiring of [parent].</span>")
+		if(6)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the mainboard.", "<span class='notice'>You secure the mainboard.</span>")
+			else
+				user.visible_message("[user] removes the central control module from [parent].", "<span class='notice'>You remove the central computer mainboard from [parent].</span>")
+		if(7)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the peripherals control module into [parent].", "<span class='notice'>You install the peripherals control module into [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the mainboard.", "<span class='notice'>You unfasten the mainboard.</span>")
+		if(8)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the peripherals control module.", "<span class='notice'>You secure the peripherals control module.</span>")
+			else
+				user.visible_message("[user] removes the peripherals control module from [parent].", "<span class='notice'>You remove the peripherals control module from [parent].</span>")
+		if(9)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the weapon control module into [parent].", "<span class='notice'>You install the weapon control module into [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the peripherals control module.", "<span class='notice'>You unfasten the peripherals control module.</span>")
+		if(10)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the weapon control module.", "<span class='notice'>You secure the weapon control module.</span>")
+			else
+				user.visible_message("[user] removes the weapon control module from [parent].", "<span class='notice'>You remove the weapon control module from [parent].</span>")
+		if(11)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs scanner module to [parent].", "<span class='notice'>You install scanner module to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the weapon control module.", "<span class='notice'>You unfasten the weapon control module.</span>")
+		if(12)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the advanced scanner module.", "<span class='notice'>You secure the scanner module.</span>")
+			else
+				user.visible_message("[user] removes the advanced scanner module from [parent].", "<span class='notice'>You remove the scanner module from [parent].</span>")
+		if(13)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs capacitor to [parent].", "<span class='notice'>You install capacitor to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the  scanner module.", "<span class='notice'>You unfasten the scanner module.</span>")
+		if(14)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the capacitor.", "<span class='notice'>You secure the capacitor.</span>")
+			else
+				user.visible_message("[user] removes the capacitor from [parent].", "<span class='notice'>You remove the capacitor from [parent].</span>")
+		if(15)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the power cell into [parent].", "<span class='notice'>You install the power cell into [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the capacitor.", "<span class='notice'>You unfasten the capacitor.</span>")
+		if(16)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the power cell.", "<span class='notice'>You secure the power cell.</span>")
+			else
+				user.visible_message("[user] prys the power cell from [parent].", "<span class='notice'>You pry the power cell from [parent].</span>")
+		if(17)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the internal armor layer to [parent].", "<span class='notice'>You install the internal armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the power cell.", "<span class='notice'>You unfasten the power cell.</span>")
+		if(18)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the internal armor layer.", "<span class='notice'>You secure the internal armor layer.</span>")
+			else
+				user.visible_message("[user] pries internal armor layer from [parent].", "<span class='notice'>You pry internal armor layer from [parent].</span>")
+		if(19)
+			if(diff==FORWARD)
+				user.visible_message("[user] welds the internal armor layer to [parent].", "<span class='notice'>You weld the internal armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the internal armor layer.", "<span class='notice'>You unfasten the internal armor layer.</span>")
+		if(20)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs Gygax Armor Plates to [parent].", "<span class='notice'>You install Gygax Armor Plates to [parent].</span>")
+			else
+				user.visible_message("[user] cuts the internal armor layer from [parent].", "<span class='notice'>You cut the internal armor layer from [parent].</span>")
+		if(21)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures Gygax Armor Plates.", "<span class='notice'>You secure Gygax Armor Plates.</span>")
+			else
+				user.visible_message("[user] pries Gygax Armor Plates from [parent].", "<span class='notice'>You pry Gygax Armor Plates from [parent].</span>")
+		if(22)
+			if(diff==FORWARD)
+				user.visible_message("[user] welds Gygax Armor Plates to [parent].", "<span class='notice'>You weld Gygax Armor Plates to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens Gygax Armor Plates.", "<span class='notice'>You unfasten Gygax Armor Plates.</span>")
+	return TRUE
+
+/datum/component/construction/unordered/mecha_chassis/firefighter
+	result = /datum/component/construction/mecha/firefighter
+	steps = list(
+		/obj/item/mecha_parts/part/ripley_torso,
+		/obj/item/mecha_parts/part/ripley_left_arm,
+		/obj/item/mecha_parts/part/ripley_right_arm,
+		/obj/item/mecha_parts/part/ripley_left_leg,
+		/obj/item/mecha_parts/part/ripley_right_leg,
+		/obj/item/clothing/suit/fire
+	)
+
+/datum/component/construction/mecha/firefighter
+	result = /obj/mecha/working/ripley/firefighter
+	base_icon = "fireripley"
+	steps = list(
+		//1
+		list(
+			"key" = TOOL_WRENCH,
+			"desc" = "The hydraulic systems are disconnected."
+		),
+
+		//2
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "The hydraulic systems are connected."
+		),
+
+		//3
+		list(
+			"key" = /obj/item/stack/cable_coil,
+			"amount" = 5,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The hydraulic systems are active."
+		),
+
+		//4
+		list(
+			"key" = TOOL_WIRECUTTER,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The wiring is added."
+		),
+
+		//5
+		list(
+			"key" = /obj/item/circuitboard/mecha/ripley/main,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The wiring is adjusted."
+		),
+
+		//6
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Central control module is installed."
+		),
+
+		//7
+		list(
+			"key" = /obj/item/circuitboard/mecha/ripley/peripherals,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Central control module is secured."
+		),
+
+		//8
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Peripherals control module is installed."
+		),
+
+		//9
+		list(
+			"key" = /obj/item/stock_parts/cell,
+			"action" = ITEM_MOVE_INSIDE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Peripherals control module is secured."
+		),
+
+		//10
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "The power cell is installed."
+		),
+
+		//11
+		list(
+			"key" = /obj/item/stack/sheet/plasteel,
+			"amount" = 5,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The power cell is secured."
+		),
+
+		//12
+		list(
+			"key" = TOOL_WRENCH,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Internal armor is installed."
+		),
+
+		//13
+		list(
+			"key" = TOOL_WELDER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "Internal armor is wrenched."
+		),
+
+		//14
+		list(
+			"key" = /obj/item/stack/sheet/plasteel,
+			"amount" = 5,
+			"back_key" = TOOL_WELDER,
+			"desc" = "Internal armor is welded."
+		),
+
+		//15
+		list(
+			"key" = /obj/item/stack/sheet/plasteel,
+			"amount" = 5,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "External armor is being installed."
+		),
+
+		//16
+		list(
+			"key" = TOOL_WRENCH,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "External armor is installed."
+		),
+
+		//17
+		list(
+			"key" = TOOL_WELDER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "External armor is wrenched."
+		),
+	)
+
+/datum/component/construction/mecha/firefighter/custom_action(obj/item/I, mob/living/user, diff)
+	if(!..())
+		return FALSE
+
+	//TODO: better messages.
+	switch(index)
+		if(1)
+			user.visible_message("[user] connects [parent] hydraulic systems", "<span class='notice'>You connect [parent] hydraulic systems.</span>")
+		if(2)
+			if(diff==FORWARD)
+				user.visible_message("[user] activates [parent] hydraulic systems.", "<span class='notice'>You activate [parent] hydraulic systems.</span>")
+			else
+				user.visible_message("[user] disconnects [parent] hydraulic systems", "<span class='notice'>You disconnect [parent] hydraulic systems.</span>")
+		if(3)
+			if(diff==FORWARD)
+				user.visible_message("[user] adds the wiring to [parent].", "<span class='notice'>You add the wiring to [parent].</span>")
+			else
+				user.visible_message("[user] deactivates [parent] hydraulic systems.", "<span class='notice'>You deactivate [parent] hydraulic systems.</span>")
+		if(4)
+			if(diff==FORWARD)
+				user.visible_message("[user] adjusts the wiring of [parent].", "<span class='notice'>You adjust the wiring of [parent].</span>")
+			else
+				user.visible_message("[user] removes the wiring from [parent].", "<span class='notice'>You remove the wiring from [parent].</span>")
+		if(5)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the central control module into [parent].", "<span class='notice'>You install the central computer mainboard into [parent].</span>")
+			else
+				user.visible_message("[user] disconnects the wiring of [parent].", "<span class='notice'>You disconnect the wiring of [parent].</span>")
+		if(6)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the mainboard.", "<span class='notice'>You secure the mainboard.</span>")
+			else
+				user.visible_message("[user] removes the central control module from [parent].", "<span class='notice'>You remove the central computer mainboard from [parent].</span>")
+		if(7)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the peripherals control module into [parent].", "<span class='notice'>You install the peripherals control module into [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the mainboard.", "<span class='notice'>You unfasten the mainboard.</span>")
+		if(8)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the peripherals control module.", "<span class='notice'>You secure the peripherals control module.</span>")
+			else
+				user.visible_message("[user] removes the peripherals control module from [parent].", "<span class='notice'>You remove the peripherals control module from [parent].</span>")
+		if(9)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the power cell into [parent].", "<span class='notice'>You install the power cell into [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the peripherals control module.", "<span class='notice'>You unfasten the peripherals control module.</span>")
+		if(10)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the power cell.", "<span class='notice'>You secure the power cell.</span>")
+			else
+				user.visible_message("[user] prys the power cell from [parent].", "<span class='notice'>You pry the power cell from [parent].</span>")
+		if(11)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the internal armor layer to [parent].", "<span class='notice'>You install the internal armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the power cell.", "<span class='notice'>You unfasten the power cell.</span>")
+		if(12)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the internal armor layer.", "<span class='notice'>You secure the internal armor layer.</span>")
+			else
+				user.visible_message("[user] pries internal armor layer from [parent].", "<span class='notice'>You pry internal armor layer from [parent].</span>")
+		if(13)
+			if(diff==FORWARD)
+				user.visible_message("[user] welds the internal armor layer to [parent].", "<span class='notice'>You weld the internal armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the internal armor layer.", "<span class='notice'>You unfasten the internal armor layer.</span>")
+		if(14)
+			if(diff==FORWARD)
+				user.visible_message("[user] starts to install the external armor layer to [parent].", "<span class='notice'>You install the external armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] cuts the internal armor layer from [parent].", "<span class='notice'>You cut the internal armor layer from [parent].</span>")
+		if(15)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the external reinforced armor layer to [parent].", "<span class='notice'>You install the external reinforced armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] removes the external armor from [parent].", "<span class='notice'>You remove the external armor from [parent].</span>")
+		if(16)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the external armor layer.", "<span class='notice'>You secure the external reinforced armor layer.</span>")
+			else
+				user.visible_message("[user] pries external armor layer from [parent].", "<span class='notice'>You pry external armor layer from [parent].</span>")
+		if(17)
+			if(diff==FORWARD)
+				user.visible_message("[user] welds the external armor layer to [parent].", "<span class='notice'>You weld the external armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the external armor layer.", "<span class='notice'>You unfasten the external armor layer.</span>")
+	return TRUE
+
+/datum/component/construction/unordered/mecha_chassis/honker
+	result = /datum/component/construction/mecha/honker
+	steps = list(
+		/obj/item/mecha_parts/part/honker_torso,
+		/obj/item/mecha_parts/part/honker_left_arm,
+		/obj/item/mecha_parts/part/honker_right_arm,
+		/obj/item/mecha_parts/part/honker_left_leg,
+		/obj/item/mecha_parts/part/honker_right_leg,
+		/obj/item/mecha_parts/part/honker_head
+	)
+
+/datum/component/construction/mecha/honker
+	result = /obj/mecha/combat/honker
+	steps = list(
+		//1
+		list(
+			"key" = /obj/item/bikehorn
+		),
+
+		//2
+		list(
+			"key" = /obj/item/circuitboard/mecha/honker/main,
+			"action" = ITEM_DELETE
+		),
+
+		//3
+		list(
+			"key" = /obj/item/bikehorn
+		),
+
+		//4
+		list(
+			"key" = /obj/item/circuitboard/mecha/honker/peripherals,
+			"action" = ITEM_DELETE
+		),
+
+		//5
+		list(
+			"key" = /obj/item/bikehorn
+		),
+
+		//6
+		list(
+			"key" = /obj/item/circuitboard/mecha/honker/targeting,
+			"action" = ITEM_DELETE
+		),
+
+		//7
+		list(
+			"key" = /obj/item/bikehorn
+		),
+
+		//8
+		list(
+			"key" = /obj/item/stock_parts/cell,
+			"action" = ITEM_MOVE_INSIDE
+		),
+
+		//9
+		list(
+			"key" = /obj/item/bikehorn
+		),
+
+		//10
+		list(
+			"key" = /obj/item/clothing/mask/gas/clown_hat,
+			"action" = ITEM_DELETE
+		),
+
+		//11
+		list(
+			"key" = /obj/item/bikehorn
+		),
+
+		//12
+		list(
+			"key" = /obj/item/clothing/shoes/clown_shoes,
+			"action" = ITEM_DELETE
+		),
+
+		//13
+		list(
+			"key" = /obj/item/bikehorn
+		),
+	)
+
+// HONK doesn't have any construction step icons, so we just set an icon once.
+/datum/component/construction/mecha/honker/update_parent(step_index)
+	if(step_index == 1)
+		var/atom/parent_atom = parent
+		parent_atom.icon = 'icons/mecha/mech_construct.dmi'
+		parent_atom.icon_state = "honker_chassis"
+	..()
+
+/datum/component/construction/mecha/honker/custom_action(obj/item/I, mob/living/user, diff)
+	if(!..())
+		return FALSE
+
+	if(istype(I, /obj/item/bikehorn))
+		playsound(parent, 'sound/items/bikehorn.ogg', 50, 1)
 		user.visible_message("HONK!")
 
-	holder.icon_state = "honker_chassis"
-	return 1
+	//TODO: better messages.
+	switch(index)
+		if(2)
+			user.visible_message("[user] installs the central control module into [parent].", "<span class='notice'>You install the central control module into [parent].</span>")
+		if(4)
+			user.visible_message("[user] installs the peripherals control module into [parent].", "<span class='notice'>You install the peripherals control module into [parent].</span>")
+		if(6)
+			user.visible_message("[user] installs the weapon control module into [parent].", "<span class='notice'>You install the weapon control module into [parent].</span>")
+		if(8)
+			user.visible_message("[user] installs the power cell into [parent].", "<span class='notice'>You install the power cell into [parent].</span>")
+		if(10)
+			user.visible_message("[user] puts clown wig and mask on [parent].", "<span class='notice'>You put clown wig and mask on [parent].</span>")
+		if(12)
+			user.visible_message("[user] puts clown boots on [parent].", "<span class='notice'>You put clown boots on [parent].</span>")
+	return TRUE
 
-/datum/construction/reversible/mecha/honker/add_board_keys()
-	return
-
-
-/datum/construction/reversible/mecha/phazon
-	base_icon = "phazon"
-	mainboard = /obj/item/weapon/circuitboard/mecha/phazon/main
-	peripherals = /obj/item/weapon/circuitboard/mecha/phazon/peripherals
-	result = "/obj/mecha/combat/phazon"
-
+/datum/component/construction/unordered/mecha_chassis/durand
+	result = /datum/component/construction/mecha/durand
 	steps = list(
-					//1
-					list(Co_DESC="External armor is wrenched.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/weldingtool,
-					 		Co_AMOUNT = 3,
-					 		Co_VIS_MSG = "{USER} weld{s} external armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the external armor layer.")
-					 	),
-					//2
-					 list(Co_DESC="External armor is installed.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} secure{s} external armor layer."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} prie{s} external armor layer from {HOLDER}.",
-					 		Co_START_MSG = "{USER} begin{s} removing the external reinforced armor...",
-					 		Co_DELAY = 30,)
-					 	),
-					 //3
-					 list(Co_DESC="Internal armor is welded.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/sheet/plasteel,
-					 		Co_AMOUNT = 5,
-					 		Co_VIS_MSG = "{USER} install{s} external reinforced armor layer to {HOLDER}.",
-					 		Co_START_MSG = "{USER} begin{s} installing the external reinforced armor...",
-					 		Co_DELAY = 30),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/weldingtool,
-					 		Co_AMOUNT = 3,
-					 		Co_VIS_MSG = "{USER} cut{s} internal armor layer from {HOLDER}.")
-					 	),
-					 //4
-					 list(Co_DESC="Internal armor is wrenched",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/weldingtool,
-					 		Co_AMOUNT = 3,
-					 		Co_VIS_MSG = "{USER} weld{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} unfastens the internal armor layer.")
-					 	),
-					 //5
-					 list(Co_DESC="Internal armor is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} secure{s} internal armor layer."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} prie{s} internal armor layer from {HOLDER}.")
-					 	),
+		/obj/item/mecha_parts/part/durand_torso,
+		/obj/item/mecha_parts/part/durand_left_arm,
+		/obj/item/mecha_parts/part/durand_right_arm,
+		/obj/item/mecha_parts/part/durand_left_leg,
+		/obj/item/mecha_parts/part/durand_right_leg,
+		/obj/item/mecha_parts/part/durand_head
+	)
 
-					 //6
-					 list(Co_DESC="Phaze array is secured",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/sheet/metal,
-					 		Co_AMOUNT = 5,
-					 		Co_VIS_MSG = "{USER} install{s} internal armor layer to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the phaze array.")
-					 	),
-					 //7
-					 list(Co_DESC="Phaze array is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} secure{s} the phaze array."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} remove{s} the phaze array from {HOLDER}.")
-					 	),
-					 //8
-					 list(Co_DESC="Peripherals control module is secured",
-					 	Co_NEXTSTEP = list(Co_KEY= /obj/item/mecha_parts/part/phazon_phase_array,
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} phaze array to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the peripherals control module.")
-					 	),
-					 //9
-					 list(Co_DESC="Peripherals control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} secure{s} the peripherals control module."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} remove{s} the peripherals control module from {HOLDER}.")
-					 	),
-					 //10
-					 list(Co_DESC="Central control module is secured",
-					 	Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} the peripherals control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} unfasten{s} the mainboard.")
-					 	),
-					 //11
-					 list(Co_DESC="Central control module is installed",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} secure{s} the mainboard."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
-					 		Co_VIS_MSG = "{USER} remove{s} the central control module from {HOLDER}.")
-					 	),
-					 //12
-					 list(Co_DESC="The wiring is adjusted",
-						Co_NEXTSTEP = list(Co_KEY= null, //set by a proc
-					 		Co_AMOUNT = 1,
-					 		Co_VIS_MSG = "{USER} install{s} the central control module into {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} disconnect{s} the wiring of {HOLDER}.")
-					 	),
-					 //13
-					 list(Co_DESC="The wiring is added",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wirecutters,
-					 		Co_VIS_MSG = "{USER} adjust{s} the wiring of {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} remove{s} the wiring of {HOLDER}.")
-					 	),
-					 //14
-					 list(Co_DESC="The hydraulic systems are active.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/cable_coil,
-					 		Co_AMOUNT = 10,
-					 		Co_VIS_MSG = "{USER} add{s} the wiring to {HOLDER}."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} deactivate{s} {HOLDER} hydraulic systems.")
-					 	),
-					 //15
-					 list(Co_DESC="The hydraulic systems are connected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
-					 		Co_VIS_MSG = "{USER} activate{s} {HOLDER} hydraulic systems."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} disconnect{s} {HOLDER} hydraulic systems.")
-					 	),
-					 //16
-					 list(Co_DESC="The hydraulic systems are disconnected.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/wrench,
-					 		Co_VIS_MSG = "{USER} connect{s} {HOLDER} hydraulic systems.")
-					 	)
-					)
+/datum/component/construction/mecha/durand
+	result = /obj/mecha/combat/durand
+	base_icon = "durand"
+	steps = list(
+		//1
+		list(
+			"key" = TOOL_WRENCH,
+			"desc" = "The hydraulic systems are disconnected."
+		),
 
-/datum/construction/reversible/mecha/clarke
-	result = "/obj/mecha/working/clarke"
-	base_icon = "clarke"
+		//2
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "The hydraulic systems are connected."
+		),
 
-	mainboard = /obj/item/weapon/circuitboard/mecha/clarke/main
-	peripherals = /obj/item/weapon/circuitboard/mecha/clarke/peripherals
+		//3
+		list(
+			"key" = /obj/item/stack/cable_coil,
+			"amount" = 5,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The hydraulic systems are active."
+		),
+
+		//4
+		list(
+			"key" = TOOL_WIRECUTTER,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The wiring is added."
+		),
+
+		//5
+		list(
+			"key" = /obj/item/circuitboard/mecha/durand/main,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The wiring is adjusted."
+		),
+
+		//6
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Central control module is installed."
+		),
+
+		//7
+		list(
+			"key" = /obj/item/circuitboard/mecha/durand/peripherals,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Central control module is secured."
+		),
+
+		//8
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Peripherals control module is installed."
+		),
+
+		//9
+		list(
+			"key" = /obj/item/circuitboard/mecha/durand/targeting,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Peripherals control module is secured."
+		),
+
+		//10
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Weapon control module is installed."
+		),
+
+		//11
+		list(
+			"key" = /obj/item/stock_parts/scanning_module,
+			"action" = ITEM_MOVE_INSIDE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Weapon control module is secured."
+		),
+
+		//12
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Phasic scanner module is installed."
+		),
+
+		//13
+		list(
+			"key" = /obj/item/stock_parts/capacitor,
+			"action" = ITEM_MOVE_INSIDE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Phasic scanner module is secured."
+		),
+
+		//14
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Super capacitor is installed."
+		),
+
+		//15
+		list(
+			"key" = /obj/item/stock_parts/cell,
+			"action" = ITEM_MOVE_INSIDE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Super capacitor is secured."
+		),
+
+		//16
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "The power cell is installed."
+		),
+
+		//17
+		list(
+			"key" = /obj/item/stack/sheet/metal,
+			"amount" = 5,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The power cell is secured."
+		),
+
+		//18
+		list(
+			"key" = TOOL_WRENCH,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Internal armor is installed."
+		),
+
+		//19
+		list(
+			"key" = TOOL_WELDER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "Internal armor is wrenched."
+		),
+
+		//20
+		list(
+			"key" = /obj/item/mecha_parts/part/durand_armor,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_WELDER,
+			"desc" = "Internal armor is welded."
+		),
+
+		//21
+		list(
+			"key" = TOOL_WRENCH,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "External armor is installed."
+		),
+
+		//22
+		list(
+			"key" = TOOL_WELDER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "External armor is wrenched."
+		),
+	)
+
+
+/datum/component/construction/mecha/durand/custom_action(obj/item/I, mob/living/user, diff)
+	if(!..())
+		return FALSE
+
+	//TODO: better messages.
+	switch(index)
+		if(1)
+			user.visible_message("[user] connects [parent] hydraulic systems", "<span class='notice'>You connect [parent] hydraulic systems.</span>")
+		if(2)
+			if(diff==FORWARD)
+				user.visible_message("[user] activates [parent] hydraulic systems.", "<span class='notice'>You activate [parent] hydraulic systems.</span>")
+			else
+				user.visible_message("[user] disconnects [parent] hydraulic systems", "<span class='notice'>You disconnect [parent] hydraulic systems.</span>")
+		if(3)
+			if(diff==FORWARD)
+				user.visible_message("[user] adds the wiring to [parent].", "<span class='notice'>You add the wiring to [parent].</span>")
+			else
+				user.visible_message("[user] deactivates [parent] hydraulic systems.", "<span class='notice'>You deactivate [parent] hydraulic systems.</span>")
+		if(4)
+			if(diff==FORWARD)
+				user.visible_message("[user] adjusts the wiring of [parent].", "<span class='notice'>You adjust the wiring of [parent].</span>")
+			else
+				user.visible_message("[user] removes the wiring from [parent].", "<span class='notice'>You remove the wiring from [parent].</span>")
+		if(5)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the central control module into [parent].", "<span class='notice'>You install the central computer mainboard into [parent].</span>")
+			else
+				user.visible_message("[user] disconnects the wiring of [parent].", "<span class='notice'>You disconnect the wiring of [parent].</span>")
+		if(6)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the mainboard.", "<span class='notice'>You secure the mainboard.</span>")
+			else
+				user.visible_message("[user] removes the central control module from [parent].", "<span class='notice'>You remove the central computer mainboard from [parent].</span>")
+		if(7)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the peripherals control module into [parent].", "<span class='notice'>You install the peripherals control module into [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the mainboard.", "<span class='notice'>You unfasten the mainboard.</span>")
+		if(8)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the peripherals control module.", "<span class='notice'>You secure the peripherals control module.</span>")
+			else
+				user.visible_message("[user] removes the peripherals control module from [parent].", "<span class='notice'>You remove the peripherals control module from [parent].</span>")
+		if(9)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the weapon control module into [parent].", "<span class='notice'>You install the weapon control module into [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the peripherals control module.", "<span class='notice'>You unfasten the peripherals control module.</span>")
+		if(10)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the weapon control module.", "<span class='notice'>You secure the weapon control module.</span>")
+			else
+				user.visible_message("[user] removes the weapon control module from [parent].", "<span class='notice'>You remove the weapon control module from [parent].</span>")
+		if(11)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs scanner module to [parent].", "<span class='notice'>You install phasic scanner module to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the weapon control module.", "<span class='notice'>You unfasten the weapon control module.</span>")
+		if(12)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the scanner module.", "<span class='notice'>You secure the scanner module.</span>")
+			else
+				user.visible_message("[user] removes the scanner module from [parent].", "<span class='notice'>You remove the scanner module from [parent].</span>")
+		if(13)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs capacitor to [parent].", "<span class='notice'>You install capacitor to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the scanner module.", "<span class='notice'>You unfasten the scanner module.</span>")
+		if(14)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the capacitor.", "<span class='notice'>You secure the capacitor.</span>")
+			else
+				user.visible_message("[user] removes the super capacitor from [parent].", "<span class='notice'>You remove the capacitor from [parent].</span>")
+		if(15)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the power cell into [parent].", "<span class='notice'>You install the power cell into [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the capacitor.", "<span class='notice'>You unfasten the capacitor.</span>")
+		if(16)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the power cell.", "<span class='notice'>You secure the power cell.</span>")
+			else
+				user.visible_message("[user] prys the power cell from [parent].", "<span class='notice'>You pry the power cell from [parent].</span>")
+		if(17)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the internal armor layer to [parent].", "<span class='notice'>You install the internal armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the power cell.", "<span class='notice'>You unfasten the power cell.</span>")
+		if(18)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the internal armor layer.", "<span class='notice'>You secure the internal armor layer.</span>")
+			else
+				user.visible_message("[user] pries internal armor layer from [parent].", "<span class='notice'>You pry internal armor layer from [parent].</span>")
+		if(19)
+			if(diff==FORWARD)
+				user.visible_message("[user] welds the internal armor layer to [parent].", "<span class='notice'>You weld the internal armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the internal armor layer.", "<span class='notice'>You unfasten the internal armor layer.</span>")
+		if(20)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs Durand Armor Plates to [parent].", "<span class='notice'>You install Durand Armor Plates to [parent].</span>")
+			else
+				user.visible_message("[user] cuts the internal armor layer from [parent].", "<span class='notice'>You cut the internal armor layer from [parent].</span>")
+		if(21)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures Durand Armor Plates.", "<span class='notice'>You secure Durand Armor Plates.</span>")
+			else
+				user.visible_message("[user] pries Durand Armor Plates from [parent].", "<span class='notice'>You pry Durand Armor Plates from [parent].</span>")
+		if(22)
+			if(diff==FORWARD)
+				user.visible_message("[user] welds Durand Armor Plates to [parent].", "<span class='notice'>You weld Durand Armor Plates to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens Durand Armor Plates.", "<span class='notice'>You unfasten Durand Armor Plates.</span>")
+	return TRUE
+
+//PHAZON
+
+/datum/component/construction/unordered/mecha_chassis/phazon
+	result = /datum/component/construction/mecha/phazon
+	steps = list(
+		/obj/item/mecha_parts/part/phazon_torso,
+		/obj/item/mecha_parts/part/phazon_left_arm,
+		/obj/item/mecha_parts/part/phazon_right_arm,
+		/obj/item/mecha_parts/part/phazon_left_leg,
+		/obj/item/mecha_parts/part/phazon_right_leg,
+		/obj/item/mecha_parts/part/phazon_head
+	)
+
+/datum/component/construction/mecha/phazon
+	result = /obj/mecha/combat/phazon
+	base_icon = "phazon"
+	steps = list(
+		//1
+		list(
+			"key" = TOOL_WRENCH,
+			"desc" = "The hydraulic systems are disconnected."
+		),
+
+		//2
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "The hydraulic systems are connected."
+		),
+
+		//3
+		list(
+			"key" = /obj/item/stack/cable_coil,
+			"amount" = 5,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The hydraulic systems are active."
+		),
+
+		//4
+		list(
+			"key" = TOOL_WIRECUTTER,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The wiring is added."
+		),
+
+		//5
+		list(
+			"key" = /obj/item/circuitboard/mecha/phazon/main,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The wiring is adjusted."
+		),
+
+		//6
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Central control module is installed."
+		),
+
+		//7
+		list(
+			"key" = /obj/item/circuitboard/mecha/phazon/peripherals,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Central control module is secured."
+		),
+
+		//8
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Peripherals control module is installed"
+		),
+
+		//9
+		list(
+			"key" = /obj/item/circuitboard/mecha/phazon/targeting,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Peripherals control module is secured."
+		),
+
+		//10
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Weapon control is installed."
+		),
+
+		//11
+		list(
+			"key" = /obj/item/stock_parts/scanning_module,
+			"action" = ITEM_MOVE_INSIDE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Weapon control module is secured."
+		),
+
+		//12
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Phasic scanner module is installed."
+		),
+
+		//13
+		list(
+			"key" = /obj/item/stock_parts/capacitor,
+			"action" = ITEM_MOVE_INSIDE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Phasic scanner module is secured."
+		),
+
+		//14
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Super capacitor is installed."
+		),
+
+		//15
+		list(
+			"key" = /obj/item/stack/ore/bluespace_crystal,
+			"amount" = 1,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Super capacitor is secured."
+		),
+
+		//16
+		list(
+			"key" = /obj/item/stack/cable_coil,
+			"amount" = 5,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "The bluespace crystal is installed."
+		),
+
+		//17
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_WIRECUTTER,
+			"desc" = "The bluespace crystal is connected."
+		),
+
+		//18
+		list(
+			"key" = /obj/item/stock_parts/cell,
+			"action" = ITEM_MOVE_INSIDE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The bluespace crystal is engaged."
+		),
+
+		//19
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "The power cell is installed.",
+			"icon_state" = "phazon17"
+			// This is the point where a step icon is skipped, so "icon_state" had to be set manually starting from here.
+		),
+
+		//20
+		list(
+			"key" = /obj/item/stack/sheet/plasteel,
+			"amount" = 5,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The power cell is secured.",
+			"icon_state" = "phazon18"
+		),
+
+		//21
+		list(
+			"key" = TOOL_WRENCH,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Phase armor is installed.",
+			"icon_state" = "phazon19"
+		),
+
+		//22
+		list(
+			"key" = TOOL_WELDER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "Phase armor is wrenched.",
+			"icon_state" = "phazon20"
+		),
+
+		//23
+		list(
+			"key" = /obj/item/mecha_parts/part/phazon_armor,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_WELDER,
+			"desc" = "Phase armor is welded.",
+			"icon_state" = "phazon21"
+		),
+
+		//24
+		list(
+			"key" = TOOL_WRENCH,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "External armor is installed.",
+			"icon_state" = "phazon22"
+		),
+
+		//25
+		list(
+			"key" = TOOL_WELDER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "External armor is wrenched.",
+			"icon_state" = "phazon23"
+		),
+
+		//26
+		list(
+			"key" = /obj/item/device/assembly/signaler/anomaly,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_WELDER,
+			"desc" = "Anomaly core socket is open.",
+			"icon_state" = "phazon24"
+		),
+	)
+
+
+/datum/component/construction/mecha/phazon/custom_action(obj/item/I, mob/living/user, diff)
+	if(!..())
+		return FALSE
+
+	//TODO: better messages.
+	switch(index)
+		if(1)
+			user.visible_message("[user] connects [parent] hydraulic systems", "<span class='notice'>You connect [parent] hydraulic systems.</span>")
+		if(2)
+			if(diff==FORWARD)
+				user.visible_message("[user] activates [parent] hydraulic systems.", "<span class='notice'>You activate [parent] hydraulic systems.</span>")
+			else
+				user.visible_message("[user] disconnects [parent] hydraulic systems", "<span class='notice'>You disconnect [parent] hydraulic systems.</span>")
+		if(3)
+			if(diff==FORWARD)
+				user.visible_message("[user] adds the wiring to [parent].", "<span class='notice'>You add the wiring to [parent].</span>")
+			else
+				user.visible_message("[user] deactivates [parent] hydraulic systems.", "<span class='notice'>You deactivate [parent] hydraulic systems.</span>")
+		if(4)
+			if(diff==FORWARD)
+				user.visible_message("[user] adjusts the wiring of [parent].", "<span class='notice'>You adjust the wiring of [parent].</span>")
+			else
+				user.visible_message("[user] removes the wiring from [parent].", "<span class='notice'>You remove the wiring from [parent].</span>")
+		if(5)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the central control module into [parent].", "<span class='notice'>You install the central computer mainboard into [parent].</span>")
+			else
+				user.visible_message("[user] disconnects the wiring of [parent].", "<span class='notice'>You disconnect the wiring of [parent].</span>")
+		if(6)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the mainboard.", "<span class='notice'>You secure the mainboard.</span>")
+			else
+				user.visible_message("[user] removes the central control module from [parent].", "<span class='notice'>You remove the central computer mainboard from [parent].</span>")
+		if(7)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the peripherals control module into [parent].", "<span class='notice'>You install the peripherals control module into [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the mainboard.", "<span class='notice'>You unfasten the mainboard.</span>")
+		if(8)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the peripherals control module.", "<span class='notice'>You secure the peripherals control module.</span>")
+			else
+				user.visible_message("[user] removes the peripherals control module from [parent].", "<span class='notice'>You remove the peripherals control module from [parent].</span>")
+		if(9)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the weapon control module into [parent].", "<span class='notice'>You install the weapon control module into [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the peripherals control module.", "<span class='notice'>You unfasten the peripherals control module.</span>")
+		if(10)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the weapon control module.", "<span class='notice'>You secure the weapon control module.</span>")
+			else
+				user.visible_message("[user] removes the weapon control module from [parent].", "<span class='notice'>You remove the weapon control module from [parent].</span>")
+		if(11)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs phasic scanner module to [parent].", "<span class='notice'>You install scanner module to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the weapon control module.", "<span class='notice'>You unfasten the weapon control module.</span>")
+		if(12)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the phasic scanner module.", "<span class='notice'>You secure the scanner module.</span>")
+			else
+				user.visible_message("[user] removes the phasic scanner module from [parent].", "<span class='notice'>You remove the scanner module from [parent].</span>")
+		if(13)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs super capacitor to [parent].", "<span class='notice'>You install capacitor to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the phasic scanner module.", "<span class='notice'>You unfasten the scanner module.</span>")
+		if(14)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the super capacitor.", "<span class='notice'>You secure the capacitor.</span>")
+			else
+				user.visible_message("[user] removes the super capacitor from [parent].", "<span class='notice'>You remove the capacitor from [parent].</span>")
+		if(15)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the bluespace crystal.", "<span class='notice'>You install the bluespace crystal.</span>")
+			else
+				user.visible_message("[user] unsecures the super capacitor from [parent].", "<span class='notice'>You unsecure the capacitor from [parent].</span>")
+		if(16)
+			if(diff==FORWARD)
+				user.visible_message("[user] connects the bluespace crystal.", "<span class='notice'>You connect the bluespace crystal.</span>")
+			else
+				user.visible_message("[user] removes the bluespace crystal from [parent].", "<span class='notice'>You remove the bluespace crystal from [parent].</span>")
+		if(17)
+			if(diff==FORWARD)
+				user.visible_message("[user] engages the bluespace crystal.", "<span class='notice'>You engage the bluespace crystal.</span>")
+			else
+				user.visible_message("[user] disconnects the bluespace crystal from [parent].", "<span class='notice'>You disconnect the bluespace crystal from [parent].</span>")
+		if(18)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the power cell into [parent].", "<span class='notice'>You install the power cell into [parent].</span>")
+			else
+				user.visible_message("[user] disengages the bluespace crystal.", "<span class='notice'>You disengage the bluespace crystal.</span>")
+		if(19)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the power cell.", "<span class='notice'>You secure the power cell.</span>")
+			else
+				user.visible_message("[user] prys the power cell from [parent].", "<span class='notice'>You pry the power cell from [parent].</span>")
+		if(20)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the phase armor layer to [parent].", "<span class='notice'>You install the phase armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the power cell.", "<span class='notice'>You unfasten the power cell.</span>")
+		if(21)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the phase armor layer.", "<span class='notice'>You secure the phase armor layer.</span>")
+			else
+				user.visible_message("[user] pries the phase armor layer from [parent].", "<span class='notice'>You pry the phase armor layer from [parent].</span>")
+		if(22)
+			if(diff==FORWARD)
+				user.visible_message("[user] welds the phase armor layer to [parent].", "<span class='notice'>You weld the phase armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the phase armor layer.", "<span class='notice'>You unfasten the phase armor layer.</span>")
+		if(23)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs Phazon Armor Plates to [parent].", "<span class='notice'>You install Phazon Armor Plates to [parent].</span>")
+			else
+				user.visible_message("[user] cuts phase armor layer from [parent].", "<span class='notice'>You cut the phase armor layer from [parent].</span>")
+		if(24)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures Phazon Armor Plates.", "<span class='notice'>You secure Phazon Armor Plates.</span>")
+			else
+				user.visible_message("[user] pries Phazon Armor Plates from [parent].", "<span class='notice'>You pry Phazon Armor Plates from [parent].</span>")
+		if(25)
+			if(diff==FORWARD)
+				user.visible_message("[user] welds Phazon Armor Plates to [parent].", "<span class='notice'>You weld Phazon Armor Plates to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens Phazon Armor Plates.", "<span class='notice'>You unfasten Phazon Armor Plates.</span>")
+		if(26)
+			if(diff==FORWARD)
+				user.visible_message("[user] carefully inserts the anomaly core into [parent] and secures it.",
+					"<span class='notice'>You slowly place the anomaly core into its socket and close its chamber.</span>")
+	return TRUE
+
+//ODYSSEUS
+
+/datum/component/construction/unordered/mecha_chassis/odysseus
+	result = /datum/component/construction/mecha/odysseus
+	steps = list(
+		/obj/item/mecha_parts/part/odysseus_torso,
+		/obj/item/mecha_parts/part/odysseus_head,
+		/obj/item/mecha_parts/part/odysseus_left_arm,
+		/obj/item/mecha_parts/part/odysseus_right_arm,
+		/obj/item/mecha_parts/part/odysseus_left_leg,
+		/obj/item/mecha_parts/part/odysseus_right_leg
+	)
+
+/datum/component/construction/mecha/odysseus
+	result = /obj/mecha/medical/odysseus
+	base_icon = "odysseus"
+	steps = list(
+		//1
+		list(
+			"key" = TOOL_WRENCH,
+			"desc" = "The hydraulic systems are disconnected."
+		),
+
+		//2
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "The hydraulic systems are connected."
+		),
+
+		//3
+		list(
+			"key" = /obj/item/stack/cable_coil,
+			"amount" = 5,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The hydraulic systems are active."
+		),
+
+		//4
+		list(
+			"key" = TOOL_WIRECUTTER,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The wiring is added."
+		),
+
+		//5
+		list(
+			"key" = /obj/item/circuitboard/mecha/odysseus/main,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The wiring is adjusted."
+		),
+
+		//6
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Central control module is installed."
+		),
+
+		//7
+		list(
+			"key" = /obj/item/circuitboard/mecha/odysseus/peripherals,
+			"action" = ITEM_DELETE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Central control module is secured."
+		),
+
+		//8
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Peripherals control module is installed."
+		),
+
+		//9
+		list(
+			"key" = /obj/item/stock_parts/cell,
+			"action" = ITEM_MOVE_INSIDE,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "Peripherals control module is secured."
+		),
+
+		//10
+		list(
+			"key" = TOOL_SCREWDRIVER,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "The power cell is installed."
+		),
+
+		//11
+		list(
+			"key" = /obj/item/stack/sheet/metal,
+			"amount" = 5,
+			"back_key" = TOOL_SCREWDRIVER,
+			"desc" = "The power cell is secured."
+		),
+
+		//12
+		list(
+			"key" = TOOL_WRENCH,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "Internal armor is installed."
+		),
+
+		//13
+		list(
+			"key" = TOOL_WELDER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "Internal armor is wrenched."
+		),
+
+		//14
+		list(
+			"key" = /obj/item/stack/sheet/plasteel,
+			"amount" = 5,
+			"back_key" = TOOL_WELDER,
+			"desc" = "Internal armor is welded."
+		),
+
+		//15
+		list(
+			"key" = TOOL_WRENCH,
+			"back_key" = TOOL_CROWBAR,
+			"desc" = "External armor is installed."
+		),
+
+		//16
+		list(
+			"key" = TOOL_WELDER,
+			"back_key" = TOOL_WRENCH,
+			"desc" = "External armor is wrenched."
+		),
+	)
+
+/datum/component/construction/mecha/odysseus/custom_action(obj/item/I, mob/living/user, diff)
+	if(!..())
+		return FALSE
+
+	//TODO: better messages.
+	switch(index)
+		if(1)
+			user.visible_message("[user] connects [parent] hydraulic systems", "<span class='notice'>You connect [parent] hydraulic systems.</span>")
+		if(2)
+			if(diff==FORWARD)
+				user.visible_message("[user] activates [parent] hydraulic systems.", "<span class='notice'>You activate [parent] hydraulic systems.</span>")
+			else
+				user.visible_message("[user] disconnects [parent] hydraulic systems", "<span class='notice'>You disconnect [parent] hydraulic systems.</span>")
+		if(3)
+			if(diff==FORWARD)
+				user.visible_message("[user] adds the wiring to [parent].", "<span class='notice'>You add the wiring to [parent].</span>")
+			else
+				user.visible_message("[user] deactivates [parent] hydraulic systems.", "<span class='notice'>You deactivate [parent] hydraulic systems.</span>")
+		if(4)
+			if(diff==FORWARD)
+				user.visible_message("[user] adjusts the wiring of [parent].", "<span class='notice'>You adjust the wiring of [parent].</span>")
+			else
+				user.visible_message("[user] removes the wiring from [parent].", "<span class='notice'>You remove the wiring from [parent].</span>")
+		if(5)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the central control module into [parent].", "<span class='notice'>You install the central computer mainboard into [parent].</span>")
+			else
+				user.visible_message("[user] disconnects the wiring of [parent].", "<span class='notice'>You disconnect the wiring of [parent].</span>")
+		if(6)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the mainboard.", "<span class='notice'>You secure the mainboard.</span>")
+			else
+				user.visible_message("[user] removes the central control module from [parent].", "<span class='notice'>You remove the central computer mainboard from [parent].</span>")
+		if(7)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the peripherals control module into [parent].", "<span class='notice'>You install the peripherals control module into [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the mainboard.", "<span class='notice'>You unfasten the mainboard.</span>")
+		if(8)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the peripherals control module.", "<span class='notice'>You secure the peripherals control module.</span>")
+			else
+				user.visible_message("[user] removes the peripherals control module from [parent].", "<span class='notice'>You remove the peripherals control module from [parent].</span>")
+		if(9)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the power cell into [parent].", "<span class='notice'>You install the power cell into [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the peripherals control module.", "<span class='notice'>You unfasten the peripherals control module.</span>")
+		if(10)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the power cell.", "<span class='notice'>You secure the power cell.</span>")
+			else
+				user.visible_message("[user] prys the power cell from [parent].", "<span class='notice'>You pry the power cell from [parent].</span>")
+		if(11)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the internal armor layer to [parent].", "<span class='notice'>You install the internal armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the power cell.", "<span class='notice'>You unfasten the power cell.</span>")
+		if(12)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the internal armor layer.", "<span class='notice'>You secure the internal armor layer.</span>")
+			else
+				user.visible_message("[user] pries internal armor layer from [parent].", "<span class='notice'>You pry internal armor layer from [parent].</span>")
+		if(13)
+			if(diff==FORWARD)
+				user.visible_message("[user] welds the internal armor layer to [parent].", "<span class='notice'>You weld the internal armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the internal armor layer.", "<span class='notice'>You unfasten the internal armor layer.</span>")
+		if(14)
+			if(diff==FORWARD)
+				user.visible_message("[user] installs the external armor layer to [parent].", "<span class='notice'>You install the external reinforced armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] cuts the internal armor layer from [parent].", "<span class='notice'>You cut the internal armor layer from [parent].</span>")
+		if(15)
+			if(diff==FORWARD)
+				user.visible_message("[user] secures the external armor layer.", "<span class='notice'>You secure the external reinforced armor layer.</span>")
+			else
+				user.visible_message("[user] pries the external armor layer from [parent].", "<span class='notice'>You pry the external armor layer from [parent].</span>")
+		if(16)
+			if(diff==FORWARD)
+				user.visible_message("[user] welds the external armor layer to [parent].", "<span class='notice'>You weld the external armor layer to [parent].</span>")
+			else
+				user.visible_message("[user] unfastens the external armor layer.", "<span class='notice'>You unfasten the external armor layer.</span>")
+	return TRUE

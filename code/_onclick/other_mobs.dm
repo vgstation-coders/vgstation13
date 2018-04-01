@@ -4,148 +4,116 @@
 
 	Otherwise pretty standard.
 */
-/mob/living/carbon/human/UnarmedAttack(var/atom/A, var/proximity, var/params)
-	var/obj/item/clothing/gloves/G = gloves // not typecast specifically enough in defines
+/mob/living/carbon/human/UnarmedAttack(atom/A, proximity)
 
-	if(!is_pacified() && a_intent == "hurt" && A.loc != src)
-		var/special_attack_result = SPECIAL_ATTACK_SUCCESS
-		switch(attack_type) //Special attacks - kicks, bites
-			if(ATTACK_KICK)
-				if(can_kick(A))
-
-					delayNextAttack(10)
-
-					special_attack_result = A.kick_act(src)
-					if(special_attack_result != SPECIAL_ATTACK_CANCEL) //kick_act returns that value if there's no interaction specified
-						after_special_attack(A, attack_type, special_attack_result)
-						return
-
-					delayNextAttack(-10) //This is only called when the kick fails
-				else
-					set_attack_type() //Reset attack type
-
-			if(ATTACK_BITE)
-				if(can_bite(A))
-
-					delayNextAttack(10)
-
-					special_attack_result = A.bite_act(src)
-					if(special_attack_result != SPECIAL_ATTACK_CANCEL) //bite_act returns that value if there's no interaction specified
-						after_special_attack(A, attack_type, special_attack_result)
-						return
-
-					delayNextAttack(-10) //This is only called when the bite fails
-				else
-					set_attack_type() //Reset attack type
+	if(!has_active_hand()) //can't attack without a hand.
+		to_chat(src, "<span class='notice'>You look at your arm and sigh.</span>")
+		return
 
 	// Special glove functions:
 	// If the gloves do anything, have them return 1 to stop
 	// normal attack_hand() here.
-	if(proximity && istype(G) && G.Touch(A, src, 1))
+	var/obj/item/clothing/gloves/G = gloves // not typecast specifically enough in defines
+	if(proximity && istype(G) && G.Touch(A,1))
 		return
 
-	if(ismob(A))
-		delayNextAttack(10)
+	var/override = 0
 
-	if(src.can_use_hand())
-		A.attack_hand(src, params, proximity)
+	for(var/datum/mutation/human/HM in dna.mutations)
+		override += HM.on_attack_hand(src, A, proximity)
+
+	if(override)
+		return
+
+	SendSignal(COMSIG_HUMAN_MELEE_UNARMED_ATTACK, A)
+	A.attack_hand(src)
+
+//Return TRUE to cancel other attack hand effects that respect it.
+/atom/proc/attack_hand(mob/user)
+	. = FALSE
+	if(!(interaction_flags_atom & INTERACT_ATOM_NO_FINGERPRINT_ATTACK_HAND))
+		add_fingerprint(user)
+	if(SendSignal(COMSIG_ATOM_ATTACK_HAND, user) & COMPONENT_NO_ATTACK_HAND)
+		. = TRUE
+	if(interaction_flags_atom & INTERACT_ATOM_ATTACK_HAND)
+		. = _try_interact(user)
+
+//Return a non FALSE value to cancel whatever called this from propagating, if it respects it.
+/atom/proc/_try_interact(mob/user)
+	if(IsAdminGhost(user))		//admin abuse
+		return interact(user)
+	if(can_interact(user))
+		return interact(user)
+	return FALSE
+
+/atom/proc/can_interact(mob/user)
+	if(!user.can_interact_with(src))
+		return FALSE
+	if((interaction_flags_atom & INTERACT_ATOM_REQUIRES_DEXTERITY) && !user.IsAdvancedToolUser())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return FALSE
+	if(!(interaction_flags_atom & INTERACT_ATOM_IGNORE_INCAPACITATED) && user.incapacitated((interaction_flags_atom & INTERACT_ATOM_IGNORE_RESTRAINED), !(interaction_flags_atom & INTERACT_ATOM_CHECK_GRAB)))
+		return FALSE
+	return TRUE
+
+/atom/movable/can_interact(mob/user)
+	. = ..()
+	if(!.)
+		return
+	if(!anchored && (interaction_flags_atom & INTERACT_ATOM_REQUIRES_ANCHORED))
+		return FALSE
+
+/atom/proc/interact(mob/user)
+	if(interaction_flags_atom & INTERACT_ATOM_NO_FINGERPRINT_INTERACT)
+		add_hiddenprint(user)
 	else
-		A.attack_stump(src, params)
+		add_fingerprint(user)
+	if(interaction_flags_atom & INTERACT_ATOM_UI_INTERACT)
+		return ui_interact(user)
+	return FALSE
 
-	if(src.lying && !(isUnconscious() || stunned || paralysis) && check_crawl_ability() && isfloor(A) && isfloor(get_turf(src)) && proximity && !pulledby && !locked_to && !client.move_delayer.blocked())
-		var/crawldelay
-		if (Holiday == APRIL_FOOLS_DAY)
-			crawldelay = movement_delay()*3
-		else
-			crawldelay = round(1 + base_movement_tally()/5) * 1 SECONDS
-		Move(A, get_dir(src,A), glide_size_override = crawldelay)
-		delayNextMove(crawldelay, additive=1)
-		if (prob(15) && Holiday == APRIL_FOOLS_DAY)
-			adjustBrainLoss(5)
-			say(pick("CRAAWLING IN MY SKIIIN!!!",
-			"THESE WOUNDS, THEY WILL NOT HEEEAL!!!",
-			"FEAR IS HOW I FAAAALL!!!",
-			"CONFUSING WHAT IS REEEEEAL!!!!",
-
-			"CRAWLING IN MY BRIG!!!!",
-
-			"It's actually about the spirit of a cheeky crawling with the lads",
-
-			"Try to crawl FREELY and AUTOMATICALLY good bye",
-
-			"SNEAKY CR*WLERS!",
-
-			"It's an feature",
-
-			"AND YOU FALL AND YOU CRAWL AND YOU BREAK AND YOU TAKE WHAT YOU TAKE AND YOU FALL AND YOU CRAWL AND YOU-")
-			)
-
-/atom/proc/attack_hand(mob/user as mob, params, var/proximity)
+/*
+/mob/living/carbon/human/RestrainedClickOn(var/atom/A) ---carbons will handle this
 	return
+*/
 
-//called when we try to click but have no hand
-//good for general purposes
-/atom/proc/attack_stump(mob/user as mob, params, var/proximity)
-	if(!requires_dexterity(user))
-		attack_hand(user, params, proximity) //if the object doesn't need dexterity, we can use our stump
-	else
-		to_chat(user, "Your [user.get_index_limb_name(user.active_hand)] is not fine enough for this action.")
-
-/atom/proc/requires_dexterity(mob/user)
+/mob/living/carbon/RestrainedClickOn(atom/A)
 	return 0
 
-/mob/living/carbon/human/RestrainedClickOn(var/atom/A)
-	return
-
-/mob/living/carbon/human/RangedAttack(var/atom/A)
-	if(!gloves && !mutations.len)
-		return
+/mob/living/carbon/human/RangedAttack(atom/A, mouseparams)
 	if(gloves)
 		var/obj/item/clothing/gloves/G = gloves
-		if(istype(G) && G.Touch(A, src, 0)) // for magic gloves
+		if(istype(G) && G.Touch(A,0)) // for magic gloves
 			return
-	if(mutations.len)
-		if((M_LASER in mutations) && a_intent == I_HURT)
-			LaserEyes(A) // moved into a proc below
 
-		else if(M_TK in mutations)
-			/*switch(get_dist(src,A))
-				if(1 to 5) // not adjacent may mean blocked by window
-					Next_move += 2
-				if(5 to 7)
-					Next_move += 5
-				if(8 to 15)
-					Next_move += 10
-				if(16 to 128)
-					return
-			*/
-			A.attack_tk(src)
+	for(var/datum/mutation/human/HM in dna.mutations)
+		HM.on_ranged_attack(src, A, mouseparams)
+
+	if(isturf(A) && get_dist(src,A) <= 1)
+		src.Move_Pulled(A)
 
 /*
 	Animals & All Unspecified
 */
-/mob/living/UnarmedAttack(var/atom/A)
-	if(ismob(A))
-		delayNextAttack(10)
+/mob/living/UnarmedAttack(atom/A)
 	A.attack_animal(src)
+
+/atom/proc/attack_animal(mob/user)
 	return
 
-/atom/proc/attack_animal(mob/user as mob)
-	return
-/mob/living/RestrainedClickOn(var/atom/A)
+/mob/living/RestrainedClickOn(atom/A)
 	return
 
 /*
 	Monkeys
 */
-/mob/living/carbon/monkey/UnarmedAttack(var/atom/A)
-	if(ismob(A))
-		delayNextAttack(10)
+/mob/living/carbon/monkey/UnarmedAttack(atom/A)
 	A.attack_paw(src)
-	return
 
-/atom/proc/attack_paw(mob/user as mob)
-	return
+/atom/proc/attack_paw(mob/user)
+	if(SendSignal(COMSIG_ATOM_ATTACK_PAW, user) & COMPONENT_NO_ATTACK_HAND)
+		return TRUE
+	return FALSE
 
 /*
 	Monkey RestrainedClickOn() was apparently the
@@ -154,53 +122,51 @@
 	moving it here instead of various hand_p's has simplified
 	things considerably
 */
-/mob/living/carbon/monkey/RestrainedClickOn(var/atom/A)
-	if(a_intent != I_HURT || !ismob(A))
+/mob/living/carbon/monkey/RestrainedClickOn(atom/A)
+	if(..())
 		return
-	delayNextAttack(10)
-	if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
+	if(a_intent != INTENT_HARM || !ismob(A))
+		return
+	if(is_muzzled())
 		return
 	var/mob/living/carbon/ML = A
-	var/dam_zone = ran_zone(pick(LIMB_CHEST, LIMB_LEFT_HAND, LIMB_RIGHT_HAND, LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
-	var/armor = ML.run_armor_check(dam_zone, "melee")
-	if(prob(75))
-		ML.apply_damage(rand(1,3), BRUTE, dam_zone, armor)
-		for(var/mob/O in viewers(ML, null))
-			O.show_message("<span class='danger'>[name] has bit [ML]!</span>", 1)
-		if(armor >= 2)
-			return
-		if(ismonkey(ML))
-			for(var/datum/disease/D in viruses)
-				if(istype(D, /datum/disease/jungle_fever))
-					ML.contract_disease(D,1,0)
-	else
-		for(var/mob/O in viewers(ML, null))
-			O.show_message("<span class='danger'>[src] has attempted to bite [ML]!</span>", 1)
+	if(istype(ML))
+		var/dam_zone = pick(BODY_ZONE_CHEST, BODY_ZONE_PRECISE_L_HAND, BODY_ZONE_PRECISE_R_HAND, BODY_ZONE_L_LEG, BODY_ZONE_R_LEG)
+		var/obj/item/bodypart/affecting = null
+		if(ishuman(ML))
+			var/mob/living/carbon/human/H = ML
+			affecting = H.get_bodypart(ran_zone(dam_zone))
+		var/armor = ML.run_armor_check(affecting, "melee")
+		if(prob(75))
+			ML.apply_damage(rand(1,3), BRUTE, affecting, armor)
+			ML.visible_message("<span class='danger'>[name] bites [ML]!</span>", \
+							"<span class='userdanger'>[name] bites [ML]!</span>")
+			if(armor >= 2)
+				return
+			for(var/thing in diseases)
+				var/datum/disease/D = thing
+				ML.ForceContractDisease(D)
+		else
+			ML.visible_message("<span class='danger'>[src] has attempted to bite [ML]!</span>")
 
 /*
 	Aliens
 	Defaults to same as monkey in most places
 */
-/mob/living/carbon/alien/UnarmedAttack(var/atom/A)
-	if(ismob(A))
-		delayNextAttack(10)
+/mob/living/carbon/alien/UnarmedAttack(atom/A)
 	A.attack_alien(src)
-	return
 
-/atom/proc/attack_alien(mob/user as mob)
+/atom/proc/attack_alien(mob/living/carbon/alien/user)
 	attack_paw(user)
 	return
-/mob/living/carbon/alien/RestrainedClickOn(var/atom/A)
+
+/mob/living/carbon/alien/RestrainedClickOn(atom/A)
 	return
 
 // Babby aliens
-/mob/living/carbon/alien/larva/UnarmedAttack(var/atom/A)
-	if(ismob(A))
-		delayNextAttack(10)
+/mob/living/carbon/alien/larva/UnarmedAttack(atom/A)
 	A.attack_larva(src)
-	return
-
-/atom/proc/attack_larva(mob/user as mob)
+/atom/proc/attack_larva(mob/user)
 	return
 
 
@@ -208,50 +174,78 @@
 	Slimes
 	Nothing happening here
 */
-/mob/living/carbon/slime/UnarmedAttack(var/atom/A)
+/mob/living/simple_animal/slime/UnarmedAttack(atom/A)
 	A.attack_slime(src)
+/atom/proc/attack_slime(mob/user)
 	return
-/atom/proc/attack_slime(mob/user as mob)
+/mob/living/simple_animal/slime/RestrainedClickOn(atom/A)
 	return
-/mob/living/carbon/slime/RestrainedClickOn(var/atom/A)
+
+
+/*
+	Drones
+*/
+/mob/living/simple_animal/drone/UnarmedAttack(atom/A)
+	A.attack_drone(src)
+
+/atom/proc/attack_drone(mob/living/simple_animal/drone/user)
+	attack_hand(user) //defaults to attack_hand. Override it when you don't want drones to do same stuff as humans.
+
+/mob/living/simple_animal/slime/RestrainedClickOn(atom/A)
 	return
+
+
+/*
+	True Devil
+*/
+
+/mob/living/carbon/true_devil/UnarmedAttack(atom/A, proximity)
+	A.attack_hand(src)
+
+/*
+	Brain
+*/
+
+/mob/living/brain/UnarmedAttack(atom/A)//Stops runtimes due to attack_animal being the default
+	return
+
+
+/*
+	pAI
+*/
+
+/mob/living/silicon/pai/UnarmedAttack(atom/A)//Stops runtimes due to attack_animal being the default
+	return
+
+
+/*
+	Simple animals
+*/
+
+/mob/living/simple_animal/UnarmedAttack(atom/A, proximity)
+	if(!dextrous)
+		return ..()
+	if(!ismob(A))
+		A.attack_hand(src)
+		update_inv_hands()
+
+
+/*
+	Hostile animals
+*/
+
+/mob/living/simple_animal/hostile/UnarmedAttack(atom/A)
+	target = A
+	if(dextrous && !is_type_in_typecache(A, environment_target_typecache) && !ismob(A))
+		..()
+	else
+		AttackingTarget()
+
+
 
 /*
 	New Players:
 	Have no reason to click on anything at all.
 */
-/mob/new_player/ClickOn()
+/mob/dead/new_player/ClickOn()
 	return
-
-/*
-	Constructs
-*/
-
-/mob/living/simple_animal/construct/UnarmedAttack(atom/A)
-	if(ismob(A))
-		delayNextAttack(10)
-	if(!A.attack_construct(src))//does attack_construct do something to that atom? if no, just do attack_animal
-		A.attack_animal(src)
-
-/mob/living/simple_animal/construct/RangedAttack(atom/A)
-	A.attack_construct(src)
-
-/atom/proc/attack_construct(mob/user as mob,var/dist = null)
-	return 0
-
-//Martians
-/mob/living/carbon/complex/martian/UnarmedAttack(atom/A)
-	if(ismob(A))
-		delayNextAttack(10)
-	A.attack_martian(src)
-
-/mob/living/carbon/complex/martian/RangedAttack(atom/A)
-	if(mutations.len)
-		if((M_LASER in mutations) && a_intent == I_HURT)
-			LaserEyes(A) // moved into a proc below
-
-		else if(M_TK in mutations)
-			A.attack_tk(src)
-
-/atom/proc/attack_martian(mob/user)
-	return attack_hand(user)

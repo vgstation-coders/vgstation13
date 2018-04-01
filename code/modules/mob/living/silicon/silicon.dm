@@ -1,38 +1,75 @@
 /mob/living/silicon
 	gender = NEUTER
-	voice_name = "synthesized voice"
-	can_butcher = 0
-	mob_property_flags = MOB_ROBOTIC
+	has_unlimited_silicon_privilege = 1
+	verb_say = "states"
+	verb_ask = "queries"
+	verb_exclaim = "declares"
+	verb_yell = "alarms"
+	initial_language_holder = /datum/language_holder/synthetic
+	see_in_dark = 8
+	bubble_icon = "machine"
+	weather_immunities = list("ash")
+	possible_a_intents = list(INTENT_HELP, INTENT_HARM)
 
-	var/flashed = 0
-	var/syndicate = 0
 	var/datum/ai_laws/laws = null//Now... THEY ALL CAN ALL HAVE LAWS
+	var/last_lawchange_announce = 0
 	var/list/alarms_to_show = list()
 	var/list/alarms_to_clear = list()
+	var/designation = ""
+	var/radiomod = "" //Radio character used before state laws/arrivals announce to allow department transmissions, default, or none at all.
+	var/obj/item/device/camera/siliconcam/aicamera = null //photography
+	hud_possible = list(ANTAG_HUD, DIAG_STAT_HUD, DIAG_HUD, DIAG_TRACK_HUD)
 
 	var/obj/item/device/radio/borg/radio = null //AIs dont use this but this is at the silicon level to advoid copypasta in say()
-	var/list/speech_synthesizer_langs = list()	//which languages can be vocalized by the speech synthesizer
-	var/sensor_mode = 0 //Determines the current HUD.
-	#define SEC_HUD 1 //Security HUD mode
-	#define MED_HUD 2 //Medical HUD mode
-	#define MESON_VISION 3 // Engineering borg and mommis
-	#define NIGHT 4 // night vision
-	#define THERMAL_VISION 5 // combat borgs thermals
-	var/global/list/vision_types_list = list("Security Hud","Medical Hud", "Meson Vision", "Night Vision", "Thermal Vision")
+
 	var/list/alarm_types_show = list("Motion" = 0, "Fire" = 0, "Atmosphere" = 0, "Power" = 0, "Camera" = 0)
 	var/list/alarm_types_clear = list("Motion" = 0, "Fire" = 0, "Atmosphere" = 0, "Power" = 0, "Camera" = 0)
 
-/mob/living/silicon/hasFullAccess()
-	return 1
+	var/lawcheck[1]
+	var/ioncheck[1]
+	var/hackedcheck[1]
+	var/devillawcheck[5]
 
-/mob/living/silicon/GetAccess()
-	return get_all_accesses()
+	var/sensors_on = 0
+	var/med_hud = DATA_HUD_MEDICAL_ADVANCED //Determines the med hud to use
+	var/sec_hud = DATA_HUD_SECURITY_ADVANCED //Determines the sec hud to use
+	var/d_hud = DATA_HUD_DIAGNOSTIC_BASIC //Determines the diag hud to use
 
-/mob/living/silicon/feels_pain()
-	return FALSE
+	var/law_change_counter = 0
+	var/obj/machinery/camera/builtInCamera = null
+	var/updating = FALSE //portable camera camerachunk update
 
-/mob/living/silicon/proc/can_diagnose()
-	return null
+	var/hack_software = FALSE //Will be able to use hacking actions
+	var/interaction_range = 7			//wireless control range
+
+/mob/living/silicon/Initialize()
+	. = ..()
+	GLOB.silicon_mobs += src
+	faction += "silicon"
+	for(var/datum/atom_hud/data/diagnostic/diag_hud in GLOB.huds)
+		diag_hud.add_to_hud(src)
+	diag_hud_set_status()
+	diag_hud_set_health()
+
+/mob/living/silicon/ComponentInitialize()
+	. = ..()
+	AddComponent(/datum/component/rad_insulation, RAD_NO_INSULATION, TRUE, TRUE)
+
+/mob/living/silicon/med_hud_set_health()
+	return //we use a different hud
+
+/mob/living/silicon/med_hud_set_status()
+	return //we use a different hud
+
+/mob/living/silicon/Destroy()
+	radio = null
+	aicamera = null
+	QDEL_NULL(builtInCamera)
+	GLOB.silicon_mobs -= src
+	return ..()
+
+/mob/living/silicon/contents_explosion(severity, target)
+	return
 
 /mob/living/silicon/proc/cancelAlarm()
 	return
@@ -40,15 +77,7 @@
 /mob/living/silicon/proc/triggerAlarm()
 	return
 
-/mob/living/silicon/proc/show_laws()
-	return
-
-/mob/living/silicon/proc/write_laws()
-	if(laws)
-		var/text = src.laws.write_laws()
-		return text
-
-/mob/living/silicon/proc/queueAlarm(var/message, var/type, var/incoming = 1)
+/mob/living/silicon/proc/queueAlarm(message, type, incoming = 1)
 	var/in_cooldown = (alarms_to_show.len > 0 || alarms_to_clear.len > 0)
 	if(incoming)
 		alarms_to_show += message
@@ -58,7 +87,7 @@
 		alarm_types_clear[type] += 1
 
 	if(!in_cooldown)
-		spawn(10 * 10) // 10 seconds
+		spawn(3 * 10) // 3 seconds
 
 			if(alarms_to_show.len < 5)
 				for(var/msg in alarms_to_show)
@@ -66,6 +95,9 @@
 			else if(alarms_to_show.len)
 
 				var/msg = "--- "
+
+				if(alarm_types_show["Burglar"])
+					msg += "BURGLAR: [alarm_types_show["Burglar"]] alarms detected. - "
 
 				if(alarm_types_show["Motion"])
 					msg += "MOTION: [alarm_types_show["Motion"]] alarms detected. - "
@@ -80,9 +112,9 @@
 					msg += "POWER: [alarm_types_show["Power"]] alarms detected. - "
 
 				if(alarm_types_show["Camera"])
-					msg += "CAMERA: [alarm_types_show["Power"]] alarms detected. - "
+					msg += "CAMERA: [alarm_types_show["Camera"]] alarms detected. - "
 
-				msg += "<A href=?src=\ref[src];showalerts=1'>\[Show Alerts\]</a>"
+				msg += "<A href=?src=[REF(src)];showalerts=1'>\[Show Alerts\]</a>"
 				to_chat(src, msg)
 
 			if(alarms_to_clear.len < 3)
@@ -105,237 +137,268 @@
 					msg += "POWER: [alarm_types_clear["Power"]] alarms cleared. - "
 
 				if(alarm_types_show["Camera"])
-					msg += "CAMERA: [alarm_types_show["Power"]] alarms detected. - "
+					msg += "CAMERA: [alarm_types_clear["Camera"]] alarms cleared. - "
 
-				msg += "<A href=?src=\ref[src];showalerts=1'>\[Show Alerts\]</a>"
+				msg += "<A href=?src=[REF(src)];showalerts=1'>\[Show Alerts\]</a>"
 				to_chat(src, msg)
 
 
 			alarms_to_show = list()
 			alarms_to_clear = list()
-			for(var/i = 1; i < alarm_types_show.len; i++)
-				alarm_types_show[i] = 0
-			for(var/i = 1; i < alarm_types_clear.len; i++)
-				alarm_types_clear[i] = 0
+			for(var/key in alarm_types_show)
+				alarm_types_show[key] = 0
+			for(var/key in alarm_types_clear)
+				alarm_types_clear[key] = 0
 
-/mob/living/silicon/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0)
-	return 1
-
-/mob/living/silicon/generate_static_overlay()
-	return
-
-/mob/living/silicon/emp_act(severity)
-	for(var/obj/item/stickybomb/B in src)
-		if(B.stuck_to)
-			visible_message("<span class='warning'>\the [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
-			B.deactivate()
-			B.unstick()
-
-	if(flags & INVULNERABLE)
-		return
-
-	switch(severity)
-		if(1)
-			src.take_organ_damage(20)
-			Stun(rand(10,12))
-		if(2)
-			src.take_organ_damage(10)
-			Stun(rand(5,7))
-	flash_eyes(visual = 1, type = /obj/abstract/screen/fullscreen/flash/noise)
-	to_chat(src, "<span class='danger'>*BZZZT*</span>")
-	to_chat(src, "<span class='warning'>Warning: Electromagnetic pulse detected.</span>")
-	..()
-
-/mob/living/silicon/proc/damage_mob(var/brute = 0, var/fire = 0, var/tox = 0)
-	return
+/mob/living/silicon/can_inject(mob/user, error_msg)
+	if(error_msg)
+		to_chat(user, "<span class='alert'>Their outer shell is too tough.</span>")
+	return FALSE
 
 /mob/living/silicon/IsAdvancedToolUser()
-	return 1
+	return TRUE
 
-/mob/living/silicon/bullet_act(var/obj/item/projectile/Proj)
-	if(!Proj.nodamage)
-		adjustBruteLoss(Proj.damage)
-	Proj.on_hit(src,2)
-	return 2
-
-/mob/living/silicon/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)
-	return 0//The only effect that can hit them atm is flashes and they still directly edit so this works for now
-/*
-	if(!effect || (blocked >= 2))
-		return 0
-	switch(effecttype)
-		if(STUN)
-			stunned = max(stunned,(effect/(blocked+1)))
-		if(WEAKEN)
-			knockdown = max(knockdown,(effect/(blocked+1)))
-		if(PARALYZE)
-			paralysis = max(paralysis,(effect/(blocked+1)))
-		if(IRRADIATE)
-			radiation += min((effect - (effect*getarmor(null, "rad"))), 0)//Rads auto check armor
-		if(STUTTER)
-			stuttering = max(stuttering,(effect/(blocked+1)))
-		if(EYE_BLUR)
-			eye_blurry = max(eye_blurry,(effect/(blocked+1)))
-		if(DROWSY)
-			drowsyness = max(drowsyness,(effect/(blocked+1)))
-	updatehealth()
-	return 1*/
-
-/proc/islinked(var/mob/living/silicon/robot/bot, var/mob/living/silicon/ai/ai)
+/proc/islinked(mob/living/silicon/robot/bot, mob/living/silicon/ai/ai)
 	if(!istype(bot) || !istype(ai))
-		return 0
-	if (bot.connected_ai == ai)
-		return 1
+		return FALSE
+	if(bot.connected_ai == ai)
+		return TRUE
+	return FALSE
+
+/mob/living/silicon/Topic(href, href_list)
+	if (href_list["lawc"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
+		var/L = text2num(href_list["lawc"])
+		switch(lawcheck[L+1])
+			if ("Yes")
+				lawcheck[L+1] = "No"
+			if ("No")
+				lawcheck[L+1] = "Yes"
+		checklaws()
+
+	if (href_list["lawi"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
+		var/L = text2num(href_list["lawi"])
+		switch(ioncheck[L])
+			if ("Yes")
+				ioncheck[L] = "No"
+			if ("No")
+				ioncheck[L] = "Yes"
+		checklaws()
+
+	if (href_list["lawh"])
+		var/L = text2num(href_list["lawh"])
+		switch(hackedcheck[L])
+			if ("Yes")
+				hackedcheck[L] = "No"
+			if ("No")
+				hackedcheck[L] = "Yes"
+		checklaws()
+
+	if (href_list["lawdevil"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
+		var/L = text2num(href_list["lawdevil"])
+		switch(devillawcheck[L])
+			if ("Yes")
+				devillawcheck[L] = "No"
+			if ("No")
+				devillawcheck[L] = "Yes"
+		checklaws()
+
+
+	if (href_list["laws"]) // With how my law selection code works, I changed statelaws from a verb to a proc, and call it through my law selection panel. --NeoFite
+		statelaws()
+
+	return
+
+
+/mob/living/silicon/proc/statelaws(force = 0)
+
+	//"radiomod" is inserted before a hardcoded message to change if and how it is handled by an internal radio.
+	say("[radiomod] Current Active Laws:")
+	//laws_sanity_check()
+	//laws.show_laws(world)
+	var/number = 1
+	sleep(10)
+
+	if (laws.devillaws && laws.devillaws.len)
+		for(var/index = 1, index <= laws.devillaws.len, index++)
+			if (force || devillawcheck[index] == "Yes")
+				say("[radiomod] 666. [laws.devillaws[index]]")
+				sleep(10)
+
+
+	if (laws.zeroth)
+		if (force || lawcheck[1] == "Yes")
+			say("[radiomod] 0. [laws.zeroth]")
+			sleep(10)
+
+	for (var/index = 1, index <= laws.hacked.len, index++)
+		var/law = laws.hacked[index]
+		var/num = ionnum()
+		if (length(law) > 0)
+			if (force || hackedcheck[index] == "Yes")
+				say("[radiomod] [num]. [law]")
+				sleep(10)
+
+	for (var/index = 1, index <= laws.ion.len, index++)
+		var/law = laws.ion[index]
+		var/num = ionnum()
+		if (length(law) > 0)
+			if (force || ioncheck[index] == "Yes")
+				say("[radiomod] [num]. [law]")
+				sleep(10)
+
+	for (var/index = 1, index <= laws.inherent.len, index++)
+		var/law = laws.inherent[index]
+
+		if (length(law) > 0)
+			if (force || lawcheck[index+1] == "Yes")
+				say("[radiomod] [number]. [law]")
+				number++
+				sleep(10)
+
+	for (var/index = 1, index <= laws.supplied.len, index++)
+		var/law = laws.supplied[index]
+
+		if (length(law) > 0)
+			if(lawcheck.len >= number+1)
+				if (force || lawcheck[number+1] == "Yes")
+					say("[radiomod] [number]. [law]")
+					number++
+					sleep(10)
+
+
+/mob/living/silicon/proc/checklaws() //Gives you a link-driven interface for deciding what laws the statelaws() proc will share with the crew. --NeoFite
+
+	var/list = "<b>Which laws do you want to include when stating them for the crew?</b><br><br>"
+
+	if (laws.devillaws && laws.devillaws.len)
+		for(var/index = 1, index <= laws.devillaws.len, index++)
+			if (!devillawcheck[index])
+				devillawcheck[index] = "No"
+			list += {"<A href='byond://?src=[REF(src)];lawdevil=[index]'>[devillawcheck[index]] 666:</A> <font color='#cc5500'>[laws.devillaws[index]]</font><BR>"}
+
+	if (laws.zeroth)
+		if (!lawcheck[1])
+			lawcheck[1] = "No" //Given Law 0's usual nature, it defaults to NOT getting reported. --NeoFite
+		list += {"<A href='byond://?src=[REF(src)];lawc=0'>[lawcheck[1]] 0:</A> <font color='#ff0000'><b>[laws.zeroth]</b></font><BR>"}
+
+	for (var/index = 1, index <= laws.hacked.len, index++)
+		var/law = laws.hacked[index]
+		if (length(law) > 0)
+			if (!hackedcheck[index])
+				hackedcheck[index] = "No"
+			list += {"<A href='byond://?src=[REF(src)];lawh=[index]'>[hackedcheck[index]] [ionnum()]:</A> <font color='#660000'>[law]</font><BR>"}
+			hackedcheck.len += 1
+
+	for (var/index = 1, index <= laws.ion.len, index++)
+		var/law = laws.ion[index]
+
+		if (length(law) > 0)
+			if (!ioncheck[index])
+				ioncheck[index] = "Yes"
+			list += {"<A href='byond://?src=[REF(src)];lawi=[index]'>[ioncheck[index]] [ionnum()]:</A> <font color='#547DFE'>[law]</font><BR>"}
+			ioncheck.len += 1
+
+	var/number = 1
+	for (var/index = 1, index <= laws.inherent.len, index++)
+		var/law = laws.inherent[index]
+
+		if (length(law) > 0)
+			lawcheck.len += 1
+
+			if (!lawcheck[number+1])
+				lawcheck[number+1] = "Yes"
+			list += {"<A href='byond://?src=[REF(src)];lawc=[number]'>[lawcheck[number+1]] [number]:</A> [law]<BR>"}
+			number++
+
+	for (var/index = 1, index <= laws.supplied.len, index++)
+		var/law = laws.supplied[index]
+		if (length(law) > 0)
+			lawcheck.len += 1
+			if (!lawcheck[number+1])
+				lawcheck[number+1] = "Yes"
+			list += {"<A href='byond://?src=[REF(src)];lawc=[number]'>[lawcheck[number+1]] [number]:</A> <font color='#990099'>[law]</font><BR>"}
+			number++
+	list += {"<br><br><A href='byond://?src=[REF(src)];laws=1'>State Laws</A>"}
+
+	usr << browse(list, "window=laws")
+
+/mob/living/silicon/proc/set_autosay() //For allowing the AI and borgs to set the radio behavior of auto announcements (state laws, arrivals).
+	if(!radio)
+		to_chat(src, "Radio not detected.")
+		return
+
+	//Ask the user to pick a channel from what it has available.
+	var/Autochan = input("Select a channel:") as null|anything in list("Default","None") + radio.channels
+
+	if(!Autochan)
+		return
+	if(Autochan == "Default") //Autospeak on whatever frequency to which the radio is set, usually Common.
+		radiomod = ";"
+		Autochan += " ([radio.frequency])"
+	else if(Autochan == "None") //Prevents use of the radio for automatic annoucements.
+		radiomod = ""
+	else	//For department channels, if any, given by the internal radio.
+		for(var/key in GLOB.department_radio_keys)
+			if(GLOB.department_radio_keys[key] == Autochan)
+				radiomod = ":" + key
+				break
+
+	to_chat(src, "<span class='notice'>Automatic announcements [Autochan == "None" ? "will not use the radio." : "set to [Autochan]."]</span>")
+
+/mob/living/silicon/put_in_hand_check() // This check is for borgs being able to receive items, not put them in others' hands.
 	return 0
 
-/mob/living/silicon/proc/system_integrity()
-	return round((health / maxHealth) * 100)
-
-// this function shows the health of a silicon in the Status panel
-/mob/living/silicon/proc/show_system_integrity()
-	if(stat == CONSCIOUS)
-		stat(null, text("System integrity: [system_integrity()]%"))
-	else
-		stat(null, text("Systems nonfunctional"))
-
-// This is a pure virtual function, it should be overwritten by all subclasses
-/mob/living/silicon/proc/show_malf_ai()
+// The src mob is trying to place an item on someone
+// But the src mob is a silicon!!  Disable.
+/mob/living/silicon/stripPanelEquip(obj/item/what, mob/who, slot)
 	return 0
 
-// this function displays the station time in the status panel
-/mob/living/silicon/proc/show_station_time()
-	stat(null, "Station Time: [worldtime2text()]")
 
-
-// this function displays the shuttles ETA in the status panel if the shuttle has been called
-/mob/living/silicon/proc/show_emergency_shuttle_eta()
-	if(emergency_shuttle.online && emergency_shuttle.location < 2)
-		var/timeleft = emergency_shuttle.timeleft()
-		if (timeleft)
-			var/acronym = emergency_shuttle.location == 1 ? "ETD" : "ETA"
-			stat(null, "[acronym]-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
-
-
-// This adds the basic clock, shuttle recall timer, and malf_ai info to all silicon lifeforms
-/mob/living/silicon/Stat()
-	..()
-	if(statpanel("Status"))
-		show_station_time()
-		show_emergency_shuttle_eta()
-		show_system_integrity()
-		show_malf_ai()
-
-// this function displays the stations manifest in a separate window
-/mob/living/silicon/proc/show_station_manifest()
-	var/dat
-	dat += "<h4>Crew Manifest</h4>"
-	if(data_core)
-		dat += data_core.get_manifest(1) // make it monochrome
-	dat += "<br>"
-	src << browse(dat, "window=airoster")
-	onclose(src, "airoster")
-
-/mob/living/silicon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
-	if(istype(source, /obj/machinery/containment_field))
-		var/damage = shock_damage * siemens_coeff * 0.75 // take reduced damage
-
-		if(damage <= 0)
-			damage = 0
-
-		if(take_overall_damage(0, damage, "[source]") == 0) // godmode
-			return 0
-
-		visible_message( \
-			"<span class='warning'>[src] was shocked by the [source]!</span>", \
-			"<span class='danger'>Energy pulse detected, system damaged!</span>", \
-			"<span class='warning'>You hear a heavy electrical crack.</span>" \
-		)
-
-		if(prob(20))
-			Stun(2)
-
-		spark(loc, 5)
-
-		return damage
-
-	return 0
-
-/mob/living/silicon/assess_threat() //Secbots will not target silicons!
+/mob/living/silicon/assess_threat(judgement_criteria, lasercolor = "", datum/callback/weaponcheck=null) //Secbots won't hunt silicon units
 	return -10
 
-/mob/living/silicon/put_in_hand_check(var/obj/item/W)
-	return 0
+/mob/living/silicon/proc/remove_sensors()
+	var/datum/atom_hud/secsensor = GLOB.huds[sec_hud]
+	var/datum/atom_hud/medsensor = GLOB.huds[med_hud]
+	var/datum/atom_hud/diagsensor = GLOB.huds[d_hud]
+	secsensor.remove_hud_from(src)
+	medsensor.remove_hud_from(src)
+	diagsensor.remove_hud_from(src)
 
-/mob/living/silicon/can_speak_lang(datum/language/speaking)
-	return universal_speak || (speaking in src.speech_synthesizer_langs)	//need speech synthesizer support to vocalize a language
+/mob/living/silicon/proc/add_sensors()
+	var/datum/atom_hud/secsensor = GLOB.huds[sec_hud]
+	var/datum/atom_hud/medsensor = GLOB.huds[med_hud]
+	var/datum/atom_hud/diagsensor = GLOB.huds[d_hud]
+	secsensor.add_hud_to(src)
+	medsensor.add_hud_to(src)
+	diagsensor.add_hud_to(src)
 
-/mob/living/silicon/add_language(var/language, var/can_speak=1)
-	if (..(language) && can_speak)
-		speech_synthesizer_langs |= (all_languages[language])
-		return 1
-
-/mob/living/silicon/remove_language(var/rem_language)
-	..(rem_language)
-
-	for (var/datum/language/L in speech_synthesizer_langs)
-		if (L.name == rem_language)
-			speech_synthesizer_langs -= L
-
-/mob/living/silicon/check_languages()
-	set name = "Check Known Languages"
-	set category = "IC"
-	set src = usr
-
-	var/dat = "<b><font size = 5>Known Languages</font></b><br/><br/>"
-
-	if(default_language)
-		dat += "Current default language: [default_language] - <a href='byond://?src=\ref[src];default_lang=reset'>reset</a><br/><br/>"
-
-	for(var/datum/language/L in languages)
-		var/default_str
-		if(L == default_language)
-			default_str = " - default - <a href='byond://?src=\ref[src];default_lang=reset'>reset</a>"
-		else
-			default_str = " - <a href='byond://?src=\ref[src];default_lang=[L]'>set default</a>"
-
-		var/synth = (L in speech_synthesizer_langs)
-		dat += "<b>[L.name] (:[L.key])</b>[synth ? default_str : null]<br/>Speech Synthesizer: <i>[synth ? "YES" : "NOT SUPPORTED"]</i><br/>[L.desc]<br/><br/>"
-
-	src << browse(dat, "window=checklanguage")
-	return
-
-/mob/living/silicon/dexterity_check()
-	return 1
-
-/mob/living/silicon/html_mob_check(var/typepath)
-	for(var/atom/movable/AM in html_machines)
-		if(typepath == AM.type)
-			if(max(abs(AM.x-src.x),abs(AM.y-src.y)) <= client.view)
-				return 1
-	return 0
-
-/mob/living/silicon/spook(mob/dead/observer/ghost)
-	if(!..(ghost, TRUE) || !client)
+/mob/living/silicon/proc/toggle_sensors()
+	if(incapacitated())
 		return
-	to_chat(src, "<i>[pick(boo_phrases_silicon)]</i>")
+	sensors_on = !sensors_on
+	if (!sensors_on)
+		to_chat(src, "Sensor overlay deactivated.")
+		remove_sensors()
+		return
+	add_sensors()
+	to_chat(src, "Sensor overlay activated.")
 
-/mob/living/silicon/bite_act(mob/living/carbon/human/H)
-	if(H.hallucinating() || (M_BEAK in H.mutations)) //If we're hallucinating, bite the silicon and lose some of our teeth. Doesn't apply to vox who have beaks
-		..()
+/mob/living/silicon/proc/GetPhoto()
+	if (aicamera)
+		return aicamera.selectpicture(aicamera)
 
-		H.knock_out_teeth()
-	else
-		to_chat(H, "<span class='info'>Your self-preservation instinct prevents you from breaking your teeth on \the [src].</span>")
+/mob/living/silicon/update_transform()
+	var/matrix/ntransform = matrix(transform) //aka transform.Copy()
+	var/changed = 0
+	if(resize != RESIZE_DEFAULT_SIZE)
+		changed++
+		ntransform.Scale(resize)
+		resize = RESIZE_DEFAULT_SIZE
 
-/mob/living/silicon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/abstract/screen/fullscreen/flash/noise)
-	if(affect_silicon)
-		return ..()
+	if(changed)
+		animate(src, transform = ntransform, time = 2,easing = EASE_IN|EASE_OUT)
+	return ..()
 
-/mob/living/silicon/earprot()
+/mob/living/silicon/is_literate()
 	return 1
-
-/mob/living/silicon/show_inv(mob/user)
-	return
-
-/mob/living/silicon/get_survive_objective()
-	return new /datum/objective/siliconsurvive

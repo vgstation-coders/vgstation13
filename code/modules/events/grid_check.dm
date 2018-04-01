@@ -1,17 +1,19 @@
-/datum/event/grid_check	//NOTE: Times are measured in master controller ticks!
-	announceWhen		= 5
+/datum/round_event_control/grid_check
+	name = "Grid Check"
+	typepath = /datum/round_event/grid_check
+	weight = 10
+	max_occurrences = 3
 
-/datum/event/grid_check/setup()
-	endWhen = rand(30,120)
+/datum/round_event/grid_check
+	announceWhen	= 1
+	startWhen = 1
 
-/datum/event/grid_check/start()
-	power_failure(0)
+/datum/round_event/grid_check/announce(fake)
+	priority_announce("Abnormal activity detected in [station_name()]'s powernet. As a precautionary measure, the station's power will be shut off for an indeterminate duration.", "Critical Power Failure", 'sound/ai/poweroff.ogg')
 
-/datum/event/grid_check/announce()
-	command_alert(/datum/command_alert/power_disabled)
 
-/datum/event/grid_check/end()
-	if(universe.name != "Normal")
-		message_admins("Universe isn't normal, aborting power_restore().")//we don't want the power to come back up during Nar-Sie or a Supermatter Cascade, do we?
-		return
-	power_restore()
+/datum/round_event/grid_check/start()
+	for(var/P in GLOB.apcs_list)
+		var/obj/machinery/power/apc/C = P
+		if(C.cell && is_station_level(C.z))
+			C.energy_fail(rand(30,120))

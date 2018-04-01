@@ -1,25 +1,62 @@
-/mob/living/carbon/
+/mob/living/carbon
 	gender = MALE
-	var/list/stomach_contents = list()
-	var/list/datum/disease2/disease/virus2 = list()
-	var/antibodies = 0
+	pressure_resistance = 15
+	possible_a_intents = list(INTENT_HELP, INTENT_HARM)
+	hud_possible = list(HEALTH_HUD,STATUS_HUD,ANTAG_HUD,GLAND_HUD)
+	has_limbs = 1
+	held_items = list(null, null)
+	var/list/stomach_contents		= list()
+	var/list/internal_organs		= list()	//List of /obj/item/organ in the mob. They don't go in the contents for some reason I don't want to know.
+	var/list/internal_organs_slot= list() //Same as above, but stores "slot ID" - "organ" pairs for easy access.
+	var/silent = FALSE 		//Can't talk. Value goes down every life proc. //NOTE TO FUTURE CODERS: DO NOT INITIALIZE NUMERICAL VARS AS NULL OR I WILL MURDER YOU.
+	var/dreaming = 0 //How many dream images we have left to send
 
-	var/last_eating = 0 	//Not sure what this does... I found it hidden in food.dm
-
-	var/life_tick = 0      // The amount of life ticks that have processed on this mob.
-	// total amount of wounds on mob, used to spread out healing and the like over all wounds
-	var/number_wounds = 0
-	var/obj/item/handcuffed = null //Whether or not the mob is handcuffed.
+	var/obj/item/handcuffed = null //Whether or not the mob is handcuffed
 	var/obj/item/legcuffed = null  //Same as handcuffs but for legs. Bear traps use this.
-	//Surgery info
-	var/datum/surgery_status/op_stage = new/datum/surgery_status
 
-	var/pulse = PULSE_NORM	//current pulse level
+	var/disgust = 0
 
-	var/hasmouth = 1 // Used for food, etc.
+//inventory slots
+	var/obj/item/back = null
+	var/obj/item/clothing/mask/wear_mask = null
+	var/obj/item/clothing/neck/wear_neck = null
+	var/obj/item/tank/internal = null
+	var/obj/item/head = null
 
-	var/event/on_emote = new ()
-	var/base_insulation = 0
-	var/unslippable = 0 //Whether the mob can be slipped
-	var/list/body_alphas = list()	//Alpha values applied to just the body sprite of humans/monkeys, rather than their whole icon
-	var/coughedtime = null
+	var/obj/item/gloves = null //only used by humans
+	var/obj/item/shoes = null //only used by humans.
+	var/obj/item/clothing/glasses/glasses = null //only used by humans.
+	var/obj/item/ears = null //only used by humans.
+
+	var/datum/dna/dna = null//Carbon
+	var/datum/mind/last_mind = null //last mind to control this mob, for blood-based cloning
+
+	var/failed_last_breath = 0 //This is used to determine if the mob failed a breath. If they did fail a brath, they will attempt to breathe each tick, otherwise just once per 4 ticks.
+
+	var/co2overloadtime = null
+	var/temperature_resistance = T0C+75
+	var/obj/item/reagent_containers/food/snacks/meat/slab/type_of_meat = /obj/item/reagent_containers/food/snacks/meat/slab
+
+	var/gib_type = /obj/effect/decal/cleanable/blood/gibs
+
+	var/rotate_on_lying = 1
+
+	var/tinttotal = 0	// Total level of visualy impairing items
+
+	var/list/bodyparts = list(/obj/item/bodypart/chest, /obj/item/bodypart/head, /obj/item/bodypart/l_arm,
+					 /obj/item/bodypart/r_arm, /obj/item/bodypart/r_leg, /obj/item/bodypart/l_leg)
+	//Gets filled up in create_bodyparts()
+
+	var/list/hand_bodyparts = list() //a collection of arms (or actually whatever the fug /bodyparts you monsters use to wreck my systems)
+
+	var/icon_render_key = ""
+	var/static/list/limb_icon_cache = list()
+
+	//halucination vars
+	var/image/halimage
+	var/image/halbody
+	var/obj/halitem
+	var/hal_screwyhud = SCREWYHUD_NONE
+	var/next_hallucination = 0
+	var/cpr_time = 1 //CPR cooldown.
+	var/damageoverlaytemp = 0

@@ -1,96 +1,49 @@
-/obj/item/clothing/suit/storage/labcoat
+/obj/item/clothing/suit/toggle/labcoat
 	name = "labcoat"
 	desc = "A suit that protects against minor chemical spills."
-	var/base_icon_state = "labcoat"
-	var/open=1
-	//icon_state = "labcoat_open"
+	icon_state = "labcoat"
 	item_state = "labcoat"
 	blood_overlay_type = "coat"
-	allowed = list(/obj/item/device/analyzer,/obj/item/stack/medical,/obj/item/weapon/dnainjector,/obj/item/weapon/reagent_containers/dropper,/obj/item/weapon/reagent_containers/syringe,/obj/item/weapon/reagent_containers/hypospray,/obj/item/device/healthanalyzer,/obj/item/device/flashlight/pen,/obj/item/weapon/minihoe,/obj/item/weapon/switchtool)
-	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 50, rad = 0)
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	body_parts_covered = CHEST|ARMS
+	allowed = list(/obj/item/device/analyzer, /obj/item/stack/medical, /obj/item/dnainjector, /obj/item/reagent_containers/dropper, /obj/item/reagent_containers/syringe, /obj/item/reagent_containers/hypospray, /obj/item/device/healthanalyzer, /obj/item/device/flashlight/pen, /obj/item/reagent_containers/glass/bottle, /obj/item/reagent_containers/glass/beaker, /obj/item/reagent_containers/pill, /obj/item/storage/pill_bottle, /obj/item/paper, /obj/item/melee/classic_baton/telescopic, /obj/item/soap, /obj/item/device/sensor_device, /obj/item/tank/internals/emergency_oxygen, /obj/item/tank/internals/plasmaman)
+	armor = list("melee" = 0, "bullet" = 0, "laser" = 0,"energy" = 0, "bomb" = 0, "bio" = 50, "rad" = 0, "fire" = 50, "acid" = 50)
+	togglename = "buttons"
+	species_exception = list(/datum/species/golem)
 
-
-
-/obj/item/clothing/suit/storage/labcoat/update_icon()
-	if(open)
-		icon_state="[base_icon_state]_open"
-	else
-		icon_state="[base_icon_state]"
-
-/obj/item/clothing/suit/storage/labcoat/verb/toggle()
-	set name = "Toggle Labcoat Buttons"
-	set category = "Object"
-	set src in usr
-
-	if(usr.incapacitated())
-		return 0
-
-	if(open)
-		to_chat(usr, "You button up the labcoat.")
-		src.body_parts_covered |= IGNORE_INV
-	else
-		to_chat(usr, "You unbutton the labcoat.")
-		src.body_parts_covered ^= IGNORE_INV
-	open=!open
-	update_icon()
-	usr.update_inv_wear_suit()	//so our overlays update
-
-/obj/item/clothing/suit/storage/labcoat/New()
-	. = ..()
-	update_icon()
-
-/obj/item/clothing/suit/storage/labcoat/cmo
+/obj/item/clothing/suit/toggle/labcoat/cmo
 	name = "chief medical officer's labcoat"
 	desc = "Bluer than the standard model."
-	base_icon_state = "labcoat_cmo"
+	icon_state = "labcoat_cmo"
 	item_state = "labcoat_cmo"
-	allowed = list(/obj/item/device/analyzer,/obj/item/stack/medical,/obj/item/weapon/dnainjector,/obj/item/weapon/reagent_containers/dropper,/obj/item/weapon/reagent_containers/syringe,/obj/item/weapon/reagent_containers/hypospray,/obj/item/device/healthanalyzer,/obj/item/device/flashlight/pen,/obj/item/weapon/minihoe,/obj/item/weapon/switchtool,/obj/item/roller)
-	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 70, rad = 0)
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
-/obj/item/clothing/suit/storage/labcoat/mad
-	name = "The Mad's labcoat"
+/obj/item/clothing/suit/toggle/labcoat/emt
+	name = "EMT's jacket"
+	desc = "A dark blue jacket with reflective strips for emergency medical technicians."
+	icon_state = "labcoat_emt"
+	item_state = "labcoat_cmo"
+
+/obj/item/clothing/suit/toggle/labcoat/mad
+	name = "\improper The Mad's labcoat"
 	desc = "It makes you look capable of konking someone on the noggin and shooting them into space."
-	base_icon_state = "labgreen"
+	icon_state = "labgreen"
 	item_state = "labgreen"
-	species_fit = list(VOX_SHAPED)
 
-/obj/item/clothing/suit/storage/labcoat/genetics
+/obj/item/clothing/suit/toggle/labcoat/genetics
 	name = "geneticist labcoat"
 	desc = "A suit that protects against minor chemical spills. Has a blue stripe on the shoulder."
-	base_icon_state = "labcoat_gen"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	icon_state = "labcoat_gen"
 
-/obj/item/clothing/suit/storage/labcoat/chemist
+/obj/item/clothing/suit/toggle/labcoat/chemist
 	name = "chemist labcoat"
 	desc = "A suit that protects against minor chemical spills. Has an orange stripe on the shoulder."
-	base_icon_state = "labcoat_chem"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	icon_state = "labcoat_chem"
 
-/obj/item/clothing/suit/storage/labcoat/virologist
+/obj/item/clothing/suit/toggle/labcoat/virologist
 	name = "virologist labcoat"
 	desc = "A suit that protects against minor chemical spills. Offers slightly more protection against biohazards than the standard model. Has a green stripe on the shoulder."
-	base_icon_state = "labcoat_vir"
-	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 60, rad = 0)
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	icon_state = "labcoat_vir"
 
-/obj/item/clothing/suit/storage/labcoat/science
+/obj/item/clothing/suit/toggle/labcoat/science
 	name = "scientist labcoat"
 	desc = "A suit that protects against minor chemical spills. Has a purple stripe on the shoulder."
-	base_icon_state = "labcoat_tox"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-
-/obj/item/clothing/suit/storage/labcoat/oncologist
-	name = "oncologist labcoat"
-	desc = "A suit that protects against minor radiation exposure. Offers slightly more protection against radiation than the standard model. Has a black stripe on the shoulder."
-	base_icon_state = "labcoat_onc"
-	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 60)
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-
-/obj/item/clothing/suit/storage/labcoat/rd
-	name = "research director's labcoat"
-	desc = "It smells like weird science."
-	base_icon_state = "labcoat_rd"
-	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 20, bio = 50, rad = 50)
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	icon_state = "labcoat_tox"

@@ -3,45 +3,56 @@
 	desc = "A board for pinning important notices upon."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "nboard00"
-	flags = FPRINT
-	density = 0
-	anchored = 1
+	density = FALSE
+	anchored = TRUE
+	max_integrity = 150
 	var/notices = 0
 
-/obj/structure/noticeboard/initialize()
+/obj/structure/noticeboard/Initialize(mapload)
+	. = ..()
+
+	if(!mapload)
+		return
+
 	for(var/obj/item/I in loc)
 		if(notices > 4)
 			break
-		if(istype(I, /obj/item/weapon/paper))
+		if(istype(I, /obj/item/paper))
 			I.forceMove(src)
 			notices++
 	icon_state = "nboard0[notices]"
 
 //attaching papers!!
-/obj/structure/noticeboard/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
-	if(iswrench(O))
-		to_chat(user, "<span class='notice'>You disassemble \the [src].</span>")
-		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
-		new /obj/item/stack/sheet/wood (src.loc,2)
-		qdel(src)
-	if(istype(O, /obj/item/weapon/paper))
+/obj/structure/noticeboard/attackby(obj/item/O, mob/user, params)
+	if(istype(O, /obj/item/paper) || istype(O, /obj/item/photo))
+		if(!allowed(user))
+			to_chat(user, "<span class='info'>You are not authorized to add notices</span>")
+			return
 		if(notices < 5)
-			O.add_fingerprint(user)
-			add_fingerprint(user)
-			user.drop_item(O,src, force_drop = 1)
+			if(!user.transferItemToLoc(O, src))
+				return
 			notices++
-			icon_state = "nboard0[notices]"	//update sprite
-			to_chat(user, "<span class='notice'>You pin the paper to the noticeboard.</span>")
+			icon_state = "nboard0[notices]"
+			to_chat(user, "<span class='notice'>You pin the [O] to the noticeboard.</span>")
 		else
-			to_chat(user, "<span class='notice'>You reach to pin your paper to the board but hesitate. You are certain your paper will not be seen among the many others already attached.</span>")
+			to_chat(user, "<span class='notice'>The notice board is full</span>")
+	else
+		return ..()
 
-/obj/structure/noticeboard/attack_hand(user as mob)
-	var/dat = "<B>Noticeboard</B><BR>"
-	for(var/obj/item/weapon/paper/P in src)
-		dat += "<A href='?src=\ref[src];read=\ref[P]'>[P.name]</A> <A href='?src=\ref[src];write=\ref[P]'>Write</A> <A href='?src=\ref[src];remove=\ref[P]'>Remove</A><BR>"
+/obj/structure/noticeboard/interact(mob/user)
+	ui_interact(user)
+
+/obj/structure/noticeboard/ui_interact(mob/user)
+	. = ..()
+	var/auth = allowed(user)
+	var/dat = "<B>[name]</B><BR>"
+	for(var/obj/item/P in src)
+		if(istype(P, /obj/item/paper))
+			dat += "<A href='?src=[REF(src)];read=[REF(P)]'>[P.name]</A> [auth ? "<A href='?src=[REF(src)];write=[REF(P)]'>Write</A> <A href='?src=[REF(src)];remove=[REF(P)]'>Remove</A>" : ""]<BR>"
+		else
+			dat += "<A href='?src=[REF(src)];read=[REF(P)]'>[P.name]</A> [auth ? "<A href='?src=[REF(src)];remove=[REF(P)]'>Remove</A>" : ""]<BR>"
 	user << browse("<HEAD><TITLE>Notices</TITLE></HEAD>[dat]","window=noticeboard")
 	onclose(user, "noticeboard")
-
 
 /obj/structure/noticeboard/Topic(href, href_list)
 	..()
@@ -49,30 +60,73 @@
 	if(href_list["remove"])
 		if((usr.stat || usr.restrained()))	//For when a player is handcuffed while they have the notice window open
 			return
-		var/obj/item/P = locate(href_list["remove"])
-		if((P && P.loc == src))
-			P.forceMove(get_turf(src))	//dump paper on the floor because you're a clumsy fuck
-			P.add_fingerprint(usr)
-			add_fingerprint(usr)
+		var/obj/item/I = locate(href_list["remove"]) in contents
+		if(istype(I) && I.loc == src)
+			I.forceMove(usr.loc)
+			usr.put_in_hands(I)
 			notices--
 			icon_state = "nboard0[notices]"
 
 	if(href_list["write"])
 		if((usr.stat || usr.restrained())) //For when a player is handcuffed while they have the notice window open
 			return
-		var/obj/item/P = locate(href_list["write"])
-
-		if((P && P.loc == src)) //ifthe paper's on the board
-			var/pen_index = usr.find_held_item_by_type(/obj/item/weapon/pen)
-			if(pen_index)
-				var/obj/item/weapon/pen/pen = usr.held_items[pen_index]
+		var/obj/item/P = locate(href_list["write"]) in contents
+		if(istype(P) && P.loc == src)
+			var/obj/item/I = usr.is_holding_item_of_type(/obj/item/pen)
+			if(I)
 				add_fingerprint(usr)
-				P.attackby(pen, usr)
+				P.attackby(I, usr)
 			else
 				to_chat(usr, "<span class='notice'>You'll need something to write with!</span>")
 
 	if(href_list["read"])
-		var/obj/item/weapon/paper/P = locate(href_list["read"])
-		if((P && P.loc == src))
-			P.show_text(usr)
-	return
+		var/obj/item/I = locate(href_list["read"]) in contents
+		if(istype(I) && I.loc == src)
+			usr.examinate(I)
+
+/obj/structure/noticeboard/deconstruct(disassembled = TRUE)
+	if(!(flags_1 & NODECONSTRUCT_1))
+		new /obj/item/stack/sheet/metal (loc, 1)
+	qdel(src)
+
+// Notice boards for the heads of staff (plus the qm)
+
+/obj/structure/noticeboard/captain
+	name = "Captain's Notice Board"
+	desc = "Important notices from the Captain."
+	req_access = list(ACCESS_CAPTAIN)
+
+/obj/structure/noticeboard/hop
+	name = "Head of Personnel's Notice Board"
+	desc = "Important notices from the Head of Personnel."
+	req_access = list(ACCESS_HOP)
+
+/obj/structure/noticeboard/ce
+	name = "Chief Engineer's Notice Board"
+	desc = "Important notices from the Chief Engineer."
+	req_access = list(ACCESS_CE)
+
+/obj/structure/noticeboard/hos
+	name = "Head of Security's Notice Board"
+	desc = "Important notices from the Head of Security."
+	req_access = list(ACCESS_HOS)
+
+/obj/structure/noticeboard/cmo
+	name = "Chief Medical Officer's Notice Board"
+	desc = "Important notices from the Chief Medical Officer."
+	req_access = list(ACCESS_CMO)
+
+/obj/structure/noticeboard/rd
+	name = "Research Director's Notice Board"
+	desc = "Important notices from the Research Director."
+	req_access = list(ACCESS_RD)
+
+/obj/structure/noticeboard/qm
+	name = "Quartermaster's Notice Board"
+	desc = "Important notices from the Quartermaster."
+	req_access = list(ACCESS_QM)
+
+/obj/structure/noticeboard/staff
+	name = "Staff Notice Board"
+	desc = "Important notices from the heads of staff."
+	req_access = list(ACCESS_HEADS)

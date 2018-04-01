@@ -1,4 +1,4 @@
-/area/engineering/engine/poweralert(var/state, var/source)
+/area/engine/engineering/poweralert(state, source)
 	if (state != poweralm)
-		investigation_log(I_SINGULO,"has a power alarm!")
+		investigate_log("has a power alarm!", INVESTIGATE_SINGULO)
 	..()

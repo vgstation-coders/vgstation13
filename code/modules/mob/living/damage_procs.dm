@@ -8,34 +8,64 @@
 	Returns
 	standard 0 if fail
 */
-/mob/living/proc/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, var/used_weapon = null, ignore_events = 0)
-	if(!damage || (blocked >= 2))
+/mob/living/proc/apply_damage(damage = 0,damagetype = BRUTE, def_zone = null, blocked = FALSE)
+	var/hit_percent = (100-blocked)/100
+	if(!damage || (hit_percent <= 0))
 		return 0
-	var/damage_done = damage/(blocked+1)
 	switch(damagetype)
 		if(BRUTE)
-			adjustBruteLoss(damage_done)
+			adjustBruteLoss(damage * hit_percent)
 		if(BURN)
-			if(M_RESIST_HEAT in mutations)
-				damage_done = 0
-			adjustFireLoss(damage_done)
+			adjustFireLoss(damage * hit_percent)
 		if(TOX)
-			adjustToxLoss(damage_done)
+			adjustToxLoss(damage * hit_percent)
 		if(OXY)
-			adjustOxyLoss(damage_done)
+			adjustOxyLoss(damage * hit_percent)
 		if(CLONE)
-			adjustCloneLoss(damage_done)
-		if(HALLOSS)
-			adjustHalLoss(damage_done)
+			adjustCloneLoss(damage * hit_percent)
+		if(STAMINA)
+			adjustStaminaLoss(damage * hit_percent)
 		if(BRAIN)
-			adjustBrainLoss(damage_done)
-	updatehealth()
+			adjustBrainLoss(damage * hit_percent)
+	return 1
 
-	return damage_done
+/mob/living/proc/apply_damage_type(damage = 0, damagetype = BRUTE) //like apply damage except it always uses the damage procs
+	switch(damagetype)
+		if(BRUTE)
+			return adjustBruteLoss(damage)
+		if(BURN)
+			return adjustFireLoss(damage)
+		if(TOX)
+			return adjustToxLoss(damage)
+		if(OXY)
+			return adjustOxyLoss(damage)
+		if(CLONE)
+			return adjustCloneLoss(damage)
+		if(STAMINA)
+			return adjustStaminaLoss(damage)
+		if(BRAIN)
+			return adjustBrainLoss(damage)
+
+/mob/living/proc/get_damage_amount(damagetype = BRUTE)
+	switch(damagetype)
+		if(BRUTE)
+			return getBruteLoss()
+		if(BURN)
+			return getFireLoss()
+		if(TOX)
+			return getToxLoss()
+		if(OXY)
+			return getOxyLoss()
+		if(CLONE)
+			return getCloneLoss()
+		if(STAMINA)
+			return getStaminaLoss()
+		if(BRAIN)
+			return getBrainLoss()
 
 
-/mob/living/proc/apply_damages(var/brute = 0, var/burn = 0, var/tox = 0, var/oxy = 0, var/clone = 0, var/halloss = 0, var/def_zone = null, var/blocked = 0)
-	if(blocked >= 2)
+/mob/living/proc/apply_damages(brute = 0, burn = 0, tox = 0, oxy = 0, clone = 0, def_zone = null, blocked = FALSE, stamina = 0, brain = 0)
+	if(blocked >= 100)
 		return 0
 	if(brute)
 		apply_damage(brute, BRUTE, def_zone, blocked)
@@ -47,72 +77,209 @@
 		apply_damage(oxy, OXY, def_zone, blocked)
 	if(clone)
 		apply_damage(clone, CLONE, def_zone, blocked)
-	if(halloss)
-		apply_damage(halloss, HALLOSS, def_zone, blocked)
+	if(stamina)
+		apply_damage(stamina, STAMINA, def_zone, blocked)
+	if(brain)
+		apply_damage(brain, BRAIN, def_zone, blocked)
 	return 1
 
 
 
-/mob/living/proc/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)
-	if(!effect || (blocked >= 2))
+/mob/living/proc/apply_effect(effect = 0,effecttype = STUN, blocked = FALSE)
+	var/hit_percent = (100-blocked)/100
+	if(!effect || (hit_percent <= 0))
 		return 0
-	var/altered = 0
 	switch(effecttype)
 		if(STUN)
-			altered = effect/(blocked+1)
-			Stun(altered)
-		if(WEAKEN)
-			altered = effect/(blocked+1)
-			Knockdown(altered)
-		if(PARALYZE)
-			altered = effect/(blocked+1)
-			Paralyse(altered)
-		if(AGONY)
-			altered = effect
-			halloss += altered // Useful for objects that cause "subdual" damage. PAIN!
+			Stun(effect * hit_percent)
+		if(KNOCKDOWN)
+			Knockdown(effect * hit_percent)
+		if(UNCONSCIOUS)
+			Unconscious(effect * hit_percent)
 		if(IRRADIATE)
-			altered = max((((effect - (effect*(getarmor(null, "rad")/100))))/(blocked+1)),0)//Rads auto check armor
-			radiation += altered
+			radiation += max(effect * hit_percent, 0)
+		if(SLUR)
+			slurring = max(slurring,(effect * hit_percent))
 		if(STUTTER)
-			if(status_flags & CANSTUN) // stun is usually associated with stutter
-				altered = max(stuttering,(effect/(blocked+1)))
-				stuttering = altered
+			if((status_flags & CANSTUN) && !has_trait(TRAIT_STUNIMMUNE)) // stun is usually associated with stutter
+				stuttering = max(stuttering,(effect * hit_percent))
 		if(EYE_BLUR)
-			altered = max(eye_blurry,(effect/(blocked+1)))
-			eye_blurry = altered
+			blur_eyes(effect * hit_percent)
 		if(DROWSY)
-			altered = max(drowsyness,(effect/(blocked+1)))
-			drowsyness = altered
-	updatehealth()
-	return altered
+			drowsyness = max(drowsyness,(effect * hit_percent))
+		if(JITTER)
+			if((status_flags & CANSTUN) && !has_trait(TRAIT_STUNIMMUNE))
+				jitteriness = max(jitteriness,(effect * hit_percent))
+	return 1
 
 
-/mob/living/proc/apply_effects(var/stun = 0, var/weaken = 0, var/paralyze = 0, var/irradiate = 0, var/stutter = 0, var/eyeblur = 0, var/drowsy = 0, var/agony = 0, var/blocked = 0)
-	if(blocked >= 2)
+/mob/living/proc/apply_effects(stun = 0, knockdown = 0, unconscious = 0, irradiate = 0, slur = 0, stutter = 0, eyeblur = 0, drowsy = 0, blocked = FALSE, stamina = 0, jitter = 0)
+	if(blocked >= 100)
 		return 0
 	if(stun)
 		apply_effect(stun, STUN, blocked)
-	if(weaken)
-		apply_effect(weaken, WEAKEN, blocked)
-	if(paralyze)
-		apply_effect(paralyze, PARALYZE, blocked)
+	if(knockdown)
+		apply_effect(knockdown, KNOCKDOWN, blocked)
+	if(unconscious)
+		apply_effect(unconscious, UNCONSCIOUS, blocked)
 	if(irradiate)
 		apply_effect(irradiate, IRRADIATE, blocked)
+	if(slur)
+		apply_effect(slur, SLUR, blocked)
 	if(stutter)
 		apply_effect(stutter, STUTTER, blocked)
 	if(eyeblur)
 		apply_effect(eyeblur, EYE_BLUR, blocked)
 	if(drowsy)
 		apply_effect(drowsy, DROWSY, blocked)
-	if(agony)
-		apply_effect(agony, AGONY, blocked)
+	if(stamina)
+		apply_damage(stamina, STAMINA, null, blocked)
+	if(jitter)
+		apply_effect(jitter, JITTER, blocked)
 	return 1
 
-/mob/living/ashify()
-	return //let's not go ashy, shall we?
 
-/mob/living/proc/apply_radiation(var/rads, var/application = RAD_EXTERNAL)
-	if(application == RAD_EXTERNAL) //Supermatter, PA particles, jukebox, transmitter
-		apply_effect(rads, IRRADIATE)
-	if(application == RAD_INTERNAL) //
-		radiation += rads
+/mob/living/proc/getBruteLoss()
+	return bruteloss
+
+/mob/living/proc/adjustBruteLoss(amount, updating_health = TRUE, forced = FALSE)
+	if(!forced && (status_flags & GODMODE))
+		return FALSE
+	bruteloss = CLAMP((bruteloss + (amount * CONFIG_GET(number/damage_multiplier))), 0, maxHealth * 2)
+	if(updating_health)
+		updatehealth()
+	return amount
+
+/mob/living/proc/getOxyLoss()
+	return oxyloss
+
+/mob/living/proc/adjustOxyLoss(amount, updating_health = TRUE, forced = FALSE)
+	if(!forced && (status_flags & GODMODE))
+		return FALSE
+	oxyloss = CLAMP((oxyloss + (amount * CONFIG_GET(number/damage_multiplier))), 0, maxHealth * 2)
+	if(updating_health)
+		updatehealth()
+	return amount
+
+/mob/living/proc/setOxyLoss(amount, updating_health = TRUE, forced = FALSE)
+	if(status_flags & GODMODE)
+		return 0
+	oxyloss = amount
+	if(updating_health)
+		updatehealth()
+	return amount
+
+/mob/living/proc/getToxLoss()
+	return toxloss
+
+/mob/living/proc/adjustToxLoss(amount, updating_health = TRUE, forced = FALSE)
+	if(!forced && (status_flags & GODMODE))
+		return FALSE
+	toxloss = CLAMP((toxloss + (amount * CONFIG_GET(number/damage_multiplier))), 0, maxHealth * 2)
+	if(updating_health)
+		updatehealth()
+	return amount
+
+/mob/living/proc/setToxLoss(amount, updating_health = TRUE, forced = FALSE)
+	if(!forced && (status_flags & GODMODE))
+		return FALSE
+	toxloss = amount
+	if(updating_health)
+		updatehealth()
+	return amount
+
+/mob/living/proc/getFireLoss()
+	return fireloss
+
+/mob/living/proc/adjustFireLoss(amount, updating_health = TRUE, forced = FALSE)
+	if(!forced && (status_flags & GODMODE))
+		return FALSE
+	fireloss = CLAMP((fireloss + (amount * CONFIG_GET(number/damage_multiplier))), 0, maxHealth * 2)
+	if(updating_health)
+		updatehealth()
+	return amount
+
+/mob/living/proc/getCloneLoss()
+	return cloneloss
+
+/mob/living/proc/adjustCloneLoss(amount, updating_health = TRUE, forced = FALSE)
+	if(!forced && (status_flags & GODMODE))
+		return FALSE
+	cloneloss = CLAMP((cloneloss + (amount * CONFIG_GET(number/damage_multiplier))), 0, maxHealth * 2)
+	if(updating_health)
+		updatehealth()
+	return amount
+
+/mob/living/proc/setCloneLoss(amount, updating_health = TRUE, forced = FALSE)
+	if(!forced && (status_flags & GODMODE))
+		return FALSE
+	cloneloss = amount
+	if(updating_health)
+		updatehealth()
+	return amount
+
+/mob/living/proc/getBrainLoss()
+	. = 0
+
+/mob/living/proc/adjustBrainLoss(amount, maximum = BRAIN_DAMAGE_DEATH)
+	return
+
+/mob/living/proc/setBrainLoss(amount)
+	return
+
+/mob/living/proc/getStaminaLoss()
+	return staminaloss
+
+/mob/living/proc/adjustStaminaLoss(amount, updating_stamina = TRUE, forced = FALSE)
+	return
+
+/mob/living/proc/setStaminaLoss(amount, updating_stamina = TRUE, forced = FALSE)
+	return
+
+// heal ONE external organ, organ gets randomly selected from damaged ones.
+/mob/living/proc/heal_bodypart_damage(brute = 0, burn = 0, stamina = 0, updating_health = TRUE)
+	adjustBruteLoss(-brute, FALSE) //zero as argument for no instant health update
+	adjustFireLoss(-burn, FALSE)
+	adjustStaminaLoss(-stamina, FALSE)
+	if(updating_health)
+		updatehealth()
+		update_stamina()
+
+// damage ONE external organ, organ gets randomly selected from damaged ones.
+/mob/living/proc/take_bodypart_damage(brute = 0, burn = 0, stamina = 0, updating_health = TRUE)
+	adjustBruteLoss(brute, FALSE) //zero as argument for no instant health update
+	adjustFireLoss(burn, FALSE)
+	adjustStaminaLoss(stamina, FALSE)
+	if(updating_health)
+		updatehealth()
+		update_stamina()
+
+// heal MANY bodyparts, in random order
+/mob/living/proc/heal_overall_damage(brute = 0, burn = 0, stamina = 0, only_robotic = FALSE, only_organic = TRUE, updating_health = TRUE)
+	adjustBruteLoss(-brute, FALSE) //zero as argument for no instant health update
+	adjustFireLoss(-burn, FALSE)
+	adjustStaminaLoss(-stamina, FALSE)
+	if(updating_health)
+		updatehealth()
+		update_stamina()
+
+// damage MANY bodyparts, in random order
+/mob/living/proc/take_overall_damage(brute = 0, burn = 0, stamina = 0, updating_health = TRUE)
+	adjustBruteLoss(brute, FALSE) //zero as argument for no instant health update
+	adjustFireLoss(burn, FALSE)
+	adjustStaminaLoss(stamina, FALSE)
+	if(updating_health)
+		updatehealth()
+		update_stamina()
+
+//heal up to amount damage, in a given order
+/mob/living/proc/heal_ordered_damage(amount, list/damage_types)
+	. = amount //we'll return the amount of damage healed
+	for(var/i in damage_types)
+		var/amount_to_heal = min(amount, get_damage_amount(i)) //heal only up to the amount of damage we have
+		if(amount_to_heal)
+			apply_damage_type(-amount_to_heal, i)
+			amount -= amount_to_heal //remove what we healed from our current amount
+		if(!amount)
+			break
+	. -= amount //if there's leftover healing, remove it from what we return

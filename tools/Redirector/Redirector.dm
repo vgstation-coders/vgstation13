@@ -18,9 +18,9 @@ var/admin_substr  = "admins=" // search for this to locate # of admins
 world
 	name = "TGstation Redirector"
 
-	New()
-		..()
-		gen_configs()
+world/New()
+	..()
+	gen_configs()
 
 /datum/server
 	var/players = 0
@@ -36,7 +36,7 @@ mob/Login()
 	var/list/servers = list()
 	for(var/x in global.servers)
 
-		to_chat(world, "[x] [servernames[ global.servers.Find(x) ]]")
+		world << "[x] [servernames[ global.servers.Find(x) ]]"
 
 		var/info = world.Export("[x]?status")
 		var/datum/server/S = new()
@@ -46,8 +46,8 @@ mob/Login()
 		S.weight += player_weight * S.players
 		S.link = x
 
-		to_chat(world, S.players)
-		to_chat(world, S.admins)
+		world << S.players
+		world << S.admins
 
 		weights.Add(S.weight)
 		servers.Add(S)
@@ -58,10 +58,9 @@ mob/Login()
 		if(S.weight == lowest)
 			serverlink = S.link
 
-	to_chat(src, link(serverlink))
+	src << link(serverlink)
 
 proc/extract(var/data, var/type = PLAYERS)
-
 
 	var/nextpos = 0
 

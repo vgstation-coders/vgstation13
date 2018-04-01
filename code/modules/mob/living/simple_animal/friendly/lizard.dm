@@ -1,5 +1,5 @@
 /mob/living/simple_animal/hostile/lizard
-	name = "lizard"
+	name = "Lizard"
 	desc = "A cute tiny lizard."
 	icon_state = "lizard"
 	icon_living = "lizard"
@@ -7,71 +7,34 @@
 	speak_emote = list("hisses")
 	health = 5
 	maxHealth = 5
+	faction = list("Lizard")
 	attacktext = "bites"
 	melee_damage_lower = 1
 	melee_damage_upper = 2
 	response_help  = "pets"
 	response_disarm = "shoos"
 	response_harm   = "stomps on"
-
-	size = SIZE_TINY
-	mob_property_flags = MOB_NO_PETRIFY //Can't get petrified (nethack references)
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/lizard
-	held_items = list()
-
-	stop_automated_movement_when_pulled = TRUE
-	environment_smash_flags = 0
+	ventcrawler = VENTCRAWLER_ALWAYS
 	density = FALSE
 	pass_flags = PASSTABLE | PASSMOB
-	vision_range = 6
-	aggro_vision_range = 6
-	idle_vision_range = 6
-	search_objects = 1
+	mob_size = MOB_SIZE_SMALL
+	gold_core_spawnable = FRIENDLY_SPAWN
+	obj_damage = 0
+	environment_smash = ENVIRONMENT_SMASH_NONE
+	var/static/list/edibles = typecacheof(list(/mob/living/simple_animal/butterfly, /mob/living/simple_animal/cockroach)) //list of atoms, however turfs won't affect AI, but will affect consumption.
 
-	var/static/list/edibles = list(/mob/living/simple_animal/cockroach, /obj/item/weapon/reagent_containers/food/snacks/roach_eggs) //Add bugs to this as they get added in
-
-/mob/living/simple_animal/hostile/lizard/UnarmedAttack(var/atom/A)
-	if(is_type_in_list(A, edibles))
-		delayNextAttack(10)
-		gulp(A)
-	else return ..()
-
-/mob/living/simple_animal/hostile/lizard/proc/gulp(var/atom/eat_this)
-	visible_message("\The [name] consumes [eat_this] in a single gulp.", "<span class='notice'>You consume [eat_this] in a single gulp.</span>")
-	playsound(src,'sound/items/egg_squash.ogg', rand(30,70), 1)
-	qdel(eat_this)
-	adjustBruteLoss(-2)
-
-/mob/living/simple_animal/hostile/lizard/LoseAggro()
-	..()
-	search_objects = 1
-
-/mob/living/simple_animal/hostile/lizard/CanAttack(var/atom/the_target)//Can we actually attack a possible target?
+/mob/living/simple_animal/hostile/lizard/CanAttack(atom/the_target)//Can we actually attack a possible target?
 	if(see_invisible < the_target.invisibility)//Target's invisible to us, forget it
 		return FALSE
-	if(is_type_in_list(the_target, edibles))
+	if(is_type_in_typecache(the_target,edibles))
 		return TRUE
 	return FALSE
 
-/mob/living/simple_animal/hostile/lizard/verb/ventcrawl()
-	set name = "Crawl through Vent"
-	set desc = "Enter an air vent and crawl through the pipe system."
-	set category = "Object"
-	var/pipe = start_ventcrawl()
-	if(pipe)
-		handle_ventcrawl(pipe)
-
-/mob/living/simple_animal/hostile/lizard/verb/hide()
-	set name = "Hide"
-	set desc = "Allows to hide beneath tables or certain items. Toggled on or off."
-	set category = "Object"
-
-	if(isUnconscious())
-		return
-
-	if (plane != HIDING_MOB_PLANE)
-		plane = HIDING_MOB_PLANE
-		to_chat(src, "<span class='notice'>You are now hiding.</span>")
+/mob/living/simple_animal/hostile/lizard/AttackingTarget()
+	if(is_type_in_typecache(target,edibles)) //Makes sure player lizards only consume edibles.
+		visible_message("[name] consumes [target] in a single gulp", "<span class='notice'>You consume [target] in a single gulp</span>")
+		QDEL_NULL(target) //Nom
+		adjustBruteLoss(-2)
+		return TRUE
 	else
-		plane = MOB_PLANE
-		to_chat(src, "<span class='notice'>You have stopped hiding.</span>")
+		return ..()

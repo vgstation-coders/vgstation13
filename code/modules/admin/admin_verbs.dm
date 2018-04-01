@@ -1,221 +1,183 @@
 //admin verb groups - They can overlap if you so wish. Only one of each verb will exist in the verbs list regardless
-var/list/admin_verbs_default = list(
-	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
-	/client/proc/deadmin_self,			/*destroys our own admin datum so we can play as a regular player*/
+//the procs are cause you can't put the comments in the GLOB var define
+GLOBAL_PROTECT(admin_verbs_default)
+GLOBAL_LIST_INIT(admin_verbs_default, world.AVerbsDefault())
+/world/proc/AVerbsDefault()
+	return list(
+	/client/proc/deadmin,				/*destroys our own admin datum so we can play as a regular player*/
+	/client/proc/cmd_admin_say,			/*admin-only ooc chat*/
 	/client/proc/hide_verbs,			/*hides all our adminverbs*/
 	/client/proc/hide_most_verbs,		/*hides all our hideable adminverbs*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game. +VAREDIT needed to modify*/
-	/client/proc/check_antagonists,		/*shows all antags*/
-	/client/proc/advwho,				/*in addition to listing connected ckeys, shows character name and living/dead/antag status for each*/
-	/datum/admins/proc/checkCID,
-	/datum/admins/proc/checkCKEY
-//	/client/proc/deadchat				/*toggles deadchat on/off*/
+	/client/proc/dsay,					/*talk in deadchat using our ckey/fakekey*/
+	/client/proc/investigate_show,		/*various admintools for investigation. Such as a singulo grief-log*/
+	/client/proc/secrets,
+	/client/proc/toggle_hear_radio,		/*allows admins to hide all radio output*/
+	/client/proc/reload_admins,
+	/client/proc/reestablish_db_connection, /*reattempt a connection to the database*/
+	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
+	/client/proc/cmd_admin_pm_panel,		/*admin-pm list*/
+	/client/proc/cmd_admin_ticket_panel,
+	/client/proc/stop_sounds
 	)
-var/list/admin_verbs_admin = list(
-	/client/proc/set_base_turf,
-	/datum/admins/proc/delay,
-	/client/proc/SendCentcommFax,		/*sends a fax to all fax machines*/
-	/client/proc/player_panel,			/*shows an interface for all players, with links to various panels (old style)*/
-	/client/proc/player_panel_new,		/*shows an interface for all players, with links to various panels*/
+GLOBAL_PROTECT(admin_verbs_admin)
+GLOBAL_LIST_INIT(admin_verbs_admin, world.AVerbsAdmin())
+/world/proc/AVerbsAdmin()
+	return list(
 	/client/proc/invisimin,				/*allows our mob to go invisible/visible*/
 //	/datum/admins/proc/show_traitor_panel,	/*interface which shows a mob's mind*/ -Removed due to rare practical use. Moved to debug verbs ~Errorage
+	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
+	/datum/verbs/menu/Admin/verb/playerpanel,
+	/client/proc/game_panel,			/*game panel, allows to change game-mode etc*/
+	/client/proc/check_ai_laws,			/*shows AI and borg laws*/
+	/datum/admins/proc/toggleooc,		/*toggles ooc on/off for everyone*/
+	/datum/admins/proc/toggleoocdead,	/*toggles ooc on/off for everyone who is dead*/
 	/datum/admins/proc/toggleenter,		/*toggles whether people can join the current game*/
 	/datum/admins/proc/toggleguests,	/*toggles whether guests can join the current game*/
 	/datum/admins/proc/announce,		/*priority announce something to all clients.*/
-	/client/proc/colorooc,				/*allows us to set a custom colour for everythign we say in ooc*/
+	/datum/admins/proc/set_admin_notice, /*announcement all clients see when joining the server.*/
 	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
 	/client/proc/toggle_view_range,		/*changes how far we can see*/
-	/datum/admins/proc/view_txt_log,	/*shows the server log (diary) for today*/
+	/datum/admins/proc/view_txt_log,	/*shows the server log (world_game_log) for today*/
 	/datum/admins/proc/view_atk_log,	/*shows the server combat-log, doesn't do anything presently*/
-	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
-	/client/proc/cmd_admin_pm_panel,	/*admin-pm list*/
 	/client/proc/cmd_admin_subtle_message,	/*send an message to somebody as a 'voice in their head'*/
 	/client/proc/cmd_admin_delete,		/*delete an instance/object/mob/etc*/
 	/client/proc/cmd_admin_check_contents,	/*displays the contents of an instance*/
+	/client/proc/check_antagonists,		/*shows all antags*/
 	/datum/admins/proc/access_news_network,	/*allows access of newscasters*/
-	/client/proc/giveruntimelog,		/*allows us to give access to runtime logs to somebody*/
-	/client/proc/getruntimelog,			/*allows us to access runtime logs to somebody*/
-	/client/proc/getserverlog,			/*allows us to fetch server logs (diary) for other days*/
+	/client/proc/getserverlog,			/*allows us to fetch server logs (world_game_log) for other days*/
 	/client/proc/jumptocoord,			/*we ghost and jump to a coordinate*/
 	/client/proc/Getmob,				/*teleports a mob to our location*/
 	/client/proc/Getkey,				/*teleports a mob with a certain ckey to our location*/
 //	/client/proc/sendmob,				/*sends a mob somewhere*/ -Removed due to it needing two sorting procs to work, which were executed every time an admin right-clicked. ~Errorage
-	/client/proc/Jump,
+	/client/proc/jumptoarea,
 	/client/proc/jumptokey,				/*allows us to jump to the location of a mob with a certain ckey*/
 	/client/proc/jumptomob,				/*allows us to jump to a specific mob*/
 	/client/proc/jumptoturf,			/*allows us to jump to a specific turf*/
-	/client/proc/jumptomapelement,			/*allows us to jump to a specific vault*/
 	/client/proc/admin_call_shuttle,	/*allows us to call the emergency shuttle*/
-	/client/proc/admin_cancel_shuttle,	/*allows us to cancel the emergency shuttle, sending it back to centcomm*/
+	/client/proc/admin_cancel_shuttle,	/*allows us to cancel the emergency shuttle, sending it back to centcom*/
 	/client/proc/cmd_admin_direct_narrate,	/*send text directly to a player with no padding. Useful for narratives and fluff-text*/
-	/client/proc/cmd_admin_local_narrate,	/*send text locally to all players in view, similar to direct narrate*/
 	/client/proc/cmd_admin_world_narrate,	/*sends text to all players with no padding*/
+	/client/proc/cmd_admin_local_narrate,	/*sends text to all mobs within view of atom*/
 	/client/proc/cmd_admin_create_centcom_report,
-	/client/proc/check_words,			/*displays cult-words*/
-	/client/proc/check_ai_laws,			/*shows AI and borg laws*/
-	/client/proc/admin_memo,			/*admin memo system. show/delete/write. +SERVER needed to delete admin memos of others*/
-	/client/proc/dsay,					/*talk in deadchat using our ckey/fakekey*/
-	/client/proc/investigate_show,		/*various admintools for investigation. Such as a singulo grief-log*/
-	/client/proc/secrets,
-	/client/proc/shuttle_magic,
-	/datum/admins/proc/toggleooc,		/*toggles ooc on/off for everyone*/
-	/datum/admins/proc/togglelooc, /*toggles looc on/off for everyone*/
-	/datum/admins/proc/toggleoocdead,	/*toggles ooc on/off for everyone who is dead*/
-	/client/proc/game_panel,			/*game panel, allows to change game-mode etc*/
-	/client/proc/cmd_admin_say,			/*admin-only ooc chat*/
-	/datum/admins/proc/PlayerNotes,
-	/client/proc/cmd_mod_say,
-	/client/proc/cmd_mod_window,
-	/datum/admins/proc/show_player_info,
-	/client/proc/free_slot,			/*frees slot for chosen job*/
-	/client/proc/cmd_admin_change_custom_event,
-	/client/proc/cmd_admin_rejuvenate,
-	/client/proc/check_customitem_activity,
-	// /client/proc/man_up,
-	// /client/proc/global_man_up,
-	/client/proc/toggle_antagHUD_use,
-	/client/proc/toggle_antagHUD_restrictions,
-	/client/proc/allow_character_respawn,    /* Allows a ghost to respawn */
-	/client/proc/watchdog_force_restart,	/*forces restart using watchdog feature*/
-	/client/proc/manage_religions
-)
-var/list/admin_verbs_ban = list(
-	/client/proc/unban_panel,
-	/client/proc/jobbans,
-	/client/proc/unjobban_panel
-	// /client/proc/DB_ban_panel
+	/client/proc/cmd_change_command_name,
+	/client/proc/cmd_admin_check_player_exp, /* shows players by playtime */
+	/client/proc/toggle_antag_hud, 	/*toggle display of the admin antag hud*/
+	/client/proc/toggle_combo_hud, // toggle display of the combination pizza antag and taco sci/med/eng hud
+	/client/proc/toggle_AI_interact, /*toggle admin ability to interact with machines as an AI*/
+	/client/proc/open_shuttle_manipulator, /* Opens shuttle manipulator UI */
+	/client/proc/deadchat,
+	/client/proc/toggleprayers,
+	/client/proc/toggleadminhelpsound,
+	/client/proc/respawn_character
 	)
-var/list/admin_verbs_sounds = list(
-	/client/proc/play_local_sound,
-	/client/proc/play_sound
-	)
-var/list/admin_verbs_fun = list(
-	/datum/admins/proc/media_stop_all,
-	/client/proc/object_talk,
+GLOBAL_PROTECT(admin_verbs_ban)
+GLOBAL_LIST_INIT(admin_verbs_ban, list(/client/proc/unban_panel, /client/proc/DB_ban_panel, /client/proc/stickybanpanel))
+GLOBAL_PROTECT(admin_verbs_sounds)
+GLOBAL_LIST_INIT(admin_verbs_sounds, list(/client/proc/play_local_sound, /client/proc/play_sound, /client/proc/set_round_end_sound))
+GLOBAL_PROTECT(admin_verbs_fun)
+GLOBAL_LIST_INIT(admin_verbs_fun, list(
+	/client/proc/cmd_admin_dress,
 	/client/proc/cmd_admin_gib_self,
 	/client/proc/drop_bomb,
-	/client/proc/drop_emp,
+	/client/proc/set_dynex_scale,
+	/client/proc/drop_dynex_bomb,
 	/client/proc/cinematic,
 	/client/proc/one_click_antag,
-	/client/proc/antag_madness,
-	/datum/admins/proc/toggle_aliens,
-	// FUUUUCKED /client/proc/zombie_event, // ZOMBB-B-BIES
 	/client/proc/cmd_admin_add_freeform_ai_law,
-	/client/proc/cmd_admin_add_random_ai_law,
-	/client/proc/make_sound,
+	/client/proc/object_say,
 	/client/proc/toggle_random_events,
 	/client/proc/set_ooc,
-	/client/proc/editappear,
-	/client/proc/commandname,
-	/client/proc/delete_all_adminbus,
-	/client/proc/delete_all_bomberman,
-	/client/proc/create_bomberman_arena,
-	/client/proc/control_bomberman_arena,
-	/client/proc/gib_money, // /vg/
-	/client/proc/smissmas,
-	/client/proc/achievement,
-	/client/proc/mommi_static,
-	/client/proc/makepAI,
-	/client/proc/set_blob_looks,
-	)
-var/list/admin_verbs_spawn = list(
-	/datum/admins/proc/spawn_atom, // Allows us to spawn instances
-	/client/proc/spawn_datum, //Allows us to spawn datums to the marked datum buffer
-	/client/proc/respawn_character, //Allows us to re-spawn someone
-	/client/proc/debug_reagents, //Allows us to spawn reagents in mobs/containers
-	/client/proc/create_awaymission, //Allows us to summon away missions
-	/client/proc/create_map_element,
-	/client/proc/cmd_admin_equip_loadout //Allows us to equip sets of items to mobs
-	)
-var/list/admin_verbs_server = list(
-	/client/proc/Set_Holiday,
-	/client/proc/ToRban,
+	/client/proc/reset_ooc,
+	/client/proc/forceEvent,
+	/client/proc/admin_change_sec_level,
+	/client/proc/toggle_nuke,
+	/client/proc/mass_zombie_infection,
+	/client/proc/mass_zombie_cure,
+	/client/proc/polymorph_all,
+	/client/proc/show_tip,
+	/client/proc/smite,
+	/client/proc/admin_away
+	))
+GLOBAL_PROTECT(admin_verbs_spawn)
+GLOBAL_LIST_INIT(admin_verbs_spawn, list(/datum/admins/proc/spawn_atom, /datum/admins/proc/spawn_cargo, /datum/admins/proc/spawn_objasmob, /client/proc/respawn_character))
+GLOBAL_PROTECT(admin_verbs_server)
+GLOBAL_LIST_INIT(admin_verbs_server, world.AVerbsServer())
+/world/proc/AVerbsServer()
+	return list(
 	/datum/admins/proc/startnow,
 	/datum/admins/proc/restart,
+	/datum/admins/proc/end_round,
+	/datum/admins/proc/delay,
 	/datum/admins/proc/toggleaban,
-	/client/proc/toggle_log_hrefs,
-	/datum/admins/proc/immreboot,
 	/client/proc/everyone_random,
 	/datum/admins/proc/toggleAI,
 	/client/proc/cmd_admin_delete,		/*delete an instance/object/mob/etc*/
 	/client/proc/cmd_debug_del_all,
-	/datum/admins/proc/adrev,
-	/datum/admins/proc/adspawn,
-	/datum/admins/proc/adjump,
-	/datum/admins/proc/toggle_aliens,
 	/client/proc/toggle_random_events,
-	/client/proc/check_customitem_activity,
-	/client/proc/dump_chemreactions,
-	/client/proc/save_coordinates
+	/client/proc/forcerandomrotate,
+	/client/proc/adminchangemap,
+	/client/proc/panicbunker,
+	/client/proc/toggle_hub
 	)
-var/list/admin_verbs_debug = list(
-	/client/proc/gc_dump_hdl,
-	/client/proc/debug_pooling,
+GLOBAL_PROTECT(admin_verbs_debug)
+GLOBAL_LIST_INIT(admin_verbs_debug, world.AVerbsDebug())
+/world/proc/AVerbsDebug()
+	return list(
+	/client/proc/restart_controller,
 	/client/proc/cmd_admin_list_open_jobs,
-	/proc/getbrokeninhands,
 	/client/proc/Debug2,
 	/client/proc/cmd_debug_make_powernets,
-	/client/proc/kill_airgroup,
-	/client/proc/debug_controller,
 	/client/proc/cmd_debug_mob_lists,
 	/client/proc/cmd_admin_delete,
 	/client/proc/cmd_debug_del_all,
-	/client/proc/cmd_debug_tog_aliens,
-	/client/proc/air_report,
-	/client/proc/reload_admins,
 	/client/proc/restart_controller,
 	/client/proc/enable_debug_verbs,
 	/client/proc/callproc,
-	/client/proc/cmd_admin_dump_instances, // /vg/
-	/client/proc/cmd_admin_dump_machine_type_list, // /vg/
-	/client/proc/disable_bloodvirii,       // /vg
-	/client/proc/handle_paperwork, //this is completely experimental
-	/client/proc/reload_style_sheet,
-	/client/proc/reset_style_sheet,
+	/client/proc/callproc_datum,
+	/client/proc/SDQL2_query,
 	/client/proc/test_movable_UI,
 	/client/proc/test_snap_UI,
-	/client/proc/configFood,
-	/client/proc/cmd_dectalk,
-	/client/proc/debug_reagents,
-	/client/proc/create_awaymission,
-	/client/proc/make_invulnerable,
-	/client/proc/cmd_admin_dump_delprofile,
-	/client/proc/mob_list,
-	/client/proc/cure_disease,
-	/client/proc/check_bomb,
-	/client/proc/set_teleport_pref,
-	/client/proc/check_convertables,
-	/client/proc/check_spiral,
-	/client/proc/check_striketeams,
-	/client/proc/cmd_admin_find_bad_blood_tracks,
 	/client/proc/debugNatureMapGenerator,
-	/client/proc/callatomproc,
+	/client/proc/check_bomb_impacts,
+	/proc/machine_upgrade,
+	/client/proc/populate_world,
+	/client/proc/get_dynex_power,		//*debug verbs for dynex explosions.
+	/client/proc/get_dynex_range,		//*debug verbs for dynex explosions.
+	/client/proc/set_dynex_scale,
+	/client/proc/cmd_display_del_log,
+	/client/proc/create_outfits,
+	/client/proc/modify_goals,
+	/client/proc/debug_huds,
+	/client/proc/map_template_load,
+	/client/proc/map_template_upload,
+	/client/proc/jump_to_ruin,
+	/client/proc/clear_dynamic_transit,
+	/client/proc/toggle_medal_disable,
 	/client/proc/view_runtimes,
-	/client/proc/cmd_mass_modify_object_variables,
-	/client/proc/emergency_shuttle_panel,
+	/client/proc/pump_random_event,
+	/client/proc/cmd_display_init_log,
+	/client/proc/cmd_display_overlay_log,
+	/datum/admins/proc/create_or_modify_area,
 	)
-var/list/admin_verbs_possess = list(
-	/proc/possess,
-	/proc/release
-	)
-var/list/admin_verbs_permissions = list(
-	/client/proc/edit_admin_permissions
-	)
-var/list/admin_verbs_rejuv = list(
-	/client/proc/respawn_character
-	)
-var/list/admin_verbs_polling = list(
-	/client/proc/create_poll
-	)
+GLOBAL_PROTECT(admin_verbs_possess)
+GLOBAL_LIST_INIT(admin_verbs_possess, list(/proc/possess, /proc/release))
+GLOBAL_PROTECT(admin_verbs_permissions)
+GLOBAL_LIST_INIT(admin_verbs_permissions, list(/client/proc/edit_admin_permissions))
+GLOBAL_PROTECT(admin_verbs_poll)
+GLOBAL_LIST_INIT(admin_verbs_poll, list(/client/proc/create_poll))
+
 //verbs which can be hidden - needs work
-var/list/admin_verbs_hideable = list(
+GLOBAL_PROTECT(admin_verbs_hideable)
+GLOBAL_LIST_INIT(admin_verbs_hideable, list(
 	/client/proc/set_ooc,
-	/client/proc/deadmin_self,
+	/client/proc/reset_ooc,
+	/client/proc/deadmin,
 	/datum/admins/proc/show_traitor_panel,
 	/datum/admins/proc/toggleenter,
 	/datum/admins/proc/toggleguests,
 	/datum/admins/proc/announce,
-	/client/proc/colorooc,
+	/datum/admins/proc/set_admin_notice,
 	/client/proc/admin_ghost,
 	/client/proc/toggle_view_range,
 	/datum/admins/proc/view_txt_log,
@@ -227,165 +189,127 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/admin_cancel_shuttle,
 	/client/proc/cmd_admin_direct_narrate,
 	/client/proc/cmd_admin_world_narrate,
-	/client/proc/check_words,
+	/client/proc/cmd_admin_local_narrate,
 	/client/proc/play_local_sound,
 	/client/proc/play_sound,
-	/client/proc/object_talk,
+	/client/proc/set_round_end_sound,
+	/client/proc/cmd_admin_dress,
 	/client/proc/cmd_admin_gib_self,
 	/client/proc/drop_bomb,
-	/client/proc/drop_emp,
+	/client/proc/drop_dynex_bomb,
+	/client/proc/get_dynex_range,
+	/client/proc/get_dynex_power,
+	/client/proc/set_dynex_scale,
 	/client/proc/cinematic,
-	/datum/admins/proc/toggle_aliens,
 	/client/proc/cmd_admin_add_freeform_ai_law,
-	/client/proc/cmd_admin_add_random_ai_law,
 	/client/proc/cmd_admin_create_centcom_report,
-	/client/proc/make_sound,
+	/client/proc/cmd_change_command_name,
+	/client/proc/object_say,
 	/client/proc/toggle_random_events,
-	/client/proc/cmd_admin_add_random_ai_law,
-	/client/proc/Set_Holiday,
-	/client/proc/ToRban,
 	/datum/admins/proc/startnow,
 	/datum/admins/proc/restart,
 	/datum/admins/proc/delay,
 	/datum/admins/proc/toggleaban,
-	/client/proc/toggle_log_hrefs,
-	/datum/admins/proc/immreboot,
 	/client/proc/everyone_random,
-	/client/proc/shuttle_magic,
 	/datum/admins/proc/toggleAI,
-	/datum/admins/proc/adrev,
-	/datum/admins/proc/adspawn,
-	/datum/admins/proc/adjump,
 	/client/proc/restart_controller,
 	/client/proc/cmd_admin_list_open_jobs,
 	/client/proc/callproc,
+	/client/proc/callproc_datum,
 	/client/proc/Debug2,
 	/client/proc/reload_admins,
 	/client/proc/cmd_debug_make_powernets,
-	/client/proc/kill_airgroup,
-	/client/proc/debug_controller,
 	/client/proc/startSinglo,
-	/client/proc/cheat_power,
-	/client/proc/setup_atmos,
 	/client/proc/cmd_debug_mob_lists,
 	/client/proc/cmd_debug_del_all,
-	/client/proc/cmd_debug_tog_aliens,
-	/client/proc/air_report,
 	/client/proc/enable_debug_verbs,
-	/client/proc/mob_list,
 	/proc/possess,
 	/proc/release,
-	/client/proc/gc_dump_hdl,
-	/client/proc/debug_pooling,
-	/client/proc/create_map_element
-	)
-var/list/admin_verbs_mod = list(
-	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
-	/client/proc/cmd_admin_pm_panel,	/*admin-pm list*/
-	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game.*/
-	/datum/admins/proc/PlayerNotes,
-	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
-	/client/proc/cmd_mod_say,
-	/client/proc/cmd_mod_window,
-	/datum/admins/proc/show_player_info,
-	/client/proc/player_panel_new,
-	/client/proc/vv_marked_datum,
-	/datum/admins/proc/view_mob_attack_log /* Allow you to view attack logs since doing it in VV sucks */
-)
+	/client/proc/reload_admins,
+	/client/proc/panicbunker,
+	/client/proc/admin_change_sec_level,
+	/client/proc/toggle_nuke,
+	/client/proc/cmd_display_del_log,
+	/client/proc/toggle_antag_hud,
+	/client/proc/toggle_combo_hud,
+	/client/proc/debug_huds
+	))
+
 /client/proc/add_admin_verbs()
 	if(holder)
-		verbs += admin_verbs_default
-		if(holder.rights & R_BUILDMODE)
+		control_freak = CONTROL_FREAK_SKIN | CONTROL_FREAK_MACROS
+
+		var/rights = holder.rank.rights
+		verbs += GLOB.admin_verbs_default
+		if(rights & R_BUILDMODE)
 			verbs += /client/proc/togglebuildmodeself
-		if(holder.rights & R_ADMIN)
-			verbs += admin_verbs_admin
-		if(holder.rights & R_BAN)
-			verbs += admin_verbs_ban
-		if(holder.rights & R_FUN)
-			verbs += admin_verbs_fun
-		if(holder.rights & R_SERVER)
-			verbs += admin_verbs_server
-		if(holder.rights & R_DEBUG)
-			verbs += admin_verbs_debug
-		if(holder.rights & R_POSSESS)
-			verbs += admin_verbs_possess
-		if(holder.rights & R_PERMISSIONS)
-			verbs += admin_verbs_permissions
-		if(holder.rights & R_POLLING)
-			verbs += admin_verbs_polling
-		if(holder.rights & R_STEALTH)
+		if(rights & R_ADMIN)
+			verbs += GLOB.admin_verbs_admin
+		if(rights & R_BAN)
+			verbs += GLOB.admin_verbs_ban
+		if(rights & R_FUN)
+			verbs += GLOB.admin_verbs_fun
+		if(rights & R_SERVER)
+			verbs += GLOB.admin_verbs_server
+		if(rights & R_DEBUG)
+			verbs += GLOB.admin_verbs_debug
+		if(rights & R_POSSESS)
+			verbs += GLOB.admin_verbs_possess
+		if(rights & R_PERMISSIONS)
+			verbs += GLOB.admin_verbs_permissions
+		if(rights & R_STEALTH)
 			verbs += /client/proc/stealth
-		if(holder.rights & R_REJUVINATE)
-			verbs += admin_verbs_rejuv
-		if(holder.rights & R_SOUNDS)
-			verbs += admin_verbs_sounds
-		if(holder.rights & R_SPAWN)
-			verbs += admin_verbs_spawn
-		if(holder.rights & R_MOD)
-			verbs += admin_verbs_mod
-		if(holder.rights & R_ADMINBUS)
-			verbs += /client/proc/secrets
+		if(rights & R_ADMIN)
+			verbs += GLOB.admin_verbs_poll
+		if(rights & R_SOUNDS)
+			verbs += GLOB.admin_verbs_sounds
+			if(CONFIG_GET(string/invoke_youtubedl))
+				verbs += /client/proc/play_web_sound
+		if(rights & R_SPAWN)
+			verbs += GLOB.admin_verbs_spawn
 
 /client/proc/remove_admin_verbs()
 	verbs.Remove(
-		admin_verbs_default,
+		GLOB.admin_verbs_default,
 		/client/proc/togglebuildmodeself,
-		admin_verbs_admin,
-		admin_verbs_ban,
-		admin_verbs_fun,
-		admin_verbs_server,
-		admin_verbs_debug,
-		admin_verbs_possess,
-		admin_verbs_permissions,
+		GLOB.admin_verbs_admin,
+		GLOB.admin_verbs_ban,
+		GLOB.admin_verbs_fun,
+		GLOB.admin_verbs_server,
+		GLOB.admin_verbs_debug,
+		GLOB.admin_verbs_possess,
+		GLOB.admin_verbs_permissions,
 		/client/proc/stealth,
-		admin_verbs_rejuv,
-		admin_verbs_sounds,
-		admin_verbs_spawn,
-		admin_verbs_mod,
+		GLOB.admin_verbs_poll,
+		GLOB.admin_verbs_sounds,
+		/client/proc/play_web_sound,
+		GLOB.admin_verbs_spawn,
 		/*Debug verbs added by "show debug verbs"*/
-		/client/proc/Cell,
-		/client/proc/pdiff,
-		/client/proc/do_not_use_these,
-		/client/proc/camera_view,
-		/client/proc/sec_camera_report,
-		/client/proc/intercom_view,
-		/client/proc/air_status,
-		/client/proc/atmosscan,
-		/client/proc/powerdebug,
-		/client/proc/count_objects_on_z_level,
-		/client/proc/count_objects_all,
-		/client/proc/cmd_assume_direct_control,
-		/client/proc/jump_to_dead_group,
-		/client/proc/startSinglo,
-		/client/proc/cheat_power,
-		/client/proc/setup_atmos,
-		/client/proc/ticklag,
-		/client/proc/cmd_admin_grantfullaccess,
-		/client/proc/kaboom,
-		/client/proc/splash,
-		/client/proc/cmd_admin_areatest,
-		/client/proc/readmin,
-		/proc/generateMiniMaps,
-		/client/proc/maprender
+		GLOB.admin_verbs_debug_mapping,
+		/client/proc/disable_debug_verbs,
+		/client/proc/readmin
 		)
 
 /client/proc/hide_most_verbs()//Allows you to keep some functionality while hiding some verbs
 	set name = "Adminverbs - Hide Most"
 	set category = "Admin"
-	verbs.Remove(/client/proc/hide_most_verbs, admin_verbs_hideable)
+
+	verbs.Remove(/client/proc/hide_most_verbs, GLOB.admin_verbs_hideable)
 	verbs += /client/proc/show_verbs
 
 	to_chat(src, "<span class='interface'>Most of your adminverbs have been hidden.</span>")
-	feedback_add_details("admin_verb","HMV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Hide Most Adminverbs") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
 
 /client/proc/hide_verbs()
 	set name = "Adminverbs - Hide All"
 	set category = "Admin"
+
 	remove_admin_verbs()
 	verbs += /client/proc/show_verbs
+
 	to_chat(src, "<span class='interface'>Almost all of your adminverbs have been hidden.</span>")
-	feedback_add_details("admin_verb","TAVVH") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Hide All Adminverbs") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
 
 /client/proc/show_verbs()
@@ -394,9 +318,9 @@ var/list/admin_verbs_mod = list(
 
 	verbs -= /client/proc/show_verbs
 	add_admin_verbs()
-	to_chat(src, "<span class='interface'>All of your adminverbs are now visible.</span>")
-	feedback_add_details("admin_verb","TAVVS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+	to_chat(src, "<span class='interface'>All of your adminverbs are now visible.</span>")
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Show Adminverbs") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
 
@@ -406,24 +330,28 @@ var/list/admin_verbs_mod = list(
 	set name = "Aghost"
 	if(!holder)
 		return
-	if(istype(mob,/mob/dead/observer))
+	if(isobserver(mob))
 		//re-enter
 		var/mob/dead/observer/ghost = mob
-		ghost.can_reenter_corpse = 1			//just in-case.
+		if(!ghost.mind || !ghost.mind.current) //won't do anything if there is no body
+			return
+		if(!ghost.can_reenter_corpse)
+			log_admin("[key_name(usr)] re-entered corpse")
+			message_admins("[key_name_admin(usr)] re-entered corpse")
+		ghost.can_reenter_corpse = 1 //force re-entering even when otherwise not possible
 		ghost.reenter_corpse()
-		feedback_add_details("admin_verb","P") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	else if(istype(mob,/mob/new_player))
+		SSblackbox.record_feedback("tally", "admin_verb", 1, "Admin Reenter") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	else if(isnewplayer(mob))
 		to_chat(src, "<font color='red'>Error: Aghost: Can't admin-ghost whilst in the lobby. Join or Observe first.</font>")
 	else
 		//ghostize
+		log_admin("[key_name(usr)] admin ghosted.")
+		message_admins("[key_name_admin(usr)] admin ghosted.")
 		var/mob/body = mob
-		if(body.mind)
-			body.mind.isScrying = 1
 		body.ghostize(1)
-
 		if(body && !body.key)
 			body.key = "@[key]"	//Haaaaaaaack. But the people have spoken. If it breaks; blame adminbus
-		feedback_add_details("admin_verb","O") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+		SSblackbox.record_feedback("tally", "admin_verb", 1, "Admin Ghost") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
 /client/proc/invisimin()
@@ -433,32 +361,10 @@ var/list/admin_verbs_mod = list(
 	if(holder && mob)
 		if(mob.invisibility == INVISIBILITY_OBSERVER)
 			mob.invisibility = initial(mob.invisibility)
-			to_chat(mob, "<span class='danger'>Invisimin off. Invisibility reset.</span>")
-			mob.icon_state = "ghost"
-			mob.icon = 'icons/mob/human.dmi'
-			mob.update_icons()
+			to_chat(mob, "<span class='boldannounce'>Invisimin off. Invisibility reset.</span>")
 		else
 			mob.invisibility = INVISIBILITY_OBSERVER
-			to_chat(mob, "<span class='notice'><b>Invisimin on. You are now as invisible as a ghost.</b></span>")
-			mob.icon_state = "ghost"
-			mob.icon = 'icons/mob/mob.dmi'
-
-
-/client/proc/player_panel()
-	set name = "Player Panel"
-	set category = "Admin"
-	if(holder)
-		holder.player_panel_old()
-	feedback_add_details("admin_verb","PP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	return
-
-/client/proc/player_panel_new()
-	set name = "Player Panel New"
-	set category = "Admin"
-	if(holder)
-		holder.player_panel_new()
-	feedback_add_details("admin_verb","PPN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	return
+			to_chat(mob, "<span class='adminnotice'><b>Invisimin on. You are now as invisible as a ghost.</b></span>")
 
 /client/proc/check_antagonists()
 	set name = "Check Antagonists"
@@ -466,58 +372,53 @@ var/list/admin_verbs_mod = list(
 	if(holder)
 		holder.check_antagonists()
 		log_admin("[key_name(usr)] checked antagonists.")	//for tsar~
-	feedback_add_details("admin_verb","CHA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	return
-
-/client/proc/jobbans()
-	set name = "Display Job bans"
-	set category = "Admin"
-	if(holder)
-		if(config.ban_legacy_system)
-			holder.Jobbans()
-		else
-			holder.DB_ban_panel()
-	feedback_add_details("admin_verb","VJB") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	return
+		if(!isobserver(usr) && SSticker.HasRoundStarted())
+			message_admins("[key_name_admin(usr)] checked antagonists.")
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Check Antagonists") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/unban_panel()
 	set name = "Unban Panel"
 	set category = "Admin"
 	if(holder)
-		if(config.ban_legacy_system)
+		if(CONFIG_GET(flag/ban_legacy_system))
 			holder.unbanpanel()
 		else
 			holder.DB_ban_panel()
-	feedback_add_details("admin_verb","UBP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	return
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Unban Panel") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/game_panel()
 	set name = "Game Panel"
 	set category = "Admin"
 	if(holder)
 		holder.Game()
-	feedback_add_details("admin_verb","GP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	return
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Game Panel") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/secrets()
 	set name = "Secrets"
 	set category = "Admin"
 	if (holder)
 		holder.Secrets()
-	feedback_add_details("admin_verb","S") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	return
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Secrets Panel") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/proc/colorooc()
-	set category = "Fun"
-	set name = "OOC Text Color"
-	if(!holder)
-		return
-	var/new_ooccolor = input(src, "Please select your OOC colour.", "OOC colour") as color|null
-	if(new_ooccolor)
-		prefs.ooccolor = new_ooccolor
-		prefs.save_preferences_sqlite(src, ckey)
-	feedback_add_details("admin_verb","OC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	return
+
+/client/proc/findStealthKey(txt)
+	if(txt)
+		for(var/P in GLOB.stealthminID)
+			if(GLOB.stealthminID[P] == txt)
+				return P
+	txt = GLOB.stealthminID[ckey]
+	return txt
+
+/client/proc/createStealthKey()
+	var/num = (rand(0,1000))
+	var/i = 0
+	while(i == 0)
+		i = 1
+		for(var/P in GLOB.stealthminID)
+			if(num == GLOB.stealthminID[P])
+				num++
+				i = 0
+	GLOB.stealthminID["[ckey]"] = "@[num2text(num)]"
 
 /client/proc/stealth()
 	set category = "Admin"
@@ -525,6 +426,11 @@ var/list/admin_verbs_mod = list(
 	if(holder)
 		if(holder.fakekey)
 			holder.fakekey = null
+			if(isobserver(mob))
+				mob.invisibility = initial(mob.invisibility)
+				mob.alpha = initial(mob.alpha)
+				mob.name = initial(mob.name)
+				mob.mouse_opacity = initial(mob.mouse_opacity)
 		else
 			var/new_key = ckeyEx(input("Enter your desired display name.", "Fake Key", key) as text|null)
 			if(!new_key)
@@ -532,738 +438,266 @@ var/list/admin_verbs_mod = list(
 			if(length(new_key) >= 26)
 				new_key = copytext(new_key, 1, 26)
 			holder.fakekey = new_key
+			createStealthKey()
+			if(isobserver(mob))
+				mob.invisibility = INVISIBILITY_MAXIMUM //JUST IN CASE
+				mob.alpha = 0 //JUUUUST IN CASE
+				mob.name = " "
+				mob.mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 		log_admin("[key_name(usr)] has turned stealth mode [holder.fakekey ? "ON" : "OFF"]")
-		message_admins("[key_name_admin(usr)] has turned stealth mode [holder.fakekey ? "ON" : "OFF"]", 1)
-	feedback_add_details("admin_verb","SM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+		message_admins("[key_name_admin(usr)] has turned stealth mode [holder.fakekey ? "ON" : "OFF"]")
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Stealth Mode") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-#define MAX_WARNS 3
-#define AUTOBANTIME 90
-
-/client/proc/warn(warned_ckey)
-	var/reason = "Autobanning due to too many formal warnings"
-	if(!check_rights(R_ADMIN))
-		return
-
-	if(!warned_ckey || !istext(warned_ckey))
-		return
-
-
-	var/datum/preferences/D
-	var/client/C = directory[warned_ckey]
-	if(C)
-		D = C.prefs
-	else
-		D = preferences_datums[warned_ckey]
-
-	if(!D)
-		to_chat(src, "<font color='red'>Error: warn(): No such ckey found.</font>")
-		return
-
-	var/warn_reason = input("Reason for warning?", "Admin abuuuuuuuse") as null|text
-	if(!warn_reason)
-		return
-	notes_add(warned_ckey,warn_reason,src.mob)
-	if(++D.warns >= MAX_WARNS)					//uh ohhhh...you'reee iiiiin trouuuubble O:)
-		var/bantime = AUTOBANTIME//= (++D.warnbans * AUTOBANTIME)
-		D.warns = 0
-		++D.warnbans
-		for(var/i = 1; i < D.warnbans; i++)
-			bantime *= 2
-		ban_unban_log_save("[ckey] warned [warned_ckey] - [warn_reason], resulting in a [bantime] minute autoban.")
-		if(C)
-			message_admins("[key_name_admin(src)] has warned [key_name_admin(C)] - [warn_reason], resulting in a [bantime] minute ban.")
-			to_chat(C, "<span class='danger'><BIG>You have been autobanned due to a warning by [ckey] - Reason: [warn_reason].</BIG></span><br>This is a temporary ban, it will be removed in [bantime] minutes.")
-		else
-			message_admins("[key_name_admin(src)] has warned [warned_ckey] - [warn_reason], resulting in a [bantime] minute ban.")
-		AddBan(warned_ckey, D.last_id, "Autobanning due to too many formal warnings - [warn_reason]", ckey, 1, bantime)
-		holder.DB_ban_record(BANTYPE_TEMP, null, bantime, "[reason] - [warn_reason]", , ,warned_ckey)
-		feedback_inc("ban_warn",1)
-		D.save_preferences_sqlite(C, C.ckey)
-		del(C)
-	else
-		if(C)
-			to_chat(C, "<span class='danger'><BIG>You have been formally warned by an administrator - Reason: [warn_reason].</span></BIG><br>Further warnings will result in an autoban.</font>")
-			message_admins("[key_name_admin(src)] has warned [key_name_admin(C)] - [warn_reason]. They have [MAX_WARNS-D.warns] strikes remaining. And have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
-		else
-			message_admins("[key_name_admin(src)] has warned [warned_ckey] (DC) - [warn_reason]. They have [MAX_WARNS-D.warns] strikes remaining. And have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
-		D.save_preferences_sqlite(C, C.ckey)
-	feedback_add_details("admin_verb","WARN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/client/proc/unwarn(warned_ckey)
-	if(!check_rights(R_ADMIN))
-		return
-
-	if(!warned_ckey || !istext(warned_ckey))
-		return
-	/*if(warned_ckey in admin_datums)
-		to_chat(usr, "<font color='red'>Error: warn(): You can't warn admins.</font>")
-		return*/
-
-	var/datum/preferences/D
-	var/client/C = directory[warned_ckey]
-	if(C)
-		D = C.prefs
-	else
-		D = preferences_datums[warned_ckey]
-
-	if(!D)
-		to_chat(src, "<font color='red'>Error: unwarn(): No such ckey found.</font>")
-		return
-
-	if(D.warns == 0)
-		to_chat(src, "<font color='red'>Error: unwarn(): You can't unwarn someone with 0 warnings, you big dummy.</font>")
-		return
-
-	D.warns-=1
-	var/strikesleft = MAX_WARNS-D.warns
-	if(C)
-		to_chat(C, "<font color='red'><BIG><B>One of your warnings has been removed.</B></BIG><br>You currently have [strikesleft] strike\s left</font>")
-		message_admins("[key_name_admin(src)] has unwarned [key_name_admin(C)]. They have [strikesleft] strike(s) remaining, and have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
-	else
-		message_admins("[key_name_admin(src)] has unwarned [warned_ckey] (DC). They have [strikesleft] strike(s) remaining, and have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
-	D.save_preferences_sqlite(C, C.ckey)
-	feedback_add_details("admin_verb","UNWARN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-#undef MAX_WARNS
-#undef AUTOBANTIME
-
-/client/proc/drop_bomb() // Some admin dickery that can probably be done better -- TLE
+/client/proc/drop_bomb()
 	set category = "Special Verbs"
 	set name = "Drop Bomb"
 	set desc = "Cause an explosion of varying strength at your location."
 
+	var/list/choices = list("Small Bomb (1, 2, 3, 3)", "Medium Bomb (2, 3, 4, 4)", "Big Bomb (3, 5, 7, 5)", "Maxcap", "Custom Bomb")
+	var/choice = input("What size explosion would you like to produce? WARNING: These ignore the maxcap") as null|anything in choices
 	var/turf/epicenter = mob.loc
-	var/list/choices = list("Small Bomb (1,2,3)", "Medium Bomb (2,3,4)", "Big Bomb (3,5,7)", "Custom Bomb")
-	var/choice = input("What size explosion would you like to produce?") in choices | null
+
 	switch(choice)
 		if(null)
 			return 0
-		if("Small Bomb (1,2,3)")
-			explosion(epicenter, 1, 2, 3, 3)
-		if("Medium Bomb (2,3,4)")
-			explosion(epicenter, 2, 3, 4, 4)
-		if("Big Bomb (3,5,7)")
-			explosion(epicenter, 3, 5, 7, 5)
+		if("Small Bomb (1, 2, 3, 3)")
+			explosion(epicenter, 1, 2, 3, 3, TRUE, TRUE)
+		if("Medium Bomb (2, 3, 4, 4)")
+			explosion(epicenter, 2, 3, 4, 4, TRUE, TRUE)
+		if("Big Bomb (3, 5, 7, 5)")
+			explosion(epicenter, 3, 5, 7, 5, TRUE, TRUE)
+		if("Maxcap")
+			explosion(epicenter, GLOB.MAX_EX_DEVESTATION_RANGE, GLOB.MAX_EX_HEAVY_RANGE, GLOB.MAX_EX_LIGHT_RANGE, GLOB.MAX_EX_FLASH_RANGE)
 		if("Custom Bomb")
-			var/devastation_range = input("Devastation range (in tiles):") as num
-			var/heavy_impact_range = input("Heavy impact range (in tiles):") as num
-			var/light_impact_range = input("Light impact range (in tiles):") as num
-			var/flash_range = input("Flash range (in tiles):") as num
-			explosion(epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range)
+			var/devastation_range = input("Devastation range (in tiles):") as null|num
+			if(devastation_range == null)
+				return
+			var/heavy_impact_range = input("Heavy impact range (in tiles):") as null|num
+			if(heavy_impact_range == null)
+				return
+			var/light_impact_range = input("Light impact range (in tiles):") as null|num
+			if(light_impact_range == null)
+				return
+			var/flash_range = input("Flash range (in tiles):") as null|num
+			if(flash_range == null)
+				return
+			if(devastation_range > GLOB.MAX_EX_DEVESTATION_RANGE || heavy_impact_range > GLOB.MAX_EX_HEAVY_RANGE || light_impact_range > GLOB.MAX_EX_LIGHT_RANGE || flash_range > GLOB.MAX_EX_FLASH_RANGE)
+				if(alert("Bomb is bigger than the maxcap. Continue?",,"Yes","No") != "Yes")
+					return
+			epicenter = mob.loc //We need to reupdate as they may have moved again
+			explosion(epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, TRUE, TRUE)
+	message_admins("[ADMIN_LOOKUPFLW(usr)] creating an admin explosion at [epicenter.loc].")
+	log_admin("[key_name(usr)] created an admin explosion at [epicenter.loc].")
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Drop Bomb") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-	log_admin("[key_name(usr)] creating an admin explosion at [epicenter.loc] ([epicenter.x],[epicenter.y],[epicenter.z]).")
-	message_admins("<span class='notice'>[key_name_admin(src)] creating an admin explosion at [epicenter.loc] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>).</span>")
-	feedback_add_details("admin_verb","DB") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/client/proc/drop_emp()
+/client/proc/drop_dynex_bomb()
 	set category = "Special Verbs"
-	set name = "Drop EMP"
-	set desc = "Cause an EMP of varying strength at your location."
+	set name = "Drop DynEx Bomb"
+	set desc = "Cause an explosion of varying strength at your location."
 
+	var/ex_power = input("Explosive Power:") as null|num
 	var/turf/epicenter = mob.loc
-	var/list/choices = list("Small EMP (1,2)", "Medium EMP (2,4)", "Big EMP (4,8)", "Custom EMP")
-	var/choice = input("What size EMP would you like to produce?") in choices | null
-	switch(choice)
-		if(null)
-			return 0
-		if("Small EMP (1,2)")
-			empulse(epicenter, 1, 2)
-		if("Medium EMP (2,4)")
-			empulse(epicenter, 2, 4)
-		if("Big EMP (4,8)")
-			empulse(epicenter, 4, 8)
-		if("Custom EMP")
-			var/heavy_impact_range = input("Heavy impact range (in tiles):") as num
-			var/light_impact_range = input("Light impact range (in tiles):") as num
-			empulse(epicenter, heavy_impact_range, light_impact_range)
+	if(ex_power && epicenter)
+		dyn_explosion(epicenter, ex_power)
+		message_admins("[ADMIN_LOOKUPFLW(usr)] creating an admin explosion at [epicenter.loc].")
+		log_admin("[key_name(usr)] created an admin explosion at [epicenter.loc].")
+		SSblackbox.record_feedback("tally", "admin_verb", 1, "Drop Dynamic Bomb") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-	log_admin("[key_name(usr)] creating an admin EMP at [epicenter.loc] ([epicenter.x],[epicenter.y],[epicenter.z]).")
-	message_admins("<span class='notice'>[key_name_admin(src)] creating an admin EMP at [epicenter.loc] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>).</span>")
-	feedback_add_details("admin_verb","DE") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+/client/proc/get_dynex_range()
+	set category = "Debug"
+	set name = "Get DynEx Range"
+	set desc = "Get the estimated range of a bomb, using explosive power."
 
-/client/proc/give_spell(mob/T as mob in mob_list) // -- Urist
+	var/ex_power = input("Explosive Power:") as null|num
+	if (isnull(ex_power))
+		return
+	var/range = round((2 * ex_power)**GLOB.DYN_EX_SCALE)
+	to_chat(usr, "Estimated Explosive Range: (Devastation: [round(range*0.25)], Heavy: [round(range*0.5)], Light: [round(range)])")
+
+/client/proc/get_dynex_power()
+	set category = "Debug"
+	set name = "Get DynEx Power"
+	set desc = "Get the estimated required power of a bomb, to reach a specific range."
+
+	var/ex_range = input("Light Explosion Range:") as null|num
+	if (isnull(ex_range))
+		return
+	var/power = (0.5 * ex_range)**(1/GLOB.DYN_EX_SCALE)
+	to_chat(usr, "Estimated Explosive Power: [power]")
+
+/client/proc/set_dynex_scale()
+	set category = "Debug"
+	set name = "Set DynEx Scale"
+	set desc = "Set the scale multiplier of dynex explosions. The default is 0.5."
+
+	var/ex_scale = input("New DynEx Scale:") as null|num
+	if(!ex_scale)
+		return
+	GLOB.DYN_EX_SCALE = ex_scale
+	log_admin("[key_name(usr)] has modified Dynamic Explosion Scale: [ex_scale]")
+	message_admins("[key_name_admin(usr)] has  modified Dynamic Explosion Scale: [ex_scale]")
+
+/client/proc/give_spell(mob/T in GLOB.mob_list)
 	set category = "Fun"
 	set name = "Give Spell"
 	set desc = "Gives a spell to a mob."
 
-	var/spell/S = input("Choose the spell to give to that guy", "ABRAKADABRA") as null|anything in spells
+	var/list/spell_list = list()
+	var/type_length = length("/obj/effect/proc_holder/spell") + 2
+	for(var/A in GLOB.spells)
+		spell_list[copytext("[A]", type_length)] = A
+	var/obj/effect/proc_holder/spell/S = input("Choose the spell to give to that guy", "ABRAKADABRA") as null|anything in spell_list
 	if(!S)
 		return
-	T.add_spell(new S)
-	feedback_add_details("admin_verb","GS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	log_admin("[key_name(usr)] gave [key_name(T)] the spell [S].")
-	message_admins("<span class='notice'>[key_name_admin(usr)] gave [key_name(T)] the spell [S].</span>", 1)
 
-/client/proc/give_disease(mob/T as mob in mob_list) // -- Giacom
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Give Spell") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	log_admin("[key_name(usr)] gave [key_name(T)] the spell [S].")
+	message_admins("<span class='adminnotice'>[key_name_admin(usr)] gave [key_name(T)] the spell [S].</span>")
+
+	S = spell_list[S]
+	if(T.mind)
+		T.mind.AddSpell(new S)
+	else
+		T.AddSpell(new S)
+		message_admins("<span class='danger'>Spells given to mindless mobs will not be transferred in mindswap or cloning!</span>")
+
+/client/proc/remove_spell(mob/T in GLOB.mob_list)
+	set category = "Fun"
+	set name = "Remove Spell"
+	set desc = "Remove a spell from the selected mob."
+
+	if(T && T.mind)
+		var/obj/effect/proc_holder/spell/S = input("Choose the spell to remove", "NO ABRAKADABRA") as null|anything in T.mind.spell_list
+		if(S)
+			T.mind.RemoveSpell(S)
+			log_admin("[key_name(usr)] removed the spell [S] from [key_name(T)].")
+			message_admins("<span class='adminnotice'>[key_name_admin(usr)] removed the spell [S] from [key_name(T)].</span>")
+			SSblackbox.record_feedback("tally", "admin_verb", 1, "Remove Spell") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/client/proc/give_disease(mob/living/T in GLOB.mob_living_list)
 	set category = "Fun"
 	set name = "Give Disease"
 	set desc = "Gives a Disease to a mob."
-	var/datum/disease/D = input("Choose the disease to give to that guy", "ACHOO") as null|anything in diseases
+	if(!istype(T))
+		to_chat(src, "<span class='notice'>You can only give a disease to a mob of type /mob/living.</span>")
+		return
+	var/datum/disease/D = input("Choose the disease to give to that guy", "ACHOO") as null|anything in SSdisease.diseases
 	if(!D)
 		return
-	T.contract_disease(new D, 1)
-	feedback_add_details("admin_verb","GD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	T.ForceContractDisease(new D, FALSE, TRUE)
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Give Disease") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] gave [key_name(T)] the disease [D].")
-	message_admins("<span class='notice'>[key_name_admin(usr)] gave [key_name(T)] the disease [D].</span>", 1)
+	message_admins("<span class='adminnotice'>[key_name_admin(usr)] gave [key_name(T)] the disease [D].</span>")
 
-/client/proc/make_sound(var/obj/O in world) // -- TLE
+/client/proc/object_say(obj/O in world)
 	set category = "Special Verbs"
-	set name = "Make Sound"
-	set desc = "Display a message to everyone who can hear the target"
-	if(istype(O))
-		var/message = input("What do you want the message to be?", "Make Sound") as text|null
-		if(!message)
-			return
-		var/mob/living/M
-		var/olduniv
-		if(ismob(O))
-			M = O
-			olduniv = M.universal_speak
-			M.universal_speak = 1
-		O.say(message)
-		if(M)
-			M.universal_speak = olduniv
-		log_admin("[key_name(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound")
-		message_admins("<span class='notice'>[key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound</span>", 1)
-		feedback_add_details("admin_verb","MS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-
+	set name = "OSay"
+	set desc = "Makes an object say something."
+	var/message = input(usr, "What do you want the message to be?", "Make Sound") as text | null
+	if(!message)
+		return
+	O.say(message)
+	log_admin("[key_name(usr)] made [O] at [O.x], [O.y], [O.z] say \"[message]\"")
+	message_admins("<span class='adminnotice'>[key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. say \"[message]\"</span>")
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Object Say") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 /client/proc/togglebuildmodeself()
 	set name = "Toggle Build Mode Self"
 	set category = "Special Verbs"
 	if(src.mob)
 		togglebuildmode(src.mob)
-	feedback_add_details("admin_verb","TBMS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/client/proc/object_talk(var/obj/O in world) // -- TLE
-	set category = "Special Verbs"
-	set name = "OSay"
-	set desc = "Make an object say something"
-	var/message = input(usr, "What do you want the message to be?", "Make Sound") as text | null
-	if(!message)
-		return
-	var/mob/living/M
-	var/olduniv
-	if(ismob(O))
-		M = O
-		olduniv = M.universal_speak
-		M.universal_speak = 1
-	O.say(message)
-	if(M)
-		M.universal_speak = olduniv
-	log_admin("[key_name(usr)] made [O] at [O.x], [O.y], [O.z] say \"[message]\"")
-	message_admins("<span class='adminnotice'>[key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. say \"[message]\"</span>", 1)
-	feedback_add_details("admin_verb","OT") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/client/proc/deadmin_self()
-	set name = "De-admin self"
-	set category = "Admin"
-
-	if(holder)
-		if(alert("Are you sure you want to deadmin?","Deadmin","Yes","No")=="No")
-			return
-		log_admin("[src] deadminned themself.")
-		message_admins("[src] deadminned themself.")
-		deadmin()
-		verbs += /client/proc/readmin
-		deadmins += ckey
-		to_chat(src, "<span class='interface'>You are now a normal player.</span>")
-	feedback_add_details("admin_verb","DAS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/client/proc/toggle_log_hrefs()
-	set name = "Toggle href logging"
-	set category = "Server"
-	if(!holder)
-		return
-	if(config)
-		if(config.log_hrefs)
-			config.log_hrefs = 0
-			to_chat(src, "<b>Stopped logging hrefs</b>")
-		else
-			config.log_hrefs = 1
-			to_chat(src, "<b>Started logging hrefs</b>")
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Toggle Build Mode") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/check_ai_laws()
 	set name = "Check AI Laws"
 	set category = "Admin"
 	if(holder)
-		log_admin("[key_name(usr)] checked silicon laws.")
 		src.holder.output_ai_laws()
 
-
-//---- bs12 verbs ----
-
-/client/proc/mod_panel()
-	set name = "Moderator Panel"
+/client/proc/deadmin()
+	set name = "Deadmin"
 	set category = "Admin"
+	set desc = "Shed your admin powers."
 
-/*	if(holder)
-		holder.mod_panel()*/
-//	feedback_add_details("admin_verb","MP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	return
-
-/client/proc/editappear(mob/living/carbon/human/M as mob in mob_list)
-	set name = "Edit Appearance"
-	set category = "Fun"
-
-	if(!check_rights(R_FUN))
+	if(!holder)
 		return
 
-	if(!istype(M, /mob/living/carbon/human))
-		to_chat(usr, "<span class='warning'>You can only do this to humans!</span>")
-		return
-	switch(alert("Are you sure you wish to edit this mob's appearance? Skrell, Unathi, Vox and Tajaran can result in unintended consequences.",,"Yes","No"))
-		if("No")
-			return
-	var/new_facial = input("Please select facial hair color.", "Character Generation") as color
-	if(new_facial)
-		M.r_facial = hex2num(copytext(new_facial, 2, 4))
-		M.g_facial = hex2num(copytext(new_facial, 4, 6))
-		M.b_facial = hex2num(copytext(new_facial, 6, 8))
+	if(has_antag_hud())
+		toggle_antag_hud()
 
-	var/new_hair = input("Please select hair color.", "Character Generation") as color
-	if(new_facial)
-		M.r_hair = hex2num(copytext(new_hair, 2, 4))
-		M.g_hair = hex2num(copytext(new_hair, 4, 6))
-		M.b_hair = hex2num(copytext(new_hair, 6, 8))
+	holder.deactivate()
 
-	var/new_eyes = input("Please select eye color.", "Character Generation") as color
-	if(new_eyes)
-		M.r_eyes = hex2num(copytext(new_eyes, 2, 4))
-		M.g_eyes = hex2num(copytext(new_eyes, 4, 6))
-		M.b_eyes = hex2num(copytext(new_eyes, 6, 8))
-
-	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation")  as text
-
-	if (new_tone)
-		M.s_tone = max(min(round(text2num(new_tone)), 220), 1)
-		M.s_tone =  -M.s_tone + 35
-
-	// hair
-	var/new_hstyle = input(usr, "Select a hair style", "Grooming")  as null|anything in hair_styles_list
-	if(new_hstyle)
-		M.h_style = new_hstyle
-
-	// facial hair
-	var/new_fstyle = input(usr, "Select a facial hair style", "Grooming")  as null|anything in facial_hair_styles_list
-	if(new_fstyle)
-		M.f_style = new_fstyle
-
-	var/new_gender = alert(usr, "Please select gender.", "Character Generation", "Male", "Female")
-	if (new_gender)
-		if(new_gender == "Male")
-			M.setGender(MALE)
-		else
-			M.setGender(FEMALE)
-	M.update_hair()
-	M.update_body()
-	M.check_dna(M)
-
-/client/proc/playernotes()
-	set name = "Show Player Notes"
-	set category = "Admin"
-	if(holder)
-		holder.PlayerNotes()
-	return
-
-/client/proc/free_slot()
-	set name = "Free Job Slot"
-	set category = "Admin"
-	if(holder)
-		var/list/jobs = list()
-		for (var/datum/job/J in job_master.occupations)
-			if (J.current_positions >= J.total_positions && J.total_positions != -1)
-				jobs += J.title
-		if (!jobs.len)
-			to_chat(usr, "There are no fully staffed jobs.")
-			return
-		var/job = input("Please select job slot to free", "Free job slot")  as null|anything in jobs
-		if (job)
-			job_master.FreeRole(job)
-	return
-
-/client/proc/commandname()
-	set name = "Set Command Name"
-	set category = "Fun"
-
-	var/text = input(usr,"Please select a new Central Command name.", null)as text|null
-	if(text)
-		change_command_name(text)
-
-/client/proc/man_up(mob/T as mob in mob_list)
-	set category = "Fun"
-	set name = "Man Up"
-	set desc = "Tells mob to man up and deal with it."
-
-	to_chat(T, "<span class='notice'><b><font size=3>Man up and deal with it.</font></b></span>")
-	to_chat(T, "<span class='notice'>Move on.</span>")
-
-	log_admin("[key_name(usr)] told [key_name(T)] to man up and deal with it.")
-	message_admins("<span class='notice'>[key_name_admin(usr)] told [key_name(T)] to man up and deal with it.</span>", 1)
-
-/client/proc/global_man_up()
-	set category = "Fun"
-	set name = "Man Up Global"
-	set desc = "Tells everyone to man up and deal with it."
-
-	for (var/mob/T as mob in mob_list)
-		to_chat(T, "<br><center><span class='notice'><b><font size=4>Man up.<br> Deal with it.</font></b><br>Move on.</span></center><br>")
-		T << 'sound/voice/ManUp1.ogg'
-
-	log_admin("[key_name(usr)] told everyone to man up and deal with it.")
-	message_admins("<span class='notice'>[key_name_admin(usr)] told everyone to man up and deal with it.</span>", 1)
-
+	to_chat(src, "<span class='interface'>You are now a normal player.</span>")
+	log_admin("[src] deadmined themself.")
+	message_admins("[src] deadmined themself.")
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Deadmin")
 
 /client/proc/readmin()
-	set name = "Re-admin self"
+	set name = "Readmin"
 	set category = "Admin"
 	set desc = "Regain your admin powers."
-	var/datum/admins/D = admin_datums[ckey]
-	if(config.admin_legacy_system)
-		to_chat(src, "<span class='notice'>Legacy admins is not supported yet</span>")
-		return
-	else
-		if(!dbcon.IsConnected())
-			message_admins("Warning, mysql database is not connected.")
-			to_chat(src, "Warning, mysql database is not connected.")
-			return
-		if(D)
-			to_chat(src, "You are already an admin.")
-			verbs -= /client/proc/readmin
-			return
-		var/sql_ckey = sanitizeSQL(ckey(ckey))
-		var/DBQuery/query = dbcon.NewQuery("SELECT ckey, rank, level, flags FROM erro_admin WHERE ckey = '[sql_ckey]'")
-		query.Execute()
-		while(query.NextRow())
-			var/dckey = query.item[1]
-			var/rank = query.item[2]
-			if(rank == "Removed")
-				continue	//This person was de-adminned. They are only in the admin list for archive purposes.
 
-			var/rights = query.item[4]
-			if(istext(rights))
-				rights = text2num(rights)
-			D = new /datum/admins(rank, rights, dckey)
+	var/datum/admins/A = GLOB.deadmins[ckey]
 
-			//find the client for a ckey if they are connected and associate them with the new admin datum
-			D.associate(src)
-			message_admins("[src] re-adminned themselves.")
-			log_admin("[src] re-adminned themselves.")
-			feedback_add_details("admin_verb","RAS")
-			verbs -= /client/proc/readmin
+	if(!A)
+		A = GLOB.admin_datums[ckey]
+		if (!A)
+			var/msg = " is trying to readmin but they have no deadmin entry"
+			message_admins("[key_name_admin(src)][msg]")
+			log_admin_private("[key_name(src)][msg]")
 			return
 
-/client/proc/achievement()
-	set name = "Give Achievement"
-	set category = "Fun"
+	A.associate(src)
 
-	if(!check_rights(R_FUN))
-		return
+	if (!holder)
+		return //This can happen if an admin attempts to vv themself into somebody elses's deadmin datum by getting ref via brute force
 
-	var/achoice = "Cancel"
+	to_chat(src, "<span class='interface'>You are now an admin.</span>")
+	message_admins("[src] re-adminned themselves.")
+	log_admin("[src] re-adminned themselves.")
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Readmin")
 
-	if(!player_list.len)
-		to_chat(usr, "player list is empty!")
-		return
+/client/proc/populate_world(amount = 50 as num)
+	set name = "Populate World"
+	set category = "Debug"
+	set desc = "(\"Amount of mobs to create\") Populate the world with test mobs."
 
-	var/mob/winner = input("Who's a winner?", "Achievement Winner", null) as null|anything in player_list
-	if(!winner)
-		return
+	if (amount > 0)
+		var/area/area
+		var/list/candidates
+		var/turf/open/floor/tile
+		var/j,k
 
-	var/name = input("What will you call your achievement?", "Achievement Winner", "New Achievement", null) as null|text
-	if(!name)
-		return
+		for (var/i = 1 to amount)
+			j = 100
 
-	var/desc = input("What description will you give it?", "Achievement Description", "You Win", null) as null|text
-	if(!desc)
-		return
+			do
+				area = pick(GLOB.the_station_areas)
 
-	if(istype(winner, /mob/living))
-		achoice = alert("Give our winner his own trophy?","Achievement Trophy", "Confirm", "Cancel")
-		if(achoice == "Cancel")
-			return
+				if (area)
 
-	var/glob = alert("Announce the achievement globally? (Beware! Ruins immersion!)", "Last Question", "No!","Yes!")
+					candidates = get_area_turfs(area)
 
-	if(achoice == "Confirm")
-		var/obj/item/weapon/reagent_containers/food/drinks/golden_cup/C = new(get_turf(winner))
-		C.name = name
-		C.desc = desc
-		if(iscarbon(winner) && (winner.stat == CONSCIOUS))
-			winner.put_in_hands(C)
-	else
-		to_chat(winner, "<span class='danger'>You win [name]! [desc]</span>")
+					if (candidates.len)
+						k = 100
 
-	var/icon/cup = icon('icons/obj/drinks.dmi', "golden_cup")
+						do
+							tile = pick(candidates)
+						while ((!tile || !istype(tile)) && --k > 0)
 
-	if(glob == "No!")
-		winner.client << sound('sound/misc/achievement.ogg')
-		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='danger'>[bicon(cup)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
-	else
-		world << sound('sound/misc/achievement.ogg')
-		to_chat(world, "<span class='danger'>[bicon(cup)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
+						if (tile)
+							var/mob/living/carbon/human/hooman = new(tile)
+							hooman.equipOutfit(pick(subtypesof(/datum/outfit)))
+							testing("Spawned test mob at [tile.x],[tile.y],[tile.z]")
+			while (!area && --j > 0)
 
-	to_chat(winner, "<span class='danger'>Congratulations!</span>")
-
-	achievements += "<b>[winner.key]</b> as <b>[winner.name]</b> won \"<b>[name]</b>\"! \"[desc]\""
-
-	message_admins("[key_name_admin(usr)] has awarded <b>[winner.key]</b>([winner.name]) with the achievement \"<b>[name]</b>\"! \"[desc]\".", 1)
-
-/client/proc/mommi_static()
-	set name = "Toggle MoMMI Static"
-	set desc = "Toggle whether MoMMIs can see mobs or if the mobs are cloaked in static"
-	set category = "Fun"
-
-	if(!holder || !config)
-		return
-
-	config.mommi_static = !config.mommi_static
-	log_admin("[key_name(src)] turned MoMMI static [config.mommi_static ? "on" : "off"].")
-	message_admins("[key_name(src)] turned MoMMI static [config.mommi_static ? "on" : "off"].")
-	for(var/mob/living/silicon/robot/mommi/M in player_list)
-		if(M.can_see_static())
-			M.add_static_overlays()
-		else
-			M.remove_static_overlays()
-
-/client/proc/shuttle_magic()
-	set name = "Shuttle Magic"
-	set desc = "Open a menu with magic"
+/client/proc/toggle_AI_interact()
+	set name = "Toggle Admin AI Interact"
 	set category = "Admin"
+	set desc = "Allows you to interact with most machines as an AI would as a ghost"
 
-	if(!holder || !config)
-		return
+	AI_Interact = !AI_Interact
+	if(mob && IsAdminGhost(mob))
+		mob.has_unlimited_silicon_privilege = AI_Interact
 
-	holder.shuttle_magic()
-
-/client/proc/set_blob_looks()
-	set name = "Set Blob Looks"
-	set category = "Fun"
-
-	var/to_choose_from = list("ADMINBUS (custom DMI upload)")
-	to_choose_from += blob_looks_admin
-	var/chosen = input("This will change the looks of every blob currently in the world.", "Blob Looks", blob_looks_admin[1]) as null|anything in to_choose_from
-
-	if(!chosen)
-		return
-
-	if(chosen == "ADMINBUS (custom DMI upload)")
-		adminblob_icon = input("Pick Icon:","Icon") as icon
-		if(!adminblob_icon)
-			return
-		adminblob_size = text2num(alert("Which size are those icons?","","64","32"))
-
-		if((adminblob_size == 64) && (alert("Do you want to use a custom Pulse soundfile?","","Yes","No") == "Yes"))
-			adminblob_beat = input("Pick Soundfile (DO NOT USE AN OVERLY LONG SOUNDFILE UNLESS YOU ARE READY TO FACE THE CONSEQUENCES):","(DO NOT USE AN OVERLY LONG SOUNDFILE UNLESS YOU ARE READY TO FACE THE CONSEQUENCES)") as file
-		else
-			adminblob_beat = 'sound/effects/blob_pulse.ogg'
-
-		blob_looks_admin["adminbus"] = adminblob_size
-		chosen = "adminbus"
-	else
-		adminblob_icon = null
-
-	for(var/obj/effect/blob/B in blobs)
-		B.looks = chosen
-		B.update_looks(1)
-
-	log_admin("[key_name(src)] set all blobs to use the \"[chosen]\" look.")
-	message_admins("<span class='notice'>[key_name_admin(src)] set all blobs to use the \"[chosen]\" look.</span>")
-
-/datum/admins/proc/media_stop_all()
-	set name = "Stop All Media"
-	set desc = "Stops all music and video."
-	set category = "Fun"
-
-	if(!check_rights(R_FUN))
-		return
-
-	message_admins("[key_name_admin(usr)] has stopped all media.", 1)
-
-	stop_all_media()
-
-/client/proc/SendCentcommFax()
-	set	category = "Fun"
-	set name = "Send Fax"
-	set desc = "Sends a fax to all fax machines."
-
-	var/sent = input(src, "Please enter a message send via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", "") as message|null
-	if(!sent)
-		return
-
-	var/sentname = input(src, "Pick a title for the report", "Title") as text|null
-
-	SendFax(sent, sentname, centcomm = 1)
-
-	log_admin("[key_name(src)] sent a fax to all machines.: [sent]")
-	message_admins("[key_name_admin(src)] sent a fax to all machines.", 1)
-
-/client/proc/create_map_element()
-	set category = "Admin"
-	set name = "Load Map Element"
-	set desc = "Loads a map element - a vault, an away mission or something else."
-
-	if(!check_rights(R_SPAWN))
-		return
-
-	var/datum/map_element/ME
-	var/mission_to_load = alert(usr, "How do you want to select the map element?", "Map element loading", "Choose a /datum/map_element object", "Load external .dmm file", "Cancel")
-	switch(mission_to_load)
-		if("Choose a /datum/map_element object")
-			var/new_map_element = input(usr, "Please select the map element object.", "Map element loading") as null|anything in typesof(/datum/map_element) - /datum/map_element
-			if(!new_map_element)
-				return
-
-			ME = new new_map_element
-			log_admin("[key_name(src)] is trying to load [ME.file_path].")
-
-		if("Load external .dmm file")
-			to_chat(src, "<span class='danger'>Do not load very large maps or files that aren't BYOND maps. If you want to be sure that your map won't hang up the game, try loading it on a local server first.</span>")
-			ME = new /datum/map_element
-			log_admin("[key_name(src)] is trying to load an external map file.")
-			var/new_file_path = input(usr, "Select a .dmm file.    WARNING: Very large map files WILL crash the server. Loading them is punishable by death.", "Map element loading") as null|file
-			if(!new_file_path)
-				return
-
-			log_admin("[key_name(src)] has selected [new_file_path] for loading.")
-			ME.file_path = new_file_path
-		else
-			return
-
-	var/x_coord
-	var/y_coord
-	var/z_coord
-
-	#define ML_CURRENT_LOC  "Use my current location"
-	#define ML_INPUT_COORDS "Input coordinates"
-	#define ML_LOAD_TO_Z2   "Find a suitable location at Z-level 2 (done automatically)"
-	var/static/list/choices = list(
-	ML_CURRENT_LOC,
-	ML_INPUT_COORDS,
-	ML_LOAD_TO_Z2
-	)
-
-	switch(input(usr, "Select a location for the new map element", "Map element loading") as null|anything in choices)
-		if(ML_CURRENT_LOC)
-			var/turf/new_location = get_turf(usr)
-			if(!new_location)
-				return
-
-			x_coord = new_location.x
-			y_coord = new_location.y
-			z_coord = new_location.z
-
-		if(ML_INPUT_COORDS)
-			x_coord = input(usr, "Input the X coordinate: ", "Map element loading") as null|num
-			if(x_coord == null)
-				return
-
-			y_coord = input(usr, "Input the Y coordinate (X = [x_coord]): ", "Map element loading") as null|num
-			if(y_coord == null)
-				return
-
-			z_coord = input(usr, "Input the Z coordinate. If it's higher than [world.maxz], a new Z-level will be created (X = [x_coord], Y = [y_coord]): ", "Map element loading") as null|num
-			if(z_coord == null)
-				return
-
-			x_coord = Clamp(x_coord, 1, world.maxx)
-			y_coord = Clamp(y_coord, 1, world.maxy)
-
-		if(ML_LOAD_TO_Z2)
-			if(!dungeon_area)
-				to_chat(src, "<span class='warning'>Dungeon area not defined! This map is missing the /obj/effect/landmark/dungeon_area object.</span>")
-				return
-
-			log_admin("[key_name(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically).")
-			message_admins("[key_name_admin(src)] is loading [ME.file_path] at z-level 2 (location chosen automatically)")
-			load_dungeon(ME)
-			message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"]")
-			return
-
-
-	log_admin("[key_name(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord]")
-	message_admins("[key_name_admin(src)] is loading [ME.file_path] at [x_coord], [y_coord], [z_coord]")
-	ME.load(x_coord - 1, y_coord - 1, z_coord) //Reduce X and Y by 1 because these arguments are actually offsets, and they're added to 1;1 in the map loader. Without this, spawning something at 1;1 would result in it getting spawned at 2;2
-	message_admins("[ME.file_path] loaded at [ME.location ? formatJumpTo(ME.location) : "[x_coord], [y_coord], [z_coord]"]")
-
-/client/proc/create_awaymission()
-	set category = "Admin"
-	set name = "Create Away Mission"
-	set desc = "Creates an away mission and links it to the station's gateway."
-	//Check admin rights
-	if(!check_rights(R_SPAWN))
-		return
-
-	var/list/L = getRandomZlevels(1)
-	var/list/choices = list()
-
-	if(!L.len)
-		to_chat(src, "No away missions found.")
-		return
-
-	to_chat(src, "<span class='danger'>WARNING: Loading large away missions may temporarily hang up the server. Usually the lag will last for less than a minute.</span><hr>")
-
-	for(var/datum/map_element/away_mission/AM in L)
-		if(AM.name)
-			choices[AM.name] = AM
-		else
-			choices[AM.file_path] = AM
-
-		to_chat(src, "<b>[(AM.name ? AM.name : AM.file_path)]</b> - <span class='info'>[(AM.desc ? AM.desc : "No description")]</span>")
-
-	var/choice = input(src, "Select an away mission to load. See chat for descriptions!", "AWAY MISSIONS") as null|anything in choices
-	if(!choice)
-		return
-
-	log_admin("[key_name(src)] is loading an away mission: [choice]")
-	message_admins("[key_name_admin(src)] is loading an away mission: [choice]", 1)
-
-	var/datum/map_element/away_mission/AM = choices[choice]
-
-	var/override = 0
-	if(existing_away_missions.len)
-		var/continue_loading = alert(src, "There is already an away mission loaded. Do you want to load [AM.name] anyway? If there are more than two away mission gateways, the station gateway will be able to teleport its users to both of them.", "AWAY MISSIONS", "Yes", "No")
-		if(!continue_loading)
-			return
-
-		if(continue_loading == "Yes")
-			override = 1
-
-	to_chat(src, "Attempting to load [AM.name] ([AM.file_path])...")
-	createRandomZlevel(override, AM, usr)
-	to_chat(src, "The away mission has been generated on z-level [world.maxz] [AM.location ? "([formatJumpTo(AM.location)])" : ""]")
-
-/client/proc/cmd_dectalk()
-	set name = "Dectalk"
-	set category = "Special Verbs"
-	set desc = "Sends a message as voice to all players"
-	set popup_menu = 0
-
-	if(!check_rights(R_DEBUG))
-		return 0
-
-	var/msg
-	if (args && args.len > 0)
-		msg = args[1]
-
-	msg = input(src, "Sends a message as voice to all players", "Dectalk", msg) as null|message
-	if (!msg)
-		return 0
-
-	var/audio = dectalk(msg)
-	if (audio && audio["audio"])
-		message_admins("[key_name(src)] has used the dectalk verb with message: [audio["message"]]")
-		log_admin("[key_name(src)] has used the dectalk verb with message: [audio["message"]]")
-
-		for (var/client/C in clients)
-			var/trigger = src.key
-			chatOutput.ehjax_send(C, "browseroutput", list("dectalk" = audio["audio"], "decTalkTrigger" = trigger))
-		return 1
-	else if (audio && audio["cooldown"])
-		alert(src, "There is a [nextDecTalkDelay] second global cooldown between uses of this verb. Please wait [((world.timeofday + nextDecTalkDelay * 10) - world.timeofday)/10] seconds.")
-		src.cmd_dectalk(msg)
-		return 0
-	else
-		alert(src, "An external server error has occurred. Please report this.")
-		return 0
+	log_admin("[key_name(usr)] has [AI_Interact ? "activated" : "deactivated"] Admin AI Interact")
+	message_admins("[key_name_admin(usr)] has [AI_Interact ? "activated" : "deactivated"] their AI interaction")

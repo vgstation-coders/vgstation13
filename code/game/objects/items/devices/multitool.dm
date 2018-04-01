@@ -1,184 +1,168 @@
-// Multitool -- A multitool is used for hacking electronic devices.
+#define PROXIMITY_NONE ""
+#define PROXIMITY_ON_SCREEN "_red"
+#define PROXIMITY_NEAR "_yellow"
 
-#define DETECT_TICKER_PERIOD	10 //in deciseconds
-#define DETECT_AI				1
-#define DETECT_PAI				2
-#define DETECT_RECORDER			4
-#define DETECT_ANALYZER			8
+/**
+ * Multitool -- A multitool is used for hacking electronic devices.
+ *
+ */
 
- //////////////////////////////////////////////////////////
+
+
 
 /obj/item/device/multitool
-	name					= "multitool"
-	desc					= "Used for pulsing wires to test which to cut. Not recommended by doctors."
-	icon_state				= "multitool"
-	flags					= FPRINT
-	siemens_coefficient		= 1
-	force					= 5.0
-	w_class					= 2.0
-	throwforce				= 5.0
-	throw_range				= 15
-	throw_speed				= 3
-	attack_delay			= 5
-	starting_materials		= list(MAT_IRON = 50, MAT_GLASS = 20)
-	w_type					= RECYK_ELECTRONIC
-	melt_temperature		= MELTPOINT_SILICON
-	origin_tech				= Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"
-	// VG: We dun changed dis so we can link simple machines. - N3X
+	name = "multitool"
+	desc = "Used for pulsing wires to test which to cut. Not recommended by doctors."
+	icon_state = "multitool"
+	lefthand_file = 'icons/mob/inhands/equipment/tools_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/equipment/tools_righthand.dmi'
+	force = 5
+	w_class = WEIGHT_CLASS_SMALL
+	tool_behaviour = TOOL_MULTITOOL
+	throwforce = 0
+	throw_range = 7
+	throw_speed = 3
+	materials = list(MAT_METAL=50, MAT_GLASS=20)
 	var/obj/machinery/buffer // simple machine buffer for device linkage
-	var/clone				= 0 // If this is on cloning will happen, this is handled in machinery code.
+	hitsound = 'sound/weapons/tap.ogg'
+	toolspeed = 1
+	tool_behaviour = TOOL_MULTITOOL
+	usesound = 'sound/weapons/empty.ogg'
+	var/datum/integrated_io/selected_io = null  //functional for integrated circuits.
+	var/mode = 0
 
-/obj/item/device/multitool/proc/IsBufferA(var/typepath)
-	if(!buffer)
-		return 0
-	return istype(buffer,typepath)
+/obj/item/device/multitool/suicide_act(mob/living/carbon/user)
+	user.visible_message("<span class='suicide'>[user] puts the [src] to [user.p_their()] chest. It looks like [user.p_theyre()] trying to pulse [user.p_their()] heart off!</span>")
+	return OXYLOSS//theres a reason it wasnt recommended by doctors
 
-/obj/item/device/multitool/attack_self(var/mob/user)
-	if(!buffer && !clone) // Can't enable cloning without buffer.
+/obj/item/device/multitool/attack_self(mob/user)
+	if(selected_io)
+		selected_io = null
+		to_chat(user, "<span class='notice'>You clear the wired connection from the multitool.</span>")
+	else
+		..()
+	update_icon()
+
+/obj/item/device/multitool/update_icon()
+	if(selected_io)
+		icon_state = "multitool_red"
+	else
+		icon_state = "multitool"
+
+/obj/item/device/multitool/proc/wire(var/datum/integrated_io/io, mob/user)
+	if(!io.holder.assembly)
+		to_chat(user, "<span class='warning'>\The [io.holder] needs to be secured inside an assembly first.</span>")
 		return
 
-	clone = !clone
-	if(clone)
-		to_chat(user, "<span class='notice'>You enable cloning on \the [src].</span>")
+	if(selected_io)
+		if(io == selected_io)
+			to_chat(user, "<span class='warning'>Wiring \the [selected_io.holder]'s [selected_io.name] into itself is rather pointless.</span>")
+			return
+		if(io.io_type != selected_io.io_type)
+			to_chat(user, "<span class='warning'>Those two types of channels are incompatable.  The first is a [selected_io.io_type], \
+			while the second is a [io.io_type].</span>")
+			return
+		if(io.holder.assembly && io.holder.assembly != selected_io.holder.assembly)
+			to_chat(user, "<span class='warning'>Both \the [io.holder] and \the [selected_io.holder] need to be inside the same assembly.</span>")
+			return
+		io.connect_pin(selected_io)
+
+		to_chat(user, "<span class='notice'>You connect \the [selected_io.holder]'s [selected_io.name] to \the [io.holder]'s [io.name].</span>")
+		selected_io.holder.interact(user) // This is to update the UI.
+		selected_io = null
+
 	else
-		to_chat(user, "<span class='notice'>You disable cloning on \the [src].</span>")
+		selected_io = io
+		to_chat(user, "<span class='notice'>You link \the multitool to \the [selected_io.holder]'s [selected_io.name] data channel.</span>")
 
-/obj/item/device/multitool/examine(var/mob/user)
-	. = ..()
-	to_chat(user, "<span class='notice'>Cloning is [clone ? "enabled" : "disabled"].</span>")
+	update_icon()
 
-/////////////////////////
-//Disguised AI detector// - changes color based on proximity to various surveillance devices
-/////////////////////////
+
+/obj/item/device/multitool/proc/unwire(var/datum/integrated_io/io1, var/datum/integrated_io/io2, mob/user)
+	if(!io1.linked.len || !io2.linked.len)
+		to_chat(user, "<span class='warning'>There is nothing connected to the data channel.</span>")
+		return
+
+	if(!(io1 in io2.linked) || !(io2 in io1.linked) )
+		to_chat(user, "<span class='warning'>These data pins aren't connected!</span>")
+		return
+	else
+		io1.disconnect_pin(io2)
+		to_chat(user, "<span class='notice'>You clip the data connection between the [io1.holder.displayed_name]'s \
+		[io1.name] and the [io2.holder.displayed_name]'s [io2.name].</span>")
+		io1.holder.interact(user) // This is to update the UI.
+		update_icon()
+
+
+
+// Syndicate device disguised as a multitool; it will turn red when an AI camera is nearby.
+
 
 /obj/item/device/multitool/ai_detect
-	var/detected = 0 //bitflags
-	var/cooldown = FALSE
+	var/track_cooldown = 0
+	var/track_delay = 10 //How often it checks for proximity
+	var/detect_state = PROXIMITY_NONE
+	var/rangealert = 8	//Glows red when inside
+	var/rangewarning = 20 //Glows yellow when inside
 
 /obj/item/device/multitool/ai_detect/New()
-	spawn() src.ticker()
+	..()
+	START_PROCESSING(SSobj, src)
 
-/obj/item/device/multitool/ai_detect/proc/ticker()
-	var/mob/M
-	var/range
-	var/turf/our_turf
-	var/turf/T
-	while(src && !src.gcDestroyed)
-		detected = 0
-		our_turf = get_turf(src)
-		range = range(8,our_turf)
+/obj/item/device/multitool/ai_detect/Destroy()
+	STOP_PROCESSING(SSobj, src)
+	return ..()
 
-		//Search for AIs and people looking through sec cams
-		if(cameranet.chunkGenerated(our_turf.x, our_turf.y, our_turf.z))
-			var/datum/camerachunk/chunk = cameranet.getCameraChunk(our_turf.x, our_turf.y, our_turf.z)
-			if(chunk && chunk.seenby.len)
-				for(M in chunk.seenby)
-					if(get_dist(src,M) < 8)
-						src.detected |= DETECT_AI
+/obj/item/device/multitool/ai_detect/process()
+	if(track_cooldown > world.time)
+		return
+	detect_state = PROXIMITY_NONE
+	multitool_detect()
+	icon_state = "[initial(icon_state)][detect_state]"
+	track_cooldown = world.time + track_delay
+
+/obj/item/device/multitool/ai_detect/proc/multitool_detect()
+	var/turf/our_turf = get_turf(src)
+	for(var/mob/living/silicon/ai/AI in GLOB.ai_list)
+		if(AI.cameraFollow == src)
+			detect_state = PROXIMITY_ON_SCREEN
+			break
+
+	if(!detect_state && GLOB.cameranet.chunkGenerated(our_turf.x, our_turf.y, our_turf.z))
+		var/datum/camerachunk/chunk = GLOB.cameranet.getCameraChunk(our_turf.x, our_turf.y, our_turf.z)
+		if(chunk)
+			if(chunk.seenby.len)
+				for(var/mob/camera/aiEye/A in chunk.seenby)
+					var/turf/detect_turf = get_turf(A)
+					if(get_dist(our_turf, detect_turf) < rangealert)
+						detect_state = PROXIMITY_ON_SCREEN
+						break
+					if(get_dist(our_turf, detect_turf) < rangewarning)
+						detect_state = PROXIMITY_NEAR
 						break
 
-		for(T in range) //Search for pAIs
-			if(src.findItem(/mob/living/silicon/pai,T))
-				src.detected |= DETECT_PAI
+/obj/item/device/multitool/ai_detect/admin
+	desc = "Used for pulsing wires to test which to cut. Not recommended by doctors. Has a strange tag that says 'Grief in Safety'." //What else should I say for a meme item?
+	track_delay = 5
+
+/obj/item/device/multitool/ai_detect/admin/multitool_detect()
+	var/turf/our_turf = get_turf(src)
+	for(var/mob/J in urange(rangewarning,our_turf))
+		if(GLOB.admin_datums[J.ckey])
+			detect_state = PROXIMITY_NEAR
+			var/turf/detect_turf = get_turf(J)
+			if(get_dist(our_turf, detect_turf) < rangealert)
+				detect_state = PROXIMITY_ON_SCREEN
 				break
 
-		for(T in range) //Search for recorders
-			if(src.findItem(/obj/item/device/taperecorder,T))
-				src.detected |= DETECT_RECORDER
-				break
+/obj/item/device/multitool/cyborg
+	name = "multitool"
+	desc = "Optimised and stripped-down version of a regular multitool."
+	toolspeed = 0.5
 
-		for(T in range) //Search for analyzers
-			if(src.findComponent(/obj/item/device/assembly/voice,T))
-				src.detected |= DETECT_ANALYZER
-				break
-
-		src.update_icon()
-		sleep(DETECT_TICKER_PERIOD)
-	return
-
-/obj/item/device/multitool/ai_detect/proc/findItem(pathToFind,atom/thingToSearch)
-	if(locate(pathToFind) in thingToSearch.contents)
-		return 1
-	for(var/mob/living/carbon/mob in thingToSearch)
-		if(.(pathToFind,mob))
-			return 1
-	return 0
-
-/obj/item/device/multitool/ai_detect/proc/findComponent(pathToFind,atom/thingToSearch)
-	if(locate(pathToFind) in thingToSearch.contents)
-		return 1
-	for(var/obj/item/device/assembly_holder/assembly in thingToSearch)
-		if(.(pathToFind,assembly))
-			return 1
-	for(var/obj/item/device/transfer_valve/valve in thingToSearch)
-		if(.(pathToFind,valve))
-			return 1
-	for(var/mob/living/carbon/mob in thingToSearch)
-		if(.(pathToFind,mob))
-			return 1
-	return 0
-
-obj/item/device/multitool/ai_detect/update_icon()
-	if(src.detected)
-		if(src.detected & DETECT_AI)
-			src.icon_state = "[initial(src.icon_state)]_red"
-		else if(src.detected & DETECT_PAI)
-			src.icon_state = "[initial(src.icon_state)]_orange"
-		else if(src.detected & DETECT_RECORDER)
-			src.icon_state = "[initial(src.icon_state)]_yellow"
-		else if(src.detected & DETECT_ANALYZER)
-			src.icon_state = "[initial(src.icon_state)]_blue"
-	else
-		src.icon_state = initial(src.icon_state)
-	return
-
-obj/item/device/multitool/ai_detect/examine(mob/user)
-	..()
-	if(src.detected)
-		user << "<span class='info'>The screen displays:</span>"
-		if(detected & DETECT_AI)
-			to_chat(user, "<span class='info'>AI detected</span>")
-		if(detected & DETECT_PAI)
-			to_chat(user, "<span class='info'>pAI detected</span>")
-		if(detected & DETECT_RECORDER)
-			to_chat(user, "<span class='info'>Tape recorder detected</span>")
-		if(detected & DETECT_ANALYZER)
-			to_chat(user, "<span class='info'>Voice analyzer detected</span>")
-	else
-		to_chat(user, "<span class='info'>The screen is not displaying anything.</span>")
-
-	if (cooldown == TRUE)
-		to_chat(user, "<span class='info'>\The [src] seems to be charging. Is it wireless?</span>")
-
-/obj/item/device/multitool/ai_detect/attack_self()
-	var/EPI_RANGE = 7 //range to turn off cameras nearby
-	var/PROB_DC_CAMS = 25 //probability to turn off cameras far away
-	var/turf/T = get_turf(src)
-
-	if (cooldown == TRUE)
-		to_chat(usr, "<span class='info'>It's not ready yet!</span>")
-		return
-
-	if (cooldown == FALSE)
-		for(var/obj/machinery/camera/C in view(EPI_RANGE)) //guaranteed to turnoff nearby cameras
-			if (C.status) //check it's actually working
-				C.emp_act(1)
-				playsound(C,"sound/effects/electricity_short_disruption.ogg",50,1)
-
-		for(var/obj/machinery/camera/H in cameranet.cameras) //global camera list
-			if (prob(PROB_DC_CAMS) && T.z == H.z && H.status) //same Zlvl & working
-				H.emp_act(1)
-				playsound(H,"sound/effects/electricity_short_disruption.ogg",50,1)
-
-		cooldown = TRUE
-		to_chat(usr, "<span class='info'>You can feel the AI's circuits grinding.</span>")
-		spawn(3000) //5minutes
-			cooldown = FALSE
-			to_chat(usr, "<span class='info'>\The [src] is now fully charged.</span>")
-
-////////////////////////////////////////////////////////////////////////
-#undef DETECT_TICKER_PERIOD
-#undef DETECT_AI
-#undef DETECT_PAI
-#undef DETECT_RECORDER
-#undef DETECT_ANALYZER
+/obj/item/device/multitool/abductor
+	name = "alien multitool"
+	desc = "An omni-technological interface."
+	icon = 'icons/obj/abductor.dmi'
+	icon_state = "multitool"
+	toolspeed = 0.1
