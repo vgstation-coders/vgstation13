@@ -16,7 +16,7 @@
 
 */
 
-/mob/living/carbon/martian
+/mob/living/carbon/complex/martian
 	name = "martian"
 	desc = "An alien resembling an overgrown octopus."
 	voice_name = "martian"
@@ -24,7 +24,7 @@
 	icon = 'icons/mob/martian.dmi'
 	icon_state = "martian"
 
-	species_type = /mob/living/carbon/martian
+	species_type = /mob/living/carbon/complex/martian
 	speak_emote = list("blorbles","burbles")
 
 	held_items = list(null, null, null, null, null, null) //6 hands
@@ -46,33 +46,34 @@
 	//Inventory slots
 	var/obj/item/head //hat
 
-	var/icon_state_standing = "martian"
-	var/icon_state_lying = "lying"
-	var/icon_state_dead = "dead"
+	icon_state_standing = "martian"
+	icon_state_lying = "lying"
+	icon_state_dead = "dead"
 
-	var/flag = 0
+	flag = 0
 
-/mob/living/carbon/martian/New()
-	create_reagents(200)
+	base_insulation = 0.5
+
+/mob/living/carbon/complex/martian/New()
 	name = pick("martian","scootaloo","squid","rootmarian","phoronitian","sepiida","octopodiforme",\
 	"bolitaenides","belemnites","astrocanthoteuthis","octodad","ocotillo","kalamarian")
 	add_language(LANGUAGE_MARTIAN)
 	default_language = all_languages[LANGUAGE_MARTIAN]
 	..()
 
-/mob/living/carbon/martian/Destroy()
+/mob/living/carbon/complex/martian/Destroy()
 	head = null
 
 	..()
 
 #ifdef MARTIANS_AMBIDEXTROUS
-/mob/living/carbon/martian/do_after_hand_check(held_item)
+/mob/living/carbon/complex/martian/do_after_hand_check(held_item)
 	//Normally do_after breaks if you switch hands. With martians, it will only break if the used item is dropped
 	//This lets them do multiple things at once.
 	return (held_items.Find(held_item))
 #endif
 
-/mob/living/carbon/martian/eyecheck()
+/mob/living/carbon/complex/martian/eyecheck()
 	var/obj/item/clothing/head/headwear = src.head
 	var/protection
 	if(headwear)
@@ -80,22 +81,22 @@
 
 	return Clamp(protection, -2, 2)
 
-/mob/living/carbon/martian/earprot()
+/mob/living/carbon/complex/martian/earprot()
 	return 1
 
-/mob/living/carbon/martian/dexterity_check()
+/mob/living/carbon/complex/martian/dexterity_check()
 	return TRUE
 
-/mob/living/carbon/martian/IsAdvancedToolUser()
+/mob/living/carbon/complex/martian/IsAdvancedToolUser()
 	return TRUE
 
-/mob/living/carbon/martian/Process_Spaceslipping()
+/mob/living/carbon/complex/martian/Process_Spaceslipping()
 	return 0 //No slipping
 
-/mob/living/carbon/martian/has_eyes()
+/mob/living/carbon/complex/martian/has_eyes()
 	return FALSE
 
-/mob/living/carbon/martian/updatehealth()
+/mob/living/carbon/complex/martian/updatehealth()
 	if(status_flags & GODMODE)
 		health = maxHealth
 		stat = CONSCIOUS
@@ -103,7 +104,7 @@
 		health = maxHealth - getOxyLoss() - getFireLoss() - getBruteLoss() - getCloneLoss()
 
 
-/mob/living/carbon/martian/ex_act(severity)
+/mob/living/carbon/complex/martian/ex_act(severity)
 	if(flags & INVULNERABLE)
 		return
 
@@ -127,11 +128,11 @@
 
 	updatehealth()
 
-/mob/living/carbon/martian/Login()
+/mob/living/carbon/complex/martian/Login()
 	..()
 	update_hud()
 
-/mob/living/carbon/martian/Stat()
+/mob/living/carbon/complex/martian/Stat()
 	..()
 	if(statpanel("Status"))
 		stat(null, "Intent: [a_intent]")

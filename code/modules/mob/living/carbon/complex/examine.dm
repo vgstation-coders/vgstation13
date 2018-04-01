@@ -1,4 +1,4 @@
-/mob/living/carbon/martian/examine(mob/user)
+/mob/living/carbon/complex/examine(mob/user)
 
 	var/msg = "<span class='info'>*---------*\nThis is [bicon(src)] \a <EM>[src]</EM>!\n"
 
@@ -17,12 +17,12 @@
 	else
 		msg += "<span class='warning'>"
 		if (src.getBruteLoss())
-			if (src.getBruteLoss() < 30)
+			if (src.getBruteLoss() < maxHealth/2)
 				msg += "It has minor bruising.\n"
 			else
 				msg += "<B>It has severe bruising!</B>\n"
 		if (src.getFireLoss())
-			if (src.getFireLoss() < 30)
+			if (src.getFireLoss() < maxHealth/2)
 				msg += "It has minor burns.\n"
 			else
 				msg += "<B>It has severe burns!</B>\n"

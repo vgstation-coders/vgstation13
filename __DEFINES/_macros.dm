@@ -8,7 +8,7 @@
 
 #define ismonkey(A) istype(A, /mob/living/carbon/monkey)
 
-#define ismartian(A) istype(A, /mob/living/carbon/martian)
+#define ismartian(A) istype(A, /mob/living/carbon/complex/martian)
 
 #define ishigherbeing(A) (ishuman(A) || ismartian(A))
 

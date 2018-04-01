@@ -792,7 +792,7 @@
 
 	else if(ismartian(M))
 		//why
-		var/mob/living/carbon/martian/MA = M
+		var/mob/living/carbon/complex/martian/MA = M
 		switch(slot)
 			if(slot_head)
 				if(MA.head)
