@@ -89,11 +89,17 @@
 			stat("Players: [totalPlayers]", "Players Ready: [totalPlayersReady]")
 			totalPlayers = 0
 			totalPlayersReady = 0
-			for(var/mob/new_player/player in player_list)
-				stat("[player.key]", (player.ready)?("(Playing)"):(null))
-				totalPlayers++
-				if(player.ready)
-					totalPlayersReady++
+			if(Holiday == APRIL_FOOLS_DAY && !check_rights(R_ADMIN))
+				totalPlayers = rand(0,4000)%rand(1,10)
+				totalPlayersReady = totalPlayers%rand(1,10)
+				for(var/i = 1 to rand(5,45))
+					stat("[prob(50)?capitalize(pick(first_names_female)):capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))]", prob(50)?("(Playing)"):(null))
+			else
+				for(var/mob/new_player/player in player_list)
+					stat("[player.key]", (player.ready)?("(Playing)"):(null))
+					totalPlayers++
+					if(player.ready)
+						totalPlayersReady++
 
 /mob/new_player/Topic(href, href_list[])
 	//var/timestart = world.timeofday
