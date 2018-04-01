@@ -3310,22 +3310,21 @@
 	density = 0.62
 	specheatcap = 49.23
 
-/datum/reagent/tobacco
+/datum/reagent/nicotine
+	name = "Nicotine"
+	id = NICOTINE
+	description = "A highly addictive stimulant extracted from the tobacco plant."
+	reagent_state = LIQUID
+	color = "#181818" //rgb: 24, 24, 24
+	density = 1.01
+
+/datum/reagent/nicotine/tobacco
 	name = "Tobacco"
 	id = TOBACCO
 	description = "The cured and ground leaves of a tobacco plant."
 	reagent_state = SOLID
 	color = "#4c1e00" //rgb: 76, 30, 0
 	density = 1.01
-
-/datum/reagent/tobacco/on_mob_life(var/mob/living/M)
-	if(..())
-		return 1
-
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		if(prob(1))
-			H.add_cancer(1, LIMB_CHEST)
 
 /datum/reagent/danbacco
 	name = "Tobacco"
@@ -3343,14 +3342,6 @@
 		var/mob/living/carbon/human/H = M
 		if(prob(50)) //Discount dan's special blend.
 			H.add_cancer(1, LIMB_CHEST)
-
-/datum/reagent/nicotine
-	name = "Nicotine"
-	id = NICOTINE
-	description = "A highly addictive stimulant extracted from the tobacco plant."
-	reagent_state = LIQUID
-	color = "#181818" //rgb: 24, 24, 24
-	density = 1.01
 
 /datum/reagent/ammonia
 	name = "Ammonia"
