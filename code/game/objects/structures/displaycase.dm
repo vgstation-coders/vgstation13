@@ -39,7 +39,10 @@
 
 /obj/structure/displaycase/lamarr/New()
 	..()
-	occupant=new /obj/item/clothing/mask/facehugger/lamarr(src)
+	if(Holiday == APRIL_FOOLS_DAY && prob(50))
+		occupant=new /obj/item/clothing/shoes/magboots/funk(src)
+	else
+		occupant=new /obj/item/clothing/mask/facehugger/lamarr(src)
 	locked=1
 	req_access=list(access_rd)
 	update_icon()
