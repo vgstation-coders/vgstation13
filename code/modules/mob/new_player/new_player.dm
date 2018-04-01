@@ -309,6 +309,7 @@
 		if(prob(10)) // 10% of those have a good mut.
 			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
 
+
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
 		return 0
@@ -486,14 +487,14 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	if(new_character.mind)
 		new_character.mind.store_memory("<b>Your blood type is:</b> [new_character.dna.b_type]<br>")
 
-	if(client.prefs.disabilities & DISABILITY_FLAG_NEARSIGHTED)
+	if(client.prefs.disabilities & DISABILITY_FLAG_NEARSIGHTED || (Holiday == APRIL_FOOLS_DAY && src.mind.assigned_role in science_positions && prob(30)))
 		new_character.dna.SetSEState(GLASSESBLOCK,1,1)
 		new_character.disabilities |= NEARSIGHTED
 
 	if(client.prefs.disabilities & DISABILITY_FLAG_VEGAN)
 		new_character.dna.SetSEState(VEGANBLOCK, 1, 1)
 
-	if(client.prefs.disabilities & DISABILITY_FLAG_ASTHMA)
+	if(client.prefs.disabilities & DISABILITY_FLAG_ASTHMA || (Holiday == APRIL_FOOLS_DAY && src.mind.assigned_role in science_positions && prob(30)))
 		new_character.dna.SetSEState(ASTHMABLOCK, 1, 1)
 
 	chosen_species = all_species[client.prefs.species]
@@ -513,6 +514,9 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	if(client.prefs.disabilities & DISABILITY_FLAG_MUTE)
 		new_character.dna.SetSEState(MUTEBLOCK,1,1)
 		new_character.sdisabilities |= MUTE
+
+	if(Holiday == APRIL_FOOLS_DAY && prob(5))
+		new_character.mutations.Add(M_CLUMSY)
 
 	new_character.dna.UpdateSE()
 	domutcheck(new_character, null, MUTCHK_FORCED)
