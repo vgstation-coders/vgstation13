@@ -1,6 +1,30 @@
 #define JITTER_MEDIUM 100
 #define JITTER_HIGH 300
 
+/mob/living/carbon/human
+
+	var/set_pronouns = FALSE
+
+	var/pronoun_personal_subject = ""
+	var/pronoun_possesive = ""
+	var/pronoun_reflexive = ""
+	var/verb_be = ""
+	var/verb_have = ""
+
+
+/mob/living/carbon/human/verb/choose_pronouns()
+	set name = "Choose pronouns"
+	set category = "IC"
+	
+	if (Holiday == APRIL_FOOLS_DAY)
+		pronoun_personal_subject = stripped_input(src, "Please enter your desired personal pronoun.", "Personal pronoun", "They", 5)
+		pronoun_possesive = stripped_input(src, "Please enter your desired possesive pronoun.", "Possesive pronoun", "Their", 5)
+		pronoun_reflexive = stripped_input(src, "Please enter your desired reflexive pronoun.", "Reflexive pronoun", "Them", 5)
+		verb_be = alert(src, "How does your desired pronoun conjugate with the auxiliary 'be'?", "Auxiliary 'to be'", "is", "are")
+		verb_have = alert(src, "How does your desired pronoun conjugate with the auxiliary 'have'?", "Auxiliary 'to have'", "has", "have")
+
+		set_pronouns = TRUE
+
 /mob/living/carbon/human/examine(mob/user)
 	var/list/obscured = check_obscured_slots()
 	var/skipgloves = 0
@@ -60,6 +84,13 @@
 				t_He = "She"
 				t_his = "her"
 				t_him = "her"
+
+	if (set_pronouns)
+		t_He = pronoun_personal_subject
+		t_his = pronoun_possesive
+		t_him = pronoun_reflexive
+		t_has = verb_have
+		t_is = verb_be
 
 	var/distance = get_dist(user,src)
 	if(istype(user, /mob/dead/observer) || !istype(user) || user.stat == 2) // ghosts can see anything
