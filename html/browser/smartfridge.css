@@ -1,0 +1,35 @@
+.fridgeIcon img{
+	/* 64x64 futureproofing! */
+	width: 32px;
+	height: 32px;
+	-ms-interpolation-mode: nearest-neighbor;
+}
+
+.cropped img{
+	/* 32x32 is a little too big for the fridge menu, and most of it is empty space for small icons, so we're going to crop some out */
+	margin-top: -8px; margin-bottom: -5px;
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+/* Oh wouldn't things be so easy if this shit just worked in IE7?
+tr:nth-child(even){background-color: #e6e6e6}
+tr:nth-child(odd){background-color: #f2f2f2;}
+*/
+
+.imageToggleButton {
+	position:absolute;
+	right:2.5%;
+}
+
+.pileName {
+	width: 100%;
+	vertical-align: middle;
+}
+
+.shelfButton {
+	vertical-align: bottom;
+}

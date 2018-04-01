@@ -116,6 +116,11 @@ GLOBAL_LIST_INIT(metal_recipes, list ( \
 /obj/item/stack/sheet/metal/five
 	amount = 5
 
+/obj/item/stack/sheet/metal/singularity_act()
+	returnToPool(src)
+	return 2
+
+// Diet metal.
 /obj/item/stack/sheet/metal/cyborg
 	materials = list()
 	is_cyborg = 1

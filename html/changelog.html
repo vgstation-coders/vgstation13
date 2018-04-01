@@ -2030,3 +2030,1777 @@
 </td></tr></table>
 </body>
 </html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+HEY, YOU.
+
+ADDING A CHANGELOG ENTRY? MAKE changelog/USERNAME.yml.  READ example.yml SO YOU DON'T SCREW UP.
+
+ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old teams)
+--->
+<html>
+	<head>
+		<title>/vg/station Changelog</title>
+		<link rel="stylesheet" type="text/css" href="changelog.css">
+		<script type='text/javascript'>
+            function changeText(tagID, newText, linkTagID) {
+                var tag = document.getElementById(tagID);
+                tag.innerHTML = newText;
+                var linkTag = document.getElementById(linkTagID);
+                linkTag.removeAttribute("href");
+                linkTag.removeAttribute("onclick");
+            }
+
+		</script>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	</head>
+	<body>
+		<!--
+		Header Section
+		-->
+		<div class="header">
+			<h1>/vg/station - A Space Station 13 Server</h1>
+			<p>
+				<b>Forum | <a href="http://ss13.moe/wiki/index.php/Main_Page">Wiki</a> | <a href="https://github.com/vgstation-coders/vgstation13">Source</a></b>
+			</p>
+			<p>
+				<b>Visit our IRC channel:</b><a href="irc://irc.rizon.net/vgstation">#vgstation on irc.rizon.net</a>
+			</p>
+			<p>
+				<em>Code licensed under <a href="http://www.gnu.org/licenses/gpl.html">GPLv3</a>. Content licensed under <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.</em>
+			</p>
+
+			<h2>/vg/station 13 Credits</h2>
+			<dl class="creditblock">
+				<dt class="creditsection">
+					Code:
+				</dt>
+				<dd>
+					9600bauds, Cloroxygen, Clusterfack, ComicIronic, Deity Link, Duny, Dylanstrategie, Emisune, Exxion, IconLeap, Iamgoofball, Intigracy, Kurfursten, N3X15, PJB3005, Pomf123, SarahJohnson, Shadowmech88, Sood, Unid, Velard Amakar, wwjnc
+				</dd>
+				<dt class="creditsection">
+					Sprites:
+				</dt>
+				<dd>
+					Blithering, Bustatime, Cloroxygen, Cogwerks, Dbuhos, Deity Link, Emisune, Intigracy, ISaidNo, Kokuten, N3X15, NigglyWiggly, Osaifh, Rei1226, Shadowmech88, Skowron
+				</dd>
+				<dt class="creditsection">
+					Sounds:
+				</dt>
+				<dd>
+					Deity Link, IratePirate, Railfist, Zth
+				</dd>
+				<dt class="creditsection">
+					Mapping:
+				</dt>
+				<dd>
+					ComicIronic, CptWad, Duny, dylanstrategie, IratePirate, MrSegi, PJB3005, Pomf123, Probe1, xpcybic
+				</dd>
+				<dt class="creditsection">
+					Thanks To:
+				</dt>
+				<dd>
+					Baystation, Festival TTS, /tg/ station, Goonstation, Animus Station, Daedalus, anyone we forgot above, and the original Spacestation 13 devs. Skibiliano for the IRC bot.
+				</dd>
+			</dl>
+		</div>
+
+		<div class="testserver">
+			Visit the Bleeding-Edge test server at <a href="byond://pomftest.undo.it:7777">byond://pomftest.undo.it:7777</a>
+		</div>
+
+		<!--
+
+		AGAIN, TO ADD SHIT, ADD AND MAINTAIN YOUR OWN changelog/USERNAME.yml FILE.
+
+		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
+
+		-->
+		<div class="commit sansserif">
+
+			<h2 class="date">2018.04.01</h2>
+			<h3 class="author">Blithering updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">more options for beekeepers, introduces two new kinds of bees!</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Silicons are now clown compatible.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds new gamemodes, to prepare for antag datums</li>
+				<li class="rscadd">Diversifies the cargo crate structure.</li>
+			</ul>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">You can now choose which pronouns should be displayed on examine with the verb "Choose pronouns" in the IC tab.</li>
+				<li class="tweak">Flashbangs have been removed from the game.</li>
+			</ul>
+
+			<h2 class="date">2018.03.31</h2>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">There is no longer a delay when crawling.</li>
+			</ul>
+
+			<h2 class="date">2018.03.28</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Having a borer as a monkey or nymph will no longer prevent you from ventcrawling.</li>
+			</ul>
+
+			<h2 class="date">2018.03.27</h2>
+			<h3 class="author">Irradiation updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Cryptobiolin metabolism has been reduced to 0.2</li>
+			</ul>
+			<h3 class="author">Micluc updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Having more than one soybean in the microwave will display 'Soybeans' instead of 'Soybeans'</li>
+				<li class="bugfix">Having more than one grape or green grape will display bunches of grapes now</li>
+			</ul>
+
+			<h2 class="date">2018.03.26</h2>
+			<h3 class="author">Irradiation updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The price for the  glock pack crate in cargo has been reduced to 60$.</li>
+			</ul>
+
+			<h2 class="date">2018.03.25</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed vampires mistakenly being able to enthrall chaplains.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Makes the emagging of silicons sparky again</li>
+			</ul>
+
+			<h2 class="date">2018.03.24</h2>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added reinforced cyborg components. They resist about a third of the damage dealt to it. They can be found in the components tab in the exosuit fab after some research. They require a variety of materials to make.</li>
+				<li class="rscadd">Added the reinforced cyborg torso. When used in the construction of a cyborg it makes the resulting cyborg come pre-installed with reinforced cyborg components. It costs the combined cost of a normal torso and all of the new reinforced components. It can be found in the components tab as well.</li>
+				<li class="rscadd">You can examine components to tell if they are damaged at all now.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds functionality to the previously useless wires on the rnd machines, one if you pulse it, it keep creating the last thing it was told to make. The other if you attach a signaler to it, it will pulse a signal through that signaler.</li>
+			</ul>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">In ragin' mages, wizards no longer instantly die when in crit.</li>
+				<li class="bugfix">Custom religions can print their Bible at the library checkout computer, including the Chaplain's.</li>
+			</ul>
+
+			<h2 class="date">2018.03.23</h2>
+			<h3 class="author">Irradiation updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Renamed the .45 glock gun & ammo crates to .380 instead.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Reworked circuit imprinter reagent storage. Imprinters now actually hold reagents in their internal beakers instead of a phantom reagent holder that was destroyed when parts were swapped.</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">(Packed) Changes tech storage to have regular walls instead of Reinforced walls.  Secure tech storage remains reinforced.</li>
+			</ul>
+
+			<h2 class="date">2018.03.22</h2>
+			<h3 class="author">BurntDevil updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Expanded Deff's bridge to have more space for gameplay options</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds a code function to disable mesons for mappers so you can't peek at secret vaults</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed items carried by monkeys, nymphs, etc. displaying icons as if they were in the mob's right hand when carried in the left hand.</li>
+				<li class="rscadd">Red and yellow floorbots are now possible to build from their respective-colored toolboxes.</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Metaclubs telecomms shouldn't die on its own anymore.</li>
+			</ul>
+
+			<h2 class="date">2018.03.21</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Returned diona photosynthesis to how it was before a major unintended buff.</li>
+			</ul>
+
+			<h2 class="date">2018.03.20</h2>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Bagel Genetics now has a service desk and the consoles are closer together.</li>
+			</ul>
+
+			<h2 class="date">2018.03.17</h2>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds ablative plate armor</li>
+				<li class="rscadd">Adds armor shards you can attach to your jumpsuit to give you a bit more armor</li>
+			</ul>
+
+			<h2 class="date">2018.03.16</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Hyperzine will now divide slowdown from worn clothing/held items (like magboots, spacesuits, or gatling guns) by 2.5 instead of completely removing it.</li>
+			</ul>
+
+			<h2 class="date">2018.03.15</h2>
+			<h3 class="author">Commandersand updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added some sounds to the sound synth the clown/mime gets</li>
+			</ul>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The gas mixer interface will show the english name for the direction of the nodes rather than just 1 and 2.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a long-standing bug which caused the blood vessels of a human whose blood level had dropped to zero, or close to it, to glitch out and become unusable forever.</li>
+				<li class="bugfix">Changed how disposals pipes check for fat people, so that you will stop being considered fat in the event you lose weight in transit. (Although if you're already stuck, this won't unstick you without another package to push you through.)</li>
+				<li class="bugfix">Fixed minebot AI getting stuck and having to be reset constantly.</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Bagel now has a bloodbank fridge in Medbay Storage where the bloodbags were.</li>
+				<li class="tweak">Bagel salvage ship and vox skipjack now arrive way closer to the vox tradepost than before.</li>
+			</ul>
+
+			<h2 class="date">2018.03.14</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="imageadd">Added worn sprites for the diagnostic HUD. It's no longer invisible when worn!</li>
+				<li class="bugfix">Staff of the necromancer will no longer put dead players that became some other mob back into their old zombie.</li>
+				<li class="bugfix">Unzombified zombies will properly regain their original player.</li>
+				<li class="tweak">Whacking zombies with a bible to deconvert them now has a cooldown.</li>
+			</ul>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added the capillary laying operation tool (CLOT). An advanced version of the fixOvein. Using the CLOT in hand will toggle it to a secondary state where it can inject biofoam during surgery (the person needs to be on a valid surgery table/surface). You need to feed it rolls of gauze to fill it with biofoam at a rate of 1u per roll. Advanced trauma kits will make 5u per kit.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed circuit imprinter resource efficiency not benefiting from better manipulators.</li>
+			</ul>
+			<h3 class="author">TurboGay updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Altered several engineering crates (emitter, field generator, particle accelerator, shield generator, starscreen shield generator and capacitor crates) access requirements from CE to engine access.</li>
+				<li class="tweak">Altered motorized wheelchair crate access requirements from CMO to medical access.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes two 2-years old runtimes with action buttons.</li>
+			</ul>
+
+			<h2 class="date">2018.03.13</h2>
+			<h3 class="author">Irradiation updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added a blood bank fridge in metaclub medbay in place of the bloodbag table in Metaclub's medbay.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Fishtank-related circuits are now makeable from circuit imprinters.</li>
+			</ul>
+
+			<h2 class="date">2018.03.12</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The engineering cyborgs magnetic gripper can now interact with things it's gripping (e.g. airlock electronics, tanks). It can also hold additional items such as table/rack parts, and mountable frames (for APC, air alarms, ...)</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Circuit imprinters now use much less sulfuric acid when printing any circuit that is makeable with a soldering iron.</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">All research outposts now have anomaly storage containers to help you transport dangerous large artifacts.</li>
+			</ul>
+
+			<h2 class="date">2018.03.11</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Imidazoline will no longer heal mechanical eyes.</li>
+				<li class="bugfix">Fixed a bug that prevented ghosts from viewing body scanners and sleepers interfaces.</li>
+				<li class="tweak">Updated the cyborg self-diagnosis UI.</li>
+				<li class="tweak">Cyborgs and MoMMIs can now use their modules while buckled.</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds magnificent magboots.  It's what mag stands for!  Sprites by DrSnips/DrSlimes</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed an ancient bug that allowed the robotics console bypass hacked traitor borgs anti-termination safety</li>
+			</ul>
+
+			<h2 class="date">2018.03.09</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Headset encryption keys are now tiny.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Emitter mirrors and splitters now mirror and or split lasers fired at them.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed having to enter *custom emotes twice.</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Bagel now starts with twice as much power as it does currently.  Overall, it is less than half of what it was a month ago but is now significantly higher giving engineers a longer opportunity to set up power.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes living cyborgs being untippable</li>
+				<li class="bugfix">Fixes cyborgs having access to binary even if their binary communication device is broken or offline</li>
+				<li class="bugfix">Fixes *flap and *clap not working on cyborgs</li>
+			</ul>
+
+			<h2 class="date">2018.03.08</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Facehuggers now wander a little if they find another facehugger on their turf.</li>
+				<li class="bugfix">Toy facehuggers no longer hunt or remove equipment (although Lamarr still will). Wearing a dead, toy, or sterile facehugger no longer fools hugger AI. Huggers should no longer hug through mechs, closets or other containers.</li>
+				<li class="tweak">Facehuggers will try to keep their victims alive by auto-connecting to any internals they had enabled. (Don't ask how they know how to do that.)</li>
+				<li class="tweak">Cyborgs that are reset or destroyed while holding items inside storage modules will drop those items instead of deleting them.</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">(Packed) Reworks packed kitchen to have more space, bartenders area to have more space.  Moves MoMMI nest next to CE office.  Moves maint behind the kitchen downward to atmos.  Botany has been expanded by one tile and some things have been shifted around.</li>
+				<li class="tweak">(Packed) The ERT shuttle now arrives north of the AI core instead of where the emergency shuttle docks.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">MoMMIs don't start with the default flashlight/flash anymore</li>
+			</ul>
+			<h3 class="author">unid15 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed gremlins spamming messages when locked in cages, or when near windows</li>
+				<li class="rscadd">Gremlins can now use operating tables to perform surgery (operating them in the same way as deepfryers - using nearby items). Given their tendency to run around, the surgery can fail if they aren't restrained.</li>
+				<li class="tweak">Changed how mimic meat works. It's also slightly toxic now.</li>
+			</ul>
+
+			<h2 class="date">2018.03.07</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Security armor and hardsuits can store the blunderbuss.</li>
+			</ul>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added a surgery tab to the protolathe to house all surgery related designs to cut down the clutter.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">You can now add and remove playlists from the juke by inserting or ejecting vinyls on the settings page.</li>
+			</ul>
+
+			<h2 class="date">2018.03.06</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Consecutive repeated messages in chat will be squashed into one. This behaviour can be turned off in your chat preferences.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed cell chargers not charging low-capacity power cells.</li>
+				<li class="bugfix">Fixed power cell lights not updating when removed from cyborg recharge stations.</li>
+			</ul>
+			<h3 class="author">imw-Oculus updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Display cases and fish bowls can now be built again</li>
+			</ul>
+
+			<h2 class="date">2018.03.05</h2>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed magic butterflies from magic butterfly knifes not self destructing.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">Metaclub: The Vox have moved out of the deep space base. It remains for vault hunters, but has no Trader-related items, blueprinted areas, trader shuttle, or research ferry.</li>
+				<li class="rscadd">Metaclub: Vox station replaced with one large 'mothership' that needs to be powered and can stop at 3 locations (main station, solar farm, asteroid casino).</li>
+				<li class="rscadd">There is now a "Trader Shoal" joint account. All traders know the number and PIN. It starts with 0 credits and earns no wages over time. This allows Traders to use custom vendors.</li>
+			</ul>
+
+			<h2 class="date">2018.03.04</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Mysterious d20s are now scannable again (by the syndie device analyzer only).</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">Removes SCP-294 (The coffee machine that creates any chem in the game freely) from Bagels Asteroid.  The sneaky coder cabal was here.</li>
+			</ul>
+
+			<h2 class="date">2018.03.03</h2>
+			<h3 class="author">Anglosphere updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Butter</li>
+				<li class="rscadd">Liquid Butter (Reagent)</li>
+			</ul>
+			<h3 class="author">Irradiation updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Lowered the recipe of Saltwater to 5u Sodium Chloride/20u Water from 5u Sodium Chloride/50u Water.</li>
+				<li class="tweak">Lowered the resulting amount of Saltwater to 20u from 50u.</li>
+			</ul>
+			<h3 class="author">Jared-Fogle updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds breathalyzers to bars and autolathes. Compete to see who's liver can withstand the most torture.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Cloning console has a small number preview of how many records are currently active and saved</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Packed now has lightswitches in Mechanics and Virology.  Wardens room now requires security officer access instead of general brig access that paramedics have.  The brig door button now works properly.</li>
+				<li class="rscdel">Packed no longer has an electrified grille in maintenance behind Medbay.  Plus a lot of minor bugfixes.</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Lifeline now heals you and replenishes a bit of blood.</li>
+			</ul>
+
+			<h2 class="date">2018.03.02</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">All pinpointers now update four times more frequently than before.</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Fun little maze vault for you to explore.</li>
+			</ul>
+			<h3 class="author">Zth-- updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed custom vending machines bugs: list duplication, traders not being able to manipulate them, and not linking to cargo correctly</li>
+				<li class="rscadd">Added stack support to them</li>
+			</ul>
+
+			<h2 class="date">2018.03.01</h2>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed issues with switchtools' attack animations.</li>
+			</ul>
+			<h3 class="author">Irradiation updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added Saltwater. It induces puking when inside the body.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds jars for storing reagents and items in. Items in the jar are constantly touched by the reagents inside, so be careful what you mix up.</li>
+				<li class="rscadd">Internal organs in the presence of peridaxon are now healed over time.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug with nanite infection where it had to pass a redundant permeability check.</li>
+				<li class="bugfix">Fixed a bug where when butchering something, if you had cut out all the meat first, you were locked out of harvesting other things like skin and teeth.</li>
+				<li class="bugfix">Fixed broken vendors not being wrenchable.</li>
+			</ul>
+			<h3 class="author">RealestEstate updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Empty trash bags can be worn on the suit slot, and empty chicken buckets can be worn as hats. Sprites courtesy of Blithering</li>
+			</ul>
+			<h3 class="author">Zth-- updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed borgs being immune to fire.</li>
+				<li class="rscadd">Engiborgs and mommis have protection against it.</li>
+				<li class="tweak">New drunkness camera effect</li>
+			</ul>
+
+			<h2 class="date">2018.02.28</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Creating a barricade on a door won't open said door.</li>
+				<li class="bugfix">Fixed an issue with barricades on the same tile as doors preventing interaction with either of them.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added docking lights.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Ventcrawlers are now able to cancel from exiting vents.</li>
+			</ul>
+
+			<h2 class="date">2018.02.27</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Lots of automated NPC emotes will display correctly now.</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Custom trade ship for Packed Station.</li>
+				<li class="bugfix">Skellingtons stuffed into the gibber now produce bones instead of human meat.  Credit to NigglyWiggly for the sprites.</li>
+				<li class="rscadd">There are now sheets of bones that can be ground up into bone marrow.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Fixes AI starting with their cameras stuck in the roundstart cuck cube</li>
+				<li class="bugfix">Fixed ushankas having no initial icon.</li>
+				<li class="tweak">Borgs with no MMI/Posibrain are now registered as 'Robot' in their PDAs.</li>
+				<li class="tweak">Borgs with damaged/broken cell/actuator can't get up by themselves after being tipped.</li>
+				<li class="tweak">Hitting a cyborg/mommi with objects that do no damage won't create sparks anymore.</li>
+				<li class="rscadd">The old "Hydrobot" icon is now available for Service Cyborgs.</li>
+				<li class="rscadd">Revived the Soviet MoMMI subtype and created a NT subtype.</li>
+				<li class="rscadd">Derelict MoMMIs now spawn as Soviet MoMMIs: They can't change their names, don't appear on cameras, see static on top of mobs and also come with an RCD, RSF(Rapid-Soviet-Fabricator), instrument synth, soap bar, plasma cutter and automatic ore loader on top of their default MoMMI loadout.</li>
+				<li class="tweak">Roundstart/built/transformed MoMMIs are now NT MoMMIs: They start on the engineering camera network and can hear engineering radio.</li>
+				<li class="rscadd">Made the Dorf MoMMI Spawner spawn NT MoMMIs with the dorf lawset.</li>
+				<li class="bugfix">Fixed MoMMIs being able to hide their eyes using Hide when emagged.</li>
+			</ul>
+
+			<h2 class="date">2018.02.26</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug that prevented the Blind and Mutate spells from appearing in wizard spellbooks.</li>
+				<li class="tweak">Multitooling a power cable will now show network load in addition to available power.</li>
+				<li class="bugfix">Fixed implant lockboxes and shotgun shell boxes having the wrong number of slots.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug where the hyperspace at the Mecha Graveyard would not throw you, allowing you to reach CentComm.</li>
+				<li class="bugfix">Increased the size of the Mecha Graveyard dock to accommodate the larger Defficiency cargo/research shuttle.</li>
+			</ul>
+			<h3 class="author">Tehsapper updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">added automatic charge mode for SMES, allowing them to charge using any amount of available power that is less or equal to their input level. The old ("manual") mode is still there.</li>
+				<li class="tweak">upgraded SMES have better capacity and max input/output.</li>
+				<li class="tweak">SMES UI now shows if input terminal or output power cable are missing.</li>
+				<li class="bugfix">fixed being able to reconstruct SMES for free power. New SMES start out with zero charge (roundstart SMES are not affected).</li>
+				<li class="bugfix">fixed SMES not connecting to output powernet upon construction.</li>
+				<li class="bugfix">fixed SMES being able to output (and lose) charge even if there is no powernet.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">The mysterious/cursed dice can't be scanned by device analysers anymore.</li>
+			</ul>
+
+			<h2 class="date">2018.02.25</h2>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">From now on most grenades will only be scannable the the traitor device analyser.</li>
+				<li class="rscdel">the device analyser(both normal and traitor versions) can't scan chrono grenades anymore.</li>
+				<li class="tweak">Inflatables and smoke grenades can still be scanned by normal device analysers.</li>
+			</ul>
+
+			<h2 class="date">2018.02.24</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Internal Affair Agents no longer have maintenance access.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug that let people interact with sleepers from the inside, and others.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes the unreported bug of changeling monkeys not getting their powers</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Bagel now has a unique vox tradeship.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes MoMMIs phantom action buttons</li>
+				<li class="bugfix">Fixes silicon album showing duplicated info when examining a photo</li>
+			</ul>
+
+			<h2 class="date">2018.02.23</h2>
+			<h3 class="author">DrCelt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds the security ushanka - it goes extremely well with the warden winter coat. (should have been in the winterjacket PR)</li>
+				<li class="tweak">Rejiggles a couple of heat conductivities with neorussian outfits; fixes some wintercoats not properly displaying stuff under it,</li>
+				<li class="rscadd">adds ski mask (literally the same as a balaclava but a different name and can protect you from the cold)</li>
+				<li class="tweak">changes balaclava to have the correct flags for covering the full head except eyes.</li>
+			</ul>
+			<h3 class="author">HarseTheef updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Makes the shuttle-related sounds 25% quieter.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds the Antique Matter Synthesizer, an item engineers can buy to convert massive amounts of power into items.</li>
+				<li class="rscadd">Traders can now latejoin (up to three slots). Doing so will hurl them through space toward the outpost, so be sure you can navigate the asteroid if you choose this option!</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed cats magically killing mice through solid objects.</li>
+			</ul>
+			<h3 class="author">Zth-- updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added a prices mode for the custom vending machine that allows you to modify the machines' prices on the fly. This feature can be toggled from the panel (where the wires are).</li>
+				<li class="rscadd">Added a insert items mode. Same as prices mode, it lets you add items by slapping them on the machine. You can also toggle this from the panel.</li>
+				<li class="rscadd">Remember that the panel can be secured by slapping your ID on the machine and linking it to your account.</li>
+			</ul>
+
+			<h2 class="date">2018.02.22</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug that caused only the first implant to show up on secHUDs.</li>
+			</ul>
+			<h3 class="author">DrCelt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Lowers breathing cold air damage threshold to -53c instead of -13c</li>
+			</ul>
+			<h3 class="author">Jared-Fogle updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Instead of being able to move freely, action buttons can now be dragged on top of each other to swap places.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">PDAs are now equipped with a multicast function. Select department message below messenger to send to an entire department at once using the new Centralized Automated Messaging Operator.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed the jaunt-blocking property of holy water. Also, since holy tiles block jaunt now, the chapel won't be possible to jaunt through.</li>
+				<li class="bugfix">Cyborgs deathgasp properly on death now.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes the supply cyborg automatic ore loader missing its icon</li>
+				<li class="rscdel">Removed the pre-roundstart bite/kick simulator</li>
+			</ul>
+
+			<h2 class="date">2018.02.21</h2>
+			<h3 class="author">DrCelt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="soundadd">adds sound for SPS when someone dies.</li>
+			</ul>
+			<h3 class="author">Jared-Fogle updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed the built-in welding mask being on the Vox roboticist suit instead of the helmet.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Our medbay technology has undergone an upgrade. You no longer need a separate console for full body scanners, sleepers, or the mancrowave.</li>
+				<li class="rscadd">Defficiency now has a mancrowave and several unique black sprites (NanoMedPlus, Chemistry Smartfridge, Bloodbank Smartfridge, Roller Bed, Bioprinter/Prosthetics Fab, Sleeper, Mancrowave, Full Body Scanner). The CMO locker also now spawns a special extra suit slot item.</li>
+				<li class="tweak">Replaced box of marauder parts at the trader vendor with a destination disk for a mecha graveyard full of wonderful salvageable robotics stuff. Bring your toolbelt and a suit!</li>
+				<li class="tweak">Replaced bottle of nanobots, bottle of rezadone, and bottle of peridazon with a box containing all three</li>
+				<li class="rscadd">Added the Wonderful Wardrobe. It contains 20 random Spessmart approved clothing items.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Lizards eat cockroaches now. Player-controlled ones can also ventcrawl and hide like mice can.</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Rebalanced starting power to last 15-20 minutes instead of 90 minutes by reducing starting charge on SMES from 1,000,000 to 200,000.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed MoMMIs getting no action buttons for their active tools/hats</li>
+			</ul>
+
+			<h2 class="date">2018.02.20</h2>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Industrial vaporizer removed from EngiVend to TraderVend for 100 credits and comes preloaded with 1000 vapor salts.</li>
+				<li class="tweak">The entire UI is less clunky and access is only required to lock/unlock or dump. Now collapse/uncollapse with altclick()</li>
+				<li class="tweak">The vaporizer is no longer wrenchable. Instead, it's simply always anchored when deployed.</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Material synthesizers can no longer scan stuff like leather or cardboard.</li>
+			</ul>
+			<h3 class="author">Zth-- updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed circuit imprinter printing with less than needed materials</li>
+			</ul>
+
+			<h2 class="date">2018.02.19</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Spider-bot speech is in the "siliconsay" style, has the robotic speech bubble and tcomms shows them as "machine" instead of "unknown."</li>
+				<li class="rscadd">Spider-bots have a verb to turn their radio listening on and off.</li>
+				<li class="tweak">Spider-bots' ability to launch certain "fun" items works and launches properly.</li>
+				<li class="bugfix">Fixed spider-bots being able to pick up anchored objects.</li>
+				<li class="tweak">Spider-bots take damage from EMPs and have a small chance to explode.</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Table parts no longer delete tables when placed atop each other.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Fixes silicons being unable to check the information of photos took by their cameras</li>
+			</ul>
+
+			<h2 class="date">2018.02.18</h2>
+			<h3 class="author">DrCelt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">People wearing shorts or similar articles of clothing can now be defibbed without taking their shorts off.</li>
+				<li class="tweak">Beakers are now on the layer above pills.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Packedstation hydroponics windoors require hydroponics access now instead of no access.</li>
+				<li class="bugfix">Packedstation service access requirements altered a bit to accommodate minimal access mode. (In case that's ever enabled.)</li>
+				<li class="rscadd">Divided Packed's Central Primary hall area a bit. There are now fore and aft primary hallway areas.</li>
+				<li class="rscadd">The Packed Engineering break room/lobby has been split off into its own area.</li>
+				<li class="rscadd">Added some air alarms and fire alarms to Packed.</li>
+				<li class="rscadd">Added a bag of sugar to the kitchen coldroom on Packed.</li>
+				<li class="tweak">Trader outpost air alarms require trader access now.</li>
+			</ul>
+
+			<h2 class="date">2018.02.17</h2>
+			<h3 class="author">Cisrox updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds prescription contact lenses, and polarized contact lenses that serve as sunglasses.</li>
+				<li class="rscadd">Adds nanite contact lenses that you can use to dye your eyes.</li>
+				<li class="rscadd">Adds a contact lens crate to cargo.</li>
+			</ul>
+			<h3 class="author">DrCelt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Wooden cabinets cannot be welded anymore.</li>
+				<li class="rscadd">adds white gloves to premium goods (insert coin) in autodrobe</li>
+			</ul>
+			<h3 class="author">HarseTheef updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds the Asthma disability, albuterol, and Inhalers</li>
+			</ul>
+			<h3 class="author">Jared-Fogle updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added a built-in welding mask toggle to the Vox Roboticist Pressure Helmet and Plasmaman Science Helmet.</li>
+			</ul>
+			<h3 class="author">Kammerjunk updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Sand decal will now only be added if it isn't already in the contents of the turf.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a couple Deff scrubbers that were facing the wrong way.</li>
+				<li class="bugfix">Put brig access requirements on the Deff brig exterior access buttons.</li>
+				<li class="tweak">Projectile attacks made by player-controlled simple mobs are now logged.</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Slapping vending machines with an ID to pay for a product now works again. That includes the 'Pay' button and touching your ID to the physical machine.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tgs">Cyborgs can now take and upload photos to newscasters. If connected to an AI (Album HUD icon green) any photo taken by them is automatically sync'd with them. Pulsing their camera wire forces them to sync photos with their connected AI.</li>
+				<li class="tweak">The pAI positioning system(pPS) UI is now consistent with all other GPS</li>
+				<li class="tweak">The pAI positioning system(pPS) will now support tags up to 5 digits</li>
+				<li class="rscadd">Ports the Cyborg GPS from TEEGEE and adds it to Supply Cyborgs</li>
+				<li class="tweak">Supply Cyborgs mining satchel is now called 'automatic ore loader'. It can be toggled on to automatically pick up AND insert ore inside a nearby ore box(Sprite by Blithering).</li>
+			</ul>
+
+			<h2 class="date">2018.02.16</h2>
+			<h3 class="author">DrCelt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">fixes bug where plasmamen don't cool down due to accidental feature loss</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added sounds, feedback and a slight delay to emergency cyborg restart boards.</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Meta Vox Tradeship has less windows over its trading tables so you can access all the tables.</li>
+				<li class="rscadd">(Bagel) Adds chillbug packets to Vox Botany</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Hypnotise costs 10 blood again.</li>
+				<li class="rscadd">Vampires now start with 10 blood.</li>
+			</ul>
+
+			<h2 class="date">2018.02.15</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">You no longer track footprints while riding a vehicle.</li>
+				<li class="bugfix">Fixed admins not being able to jump to oathbreaking mimes.</li>
+			</ul>
+			<h3 class="author">Zth-- updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">All vending machines start connected to the cargo account.</li>
+			</ul>
+
+			<h2 class="date">2018.02.14</h2>
+			<h3 class="author">Jared-Fogle updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Vox Armalis breathe nitrogen instead of oxygen, but unlike other Vox will not get oxygen poisoning.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">New fish recipes (3 shrimp, 3 catfish, 4 salmon, 1 shark, 1 glo-fish, 2 goldfish)</li>
+				<li class="tweak">Shark detoothing now gives 10 teeth.</li>
+				<li class="tweak">Lowered chance for dud eggs to 10% (from 25%)</li>
+				<li class="rscadd">Clownfish now have a chance to make your fish tank honk each tick.</li>
+				<li class="rscadd">Clownfish now honk on hit.</li>
+				<li class="rscadd">Conduction plates can now be built from the board provided in the exotic fish crate. Any fishtank on top of said plate will generate power for the grid based on number of electric eels and part tier. (You can also duplicate them at the general fab and flatpack fab)</li>
+				<li class="rscadd">New fish available at the Vox trader vendor: sea devil. They'll plant new fish eggs for you automatically and occasionally eat a fish. They do not lay eggs but can be harvested whole to move to a new tank.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Xenomorph disarms now take into account the targets armor.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Mouse language restored.</li>
+				<li class="tweak">Drink containers with the right acid are capable of filling a soldering iron now. Previously this didn't work.</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added security sunglasses. Can be found in secvends and sunglasses crates.</li>
+				<li class="imageadd">Added red sunglasses.  Sprites by Blithering! Can be found in sunglasses crates.</li>
+			</ul>
+
+			<h2 class="date">2018.02.13</h2>
+			<h3 class="author">DrCelt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes decoy balloons examine text not appearing</li>
+			</ul>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Xenobio slime potions are now tiny items.</li>
+				<li class="tweak">The colors of some sec hud icons have been changed to better fit their respective jobs.</li>
+				<li class="imageadd">Science icons are now pink/purple and scientist/RD icons are now a vortex shape.</li>
+				<li class="imageadd">Cargo and mining are now brown.</li>
+				<li class="imageadd">Chemist is now red/white.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Windoors that are destroyed will now drop their airlock electronics when destroyed by melee attacks too instead of just when destroyed by projectiles.</li>
+				<li class="tweak">Windoors now take 2 cables to make to match how many they drop, up from 1.</li>
+				<li class="bugfix">Newly constructed windoors are now compatible with the "one access" setting on airlock electronics.</li>
+				<li class="bugfix">Newly constructed windoors should now inherit fingerprints from the assembly they're made from.</li>
+				<li class="bugfix">Automatic shuttle calling no longer counts calling devices at Centcomm.</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Emagging vending machines now hacks and unlocks them</li>
+				<li class="bugfix">Vending machines can now be emagged again</li>
+			</ul>
+
+			<h2 class="date">2018.02.12</h2>
+			<h3 class="author">DrCelt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes runtime on trying to build a console with a soldered circuit board</li>
+				<li class="bugfix">Fixed bots being able to open blast doors</li>
+			</ul>
+			<h3 class="author">abernd updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Flamethrowers now do 50% damage to blobs (upwards from 10%)</li>
+				<li class="tweak">Flamethrowers can now actually kill blobs</li>
+			</ul>
+
+			<h2 class="date">2018.02.11</h2>
+			<h3 class="author">DrCelt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Crank cell chargers now update the cells icon</li>
+				<li class="rscadd">Lightning spell now does damage properly.</li>
+			</ul>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed charger's sprite not showing their status at 50% to 75% charge.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Photo albums can store 50 photos now, up from 7.</li>
+			</ul>
+
+			<h2 class="date">2018.02.09</h2>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Every non-combat(Security, Combat, Syndicate)/engineering cyborg is now equipped with a mini extinguisher.</li>
+				<li class="rscdel">Removed the big extinguishers from both Standard and TG17355 Cyborgs.</li>
+				<li class="rscadd">Fixed ghosts being unable to shift+click the AI</li>
+			</ul>
+
+			<h2 class="date">2018.02.08</h2>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed syringes having a bloodbag icon over them when they had a small amount of reagents in them.</li>
+				<li class="rscadd">Added a few butterfly knifes. Upon flipping them closed they summon a "butterfly" for 20 seconds but only one at a time. It takes 25 seconds to recharge.</li>
+				<li class="rscadd">The butterfly will fight along side you. It does about 25 damage per hit.</li>
+				<li class="rscadd">A syndicate butterfly knife can be bought in the syndicate uplink for 7TC.</li>
+				<li class="rscadd">A crystal butterfly knife can be bought from the wizard spellbook for 20 points.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The telecommunications network monitor can now perform a traceroute to help you diagnose where the system breakdown is.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Patients zero of a viral outbreak no longer get a roll for natural immunity to that virus.</li>
+			</ul>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The emergency defibrillator will now give a proper reason for failing to revive people.</li>
+			</ul>
+			<h3 class="author">The-Whargoul updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Gave Plasmamen NO_HUNGER.</li>
+				<li class="tweak">Removed Plasmamen's ability to eat solid food and medication.</li>
+			</ul>
+			<h3 class="author">TurboGay updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">allows for construction permits to fit in wallets</li>
+			</ul>
+
+			<h2 class="date">2018.02.07</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug that prevented HUDs from finding records for people wearing no ID.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Can now build thrones from wood.</li>
+				<li class="rscadd">Can now build chests from wood and plasteel. The plasteel has to be in your immediate vicinity or in your off-hand.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Gave MMIs and posibrains dexterity. AFAIK the only thing this will affect is the mecha engineering switchtool, which MMI and posi piloted Clarkes will now be able to make full use of.</li>
+				<li class="tweak">Constructs are now shock-immune.</li>
+			</ul>
+
+			<h2 class="date">2018.02.06</h2>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added the directed laser heater. It heats reagents in containers when placed on it. Use alt click or the right click verb to toggle it on and off.</li>
+				<li class="rscadd">Added the cryonic wave projector. It cools reagents in containers when placed on it. Use alt click or the right click verb to toggle it on and off.</li>
+			</ul>
+
+			<h2 class="date">2018.02.05</h2>
+			<h3 class="author">DrCelt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Botany tray lids now properly block bees.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">You can now buckle another person into a wheelchair, assuming they are otherwise valid to sit in it. This change does not extend to the multiman wheelchair.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Packedstation: The escape shuttle brig turfs were fixed so "escape alive and free" objectives should properly fail now if the antagonist is on them and restrained.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes Mecha Hitler holocausting the whole server with infinite german explosions.</li>
+			</ul>
+
+			<h2 class="date">2018.02.02</h2>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">You can no longer deathwhisper over radio</li>
+			</ul>
+
+			<h2 class="date">2018.01.31</h2>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Clipboards will now properly update when dumped into a cabinet</li>
+				<li class="bugfix">Clipboards now properly show the last item on top instead of the item last removed</li>
+				<li class="bugfix">Fixed the headset whisper bug</li>
+			</ul>
+			<h3 class="author">Pomf123 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Non-Admin players that did not join the round can no longer vote for the next map.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Ports the 'Toggle Floor Bolts' AI verb from TG</li>
+				<li class="rscadd">Added a tile painter to the default service cyborg loadout.</li>
+				<li class="rscadd">Ports the portable seed extractor from TG. It doubles ad both plant bag and seed extractor but it can only extract at most two seeds per crop.</li>
+				<li class="rscdel">Removed the plant bag from the H.U.E.Y. upgrade.</li>
+				<li class="rscadd">Added the portable seed extractor to the H.U.E.Y. upgrade.</li>
+				<li class="bugfix">Fixes the chaos blade having no back icon while possessed.</li>
+				<li class="rscadd">Adds the reagent chill wax to the peace hypospray.</li>
+				<li class="rscadd">Added a chance to get a random cyborg upgrade(minus the magnetic gripper) as premium item in the Vox Supply.</li>
+			</ul>
+
+			<h2 class="date">2018.01.30</h2>
+			<h3 class="author">Arthurdentist updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added a new premium costume to the security vendors, a British police uniform.</li>
+			</ul>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">RCDs can fit in hazard vests.</li>
+				<li class="soundadd">Changing security levels will play a notification sound.</li>
+				<li class="bugfix">Made the virology machines and account database (un)wrenchable.</li>
+				<li class="tweak">Updated the medical sleeper UI.</li>
+			</ul>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed chill bugs colonizing empty apiaries from turning into regular bees.</li>
+				<li class="rscadd">Added a transparent animated holographic ray between an holopad and its AI hologram</li>
+				<li class="rscadd">EMPs turn off AI holograms</li>
+			</ul>
+			<h3 class="author">DrCelt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Did stuff!</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Tradervend no longer lists each option twice, but instead gives five choices (up from four)</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed emergency flares not lighting cigarettes, thermite, etc.</li>
+				<li class="tweak">Added some unnecessary examine text to flares too.</li>
+			</ul>
+
+			<h2 class="date">2018.01.29</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed some manuals not printing on the library computer.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Fixes charcoal not appearing in the upgraded cyborg hypospray reagent list.</li>
+			</ul>
+
+			<h2 class="date">2018.01.28</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">The Emergency Shuttle should now always be playing its hyperspace warm up sound.</li>
+				<li class="experiment">hey I'm back.</li>
+				<li class="tweak">Slightly increased the ratio of honey found in honeycomb, compared to reagents from plants.</li>
+				<li class="tweak">Slowed down the rate at which your body metabolizes honey.</li>
+				<li class="rscadd">Added Chill Bugs, a new species of bees. One or two packets of those can be found on the Vox outpost. Those bugs imported from Vox worlds need N2 to breath and suffocate in Oxygen. They produce a honey-like substance called Chill Wax, and while it doesn't heal as efficiently as regular honey does, it has the strange property of causing people who ingest it to become unable to perform any act of violence. Incidentally, Chill Bugs live up to their name and don't get angry ever, and there are only a handful of reagents that can raise their hive's toxicity, which makes raising them much easier than raising bees, if you can set up proper atmos.</li>
+				<li class="imageadd">New sprite for the beekeeping book</li>
+			</ul>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Crawling now requires you to stand still for exactly 1 seconds before moving. Missing/damaged limbs significantly increase that delay. Hyperzine counteracts those adverse effects. Additionally, once you've began to crawl in a certain direction, you can no longer change said direction.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes a runtime when examining cyborgs with activated grippers and no gripped item.</li>
+				<li class="rscadd">Adds the staff of nullmancy, heavenly chain, honk rod, french rod, blessed cane and septerion morningstar as holy weapon skins for the null rod.</li>
+				<li class="rscadd">Adds the chaos blade, a talking "holy" weapon, as a rare drop to temple and war digsites.</li>
+				<li class="rscadd">Added "Martian" as a staff of change mode.</li>
+				<li class="rscdel">Removed "Horror" from changelings from the staff of change's "Human" setting.</li>
+				<li class="bugfix">Borgs/MoMMIs will now self-destruct themselves after being transformed by a staff of change/admin panel if their brain is from a jobbanned player.</li>
+				<li class="bugfix">the Monkey mode in the staff of change will now properly transform their targets in their respective primite species AND transfer their DNA/damage taken/intent properly.</li>
+			</ul>
+
+			<h2 class="date">2018.01.25</h2>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">You can now insert the key of a vehicle into the vehicle itself to allow it to run. The old method of holding the key in hand at all times still works as well. This applies to vehicles like janicarts, firebirds, gigadrills, etc.</li>
+			</ul>
+
+			<h2 class="date">2018.01.24</h2>
+			<h3 class="author">HarseTheef updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Reworks Chloral Hydrate to only apply a knockdown when above 10u and apply a confused/drowsy state for all amounts below 10u.</li>
+			</ul>
+			<h3 class="author">PromethTK11 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Packed: Fixed a lot of air alarms/vent/scrubbers issues on Packed, you can breath now.</li>
+				<li class="tweak">Packed: You shouldn't be able to crowbar the AI core blast-door now.</li>
+				<li class="rscadd">Packed: Added an evidence locker to brig for all your noir needs.</li>
+				<li class="bugfix">Packed: The flash of the brig cells now should work properly.</li>
+				<li class="rscadd">And various Packedstation misc fixes!</li>
+			</ul>
+
+			<h2 class="date">2018.01.23</h2>
+			<h3 class="author">Intigracy updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">"This is a test changelog (please don't mind it)."</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Boozeomats and soda dispensers can now dispense ice again</li>
+			</ul>
+			<h3 class="author">PJB3005 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">"Charcoal works 5x faster now, remains in the body for much longer, doesn't delete itself on vomiting (but still causes vomiting) and it automatically deletes itself when all reagents are gone."</li>
+			</ul>
+			<h3 class="author">gbasood updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Buttbots now actually make fart noises when they parrot someone they hear.</li>
+			</ul>
+
+			<h2 class="date">2018.01.22</h2>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Speaking over a headset or radio will now cause your local speech to appear before the radio message.</li>
+				<li class="bugfix">Damage to telecomms will no longer cause your local messages to be delayed if you are standing in range of a radio. However, the radio transmission will still be delayed, and appear separately.</li>
+			</ul>
+
+			<h2 class="date">2018.01.21</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Ghosts with the appropriate HUDs will be able to look at people's security and medical records by examining them.</li>
+			</ul>
+			<h3 class="author">PJB3005 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Did stuff!</li>
+			</ul>
+			<h3 class="author">unid15 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Ring of fire now rapidly expands outwards from the wizard when initially cast</li>
+			</ul>
+
+			<h2 class="date">2018.01.20</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">P-ray scanners are now 10 times as expensive to build compared to the T-ray scanners.</li>
+			</ul>
+
+			<h2 class="date">2018.01.19</h2>
+			<h3 class="author">CptWad updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">I am back from the dead! With bugfixes!</li>
+				<li class="rscadd">In order to make showers visible in shower curtains, added two new types of showers that allow visibility (click-ability) of shower heads while in the open position.</li>
+			</ul>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="spellcheck">Fixed several typos.</li>
+				<li class="tweak">Made antag (cult/thrall/rev) (de)conversion messages bigger.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Alt-clicking almost any binary atmos device (pumps, valves, gates) will toggle it on/off. Exceptions are TEG circulators, MSGS, DP Vents.</li>
+				<li class="rscadd">Alt-clicking a pipe segment that isn't wrenched down will rotate it.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Anti toxin now covers the botany toxins as well</li>
+			</ul>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">You can no longer hulk ad infinitum by using a clean SE while hulking.</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">added black bedsheets and black soft caps</li>
+				<li class="imageadd">sprites by Blithering</li>
+			</ul>
+
+			<h2 class="date">2018.01.18</h2>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Enthralled people can see other thralls from the same vampire.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">You can now put mice on your head.</li>
+			</ul>
+
+			<h2 class="date">2018.01.17</h2>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Raised the amount of phazon you get per vein from 2 to 3.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">More leather recipes added.</li>
+				<li class="rscadd">The crafted leather items now inherit the name of the source of the leather. Corgi leather cowboy hats, Cat leather shoes, et cetera.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Damage on a limb now has only a chance to widen an existing wound rather than doing it all the time.</li>
+				<li class="bugfix">Once installed, robot jetpacks now function in MoMMIs as they were supposed to. Godspeed, little crabs.</li>
+			</ul>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added fishtanks! Construct your own fishtank with glasses, metal and a circuit board. Breed fish with eggs from cargo. Catch fish, make your own fish-based recipes! Sprites courtesy of Blithering. Original fishtanks on Paradise courtesy of TheFalseIncarnate, original work on fishtanks courtesy of jakmak.</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added black crayons.</li>
+				<li class="tweak">Crayon boxes can now hold 7 crayons and include a black crayon.</li>
+				<li class="tweak">Hand crank charger now adds 10 times more power units per crank</li>
+			</ul>
+
+			<h2 class="date">2018.01.16</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">NT default and Robocop core boards can be printed using the circuit imprinter.</li>
+			</ul>
+			<h3 class="author">HarseTheef updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Removes the blood cost from Hypnosis for vampires.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Vampire blood costs were adjusted. Bat Form and Shadowstep now actually spend blood and cost 20 and 10 usable blood respectively. Summon Bats costs 50 usable blood.</li>
+				<li class="rscadd">Improved vamp rejuvenate now has a message telling you about the effect.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes verb holders falling out of your pocket.</li>
+			</ul>
+
+			<h2 class="date">2018.01.12</h2>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">You can now lock direction in a mech</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Chemical effects that cause disfigurement (acid, mainly) and undo disfigurement (rezadone) should work again.</li>
+				<li class="rscadd">Added messages to a few disfigurement/un-disfigurement events.</li>
+			</ul>
+			<h3 class="author">Unknown-as-Captain updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Cat ears give slow brain damage over time.</li>
+			</ul>
+
+			<h2 class="date">2018.01.09</h2>
+			<h3 class="author">Cisrox updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds unique color combinations for dual e-swords. The colors of the e-swords forming the dual e-sword determines this.</li>
+				<li class="rscdel">Deleted dualesword1 sprite that was serving as a placeholder, it has been replaced by the new colors.</li>
+			</ul>
+			<h3 class="author">EdXbtkOEwGw updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Properly implemented glide_size on a lot of things. This means, for example, dragging a corpse won't make it look like it's teleporting everywhere, ghosts won't rollerskate in the air after haunting a slow person, plus smooth conveyor belts, smooth space inertia, and other things. If you still notice old no-glidesize behavior of stuff teleporting around, make a bug report.</li>
+			</ul>
+
+			<h2 class="date">2018.01.08</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Defficiency: Fixed up some misplaced atmos pipes in medbay, the bar backroom, and cargo maint.</li>
+				<li class="bugfix">Bagelstation: The kitchen's mail was being sent to the janitor's closet.</li>
+			</ul>
+			<h3 class="author">Sooose updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Increased slime tiles generated from green slime reaction to 20.</li>
+				<li class="tweak">Increased max slime tile stack size to 60.</li>
+			</ul>
+
+			<h2 class="date">2018.01.06</h2>
+			<h3 class="author">Jared-Fogle updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fix eye protection being lowered when toggling the welding goggles back on.</li>
+			</ul>
+
+			<h2 class="date">2018.01.04</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Slight correction to the checks for putting monkeys into the monkey recycler.</li>
+			</ul>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Add religious converting. Chaplains will be able to ask people to convert to their religion.</li>
+				<li class="rscadd">Admins are now able to bus in religions and subtle PM all followers of a particular religions, as well as removing people from their religions.</li>
+			</ul>
+
+			<h2 class="date">2018.01.03</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Mops should work now.</li>
+			</ul>
+
+			<h2 class="date">2017.12.31</h2>
+			<h3 class="author">Cyadox updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Quick-equip hotkey can now swap items in occupied slots.</li>
+				<li class="bugfix">Stopping surgery by dropping or storing your tool now harms the patient</li>
+			</ul>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Diagnostic HUDs can be printed from the protolathe.</li>
+				<li class="rscadd">Ghosts can use the diagnostic HUD.</li>
+				<li class="tweak">Expanded the list of items the security hardsuit can hold. If the security armor can hold it, the hardsuit can too.</li>
+				<li class="rscadd">AIs can now track mechs.</li>
+			</ul>
+			<h3 class="author">HarseTheef updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Increased the tracking ability of the hand held tracking implant tool</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Made chemical heating less of a pain in the ass.</li>
+				<li class="rscadd">Can now sell plasma via cargo again.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Clone damage on slimepeople can be healed now.</li>
+				<li class="spellcheck">Improved the clarity of cult bonus objectives.</li>
+				<li class="bugfix">A breathing bug for non-human mobs was fixed. Tiny concentrations of CO2 and plasma should no longer kill animals dead.</li>
+				<li class="bugfix">A similar bug was causing space heaters and AC units to be unduly effective.</li>
+			</ul>
+
+			<h2 class="date">2017.12.28</h2>
+			<h3 class="author">Cyadox updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds an alternative MoMMi Prime sprite, Credit to Skowron.</li>
+			</ul>
+
+			<h2 class="date">2017.12.27</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added the diagnostic HUD: lets the user see integrity and power cell charge for cyborgs and mechs. A couple of them can be found in the roboticist's locker.</li>
+				<li class="rscadd">Ghosts can use the security HUD.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Aliens can only pickup facehuggers now.</li>
+				<li class="rscadd">Martian new HUD courtesy of realestestate</li>
+			</ul>
+			<h3 class="author">unid15 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Large amounts of blunt brute damage (16 and more) will gib limbs, instead of severing them. Gibbed limbs are destroyed, but heads still leave an intact brain.</li>
+			</ul>
+
+			<h2 class="date">2017.12.26</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Due to their inherent slowness, alien queens aren't affected by pain slowdown any longer.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds the Service Cyborg H.O.N.K. upgrade! It comes with a bikehorn, rainbow stamp, rainbow crayon, sound synth and a water flower ready for your everyday fun times.</li>
+			</ul>
+
+			<h2 class="date">2017.12.24</h2>
+			<h3 class="author">PJB3005 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed NTSL scripts scrambling characters like >. You can make a script that adds meme arrows to everything now.</li>
+			</ul>
+
+			<h2 class="date">2017.12.22</h2>
+			<h3 class="author">Arthurdentist updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added two new spells that will be available for wizards to purchase on Christmas Day</li>
+			</ul>
+
+			<h2 class="date">2017.12.20</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Bio suits will block plasma like they were supposed to.</li>
+			</ul>
+			<h3 class="author">Sooose updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Curtains now start anchored and can be (un)secured with a screwdriver.</li>
+			</ul>
+			<h3 class="author">yclatious updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Reduced prices on soda machines</li>
+			</ul>
+
+			<h2 class="date">2017.12.19</h2>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Cyborg upgrades (Medical MK-2, Service Cooking, Service H.U.E.Y.) will upgrade both chem/service gripper properly now.</li>
+			</ul>
+
+			<h2 class="date">2017.12.18</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Security cyborgs now have a hailer for your targeted hailing needs.</li>
+			</ul>
+			<h3 class="author">Unknown-as-Captain updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">MoMMIs can scan phazon.</li>
+			</ul>
+
+			<h2 class="date">2017.12.17</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Buffed the service borg beer synthesizer to produce 1u each tick (previously 0.3u)</li>
+				<li class="tweak">Trying to apply tape to doors won't open said doors anymore.</li>
+				<li class="bugfix">Can't stack multiple tapes on doors anymore.</li>
+			</ul>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added sodium polyacrylate. It absorbs water and spacelube not only in containers but on floors as well. Made with 3u carbon, 3u hydrogen, 1u sodium, and 2u oxygen.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds Rad patches. A jumpsuit accessory that changes color when it absorbs radiation</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Carbon mobs will now receive damage slowdown proportional for their maximum health, instead of always being based on 100.</li>
+			</ul>
+			<h3 class="author">PromethTK11 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Packed: Now the hyperspectral imager is on place on the outpost, and there are some tools for scientist now.</li>
+				<li class="tweak">Packed: Elite-syndie shuttle works properly now.</li>
+				<li class="tweak">Packed: Secway keys added to the warden locker.</li>
+				<li class="tweak">Packed: Scrubbers now scrub out plasma by default.</li>
+				<li class="tweak">Packed: And a lot of misc fixes/changes!</li>
+			</ul>
+			<h3 class="author">Unknown-as-Captain updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes mismatched glide_sizes for vehicles (possibly other things as well). This means wounded people riding vehicles won't wobble all over the place anymore.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Supply cyborgs now have access to both cargo and mining radio instead of just cargo.</li>
+				<li class="rscadd">Ghosts can now examine closed lockers to check its contents</li>
+			</ul>
+			<h3 class="author">yclatious updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Reduced prices on the Off World Off License vendor, enjoy lower prices for lower quality beer.</li>
+			</ul>
+
+			<h2 class="date">2017.12.11</h2>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Turrets now check if you are stunned rather than if you are lying down before firing at you</li>
+			</ul>
+
+			<h2 class="date">2017.12.10</h2>
+			<h3 class="author">PJB3005 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Lowered the find rate on the "crystal" xenoarch artifact. It did literally nothing except infuriate xenoarchs.</li>
+			</ul>
+
+			<h2 class="date">2017.12.09</h2>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The telecommunications network monitoring console can now boost the signal of telecomms machines affected by ionospheric interference, rebooting them immediately. This will cause increased temperature and power expense for five minutes.</li>
+				<li class="rscadd">The network monitor will also remotely display machine integrity.</li>
+			</ul>
+			<h3 class="author">Unknown-as-Captain updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Increases energy cost of airlocks made with with borg RCDs</li>
+				<li class="rscadd">Re-added 2012 flashbang box description</li>
+				<li class="tweak">You now get 40 bananium/phazon floortiles per sheet, up from 4</li>
+				<li class="rscdel">Cyborg material synthetizers cannot dupe bananium or phazon. You can still synthetize it by using solid matter cartridges.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds the instrument synthesizer to the default service cyborg loadout.</li>
+				<li class="rscadd">Adds the H.U.E.Y. upgrade to service cyborgs! It comes with a mini hoe, clippers, plant bag, plant analyzer and makes the service gripper able to handle seeds and glass containers.</li>
+				<li class="tweak">Removes the botanics-related upgrades from the cooking upgrade and makes it cheaper.</li>
+				<li class="rscadd">You can now drag and drop a piece of meat on cloning pods to make them suck and process every piece of meat in the same tile as the one being dragged(this feature can't be used by silicons).</li>
+				<li class="rscadd">Kicking a cloning pod now has 5% chance to unlock and eject its occupant.</li>
+			</ul>
+
+			<h2 class="date">2017.12.07</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Space suits are now orderable from cargo.</li>
+				<li class="tweak">Science access lets you open exotic seeds crates (hydroponics access still works).</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">You may now drag crates onto disposal bins to return your emptied mail.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Bananas now have potassium in them</li>
+			</ul>
+			<h3 class="author">RealestEstate updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Did stuff!</li>
+				<li class="rscdel">did other stuff!</li>
+			</ul>
+
+			<h2 class="date">2017.12.06</h2>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">More cargo shuttle fixes. Metaclub cargo shuttle no longer steals windows.</li>
+			</ul>
+			<h3 class="author">Pomf123 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added AOL You got mail.wav to disposals when packages arrive.</li>
+			</ul>
+			<h3 class="author">ShiftyRail updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Add a cancel option to text prompts which previously had none.</li>
+			</ul>
+
+			<h2 class="date">2017.12.05</h2>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Deff cargo shuttle now no longer tries to run over the kitchen</li>
+			</ul>
+
+			<h2 class="date">2017.12.03</h2>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Feral ghouls are fixed</li>
+				<li class="tweak">It is now easier to become a ghoul somewhat. Less uncurable brain damage.</li>
+			</ul>
+			<h3 class="author">unid15 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed maploader being very laggy and crashing the server when loading away missions</li>
+			</ul>
+
+			<h2 class="date">2017.12.02</h2>
+			<h3 class="author">Blithering updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Did stuff!</li>
+				<li class="rscdel">did other stuff!</li>
+			</ul>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added loot crates. A monthly subscription for $30 you can buy in the cargo merch computer.</li>
+				<li class="rscadd">Added the measuring tape, core sampler, and phazon glow stick to the list of anomaly designs in the protolathe.</li>
+				<li class="rscadd">Added the phazon glowstick. It changes to random colors when you shake with it or interact with it. It can be worn on jumpsuits like other accessories. It will not change colors while on jumpsuits. (This is a feature not a bug)</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Having a cane on you when your leg's broken now helps you move a bit faster than otherwise.</li>
+				<li class="rscadd">Activated charcoal recipe added. 2 parts acid, 1 part carbon. 450 degrees C</li>
+				<li class="rscadd">You can now crawl by clicking on a turf in proximity when on the ground but not unconscious or dead and have arms</li>
+				<li class="tweak">Bunsen burner buffed by 150%</li>
+			</ul>
+
+			<h2 class="date">2017.11.28</h2>
+			<h3 class="author">unid15 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added a new vault</li>
+			</ul>
+
+			<h2 class="date">2017.11.26</h2>
+			<h3 class="author">unid15 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Text written on paper with crayons is now colored again</li>
+				<li class="tweak">Text written on paper is no longer permanently lost if the act of writing somehow fails, only if you press the 'Cancel' button</li>
+			</ul>
+
+			<h2 class="date">2017.11.18</h2>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Paramedic locker contents have been shuffled a bit.</li>
+				<li class="rscadd">Paramedic EVA locker now has two internalbleeding kits. (8 total bio foam injectors)</li>
+				<li class="rscdel">Removed some of the extra paramedic gear leaving two complete sets of outfits.</li>
+				<li class="rscadd">Paramedic webbing added to the EVA locker.</li>
+				<li class="imageadd">The magboots in the paramedic EVA locker now have paramedic colors.</li>
+				<li class="rscadd">Added the precision grasper. It functions like a hemostat at double speed and allows you to retrieve implanted things 100% of the time when trying to fish them out.</li>
+				<li class="rscadd">Added the diamond surgical drill. An advanced version of the surgical drill. It's extremely fast like other diamond drills.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Radiation closets now spawn with a single Geiger counter.</li>
+				<li class="rscadd">Geiger counters fit on tool-belts.</li>
+			</ul>
+			<h3 class="author">unid15 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed admins not being able to modify lighting parameters on objects</li>
+				<li class="experiment">Buildmode now supports area modification. While in build-adv mode, middle-click on a turf twice to begin expanding its area. This works like the station's blueprints, but also supports click-dragging to convert large amounts of turfs quickly. Middle-click anywhere outside of the edited area to stop. Areas may now be spawned from paths as well, just like any other object, using either "spawn" or buildmode.</li>
+				<li class="rscadd">Added a new disability - veganism. It can be received either randomly at roundstart, by enabling it in your character preferences, through a new stage 2 virus effect, or through genetics. Also added a "veganism" / "animal rights" religion which automatically grants this disability.</li>
+				<li class="rscadd">Eating animal products, meat, milk, honey and blood as a vegan will make you nauseous, and further continuing to do so will cause minor toxin damage. Vegan vampires are unable to drink blood, if turned vegan after becoming a vampire.</li>
+			</ul>
+
+			<h2 class="date">2017.11.16</h2>
+			<h3 class="author">N3X15 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">Disables one-way window construction.  Should help with performance.</li>
+			</ul>
+
+			<h2 class="date">2017.11.12</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Carded AIs will no longer require a powered APC.</li>
+				<li class="rscadd">Personal AIs' wirejacks can now also close airlocks.</li>
+			</ul>
+			<h3 class="author">MadmanMartian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Can now fold up plastic bags when empty so they can fit in smaller areas such as pockets</li>
+			</ul>
+
+			<h2 class="date">2017.11.11</h2>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">You may now lube up TEG circulators (up to 25u each) to increase power output. Power growth is linear up to 200% bonus based on flow capacity.</li>
+				<li class="rscadd">Lube in circulators will slowly heat until converting into toxic waste.</li>
+				<li class="rscadd">Degrease engine by pouring in ethanol. Ethanol cancels out toxic waste.</li>
+			</ul>
+
+			<h2 class="date">2017.11.10</h2>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added the mobile operating table. It works just like a roller bed but allows you to to surgery on it without the chance of failure like a normal roller bed. Can be made in the protolathe or exosuit fab under the misc tabs.</li>
+				<li class="rscadd">Paramedic vests, first responder jackets, CMO labcoat, and medical/paramedic spacesuits can now carry folded roller beds in their suit slot.</li>
+			</ul>
+			<h3 class="author">PJB3005 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="imageadd">The Hyperspectral Imager now has its own unique sprite and doesn't look like a literal photocopier.</li>
+				<li class="rscadd">Xenoarch analysis machines now use a fancy NanoUI.</li>
+				<li class="rscadd">Xenoarch analysis machines have a ctrl+click shortcut for starting scanning and an alt+click shortcut for ejecting the inserted container.</li>
+				<li class="rscadd">Bunsen burners are now also toggle with alt+click.</li>
+			</ul>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Wired glass sheets no longer yield more cables than it takes to construct them.</li>
+			</ul>
+
+			<h2 class="date">2017.11.09</h2>
+			<h3 class="author">DrSnips updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Bone gels can now be created. It requires you to mix 10u of milk and 10u of cryoxadone inside a vial.</li>
+				<li class="rscadd">Fix O veins can now be created as well. It requires you to mix 10u of bicaridine and 10u clonexadone inside a vial.</li>
+			</ul>
+			<h3 class="author">Intigracy updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Tripled the RNG chance of climbing a table.</li>
+			</ul>
+
+			<h2 class="date">2017.11.05</h2>
+			<h3 class="author">Pathid updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added the ability to toggle subspace transmission on mech radios.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">lathes/fabricators now accept sheets from sheet inserters</li>
+			</ul>
+
+			<h2 class="date">2017.11.04</h2>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">Removes the duplicated sheet inserter from supply borgs</li>
+				<li class="bugfix">Bioprinters actually work again, sorry folks.</li>
+			</ul>
+
+			<h2 class="date">2017.11.03</h2>
+			<h3 class="author">Shadowmech88 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added a beach party vault.</li>
+				<li class="rscadd">Added trophy mounts. They can be crafted from two planks of wood, and items can be mounted on them. The trophy mounts can be applied to walls, and removed from walls via a crowbar. Clicking on the trophy mount with an item will mount the item wherever you click on the trophy mount. Alt+clicking with the item in your active hand will instead auto-center it on the trophy mount.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds cyborg grippers! Simple manipulators that can handle a limited amount of items.</li>
+				<li class="rscadd">Adds the service gripper service borgs, allowing them to handle drinks and trash.</li>
+				<li class="rscadd">Adds the chemistry gripper to medical cyborgs, allowing them to handle beakers and blood bags.</li>
+				<li class="rscadd">Adds the sheet to supply cyborgs, allowing them to hold and insert sheets inside machinery.</li>
+				<li class="rscdel">cyborg beakers, service shaker and universal enzyme are gone.</li>
+				<li class="tweak">The medical cyborg upgrade got more expensive and needs anomaly research 2 but it also upgrades the chemistry gripper allowing it to handle pills and pill bottles.</li>
+				<li class="tweak">The service cyborg upgrade got more expensive and needs anomaly research 2 but it now gives a rolling pin and also upgrades the service gripper allowing it to handle food, seeds and beakers.</li>
+				<li class="rscadd">Adds the magnetic gripper for engineering cyborgs and organ gripper for medical cyborg as expensive upgrades.</li>
+				<li class="tweak">Silicons can now use the bioprinter.</li>
+			</ul>
+
+			<h2 class="date">2017.11.02</h2>
+			<h3 class="author">PJB3005 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Bolas now automatically throw, even when not in throw mode.</li>
+			</ul>
+			<h3 class="author">unid15 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="experiment">The "spawn" and "create-datum" admin commands can change the new object's variables automatically after spawning it. Append any variable changes at the end of the string in curly brackets like so: spawn "/obj/item.{name="Item" ; w_class=5}"</li>
+				<li class="bugfix">Fixed some bugs with buildmode's edit mode (fixed strange behaviour when setting values to 0, fixed inability to reset object appearances). While in edit mode, middle-click any object to copy its variable.</li>
+			</ul>
+		</div>
+		<!--
+		Credits Section
+		-->
+		<h1>Credits</h1>
+
+		<h2>Baystation 12 Credits</h2>
+		<dl class="creditblock">
+			<dt class="creditsection">
+				Code:
+			</dt>
+			<dd>
+				Abi79, Aryn, Cael_Aislinn, Chinsky, cib, CompactNinja, DopeGhoti, Erthilo, Hawk_v3, Head, Ispil, Lexusjjss, Melonstorm, Miniature, Mloc, NerdyBoy1104, SkyMarshal, Spectre, Strumpetplaya, Sunfall, Tastyfish, Uristqwerty
+			</dd>
+			<dt class="creditsection">
+				Sprites:
+			</dt>
+			<dd>
+				Apple_Master, Arcalane, Chinsky, CompactNinja, Deus Dactyl, Erthilo, Flashkirby, Miniature, Searif, Xenone
+			</dd>
+			<dt class="creditsection">
+				Thanks To:
+			</dt>
+			<dd>
+				/tg/ station, Goonstation, Animus Station, Daedalus, and original Spacestation 13 devs. Skibiliano for the IRC bot.
+			</dd>
+			<dt class="creditsection">
+				Sounds:
+			</dt>
+			<dd>
+				Aryn
+			</dd>
+		</dl>
+
+		<h2>/tg/ station 13 Development Team</h2>
+		<dl class="creditblock">
+			<dt class="creditsection">
+				Coders:
+			</dt>
+			<dd>
+				TLE, NEO, Errorage, muskets, veryinky, Skie, Noise, Numbers, Agouri, Noka, Urist McDorf, Uhangi, Darem, Mport, rastaf0, Doohl, Superxpdude, Rockdtben, ConstantA, Petethegoat, Kor, Polymorph, Carn, Nodrak, Donkie
+			</dd>
+			<dt class="creditsection">
+				Spriters:
+			</dt>
+			<dd>
+				Agouri, Cheridan, Cruazy Guest, Deeaych, Deuryn, Matty406, Microwave, ShiftyEyesShady, Skie, Uhangi, Veyveyr, Petethegoat, Kor, Ricotez, Ausops, TankNut
+			</dd>
+			<dt class="creditsection">
+				Sounds:
+			</dt>
+			<dd>
+				Skie, Lasty/Vinyl
+			</dd>
+			<dt class="creditsection">
+				Thanks to:
+			</dt>
+			<dd>
+				CDK Station devs, GoonStation devs, the original SpaceStation developers and Invisty for the title image
+			</dd>
+		</dl>
+
+		<h2>Daedalus Development Team</h2>
+		<dl class="creditblock">
+			<dt class="creditsection">
+				Coders:
+			</dt>
+			<dd>
+				DopeGhoti, Sunfall, ThVortex
+			</dd>
+			<dt class="creditsection">
+				Artwork:
+			</dt>
+			<dd>
+				Captain Hammer
+			</dd>
+			<dt class="creditsection">
+				Spriters:
+			</dt>
+			<dd>
+				((TODO.))
+			</dd>
+			<dt class="creditsection">
+				Sounds:
+			</dt>
+			<dd>
+				Peter J, due, Erik Satie
+			</dd>
+			<dt class="creditsection">
+				Thanks to:
+			</dt>
+			<dd>
+				All the dev teams that came before: BS12, /tg/station13, the Goons, and the original SS13 folks.
+			</dd>
+		</dl>
+
+		<h2>GoonStation 13 Development Team</h2>
+		<dl class="creditblock">
+			<dt class="creditsection">
+				Coders:
+			</dt>
+			<dd>
+				Stuntwaffle, Showtime, Pantaloons, Nannek, Keelin, Exadv1, hobnob, Justicefries, 0staf, sniperchance, AngriestIBM, BrianOBlivion
+			</dd>
+			<dt class="creditsection">
+				Spriters:
+			</dt>
+			<dd>
+				Supernorn, Haruhi, Stuntwaffle, Pantaloons, Rho, SynthOrange, I Said No
+			</dd>
+		</dl>
+		<p class="lic">
+			<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+			<br />
+			<i>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.
+			<br />
+			Rights are currently extended to <a href="http://forums.somethingawful.com/">SomethingAwful Goons</a> only.</i>
+		</p>
+		<p class="lic">
+			Some icons by <a href="http://p.yusukekamiyamane.com/">Yusuke Kamiyamane</a>. All rights reserved. Licensed under a <a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 License</a>.
+		</p>
+	</body>
+</html>

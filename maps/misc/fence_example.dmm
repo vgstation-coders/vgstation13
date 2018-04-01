@@ -1,0 +1,63 @@
+"a" = (/turf/unsimulated/wall/other,/area/prison/solitary)
+"b" = (/obj/machinery/power/apc{dir = 8; pixel_x = -24},/obj/machinery/power/terminal{dir = 8},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor,/area/prison/solitary)
+"c" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/prison/solitary)
+"d" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/prison/solitary)
+"e" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor,/area/prison/solitary)
+"f" = (/obj/machinery/power/terminal,/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor,/area/prison/solitary)
+"g" = (/turf/simulated/floor,/area/prison/solitary)
+"h" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/prison/solitary)
+"i" = (/obj/machinery/power/battery/smes/infinite,/obj/structure/cable,/turf/simulated/floor,/area/prison/solitary)
+"j" = (/obj/structure/fence/post{dir = 4},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor/plating,/area/prison/solitary)
+"k" = (/obj/structure/fence{dir = 4},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor/plating,/area/prison/solitary)
+"l" = (/obj/structure/fence{dir = 4},/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/structure/cable,/turf/simulated/floor/plating,/area/prison/solitary)
+"m" = (/obj/structure/fence/door/opened,/turf/simulated/floor/plating,/area/prison/solitary)
+"n" = (/obj/structure/fence/post{dir = 4},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable,/turf/simulated/floor/plating,/area/prison/solitary)
+"o" = (/obj/structure/fence{dir = 4},/obj/structure/cable,/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor/plating,/area/prison/solitary)
+"p" = (/obj/structure/fence/post{dir = 4},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor/plating,/area/prison/solitary)
+"q" = (/obj/structure/fence/post,/turf/simulated/floor/plating,/area/prison/solitary)
+"r" = (/turf/simulated/floor/engine,/area/prison/solitary)
+"s" = (/obj/structure/fence/post,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable,/turf/simulated/floor/engine,/area/prison/solitary)
+"t" = (/obj/structure/fence,/turf/simulated/floor/plating,/area/prison/solitary)
+"u" = (/obj/structure/fence,/obj/structure/cable,/turf/simulated/floor/engine,/area/prison/solitary)
+"v" = (/obj/structure/fence/corner{dir = 8},/turf/simulated/floor{icon_state = "cult"},/area/prison/solitary)
+"w" = (/obj/structure/fence{dir = 4},/turf/simulated/floor{icon_state = "cult"},/area/prison/solitary)
+"x" = (/obj/structure/fence/post{dir = 4},/turf/simulated/floor{icon_state = "cult"},/area/prison/solitary)
+"y" = (/obj/structure/fence/corner{dir = 4},/turf/simulated/floor{icon_state = "cult"},/area/prison/solitary)
+"z" = (/obj/structure/fence,/turf/simulated/floor{icon_state = "cult"},/area/prison/solitary)
+"A" = (/turf/simulated/floor{icon_state = "cult"},/area/prison/solitary)
+"B" = (/mob/living/simple_animal/hostile/humanoid/vox{name = "Shlomo"},/turf/simulated/floor{icon_state = "cult"},/area/prison/solitary)
+"C" = (/obj/structure/fence/cut/small,/turf/simulated/floor/plating,/area/prison/solitary)
+"D" = (/obj/structure/fence/cut/medium,/turf/simulated/floor/plating,/area/prison/solitary)
+"E" = (/obj/structure/fence/corner{dir = 1},/turf/simulated/floor{icon_state = "cult"},/area/prison/solitary)
+"F" = (/obj/structure/fence/door/secure/from_south,/turf/simulated/floor{icon_state = "cult"},/area/prison/solitary)
+"G" = (/obj/structure/fence/corner,/turf/simulated/floor{icon_state = "cult"},/area/prison/solitary)
+"H" = (/obj/structure/fence/cut/large,/turf/simulated/floor/plating,/area/prison/solitary)
+"I" = (/obj/structure/fence/post{dir = 4},/turf/simulated/floor/plating,/area/prison/solitary)
+"J" = (/obj/structure/fence{dir = 4},/turf/simulated/floor/plating,/area/prison/solitary)
+"K" = (/obj/structure/fence/cut/large{dir = 4},/turf/simulated/floor/plating,/area/prison/solitary)
+"L" = (/obj/structure/fence/cut/medium{dir = 4},/turf/simulated/floor/plating,/area/prison/solitary)
+"M" = (/obj/structure/fence/cut/small{dir = 4},/turf/simulated/floor/plating,/area/prison/solitary)
+"N" = (/obj/structure/fence/door/secure/from_south,/turf/simulated/floor/plating,/area/prison/solitary)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaa
+abcccccdcecdccfgggga
+agggggghghghggigggga
+agggggghghghggggggga
+agajkkklmnmokkkpagga
+agqrrrrrrsrrrrrrqgga
+agtrrrrrrurrrrrrtgga
+agtrrvwwwxwwwyrrtgga
+agtrrzAAAAAAAzrrtgga
+agtrrzAAAAAAAzrrtgga
+agtrrzAAABAAAzrrtgga
+agtrrzAAAAAAAzrrtgga
+agCrrzAAAAAAAzrrtgga
+agDrrEwwwFwwwGrrtgga
+agHrrrrrrrrrrrrrtgga
+agtrrrrrrrrrrrrrtgga
+agqrrrrrrrrrrrrrqgga
+agaIJKLMJNJJJJJIagga
+agggggggggggggggggga
+aaaaaaaaaaaaaaaaaaaa
+"}

@@ -1,0 +1,111 @@
+/*Made by N3X15*/
+
+html {
+	font-family:sans-serif;
+	font-size:small;
+}
+a{
+	color:#0066cc;
+	text-decoration:none;
+}
+
+a img {
+	border:1px solid #0066cc;
+	background:#dfdfdf;
+}
+
+a.color {
+	padding: 5px 10px;
+	font-size: large;
+	font-weight: bold;
+	border:1px solid white;
+}
+
+a.schematic_selected {
+	color: #199130;
+}
+a.schematic_selected:hover {
+	background-color: #199130;
+}
+
+a.selected img,
+a:hover {
+	background: #0066cc;
+	color: #ffffff;
+}
+
+a.no_dec
+{
+	display: inline-block;
+}
+
+a.no_dec:hover
+{
+	background: #FFFFFF;
+	color: #ffffff;
+}
+
+#dir_holder
+{
+	display: inline-block;
+	margin-right: 10px;
+}
+
+/* RPD layers, YES I SUCK AT CSS */
+
+.layer_holder
+{
+	height: 32px;
+	width: 40px;
+	display: inline-block;
+}
+
+.layer.horizontal
+{
+	left: 0px;
+	background-image: url(RPD_0_4.png);
+	height: 5px;
+	width: 32px;
+	background-position: 0px 19px;
+}
+
+.layer.vertical
+{
+	/*top: 0px;*/
+	background-image: url(RPD_0_1.png);
+	width: 5px;
+	height: 32px;
+	/*right: 0px;*/
+	background-position: 19px 0px;
+	display: inline-block;
+	position: relative;
+}
+
+.layer.horizontal.selected
+{
+	background-image: url(RPD-layer-blended-4.png);
+}
+
+.layer.vertical.selected
+{
+	background-image: url(RPD-layer-blended-1.png);
+}
+
+.layer.horizontal.one		{top: 0px;}
+.layer.horizontal.two		{top: 2px;}
+.layer.horizontal.three		{top: 2px;}
+.layer.horizontal.four		{top: 2px;}
+.layer.horizontal.five		{top: 2px;}
+
+/* IT WERKS DON'T TOUCH IT */
+
+.layer.vertical.one			{left: 0px;}
+.layer.vertical.two			{left: -1px;}
+.layer.vertical.three		{left: -3px;}
+.layer.vertical.four		{left: -5px;}
+.layer.vertical.five		{left: -7px;}
+
+.fav
+{
+	font-family: Consolas, monospace;
+}

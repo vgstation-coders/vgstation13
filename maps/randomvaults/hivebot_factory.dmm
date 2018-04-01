@@ -1,0 +1,106 @@
+"aa" = (/turf/space,/area)
+"ab" = (/obj/item/robot_parts/robot_component/diagnosis_unit,/turf/space,/area)
+"ac" = (/obj/structure/lattice,/turf/space,/area)
+"ad" = (/turf/unsimulated/mineral,/area/vault/factory)
+"ae" = (/turf/simulated/wall,/area/vault/factory)
+"af" = (/obj/item/device/robotanalyzer,/obj/item/weapon/weldingtool,/turf/simulated/floor/plating,/area/vault/factory)
+"ag" = (/obj/structure/computerframe,/turf/simulated/floor/plating,/area/vault/factory)
+"ah" = (/obj/machinery/computer/aifixer,/turf/simulated/floor/plating,/area/vault/factory)
+"ai" = (/obj/item/robot_parts/head,/turf/simulated/floor/plating,/area/vault/factory)
+"aj" = (/obj/item/robot_parts/robot_suit,/obj/item/weapon/gun/projectile/automatic/xcom,/turf/simulated/floor/plating,/area/vault/factory)
+"ak" = (/turf/unsimulated/floor,/area/vault/factory)
+"al" = (/mob/living/simple_animal/hostile/hivebot/range{anchored = 1; canmove = 0; name = "Hivebot Sentry"},/turf/unsimulated/floor,/area/vault/factory)
+"am" = (/obj/item/robot_parts/robot_component/binary_communication_device,/mob/living/simple_animal/hostile/hivebot/strong,/turf/simulated/floor/plating,/area/vault/factory)
+"an" = (/turf/simulated/floor/plating,/area/vault/factory)
+"ao" = (/obj/item/weapon/reagent_containers/glass/bucket,/obj/effect/decal/cleanable/blood/oil,/turf/simulated/floor/plating,/area/vault/factory)
+"ap" = (/obj/structure/reagent_dispensers/silicate,/turf/simulated/floor/plating,/area/vault/factory)
+"aq" = (/obj/item/robot_parts/robot_suit,/obj/item/clothing/glasses/welding,/turf/simulated/floor/plating,/area/vault/factory)
+"ar" = (/obj/item/robot_parts/robot_suit,/mob/living/simple_animal/hostile/hivebot/strong,/turf/simulated/floor/plating,/area/vault/factory)
+"as" = (/turf/simulated/wall/r_wall,/area/vault/factory)
+"at" = (/obj/item/robot_parts/robot_component/camera,/obj/structure/window/barricade{dir = 4},/turf/unsimulated/floor,/area/vault/factory)
+"au" = (/obj/machinery/door/unpowered/shuttle,/turf/simulated/floor/plating,/area/vault/factory)
+"av" = (/obj/structure/window/barricade{dir = 8},/obj/structure/sign/securearea{desc = "A warning sign which reads 'VACUUM'"; icon_state = "space"; name = "VACUUM"; pixel_x = -32; pixel_y = -32},/mob/living/simple_animal/hostile/hivebot,/turf/simulated/floor/plating,/area/vault/factory)
+"aw" = (/obj/structure/window/barricade{dir = 4},/mob/living/simple_animal/hostile/hivebot,/turf/simulated/floor/plating,/area/vault/factory)
+"ax" = (/obj/structure/window/barricade{dir = 8},/mob/living/simple_animal/hostile/hivebot/strong,/turf/simulated/floor/plating,/area/vault/factory)
+"ay" = (/obj/effect/gibspawner/robot,/obj/item/weapon/wirecutters,/turf/simulated/floor/plating,/area/vault/factory)
+"az" = (/mob/living/simple_animal/hostile/hivebot/range,/turf/simulated/floor/plating,/area/vault/factory)
+"aA" = (/obj/item/robot_parts/robot_suit,/turf/simulated/floor/plating,/area/vault/factory)
+"aB" = (/obj/structure/crematorium,/turf/simulated/floor/plating,/area/vault/factory)
+"aC" = (/obj/item/weapon/fireaxe,/obj/item/weapon/gun/projectile/flare/syndicate,/mob/living/simple_animal/hostile/monster/cyber_horror/quiet{name = "Kevin the cremator"},/turf/simulated/floor/plating,/area/vault/factory)
+"aD" = (/obj/machinery/floodlight,/turf/unsimulated/floor,/area/vault/factory)
+"aE" = (/obj/item/weapon/wrench,/turf/simulated/floor/plating,/area/vault/factory)
+"aF" = (/mob/living/simple_animal/hostile/hivebot/strong,/turf/simulated/floor/plating,/area/vault/factory)
+"aG" = (/obj/item/weapon/weldingtool,/turf/simulated/floor/plating,/area/vault/factory)
+"aH" = (/obj/item/robot_parts/robot_suit,/obj/item/weapon/weldingtool,/turf/simulated/floor/plating,/area/vault/factory)
+"aI" = (/obj/effect/decal/cleanable/ash,/turf/simulated/floor/plating,/area/vault/factory)
+"aJ" = (/obj/item/weapon/barricade_kit,/turf/simulated/floor/plating,/area/vault/factory)
+"aK" = (/obj/structure/reagent_dispensers,/obj/item/clothing/head/welding,/turf/simulated/floor/plating,/area/vault/factory)
+"aL" = (/obj/structure/disposaloutlet{dir = 1},/obj/structure/disposalpipe/trunk,/turf/simulated/floor/plating,/area/vault/factory)
+"aM" = (/obj/item/device/silicate_sprayer/advanced,/mob/living/simple_animal/hostile/hivebot/rapid,/turf/simulated/floor/plating,/area/vault/factory)
+"aN" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor/plating,/area/vault/factory)
+"aO" = (/obj/machinery/conveyor,/turf/simulated/floor/plating,/area/vault/factory)
+"aP" = (/obj/item/weapon/wrench,/obj/effect/gibspawner/human,/mob/living/simple_animal/hostile/hivebot/strong,/turf/simulated/floor/plating,/area/vault/factory)
+"aQ" = (/obj/structure/disposalpipe/segment,/turf/simulated/wall/r_wall,/area/vault/factory)
+"aR" = (/obj/structure/disposalpipe/segment{dir = 4; icon_state = "pipe-c"},/turf/unsimulated/mineral,/area/vault/factory)
+"aS" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/unsimulated/mineral,/area/vault/factory)
+"aT" = (/obj/structure/disposalpipe/segment{dir = 8; icon_state = "pipe-c"},/turf/unsimulated/mineral,/area/vault/factory)
+"aU" = (/obj/structure/sign/examroom,/turf/simulated/wall,/area/vault/factory)
+"aV" = (/obj/machinery/conveyor,/obj/structure/window/barricade,/turf/simulated/floor/plating,/area/vault/factory)
+"aW" = (/obj/structure/disposalpipe/segment,/turf/unsimulated/mineral,/area/vault/factory)
+"aX" = (/obj/machinery/conveyor,/obj/structure/plasticflaps{opacity = 1},/turf/simulated/floor/plating,/area/vault/factory)
+"aY" = (/obj/machinery/conveyor,/turf/simulated/floor/engine,/area/vault/factory)
+"aZ" = (/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/floor/engine,/area/vault/factory)
+"ba" = (/obj/machinery/power/emitter/energycannon{dir = 8},/turf/simulated/floor/engine,/area/vault/factory)
+"bb" = (/obj/structure/lattice,/obj/item/weapon/shard/plasma,/turf/space,/area)
+"bc" = (/obj/machinery/power/emitter/energycannon{dir = 4},/turf/simulated/floor/engine,/area/vault/factory)
+"bd" = (/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor/engine,/area/vault/factory)
+"be" = (/obj/structure/disposalpipe/segment{dir = 4; icon_state = "pipe-c"},/turf/simulated/wall/r_wall,/area/vault/factory)
+"bf" = (/obj/structure/disposalpipe/segment{dir = 8; icon_state = "pipe-c"},/turf/simulated/wall/r_wall,/area/vault/factory)
+"bg" = (/obj/effect/gibspawner/robot,/turf/space,/area)
+"bh" = (/obj/item/robot_parts/robot_component/radio,/turf/space,/area)
+"bi" = (/obj/machinery/conveyor,/obj/structure/plasticflaps{opacity = 1},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bj" = (/obj/structure/sign/fire,/turf/simulated/wall/r_wall,/area/vault/factory)
+"bk" = (/obj/structure/disposalpipe/broken,/obj/structure/disposalpipe/broken{dir = 4},/obj/effect/gibspawner/robot,/turf/space,/area)
+"bl" = (/obj/structure/disposalpipe/segment{dir = 4},/obj/structure/window/reinforced/plasma{dir = 1},/turf/space,/area)
+"bm" = (/obj/structure/disposalpipe/segment{dir = 2; icon_state = "pipe-c"},/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma{dir = 1},/turf/space,/area)
+"bn" = (/mob/living/simple_animal/hostile/monster/cyber_horror/quiet{name = "factory overseer"},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bo" = (/obj/machinery/conveyor,/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bp" = (/obj/structure/disposalpipe/segment,/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bq" = (/obj/machinery/disposal{desc = "A pneumatic waste disposal unit. This one is used to transport malfunctioning hivebots."; name = "recycling"},/obj/structure/disposalpipe/trunk,/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"br" = (/obj/structure/disposalpipe/segment,/obj/structure/lattice,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area)
+"bs" = (/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bt" = (/obj/structure/disposalpipe/segment{dir = 1; icon_state = "pipe-c"},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bu" = (/obj/structure/disposalpipe/segment{dir = 8; icon_state = "pipe-c"},/obj/structure/rack,/obj/item/weapon/glue{pixel_y = 6},/obj/item/weapon/glue,/obj/item/weapon/glue{pixel_y = -6},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bv" = (/obj/structure/disposalpipe/segment,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area)
+"bw" = (/obj/machinery/disposal{desc = "A pneumatic device that sends you to the nearest Hivebot Transport Unit."; name = "pipe-based transportation unit"},/obj/structure/disposalpipe/trunk{dir = 4},/turf/simulated/floor{icon_state = "floorgrime"},/area/vault/factory)
+"bx" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/wall/r_wall,/area/vault/factory)
+"by" = (/obj/structure/lattice,/obj/structure/window/reinforced/plasma,/turf/space,/area)
+"bz" = (/obj/structure/disposalpipe/trunk{dir = 1},/obj/structure/lattice,/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 4},/turf/space,/area)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaacacacacacacacacaaaaaaaaaaaa
+aaaaaaaaacacacadadadadadadacacacacaaaaaa
+aaaaacacacadadadadadadadadadadadacaaaaaa
+aaacacadadadadadadadadadadadadadacacaaaa
+aaacaeadadadaeaeaeaeaeaeaeaeadadadacacaa
+aaacaeaeadadaeafagahagaiajaeadadadadacac
+acakalaeaeaeaeamanaoapaqaraeasasasasadac
+aaakatauavawauaxanayazaAaraeasaBaCasadac
+aaakaDaeaEaeaeaFanaGazaHaraeasaIanasadac
+acakalaeaJaKaeaeaeanazaeaeaeasaLasasadac
+aaacaeaeaMaNaeadaeaOaPaeadadasaQasadadac
+aaacaeaeaeaeaeadaeaOazaeaRaSaSaTadadadac
+aaacadadadadadadaUaVaFaeaWadadadadacacac
+aaacacacadadacacasaXasasaQacadadacacaaaa
+aaaaaaacacacasasasaYaZbaaQacbbacacaaaaaa
+aaaaaaaaaaaaasbcbdaYasbebfbgbhaaaaaaaaaa
+aaaaaaaaaaaaasasasbiasaQbjasbkblbmaaaaaa
+aaaaaaaaaaaaadasbnbobnbpbqasaWacbraaaaaa
+aaaaaaaaaaadadasbsbobsbtbuasaWadbvaaaaaa
+aaaaaaaaaaadadasbsbsbsbsbwbxaTbybzaaaaaa
+aaaaaaaaaaaaadasasasasasasasaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaadadadadadaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaadadadaaaaaaaaaaaaaaaa
+"}
