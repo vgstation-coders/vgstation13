@@ -145,6 +145,10 @@
 	result = /obj/item/stack/sheet/animalhide/human
 	amount = 3
 
+/datum/butchering_product/skin/gondola
+	result = /obj/item/stack/sheet/animalhide/gondola
+	amount = 2
+
 /datum/butchering_product/skin/human/spawn_result(location, mob/parent)
 	if(!amount)
 		return
@@ -307,6 +311,7 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/carbon/human/tajaran					= list(TEETH_HUMAN, /datum/butchering_product/skin/cat/lots),
 	/mob/living/carbon/human/dummy						= list(TEETH_HUMAN),
 
+	/mob/living/carbon/complex/gondola				= list(/datum/butchering_product/skin/gondola, TEETH_FEW),
 )
 
 #undef TEETH_FEW
