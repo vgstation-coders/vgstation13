@@ -190,6 +190,20 @@
 
 	return D
 
+//The reverse
+/datum/shuttle/proc/remove_dock(var/D)
+	if(ispath(D))
+		for(var/obj/docking_port/destination/dock in all_docking_ports)
+			if(istype(dock,D))
+				dock.unlink_from_shuttle(src)
+				return dock
+	else if(istype(D,/obj/docking_port/destination))
+		var/obj/docking_port/destination/dock = D
+		dock.unlink_from_shuttle(src)
+		return dock
+
+	return D
+
 //Adds a docking port as a transit area, accepts path or the port itself
 /datum/shuttle/proc/set_transit_dock(var/D)
 	if(ispath(D))
