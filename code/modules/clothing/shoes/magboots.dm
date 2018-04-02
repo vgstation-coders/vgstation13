@@ -199,7 +199,7 @@
 		H.reagents.add_reagent(HYPOZINE, 1)
 
 	if(funk_level > 9 && prob((5/russian)*funk_level))
-		explosion(get_turf(src), (1*funk_level)/russian, ((1*funk_level)/russian)**2, ((1*funk_level)/russian)**3)
+		explosion(get_turf(src), round((1*funk_level)/russian)*0.25, round((1*funk_level)/russian)*0.5, round((1*funk_level)/russian))
 
 	if(prob((funk_level/russian)*2)) //IT WAS ALWAYS TOO LATE
 		toggle()
