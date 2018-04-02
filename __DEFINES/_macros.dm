@@ -10,7 +10,7 @@
 
 #define ismartian(A) istype(A, /mob/living/carbon/martian)
 
-#define ishigherbeing(A) (ishuman(A) || ismartian(A))
+#define ishigherbeing(A) (ishuman(A) || ismartian(A) || (ismonkey(A) && A.dexterity_check()))
 
 #define isvox(A) (ishuman(A) && A.species && istype(A.species, /datum/species/vox))
 
