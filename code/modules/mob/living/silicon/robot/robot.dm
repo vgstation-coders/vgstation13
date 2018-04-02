@@ -221,12 +221,7 @@
 		sensor = null
 
 /proc/getAvailableRobotModules()
-	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service")
-	if (Holiday == APRIL_FOOLS_DAY)
-		if (security_level == SEC_LEVEL_BLUE)
-			modules += "Security"
-	else
-		modules += "Security"
+	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Security")
 	if (security_level == SEC_LEVEL_RED)
 		modules+="Combat"
 	return modules
