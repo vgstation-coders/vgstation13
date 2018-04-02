@@ -255,6 +255,8 @@
 											components += P
 											req_components[I]--
 											update_desc()
+											if(P.is_open_container())
+												. = 1
 											break
 								to_chat(user, desc)
 

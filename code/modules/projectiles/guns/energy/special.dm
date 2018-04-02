@@ -209,13 +209,13 @@
 
 	switch(raisetype)
 		if(ZOMBIE)
-			var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(target), user, H.mind)
+			var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(target), user, H)
 			T.get_clothes(H, T)
 			T.name = H.real_name
 			T.host = H
 			H.loc = null
 		if(SKELETON)
-			new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(target), user, H.mind)
+			new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(target), user, H)
 			H.gib()
 	charges--
 

@@ -144,10 +144,12 @@
 	if (!R) // No religion, may as well be a good time to remove the icon if it's there
 		Remove(M)
 		return FALSE
-
 	if (R.isReligiousLeader(M))
 		to_chat(M, "<span class='warning'>You are the leader of this flock and cannot forsake them. If you have to, pray to the Gods for release.</span>")
 		return FALSE
+	if (alert("Do you wish to renounce [R.name]?","Renouncing a religion","Yes","No") != "Yes")
+		return FALSE
+
 	R.renounce(owner)
 	Remove(owner)
 

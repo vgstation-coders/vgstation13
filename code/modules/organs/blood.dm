@@ -11,15 +11,26 @@ var/const/BLOOD_VOLUME_OKAY = 336
 var/const/BLOOD_VOLUME_BAD = 224
 var/const/BLOOD_VOLUME_SURVIVE = 122
 
-/mob/living/carbon/human/var/datum/reagents/vessel	//Container for blood and BLOOD ONLY. Do not transfer other chems here.
+/mob/living/carbon/human/var/datum/reagents/vessel/vessel	//Container for blood and BLOOD ONLY. Do not transfer other chems here.
 /mob/living/carbon/human/var/var/pale = 0			//Should affect how mob sprite is drawn, but currently doesn't.
+
+/datum/reagents/vessel/update_total() //Version of this that doesn't call del_reagent
+	total_volume = 0
+	amount_cache.len = 0
+	for(var/datum/reagent/R in reagent_list)
+		if(R.volume < 0.1)
+			R.volume = 0
+		else
+			total_volume += R.volume
+			amount_cache += list(R.id = R.volume)
+	return 0
 
 //Initializes blood vessels
 /mob/living/carbon/human/proc/make_blood()
 	if(vessel)
 		return
 
-	vessel = new/datum/reagents(600)
+	vessel = new/datum/reagents/vessel(600)
 	vessel.my_atom = src
 
 	if(species && species.anatomy_flags & NO_BLOOD) //We want the var for safety but we can do without the actual blood.

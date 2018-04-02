@@ -83,7 +83,6 @@
 	..()
 	if(health <= 0)
 		for(var/atom/movable/A in src)
-			for(var/obj/O in src)
 			remove_from_storage(A, get_turf(src))
 
 		qdel(src)
@@ -96,51 +95,34 @@
 		if(2)
 			if(prob(80))
 				for(var/atom/movable/A in src)
-					for(var/obj/O in src)
 					remove_from_storage(A, get_turf(src))
 					A.ex_act(3)
 				qdel(src)
 		if(3)
 			if(prob(50))
 				for(var/atom/movable/A in src)
-					for(var/obj/O in src)
 					remove_from_storage(A, get_turf(src))
 				qdel(src)
 
 /obj/item/weapon/storage/lockbox/emp_act(severity)
 	..()
 	if(!broken)
+		var/probab
 		switch(severity)
 			if(1)
-				if(prob(80))
-					locked = !locked
-					src.update_icon()
-					if(!locked)
-						for(var/atom/movable/A in src)
-							for(var/obj/O in src)
-							remove_from_storage(A, get_turf(src))
-						if(oneuse)
-							qdel(src)
+				probab = 80
 			if(2)
-				if(prob(50))
-					locked = !locked
-					src.update_icon()
-					if(!locked)
-						for(var/atom/movable/A in src)
-							for(var/obj/O in src)
-							remove_from_storage(A, get_turf(src))
-						if(oneuse)
-							qdel(src)
-			if(3)
-				if(prob(25))
-					locked = !locked
-					src.update_icon()
-					if(!locked)
-						for(var/atom/movable/A in src)
-							for(var/obj/O in src)
-							remove_from_storage(A, get_turf(src))
-						if(oneuse)
-							qdel(src)
+				probab = 50
+		if(prob(probab))
+			locked = !locked
+			src.update_icon()
+			if(!locked)
+				for(var/atom/movable/A in src)
+					remove_from_storage(A, get_turf(src))
+				if(oneuse)
+					qdel(src)
+
+
 
 /obj/item/weapon/storage/lockbox/update_icon()
 	..()

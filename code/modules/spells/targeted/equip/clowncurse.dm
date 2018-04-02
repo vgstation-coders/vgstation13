@@ -50,7 +50,7 @@
 	name = "The Elf Curse"
 	desc = "A curse that will turn its victim into a miserable christmas elf."
 	abbreviation = "EC"
-	holiday_required = list("Christmas")
+	holiday_required = list(XMAS)
 
 	hud_state = "wiz_elf"
 

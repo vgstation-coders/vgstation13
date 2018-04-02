@@ -792,7 +792,7 @@
 
 	else if(ismartian(M))
 		//why
-		var/mob/living/carbon/martian/MA = M
+		var/mob/living/carbon/complex/martian/MA = M
 		switch(slot)
 			if(slot_head)
 				if(MA.head)
@@ -1228,3 +1228,6 @@ var/global/list/image/blood_overlays = list()
 //Called when user clicks on an object while looking through a camera (passed to the proc as [eye])
 /obj/item/proc/remote_attack(atom/target, mob/user, atom/movable/eye)
 	return
+
+/obj/item/proc/recyclable() //Called by RnD machines, for added object-specific sanity.
+	return TRUE

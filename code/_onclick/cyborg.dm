@@ -52,10 +52,6 @@
 		A.attack_robot(src)
 		return
 
-	// locked_to cannot prevent machine interlinking but stops arm movement
-	if(locked_to)
-		return
-
 	if(W == A)
 		/*next_move = world.time + 8
 		if(W.flags&USEDELAY)

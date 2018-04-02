@@ -257,7 +257,7 @@
 /mob/proc/Martianize()
 	if(!Premorph())
 		return
-	var/mob/living/carbon/martian/new_aunt = new /mob/living/carbon/martian(get_turf(src))
+	var/mob/living/carbon/complex/martian/new_aunt = new /mob/living/carbon/complex/martian(get_turf(src))
 	Postmorph(new_aunt)
 	return new_aunt
 
@@ -307,5 +307,16 @@
 	Postmorph(new_mob)
 	to_chat(new_mob, "You feel more... animalistic")
 	return new_mob
+
+/mob/living/carbon/human/proc/GALize()
+	s_tone = -100 //Nichi saro ni itte hada o yaku
+	update_body()
+	if(gender == MALE && h_style != "Toriyama 2")
+		h_style = "Toriyama 2" //Yeah, gyaru otoko sengen
+	r_facial = r_hair = 255
+	g_facial = g_hair = 255
+	b_facial = b_hair = 0
+	update_hair()
+	playsound(src, 'sound/misc/gal-o-sengen.ogg', 50, 1)// GO GO GO GO GO GO GAL-O-SENGEN
 
 #undef MONKEY_ANIM_TIME

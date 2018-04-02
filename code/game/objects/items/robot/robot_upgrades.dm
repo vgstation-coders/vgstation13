@@ -276,7 +276,7 @@
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper"
 	required_module = list(/obj/item/weapon/robot_module/engineering)
-	modules_to_add = list(/obj/item/weapon/gripper/no_use/magnetic)
+	modules_to_add = list(/obj/item/weapon/gripper/magnetic)
 
 /obj/item/borg/upgrade/organ_gripper
 	name = "medical cyborg organ gripper upgrade"

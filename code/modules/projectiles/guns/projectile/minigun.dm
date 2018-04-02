@@ -9,6 +9,7 @@
 	recoil = 1
 	slot_flags = null
 	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
+	slowdown = MINIGUN_SLOWDOWN_NONWIELDED
 	w_class = W_CLASS_HUGE//we be fuckin huge maaan
 	fire_delay = 0
 	fire_sound = 'sound/weapons/gatling_fire.ogg'
@@ -63,7 +64,7 @@
 /obj/item/weapon/gun/gatling/can_discharge() //Why is this gun not a child of gun/projectile?
 	if (current_shells && wielded)
 		return 1
-	
+
 /obj/item/weapon/gun/gatling/update_icon()
 	switch(current_shells)
 		if(150 to INFINITY)

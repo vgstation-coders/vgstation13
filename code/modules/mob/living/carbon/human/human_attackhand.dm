@@ -38,6 +38,7 @@
 		if(2) //Full block
 			damage = 0
 
+	damage = run_armor_absorb(affecting, "melee", damage)
 	if(!damage && dam_check)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='danger'>\The [M] has attempted to bite \the [src]!</span>")
@@ -128,7 +129,7 @@
 			damage = max(0, damage - rand(1,5))
 		if(2) //Full block
 			damage = max(0, damage - rand(1,10))
-
+	damage = run_armor_absorb(affecting, "melee", damage)
 	if(knockout >= 7 && prob(33))
 		visible_message("<span class='danger'>[M] weakens [src]!</span>")
 		apply_effect(3, WEAKEN, armorblock)

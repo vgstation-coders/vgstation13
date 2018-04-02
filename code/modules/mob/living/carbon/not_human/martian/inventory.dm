@@ -1,5 +1,4 @@
-
-/mob/living/carbon/martian/get_item_offset_by_index(index)
+/mob/living/carbon/not_human/martian/get_item_offset_by_index(index)
 	switch(index)
 		if(1,6)
 			return list("x"=0, "y"=0)
@@ -10,7 +9,7 @@
 
 	return list()
 
-/mob/living/carbon/martian/get_held_item_ui_location(index)
+/mob/living/carbon/not_human/martian/get_held_item_ui_location(index)
 	if(!is_valid_hand_index(index))
 		return
 
@@ -30,7 +29,7 @@
 		else
 			return ..()
 
-/mob/living/carbon/martian/get_index_limb_name(index)
+/mob/living/carbon/not_human/martian/get_index_limb_name(index)
 	if(!index)
 		index = active_hand
 
@@ -50,14 +49,14 @@
 		else
 			return "tentacle"
 
-/mob/living/carbon/martian/get_direction_by_index(index)
+/mob/living/carbon/not_human/martian/get_direction_by_index(index)
 	if(index <= 3)
 		return "right_hand"
 	else
 		return "left_hand"
 
 
-/mob/living/carbon/martian/GetAccess()
+/mob/living/carbon/not_human/martian/GetAccess()
 	var/list/ACL=list()
 
 	for(var/obj/item/I in held_items)
@@ -65,7 +64,7 @@
 
 	return ACL
 
-/mob/living/carbon/martian/get_visible_id()
+/mob/living/carbon/not_human/martian/get_visible_id()
 	var/id = null
 	for(var/obj/item/I in held_items)
 		id = I.GetID()
@@ -73,10 +72,10 @@
 			break
 	return id
 
-/mob/living/carbon/martian/can_wield()
+/mob/living/carbon/not_human/martian/can_wield()
 	return 1
 
-/mob/living/carbon/martian/u_equip(obj/item/W, dropped = 1, var/slot = null)
+/mob/living/carbon/not_human/martian/u_equip(obj/item/W, dropped = 1, var/slot = null)
 	var/success = 0
 
 	if(!W)
@@ -102,24 +101,7 @@
 
 	return
 
-/mob/living/carbon/martian/equip_to_slot(obj/item/W, slot, redraw_mob = 1)
-	if(!istype(W))
-		return
-
-	if(src.is_holding_item(W))
-		src.u_equip(W)
-
-	if(slot == slot_head)
-		head = W
-		update_inv_head(redraw_mob)
-
-	W.hud_layerise()
-	W.equipped(src, slot)
-	W.forceMove(src)
-	if(client)
-		client.screen |= W
-
-/mob/living/carbon/martian/abiotic()
+/mob/living/carbon/not_human/martian/abiotic()
 	for(var/obj/item/I in held_items)
 		if(I.abstract)
 			continue
@@ -128,7 +110,7 @@
 
 	return head
 
-/mob/living/carbon/martian/show_inv(mob/living/carbon/user)
+/mob/living/carbon/not_human/martian/show_inv(mob/living/carbon/user)
 	user.set_machine(src)
 
 	var/dat
@@ -150,8 +132,18 @@
 
 
 // Return the item currently in the slot ID
-/mob/living/carbon/martian/get_item_by_slot(slot_id)
+/mob/living/carbon/not_human/martian/get_item_by_slot(slot_id)
 	switch(slot_id)
 		if(slot_head)
 			return head
 	return null
+
+/mob/living/carbon/not_human/martian/equip_to_slot(obj/item/W, slot, redraw_mob = 1)
+	if(!istype(W))
+		return
+
+	if(slot == slot_head)
+		head = W
+		update_inv_head(redraw_mob)
+
+	..()

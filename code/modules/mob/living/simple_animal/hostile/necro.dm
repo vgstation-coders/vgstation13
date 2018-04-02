@@ -4,28 +4,30 @@
 	faction = "necro"
 	mob_property_flags = MOB_UNDEAD
 
-/mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, datum/mind/Controller)
+/mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, var/mob/living/Victim, datum/mind/Controller)
 	..()
-	if(Controller)
-		mind = Controller
-		ckey = ckey(mind.key)
+	if(Victim && Victim.mind)
+		Victim.mind.transfer_to(src)
+		var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
+		if(ghost && ghost.can_reenter_corpse)
+			key = mind.key // Force the ghost in here
 	if(Owner)
 		faction = "\ref[Owner]"
 		friends.Add(Owner)
 		creator = Owner
-		if(Controller)
+		if(client)
 			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner]. Do his bidding so long as he lives, for when he falls so do you.</span></big>")
 		var/ref = "\ref[Owner.mind]"
 		var/list/necromancers
 		if(!(Owner.mind in ticker.mode.necromancer))
 			ticker.mode:necromancer[ref] = list()
 		necromancers = ticker.mode:necromancer[ref]
-		necromancers.Add(Controller)
+		necromancers.Add(Victim.mind)
 		ticker.mode:necromancer[ref] = necromancers
 		ticker.mode.update_necro_icons_added(Owner.mind)
-		ticker.mode.update_necro_icons_added(Controller)
+		ticker.mode.update_necro_icons_added(Victim.mind)
 		ticker.mode.update_all_necro_icons()
-		ticker.mode.risen.Add(Controller)
+		ticker.mode.risen.Add(Victim.mind)
 
 	if(name == initial(name) && !unique_name)
 		name += " ([rand(1,1000)])"
@@ -455,6 +457,7 @@
 	health = 50
 	can_evolve = TRUE
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
+	var/being_unzombified = FALSE
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/check_evolve()
 	..()
@@ -472,13 +475,16 @@
 	..()
 	if(stat == DEAD) //Can only attempt to unzombify if they're dead
 		if(istype (W, /obj/item/weapon/storage/bible)) //This calls for divine intervention
+			if(being_unzombified)
+				to_chat(user, "<span class='warning'>\The [src] is already being repeatedly whacked!</span>")
+				return
+			being_unzombified = TRUE
 			var/obj/item/weapon/storage/bible/bible = W
 			user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.my_rel.deity_name] to bring this poor soul back from the brink.</span>")
 
 			var/chaplain = 0 //Are we the Chaplain ? Used for simplification
 			if(user.mind && (user.mind.assigned_role == "Chaplain"))
 				chaplain = TRUE //Indeed we are
-
 			if(do_after(user, src, 25)) //So there's a nice delay
 				if(!chaplain)
 					if(prob(5)) //Let's be generous, they'll only get one regen for this
@@ -504,12 +510,15 @@
 						unzombify()
 					else
 						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
+			being_unzombified = FALSE
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/proc/unzombify()
-	if(host)
+	if(host && mind)
 		host.loc = get_turf(src)
-		if(!host.mind && src.mind) //This is assuming that, somehow, the host lost their soul, and it ended up in the zombie
-			mind.transfer_to(host)
+		mind.transfer_to(host)
+		var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
+		if(ghost && ghost.can_reenter_corpse)
+			key = mind.key
 		host.resurrect() //It's a miracle!
 		host.revive()
 		visible_message("<span class='notice'>\The [src]'s eyes regain focus, the smell of decay vanishing, [host] has come back to their senses!.</span>")

@@ -56,7 +56,7 @@
 			return TRUE //We still connected
 		if(!I.force)
 			return TRUE
-
-	apply_damage(I.force, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+	var/damage = run_armor_absorb(target_zone, I.damtype, I.force)
+	apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
 
 	return TRUE

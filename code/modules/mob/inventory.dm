@@ -183,7 +183,7 @@
 	W.hud_layerise()
 	W.pixel_x = initial(W.pixel_x)
 	W.pixel_y = initial(W.pixel_y)
-	W.equipped(src, null, index)
+	W.equipped(src, index)
 
 	if(client)
 		client.screen |= W

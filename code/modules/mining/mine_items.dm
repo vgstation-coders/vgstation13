@@ -666,6 +666,10 @@ proc/move_mining_shuttle()
 		SetOffenseBehavior()
 	..()
 
+/mob/living/simple_animal/hostile/mining_drone/LoseAggro()
+	stop_automated_movement = 0
+	vision_range = idle_vision_range
+
 /**********************Lazarus Injector**********************/
 
 /obj/item/weapon/lazarus_injector

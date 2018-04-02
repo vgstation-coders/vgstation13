@@ -66,6 +66,14 @@
 	source_string = "deer"
 	origin_tech = ""
 
+/obj/item/stack/sheet/animalhide/gondola
+	name = "gondola skin"
+	desc = "It's all quiet now."
+	singular_name = "gondola skin piece"
+	icon_state = "sheet-gondola"
+	source_string = "gondola"
+	origin_tech = ""
+
 //don't see anywhere else to put these, maybe together they could be used to make the xenos suit?
 /obj/item/stack/sheet/xenochitin
 	name = "alien chitin"

@@ -50,6 +50,8 @@
 
 	// Components are basically robot organs.
 	var/list/components = list()
+	var/component_extension = null
+
 	var/obj/item/device/mmi/mmi = null
 	var/obj/item/device/pda/ai/rbPDA = null
 	var/datum/wires/robot/wires = null
@@ -103,7 +105,7 @@
 	station_holomap = new(src)
 	radio = new /obj/item/device/radio/borg(src)
 	aicamera = new/obj/item/device/camera/silicon/robot_camera(src)
-	
+
 	if(AIlink)
 		connected_ai = select_active_ai_with_fewest_borgs()
 
@@ -158,6 +160,19 @@
 		rbPDA = new/obj/item/device/pda/ai(src)
 	rbPDA.set_name_and_job(custom_name,braintype)
 
+/mob/living/silicon/robot/proc/upgrade_components()
+	if(component_extension)
+		for(var/V in components) if(V != "power cell")
+			var/datum/robot_component/C = components[V]
+			var/NC = text2path("[C.external_type][component_extension]")
+			var/obj/item/robot_parts/robot_component/I = NC
+			if(initial(I.isupgrade))
+				I = new NC
+				C.installed = COMPONENT_INSTALLED
+				qdel(C.wrapped)
+				C.wrapped = I
+				C.vulnerability = I.vulnerability
+
 //If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
 //Improved /N
 /mob/living/silicon/robot/Destroy()
@@ -207,7 +222,7 @@
 
 /proc/getAvailableRobotModules()
 	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Security")
-	if(security_level == SEC_LEVEL_RED)
+	if (security_level == SEC_LEVEL_RED)
 		modules+="Combat"
 	return modules
 
@@ -246,7 +261,7 @@
 /mob/living/silicon/robot/proc/set_module_sprites(var/list/new_sprites)
 	if(new_sprites && new_sprites.len)
 		module_sprites = new_sprites.Copy()
-	
+
 	if(module_sprites.len)
 		var/picked = pick(module_sprites)
 		icon_state = module_sprites[picked]
@@ -288,7 +303,7 @@
 
 	var/newname
 	for(var/i = 1 to 3)
-		newname = trimcenter(trim(stripped_input(src,"You are a [braintype]. Enter a name, or leave blank for the default name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN))
+		newname = reject_bad_name(stripped_input(src,"You are a [braintype]. Enter a name, or leave blank for the default name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN)
 		if(newname == null)
 			if(alert(src,"Are you sure you want the default name?",,"Yes","No") == "Yes")
 				break
@@ -348,12 +363,28 @@
 	if(!can_diagnose())
 		return null
 
-	var/dat = "<HEAD><TITLE>[name] Self-Diagnosis Report</TITLE></HEAD><BODY>\n"
+	var/list/dat = list({"<table>
+	<tr>
+		<th>Component</th>
+		<th>Energy consumption</th>
+		<th>Brute damage</th>
+		<th>Electronics damage</th>
+		<th>Powered</th>
+		<th>Toggled</th>
+	</tr>"})
 	for (var/V in components)
 		var/datum/robot_component/C = components[V]
-		dat += "<b>[C.name]</b><br><table><tr><td>Power consumption</td><td>[C.energy_consumption]</td></tr><tr><td>Brute Damage:</td><td>[C.brute_damage]</td></tr><tr><td>Electronics Damage:</td><td>[C.electronics_damage]</td></tr><tr><td>Powered:</td><td>[(!C.energy_consumption || C.is_powered()) ? "Yes" : "No"]</td></tr><tr><td>Toggled:</td><td>[ C.toggled ? "Yes" : "No"]</td></table><br>"
+		dat += {"<tr>
+		<td>[C.name]</td>
+		<td>[C.energy_consumption]W</td>
+		<td>[C.brute_damage || "None"]</td>
+		<td>[C.electronics_damage || "None"]</td>
+		<td>[(!C.energy_consumption || C.is_powered()) ? "Yes" : "No"]</td>
+		<td>[C.toggled ? "On" : "Off"]</td>
+		</tr>"}
 
-	return dat
+	dat += "</table>"
+	return jointext(dat, "")
 
 
 /mob/living/silicon/robot/verb/self_diagnosis_verb()
@@ -364,7 +395,9 @@
 		to_chat(src, "<span class='warning'>Your self-diagnosis component isn't functioning.</span>")
 
 	var/dat = self_diagnosis()
-	src << browse(dat, "window=robotdiagnosis")
+	var/datum/browser/popup = new(src, "\ref[src]-robotdiagnosis", "Self diagnosis", 730, 270)
+	popup.set_content(dat)
+	popup.open()
 
 
 /mob/living/silicon/robot/verb/toggle_component()
@@ -465,6 +498,13 @@
 	for(var/obj/item/stack/S in module.modules)
 		stat(null, text("[S.name]: [S.amount]/[S.max_amount]"))
 
+/mob/living/silicon/robot/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
+	if(!(Holiday == APRIL_FOOLS_DAY))
+		return 0
+	if(..())
+		spark(src, 5, FALSE)
+		return 1
+
 // update the status screen display
 /mob/living/silicon/robot/Stat()
 	..()
@@ -551,12 +591,12 @@
 				L -= I
 	if(cleared)
 		queueAlarm(text("--- [class] alarm in [A.name] has been cleared."), class, 0)
-//		if(viewalerts) robot_alerts()
 	return !cleared
 
 
 /mob/living/silicon/robot/emag_act(mob/user as mob)
 	if(user != src)
+		spark(src, 5, FALSE)
 		if(!opened)
 			if(locked)
 				if(prob(90))
@@ -626,6 +666,7 @@
 				C.wrapped = W
 				C.electronics_damage = I.electronics_damage
 				C.brute_damage = I.brute_damage
+				C.vulnerability = I.vulnerability
 				C.install()
 				user.drop_item(W)
 				W.forceMove(null)
@@ -642,11 +683,14 @@
 			return
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0))
+			var/starting_health = health
 			adjustBruteLoss(-30)
 			updatehealth()
+			if(health != starting_health)
+				visible_message("<span class='attack'>[user] fixes some dents on [src]!</span>")
+			else
+				to_chat(user, "<span class='warning'>[src] is far too damaged for [WT] to have any effect!</span>")
 			add_fingerprint(user)
-			for(var/mob/O in viewers(user, null))
-				O.show_message(text("<span class='attack'>[user] has fixed some of the dents on [src]!</span>"), 1)
 		else
 			to_chat(user, "Need more welding fuel!")
 			return
@@ -763,6 +807,7 @@
 			C.install()
 			if(can_diagnose())
 				to_chat(src, "<span class='info' style=\"font-family:Courier\">New cell installed. Type: [cell.name]. Charge: [cell.charge].</span>")
+		updateicon()
 
 	else if(iswiretool(W))
 		if(wiresexposed)
@@ -1173,8 +1218,12 @@
 				sensor_mode = NIGHT
 				to_chat(src, "<span class='notice'>Light amplification mode enabled.</span>")
 			if("Mesons")
-				sensor_mode = MESON_VISION
-				to_chat(src, "<span class='notice'>Meson Vison augmentation enabled.</span>")
+				var/area/A = get_area(src)
+				if(A.flags & NO_MESONS)
+					to_chat(src, "<span class = 'warning'>Unable to initialize Meson Vision. Probable cause: [pick("Atmospheric anomaly","Poor boot paramater","Bulb burn-out")]</span>")
+				else
+					sensor_mode = MESON_VISION
+					to_chat(src, "<span class='notice'>Meson Vision augmentation enabled.</span>")
 			if("Thermal")
 				sensor_mode = THERMAL_VISION
 				to_chat(src, "<span class='notice'>Thermal Optics augmentation enabled.</span>")
@@ -1183,6 +1232,11 @@
 				to_chat(src, "<span class='notice'>Sensor augmentations disabled.</span>")
 		handle_sensor_modes()
 		update_sight_hud()
+
+/mob/living/silicon/robot/area_entered(area/A)
+	if(A.flags & NO_MESONS && sensor_mode == MESON_VISION)
+		to_chat(src, "<span class='warning'>Your Meson Vision augmentation [pick("force-quits","shuts down unexpectedly","has received an update and needs to close")]!</span>")
+		unequip_sight()
 
 /mob/living/silicon/robot/proc/unequip_sight()
 	sensor_mode = 0

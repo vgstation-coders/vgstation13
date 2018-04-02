@@ -500,20 +500,21 @@
 /mob/living/carbon/CheckSlip()
 	return !locked_to && !lying && !unslippable
 
-/mob/living/carbon/proc/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
+/mob/living/proc/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
+	stop_pulling()
+	Stun(stun_amount)
+	Knockdown(weaken_amount)
+	return 1
+
+/mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
 	if(!slip_on_walking && m_intent == "walk")
 		return 0
 
 	if (CheckSlip() < 1 || !on_foot())
 		return 0
-
-	stop_pulling()
-	Stun(stun_amount)
-	Knockdown(weaken_amount)
-
-	playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
-
-	return 1
+	if(..())
+		playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
+		return 1
 
 /mob/living/carbon/proc/transferImplantsTo(mob/living/carbon/newmob)
 	for(var/obj/item/weapon/implant/I in src)
@@ -625,7 +626,7 @@
 
 /mob/living/carbon/movement_tally_multiplier()
 	. = ..()
-	if(!istype(loc, /turf/space) && !reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+	if(!istype(loc, /turf/space))
 		for(var/obj/item/I in get_clothing_items())
 			if(I.slowdown <= 0)
 				testing("[I] HAD A SLOWDOWN OF <=0 OH DEAR")
@@ -635,6 +636,11 @@
 		for(var/obj/item/I in held_items)
 			if(I.flags & SLOWDOWN_WHEN_CARRIED)
 				. *= I.slowdown
+
+		if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+			. *= 0.4
+			if(. < 1)//we don't want to move faster than the base speed
+				. = 1
 
 /mob/living/carbon/base_movement_tally()
 	. = ..()
@@ -677,7 +683,7 @@
 			to_chat(src, "Interference is disrupting the connection with the mind of [M].")
 			return 0
 	if(ismartian(M))
-		var/mob/living/carbon/martian/MR = M
+		var/mob/living/carbon/complex/martian/MR = M
 		if(MR.head)
 			if(istype(MR.head, /obj/item/clothing/head/helmet/space/martian) || istype(MR.head,/obj/item/clothing/head/tinfoil))
 				to_chat(src, "Interference is disrupting the connection with the mind of [M].")

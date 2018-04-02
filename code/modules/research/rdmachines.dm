@@ -18,6 +18,7 @@ var/global/list/rnd_machines = list()
 	var/stopped		= 0
 	var/base_state	= ""
 	var/build_time	= 0
+	var/auto_make = 0
 
 	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 

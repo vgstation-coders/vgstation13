@@ -193,7 +193,7 @@
 			for(var/mob/living/carbon/human/H in view(7,src))
 				if(H.vessel.get_reagent_amount(BLOOD) && !(H.species.anatomy_flags & NO_BLOOD))
 					possible_targets += H
-			if(possible_targets)
+			if(possible_targets.len)
 				target = pick(possible_targets)
 			else
 				return
