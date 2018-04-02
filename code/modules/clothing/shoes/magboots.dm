@@ -161,7 +161,7 @@
 		return
 	usr.visible_message("<span class = 'warning'>[usr] dials up \the [src]'s funk level to [funk_level+1]</span>")
 	funk_level++
-	if(funk_level >= 4)
+	if(funk_level >= 2)
 		clothing_flags |= NOSLIP
 		magpulse = 1
 
@@ -180,10 +180,10 @@
 	else
 		if(H.w_uniform.type == /obj/item/clothing/under/russobluecamooutfit || istype(H.w_uniform, /obj/item/clothing/under/neorussian))
 			russian+=2
-	if(findtext("ivan",lowertext(H.name)) || findtext("yuri",lowertext(H.name)) || findtext("vlad",lowertext(H.name)) || findtext("lenin",lowertext(H.name)) || findtext("boris",lowertext(H.name)) || findtext("sasha",lowertext(H.name)) || findtext("misha",lowertext(H.name)))
+	if(findtext("ivan",lowertext(H.name)) || findtext("yuri",lowertext(H.name)) || findtext("vlad",lowertext(H.name)) || findtext("lenin",lowertext(H.name)) || findtext("boris",lowertext(H.name)) || findtext("sasha",lowertext(H.name)) || findtext("misha",lowertext(H.name)) || findtext("sergei",lowertext(H.name)))
 		russian+=3
 
-	if(funk_level > 3 && prob((50/russian)*funk_level))
+	if(funk_level > 2 && prob((50/russian)**funk_level))
 		var/datum/organ/external/foot = H.pick_usable_organ(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
 		if(foot.take_damage((rand(1, 3)/10)*funk_level, 0))
 			H.UpdateDamageIcon()
@@ -191,11 +191,23 @@
 	if(funk_level > 4 && prob((10/russian)*funk_level))
 		H.reagents.add_reagent(HYPERZINE, 1)
 
+	/** IT WAS TOO MUCH, SERGEI
 	if(funk_level > 5 && prob((20/russian)*funk_level)) //IT IS TOO LATE, SERGEI
 		step_rand(H)
-
+	**/
 	if(funk_level > 6 && prob((10/russian)*funk_level))
 		H.reagents.add_reagent(HYPOZINE, 1)
 
-	if(prob((funk_level/russian)**2)) //IT WAS ALWAYS TOO LATE
+	if(funk_level > 9 && prob((5/russian)*funk_level))
+		explosion(get_turf(src), (1*funk_level)/russian, ((1*funk_level)/russian)**2, ((1*funk_level)/russian)**3)
+
+	if(prob((funk_level/russian)*2)) //IT WAS ALWAYS TOO LATE
 		toggle()
+
+/obj/item/clothing/shoes/magboots/funk/OnMobDeath(var/mob/living/carbon/human/wearer)
+	var/mob/living/carbon/human/W = wearer
+	W.drop_from_inventory(src)
+	funk_level = 0
+	canremove = 1
+	clothing_flags &= ~NOSLIP
+	magpulse = 0
