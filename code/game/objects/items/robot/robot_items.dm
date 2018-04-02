@@ -245,7 +245,7 @@ obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
 //The cyborg-friendly version and shameless copypaste of binoculars.
 /obj/item/cyborglens
 	name = "long-range zoom camera lens"
-	icon_state = "pocket_mirror"
+	icon_state = "binoculars"
 	var/zoom = FALSE
 	var/event_key = null
 

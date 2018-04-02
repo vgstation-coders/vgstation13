@@ -323,7 +323,7 @@
 	desc = "So that's the way you scientific detectives work. My god! for a fat, middle-aged, hard-boiled, pig-headed guy, you've got the vaguest way of doing things I ever heard of."
 	icon_state = "cyborg_upgrade3"
 	required_module = list(/obj/item/weapon/robot_module/security, /obj/item/weapon/robot_module/tg17355)
-	modules_to_add = list(/obj/item/weapon/gripper/service/noir, /obj/item/cyborglens, /obj/item/device/taperecorder, /obj/item/weapon/gun/projectile/detective, /obj/item/ammo_storage/speedloader/c38/cyborg)
+	modules_to_add = list(/obj/item/weapon/gripper/service/noir, /obj/item/weapon/evidencebag, /obj/item/cyborglens, /obj/item/device/handtv, /obj/item/device/taperecorder, /obj/item/weapon/gun/projectile/detective, /obj/item/ammo_storage/speedloader/c38/cyborg)
 
 /obj/item/borg/upgrade/noir/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -331,6 +331,13 @@
 
 	if(check_icon(R.icon, "[R.base_icon]-noir"))
 		R.set_module_sprites(list("Noir" = "[R.base_icon]-noir"))
+	//If they have no sec key, give them one.
+	if(!istype(R.module.radio_key, /obj/item/device/encryptionkey/headset_sec))
+		R.module.ResetEncryptionKey(R)
+		R.module.radio_key = /obj/item/device/encryptionkey/headset_sec
+		R.module.AddEncryptionKey(R)
+	//If they don't have a SECHUD, give them one.
+	R.module.sensor_augs |= "Security"
 
 /obj/item/borg/upgrade/warden
 	name = "security cyborg warden upgrade board"
@@ -351,7 +358,7 @@
 		R.module.radio_key = /obj/item/device/encryptionkey/headset_sec
 		R.module.AddEncryptionKey(R)
 	//If they don't have a SECHUD, give them one.
-	R.module.sensor_augs |= list("Security")
+	R.module.sensor_augs |= "Security"
 
 
 #undef FAILED_TO_ADD
