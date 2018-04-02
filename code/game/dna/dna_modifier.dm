@@ -20,6 +20,7 @@
 	var/ckey=null
 	var/mind=null
 	var/list/languages = list()
+	var/times_cloned=0
 
 /datum/dna2/record/proc/GetData()
 	var/list/ser=list("data" = null, "owner" = null, "label" = null, "type" = null, "ue" = 0)
@@ -534,7 +535,7 @@
 	if(!connected)
 		src.visible_message("[bicon(src)]<span class='notice'>No scanner connected!<span>")
 		return
-	
+
 	if(user == connected.occupant)
 		return
 
