@@ -1459,6 +1459,7 @@
 #include "code\modules\mob\living\carbon\racial_spells.dm"
 #include "code\modules\mob\living\carbon\shock.dm"
 #include "code\modules\mob\living\carbon\species.dm"
+#include "code\modules\mob\living\carbon\species_powers.dm"
 #include "code\modules\mob\living\carbon\stripping.dm"
 #include "code\modules\mob\living\carbon\update_icons.dm"
 #include "code\modules\mob\living\carbon\alien\alien.dm"

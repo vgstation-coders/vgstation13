@@ -76,7 +76,7 @@
 
 /mob/living/carbon/human/IsVocal()
 	if(mind)
-		return !miming
+		return !(issilent(src))
 	return 1
 
 /mob/living/carbon/human/proc/SetSpecialVoice(var/new_voice)
