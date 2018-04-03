@@ -78,10 +78,11 @@ var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 
 /datum/wires/jukebox/UpdateCut(var/index, var/mended)
 	var/obj/machinery/media/jukebox/J = holder
+	var/obj/I = usr.get_active_hand()
 	switch(index)
 		if(JUKE_POWER_ONE,JUKE_POWER_TWO,JUKE_POWER_THREE)
 			J.power_change()
-			J.shock(usr, 50)
+			J.shock(usr, 50, (I ? I.siemens_coefficient : 1))
 			if(freq_config_data[index]==0)
 				freq_config_data[index] = 14
 			else
@@ -93,7 +94,7 @@ var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 			else
 				J.allowed_modes = loopModeNames.Copy()
 		if(JUKE_TRANSMIT)
-			J.shock(usr, 50)
+			J.shock(usr, 50, (I ? I.siemens_coefficient : 1))
 			if(IsIndexCut(JUKE_TRANSMIT))
 				J.machine_flags &= !MULTITOOL_MENU
 			else
@@ -104,4 +105,4 @@ var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 					return
 			J.short()
 		if(JUKE_SETTING)
-			J.shock(usr, 50)
+			J.shock(usr, 50, (I ? I.siemens_coefficient : 1))

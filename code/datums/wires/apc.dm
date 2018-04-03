@@ -66,17 +66,17 @@ var/const/APC_WIRE_AI_CONTROL = 8
 
 /datum/wires/apc/UpdateCut(var/index, var/mended)
 	var/obj/machinery/power/apc/A = holder
-
+	var/obj/I = usr.get_active_hand()
 	switch(index)
 		if(APC_WIRE_MAIN_POWER1, APC_WIRE_MAIN_POWER2)
 
 			if(!mended)
-				A.shock(usr, 50)
+				A.shock(usr, 50,(I ? I.siemens_coefficient : 1))
 				A.shorted = 1
 
 			else if(!IsIndexCut(APC_WIRE_MAIN_POWER1) && !IsIndexCut(APC_WIRE_MAIN_POWER2))
 				A.shorted = 0
-				A.shock(usr, 50)
+				A.shock(usr, 50,(I ? I.siemens_coefficient : 1))
 
 		if(APC_WIRE_AI_CONTROL)
 
