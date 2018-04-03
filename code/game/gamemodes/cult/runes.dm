@@ -1132,7 +1132,7 @@
 			if (dna_scannernew.locked)
 				dna_scannernew.locked = 0
 		for(var/mob/living/carbon/C in users)
-			user.take_overall_damage(10, 0)
+			C.take_overall_damage(10, 0)
 			C.say("Khari[pick("'","`")]d! Gual'te nikka!")
 		to_chat(cultist, "<span class='warning'>You feel a tingle as you find yourself freed from your restraints.</span>")
 		qdel(src)
