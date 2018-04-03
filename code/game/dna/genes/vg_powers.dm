@@ -133,7 +133,10 @@ Obviously, requires DNA2.
 	appearance_flags = 0
 	plane = NOIR_BLOOD_PLANE
 
-var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /obj/abstract/screen/plane_master/noir_dummy())
+/obj/abstract/screen/plane_master/noir_master/hud
+	plane = HUD_PLANE
+
+var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /obj/abstract/screen/plane_master/noir_dummy(),new /obj/abstract/screen/plane_master/noir_master/hud())
 
 /datum/dna/gene/basic/noir
 	name="Noir"

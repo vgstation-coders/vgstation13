@@ -229,6 +229,9 @@ What is the naming convention for planes or layers?
 	#define HUD_ITEM_LAYER 			2
 	#define HUD_ABOVE_ITEM_LAYER 	3
 
+#define LOWEST_PLANE			PLATING_PLANE
+#define HIGHEST_PLANE			HUD_PLANE
+
 /atom/proc/hud_layerise()
 	plane = HUD_PLANE
 	layer = HUD_ITEM_LAYER
@@ -264,3 +267,25 @@ var/obj/abstract/screen/plane_master/clickmaster_dummy/clickmaster_dummy = new()
 				break
 		sorted.Insert(compare_index+1, current_atom) // insert it just above the atom it was higher than - or at the bottom if it was higher than nothing.
 	return sorted // return the sorted list.
+
+
+/obj/abstract/screen/plane_master/motion_blur/New(var/plane_to_blur,var/client/C,var/time = 240)
+	if(!plane_to_blur || !C)
+		return qdel(src)
+	..()
+	plane = plane_to_blur
+	C.screen += src
+	filters += filter(type = "motion_blur",x=5,y=-5)
+	animate(filters[1],x = -3,y = 3,time = time/4,easing = BOUNCE_EASING)
+	animate(x = 6,y = 6,time = time/4, easing = BOUNCE_EASING)
+	animate(x = -3,y = -3,time = time/4, easing = BOUNCE_EASING)
+	animate(x = 0,y = 0,time = time/4)
+	spawn(time)
+		if(C)
+			C.screen -= src
+		qdel(src)
+
+/client/proc/motion_blur_planes(var/time = 240)
+	for(var/i = LOWEST_PLANE to HIGHEST_PLANE)
+		if(i != LIGHTING_PLANE && i != HUD_PLANE)
+			new /obj/abstract/screen/plane_master/motion_blur(i,src,time)

@@ -3,7 +3,7 @@ var/datum/subsystem/mob/SSmob
 
 /datum/subsystem/mob
 	name          = "Mob"
-	wait          = 2 SECONDS
+	wait          = SS_WAIT_MOB
 	flags         = SS_NO_INIT | SS_KEEP_TIMING
 	priority      = SS_PRIORITY_MOB
 	display_order = SS_DISPLAY_MOB
