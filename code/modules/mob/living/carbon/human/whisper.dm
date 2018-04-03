@@ -11,7 +11,7 @@
 	if(isDead())
 		return
 
-	if(issilent(src))
+	if(silent)
 		to_chat(src, "<span class='warning'>You can't speak while silenced.</span>")
 		return
 

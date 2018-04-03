@@ -84,8 +84,10 @@ mob/proc/remove_internal_organ()
 		return
 	if(!colour_to_apply)
 		colour_to_apply = get_screen_colour()
-	var/list/difference = difflist(client.color,colour_to_apply)
-	if(difference || !(client.color) || !istype(difference) || !difference.len)
+	var/list/difference = list()
+	if(client.color)
+		difference = difflist(client.color,colour_to_apply)
+	if(!difference.len || difference || !istype(difference))
 		client.updating_colour = 1
 		var/cached_ckey = client.ckey
 		if(forceupdate)
@@ -102,7 +104,7 @@ mob/proc/remove_internal_organ()
 				client.updating_colour = 0
 				difference = difflist(client.color,get_screen_colour())
 				if((difference || !(client.color) || !istype(difference) || !difference.len) && !forceupdate) // panic panic panic
-					src.update_colour(forceupdate = 1)
+					src.update_colour(0,1,colour_to_apply)
 			else
 				bad_changing_colour_ckeys["[cached_ckey]"] = 1
 

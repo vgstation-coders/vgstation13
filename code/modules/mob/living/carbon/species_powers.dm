@@ -16,7 +16,7 @@
 
 
 /spell/targeted/genetic/invert_eyes/cast(list/targets, mob/user)
-	var/list/colourmatrix
+	var/list/colourmatrix = list()
 	if(toggle)
 		colourmatrix = list(-1, 0, 0,
 						 0,-1, 0,
@@ -25,5 +25,5 @@
 	else
 		colourmatrix = default_colour_matrix
 	for(var/mob/living/carbon/human/M in targets)
-		M.update_colour(50,1,colourmatrix)
+		M.update_colour(50,0,colourmatrix)
 	toggle = !toggle

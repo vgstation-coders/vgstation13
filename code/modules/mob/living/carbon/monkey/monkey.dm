@@ -469,27 +469,31 @@
 
 /mob/living/carbon/monkey/mushroom/Life()
 	..()
-	if(!isDead() && !gcDestroyed)
+	if(!isDead() && !gcDestroyed && client)
 		var/light_amount = 0
 		if(isturf(loc))
 			var/turf/T = loc
 			light_amount = T.get_lumcount() * 10
 
-		growth = Clamp(growth + rand(1,3)/(light_amount ? light_amount : 1),0,100)
+		growth = Clamp(growth + rand(1,3)/(10*light_amount>1 ? light_amount : 1),0,100)
 
 		if(growth >= 100)
 			growth = 0
-			var/mob/living/carbon/human/adult = new(get_turf(src.loc))
+			var/mob/living/carbon/human/adult = new()
 			adult.alpha = 0
 			var/matrix/smol = matrix()
 			smol.Scale(0)
 			var/matrix/large = matrix()
 			var/matrix/M = adult.transform
 			M.Scale(0)
+			adult.set_species("Mushroom")
+			for(var/datum/language/L in languages)
+				adult.add_language(L.name)
+
+			adult.regenerate_icons()
+			adult.forceMove(get_turf(src))
 			animate(src, alpha = 0, transform = smol, time = 3 SECONDS, easing = SINE_EASING)
 			animate(adult, alpha = 255, transform = large, time = 3 SECONDS, easing = SINE_EASING)
-			adult.set_species("Mushroom")
-
 			transferImplantsTo(adult)
 			transferBorers(adult)
 
@@ -499,10 +503,6 @@
 				L = null
 				qdel(L)
 
-			for(var/datum/language/L in languages)
-				adult.add_language(L.name)
-
-			adult.regenerate_icons()
 			if(mind)
 				src.mind.transfer_to(adult)
 			adult.fully_replace_character_name(newname = src.real_name)
