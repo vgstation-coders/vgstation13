@@ -126,7 +126,7 @@ var/list/department_radio_keys = list(
 		return
 
 	var/message_mode = get_message_mode(message)
-	if(issilent(src))
+	if(silent)
 		to_chat(src, "<span class='warning'>You can't speak while silenced.</span>")
 		return
 	if((status_flags & FAKEDEATH) && !stat && message_mode != MODE_CHANGELING)
