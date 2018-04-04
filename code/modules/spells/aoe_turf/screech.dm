@@ -14,12 +14,14 @@
 	cooldown_min = 5 MINUTES
 
 	override_base = "vamp"
-	hud_state = "vampire_cloack"
+	hud_state = "vampire_screech"
 
 	var/blood_cost = 30
 
 /spell/aoe_turf/screech/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
+	if (!.) // No need to go further.
+		return FALSE
 	if (!user.vampire_power(blood_cost, 0, FALSE))
 		return FALSE
 
@@ -27,14 +29,15 @@
 	
 	var/list/targets = list()
 
-	for(var/mob/living/carbon/C in hearers(4, user))
+	for(var/mob/living/carbon/C in hearers(user, 4))
+		to_chat(world, C)
 		if(C == user)
 			continue
 		if(ishuman(C))
 			var/mob/living/carbon/human/H = C
 			if(H.earprot())
 				continue
-			if(!C.vampire_affected(user))
+			if(!C.vampire_affected(user.mind))
 				continue
 			targets += C
 	

@@ -151,6 +151,7 @@
 	range = SELFCAST
 	duration = 50 //in deciseconds
 
+	override_base = "vamp"
 	hud_state = "vampire_jaunt"
 
 	enteranim = "batify"
@@ -160,6 +161,8 @@
 	var/blood_cost = 20
 
 /spell/targeted/ethereal_jaunt/vamp/cast_check(var/skipcharge = 0, var/mob/user = usr)
+	. = ..()
+	if (!.) // No need to go further.
+		return FALSE
 	if (!user.vampire_power(blood_cost, 0))
 		return FALSE
-	return ..()

@@ -22,10 +22,12 @@
 
 /spell/aoe_turf/glare/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
-	if (!user.vampire_power(blood_cost, 0))
+	if (!.) // No need to go further.
 		return FALSE
 	if (istype(user.get_item_by_slot(slot_glasses), /obj/item/clothing/glasses/sunglasses/blindfold))
 		to_chat(user, "<span class='warning'>You're blindfolded!</span>")
+	if (!user.vampire_power(blood_cost, 0))
+		return FALSE
 
 /spell/aoe_turf/glare/choose_targets(var/mob/user = usr)
 	var/list/targets = list()

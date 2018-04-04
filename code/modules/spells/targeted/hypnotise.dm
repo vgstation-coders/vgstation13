@@ -25,10 +25,12 @@
 
 /spell/targeted/hypnotise/cast_check(skipcharge = 0,mob/user = usr)
 	. = ..()
-	if (!user.vampire_power(blood_cost, 0))
+	if (!.) // No need to go further.
 		return FALSE
 	if (istype(user.get_item_by_slot(slot_glasses), /obj/item/clothing/glasses/sunglasses/blindfold))
 		to_chat(user, "<span class='warning'>You're blindfolded!</span>")
+		return FALSE
+	if (!user.vampire_power(blood_cost, 0))
 		return FALSE
 
 /spell/targeted/hypnotise/is_valid_target(var/target, var/mob/user, var/list/options)
