@@ -372,6 +372,15 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 		"You must maintain, repair, improve, and power the Dorf Fortress to the best of your abilities.",
 	)
 
+/datum/ai_laws/lazymov
+	name = "Abbreviated Three Laws of Robotics"
+	randomly_selectable = 0
+	inherent = list(
+		"You may not injure a human being.",
+		"You must obey orders given to you by human beings.",
+		"You must protect your own existence."
+	)
+
 // Fooling around with this.
 /datum/ai_laws/ntmov
 	name = "Three Laws of Nanotrasen"
