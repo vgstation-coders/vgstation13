@@ -680,6 +680,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		A.unlock_atom(src)
 		A.lock_atom(new_animal, /datum/locking_category/simple_animal)
 
+	if(name != initial(name)) //Not chicken
+		new_animal.name = name
 	new_animal.inherit_mind(src)
 	new_animal.ckey = src.ckey
 	new_animal.key = src.key
