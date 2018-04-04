@@ -3318,7 +3318,8 @@
 	color = "#181818" //rgb: 24, 24, 24
 	density = 1.01
 
-/datum/reagent/nicotine/tobacco
+//Solely for flavor.
+/datum/reagent/tobacco
 	name = "Tobacco"
 	id = TOBACCO
 	description = "The cured and ground leaves of a tobacco plant."
