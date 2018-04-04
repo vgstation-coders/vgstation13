@@ -417,7 +417,7 @@
 			to_chat(H, "<span class='warning'>Your [glass_hand.display_name] resonates with the glass in \the [glass_to_shatter], shattering it to bits!</span>")
 			glass_to_shatter.reagents.reaction(H.loc, TOUCH)
 			new/obj/effect/decal/cleanable/generic(get_turf(H))
-			playsound(get_turf(H), 'sound/effects/Glassbr1.ogg', 25, 1)
+			playsound(H, 'sound/effects/Glassbr1.ogg', 25, 1)
 			spawn(1 SECONDS)
 				if (H && glass_hand)
 					if (prob(50 * multiplier))
@@ -550,6 +550,14 @@
 		var/mob/M = touched
 		add_attacklogs(mob, M, "damaged with keratin spikes",addition = "([M] bumped into [mob])", admin_warn = FALSE)
 
+/datum/disease2/effect/vegan
+	name = "Vegan Syndrome"
+	stage = 2
+
+/datum/disease2/effect/vegan/activate(var/mob/living/carbon/mob)
+	mob.dna.check_integrity()
+	mob.dna.SetSEState(VEGANBLOCK,1)
+	domutcheck(mob, null)
 
 ////////////////////////STAGE 3/////////////////////////////////
 
@@ -580,7 +588,6 @@
 	mob.dna.check_integrity()
 	mob.dna.SetSEState(REMOTETALKBLOCK,1)
 	domutcheck(mob, null)
-
 
 /datum/disease2/effect/mind
 	name = "Lazy Mind Syndrome"
@@ -972,6 +979,41 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	var/obj/item/spawned_organ = new organ_type(get_turf(mob))
 	mob.visible_message("<span class='warning'>\A [spawned_organ.name] is extruded from \the [mob]'s body and falls to the ground!</span>","<span class='warning'>\A [spawned_organ.name] is extruded from your body and falls to the ground!</span>")
 
+/datum/disease2/effect/multiarm
+	name = "Polymelia Syndrome"
+	stage = 3
+	max_multiplier = 3
+	var/activated = FALSE
+
+/datum/disease2/effect/multiarm/activate(var/mob/living/carbon/mob)
+	if(activated)
+		return
+	var/hand_amount = round(multiplier)
+	mob.visible_message("<span class='warning'>[mob.take_blood(null, rand(4,12)) ? "With a spray of blood, " : ""][hand_amount > 1 ? "[hand_amount] more arms sprout" : "a new arm sprouts"] from \the [mob]!</span>","<span class='notice'>[hand_amount] more arms burst forth from your back!</span>")
+	mob.set_hand_amount(mob.held_items.len + hand_amount)
+	blood_splatter(mob.loc,mob,TRUE)
+	activated = TRUE
+
+/datum/disease2/effect/multiarm/deactivate(var/mob/living/carbon/mob)
+	if(!activated)
+		return
+	var/hand_amount = round(multiplier)
+	mob.visible_message("<span class='notice'>The arms sticking out of \the [mob]'s back shrivel up and fall off!</span>", "<span class='warning'>Your new arms begin to die off, as the virus can no longer support them.</span>")
+	mob.set_hand_amount(mob.held_items.len - hand_amount)
+	for(var/i = 1 to hand_amount)
+		var/r_or_l = pick("right","left")
+		var/obj/item/organ/external/E
+		var/obj/item/organ/external/EE
+		if(r_or_l == "right")
+			E = new /obj/item/organ/external/r_arm(mob.loc, mob)
+			EE = new /obj/item/organ/external/r_hand(mob.loc, mob)
+		else
+			E = new /obj/item/organ/external/l_arm(mob.loc, mob)
+			EE = new /obj/item/organ/external/l_hand(mob.loc, mob)
+		E.add_child(EE)
+		E.throw_at(get_step(src,pick(alldirs)), rand(1,4), rand(1,3))
+	..()
+
 
 ////////////////////////STAGE 4/////////////////////////////////
 
@@ -1034,6 +1076,16 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 		if(h.species.name != "Tajaran")
 			if(h.set_species("Tajaran"))
 				h.regenerate_icons()
+
+/datum/disease2/effect/zombie
+	name = "Stubborn brain syndrome"
+	stage = 4
+	badness = 2
+
+/datum/disease2/effect/zombie/activate(var/mob/living/carbon/mob)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/h = mob
+		h.become_zombie_after_death = 1
 
 
 /datum/disease2/effect/voxpox

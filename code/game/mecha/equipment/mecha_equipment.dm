@@ -137,10 +137,9 @@
 		send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
 	return
 
-/obj/item/mecha_parts/mecha_equipment/proc/occupant_message(message)
+/obj/item/mecha_parts/mecha_equipment/proc/occupant_message(var/message, var/prevent_spam = FALSE)
 	if(chassis)
-		chassis.occupant_message("[bicon(src)] [message]")
-	return
+		chassis.occupant_message("[bicon(src)] [message]", prevent_spam)
 
 /obj/item/mecha_parts/mecha_equipment/proc/log_message(message)
 	if(chassis)

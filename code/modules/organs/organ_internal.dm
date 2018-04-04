@@ -219,6 +219,9 @@
 /datum/organ/internal/brain/slime_core
 	removed_type = /obj/item/organ/internal/brain/slime_core
 
+/datum/organ/internal/brain/mushroom_brain
+	removed_type = /obj/item/organ/internal/brain/mushroom
+
 /datum/organ/internal/appendix
 	name = "appendix"
 	parent_organ = LIMB_GROIN
@@ -230,8 +233,14 @@
 
 	if(!removed_type)
 		return 0
+	var/obj/item/organ/internal/removed_organ
 
-	var/obj/item/organ/internal/removed_organ = new removed_type(get_turf(user))
+	if(isatom(removed_type))
+		removed_organ = removed_type
+		removed_organ.forceMove(get_turf(user))
+		removed_type = null
+	else
+		removed_organ = new removed_type(get_turf(user))
 
 	if(istype(removed_organ))
 		removed_organ.organ_data = src
@@ -239,6 +248,7 @@
 			removed_organ.had_mind = !isnull(owner.mind)
 		removed_organ.update()
 		organ_holder = removed_organ
+		removed_organ.stabilized = FALSE
 	return removed_organ
 
 /datum/organ/internal/send_to_past(var/duration)

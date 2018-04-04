@@ -45,7 +45,7 @@
 			F.reagents.remove_reagent(FUEL, 50, 1)//Deleting 50 fuel from the welding fuel tank,
 			assembled = 1
 			to_chat(user, "<span  class='notice'>You've filled the makeshift explosive with welding fuel.</span>")
-			playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+			playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 			desc = "An improvised explosive assembly. Filled to the brim with 'Explosive flavor'"
 			overlays += image('icons/obj/grenade.dmi', icon_state = "improvised_grenade_filled")
 			return
@@ -114,7 +114,7 @@
 				current_shrapnel += I.shrapnel_size
 				if(user && user.drop_item(I, src))
 					to_chat(user, "<span  class='notice'>You add \the [I] to the improvised explosive.</span>")
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+					playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
 				else
 					I.forceMove(src)
 

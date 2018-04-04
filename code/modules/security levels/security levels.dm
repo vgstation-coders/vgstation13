@@ -21,24 +21,28 @@
 	if(level >= SEC_LEVEL_GREEN && level <= SEC_LEVEL_DELTA && level != security_level)
 		switch(level)
 			if(SEC_LEVEL_GREEN)
+				world << sound('sound/misc/notice2.ogg')
 				to_chat(world, "<font size=4 color='red'>Attention! Security level lowered to green</font>")
 				to_chat(world, "<font color='red'>[config.alert_desc_green]</font>")
 				security_level = SEC_LEVEL_GREEN
-
 			if(SEC_LEVEL_BLUE)
 				if(security_level < SEC_LEVEL_BLUE)
+					world << sound('sound/misc/notice1.ogg')
 					to_chat(world, "<font size=4 color='red'>Attention! Security level elevated to blue</font>")
 					to_chat(world, "<font color='red'>[config.alert_desc_blue_upto]</font>")
 				else
+					world << sound('sound/misc/notice2.ogg')
 					to_chat(world, "<font size=4 color='red'>Attention! Security level lowered to blue</font>")
 					to_chat(world, "<font color='red'>[config.alert_desc_blue_downto]</font>")
 				security_level = SEC_LEVEL_BLUE
 
 			if(SEC_LEVEL_RED)
 				if(security_level < SEC_LEVEL_RED)
+					world << sound('sound/misc/redalert1.ogg')
 					to_chat(world, "<font size=4 color='red'>Attention! Code red!</font>")
 					to_chat(world, "<font color='red'>[config.alert_desc_red_upto]</font>")
 				else
+					world << sound('sound/misc/notice2.ogg')
 					to_chat(world, "<font size=4 color='red'>Attention! Code red!</font>")
 					to_chat(world, "<font color='red'>[config.alert_desc_red_downto]</font>")
 				security_level = SEC_LEVEL_RED

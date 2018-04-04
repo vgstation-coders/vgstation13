@@ -1,7 +1,6 @@
 //ERT
 
 var/list/response_team_members = list()
-var/list/distributed_ert_suits = list()
 
 /datum/striketeam/ert
 	striketeam_name = TEAM_ERT

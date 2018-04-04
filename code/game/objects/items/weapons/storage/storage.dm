@@ -29,6 +29,7 @@
 	var/foldable = null	// BubbleWrap - if set, can be folded (when empty) into a sheet of cardboard
 	var/foldable_amount = 1 // Number of foldables to produce, if any - N3X
 	var/internal_store = 0
+	var/list/no_storage_slot = new/list()//if the item is equipped in a slot that is contained in this list, the item will act purely as a clothing item and not a storage item (ie plastic bags over head)
 
 /obj/item/weapon/storage/proc/can_use()
 	return TRUE
@@ -48,7 +49,7 @@
 		if(!(src.loc == usr) || (src.loc && src.loc.loc == usr))
 			return
 
-		playsound(get_turf(src), "rustle", 50, 1, -5)
+		playsound(src, "rustle", 50, 1, -5)
 		if(!( M.restrained() ) && !( M.stat ))
 			var/obj/abstract/screen/inventory/OI = over_object
 
@@ -213,9 +214,14 @@
 
 //This proc return 1 if the item can be picked up and 0 if it can't.
 //Set the stop_messages to stop it from printing messages
-/obj/item/weapon/storage/proc/can_be_inserted(obj/item/W as obj, stop_messages = 0)
+/obj/item/weapon/storage/proc/can_be_inserted(obj/item/W as obj, stop_messages = 0,mob/M, slot)
 	if(!istype(W))
 		return //Not an item
+	if(isliving(loc))
+		var/mob/living/L = loc
+		for (var/i in no_storage_slot)
+			if(L.is_wearing_item(src, i)) //prevents putting items into a storage item that's equipped on a no_storage_slot
+				return FALSE
 
 	if(src.loc == W)
 		return 0 //Means the item is already in the storage item
@@ -364,10 +370,6 @@
 		var/obj/item/weapon/storage/fancy/F = src
 		F.update_icon(1)
 
-	for(var/mob/M in range(1, get_turf(src)))
-		if (M.s_active == src)
-			if (M.client)
-				M.client.screen -= W
 
 	if(new_location)
 		var/mob/M
@@ -376,7 +378,8 @@
 			W.dropped(M)
 		if(ismob(new_location))
 			M = new_location
-			M.put_in_active_hand(W)
+			if(!M.put_in_active_hand(W))
+				return 0
 		else
 			if(istype(new_location, /obj/item/weapon/storage))
 				var/obj/item/weapon/storage/A = new_location
@@ -385,6 +388,11 @@
 				W.forceMove(new_location)
 	else
 		W.forceMove(get_turf(src))
+
+	for(var/mob/M in range(1, get_turf(src)))
+		if (M.s_active == src)
+			if (M.client)
+				M.client.screen -= W
 
 	if(usr)
 		src.orient2hud(usr)
@@ -448,7 +456,7 @@
 	return
 
 /obj/item/weapon/storage/attack_hand(mob/user as mob)
-	playsound(get_turf(src), "rustle", 50, 1, -5)
+	playsound(src, "rustle", 50, 1, -5)
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
@@ -507,7 +515,7 @@
 	set name = "Empty Contents"
 	set category = "Object"
 
-	if((!ishuman(usr) && (src.loc != usr)) || usr.isUnconscious() || usr.restrained())
+	if((!ishigherbeing(usr) && (src.loc != usr)) || usr.isUnconscious() || usr.restrained())
 		return
 
 	var/turf/T = get_turf(src)
@@ -556,7 +564,7 @@
 
 	//Clicking on itself will empty it, if it has the verb to do that.
 	if(user.get_active_hand() == src)
-		if(src.verbs.Find(/obj/item/weapon/storage/verb/quick_empty))
+		if(src.verbs.Find(/obj/item/weapon/storage/verb/quick_empty) && contents.len)
 			src.quick_empty()
 			return
 
@@ -577,7 +585,8 @@
 		return
 	// Now make the cardboard
 	to_chat(user, "<span class='notice'>You fold \the [src] flat.</span>")
-	new src.foldable(get_turf(src),foldable_amount)
+	var/folded = new src.foldable(get_turf(src),foldable_amount)
+	transfer_fingerprints_to(folded)
 	qdel(src)
 //BubbleWrap END
 /obj/item/weapon/storage/proc/can_see_contents()
@@ -596,10 +605,12 @@
 
 /obj/item/weapon/storage/Destroy()
 	close_all()
-	returnToPool(boxes)
-	returnToPool(closer)
-	boxes = null
-	closer = null
+	if(boxes)
+		returnToPool(boxes)
+		boxes = null
+	if(closer)
+		returnToPool(closer)
+		closer = null
 	for(var/atom/movable/AM in contents)
 		qdel(AM)
 	contents = null
@@ -660,3 +671,10 @@
 /obj/item/weapon/storage/proc/mass_remove(var/atom/A)
 	for(var/obj/item/O in contents)
 		remove_from_storage(O, A)
+
+/obj/item/weapon/storage/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	//Forbids wearing a storage item in a  no_storage_slot (ie plastic bags over head) with something already inside
+	.=..()
+	for (var/i in no_storage_slot)
+		if(contents.len && (slot == i))
+			return CANNOT_EQUIP

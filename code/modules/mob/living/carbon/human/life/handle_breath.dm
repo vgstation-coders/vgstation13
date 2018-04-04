@@ -24,7 +24,7 @@
 	var/datum/gas_mixture/environment = loc.return_air()
 	var/datum/gas_mixture/breath
 	//HACK NEED CHANGING LATER
-	if(health < config.health_threshold_crit)
+	if(health < config.health_threshold_crit || !L)
 		losebreath++
 	if(losebreath > 0) //Suffocating so do not take a breath
 		losebreath--
@@ -56,7 +56,7 @@
 				else
 					*/
 					//Not enough air around, take a percentage of what's there to model this properly
-				breath_moles = environment.total_moles() * BREATH_PERCENTAGE
+				breath_moles = (environment.total_moles() / environment.volume * CELL_VOLUME) * BREATH_PERCENTAGE
 
 				breath = loc.remove_air(breath_moles)
 
@@ -112,9 +112,13 @@
 					adjust_fire_stacks(0.5)
 					IgniteMob()
 		else
-			if(fire_stacks > 0)
-				var/obj/item/clothing/suit/space/plasmaman/PS=wear_suit
-				PS.Extinguish(src)
+			var/obj/item/clothing/suit/space/plasmaman/PS=wear_suit
+			if(istype(PS))
+				if(fire_stacks > 0)
+					PS.Extinguish(src)
+				else
+					PS.regulate_temp_of_wearer(src)
+
 
 	if(breath)
 		loc.assume_air(breath)
@@ -142,8 +146,8 @@
 /mob/living/carbon/human/proc/handle_breath(var/datum/gas_mixture/breath)
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
 		return 0
-
-	if(!breath || (breath.total_moles() == 0) || suiciding)
+	var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
+	if(!breath || (breath.total_moles() == 0) || suiciding || !L)
 		if(reagents.has_reagent(INAPROVALINE))
 			return 0
 		if(suiciding)
@@ -163,7 +167,7 @@
 		return 0
 
 	// Lungs now handle processing atmos shit.
-	for(var/datum/organ/internal/lungs/L in internal_organs)
+	if(L)
 		L.handle_breath(breath,src)
 
 	return 1

@@ -101,7 +101,6 @@ client/proc/Test_ZAS_Connection(var/turf/simulated/T as turf)
 		to_chat(client, "Pressure: [air.return_pressure()] KPa")
 		to_chat(client, "")
 		to_chat(client, "Unsimulated Zone(space/catwalk) Tiles: [length(unsimulated_tiles)]")
-		to_chat(client, "Movable Objects: [length(movables())]")
 		to_chat(client, "<u>Connections: [length(connections)]</u>")
 
 		for(var/connection/C in connections)

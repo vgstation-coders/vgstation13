@@ -40,6 +40,8 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 						MAT_SILVER
 	)
 
+	var/draining = FALSE
+
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/New()
 	. = ..()
 
@@ -61,11 +63,12 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 
 
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/RefreshParts()
+	..()
 	var/T = 0
 	for(var/obj/item/weapon/reagent_containers/glass/G in component_parts)
-		T += G.reagents.maximum_volume
+		T += G.reagents.maximum_volume - G.reagents.total_volume
+	create_reagents(T) // This is only a buffer for handling reagents poured into the imprinter before they flow into the beakers
 
-	create_reagents(T) // Holder for the reagents used as materials.
 	T = 0
 	for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
 		T += M.rating
@@ -75,3 +78,35 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	..()
 	if (O.is_open_container())
 		return 0
+
+/obj/machinery/r_n_d/fabricator/circuit_imprinter/on_reagent_change()
+	if(!draining)
+		drain_to_beakers()
+
+/obj/machinery/r_n_d/fabricator/circuit_imprinter/proc/drain_to_beakers()
+	draining = TRUE
+	for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+		if(RC.reagents.is_full())
+			continue
+		var/empty_volume = RC.reagents.maximum_volume - RC.reagents.total_volume
+		reagents.trans_to(RC, empty_volume)
+		if(reagents.is_empty())
+			break
+	reagents.clear_reagents()
+	update_buffer_size()
+	draining = FALSE
+
+/obj/machinery/r_n_d/fabricator/circuit_imprinter/update_buffer_size()
+	var/total_empty_volume = 0
+	for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+		total_empty_volume += RC.reagents.maximum_volume - RC.reagents.total_volume
+	reagents.maximum_volume = total_empty_volume
+
+/obj/machinery/r_n_d/fabricator/circuit_imprinter/proc/get_total_volume()
+	var/all_volume = 0
+	for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+		all_volume += RC.reagents.total_volume
+	return all_volume
+
+/obj/machinery/r_n_d/fabricator/circuit_imprinter/hide_own_reagents()
+	return TRUE

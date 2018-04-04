@@ -267,7 +267,7 @@
 				var/obj/location_as_object = loc
 				breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
 			else if(istype(loc, /turf/))
-				var/breath_moles = environment.total_moles()*BREATH_PERCENTAGE
+				var/breath_moles = environment.total_moles()/environment.volume*CELL_VOLUME*BREATH_PERCENTAGE
 				breath = loc.remove_air(breath_moles)
 
 				// Handle chem smoke effect  -- Doohl
@@ -520,7 +520,7 @@
 		if(isturf(loc)) //else, there's considered to be no light
 			var/turf/T = loc
 			if(T.dynamic_lighting)
-				light_amount = T.get_lumcount() * 10
+				light_amount = (T.get_lumcount() * 10) - 5
 			else
 				light_amount = 5
 		nutrition += light_amount

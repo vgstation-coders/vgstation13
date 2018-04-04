@@ -25,7 +25,7 @@ var/global/list/alert_overlays_global = list()
 
 		var/turf/simulated/T=get_turf(get_step(loc,dir))
 
-		if(dir == turn(source.dir, 180) && source.flags & ON_BORDER) //[   ][  |][   ] imagine the | is the source (with dir EAST -> facing right), and the brackets are floors. When we try to get the turf to the left's air info, use the middle's turf instead
+		if(dir == turn(source.dir, 180) && source.flow_flags & ON_BORDER) //[   ][  |][   ] imagine the | is the source (with dir EAST -> facing right), and the brackets are floors. When we try to get the turf to the left's air info, use the middle's turf instead
 			if(!(locate(/obj/machinery/door/airlock) in get_turf(source))) //If we're on a door, however, DON'T DO THIS -> doors are airtight, so the result will be innacurate! This is a bad snowflake, but as long as it makes the feature freeze go away...
 				T = get_turf(source)
 
@@ -111,7 +111,7 @@ var/global/list/alert_overlays_global = list()
 
 	for(var/obj/machinery/door/firedoor/F in loc)
 		if(F != src)
-			if(F.flags & ON_BORDER && src.flags & ON_BORDER && F.dir != src.dir) //two border doors on the same tile don't collide
+			if(F.flow_flags & ON_BORDER && src.flow_flags & ON_BORDER && F.dir != src.dir) //two border doors on the same tile don't collide
 				continue
 			spawn(1)
 				new /obj/item/firedoor_frame(get_turf(src))
@@ -396,7 +396,7 @@ var/global/list/alert_overlays_global = list()
 					if(dir_alerts[d] & (1<<(i-1)))// Check to see if dir_alerts[d] has the i-1th bit set.
 
 						var/list/state_list = alert_overlays_local["alert_[ALERT_STATES[i]]"]
-						if(flags & ON_BORDER)
+						if(flow_flags & ON_BORDER)
 							overlays += turn(state_list["[turn(cdir, dir2angle(src.dir))]"], dir2angle(src.dir))
 						else
 							overlays += state_list["[cdir]"]
@@ -415,7 +415,7 @@ var/global/list/alert_overlays_global = list()
 		lockdown=0
 
 		// Pressure alerts
-		if(flags & ON_BORDER) //For border firelocks, we only need to check front and back, don't check the sides
+		if(flow_flags & ON_BORDER) //For border firelocks, we only need to check front and back, don't check the sides
 			var/turf/T1 = get_step(loc,dir)
 			var/turf/T2
 			if(locate(/obj/machinery/door/airlock) in get_turf(src)) //If this firelock is in the same tile as an airlock, we want to check the OTHER SIDE of the airlock, not the airlock turf itself.
@@ -484,7 +484,7 @@ var/global/list/alert_overlays_global = list()
 			  //This is needed due to BYOND limitations in controlling visibility
 	heat_proof = 1
 	air_properties_vary_with_direction = 1
-	flags = ON_BORDER
+	flow_flags = ON_BORDER
 
 /obj/machinery/door/firedoor/border_only/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
@@ -506,7 +506,7 @@ var/global/list/alert_overlays_global = list()
 /obj/machinery/door/firedoor/border_only/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
-	if(flags & ON_BORDER)
+	if(flow_flags & ON_BORDER)
 		if(target) //Are we doing a manual check to see
 			if(get_dir(loc, target) == dir)
 				return !density

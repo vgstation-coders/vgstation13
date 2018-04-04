@@ -114,7 +114,7 @@
 		"<span class='warning'>Your hand slips, damaging [target]'s face with \the [tool]!</span>")
 	var/datum/organ/external/head/h = affected
 	h.createwound(BRUISE, 10)
-	h.disfigured = 1
+	h.disfigure("brute")
 
 
 

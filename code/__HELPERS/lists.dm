@@ -58,7 +58,7 @@
 
 //Checks for specific types in a list
 /proc/is_type_in_list(datum/A, list/L)
-	if(!L.len || !A)
+	if(!L || !L.len || !A)
 		return 0
 
 	if(L[L[1]] != MAX_VALUE) //Is this already a generated typecache
@@ -264,6 +264,15 @@
 			return key
 		i++
 	return null
+
+// Returns the first key to match the specified element. This is intended for lists which are injective functions.
+// Which is to say, two keys will not map to the same element.
+/proc/get_key_by_element(var/list/L, var/element)
+	for(var/key in L)
+		if(L[key] == element)
+			return key
+	return null
+
 
 /proc/count_by_type(var/list/L, type)
 	var/i = 0

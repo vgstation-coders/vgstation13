@@ -14,6 +14,7 @@
 	possible_transfer_amounts = list(5,10,15,25,30,50)
 	volume = 50
 	flags = FPRINT  | OPENCONTAINER
+	layer = ABOVE_OBJ_LAYER
 
 	//This is absolutely terrible
 	// TODO To remove this, return 1 on every attackby() that handles reagent_containers.
@@ -89,11 +90,12 @@
 	var/transfer_result = transfer(target, user, splashable_units = -1) // Potentially splash with everything inside
 
 	if((transfer_result > 10) && (isturf(target) || istype(target, /obj/machinery/portable_atmospherics/hydroponics)))	//if we're splashing a decent amount of reagent on the floor
-		playsound(get_turf(target), 'sound/effects/slosh.ogg', 25, 1)													//or in an hydro tray, then we make some noise.
+		playsound(target, 'sound/effects/slosh.ogg', 25, 1)													//or in an hydro tray, then we make some noise.
 
 /obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
 		set_tiny_label(user)
+	attempt_heating(W, user)
 
 /obj/item/weapon/reagent_containers/glass/fits_in_iv_drip()
 	return 1
@@ -133,21 +135,21 @@
 						return 1
 					src.reagents.trans_to(M, 1)
 					to_chat(user, "<span class='notice'>You barely manage to wet [M]</span>")
-					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+					playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 				if(30 to 100)
 					if(M.reagents.total_volume >= 5)
 						to_chat(user, "<span class='notice'>You dip \the [M]'s head into \the [src] but don't soak anything up.</span>")
 						return 1
 					src.reagents.trans_to(M, 2)
 					to_chat(user, "<span class='notice'>You manage to wet [M]</span>")
-					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+					playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 				if(100 to INFINITY)
 					if(M.reagents.total_volume >= 10)
 						to_chat(user, "<span class='notice'>You dip \the [M]'s head into \the [src] but don't soak anything up.</span>")
 						return 1
 					src.reagents.trans_to(M, 5)
 					to_chat(user, "<span class='notice'>You manage to soak [M]</span>")
-					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+					playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 				else
 					to_chat(user, "What")
 					return 1
@@ -209,20 +211,6 @@
 	starting_materials = list(MAT_GLASS = 1500)
 	volume = 100
 	possible_transfer_amounts = list(5,10,15,25,30,50,100)
-
-/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg
-	var/obj/item/weapon/robot_module/holder
-
-/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/New(loc,_holder)
-	..()
-	holder = _holder
-
-/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/proc/return_to_modules()
-	var/mob/living/silicon/robot/R = holder.loc
-	if(R.module_state_1 == src || R.module_state_2 == src || R.module_state_3 == src)
-		forceMove(R)
-	else
-		forceMove(holder)
 
 /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
 	name = "plasma beaker"
@@ -340,21 +328,21 @@
 						return 1
 					src.reagents.trans_to(M, 1)
 					to_chat(user, "<span class='notice'>You barely manage to wet [M]</span>")
-					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+					playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 				if(30 to 100)
 					if(M.reagents.total_volume >= 5)
 						to_chat(user, "<span class='notice'>You dip \the [M]'s head into \the [src] but don't soak anything up.</span>")
 						return 1
 					src.reagents.trans_to(M, 2)
 					to_chat(user, "<span class='notice'>You manage to wet [M]</span>")
-					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+					playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 				if(100 to INFINITY)
 					if(M.reagents.total_volume >= 10)
 						to_chat(user, "<span class='notice'>You dip \the [M]'s head into \the [src] but don't soak anything up.</span>")
 						return 1
 					src.reagents.trans_to(M, 5)
 					to_chat(user, "<span class='notice'>You manage to soak [M]</span>")
-					playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+					playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 				else
 					to_chat(user, "What")
 					return 1
@@ -370,6 +358,7 @@
 		user.put_in_hands(new /obj/item/weapon/bucket_sensor)
 		user.drop_from_inventory(src)
 		qdel(src)
+	attempt_heating(D, user)
 
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
 	..()

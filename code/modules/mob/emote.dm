@@ -45,7 +45,7 @@
 		// Type 2 (Audible) emotes are sent to anyone in hear range
 		// of the *LOCATION* -- this is important for pAIs to be heard
 		else if (m_type & 2)
-			for(var/mob/living/M in get_hearers_in_view(get_turf(src), null))
+			for(var/mob/M in get_hearers_in_view(7, src))
 				M.show_message(message, m_type)
 
 /mob/proc/emote_dead(var/message)

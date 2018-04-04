@@ -11,7 +11,7 @@
 	var/projectiletype
 	var/projectilesound
 	var/casingtype
-	var/move_to_delay = 2 //delay for the automated movement.
+	var/move_to_delay = 2 //delay for the movement when chasing a target. higher = slower movement.
 	var/list/friends = list()
 	var/vision_range = 9 //How big of an area to search for targets in, a vision of 9 attempts to find targets as soon as they walk into screen view
 
@@ -41,7 +41,7 @@
 	. = ..()
 	//Cooldowns
 	if(ranged)
-		ranged_cooldown--
+		ranged_cooldown = max(0,ranged_cooldown-1)
 
 	if(istype(loc, /obj/item/device/mobcapsule))
 		return 0
@@ -251,6 +251,7 @@
 /mob/living/simple_animal/hostile/proc/LoseAggro()
 	stop_automated_movement = 0
 	vision_range = idle_vision_range
+	search_objects = initial(search_objects)
 
 /mob/living/simple_animal/hostile/proc/LoseTarget()
 	stance = HOSTILE_STANCE_IDLE
@@ -299,6 +300,8 @@
 		ranged_cooldown = ranged_cooldown_cap
 		if(ranged_message)
 			visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
+		if(ckey)
+			add_attacklogs(src, target, "[ranged_message ? ranged_message : "shot"] at")
 		if(casingtype)
 			new casingtype(get_turf(src),1)// empty casing
 

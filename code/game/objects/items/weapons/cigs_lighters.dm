@@ -27,6 +27,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/smoketime = 10
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
 	heat_production = 1000
+	source_temperature = TEMPERATURE_FLAME
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("burns", "singes")
@@ -88,18 +89,18 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		lit = -1
 		update_brightness()
 		return
-	if(env.oxygen < 5)
+	if(env.oxygen / env.volume * CELL_VOLUME < 5)
 		lit = -1
 		update_brightness()
 		if(M)
 			to_chat(M, "The flame on \the [src] suddenly goes out in a weak fashion.")
 	if(location)
-		location.hotspot_expose(heat_production, 5, surfaces = istype(loc, /turf))
+		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
 		return
 
 /obj/item/weapon/match/is_hot()
 	if(lit == 1)
-		return heat_production
+		return source_temperature
 	return 0
 
 /obj/item/weapon/match/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
@@ -157,6 +158,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	body_parts_covered = 0
 	attack_verb = list("burns", "singes")
 	heat_production = 1000
+	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
 	slot_flags = SLOT_MASK|SLOT_EARS
 	var/lit = 0
@@ -216,7 +218,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/is_hot()
 	if(lit)
-		return heat_production
+		return source_temperature
 	return 0
 
 /obj/item/clothing/mask/cigarette/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -340,7 +342,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		M.IgniteMob()
 	smoketime--
 	var/datum/gas_mixture/env = location.return_air()
-	if(smoketime <= 0 | env.oxygen < 5)
+	if(smoketime <= 0 | env.oxygen / env.volume * CELL_VOLUME < 5)
 		if(!inside_item)
 			var/atom/new_butt = new type_butt(location) //Spawn the cigarette butt
 			transfer_fingerprints_to(new_butt)
@@ -355,7 +357,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		qdel(src)
 		return
 	if(location)
-		location.hotspot_expose(700, 5, surfaces = istype(loc, /turf))
+		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
 	//Oddly specific and snowflakey reagent transfer system below
 	if(reagents && reagents.total_volume)	//Check if it has any reagents at all
 		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask))) //If it's in the human/monkey mouth, transfer reagents to the mob
@@ -559,7 +561,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		update_brightness()
 		return
 	if(location)
-		location.hotspot_expose(700, 5, surfaces = istype(loc, /turf))
+		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
 	return
 
 /obj/item/clothing/mask/cigarette/pipe/attack_self(mob/user as mob) //Refills the pipe. Can be changed to an attackby later, if loose tobacco is added to vendors or something. //Later meaning never
@@ -612,6 +614,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/fuel = 20
 	var/fueltime
 	heat_production = 1500
+	source_temperature = TEMPERATURE_FLAME
 	slot_flags = SLOT_BELT
 	attack_verb = list("burns", "singes")
 	light_color = LIGHT_COLOR_FIRE
@@ -673,19 +676,19 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		fuel += O.reagents.remove_any(initial(fuel) - fuel)
 		user.visible_message("<span class='notice'>[user] refuels \the [src].</span>", \
 		"<span class='notice'>You refuel \the [src].</span>")
-		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		return
 
 /obj/item/weapon/lighter/attack_self(mob/living/user)
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy
-	if(!fuel | env.oxygen < 5)
+	if(!fuel | env.oxygen / env.volume * CELL_VOLUME < 5)
 		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \
 		"<span class='notice'>You try to light \the [src], but no flame appears.</span>")
 		return
 	if(!lit) //Lighting the lighter
-		playsound(get_turf(src), pick(lightersound), 50, 1)
+		playsound(src, pick(lightersound), 50, 1)
 		if(fuel >= initial(fuel) - 5 || prob(100 * (fuel/initial(fuel)))) //Strike, but fail to light it
 			user.visible_message("<span class='notice'>[user] manages to light \the [src].</span>", \
 			"<span class='notice'>You manage to light \the [src].</span>")
@@ -706,7 +709,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter/is_hot()
 	if(lit)
-		return heat_production
+		return source_temperature
 	return 0
 
 /obj/item/weapon/lighter/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
@@ -725,7 +728,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/lighter/process()
 	var/turf/location = get_turf(src)
 	if(location)
-		location.hotspot_expose(700, 5, surfaces = istype(loc, /turf))
+		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
 	if(!fueltime)
 		fueltime = world.time + 100
 	if(world.time > fueltime)
@@ -737,7 +740,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			visible_message("<span class='warning'>Without warning, \the [src] suddenly shuts off.</span>")
 			fueltime = null
 	var/datum/gas_mixture/env = location.return_air()
-	if(env.oxygen < 5)
+	if(env.oxygen / env.volume * CELL_VOLUME < 5)
 		lit = 0
 		update_brightness()
 		visible_message("<span class='warning'>Without warning, the flame on \the [src] suddenly goes out in a weak fashion.</span>")
@@ -760,19 +763,19 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy
-	if(!fuel | env.oxygen < 5)
+	if(!fuel | env.oxygen / env.volume * CELL_VOLUME < 5)
 		user.visible_message("<span class='rose'>[user] attempts to light \the [src] to no avail.</span>", \
 		"<span class='notice'>You try to light \the [src], but no flame appears.</span>")
 		return
 	lit = !lit
 	if(lit) //Was lit
-		playsound(get_turf(src), pick(open_sound), 50, 1)
+		playsound(src, pick(open_sound), 50, 1)
 		user.visible_message("<span class='rose'>Without even breaking stride, [user] flips open and lights \the [src] in one smooth movement.</span>", \
 		"<span class='rose'>Without even breaking stride, you flip open and light \the [src] in one smooth movement.</span>")
 		--fuel
 	else //Was shut off
 		fueltime = null
-		playsound(get_turf(src), pick(close_sound), 50, 1)
+		playsound(src, pick(close_sound), 50, 1)
 		user.visible_message("<span class='rose'>You hear a quiet click as [user] shuts off \the [src] without even looking at what they're doing. Wow.</span>", \
 		"<span class='rose'>You hear a quiet click as you shut off \the [src] without even looking at what you are doing.</span>")
 	update_brightness()

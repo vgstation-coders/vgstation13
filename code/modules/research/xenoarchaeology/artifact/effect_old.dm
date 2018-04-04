@@ -141,7 +141,7 @@
 					var/obj/effect/energy_field/E = new (locate(user.x,user.y,user.z))
 					created_field.Add(E)
 					E.strength = 1
-					E.density = 1
+					E.setDensity(TRUE)
 					E.anchored = 1
 					E.invisibility = 0
 				return 1
@@ -507,7 +507,7 @@
 				var/obj/effect/energy_field/E = new (locate(originator.x,originator.y,originator))
 				created_field.Add(E)
 				E.strength = 1
-				E.density = 1
+				E.setDensity(TRUE)
 				E.anchored = 1
 				E.invisibility = 0
 

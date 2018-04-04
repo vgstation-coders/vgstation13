@@ -239,6 +239,17 @@ var/global/datum/controller/vote/vote = new()
 	if(mode)
 		if(config.vote_no_dead && usr.stat == DEAD && !usr.client.holder)
 			return 0
+		if(mode == "map")
+			if(!usr.client.holder)
+				var/mob/M = usr
+				if(isnewplayer(M))
+					to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
+					return 0
+				if(isobserver(M))
+					var/mob/dead/observer/O = M
+					if(O.started_as_observer)
+						to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
+						return 0
 		if(current_votes[ckey])
 			choices[choices[current_votes[ckey]]]--
 		if(vote && 1<=vote && vote<=choices.len)
@@ -303,6 +314,16 @@ var/global/datum/controller/vote/vote = new()
 		update(1)
 		if(popup)
 			for(var/client/C in clients)
+				if(vote_type == "map" && !C.holder)
+					if(C.mob)
+						var/mob/M = C.mob
+						//Do not prompt non-admin new players or round start observers for a map vote - Pomf
+						if(isnewplayer(M))
+							continue
+						if(isobserver(M))
+							var/mob/dead/observer/O = M
+							if(O.started_as_observer)
+								continue
 				interact(C)
 		else
 			if(istype(usr) && usr.client)

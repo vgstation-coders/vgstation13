@@ -27,6 +27,14 @@ proc/arctan(x)
 /proc/Ceiling(x, y = 1)
 	. = -round(-x / y) * y
 
+/proc/sgn(const/i)
+	if(i > 0)
+		return 1
+	else if(i < 0)
+		return -1
+	else
+		return 0
+
 //Moved to macros.dm to reduce pure calling overhead, this was being called shitloads, like, most calls of all procs.
 /*
 /proc/Clamp(const/val, const/min, const/max)

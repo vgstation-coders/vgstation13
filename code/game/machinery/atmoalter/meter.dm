@@ -72,7 +72,7 @@
 	else
 		icon_state = "meter4"
 
-	if(frequency)
+	if(id_tag && frequency)
 		var/datum/radio_frequency/radio_connection = radio_controller.return_frequency(frequency)
 
 		if(!radio_connection)
@@ -152,7 +152,7 @@
 	if (!iswrench(W))
 		return ..()
 
-	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+	playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 	to_chat(user, "<span class='notice'>You begin to unfasten \the [src]...</span>")
 	if (do_after(user, src, 40))
 		user.visible_message( \

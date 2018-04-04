@@ -10,7 +10,6 @@
 
 	level = 1
 
-	var/on = 0
 	var/pump_direction = 1 //0 = siphoning, 1 = releasing
 
 	var/external_pressure_bound = ONE_ATMOSPHERE
@@ -220,3 +219,6 @@
 	id_tag = O.id_tag
 	set_frequency(O.frequency)
 	return 1
+
+/obj/machinery/atmospherics/binary/dp_vent_pump/toggle_status(var/mob/user)
+	return FALSE

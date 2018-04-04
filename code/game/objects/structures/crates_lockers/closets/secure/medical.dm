@@ -194,7 +194,7 @@
 	icon_broken = "medical_wall_spark"
 	icon_off = "medical_wall_off"
 	anchored = 1
-	density = 0
+	setDensity(FALSE)
 	wall_mounted = 1
 	req_access = list(access_medical)
 
@@ -227,6 +227,8 @@
 		sleep(2)
 		new /obj/item/clothing/suit/space/paramedic(src)
 		new /obj/item/clothing/head/helmet/space/paramedic(src)
-		new /obj/item/clothing/shoes/magboots(src)
+		new /obj/item/clothing/shoes/magboots/para(src)
+		new /obj/item/clothing/accessory/storage/webbing/paramed(src)
+		new /obj/item/weapon/storage/firstaid/internalbleed(src)
 		new /obj/item/weapon/storage/firstaid/internalbleed(src)
 		return

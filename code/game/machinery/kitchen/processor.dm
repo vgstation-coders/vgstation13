@@ -152,7 +152,7 @@
 					target.canmove = 0
 					target.icon = null
 					target.invisibility = 101
-					target.density = 0
+					target.setDensity(FALSE)
 					var/throwzone = list()
 					for(var/turf/T in orange(loc,4))
 						throwzone += T
@@ -236,7 +236,7 @@
 		user.visible_message("<span class='notice'>[user] turns on [src]</span>.", \
 			"You turn on \a [src].", \
 			"You hear [src] start")
-		playsound(get_turf(src), 'sound/machines/blender.ogg', 50, 1)
+		playsound(src, 'sound/machines/blender.ogg', 50, 1)
 		use_power(500)
 		sleep(P.time*time_coeff)
 		P.process(src.loc, O)

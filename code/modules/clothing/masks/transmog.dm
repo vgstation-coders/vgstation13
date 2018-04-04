@@ -101,7 +101,7 @@
 /obj/item/clothing/mask/morphing/lizard
 	name = "mask of the lizard"
 	desc = "It appears to be modeled after a lizard."
-	target_type = /mob/living/simple_animal/lizard
+	target_type = /mob/living/simple_animal/hostile/lizard
 	icon_state = "lizard_mask"
 
 /obj/item/clothing/mask/morphing/xeno

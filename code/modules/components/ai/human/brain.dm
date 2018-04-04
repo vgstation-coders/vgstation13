@@ -154,8 +154,8 @@
 						if(DESIRE_ID)
 							if((I.slot_flags & SLOT_ID) && I.mob_can_equip(H, slot_wear_id))
 								goal = I
-			if(goal)
-				break
+					if(goal)
+						break processing_desires
 	return goal
 
 /datum/component/ai/human_brain/proc/AcquireItem(mob/living/carbon/human/H, obj/item/I)

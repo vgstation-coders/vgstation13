@@ -79,12 +79,15 @@ mob/proc/remove_internal_organ()
 	else
 		return default_colour_matrix
 
-/mob/proc/update_colour(var/time = 50,var/forceupdate = 0)
+/mob/proc/update_colour(var/time = 50,var/forceupdate = 0, var/list/colour_to_apply)
 	if(!client || (client.updating_colour && !forceupdate))
 		return
-	var/list/colour_to_apply = get_screen_colour()
-	var/list/difference = difflist(client.color,colour_to_apply)
-	if(difference || !(client.color) || !istype(difference) || !difference.len)
+	if(!colour_to_apply)
+		colour_to_apply = get_screen_colour()
+	var/list/difference = list()
+	if(client.color)
+		difference = difflist(client.color,colour_to_apply)
+	if(!difference.len || difference || !istype(difference))
 		client.updating_colour = 1
 		var/cached_ckey = client.ckey
 		if(forceupdate)
@@ -101,7 +104,7 @@ mob/proc/remove_internal_organ()
 				client.updating_colour = 0
 				difference = difflist(client.color,get_screen_colour())
 				if((difference || !(client.color) || !istype(difference) || !difference.len) && !forceupdate) // panic panic panic
-					src.update_colour(forceupdate = 1)
+					src.update_colour(0,1,colour_to_apply)
 			else
 				bad_changing_colour_ckeys["[cached_ckey]"] = 1
 
@@ -542,3 +545,12 @@ proc/is_blind(A)
 			if(user.mind.special_role == HIGHLANDER && (honorable & HONORABLE_HIGHLANDER))
 				return TRUE
 	return FALSE
+
+// Called by /mob/living/carbon/human/examine() and /mob/living/carbon/human/Topic()
+// Returns whether the mob can see the specified HUD
+/mob/proc/hasHUD(var/hud_kind)
+	return FALSE
+
+// Returns a string that provides identification data for this mob
+/mob/proc/identification_string()
+	return name

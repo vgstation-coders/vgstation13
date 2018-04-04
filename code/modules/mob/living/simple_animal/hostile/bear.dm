@@ -26,6 +26,7 @@
 	melee_damage_lower = 20
 	melee_damage_upper = 30
 	size = SIZE_BIG
+	speak_override = TRUE
 
 	//Space bears aren't affected by atmos.
 	min_oxy = 0
@@ -75,7 +76,7 @@
 	melee_damage_lower=10
 	melee_damage_upper=40
 
-/mob/living/simple_animal/hostile/bear/Move()
+/mob/living/simple_animal/hostile/bear/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(stat != DEAD)
 		if(loc && istype(loc,/turf/space))

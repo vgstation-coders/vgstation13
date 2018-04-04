@@ -99,7 +99,7 @@
 		if( iscarbon(T) )
 			var/mob/living/carbon/MC = T
 			if( !MC.stat )
-				if( !MC.lying || lasers ) //only shoots them while they're down if set to laser mode
+				if( !MC.isStunned() || lasers ) //only shoots them while they're down if set to laser mode
 					return 1
 		if(issilicon(T))
 			if(!shootsilicons || istype(T,/mob/living/silicon/ai))
@@ -131,7 +131,7 @@
 		if(!M.stat && !(M.flags & INVULNERABLE) && M.faction != faction)
 			if(iscarbon(M))
 				var/mob/living/carbon/C = M
-				if(!C.lying || lasers) //only shoots them while they're down if set to laser mode
+				if(!C.isStunned() || lasers) //only shoots them while they're down if set to laser mode
 					new_targets += C
 			else
 				new_targets += M
@@ -179,9 +179,9 @@
 
 		if(prob(15))
 			if(prob(50))
-				playsound(get_turf(src), 'sound/effects/turret/move1.wav', 60, 1)
+				playsound(src, 'sound/effects/turret/move1.wav', 60, 1)
 			else
-				playsound(get_turf(src), 'sound/effects/turret/move2.wav', 60, 1)
+				playsound(src, 'sound/effects/turret/move2.wav', 60, 1)
 	else if(!isPopping())//else, pop down
 		if(!isDown())
 			popDown()
@@ -244,7 +244,7 @@
 	if ((!isPopping()) || src.popping==-1)
 		invisibility = 0
 		popping = 1
-		playsound(get_turf(src), 'sound/effects/turret/open.wav', 60, 1)
+		playsound(src, 'sound/effects/turret/open.wav', 60, 1)
 		if (src.cover!=null)
 			flick("popup", src.cover)
 			src.cover.icon_state = "openTurretCover"
@@ -255,7 +255,7 @@
 /obj/machinery/turret/proc/popDown()
 	if ((!isPopping()) || src.popping==1)
 		popping = -1
-		playsound(get_turf(src), 'sound/effects/turret/open.wav', 60, 1)
+		playsound(src, 'sound/effects/turret/open.wav', 60, 1)
 		if (src.cover!=null)
 			flick("popdown", src.cover)
 			src.cover.icon_state = "turretCover"
@@ -279,7 +279,7 @@
 	user.delayNextAttack(10)
 	if(..())
 		return 1
-	playsound(get_turf(src), 'sound/weapons/smash.ogg', 60, 1)
+	playsound(src, 'sound/weapons/smash.ogg', 60, 1)
 	spark(src, 5, FALSE)
 	src.health -= W.force * 0.5
 	visible_message("<span class='danger'>[user] attacked \the [src] with \the [W]!</span>")
@@ -302,7 +302,7 @@
 
 /obj/machinery/turret/proc/die()
 	src.health = 0
-	src.density = 0
+	setDensity(FALSE)
 	src.stat |= BROKEN
 	src.icon_state = "destroyed_target_prism"
 	if (cover!=null)
@@ -346,11 +346,12 @@
 
 /obj/machinery/turretid/emag(mob/user)
 	if(!emagged)
-		to_chat(user, "<span class='warning'>You short out the turret controls' access analysis module.</span>")
 		emagged = 1
 		locked = 0
-		if(user.machine==src)
-			src.attack_hand(user)
+		if(user)
+			to_chat(user, "<span class='warning'>You short out the turret controls' access analysis module.</span>")
+			if(user.machine==src)
+				src.attack_hand(user)
 		return 1
 	return
 
@@ -432,7 +433,7 @@
 /obj/machinery/turret/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	if(!(stat & BROKEN))
 		M.do_attack_animation(src, M)
-		playsound(get_turf(src), 'sound/weapons/slash.ogg', 25, 1, -1)
+		playsound(src, 'sound/weapons/slash.ogg', 25, 1, -1)
 		visible_message("<span class='danger'>[] has slashed at []!</span>", M, src)
 		src.health -= 15
 		if (src.health <= 0)
@@ -606,7 +607,7 @@
 	var/target = null
 	if(scan_for["human"])
 		for(var/mob/living/carbon/human/M in oview(scan_range,src))
-			if(M.stat || M.lying || M in exclude)
+			if(M.stat || M.isStunned() || M in exclude)
 				continue
 			pos_targets += M
 	if(scan_for["cyborg"])

@@ -128,6 +128,8 @@
 
 	dir = newdirection
 	update_nearby_conveyors() //Try to resmooth with nearby diagonals
+	updateConfig()
+	setmove()
 
 /obj/machinery/conveyor/proc/copy_radio_from_neighbors()
 	var/obj/machinery/conveyor_switch/lever = locate() in orange(src,1)
@@ -242,6 +244,7 @@
 		for(var/atom/movable/A in affecting)
 			if(!A.anchored)
 				if(A.loc == src.loc) // prevents the object from being affected if it's not currently here.
+					A.set_glide_size(DELAY2GLIDESIZE(SS_WAIT_FAST_MACHINERY))
 					step(A,movedir)
 					items_moved++
 			if(items_moved >= max_moved)
@@ -257,7 +260,7 @@
 	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0,user))
-			playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
+			playsound(src, 'sound/items/Welder2.ogg', 50, 1)
 			if(do_after(user, src, 30))
 				user.visible_message("<span class='warning'>Plates of metal are cut off \the [src] by [user.name] with the welding tool.</span>", \
 				"<span class='warning'>You cut the metal plates off \the [src] with the welding tool.</span>", \
@@ -280,7 +283,7 @@
 	var/obj/O = user.get_active_hand()
 	if(iscrowbar(O))
 		update_dir(get_dir(src, over_location))
-		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 25, 1)
+		playsound(src, 'sound/items/Crowbar.ogg', 25, 1)
 		to_chat(user, "You change the direction of \the [src] using \the [O].")
 		return
 	return ..()
@@ -318,7 +321,6 @@
 	if("setdir" in href_list)
 		operating=0
 		update_dir(text2num(href_list["setdir"]))
-		updateConfig()
 		return MT_UPDATE
 	if("reverse" in href_list)
 		operating=0
@@ -532,7 +534,7 @@
 		return .
 	if(iswrench(W))
 		to_chat(user, "<span class='notice'>Deconstructing \the [src]...</span>")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 		if(do_after(user, src,50))
 			to_chat(user, "<span class='notice'>You disassemble \the [src].</span>")
 			var/turf/T=get_turf(src)

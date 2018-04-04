@@ -7,6 +7,7 @@ code\game\\dna\genes\goon_powers.dm
 /spell/targeted/genetic
 	name = "Genetic modifier"
 	desc = "This spell inflicts a set of mutations and disabilities upon the target."
+	user_type = USER_TYPE_GENETIC
 
 	var/disabilities = 0 //bits
 	var/list/mutations = list() //mutation strings
@@ -51,6 +52,7 @@ code\game\\dna\genes\goon_powers.dm
 	hud_state = "wiz_blind"
 
 	price = 0.5 * Sp_BASE_PRICE //Half of the normal spell price
+	user_type = USER_TYPE_WIZARD
 
 /spell/targeted/genetic/mutate
 	name = "Mutate"
@@ -71,3 +73,4 @@ code\game\\dna\genes\goon_powers.dm
 	cooldown_min = 300 //25 deciseconds reduction per rank
 
 	hud_state = "wiz_hulk"
+	user_type = USER_TYPE_WIZARD

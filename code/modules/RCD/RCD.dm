@@ -240,6 +240,10 @@
 	else
 		interface.updateContent("schematic_options", " ")
 
+// Called by schematics to delay their actions
+/obj/item/device/rcd/proc/delay(var/mob/user, var/atom/target, var/amount)
+	return do_after(user, target, amount)
+
 /obj/item/device/rcd/MouseWheeled(var/mob/user, var/delta_x, var/delta_y, var/params)
 	var/modifiers = params2list(params)
 	if (modifiers["ctrl"])
@@ -314,7 +318,7 @@
 
 		qdel(W)
 		matter += 10
-		playsound(get_turf(src), 'sound/machines/click.ogg', 20, 1)
+		playsound(src, 'sound/machines/click.ogg', 20, 1)
 		to_chat(user, "<span class='notice'>\the [src] now holds [matter]/[max_matter] matter-units.</span>")
 		return 1
 

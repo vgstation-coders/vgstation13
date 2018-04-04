@@ -225,18 +225,14 @@
 		rev_mind.special_role = null
 
 		if(beingborged)
-			to_chat(rev_mind.current, "<span class='danger'><FONT size = 3>The frame's firmware detects and deletes your neural reprogramming!  You remember nothing from the moment you were flashed until now.</FONT></span>")
-
+			rev_mind.current.visible_message(
+				"<span class='big danger'>The frame beeps contentedly, purging the hostile memory engram from the MMI before initalizing it.</span>",
+				"<span class='big danger'>The frame's firmware detects and deletes your neural reprogramming! You remember nothing from the moment you were flashed until now.</span>")
 		else
-			to_chat(rev_mind.current, "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a revolutionary! Your memory is hazy from the time you were a rebel...the only thing you remember is the name of the one who brainwashed you...</FONT></span>")
+			rev_mind.current.visible_message("<span class='big danger'>It looks like [rev_mind.current] just remembered their real allegiance!</span>",
+				"<span class='big danger'>You have been brainwashed! You are no longer a revolutionary! Your memory is hazy from the time you were a rebel...the only thing you remember is the name of the one who brainwashed you...</span>")
 
 		update_rev_icons_removed(rev_mind)
-		for(var/mob/living/M in view(rev_mind.current))
-			if(beingborged)
-				to_chat(M, "The frame beeps contentedly, purging the hostile memory engram from the MMI before initalizing it.")
-
-			else
-				to_chat(M, "[rev_mind.current] looks like they just remembered their real allegiance!")
 		log_admin("[rev_mind.current] ([ckey(rev_mind.current.key)] has been deconverted from the revolution")
 
 

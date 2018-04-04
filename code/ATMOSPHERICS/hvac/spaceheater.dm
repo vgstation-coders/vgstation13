@@ -282,7 +282,7 @@
 				var/datum/gas_mixture/env = L.return_air()
 				if(env.temperature != set_temperature + T0C)
 
-					var/transfer_moles = 0.25 * env.total_moles()
+					var/transfer_moles = 0.25 * env.total_moles() / env.volume * CELL_VOLUME
 
 					var/datum/gas_mixture/removed = env.remove(transfer_moles)
 
@@ -325,7 +325,7 @@
 		return
 	lastcharge = Floor(cell.charge/10)
 	if(on)
-		playsound(get_turf(src), pick(comfyfire), (cell.charge/250)*5, 1, -1,channel = 124)
+		playsound(src, pick(comfyfire), (cell.charge/250)*5, 1, -1,channel = 124)
 
 
 /obj/machinery/space_heater/campfire/Crossed(mob/user as mob)

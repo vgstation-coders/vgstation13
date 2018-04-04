@@ -36,7 +36,7 @@
 	else
 		new/mob/living/simple_animal/hostile/blobspore(src.loc, src)
 
-	stat_collection.blobblob.spores_spawned++
+	stat_collection.blob_spores_spawned++
 
 	return 1
 
@@ -114,7 +114,7 @@
 
 /mob/living/simple_animal/hostile/blobspore/Die()
 	var/sound = pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg')
-	playsound(get_turf(src), sound, 50, 1)
+	playsound(src, sound, 50, 1)
 	qdel(src)
 
 /mob/living/simple_animal/hostile/blobspore/Destroy()

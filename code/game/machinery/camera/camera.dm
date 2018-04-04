@@ -176,7 +176,7 @@ var/list/camera_names=list()
 	update_icon()
 	user.do_attack_animation(src, user)
 	visible_message("<span class='warning'>\The [user] slashes at [src]!</span>")
-	playsound(get_turf(src), 'sound/weapons/slash.ogg', 100, 1)
+	playsound(src, 'sound/weapons/slash.ogg', 100, 1)
 	add_hiddenprint(user)
 	deactivate(user,0)
 
@@ -240,7 +240,7 @@ var/list/camera_messages = list()
 			var/obj/U = locate(/obj) in assembly.upgrades
 			if(U)
 				to_chat(user, "You unattach \the [U] from the camera.")
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
 				U.forceMove(get_turf(src))
 				assembly.upgrades -= U
 				update_upgrades()
@@ -308,7 +308,7 @@ var/list/camera_messages = list()
 				add_hiddenprint(user)
 			else
 				visible_message("<span class='warning'> \The [src] deactivates!</span>")
-			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+			playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
 			add_hiddenprint(user)
 		else
 			if(user)
@@ -316,7 +316,7 @@ var/list/camera_messages = list()
 				add_hiddenprint(user)
 			else
 				visible_message("<span class='warning'> \The [src] reactivates!</span>")
-			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+			playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
 			add_hiddenprint(user)
 		cameranet.updateVisibility(src, 0)
 	// now disconnect anyone using the camera
@@ -400,7 +400,7 @@ var/list/camera_messages = list()
 
 	// Do after stuff here
 	to_chat(user, "<span class='notice'>You start to weld the [src].</span>")
-	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+	playsound(src, 'sound/items/Welder.ogg', 50, 1)
 	WT.eyecheck(user)
 	busy = 1
 	if(do_after(user, src, 100))

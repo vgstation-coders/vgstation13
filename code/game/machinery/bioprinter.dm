@@ -34,7 +34,9 @@
 	)
 
 /obj/machinery/bioprinter/New()
-	. = ..()
+	..()
+	if(map.nameShort == "deff")
+		icon = 'maps/defficiency/medbay.dmi'
 
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/bioprinter,\
@@ -58,7 +60,7 @@
 	prints_prosthetics = 1
 
 /obj/machinery/bioprinter/attack_hand(mob/user)
-	if(!ishuman(user))
+	if(!ishigherbeing(user) && !issilicon(user))
 		return
 
 	var/choice = input("What would you like to print?") as null|anything in products
@@ -108,7 +110,7 @@
 			return
 	else if(iswrench(W))
 		user.visible_message("<span class='notice'>[user] begins to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You begin to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src, 30))
 			user.visible_message("<span class='notice'>[user] begins to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
 			if(anchored)

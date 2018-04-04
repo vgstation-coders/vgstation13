@@ -28,11 +28,8 @@ Class Procs:
 	rebuild()
 		Invalidates the zone and marks all its former tiles for updates.
 
-	add_tile_air(turf/simulated/T)
-		Adds the air contained in T.air to the zone's air supply. Called when adding a turf.
-
 	tick()
-		Called only when the gas content is changed. Archives values and changes gas graphics.
+		Called only when the gas content is changed. Changes gas graphics.
 
 	dbg_data(mob/M)
 		Sends M a printout of important figures for the zone.
@@ -51,8 +48,7 @@ Class Procs:
 /zone/New()
 	SSair.add_zone(src)
 	air.temperature = TCMB
-	air.group_multiplier = 1
-	air.volume = CELL_VOLUME
+	air.volume = 0
 
 /zone/proc/add(turf/simulated/T)
 #ifdef ZASDBG
@@ -62,7 +58,8 @@ Class Procs:
 #endif
 
 	var/datum/gas_mixture/turf_air = T.return_air()
-	add_tile_air(turf_air)
+	air.volume += turf_air.volume
+	air.merge(turf_air)
 	T.zone = src
 	contents.Add(T)
 	T.set_graphic(air.graphics)
@@ -74,12 +71,14 @@ Class Procs:
 	ASSERT(T.zone == src)
 	soft_assert(T in contents, "Lists are weird broseph")
 #endif
-	contents.Remove(T)
+
 	T.zone = null
+	var/datum/gas_mixture/turf_air = T.return_air()
+	air.multiply(1 - turf_air.volume / air.volume)
+	air.volume -= turf_air.volume
+	contents.Remove(T)
 	T.set_graphic(0)
-	if(contents.len)
-		air.group_multiplier = contents.len
-	else
+	if(!contents.len)
 		c_invalidate()
 
 /zone/proc/c_merge(zone/into)
@@ -113,26 +112,36 @@ Class Procs:
 		T.needs_air_update = 0 //Reset the marker so that it will be added to the list.
 		SSair.mark_for_update(T)
 
-/zone/proc/add_tile_air(datum/gas_mixture/tile_air)
-	//air.volume += CELL_VOLUME
-	air.group_multiplier = 1
-	air.multiply(contents.len)
-	air.merge(tile_air)
-	air.divide(contents.len+1)
-	air.group_multiplier = contents.len+1
+//Gets a list of the gas_mixtures of all zones connected to this one through arbitrarily many sleeping edges.
+//This is to cut down somewhat on differentials across open doors.
+//Yes, recursion is slow, but this will generally not be called very often, and will rarely have to recurse more than a few levels deep.
+//That said, feel free to optimize it if you want.
+//
+//At the top level, just call it with no arg. The arg generally is for internal use.
+/zone/proc/get_equalized_zone_air(list/found = list())
+	found += air
+	. = found //I want to minimize the call stack left over after the recursive call. Honestly the implicit return is probably the same as an explicit one, but I'd rather play it safe.
+	for(var/connection_edge/zone/E in edges)
+		if(E.sleeping)
+			var/zone/Z = E.get_connected_zone(src)
+			if(!(Z.air in found))
+				Z.get_equalized_zone_air(found)
 
 /zone/proc/tick()
-	air.archive()
 	if(air.check_tile_graphic())
 		for(var/turf/simulated/T in contents)
 			T.set_graphic(air.graphics)
+
+	for(var/connection_edge/E in edges)
+		if(E.sleeping)
+			E.recheck()
 
 /zone/proc/dbg_data(mob/M)
 	to_chat(M, name)
 	to_chat(M, "O2: [air.oxygen] N2: [air.nitrogen] CO2: [air.carbon_dioxide] P: [air.toxins]")
 	to_chat(M, "P: [air.return_pressure()] kPa V: [air.volume]L T: [air.temperature]�K ([air.temperature - T0C]�C)")
 	to_chat(M, "O2 per N2: [(air.nitrogen ? air.oxygen/air.nitrogen : "N/A")] Moles: [air.total_moles]")
-	to_chat(M, "Simulated: [contents.len] ([air.group_multiplier])")
+	to_chat(M, "Simulated: [contents.len] ([air.volume / CELL_VOLUME])")
 //	to_chat(M, "Unsimulated: [unsimulated_contents.len]")
 //	to_chat(M, "Edges: [edges.len]")
 	if(invalid)

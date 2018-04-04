@@ -334,7 +334,7 @@
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
 		if(isslimeperson(H))
-			amount = 0
+			amount = min(amount, 0)
 
 	cloneloss = min(max(cloneloss + (amount * clone_damage_modifier), 0),(maxHealth*2))
 
@@ -431,6 +431,9 @@
 		return L
 
 /mob/living/proc/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
+	if(status_flags & GODMODE || M_NO_SHOCK in src.mutations)
+		return 0
+
 	var/damage = shock_damage * siemens_coeff
 
 	if(damage <= 0)
@@ -478,7 +481,7 @@
 	src.updatehealth()
 
 // damage ONE external organ, organ gets randomly selected from damaged ones.
-/mob/living/proc/take_organ_damage(var/brute, var/burn)
+/mob/living/proc/take_organ_damage(var/brute, var/burn, var/ignore_inorganics = FALSE)
 	if(status_flags & GODMODE)
 		return 0	//godmode
 	if(flags & INVULNERABLE)
@@ -655,13 +658,13 @@ Thanks.
 
 	return
 
-/mob/living/Move(atom/newloc, direct)
-	if (locked_to && locked_to.loc != newloc)
+/mob/living/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	if (locked_to && locked_to.loc != NewLoc)
 		var/datum/locking_category/category = locked_to.get_lock_cat_for(src)
 		if (locked_to.anchored || category.flags & CANT_BE_MOVED_BY_LOCKED_MOBS)
 			return 0
 		else
-			return locked_to.Move(newloc, direct)
+			return locked_to.Move(NewLoc, Dir)
 
 	if (restrained())
 		stop_pulling()
@@ -717,7 +720,7 @@ Thanks.
 						if (ok)
 							var/atom/movable/secondarypull = M.pulling
 							M.stop_pulling()
-							pulling.Move(T, get_dir(pulling, T))
+							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
 
@@ -762,7 +765,7 @@ Thanks.
 													add_logs(src, HM, "caused drag damage bloodloss to", admin = (HM.ckey))
 					else
 						if (pulling)
-							pulling.Move(T, get_dir(pulling, T))
+							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
 				else
 					stop_pulling()
 	else
@@ -777,14 +780,14 @@ Thanks.
 			M.UpdateFeed(src)
 
 	if(T != loc)
-		handle_hookchain(direct)
+		handle_hookchain(Dir)
 
 	if(.)
 		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
 			var/mob/living/M = G.loc
 			if(!(M in view(src)))
 				NotTargeted(G)
-		for(var/obj/item/weapon/gun/G in src) //Handle the gunner loosing sight of their target/s
+		for(var/obj/item/weapon/gun/G in src) //Handle the gunner losing sight of their target/s
 			if(G.target)
 				for(var/mob/living/M in G.target)
 					if(M && !(M in view(src)))
@@ -1300,7 +1303,7 @@ Thanks.
 				if(A == src)
 					continue
 				if(A.density)
-					if(A.flags&ON_BORDER)
+					if(A.flow_flags&ON_BORDER)
 						dense = !A.Cross(src, src.loc)
 					else
 						dense = 1
@@ -1309,7 +1312,7 @@ Thanks.
 			if((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent == I_HELP || src.restrained()) && tmob.canmove && canmove && !dense && can_move_mob(tmob, 1, 0)) // mutual brohugs all around!
 				var/turf/oldloc = loc
 				forceMove(tmob.loc)
-				tmob.forceMove(oldloc)
+				tmob.forceMove(oldloc, glide_size_override = src.glide_size)
 				now_pushing = 0
 				for(var/mob/living/carbon/slime/slime in view(1,tmob))
 					if(slime.Victim == tmob)
@@ -1352,7 +1355,7 @@ Thanks.
 
 				if (!AM.anchored)
 					var/t = get_dir(src, AM)
-					if(AM.flags & ON_BORDER && !t)
+					if(AM.flow_flags & ON_BORDER && !t)
 						t = AM.dir
 					if (istype(AM, /obj/structure/window/full))
 						for(var/obj/structure/window/win in get_step(AM,t))
@@ -1375,6 +1378,7 @@ Thanks.
 		M = new meat_type(location, src)
 	else
 		M = new meat_type(location)
+	meat_taken++
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
 
 	if(istype(A))
@@ -1386,6 +1390,9 @@ Thanks.
 		else
 			A.name = "[initial(src.name)] meat"
 			A.animal_name = initial(src.name)
+
+	if(reagents)
+		reagents.trans_to(A,round (reagents.total_volume * (meat_amount/meat_taken), 1))
 	return M
 
 /mob/living/proc/butcher()
@@ -1405,12 +1412,7 @@ Thanks.
 		return
 
 	if(!can_butcher)
-		if(meat_taken)
-			to_chat(user, "<span class='notice'>[src] has already been butchered.</span>")
-			return
-		else
-			to_chat(user, "<span class='notice'>You can't butcher [src]!")
-			return
+		to_chat(user, "<span class='notice'>You can't butcher [src]!")
 		return
 
 	var/obj/item/tool = null	//The tool that is used for butchering
@@ -1456,13 +1458,16 @@ Thanks.
 
 	if(src.butchering_drops && src.butchering_drops.len)
 		var/list/actions = list()
-		actions += "Butcher"
+		if(meat_taken < meat_amount)
+			actions += "Butcher"
 		for(var/datum/butchering_product/B in src.butchering_drops)
 			if(B.amount <= 0)
 				continue
-
 			actions |= capitalize(B.verb_name)
 			actions[capitalize(B.verb_name)] = B
+		if(!actions.len)
+			to_chat(user, "<span class='notice'>[src] has already been butchered.</span>")
+			return
 		actions += "Cancel"
 
 		var/choice = input(user,"What would you like to do with \the [src]?","Butchering") in actions
@@ -1489,6 +1494,10 @@ Thanks.
 				src.update_icons()
 			return
 
+	else if(meat_taken >= meat_amount)
+		to_chat(user, "<span class='notice'>[src] has already been butchered.</span>")
+		return
+
 	user.visible_message("<span class='notice'>[user] starts butchering \the [src][tool ? " with \the [tool]" : ""].</span>",\
 		"<span class='info'>You start butchering \the [src].</span>")
 	src.being_butchered = 1
@@ -1499,7 +1508,6 @@ Thanks.
 		return
 
 	src.drop_meat(get_turf(src))
-	src.meat_taken++
 	src.being_butchered = 0
 	if(tool_name)
 		if(!advanced_butchery)
@@ -1511,7 +1519,6 @@ Thanks.
 		return
 
 	to_chat(user, "<span class='info'>You butcher \the [src].</span>")
-	can_butcher = 0
 
 	if(istype(src, /mob/living/simple_animal)) //Animals can be butchered completely, humans - not so
 		if(src.size > SIZE_TINY) //Tiny animals don't produce gibs
@@ -1629,30 +1636,34 @@ Thanks.
 /mob/proc/throw_item(var/atom/target,var/atom/movable/what=null)
 	return
 
+#define FAILED_THROW 0
+#define THREW_SOMETHING 1
+#define THREW_NOTHING -1
+
 /mob/living/throw_item(var/atom/target,var/atom/movable/what=null)
 	src.throw_mode_off()
 	if(usr.stat || !target)
-		return
+		return FAILED_THROW
 
 	if(!istype(loc,/turf))
 		to_chat(src, "<span class='warning'>You can't do that now!</span>")
-		return
+		return FAILED_THROW
 
 	if(target.type == /obj/abstract/screen)
-		return
+		return FAILED_THROW
 
 	var/atom/movable/item = src.get_active_hand()
 	if(what)
 		item=what
 
 	if(!item)
-		return
+		return THREW_NOTHING
 
 	if (istype(item, /obj/item/offhand))
 		var/obj/item/offhand/offhand = item
 		if(offhand.wielding)
 			src.throw_item(target, offhand.wielding)
-			return
+			return FAILED_THROW
 
 	else if (istype(item, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = item
@@ -1675,12 +1686,12 @@ Thanks.
 					M.LAssailant = usr
 				returnToPool(G)
 	if(!item)
-		return //Grab processing has a chance of returning null
+		return FAILED_THROW	//Grab processing has a chance of returning null
 
 	var/obj/item/I = item
 	if(istype(I) && I.cant_drop > 0)
 		to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
-		return
+		return FAILED_THROW
 
 	remove_from_mob(item)
 
@@ -1708,6 +1719,7 @@ Thanks.
 			if(M_HULK in H.mutations || M_STRONG in H.mutations)
 				throw_mult+=0.5
 		item.throw_at(target, item.throw_range*throw_mult, item.throw_speed*throw_mult)
+		return THREW_SOMETHING
 
 /mob/living/send_to_past(var/duration)
 	..()

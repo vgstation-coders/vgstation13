@@ -2,6 +2,7 @@
 	name = "Ethereal Jaunt"
 	desc = "This spell creates your ethereal form, temporarily making you invisible and able to pass through walls."
 	abbreviation = "EJ"
+	user_type = USER_TYPE_WIZARD
 
 	school = "transmutation"
 	charge_max = 300
@@ -48,7 +49,7 @@
 	target.invisibility = INVISIBILITY_MAXIMUM
 	target.flags |= INVULNERABLE
 	var/old_density = target.density
-	target.density = 0
+	target.setDensity(FALSE)
 	target.candrop = 0
 	target.alphas["etheral_jaunt"] = 125 //Spoopy mode to know you are jaunting
 	target.handle_alpha()
@@ -77,7 +78,7 @@
 	for(var/obj/abstract/screen/movable/spell_master/SM in target.spell_masters)
 		SM.silence_spells(0)
 	target.flags &= ~INVULNERABLE
-	target.density = old_density
+	target.setDensity(old_density)
 	target.candrop = 1
 	target.incorporeal_move = previncorp
 	target.alphas -= "etheral_jaunt"
@@ -110,6 +111,7 @@
 	name = "Group Jaunt"
 	desc = "This spell allows all people within range to be jaunted along with the user"
 	hud_state = "group_jaunt"
+	user_type = USER_TYPE_OTHER
 
 	spell_flags = Z2NOCAST | INCLUDEUSER //Adminbus spell, so we'll exclude robe requirement for ease of use
 
@@ -123,6 +125,7 @@
 /spell/targeted/ethereal_jaunt/shift
 	name = "Phase Shift"
 	desc = "This spell allows you to pass through walls"
+	user_type = USER_TYPE_CULT
 
 	charge_max = 200
 	spell_flags = Z2NOCAST | INCLUDEUSER | CONSTRUCT_CHECK

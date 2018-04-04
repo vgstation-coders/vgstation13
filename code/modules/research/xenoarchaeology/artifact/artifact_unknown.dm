@@ -151,7 +151,7 @@
 			on_explode.Invoke(list("", "EXPLOSION"))
 	return
 
-/obj/machinery/artifact/Move()
+/obj/machinery/artifact/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(primary_effect)
 		primary_effect.UpdateMove()

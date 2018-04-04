@@ -45,6 +45,7 @@
 	var/role_alt_title
 
 	var/datum/job/assigned_job
+	var/datum/religion/faith
 
 	var/list/kills=list()
 	var/list/datum/objective/objectives = list()
@@ -118,6 +119,13 @@
 			output += "<B>Objective #[obj_count]</B>: [objective.explanation_text]"
 			obj_count++
 
+	// -- Religions --
+	if (faith) // This way they can get their religion changed
+		output += "<b>Religion:</b> [faith.name] <br/> \
+				   <b>Leader:</b> [faith.religiousLeader] <br/>"
+
+		if (faith.religiousLeader == src)
+			output += "You can convert people by [faith.convert_method] <br />"
 	recipient << browse(output,"window=memory")
 
 /datum/mind/proc/edit_memory()
@@ -1519,12 +1527,16 @@ proc/clear_memory(var/silent = 1)
 /proc/get_ghost_from_mind(var/datum/mind/mind)
 	if(!mind)
 		return
-	for(var/mob/dead/observer/G in player_list)
-		if(G.mind == mind)
-			return G
+	for(var/mob/M in player_list)
+		M = M.get_bottom_transmogrification()
+		if(isobserver(M))
+			if(M.mind == mind)
+				return M
 
 /proc/mind_can_reenter(var/datum/mind/mind)
 	var/mob/dead/observer/G = get_ghost_from_mind(mind)
-	if(G && G.client && G.can_reenter_corpse)
-		return TRUE
-	return FALSE
+	var/mob/M
+	if(G)
+		M = G.get_top_transmogrification()
+		if(M.client && G.can_reenter_corpse)
+			return G

@@ -93,7 +93,8 @@
 	if(!emagged)
 		locked = FALSE
 		emagged = TRUE
-		user.visible_message("\The [user] shorts out the lock on the interface on \the [src].","<span class='warning'>You short out the lock.</span>")
+		if(user)
+			user.visible_message("\The [user] shorts out the lock on the interface on \the [src].","<span class='warning'>You short out the lock.</span>")
 
 /obj/machinery/power/rust_fuel_injector/attackby(var/obj/item/W, var/mob/user)
 	if(..())
@@ -127,7 +128,7 @@
 		return
 	ui_interact(user)
 
-/obj/machinery/power/rust_fuel_injector/ui_interact(var/mob/user, var/ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/power/rust_fuel_injector/ui_interact(var/mob/user, var/ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/data[0]
 	data["locked"] = locked && !issilicon(user) && !isAdminGhost(user)
 	data["id_tag"] = id_tag
@@ -144,7 +145,7 @@
 	data["cached_power_avail"] = round(cached_power_avail)
 	data["remote_access_enabled"] = remote_access_enabled
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "r-ust_fuel_injector.tmpl", name, 500, 360)
 		ui.set_initial_data(data)
@@ -167,7 +168,7 @@
 	if(href_list["fuel_assembly"])
 		attempt_fuel_swap()
 		return 1
-	
+
 	if(href_list["emergency_fuel_assembly"])
 		if(cur_assembly)
 			cur_assembly.forceMove(src.loc)
@@ -182,11 +183,11 @@
 		else
 			begin_injecting()
 		return 1
-	
+
 	if(href_list["toggle_remote"])
 		remote_access_enabled = !remote_access_enabled
 		return 1
-	
+
 	if(href_list["fuel_usage"])
 		var/new_usage = text2num(input("Enter new fuel usage (0.01% - 100%):", name, fuel_usage * 100))
 		if(!new_usage)
@@ -197,7 +198,7 @@
 		fuel_usage = new_usage / 100
 		active_power_usage = 500 + 1000 * fuel_usage
 		return 1
-	
+
 	if(href_list["update_extern"])
 		var/obj/machinery/computer/rust_fuel_control/C = locate(href_list["update_extern"])
 		if(C)

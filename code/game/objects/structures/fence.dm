@@ -114,7 +114,7 @@
 			strength = H.get_strength()
 
 		user.visible_message("<span class='danger'>\The [user] hits \the [src]!</span>")
-		playsound(get_turf(src), 'sound/effects/fence_smash.ogg', 30 * strength, 1) //Sound is louder the stronger you are
+		playsound(src, 'sound/effects/fence_smash.ogg', 30 * strength, 1) //Sound is louder the stronger you are
 		shock(user, 100)
 		return 1
 
@@ -147,7 +147,7 @@
 			icon_state = "straight_cut2"
 		if(LARGE_HOLE)
 			icon_state = "straight_cut3"
-			density = 0
+			setDensity(FALSE)
 
 /obj/structure/fence/Bumped(atom/user)
 	if(ismob(user))
@@ -217,15 +217,15 @@
 			open = FALSE
 
 	update_door_status()
-	playsound(get_turf(src), 'sound/machines/click.ogg', 100, 1)
+	playsound(src, 'sound/machines/click.ogg', 100, 1)
 
 /obj/structure/fence/door/proc/update_door_status()
 	switch(open)
 		if(FALSE)
-			density = 1
+			setDensity(TRUE)
 			icon_state = "door_closed"
 		if(TRUE)
-			density = 0
+			setDensity(FALSE)
 			icon_state = "door_opened"
 
 /obj/structure/fence/door/proc/can_open(mob/user)

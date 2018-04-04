@@ -64,6 +64,11 @@
 	seed_type = "diona"
 	vending_cat = "sentient"
 
+/obj/item/seeds/mushroommanspore
+	name = "packet of mushrom spores"
+	seed_type = "moshrum"
+	vending_cat = "sentient"
+
 /obj/item/seeds/poppyseed
 	name = "packet of poppy seeds"
 	seed_type = "poppies"
@@ -1161,7 +1166,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/banana)
 	plant_icon = "banana"
 	harvest_repeat = 1
-	chems = list(BANANA = list(1,10))
+	chems = list(BANANA = list(1,10), POTASSIUMCARBONATE = list(0.1,30))
 
 	lifespan = 50
 	maturation = 6
@@ -1565,6 +1570,28 @@
 	production = 1
 	yield = 10
 	potency = 30
+
+/datum/seed/moshrum
+	name = "moshrum"
+	seed_name = "moshrum"
+	seed_noun = "nodules"
+	display_name = "moshrum nodes"
+	packet_icon = "mycelium-walkingmushroom"
+	plant_icon = "walkingmushroom"
+	products = list(/mob/living/carbon/monkey/mushroom)
+	mob_drop = /obj/item/seeds/mushroommanspore
+	product_requires_player = TRUE
+	product_kill_inactive = FALSE
+	immutable = TRUE
+
+	lifespan = 50
+	endurance = 35
+	maturation = 5
+	production = 10
+	yield = 2
+	potency = 30
+	ideal_light = 0
+
 
 /datum/seed/test
 	name = "test"

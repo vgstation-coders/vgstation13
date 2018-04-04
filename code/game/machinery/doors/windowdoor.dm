@@ -7,7 +7,7 @@
 	var/health = 100
 	visible = 0.0
 	use_power = 0
-	flags = ON_BORDER
+	flow_flags = ON_BORDER
 	plane = ABOVE_HUMAN_PLANE //Make it so it appears above all mobs (AI included), it's a border object anyway
 	layer = WINDOOR_LAYER //Below curtains
 	opacity = 0
@@ -33,7 +33,7 @@
 	return
 
 /obj/machinery/door/window/Destroy()
-	density = 0
+	setDensity(FALSE)
 	if (!dismantled)
 		playsound(src, "shatter", 70, 1)
 	..()
@@ -43,7 +43,7 @@
 		animate(src, color="#FFFFFF", time=5)
 	else
 		animate(src, color="#222222", time=5)
-	
+
 	if(density) //window is CLOSED
 		if(window_is_opaque) //Is it dark?
 			set_opacity(0) //Make it light.
@@ -54,7 +54,7 @@
 	else //Window is OPEN!
 		window_is_opaque = !window_is_opaque //We pass on that we've been toggled.
 	return opacity
-	
+
 /obj/machinery/door/window/examine(mob/user as mob)
 	..()
 	if(smartwindow)
@@ -110,7 +110,7 @@
 /obj/machinery/door/window/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
-	if(flags & ON_BORDER) //but it will always be on border tho
+	if(flow_flags & ON_BORDER) //but it will always be on border tho
 		if(target) //Are we doing a manual check to see
 			if(get_dir(loc, target) == dir)
 				return !density
@@ -130,12 +130,12 @@
 	if(!operating) //in case of emag
 		operating = 1
 	flick(text("[]opening", base_state), src)
-	playsound(get_turf(src), soundeffect, 100, 1)
+	playsound(src, soundeffect, 100, 1)
 	icon_state = text("[]open", base_state)
 	sleep(animation_delay)
 
 	explosion_resistance = 0
-	density = 0
+	setDensity(FALSE)
 	if (smartwindow && window_is_opaque)
 		set_opacity(0) //You can see through open windows
 	update_nearby_tiles()
@@ -149,10 +149,10 @@
 		return 0
 	operating = 1
 	flick(text("[]closing", base_state), src)
-	playsound(get_turf(src), soundeffect, 100, 1)
+	playsound(src, soundeffect, 100, 1)
 	icon_state = base_state
 
-	density = 1
+	setDensity(TRUE)
 	explosion_resistance = initial(explosion_resistance)
 	if (smartwindow && window_is_opaque)
 		set_opacity(1)
@@ -188,7 +188,7 @@
 		tforce = 40
 	else
 		tforce = AM:throwforce
-	playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 100, 1)
+	playsound(src, 'sound/effects/Glasshit.ogg', 100, 1)
 	take_damage(tforce)
 
 /obj/machinery/door/window/attack_ai(mob/user as mob)
@@ -201,16 +201,11 @@
 			return
 		user.delayNextAttack(8)
 		user.do_attack_animation(src, user)
-		health = max(0, health - 25)
-		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 		visible_message("<span class='warning'>\The [user] smashes against \the [name].</span>", 1)
-		if (health <= 0)
-			getFromPool(shard, loc)
-			getFromPool(/obj/item/stack/cable_coil, loc, 2)
-			qdel(src)
+		take_damage(25)
 	else
 		return attack_hand(user)
-
 
 /obj/machinery/door/window/attack_animal(mob/living/user as mob)
 	if(operating)
@@ -220,14 +215,9 @@
 		return
 	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)
-	health = max(0, health - M.melee_damage_upper)
-	playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+	playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 	visible_message("<span class='warning'>\The [M] [M.attacktext] against \the [name].</span>", 1)
-	if (health <= 0)
-		getFromPool(shard, loc)
-		getFromPool(/obj/item/stack/cable_coil, loc, 2)
-		qdel(src)
-
+	take_damage(M.melee_damage_upper)
 
 /obj/machinery/door/window/attack_hand(mob/user as mob)
 	return attackby(user, user)
@@ -236,7 +226,7 @@
 	// Make emagged/open doors able to be deconstructed
 	if (!density && operating != 1 && iscrowbar(I))
 		user.visible_message("[user] removes the electronics from the windoor assembly.", "You start to remove the electronics from the windoor assembly.")
-		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 100, 1)
+		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 		if (do_after(user, src, 40) && src && !density && operating != 1)
 			to_chat(user, "<span class='notice'>You removed the windoor electronics!</span>")
 			make_assembly(user)
@@ -262,28 +252,24 @@
 			to_chat(user, "<span class='notice'>This windoor already has electronics in it.</span>")
 			return 0
 		LT.use(1)
-		to_chat(user, "<span class='notice'>You add some electronics to the windoor.</span>")	
+		to_chat(user, "<span class='notice'>You add some electronics to the windoor.</span>")
 		smartwindow = new /obj/machinery/smartglass_electronics(src)
 		return smartwindow
-	
+
 	//If its a multitool and our windoor is smart, open the menu
 	if(ismultitool(I) && smartwindow)
 		smartwindow.update_multitool_menu(user)
 		return
-		
+
 	//If it's a weapon, smash windoor. Unless it's an id card, agent card, ect.. then ignore it (Cards really shouldnt damage a door anyway)
 	if(density && istype(I, /obj/item/weapon) && !istype(I, /obj/item/weapon/card))
 		var/aforce = I.force
 		user.do_attack_animation(src, I)
 		user.delayNextAttack(8)
-		if(I.damtype == BRUTE || I.damtype == BURN)
-			health = max(0, health - aforce)
-		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 		visible_message("<span class='danger'>[src] was hit by [I].</span>")
-		if (health <= 0)
-			getFromPool(shard, loc)
-			getFromPool(/obj/item/stack/cable_coil, loc, 2)
-			qdel(src)
+		if(I.damtype == BRUTE || I.damtype == BURN)
+			take_damage(aforce)
 		return
 
 	add_fingerprint(user)
@@ -303,8 +289,9 @@
 	return ..()
 
 /obj/machinery/door/window/emag(mob/user)
-	var used_emag = (/obj/item/weapon/card/emag in user.contents) //TODO: Find a better way of checking this
-	return hackOpen(used_emag, user)
+	if(user)
+		var/used_emag = (/obj/item/weapon/card/emag in user.contents) //TODO: Find a better way of checking this
+		return hackOpen(used_emag, user)
 
 /obj/machinery/door/window/proc/hackOpen(obj/item/I, mob/user)
 	operating = -1

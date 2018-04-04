@@ -156,6 +156,12 @@
 						/obj/item/weapon/glow_orb,\
 						)
 
+/datum/spellbook_artifact/butterflyknife
+	name = "Crystal Butterfly Knife"
+	desc = "A butterfly knife made of colored crystals. It's infused with summoning magic so when it's flipped it will summon a crystal butterfly that attacks anything but it's summoner."
+	abbreviation = "BK"
+	spawned_items = list(/obj/item/weapon/butterflyknife/viscerator/magic)
+
 //SANTA BUNDLE
 
 /datum/spellbook_artifact/santa_bundle
@@ -196,4 +202,4 @@
 	SetUniversalState(/datum/universal_state/christmas)
 
 /datum/spellbook_artifact/santa_bundle/can_buy()
-	return (Holiday == "Christmas" && !istype(universe, /datum/universal_state/christmas))
+	return (Holiday == XMAS && !istype(universe, /datum/universal_state/christmas))

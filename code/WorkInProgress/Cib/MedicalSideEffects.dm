@@ -62,7 +62,7 @@
 		if(11 to 30)
 			H.custom_pain("You feel a throbbing pain in your head!",1)
 		if(31 to 50)
-			H.custom_pain("You feel an excrutiating pain in your head!",1)
+			H.custom_pain("You feel an excruciating pain in your head!",1)
 			H.adjustBrainLoss(1)
 		if(51 to INFINITY)
 			H.custom_pain("It feels like your head is about to split open!",1)

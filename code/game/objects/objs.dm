@@ -10,6 +10,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/sharpness = 0 //not a binary - rough guide is 0.8 cutting, 1 cutting well, 1.2 specifically sharp (knives, etc) 1.5 really sharp (scalpels, e-weapons)
 	var/sharpness_flags = 0 //Describe in which way this thing is sharp. Shouldn't sharpness be exclusive to obj/item?
 	var/heat_production = 0
+	var/source_temperature = 0
 	var/price = 0
 
 	var/in_use = 0 // If we have a user using us, this will be set on. We will check if the user has stopped using us, and thus stop updating and LAGGING EVERYTHING!
@@ -25,8 +26,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	// Shit for mechanics. (MECH_*)
 	var/mech_flags=0
 
-	var/holomap = FALSE // Whether we should be on the holomap.
-	var/auto_holomap = FALSE // Whether we automatically soft-add ourselves to the holomap in New(), make sure this is false is something does it manually.
 	plane = OBJ_PLANE
 
 	var/defective = 0
@@ -41,12 +40,14 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	var/has_been_invisible_sprayed = FALSE
 
-/obj/New()
-	..()
-	if (auto_holomap && isturf(loc))
-		var/turf/T = loc
-		T.soft_add_holomap(src)
-	verbs -= /obj/verb/remove_pai
+// Whether this object can appear in holomaps
+/obj/proc/supports_holomap()
+	return FALSE
+
+/obj/proc/add_self_to_holomap()
+	var/turf/T = loc
+	if(istype(T) && ticker && ticker.current_state != GAME_STATE_PLAYING)
+		T.add_holomap(src)
 
 /obj/Destroy()
 	for(var/mob/user in _using)
@@ -58,7 +59,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(integratedpai)
 		qdel(integratedpai)
 		integratedpai = null
-		verbs -= /obj/verb/remove_pai
 
 	..()
 
@@ -70,8 +70,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return 0
 	P.forceMove(src)
 	integratedpai = P
-	verbs += /obj/verb/remove_pai
-
+	verbs += /obj/proc/remove_pai
 
 /obj/attackby(obj/item/weapon/W, mob/user)
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
@@ -144,7 +143,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(istype(A,/obj/machinery)||(istype(A,/mob)&&user.secHUD))
 		A.attack_pai(user)
 
-/obj/verb/remove_pai()
+/obj/proc/remove_pai()
 	set name = "Remove pAI"
 	set category = "Object"
 	set src in range(1)
@@ -166,7 +165,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/eject_integratedpai_if_present()
 	if(integratedpai)
 		integratedpai.forceMove(get_turf(src))
-		verbs -= /obj/verb/remove_pai
+		verbs -= /obj/proc/remove_pai
 		var/obj/item/device/paicard/P = integratedpai
 		integratedpai = null
 		return P
@@ -202,8 +201,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/is_sharp()
 	return sharpness
 
-/obj/proc/is_hot()
-	return heat_production
+/obj/proc/is_hot() //This returns the temperature of the object if possible
+	return source_temperature
+
+/obj/proc/thermal_energy_transfer()
+	if(is_hot())
+		return heat_production
+	return 0
 
 /obj/proc/process()
 	set waitfor = FALSE
@@ -237,16 +241,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	else
 		return null
 
-/atom/movable/proc/initialize()
-	return
-
 /obj/proc/updateUsrDialog()
 	if(in_use)
 		var/is_in_use = 0
 		if(_using && _using.len)
 			var/list/nearby = viewers(1, src) + loc //List of nearby things includes the location - allows you to call this proc on items and such
 			for(var/mob/M in _using) // Only check things actually messing with us.
-				if (!M || !M.client || M.machine != src)
+				if (!M || !M.client)
 					_using.Remove(M)
 					continue
 
@@ -257,7 +258,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 						src.attack_ai(M)
 
 					// check for TK users
-					if(M.mutations && M.mutations.len)
+					else if(M.mutations && M.mutations.len)
 						if(M_TK in M.mutations)
 							is_in_use = 1
 							src.attack_hand(M, TRUE) // The second param is to make sure brain damage on the user doesn't cause the UI to not update but the action to still happen.
@@ -444,7 +445,7 @@ a {
 	if(density==0 || can_affix_to_dense_turf)
 		return TRUE// Non-dense things just don't care. Same with can_affix_to_dense_turf=TRUE objects.
 	for(var/obj/other in loc) //ensure multiple things aren't anchored in one place
-		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flags & ON_BORDER))
+		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flow_flags & ON_BORDER))
 			to_chat(user, "\The [other] is already anchored in this location.")
 			return FALSE // NOPE
 	return TRUE
@@ -589,6 +590,7 @@ a {
 			else
 				user.visible_message("<span class='warning'>[user] kicks \himself away from \the [A].</span>", "<span class='notice'>You kick yourself away from \the [A]. Wee!</span>")
 				for(var/i in list(2,2,3,3))
+					set_glide_size(DELAY2GLIDESIZE(i))
 					if(!step(src, movementdirection))
 						change_dir(turn(movementdirection, 180)) //stop, but don't turn around when hitting a wall
 						break
@@ -596,7 +598,7 @@ a {
 					sleep(i)
 		return 1
 
-/obj/make_invisible(var/source_define, var/time)
+/obj/make_invisible(var/source_define, var/time, var/include_clothing)
 	if(..() || !source_define)
 		return
 	alpha = 1

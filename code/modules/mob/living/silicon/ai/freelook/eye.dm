@@ -10,6 +10,7 @@
 	var/list/visibleCameraChunks = list()
 	var/mob/living/silicon/ai/ai = null
 	var/high_res = 0
+	glide_size = WORLD_ICON_SIZE //AI eyes are hyperspeed, who knows
 	flags = HEAR_ALWAYS | TIMELESS
 
 // Use this when setting the aiEye's location.
@@ -35,7 +36,7 @@
 			var/obj/machinery/hologram/holopad/H = ai.current
 			H.move_hologram()
 
-/mob/camera/aiEye/Move()
+/mob/camera/aiEye/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
 
 /mob/camera/aiEye/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A) //proc for eye seeing visible messages from atom A, only possible with the high_res camera module
@@ -62,22 +63,6 @@
 
 // AI MOVEMENT
 
-// The AI's "eye". Described on the top of the page.
-
-/mob/living/silicon/ai
-	var/mob/camera/aiEye/eyeobj = new()
-	var/sprint = 10
-	var/cooldown = 0
-	var/acceleration = 1
-
-
-// Intiliaze the eye by assigning it's "ai" variable to us. Then set it's loc to us.
-/mob/living/silicon/ai/New()
-	..()
-	eyeobj.ai = src
-	eyeobj.name = "[src.name] (AI Eye)" // Give it a name
-	spawn(5)
-		eyeobj.forceMove(src.loc)
 
 /mob/living/silicon/ai/Destroy()
 	eyeobj.ai = null
@@ -93,20 +78,6 @@
 			//AI.eyeobj.forceMove(src)
 			if (isturf(src.loc) || isturf(src))
 				AI.eyeobj.forceMove(src)
-
-/mob/living/Click()
-	if(isAI(usr)) //IDK why this is needed
-		var/mob/living/silicon/ai/A = usr
-		if(!A.aicamera.in_camera_mode) //Fix for taking photos of mobs
-			return
-	..()
-
-/mob/living/DblClick()
-	if(isAI(usr) && usr != src)
-		var/mob/living/silicon/ai/A = usr
-		A.ai_actual_track(src)
-		return
-	..()
 
 // This will move the AIEye. It will also cause lights near the eye to light up, if toggled.
 // This is handled in the proc below this one.
@@ -152,7 +123,6 @@
 		//src.eyeobj.loc = src.loc
 		src.eyeobj.forceMove(src.loc)
 	else
-		to_chat(src, "ERROR: Eyeobj not found. Creating new eye...")
 		src.eyeobj = new(src.loc)
 		src.eyeobj.ai = src
 		src.eyeobj.name = "[src.name] (AI Eye)" // Give it a name

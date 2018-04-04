@@ -10,42 +10,7 @@
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 
-	var/static/list/available_spells = list(
-	/spell/targeted/projectile/magic_missile,
-	/spell/targeted/projectile/dumbfire/fireball,
-	/spell/targeted/projectile/dumbfire/fireball/firebreath,
-	/spell/lightning,
-	/spell/aoe_turf/ring_of_fire,
-	/spell/aoe_turf/disable_tech,
-	/spell/aoe_turf/smoke,
-	/spell/targeted/genetic/blind,
-	/spell/targeted/disorient,
-	/spell/targeted/mind_transfer,
-	/spell/aoe_turf/conjure/forcewall,
-	/spell/aoe_turf/blink,
-	/spell/area_teleport,
-	/spell/targeted/genetic/mutate,
-	/spell/targeted/ethereal_jaunt,
-	/spell/aoe_turf/fall,
-	/spell/mirror_of_pain,
-	/spell/aoe_turf/knock,
-	/spell/targeted/equip_item/horsemask,
-	/spell/targeted/equip_item/clowncurse,
-	/spell/targeted/equip_item/frenchcurse,
-	/spell/targeted/shoesnatch,
-	/spell/targeted/equip_item/robesummon,
-	/spell/targeted/flesh_to_stone,
-	/spell/targeted/buttbots_revenge,
-	/spell/aoe_turf/conjure/pontiac,
-	/spell/aoe_turf/conjure/arcane_golem,
-	/spell/targeted/bound_object,
-	/spell/aoe_turf/conjure/snakes,
-	/spell/targeted/push,
-	/spell/targeted/feint,
-	/spell/targeted/fist,
-	/spell/aoe_turf/conjure/doppelganger,
-	/spell/noclothes
-	)
+	var/list/available_spells = list()
 
 	//Unlike the list above, the available_artifacts list builds itself from all subtypes of /datum/spellbook_artifact
 	var/static/list/available_artifacts = list()
@@ -55,7 +20,7 @@
 		/obj/item/potion/transform = Sp_BASE_PRICE*0.75,
 		/obj/item/potion/toxin = Sp_BASE_PRICE*0.75,
 		/obj/item/potion/mana = Sp_BASE_PRICE*0.5,
-		/obj/item/potion/invisibility = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/invisibility/major = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/stoneskin = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/speed/major = Sp_BASE_PRICE*0.5,
 		/obj/item/potion/zombie = Sp_BASE_PRICE*0.5,
@@ -67,6 +32,7 @@
 		/obj/item/potion/deception = Sp_BASE_PRICE*0.1,
 		/obj/item/potion/levitation = Sp_BASE_PRICE*0.1,
 		/obj/item/potion/fireball = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/invisibility = Sp_BASE_PRICE*0.1,
 		/obj/item/potion/light = Sp_BASE_PRICE*0.05,
 		/obj/item/potion/fullness = Sp_BASE_PRICE*0.05,
 		/obj/item/potion/transparency = Sp_BASE_PRICE*0.05,
@@ -88,6 +54,13 @@
 	..()
 
 	available_artifacts = typesof(/datum/spellbook_artifact) - /datum/spellbook_artifact
+
+	for(var/type_S in getAllWizSpells())
+		var/spell/S = new type_S // Because initial doesn't work with lists
+		if (!S.holiday_required.len)
+			available_spells += type_S // We're giving types
+		else if (Holiday in S.holiday_required) // Either no holiday or a very special spell for a very special day
+			available_spells += type_S // We're giving types
 
 	for(var/T in available_artifacts)
 		available_artifacts.Add(new T) //Create a new object with the path T
@@ -113,6 +86,7 @@
 			src.uses += APPRENTICE_PRICE
 			qdel (O)
 			O = null
+
 
 #define buy_href_link(obj, price, txt) ((price > uses) ? "Price: [price] point\s" : "<a href='?src=\ref[src];spell=[obj];buy=1'>[txt]</a>")
 #define book_background_color "#F1F1D4"
@@ -719,7 +693,7 @@
 			B.transfer_buttdentity(C)
 			C.op_stage.butt = 4
 			to_chat(user, "<span class='warning'>Your ass just blew up!</span>")
-		playsound(get_turf(src), 'sound/effects/superfart.ogg', 50, 1)
+		playsound(src, 'sound/effects/superfart.ogg', 50, 1)
 		C.apply_damage(40, BRUTE, LIMB_GROIN)
 		C.apply_damage(10, BURN, LIMB_GROIN)
 		qdel(src)

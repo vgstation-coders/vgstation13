@@ -146,11 +146,11 @@
 /obj/item/mecha_parts/mecha_equipment/tool/jail/Topic(href,href_list)
 	if(..())
 		return TRUE
-	var/datum/topic_input/filter = new /datum/topic_input(href,href_list)
+	var/datum/topic_input/topic_filter = new /datum/topic_input(href,href_list)
 	for(var/cell in cells)
-		if(filter.get("eject[cell]"))
+		if(topic_filter.get("eject[cell]"))
 			go_out(cell)
-		if(filter.get("subdue[cell]"))
+		if(topic_filter.get("subdue[cell]"))
 			subdue(cell)
 	return
 

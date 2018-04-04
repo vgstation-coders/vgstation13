@@ -187,9 +187,9 @@ Auto Patrol: []"},
 	src.add_fingerprint(usr)
 	if(lasercolor && (istype(usr,/mob/living/carbon/human)))
 		var/mob/living/carbon/human/H = usr
-		if((lasercolor == "b") && (istype(H.wear_suit, /obj/item/clothing/suit/redtag)))//Opposing team cannot operate it
+		if((lasercolor == "b") && iswearingredtag(H))//Opposing team cannot operate it
 			return
-		else if((lasercolor == "r") && (istype(H.wear_suit, /obj/item/clothing/suit/bluetag)))
+		else if((lasercolor == "r") && iswearingbluetag(H))
 			return
 	if ((href_list["power"]) && (src.allowed(usr)))
 		if (src.on)
@@ -333,7 +333,7 @@ Auto Patrol: []"},
 				if(!istype(target.loc, /turf))
 					return
 				if (Adjacent(target))		// if right next to perp
-					playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
+					playsound(src, 'sound/weapons/Egloves.ogg', 50, 1, -1)
 					src.icon_state = "[lasercolor][icon_initial]-c"
 					spawn(2)
 						src.icon_state = "[lasercolor][icon_initial][src.on]"
@@ -387,7 +387,7 @@ Auto Patrol: []"},
 
 			if(istype(src.target,/mob/living/carbon))
 				if (!src.target.handcuffed && !src.arrest_type)
-					playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
+					playsound(src, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
 					mode = SECBOT_ARREST
 					visible_message("<span class='danger'>[src] is trying to put handcuffs on [src.target]!</span>")
 
@@ -406,7 +406,7 @@ Auto Patrol: []"},
 							src.last_found = world.time
 							src.frustration = 0
 
-		//					playsound(get_turf(src), pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
+		//					playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
 		//					var/arrest_message = pick("Have a secure day!","I AM THE LAW.", "God made tomorrow for the crooks we don't catch today.","You can't outrun a radio.")
 		//					src.speak(arrest_message)
 			else
@@ -721,7 +721,7 @@ Auto Patrol: []"},
 			src.oldtarget_name = C.name
 			src.speak("Level [src.threatlevel] infraction alert!")
 			if(!src.lasercolor)
-				playsound(get_turf(src), pick('sound/voice/ed209_20sec.ogg', 'sound/voice/EDPlaceholder.ogg'), 50, 0)
+				playsound(src, pick('sound/voice/ed209_20sec.ogg', 'sound/voice/EDPlaceholder.ogg'), 50, 0)
 			src.visible_message("<b>[src]</b> points at [C.name]!")
 			mode = SECBOT_HUNT
 			spawn(0)
@@ -769,7 +769,7 @@ Auto Patrol: []"},
 
 	if(src.lasercolor == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
 		threatcount = 0//They will not, however shoot at people who have guns, because it gets really fucking annoying
-		if(istype(perp.wear_suit, /obj/item/clothing/suit/redtag))
+		if(iswearingredtag(perp))
 			threatcount += PERP_LEVEL_ARREST
 		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/tag/red))
 			threatcount += PERP_LEVEL_ARREST
@@ -778,7 +778,7 @@ Auto Patrol: []"},
 
 	if(src.lasercolor == "r")
 		threatcount = 0
-		if(istype(perp.wear_suit, /obj/item/clothing/suit/bluetag))
+		if(iswearingbluetag(perp))
 			threatcount += PERP_LEVEL_ARREST
 		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/tag/blue))
 			threatcount += PERP_LEVEL_ARREST
@@ -856,9 +856,9 @@ Auto Patrol: []"},
 			if(!lasercolor)
 				new /obj/item/clothing/suit/armor/vest(Tsec)
 			if(lasercolor == "b")
-				new /obj/item/clothing/suit/bluetag(Tsec)
+				new /obj/item/clothing/suit/tag/bluetag(Tsec)
 			if(lasercolor == "r")
-				new /obj/item/clothing/suit/redtag(Tsec)
+				new /obj/item/clothing/suit/tag/redtag(Tsec)
 
 	spark(src)
 
@@ -883,7 +883,7 @@ Auto Patrol: []"},
 		return
 
 	//if(lastfired && world.time - lastfired < 100)
-	//	playsound(get_turf(src), 'ed209_shoot.ogg', 50, 0)
+	//	playsound(src, 'ed209_shoot.ogg', 50, 0)
 
 	if (!( istype(U, /turf) ))
 		return
@@ -973,9 +973,9 @@ Auto Patrol: []"},
 						icon_state = "ed209_legs"
 
 		if(2)
-			if( istype(W, /obj/item/clothing/suit/redtag) )
+			if( istype(W, /obj/item/clothing/suit/tag/redtag) )
 				lasercolor = "r"
-			else if( istype(W, /obj/item/clothing/suit/bluetag) )
+			else if( istype(W, /obj/item/clothing/suit/tag/bluetag) )
 				lasercolor = "b"
 			if( lasercolor || istype(W, /obj/item/clothing/suit/armor/vest) )
 				if(user.drop_item(W))
@@ -1052,7 +1052,7 @@ Auto Patrol: []"},
 
 		if(8)
 			if( isscrewdriver(W) )
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 				var/turf/T = get_turf(user)
 				to_chat(user, "<span class='notice'>Now attaching the gun to the frame...</span>")
 				sleep(40)

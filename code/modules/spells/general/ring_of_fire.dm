@@ -1,6 +1,7 @@
 /spell/aoe_turf/ring_of_fire
 	name = "Ring of Fire"
 	desc = "Summon a stationary ring of flames around your current location for 10 seconds. While the ring is active, you are fully immune to fire and burns."
+	user_type = USER_TYPE_WIZARD
 	school = "conjuration"
 	charge_max = 300
 	cooldown_min = 100
@@ -74,12 +75,35 @@
 /obj/effect/ring_of_fire/New(loc, list/locations, duration)
 	..()
 
+	var/list/processing_locking_cats = list()
+
 	for(var/turf/T in locations)
+		//Create the flames at their intended location
 		var/obj/effect/fire_blast/ring_of_fire/F = new /obj/effect/fire_blast/ring_of_fire(T, fire_duration = duration)
 
 		var/lock_id = "\ref[F]"
-		add_lock_cat(/datum/locking_category/ring_of_fire, lock_id)
+		var/datum/locking_category/ring_of_fire/locking_cat = add_lock_cat(/datum/locking_category/ring_of_fire, lock_id)
+		//Lock_atom notes their intended location, and moves all of them to the caster's turf
 		lock_atom(F, lock_id)
+
+		processing_locking_cats.Add(locking_cat)
+
+	//This subprocess moves all flames to their intended location
+	spawn()
+		while(processing_locking_cats.len)
+			for(var/datum/locking_category/ring_of_fire/ROF in processing_locking_cats)
+				if(ROF.x_offset == ROF.target_x_offset && ROF.y_offset == ROF.target_y_offset)
+					processing_locking_cats.Remove(ROF)
+					continue
+				if(!ROF.locked || !ROF.locked.len || !ROF.owner || !ROF.owner.loc)
+					processing_locking_cats.Remove(ROF)
+					continue
+
+				ROF.x_offset += sgn(ROF.target_x_offset - ROF.x_offset)
+				ROF.y_offset += sgn(ROF.target_y_offset - ROF.y_offset)
+				ROF.update_locks()
+
+			sleep(5)
 
 	spawn(duration)
 		qdel(src)
@@ -89,9 +113,13 @@
 	spread = 0
 
 /datum/locking_category/ring_of_fire
+	var/target_x_offset
+	var/target_y_offset
 
 /datum/locking_category/ring_of_fire/lock(atom/movable/AM)
-	x_offset = AM.x - owner.x
-	y_offset = AM.y - owner.y
+	target_x_offset = AM.x - owner.x
+	target_y_offset = AM.y - owner.y
+	x_offset = 0
+	y_offset = 0
 
 	..()

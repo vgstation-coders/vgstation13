@@ -52,9 +52,9 @@
 		if(wizard.current.stat == DEAD)
 			continue
 		if(wizard.current.stat == UNCONSCIOUS)
-			if(wizard.current.health < 0)
+			if(wizard.current.health < -75)
 				to_chat(wizard.current, "<span class='warning'><font size='4'>The Space Wizard Federation is upset with your performance and have terminated your employment.</font></span>")
-				wizard.current.stat = DEAD
+				wizard.current.death()
 				continue
 		wizards_alive++
 

@@ -21,9 +21,9 @@
 	if(!full)
 		return
 	user.visible_message("<span class='danger'>\The [user] drinks \the [src].</span>", "<span class='notice'>You drink \the [src].</span>")
-	playsound(get_turf(src),'sound/items/uncorking.ogg', rand(10,50), 1)
+	playsound(src,'sound/items/uncorking.ogg', rand(10,50), 1)
 	spawn(6)
-		playsound(get_turf(src),'sound/items/drink.ogg', rand(10,50), 1)
+		playsound(src,'sound/items/drink.ogg', rand(10,50), 1)
 	imbibe(user)
 
 /obj/item/potion/update_icon()
@@ -56,7 +56,7 @@
 		user.visible_message("<span class='danger'>\The [user] attempts to feed \the [M] \the [src].</span>", "<span class='danger'>You attempt to feed \the [M] \the [src].</span>")
 		if(!do_mob(user, M))
 			return
-		playsound(get_turf(src),'sound/items/drink.ogg', rand(10,50), 1)
+		playsound(src,'sound/items/drink.ogg', rand(10,50), 1)
 		user.visible_message("<span class='danger'>\The [user] feeds \the [M] \the [src].</span>", "<span class='danger'>You feed \the [M] \the [src].</span>")
 
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fed [src.name] by [user.name] ([user.ckey])</font>")
@@ -117,17 +117,26 @@
 			SP.charge_counter = SP.charge_max
 
 /obj/item/potion/invisibility
-	name = "potion of invisibility"
-	desc = "Become completely invisible for one minute."
-	icon_state = "mass_orb"
+	name = "potion of minor invisibility"
+	desc = "Become completely invisible for five minutes."
+	icon_state = "blue_largebottle"
+	var/time = 5 MINUTES
+	var/include_clothes = FALSE
 
 /obj/item/potion/invisibility/imbibe_effect(mob/user)
-	user.make_invisible(INVISIBLEPOTION, 1 MINUTES)
+	user.make_invisible(INVISIBLEPOTION, time, include_clothes)
 
 /obj/item/potion/invisibility/impact_atom(atom/target)
 	if(isatommovable(target))
 		var/atom/movable/AM = target
-		AM.make_invisible(INVISIBLEPOTION, 1 MINUTES)
+		AM.make_invisible(INVISIBLEPOTION, time)
+
+/obj/item/potion/invisibility/major
+	name = "potion of major invisibility"
+	desc = "Become completely invisible, along with all your clothing and possessions, for one minute."
+	icon_state = "mass_orb"
+	time = 1 MINUTES
+	include_clothes = TRUE
 
 /obj/item/potion/stoneskin
 	name = "potion of stone skin"
@@ -206,13 +215,7 @@
 		playsound(T, 'sound/effects/phasein.ogg', 50, 1)
 	user.visible_message("<span class='danger'>\The [user] transforms into \a [new_mob]!</span>", "<span class='notice'>You transform into \a [new_mob].</span>")
 	spawn(5 MINUTES)
-		var/mob/top_level = new_mob
-		if(top_level.transmogged_to)
-			while(top_level.transmogged_to)
-				top_level = top_level.transmogged_to
-		var/turf/T2 = get_turf(top_level)
-		while(top_level)
-			top_level = top_level.transmogrify()
+		var/turf/T2 = get_turf(new_mob.completely_untransmogrify())
 		if(T2)
 			playsound(T2, 'sound/effects/phasein.ogg', 50, 1)
 
@@ -235,14 +238,14 @@
 	return ishuman(user)
 
 /obj/item/potion/zombie/imbibe_effect(mob/living/carbon/human/user)
-	user.become_zombie_after_death = TRUE
+	user.become_zombie_after_death = 2
 
 /obj/item/potion/zombie/impact_atom(atom/target)
 	var/mob/M = get_last_player_touched()
 	var/list/L = get_all_mobs_in_dview(get_turf(src))
 	for(var/mob/living/carbon/human/H in L)
 		if(H.isDeadorDying())
-			if(prob(50))
+			if(prob(50) && isjusthuman(H))
 				H.make_zombie(M)
 			else
 				new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), M, H.mind)

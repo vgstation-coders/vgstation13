@@ -4,7 +4,7 @@
 
 /obj/item/weapon/gun/osipr
 	name = "\improper Overwatch Standard Issue Pulse Rifle"
-	desc = "Centuries ago those weapons striked fear in all of humanity when the Combine attacked the Earth. Nowadays these are just the best guns that the Syndicate can provide to its Elite Troops with its tight budget."
+	desc = "Centuries ago those weapons struck fear in all of humanity when the Combine attacked the Earth. Nowadays these are just the best guns that the Syndicate can provide to its Elite Troops with its tight budget."
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "osipr"
 	item_state = "osipr"
@@ -70,7 +70,7 @@
 			A.forceMove(src)
 			magazine = A
 			update_icon()
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
 			to_chat(user, "<span class='info'>You insert a new magazine.</span>")
 			user.regenerate_icons()
 
@@ -81,7 +81,7 @@
 			user.u_equip(A,1)
 			qdel(A)
 			energy_balls++
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
 			to_chat(user, "<span class='info'>You insert \the [A].</span>")
 	else
 		..()
@@ -92,7 +92,7 @@
 		user.put_in_hands(magazine)
 		magazine = null
 		update_icon()
-		playsound(get_turf(src), 'sound/machines/click.ogg', 25, 1)
+		playsound(src, 'sound/machines/click.ogg', 25, 1)
 		to_chat(user, "<span class='info'>You remove the magazine.</span>")
 		user.regenerate_icons()
 	else

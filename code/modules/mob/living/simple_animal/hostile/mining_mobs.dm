@@ -313,7 +313,7 @@ obj/item/asteroid/basilisk_hide/New()
 
 /obj/item/asteroid/hivelord_core/process()
 	if(reagents && reagents.has_reagent(FROSTOIL, 5))
-		playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
+		playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
 		desc = "All that remains of a hivelord, it seems to be what allows it to break pieces of itself off without being hurt. It is covered in a thin coat of frost."
 		processing_objects.Remove(src)
 		return
@@ -371,7 +371,7 @@ obj/item/asteroid/basilisk_hide/New()
 	else
 		to_chat(user, "<span class='notice'>You chomp into \the [src], barely managing to hold it down, but feel amazingly refreshed in mere moments.</span>")
 
-	playsound(get_turf(src), 'sound/items/eatfood.ogg', rand(10, 50), 1)
+	playsound(src, 'sound/items/eatfood.ogg', rand(10, 50), 1)
 	target.revive()
 
 	user.drop_from_inventory(src)

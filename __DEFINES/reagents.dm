@@ -8,6 +8,7 @@
 #define VACCINE 			"vaccine"
 #define WATER 			"water"
 #define LUBE 			"lube"
+#define SODIUM_POLYACRYLATE			"sodium_polyacrylate"
 #define PHALANXIMINE 			"phalanximine"
 #define TOXIN 			"toxin"
 #define PLASTICIDE 			"plasticide"
@@ -106,6 +107,7 @@
 #define FLUOROSURFACTANT 			"fluorosurfactant"
 #define NICOTINE 			"nicotine"
 #define AMMONIA 			"ammonia"
+#define SALINE				"saline"
 #define GLUE 			"glue"
 #define DIETHYLAMINE 			"diethylamine"
 #define ETHYLREDOXRAZINE 			"ethylredoxrazine"
@@ -136,6 +138,7 @@
 #define CHERRYJELLY 			"cherryjelly"
 #define HONEY			"honey"
 #define ROYALJELLY			"royaljelly"
+#define CHILLWAX			"chillwax"
 #define DIPPING_SAUCE	"dippingsauce"
 #define DISCOUNT 			"discount"
 #define IRRADIATEDBEANS 			"irradiatedbeans"
@@ -326,6 +329,10 @@
 #define HEMOSCYANINE	"hemoscyanine"
 #define ANTHRACENE		"anthracene"
 #define PINTPOINTER		"pintpointer"
+#define MUCUS			"mucus"
+#define ALBUTEROL		"albuterol"
+#define LIQUIDBUTTER	"liquidbutter"
+#define SALTWATER		"saltwater"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -352,12 +359,21 @@
 #define HYOSCYAMINE		"hyoscyamine"
 #define CORIAMYRTIN		"coriamyrtin"
 #define THYMOL			"thymol"
+#define POTASSIUMCARBONATE "potassium_carbonate"
 
 #define PETRITRICIN		"petritricin"
 #define APETRINE		"apetrine"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
+
+//Temperatures of things (Kelvin)
+#define TEMPERATURE_HOTMETAL 300
+#define TEMPERATURE_LASER ARBITRARILY_PLANCK_NUMBER //Lasers technically have no upper limit
+#define TEMPERATURE_FLAME 700
+#define TEMPERATURE_WELDER 3480
+#define TEMPERATURE_PLASMA 4500
+#define HEAT_TRANSFER_MULTIPLIER 7 //Multiplies the numbers above when heating a reagent container. A truly magical number.
 
 // By defining the effect multiplier this way, it'll exactly adjust
 // all effects according to how they originally were with the 0.4 metabolism

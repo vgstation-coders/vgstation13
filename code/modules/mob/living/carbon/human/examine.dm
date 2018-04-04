@@ -212,7 +212,7 @@
 			spawn(15)
 				if(user && distance <= 1 && (!istype(user) || !user.isUnconscious()))
 					if(pulse == PULSE_NONE || (status_flags & FAKEDEATH))
-						to_chat(user, "<span class='deadsay'>[t_He] has no pulse[src.client ? "" : " and [t_his] soul has departed"]...</span>")
+						to_chat(user, "<span class='deadsay'>[t_He] has no pulse[mind ? "" : " and [t_his] soul has departed"]...</span>")
 					else
 						to_chat(user, "<span class='deadsay'>[t_He] has a pulse!</span>")
 
@@ -231,11 +231,17 @@
 
 	msg += "</span>"
 
-	if(has_brain() && stat != DEAD)
-		if(!key)
-			msg += "<span class='deadsay'>[t_He] [t_is] totally catatonic. The stresses of life in deep space must have been too much for [t_him]. Any recovery is unlikely.</span>\n"
-		else if(!client)
-			msg += "[t_He] [t_has] a vacant, braindead stare...\n"
+	if(show_client_status_on_examine || isAdminGhost(user))
+		if(has_brain() && stat != DEAD)
+			if(!key)
+				msg += "<span class='deadsay'>[t_He] [t_is] totally catatonic. The stresses of life in deep space must have been too much for [t_him]. Any recovery is unlikely.</span>\n"
+			else if(!client)
+				msg += "[t_He] [t_has] a vacant, braindead stare...\n"
+
+	// Religions
+	if (ismob(user) && user.mind && user.mind.faith && user.mind.faith.isReligiousLeader(user) && mind)
+		if (src.mind.faith == user.mind.faith)
+			msg += "<span class='notice'>You recognise [t_him] as a follower of [user.mind.faith.name].</span><br/>"
 
 	var/list/wound_flavor_text = list()
 	var/list/is_destroyed = list()
@@ -424,53 +430,32 @@
 	if(butchery)
 		msg += "<span class='warning'>[butchery]</span>\n"
 
-	if(hasHUD(user,"security"))
-		var/perpname = "wot"
+	if(istype(user) && user.hasHUD(HUD_SECURITY))
+		var/perpname = get_identification_name(get_face_name())
 		var/criminal = "None"
 
-		if(wear_id)
-			var/obj/item/weapon/card/id/I = wear_id.GetID()
-			if(I)
-				perpname = I.registered_name
-			else
-				perpname = name
-		else
-			perpname = name
-
-		if(perpname)
-			for (var/datum/data/record/E in data_core.general)
-				if(E.fields["name"] == perpname)
-					for (var/datum/data/record/R in data_core.security)
-						if(R.fields["id"] == E.fields["id"])
-							criminal = R.fields["criminal"]
-
+		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
+		if(sec_record)
+			criminal = sec_record.fields["criminal"]
 
 			msg += {"<span class = 'deptradio'>Criminal status:</span> <a href='?src=\ref[src];criminal=1'>\[[criminal]\]</a>
-<span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]</a>  <a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"}
+<span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]\n</a>"}
+			if(!isjustobserver(user))
+				msg += "<a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"
 			msg += {"[wpermit(src) ? "<span class = 'deptradio'>Has weapon permit.</span>\n" : ""]"}
 
-	if(hasHUD(user,"medical"))
-		var/perpname = "wot"
+	if(istype(user) && user.hasHUD(HUD_MEDICAL))
+		var/perpname = get_identification_name(get_face_name())
 		var/medical = "None"
 
-		if(wear_id)
-			if(istype(wear_id,/obj/item/weapon/card/id))
-				perpname = wear_id:registered_name
-			else if(istype(wear_id,/obj/item/device/pda))
-				var/obj/item/device/pda/tempPda = wear_id
-				perpname = tempPda.owner
-		else
-			perpname = src.name
-
-		for (var/datum/data/record/E in data_core.general)
-			if (E.fields["name"] == perpname)
-				for (var/datum/data/record/R in data_core.general)
-					if (R.fields["id"] == E.fields["id"])
-						medical = R.fields["p_stat"]
-
+		var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
+		if(gen_record)
+			medical = gen_record.fields["p_stat"]
 
 		msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n
-			<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]</a> <a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>\n"}
+			<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]\n</a>"}
+		if(!isjustobserver(user))
+			msg += "<a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>\n"
 
 	if(flavor_text && can_show_flavor_text())
 		msg += "[print_flavor_text()]\n"
@@ -480,36 +465,6 @@
 	to_chat(user, msg)
 	if(istype(user))
 		user.heard(src)
-
-//Helper procedure. Called by /mob/living/carbon/human/examine() and /mob/living/carbon/human/Topic() to determine HUD access to security and medical records.
-/proc/hasHUD(mob/M as mob, hudtype)
-	if(istype(M, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = M
-		switch(hudtype)
-			if("security")
-				return istype(H.glasses, /obj/item/clothing/glasses/hud/security) || istype(H.glasses, /obj/item/clothing/glasses/sunglasses/sechud)
-			if("medical")
-				return istype(H.glasses, /obj/item/clothing/glasses/hud/health)
-			else
-				return 0
-	else if(istype(M, /mob/living/silicon/robot))
-		var/mob/living/silicon/robot/R = M
-		switch(hudtype)
-			if("security")
-				return R.sensor_mode == 1
-			if("medical")
-				return R.sensor_mode == 2
-			else
-				return 0
-	else if(istype(M, /mob/living/silicon/pai))
-		var/mob/living/silicon/pai/P = M
-		switch(hudtype)
-			if("security")
-				return P.secHUD
-			if("medical")
-				return P.medHUD
-	else
-		return 0
 
 #undef Jitter_Medium
 #undef Jitter_High

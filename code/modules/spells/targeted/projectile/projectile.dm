@@ -7,6 +7,7 @@ If the spell_projectile is seeking, it will update its target every process and 
 
 /spell/targeted/projectile
 	name = "projectile spell"
+	user_type = USER_TYPE_NOUSER
 
 	range = 7
 
@@ -24,6 +25,9 @@ If the spell_projectile is seeking, it will update its target every process and 
 		proj_type = text2path(proj_type) // sanity filters
 
 	for(var/atom/target in targets)
+		if (user.is_pacified(VIOLENCE_DEFAULT,target))
+			return
+
 		var/obj/item/projectile/projectile = spawn_projectile(user.loc, user.dir)
 
 		if(!projectile)

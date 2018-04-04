@@ -108,6 +108,27 @@ var/global/list/thing_storm_types = list(
 		/obj/item/projectile/meteor/blob/node,
 		/obj/item/projectile/meteor/blob/node,
 	),
+	"fireworks" = list(
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+		/obj/item/projectile/meteor/firework,
+	)
 )
 
 /datum/event/thing_storm
@@ -187,3 +208,13 @@ var/global/list/thing_storm_types = list(
 
 /datum/event/thing_storm/blob_storm/end()
 	command_alert(/datum/command_alert/blob_storm/overminds/end)
+
+/datum/event/thing_storm/fireworks/setup()
+	endWhen = rand(60, 90) + 10
+	storm_name="fireworks"
+
+/datum/event/thing_storm/fireworks/tick()
+	meteor_wave(rand(45, 60), types = thing_storm_types[storm_name])
+
+/datum/event/thing_storm/fireworks/announce()
+	command_alert("The station is about to be bombarded by light-based distraction projectiles. Source unknown. No hull breaches are likely.", "Firework Fiasco")

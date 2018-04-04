@@ -13,6 +13,7 @@
 #define PROFILE_MACHINES // Disable when not debugging.
 
 #define ARBITRARILY_LARGE_NUMBER 10000 //Used in delays.dm and vehicle.dm. Upper limit on delays
+#define ARBITRARILY_PLANCK_NUMBER 1.417*(10**32) //1.417×10^32. Because ARBITRARILY_LARGE_NUMBER is too small and INF is too large
 #define MAX_VALUE 65535
 
 #ifdef PROFILE_MACHINES
@@ -174,7 +175,6 @@ var/MAX_EXPLOSION_RANGE = 14
 //Item flags!
 #define PROXMOVE	1	// Will the code check us when we move or when something moves near us? Note that if the item doesn't have this flag, HasProximity() will never execute for it.
 #define FPRINT		2	// takes a fingerprint
-#define ON_BORDER	4	// item has priority to check when entering or leaving
 #define INVULNERABLE 8
 #define HEAR		16 // This flag is necessary to give an item (or mob) the ability to hear spoken messages! Mobs without a client still won't hear anything unless given HEAR_ALWAYS
 #define HEAR_ALWAYS 32 // Assign a virtualhearer to the mob even when no client is controlling it. (technically not an item flag, but related to the above)
@@ -196,6 +196,11 @@ var/MAX_EXPLOSION_RANGE = 14
 
 #define ALL ~0
 #define NONE 0
+
+//airflow flags!
+
+#define ON_BORDER 1   // item has priority to check when entering or leaving
+#define IMPASSABLE 2  // item will make things auto_fail on prox checks through it
 
 
 //sharpness flags
@@ -369,6 +374,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define DISABILITY_FLAG_DEAF        8
 #define DISABILITY_FLAG_BLIND       16
 #define DISABILITY_FLAG_MUTE		32
+#define DISABILITY_FLAG_VEGAN		64
+#define DISABILITY_FLAG_ASTHMA 128
 
 ///////////////////////////////////////
 // MUTATIONS
@@ -440,6 +447,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_SANS		211		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'fuck comic sans' IN YOUR PR.
 #define M_FARSIGHT	212		// Increases mob's view range by 2
 #define M_NOIR		213		// aww yis detective noir
+#define M_VEGAN		214
+#define M_ASTHMA		215
 
 var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 				 				  0.33,0.33,0.33,0,\
@@ -457,6 +466,7 @@ var/global/list/bad_changing_colour_ckeys = list()
 #define COUGHING		4
 #define TOURETTES		8
 #define NERVOUS			16
+#define ASTHMA		32
 
 //sdisabilities
 #define BLIND			1
@@ -559,7 +569,6 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define CANPUSH		8
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
-#define DISFIGURED	16384	//I'll probably move this elsewhere if I ever get wround to writing a bitflag mob-damage system
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
 
 var/static/list/scarySounds = list('sound/weapons/thudswoosh.ogg','sound/weapons/Taser.ogg','sound/weapons/armbomb.ogg','sound/voice/hiss1.ogg','sound/voice/hiss2.ogg','sound/voice/hiss3.ogg','sound/voice/hiss4.ogg','sound/voice/hiss5.ogg','sound/voice/hiss6.ogg','sound/effects/Glassbr1.ogg','sound/effects/Glassbr2.ogg','sound/effects/Glassbr3.ogg','sound/items/Welder.ogg','sound/items/Welder2.ogg','sound/machines/airlock.ogg','sound/effects/clownstep1.ogg','sound/effects/clownstep2.ogg')
@@ -862,15 +871,17 @@ SEE_PIXELS	256
 #define RIGHT 2
 
 // for secHUDs and medHUDs and variants. The number is the location of the image on the list hud_list of humans.
-#define HEALTH_HUD          1 // a simple line rounding the mob's number health
-#define STATUS_HUD          2 // alive, dead, diseased, etc.
-#define ID_HUD              3 // the job asigned to your ID
-#define WANTED_HUD          4 // wanted, released, parroled, security status
-#define IMPLOYAL_HUD		5 // loyality implant
-#define IMPCHEM_HUD		    6 // chemical implant
-#define IMPTRACK_HUD		7 // tracking implant
-#define SPECIALROLE_HUD 	8 // AntagHUD image
-#define STATUS_HUD_OOC		9 // STATUS_HUD without virus db check for someone being ill.
+#define HEALTH_HUD          "health" // a simple line rounding the mob's number health
+#define STATUS_HUD          "status" // alive, dead, diseased, etc.
+#define ID_HUD              "id" // the job asigned to your ID
+#define WANTED_HUD          "wanted" // wanted, released, parroled, security status
+#define IMPLOYAL_HUD		"imployal" // loyality implant
+#define IMPCHEM_HUD		    "impchem" // chemical implant
+#define IMPTRACK_HUD		"imptrack" // tracking implant
+#define SPECIALROLE_HUD 	"specialrole" // AntagHUD image
+#define STATUS_HUD_OOC		"status_ooc" // STATUS_HUD without virus db check for someone being ill.
+#define DIAG_HEALTH_HUD		"diag_health" // Diagnostic HUD - health bar
+#define DIAG_CELL_HUD		"diag_cell" // Diagnostic HUD - power cell status for cyborgs, mechs
 
 // Hypothermia - using the swiss staging system. - called by the proc undergoing_hypothermia() in handle_hypothermia.dm
 #define NO_HYPOTHERMIA			0	// >35C   - Fine
@@ -912,6 +923,8 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define PLASMA_IMMUNE 512
 #define RAD_GLOW 1024
 #define ELECTRIC_HEAL 2048
+#define IS_SPECIES_MUTE 4096
+#define REQUIRE_DARK 8192
 
 //Species anatomical flags.
 #define HAS_SKIN_TONE 1
@@ -974,13 +987,16 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VAMP_CLOAK    7
 #define VAMP_BATS     8
 #define VAMP_SCREAM   9
-#define VAMP_JAUNT    10
-#define VAMP_SLAVE    11
-#define VAMP_BLINK    12
-#define VAMP_MATURE   13
-#define VAMP_SHADOW   14
-#define VAMP_CHARISMA 15
-#define VAMP_UNDYING  16
+#define VAMP_HEAL     10
+#define VAMP_JAUNT    11
+#define VAMP_SLAVE    12
+#define VAMP_BLINK    13
+#define VAMP_MATURE   14
+#define VAMP_SHADOW   15
+#define VAMP_CHARISMA 16
+#define VAMP_UNDYING  17
+
+#define STARTING_BLOOD 10
 
 // Moved from machine_interactions.dm
 #define STATION_Z  1
@@ -1276,6 +1292,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_MOUSE "Mouse"
 #define LANGUAGE_GOLEM "Golem"
 #define LANGUAGE_SLIME "Slime"
+#define LANGUAGE_MARTIAN "Martian"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
@@ -1321,8 +1338,9 @@ var/proccalls = 1
 //incorporeal_move values
 #define INCORPOREAL_DEACTIVATE	0
 #define INCORPOREAL_GHOST		1
-#define INCORPOREAL_NINJA		2
-#define INCORPOREAL_ETHEREAL	3
+#define INCORPOREAL_ETHEREAL	2
+#define GHOST_MOVEDELAY 1
+#define ETHEREAL_MOVEDELAY 2
 
 
 //MALFUNCTION FLAGS
@@ -1546,3 +1564,30 @@ var/proccalls = 1
 
 
 #define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
+
+#define BEESPECIES_NORMAL	"bees"
+#define BEESPECIES_VOX		"chill bugs"
+
+//mob/proc/is_pacified()
+#define VIOLENCE_SILENT		0
+#define VIOLENCE_DEFAULT	1
+#define VIOLENCE_GUN		2
+
+// Used to determine which HUD is in use
+#define HUD_NONE 0
+#define HUD_MEDICAL 1
+#define HUD_SECURITY 2
+
+//Cyborg components
+#define COMPONENT_BROKEN -1
+#define COMPONENT_MISSING 0
+#define COMPONENT_INSTALLED 1
+
+//Glidesize
+#define INERTIA_MOVEDELAY 5
+#define FRACTIONAL_GLIDESIZES 1
+#ifdef FRACTIONAL_GLIDESIZES
+#define DELAY2GLIDESIZE(delay) (WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1))
+#else
+#define DELAY2GLIDESIZE(delay) (Ceiling(WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1)))
+#endif

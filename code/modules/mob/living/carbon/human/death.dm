@@ -115,10 +115,10 @@
 		sql_report_death(src)
 		ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
 	species.handle_death(src)
-	if(become_zombie_after_death)
+	if(become_zombie_after_death && isjusthuman(src)) //2 if they retain their mind, 1 if they don't
 		spawn(30 SECONDS)
 			if(!gcDestroyed)
-				make_zombie()
+				make_zombie(retain_mind = become_zombie_after_death-1)
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()
@@ -132,7 +132,8 @@
 	update_hair(0)
 
 	mutations.Add(SKELETON)
-	status_flags |= DISFIGURED
+	var/datum/organ/external/head/head_organ = get_organ(LIMB_HEAD)
+	head_organ.disfigure("burn")
 	update_body(0)
 	update_mutantrace()
 	return
@@ -147,7 +148,8 @@
 	update_hair(0)
 
 	mutations.Add(M_HUSK)
-	status_flags |= DISFIGURED	//Makes them unknown without fucking up other stuff like admintools
+	var/datum/organ/external/head/head_organ = get_organ(LIMB_HEAD)
+	head_organ.disfigure("brute")
 	update_body(0)
 	update_mutantrace()
 	vessel.remove_reagent(BLOOD,vessel.get_reagent_amount(BLOOD))

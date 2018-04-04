@@ -369,6 +369,34 @@
 	corpsemask = /obj/item/clothing/mask/breath
 	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/mining
 
+/obj/effect/landmark/corpse/janitor
+	name = "Janitor"
+	corpseradio = /obj/item/device/radio/headset/headset_cargo
+	corpseuniform = /obj/item/clothing/under/rank/janitor
+	corpseshoes = /obj/item/clothing/shoes/black
+	corpseback = /obj/item/weapon/storage/backpack
+	corpsebelt = /obj/item/weapon/storage/belt/janitor
+	corpsegloves = /obj/item/clothing/gloves/purple
+	corpsehelmet = /obj/item/clothing/head/soft/purple
+	corpseid = 1
+	corpseidjob = "Janitor"
+	corpseidaccess = "Janitor"
+
+/obj/effect/landmark/corpse/janitor/chempack
+	corpseback = /obj/item/weapon/reagent_containers/chempack
+	corpseglasses = /obj/item/clothing/glasses/sunglasses
+
+/obj/effect/landmark/corpse/pilot
+	name = "pilot"
+	corpseradio = /obj/item/device/radio/headset/headset_sec
+	corpseuniform = /obj/item/clothing/under/aviatoruniform
+	corpseshoes = /obj/item/clothing/shoes/jackboots
+	corpsegloves = /obj/item/clothing/gloves/botanic_leather
+	corpseglasses = /obj/item/clothing/glasses/sunglasses
+	corpsemask = /obj/item/clothing/mask/scarf/red
+	corpsepocket1 = /obj/item/ammo_storage/speedloader/a357
+	corpsepocket2 = /obj/item/clothing/mask/cigarette/cigar
+
 
 /////////////////Officers//////////////////////
 

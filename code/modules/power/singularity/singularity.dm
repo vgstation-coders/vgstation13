@@ -111,7 +111,7 @@
 							new /obj/effect/gibspawner/generic(get_turf(user))
 							qdel(user)
 					else
-						playsound(get_turf(user), get_sfx("soulstone"), 50,1)
+						playsound(user, get_sfx("soulstone"), 50,1)
 						make_tracker_effects(get_turf(user), get_turf(src))
 						user.dust()
 				else
@@ -642,7 +642,7 @@
 /obj/machinery/singularity/acidable()
 	return 0
 
-/obj/machinery/singularity/Move(newLoc, movedir)
+/obj/machinery/singularity/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	if(timestopped)
 		return 0
-	return forceMove(get_step(src,movedir))
+	return forceMove(get_step(src,Dir))

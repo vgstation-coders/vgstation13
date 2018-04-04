@@ -279,13 +279,14 @@
 				if(!(player.mind in drafted) || !(player.mind in candidates)) // Players were getting placed in candidates AND drafted lists.
 					if(player.client.desires_role(role, display_to_user=poll)) // We don't have enough people who want to be antagonist, make a seperate list of people who don't want to be one
 						if(!jobban_isbanned(player, "Syndicate") && !jobban_isbanned(player, role)) //Nodrak/Carn: Antag Job-bans
-							drafted += player.mind
-
-	if(restricted_jobs)
-		for(var/datum/mind/player in drafted)				// Remove people who can't be an antagonist
-			for(var/job in restricted_jobs)
-				if(player.assigned_role == job)
-					drafted -= player
+							if (restricted_jobs) // Can't draft something that's restricted.
+								var/datum/mind/M = player.mind
+								if (!(M.assigned_job in restricted_jobs))
+									drafted += M
+								else
+									continue
+							else
+								drafted += player.mind
 
 	drafted = shuffle(drafted) // Will hopefully increase randomness, Donkie
 
@@ -350,8 +351,9 @@
 ///////////////////////////////////
 /datum/game_mode/proc/get_living_heads()
 	var/list/heads = list()
-	for(var/mob/living/carbon/human/player in mob_list)
-		if(player.stat!=2 && player.mind && (player.mind.assigned_role in command_positions))
+	for(var/client/C in clients)
+		var/mob/living/carbon/human/player = C.mob
+		if(istype(player) && player.stat!=2 && player.mind && (player.mind.assigned_role in command_positions))
 			heads += player.mind
 	return heads
 
@@ -361,15 +363,17 @@
 ////////////////////////////
 /datum/game_mode/proc/get_all_heads()
 	var/list/heads = list()
-	for(var/mob/player in mob_list)
-		if(player.mind && (player.mind.assigned_role in command_positions))
+	for(var/client/C in clients)
+		var/mob/living/carbon/human/player = C.mob
+		if(istype(player) && player.mind && (player.mind.assigned_role in command_positions))
 			heads += player.mind
 	return heads
 
 /datum/game_mode/proc/get_assigned_head_roles()
 	var/list/roles = list()
-	for(var/mob/player in mob_list)
-		if(player.mind && (player.mind.assigned_role in command_positions))
+	for(var/client/C in clients)
+		var/mob/living/carbon/human/player = C.mob
+		if(istype(player) && player.mind && (player.mind.assigned_role in command_positions))
 			roles += player.mind.assigned_role
 	return roles
 

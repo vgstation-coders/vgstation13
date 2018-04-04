@@ -84,7 +84,7 @@
 
 	ui_interact(user)
 
-/obj/machinery/computer/pda_terminal/ui_interact(mob/user, ui_key="main", datum/nanoui/ui=null)
+/obj/machinery/computer/pda_terminal/ui_interact(mob/user, ui_key="main", datum/nanoui/ui=null, var/force_open=NANOUI_FOCUS)
 	user.set_machine(src)
 
 	var/data[0]
@@ -94,7 +94,7 @@
 	data["has_pda_device"] = !!pda_device
 	data["pda_apps"] = format_apps(pda_device)
 
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		ui = new(user, src, ui_key, "pda_terminal.tmpl", src.name, 800, 700)
 		ui.set_initial_data(data)

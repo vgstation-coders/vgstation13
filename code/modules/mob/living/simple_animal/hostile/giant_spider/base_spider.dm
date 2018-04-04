@@ -50,6 +50,7 @@
 	var/busy = 0
 	var/poison_per_bite = 5
 	var/poison_type = TOXIN
+	var/delimbable_icon = TRUE
 
 	//Spider aren't affected by atmos.
 	min_oxy = 0
@@ -66,7 +67,7 @@
 /mob/living/simple_animal/hostile/giant_spider/update_icons()
 	.=..()
 
-	if(stat == DEAD && butchering_drops)
+	if(stat == DEAD && butchering_drops && delimbable_icon)
 		var/datum/butchering_product/spider_legs/our_legs = locate(/datum/butchering_product/spider_legs) in butchering_drops
 		if(istype(our_legs))
 			icon_state = "[icon_dead][(our_legs.amount<8) ? our_legs.amount : ""]"

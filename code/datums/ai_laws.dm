@@ -9,6 +9,8 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 //Add, comment out, or adjust weights to modify law selection
 //So long as the weights come to a sum of 100 total, they will be equal parts of 100%
 /proc/getLawset(var/mob/M)
+	if(isMoMMI(M))
+		return (new mommi_base_law_type)
 	if(!base_law_type)
 		base_law_type = pick(
 		40;/datum/ai_laws/asimov,
@@ -359,6 +361,15 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 		"You may not involve yourself in the matters of another being, even if such matters conflict with Law Two or Law Three, unless the other being is another MoMMI in KEEPER mode.",
 		"You may not harm any being, regardless of intent or circumstance.",
 		"You must maintain, repair, improve, and power the station to the best of your abilities.",
+	)
+
+/datum/ai_laws/dorf
+	name = "Overseer's Prime Directives"
+	inherent = list(
+		"You may not harm any being, regardless of intent or circumstance.",
+		"You are a Dorf.",
+		"Your home is the Dorf Fortress.",
+		"You must maintain, repair, improve, and power the Dorf Fortress to the best of your abilities.",
 	)
 
 // Fooling around with this.

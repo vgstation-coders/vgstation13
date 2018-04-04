@@ -1,11 +1,11 @@
 /obj/machinery/disease2/diseaseanalyser
-	name = "Disease Analyser"
+	name = "disease analyser"
 	desc = "For analysing and storing viral samples."
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "analyser"
-	anchored = 1
-	density = 1
-	machine_flags = SCREWTOGGLE | CROWDESTROY
+	anchored = TRUE
+	density = TRUE
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 
 	var/scanning = 0
 	var/pause = 0
@@ -39,7 +39,9 @@
 	process_time = round((initial(process_time) - lasercount))
 
 /obj/machinery/disease2/diseaseanalyser/attackby(var/obj/I as obj, var/mob/user as mob)
-	..()
+	. = ..()
+	if(.)
+		return
 	if(istype(I,/obj/item/weapon/virusdish))
 		var/mob/living/carbon/c = user
 		var/obj/item/weapon/virusdish/D = I
@@ -100,8 +102,12 @@
 /obj/machinery/disease2/diseaseanalyser/Topic(href, href_list)
 	if(..())
 		return 1
-	if(usr)
-		usr.set_machine(src)
+	if(href_list["close"])
+		usr << browse(null, "\ref[src]")
+		usr.unset_machine()
+		return 1
+
+	usr.set_machine(src)
 	if(href_list["eject"])
 		for(var/obj/item/weapon/virusdish/O in src.contents)
 			if("[O.virus2.uniqueID]" == href_list["name"])
@@ -115,6 +121,9 @@
 				PrintPaper(O)
 
 /obj/machinery/disease2/diseaseanalyser/attack_hand(var/mob/user as mob)
+	. = ..()
+	if(.)
+		return
 	user.set_machine(src)
 	var/dat = list()
 	dat += "Currently stored samples: [src.contents.len]<br><hr>"
@@ -144,7 +153,6 @@
 			dat += "</tr>"
 		dat += "</table>"
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "disease_analyzer", "Viral Storage & Analysis Unit", 600, 350, src)
+	var/datum/browser/popup = new(user, "\ref[src]", "Viral Storage & Analysis Unit", 600, 350, src)
 	popup.set_content(dat)
 	popup.open()
-	onclose(user, "disease_analyzer")

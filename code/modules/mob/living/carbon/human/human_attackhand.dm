@@ -1,5 +1,8 @@
 //BITES
 /mob/living/carbon/human/bite_act(mob/living/carbon/human/M as mob)
+
+	var/dam_check = !(istype(loc, /turf) && istype(loc.loc, /area/start)) // 0 or 1
+
 	if(M == src)
 		return //Can't bite yourself
 
@@ -20,11 +23,11 @@
 //end vampire codes
 
 	var/armor_modifier = 30
-	var/damage = rand(1, 5)
+	var/damage = rand(1, 5)*dam_check
 
 	if(M.organ_has_mutation(LIMB_HEAD, M_BEAK)) //Beaks = stronger bites
 		armor_modifier = 5
-		damage += 4
+		damage += 4*dam_check
 
 	var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
 
@@ -35,7 +38,8 @@
 		if(2) //Full block
 			damage = 0
 
-	if(!damage)
+	damage = run_armor_absorb(affecting, "melee", damage)
+	if(!damage && dam_check)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='danger'>\The [M] has attempted to bite \the [src]!</span>")
 		return 0
@@ -61,6 +65,9 @@
 
 //KICKS
 /mob/living/carbon/human/kick_act(mob/living/carbon/human/M)
+
+	var/dam_check = !(istype(loc, /turf) && istype(loc.loc, /area/start)) // 0 or 1
+
 	//Pick a random usable foot to perform the kick with
 	var/datum/organ/external/foot_organ = pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
 
@@ -78,19 +85,19 @@
 		stomping = 1
 
 	var/armor_modifier = 1
-	var/damage = rand(0,7)
+	var/damage = rand(0,7)*dam_check
 	var/knockout = damage
 
 	if(stomping) //Stomps = more damage and armor bypassing
 		armor_modifier = 0.5
-		damage += rand(0,7)
+		damage += rand(0,7)*dam_check
 		attack_verb = "stomps on"
 	else if(M.reagents && M.reagents.has_reagent(GYRO))
-		damage += rand(0,4)
+		damage += rand(0,4)*dam_check
 		knockout += rand(0,3)
 		attack_verb = "roundhouse kicks"
 
-	if(!damage)
+	if(!damage && dam_check) // So that people still think they are biting each other
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='danger'>\The [M] attempts to kick \the [src]!</span>")
 		return 0
@@ -122,7 +129,7 @@
 			damage = max(0, damage - rand(1,5))
 		if(2) //Full block
 			damage = max(0, damage - rand(1,10))
-
+	damage = run_armor_absorb(affecting, "melee", damage)
 	if(knockout >= 7 && prob(33))
 		visible_message("<span class='danger'>[M] weakens [src]!</span>")
 		apply_effect(3, WEAKEN, armorblock)

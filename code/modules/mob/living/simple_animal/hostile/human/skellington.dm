@@ -5,6 +5,8 @@
 	icon = 'icons/mob/hostile_humanoid.dmi'
 	icon_state = "skellington"
 
+	faction = "skeleton"
+
 	corpse = /obj/effect/landmark/corpse/skellington
 
 	melee_damage_lower = 2

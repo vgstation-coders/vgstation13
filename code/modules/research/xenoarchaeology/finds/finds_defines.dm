@@ -96,6 +96,10 @@
 			return "iron"
 		if(ARCHAEO_TOY)
 			return "potassium"
+		if(ARCHAEO_LARGE_CRYSTAL)
+			return "nitrogen"
+		if(ARCHAEO_CHAOS)
+			return "iron"
 	return "plasma"
 
 //see /turf/unsimulated/mineral/New() in code/modules/mining/mine_turfs.dm
@@ -166,6 +170,7 @@
 			100;ARCHAEO_KNIFE,\
 			100;ARCHAEO_CRYSTAL,\
 			75;ARCHAEO_MASK,\
+			75;ARCHAEO_SASH,\
 			75;ARCHAEO_CULTBLADE,\
 			50;ARCHAEO_SOULSTONE,\
 			50;ARCHAEO_UNKNOWN,\
@@ -173,9 +178,11 @@
 			25;ARCHAEO_BEARTRAP,\
 			10;ARCHAEO_KATANA,\
 			10;ARCHAEO_CLAYMORE,\
+			10;ARCHAEO_CHAOS,\
 			10;ARCHAEO_SHARD,\
 			10;ARCHAEO_RODS,\
-			10;ARCHAEO_METAL\
+			10;ARCHAEO_METAL,\
+			5;ARCHAEO_LARGE_CRYSTAL\
 			)
 		if(DIGSITE_WAR)
 			find_type = pick(\
@@ -186,11 +193,13 @@
 			75;ARCHAEO_CLAYMORE,\
 			75;ARCHAEO_LANCE,\
 			50;ARCHAEO_UNKNOWN,\
+			50;ARCHAEO_ROULETTE,\
 			50;ARCHAEO_CULTROBES,\
 			50;ARCHAEO_CULTBLADE,\
 			25;ARCHAEO_HANDCUFFS,\
 			25;ARCHAEO_BEARTRAP,\
 			25;ARCHAEO_TOOL,\
+			10;ARCHAEO_CHAOS,\
 			10;ARCHAEO_ROBOT,\
 			5;ARCHAEO_REMAINS_ROBOT\
 			)

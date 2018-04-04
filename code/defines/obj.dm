@@ -34,6 +34,7 @@
  * This item is completely unused, but removing it will break something in R&D and Radio code causing PDA and Ninja code to fail on compile
  */
 
+// Holy shit someone make this a datum already
 /obj/effect/datacore
 	name = "datacore"
 	var/medical[] = list()
@@ -42,7 +43,27 @@
 	//This list tracks characters spawned in the world and cannot be modified in-game. Currently referenced by respawn_character().
 	var/locked[] = list()
 
+// Finds a record in 'general' based on the name, then finds a record in 'which' based on the ID
+// Returns the record if it finds one, null otherwise
+/obj/effect/datacore/proc/find_record_by_name(var/target_name, var/list/which)
+	for (var/datum/data/record/E in general)
+		if (E.fields["name"] == target_name)
+			for (var/datum/data/record/R in which)
+				if (R.fields["id"] == E.fields["id"])
+					return R
+	return null
 
+/obj/effect/datacore/proc/find_general_record_by_name(var/target_name)
+	for(var/datum/data/record/E in general)
+		if(E.fields["name"] == target_name)
+			return E
+	return null
+
+/obj/effect/datacore/proc/find_medical_record_by_name(var/target_name)
+	return find_record_by_name(target_name, medical)
+
+/obj/effect/datacore/proc/find_security_record_by_name(var/target_name)
+	return find_record_by_name(target_name, security)
 
 /obj/effect/datacore/proc/get_manifest(monochrome, OOC)
 	var/list/heads = new()

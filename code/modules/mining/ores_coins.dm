@@ -37,10 +37,15 @@
 	slot_flags = SLOT_POCKET
 	throw_range = 1 //It just scatters to the ground as soon as you throw it.
 
+/obj/item/weapon/ore/glass/cave
+	name = "cave sand"
+	icon_state = "cavesand"
+
 /obj/item/weapon/ore/glass/throw_impact(atom/hit_atom)
 	//Intentionally not calling ..()
 	if(isturf(hit_atom))
-		new/obj/effect/decal/cleanable/scattered_sand(hit_atom)
+		if(!locate(/obj/effect/decal/cleanable/scattered_sand) in hit_atom)
+			new/obj/effect/decal/cleanable/scattered_sand(hit_atom)
 		qdel(src)
 	else if(ishuman(hit_atom))
 		var/mob/living/carbon/human/H = hit_atom

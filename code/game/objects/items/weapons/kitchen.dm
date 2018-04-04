@@ -162,6 +162,7 @@
 	sharpness = 1.2
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	melt_temperature = MELTPOINT_STEEL
+	hitsound = 'sound/weapons/bladeslice.ogg'
 
 /obj/item/weapon/kitchen/utensil/knife/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
@@ -172,7 +173,7 @@
 /obj/item/weapon/kitchen/utensil/knife/attack(target as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>You accidentally cut yourself with the [src].</span>")
-		user.take_organ_damage(20)
+		user.take_organ_damage(2 * force)
 		return
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 	return ..()
@@ -294,6 +295,31 @@
 		L.Stun(5)
 		L.Knockdown(5)
 	return ..()
+
+
+/obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver/attack(mob/M, mob/user)
+	if (!M.isDead())
+		..()
+	else
+		if (!ishuman(M))
+			return ..()
+		var/mob/living/carbon/human/H = M
+
+		H.drop_meat(H.loc)
+		--H.meatleft
+		H.loc.add_blood(src)
+
+		to_chat(user, "<span class='warning'>You hack off a chunk of meat from \the [H].</span>")
+		if(!H.meatleft)
+			H.attack_log += "\[[time_stamp()]\] Was chopped up into meat by <b>\the [key_name(M)]</b>"
+			user.attack_log += "\[[time_stamp()]\] Chopped up <b>\the [key_name(H)]</b> into meat</b>"
+			msg_admin_attack("\The [key_name(user)] chopped up \the [key_name(H)] into meat (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+			if(!iscarbon(user))
+				H.LAssailant = null
+			else
+				H.LAssailant = user
+			qdel(H)
+		return TRUE
 
 /*
  * Rolling Pins

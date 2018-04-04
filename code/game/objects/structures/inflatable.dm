@@ -255,7 +255,7 @@
 	busy = 1
 	flick("door_closing",src)
 	sleep(5)
-	density = 1
+	setDensity(TRUE)
 	is_open = 0
 	update_icon()
 	busy = 0

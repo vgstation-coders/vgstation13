@@ -110,6 +110,11 @@
 		H.update_inv_by_slot(slot_flags)
 	update_verbs()
 
+/obj/item/clothing/proc/get_accessory_by_exclusion(var/exclusion)
+	for(var/obj/item/clothing/accessory/A in accessories)
+		if(A.accessory_exclusion == exclusion)
+			return A
+
 /obj/item/clothing/verb/removeaccessory()
 	set name = "Remove Accessory"
 	set category = "Object"
@@ -236,6 +241,12 @@
 				visible_message("<span class='notice'>\The [user] puts out the fire on \the [target].</span>")
 		return
 
+/obj/item/clothing/proc/get_armor(var/type)
+	return armor[type]
+
+/obj/item/clothing/proc/get_armor_absorb(var/type)
+	return armor_absorb[type]
+
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
 	name = "ears"
@@ -325,6 +336,10 @@ BLIND     // can't see anything
 
 	var/bonus_knockout = 0 //Knockout chance is multiplied by (1 + bonus_knockout) and is capped at 1/2. 0 = 1/12 chance, 1 = 1/6 chance, 2 = 1/4 chance, 3 = 1/3 chance, etc.
 	var/damage_added = 0 //Added to unarmed damage, doesn't affect knockout chance
+	var/sharpness_added = 0 //Works like weapon sharpness for unarmed attacks, affects bleeding and limb severing.
+	var/hitsound_added = "punch"	//The sound that plays for an unarmed attack while wearing these gloves.
+
+	var/attack_verb_override = "punches"
 
 /obj/item/clothing/gloves/emp_act(severity)
 	if(cell)
@@ -345,7 +360,16 @@ BLIND     // can't see anything
 /obj/item/clothing/gloves/proc/get_damage_added()
 	return damage_added
 
+/obj/item/clothing/gloves/proc/get_sharpness_added()
+	return sharpness_added
+
+/obj/item/clothing/gloves/proc/get_hitsound_added()
+	return hitsound_added
+
 /obj/item/clothing/gloves/proc/on_punch(mob/user, mob/victim)
+	return
+
+/obj/item/clothing/gloves/proc/on_wearer_threw_item(mob/user, atom/target, atom/movable/thrown)	//Called when the mob wearing the gloves successfully throws either something or nothing.
 	return
 
 //Head
@@ -404,6 +428,8 @@ BLIND     // can't see anything
 			src.is_flipped = 2
 			body_parts_covered &= ~(MOUTH|HEAD|BEARD|FACE)
 		usr.update_inv_wear_mask()
+		usr.update_hair()
+		usr.update_inv_glasses()
 
 /obj/item/clothing/mask/New()
 	if(!can_flip /*&& !istype(/obj/item/clothing/mask/gas/voice)*/) //the voice changer has can_flip = 1 anyways but it's worth noting that it exists if anybody changes this in the future
@@ -564,6 +590,8 @@ BLIND     // can't see anything
 
 	var/list/modes = list("Off", "Binary sensors", "Vitals tracker", "Tracking beacon")
 	var/switchMode = input("Select a sensor mode:", "Suit Sensor Mode", modes[sensor_mode + 1]) in modes
+	if(user.incapacitated())
+		return
 	if(get_dist(user, src) > 1)
 		to_chat(user, "<span class='warning'>You have moved too far away.</span>")
 		return

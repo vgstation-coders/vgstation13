@@ -62,7 +62,7 @@ obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob
 		return
 
 	// Loading individual seeds into the machine
-	if (istype(O,/obj/item/seeds))
+	if(istype(O,/obj/item/seeds))
 		if (!hasSpaceCheck(user))
 			return
 		user.drop_item(force_drop = 1)
@@ -71,55 +71,19 @@ obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob
 		updateUsrDialog()
 		return
 
-	// Fruits and vegetables.
-	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown) || istype(O, /obj/item/weapon/grown))
-
-		user.drop_item(O, force_drop = 1)
-
-		var/datum/seed/new_seed_type
-		if(istype(O, /obj/item/weapon/grown))
-			var/obj/item/weapon/grown/F = O
-			if(F.plantname)
-				new_seed_type = plant_controller.seeds[F.plantname]
-		else
-			var/obj/item/weapon/reagent_containers/food/snacks/grown/F = O
-			if(F.plantname)
-				new_seed_type = plant_controller.seeds[F.plantname]
-
-		if(new_seed_type)
-			to_chat(user, "<span class='notice'>You extract some seeds from [O].</span>")
-			var/produce = rand(min_seeds,max_seeds)
-			for(var/i = 0;i<=produce;i++)
-				var/obj/item/seeds/seeds = new(get_turf(src))
-				seeds.seed_type = new_seed_type.name
-				seeds.update_seed()
-		else
-			to_chat(user, "[O] doesn't seem to have any usable seeds inside it.")
-
-		qdel(O)
-
-	//Grass. //Why isn't this using the nonplant_seed_type functionality below?
-	else if(istype(O, /obj/item/stack/tile/grass))
+	//Grass. //Why isn't this using the nonplant_seed_type functionality?
+	if(istype(O, /obj/item/stack/tile/grass))
 		var/obj/item/stack/tile/grass/S = O
 		to_chat(user, "<span class='notice'>You extract some seeds from the [S.name].</span>")
 		S.use(1)
 		new /obj/item/seeds/grassseed(loc)
-
-	if(O)
-		var/obj/item/F = O
-		if(F.nonplant_seed_type)
-			to_chat(user, "<span class='notice'>You extract some seeds from the [F.name].</span>")
-			user.drop_item(O, force_drop = 1)
-			var/t_amount = 0
-			var/t_max = rand(1,4)
-			while(t_amount < t_max)
-				new F.nonplant_seed_type(src.loc)
-				t_amount++
-			qdel(F)
+		return
+	
+	if(seedify(O, src, user))
+		to_chat(user, "<span class='notice'>You extract some seeds from [O].</span>")
+		return		
 
 	..()
-
-	return
 
 //Code shamelessly ported over and adapted from tgstation's github repo, PR #2973, credit to Kelenius for the original code
 datum/seed_pile //Maybe there's a better way to do this.

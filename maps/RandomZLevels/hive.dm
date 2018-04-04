@@ -614,7 +614,7 @@ var/list/hive_pylons = list()
 			'sound/effects/wind/wind_2_2.ogg',\
 			'sound/effects/wind/wind_3_1.ogg',\
 			)
-			playsound(get_turf(HA), played_sound, 60, 1)
+			playsound(HA, played_sound, 60, 1)
 
 /obj/effect/landmark/hive/monster_spawner
 	name = "alien spawner"
@@ -761,5 +761,5 @@ var/list/hive_pylons = list()
 //Rewards
 /obj/item/weapon/cloakingcloak/hive
 	name = "alien cloak"
-	desc = "Very light and soft to the tough, it's hard to believe that you would find something so delicate inside the Hive."
+	desc = "Soft to the tough."
 

@@ -90,7 +90,7 @@
 		add_logs(user, M, "injected [transferred]u [reagent_ids[mode]] with \the [src]", admin = (user.ckey && M.ckey)) //We don't care about monkeymen, right?
 
 /obj/item/weapon/reagent_containers/borghypo/attack_self(mob/user as mob)
-	playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0) // change the mode
+	playsound(src, 'sound/effects/pop.ogg', 50, 0) // change the mode
 
 	if(++mode > reagent_list.len)
 		mode = 1
@@ -109,14 +109,14 @@
 /obj/item/weapon/reagent_containers/borghypo/upgraded
 	name = "upgraded cyborg hypospray"
 	desc = "An upgraded hypospray with more potent chemicals and a larger storage capacity."
-	reagent_ids = list(DOCTORSDELIGHT, DEXALINP, SPACEACILLIN, "charcoal")
+	reagent_ids = list(DOCTORSDELIGHT, DEXALINP, SPACEACILLIN, CHARCOAL)
 	volume = 50
 	recharge_time = 3 // time it takes for shots to recharge (in seconds)
 
 /obj/item/weapon/reagent_containers/borghypo/peace
 	name = "peace hypospray"
 	desc = "A tranquilizer synthesizer and injection system. These drugs are capable of inducing a state of relaxation, or euphoria."
-	reagent_ids = list(STOXIN,CRYPTOBIOLIN)
+	reagent_ids = list(STOXIN,CRYPTOBIOLIN,CHILLWAX)
 	volume = 5
 	recharge_time = 20
 

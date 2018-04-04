@@ -36,6 +36,11 @@
 	//
 	//Intended for animated items that aren't so easy to add to the base sprite
 	var/list/visible_items = list()
+	var/needs_to_reload = FALSE
+	var/bullets_remaining = 0
+	var/reload_sound = 'sound/weapons/magdrop_1.ogg'
+	var/drop_on_reload = null
+	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /mob/living/simple_animal/hostile/humanoid/New()
 	..()
@@ -44,6 +49,9 @@
 		var/image/new_img = image(I, icon_state = visible_items[I], layer = MOB_LAYER)
 		new_img.plane = MOB_PLANE
 		overlays.Add(new_img)
+
+/mob/living/simple_animal/hostile/humanoid/getarmor(var/def_zone, var/type)
+	return armor[type]
 
 /mob/living/simple_animal/hostile/humanoid/Die()
 	..()
@@ -62,3 +70,23 @@
 
 	qdel(src)
 	return
+
+/mob/living/simple_animal/hostile/humanoid/Shoot()
+	if(!needs_to_reload)
+		..()
+		return
+	if(bullets_remaining > 0)
+		bullets_remaining--
+		..()
+		return
+	if(canmove)
+		visible_message("<span class = 'warning'>\The [src] stops to reload!</span>")
+		playsound(src, reload_sound, 100, 1)
+		if(drop_on_reload)
+			new drop_on_reload(src.loc)
+		canmove = FALSE
+		spawn(rand(initial(bullets_remaining)/2 SECONDS,initial(bullets_remaining)*2 SECONDS))
+			visible_message("<span class = 'warning'>\The [src] reloads!</span>")
+			canmove = TRUE
+			bullets_remaining = initial(bullets_remaining)
+	..()

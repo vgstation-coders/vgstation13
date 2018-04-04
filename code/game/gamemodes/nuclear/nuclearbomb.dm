@@ -294,7 +294,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	if( bomb_location && (bomb_location.z == map.zMainStation) )
 		var/map_center_x = world.maxx * 0.5
 		var/map_center_y = world.maxy * 0.5
-		
+
 		if( (bomb_location.x < (map_center_x-NUKERANGE)) || (bomb_location.x > (map_center_x+NUKERANGE)) || (bomb_location.y < (map_center_y-NUKERANGE)) || (bomb_location.y > (map_center_y+NUKERANGE)) )
 			off_station = 1
 	else
@@ -351,6 +351,9 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 
 	reset_vars_after_duration(resettable_vars, duration)
 
+/obj/machinery/nuclearbomb/isacidhardened() // Requires Aliens to channel acidspit on the nuke.
+	return TRUE
+	
 /obj/item/weapon/disk/nuclear
 	name = "nuclear authentication disk"
 	desc = "Better keep this safe."
@@ -390,8 +393,15 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 		respawned = 1
 
 /obj/item/weapon/disk/nuclear/process()
-	if(!get_turf(src))
+	var/turf/T = get_turf(src)
+	if(!T)
 		var/atom/A
 		for(A=src, A && A.loc && !isturf(A.loc), A=A.loc);  // semicolon is for the empty statement
 		message_admins("\The [src] ended up in nullspace somehow, and has been replaced.[loc ? " It was contained in [A] when it was nullspaced." : ""]")
 		qdel(src)
+	if(T.z != map.zMainStation && T.z != map.zCentcomm)
+		var/atom/A
+		for(A=src, A && A.loc && !isturf(A.loc), A=A.loc);  // semicolon is for the empty statement
+		message_admins("\The [src] ended up in a non-authorised z-Level somehow, and has been replaced.[loc ? " It was contained in [A] when it was moved." : ""]")
+		qdel(src)
+

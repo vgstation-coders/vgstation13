@@ -139,7 +139,7 @@
 			var/obj/item/S = special_assembly
 			S.on_found(finder)
 
-/obj/item/device/assembly_holder/Move()
+/obj/item/device/assembly_holder/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(a_left && a_right)
 		a_left.holder_movement()
@@ -183,7 +183,7 @@
 			return
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0,user))
-			playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
+			playsound(src, 'sound/items/Welder2.ogg', 50, 1)
 			to_chat(user, "<span class='notice'>You begin to weld \the [src] to the floor...</span>")
 			if (do_after(user, src, 40))
 				var/obj/machinery/igniter/igniter=new(src.loc)

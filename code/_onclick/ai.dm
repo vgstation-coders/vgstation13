@@ -17,7 +17,7 @@
 	if(control_disabled || stat)
 		return
 
-	if(ismob(A))
+	if(ismob(A) || ismecha(A))
 		ai_actual_track(A)
 	else
 		A.move_camera_by_click()
@@ -53,8 +53,8 @@
 		return
 
 	if(aicamera.in_camera_mode)
-		aicamera.camera_mode_off()
-		aicamera.captureimage(A, usr)
+		aicamera.toggle_camera_mode()
+		aicamera.captureimage(A, src)
 		return
 
 	/*
@@ -135,3 +135,6 @@
 		// disable/6 is not in Topic; disable/5 disables both temporary and permenant shock
 		Topic("aiDisable=5", list("aiDisable"="5"), 1)
 	return
+
+/obj/machinery/door/firedoor/AIShiftClick(var/mob/living/silicon/ai/user) // Allows examining firelocks
+	examine(user)

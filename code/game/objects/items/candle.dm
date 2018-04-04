@@ -6,6 +6,7 @@
 	item_state = "candle1"
 	w_class = W_CLASS_TINY
 	heat_production = 1000
+	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
 
 	var/wax = 200
@@ -26,10 +27,11 @@
 	if(W.is_hot() || W.sharpness_flags & (HOT_EDGE))
 		light("<span class='notice'>[user] lights [src] with [W].</span>")
 
-/obj/item/candle/proc/light(var/flavor_text = "<span class='notice'>[usr] lights [src].</span>")
+/obj/item/candle/proc/light(var/flavor_text = "<span class='notice'>[usr] lights [src].</span>", var/quiet = 0)
 	if(!src.lit)
 		src.lit = 1
-		visible_message(flavor_text)
+		if(!quiet)
+			visible_message(flavor_text)
 		set_light(CANDLE_LUM)
 		processing_objects.Add(src)
 
@@ -39,7 +41,7 @@
 	wax--
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
-	if(env.oxygen < 5)
+	if(env.oxygen / env.volume * CELL_VOLUME < 5)
 		src.lit = 0
 		set_light(0)
 		processing_objects.Remove(src)
@@ -53,7 +55,7 @@
 		return
 	update_icon()
 	if(istype(T)) //Start a fire if possible
-		T.hotspot_expose(700, 5, surfaces = 0)
+		T.hotspot_expose(source_temperature, 5, surfaces = 0)
 
 /obj/item/candle/attack_self(mob/user as mob)
 	if(lit)
@@ -63,10 +65,10 @@
 
 /obj/item/candle/is_hot()
 	if(lit)
-		return heat_production
+		return source_temperature
 	return 0
 
 /obj/item/weapon/match/is_hot()
 	if(lit)
-		return heat_production
+		return source_temperature
 	return 0

@@ -241,7 +241,7 @@
 
 /obj/machinery/meteor_battery/proc/die()
 	src.health = 0
-	src.density = 0
+	setDensity(FALSE)
 	src.stat |= BROKEN
 	src.icon_state = "broke"
 	if (cover!=null)

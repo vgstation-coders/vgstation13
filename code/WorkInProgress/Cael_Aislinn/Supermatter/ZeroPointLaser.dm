@@ -94,7 +94,7 @@
 			src.shot_number = 0
 		use_power(1000)
 		var/obj/item/projectile/beam/emitter/A = getFromPool(/obj/item/projectile/beam/emitter, loc)
-		playsound(get_turf(src), 'sound/weapons/emitter.ogg', 25, 1)
+		playsound(src, 'sound/weapons/emitter.ogg', 25, 1)
 		if(prob(35))
 			spark(src, 5)
 		A.dir = src.dir
@@ -117,7 +117,8 @@
 	if(!emagged)
 		locked = 0
 		emagged = 1
-		user.visible_message("[user.name] emags the [src.name].","<span class='warning'>You short out the lock.</span>")
+		if(user)
+			user.visible_message("[user.name] emags the [src.name].","<span class='warning'>You short out the lock.</span>")
 		return 1
 	return -1
 

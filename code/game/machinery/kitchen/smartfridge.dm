@@ -85,6 +85,7 @@
 /obj/machinery/smartfridge/Destroy()
 	for(var/key in piles)
 		returnToPool(piles[key])
+	piles.Cut()
 	..()
 
 /obj/machinery/smartfridge/proc/accept_check(var/obj/item/O as obj, var/mob/user as mob)
@@ -134,7 +135,9 @@
 							/obj/item/weapon/reagent_containers/pill)
 
 /obj/machinery/smartfridge/medbay/New()
-	. = ..()
+	..()
+	if(map.nameShort == "deff")
+		icon = 'maps/defficiency/medbay.dmi'
 
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/smartfridge/medbay,
@@ -159,7 +162,9 @@
 							/obj/item/weapon/reagent_containers)
 
 /obj/machinery/smartfridge/chemistry/New()
-	. = ..()
+	..()
+	if(map.nameShort == "deff")
+		icon = 'maps/defficiency/medbay.dmi'
 
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/smartfridge/chemistry,
@@ -236,6 +241,8 @@
 
 /obj/machinery/smartfridge/bloodbank/New()
 	. = ..()
+	if(map.nameShort == "deff")
+		icon = 'maps/defficiency/medbay.dmi'
 
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/smartfridge/bloodbank,
@@ -262,6 +269,9 @@
 	insert_item(new /obj/item/weapon/reagent_containers/blood/BMinus(src))
 	insert_item(new /obj/item/weapon/reagent_containers/blood/OPlus(src))
 	insert_item(new /obj/item/weapon/reagent_containers/blood/OMinus(src))
+	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
+	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
+	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
 	insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
 
 

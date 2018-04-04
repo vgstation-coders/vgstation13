@@ -19,18 +19,21 @@
 	var/storage_capacity = 30 //This is so that someone can't pack hundreds of items in a locker/crate
 							  //then open it in a populated area to crash clients.
 	var/breakout_time = 2 //2 minutes by default
+	var/sound_file = 'sound/machines/click.ogg'
 
 	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 	w_type = RECYK_METAL
 	ignoreinvert = 1
 
+/obj/structure/closet/proc/canweld()
+	return 1
 
 /obj/structure/closet/initialize()
 	..()
 	if(!opened)		// if closed, any item at the crate's loc is put in the contents
 		take_contents()
 	else
-		density = 0
+		setDensity(FALSE)
 
 /obj/structure/closet/spawned_by_map_element()
 	..()
@@ -96,17 +99,13 @@
 	if(!src.can_open())
 		return 0
 
-
 	src.icon_state = src.icon_opened
 	src.opened = 1
-	src.density = 0
+	setDensity(FALSE)
 	src.dump_contents()
-	INVOKE_EVENT(on_destroyed, list())
-	if(istype(src, /obj/structure/closet/body_bag))
-		playsound(get_turf(src), 'sound/items/zip.ogg', 15, 1, -3)
-	else
-		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
+	playsound(src, sound_file, 15, 1, -3)
 	return 1
+
 
 /obj/structure/closet/proc/insert(var/atom/movable/AM)
 
@@ -139,6 +138,7 @@
 		return 0
 
 	take_contents()
+
 	/* /vg/: Delete if there's no code in here we need.
 	var/itemcount = 0
 
@@ -173,13 +173,8 @@
 	*/
 	src.icon_state = src.icon_closed
 	src.opened = 0
-	if(istype(src, /obj/structure/closet/body_bag))
-		playsound(get_turf(src), 'sound/items/zip.ogg', 15, 1, -3)
-	else
-		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
-	density = 1
-	for(var/obj/effect/beam/B in loc)
-		B.Crossed(src)
+	setDensity(initial(density))
+	playsound(src, sound_file, 15, 1, -3)
 	return 1
 
 /obj/structure/closet/proc/toggle()
@@ -288,7 +283,7 @@
 		if(istype(W,/obj/item/tk_grab))
 			return 0
 
-		if(istype(W, /obj/item/weapon/weldingtool))
+		if(istype(W, /obj/item/weapon/weldingtool) && canweld())
 			var/obj/item/weapon/weldingtool/WT = W
 			if(!WT.remove_fuel(0,user))
 				to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
@@ -303,7 +298,7 @@
 
 	else if(istype(W, /obj/item/stack/package_wrap))
 		return
-	else if(istype(W, /obj/item/weapon/weldingtool))
+	else if(istype(W, /obj/item/weapon/weldingtool) && canweld())
 		var/obj/item/weapon/weldingtool/WT = W
 		if(!WT.remove_fuel(0,user))
 			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
@@ -482,3 +477,13 @@
 		"health")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
+/obj/structure/closet/examine(mob/user)
+	..()
+	if(!opened && isobserver(user) && !istype(user,/mob/dead/observer/deafmute)) //Fuck off phantom mask users
+		var/mob/dead/observer/ghost = user
+		if(!isAdminGhost(ghost) && ghost.mind && ghost.mind.current)
+			if(ghost.mind.isScrying || ghost.mind.current.ajourn) //Scrying or astral travel, fuck them.
+				return
+		to_chat(ghost, "It contains: <span class='info'>[english_list(contents)]</span>.")
+		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")

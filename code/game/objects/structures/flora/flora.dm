@@ -328,7 +328,7 @@
 	icon = 'icons/obj/hydroponics2.dmi'
 	icon_state = "claypot"
 	anchored = 0
-	density = 0
+	density = FALSE
 	var/plant_name = ""
 
 /obj/structure/flora/pottedplant/claypot/examine(mob/user)

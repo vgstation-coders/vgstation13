@@ -55,5 +55,5 @@
 			for(var/mob/M in src)
 				M.forceMove(src.loc)
 				icon_state = "egg_hatched"
-				density = 0
+				setDensity(FALSE)
 		return

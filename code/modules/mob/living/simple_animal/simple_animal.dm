@@ -21,6 +21,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/list/emote_hear = list()	//Hearable emotes
 	var/list/emote_see = list()		//Unlike speak_emote, the list of things in this variable only show by themselves with no spoken text. IE: Ian barks, Ian yaps
 
+	var/speak_override = FALSE
+
 	var/turns_per_move = 1
 	var/turns_since_move = 0
 
@@ -150,7 +152,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			icon_state = icon_living
 			src.resurrect()
 			stat = CONSCIOUS
-			density = 1
+			setDensity(TRUE)
 			update_canmove()
 		if(canRegenerate && !isRegenerating)
 			src.delayedRegen()
@@ -206,48 +208,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 					wander_move(destination)
 					turns_since_move = 0
 
-	var/someone_in_earshot=0
-	if(!client && speak_chance && (ckey == null)) // Remove this if earshot is used elsewhere.
-		// All we're doing here is seeing if there's any CLIENTS nearby.
-		for(var/mob/M in get_hearers_in_view(7, src))
-			if(M.client)
-				someone_in_earshot=1
-				break
-
-	//Speaking
-	if(!client && speak_chance && (ckey == null) && someone_in_earshot)
-		if(speak && speak.len)
-			if(rand(0,200) < speak_chance)
-				if((emote_hear && emote_hear.len) || (emote_see && emote_see.len))
-					var/length = speak.len
-					if(emote_hear && emote_hear.len)
-						length += emote_hear.len
-					if(emote_see && emote_see.len)
-						length += emote_see.len
-					var/randomValue = rand(1,length)
-					if(randomValue <= speak.len)
-						say(pick(speak))
-					else
-						randomValue -= speak.len
-						if(emote_see && randomValue <= emote_see.len)
-							emote(pick(emote_see),1)
-						else
-							emote(pick(emote_hear),2)
-				else
-					say(pick(speak))
-			else
-				if(!(emote_hear && emote_hear.len) && (emote_see && emote_see.len))
-					emote(pick(emote_see),1)
-				if((emote_hear && emote_hear.len) && !(emote_see && emote_see.len))
-					emote(pick(emote_hear),2)
-				if((emote_hear && emote_hear.len) && (emote_see && emote_see.len))
-					var/length = emote_hear.len + emote_see.len
-					var/pick = rand(1,length)
-					if(pick <= emote_see.len)
-						emote(pick(emote_see),1)
-					else
-						emote(pick(emote_hear),2)
-
+	handle_automated_speech()
 
 	//Atmos
 	if(flags & INVULNERABLE)
@@ -266,41 +227,41 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				bodytemperature += ((Environment.temperature - bodytemperature) / 5)
 
 			if(min_oxy)
-				if(Environment.oxygen < min_oxy)
+				if(Environment.oxygen / Environment.volume * CELL_VOLUME < min_oxy)
 					atmos_suitable = 0
 					oxygen_alert = 1
 				else
 					oxygen_alert = 0
 
 			if(max_oxy)
-				if(Environment.oxygen > max_oxy)
+				if(Environment.oxygen / Environment.volume * CELL_VOLUME > max_oxy)
 					atmos_suitable = 0
 
 			if(min_tox)
-				if(Environment.toxins < min_tox)
+				if(Environment.toxins / Environment.volume * CELL_VOLUME < min_tox)
 					atmos_suitable = 0
 
 			if(max_tox)
-				if(Environment.toxins > max_tox)
+				if(Environment.toxins / Environment.volume * CELL_VOLUME > max_tox)
 					atmos_suitable = 0
 					toxins_alert = 1
 				else
 					toxins_alert = 0
 
 			if(min_n2)
-				if(Environment.nitrogen < min_n2)
+				if(Environment.nitrogen / Environment.volume * CELL_VOLUME < min_n2)
 					atmos_suitable = 0
 
 			if(max_n2)
-				if(Environment.nitrogen > max_n2)
+				if(Environment.nitrogen / Environment.volume * CELL_VOLUME > max_n2)
 					atmos_suitable = 0
 
 			if(min_co2)
-				if(Environment.carbon_dioxide < min_co2)
+				if(Environment.carbon_dioxide / Environment.volume * CELL_VOLUME < min_co2)
 					atmos_suitable = 0
 
 			if(max_co2)
-				if(Environment.carbon_dioxide > max_co2)
+				if(Environment.carbon_dioxide / Environment.volume * CELL_VOLUME > max_co2)
 					atmos_suitable = 0
 
 	//Atmos effect
@@ -350,9 +311,43 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(stat)
 		return
 	if(act == "scream")
-		desc = "makes a loud and pained whimper"  //ugly hack to stop animals screaming when crushed :P
+		desc = "makes a loud and pained whimper!"  //ugly hack to stop animals screaming when crushed :P
+		act = "me"
+	if(!desc && act != "me")
+		desc = "[act]."
 		act = "me"
 	..(act, type, desc)
+
+/mob/living/simple_animal/check_emote(message)
+	if(copytext(message, 1, 2) == "*")
+		to_chat(src, "<span class = 'notice'>This type of mob doesn't support this. Use the Me verb instead.</span>")
+		return 1
+
+/mob/living/simple_animal/proc/handle_automated_speech()
+
+	var/someone_in_earshot=0
+	if(!client && speak_chance && ckey == null) // Remove this if earshot is used elsewhere.
+		// All we're doing here is seeing if there's any CLIENTS nearby.
+		for(var/mob/M in get_hearers_in_view(7, src))
+			if(M.client)
+				someone_in_earshot=1
+				break
+
+	if(someone_in_earshot)
+		if(rand(0,200) < speak_chance)
+			var/mode = pick(
+			speak.len;      1,
+			emote_hear.len; 2,
+			emote_see.len;  3
+			)
+
+			switch(mode)
+				if(1)
+					say(pick(speak))
+				if(2)
+					emote("me", MESSAGE_HEAR, "[pick(emote_hear)].")
+				if(3)
+					emote("me", MESSAGE_SEE, "[pick(emote_see)].")
 
 /mob/living/simple_animal/attack_animal(mob/living/simple_animal/M)
 	M.unarmed_attack_mob(src)
@@ -390,7 +385,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	return
 
-/mob/living/simple_animal/MouseDrop(mob/living/carbon/human/M)
+/mob/living/simple_animal/MouseDrop(mob/living/carbon/M)
 	if(M != usr || !istype(M) || !Adjacent(M) || M.incapacitated())
 		return
 
@@ -475,6 +470,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			else
 				butcher()
 				return 1
+	else if (user.is_pacified(VIOLENCE_DEFAULT,src))
+		return
 	else
 		user.delayNextAttack(8)
 		if(O.force)
@@ -515,7 +512,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	dead_mob_list += src
 	icon_state = icon_dead
 	stat = DEAD
-	density = 0
+	setDensity(FALSE)
 
 	animal_count[src.type]--
 	if(!src.butchering_drops && animal_butchering_products[src.species_type]) //If we already created a list of butchering drops, don't create another one
@@ -683,6 +680,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		A.unlock_atom(src)
 		A.lock_atom(new_animal, /datum/locking_category/simple_animal)
 
+	if(name != initial(name)) //Not chicken
+		new_animal.name = name
 	new_animal.inherit_mind(src)
 	new_animal.ckey = src.ckey
 	new_animal.key = src.key
@@ -740,6 +739,21 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(spaced)
 		walk(src,0)
 	return !spaced
+
+/mob/living/simple_animal/say()
+	if(speak_override)
+		return ..(pick(speak))
+	else
+		return ..()
+
+
+/mob/living/simple_animal/proc/name_mob(mob/user)
+	var/n_name = copytext(sanitize(input(user, "What would you like to name \the [src]?", "Renaming \the [src]", null) as text|null), 1, MAX_NAME_LEN)
+	if(n_name && !user.incapacitated())
+		name = "[n_name]"
+	var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+	heart.plane = ABOVE_HUMAN_PLANE
+	flick_overlay(heart, list(user.client), 20)
 
 
 /datum/locking_category/simple_animal

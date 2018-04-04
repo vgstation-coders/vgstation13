@@ -60,6 +60,7 @@
 	desc = "Some sterile gauze to wrap around bloody stumps."
 	icon_state = "brutepack"
 	origin_tech = Tc_BIOTECH + "=1"
+	restraint_resist_time = 20 SECONDS
 
 /obj/item/stack/medical/bruise_pack/bandaid
 	name = "small bandage"

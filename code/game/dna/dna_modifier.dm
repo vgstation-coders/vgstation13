@@ -20,6 +20,7 @@
 	var/ckey=null
 	var/mind=null
 	var/list/languages = list()
+	var/times_cloned=0
 
 /datum/dna2/record/proc/GetData()
 	var/list/ser=list("data" = null, "owner" = null, "label" = null, "type" = null, "ue" = 0)
@@ -54,6 +55,7 @@
 	var/injector_cooldown = 300 //Used by attachment
 	machine_flags = SCREWTOGGLE | CROWDESTROY
 	var/obj/machinery/computer/connected
+	var/last_message // Used by go_out()
 
 	light_color = LIGHT_COLOR_CYAN
 	use_auto_lights = 1
@@ -168,7 +170,7 @@
 		return
 	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
 		return
-	if(!ishuman(user) && !isrobot(user)) //No ghosts or mice putting people into the scanner
+	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the scanner
 		return
 	if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
 		return
@@ -205,7 +207,7 @@
 		user.pulling = null
 
 /obj/machinery/dna_scannernew/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
-	if(!ishuman(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
+	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
 		return
 	if(!occupant)
 		to_chat(usr, "<span class='warning'>The sleeper is unoccupied!</span>")
@@ -243,6 +245,8 @@
 		if(user.drop_item(beaker, src))
 			beaker = item
 			user.visible_message("[user] adds \a [item] to \the [src]!", "You add \a [item] to \the [src]!")
+			if(connected)
+				nanomanager.update_uis(connected)
 			return
 	else if(istype(item, /obj/item/weapon/grab)) //sanity checks, you chucklefucks
 		var/obj/item/weapon/grab/G = item
@@ -268,27 +272,35 @@
 	src.occupant = M
 	src.icon_state = "scanner_1"
 
+	if(connected)
+		nanomanager.update_uis(connected)
+
 	// search for ghosts, if the corpse is empty and the scanner is connected to a cloner
 	for(dir in cardinal)
 		var/obj/machinery/computer/cloning/C = locate(/obj/machinery/computer/cloning) in get_step(src, dir)
 		if(C)
 			C.update_icon()
 			if(!M.client && M.mind)
-				var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
+				var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
 				if(ghost)
-					if(ghost.client && ghost.can_reenter_corpse)
-						ghost << 'sound/effects/adminhelp.ogg'
-						to_chat(ghost, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
+					var/mob/ghostmob = ghost.get_top_transmogrification()
+					if(ghostmob)
+						ghostmob << 'sound/effects/adminhelp.ogg'
+						to_chat(ghostmob, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
 							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 				break
 			break
 	return
 
+#define DNASCANNER_MESSAGE_INTERVAL 1 SECONDS
+
 /obj/machinery/dna_scannernew/proc/go_out(var/exit = src.loc)
 	if (!occupant)
 		return 0
 	if(locked)
-		visible_message("Can't eject occupants while \the [src] is locked.")
+		if(world.time - last_message > DNASCANNER_MESSAGE_INTERVAL)
+			say("Can't eject occupants while \the [src] is locked.")
+			last_message = world.time
 		return 0
 	if(!occupant.gcDestroyed)
 		occupant.forceMove(exit)
@@ -306,7 +318,12 @@
 		if(C)
 			C.update_icon()
 
+	if(connected)
+		nanomanager.update_uis(connected)
+
 	return 1
+
+#undef DNASCANNER_MESSAGE_INTERVAL
 
 /obj/machinery/dna_scannernew/proc/contains_husk()
 	if(occupant && (M_HUSK in occupant.mutations))
@@ -315,11 +332,13 @@
 
 /obj/machinery/dna_scannernew/on_login(var/mob/M)
 	if(M.mind && !M.client && locate(/obj/machinery/computer/cloning) in range(src, 1)) //!M.client = mob has ghosted out of their body
-		var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
-		if(ghost && ghost.client)
-			ghost << 'sound/effects/adminhelp.ogg'
-			to_chat(ghost, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
-				(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[src];reentercorpse=1'>click here!</a>)</span>")
+		var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
+		if(ghost)
+			var/mob/ghostmob = ghost.get_top_transmogrification()
+			if(ghostmob)
+				ghostmob << 'sound/effects/adminhelp.ogg'
+				to_chat(ghostmob, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
+					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 
 /obj/machinery/dna_scannernew/ex_act(severity)
 	//This is by far the oldest code I have ever seen, please appreciate how it's preserved in comments for distant posterity. Have some perspective of where we came from.
@@ -385,25 +404,22 @@
 	var/list/datum/dna2/record/buffers[3]
 	var/irradiating = 0
 	var/list/datum/block_label/labels[DNA_SE_LENGTH]
-
-	// Quick fix for issue 286 (screwdriver the screen twice to restore injector) -Pete.
 	var/injector_ready = 0
-
 	var/obj/machinery/dna_scannernew/connected
 	var/obj/item/weapon/disk/data/disk
 	var/selected_menu_key
-
-	// Fix for #274 (Mash create block injector without answering dialog to make unlimited injectors) - N3X.
 	var/waiting_for_user_input = 0
 
 	light_color = LIGHT_COLOR_BLUE
 
 /obj/machinery/computer/scan_consolenew/Destroy()
-	if(connected.connected == src)
-		connected.connected = null
-	connected = null
+	if(connected)
+		if(connected.connected == src)
+			connected.connected = null
+		connected = null
 	for(var/datum/block_label/label in labels)
 		returnToPool(label)
+	labels.Cut()
 	buffers.Cut()
 	if(disk)
 		qdel(disk)
@@ -424,6 +440,7 @@
 			if (user.drop_item(O, src))
 				disk = O
 				to_chat(user, "You insert [O].")
+				nanomanager.update_uis(src)
 	return
 
 /obj/machinery/computer/scan_consolenew/New()
@@ -436,7 +453,7 @@
 		connected = findScanner()
 		connected.connected = src
 		spawn(250)
-			src.injector_ready = 1
+			setInjectorReady()
 		return
 	return
 
@@ -489,18 +506,12 @@
 	else
 		use_power = 1
 
-/obj/machinery/computer/scan_consolenew/attack_paw(user as mob)
-	ui_interact(user)
-
-/obj/machinery/computer/scan_consolenew/attack_ai(user as mob)
-	src.add_hiddenprint(user)
-	ui_interact(user)
-
 /obj/machinery/computer/scan_consolenew/attack_hand(user as mob)
 	if(!..())
 		if(!connected)
 			connected = findScanner() //lets get that machine
-			connected.connected = src
+			if(connected)
+				connected.connected = src
 		ui_interact(user)
 
 /obj/machinery/computer/scan_consolenew/AltClick()
@@ -520,13 +531,12 @@
   *
   * @return nothing
   */
-/obj/machinery/computer/scan_consolenew/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
-
-	if(connected)
-		if(user == connected.occupant || user.isUnconscious())
-			return
-	else
+/obj/machinery/computer/scan_consolenew/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
+	if(!connected)
 		src.visible_message("[bicon(src)]<span class='notice'>No scanner connected!<span>")
+		return
+
+	if(user == connected.occupant)
 		return
 
 	// this is the data which will be sent to the ui
@@ -610,7 +620,7 @@
 				data["beakerVolume"] += R.volume
 
 	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
@@ -619,8 +629,6 @@
 		ui.set_initial_data(data)
 		// open the new ui window
 		ui.open()
-		// auto update every Master Controller tick
-		ui.set_auto_update(1)
 
 /obj/machinery/computer/scan_consolenew/proc/pulse_radiation(mob/user)
 	if(connected.contains_husk())
@@ -630,8 +638,8 @@
 	var/lock_state = src.connected.locked
 	src.connected.locked = 1//lock it
 
+	nanomanager.update_uis(src)
 	sleep(10*src.radiation_duration) // sleep for radiation_duration seconds
-
 	irradiating = 0
 
 	if(!src.connected.occupant)
@@ -650,6 +658,11 @@
 
 	src.connected.occupant.radiation += ((src.radiation_intensity*3)+src.radiation_duration*3)
 	src.connected.locked = lock_state
+	nanomanager.update_uis(src)
+
+/obj/machinery/computer/scan_consolenew/proc/setInjectorReady()
+	injector_ready = 1
+	nanomanager.update_uis(src)
 
 /obj/machinery/computer/scan_consolenew/npc_tamper_act(mob/living/L)
 	radiation_duration = rand(1, MAX_RADIATION_DURATION)
@@ -683,7 +696,7 @@
 
 	if (href_list["pulseRadiation"])
 		pulse_radiation(usr)
-		return 1 // return 1 forces an update to all Nano uis attached to src
+		return // pulse_radiation() handles the updating
 
 	if (href_list["radiationDuration"])
 		if (text2num(href_list["radiationDuration"]) > 0)
@@ -766,8 +779,8 @@
 		var/lock_state = src.connected.locked
 		src.connected.locked = 1//lock it
 
+		nanomanager.update_uis(src)
 		sleep(10*src.radiation_duration) // sleep for radiation_duration seconds
-
 		irradiating = 0
 
 		if (!src.connected.occupant)
@@ -827,8 +840,8 @@
 		var/lock_state = src.connected.locked
 		src.connected.locked = 1 //lock it
 
+		nanomanager.update_uis(src)
 		sleep(10*src.radiation_duration) // sleep for radiation_duration seconds
-
 		irradiating = 0
 
 		if(src.connected.occupant)
@@ -1047,9 +1060,9 @@
 				if(success)
 					I.forceMove(src.loc)
 					I.name += " ([buf.name])"
-					src.injector_ready = 0
+					injector_ready = 0
 					spawn(connected.injector_cooldown)
-						src.injector_ready = 1
+						setInjectorReady()
 			return 1
 
 		if (bufferOption == "loadDisk")

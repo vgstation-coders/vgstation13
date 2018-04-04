@@ -78,7 +78,7 @@
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita/attack_self(mob/user)
 	if(fired)
-		playsound(get_turf(src), 'sound/weapons/stickybomb_det.ogg', 30, 1)
+		playsound(src, 'sound/weapons/stickybomb_det.ogg', 30, 1)
 		fired.detonate()
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita/suicide_act(var/mob/user)

@@ -37,6 +37,9 @@
 						message_admins("<font color='red'><B>Notice: </B><font color='blue'><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has the same [matches] as [key_name_admin(M)] (no longer logged in). </font>", 1)
 						log_access("Notice: [key_name(src)] has the same [matches] as [key_name(M)] (no longer logged in).")
 
+// Do not call ..()
+// If you do so and the mob is in nullspace BYOND will attempt to move the mob a gorillion times
+// See http://www.byond.com/docs/ref/info.html#/mob/proc/Login and http://www.byond.com/forum/?post=2151126
 /mob/Login()
 	player_list |= src
 	update_Login_details()
@@ -55,6 +58,8 @@
 	hud_used = new /datum/hud(src)
 	gui_icons = new /datum/ui_icons(src)
 	client.screen += catcher //Catcher of clicks
+	client.screen += clickmaster // click catcher planesmaster on plane 0 with mouse opacity 0 - allows click catcher to work with SEE_BLACKNESS
+	client.screen += clickmaster_dummy // honestly fuck you lummox
 
 	regular_hud_updates()
 
@@ -63,9 +68,7 @@
 
 	delayNextMove(0)
 
-	change_sight(adding = SEE_SELF)
-
-	..()
+	change_sight(adding = (SEE_SELF|SEE_BLACKNESS))
 
 	reset_view()
 

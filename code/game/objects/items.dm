@@ -39,6 +39,7 @@
 	var/cant_drop_msg = " sticks to your hand!"
 
 	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+	var/armor_absorb = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
 	var/list/allowed = null //suit storage stuff.
 	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
@@ -90,6 +91,9 @@
 
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
+
+/obj/item/proc/is_hidden_identity()
+	return is_slot_hidden(body_parts_covered,HIDEFACE)
 
 /obj/item/ex_act(severity)
 	switch(severity)
@@ -158,26 +162,27 @@
 
 	forceMove(T)
 
-/obj/item/examine(mob/user)
-	var/size
-	switch(w_class)
-		if(W_CLASS_TINY)
-			size = "tiny"
-		if(W_CLASS_SMALL)
-			size = "small"
-		if(W_CLASS_MEDIUM)
-			size = "normal-sized"
-		if(W_CLASS_LARGE)
-			size = "bulky"
-		if(W_CLASS_HUGE to INFINITY)
-			size = "huge"
+/obj/item/examine(mob/user, var/size = "", var/show_name = TRUE)
+	if(!size)
+		switch(w_class)
+			if(W_CLASS_TINY)
+				size = "tiny"
+			if(W_CLASS_SMALL)
+				size = "small"
+			if(W_CLASS_MEDIUM)
+				size = "normal-sized"
+			if(W_CLASS_LARGE)
+				size = "bulky"
+			if(W_CLASS_HUGE to INFINITY)
+				size = "huge"
 	//if (clumsy_check(usr) && prob(50)) t = "funny-looking"
 	var/pronoun
 	if (gender == PLURAL)
 		pronoun = "They are"
 	else
 		pronoun = "It is"
-	..(user, " [pronoun] a [size] item.")
+	size = " [pronoun] a [size] item."
+	..(user, size, show_name)
 	if(price && price > 0)
 		to_chat(user, "You read '[price] space bucks' on the tag.")
 	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
@@ -206,7 +211,8 @@
 	if (istype(loc, /obj/item/weapon/storage))
 		//If the item is in a storage item, take it out.
 		var/obj/item/weapon/storage/S = loc
-		S.remove_from_storage(src, user)
+		if(!S.remove_from_storage(src, user))
+			return
 
 	throwing = FALSE
 	if (loc == user)
@@ -234,16 +240,6 @@
 	return TRUE
 
 /obj/item/attack_paw(mob/user as mob)
-
-	if(isalien(user)) // -- TLE
-		var/mob/living/carbon/alien/A = user
-
-		if(!A.has_fine_manipulation || w_class >= W_CLASS_LARGE)
-			if(src in A.contents) // To stop Aliens having items stuck in their pockets
-				A.drop_from_inventory(src)
-			to_chat(user, "Your claws aren't capable of such fine manipulation.")
-			return
-
 	if (istype(loc, /obj/item/weapon/storage))
 		for(var/mob/M in range(1, loc))
 			if (M.s_active == loc)
@@ -796,7 +792,7 @@
 
 	else if(ismartian(M))
 		//why
-		var/mob/living/carbon/martian/MA = M
+		var/mob/living/carbon/complex/martian/MA = M
 		switch(slot)
 			if(slot_head)
 				if(MA.head)
@@ -854,7 +850,7 @@
 
 //Used in twohanding
 /obj/item/proc/wield(mob/user, var/inactive = FALSE)
-	if(!user.can_wield())
+	if(!user.can_wield(src))
 		user.show_message("You can't wield \the [src] as it's too heavy.")
 		return
 
@@ -1196,11 +1192,14 @@ var/global/list/image/blood_overlays = list()
 			return
 
 	if(restraint_apply_sound)
-		playsound(get_turf(src), restraint_apply_sound, 30, 1, -2)
+		playsound(src, restraint_apply_sound, 30, 1, -2)
 	user.visible_message("<span class='danger'>[user] is trying to restrain \the [C] with \the [src]!</span>",
 						 "<span class='danger'>You try to restrain \the [C] with \the [src]!</span>")
 
 	if(do_after(user, C, restraint_apply_time))
+		if(C.handcuffed)
+			to_chat(user, "<span class='notice'>\The [C] is already handcuffed.</span>")
+			return
 		feedback_add_details("handcuffs", "[name]")
 
 		if(clumsy_check(user) && prob(50))
@@ -1229,3 +1228,6 @@ var/global/list/image/blood_overlays = list()
 //Called when user clicks on an object while looking through a camera (passed to the proc as [eye])
 /obj/item/proc/remote_attack(atom/target, mob/user, atom/movable/eye)
 	return
+
+/obj/item/proc/recyclable() //Called by RnD machines, for added object-specific sanity.
+	return TRUE

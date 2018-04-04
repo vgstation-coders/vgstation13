@@ -114,6 +114,7 @@
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "label_cart" //Placeholder image; recolored police tape
 	w_class = W_CLASS_TINY
+	restraint_resist_time = 5 SECONDS
 	var/left = 250
 
 /obj/item/device/label_roll/New(var/loc, var/amount=null)

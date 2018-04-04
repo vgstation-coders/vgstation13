@@ -15,6 +15,16 @@
 	message_admins("[key_name_admin(usr)] made [key_name_admin(M)] drop everything!", 1)
 	feedback_add_details("admin_verb","DEVR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+/client/proc/manage_religions()
+	set category = "Admin"
+	set name = "Manage Religions"
+	if(!holder)
+		to_chat(src, "Only administrators may use this command.")
+		return
+
+	holder.updateRelWindow()
+
+
 /client/proc/cmd_admin_prison(mob/M as mob in mob_list)
 	set category = "Admin"
 	set name = "Prison"
@@ -52,12 +62,17 @@
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	var/msg = input("Message:", text("Subtle PM to [M.key]")) as text
-	if (!msg)
+	var/msg = input("Message:", text("Subtle PM to [M.key]")) as null | message
+	if (isnull(msg))
 		return
-	var/deity = input("Deity: The current chosen deity is [ticker.Bible_deity_name]. Input a different one, or leave blank to have the message be from 'a voice'.", text("Subtle PM to [M.key]"), ticker.Bible_deity_name) as text
-	if(!deity)
+
+	var/deity = input("Deity: The current chosen deity is [ticker.Bible_deity_name]. Input a different one, or leave blank to have the message be from 'a voice'.", text("Subtle PM to [M.key]"), ticker.Bible_deity_name) as null | text
+
+	if(isnull(deity)) //Hit the cancel button
+		return
+	else if(!deity) //Left the text field blank
 		deity = "a voice"
+
 	if(usr)
 		if (usr.client)
 			if(usr.client.holder)
@@ -76,7 +91,7 @@
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	var/msg = input("Message:", text("Enter the text you wish to appear to everyone, input nothing to cancel.")) as text
+	var/msg = input("Message:", text("Enter the text you wish to appear to everyone.")) as null | message
 
 	if(!msg)
 		return
@@ -100,7 +115,7 @@
 	if(!M)
 		return
 
-	var/msg = input("Message:", text("Enter the text you wish to appear to your target, input nothing to cancel.")) as text
+	var/msg = input("Message:", text("Enter the text you wish to appear to your target, input nothing to cancel.")) as null | message
 
 	if(!msg)
 		return
@@ -118,7 +133,7 @@
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	var/msg = input("Message:", text("Enter the text you wish to appear to your target, input nothing to cancel.")) as text
+	var/msg = input("Message:", text("Enter the text you wish to appear to your target, input nothing to cancel.")) as null | message
 
 	if(!msg)
 		return

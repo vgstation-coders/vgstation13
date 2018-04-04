@@ -87,7 +87,7 @@
 			M.update_music()
 	master_area=null
 
-/obj/machinery/media/Move()
+/obj/machinery/media/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(anchored)
 		update_music()

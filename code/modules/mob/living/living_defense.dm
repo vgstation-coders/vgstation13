@@ -10,7 +10,7 @@
 	1 - halfblock
 	2 - fullblock
 */
-/mob/living/proc/run_armor_check(var/def_zone = null, var/attack_flag = "melee", var/absorb_text = null, var/soften_text = null, modifier = 1)
+/mob/living/proc/run_armor_check(var/def_zone = null, var/attack_flag = "melee", var/absorb_text = null, var/soften_text = null, modifier = 1, var/quiet = 0, var/armor_penetration = 0)
 	var/armor = getarmor(def_zone, attack_flag)
 	var/absorb = 0
 
@@ -19,23 +19,42 @@
 	if(prob(armor * modifier))
 		absorb += 1
 
+	if(prob(armor_penetration))
+		absorb -= 1
+	if(prob(armor_penetration))
+		absorb -= 1
+
 	if(absorb >= 2)
-		if(absorb_text)
-			show_message("[absorb_text]")
-		else
-			show_message("<span class='warning'>Your armor absorbs the blow!</span>")
+		if(!quiet)
+			if(absorb_text)
+				show_message("[absorb_text]")
+			else
+				show_message("<span class='warning'>Your armor absorbs the blow!</span>")
 		return 2
 	if(absorb == 1)
-		if(absorb_text)
-			show_message("[soften_text]",4)
-		else
-			show_message("<span class='warning'>Your armor softens the blow!</span>")
+		if(!quiet)
+			if(absorb_text)
+				show_message("[soften_text]",4)
+			else
+				show_message("<span class='warning'>Your armor softens the blow!</span>")
 		return 1
 	return 0
 
-
 /mob/living/proc/getarmor(var/def_zone, var/type)
 	return 0
+
+/mob/living/proc/getarmorabsorb(var/def_zone, var/type)
+	return 0
+
+/mob/living/proc/run_armor_absorb(var/def_zone = null, var/attack_flag = "melee", var/initial_damage)
+	var/armor = getarmorabsorb(def_zone, attack_flag)
+	var/final_damage = initial_damage
+	if(armor)
+		var/damage_multiplier = final_damage/armor
+		if(damage_multiplier < 1)
+			final_damage *= damage_multiplier
+
+	return final_damage
 
 
 /mob/living/bullet_act(var/obj/item/projectile/P, var/def_zone)
@@ -54,12 +73,13 @@
 			src.visible_message("<span class='warning'>[src] triggers their deadman's switch!</span>")
 			signaler.signal()
 
-	var/absorb = run_armor_check(def_zone, P.flag)
+	var/absorb = run_armor_check(def_zone, P.flag, armor_penetration = P.armor_penetration)
 	if(absorb >= 2)
 		P.on_hit(src,2)
 		return 2
 	if(!P.nodamage)
-		apply_damage((P.damage/(absorb+1)), P.damage_type, def_zone, absorb, P.is_sharp(), used_weapon = P)
+		var/damage = run_armor_absorb(def_zone, P.flag, (P.damage/(absorb+1)))
+		apply_damage(damage, P.damage_type, def_zone, absorb, P.is_sharp(), used_weapon = P)
 		regenerate_icons()
 	P.on_hit(src, absorb)
 	if(istype(P, /obj/item/projectile/beam/lightning))
@@ -93,9 +113,10 @@
 				zone_normal_name = "right leg"
 			else
 				zone_normal_name = zone
-		var/armor = run_armor_check(zone, "melee", "Your armor has protected your [zone_normal_name].", "Your armor has softened hit to your [zone_normal_name].")
+		var/armor = run_armor_check(zone, "melee", "Your armor has protected your [zone_normal_name].", "Your armor has softened the blow to your [zone_normal_name].", armor_penetration = O.throwforce*(speed/5)*O.sharpness)
 		if(armor < 2)
-			apply_damage(O.throwforce*(speed/5), dtype, zone, armor, O.is_sharp(), O)
+			var/damage = run_armor_absorb(zone, "melee", O.throwforce*(speed/5))
+			apply_damage(damage, dtype, zone, armor, O.is_sharp(), O)
 
 		// Begin BS12 momentum-transfer code.
 
@@ -280,7 +301,7 @@
 	if(istype(T))
 		var/datum/gas_mixture/G = loc.return_air() // Check if we're standing in an oxygenless environment
 		if(G)
-			oxy=G.oxygen
+			oxy=G.oxygen/G.volume*CELL_VOLUME
 	if(oxy < 1 || fire_stacks <= 0)
 		ExtinguishMob() //If there's no oxygen in the tile we're on, put out the fire
 		return 1

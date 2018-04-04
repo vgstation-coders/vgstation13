@@ -76,11 +76,9 @@ obj/structure/transit_tube_pod/ex_act(severity)
 
 /obj/structure/transit_tube_pod/New()
 	. = ..()
-	air_contents.oxygen = MOLES_O2STANDARD
-	air_contents.nitrogen = MOLES_N2STANDARD
-	air_contents.temperature = T20C
-	air_contents.pressure = ONE_ATMOSPHERE
-	air_contents.total_moles = MOLES_CELLSTANDARD
+	air_contents.adjust_multi_temp(
+		"oxygen", MOLES_O2STANDARD, T20C,
+		"nitrogen", MOLES_N2STANDARD, T20C)
 
 	// Give auto tubes time to align before trying to start moving
 	spawn (5)
@@ -333,13 +331,13 @@ obj/structure/transit_tube_pod/ex_act(severity)
 			sleep(last_delay)
 			dir = next_dir
 			forceMove(next_loc) // When moving from one tube to another, skip collision and such.
-			density = current_tube.density
+			setDensity(current_tube.density)
 
 			if(current_tube && current_tube.should_stop_pod(src, next_dir))
 				current_tube.pod_stopped(src, dir)
 				break
 
-		density = 1
+		setDensity(TRUE)
 
 		// If the pod is no longer in a tube, move in a line until stopped or slowed to a halt.
 		//  /turf/inertial_drift appears to only work on mobs, and re-implementing some of the
@@ -365,9 +363,6 @@ obj/structure/transit_tube_pod/ex_act(severity)
 /obj/structure/transit_tube_pod/return_air()
 	return air_contents
 
-// For now, copying what I found in an unused FEA file (and almost identical in a
-//  used ZAS file). Means that assume_air and remove_air don't actually alter the
-//  air contents.
 /obj/structure/transit_tube_pod/assume_air(datum/gas_mixture/giver)
 	return air_contents.merge(giver)
 
@@ -380,28 +375,13 @@ obj/structure/transit_tube_pod/ex_act(severity)
 //  giving it a chance to mix its internal air supply with the turf it is
 //  currently on.
 /obj/structure/transit_tube_pod/proc/mix_air()
+	ASSERT(isturf(loc))
+
 	var/datum/gas_mixture/environment = loc.return_air()
-	var/env_pressure = environment.return_pressure()
-	var/int_pressure = air_contents.return_pressure()
-	var/total_pressure = env_pressure + int_pressure
-
-	if(total_pressure == 0)
-		return
-
-	// Math here: Completely made up, not based on realistic equasions.
-	//  Goal is to balance towards equal pressure, but ensure some gas
-	//  transfer in both directions regardless.
-	// Feel free to rip this out and replace it with something better,
-	//  I don't really know muhch about how gas transfer rates work in
-	//  SS13.
-	var/transfer_in = max(0.1, 0.5 * (env_pressure - int_pressure) / total_pressure)
-	var/transfer_out = max(0.1, 0.3 * (int_pressure - env_pressure) / total_pressure)
-
-	var/datum/gas_mixture/from_env = loc.remove_air(environment.total_moles() * transfer_in)
-	var/datum/gas_mixture/from_int = air_contents.remove(air_contents.total_moles() * transfer_out)
-
-	loc.assume_air(from_int)
-	air_contents.merge(from_env)
+	if(istype(loc, /turf/simulated)) //An obnoxious hack to prevent super slow draining to space.
+		air_contents.share_tiles(environment, 6) //6 simply corresponds to the closest to the previous behavior. I think.
+	else
+		air_contents.share_space(environment, 6)
 
 
 
@@ -460,7 +440,7 @@ obj/structure/transit_tube_pod/ex_act(severity)
 		tube_dirs = parse_dirs(icon_state)
 
 		if(copytext(icon_state, 1, 3) == "D-" || findtextEx(icon_state, "Pass"))
-			density = 0
+			setDensity(FALSE)
 
 
 

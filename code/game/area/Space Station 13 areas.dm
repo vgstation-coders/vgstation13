@@ -516,6 +516,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/centcom/suppy
 	name = "\improper Centcom Supply Shuttle"
+	turret_protected = 1
 
 /area/centcom/ferry
 	name = "\improper Centcom Transport Shuttle"
@@ -2429,6 +2430,10 @@ proc/process_adminbus_teleport_locs()
 
 /area/awaymission/leviathan/mining
 	name = "Leviathan"
+	icon_state = "mining_production"
+
+/area/awaymission/snowplanet
+	name = "snowplanet"
 	icon_state = "mining_production"
 
 /////////////////////////////////////////////////////////////////////

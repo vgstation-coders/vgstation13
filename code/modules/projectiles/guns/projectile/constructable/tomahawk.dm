@@ -67,7 +67,7 @@
 	if(ismetal)
 		return
 	to_chat(user, "<span class='warning'>\The [src]'s blade shatters!</span>")
-	playsound(get_turf(user), "shatter", 50, 1)
+	playsound(user, "shatter", 50, 1)
 	if(src.loc == user)
 		user.drop_item(src, force_drop = 1)
 		if(istype(src, /obj/item/weapon/hatchet/tomahawk/pipe))

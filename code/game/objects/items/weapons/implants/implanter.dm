@@ -10,15 +10,12 @@
 
 /obj/item/weapon/implanter/proc/update()
 
-
-
 /obj/item/weapon/implanter/update()
 	if (src.imp)
 		src.icon_state = "implanter1"
 	else
 		src.icon_state = "implanter0"
 	return
-
 
 /obj/item/weapon/implanter/attack(mob/M as mob, mob/user as mob)
 	if (!istype(M, /mob/living/carbon))
@@ -54,14 +51,15 @@
 
 
 /obj/item/weapon/implanter/traitor
-	name = "implanter-greytide"
-	desc = "Greytide Stationwide."
+	name = "greytide conversion kit"
+	desc = "Any humanoid injected with this implant will become loyal to the injector and the greytide, unless of course the host is already loyal to someone else."
 
 /obj/item/weapon/implanter/traitor/New()
 	src.imp = new /obj/item/weapon/implant/traitor(src)
 	..()
 	update()
 	return
+
 
 /obj/item/weapon/implanter/loyalty
 	name = "implanter-loyalty"
@@ -73,7 +71,6 @@
 	return
 
 
-
 /obj/item/weapon/implanter/explosive
 	name = "implanter (E)"
 
@@ -83,6 +80,7 @@
 	update()
 	return
 
+
 /obj/item/weapon/implanter/adrenalin
 	name = "implanter-adrenalin"
 
@@ -91,6 +89,7 @@
 	..()
 	update()
 	return
+
 
 /obj/item/weapon/implanter/compressed
 	name = "implanter (C)"
@@ -147,3 +146,13 @@
 		c.scanned = I
 		c.scanned.forceMove(c)
 		update()
+
+
+/obj/item/weapon/implanter/peace
+	name = "implanter-pax"
+	desc = "An implanter containing a pax implant"
+
+/obj/item/weapon/implanter/peace/New()
+	src.imp = new /obj/item/weapon/implant/peace(src)
+	..()
+	update()

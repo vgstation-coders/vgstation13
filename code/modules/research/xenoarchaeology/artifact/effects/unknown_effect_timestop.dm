@@ -11,7 +11,7 @@
 	..()
 	caster = new
 	caster.invisibility = 101
-	caster.density = 0
+	caster.setDensity(FALSE)
 	caster.anchored = 1
 	caster.flags = INVULNERABLE
 	fall = new /spell/aoe_turf/fall

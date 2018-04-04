@@ -16,6 +16,7 @@
 	var/prosthetic_icon                       // Icon for robotic organ.
 	var/is_printed = FALSE                    // Used for heist.
 	var/had_mind = FALSE                      // Owner had a mind at some point. (heist)
+	var/stabilized = FALSE
 
 /obj/item/organ/internal/attack_self(mob/user as mob)
 
@@ -58,6 +59,17 @@
 	// Don't process if we're in a freezer, an MMI or a stasis bag. //TODO: ambient temperature?
 	if(istype(loc,/obj/item/device/mmi) || istype(loc,/obj/item/bodybag/cryobag) || istype(loc,/obj/structure/closet/crate/freezer))
 		return
+
+
+	if(istype(loc,/obj/item/weapon/reagent_containers/glass/jar))
+		var/obj/item/weapon/reagent_containers/glass/jar/J = loc
+		if(J.safe_holder())
+			return
+
+	//We're stabilized somehow.
+	if(stabilized)
+		return
+
 
 	if(fresh && prob(40))
 		fresh--

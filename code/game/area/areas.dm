@@ -11,10 +11,13 @@ var/area/space_area
 	var/list/area_turfs
 	var/turret_protected = 0
 	var/list/turretTargets = list()
-	plane = BASE_PLANE
-	layer = AREA_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
+	plane = ABOVE_LIGHTING_PLANE
+	layer = MAPPING_AREA_LAYER
 	var/base_turf_type = null
 	var/shuttle_can_crush = TRUE
+	var/project_shadows = FALSE
+	var/obj/effect/narration/narrator = null
+
 	flags = 0
 
 /area/New()
@@ -413,12 +416,23 @@ var/area/space_area
 	var/area/oldArea = Obj.areaMaster
 	Obj.areaMaster = src
 
+	if(project_shadows)
+		Obj.update_shadow()
+	else if(istype(oldArea) && oldArea.project_shadows)
+		Obj.underlays -= Obj.shadow
+
+	Obj.area_entered(src)
+	for(var/atom/movable/thing in get_contents_in_object(Obj))
+		thing.area_entered(src)
+		thing.areaMaster = src
+
 	for(var/mob/mob_in_obj in Obj.contents)
+
 		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = Obj.areaMaster, "old" = oldArea))
 
 	var/mob/M = Obj
 
-	if(M && istype(M))
+	if(istype(M))
 		CallHook("MobAreaChange", list("mob" = M, "new" = Obj.areaMaster, "old" = oldArea)) // /vg/ - EVENTS!
 		if(M.client && (M.client.prefs.toggles & SOUND_AMBIENCE) && isnull(M.areaMaster.media_source) && !M.client.ambience_playing)
 			M.client.ambience_playing = 1
@@ -456,6 +470,9 @@ var/area/space_area
 			spawn(600) // Ewww - this is very very bad.
 				if(M && M.client)
 					M.client.ambience_playing = 0
+
+		if(narrator)
+			narrator.Crossed(M)
 
 	if(turret_protected)
 		if(isliving(Obj))
@@ -559,7 +576,7 @@ var/area/space_area
 		for(var/atom/movable/AM in T.contents)
 			AM.change_area(old_area,src)
 
-var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z", "group", "contents", "air", "light", "areaMaster", "underlays", "lighting_overlay", "corners", "affecting_lights", "has_opaque_atom", "lighting_corners_initialised", "light_sources")
+var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z", "group", "contents", "air", "zone", "light", "areaMaster", "underlays", "lighting_overlay", "corners", "affecting_lights", "has_opaque_atom", "lighting_corners_initialised", "light_sources")
 var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are moved by move_area_to and move_contents_to
 var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f9","swall_f10") //icon_states for which to prepare an underlay
 
@@ -667,7 +684,7 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 						// Spawn a new shuttle corner object
 						var/obj/corner = new()
 						corner.forceMove(X)
-						corner.density = 1
+						corner.setDensity(TRUE)
 						corner.anchored = 1
 						corner.icon = X.icon
 						corner.icon_state = replacetext(X.icon_state, "_s", "_f")

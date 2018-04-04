@@ -74,7 +74,7 @@
 		if(flying)
 			animate(remains, pixel_y = pixel_y - 8 * PIXEL_MULTIPLIER, 5, 1) //Fall down gracefully
 
-		playsound(get_turf(src), pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat
+		playsound(src, pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat
 
 		..()
 
@@ -122,7 +122,7 @@
 				//And yeah, roaches can lay eggs on their own eggs. This is kinda intended
 
 				if(F && F.reagents)
-					F.reagents.add_reagent(TOXIN, rand(0.2,0.6)) //Add some toxin to the food
+					F.reagents.add_reagent(TOXIN, rand(2,6)/10) //Add some toxin to the food
 					lay_eggs()
 
 		return //Don't do anything after that
@@ -165,7 +165,7 @@
 	//No food, trash, walls or anything - just modify our pixel_x and pixel_y
 	animate(src, pixel_x = rand(-20,20) * PIXEL_MULTIPLIER, pixel_y = rand(-20,20) * PIXEL_MULTIPLIER, (flying ? 5 : 15) , 1) //This animation takes 1.5 seconds, or 0.5 if flying
 
-/mob/living/simple_animal/cockroach/Move()
+/mob/living/simple_animal/cockroach/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 
 	if(!flying)
@@ -286,7 +286,7 @@
 	if(size >= H.size)
 		return
 
-	playsound(get_turf(H),'sound/items/eatfood.ogg', rand(10,50), 1)
+	playsound(H,'sound/items/eatfood.ogg', rand(10,50), 1)
 	H.visible_message("<span class='notice'>[H] eats \the [src]!</span>", "<span class='notice'>You eat \the [src]!</span>")
 
 	Die(gore = 1)

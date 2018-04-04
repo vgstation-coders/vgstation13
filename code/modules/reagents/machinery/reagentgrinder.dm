@@ -44,6 +44,7 @@ var/global/list/juice_items = list (
 		/obj/item/weapon/grown/nettle         = list(FORMIC_ACID = 0),
 		/obj/item/weapon/grown/deathnettle    = list(PHENOL = 0),
 		/obj/item/stack/sheet/charcoal        = list("charcoal" = 20),
+		/obj/item/stack/sheet/bone	          = list(BONEMARROW = 20),
 
 		//Blender Stuff
 		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans = list(SOYMILK = -10), //I have no fucking idea what most of these numbers mean and I hate them.
@@ -67,7 +68,6 @@ var/global/list/juice_items = list (
 
 
 	var/list/holdingitems = list()
-	var/targetMoveKey
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -88,21 +88,6 @@ var/global/list/juice_items = list (
 	RefreshParts()
 
 	return
-
-/obj/machinery/reagentgrinder/proc/user_moved(var/list/args)
-	var/event/E = args["event"]
-	if(!targetMoveKey)
-		E.handlers.Remove("\ref[src]:user_moved")
-		return
-
-	var/turf/T = args["loc"]
-
-	if(!Adjacent(T))
-		if(E.holder)
-			var/atom/movable/holder = E.holder
-			holder.on_moved.Remove(targetMoveKey)
-		detach()
-
 
 /obj/machinery/reagentgrinder/RefreshParts()
 	var/T = 0
@@ -154,10 +139,6 @@ var/global/list/juice_items = list (
 				return
 
 			src.beaker =  O
-			if(user.type == /mob/living/silicon/robot)
-				var/mob/living/silicon/robot/R = user
-				R.uneq_active()
-				targetMoveKey =  R.on_moved.Add(src, "user_moved")
 
 			update_icon()
 			src.updateUsrDialog()
@@ -278,9 +259,6 @@ var/global/list/juice_items = list (
 	if (!beaker)
 		return
 	beaker.forceMove(src.loc)
-	if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-		var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = beaker
-		borgbeak.return_to_modules()
 	beaker = null
 	update_icon()
 
@@ -355,7 +333,7 @@ var/global/list/juice_items = list (
 		return
 	if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
 		return
-	playsound(get_turf(src), speed_multiplier < 2 ? 'sound/machines/juicer.ogg' : 'sound/machines/juicerfast.ogg', 30, 1)
+	playsound(src, speed_multiplier < 2 ? 'sound/machines/juicer.ogg' : 'sound/machines/juicerfast.ogg', 30, 1)
 	inuse = 1
 	spawn(50/speed_multiplier)
 		inuse = 0
@@ -389,7 +367,7 @@ var/global/list/juice_items = list (
 		return
 	if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
 		return
-	playsound(get_turf(src), speed_multiplier < 2 ? 'sound/machines/blender.ogg' : 'sound/machines/blenderfast.ogg', 50, 1)
+	playsound(src, speed_multiplier < 2 ? 'sound/machines/blender.ogg' : 'sound/machines/blenderfast.ogg', 50, 1)
 	inuse = 1
 	spawn(60/speed_multiplier)
 		inuse = 0

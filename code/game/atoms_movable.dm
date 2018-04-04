@@ -50,6 +50,11 @@
 	// When this object moves. (args: loc)
 	var/event/on_moved
 
+	var/atom/movable/tether_master
+	var/list/tether_slaves
+	var/list/current_tethers
+	var/obj/shadow/shadow
+
 /atom/movable/New()
 	. = ..()
 	areaMaster = get_area_master(src)
@@ -69,6 +74,7 @@
 
 	if(materials)
 		returnToPool(materials)
+		materials = null
 
 	if(on_moved)
 		on_moved.holder = null
@@ -93,6 +99,8 @@
 
 	locking_categories      = null
 	locking_categories_name = null
+
+	break_all_tethers()
 
 	if((flags & HEAR) && !ismob(src))
 		for(var/mob/virtualhearer/VH in virtualhearers)
@@ -135,57 +143,58 @@
 
 	..()
 
-/atom/movable/proc/get_move_delay()
-	// Copied from Move().
-	if(ismob(src))
-		var/mob/M = src
-		if(M.client)
-			return (3+(M.client.move_delayer.next_allowed - world.time))*world.tick_lag
-	return max(5 * world.tick_lag, 1)
+//TODO move this somewhere else
+/atom/movable/proc/set_glide_size(glide_size_override = 0)
+	glide_size = glide_size_override
 
-// This is designed to only be used occasionally, since procs add overhead.
-/atom/movable/proc/reset_glide_size()
-	glide_size = Ceiling(WORLD_ICON_SIZE / src.get_move_delay() * world.tick_lag) - 1 //We always split up movements into cardinals for issues with diagonal movements.
-	//glide_size = WORLD_ICON_SIZE / max(move_delay, world.tick_lag) * world.tick_lag // Updated calc from http://www.byond.com/forum/?post=1573076
-
-/mob/verb/fix_gliding()
-	set category = "OOC"
-	set name = "Fix Movement"
-	set desc = "Fixes jerky movement caused by BYOND being dumb."
-	reset_glide_size()
-
-
-/atom/movable/Move(newLoc,Dir=0,step_x=0,step_y=0)
-	if(!loc || !newLoc)
+/atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
+	if(!loc || !NewLoc)
 		return 0
-	//set up glide sizes before the move
-	//ensure this is a step, not a jump
 
-	//. = ..(NewLoc,Dir,step_x,step_y)
+	if(current_tethers && current_tethers.len)
+		for(var/datum/tether/master_slave/T in current_tethers)
+			if(T.effective_slave == src)
+				if(get_exact_dist(T.effective_master, src) > T.tether_distance)
+					T.break_tether()
+					break
+				if(get_exact_dist(T.effective_master, NewLoc) > T.tether_distance)
+					change_dir(Dir)
+					return 0
+		for(var/datum/tether/equal/restrictive/R in current_tethers)
+			var/atom/movable/AM
+			if(R.effective_slave == src)
+				AM = R.effective_master
+			else
+				AM = R.effective_slave
+			if(get_exact_dist(AM, src) > R.tether_distance)
+				R.break_tether()
+				break
+			if(get_exact_dist(AM, NewLoc) > R.tether_distance)
+				change_dir(Dir)
+				return 0
 	if(timestopped)
 		if(!pulledby || pulledby.timestopped) //being moved by our wizard maybe?
 			return 0
-	var/move_delay = max(5 * world.tick_lag, 1)
-	if(ismob(src))
-		var/mob/M = src
-		if(M.client)
-			move_delay = (3+(M.client.move_delayer.next_allowed - world.time))*world.tick_lag
 
 	var/can_pull_tether = 0
 	if(tether)
-		if(tether.attempt_to_follow(src,newLoc))
+		if(tether.attempt_to_follow(src,NewLoc))
 			can_pull_tether = 1
 		else
 			return 0
-	glide_size = Ceiling(WORLD_ICON_SIZE / move_delay * world.tick_lag) - 1 //We always split up movements into cardinals for issues with diagonal movements.
+
+	if(glide_size_override > 0)
+		set_glide_size(glide_size_override)
+
 	var/atom/oldloc = loc
-	if((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == newLoc))
+	if((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == NewLoc))
 		. = ..()
 
 		update_dir()
 		return
 
-	if(loc != newLoc)
+	//We always split up movements into cardinals for issues with diagonal movements.
+	if(loc != NewLoc)
 		if (!(Dir & (Dir - 1))) //Cardinal move
 			. = ..()
 		else //Diagonal move, split it into cardinal moves
@@ -221,7 +230,7 @@
 
 	update_dir()
 
-	if(!loc || (loc == oldloc && oldloc != newLoc))
+	if(!loc || (loc == oldloc && oldloc != NewLoc))
 		last_move = 0
 		return
 
@@ -234,15 +243,20 @@
 			tether_datum.snap = 1
 			tether_datum.Delete_Chain()
 
-	last_move = (Dir || get_dir(oldloc, newLoc)) //If direction isn't specified, calculate it ourselves
+	last_move = (Dir || get_dir(oldloc, NewLoc)) //If direction isn't specified, calculate it ourselves
 	set_inertia(last_move)
 
 	last_moved = world.time
 	src.move_speed = world.timeofday - src.l_move_time
 	src.l_move_time = world.timeofday
 	// Update on_moved listeners.
-	INVOKE_EVENT(on_moved,list("loc"=newLoc))
-	return .
+	INVOKE_EVENT(on_moved,list("loc"=NewLoc))
+
+/atom/movable/search_contents_for(path,list/filter_path=null) // For vehicles
+	var/list/found = ..()
+	for (var/atom/A in locked_atoms)
+		found += A.search_contents_for(path,filter_path)
+	return found
 
 //The reason behind change_dir()
 /atom/movable/proc/update_dir()
@@ -307,6 +321,7 @@
 	C.name = id
 	locking_categories_name[id] = C
 	locking_categories += C
+	return C
 
 /atom/movable/proc/get_lock_cat(var/category = /datum/locking_category)
 	locking_init()
@@ -389,7 +404,9 @@
 		Obstacle.Bumped(src)
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
-/atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE)
+/atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+	if(glide_size_override)
+		glide_size = glide_size_override
 	var/atom/old_loc = loc
 	loc = destination
 	last_moved = world.time
@@ -543,7 +560,7 @@
 					. = 0
 					break
 
-				src.Move(step, dy)
+				src.Move(step, dy, glide_size_override = DELAY2GLIDESIZE(fly_speed))
 				. = hit_check(speed, user)
 				error += dist_x
 				dist_travelled++
@@ -557,7 +574,7 @@
 					. = 0
 					break
 
-				src.Move(step, dx)
+				src.Move(step, dx, glide_size_override = DELAY2GLIDESIZE(fly_speed))
 				. = hit_check(speed, user)
 				error -= dist_y
 				dist_travelled++
@@ -579,7 +596,7 @@
 					. = 0
 					break
 
-				src.Move(step, dx)
+				src.Move(step, dx, glide_size_override = DELAY2GLIDESIZE(fly_speed))
 				. = hit_check(speed, user)
 				error += dist_y
 				dist_travelled++
@@ -593,7 +610,7 @@
 					. = 0
 					break
 
-				src.Move(step, dy)
+				src.Move(step, dy, glide_size_override = DELAY2GLIDESIZE(fly_speed))
 				. = hit_check(speed, user)
 				error -= dist_x
 				dist_travelled++
@@ -733,12 +750,13 @@
 		inertia_dir  = 0
 		return
 
-	sleep(5)
+	sleep(INERTIA_MOVEDELAY)
 
 	if(can_apply_inertia() && (src.loc == start))
 		if(!inertia_dir)
 			return //inertia_dir = last_move
 
+		set_glide_size(DELAY2GLIDESIZE(INERTIA_MOVEDELAY))
 		step(src, inertia_dir)
 
 /atom/movable/proc/reset_inertia()
@@ -764,7 +782,7 @@
 
 	invisibility = INVISIBILITY_MAXIMUM
 	flags |= INVULNERABLE
-	density = 0
+	setDensity(FALSE)
 	anchored = 1
 	flags |= TIMELESS
 	if(!ignoreinvert)
@@ -778,7 +796,7 @@
 	timestopped = 0
 	if(!init_invuln)
 		flags &= ~INVULNERABLE
-	density = init_density
+	setDensity(init_density)
 	anchored = init_anchored
 	if(!init_timeless)
 		flags &= ~TIMELESS
@@ -938,5 +956,16 @@
 	for(var/client/C in viewers)
 		C.images -= item
 
-/atom/movable/proc/make_invisible(var/source_define, var/time)	//Makes things practically invisible, not actually invisible. Alpha is set to 1.
+/atom/movable/proc/make_invisible(var/source_define, var/time, var/include_clothing)	//Makes things practically invisible, not actually invisible. Alpha is set to 1.
 	return invisibility || alpha <= 1	//already invisible
+
+/atom/movable/proc/break_all_tethers()	//Breaks all tethers
+	if(current_tethers)
+		for(var/datum/tether/T in current_tethers)
+			T.break_tether()
+
+/atom/movable/proc/on_tether_broken(atom/movable/other_end)	//To allow for code based on when a tether with a specific thing is broken
+	return
+
+/atom/movable/proc/area_entered(var/area/A)
+	return

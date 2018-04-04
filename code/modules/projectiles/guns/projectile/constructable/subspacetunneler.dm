@@ -52,10 +52,6 @@
 		/obj/structure/closet/secure_closet/brig,				//brig cell closets
 		/obj/machinery/disposal,								//disposal bins
 		/obj/machinery/light,									//light bulbs and tubes
-		/obj/machinery/sleep_console,							//sleeper consoles
-		/obj/machinery/sleeper,									//sleepers
-		/obj/machinery/body_scanconsole,						//body scanner consoles
-		/obj/machinery/bodyscanner,								//body scanners
 		/obj/machinery/hologram/holopad,						//AI holopads
 		/obj/machinery/media/receiver/boombox/wallmount,		//sound systems
 		/obj/machinery/keycard_auth,							//keycard authentication devices

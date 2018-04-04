@@ -136,6 +136,7 @@
 
 /spell/targeted/cryokinesis
 	name = "Cryokinesis"
+	user_type = USER_TYPE_GENETIC
 	desc = "Drops the bodytemperature of another person."
 	panel = "Mutant Powers"
 
@@ -202,6 +203,7 @@
 /spell/targeted/eat
 	name = "Eat"
 	desc = "Eat just about anything!"
+	user_type = USER_TYPE_GENETIC
 	panel = "Mutant Powers"
 
 	charge_type = Sp_RECHARGE
@@ -232,7 +234,7 @@
 		/mob/living/simple_animal/tomato,
 		/mob/living/simple_animal/chick,
 		/mob/living/simple_animal/chicken,
-		/mob/living/simple_animal/lizard,
+		/mob/living/simple_animal/hostile/lizard,
 		/mob/living/simple_animal/cow,
 		/mob/living/simple_animal/spiderbot
 		)
@@ -380,14 +382,14 @@
 		else
 			user.visible_message("<span class='danger'>[user] eats [the_item]'s [limb.display_name].</span>", \
 			"<span class='danger'>You eat [the_item]'s [limb.display_name].</span>")
-			playsound(get_turf(user), 'sound/items/eatfood.ogg', 50, 0)
+			playsound(user, 'sound/items/eatfood.ogg', 50, 0)
 			message_admins("[user] ate [the_item]'s [limb]: (<A href='?_src_=holder;jumpto=\ref[user]'><b>Jump to</b></A>)")
 			log_game("[user] ate \the [the_item]'s [limb] at [user.x], [user.y], [user.z]")
 			limb.droplimb("override" = 1, "spawn_limb" = 0)
 			doHeal(user)
 	else
 		user.visible_message("<span class='warning'>[usr] eats \the [the_item].")
-		playsound(get_turf(user), 'sound/items/eatfood.ogg', 50, 0)
+		playsound(user, 'sound/items/eatfood.ogg', 50, 0)
 		message_admins("[user] ate \the [the_item]: (<A href='?_src_=holder;jumpto=\ref[user]'><b>Jump to</b></A>)")
 		log_game("[user] ate \the [the_item] at [user.x], [user.y], [user.z]")
 		qdel(the_item)
@@ -417,6 +419,7 @@
 	name = "Jump"
 	desc = "Leap great distances!"
 	panel = "Mutant Powers"
+	user_type = USER_TYPE_GENETIC
 	range = SELFCAST
 
 	charge_type = Sp_RECHARGE
@@ -539,6 +542,7 @@
 	name = "Polymorph"
 	desc = "Mimic the appearance of others!"
 	panel = "Mutant Powers"
+	user_type = USER_TYPE_GENETIC
 	charge_max = 1800
 
 	spell_flags = 0
@@ -587,6 +591,7 @@
 	name = "Read Mind"
 	desc = "Read the minds of others for information."
 	panel = "Mutant Powers"
+	user_type = USER_TYPE_GENETIC
 
 	range = 7
 	max_targets = 1
@@ -701,9 +706,9 @@
 
 	mutation = M_SUPER_FART
 
-	New()
-		..()
-		block = SUPERFARTBLOCK
+/datum/dna/gene/basic/superfart/New()
+	..()
+	block = SUPERFARTBLOCK
 
 // WAS: /datum/bioEffect/strong
 /datum/dna/gene/basic/strong
@@ -715,6 +720,6 @@
 
 	mutation = M_STRONG
 
-	New()
-		..()
-		block=STRONGBLOCK
+/datum/dna/gene/basic/strong/New()
+	..()
+	block=STRONGBLOCK

@@ -77,7 +77,7 @@ mineral/clown
 mineral/phazon
 	display_name = "Phazon"
 	name = "Phazon"
-	result_amount = 2 // 1
+	result_amount = 3
 	spread = 0
 	ore = /obj/item/weapon/ore/phazon
 

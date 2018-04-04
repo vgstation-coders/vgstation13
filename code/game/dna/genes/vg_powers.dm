@@ -24,6 +24,14 @@ Obviously, requires DNA2.
 
 	spelltype = /spell/targeted/genetic/hulk
 
+/datum/dna/gene/basic/grant_spell/hulk/deactivate(var/mob/M, var/connected, var/flags)
+	M.mutations.Remove(M_HULK)
+	M.update_mutations()
+	if (ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.update_body()
+	return ..()
+
 /datum/dna/gene/basic/grant_spell/hulk/New()
 	..()
 	block = HULKBLOCK
@@ -46,6 +54,7 @@ Obviously, requires DNA2.
 /spell/targeted/genetic/hulk
 	name = "Hulk Out"
 	panel = "Mutant Powers"
+	user_type = USER_TYPE_GENETIC
 	range = SELFCAST
 
 	charge_type = Sp_RECHARGE
@@ -141,9 +150,11 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 /datum/dna/gene/basic/noir/activate(var/mob/M)
 	..()
 	M.update_colour()
-	M.client.screen += noir_master
+	if(M.client) // wow it's almost like non-client mobs can get mutations!
+		M.client.screen += noir_master
 
 /datum/dna/gene/basic/noir/deactivate(var/mob/M,var/connected,var/flags)
 	if(..())
 		M.update_colour()
-		M.client.screen -= noir_master
+		if(M.client)
+			M.client.screen -= noir_master

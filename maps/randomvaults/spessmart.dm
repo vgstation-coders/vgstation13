@@ -188,7 +188,7 @@ var/list/shop_prices = list( //Cost in space credits
 	..()
 
 	var/area/vault/supermarket/shop/S = locate(/area/vault/supermarket/shop)
-	S.initialize()
+	S.setup()
 
 
 var/list/circuitboards = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Spessmart
@@ -226,7 +226,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	jammed = 2
 	icon_state = "red"
 
-/area/vault/supermarket/shop/proc/initialize()
+/area/vault/supermarket/shop/proc/setup()
 	spawn()
 		/*
 		looping:
@@ -381,7 +381,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	desc = "The light inside is out, but it still works."
 
 	icon = 'icons/mob/robots.dmi'
-	icon_state = "Service"
+	icon_state = "servbot_f"
 
 	anchored = 1
 
@@ -674,7 +674,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	robogibs(get_turf(src))
 	qdel(src)
 
-/mob/living/simple_animal/hostile/spessmart_guardian/Move()
+/mob/living/simple_animal/hostile/spessmart_guardian/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	if(alert_on_movement && !canmove)
 		Retaliate()
 

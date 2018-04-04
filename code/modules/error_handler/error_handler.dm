@@ -16,7 +16,7 @@
 
 	global.total_runtimes++
 
-	var/erroruid = "[e.file][e.line]"
+	var/erroruid = "[e.file][e.line]:[e]"
 	var/last_seen = global.error_last_seen[erroruid]
 	var/cooldown = global.error_cooldown[erroruid] || 0
 	if (last_seen == null) // A new error!
@@ -59,7 +59,7 @@
 			var/skipcount = abs(global.error_cooldown[erroruid]) - 1
 			global.error_cooldown[erroruid] = 0
 			if (skipcount > 0)
-				world.log << "\[[time_stamp()]] Skipped [skipcount] runtimes in [e.file],[e.line]."
+				world.log << "\[[time_stamp()]] Skipped [skipcount] runtimes in [e.file],[e.line]: [e]"
 				error_cache.log_error(e, skip_count = skipcount)
 
 	global.error_last_seen[erroruid] = world.time

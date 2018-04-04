@@ -121,9 +121,9 @@
 	if(isturf(loc) && amount_grown > 0)
 		amount_grown += rand(0,2)
 		if(amount_grown >= 100)
-			var/spawn_type = pick(spider_types)
-			new spawn_type(src.loc)
-			qdel(src)
+			if(!species_type)
+				species_type = pick(spider_types)
+			grow_up()
 			return
 
 	..()

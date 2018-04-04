@@ -77,7 +77,7 @@
 			"<span class='notice'>[M] unbuckled \himself!</span>",\
 			"You unbuckle yourself from \the [src].",\
 			"You hear metal clanking.")
-	playsound(get_turf(src), 'sound/misc/buckle_unclick.ogg', 50, 1)
+	playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
 	unlock_atom(M)
 
 	add_fingerprint(user)
@@ -117,10 +117,13 @@
 			"You are buckled in to [src] by [user.name].",\
 			"You hear metal clanking.")
 
-	playsound(get_turf(src), 'sound/misc/buckle_click.ogg', 50, 1)
+	playsound(src, 'sound/misc/buckle_click.ogg', 50, 1)
 	add_fingerprint(user)
 
 	lock_atom(M, lock_type)
+
+	if(M.pulledby)
+		M.pulledby.start_pulling(src)
 
 /*
  * Roller beds
@@ -140,13 +143,23 @@
 	lockflags = DENSE_WHEN_LOCKED
 	lock_type = /datum/locking_category/buckle/bed/roller
 
+/obj/structure/bed/roller/deff
+	icon = 'maps/defficiency/medbay.dmi'
+	roller_type = /obj/item/roller/deff
+
 /obj/item/roller
 	name = "roller bed"
 	desc = "A collapsed roller bed that can be carried around."
 	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "folded"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/lokiamis.dmi', "right_hand" = 'icons/mob/in-hand/right/lokiamis.dmi')
+	item_state = "folded"
 	var/bed_type = /obj/structure/bed/roller
 	w_class = W_CLASS_LARGE // Can't be put in backpacks. Oh well.
+
+/obj/item/roller/deff
+	icon = 'maps/defficiency/medbay.dmi'
+	bed_type = /obj/structure/bed/roller/deff
 
 /obj/item/roller/attack_self(mob/user)
 	var/obj/structure/bed/roller/R = new bed_type(user.loc)
@@ -170,7 +183,7 @@
 /obj/structure/bed/roller/MouseDrop(over_object, src_location, over_location)
 	..()
 	if(over_object == usr && Adjacent(usr))
-		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
+		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
 			return
 
 		if(is_locking(lock_type))
@@ -186,7 +199,7 @@
 	if(istype(W,/obj/item/roller_holder))
 		manual_unbuckle(user)
 	if(iswrench(W))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		drop_stack(sheet_type, loc, 2, user)
 		qdel(src)
 		return
@@ -250,6 +263,22 @@
 	down_state = "borgbed_down"
 	roller_type = /obj/item/roller/borg
 
+//A surgical roller bed that allows you to do surgery on it 100% of the time in place of the 75% chance of the normal one.
+/obj/item/roller/surgery
+	name = "mobile operating table"
+	desc = "A collapsed mobile operating table that can be carried around."
+	icon = 'icons/obj/rollerbed.dmi'
+	icon_state = "adv_folded"
+	bed_type = /obj/structure/bed/roller/surgery
+
+/obj/structure/bed/roller/surgery
+	name = "mobile operating table"
+	desc = "A new meaning to saving people in the hall. It's much more stable than a regular roller bed."
+	icon = 'icons/obj/rollerbed.dmi'
+	icon_state = "adv_down"
+	up_state ="adv_up"
+	down_state = "adv_down"
+	roller_type = /obj/item/roller/surgery
 
 /datum/locking_category/buckle/bed
 	flags = LOCKED_SHOULD_LIE

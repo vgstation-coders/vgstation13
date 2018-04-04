@@ -137,36 +137,13 @@
 	return network
 
 /datum/pipeline/proc/mingle_with_turf(turf/simulated/target, mingle_volume)
-	var/datum/gas_mixture/air_sample = air.remove_ratio(mingle_volume/air.volume)
-	air_sample.volume = mingle_volume
+	var/datum/gas_mixture/air_sample = air.remove_volume(mingle_volume)
 
-	if(istype(target) && target.zone)
-		//Have to consider preservation of group statuses
-		var/datum/gas_mixture/turf_copy = new
+	var/datum/gas_mixture/turf_air = target.return_air()
 
-		turf_copy.copy_from(target.zone.air)
-		turf_copy.volume = target.zone.air.volume //Copy a good representation of the turf from parent group
+	equalize_gases(list(air_sample, turf_air))
+	air.merge(air_sample)
 
-		equalize_gases(list(air_sample, turf_copy))
-		air.merge(air_sample)
-
-		turf_copy.subtract(target.zone.air)
-
-		target.zone.air.merge(turf_copy)
-
-	else
-		var/datum/gas_mixture/turf_air = target.return_air()
-
-		equalize_gases(list(air_sample, turf_air))
-		air.merge(air_sample)
-		//turf_air already modified by equalize_gases()
-
-	/*
-	if(istype(target) && !target.processing)
-		if(target.air)
-			if(target.air.check_tile_graphic())
-				target.update_visuals(target.air)
-	*/
 	if(network)
 		network.update = 1
 
@@ -214,7 +191,7 @@
 			air.temperature += self_temperature_delta
 
 			if(modeled_location.zone)
-				modeled_location.zone.air.temperature += sharer_temperature_delta/modeled_location.zone.air.group_multiplier
+				modeled_location.zone.air.temperature += sharer_temperature_delta
 			else
 				modeled_location.air.temperature += sharer_temperature_delta
 

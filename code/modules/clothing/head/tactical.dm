@@ -41,9 +41,9 @@ obj/item/clothing/head/helmet/tactical/attack_self(mob/user)
 		flashlight.on = !flashlight.on
 		if(get_turf(src))
 			if(flashlight.on)
-				playsound(get_turf(src), flashlight.sound_on, 50, 1)
+				playsound(src, flashlight.sound_on, 50, 1)
 			else
-				playsound(get_turf(src), flashlight.sound_off, 50, 1)
+				playsound(src, flashlight.sound_off, 50, 1)
 	update_brightness()
 	user.update_inv_head()
 

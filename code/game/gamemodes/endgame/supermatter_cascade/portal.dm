@@ -45,7 +45,7 @@
 		var/turf/T = A
 		var/dist = get_dist(T, src)
 		if (dist <= consume_range && T.density)
-			T.density = FALSE
+			T.setDensity(FALSE)
 
 		for (var/atom/movable/AM in T.contents)
 			if (AM == src) // This is the snowflake.

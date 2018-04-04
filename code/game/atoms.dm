@@ -8,6 +8,7 @@ var/global/list/ghdel_profiling = list()
 	var/blessed=0 // Chaplain did his thing. (set by bless() proc, which is called by holywater)
 
 	var/flags = FPRINT
+	var/flow_flags = 0
 	var/list/fingerprints
 	var/list/fingerprintshidden
 	var/fingerprintslast = null
@@ -29,7 +30,8 @@ var/global/list/ghdel_profiling = list()
 	/////////////////////////////
 	// On Destroy()
 	var/event/on_destroyed
-
+	// When density is changed
+	var/event/on_density_change
 
 
 	var/labeled //Stupid and ugly way to do it, but the alternative would probably require rewriting everywhere a name is read.
@@ -155,6 +157,9 @@ var/global/list/ghdel_profiling = list()
 	if(on_destroyed)
 		on_destroyed.holder = null
 		on_destroyed = null
+	if (on_density_change)
+		on_density_change.holder = null
+		on_density_change = null
 	if(istype(beams, /list) && beams.len)
 		beams.len = 0
 	/*if(istype(beams) && beams.len)
@@ -168,6 +173,7 @@ var/global/list/ghdel_profiling = list()
 
 /atom/New()
 	on_destroyed = new("owner"=src)
+	on_density_change = new("owner"=src)
 	. = ..()
 	AddToProfiler()
 
@@ -194,6 +200,16 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/Bumped(AM as mob|obj)
 	return
 
+/atom/proc/setDensity(var/density)
+	if (density == src.density)
+		return FALSE // No need to invoke the event when we're not doing any actual change
+	src.density = density
+	INVOKE_EVENT(on_density_change, list("atom" = src)) // Invoke event for density change
+	if(beams && beams.len) // If beams is not a list something bad happened and we want to have a runtime to lynch whomever is responsible.
+		beams.len = 0
+	for (var/obj/effect/beam/B in loc)
+		B.Crossed(src)
+
 /atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
 	return Bumped(W)
 
@@ -202,6 +218,10 @@ var/global/list/ghdel_profiling = list()
 // false if closed
 /atom/proc/is_open_container()
 	return flags & OPENCONTAINER
+
+// For when we want an open container that doesn't show its reagents on examine
+/atom/proc/hide_own_reagents()
+	return FALSE
 
 // As a rule of thumb, should smoke be able to pop out from inside this object?
 // Currently only used for chemical reactions, see Chemistry-Recipes.dm
@@ -259,6 +279,7 @@ var/global/list/ghdel_profiling = list()
  * RETURNS: list of found atoms
  */
 
+
 /atom/proc/search_contents_for(path,list/filter_path=null)
 	var/list/found = list()
 	for(var/atom/A in src)
@@ -273,6 +294,7 @@ var/global/list/ghdel_profiling = list()
 		if(A.contents.len)
 			found += A.search_contents_for(path,filter_path)
 	return found
+
 
 /*
  *	atom/proc/contains_atom_from_list(var/list/L)
@@ -381,7 +403,7 @@ its easier to just keep the beam vertical.
 
 //Woo hoo. Overtime
 //All atoms
-/atom/proc/examine(mob/user, var/size = "")
+/atom/proc/examine(mob/user, var/size = "", var/show_name = TRUE)
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src]."
 	if(src.blood_DNA && src.blood_DNA.len)
@@ -391,11 +413,12 @@ its easier to just keep the beam vertical.
 			f_name = "a "
 		f_name += "<span class='danger'>blood-stained</span> [name]!"
 
-	to_chat(user, "[bicon(src)] That's [f_name]" + size)
+	if(show_name)
+		to_chat(user, "[bicon(src)] That's [f_name]" + size)
 	if(desc)
 		to_chat(user, desc)
 
-	if(reagents && is_open_container() && !ismob(src)) //is_open_container() isn't really the right proc for this, but w/e
+	if(reagents && is_open_container() && !ismob(src) && !hide_own_reagents()) //is_open_container() isn't really the right proc for this, but w/e
 		if(get_dist(user,src) > 3)
 			to_chat(user, "<span class='info'>You can't make out the contents.</span>")
 		else
@@ -427,7 +450,28 @@ its easier to just keep the beam vertical.
 			to_chat(user, harm_label_examine[1])
 		else
 			to_chat(user, harm_label_examine[2])
-	return
+
+	var/obj/item/device/camera_bug/bug = locate() in src
+	if(bug)
+		var/this_turf = get_turf(src)
+		var/user_turf = get_turf(user)
+		var/distance = get_dist(this_turf, user_turf)
+		if(Adjacent(user))
+			to_chat(user, "<a href='?src=\ref[src];bug=\ref[bug]'>There's something hidden in there.</a>")
+		else if(isobserver(user) || prob(100 / (distance + 2)))
+			to_chat(user, "There's something hidden in there.")
+
+/atom/Topic(href, href_list)
+	. = ..()
+	if(.)
+		return
+	var/obj/item/device/camera_bug/bug = locate(href_list["bug"])
+	if(istype(bug))
+		. = 1
+		if(isAdminGhost(usr))
+			bug.removed(null, null, FALSE)
+		if(ishuman(usr) && !usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
+			bug.removed(usr)
 
 // /atom/proc/MouseDrop_T()
 // 	return
@@ -819,6 +863,9 @@ its easier to just keep the beam vertical.
 /atom/proc/acidable()
 	return 0
 
+/atom/proc/isacidhardened()
+	return FALSE
+
 /atom/proc/holomapAlwaysDraw()
 	return 1
 
@@ -861,3 +908,6 @@ its easier to just keep the beam vertical.
 	for(var/client/C in clients)
 		if(uppertext(C.ckey) == uppertext(fingerprintslast))
 			return C.mob
+
+/atom/proc/initialize()
+	return

@@ -27,7 +27,7 @@
 			var/obj/effect/overlay/trail = getFromPool(/obj/effect/overlay, src.loc)
 			trail.icon = proj_trail_icon
 			trail.icon_state = proj_trail_icon_state
-			trail.density = 0
+			trail.setDensity(FALSE)
 			spawn(proj_trail_lifespan)
 				returnToPool(trail)
 	return

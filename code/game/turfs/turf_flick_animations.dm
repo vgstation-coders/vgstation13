@@ -4,7 +4,7 @@
 			playsound(src, anim_sound, 50, 1)
 		var/atom/movable/overlay/animation = getFromPool(/atom/movable/overlay, src)
 		animation.name = "turf_animation"
-		animation.density = 0
+		animation.setDensity(FALSE)
 		animation.anchored = 1
 		animation.icon = anim_icon
 		animation.icon_state = anim_state
@@ -79,7 +79,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 	if(!c_animation)
 		c_animation = new /atom/movable/overlay(src)
 		c_animation.name = "cultification"
-		c_animation.density = 0
+		c_animation.setDensity(FALSE)
 		c_animation.anchored = 1
 		c_animation.icon = 'icons/effects/effects.dmi'
 		c_animation.layer = 3
@@ -101,7 +101,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 	if(!c_animation)
 		c_animation = new /atom/movable/overlay(src)
 		c_animation.name = "invocanimation"
-		c_animation.density = 0
+		c_animation.setDensity(FALSE)
 		c_animation.anchored = 1
 		c_animation.icon = 'icons/effects/effects.dmi'
 		c_animation.layer = 5
@@ -119,7 +119,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 	if(!c_animation)
 		c_animation = new /atom/movable/overlay(src)
 		c_animation.name = "nullding"
-		c_animation.density = 0
+		c_animation.setDensity(FALSE)
 		c_animation.anchored = 1
 		c_animation.icon = 'icons/effects/96x96.dmi'
 		c_animation.layer = 5
@@ -141,7 +141,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 	if(!c_animation)
 		c_animation = new /atom/movable/overlay(src)
 		c_animation.name = "beamin"
-		c_animation.density = 0
+		c_animation.setDensity(FALSE)
 		c_animation.anchored = 1
 		c_animation.icon = 'icons/effects/96x96.dmi'
 		c_animation.layer = 5
@@ -160,7 +160,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 	if(!c_animation)
 		c_animation = new /atom/movable/overlay(src)
 		c_animation.name = "rejuvinate"
-		c_animation.density = 0
+		c_animation.setDensity(FALSE)
 		c_animation.anchored = 1
 		c_animation.icon = 'icons/effects/64x64.dmi'
 		c_animation.layer = 5
@@ -178,7 +178,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 	if(!c_animation)
 		c_animation = new /atom/movable/overlay(src)
 		c_animation.name = "busteleport"
-		c_animation.density = 0
+		c_animation.setDensity(FALSE)
 		c_animation.anchored = 1
 		c_animation.icon = 'icons/effects/160x160.dmi'
 		c_animation.layer = 5

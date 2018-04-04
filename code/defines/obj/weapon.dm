@@ -195,6 +195,9 @@
 	var/trip_prob = 90
 	var/thrown_from
 
+/obj/item/weapon/legcuffs/bolas/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	user.throw_item(target)
+
 /obj/item/weapon/legcuffs/bolas/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is wrapping the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(OXYLOSS)

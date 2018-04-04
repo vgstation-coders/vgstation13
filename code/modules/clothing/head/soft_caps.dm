@@ -104,3 +104,9 @@
 	desc = "It's a baseball hat in a tasteful blue color."
 	icon_state = "bridgeofficersoft"
 	_color = "bridgeofficer"
+
+/obj/item/clothing/head/soft/black
+	name = "black cap"
+	desc = "It's a baseball hat in a tasteful black color."
+	icon_state = "blacksoft"
+	_color = "black"

@@ -35,6 +35,8 @@ datum/emergency_shuttle
 
 	var/voting_cache = 0
 
+	var/warmup_sound = 0
+
 	// call the shuttle
 	// if not called before, set the endtime to T+600 seconds
 	// otherwise if outgoing, switch to incoming
@@ -43,10 +45,8 @@ datum/emergency_shuttle/proc/init()
 	var/list/pods_to_test = list ("1","2","3","5")//ADD NEW PODS HERE
 	for (var/i in pods_to_test)
 		var/area/pod_test = locate(text2path("/area/shuttle/escape_pod[i]/station"))
-		if (area_in_map(pod_test))
+		if (is_area_in_map(pod_test))
 			escape_pods[i] = "station"
-
-
 datum/emergency_shuttle/proc/incall(coeff = 1)
 	if(shutdown)
 		return
@@ -201,27 +201,27 @@ datum/emergency_shuttle/proc/hyperspace_sounds(var/phase)
 				if(M && M.client)
 					var/turf/M_turf = get_turf(M)
 					if (M_turf.z == shuttle.dock_station.z)
-						M.playsound_local(shuttle.dock_station, 'sound/machines/hyperspace_end.ogg', 100 - (get_dist(shuttle.dock_station,M_turf)*2), 1, frequency, falloff = 5)
+						M.playsound_local(shuttle.dock_station, 'sound/machines/hyperspace_end.ogg', 75 - (get_dist(shuttle.dock_station,M_turf)*2), 1, frequency, falloff = 5)
 		if ("begin")
 			for (var/mob/M in player_list)
 				if(M && M.client)
 					var/turf/M_turf = get_turf(M)
 					if (M_turf.z == shuttle.dock_station.z)
-						M.playsound_local(shuttle.dock_station, 'sound/machines/hyperspace_begin.ogg', 100 - (get_dist(shuttle.dock_station,M_turf)*2), 1, frequency, falloff = 5)
+						M.playsound_local(shuttle.dock_station, 'sound/machines/hyperspace_begin.ogg', 75 - (get_dist(shuttle.dock_station,M_turf)*2), 1, frequency, falloff = 5)
 		if ("progression")
 			for (var/mob/M in player_list)
 				if(M && M.client)
 					var/turf/M_turf = get_turf(M)
 					if (M_turf.z == shuttle.linked_port.z)
-						M.playsound_local(shuttle.linked_port, 'sound/machines/hyperspace_progress.ogg', 100 - (get_dist(shuttle.linked_port,M_turf)*2), 1, frequency, falloff = 5)
+						M.playsound_local(shuttle.linked_port, 'sound/machines/hyperspace_progress.ogg', 75 - (get_dist(shuttle.linked_port,M_turf)*2), 1, frequency, falloff = 5)
 		if ("end")
 			for (var/mob/M in player_list)
 				if(M && M.client)
 					var/turf/M_turf = get_turf(M)
 					if (M_turf.z == shuttle.linked_port.z)
-						M.playsound_local(shuttle.linked_port, 'sound/machines/hyperspace_end.ogg', 100 - (get_dist(shuttle.linked_port,M_turf)*2), 1, frequency, falloff = 5)
+						M.playsound_local(shuttle.linked_port, 'sound/machines/hyperspace_end.ogg', 75 - (get_dist(shuttle.linked_port,M_turf)*2), 1, frequency, falloff = 5)
 					if (M_turf.z == shuttle.dock_centcom.z)
-						M.playsound_local(shuttle.dock_centcom, 'sound/machines/hyperspace_end.ogg', 100 - (get_dist(shuttle.dock_centcom,M_turf)*2), 1, frequency, falloff = 5)
+						M.playsound_local(shuttle.dock_centcom, 'sound/machines/hyperspace_end.ogg', 75 - (get_dist(shuttle.dock_centcom,M_turf)*2), 1, frequency, falloff = 5)
 
 datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 	switch (phase)
@@ -310,6 +310,10 @@ datum/emergency_shuttle/proc/process()
 		timeleft = 0
 	if(timeleft < 0)		// Sanity
 		timeleft = 0
+
+	if(timeleft > 6)
+		warmup_sound = 0
+
 	switch(location)
 		if(0)
 
@@ -356,8 +360,8 @@ datum/emergency_shuttle/proc/process()
 				return 1
 
 		if(1)
-
-			if(timeleft == 5)
+			if(timeleft <= 6 && !warmup_sound)
+				warmup_sound = 1
 				hyperspace_sounds("begin")
 			// Just before it leaves, close the damn doors!
 			if(timeleft == 2 || timeleft == 1)

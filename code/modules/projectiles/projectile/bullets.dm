@@ -328,6 +328,7 @@
 	icon = 'icons/obj/projectiles_experimental.dmi'
 	icon_state = "hecate"
 	damage = 101//you're going to crit, lad
+	armor_penetration = 75
 	kill_count = 255//oh boy, we're crossing through the entire Z level!
 	stun = 5
 	weaken = 5
@@ -497,7 +498,7 @@
 /obj/item/projectile/bullet/vial/OnDeath()
 	if(!hit_mob)
 		src.visible_message("<span class='warning'>The vial shatters!</span>")
-	playsound(get_turf(src), "shatter", 20, 1)
+	playsound(src, "shatter", 20, 1)
 
 /obj/item/projectile/bullet/blastwave
 	name = "blast wave"
@@ -762,7 +763,7 @@
 
 /obj/item/projectile/bullet/liquid_blob/OnDeath()
 	if(get_turf(src))
-		playsound(get_turf(src), 'sound/effects/slosh.ogg', 20, 1)
+		playsound(src, 'sound/effects/slosh.ogg', 20, 1)
 
 /obj/item/projectile/bullet/buckshot
 	name = "buckshot pellet"
@@ -838,3 +839,9 @@
 
 /obj/item/projectile/bullet/buckshot/bullet_storm/get_radius_turfs(turf/T)
 	return circlerangeturfs(original,5)
+
+/obj/item/projectile/bullet/faggot
+	name = "high-speed faggot"
+	icon = 'icons/obj/food.dmi'
+	icon_state = "faggot"
+	damage = 10

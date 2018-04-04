@@ -41,13 +41,13 @@
 /obj/structure/lamarr/proc/healthcheck()
 	if (src.health <= 0)
 		if (!( src.destroyed ))
-			src.density = 0
+			setDensity(FALSE)
 			src.destroyed = 1
 			getFromPool(/obj/item/weapon/shard, loc)
 			playsound(src, "shatter", 70, 1)
 			Break()
 	else
-		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 	return
 
 /obj/structure/lamarr/update_icon()

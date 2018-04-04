@@ -112,7 +112,7 @@
 		return
 	if(iswrench(C))
 		to_chat(user, "<span class='notice'>Removing rods...</span>")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 80, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 80, 1)
 		if(do_after(user, src, 30) && istype(src, /turf/simulated/floor/engine)) // Somehow changing the turf does NOT kill the current running proc.
 			new /obj/item/stack/rods(src, 2)
 			ChangeTurf(/turf/simulated/floor)
@@ -254,6 +254,17 @@
 	name = "Coastline"
 	icon = 'icons/misc/beach2.dmi'
 	icon_state = "sandwater"
+
+/turf/simulated/floor/beach/coastline/north
+	icon_state = "sandwater_north"
+
+/turf/simulated/floor/beach/coastline/east
+	icon = 'icons/misc/beach3.dmi'
+	icon_state = "sandwater_east"
+
+/turf/simulated/floor/beach/coastline/west
+	icon = 'icons/misc/beach3.dmi'
+	icon_state = "sandwater_west"
 
 /turf/simulated/floor/beach/water
 	name = "Water"

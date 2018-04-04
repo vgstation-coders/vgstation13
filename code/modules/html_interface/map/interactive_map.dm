@@ -79,6 +79,8 @@ var/const/ALLOW_CENTCOMM = FALSE
 /datum/interactive_map/proc/queueUpdate(z)
 
 /proc/generateMiniMaps()
+	set category = "Debug"
+	set name = "Generate minimaps"
 	//spawn // NO
 	for (var/z = 1 to world.maxz)
 		if(z == CENTCOMM_Z && !ALLOW_CENTCOMM)

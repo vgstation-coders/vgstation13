@@ -9,27 +9,59 @@
  * Lasertag
  */
 
-/obj/item/clothing/suit/bluetag
+/obj/item/clothing/suit/tag
+	blood_overlay_type = "armor"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
+	body_parts_covered = FULL_TORSO
+	siemens_coefficient = 3.0
+
+/obj/item/clothing/suit/tag/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(!proximity_flag)
+		return 0
+	if(istype(target, /obj/item/clothing/under) || istype(target, /obj/item/clothing/monkeyclothes))
+		var/obj/item/clothing/C = target
+		var/obj/item/clothing/accessory/lasertag/L = new()
+		if(C.check_accessory_overlap(L))
+			to_chat(user, "<span class='notice'>You cannot attach more accessories of this type to \the [C].</span>")
+			return
+		if(user.drop_item(src))
+			to_chat(user, "<span class='notice'>You attach \the [src] to \the [C].</span>")
+			C.attach_accessory(L)
+			transfer_fingerprints(src,L)
+			forceMove(L)
+			L.source_vest = src
+			L.update_icon()
+		return 1
+	return ..()
+
+/proc/get_tag_armor(mob/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(istype(H.wear_suit, /obj/item/clothing/suit/tag))
+			return H.wear_suit
+		if(isclothing(H.w_uniform))
+			var/obj/item/clothing/C = H.w_uniform
+			for(var/obj/item/clothing/accessory/lasertag/L in C.accessories)
+				return L.source_vest
+	if(ismonkey(M))
+		var/mob/living/carbon/monkey/MO = M
+		if(isclothing(MO.uniform))
+			for(var/obj/item/clothing/accessory/lasertag/L in MO.uniform.accessories)
+				return L.source_vest
+
+/obj/item/clothing/suit/tag/bluetag
 	name = "blue laser tag armour"
 	desc = "Blue Pride, Station Wide."
 	icon_state = "bluetag"
 	item_state = "bluetag"
-	blood_overlay_type = "armor"
-	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
-	body_parts_covered = FULL_TORSO
 	allowed = list (/obj/item/weapon/gun/energy/tag/blue)
-	siemens_coefficient = 3.0
 
-/obj/item/clothing/suit/redtag
+/obj/item/clothing/suit/tag/redtag
 	name = "red laser tag armour"
 	desc = "Pew pew pew."
 	icon_state = "redtag"
 	item_state = "redtag"
-	blood_overlay_type = "armor"
-	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
-	body_parts_covered = FULL_TORSO
 	allowed = list (/obj/item/weapon/gun/energy/tag/red)
-	siemens_coefficient = 3.0
 
 /*
  * Costume

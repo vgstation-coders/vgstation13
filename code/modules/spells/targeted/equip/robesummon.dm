@@ -7,6 +7,7 @@
 	name = "Summon Robes"
 	desc = "A spell which will summon you a new set of robes."
 	abbreviation = "RS"
+	user_type = USER_TYPE_WIZARD
 
 	school = "evocation"
 	charge_max = 300
@@ -65,7 +66,6 @@
 
 	name = "Summon Hardsuit"
 	desc = "A spell which will summon you a wizard hardsuit."
-	delete_old = 1
 	return "You have improved Summon Robes into [name]. It will now summon a gem-encrusted hardsuit with internals."
 
 

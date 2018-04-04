@@ -88,7 +88,7 @@
 		S.forceMove(src)
 		update_spear()
 
-/mob/living/simple_animal/hostile/frog/Move()
+/mob/living/simple_animal/hostile/frog/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 
 	if(!isDead() && isturf(loc) && !locked_to && !throwing)

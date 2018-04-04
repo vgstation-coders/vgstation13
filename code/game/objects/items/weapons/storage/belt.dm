@@ -46,7 +46,8 @@
 		"/obj/item/weapon/reagent_containers/glass/fuelcan",
 		"/obj/item/device/lightreplacer",
 		"/obj/item/device/device_analyser",
-		"/obj/item/device/silicate_sprayer"
+		"/obj/item/device/silicate_sprayer",
+		"/obj/item/device/geiger_counter"
 		)
 
 /obj/item/weapon/storage/belt/utility/complete/New()
@@ -110,6 +111,7 @@
 		"/obj/item/device/device_analyser",
 		"/obj/item/weapon/rcl",
 		"/obj/item/device/silicate_sprayer",
+		"/obj/item/device/geiger_counter",
 		"/obj/item/weapon/inflatable_dispenser"
 		)
 
@@ -318,7 +320,7 @@
 		update_icon()
 
 /obj/item/weapon/storage/belt/lazarus/remove_from_storage(obj/item/W as obj, atom/new_location)
-	..()
+	. = ..()
 	update_icon()
 
 /obj/item/weapon/storage/belt/lazarus/antag
@@ -327,6 +329,8 @@
 /obj/item/weapon/storage/belt/lazarus/antag/New(loc, mob/user)
 	var/blocked = list(
 	/mob/living/simple_animal/hostile/hivebot/tele,
+	/mob/living/simple_animal/hostile/wendigo/evolved,
+	/mob/living/simple_animal/hostile/wendigo/alpha,
 	)
 	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
 	critters = shuffle(critters)

@@ -175,6 +175,10 @@ proc/move_mining_shuttle()
 	on = 1
 	update_brightness()
 
+/obj/item/device/flashlight/lantern/on/dim
+	name = "dim lantern"
+	light_power = 0.6
+
 /*****************************Pickaxe********************************/
 
 //Dig constants defined in setup.dm
@@ -254,6 +258,7 @@ proc/move_mining_shuttle()
 	w_class = W_CLASS_MEDIUM //it is smaller than the pickaxe
 	damtype = "fire"
 	heat_production = 3800
+	source_temperature = TEMPERATURE_PLASMA
 	digspeed = 20 //Can slice though normal walls, all girders, or be used in reinforced wall deconstruction/ light thermite on fire
 	sharpness = 1.0
 	sharpness_flags = SHARP_BLADE | HOT_EDGE | INSULATED_EDGE
@@ -262,9 +267,6 @@ proc/move_mining_shuttle()
 	diggables = DIG_ROCKS | DIG_WALLS
 	drill_verb = "cutting"
 	drill_sound = 'sound/items/Welder.ogg'
-
-/obj/item/weapon/pickaxe/plasmacutter/is_hot()
-	return 1
 
 /obj/item/weapon/pickaxe/diamond
 	name = "diamond pickaxe"
@@ -448,7 +450,7 @@ proc/move_mining_shuttle()
 
 /obj/item/weapon/resonator/proc/CreateResonance(var/target, var/creator)
 	if(cooldown <= 0)
-		playsound(get_turf(src),'sound/effects/stealthoff.ogg',50,1)
+		playsound(src,'sound/effects/stealthoff.ogg',50,1)
 		var/obj/effect/resonance/R = new /obj/effect/resonance(get_turf(target))
 		R.creator = creator
 		cooldown = 1
@@ -512,9 +514,7 @@ proc/move_mining_shuttle()
 	throwforce = 0
 	sterile = 1
 	//tint = 3 //Makes it feel more authentic when it latches on
-
-/obj/item/clothing/mask/facehugger/toy/Die()
-	return
+	real = FALSE
 
 /**********************Mining drone cube**********************/
 
@@ -666,6 +666,10 @@ proc/move_mining_shuttle()
 		SetOffenseBehavior()
 	..()
 
+/mob/living/simple_animal/hostile/mining_drone/LoseAggro()
+	stop_automated_movement = 0
+	vision_range = idle_vision_range
+
 /**********************Lazarus Injector**********************/
 
 /obj/item/weapon/lazarus_injector
@@ -694,7 +698,9 @@ proc/move_mining_shuttle()
 	if(istype(target, /mob/living) && proximity_flag)
 		if(istype(target, /mob/living/simple_animal))
 			var/mob/living/simple_animal/M = target
-
+			if(M.mob_property_flags & MOB_NO_LAZ)
+				to_chat(user, "<span class='warning'>\The [src] is incapable of reviving \the [M].</span>")
+				return
 			if(M.stat == DEAD)
 
 				M.faction = "lazarus \ref[user]"

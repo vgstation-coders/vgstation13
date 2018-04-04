@@ -34,9 +34,11 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 
 /datum/hud/New(mob/owner)
 	mymob = owner
-	instantiate()
+
 	hide_actions_toggle = new
 	hide_actions_toggle.InitialiseIcon(mymob)
+
+	instantiate()
 	..()
 
 /datum/hud/Destroy()
@@ -172,6 +174,7 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 			adding -= IN
 			mymob.client.screen -= IN
 
+		hand_hud_objects -= IN
 		returnToPool(IN)
 
 	if(mymob.client)

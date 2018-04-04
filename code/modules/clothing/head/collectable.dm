@@ -1,5 +1,6 @@
 
 //Hat Station 13
+//There is absolutely no reason why these need to be typed under /obj/item/clothing/head/collectable.
 
 /obj/item/clothing/head/collectable
 	name = "collectable hat"
@@ -79,7 +80,7 @@
 	icon_state = "pirate"
 	item_state = "pirate"
 
-/obj/item/clothing/head/collectable/kitty
+/obj/item/clothing/head/kitty/collectable
 	name = "collectable kitty ears"
 	desc = "The fur feels.....a bit too realistic."
 	icon_state = "kitty"

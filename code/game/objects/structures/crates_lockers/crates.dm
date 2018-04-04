@@ -271,6 +271,22 @@
 	locked = 1
 	health = 1000
 
+/obj/structure/closet/crate/secure/anti_tamper
+	name = "Extra-secure crate"
+
+/obj/structure/closet/crate/secure/anti_tamper/Destroy()
+	if(locked)
+		visible_message("<span class = 'warning'>Something bursts open from within \the [src]!</span>")
+		var/datum/effect/effect/system/smoke_spread/chem/S = new //Surprise!
+		S.attach(get_turf(src))
+		S.chemholder.reagents.add_reagent(CAPSAICIN, 40)
+		S.chemholder.reagents.add_reagent(CONDENSEDCAPSAICIN, 16)
+		S.chemholder.reagents.add_reagent(SACID, 12)
+		S.set_up(src, 10, 0, loc)
+		spawn(0)
+			S.start()
+	..()
+
 /obj/structure/closet/crate/large
 	name = "large crate"
 	desc = "A hefty metal crate."
@@ -376,12 +392,16 @@
 	..()
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
+	new /obj/item/device/geiger_counter(src)
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
+	new /obj/item/device/geiger_counter(src)
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
+	new /obj/item/device/geiger_counter(src)
 	new /obj/item/clothing/suit/radiation(src)
 	new /obj/item/clothing/head/radiation(src)
+	new /obj/item/device/geiger_counter(src)
 
 /obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0 || wall_mounted))
@@ -395,13 +415,13 @@
 		return 0
 	if(!src.can_open())
 		return 0
-	playsound(get_turf(src), sound_effect_open, 15, 1, -3)
+	playsound(src, sound_effect_open, 15, 1, -3)
 
 	dump_contents()
 
 	icon_state = icon_opened
 	src.opened = 1
-	src.density = 0
+	setDensity(FALSE)
 	return 1
 
 /obj/structure/closet/crate/close()
@@ -409,13 +429,13 @@
 		return 0
 	if(!src.can_close())
 		return 0
-	playsound(get_turf(src), sound_effect_close, 15, 1, -3)
+	playsound(src, sound_effect_close, 15, 1, -3)
 
 	take_contents()
 
 	icon_state = icon_closed
 	src.opened = 0
-	src.density = 1
+	src.setDensity(TRUE)
 	return 1
 
 /obj/structure/closet/crate/insert(var/atom/movable/AM, var/include_mobs = 0)
@@ -484,7 +504,7 @@
 		overlays += emag
 		overlays += sparks
 		spawn(6) overlays -= sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
-		playsound(get_turf(src), "sparks", 60, 1)
+		playsound(src, "sparks", 60, 1)
 		src.locked = 0
 		src.broken = 1
 		to_chat(user, "<span class='notice'>You unlock \the [src].</span>")
@@ -537,7 +557,7 @@
 			overlays += emag
 			overlays += sparks
 			spawn(6) overlays -= sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
-			playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+			playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 			src.locked = 0
 	if(!opened && prob(20/severity))
 		if(!locked)

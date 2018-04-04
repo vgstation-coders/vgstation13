@@ -1,11 +1,5 @@
 var/datum/controller/gameticker/ticker
 
-#define GAME_STATE_PREGAME		1
-#define GAME_STATE_SETTING_UP	2
-#define GAME_STATE_PLAYING		3
-#define GAME_STATE_FINISHED		4
-
-
 /datum/controller/gameticker
 	var/remaining_time = 0
 	var/const/restart_timeout = 600
@@ -20,10 +14,12 @@ var/datum/controller/gameticker/ticker
 
 	var/list/datum/mind/minds = list()//The people in the game. Used for objective tracking.
 
-	var/Bible_icon_state	// icon_state the chaplain has chosen for his bible
-	var/Bible_item_state	// item_state the chaplain has chosen for his bible
+	var/Bible_icon_state	// icon_state the OFFICIAL chaplain has chosen for his bible
+	var/Bible_item_state	// item_state the OFFICIAL chaplain has chosen for his bible
 	var/Bible_name			// name of the bible
-	var/Bible_deity_name = "Space Jesus"
+	var/Bible_deity_name = "Space Jesus" 	// Default deity
+	var/datum/religion/chap_rel 			// Official religion of chappy
+	var/list/datum/religion/religions = list() // Religion(s) in the game
 
 	var/random_players = 0 	// if set to nonzero, ALL players who latejoin or declare-ready join will have random appearances/genders
 
@@ -64,7 +60,18 @@ var/datum/controller/gameticker/ticker
 		"sound/music/dawsonschristian.ogg",
 		"sound/music/carmenmirandasghost.ogg",
 		))
-	login_music = fcopy_rsc(oursong)
+
+	if(SNOW_THEME)
+		var/path = "sound/music/xmas/"
+		var/list/filenames = flist(path)
+		for(var/filename in filenames)
+			if(copytext(filename, length(filename)) == "/")
+				filenames -= filename
+		login_music = file("[path][pick(filenames)]")
+	else
+		login_music = fcopy_rsc(oursong)
+
+	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`")
 
 	do
 		var/delay_timetotal = 3000 //actually 5 minutes or incase this is changed from 3000, (time_in_seconds * 10)
@@ -155,8 +162,11 @@ var/datum/controller/gameticker/ticker
 		for (var/datum/game_mode/M in runnable_modes)
 			modes+=M.name
 		modes = sortList(modes)
-		to_chat(world, "<B>The current game mode is - Secret!</B>")
-		to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
+		if(Holiday == APRIL_FOOLS_DAY)
+			to_chat(world, "<B>The current game mode is - [pick("Chivalry","Crab Battle","Bay Transfer","Dwarf Fortress","Ian Says","Admins Funhouse","Meteor","Xenoarchaeology Appreciation","Clowns versus [pick("Mimes","Assistants","the Universe")]","Dino wars","Malcolm in the Middle","Six hours of extended where one person with all the access refuses to call the shuttle while everyone else goes braindead","Monkey Study","Nations","Nations by Hasbro","High roleplay Extended","DarkRP","Babies Day out","Ians Day out","Shortstaffed medical")]!</B>")
+		else
+			to_chat(world, "<B>The current game mode is - Secret!</B>")
+			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
 	else
 		src.mode.announce()
 
@@ -166,6 +176,10 @@ var/datum/controller/gameticker/ticker
 	equip_characters()
 	data_core.manifest()
 	current_state = GAME_STATE_PLAYING
+	// Update new player panels so they say join instead of ready up.
+	for(var/mob/new_player/player in player_list)
+		player.new_player_panel_proc()
+
 
 	//here to initialize the random events nicely at round start
 	setup_economy()
@@ -174,8 +188,8 @@ var/datum/controller/gameticker/ticker
 		mode.post_setup()
 		//Cleanup some stuff
 		for(var/obj/effect/landmark/start/S in landmarks_list)
-			//Deleting Startpoints but we need the ai point to AI-ize people later
-			if (S.name != "AI")
+			//Deleting Startpoints but we need the ai point to AI-ize people later and the Trader point to throw new ones
+			if (S.name != "AI" && S.name != "Trader")
 				qdel(S)
 		var/list/obj/effect/landmark/spacepod/random/L = list()
 		for(var/obj/effect/landmark/spacepod/random/SS in landmarks_list)
@@ -188,7 +202,6 @@ var/datum/controller/gameticker/ticker
 				if(istype(obj, /obj/effect/landmark/spacepod/random))
 					qdel(obj)
 
-		stat_collection.death_stats = list() // Get rid of the corpses that spawn on startup.
 		to_chat(world, "<FONT color='blue'><B>Enjoy the game!</B></FONT>")
 //		world << sound('sound/AI/welcome.ogg')// Skie //Out with the old, in with the new. - N3X15
 
@@ -399,7 +412,7 @@ var/datum/controller/gameticker/ticker
 			declare_completion()
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
-				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = 1)
+				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = config.weighted_votes)
 				var/options = jointext(vote.choices, " ")
 				feedback_set("map vote choices", options)
 
@@ -431,6 +444,8 @@ var/datum/controller/gameticker/ticker
 						blackbox.save_all_data_to_sql()
 				else
 					blackbox.save_all_data_to_sql()
+
+			stat_collection.Process()
 
 			if (watchdog.waiting)
 				to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in [config.map_voting ? "[(restart_timeout/10)] seconds." : "a few seconds."]</B></span>")

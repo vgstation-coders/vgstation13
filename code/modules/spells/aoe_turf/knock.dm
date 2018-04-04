@@ -2,6 +2,7 @@
 	name = "Knock"
 	desc = "This spell opens nearby doors and does not require wizard garb."
 	abbreviation = "KN"
+	user_type = USER_TYPE_WIZARD
 
 	school = "transmutation"
 	charge_max = 100
@@ -30,6 +31,7 @@
 /spell/aoe_turf/knock/harvester
 	name = "Disintegrate Doors"
 	desc = "No door shall stop you."
+	user_type = USER_TYPE_CULT
 
 	spell_flags = CONSTRUCT_CHECK
 

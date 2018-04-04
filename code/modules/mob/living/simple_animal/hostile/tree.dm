@@ -42,7 +42,7 @@
 /mob/living/simple_animal/hostile/tree/FindTarget()
 	. = ..()
 	if(.)
-		emote("growls at [.]")
+		emote("me",, "growls at [.]!")
 
 /mob/living/simple_animal/hostile/tree/AttackingTarget()
 	. =..()

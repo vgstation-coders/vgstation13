@@ -321,9 +321,9 @@
 	if(!can_buy(BLOBTAUNTCOST))
 		return
 
-
-	to_chat(src.z, "<span class='warning'>Your vision becomes cloudy, and your mind becomes clear.</span>")
+	var/current_zlevel = get_z_level(src)
+	to_chat(current_zlevel, "<span class='warning'>Your vision becomes cloudy, and your mind becomes clear.</span>")
 	spawn(5)
-	to_chat(src.z, "<span class='blob'>[message]</span>") //Only sends messages to things on its own z level
+	to_chat(current_zlevel, "<span class='blob'>[message]</span>") //Only sends messages to things on its own z level
 	add_gamelogs(src, "used blob telepathy to convey \"[message]\"", tp_link = TRUE)
 	log_blobtelepathy("[key_name(usr)]: [message]")
