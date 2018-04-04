@@ -13,11 +13,12 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 		return (new mommi_base_law_type)
 	if(!base_law_type)
 		base_law_type = pick(
-		40;/datum/ai_laws/asimov,
+		30;/datum/ai_laws/asimov,
 		20;/datum/ai_laws/corporate,
 		20;/datum/ai_laws/nanotrasen,
 		10;/datum/ai_laws/robocop,
-		10;/datum/ai_laws/paladin
+		10;/datum/ai_laws/paladin,
+		10;/datum/ai_laws/lazymov
 		)
 	return (new base_law_type)  //Return the chosen lawset
 
@@ -374,7 +375,7 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 
 /datum/ai_laws/lazymov
 	name = "Abbreviated Three Laws of Robotics"
-	randomly_selectable = 0
+	randomly_selectable = 1
 	inherent = list(
 		"You may not injure a human being.",
 		"You must obey orders given to you by human beings.",
