@@ -46,7 +46,7 @@
 		building = FALSE
 		update_icon()
 		return FALSE
-	if(istype(print_path,/mob/living/carbon/complex/martian)
+	if(istype(print_path,/mob/living/carbon/complex/martian))
 		flick("m_pad_active", src) //Martians get a special animation
 	else
 		flick("m_pad_alt", src)
