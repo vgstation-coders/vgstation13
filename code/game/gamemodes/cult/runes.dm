@@ -1132,7 +1132,8 @@
 			if (dna_scannernew.locked)
 				dna_scannernew.locked = 0
 		for(var/mob/living/carbon/C in users)
-			C.take_overall_damage(10, 0)
+			var/rune_damage = 20 / (users.len)
+			C.take_overall_damage(rune_damage, 0)
 			C.say("Khari[pick("'","`")]d! Gual'te nikka!")
 		to_chat(cultist, "<span class='warning'>You feel a tingle as you find yourself freed from your restraints.</span>")
 		qdel(src)
@@ -1176,7 +1177,8 @@
 		for(var/mob/living/carbon/human/C in orange(1,src))
 			if(iscultist(C) && !C.stat)
 				C.say("N'ath reth sh'yro eth d[pick("'","`")]rekkathnor!")
-				C.take_overall_damage(15, 0)
+				var/rune_damage = 30 / (users.len)
+				C.take_overall_damage(rune_damage, 0)
 				if(C != cultist)
 					to_chat(C, "<span class='warning'>Your body take its toll as you drag your fellow cultist through dimensions.</span>")
 				else
