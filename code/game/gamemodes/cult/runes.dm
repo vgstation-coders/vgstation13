@@ -1131,8 +1131,8 @@
 			var/obj/machinery/dna_scannernew/dna_scannernew = cultist.loc
 			if (dna_scannernew.locked)
 				dna_scannernew.locked = 0
+		var/rune_damage = 20 / (users.len)
 		for(var/mob/living/carbon/C in users)
-			var/rune_damage = 20 / (users.len)
 			C.take_overall_damage(rune_damage, 0)
 			C.say("Khari[pick("'","`")]d! Gual'te nikka!")
 		to_chat(cultist, "<span class='warning'>You feel a tingle as you find yourself freed from your restraints.</span>")
@@ -1174,10 +1174,10 @@
 		cultist.lying = 1
 		cultist.regenerate_icons()
 		to_chat(T, visible_message("<span class='warning'>[cultist] suddenly disappears in a flash of red light!</span>"))
+		var/rune_damage = 30 / (users.len)
 		for(var/mob/living/carbon/human/C in orange(1,src))
 			if(iscultist(C) && !C.stat)
 				C.say("N'ath reth sh'yro eth d[pick("'","`")]rekkathnor!")
-				var/rune_damage = 30 / (users.len)
 				C.take_overall_damage(rune_damage, 0)
 				if(C != cultist)
 					to_chat(C, "<span class='warning'>Your body take its toll as you drag your fellow cultist through dimensions.</span>")
