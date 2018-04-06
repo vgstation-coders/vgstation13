@@ -226,6 +226,8 @@
 			dat += "<br>Range: Global"
 		if(SELFCAST)
 			dat += "<br>Range: Self"
+	if(spell.desc)
+		dat += "<br>Desc: [spell.desc]"
 	openToolTip(usr,src,params,title = name,content = dat)
 
 /obj/abstract/screen/spell/MouseExited()

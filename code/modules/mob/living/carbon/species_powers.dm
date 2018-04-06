@@ -1,5 +1,6 @@
 /spell/targeted/genetic/invert_eyes
 	name = "Invert eyesight"
+	desc = "Inverts the colour spectrum you see, letting you see clearly in the dark, but not in the light."
 	panel = "Mutant Powers"
 	user_type = USER_TYPE_GENETIC
 	range = SELFCAST
