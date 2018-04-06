@@ -106,6 +106,10 @@
 				R.hands.icon_state = module_holder
 
 /obj/item/weapon/robot_module/proc/AddCameraNetworks(var/mob/living/silicon/robot/R)
+	if(!R.camera && networks.len > 0) //Alright this module adds the borg to a CAMERANET but it has no camera, so we give it one.
+		R.camera = new /obj/machinery/camera(R)
+		R.camera.c_tag = R.real_name
+		R.camera.network = list() //Empty list to prevent it from appearing where it isn't supposed to.
 	if(R.camera)
 		for(var/network in networks)
 			if(!(network in R.camera.network))

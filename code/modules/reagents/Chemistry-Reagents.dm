@@ -3318,6 +3318,32 @@
 	color = "#181818" //rgb: 24, 24, 24
 	density = 1.01
 
+//Solely for flavor.
+/datum/reagent/tobacco
+	name = "Tobacco"
+	id = TOBACCO
+	description = "The cured and ground leaves of a tobacco plant."
+	reagent_state = SOLID
+	color = "#4c1e00" //rgb: 76, 30, 0
+	density = 1.01
+
+/datum/reagent/danbacco
+	name = "Tobacco"
+	id = DANBACCO //This product may or may not cause cancer.
+	description = "The cured and ground leaves of a tobacco plant with additional Discount Dan flavors."
+	reagent_state = SOLID
+	color = "#4c1e00" //rgb: 76, 30, 0
+	density = 1.01
+
+/datum/reagent/danbacco/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(prob(50)) //Discount dan's special blend.
+			H.add_cancer(1, LIMB_CHEST)
+
 /datum/reagent/ammonia
 	name = "Ammonia"
 	id = AMMONIA

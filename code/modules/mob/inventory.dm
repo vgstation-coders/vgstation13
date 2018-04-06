@@ -183,7 +183,7 @@
 	W.hud_layerise()
 	W.pixel_x = initial(W.pixel_x)
 	W.pixel_y = initial(W.pixel_y)
-	W.equipped(src, index)
+	W.equipped(src,null,index)
 
 	if(client)
 		client.screen |= W
@@ -325,8 +325,6 @@
 		if(iscarbon(M))
 			var/mob/living/carbon/C = M
 			C.stomach_contents.Add(to_drop)
-
-	to_drop.dropped(src)
 
 	if(to_drop && to_drop.loc)
 		return 1

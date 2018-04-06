@@ -113,5 +113,6 @@
 		/obj/item/seeds/gelthi,
 		/obj/item/seeds/vale,
 		/obj/item/seeds/surik,
+		/obj/item/seeds/mushroommanspore,
 		)
 	nonplant_seed_type = pick(prehistoric_plants)
