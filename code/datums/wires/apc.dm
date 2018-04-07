@@ -71,12 +71,12 @@ var/const/APC_WIRE_AI_CONTROL = 8
 		if(APC_WIRE_MAIN_POWER1, APC_WIRE_MAIN_POWER2)
 
 			if(!mended)
-				A.shock(usr, 50,(I ? I.siemens_coefficient : 1))
+				A.shock(usr, 50,get_conductivity(I))
 				A.shorted = 1
 
 			else if(!IsIndexCut(APC_WIRE_MAIN_POWER1) && !IsIndexCut(APC_WIRE_MAIN_POWER2))
 				A.shorted = 0
-				A.shock(usr, 50,(I ? I.siemens_coefficient : 1))
+				A.shock(usr, 50,get_conductivity(I))
 
 		if(APC_WIRE_AI_CONTROL)
 

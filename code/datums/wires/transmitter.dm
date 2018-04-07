@@ -52,6 +52,6 @@ var/const/TRANS_SETTINGS = 16 //Pulse shows percentage given by environment temp
 	switch(index)
 		if(TRANS_POWER)
 			T.power_change()
-			T.shock(usr, 50, (I ? I.siemens_coefficient : 1))
+			T.shock(usr, 50, get_conductivity(I))
 		if(TRANS_LINK)
-			T.shock(usr, 50, (I ? I.siemens_coefficient : 1))
+			T.shock(usr, 50, get_conductivity(I))

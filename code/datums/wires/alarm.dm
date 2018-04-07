@@ -43,7 +43,7 @@ var/const/AALARM_WIRE_AALARM = 16
 //				to_chat(world, "Idscan wire cut")
 
 		if(AALARM_WIRE_POWER)
-			A.shock(usr, 50,(I ? I.siemens_coefficient : 1))
+			A.shock(usr, 50,get_conductivity(I))
 			A.shorted = !mended
 			A.update_icon()
 //			to_chat(world, "Power wire cut")

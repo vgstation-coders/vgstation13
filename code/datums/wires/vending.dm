@@ -23,7 +23,7 @@ var/const/VENDING_WIRE_IDSCAN = 8
 	if(!istype(L, /mob/living/silicon))
 		if(V.seconds_electrified)
 			var/obj/I = L.get_active_hand()
-			if(V.shock(L, 100, (I ? I.siemens_coefficient : 1)))
+			if(V.shock(L, 100, get_conductivity(I)))
 				return 0
 	if(V.panel_open)
 		return 1
