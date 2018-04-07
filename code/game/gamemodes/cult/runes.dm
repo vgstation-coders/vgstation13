@@ -201,6 +201,11 @@
 			log_admin("[usr]([ckey(usr.key)]) has converted [M] ([ckey(M.key)]) to the cult at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.loc.x];Y=[M.loc.y];Z=[M.loc.z]'>([M.loc.x], [M.loc.y], [M.loc.z])</a>")
 			add_attacklogs(usr, M, "converted to the Cult of Nar'Sie!")
 			stat_collection.cult_converted++
+
+			if (M.mind.assigned_role == "Clown")
+				var/datum/action/toggle_clumsy/ActionButton = new
+				ActionButton.Grant(M)
+
 			if(M.client)
 				spawn(600)
 					if(M && !M.client)
