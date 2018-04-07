@@ -23,6 +23,10 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 	//should have format of list("emagged" = 1,"name" = "Wizard's Justicebot"), for example
 
 /spell/aoe_turf/conjure/cast(list/targets, mob/user)
+
+	to_chat(world, "cast()")
+	to_chat(world, "[targets.len]")
+
 	if(!isnull(cast_sound))
 		playsound(get_turf(user), cast_sound, 50, 1)
 
@@ -63,6 +67,7 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 			spawn_place.ChangeTurf(summoned_object_type)
 			summoned_object = spawn_place
 		else
+			to_chat(world, "calling summon object")
 			summoned_object = summon_object(summoned_object_type,spawn_place)
 
 		on_creation(summoned_object, user)

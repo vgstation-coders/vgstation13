@@ -221,23 +221,17 @@
 
 /datum/role/vampire/proc/handle_cloak(var/mob/living/carbon/human/H)
 	var/turf/T = get_turf(H)
-
-	to_chat(world, "handle_cloak")
-
 	if(!iscloaking)
-		to_chat(world, "not cloaking")
 		H.alphas["vampire_cloak"] = 255
 		H.color = "#FFFFFF"
 		return FALSE
 
 	if((T.get_lumcount() * 10) <= 2)
-		to_chat(world, "cloaking, low lumcount")
 		H.alphas["vampire_cloak"] = round((255 * 0.15))
 		if(VAMP_SHADOW in powers)
 			H.color = "#000000"
 		return TRUE
 	else
-		to_chat(world, "cloaking, high lumcount")
 		if(VAMP_SHADOW in powers)
 			H.alphas["vampire_cloak"] = round((255 * 0.15))
 		else
