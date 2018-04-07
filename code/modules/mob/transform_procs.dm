@@ -80,7 +80,7 @@
 	return Mo
 
 /mob/living/carbon/human/monkeyize(ignore_primitive = FALSE)
-	..()
+	.=..()
 
 /mob/proc/Cluwneize()
 	if(!Premorph())

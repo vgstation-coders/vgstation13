@@ -144,6 +144,7 @@
 // Destroy this role
 /datum/role/proc/Drop()
 	if(faction && (src in faction.members))
+		faction.update_hud_removed(src)
 		faction.members.Remove(src)
 
 	if(!faction)
@@ -434,20 +435,6 @@
 	id = NUKE_OP
 	logo_state = "nuke-logo"
 
-//________________________________________________
-
-
-/datum/role/revolutionary_leader
-	name = HEADREV
-	id = HEADREV
-	logo_state = "rev_head-logo"
-
-//________________________________________________
-
-/datum/role/revolutionary
-	name = REV
-	id = REV
-	logo_state = "rev-logo"
 
 //________________________________________________
 
