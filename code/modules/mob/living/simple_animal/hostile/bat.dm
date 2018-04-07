@@ -60,10 +60,11 @@
 		emote("flutters towards [.]")
 
 /mob/living/simple_animal/hostile/scarybat/Found(var/atom/A)//This is here as a potential override to pick a specific target if available
-	if(istype(A, /mob/living))
-		var/mob/living/L = A
-		if (L.mind && L.mind.faction == vamp_fac)
-			return FALSE
+	if(!istype(A, /mob/living))
+		return FALSE
+	var/mob/living/L = A
+	if (L.mind && L.mind.faction == vamp_fac)
+		return FALSE
 	return ..()
 
 /mob/living/simple_animal/hostile/scarybat/AttackingTarget()
