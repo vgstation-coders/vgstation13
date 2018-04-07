@@ -202,3 +202,7 @@
 		return 1
 
 	return 0
+
+/datum/action/item_action/generic_toggle/New()
+	..()
+	name = "Toggle [target]"
