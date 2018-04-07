@@ -894,6 +894,62 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon_state = "bottle14"
 	w_class = W_CLASS_TINY
 
+/obj/item/weapon/slimechange
+	name = "slime dye"
+	desc = "A bottle of dye that can be used on a slime to change it's color."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle14"
+	w_class = W_CLASS_TINY
+
+/obj/item/weapon/slimechange/attack(var/mob/living/M, mob/user as mob)
+	if(istype(M, /mob/living/carbon/slime))
+		var/mob/living/carbon/slime/OS = M
+		if(OS.stat)
+			to_chat(user, "<span class='warning'>You're unable to use the [src] on the dead slime!</span>")
+			return..()
+		var/new_color = input(user, "Choose a new color for the dye:", "Color Select") as anything in list("adamantine", "black", "blue", "bluespace", "cerulean", "darkpurple", "darkblue", "darkpurple", "gold", "grey", "lightpink", "metal", "oil", "orange", "pink", "purple", "pyrite", "red", "sepia", "silver", "yellow")
+		if(new_color)
+			var/adult = FALSE //Passinging on if it was an adult or not
+			if(istype(OS, /mob/living/carbon/slime/adult))
+				adult = TRUE
+			var/new_slime
+			if(new_color == "grey")
+				new_slime = /mob/living/carbon/slime
+			else
+				new_slime = text2path("/mob/living/carbon/slime[adult ? "/adult" : ""]/[new_color]")
+			var/mob/living/carbon/slime/NS = new new_slime(OS.loc)
+			//Passing on several other traits to make it almost exactly the same as the old one.
+			NS.Friends = OS.Friends
+			NS.tame = OS.tame
+			NS.Discipline = OS.Discipline
+			NS.cores = OS.cores
+			NS.powerlevel = OS.powerlevel
+			NS.amount_grown = OS.amount_grown
+			NS.nutrition = OS.nutrition
+			to_chat(user, "<span class='notice'>You dye the slime [new_color].</span>")
+			qdel(OS)
+			qdel(src)
+		else
+			to_chat(user, "<span class='notice'>You decide not to use the potion.</span>")
+		//to_chat(user, "faggots.")
+	else if(ishuman(M))
+		var/mob/living/carbon/human/S = M
+		if(isslimeperson(S))
+			var/new_color = input(user, "Choose a color for the dye:", "Color Select") as color|null
+			if(new_color)
+				S.multicolor_skin_r = hex2num(copytext(new_color, 2, 4))
+				S.multicolor_skin_g = hex2num(copytext(new_color, 4, 6))
+				S.multicolor_skin_b = hex2num(copytext(new_color, 6, 8))
+				S.update_body()
+				if(S == user)
+					to_chat(user, "<span class='notice'>You dye yourself a new color.</span>")
+				else
+					to_chat(user, "<span class='notice'>You dye the slime person a new color.</span>")
+				qdel(src)
+			else
+				to_chat(user, "<span class='notice'>You decide not to use the potion.</span>")
+
+
 ////////Adamantine Golem stuff I dunno where else to put it
 /*
 /obj/item/clothing/under/golem
