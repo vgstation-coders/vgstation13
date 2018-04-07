@@ -415,26 +415,6 @@
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
-/datum/role/traitor
-	name = TRAITOR
-	id = TRAITOR
-	logo_state = "synd-logo"
-
-//________________________________________________
-
-
-/datum/role/rogue//double agent
-	name = ROGUE
-	id = ROGUE
-	logo_state = "synd-logo"
-
-//________________________________________________
-
-/datum/role/nuclear_operative
-	name = NUKE_OP
-	id = NUKE_OP
-	logo_state = "nuke-logo"
-
 
 //________________________________________________
 
