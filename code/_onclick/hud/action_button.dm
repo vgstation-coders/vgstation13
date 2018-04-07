@@ -74,7 +74,7 @@
 	if(!hud_used || !client)
 		return
 
-	if(hud_used.hud_shown != 1 || !hud_used.hide_actions_toggle)
+	if(hud_used.hud_shown != 1)
 		return
 
 	var/button_number = 0
