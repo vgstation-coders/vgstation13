@@ -384,6 +384,14 @@ var/list/uplink_items = list()
 	cost = 12
 	job = list("Internal Affairs Agent")
 
+/datum/uplink_item/jobspecific/knifeboot
+	name = "Concealed knife shoes"
+	desc = "Shoes with a knife concealed in the toecap. Tap your heels together to reveal the knife. Kick the target to stab them."
+	item = /obj/item/clothing/shoes/knifeboot
+	cost = 4
+	job = list("Internal Affairs Agent")
+
+
 //Nuke Ops Prices
 /datum/uplink_item/nukeprice
 	gamemodes = list("nuclear emergency")

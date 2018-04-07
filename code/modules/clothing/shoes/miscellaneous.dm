@@ -441,7 +441,6 @@
 	desc = "The height of fashion, and they're pre-polished!"
 	icon_state = "laceups"
 	item_state = "laceups"
-	desc = "A pair of black shoes."
 	species_fit = list(VOX_SHAPED)
 	actions_types = list(/datum/action/item_action/generic_toggle)
 	var/toggle = FALSE
