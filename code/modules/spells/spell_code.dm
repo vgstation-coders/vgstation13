@@ -132,6 +132,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	return ((target in view_or_range(range, user, selection_type)) && istype(target, /mob/living))
 
 /spell/proc/perform(mob/user = usr, skipcharge = 0, list/target_override) //if recharge is started is important for the trigger spells
+	to_chat(world, "perfom")
 	if(!holder)
 		holder = user //just in case
 
@@ -147,7 +148,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			gradual_casting = FALSE
 			stop_casting(targets, user)
 			return
+	to_chat(world, "cast_check 1")
 	if(!cast_check(skipcharge, user))
+		to_chat(world, "cast_check 1 - fail")
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
 		block = 0
@@ -157,17 +160,23 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return
 
 	if(!targets)
+		to_chat(world, "choose_targets in perform()")
 		targets = choose_targets(user)
 
+	to_chat(world, "cast_check 2")
 	if(!cast_check(skipcharge, user))
+		to_chat(world, "cast_check 2 - fail")
 		return //Prevent queueing of spells by opening several choose target windows.
 	if(targets && targets.len)
+		to_chat(world, "targets & targets.len")
 		targets = before_cast(targets, user) //applies any overlays and effects
 		if(!targets.len) //before cast has rechecked what we can target
+			to_chat(world, "No targets !")
 			return
 		invocation(user, targets)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
+		to_chat(world, "INVOKE_EVENT : spell")
 		INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = targets))
 
 		if(prob(critfailchance))
