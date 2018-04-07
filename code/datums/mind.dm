@@ -465,7 +465,6 @@
 /datum/mind/Topic(href, href_list)
 	if(!check_rights(R_ADMIN))
 		return
-
 	if (href_list["job_edit"])
 		var/new_job = input("Select new job", "Assigned job", assigned_role) as null|anything in get_all_jobs()
 		if (!new_job)
@@ -628,6 +627,9 @@
 		objective.force_success = !objective.force_success
 		log_admin("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
 
+	else if(href_list["role"]) //Something role specific
+		var/datum/role/R = locate(href_list["role"])
+		R.Topic(href, href_list)
 
 	role_panel()
 /*
@@ -1361,20 +1363,7 @@ proc/clear_memory(var/silent = 1)
 
 */
 /*
-/datum/mind/proc/find_syndicate_uplink()
-	var/uplink = null
 
-	for (var/obj/item/I in get_contents_in_object(current, /obj/item))
-		if (I && I.hidden_uplink)
-			uplink = I.hidden_uplink
-			break
-
-	return uplink
-
-/datum/mind/proc/take_uplink()
-	var/obj/item/device/uplink/hidden/H = find_syndicate_uplink()
-	if(H)
-		qdel(H)
 
 
 /datum/mind/proc/make_AI_Malf()

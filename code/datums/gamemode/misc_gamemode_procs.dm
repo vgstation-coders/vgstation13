@@ -197,3 +197,76 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 		if(istype(player) && player.mind && (player.mind.assigned_role in command_positions))
 			roles += player.mind.assigned_role
 	return roles
+
+/proc/equip_traitor(mob/living/carbon/human/traitor_mob, var/uses = 20)
+	if (!istype(traitor_mob))
+		return
+	. = 1
+
+	// find a radio! toolbox(es), backpack, belt, headset
+	var/loc = ""
+	var/obj/item/R = locate(/obj/item/device/pda) in traitor_mob.contents //Hide the uplink in a PDA if available, otherwise radio
+	if(!R)
+		R = locate(/obj/item/device/radio) in traitor_mob.contents
+
+	if (!R)
+		to_chat(traitor_mob, "Unfortunately, the Syndicate wasn't able to get you a radio.")
+		. = 0
+	else
+		if (istype(R, /obj/item/device/radio))
+			// generate list of radio freqs
+			var/obj/item/device/radio/target_radio = R
+			var/freq = 1441
+			var/list/freqlist = list()
+			while (freq <= 1489)
+				if (freq < 1451 || freq > 1459)
+					freqlist += freq
+				freq += 2
+				if ((freq % 2) == 0)
+					freq += 1
+			freq = freqlist[rand(1, freqlist.len)]
+
+			var/obj/item/device/uplink/hidden/T = new(R)
+			T.uses = uses
+			target_radio.hidden_uplink = T
+			target_radio.traitor_frequency = freq
+			to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply dial the frequency [format_frequency(freq)] to unlock its hidden features.")
+			traitor_mob.mind.store_memory("<B>Radio Freq:</B> [format_frequency(freq)] ([R.name] [loc]).")
+			traitor_mob.mind.total_TC += target_radio.hidden_uplink.uses
+		else if (istype(R, /obj/item/device/pda))
+			// generate a passcode if the uplink is hidden in a PDA
+			var/pda_pass = "[rand(100,999)] [pick("Alpha","Bravo","Delta","Omega")]"
+
+			var/obj/item/device/uplink/hidden/T = new(R)
+			R.hidden_uplink = T
+			var/obj/item/device/pda/P = R
+			P.lock_code = pda_pass
+
+			to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply enter the code \"[pda_pass]\" into the ringtone select to unlock its hidden features.")
+			traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [pda_pass] ([R.name] [loc]).")
+			traitor_mob.mind.total_TC += R.hidden_uplink.uses
+
+
+/datum/mind/proc/find_syndicate_uplink()
+	var/uplink = null
+
+	for (var/obj/item/I in get_contents_in_object(current, /obj/item))
+		if (I && I.hidden_uplink)
+			uplink = I.hidden_uplink
+			break
+
+	return uplink
+
+/datum/mind/proc/take_uplink()
+	var/obj/item/device/uplink/hidden/H = find_syndicate_uplink()
+	if(H)
+		qdel(H)
+
+/proc/add_law_zero(mob/living/silicon/ai/killer)
+	var/law = "Accomplish your objectives at all costs."
+	var/law_borg = "Accomplish your AI's objectives at all costs."
+	to_chat(killer, "<b>Your laws have been changed!</b>")
+	killer.set_zeroth_law(law, law_borg)
+	to_chat(killer, "New law: 0. [law]")
+
+
