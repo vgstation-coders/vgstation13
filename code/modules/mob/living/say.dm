@@ -28,7 +28,7 @@
 			return "Unknown"
 var/list/department_radio_keys = list(
 	  ":0" = "Deathsquad",	 "#0" = "Deathsquad",	".0" = "Deathsquad",
-	  ":1" = "Response Team","#1" = "Response Team",".1" = "Response Team",
+	  ":-" = "Response Team","#-" = "Response Team",".-" = "Response Team",
 
 	  ":r" = "right hand",	"#r" = "right hand",	".r" = "right hand", "!r" = "fake right hand",
 	  ":l" = "left hand",	"#l" = "left hand",		".l" = "left hand",  "!l" = "fake left hand",
