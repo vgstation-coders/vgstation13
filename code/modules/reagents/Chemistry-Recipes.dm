@@ -2182,6 +2182,14 @@
 	required_catalysts = list(ENZYME = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/vinegar
+	name = "Vinegar"
+	id = VINEGAR
+	result = VINEGAR
+	required_reagents = list(WINE = 1, WATER = 1)
+	required_catalysts = list(ENZYME = 1)
+	result_amount = 2
+
 /datum/chemical_reaction/sprinkles
 	name = "Sprinkles"
 	id = SPRINKLES
@@ -2201,7 +2209,7 @@
 /datum/chemical_reaction/cheesewheel/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
 	new /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel(location)
-	
+
 /datum/chemical_reaction/butter
 	name = "Butter"
 	id = "butter"
@@ -2865,14 +2873,6 @@
 	result = REWRITER
 	required_reagents = list(SPACEMOUNTAINWIND = 1, COFFEE = 1)
 	result_amount = 2
-
-/datum/chemical_reaction/vinegar
-	name = "Vinegar"
-	id = VINEGAR
-	result = VINEGAR
-	required_reagents = list(WINE = 5)
-	required_catalysts = list(ENZYME = 5)
-	result_amount = 5
 
 //Cafe stuff!
 /datum/chemical_reaction/acidtea
