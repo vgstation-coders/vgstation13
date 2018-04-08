@@ -96,7 +96,6 @@
 		R.movement_speed_modifier -= SILICON_VTEC_SPEED_BONUS
 
 	qdel(R.module)
-	R.mutations = initial(R.mutations)
 	R.set_module_sprites(list("Default" = "robot"))
 	R.updatename("Default")
 
