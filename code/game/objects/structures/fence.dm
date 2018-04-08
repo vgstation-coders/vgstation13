@@ -67,7 +67,7 @@
 	hole_size = LARGE_HOLE
 
 /obj/structure/fence/attackby(obj/item/W, mob/user)
-	if(iswirecutter(W) && !shock(user, 100))
+	if(iswirecutter(W) && !shock(user, 100, W.siemens_coefficient))
 		if(!cuttable)
 			to_chat(user, "<span class='notice'>This section of the fence can't be cut.</span>")
 			return
@@ -167,7 +167,7 @@
 			return !density
 
 //Mostly copied from grille.dm
-/obj/structure/fence/proc/shock(mob/user, prb = 100)
+/obj/structure/fence/proc/shock(mob/user, prb = 100, siemens_coefficient = 1)
 	if(!prob(prb)) //If the probability roll failed, don't go further
 		return 0
 	if(!in_range(src, user)) //To prevent TK and mech users from getting shocked
@@ -176,7 +176,7 @@
 	var/turf/T = get_turf(src)
 	var/obj/structure/cable/C = T.get_cable_node()
 	if(C)
-		if(electrocute_mob(user, C, src))
+		if(electrocute_mob(user, C, src, siemens_coefficient))
 			spark(src)
 			return 1
 		else

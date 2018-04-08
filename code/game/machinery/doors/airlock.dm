@@ -455,7 +455,7 @@ About the new airlock wires panel:
 // shock user with probability prb (if all connections & power are working)
 // returns 1 if shocked, 0 otherwise
 // The preceding comment was borrowed from the grille's shock script
-/obj/machinery/door/airlock/shock(mob/user, prb)
+/obj/machinery/door/airlock/shock(mob/user, prb, var/siemenspassed = 1)
 	if((stat & (NOPOWER)) || !src.arePowerSystemsOn())		// unpowered, no shock
 		return 0
 	if(hasShocked)
@@ -463,7 +463,7 @@ About the new airlock wires panel:
 	if(!prob(prb))
 		return 0 //you lucked out, no shock for you
 	spark(src, 5)
-	if(electrocute_mob(user, get_area(src), src))
+	if(electrocute_mob(user, get_area(src), src, siemenspassed))
 		hasShocked = 1
 		spawn(10)
 			hasShocked = 0
@@ -1054,7 +1054,7 @@ About the new airlock wires panel:
 	if (!istype(user, /mob/living/silicon))
 		if (isElectrified())
 			// TODO: analyze the called proc
-			if (shock(user, 75))
+			if (shock(user, 75, I.siemens_coefficient))
 				user.delayNextAttack(10)
 				return
 

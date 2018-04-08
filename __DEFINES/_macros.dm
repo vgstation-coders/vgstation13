@@ -275,3 +275,4 @@ proc/get_space_area()
 
 #define SNOW_THEME (map.snow_theme || Holiday == XMAS || Holiday == XMAS_EVE)
 
+#define get_conductivity(A) (A ? A.siemens_coefficient : 1)
