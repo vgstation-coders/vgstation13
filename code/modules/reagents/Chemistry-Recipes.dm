@@ -2175,18 +2175,18 @@
 	required_reagents = list(SOYMILK = 4, FORMIC_ACID = 1)
 
 /datum/chemical_reaction/vinegar
-	name = "Malt Vinegar"
-	id = VINEGAR
-	result = VINEGAR
-	required_reagents = list(ETHANOL = 1, WATER = 1)
-	required_catalysts = list(ENZYME = 1)
-	result_amount = 2
-
-/datum/chemical_reaction/vinegar
 	name = "Vinegar"
 	id = VINEGAR
 	result = VINEGAR
 	required_reagents = list(WINE = 1, WATER = 1)
+	required_catalysts = list(ENZYME = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/vinegar/malt
+	name = "Malt Vinegar"
+	id = VINEGAR
+	result = VINEGAR
+	required_reagents = list(ETHANOL = 1, WATER = 1)
 	required_catalysts = list(ENZYME = 1)
 	result_amount = 2
 
