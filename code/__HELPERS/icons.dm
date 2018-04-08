@@ -141,7 +141,7 @@ proc/adjust_brightness(var/color, var/value)
 				return y_pixel - 1
 	return null
 
-/proc/check_icon(var/icon/I, var/wanted_state = null)
+/proc/has_icon(var/icon/I, var/wanted_state = null)
 	if(!I)
 		return FALSE
 

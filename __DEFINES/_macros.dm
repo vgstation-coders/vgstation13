@@ -182,6 +182,8 @@
 
 #define isID(A) (istype(A, /obj/item/weapon/card/id))
 
+#define isRoboID(A) (istype(A, /obj/item/weapon/card/robot))
+
 #define isPDA(A) (istype(A, /obj/item/device/pda))
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor))

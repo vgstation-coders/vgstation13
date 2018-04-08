@@ -206,7 +206,7 @@
 	name = "cyborg jetpack module board"
 	desc = "A carbon dioxide jetpack suitable for low-gravity operations."
 	icon_state = "cyborg_upgrade3"
-	required_module = list(/obj/item/weapon/robot_module/miner,/obj/item/weapon/robot_module/engineering,/obj/item/weapon/robot_module/combat)
+	required_module = list(/obj/item/weapon/robot_module/miner, /obj/item/weapon/robot_module/engineering, /obj/item/weapon/robot_module/combat)
 	modules_to_add = list(/obj/item/weapon/tank/jetpack/carbondioxide/silicon)
 	add_to_mommis = TRUE
 
@@ -305,8 +305,8 @@
 
 /obj/item/borg/upgrade/honk
 	name = "service cyborg H.O.N.K. upgrade board"
-	desc = "Used to give a service cyborg fun toys!"
-	icon_state = "cyborg_upgrade3"
+	desc = "Used to give a service cyborg fun toys, Honk!"
+	icon_state = "gooncode"
 	required_module = list(/obj/item/weapon/robot_module/butler, /obj/item/weapon/robot_module/tg17355)
 	modules_to_add = list(/obj/item/weapon/bikehorn, /obj/item/weapon/stamp/clown, /obj/item/toy/crayon/rainbow, /obj/item/toy/waterflower, /obj/item/device/soundsynth)
 
@@ -314,14 +314,19 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	if(check_icon(R.icon, "[R.base_icon]-clown")) //Honk!
+	if(has_icon(R.icon, "[R.base_icon]-clown")) //Honk!
 		R.set_module_sprites(list("Honk" = "[R.base_icon]-clown"))
+
+	var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R, user)
+	if(H)
+		H.Honkize()
+
 	playsound(R, 'sound/items/AirHorn.ogg', 50, 1)
 
 /obj/item/borg/upgrade/noir
 	name = "security cyborg N.O.I.R. upgrade board"
 	desc = "So that's the way you scientific detectives work. My god! for a fat, middle-aged, hard-boiled, pig-headed guy, you've got the vaguest way of doing things I ever heard of."
-	icon_state = "cyborg_upgrade3"
+	icon_state = "mainboard"
 	required_module = list(/obj/item/weapon/robot_module/security, /obj/item/weapon/robot_module/tg17355)
 	modules_to_add = list(/obj/item/weapon/gripper/service/noir, /obj/item/weapon/evidencebag, /obj/item/cyborglens, /obj/item/device/handtv, /obj/item/device/taperecorder, /obj/item/weapon/gun/projectile/detective, /obj/item/ammo_storage/speedloader/c38/cyborg)
 
@@ -329,36 +334,52 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	if(check_icon(R.icon, "[R.base_icon]-noir"))
+	if(has_icon(R.icon, "[R.base_icon]-noir"))
 		R.set_module_sprites(list("Noir" = "[R.base_icon]-noir"))
-	//If they have no sec key, give them one.
-	if(!istype(R.module.radio_key, /obj/item/device/encryptionkey/headset_sec))
+
+	if(!istype(R.module.radio_key, /obj/item/device/encryptionkey/headset_sec)) //If they have no sec key, give them one.
 		R.module.ResetEncryptionKey(R)
 		R.module.radio_key = /obj/item/device/encryptionkey/headset_sec
 		R.module.AddEncryptionKey(R)
-	//If they don't have a SECHUD, give them one.
-	R.module.sensor_augs |= "Security"
+
+	if(!("Security" in R.module.sensor_augs)) //If they don't have a SECHUD, give them one.
+		pop(R.module.sensor_augs)
+		R.module.sensor_augs.Add("Security", "Disable")
 
 /obj/item/borg/upgrade/warden
-	name = "security cyborg warden upgrade board"
-	desc = "Used to give a security cyborg warding tools."
-	icon_state = "cyborg_upgrade3"
+	name = "cyborg warden upgrade board"
+	desc = "Used to give a security cyborg supervisory enforcement tools."
+	icon_state = "mcontroller"
 	required_module = list(/obj/item/weapon/robot_module/security, /obj/item/weapon/robot_module/tg17355)
-	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/loyalty/cyborg, /obj/item/weapon/wrench)
+	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/cyborg, /obj/item/weapon/card/robot, /obj/item/weapon/wrench)
+	var/list/new_icons = list()
 
 /obj/item/borg/upgrade/warden/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
 
-	if(check_icon(R.icon, "[R.base_icon]-warden"))
-		R.set_module_sprites(list("Warden" = "[R.base_icon]-warden"))
-	//If they have no sec key, give them one.
-	if(!istype(R.module.radio_key, /obj/item/device/encryptionkey/headset_sec))
+	R.component_extension = "/kevlar"
+	R.upgrade_components()
+
+	if(has_icon(R.icon, "[R.base_icon]-warden"))
+		new_icons += list("Warden" = "[R.base_icon]-warden")
+	if(has_icon(R.icon, "[R.base_icon]-H"))
+		new_icons += list("Heavy" = "[R.base_icon]-H")
+	if(new_icons.len > 0)
+		R.set_module_sprites(new_icons)
+
+	var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R, user)
+	if(H)
+		H.Lawize()
+
+	if(!istype(R.module.radio_key, /obj/item/device/encryptionkey/headset_sec)) //If they have no sec key, give them one.
 		R.module.ResetEncryptionKey(R)
 		R.module.radio_key = /obj/item/device/encryptionkey/headset_sec
 		R.module.AddEncryptionKey(R)
-	//If they don't have a SECHUD, give them one.
-	R.module.sensor_augs |= "Security"
+
+	if(!("Security" in R.module.sensor_augs)) //If they don't have a SECHUD, give them one.
+		pop(R.module.sensor_augs)
+		R.module.sensor_augs.Add("Security", "Disable")
 
 
 #undef FAILED_TO_ADD

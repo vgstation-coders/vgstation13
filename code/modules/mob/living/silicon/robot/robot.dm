@@ -1061,17 +1061,17 @@
 
 	if(opened)
 		if(wiresexposed)
-			overlays += image(icon = icon, icon_state = "[check_icon(icon, "[icon_state]-ov-openpanel +w")? "[icon_state]-ov-openpanel +w" : "ov-openpanel +w"]")
+			overlays += image(icon = icon, icon_state = "[has_icon(icon, "[icon_state]-ov-openpanel +w")? "[icon_state]-ov-openpanel +w" : "ov-openpanel +w"]")
 		else if(cell)
-			overlays += image(icon = icon, icon_state = "[check_icon(icon, "[icon_state]-ov-openpanel +c")? "[icon_state]-ov-openpanel +c" : "ov-openpanel +c"]")
+			overlays += image(icon = icon, icon_state = "[has_icon(icon, "[icon_state]-ov-openpanel +c")? "[icon_state]-ov-openpanel +c" : "ov-openpanel +c"]")
 		else
-			overlays += image(icon = icon, icon_state = "[check_icon(icon, "[icon_state]-ov-openpanel -c")? "[icon_state]-ov-openpanel -c" : "ov-openpanel -c"]")
+			overlays += image(icon = icon, icon_state = "[has_icon(icon, "[icon_state]-ov-openpanel -c")? "[icon_state]-ov-openpanel -c" : "ov-openpanel -c"]")
 
-	if(module_active && istype(module_active,/obj/item/borg/combat/shield) && check_icon(icon, "[icon_state]-shield"))
+	if(module_active && istype(module_active,/obj/item/borg/combat/shield) && has_icon(icon, "[icon_state]-shield"))
 		overlays += image(icon = icon, icon_state = "[icon_state]-shield")
 
 	if(base_icon)
-		if(module_active && istype(module_active,/obj/item/borg/combat/mobility) && check_icon(icon, "[icon_state]-roll"))
+		if(module_active && istype(module_active,/obj/item/borg/combat/mobility) && has_icon(icon, "[icon_state]-roll"))
 			icon_state = "[base_icon]-roll"
 		else
 			icon_state = base_icon
