@@ -38,6 +38,7 @@
 /datum/gamemode/proc/SetupFactions()
 
 /datum/gamemode/proc/Setup()
+	to_chat(world, "Setup")
 	if(minimum_player_count && minimum_player_count < get_player_count())
 		TearDown()
 		return 0
@@ -115,6 +116,7 @@
 			break
 		shuffle(available_players)
 		var/datum/role/newRole = new R
+		. += newRole // Get the roles we created
 		if(!newRole)
 			WARNING("Role killed itself or was otherwise missing!")
 			return 0
@@ -125,8 +127,6 @@
 			newRole.Drop()
 			i--
 			continue
-
-	return 1
 
 
 

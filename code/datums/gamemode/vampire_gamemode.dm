@@ -1,7 +1,31 @@
 /datum/gamemode/vampire
-	minimum_player_count = 10
+	minimum_player_count = 0 // OVERRIDE
 	name = "Vampire"
 	factions_allowed = list(/datum/faction/vampire)
+
+	roles_allowed = 1 // Per factions
+
+	var/number_of_vamps
+
+/datum/gamemode/vampire/CreateFactions()
+	to_chat(world, "vamp - createFactions")
+	number_of_vamps = min(1, round(get_player_count()/10))
+	for (var/i = 1 to number_of_vamps)
+		to_chat(world, "vamp - createFaction [i]")
+		CreateFaction(/datum/faction/vampire)
+
+/datum/gamemode/vampire/CreateRoles()
+	to_chat(world, "vamp - createRoles")
+	var/list/datum/role/vampire/vampires = list()
+	vampires = CreateNumOfRoles(/datum/role/vampire, number_of_vamps)
+	for (var/i = 1 to number_of_vamps)
+		to_chat(world, "vamp - createRole - for [i]")
+		var/datum/faction/vampire/v_fac = factions[i]
+		if (istype(v_fac))
+			v_fac.addMaster(vampires[i])
+
+/datum/gamemode/vampire/PopulateFactions()
+	// Void - we do that in CreateRoles()
 
 // -- Vampire powers
 
