@@ -4,13 +4,13 @@
 
 /datum/role/vampire
 	id = VAMPIRE
-	name = "Vampire"
+	name = VAMPIRE
 	special_role = "vampire"
 	disallow_job = FALSE
 	restricted_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain")
 	logo_state = "vampire-logo"
 	greets = list("default","custom","admintoggle")
-
+	required_pref = BE_VAMPIRE
 
 	// -- Vampire mechanics --
 	var/list/datum/role/thrall/thralls = list()

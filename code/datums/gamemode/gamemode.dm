@@ -56,11 +56,14 @@
 
 /datum/gamemode/proc/CreateFaction(var/Fac, var/population, var/override = 0)
 	var/datum/faction/F = new Fac
+	to_chat(world, "Create Fac")
 	if(F.can_setup(population) || override)
+		to_chat(world, "Could setup")
 		factions += F
 		factions_allowed -= F
 		return F
 	else
+		to_chat(world, "Could not setup")
 		qdel(F)
 		return null
 /*
@@ -103,11 +106,15 @@
 
 /datum/gamemode/proc/CreateNumOfRoles(var/datum/role/R, var/num)
 	var/list/available_players = get_ready_players()
+	to_chat(world, "avail players = [available_players.len]")
 	for(var/mob/new_player/P in available_players)
+		to_chat(world, "player [P]")
 		if(!P.client || !P.mind)
+			to_chat(world, "Removed because no mind")
 			available_players.Remove(P)
 			continue
 		if(!P.client.desires_role(initial(R.required_pref)) || jobban_isbanned(P, initial(R.required_pref)))
+			to_chat(world, "Removed because doesn't want")
 			available_players.Remove(P)
 			continue
 	for(var/i = 0 to num)
@@ -116,6 +123,7 @@
 			break
 		shuffle(available_players)
 		var/datum/role/newRole = new R
+		to_chat(world, "nex role created")
 		. += newRole // Get the roles we created
 		if(!newRole)
 			WARNING("Role killed itself or was otherwise missing!")
@@ -124,6 +132,7 @@
 		var/mob/new_player/P = pick(available_players)
 		available_players.Remove(P)
 		if(!newRole.AssignToRole(P.mind))
+			to_chat(world, "failed assignToRole()")
 			newRole.Drop()
 			i--
 			continue
