@@ -302,7 +302,14 @@ obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
 
 #undef NEEDED_CHARGE_TO_RESTOCK_IMP
 
-/obj/item/weapon/card/robot //This is not a child of id cards, as to avoid dumb typechecks on computers.
-	name = "security code transmission device"
+/obj/item/weapon/card/robot //This is not a child of id cards, as to avoid dumb typechecks on computers. Ported from bay's research cyborg.
+	name = "access code transmission device"
 	icon_state = "id-robot"
-	desc = "A circuit grafted onto the bottom of an ID card. It is used to transmit security codes into deployable barriers, allowing you to lock and unlock them."
+	desc = "A circuit grafted onto the bottom of an ID card."
+
+/obj/item/weapon/card/robot/security
+	name = "security code transmission device"
+
+/obj/item/weapon/card/robot/security/New()
+	..()
+	desc += " This one is used to transmit security codes into deployable barriers, allowing the user to lock and unlock them."

@@ -164,6 +164,16 @@
 	R.stat = CONSCIOUS
 	R.resurrect()
 
+/obj/item/borg/upgrade/proc/securify_module(var/mob/living/silicon/robot/R)
+	if(!istype(R.module.radio_key, /obj/item/device/encryptionkey/headset_sec)) //If they have no sec key, give them one.
+		R.module.ResetEncryptionKey(R)
+		R.module.radio_key = /obj/item/device/encryptionkey/headset_sec
+		R.module.AddEncryptionKey(R)
+
+	if(!("Security" in R.module.sensor_augs)) //If they don't have a SECHUD, give them one.
+		pop(R.module.sensor_augs)
+		R.module.sensor_augs.Add("Security", "Disable")
+
 /obj/item/borg/upgrade/vtec
 	name = "cyborg VTEC upgrade board"
 	desc = "Used to kick in a robot's VTEC systems, increasing their speed."
@@ -336,27 +346,21 @@
 	if(has_icon(R.icon, "[R.base_icon]-noir"))
 		R.set_module_sprites(list("Noir" = "[R.base_icon]-noir"))
 
-	if(!istype(R.module.radio_key, /obj/item/device/encryptionkey/headset_sec)) //If they have no sec key, give them one.
-		R.module.ResetEncryptionKey(R)
-		R.module.radio_key = /obj/item/device/encryptionkey/headset_sec
-		R.module.AddEncryptionKey(R)
-
-	if(!("Security" in R.module.sensor_augs)) //If they don't have a SECHUD, give them one.
-		pop(R.module.sensor_augs)
-		R.module.sensor_augs.Add("Security", "Disable")
+	securify_module(R)
 
 /obj/item/borg/upgrade/warden
 	name = "cyborg warden upgrade board"
 	desc = "Used to give a security cyborg supervisory enforcement tools."
 	icon_state = "mcontroller"
 	required_module = list(/obj/item/weapon/robot_module/security, /obj/item/weapon/robot_module/tg17355)
-	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/cyborg, /obj/item/weapon/card/robot, /obj/item/weapon/wrench)
+	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/cyborg, /obj/item/weapon/card/robot/security, /obj/item/weapon/wrench)
 	var/list/new_icons = list()
 
 /obj/item/borg/upgrade/warden/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
 
+	//Trusty warden armor.
 	R.component_extension = "/kevlar"
 	R.upgrade_components()
 
@@ -367,18 +371,11 @@
 	if(new_icons.len > 0)
 		R.set_module_sprites(new_icons)
 
+	securify_module(R)
+
 	var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R, user)
 	if(H)
 		H.Lawize()
-
-	if(!istype(R.module.radio_key, /obj/item/device/encryptionkey/headset_sec)) //If they have no sec key, give them one.
-		R.module.ResetEncryptionKey(R)
-		R.module.radio_key = /obj/item/device/encryptionkey/headset_sec
-		R.module.AddEncryptionKey(R)
-
-	if(!("Security" in R.module.sensor_augs)) //If they don't have a SECHUD, give them one.
-		pop(R.module.sensor_augs)
-		R.module.sensor_augs.Add("Security", "Disable")
 
 
 #undef FAILED_TO_ADD
