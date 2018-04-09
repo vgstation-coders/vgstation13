@@ -45,7 +45,9 @@
 // Things like the Dimensional Push spell can move ANYTHING
 /obj/machinery/portable_atmospherics/Uncrossed(var/atom/movable/AM)
 	if(AM == connected_port)
-		disconnect()
+		spawn(1)
+			if(src && AM && AM.loc != loc)
+				disconnect()
 
 /obj/machinery/portable_atmospherics/proc/connect(obj/machinery/atmospherics/unary/portables_connector/new_port)
 	//Make sure not already connected to something else

@@ -48,7 +48,7 @@
 		return
 	if(AM == connected_device)
 		spawn(1)
-			if(AM.loc != src.loc)
+			if(src && AM && AM.loc != loc && connected_device)
 				connected_device.disconnect()
 
 /obj/machinery/atmospherics/unary/portables_connector/return_network(obj/machinery/atmospherics/reference)
