@@ -9,22 +9,30 @@
 
 /datum/gamemode/vampire/CreateFactions()
 	to_chat(world, "vamp - createFactions")
-	number_of_vamps = min(1, round(get_player_count()/10))
+	number_of_vamps = max(1, round(get_player_count()/10))
+	to_chat(world, "[number_of_vamps]")
 	for (var/i = 1 to number_of_vamps)
 		to_chat(world, "vamp - createFaction [i]")
-		CreateFaction(/datum/faction/vampire)
+		. += CreateFaction(/datum/faction/vampire)
 
 /datum/gamemode/vampire/CreateRoles()
 	to_chat(world, "vamp - createRoles")
 	var/list/datum/role/vampire/vampires = list()
 	vampires = CreateNumOfRoles(/datum/role/vampire, number_of_vamps)
+	if (!vampires || !vampires.len)
+		WARNING("Unable to create enough roles!")
+		return FALSE
+	to_chat(world, "[vampires.len]")
 	for (var/i = 1 to number_of_vamps)
 		to_chat(world, "vamp - createRole - for [i]")
 		var/datum/faction/vampire/v_fac = factions[i]
 		if (istype(v_fac))
+			to_chat(world, "addMaster - [i]")
 			v_fac.addMaster(vampires[i])
+	return vampires
 
 /datum/gamemode/vampire/PopulateFactions()
+	to_chat(world, "vamp - populateFactions - void")
 	// Void - we do that in CreateRoles()
 
 // -- Vampire powers
