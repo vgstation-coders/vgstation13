@@ -235,6 +235,12 @@
 	name="Box of Crayons"
 	result=/obj/item/weapon/storage/fancy/crayons
 
+/datum/biogen_recipe/misc/rice_hat
+	name = "Rice Hat"
+	id = "rice_hat"
+	cost = 300
+	result = /obj/item/clothing/head/rice_hat
+
 /datum/biogen_recipe/flooring
 	category="Flooring"
 
@@ -251,12 +257,6 @@
 	name="Piece of Arcade Carpet"
 	other_amounts=list(5,10,20)
 	result=/obj/item/stack/tile/arcade
-
-/datum/biogen_recipe/rice_hat
-	name = "Rice Hat"
-	id = "rice_hat"
-	cost = 300
-	result = /obj/item/clothing/head/rice_hat
 
 /obj/machinery/biogenerator
 	name = "Biogenerator"
