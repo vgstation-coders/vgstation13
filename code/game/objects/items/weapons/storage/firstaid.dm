@@ -102,7 +102,7 @@
 	new /obj/item/weapon/reagent_containers/pill/dexalin(src)
 	new /obj/item/weapon/reagent_containers/pill/dexalin(src)
 	new /obj/item/weapon/reagent_containers/pill/inaprovaline(src)
-	new /obj/item/weapon/reagent_containers/pill/inaprovaline(src)
+	new /obj/item/weapon/reagent_containers/syringe/inaprovaline(src)
 	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
 	new /obj/item/device/healthanalyzer(src)
 	return
