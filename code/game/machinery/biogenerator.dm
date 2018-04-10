@@ -252,6 +252,12 @@
 	other_amounts=list(5,10,20)
 	result=/obj/item/stack/tile/arcade
 
+/datum/design/rice_hat
+	name = "Rice Hat"
+	id = "rice_hat"
+	cost = 300
+	result = /obj/item/clothing/head/rice_hat
+
 /obj/machinery/biogenerator
 	name = "Biogenerator"
 	desc = ""

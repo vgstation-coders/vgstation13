@@ -552,13 +552,25 @@
 		return
 	M.visible_message("<span class='notice'>\The [M] opens \his [src.name], allowing you to see inside. <a HREF='?src=\ref[M];listitems=\ref[hold]'>Take a closer look.</a></span>","<span class='notice'>You flash the contents of your [src.name].</span>")
 
-/obj/item/clothing/suit/sakura_kimono
+/obj/item/clothing/suit/kimono
+	name = "kimono"
+	desc = "A traditional Japanese kimono."
+	icon_state = "fancy_kimono"
+	item_state = "fancy_kimono"
+	flags = FPRINT
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+
+/obj/item/clothing/suit/kimono/ronin
+	name = "black kimono"
+	desc = "A black and plain looking kimono."
+	icon_state = "ronin_kimono"
+	item_state = "ronin_kimono"
+
+/obj/item/clothing/suit/kimono/sakura
 	name = "sakura kimono"
 	desc = "A pale-pink, nearly white, kimono with a red and gold obi. There is a embroidered design of cherry blossom flowers covering the kimono."
 	icon_state = "sakura_kimono"
 	item_state = "sakura_kimono"
-	flags = FPRINT
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 
 /obj/item/clothing/suit/clockwork_robes
 	name = "clockwork robes"
