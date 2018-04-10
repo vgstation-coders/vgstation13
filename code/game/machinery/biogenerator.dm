@@ -252,7 +252,7 @@
 	other_amounts=list(5,10,20)
 	result=/obj/item/stack/tile/arcade
 
-/datum/design/rice_hat
+/datum/biogen_recipe/rice_hat
 	name = "Rice Hat"
 	id = "rice_hat"
 	cost = 300
