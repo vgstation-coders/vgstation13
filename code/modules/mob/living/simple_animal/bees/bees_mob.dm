@@ -40,6 +40,7 @@
 		if (corpse != src)
 			corpse.overlays += I
 			qdel(src)
+			return
 		else
 			icon_state = "bees0"
 			overlays += I
