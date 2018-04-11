@@ -216,7 +216,7 @@
 				to_chat(user, "<span class='notice'>You empty the [species.common_name] into the apiary.</span>")
 			else
 				var allowed = MAX_BEES_PER_HIVE - worker_bees_inside+queen_bees_inside+bees_outside_hive.len
-				if (allowed == 0)
+				if (allowed <= 0)
 					to_chat(user, "<span class='warning'>There are too many [species.common_name] in the apiary already.</span>")
 				else
 					for (var/i = 1 to allowed)
