@@ -26,8 +26,8 @@
 	if(owner)
 		Remove(owner)
 	target = null
-//	qdel(button)
-//	button = null
+	qdel(button)
+	button = null
 	return ..()
 
 /datum/action/proc/Grant(mob/M)
@@ -37,22 +37,22 @@
 		Remove(owner)
 	owner = M
 	M.actions += src
-//	button = new
-//	button.linked_action = src
-//	button.name = name
-//	button.actiontooltipstyle = buttontooltipstyle
-//	if(desc)
-//		button.desc = desc
-//	if(M.client)
-//		M.client.screen += button
-//	M.update_action_buttons()
+	button = new
+	button.linked_action = src
+	button.name = name
+	button.actiontooltipstyle = buttontooltipstyle
+	if(desc)
+		button.desc = desc
+	if(M.client)
+		M.client.screen += button
+	M.update_action_buttons()
 
 /datum/action/proc/Remove(mob/M)
-//	if(M.client)
-//		M.client.screen -= button
-//	button.moved = FALSE //so the button appears in its normal position when given to another owner.
+	if(M.client)
+		M.client.screen -= button
+	button.moved = FALSE //so the button appears in its normal position when given to another owner.
 	M.actions -= src
-//	M.update_action_buttons()
+	M.update_action_buttons()
 	owner = null
 
 /datum/action/proc/Trigger()
@@ -80,7 +80,7 @@
 			return 0
 	return 1
 
-/*/datum/action/proc/UpdateButtonIcon()
+/datum/action/proc/UpdateButtonIcon()
 	if(button)
 		button.icon = button_icon
 		button.icon_state = background_icon_state
@@ -100,7 +100,7 @@
 		img = image(icon_icon, current_button, button_icon_state)
 		img.pixel_x = 0
 		img.pixel_y = 0
-		current_button.overlays += img*/
+		current_button.overlays += img
 
 
 
@@ -129,7 +129,7 @@
 		I.attack_self(owner)
 	return 1
 
-/*/datum/action/item_action/ApplyIcon(obj/abstract/screen/movable/action_button/current_button)
+/datum/action/item_action/ApplyIcon(obj/abstract/screen/movable/action_button/current_button)
 	current_button.overlays = null
 
 	if(button_icon && button_icon_state)
@@ -141,7 +141,7 @@
 		var/old = I.layer
 		I.layer = FLOAT_LAYER //AAAH
 		current_button.overlays += I
-		I.layer = old */
+		I.layer = old
 
 //Mostly attack self procs renamed
 /datum/action/item_action/set_internals
