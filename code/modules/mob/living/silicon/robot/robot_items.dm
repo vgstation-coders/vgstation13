@@ -397,8 +397,8 @@
 		overlays += olay
 	else
 		alpha = initial(alpha)
-	if(usr)
-		usr.update_action_buttons()
+//	if(usr)
+//		usr.update_action_buttons()
 	..()
 
 /obj/item/weapon/gripper/examine(mob/user)

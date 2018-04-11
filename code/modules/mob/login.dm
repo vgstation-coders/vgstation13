@@ -41,6 +41,7 @@
 // If you do so and the mob is in nullspace BYOND will attempt to move the mob a gorillion times
 // See http://www.byond.com/docs/ref/info.html#/mob/proc/Login and http://www.byond.com/forum/?post=2151126
 /mob/Login()
+	alert(src,"!!Action buttons are being removed as part of a temporary test to figure out the cause of screen freezes - some items will now have to be used in your hand to be toggled until this test is complete!! - please immediately ahelp WITH A SCREENSHOT if your screen is frozen and NOT fixed by relogging and/or waiting 30 seconds.")
 	player_list |= src
 	update_Login_details()
 	world.update_status()

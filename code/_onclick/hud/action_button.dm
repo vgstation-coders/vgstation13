@@ -1,4 +1,4 @@
-/obj/abstract/screen/movable/action_button
+/*/obj/abstract/screen/movable/action_button
 	var/datum/action/linked_action
 	var/actiontooltipstyle = ""
 	screen_loc = null
@@ -133,4 +133,4 @@
 
 	var/matrix/M = matrix()
 	M.Translate(x_offset,y_offset)
-	button.transform = M
+	button.transform = M*/

@@ -33,11 +33,11 @@
 	..()
 	var/obj/spacepod/S = target
 	S.toggle_passengers()
-	if(S.passengers_allowed)
+/*	if(S.passengers_allowed)
 		button_icon_state = "lock_open"
 	else
 		button_icon_state = "lock_closed"
-	UpdateButtonIcon()
+	UpdateButtonIcon()*/
 
 /datum/action/spacepod/pilot/toggle_passenger_weaponry
 	name = "Toggle Passenger Weaponry"
@@ -47,11 +47,11 @@
 	..()
 	var/obj/spacepod/S = target
 	S.toggle_passenger_guns()
-	if(S.passenger_fire)
+/*	if(S.passenger_fire)
 		button_icon_state = "weapons_on"
 	else
 		button_icon_state = "weapons_off"
-	UpdateButtonIcon()
+	UpdateButtonIcon()*/
 
 /datum/action/spacepod/passenger //Subtype for passengers only
 
