@@ -30,6 +30,7 @@
 	damage = 10
 	damage_type = BURN
 	kill_count = 1 //Limits the range to one tile
+	embed = 0
 
 /obj/item/projectile/bullet/shrapnel
 
