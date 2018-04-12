@@ -24,6 +24,13 @@
 	damage_type = TOX
 	weaken = 5
 
+/obj/item/projectile/bullet/blank
+	name = "hot gas discharge"
+	icon_state = null
+	damage = 10
+	damage_type = BURN
+	kill_count = 1 //Limits the range to one tile
+
 /obj/item/projectile/bullet/shrapnel
 
 	name = "shrapnel"
