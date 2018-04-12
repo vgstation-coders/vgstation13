@@ -59,4 +59,3 @@
 				client.prefs.save_preferences()
 				winset(client, "rpane.changelog", "background-color=none;font-style=;")
 			client.playtitlemusic()
-		alert(src,"!!Action buttons are being removed as part of a temporary test to figure out the cause of screen freezes - some items will now have to be used in your hand to be toggled until this test is complete!! - please immediately ahelp WITH A SCREENSHOT if your screen is frozen and NOT fixed by relogging and/or waiting 30 seconds.")
