@@ -12,6 +12,8 @@
 #define WARNING_DELAY 30 		//seconds between warnings.
 #define AUDIO_WARNING_DELAY 30
 
+var/global/total_supermatter_objects = 0
+
 /obj/machinery/power/supermatter
 	name = "Supermatter Crystal"
 	desc = "A strangely translucent and iridescent crystal. <span class='warning'>You get headaches just from looking at it.</span>"
@@ -94,6 +96,9 @@
 	radio = new (src)
 	if(frequency)
 		set_frequency(frequency)
+	if(!id_tag)
+		id_tag = "supermatter_[total_supermatter_objects]"
+	total_supermatter_objects++
 
 /obj/machinery/power/supermatter/Destroy()
 	qdel(radio)
@@ -198,7 +203,6 @@
 				play_alert = (damage > audio_warning_point)
 			else
 				warning = "[short_name] hyperstructure returning to safe operating levels. Instability: [stability]%"
-			//radio.say(warning, "Supermatter [short_name] Monitor")
 			var/datum/speech/speech = radio.create_speech(warning, frequency=1459, transmitter=radio)
 			speech.name = "Supermatter [short_name] Monitor"
 			speech.job = "Automated Announcement"
@@ -242,7 +246,7 @@
 	damage = max( damage + ( (removed.temperature - 800) / 150 ) , 0 )
 	//Ok, 100% oxygen atmosphere = best reaction
 	//Maxes out at 100% oxygen pressure
-	oxygen = max(min((removed.oxygen - (removed.nitrogen * NITROGEN_RETARDATION_FACTOR)) / MOLES_CELLSTANDARD, 1), 0)
+	oxygen = Clamp((removed.oxygen - removed.nitrogen*NITROGEN_RETARDATION_FACTOR) / MOLES_CELLSTANDARD, 0, 1) //0 unless O2>80%. At 99%, ~0.6
 
 	var/temp_factor = 100
 
@@ -463,3 +467,96 @@
 	id_tag = O.id_tag
 	set_frequency(O.frequency)
 	return 1
+
+/obj/machinery/computer/supermatter
+	name = "Supermatter Monitoring Computer"
+	desc = "Monitors ambient temperature and stability of a linked shard to provide early warning information regarding delamination."
+	icon_state = "sme"
+	circuit = "/obj/item/weapon/circuitboard/supermatter"
+	light_color = LIGHT_COLOR_YELLOW
+	var/id_tag = null //Mappable
+	var/obj/machinery/power/supermatter/linked = null
+
+/obj/machinery/computer/supermatter/New()
+	..()
+	try_link(id_tag) //If we have a mapped id, looks for matching supermatter. If not, looks for one on the z-level.
+
+
+/obj/machinery/computer/supermatter/attack_hand(mob/user)
+	add_fingerprint(user)
+	if(stat & (BROKEN|NOPOWER))
+		return
+	return ui_interact(user)
+
+/obj/machinery/computer/supermatter/attack_ai(mob/user)
+	return attack_hand(user)
+
+/obj/machinery/computer/supermatter/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
+	if (gcDestroyed || !get_turf(src) || !anchored)
+		if(!ui)
+			ui = nanomanager.get_open_ui(user, src, ui_key)
+		if(ui)
+			ui.close()
+		return
+
+	var/data[0]
+	if(linked) //We really want to be linked, but the template can survive even without a link
+		var/datum/gas_mixture/env = linked.loc.return_air()
+		data["id"] = linked.id_tag
+		data["temperature"] = env.temperature
+		data["stability"] = linked.stability()
+		if(!istype(linked.loc, /turf)||istype(linked.loc, /turf/space))
+			data["dps"] = 0 //If crated or in space, damage is exactly 0
+			data["oxygen"] = 0 //This doesn't really matter because power isn't generated in this state
+		else
+			data["dps"] = (env.temperature-800)/150
+			var/turf/T = linked.loc //We know it's a turf, we just checked
+			data["oxygen"] = round(T.oxygen)
+		data["location"] = linked.areaMaster.name
+
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+	if (!ui)
+		ui = new(user, src, ui_key, "supermatter.tmpl", "Supermatter Monitoring Computer", 520, 340)
+		ui.set_initial_data(data)
+		ui.open()
+
+/obj/machinery/computer/supermatter/Topic(href, href_list)
+	if(..())
+		return
+	if(usr.incapacitated() || (!Adjacent(usr)&&!issilicon(usr)) || !usr.dexterity_check())
+		return
+	if(href_list["select"])
+		var/new_id = input("New target ID tag","Selecting Supermatter",id_tag) as text|null
+		if(!new_id)
+			return
+		try_link(new_id)
+	if(href_list["list"])
+		var/list/local_supermatter = list()
+		for(var/obj/machinery/power/supermatter/S in power_machines)
+			var/turf/T = get_turf(S) //Allowed to see into crates
+			if(T.z == z)
+				local_supermatter += S.id_tag
+		to_chat(usr,"<span class='info'>\The [src] flashes briefly, displaying the following ID tags: [json_encode(local_supermatter)]</span>")
+	return 1
+
+/obj/machinery/computer/supermatter/proc/try_link(var/new_id)
+	if(new_id)
+		id_tag = new_id
+		for(var/obj/machinery/power/supermatter/S in power_machines)
+			if(S.id_tag == id_tag)
+				var/turf/simulated/T = get_turf(S) //Allowed to see into crates
+				if(T.z == z)
+					linked = S
+				else
+					visible_message("<span class='warning'>\The [src] buzzes.</span>")
+				return
+	else
+		for(var/obj/machinery/power/supermatter/S in power_machines)
+			if(S.z == z) //It's supermatter and it's on our Z-level
+				linked = S
+				return
+
+/obj/machinery/computer/supermatter/process()
+	if(!..())
+		return 0
+	nanomanager.update_uis(src)

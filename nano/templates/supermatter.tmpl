@@ -1,0 +1,65 @@
+<div class="item">
+	<div class="itemLabel">
+		Target Supermatter:
+	</div>
+	<div class="itemContent">
+		{{:data.id}} {{:helper.link('Assign ID Tag', 'check', {'select' : 1}, null)}} {{:helper.link('List Available', 'search', {'list' : 1}, null)}}
+	</div>
+	<div class="itemLabel">
+		Target Location
+	</div>
+	<div class="itemContent">
+		{{:data.location}}
+	</div>
+</div>
+
+{{if data.id}}
+<div class="statusDisplay">
+	<div class="line">
+		<div class="statusLabel">
+			Instability Data
+		</div>
+		<div class="statusValue">
+			{{:helper.displayBar(data.stability, 0, 100, data.stability > 5 ? "bad" : "neutral")}}
+			{{:helper.round(data.stability)}}% Instability
+		</div>
+	</div>
+	<div class="line">
+		<div class="statusLabel">
+			Instability Per Tick:
+		</div>
+		<div class="statusValue">
+			{{if data.dps>0}}
+				<div class="statusValue bad">{{:helper.precisionRound(data.dps,2)}}%</div>
+			{{else}}
+				<div class="statusValue good">{{:helper.precisionRound(data.dps,2)}}%</div>
+			{{/if}}
+		</div>
+	</div>
+	<div class="line">
+		<div class="statusLabel">
+			Temperature:
+		</div>
+		<div class="statusValue">
+			{{:helper.displayBar(data.temperature, 0, 1000, data.temperature > 800 ? "bad" : (data.temperature > 500 ? "neutral" : "good"))}}
+			{{:helper.round(data.temperature)}} Kelvin
+		</div>
+	</div>
+	<div class="line">
+		<div class="statusLabel">
+			Composition:
+		</div>
+		<div class="statusValue">
+			{{:helper.displayBar(data.oxygen, 0, 100, data.oxygen > 80 ? "good" : "neutral")}}
+			{{:data.oxygen}}% Oxygen
+		</div>
+	</div>
+	<div class="line">
+		{{if data.oxygen > 80}}
+			<div class="statusValue good">Radiation Conditions Optimal</div>
+		{{else}}
+			<div class="statusValue average">Radiation Conditions Standard</div>
+		{{/if}}
+	</div>
+</div>
+{{/if}}
