@@ -1,5 +1,5 @@
 /mob/living/simple_animal/hostile/bigroach
-	name = "mutated roach"
+	name = "mutated cockroach"
 	desc = "A cockroach mutated not only to be several times the size of an ordinary one, but also to be much more bloodthirsty. The genetic changes have rendered it sterile and unable to fly."
 
 	icon_state = "bigroach"
@@ -34,10 +34,51 @@
 
 	melee_damage_lower = 5
 	melee_damage_upper = 10
-	attacktext = "bites"
+	attacktext = "gnaws"
 	attack_sound = 'sound/weapons/bite.ogg'
 
 	faction = "roach"
+
+	var/icon_aggro = "bigroach_angry"
+
+/mob/living/simple_animal/hostile/bigroach/queen
+	name = "cockroach matriarch"
+	desc = "A cockroach, twisted and deformed by mutagenic chemicals nearly to the point of unrecognition, reaching an abnormal size in the progress. By an odd twist of luck, the result is not only alive and functioning - it is also able to lay eggs."
+
+	icon_state = "hugeroach"
+	icon_living = "hugeroach"
+	icon_dead = "hugeroach_dead"
+
+	maxHealth = 150
+	health = 150
+
+	size = SIZE_NORMAL
+
+	melee_damage_lower = 10
+	melee_damage_upper = 25
+
+	move_to_delay = 10
+	turns_per_move = 3
+
+	icon_aggro = "hugeroach"
+
+	stat_attack = UNCONSCIOUS //Attack unconscious mobs to lay eggs
+
+/mob/living/simple_animal/hostile/bigroach/queen/AttackingTarget()
+	if(isliving(target))
+		var/mob/living/L = target
+
+		//Only lay eggs into unconscious dudes
+		if(L.isUnconscious())
+			visible_message("<span class='notice'>\The [src] lays some eggs on top of \the [L]!</span>")
+			playsound(src, 'sound/effects/bug_hiss.ogg', 50, 1)
+			var/obj/item/egg = new /obj/item/weapon/reagent_containers/food/snacks/egg/bigroach(get_turf(target))
+
+			//40% chance for the egg to be fertile
+			if(prob(40))
+				processing_objects.Add(egg)
+
+	return ..()
 
 /mob/living/simple_animal/hostile/bigroach/New()
 	..()
@@ -65,7 +106,7 @@
 /mob/living/simple_animal/hostile/bigroach/Aggro()
 	..()
 
-	icon_living = "bigroach_angry"
+	icon_living = icon_aggro
 	icon_state = icon_living
 
 	spawn(rand(1,14))
