@@ -60,12 +60,6 @@
 	icon_living = "bigroach"
 	icon_state = icon_living
 
-/mob/living/simple_animal/hostile/bigroach/Cross(atom/movable/crosser)
-	if(istype(crosser, /mob/living/simple_animal/hostile/bigroach))
-		return 1
-
-	return ..()
-
 /mob/living/simple_animal/cockroach/bigroach/ex_act()
 	return //Survive bombs
 
