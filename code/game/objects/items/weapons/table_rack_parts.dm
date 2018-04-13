@@ -27,6 +27,7 @@
 	desc = "Parts of a brass table. It's slightly warm to the touch."
 	icon_state = "brass_tableparts"
 	starting_materials = list(MAT_BRASS = 3750)
+	table_type = /obj/structure/table/reinforced/clockwork
 
 /obj/item/weapon/table_parts/clockwork/clockify()
 	return

@@ -263,7 +263,7 @@
 
 		if(!cult_round || cult_round.narsie_condition_cleared)//if the game mode wasn't cult to begin with, there won't be need to complete a first objective to prepare the summoning.
 			if(active_cultists.len >= 9)
-				if(z != map.zMainStation)
+				if(z != map.zMainStation || Holiday == APRIL_FOOLS_DAY)
 					for(var/mob/M in active_cultists)
 						to_chat(M, "<span class='danger'>YOU HAVE A TERRIBLE FEELING. IS SOMETHING WRONG WITH THE RITUAL?</span>")//You get one warning
 
@@ -311,13 +311,17 @@
 		return
 
 	if(currentCountdown <= 0)
-		if(z != map.zMainStation)//No more summonings on the Asteroid!
+		if(z != map.zMainStation || Holiday == APRIL_FOOLS_DAY)//No more summonings on the Asteroid!
 			for(var/mob/M in active_cultists)
 				M.say("Tok-lyr rqa'nap g[pick("'","`")]lt-ulotf!")
 			summonturfs = list()
 			summoning = 0
 			for(var/mob/M in active_cultists)
-				to_chat(M, "<span class='sinister'>THE GEOMETER OF BLOOD IS HIGHLY DISAPOINTED WITH YOUR INABILITY TO PERFORM THE RITUAL IN ITS REQUESTED LOCATION.</span>")
+				if(Holiday != APRIL_FOOLS_DAY)
+					to_chat(M, "<span class='sinister'>THE GEOMETER OF BLOOD IS HIGHLY DISAPOINTED WITH YOUR INABILITY TO PERFORM THE RITUAL IN ITS REQUESTED LOCATION.</span>")
+				else
+					to_chat(M, "<span class='heavy_brass'>You fool.</span>")
+					new /obj/machinery/singularity/narsie/large/clockwork(src.loc)
 				M.gib()
 		else
 			for(var/mob/M in active_cultists)

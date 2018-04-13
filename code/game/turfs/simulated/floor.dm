@@ -99,8 +99,7 @@ var/list/wood_icons = list("wood","wood-broken")
 	if(!(locate(/obj/effect/decal/cleanable/dirt) in contents))
 		getFromPool(/obj/effect/decal/cleanable/dirt,src)
 
-turf/simulated/floor/update_icon()
-
+/turf/simulated/floor/update_icon()
 	if(lava)
 		return
 	else if(is_plasteel_floor())
@@ -109,7 +108,7 @@ turf/simulated/floor/update_icon()
 	else if(is_plating())
 		if(!broken && !burnt)
 			icon_state = icon_plating //Because asteroids are 'platings' too.
-	else if(is_clockwork())
+	else if(is_clockwork_floor())
 		icon_state = "clockwork"
 	else if(is_slime_floor())
 		icon_state = "tile-slime"
@@ -272,8 +271,8 @@ turf/simulated/floor/update_icon()
 		return 1
 	return 0
 
-/turf/simulated/floor/is_clockwork()
-	if(istype(floor_tile,/turf/simulated/floor/engine/clockwork))
+/turf/simulated/floor/is_clockwork_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/brass))
 		return TRUE
 	return FALSE
 
@@ -300,7 +299,7 @@ turf/simulated/floor/update_icon()
 	else if(is_grass_floor())
 		src.icon_state = "sand[pick("1","2","3")]"
 		broken = 1
-	else if(is_clockwork())
+	else if(is_clockwork_floor())
 		return //it's fucking magic
 	else if(is_slime_floor())
 		spawn(rand(2,10))
@@ -324,7 +323,7 @@ turf/simulated/floor/update_icon()
 		return
 	if(istype(src,/turf/unsimulated/floor/asteroid))
 		return//Asteroid tiles don't burn
-	if(is_clockwork())
+	if(is_clockwork_floor())
 		return // it's fucking magic
 	if(is_plasteel_floor())
 		src.icon_state = "damaged[pick(1,2,3,4,5)]"

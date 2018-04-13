@@ -167,6 +167,19 @@
 	else
 		dust()
 
+/mob/living/clockify()
+	if(iscultist(src))
+		gib()
+	else if(mind && mind.faith && mind.faith.name == "Clockwork Cult")
+		if(get_species() != "Clockwork Golem")
+			to_chat(src, "<span class='brass'>The Clockwork Justiciar is overjoyed to be reunited with its followers, and accepts your body in sacrifice. As reward, you have been gifted with the body of a Clockwork Golem.</span>")
+			Humanize("Clockwork Golem")
+		return
+	else if(get_species() == "Clockwork Golem")
+		return
+	else
+		dust()
+
 /mob/living/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
 
