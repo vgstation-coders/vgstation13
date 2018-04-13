@@ -19,11 +19,6 @@
 /obj/machinery/mommi_spawner/dorf
 	dorf = TRUE
 
-/obj/machinery/mommi_spawner/dorf/attack_ghost(var/mob/dead/observer/user)
-	if(stat & (NOPOWER|BROKEN))
-		return
-	..()
-
 /obj/machinery/mommi_spawner/power_change()
 	if (powered())
 		stat &= ~NOPOWER
