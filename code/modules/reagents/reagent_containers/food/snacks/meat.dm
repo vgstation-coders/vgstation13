@@ -162,7 +162,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 0.5)
-	reagents.add_reagent(ROACHSHELL, rand(5,12))
+	reagents.add_reagent(ROACHSHELL, rand(2,6))
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
@@ -172,6 +172,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(ROACHSHELL, 16)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
 	name = "mimic meat"
