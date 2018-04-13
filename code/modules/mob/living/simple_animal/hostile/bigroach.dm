@@ -1,6 +1,6 @@
 /mob/living/simple_animal/hostile/bigroach
 	name = "mutated roach"
-	desc = "A cockroach mutated not only to be several times the size of an ordinary one, but also to be much more bloodthirsty. It can survive in most environments, and the genetic changes have rendered it sterile."
+	desc = "A cockroach mutated not only to be several times the size of an ordinary one, but also to be much more bloodthirsty. The genetic changes have rendered it sterile and unable to fly."
 
 	icon_state = "bigroach"
 	icon_living = "bigroach"
@@ -14,8 +14,8 @@
 
 	move_to_delay = 4
 
-	maxHealth = 55
-	health = 55
+	maxHealth = 35
+	health = 35
 
 	size = SIZE_SMALL
 
@@ -42,8 +42,25 @@
 /mob/living/simple_animal/hostile/bigroach/New()
 	..()
 
-	pixel_x = rand(-12, 12) * PIXEL_MULTIPLIER
-	pixel_y = rand(-12, 12) * PIXEL_MULTIPLIER
+	pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+	pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
+
+/mob/living/simple_animal/hostile/bigroach/Die()
+	..()
+
+	playsound(src, pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat
+
+/mob/living/simple_animal/hostile/bigroach/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/weapon/newspaper))
+		to_chat(user, "<span class='notice'>You're gonna need a bigger newspaper.</span>")
+	else if(istype(W, /obj/item/weapon/plantspray/pests))
+		var/obj/item/weapon/plantspray/pests/P = W
+		if(P.use(1))
+			to_chat(user, "<span class='notice'>\The [P] doesn't seem to be very effective.</span>")
+			playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
+	else
+		return ..()
+
 
 /mob/living/simple_animal/hostile/bigroach/Aggro()
 	..()

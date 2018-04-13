@@ -286,6 +286,7 @@
 		if(MUTAGEN)
 			if(prob(10))
 				visible_message("<span class='userdanger'>\The [src] evolves!</span>")
+				message_admins("Created a mutated cockroach at [formatJumpTo(get_turf(src))]; usr = [key_name(usr)]")
 				grow_up(/mob/living/simple_animal/hostile/bigroach)
 			else if(prob(10))
 				Die(gore = 0)
