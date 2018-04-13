@@ -153,3 +153,14 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 100)
 	category = "Module Boards"
 	build_path = /obj/item/weapon/aiModule/core/robocop
+
+
+/datum/design/lazymov
+	name = "Core Module Design (Lazymov)"
+	desc = "Allows for the construction of a Lazymov AI Core Module."
+	id = "lazymov_module"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_MATERIALS = 6)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 100)
+	category = "Module Boards"
+	build_path = /obj/item/weapon/aiModule/core/lazymov
