@@ -26,16 +26,15 @@
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/external/affecting = H.get_organ(user.zone_sel.selecting)
 
-		if(affecting.open == 1)
-			if(affecting && (affecting.status & ORGAN_ROBOT))
-				if(affecting.get_damage())
-					affecting.heal_damage(rand(15, 20), rand(15, 20), robo_repair = 1)
-					H.updatehealth()
-					use(1)
-					user.visible_message("<span class='notice'>[user] applies some [src] to [user != M ? "[M]'s":"their"] [affecting.display_name].</span>", \
-					"<span class='notice'>You apply some [src] to [user != M ? "[M]'s":"your"] [affecting.display_name].</span>")
-				else
-					to_chat(user, "<span class='notice'>Nothing to fix here.</span>")
+		if(affecting && (affecting.status & ORGAN_ROBOT))
+			if(affecting.get_damage())
+				affecting.heal_damage(rand(15, 20), rand(15, 20), robo_repair = 1)
+				H.updatehealth()
+				use(1)
+				user.visible_message("<span class='notice'>[user] applies some [src] to [user != M ? "[M]'s":"their"] [affecting.display_name].</span>", \
+				"<span class='notice'>You apply some [src] to [user != M ? "[M]'s":"your"] [affecting.display_name].</span>")
+			else
+				to_chat(user, "<span class='notice'>Nothing to fix here.</span>")
 		else
 			if(can_operate(H, user))
 				if(do_surgery(H,user,src))
