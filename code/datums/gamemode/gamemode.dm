@@ -105,6 +105,7 @@
 
 
 /datum/gamemode/proc/CreateNumOfRoles(var/datum/role/R, var/num)
+	. = list()
 	var/list/available_players = get_ready_players()
 	to_chat(world, "avail players = [available_players.len]")
 	for(var/mob/new_player/P in available_players)
@@ -123,7 +124,7 @@
 			break
 		shuffle(available_players)
 		var/datum/role/newRole = new R
-		to_chat(world, "nex role created")
+		to_chat(world, "new role created")
 		. += newRole // Get the roles we created
 		if(!newRole)
 			WARNING("Role killed itself or was otherwise missing!")

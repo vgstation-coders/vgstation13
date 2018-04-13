@@ -19,7 +19,7 @@
 	to_chat(world, "vamp - createRoles")
 	var/list/datum/role/vampire/vampires = list()
 	vampires = CreateNumOfRoles(/datum/role/vampire, number_of_vamps)
-	if (!vampires || !vampires.len)
+	if (!vampires)
 		WARNING("Unable to create enough roles!")
 		return FALSE
 	to_chat(world, "[vampires.len]")
