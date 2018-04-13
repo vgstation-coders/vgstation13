@@ -60,8 +60,8 @@
 	icon_living = "bigroach"
 	icon_state = icon_living
 
-/mob/living/simple_animal/cockroach/bigroach/ex_act()
+/mob/living/simple_animal/hostile/bigroach/ex_act()
 	return //Survive bombs
 
-/mob/living/simple_animal/cockroach/bigroach/nuke_act()
+/mob/living/simple_animal/hostile/bigroach/nuke_act()
 	return //Survive nuclear blasts
