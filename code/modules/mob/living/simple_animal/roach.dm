@@ -22,6 +22,8 @@
 	response_disarm = "pokes"
 	response_harm   = "stomps on"
 
+	faction = "roach"
+
 	density = 0
 
 	minbodytemp = 273.15		//Can't survive at below 0 C
@@ -281,6 +283,12 @@
 	switch(id)
 		if(TOXIN)
 			Die(gore = 0)
+		if(MUTAGEN)
+			if(prob(10))
+				visible_message("<span class='userdanger'>\The [src] evolves!</span>")
+				grow_up(/mob/living/simple_animal/hostile/bigroach)
+			else if(prob(10))
+				Die(gore = 0)
 
 /mob/living/simple_animal/cockroach/bite_act(mob/living/carbon/human/H)
 	if(size >= H.size)
