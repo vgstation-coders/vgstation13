@@ -43,7 +43,7 @@
 
 /mob/living/simple_animal/hostile/bigroach/queen
 	name = "cockroach matriarch"
-	desc = "A cockroach, twisted and deformed by mutagenic chemicals nearly to the point of unrecognition, reaching an abnormal size in the progress. By an odd twist of luck, the result is not only alive and functioning - it is also able to lay eggs."
+	desc = "A cockroach, twisted and deformed by mutagenic chemicals nearly to the point of unrecognition, reaching nearly the size of an adult human. By an odd twist of fate, is not only alive and functioning - it is also able to lay eggs."
 
 	icon_state = "hugeroach"
 	icon_living = "hugeroach"
