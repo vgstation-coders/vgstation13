@@ -292,7 +292,7 @@
 				Die(gore = 0)
 			else if(prob(1))
 				playsound(src, 'sound/effects/lingextends.ogg', 100)
-				visible_message("<span class='userdanger'>\The [src] rapidly evolves, twisting and deforming into something terrifying before your own very eyes!</span>")
+				visible_message("<span class='userdanger'>\The [src] rapidly evolves, twisting and deforming into something terrifying before your very eyes!</span>")
 				message_admins("Created a mutated cockroach matriarch at [formatJumpTo(get_turf(src))]; usr = [key_name(usr)]")
 				grow_up(/mob/living/simple_animal/hostile/bigroach/queen)
 
