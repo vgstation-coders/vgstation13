@@ -64,6 +64,8 @@
 
 	stat_attack = UNCONSCIOUS //Attack unconscious mobs to lay eggs
 
+	var/egg_type = /obj/item/weapon/reagent_containers/food/snacks/egg/bigroach
+
 /mob/living/simple_animal/hostile/bigroach/queen/AttackingTarget()
 	if(isliving(target))
 		var/mob/living/L = target
@@ -72,10 +74,10 @@
 		if(L.isUnconscious())
 			visible_message("<span class='notice'>\The [src] lays some eggs on top of \the [L]!</span>")
 			playsound(src, 'sound/effects/bug_hiss.ogg', 50, 1)
-			var/obj/item/egg = new /obj/item/weapon/reagent_containers/food/snacks/egg/bigroach(get_turf(target))
+			var/obj/item/egg = new egg_type(get_turf(target))
 
 			//40% chance for the egg to be fertile
-			if(prob(40))
+			if(prob(40) && (animal_count[/mob/living/simple_animal/hostile/bigroach] < ANIMAL_CHILD_CAP))
 				processing_objects.Add(egg)
 
 	return ..()
@@ -115,7 +117,7 @@
 /mob/living/simple_animal/hostile/bigroach/LoseAggro()
 	..()
 
-	icon_living = "bigroach"
+	icon_living = initial(icon_living)
 	icon_state = icon_living
 
 /mob/living/simple_animal/hostile/bigroach/ex_act()
