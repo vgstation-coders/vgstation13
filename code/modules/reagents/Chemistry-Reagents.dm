@@ -853,7 +853,7 @@
 	description = "Inaprovaline is a synaptic stimulant and cardiostimulant. Commonly used to stabilize patients."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
-	custom_metabolism = 0.5
+	custom_metabolism = 0.2
 	pain_resistance = 25
 	density = 1.66
 	specheatcap = 0.8
