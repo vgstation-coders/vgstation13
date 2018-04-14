@@ -27,10 +27,11 @@
 		else
 			return "Unknown"
 var/list/department_radio_keys = list(
-	  ":0" = "Deathsquad",	"#0" = "Deathsquad",	".0" = "Deathsquad",
+	  ":0" = "Deathsquad",	 "#0" = "Deathsquad",	".0" = "Deathsquad",
+	  ":-" = "Response Team","#-" = "Response Team",".-" = "Response Team",
 
-	  ":r" = "right ear",	"#r" = "right ear",		".r" = "right ear", "!r" = "fake right ear",
-	  ":l" = "left ear",	"#l" = "left ear",		".l" = "left ear",  "!l" = "fake left ear",
+	  ":r" = "right hand",	"#r" = "right hand",	".r" = "right hand", "!r" = "fake right hand",
+	  ":l" = "left hand",	"#l" = "left hand",		".l" = "left hand",  "!l" = "fake left hand",
 	  ":i" = "intercom",	"#i" = "intercom",		".i" = "intercom",
 	  ":h" = "department",	"#h" = "department",	".h" = "department",
 	  ":c" = "Command",		"#c" = "Command",		".c" = "Command",
@@ -42,7 +43,6 @@ var/list/department_radio_keys = list(
 	  ":b" = "binary",		"#b" = "binary",		".b" = "binary",
 	  ":a" = "alientalk",	"#a" = "alientalk",		".a" = "alientalk",
 	  ":t" = "Syndicate",	"#t" = "Syndicate",		".t" = "Syndicate",
-	  ":r" = "Response Team","#r" = "Response Team",".r" = "Response Team",
 	  ":u" = "Supply",		"#u" = "Supply",		".u" = "Supply",
 	  ":d" = "Service",     "#d" = "Service",       ".d" = "Service",
 	  ":g" = "changeling",	"#g" = "changeling",	".g" = "changeling",
@@ -50,8 +50,8 @@ var/list/department_radio_keys = list(
 	  ":y" = "ancientchat",	"#y" = "ancientchat",	".y" = "ancientchat",
 	  ":p" = "AI Private",	"#p" = "AI Private",	".p" = "AI Private",
 
-	  ":R" = "right ear",	"#R" = "right ear",		".R" = "right ear", "!R" = "fake right ear",
-	  ":L" = "left ear",	"#L" = "left ear",		".L" = "left ear",  "!L" = "fake left ear",
+	  ":R" = "right hand",	"#R" = "right hand",	".R" = "right hand", "!R" = "fake right hand",
+	  ":L" = "left hand",	"#L" = "left hand",		".L" = "left hand",  "!L" = "fake left hand",
 	  ":I" = "intercom",	"#I" = "intercom",		".I" = "intercom",
 	  ":H" = "department",	"#H" = "department",	".H" = "department",
 	  ":C" = "Command",		"#C" = "Command",		".C" = "Command",
@@ -63,7 +63,6 @@ var/list/department_radio_keys = list(
 	  ":B" = "binary",		"#B" = "binary",		".B" = "binary",
 	  ":A" = "alientalk",	"#A" = "alientalk",		".A" = "alientalk",
 	  ":T" = "Syndicate",	"#T" = "Syndicate",		".T" = "Syndicate",
-	  ":R" = "Response Team","#R" = "Response Team",".R" = "Response Team",
 	  ":U" = "Supply",		"#U" = "Supply",		".U" = "Supply",
 	  ":D" = "Service",     "#D" = "Service",       ".D" = "Service",
 	  ":G" = "changeling",	"#G" = "changeling",	".G" = "changeling",
@@ -73,21 +72,21 @@ var/list/department_radio_keys = list(
 
 	  //kinda localization -- rastaf0
 	  //same keys as above, but on russian keyboard layout. This file uses cp1251 as encoding.
-	  ":ê" = "right ear",	"#ê" = "right ear",		".ê" = "right ear",
-	  ":ä" = "left ear",	"#ä" = "left ear",		".ä" = "left ear",
+	  ":ê" = "right hand",	"#ê" = "right hand",	".ê" = "right hand",
+	  ":ä" = "left hand",	"#ä" = "left hand",	".ä" = "left hand",
 	  ":ø" = "intercom",	"#ø" = "intercom",		".ø" = "intercom",
 	  ":ð" = "department",	"#ð" = "department",	".ð" = "department",
-	  ":ñ" = "Command",		"#ñ" = "Command",		".ñ" = "Command",
-	  ":ò" = "Science",		"#ò" = "Science",		".ò" = "Science",
-	  ":ü" = "Medical",		"#ü" = "Medical",		".ü" = "Medical",
-	  ":ó" = "Engineering",	"#ó" = "Engineering",	".ó" = "Engineering",
+	  ":ñ" = "Command",	"#ñ" = "Command",		".ñ" = "Command",
+	  ":ò" = "Science",	"#ò" = "Science",		".ò" = "Science",
+	  ":ü" = "Medical",	"#ü" = "Medical",		".ü" = "Medical",
+	  ":ó" = "Engineering","#ó" = "Engineering",	".ó" = "Engineering",
 	  ":û" = "Security",	"#û" = "Security",		".û" = "Security",
-	  ":ö" = "whisper",		"#ö" = "whisper",		".ö" = "whisper",
+	  ":ö" = "whisper",	"#ö" = "whisper",		".ö" = "whisper",
 	  ":è" = "binary",		"#è" = "binary",		".è" = "binary",
-	  ":ô" = "alientalk",	"#ô" = "alientalk",		".ô" = "alientalk",
-	  ":å" = "Syndicate",	"#å" = "Syndicate",		".å" = "Syndicate",
+	  ":ô" = "alientalk",	"#ô" = "alientalk",	".ô" = "alientalk",
+	  ":å" = "Syndicate",	"#å" = "Syndicate",	".å" = "Syndicate",
 	  ":é" = "Supply",		"#é" = "Supply",		".é" = "Supply",
-	  ":â" = "Service",     "#â" = "Service",       ".â" = "Service",
+	  ":â" = "Service",    "#â" = "Service",      ".â" = "Service",
 	  ":ï" = "changeling",	"#ï" = "changeling",	".ï" = "changeling"
 )
 
