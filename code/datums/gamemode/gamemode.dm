@@ -107,15 +107,11 @@
 /datum/gamemode/proc/CreateNumOfRoles(var/datum/role/R, var/num)
 	. = list()
 	var/list/available_players = get_ready_players()
-	to_chat(world, "avail players = [available_players.len]")
 	for(var/mob/new_player/P in available_players)
-		to_chat(world, "player [P]")
 		if(!P.client || !P.mind)
-			to_chat(world, "Removed because no mind")
 			available_players.Remove(P)
 			continue
 		if(!P.client.desires_role(initial(R.required_pref)) || jobban_isbanned(P, initial(R.required_pref)))
-			to_chat(world, "Removed because doesn't want")
 			available_players.Remove(P)
 			continue
 	for(var/i = 0 to num)
@@ -124,7 +120,6 @@
 			break
 		shuffle(available_players)
 		var/datum/role/newRole = new R
-		to_chat(world, "new role created")
 		. += newRole // Get the roles we created
 		if(!newRole)
 			WARNING("Role killed itself or was otherwise missing!")
