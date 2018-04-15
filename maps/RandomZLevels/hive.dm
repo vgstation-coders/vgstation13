@@ -30,7 +30,7 @@
 
 #define DIFF_CASUAL   "CASUAL"
 #define DIFF_CASUAL_SCORE_MULTIPLIER 1
-#define DIFF_CASUAL_DESC "Monster respawns halved in amount. Pylons emit 15% radiation."
+#define DIFF_CASUAL_DESC "Monster respawns reduced by 66%. Pylons emit 15% radiation."
 
 #define DIFF_BABY     "BABY'S DAY OUT"
 #define DIFF_BABY_SCORE_MULTIPLIER 0.5
@@ -106,10 +106,10 @@
 
 	switch(difficulty)
 		if(DIFF_CASUAL)
-			//50% respawn points inactive
+			//66% respawn points inactive
 			//Pylons 15% effective
 			for(var/obj/effect/landmark/hive/monster_spawner/MS in objects)
-				if(prob(50))
+				if(prob(66))
 					MS.inactive = TRUE
 			for(var/obj/structure/hive/pylon/P in objects)
 				P.radiation_multiplier = 0.15
@@ -121,7 +121,7 @@
 				MS.inactive = TRUE
 			for(var/obj/structure/hive/pylon/P in objects)
 				P.emit_oxyloss = TRUE
-				P.radiation_multiplier = 0.15 //Otherwise it gets too deadly
+				P.radiation_multiplier = 0.25 //Wouldn't want it to be too deadly
 
 
 /datum/map_element/away_mission/hive/process_scoreboard()
@@ -607,7 +607,7 @@ var/list/hive_pylons = list()
 	for(var/mob/living/carbon/M in range(src, rad_range))
 		//Babymode deals temporary oxygen damage
 		if(emit_oxyloss)
-			if(prob(5))
+			if(prob(10))
 				to_chat(M, "<span class='warning'>You feel [pick("mildly", "a bit", "somewhat")] [pick("irritated", "inconvenienced", "bothered")].</span>")
 			M.adjustOxyLoss(radiation_power * radiation_multiplier)
 			continue
