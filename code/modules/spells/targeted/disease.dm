@@ -22,7 +22,7 @@
 
 /spell/targeted/disease/cast_check(skipcharge = 0,mob/user = usr)
 	. = ..()
-	if (!user.vampire_power(blood_cost, 0, 1))
+	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
 
 /spell/targeted/disease/is_valid_target(var/target, var/mob/user, var/list/options)
@@ -58,4 +58,6 @@
 	infect_virus2(target,shutdown,0)
 
 	var/datum/role/vampire/V = isvampire(user)
-	V.remove_blood(50)
+	if(!V)
+		return FALSE
+	V.remove_blood(blood_cost)

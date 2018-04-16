@@ -164,5 +164,12 @@
 	. = ..()
 	if (!.) // No need to go further.
 		return FALSE
-	if (!user.vampire_power(blood_cost, 0))
+	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
+
+/spell/targeted/ethereal_jaunt/vamp/cast(list/targets, var/mob/user)
+	..()
+	var/datum/role/vampire/V = isvampire(user)
+	if (!V)
+		return FALSE
+	V.remove_blood(blood_cost)

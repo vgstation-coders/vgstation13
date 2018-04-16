@@ -22,7 +22,7 @@
 	. = ..()
 	if (!.) // No need to go further.
 		return FALSE
-	if (!user.vampire_power(blood_cost, 0))
+	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
 
 /spell/cloak/choose_targets(var/mob/user = usr)
@@ -31,5 +31,8 @@
 /spell/cloak/cast(var/list/targets, var/mob/user)
 	var/mob/living/carbon/human/H = user
 	var/datum/role/vampire/V = isvampire(user) // Shouldn't ever be null, as cast_check checks if we're a vamp.
+	if (!V)
+		return FALSE
 	V.iscloaking = !V.iscloaking
 	to_chat(H, "<span class='notice'>You will now be [V.iscloaking ? "hidden" : "seen"] in darkness.</span>")
+	V.remove_blood(blood_cost)

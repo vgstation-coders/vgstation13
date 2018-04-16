@@ -22,7 +22,7 @@
 	. = ..()
 	if (!.) // No need to go further.
 		return FALSE
-	if (!user.vampire_power(blood_cost, 0))
+	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
 
 /spell/rejuvenate/choose_targets(var/mob/user = usr)
@@ -44,3 +44,4 @@
 				H.adjustToxLoss(-2)
 				H.adjustFireLoss(-2)
 				sleep(3.5 SECONDS) // Before the next healing tick
+	V.remove_blood(blood_cost)
