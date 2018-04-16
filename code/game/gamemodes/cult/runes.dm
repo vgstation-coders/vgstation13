@@ -1168,9 +1168,9 @@
 			status = ""
 			if(C in visible_mobs)
 				status = "(Present)"
-			else if(C.stat==DEAD)
+			else if(C.isDead())
 				status = "(Dead)"
-			annotated_cultists[text("[] []", C.name, status)] = C
+			annotated_cultists["[C.name] [status]"] = C
 		var/choice = input("Choose the one who you want to summon", "Followers of Geometer") as null|anything in annotated_cultists
 		var/mob/living/carbon/cultist = annotated_cultists[choice]
 		if(!cultist)
