@@ -669,11 +669,15 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	return 1
 
-/mob/living/simple_animal/proc/grow_up()
-	if(src.type == species_type) //Already grown up
+/mob/living/simple_animal/proc/grow_up(type_override = null)
+	var/new_type = species_type
+	if(type_override)
+		new_type = type_override
+
+	if(src.type == new_type) //Already grown up
 		return
 
-	var/mob/living/simple_animal/new_animal = new species_type(src.loc)
+	var/mob/living/simple_animal/new_animal = new new_type(src.loc)
 
 	if(locked_to) //Handle atom locking
 		var/atom/movable/A = locked_to
@@ -688,6 +692,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	forceMove(get_turf(src))
 	qdel(src)
+
+	return new_animal
 
 /mob/living/simple_animal/proc/inherit_mind(mob/living/simple_animal/from)
 	src.faction = from.faction
