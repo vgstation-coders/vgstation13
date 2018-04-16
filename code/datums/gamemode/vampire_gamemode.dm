@@ -24,6 +24,12 @@
 			v_fac.addMaster(vampires[i])
 	return vampires
 
+/datum/gamemode/vampire/createBasicRole(var/type_role)
+	for (var/datum/faction/F in factions)
+		if (!F.members.len) // First empty fac
+			return new type_role(fac = F)
+			
+
 /datum/gamemode/vampire/PopulateFactions()
 	// Void - we do that in CreateRoles()
 
@@ -134,7 +140,7 @@
 /datum/power/vampire/slave
 	blood_threeshold = 300
 	id = VAMP_SLAVE
-	spell_path = /spell/targeted/enthrall // TODO
+	spell_path = /spell/targeted/enthrall
 	helptext = "You have gained the Enthrall ability which at a heavy blood cost allows you to enslave a human that is not loyal to any other, forever."
 
 /datum/power/vampire/blink

@@ -38,7 +38,6 @@
 /datum/gamemode/proc/SetupFactions()
 
 /datum/gamemode/proc/Setup()
-	to_chat(world, "Setup")
 	if(minimum_player_count && minimum_player_count < get_player_count())
 		TearDown()
 		return 0
@@ -56,14 +55,11 @@
 
 /datum/gamemode/proc/CreateFaction(var/Fac, var/population, var/override = 0)
 	var/datum/faction/F = new Fac
-	to_chat(world, "Create Fac")
 	if(F.can_setup(population) || override)
-		to_chat(world, "Could setup")
 		factions += F
 		factions_allowed -= F
 		return F
 	else
-		to_chat(world, "Could not setup")
 		qdel(F)
 		return null
 /*
@@ -119,7 +115,7 @@
 			WARNING("We've gone through all available players, there's nobody to make an antag!")
 			break
 		shuffle(available_players)
-		var/datum/role/newRole = new R
+		var/datum/role/newRole = createBasicRole(R)
 		. += newRole // Get the roles we created
 		if(!newRole)
 			WARNING("Role killed itself or was otherwise missing!")
@@ -128,11 +124,12 @@
 		var/mob/new_player/P = pick(available_players)
 		available_players.Remove(P)
 		if(!newRole.AssignToRole(P.mind))
-			to_chat(world, "failed assignToRole()")
 			newRole.Drop()
 			i--
 			continue
 
+/datum/gamemode/proc/createBasicRole(var/type_role)
+	return new type_role
 
 
 /datum/gamemode/proc/latespawn(var/mob/mob) //Check factions, see if anyone wants a latejoiner

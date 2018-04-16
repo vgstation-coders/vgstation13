@@ -60,6 +60,9 @@
 	for(var/type_VP in roundstart_powers)
 		var/datum/power/vampire/VP = new type_VP
 		VP.Give(src)
+	
+	faction.name = "Lord [antag.current]'s vampiric servants."
+
 
 /datum/role/vampire/RemoveFromRole(var/datum/mind/M)
 	var/list/vamp_spells = getAllVampSpells()
@@ -148,7 +151,7 @@
 		if(!target.mind)
 			to_chat(assailant, "<span class='warning'>This blood is lifeless and has no power.</span>")
 			draining = null
-			return 0
+			return FALSE
 		if(!target.vessel.get_reagent_amount(BLOOD))
 			to_chat(assailant, "<span class='warning'>They've got no blood left to give.</span>")
 			break
@@ -156,7 +159,6 @@
 			blood = min(10, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 10 blood, give them the remnant else they get 10 blood
 			blood_total += blood
 			blood_usable += blood
-			update_vamp_hud()
 			target.adjustCloneLoss(10) // beep boop 10 damage
 		else
 			blood = min(5, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 5 bloods
@@ -165,6 +167,7 @@
 			to_chat(assailant, "<span class='notice'>You have accumulated [blood_total] [blood_total > 1 ? "units" : "unit"] of blood[blood_usable_before != blood_usable ?", and have [blood_usable] left to use." : "."]</span>")
 		check_vampire_upgrade()
 		target.vessel.remove_reagent(BLOOD,25)
+		update_vamp_hud()
 
 	draining = null
 	to_chat(assailant, "<span class='notice'>You stop draining \the [target] of blood.</span>")
@@ -178,7 +181,15 @@
 			var/datum/power/vampire/VP = new VP_type
 			if (!(VP.id in powers))
 				VP.Give(src)
-			
+
+/datum/role/vampire/proc/handle_enthrall(var/datum/mind/M)
+	if (!istype(M))
+		return FALSE
+	var/datum/role/thrall/T = new(thrall = M, master = src) // Creating a new thrall
+	update_vamp_hud(T)
+	thralls += T
+	for (var/datum/role/thrall/T_other in thralls)
+		T_other.update_vamp_hud(T)
 /*
 -- Life() related procs --
 */
@@ -339,7 +350,8 @@
 -- Helpers --
 */
 
-/datum/role/vampire/proc/update_vamp_hud()
+// ! - need to handle thrall removing
+/datum/role/vampire/proc/update_vamp_hud(var/datum/role/thrall/new_T = null)
 	var/mob/M = antag.current
 	if(M.hud_used)
 		if(!M.hud_used.vampire_blood_display)
@@ -348,6 +360,17 @@
 		M.hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE*2
 		M.hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
 		M.hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'>U:<font color='#33FF33'>[blood_usable]</font><br> T:<font color='#FFFF00'>[blood_total]</font></div>"
+
+	if (istype(new_T))
+		if (thralls.len <= 1) // Our very first thrall ! Let's celebrate by getting a new icon
+			var/image/I = image('icons/mob/mob.dmi', loc = antag.current, icon_state = "vampire")
+			I.plane = VAMP_ANTAG_HUD_PLANE
+			antag.current.client.images += I
+		
+		var/mob/thrall = new_T.antag.current
+		var/image/I2 = image('icons/mob/mob.dmi', loc = thrall, icon_state = "vampthrall")
+		I2.plane = VAMP_ANTAG_HUD_PLANE
+		antag.current.client.images += I2
 
 /mob/living/carbon/human/proc/check_sun()
 	var/ax = x
@@ -401,6 +424,17 @@
 	logo_state = "thrall-logo"
 	var/datum/role/vampire/master
 
+/datum/role/thrall/New(var/datum/mind/thrall, var/datum/role/vampire/master)
+	if(!istype(master))
+		return FALSE
+
+	src.master = master
+	master.faction.members += src
+	faction = master.faction
+	antag = thrall
+
+	OnPostSetup()
+
 /datum/role/thrall/Greet(var/you_are = TRUE)
 	var/dat
 	if (you_are)
@@ -412,3 +446,21 @@
 
 /datum/role/thrall/ForgeObjectives()
 	objectives.AddObjective(new /datum/objective/protect_master(master), src.antag)
+
+/datum/role/thrall/proc/update_vamp_hud(var/datum/role/thrall/new_T = null)
+	if (!istype(new_T))
+		return FALSE
+
+	var/image/I = image('icons/mob/mob.dmi', loc = new_T.antag.current, icon_state = "vampthrall")
+	I.plane = VAMP_ANTAG_HUD_PLANE
+	antag.current.client.images += I
+	
+	if (new_T == src) // He just joined - let's tell him who is the master, as well as the other guys
+		var/image/I2 = image('icons/mob/mob.dmi', loc = master.antag.current, icon_state = "vampire")
+		I2.plane = VAMP_ANTAG_HUD_PLANE
+		antag.current.client.images += I2
+		for (var/datum/role/thrall/T_other in master.thralls - src)
+			var/image/I3= image('icons/mob/mob.dmi', loc = T_other.antag.current, icon_state = "vampthrall")
+			I2.plane = VAMP_ANTAG_HUD_PLANE
+			antag.current.client.images += I2
+

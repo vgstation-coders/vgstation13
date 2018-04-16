@@ -60,3 +60,7 @@
 		W.Destroy(brokenup = 1)
 
 	playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
+
+	var/datum/role/vampire/V = isvampire(user)
+	if (V)
+		return FALSE

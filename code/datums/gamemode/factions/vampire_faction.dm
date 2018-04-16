@@ -10,7 +10,6 @@
 
 /datum/faction/vampire/New(var/datum/role/vampire/V)
 	..()
-	to_chat(world, "Creating a faction !")
 	if (istype(V)) // Late creation
 		addMaster(V)
 
@@ -19,8 +18,6 @@
 		leader = V
 		members += V
 		V.faction = src
-		V.antag.faction = src
-		name = "Lord [V.antag.current]'s vampiric servants.'"
 
 /datum/faction/vampire/can_setup()
 	// TODO : check if the number of players > 10, if we have at least 2 players with vamp enabled.
