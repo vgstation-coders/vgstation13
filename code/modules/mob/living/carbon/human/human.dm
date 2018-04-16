@@ -1428,7 +1428,7 @@
 // Makes all robot organs, internal and external, organic.
 /mob/living/carbon/human/proc/make_all_robot_parts_organic()
 	make_robot_limbs_organic()
-	make_robo
+	make_robot_internals_organic()
 	
 // Makes all limbs robotic.
 /mob/living/carbon/human/proc/make_organic_limbs_robotic()
