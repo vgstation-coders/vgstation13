@@ -155,7 +155,6 @@
 	if (href_list["rune"])
 		var/obj/item/weapon/paper/talisman/T
 		switch(href_list["rune"])
-			var/obj/item/weapon/paper/talisman/T
 			if("newtome")
 				T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				T.imbue = "newtome"
