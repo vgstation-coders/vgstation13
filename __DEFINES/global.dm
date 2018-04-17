@@ -369,11 +369,11 @@ var/list/blacklisted_mobs = list(
 
 //Boss monster list
 var/list/boss_mobs = existing_typesof(
-	/mob/living/simple_animal/scp_173,				// Just a statue.
-	/mob/living/simple_animal/hostile/hivebot/tele,	// Hivebot spawner WIP thing
-	/mob/living/simple_animal/hostile/wendigo,		// Stupid strong evolving creature things that scream for help
-	/mob/living/simple_animal/hostile/mechahitler,	// Sieg heil!
-	/mob/living/simple_animal/hostile/alien/queen,	// Queens can make eggs and spark the xenocalypse
+	/mob/living/simple_animal/scp_173,						// Just a statue.
+	/mob/living/simple_animal/hostile/hivebot/tele,			// Hivebot spawner WIP thing
+	/mob/living/simple_animal/hostile/wendigo,				// Stupid strong evolving creature things that scream for help
+	/mob/living/simple_animal/hostile/mechahitler,			// Sieg heil!
+	/mob/living/simple_animal/hostile/alien/queen/large,	// The bigger and beefier version of queens.
 	)
 
 //Global list of all Cyborg/MoMMI modules.
