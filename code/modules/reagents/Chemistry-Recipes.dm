@@ -1216,7 +1216,8 @@
 		/mob/living/simple_animal/hostile/mimic/crate,
 		/mob/living/simple_animal/hostile/mimic/crate/chest,
 		/mob/living/simple_animal/hostile/mimic/crate/item,
-		) + typesof(/mob/living/simple_animal/hostile/humanoid) + typesof(/mob/living/simple_animal/hostile/asteroid) //Exclusion list for things you don't want the reaction to create.
+		/mob/living/simple_animal/hostile/mechahitler,
+		) + typesof(/mob/living/simple_animal/hostile/humanoid) + typesof(/mob/living/simple_animal/hostile/asteroid) + typesof(/mob/living/simple_animal/hostile/wendigo)//Exclusion list for things you don't want the reaction to create.
 
 	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - blocked //List of possible hostile mobs
 
