@@ -1203,8 +1203,6 @@
 
 	var/blocked = list(
 		/mob/living/simple_animal/hostile/alien/queen/large,
-		/mob/living/simple_animal/hostile/faithless,
-		/mob/living/simple_animal/hostile/faithless/cult,
 		/mob/living/simple_animal/hostile/scarybat/cult,
 		/mob/living/simple_animal/hostile/creature/cult,
 		/mob/living/simple_animal/hostile/retaliate/clown,
@@ -1212,12 +1210,8 @@
 		/mob/living/simple_animal/hostile/carp/holocarp,
 		/mob/living/simple_animal/hostile/slime,
 		/mob/living/simple_animal/hostile/mining_drone,
-		/mob/living/simple_animal/hostile/mimic,
-		/mob/living/simple_animal/hostile/mimic/crate,
-		/mob/living/simple_animal/hostile/mimic/crate/chest,
-		/mob/living/simple_animal/hostile/mimic/crate/item,
 		/mob/living/simple_animal/hostile/mechahitler,
-		) + typesof(/mob/living/simple_animal/hostile/humanoid) + typesof(/mob/living/simple_animal/hostile/asteroid) + typesof(/mob/living/simple_animal/hostile/wendigo)//Exclusion list for things you don't want the reaction to create.
+		) + typesof(/mob/living/simple_animal/hostile/faithless) + typesof(/mob/living/simple_animal/hostile/humanoid) + typesof(/mob/living/simple_animal/hostile/asteroid) + typesof(/mob/living/simple_animal/hostile/wendigo) + typesof(/mob/living/simple_animal/hostile/mimic)//Exclusion list for things you don't want the reaction to create.
 
 	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - blocked //List of possible hostile mobs
 
