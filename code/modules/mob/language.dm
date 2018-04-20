@@ -275,6 +275,7 @@
 	exclaim_verb = "blurbs"
 	key = "@"
 	colour = "grey"
+	flags = RESTRICTED
 	space_chance = 35
 	native = 1
 	syllables = list("khah","kig","kitol","kaor","bar","dar","dator","lok","ma","mu","o","och","gort","gal")
