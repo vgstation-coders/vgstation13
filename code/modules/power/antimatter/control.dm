@@ -66,7 +66,7 @@
 	if(stat & (NOPOWER|BROKEN) || !active)//can update the icons even without power
 		return
 
-	if(!fueljar)//No fuel but we are on, shutdown
+	if(!fueljar || fueljar.fuel <= 0)//No fuel but we are on, shutdown
 		toggle_power()
 		//Angry buzz or such here
 		return
