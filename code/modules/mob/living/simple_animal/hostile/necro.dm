@@ -691,7 +691,7 @@
 			visible_message("<span class = 'blob'>\The [src] glows with a brilliant light!</span>")
 		set_light(vision_range/2, vision_range, "#a1d68b")
 		spawn(1 SECONDS)
-			emit_harvestable_radiation(get_turf(src), rand(500, 1000), range = 7)
+			emitted_harvestable_radiation(get_turf(src), rand(500, 1000), range = 7)
 
 			var/list/can_see = view(src, vision_range)
 			for(var/mob/living/carbon/human/H in can_see)

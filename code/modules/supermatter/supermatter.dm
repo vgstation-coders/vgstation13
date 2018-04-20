@@ -361,7 +361,7 @@
 	Consume(user)
 
 /obj/machinery/power/supermatter/proc/transfer_energy()
-	emit_harvestable_radiation(get_turf(src), power, range = 15)
+	emitted_harvestable_radiation(get_turf(src), power, range = 15)
 
 /obj/machinery/power/supermatter/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	. = ..()

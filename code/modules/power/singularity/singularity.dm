@@ -581,7 +581,7 @@
 	return
 
 /obj/machinery/singularity/proc/pulse()
-	emit_harvestable_radiation(get_turf(src), energy, range = 15)
+	emitted_harvestable_radiation(get_turf(src), energy, range = 15)
 
 /obj/machinery/singularity/proc/on_capture()
 	chained = 1

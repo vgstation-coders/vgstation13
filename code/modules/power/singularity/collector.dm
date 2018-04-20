@@ -126,10 +126,10 @@ var/global/list/rad_collectors = list()
 	else
 		update_icons()
 
-/proc/emit_harvestable_radiation(turf/center, power, range = 7)
+/proc/emitted_harvestable_radiation(turf/center, power, range = 7)
 	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
 		if(get_dist(R, center) <= range) //Better than using orange() every process.
-			R.receive_pulse(energy)
+			R.receive_pulse(power)
 
 /obj/machinery/power/rad_collector/proc/receive_pulse(const/pulse_strength)
 	if (P && active)
