@@ -692,7 +692,7 @@
 		set_light(vision_range/2, vision_range, "#a1d68b")
 		spawn(1 SECONDS)
 			/
-			emitted_harvestable_radiation(get_turf(src), rand(2000, 5000), range = 7)
+			emitted_harvestable_radiation(get_turf(src), rand(250, 500), range = 7)
 
 			var/list/can_see = view(src, vision_range)
 			for(var/mob/living/carbon/human/H in can_see)
