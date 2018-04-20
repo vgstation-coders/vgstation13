@@ -64,6 +64,9 @@ Used In File(s): /code/game/machinery/computers/communications.dm
 			<div class="line">
 				{{:helper.link('Message List','comment',{'operation':'messagelist'})}}
 			</div>
+			<div class="line">
+				{{:helper.link('Toggle Port Status','key',{'operation':'SetPortRestriction'})}}
+			</div>
 			{{if data.str_security_level == "red" || data.str_security_level == "delta"}}
 				<div class="line">
 					{{:helper.link('Request Response Team','alert',{'operation':'emergency_screen'})}}

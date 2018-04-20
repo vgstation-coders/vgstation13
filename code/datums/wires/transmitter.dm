@@ -48,9 +48,10 @@ var/const/TRANS_SETTINGS = 16 //Pulse shows percentage given by environment temp
 
 /datum/wires/transmitter/UpdateCut(var/index, var/mended)
 	var/obj/machinery/media/transmitter/broadcast/T = holder
+	var/obj/I = usr.get_active_hand()
 	switch(index)
 		if(TRANS_POWER)
 			T.power_change()
-			T.shock(usr, 50)
+			T.shock(usr, 50, get_conductivity(I))
 		if(TRANS_LINK)
-			T.shock(usr, 50)
+			T.shock(usr, 50, get_conductivity(I))

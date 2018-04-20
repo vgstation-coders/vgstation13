@@ -222,7 +222,7 @@
 
 /proc/getAvailableRobotModules()
 	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Security")
-	if(security_level == SEC_LEVEL_RED)
+	if (security_level == SEC_LEVEL_RED)
 		modules+="Combat"
 	return modules
 
@@ -303,7 +303,7 @@
 
 	var/newname
 	for(var/i = 1 to 3)
-		newname = trimcenter(trim(stripped_input(src,"You are a [braintype]. Enter a name, or leave blank for the default name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN))
+		newname = reject_bad_name(stripped_input(src,"You are a [braintype]. Enter a name, or leave blank for the default name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN)
 		if(newname == null)
 			if(alert(src,"Are you sure you want the default name?",,"Yes","No") == "Yes")
 				break
@@ -497,6 +497,13 @@
 		return
 	for(var/obj/item/stack/S in module.modules)
 		stat(null, text("[S.name]: [S.amount]/[S.max_amount]"))
+
+/mob/living/silicon/robot/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
+	if(!(Holiday == APRIL_FOOLS_DAY))
+		return 0
+	if(..())
+		spark(src, 5, FALSE)
+		return 1
 
 // update the status screen display
 /mob/living/silicon/robot/Stat()

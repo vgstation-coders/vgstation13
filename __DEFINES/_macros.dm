@@ -8,9 +8,9 @@
 
 #define ismonkey(A) istype(A, /mob/living/carbon/monkey)
 
-#define ismartian(A) istype(A, /mob/living/carbon/martian)
+#define ismartian(A) istype(A, /mob/living/carbon/complex/martian)
 
-#define ishigherbeing(A) (ishuman(A) || ismartian(A))
+#define ishigherbeing(A) (ishuman(A) || ismartian(A) || (ismonkey(A) && A.dexterity_check()))
 
 #define isvox(A) (ishuman(A) && A.species && istype(A.species, /datum/species/vox))
 
@@ -186,6 +186,7 @@
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor))
 
+#define issilent(A) (A.silent || (ishuman(A) && (A:miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 //Macros for antags
 
 #define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind && H.mind.vampire)
@@ -274,3 +275,4 @@ proc/get_space_area()
 
 #define SNOW_THEME (map.snow_theme || Holiday == XMAS || Holiday == XMAS_EVE)
 
+#define get_conductivity(A) (A ? A.siemens_coefficient : 1)

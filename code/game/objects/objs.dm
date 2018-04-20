@@ -189,6 +189,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return 1
 	return
 
+
 /obj/proc/cultify()
 	qdel(src)
 

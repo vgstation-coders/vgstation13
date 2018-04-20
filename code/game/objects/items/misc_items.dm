@@ -49,7 +49,7 @@
 
 /obj/item/red_ribbon_arm/equipped(mob/living/carbon/human/H, equipped_slot)
 	..()
-	if(istype(H) && H.get_item_by_slot(slot_belt) == src && equipped_slot != null)
+	if(istype(H) && H.get_item_by_slot(slot_belt) == src && equipped_slot != null && equipped_slot == slot_belt)
 		H.set_hand_amount(H.held_items.len + 1)
 
 /obj/item/red_ribbon_arm/unequipped(mob/living/carbon/human/user, var/from_slot = null)

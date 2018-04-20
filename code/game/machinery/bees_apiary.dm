@@ -1,5 +1,7 @@
 //http://www.youtube.com/watch?v=-1GadTfGFvU
 
+#define MAX_BEES_PER_HIVE	40
+
 /*
 
 > apiary tray
@@ -203,14 +205,28 @@
 	else if(istype(O, /obj/item/weapon/bee_net))
 		var/obj/item/weapon/bee_net/N = O
 		if(N.caught_bees.len)
-			for (var/datum/bee/B in N.caught_bees)
-				if (!species || !(queen_bees_inside || worker_bees_inside))
-					species = B.species
-				if (species == B.species)
-					enterHive(B)
-					N.caught_bees.Remove(B)
-			N.current_species = null
-			to_chat(user, "<span class='notice'>You empty the [species.common_name] into the apiary.</span>")
+			if (N.caught_bees.len+worker_bees_inside+queen_bees_inside+bees_outside_hive.len <= MAX_BEES_PER_HIVE)
+				for (var/datum/bee/B in N.caught_bees)
+					if (!species || !(queen_bees_inside || worker_bees_inside))
+						species = B.species
+					if (species == B.species)
+						enterHive(B)
+						N.caught_bees.Remove(B)
+				N.current_species = null
+				to_chat(user, "<span class='notice'>You empty the [species.common_name] into the apiary.</span>")
+			else
+				var allowed = MAX_BEES_PER_HIVE - worker_bees_inside+queen_bees_inside+bees_outside_hive.len
+				if (allowed <= 0)
+					to_chat(user, "<span class='warning'>There are too many [species.common_name] in the apiary already.</span>")
+				else
+					for (var/i = 1 to allowed)
+						var/datum/bee/B = pick(N.caught_bees)
+						if (!species || !(queen_bees_inside || worker_bees_inside))
+							species = B.species
+						if (species == B.species)
+							enterHive(B)
+							N.caught_bees.Remove(B)
+					to_chat(user, "<span class='notice'>You empty [allowed] [species.common_name] into the apiary.</span>")
 		else
 			to_chat(user, "<span class='notice'>There are no more bees in the net.</span>")
 	else
@@ -388,7 +404,7 @@
 
 
 		//PRODUCING WORKER BEES
-		if(nutrilevel > 10 && queen_bees_inside > 0 && worker_bees_inside < 20)
+		if(nutrilevel > 10 && queen_bees_inside > 0 && worker_bees_inside < MAX_BEES_PER_HIVE/2)
 			worker_bees_inside += queen_bees_inside
 
 		// We're getting in dire need of nutrients, let's starve bees so others can survive
@@ -542,3 +558,5 @@
 /obj/machinery/apiary/wild/update_icon()
 	overlays.len = 0
 	return
+
+#undef MAX_BEES_PER_HIVE

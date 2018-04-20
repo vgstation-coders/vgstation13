@@ -17,14 +17,7 @@
 	var/dorf = FALSE
 
 /obj/machinery/mommi_spawner/dorf
-	machine_flags = WRENCHMOVE
-	desc = "A large pad mounted to the ground with large bolts."
 	dorf = TRUE
-
-/obj/machinery/mommi_spawner/dorf/attack_ghost(var/mob/dead/observer/user)
-	if(stat & NOPOWER|BROKEN)
-		return
-	..()
 
 /obj/machinery/mommi_spawner/power_change()
 	if (powered())
@@ -176,7 +169,7 @@
 		if(use_mmi)
 			M.mmi = use_mmi
 			use_mmi.forceMove(M)
-		
+
 		if(!use_mmi)
 			M.key = user.key
 			qdel(user)

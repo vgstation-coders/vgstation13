@@ -238,6 +238,7 @@
 	wizard_garb = 1
 
 	species_restricted = null
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/teleportation_scroll,/obj/item/weapon/gun/energy/staff)
 
 /obj/item/clothing/suit/space/rig/wizard/acidable()
 	return 0

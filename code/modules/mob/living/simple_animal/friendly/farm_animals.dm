@@ -194,8 +194,7 @@
 	if(!stat && !ckey)
 		amount_grown += rand(1,2)
 		if(amount_grown >= 100)
-			new /mob/living/simple_animal/chicken(src.loc)
-			qdel(src)
+			grow_up()
 
 /mob/living/simple_animal/chicken
 	name = "chicken"

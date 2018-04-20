@@ -219,6 +219,9 @@
 /datum/organ/internal/brain/slime_core
 	removed_type = /obj/item/organ/internal/brain/slime_core
 
+/datum/organ/internal/brain/mushroom_brain
+	removed_type = /obj/item/organ/internal/brain/mushroom
+
 /datum/organ/internal/appendix
 	name = "appendix"
 	parent_organ = LIMB_GROIN

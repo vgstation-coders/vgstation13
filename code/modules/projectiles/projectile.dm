@@ -508,6 +508,11 @@ var/list/impact_master = list()
 	OnDeath()
 	returnToPool(src)
 
+/obj/item/projectile/beam/lightning/spell/bullet_die()
+        spawn()
+                OnDeath()
+                returnToPool(src)
+
 /obj/item/projectile/proc/bump_original_check()
 	if(!bumped && !isturf(original))
 		if(loc == get_turf(original))

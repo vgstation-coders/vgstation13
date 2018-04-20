@@ -2031,7 +2031,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/aloe = 3,
 		/obj/item/seeds/pitcher = 3,
 		/obj/item/seeds/vaporsac = 3,
-		/obj/item/seeds/dionanode = 3
+		/obj/item/seeds/mushroommanspore = 3
 		)
 	contraband = list(
 		/obj/item/seeds/eggyseed = 2,
@@ -2962,12 +2962,14 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/storage/trader = 3,
 		/obj/item/device/pda/trader = 3,
 		/obj/item/weapon/capsule = 60,
+		/obj/item/weapon/implantcase/peace = 5,
 		/obj/item/vaporizer = 1,
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
 		/obj/item/device/pda/trader = 100,
 		/obj/item/weapon/capsule = 10,
+		/obj/item/weapon/implantcase/peace = 100,
 		/obj/item/vaporizer = 100
 		)
 

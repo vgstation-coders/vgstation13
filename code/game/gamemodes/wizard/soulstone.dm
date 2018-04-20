@@ -262,6 +262,11 @@
 		if(ismob(target))
 			var/mob/M = target
 			true_name = M.real_name
+			for(var/obj/item/W in M)
+				M.drop_from_inventory(W)
+			if(iscarbon(M))
+				var/mob/living/carbon/C = M
+				C.dropBorers(1)
 			new /obj/effect/decal/cleanable/ash(get_turf(target))
 		else if(istype(target,/obj/item/organ/external/head))
 			var/obj/item/organ/external/head/H = target

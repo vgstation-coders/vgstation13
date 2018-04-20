@@ -509,7 +509,7 @@
 			anomaly_factor = 2
 			apply_prefix = FALSE
 			item_type = "[pick("mechanical","robotic","cyborg")] [pick("remains","chassis","debris")]"
-			icon = 'icons/effects/blood.dmi'
+			icon = 'icons/mob/robots.dmi'
 			icon_state = "remainsrobot"
 			additional_desc = pick("Almost mistakeable for the remains of a modern cyborg.",\
 			"They are barely recognisable as anything other than a pile of waste metals.",\
