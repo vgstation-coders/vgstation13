@@ -50,7 +50,7 @@
 		to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
 		L.apply_radiation(5, RAD_INTERNAL)
 
-	emitted_harvestable_radiation(get_turf(owner), 20, range = 2)
+	emitted_harvestable_radiation(get_turf(owner), 1, range = 2) //Around 70W, nothing much really
 
 /datum/dna/gene/disability/radioactive/OnDrawUnderlays(var/mob/M,var/g,var/fat)
 	return "rads[fat]_s"
