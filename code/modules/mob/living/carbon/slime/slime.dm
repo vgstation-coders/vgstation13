@@ -907,7 +907,28 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		if(OS.stat)
 			to_chat(user, "<span class='warning'>You're unable to use the [src] on the dead slime!</span>")
 			return..()
-		var/new_color = input(user, "Choose a new color for the dye:", "Color Select") as anything in list("adamantine", "black", "blue", "bluespace", "cerulean", "darkpurple", "darkblue", "darkpurple", "gold", "grey", "lightpink", "metal", "oil", "orange", "pink", "purple", "pyrite", "red", "sepia", "silver", "yellow")
+		var/new_color = input(user, "Choose a new color for the dye:", "Color Select") as anything in list(
+			//"adamantine",
+			//"black",
+			"blue",
+			//"bluespace",
+			//"cerulean",
+			"darkpurple",
+			"darkblue",
+			"darkpurple",
+			"gold",
+			"grey",
+			//"lightpink",
+			"metal",
+			//"oil",
+			"orange",
+			"pink",
+			"purple",
+			//"pyrite",
+			"red",
+			//"sepia",
+			"silver",
+			"yellow")
 		if(new_color)
 			var/adult = FALSE //Passinging on if it was an adult or not
 			if(istype(OS, /mob/living/carbon/slime/adult))
@@ -926,6 +947,8 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			NS.powerlevel = OS.powerlevel
 			NS.amount_grown = OS.amount_grown
 			NS.nutrition = OS.nutrition
+			if(OS.mind)
+				OS.mind.transfer_to(NS)
 			to_chat(user, "<span class='notice'>You dye the slime [new_color].</span>")
 			qdel(OS)
 			qdel(src)
