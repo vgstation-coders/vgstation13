@@ -1116,16 +1116,24 @@ var/global/floorIsLava = 0
 	if(!check_rights(R_ADMIN))
 		return
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
-		if(ticker.delay_end == 2)
-			to_chat(world, "<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
-			log_admin("<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
-			if(watchdog.waiting)
-				watchdog.signal_ready()
-			else
-				world.Reboot()
-		ticker.delay_end = !ticker.delay_end
-		log_admin("[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].")
-		message_admins("<span class='notice'>[key_name(usr)] [ticker.delay_end ? "delayed the round end" : "has made the round end normally"].</span>", 1)
+		if(ticker.delay_end)
+			var/confirm = alert("[ticker.delay_end == 2 ? "End the round?" : "Make the round end normally?"]", "Delay Cancellation", "Yes", "No")
+			if(confirm == "Yes")
+				if(ticker.delay_end == 2)
+					to_chat(world, "<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
+					log_admin("<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
+					if(watchdog.waiting)
+						watchdog.signal_ready()
+					else
+						world.Reboot()
+				else
+					log_admin("[key_name(usr)] has made the round end normally.")
+					message_admins("<span class='notice'>[key_name(usr)] has made the round end normally.</span>", 1)
+					ticker.delay_end = 0
+		else
+			log_admin("[key_name(usr)] delayed the round end.")
+			message_admins("<span class='notice'>[key_name(usr)] delayed the round end.</span>", 1)
+			ticker.delay_end = 1
 
 		return //alert("Round end delayed", null, null, null, null, null)
 	if (!( going ))
