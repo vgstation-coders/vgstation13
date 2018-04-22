@@ -1116,6 +1116,9 @@ var/global/floorIsLava = 0
 	if(!check_rights(R_ADMIN))
 		return
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
+		var/response = alert("Toggle round end delay? It is currently [ticker.delay_end?"delayed":"not delayed"]","Toggle round end delay","Yes","No")
+		if(response != "Yes")
+			return
 		if(ticker.delay_end == 2)
 			to_chat(world, "<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
 			log_admin("<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
