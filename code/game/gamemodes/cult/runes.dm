@@ -770,6 +770,7 @@
 			imbued_from = R
 			break
 	if (imbued_from)
+		T.uses = talisman_charges(T.imbue)
 		for (var/mob/V in viewers(src))
 			V.show_message("<span class='warning'>The runes turn into dust, which then forms into an arcane image on the paper.</span>", 1)
 		usr.say("H'drak v[pick("'","`")]loso, mir'kanas verbot!")
