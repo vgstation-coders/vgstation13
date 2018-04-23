@@ -342,5 +342,5 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 //Nanotrasen MoMMI subtype because we don't give mommis a choice of choosing their module.
 /mob/living/silicon/robot/mommi/nt/New()
-	..()
 	pick_module("Nanotrasen")
+	..()

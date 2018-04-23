@@ -2532,7 +2532,7 @@
 				base_law_type = selected_law
 				subject = "AIs and Cyborgs"
 			if("mommi")
-				mommi_base_law_type = selected_law
+				mommi_laws["Default"] = selected_law
 				subject = "MoMMIs"
 		to_chat(usr, "<span class='notice'>New [subject] will spawn with the [selected_law] lawset.</span>")
 		log_admin("[key_name(src.owner)] set the default laws of [subject] to: [selected_law]")

@@ -383,5 +383,6 @@ var/global/list/robot_modules = list(
 
 var/global/list/mommi_modules = list(
 	"Nanotrasen"    = /obj/item/weapon/robot_module/mommi/nt,
-	"Soviet" 	    = /obj/item/weapon/robot_module/mommi/soviet
+	"Soviet" 	    = /obj/item/weapon/robot_module/mommi/soviet,
+	"Gravekeeper"	= /obj/item/weapon/robot_module/mommi/cogspider
 	)

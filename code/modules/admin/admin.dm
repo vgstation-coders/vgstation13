@@ -687,7 +687,7 @@ var/global/floorIsLava = 0
 				<a href="?src=\ref[src];set_base_laws=ai"><b>Default Cyborg/AI Laws:</b>[base_law_type]</a>
 			</li>
 			<li>
-				<a href="?src=\ref[src];set_base_laws=mommi"><b>Default MoMMI Laws:</b>[mommi_base_law_type]</a>
+				<a href="?src=\ref[src];set_base_laws=mommi"><b>Default MoMMI Laws:</b>[mommi_laws["Default"]]</a>
 			</li>
 		</ul>
 		<hr />
