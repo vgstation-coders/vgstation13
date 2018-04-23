@@ -216,6 +216,8 @@
 
 #define isdeathsquad(H) (H.mind in ticker.mode.deathsquads)
 
+#define isclockwork(H) ((H.get_species() == "Clockwork Golem") || (H.mind && H.mind.faith && H.mind.faith.name == "Clockwork Cult"))
+
 
 //Macro for AREAS!
 

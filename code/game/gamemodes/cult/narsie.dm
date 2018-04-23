@@ -547,7 +547,7 @@ var/global/mr_clean_targets = list(
 	icon = 'icons/obj/narsie.dmi'
 	icon_state = "narsie"
 
-/obj/machinery/singularity/narsie/large/clockwork //Rushed copypaste of nar-sie because i don't give a fuck, it's april fools.
+/obj/machinery/singularity/narsie/large/clockwork //Rushed copypaste of nar-sie because i don't give a fuck.
 	name = "Ratvar, the Clockwork Justiciar"
 	desc = "..."
 	icon = 'icons/obj/ratvar.dmi'
@@ -555,13 +555,18 @@ var/global/mr_clean_targets = list(
 	narnar = FALSE
 	announce_text = "<span class='ratvar'>ONCE AGAIN MY LIGHT SHINES AMONG THESE PATHETIC STARS</span>"
 
+/obj/machinery/singularity/narsie/large/clockwork/New()
+	narsie_cometh = 1//so we don't force a shuttle call
+	..()
+	narsie_cometh = 0
+
 /obj/machinery/singularity/narsie/large/clockwork/on_capture()
-	chained = 1
-	move_self = 0
+	chained = TRUE
+	move_self = FALSE
 
 /obj/machinery/singularity/narsie/large/clockwork/on_release()
-	chained = 0
-	move_self = 1
+	chained = FALSE
+	move_self = TRUE
 
 /obj/machinery/singularity/narsie/large/clockwork/consume(const/atom/A)
 	//MOB PROCESSING
@@ -591,18 +596,22 @@ var/global/mr_clean_targets = list(
 
 		if(dist <= consume_range && !istype(A, /turf/space))
 			var/turf/T = A
-			if(T.holy)
+			if(T.holy) //Whatever.
 				T.holy = FALSE
 			T.clockify()
 
 /obj/machinery/singularity/narsie/large/clockwork/mezzer()
-	for(var/mob/living/carbon/M in oviewers(8, src))
+	for(var/mob/living/M in oviewers(8, src))
 		if(M.stat == CONSCIOUS)
 			if(M.flags & INVULNERABLE)
 				continue
-			if(iscultist(M))
-				to_chat(M, "<span class='danger'>You feel your sanity crumble away in an instant as you gaze upon [src.name]...</span>")
-				M.apply_effect(3, STUN)
+			if(isclockwork(M))
+				continue
+			to_chat(M, "<span class='heavy_brass'>You see an abomination of rusting parts and hear the whooshing steam and cl[pick("ank", "ink", "unk", "ang")]ing cogs. The sound</span> <span class='danger'>is a meaningless cacophony.</span>.")
+			M.apply_effect(3, STUN)
 
-/obj/machinery/singularity/narsie/large/clockwork/narsiewall()
+/obj/machinery/singularity/narsie/large/clockwork/narsiewall() //We don't make snowflake cult walls
+	return
+
+/obj/machinery/singularity/narsie/large/clockwork/narsiefloor() //We don't make snowflake cult floors
 	return

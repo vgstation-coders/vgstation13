@@ -357,11 +357,11 @@
 
 /obj/item/device/rcd/replicafab
 	name = "replicant fabricator"
-	desc = "A handheld clockwork device used to rapidly construct or deconstruct things. Requires metal to function."
+	desc = "A handheld clockwork device used to rapidly construct or deconstruct things. Requires brass to function."
 	icon_state = "replica_fabricator"
 
-	var/metal_amt = 50
-	var/max_metal = 50
+	var/brass_amt = 50
+	var/max_brass = 50
 
 	schematics = list(
 		/datum/rcd_schematic/decon,
@@ -373,19 +373,19 @@
 	)
 
 /obj/item/device/rcd/replicafab/attackby(var/obj/item/W, var/mob/user)
-	if(istype(W, /obj/item/stack/sheet/metal))
-		var/obj/item/stack/sheet/metal/M = W
-		var/amount = min(max_metal - metal_amt, M.amount)
-		metal_amt += amount
-		M.use(amount)
+	if(istype(W, /obj/item/stack/sheet/brass))
+		var/obj/item/stack/sheet/brass/B = W
+		var/amount = min(max_brass - brass_amt, B.amount)
+		brass_amt += amount
+		B.use(amount)
 
-		to_chat(user, "<span class='notice'>You insert [amount] sheets of metal into \the [src].</span>")
+		to_chat(user, "<span class='notice'>You insert [amount] sheets of metal into \the [name].</span>")
 		return TRUE
 
 	. = ..()
 
 /obj/item/device/rcd/replicafab/get_energy(var/mob/user)
-	return metal_amt
+	return brass_amt
 
 /obj/item/device/rcd/replicafab/use_energy(var/amount, var/mob/user)
-	metal_amt -= amount
+	brass_amt -= amount
