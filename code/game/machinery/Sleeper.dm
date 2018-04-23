@@ -262,7 +262,7 @@
 	if(..())
 		return TRUE
 	if(!istype(W, /obj/item/weapon/grab))
-		return ..()
+		return
 	var/obj/item/weapon/grab/G = W
 	if(!(ismob(G.affecting)) || G.affecting.locked_to)
 		return
@@ -630,7 +630,7 @@
 		if(occupant)
 			if(ishuman(occupant))
 				var/mob/living/carbon/human/H = occupant
-				if(isdiona(H)) 
+				if(isdiona(H))
 					if(H.h_style != "Popped Hair")
 						to_chat(H, "<span class = 'notice'>Your head pops!</span>")
 						playsound(src, 'sound/effects/pop.ogg', 50, 1)
