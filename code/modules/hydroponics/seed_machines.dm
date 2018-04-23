@@ -54,7 +54,6 @@
 	for(var/obj/item/weapon/stock_parts/manipulator/MA in component_parts)
 		T += MA.rating
 	time_coeff = T
-	T = 0
 
 /obj/machinery/botany/process()
 
@@ -62,7 +61,7 @@
 	if(!active)
 		return
 
-	if(world.time > last_action + round(action_time/time_coeff))
+	if(world.time > last_action + action_time/time_coeff)
 		finished_task()
 
 /obj/machinery/botany/attack_paw(mob/user as mob)
