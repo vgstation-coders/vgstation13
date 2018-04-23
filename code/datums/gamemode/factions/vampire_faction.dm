@@ -7,6 +7,7 @@
 	late_role = VAMPIRE // Vampires do not change their role.
 	roletype = /datum/role/vampire
 	logo_state = "vampire-logo"
+	hud_icons = list("vampire-logo", "thrall-logo")
 
 /datum/faction/vampire/New(var/datum/role/vampire/V)
 	..()
