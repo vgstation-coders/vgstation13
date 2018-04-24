@@ -120,6 +120,27 @@ Frequency:
 					src.attack_self(M)
 	return
 
+/obj/item/weapon/bananapeel/bluespace
+	name = "bluespace banana peel"
+	desc = "A peel from a bluespace banana."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "bluespacebanana_peel"
+	item_state = "bluespacebanana_peel"
+
+/obj/item/weapon/bananapeel/bluespace/Crossed(AM as mob|obj)
+	if (istype(AM, /mob/living/carbon))
+		var/mob/living/carbon/M = AM
+		if (M.Slip(2, 2, 1))
+			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
+				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+			if(istype(AM,/mob/living/carbon/human))
+				var/mob/living/carbon/human/H = AM
+				var/obj/teleported_shoes = H.shoes
+				var/tele_destination = pick_rand_tele_turf(H, src.potency/15, src.potency/10)
+				if(teleported_shoes && tele_destination)
+					H.drop_from_inventory(teleported_shoes)
+					teleported_shoes.forceMove(tele_destination)
+					spark(H.loc)
 
 /*
  * Hand-tele
