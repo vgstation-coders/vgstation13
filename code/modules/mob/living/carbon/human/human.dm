@@ -1151,6 +1151,18 @@
 			add_spell(spell, "racial_spell_ready", /obj/abstract/screen/movable/spell_master/racial)
 	if(force_organs || !src.organs || !src.organs.len)
 		src.species.create_organs(src)
+	else
+		for(var/datum/organ/external/current_organ in organs)
+			if(species.anatomy_flags & NO_BLOOD)
+				current_organ.status &= ~ORGAN_BLEEDING
+			if(species.anatomy_flags & NO_BONES)
+				current_organ.status &= ~ORGAN_BROKEN
+				current_organ.status &= ~ORGAN_SPLINTED
+			if(species.anatomy_flags & NO_STRUCTURE && current_organ.status & ORGAN_DESTROYED)
+				current_organ.status |= ORGAN_ATTACHABLE
+				current_organ.amputated = 1
+				current_organ.setAmputatedTree()
+				current_organ.open = 0
 	var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 	if(E)
 		src.see_in_dark = E.see_in_dark //species.darksight
