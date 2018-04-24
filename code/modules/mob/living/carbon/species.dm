@@ -964,7 +964,7 @@ var/list/has_died_as_golem = list()
 
 /mob/living/golem_dust/clockwork //serves as the corpse of adamantine golems
 	name = "clockwork remains"
-	desc = "The remains of an clockwork golem."
+	desc = "The remains of a clockwork golem."
 	icon = 'icons/mob/human_races/r_cgolem.dmi'
 	icon_state = "clockgolem_dead"
 	meat_type = /obj/item/stack/sheet/brass
