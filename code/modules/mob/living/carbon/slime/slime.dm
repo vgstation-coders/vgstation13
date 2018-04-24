@@ -929,7 +929,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			//"sepia",
 			"silver",
 			"yellow")
-		if(new_color)
+		if(new_color && !OS.stat)
 			var/adult = FALSE //Passinging on if it was an adult or not
 			if(istype(OS, /mob/living/carbon/slime/adult))
 				adult = TRUE
@@ -953,8 +953,10 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			qdel(OS)
 			qdel(src)
 		else
-			to_chat(user, "<span class='notice'>You decide not to use the potion.</span>")
-		//to_chat(user, "faggots.")
+			if(OS.stat)
+				to_chat(user, "<span class='warning'>You're unable to use the [src] on the dead slime!</span>")
+			else
+				to_chat(user, "<span class='notice'>You decide not to use the potion.</span>")
 	else if(ishuman(M))
 		var/mob/living/carbon/human/S = M
 		if(isslimeperson(S))
