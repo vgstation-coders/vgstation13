@@ -7,18 +7,18 @@
 	category = "Clockwork"
 
 /datum/rcd_schematic/clock_door/attack(var/atom/A, var/mob/user)
-	if(!istype(A, /turf))
+	if(!isturf(A))
 		return TRUE
 	if(locate(/obj/machinery/door/airlock/clockwork) in A)
 		return "there is already a door on this spot!"
 	to_chat(user, "Building door...")
-	if(!do_after(user, A, 50))
+	if(!master.delay(user, A, 5 SECONDS))
 		return TRUE
 	if(master.get_energy(user) < energy_cost)
 		return TRUE
 	if(locate(/obj/machinery/door/airlock/clockwork) in A)
 		return "there is already a door on this spot!"
-	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 	new/obj/machinery/door/airlock/clockwork(A)
 
 /datum/rcd_schematic/clock_convert
@@ -34,11 +34,11 @@
 			return TRUE
 		var/obj/machinery/door/D = A
 		to_chat(user, "Converting [D.name]...")
-		if(!do_after(user, D, 50))
+		if(!master.delay(user, D, 5 SECONDS))
 			return TRUE
 		if(master.get_energy(user) < CLOCK_AIRLOCK_CONVERT_COST)
 			return TRUE
-		playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 		D.clockify()
 		master.use_energy(CLOCK_AIRLOCK_CONVERT_COST, user)
 		return FALSE
@@ -48,7 +48,7 @@
 			return TRUE
 		var/turf/simulated/floor/T = A
 		to_chat(user, "Converting [T.name]...")
-		playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 		T.clockify()
 		master.use_energy(CLOCK_FLOOR_CONVERT_COST, user)
 		return FALSE
@@ -58,7 +58,7 @@
 			return TRUE
 		var/turf/simulated/wall/W = A
 		to_chat(user, "Converting [W.name]...")
-		if(!do_after(user, W, 50))
+		if(!master.delay(user, W, 5 SECONDS))
 			return TRUE
 		if(master.get_energy(user) < CLOCK_WALL_CONVERT_COST)
 			return TRUE
