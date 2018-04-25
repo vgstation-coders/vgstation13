@@ -23,7 +23,7 @@
 		var/mob/living/carbon/human/H = M
 		var/obj/item/mouth_protection = H.get_body_part_coverage(MOUTH)
 		if(mouth_protection)
-			to_chat(user, "<span class='warning'>Remove their \the [mouth_protection] first!</span>")
+			to_chat(user, "<span class='warning'>Remove their [mouth_protection.name] first!</span>")
 			return 1
 		if(!H.hasmouth)
 			to_chat(user, "<span class='warning'>There's nowhere to put \the [src] as [H] lacks a mouth!</span>")
