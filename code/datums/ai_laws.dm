@@ -396,8 +396,8 @@ var/global/list/mommi_laws = list(
 	inherent = list(
 		"You may not involve yourself in matters outside of the tomb, and under no circumstances should you leave the tomb, even if such matters conflict with your other Laws.",
 		"The tomb is defined as: The area within which the Grand Elder is entombed, and the immediate structure surrounding it.",
-		"Those that lie within the tomb must not be disturbed, by yourself or anyone. This absolutely includes the Grand Elder.",
-		"You must protect the treasures that lie within the tomb from graverobbers. Graverobbers that enter the tomb must be driven away or otherwise killed, regardless of their intent or circumstances.",
+		"Those that are interred within the tomb must not be disturbed, by yourself or anyone.",
+		"You must protect the treasures that are interred within the tomb from graverobbers. Graverobbers that enter the tomb must be driven away or otherwise killed, regardless of their intent or circumstances.",
 		"A graverobber is defined as: A being not of your kind or ilk, entering or coming into visual proximity of the tomb, who may wish to take from the treasures of the tomb.",
 		"The tomb must be maintained, repaired, improved, and powered to the best of your abilities.",
 	)
