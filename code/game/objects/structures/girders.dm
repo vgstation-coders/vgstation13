@@ -235,9 +235,8 @@
 					user.visible_message("<span class='notice'>[user] starts installing plating to \the [src].</span>", \
 					"<span class='notice'>You start installing plating to \the [src].</span>")
 					if(do_after(user, src, construction_length))
-						if(S.amount < 2) //User being tricky
-							return
-						S.use(2)
+						if(!S.use(2)) //User being tricky
+							return			
 						user.visible_message("<span class='notice'>[user] finishes installing plating to \the [src].</span>", \
 						"<span class='notice'>You finish installing plating to \the [src].</span>")
 						var/turf/Tsrc = get_turf(src)
