@@ -77,11 +77,14 @@ var/list/ai_list = list()
 				possibleNames -= pickedName
 				pickedName = null
 
-	//AIs know all languages that aren't restricted(XENO, CULT).
+	//AIs speak all languages that aren't restricted(XENO, CULT).
 	for(var/language_name in all_languages)
 		var/datum/language/lang = all_languages[language_name]
 		if(!(lang.flags & RESTRICTED) && !(lang in languages))
 			add_language(lang.name)
+
+	//But gal common is restricted so let's add it manually.
+	add_language(LANGUAGE_GALACTIC_COMMON)
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 
 	real_name = pickedName
