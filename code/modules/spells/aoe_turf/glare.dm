@@ -26,7 +26,7 @@
 		return FALSE
 	if (istype(user.get_item_by_slot(slot_glasses), /obj/item/clothing/glasses/sunglasses/blindfold))
 		to_chat(user, "<span class='warning'>You're blindfolded!</span>")
-	if (!user.vampire_power(blood_cost, 0))
+	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
 
 /spell/aoe_turf/glare/choose_targets(var/mob/user = usr)

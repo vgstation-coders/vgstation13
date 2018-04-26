@@ -28,7 +28,7 @@
 	for (var/datum/faction/F in factions)
 		if (!F.members.len) // First empty fac
 			return new type_role(fac = F)
-			
+
 
 /datum/gamemode/vampire/PopulateFactions()
 	// Void - we do that in CreateRoles()
@@ -60,9 +60,20 @@
 
 	if (helptext)
 		to_chat(V.antag.current, "<span class = 'notice'>[helptext]</span>")
-	
+
 	if (store_in_memory)
 		V.antag.store_memory("<font size = '1'>[helptext]</font>")
+
+/datum/power/vampire/proc/remove(var/datum/role/vampire/V)
+	if (!istype(V))
+		message_admins("Error: trying to remove a vampire power from a non-vampire.")
+		return FALSE
+
+	if (spell_path)
+		var/spell/S = new spell_path
+		V.antag.current.remove_spell(S)
+
+	V.powers -= id
 
 // -- List of all vampire spells
 
@@ -146,7 +157,7 @@
 /datum/power/vampire/blink
 	blood_threeshold = 300
 	id = VAMP_BLINK
-	spell_path = null // TODO
+	spell_path = /spell/aoe_turf/blink/vamp
 	helptext = "You have gained the ability to shadowstep, which makes you disappear into nearby shadows at the cost of blood."
 
 /* Tier 5 (/vg/) */
@@ -160,14 +171,13 @@
 /datum/power/vampire/shadow
 	blood_threeshold = 450
 	id = VAMP_SHADOW
-	spell_path = null // TODO
+	spell_path = /spell/menace
 	helptext = "You have gained mastery over the shadows. In the dark, you can mask your identity, instantly terrify non-vampires who approach you, and enter the chapel for a longer period of time."
 
 /* Tier 66 (/vg/) */
-/datum/power/vampire/charisma
+/datum/power/vampire/charisma // Passive
 	blood_threeshold = 500
 	id = VAMP_CHARISMA
-	spell_path = null // TODO
 	helptext = "You develop an uncanny charismatic aura that makes you difficult to disobey. Hypnotise and Enthrall take less time to perform, and Enthrall works on implanted targets."
 	store_in_memory = TRUE
 
@@ -175,6 +185,6 @@
 /datum/power/vampire/undying
 	blood_threeshold = 666
 	id = VAMP_UNDYING
-	spell_path = null // TODO
+	spell_path = /spell/undeath
 	helptext = "You have reached the absolute peak of your power. Your abilities cannot be nullified very easily, and you may return from the grave so long as your body is not burned, destroyed or sanctified. You can also spawn a rather nice cape."
 	store_in_memory = TRUE
