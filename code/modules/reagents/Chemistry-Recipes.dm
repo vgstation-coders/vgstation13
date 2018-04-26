@@ -1213,6 +1213,7 @@
 		/mob/living/simple_animal/hostile/slime,
 		/mob/living/simple_animal/hostile/mining_drone,
 		/mob/living/simple_animal/hostile/mimic,
+		/mob/living/simple_animal/hostile/retaliate/cockatrice
 		)//Exclusion list for things you don't want the reaction to create.
 
 	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - blocked - boss_mobs//List of possible hostile mobs
