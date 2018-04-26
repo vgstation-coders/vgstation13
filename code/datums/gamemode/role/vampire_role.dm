@@ -344,12 +344,16 @@
 	blood_usable = max(0, blood_usable - amount)
 	update_vamp_hud()
 
+/datum/role/vampire/proc/remove_vampire_powers()
+	for (var/datum/power/vampire/VP in powers)
+		VP.remove(V)
+
 /*
 -- Helpers --
 */
 
 // ! - need to handle thrall removing
-/datum/role/vampire/proc/update_vamp_hud() // /var/datum/role/thrall/new_T = null)
+/datum/role/vampire/proc/update_vamp_hud()
 	var/mob/M = antag.current
 	if(M.hud_used)
 		if(!M.hud_used.vampire_blood_display)
@@ -358,18 +362,7 @@
 		M.hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE*2
 		M.hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
 		M.hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'>U:<font color='#33FF33'>[blood_usable]</font><br> T:<font color='#FFFF00'>[blood_total]</font></div>"
-	/*
-	if (istype(new_T))
-		if (thralls.len <= 1) // Our very first thrall ! Let's celebrate by getting a new icon
-			var/image/I = image('icons/mob/mob.dmi', loc = antag.current, icon_state = "vampire")
-			I.plane = VAMP_ANTAG_HUD_PLANE
-			antag.current.client.images += I
-		
-		var/mob/thrall = new_T.antag.current
-		var/image/I2 = image('icons/mob/mob.dmi', loc = thrall, icon_state = "vampthrall")
-		I2.plane = VAMP_ANTAG_HUD_PLANE
-		antag.current.client.images += I2
-	*/
+
 /mob/living/carbon/human/proc/check_sun()
 	var/ax = x
 	var/ay = y
@@ -444,23 +437,3 @@
 
 /datum/role/thrall/ForgeObjectives()
 	objectives.AddObjective(new /datum/objective/protect_master(master), src.antag)
-
-/*
-/datum/role/thrall/proc/update_vamp_hud(var/datum/role/thrall/new_T = null)
-	if (!istype(new_T))
-		return FALSE
-
-	var/image/I = image('icons/mob/mob.dmi', loc = new_T.antag.current, icon_state = "vampthrall")
-	I.plane = VAMP_ANTAG_HUD_PLANE
-	antag.current.client.images += I
-	
-	if (new_T == src) // He just joined - let's tell him who is the master, as well as the other guys
-		var/image/I2 = image('icons/mob/mob.dmi', loc = master.antag.current, icon_state = "vampire")
-		I2.plane = VAMP_ANTAG_HUD_PLANE
-		antag.current.client.images += I2
-		for (var/datum/role/thrall/T_other in master.thralls - src)
-			var/image/I3= image('icons/mob/mob.dmi', loc = T_other.antag.current, icon_state = "vampthrall")
-			I2.plane = VAMP_ANTAG_HUD_PLANE
-			antag.current.client.images += I2
-*/
-
