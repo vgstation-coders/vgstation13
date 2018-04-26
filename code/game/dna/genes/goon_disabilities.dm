@@ -48,7 +48,7 @@
 		if(L == owner)
 			continue
 		to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
-		L.apply_radiation(5, RAD_INTERNAL)
+		L.apply_radiation(5, RAD_EXTERNAL)
 
 	emitted_harvestable_radiation(get_turf(owner), 1, range = 2) //Around 70W, nothing much really
 
