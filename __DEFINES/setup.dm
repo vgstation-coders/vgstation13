@@ -13,7 +13,7 @@
 #define PROFILE_MACHINES // Disable when not debugging.
 
 #define ARBITRARILY_LARGE_NUMBER 10000 //Used in delays.dm and vehicle.dm. Upper limit on delays
-#define ARBITRARILY_PLANCK_NUMBER 1.417*(10**32) //1.417×10^32. Because ARBITRARILY_LARGE_NUMBER is too small and INF is too large
+#define ARBITRARILY_PLANCK_NUMBER 1.417*(10**32) //1.417Ã—10^32. Because ARBITRARILY_LARGE_NUMBER is too small and INF is too large
 #define MAX_VALUE 65535
 
 #ifdef PROFILE_MACHINES
@@ -964,6 +964,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 //Language flags.
 #define WHITELISTED 1  // Language is available if the speaker is whitelisted.
 #define RESTRICTED 2   // Language can only be accquired by spawning or an admin.
+#define CAN_BE_SECONDARY_LANGUAGE 4 // Language is available on character setup as secondary language.
 
 // Hairstyle flags
 #define HAIRSTYLE_CANTRIP 1 // 5% chance of tripping your stupid ass if you're running.

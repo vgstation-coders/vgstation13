@@ -4,6 +4,14 @@
 	var/list/datum/mind/cult = list()
 	var/list/allwords = list("travel","self","see","hell","blood","join","tech","destroy", "other", "hide")
 
+/proc/talisman_charges(var/imbue)
+	switch(imbue)
+		if("communicate")
+			return 5
+		if("supply")
+			return 5
+		else // Tele talisman's imbue is the final word.
+			return 1
 
 /proc/iscultist(mob/living/M as mob)
 	return istype(M) && M.mind && ticker && ticker.mode && (M.mind in ticker.mode.cult)

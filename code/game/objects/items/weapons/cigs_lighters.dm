@@ -167,7 +167,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/lastHolder = null
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a boring old cigarette
 	var/smoketime = 300
-	var/chem_volume = 15
+	var/chem_volume = 20
 	var/inside_item = 0 //For whether the cigarette is contained inside another item.
 	var/filling = null //To alter the name if it's a special kind of cigarette
 
@@ -422,7 +422,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/weapon/cigbutt/cigarbutt
 	item_state = "cigar"
 	smoketime = 1500
-	chem_volume = 20
+	chem_volume = 25
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/mask/cigarette/cigar/cohiba

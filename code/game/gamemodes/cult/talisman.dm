@@ -1,7 +1,7 @@
 /obj/item/weapon/paper/talisman
 	icon_state = "paper_talisman"
 	var/imbue = null
-	var/uses = 0
+	var/uses = 1
 	var/nullblock = 0
 
 /obj/item/weapon/paper/talisman/update_icon()
@@ -43,6 +43,7 @@
 				to_chat(user, "This talisman has been imbued with the power of providing you and your allies with some supplies to start your cult.")
 			else
 				to_chat(user, "This talisman.....has no particular power. Is this some kind of joke?")
+		to_chat(user, "Uses left: [src.uses]")
 	else
 		to_chat(user, "Something about the blood stains on this paper fills you with uneasiness.")
 
@@ -65,7 +66,7 @@
 
 /obj/item/weapon/paper/talisman/attack_self(mob/living/user as mob)
 	if(iscultist(user))
-		var/delete = 1
+		var/use_charge = 1
 		switch(imbue)
 			if("newtome")
 				call(/obj/effect/rune/proc/tomesummon)()
@@ -85,7 +86,7 @@
 					T1.turf_animation('icons/effects/effects.dmi',"rune_teleport")
 			if("communicate")
 				//If the user cancels the talisman this var will be set to 0
-				delete = call(/obj/effect/rune/proc/communicate)()
+				use_charge = call(/obj/effect/rune/proc/communicate)()
 			if("deafen")
 				deafen()
 				qdel(src)
@@ -99,7 +100,9 @@
 				supply()
 		user.take_organ_damage(5, 0)
 		if(src && src.imbue!="supply" && src.imbue!="runestun")
-			if(delete)
+			if(use_charge)
+				uses--
+			if(!src.uses)
 				qdel(src)
 		return
 	else
@@ -150,33 +153,37 @@
 		return
 
 	if (href_list["rune"])
+		var/obj/item/weapon/paper/talisman/T
 		switch(href_list["rune"])
 			if("newtome")
-				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
+				T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				T.imbue = "newtome"
 			if("teleport")
-				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
+				T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				var/list/words = list("ire" = "ire", "ego" = "ego", "nahlizet" = "nahlizet", "certum" = "certum", "veri" = "veri", "jatkaa" = "jatkaa", "balaq" = "balaq", "mgar" = "mgar", "karazet" = "karazet", "geeri" = "geeri")
 				T.imbue = input("Write your teleport destination rune:", "Rune Scribing") in words
 			if("emp")
-				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
+				T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				T.imbue = "emp"
 			if("conceal")
-				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
+				T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				T.imbue = "conceal"
 			if("communicate")
-				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
+				T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				T.imbue = "communicate"
 			if("runestun")
-				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
+				T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				T.imbue = "runestun"
 			//if("armor")
-				//var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
+				//T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				//T.imbue = "armor"
 			if("soulstone")
 				new /obj/item/device/soulstone(get_turf(usr))
 			if("construct")
 				new /obj/structure/constructshell/cult(get_turf(usr))
+
+		if(T)
+			T.uses = talisman_charges(T.imbue)
 		src.uses--
 		supply()
 	return
