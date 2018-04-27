@@ -281,8 +281,8 @@
 
 /obj/item/clothing/glasses/sunglasses/sechud/syndishades/proc/change()
 	var/obj/item/clothing/glasses/A
-	A = input("Select style to change it to", "BOOYEA", A) as null|anything in clothing_choices
-	if(!A ||(usr.stat))
+	A = input("Select style to change it to", "Styles", A) as null|anything in clothing_choices
+	if(!src || src.gcDestroyed || !A || usr.incapacitated() || !Adjacent(usr))
 		return
 	desc = A.desc
 	name = A.name
