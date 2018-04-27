@@ -948,17 +948,14 @@ var/list/has_died_as_golem = list()
 	name = "Clockwork Golem"
 	icobase = 'icons/mob/human_races/r_cgolem.dmi'
 	deform = 'icons/mob/human_races/r_def_cgolem.dmi'
+	known_languages = list(LANGUAGE_CLOCKWORK)
 	meat_type = /obj/item/stack/sheet/brass
 	attack_verb = "smashes"
 
 	primitive = null
 
-	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD | NO_STRUCTURE
-
-	uniform_icons = 'icons/mob/uniform.dmi'
-
-	blood_color = "#B5A642"
-	flesh_color = "#B5A642"
+	blood_color = "#BE8700"
+	flesh_color = "#42474D"
 
 	dust_type = /mob/living/golem_dust/clockwork
 

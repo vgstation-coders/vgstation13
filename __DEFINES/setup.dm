@@ -1291,6 +1291,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_MONKEY "Monkey"
 #define LANGUAGE_VOX "Vox-pidgin"
 #define LANGUAGE_CULT "Cult"
+#define LANGUAGE_CLOCKWORK "Clockwork"
 #define LANGUAGE_MOUSE "Mouse"
 #define LANGUAGE_GOLEM "Golem"
 #define LANGUAGE_SLIME "Slime"
