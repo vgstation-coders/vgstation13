@@ -146,13 +146,19 @@
 
 	playsound(get_turf(src), startup_sound, 75, 1)
 
+	//Borgs speak all common languages by default.
 	add_language(LANGUAGE_GALACTIC_COMMON)
+	add_language(LANGUAGE_HUMAN)
 	add_language(LANGUAGE_TRADEBAND)
-	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
+	add_language(LANGUAGE_GUTTER)
+
+	//But unlike AIs, they can only understand the rest.
 	for(var/L in all_languages)
 		var/datum/language/lang = all_languages[L]
-		if(~lang.flags & RESTRICTED && !(lang in languages))
-			add_language(lang, FALSE)
+		if(!(lang.flags & RESTRICTED) && !(lang in languages))
+			add_language(lang.name, can_speak = FALSE)
+
+	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 
 // setup the PDA and its name
 /mob/living/silicon/robot/proc/setup_PDA()

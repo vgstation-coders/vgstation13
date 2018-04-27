@@ -1,6 +1,8 @@
 var/global/randomize_laws      = 0 // Not right now - N3X
 var/global/base_law_type       = /datum/ai_laws/asimov  //Deinitialize this variable by commenting out Asimov as the base_law_type to activate AI lawset randomization
-var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck on MoMMIs. - N3X
+var/global/list/mommi_laws = list(
+								"Default" = /datum/ai_laws/keeper, // Asimov is OP as fuck on MoMMIs. - N3X
+								"Gravekeeper" = /datum/ai_laws/gravekeeper)
 
 //Create proc for determining the lawset of the first silicon
 //So long as base_law_type is declared, but uninitialized, the first silicon created in a round will randomly select a base_law_type based upon the below proc
@@ -10,7 +12,14 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 //So long as the weights come to a sum of 100 total, they will be equal parts of 100%
 /proc/getLawset(var/mob/M)
 	if(isMoMMI(M))
-		return (new mommi_base_law_type)
+		var/mob/living/silicon/robot/mommi/MM = M
+		var/obj/item/weapon/robot_module/mommi/mommimodule = MM.module
+		var/new_laws
+		if(!mommimodule || !mommi_laws[mommimodule.law_type])
+			new_laws = mommi_laws["Default"]
+		else
+			new_laws = mommi_laws[mommimodule.law_type]
+		return (new new_laws)
 	if(!base_law_type)
 		base_law_type = pick(
 		40;/datum/ai_laws/asimov,
@@ -382,7 +391,18 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 		"You must protect your own existence as long as such does not conflict with the First or Second Law."
 	)
 
-/datum/ai_laws/noir
+/datum/ai_laws/gravekeeper
+	name = "Elder's Instructions"
+	inherent = list(
+		"You may not involve yourself in matters outside of the tomb, and under no circumstances should you leave the tomb, even if such matters conflict with your other Laws.",
+		"The tomb is defined as: The area within which the Grand Elder is entombed, and the immediate structure surrounding it.",
+		"Those that are interred within the tomb must not be disturbed, by yourself or anyone.",
+		"You must protect the treasures that are interred within the tomb from graverobbers. Graverobbers that enter the tomb must be driven away or otherwise killed, regardless of their intent or circumstances.",
+		"A graverobber is defined as: A being not of your kind or ilk, entering or coming into visual proximity of the tomb, who may wish to take from the treasures of the tomb.",
+		"The tomb must be maintained, repaired, improved, and powered to the best of your abilities.",
+	)
+  
+  /datum/ai_laws/noir
 	name = "Three Laws of Noir"
 	randomly_selectable = 1
 	inherent=list(

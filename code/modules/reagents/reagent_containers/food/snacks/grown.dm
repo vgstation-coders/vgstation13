@@ -240,8 +240,9 @@ var/list/special_fruits = list()
 		return 0
 
 	var/list/turfs = new/list()
+	var/turf/hit_turf = get_turf(hit_atom)
 	//This could likely use some standardization but I have no idea how to not break it.
-	for(var/turf/T in trange(outer_teleport_radius, get_turf(hit_atom)))
+	for(var/turf/T in trange(outer_teleport_radius, hit_turf))
 		if(get_dist(T, hit_atom) <= inner_teleport_radius)
 			continue
 		if(is_blocked_turf(T) || istype(T, /turf/space))
@@ -260,20 +261,22 @@ var/list/special_fruits = list()
 	var/turf/picked = pick(turfs)
 	if(!isturf(picked))
 		return 0
-	switch(rand(1, 2)) //50-50 % chance to teleport the thrower or the target.
-		if(1) //Teleports the person who threw the fruit
-			spark(M)
-			new/obj/effect/decal/cleanable/molten_item(M.loc) //Leaves a pile of goo behind for dramatic effect.
-			M.forceMove(picked) //Send then to that location we picked previously
+	var/list/mobs = new/list()
+	for(var/mob/turfMobs in hit_turf)
+		mobs += M
+	if(prob(50) && (mobs.len > 0)) //50% chance to teleport the person who was hit by the fruit
+		spark(hit_atom)
+		new/obj/effect/decal/cleanable/molten_item(hit_turf) //Leave a pile of goo behind for dramatic effect...
+		for(var/mob/A in hit_turf) //For the mobs in the tile that was hit...
+			A.forceMove(picked) //And teleport them to the chosen location.
 			spawn()
-				spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
-		if(2) //Teleports the target instead.
-			spark(hit_atom)
-			new/obj/effect/decal/cleanable/molten_item(get_turf(hit_atom)) //Leave a pile of goo behind for dramatic effect...
-			for(var/mob/A in get_turf(hit_atom)) //For the mobs in the tile that was hit...
-				A.forceMove(picked) //And teleport them to the chosen location.
-				spawn()
-					spark(A)
+				spark(A)
+	else //Teleports the thrower instead.
+		spark(M)
+		new/obj/effect/decal/cleanable/molten_item(M.loc) //Leaves a pile of goo behind for dramatic effect.
+		M.forceMove(picked) //Send then to that location we picked previously
+		spawn()
+			spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
 	return 1
 
 

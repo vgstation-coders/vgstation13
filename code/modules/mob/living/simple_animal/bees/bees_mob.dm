@@ -31,9 +31,19 @@
 
 /obj/effect/decal/cleanable/bee/New()
 	..()
-	dir = pick(cardinal)
-	pixel_x = rand(-10,10)
-	pixel_y = rand(-4,4)
+	var/image/I = image(icon,icon_state)
+	I.pixel_x = rand(-10,10)
+	I.pixel_y = rand(-4,4)
+	I.dir = pick(cardinal)
+
+	for (var/obj/effect/decal/cleanable/bee/corpse in get_turf(src))
+		if (corpse != src)
+			corpse.overlays += I
+			qdel(src)
+			return
+		else
+			icon_state = "bees0"
+			overlays += I
 
 /obj/effect/decal/cleanable/bee/queen_bee
 	name = "dead queen bee"

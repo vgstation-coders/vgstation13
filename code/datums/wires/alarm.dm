@@ -35,6 +35,7 @@ var/const/AALARM_WIRE_AALARM = 16
 
 /datum/wires/alarm/UpdateCut(var/index, var/mended)
 	var/obj/machinery/alarm/A = holder
+	var/obj/I = usr.get_active_hand()
 	switch(index)
 		if(AALARM_WIRE_IDSCAN)
 			if(!mended)
@@ -42,7 +43,7 @@ var/const/AALARM_WIRE_AALARM = 16
 //				to_chat(world, "Idscan wire cut")
 
 		if(AALARM_WIRE_POWER)
-			A.shock(usr, 50)
+			A.shock(usr, 50,get_conductivity(I))
 			A.shorted = !mended
 			A.update_icon()
 //			to_chat(world, "Power wire cut")

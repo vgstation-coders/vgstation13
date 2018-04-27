@@ -52,6 +52,7 @@
 
 #define MOMMI_SOVIET_SPEED_MODIFIER 1
 #define MOMMI_NT_SPEED_MODIFIER 1
+#define COGSPIDER_SPEED_MODIFIER 2
 
 #define SILICON_MOBILITY_MODULE_SPEED_MODIFIER 0.75 //Silicon's speed var is multiplied by the mobility module modifier
 #define SILICON_VTEC_SPEED_BONUS 0.25 //But the VTEC Bonus is ADDED to their movement_speed_modifier
