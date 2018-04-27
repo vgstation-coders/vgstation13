@@ -8,6 +8,7 @@
 	respawnables_max_amount = MOMMI_MAX_COIL
 	default_modules = FALSE
 	var/ae_type = "Default" //Anti-emancipation override type, pretty much just fluffy.
+	var/law_type = "Default"
 
 /obj/item/weapon/robot_module/mommi/New(var/mob/living/silicon/robot/R)
 	..()
@@ -75,3 +76,11 @@
 	modules += new /obj/item/weapon/soap/syndie(src)
 	modules += new /obj/item/weapon/pickaxe/plasmacutter(src)
 	modules += new /obj/item/weapon/storage/bag/ore/auto(src)
+
+/obj/item/weapon/robot_module/mommi/cogspider
+	name = "Gravekeeper belt of holding."
+	speed_modifier = COGSPIDER_SPEED_MODIFIER
+	sprites = list(
+		"Gravekeeper" = "cogspider"
+		)
+	law_type = "Gravekeeper"
