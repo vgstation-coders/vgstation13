@@ -1367,7 +1367,7 @@ var/global/num_vending_terminals = 1
 	icon_state = "snack"
 	products = list(
 		/obj/item/weapon/reagent_containers/food/snacks/candy = 6,
-		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/chips =6,
 		/obj/item/weapon/reagent_containers/food/snacks/sosjerky = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin = 6,
@@ -1384,7 +1384,7 @@ var/global/num_vending_terminals = 1
 		)
 	prices = list(
 		/obj/item/weapon/reagent_containers/food/snacks/candy = 13,
-		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating = 15,
 		/obj/item/weapon/reagent_containers/food/snacks/chips = 30,
 		/obj/item/weapon/reagent_containers/food/snacks/sosjerky = 40,
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin = 60,
