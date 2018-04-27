@@ -249,13 +249,16 @@
 	darkness_view = 0 //Subtly better than normal shades
 	origin_tech = Tc_SYNDICATE + "=3"
 	actions_types = list(/datum/action/item_action/change_appearance_shades)
-	var/list/clothing_choices = list()
+	var/static/list/clothing_choices = null
 	var/full_access = FALSE
 
 /obj/item/clothing/glasses/sunglasses/sechud/syndishades/New()
 	..()
-	for(var/Type in existing_typesof(/obj/item/clothing/glasses) - /obj/item/clothing/glasses - typesof(/obj/item/clothing/glasses/sunglasses/sechud/syndishades))
-		clothing_choices += new Type
+	if(!clothing_choices)
+		clothing_choices = list()
+		for(var/Type in existing_typesof(/obj/item/clothing/glasses) - /obj/item/clothing/glasses - typesof(/obj/item/clothing/glasses/sunglasses/sechud/syndishades))
+			var/obj/glass = Type
+			clothing_choices[initial(glass.name)] = glass
 
 /obj/item/clothing/glasses/sunglasses/sechud/syndishades/attackby(obj/item/I, mob/user)
 	..()
@@ -281,14 +284,14 @@
 
 /obj/item/clothing/glasses/sunglasses/sechud/syndishades/proc/change()
 	var/obj/item/clothing/glasses/A
-	A = input("Select style to change it to", "Styles", A) as null|anything in clothing_choices
-	if(!src || src.gcDestroyed || !A || usr.incapacitated() || !Adjacent(usr))
+	A = input("Select style to change it to", "Style Selector", A) as null|anything in clothing_choices
+	if(src.gcDestroyed || !A || usr.incapacitated() || !Adjacent(usr))
 		return
-	desc = A.desc
-	name = A.name
-	icon_state = A.icon_state
-	item_state = A.item_state
-	_color = A._color
+	desc = initial(clothing_choices[A].desc)
+	name = initial(clothing_choices[A].name)
+	icon_state = initial(clothing_choices[A].icon_state)
+	item_state = initial(clothing_choices[A].item_state)
+	_color = initial(clothing_choices[A]._color)
 	usr.update_inv_glasses()
 
 /obj/item/clothing/glasses/thermal
