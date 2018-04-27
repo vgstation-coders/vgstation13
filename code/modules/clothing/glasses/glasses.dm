@@ -122,13 +122,13 @@
 	name = "red star-shaped sunglasses"
 	desc = "Novelty sunglasses with a fancy silver frame and two red-tinted star-shaped lenses. You should probably stomp on them and get a pair of normal ones."
 	icon_state = "sun_star_silver"
-	
+
 /obj/item/clothing/glasses/sunglasses/red
 	name = "red sunglasses"
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes, and the colored lenses let you see the world in red."
 	icon_state = "sunred"
 	item_state = "sunred"
-	
+
 /obj/item/clothing/glasses/sunglasses/security
 	name = "security sunglasses"
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes. Often worn by budget security officers."
@@ -240,6 +240,56 @@
 		if(prob(55))
 			hud = null
 			qdel(hud)
+
+/obj/item/clothing/glasses/sunglasses/sechud/syndishades
+	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
+	name = "sunglasses"
+	icon_state = "sun"
+	item_state = "sunglasses"
+	darkness_view = 0 //Subtly better than normal shades
+	origin_tech = Tc_SYNDICATE + "=3"
+	actions_types = list(/datum/action/item_action/change_appearance_shades)
+	var/list/clothing_choices = list()
+	var/full_access = FALSE
+
+/obj/item/clothing/glasses/sunglasses/sechud/syndishades/New()
+	..()
+	for(var/Type in existing_typesof(/obj/item/clothing/glasses) - /obj/item/clothing/glasses - typesof(/obj/item/clothing/glasses/sunglasses/sechud/syndishades))
+		clothing_choices += new Type
+
+/obj/item/clothing/glasses/sunglasses/sechud/syndishades/attackby(obj/item/I, mob/user)
+	..()
+	if(istype(I, /obj/item/clothing/glasses/sunglasses/sechud) || istype(I, /obj/item/clothing/glasses/hud/security))
+		var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/S = I
+		if(istype(S) && !S.full_access)
+			return
+		if(full_access)
+			to_chat(user, "<span class='warning'>\The [src] already has those access codes.</span>")
+			return
+		else
+			to_chat(user, "<span class='notice'>You transfer the security access codes from \the [I] to \the [src].</span>")
+			full_access = TRUE
+
+/datum/action/item_action/change_appearance_shades
+	name = "Change Shades Appearance"
+
+/datum/action/item_action/change_appearance_shades/Trigger()
+	var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/T = target
+	if(!istype(T))
+		return
+	T.change()
+
+/obj/item/clothing/glasses/sunglasses/sechud/syndishades/proc/change()
+	var/obj/item/clothing/glasses/A
+	A = input("Select style to change it to", "BOOYEA", A) as null|anything in clothing_choices
+	if(!A ||(usr.stat))
+		return
+	desc = A.desc
+	name = A.name
+	icon_state = A.icon_state
+	item_state = A.item_state
+	_color = A._color
+	usr.update_inv_glasses()
 
 /obj/item/clothing/glasses/thermal
 	name = "Optical Thermal Scanner"
