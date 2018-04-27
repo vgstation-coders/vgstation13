@@ -1597,7 +1597,6 @@
 #include "code\modules\mob\living\silicon\decoy\death.dm"
 #include "code\modules\mob\living\silicon\decoy\decoy.dm"
 #include "code\modules\mob\living\silicon\decoy\life.dm"
-#include "code\modules\mob\living\silicon\mommi\cogspider.dm"
 #include "code\modules\mob\living\silicon\mommi\death.dm"
 #include "code\modules\mob\living\silicon\mommi\emote.dm"
 #include "code\modules\mob\living\silicon\mommi\examine.dm"
