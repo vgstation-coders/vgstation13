@@ -67,6 +67,9 @@
 	if((environment.toxins / environment.volume * CELL_VOLUME) > MOLES_PLASMA_VISIBLE)
 		pl_effects()
 
+	if(istype(loc, /turf/space))
+		check_sun()
+
 // Helper proc to map body temperatures to its corresponding heat/cold damage value
 /mob/living/carbon/human/proc/get_body_temperature_damage(var/temperature)
 	if (temperature < species.cold_level_3)
