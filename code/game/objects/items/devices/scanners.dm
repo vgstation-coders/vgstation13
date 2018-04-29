@@ -406,7 +406,7 @@ Subject's pulse: ??? BPM"})
 			return
 		if(!C.dna)
 			return
-		if(M_NOCLONE in C.mutations)
+		if(M_HUSK in C.mutations)
 			return
 
 		var/datum/reagent/B = C.take_blood(src, src.reagents.maximum_volume)
