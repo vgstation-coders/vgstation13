@@ -15,12 +15,12 @@ For vending packs, see vending_packs.dm*/
 			return 0
 		acc_info["idname"] = usr_id.registered_name
 		acc_info["idrank"] = usr_id.GetJobName()
-	else if(issilicon(user))
-		acc_info["idname"] = user.real_name
-		acc_info["idrank"] = "Cyborg"
 	else if(isAI(user))
 		acc_info["idname"] = user.real_name
 		acc_info["idrank"] = "AI"
+	else if(issilicon(user))
+		acc_info["idname"] = user.real_name
+		acc_info["idrank"] = "Cyborg"
 	var/datum/money_account/account = user.get_worn_id_account()
 	if(!account)
 		to_chat(user, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
