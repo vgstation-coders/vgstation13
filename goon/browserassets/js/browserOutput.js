@@ -1003,6 +1003,7 @@ $(function() {
 	$('#toggleCombine').click(function(e) {
 		opts.messageCombining = !opts.messageCombining;
 		setCookie('messagecombining', opts.messageCombining, 365);
+		internalOutput('<span class="internal boldnshit">Line combining '+(opts.messageCombining ? 'enabled' : 'disabled')+'</span>', 'internal');
 	})
 
 	// Tell BYOND to give us a macro list.
