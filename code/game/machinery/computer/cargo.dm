@@ -15,6 +15,9 @@ For vending packs, see vending_packs.dm*/
 			return 0
 		acc_info["idname"] = usr_id.registered_name
 		acc_info["idrank"] = usr_id.GetJobName()
+	else if(isAI(user))
+		acc_info["idname"] = user.real_name
+		acc_info["idrank"] = "AI"
 	else if(issilicon(user))
 		acc_info["idname"] = user.real_name
 		acc_info["idrank"] = "Cyborg"
