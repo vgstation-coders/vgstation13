@@ -67,18 +67,6 @@
 			playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 			m_type = VISIBLE
 
-		if("law")
-			message = "<B>[src]</B> shows its legal authorization barcode."
-
-			playsound(src, 'sound/voice/biamthelaw.ogg', 50, 0)
-			m_type = VISIBLE
-
-		if("halt")
-			message = "<B>[src]</B>'s speakers skreech, \"Halt! Security!\"."
-
-			playsound(src, 'sound/voice/halt.ogg', 50, 0)
-			m_type = HEARABLE
-
 	if (message && !isUnconscious())
 		if (m_type & VISIBLE)
 			for(var/mob/O in viewers(src, null))
