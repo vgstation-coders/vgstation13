@@ -484,6 +484,9 @@
 	if(volume >= 3) //Hardcoded
 		T.wet(800)
 
+	douse(T, volume)
+
+/datum/reagent/water/proc/douse(var/turf/simulated/T, var/volume)
 	var/hotspot = (locate(/obj/effect/fire) in T)
 	if(hotspot)
 		var/datum/gas_mixture/lowertemp = T.remove_air(T:air:total_moles())
@@ -996,13 +999,7 @@
 	if(volume >= 5)
 		T.bless()
 
-	var/hotspot = (locate(/obj/effect/fire) in T)
-	if(hotspot)
-		var/datum/gas_mixture/lowertemp = T.remove_air(T:air:total_moles())
-		lowertemp.temperature = max(min(lowertemp.temperature-2000, lowertemp.temperature / 2), 0)
-		lowertemp.react()
-		T.assume_air(lowertemp)
-		qdel(hotspot)
+	call(/datum/reagent/water/proc/douse)(T, volume)
 
 /datum/reagent/serotrotium
 	name = "Serotrotium"
@@ -4013,13 +4010,8 @@
 
 	if(volume >= 3)
 		T.wet(800)
-	var/hotspot = (locate(/obj/effect/fire) in T)
-	if(hotspot)
-		var/datum/gas_mixture/lowertemp = T.remove_air(T:air:total_moles())
-		lowertemp.temperature = max( min(lowertemp.temperature-2000,lowertemp.temperature / 2), 0)
-		lowertemp.react()
-		T.assume_air(lowertemp)
-		qdel(hotspot)
+
+	call(/datum/reagent/water/proc/douse)(T, volume)
 
 /datum/reagent/enzyme
 	name = "Universal Enzyme"
