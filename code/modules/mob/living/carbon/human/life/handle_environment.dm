@@ -67,6 +67,9 @@
 	if((environment.toxins / environment.volume * CELL_VOLUME) > MOLES_PLASMA_VISIBLE)
 		pl_effects()
 
+	if(istype(loc, /turf/space))
+		check_sun()
+
 // Helper proc to map body temperatures to its corresponding heat/cold damage value
 /mob/living/carbon/human/proc/get_body_temperature_damage(var/temperature)
 	if (temperature < species.cold_level_3)
@@ -83,3 +86,37 @@
 		return HEAT_DAMAGE_LEVEL_3
 	else
 		return 0
+
+/mob/living/carbon/human/proc/check_sun()
+	if(!is_in_sun(get_turf(src),20))
+		return
+
+	var/thermal_protection = get_heat_protection(get_heat_protection_flags(sun.heat))
+	if(thermal_protection < 1)
+		to_chat(src, "<span class = 'warning'>You feel the sun beating down on you.</span>")
+		bodytemperature += (1 - thermal_protection) * ((sun.heat - get_skin_temperature()) / BODYTEMP_HEAT_DIVISOR)
+	if(prob(sun.severity))
+		apply_radiation(rand(1,5)*(sun.severity/50), RAD_EXTERNAL)
+	if(isvampire(src))
+		if(prob(45))
+			switch(health)
+				if(80 to 100)
+					to_chat(src, "<span class='warning'>Your skin flakes away...</span>")
+					adjustFireLoss(1)
+				if(60 to 80)
+					to_chat(src, "<span class='warning'>Your skin sizzles!</span>")
+					adjustFireLoss(1)
+				if((-INFINITY) to 60)
+					if(!on_fire)
+						to_chat(src, "<span class='danger'>Your skin catches fire!</span>")
+					else
+						to_chat(src, "<span class='danger'>You continue to burn!</span>")
+					fire_stacks += 5
+					IgniteMob()
+			emote("scream",,, 1)
+		else
+			switch(health)
+				if((-INFINITY) to 60)
+					fire_stacks++
+					IgniteMob()
+		adjustFireLoss(3)

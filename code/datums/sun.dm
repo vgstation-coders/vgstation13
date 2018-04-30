@@ -1,6 +1,7 @@
 var/global/datum/sun/sun
 
 /datum/sun
+	var/name
 	var/angle
 	var/dx
 	var/dy
@@ -14,6 +15,8 @@ var/global/datum/sun/sun
 	var/nextTime
 	var/lastAngle = 0
 	var/rotationRate = 1 //A pretty average way of setting up station rotation direction AND absolute speed
+	var/heat //Temperature you are exposed to when in space. Not technically correct, but current temperature model doesn't use energy exposure, only temperature exposure.
+	var/severity //How nasty the star is (Possibility out of 100 you'll be exposed to radiation, how severe the radiation exposure will be)
 
 /datum/sun/New()
 
@@ -24,6 +27,9 @@ var/global/datum/sun/sun
 	if(prob(50))
 		rotationRate = -rotationRate
 
+	heat = rand(250, 3000)
+	severity = rand(1,100)
+	name = pick(star_names)
 /*
  * Calculate the sun's position given the time of day.
  */
@@ -72,22 +78,24 @@ var/global/datum/sun/sun
 //For a solar panel, trace towards sun to see if we're in shadow.
 
 /datum/sun/proc/occlusion(const/obj/machinery/power/solar/panel/S)
-	var/ax = S.x //Start at the solar panel.
-	var/ay = S.y
-	var/i
-	var/turf/T
-
-	for(i = 1 to 256) //No tiles shall stay unchecked. Since the loop stops when it hit level boundaries or opaque blocks, this can't cause too much problems
-		ax += dx //Do step
-		ay += dy
-
-		T = locate(round(ax, 0.5), round(ay, 0.5), S.z)
-
-		if(T.x == 1 || T.x == world.maxx || T.y == 1 || T.y == world.maxy) // Not obscured if we reach the edge.
-			break
-		if(T.opacity) //Opaque objects block light.
-			S.obscured = 1
-			return
-
-	S.obscured = 0 //If hit the edge or stepped 20 times, not obscured.
+	S.obscured = is_in_sun(get_turf(S), 256) //If hit the edge or stepped 256 times, not obscured.
 	S.update_solar_exposure()
+
+
+/proc/is_in_sun(var/turf/init_turf, var/max_check = 20)
+	var/ax = init_turf.x
+	var/ay = init_turf.y
+
+	for(var/i = 1 to max_check)
+		ax += sun.dx
+		ay += sun.dy
+
+		var/turf/T = locate( round(ax,0.5),round(ay,0.5),init_turf.z)
+
+		if(T.x == 1 || T.x==world.maxx || T.y==1 || T.y==world.maxy)
+			break
+
+		if(T.density)
+			return 0
+
+	return 1

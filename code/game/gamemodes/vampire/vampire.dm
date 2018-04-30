@@ -630,46 +630,6 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	enthralled_mind.current.unsubLife(src)
 	to_chat(enthralled_mind.current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were enthralled until now.</FONT></span>")
 
-/mob/living/carbon/human/proc/check_sun()
-
-
-	var/ax = x
-	var/ay = y
-
-	for(var/i = 1 to 20)
-		ax += sun.dx
-		ay += sun.dy
-
-		var/turf/T = locate( round(ax,0.5),round(ay,0.5),z)
-
-		if(T.x == 1 || T.x==world.maxx || T.y==1 || T.y==world.maxy)
-			break
-
-		if(T.density)
-			return
-	if(prob(45))
-		switch(health)
-			if(80 to 100)
-				to_chat(src, "<span class='warning'>Your skin flakes away...</span>")
-				adjustFireLoss(1)
-			if(60 to 80)
-				to_chat(src, "<span class='warning'>Your skin sizzles!</span>")
-				adjustFireLoss(1)
-			if((-INFINITY) to 60)
-				if(!on_fire)
-					to_chat(src, "<span class='danger'>Your skin catches fire!</span>")
-				else
-					to_chat(src, "<span class='danger'>You continue to burn!</span>")
-				fire_stacks += 5
-				IgniteMob()
-		emote("scream",,, 1)
-	else
-		switch(health)
-			if((-INFINITY) to 60)
-				fire_stacks++
-				IgniteMob()
-	adjustFireLoss(3)
-
 /mob/living/carbon/human/proc/handle_vampire_smite()
 	var/smitetemp = 0
 	var/vampcoat = istype(wear_suit, /obj/item/clothing/suit/storage/draculacoat) //coat reduces smiting
@@ -755,8 +715,6 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	handle_vampire_cloak()
 	handle_vampire_menace()
 	handle_vampire_smite()
-	if(istype(loc, /turf/space))
-		check_sun()
 	if(istype(loc, /obj/structure/closet/coffin))
 		adjustBruteLoss(-4)
 		adjustFireLoss(-4)

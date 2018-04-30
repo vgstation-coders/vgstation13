@@ -70,7 +70,7 @@
 		var/thermal_loss = (1-get_cold_protection())  				// How much of your skin is exposed.
 		if(!isVentCrawling() && ((environment.total_moles / environment.volume * CELL_VOLUME) > MOLES_CELLSTANDARD || !IS_SPACE_COLD))
 			var/pressure_diff   = (environment.total_moles / environment.volume * CELL_VOLUME) / MOLES_CELLSTANDARD // How many moles are in the environment over 103.934, the normal value of a station.
-			var/pressure_factor = (-COLD_PRESSUREFACTOR_MAX)/(pressure_diff) + COLD_PRESSUREFACTOR_MAX // non linear.
+			var/pressure_factor = pressure_diff?(-COLD_PRESSUREFACTOR_MAX)/(pressure_diff) + COLD_PRESSUREFACTOR_MAX : 0 // non linear.
 			if(pressure_diff < PRESSUREFACTOR_NO_LINEAR)
 				pressure_factor = pressure_diff
 			thermal_loss *= pressure_factor
