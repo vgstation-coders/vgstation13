@@ -53,6 +53,11 @@
 	..()
 	T.adjust_water(1)
 
+/datum/reagent/water/holywater/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	if(T.seed && !T.dead)
+		T.health += 0.1
+
 /datum/reagent/mutagen
 	custom_plant_metabolism = 2
 /datum/reagent/mutagen/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
