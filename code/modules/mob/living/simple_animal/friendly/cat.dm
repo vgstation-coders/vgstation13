@@ -129,6 +129,7 @@
 
 /mob/living/simple_animal/cat/snek/corpus
 	name = "Corpus"
+	density = 0
 
 var/list/wizard_snakes = list()
 
