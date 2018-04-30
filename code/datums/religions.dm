@@ -264,6 +264,12 @@
 	bible_names = list("The Necronomicon", "The Book of Eibon", "De Vermis Mysteriis", "Unaussprechlichen Kulten")
 	keys = list("cthulhu", "old ones", "great old ones", "outer gods", "elder gods", "esoteric order of dagon")
 
+/datum/religion/hastur
+	name = "Brotherhood of The Yellow Sign" //I'm fed up with people think I worship Dagon. We're moving out.
+	deity_name = "Hastur"
+	bible_name = "The King in Yellow" //The name of the titular fictional play in the 1895 book by Robert Chambers
+	keys = list("hastur","yellow sign","king in yellow","brotherhood of the yellow sign")
+
 /datum/religion/islam
 	name = "Islam"
 	deity_name = "Allah"
