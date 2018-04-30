@@ -630,37 +630,6 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 	enthralled_mind.current.unsubLife(src)
 	to_chat(enthralled_mind.current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were enthralled until now.</FONT></span>")
 
-/mob/living/carbon/human/proc/check_sun()
-	if(!is_in_sun(get_turf(src),20))
-		return
-	to_chat(src, "<span class = 'warning'>You feel the sun beating down on you.</span>")
-	var/thermal_protection = get_heat_protection(get_heat_protection_flags(sun.sun_temperature))
-	if(thermal_protection < 1)
-		bodytemperature += (1 - thermal_protection) * ((sun.sun_temperature - get_skin_temperature()) / BODYTEMP_HEAT_DIVISOR)
-	if(isvampire(src))
-		if(prob(45))
-			switch(health)
-				if(80 to 100)
-					to_chat(src, "<span class='warning'>Your skin flakes away...</span>")
-					adjustFireLoss(1)
-				if(60 to 80)
-					to_chat(src, "<span class='warning'>Your skin sizzles!</span>")
-					adjustFireLoss(1)
-				if((-INFINITY) to 60)
-					if(!on_fire)
-						to_chat(src, "<span class='danger'>Your skin catches fire!</span>")
-					else
-						to_chat(src, "<span class='danger'>You continue to burn!</span>")
-					fire_stacks += 5
-					IgniteMob()
-			emote("scream",,, 1)
-		else
-			switch(health)
-				if((-INFINITY) to 60)
-					fire_stacks++
-					IgniteMob()
-		adjustFireLoss(3)
-
 /mob/living/carbon/human/proc/handle_vampire_smite()
 	var/smitetemp = 0
 	var/vampcoat = istype(wear_suit, /obj/item/clothing/suit/storage/draculacoat) //coat reduces smiting

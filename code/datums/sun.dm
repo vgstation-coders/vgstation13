@@ -1,6 +1,7 @@
 var/global/datum/sun/sun
 
 /datum/sun
+	var/name
 	var/angle
 	var/dx
 	var/dy
@@ -14,7 +15,8 @@ var/global/datum/sun/sun
 	var/nextTime
 	var/lastAngle = 0
 	var/rotationRate = 1 //A pretty average way of setting up station rotation direction AND absolute speed
-	var/sun_temperature = 0
+	var/heat //Temperature you are exposed to when in space. Not technically correct, but current temperature model doesn't use energy exposure, only temperature exposure.
+	var/severity //How nasty the star is (Possibility out of 100 you'll be exposed to radiation, how severe the radiation exposure will be)
 
 /datum/sun/New()
 
@@ -25,8 +27,9 @@ var/global/datum/sun/sun
 	if(prob(50))
 		rotationRate = -rotationRate
 
-	sun_temperature = rand(2500, 10000)
-
+	heat = rand(250, 3000)
+	severity = rand(1,100)
+	name = pick(star_names)
 /*
  * Calculate the sun's position given the time of day.
  */

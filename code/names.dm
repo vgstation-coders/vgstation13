@@ -21,3 +21,4 @@ var/list/borer_names = file2list("config/names/borer.txt")
 var/list/hologram_names = file2list("config/names/hologram.txt")
 
 var/list/autoborg_silly_names = file2listExceptComments("config/names/autoborg_silly.txt")
+var/list/star_names = file2list("config/names/star.txt")
