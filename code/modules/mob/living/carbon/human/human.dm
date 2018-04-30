@@ -1798,5 +1798,8 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 		if(HUD_MEDICAL)
 			return istype(glasses, /obj/item/clothing/glasses/hud/health)
 		if(HUD_SECURITY)
+			if(istype(glasses, /obj/item/clothing/glasses/sunglasses/sechud/syndishades))
+				var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/S = glasses
+				return S.full_access
 			return is_type_in_list(glasses, list(/obj/item/clothing/glasses/hud/security, /obj/item/clothing/glasses/sunglasses/sechud))
 	return FALSE
