@@ -43,7 +43,6 @@
 
 	user << browse(dat, "window=arcade")
 	onclose(user, "arcade")
-	return
 
 /obj/machinery/computer/arcade/Topic(href, href_list)
 	to_chat(world, "TOPIC")
@@ -53,7 +52,6 @@
 
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
-	return
 
 /obj/machinery/computer/arcade/emag(mob/user)
 	game.emag_act(user)

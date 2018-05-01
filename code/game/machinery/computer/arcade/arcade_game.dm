@@ -241,7 +241,6 @@
 			feedback_inc("arcade_loss_hp_normal")
 
 	blocked = 0
-	return
 
 /datum/arcade_game/space_villain/proc/action_charge()
 	blocked = 1
