@@ -98,12 +98,31 @@
 				else if(O.autoignition_temperature)
 					if(blast_temperature >= O.autoignition_temperature)
 						O.ignite(blast_temperature)
+				if(istype(O, /obj/item/clothing/mask/facehugger))
+					var/obj/item/clothing/mask/facehugger/F = O
+					F.health -= adjusted_fire_damage
+					F.healthcheck()
 			for(var/obj/effect/E in get_turf(A))
 				if(istype(E, /obj/effect/blob))
 					var/obj/effect/blob/B = E
 					B.health -= (adjusted_fire_damage/2)
 					B.update_icon()
 					B.update_health()
+				if(istype(E,/obj/effect/alien/weeds))
+					var/obj/effect/alien/weeds/B = E
+					B.health -= adjusted_fire_damage
+					B.healthcheck()
+				if(istype(E,/obj/effect/alien/egg))
+					var/obj/effect/alien/egg/B = E
+					B.health -= adjusted_fire_damage
+					B.healthcheck()
+				if(istype(E,/obj/effect/plantsegment))
+					var/obj/effect/plantsegment/B = E
+					B.health -= adjusted_fire_damage
+					B.check_health()
+				if(istype(E, /obj/effect/biomass))
+					var/obj/effect/biomass/B = E
+					qdel(B)
 
 			var/turf/T2 = get_turf(src)
 			T2.hotspot_expose((blast_temperature * 2) + 380,500)
