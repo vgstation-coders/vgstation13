@@ -143,11 +143,11 @@
 		if(!head || head.status & ORGAN_DESTROYED)
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Severe cranial damage detected.</span>")
 			return
-		if(M_NOCLONE in target.mutations)
-			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Irremediable genetic damage detected.</span>")
+		if(M_HUSK in target.mutations)
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Irremediable cellular damage detected.</span>")
 			return
 		if(!target.has_brain())
-			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No nervous system detected.</span>")
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No central nervous system detected.</span>")
 			return
 		if(target.suiciding)
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Severe nerve trauma detected.</span>") // They suicided so they fried their brain. Space Magic.
