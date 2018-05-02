@@ -26,6 +26,12 @@
 	if(cursed)
 		name = "cursed [name]"
 
+/obj/item/clothing/mask/morphing/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	M.visible_message("<span class = 'warning'>\The [M] attempts to put on \the [src].</span>")
+	if(do_after(M, src, 50))
+		return ..()
+	return CANNOT_EQUIP
+
 /obj/item/clothing/mask/morphing/equipped(mob/living/carbon/C, wear_mask)
 	if(target_type && istype(C))
 		if(C.get_item_by_slot(slot_wear_mask) == src)
