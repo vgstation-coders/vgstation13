@@ -329,6 +329,9 @@
 	var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R, user)
 	if(H)
 		H.Honkize()
+	var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R, user)
+	if(C)
+		C.Honkize()
 
 	playsound(R, 'sound/items/AirHorn.ogg', 50, 1)
 
@@ -347,6 +350,13 @@
 		R.set_module_sprites(list("Noir" = "[R.base_icon]-noir"))
 
 	securify_module(R)
+
+	var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R, user)
+	if(H)
+		H.Lawize()
+	var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R, user)
+	if(C)
+		C.Noirize()
 
 /obj/item/borg/upgrade/warden
 	name = "cyborg warden upgrade board"
@@ -376,6 +386,8 @@
 	var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R, user)
 	if(H)
 		H.Lawize()
-
+	var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R, user)
+	if(C)
+		C.Lawize()
 
 #undef FAILED_TO_ADD
