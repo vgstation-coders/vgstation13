@@ -8,7 +8,7 @@
 	var/atom/atom_to_mimic
 
 
-/mob/living/simple_animal/hologram/Die()
+/mob/living/simple_animal/hologram/death()
 	..()
 	visible_message("<span class = 'notice>\The [src] dissipates from view.</span>")
 	qdel(src)

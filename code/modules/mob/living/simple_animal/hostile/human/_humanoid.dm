@@ -53,7 +53,7 @@
 /mob/living/simple_animal/hostile/humanoid/getarmor(var/def_zone, var/type)
 	return armor[type]
 
-/mob/living/simple_animal/hostile/humanoid/Die()
+/mob/living/simple_animal/hostile/humanoid/death()
 	..()
 	if(corpse)
 		new corpse(loc)

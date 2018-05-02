@@ -160,7 +160,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 	if(health < 1 && stat != DEAD)
-		Die()
+		death()
 		return 0
 
 	life_tick++
@@ -506,7 +506,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(statpanel("Status") && show_stat_health)
 		stat(null, "Health: [round((health / maxHealth) * 100)]%")
 
-/mob/living/simple_animal/proc/Die()
+/mob/living/simple_animal/death(gibbed)
+	if(stat == DEAD)
+		return
+
+	if(!gibbed)
+		visible_message("<span class='danger'>\the [src] stops moving...</span>")
+
 	health = 0 // so /mob/living/simple_animal/Life() doesn't magically revive them
 	living_mob_list -= src
 	dead_mob_list += src
@@ -524,16 +530,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	verbs += /mob/living/proc/butcher
 
-	return
+	..(gibbed)
 
-/mob/living/simple_animal/death(gibbed)
-	if(stat == DEAD)
-		return
-
-	if(!gibbed)
-		visible_message("<span class='danger'>\the [src] stops moving...</span>")
-
-	Die()
 
 /mob/living/simple_animal/ex_act(severity)
 	if(flags & INVULNERABLE)
@@ -561,7 +559,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
-		Die()
+		death()
 
 /mob/living/simple_animal/adjustFireLoss(damage)
 	if(status_flags & GODMODE)
@@ -575,7 +573,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
-		Die()
+		death()
 
 /mob/living/simple_animal/proc/skinned()
 	if(butchering_drops)

@@ -346,7 +346,7 @@
 	if(fat>BOX_GROWTH_BAR)
 		updatefat()
 
-/mob/living/simple_animal/hostile/retaliate/box/Die()
+/mob/living/simple_animal/hostile/retaliate/box/death()
 	..()
 	playsound(src, 'sound/effects/box_scream.ogg', 100, 1)
 

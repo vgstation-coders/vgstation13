@@ -593,7 +593,7 @@ proc/move_mining_shuttle()
 		return
 	..()
 
-/mob/living/simple_animal/hostile/mining_drone/Die()
+/mob/living/simple_animal/hostile/mining_drone/death()
 	..()
 	visible_message("<span class='danger'>\The [src] blows apart!</span>")
 	new /obj/effect/decal/remains/robot(src.loc)

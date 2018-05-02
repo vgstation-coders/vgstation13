@@ -189,7 +189,7 @@
 			to_chat(user, "<span class = 'danger'>It seems a bit hungry.</span>")
 
 /mob/living/simple_animal/mouse/proc/splat()
-	Die()
+	death()
 	src.icon_dead = "mouse_[_color]_splat"
 	src.icon_state = "mouse_[_color]_splat"
 	if(client)
@@ -262,7 +262,7 @@
 			M << 'sound/effects/mousesqueek.ogg'
 	..()
 
-/mob/living/simple_animal/mouse/Die()
+/mob/living/simple_animal/mouse/death()
 	if(client)
 		client.time_died_as_mouse = world.time
 	..()

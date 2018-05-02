@@ -81,7 +81,7 @@
 		src.add_spell(new spell, "const_spell_ready")
 	updateicon()
 
-/mob/living/simple_animal/construct/Die()
+/mob/living/simple_animal/construct/death()
 	..()
 	for(var/i=0;i<3;i++)
 		new /obj/item/weapon/ectoplasm (src.loc)

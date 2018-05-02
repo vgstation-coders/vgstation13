@@ -419,7 +419,7 @@
 	lying = 0
 	update_transform()
 
-/mob/living/simple_animal/hostile/necro/zombie/Die()
+/mob/living/simple_animal/hostile/necro/zombie/death()
 	..()
 	lying = 1
 	update_transform()

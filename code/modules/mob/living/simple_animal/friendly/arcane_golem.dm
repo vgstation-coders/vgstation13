@@ -77,7 +77,7 @@
 	var/mob/master = master_spell.holder
 	if(istype(master))
 		if(master.isDead() || isnull(master.loc))
-			Die()
+			death()
 			return
 
 		//Alive - follow the master
@@ -85,7 +85,7 @@
 			if(canmove)
 				Goto(master, move_to_delay)
 
-/mob/living/simple_animal/hostile/arcane_golem/Die()
+/mob/living/simple_animal/hostile/arcane_golem/death()
 	..()
 
 	//Punish the master by putting all of his spells on cooldown

@@ -82,7 +82,7 @@
 	else
 		..()
 
-/mob/living/simple_animal/hostile/humanoid/janitor/Die()
+/mob/living/simple_animal/hostile/humanoid/janitor/death()
 	CS.forceMove(loc)
 	CS = null
 	..()

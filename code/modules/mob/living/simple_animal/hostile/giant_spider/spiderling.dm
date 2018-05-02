@@ -49,7 +49,7 @@
 	if(prob(75))
 		amount_grown = 1
 
-/mob/living/simple_animal/hostile/giant_spider/spiderling/Die()
+/mob/living/simple_animal/hostile/giant_spider/spiderling/death()
 	visible_message("<span class='alert'>[src] dies!</span>")
 	new /obj/effect/decal/cleanable/spiderling_remains(src.loc)
 	..()

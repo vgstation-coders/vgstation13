@@ -147,7 +147,7 @@
 			M.show_message("<span class='warning'>[src] makes an odd warbling noise, fizzles, and explodes.</span>")
 	explosion(get_turf(loc), -1, -1, 3, 5)
 	eject_brain()
-	Die()
+	death()
 
 /mob/living/simple_animal/spiderbot/update_icon()
 	if(mmi)
@@ -186,7 +186,7 @@
 
 	..()
 
-/mob/living/simple_animal/spiderbot/Die()
+/mob/living/simple_animal/spiderbot/death()
 
 	living_mob_list -= src
 	dead_mob_list += src

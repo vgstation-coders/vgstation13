@@ -118,7 +118,7 @@
 	visited_plants.len = 0
 	..()
 
-/mob/living/simple_animal/bee/Die()
+/mob/living/simple_animal/bee/death()
 	returnToPool(src)
 
 /mob/living/simple_animal/bee/gib()
@@ -212,7 +212,7 @@
 			amount = 0
 		else
 			amount -= B.health
-			B.Die()
+			B.death()
 
 	if (bees.len <= 0)
 		qdel(src)

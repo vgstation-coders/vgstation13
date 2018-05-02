@@ -37,7 +37,7 @@
 
 	var/list/clothing = list()
 
-/mob/living/simple_animal/hostile/mannequin/Die()
+/mob/living/simple_animal/hostile/mannequin/death()
 	..()
 	breakDown()
 	qdel(src)

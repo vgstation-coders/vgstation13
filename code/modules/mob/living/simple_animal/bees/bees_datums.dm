@@ -42,7 +42,7 @@
 		state = BEE_HEADING_HOME
 		mob.updateState = 1
 
-/datum/bee/proc/Die()
+/datum/bee/proc/death()
 	if (mob)
 		new corpse(get_turf(mob))
 	qdel(src)

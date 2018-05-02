@@ -34,7 +34,7 @@
 	if(stat == CONSCIOUS)
 		animate(src, pixel_x = rand(-12,12) * PIXEL_MULTIPLIER, pixel_y = rand(-12,12) * PIXEL_MULTIPLIER, time = 15, easing = SINE_EASING)
 
-/mob/living/simple_animal/hostile/viscerator/Die()
+/mob/living/simple_animal/hostile/viscerator/death()
 	..()
 	visible_message("<span class='warning'><b>[src]</b> is smashed into pieces!</span>")
 	qdel (src)
@@ -93,7 +93,7 @@
 /mob/living/simple_animal/hostile/viscerator/butterfly/Life()
 	..()
 	if(autodie && life_tick > 10)
-		Die()
+		death()
 
 /mob/living/simple_animal/hostile/viscerator/butterfly/magic
 	name = "crystal butterfly"
