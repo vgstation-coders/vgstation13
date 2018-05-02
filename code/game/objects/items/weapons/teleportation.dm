@@ -135,7 +135,7 @@ Frequency:
 				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 			if(istype(AM,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = AM
-				var/obj/teleported_shoes = H.shoes
+				var/obj/teleported_shoes = H.get_item_by_slot(slot_shoes)
 				var/tele_destination = pick_rand_tele_turf(H, src.potency/15, src.potency/10)
 				if(teleported_shoes && tele_destination)
 					H.drop_from_inventory(teleported_shoes)
