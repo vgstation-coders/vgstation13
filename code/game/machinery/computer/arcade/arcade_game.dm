@@ -6,7 +6,7 @@
 	var/emagged = 0
 
 /datum/arcade_game/Destroy()
-	cheaters = list()
+	cheaters = null
 	holder = null
 	..()
 
