@@ -173,6 +173,10 @@
 	if(!("Security" in R.module.sensor_augs)) //If they don't have a SECHUD, give them one.
 		pop(R.module.sensor_augs)
 		R.module.sensor_augs.Add("Security", "Disable")
+	
+	var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R, user)
+	if(H)
+		H.Lawize()
 
 /obj/item/borg/upgrade/vtec
 	name = "cyborg VTEC upgrade board"
@@ -351,9 +355,6 @@
 
 	securify_module(R)
 
-	var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R, user)
-	if(H)
-		H.Lawize()
 	var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R, user)
 	if(C)
 		C.Noirize()
@@ -383,9 +384,6 @@
 
 	securify_module(R)
 
-	var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R, user)
-	if(H)
-		H.Lawize()
 	var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R, user)
 	if(C)
 		C.Lawize()
