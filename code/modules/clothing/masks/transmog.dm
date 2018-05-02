@@ -28,7 +28,7 @@
 
 /obj/item/clothing/mask/morphing/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 	M.visible_message("<span class = 'warning'>\The [M] attempts to put on \the [src].</span>")
-	if(do_after(M, src, 50))
+	if(do_after(M, src, 5 SECONDS))
 		return ..()
 	return CANNOT_EQUIP
 
