@@ -15,6 +15,12 @@
 	game = new /datum/arcade_game/space_villain(src)
 	name = game.name
 
+/obj/machinery/computer/arcade/Destroy()
+	if(game)
+		qdel(game)
+		game = null
+	..()
+
 /obj/machinery/computer/arcade/proc/import_game_data(var/obj/item/weapon/circuitboard/arcade/A)
 	if(!A || !A.game_data || !A.game_data.len)
 		return
@@ -27,13 +33,6 @@
 		A.game_data = list()
 	A.game_data.len = 0
 	A.game_data = game.export_data()
-
-/obj/machinery/computer/arcade/attack_ai(mob/user)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
-
-/obj/machinery/computer/arcade/attack_paw(mob/user)
-	return src.attack_hand(user)
 
 /obj/machinery/computer/arcade/attack_hand(mob/user)
 	if(..())

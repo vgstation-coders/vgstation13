@@ -5,6 +5,11 @@
 	var/list/cheaters = list()
 	var/emagged = 0
 
+/datum/arcade_game/Destroy()
+	cheaters = list()
+	holder = null
+	..()
+
 /datum/arcade_game/proc/import_data(var/list/args)
 	if(!args || !args["arcade_type"])
 		return 0
@@ -56,7 +61,7 @@
 				/obj/item/clothing/under/syndicate/tacticool	= 2,
 				/obj/item/toy/sword								= 2,
 				/obj/item/toy/bomb								= 1,
-				/obj/item/toy/gun								= 2,
+				list(/obj/item/toy/gun, /obj/item/toy/ammo/gun) = 2,
 				/obj/item/toy/crossbow							= 2,
 				/obj/item/weapon/storage/box/syndicatefake/space = 2,
 				/obj/item/weapon/storage/fancy/crayons			= 2,
@@ -194,13 +199,11 @@
 			else if(!holder.contents.len)
 				feedback_inc("arcade_win_normal")
 				var/prizeselect = pickweight(prizes)
-				new prizeselect(holder.loc)
-
-				if(istype(prizeselect, /obj/item/toy/gun)) //Ammo comes with the gun
-					new /obj/item/toy/ammo/gun(holder.loc)
-
-				else if(istype(prizeselect, /obj/item/clothing/suit/syndicatefake)) //Helmet is part of the suit
-					new	/obj/item/clothing/head/syndicatefake(holder.loc)
+				if(islist(prizeselect))
+					for(var/i in prizeselect)
+						new i(holder.loc)
+				else
+					new prizeselect(holder.loc)
 
 			else //admins can varedit arcades to have special prizes via contents, but it removes the prize rather than spawn a new one
 				feedback_inc("arcade_win_normal")
@@ -294,7 +297,7 @@
 			return 0
 		else if(user in cheaters)
 			to_chat(usr, "<span class='danger'>[enemy_name] throws a bomb at you for trying to cheat him again.</span>")
-			explosion(get_turf(holder.loc),-1,0,2)//IED sized explosion
+			explosion(holder.loc,-1,0,2)//IED sized explosion
 			user.gib()
 			cheaters = null
 			qdel(src)
