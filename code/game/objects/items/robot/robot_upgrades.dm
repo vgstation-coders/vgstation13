@@ -174,7 +174,7 @@
 		pop(R.module.sensor_augs)
 		R.module.sensor_augs.Add("Security", "Disable")
 	
-	var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R, user)
+	var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R, R)
 	if(H)
 		H.Lawize()
 
