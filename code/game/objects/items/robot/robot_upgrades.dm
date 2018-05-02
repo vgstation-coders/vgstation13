@@ -350,8 +350,13 @@
 	if(..())
 		return FAILED_TO_ADD
 
+	var/list/new_icons = list()
 	if(has_icon(R.icon, "[R.base_icon]-noir"))
-		R.set_module_sprites(list("Noir" = "[R.base_icon]-noir"))
+		new_icons += list("Hardboiled" = "[R.base_icon]-noir")
+	if(has_icon(R.icon, "[R.base_icon]-noirbw"))
+		new_icons += list("Noir" = "[R.base_icon]-noirbw")
+	if(new_icons.len > 0)
+		R.set_module_sprites(new_icons)
 
 	securify_module(R)
 
@@ -365,7 +370,6 @@
 	icon_state = "mcontroller"
 	required_module = list(/obj/item/weapon/robot_module/security, /obj/item/weapon/robot_module/tg17355)
 	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/cyborg, /obj/item/weapon/card/robot/security, /obj/item/weapon/wrench)
-	var/list/new_icons = list()
 
 /obj/item/borg/upgrade/warden/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -375,6 +379,7 @@
 	R.component_extension = "/kevlar"
 	R.upgrade_components()
 
+	var/list/new_icons = list()
 	if(has_icon(R.icon, "[R.base_icon]-warden"))
 		new_icons += list("Warden" = "[R.base_icon]-warden")
 	if(has_icon(R.icon, "[R.base_icon]-H"))
