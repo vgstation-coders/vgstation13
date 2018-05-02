@@ -118,7 +118,8 @@
 	visited_plants.len = 0
 	..()
 
-/mob/living/simple_animal/bee/death()
+/mob/living/simple_animal/bee/death(var/gibbed = FALSE)
+	..(gibbed)
 	returnToPool(src)
 
 /mob/living/simple_animal/bee/gib()

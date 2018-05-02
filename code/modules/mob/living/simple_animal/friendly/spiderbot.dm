@@ -186,11 +186,8 @@
 
 	..()
 
-/mob/living/simple_animal/spiderbot/death()
-
-	living_mob_list -= src
-	dead_mob_list += src
-
+/mob/living/simple_animal/spiderbot/death(var/gibbed = FALSE)
+	..(TRUE)
 	if(camera)
 		camera.status = 0
 	if(held_item && !isnull(held_item))

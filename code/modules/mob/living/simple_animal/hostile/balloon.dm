@@ -93,6 +93,6 @@
 				B.live()
 	death()
 
-/mob/living/simple_animal/hostile/balloon/death()
-	..()
+/mob/living/simple_animal/hostile/balloon/death(var/gibbed = FALSE)
+	..(TRUE)
 	qdel(src)

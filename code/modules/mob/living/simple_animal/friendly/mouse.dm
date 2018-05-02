@@ -262,10 +262,10 @@
 			M << 'sound/effects/mousesqueek.ogg'
 	..()
 
-/mob/living/simple_animal/mouse/death()
+/mob/living/simple_animal/mouse/death(var/gibbed = FALSE)
 	if(client)
 		client.time_died_as_mouse = world.time
-	..()
+	..(gibbed)
 
 /*
  * Mouse types

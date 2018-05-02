@@ -85,8 +85,8 @@
 			if(canmove)
 				Goto(master, move_to_delay)
 
-/mob/living/simple_animal/hostile/arcane_golem/death()
-	..()
+/mob/living/simple_animal/hostile/arcane_golem/death(var/gibbed = FALSE)
+	..(gibbed)
 
 	//Punish the master by putting all of his spells on cooldown
 	if(master_spell)

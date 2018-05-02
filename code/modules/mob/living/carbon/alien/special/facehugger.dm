@@ -399,7 +399,6 @@
 
 	visible_message("<span class='danger'>\The [src] curls up into a ball!</span>")
 
-	return
 
 /proc/CanHug(mob/living/M, obj/item/clothing/mask/facehugger/hugger = null)
 	if(isalien(M))

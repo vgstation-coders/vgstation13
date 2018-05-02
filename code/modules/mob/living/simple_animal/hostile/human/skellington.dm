@@ -83,10 +83,10 @@
 /mob/living/simple_animal/hostile/humanoid/skellington/petard/AttackingTarget()
 	death()
 
-/mob/living/simple_animal/hostile/humanoid/skellington/petard/death()
+/mob/living/simple_animal/hostile/humanoid/skellington/petard/death(var/gibbed = FALSE)
 	var/turf/T = get_turf(src)
 
-	..()
+	..(TRUE)
 
 	explosion(T, -1, 1, 2)
 

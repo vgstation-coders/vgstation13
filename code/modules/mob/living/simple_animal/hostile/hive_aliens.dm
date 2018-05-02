@@ -133,8 +133,8 @@
 
 	var/obj/structure/hive/spikes/summoned_spikes
 
-/mob/living/simple_animal/hostile/hive_alien/constructor/death()
-	..()
+/mob/living/simple_animal/hostile/hive_alien/constructor/death(var/gibbed = FALSE)
+	..(gibbed)
 
 	flick("hive_artificer_dying", src)
 	if(summoned_spikes)

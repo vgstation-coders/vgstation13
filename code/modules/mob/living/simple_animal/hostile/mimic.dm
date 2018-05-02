@@ -46,8 +46,8 @@
 	.=..()
 	apply_disguise()
 
-/mob/living/simple_animal/hostile/mimic/death()
-	..()
+/mob/living/simple_animal/hostile/mimic/death(var/gibbed = FALSE)
+	..(TRUE)
 	visible_message("<span class='warning'><b>[src]</b> stops moving!</span>")
 	qdel(src)
 
@@ -271,11 +271,11 @@ var/global/list/crate_mimic_disguises = list(\
 
 	var/can_grab = 1
 
-/mob/living/simple_animal/hostile/mimic/crate/chest/death()
+/mob/living/simple_animal/hostile/mimic/crate/chest/death(var/gibbed = FALSE)
 	for(var/atom/movable/A in get_locked(/datum/locking_category/mimic))
 		unlock_atom(A)
 		visible_message("<span class='notice'>\The [src] lets go of \the [A]!</span>")
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/AttackingTarget()
 	..()
@@ -435,9 +435,9 @@ var/global/list/item_mimic_disguises = list(
 	if(desc)
 		to_chat(user, desc)
 
-/mob/living/simple_animal/hostile/mimic/crate/item/death()
+/mob/living/simple_animal/hostile/mimic/crate/item/death(var/gibbed = FALSE)
 	copied_object = meat_type //Without this line, mimics would spawn items they're disguised as. Since they're relatively weak and can appear as gatling guns, this is required!
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/mimic/crate/item/attack_hand(mob/user)
 	if(angry)
@@ -538,11 +538,11 @@ var/global/list/protected_objects = list(
 		death()
 		return
 
-/mob/living/simple_animal/hostile/mimic/copy/death()
+/mob/living/simple_animal/hostile/mimic/copy/death(var/gibbed = FALSE)
 
 	for(var/atom/movable/M in src)
 		M.forceMove(get_turf(src))
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/mimic/copy/ListTargets()
 	// Return a list of targets that isn't the creator

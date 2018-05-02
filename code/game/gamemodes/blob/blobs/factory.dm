@@ -112,7 +112,8 @@
 		return 1
 	return ..()
 
-/mob/living/simple_animal/hostile/blobspore/death()
+/mob/living/simple_animal/hostile/blobspore/death(var/gibbed = FALSE)
+	..(TRUE) //Gibs regardless
 	var/sound = pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg')
 	playsound(src, sound, 50, 1)
 	qdel(src)
