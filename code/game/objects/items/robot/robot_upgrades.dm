@@ -173,10 +173,6 @@
 	if(!("Security" in R.module.sensor_augs)) //If they don't have a SECHUD, give them one.
 		pop(R.module.sensor_augs)
 		R.module.sensor_augs.Add("Security", "Disable")
-	
-	var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R, R)
-	if(H)
-		H.Lawize()
 
 /obj/item/borg/upgrade/vtec
 	name = "cyborg VTEC upgrade board"
