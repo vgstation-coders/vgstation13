@@ -1201,10 +1201,10 @@
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently!</span>")
 		sleep(50)
 
-	var/blocked = list(
-		/mob/living/simple_animal/hostile/alien/queen/large,
+	var/blocked = existing_typesof(
+		/mob/living/simple_animal/hostile/humanoid,
+		/mob/living/simple_animal/hostile/asteroid,
 		/mob/living/simple_animal/hostile/faithless,
-		/mob/living/simple_animal/hostile/faithless/cult,
 		/mob/living/simple_animal/hostile/scarybat/cult,
 		/mob/living/simple_animal/hostile/creature/cult,
 		/mob/living/simple_animal/hostile/retaliate/clown,
@@ -1213,12 +1213,10 @@
 		/mob/living/simple_animal/hostile/slime,
 		/mob/living/simple_animal/hostile/mining_drone,
 		/mob/living/simple_animal/hostile/mimic,
-		/mob/living/simple_animal/hostile/mimic/crate,
-		/mob/living/simple_animal/hostile/mimic/crate/chest,
-		/mob/living/simple_animal/hostile/mimic/crate/item,
-		) + typesof(/mob/living/simple_animal/hostile/humanoid) + typesof(/mob/living/simple_animal/hostile/asteroid) //Exclusion list for things you don't want the reaction to create.
+		/mob/living/simple_animal/hostile/retaliate/cockatrice
+		)//Exclusion list for things you don't want the reaction to create.
 
-	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - blocked //List of possible hostile mobs
+	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - blocked - boss_mobs//List of possible hostile mobs
 
 	playsound(holder.my_atom, 'sound/effects/phasein.ogg', 100, 1)
 
