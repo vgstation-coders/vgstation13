@@ -12,7 +12,7 @@
 
 /obj/machinery/computer/arcade/New()
 	..()
-	game = new /datum/arcade_game/space_villain()
+	game = new /datum/arcade_game/space_villain(src)
 	name = game.name
 
 /obj/machinery/computer/arcade/proc/import_game_data(var/obj/item/weapon/circuitboard/arcade/A)
@@ -43,15 +43,6 @@
 
 	user << browse(dat, "window=arcade")
 	onclose(user, "arcade")
-
-/obj/machinery/computer/arcade/Topic(href, href_list)
-	to_chat(world, "TOPIC")
-	if(..())
-		return
-	game.arcade_topic(href, href_list)
-
-	src.add_fingerprint(usr)
-	src.updateUsrDialog()
 
 /obj/machinery/computer/arcade/emag(mob/user)
 	game.emag_act(user)

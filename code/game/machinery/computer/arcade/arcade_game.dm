@@ -19,8 +19,6 @@
 	return ""
 
 
-/datum/arcade_game/proc/arcade_topic(href, href_list)
-
 /datum/arcade_game/proc/is_cheater(mob/user)
 	if(user in cheaters)
 		return 1
@@ -33,6 +31,10 @@
 /datum/arcade_game/proc/kick_act()
 
 /datum/arcade_game/proc/npc_tamper_act(mob/living/L)
+
+/datum/arcade_game/New(var/holder)
+	..()
+	src.holder = holder
 
 /datum/arcade_game/space_villain
 	var/enemy_name = "Space Villain"
@@ -136,8 +138,9 @@
 
 	return dat
 
-/datum/arcade_game/space_villain/arcade_topic(href, href_list)
-	to_chat(world, "Accessing arcade_topic")
+/datum/arcade_game/space_villain/Topic(href, href_list)
+	if(..())
+		return
 	if (!blocked && !gameover)
 		if (href_list["attack"])
 			action_attack()
@@ -167,6 +170,10 @@
 		if(emagged)
 			New()
 			emagged = 0
+
+	holder.add_fingerprint(usr)
+	holder.updateUsrDialog()
+
 
 /datum/arcade_game/space_villain/proc/arcade_action()
 	if ((enemy_mp <= 0) || (enemy_hp <= 0))
