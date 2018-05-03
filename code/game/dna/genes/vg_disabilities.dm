@@ -124,10 +124,23 @@
 	activation_message = "You feel short of breath."
 	deactivation_message = "You can breathe normally again."
 	disability= ASTHMA
-	
+
 	mutation = M_ASTHMA
-	
+
 /datum/dna/gene/disability/asthma/New()
 	..()
 	block = ASTHMABLOCK
-	
+
+
+/datum/dna/gene/disability/lactose
+	name = "Lactose intolerance"
+	desc = "A condition where your body is unable to digest Lactose, a sugar commonly found in milk."
+	activation_message = ""
+	deactivation_message = ""
+	disability = LACTOSE
+
+	mutation = M_LACTOSE
+
+/datum/dna/gene/disability/lactose/New()
+	..()
+	block = LACTOSEBLOCK
