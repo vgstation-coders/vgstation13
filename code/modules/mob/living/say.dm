@@ -247,7 +247,8 @@ var/list/department_radio_keys = list(
 /mob/living/proc/hear_radio_only()
 	return 0
 
-/mob/living/send_speech(var/datum/speech/speech, var/message_range=7, var/bubble_type) // what is bubble type?
+/mob/living/send_speech(var/datum/speech/speech, var/message_range=7, var/bubble_type)
+
 	say_testing(src, "/mob/living/send_speech() start, msg = [speech.message]; message_range = [message_range]; language = [speech.language ? speech.language.name : "None"]; speaker = [speech.speaker];")
 	if(isnull(message_range))
 		message_range = 7
@@ -265,6 +266,10 @@ var/list/department_radio_keys = list(
 
 	for (var/atom/movable/listener in listening_nonmobs)
 		listener.Hear(speech, rendered)
+
+/mob/living/carbon/human/send_speech(var/datum/speech/speech, var/message_range=7, var/bubble_type)
+	talkcount++
+	. = ..()
 
 /mob/living/proc/say_test(var/text)
 	var/ending = copytext(text, length(text))

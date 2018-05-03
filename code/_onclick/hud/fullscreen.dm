@@ -131,3 +131,10 @@
 	icon = 'icons/mob/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	icon_state = "druggy"
+
+/obj/abstract/screen/fullscreen/fullblack
+	icon = 'icons/mob/screen1.dmi'
+	icon_state = "black"
+	screen_loc = "WEST,SOUTH to EAST,NORTH"
+	plane = ABOVE_HUD_PLANE
+	layer = COVERALL_LAYER
