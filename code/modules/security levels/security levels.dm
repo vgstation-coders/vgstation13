@@ -38,7 +38,7 @@
 
 			if(SEC_LEVEL_RED)
 				if(security_level < SEC_LEVEL_RED)
-					world << sound('sound/misc/redalert1.ogg')
+					world << sound('sound/misc/notice1-freq-0.39.ogg')
 					to_chat(world, "<font size=4 color='red'>Attention! Code red!</font>")
 					to_chat(world, "<font color='red'>[config.alert_desc_red_upto]</font>")
 				else
