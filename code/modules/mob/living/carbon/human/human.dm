@@ -1441,6 +1441,22 @@
 /mob/living/carbon/human/proc/make_all_robot_parts_organic()
 	make_robot_limbs_organic()
 	make_robot_internals_organic()
+	
+// Makes all limbs robotic.
+/mob/living/carbon/human/proc/make_organic_limbs_robotic()
+	for(var/datum/organ/external/O in organs)
+		O.robotize()
+	update_icons()
+
+// Makes all internal organs robotic.
+/mob/living/carbon/human/proc/make_organic_internals_robotic()
+	for(var/datum/organ/internal/O in organs)
+		O.robotic = TRUE
+
+// Makes all organs, internal and external, robotic.
+/mob/living/carbon/human/proc/make_all_organic_parts_robotic()
+	make_organic_limbs_robotic()
+	make_organic_internals_robotic()
 
 /mob/living/carbon/human/proc/set_attack_type(new_type = NORMAL_ATTACK)
 	kick_icon.icon_state = "act_kick"
