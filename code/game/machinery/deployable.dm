@@ -37,10 +37,11 @@
 		to_chat(user, "<span class='warning'>It seems to be malfunctioning.</span>")
 
 /obj/machinery/deployable/barrier/attackby(var/obj/item/weapon/W, var/mob/user)
-	if (isID(W) || isPDA(W))
-		if (!allowed(user))
-			to_chat(user, "<span class='warning'>Access denied.</span>")
-			return
+	if(isID(W) || isPDA(W) || isRoboID(W))
+		if(!isrobot(user))
+			if(!allowed(user))
+				to_chat(user, "<span class='warning'>Access denied.</span>")
+				return
 		anchored = !anchored
 		update_icon()
 		if (anchored)

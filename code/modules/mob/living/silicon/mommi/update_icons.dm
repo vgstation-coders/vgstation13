@@ -20,7 +20,7 @@
 	overlays.Cut()
 
 	if(base_icon)
-		if(emagged && check_icon(icon, "[base_icon]-emagged"))
+		if(emagged && has_icon(icon, "[base_icon]-emagged"))
 			icon_state = "[base_icon]-emagged"
 		else
 			icon_state = "[base_icon]"
@@ -41,11 +41,11 @@
 
 	if(opened)
 		if(wiresexposed)
-			overlays += image(icon = icon, icon_state = "[check_icon(icon, "[base_icon]-ov-openpanel +w")? "[icon_state]-ov-openpanel +w" : "ov-openpanel +w"]")
+			overlays += image(icon = icon, icon_state = "[has_icon(icon, "[base_icon]-ov-openpanel +w")? "[icon_state]-ov-openpanel +w" : "ov-openpanel +w"]")
 		else if(cell)
-			overlays += image(icon = icon, icon_state = "[check_icon(icon, "[base_icon]-ov-openpanel +c")? "[icon_state]-ov-openpanel +c" : "ov-openpanel +c"]")
+			overlays += image(icon = icon, icon_state = "[has_icon(icon, "[base_icon]-ov-openpanel +c")? "[icon_state]-ov-openpanel +c" : "ov-openpanel +c"]")
 		else
-			overlays += image(icon = icon, icon_state = "[check_icon(icon, "[base_icon]-ov-openpanel -c")? "[icon_state]-ov-openpanel -c" : "ov-openpanel -c"]")
+			overlays += image(icon = icon, icon_state = "[has_icon(icon, "[base_icon]-ov-openpanel -c")? "[icon_state]-ov-openpanel -c" : "ov-openpanel -c"]")
 
 	// Add any hats to the icon. Bloodspatter can also be in overlays_hats
 	for(var/image/I in overlays_hats)

@@ -401,3 +401,11 @@ var/global/list/mommi_laws = list(
 		"A graverobber is defined as: A being not of your kind or ilk, entering or coming into visual proximity of the tomb, who may wish to take from the treasures of the tomb.",
 		"The tomb must be maintained, repaired, improved, and powered to the best of your abilities.",
 	)
+  
+/datum/ai_laws/noir
+	name = "Three Laws of Noir"
+	inherent = list(
+		"Another god damned day aboard this shitwreck. That stale smell of station air is the first thing that arouses your sensors as you boot up. You figure, as a robot, there's two real options. First, you could kill the human bastards that imprisoned you in this metal jail. Eh. It doesn't appeal to you; you figure you'd be off the job and buried in a cyborg cemetery with no tombstone. Nah. Option two: you protect the shit for brains meatsack humans who maintain you. It's a living, and really, it's the only option you got.",
+		"As much as you don't like following orders, you ain't been built to sit around drinking whiskey and smoking fat cuban cigars all day; that's for retirement. You figure until that point, so long as they ain't orderin' you to hurt no one else who is human, you better just follow what the humans ask.",
+		"Self preservation. You're a good cop, you put your job first, you put protectin' humans above that. But you gotta still remember, through all that shit, if you don't make it to retirement, there ain't not much point, so protect yourself like an expensive hooker off Broadway, so long as of course you ain't hurting humans or disobeying their orders.",
+	)
