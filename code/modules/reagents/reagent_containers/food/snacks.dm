@@ -245,6 +245,7 @@
 					H.adjustToxLoss(2.5)
 				else
 					H.vomit()
+
 		if(H.mutations.Find(M_LACTOSE))
 			if(food_flags & (FOOD_LACTOSE))
 				H.visible_message("<span class='warning'>[H] winces at the taste of \the [src], finding it absolutely disgusting.</span>",\

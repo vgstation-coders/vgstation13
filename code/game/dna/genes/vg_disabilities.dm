@@ -144,3 +144,18 @@
 /datum/dna/gene/disability/lactose/New()
 	..()
 	block = LACTOSEBLOCK
+
+/datum/dna/gene/disability/lactose/OnMobLife(var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return
+
+	if(prob(10))
+		for(var/R in list(MILK, CREAM, VIRUSFOOD, OFFCOLORCHEESE, CHEESYGLOOP, ALOE, BANANAHONK, BILK, CAFE_LATTE, MILKSHAKE, BAREFOOT, PINACOLADA, BOOGER, BROWNSTAR, IRISHCARBOMB, IRISHCOFFEE, IRISHCREAM, SILENCER, DOCTORSDELIGHT, WHITERUSSIAN, ANTIFREEZE))
+			if(H.reagents.has_reagent(R))
+				to_chat(H, "<span class='warning'>Your body rejects the [reagent_name(R)]!</span>")
+
+				if(H.lastpuke) //If already puking, add some toxins
+					H.adjustToxLoss(2.5)
+				else
+					H.vomit()
+				break
