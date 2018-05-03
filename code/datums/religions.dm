@@ -848,7 +848,9 @@
 	keys = list("samurai", "honor", "bushido", "weaboo")
 
 /datum/religion/samurai/equip_chaplain(var/mob/living/carbon/human/H)
-	H.equip_or_collect(new /obj/item/clothing/suit/sakura_kimono(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/clothing/head/rice_hat(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/suit/kimono/ronin(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/clothing/shoes/sandal(H), slot_shoes)
 
 /datum/religion/clockworkcult
 	name = "Clockwork Cult"
