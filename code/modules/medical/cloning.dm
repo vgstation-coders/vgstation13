@@ -327,6 +327,11 @@
 			//So clones don't die of oxyloss in a running pod.
 			else if(occupant.reagents.get_reagent_amount(INAPROVALINE) < 30) //Done like this because inaprovaline is toxic to vox
 				occupant.reagents.add_reagent(INAPROVALINE, 60)
+			if(istype(H.species, /datum/species/plasmaman))
+				H.fire_sprite = "Plasmaman"
+
+			if(istype(H.species, /datum/species/vox) & occupant.reagents.get_reagent_amount(NITROGEN) < 30)
+				occupant.reagents.add_reagent(NITROGEN, 60)
 
 			//Also heal some oxyloss ourselves because inaprovaline is so bad at preventing it!!
 			occupant.adjustOxyLoss(-4)
