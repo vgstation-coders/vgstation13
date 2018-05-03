@@ -142,7 +142,7 @@ Class Procs:
 
 	for(var/turf/simulated/S in world)
 		simulated_turf_count++
-		S.update_air_properties()
+		S.update_air_properties(FALSE)
 
 	to_chat(world, {"<span class='info'>Total Simulated Turfs: [simulated_turf_count]
 Total Zones: [zones.len]
@@ -201,7 +201,6 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 				T.needs_air_update = 0
 				#ifdef ZASDBG
 				T.overlays -= mark
-				updated++
 				#endif
 				//sleep(1)
 
@@ -212,7 +211,6 @@ Total Unsimulated Turfs: [world.maxx*world.maxy*world.maxz - simulated_turf_coun
 				T.needs_air_update = 0
 				#ifdef ZASDBG
 				T.overlays -= mark
-				updated++
 				#endif
 
 		if(SSAIR_EDGES)
