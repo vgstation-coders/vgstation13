@@ -888,3 +888,11 @@
 	//Add veganism disability
 	H.dna.SetSEState(VEGANBLOCK, 1)
 	domutcheck(H, null, 1)
+
+/datum/religion/dorf
+	name = "Dorfism"
+	deity_name = "Armok, God of Blood"
+	bible_names = list("How to Play Dwarf Fortress", "Book of Grudges", "Strike the Earth", "Lazy Newb Pack", "The Will of Armok", "Mining 101", "Hidden Fun Stuff and You")
+	male_adept = "Expedition Leader"
+	female_adept = "Expedition Leader"
+	keys = list("armok", "dwarf", "dorf", "dwarf fortress", "dorf fort")
