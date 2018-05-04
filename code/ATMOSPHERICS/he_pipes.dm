@@ -68,14 +68,11 @@
 
 	// Get gas from pipenet
 	var/datum/gas_mixture/internal = return_air()
-	var/remove_ratio = volume/internal.volume
-	var/datum/gas_mixture/internal_removed = internal.remove_ratio(remove_ratio)
+	var/datum/gas_mixture/internal_removed = internal.remove_volume(volume)
 
 	//Get processable air sample and thermal info from environment
-	var/datum/gas_mixture/environment = loc.return_air()
-	var/environment_moles = environment.total_moles()
-	var/transfer_moles = 0.25 * environment_moles
-	var/datum/gas_mixture/external_removed = environment.remove(transfer_moles)
+	var/datum/gas_mixture/environment = loc.return_air(TRUE)
+	var/datum/gas_mixture/external_removed = environment.remove_ratio(0.25)
 
 	// No environmental gas?  We radiate it, then.
 	if(!external_removed)
