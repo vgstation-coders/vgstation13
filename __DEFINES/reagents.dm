@@ -333,6 +333,8 @@
 #define ALBUTEROL		"albuterol"
 #define LIQUIDBUTTER	"liquidbutter"
 #define SALTWATER		"saltwater"
+#define CALCIUMOXIDE		"calciumoxide"
+#define CALCIUMHYDROXIDE	"calciumhydroxide"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -360,7 +362,8 @@
 #define CORIAMYRTIN		"coriamyrtin"
 #define THYMOL			"thymol"
 #define POTASSIUMCARBONATE "potassium_carbonate"
-
+#define TOBACCO			"tobacco"
+#define DANBACCO		"danbacco"
 #define PETRITRICIN		"petritricin"
 #define APETRINE		"apetrine"
 

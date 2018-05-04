@@ -23,10 +23,7 @@
 	var/module_holder = "nomod"
 
 	//Languages
-	var/list/languages = list(
-		LANGUAGE_GALACTIC_COMMON = TRUE,
-		LANGUAGE_TRADEBAND = TRUE,
-		)
+	var/list/languages = list()
 	var/list/added_languages //Bookkeeping
 
 	//Radio
@@ -106,6 +103,10 @@
 				R.hands.icon_state = module_holder
 
 /obj/item/weapon/robot_module/proc/AddCameraNetworks(var/mob/living/silicon/robot/R)
+	if(!R.camera && networks.len > 0) //Alright this module adds the borg to a CAMERANET but it has no camera, so we give it one.
+		R.camera = new /obj/machinery/camera(R)
+		R.camera.c_tag = R.real_name
+		R.camera.network = list() //Empty list to prevent it from appearing where it isn't supposed to.
 	if(R.camera)
 		for(var/network in networks)
 			if(!(network in R.camera.network))
@@ -166,13 +167,13 @@
 			modules += O
 
 /obj/item/weapon/robot_module/proc/add_languages(var/mob/living/silicon/robot/R)
-	for(var/language in languages)
-		if(R.add_language(language, languages[language]))
-			added_languages |= language
+	for(var/language_name in languages)
+		if(R.add_language(language_name))
+			added_languages |= language_name
 
 /obj/item/weapon/robot_module/proc/remove_languages(var/mob/living/silicon/robot/R)
-	for(var/language in added_languages)
-		R.remove_language(language)
+	for(var/language_name in added_languages)
+		R.remove_language(language_name, TRUE) //We remove the ability to speak but keep the ability to understand.
 	added_languages.Cut()
 
 //Modules
@@ -434,14 +435,14 @@
 		"R34 - SRV9a 'Llyod'" = "lloyd"
 		)
 	languages = list(
-		LANGUAGE_GALACTIC_COMMON = TRUE,
-		LANGUAGE_UNATHI	= TRUE,
-		LANGUAGE_CATBEAST = TRUE,
-		LANGUAGE_SKRELLIAN = TRUE,
-		LANGUAGE_ROOTSPEAK = TRUE,
-		LANGUAGE_TRADEBAND = TRUE,
-		LANGUAGE_GUTTER	= TRUE,
-		LANGUAGE_MONKEY	= TRUE,
+		LANGUAGE_UNATHI,
+		LANGUAGE_CATBEAST,
+		LANGUAGE_SKRELLIAN,
+		LANGUAGE_GREY,
+		LANGUAGE_CLATTER,
+		LANGUAGE_VOX,
+		LANGUAGE_GOLEM,
+		LANGUAGE_SLIME,
 		)
 	speed_modifier = CYBORG_SERVICE_SPEED_MODIFIER
 

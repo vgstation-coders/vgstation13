@@ -24,6 +24,18 @@
 //  when they see a target. When their target is attacked by a different alien, they'll remotely build walls behind the victim, blocking off escape
 
 ///////////////////////////////////////////****THE MISSION****////////////////////////////////////////////
+#define DIFF_HARDCORE  "HARDCORE"
+#define DIFF_HARDCORE_SCORE_MULTIPLIER 3
+#define DIFF_HARDCORE_DESC "Monster respawns normal. Pylons emit 100% radiation."
+
+#define DIFF_CASUAL   "CASUAL"
+#define DIFF_CASUAL_SCORE_MULTIPLIER 1
+#define DIFF_CASUAL_DESC "Monster respawns reduced by 66%. Pylons emit 15% radiation."
+
+#define DIFF_BABY     "BABY'S DAY OUT"
+#define DIFF_BABY_SCORE_MULTIPLIER 0.5
+#define DIFF_BABY_DESC "Monster respawns disabled. Pylons deal temporary oxyloss damage instead of radiation."
+
 /datum/map_element/away_mission/hive
 	name = "The Hive"
 	file_path = "maps/RandomZLevels/hive.dmm"
@@ -39,6 +51,8 @@
 	var/list/rewards = list()
 	var/start_reward_amount = 0
 
+	var/difficulty = DIFF_HARDCORE
+
 	var/static/reward_types = list(\
 	/obj/item/weapon/gun/energy/pulse_rifle,
 	/obj/item/weapon/gun/stickybomb,
@@ -48,6 +62,17 @@
 	/obj/item/clothing/gloves/powerfist,
 	/obj/item/clothing/glasses/thermal/eyepatch
 	)
+
+/datum/map_element/away_mission/hive/pre_load()
+	..()
+
+	to_chat(usr, "<span class='danger'>Pleaes select the difficulty level for this away mission. The difficulty level will be visible on round-end screen. It will also affect the final score.</span>")
+	to_chat(usr, "<span class='sinister'>HARDCORE</span>: [DIFF_HARDCORE_DESC] [DIFF_HARDCORE_SCORE_MULTIPLIER]x score multiplier")
+	to_chat(usr, "<span class='sinister'>CASUAL</span>: [DIFF_CASUAL_DESC] [DIFF_CASUAL_SCORE_MULTIPLIER]x score multiplier")
+	to_chat(usr, "<span class='sinister'>BABY'S DAY OUT</span>: [DIFF_BABY_DESC] [DIFF_BABY_SCORE_MULTIPLIER]x score multiplier")
+
+	difficulty = alert(usr, "Select the difficulty level for the away mission. You can't change it later!", "Adventure awaits", DIFF_HARDCORE, DIFF_CASUAL, DIFF_BABY)
+	to_chat(usr, "<span class='notice'>You've selected the <b>[difficulty]</b> difficulty level!</span>")
 
 /datum/map_element/away_mission/hive/initialize(list/objects)
 	..()
@@ -79,14 +104,48 @@
 		if(alert(usr, "Create a command report containing a briefing?", "Adventure awaits", "Yes", "No") == "Yes")
 			command_alert(/datum/command_alert/awaymission/hive)
 
+	switch(difficulty)
+		if(DIFF_CASUAL)
+			//66% respawn points inactive
+			//Pylons 15% effective
+			for(var/obj/effect/landmark/hive/monster_spawner/MS in objects)
+				if(prob(66))
+					MS.inactive = TRUE
+			for(var/obj/structure/hive/pylon/P in objects)
+				P.radiation_multiplier = 0.15
+
+		if(DIFF_BABY)
+			//100% respawn points inactive
+			//Pylons emit oxyloss
+			for(var/obj/effect/landmark/hive/monster_spawner/MS in objects)
+				MS.inactive = TRUE
+			for(var/obj/structure/hive/pylon/P in objects)
+				P.emit_oxyloss = TRUE
+				P.radiation_multiplier = 0.25 //Wouldn't want it to be too deadly
+
+
 /datum/map_element/away_mission/hive/process_scoreboard()
 	var/list/L = list()
+
+	//Difficulty level information
+	var/difficulty_desc
+	switch(difficulty)
+		if(DIFF_HARDCORE)
+			difficulty_desc = DIFF_HARDCORE_DESC
+		if(DIFF_CASUAL)
+			difficulty_desc = DIFF_CASUAL_DESC
+		if(DIFF_BABY)
+			difficulty_desc = DIFF_BABY_DESC
+
+	L["Difficulty level: <u>[difficulty]</u> - [difficulty_desc]<br>"] = 0
+
+	//Accomplishments
 	var/CPU_rescued = FALSE
 
 	if(!CPU)
 		L["The Hive CPU has been destroyed!"] = 5000 //Destroying it is fine, too
 	else if(istype(get_area(CPU), /area/shuttle/escape))
-		L["You have retreived the Hive CPU. Fantastic job!"] = 20000 //Add 20000 points for potentially advancing research hundreds of years into the future
+		L["You have retreived the Hive CPU. Fantastic job!"] = 15000 //Add 15000 points for potentially advancing research hundreds of years into the future
 		CPU_rescued = TRUE
 	else
 		L["You have left the Hive CPU behind."] = 0 //Whatever, we'll send somebody to pick it up
@@ -100,7 +159,7 @@
 	if(!bluespace_deaths)
 		L["No supermatter lake-related casualties."] = 1000
 	else
-		L += "[bluespace_deaths] [bluespace_deaths == 1 ? "loser was" : "people were"] annihilated in the supermatter lakes."
+		L += "[bluespace_deaths] [bluespace_deaths == 1 ? "man was" : "people were"] annihilated in the supermatter lakes."
 
 	var/found_secrets = 0
 	for(var/obj/item/I in rewards)
@@ -115,6 +174,19 @@
 
 	if(CPU_rescued && !communicator && !replicator && (found_secrets == start_reward_amount))
 		L["<br>100% completion! Outstanding!"] = 50000
+
+	//Apply score multiplier
+	var/score_multiplier
+	switch(difficulty)
+		if(DIFF_HARDCORE)
+			score_multiplier = DIFF_HARDCORE_SCORE_MULTIPLIER
+		if(DIFF_CASUAL)
+			score_multiplier = DIFF_CASUAL_SCORE_MULTIPLIER
+		if(DIFF_BABY)
+			score_multiplier = DIFF_BABY_SCORE_MULTIPLIER
+
+	for(var/score_category in L)
+		L[score_category] *= score_multiplier
 
 	return L
 
@@ -487,8 +559,13 @@ var/list/hive_pylons = list()
 	var/radiation_cooldown = 40 SECONDS
 	var/last_pulse
 
+	var/emit_oxyloss = FALSE //For babymode
+
 	var/radiation_range = 12
 	var/radiation_power = 20
+
+	var/radiation_multiplier = 1.0
+
 	var/active = TRUE
 
 /obj/structure/hive/pylon/New()
@@ -523,11 +600,18 @@ var/list/hive_pylons = list()
 
 		emit_radiation(radiation_range, radiation_power)
 		radiation_range = rand(10,15)
-		radiation_power = rand(10,30)
+		radiation_power = rand(10,30) * radiation_multiplier
 
 /obj/structure/hive/pylon/proc/emit_radiation(rad_range, rad_power )
 	// Radiation
 	for(var/mob/living/carbon/M in range(src, rad_range))
+		//Babymode deals temporary oxygen damage
+		if(emit_oxyloss)
+			if(prob(10))
+				to_chat(M, "<span class='warning'>You feel [pick("mildly", "a bit", "somewhat")] [pick("irritated", "inconvenienced", "bothered")].</span>")
+			M.adjustOxyLoss(radiation_power * radiation_multiplier)
+			continue
+
 		var/mob/living/carbon/human/H = M
 		var/msg
 		if(istype(H) && H.species && H.species.flags & RAD_ABSORB)
@@ -585,6 +669,8 @@ var/list/hive_pylons = list()
 		to_chat(A, 'sound/effects/heart_beat_loop.ogg') //Play the sound globally across the entire away mission
 
 	for(var/obj/effect/landmark/hive/monster_spawner/MS in landmarks_list)
+		if(MS.inactive)
+			continue
 		if(prob(30)) //30% chance to skip a monster spawner
 			continue
 
@@ -620,6 +706,8 @@ var/list/hive_pylons = list()
 	name = "alien spawner"
 	desc = "Periodically spawns monsters if the hive replicator isn't destroyed."
 	icon_state = "x"
+
+	var/inactive = FALSE
 
 //Communication unit
 /obj/structure/hive/communicator

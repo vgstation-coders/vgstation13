@@ -163,7 +163,7 @@
 
 	var/book_style = "Bible"
 
-	book_style = input(user, "Which bible style would you like?") as null|anything in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "[R.holy_book.name == "clockwork slab" ? "Slab":"Tome"]", "The King in Yellow", "Ithaqua", "Scientology", \
+	book_style = input(user, "Which bible style would you like?") as null|anything in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "[R.holy_book.name == "Clockwork slab" ? "Slab":"Tome"]", "The King in Yellow", "Ithaqua", "Scientology", \
 																		   "The Bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
 	switch(book_style)
 		if("Koran")
@@ -263,6 +263,12 @@
 	deity_name = "Cthulhu" //I hope it's spelt correctly
 	bible_names = list("The Necronomicon", "The Book of Eibon", "De Vermis Mysteriis", "Unaussprechlichen Kulten")
 	keys = list("cthulhu", "old ones", "great old ones", "outer gods", "elder gods", "esoteric order of dagon")
+
+/datum/religion/hastur
+	name = "Brotherhood of The Yellow Sign" //I'm fed up with people think I worship Dagon. We're moving out.
+	deity_name = "Hastur"
+	bible_name = "The King in Yellow" //The name of the titular fictional play in the 1895 book by Robert Chambers
+	keys = list("hastur","yellow sign","king in yellow","brotherhood of the yellow sign")
 
 /datum/religion/islam
 	name = "Islam"
@@ -842,7 +848,9 @@
 	keys = list("samurai", "honor", "bushido", "weaboo")
 
 /datum/religion/samurai/equip_chaplain(var/mob/living/carbon/human/H)
-	H.equip_or_collect(new /obj/item/clothing/suit/sakura_kimono(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/clothing/head/rice_hat(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/suit/kimono/ronin(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/clothing/shoes/sandal(H), slot_shoes)
 
 /datum/religion/clockworkcult
 	name = "Clockwork Cult"
@@ -880,3 +888,11 @@
 	//Add veganism disability
 	H.dna.SetSEState(VEGANBLOCK, 1)
 	domutcheck(H, null, 1)
+
+/datum/religion/dorf
+	name = "Dorfism"
+	deity_name = "Armok, God of Blood"
+	bible_names = list("How to Play Dwarf Fortress", "Book of Grudges", "Strike the Earth", "Lazy Newb Pack", "The Will of Armok", "Mining 101", "Hidden Fun Stuff and You")
+	male_adept = "Expedition Leader"
+	female_adept = "Expedition Leader"
+	keys = list("armok", "dwarf", "dorf", "dwarf fortress", "dorf fort")

@@ -3,24 +3,15 @@
 	desc = "A self-recharging device used to rapidly deploy cookies."
 	icon = 'icons/obj/RCD.dmi'
 	icon_state = "rcd"
-	var/matter = 10
-	var/toxin = 0
+	var/food_type = /obj/item/weapon/reagent_containers/food/snacks/cookie
+	var/toxin = FALSE
+	var/toxin_type = CHLORALHYDRATE
+	var/toxin_amount = 10
+	var/emagged = FALSE
+	var/sound_type = 'sound/machines/click.ogg'
 	var/cooldown = 0
-	var/cooldowndelay = 15 SECONDS // ONE COOKIE PER SECOND WAS A NO NO, THESE THINGS CAN MAKE FREE SHITTER JUICE WHEN EMAGGED
-	var/emagged = 0
+	var/delay = 15 SECONDS
 	w_class = W_CLASS_MEDIUM
-
-/obj/item/weapon/cookiesynth/New()
-	..()
-	processing_objects.Add(src)
-
-/obj/item/weapon/cookiesynth/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-/obj/item/weapon/cookiesynth/examine(mob/user)
-	..()
-	to_chat(user,"<span class='notice'>It currently holds [matter]/10 cookie-units.</span>")
 
 /obj/item/weapon/cookiesynth/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -29,13 +20,7 @@
 
 /obj/item/weapon/cookiesynth/proc/Emag(mob/user)
 	emagged = !emagged
-	if(emagged)
-		if(user)
-			to_chat(user,"<span class='warning'>You short out the [src]'s reagent safety checker!</span>")
-	else
-		if(user)
-			to_chat(user,"<span class='warning'>You reset the [src]'s reagent safety checker!</span>")
-		toxin = 0
+	spark(src)
 
 /obj/item/weapon/cookiesynth/attack_self(mob/user)
 	if(isrobot(user))
@@ -47,21 +32,14 @@
 
 /obj/item/weapon/cookiesynth/proc/toggle_toxins(mob/user)
 	toxin = !toxin
-	to_chat(user,"Cookie Synthesizer [toxin ? "Hacked" : "Reset"].")
-
-/obj/item/weapon/cookiesynth/process()
-	if(matter < 10)
-		matter++
+	to_chat(user,"<span class='warning'>You [toxin ? "dis" : "en"]able the [src]'s reagent safety checker!</span>")
 
 /obj/item/weapon/cookiesynth/afterattack(atom/A, mob/user, proximity)
 	if(cooldown > world.time)
 		return
 	if(!proximity)
 		return
-	if (!(istype(A, /obj/structure/table) || isturf(A)))
-		return
-	if(matter < 1)
-		to_chat(user,"<span class='warning'>The [src] doesn't have enough matter left. Wait for it to recharge!</span>")
+	if(!(istype(A, /obj/structure/table) || isturf(A)))
 		return
 	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
@@ -69,14 +47,37 @@
 			to_chat(user,"<span class='warning'>You do not have enough power to use [src].</span>")
 			return
 	var/turf/T = get_turf(A)
-	playsound(src.loc, 'sound/machines/click.ogg', 10, 1)
-	to_chat(user,"Fabricating Cookie..")
-	var/obj/item/weapon/reagent_containers/food/snacks/cookie/S = new /obj/item/weapon/reagent_containers/food/snacks/cookie(T)
+	playsound(src.loc, sound_type, 10, 1)
+	var/obj/item/weapon/reagent_containers/food/S = new food_type(T)
+	to_chat(user,"Fabricating [utf8_lowercase(S.name)]..")
 	if(toxin)
-		S.reagents.add_reagent(CHLORALHYDRATE, 10)
-	if (isrobot(user))
+		S.reagents.add_reagent(toxin_type, toxin_amount)
+	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
 		R.cell.charge -= 100
-	else
-		matter--
-	cooldown = world.time + cooldowndelay
+	cooldown = world.time + delay
+
+//TODO: Give hugborgs their own custom RSF instead of this snoflakey mess.
+
+/obj/item/weapon/cookiesynth/proc/Honkize()
+	name = "banana synthesizer"
+	desc = "A self-recharging device used to rapidly deploy bananas."
+	food_type = /obj/item/weapon/reagent_containers/food/snacks/grown/banana
+	toxin_type = SPIRITBREAKER
+
+/obj/item/weapon/cookiesynth/proc/Lawize()
+	name = "donut synthesizer"
+	desc = "A self-recharging device used to rapidly deploy donuts."
+	food_type = /obj/item/weapon/reagent_containers/food/snacks/donut/normal
+	toxin_type = CHEESYGLOOP
+
+/obj/item/weapon/cookiesynth/proc/Noirize()
+	name = "joe synthesizer"
+	desc = "A self-recharging device used to rapidly deploy bitter, black, and tasteless coffee."
+	food_type = /obj/item/weapon/reagent_containers/food/drinks/mug/joe
+	toxin_type = HEMOSCYANINE
+
+/obj/item/weapon/reagent_containers/food/drinks/mug/joe/New()
+	..()
+	reagents.add_reagent(DETCOFFEE, 20)
+

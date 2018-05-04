@@ -581,9 +581,7 @@
 	return
 
 /obj/machinery/singularity/proc/pulse()
-	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
-		if(get_dist(R, src) <= 15) //Better than using orange() every process.
-			R.receive_pulse(energy)
+	emitted_harvestable_radiation(get_turf(src), energy, range = 15)
 
 /obj/machinery/singularity/proc/on_capture()
 	chained = 1

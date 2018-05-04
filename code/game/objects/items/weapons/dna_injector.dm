@@ -309,7 +309,7 @@
 
 /obj/item/weapon/dnainjector/nofail/antiremoteview
 	name = "DNA-Injector (Anti-Remote View)"
-	desc = "Cures green skin."
+	desc = "Quit staring."
 	datatype = DNA2_BUF_SE
 	value = 0x001
 	//block = 2

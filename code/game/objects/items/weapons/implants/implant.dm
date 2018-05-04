@@ -322,8 +322,10 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	var/list/implanters
 	var/ref = "\ref[user.mind]"
 	if(!iscarbon(M))
+		to_chat(user, "<span class='danger'>The implant doesn't seem to be compatible with [M]!</span>")
 		return 0
 	if(!M.mind)
+		to_chat(user, "<span class='danger'>[M] lacks a mind to affect!</span>")
 		return 0
 	var/mob/living/carbon/H = M
 	if(M == user)
@@ -331,10 +333,12 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		if(isliving(user))
 			user:brainloss += 10
 		return
-	if(locate(/obj/item/weapon/implant/traitor) in H.contents || locate(/obj/item/weapon/implant/loyalty) in H.contents)
-		H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel a strange sensation in your head that quickly dissipates.</span>")
-		return 0
-	else if(H.mind in ticker.mode.traitors)
+	for(var/obj/item/weapon/implant/I in H)
+		if(istype(I, /obj/item/weapon/implant/traitor) || istype(I, /obj/item/weapon/implant/loyalty))
+			if(I.imp_in == H)
+				H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel a strange sensation in your head that quickly dissipates.</span>")
+				return 0
+	if(H.mind in ticker.mode.traitors)
 		H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel a familiar sensation in your head that quickly dissipates.</span>")
 		return 0
 	H.implanting = 1

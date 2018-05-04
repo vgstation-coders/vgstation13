@@ -28,6 +28,7 @@
 
 /spell/targeted/remoteobserve
 	name = "Remote View"
+	desc = "Lets you see through the eyes of others."
 	panel = "Mutant Powers"
 
 	charge_type = Sp_RECHARGE
@@ -108,7 +109,7 @@
 
 /spell/targeted/remotesay
 	name = "Project Mind"
-	desc = "Speak into the minds of others."
+	desc = "Speak into the minds of others. You must either hear them speak or examine them to make contact."
 	panel = "Mutant Powers"
 
 	charge_type = Sp_RECHARGE

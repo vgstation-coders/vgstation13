@@ -895,11 +895,11 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/angel)
 	packet_icon = "mycelium-angel"
 	plant_icon = "angel"
-	chems = list(NUTRIMENT = list(1,50), AMATOXIN = list(13,3), PSILOCYBIN = list(1,25))
+	chems = list(NUTRIMENT = list(1,50), AMANATIN = list(1,3))
 
 	maturation = 12
 	yield = 2
-	potency = 35
+	potency = 15
 
 /datum/seed/mushroom/towercap
 	name = "towercap"

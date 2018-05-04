@@ -555,4 +555,7 @@
 
 	..()
 
+/obj/machinery/portable_atmospherics/hydroponics/AltClick()
+	close_lid()
+
 /datum/locking_category/hydro_tray

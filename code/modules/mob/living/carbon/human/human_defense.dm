@@ -256,17 +256,18 @@ emp_act
 
 	var/bloody = FALSE
 	if(final_force && ((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (final_force * 2)))
-		I.add_blood(src)	//Make the weapon bloody, not the person.
-		if(prob(33))
-			bloody = TRUE
-			var/turf/location = loc
-			if(istype(location, /turf/simulated))
-				location.add_blood(src)
-			if(ishuman(user))
-				var/mob/living/carbon/human/H = user
-				if(get_dist(H, src) <= 1) //people with TK won't get smeared with blood
-					H.bloody_body(src)
-					H.bloody_hands(src)
+		if(!(src.species.anatomy_flags & NO_BLOOD))
+			I.add_blood(src)	//Make the weapon bloody, not the person.
+			if(prob(33))
+				bloody = TRUE
+				var/turf/location = loc
+				if(istype(location, /turf/simulated))
+					location.add_blood(src)
+				if(ishuman(user))
+					var/mob/living/carbon/human/H = user
+					if(get_dist(H, src) <= 1) //people with TK won't get smeared with blood
+						H.bloody_body(src)
+						H.bloody_hands(src)
 
 		switch(hit_area)
 			if(LIMB_HEAD)//Harder to score a stun but if you do it lasts a bit longer

@@ -144,14 +144,14 @@
 /obj/structure/grille/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
 	if(iswirecutter(W))
-		if(!shock(user, 100)) //Prevent user from doing it if he gets shocked
+		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
 			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
 			drop_stack(/obj/item/stack/rods, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not !
 			qdel(src)
 			return
 		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards !
 	else if((isscrewdriver(W)) && (istype(loc, /turf/simulated) || anchored))
-		if(!shock(user, 90))
+		if(!shock(user, 90, W.siemens_coefficient))
 			playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
 			anchored = !anchored
 			user.visible_message("<span class='notice'>[user] [anchored ? "fastens" : "unfastens"] the grille [anchored ? "to" : "from"] the floor.</span>", \
@@ -215,7 +215,7 @@
 				dam = W.force * 0.5 //Rod matrices have an innate resistance to brute damage
 
 	if(!(W.sharpness_flags & INSULATED_EDGE))
-		shock(user, 100 * W.siemens_coefficient) //Chance of getting shocked is proportional to conductivity
+		shock(user, 100 * W.siemens_coefficient, W.siemens_coefficient) //Chance of getting shocked is proportional to conductivity
 
 	if(dam)
 		user.do_attack_animation(src, W)
@@ -227,7 +227,7 @@
 //Shock user with probability prb (if all connections & power are working)
 //Returns 1 if shocked, 0 otherwise
 
-/obj/structure/grille/proc/shock(mob/user as mob, prb)
+/obj/structure/grille/proc/shock(mob/user as mob, prb, siemens_coeff)
 	if(!anchored || broken)	//De-anchored and destroyed grilles are never connected to the powernet !
 		return 0
 	if(!prob(prb)) //If the probability roll failed, don't go further
@@ -238,7 +238,7 @@
 	var/turf/T = get_turf(src)
 	var/obj/structure/cable/C = T.get_cable_node()
 	if(C)
-		if(electrocute_mob(user, C, src))
+		if(electrocute_mob(user, C, src, siemens_coeff))
 			spark(src)
 			return 1
 		else

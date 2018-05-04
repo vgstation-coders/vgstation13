@@ -144,9 +144,9 @@ var/global/list/tv_monitors = list()
 
 /obj/machinery/computer/security/engineering
 	name = "Engineering Cameras"
-	desc = "Used to monitor fires and breaches."
+	desc = "Used to monitor engineering silicons and alarms."
 	icon_state = "engineeringcameras"
-	network = list(CAMERANET_POWERALARMS,CAMERANET_ATMOSALARMS,CAMERANET_FIREALARMS)
+	network = list(CAMERANET_ENGI,CAMERANET_POWERALARMS,CAMERANET_ATMOSALARMS,CAMERANET_FIREALARMS)
 	circuit = "/obj/item/weapon/circuitboard/security/engineering"
 
 	light_color = LIGHT_COLOR_YELLOW

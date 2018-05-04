@@ -126,6 +126,12 @@ var/global/list/rad_collectors = list()
 	else
 		update_icons()
 
+/proc/emitted_harvestable_radiation(turf/center, power, range = 7)
+	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
+		if(get_dist(R, center) <= range) //Better than using orange() every process.
+			R.receive_pulse(power)
+
+//Pulse_strength is multiplied by around 70 (less or more depending on the air tank setup) to get the amount of watts generated
 /obj/machinery/power/rad_collector/proc/receive_pulse(const/pulse_strength)
 	if (P && active)
 		var/power_produced = P.air_contents.toxins * pulse_strength * 3.5 // original was 20, nerfed to 2 now 3.5 should get you about 500kw

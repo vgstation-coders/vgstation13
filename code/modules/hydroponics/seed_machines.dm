@@ -42,6 +42,18 @@
 	var/eject_disk = 0
 	var/failed_task = 0
 	var/disk_needs_genes = 0
+	var/time_coeff = 1
+	var/degradation_coeff = 1
+
+/obj/machinery/botany/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/micro_laser/ML in component_parts)
+		T += ML.rating
+	degradation_coeff = round(T/2)
+	T = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/MA in component_parts)
+		T += MA.rating
+	time_coeff = T
 
 /obj/machinery/botany/process()
 
@@ -49,7 +61,7 @@
 	if(!active)
 		return
 
-	if(world.time > last_action + action_time)
+	if(world.time > last_action + action_time/time_coeff)
 		finished_task()
 
 /obj/machinery/botany/attack_paw(mob/user as mob)
@@ -142,6 +154,8 @@
 		/obj/item/weapon/stock_parts/console_screen,
 		/obj/item/weapon/stock_parts/matter_bin,
 	)
+
+	RefreshParts()
 
 /obj/machinery/botany/extractor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 
@@ -263,7 +277,7 @@
 		loaded_disk.desc += " The label reads 'gene [href_list["get_gene"]], sampled from [genetics.display_name]'."
 		eject_disk = 1
 
-		degradation += rand(20,60)
+		degradation += round(rand(20,60)/degradation_coeff)
 		if(degradation >= 100)
 			failed_task = 1
 			genetics = null
@@ -295,6 +309,9 @@
 		/obj/item/weapon/stock_parts/micro_laser,
 		/obj/item/weapon/stock_parts/console_screen,
 	)
+
+	RefreshParts()
+
 
 /obj/machinery/botany/editor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 
@@ -363,7 +380,7 @@
 
 		for(var/datum/plantgene/gene in loaded_disk.genes)
 			loaded_seed.seed.apply_gene(gene, mode)
-			loaded_seed.modified += rand(5,10)
+			loaded_seed.modified += round(rand(5,10)/degradation_coeff)
 
 	else if(href_list["toggle_mode"])
 		switch(mode)

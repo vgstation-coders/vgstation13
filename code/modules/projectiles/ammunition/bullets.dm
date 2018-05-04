@@ -117,7 +117,7 @@
 	name = "blank shell"
 	desc = "A blank shell.  Does not contain any projectile material."
 	icon_state = "blshell"
-	projectile_type = ""
+	projectile_type = "/obj/item/projectile/bullet/blank"
 	starting_materials = list(MAT_IRON = 250)
 	w_type = RECYK_METAL
 

@@ -770,6 +770,7 @@
 			imbued_from = R
 			break
 	if (imbued_from)
+		T.uses = talisman_charges(T.imbue)
 		for (var/mob/V in viewers(src))
 			V.show_message("<span class='warning'>The runes turn into dust, which then forms into an arcane image on the paper.</span>", 1)
 		usr.say("H'drak v[pick("'","`")]loso, mir'kanas verbot!")
@@ -1131,8 +1132,9 @@
 			var/obj/machinery/dna_scannernew/dna_scannernew = cultist.loc
 			if (dna_scannernew.locked)
 				dna_scannernew.locked = 0
+		var/rune_damage = 20 / (users.len)
 		for(var/mob/living/carbon/C in users)
-			user.take_overall_damage(10, 0)
+			C.take_overall_damage(rune_damage, 0)
 			C.say("Khari[pick("'","`")]d! Gual'te nikka!")
 		to_chat(cultist, "<span class='warning'>You feel a tingle as you find yourself freed from your restraints.</span>")
 		qdel(src)
@@ -1159,7 +1161,19 @@
 		if(iscultist(C) && !C.stat)
 			users+=C
 	if(users.len>=2)
-		var/mob/living/carbon/cultist = input("Choose the one who you want to summon", "Followers of Geometer") as null|anything in ((cultists - users) - user)
+		cultists-=users
+		var/list/mob/living/carbon/annotated_cultists = new
+		var/status = ""
+		var/list/visible_mobs = viewers(user)
+		for(var/mob/living/carbon/C in cultists)
+			status = ""
+			if(C in visible_mobs)
+				status = "(Present)"
+			else if(C.isDead())
+				status = "(Dead)"
+			annotated_cultists["[C.name] [status]"] = C
+		var/choice = input("Choose the one who you want to summon", "Followers of Geometer") as null|anything in annotated_cultists
+		var/mob/living/carbon/cultist = annotated_cultists[choice]
 		if(!cultist)
 			return fizzle()
 		if (cultist == user) //just to be sure.
@@ -1173,10 +1187,11 @@
 		cultist.lying = 1
 		cultist.regenerate_icons()
 		to_chat(T, visible_message("<span class='warning'>[cultist] suddenly disappears in a flash of red light!</span>"))
+		var/rune_damage = 30 / (users.len)
 		for(var/mob/living/carbon/human/C in orange(1,src))
 			if(iscultist(C) && !C.stat)
 				C.say("N'ath reth sh'yro eth d[pick("'","`")]rekkathnor!")
-				C.take_overall_damage(15, 0)
+				C.take_overall_damage(rune_damage, 0)
 				if(C != cultist)
 					to_chat(C, "<span class='warning'>Your body take its toll as you drag your fellow cultist through dimensions.</span>")
 				else

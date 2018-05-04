@@ -1147,24 +1147,12 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 									SetDepartmentFlags(job, i, F)
 
 				if("language")
-					var/languages_available
 					var/list/new_languages = list("None")
 
-					if(config.usealienwhitelist)
-						for(var/L in all_languages)
-							var/datum/language/lang = all_languages[L]
-							if((!(lang.flags & RESTRICTED)) && (is_alien_whitelisted(user, L)||(!( lang.flags & WHITELISTED ))))
-								new_languages += lang.name
-
-								languages_available = 1
-
-						if(!(languages_available))
-							alert(user, "There are not currently any available secondary languages.")
-					else
-						for(var/L in all_languages)
-							var/datum/language/lang = all_languages[L]
-							if(!(lang.flags & RESTRICTED))
-								new_languages += lang.name
+					for(var/L in all_languages)
+						var/datum/language/lang = all_languages[L]
+						if(lang.flags & CAN_BE_SECONDARY_LANGUAGE)
+							new_languages += lang.name
 
 					language = input("Please select a secondary language", "Character Generation", null) in new_languages
 

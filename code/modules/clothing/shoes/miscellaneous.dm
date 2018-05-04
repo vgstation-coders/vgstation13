@@ -435,3 +435,31 @@
 	desc = "A pair of boots worn by the followers of Ratvar."
 	icon_state = "clockwork"
 	item_state = "clockwork"
+
+/obj/item/clothing/shoes/knifeboot
+	name = "laceup shoes"
+	desc = "The height of fashion, and they're pre-polished!"
+	icon_state = "laceups"
+	item_state = "laceups"
+	species_fit = list(VOX_SHAPED)
+	actions_types = list(/datum/action/item_action/generic_toggle)
+	var/toggle = FALSE
+
+/obj/item/clothing/shoes/knifeboot/attack_self()
+	toggle = !toggle
+	to_chat(usr, "<span class = 'notice'>You toggle \the [src]'s hidden knife [toggle?"out":"in"].</span>")
+	update_icon()
+	..()
+
+/obj/item/clothing/shoes/knifeboot/update_icon()
+	if(toggle)
+		icon_state = "[initial(icon_state)]_1"
+	else
+		icon_state = initial(icon_state)
+	item_state = icon_state
+
+/obj/item/clothing/shoes/knifeboot/on_kick(mob/living/carbon/human/user, mob/living/victim)
+	if(istype(victim) && toggle)
+		var/datum/organ/external/affecting = victim.get_organ(ran_zone(user.zone_sel.selecting))
+		//Sharpness 1.5, force 10, edge = SHARP_TIP | SHARP_BLADE
+		victim.apply_damage(victim.run_armor_absorb(affecting, "melee", 10), BRUTE, affecting, victim.run_armor_check(affecting, "melee"), sharp = 1.5, edge = SHARP_TIP | SHARP_BLADE, used_weapon = src)

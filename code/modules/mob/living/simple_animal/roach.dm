@@ -22,6 +22,8 @@
 	response_disarm = "pokes"
 	response_harm   = "stomps on"
 
+	faction = "roach"
+
 	density = 0
 
 	minbodytemp = 273.15		//Can't survive at below 0 C
@@ -281,6 +283,30 @@
 	switch(id)
 		if(TOXIN)
 			Die(gore = 0)
+		if(MUTAGEN)
+			if(prob(10)) //10% chance to become a big roach
+
+				//Unless there are already a lot of big roaches
+				if(animal_count[/mob/living/simple_animal/hostile/bigroach] >= ANIMAL_CHILD_CAP)
+					Die(gore = 0)
+					return
+
+				visible_message("<span class='danger'>\The [src] evolves!</span>")
+				message_admins("Created a mutated cockroach at [formatJumpTo(get_turf(src))]; usr = [key_name(usr)]")
+				grow_up(/mob/living/simple_animal/hostile/bigroach)
+			else if(prob(20)) //After that, 20% chance to die
+				Die(gore = 0)
+			else if(prob(0.5)) //After that, 0.5% chance to become a roach queen
+
+				//Unless there is already a roach queen nearby
+				if(locate(/mob/living/simple_animal/hostile/bigroach/queen) in orange(world.view, src))
+					Die(gore = 0)
+					return
+
+				playsound(src, 'sound/effects/lingextends.ogg', 100)
+				visible_message("<span class='userdanger'>\The [src] rapidly evolves, twisting and deforming into something terrifying before your own very eyes!</span>")
+				message_admins("Created a mutated cockroach matriarch at [formatJumpTo(get_turf(src))]; usr = [key_name(usr)]")
+				grow_up(/mob/living/simple_animal/hostile/bigroach/queen)
 
 /mob/living/simple_animal/cockroach/bite_act(mob/living/carbon/human/H)
 	if(size >= H.size)

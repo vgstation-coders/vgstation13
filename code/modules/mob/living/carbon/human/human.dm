@@ -1151,6 +1151,18 @@
 			add_spell(spell, "racial_spell_ready", /obj/abstract/screen/movable/spell_master/racial)
 	if(force_organs || !src.organs || !src.organs.len)
 		src.species.create_organs(src)
+	else
+		for(var/datum/organ/external/current_organ in organs)
+			if(species.anatomy_flags & NO_BLOOD)
+				current_organ.status &= ~ORGAN_BLEEDING
+			if(species.anatomy_flags & NO_BONES)
+				current_organ.status &= ~ORGAN_BROKEN
+				current_organ.status &= ~ORGAN_SPLINTED
+			if(species.anatomy_flags & NO_STRUCTURE && current_organ.status & ORGAN_DESTROYED)
+				current_organ.status |= ORGAN_ATTACHABLE
+				current_organ.amputated = 1
+				current_organ.setAmputatedTree()
+				current_organ.open = 0
 	var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 	if(E)
 		src.see_in_dark = E.see_in_dark //species.darksight
@@ -1429,6 +1441,22 @@
 /mob/living/carbon/human/proc/make_all_robot_parts_organic()
 	make_robot_limbs_organic()
 	make_robot_internals_organic()
+	
+// Makes all limbs robotic.
+/mob/living/carbon/human/proc/make_organic_limbs_robotic()
+	for(var/datum/organ/external/O in organs)
+		O.robotize()
+	update_icons()
+
+// Makes all internal organs robotic.
+/mob/living/carbon/human/proc/make_organic_internals_robotic()
+	for(var/datum/organ/internal/O in organs)
+		O.robotic = TRUE
+
+// Makes all organs, internal and external, robotic.
+/mob/living/carbon/human/proc/make_all_organic_parts_robotic()
+	make_organic_limbs_robotic()
+	make_organic_internals_robotic()
 
 /mob/living/carbon/human/proc/set_attack_type(new_type = NORMAL_ATTACK)
 	kick_icon.icon_state = "act_kick"
@@ -1786,5 +1814,8 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 		if(HUD_MEDICAL)
 			return istype(glasses, /obj/item/clothing/glasses/hud/health)
 		if(HUD_SECURITY)
+			if(istype(glasses, /obj/item/clothing/glasses/sunglasses/sechud/syndishades))
+				var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/S = glasses
+				return S.full_access
 			return is_type_in_list(glasses, list(/obj/item/clothing/glasses/hud/security, /obj/item/clothing/glasses/sunglasses/sechud))
 	return FALSE
