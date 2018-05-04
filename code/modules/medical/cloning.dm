@@ -236,7 +236,7 @@
 	connected.update_icon()
 
 	if(isplasmaman(H))
-	H.fire_sprite = "Plasmaman"
+		H.fire_sprite = "Plasmaman"
 
 	//Get the clone body ready
 	H.dna = R.dna.Clone()
