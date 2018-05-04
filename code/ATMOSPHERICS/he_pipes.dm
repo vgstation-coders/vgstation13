@@ -72,7 +72,7 @@
 
 	//Get processable air sample and thermal info from environment
 	var/datum/gas_mixture/environment = loc.return_air(TRUE)
-	var/datum/gas_mixture/external_removed = environment.remove_ratio(0.25)
+	var/datum/gas_mixture/external_removed = environment.remove_volume(0.25 * CELL_VOLUME)
 
 	// No environmental gas?  We radiate it, then.
 	if(!external_removed)
