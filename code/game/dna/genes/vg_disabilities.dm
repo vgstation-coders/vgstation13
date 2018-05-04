@@ -132,6 +132,30 @@
 	block = ASTHMABLOCK
 
 
+var/list/milk_reagents = list(
+		MILK,
+		CREAM,
+		VIRUSFOOD,
+		OFFCOLORCHEESE,
+		CHEESYGLOOP,
+		ALOE,
+		BANANAHONK,
+		BILK,
+		CAFE_LATTE,
+		MILKSHAKE,
+		BAREFOOT,
+		PINACOLADA,
+		BOOGER,
+		BROWNSTAR,
+		IRISHCARBOMB,
+		IRISHCOFFEE,
+		IRISHCREAM,
+		SILENCER,
+		DOCTORSDELIGHT,
+		WHITERUSSIAN,
+		ANTIFREEZE)
+
+
 /datum/dna/gene/disability/lactose
 	name = "Lactose intolerance"
 	desc = "A condition where your body is unable to digest Lactose, a sugar commonly found in milk."
@@ -150,7 +174,7 @@
 		return
 
 	if(prob(10))
-		for(var/R in list(MILK, CREAM, VIRUSFOOD, OFFCOLORCHEESE, CHEESYGLOOP, ALOE, BANANAHONK, BILK, CAFE_LATTE, MILKSHAKE, BAREFOOT, PINACOLADA, BOOGER, BROWNSTAR, IRISHCARBOMB, IRISHCOFFEE, IRISHCREAM, SILENCER, DOCTORSDELIGHT, WHITERUSSIAN, ANTIFREEZE))
+		for(var/R in milk_reagents)
 			if(H.reagents.has_reagent(R))
 				to_chat(H, "<span class='warning'>Your body rejects the [reagent_name(R)]!</span>")
 
