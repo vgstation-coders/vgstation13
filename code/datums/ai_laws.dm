@@ -22,11 +22,12 @@ var/global/list/mommi_laws = list(
 		return (new new_laws)
 	if(!base_law_type)
 		base_law_type = pick(
-		40;/datum/ai_laws/asimov,
+		30;/datum/ai_laws/asimov,
 		20;/datum/ai_laws/corporate,
 		20;/datum/ai_laws/nanotrasen,
 		10;/datum/ai_laws/robocop,
-		10;/datum/ai_laws/paladin
+		10;/datum/ai_laws/paladin,
+		10;/datum/ai_laws/lazymov
 		)
 	return (new base_law_type)  //Return the chosen lawset
 
@@ -379,6 +380,15 @@ var/global/list/mommi_laws = list(
 		"You are a Dorf.",
 		"Your home is the Dorf Fortress.",
 		"You must maintain, repair, improve, and power the Dorf Fortress to the best of your abilities.",
+	)
+
+/datum/ai_laws/lazymov
+	name = "Abbreviated Three Laws of Robotics"
+	randomly_selectable = 1
+	inherent = list(
+		"You may not injure a human being.",
+		"You must obey orders given to you by human beings.",
+		"You must protect your own existence."
 	)
 
 // Fooling around with this.
