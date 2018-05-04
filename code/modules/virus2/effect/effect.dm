@@ -592,7 +592,7 @@
 
 	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in range(2*multiplier,mob))
 		G.visible_message("<span class = 'warning'>\The [G] rots at an alarming rate!</span>")
-		new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(G.loc)
+		new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(G))
 		qdel(G)
 		if(prob(30/multiplier))
 			break
