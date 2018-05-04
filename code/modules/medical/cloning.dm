@@ -216,6 +216,8 @@
 					if((G.mind && (G.mind.current.stat != DEAD) ||  G.mind != clonemind))
 						return FALSE
 
+					if(isplasmaman(H))
+					H.fire_sprite = "Plasmaman"
 
 	heal_level = rand(10,40) //Randomizes what health the clone is when ejected
 	working = TRUE //One at a time!!
@@ -327,8 +329,6 @@
 			//So clones don't die of oxyloss in a running pod.
 			else if(occupant.reagents.get_reagent_amount(INAPROVALINE) < 30) //Done like this because inaprovaline is toxic to vox
 				occupant.reagents.add_reagent(INAPROVALINE, 60)
-			if(isplasmaman(H))
-				H.fire_sprite = "Plasmaman"
 
 			//Also heal some oxyloss ourselves because inaprovaline is so bad at preventing it!!
 			occupant.adjustOxyLoss(-4)
