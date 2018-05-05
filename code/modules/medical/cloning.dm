@@ -216,7 +216,6 @@
 					if((G.mind && (G.mind.current.stat != DEAD) ||  G.mind != clonemind))
 						return FALSE
 
-
 	heal_level = rand(10,40) //Randomizes what health the clone is when ejected
 	working = TRUE //One at a time!!
 	locked = TRUE
@@ -235,6 +234,9 @@
 		icon_state = "pod_e"
 
 	connected.update_icon()
+
+	if(isplasmaman(H))
+		H.fire_sprite = "Plasmaman"
 
 	//Get the clone body ready
 	H.dna = R.dna.Clone()
