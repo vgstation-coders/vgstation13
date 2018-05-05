@@ -1,6 +1,6 @@
 /spell/cloak
-	name = "Shadowy Menace (toggle)"
-	desc = "Terrify anyone who looks at you in the dark."
+	name = "Cloak of Darkness (toggle)"
+	desc = "Toggles whether you are currently cloaking yourself in darkness."
 	abbreviation = "CK"
 
 	school = "vampire"

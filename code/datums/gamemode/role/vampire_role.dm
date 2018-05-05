@@ -11,7 +11,6 @@
 	logo_state = "vampire-logo"
 	greets = list("default","custom","admintoggle")
 	required_pref = ROLE_VAMPIRE
-	logo_state = "vampire-lgo"
 
 	// -- Vampire mechanics --
 	var/list/datum/role/thrall/thralls = list()
@@ -96,8 +95,8 @@
 
 /datum/role/vampire/ForgeObjectives()
 	// -- Vampires objectives : acquire blood, assassinate.
-	objectives.AddObjective(new /datum/objective/acquire_blood, src.antag)
-	objectives.AddObjective(new /datum/objective/target/assassinate, src.antag)
+	AppendObjective(new /datum/objective/acquire_blood)
+	AppendObjective(new /datum/objective/target/assassinate)
 
 // -- Vampire mechanics --
 
@@ -187,6 +186,7 @@
 	if (!istype(M))
 		return FALSE
 	var/datum/role/thrall/T = new(thrall = M, master = src) // Creating a new thrall
+	update_faction_icons()
 	thralls += T
 /*
 -- Life() related procs --
@@ -257,7 +257,10 @@
 		ismenacing = 0
 		return FALSE
 
-	for(var/mob/living/carbon/C in oview(6))
+	var/mob/M = antag.current
+	var/radius = 6
+
+	for(var/mob/living/carbon/C in oviewers(radius, M))
 		if(prob(35))
 			continue //to prevent fearspam
 		if(!C.vampire_affected(antag))
@@ -346,7 +349,7 @@
 
 /datum/role/vampire/proc/remove_vampire_powers()
 	for (var/datum/power/vampire/VP in powers)
-		VP.remove(V)
+		VP.remove(src)
 
 /*
 -- Helpers --
@@ -436,4 +439,13 @@
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
 /datum/role/thrall/ForgeObjectives()
-	objectives.AddObjective(new /datum/objective/protect_master(master), src.antag)
+	AppendObjective(new /datum/objective/protect_master(master))
+
+/datum/role/thrall/Drop(var/deconverted = FALSE)
+	master.thralls -= src
+	faction.members -= src
+	if (deconverted)
+		var/mob/M = antag.current
+		M.visible_message("<span class='big danger'>[M] suddenly becomes calm and collected again, \his eyes clear up.</span>",
+		"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
+	..()

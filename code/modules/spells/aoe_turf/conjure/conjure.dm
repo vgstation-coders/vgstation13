@@ -23,10 +23,6 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 	//should have format of list("emagged" = 1,"name" = "Wizard's Justicebot"), for example
 
 /spell/aoe_turf/conjure/cast(list/targets, mob/user)
-
-	to_chat(world, "cast()")
-	to_chat(world, "[targets.len]")
-
 	if(!isnull(cast_sound))
 		playsound(get_turf(user), cast_sound, 50, 1)
 

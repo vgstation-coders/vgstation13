@@ -50,7 +50,7 @@
 	if (!istype(the_target, /mob/living))
 		return ..()
 	var/mob/living/L = the_target
-	if (L.mind && L.mind.faction == vamp_fac)
+	if (L in vamp_fac.members)
 		return FALSE
 	return ..()
 
@@ -59,11 +59,11 @@
 	if(.)
 		emote("flutters towards [.]")
 
-/mob/living/simple_animal/hostile/scarybat/Found(var/atom/A)//This is here as a potential override to pick a specific target if available
+/mob/living/simple_animal/hostile/scarybat/Found(var/atom/A) //This is here as a potential override to pick a specific target if available
 	if(!istype(A, /mob/living))
 		return FALSE
 	var/mob/living/L = A
-	if (L.mind && L.mind.faction == vamp_fac)
+	if (L in vamp_fac.members)
 		return FALSE
 	return ..()
 

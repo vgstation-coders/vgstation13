@@ -23,7 +23,7 @@
 	var/datum/role/vampire/V = isvampire(user)
 	if (!.) // No need to go further.
 		return FALSE
-	if (!user.vampire_power(blood_cost, CONSCIOUS))
+	if (!user.vampire_power(blood_cost, DEAD))
 		return FALSE
 	if (!user.isDead())
 		to_chat(user, "<span class='warning'>You need to be dead to do that. Well, you're already dead; undead to be precise, but you need to be DEAD dead to use it.</span>")
@@ -48,21 +48,21 @@
 		if (H.client && cast_check()) // If he didn't log out + if we didn't get revived/smitted in the meantime already
 			to_chat(H, "<span class='sinister'>Your corpse twitches slightly. It's safe to assume nobody noticed.</span>")
 			to_chat(H, "<span class = 'notice'>Click the action button to revive.</span>")
+			var/datum/action/undeath/undeath_action = new()
+			undeath_action.Grant(H)
 
 // Action button for actual revival
-/*
-/datum/action/undeath
-    name = "Return to unlife"
-	desc = "Allows you to walk among the living once more."
-	icon_icon = ''
-	button_icon_state = '' // Need spiters
 
-/datum/action/renounce/Trigger()
+/datum/action/undeath
+	name = "Return to unlife"
+	desc = "Allows you to walk among the living once more."
+	// Need spiters
+
+/datum/action/undeath/Trigger()
 	var/mob/living/M = owner
 	var/datum/role/vampire/V = isvampire(M)
 	M.revive(FALSE)
-	V.remove_vampire_blood(M.vampire.bloodusable)
+	V.remove_blood(V.blood_usable)
 	V.check_vampire_upgrade()
 	to_chat(M, "<span class='sinister'>You awaken, ready to strike fear into the hearts of mortals once again.</span>")
 	Remove(owner)
-*/

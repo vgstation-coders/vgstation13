@@ -34,7 +34,6 @@
 	if (!M.vampire_affected(user.mind))
 		return FALSE
 
-
 	if (!user.can_enthrall(target))
 		return FALSE
 

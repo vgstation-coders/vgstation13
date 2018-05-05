@@ -1,6 +1,6 @@
 /spell/menace
-	name = "Menace (toggle)"
-	desc = "Shadowy menace"
+	name = "Shadowy Menace (toggle)"
+	desc = "Terrify anyone who looks at you in the dark."
 	abbreviation = "CK"
 
 	school = "vampire"
