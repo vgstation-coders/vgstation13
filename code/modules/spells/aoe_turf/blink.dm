@@ -25,7 +25,7 @@
 		user.unlock_from()
 		user.forceMove(T)
 
-		makeAnimation(T, starting, user)
+		makeAnimation(T, starting)
 	return
 
 /spell/aoe_turf/blink/proc/makeAnimation(var/turf/T, var/turf/starting)
@@ -58,17 +58,13 @@
 	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
 
-/spell/aoe_turf/blink/vamp/is_valid_target(var/target, mob/user, options)
-	var/turf/T = target
-	. = ..()
-	if (!.)
-		return FALSE
-	if (istype(T))
-		return FALSE
-	if ((T.get_lumcount() * 10) > max_lum)
-		return FALSE
-	if (istype(T,/turf/space))
-		return FALSE
+/spell/aoe_turf/blink/vamp/choose_targets()
+	var/turfs = ..()
+	for (var/turf/T in turfs)
+		if (T.get_lumcount() < 2)
+			turfs -= T
+	return turfs
+
 
 /spell/aoe_turf/blink/vamp/makeAnimation(var/turf/T, var/turf/starting)
 	starting.turf_animation('icons/effects/effects.dmi',"shadowstep")
