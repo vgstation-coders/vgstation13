@@ -38,10 +38,12 @@ var/datum/controller/gameticker/ticker
 
 	// Hack
 	var/obj/machinery/media/jukebox/superjuke/thematic/theme = null
+	var/datum/credits/end_credits
 
 #define LOBBY_TICKING 1
 #define LOBBY_TICKING_RESTARTED 2
 /datum/controller/gameticker/proc/pregame()
+	end_credits = new()
 	var/oursong = file(pick(
 		"sound/music/space.ogg",
 		"sound/music/traitor.ogg",
@@ -407,6 +409,8 @@ var/datum/controller/gameticker/ticker
 	var/mode_finished = mode.check_finished() || (emergency_shuttle.location == 2 && emergency_shuttle.alert == 1) || force_round_end
 	if(!mode.explosion_in_progress && mode_finished)
 		current_state = GAME_STATE_FINISHED
+		end_credits.generate_credits() // roundend grief not included in the credits
+		end_credits.generate_producers() // roundend grief not included in the credits
 
 		spawn
 			declare_completion()
@@ -458,6 +462,9 @@ var/datum/controller/gameticker/ticker
 					delay_end = 2
 			else if(!delay_end)
 				sleep(restart_timeout)
+				roll_credits()
+				var/time_to_sleep = (end_credits.time_wait + (CREDIT_SPAWN_SPEED*end_credits.producers.len) + CREDIT_ROLL_SPEED)
+				sleep(time_to_sleep)
 				if(!delay_end)
 					CallHook("Reboot",list())
 					world.Reboot()
@@ -715,6 +722,14 @@ var/datum/controller/gameticker/ticker
 		text += {"<br><img src="logo_[tempstate].png"> [winner]"}
 
 	return text
+
+
+/datum/controller/gameticker/proc/roll_credits()
+	if(end_credits.text == "")
+		end_credits.generate_credits()
+		end_credits.generate_producers()
+	for(var/client/C in clients)
+		C.roll_credits(end_credits)
 
 
 /world/proc/has_round_started()
