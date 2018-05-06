@@ -12,6 +12,8 @@
 	var/list/holographic_items = list()
 	var/damaged = 0
 	var/last_change = 0
+
+	var/holopeople_enabled = FALSE //Set this to true to allow observers become holodudes
 	var/list/connected_holopeople = list()
 	var/maximum_holopeople = 4
 
@@ -59,8 +61,14 @@
 	var/dat
 
 	dat += {"<B>Holodeck Control System</B><BR>"}
-//	if(isobserver(user))
-//		dat += {"<HR><A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram\]</font></A><BR>"}
+	if(isobserver(user))
+		if(holopeople_enabled)
+			dat += "<HR><A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram\]</font></A><BR>"
+		else
+			dat += "<HR>\[Advanced Holograms Unavailable\]</font><BR>"
+	if(isAdminGhost(user))
+		dat += "Advanced holograms are: <A href='?src=\ref[src];toggle_holopeople=1'>[holopeople_enabled ? "ENABLED" : "DISABLED"]</A><BR>"
+
 	dat += {"<HR>Current Loaded Programs:<BR>
 		<A href='?src=\ref[src];basketball=1'>((Basketball Court)</font>)</A><BR>
 		<A href='?src=\ref[src];beach=1'>((Beach)</font>)</A><BR>
@@ -119,6 +127,12 @@
 
 	if(href_list["spawn_holoperson"])
 		spawn_holoperson(usr)
+	if(href_list["toggle_holopeople"])
+		holopeople_enabled = !holopeople_enabled
+		src.updateUsrDialog()
+
+		message_admins("[key_name(usr)] has [holopeople_enabled ? "enabled" : "disabled"] advanced hologram spawning at [formatJumpTo(src)]")
+		to_chat(usr, "Advanced holograms are now [holopeople_enabled ? "enabled" : "disabled"].")
 
 	if(..())
 		return 1
