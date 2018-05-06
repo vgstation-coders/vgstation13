@@ -82,7 +82,7 @@
 	if(!internal.total_moles)
 		return
 
-	var/datum/gas_mixture/external_removed = environment.remove_volume(0.25 * CELL_VOLUME)
+	var/datum/gas_mixture/external_removed = environment.remove(0.25 * environment_moles)
 	var/datum/gas_mixture/internal_removed = internal.remove_volume(volume)
 
 

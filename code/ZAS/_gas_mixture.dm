@@ -368,7 +368,7 @@
 	//Inputs: Percentage to remove.
 	//Outputs: Removed air.
 
-	if(ratio <= 0)
+	if(ratio <= 0 || total_moles <= 0)
 		return null
 
 	ratio = min(ratio, 1)
