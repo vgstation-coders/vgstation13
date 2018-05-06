@@ -69,7 +69,9 @@
 		else
 			dat += "<HR>\[Advanced Holograms Unavailable\]</font><BR>"
 	if(isAdminGhost(user))
-		dat += "Advanced holograms are: <A href='?src=\ref[src];toggle_holopeople=1'>[holopeople_enabled ? "ENABLED" : "DISABLED"]</A><BR>"
+		dat += "<BR><b>ADMIN OPTIONS:</b><BR>"
+		dat += "Advanced hologram spawning is: <A href='?src=\ref[src];toggle_holopeople=1'>[holopeople_enabled ? "ENABLED" : "DISABLED"]</A><BR>"
+		dat += "<A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram (Admin)\]</font></A><HR>"
 
 	dat += {"<HR>Current Loaded Programs:<BR>
 		<A href='?src=\ref[src];basketball=1'>((Basketball Court)</font>)</A><BR>
@@ -128,7 +130,7 @@
 	usr.set_machine(src)
 
 	if(href_list["spawn_holoperson"])
-		if(holopeople_enabled)
+		if(holopeople_enabled || isAdminGhost(usr))
 			spawn_holoperson(usr)
 	if(href_list["toggle_holopeople"])
 		holopeople_enabled = !holopeople_enabled
