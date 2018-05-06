@@ -203,7 +203,11 @@
 
 
 /datum/gas_mixture/proc/thermal_energy()
-	return temperature*heat_capacity()
+	return temperature * heat_capacity()
+
+
+/datum/gas_mixture/proc/molar_density(gas) //Per liter. You should probably be using pressure instead, but considering this had to be made, you wouldn't be the first not to.
+	return (gas ? vars[gas] : total_moles) / volume //Should verify if gas is actually a valid gas, but this shouldn't be in use for long anyway.
 
 ///////////////////////////////
 //PV=nRT - related procedures//
