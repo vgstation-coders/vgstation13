@@ -39,9 +39,11 @@
 		return
 	var/turf/spawnturf
 	var/list/L = get_area_turfs(linkedholodeck.type)
-	var/turf/T = pick(L)
-	while(is_blocked_turf(T))
-		T = pick(L)
+
+	spawnturf = pick_n_take(L)
+	while(is_blocked_turf(spawnturf) && L.len)
+		spawnturf = pick_n_take(L)
+
 	if(spawnturf)
 		user.forceMove(spawnturf)
 		var/mob/living/simple_animal/hologram/advanced/H = user.transmogrify(/mob/living/simple_animal/hologram/advanced, TRUE)
@@ -126,7 +128,8 @@
 	usr.set_machine(src)
 
 	if(href_list["spawn_holoperson"])
-		spawn_holoperson(usr)
+		if(holopeople_enabled)
+			spawn_holoperson(usr)
 	if(href_list["toggle_holopeople"])
 		holopeople_enabled = !holopeople_enabled
 		src.updateUsrDialog()
