@@ -60,9 +60,6 @@
 	for(var/type_VP in roundstart_powers)
 		var/datum/power/vampire/VP = new type_VP
 		VP.Give(src)
-	
-	faction.name = "Lord [antag.current]'s vampiric servants."
-
 
 /datum/role/vampire/RemoveFromRole(var/datum/mind/M)
 	var/list/vamp_spells = getAllVampSpells()
