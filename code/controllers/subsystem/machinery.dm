@@ -48,5 +48,8 @@ var/list/machines = list()
 		if (M.use_power)
 			M.auto_use_power()
 
+		if (M.on_fire && prob(15) && M.use_power(1500) != 0)
+			spark(M, 5)
+
 		if (MC_TICK_CHECK)
 			return
