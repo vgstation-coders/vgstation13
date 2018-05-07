@@ -932,10 +932,8 @@
 				V.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
 		var/datum/role/thrall/T = isthrall(H)
 		if(T)
-			to_chat(world, "Thrall + holy water")
 			if (prob(35)) // 35% chance of dethralling
-				to_chat(world, "deconverted")
-				T.Drop(deconverted = TRUE)
+				T.Drop()
 
 /datum/reagent/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
 

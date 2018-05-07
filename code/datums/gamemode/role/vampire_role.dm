@@ -95,8 +95,8 @@
 
 /datum/role/vampire/ForgeObjectives()
 	// -- Vampires objectives : acquire blood, assassinate.
-	AppendObjective(new /datum/objective/acquire_blood)
-	AppendObjective(new /datum/objective/target/assassinate)
+	AppendObjective(/datum/objective/acquire_blood)
+	AppendObjective(/datum/objective/target/assassinate)
 
 // -- Vampire mechanics --
 
@@ -186,7 +186,6 @@
 	if (!istype(M))
 		return FALSE
 	var/datum/role/thrall/T = new(thrall = M, master = src) // Creating a new thrall
-	update_faction_icons()
 	thralls += T
 /*
 -- Life() related procs --
@@ -347,10 +346,6 @@
 	blood_usable = max(0, blood_usable - amount)
 	update_vamp_hud()
 
-/datum/role/vampire/proc/remove_vampire_powers()
-	for (var/datum/power/vampire/VP in powers)
-		VP.remove(src)
-
 /*
 -- Helpers --
 */
@@ -416,17 +411,18 @@
 	name = "thrall"
 	special_role = "thrall"
 	logo_state = "thrall-logo"
+
 	var/datum/role/vampire/master
 
 /datum/role/thrall/New(var/datum/mind/thrall, var/datum/role/vampire/master)
+	. = ..()
 	if(!istype(master))
 		return FALSE
-
 	src.master = master
 	master.faction.members += src
 	faction = master.faction
 	antag = thrall
-
+	update_faction_icons()
 	OnPostSetup()
 
 /datum/role/thrall/Greet(var/you_are = TRUE)
@@ -439,13 +435,13 @@
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
 /datum/role/thrall/ForgeObjectives()
-	AppendObjective(new /datum/objective/protect_master(master))
+	objectives.AddObjective(new /datum/objective/protect_master(master), antag)
+
 
 /datum/role/thrall/Drop(var/deconverted = FALSE)
 	master.thralls -= src
-	faction.members -= src
-	if (deconverted)
-		var/mob/M = antag.current
-		M.visible_message("<span class='big danger'>[M] suddenly becomes calm and collected again, \his eyes clear up.</span>",
-		"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
-	..()
+	var/mob/M = antag.current
+	M.visible_message("<span class='big danger'>[M] suddenly becomes calm and collected again, \his eyes clear up.</span>",
+	"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
+	update_faction_icons()
+	return ..()

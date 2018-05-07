@@ -64,17 +64,6 @@
 	if (store_in_memory)
 		V.antag.store_memory("<font size = '1'>[helptext]</font>")
 
-/datum/power/vampire/proc/remove(var/datum/role/vampire/V)
-	if (!istype(V))
-		message_admins("Error: trying to remove a vampire power from a non-vampire.")
-		return FALSE
-
-	if (spell_path)
-		var/spell/S = new spell_path
-		V.antag.current.remove_spell(S)
-
-	V.powers -= id
-
 // -- List of all vampire spells
 
 /* Tier 0 : roundstart */
