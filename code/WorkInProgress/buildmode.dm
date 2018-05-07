@@ -196,7 +196,7 @@ obj/effect/bmode/buildholder/New()
 				return 1
 			if(2)
 				copycat = null
-				var/partial_type = input("Enter type, or leave blank to see all types", "Typepath", "/obj/structure/closet") as text|null
+				var/partial_type = input(usr, "Enter type, or leave blank to see all types", "Typepath", "/obj/structure/closet") as text|null
 				if(isnull(partial_type))
 					return
 				
