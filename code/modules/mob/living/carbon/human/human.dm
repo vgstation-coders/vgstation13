@@ -1177,6 +1177,8 @@
 		src.dna.species = new_species_name
 		src.species.handle_post_spawn(src)
 		src.update_icons()
+		if(species.species_intro)
+			to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
 	return 1
 
 /mob/living/carbon/human/proc/bloody_doodle()
@@ -1441,7 +1443,7 @@
 /mob/living/carbon/human/proc/make_all_robot_parts_organic()
 	make_robot_limbs_organic()
 	make_robot_internals_organic()
-	
+
 // Makes all limbs robotic.
 /mob/living/carbon/human/proc/make_organic_limbs_robotic()
 	for(var/datum/organ/external/O in organs)
