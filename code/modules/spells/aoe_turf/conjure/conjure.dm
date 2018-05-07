@@ -63,7 +63,6 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 			spawn_place.ChangeTurf(summoned_object_type)
 			summoned_object = spawn_place
 		else
-			to_chat(world, "calling summon object")
 			summoned_object = summon_object(summoned_object_type,spawn_place)
 
 		on_creation(summoned_object, user)

@@ -37,13 +37,11 @@
 
 /spell/undeath/cast(var/list/targets, var/mob/user)
 	var/mob/living/carbon/human/H = user
-	var/datum/role/vampire/V = isvampire(user) // Shouldn't ever be null, as cast_check checks if we're a vamp.
 	to_chat(H, "You attempt to recover. This may take between 30 and 45 seconds.")
 	var/delay = rand(30 SECONDS, 45 SECONDS)
 
 	spawn()
 		user.update_canmove()
-		V.remove_vampire_powers()
 		sleep(delay)
 		if (H.client && cast_check()) // If he didn't log out + if we didn't get revived/smitted in the meantime already
 			to_chat(H, "<span class='sinister'>Your corpse twitches slightly. It's safe to assume nobody noticed.</span>")

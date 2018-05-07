@@ -116,9 +116,7 @@
 			return 1 //Don't heal the mob
 		var/datum/role/thrall/T = isthrall(H)
 		if(T && isChaplain(user))
-			T.Drop(deconverted = TRUE) // Remove the thrall using the Drop() function to leave the role.
-			H.visible_message("<span class='big danger'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
-			"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
+			T.Drop() // Remove the thrall using the Drop() function to leave the role.
 			return 1 //That's it, game over
 
 		bless_mob(user, H) //Let's outsource the healing code, because we can

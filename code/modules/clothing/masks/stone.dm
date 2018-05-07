@@ -25,6 +25,7 @@
 /obj/item/clothing/mask/stone/equipped(mob/M as mob, wear_mask)
 	if(!istype(M, /mob/living/carbon/human)) //just in case a non-human somehow manages to equip it
 		forceMove(M.loc)
+	spikes()
 
 /obj/item/clothing/mask/stone/proc/spikes()
 	icon_state = "stone_spikes"
@@ -45,10 +46,12 @@
 				if(!V) //They are not already a vampire
 					to_chat(H, "<span class='danger'>The mask's stone spikes pierce your skull and enter your brain!</span>")
 					var/datum/role/vampire/vamp = new(H.mind) // Creates a vamp.
-					var/datum/faction/vampire/Fac_vamp = new(vamp) // Creates his own faction
+					var/datum/faction/vampire/Fac_vamp = new(vamp) // Creates his own faction=
 					ticker.mode.factions += Fac_vamp
+					ticker.mode.orphaned_roles -= vamp
 					vamp.OnPostSetup() // TODO rolefix ! This should be part of a bigger makeNewAntag() proc.
 					log_admin("[H] has become a vampire using a stone mask.")
+					update_faction_icons()
 					spawn(10)	//Unlocking their abilities produces a lot of text, I want to give them a chance to see that they have objectives
 						vamp.blood_total = blood_to_give
 						vamp.blood_usable = blood_to_give

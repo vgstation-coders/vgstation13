@@ -61,10 +61,15 @@
 /spell/aoe_turf/blink/vamp/choose_targets()
 	var/turfs = ..()
 	for (var/turf/T in turfs)
-		if (T.get_lumcount() < 2)
+		if (T.get_lumcount() * 10 > 2)
 			turfs -= T
 	return turfs
 
+/spell/aoe_turf/blink/vamp/cast(var/list/targets, var/mob/user)
+	. = ..()
+	var/datum/role/vampire/V = isvampire(user)
+	if (V)
+		V.remove_blood(blood_cost)
 
 /spell/aoe_turf/blink/vamp/makeAnimation(var/turf/T, var/turf/starting)
 	starting.turf_animation('icons/effects/effects.dmi',"shadowstep")
