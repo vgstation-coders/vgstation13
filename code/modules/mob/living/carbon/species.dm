@@ -1178,3 +1178,9 @@ var/list/has_died_as_golem = list()
 	has_organ = list(
 		"brain" =    /datum/organ/internal/brain/mushroom_brain,
 		)
+
+	species_intro = "You are a Mushroom Person.<br>\
+					You are an odd creature, light harms you and makes you hunger, but the darkness heals you and feeds you.<br>\
+					You have a resistance to burn and toxin, but a weakness to brute damage. You are adept at seeing in the dark, moreso with your light inversion ability.<br>\
+					However, you lack a mouth with which to talk. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
+					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
