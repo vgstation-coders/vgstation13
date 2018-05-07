@@ -5,7 +5,7 @@
 /datum/role/vampire
 	id = VAMPIRE
 	name = VAMPIRE
-	special_role = "vampire"
+	special_role = ROLE_VAMPIRE
 	disallow_job = FALSE
 	restricted_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain")
 	logo_state = "vampire-logo"
@@ -94,9 +94,21 @@
 		. += T.GetScoreboard()
 
 /datum/role/vampire/ForgeObjectives()
-	// -- Vampires objectives : acquire blood, assassinate.
+
 	AppendObjective(/datum/objective/acquire_blood)
+
 	AppendObjective(/datum/objective/target/assassinate)
+
+	AppendObjective(/datum/objective/target/steal)
+
+	switch(rand(1,100))
+		if(1 to 80)
+			if (!(locate(/datum/objective/escape) in objectives.objectives)) // Objectives (the objective holder).objectives (the objective list)
+				AppendObjective(/datum/objective/escape)
+		else
+			if (!(locate(/datum/objective/survive) in objectives.objectives))
+				AppendObjective(/datum/objective/survive)
+	return
 
 // -- Vampire mechanics --
 

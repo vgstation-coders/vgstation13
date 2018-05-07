@@ -30,7 +30,6 @@
 	var/list/targets = list()
 
 	for(var/mob/living/carbon/C in hearers(user, 4))
-		to_chat(world, C)
 		if(C == user)
 			continue
 		if(ishuman(C))
