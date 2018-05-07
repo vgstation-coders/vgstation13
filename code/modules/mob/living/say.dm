@@ -24,31 +24,61 @@
 			return "cultchat"
 		if(MODE_ANCIENT)
 			return "ancientchat"
+		if(MODE_MUSHROOM)
+			return "sporechat"
 		else
 			return "Unknown"
 var/list/department_radio_keys = list(
 	  ":0" = "Deathsquad",	 "#0" = "Deathsquad",	".0" = "Deathsquad",
+	  //1 Used by LANGUAGE_GALACTIC_COMMON
+	  //2 Used by LANGUAGE_TRADEBAND
+	  //3 Used by LANGUAGE_GUTTER
+	  //4 Used by LANGUAGE_XENO
+	  //5 Used by LANGUAGE_CULT
+	  //6 Used by LANGUAGE_MONKEY
+	  //7 Used by LANGUAGE_HUMAN
+	  //8 Used by LANGUAGE_GOLEM
+	  //9 Used by LANGUAGE_MOUSE
 	  ":-" = "Response Team","#-" = "Response Team",".-" = "Response Team",
-
-	  ":r" = "right hand",	"#r" = "right hand",	".r" = "right hand", "!r" = "fake right hand",
-	  ":l" = "left hand",	"#l" = "left hand",		".l" = "left hand",  "!l" = "fake left hand",
-	  ":i" = "intercom",	"#i" = "intercom",		".i" = "intercom",
-	  ":h" = "department",	"#h" = "department",	".h" = "department",
-	  ":c" = "Command",		"#c" = "Command",		".c" = "Command",
-	  ":n" = "Science",		"#n" = "Science",		".n" = "Science",
-	  ":m" = "Medical",		"#m" = "Medical",		".m" = "Medical",
-	  ":e" = "Engineering", "#e" = "Engineering",	".e" = "Engineering",
-	  ":s" = "Security",	"#s" = "Security",		".s" = "Security",
-	  ":w" = "whisper",		"#w" = "whisper",		".w" = "whisper",
-	  ":b" = "binary",		"#b" = "binary",		".b" = "binary",
 	  ":a" = "alientalk",	"#a" = "alientalk",		".a" = "alientalk",
+	  ":b" = "binary",		"#b" = "binary",		".b" = "binary",
+	  ":c" = "Command",		"#c" = "Command",		".c" = "Command",
+	  ":d" = "Service",     "#d" = "Service",       ".d" = "Service",
+	  ":e" = "Engineering", "#e" = "Engineering",	".e" = "Engineering",
+	  //f Used by LANGUAGE_SLIME
+	  ":g" = "changeling",	"#g" = "changeling",	".g" = "changeling",
+	  ":h" = "department",	"#h" = "department",	".h" = "department",
+	  ":i" = "intercom",	"#i" = "intercom",		".i" = "intercom",
+	  //j Used by LANGUAGE_TAJARAN
+	  //k Used by LANGUAGE_SKRELLIAN and LANGUAGE_GREY
+	  ":l" = "left hand",	"#l" = "left hand",		".l" = "left hand",  "!l" = "fake left hand",
+	  ":m" = "Medical",		"#m" = "Medical",		".m" = "Medical",
+	  ":n" = "Science",		"#n" = "Science",		".n" = "Science",
+	  //o Used by LANGUAGE_UNATHI
+	  ":p" = "AI Private",	"#p" = "AI Private",	".p" = "AI Private",
+	  //q Used by LANGUAGE_ROOTSPEAK
+	  ":r" = "right hand",	"#r" = "right hand",	".r" = "right hand", "!r" = "fake right hand",
+	  ":s" = "Security",	"#s" = "Security",		".s" = "Security",
 	  ":t" = "Syndicate",	"#t" = "Syndicate",		".t" = "Syndicate",
 	  ":u" = "Supply",		"#u" = "Supply",		".u" = "Supply",
-	  ":d" = "Service",     "#d" = "Service",       ".d" = "Service",
-	  ":g" = "changeling",	"#g" = "changeling",	".g" = "changeling",
+	  //v Used by LANGUAGE_VOX
+	  ":w" = "whisper",		"#w" = "whisper",		".w" = "whisper",
 	  ":x" = "cultchat",	"#x" = "cultchat",		".x" = "cultchat",
 	  ":y" = "ancientchat",	"#y" = "ancientchat",	".y" = "ancientchat",
-	  ":p" = "AI Private",	"#p" = "AI Private",	".p" = "AI Private",
+	  //z Used by LANGUAGE_CLATTER
+	  //@ Used by LANGUAGE_MARTIAN
+	  ":~" = "sporechat",	"#~" = "sporechat",	    ".~" = "sporechat",
+
+
+
+
+
+
+
+
+
+
+
 
 	  ":R" = "right hand",	"#R" = "right hand",	".R" = "right hand", "!R" = "fake right hand",
 	  ":L" = "left hand",	"#L" = "left hand",		".L" = "left hand",  "!L" = "fake left hand",
@@ -358,6 +388,17 @@ var/list/department_radio_keys = list(
 						if(!istype(M,/mob/new_player))
 							handle_render(M,themessage,src)
 					return 1
+		if(MODE_MUSHROOM)
+			var/message = text("<span class='mushroom'>Sporemind, <b>[]:</b> []</span>", src.name, html_encode(speech.message))
+			var/turf/T = get_turf(src)
+			log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Spore chat: [html_encode(speech.message)]")
+			for(var/mob/M in player_list)
+				if(iscarbon(M))
+					var/mob/living/carbon/human/H = M
+					if(ismushroom(H))
+						handle_render(M, message,src)
+				if((M in dead_mob_list) && !istype(M, /mob/new_player))
+					handle_render(M, message,src)
 	return 0
 
 /mob/living/proc/treat_speech(var/datum/speech/speech, genesay = 0)
