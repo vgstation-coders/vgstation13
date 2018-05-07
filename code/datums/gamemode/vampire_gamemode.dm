@@ -22,6 +22,7 @@
 		var/datum/faction/vampire/v_fac = factions[i]
 		if (istype(v_fac))
 			v_fac.addMaster(vampires[i])
+			v_fac.name = "Vampire force #[i]"
 	return vampires
 
 /datum/gamemode/vampire/createBasicRole(var/type_role)
