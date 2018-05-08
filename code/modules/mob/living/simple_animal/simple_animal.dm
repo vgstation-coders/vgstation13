@@ -472,10 +472,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				return 1
 	else if (user.is_pacified(VIOLENCE_DEFAULT,src))
 		return
-	..()
 	if(supernatural && istype(O,/obj/item/weapon/nullrod))
-		damage *= 2
 		purge = 3
+	..()
+
 
 
 /mob/living/simple_animal/base_movement_tally()
@@ -544,6 +544,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(skinned())
 		damage = damage * 2
+	if(purge)
+		damage = damage * 2
 
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
@@ -558,7 +560,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(skinned())
 		damage = damage * 2
-
+	if(purge)
+		damage = damage * 2
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		Die()
