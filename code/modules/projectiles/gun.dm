@@ -311,7 +311,7 @@
 			src.visible_message("*click click*")
 			playsound(src, empty_sound, 100, 1)
 
-/obj/item/weapon/gun/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
+/obj/item/weapon/gun/attack(mob/living/M, mob/living/user, def_zone)
 	//Suicide handling.
 	if (M == user && user.zone_sel.selecting == "mouth" && !mouthshoot)
 		if(istype(M.wear_mask, /obj/item/clothing/mask/happy))
