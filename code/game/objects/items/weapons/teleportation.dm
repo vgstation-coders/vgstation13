@@ -142,12 +142,51 @@ Frequency:
 	var/list/portals = list()
 	var/charge = HANDTELE_MAX_CHARGE//how many pairs of portal can the hand-tele sustain at once. a new charge is added every 30 seconds until the maximum is reached..
 	var/recharging = 0
+	var/destination_id
+	var/destination_name
 
 /obj/item/weapon/hand_tele/attack_self(mob/user as mob)
 	var/turf/current_location = get_turf(user)//What turf is the user on?
 	if(!current_location||current_location.z==2||current_location.z>=7)//If turf was not found or they're on z level 2 or >7 which does not currently exist.
 		to_chat(user, "<span class='notice'>\The [src] is malfunctioning.</span>")
 		return
+
+	if((user.get_active_hand() != src || user.stat || user.restrained()))
+		return
+	if(charge < HANDTELE_PORTAL_COST)
+		user.show_message("<span class='notice'>\The [src] is recharging!</span>")
+		return
+
+	if(!destination_id)
+		choose_destination(user)
+	var/T = destination_id
+
+	if((destination_name == "None (Dangerous)") && prob(5))
+		T = locate(rand(7, world.maxx - 7), rand(7, world.maxy -7), map.zTCommSat)
+
+	var/turf/U = get_turf(src)
+	U.visible_message("<span class='notice'>Locked In.</span>")
+	var/obj/effect/portal/P1 = new (U)
+	var/obj/effect/portal/P2 = new (get_turf(T))
+	P1.target = P2
+	P2.target = P1
+	P2.icon_state = "portal1"
+	P1.creator = src
+	P2.creator = src
+	P1.blend_icon(P2)
+	P2.blend_icon(P1)
+	P1.owner = user
+	P2.owner = user
+	portals += P1
+	portals += P2
+	src.add_fingerprint(user)
+
+	charge = max(charge - HANDTELE_PORTAL_COST,0)
+	if(!recharging)
+		recharging = 1
+		processing_objects.Add(src)
+
+/obj/item/weapon/hand_tele/proc/choose_destination(var/user)
 	var/list/L = list(  )
 	for(var/obj/machinery/computer/teleporter/R in machines)
 		for(var/obj/machinery/teleport/hub/com in locate(R.x + 2, R.y, R.z))
@@ -173,40 +212,11 @@ Frequency:
 		L["None (Dangerous)"] = pick(turfs)
 
 	turfs = null
+	destination_name = input(user, "Please select a teleporter to lock in on.", "Hand Teleporter") in L
+	destination_id = L[destination_name]
 
-	var/t1 = input(user, "Please select a teleporter to lock in on.", "Hand Teleporter") in L
-
-	if((user.get_active_hand() != src || user.stat || user.restrained()))
-		return
-	if(charge < HANDTELE_PORTAL_COST)
-		user.show_message("<span class='notice'>\The [src] is recharging!</span>")
-		return
-	var/T = L[t1]
-
-	if((t1 == "None (Dangerous)") && prob(5))
-		T = locate(rand(7, world.maxx - 7), rand(7, world.maxy -7), map.zTCommSat)
-
-	var/turf/U = get_turf(src)
-	U.visible_message("<span class='notice'>Locked In.</span>")
-	var/obj/effect/portal/P1 = new (U)
-	var/obj/effect/portal/P2 = new (get_turf(T))
-	P1.target = P2
-	P2.target = P1
-	P2.icon_state = "portal1"
-	P1.creator = src
-	P2.creator = src
-	P1.blend_icon(P2)
-	P2.blend_icon(P1)
-	P1.owner = user
-	P2.owner = user
-	portals += P1
-	portals += P2
-	src.add_fingerprint(user)
-
-	charge = max(charge - HANDTELE_PORTAL_COST,0)
-	if(!recharging)
-		recharging = 1
-		processing_objects.Add(src)
+/obj/item/weapon/hand_tele/AltClick(var/mob/usr)
+	choose_destination(usr)
 
 /obj/item/weapon/hand_tele/process()
 	charge = min(HANDTELE_MAX_CHARGE,charge+1)
