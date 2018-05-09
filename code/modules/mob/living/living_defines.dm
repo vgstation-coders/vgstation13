@@ -78,6 +78,7 @@
 	var/cap_calorie_burning_bodytemp = TRUE
 	var/calorie_burning_heat_multiplier = 1		//The heat generated from burning calories is multiplied by this value.
 	var/thermal_loss_multiplier = 1				//The heat the mob loses to the environment is multiplied by this value.
+	var/list/addictions = list() 				//What the mob is addicted to
 
 /mob/living/proc/unsubLife(datum/sub)
 	while("\ref[sub]" in callOnLife)
