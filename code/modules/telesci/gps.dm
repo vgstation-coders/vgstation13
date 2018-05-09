@@ -16,6 +16,7 @@ var/list/SPS_list = list()
 	var/emped = FALSE
 	var/autorefreshing = FALSE
 	var/builtin = FALSE
+	var/unique_id = ""
 
 /obj/item/device/gps/proc/gen_id()
 	return GPS_list.len
@@ -29,6 +30,7 @@ var/list/SPS_list = list()
 /obj/item/device/gps/New()
 	..()
 	gpstag = "[base_tag][gen_id()]"
+	unique_id = "\ref[src]"
 	update_name()
 	overlays += image(icon = icon, icon_state = "working")
 	handle_list()
@@ -61,6 +63,19 @@ var/list/SPS_list = list()
 	else
 		..()
 
+/obj/item/device/gps/proc/get_location_name()
+	var/turf/device_turf = get_turf(src)
+	var/area/device_area = get_area(src)
+	if(emped)
+		return "ERROR"
+	else if(!device_turf || !device_area)
+		return "UNKNOWN"
+	else if(device_turf.z > WORLD_X_OFFSET.len)
+		return "[format_text(device_area.name)] (UNKNOWN, UNKNOWN, UNKNOWN)"
+	else
+		return "[format_text(device_area.name)] ([device_turf.x-WORLD_X_OFFSET[device_turf.z]], [device_turf.y-WORLD_Y_OFFSET[device_turf.z]], [device_turf.z])"
+
+
 /obj/item/device/gps/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/data[0]
 	if(emped)
@@ -68,26 +83,19 @@ var/list/SPS_list = list()
 	else
 		data["gpstag"] = gpstag
 		data["autorefresh"] = autorefreshing
+		data["location_text"] = get_location_name()
+		data["unique_id"] = unique_id
 		var/list/devices = list()
 		for(var/D in get_list())
-			var/device_data[0]
-			var/turf/device_turf = get_turf(D)
-			var/area/device_area = get_area(D)
-			var/device_tag = null
-			var/device_rip = null
 			var/obj/item/device/gps/G = D
-			device_tag = G.gpstag
-			device_rip = G.emped
-			device_data["tag"] = device_tag
-			if(device_rip)
-				device_data["location_text"] = "ERROR"
-			else if(!device_turf || !device_area)
-				device_data["location_text"] = "UNKNOWN"
-			else if(device_turf.z > WORLD_X_OFFSET.len)
-				device_data["location_text"] = "[format_text(device_area.name)] (UNKNOWN, UNKNOWN, UNKNOWN)"
-			else
-				device_data["location_text"] = "[format_text(device_area.name)] ([device_turf.x-WORLD_X_OFFSET[device_turf.z]], [device_turf.y-WORLD_Y_OFFSET[device_turf.z]], [device_turf.z])"
-			devices += list(device_data)
+			if(src.unique_id != G.unique_id)
+				var/device_data[0]
+				var/device_tag = null
+				device_tag = G.gpstag
+				device_data["tag"] = device_tag
+				device_data["location_text"] = G.get_location_name()
+				device_data["unique_id"] = G.unique_id
+				devices += list(device_data)
 		data["devices"] = devices
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
