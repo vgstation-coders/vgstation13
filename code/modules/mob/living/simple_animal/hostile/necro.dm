@@ -577,6 +577,7 @@
 	get_clothes(target, new_zombie)
 	new_zombie.name = target.real_name
 	new_zombie.host = target
+	target.ghostize()
 	target.loc = null
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/get_clothes(var/mob/target, var/mob/living/simple_animal/hostile/necro/zombie/new_zombie)
