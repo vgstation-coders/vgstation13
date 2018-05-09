@@ -16,7 +16,6 @@ var/list/SPS_list = list()
 	var/emped = FALSE
 	var/autorefreshing = FALSE
 	var/builtin = FALSE
-	var/unique_id = ""
 
 /obj/item/device/gps/proc/gen_id()
 	return GPS_list.len
@@ -30,7 +29,6 @@ var/list/SPS_list = list()
 /obj/item/device/gps/New()
 	..()
 	gpstag = "[base_tag][gen_id()]"
-	unique_id = "\ref[src]"
 	update_name()
 	overlays += image(icon = icon, icon_state = "working")
 	handle_list()
@@ -84,17 +82,13 @@ var/list/SPS_list = list()
 		data["gpstag"] = gpstag
 		data["autorefresh"] = autorefreshing
 		data["location_text"] = get_location_name()
-		data["unique_id"] = unique_id
 		var/list/devices = list()
 		for(var/D in get_list())
 			var/obj/item/device/gps/G = D
-			if(src.unique_id != G.unique_id)
+			if(src != G)
 				var/device_data[0]
-				var/device_tag = null
-				device_tag = G.gpstag
-				device_data["tag"] = device_tag
+				device_data["tag"] = G.gpstag
 				device_data["location_text"] = G.get_location_name()
-				device_data["unique_id"] = G.unique_id
 				devices += list(device_data)
 		data["devices"] = devices
 
