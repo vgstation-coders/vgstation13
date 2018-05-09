@@ -2399,6 +2399,7 @@
 
 	M.setCloneLoss(0)
 	M.setOxyLoss(0)
+	M.rad_tick = 0
 	M.radiation = 0
 	M.heal_organ_damage(5,5)
 	M.adjustToxLoss(-5)
