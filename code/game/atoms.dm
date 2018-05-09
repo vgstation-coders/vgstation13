@@ -653,7 +653,7 @@ its easier to just keep the beam vertical.
 		return
 	if(isnull(M.key))
 		return
-	if (!( src.flags ) & FPRINT)
+	if (!(src.flags & FPRINT))
 		return
 	if (ishuman(M))
 		//Add the list if it does not exist.
