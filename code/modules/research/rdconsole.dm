@@ -373,7 +373,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				if(choice == "Cancel" || !linked_destroy)
 					return
 
-				deconstruct_item()
+				deconstruct_item(usr)
 
 	else if(href_list["lock"]) //Lock the console from use by anyone without tox access.
 		if(src.allowed(usr))
@@ -1027,7 +1027,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 /obj/machinery/computer/rdconsole/npc_tamper_act(mob/living/L) //Turn on the destructive analyzer
 	//Item making happens when the gremlin tampers with the circuit imprinter / protolathe. They don't need this console for that
 	if(linked_destroy && linked_destroy.loaded_item)
-		deconstruct_item()
+		deconstruct_item(L)
 
 /obj/machinery/computer/rdconsole/mommi
 	name = "MoMMI R&D Console"
