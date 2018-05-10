@@ -21,7 +21,7 @@ var/list/SPS_list = list()
 	return GPS_list.len
 
 /obj/item/device/gps/proc/get_list()
-	return GPS_list.Copy()
+	return GPS_list
 
 /obj/item/device/gps/proc/update_name()
 	name = "[base_name] ([gpstag])"
@@ -169,7 +169,7 @@ var/list/SPS_list = list()
 	return SPS_list.len
 
 /obj/item/device/gps/secure/get_list()
-	return SPS_list.Copy()
+	return SPS_list
 
 /obj/item/device/gps/secure/OnMobDeath(mob/wearer)
 	if(emped)
