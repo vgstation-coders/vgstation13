@@ -66,7 +66,7 @@
 	if (istype(W, /obj/item/weapon/reagent_containers))
 		if(W.reagents.amount_cache.len == 1 && W.reagents.has_reagent(FLOUR, 5))
 			W.reagents.remove_reagent(FLOUR,5)
-			new /obj/item/weapon/reagent_containers/food/snacks/dough(loc)
+			new /obj/item/weapon/reagent_containers/food/snacks/dough(get_turf(src))
 			to_chat(user, "You make some dough.")
 			qdel(src)
 			return 1
