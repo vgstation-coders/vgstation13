@@ -38,7 +38,7 @@
 
 #define isgrue(A) (ishuman(A) && A.species && istype(A.species, /datum/species/grue))
 
-#define ismushroom(A) ((ishuman(A) && A.species && istype(A.species, /datum/species/mushroom)) || (ismonkey(A) && istype(A, /mob/living/carbon/monkey/mushroom)))
+#define ismushroom(A) ((ishuman(A) && A.species && istype(A.species, /datum/species/mushroom)) || (istype(A, /mob/living/carbon/monkey/mushroom)))
 
 #define ishologram(A) (istype(A, /mob/living/simple_animal/hologram/advanced))
 
