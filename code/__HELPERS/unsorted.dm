@@ -1766,10 +1766,4 @@ Game Mode config tags:
 		if(T.y > world.maxy-outer_teleport_radius || T.y < outer_teleport_radius)
 			continue
 		turfs += T
-	if(!turfs.len)
-		var/list/turfs_to_pick_from = list()
-		for(var/turf/T in trange(outer_teleport_radius, get_turf(hit_atom)))
-			if(get_dist(T, hit_atom) > inner_teleport_radius)
-				turfs_to_pick_from += T
-		turfs += pick(/turf in turfs_to_pick_from)
 	return pick(turfs)
