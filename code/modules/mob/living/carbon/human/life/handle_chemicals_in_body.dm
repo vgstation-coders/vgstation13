@@ -141,6 +141,7 @@
 		animate(src)
 
 	handle_trace_chems()
+	handle_addictions()
 
 	var/datum/organ/internal/liver/liver = internal_organs_by_name["liver"]
 	if(liver)
