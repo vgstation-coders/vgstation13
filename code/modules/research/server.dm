@@ -24,6 +24,8 @@
 		/obj/item/weapon/stock_parts/capacitor
 	)
 
+	icon_state_open = icon_state // needs to be here to override what's done in the parent's New()
+
 	RefreshParts()
 	src.initialize(); //Agouri
 
@@ -91,7 +93,10 @@
 	griefProtection()
 	..()
 
-
+/obj/machinery/r_n_d/server/update_icon()
+	..()
+	if(panel_open)
+		overlays += "[initial(icon_state)]_panel"
 
 //Backup files to centcomm to help admins recover data after greifer attacks
 /obj/machinery/r_n_d/server/proc/griefProtection()
