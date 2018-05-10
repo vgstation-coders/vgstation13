@@ -1,58 +1,64 @@
-/obj/machinery/telecomms/pda_multicaster
+var/list/pda_multicasters = list()
+
+/obj/machinery/pda_multicaster
 	name = "\improper PDA multicaster"
 	desc = "Duplicates messages and sends copies to departments."
 	icon = 'icons/obj/machines/telecomms.dmi'
-	icon_state = "pda_server"
+	icon_state = "pda_server-on"
 	density = 1
 	anchored = 1
 	use_power = 1
 	idle_power_usage = 750
 	var/obj/item/device/pda/camo/CAMO
+	var/on = TRUE
 
-/obj/machinery/telecomms/pda_multicaster/New()
+/obj/machinery/pda_multicaster/New()
 	..()
 	CAMO = new(src)
+	pda_multicasters.Add(src)
 
-/obj/machinery/telecomms/pda_multicaster/prebuilt/New()
+/obj/machinery/pda_multicaster/prebuilt/New()
 	..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/telecomms/pda_multicaster,
+		/obj/item/weapon/circuitboard/pda_multicaster,
 		/obj/item/weapon/stock_parts/subspace/filter,
 		/obj/item/weapon/stock_parts/manipulator
 	)
 
 	RefreshParts()
 
-/obj/machinery/telecomms/pda_multicaster/Destroy()
-	qdel(CAMO)
+/obj/machinery/pda_multicaster/Destroy()
+	pda_multicasters.Remove(src)
+	if(CAMO)
+		qdel(CAMO)
+		CAMO = null
 	..()
 
-/obj/machinery/telecomms/pda_multicaster/update_icon()
+/obj/machinery/pda_multicaster/update_icon()
 	if(stat & (BROKEN|NOPOWER|EMPED))
 		icon_state = "pda_server-nopower"
 	else
 		icon_state = "pda_server-[on ? "on" : "off"]"
 
-/obj/machinery/telecomms/pda_multicaster/attack_ai(mob/user)
-	attack_hand(user)
-
-/obj/machinery/telecomms/pda_multicaster/attack_hand(mob/user)
+/obj/machinery/pda_multicaster/attack_hand(mob/user)
+	if(user.incapacitated() && !isAdminGhost(user))
+		return
 	toggle_power(user)
 
-/obj/machinery/telecomms/pda_multicaster/proc/toggle_power(mob/user)
+/obj/machinery/pda_multicaster/proc/toggle_power(mob/user)
 	on = !on
 	visible_message("\the [user] turns \the [src] [on ? "on" : "off"].")
 	update_icon()
 
-/obj/machinery/telecomms/pda_multicaster/proc/check_status()
+/obj/machinery/pda_multicaster/proc/check_status()
 	return !(stat&(BROKEN|NOPOWER|EMPED))&&on
 
-/obj/machinery/telecomms/pda_multicaster/proc/update_PDAs(var/turn_off)
+/obj/machinery/pda_multicaster/proc/update_PDAs(var/turn_off)
 	for(var/obj/item/device/pda/pda in contents)
 		pda.toff = turn_off
 
-/obj/machinery/telecomms/pda_multicaster/proc/multicast(var/target,var/obj/item/device/pda/sender,var/mob/living/U,var/message)
+/obj/machinery/pda_multicaster/proc/multicast(var/target,var/obj/item/device/pda/sender,var/mob/living/U,var/message)
 	var/list/redirection_list = list(
 		"security" = list(/obj/item/device/pda/warden,/obj/item/device/pda/detective,/obj/item/device/pda/security,/obj/item/device/pda/heads/hos),
 		"engineering" = list(/obj/item/device/pda/engineering,/obj/item/device/pda/atmos,/obj/item/device/pda/heads/ce),

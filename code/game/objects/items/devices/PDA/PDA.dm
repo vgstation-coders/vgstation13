@@ -1814,12 +1814,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				if (last_text && world.time < last_text + 5)
 					return
 				last_text = world.time
-				for(var/obj/machinery/telecomms/pda_multicaster/multicaster in telecomms_list)
+				for(var/obj/machinery/pda_multicaster/multicaster in pda_multicasters)
 					if(multicaster.check_status())
 						multicaster.multicast(target,src,usr,t)
 						tnote += "<i><b>&rarr; To [target]:</b></i><br>[t]<br>"
 						return
-				to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, Messaging server is not responding.'</span>")
+				to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, CAMO server is not responding.'</span>")
 
 			if("transferFunds")
 				if(!id)
