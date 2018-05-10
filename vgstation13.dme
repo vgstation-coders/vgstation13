@@ -67,7 +67,6 @@
 #include "code\__HELPERS\game.dm"
 #include "code\__HELPERS\gender.dm"
 #include "code\__HELPERS\global_lists.dm"
-#include "code\__HELPERS\globalaccess.dm"
 #include "code\__HELPERS\icons.dm"
 #include "code\__HELPERS\iteration.dm"
 #include "code\__HELPERS\lists.dm"
