@@ -46,6 +46,7 @@
 				if(!V) //They are not already a vampire
 					to_chat(H, "<span class='danger'>The mask's stone spikes pierce your skull and enter your brain!</span>")
 					if (makeLateVampire(H, blood_to_give)) // If we could create them
+						log_admin("[H] has become a vampire using a stone mask.")
 						if (!infinite)
 							crumble()
 					return
@@ -76,14 +77,13 @@
 	infinite = 1
 
 /proc/makeLateVampire(var/mob/living/carbon/human/H, var/blood_to_give)
-	var/datum/role/vampire/vamp =  new(H.mind, override = TRUE)
-	var/datum/faction/vampire/Fac_vamp = new(vamp)
+	var/datum/faction/vampire/Fac_vamp = new
+	var/datum/role/vampire/vamp =  new(H.mind, Fac_vamp, override = TRUE)
 	if (!vamp || !Fac_vamp)
 		return FALSE
 	ticker.mode.factions += Fac_vamp
 	ticker.mode.orphaned_roles -= vamp
 	vamp.OnPostSetup()
-	log_admin("[H] has become a vampire using a stone mask.")
 	update_faction_icons()
 	spawn(10)	//Unlocking their abilities produces a lot of text, I want to give them a chance to see that they have objectives
 		vamp.blood_total = blood_to_give
@@ -91,3 +91,4 @@
 		to_chat(H, "<span class='notice'>You have accumulated [vamp.blood_total] [vamp.blood_total > 1 ? "units" : "unit"] of blood and have [vamp.blood_usable] left to use.</span>")
 		vamp.check_vampire_upgrade()
 		vamp.update_vamp_hud()
+	return TRUE

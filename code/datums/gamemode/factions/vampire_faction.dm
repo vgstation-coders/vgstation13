@@ -9,11 +9,6 @@
 	logo_state = "vampire-logo"
 	hud_icons = list("vampire-logo", "thrall-logo")
 
-/datum/faction/vampire/New(var/datum/role/vampire/V)
-	..()
-	if (istype(V)) // Late creation
-		addMaster(V)
-
 /datum/faction/vampire/proc/addMaster(var/datum/role/vampire/V)
 	if (!leader)
 		leader = V

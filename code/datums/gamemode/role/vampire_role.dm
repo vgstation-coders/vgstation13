@@ -30,6 +30,9 @@
 
 /datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	..()
+	if (istype(fac, /datum/faction/vampire))
+		var/datum/faction/vampire/vamp_fac = fac
+		vamp_fac.addMaster(src)
 	wikiroute = role_wiki[ROLE_VAMPIRE]
 
 /datum/role/vampire/Greet(var/greeting,var/custom)
