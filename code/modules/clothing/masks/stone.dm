@@ -82,7 +82,6 @@
 	if (!vamp || !Fac_vamp)
 		return FALSE
 	ticker.mode.factions += Fac_vamp
-	ticker.mode.orphaned_roles -= vamp
 	vamp.OnPostSetup()
 	update_faction_icons()
 	spawn(10)	//Unlocking their abilities produces a lot of text, I want to give them a chance to see that they have objectives
