@@ -50,7 +50,7 @@
 	if (!istype(the_target, /mob/living))
 		return ..()
 	var/mob/living/L = the_target
-	if (L in vamp_fac.members)
+	if (L.mind && L.mind.faction == vamp_fac)
 		return FALSE
 	return ..()
 
@@ -63,7 +63,7 @@
 	if(!istype(A, /mob/living))
 		return FALSE
 	var/mob/living/L = A
-	if (L in vamp_fac.members)
+	if (L.mind && L.mind.faction == vamp_fac)
 		return FALSE
 	return ..()
 

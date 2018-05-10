@@ -28,7 +28,7 @@
 
 	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
 
-/datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
+/datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	..()
 	wikiroute = role_wiki[ROLE_VAMPIRE]
 
@@ -430,6 +430,7 @@
 	src.master = master
 	master.faction.members += src
 	faction = master.faction
+	antag.faction = master.faction
 	antag = thrall
 	update_faction_icons()
 	OnPostSetup()
@@ -444,7 +445,10 @@
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
 /datum/role/thrall/ForgeObjectives()
-	objectives.AddObjective(new /datum/objective/protect_master(master), antag)
+	var/list/parameters = list(
+		"master" = master
+	) 
+	AppendObjective(/datum/objective/protect_master, arguments = parameters)
 
 
 /datum/role/thrall/Drop(var/deconverted = FALSE)
