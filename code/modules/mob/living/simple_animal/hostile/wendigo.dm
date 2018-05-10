@@ -112,9 +112,9 @@
 
 	speed = 1
 
-/mob/living/simple_animal/hostile/wendigo/human/death()
+/mob/living/simple_animal/hostile/wendigo/human/death(var/gibbed = FALSE)
 	flick("wendigo_dying",src)
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/wendigo/human/check_evolve()
 	if(consumes > HUMEVOLV)
@@ -221,6 +221,6 @@
 	melee_damage_lower = 20
 	melee_damage_upper = 40
 
-/mob/living/simple_animal/hostile/wendigo/skifree/death()
-	..()
+/mob/living/simple_animal/hostile/wendigo/skifree/death(var/gibbed = FALSE)
+	..(TRUE)
 	qdel(src)

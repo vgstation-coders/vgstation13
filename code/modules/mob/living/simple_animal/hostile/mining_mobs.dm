@@ -219,10 +219,10 @@ obj/item/asteroid/basilisk_hide/New()
 	visible_message("<span class='danger'>The [P.name] was repelled by [src.name]'s girth!</span>")
 	return
 
-/mob/living/simple_animal/hostile/asteroid/goldgrub/Die()
+/mob/living/simple_animal/hostile/asteroid/goldgrub/death(var/gibbed = FALSE)
 	alerted = 0
 	Reward()
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/asteroid/hivelord
 	name = "hivelord"
@@ -264,9 +264,9 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/hivelord/AttackingTarget()
 	OpenFire()
 
-/mob/living/simple_animal/hostile/asteroid/hivelord/Die()
+/mob/living/simple_animal/hostile/asteroid/hivelord/death(var/gibbed = FALSE)
 	mouse_opacity = 1
-	..()
+	..(gibbed)
 	update_icons()
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/update_icons()
@@ -407,7 +407,8 @@ obj/item/asteroid/basilisk_hide/New()
 	spawn(100)
 		returnToPool(src)
 
-/mob/living/simple_animal/hostile/asteroid/hivelordbrood/Die()
+/mob/living/simple_animal/hostile/asteroid/hivelordbrood/death(var/gibbed = FALSE)
+	..(TRUE)
 	returnToPool(src)
 
 /mob/living/simple_animal/hostile/asteroid/goliath

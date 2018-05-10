@@ -197,7 +197,8 @@
 	mob_property_flags = MOB_HOLOGRAPHIC
 	holder_type = null
 
-/mob/living/simple_animal/hostile/carp/holocarp/Die()
+/mob/living/simple_animal/hostile/carp/holocarp/death(var/gibbed = FALSE)
+	..(TRUE)
 	qdel(src)
 
 #undef PHEROMONES_NO_EFFECT

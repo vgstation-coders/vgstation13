@@ -14,9 +14,9 @@
 	..()
 	connect_frequency()
 
-/mob/living/carbon/complex/gondola/death()
+/mob/living/carbon/complex/gondola/death(var/gibbed = FALSE)
 	disconnect_media_source()
-	..()
+	..(gibbed)
 
 /mob/living/carbon/complex/gondola/area_entered()
 	update_music()

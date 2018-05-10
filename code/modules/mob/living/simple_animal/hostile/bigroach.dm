@@ -88,9 +88,8 @@
 	pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 	pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
-/mob/living/simple_animal/hostile/bigroach/Die()
-	..()
-
+/mob/living/simple_animal/hostile/bigroach/death(var/gibbed = FALSE)
+	..(gibbed)
 	playsound(src, pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat
 
 /mob/living/simple_animal/hostile/bigroach/attackby(obj/item/W, mob/user)

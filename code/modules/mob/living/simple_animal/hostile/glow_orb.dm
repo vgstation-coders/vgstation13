@@ -91,12 +91,12 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 			set_light(4, 1, "#0068B2")
 			walk(src,0)
 	else
-		Die()
+		death()
 
 	..()
 
-/mob/living/simple_animal/hostile/glow_orb/Die()
-	..()
+/mob/living/simple_animal/hostile/glow_orb/death(var/gibbed = FALSE)
+	..(gibbed)
 	visible_message("<span class = 'notice'>\The [src] grows dim as it falls to the ground.</span>")
 	flick("glow_stone_deactivate", src)
 	spawn(10)

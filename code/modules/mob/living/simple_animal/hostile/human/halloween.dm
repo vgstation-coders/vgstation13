@@ -36,7 +36,8 @@
 
 	return ..(P)
 
-/mob/living/simple_animal/hostile/humanoid/kitchen/poutine/Die()
+/mob/living/simple_animal/hostile/humanoid/kitchen/poutine/death(var/gibbed = FALSE)
+	..(TRUE)
 	for(var/i=1 to 3)
 		var/to_spawn = pick(/obj/item/weapon/reagent_containers/food/snacks/poutine, /obj/item/weapon/reagent_containers/food/snacks/poutinedangerous,\
 							/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel)
@@ -97,7 +98,8 @@
 	friendly_fire = 0
 	canmove = 1
 
-/mob/living/simple_animal/hostile/humanoid/kitchen/meatballer/Die()
+/mob/living/simple_animal/hostile/humanoid/kitchen/meatballer/death(var/gibbed = FALSE)
+	..(TRUE)
 	for(var/i=1 to 3)
 		var/to_spawn = pick(/obj/item/weapon/reagent_containers/food/snacks/spaghetti, /obj/item/weapon/reagent_containers/food/snacks/meatballspaghetti,\
 							/obj/item/weapon/reagent_containers/food/snacks/copypasta)
@@ -236,7 +238,8 @@
 	spawn(5 SECONDS)
 		retreating = 0
 
-/mob/living/simple_animal/hostile/humanoid/vampire/Die()
+/mob/living/simple_animal/hostile/humanoid/vampire/death(var/gibbed = FALSE)
+	..(TRUE)
 	visible_message("<span class='warning'>\The [src] lets out one last ear piercing shriek, before collapsing into dust!</span>")
 	for(var/mob/living/carbon/C in hearers(4, src))
 		if(ishuman(C))
@@ -406,8 +409,9 @@
 
 	return ..()
 
-/mob/living/simple_animal/hostile/humanoid/supermatter/Die()
+/mob/living/simple_animal/hostile/humanoid/supermatter/death(var/gibbed = FALSE)
 	set waitfor = 0
+	..(TRUE)
 	animate(src, alpha = 0, time = 2 SECONDS, easing = SINE_EASING)
 	sleep(3 SECONDS)
 	empulse(get_turf(src), 6, 12, 1)
@@ -518,7 +522,8 @@
 	A.lock_atom(src, /datum/locking_category/cable_lock)
 	update_icon()
 
-/mob/living/simple_animal/hostile/syphoner/Die()
+/mob/living/simple_animal/hostile/syphoner/death(var/gibbed = FALSE)
+	..(TRUE)
 	visible_message("<span class = 'warning'>\The [src] explodes!</span>")
 	var/turf/T = get_turf(src)
 	new /obj/effect/gibspawner/robot(T)
