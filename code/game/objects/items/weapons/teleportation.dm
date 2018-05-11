@@ -151,8 +151,6 @@ Frequency:
 		to_chat(user, "<span class='notice'>\The [src] is malfunctioning.</span>")
 		return
 
-	if((user.get_active_hand() != src || user.stat || user.restrained()))
-		return
 	if(charge < HANDTELE_PORTAL_COST)
 		user.show_message("<span class='notice'>\The [src] is recharging!</span>")
 		return
@@ -160,6 +158,9 @@ Frequency:
 	if(!destination_id)
 		choose_destination(user)
 	var/T = destination_id
+
+	if((user.get_active_hand() != src || user.stat || user.restrained()))
+		return
 
 	if((destination_name == "None (Dangerous)") && prob(5))
 		T = locate(rand(7, world.maxx - 7), rand(7, world.maxy -7), map.zTCommSat)
@@ -216,6 +217,8 @@ Frequency:
 	destination_id = L[destination_name]
 
 /obj/item/weapon/hand_tele/AltClick(var/mob/usr)
+	if((usr.incapacitated() || !Adjacent(usr)))
+		return
 	choose_destination(usr)
 
 /obj/item/weapon/hand_tele/process()
