@@ -10,11 +10,11 @@
 #define N2MARS  0.04 //Mars atmosphere is actually 1.9% nitrogen, 1.9% argon with traces of other gases. Simplified to 4% nitrogen
 
 #define MOLES_PLASMA_VISIBLE	0.7 //Moles in a standard cell after which plasma is visible
-#define MOLES_O2STANDARD MOLES_CELLSTANDARD*O2STANDARD	// O2 standard value (21%)
-#define MOLES_N2STANDARD MOLES_CELLSTANDARD*N2STANDARD	// N2 standard value (79%)
+#define MOLES_O2STANDARD (MOLES_CELLSTANDARD*O2STANDARD)	// O2 standard value (21%)
+#define MOLES_N2STANDARD (MOLES_CELLSTANDARD*N2STANDARD)	// N2 standard value (79%)
 
-#define MOLES_CO2MARS MOLES_CELLMARS*CO2MARS
-#define MOLES_N2MARS  MOLES_CELLMARS*N2MARS
+#define MOLES_CO2MARS (MOLES_CELLMARS*CO2MARS)
+#define MOLES_N2MARS  (MOLES_CELLMARS*N2MARS)
 
 //These are for when a mob breathes poisonous air.
 #define MIN_PLASMA_DAMAGE 1
@@ -22,13 +22,13 @@
 
 #define BREATH_VOLUME 0.5	//liters in a normal breath
 #define BREATH_MOLES (ONE_ATMOSPHERE * BREATH_VOLUME /(T20C*R_IDEAL_GAS_EQUATION))
-#define BREATH_PERCENTAGE BREATH_VOLUME/CELL_VOLUME //Amount of air to take a from a tile
-#define HUMAN_NEEDED_OXYGEN	MOLES_CELLSTANDARD*BREATH_PERCENTAGE*0.16 //Amount of air needed before pass out/suffocation commences
+#define BREATH_PERCENTAGE (BREATH_VOLUME/CELL_VOLUME) //Amount of air to take a from a tile
+#define HUMAN_NEEDED_OXYGEN	(MOLES_CELLSTANDARD*BREATH_PERCENTAGE*0.16) //Amount of air needed before pass out/suffocation commences
 
 #define MINIMUM_AIR_RATIO_TO_SUSPEND 0.05 //Minimum ratio of air that must move to/from a tile to suspend group processing
-#define MINIMUM_AIR_TO_SUSPEND MOLES_CELLSTANDARD*MINIMUM_AIR_RATIO_TO_SUSPEND //Minimum amount of air that has to move before a group processing can be suspended
+#define MINIMUM_AIR_TO_SUSPEND (MOLES_CELLSTANDARD*MINIMUM_AIR_RATIO_TO_SUSPEND) //Minimum amount of air that has to move before a group processing can be suspended
 
-#define MINIMUM_MOLES_DELTA_TO_MOVE MOLES_CELLSTANDARD*MINIMUM_AIR_RATIO_TO_SUSPEND //Either this must be active
+#define MINIMUM_MOLES_DELTA_TO_MOVE (MOLES_CELLSTANDARD*MINIMUM_AIR_RATIO_TO_SUSPEND) //Either this must be active
 #define MINIMUM_TEMPERATURE_TO_MOVE	(T20C+100) 		  //or this (or both, obviously)
 
 #define MINIMUM_TEMPERATURE_RATIO_TO_SUSPEND 0.012
