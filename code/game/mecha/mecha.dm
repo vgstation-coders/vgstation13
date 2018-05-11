@@ -1172,6 +1172,7 @@
 	if(enter_after(40,usr))
 		if(!src.occupant)
 			moved_inside(usr)
+			refresh_spells()
 		else if(src.occupant!=usr)
 			to_chat(usr, "[src.occupant] was faster. Try better next time, loser.")
 	else
@@ -1384,6 +1385,7 @@
 		*/
 		empty_bad_contents()
 		src.occupant << browse(null, "window=exosuit")
+		remove_mech_spells()
 		if(istype(mob_container, /obj/item/device/mmi) || istype(mob_container, /obj/item/device/mmi/posibrain))
 			var/obj/item/device/mmi/mmi = mob_container
 			if(mmi.brainmob)
@@ -1957,6 +1959,63 @@
 				AI.icon_state = "ai-crash"
 			src.occupant = cur_occupant
 */
+	return
+
+//////////////////////
+/////// Spells ///////
+//////////////////////
+/spell/mech
+	range = 0
+	invocation = "none"
+	invocation_type = "SpI_NONE"
+	panel = "Mech Modules"
+	spell_flags = null
+	charge_type = Sp_RECHARGE
+	charge_max = 0
+	charge_counter = 0
+	hud_state = "mecha_equip"
+	override_base = "mech"
+	var/obj/mecha/M
+	var/obj/item/mecha_parts/mecha_equipment/ME
+
+/spell/mech/New(var/obj/mecha/M, var/obj/item/mecha_parts/mecha_equipment/ME)
+	src.M = M
+	if(ME)
+		src.ME = ME
+		name = ME.name
+		hud_state = ME.icon_state
+		override_icon = ME.icon
+	charge_counter = charge_max
+	desc = "[name]"
+
+/spell/mech/cast(list/targets, mob/user)
+	if(M.selected != ME)
+		ME.activate()
+	else
+		ME.alt_action()
+
+/spell/mech/choose_targets(mob/user = user)
+	return list(user)
+
+/obj/mecha/proc/refresh_spells()
+	if(!occupant)
+		return
+	for(var/obj/item/mecha_parts/mecha_equipment/W in equipment)
+		var/spell/mech/MS
+		if(W.MS)
+			MS = W.MS
+			occupant.add_spell(MS, "mech_spell_ready", /obj/abstract/screen/movable/spell_master/mech)
+
+/obj/mecha/proc/remove_mech_spells()
+	for(var/spell/mech/MS in occupant.spell_list)
+		occupant.remove_spell(MS)
+
+/obj/mecha/proc/equip_module(var/obj/item/mecha_parts/mecha_equipment/ME)
+	if(ME)
+		src.selected = ME
+		src.occupant_message("You switch to [ME]")
+		src.visible_message("[src] raises [ME]")
+		send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
 	return
 
 ///////////////////////

@@ -15,6 +15,8 @@
 	var/range = MELEE //bitflags
 	reliability = 1000
 	var/salvageable = 1
+	var/is_activateable = 1
+	var/spell/mech/MS //Default action is to make the make it the active equipment
 
 
 /obj/item/mecha_parts/mecha_equipment/proc/do_after_cooldown(target=1, delay_mult=1)
@@ -75,7 +77,6 @@
 /obj/item/mecha_parts/mecha_equipment/proc/is_melee()
 	return (range&MELEE)
 
-
 /obj/item/mecha_parts/mecha_equipment/proc/action_checks(atom/target)
 	if(!target)
 		return 0
@@ -106,6 +107,9 @@
 	if(!M.selected)
 		M.selected = src
 	src.update_chassis_page()
+	if(is_activateable)
+		MS = new /spell/mech(M, src)
+	M.refresh_spells()
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/detach(atom/moveto=null)
@@ -118,7 +122,9 @@
 	update_chassis_page()
 	chassis.log_message("[src] removed from equipment.")
 	chassis = null
+	MS = null
 	set_ready_state(1)
+	chassis.refresh_spells()
 	return
 
 
@@ -150,4 +156,11 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/on_mech_turn()
+	return
+
+/obj/item/mecha_parts/mecha_equipment/proc/activate()
+	chassis.equip_module(src)
+	return
+
+/obj/item/mecha_parts/mecha_equipment/proc/alt_action()
 	return

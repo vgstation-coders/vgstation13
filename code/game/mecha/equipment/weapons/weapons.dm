@@ -168,6 +168,10 @@
 	..()
 	projectiles = max_projectiles
 
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/alt_action()
+	rearm()
+
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/become_defective()
 	if(!defective)
 		..()
@@ -195,6 +199,7 @@
 			chassis.use_power(projectile_energy_cost)
 	send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
 	log_message("Rearmed [src.name].")
+	to_chat(chassis.occupant, "<span class='notice'>Rearmed [src.name].</span>")
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/Topic(href, href_list)
