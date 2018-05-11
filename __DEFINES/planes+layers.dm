@@ -146,11 +146,11 @@ What is the naming convention for planes or layers?
 
 #define HUMAN_PLANE 			9			// For Humans that are standing up.
 
-//#define THIS_SPACE_FOR_RENT!	10
+#define VAMP_ANTAG_HUD_PLANE	10
 
 //#define THIS_SPACE_FOR_RENT!	11
 
-#define ANTAG_HUD_PLANE 		12
+#define ANTAG_HUD_PLANE		 	12
 
 //#define THIS_SPACE_FOR_RENT!	13
 

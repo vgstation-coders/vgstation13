@@ -40,30 +40,31 @@
 	size = SIZE_TINY
 
 	faction = "scarybat"
-	var/mob/living/owner
+	var/datum/faction/vamp_fac
 	held_items = list()
-
-/mob/living/simple_animal/hostile/scarybat/New(loc, mob/living/L as mob)
-	..()
-	if(istype(L))
-		owner = L
 
 /mob/living/simple_animal/hostile/scarybat/Process_Spacemove(var/check_drift = 0)
 	return 1
 
 /mob/living/simple_animal/hostile/scarybat/CanAttack(var/atom/the_target)
-	if(the_target == owner)
-		return 0
-	return ..(the_target)
+	if (!istype(the_target, /mob/living))
+		return ..()
+	var/mob/living/L = the_target
+	if (L.mind && L.mind.faction == vamp_fac)
+		return FALSE
+	return ..()
 
 /mob/living/simple_animal/hostile/scarybat/FindTarget()
 	. = ..()
 	if(.)
 		emote("me",, "flutters towards [.]!")
 
-/mob/living/simple_animal/hostile/scarybat/Found(var/atom/A)//This is here as a potential override to pick a specific target if available
-	if(istype(A) && A == owner)
-		return 0
+/mob/living/simple_animal/hostile/scarybat/Found(var/atom/A) //This is here as a potential override to pick a specific target if available
+	if(!istype(A, /mob/living))
+		return FALSE
+	var/mob/living/L = A
+	if (L.mind && L.mind.faction == vamp_fac)
+		return FALSE
 	return ..()
 
 /mob/living/simple_animal/hostile/scarybat/AttackingTarget()

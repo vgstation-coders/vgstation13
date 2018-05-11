@@ -1,17 +1,16 @@
-
 /*
  -- Vampires --
  */
 
 /datum/role/vampire
 	id = VAMPIRE
-	name = "Vampire"
-	special_role = "vampire"
+	name = VAMPIRE
+	special_role = ROLE_VAMPIRE
 	disallow_job = FALSE
 	restricted_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain")
 	logo_state = "vampire-logo"
 	greets = list("default","custom","admintoggle")
-
+	required_pref = ROLE_VAMPIRE
 
 	// -- Vampire mechanics --
 	var/list/datum/role/thrall/thralls = list()
@@ -29,8 +28,11 @@
 
 	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
 
-/datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
+/datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	..()
+	if (istype(fac, /datum/faction/vampire))
+		var/datum/faction/vampire/vamp_fac = fac
+		vamp_fac.addMaster(src)
 	wikiroute = role_wiki[ROLE_VAMPIRE]
 
 /datum/role/vampire/Greet(var/greeting,var/custom)
@@ -65,7 +67,7 @@
 /datum/role/vampire/RemoveFromRole(var/datum/mind/M)
 	var/list/vamp_spells = getAllVampSpells()
 	for(var/spell/spell in antag.current.spell_list)
-		if (is_type_in_list(spell, vamp_spells))//TODO: HAVE A LIST WITH EVERY VAMPIRE SPELLS
+		if (is_type_in_list(spell, vamp_spells))
 			antag.current.remove_spell(spell)
 	if(antag.current.client && antag.current.hud_used)
 		if(antag.current.hud_used.vampire_blood_display)
@@ -92,9 +94,21 @@
 		. += T.GetScoreboard()
 
 /datum/role/vampire/ForgeObjectives()
-	// -- Vampires objectives : acquire blood, assassinate.
-	objectives.AddObjective(new /datum/objective/acquire_blood, src.antag)
-	objectives.AddObjective(new /datum/objective/target/assassinate, src.antag)
+
+	AppendObjective(/datum/objective/acquire_blood)
+
+	AppendObjective(/datum/objective/target/assassinate)
+
+	AppendObjective(/datum/objective/target/steal)
+
+	switch(rand(1,100))
+		if(1 to 80)
+			if (!(locate(/datum/objective/escape) in objectives.objectives)) // Objectives (the objective holder).objectives (the objective list)
+				AppendObjective(/datum/objective/escape)
+		else
+			if (!(locate(/datum/objective/survive) in objectives.objectives))
+				AppendObjective(/datum/objective/survive)
+	return
 
 // -- Vampire mechanics --
 
@@ -149,7 +163,7 @@
 		if(!target.mind)
 			to_chat(assailant, "<span class='warning'>This blood is lifeless and has no power.</span>")
 			draining = null
-			return 0
+			return FALSE
 		if(!target.vessel.get_reagent_amount(BLOOD))
 			to_chat(assailant, "<span class='warning'>They've got no blood left to give.</span>")
 			break
@@ -157,7 +171,6 @@
 			blood = min(10, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 10 blood, give them the remnant else they get 10 blood
 			blood_total += blood
 			blood_usable += blood
-			update_vamp_hud()
 			target.adjustCloneLoss(10) // beep boop 10 damage
 		else
 			blood = min(5, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 5 bloods
@@ -166,76 +179,26 @@
 			to_chat(assailant, "<span class='notice'>You have accumulated [blood_total] [blood_total > 1 ? "units" : "unit"] of blood[blood_usable_before != blood_usable ?", and have [blood_usable] left to use." : "."]</span>")
 		check_vampire_upgrade()
 		target.vessel.remove_reagent(BLOOD,25)
+		update_vamp_hud()
 
 	draining = null
 	to_chat(assailant, "<span class='notice'>You stop draining \the [target] of blood.</span>")
 	return TRUE
 
 /datum/role/vampire/proc/check_vampire_upgrade()
-	var/list/old_powers = powers.Copy()
 
 	for (var/i in subtypesof(/datum/power/vampire))
 		var/datum/power/vampire/VP_type = i
 		if (blood_total > initial(VP_type.blood_threeshold) && !(initial(VP_type.id) in powers))
 			var/datum/power/vampire/VP = new VP_type
-			VP.Give(src)
+			if (!(VP.id in powers))
+				VP.Give(src)
 
-	announce_new_powers(old_powers, powers)
-
-/datum/role/vampire/proc/announce_new_powers(var/old_powers, var/new_powers)
-	var/msg = ""
-	var/mob/M = antag.current
-	for(var/n in new_powers)
-		if(!(n in old_powers))
-			switch(n)
-				if(VAMP_SHAPE)
-					msg = "<span class='notice'>You have gained the shapeshifting ability, at the cost of stored blood you can change your form permanently.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_VISION)
-					msg = "<span class='notice'>Your vampiric vision has improved.</span>"
-					to_chat(M, "[msg]")
-					antag.store_memory("<font size = 1>[msg]</font>")
-				if(VAMP_DISEASE)
-					msg = "<span class='notice'>You have gained the Diseased Touch ability which causes those you touch to die shortly after unless treated medically.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_CLOAK)
-					msg = "<span class='notice'>You have gained the Cloak of Darkness ability which when toggled makes you near invisible in the shroud of darkness.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_BATS)
-					msg = "<span class='notice'>You have gained the Summon Bats ability which allows you to summon a trio of angry space bats.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_SCREAM)
-					msg = "<span class='notice'>You have gained the Chiroptean Screech ability which stuns anything with ears in a large radius and shatters glass in the process.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_HEAL)
-					msg = "<span class=notice'>Your rejuvination abilities have improved and will now heal you over time when used.</span>"
-					to_chat(M, "[msg]")
-					antag.store_memory("<font size = 1>[msg]</font>")
-				if(VAMP_JAUNT)
-					msg = "<span class='notice'>You have gained the Mist Form ability which allows you to take on the form of mist for a short period and pass over any obstacle in your path.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_SLAVE)
-					msg = "<span class='notice'>You have gained the Enthrall ability which at a heavy blood cost allows you to enslave a human that is not loyal to any other for a random period of time.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_BLINK)
-					msg = "<span class='notice'>You have gained the ability to shadowstep, which makes you disappear into nearby shadows at the cost of blood.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_MATURE)
-					msg = "<span class='sinister'>You have reached physical maturity. You are more resistant to holy things, and your vision has been improved greatly.</span>"
-					to_chat(M, "[msg]")
-					antag.store_memory("<font size = 1>[msg]</font>")
-				if(VAMP_SHADOW)
-					msg = "<span class='notice'>You have gained mastery over the shadows. In the dark, you can mask your identity, instantly terrify non-vampires who approach you, and enter the chapel for a longer period of time.</span>"
-					to_chat(M, "[msg]")
-				if(VAMP_CHARISMA)
-					msg = "<span class='sinister'>You develop an uncanny charismatic aura that makes you difficult to disobey. Hypnotise and Enthrall take less time to perform, and Enthrall works on implanted targets.</span>"
-					to_chat(M, "[msg]")
-					antag.store_memory("<font size = 1>[msg]</font>")
-				if(VAMP_UNDYING)
-					msg = "<span class='sinister'>You have reached the absolute peak of your power. Your abilities cannot be nullified very easily, and you may return from the grave so long as your body is not burned, destroyed or sanctified. You can also spawn a rather nice cape.</span>"
-					to_chat(M, "[msg]")
-					antag.store_memory("<font size = 1>[msg]</font>")
-
+/datum/role/vampire/proc/handle_enthrall(var/datum/mind/M)
+	if (!istype(M))
+		return FALSE
+	var/datum/role/thrall/T = new(thrall = M, master = src) // Creating a new thrall
+	thralls += T
 /*
 -- Life() related procs --
 */
@@ -265,9 +228,19 @@
 				I.status &= ~ORGAN_BLEEDING
 	nullified = max(0, nullified - 1)
 
+	if (!H.druggy)
+		H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
+
+	if (VAMP_MATURE in powers)
+		H.change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
+		H.see_in_dark = 8
+		H.see_invisible = SEE_INVISIBLE_MINIMUM
+
+	else if (VAMP_VISION in powers)
+		antag.current.change_sight(adding = SEE_MOBS)
+
 /datum/role/vampire/proc/handle_cloak(var/mob/living/carbon/human/H)
 	var/turf/T = get_turf(H)
-
 	if(!iscloaking)
 		H.alphas["vampire_cloak"] = 255
 		H.color = "#FFFFFF"
@@ -295,7 +268,10 @@
 		ismenacing = 0
 		return FALSE
 
-	for(var/mob/living/carbon/C in oview(6))
+	var/mob/M = antag.current
+	var/radius = 6
+
+	for(var/mob/living/carbon/C in oviewers(radius, M))
 		if(prob(35))
 			continue //to prevent fearspam
 		if(!C.vampire_affected(antag))
@@ -386,6 +362,7 @@
 -- Helpers --
 */
 
+// ! - need to handle thrall removing
 /datum/role/vampire/proc/update_vamp_hud()
 	var/mob/M = antag.current
 	if(M.hud_used)
@@ -446,7 +423,20 @@
 	name = "thrall"
 	special_role = "thrall"
 	logo_state = "thrall-logo"
+
 	var/datum/role/vampire/master
+
+/datum/role/thrall/New(var/datum/mind/thrall, var/datum/role/vampire/master)
+	. = ..()
+	if(!istype(master))
+		return FALSE
+	src.master = master
+	master.faction.members += src
+	faction = master.faction
+	antag.faction = master.faction
+	antag = thrall
+	update_faction_icons()
+	OnPostSetup()
 
 /datum/role/thrall/Greet(var/you_are = TRUE)
 	var/dat
@@ -458,4 +448,16 @@
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
 /datum/role/thrall/ForgeObjectives()
-	objectives.AddObjective(new /datum/objective/protect_master(master), src.antag)
+	var/list/parameters = list(
+		"master" = master
+	) 
+	AppendObjective(/datum/objective/protect_master, arguments = parameters)
+
+
+/datum/role/thrall/Drop(var/deconverted = FALSE)
+	master.thralls -= src
+	var/mob/M = antag.current
+	M.visible_message("<span class='big danger'>[M] suddenly becomes calm and collected again, \his eyes clear up.</span>",
+	"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
+	update_faction_icons()
+	return ..()

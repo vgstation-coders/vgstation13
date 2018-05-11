@@ -135,7 +135,7 @@ var/list/factions_with_hud_icons = list()
 	return dat
 
 /datum/faction/proc/process()
-	for(var/datum/role/R in members)
+	for (var/datum/role/R in members)
 		R.process()
 
 /datum/faction/proc/check_win()
