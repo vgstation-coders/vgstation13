@@ -29,7 +29,7 @@
 #define MINIMUM_AIR_TO_SUSPEND MOLES_CELLSTANDARD*MINIMUM_AIR_RATIO_TO_SUSPEND //Minimum amount of air that has to move before a group processing can be suspended
 
 #define MINIMUM_MOLES_DELTA_TO_MOVE MOLES_CELLSTANDARD*MINIMUM_AIR_RATIO_TO_SUSPEND //Either this must be active
-#define MINIMUM_TEMPERATURE_TO_MOVE	T20C+100 		  //or this (or both, obviously)
+#define MINIMUM_TEMPERATURE_TO_MOVE	(T20C+100) 		  //or this (or both, obviously)
 
 #define MINIMUM_TEMPERATURE_RATIO_TO_SUSPEND 0.012
 #define MINIMUM_TEMPERATURE_DELTA_TO_SUSPEND 4 //Minimum temperature difference before group processing is suspended
@@ -38,8 +38,8 @@
 #define MINIMUM_PRESSURE_DELTA_TO_SUSPEND 0.1 //The minimum pressure difference required for groups to remain separate (unless they meet other conditions). Chosen arbitrarily.
 #define MINIMUM_PRESSURE_RATIO_TO_SUSPEND 0.05 //Minimum RELATIVE difference in pressure for groups to stay separate (unless they meet other conditions). Also chosen arbitrarily.
 
-#define MINIMUM_TEMPERATURE_FOR_SUPERCONDUCTION		T20C+10
-#define MINIMUM_TEMPERATURE_START_SUPERCONDUCTION	T20C+200
+#define MINIMUM_TEMPERATURE_FOR_SUPERCONDUCTION		(T20C+10)
+#define MINIMUM_TEMPERATURE_START_SUPERCONDUCTION	(T20C+200)
 
 //Must be between 0 and 1. Values closer to 1 equalize temperature faster. Should not exceed 0.4 else strange heat flow occurs.
 #define FLOOR_HEAT_TRANSFER_COEFFICIENT 0.4
@@ -50,13 +50,13 @@
 #define WINDOW_HEAT_TRANSFER_COEFFICIENT 0.1 //a hack for now
 
 // Fire Damage
-#define CARBON_LIFEFORM_FIRE_RESISTANCE 200+T0C
+#define CARBON_LIFEFORM_FIRE_RESISTANCE (200+T0C)
 #define CARBON_LIFEFORM_FIRE_DAMAGE		4
 
 //Plasma fire properties
-#define PLASMA_MINIMUM_BURN_TEMPERATURE		100+T0C
-#define PLASMA_FLASHPOINT 					246+T0C
-#define PLASMA_UPPER_TEMPERATURE			1370+T0C
+#define PLASMA_MINIMUM_BURN_TEMPERATURE		(100+T0C)
+#define PLASMA_FLASHPOINT 					(246+T0C)
+#define PLASMA_UPPER_TEMPERATURE			(1370+T0C)
 #define PLASMA_MINIMUM_OXYGEN_NEEDED		2
 #define PLASMA_MINIMUM_OXYGEN_PLASMA_RATIO	20
 #define PLASMA_OXYGEN_FULLBURN				10
