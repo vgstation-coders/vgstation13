@@ -19,9 +19,11 @@
 	var/blood_cost = 1
 
 /spell/rejuvenate/cast_check(var/skipcharge = 0, var/mob/user = usr)
-	if (!user.vampire_power(blood_cost, 0))
+	. = ..()
+	if (!.) // No need to go further.
 		return FALSE
-	return ..()
+	if (!user.vampire_power(blood_cost, CONSCIOUS))
+		return FALSE
 
 /spell/rejuvenate/choose_targets(var/mob/user = usr)
 	return list(user) // Self-cast
@@ -42,3 +44,4 @@
 				H.adjustToxLoss(-2)
 				H.adjustFireLoss(-2)
 				sleep(3.5 SECONDS) // Before the next healing tick
+	V.remove_blood(blood_cost)

@@ -101,6 +101,7 @@
 
 
 /datum/gamemode/proc/CreateNumOfRoles(var/datum/role/R, var/num)
+	. = list()
 	var/list/available_players = get_ready_players()
 	for(var/mob/new_player/P in available_players)
 		if(!P.client || !P.mind)
@@ -114,7 +115,8 @@
 			WARNING("We've gone through all available players, there's nobody to make an antag!")
 			break
 		shuffle(available_players)
-		var/datum/role/newRole = new R
+		var/datum/role/newRole = createBasicRole(R)
+		. += newRole // Get the roles we created
 		if(!newRole)
 			WARNING("Role killed itself or was otherwise missing!")
 			return 0
@@ -126,8 +128,8 @@
 			i--
 			continue
 
-	return 1
-
+/datum/gamemode/proc/createBasicRole(var/type_role)
+	return new type_role
 
 
 /datum/gamemode/proc/latespawn(var/mob/mob) //Check factions, see if anyone wants a latejoiner
