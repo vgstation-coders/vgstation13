@@ -100,7 +100,7 @@
 
 	var/wikiroute
 
-/datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
+/datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	// Link faction.
 	faction=fac
 	if(!faction)
@@ -109,7 +109,7 @@
 	if(new_id)
 		id = new_id
 
-	if(M && !AssignToRole(M))
+	if(M && !AssignToRole(M, override))
 		Drop()
 		return 0
 
@@ -212,12 +212,12 @@
 /datum/role/proc/ForgeObjectives()
 	return
 
-/datum/role/proc/AppendObjective(var/objective_type,var/duplicates=0,var/text=null)
+/datum/role/proc/AppendObjective(var/objective_type,var/duplicates=0, var/list/arguments = null)
 	if(!duplicates && locate(objective_type) in objectives)
 		return FALSE
 	var/datum/objective/O
-	if(text)
-		O = new objective_type(text)
+	if(arguments)
+		O = new objective_type(arguments)
 	else
 		O = new objective_type()
 	if(O.PostAppend())

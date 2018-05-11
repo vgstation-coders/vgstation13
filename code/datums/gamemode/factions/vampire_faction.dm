@@ -7,6 +7,14 @@
 	late_role = VAMPIRE // Vampires do not change their role.
 	roletype = /datum/role/vampire
 	logo_state = "vampire-logo"
+	hud_icons = list("vampire-logo", "thrall-logo")
+
+/datum/faction/vampire/proc/addMaster(var/datum/role/vampire/V)
+	if (!leader)
+		leader = V
+		members += V
+		V.faction = src
+		V.antag.faction = src
 
 /datum/faction/vampire/can_setup()
 	// TODO : check if the number of players > 10, if we have at least 2 players with vamp enabled.

@@ -19,9 +19,11 @@
 	var/blood_cost = 1
 
 /spell/shapeshift/cast_check(var/skipcharge = 0, var/mob/user = usr)
-	if (!user.vampire_power(blood_cost, 0))
+	. = ..()
+	if (!.) // No need to go further.
 		return FALSE
-	return ..()
+	if (!user.vampire_power(blood_cost, CONSCIOUS))
+		return FALSE
 
 /spell/shapeshift/choose_targets(var/mob/user = usr)
 	return list(user) // Self-cast
@@ -33,3 +35,6 @@
 	user.client.prefs.real_name = user.generate_name() //random_name(M.current.gender)
 	user.client.prefs.randomize_appearance_for(user)
 	user.regenerate_icons()
+	var/datum/role/vampire/V = isvampire(user)
+	if (V)
+		V.remove_blood(blood_cost)

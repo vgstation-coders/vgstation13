@@ -23,13 +23,15 @@
 
 	var/blood_cost = 10
 
-/spell/targeted/hypnotise/cast_check(skipcharge = 0,mob/user = usr)
-	if (!user.vampire_power(blood_cost, 0))
+/spell/targeted/hypnotise/cast_check(skipcharge = 0, mob/user = usr)
+	. = ..()
+	if (!.) // No need to go further.
 		return FALSE
 	if (istype(user.get_item_by_slot(slot_glasses), /obj/item/clothing/glasses/sunglasses/blindfold))
 		to_chat(user, "<span class='warning'>You're blindfolded!</span>")
 		return FALSE
-	return ..()
+	if (!user.vampire_power(blood_cost, CONSCIOUS))
+		return FALSE
 
 /spell/targeted/hypnotise/is_valid_target(var/target, var/mob/user, var/list/options)
 	if (!ismob(target))
@@ -55,3 +57,8 @@
 			apply_spell_damage(target)
 		else
 			to_chat(user, "<span class='warning'>You broke your gaze.</span>")
+			return FALSE
+	var/datum/role/vampire/V = isvampire(user)
+	if (!V)
+		return FALSE
+	V.remove_blood(blood_cost)
