@@ -160,10 +160,10 @@
 		if (!multiplier)
 			multiplier = 1
 		if (src.amount < R.req_amount*multiplier)
-			if (R.req_amount*multiplier>1)
-				to_chat(usr, "<span class='warning'>You haven't got enough [src] to build \the [R.req_amount*multiplier] [R.title]\s!</span>")
+			if (R.res_amount*multiplier>1)
+				to_chat(usr, "<span class='warning'>You haven't got enough [irregular_plural ? irregular_plural : "[singular_name]\s"] to build [R.res_amount*multiplier] [R.title]\s!</span>")
 			else
-				to_chat(usr, "<span class='warning'>You haven't got enough [src] to build \the [R.title]!</span>")
+				to_chat(usr, "<span class='warning'>You haven't got enough [irregular_plural ? irregular_plural : "[singular_name]\s"] to build \the [R.title]!</span>")
 			return
 		if (!R.can_build_here(usr, usr.loc))
 			return
