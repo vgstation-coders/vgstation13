@@ -358,12 +358,7 @@
 	AE.forceMove(loc)
 
 /obj/machinery/door/window/clockify()
-	if(invisibility != INVISIBILITY_MAXIMUM)
-		invisibility = INVISIBILITY_MAXIMUM
-		var/obj/machinery/door/window/clockwork/C = new /obj/machinery/door/window/clockwork(loc)
-		C.dir = dir
-		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "clock_gear", sleeptime = 10)
-		qdel(src)
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/machinery/door/window/clockwork)
 
 /obj/machinery/door/window/brigdoor
 	name = "Secure Window Door"

@@ -278,3 +278,12 @@ proc/get_space_area()
 #define SNOW_THEME (map.snow_theme || Holiday == XMAS || Holiday == XMAS_EVE)
 
 #define get_conductivity(A) (A ? A.siemens_coefficient : 1)
+
+#define GENERIC_CLOCKWORK_CONVERSION(A, B)\
+	if(A.invisibility != INVISIBILITY_MAXIMUM){\
+		A.invisibility = INVISIBILITY_MAXIMUM;\
+		var/atom/movable/C = new B(A.loc);\
+		C.dir = A.dir;\
+		anim(target = A, a_icon = 'icons/effects/effects.dmi', a_icon_state = "clock_gear", sleeptime = 10);\
+		qdel(A);\
+	}

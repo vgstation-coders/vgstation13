@@ -35,11 +35,7 @@
 	new /obj/structure/table/woodentable(loc) //See New() for qdel
 
 /obj/structure/table/clockify()
-	if(invisibility != INVISIBILITY_MAXIMUM)
-		invisibility = INVISIBILITY_MAXIMUM
-		new /obj/structure/table/reinforced/clockwork(loc)
-		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "clock_gear", sleeptime = 10)
-		qdel(src)
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/table/reinforced/clockwork)
 
 /obj/structure/table/New()
 	..()
