@@ -362,7 +362,7 @@ var/list/available_staff_transforms = list(
 	)
 
 //Broken mob list
-var/list/blacklisted_mobs = list(
+var/global/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/space_worm, // Unfinished. Very buggy, they seem to just spawn additional space worms everywhere and eating your own tail results in new worms spawning.
 		/mob/living/simple_animal/hostile/humanoid, // JUST DON'T DO IT, OK?
 		/mob/living/simple_animal/hostile/retaliate/cockatrice, // I'm just copying this from transmog.
@@ -371,10 +371,11 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hologram, // Can't live outside the holodeck.
 		/mob/living/slime_pile, // They are dead.
 		/mob/living/adamantine_dust // Ditto
+		/mob/living/simple_animal/hostile/mining_drone //This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
 		)
 
 //Boss monster list
-var/list/boss_mobs = existing_typesof(
+var/global/list/boss_mobs = list(
 	/mob/living/simple_animal/scp_173,						// Just a statue.
 	/mob/living/simple_animal/hostile/hivebot/tele,			// Hivebot spawner WIP thing
 	/mob/living/simple_animal/hostile/wendigo,				// Stupid strong evolving creature things that scream for help
