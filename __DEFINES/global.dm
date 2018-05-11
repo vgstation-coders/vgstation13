@@ -1,3 +1,9 @@
+/proc/writeglobal(var/which, var/what)
+	global.vars[which] = what
+
+/proc/readglobal(var/which)
+	return global.vars[which]
+
 #define DNA_SE_LENGTH 58
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
