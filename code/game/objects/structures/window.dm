@@ -67,6 +67,11 @@ var/list/one_way_windows
 	..()
 	examine_health(user)
 
+/obj/structure/window/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		return
+	rotate()
+
 /obj/structure/window/proc/examine_health(mob/user)
 	if(!anchored)
 		to_chat(user, "It appears to be completely loose and movable.")
