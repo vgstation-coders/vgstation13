@@ -136,6 +136,23 @@ var/list/radiochannels = list(
 	"DJ" = 1201
 )
 
+var/list/radiochannels_aiaccess = list(
+	"Common" = TRUE,
+	"AI Private" = TRUE,
+	"Deathsquad" = FALSE,
+	"Security" = TRUE,
+	"Engineering" = TRUE,
+	"Command" = TRUE,
+	"Medical" = TRUE,
+	"Science" = TRUE,
+	"Service" = TRUE,
+	"Supply" = TRUE,
+	"Response Team" = TRUE,
+	"Raider" = FALSE,
+	"Syndicate" = FALSE,
+	"DJ" = FALSE
+)
+
 var/list/secure_radiochannels = list(
 	"Common" = FALSE,
 	"AI Private" = TRUE,
@@ -180,7 +197,7 @@ var/list/radiochannelsreverse = list(
 			var/assigned = FALSE
 			while (!assigned)
 				var/new_freq = 2*rand(600, 710)+1 // We want an odd frequency
-				if (!(new_freq in radiochannels) || new_freq in old_freqs) // If there's no channel associated to that frequence, or if it's not an old one (prevent some problem with span being wrongly attributed)
+				if (!(new_freq in radiochannels) && !(new_freq in old_freqs)) // If there's no channel associated to that frequence, or if it's not an old one (prevent some problem with span being wrongly attributed)
 					assigned = TRUE
 					var/new_freq_txt = num2text(new_freq)
 					var/old_freq_txt = num2text(old_freq)

@@ -180,3 +180,11 @@
 /obj/item/device/radio/intercom/medbay/broadcast_nospeaker
 	broadcasting = 1
 	listening = 0
+
+/obj/item/device/radio/intercom/ai_private
+	name = "Private AI Channel"
+	broadcasting = TRUE
+
+/obj/item/device/radio/intercom/ai_private/initialize()
+	frequency = AIPRIV_FREQ
+	..()
