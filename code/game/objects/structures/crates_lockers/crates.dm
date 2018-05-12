@@ -129,6 +129,7 @@
 			newgas.temperature -= cooling_power
 		else
 			newgas.temperature = target_temp
+		newgas.update_values()
 		return newgas
 
 /obj/structure/closet/crate/freezer/surgery
