@@ -1458,7 +1458,7 @@
 			.(href, list("c_mode"=1))
 		else
 			var/list/possible = list()
-			possible += mixed_allowed
+			possible += mixed_factions_allowed
 			possible += "DONE"
 			possible += "CANCEL"
 			if(possible.len < 3)
@@ -1504,7 +1504,7 @@
 			.(href, list("f_secret"=1))
 		else
 			var/list/possible = list()
-			possible += mixed_allowed
+			possible += mixed_factions_allowed
 			possible += "DONE"
 			possible += "CANCEL"
 			if(possible.len < 3)

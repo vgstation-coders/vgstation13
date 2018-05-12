@@ -1,5 +1,5 @@
 /datum/admins/proc/check_antagonists()
-	if (!ticker || ticker.current_state < GAME_STATE_PLAYING)
+	if (!ticker)
 		alert("The game hasn't started yet!")
 		return
 

@@ -189,6 +189,8 @@
 
 //Macros for antags
 
+#define isfaction(A) (istype(A, /datum/faction))
+
 #define isvampire(H) (H.mind ? H.mind.GetRole(VAMPIRE) : FALSE)
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)

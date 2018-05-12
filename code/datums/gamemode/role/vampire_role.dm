@@ -30,8 +30,12 @@
 
 /datum/role/vampire/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	..()
-	if (istype(fac, /datum/faction/vampire))
-		var/datum/faction/vampire/vamp_fac = fac
+	var/datum/faction/vampire/vamp_fac
+	if(!fac)
+		vamp_fac = new
+		vamp_fac.addMaster(src)
+	else if (istype(fac, /datum/faction/vampire))
+		vamp_fac = fac
 		vamp_fac.addMaster(src)
 	wikiroute = role_wiki[ROLE_VAMPIRE]
 
@@ -448,10 +452,9 @@
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
 /datum/role/thrall/ForgeObjectives()
-	var/list/parameters = list(
-		"master" = master
-	) 
-	AppendObjective(/datum/objective/protect_master, arguments = parameters)
+	var/datum/objective/target/protect/P = new(auto_target = FALSE)
+	P.set_target(master.antag)
+	AppendObjective(P)
 
 
 /datum/role/thrall/Drop(var/deconverted = FALSE)

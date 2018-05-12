@@ -64,6 +64,10 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/forgeObjectives()
 
 /datum/faction/proc/HandleNewMind(var/datum/mind/M) //Used on faction creation
+	for(var/datum/role/R in members)
+		if(R.antag == M)
+			WARNING("Mind was already a role in this faction")
+			return 0
 	var/newRole = new initroletype(M, src, initial_role)
 	if(!newRole)
 		WARNING("Role killed itself or was otherwise missing!")
@@ -72,6 +76,10 @@ var/list/factions_with_hud_icons = list()
 	return 1
 
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M)
+	for(var/datum/role/R in members)
+		if(R.antag == M)
+			WARNING("Mind was already a role in this faction")
+			return 0
 	var/datum/R = new roletype(M, src, late_role)
 	if(!R)
 		return 0
@@ -262,6 +270,14 @@ var/list/factions_with_hud_icons = list()
 		equip_wizard(wwizard.antag.current)
 		name_wizard(wwizard.antag.current)
 
+
+/datum/faction/wizard/ragin
+	accept_latejoiners = TRUE
+	var/max_wizards
+
+/datum/faction/wizard/ragin/check_win()
+	if(members.len == max_roles)
+		return 1
 //________________________________________________
 
 #define ADD_REVOLUTIONARY_FAIL_IS_COMMAND -1

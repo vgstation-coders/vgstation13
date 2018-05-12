@@ -180,13 +180,13 @@
 	// Discord crap.
 	var/discord_url
 	var/discord_password
-	
+
 	// Weighted Votes
 	var/weighted_votes = 0
 
 /datum/configuration/New()
 	. = ..()
-	var/list/L = subtypesof(/datum/gamemode)
+	var/list/L = subtypesof(/datum/gamemode)-/datum/gamemode/cult
 
 	for (var/T in L)
 		// I wish I didn't have to instance the game modes in order to look up
@@ -727,7 +727,7 @@
 /datum/configuration/proc/pick_mode(mode_name)
 	// I wish I didn't have to instance the game modes in order to look up
 	// their information, but it is the only way (at least that I know of).
-	for (var/T in subtypesof(/datum/gamemode))
+	for (var/T in subtypesof(/datum/gamemode)-/datum/gamemode/cult)
 		var/datum/gamemode/M = new T()
 		if (M.name && M.name == mode_name)
 			return M
@@ -736,7 +736,7 @@
 
 /datum/configuration/proc/get_runnable_modes()
 	var/list/datum/gamemode/runnable_modes = new
-	for (var/T in subtypesof(/datum/gamemode))
+	for (var/T in subtypesof(/datum/gamemode)-/datum/gamemode/cult)
 		var/datum/gamemode/M = new T()
 //		log_startup_progress("DEBUG: [T], tag=[M.name], prob=[probabilities[M.name]]")
 		if (!(M.name in modes))
