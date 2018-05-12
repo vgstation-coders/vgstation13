@@ -32,10 +32,8 @@
 	var/amp = null
 	var/quills = 3
 
-/mob/living/simple_animal/vox/armalis/Die()
-	living_mob_list -= src
-	dead_mob_list += src
-	stat = DEAD
+/mob/living/simple_animal/vox/armalis/death(var/gibbed = FALSE)
+	..(TRUE)
 	var/turf/gloc = get_turf(loc)
 	visible_message("<span class='danger'><B>[src] shudders violently and explodes!</B>","<span class='warning'>You feel your body rupture!</span></span>")
 	gib()

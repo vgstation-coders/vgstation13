@@ -32,11 +32,13 @@
 
 #define isgolem(A) (ishuman(A) && A.species && istype(A.species, /datum/species/golem))
 
-#define isslimeperson(A) (ishuman(A) && A.species && istype(A.species, /datum/species/slime))
+#define isslimeperson(A) (ishuman(A) && istype(A:species, /datum/species/slime))
 
 #define ishorrorform(A) (ishuman(A) && A.species && istype(A.species, /datum/species/horror))
 
 #define isgrue(A) (ishuman(A) && A.species && istype(A.species, /datum/species/grue))
+
+#define ismushroom(A) ((ishuman(A) && A.species && istype(A.species, /datum/species/mushroom)) || (istype(A, /mob/living/carbon/monkey/mushroom)))
 
 #define ishologram(A) (istype(A, /mob/living/simple_animal/hologram/advanced))
 
@@ -181,6 +183,8 @@
 #define ismecha(A) (istype(A, /obj/mecha))
 
 #define isID(A) (istype(A, /obj/item/weapon/card/id))
+
+#define isRoboID(A) (istype(A, /obj/item/weapon/card/robot))
 
 #define isPDA(A) (istype(A, /obj/item/device/pda))
 

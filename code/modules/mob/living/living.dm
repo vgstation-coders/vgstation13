@@ -34,8 +34,7 @@
 
 	. = ..()
 
-/mob/living/examine(mob/user) //Show the mob's size and whether it's been butchered
-	var/size
+/mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
 	switch(src.size)
 		if(SIZE_TINY)
 			size = "tiny"
@@ -56,7 +55,7 @@
 	else if(src.gender == PLURAL)
 		pronoun = "they are"
 
-	..(user, " [capitalize(pronoun)] [size].")
+	..(user, " [capitalize(pronoun)] [size].", show_name, FALSE)
 	if(meat_taken > 0)
 		to_chat(user, "<span class='info'>[capitalize(pronoun)] partially butchered.</span>")
 

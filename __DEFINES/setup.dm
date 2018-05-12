@@ -13,7 +13,7 @@
 #define PROFILE_MACHINES // Disable when not debugging.
 
 #define ARBITRARILY_LARGE_NUMBER 10000 //Used in delays.dm and vehicle.dm. Upper limit on delays
-#define ARBITRARILY_PLANCK_NUMBER 1.417*(10**32) //1.417×10^32. Because ARBITRARILY_LARGE_NUMBER is too small and INF is too large
+#define ARBITRARILY_PLANCK_NUMBER 1.417*(10**32) //1.417Ã—10^32. Because ARBITRARILY_LARGE_NUMBER is too small and INF is too large
 #define MAX_VALUE 65535
 
 #ifdef PROFILE_MACHINES
@@ -376,6 +376,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define DISABILITY_FLAG_MUTE		32
 #define DISABILITY_FLAG_VEGAN		64
 #define DISABILITY_FLAG_ASTHMA 128
+#define DISABILITY_FLAG_LACTOSE		256
 
 ///////////////////////////////////////
 // MUTATIONS
@@ -448,7 +449,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_FARSIGHT	212		// Increases mob's view range by 2
 #define M_NOIR		213		// aww yis detective noir
 #define M_VEGAN		214
-#define M_ASTHMA		215
+#define M_ASTHMA	215
+#define M_LACTOSE	216
 
 var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 				 				  0.33,0.33,0.33,0,\
@@ -467,6 +469,7 @@ var/global/list/bad_changing_colour_ckeys = list()
 #define TOURETTES		8
 #define NERVOUS			16
 #define ASTHMA		32
+#define LACTOSE		64
 
 //sdisabilities
 #define BLIND			1
@@ -963,6 +966,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 //Language flags.
 #define WHITELISTED 1  // Language is available if the speaker is whitelisted.
 #define RESTRICTED 2   // Language can only be accquired by spawning or an admin.
+#define CAN_BE_SECONDARY_LANGUAGE 4 // Language is available on character setup as secondary language.
 
 // Hairstyle flags
 #define HAIRSTYLE_CANTRIP 1 // 5% chance of tripping your stupid ass if you're running.
@@ -1300,7 +1304,6 @@ var/default_colour_matrix = list(1,0,0,0,\
 	#define say_testing(a,x) to_chat(a, ("([__FILE__]:[__LINE__] say_testing) [x]"))
 #else
 	#define say_testing(a,x)
-//	null << "[x][a]")
 #endif
 
 //#define JUSTFUCKMYSHITUP 1
@@ -1366,7 +1369,7 @@ var/proccalls = 1
 #define FOOD_SWEET	4
 #define FOOD_LIQUID	8
 #define FOOD_SKELETON_FRIENDLY 16 //Can be eaten by skeletons
-
+#define FOOD_LACTOSE 32 //Contains MILK
 /*
  *
  *
@@ -1426,6 +1429,7 @@ var/proccalls = 1
 #define MODE_CHANGELING "changeling"
 #define MODE_CULTCHAT "cultchat"
 #define MODE_ANCIENT "ancientchat"
+#define MODE_MUSHROOM "sporechat"
 
 //Hardcore mode stuff
 

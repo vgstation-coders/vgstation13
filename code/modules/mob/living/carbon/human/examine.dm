@@ -49,8 +49,6 @@
 		t_has = "have"
 		t_is = "are"
 	else
-		if(icon)
-			msg += "[bicon(src)] " //note, should we ever go back to runtime-generated icons (please don't), you will need to change this to [bicon(icon)] to prevent crashes.
 		switch(gender)
 			if(MALE)
 				t_He = "He"

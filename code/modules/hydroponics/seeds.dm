@@ -125,6 +125,11 @@
 	seed_type = "banana"
 	vending_cat = "fruits"
 
+/obj/item/seeds/bluespacebananaseed
+	name = "packet of bluespace banana seeds"
+	seed_type = "bluespacebanana"
+	vending_cat = "fruits"
+
 /obj/item/seeds/eggplantseed
 	name = "packet of eggplant seeds"
 	seed_type = "eggplant"
@@ -1167,6 +1172,7 @@
 	plant_icon = "banana"
 	harvest_repeat = 1
 	chems = list(BANANA = list(1,10), POTASSIUMCARBONATE = list(0.1,30))
+	mutants = list("bluespacebanana")
 
 	lifespan = 50
 	maturation = 6
@@ -1175,6 +1181,15 @@
 	ideal_light = 9
 	water_consumption = 6
 	ideal_heat = 298
+
+/datum/seed/banana/bluespace
+	name = "bluespacebanana"
+	seed_name = "bluespacebanana"
+	display_name = "bluespace banana tree"
+	packet_icon = "seed-bluespacebanana"
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana)
+	plant_icon = "banana"
+	mutants = null
 
 /datum/seed/corn
 	name = "corn"

@@ -71,6 +71,7 @@
 			if("newtome")
 				call(/obj/effect/rune/proc/tomesummon)()
 			if("armor") //Fuck off with your shit /tg/. This isn't Edgy Rev+
+				user.drop_from_inventory(src) //So that the blade goes straight to your active hand.
 				call(/obj/effect/rune/proc/armor)()
 			if("emp")
 				call(/obj/effect/rune/proc/emp)(usr.loc,3)

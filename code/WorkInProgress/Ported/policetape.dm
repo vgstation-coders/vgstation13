@@ -179,10 +179,17 @@
 		breaktape(null, user)
 
 /obj/item/tape/attack_paw(mob/user as mob)
-	breaktape(/obj/item/weapon/wirecutters,user)
+	breaktape(null,user, TRUE)
 
-/obj/item/tape/proc/breaktape(obj/item/weapon/W as obj, mob/user as mob)
-	if(user.a_intent == I_HELP && (!W || !W.is_sharp()) && !src.allowed(user))
+/obj/item/tape/attack_animal(var/mob/living/L)
+	if(istype(L, /mob/living/simple_animal))
+		var/mob/living/simple_animal/SA = L
+		if(SA.melee_damage_lower < 5)
+			return
+	breaktape(null,L, TRUE)
+
+/obj/item/tape/proc/breaktape(obj/item/weapon/W as obj, mob/user as mob, var/override = FALSE)
+	if(!override && user.a_intent == I_HELP && (!W || !W.is_sharp()) && !src.allowed(user))
 		to_chat(user, "<span class='notice'>You can't break [src] [W ? "with \the [W] " : ""]unless you use force.</span>")
 		return
 	user.visible_message("<span class='warning'>[user] breaks [src]!</span>")

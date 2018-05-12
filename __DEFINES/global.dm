@@ -1,4 +1,10 @@
-#define DNA_SE_LENGTH 57
+/proc/writeglobal(var/which, var/what)
+	global.vars[which] = what
+
+/proc/readglobal(var/which)
+	return global.vars[which]
+
+#define DNA_SE_LENGTH 58
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
 
@@ -367,6 +373,15 @@ var/list/blacklisted_mobs = list(
 		/mob/living/adamantine_dust // Ditto
 		)
 
+//Boss monster list
+var/list/boss_mobs = existing_typesof(
+	/mob/living/simple_animal/scp_173,						// Just a statue.
+	/mob/living/simple_animal/hostile/hivebot/tele,			// Hivebot spawner WIP thing
+	/mob/living/simple_animal/hostile/wendigo,				// Stupid strong evolving creature things that scream for help
+	/mob/living/simple_animal/hostile/mechahitler,			// Sieg heil!
+	/mob/living/simple_animal/hostile/alien/queen/large,	// The bigger and beefier version of queens.
+	)
+
 //Global list of all Cyborg/MoMMI modules.
 var/global/list/robot_modules = list(
 	"Standard"		= /obj/item/weapon/robot_module/standard,
@@ -383,5 +398,6 @@ var/global/list/robot_modules = list(
 
 var/global/list/mommi_modules = list(
 	"Nanotrasen"    = /obj/item/weapon/robot_module/mommi/nt,
-	"Soviet" 	    = /obj/item/weapon/robot_module/mommi/soviet
+	"Soviet" 	    = /obj/item/weapon/robot_module/mommi/soviet,
+	"Gravekeeper"	= /obj/item/weapon/robot_module/mommi/cogspider
 	)

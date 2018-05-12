@@ -76,23 +76,17 @@ var/list/ai_list = list()
 			if(A.real_name == pickedName && possibleNames.len > 1) //fixing the theoretically possible infinite loop
 				possibleNames -= pickedName
 				pickedName = null
-	add_language(LANGUAGE_GALACTIC_COMMON, TRUE)
-	add_language(LANGUAGE_UNATHI, TRUE)
-	add_language(LANGUAGE_CATBEAST, TRUE)
-	add_language(LANGUAGE_SKRELLIAN, TRUE)
-	add_language(LANGUAGE_ROOTSPEAK, TRUE)
-	add_language(LANGUAGE_GUTTER, TRUE)
-	add_language(LANGUAGE_CLATTER, TRUE)
-	add_language(LANGUAGE_GREY, TRUE)
-	add_language(LANGUAGE_MONKEY, TRUE)
-	add_language(LANGUAGE_VOX, TRUE)
-	add_language(LANGUAGE_GOLEM, TRUE)
-	add_language(LANGUAGE_TRADEBAND, TRUE)
-	add_language(LANGUAGE_MOUSE, TRUE)
-	add_language(LANGUAGE_GOLEM, TRUE)
-	add_language(LANGUAGE_SLIME, TRUE)
-	add_language(LANGUAGE_HUMAN, TRUE)
+
+	//AIs speak all languages that aren't restricted(XENO, CULT).
+	for(var/language_name in all_languages)
+		var/datum/language/lang = all_languages[language_name]
+		if(!(lang.flags & RESTRICTED) && !(lang in languages))
+			add_language(lang.name)
+
+	//But gal common is restricted so let's add it manually.
+	add_language(LANGUAGE_GALACTIC_COMMON)
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
+
 	real_name = pickedName
 	name = real_name
 	anchored = TRUE

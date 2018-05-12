@@ -38,21 +38,22 @@
 	deactivation_message = "You no longer feel awful and sick all over."
 	flags = GENE_UNNATURAL
 
-	New()
-		..()
-		block=RADBLOCK
+/datum/dna/gene/disability/radioactive/New()
+	..()
+	block=RADBLOCK
 
-	OnMobLife(var/mob/owner)
-		owner.radiation = max(owner.radiation, 20)
-		for(var/mob/living/L in range(1, owner))
-			if(L == owner)
-				continue
-			to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
-			L.apply_radiation(5, RAD_INTERNAL)
-		return
+/datum/dna/gene/disability/radioactive/OnMobLife(var/mob/owner)
+	owner.radiation = max(owner.radiation, 20)
+	for(var/mob/living/L in range(1, owner))
+		if(L == owner)
+			continue
+		to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
+		L.apply_radiation(5, RAD_EXTERNAL)
 
-	OnDrawUnderlays(var/mob/M,var/g,var/fat)
-		return "rads[fat]_s"
+	emitted_harvestable_radiation(get_turf(owner), 1, range = 2) //Around 70W, nothing much really
+
+/datum/dna/gene/disability/radioactive/OnDrawUnderlays(var/mob/M,var/g,var/fat)
+	return "rads[fat]_s"
 
 ////////////////////////////////////////
 // Other disabilities

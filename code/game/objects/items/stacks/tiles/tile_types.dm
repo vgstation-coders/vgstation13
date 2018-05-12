@@ -158,8 +158,6 @@ obj/item/stack/tile/slime
 	max_amount = 60
 
 /obj/item/stack/tile/slime/adjust_slowdown(mob/living/L, current_slowdown)
-	if(ishuman(L))
-		var/mob/living/carbon/human/H = L
-		if(isslimeperson(H))
-			return -1
+	if(isslimeperson(L) || isslime(L))
+		return -1
 	return current_slowdown+5

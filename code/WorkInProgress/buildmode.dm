@@ -196,7 +196,13 @@ obj/effect/bmode/buildholder/New()
 				return 1
 			if(2)
 				copycat = null
-				objholder = text2path(input(usr,"Enter typepath:" ,"Typepath","/obj/structure/closet"))
+				var/partial_type = input(usr, "Enter type, or leave blank to see all types", "Typepath", "/obj/structure/closet") as text|null
+				if(isnull(partial_type))
+					return
+				
+				var/list/matches = get_matching_types(partial_type, /atom)
+				objholder = input("Select type", "Typepath") as null|anything in matches
+				
 				if(!ispath(objholder))
 					objholder = /obj/structure/closet
 					alert("That path is not allowed.")

@@ -333,6 +333,8 @@
 #define ALBUTEROL		"albuterol"
 #define LIQUIDBUTTER	"liquidbutter"
 #define SALTWATER		"saltwater"
+#define CALCIUMOXIDE		"calciumoxide"
+#define CALCIUMHYDROXIDE	"calciumhydroxide"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

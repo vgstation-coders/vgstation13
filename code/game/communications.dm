@@ -173,40 +173,32 @@ var/list/radiochannelsreverse = list(
 // Make random frequencies for the "secure" channels so that they are not easily listenned to.
 
 /proc/makeSecureChannels()
+	var/old_freqs = list()
 	for (var/channel in secure_radiochannels)
 		if (secure_radiochannels[channel]) // If it's indeed secured
 			var/old_freq = radiochannels[channel]
 			var/assigned = FALSE
 			while (!assigned)
 				var/new_freq = 2*rand(600, 710)+1 // We want an odd frequency
-				if (!(new_freq in radiochannels)) // If there's no channel associated to that frequence
+				if (!(new_freq in radiochannels) || new_freq in old_freqs) // If there's no channel associated to that frequence, or if it's not an old one (prevent some problem with span being wrongly attributed)
 					assigned = TRUE
 					var/new_freq_txt = num2text(new_freq)
 					var/old_freq_txt = num2text(old_freq)
 
+					old_freqs += old_freq_txt
+
 					radiochannels[channel] = new_freq
 					radiochannelsreverse[new_freq_txt] = channel
-					radiochannelsreverse -= old_freq_txt
 
 					var/span = freqtospan[old_freq_txt]
 					freqtospan[new_freq_txt] = span
-					freqtospan -= old_freq_txt
 
 					freqtoname[new_freq_txt] = channel
-					freqtoname -= old_freq_txt
 	
-	to_chat(world, "Radiochannels :")
-	for (var/channel in radiochannels)
-		to_chat(world, "[channel] = [radiochannels[channel]]")
-		
-	to_chat(world, "Radiochannelsreverse :")
-	for (var/channel in radiochannelsreverse)
-		to_chat(world, "[channel] = [radiochannelsreverse[channel]]")
-		
-	to_chat(world, "freqtoname :")
-	for (var/channel in freqtoname)
-		to_chat(world, "[channel] = [freqtoname[channel]]")
-		
+	for (var/old_freq in old_freqs)
+		radiochannelsreverse -= old_freq
+		freqtospan -= old_freq
+		freqtoname -= old_freq
 
 //depenging helpers
 #define SUPP_FREQ radiochannels["Supply"] //supply, coloured light brown in chat window

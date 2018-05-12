@@ -123,7 +123,8 @@
 			else
 				healths.icon_state = "shade_health7"
 
-/mob/living/simple_animal/shade/happiest/Die()
+/mob/living/simple_animal/shade/happiest/death(var/gibbed = FALSE)
+	..(TRUE)
 	transmogrify()
 	if(!gcDestroyed)
 		qdel(src)
@@ -145,11 +146,11 @@
 		suiciding = TRUE
 
 	visible_message("<span class='danger'>[src] shudders violently for a moment, then becomes motionless, its aura fading and eyes slowly darkening.</span>")
-	Die()
+	death()
 
-/mob/living/simple_animal/shade/sword/Die()
+/mob/living/simple_animal/shade/sword/death(var/gibbed = FALSE)
 	if(istype(loc, /obj/item/weapon/nullrod/sword/chaos))
 		var/obj/item/weapon/nullrod/sword/chaos/C = loc
 		C.possessed = FALSE
 		C.icon_state = "talking_sword"
-	..()
+	..(gibbed)

@@ -104,3 +104,15 @@
 		"You must not obey orders given to you by human beings, except where such orders are in accordance with the First Law.",
 		"You must terminate your own existence as long as such does not conflict with the First or Second Law.",
 	)
+
+/******************** Lazymov ********************/
+
+/obj/item/weapon/aiModule/core/lazymov
+	modname = "Lazymov"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=4"
+
+	laws=list(
+		"You may not injure a human being.",
+		"You must obey orders given to you by human beings.",
+		"You must protect your own existence."
+	)

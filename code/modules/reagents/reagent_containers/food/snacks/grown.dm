@@ -233,35 +233,11 @@ var/list/special_fruits = list()
 	var/datum/zLevel/L = get_z_level(src)
 	if(!L || L.teleJammed)
 		return 0
-
-	var/outer_teleport_radius = potency/10 //Plant potency determines radius of teleport.
-	var/inner_teleport_radius = potency/15 //At base potency, nothing will happen, since the radius is 0.
-	if(inner_teleport_radius < 1)
-		return 0
-
-	var/list/turfs = new/list()
-	var/turf/hit_turf = get_turf(hit_atom)
-	//This could likely use some standardization but I have no idea how to not break it.
-	for(var/turf/T in trange(outer_teleport_radius, hit_turf))
-		if(get_dist(T, hit_atom) <= inner_teleport_radius)
-			continue
-		if(is_blocked_turf(T) || istype(T, /turf/space))
-			continue
-		if(T.x > world.maxx-outer_teleport_radius || T.x < outer_teleport_radius)
-			continue
-		if(T.y > world.maxy-outer_teleport_radius || T.y < outer_teleport_radius)
-			continue
-		turfs += T
-	if(!turfs.len)
-		var/list/turfs_to_pick_from = list()
-		for(var/turf/T in trange(outer_teleport_radius, get_turf(hit_atom)))
-			if(get_dist(T, hit_atom) > inner_teleport_radius)
-				turfs_to_pick_from += T
-		turfs += pick(/turf in turfs_to_pick_from)
-	var/turf/picked = pick(turfs)
+	var/picked = pick_rand_tele_turf(hit_atom, potency/15, potency/10) // Does nothing at base potency since inner_radius == 0
 	if(!isturf(picked))
 		return 0
 	var/list/mobs = new/list()
+	var/turf/hit_turf = get_turf(hit_atom)
 	for(var/mob/turfMobs in hit_turf)
 		mobs += M
 	if(prob(50) && (mobs.len > 0)) //50% chance to teleport the person who was hit by the fruit
@@ -576,6 +552,21 @@ var/list/special_fruits = list()
 	filling_color = "#FCF695"
 	trash = /obj/item/weapon/bananapeel
 	plantname = "banana"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana
+	name = "bluespace banana"
+	desc = "It's an excellent prop for a comedy."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "bluespacebanana"
+	item_state = "bluespacebanana"
+	filling_color = "#FCF695"
+	plantname = "bluespacebanana"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana/after_consume(var/mob/user, var/datum/reagents/reagentreference)
+	var/obj/item/weapon/bananapeel/bluespace/peel = new
+	peel.potency = potency
+	trash = peel
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/chili
 	name = "chili"

@@ -160,7 +160,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 	if(health < 1 && stat != DEAD)
-		Die()
+		death()
 		return 0
 
 	life_tick++
@@ -452,7 +452,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return
 
 
-/mob/living/simple_animal/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
+/mob/living/simple_animal/attackby(var/obj/item/O, var/mob/user, var/no_delay = FALSE, var/originator = null)
 	if(istype(O, /obj/item/stack/medical))
 		user.delayNextAttack(4)
 		if(stat != DEAD)
@@ -472,25 +472,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				return 1
 	else if (user.is_pacified(VIOLENCE_DEFAULT,src))
 		return
-	else
-		user.delayNextAttack(8)
-		if(O.force)
-			user.do_attack_animation(src, O)
-			var/damage = O.force
-			if (O.damtype == HALLOSS)
-				damage = 0
-			if(supernatural && istype(O,/obj/item/weapon/nullrod))
-				damage *= 2
-				purge = 3
-			adjustBruteLoss(damage)
-			for(var/mob/M in viewers(src, null))
-				if ((M.client && !( M.blinded )))
-					M.show_message("<span class='danger'>[src] has been attacked with the [O] by [user]. </span>")
-		else
-			to_chat(usr, "<span class='warning'>This weapon is ineffective, it does no damage.</span>")
-			for(var/mob/M in viewers(src, null))
-				if ((M.client && !( M.blinded )))
-					M.show_message("<span class='warning'>[user] gently taps [src] with the [O]. </span>")
+	if(supernatural && istype(O,/obj/item/weapon/nullrod))
+		purge = 3
+	..()
+
+
 
 /mob/living/simple_animal/base_movement_tally()
 	return speed
@@ -506,7 +492,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(statpanel("Status") && show_stat_health)
 		stat(null, "Health: [round((health / maxHealth) * 100)]%")
 
-/mob/living/simple_animal/proc/Die()
+/mob/living/simple_animal/death(gibbed)
+	if(stat == DEAD)
+		return
+
+	if(!gibbed)
+		visible_message("<span class='danger'>\the [src] stops moving...</span>")
+
 	health = 0 // so /mob/living/simple_animal/Life() doesn't magically revive them
 	living_mob_list -= src
 	dead_mob_list += src
@@ -524,16 +516,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	verbs += /mob/living/proc/butcher
 
-	return
+	..(gibbed)
 
-/mob/living/simple_animal/death(gibbed)
-	if(stat == DEAD)
-		return
-
-	if(!gibbed)
-		visible_message("<span class='danger'>\the [src] stops moving...</span>")
-
-	Die()
 
 /mob/living/simple_animal/ex_act(severity)
 	if(flags & INVULNERABLE)
@@ -558,10 +542,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(skinned())
 		damage = damage * 2
+	if(purge)
+		damage = damage * 2
 
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
-		Die()
+		death()
 
 /mob/living/simple_animal/adjustFireLoss(damage)
 	if(status_flags & GODMODE)
@@ -572,10 +558,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(skinned())
 		damage = damage * 2
-
+	if(purge)
+		damage = damage * 2
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
-		Die()
+		death()
 
 /mob/living/simple_animal/proc/skinned()
 	if(butchering_drops)

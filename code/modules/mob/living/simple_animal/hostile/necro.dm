@@ -419,8 +419,8 @@
 	lying = 0
 	update_transform()
 
-/mob/living/simple_animal/hostile/necro/zombie/Die()
-	..()
+/mob/living/simple_animal/hostile/necro/zombie/death(var/gibbed = FALSE)
+	..(gibbed)
 	lying = 1
 	update_transform()
 
@@ -577,6 +577,7 @@
 	get_clothes(target, new_zombie)
 	new_zombie.name = target.real_name
 	new_zombie.host = target
+	target.ghostize()
 	target.loc = null
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/get_clothes(var/mob/target, var/mob/living/simple_animal/hostile/necro/zombie/new_zombie)
@@ -691,6 +692,9 @@
 			visible_message("<span class = 'blob'>\The [src] glows with a brilliant light!</span>")
 		set_light(vision_range/2, vision_range, "#a1d68b")
 		spawn(1 SECONDS)
+			/
+			emitted_harvestable_radiation(get_turf(src), rand(250, 500), range = 7)
+
 			var/list/can_see = view(src, vision_range)
 			for(var/mob/living/carbon/human/H in can_see)
 				var/rad_cost = min(radiation, rand(10,20))

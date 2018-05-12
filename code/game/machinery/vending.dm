@@ -1367,7 +1367,7 @@ var/global/num_vending_terminals = 1
 	icon_state = "snack"
 	products = list(
 		/obj/item/weapon/reagent_containers/food/snacks/candy = 6,
-		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen = 6,
+		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/chips =6,
 		/obj/item/weapon/reagent_containers/food/snacks/sosjerky = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin = 6,
@@ -1384,7 +1384,7 @@ var/global/num_vending_terminals = 1
 		)
 	prices = list(
 		/obj/item/weapon/reagent_containers/food/snacks/candy = 13,
-		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating = 15,
 		/obj/item/weapon/reagent_containers/food/snacks/chips = 30,
 		/obj/item/weapon/reagent_containers/food/snacks/sosjerky = 40,
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin = 60,
@@ -2468,6 +2468,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/franksuit = 3,
 		/obj/item/clothing/gloves/frankgloves = 3,
 		/obj/item/clothing/shoes/frankshoes =3,
+		/obj/item/clothing/suit/kimono/sakura = 3
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
 		/obj/item/clothing/suit/cardborg = 3,
@@ -2495,7 +2496,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/darkholme = 3,
 		/obj/item/clothing/suit/wizrobe/magician/fake = 3,
 		/obj/item/clothing/head/wizard/magician = 3,
-		/obj/item/clothing/suit/sakura_kimono = 3,
+		/obj/item/clothing/suit/kimono = 3,
 		/obj/item/clothing/gloves/white = 3,
 		)
 
@@ -2937,6 +2938,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/clockwork_hood = 2,
 		/obj/item/clothing/suit/clockwork_robes = 2,
 		/obj/item/clothing/shoes/clockwork_boots = 2,
+		/obj/item/clothing/suit/kimono/ronin = 2
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater = 1,

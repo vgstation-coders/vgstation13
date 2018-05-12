@@ -2399,6 +2399,7 @@
 
 	M.setCloneLoss(0)
 	M.setOxyLoss(0)
+	M.rad_tick = 0
 	M.radiation = 0
 	M.heal_organ_damage(5,5)
 	M.adjustToxLoss(-5)
@@ -4023,7 +4024,7 @@
 /datum/reagent/dry_ramen
 	name = "Dry Ramen"
 	id = DRY_RAMEN
-	description = "Space age food, since August 25, 1958. Contains dried noodles, vegetables, and chemicals that boil in contact with water."
+	description = "Space age food, since August 25, 1958. Contains dried noodles and vegetables, best cooked in boiling water."
 	reagent_state = SOLID
 	nutriment_factor = REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
@@ -6516,3 +6517,31 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	alpha = 64
 	density = 0.622
 	specheatcap = 99.27
+
+/datum/reagent/calciumoxide
+	name = "Calcium Oxide"
+	id = CALCIUMOXIDE
+	description = "Quicklime. Reacts strongly with water forming calcium hydrate and generating heat in the process"
+	color = "#FFFFFF"
+	density = 3.34
+	specheatcap = 42.09
+
+/datum/reagent/calciumoxide/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if((H.species && H.species.flags & NO_BREATHE) || M_NO_BREATH in H.mutations)
+			return
+		M.adjustFireLoss(0.5 * REM)
+		if(prob(10))
+			M.visible_message("<span class='warning'>[M] [pick("dry heaves!", "coughs!", "splutters!")]</span>")
+
+/datum/reagent/calciumhydroxide
+	name = "Calcium Hydroxide"
+	id = CALCIUMHYDROXIDE
+	description = "Hydrated lime, non-toxic."
+	color = "#FFFFFF"
+	density = 2.211
+	specheatcap = 87.45
