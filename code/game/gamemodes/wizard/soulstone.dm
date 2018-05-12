@@ -108,7 +108,9 @@
 		L.forceMove(get_turf(src))
 		L.status_flags &= ~GODMODE
 		if(user)
-			to_chat(L, "<b>You have been released from your prison, but you are still bound to [user.name]'s will. Help them succeed in their goals at all costs. Be warned, you are as fragile as glass. If need be, your master can recapture you in the stone to heal you.</b>")
+			to_chat(L, "<b>You have been released from your prison, but you are still bound to [user.name]'s will. Help them succeed in their goals at all costs.<br>\
+						Be warned, you are as fragile as glass and your attacks are not terribly strong. On the plus side, you fly and have no need for air.<br>\
+						If need be, your master can recapture you in the stone to heal you.</b>")
 		L.canmove = 1
 		L.cancel_camera()
 
