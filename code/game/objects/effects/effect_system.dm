@@ -760,9 +760,9 @@ steam.start() -- spawns the effect
 		var/turf/simulated/T = get_turf(src)
 		var/datum/gas_mixture/local_air = T.return_air()
 		flick("[icon_state]-disolve", src)
-		if((local_air.temperature  < lowest_temperature)&&(savedtemp > lowest_temperature)) //ie, we have over-chilled
+		if((local_air.temperature < lowest_temperature) && (savedtemp > lowest_temperature)) //ie, we have over-chilled
 			local_air.temperature = lowest_temperature
-		else if ((local_air.temperature  < lowest_temperature)&&(savedtemp < lowest_temperature) && savedtemp) //ie it chilled when it shouldn't have
+		else if((local_air.temperature < lowest_temperature) && (savedtemp < lowest_temperature) && savedtemp) //ie it chilled when it shouldn't have
 			local_air.temperature = savedtemp
 		sleep(5)
 		qdel(src)
