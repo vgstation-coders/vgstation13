@@ -771,8 +771,6 @@
 			return global.radiochannels;
 		if("radiochannelsreverse")
 			return global.radiochannelsreverse;
-		if("CENT_FREQS")
-			return global.CENT_FREQS;
 		if("radio_controller")
 			return global.radio_controller;
 		if("pointers")
@@ -2676,8 +2674,6 @@
 			global.radiochannels=newval
 		if("radiochannelsreverse")
 			global.radiochannelsreverse=newval
-		if("CENT_FREQS")
-			global.CENT_FREQS=newval
 		if("radio_controller")
 			global.radio_controller=newval
 		if("pointers")

@@ -18,6 +18,7 @@ var/list/processing_objects = list()
 
 
 /datum/subsystem/obj/Initialize()
+	makeSecureChannels() // Need to be done before objects are initialised because else the headsets get the default freqs
 	for(var/atom/object in world)
 		object.initialize()
 		CHECK_TICK
