@@ -68,6 +68,9 @@ var/list/factions_with_hud_icons = list()
 		if(R.antag == M)
 			WARNING("Mind was already a role in this faction")
 			return 0
+	if(M.GetRole(initial_role))
+		warning("Mind already had a role of [initial_role]!")
+		return 0
 	var/newRole = new initroletype(M, src, initial_role)
 	if(!newRole)
 		WARNING("Role killed itself or was otherwise missing!")
@@ -80,6 +83,9 @@ var/list/factions_with_hud_icons = list()
 		if(R.antag == M)
 			WARNING("Mind was already a role in this faction")
 			return 0
+	if(M.GetRole(late_role))
+		warning("Mind already had a role of [late_role]!")
+		return 0
 	var/datum/R = new roletype(M, src, late_role)
 	if(!R)
 		return 0
