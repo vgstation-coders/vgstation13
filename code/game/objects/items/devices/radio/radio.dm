@@ -97,12 +97,7 @@
 
 	dat += {"
 				Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>
-				Frequency:
-				<A href='byond://?src=\ref[src];freq=-10'>-</A>
-				<A href='byond://?src=\ref[src];freq=-2'>-</A>
-				[format_frequency(frequency)]
-				<A href='byond://?src=\ref[src];freq=2'>+</A>
-				<A href='byond://?src=\ref[src];freq=10'>+</A><BR>
+				Frequency: <A href='byond://?src=\ref[src];set_freq=-1'>[format_frequency(frequency)]</a><BR>
 				"}
 
 	for (var/ch_name in channels)
@@ -164,11 +159,14 @@
 
 		return
 
-	else if (href_list["freq"])
-		var/new_frequency = (frequency + text2num(href_list["freq"]))
-		if (!freerange || (frequency < 1200 || frequency > 1600))
+	else if("set_freq" in href_list)
+		var/new_frequency=frequency
+		if(href_list["set_freq"]!="-1")
+			new_frequency = text2num(href_list["set_freq"])
+		else
+			new_frequency = input(usr, "Set a new frequency (1200-1600 kHz).", src, frequency) as null|num
 			new_frequency = sanitize_frequency(new_frequency, maxf)
-		set_frequency(new_frequency)
+			set_frequency(new_frequency)
 		if(hidden_uplink)
 			if(hidden_uplink.check_trigger(usr, frequency, traitor_frequency))
 				usr << browse(null, "window=radio")
