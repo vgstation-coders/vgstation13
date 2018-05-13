@@ -138,7 +138,7 @@ var/list/ai_list = list()
 			to_chat(src, "To use something, simply click on it.")
 			to_chat(src, "Use say :b to speak to your cyborgs through binary.")
 			to_chat(src, "The various frequencies used by the crew to communicate have been stored in your mind. Use the verb <i>Notes</i> to access them.")
-			store_frequencies_in_memory()
+			store_frequencies_in_memory(src)
 			if(!(ticker && ticker.mode && (mind in ticker.mode.malf_ai)))
 				show_laws()
 				to_chat(src, "<b>These laws may be changed by other players, or by you being the traitor.</b>")
@@ -147,13 +147,6 @@ var/list/ai_list = list()
 	ai_list += src
 	..()
 	return
-
-/mob/living/silicon/ai/proc/store_frequencies_in_memory()
-	var/data = ("<h3>Frequencies of the station:</h3>")
-	for (var/channel in radiochannels_aiaccess)
-		if (radiochannels_aiaccess[channel] && channel in radiochannels) // We know about it and it actually exists in the channel list
-			data += ("<b>[channel]</b>: <i>[radiochannels[channel]/10]</i> <br />")
-	mind.store_memory(data)
 
 /mob/living/silicon/ai/verb/toggle_anchor()
 	set category = "AI Commands"

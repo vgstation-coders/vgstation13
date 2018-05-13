@@ -7,7 +7,7 @@
 	to_chat(src, "To use something, simply click on it.")
 	to_chat(src, {"Use say ":b to speak to your cyborgs through binary."})
 	to_chat(src, "The various frequencies used by the crew to communicate have been stored in your mind. Use the verb <i>Notes</i> to access them.")
-	store_frequencies_in_memory()
+	store_frequencies_in_memory(src)
 	show_laws()
 	if(!(ticker && ticker.mode && (mind in ticker.mode.malf_ai)))
 		to_chat(src, "<b>These laws may be changed by other players, or by you being the traitor.</b>")

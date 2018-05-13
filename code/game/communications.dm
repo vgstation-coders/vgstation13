@@ -136,7 +136,8 @@ var/list/radiochannels = list(
 	"DJ" = 1201
 )
 
-var/list/radiochannels_aiaccess = list(
+// The channels the AI and the Librarian have access to.
+var/list/radiochannels_access = list(
 	"Common" = TRUE,
 	"AI Private" = TRUE,
 	"Deathsquad" = FALSE,
@@ -216,6 +217,13 @@ var/list/radiochannelsreverse = list(
 		radiochannelsreverse -= old_freq
 		freqtospan -= old_freq
 		freqtoname -= old_freq
+
+/proc/store_frequencies_in_memory(var/mob/living/L)
+	var/data = ("<h3>Frequencies of the station:</h3>")
+	for (var/channel in radiochannels_access)
+		if (radiochannels_access[channel] && channel in radiochannels) // We know about it and it actually exists in the channel list
+			data += ("<b>[channel]</b>: <i>[radiochannels[channel]/10]</i> <br />")
+	L.mind.store_memory(data)
 
 //depenging helpers
 #define SUPP_FREQ radiochannels["Supply"] //supply, coloured light brown in chat window

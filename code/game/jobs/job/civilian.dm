@@ -462,39 +462,40 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/librarian
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		switch(H.backbag)
-			if(2)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
-			if(3)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
-			if(4)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-			if(5)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
-		H.equip_or_collect(new /obj/item/clothing/under/suit_jacket/red(H), slot_w_uniform)
-		//H.equip_or_collect(new /obj/item/device/pda/librarian(H), slot_belt)
-		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
-		var/obj/item/weapon/storage/bag/plasticbag/P = new /obj/item/weapon/storage/bag/plasticbag(H)
-		H.put_in_hands(P)
-		new /obj/item/weapon/barcodescanner(P)
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
-		else
-			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-		var/list/new_languages = list()
-		for(var/L in all_languages)
-			var/datum/language/lang = all_languages[L]
-			if(~lang.flags & RESTRICTED && !(lang in H.languages))
-				new_languages += lang.name
+/datum/job/librarian/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
+	H.equip_or_collect(new /obj/item/clothing/under/suit_jacket/red(H), slot_w_uniform)
+	//H.equip_or_collect(new /obj/item/device/pda/librarian(H), slot_belt)
+	H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
+	var/obj/item/weapon/storage/bag/plasticbag/P = new /obj/item/weapon/storage/bag/plasticbag(H)
+	H.put_in_hands(P)
+	new /obj/item/weapon/barcodescanner(P)
+	if(H.backbag == 1)
+		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
+	else
+		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	var/list/new_languages = list()
+	for(var/L in all_languages)
+		var/datum/language/lang = all_languages[L]
+		if(~lang.flags & RESTRICTED && !(lang in H.languages))
+			new_languages += lang.name
 
-		var/picked_lang = pick(new_languages)
-		H.add_language(picked_lang)
-		to_chat(H, "<span class = 'notice'>Due to your well read nature, you find yourself versed in the language of [picked_lang]. Check-Known-Languages under the IC tab to use it.</span>")
-		return 1
-
+	var/picked_lang = pick(new_languages)
+	H.add_language(picked_lang)
+	to_chat(H, "<span class = 'notice'>Due to your well read nature, you find yourself versed in the language of [picked_lang]. Check-Known-Languages under the IC tab to use it.</span>")
+	to_chat(H, "<span class = 'notice'>As a known Ace Reporter, you've managed to discover the frequencies used by the crew to communicate. Use Notes under the IC tab to check them.")
+	store_frequencies_in_memory(H)
+	return 1
 
 
 //var/global/lawyer = 0//Checks for another lawyer //This changed clothes on 2nd lawyer, both IA get the same dreds.
@@ -515,42 +516,45 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/lawyer
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		switch(H.backbag)
-			if(2)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
-			if(3)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
-			if(4)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-			if(5)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
-		if (H.mind.role_alt_title)
-			switch(H.mind.role_alt_title)
-				if("Lawyer")
-					H.equip_or_collect(new /obj/item/clothing/under/lawyer/bluesuit(H), slot_w_uniform)
-					H.equip_or_collect(new /obj/item/clothing/suit/storage/lawyer/bluejacket(H), slot_wear_suit)
-					H.equip_or_collect(new /obj/item/clothing/shoes/leather(H), slot_shoes)
-				if("Bridge Officer")
-					H.equip_or_collect (new /obj/item/clothing/shoes/centcom(H), slot_shoes)
-					H.equip_or_collect(new /obj/item/clothing/suit/storage/lawyer/bridgeofficer(H), slot_wear_suit)
-					H.equip_or_collect(new /obj/item/clothing/under/bridgeofficer, slot_w_uniform)
-					H.equip_or_collect(new /obj/item/device/radio/headset/headset_com, slot_ears)
-					H.equip_or_collect(new /obj/item/clothing/head/soft/bridgeofficer(H), slot_head)
-					H.equip_or_collect(new /obj/item/clothing/gloves/white(H), slot_gloves)
-		H.equip_or_collect(new /obj/item/clothing/under/rank/internalaffairs(H), slot_w_uniform)
-		H.equip_or_collect(new /obj/item/clothing/suit/storage/internalaffairs(H), slot_wear_suit)
-		H.equip_or_collect(new /obj/item/clothing/shoes/centcom(H), slot_shoes)
-		H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
-		//H.equip_or_collect(new /obj/item/device/pda/lawyer(H), slot_belt)
-		H.put_in_hands(new /obj/item/weapon/storage/briefcase/centcomm(H))
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
-		else
-			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-		var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
-		L.imp_in = H
-		L.implanted = 1
-		return 1
+/datum/job/lawyer/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger(H), slot_back)
+	if (H.mind.role_alt_title)
+		switch(H.mind.role_alt_title)
+			if("Lawyer")
+				H.equip_or_collect(new /obj/item/clothing/under/lawyer/bluesuit(H), slot_w_uniform)
+				H.equip_or_collect(new /obj/item/clothing/suit/storage/lawyer/bluejacket(H), slot_wear_suit)
+				H.equip_or_collect(new /obj/item/clothing/shoes/leather(H), slot_shoes)
+			if("Bridge Officer")
+				H.equip_or_collect (new /obj/item/clothing/shoes/centcom(H), slot_shoes)
+				H.equip_or_collect(new /obj/item/clothing/suit/storage/lawyer/bridgeofficer(H), slot_wear_suit)
+				H.equip_or_collect(new /obj/item/clothing/under/bridgeofficer, slot_w_uniform)
+				H.equip_or_collect(new /obj/item/device/radio/headset/headset_com, slot_ears)
+				H.equip_or_collect(new /obj/item/clothing/head/soft/bridgeofficer(H), slot_head)
+				H.equip_or_collect(new /obj/item/clothing/gloves/white(H), slot_gloves)
+	H.equip_or_collect(new /obj/item/clothing/under/rank/internalaffairs(H), slot_w_uniform)
+	H.equip_or_collect(new /obj/item/clothing/suit/storage/internalaffairs(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/clothing/shoes/centcom(H), slot_shoes)
+	H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
+	//H.equip_or_collect(new /obj/item/device/pda/lawyer(H), slot_belt)
+	H.put_in_hands(new /obj/item/weapon/storage/briefcase/centcomm(H))
+	if(H.backbag == 1)
+		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
+	else
+		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
+	L.imp_in = H
+	L.implanted = 1
+	to_chat(H, "<span class = 'notice'>As the station's [H.mind.role_alt_title ? H.mind.role_alt_title : "Lawyer"], you have access to the security and the command channel. They are stored in your memory. Use the verb 'Notes' under the IC tab to access them.</span>")
+	H.mind.store_memory("<b>Command frequency: </b> <i>[COMM_FREQ]</i> <br/>")
+	H.mind.store_memory("<b>Security frequency: </b> <i>[SEC_FREQ]</i> <br/>")
+	return 1
