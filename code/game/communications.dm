@@ -154,10 +154,10 @@ var/list/radiochannels_access = list(
 	"DJ" = FALSE
 )
 
-var/list/secure_radiochannels = list(
+var/list/random_radiochannels = list(
 	"Common" = FALSE,
 	"AI Private" = TRUE,
-	"Deathsquad" = FALSE, // Secured by the fact that it needs its own key
+	"Deathsquad" = TRUE,
 	"Security" = TRUE,
 	"Engineering" = FALSE,
 	"Command" = TRUE,
@@ -166,9 +166,16 @@ var/list/secure_radiochannels = list(
 	"Service" = FALSE,
 	"Supply" = FALSE,
 	"Response Team" = TRUE,
-	"Raider" = FALSE, // Secured by the fact that it needs its own key
-	"Syndicate" = FALSE, // Secured by the fact that it needs its own key
+	"Raider" = TRUE,
+	"Syndicate" = TRUE,
 	"DJ" = TRUE,
+)
+
+var/list/crypted_radiochannels_reverse = list(
+	"1213" = "Syndicate",
+	"1215" = "Raider",
+	"1359" = "Security",
+	"1353" = "Command",
 )
 
 var/list/radiochannelsreverse = list(
@@ -192,8 +199,8 @@ var/list/radiochannelsreverse = list(
 
 /proc/makeSecureChannels()
 	var/old_freqs = list()
-	for (var/channel in secure_radiochannels)
-		if (secure_radiochannels[channel]) // If it's indeed secured
+	for (var/channel in random_radiochannels)
+		if (random_radiochannels[channel]) // If it's indeed secured
 			var/old_freq = radiochannels[channel]
 			var/assigned = FALSE
 			while (!assigned)
@@ -212,7 +219,11 @@ var/list/radiochannelsreverse = list(
 					freqtospan[new_freq_txt] = span
 
 					freqtoname[new_freq_txt] = channel
-	
+
+					if (old_freq_txt in crypted_radiochannels_reverse)
+						crypted_radiochannels_reverse[new_freq_txt] = channel
+						crypted_radiochannels_reverse -= old_freq_txt
+
 	for (var/old_freq in old_freqs)
 		radiochannelsreverse -= old_freq
 		freqtospan -= old_freq

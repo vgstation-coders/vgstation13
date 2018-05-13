@@ -19,8 +19,6 @@
 	var/freerange = 0 // 0 - Sanitize frequencies, 1 - Full range
 	var/list/channels = list() //see communications.dm for full list. First channes is a "default" for :h
 	var/subspace_transmission = 0
-	var/syndie = 0//Holder to see if it's a syndicate encrpyed radio
-	var/raider = 0//same as above but for raiders
 	var/maxf = 1499
 //			"Example" = FREQ_LISTENING|FREQ_BROADCASTING
 	flags = FPRINT | HEAR
@@ -461,6 +459,7 @@
 	return
 */
 
+#define CANT_RECIEVE -1 // -1 = can't recieve for the caller of that proc
 
 /obj/item/device/radio/proc/receive_range(freq, level)
 	// check if this radio can receive on the given frequency, and if so,
@@ -468,39 +467,44 @@
 	// returns: -1 if can't receive, range otherwise
 
 	if (isWireCut(WIRE_RECEIVE))
-		return -1
+		return CANT_RECIEVE
 	if(!listening)
-		return -1
+		return CANT_RECIEVE
 	if(!(0 in level))
 		var/turf/position = get_turf(src)
 		if(!position || !(position.z in level))
-			return -1
-	if(freq == SYND_FREQ)
-		if(!(src.syndie))//Checks to see if it's allowed on that frequency, based on the encryption keys
-			return -1
-	if(freq == RAID_FREQ)
-		if(!(src.raider))//Checks to see if it's allowed on that frequency, based on the encryption keys, bird edition
-			return -1
+			return CANT_RECIEVE
+
+	// Handle if we can actually get it or not
+	var/freq_txt = num2text(freq)
+	if (freq_txt in crypted_radiochannels_reverse) // We can't, we need encryption keys for that.
+		var/channel = crypted_radiochannels_reverse[freq_txt]
+		if (!handle_crypted_channels(channel))
+			return CANT_RECIEVE
+
 	if (!on)
-		return -1
+		return CANT_RECIEVE
 	if (!freq) //received on main frequency
 		if (!listening)
-			return -1
+			return CANT_RECIEVE
 	else
 		var/accept = (freq==frequency && listening)
 		if (!accept)
 			for (var/ch_name in channels)
 				if(channels[ch_name] & FREQ_LISTENING)
-					if(radiochannels[ch_name] == text2num(freq) || syndie)
+					if(radiochannels[ch_name] == text2num(freq))
 						accept = 1
 						break
 		if (!accept)
-			return -1
+			return CANT_RECIEVE
 	return canhear_range
 
+#undef CANT_RECIEVE
+
+/obj/item/device/radio/proc/handle_crypted_channels(var/channel) // We can't listen to them on a SBR, need a headset with the proper encryption keys.
+	return FALSE
+
 /obj/item/device/radio/proc/send_hear(freq, level)
-
-
 	var/range = receive_range(freq, level)
 	if(range > -1)
 		return get_hearers_in_view(canhear_range, src)

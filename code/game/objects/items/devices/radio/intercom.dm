@@ -8,9 +8,40 @@
 	var/number = 0
 	var/anyai = 1
 	var/circuitry_installed=1
+	var/obj/item/device/encryptionkey/keyslot
 	var/mob/living/silicon/ai/ai = list()
 	var/last_tick //used to delay the powercheck
 	var/buildstage = 0
+
+/obj/item/device/radio/intercom/attackby(var/obj/item/weapon/W, var/mob/user)
+//	..()
+	user.set_machine(src)
+	if (!( isscrewdriver(W) || (istype(W, /obj/item/device/encryptionkey/ ))))
+		return
+
+	if(isscrewdriver(W))
+		if(keyslot)
+			for(var/ch_name in channels)
+				radio_controller.remove_object(src, radiochannels[ch_name])
+				secure_radio_connections[ch_name] = null
+
+			var/turf/T = get_turf(user)
+			if(T)
+				keyslot.forceMove(T)
+				keyslot = null
+			to_chat(user, "You pop out the encryption key in the intercom!")
+
+		else
+			to_chat(user, "This intercom doesn't have an encryption key!  How useless...")
+
+	if(istype(W, /obj/item/device/encryptionkey/))
+		if(keyslot)
+			to_chat(user, "This intercom can't hold another key!")
+			return
+
+		if(user.drop_item(W, src))
+			keyslot = W
+	return
 
 /obj/item/device/radio/intercom/supports_holomap()
 	return TRUE
@@ -53,25 +84,33 @@
 	spawn (0)
 		attack_self(user)
 
+#define CANT_RECIEVE
+
 /obj/item/device/radio/intercom/receive_range(freq, level)
 	if (!on || b_stat || isWireCut(WIRE_RECEIVE))
-		return -1
+		return CANT_RECIEVE
 	if(!(0 in level))
 		var/turf/position = get_turf(src)
 		if(isnull(position) || !(position.z in level))
-			return -1
+			return CANT_RECIEVE
 	if (!src.listening)
-		return -1
-	if(freq == SYND_FREQ)
-		if(!(src.syndie))
-			return -1//Prevents broadcast of messages over devices lacking the encryption
+		return CANT_RECIEVE
 
-	if(freq == RAID_FREQ)
-		if(!(src.raider))
-			return -1//Prevents broadcast of messages over devices lacking the encryption, birb edition
+	var/freq_txt = num2text(freq)
+
+	if (freq_txt in crypted_radiochannels_reverse) // Do we have the encryption key for it
+		var/channel = crypted_radiochannels_reverse[freq_txt]
+		if (!handle_crypted_channels(channel))
+			return CANT_RECIEVE
 
 	return canhear_range
 
+#undef CANT_RECIEVE
+
+/obj/item/device/radio/intercom/handle_crypted_channels(var/channel)
+	if (channel in keyslot.secured_channels)
+		return TRUE
+	return FALSE
 
 /obj/item/device/radio/intercom/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(speech.speaker && !src.anyai && !(speech.speaker in src.ai))
@@ -187,4 +226,13 @@
 
 /obj/item/device/radio/intercom/ai_private/initialize()
 	frequency = AIPRIV_FREQ
+	..()
+
+/obj/item/device/radio/intercom/syndicate
+	name = "Syndicate intercom"
+	desc = "Talk through this. Evily."
+
+/obj/item/device/radio/intercom/syndicate/initialize()
+	keyslot = new /obj/item/device/encryptionkey/syndicate
+	frequency = SYND_FREQ
 	..()

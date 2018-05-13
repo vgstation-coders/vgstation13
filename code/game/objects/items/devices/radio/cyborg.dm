@@ -53,7 +53,6 @@
 
 /obj/item/device/radio/borg/proc/recalculateChannels()
 	src.channels = list()
-	src.syndie = 0
 
 	if(keyslot)
 		for(var/ch_name in keyslot.channels)
@@ -61,9 +60,6 @@
 				continue
 			src.channels += ch_name
 			src.channels[ch_name] = keyslot.channels[ch_name]
-
-		if(keyslot.syndie)
-			src.syndie = 1
 
 
 	for (var/ch_name in channels)
