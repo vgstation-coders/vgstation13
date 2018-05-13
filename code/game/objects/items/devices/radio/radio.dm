@@ -7,6 +7,7 @@
 	var/on = 1 // 0 for off
 	var/last_transmission
 	var/frequency = 1459 //common chat
+	var/new_frequency
 	var/traitor_frequency = 0 //tune to frequency to unlock traitor supplies
 	var/canhear_range = 3 // the range which mobs can hear this radio from
 	var/obj/item/device/radio/patch_link = null
@@ -97,7 +98,12 @@
 
 	dat += {"
 				Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>
-				Frequency: <A href='byond://?src=\ref[src];set_freq=-1'>[format_frequency(frequency)]</a><BR>
+				Frequency:
+				<A href='byond://?src=\ref[src];freq=-10'>-</A>
+				<A href='byond://?src=\ref[src];freq=-2'>-</A>
+				<A href='byond://?src=\ref[src];set_freq=-1'>[format_frequency(frequency)]</a>
+				<A href='byond://?src=\ref[src];freq=2'>+</A>
+				<A href='byond://?src=\ref[src];freq=10'>+</A><BR>
 				"}
 
 	for (var/ch_name in channels)
@@ -118,6 +124,12 @@
 	return {"
 			<B>[chan_name]</B>: <A href='byond://?src=\ref[src];ch_name=[chan_name];listen=[!list]'>[list ? "Engaged" : "Disengaged"]</A><BR>
 			"}
+
+/obj/item/device/radio/proc/check_traitor_uplink(frequency)
+	if(hidden_uplink)
+		if(hidden_uplink.check_trigger(usr, frequency, traitor_frequency))
+			usr << browse(null, "window=radio")
+			return
 
 /obj/item/device/radio/Topic(href, href_list)
 	//..()
@@ -160,17 +172,21 @@
 		return
 
 	else if("set_freq" in href_list)
-		var/new_frequency=frequency
+		new_frequency=frequency
 		if(href_list["set_freq"]!="-1")
 			new_frequency = text2num(href_list["set_freq"])
 		else
-			new_frequency = input(usr, "Set a new frequency (1200-1600 kHz).", src, frequency) as null|num
+			new_frequency = input(usr, "Set a new frequency (1200-1600 KHz).", src, frequency) as null|num
 			new_frequency = sanitize_frequency(new_frequency, maxf)
 			set_frequency(new_frequency)
-		if(hidden_uplink)
-			if(hidden_uplink.check_trigger(usr, frequency, traitor_frequency))
-				usr << browse(null, "window=radio")
-				return
+		check_traitor_uplink(frequency)
+
+	else if (href_list["freq"])
+		new_frequency=frequency
+		new_frequency = (frequency + text2num(href_list["freq"]))
+		new_frequency = sanitize_frequency(new_frequency, maxf)
+		set_frequency(new_frequency)
+		check_traitor_uplink(frequency)
 
 	else if (href_list["talk"])
 		broadcasting = text2num(href_list["talk"])
