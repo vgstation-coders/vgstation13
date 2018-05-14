@@ -124,6 +124,10 @@
 	var/number_of_roles = 0
 	var/list/available_players = FilterAvailablePlayers(R)
 	for(var/i = 0 to num)
+		to_chat(world, "Checking [i]")
+		if(!available_players.len)
+			warning("ran out of available players to fill role [R]!")
+			break
 		shuffle(available_players)
 		var/mob/new_player/P = pick(available_players)
 		available_players.Remove(P)
@@ -131,9 +135,6 @@
 			i--
 			continue
 		number_of_roles++ // Get the roles we created
-		if(!available_players.len)
-			warning("ran out of available players to fill role [R]!")
-			break
 	return number_of_roles
 
 
@@ -148,11 +149,11 @@
 		if(!P.client.desires_role(initial(R.required_pref)) || jobban_isbanned(P, initial(R.required_pref)))
 			players_to_choose.Remove(P)
 			continue
+	if(!players_to_choose.len)
+		warning("No available players for [R]")
 	return players_to_choose
 
 /datum/gamemode/proc/CreateRole(var/datum/role/R, var/mob/P)
-	ASSERT(R)
-	ASSERT(P)
 	var/datum/role/newRole = CreateBasicRole(R)
 
 	if(!newRole)
@@ -160,8 +161,11 @@
 		return 0
 
 	if(!newRole.AssignToRole(P.mind))
+		warning("Role refused mind and dropped!")
 		newRole.Drop()
 		return 0
+
+	return 1
 
 /datum/gamemode/proc/latespawn(var/mob/mob) //Check factions, see if anyone wants a latejoiner
 	var/list/possible_factions = list()
