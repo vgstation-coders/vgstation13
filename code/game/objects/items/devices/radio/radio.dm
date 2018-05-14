@@ -7,7 +7,6 @@
 	var/on = 1 // 0 for off
 	var/last_transmission
 	var/frequency = 1459 //common chat
-	var/new_frequency
 	var/traitor_frequency = 0 //tune to frequency to unlock traitor supplies
 	var/canhear_range = 3 // the range which mobs can hear this radio from
 	var/obj/item/device/radio/patch_link = null
@@ -130,9 +129,10 @@
 		if(hidden_uplink.check_trigger(usr, frequency, traitor_frequency))
 			usr << browse(null, "window=radio")
 			return
+	return
 
 /obj/item/device/radio/Topic(href, href_list)
-	//..()
+	var/new_frequency
 	if (usr.stat || !on)
 		return
 
