@@ -128,8 +128,7 @@
 	if(hidden_uplink)
 		if(hidden_uplink.check_trigger(usr, frequency, traitor_frequency))
 			usr << browse(null, "window=radio")
-			return
-	return
+			return 1
 
 /obj/item/device/radio/Topic(href, href_list)
 	var/new_frequency
@@ -179,13 +178,15 @@
 			new_frequency = input(usr, "Set a new frequency (1200-1600 kHz).", src, frequency) as null|num
 			new_frequency = sanitize_frequency(new_frequency, maxf)
 			set_frequency(new_frequency)
-		check_traitor_uplink(frequency)
+		if (check_traitor_uplink(frequency))
+			return
 
 	else if (href_list["freq"])
 		new_frequency = (frequency + text2num(href_list["freq"]))
 		new_frequency = sanitize_frequency(new_frequency, maxf)
 		set_frequency(new_frequency)
-		check_traitor_uplink(frequency)
+		if (check_traitor_uplink(frequency))
+			return
 
 	else if (href_list["talk"])
 		broadcasting = text2num(href_list["talk"])
