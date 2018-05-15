@@ -56,9 +56,7 @@
 				else
 					*/
 					//Not enough air around, take a percentage of what's there to model this properly
-				breath_moles = (environment.total_moles() / environment.volume * CELL_VOLUME) * BREATH_PERCENTAGE
-
-				breath = loc.remove_air(breath_moles)
+				breath = environment.remove_volume(CELL_VOLUME * BREATH_PERCENTAGE)
 
 				if(!breath || breath.total_moles < BREATH_MOLES / 5 || breath.total_moles > BREATH_MOLES * 5)
 					if(prob(15)) // 15% chance for lung damage if air intake is less of a fifth, or more than five times the threshold
