@@ -8,6 +8,8 @@
 	slot_flags = SLOT_BELT
 	throwforce = 3
 	w_class = W_CLASS_SMALL
+	starting_materials = list(MAT_GLASS = 3500)
+	w_type = RECYK_GLASS
 	throw_speed = 2
 	throw_range = 10
 	amount_per_transfer_from_this = 10

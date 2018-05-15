@@ -43,6 +43,9 @@
 		new /obj/item/weapon/wirecutters(), \
 		new /obj/item/weapon/wrench(), \
 		new /obj/item/weapon/solder(),\
+		new /obj/item/weapon/wirecutters/clippers(),\
+		new /obj/item/weapon/hatchet(),\
+		new /obj/item/weapon/minihoe(),\
 		new /obj/item/device/analyzer(), \
 		new /obj/item/weapon/pickaxe/shovel/spade(), \
 		new /obj/item/device/silicate_sprayer/empty(), \
@@ -55,6 +58,7 @@
 		new /obj/item/weapon/reagent_containers/food/drinks/mug(), \
 		new /obj/item/weapon/storage/toolbox(), \
 		new /obj/item/weapon/reagent_containers/glass/jar(), \
+		new /obj/item/weapon/reagent_containers/spray(),\
 		),
 		"Assemblies"=list(
 		new /obj/item/device/assembly/igniter(), \
@@ -136,6 +140,7 @@
 		new /obj/item/ammo_casing/shotgun(), \
 		new /obj/item/ammo_casing/shotgun/dart(), \
 		new /obj/item/ammo_casing/shotgun/buckshot(),\
+		new /obj/item/weapon/legcuffs/beartrap(),\
 		)
 	)
 
