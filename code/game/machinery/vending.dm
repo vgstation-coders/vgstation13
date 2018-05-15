@@ -878,11 +878,11 @@ var/global/num_vending_terminals = 1
 			var/cat=text2num(href_list["cat"])
 			var/datum/data/vending_product/R = GetProductByID(idx,cat)
 			if(R.price)
-				can_vend = 0//all borgs can buy free items from vending machines
+				can_vend = FALSE //all borgs can buy free items from vending machines
 		if(istype(usr,/mob/living/silicon/robot))
 			var/mob/living/silicon/robot/R = usr
-			if((R.module && istype(R.module,/obj/item/weapon/robot_module/butler) ) || isMoMMI(R))
-				can_vend = 1//only service borgs and MoMMI can buy costly items
+			if((R.module && R.module.can_buy))
+				can_vend = TRUE //But if their module allows it..
 		if(!can_vend)
 			to_chat(usr, "<span class='warning'>The vending machine refuses to interface with you, as you are not in its target demographic!</span>")
 			return

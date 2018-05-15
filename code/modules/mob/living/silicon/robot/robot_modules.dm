@@ -1,15 +1,21 @@
 /obj/item/weapon/robot_module
 	name = "robot module"
 	w_class = W_CLASS_GIANT
-	item_state = "electronic"
-	flags = FPRINT
-	siemens_coefficient = 1
 
 	var/speed_modifier = CYBORG_STANDARD_SPEED_MODIFIER
-	var/can_be_pushed = TRUE
-	var/no_slip = FALSE
 	var/default_modules = TRUE //Do we start with a flash/light?
 
+	//Quirks
+	var/can_be_pushed = TRUE //Can we be pushed?
+	var/can_handle_medical = FALSE //Can we handle medical machinery?
+	var/can_handle_chems = FALSE //Can we handle chem machinery?
+	var/can_handle_food = FALSE //Can we handle food machinery?
+	var/can_buy = FALSE //Can we buy from vending machines?
+	var/clean_on_move = FALSE //Do we clean the floor while moving?
+	var/no_slip = FALSE //Do we get pushed by ZAS/Can space slip?
+	var/is_the_law = FALSE //ARE. WE. THE. LAW?
+
+	//Icons
 	var/list/sprites = list()
 
 	//Modules
@@ -228,7 +234,6 @@
 	module_holder = "medical"
 	networks = list(CAMERANET_MEDBAY)
 	radio_key = /obj/item/device/encryptionkey/headset_med
-	can_be_pushed = FALSE
 	sprites = list(
 		"Default" = "medbot",
 		"Needles" = "needles",
@@ -249,6 +254,9 @@
 		/obj/item/stack/medical/splint
 		)
 	respawnables_max_amount = MEDICAL_MAX_KIT
+	can_be_pushed = FALSE
+	can_handle_medical = TRUE
+	can_handle_chems = TRUE
 
 /obj/item/weapon/robot_module/medical/New()
 	..()
@@ -298,7 +306,6 @@
 	module_holder = "engineer"
 	networks = list(CAMERANET_ENGI)
 	radio_key = /obj/item/device/encryptionkey/headset_eng
-	no_slip = TRUE
 	sprites = list(
 		"Default" = "engibot",
 		"Engiseer" = "engiseer",
@@ -313,6 +320,7 @@
 		"R34 - ENG7a 'Conagher'" = "conagher"
 		)
 	speed_modifier = CYBORG_ENGINEERING_SPEED_MODIFIER
+	no_slip = TRUE
 	respawnables = list (/obj/item/stack/cable_coil)
 	respawnables_max_amount = ENGINEERING_MAX_COIL
 
@@ -366,6 +374,7 @@
 		"R34 - SEC10a 'Woody'" = "woody"
 		)
 	speed_modifier = CYBORG_SECURITY_SPEED_MODIFIER
+	is_the_law = TRUE
 
 /obj/item/weapon/robot_module/security/New()
 	..()
@@ -399,6 +408,7 @@
 		"R34 - CUS3a 'Flynn'" = "flynn"
 		)
 	speed_modifier = CYBORG_JANITOR_SPEED_MODIFIER
+	clean_on_move = TRUE
 
 /obj/item/weapon/robot_module/janitor/New()
 	..()
@@ -445,6 +455,9 @@
 		LANGUAGE_SLIME,
 		)
 	speed_modifier = CYBORG_SERVICE_SPEED_MODIFIER
+	can_handle_food = TRUE
+	can_handle_chems = TRUE
+	can_buy = TRUE
 
 /obj/item/weapon/robot_module/butler/New()
 	..()
@@ -550,6 +563,7 @@
 		"R34 - WAR8a 'Chesty'" = "chesty"
 		)
 	speed_modifier = CYBORG_COMBAT_SPEED_MODIFIER
+	is_the_law = TRUE
 
 /obj/item/weapon/robot_module/combat/New()
 	..()

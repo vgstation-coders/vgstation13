@@ -198,7 +198,7 @@
 			m_type = VISIBLE
 
 		if("law")
-			if(istype(module,/obj/item/weapon/robot_module/security))
+			if(module.is_the_law)
 				message = "<B>[src]</B> shows its legal authorization barcode."
 
 				playsound(src, 'sound/voice/biamthelaw.ogg', 50, 0)
@@ -207,7 +207,7 @@
 				to_chat(src, "You are not THE LAW, pal.")
 
 		if("halt")
-			if(istype(module,/obj/item/weapon/robot_module/security))
+			if(module.is_the_law)
 				message = "<B>[src]</B>'s speakers skreech, \"Halt! Security!\"."
 
 				playsound(src, 'sound/voice/halt.ogg', 50, 0)

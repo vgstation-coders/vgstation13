@@ -1264,7 +1264,7 @@
 	. = ..()
 
 	if(module)
-		if(module.type == /obj/item/weapon/robot_module/janitor)
+		if(module.clean_on_move)
 			var/turf/tile = loc
 			if(isturf(tile))
 				tile.clean_blood()

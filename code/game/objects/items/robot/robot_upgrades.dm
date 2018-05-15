@@ -173,6 +173,9 @@
 	if(!("Security" in R.module.sensor_augs)) //If they don't have a SECHUD, give them one.
 		pop(R.module.sensor_augs)
 		R.module.sensor_augs.Add("Security", "Disable")
+	
+	if(!R.module.is_the_law) //Make them able to *law and *halt
+		R.module.is_the_law = TRUE
 
 /obj/item/borg/upgrade/vtec
 	name = "cyborg VTEC upgrade board"

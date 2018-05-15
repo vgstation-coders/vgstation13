@@ -199,7 +199,7 @@
 /obj/machinery/microwave/attack_ai(mob/user as mob)
 	if(istype(user,/mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = user
-		if(istype(R.module, /obj/item/weapon/robot_module/butler))
+		if(R.module && R.module.can_handle_food)
 			user.set_machine(src)
 			interact(user)
 			return 1

@@ -3,6 +3,8 @@
 	name = "mobile mmi robot module"
 	languages = list()
 	no_slip = TRUE
+	can_handle_chems = TRUE
+	can_buy = TRUE
 	sprites = list("Basic" = "mommi")
 	respawnables = list (/obj/item/stack/cable_coil)
 	respawnables_max_amount = MOMMI_MAX_COIL
@@ -67,6 +69,7 @@
 	sprites = list(
 		"RuskieBot" = "ruskiebot"
 		)
+	can_handle_food = TRUE //They can use bartending machinery.
 
 /obj/item/weapon/robot_module/mommi/soviet/New(var/mob/living/silicon/robot/R) //Powercreep!
 	..()
