@@ -1264,7 +1264,7 @@
 	. = ..()
 
 	if(module)
-		if(module.clean_on_move)
+		if(module.quirk_flags & MODULE_CLEAN_ON_MOVE)
 			var/turf/tile = loc
 			if(isturf(tile))
 				tile.clean_blood()

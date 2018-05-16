@@ -174,8 +174,8 @@
 		pop(R.module.sensor_augs)
 		R.module.sensor_augs.Add("Security", "Disable")
 	
-	if(!R.module.is_the_law) //Make them able to *law and *halt
-		R.module.is_the_law = TRUE
+	if(!R.module.quirk_flags & MODULE_IS_THE_LAW) //Make them able to *law and *halt
+		R.module.quirk_flags |= MODULE_IS_THE_LAW
 
 /obj/item/borg/upgrade/vtec
 	name = "cyborg VTEC upgrade board"
