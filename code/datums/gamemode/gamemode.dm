@@ -38,7 +38,6 @@
 /datum/gamemode/proc/SetupFactions()
 
 /datum/gamemode/proc/Setup()
-	to_chat(world, "Setup of [name] called. Minimum player count: [minimum_player_count]. Player count: [get_player_count()]")
 	if(minimum_player_count && minimum_player_count < get_player_count())
 		TearDown()
 		return 0
@@ -56,7 +55,6 @@
 		factions_to_process = factions_allowed
 	var/pc = get_player_count() //right proc?
 	for(var/Fac in factions_to_process)
-		to_chat(world, "[Fac]")
 		if(islist(Fac))
 			var/list/L = Fac
 			CreateFactions(L, FALSE)
@@ -124,7 +122,6 @@
 	var/number_of_roles = 0
 	var/list/available_players = FilterAvailablePlayers(R)
 	for(var/i = 0 to num)
-		to_chat(world, "Checking [i]")
 		if(!available_players.len)
 			warning("ran out of available players to fill role [R]!")
 			break
@@ -200,7 +197,6 @@
 	return 1
 
 /datum/gamemode/proc/TearDown()
-	to_chat(world, "Teardown called on gametype [name].")
 	// This is where the game mode is shut down and cleaned up.
 
 /datum/gamemode/proc/GetScoreboard()

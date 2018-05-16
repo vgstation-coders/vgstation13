@@ -14,7 +14,6 @@
 		leader = V
 		members += V
 		V.faction = src
-		V.antag.faction = src
 
 /datum/faction/vampire/can_setup()
 	// TODO : check if the number of players > 10, if we have at least 2 players with vamp enabled.

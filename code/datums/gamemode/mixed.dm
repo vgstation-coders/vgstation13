@@ -1,6 +1,6 @@
 var/list/mixed_factions_allowed = list(
-	typesof(/datum/faction/syndicate/traitor),
-	/datum/faction/wizard,
+	typesof(/datum/faction/wizard,
+	/datum/faction/syndicate/traitor),
 	)
 var/list/mixed_roles_allowed = list(
 	/datum/role/vampire = 1,

@@ -145,6 +145,7 @@ var/datum/controller/gameticker/ticker
 		return 0
 
 	//Configure mode and assign player to special mode stuff
+	job_master.DivideOccupations() //Distribute jobs
 	var/can_continue = src.mode.Setup()//Setup special modes
 	if(!can_continue)
 		current_state = GAME_STATE_PREGAME
@@ -162,7 +163,6 @@ var/datum/controller/gameticker/ticker
 		modes = sortList(modes)
 		to_chat(world, "<B>The current game mode is - Secret!</B>")
 		to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
-	job_master.DivideOccupations() //Distribute jobs
 	init_PDAgames_leaderboard()
 	create_characters() //Create player characters and transfer them
 	collect_minds()
@@ -363,6 +363,7 @@ var/datum/controller/gameticker/ticker
 /datum/controller/gameticker/proc/equip_characters()
 	var/captainless=1
 	for(var/mob/living/carbon/human/player in player_list)
+		to_chat(world, "[player] has assigned_role [player.mind.assigned_role]")
 		if(player && player.mind && player.mind.assigned_role)
 			if(player.mind.assigned_role == "Captain")
 				captainless=0

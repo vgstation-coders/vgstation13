@@ -152,7 +152,7 @@
 
 	if(antag)
 		RemoveFromRole(antag)
-	del(src)
+	qdel(src)
 
 // Scaling, should fuck with min/max players.
 // Return 1 on success, 0 on failure.
@@ -164,6 +164,7 @@
 /datum/role/proc/CanBeAssigned(var/datum/mind/M)
 	if(restricted_jobs.len>0)
 		if(M.assigned_role in restricted_jobs)
+			to_chat(world, "[M.assigned_role] was in restricted jobs")
 			return 0
 
 	if(protected_antags.len>0)
@@ -172,7 +173,7 @@
 				return 0
 
 	if(required_jobs.len>0)
-		if(!M.assigned_role in required_jobs)
+		if(!(M.assigned_role in required_jobs))
 			return 0
 
 	if(is_type_in_list(src, M.antag_roles)) //No double double agent agent
@@ -197,6 +198,7 @@
 	if(special_role)
 		antag.special_role=special_role
 	if(disallow_job)
+		to_chat(world, "disallow job active")
 		antag.assigned_role="MODE"
 	return 1
 
@@ -300,7 +302,7 @@
 		text += "<br/><font color='red'><B>\The [name] has failed.</B></font>"
 		feedback_add_details("[id]_success","FAIL")
 
-	to_chat(world, text)
+	return text
 
 /datum/role/proc/extraPanelButtons()
 	var/dat = ""
@@ -376,7 +378,7 @@
 "}
 */
 /datum/role/proc/GetScoreboard()
-	//If you've gotten here to find what the hell this proc is for, you've hit a dead end. We don't know either.
+	return Declare()
 
 // DO NOT OVERRIDE
 /datum/role/Topic(href, href_list)
