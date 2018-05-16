@@ -244,16 +244,23 @@
 
 	update_pull_icon()
 	if (client)
-//			clear_fullscreens()
 
 		if(src.eye_blind || blinded)
 			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
+		else
+			clear_fullscreen("blind")
 		if (src.disabilities & NEARSIGHTED)
 			overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired)
+		else
+			clear_fullscreen("impaired")
 		if (src.eye_blurry)
 			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
+		else
+			clear_fullscreen("blurry")
 		if (src.druggy)
 			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
+		else
+			clear_fullscreen("high")
 
 	if (stat != 2)
 		if (machine)
