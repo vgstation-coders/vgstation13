@@ -112,9 +112,10 @@
 		new /obj/item/weapon/razor(), \
 		new /obj/item/device/rcd/tile_painter(), \
 		new /obj/item/device/rcd/matter/rsf(), \
-		new /obj/item/device/destTagger, \
-		new /obj/item/device/priceTagger, \
-		new /obj/item/device/breathalyzer, \
+		new /obj/item/device/destTagger(), \
+		new /obj/item/device/priceTagger(), \
+		new /obj/item/weapon/hand_labeler(), \
+		new /obj/item/device/breathalyzer(), \
 		),
 		"Misc_Other"=list(
 		new /obj/item/weapon/rcd_ammo(), \
