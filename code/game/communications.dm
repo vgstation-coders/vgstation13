@@ -176,6 +176,7 @@ var/list/crypted_radiochannels_reverse = list(
 	"1215" = "Raider",
 	"1359" = "Security",
 	"1353" = "Command",
+	"1345" = "Response Team"
 )
 
 var/list/radiochannelsreverse = list(
@@ -237,8 +238,6 @@ var/list/radiochannelsreverse = list(
 	L.mind.store_memory(data)
 
 //depenging helpers
-#define SUPP_FREQ radiochannels["Supply"] //supply, coloured light brown in chat window
-#define SERV_FREQ radiochannels["Service"] //service, coloured green in chat window
 #define DSQUAD_FREQ radiochannels["Deathsquad"] //death squad frequency, coloured grey in chat window
 #define RESTEAM_FREQ radiochannels["Response Team"] //response team frequency, uses the deathsquad color at the moment.
 #define AIPRIV_FREQ radiochannels["AI Private"] //AI private, colored magenta in chat window

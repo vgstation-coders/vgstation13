@@ -228,6 +228,8 @@
 	frequency = AIPRIV_FREQ
 	..()
 
+// Mapped intercoms
+
 /obj/item/device/radio/intercom/syndicate
 	name = "Syndicate intercom"
 	desc = "Talk through this. Evily."
@@ -236,3 +238,26 @@
 	keyslot = new /obj/item/device/encryptionkey/syndicate
 	frequency = SYND_FREQ
 	..()
+
+// Can't remove keys from mapped intercoms
+/obj/item/device/radio/intercom/mapped/attackby(var/obj/item/weapon/W, var/mob/user)
+	if (iscrowbar(W))
+		to_chat(user, "<span class='notice'>You can't seem to pull out the encryption key of this one.</span>")
+	return FALSE
+
+/obj/item/device/radio/intercom/mapped/ace_reporter
+	name = "Ace Reporter intercom"
+	desc = "Alert cargo before security raids them!"
+	freerange = TRUE
+
+/obj/item/device/radio/intercom/mapped/ace_reporter/initialize()
+	frequency = pick(COMM_FREQ, SEC_FREQ, COMMON_FREQ)
+	keyslot = new /obj/item/device/encryptionkey/mapped
+
+/obj/item/device/radio/intercom/mapped/dj_sat
+	name = "Pirate Radio Listening Channel"
+	desc = "The sickest tunes this side of Tau Ceti."
+	freerange = TRUE
+
+/obj/item/device/radio/intercom/mapped/dj_sat/initialize()
+	keyslot = new /obj/item/device/encryptionkey/mapped

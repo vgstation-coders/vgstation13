@@ -58,8 +58,8 @@
 	affected.implants += L
 	L.part = affected
 	to_chat(H, "<span class = 'notice'>As part of the command staff, and a member of security, you have access to the security and command frequencies. They are stored in your memory. Use the verb 'Notes' under the IC tab to access them.</span>")
-	H.mind.store_memory("<b>Command frequency: </b> <i>[COMM_FREQ]</i> <br/>")
-	H.mind.store_memory("<b>Security frequency: </b> <i>[SEC_FREQ]</i> <br/>")
+	H.mind.store_memory("<b>Command frequency: </b> <i>[COMM_FREQ/10]</i> <br/>")
+	H.mind.store_memory("<b>Security frequency: </b> <i>[SEC_FREQ/10]</i> <br/>")
 	return 1
 
 
@@ -114,7 +114,7 @@
 	affected.implants += L
 	L.part = affected
 	to_chat(H, "<span class = 'notice'>As a member of security, you have access to your departement's frequency. It is stored in your memory. Use the verb 'Notes' under the IC tab to access it.</span>")
-	H.mind.store_memory("<b>Security frequency: </b> <i>[SEC_FREQ]</i> <br/>")
+	H.mind.store_memory("<b>Security frequency: </b> <i>[SEC_FREQ/10]</i> <br/>")
 	return 1
 
 
@@ -194,7 +194,7 @@
 	H.mutations += M_SOBER
 	H.check_mutations = 1
 	to_chat(H, "<span class = 'notice'>As a member of security, you have access to your departement's frequency. It is stored in your memory. Use the verb 'Notes' under the IC tab to access it.</span>")
-	H.mind.store_memory("<b>Security frequency: </b> <i>[SEC_FREQ]</i> <br/>")
+	H.mind.store_memory("<b>Security frequency: </b> <i>[SEC_FREQ/10]</i> <br/>")
 	return 1
 
 
@@ -249,5 +249,5 @@
 	affected.implants += L
 	L.part = affected
 	to_chat(H, "<span class = 'notice'>As a member of security, you have access to your departement's frequency. It is stored in your memory. Use the verb 'Notes' under the IC tab to access it.</span>")
-	H.mind.store_memory("<b>Security frequency: </b> <i>[SEC_FREQ]</i> <br/>")
+	H.mind.store_memory("<b>Security frequency: </b> <i>[SEC_FREQ/10]</i> <br/>")
 	return 1

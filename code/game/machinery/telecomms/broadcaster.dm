@@ -343,7 +343,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 				blackbox.msg_syndicate += blackbox_msg
 			if(speech.frequency == RAID_FREQ)
 				blackbox.msg_raider += blackbox_msg
-			if(speech.frequency == SERV_FREQ)
+			if(speech.frequency == SER_FREQ)
 				blackbox.msg_service += blackbox_msg
 			if(speech.frequency == SUP_FREQ)
 				blackbox.msg_cargo += blackbox_msg

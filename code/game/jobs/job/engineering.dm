@@ -47,7 +47,7 @@
 	else
 		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
 	to_chat(H, "<span class = 'notice'>As a head of staff, you have access to the command channel frequency. It is stored in your memory. Use the 'Notes' verb in the IC tab to access it.")
-	H.mind.store_memory("<b>Command frequency: </b> <i>[COMM_FREQ]</i> <br/>")
+	H.mind.store_memory("<b>Command frequency: </b> <i>[COMM_FREQ/10]</i> <br/>")
 	return 1
 
 
