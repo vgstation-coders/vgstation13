@@ -841,7 +841,7 @@
 					to_chat(user, "You need more cable for this!")
 					return
 				for(var/i, i<= 5, i++)
-					wires.UpdateCut(i,1)
+					wires.UpdateCut(i, 1, user)
 
 				to_chat(user, "You wire \the [src]!")
 				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
