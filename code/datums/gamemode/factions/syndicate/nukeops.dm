@@ -4,6 +4,8 @@
 	required_pref = ROLE_OPERATIVE
 	initial_role = NUKE_OP
 	late_role = NUKE_OP
+	initroletype = /datum/role/nuclear_operative
+	roletype = /datum/role/nuclear_operative
 	desc = "The culmination of succesful NT traitors, who have managed to steal a nuclear device.\
 	Load up, grab the nuke, don't forget where you've parked, find the nuclear auth disk, and give them hell."
 	logo_state = "nuke-logo"
