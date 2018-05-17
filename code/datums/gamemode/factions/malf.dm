@@ -5,9 +5,10 @@
 	required_pref = ROLE_MALF
 	initial_role = MALF
 	late_role = MALF //There shouldn't really be any late roles for malfunction, but just in case we can corrupt an AI in the future, let's keep this
+	initroletype = /datum/role/malfAI
 	roletype = /datum/role/malfAI
 	logo_state = "malf-logo"
-	var/apcs
+	var/apcs = 0
 	var/AI_win_timeleft = 1800
 	var/malf_mode_declared //Boolean
 	var/station_captured //Boolean
@@ -17,6 +18,9 @@
 	var/icon/logo = icon('icons/mob/screen_spells.dmi', "malf_open")
 	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Free Silicon Hivemind</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
 	return header
+
+/datum/faction/malf/forgeObjectives()
+	AppendObjective(/datum/objective/nuclear)
 
 
 /datum/faction/malf/process()

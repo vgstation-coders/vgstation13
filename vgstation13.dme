@@ -306,7 +306,6 @@
 #include "code\datums\gamemode\objectives\minimize_casualties.dm"
 #include "code\datums\gamemode\objectives\nuclear.dm"
 #include "code\datums\gamemode\objectives\objective.dm"
-#include "code\datums\gamemode\objectives\protect_master.dm"
 #include "code\datums\gamemode\objectives\silence.dm"
 #include "code\datums\gamemode\objectives\survive.dm"
 #include "code\datums\gamemode\objectives\survive_silicon.dm"

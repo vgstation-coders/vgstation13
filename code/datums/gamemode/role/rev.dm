@@ -1,6 +1,7 @@
 /datum/role/revolutionary
 	name = REV
 	id = REV
+	restricted_jobs = list("Security Officer", "Warden", "Detective", "AI", "Cyborg","Mobile MMI","Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer", "Internal Affairs Agent")
 	logo_state = "rev-logo"
 
 /datum/role/revolutionary/Greet(var/greeting,var/custom)

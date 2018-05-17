@@ -193,6 +193,8 @@
 #define issilent(A) (A.silent || (ishuman(A) && (A:miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 //Macros for antags
 
+#define isfaction(A) (istype(A, /datum/faction))
+
 #define isvampire(H) (H.mind ? H.mind.GetRole(VAMPIRE) : FALSE)
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)

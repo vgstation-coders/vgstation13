@@ -64,16 +64,31 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/forgeObjectives()
 
 /datum/faction/proc/HandleNewMind(var/datum/mind/M) //Used on faction creation
-	var/newRole = new initroletype(M, src, initial_role)
-	if(!newRole)
-		WARNING("Role killed itself or was otherwise missing!")
+	for(var/datum/role/R in members)
+		if(R.antag == M)
+			WARNING("Mind was already a role in this faction")
+			return 0
+	if(M.GetRole(initial_role))
+		warning("Mind already had a role of [initial_role]!")
+		return 0
+	var/datum/role/newRole = new initroletype(src,null, initial_role)
+	if(!newRole.AssignToRole(M))
+		newRole.Drop()
 		return 0
 	members.Add(newRole)
 	return 1
 
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M)
-	var/datum/R = new roletype(M, src, late_role)
-	if(!R)
+	for(var/datum/role/R in members)
+		if(R.antag == M)
+			WARNING("Mind was already a role in this faction")
+			return 0
+	if(M.GetRole(late_role))
+		warning("Mind already had a role of [late_role]!")
+		return 0
+	var/datum/role/R = new roletype(fac = src, new_id = late_role)
+	if(!R.AssignToRole(M))
+		R.Drop()
 		return 0
 	members.Add(R)
 	return 1
@@ -239,6 +254,7 @@ var/list/factions_with_hud_icons = list()
 	desc = "A conglomeration of magically adept individuals, with no obvious heirachy, instead acting as equal individuals in the pursuit of magic-oriented endeavours.\
 	Their motivations for attacking seemingly peaceful enclaves or operations are as yet unknown, but they do so without respite or remorse.\
 	This has led to them being identified as enemies of humanity, and should be treated as such."
+	initroletype = /datum/role/wizard
 	roletype = /datum/role/wizard
 	logo_state = "wizard-logo"
 	hud_icons = list("wizard-logo","apprentice-logo")
@@ -262,6 +278,14 @@ var/list/factions_with_hud_icons = list()
 		equip_wizard(wwizard.antag.current)
 		name_wizard(wwizard.antag.current)
 
+
+/datum/faction/wizard/ragin
+	accept_latejoiners = TRUE
+	var/max_wizards
+
+/datum/faction/wizard/ragin/check_win()
+	if(members.len == max_roles)
+		return 1
 //________________________________________________
 
 #define ADD_REVOLUTIONARY_FAIL_IS_COMMAND -1
@@ -278,6 +302,7 @@ var/list/factions_with_hud_icons = list()
 	desc = "Viva!"
 	logo_state = "rev-logo"
 	initroletype = /datum/role/revolutionary/leader
+	roletype = /datum/role/revolutionary
 
 /datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)
 	if(M.assigned_role in command_positions)
@@ -303,8 +328,6 @@ var/list/factions_with_hud_icons = list()
 		var/datum/objective/target/assassinate/A = new(auto_target = FALSE)
 		if(A.set_target(head_mind))
 			AppendObjective(A)
-
-//____________________{"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Cult of Nar-Sie</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}____________________________
 
 /datum/faction/strike_team
 	name = "Custom Strike Team"//obviously this name is a placeholder getting replaced by the admin setting up the squad

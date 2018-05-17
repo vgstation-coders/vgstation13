@@ -152,7 +152,7 @@
 
 	if(antag)
 		RemoveFromRole(antag)
-	del(src)
+	qdel(src)
 
 // Scaling, should fuck with min/max players.
 // Return 1 on success, 0 on failure.
@@ -172,8 +172,11 @@
 				return 0
 
 	if(required_jobs.len>0)
-		if(!M.assigned_role in required_jobs)
+		if(!(M.assigned_role in required_jobs))
 			return 0
+
+	if(is_type_in_list(src, M.antag_roles)) //No double double agent agent
+		return 0
 	return 1
 
 // General sanity checks before assigning host.
@@ -212,14 +215,14 @@
 /datum/role/proc/ForgeObjectives()
 	return
 
-/datum/role/proc/AppendObjective(var/objective_type,var/duplicates=0, var/list/arguments = null)
+/datum/role/proc/AppendObjective(var/objective_type,var/duplicates=0)
 	if(!duplicates && locate(objective_type) in objectives)
 		return FALSE
 	var/datum/objective/O
-	if(arguments)
-		O = new objective_type(arguments)
+	if(istype(objective_type, /datum/objective)) //Passed an actual objective
+		O = objective_type
 	else
-		O = new objective_type()
+		O = new objective_type
 	if(O.PostAppend())
 		objectives.AddObjective(O, antag)
 		return TRUE
@@ -239,7 +242,7 @@
 	return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
 [name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
  - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
- - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>"}
+ - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a><br>"}
 
 /datum/role/proc/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -297,7 +300,7 @@
 		text += "<br/><font color='red'><B>\The [name] has failed.</B></font>"
 		feedback_add_details("[id]_success","FAIL")
 
-	to_chat(world, text)
+	return text
 
 /datum/role/proc/extraPanelButtons()
 	var/dat = ""
@@ -373,7 +376,7 @@
 "}
 */
 /datum/role/proc/GetScoreboard()
-	//If you've gotten here to find what the hell this proc is for, you've hit a dead end. We don't know either.
+	return Declare()
 
 // DO NOT OVERRIDE
 /datum/role/Topic(href, href_list)
