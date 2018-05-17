@@ -126,3 +126,17 @@
 	reagent_ids = list(CYANIDE)
 	volume = 10
 	recharge_time = 10
+
+/obj/item/weapon/reagent_containers/borghypo/biofoam
+	name = "biofoam injector"
+	desc = "A small device used to administer biofoam in the field."
+	icon_state = "biofoam1"
+	reagent_ids = list(BIOFOAM)
+	volume = 15
+	recharge_time = 30
+
+/obj/item/weapon/reagent_containers/borghypo/biofoam/update_icon()
+	if(reagents.total_volume > 0)
+		icon_state = "biofoam1"
+	else
+		icon_state = "biofoam0"

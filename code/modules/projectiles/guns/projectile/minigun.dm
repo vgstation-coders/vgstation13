@@ -138,3 +138,32 @@
 			icon_state = "beegun25"
 		else
 			icon_state = "beegun0"
+
+/obj/item/weapon/gun/gatling/cyborg
+	max_shells = 500
+	current_shells = 500
+	flags = null
+	var/deployed = FALSE
+	var/busy = FALSE
+
+/obj/item/weapon/gun/gatling/cyborg/can_discharge()
+	if(current_shells && deployed)
+		return TRUE
+
+/obj/item/weapon/gun/gatling/cyborg/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+	if(deployed)
+		Fire(A,user,params, "struggle" = struggle)
+		return
+	to_chat(user, "<span class='warning'>You must deploy \the [src] before you can fire it!</span>")
+
+/obj/item/weapon/gun/gatling/cyborg/attack_self(mob/user)
+	if(user.incapacitated() || !isturf(user.loc) || busy)
+		return
+	busy = TRUE
+	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	if(do_after(user, src, 20))
+		user.anchored = !user.anchored
+		deployed = !deployed
+		update_icon()
+		to_chat(src, "\The [src] is now <b>[deployed ? "" : "un"]deployed</b>.")
+	busy = FALSE

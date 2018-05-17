@@ -1458,14 +1458,26 @@
 //Syndicate subtype because putting this on new() is fucking retarded.
 /mob/living/silicon/robot/syndie
 	cell_type = /obj/item/weapon/cell/hyper
+	startup_sound = 'sound/voice/syndicate_intro.ogg'
 
 /mob/living/silicon/robot/syndie/New()
 	..()
-
 	UnlinkSelf()
+
 	laws = new /datum/ai_laws/syndicate_override()
-	pick_module("Syndicate")
 	install_upgrade(src, /obj/item/borg/upgrade/vtec)
+	install_upgrade(src, /obj/item/borg/upgrade/jetpack)
+
+/mob/living/silicon/robot/syndie/blitz/New()
+	..()
+
+	pick_module("Syndicate Blitzkrieg")
+
+/mob/living/silicon/robot/syndie/crisis/New()
+	..()
+
+	pick_module("Syndicate Crisis")
+	install_upgrade(src, /obj/item/borg/upgrade/medical/surgery)
 
 //Moving hugborgs to an easy-to-spawn subtype because they were as retarded as the syndie one.
 /mob/living/silicon/robot/hugborg

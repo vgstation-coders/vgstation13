@@ -1,15 +1,16 @@
 //Global list of all Cyborg/MoMMI modules.
 var/global/list/robot_modules = list(
-	"Standard"		= /obj/item/weapon/robot_module/standard,
-	"Service" 		= /obj/item/weapon/robot_module/butler,
-	"Supply" 		= /obj/item/weapon/robot_module/miner,
-	"Medical" 		= /obj/item/weapon/robot_module/medical,
-	"Security" 		= /obj/item/weapon/robot_module/security,
-	"Engineering"	= /obj/item/weapon/robot_module/engineering,
-	"Janitor" 		= /obj/item/weapon/robot_module/janitor,
-	"Combat" 		= /obj/item/weapon/robot_module/combat,
-	"Syndicate"		= /obj/item/weapon/robot_module/syndicate,
-	"TG17355"		= /obj/item/weapon/robot_module/tg17355
+	"Standard"				= /obj/item/weapon/robot_module/standard,
+	"Service" 				= /obj/item/weapon/robot_module/butler,
+	"Supply" 				= /obj/item/weapon/robot_module/miner,
+	"Medical" 				= /obj/item/weapon/robot_module/medical,
+	"Security" 				= /obj/item/weapon/robot_module/security,
+	"Engineering"			= /obj/item/weapon/robot_module/engineering,
+	"Janitor" 				= /obj/item/weapon/robot_module/janitor,
+	"Combat" 				= /obj/item/weapon/robot_module/combat,
+	"Syndicate Blitzkrieg"	= /obj/item/weapon/robot_module/syndicate_blitzkrieg,
+	"Syndicate Crisis"		= /obj/item/weapon/robot_module/syndicate_crisis,
+	"TG17355"				= /obj/item/weapon/robot_module/tg17355
     )
 
 var/global/list/mommi_modules = list(
@@ -52,12 +53,14 @@ var/global/list/mommi_modules = list(
 #define SILICON_MOBILITY_MODULE_SPEED_MODIFIER 0.75 //Silicon's speed var is multiplied by the mobility module modifier
 #define SILICON_VTEC_SPEED_BONUS 0.25 //But the VTEC Bonus is ADDED to their movement_speed_modifier
 
-//Bitflags for module quirks
-#define MODULE_CAN_BE_PUSHED 1
-#define MODULE_CAN_HANDLE_MEDICAL 2
-#define MODULE_CAN_HANDLE_CHEMS 4
-#define MODULE_CAN_HANDLE_FOOD 8
-#define MODULE_CAN_BUY 16
-#define MODULE_CLEAN_ON_MOVE 32
-#define MODULE_HAS_MAGPULSE 64
-#define MODULE_IS_THE_LAW 128
+//Module quirks
+#define MODULE_CAN_BE_PUSHED 1		//What says on the tin.
+#define MODULE_CAN_HANDLE_MEDICAL 2	//Can use medbay's machinery
+#define MODULE_CAN_HANDLE_CHEMS 4	//Can use chemistry dispensers
+#define MODULE_CAN_HANDLE_FOOD 8	//Can use microwaves and bartending machinery
+#define MODULE_CAN_BUY 16			//Can use the station
+#define MODULE_CLEAN_ON_MOVE 32		//Will clean everything under it while moving
+#define MODULE_HAS_MAGPULSE 64		//Module isn't pushed b ZAS nor can slip in space
+#define MODULE_IS_THE_LAW 128		//Module can use *law and *halt
+#define MODULE_IS_SYNDICATE 256		//A hacked/syndicate module
+#define MODULE_IS_DEFINITIVE 512	//Can't get a module reset

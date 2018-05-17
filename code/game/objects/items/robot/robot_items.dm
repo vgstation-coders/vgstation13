@@ -313,3 +313,20 @@ obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
 /obj/item/weapon/card/robot/security/New()
 	..()
 	desc += " This one is used to transmit security codes into deployable barriers, allowing the user to lock and unlock them."
+
+//Syndicate Module
+#define NEEDED_CHARGE_TO_RESTOCK_MAG 30
+
+/obj/item/weapon/gun/projectile/automatic/c20r/cyborg
+	var/charge = 0
+
+/obj/item/weapon/gun/projectile/automatic/c20r/cyborg/restock()
+	charge++
+	if(charge >= NEEDED_CHARGE_TO_RESTOCK_MAG && !stored_magazine) //takes about 60 seconds.
+		if(mag_type)
+			stored_magazine = new mag_type(src)
+			update_icon()
+			chamber_round()
+			charge = initial(charge)
+
+#undef NEEDED_CHARGE_TO_RESTOCK_MAG
