@@ -44,7 +44,6 @@
 	SetupFactions()
 	var/FactionSuccess = CreateFactions()
 	var/RolesSuccess = CreateRoles()
-	to_chat(world, "Factions loaded:([FactionSuccess]). Roles loaded: ([RolesSuccess])")
 	return FactionSuccess && RolesSuccess
 
 

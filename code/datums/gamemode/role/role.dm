@@ -164,7 +164,6 @@
 /datum/role/proc/CanBeAssigned(var/datum/mind/M)
 	if(restricted_jobs.len>0)
 		if(M.assigned_role in restricted_jobs)
-			to_chat(world, "[M.assigned_role] was in restricted jobs")
 			return 0
 
 	if(protected_antags.len>0)
@@ -198,7 +197,6 @@
 	if(special_role)
 		antag.special_role=special_role
 	if(disallow_job)
-		to_chat(world, "disallow job active")
 		antag.assigned_role="MODE"
 	return 1
 
