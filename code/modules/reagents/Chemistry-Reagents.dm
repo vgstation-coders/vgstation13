@@ -2996,7 +2996,7 @@
 	id = SPIRITBREAKER
 	description = "An extremely dangerous hallucinogen often used for torture. Extracted from the leaves of the rare Ambrosia Cruciatus plant."
 	reagent_state = LIQUID
-	color = "3B0805" //rgb: 59, 8, 5
+	color = "#3B0805" //rgb: 59, 8, 5
 	custom_metabolism = 0.05
 
 /datum/reagent/spiritbreaker/on_mob_life(var/mob/living/M)
