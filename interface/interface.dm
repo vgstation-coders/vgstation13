@@ -60,7 +60,6 @@ Hotkey-Mode: (hotkey-mode must be on)
 \tr = throw
 \tm = me
 \tt = say
-\to = OOC
 \tx = swap-hand
 \tz = activate held object (or y)
 \tf = cycle-intents-left
