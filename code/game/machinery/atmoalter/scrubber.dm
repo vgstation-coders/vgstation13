@@ -116,7 +116,7 @@
 
 	if(on)
 		var/datum/gas_mixture/environment = get_environment()
-		var/transfer_moles = min(1, volume_rate/environment.volume)*environment.total_moles()
+		var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles()
 
 		//Take a gas sample
 		var/datum/gas_mixture/removed = remove_sample(environment, transfer_moles)
