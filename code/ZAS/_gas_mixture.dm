@@ -403,8 +403,9 @@
 //Removes a volume of gas from the mixture and returns a gas_mixture containing the removed air with the given volume.
 /datum/gas_mixture/proc/remove_volume(removed_volume)
 	var/datum/gas_mixture/removed = remove_ratio(removed_volume/volume)
-	removed.volume = removed_volume
-	removed.update_values()
+	if(removed)
+		removed.volume = removed_volume
+		removed.update_values()
 	return removed
 
 
