@@ -4,3 +4,4 @@
 
 /datum/gamemode/wizard/ragin
 	name = "Ragin' Mages"
+	factions_allowed = list(/datum/faction/wizard/ragin)

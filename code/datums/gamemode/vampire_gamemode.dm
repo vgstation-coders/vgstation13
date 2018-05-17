@@ -1,38 +1,7 @@
 /datum/gamemode/vampire
 	minimum_player_count = 10
 	name = "Vampire"
-	factions_allowed = list(/datum/faction/vampire)
-
-	roles_allowed = 1 // Per factions
-
-	var/number_of_vamps
-
-/datum/gamemode/vampire/CreateFactions()
-	number_of_vamps = max(1, round(get_player_count()/10))
-	for (var/i = 1 to number_of_vamps)
-		. += CreateFaction(/datum/faction/vampire)
-
-/datum/gamemode/vampire/CreateRoles()
-	var/list/datum/role/vampire/vampires = list()
-	vampires = CreateNumOfRoles(/datum/role/vampire, number_of_vamps)
-	if (!vampires)
-		WARNING("Unable to create enough roles!")
-		return FALSE
-	for (var/i = 1 to number_of_vamps)
-		var/datum/faction/vampire/v_fac = factions[i]
-		if (istype(v_fac))
-			v_fac.addMaster(vampires[i])
-			v_fac.name = "Vampire force #[i]"
-	return vampires
-
-/datum/gamemode/vampire/createBasicRole(var/type_role)
-	for (var/datum/faction/F in factions)
-		if (!F.members.len) // First empty fac
-			return new type_role(fac = F)
-
-
-/datum/gamemode/vampire/PopulateFactions()
-	// Void - we do that in CreateRoles()
+	roles_allowed = list(/datum/role/vampire = 1)
 
 // -- Vampire powers
 

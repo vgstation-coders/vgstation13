@@ -42,16 +42,25 @@
 		TearDown()
 		return 0
 	SetupFactions()
-	return CreateFactions() && CreateRoles()
+	var/FactionSuccess = CreateFactions()
+	var/RolesSuccess = CreateRoles()
+	return FactionSuccess && RolesSuccess
 
 
 /*===FACTION RELATED STUFF===*/
 
-/datum/gamemode/proc/CreateFactions()
+/datum/gamemode/proc/CreateFactions(var/list/factions_to_process, var/populate_factions = TRUE)
+	if(factions_to_process == null)
+		factions_to_process = factions_allowed
 	var/pc = get_player_count() //right proc?
-	for(var/Fac in factions_allowed)
-		CreateFaction(Fac, pc)
-	return PopulateFactions()
+	for(var/Fac in factions_to_process)
+		if(islist(Fac))
+			var/list/L = Fac
+			CreateFactions(L, FALSE)
+		else
+			CreateFaction(Fac, pc)
+	if(populate_factions)
+		return PopulateFactions()
 
 /datum/gamemode/proc/CreateFaction(var/Fac, var/population, var/override = 0)
 	var/datum/faction/F = new Fac
@@ -60,6 +69,7 @@
 		factions_allowed -= F
 		return F
 	else
+		warning("Faction ([F]) could not set up properly with given population.")
 		qdel(F)
 		return null
 /*
@@ -83,8 +93,8 @@
 			if(!P.client.desires_role(F.required_pref) || jobban_isbanned(P, F.required_pref))
 				continue
 			if(!F.HandleNewMind(P.mind))
-				WARNING("[P.mind] failed [F] HandleNewMind!")
-				return 0
+				warning("[P.mind] failed [F] HandleNewMind!")
+				continue
 	return 1
 
 
@@ -95,42 +105,63 @@
 		return 1
 	for(var/role in roles_allowed)
 		if(isnum(roles_allowed[role]))
-			return CreateNumOfRoles(role, roles_allowed[role])
-		//else
-			//Whichever witchcraft we employ in the future to have it scale with the playercount
+			return CreateStrictNumOfRoles(role, roles_allowed[role])
+		else
+			CreateNumOfRoles(role, FilterAvailablePlayers(role))
+			return 1
 
+/datum/gamemode/proc/CreateNumOfRoles(var/datum/role/R, var/list/candidates)
+	if(!candidates || !candidates.len)
+		warning("ran out of available players to fill role [R]!")
+		return
+	for(var/mob/M in candidates)
+		CreateRole(R, M)
 
-/datum/gamemode/proc/CreateNumOfRoles(var/datum/role/R, var/num)
-	. = list()
-	var/list/available_players = get_ready_players()
-	for(var/mob/new_player/P in available_players)
-		if(!P.client || !P.mind)
-			available_players.Remove(P)
-			continue
-		if(!P.client.desires_role(initial(R.required_pref)) || jobban_isbanned(P, initial(R.required_pref)))
-			available_players.Remove(P)
-			continue
+/datum/gamemode/proc/CreateStrictNumOfRoles(var/datum/role/R, var/num)
+	var/number_of_roles = 0
+	var/list/available_players = FilterAvailablePlayers(R)
 	for(var/i = 0 to num)
 		if(!available_players.len)
-			WARNING("We've gone through all available players, there's nobody to make an antag!")
+			warning("ran out of available players to fill role [R]!")
 			break
 		shuffle(available_players)
-		var/datum/role/newRole = createBasicRole(R)
-		. += newRole // Get the roles we created
-		if(!newRole)
-			WARNING("Role killed itself or was otherwise missing!")
-			return 0
-
 		var/mob/new_player/P = pick(available_players)
 		available_players.Remove(P)
-		if(!newRole.AssignToRole(P.mind))
-			newRole.Drop()
+		if(!CreateRole(R, P))
 			i--
 			continue
+		number_of_roles++ // Get the roles we created
+	return number_of_roles
 
-/datum/gamemode/proc/createBasicRole(var/type_role)
+
+/datum/gamemode/proc/CreateBasicRole(var/type_role)
 	return new type_role
 
+/datum/gamemode/proc/FilterAvailablePlayers(var/datum/role/R, var/list/players_to_choose = get_ready_players())
+	for(var/mob/new_player/P in players_to_choose)
+		if(!P.client || !P.mind)
+			players_to_choose.Remove(P)
+			continue
+		if(!P.client.desires_role(initial(R.required_pref)) || jobban_isbanned(P, initial(R.required_pref)))
+			players_to_choose.Remove(P)
+			continue
+	if(!players_to_choose.len)
+		warning("No available players for [R]")
+	return players_to_choose
+
+/datum/gamemode/proc/CreateRole(var/datum/role/R, var/mob/P)
+	var/datum/role/newRole = CreateBasicRole(R)
+
+	if(!newRole)
+		warning("Role killed itself or was otherwise missing!")
+		return 0
+
+	if(!newRole.AssignToRole(P.mind))
+		warning("Role refused mind and dropped!")
+		newRole.Drop()
+		return 0
+
+	return 1
 
 /datum/gamemode/proc/latespawn(var/mob/mob) //Check factions, see if anyone wants a latejoiner
 	var/list/possible_factions = list()

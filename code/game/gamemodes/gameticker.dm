@@ -380,6 +380,7 @@ var/datum/controller/gameticker/ticker
 /datum/controller/gameticker/proc/equip_characters()
 	var/captainless=1
 	for(var/mob/living/carbon/human/player in player_list)
+		to_chat(world, "[player] has assigned_role [player.mind.assigned_role]")
 		if(player && player.mind && player.mind.assigned_role)
 			if(player.mind.assigned_role == "Captain")
 				captainless=0
