@@ -76,13 +76,13 @@ var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 		if(JUKE_SETTING)
 			J.access_unlocked = !J.access_unlocked
 
-/datum/wires/jukebox/UpdateCut(var/index, var/mended)
+/datum/wires/jukebox/UpdateCut(var/index, var/mended, var/mob/user)
 	var/obj/machinery/media/jukebox/J = holder
-	var/obj/I = usr.get_active_hand()
+	var/obj/I = user.get_active_hand()
 	switch(index)
 		if(JUKE_POWER_ONE,JUKE_POWER_TWO,JUKE_POWER_THREE)
 			J.power_change()
-			J.shock(usr, 50, get_conductivity(I))
+			J.shock(user, 50, get_conductivity(I))
 			if(freq_config_data[index]==0)
 				freq_config_data[index] = 14
 			else
@@ -94,7 +94,7 @@ var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 			else
 				J.allowed_modes = loopModeNames.Copy()
 		if(JUKE_TRANSMIT)
-			J.shock(usr, 50, get_conductivity(I))
+			J.shock(user, 50, get_conductivity(I))
 			if(IsIndexCut(JUKE_TRANSMIT))
 				J.machine_flags &= !MULTITOOL_MENU
 			else
@@ -105,4 +105,4 @@ var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 					return
 			J.short()
 		if(JUKE_SETTING)
-			J.shock(usr, 50, get_conductivity(I))
+			J.shock(user, 50, get_conductivity(I))

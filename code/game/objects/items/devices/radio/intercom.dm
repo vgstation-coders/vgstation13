@@ -106,7 +106,7 @@
 					update_icon()
 					processing_objects.Add(src)
 					for(var/i, i<= 5, i++)
-						wires.UpdateCut(i,1)
+						wires.UpdateCut(i,1, user)
 				return 1
 		if(1)
 			if(iscablecoil(W))
