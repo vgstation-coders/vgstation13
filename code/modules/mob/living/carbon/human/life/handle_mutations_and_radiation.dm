@@ -207,7 +207,7 @@
 			if(prob(10*minor_rad_multiplier))
 				//Blindness
 				var/datum/organ/internal/eyes/E = internal_organs_by_name["eyes"]
-				if(!E.robotic && !(sdisabilities & BLIND || disabilities & NEARSIGHTED))
+				if(E && !E.robotic && !(sdisabilities & BLIND || disabilities & NEARSIGHTED))
 					to_chat(src, "<span class = 'danger'>[pick("Your eyesight starts to fade!","Your eyes go cloudy!","Are you going blind?")]</span>")
 					E.take_damage(2.5, TRUE)
 					eye_blurry = min(eye_blurry+1.5,50)
