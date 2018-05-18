@@ -171,13 +171,9 @@
 		return
 
 	else if("set_freq" in href_list)
-		new_frequency=frequency
-		if(href_list["set_freq"]!="-1")
-			new_frequency = text2num(href_list["set_freq"])
-		else
-			new_frequency = input(usr, "Set a new frequency (1200-1600 kHz).", src, frequency) as null|num
-			new_frequency = sanitize_frequency(new_frequency, maxf)
-			set_frequency(new_frequency)
+		new_frequency = input(usr, "Set a new frequency (1200-1600 kHz).", src, frequency) as null|num
+		new_frequency = sanitize_frequency(new_frequency, maxf)
+		set_frequency(new_frequency)
 		if (check_traitor_uplink(frequency))
 			return
 
