@@ -302,7 +302,7 @@
 	desc = "Used to give a medical cyborg a organ gripper."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper-medical"
-	required_module = list(/obj/item/weapon/robot_module/medical, /obj/item/weapon/robot_module/syndicate_crisis)
+	required_module = list(/obj/item/weapon/robot_module/medical)
 	modules_to_add = list(/obj/item/weapon/gripper/organ)
 
 /obj/item/borg/upgrade/hydro

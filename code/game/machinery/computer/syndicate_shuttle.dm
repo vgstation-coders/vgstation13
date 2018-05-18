@@ -47,7 +47,13 @@
 	if(!..())
 		return attack_hand(user)
 
-/obj/machinery/computer/syndicate_station/attack_ai(mob/user as mob)
+/obj/machinery/computer/syndicate_station/attack_ai(mob/user)
+	if(isrobot(user))
+		var/mob/living/silicon/robot/R = user
+		if(!(R.module && (R.module.quirk_flags & MODULE_IS_SYNDICATE)))
+			to_chat(R, "<span class='danger'>ALERT: Foreign software detected.</span>")
+			to_chat(R, "<span class='notice'>Your security protocols prevent you from interfacing with [src].</span>")
+			return
 	src.add_hiddenprint(user)
 	return attack_hand(user)
 

@@ -314,7 +314,7 @@ obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
 	..()
 	desc += " This one is used to transmit security codes into deployable barriers, allowing the user to lock and unlock them."
 
-//Syndicate Module
+//Syndicate Blitzkrieg
 #define NEEDED_CHARGE_TO_RESTOCK_MAG 30
 
 /obj/item/weapon/gun/projectile/automatic/c20r/cyborg
@@ -330,3 +330,86 @@ obj/item/borg/stun/attack(mob/M as mob, mob/living/silicon/robot/user as mob)
 			charge = initial(charge)
 
 #undef NEEDED_CHARGE_TO_RESTOCK_MAG
+
+/obj/item/weapon/gun/gatling/cyborg
+	name = "portable gun turret"
+	icon = 'icons/obj/turrets.dmi'
+	icon_state = "gun_turret"
+	max_shells = 500
+	current_shells = 500
+	flags = null
+	var/deployed = FALSE
+	var/busy = FALSE
+
+/obj/item/weapon/gun/gatling/cyborg/can_discharge()
+	if(current_shells && deployed)
+		return TRUE
+
+/obj/item/weapon/gun/gatling/cyborg/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+	if(deployed)
+		Fire(A,user,params, "struggle" = struggle)
+		return
+	to_chat(user, "<span class='warning'>You must deploy \the [src] before you can fire it!</span>")
+
+/obj/item/weapon/gun/gatling/cyborg/attack_self(mob/user)
+	if(user.incapacitated() || !isturf(user.loc) || busy)
+		return
+	update_deploy(user)
+	
+
+/obj/item/weapon/gun/gatling/cyborg/dropped(mob/user)
+	update_deploy(user)
+
+/obj/item/weapon/gun/gatling/cyborg/proc/update_deploy(mob/user)
+	var/turf/T = get_turf(user)
+	if(!T) //We can't deploy it with no turf under us, but we somehow stop having a turf under us for some reason we can still undeploy it.
+		if(!deployed)
+			to_chat(user, "<span class='warning'>You can't deploy \the [name] here!</span>")
+			return
+		actually_deploy(user)
+		return
+	busy = TRUE
+	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	if(do_after(user, src, 5 SECONDS))
+		actually_deploy(user)
+	busy = FALSE
+
+/obj/item/weapon/gun/gatling/cyborg/proc/actually_deploy(mob/user)
+	user.anchored = !user.anchored
+	deployed = !deployed
+	to_chat(user, "\The [name] is now <b>[deployed ? "" : "un"]deployed</b>.")
+
+//Syndie Crisis
+/obj/item/weapon/implanter/cyborg/syndie_eimplanter
+	imp_type = /obj/item/weapon/implant/explosive/nuclear
+
+/obj/item/weapon/pinpointer/syndicate_crisis
+	name = "syndicate pinpointer"
+	desc = "An integrated tracking device, jury-rigged to search for living Syndicate operatives."
+	watches_nuke = FALSE
+
+/obj/item/weapon/pinpointer/syndicate_crisis/process()
+	point_at(get_closest_op())
+
+/obj/item/weapon/pinpointer/syndicate_crisis/attack_self()
+	if(!active)
+		active = TRUE
+		process()
+		fast_objects += src
+		to_chat(usr,"<span class='notice'>You activate the pinpointer</span>")
+	else
+		active = FALSE
+		fast_objects -= src
+		icon_state = "pinoff"
+		to_chat(usr,"<span class='notice'>You deactivate the pinpointer</span>")
+
+/obj/item/weapon/pinpointer/syndicate_crisis/proc/get_closest_op()
+	var/list/possible_targets = list()
+	var/turf/here = get_turf(src)
+	if(ticker.mode.syndicates.len)
+		for(var/datum/mind/N in ticker.mode.syndicates)
+			var/mob/M = N.current
+			if(M && !M.isDead())
+				possible_targets |= M
+	var/mob/living/closest_operative = get_closest_atom(/mob/living/carbon/human, possible_targets, here)
+	return closest_operative

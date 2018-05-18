@@ -128,8 +128,7 @@
 	recharge_time = 10
 
 /obj/item/weapon/reagent_containers/borghypo/biofoam
-	name = "biofoam injector"
-	desc = "A small device used to administer biofoam in the field."
+	name = "biofoam hypospray"
 	icon_state = "biofoam1"
 	reagent_ids = list(BIOFOAM)
 	volume = 15
@@ -140,3 +139,11 @@
 		icon_state = "biofoam1"
 	else
 		icon_state = "biofoam0"
+
+/obj/item/weapon/reagent_containers/borghypo/crisis
+	name = "crisis hypospray"
+	desc = "A syndicate-exclusive emergency hypospray filled with potent stimulants and painkillers."
+	icon_state = "borghypo_s"
+	reagent_ids = list(TRICORDRAZINE, INAPROVALINE, COCAINE, OXYCODONE, TRAMADOL)
+	volume = 10
+	amount_per_transfer_from_this = 10

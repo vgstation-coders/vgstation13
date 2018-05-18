@@ -46,6 +46,12 @@ var/global/vox_shuttle_location
 		return attack_hand(user)
 
 /obj/machinery/computer/vox_station/attack_ai(mob/user as mob)
+	if(isrobot(user))
+		var/mob/living/silicon/robot/R = user
+		if(!(R.module && (R.module.quirk_flags & MODULE_IS_SYNDICATE)))
+			to_chat(R, "<span class='danger'>ALERT: Foreign software detected.</span>")
+			to_chat(R, "<span class='notice'>Your security protocols prevent you from interfacing with [src].</span>")
+			return
 	src.add_hiddenprint(user)
 	return attack_hand(user)
 

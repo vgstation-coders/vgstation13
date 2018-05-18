@@ -298,6 +298,16 @@
 	circuit = /obj/item/weapon/circuitboard/syndicatedoor
 	light_color = null
 
+/obj/machinery/computer/pod/old/syndicate/attack_ai(mob/user)
+	if(isrobot(user))
+		var/mob/living/silicon/robot/R = user
+		if(!(R.module && (R.module.quirk_flags & MODULE_IS_SYNDICATE)))
+			to_chat(R, "<span class='danger'>ALERT: Foreign software detected.</span>")
+			to_chat(R, "<span class='notice'>Your security protocols prevent you from interfacing with [src].</span>")
+			return
+	src.add_hiddenprint(user)
+	return attack_hand(user)
+
 /obj/machinery/computer/pod/old/syndicate/attack_hand(var/mob/user as mob)
 	if(!allowed(user))
 		to_chat(user, "<span class='warning'>Access Denied.</span>")

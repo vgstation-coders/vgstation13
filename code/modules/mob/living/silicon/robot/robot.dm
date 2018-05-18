@@ -1457,6 +1457,7 @@
 
 //Syndicate subtype because putting this on new() is fucking retarded.
 /mob/living/silicon/robot/syndie
+	req_access = list(access_syndicate)
 	cell_type = /obj/item/weapon/cell/hyper
 	startup_sound = 'sound/voice/syndicate_intro.ogg'
 

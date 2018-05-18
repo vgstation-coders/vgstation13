@@ -518,7 +518,7 @@
 	networks = list(CAMERANET_NUKE)
 	radio_key = /obj/item/device/encryptionkey/syndicate
 	sprites = list(
-		"Droid - 'Rottweiler'" = "rottweiler-combat"
+		"Motile" = "motile-combat"
 		)
 	speed_modifier = CYBORG_SYNDICATE_SPEED_MODIFIER
 
@@ -527,7 +527,7 @@
 
 	modules += new /obj/item/weapon/crowbar(src)
 	modules += new /obj/item/weapon/gun/projectile/automatic/c20r/cyborg(src)
-	modules += new /obj/item/weapon/melee/energy/hfmachete(src)
+	modules += new /obj/item/weapon/melee/energy/hfmachete(src) //Placeholder
 	modules += new /obj/item/weapon/pinpointer/nukeop(src)
 	modules += new /obj/item/weapon/card/emag(src)
 	modules += new /obj/item/weapon/wrench(src) //This thing supposed to be a hacked and modded combat cyborg, is it really going to be stopped by a chair or table?
@@ -558,9 +558,11 @@
 	modules += new /obj/item/weapon/pinpointer/syndicate_crisis(src)
 	modules += new /obj/item/device/healthanalyzer(src)
 	modules += new /obj/item/device/mass_spectrometer/adv(src)
-	modules += new /obj/item/weapon/inflatable_dispenser(src)
+	modules += new /obj/item/weapon/revivalprod(src)
+	modules += new /obj/item/weapon/reagent_containers/borghypo/crisis(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/biofoam(src)
-	emag = new /obj/item/weapon/gun/energy/pulse_rifle/destroyer(src) //Placeholder
+	modules += new /obj/item/weapon/inflatable_dispenser(src)
+	emag = new /obj/item/weapon/implanter/cyborg/syndie_eimplanter(src)
 
 	sensor_augs = list("Thermal", "Medical", "Disable")
 
