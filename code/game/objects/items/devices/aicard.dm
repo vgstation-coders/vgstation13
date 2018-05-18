@@ -135,3 +135,13 @@
 		if(3.0)
 			if(prob(25))
 				qdel(src)
+
+/obj/item/device/aicard/Destroy()
+	for(var/mob/living/M in src)
+		if(!isAI(M) && loc) //I don't know how this happened but you never know
+			M.forceMove(loc)
+		else
+			M.death(1)
+			M.ghostize()
+			qdel(M)
+	..()
