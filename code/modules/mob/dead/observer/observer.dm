@@ -1013,3 +1013,13 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	var/mob/M = get_top_transmogrification()
 	return (M && M.client && can_reenter_corpse)
 
+/mob/dead/observer/verb/pai_signup()
+	set name = "Sign up as pAI"
+	set category = "Ghost"
+	set desc = "Create and submit your pAI personality"
+
+	if(!paiController.check_recruit(src))
+		to_chat(src, "<span class='warning'>Not available. You may have been pAI-banned.</span>")
+		return
+
+	paiController.recruitWindow(src)
