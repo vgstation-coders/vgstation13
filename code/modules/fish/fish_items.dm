@@ -84,7 +84,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 /obj/item/weapon/reagent_containers/food/snacks/shrimp/New()
 	..()
 	desc = pick("Anyway, like I was sayin', shrimp is the fruit of the sea.", "You can barbecue it, boil it, broil it, bake it, saute it.")
-	reagents.add_reagent("NUTRIMENT", 1)
+	reagents.add_reagent(NUTRIMENT, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/feederfish
 	name = "feeder fish"
@@ -96,7 +96,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/reagent_containers/food/snacks/feederfish/New()
 	..()
-	reagents.add_reagent("NUTRIMENT", 1)
+	reagents.add_reagent(NUTRIMENT, 1)
 
 /obj/item/weapon/fish
 	name = "fish"
