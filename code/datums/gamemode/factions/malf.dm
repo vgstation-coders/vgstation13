@@ -13,6 +13,7 @@
 	var/malf_mode_declared //Boolean
 	var/station_captured //Boolean
 	var/to_nuke_or_not_to_nuke //Boolean
+	var/malf_win
 
 /datum/faction/malf/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/mob/screen_spells.dmi', "malf_open")
@@ -27,8 +28,13 @@
 	if(apcs >= 3 && malf_mode_declared && can_malf_ai_takeover())
 		AI_win_timeleft -= ((apcs / 6) * SSticker.getLastTickerTimeDuration()) //Victory timer de-increments based on how many APCs are hacked.
 
-	if(AI_win_timeleft <= 0)
-		check_win()
+	if (AI_win_timeleft <= 0 && !station_captured)
+		station_captured = 1
+		to_nuke_or_not_to_nuke = 1
+		capture_the_station()
+		spawn (600)
+			to_nuke_or_not_to_nuke = 0
+			malf_win = 1
 
 
 /datum/faction/malf/proc/can_malf_ai_takeover()
@@ -39,9 +45,7 @@
 	return FALSE
 
 /datum/faction/malf/check_win()
-	if (AI_win_timeleft <= 0 && !station_captured)
-		station_captured = 1
-		capture_the_station()
+	if(malf_win)
 		return 1
 	else
 		return 0
@@ -53,12 +57,10 @@
 
 	stat_collection.malf_won = 1
 
-	to_nuke_or_not_to_nuke = 1
 	for(var/datum/role/malfAI in members)
 		to_chat(malfAI.antag.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
 You may decide to blow up the station. You have 60 seconds to choose.<br>
 You should now be able to use your Explode spell to interface with the nuclear fission device.</span>"})
 		malfAI.antag.current.add_spell(new /spell/aoe_turf/ai_win, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
-	spawn (600)
-		to_nuke_or_not_to_nuke = 0
+
 	return
