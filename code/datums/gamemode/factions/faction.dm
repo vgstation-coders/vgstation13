@@ -91,6 +91,7 @@ var/list/factions_with_hud_icons = list()
 		R.Drop()
 		return 0
 	members.Add(R)
+	R.OnPostSetup()
 	return 1
 
 /datum/faction/proc/HandleRecruitedRole(var/datum/role/R)
