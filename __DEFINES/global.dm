@@ -370,11 +370,12 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/asteroid/hivelordbrood, // They aren't supposed to be playable.
 		/mob/living/simple_animal/hologram, // Can't live outside the holodeck.
 		/mob/living/slime_pile, // They are dead.
-		/mob/living/adamantine_dust // Ditto
+		/mob/living/adamantine_dust, // Ditto
+		/mob/living/simple_animal/hostile/mining_drone //This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
 		)
 
 //Boss monster list
-var/list/boss_mobs = existing_typesof(
+var/list/boss_mobs = list(
 	/mob/living/simple_animal/scp_173,						// Just a statue.
 	/mob/living/simple_animal/hostile/hivebot/tele,			// Hivebot spawner WIP thing
 	/mob/living/simple_animal/hostile/wendigo,				// Stupid strong evolving creature things that scream for help
