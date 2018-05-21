@@ -105,7 +105,7 @@
 	set_up_access()
 	if(!M || !istype(M))
 		return 0 // I guess?  This seems to happen when AIs use something.
-	if(M.hasFullAccess()) // AI, robots, adminghosts, etc.
+	if(M.hasFullAccess()) // AI, adminghosts, etc.
 		return 1
 	var/list/ACL = M.GetAccess()
 	return can_access(ACL,req_access,req_one_access)

@@ -539,12 +539,12 @@
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
-	modules += new /obj/item/weapon/gun/projectile/automatic/c20r/cyborg(src)
-	modules += new /obj/item/weapon/melee/energy/hfmachete(src) //Placeholder
+	modules += new /obj/item/weapon/gun/projectile/automatic/c20r(src)
+	modules += new /obj/item/robot_rack/ammo(src) //Placeholder
 	modules += new /obj/item/weapon/pinpointer/nukeop(src)
 	modules += new /obj/item/weapon/card/emag(src)
 	modules += new /obj/item/weapon/wrench(src) //This thing supposed to be a hacked and modded combat cyborg, is it really going to be stopped by a chair or table?
-	emag = new /obj/item/weapon/gun/gatling/cyborg(src)
+//	emag = new /obj/item/weapon/gun/gatling/cyborg(src)
 
 	sensor_augs = list("Thermal", "Light Amplification", "Disable")
 
@@ -553,7 +553,7 @@
 /obj/item/weapon/robot_module/syndicate/crisis
 	name = "syndicate crisis robot module"
 	sprites = list(
-		"Droid" = "toilet-syndie"
+		"Droid" = "toilet-syndie" //Placeholder
 		)
 
 /obj/item/weapon/robot_module/syndicate/crisis/New()
@@ -572,7 +572,7 @@
 	modules += new /obj/item/weapon/reagent_containers/borghypo/crisis(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/biofoam(src)
 	modules += new /obj/item/weapon/inflatable_dispenser(src)
-	emag = new /obj/item/weapon/implanter/cyborg/syndie_eimplanter(src)
+//	emag = new /obj/item/weapon/implanter/cyborg/syndie_eimplanter(src) //Placeholder
 
 	sensor_augs = list("Thermal", "Medical", "Disable")
 
