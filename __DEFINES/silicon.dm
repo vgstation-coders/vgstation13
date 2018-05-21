@@ -1,23 +1,53 @@
+//Cyborg modules
+#define STANDARD_MODULE "Standard"
+#define SERVICE_MODULE "Service"
+#define SUPPLY_MODULE "Supply"
+#define MEDICAL_MODULE "Medical"
+#define SECURITY_MODULE "Security"
+#define ENGINEERING_MODULE "Engineering"
+#define JANITOR_MODULE "Janitor"
+#define COMBAT_MODULE "Combat"
+#define SYNDIE_BLITZ_MODULE "Syndicate Blitzkrieg"
+#define SYNDIE_CRISIS_MODULE "Syndicate Crisis"
+#define HUG_MODULE "TG17355"
+
+//MoMMI modules
+#define NANOTRASEN_MOMMI "Nanotrasen"
+#define SOVIET_MOMMI "Soviet"
+#define GRAVEKEEPER_MOMMI "Gravekeeper"
+
 //Global list of all Cyborg/MoMMI modules.
 var/global/list/robot_modules = list(
-	"Standard"				= /obj/item/weapon/robot_module/standard,
-	"Service" 				= /obj/item/weapon/robot_module/butler,
-	"Supply" 				= /obj/item/weapon/robot_module/miner,
-	"Medical" 				= /obj/item/weapon/robot_module/medical,
-	"Security" 				= /obj/item/weapon/robot_module/security,
-	"Engineering"			= /obj/item/weapon/robot_module/engineering,
-	"Janitor" 				= /obj/item/weapon/robot_module/janitor,
-	"Combat" 				= /obj/item/weapon/robot_module/combat,
-	"Syndicate Blitzkrieg"	= /obj/item/weapon/robot_module/syndicate_blitzkrieg,
-	"Syndicate Crisis"		= /obj/item/weapon/robot_module/syndicate_crisis,
-	"TG17355"				= /obj/item/weapon/robot_module/tg17355
+	STANDARD_MODULE			= /obj/item/weapon/robot_module/standard,
+	SERVICE_MODULE			= /obj/item/weapon/robot_module/butler,
+	SUPPLY_MODULE 			= /obj/item/weapon/robot_module/miner,
+	MEDICAL_MODULE			= /obj/item/weapon/robot_module/medical,
+	SECURITY_MODULE			= /obj/item/weapon/robot_module/security,
+	ENGINEERING_MODULE		= /obj/item/weapon/robot_module/engineering,
+	JANITOR_MODULE			= /obj/item/weapon/robot_module/janitor,
+	COMBAT_MODULE 			= /obj/item/weapon/robot_module/combat,
+	SYNDIE_BLITZ_MODULE		= /obj/item/weapon/robot_module/syndicate/blitzkrieg,
+	SYNDIE_CRISIS_MODULE	= /obj/item/weapon/robot_module/syndicate/crisis,
+	HUG_MODULE				= /obj/item/weapon/robot_module/tg17355
     )
 
 var/global/list/mommi_modules = list(
-	"Nanotrasen"    = /obj/item/weapon/robot_module/mommi/nt,
-	"Soviet" 	    = /obj/item/weapon/robot_module/mommi/soviet,
-	"Gravekeeper"	= /obj/item/weapon/robot_module/mommi/cogspider
+	NANOTRASEN_MOMMI   		= /obj/item/weapon/robot_module/mommi/nt,
+	SOVIET_MOMMI 	    	= /obj/item/weapon/robot_module/mommi/soviet,
+	GRAVEKEEPER_MOMMI		= /obj/item/weapon/robot_module/mommi/cogspider
 	)
+
+//Module quirks
+#define MODULE_CAN_BE_PUSHED 1		//What says on the tin.
+#define MODULE_CAN_HANDLE_MEDICAL 2	//Can use medbay's machinery
+#define MODULE_CAN_HANDLE_CHEMS 4	//Can use chemistry dispensers
+#define MODULE_CAN_HANDLE_FOOD 8	//Can use microwaves and bartending machinery
+#define MODULE_CAN_BUY 16			//Can use the station
+#define MODULE_CLEAN_ON_MOVE 32		//Will clean everything under it while moving
+#define MODULE_HAS_MAGPULSE 64		//Module isn't pushed b ZAS nor can slip in space
+#define MODULE_IS_THE_LAW 128		//Module can use *law and *halt
+#define MODULE_IS_SYNDICATE 256		//A hacked/syndicate module
+#define MODULE_IS_DEFINITIVE 512	//Can't get a module reset
 
 // Cyborgs & MoMMI defines
 #define CYBORG_STARTING_TONER 40
@@ -52,15 +82,3 @@ var/global/list/mommi_modules = list(
 
 #define SILICON_MOBILITY_MODULE_SPEED_MODIFIER 0.75 //Silicon's speed var is multiplied by the mobility module modifier
 #define SILICON_VTEC_SPEED_BONUS 0.25 //But the VTEC Bonus is ADDED to their movement_speed_modifier
-
-//Module quirks
-#define MODULE_CAN_BE_PUSHED 1		//What says on the tin.
-#define MODULE_CAN_HANDLE_MEDICAL 2	//Can use medbay's machinery
-#define MODULE_CAN_HANDLE_CHEMS 4	//Can use chemistry dispensers
-#define MODULE_CAN_HANDLE_FOOD 8	//Can use microwaves and bartending machinery
-#define MODULE_CAN_BUY 16			//Can use the station
-#define MODULE_CLEAN_ON_MOVE 32		//Will clean everything under it while moving
-#define MODULE_HAS_MAGPULSE 64		//Module isn't pushed b ZAS nor can slip in space
-#define MODULE_IS_THE_LAW 128		//Module can use *law and *halt
-#define MODULE_IS_SYNDICATE 256		//A hacked/syndicate module
-#define MODULE_IS_DEFINITIVE 512	//Can't get a module reset

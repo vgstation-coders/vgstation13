@@ -20,7 +20,7 @@
   return TRUE
 
 /mob/living/silicon/robot/mommi/soviet/New()
-  pick_module("Soviet")
+  pick_module(SOVIET_MOMMI)
   ..()
   var/obj/item/clothing/head/ushanka/soviet_hat = new /obj/item/clothing/head/ushanka(src)
   equip_to_slot(soviet_hat, slot_head, TRUE)

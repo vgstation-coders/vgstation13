@@ -1442,16 +1442,23 @@
 	new_upgrade.attempt_action(src, user, TRUE)
 	qdel(new_upgrade)
 
+/mob/living/silicon/robot/GetAccess()
+	if(module)
+		return module.access
+	return //Pick a module you lil shit.
+
+/mob/living/silicon/robot/hasFullAccess()
+	return FALSE
+
 //Combat module debug subtype.
 /mob/living/silicon/robot/debug_droideka
 	cell_type = /obj/item/weapon/cell/hyper
 
 /mob/living/silicon/robot/debug_droideka/New()
 	..()
-
 	UnlinkSelf()
 	laws = new /datum/ai_laws/ntmov()
-	pick_module("Combat")
+	pick_module(COMBAT_MODULE)
 	set_module_sprites(list("Droid" = "droid-combat"))
 	install_upgrade(src, /obj/item/borg/upgrade/vtec)
 
@@ -1464,21 +1471,17 @@
 /mob/living/silicon/robot/syndie/New()
 	..()
 	UnlinkSelf()
-
 	laws = new /datum/ai_laws/syndicate_override()
 	install_upgrade(src, /obj/item/borg/upgrade/vtec)
 	install_upgrade(src, /obj/item/borg/upgrade/jetpack)
 
 /mob/living/silicon/robot/syndie/blitz/New()
 	..()
-
-	pick_module("Syndicate Blitzkrieg")
+	pick_module(SYNDIE_BLITZ_MODULE)
 
 /mob/living/silicon/robot/syndie/crisis/New()
 	..()
-
-	pick_module("Syndicate Crisis")
-	install_upgrade(src, /obj/item/borg/upgrade/medical/surgery)
+	pick_module(SYNDIE_CRISIS_MODULE)
 
 //Moving hugborgs to an easy-to-spawn subtype because they were as retarded as the syndie one.
 /mob/living/silicon/robot/hugborg
@@ -1486,11 +1489,9 @@
 
 /mob/living/silicon/robot/hugborg/New()
 	..()
-
 	UnlinkSelf()
 	laws = new /datum/ai_laws/asimov()
-
-	pick_module("TG17355")
+	pick_module(HUG_MODULE)
 	set_module_sprites(list("Peacekeeper" = "peaceborg"))
 
 /mob/living/silicon/robot/hugborg/clown/New()

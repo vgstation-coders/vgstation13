@@ -179,12 +179,6 @@ var/syndicate_elite_shuttle_timeleft = 0
 		return 1
 
 /obj/machinery/computer/syndicate_elite_shuttle/attack_ai(var/mob/user as mob)
-	if(isrobot(user))
-		var/mob/living/silicon/robot/R = user
-		if(!(R.module && (R.module.quirk_flags & MODULE_IS_SYNDICATE)))
-			to_chat(R, "<span class='danger'>ALERT: Foreign software detected.</span>")
-			to_chat(R, "<span class='notice'>Your security protocols prevent you from interfacing with [src].</span>")
-			return
 	src.add_hiddenprint(user)
 	return attack_hand(user)
 

@@ -37,6 +37,9 @@
 	var/list/respawnables
 	var/respawnables_max_amount = 0
 
+	//Access
+	var/list/access = list()
+
 /obj/item/weapon/robot_module/Destroy()
 	if(istype(loc, /mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = loc
@@ -88,6 +91,7 @@
 	AddCameraNetworks(R)
 	AddEncryptionKey(R)
 	ApplyStatusFlags(R)
+	access = GetModuleAccess()
 
 /obj/item/weapon/robot_module/proc/AddDefaultModules()
 	modules += new /obj/item/device/flashlight(src)
@@ -174,6 +178,9 @@
 	for(var/language_name in added_languages)
 		R.remove_language(language_name, TRUE) //We remove the ability to speak but keep the ability to understand.
 	added_languages.Cut()
+
+/obj/item/weapon/robot_module/proc/GetModuleAccess()
+	return get_all_accesses()
 
 //Modules
 /obj/item/weapon/robot_module/standard
@@ -511,18 +518,24 @@
 
 	fix_modules()
 
-/obj/item/weapon/robot_module/syndicate_blitzkrieg
-	name = "syndicate blitzkrieg robot module"
+/obj/item/weapon/robot_module/syndicate
+	name = "syndicate robot module"
 	module_holder = "malf"
-	quirk_flags = MODULE_IS_SYNDICATE | MODULE_HAS_MAGPULSE | MODULE_IS_DEFINITIVE
+	quirk_flags = MODULE_IS_SYNDICATE | MODULE_IS_DEFINITIVE
 	networks = list(CAMERANET_NUKE)
 	radio_key = /obj/item/device/encryptionkey/syndicate
-	sprites = list(
-		"Motile" = "motile-combat"
-		)
 	speed_modifier = CYBORG_SYNDICATE_SPEED_MODIFIER
 
-/obj/item/weapon/robot_module/syndicate_blitzkrieg/New()
+/obj/item/weapon/robot_module/syndicate/GetModuleAccess()
+	return get_all_syndicate_access()
+
+/obj/item/weapon/robot_module/syndicate/blitzkrieg
+	name = "syndicate blitzkrieg robot module"
+	sprites = list(
+		"Motile" = "motile-syndie"
+		)
+
+/obj/item/weapon/robot_module/syndicate/blitzkrieg/New()
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
@@ -537,19 +550,16 @@
 
 	fix_modules()
 
-/obj/item/weapon/robot_module/syndicate_crisis
+/obj/item/weapon/robot_module/syndicate/crisis
 	name = "syndicate crisis robot module"
-	module_holder = "malf"
-	quirk_flags = MODULE_IS_SYNDICATE | MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS | MODULE_IS_DEFINITIVE
-	networks = list(CAMERANET_NUKE)
-	radio_key = /obj/item/device/encryptionkey/syndicate
 	sprites = list(
-		"Droid - 'Rottweiler'" = "rottweiler-combat"
+		"Droid" = "toilet-syndie"
 		)
-	speed_modifier = CYBORG_SYNDICATE_SPEED_MODIFIER
 
-/obj/item/weapon/robot_module/syndicate_crisis/New()
+/obj/item/weapon/robot_module/syndicate/crisis/New()
 	..()
+
+	quirk_flags |= MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS
 
 	modules += new /obj/item/weapon/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)

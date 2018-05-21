@@ -70,7 +70,7 @@
 	name = "medical cyborg MK-2 upgrade board"
 	desc = "Used to give a medical cyborg advanced care tools and upgrade their chemistry gripper to be able to handle pills and pill bottles."
 	icon_state = "cyborg_upgrade"
-	required_module = list(/obj/item/weapon/robot_module/medical, /obj/item/weapon/robot_module/syndicate_crisis)
+	required_module = list(/obj/item/weapon/robot_module/medical, /obj/item/weapon/robot_module/syndicate/crisis)
 	modules_to_add = list(/obj/item/weapon/melee/defibrillator,/obj/item/weapon/reagent_containers/borghypo/upgraded)
 
 /obj/item/borg/upgrade/medical/surgery/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
@@ -225,7 +225,7 @@
 	name = "cyborg jetpack module board"
 	desc = "A carbon dioxide jetpack suitable for low-gravity operations."
 	icon_state = "cyborg_upgrade3"
-	required_module = list(/obj/item/weapon/robot_module/miner, /obj/item/weapon/robot_module/engineering, /obj/item/weapon/robot_module/combat, /obj/item/weapon/robot_module/syndicate_blitzkrieg, /obj/item/weapon/robot_module/syndicate_crisis)
+	required_module = list(/obj/item/weapon/robot_module/miner, /obj/item/weapon/robot_module/engineering, /obj/item/weapon/robot_module/combat, /obj/item/weapon/robot_module/syndicate/blitzkrieg, /obj/item/weapon/robot_module/syndicate/crisis)
 	modules_to_add = list(/obj/item/weapon/tank/jetpack/carbondioxide/silicon)
 	add_to_mommis = TRUE
 
