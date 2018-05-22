@@ -122,7 +122,12 @@
 		if(!gas)
 			return null
 		var/datum/gas_mixture/newgas = new/datum/gas_mixture()
-		newgas.copy_from(gas)
+		newgas.oxygen = gas.oxygen
+		newgas.carbon_dioxide = gas.carbon_dioxide
+		newgas.nitrogen = gas.nitrogen
+		newgas.toxins = gas.toxins
+		newgas.volume = gas.volume
+		newgas.temperature = gas.temperature
 		if(newgas.temperature <= target_temp)
 			return
 
@@ -130,7 +135,6 @@
 			newgas.temperature -= cooling_power
 		else
 			newgas.temperature = target_temp
-		newgas.update_values()
 		return newgas
 
 /obj/structure/closet/crate/freezer/surgery
