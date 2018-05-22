@@ -81,7 +81,7 @@
 	var/pressure=myenv.return_pressure()
 
 	for(var/dir in cardinal)
-		var/turf/simulated/T=get_turf(get_step(loc,dir))
+		var/turf/simulated/T = get_step(loc, dir)
 		if(T && istype(T) && T.zone)
 			var/datum/gas_mixture/environment = T.return_air()
 			var/pdiff = abs(pressure - environment.return_pressure())

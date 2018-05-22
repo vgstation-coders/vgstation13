@@ -301,7 +301,7 @@ Subject's pulse: ??? BPM"})
 
 	var/datum/gas_mixture/environment = location.return_air()
 
-	to_chat(user, output_gas_scan(environment, location, 1))
+	to_chat(user, output_gas_scan(environment, location, 1, CELL_VOLUME))
 
 	src.add_fingerprint(user)
 	return
@@ -324,14 +324,20 @@ Subject's pulse: ??? BPM"})
 		return
 	var/turf/T = A
 	var/datum/gas_mixture/environment = T.return_air()
-	to_chat(user, output_gas_scan(environment, T, 1))
+	to_chat(user, output_gas_scan(environment, T, 1, CELL_VOLUME))
 	add_fingerprint(user)
 
 //If human_standard is enabled, the message will be formatted to show which values are dangerous
-/obj/item/device/analyzer/proc/output_gas_scan(var/datum/gas_mixture/scanned, var/atom/container, human_standard = 1)
+//If unit_vol is specified, it will output the values for that volume of the scanned gas. Really for analyzing areas.
+/obj/item/device/analyzer/proc/output_gas_scan(var/datum/gas_mixture/scanned, var/atom/container, human_standard = 1, unit_vol)
 	if(!scanned)
 		return "<span class='warning'>No gas mixture found.</span>"
 	scanned.update_values()
+	if(unit_vol)
+		var/datum/gas_mixture/unit = new() //Unless something goes horribly wrong, this will be cleaned up by the GC at the end of the proc.
+		unit.volume = unit_vol
+		unit.copy_from(scanned)
+		scanned = unit
 	var/pressure = scanned.return_pressure()
 	var/total_moles = scanned.total_moles()
 	var/message = ""
@@ -350,13 +356,13 @@ Subject's pulse: ??? BPM"})
 		var/unknown_concentration =  1 - (o2_concentration + n2_concentration + co2_concentration + plasma_concentration)
 
 		if(n2_concentration > 0.01)
-			message += "<br>[human_standard && abs(n2_concentration - N2STANDARD) > 20 ? "<span class='bad'>" : "<span class='notice'>"] Nitrogen: [round(scanned.nitrogen / scanned.volume * CELL_VOLUME, 0.1)] mol, [round(n2_concentration*100)]%</span>"
+			message += "<br>[human_standard && abs(n2_concentration - N2STANDARD) > 20 ? "<span class='bad'>" : "<span class='notice'>"] Nitrogen: [round(scanned.nitrogen, 0.1)] mol, [round(n2_concentration*100)]%</span>"
 		if(o2_concentration > 0.01)
-			message += "<br>[human_standard && abs(o2_concentration - O2STANDARD) > 2 ? "<span class='bad'>" : "<span class='notice'>"] Oxygen: [round(scanned.oxygen / scanned.volume * CELL_VOLUME, 0.1)] mol, [round(o2_concentration*100)]%</span>"
+			message += "<br>[human_standard && abs(o2_concentration - O2STANDARD) > 2 ? "<span class='bad'>" : "<span class='notice'>"] Oxygen: [round(scanned.oxygen, 0.1)] mol, [round(o2_concentration*100)]%</span>"
 		if(co2_concentration > 0.01)
-			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] CO2: [round(scanned.carbon_dioxide / scanned.volume * CELL_VOLUME, 0.1)] mol, [round(co2_concentration*100)]%</span>"
+			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] CO2: [round(scanned.carbon_dioxide, 0.1)] mol, [round(co2_concentration*100)]%</span>"
 		if(plasma_concentration > 0.01)
-			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] Plasma: [round(scanned.toxins / scanned.volume * CELL_VOLUME, 0.1)] mol, [round(plasma_concentration*100)]%</span>"
+			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] Plasma: [round(scanned.toxins, 0.1)] mol, [round(plasma_concentration*100)]%</span>"
 		if(unknown_concentration > 0.01)
 			message += "<br><span class='notice'>Unknown: [round(unknown_concentration*100)]%</span>"
 
