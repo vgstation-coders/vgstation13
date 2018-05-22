@@ -325,6 +325,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/proc/handle_automated_speech()
 
+	if(!(speak.len || emote_hear.len || emote_see.len))
+		return
+
 	var/someone_in_earshot=0
 	if(!client && speak_chance && ckey == null) // Remove this if earshot is used elsewhere.
 		// All we're doing here is seeing if there's any CLIENTS nearby.
