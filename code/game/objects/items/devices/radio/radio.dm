@@ -20,6 +20,8 @@
 	var/list/channels = list() //see communications.dm for full list. First channes is a "default" for :h
 	var/subspace_transmission = 0
 	var/maxf = 1499
+	var/translate_binary = 0
+	var/translate_hive = 0
 //			"Example" = FREQ_LISTENING|FREQ_BROADCASTING
 	flags = FPRINT | HEAR
 	siemens_coefficient = 1
@@ -459,8 +461,6 @@
 	return
 */
 
-#define CANT_RECIEVE -1 // -1 = can't recieve for the caller of that proc
-
 /obj/item/device/radio/proc/receive_range(freq, level)
 	// check if this radio can receive on the given frequency, and if so,
 	// what the range is in which mobs will hear the radio
@@ -499,7 +499,8 @@
 			return CANT_RECIEVE
 	return canhear_range
 
-#undef CANT_RECIEVE
+/obj/item/device/radio/proc/recalculateChannels()
+	// nothing
 
 /obj/item/device/radio/proc/handle_crypted_channels(var/channel) // We can't listen to them on a SBR, need a headset with the proper encryption keys.
 	return FALSE

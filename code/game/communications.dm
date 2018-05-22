@@ -196,7 +196,7 @@ var/list/radiochannelsreverse = list(
 	"1459" = "Common"
 )
 
-// Make random frequencies for the "secure" channels so that they are not easily listenned to.
+// Make random frequencies for the "secure" channels so that they are not easily listened to.
 
 /proc/makeSecureChannels()
 	var/old_freqs = list()
@@ -205,7 +205,7 @@ var/list/radiochannelsreverse = list(
 			var/old_freq = radiochannels[channel]
 			var/assigned = FALSE
 			while (!assigned)
-				var/new_freq = 2*rand(600, 710)+1 // We want an odd frequency
+				var/new_freq = 2*rand(600, 698)+1 // We want an odd frequency
 				if (!(new_freq in radiochannels) && !(new_freq in old_freqs)) // If there's no channel associated to that frequence, or if it's not an old one (prevent some problem with span being wrongly attributed)
 					assigned = TRUE
 					var/new_freq_txt = num2text(new_freq)

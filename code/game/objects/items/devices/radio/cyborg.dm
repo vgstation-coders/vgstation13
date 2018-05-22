@@ -51,7 +51,7 @@
 
 	return
 
-/obj/item/device/radio/borg/proc/recalculateChannels()
+/obj/item/device/radio/borg/recalculateChannels()
 	src.channels = list()
 
 	if(keyslot)

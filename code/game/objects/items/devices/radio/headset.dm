@@ -10,8 +10,8 @@
 	canhear_range = 0 // can't hear headsets from very far away
 
 	slot_flags = SLOT_EARS
-	var/translate_binary = 0
-	var/translate_hive = 0
+	translate_binary = 0
+	translate_hive = 0
 	var/obj/item/device/encryptionkey/keyslot1 = null
 	var/obj/item/device/encryptionkey/keyslot2 = null
 	maxf = 1489
@@ -334,7 +334,7 @@
 	return
 
 
-/obj/item/device/radio/headset/proc/recalculateChannels()
+/obj/item/device/radio/headset/recalculateChannels()
 	src.channels = list()
 	src.translate_binary = 0
 	src.translate_hive = 0
