@@ -107,6 +107,9 @@
 			if(VH.attached == src)
 				returnToPool(VH)
 
+	for(var/atom/movable/AM in src)
+		qdel(AM)
+
 	..()
 
 /proc/delete_profile(var/type, code = 0)
