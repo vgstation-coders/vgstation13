@@ -1,7 +1,11 @@
+/* Legacy cult (Cult 2.0), by Deity and Urist */
+
 /datum/faction/cult
 	ID = CULT
 	var/eldergod
 	var/deity_name
+
+// -- Cult of Nar'Sie
 
 /datum/faction/cult/narsie
 	name = "Cult of Nar-Sie"
@@ -14,6 +18,8 @@
 	var/list/startwords = list("blood","join","self","hell")
 	var/list/bloody_floors = list()
 	var/narsie_condition_cleared
+
+	roletype = /datum/role/legacy_cultist
 
 /datum/faction/cult/narsie/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/logos.dmi', "cult-logo")
@@ -51,6 +57,8 @@
 	var/list/dat = ..()
 	dat += "<a href='?_src_=holder;cult_mindspeak=\ref[src]'>Voice of [deity_name]</a>"
 	return dat
+
+// -- Clockwork Cult
 
 /datum/faction/cult/machine
 	name = "Cult of Ratvar"
