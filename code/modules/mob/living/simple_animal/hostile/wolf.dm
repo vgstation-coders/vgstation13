@@ -31,6 +31,7 @@
 	icon_living = "wolf"
 	icon_dead = "wolf_dead"
 	speak_chance = 5
+	emote_hear = list("growls", "howls")
 	turns_per_move = 4
 	response_help = "pets"
 	response_disarm = "gently pushes aside"
