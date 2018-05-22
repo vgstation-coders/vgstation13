@@ -301,8 +301,8 @@
 	if(istype(T))
 		var/datum/gas_mixture/G = loc.return_air() // Check if we're standing in an oxygenless environment
 		if(G)
-			oxy=G.oxygen/G.volume*CELL_VOLUME
-	if(oxy < 1 || fire_stacks <= 0)
+			oxy = G.molar_density("oxygen")
+	if(oxy < (1 / CELL_VOLUME) || fire_stacks <= 0)
 		ExtinguishMob() //If there's no oxygen in the tile we're on, put out the fire
 		return 1
 	var/turf/location = get_turf(src)

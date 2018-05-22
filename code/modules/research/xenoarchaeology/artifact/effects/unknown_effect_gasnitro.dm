@@ -15,10 +15,10 @@
 	if(holder)
 		var/datum/gas_mixture/env = holder.loc.return_air()
 		if(env)
-			env.nitrogen += rand(2,15)
+			env.adjust_gas("nitrogen", rand(2,15))
 
 /datum/artifact_effect/gasnitro/DoEffectAura()
 	if(holder)
 		var/datum/gas_mixture/env = holder.loc.return_air()
-		if(env && env.total_moles < max_pressure)
-			env.nitrogen += pick(0, 0, 0.1, rand())
+		if(env && env.pressure < max_pressure)
+			env.adjust_gas("nitrogen", pick(0, 0, 0.1, rand()))

@@ -159,7 +159,7 @@
 			(scrub_N2O && environment.trace_gases.len > 0) ||\
 			(scrub_O2 && environment.oxygen > 0) ||\
 			(scrub_N2 && environment.nitrogen > 0))
-			var/transfer_moles = min(1, volume_rate/environment.volume)*environment.total_moles()
+			var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles()
 
 			//Take a gas sample
 			var/datum/gas_mixture/removed = loc.remove_air(transfer_moles)
