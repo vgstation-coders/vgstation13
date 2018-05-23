@@ -196,13 +196,6 @@
 	result_amount = 1
 */
 
-/datum/chemical_reaction/water
-	name = "Water"
-	id = WATER
-	result = WATER
-	required_reagents = list(HYDROGEN = 2, OXYGEN = 1)
-	result_amount = 1
-
 /datum/chemical_reaction/sacid
 	name = "Sulphuric Acid"
 	id = SACID
@@ -221,7 +214,7 @@
 	name = "Lexorin"
 	id = LEXORIN
 	result = LEXORIN
-	required_reagents = list(PLASMA = 1, HYDROGEN = 1, NITROGEN = 1)
+	required_reagents = list(PLASMA = 1, AMMONIA = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/space_drugs
@@ -664,14 +657,18 @@
 	..()
 
 /datum/chemical_reaction/solidification
-	name = "Metal solidification"
+	name = "Solid Metal"
 	id = "metalsolid"
 	result = null
 	required_reagents = list(SILICATE = 10, FROSTOIL = 10, IRON = 20)
 	result_amount = 1
 
-/datum/chemical_reaction/solidification/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
+/datum/chemical_reaction/solidification/proc/product_to_spawn()
+	return /obj/item/stack/sheet/metal
+
+/datum/chemical_reaction/solidification/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
+	var/to_spawn = product_to_spawn()
 	new to_spawn(location, result_amount)
 
 /datum/chemical_reaction/solidification/plasma
@@ -681,21 +678,8 @@
 	required_reagents = list(SILICATE = 10, FROSTOIL = 10, PLASMA = 20)
 	result_amount = 1
 
-/datum/chemical_reaction/solidification/plasma/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
-	to_spawn = /obj/item/stack/sheet/mineral/plasma
-	..()
-
-
-/datum/chemical_reaction/solidification/iron
-	name = "Solid Metal"
-	id = "solidmetal"
-	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 10, IRON = 20)
-	result_amount = 1
-
-/datum/chemical_reaction/solidification/iron/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
-	to_spawn = /obj/item/stack/sheet/metal
-	..()
+/datum/chemical_reaction/solidification/plasma/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/plasma
 
 /datum/chemical_reaction/solidification/silver
 	name = "Solid Silver"
@@ -704,9 +688,8 @@
 	required_reagents = list(SILICATE = 10, FROSTOIL = 10, SILVER = 20)
 	result_amount = 1
 
-/datum/chemical_reaction/solidification/silver/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
-	to_spawn = /obj/item/stack/sheet/mineral/silver
-	..()
+/datum/chemical_reaction/solidification/silver/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/silver
 
 /datum/chemical_reaction/solidification/gold
 	name = "Solid Gold"
@@ -715,9 +698,8 @@
 	required_reagents = list(SILICATE = 10, FROSTOIL = 10, GOLD = 20)
 	result_amount = 1
 
-/datum/chemical_reaction/solidification/gold/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
-	to_spawn = /obj/item/stack/sheet/mineral/gold
-	..()
+/datum/chemical_reaction/solidification/gold/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/gold
 
 /datum/chemical_reaction/solidification/uranium
 	name = "Solid Uranium"
@@ -726,20 +708,18 @@
 	required_reagents = list(SILICATE = 10, FROSTOIL = 10, URANIUM = 20)
 	result_amount = 1
 
-/datum/chemical_reaction/solidification/uranium/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
-	to_spawn = /obj/item/stack/sheet/mineral/uranium
-	..()
+/datum/chemical_reaction/solidification/uranium/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/uranium
 
 /datum/chemical_reaction/solidification/plasteel
 	name = "Solid Plasteel"
 	id = "solidplasteel"
 	result = null
-	required_reagents = list(SILICATE = 10, FROSTOIL = 5, CAPSAICIN = 5, PLASMA = 10, IRON = 10)
+	required_reagents = list(SODIUMSILICATE = 5, FROSTOIL = 5, PLASMA = 10, IRON = 10)
 	result_amount = 1
 
-/datum/chemical_reaction/solidification/plasteel/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
-	to_spawn = /obj/item/stack/sheet/plasteel
-	..()
+/datum/chemical_reaction/solidification/plasteel/product_to_spawn()
+	return /obj/item/stack/sheet/plasteel
 
 /datum/chemical_reaction/solidification/plastic
 	name = "Plastic"
@@ -748,9 +728,8 @@
 	required_reagents = list(PACID = 10, PLASTICIDE = 20)
 	result_amount = 10
 
-/datum/chemical_reaction/solidification/plastic/on_reaction(var/datum/reagents/holder, var/obj/item/stack/sheet/to_spawn)
-	to_spawn = /obj/item/stack/sheet/mineral/plastic
-	..()
+/datum/chemical_reaction/solidification/plastic/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/plastic
 
 /datum/chemical_reaction/condensedcapsaicin
 	name = "Condensed Capsaicin"
@@ -2186,7 +2165,7 @@
 	name = "Sprinkles"
 	id = SPRINKLES
 	result = SPRINKLES
-	required_reagents = list(SUGAR = 5)
+	required_reagents = list(SUGAR = 5, WATER = 5)
 	required_catalysts = list(ENZYME = 1)
 	result_amount = 5
 
@@ -2206,7 +2185,7 @@
 	name = "Butter"
 	id = "butter"
 	result = null
-	required_reagents = list(MILK = 20, CREAM = 20, SODIUMCHLORIDE = 5)
+	required_reagents = list(CREAM = 20, SODIUMCHLORIDE = 5)
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 1
 
@@ -2751,7 +2730,7 @@
 	name = "Aloe"
 	id = ALOE
 	result = ALOE
-	required_reagents = list(CREAM = 1, WHISKEY = 1, WATERMELONJUICE = 1)
+	required_reagents = list(IRISHCREAM = 1, WATERMELONJUICE = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/andalusia
@@ -3080,6 +3059,13 @@
 	result_amount = 1
 	reaction_temp_change = 47
 	react_discretely = TRUE
+
+/datum/chemical_reaction/sodium_silicate
+	name = "Sodium Silicate"
+	id = SODIUMSILICATE
+	result = SODIUMSILICATE
+	required_reagents = list(SODIUM = 2, SILICON = 1, OXYGEN = 3)
+	result_amount = 5
 
 
 #undef ALERT_AMOUNT_ONLY
