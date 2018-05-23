@@ -81,7 +81,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		return
 	if(O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
 		return
-	if(istype(O, /mob/living/silicon)) //robutts dont fit
+	if(issilicon(O)) //robutts dont fit
 		return
 	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
 		return
