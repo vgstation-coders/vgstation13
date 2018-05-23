@@ -54,7 +54,7 @@ var/failed_any_test = FALSE
 
 		test.start()
 
-		duration = world.time - duration
+		duration = world.timeofday - duration
 		global.current_test = null
 		global.failed_any_test |= !test.succeeded
 
