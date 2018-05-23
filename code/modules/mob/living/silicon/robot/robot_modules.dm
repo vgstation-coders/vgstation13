@@ -198,7 +198,7 @@
 		"Noble" = "Noble-STD",
 		"R34 - STR4a 'Durin'" = "durin"
 		)
-	respawnables = list (
+	respawnables = list(
 		/obj/item/stack/medical/bruise_pack,
 		/obj/item/stack/medical/ointment,
 		)
@@ -249,7 +249,7 @@
 		"R34 - MED6a 'Gibbs'" = "gibbs"
 		)
 	speed_modifier = CYBORG_MEDICAL_SPEED_MODIFIER
-	respawnables = list (
+	respawnables = list(
 		/obj/item/stack/medical/advanced/bruise_pack,
 		/obj/item/stack/medical/advanced/ointment,
 		/obj/item/stack/medical/splint
@@ -319,7 +319,7 @@
 		"R34 - ENG7a 'Conagher'" = "conagher"
 		)
 	speed_modifier = CYBORG_ENGINEERING_SPEED_MODIFIER
-	respawnables = list (/obj/item/stack/cable_coil)
+	respawnables = list(/obj/item/stack/cable_coil)
 	respawnables_max_amount = ENGINEERING_MAX_COIL
 
 /obj/item/weapon/robot_module/engineering/New()
@@ -492,7 +492,7 @@
 		"R34 - MIN2a 'Ishimura'" = "ishimura"
 		)
 	speed_modifier = CYBORG_SUPPLY_SPEED_MODIFIER
-	respawnables = list (/obj/item/stack/package_wrap)
+	respawnables = list(/obj/item/stack/package_wrap)
 	respawnables_max_amount = SUPPLY_MAX_WRAP
 
 /obj/item/weapon/robot_module/miner/New()
@@ -529,6 +529,13 @@
 /obj/item/weapon/robot_module/syndicate/GetModuleAccess()
 	return get_all_syndicate_access()
 
+/obj/item/weapon/robot_module/syndicate/blitzkrieg/New()
+	..()
+
+	modules += new /obj/item/weapon/card/emag(src)
+	modules += new /obj/item/weapon/crowbar(src)
+	fix_modules()
+
 /obj/item/weapon/robot_module/syndicate/blitzkrieg
 	name = "syndicate blitzkrieg robot module"
 	sprites = list(
@@ -538,12 +545,10 @@
 /obj/item/weapon/robot_module/syndicate/blitzkrieg/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
-	modules += new /obj/item/weapon/gun/projectile/automatic/c20r(src)
-	modules += new /obj/item/robot_rack/ammo(src) //Placeholder
-	modules += new /obj/item/weapon/pinpointer/nukeop(src)
-	modules += new /obj/item/weapon/card/emag(src)
 	modules += new /obj/item/weapon/wrench(src) //This thing supposed to be a hacked and modded combat cyborg, is it really going to be stopped by a chair or table?
+	modules += new /obj/item/weapon/gun/projectile/automatic/c20r(src)
+	modules += new /obj/item/robot_rack/ammo/a12mm(src) //Placeholder
+	modules += new /obj/item/weapon/pinpointer/nukeop(src)
 //	emag = new /obj/item/weapon/gun/gatling/cyborg(src)
 
 	sensor_augs = list("Thermal", "Light Amplification", "Disable")
@@ -561,7 +566,6 @@
 
 	quirk_flags |= MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS
 
-	modules += new /obj/item/weapon/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/gripper/chemistry(src)
 	modules += new /obj/item/weapon/gun/dartgun/vox/raider(src) //Placeholder

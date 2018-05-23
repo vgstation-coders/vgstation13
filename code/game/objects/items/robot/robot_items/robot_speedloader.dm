@@ -9,6 +9,7 @@
 	charge++
 	if(charge >= NEEDED_CHARGE_TO_RESTOCK_AMMO && stored_ammo.len < max_ammo) //takes about 10 seconds.
 		stored_ammo += new ammo_type(src)
+		playsound(src, 'sound/machines/info.ogg',20)
 		update_icon()
 		charge = initial(charge)
 

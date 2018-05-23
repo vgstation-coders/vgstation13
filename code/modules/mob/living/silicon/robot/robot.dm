@@ -1453,6 +1453,7 @@
 //Combat module debug subtype.
 /mob/living/silicon/robot/debug_droideka
 	cell_type = /obj/item/weapon/cell/hyper
+	startup_sound = 'sound/mecha/nominalnano.ogg'
 
 /mob/living/silicon/robot/debug_droideka/New()
 	..()
@@ -1466,22 +1467,23 @@
 /mob/living/silicon/robot/syndie
 	req_access = list(access_syndicate)
 	cell_type = /obj/item/weapon/cell/hyper
-	startup_sound = 'sound/voice/syndicate_intro.ogg'
+	startup_sound = 'sound/mecha/nominalsyndi.ogg'
 
 /mob/living/silicon/robot/syndie/New()
 	..()
 	UnlinkSelf()
 	laws = new /datum/ai_laws/syndicate_override()
-	install_upgrade(src, /obj/item/borg/upgrade/vtec)
-	install_upgrade(src, /obj/item/borg/upgrade/jetpack)
 
 /mob/living/silicon/robot/syndie/blitz/New()
 	..()
 	pick_module(SYNDIE_BLITZ_MODULE)
+	install_upgrade(src, /obj/item/borg/upgrade/jetpack)
 
 /mob/living/silicon/robot/syndie/crisis/New()
 	..()
 	pick_module(SYNDIE_CRISIS_MODULE)
+	install_upgrade(src, /obj/item/borg/upgrade/vtec)
+	install_upgrade(src, /obj/item/borg/upgrade/jetpack)
 
 //Moving hugborgs to an easy-to-spawn subtype because they were as retarded as the syndie one.
 /mob/living/silicon/robot/hugborg
