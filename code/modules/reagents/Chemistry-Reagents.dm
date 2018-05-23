@@ -6545,3 +6545,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#FFFFFF"
 	density = 2.211
 	specheatcap = 87.45
+
+/datum/reagent/sodium_silicate
+	name = "Sodium Silicate"
+	id = SODIUMSILICATE
+	description = "A white powder, commonly used in cements."
+	reagent_state = SOLID
+	color = "#E5E5E5"
+	density = 2.61
+	specheatcap = 111.8
