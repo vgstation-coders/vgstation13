@@ -196,6 +196,13 @@
 	result_amount = 1
 */
 
+/datum/chemical_reaction/water
+	name = "Water"
+	id = WATER
+	result = WATER
+	required_reagents = list(HYDROGEN = 2, OXYGEN = 1)
+	result_amount = 1
+
 /datum/chemical_reaction/sacid
 	name = "Sulphuric Acid"
 	id = SACID
@@ -235,7 +242,7 @@
 	name = "Sodium Polyacrylate"
 	id = SODIUM_POLYACRYLATE
 	result = SODIUM_POLYACRYLATE
-	required_reagents = list(CARBON = 3, HYDROGEN = 3, SODIUM = 1, OXYGEN = 2)
+	required_reagents = list(CARBON = 3, SODIUM = 1, WATER = 2)
 	result_amount = 8
 
 /datum/chemical_reaction/spoly_absorb_water
