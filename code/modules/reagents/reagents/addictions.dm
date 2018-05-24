@@ -12,7 +12,7 @@
 	..()
 	if(new_holder)
 		holder = new_holder
-		holder.addictions.Add(src)
+		holder.addictions[addicted] = src
 	if(addicted)
 		addiction = addicted
 
@@ -20,14 +20,14 @@
 	if(holder)
 		holder.addictions.Remove(src)
 		holder = null
-	if(addiction_effects.len)
+	if(addiction_effects)
 		for(var/datum/addiction_effect/E in addiction_effects)
 			qdel(E)
 		addiction_effects = null
 	..()
 
 /datum/addiction/proc/add_effect(var/datum/addiction_effect/E, var/tick_trigger)
-	addiction_effects.Add(tick_trigger = E)
+	addiction_effects[tick_trigger] = E
 
 /datum/addiction/proc/handle_addiction()
 	if(holder.reagents && istype(addiction, /datum/reagent)?holder.reagents.has_reagent_type(addiction, 1*addiction_multiplier):holder.reagents.has_reagent(addiction, 1*addiction_multiplier))

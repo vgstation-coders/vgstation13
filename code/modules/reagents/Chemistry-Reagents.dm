@@ -183,6 +183,8 @@
 	M.adjustToxLoss(1)
 
 /datum/reagent/proc/on_addiction(var/mob/living/M) //Feel free to override with your own custom addictions
+	if(M.addictions[src.id])
+		return
 	var/datum/addiction/A = new(M, src.id)
 	A.add_effect(new /datum/addiction_effect, 100)
 
