@@ -65,6 +65,7 @@
 	maxHealth = 200
 	health = 200
 	gender = NEUTER
+	size = SIZE_BIG
 
 	update_icon = 0
 	nutrition = 800 // 1200 = max

@@ -21,7 +21,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/on = 0
 	var/ejecting = 0
 	var/temperature_archived
-	var/mob/living/carbon/occupant = null
+	var/mob/living/occupant = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 
 	var/current_heat_capacity = 50
@@ -73,7 +73,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	..()
 
 /obj/machinery/atmospherics/unary/cryo_cell/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if(!ismob(O)) //humans only
+	if(!ismob(O))
 		return
 	if(O.loc == user) //no you can't pull things out of your ass
 		return
@@ -81,7 +81,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		return
 	if(O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
 		return
-	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
+	if(issilicon(O)) //robutts dont fit
 		return
 	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
 		return
@@ -562,9 +562,12 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	nanomanager.update_uis(src)
 
 
-/obj/machinery/atmospherics/unary/cryo_cell/proc/put_mob(mob/living/carbon/M as mob)
+/obj/machinery/atmospherics/unary/cryo_cell/proc/put_mob(mob/living/M as mob)
 	if (!istype(M))
 		to_chat(usr, "<span class='danger'>The cryo cell cannot handle such a lifeform!</span>")
+		return
+	if(M.size > SIZE_NORMAL)
+		to_chat(usr, "<span class='danger'>\The [src] cannot fit such a large lifeform!</span>")
 		return
 	if (occupant)
 		to_chat(usr, "<span class='danger'>The cryo cell is already occupied!</span>")
