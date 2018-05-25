@@ -38,7 +38,7 @@ var/list/doppelgangers = list()
 		doppelgangers[D] = holder
 	D.appearance = holder.appearance
 	D.alpha = OPAQUE // No more invisible doppels
-	doppelgangers_count_by_wizards[user]++ // Update the counts of doppels we summoned
+	doppelgangers_count_by_wizards[holder]++ // Update the counts of doppels we summoned
 	spawn (spell_duration)
 		D.death()
 
