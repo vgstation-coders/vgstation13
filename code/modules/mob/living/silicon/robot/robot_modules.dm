@@ -278,7 +278,7 @@
 	modules += new /obj/item/weapon/surgicaldrill(src)
 	modules += new /obj/item/weapon/revivalprod(src)
 	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
-	modules += new /obj/item/roller_holder(src)
+	modules += new /obj/item/robot_rack/bed(src)
 	var/obj/item/stack/medical/advanced/bruise_pack/B = new /obj/item/stack/medical/advanced/bruise_pack(src)
 	B.max_amount = MEDICAL_MAX_KIT
 	B.amount = MEDICAL_MAX_KIT
@@ -519,7 +519,7 @@
 	fix_modules()
 
 /obj/item/weapon/robot_module/syndicate
-	name = "syndicate robot module"
+	name = "syndicate-modded combat robot module"
 	module_holder = "malf"
 	quirk_flags = MODULE_IS_SYNDICATE | MODULE_IS_DEFINITIVE
 	networks = list(CAMERANET_NUKE)
@@ -547,7 +547,7 @@
 
 	modules += new /obj/item/weapon/wrench(src) //This thing supposed to be a hacked and modded combat cyborg, is it really going to be stopped by a chair or table?
 	modules += new /obj/item/weapon/gun/projectile/automatic/c20r(src)
-	modules += new /obj/item/robot_rack/ammo/a12mm(src) //Placeholder
+	modules += new /obj/item/robot_rack/ammo/a12mm(src)
 	modules += new /obj/item/weapon/pinpointer/nukeop(src)
 //	emag = new /obj/item/weapon/gun/gatling/cyborg(src)
 

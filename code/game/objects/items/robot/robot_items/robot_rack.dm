@@ -1,12 +1,13 @@
-//Robot racks
+#define NEEDED_CHARGE_TO_RESTOCK_MAG 30
+
+//Robot racks.
 /obj/item/robot_rack
 	name = "generic robot rack"
-	desc = "A rack for carrying large items as a robot."
+	desc = "A rack for carrying objects as a robot."
 	var/obj/object_type = null //The types of object the rack holds (subtypes are allowed).
-	var/obj/interact_type = null //Things of this type will trigger attack_hand when attacked by this.
 	var/obj/initial_type = null //What type we start with. Useful if we start with a subtype of the type we can held.
-	var/starting_objects = 0
-	var/capacity = 1 //How many objects can be held.
+	var/starting_objects = 0 //How many things we start with.
+	var/capacity = 1 //How many things can be held.
 	var/list/obj/held = list() //What is being held.
 
 /obj/item/robot_rack/examine(mob/user)
@@ -25,15 +26,8 @@
 			update_icon()
 
 /obj/item/robot_rack/Destroy()
-	if(held.len > 0)
-		for(var/H in held)
-			qdel(H)
-			held -= H
 	held = null
 	..()
-
-/obj/item/robot_rack/update_icon()
-	return
 
 /obj/item/robot_rack/attack_self(mob/user)
 	if(!length(held))
@@ -46,8 +40,6 @@
 	to_chat(user, "<span class='notice'>You deploy [R].</span>")
 
 /obj/item/robot_rack/preattack(obj/O, mob/user, proximity, params)
-	if(istype(O, interact_type))
-		O.attack_hand(user) //Used mainly by roller beds to unbuckle dudes
 	if(istype(O, object_type))
 		if(length(held) < capacity)
 			to_chat(user, "<span class='notice'>You collect [O].</span>")
@@ -55,26 +47,30 @@
 			held += O
 			update_icon()
 			return
-		to_chat(user, "<span class='notice'>\The [src] is full and can't store any more items.</span>")
+		to_chat(user, "<span class='notice'>\The [name] is full and can't store any more items.</span>")
 		return
 	. = ..()
 
-//Mediborg's roller bed rack
-/obj/item/robot_rack/roller_bed
+//Mediborg's bed rack
+/obj/item/robot_rack/bed
 	name = "hover bed rack"
 	desc = "A rack for carrying a collapsed rover or roller bed."
 	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "borgbed_stored"
 	object_type = /obj/structure/bed/roller
 	initial_type = /obj/structure/bed/roller/borg
+	var/obj/interact_type = /obj/structure/bed //Unbuckle dudes.
 	starting_objects = 1
 
-/obj/item/robot_rack/roller_bed/update_icon()
-	icon_state = "borgbed_[held.len > 0 ? "stored" : "deployed"]"
+/obj/item/robot_rack/bed/preattack(obj/O, mob/user, proximity, params)
+	if(istype(O, interact_type)) //Move this to rack level if in the future anything else needs this.
+		O.attack_hand(user)
+	. = ..()
 
-//Ammo racks, they hold/make mags and borgs can slap projectile guns with it to load them.
-#define NEEDED_CHARGE_TO_RESTOCK_MAG 30
+/obj/item/robot_rack/bed/update_icon()
+	icon_state = "borgbed_[length(held) > 0 ? "stored" : "deployed"]"
 
+//Ammo racks, they hold/make mags and borgs can attack it with projectile guns to load them.
 /obj/item/robot_rack/ammo
 	name = "magazine carrier"
 	desc = "DELET THIS"
@@ -95,14 +91,17 @@
 
 /obj/item/robot_rack/ammo/attackby(obj/O, mob/user)
 	if(istype(O, reload_type))
-		var/obj/item/weapon/gun/projectile/automatic/G = O
-		var/obj/item/ammo_storage/magazine/M = held[length(held)]
-		if(!G.stored_magazine)
-			playsound(src, 'sound/items/metal_impact.ogg',20)
-			M.forceMove(G)
-			held -= M
-			G.LoadMag(M)
-		return TRUE
+		if(held && (length(held) > 0))
+			var/obj/item/weapon/gun/projectile/automatic/G = O
+			var/obj/item/ammo_storage/magazine/M = held[length(held)]
+			if(!G.stored_magazine)
+				playsound(src, 'sound/weapons/magdrop_1.ogg',20)
+				M.forceMove(G)
+				held -= M
+				G.LoadMag(M)
+				return TRUE
+		else
+			to_chat(user, "\The [name] is empty!")
 
 //Syndicate Blitzkrieg's ammo rack/loader
 /obj/item/robot_rack/ammo/a12mm
@@ -112,13 +111,11 @@
 	icon_state = "toolbox_syndi"
 	hitsound = 'sound/weapons/toolbox.ogg'
 	attack_verb = list("robusts", "batters", "staves in")
-	force = 15 //if we're making it toolbox-looking then let's give it realistic damage
+	force = 15 //if we're making it toolbox-shaped then let's give it realistic damage
 	initial_type = /obj/item/ammo_storage/magazine/a12mm/ops
 	object_type = /obj/item/ammo_storage/magazine/a12mm
 	reload_type = /obj/item/weapon/gun/projectile/automatic/c20r
 	starting_objects = 3
 	capacity = 5
-	
-	
 
 #undef NEEDED_CHARGE_TO_RESTOCK_MAG

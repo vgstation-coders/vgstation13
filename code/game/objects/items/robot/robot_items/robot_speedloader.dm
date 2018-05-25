@@ -1,6 +1,6 @@
-//Noir upgrade's speedloader
 #define NEEDED_CHARGE_TO_RESTOCK_AMMO 5
 
+//Noir upgrade's speedloader
 /obj/item/ammo_storage/speedloader/c38/cyborg
 	desc = "The echo of the first shot, like the first sip of whiskey, burning..."
 	var/charge = 0

@@ -196,8 +196,6 @@
 		qdel(src)
 
 /obj/structure/bed/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W,/obj/item/roller_holder))
-		manual_unbuckle(user)
 	if(iswrench(W))
 		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		drop_stack(sheet_type, loc, 2, user)
@@ -205,48 +203,6 @@
 		return
 
 	. = ..()
-
-/obj/structure/bed/roller/attackby(obj/item/weapon/W, mob/user)
-	..()
-	if(istype(W,/obj/item/roller_holder))
-		var/obj/item/roller_holder/RH = W
-		if(!RH.held)
-			to_chat(user, "<span class='notice'>You collect \the [src].</span>")
-			src.forceMove(RH)
-			RH.held = src
-			RH.update_icon()
-
-/obj/item/roller_holder
-	name = "roller bed rack"
-	desc = "A rack for carrying a collapsed roller bed."
-	icon = 'icons/obj/rollerbed.dmi'
-	icon_state = "borgbed_stored"
-	var/obj/structure/bed/roller/borg/held
-
-/obj/item/roller_holder/update_icon()
-	icon_state = "borgbed_[held ? "stored" : "deployed"]"
-
-/obj/item/roller_holder/New()
-	..()
-	held = new(src)
-
-/obj/item/roller_holder/attack_self(mob/user as mob)
-
-	if(!held)
-		to_chat(user, "<span class='notice'>The [src.name] is empty.</span>")
-		return
-
-	to_chat(user, "<span class='notice'>You deploy \the [held].</span>")
-	held.add_fingerprint(user)
-	held.forceMove(get_turf(src))
-	held = null
-	update_icon()
-
-/obj/item/roller_holder/Destroy()
-	if(held)
-		qdel(held)
-		held = null
-	..()
 
 /obj/item/roller/borg
 	name = "hover roller bed"

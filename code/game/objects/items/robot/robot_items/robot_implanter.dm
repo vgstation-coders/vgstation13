@@ -1,6 +1,6 @@
-//Warden upgrade's implanter
 #define NEEDED_CHARGE_TO_RESTOCK_IMP 30
 
+//Warden upgrade's implanter
 /obj/item/weapon/implanter/cyborg
 	name = "cyborg implanter"
 	imp_type = /obj/item/weapon/implant/loyalty
