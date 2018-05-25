@@ -23,7 +23,7 @@ var/list/doppelgangers = list()
 
 // Sanity : don't copy more than one guy
 /spell/aoe_turf/conjure/doppelganger/cast_check(skipcharge = 0,mob/user = usr)
-	if (doppelgangers_count_by_wizards[user] > MAX_DOPPELS) // We summoned too much doppels :(
+	if (doppelgangers_count_by_wizards[user] > MAX_DOPPLES) // We summoned too much doppels :(
 		to_chat(user, "<span class = 'warning'>We have duplicated ourselves too much in this plane.</span>")
 		return FALSE
 	var/list/L = view(user, 0)
@@ -38,7 +38,7 @@ var/list/doppelgangers = list()
 		doppelgangers[D] = holder
 	D.appearance = holder.appearance
 	D.alpha = OPAQUE // No more invisible doppels
-	doppelgangers_by_wizards[user]++ // Update the counts of doppels we summoned
+	doppelgangers_count_by_wizards[user]++ // Update the counts of doppels we summoned
 	spawn (spell_duration)
 		D.death()
 
