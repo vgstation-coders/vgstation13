@@ -1,4 +1,5 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
+var/global/list/all_objectives = list()
 
 var/list/potential_theft_objectives=list(
 	"traitor" = typesof(/datum/theft_objective/traitor) - /datum/theft_objective/traitor,
@@ -19,8 +20,14 @@ var/list/potential_theft_objectives=list(
 	var/list/bad_assassinate_targets = list("AI","Cyborg","Mobile MMI","Trader")
 
 /datum/objective/New(var/text)
+	all_objectives |= src
 	if(text)
 		explanation_text = text
+
+/datum/objective/Destroy()
+	all_objectives -= src
+	return ..()
+
 
 /datum/objective/proc/check_completion()
 	return completed

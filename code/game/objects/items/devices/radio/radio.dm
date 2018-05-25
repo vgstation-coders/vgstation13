@@ -543,3 +543,29 @@
 	for (var/ch_name in channels)
 		channels[ch_name] = 0
 	..()
+
+/obj/item/device/radio/proc/autosay(var/message, var/channel, var/zlevel = list(1)) //BS12 EDIT
+	var/datum/radio_frequency/connection = null
+	if(channel && channels && channels.len > 0)
+		if(channel == "department")
+			channel = channels[1]
+		connection = secure_radio_connections[channel]
+	else
+		connection = connection
+		channel = null
+	if(!istype(connection))
+		return
+	if(!connection)
+		return
+//	var/mob/living/automatedannouncer/A = new /mob/living/automatedannouncer(src)
+	var/datum/speech/speech = src.create_speech(message=message, frequency=connection, transmitter=src)
+
+/*	Broadcast_Message(connection, A,
+						0, "*garbled automated announcement*", src,
+						message, from, "Automated Announcement", from, "synthesized voice",
+						4, 0, zlevel, connection.frequency, follow_target = follow_target)*/
+	Broadcast_Message(speech,
+			data=0,
+			compression=0,
+			level=list(zlevel))
+	returnToPool(speech)
