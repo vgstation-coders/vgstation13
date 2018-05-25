@@ -65,6 +65,8 @@
 
 /mob/living/simple_animal/hostile/humanoid/wizard/doppelganger/Destroy()
 	spell = null
+	var/mob/my_wiz = doppelgangers[src]
+	doppelgangers_count_by_wizards[my_wiz]--
 	doppelgangers[src] = null
 	doppelgangers -= src
 	..()
