@@ -13,7 +13,7 @@
 #define PROFILE_MACHINES // Disable when not debugging.
 
 #define ARBITRARILY_LARGE_NUMBER 10000 //Used in delays.dm and vehicle.dm. Upper limit on delays
-#define ARBITRARILY_PLANCK_NUMBER 1.417*(10**32) //1.417×10^32. Because ARBITRARILY_LARGE_NUMBER is too small and INF is too large
+#define ARBITRARILY_PLANCK_NUMBER 1.417*(10**32) //1.417ï¿½10^32. Because ARBITRARILY_LARGE_NUMBER is too small and INF is too large
 #define MAX_VALUE 65535
 
 #ifdef PROFILE_MACHINES
@@ -831,24 +831,25 @@ SEE_PIXELS	256
 #define ROLEPREF_VALMASK  3 // 0b00000011 - Used to get ROLEPREF flags without the ROLEPREF_POLLED and ROLEPREF_SAVE bits
 
 // Should correspond to jobbans, too.
-#define ROLE_ALIEN      "alien"
-#define ROLE_BLOB       "blob"      // New!
-#define ROLE_BORER      "borer"     // New!
-#define ROLE_CHANGELING "changeling"
-#define ROLE_COMMANDO   "commando"  // New!
-#define ROLE_CULTIST    "cultist"
-#define ROLE_MALF       "malf AI"
-#define ROLE_NINJA      "ninja"
-#define ROLE_OPERATIVE  "operative" // New!
-#define ROLE_PAI        "pAI"
-#define ROLE_PLANT      "Dionaea"
-#define ROLE_POSIBRAIN  "posibrain"
-#define ROLE_REV        "revolutionary"
-#define ROLE_STRIKE     "Strike Team"
-#define ROLE_TRAITOR    "traitor"
-#define ROLE_VAMPIRE    "vampire"
-#define ROLE_VOXRAIDER  "vox raider"
-#define ROLE_WIZARD     "wizard"
+#define ROLE_ALIEN      	"alien"
+#define ROLE_BLOB       	"blob"      // New!
+#define ROLE_BORER      	"borer"     // New!
+#define ROLE_CHANGELING 	"changeling"
+#define ROLE_COMMANDO   	"commando"  // New!
+#define ROLE_CULTIST    	"cultist"
+#define ROLE_LEGACY_CULTIST "legacy_cultist"
+#define ROLE_MALF       	"malf AI"
+#define ROLE_NINJA      	"ninja"
+#define ROLE_OPERATIVE  	"operative" // New!
+#define ROLE_PAI        	"pAI"
+#define ROLE_PLANT      	"Dionaea"
+#define ROLE_POSIBRAIN  	"posibrain"
+#define ROLE_REV        	"revolutionary"
+#define ROLE_STRIKE     	"Strike Team"
+#define ROLE_TRAITOR    	"traitor"
+#define ROLE_VAMPIRE    	"vampire"
+#define ROLE_VOXRAIDER  	"vox raider"
+#define ROLE_WIZARD     	"wizard"
 
 
 #define AGE_MIN 17			//youngest a character can be

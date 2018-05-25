@@ -7,6 +7,7 @@
 	logo_state = "cult-logo"
 	greets = list("default","custom","admintoggle")
 	required_pref = ROLE_LEGACY_CULTIST
+	wikiroute = role_wiki[ROLE_LEGACY_CULTIST]
 
 
 

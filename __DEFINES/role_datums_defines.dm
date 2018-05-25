@@ -14,6 +14,8 @@
 #define HIVEMIND "changeling hivemind"
 #define WIZFEDERATION "wizard federation"
 #define VAMPIRELORDS "vampire lords"
+#define CULT "generic cult"
+#define LEGACY_CULT "legacy cult"
 
 // Role IDs
 #define TRAITOR "traitor"

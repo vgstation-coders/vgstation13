@@ -1188,18 +1188,18 @@ client/proc/cure_disease()
 	message_admins("[src]/([ckey(src.key)] Cured all mobs of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]")
 
 client/proc/check_convertables()
-	set name = "Check Convertables"
+	set name = "Check Convertables (Cult v2.0)"
 	set category = "Debug"
 	if(!holder || !ticker || !ticker.mode)
 		return
-	var/datum/faction/cult = find_active_faction(BLOODCULT)
+	var/datum/faction/cult = find_active_faction(LEGACY_CULT)
 	var/dat = ""
 	for(var/mob/M in player_list)
 		if(!M.mind)
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=grey><b>NO MIND</b></font></br>"
 		else if(!istype(M,/mob/living/carbon/human))
 			dat += "[M.real_name]/([ckey(M.key)]): <b>NOT HUMAN</b></br>"
-		else if(!is_convertable_to_cult(M.mind))
+		else if(!is_convertable_to_cult_legacy(M.mind))
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=red><b>UNCONVERTABLE</b></font></br>"
 		else if(jobban_isbanned(M, "cultist"))
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=red><b>JOBBANNED</b></font></br>"
