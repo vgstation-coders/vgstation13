@@ -307,7 +307,7 @@
 /mob/living/proc/get_rad_stage()
 	switch(rad_tick)
 		if(0)
-			return "none"
+			return "N/A"
 		if(1 to RADDOSELIGHT)
 			return "Early"
 		if(RADDOSELIGHT to RADDOSEMINOR)
