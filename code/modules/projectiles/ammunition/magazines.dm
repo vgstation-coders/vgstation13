@@ -23,6 +23,7 @@
 	icon = 'icons/obj/beretta.dmi'
 	icon_state = "beretta_mag"
 	origin_tech = Tc_COMBAT + "=2"
+	caliber = "9mm"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
 	exact = 0
 	max_ammo = 15		 
