@@ -81,6 +81,7 @@
 		"health" = H.health,
 		"virus_present" = H.virus2.len,
 		"rads" = H.radiation,
+		"radtick" = H.rad_tick,
 		"cloneloss" = H.getCloneLoss(),
 		"brainloss" = H.getBrainLoss(),
 		"paralysis" = H.paralysis,
@@ -122,6 +123,8 @@
 	if(occ["virus_present"])
 		dat += "<font color='red'>Viral pathogen detected in blood stream.</font><br>"
 	dat += text("[]\tRadiation Level %: []</font><br>", (occ["rads"] < 10 ?"<font color='blue'>" : "<font color='red'>"), occ["rads"])
+	if(occ["radtick"] > 0)
+		dat += text("<font color='red'>Absorbed rads danger index: <b>[occ["radtick"]]</b></font><br>")
 	dat += text("[]\tGenetic Tissue Damage %: []</font><br>", (occ["cloneloss"] < 1 ?"<font color='blue'>" : "<font color='red'>"), occ["cloneloss"])
 	dat += text("[]\tApprox. Brain Damage %: []</font><br>", (occ["brainloss"] < 1 ?"<font color='blue'>" : "<font color='red'>"), occ["brainloss"])
 	dat += text("Paralysis Summary %: [] ([] seconds left!)<br>", occ["paralysis"], round(occ["paralysis"] / 4))
