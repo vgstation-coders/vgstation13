@@ -905,9 +905,9 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	if(istype(M, /mob/living/carbon/slime))
 		var/mob/living/carbon/slime/OS = M
 		if(OS.stat)
-			to_chat(user, "<span class='warning'>You're unable to use the [src] on the dead slime!</span>")
+			to_chat(user, "<span class='warning'>You're unable to use \the [src] on the dead slime!</span>")
 			return..()
-		var/new_color = input(user, "Choose a new color for the dye:", "Color Select") as anything in list(
+		var/new_color = input(user, "Choose a new color for the dye:", "Color Select") as null|anything in list(
 			//"adamantine",
 			//"black",
 			"blue",
@@ -929,10 +929,14 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			//"sepia",
 			"silver",
 			"yellow")
-		if(new_color && !OS.stat)
-			var/adult = FALSE //Passinging on if it was an adult or not
-			if(istype(OS, /mob/living/carbon/slime/adult))
-				adult = TRUE
+		if(new_color)
+			if(!OS.Adjacent(user))
+				to_chat(user, "<span class='warning'>You can't reach the slime from here.</span>")
+				return
+			if(OS.stat)
+				to_chat(user, "<span class='warning'>You're unable to use \the [src] on the dead slime!</span>")
+				return
+			var/adult = istype(OS, /mob/living/carbon/slime/adult) //Passing on if it was an adult or not.
 			var/new_slime
 			if(new_color == "grey")
 				new_slime = /mob/living/carbon/slime
@@ -953,15 +957,21 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			qdel(OS)
 			qdel(src)
 		else
-			if(OS.stat)
-				to_chat(user, "<span class='warning'>You're unable to use the [src] on the dead slime!</span>")
-			else
-				to_chat(user, "<span class='notice'>You decide not to use the potion.</span>")
+			to_chat(user, "<span class='notice'>You decide not to use the potion.</span>")
 	else if(ishuman(M))
 		var/mob/living/carbon/human/S = M
+		if(S.stat)
+			to_chat(user, "<span class='warning'>You're unable to use \the [src] on the dead slime person!</span>")
+			return..()
 		if(isslimeperson(S))
 			var/new_color = input(user, "Choose a color for the dye:", "Color Select") as color|null
 			if(new_color)
+				if(!S.Adjacent(user))
+					to_chat(user, "<span class='warning'>You can't reach the slime person from here.</span>")
+					return
+				if(S.stat)
+					to_chat(user, "<span class='warning'>You're unable to use \the [src] on the dead slime person!</span>")
+					return
 				S.multicolor_skin_r = hex2num(copytext(new_color, 2, 4))
 				S.multicolor_skin_g = hex2num(copytext(new_color, 4, 6))
 				S.multicolor_skin_b = hex2num(copytext(new_color, 6, 8))
@@ -973,6 +983,8 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 				qdel(src)
 			else
 				to_chat(user, "<span class='notice'>You decide not to use the potion.</span>")
+	else
+		return..()
 
 
 ////////Adamantine Golem stuff I dunno where else to put it
