@@ -193,7 +193,7 @@
 	max_shells = 15
 	caliber = list("9mm" = 1)
 	silenced = 0
-	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2" + Tc_SYNDICATE + "=2"
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=2"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
 	mag_type = "/obj/item/ammo_storage/magazine/beretta"
 	load_method = 2
