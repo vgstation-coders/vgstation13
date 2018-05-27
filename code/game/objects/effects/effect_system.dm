@@ -981,6 +981,7 @@ steam.start() -- spawns the effect
 	icon_regular_floor = "foamedmetal"
 	icon_plating = "foamedmetal"
 	can_exist_under_lattice = 1
+	plane = PLATING_PLANE
 
 /turf/simulated/floor/foamedmetal/attack_hand(mob/living/user as mob)
 	user.delayNextAttack(10)

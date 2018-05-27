@@ -442,6 +442,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//icon_plating = "asteroid"
 	var/dug = 0       //0 = has not yet been dug, 1 = has already been dug
 	var/sand_type = /obj/item/weapon/ore/glass
+	plane = PLATING_PLANE
 
 /turf/unsimulated/floor/asteroid/air
 	oxygen = MOLES_O2STANDARD
