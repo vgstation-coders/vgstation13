@@ -147,7 +147,7 @@
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	mag_type = "/obj/item/ammo_storage/magazine/m380auto"
 	max_shells = 8
-	caliber = list(".45"  = 1)
+	caliber = list(".380AUTO"  = 1)
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
