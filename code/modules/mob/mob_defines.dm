@@ -240,9 +240,9 @@
 
 	var/force_compose = 0 //If this is nonzero, the mob will always compose it's own hear message instead of using the one given in the arguments.
 
-	var/obj/control_object = null	//Used by admins to possess objects. All mobs should have this var
+	var/list/control_object = list()	//Used by admins to possess objects. All mobs should have this var
 
-	var/obj/orient_object = null	//Similar to control object. But only lets the mob manipulate which direction the object is facing.
+	var/list/orient_object = list()	//Similar to control object. But only lets the mob manipulate which direction the object is facing.
 
 	//Whether or not mobs can understand other mobtypes. These stay in /mob so that ghosts can hear everything.
 	var/universal_speak = 0 // Set to 1 to enable the mob to speak to everyone -- TLE
