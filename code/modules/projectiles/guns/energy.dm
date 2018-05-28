@@ -10,6 +10,7 @@
 	var/projectile_type = "/obj/item/projectile/beam/practice"
 	var/modifystate
 	var/charge_states = 1 //if the gun changes icon states depending on charge, this is 1. Uses a var so it can be changed easily
+	var/charge_modulo = 25 //Spacing of the charge level sprites
 
 /obj/item/weapon/gun/energy/emp_act(severity)
 	power_supply.use(round(power_supply.maxcharge / (severity*2)))
@@ -26,7 +27,7 @@
 	if(!projectile_type)
 		return 0
 	return 1
-	
+
 /obj/item/weapon/gun/energy/process_chambered()
 	if(in_chamber)
 		return 1
@@ -51,9 +52,9 @@
 	ratio = Clamp(ratio, 0, 100) //Value between 0 and 100
 
 	if(ratio >= 50)
-		ratio = Floor(ratio, 25)
+		ratio = Floor(ratio, charge_modulo)
 	else
-		ratio = Ceiling(ratio, 25)
+		ratio = Ceiling(ratio, charge_modulo)
 
 	if(modifystate && charge_states)
 		icon_state = "[modifystate][ratio]"
