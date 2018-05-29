@@ -105,17 +105,17 @@
 
 //Syndicate Blitzkrieg's ammo rack/loader
 /obj/item/robot_rack/ammo/a12mm
-	name = "blitzkrieg ammo carrier"
-	desc = "An syndicate toolbox redesigned for carrying, loading and making a12mm magazines. Its built-in ammolathe needs to be directly connected to a recharging station to work."
+	name = "blitzkrieg a12mm carrier"
+	desc = "A special magazine carrier complete with gun-reloading mechanism and portable ammolathe. It needs to be directly connected to a recharging station to make more magazines."
 	icon = 'icons/obj/storage/storage.dmi'
-	icon_state = "toolbox_syndi"
-	hitsound = 'sound/weapons/toolbox.ogg'
-	attack_verb = list("robusts", "batters", "staves in")
-	force = 15 //if we're making it toolbox-shaped then let's give it realistic damage
+	icon_state = "ammopack_0"
 	initial_type = /obj/item/ammo_storage/magazine/a12mm/ops
 	object_type = /obj/item/ammo_storage/magazine/a12mm
 	reload_type = /obj/item/weapon/gun/projectile/automatic/c20r
-	starting_objects = 3
-	capacity = 5
+	starting_objects = 4
+	capacity = 4
+
+/obj/item/robot_rack/ammo/a12mm/update_icon()
+	icon_state = "ammopack_[length(held)]"
 
 #undef NEEDED_CHARGE_TO_RESTOCK_MAG

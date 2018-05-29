@@ -1453,7 +1453,7 @@
 //Combat module debug subtype.
 /mob/living/silicon/robot/debug_droideka
 	cell_type = /obj/item/weapon/cell/hyper
-	startup_sound = 'sound/mecha/nominalnano.ogg'
+	startup_sound = 'sound/mecha/LongNanoActivation.ogg'
 
 /mob/living/silicon/robot/debug_droideka/New()
 	..()
@@ -1467,7 +1467,7 @@
 /mob/living/silicon/robot/syndie
 	req_access = list(access_syndicate)
 	cell_type = /obj/item/weapon/cell/hyper
-	startup_sound = 'sound/mecha/nominalsyndi.ogg'
+	startup_sound = 'sound/mecha/LongSyndiActivation.ogg'
 
 /mob/living/silicon/robot/syndie/New()
 	..()
