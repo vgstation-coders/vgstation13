@@ -30,8 +30,10 @@
 
 	//Station Holomaps display the map of the Z-Level they were built on.
 	generateStationMinimap(map.zMainStation)
-	generateStationMinimap(map.zAsteroid)
-	generateStationMinimap(map.zDerelict)
+	if(world.maxz >= map.zAsteroid)
+		generateStationMinimap(map.zAsteroid)
+	if(world.maxz >= map.zDerelict)
+		generateStationMinimap(map.zDerelict)
 	//If they were built on another Z-Level, they will display an error screen.
 
 	holomaps_initialized = 1
