@@ -18,7 +18,7 @@
 			triggerAlarm()
 	else if (detectTime == -1)
 		for (var/mob/target in motionTargets)
-			if (target.stat == 2)
+			if (target.isDead())
 				lostTarget(target)
 			// If not detecting with motion camera...
 			if (!area_motion)

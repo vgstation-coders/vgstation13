@@ -624,7 +624,7 @@
 		to_chat(user, "<span class='warning'>You can't see into [M.name]'s mind at all!</span>")
 		return 1
 
-	if (M.stat == 2)
+	if (M.isDead())
 		to_chat(user, "<span class='warning'>[M.name] is dead and cannot have their mind read.</span>")
 		return 1
 	if (M.health < 0)

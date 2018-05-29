@@ -883,7 +883,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		to_chat(src, "You cannot infest a target in your current state.")
 		return
 
-	if(M.stat == 2)
+	if(M.isDead())
 		to_chat(src, "That is not an appropriate target.")
 		return
 
