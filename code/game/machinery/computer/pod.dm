@@ -298,10 +298,6 @@
 	circuit = /obj/item/weapon/circuitboard/syndicatedoor
 	light_color = null
 
-/obj/machinery/computer/pod/old/syndicate/attack_ai(mob/user)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
-
 /obj/machinery/computer/pod/old/syndicate/attack_hand(var/mob/user as mob)
 	if(!allowed(user))
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
