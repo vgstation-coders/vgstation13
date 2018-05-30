@@ -59,7 +59,7 @@
 			user.take_overall_damage(5, 0)
 		qdel(src)
 	if(allrunesloc && index != 0)
-		if(istype(src,/obj/effect/rune))
+		if(istype(src,/obj/effect/rune_legacy))
 			user.say("Sas[pick("'","`")]so c'arta forbici!")//Only you can stop auto-muting
 		else
 			user.whisper("Sas[pick("'","`")]so c'arta forbici!")
@@ -72,7 +72,7 @@
 			"<span class='warning'>You feel a sharp pain as your body gets dragged through a tunnel of viscera !</span>", \
 			"<span class='warning'>You hear a sickening crunch and sloshing of viscera.</span>")
 
-		if(istype(src,/obj/effect/rune))
+		if(istype(src,/obj/effect/rune_legacy))
 			invocation("rune_teleport")
 
 		user.forceMove(allrunesloc[rand(1,index)])
@@ -154,14 +154,14 @@
 /////////////////////////////////////////SECOND RUNE
 
 /obj/effect/rune_legacy/proc/tomesummon()
-	if(istype(src,/obj/effect/rune))
+	if(istype(src,/obj/effect/rune_legacy))
 		usr.say("N[pick("'","`")]ath reth sh'yro eth d'raggathnor!")
 	else
 		usr.whisper("N[pick("'","`")]ath reth sh'yro eth d'raggathnor!")
 	usr.visible_message("<span class='warning'>Rune disappears with a flash of red light, and in its place now a book lies.</span>", \
 	"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that now instead of the rune there's a book.</span>", \
 	"<span class='warning'>You hear a pop and smell ozone.</span>")
-	if(istype(src,/obj/effect/rune))
+	if(istype(src,/obj/effect/rune_legacy))
 		new /obj/item/weapon/tome(src.loc)
 		src.invocation("tome_spawn")
 	else
@@ -368,13 +368,13 @@
 	else
 		qdel(src)
 
-/obj/effect/summoning/proc/init(var/obj/effect/rune/S)
+/obj/effect/summoning/proc/init(var/obj/effect/rune_legacy/S)
 	summon_target = S
 
 /////////////////////////////////////////FIFTH RUNE
 
 /obj/effect/rune_legacy/proc/emp(var/U,var/range_red) //range_red - var which determines by which number to reduce the default emp range, U is the source loc, needed because of talisman emps which are held in hand at the moment of using and that apparently messes things up -- Urist
-	if(istype(src,/obj/effect/rune))
+	if(istype(src,/obj/effect/rune_legacy))
 		usr.say("Ta'gh fara[pick("'","`")]qha fel d'amar det!")
 	else
 		usr.whisper("Ta'gh fara[pick("'","`")]qha fel d'amar det!")
@@ -571,12 +571,12 @@
 
 /obj/effect/rune_legacy/proc/obscure(var/rad)
 	var/S=0
-	for(var/obj/effect/rune/R in orange(rad,src))
+	for(var/obj/effect/rune_legacy/R in orange(rad,src))
 		if(R!=src)
 			R.invisibility=INVISIBILITY_OBSERVER
 		S=1
 	if(S)
-		if(istype(src,/obj/effect/rune))
+		if(istype(src,/obj/effect/rune_legacy))
 			usr.say("Kla[pick("'","`")]atu barada nikt'o!")
 			for (var/mob/V in viewers(src))
 				V.show_message("<span class='warning'>The rune turns into gray dust, veiling the surrounding runes.</span>")
@@ -589,10 +589,10 @@
 					V.show_message("<span class='warning'>Dust emanates from [usr]'s hands for a moment.</span>")
 
 		return
-	if(istype(src,/obj/effect/rune))
+	if(istype(src,/obj/effect/rune_legacy))
 		return	fizzle()
 	else
-		call(/obj/effect/rune/proc/fizzle)()
+		call(/obj/effect/rune_legacy/proc/fizzle)()
 		return
 
 /////////////////////////////////////////TENTH RUNE
@@ -792,7 +792,7 @@
 
 /////////////////////////////////////////THIRTEENTH RUNE
 
-/obj/effect/rune/proc/mend()
+/obj/effect/rune_legacy/proc/mend()
 	var/mob/living/user = usr
 	src = null
 	user.say("Uhrast ka'hfa heldsagen ver[pick("'","`")]lot!")
@@ -822,12 +822,12 @@
 			return 0
 		else
 			return 0
-	if(istype(src,/obj/effect/rune))
+	if(istype(src,/obj/effect/rune_legacy))
 		user.say("O bidai nabora se[pick("'","`")]sma!")
 	else
 		user.whisper("O bidai nabora se[pick("'","`")]sma!")
 
-	if(istype(src,/obj/effect/rune))
+	if(istype(src,/obj/effect/rune_legacy))
 		user.say("[input]")
 	else
 		user.whisper("[input]")
@@ -1019,7 +1019,7 @@
 		rad = 1
 		go = 1
 	if(go)
-		for(var/obj/effect/rune/R in orange(rad,src))
+		for(var/obj/effect/rune_legacy/R in orange(rad,src))
 			if(R!=src)
 				R:visibility=15
 			S=1
@@ -1276,7 +1276,7 @@
 			if(prob(5))
 				spawn(5)
 					M.gib()
-		for(var/obj/effect/rune/R in view(src))
+		for(var/obj/effect/rune_legacy/R in view(src))
 			if(prob(10))
 				explosion(R.loc, -1, 0, 1, 5)
 		for(var/mob/living/carbon/human/C in orange(1,src))
@@ -1296,7 +1296,7 @@
 		if(iscultist(C) && !C.stat)
 			culcount++
 	if(culcount >= 5)
-		for(var/obj/effect/rune/R in rune_list)
+		for(var/obj/effect/rune_legacy/R in rune_list)
 			if(R.blood_DNA == src.blood_DNA)
 				for(var/mob/living/M in orange(2,R))
 					M.take_overall_damage(0,15)

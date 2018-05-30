@@ -1179,8 +1179,6 @@
 			return global.message_delay;
 		if("telecomms_list")
 			return global.telecomms_list;
-		if("uristrune_cache")
-			return global.uristrune_cache;
 		if("explosion_shake_message_cooldown")
 			return global.explosion_shake_message_cooldown;
 		if("explosion_turfs")
@@ -2890,8 +2888,6 @@
 			global.narsie_list=newval
 		if("mr_clean_targets")
 			global.mr_clean_targets=newval
-		if("cultwords")
-			global.cultwords=newval
 		if("rune_list")
 			global.rune_list=newval
 		if("halloween_spawns")
@@ -3048,8 +3044,6 @@
 			global.telecomms_list=newval
 		if("uristrune_cache")
 			global.uristrune_cache=newval
-		if("explosion_shake_message_cooldown")
-			global.explosion_shake_message_cooldown=newval
 		if("explosion_turfs")
 			global.explosion_turfs=newval
 		if("explosion_in_progress")

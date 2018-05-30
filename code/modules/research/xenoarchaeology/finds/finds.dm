@@ -109,7 +109,7 @@
 	var/material_descriptor = ""
 	var/apply_prefix = TRUE
 
-	var/static/cultwords = 
+	var/static/cultwords = ""
 
 	if(prob(40))
 		material_descriptor = pick("rusted ","dusty ","archaic ","fragile ")
@@ -287,7 +287,7 @@
 		if(ARCHAEO_CULTBLADE)
 			//cultblade
 			apply_prefix = FALSE
-			new_item = new /obj/item/weapon/melee/cultblade_legacy/nocult(src.loc)
+			new_item = new /obj/item/weapon/melee/legacy_cultblade/nocult(src.loc)
 			apply_material_decorations = FALSE
 			apply_image_decorations = FALSE
 			anomaly_factor = 2
@@ -322,10 +322,10 @@
 			//arcane clothing
 			apply_prefix = FALSE
 			anomaly_factor = 2
-			var/list/possible_spawns = list(/obj/item/clothing/head/culthood_legacy,
-			/obj/item/clothing/head/magus_legacy,
-			/obj/item/clothing/head/culthood_legacy/alt,
-			/obj/item/clothing/head/helmet/space/cult_legacy)
+			var/list/possible_spawns = list(/obj/item/clothing/head/legacy_culthood,
+			/obj/item/clothing/head/legacy_magus,
+			/obj/item/clothing/head/legacy_culthood/alt,
+			/obj/item/clothing/head/helmet/space/legacy_cult)
 
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)

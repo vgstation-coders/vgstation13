@@ -88,7 +88,7 @@
 
 	if(ishuman(M)) //We're forced to do two ishuman() code paragraphs because this one blocks the others
 		var/mob/living/carbon/human/H = M
-		if(istype(H.head, /obj/item/clothing/head/helmet) || istype(H.head, /obj/item/clothing/head/hardhat) || istype(H.head, /obj/item/clothing/head/fedora) || istype(H.head, /obj/item/clothing/head/culthood_legacy)) //Blessing blocked
+		if(istype(H.head, /obj/item/clothing/head/helmet) || istype(H.head, /obj/item/clothing/head/hardhat) || istype(H.head, /obj/item/clothing/head/fedora) || istype(H.head, /obj/item/clothing/head/legacy_culthood)) //Blessing blocked
 			user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [H]'s head with \the [src], but their headgear blocks the hit.</span>",
 			"<span class='warning'>You try to bless [H]'s head with \the [src], but their headgear blocks the blessing. Blasphemy!</span>")
 			return 1 //That's it. Helmets are very haram

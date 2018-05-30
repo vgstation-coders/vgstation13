@@ -121,7 +121,13 @@
 
 		if(seer == 1)
 			var/obj/effect/rune_legacy/R = locate() in loc
-			if(R && R.word1 == cultwords["see"] && R.word2 == cultwords["hell"] && R.word3 == cultwords["join"])
+			var/datum/faction/cult/narsie/blood_cult = find_active_faction(CULT_NARSIE)
+			var/cultwords
+			if (blood_cult)
+				cultwords = blood_cult.cult_words
+			else
+				cultwords = null
+			if(cultwords && R && R.word1 == cultwords["see"] && R.word2 == cultwords["hell"] && R.word3 == cultwords["join"])
 				see_invisible = SEE_INVISIBLE_OBSERVER
 			else
 				see_invisible = SEE_INVISIBLE_LIVING
