@@ -37,12 +37,16 @@
 	var/list/respawnables
 	var/respawnables_max_amount = 0
 
+	//Access
+	var/list/module_req_access = null
+
 /obj/item/weapon/robot_module/Destroy()
 	if(istype(loc, /mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = loc
 		RemoveStatusFlags(R)
 		RemoveCameraNetworks(R)
 		ResetEncryptionKey(R)
+		RemoveReqAccess(R)
 		UpdateModuleHolder(R, TRUE)
 		R.remove_module() //Helps remove screen references on robot end
 
@@ -88,6 +92,7 @@
 	AddCameraNetworks(R)
 	AddEncryptionKey(R)
 	ApplyStatusFlags(R)
+	AddReqAccess(R)
 
 /obj/item/weapon/robot_module/proc/AddDefaultModules()
 	modules += new /obj/item/device/flashlight(src)
@@ -157,6 +162,14 @@
 					O.max_amount = respawnables_max_amount
 				modules += O
 				O.amount = 1
+
+/obj/item/weapon/robot_module/proc/AddReqAccess(var/mob/living/silicon/robot/R)
+	if(module_req_access)
+		R.req_access.Add(module_req_access)
+
+/obj/item/weapon/robot_module/proc/RemoveReqAccess(var/mob/living/silicon/robot/R)
+	if(module_req_access)
+		R.req_access.Cut(module_req_access)
 
 /obj/item/weapon/robot_module/proc/rebuild()//Rebuilds the list so it's possible to add/remove items from the module
 	var/list/temp_list = modules
@@ -248,6 +261,7 @@
 		/obj/item/stack/medical/splint
 		)
 	respawnables_max_amount = MEDICAL_MAX_KIT
+	module_req_access = list(access_medical)
 
 /obj/item/weapon/robot_module/medical/New()
 	..()
@@ -314,6 +328,7 @@
 	speed_modifier = CYBORG_ENGINEERING_SPEED_MODIFIER
 	respawnables = list (/obj/item/stack/cable_coil)
 	respawnables_max_amount = ENGINEERING_MAX_COIL
+	module_req_access = list(access_construction, access_engine)
 
 /obj/item/weapon/robot_module/engineering/New()
 	..()
@@ -365,6 +380,7 @@
 		"R34 - SEC10a 'Woody'" = "woody"
 		)
 	speed_modifier = CYBORG_SECURITY_SPEED_MODIFIER
+	module_req_access = list(access_security)
 
 /obj/item/weapon/robot_module/security/New()
 	..()
@@ -399,6 +415,7 @@
 		"R34 - CUS3a 'Flynn'" = "flynn"
 		)
 	speed_modifier = CYBORG_JANITOR_SPEED_MODIFIER
+	module_req_access = list(access_janitor)
 
 /obj/item/weapon/robot_module/janitor/New()
 	..()
@@ -446,6 +463,7 @@
 		LANGUAGE_SLIME,
 		)
 	speed_modifier = CYBORG_SERVICE_SPEED_MODIFIER
+	module_req_access = list(access_kitchen, access_bar, access_hydroponics, access_library, access_chapel_office, access_clown, access_mime)
 
 /obj/item/weapon/robot_module/butler/New()
 	..()
@@ -487,6 +505,7 @@
 	speed_modifier = CYBORG_SUPPLY_SPEED_MODIFIER
 	respawnables = list (/obj/item/stack/package_wrap)
 	respawnables_max_amount = SUPPLY_MAX_WRAP
+	module_req_access = list(access_mining, access_cargo)
 
 /obj/item/weapon/robot_module/miner/New()
 	..()
@@ -551,6 +570,7 @@
 		"R34 - WAR8a 'Chesty'" = "chesty"
 		)
 	speed_modifier = CYBORG_COMBAT_SPEED_MODIFIER
+	module_req_access = list(access_security)
 
 /obj/item/weapon/robot_module/combat/New()
 	..()
