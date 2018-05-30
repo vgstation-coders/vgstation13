@@ -504,7 +504,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	projectile_type = "/obj/item/projectile/kinetic"
 	cell_type = "/obj/item/weapon/cell/crap"
 	charge_cost = 50
-	charge_modulo = 20
+	icon_charge_multiple = 20
 	var/overheat = 0
 	var/recent_reload = 1
 /*
