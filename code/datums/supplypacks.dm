@@ -1656,6 +1656,21 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_robotics)
 	group = "Science"
 
+/datum/supply_packs/robot_maintenance
+	name = "Robot maintenance equipment"
+	contains = list(/obj/item/weapon/book/manual/robotics_cyborgs,
+					/obj/item/weapon/cell/high,
+					/obj/item/weapon/storage/toolbox/robotics,
+					/obj/item/robot_parts/robot_component/actuator,
+					/obj/item/robot_parts/robot_component/radio,
+					/obj/item/robot_parts/robot_component/camera,
+					/obj/item/borg/upgrade/restart
+					)
+	cost = 250
+	containertype = /obj/structure/closet/crate/sci
+	containername = "robot maintenance equipment"
+	group = "Science"
+
 /datum/supply_packs/suspension_gen
 	name = "Suspension field generator"
 	contains = list(/obj/machinery/suspension_gen)
