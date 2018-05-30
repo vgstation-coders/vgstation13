@@ -74,7 +74,7 @@
 	return canhear_range
 
 /obj/item/device/radio/intercom/handle_crypted_channels(var/channel)
-	if (channel in keyslot.secured_channels)
+	if (istype(keyslot) && channel in keyslot.secured_channels)
 		return TRUE
 	return FALSE
 
@@ -84,6 +84,31 @@
 	..()
 
 /obj/item/device/radio/intercom/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	// If we're not constructing one...
+	if(isscrewdriver(W))
+		if(keyslot)
+			for(var/ch_name in channels)
+				radio_controller.remove_object(src, radiochannels[ch_name])
+				secure_radio_connections[ch_name] = null
+
+			var/turf/T = get_turf(user)
+			if(T)
+				keyslot.forceMove(T)
+				keyslot = null
+			to_chat(user, "You pop out the encryption key in the intercom!")
+
+		else
+			to_chat(user, "This intercom doesn't have an encryption key!  How useless...")
+
+	if(istype(W, /obj/item/device/encryptionkey))
+		to_chat(user, "You put the encryption key in \the [src].")
+		if(keyslot)
+			to_chat(user, "This intercom can't hold another key!")
+			return
+
+		if(user.drop_item(W, src))
+			keyslot = W
+		
 	switch(buildstage)
 		if(3)
 			if(iswirecutter(W) && b_stat && wires.IsAllCut())
@@ -151,55 +176,13 @@
 					new /obj/item/mounted/frame/intercom(get_turf(src))
 					qdel(src)
 					return 1
-	// If we're not constructing one...
-	if(isscrewdriver(W))
-		if(keyslot)
-			for(var/ch_name in channels)
-				radio_controller.remove_object(src, radiochannels[ch_name])
-				secure_radio_connections[ch_name] = null
-
-			var/turf/T = get_turf(user)
-			if(T)
-				keyslot.forceMove(T)
-				keyslot = null
-			to_chat(user, "You pop out the encryption key in the intercom!")
-
-		else
-			to_chat(user, "This intercom doesn't have an encryption key!  How useless...")
-
-	if(istype(W, /obj/item/device/encryptionkey/))
-		if(keyslot)
-			to_chat(user, "This intercom can't hold another key!")
-			return
-
-		if(user.drop_item(W, src))
-			keyslot = W
-			recalculateChannels()
 
 /obj/item/device/radio/intercom/recalculateChannels()
-	for(var/ch_name in keyslot.channels)
-		if(ch_name in src.channels)
-			continue
-		src.channels += ch_name
-		src.channels[ch_name] = keyslot.channels[ch_name]
+	if(keyslot.translate_binary)
+		src.translate_binary = 1
 
-		if(keyslot.translate_binary)
-			src.translate_binary = 1
-
-		if(keyslot.translate_hive)
-			src.translate_hive = 1
-
-
-	for (var/ch_name in channels)
-		//this is the most hilarious piece of code i have seen this week, so im not going to remove it
-		/*
-		if(!radio_controller)
-			sleep(30) // Waiting for the radio_controller to be created.
-		if(!radio_controller)
-			src.name = "broken radio headset"
-			return
-		*/
-		secure_radio_connections[ch_name] = add_radio(src, radiochannels[ch_name])
+	if(keyslot.translate_hive)
+		src.translate_hive = 1
 
 
 /obj/item/device/radio/intercom/update_icon()
@@ -269,6 +252,7 @@
 /obj/item/device/radio/intercom/mapped/ace_reporter/initialize()
 	frequency = pick(COMM_FREQ, SEC_FREQ, COMMON_FREQ)
 	keyslot = new /obj/item/device/encryptionkey/mapped
+	..()
 
 /obj/item/device/radio/intercom/mapped/dj_sat
 	name = "Pirate Radio Listening Channel"
@@ -277,3 +261,4 @@
 
 /obj/item/device/radio/intercom/mapped/dj_sat/initialize()
 	keyslot = new /obj/item/device/encryptionkey/mapped
+	..()
