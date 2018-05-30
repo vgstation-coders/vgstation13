@@ -46,10 +46,10 @@
 	allrunesloc = new/list()
 	var/index = 0
 //	var/tempnum = 0
-	for(var/obj/effect/rune_legacy/R in rune_list)
+	for(var/obj/effect/rune_legacy/R in rune_list_legacy)
 		if(R == src)
 			continue
-		if(R.word1 == cultwords["travel"] && R.word2 == cultwords["self"] && R.word3 == key && R.z != map.zCentcomm)
+		if(R.word1 == my_cult.cult_words["travel"] && R.word2 == my_cult.cult_words["self"] && R.word3 == key && R.z != map.zCentcomm)
 			index++
 			allrunesloc.len = index
 			allrunesloc[index] = R.loc
@@ -94,10 +94,10 @@
 	var/obj/effect/rune_legacy/IP = null
 	var/mob/living/user = usr
 	var/swapping[] = null
-	for(var/obj/effect/rune_legacy/R in rune_list)
+	for(var/obj/effect/rune_legacy/R in rune_list_legacy)
 		if(R == src)
 			continue
-		if(R.word1 == cultwords["travel"] && R.word2 == cultwords["other"] && R.word3 == key)
+		if(R.word1 == my_cult.cult_words["travel"] && R.word2 == my_cult.cult_words["other"] && R.word3 == key)
 			IP = R
 			runecount++
 	if(runecount >= 2)
@@ -392,8 +392,8 @@
 /obj/effect/rune_legacy/proc/drain()
 	var/drain = 0
 	var/list/drain_turflist = list()
-	for(var/obj/effect/rune_legacy/R in rune_list)
-		if(R.word1==cultwords["travel"] && R.word2==cultwords["blood"] && R.word3==cultwords["self"])
+	for(var/obj/effect/rune_legacy/R in rune_list_legacy)
+		if(R.word1==my_cult.cult_words["travel"] && R.word2==my_cult.cult_words["blood"] && R.word3==my_cult.cult_words["self"])
 			for(var/mob/living/carbon/D in R.loc)
 				if(D.stat!=2)
 					nullblock = 0
@@ -496,8 +496,8 @@
 
 	is_sacrifice_target = 0
 	find_sacrifice:
-		for(var/obj/effect/rune_legacy/R in rune_list)
-			if(R.word1==cultwords["blood"] && R.word2==cultwords["join"] && R.word3==cultwords["hell"])
+		for(var/obj/effect/rune_legacy/R in rune_list_legacy)
+			if(R.word1==my_cult.cult_words["blood"] && R.word2==my_cult.cult_words["join"] && R.word3==my_cult.cult_words["hell"])
 				for(var/mob/living/carbon/human/N in R.loc)
 					if(cult_round && (N.mind) && cult_round.is_sacrifice_target(N.mind))
 						is_sacrifice_target = 1
@@ -728,52 +728,52 @@
 	for(var/obj/effect/rune_legacy/R in orange(1,src))
 		if(R==src)
 			continue
-		if(R.word1==cultwords["travel"] && R.word2==cultwords["self"])  //teleport
+		if(R.word1==my_cult.cult_words["travel"] && R.word2==my_cult.cult_words["self"])  //teleport
 			T = new(src.loc)
 			T.imbue = "[R.word3]"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["see"] && R.word2==cultwords["blood"] && R.word3==cultwords["hell"]) //tome
+		if(R.word1==my_cult.cult_words["see"] && R.word2==my_cult.cult_words["blood"] && R.word3==my_cult.cult_words["hell"]) //tome
 			T = new(src.loc)
 			T.imbue = "newtome"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["destroy"] && R.word2==cultwords["see"] && R.word3==cultwords["technology"]) //emp
+		if(R.word1==my_cult.cult_words["destroy"] && R.word2==my_cult.cult_words["see"] && R.word3==my_cult.cult_words["technology"]) //emp
 			T = new(src.loc)
 			T.imbue = "emp"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["hide"] && R.word2==cultwords["see"] && R.word3==cultwords["blood"]) //conceal
+		if(R.word1==my_cult.cult_words["hide"] && R.word2==my_cult.cult_words["see"] && R.word3==my_cult.cult_words["blood"]) //conceal
 			T = new(src.loc)
 			T.imbue = "conceal"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["hell"] && R.word2==cultwords["destroy"] && R.word3==cultwords["other"]) //armor
+		if(R.word1==my_cult.cult_words["hell"] && R.word2==my_cult.cult_words["destroy"] && R.word3==my_cult.cult_words["other"]) //armor
 			T = new(src.loc)
 			T.imbue = "armor"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["blood"] && R.word2==cultwords["see"] && R.word3==cultwords["hide"]) //reveal
+		if(R.word1==my_cult.cult_words["blood"] && R.word2==my_cult.cult_words["see"] && R.word3==my_cult.cult_words["hide"]) //reveal
 			T = new(src.loc)
 			T.imbue = "revealrunes"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["hide"] && R.word2==cultwords["other"] && R.word3==cultwords["see"]) //deafen
+		if(R.word1==my_cult.cult_words["hide"] && R.word2==my_cult.cult_words["other"] && R.word3==my_cult.cult_words["see"]) //deafen
 			T = new(src.loc)
 			T.imbue = "deafen"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["destroy"] && R.word2==cultwords["see"] && R.word3==cultwords["other"]) //blind
+		if(R.word1==my_cult.cult_words["destroy"] && R.word2==my_cult.cult_words["see"] && R.word3==my_cult.cult_words["other"]) //blind
 			T = new(src.loc)
 			T.imbue = "blind"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["self"] && R.word2==cultwords["other"] && R.word3==cultwords["technology"]) //communicate
+		if(R.word1==my_cult.cult_words["self"] && R.word2==my_cult.cult_words["other"] && R.word3==my_cult.cult_words["technology"]) //communicate
 			T = new(src.loc)
 			T.imbue = "communicate"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["join"] && R.word2==cultwords["hide"] && R.word3==cultwords["technology"]) //stun
+		if(R.word1==my_cult.cult_words["join"] && R.word2==my_cult.cult_words["hide"] && R.word3==my_cult.cult_words["technology"]) //stun
 			T = new(src.loc)
 			T.imbue = "runestun"
 			imbued_from = R
@@ -1296,7 +1296,7 @@
 		if(iscultist(C) && !C.stat)
 			culcount++
 	if(culcount >= 5)
-		for(var/obj/effect/rune_legacy/R in rune_list)
+		for(var/obj/effect/rune_legacy/R in rune_list_legacy)
 			if(R.blood_DNA == src.blood_DNA)
 				for(var/mob/living/M in orange(2,R))
 					M.take_overall_damage(0,15)
@@ -1477,3 +1477,137 @@
 				to_chat(M, "<span class='warning'>Only the followers of Nar-Sie may be given their armor.</span>")
 	to_chat(user, "<span class='note'>You have to be standing on top of the rune.</span>")
 	return
+
+// Animating.
+var/list/word_to_uristrune_table = null
+
+/obj/effect/rune_legacy/proc/get_uristrune_cult(var/word1, var/word2, var/word3, var/mob/M)
+	
+	var/animated
+
+	if((word1 == my_cult.cult_words["travel"] && word2 == my_cult.cult_words["self"])						\
+	|| (word1 == my_cult.cult_words["join"] && word2 == my_cult.cult_words["blood"] && word3 == my_cult.cult_words["self"])	\
+	|| (word1 == my_cult.cult_words["hell"] && word2 == my_cult.cult_words["join"] && word3 == my_cult.cult_words["self"])	\
+	|| (word1 == my_cult.cult_words["see"] && word2 == my_cult.cult_words["blood"] && word3 == my_cult.cult_words["hell"])	\
+	|| (word1 == my_cult.cult_words["hell"] && word2 == my_cult.cult_words["destroy"] && word3 == my_cult.cult_words["other"])	\
+	|| (word1 == my_cult.cult_words["destroy"] && word2 == my_cult.cult_words["see"] && word3 == my_cult.cult_words["technology"])	\
+	|| (word1 == my_cult.cult_words["travel"] && word2 == my_cult.cult_words["blood"] && word3 == my_cult.cult_words["self"])	\
+	|| (word1 == my_cult.cult_words["see"] && word2 == my_cult.cult_words["hell"] && word3 == my_cult.cult_words["join"])		\
+	|| (word1 == my_cult.cult_words["blood"] && word2 == my_cult.cult_words["join"] && word3 == my_cult.cult_words["hell"])	\
+	|| (word1 == my_cult.cult_words["hide"] && word2 == my_cult.cult_words["see"] && word3 == my_cult.cult_words["blood"])	\
+	|| (word1 == my_cult.cult_words["hell"] && word2 == my_cult.cult_words["travel"] && word3 == my_cult.cult_words["self"])	\
+	|| (word1 == my_cult.cult_words["hell"] && word2 == my_cult.cult_words["technology"] && word3 == my_cult.cult_words["join"])	\
+	|| (word1 == my_cult.cult_words["hell"] && word2 == my_cult.cult_words["blood"] && word3 == my_cult.cult_words["join"])	\
+	|| (word1 == my_cult.cult_words["blood"] && word2 == my_cult.cult_words["see"] && word3 == my_cult.cult_words["hide"])	\
+	|| (word1 == my_cult.cult_words["destroy"] && word2 == my_cult.cult_words["travel"] && word3 == my_cult.cult_words["self"])	\
+	|| (word1 == my_cult.cult_words["travel"] && word2 == my_cult.cult_words["technology"] && word3 == my_cult.cult_words["other"])	\
+	|| (word1 == my_cult.cult_words["join"] && word2 == my_cult.cult_words["other"] && word3 == my_cult.cult_words["self"])	\
+	|| (word1 == my_cult.cult_words["hide"] && word2 == my_cult.cult_words["other"] && word3 == my_cult.cult_words["see"])	\
+	|| (word1 == my_cult.cult_words["destroy"] && word2 == my_cult.cult_words["see"] && word3 == my_cult.cult_words["other"])	\
+	|| (word1 == my_cult.cult_words["destroy"] && word2 == my_cult.cult_words["see"] && word3 == my_cult.cult_words["blood"])	\
+	|| (word1 == my_cult.cult_words["self"] && word2 == my_cult.cult_words["other"] && word3 == my_cult.cult_words["technology"])	\
+	|| (word1 == my_cult.cult_words["travel"] && word2 == my_cult.cult_words["other"])						\
+	|| (word1 == my_cult.cult_words["join"] && word2 == my_cult.cult_words["hide"] && word3 == my_cult.cult_words["technology"])	)
+		animated = 1
+	else
+		animated = 0
+
+	var/bits = word_to_uristrune_bit(word1) \
+			 | word_to_uristrune_bit(word2) \
+			 | word_to_uristrune_bit(word3)
+
+	if(M && istype(M,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = M
+		return get_uristrune(bits, animated, H.species.blood_color)
+	else
+		return get_uristrune(bits, animated)
+
+var/list/uristrune_cache_legacy = list()
+
+/obj/effect/rune_legacy/proc/get_uristrune(symbol_bits, animated = 0, bloodcolor = DEFAULT_BLOOD)
+	var/lookup = "[symbol_bits]-[animated]-[bloodcolor]"
+
+	if(lookup in uristrune_cache_legacy)
+		return uristrune_cache_legacy[lookup]
+
+	var/icon/I = icon('icons/effects/uristrunes.dmi', "blank")
+
+	for(var/i = 0, i < 10, i++)
+		if(symbol_bits & (1 << i))
+			I.Blend(icon('icons/effects/uristrunes.dmi', "rune-[1 << i]"), ICON_OVERLAY)
+
+	var/finalblood = bloodcolor
+	var/list/blood_hsl = rgb2hsl(GetRedPart(bloodcolor),GetGreenPart(bloodcolor),GetBluePart(bloodcolor))
+	if(blood_hsl.len)
+		var/list/blood_rgb = hsl2rgb(blood_hsl[1],blood_hsl[2],50)//producing a color that is neither too bright nor too dark
+		if(blood_rgb.len)
+			finalblood = rgb(blood_rgb[1],blood_rgb[2],blood_rgb[3])
+
+	var/bc1 = finalblood
+	var/bc2 = finalblood
+	bc1 += "C8"
+	bc2 += "64"
+
+	I.SwapColor(rgb(0, 0, 0, 100), bc1)
+	I.SwapColor(rgb(0, 0, 0, 50), bc1)
+
+	for(var/x = 1, x <= WORLD_ICON_SIZE, x++)
+		for(var/y = 1, y <= WORLD_ICON_SIZE, y++)
+			var/p = I.GetPixel(x, y)
+
+			if(p == null)
+				var/n = I.GetPixel(x, y + 1)
+				var/s = I.GetPixel(x, y - 1)
+				var/e = I.GetPixel(x + 1, y)
+				var/w = I.GetPixel(x - 1, y)
+
+				if(n == "#000000" || s == "#000000" || e == "#000000" || w == "#000000")
+					I.DrawBox(bc1, x, y)
+
+				else
+					var/ne = I.GetPixel(x + 1, y + 1)
+					var/se = I.GetPixel(x + 1, y - 1)
+					var/nw = I.GetPixel(x - 1, y + 1)
+					var/sw = I.GetPixel(x - 1, y - 1)
+
+					if(ne == "#000000" || se == "#000000" || nw == "#000000" || sw == "#000000")
+						I.DrawBox(bc2, x, y)
+
+	I.MapColors(0.5,0,0,0,0.5,0,0,0,0.5)//we'll darken that color a bit
+
+	icon = I
+
+	if(animated)//This masterpiece of a color matrix stack produces a nice animation no matter which color was the blood used for the rune.
+		animate(src, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)//1
+		animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)//2
+		animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 2)//3
+		animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1.5)//4
+		animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1.5)//5
+		animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)//6
+		animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)//7
+		animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)//8
+		animate(color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5)//9
+		animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)//8
+		animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)//7
+		animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)//6
+		animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1)//5
+		animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)//4
+		animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)//3
+		animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)//2
+	
+/proc/word_to_uristrune_bit(word)
+	if(word_to_uristrune_table == null)
+		word_to_uristrune_table = list()
+
+		var/bit = 1
+		var/list/words = list("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "mgar", "balaq", "karazet", "geeri")
+
+		while(length(words))
+			var/w = pick(words)
+
+			word_to_uristrune_table[w] = bit
+
+			words -= w
+			bit <<= 1
+
+	return word_to_uristrune_table[word]

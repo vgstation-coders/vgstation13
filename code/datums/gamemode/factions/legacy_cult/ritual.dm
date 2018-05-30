@@ -33,7 +33,7 @@ var/runedec = 0 // Rune cap ?
 	for(var/mob/living/silicon/ai/AI in player_list)
 		if(AI.client)
 			AI.client.images += blood_image
-	rune_list.Add(src)
+	rune_list_legacy.Add(src)
 	if (!our_cult)
 		our_cult = find_active_faction(LEGACY_CULT)
 	if (!our_cult)
@@ -51,13 +51,13 @@ var/runedec = 0 // Rune cap ?
 			AI.client.images -= blood_image
 	qdel(blood_image)
 	blood_image = null
-	rune_list.Remove(src)
+	rune_list_legacy.Remove(src)
 	..()
 
 /obj/effect/rune_legacy/examine(mob/user)
 	..()
 	if(iscultist(user) || isobserver(user))
-		var/rune_name = get_uristrune_name(word1,word2,word3)
+		var/rune_name = my_cult.get_uristrune_name(word1,word2,word3)
 		to_chat(user, "A spell circle drawn in blood. It reads: <i>[word1] [word2] [word3]</i>.[rune_name ? " From [pick("your intuition, you are pretty sure that","deep memories, you determine that","the rune's energies, you deduct that","Nar-Sie's murmurs, you know that")] this is \a <b>[rune_name]</b> rune." : ""]")
 
 
@@ -361,7 +361,7 @@ var/runedec = 0 // Rune cap ?
 		return
 
 	if(!cultwords["travel"])
-		runerandom()
+		my_cult.randomiseWords()
 	if(iscultist(user))
 		if (!istype(user.loc,/turf))
 			to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
@@ -371,7 +371,7 @@ var/runedec = 0 // Rune cap ?
 		var/cultists = 1
 		if(cult)
 			cultists = cult.members.len
-		if (rune_list.len >= 26+runedec+4*cultists) //including the useless rune at the secret room, shouldn't count against the limit of 25 runes - Urist
+		if (rune_list_legacy.len >= 26+runedec+4*cultists) //including the useless rune at the secret room, shouldn't count against the limit of 25 runes - Urist
 			alert("The cloth of reality can't take that much of a strain. Remove some runes first!")
 			return
 		else
@@ -514,7 +514,7 @@ var/runedec = 0 // Rune cap ?
 		if(src.cultistsonly && !iscultist(usr))
 			return
 		if(!cultwords["travel"])
-			runerandom()
+			my_cult.randomiseWords()
 		if(user)
 			var/r
 			if (!istype(user.loc,/turf))

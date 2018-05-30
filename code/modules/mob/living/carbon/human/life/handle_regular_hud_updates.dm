@@ -121,7 +121,7 @@
 
 		if(seer == 1)
 			var/obj/effect/rune_legacy/R = locate() in loc
-			var/datum/faction/cult/narsie/blood_cult = find_active_faction(CULT_NARSIE)
+			var/datum/faction/cult/narsie/blood_cult = find_active_faction(LEGACY_CULT)
 			var/cultwords
 			if (blood_cult)
 				cultwords = blood_cult.cult_words

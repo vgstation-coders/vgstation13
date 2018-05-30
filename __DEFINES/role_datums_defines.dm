@@ -15,7 +15,7 @@
 #define WIZFEDERATION "wizard federation"
 #define VAMPIRELORDS "vampire lords"
 #define CULT "generic cult"
-#define LEGACY_CULT "legacy cult"
+#define LEGACY_CULT "Ancient Cult of Nar-Sie"
 
 // Role IDs
 #define TRAITOR "traitor"
@@ -24,6 +24,7 @@
 #define VAMPIRE "vampire"
 #define WIZARD "wizard"
 #define CULTIST "cultist"
+#define LEGACY_CULTIST "legacy cultist"
 #define NUKE_OP "nuclear operative"
 #define HEADREV "head revolutionary"
 #define REV "revolutionary"

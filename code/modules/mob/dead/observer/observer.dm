@@ -405,7 +405,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 	if(mind.current.ajourn && mind.current.stat != DEAD) 	//check if the corpse is astral-journeying (it's client ghosted using a cultist rune).
 		var/obj/effect/rune_legacy/R = mind.current.ajourn	//whilst corpse is alive, we can only reenter the body if it's on the rune
-		var/datum/faction/cult/narsie/blood_cult = find_active_faction(CULT_NARSIE)
+		var/datum/faction/cult/narsie/blood_cult = find_active_faction(LEGACY_CULT)
 		var/list/cultwords
 		if (istype(blood_cult))
 			cultwords = blood_cult.cult_words
@@ -760,7 +760,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return 0 //something is terribly wrong
 
 	var/ghosts_can_write
-	var/datum/faction/C = find_active_faction(CULT_NARSIE)
+	var/datum/faction/C = find_active_faction(LEGACY_CULT)
 	if(C && C.members.len > config.cult_ghostwriter_req_cultists)
 		ghosts_can_write = 1
 

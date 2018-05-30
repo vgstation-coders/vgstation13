@@ -10,7 +10,6 @@
 
 //NULLROD CHECK
 
-
 var/list/rune_list = list()//all runes currently in the world
 var/list/uristrune_cache = list()//icon cache, so the whole blending process is only done once per rune.
 

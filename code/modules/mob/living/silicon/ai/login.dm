@@ -1,6 +1,6 @@
 /mob/living/silicon/ai/Login()	//ThisIsDumb(TM) TODO: tidy this up ¬_¬ ~Carn
 	..()
-	for(var/obj/effect/rune_legacy/rune in rune_list) //HOLY FUCK WHO THOUGHT LOOPING THROUGH THE WORLD WAS A GOOD IDEA
+	for(var/obj/effect/rune_legacy/rune in rune_list_legacy) //HOLY FUCK WHO THOUGHT LOOPING THROUGH THE WORLD WAS A GOOD IDEA
 		client.images += rune.blood_image
 	regenerate_icons()
 

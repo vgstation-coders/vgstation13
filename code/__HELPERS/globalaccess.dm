@@ -1027,6 +1027,8 @@
 			return global.mr_clean_targets;
 		if("rune_list")
 			return global.rune_list;
+		if("rune_list_legacy")
+			return global.rune_list_legacy;
 		if("halloween_spawns")
 			return global.halloween_spawns;
 		if("snow_recipes")
@@ -2890,6 +2892,8 @@
 			global.mr_clean_targets=newval
 		if("rune_list")
 			global.rune_list=newval
+		if("rune_list_legacy")
+			global.rune_list_legacy=newval
 		if("halloween_spawns")
 			global.halloween_spawns=newval
 		if("snow_recipes")
@@ -3042,6 +3046,8 @@
 			global.message_delay=newval
 		if("telecomms_list")
 			global.telecomms_list=newval
+		if("uristrune_cache_legacy")
+			global.uristrune_cache_legacy=newval
 		if("uristrune_cache")
 			global.uristrune_cache=newval
 		if("explosion_turfs")
