@@ -1668,7 +1668,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					)
 	cost = 250
 	containertype = /obj/structure/closet/crate/sci
-	containername = "robot maintenance equipment"
+	containername = "robot maintenance equipment crate"
 	group = "Science"
 
 /datum/supply_packs/suspension_gen
