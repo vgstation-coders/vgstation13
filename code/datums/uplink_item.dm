@@ -229,6 +229,13 @@ var/list/uplink_items = list()
 	cost = 4
 	job = list("Security Officer", "Warden", "Head of Security")
 
+/datum/uplink_item/jobspecific/syndietape_police
+	name = "Syndicate Tape"
+	desc = "A length of police tape rigged with adapative electronics that will wraps itself around the hands unathorised personnel who crosses it, cuffing them.  Do not (let them) cross. Can be used 3 times."
+	item = /obj/item/taperoll/syndie/police
+	cost = 8
+	job = list("Security Officer", "Warden", "Head of Security")
+
 //Detective
 /datum/uplink_item/jobspecific/evidenceforger
 	name = "Evidence Forger"
@@ -293,7 +300,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/greytide
 	name = "Greytide Implant"
-	desc = "A box containing an implanter filled with a greytide implant when injected into another person makes them loyal to the greytide and your cause, unless they're already implanted by someone else. Loyalty ends if he or she no longer has the implant."
+	desc = "A box containing two greytide implanters that when injected into another person makes them loyal to the greytide and your cause, unless they're already implanted by someone else. Loyalty ends if he or she no longer has the implant. CAUTION: WILL NOT WORK ON SUBJECTS WITH NT LOYALTY IMPLANTS. Now with disguised sechud sunglasses. These will have limited access until you can get your hands on some containing security codes."
 	item = /obj/item/weapon/storage/box/syndie_kit/greytide
 	cost = 14
 	job = list("Assistant")
@@ -333,7 +340,7 @@ var/list/uplink_items = list()
 	name = "Lethal Speed Chemical"
 	desc = "30 units of Hypozine, a chemical that causes the body to synthesize hyperzine, but also causes increases in muscle speed at levels that tear the body apart. Metabolizes quite slowly."
 	item = /obj/item/weapon/storage/box/syndie_kit/lethal_hyperzine
-	cost = 12
+	cost = 4
 	job = list("Chemist", "Medical Doctor", "Chief Medical Officer")
 
 //Engineer
@@ -344,12 +351,26 @@ var/list/uplink_items = list()
 	cost = 12
 	job = list("Station Engineer", "Chief Engineer")
 
+/datum/uplink_item/jobspecific/syndietape_engineering
+	name = "Syndicate Tape"
+	desc = "A length of engineering tape charged with a powerful electric potential. Will spark and shock people who attempt to remove it, creating fires. Can be used 3 times."
+	item = /obj/item/taperoll/syndie/engineering
+	cost = 4
+	job = list("Station Engineer", "Chief Engineer")
+
 //Atmos Tech
 /datum/uplink_item/jobspecific/contortionist
 	name = "Contortionist's Jumpsuit"
 	desc = "A highly flexible jumpsuit that will help you navigate the ventilation loops of the station internally. Comes with pockets and ID slot, but can't be used without stripping off most gear, including backpack, belt, helmet, and exosuit. Free hands are also necessary to crawl around inside."
 	item = /obj/item/clothing/under/contortionist
 	cost = 6
+	job = list("Atmospheric Technician", "Chief Engineer")
+
+/datum/uplink_item/jobspecific/syndietape_atmos
+	name = "Syndicate Tape"
+	desc = "A length of atmospherics tape made of an extremely sharp material that will cuts the hands of trespassers. Very difficult to remove. Can be used 3 times."
+	item = /obj/item/taperoll/syndie/atmos
+	cost = 4
 	job = list("Atmospheric Technician", "Chief Engineer")
 
 //Geneticist
@@ -383,6 +404,14 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/briefcase/false_bottomed/smg
 	cost = 12
 	job = list("Internal Affairs Agent")
+
+/datum/uplink_item/jobspecific/knifeboot
+	name = "Concealed knife shoes"
+	desc = "Shoes with a knife concealed in the toecap. Tap your heels together to reveal the knife. Kick the target to stab them."
+	item = /obj/item/clothing/shoes/knifeboot
+	cost = 4
+	job = list("Internal Affairs Agent")
+
 
 //Nuke Ops Prices
 /datum/uplink_item/nukeprice
@@ -463,6 +492,12 @@ var/list/uplink_items = list()
 	desc = "A single grenade containing a pair of incredibly destructive viscerators. Be aware that they will attack any nearby targets, including yourself. Emits a blinding flash upon detonation."
 	item = /obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate
 	cost = 6
+
+/datum/uplink_item/dangerous/butterfly
+	name = "Butterfly Knife"
+	desc = "A butterfly knife containing a deadly viscerator. It can be flipped to conceal the blade and deploy a stored viscerator. The viscerator will self destruct after 20 seconds but the knife will renew it's storage every 25 seconds automatically."
+	item = /obj/item/weapon/butterflyknife/viscerator
+	cost = 7
 
 /datum/uplink_item/dangerous/gatling
 	name = "Gatling Gun"
