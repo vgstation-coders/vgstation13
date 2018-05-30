@@ -5,7 +5,7 @@
 	icon_state = "cypherkey"
 	item_state = ""
 	w_class = W_CLASS_TINY
-	origin_tech = Tc_MAGNETS + "=4;" + Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=4;" + Tc_PROGRAMMING + "=4"
+	origin_tech = Tc_ENGINEERING + "=1;"+ Tc_PROGRAMMING + "=2"
 	var/translate_binary = 0
 	var/translate_hive = 0
 	var/list/channels = list()
