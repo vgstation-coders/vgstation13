@@ -14,8 +14,9 @@
 	var/base_icon
 	var/image/eyes = null
 
-	//New() stuff
+	//Sound
 	var/startup_sound = 'sound/voice/liveagain.ogg'
+	var/startup_vary = TRUE //Does the startup sounds vary?
 
 	// Alerts
 	var/pressure_alert = FALSE
@@ -144,7 +145,7 @@
 		cell_component.wrapped = cell
 		cell_component.installed = COMPONENT_INSTALLED
 
-	playsound(get_turf(src), startup_sound, 75, 1)
+	playsound(src, startup_sound, 75, startup_vary)
 
 	//Borgs speak all common languages by default.
 	add_language(LANGUAGE_GALACTIC_COMMON)
@@ -1453,7 +1454,8 @@
 //Combat module debug subtype.
 /mob/living/silicon/robot/debug_droideka
 	cell_type = /obj/item/weapon/cell/hyper
-	startup_sound = 'sound/mecha/LongNanoActivation.ogg'
+	startup_sound = 'sound/mecha/nominalnano.ogg'
+	startup_vary = FALSE
 
 /mob/living/silicon/robot/debug_droideka/New()
 	..()
@@ -1467,7 +1469,8 @@
 /mob/living/silicon/robot/syndie
 	req_access = list(access_syndicate)
 	cell_type = /obj/item/weapon/cell/hyper
-	startup_sound = 'sound/mecha/LongSyndiActivation.ogg'
+	startup_sound = 'sound/mecha/nominalsyndi.ogg'
+	startup_vary = FALSE
 
 /mob/living/silicon/robot/syndie/New()
 	..()
