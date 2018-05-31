@@ -202,12 +202,12 @@ var/const/MAX_SAVE_SLOTS = 8
 			if(!IsGuestKey(thekey))
 				var/load_pref = load_preferences_sqlite(theckey)
 				if(load_pref)
-					while(!speciesinit)
+					while(!SS_READY(SShumans))
 						sleep(1)
 					try_load_save_sqlite(theckey, C, default_slot)
 					return
 
-			while(!speciesinit)
+			while(!SS_READY(SShumans))
 				sleep(1)
 			randomize_appearance_for()
 			real_name = random_name(gender, species)
