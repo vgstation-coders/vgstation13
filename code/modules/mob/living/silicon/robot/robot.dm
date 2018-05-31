@@ -1483,7 +1483,6 @@
 	..()
 	pick_module(SYNDIE_CRISIS_MODULE)
 	install_upgrade(src, /obj/item/borg/upgrade/vtec)
-	install_upgrade(src, /obj/item/borg/upgrade/jetpack)
 
 //Moving hugborgs to an easy-to-spawn subtype because they were as retarded as the syndie one.
 /mob/living/silicon/robot/hugborg

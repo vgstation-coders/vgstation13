@@ -6,7 +6,7 @@
 	mech_flags = MECH_SCAN_ILLEGAL
 
 	var/charge = 1
-	var/self_destruct = FALSE //Do we delete ourselves after running out of juice?
+	var/autoqdel = FALSE //Do we delete ourselves after running out of juice?
 	var/borg_type = /mob/living/silicon/robot
 
 	var/datum/recruiter/recruiter = null
@@ -21,26 +21,23 @@
 	if(has_icon(icon, "[initial(icon_state)]-searching"))
 		icon_state = "[initial(icon_state)][busy ? "-searching" : ""]"
 
-/obj/item/weapon/robot_spawner/attack_self(mob/user as mob)
-	if(charge <= 0)
+/obj/item/weapon/robot_spawner/attack_self(mob/user)
+	request_borg(user)
+
+/obj/item/weapon/robot_spawner/attack_ghost(var/mob/dead/observer/O)
+	if(last_ping_time + ping_cooldown <= world.time)
+		last_ping_time = world.time
+		request_borg(O)
+	else
+		to_chat(O, "\The [name]'s power is low. Try again in a few moments.")
+
+/obj/item/weapon/robot_spawner/proc/request_borg(var/mob/user)
+	if(!charge)
 		to_chat(user, "\The [name] is out of power.")
 		return
 	if(busy)
 		return
-	request_borg()
 
-/obj/item/weapon/robot_spawner/attack_ghost(var/mob/dead/observer/O)
-	if(busy || !charge)
-		return
-	if(last_ping_time + ping_cooldown <= world.time)
-		last_ping_time = world.time
-		request_borg()
-	else
-		to_chat(O, "\The [name]'s power is low. Try again in a few moments.")
-
-/obj/item/weapon/robot_spawner/proc/request_borg()
-	if(busy)
-		return
 	busy = TRUE
 	visible_message("[src] pings.")
 	playsound(src, 'sound/machines/signal.ogg', 50, 0)
@@ -79,7 +76,7 @@
 		var/mob/living/silicon/robot/R = new borg_type(get_turf(loc))
 		R.key = O.key
 		post_recruited(R)
-		if(!charge && self_destruct)
+		if(!charge && autoqdel)
 			qdel(src)
 	else
 		busy = FALSE
@@ -108,10 +105,10 @@
 	ticker.mode.update_synd_icons_added(R.mind)
 	R.mind.special_role = "syndicate"
 
-//Hugborg spawner.
+//Strange spawner, a xenoarchaeology find.
 /obj/item/weapon/robot_spawner/strange
 	icon = 'icons/obj/assemblies.dmi'
-	self_destruct = TRUE
+	autoqdel = TRUE
 
 /obj/item/weapon/robot_spawner/post_recruited(mob/living/silicon/robot/R)
 	..()
