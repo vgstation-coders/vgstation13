@@ -2221,6 +2221,7 @@
 #include "code\modules\telesci\telepad.dm"
 #include "code\modules\telesci\telesci_computer.dm"
 #include "code\modules\tooltip\tooltip.dm"
+#include "code\modules\unit_tests\_unit_tests.dm"
 #include "code\modules\virus2\analyser.dm"
 #include "code\modules\virus2\antibodies.dm"
 #include "code\modules\virus2\centrifuge.dm"

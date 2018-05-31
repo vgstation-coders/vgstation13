@@ -74,7 +74,11 @@ var/datum/controller/gameticker/ticker
 	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`")
 
 	do
-		var/delay_timetotal = 3000 //actually 5 minutes or incase this is changed from 3000, (time_in_seconds * 10)
+#ifdef UNIT_TESTS
+		var/delay_timetotal = 2 SECONDS
+#else
+		var/delay_timetotal = 5 MINUTES
+#endif
 		pregame_timeleft = world.timeofday + delay_timetotal
 		to_chat(world, "<B><FONT color='blue'>Welcome to the pre-game lobby!</FONT></B>")
 		to_chat(world, "Please, setup your character and select ready. Game will start in [(pregame_timeleft - world.timeofday) / 10] seconds.")
@@ -183,6 +187,10 @@ var/datum/controller/gameticker/ticker
 
 	//here to initialize the random events nicely at round start
 	setup_economy()
+
+#ifdef UNIT_TESTS
+	run_unit_tests()
+#endif
 
 	spawn(0)//Forking here so we dont have to wait for this to finish
 		mode.post_setup()
