@@ -504,6 +504,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	projectile_type = "/obj/item/projectile/kinetic"
 	cell_type = "/obj/item/weapon/cell/crap"
 	charge_cost = 50
+	icon_charge_multiple = 20
 	var/overheat = 0
 	var/recent_reload = 1
 /*
@@ -521,10 +522,6 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	playsound(src.loc, 'sound/weapons/shotgunpump.ogg', 60, 1)
 	recent_reload = 1
 	update_icon()
-	return
-
-// /vg/ - Broken until we update to /tg/ guncode.
-/obj/item/weapon/gun/energy/kinetic_accelerator/update_icon()
 	return
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg
