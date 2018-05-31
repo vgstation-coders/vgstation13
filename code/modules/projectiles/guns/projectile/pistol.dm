@@ -184,3 +184,21 @@
 /obj/item/weapon/gun/projectile/luger/update_icon()
 	..()
 	icon_state = "[initial(icon_state)][stored_magazine ? "" : "empty"]"
+	
+/obj/item/weapon/gun/projectile/beretta
+	name = "\improper Beretta 92FS"
+	desc = "The classic wonder nine and favorite of the undercover cop. Kong whiskey not included."
+	icon = 'icons/obj/beretta.dmi'
+	icon_state = "beretta"
+	max_shells = 15
+	caliber = list("9mm" = 1)
+	silenced = 0
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=2"
+	ammo_type = "/obj/item/ammo_casing/c9mm"
+	mag_type = "/obj/item/ammo_storage/magazine/beretta"
+	load_method = 2
+	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+
+/obj/item/weapon/gun/projectile/beretta/update_icon()
+	..()
+	icon_state = "beretta[chambered ? "" : "-e"]"
