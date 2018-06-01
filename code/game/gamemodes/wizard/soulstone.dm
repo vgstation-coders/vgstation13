@@ -13,6 +13,13 @@
 /obj/item/device/soulstone/Destroy()
 	eject_shade()
 	..()
+
+/obj/item/device/soulstone/examine(mob/user)
+	..()
+	for(var/mob/living/simple_animal/shade/A in src)
+		if(!A.client)
+			to_chat(user, "<span class='warning'>The spirit within seems to be dormant.</span>")
+
 //////////////////////////////Capturing////////////////////////////////////////////////////////
 
 /obj/item/device/soulstone/attack(var/mob/living/M, mob/user as mob)
@@ -48,9 +55,6 @@
 	user << browse(dat, "window=aicard")
 	onclose(user, "aicard")
 	return
-
-
-
 
 /obj/item/device/soulstone/Topic(href, href_list)
 	var/mob/living/carbon/U = usr

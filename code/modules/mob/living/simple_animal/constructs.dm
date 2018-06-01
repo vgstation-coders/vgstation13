@@ -100,6 +100,8 @@
 		else
 			msg += "<B>It looks severely dented!</B>\n"
 		msg += "</span>"
+	if(!client)
+		msg += "<span class='warning'>The spirit animating it seems to be dormant.</span>\n"
 	msg += "*---------*</span>"
 
 	to_chat(user, msg)
