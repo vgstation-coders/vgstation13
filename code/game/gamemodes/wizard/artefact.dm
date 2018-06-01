@@ -199,3 +199,63 @@
 	spawn(2 SECONDS)
 		explosion(loc, 0, 1, 2, 3)
 		qdel(src)
+
+/obj/item/phylactery
+	name = "strange stone"
+	desc = "A stone, decorated with masterly crafted silver, adorned with silver in the shape of a human skull. It hums with malignancy."
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "phylactery_empty_noglow"
+	var/charges = 0
+	var/soulbound
+
+/obj/item/phylactery/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/device/soulstone))
+		var/obj/item/device/soulstone/S = I
+		if(locate(/mob/living/simple_animal/shade) in S)
+			visible_message("<span class = 'warning'>The soul within \the [I] is released unto \the [src].</span>")
+			for(var/mob/living/L in S)
+				qdel(S)
+			S.name = initial(S.name)
+			charges++
+			update_icon()
+	else
+		..()
+
+/obj/item/phylactery/update_icon()
+	if(soulbound)
+		if(charges >= 1)
+			icon_state = "phylactery"
+		else
+			icon_state = "phylactery_empty"
+	else
+		icon_state = "phylactery_empty_noglow"
+
+/obj/item/phylactery/attack_self(mob/user)
+	if(!soulbound && ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/datum/organ/external/E = H.get_active_hand_organ()
+		if(locate(/datum/wound) in E.wounds)
+			to_chat(user, "<span class = 'warning'>You bind your life essence to \the [src].</span>")
+			soulbound = user.on_death.Add(src, "revive_soul")
+			charges++
+			update_icon()
+	else
+		..()
+
+/obj/item/phylactery/proc/revive_soul(list/arguments)
+	if(charges <= 0)
+		return
+	var/mob/living/original = arguments["user"]
+	if(original.mind)
+		var/mob/living/carbon/human/H = new /mob/living/carbon/human/lich(get_turf(src))
+		for(var/spell/S in original.spell_list)
+			H.add_spell(S)
+			original.spell_list.Remove(S)
+		original.mind.transfer_to(H)
+		original.on_death.Remove(soulbound)
+		soulbound = H.on_death.Add(src, "revive_soul")
+	if(!arguments["body_destroyed"])
+		original.dust()
+	charges--
+	update_icon()
+

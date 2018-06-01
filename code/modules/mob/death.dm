@@ -37,7 +37,7 @@
 
 /mob/proc/death(gibbed)
 	timeofdeath = world.time
-
+	INVOKE_EVENT(on_death, list("user" = src,"body_destroyed" = gibbed))
 	living_mob_list -= src
 	dead_mob_list += src
 	stat_collection.add_death_stat(src)
