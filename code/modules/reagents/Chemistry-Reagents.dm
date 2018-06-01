@@ -2427,6 +2427,8 @@
 		holder.remove_reagent("zombiepowder", 5)
 	if(holder.has_reagent("mindbreaker"))
 		holder.remove_reagent("mindbreaker", 5)
+	if(holder.has_reagent("spiritbreaker"))
+		holder.remove_reagent("spiritbreaker", 5)
 	M.hallucination = 0
 	M.setBrainLoss(0)
 	M.disabilities = 0
