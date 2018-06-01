@@ -86,6 +86,11 @@
 		health -= rand(5,45) //These guys are like ghosts, a collision with a shuttle wouldn't destroy one outright
 	return
 
+/mob/living/simple_animal/shade/examine(mob/user)
+	..()
+	if(!client)
+		to_chat(user, "<span class='warning'>It appears to be dormant.</span>")
+
 ////////////////HUD//////////////////////
 
 /mob/living/simple_animal/shade/Life()
