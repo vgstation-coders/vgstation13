@@ -89,7 +89,7 @@
 /mob/living/simple_animal/shade/examine(mob/user)
 	..()
 	if(!client)
-		to_chat(user, "<span class='warning'>[src] appears to be dormant.</span>")
+		to_chat(user, "<span class='warning'>It appears to be dormant.</span>")
 
 ////////////////HUD//////////////////////
 
