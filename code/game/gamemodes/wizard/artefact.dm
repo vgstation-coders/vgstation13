@@ -207,19 +207,27 @@
 	icon_state = "phylactery_empty_noglow"
 	var/charges = 0
 	var/soulbound
+	var/mob/bound_soul
 
 /obj/item/phylactery/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/device/soulstone))
 		var/obj/item/device/soulstone/S = I
-		if(locate(/mob/living/simple_animal/shade) in S)
+		var/mob/living/simple_animal/shade/sacrifice = locate() in S
+		if(sacrifice)
 			visible_message("<span class = 'warning'>The soul within \the [I] is released unto \the [src].</span>")
-			for(var/mob/living/L in S)
-				qdel(S)
 			S.name = initial(S.name)
 			charges++
 			update_icon()
+			qdel(sacrifice)
 	else
 		..()
+
+/obj/item/phylactery/Destroy()
+	bound_soul.on_death.Remove(soulbound)
+	soulbound = null
+	bound_soul = null
+	..()
+
 
 /obj/item/phylactery/update_icon()
 	if(soulbound)
@@ -237,6 +245,7 @@
 		if(locate(/datum/wound) in E.wounds)
 			to_chat(user, "<span class = 'warning'>You bind your life essence to \the [src].</span>")
 			soulbound = user.on_death.Add(src, "revive_soul")
+			bound_soul = user
 			charges++
 			update_icon()
 	else
@@ -249,11 +258,12 @@
 	if(original.mind)
 		var/mob/living/carbon/human/H = new /mob/living/carbon/human/lich(get_turf(src))
 		for(var/spell/S in original.spell_list)
+			original.remove_spell(S)
 			H.add_spell(S)
-			original.spell_list.Remove(S)
 		original.mind.transfer_to(H)
 		original.on_death.Remove(soulbound)
 		soulbound = H.on_death.Add(src, "revive_soul")
+		bound_soul = H
 	if(!arguments["body_destroyed"])
 		original.dust()
 	charges--
