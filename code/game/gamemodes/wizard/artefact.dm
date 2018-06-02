@@ -207,6 +207,7 @@
 	icon_state = "phylactery_empty_noglow"
 	var/charges = 0
 	var/soulbound
+	var/z_bound
 	var/mob/bound_soul
 
 /obj/item/phylactery/attackby(obj/item/I, mob/user)
@@ -223,7 +224,8 @@
 		..()
 
 /obj/item/phylactery/Destroy()
-	bound_soul.on_death.Remove(soulbound)
+	if(bound_soul.on_death)
+		bound_soul.on_death.Remove(soulbound)
 	soulbound = null
 	bound_soul = null
 	..()
@@ -244,8 +246,7 @@
 		var/datum/organ/external/E = H.get_active_hand_organ()
 		if(locate(/datum/wound) in E.wounds)
 			to_chat(user, "<span class = 'warning'>You bind your life essence to \the [src].</span>")
-			soulbound = user.on_death.Add(src, "revive_soul")
-			bound_soul = user
+			bind(user)
 			charges++
 			update_icon()
 	else
@@ -253,19 +254,47 @@
 
 /obj/item/phylactery/proc/revive_soul(list/arguments)
 	if(charges <= 0)
+		unbind()
 		return
 	var/mob/living/original = arguments["user"]
 	if(original.mind)
-		var/mob/living/carbon/human/H = new /mob/living/carbon/human/lich(get_turf(src))
+		var/mob/living/carbon/human/H = new /mob/living/carbon/human/lich(src)
 		for(var/spell/S in original.spell_list)
 			original.remove_spell(S)
 			H.add_spell(S)
+		H.Paralyse(30)
 		original.mind.transfer_to(H)
-		original.on_death.Remove(soulbound)
-		soulbound = H.on_death.Add(src, "revive_soul")
-		bound_soul = H
-	if(!arguments["body_destroyed"])
-		original.dust()
+		unbind()
+		bind(H)
+		if(!arguments["body_destroyed"])
+			original.dust()
+		var/release_time = rand(60 SECONDS, 120 SECONDS)/charges
+		to_chat(H, "<span class = 'notice'>\The [src] will permit you exit in [release_time/10] seconds.</span>")
+		spawn(release_time)
+			to_chat(H, "<span class = 'notice'>\The [src] permits you exit from it.</span>")
+			H.forceMove(get_turf(src))
 	charges--
 	update_icon()
 
+/obj/item/phylactery/proc/unbind()
+	if(bound_soul.on_death)
+		bound_soul.on_death.Remove(soulbound)
+	if(bound_soul.on_z_transition)
+		bound_soul.on_z_transition.Remove(z_bound)
+	z_bound = null
+	soulbound = null
+	bound_soul = null
+	update_icon()
+
+/obj/item/phylactery/proc/bind(var/mob/to_bind)
+	soulbound = to_bind.on_death.Add(src, "revive_soul")
+	z_bound = to_bind.on_z_transition.Add(src, "z_block")
+	bound_soul = to_bind
+
+/obj/item/phylactery/proc/z_block(list/arguments)
+	if(arguments["to_z"] != src.z)
+		var/mob/user = arguments["user"]
+		spawn(rand(5 SECONDS, 15 SECONDS)) //Mr. Wizman, I don't feel so good
+			to_chat(user, "<span class = 'warning'>As you stray further and further away from \the [src], you feel your form unravel!</span>")
+			if(arguments["to_z"] != src.z)
+				user.dust()
