@@ -84,7 +84,7 @@
 			break
 
 
-		if(Target.health <= -70 || Target.stat == 2)
+		if(Target.health <= -70 || Target.isDead())
 			Target = null
 			AIproc = 0
 //			to_chat(world, "break 3")
