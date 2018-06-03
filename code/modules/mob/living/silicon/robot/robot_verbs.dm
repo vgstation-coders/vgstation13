@@ -31,7 +31,7 @@
 	set category = "Robot Commands"
 	set name = "Show Alerts"
 
-	if(incapacitated())
+	if(isDead() || !is_component_functioning("comms"))
 		return
 
 	robot_alerts()
@@ -41,17 +41,24 @@
 	set category = "Robot Commands"
 	set name = "Show Station Manifest"
 
-	if(incapacitated())
+	if(!is_component_functioning("comms"))
 		return
 
 	show_station_manifest()
 
+/mob/living/silicon/robot/verb/toggle_station_map()
+	set category = "Robot Commands"
+	set name = "Toggle Station Holomap"
+	set desc = "Toggle station holomap on your screen"
+
+	if(isDead() || !is_component_functioning("camera"))
+		return
+
+	station_holomap.toggleHolomap(src)
+
 /mob/living/silicon/robot/verb/self_diagnosis_verb()
 	set category = "Robot Commands"
 	set name = "Self Diagnosis"
-
-	if(incapacitated())
-		return
 
 	if(!can_diagnose())
 		to_chat(src, "<span class='warning'>Your self-diagnosis component isn't functioning.</span>")
@@ -66,7 +73,7 @@
 	set name = "Toggle Component"
 	set desc = "Toggle a component, conserving power."
 
-	if(incapacitated())
+	if(isDead())
 		return
 
 	var/list/installed_components = list()
@@ -89,22 +96,12 @@
 		C.toggled = TRUE
 		to_chat(src, "<span class='warning'>You enable [C.name].</span>")
 
-/mob/living/silicon/robot/verb/toggle_station_map()
-	set category = "Robot Commands"
-	set name = "Toggle Station Holomap"
-	set desc = "Toggle station holomap on your screen"
-
-	if(incapacitated())
-		return
-
-	station_holomap.toggleHolomap(src)
-
 /mob/living/silicon/robot/verb/unlock_own_cover()
 	set category = "Robot Commands"
 	set name = "Unlock Cover"
 	set desc = "Unlocks your own cover if it is locked. You can not lock it again. A human will have to lock it for you."
 
-	if(!incapacitated() && locked)
+	if(!isDead() && locked)
 		switch(alert("You can not lock your cover again, are you sure?\n      (You can still ask for a human to lock it)", "Unlock Own Cover", "Yes", "No"))
 			if("Yes")
 				locked = FALSE
