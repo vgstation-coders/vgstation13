@@ -215,7 +215,7 @@
 	var/mob/living/silicon/robot/R = usr
 
 	if(R.incapacitated())
-			return
+		return
 
 	borgprint()
 

@@ -31,7 +31,7 @@
 	set category = "Robot Commands"
 	set name = "Show Alerts"
 
-	if(!incapacitated())
+	if(incapacitated())
 		return
 
 	robot_alerts()
