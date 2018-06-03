@@ -12,7 +12,7 @@
 	set desc = "Allows to hide beneath tables or certain items. Toggled on or off."
 	set category = "Robot Commands"
 
-	if(incapacitated() || !is_component_functioning("actuator"))
+	if(incapacitated())
 		return
 
 	if (plane != HIDING_MOB_PLANE)
@@ -34,7 +34,7 @@
 	set desc = "Lock yourself in place"
 	set category = "Robot Commands"
 	
-	if(incapacitated() || !is_component_functioning("actuator"))
+	if(incapacitated())
 		return
 
 	anchored = !anchored //This is fucking stupid
