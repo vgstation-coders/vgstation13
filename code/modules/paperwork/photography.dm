@@ -209,6 +209,14 @@
 	set name = "Print Image"
 	set src in usr
 
+	if(!isrobot(usr))
+		return
+
+	var/mob/living/silicon/robot/R = usr
+
+	if(R.incapacitated())
+			return
+
 	borgprint()
 
 /obj/item/device/camera/attackby(obj/item/I, mob/user)
