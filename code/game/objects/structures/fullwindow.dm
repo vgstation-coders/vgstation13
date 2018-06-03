@@ -94,6 +94,10 @@
 		update_nearby_tiles()
 		ini_dir = dir
 
+/obj/structure/window/full/AltClick(var/mob/user)
+	var/turf/T = get_turf(src)
+	T.AltClick(user)
+
 /obj/structure/window/full/reinforced
 	name = "reinforced window"
 	desc = "A window with a rod matrice. It looks more solid than the average window."
