@@ -900,7 +900,7 @@
 /datum/religion/art
 	name = "The Joy of Painting"
 	deity_name = "Bob Ross"
-	bible_names = list("The Joy of Painting")
+	bible_name = "The Joy of Painting"
 	male_adept = "Painter"
 	female_adept = "Painter"
 	keys = list("art", "bob ross", "happy little trees", "happy little clouds")
