@@ -37,6 +37,6 @@
 	if(incapacitated())
 		return
 
-	R.anchored = !R.anchored //This is fucking stupid
-	R.update_canmove()
+	anchored = !anchored //This is fucking stupid
+	update_canmove()
 	updateicon()
