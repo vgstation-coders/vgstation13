@@ -28,6 +28,5 @@
 					I.attack_self(M)
 			if(COMSIG_EQUIPACTVHAND)
 				var/obj/item/I = M.get_active_hand()
-				to_chat(world, "I is [I]")
 				if(I)
 					M.equip_to_appropriate_slot(I)

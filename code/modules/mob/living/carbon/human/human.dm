@@ -1441,7 +1441,7 @@
 /mob/living/carbon/human/proc/make_all_robot_parts_organic()
 	make_robot_limbs_organic()
 	make_robot_internals_organic()
-	
+
 // Makes all limbs robotic.
 /mob/living/carbon/human/proc/make_organic_limbs_robotic()
 	for(var/datum/organ/external/O in organs)
@@ -1777,7 +1777,6 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	BrainContainer.AddComponent(/datum/component/ai/melee/throw_attack)
 	BrainContainer.AddComponent(/datum/component/ai/crowd_attack)
 	BrainContainer.AddComponent(pick(typesof(/datum/component/ai/targetting_handler)))
-	//BrainContainer.AddComponent(/datum/component/debugger) //REMEMBER TO REMOVE THIS
 
 /mob/living/carbon/human/can_show_flavor_text()
 	// Wearing a mask...

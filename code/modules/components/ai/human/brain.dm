@@ -51,7 +51,6 @@
 	AssessNeeds(H)
 	var/obj/item/I = AttainExternalItemGoal(H)
 	if(I)
-		to_chat(world, "External goal is [I]")
 		if(H.Adjacent(I))
 			AcquireItem(H, I)
 			SendSignal(COMSIG_MOVE, list("dir" = 0))
@@ -61,7 +60,6 @@
 		return
 
 	if(!isnull(current_target))
-		to_chat(world, "Attacking [current_target]")
 		SendSignal(COMSIG_ATTACKING, list("target"=current_target))
 		var/turf/T = get_turf(current_target)
 		if(T)
@@ -211,7 +209,6 @@
 		return 0
 
 /datum/component/ai/human_brain/proc/IsBetterWeapon(mob/living/carbon/human/H, var/list/search_location, var/obj/item/comparison)
-	to_chat(world, "Evaluating: [H], in [search_location] or [comparison]")
 	var/obj/item/O = H.get_active_hand()
 	if(!search_location && !comparison)
 		search_location = view(H)

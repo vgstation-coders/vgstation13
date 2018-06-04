@@ -229,7 +229,6 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 
 	//if the path is longer than maxnodes, then don't return it
 	if(path && maxnodes && path.len > (maxnodes + 1))
-		to_chat(world, "path was too long. path.len = [path.len], maxnodes = [maxnodes+1]")
 		return 0
 
 	//reverse the path to get it from start to finish

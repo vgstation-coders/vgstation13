@@ -23,7 +23,6 @@
 					return //We're already on our way there
 				target = args["loc"]
 				movement_nodes = AStar(M, target, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance, 0, 30, id=M.get_visible_id())
-				to_chat(world, "[movement_nodes[1]]")
 			if("dir" in args)
 				movement_nodes.Cut()
 				walk(M, args["dir"], walk_delay)
