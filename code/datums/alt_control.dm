@@ -1,8 +1,3 @@
-#define REVERT_ON_CONTROLLER_DAMAGED 1
-#define LOCK_EYE_TO_CONTROLLED 2
-#define LOCK_MOVEMENT_OF_CONTROLLER 4
-#define REQUIRES_CONTROL 8
-
 /datum/control
 	var/name = "controlling something else"
 	var/mob/controller
