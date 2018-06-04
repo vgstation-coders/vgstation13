@@ -69,7 +69,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		integratedpai = null
 	if(on_use)
 		on_use.holder = null
-	qdel(on_use)
+		qdel(on_use)
+		on_use = null
 
 	material_type = null //Don't qdel, they're held globally
 	..()
@@ -652,17 +653,15 @@ a {
 		for(var/i = 1 to material_mod)
 			if(prob(50)) //We're gonna use an atom
 				var/atom/AM = pick(existing_typesof(/mob/living/simple_animal))
-				if(!characters.Find(initial(AM.name)))
-					characters.Add(initial(AM.name))
+				characters |= initial(AM.name)
 			else
 				var/strangething = pick("captain","clown","mime","\improper CMO","cargo technician","medical doctor","[user ? user : "stranger"]","octopus","changeling","\improper Nuclear Operative", "[pick("greyshirt", "greytide", "assistant")]", "xenomorph","catbeast","[user && user.mind && user.mind.heard_before.len ? pick(user.mind.heard_before) : "strange thing"]","Central Command","\improper Ian","[ticker.Bible_deity_name]","Nar-Sie","\improper Poly the Parrot","\improper Wizard","vox")
-				if(!characters.Find(strangething))
-					characters.Add(strangething)
+				characters |= strangething
 			additional_description += "[i == material_mod ? " & a " : "[i > 1 ? ", a ": " A "]"][characters[i]]"
 		additional_description += ". They are in \the [pick("captains office","Space","mining outpost","vox outpost","a space station","[station_name()]","bar","kitchen","library","Science","void","Bluespace","Hell","Central Command")]"
-		if(material_mod > 1)
+		if(material_mod > 2)
 			additional_description += ". They are [pick("[pick("fighting","robusting","attacking","beating up", "abusing")] [pick("each other", pick(characters))]","playing cards","firing lasers at [pick("something",pick(characters))]","crying","laughing","blank faced","screaming","cooking [pick("something", pick(characters))]", "eating [pick("something", pick(characters))]")]. "
-		if(characters.len)
+		if(characters.len > 1)
 			for(var/i in characters)
 				additional_description += "\The [i] is [pick("laughing","crying","screaming","naked","very naked","angry","jovial","manical","melting","fading away","making a plaintive gesture")]. "
 		additional_description += "The scene gives off a feeling of [pick("unease","empathy","fear","malice","dread","happiness","strangeness","insanity","drol")]. "
