@@ -1,5 +1,10 @@
 /* Legacy cult (Cult 2.0), by Deity and Urist */
 
+#define CULT_PRELUDE 		0 // First objective
+#define CULT_INTERMEDIATE	1 // Second (objective)
+#define CULT_SUMMON 		2 // Summon objective
+#define CULT_FINALE			3 // Nar-Sie cometh
+
 /datum/faction/cult
 	ID = list(CULT)
 	var/eldergod
@@ -9,6 +14,9 @@
 	var/list/dat = ..()
 	dat += "<a href='?_src_=holder;cult_mindspeak=\ref[src]'>Voice of [deity_name]</a>"
 	return dat
+
+/datum/faction/cult/proc/grant_runeword(mob/living/carbon/human/cult_mob, var/word)
+	return
 
 // -- Cult of Nar'Sie
 
@@ -26,9 +34,12 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	var/list/allwords = list("travel","self","see","hell","blood","join","tech","destroy", "other", "hide")
 	var/list/startwords = list("blood","join","self","hell")
 	var/list/bloody_floors = list()
-	var/narsie_condition_cleared
+
+	var/datum/objective/current_objective
+	var/narsie_condition_cleared =  FALSE
 
 	var/list/cult_words = list()
+	var/cult_state = CULT_PRELUDE
 
 	roletype = /datum/role/legacy_cultist
 
@@ -98,19 +109,30 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	else
 		return null
 
-/datum/faction/cult/proc/is_sacrifice_target(var/datum/mind/M)
-	for(var/datum/objective/target/assasinate/sacrifice/S in GetObjectives())
+/datum/faction/cult/narsie/proc/is_sacrifice_target(var/datum/mind/M)
+	if (istype(current_objective, /datum/objective/target/assasinate/sacrifice))
+		var/datum/objective/target/assasinate/sacrifice/S = current_objective
 		if(S.target == M)
 			return TRUE
 	return FALSE
 
-/datum/faction/cult/HandleNewMind(var/datum/mind/M)
+/datum/faction/cult/narsie/proc/has_enough_bloody_floors()
+	if (istype(current_objective, /datum/objective/spray_blood))
+		var/datum/objective/spray_blood/blood_jectie = current_objective
+		return blood_jectie.IsFulfilled()
+	return FALSE
+
+/datum/faction/cult/narsie/proc/has_enough_adepts()
+	if (istype(current_objective, /datum/objective/convert_people))
+		var/datum/objective/convert_people/conv = current_objective
+		return conv.IsFulfilled()
+	return FALSE
+
+
+/datum/faction/cult/narsie/HandleNewMind(var/datum/mind/M)
 	..()
 	if(M.current)
 		grant_runeword(M.current)
-
-/datum/faction/cult/proc/grant_runeword(mob/living/carbon/human/cult_mob, var/word)
-	return
 
 /datum/faction/cult/narsie/grant_runeword(mob/living/carbon/human/cult_mob, var/word)
 	if (!word)
@@ -136,9 +158,59 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	for (var/i = 1 to number_of_cultists)
 		grant_runeword(members[i]) // No second arg = random word
 
+#define OBJ_SAC 		"sacrifice"
+#define OBJ_SPRAY_BLOOD "spray bood"
+#define OBJ_CONVERT 	"convert"
+
+/datum/faction/cult/narsie/proc/getNewObjective() // Placeholder values for chances waiting for the real ones.
+	current_objective.force_success = TRUE // Because people can deconvert or clean up floors but you'll still have succeded in that objective
+	AnnounceObjectiveCompletion()
+	var/datum/objective/next_objective
+	switch (cult_state)
+		if (CULT_PRELUDE)
+			if (members.len <= 4) // We only got 4 members : to the summon phase
+				cult_state = CULT_SUMMON
+				next_objective = new /datum/objective/summon_narsie
+			else
+				cult_state = CULT_INTERMEDIATE
+				var/new_obj = pick(OBJ_SAC, 200, OBJ_SPRAY_BLOOD, 50, OBJ_CONVERT, 100)
+				switch (new_obj)
+					if (OBJ_SAC)
+						next_objective = new /datum/objective/target/assasinate/sacrifice
+					if (OBJ_SPRAY_BLOOD)
+						next_objective = new /datum/objective/spray_blood
+						var/datum/objective/spray_blood/O = next_objective
+						O.cult_fac = src
+					if (OBJ_CONVERT)
+						next_objective = new /datum/objective/convert_people
+						var/datum/objective/convert_people/O = next_objective
+						O.cult_fac = src
+		
+		if (CULT_INTERMEDIATE)
+			cult_state = CULT_SUMMON
+			next_objective = new /datum/objective/summon_narsie
+	
+		if (CULT_SUMMON)
+			cult_state = CULT_FINALE
+			next_objective = new /datum/objective/defile
+
+	AppendObjective(next_objective)
+
+#undef OBJ_SAC
+#undef OBJ_SPRAY_BLOOD
+
+/datum/faction/cult/narsie/proc/AnnounceObjectiveCompletion()
+	for (var/datum/role/R in members)
+		to_chat(R.antag.current, current_objective.feedbackText())
+
 // -- Clockwork Cult
 
 /datum/faction/cult/machine
 	name = "Cult of Ratvar"
 	desc = "When engineers go just too far."
 	deity_name = "The Exiled One"
+
+#undef CULT_PRELUDE
+#undef CULT_INTERMEDIATE
+#undef CULT_SUMMON 
+#undef CULT_FINALE	

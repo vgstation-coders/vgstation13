@@ -99,6 +99,8 @@
 				if(!(locate("\ref[T]") in blood_cult.bloody_floors))
 					blood_cult.bloody_floors += T
 					blood_cult.bloody_floors[T] = T
+					if (blood_cult.has_enough_bloody_floors())
+						blood_cult.getNewObjective()
 		if(src.loc && isturf(src.loc))
 			for(var/obj/effect/decal/cleanable/C in src.loc)
 				if(C.type in absorbs_types && C != src)

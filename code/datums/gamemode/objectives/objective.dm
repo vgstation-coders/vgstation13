@@ -17,6 +17,8 @@
 		return TRUE
 	return FALSE
 
+/datum/objective/proc/feedbackText()
+
 /datum/objective_holder
 	var/list/datum/objective/objectives = list()
 	var/datum/mind/owner = null

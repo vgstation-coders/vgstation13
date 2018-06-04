@@ -173,7 +173,7 @@
 /////////////////////////////////////////THIRD RUNE
 
 /obj/effect/rune_legacy/proc/convert()
-	var/datum/faction/cult/cult = find_active_faction_by_member(usr.mind.GetRole(LEGACY_CULT))
+	var/datum/faction/cult/narsie/cult = find_active_faction_by_member(usr.mind.GetRole(LEGACY_CULT))
 	for(var/mob/living/carbon/M in src.loc)
 		if(iscultist(M))
 			to_chat(usr, "<span class='warning'>You cannot convert what is already a follower of Nar-Sie.</span>")
@@ -235,6 +235,8 @@
 				to_chat(usr, "<span class='danger'>[M] now knows the truth! Stop \him!</span>")
 			to_chat(M, "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>")
 			to_chat(M, "<span class='danger'>And you were able to force it out of your mind. You now know the truth, there's something horrible out there, stop it and its minions at all costs.</span>")
+			if (cult.has_enough_adepts())
+				cult.getNewObjective()
 			return 0
 
 	usr.say("Mah[pick("'","`")]weyh pleggh at e'ntrath!")
@@ -474,7 +476,7 @@
 	var/mob/living/carbon/human/corpse_to_raise
 	var/mob/living/carbon/human/body_to_sacrifice
 
-	var/datum/faction/cult/cult_round = find_active_faction_by_member(usr.mind.GetRole(LEGACY_CULT))
+	var/datum/faction/cult/narsie/cult_round = find_active_faction_by_member(usr.mind.GetRole(LEGACY_CULT))
 
 	var/is_sacrifice_target = 0
 	for(var/mob/living/carbon/human/M in src.loc)
@@ -866,7 +868,7 @@
 		to_chat(usr, "<span class='warning'>The presence of a null rod is perturbing the ritual.</span>")
 		return
 
-	var/datum/faction/cult/cult_round = find_active_faction_by_member(usr.mind.GetRole(LEGACY_CULT))
+	var/datum/faction/cult/narsie/cult_round = find_active_faction_by_member(usr.mind.GetRole(LEGACY_CULT))
 	var/datum/rune_controller/R = ticker.rune_controller
 	for(var/atom/A in loc)
 		if(ismob(A))
@@ -892,6 +894,8 @@
 							ritualresponse += "The Geometer of Blood gladly accepts this sacrifice."
 							satisfaction = 100
 							R.revive_counter ++
+							if (my_cult.is_sacrifice_target(M.mind))
+								my_cult.getNewObjective()
 						else					//living NPCs
 							ritualresponse += "The Geometer of Blood accepts this being in sacrifice. Somehow you get the feeling that beings with souls would make a better offering."
 							satisfaction = 50
@@ -905,6 +909,8 @@
 						ritualresponse += "The Geometer of Blood accepts this sacrifice."
 						satisfaction = 50
 						R.revive_counter ++
+						if (my_cult.is_sacrifice_target(M.mind))
+							my_cult.getNewObjective()
 					else						//dead NPCs
 						ritualresponse += "The Geometer of Blood accepts your meager sacrifice."
 						satisfaction = 10
