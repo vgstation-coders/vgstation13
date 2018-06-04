@@ -54,6 +54,7 @@
 #include "__DEFINES\tick.dm"
 #include "__DEFINES\ticker.dm"
 #include "__DEFINES\turfs.dm"
+#include "__DEFINES\weapons.dm"
 #include "__DEFINES\world.dm"
 #include "__DEFINES\ZAS.dm"
 #include "code\_secrets.dm"
