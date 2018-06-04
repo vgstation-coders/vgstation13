@@ -305,7 +305,7 @@
 	if (get_dist(user, src) < 3)
 		to_chat(user, "<span class = 'warning'>This one looks heavier than the usual.</span>")
 
-// -- Syndie atmos tape : shocks and sparks you (useful for lighting those plasma fires)
+// -- Syndie engie tape : shocks and sparks you (useful for lighting those plasma fires)
 
 /obj/item/tape/engineering/syndie
 	var/charged = TRUE
