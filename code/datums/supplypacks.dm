@@ -179,6 +179,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "showers crate"
 	group = "Supplies"
 
+/datum/supply_packs/clock
+	name = "Grandfather Clock"
+	contains = list(/obj/structure/clock/unanchored)
+	cost = 40
+	containertype = /obj/structure/largecrate
+	containername = "Ticking Crate"
+	group = "Supplies"
+
 /datum/supply_packs/metal50
 	name = "50 metal sheets"
 	contains = list(/obj/item/stack/sheet/metal)
