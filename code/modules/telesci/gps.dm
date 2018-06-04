@@ -3,7 +3,7 @@ var/list/SPS_list = list()
 
 /obj/item/device/gps
 	name = "global positioning system"
-	desc = "Helping lost spacemen find their way through the planets since 2016."
+	desc = "Helping lost spacemen find their way through the planets since 2016. Has an option to transmit a signal to other GPS devices."
 	icon = 'icons/obj/telescience.dmi'
 	icon_state = "gps-c"
 	w_class = W_CLASS_SMALL
@@ -16,6 +16,7 @@ var/list/SPS_list = list()
 	var/emped = FALSE
 	var/autorefreshing = FALSE
 	var/builtin = FALSE
+	var/transmitting = FALSE
 
 /obj/item/device/gps/proc/gen_id()
 	return GPS_list.len
@@ -45,6 +46,7 @@ var/list/SPS_list = list()
 
 /obj/item/device/gps/emp_act(severity)
 	emped = TRUE
+	transmitting = FALSE //turns off transmission when emp'd
 	overlays -= image(icon = icon, icon_state = "working")
 	overlays += image(icon = icon, icon_state = "emp")
 	spawn(30 SECONDS)
@@ -82,14 +84,16 @@ var/list/SPS_list = list()
 		data["gpstag"] = gpstag
 		data["autorefresh"] = autorefreshing
 		data["location_text"] = get_location_name()
+		data["transmit"] = transmitting
 		var/list/devices = list()
 		for(var/D in get_list())
 			var/obj/item/device/gps/G = D
 			if(src != G)
 				var/device_data[0]
-				device_data["tag"] = G.gpstag
-				device_data["location_text"] = G.get_location_name()
-				devices += list(device_data)
+				if (G.transmitting)
+					device_data["tag"] = G.gpstag
+					device_data["location_text"] = G.get_location_name()
+					devices += list(device_data)
 		data["devices"] = devices
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
@@ -124,6 +128,9 @@ var/list/SPS_list = list()
 		return TRUE
 	if(href_list["toggle_refresh"])
 		autorefreshing = !autorefreshing
+		return TRUE
+	if(href_list["toggle_transmit"])
+		transmitting = !transmitting
 		return TRUE
 
 	if(..())
@@ -160,7 +167,7 @@ var/list/SPS_list = list()
 
 /obj/item/device/gps/secure
 	base_name = "secure positioning system"
-	desc = "A secure channel SPS. It announces the position of the wearer if killed or stripped off."
+	desc = "A secure channel SPS. If it is transmitting its signal, it will announce the position of the wearer if killed or stripped off to other SPS devices."
 	icon_state = "sps"
 	base_tag = "SEC"
 
@@ -179,7 +186,8 @@ var/list/SPS_list = list()
 
 	for(var/E in SPS_list)
 		var/obj/item/device/gps/secure/S = E //No idea why casting it like this makes it work better instead of just defining it in the for each
-		S.announce(wearer, src, "has detected the death of their wearer",dead=TRUE)
+		if (transmitting == TRUE)
+			S.announce(wearer, src, "has detected the death of their wearer",dead=TRUE)
 
 /obj/item/device/gps/secure/stripped(mob/wearer)
 	if(emped)
@@ -188,8 +196,9 @@ var/list/SPS_list = list()
 	var/num = 0
 	for(var/E in SPS_list)
 		var/obj/item/device/gps/secure/S = E
-		S.announce(wearer, src, "has been stripped from their wearer",num)
-		num++
+		if (transmitting == TRUE)
+			S.announce(wearer, src, "has been stripped from their wearer",num)
+			num++
 
 var/list/deathsound = list('sound/items/die1.wav', 'sound/items/die2.wav', 'sound/items/die3.wav','sound/items/die4.wav')
 
