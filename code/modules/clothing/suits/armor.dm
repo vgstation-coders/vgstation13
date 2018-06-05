@@ -135,7 +135,7 @@
 
 /obj/item/clothing/suit/armor/laserproof/advanced
 	name = "Vest of Reflection"
-	desc = "More fragile than a common ablative armor vest, this modified version of it is much worse at absorbing damage, but it reflects energy projectiles with almost triple effectivity."
+	desc = "More fragile than a common ablative armor vest, this modified version of it is much worse at absorbing damage, but it reflects energy projectiles with almost triple effectiveness."
 	icon_state = "armor_reflec_adv"
 	item_state = "armor_reflec_adv"
 
