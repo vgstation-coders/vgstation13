@@ -591,6 +591,20 @@ proc/move_mining_shuttle()
 		to_chat(user, "<span class='notice'>You instruct \the [src] to drop any collected ore.</span>")
 		DropOre()
 		return
+	if(!client && istype(I, /obj/item/device/paicard))
+		var/obj/item/device/paicard/P = I
+		if(!P.pai)
+			to_chat(user, "<span class = 'warning'>\The [P] has no intelligence within it.</span>")
+			return
+		var/response = alert(user, "Are you sure you want to put \the [P] into \the [src]? This can not be undone.","Yes","No")
+		if(response != "Yes")
+			return
+		if(do_after(user, src, 30))
+			user.drop_item(P, force_drop = TRUE)
+			P.pai.mind.transfer_to(src)
+			projectiletype = /obj/item/projectile/kinetic
+			qdel(P)
+
 	..()
 
 /mob/living/simple_animal/hostile/mining_drone/death(var/gibbed = FALSE)
