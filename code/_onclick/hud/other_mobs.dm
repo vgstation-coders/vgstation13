@@ -124,7 +124,7 @@
 /datum/hud/proc/construct_hud()
 	var/constructtype
 
-	if(istype(mymob,/mob/living/simple_animal/construct/armoured) || istype(mymob,/mob/living/simple_animal/construct/behemoth))
+	if(istype(mymob,/mob/living/simple_animal/construct/armoured))
 		constructtype = "juggernaut"
 	else if(istype(mymob,/mob/living/simple_animal/construct/builder))
 		constructtype = "artificer"
