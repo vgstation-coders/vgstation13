@@ -106,8 +106,6 @@ This ladder stuff looks confusing, so here's an illustration!!!
 	return FALSE
 
 /obj/structure/closet/crate/sokoban/on_pull_start(mob/living/L)
-	.=..()
-
 	to_chat(L, "<span class='warning'>\The [src]'s smooth and slippery surface makes grabbing it impossible.</span>")
 	L.stop_pulling()
 
