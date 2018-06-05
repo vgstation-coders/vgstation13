@@ -30,7 +30,7 @@
 "D" = (/obj/structure/largecrate,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
 "E" = (/obj/item/stack/sheet/wood,/obj/item/stack/sheet/wood,/obj/item/weapon/crowbar,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
 "F" = (/obj/structure/largecrate/showers,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
-"G" = (/obj/item/weapon/paper{info = "Jake, we've run into some issues with the generator, so the teleporters won't recharge after a long-distance teleport. Thankfully we've got enough teleporters for you! Get all the crates shipped by the end of the day if you want to keep this job. Also, improperly tagged crates and foreign objects will be destroyed by emitters here."; name = "paper -'Quartermaster's note'"},/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"G" = (/obj/item/weapon/paper{info = "Jake, we've run into some issues with the generator, so the teleporters won't recharge after a long-distance teleport. Thankfully we've got enough teleporters on this ship! Get all the crates shipped by the end of the day if you want to keep this job. Also, improperly tagged crates and foreign objects will be destroyed by emitters."; name = "paper -'Quartermaster's note'"},/turf/simulated/shuttle/floor,/area/vault/sokoban)
 "H" = (/obj/effect/landmark/corpse/mutilated,/obj/item/weapon/gun/projectile/russian/empty,/turf/simulated/shuttle/floor,/area/vault/sokoban)
 "I" = (/obj/machinery/light{icon_state = "ltube1"; dir = 8},/turf/simulated/shuttle/floor,/area/vault/sokoban)
 "J" = (/obj/machinery/light{icon_state = "ltube1"; dir = 4},/turf/simulated/shuttle/floor,/area/vault/sokoban)
@@ -39,6 +39,7 @@
 "M" = (/obj/structure/largecrate/skele_stand,/obj/machinery/light,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
 "N" = (/obj/structure/largecrate/porcelain,/obj/machinery/light,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
 "O" = (/obj/structure/largecrate/skele_stand,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
+"P" = (/obj/item/stack/package_wrap{desc = "Wrapping paper designed to help goods safely navigate the mail system. Using it on the crates in Sokoban is considered cheating."; name = "package wrap of cheating"},/turf/simulated/shuttle/floor,/area/vault/sokoban)
 
 (1,1,1) = {"
 aaaaafffffaaaaa
@@ -47,7 +48,7 @@ aaaaffghiffaaaa
 aaaafjklkmfaaaa
 aaaafnooopfaaaa
 afdffqfrfqfftfa
-afufcccccccfvfa
+afufccccccPfvfa
 afffIcccccJfffa
 awxfcccccccfxwa
 awxfHccecccfxwa

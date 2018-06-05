@@ -45,9 +45,15 @@
 
 	//Objects that step on teleporters get teleported here
 	var/turf/jail_turf
+	var/atom/movable/reward
 
 /datum/map_element/dungeon/sokoban_level/initialize(list/objects)
 	.=..()
+
+	for(var/obj/structure/closet/crate/sokoban/crate in objects)
+		crate.on_destroyed.Add(crate, "check_cheat")
+		crate.on_moved.Add(crate, "check_cheat")
+		crate.parent = src
 
 	for(var/obj/structure/ladder/sokoban/ladder in objects)
 		//Entrance ladders are connected to previous level's exit ladder
@@ -58,6 +64,20 @@
 		else if(istype(ladder, /obj/structure/ladder/sokoban/exit))
 			ladder.id = "sokoban-[depth+1]"
 			ladder.height = 0
+
+	reward = locate(/obj/item/clothing/suit/armor/laserproof/advanced) in objects
+
+/datum/map_element/dungeon/sokoban_level/proc/on_cheat()
+	if(reward)
+		var/obj/item/toy/figure/clown/cheater_trophy = new /obj/item/toy/figure/clown(get_turf(level.reward))
+		cheater_trophy.name = "cheater's trophy"
+		cheater_trophy.desc = "Cheated at Sokoban!"
+
+		qdel(level.reward)
+		level.reward = null
+
+		if(usr)
+			to_chat(usr, "<span class='userdanger'>Cheater!</span>")
 
 /*
 This ladder stuff looks confusing, so here's an illustration!!!
@@ -101,6 +121,17 @@ This ladder stuff looks confusing, so here's an illustration!!!
 //- can't be opened or pulled
 /obj/structure/closet/crate/sokoban
 	desc = "A very heavy, tamperproof crate. A thin coating of space lube allows it to be slid around on the floor effortlessly, despite its massive weight. Unfortunately, this means it can't be grabbed at all."
+
+	var/datum/map_element/dungeon/sokoban/parent
+
+/obj/structure/closet/crate/sokoban/proc/check_cheat()
+	var/cheated = FALSE
+
+	if(!isturf(loc))
+		cheated = TRUE
+
+	if(parent && cheated)
+		parent.on_cheat()
 
 /obj/structure/closet/crate/sokoban/can_open()
 	return FALSE
