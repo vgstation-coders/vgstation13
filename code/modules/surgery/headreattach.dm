@@ -270,6 +270,9 @@
 	"<span class='notice'>You have attached \the [tool] to the bodies reshaped neck.</span>")
 	affected.attach(tool)
 	target.decapitated = null
+	affected.status = 0
+	affected.amputated = 0
+	affected.destspawn = 0
 
 /datum/surgery_step/head/attach_robot/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
