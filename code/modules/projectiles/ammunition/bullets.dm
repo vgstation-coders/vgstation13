@@ -102,7 +102,7 @@
 	name = "shotgun shell"
 	desc = "A 12 gauge slug."
 	icon_state = "gshell"
-	caliber = SHOTGUN
+	caliber = GAUGE12
 	projectile_type = "/obj/item/projectile/bullet"
 	starting_materials = list(MAT_IRON = 12500)
 	w_type = RECYK_METAL

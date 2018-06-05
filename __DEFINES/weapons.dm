@@ -18,5 +18,5 @@
 
 
 #define PULSE "pulse"
-#define SHOTGUN "shotgun"
-#define FLARE "flare"
+#define GAUGE12 "12 guage"
+#define GAUGEFLARE "flare"
