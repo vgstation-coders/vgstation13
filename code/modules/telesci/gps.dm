@@ -131,6 +131,8 @@ var/list/SPS_list = list()
 		return TRUE
 	if(href_list["toggle_transmit"])
 		transmitting = !transmitting
+		if(emped)
+				transmitting = FALSE		
 		return TRUE
 
 	if(..())
