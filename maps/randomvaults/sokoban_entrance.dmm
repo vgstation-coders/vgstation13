@@ -1,0 +1,28 @@
+"a" = (/turf/space,/area)
+"b" = (/turf/simulated/shuttle/wall,/area/vault/sokoban)
+"c" = (/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"d" = (/obj/effect/landmark/sokoban_jail,/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"e" = (/obj/structure/ladder/sokoban,/turf/simulated/shuttle/floor,/area/vault/sokoban)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaa
+aaaaaabbbbbbbaaaaaaa
+aaaaaabccdccbaaaaaaa
+aaaaaabcccccbaaaaaaa
+aaaaabbbbcbbbbaaaaaa
+aaaaabcccccccbaaaaaa
+aaaaabcccccccbaaaaaa
+aaaaabcccccccbaaaaaa
+aaaaabcccecccbaaaaaa
+aaaaabcccccccbaaaaaa
+aaaaabcccccccbaaaaaa
+aaaaabcccccccbaaaaaa
+aaaaabbbbcbbbbaaaaaa
+aaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaa
+"}

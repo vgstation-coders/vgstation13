@@ -903,6 +903,70 @@
 	icon_state = "tracks"
 	random_icon_states = null
 
+//Sokoban
+
+/area/vault/sokoban
+	dynamic_lighting = TRUE
+	mysterious = TRUE
+
+/area/vault/sokoban/level
+	dynamic_lighting = FALSE
+	mysterious = FALSE
+
+/obj/structure/closet/crate/sokoban
+	desc = "A very heavy, tamperproof crate. A thin coating of space lube allows it to be slid around on the floor effortlessly, despite its massive weight. Unfortunately, this means it can't be grabbed at all."
+
+/obj/structure/closet/crate/sokoban/can_open()
+	return FALSE
+
+/obj/structure/closet/crate/sokoban/on_pull_start(mob/living/L)
+	.=..()
+
+	to_chat(L, "<span class='warning'>\The [src]'s smooth and slippery surface makes grabbing it impossible.</span>")
+	L.stop_pulling()
+
+/obj/structure/sokoban_teleporter
+	name = "warehouse telepad"
+	desc = "A bluespace telepad used for teleporting crates to the drop point."
+	icon = 'icons/obj/telescience.dmi'
+	icon_state = "pad-idle"
+
+	plane = ABOVE_TURF_PLANE
+	layer = ABOVE_TILE_LAYER
+
+	anchored = TRUE
+	density = FALSE
+
+	var/active = TRUE
+
+/obj/structure/sokoban_teleporter/Cross(atom/movable/AM)
+	.=..()
+
+	if(!active)
+		return
+
+	flick("pad-beam", src)
+
+	if(istype(AM, /obj/structure/closet/crate/sokoban))
+		qdel(AM)
+		visible_message("<span class='notice'>\The [src] shuts down!</span>")
+		active = FALSE
+		icon_state = "pad-offline"
+	else
+		var/turf/jail = get_turf(locate(/obj/effect/landmark/sokoban_jail) in landmarks_list)
+		if(jail)
+			AM.forceMove(jail)
+		//Teleport away
+
+/obj/structure/ladder/sokoban
+	id = "sokoban-1" //Don't change this!
+
+/obj/structure/ladder/sokoban/entrance
+
+/obj/structure/ladder/sokoban/exit
+
+/obj/effect/landmark/sokoban_jail
+
 //Iron Chef
 
 /obj/item/weapon/disk/shuttle_coords/vault/ironchef
