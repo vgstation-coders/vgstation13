@@ -135,14 +135,15 @@
 
 /obj/item/clothing/suit/armor/laserproof/advanced
 	name = "Vest of Reflection"
-	desc = "Somewhat more fragile than an ablative armor vest, this modification doesn't absorb as much damage, but it reflects energy projectiles with unbelievable effectivity."
+	desc = "More fragile than a common ablative armor vest, this modified version of it is much worse at absorbing damage, but it reflects energy projectiles with almost triple effectivity."
 	icon_state = "armor_reflec_adv"
 	item_state = "armor_reflec_adv"
 
-	//Shots aimed at limbs or the head have a halved chance of reflecting, so this leaves the user with ~100% body shot reflect chance, and reflect other shots with 65% success rate (as opposed to ablative's 30%)
-	basereflectchance = 130
+	//Reflection chance is reduced by (dmg/3), and then halved if the shot was aimed at limbs or the head.
+	//In practice this makes all body shots guaranteed to be reflected, and limb shots at about 90% reflect chance (lower with damage)
+	basereflectchance = 180
 
-	armor = list(melee = 5, bullet = 5, laser = 60, energy = 40, bomb = 0, bio = 0, rad = 0)
+	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/laserproof/become_defective()
 	if(!defective)
