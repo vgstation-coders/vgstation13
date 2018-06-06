@@ -131,6 +131,18 @@
 	var/photo_size = 3 //Default is 3x3. 1x1, 5x5, 7x7 are also options
 
 	var/panelopen = FALSE
+	var/obj/item/weapon/light/bulb/flashbulb = null
+	var/skipbulb = FALSE
+
+/obj/item/device/camera/New()
+	..()
+	if(!skipbulb)
+		flashbulb = new /obj/item/weapon/light/bulb(src)
+
+/obj/item/device/camera/Destroy()
+	qdel(flashbulb)
+	flashbulb = null
+	..()
 
 /obj/item/device/camera/sepia
 	name = "camera"
@@ -197,6 +209,7 @@
 /obj/item/device/camera/silicon
 	name = "silicon photo camera"
 	var/in_camera_mode = FALSE
+	skipbulb = TRUE
 
 /obj/item/device/camera/silicon/ai_camera //camera AI can take pictures with
 	name = "\improper AI photo camera"
@@ -228,9 +241,11 @@
 		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/device/blinder/Q = new (get_turf(user))
+			handle_blinder(Q)
 			user.put_in_hands(Q)
 		else
-			new /obj/item/device/blinder(get_turf(loc))
+			var/obj/item/device/blinder/Q = new (get_turf(loc))
+			handle_blinder(Q)
 		C.use(5)
 		qdel(src)
 
@@ -249,6 +264,14 @@
 			return
 	..()
 
+/obj/item/device/camera/proc/handle_blinder(obj/item/device/blinder/blinder)
+	if(blinder.flashbulb)
+		qdel(blinder.flashbulb)
+		blinder.flashbulb = null
+	if(flashbulb)
+		blinder.flashbulb = flashbulb
+		flashbulb.forceMove(blinder)
+		flashbulb = null
 
 /obj/item/device/camera/proc/camera_get_icon(list/turfs, turf/center)
 	var/atoms[] = list()
