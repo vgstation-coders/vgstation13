@@ -29,7 +29,11 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	plane = OBJ_PLANE
 
 	var/defective = 0
-
+	var/quality = NORMAL //What level of quality this object is.
+	var/datum/material/material_type //What material this thing is made out of
+	var/event/on_use
+	var/sheet_type = /obj/item/stack/sheet/metal
+	var/sheet_amt = 1
 	var/can_take_pai = FALSE
 	var/obj/item/device/paicard/integratedpai = null
 	var/datum/delay_controller/pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
@@ -49,6 +53,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(istype(T) && ticker && ticker.current_state != GAME_STATE_PLAYING)
 		T.add_holomap(src)
 
+/obj/New()
+	..()
+	on_use = new(owner=src)
+
 /obj/Destroy()
 	for(var/mob/user in _using)
 		user.unset_machine()
@@ -59,7 +67,12 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(integratedpai)
 		qdel(integratedpai)
 		integratedpai = null
+	if(on_use)
+		on_use.holder = null
+		qdel(on_use)
+		on_use = null
 
+	material_type = null //Don't qdel, they're held globally
 	..()
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
@@ -83,6 +96,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			install_pai(W)
 			state_controls_pai(W)
 			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
+
+	INVOKE_EVENT(W.on_use, list("user" = user, "target" = src))
+	if(W.material_type)
+		W.material_type.on_use(W, src, user)
 
 /obj/proc/state_controls_pai(obj/item/device/paicard/P)			//text the pAI receives when is inserted into something. EXAMPLE: to_chat(P.pai, "Welcome to your new body")
 	if(P.pai)
@@ -615,3 +632,39 @@ a {
 			if(ismob(loc))
 				var/mob/M = loc
 				M.regenerate_icons()
+
+/obj/proc/gen_quality()
+	var/material_mod = material_type ? material_type.quality_mod : 1
+	var/turf/T = get_turf(src)
+	var/surrounding_mod = 1
+	for(var/dir in alldirs)
+		for(var/obj/I in get_step(T, dir))
+			if(I.quality > NORMAL || I.quality < NORMAL)
+				surrounding_mod *= I.quality/rand(1,3)
+	var/initial_quality = round((rand(1,3)*surrounding_mod)*material_mod)
+	quality = Clamp(initial_quality, AWFUL, LEGENDARY)
+
+/obj/proc/gen_description(mob/user)
+	var/material_mod = quality-GOOD>1 ? quality-GOOD : 0
+	var/additional_description
+	if(material_mod)
+		additional_description = "On \the [src] is a carving, it depicts:\n"
+		var/list/characters = list()
+		for(var/i = 1 to material_mod)
+			if(prob(50)) //We're gonna use an atom
+				var/atom/AM = pick(existing_typesof(/mob/living/simple_animal))
+				characters |= initial(AM.name)
+			else
+				var/strangething = pick("captain","clown","mime","\improper CMO","cargo technician","medical doctor","[user ? user : "stranger"]","octopus","changeling","\improper Nuclear Operative", "[pick("greyshirt", "greytide", "assistant")]", "xenomorph","catbeast","[user && user.mind && user.mind.heard_before.len ? pick(user.mind.heard_before) : "strange thing"]","Central Command","\improper Ian","[ticker.Bible_deity_name]","Nar-Sie","\improper Poly the Parrot","\improper Wizard","vox")
+				characters |= strangething
+			additional_description += "[i == material_mod ? " & a " : "[i > 1 ? ", a ": " A "]"][characters[i]]"
+		additional_description += ". They are in \the [pick("captains office","Space","mining outpost","vox outpost","a space station","[station_name()]","bar","kitchen","library","Science","void","Bluespace","Hell","Central Command")]"
+		if(material_mod > 2)
+			additional_description += ". They are [pick("[pick("fighting","robusting","attacking","beating up", "abusing")] [pick("each other", pick(characters))]","playing cards","firing lasers at [pick("something",pick(characters))]","crying","laughing","blank faced","screaming","cooking [pick("something", pick(characters))]", "eating [pick("something", pick(characters))]")]. "
+		if(characters.len > 1)
+			for(var/i in characters)
+				additional_description += "\The [i] is [pick("laughing","crying","screaming","naked","very naked","angry","jovial","manical","melting","fading away","making a plaintive gesture")]. "
+		additional_description += "The scene gives off a feeling of [pick("unease","empathy","fear","malice","dread","happiness","strangeness","insanity","drol")]. "
+		additional_description += "It is accented in hues of [pick("red","orange","yellow","green","blue","indigo","violet","white","black","cinnamon")]. "
+	if(additional_description)
+		desc = "[initial(desc)] \n [additional_description]"

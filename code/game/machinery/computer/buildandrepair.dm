@@ -385,7 +385,7 @@
 							return
 						playsound(src, 'sound/items/Welder.ogg', 50, 1)
 						user.visible_message("[user] welds the frame back into metal.", "You weld the frame back into metal.", "You hear welding.")
-						drop_stack(/obj/item/stack/sheet/metal/, loc, 5, user)
+						drop_stack(sheet_type, loc, 5, user)
 						state = -1
 						qdel(src)
 				return 1

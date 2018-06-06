@@ -71,7 +71,7 @@
 	flags = FPRINT
 	siemens_coefficient = 0 //no conduct
 	max_amount = 60
-
+	sheet_type = /obj/item/stack/sheet/wood
 	material = "wood"
 
 /obj/item/stack/tile/wood/proc/build(turf/S as turf)
@@ -102,7 +102,7 @@
 	if(iswrench(W))
 		if(use(4))
 			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
-			drop_stack(/obj/item/stack/sheet/wood, get_turf(user), 1, user)
+			drop_stack(sheet_type, get_turf(user), 1, user)
 		else
 			to_chat(user, "<span class='warning'>You need at least 4 [src]\s to get a wooden plank back!</span>")
 		return

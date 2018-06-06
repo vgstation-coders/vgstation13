@@ -35,6 +35,7 @@
 #include "__DEFINES\MC.dm"
 #include "__DEFINES\mobs.dm"
 #include "__DEFINES\nanoui.dm"
+#include "__DEFINES\obj_defines.dm"
 #include "__DEFINES\pai_software.dm"
 #include "__DEFINES\pipes.dm"
 #include "__DEFINES\planes+layers.dm"
