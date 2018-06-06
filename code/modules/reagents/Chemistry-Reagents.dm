@@ -601,7 +601,8 @@
 		holder.remove_reagent(ZOMBIEPOWDER, 0.5 * REM)
 	if(holder.has_reagent(MINDBREAKER))
 		holder.remove_reagent(MINDBREAKER, 2 * REM)
-	M.hallucination = max(0, M.hallucination - 5 * REM)
+	var/lucidmod = M.sleeping ? 3 : M.lying + 1 //3x as effective if they're sleeping, 2x if they're lying down
+	M.hallucination = max(0, M.hallucination - 5 * REM * lucidmod)
 	M.adjustToxLoss(-2 * REM)
 
 /datum/reagent/phalanximine
@@ -2474,7 +2475,8 @@
 	M.AdjustKnockdown(-1)
 	if(holder.has_reagent("mindbreaker"))
 		holder.remove_reagent("mindbreaker", 5)
-	M.hallucination = max(0, M.hallucination - 10)
+	var/lucidmod = M.sleeping ? 3 : M.lying + 1
+	M.hallucination = max(0, M.hallucination - 10 * lucidmod)
 	if(prob(60))
 		M.adjustToxLoss(1)
 
@@ -4273,7 +4275,8 @@
 	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
 	if(holder.has_reagent("discount"))
 		holder.remove_reagent("discount", 2 * REM)
-	M.hallucination = max(0, M.hallucination - 5 * REM)
+	var/lucidmod = M.sleeping ? 3 : M.lying + 1
+	M.hallucination = max(0, M.hallucination - 5 * REM * lucidmod)
 	M.adjustToxLoss(-2 * REM)
 
 /datum/reagent/clottingagent
