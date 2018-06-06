@@ -1,63 +1,74 @@
-"a" = (/turf/space,/area)
-"b" = (/obj/machinery/power/emitter/energycannon,/obj/machinery/light{dir = 1},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
-"c" = (/turf/simulated/shuttle/floor,/area/vault/sokoban)
-"d" = (/obj/structure/shuttle/engine/propulsion{icon_state = "propulsion"; dir = 1},/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/plating,/area/vault/sokoban)
-"e" = (/obj/structure/ladder/sokoban,/turf/simulated/shuttle/floor,/area/vault/sokoban)
-"f" = (/turf/simulated/shuttle/wall{color = "#666666"},/area/vault/sokoban)
-"g" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
-"h" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
-"i" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/grille,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
-"j" = (/obj/machinery/conveyor/auto{icon_state = "conveyor0"; dir = 6},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
-"k" = (/obj/machinery/conveyor/auto{icon_state = "conveyor0"; dir = 4},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
-"l" = (/obj/machinery/conveyor/auto{icon_state = "conveyor0"; dir = 4},/obj/effect/landmark/sokoban_jail,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
-"m" = (/obj/machinery/conveyor/auto{icon_state = "conveyor0"; dir = 10},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
-"n" = (/obj/machinery/conveyor/auto{icon_state = "conveyor0"; dir = 5},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
-"o" = (/obj/machinery/conveyor/auto{icon_state = "conveyor0"; dir = 8},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
-"p" = (/obj/machinery/conveyor/auto{icon_state = "conveyor0"; dir = 9},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
-"q" = (/obj/machinery/door/airlock/highsecurity{name = "Emittcinerator Room"},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
-"r" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
-"s" = (/obj/machinery/door/airlock/highsecurity{name = "Cargo Access"},/turf/simulated/shuttle/floor,/area/vault/sokoban)
-"t" = (/obj/structure/shuttle/engine/propulsion{icon_state = "propulsion"; dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/shuttle/plating,/area/vault/sokoban)
-"u" = (/obj/structure/shuttle/engine/heater{icon_state = "heater"; dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/plating,/area/vault/sokoban)
-"v" = (/obj/structure/shuttle/engine/heater{icon_state = "heater"; dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/shuttle/plating,/area/vault/sokoban)
-"w" = (/obj/structure/lattice,/turf/space,/area/vault/sokoban)
-"x" = (/turf/space,/area/vault/sokoban)
-"y" = (/obj/machinery/door/airlock/external,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
-"z" = (/obj/machinery/light{icon_state = "ltube1"; dir = 8},/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
-"A" = (/obj/machinery/light{icon_state = "ltube1"; dir = 4},/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
-"B" = (/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
-"C" = (/obj/structure/largecrate/porcelain,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
-"D" = (/obj/structure/largecrate,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
-"E" = (/obj/item/stack/sheet/wood,/obj/item/stack/sheet/wood,/obj/item/weapon/crowbar,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
-"F" = (/obj/structure/largecrate/showers,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
-"G" = (/obj/item/weapon/paper{info = "Jake, we've run into some issues with the generator, so the teleporters won't recharge after a long-distance teleport. Thankfully we've got enough teleporters on this ship! Get all the crates shipped by the end of the day if you want to keep this job. Also, improperly tagged crates and foreign objects will be destroyed by emitters."; name = "paper -'Quartermaster's note'"},/turf/simulated/shuttle/floor,/area/vault/sokoban)
-"H" = (/obj/effect/landmark/corpse/mutilated,/obj/item/weapon/gun/projectile/russian/empty,/turf/simulated/shuttle/floor,/area/vault/sokoban)
-"I" = (/obj/machinery/light{icon_state = "ltube1"; dir = 8},/turf/simulated/shuttle/floor,/area/vault/sokoban)
-"J" = (/obj/machinery/light{icon_state = "ltube1"; dir = 4},/turf/simulated/shuttle/floor,/area/vault/sokoban)
-"K" = (/obj/structure/largecrate/showers,/obj/machinery/light,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
-"L" = (/obj/structure/largecrate/cat,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
-"M" = (/obj/structure/largecrate/skele_stand,/obj/machinery/light,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
-"N" = (/obj/structure/largecrate/porcelain,/obj/machinery/light,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
-"O" = (/obj/structure/largecrate/skele_stand,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
-"P" = (/obj/item/stack/package_wrap{desc = "Wrapping paper designed to help goods safely navigate the mail system. Using it on the crates in Sokoban is considered cheating."; name = "package wrap of cheating"},/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"aa" = (/turf/space,/area)
+"ab" = (/obj/machinery/power/emitter/energycannon,/obj/machinery/light{dir = 1},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
+"ac" = (/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"ad" = (/obj/structure/shuttle/engine/propulsion{icon_state = "propulsion"; dir = 1},/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/plating,/area/vault/sokoban)
+"ae" = (/obj/structure/ladder/sokoban{name = "Sokoban upper deck"},/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"af" = (/turf/simulated/shuttle/wall{color = "#666666"},/area/vault/sokoban)
+"ag" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
+"ah" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
+"ai" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/grille,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
+"aj" = (/obj/machinery/conveyor/auto{icon_state = "conveyor0"; dir = 6},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
+"ak" = (/obj/machinery/conveyor/auto{icon_state = "conveyor0"; dir = 4},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
+"al" = (/obj/machinery/conveyor/auto{icon_state = "conveyor0"; dir = 4},/obj/effect/landmark/sokoban_jail,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
+"am" = (/obj/machinery/conveyor/auto{icon_state = "conveyor0"; dir = 10},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
+"an" = (/obj/machinery/conveyor/auto{icon_state = "conveyor0"; dir = 5},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
+"ao" = (/obj/machinery/conveyor/auto{icon_state = "conveyor0"; dir = 8},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
+"ap" = (/obj/machinery/conveyor/auto{icon_state = "conveyor0"; dir = 9},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
+"aq" = (/obj/machinery/door/airlock/highsecurity{name = "Emittcinerator Room"},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
+"ar" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/vault/sokoban)
+"as" = (/obj/machinery/door/airlock/highsecurity{name = "Cargo Access"},/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"at" = (/obj/structure/shuttle/engine/propulsion{icon_state = "propulsion"; dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/shuttle/plating,/area/vault/sokoban)
+"au" = (/obj/structure/shuttle/engine/heater{icon_state = "heater"; dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/plating,/area/vault/sokoban)
+"av" = (/obj/structure/shuttle/engine/heater{icon_state = "heater"; dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/shuttle/plating,/area/vault/sokoban)
+"aw" = (/obj/structure/lattice,/turf/space,/area/vault/sokoban)
+"ax" = (/turf/space,/area/vault/sokoban)
+"ay" = (/obj/machinery/door/airlock/external,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
+"az" = (/obj/machinery/light{icon_state = "ltube1"; dir = 8},/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
+"aA" = (/obj/machinery/light{icon_state = "ltube1"; dir = 4},/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
+"aB" = (/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
+"aC" = (/obj/structure/largecrate/porcelain,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
+"aD" = (/obj/structure/largecrate,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
+"aE" = (/obj/item/stack/sheet/wood,/obj/item/stack/sheet/wood,/obj/item/weapon/crowbar,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
+"aF" = (/obj/structure/largecrate/showers,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
+"aG" = (/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"aH" = (/obj/effect/landmark/corpse/mutilated,/obj/item/weapon/gun/projectile/russian/empty,/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"aI" = (/obj/machinery/light{icon_state = "ltube1"; dir = 8},/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"aJ" = (/obj/machinery/light{icon_state = "ltube1"; dir = 8},/obj/item/stack/package_wrap,/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"aK" = (/obj/structure/largecrate/showers,/obj/machinery/light,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
+"aL" = (/obj/structure/largecrate/cat,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
+"aM" = (/obj/structure/largecrate/skele_stand,/obj/machinery/light,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
+"aN" = (/obj/structure/largecrate/porcelain,/obj/machinery/light,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
+"aO" = (/obj/structure/largecrate/skele_stand,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/sokoban)
+"aP" = (/obj/machinery/light{icon_state = "ltube1"; dir = 4},/obj/structure/largecrate/skele_stand,/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"aQ" = (/obj/structure/window/reinforced{dir = 4},/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"aR" = (/obj/item/weapon/paper/sokoban,/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"aS" = (/obj/structure/largecrate/cat,/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"aT" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"aU" = (/obj/structure/window/reinforced,/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"aV" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"aW" = (/obj/machinery/light{icon_state = "ltube1"; dir = 4},/obj/structure/largecrate/cat,/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"aX" = (/obj/structure/largecrate/porcelain,/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"aY" = (/obj/structure/largecrate,/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"aZ" = (/obj/structure/largecrate/showers,/turf/simulated/shuttle/floor,/area/vault/sokoban)
+"ba" = (/obj/structure/largecrate/skele_stand,/turf/simulated/shuttle/floor,/area/vault/sokoban)
 
 (1,1,1) = {"
-aaaaafffffaaaaa
-aaaaafbfbfaaaaa
-aaaaffghiffaaaa
-aaaafjklkmfaaaa
-aaaafnooopfaaaa
-afdffqfrfqfftfa
-afufccccccPfvfa
-afffIcccccJfffa
-awxfcccccccfxwa
-awxfHccecccfxwa
-awxfccGccccfxwa
-afyfIcccccJfyfa
-afzfcccccccfAfa
-ffyffffsffffyff
-fBBCDEBBBBBBBBf
-fBBDBBBBBBBBBBf
-fFKLDDCMDCDDNOf
-fffffffffffffff
+aaaaaaaaaaafafafafafaaaaaaaaaa
+aaaaaaaaaaafabafabafaaaaaaaaaa
+aaaaaaaaafafagahaiafafaaaaaaaa
+aaaaaaaaafajakalakamafaaaaaaaa
+aaaaaaaaafanaoaoaoapafaaaaaaaa
+aaafadafafaqafarafaqafafatafaa
+aaafauafacacacacacacacafavafaa
+aaafafafaJaGacacacaQaPafafafaa
+aaawaxafacaGacacacaQaZafaxawaa
+aaawaxafaHaGacaeacaQbaafaxawaa
+aaawaxafaRaGacacacaQaSafaxawaa
+aaafayafaIaTaUaUaUaVaWafayafaa
+aaafazafacacacacacaXaYafaAafaa
+afafayafafafafasafafafafayafaf
+afaBaBaCaDaEaBaBaBaBaBaBaBaBaf
+afaBaBaDaBaBaBaBaBaBaBaBaBaBaf
+afaFaKaLaDaDaCaMaDaCaDaDaNaOaf
+afafafafafafafafafafafafafafaf
 "}
