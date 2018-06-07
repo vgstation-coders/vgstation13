@@ -14,6 +14,7 @@
 	var/cell = null
 	var/obj/item/weapon/light/bulb/flashbulb = null
 	var/start_with_bulb = TRUE
+	var/decon_path = /obj/item/device/camera/empty
 	var/powercost = 10000
 
 /obj/item/device/blinder/Destroy()
@@ -186,11 +187,11 @@
 		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/obj/item/device/camera/empty/I = new(get_turf(user))
+			var/obj/item/device/camera/empty/I = new decon_path(get_turf(user))
 			handle_camera(I)
 			user.put_in_hands(I)
 		else
-			var/obj/item/device/camera/empty/I = new(get_turf(loc))
+			var/obj/item/device/camera/empty/I = new decon_path(get_turf(loc))
 			handle_camera(I)
 		var/obj/item/stack/cable_coil/C = new (get_turf(user))
 		C.amount = 5

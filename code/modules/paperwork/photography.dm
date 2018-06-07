@@ -157,6 +157,10 @@
 	icon_off = "sepia-camera_off"
 	mech_flags = MECH_SCAN_FAIL
 
+/obj/item/device/camera/sepia/empty
+	start_with_bulb = FALSE
+	pictures_left = 0
+
 /obj/item/device/camera/big_photos
 	name = "\improper XL camera"
 	photo_size = 5
@@ -164,12 +168,20 @@
 /obj/item/device/camera/big_photos/set_zoom()
 	return
 
+/obj/item/device/camera/big_photos/empty
+	start_with_bulb = FALSE
+	pictures_left = 0
+
 /obj/item/device/camera/huge_photos
 	name = "\improper XXL camera"
 	photo_size = 7
 
 /obj/item/device/camera/huge_photos/set_zoom()
 	return
+
+/obj/item/device/camera/huge_photos/empty
+	start_with_bulb = FALSE
+	pictures_left = 0
 
 /obj/item/device/camera/examine(mob/user)
 	..()
@@ -273,6 +285,22 @@
 		blinder.flashbulb = flashbulb
 		flashbulb.forceMove(blinder)
 		flashbulb = null
+
+	blinder.name = name
+	blinder.icon = icon
+	blinder.desc = "[desc] The film chamber is filled with wire for some reason."
+	blinder.icon_state = icon_state
+	blinder.item_state = item_state
+	blinder.mech_flags = mech_flags
+
+	var/decon_paths = list(
+	/obj/item/device/camera/sepia = /obj/item/device/camera/sepia/empty,
+	/obj/item/device/camera/big_photos = /obj/item/device/camera/big_photos/empty,
+	/obj/item/device/camera/huge_photos = /obj/item/device/camera/huge_photos/empty
+	)
+
+	if(is_type_in_list(src, decon_paths))
+		blinder.decon_path = decon_paths[type]
 
 /obj/item/device/camera/proc/camera_get_icon(list/turfs, turf/center)
 	var/atoms[] = list()
