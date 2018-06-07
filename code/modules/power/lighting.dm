@@ -197,7 +197,7 @@ var/global/list/obj/machinery/light/alllights = list()
 /obj/machinery/light/New()
 	..()
 	alllights += src
-	
+
 	spawn(2)
 		var/area/A = get_area(src)
 		if(A && !A.requires_power)
@@ -734,9 +734,10 @@ var/global/list/obj/machinery/light/alllights = list()
 
 	shatter()
 
-/obj/item/weapon/light/proc/shatter()
+/obj/item/weapon/light/proc/shatter(verbose = TRUE)
 	if(status == LIGHT_OK || status == LIGHT_BURNED)
-		src.visible_message("<span class='warning'>[name] shatters.</span>","<span class='warning'>You hear a small glass object shatter.</span>")
+		if(verbose)
+			src.visible_message("<span class='warning'>[name] shatters.</span>","<span class='warning'>You hear a small glass object shatter.</span>")
 		status = LIGHT_BROKEN
 		force = 5
 		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)

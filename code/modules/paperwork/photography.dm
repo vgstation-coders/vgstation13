@@ -131,6 +131,23 @@
 	var/photo_size = 3 //Default is 3x3. 1x1, 5x5, 7x7 are also options
 
 	var/panelopen = FALSE
+	var/obj/item/weapon/light/bulb/flashbulb = null
+	var/start_with_bulb = TRUE
+	var/decon_path = /obj/item/device/camera
+
+/obj/item/device/camera/New()
+	..()
+	if(start_with_bulb)
+		flashbulb = new /obj/item/weapon/light/bulb(src)
+
+/obj/item/device/camera/Destroy()
+	qdel(flashbulb)
+	flashbulb = null
+	..()
+
+/obj/item/device/camera/empty
+	start_with_bulb = FALSE
+	pictures_left = 0
 
 /obj/item/device/camera/sepia
 	name = "camera"
@@ -140,20 +157,35 @@
 	icon_on = "sepia-camera"
 	icon_off = "sepia-camera_off"
 	mech_flags = MECH_SCAN_FAIL
+	decon_path = /obj/item/device/camera/sepia/empty
+
+/obj/item/device/camera/sepia/empty
+	start_with_bulb = FALSE
+	pictures_left = 0
 
 /obj/item/device/camera/big_photos
 	name = "\improper XL camera"
 	photo_size = 5
+	decon_path = /obj/item/device/camera/big_photos/empty
 
 /obj/item/device/camera/big_photos/set_zoom()
 	return
 
+/obj/item/device/camera/big_photos/empty
+	start_with_bulb = FALSE
+	pictures_left = 0
+
 /obj/item/device/camera/huge_photos
 	name = "\improper XXL camera"
 	photo_size = 7
+	decon_path = /obj/item/device/camera/huge_photos/empty
 
 /obj/item/device/camera/huge_photos/set_zoom()
 	return
+
+/obj/item/device/camera/huge_photos/empty
+	start_with_bulb = FALSE
+	pictures_left = 0
 
 /obj/item/device/camera/examine(mob/user)
 	..()
@@ -196,6 +228,7 @@
 
 /obj/item/device/camera/silicon
 	name = "silicon photo camera"
+	start_with_bulb = FALSE
 	var/in_camera_mode = FALSE
 
 /obj/item/device/camera/silicon/ai_camera //camera AI can take pictures with
@@ -227,10 +260,12 @@
 		to_chat(user, "You attach [C.amount > 5 ? "some" : "the"] wires to \the [src]'s flash circuit.")
 		if(loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/obj/item/device/blinder/Q = new (get_turf(user))
+			var/obj/item/device/blinder/empty/Q = new(get_turf(user))
+			handle_blinder(Q)
 			user.put_in_hands(Q)
 		else
-			new /obj/item/device/blinder(get_turf(loc))
+			var/obj/item/device/blinder/empty/Q = new(get_turf(loc))
+			handle_blinder(Q)
 		C.use(5)
 		qdel(src)
 
@@ -249,6 +284,19 @@
 			return
 	..()
 
+/obj/item/device/camera/proc/handle_blinder(obj/item/device/blinder/blinder)
+	if(flashbulb)
+		blinder.flashbulb = flashbulb
+		flashbulb.forceMove(blinder)
+		flashbulb = null
+
+	blinder.name = name
+	blinder.icon = icon
+	blinder.desc = "[desc] The film chamber is filled with wire for some reason."
+	blinder.icon_state = icon_state
+	blinder.item_state = item_state
+	blinder.mech_flags = mech_flags
+	blinder.decon_path = decon_path
 
 /obj/item/device/camera/proc/camera_get_icon(list/turfs, turf/center)
 	var/atoms[] = list()
