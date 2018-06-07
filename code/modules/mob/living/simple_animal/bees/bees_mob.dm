@@ -273,6 +273,11 @@
 		if (!visited_plants.Find(new_plant))
 			visited_plants.Add(new_plant)
 
+/mob/living/simple_animal/bee/resetVariables()
+	..()
+	bees = list()
+	visited_plants = list()
+
 ////////////////////////////////LIFE////////////////////////////////////////
 
 /mob/living/simple_animal/bee/Life()
