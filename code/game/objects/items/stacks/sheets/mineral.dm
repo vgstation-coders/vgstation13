@@ -113,7 +113,7 @@ var/list/datum/stack_recipe/diamond_recipes = list ( \
 	sheettype = "uranium"
 	melt_temperature = 1132+T0C
 	recyck_mat = MAT_URANIUM
-	mat_type = MAT_DIAMOND
+	mat_type = MAT_URANIUM
 
 var/list/datum/stack_recipe/uranium_recipes = list ( \
 	new/datum/stack_recipe("uranium floor tile", /obj/item/stack/tile/mineral/uranium, 1, 4, 20), \
