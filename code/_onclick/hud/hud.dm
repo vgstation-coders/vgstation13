@@ -36,7 +36,7 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 	mymob = owner
 
 	hide_actions_toggle = new
-	hide_actions_toggle.InitialiseIcon(mymob)
+	hide_actions_toggle.InitialiseIcon(src)
 
 	instantiate()
 	..()

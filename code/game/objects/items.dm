@@ -278,7 +278,8 @@
 	if(wielded)
 		unwield(user)
 	for(var/X in actions)
-		qdel(X)
+		var/datum/action/A = X
+		A.Remove(user)
 ///called when an item is stripped off by another person, called BEFORE it is dropped. return 1 to prevent it from actually being stripped.
 /obj/item/proc/before_stripped(mob/wearer as mob, mob/stripper as mob, slot)
 	if(slot in list(slot_l_store, slot_r_store)) //is in pockets
