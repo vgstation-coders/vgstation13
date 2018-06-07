@@ -133,6 +133,7 @@
 	var/panelopen = FALSE
 	var/obj/item/weapon/light/bulb/flashbulb = null
 	var/start_with_bulb = TRUE
+	var/decon_path = /obj/item/device/camera
 
 /obj/item/device/camera/New()
 	..()
@@ -156,6 +157,7 @@
 	icon_on = "sepia-camera"
 	icon_off = "sepia-camera_off"
 	mech_flags = MECH_SCAN_FAIL
+	decon_path = /obj/item/device/camera/sepia/empty
 
 /obj/item/device/camera/sepia/empty
 	start_with_bulb = FALSE
@@ -164,6 +166,7 @@
 /obj/item/device/camera/big_photos
 	name = "\improper XL camera"
 	photo_size = 5
+	decon_path = /obj/item/device/camera/big_photos/empty
 
 /obj/item/device/camera/big_photos/set_zoom()
 	return
@@ -175,6 +178,7 @@
 /obj/item/device/camera/huge_photos
 	name = "\improper XXL camera"
 	photo_size = 7
+	decon_path = /obj/item/device/camera/huge_photos/empty
 
 /obj/item/device/camera/huge_photos/set_zoom()
 	return
@@ -292,15 +296,7 @@
 	blinder.icon_state = icon_state
 	blinder.item_state = item_state
 	blinder.mech_flags = mech_flags
-
-	var/decon_paths = list(
-	/obj/item/device/camera/sepia = /obj/item/device/camera/sepia/empty,
-	/obj/item/device/camera/big_photos = /obj/item/device/camera/big_photos/empty,
-	/obj/item/device/camera/huge_photos = /obj/item/device/camera/huge_photos/empty
-	)
-
-	if(is_type_in_list(src, decon_paths))
-		blinder.decon_path = decon_paths[type]
+	blinder.decon_path = decon_path
 
 /obj/item/device/camera/proc/camera_get_icon(list/turfs, turf/center)
 	var/atoms[] = list()
