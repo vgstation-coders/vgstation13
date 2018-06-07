@@ -75,6 +75,7 @@
 			L.gib()
 	if(actions.len)
 		for(var/datum/action/A in actions)
+			actions.Remove(A)
 			qdel(A)
 	qdel(pr_int_temp_processor)
 	pr_int_temp_processor = null
