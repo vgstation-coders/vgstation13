@@ -13,6 +13,7 @@
 	w_type = RECYK_ELECTRONIC
 	var/cell = null
 	var/obj/item/weapon/light/bulb/flashbulb = null
+	var/start_without_bulb = FALSE
 	var/powercost = 10000
 
 /obj/item/device/blinder/Destroy()
@@ -26,8 +27,12 @@
 
 /obj/item/device/blinder/New()
 	..()
-	flashbulb = new(src)
+	if(!start_without_bulb)
+		flashbulb = new(src)
 	update_verbs()
+
+/obj/item/device/blinder/empty
+	start_without_bulb = TRUE
 
 /obj/item/device/blinder/examine(mob/user)
 	..()
@@ -181,23 +186,18 @@
 		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/obj/item/device/camera/I = new (get_turf(user))
+			var/obj/item/device/camera/empty/I = new(get_turf(user))
 			handle_camera(I)
 			user.put_in_hands(I)
 		else
-			var/obj/item/device/camera/I = new(get_turf(loc))
+			var/obj/item/device/camera/empty/I = new(get_turf(loc))
 			handle_camera(I)
 		var/obj/item/stack/cable_coil/C = new (get_turf(user))
 		C.amount = 5
 		qdel(src)
 
 /obj/item/device/blinder/proc/handle_camera(obj/item/device/camera/camera)
-	if(camera.flashbulb)
-		qdel(camera.flashbulb)
-		camera.flashbulb = null
 	if(flashbulb)
 		camera.flashbulb = flashbulb
 		flashbulb.forceMove(camera)
 		flashbulb = null
-
-	camera.pictures_left = 0

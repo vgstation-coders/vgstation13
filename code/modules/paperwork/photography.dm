@@ -132,17 +132,21 @@
 
 	var/panelopen = FALSE
 	var/obj/item/weapon/light/bulb/flashbulb = null
-	var/skipbulb = FALSE
+	var/start_without_bulb = FALSE
 
 /obj/item/device/camera/New()
 	..()
-	if(!skipbulb)
+	if(!start_without_bulb)
 		flashbulb = new /obj/item/weapon/light/bulb(src)
 
 /obj/item/device/camera/Destroy()
 	qdel(flashbulb)
 	flashbulb = null
 	..()
+
+/obj/item/device/camera/empty
+	start_without_bulb = TRUE
+	pictures_left = 0
 
 /obj/item/device/camera/sepia
 	name = "camera"
@@ -208,8 +212,8 @@
 
 /obj/item/device/camera/silicon
 	name = "silicon photo camera"
+	start_without_bulb = TRUE
 	var/in_camera_mode = FALSE
-	skipbulb = TRUE
 
 /obj/item/device/camera/silicon/ai_camera //camera AI can take pictures with
 	name = "\improper AI photo camera"
@@ -240,11 +244,11 @@
 		to_chat(user, "You attach [C.amount > 5 ? "some" : "the"] wires to \the [src]'s flash circuit.")
 		if(loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/obj/item/device/blinder/Q = new (get_turf(user))
+			var/obj/item/device/blinder/empty/Q = new(get_turf(user))
 			handle_blinder(Q)
 			user.put_in_hands(Q)
 		else
-			var/obj/item/device/blinder/Q = new (get_turf(loc))
+			var/obj/item/device/blinder/empty/Q = new(get_turf(loc))
 			handle_blinder(Q)
 		C.use(5)
 		qdel(src)
@@ -265,9 +269,6 @@
 	..()
 
 /obj/item/device/camera/proc/handle_blinder(obj/item/device/blinder/blinder)
-	if(blinder.flashbulb)
-		qdel(blinder.flashbulb)
-		blinder.flashbulb = null
 	if(flashbulb)
 		blinder.flashbulb = flashbulb
 		flashbulb.forceMove(blinder)
