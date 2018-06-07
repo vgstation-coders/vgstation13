@@ -753,3 +753,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 /datum/locking_category/simple_animal
+
+
+/mob/living/simple_animal/resetVariables()
+	..()
+	emote_hear = list()
+	emote_see = list()
