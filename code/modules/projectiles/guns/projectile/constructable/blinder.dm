@@ -13,7 +13,7 @@
 	w_type = RECYK_ELECTRONIC
 	var/cell = null
 	var/obj/item/weapon/light/bulb/flashbulb = null
-	var/start_without_bulb = FALSE
+	var/start_with_bulb = TRUE
 	var/powercost = 10000
 
 /obj/item/device/blinder/Destroy()
@@ -27,12 +27,12 @@
 
 /obj/item/device/blinder/New()
 	..()
-	if(!start_without_bulb)
+	if(start_with_bulb)
 		flashbulb = new(src)
 	update_verbs()
 
 /obj/item/device/blinder/empty
-	start_without_bulb = TRUE
+	start_with_bulb = FALSE
 
 /obj/item/device/blinder/examine(mob/user)
 	..()

@@ -132,11 +132,11 @@
 
 	var/panelopen = FALSE
 	var/obj/item/weapon/light/bulb/flashbulb = null
-	var/start_without_bulb = FALSE
+	var/start_with_bulb = TRUE
 
 /obj/item/device/camera/New()
 	..()
-	if(!start_without_bulb)
+	if(start_with_bulb)
 		flashbulb = new /obj/item/weapon/light/bulb(src)
 
 /obj/item/device/camera/Destroy()
@@ -145,7 +145,7 @@
 	..()
 
 /obj/item/device/camera/empty
-	start_without_bulb = TRUE
+	start_with_bulb = FALSE
 	pictures_left = 0
 
 /obj/item/device/camera/sepia
@@ -212,7 +212,7 @@
 
 /obj/item/device/camera/silicon
 	name = "silicon photo camera"
-	start_without_bulb = TRUE
+	start_with_bulb = FALSE
 	var/in_camera_mode = FALSE
 
 /obj/item/device/camera/silicon/ai_camera //camera AI can take pictures with
