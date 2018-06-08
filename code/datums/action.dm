@@ -130,11 +130,11 @@
 
 /datum/action/item_action/Trigger()
 	if(!..())
-		return 0
+		return FALSE
 	if(target)
 		var/obj/item/I = target
 		I.attack_self(owner)
-	return 1
+	return TRUE
 
 /datum/action/item_action/ApplyIcon(obj/abstract/screen/movable/action_button/current_button)
 	current_button.overlays = null
@@ -206,9 +206,9 @@
 		else
 			I.eyeprot = 3
 			I.body_parts_covered |= EYES
-		return 1
+		return TRUE
 
-	return 0
+	return FALSE
 
 /datum/action/item_action/generic_toggle/New()
 	..()

@@ -8,7 +8,7 @@
 
 	regular_hud_updates()
 
-	update_action_buttons()
+	update_action_buttons_icon()
 
 	if(stat == UNCONSCIOUS && health <= config.health_threshold_crit)
 		var/severity = 0

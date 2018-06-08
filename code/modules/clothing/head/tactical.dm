@@ -22,7 +22,7 @@
 		flashlight = I
 
 		update_brightness()
-		user.update_action_buttons()
+		user.update_action_buttons_icon()
 		user.update_inv_head()
 		return
 	if(isscrewdriver(I) && src.flashlight)
@@ -31,7 +31,7 @@
 		flashlight = null
 
 		update_brightness()
-		user.update_action_buttons()
+		user.update_action_buttons_icon()
 		user.update_inv_head()
 		return
 	return ..()

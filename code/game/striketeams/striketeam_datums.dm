@@ -144,7 +144,7 @@ var/list/sent_strike_teams = list()
 
 				new_commando.key = applicant.key
 
-				new_commando.update_action_buttons(1)
+				new_commando.update_action_buttons_icon()
 				new_commando.mind.store_memory("<B>Mission:</B> <span class='warning'>[mission].</span>")
 
 				greet_commando(new_commando)
