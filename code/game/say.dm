@@ -135,12 +135,11 @@ var/list/freqtoname = list(
 			<span class='name'>
 				[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)]
 				[freqpart]
-				[render_job(filtered_speech)]
 			</span>
 			[filtered_speech.render_message()]
 		</span>"}
 	*/
-	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message()]</span>"
+	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart]</span> [filtered_speech.render_message()]</span>"
 	say_testing(src, html_encode(.))
 	if(pooled)
 		returnToPool(filtered_speech)
@@ -153,11 +152,6 @@ var/list/freqtoname = list(
 	return ""
 
 /atom/movable/proc/get_job(var/datum/speech/speech)
-	return ""
-
-/atom/movable/proc/render_job(var/datum/speech/speech)
-	if(speech.job)
-		return " ([speech.job])"
 	return ""
 
 /atom/movable/proc/say_quote(var/text)
