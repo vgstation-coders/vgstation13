@@ -756,6 +756,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 /mob/living/simple_animal/resetVariables()
-	..()
+	..("emote_hear", "emote_see", args)
 	emote_hear = list()
 	emote_see = list()

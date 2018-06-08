@@ -274,7 +274,7 @@
 			visited_plants.Add(new_plant)
 
 /mob/living/simple_animal/bee/resetVariables()
-	..()
+	..("bees", "visited_plants", args)
 	bees = list()
 	visited_plants = list()
 
