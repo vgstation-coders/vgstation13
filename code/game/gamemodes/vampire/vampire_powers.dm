@@ -93,7 +93,7 @@
 /client/proc/vampire_rejuvinate()
 	set category = "Vampire"
 	set name = "Rejuvenate"
-	set desc= "Flush your system with spare blood to remove any incapacitating effects."
+	set desc= "Concentrate your power to remove any incapacitating effects. With enough total blood, you can heal yourself."
 	var/datum/mind/M = usr.mind
 	if(!M)
 		return
@@ -180,7 +180,7 @@
 		return
 	M.current.visible_message("<span class='warning'>[M.current.name]'s eyes flash briefly as he stares into [C.name]'s eyes</span>")
 	M.current.verbs -= /client/proc/vampire_hypnotise
-	spawn(1800)
+	spawn(2400)
 		if(M && M.current)
 			M.current.verbs += /client/proc/vampire_hypnotise
 	var/enhancements = ((C.knockdown ? 2 : 0) + (C.stunned ? 1 : 0) + (C.sleeping || C.paralysis ? 3 : 0))
@@ -202,7 +202,7 @@
 /client/proc/vampire_disease()
 	set category = "Vampire"
 	set name = "Diseased Touch"
-	set desc = "Touches your victim with infected blood giving them the Shutdown Syndrome which quickly shutsdown their major organs resulting in a quick painful death."
+	set desc = "Touches your victim with infected blood giving them the Shutdown Syndrome, which will result in a quick death."
 	var/datum/mind/M = usr.mind
 	if(!M)
 		return
@@ -235,7 +235,7 @@
 	infect_virus2(C,shutdown,0)
 	//M.current.remove_vampire_blood(50)//
 	M.current.verbs -= /client/proc/vampire_disease
-	sleep(1800)
+	sleep(3000)
 	if(M && M.current)
 		M.current.verbs += /client/proc/vampire_disease
 
@@ -339,14 +339,14 @@
 		playsound(M.current.loc, 'sound/effects/creepyshriek.ogg', 100, 1)
 		//M.current.remove_vampire_blood(30)//
 		M.current.verbs -= /client/proc/vampire_screech
-		sleep(1800)
+		sleep(2400)
 		if(M && M.current)
 			M.current.verbs += /client/proc/vampire_screech
 
 /client/proc/vampire_enthrall()
 	set category = "Vampire"
 	set name = "Enthrall"
-	set desc = "You use a large portion of your power to sway those loyal to none to be loyal to you only."
+	set desc = "You focus your power to sway those loyal to none to be loyal to you only."
 	var/datum/mind/M = usr.mind
 	if(!M)
 		return
@@ -364,7 +364,7 @@
 				//M.current.remove_vampire_blood(150)//
 				M.current.handle_enthrall(C)
 				M.current.verbs -= /client/proc/vampire_enthrall
-				sleep((VAMP_CHARISMA in M.vampire.powers) ? 600 : 1800)
+				sleep((VAMP_CHARISMA in M.vampire.powers) ? 600 : 6000)
 				if(M && M.current)
 					M.current.verbs += /client/proc/vampire_enthrall
 				return
@@ -512,7 +512,7 @@
 			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
 		//M.current.remove_vampire_blood(50)//
 		M.current.verbs -= /client/proc/vampire_bats
-		sleep(1200)
+		sleep(2400)
 		if(M && M.current) // Because our vampire can be completely destroyed after the sleep ends, who knows
 			M.current.verbs += /client/proc/vampire_bats
 
@@ -530,7 +530,7 @@
 		M.current.verbs -= /client/proc/vampire_jaunt
 		new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
 		ethereal_jaunt(M.current, duration, "batify", "debatify", 0)
-		sleep(600)
+		sleep(900)
 		if(M && M.current)
 			M.current.verbs += /client/proc/vampire_jaunt
 
@@ -588,7 +588,7 @@
 			usr.forceMove(picked)
 		//M.current.remove_vampire_blood(10)//
 		M.current.verbs -= /client/proc/vampire_shadowstep
-		sleep(20 SECONDS)
+		sleep(100)
 		if(M && M.current)
 			M.current.verbs += /client/proc/vampire_shadowstep
 
