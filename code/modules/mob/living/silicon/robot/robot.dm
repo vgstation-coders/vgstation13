@@ -988,8 +988,8 @@
 			cell.brute_damage = cell_component.brute_damage
 			cell.updateicon()
 			cell.add_fingerprint(user)
-			user.put_in_active_hand(cell)
-			user.visible_message("<span class='warning'>[user] removes [src]'s [cell.name].</span>", \
+			user.put_in_hands(cell)
+			visible_message("<span class='warning'>[user] removes [src]'s [cell.name].</span>", \
 			"<span class='notice'>You remove [src]'s [cell.name].</span>")
 			if(can_diagnose())
 				to_chat(src, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
@@ -1005,7 +1005,7 @@
 			cell_component.installed = COMPONENT_MISSING
 			var/obj/item/broken_device = cell_component.wrapped
 			to_chat(user, "You remove \the [broken_device].")
-			user.put_in_active_hand(broken_device)
+			user.put_in_hands(broken_device)
 			if(can_diagnose())
 				to_chat(src, "<span class='info' style=\"font-family:Courier\">Destroyed power cell removed.</span>")
 			return
