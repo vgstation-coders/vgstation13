@@ -3491,6 +3491,22 @@
 	reagent_state = LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
+	
+/datum/reagent/mustard
+	name = "Mustard"
+	id = MUSTARD
+	description = "A spicy yellow paste."
+	reagent_state = LIQUID
+	nutriment_factor = 3 * REAGENTS_METABOLISM
+	color = "#cccc33" //rgb: 204, 204, 51
+	
+/datum/reagent/relish
+	name = "Relish"
+	id = RELISH
+	description = "A pickled cucumber jam. Tasty!"
+	reagent_state = LIQUID
+	nutriment_factor = 4 * REAGENTS_METABOLISM
+	color = "#336600" //rgb: 51, 102, 0
 
 /datum/reagent/dipping_sauce
 	name = "Dipping Sauce"
