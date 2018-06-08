@@ -92,8 +92,8 @@
 
 /client/proc/vampire_rejuvinate()
 	set category = "Vampire"
-	set name = "Rejuvenate "
-	set desc= "Flush your system with spare blood to remove any incapacitating effects."
+	set name = "Rejuvenate"
+	set desc= "Concentrate your power to remove any incapacitating effects. With enough total blood, you can heal yourself."
 	var/datum/mind/M = usr.mind
 	if(!M)
 		return
@@ -165,7 +165,7 @@
 
 /client/proc/vampire_hypnotise()
 	set category = "Vampire"
-	set name = "Hypnotise (10)"
+	set name = "Hypnotise"
 	set desc= "A piercing stare that incapacitates your victim for a good length of time."
 	var/datum/mind/M = usr.mind
 	if(!M)
@@ -180,12 +180,12 @@
 		return
 	M.current.visible_message("<span class='warning'>[M.current.name]'s eyes flash briefly as he stares into [C.name]'s eyes</span>")
 	M.current.verbs -= /client/proc/vampire_hypnotise
-	spawn(1800)
+	spawn(2400)
 		if(M && M.current)
 			M.current.verbs += /client/proc/vampire_hypnotise
 	var/enhancements = ((C.knockdown ? 2 : 0) + (C.stunned ? 1 : 0) + (C.sleeping || C.paralysis ? 3 : 0))
 	if(do_mob(M.current, C, 10 - enhancements))
-		M.current.remove_vampire_blood(10)
+		//M.current.remove_vampire_blood(10)
 		if(C.mind && C.mind.vampire)
 			to_chat(M.current, "<span class='warning'>Your piercing gaze fails to knock out [C.name].</span>")
 			to_chat(C, "<span class='notice'>[M.current.name]'s feeble gaze is ineffective.</span>")
@@ -201,8 +201,8 @@
 
 /client/proc/vampire_disease()
 	set category = "Vampire"
-	set name = "Diseased Touch (50)"
-	set desc = "Touches your victim with infected blood giving them the Shutdown Syndrome which quickly shutsdown their major organs resulting in a quick painful death."
+	set name = "Diseased Touch"
+	set desc = "Touches your victim with infected blood giving them the Shutdown Syndrome, which will result in a quick death."
 	var/datum/mind/M = usr.mind
 	if(!M)
 		return
@@ -233,9 +233,9 @@
 	shutdown.stage = 2
 	shutdown.clicks = 185
 	infect_virus2(C,shutdown,0)
-	M.current.remove_vampire_blood(50)
+	//M.current.remove_vampire_blood(50)//
 	M.current.verbs -= /client/proc/vampire_disease
-	sleep(1800)
+	sleep(3000)
 	if(M && M.current)
 		M.current.verbs += /client/proc/vampire_disease
 
@@ -312,7 +312,7 @@
 
 /client/proc/vampire_screech()
 	set category = "Vampire"
-	set name = "Chiroptean Screech (30)"
+	set name = "Chiroptean Screech"
 	set desc = "An extremely loud shriek that stuns nearby humans and breaks windows as well."
 	var/datum/mind/M = usr.mind
 	if(!M)
@@ -337,16 +337,16 @@
 		for(var/obj/structure/window/W in view(4))
 			W.Destroy(brokenup = 1)
 		playsound(M.current.loc, 'sound/effects/creepyshriek.ogg', 100, 1)
-		M.current.remove_vampire_blood(30)
+		//M.current.remove_vampire_blood(30)//
 		M.current.verbs -= /client/proc/vampire_screech
-		sleep(1800)
+		sleep(2400)
 		if(M && M.current)
 			M.current.verbs += /client/proc/vampire_screech
 
 /client/proc/vampire_enthrall()
 	set category = "Vampire"
-	set name = "Enthrall (150)"
-	set desc = "You use a large portion of your power to sway those loyal to none to be loyal to you only."
+	set name = "Enthrall"
+	set desc = "You focus your power to sway those loyal to none to be loyal to you only."
 	var/datum/mind/M = usr.mind
 	if(!M)
 		return
@@ -361,10 +361,10 @@
 		to_chat(C, "<span class='sinister'>You feel the tendrils of evil [(VAMP_CHARISMA in M.vampire.powers) ? "aggressively" : "slowly"] invade your mind.</span>")
 		if(do_mob(M.current, C, (VAMP_CHARISMA in M.vampire.powers) ? 150 : 300))
 			if(M.current.vampire_power(150, 0)) // recheck
-				M.current.remove_vampire_blood(150)
+				//M.current.remove_vampire_blood(150)//
 				M.current.handle_enthrall(C)
 				M.current.verbs -= /client/proc/vampire_enthrall
-				sleep((VAMP_CHARISMA in M.vampire.powers) ? 600 : 1800)
+				sleep((VAMP_CHARISMA in M.vampire.powers) ? 600 : 6000)
 				if(M && M.current)
 					M.current.verbs += /client/proc/vampire_enthrall
 				return
@@ -485,7 +485,7 @@
 
 /client/proc/vampire_bats()
 	set category = "Vampire"
-	set name = "Summon Bats (50)"
+	set name = "Summon Bats"
 	set desc = "You summon a trio of space bats who attack nearby targets until they or their target is dead."
 	var/datum/mind/M = usr.mind
 	if(!M)
@@ -510,15 +510,15 @@
 			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
 			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
 			new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
-		M.current.remove_vampire_blood(50)
+		//M.current.remove_vampire_blood(50)//
 		M.current.verbs -= /client/proc/vampire_bats
-		sleep(1200)
+		sleep(2400)
 		if(M && M.current) // Because our vampire can be completely destroyed after the sleep ends, who knows
 			M.current.verbs += /client/proc/vampire_bats
 
 /client/proc/vampire_jaunt()
 	set category = "Vampire"
-	set name = "Bat Form (20)"
+	set name = "Bat Form"
 	set desc = "You become ethereal and can travel through walls for a short time, while leaving a scary bat behind."
 	var/duration = 5 SECONDS
 	var/datum/mind/M = usr.mind
@@ -526,11 +526,11 @@
 		return
 
 	if(M.current.vampire_power(20, 0))
-		M.current.remove_vampire_blood(20)
+		//M.current.remove_vampire_blood(20)//
 		M.current.verbs -= /client/proc/vampire_jaunt
 		new /mob/living/simple_animal/hostile/scarybat(M.current.loc, M.current)
 		ethereal_jaunt(M.current, duration, "batify", "debatify", 0)
-		sleep(600)
+		sleep(900)
 		if(M && M.current)
 			M.current.verbs += /client/proc/vampire_jaunt
 
@@ -538,7 +538,7 @@
 // Less smoke spam.
 /client/proc/vampire_shadowstep()
 	set category = "Vampire"
-	set name = "Shadowstep (10)"
+	set name = "Shadowstep"
 	set desc = "Vanish into the shadows."
 
 	var/datum/mind/M = usr.mind
@@ -586,9 +586,9 @@
 			var/turf/T = get_turf(M.current)
 			T.turf_animation('icons/effects/effects.dmi',"shadowstep")
 			usr.forceMove(picked)
-		M.current.remove_vampire_blood(10)
+		//M.current.remove_vampire_blood(10)//
 		M.current.verbs -= /client/proc/vampire_shadowstep
-		sleep(20 SECONDS)
+		sleep(100)
 		if(M && M.current)
 			M.current.verbs += /client/proc/vampire_shadowstep
 
