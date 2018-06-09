@@ -66,7 +66,7 @@ var/list/SPS_list = list()
 /obj/item/device/gps/proc/get_location_name()
 	var/turf/device_turf = get_turf(src)
 	var/area/device_area = get_area(src)
-	else if(!device_turf || !device_area)
+	if(!device_turf || !device_area)
 		return "UNKNOWN"
 	else if(device_turf.z > WORLD_X_OFFSET.len)
 		return "[format_text(device_area.name)] (UNKNOWN, UNKNOWN, UNKNOWN)"
