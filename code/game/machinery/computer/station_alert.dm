@@ -15,9 +15,7 @@
 /obj/machinery/computer/station_alert/New()
 	..()
 	if(src.z != map.zMainStation)
-		var/area/A = src.areaMaster
-		if(!A)
-			A = get_area(src)
+		var/area/A = get_area(src)
 		if(!A)
 			return
 		name = "[A.general_area_name] Alert Computer"

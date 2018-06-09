@@ -403,7 +403,8 @@ var/global/list/obj/machinery/light/alllights = list()
  * TRUE if area has power and lightswitch is on otherwise FALSE.
  */
 /obj/machinery/light/proc/has_power()
-	return areaMaster.lightswitch && areaMaster.power_light
+	var/area/this_area = get_area(src)
+	return this_area.lightswitch && this_area.power_light
 
 /obj/machinery/light/proc/flicker(var/amount = rand(10, 20))
 	if(flickering)
@@ -573,7 +574,8 @@ var/global/list/obj/machinery/light/alllights = list()
  */
 /obj/machinery/light/power_change()
 	spawn(10)
-		seton(areaMaster.lightswitch && areaMaster.power_light)
+		var/area/this_area = get_area(src)
+		seton(this_area.lightswitch && this_area.power_light)
 
 // called when on fire
 

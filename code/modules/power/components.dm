@@ -125,25 +125,26 @@
 	// If you're using a consumer, you need power.
 	//if(!use_power)
 	//	return 1
-
-	if(isnull(parent.areaMaster) || !parent.areaMaster)
+	var/area/parent_area = get_area(parent)
+	if(!parent_area)
 		return 0						// if not, then not powered.
 
 	if((machine_flags & FIXED2WORK) && !parent.anchored)
 		return 0
 
-	return parent.areaMaster.powered(chan)		// return power status of the area.
+	return parent_area.powered(chan)		// return power status of the area.
 
 // increment the power usage stats for an area
 // defaults to power_channel
 /datum/power_connection/proc/use_power(amount, chan = channel)
-	if(isnull(parent.areaMaster) || !parent.areaMaster)
+	var/area/parent_area = get_area(parent)
+	if(!parent_area)
 		return 0						// if not, then not powered.
 
 	if(!powered(chan)) //no point in trying if we don't have power
 		return 0
 
-	parent.areaMaster.use_power(amount, chan)
+	parent_area.use_power(amount, chan)
 
 // called whenever the power settings of the containing area change
 // by default, check equipment channel & set flag
@@ -226,9 +227,10 @@
 ///////////////////////////////////////////////
 
 /datum/power_connection/proc/addStaticPower(value, powerchannel)
-	if(!parent.areaMaster)
+	var/area/parent_area = get_area(parent)
+	if(!parent_area)
 		return
-	parent.areaMaster.addStaticPower(value, powerchannel)
+	parent_area.addStaticPower(value, powerchannel)
 
 /datum/power_connection/proc/removeStaticPower(value, powerchannel)
 	addStaticPower(-value, powerchannel)

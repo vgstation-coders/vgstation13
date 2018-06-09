@@ -75,7 +75,8 @@
 			to_chat(user, "<span class='warning'>There is already a cell in [src].</span>")
 			return
 		else
-			if(areaMaster.power_equip == 0) // There's no APC in this area, don't try to cheat power!
+			var/area/this_area = get_area(src)
+			if(this_area.power_equip == 0) // There's no APC in this area, don't try to cheat power!
 				to_chat(user, "<span class='warning'>[src] blinks red as you try to insert the cell!</span>")
 				return
 

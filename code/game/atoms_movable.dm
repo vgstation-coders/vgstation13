@@ -18,8 +18,6 @@
 	var/mob/pulledby = null
 	var/pass_flags = 0
 
-	var/area/areaMaster
-
 	var/sound_override = 0 //Do we make a sound when bumping into something?
 	var/hard_deleted = 0
 	var/pressure_resistance = ONE_ATMOSPHERE
@@ -57,7 +55,6 @@
 
 /atom/movable/New()
 	. = ..()
-	areaMaster = get_area_master(src)
 	if((flags & HEAR) && !ismob(src))
 		getFromPool(/mob/virtualhearer, src)
 
@@ -424,7 +421,7 @@
 
 		loc.Entered(src, old_loc)
 		if(isturf(loc))
-			var/area/A = get_area_master(loc)
+			var/area/A = get_area(loc)
 			A.Entered(src, old_loc)
 
 			for(var/atom/movable/AM in loc)
@@ -463,7 +460,7 @@
 		loc = destination
 		loc.Entered(src)
 		if(isturf(destination))
-			var/area/A = get_area_master(destination)
+			var/area/A = get_area(destination)
 			A.Entered(src)
 
 		for(var/atom/movable/AM in locked_atoms)
@@ -628,10 +625,6 @@
 	src.throwing = 0
 	if(isobj(src))
 		src.throw_impact(get_turf(src), speed, user)
-
-/atom/movable/change_area(oldarea, newarea)
-	areaMaster = newarea
-	..()
 
 //Overlays
 /atom/movable/overlay

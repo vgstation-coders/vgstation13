@@ -1569,7 +1569,8 @@
 		plane = LYING_HUMAN_PLANE
 	else
 		plane = HUMAN_PLANE
-	if(istype(areaMaster) && areaMaster.project_shadows)
+	var/area/this_area = get_area(src)
+	if(istype(this_area) && this_area.project_shadows)
 		update_shadow()
 
 /mob/living/carbon/human/set_hand_amount(new_amount) //Humans need hand organs to use the new hands. This proc will give them some
