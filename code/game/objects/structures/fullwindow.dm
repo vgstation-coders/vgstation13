@@ -154,6 +154,12 @@
 	health = 30
 	sheet_type = /obj/item/stack/sheet/glass/rglass //Ditto above
 
+/obj/structure/window/full/pressure_act(differential, direction, ignore_dir = 1)
+	//..(ignore_dir = 1)
+	if(pressure_resistance >= differential) return 0
+	health -= round((differential - pressure_resistance) / pressure_mod)
+	healthcheck(sound = 1)
+
 #undef WINDOWLOOSE
 #undef WINDOWLOOSEFRAME
 #undef WINDOWUNSECUREFRAME
