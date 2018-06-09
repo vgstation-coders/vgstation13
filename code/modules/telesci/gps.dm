@@ -46,7 +46,7 @@ var/list/SPS_list = list()
 
 /obj/item/device/gps/emp_act(severity)
 	emped = TRUE
-	transmitting = FALSE //turns off transmission when emp'd
+	transmitting = FALSE
 	overlays -= image(icon = icon, icon_state = "working")
 	overlays += image(icon = icon, icon_state = "emp")
 	spawn(30 SECONDS)
@@ -66,8 +66,6 @@ var/list/SPS_list = list()
 /obj/item/device/gps/proc/get_location_name()
 	var/turf/device_turf = get_turf(src)
 	var/area/device_area = get_area(src)
-	if(emped)
-		return "ERROR"
 	else if(!device_turf || !device_area)
 		return "UNKNOWN"
 	else if(device_turf.z > WORLD_X_OFFSET.len)
@@ -89,8 +87,8 @@ var/list/SPS_list = list()
 		for(var/D in get_list())
 			var/obj/item/device/gps/G = D
 			if(src != G)
-				var/device_data[0]
 				if (G.transmitting)
+					var/device_data[0]
 					device_data["tag"] = G.gpstag
 					device_data["location_text"] = G.get_location_name()
 					devices += list(device_data)
@@ -183,22 +181,20 @@ var/list/SPS_list = list()
 	return SPS_list
 
 /obj/item/device/gps/secure/OnMobDeath(mob/wearer)
-	if(emped)
+	if(!transmitting)
 		return
 
 	for(var/E in SPS_list)
 		var/obj/item/device/gps/secure/S = E //No idea why casting it like this makes it work better instead of just defining it in the for each
-		if (transmitting == TRUE)
 			S.announce(wearer, src, "has detected the death of their wearer",dead=TRUE)
 
 /obj/item/device/gps/secure/stripped(mob/wearer)
-	if(emped)
+	if(!transmitting)
 		return
 	. = ..()
 	var/num = 0
 	for(var/E in SPS_list)
 		var/obj/item/device/gps/secure/S = E
-		if (transmitting == TRUE)
 			S.announce(wearer, src, "has been stripped from their wearer",num)
 			num++
 
