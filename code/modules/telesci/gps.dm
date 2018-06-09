@@ -186,7 +186,7 @@ var/list/SPS_list = list()
 
 	for(var/E in SPS_list)
 		var/obj/item/device/gps/secure/S = E //No idea why casting it like this makes it work better instead of just defining it in the for each
-			S.announce(wearer, src, "has detected the death of their wearer",dead=TRUE)
+		S.announce(wearer, src, "has detected the death of their wearer",dead=TRUE)
 
 /obj/item/device/gps/secure/stripped(mob/wearer)
 	if(!transmitting)
@@ -195,7 +195,7 @@ var/list/SPS_list = list()
 	var/num = 0
 	for(var/E in SPS_list)
 		var/obj/item/device/gps/secure/S = E
-			S.announce(wearer, src, "has been stripped from their wearer",num)
+		S.announce(wearer, src, "has been stripped from their wearer",num)
 			num++
 
 var/list/deathsound = list('sound/items/die1.wav', 'sound/items/die2.wav', 'sound/items/die3.wav','sound/items/die4.wav')
