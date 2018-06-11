@@ -170,10 +170,6 @@
 	charge_max = 10
 
 /spell/mech/marauder/thrusters/cast(list/targets, mob/user)
-/*
-	set category = "Exosuit Interface"
-	set name = "Toggle thrusters"
-*/
 	if(user!=M.occupant)
 		return
 	var/obj/mecha/combat/marauder/Marauder = M
