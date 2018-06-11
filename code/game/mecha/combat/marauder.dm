@@ -167,7 +167,8 @@
 /spell/mech/marauder/thrusters
 	name = "Toggle thrusters"
 	desc = "Toggle mech thrusters."
-	charge_max = 10
+	hud_state = "jetpack-void"
+	override_icon = 'icons/obj/tank.dmi'
 
 /spell/mech/marauder/thrusters/cast(list/targets, mob/user)
 	if(user!=M.occupant)
