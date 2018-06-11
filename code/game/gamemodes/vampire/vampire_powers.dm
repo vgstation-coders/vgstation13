@@ -165,7 +165,7 @@
 
 /client/proc/vampire_hypnotise()
 	set category = "Vampire"
-	set name = "Hypnotise (10)"
+	set name = "Hypnotize (10)"
 	set desc= "A piercing stare that incapacitates your victim for a good length of time."
 	var/datum/mind/M = usr.mind
 	if(!M)
