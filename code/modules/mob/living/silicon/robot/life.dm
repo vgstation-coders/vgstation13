@@ -52,10 +52,13 @@
 			if(!is_component_functioning("actuator"))
 				Paralyse(3)
 
-			stat = 0
+			stat = CONSCIOUS
 	else
 		uneq_all()
-		stat = 1
+		if(station_holomap)
+			if(station_holomap.watching_mob)
+				station_holomap.stopWatching()
+		stat = UNCONSCIOUS
 
 
 /mob/living/silicon/robot/proc/handle_regular_status_updates()
