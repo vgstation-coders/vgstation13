@@ -10,11 +10,6 @@
 /mob/verb/whisper(message as text)
 	set name = "Whisper"
 	set category = "IC"
-	return
-/*
-/mob/proc/whisper(var/message, var/unheard=" whispers something", var/heard="whispers,", var/apply_filters=1, var/allow_lastwords=1)
-	return
-*/
 
 /mob/verb/me_verb(message as text)
 	set name = "Me"
