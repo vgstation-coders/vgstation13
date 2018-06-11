@@ -130,6 +130,7 @@
 	var/mechaIcon = MS.M.initial_icon
 	open_state = "[mechaIcon]-open"
 	closed_state = "[mechaIcon]"
+	toggle_open(2)
 
 /obj/abstract/screen/movable/spell_master/proc/remove_spell(var/spell/spell)
 	returnToPool(spell.connected_button)
