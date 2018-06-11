@@ -156,11 +156,9 @@ Frequency:
 		return
 
 	if(!destination_id)
-		choose_destination(user)
+		if(!choose_destination(user))
+			return
 	var/T = destination_id
-
-	if((user.get_active_hand() != src || user.stat || user.restrained()))
-		return
 
 	if((destination_name == "None (Dangerous)") && prob(5))
 		T = locate(rand(7, world.maxx - 7), rand(7, world.maxy -7), map.zTCommSat)
@@ -187,7 +185,7 @@ Frequency:
 		recharging = 1
 		processing_objects.Add(src)
 
-/obj/item/weapon/hand_tele/proc/choose_destination(var/user)
+/obj/item/weapon/hand_tele/proc/choose_destination(var/mob/user)
 	var/list/L = list(  )
 	for(var/obj/machinery/computer/teleporter/R in machines)
 		for(var/obj/machinery/teleport/hub/com in locate(R.x + 2, R.y, R.z))
@@ -213,8 +211,15 @@ Frequency:
 		L["None (Dangerous)"] = pick(turfs)
 
 	turfs = null
-	destination_name = input(user, "Please select a teleporter to lock in on.", "Hand Teleporter") in L
-	destination_id = L[destination_name]
+	var/destination_name = input(user, "Please select a teleporter to lock in on.", "Hand Teleporter") in L
+	var/destination_id = L[destination_name]
+
+	if((user.get_active_hand() != src || user.stat || user.restrained()))
+		return 0
+	else
+		src.destination_name = destination_name
+		src.destination_id = destination_id
+		return 1
 
 /obj/item/weapon/hand_tele/AltClick(var/mob/usr)
 	if((usr.incapacitated() || !Adjacent(usr)))
