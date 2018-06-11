@@ -196,7 +196,7 @@ var/list/SPS_list = list()
 	for(var/E in SPS_list)
 		var/obj/item/device/gps/secure/S = E
 		S.announce(wearer, src, "has been stripped from their wearer",num)
-			num++
+		num++
 
 var/list/deathsound = list('sound/items/die1.wav', 'sound/items/die2.wav', 'sound/items/die3.wav','sound/items/die4.wav')
 
@@ -214,7 +214,7 @@ var/const/DEATHSOUND_CHANNEL = 300
 
 /obj/item/device/gps/secure/proc/deathsound(var/turf/pos,var/dead=FALSE,num)
 	var/sound_channel = DEATHSOUND_CHANNEL + num
-	if(dead)
+	if(dead && transmitting)
 		playsound(src, pick(deathsound), 100, 0,channel = sound_channel,wait = TRUE)
 	if(prob(75))
 		playsound(src, 'sound/items/on3.wav',100, 0,channel = sound_channel,wait = TRUE)
