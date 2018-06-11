@@ -256,7 +256,7 @@
 		if (!(charges_left))
 			to_chat(user, "<span class = 'warning'>There is no tape left.</span>")
 			qdel(src)
-			return
+			return TRUE
 		to_chat(user, "<span class = 'notice'>There [charges_left > 1 ? "are" : "is"] [charges_left] roll[charges_left > 1 ? "s" : ""] of tape left.</span>")
 	. = ..()
 
