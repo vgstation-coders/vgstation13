@@ -184,8 +184,14 @@
 /spell/mech/marauder/dash
 	name = "Rocket-Dash"
 	desc = "Activate the mech's thrusters to charge in a line and knock down anything in your way."
+	icon_direction = EAST
+	override_icon = 'icons/mecha/mecha.dmi'
 	charge_max = 30
 	charge_counter = 30
+
+/spell/mech/marauder/dash/New()
+	..()
+	hud_state = "[M.initial_icon]-dash"
 
 /spell/mech/marauder/dash/cast(list/targets, mob/user)
 	if(user!=M.occupant)

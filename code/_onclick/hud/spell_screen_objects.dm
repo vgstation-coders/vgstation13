@@ -279,7 +279,7 @@
 
 	var/spell_icon = null
 	if(spell.override_icon && (spell.override_icon != icon))
-		spell_icon = image(icon = spell.override_icon, icon_state = spell.hud_state)
+		spell_icon = image(icon = spell.override_icon, icon_state = spell.hud_state, dir = spell.icon_direction)
 	else
 		spell_icon = spell.hud_state
 	overlays -= spell_icon
