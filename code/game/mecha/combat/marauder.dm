@@ -215,7 +215,7 @@
 	desc = "Deploy obscuring smoke to avoid retaliation."
 	charge_max = 100
 	charge_counter = 100
-	override_icon = 'screen_spells.dmi'
+	override_icon = 'icons/mob/screen_spells.dmi'
 	hud_state = "wiz_smoke"
 
 /spell/mech/marauder/smoke/cast(list/targets, mob/user)
