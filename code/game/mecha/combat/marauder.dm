@@ -230,7 +230,8 @@
 /spell/mech/marauder/zoom
 	name = "Zoom"
 	desc = "Double your viewing distance."
-	charge_max = 1
+	override_icon = 'icons/obj/items.dmi'
+	hud_state = "binoculars"
 
 /spell/mech/marauder/zoom/cast(list/targets, mob/user)
 	if(user!=M.occupant)
