@@ -1266,3 +1266,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 /mob/living/simple_animal/borer/proc/set_attack_cooldown()
 	host.delayNextAttack(10)
+
+/mob/living/simple_animal/borer/whisper(message as text)
+	return
