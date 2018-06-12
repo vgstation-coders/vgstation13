@@ -48,9 +48,9 @@
 			else
 				return
 		if(new_mob)
-			if(M.mind && M.mind.wizard_spells && M.mind.wizard_spells.len)
-				for (var/spell/S in M.mind.wizard_spells)
-					new_mob.spell_list += new S.type
+			if(new_mob.mind && new_mob.mind.wizard_spells && new_mob.mind.wizard_spells.len)
+				for (var/spell/S in new_mob.mind.wizard_spells)
+					new_mob.add_spell(S)
 			var/mob/living/carbon/human/H = new_mob
 			to_chat(new_mob, "<B>Your form morphs into that of a [(istype(H) && H.species && H.species.name) ? H.species.name : randomize].</B>")
 			return new_mob

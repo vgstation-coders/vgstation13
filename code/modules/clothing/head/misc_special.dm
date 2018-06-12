@@ -173,23 +173,29 @@
 	flags = FPRINT
 	var/icon/mob
 	var/icon/mob2
+	var/haircolored = 1
 	siemens_coefficient = 1.5
-
-	update_icon(var/mob/living/carbon/human/user)
-		if(!istype(user))
-			return
-		mob = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty")
-		mob2 = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty2")
-		mob.Blend(rgb(user.r_hair, user.g_hair, user.b_hair), ICON_ADD)
-		mob2.Blend(rgb(user.r_hair, user.g_hair, user.b_hair), ICON_ADD)
-
-		var/icon/earbit = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner")
-		var/icon/earbit2 = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner2")
-		mob.Blend(earbit, ICON_OVERLAY)
-		mob2.Blend(earbit2, ICON_OVERLAY)
 
 /obj/item/clothing/head/kitty/cursed
 	canremove = 0
+
+/obj/item/clothing/head/kitty/collectable
+	desc = "A pair of black kitty ears. Meow!"
+	haircolored = 0
+
+/obj/item/clothing/head/kitty/update_icon(var/mob/living/carbon/human/user)
+	if(!istype(user) || !haircolored)
+		return
+	mob = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty")
+	mob2 = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty2")
+	mob.Blend(rgb(user.r_hair, user.g_hair, user.b_hair), ICON_ADD)
+	mob2.Blend(rgb(user.r_hair, user.g_hair, user.b_hair), ICON_ADD)
+
+	var/icon/earbit = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner")
+	var/icon/earbit2 = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner2")
+	mob.Blend(earbit, ICON_OVERLAY)
+	mob2.Blend(earbit2, ICON_OVERLAY)
+
 
 /obj/item/clothing/head/butt
 	name = "butt"

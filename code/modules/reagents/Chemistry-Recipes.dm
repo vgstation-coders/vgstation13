@@ -3073,5 +3073,13 @@
 	result_amount = 5
 
 
+/datum/chemical_reaction/untable
+	name = "Untable Mutagen"
+	id = UNTABLE_MUTAGEN
+	result = UNTABLE_MUTAGEN
+	required_reagents = list(FORMIC_ACID = 1, PHENOL = 1, RADIUM = 1)
+	result_amount = 3
+
+
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
