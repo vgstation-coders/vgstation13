@@ -6575,3 +6575,25 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#E5E5E5"
 	density = 2.61
 	specheatcap = 111.8
+
+/datum/reagent/untable
+	name = "Untable Mutagen"
+	id = UNTABLE_MUTAGEN
+	description = "Untable Mutagen is a substance that is inert to most materials and objects, but highly corrosive to tables."
+	reagent_state = LIQUID
+	color = "#84121D" //rgb: 132, 18, 29
+	overdose_am = REAGENTS_OVERDOSE
+
+/datum/reagent/untable/reaction_obj(var/obj/O, var/volume)
+
+	if(..())
+		return 1
+
+	if(!O.acidable())
+		return
+
+	if(istype(O,/obj/structure/table))
+		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
+		I.desc = "Looks like this was \an [O] some time ago."
+		O.visible_message("<span class='warning'>\The [O] melts.</span>")
+		qdel(O)
