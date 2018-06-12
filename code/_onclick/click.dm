@@ -61,7 +61,10 @@
 		"target" = A
 	))
 	if(modifiers["middle"])
-		MiddleClickOn(A)
+		if(modifiers["shift"])
+			MiddleShiftClickOn(A)
+		else
+			MiddleClickOn(A)
 		return
 	if(modifiers["shift"])
 		ShiftClickOn(A)
@@ -225,18 +228,21 @@
 
 /*
 	Middle click
-	Only used for pointing
+	Only used for swapping hands
 */
 /mob/proc/MiddleClickOn(var/atom/A)
 	return
 /mob/living/carbon/MiddleClickOn(var/atom/A)
-	pointed(A)
+	swap_hand()
 
 // In case of use break glass
 /*
 /atom/proc/MiddleClick(var/mob/M as mob)
 	return
 */
+
+/mob/proc/MiddleShiftClickOn(var/atom/A)
+	pointed(A)
 
 /*
 	Shift click
