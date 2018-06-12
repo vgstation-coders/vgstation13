@@ -89,9 +89,9 @@
 				AdjustKnockdown(-1)
 			if(paralysis > 0)
 				AdjustParalysis(-1)
-				blinded = 1
+				blinded = TRUE
 			else
-				blinded = 0
+				blinded = FALSE
 
 		else	//Not stunned.
 			stat = CONSCIOUS
