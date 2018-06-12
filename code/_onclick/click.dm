@@ -283,6 +283,8 @@
 		else
 			user.listed_turf = T
 			user.client.statpanel = T.name
+	else
+		user.pointed(src)
 
 /mob/living/carbon/AltClick(var/mob/user)
 	if(!(user == src) && !(isrobot(user)) && user.Adjacent(src))
