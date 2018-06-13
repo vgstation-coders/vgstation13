@@ -121,29 +121,36 @@
 				dizziness = 120
 				wasdizzy = 0
 			var/client/C = client
+			var/pixel_x_diff = 0
+			var/pixel_y_diff = 0
+			var/temp
+			var/saved_dizz = dizziness
 			dizziness = max(dizziness - 1, 0)
-			if(!dizzy_effect_in_loop)
-				spawn()
-					while(dizziness)
-						C = client
-						dizzy_effect_in_loop = TRUE
-						if(C && (dizziness >= 120))
-							//https://en.wikipedia.org/wiki/Rose_(mathematics) with 3 petals
-							for(var/i=30; i <= 390; i+=(360/100))
-								C = client
-								if(!C)
-									break
-								var/r = cos(3*i) * min(dizziness/5, 50)
-								var/x = r * cos(i)
-								var/y = r * sin(i)
-								var/offset = round(dizziness/50, 1) // offset starts applying after the player has a high dizziness value
-								C.pixel_x = rand(x - offset, x + offset)
-								C.pixel_y = rand(y - offset, y + offset)
-								sleep(1)
-						else
-							break
-					dizzy_effect_in_loop = FALSE
-
+			if(C)
+				var/oldsrc = src
+				var/amplitude = dizziness * (sin(dizziness * 0.044 * world.time) + 1) / 70 //This shit is annoying at high strength
+				src = null
+				spawn(0)
+					if(C)
+						temp = amplitude * sin(0.008 * saved_dizz * world.time)
+						pixel_x_diff += temp
+						C.pixel_x += temp * PIXEL_MULTIPLIER
+						temp = amplitude * cos(0.008 * saved_dizz * world.time)
+						pixel_y_diff += temp
+						C.pixel_y += temp * PIXEL_MULTIPLIER
+						sleep(3)
+						if(C)
+							temp = amplitude * sin(0.008 * saved_dizz * world.time)
+							pixel_x_diff += temp
+							C.pixel_x += temp * PIXEL_MULTIPLIER
+							temp = amplitude * cos(0.008 * saved_dizz * world.time)
+							pixel_y_diff += temp
+							C.pixel_y += temp * PIXEL_MULTIPLIER
+						sleep(3)
+						if(C)
+							C.pixel_x -= pixel_x_diff * PIXEL_MULTIPLIER
+							C.pixel_y -= pixel_y_diff * PIXEL_MULTIPLIER
+				src = oldsrc
 			if(!wasdizzy)
 				dizziness = 0
 

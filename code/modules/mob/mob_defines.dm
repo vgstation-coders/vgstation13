@@ -128,7 +128,6 @@
 	var/bodytemperature = 310.055	//98.7 F
 	var/drowsyness = 0.0//Carbon
 	var/dizziness = 0//Carbon
-	var/dizzy_effect_in_loop = FALSE
 	var/jitteriness = 0//Carbon
 	var/flying = 0
 	var/charges = 0.0
