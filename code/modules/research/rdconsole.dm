@@ -141,13 +141,15 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	return return_name
 
 /obj/machinery/computer/rdconsole/proc/SyncRDevices() //Makes sure it is properly sync'ed up with the devices attached to it (if any).
-	if(!isarea(areaMaster) || isspace(areaMaster))
+	var/area/this_area = get_area(src)
+	if(!isarea(this_area) || isspace(this_area))
 		say("Unable to process synchronization")
 		return
 
 
 	for(var/obj/machinery/r_n_d/D in rnd_machines) //any machine in the room, just for funsies
-		if(D.linked_console != null || D.disabled || D.panel_open || !D.areaMaster || (D.areaMaster != areaMaster))
+		var/area/D_area = get_area(D)
+		if(D.linked_console != null || D.disabled || D.panel_open || !D_area || (D_area != this_area))
 			continue
 		if(D.type in research_machines)
 			linked_machines += D

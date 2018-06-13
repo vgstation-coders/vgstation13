@@ -80,7 +80,7 @@
 	..()
 
 /mob/living/carbon/not_human/gondola/proc/update_media_source()
-	var/area/A = get_area_master(src)
+	var/area/A = get_area(src)
 	if(!A)
 		return
 	// Check if there's a media source already.
@@ -98,7 +98,7 @@
 
 
 /mob/living/carbon/not_human/gondola/proc/disconnect_media_source()
-	var/area/A = get_area_master(src)
+	var/area/A = get_area(src)
 
 	// Sanity
 	if(!A)
