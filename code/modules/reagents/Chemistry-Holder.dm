@@ -521,7 +521,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 						R.reaction_mob(A, TOUCH, R.volume+volume_modifier)
 				if(isturf(A))
 					R.reaction_turf(A, R.volume+volume_modifier)
-				if(isobj(A))
+				if(istype(A, /obj))
 					R.reaction_obj(A, R.volume+volume_modifier)
 		if(INGEST)
 			for(var/datum/reagent/R in reagent_list)
@@ -532,7 +532,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 						R.reaction_mob(A, INGEST, R.volume+volume_modifier)
 				if(isturf(A) && R)
 					R.reaction_turf(A, R.volume+volume_modifier)
-				if(isobj(A) && R)
+				if(istype(A, /obj) && R)
 					R.reaction_obj(A, R.volume+volume_modifier)
 	return
 
