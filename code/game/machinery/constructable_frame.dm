@@ -203,6 +203,7 @@
 							else
 								circuit.forceMove(null)
 							new_machine.RefreshParts()
+							new_machine.power_change()
 							circuit.finish_building(new_machine, user)
 							components = null
 							qdel(src)
