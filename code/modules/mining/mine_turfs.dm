@@ -850,10 +850,10 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(stage == 2) //Gibtonite deposit is now benign and extractable. Depending on how close you were to it blowing up before defusing, you get better quality ore.
 		var/obj/item/weapon/gibtonite/G = new /obj/item/weapon/gibtonite/(src)
 		if(det_time <= 0)
-			G.quality = 3
+			G.det_quality = 3
 			G.icon_state = "Gibtonite ore 3"
 		if(det_time >= 1 && det_time <= 2)
-			G.quality = 2
+			G.det_quality = 2
 			G.icon_state = "Gibtonite ore 2"
 	ChangeTurf(/turf/unsimulated/floor/asteroid/gibtonite_remains)
 

@@ -23,6 +23,7 @@
 	siemens_coefficient = 1
 	origin_tech = Tc_MATERIALS + "=1"
 	melt_temperature = MELTPOINT_STEEL
+	mat_type = MAT_IRON
 
 /obj/item/stack/sheet/metal/resetVariables()
 	return ..("recipes", "pixel_x", "pixel_y")
@@ -94,6 +95,7 @@
 	sheettype = "wood"
 	w_type = RECYK_WOOD
 	siemens_coefficient = 0 //no conduct
+	mat_type = MAT_WOOD
 
 
 /obj/item/stack/sheet/wood/afterattack(atom/Target, mob/user, adjacent, params)

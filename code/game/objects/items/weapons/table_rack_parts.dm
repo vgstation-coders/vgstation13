@@ -21,7 +21,8 @@
 	siemens_coefficient = 1
 	attack_verb = list("slams", "bashes", "batters", "bludgeons", "thrashes", "whacks")
 	var/table_type = /obj/structure/table
-	
+	sheet_type = /obj/item/stack/sheet/metal
+
 /obj/item/weapon/table_parts/cultify()
 	new /obj/item/weapon/table_parts/wood(loc)
 	..()
@@ -29,7 +30,7 @@
 /obj/item/weapon/table_parts/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if (iswrench(W))
-		drop_stack(/obj/item/stack/sheet/metal, user.loc, 1, user)
+		drop_stack(sheet_type, user.loc, 1, user)
 		qdel(src)
 		return
 	if (istype(W, /obj/item/stack/rods))
@@ -72,7 +73,7 @@
 
 /obj/item/weapon/table_parts/reinforced/attackby(obj/item/weapon/W, mob/user)
 	if (iswrench(W))
-		drop_stack(/obj/item/stack/sheet/metal, user.loc, 1, user)
+		drop_stack(sheet_type, user.loc, 1, user)
 		drop_stack(/obj/item/stack/rods, user.loc, 1, user)
 		qdel(src)
 
@@ -82,13 +83,14 @@
 	icon_state = "wood_tableparts"
 	flags = 0
 	table_type = /obj/structure/table/woodentable
-	
+	sheet_type = /obj/item/stack/sheet/wood
+
 /obj/item/weapon/table_parts/wood/cultify()
 	return
 
 /obj/item/weapon/table_parts/wood/attackby(obj/item/weapon/W, mob/user)
 	if (iswrench(W))
-		drop_stack(/obj/item/stack/sheet/wood, user.loc, 1, user)
+		drop_stack(sheet_type, user.loc, 1, user)
 		qdel(src)
 		return
 	if (istype(W, /obj/item/stack/tile/grass))
@@ -105,10 +107,11 @@
 	name = "gambling table parts"
 	icon_state = "gambling_tableparts"
 	table_type = /obj/structure/table/woodentable/poker
+	sheet_type = /obj/item/stack/sheet/wood
 
 /obj/item/weapon/table_parts/wood/poker/attackby(obj/item/weapon/W, mob/user)
 	if (iswrench(W))
-		drop_stack(/obj/item/stack/sheet/wood, user.loc, 1, user)
+		drop_stack(sheet_type, user.loc, 1, user)
 		drop_stack(/obj/item/stack/tile/grass, user.loc, 1, user)
 		qdel(src)
 
@@ -123,11 +126,11 @@
 	flags = FPRINT
 	siemens_coefficient = 0 //copying from glass sheets and shards even if its bad balance
 	table_type = /obj/structure/table/glass
-	
+
 /obj/item/weapon/table_parts/glass/attackby(obj/item/weapon/W, mob/user)
 	if (iswrench(W))
 		drop_stack(/obj/item/stack/sheet/glass/glass, loc, 1, user)
-		drop_stack(/obj/item/stack/sheet/metal, loc, 1, user)
+		drop_stack(sheet_type, loc, 1, user)
 		qdel(src)
 
 /obj/item/weapon/rack_parts
@@ -144,7 +147,7 @@
 /obj/item/weapon/rack_parts/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if (iswrench(W))
-		drop_stack(/obj/item/stack/sheet/metal, user.loc, 1, user)
+		drop_stack(sheet_type, user.loc, 1, user)
 		qdel(src)
 		return
 	if(istype(W, /obj/item/weapon/weldingtool))

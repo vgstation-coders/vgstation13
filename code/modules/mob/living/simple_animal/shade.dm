@@ -70,7 +70,10 @@
 			if(istype(O,/obj/item/weapon/nullrod))
 				damage *= 2
 				purge = 3
-			health -= damage
+			adjustBruteLoss(damage)
+			user.do_attack_animation(src, O)
+			if(O.hitsound)
+				playsound(loc, O.hitsound, 50, 1, -1)
 			for(var/mob/M in viewers(src, null))
 				if ((M.client && !( M.blinded )))
 					M.show_message("<span class='warning'> <B>[src] has been attacked with [O] by [user].</span></B>")

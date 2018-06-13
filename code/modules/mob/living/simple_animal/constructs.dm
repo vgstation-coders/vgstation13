@@ -128,6 +128,8 @@
 			purge = 3
 		adjustBruteLoss(damage)
 		user.do_attack_animation(src, O)
+		if(O.hitsound)
+			playsound(loc, O.hitsound, 50, 1, -1)
 		user.visible_message("<span class='danger'>[src] has been attacked with [O] by [user]. </span>")
 	else
 		to_chat(usr, "<span class='warning'>This weapon is ineffective, it does no damage.</span>")
@@ -160,26 +162,13 @@
 	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
 
 /mob/living/simple_animal/construct/armoured/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	user.delayNextAttack(8)
-	if(O.force)
-		if(O.force >= 11)
-			var/damage = O.force
-			if (O.damtype == HALLOSS)
-				damage = 0
-			adjustBruteLoss(damage)
-			for(var/mob/M in viewers(src, null))
-				if ((M.client && !( M.blinded )))
-					M.show_message("<span class='danger'>\The [src] has been attacked with [O] by [user]. </span>")
-		else
-			for(var/mob/M in viewers(src, null))
-				if ((M.client && !( M.blinded )))
-					M.show_message("<span class='danger'>[O] bounces harmlessly off of \the [src]. </span>")
-	else
-		to_chat(usr, "<span class='warning'>This weapon is ineffective, it does no damage.</span>")
+	if(O.force && O.force < 11)
+		user.delayNextAttack(8)
 		for(var/mob/M in viewers(src, null))
 			if ((M.client && !( M.blinded )))
-				M.show_message("<span class='warning'>[user] gently taps \the [src] with [O]. </span>")
-
+				M.show_message("<span class='danger'>[O] bounces harmlessly off of \the [src]. </span>")
+	else
+		..()
 
 /mob/living/simple_animal/construct/armoured/bullet_act(var/obj/item/projectile/P)
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
@@ -255,7 +244,7 @@
 /////////////////////////////Behemoth/////////////////////////
 
 
-/mob/living/simple_animal/construct/behemoth
+/mob/living/simple_animal/construct/armoured/behemoth
 	name = "\improper Behemoth"
 	real_name = "\improper Behemoth"
 	desc = "The pinnacle of occult technology, Behemoths are the ultimate weapon in the Cult of Nar-Sie's arsenal."
@@ -273,30 +262,10 @@
 	speed = 6
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
 	attack_sound = 'sound/weapons/heavysmash.ogg'
-	var/energy = 0
-	var/max_energy = 1000
+	//var/energy = 0
+	//var/max_energy = 1000
 	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
 
-/mob/living/simple_animal/construct/behemoth/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	user.delayNextAttack(8)
-	if(O.force)
-		if(O.force >= 11)
-			var/damage = O.force
-			if (O.damtype == HALLOSS)
-				damage = 0
-			adjustBruteLoss(damage)
-			for(var/mob/M in viewers(src, null))
-				if ((M.client && !( M.blinded )))
-					M.show_message("<span class='danger'>\The [src] has been attacked with [O] by [user]. </span>")
-		else
-			for(var/mob/M in viewers(src, null))
-				if ((M.client && !( M.blinded )))
-					M.show_message("<span class='danger'>\The [O] bounces harmlessly off of [src]. </span>")
-	else
-		to_chat(usr, "<span class='warning'>This weapon is ineffective, it does no damage.</span>")
-		for(var/mob/M in viewers(src, null))
-			if ((M.client && !( M.blinded )))
-				M.show_message("<span class='warning'>[user] gently taps \the [src] with [O]. </span>")
 
 
 ////////////////////////Harvester////////////////////////////////
@@ -351,7 +320,7 @@
 	set category = "Behemoth"
 	set name = "Summon Cultist (300)"
 	set desc = "Teleport a cultist to your location"
-	if (istype(usr,/mob/living/simple_animal/constructbehemoth))
+	if (istype(usr,/mob/living/simple_animal/construct/armoured/behemoth))
 
 		if(usr.energy<300)
 			to_chat(usr, "<span class='warning'>You do not have enough power stored!</span>")
@@ -424,7 +393,7 @@
 				healths.icon_state = "juggernaut_health7"
 
 
-/mob/living/simple_animal/construct/behemoth/regular_hud_updates()
+/mob/living/simple_animal/construct/armoured/behemoth/regular_hud_updates()
 	..()
 	if(healths)
 		switch(health)

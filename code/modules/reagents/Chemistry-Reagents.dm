@@ -601,7 +601,8 @@
 		holder.remove_reagent(ZOMBIEPOWDER, 0.5 * REM)
 	if(holder.has_reagent(MINDBREAKER))
 		holder.remove_reagent(MINDBREAKER, 2 * REM)
-	M.hallucination = max(0, M.hallucination - 5 * REM)
+	var/lucidmod = M.sleeping ? 3 : M.lying + 1 //3x as effective if they're sleeping, 2x if they're lying down
+	M.hallucination = max(0, M.hallucination - 5 * REM * lucidmod)
 	M.adjustToxLoss(-2 * REM)
 
 /datum/reagent/phalanximine
@@ -2474,7 +2475,8 @@
 	M.AdjustKnockdown(-1)
 	if(holder.has_reagent("mindbreaker"))
 		holder.remove_reagent("mindbreaker", 5)
-	M.hallucination = max(0, M.hallucination - 10)
+	var/lucidmod = M.sleeping ? 3 : M.lying + 1
+	M.hallucination = max(0, M.hallucination - 10 * lucidmod)
 	if(prob(60))
 		M.adjustToxLoss(1)
 
@@ -3489,6 +3491,22 @@
 	reagent_state = LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
+	
+/datum/reagent/mustard
+	name = "Mustard"
+	id = MUSTARD
+	description = "A spicy yellow paste."
+	reagent_state = LIQUID
+	nutriment_factor = 3 * REAGENTS_METABOLISM
+	color = "#cccc33" //rgb: 204, 204, 51
+	
+/datum/reagent/relish
+	name = "Relish"
+	id = RELISH
+	description = "A pickled cucumber jam. Tasty!"
+	reagent_state = LIQUID
+	nutriment_factor = 4 * REAGENTS_METABOLISM
+	color = "#336600" //rgb: 51, 102, 0
 
 /datum/reagent/dipping_sauce
 	name = "Dipping Sauce"
@@ -4273,7 +4291,8 @@
 	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
 	if(holder.has_reagent("discount"))
 		holder.remove_reagent("discount", 2 * REM)
-	M.hallucination = max(0, M.hallucination - 5 * REM)
+	var/lucidmod = M.sleeping ? 3 : M.lying + 1
+	M.hallucination = max(0, M.hallucination - 5 * REM * lucidmod)
 	M.adjustToxLoss(-2 * REM)
 
 /datum/reagent/clottingagent
@@ -6556,3 +6575,25 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#E5E5E5"
 	density = 2.61
 	specheatcap = 111.8
+
+/datum/reagent/untable
+	name = "Untable Mutagen"
+	id = UNTABLE_MUTAGEN
+	description = "Untable Mutagen is a substance that is inert to most materials and objects, but highly corrosive to tables."
+	reagent_state = LIQUID
+	color = "#84121D" //rgb: 132, 18, 29
+	overdose_am = REAGENTS_OVERDOSE
+
+/datum/reagent/untable/reaction_obj(var/obj/O, var/volume)
+
+	if(..())
+		return 1
+
+	if(!O.acidable())
+		return
+
+	if(istype(O,/obj/structure/table))
+		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
+		I.desc = "Looks like this was \an [O] some time ago."
+		O.visible_message("<span class='warning'>\The [O] melts.</span>")
+		qdel(O)

@@ -10,6 +10,7 @@
 	level_max = list(Sp_TOTAL = 4, Sp_SPEED = 3, Sp_MOVE = 1)
 
 	spell_flags = NEEDSCLOTHES
+	spell_aspect_flags = SPELL_FIRE
 	charge_type = Sp_RECHARGE
 	invocation = "E ROHA"
 	invocation_type = SpI_SHOUT

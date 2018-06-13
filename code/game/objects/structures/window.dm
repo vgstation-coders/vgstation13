@@ -22,7 +22,7 @@ var/list/one_way_windows
 	var/ini_dir = null //This really shouldn't exist, but it does and I don't want to risk deleting it because it's likely mapping-related
 	var/d_state = WINDOWLOOSEFRAME //Normal windows have one step (unanchor), reinforced windows have three
 	var/shardtype = /obj/item/weapon/shard
-	var/sheettype = /obj/item/stack/sheet/glass/glass //Used for deconstruction
+	sheet_type = /obj/item/stack/sheet/glass/glass //Used for deconstruction
 	var/sheetamount = 1 //Number of sheets needed to build this window (determines how much shit is spawned via Destroy())
 	var/reinforced = 0 //Used for deconstruction steps
 	penetration_dampening = 1
@@ -468,7 +468,7 @@ var/list/one_way_windows
 							playsound(src, 'sound/items/Welder.ogg', 100, 1)
 							user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
 							"<span class='notice'>You disassemble \the [src].</span>")
-							drop_stack(sheettype, get_turf(src), sheetamount, user)
+							drop_stack(sheet_type, get_turf(src), sheetamount, user)
 							qdel(src)
 							return
 					else
@@ -498,7 +498,7 @@ var/list/one_way_windows
 					playsound(src, 'sound/items/Welder.ogg', 100, 1)
 					user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
 					"<span class='notice'>You disassemble \the [src].</span>")
-					drop_stack(sheettype, get_turf(src), sheetamount, user)
+					drop_stack(sheet_type, get_turf(src), sheetamount, user)
 					Destroy()
 					return
 			else
@@ -638,7 +638,7 @@ var/list/one_way_windows
 	name = "reinforced window"
 	desc = "A window with a rod matrice. It looks more solid than the average window."
 	icon_state = "rwindow"
-	sheettype = /obj/item/stack/sheet/glass/rglass
+	sheet_type = /obj/item/stack/sheet/glass/rglass
 	health = 40
 	d_state = WINDOWSECURE
 	reinforced = 1
@@ -654,7 +654,7 @@ var/list/one_way_windows
 	desc = "A window made out of a plasma-silicate alloy. It looks insanely tough to break and burn through."
 	icon_state = "plasmawindow"
 	shardtype = /obj/item/weapon/shard/plasma
-	sheettype = /obj/item/stack/sheet/glass/plasmaglass
+	sheet_type = /obj/item/stack/sheet/glass/plasmaglass
 	health = 120
 	penetration_dampening = 5
 
@@ -667,7 +667,7 @@ var/list/one_way_windows
 	desc = "A window made out of a plasma-silicate alloy and a rod matrice. It looks hopelessly tough to break and is most likely nigh fireproof."
 	icon_state = "plasmarwindow"
 	shardtype = /obj/item/weapon/shard/plasma
-	sheettype = /obj/item/stack/sheet/glass/plasmarglass
+	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
 	penetration_dampening = 7
 
@@ -680,7 +680,7 @@ var/list/one_way_windows
 	desc = "A window with a rod matrice. Its surface is completely tinted, making it opaque. Why not a wall ?"
 	icon_state = "twindow"
 	opacity = 1
-	sheettype = /obj/item/stack/sheet/glass/rglass //A glass type for this window doesn't seem to exist, so here's to you
+	sheet_type = /obj/item/stack/sheet/glass/rglass //A glass type for this window doesn't seem to exist, so here's to you
 
 /obj/structure/window/reinforced/tinted/frosted
 
@@ -688,7 +688,7 @@ var/list/one_way_windows
 	desc = "A window with a rod matrice. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
 	icon_state = "fwindow"
 	health = 30
-	sheettype = /obj/item/stack/sheet/glass/rglass //Ditto above
+	sheet_type = /obj/item/stack/sheet/glass/rglass //Ditto above
 
 /obj/structure/window/send_to_past(var/duration)
 	..()

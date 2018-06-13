@@ -335,6 +335,9 @@
 #define SALTWATER		"saltwater"
 #define CALCIUMOXIDE		"calciumoxide"
 #define CALCIUMHYDROXIDE	"calciumhydroxide"
+#define MUSTARD			"mustard"
+#define RELISH			"relish"
+#define UNTABLE_MUTAGEN		"untable"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"

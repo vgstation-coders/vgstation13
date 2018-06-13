@@ -12,7 +12,7 @@
 
 	if(client)
 		handle_regular_hud_updates()
-		update_action_buttons()
+		update_action_buttons_icon()
 		update_items()
 	if(!isDead()) //still using power
 		use_power()

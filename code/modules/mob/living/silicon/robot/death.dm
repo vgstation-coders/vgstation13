@@ -41,6 +41,7 @@
 	if(!gibbed)
 		emote("deathgasp")
 		updateicon() //Don't call updateicon if you're already null.
+		locked = FALSE //Cover unlocks.
 	if(camera)
 		camera.status = FALSE
 	if(station_holomap)

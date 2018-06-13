@@ -388,7 +388,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					matching_container = 1
 
 				else
-					if(my_atom.type in typesof(C.required_container))
+					if(istype(my_atom, C.required_container))
 						matching_container = 1
 
 				if(!C.required_other)

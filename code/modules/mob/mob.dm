@@ -90,6 +90,14 @@
 	if(transmogged_to)
 		qdel(transmogged_to)
 		transmogged_to = null
+	if(control_object.len)
+		for(var/A in control_object)
+			qdel(A)
+		control_object = null
+	if(orient_object.len)
+		for(var/A in orient_object)
+			qdel(A)
+		orient_object = null
 
 	..()
 
@@ -1046,7 +1054,7 @@ var/list/slot_equipment_priority = list( \
 
 		src.pulling = P
 		P.pulledby = src
-		P.on_pull_start(AM)
+		AM.on_pull_start(src)
 		update_pull_icon()
 		if(ismob(P))
 			var/mob/M = P

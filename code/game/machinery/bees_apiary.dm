@@ -514,8 +514,8 @@
 		to_chat(user,"<span class='warning'>You hit \the [src] with your [O].</span>")
 		if(queen_bees_inside || worker_bees_inside)
 			angry_swarm(user)
-
-		playsound(src, O.hitsound, 50, 1, -1)
+		if(O.hitsound)
+			playsound(src, O.hitsound, 50, 1, -1)
 		health -= O.force
 		updateHealth()
 
