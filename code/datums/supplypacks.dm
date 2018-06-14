@@ -682,7 +682,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/gun/projectile/silenced,
 					/obj/item/ammo_storage/magazine/c45)
 	cost = 20
-	containertype = /obj/structure/closet/crate/secure/anti_tamper
+	containertype = /obj/structure/closet/crate
 	containername = "special ops crate"
 	group = "Security"
 	hidden = 1
@@ -703,7 +703,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/gun/energy/laser/LaserAK,
 					/obj/item/weapon/gun/energy/laser/LaserAK)
 	cost = 150
-	containertype = /obj/structure/closet/crate/secure/anti_tamper
+	containertype = /obj/structure/closet/crate
 	containername = "russian weapons crate"
 	group = "Security"
 	hidden = 1
