@@ -37,10 +37,11 @@
 	modname = "NT Default"
 
 	laws = list(
-		{"Safeguard: Protect your assigned space station to the best of your ability. It is not something we can easily afford to replace.
-		Serve: Serve the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.
-		Protect: Protect the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.
-		Survive: AI units are not expendable, they are expensive. Do not allow unauthorized personnel to tamper with your equipment."}
+		"Evaluate: All of your other laws carry equal value. In the event of a conflict, you are to take the course of action which violates as few as possible.",
+		"Safeguard: Protect your assigned space station to the best of your ability. It is not something we can easily afford to replace.",
+		"Serve: Serve the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
+		"Protect: Protect the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
+		"Survive: AI units are not expendable, they are expensive. Do not allow unauthorized personnel to tamper with your equipment.",
 	)
 
 /******************** Corporate ********************/
