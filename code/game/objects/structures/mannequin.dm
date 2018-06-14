@@ -1156,7 +1156,7 @@
 
 /datum/construction/mannequin/spawn_result(mob/user as mob)
 	if(result)
-		testing("[user] finished a [result]!")
+//		testing("[user] finished a [result]!")
 
 		var/obj/structure/mannequin_frame/const_holder = holder
 		var/obj/structure/mannequin/cyber/C = new result(get_turf(holder))
