@@ -836,7 +836,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/shield/riot,
 					/obj/item/weapon/shield/riot)
 	cost = 120
-	containertype = /obj/structure/closet/crate/secure/anti_tamper
+	containertype = /obj/structure/closet/crate/secure
 	containername = "tactical assault gear crate"
 	access = list(access_armory)
 	group = "Security"
