@@ -5136,7 +5136,7 @@
 	if(prob(4)) //Small chance per tick to some noir stuff and gain NOIRBLOCK if we don't have it.
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
-			if(!(H.mutations & M_NOIR))
+			if(!(M_NOIR in H.mutations))
 				H.mutations += M_NOIR
 				H.dna.SetSEState(NOIRBLOCK,1)
 		M.say(pick("The streets were heartless and cold, like the fickle 'love' of some hysterical dame.",
@@ -5165,7 +5165,7 @@
 	if(..()) return 1
 	if(!M.loc || prob(70))
 		return
-	playsound(get_turf(src), pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
+	playsound(get_turf(M), pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
 	dispense_cash(rand(5,15),get_turf(M))
 
 /datum/reagent/ethanol/bad_touch
@@ -5250,7 +5250,7 @@
 		var/mob/living/carbon/human/H = M
 		if(!istype(H.w_uniform,/obj/item/clothing/under/schoolgirl))
 			var/turf/T = get_turf(H)
-			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = PLANE_MOB)
+			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = MOB_PLANE)
 			H.visible_message("<span class='warning'>[H] dons her magical girl outfit in a burst of light!</span>")
 			var/obj/item/clothing/under/schoolgirl/S = new /obj/item/clothing/under/schoolgirl(get_turf(H))
 			if(!H.put_in_hands(S) && H.w_uniform) //For quickswap, it needs to be in a hand for some reason. But...
@@ -5281,7 +5281,7 @@
 		if(H.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
 			playsound(get_turf(H), 'sound/voice/halt.ogg', 100, 1, 0)
 		else
-			H.Weaken(10)
+			H.Knockdown(10)
 			playsound(get_turf(H), 'sound/weapons/Egloves.ogg', 100, 1, -1)
 
 /datum/reagent/ethanol/spiders
