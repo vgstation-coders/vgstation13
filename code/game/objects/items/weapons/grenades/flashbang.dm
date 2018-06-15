@@ -96,7 +96,7 @@
 			M.ear_damage += rand(0, 3)
 			M.ear_deaf = max(M.ear_deaf,10)
 
-	else if(get_dist(M, T) <= 3)
+	else if(get_dist(M, T) <= 5)
 		if(!ear_safety)
 			M.Stun(4)
 			M.Knockdown(4)
