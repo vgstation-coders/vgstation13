@@ -123,7 +123,7 @@
 	..()
 	set_light(15)
 
-/obj/item/weapon/grenade/flashbang/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/grenade/flashbang/attackby(obj/item/weapon/W, mob/user)
 	if(isscrewdriver(W))
 		return
 	else
