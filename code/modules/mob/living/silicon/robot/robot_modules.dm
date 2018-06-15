@@ -548,6 +548,8 @@
 	modules += new /obj/item/weapon/wrench(src) //This thing supposed to be a hacked and modded combat cyborg, is it really going to be stopped by a chair or table?
 	modules += new /obj/item/weapon/gun/projectile/automatic/c20r(src)
 	modules += new /obj/item/robot_rack/ammo/a12mm(src)
+	modules += new /obj/item/weapon/pickaxe/plasmacutter/heat_axe(src)
+	modules += new /obj/item/device/chameleon(src)
 	modules += new /obj/item/weapon/pinpointer/nukeop(src)
 
 	sensor_augs = list("Thermal", "Light Amplification", "Disable")

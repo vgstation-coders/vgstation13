@@ -19,11 +19,8 @@
 	if(!C || !R || !user)
 		return null
 
-	var/obj/item/I = locate(C) in R.module
-	if(!I)
-		I = locate(C) in R.module.contents
-	if(!I)
-		I = locate(C) in R.module.modules
+	var/obj/item/I = R.installed_module(C)
+
 	if(!I)
 		to_chat(user, "This cyborg is missing one of the needed components!")
 		return null
