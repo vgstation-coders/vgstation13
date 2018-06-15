@@ -60,7 +60,13 @@
 			M.Stun(8)
 			M.Knockdown(8)
 		else
-			M.Knockdown(2)
+			if (issilicon(M))
+				M.Stun(4)
+				M.Knockdown(4)
+			else if (get_dist(M, T) <= 5)
+				M.Knockdown(2)
+			else
+				M.Knockdown(1)
 
 //Now applying sound
 	if(!ear_safety)
@@ -90,10 +96,17 @@
 			M.ear_damage += rand(0, 3)
 			M.ear_deaf = max(M.ear_deaf,10)
 
+	else if(get_dist(M, T) <= 3)
+		if(!ear_safety)
+			M.Stun(4)
+			M.Knockdown(4)
+			M.ear_damage += rand(0, 3)
+			M.ear_deaf = max(M.ear_deaf,10)
+
 	else if(!ear_safety)
 		if (issilicon(M))
 			M.Stun(4)
-		M.Knockdown(2)
+		M.Knockdown(1)
 		M.ear_damage += rand(0, 1)
 		M.ear_deaf = max(M.ear_deaf,5)
 
