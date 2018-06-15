@@ -10,15 +10,15 @@
 	if(!flashbang_turf)
 		return
 
-	var/list/mobs_to_flash_and_bang = get_all_mobs_in_dview(flashbang_turf, ignore_types = list(/mob/living/carbon/brain, /mob/living/silicon/ai))
+	var/list/targeted_mobs = get_all_mobs_in_dview(flashbang_turf, ignore_types = list(/mob/living/carbon/brain, /mob/living/silicon/ai))
 
 	var/mob/living/holder = get_holder_of_type(src, /mob/living)
 	if(holder) //Holding a flashbang while it goes off is a bad idea.
 		bang(flashbang_turf, holder, TRUE)
-		mobs_to_flash_and_bang -= holder
+		targeted_mobs -= holder
 	update_mob()
 
-	for(var/mob/living/M in mobs_to_flash_and_bang)
+	for(var/mob/living/M in targeted_mobs)
 		if(M.isVentCrawling()) //possibly more exceptions to be added in the future
 			continue
 		bang(flashbang_turf, M)
@@ -40,6 +40,7 @@
 	var/eye_safety = 0
 	var/ear_safety = 0
 
+
 	if(!ignore_protection)
 		eye_safety = M.eyecheck()
 		ear_safety = M.earprot() //some arbitrary measurement of ear protection, I guess? doesn't even matter if it goes above 1
@@ -56,8 +57,11 @@
 //Flashing everyone
 	if(eye_safety < 1)
 		M.flash_eyes(visual = 1, affect_silicon = 1)
-		M.Stun(10)
-		M.Knockdown(10)
+		if (get_dist(M, T) <= 3)
+			M.Stun(8)
+			M.Knockdown(8)
+		else
+			M.Knockdown(2)
 
 //Now applying sound
 	if(!ear_safety)
@@ -72,24 +76,25 @@
 			M.Stun(2)
 			M.Knockdown(2)
 		else
-			M.Stun(10)
-			M.Knockdown(10)
+			M.Stun(8)
+			M.Knockdown(8)
 			if ((prob(14) || (M == src.loc && prob(70))))
 				M.ear_damage += rand(1, 10)
 			else
 				M.ear_damage += rand(0, 5)
 				M.ear_deaf = max(M.ear_deaf,15)
 
-	else if(get_dist(M, T) <= 5)
+	else if(get_dist(M, T) <= 3)
 		if(!ear_safety)
-			M.Stun(8)
-			M.Knockdown(8)
+			M.Stun(6)
+			M.Knockdown(6)
 			M.ear_damage += rand(0, 3)
 			M.ear_deaf = max(M.ear_deaf,10)
 
 	else if(!ear_safety)
-		M.Stun(4)
-		M.Knockdown(4)
+		if (issilicon(M))
+			M.Stun(4)
+		M.Knockdown(2)
 		M.ear_damage += rand(0, 1)
 		M.ear_deaf = max(M.ear_deaf,5)
 
