@@ -303,3 +303,22 @@
 							Knockdown(3)
 							regenerate_icons()
 							visible_message("<span class='danger'>\The [src]'s form loses bulk as they collapse to the ground.</span>")
+
+/mob/living/proc/get_rad_stage()
+	switch(rad_tick)
+		if(0)
+			return "N/A"
+		if(1 to RADDOSELIGHT)
+			return "Early"
+		if(RADDOSELIGHT to RADDOSEMINOR)
+			return "Light"
+		if(RADDOSEMINOR to RADDOSEADVANCED)
+			return "Minor"
+		if(RADDOSEADVANCED to RADDOSECRITICAL)
+			return "Advanced"
+		if(RADDOSECRITICAL to RADDOSEDEADLY)
+			return "Critical"
+		if(RADDOSEDEADLY to RADDOSEFATAL)
+			return "Deadly"
+		if(RADDOSEFATAL to INFINITY)
+			return "Fatal"

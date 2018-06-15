@@ -90,6 +90,14 @@
 	if(transmogged_to)
 		qdel(transmogged_to)
 		transmogged_to = null
+	if(control_object.len)
+		for(var/A in control_object)
+			qdel(A)
+		control_object = null
+	if(orient_object.len)
+		for(var/A in orient_object)
+			qdel(A)
+		orient_object = null
 
 	..()
 
@@ -989,7 +997,7 @@ var/list/slot_equipment_priority = list( \
 	set name = "Point To"
 	set category = "Object"
 
-	if(!src || usr.isUnconscious() || !isturf(src.loc) || !(A in view(src.loc)))
+	if(!src || (usr.isUnconscious() && !isobserver(src)) || !isturf(src.loc) || !(A in view(src.loc)))
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))
@@ -1046,7 +1054,7 @@ var/list/slot_equipment_priority = list( \
 
 		src.pulling = P
 		P.pulledby = src
-		P.on_pull_start(AM)
+		AM.on_pull_start(src)
 		update_pull_icon()
 		if(ismob(P))
 			var/mob/M = P

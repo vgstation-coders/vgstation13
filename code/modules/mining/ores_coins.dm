@@ -247,7 +247,7 @@
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND
 	var/primed = 0
 	var/det_time = 100
-	var/quality = 1 //How pure this gibtonite is, determines the explosion produced by it and is derived from the det_time of the rock wall it was taken from, higher shipping_value = better
+	var/det_quality = 1 //How pure this gibtonite is, determines the explosion produced by it and is derived from the det_time of the rock wall it was taken from, higher shipping_value = better
 
 /obj/item/weapon/gibtonite/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/weapon/pickaxe) || istype(I, /obj/item/weapon/resonator))
@@ -257,7 +257,7 @@
 		primed = 0
 		user.visible_message("<span class='notice'>The chain reaction was stopped! ...The ore's quality went down.</span>")
 		icon_state = "Gibtonite ore"
-		quality = 1
+		det_quality = 1
 		return
 	..()
 
@@ -291,7 +291,7 @@
 			log_game("[key_name(usr)] has primed a [name] for detonation at [A.name]([bombturf.x],[bombturf.y],[bombturf.z])")
 		spawn(det_time)
 			if(primed)
-				switch(quality)
+				switch(det_quality)
 					if(1)
 						explosion(src.loc,-1,1,3,adminlog = notify_admins)
 					if(2)

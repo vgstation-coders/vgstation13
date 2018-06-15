@@ -60,7 +60,6 @@ Hotkey-Mode: (hotkey-mode must be on)
 \tr = throw
 \tm = me
 \tt = say
-\to = OOC
 \tx = swap-hand
 \tz = activate held object (or y)
 \tf = cycle-intents-left
@@ -98,6 +97,7 @@ Any-Mode: (hotkey doesn't need to be on)
 \tPGUP = swap-hand
 \tPGDN = activate held object
 \tEND = throw
+\tSHIFT+MMB = point-at
 
 For an exhaustive list please visit http://ss13.moe/wiki/index.php/Shortcuts
 </font>"}

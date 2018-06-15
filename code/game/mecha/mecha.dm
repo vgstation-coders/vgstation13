@@ -111,8 +111,45 @@
 /obj/mecha/Destroy()
 	src.go_out(loc, TRUE)
 	mechas_list -= src //global mech list
+	if(cell)
+		qdel(cell)
+		cell = null
+	if(internal_tank)
+		qdel(internal_tank)
+		internal_tank = null
+	if(cabin_air)
+		qdel(cabin_air)
+		cabin_air = null
+	connected_port = null
+	if(radio)
+		qdel(radio)
+		radio = null
+	if(electropack)
+		qdel(electropack)
+		electropack = null
+	if(tracking)
+		qdel(tracking)
+		tracking = null
+	if(pr_int_temp_processor)
+		qdel(pr_int_temp_processor)
+		pr_int_temp_processor = null
+	if(pr_inertial_movement)
+		qdel(pr_inertial_movement)
+		pr_inertial_movement = null
+	if(pr_give_air)
+		qdel(pr_give_air)
+		pr_give_air = null
+	if(pr_internal_damage)
+		qdel(pr_internal_damage)
+		pr_internal_damage = null
+	for(var/obj/item/mecha_parts/mecha_equipment/eq in equipment)
+		qdel(eq)
+	equipment = null
+	selected = null
+	if(events)
+		qdel(events)
+		events = null
 	..()
-	return
 
 /obj/mecha/can_apply_inertia()
 	return 1 //No anchored check - so that mechas can fly off into space

@@ -234,8 +234,6 @@ var/LACTOSEBLOCK = 0
 			if(species.default_blocks.len)
 				all_species[name]=species
 
-	speciesinit = 1
-
 
 /proc/setupfactions()
 	// Populate the factions list:

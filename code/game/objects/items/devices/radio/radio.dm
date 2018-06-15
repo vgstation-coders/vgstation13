@@ -535,6 +535,7 @@
 	else
 		user.show_message("<span class = 'notice'>\The [src] can no longer be modified or attached!</span>")
 	updateDialog()
+	update_icon()
 	add_fingerprint(user)
 
 /obj/item/device/radio/emp_act(severity)

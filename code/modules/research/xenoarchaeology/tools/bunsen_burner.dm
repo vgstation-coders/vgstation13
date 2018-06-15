@@ -91,7 +91,7 @@
 		user.visible_message("<span class = 'warning'>[user] starts to deconstruct \the [src]!</span>","<span class = 'notice'>You start to deconstruct \the [src].</span>")
 		if(do_after(user, src, 5 SECONDS))
 			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
-			drop_stack(/obj/item/stack/sheet/metal, loc, rand(3,4), user)
+			drop_stack(sheet_type, loc, rand(3,4), user)
 			qdel(src)
 	else
 		..()

@@ -229,6 +229,13 @@ var/list/uplink_items = list()
 	cost = 4
 	job = list("Security Officer", "Warden", "Head of Security")
 
+/datum/uplink_item/jobspecific/syndietape_police
+	name = "Syndicate Tape"
+	desc = "A length of police tape rigged with adapative electronics that will wraps itself around the hands unathorised personnel who crosses it, cuffing them.  Do not (let them) cross. Can be used 3 times."
+	item = /obj/item/taperoll/syndie/police
+	cost = 8
+	job = list("Security Officer", "Warden", "Head of Security")
+
 //Detective
 /datum/uplink_item/jobspecific/evidenceforger
 	name = "Evidence Forger"
@@ -344,12 +351,26 @@ var/list/uplink_items = list()
 	cost = 12
 	job = list("Station Engineer", "Chief Engineer")
 
+/datum/uplink_item/jobspecific/syndietape_engineering
+	name = "Syndicate Tape"
+	desc = "A length of engineering tape charged with a powerful electric potential. Will spark and shock people who attempt to remove it, creating fires. Can be used 3 times."
+	item = /obj/item/taperoll/syndie/engineering
+	cost = 4
+	job = list("Station Engineer", "Chief Engineer")
+
 //Atmos Tech
 /datum/uplink_item/jobspecific/contortionist
 	name = "Contortionist's Jumpsuit"
 	desc = "A highly flexible jumpsuit that will help you navigate the ventilation loops of the station internally. Comes with pockets and ID slot, but can't be used without stripping off most gear, including backpack, belt, helmet, and exosuit. Free hands are also necessary to crawl around inside."
 	item = /obj/item/clothing/under/contortionist
 	cost = 6
+	job = list("Atmospheric Technician", "Chief Engineer")
+
+/datum/uplink_item/jobspecific/syndietape_atmos
+	name = "Syndicate Tape"
+	desc = "A length of atmospherics tape made of an extremely sharp material that will cuts the hands of trespassers. Very difficult to remove. Can be used 3 times."
+	item = /obj/item/taperoll/syndie/atmos
+	cost = 4
 	job = list("Atmospheric Technician", "Chief Engineer")
 
 //Geneticist

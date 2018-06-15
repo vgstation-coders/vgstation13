@@ -116,11 +116,6 @@
 	static_overlays["letter"] = static_overlay
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
-	if(!hair_styles_list.len)
-		buildHairLists()
-	if(!all_species.len)
-		buildSpeciesLists()
-
 	if(new_species_name)
 		s_tone = random_skin_tone(new_species_name)
 	multicolor_skin_r = rand(0,255)	//Only used when the human has a species datum with the MULTICOLOR anatomical flag
@@ -1574,7 +1569,8 @@
 		plane = LYING_HUMAN_PLANE
 	else
 		plane = HUMAN_PLANE
-	if(istype(areaMaster) && areaMaster.project_shadows)
+	var/area/this_area = get_area(src)
+	if(istype(this_area) && this_area.project_shadows)
 		update_shadow()
 
 /mob/living/carbon/human/set_hand_amount(new_amount) //Humans need hand organs to use the new hands. This proc will give them some

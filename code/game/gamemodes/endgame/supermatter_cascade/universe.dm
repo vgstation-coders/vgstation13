@@ -106,7 +106,7 @@
 
 /datum/universal_state/supermatter_cascade/proc/AreaSet()
 	for(var/area/ca in areas)
-		var/area/A=get_area_master(ca)
+		var/area/A=get_area(ca)
 		if(!istype(A,/area) || isspace(A) || istype(A,/area/beach))
 			continue
 

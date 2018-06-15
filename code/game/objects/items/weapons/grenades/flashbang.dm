@@ -10,15 +10,15 @@
 	if(!flashbang_turf)
 		return
 
-	var/list/targeted_mobs = get_all_mobs_in_dview(flashbang_turf, ignore_types = list(/mob/living/carbon/brain, /mob/living/silicon/ai))
+	var/list/mobs_to_flash_and_bang = get_all_mobs_in_dview(flashbang_turf, ignore_types = list(/mob/living/carbon/brain, /mob/living/silicon/ai))
 
 	var/mob/living/holder = get_holder_of_type(src, /mob/living)
 	if(holder) //Holding a flashbang while it goes off is a bad idea.
 		bang(flashbang_turf, holder, TRUE)
-		targeted_mobs -= holder
+		mobs_to_flash_and_bang -= holder
 	update_mob()
 
-	for(var/mob/living/M in targeted_mobs)
+	for(var/mob/living/M in mobs_to_flash_and_bang)
 		if(M.isVentCrawling()) //possibly more exceptions to be added in the future
 			continue
 		bang(flashbang_turf, M)
@@ -40,8 +40,7 @@
 	var/eye_safety = 0
 	var/ear_safety = 0
 
-
-	if(!ignore_protection)
+	if(!ignore_protection && loc != M.loc)
 		eye_safety = M.eyecheck()
 		ear_safety = M.earprot() //some arbitrary measurement of ear protection, I guess? doesn't even matter if it goes above 1
 

@@ -101,12 +101,18 @@
 		desclines += "  (This error will now be silenced for [configured_error_silence_time / 600] minutes)"
 
 	// Now to actually output the error info...
-	world.log << "\[[time_stamp()]] Runtime in [e.file],[e.line]: [e]"
+	var/main_line = "\[[time_stamp()]] Runtime in [e.file],[e.line]: [e]"
+	world.log << main_line
 
 	for (var/line in desclines)
 		world.log << line
 
 	if (global.error_cache)
 		global.error_cache.log_error(e, desclines)
+
+#ifdef UNIT_TESTS
+	if(global.current_test)
+		global.current_test.fail("[main_line]\n[desclines.Join("\n")]")
+#endif
 
 #endif

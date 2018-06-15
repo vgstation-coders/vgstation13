@@ -301,7 +301,6 @@ var/global/list/minesweeper_best_players = list()
 var/nanocoins_rates = 1
 var/nanocoins_lastchange = 0
 
-var/speciesinit = 0
 var/minimapinit = 0
 
 var/bees_species = list()
@@ -369,8 +368,10 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/giant_spider/hunter/dead, // They are dead.
 		/mob/living/simple_animal/hostile/asteroid/hivelordbrood, // They aren't supposed to be playable.
 		/mob/living/simple_animal/hologram, // Can't live outside the holodeck.
+		/mob/living/simple_animal/hostile/carp/holocarp, //These can but they're just a retarded hologram carp reskin for the love of god.
 		/mob/living/slime_pile, // They are dead.
 		/mob/living/adamantine_dust, // Ditto
+		/mob/living/simple_animal/hostile/viscerator, //Nope.
 		/mob/living/simple_animal/hostile/mining_drone //This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
 		)
 

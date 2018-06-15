@@ -28,7 +28,7 @@
 			for(var/datum/objective/OBJ in H.mind.objectives)
 				to_chat(H, "<B>Objective #[obj_count]</B>: [OBJ.explanation_text]")
 				obj_count++
-		var/randomizeguns = pick("taser","egun","laser","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","beegun")
+		var/randomizeguns = pick("taser","egun","laser","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","beegun","beretta")
 		var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","disorient","staffchange","armor","scrying", "clowncurse", "mimecurse", "shoesnatch", "robesummon")
 		var/randomizeswords = pick("unlucky", "misc", "glass", "throw", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "spear", "katana", "axe", "venom", "boot", "saw", "scalpel", "bottle", "switchtool")
 		var/randomizeknightcolor = pick("green", "yellow", "blue", "red", "templar")

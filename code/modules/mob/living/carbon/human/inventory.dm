@@ -352,7 +352,7 @@
 				W.dropped(src)
 			if(W)
 				W.reset_plane_and_layer()
-	update_action_buttons()
+	update_action_buttons_icon()
 	return 1
 
 //This is a SAFE proc. Use this instead of equip_to_slot()!

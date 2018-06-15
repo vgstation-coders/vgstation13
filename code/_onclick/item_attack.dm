@@ -7,6 +7,8 @@
 				. = src.unwield(user)
 			else
 				. = src.wield(user)
+	if(material_type)
+		material_type.on_use(src, user, user)
 
 // No comment
 /atom/proc/attackby(obj/item/W, mob/user)
@@ -16,6 +18,8 @@
 	if(W && !(W.flags&NO_ATTACK_MSG))
 		user.do_attack_animation(src, W)
 		visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
+	if(W.material_type)
+		W.material_type.on_use(W, src, user)
 
 /mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null)
 	if(!no_delay)
@@ -25,6 +29,7 @@
 			I.attack(src, user, null, originator)
 		else
 			I.attack(src, user)
+
 
 
 // Proximity_flag is 1 if this afterattack was called on something adjacent, in your square, or on your person.
@@ -235,3 +240,5 @@ obj/item/proc/get_clamped_volume()
 
 	if(hitsound)
 		playsound(M.loc, I.hitsound, 50, 1, -1)
+	if(material_type)
+		material_type.on_use(src,M, user)
