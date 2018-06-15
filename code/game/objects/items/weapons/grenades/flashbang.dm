@@ -123,6 +123,9 @@
 	..()
 	set_light(15)
 
+/obj/item/weapon/grenade/flashbang/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	return
+
 /obj/item/weapon/grenade/flashbang/clusterbang//Created by Polymorph, fixed by Sieve
 	desc = "Use of this weapon may constiute a war crime in your area, consult your local captain."
 	name = "clusterbang"
