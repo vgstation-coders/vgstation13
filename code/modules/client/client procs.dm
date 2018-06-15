@@ -158,6 +158,11 @@
 		spawn(5 SECONDS)
 			del(src)
 
+	// From 511.1437 to 512.1424 BYOND has a random screen freeze bug. Note: byond_build was introduced in 512.1386 and will have a value of 0 for earlier clients.
+	else if(byond_version == 511 || (byond_version == 512 && byond_build < 1425))
+		to_chat(src, "<a class='danger big'>Your BYOND client has a bug that may result in your game screen freezing. Please visit the following link and install BYOND version 512.1425 or higher.</a>")
+		to_chat(src, "http://www.byond.com/download/build/512/")
+
 	if(!guests_allowed && IsGuestKey(key))
 		alert(src,"This server doesn't allow guest accounts to play. Please go to http://www.byond.com/ and register for a key.","Guest","OK")
 		del(src)
