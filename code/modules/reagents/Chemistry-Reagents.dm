@@ -5139,6 +5139,8 @@
 			if(!(M_NOIR in H.mutations))
 				H.mutations += M_NOIR
 				H.dna.SetSEState(NOIRBLOCK,1)
+				genemutcheck(H, NOIRBLOCK, null, MUTCHK_FORCED)
+
 		M.say(pick("The streets were heartless and cold, like the fickle 'love' of some hysterical dame.",
 			"The lights, the smoke, the grime... the city itself seemed alive that day. Was it the pulse that made me think so? Or just all the blood?",
 			"I caressed my .44 magnum. Ever since Jimmy bit it against the Two Bit Gang, the gun and its six rounds were the only partner I could trust.",
@@ -5176,8 +5178,8 @@
 
 /datum/reagent/ethanol/bad_touch/on_mob_life(var/mob/living/M) //Hallucinate and take hallucination damage.
 	if(..()) return 1
-	M.hallucination = max(M.hallucination, 3)
-	M.halloss++
+	M.hallucination = max(M.hallucination, 10)
+	M.halloss = 15
 
 /datum/reagent/ethanol/electric_sheep
 	name = "Electric Sheep"
@@ -5231,9 +5233,11 @@
 					imageloc = M.current.loc
 				if(istype(M.current.loc,/obj/mecha))
 					imagelocB = M.current.loc
-				var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "metaclub", layer = 13)
+				var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "metaclub")
+				I.plane = REV_ANTAG_HUD_PLANE
 				M.current.client.images += I
-				var/image/J = image('icons/mob/mob.dmi', loc = imagelocB, icon_state = "metaclub", layer = 13)
+				var/image/J = image('icons/mob/mob.dmi', loc = imagelocB, icon_state = "metaclub")
+				J.plane = REV_ANTAG_HUD_PLANE
 				new_buddy.current.client.images += J
 
 /datum/reagent/ethanol/waifu
