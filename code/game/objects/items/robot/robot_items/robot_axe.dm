@@ -45,7 +45,7 @@
 	w_class = active? W_CLASS_LARGE : initial(w_class)
 	sharpness_flags = active ? (INSULATED_EDGE | SHARP_BLADE | HOT_EDGE) : initial(sharpness_flags)
 	hitsound = active ? 'sound/weapons/blade1.ogg' : 'sound/weapons/empty.ogg'
-	playsound(src, active ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
+	playsound(src, active ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1) //Placeholder
 	update_icon()
 	active ? processing_objects.Add(src) : processing_objects.Remove(src)
 
@@ -70,6 +70,6 @@
 			if(prob(robot.getFireLoss())) //The more burn damage the have, the more likely they are to get a component overheated.
 				var/list/blacklisted_components = list("power cell", "armour plating")
 				var/datum/robot_component/C = pick(robot.components) - blacklisted_components
-				if(C.toggled)
+				if(robot.is_component_functioning(C) && C.toggled)
 					C.toggled = FALSE
 					to_chat(target, "<span class='danger'>DANGER: [C.name] [pick("Over Temperature", "Cooling")] Error!</span>")
