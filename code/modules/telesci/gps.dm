@@ -214,7 +214,7 @@ var/const/DEATHSOUND_CHANNEL = 300
 
 /obj/item/device/gps/secure/proc/deathsound(var/turf/pos,var/dead=FALSE,num)
 	var/sound_channel = DEATHSOUND_CHANNEL + num
-	if(dead && transmitting)
+	if(dead)
 		playsound(src, pick(deathsound), 100, 0,channel = sound_channel,wait = TRUE)
 	if(prob(75))
 		playsound(src, 'sound/items/on3.wav',100, 0,channel = sound_channel,wait = TRUE)
