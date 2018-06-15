@@ -62,6 +62,7 @@
 
 	if(!can_diagnose())
 		to_chat(src, "<span class='warning'>Your self-diagnosis component isn't functioning.</span>")
+		return
 
 	var/dat = self_diagnosis()
 	var/datum/browser/popup = new(src, "\ref[src]-robotdiagnosis", "Self diagnosis", 730, 270)
