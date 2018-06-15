@@ -896,3 +896,17 @@
 	male_adept = "Expedition Leader"
 	female_adept = "Expedition Leader"
 	keys = list("armok", "dwarf", "dorf", "dwarf fortress", "dorf fort")
+
+/datum/religion/art
+	name = "The Joy of Painting"
+	deity_name = "Bob Ross"
+	bible_name = "The Joy of Painting"
+	male_adept = "Painter"
+	female_adept = "Painter"
+	keys = list("art", "bob ross", "happy little trees", "happy little clouds")
+
+/datum/religion/art/equip_chaplain(var/mob/living/carbon/human/H)
+	H.put_in_hands(new /obj/item/mounted/frame/painting)
+	H.h_style = "Big Afro"
+	H.f_style = "Full Beard"
+	H.update_hair()

@@ -396,6 +396,8 @@
 	layer = OPEN_DOOR_LAYER
 	icon_state = "beartrap0"
 	desc = "A trap used to catch bears and other legged creatures."
+	starting_materials = list(MAT_IRON = 50000)
+	w_type = RECYK_METAL
 	var/armed = 0
 	var/obj/item/weapon/grenade/iedcasing/IED = null
 

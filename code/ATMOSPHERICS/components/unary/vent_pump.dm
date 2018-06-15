@@ -52,7 +52,8 @@
 
 /obj/machinery/atmospherics/unary/vent_pump/New()
 	..()
-	area_uid = areaMaster.uid
+	var/area/here = get_area(src)
+	area_uid = here.uid
 	if (!id_tag)
 		assign_uid()
 		id_tag = num2text(uid)
@@ -120,7 +121,7 @@
 
 		if(pressure_delta > 0.1)
 			if(air_contents.temperature > 0)
-				var/transfer_moles = pressure_delta*environment.volume/(air_contents.temperature * R_IDEAL_GAS_EQUATION)
+				var/transfer_moles = pressure_delta * CELL_VOLUME / (air_contents.temperature * R_IDEAL_GAS_EQUATION)
 
 				var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
 
@@ -138,7 +139,7 @@
 
 		if(pressure_delta > 0.1)
 			if(environment.temperature > 0)
-				var/transfer_moles = pressure_delta*air_contents.volume/(environment.temperature * R_IDEAL_GAS_EQUATION)
+				var/transfer_moles = pressure_delta * air_contents.volume / (environment.temperature * R_IDEAL_GAS_EQUATION)
 
 				var/datum/gas_mixture/removed = loc.remove_air(transfer_moles)
 				if (isnull(removed)) //in space
@@ -160,8 +161,9 @@
 		radio_connection = radio_controller.add_object(src, frequency,radio_filter_in)
 
 	if(frequency != 1439)
-		areaMaster.air_vent_info -= id_tag
-		areaMaster.air_vent_names -= id_tag
+		var/area/this_area = get_area(src)
+		this_area.air_vent_info -= id_tag
+		this_area.air_vent_names -= id_tag
 		name = "Vent Pump"
 	else
 		broadcast_status()
@@ -193,11 +195,12 @@
 	)
 
 	if(frequency == 1439)
-		if(!areaMaster.air_vent_names[id_tag])
-			var/new_name = "[areaMaster.name] Vent Pump #[areaMaster.air_vent_names.len+1]"
-			areaMaster.air_vent_names[id_tag] = new_name
+		var/area/this_area = get_area(src)
+		if(!this_area.air_vent_names[id_tag])
+			var/new_name = "[this_area.name] Vent Pump #[this_area.air_vent_names.len+1]"
+			this_area.air_vent_names[id_tag] = new_name
 			name = new_name
-		areaMaster.air_vent_info[id_tag] = signal.data
+		this_area.air_vent_info[id_tag] = signal.data
 
 	radio_connection.post_signal(src, signal, radio_filter_out)
 
@@ -344,8 +347,9 @@
 	return ..()
 
 /obj/machinery/atmospherics/unary/vent_pump/Destroy()
-	areaMaster.air_vent_info.Remove(id_tag)
-	areaMaster.air_vent_names.Remove(id_tag)
+	var/area/this_area = get_area(src)
+	this_area.air_vent_info.Remove(id_tag)
+	this_area.air_vent_names.Remove(id_tag)
 	..()
 
 /obj/machinery/atmospherics/unary/vent_pump/multitool_topic(var/mob/user, var/list/href_list, var/obj/O)
@@ -354,8 +358,9 @@
 		if(!newid)
 			return
 		if(frequency == 1439)
-			areaMaster.air_vent_info -= id_tag
-			areaMaster.air_vent_names -= id_tag
+			var/area/this_area = get_area(src)
+			this_area.air_vent_info -= id_tag
+			this_area.air_vent_names -= id_tag
 
 		id_tag = newid
 		broadcast_status()
@@ -365,10 +370,11 @@
 	return ..()
 
 /obj/machinery/atmospherics/unary/vent_pump/change_area(var/area/oldarea, var/area/newarea)
-	areaMaster.air_vent_info.Remove(id_tag)
-	areaMaster.air_vent_names.Remove(id_tag)
+	var/area/this_area = get_area(src)
+	this_area.air_vent_info.Remove(id_tag)
+	this_area.air_vent_names.Remove(id_tag)
 	..()
-	area_uid = areaMaster.uid
+	area_uid = this_area.uid
 	broadcast_status()
 
 /obj/machinery/atmospherics/unary/vent_pump/canClone(var/obj/O)
@@ -376,8 +382,9 @@
 
 /obj/machinery/atmospherics/unary/vent_pump/clone(var/obj/machinery/atmospherics/unary/vent_pump/O)
 	if(frequency == 1439) // Note: if the frequency stays at 1439 we'll be readded to the area in set_frequency().
-		areaMaster.air_vent_info -= id_tag
-		areaMaster.air_vent_names -= id_tag
+		var/area/this_area = get_area(src)
+		this_area.air_vent_info -= id_tag
+		this_area.air_vent_names -= id_tag
 	id_tag = O.id_tag
 
 	set_frequency(O.frequency)

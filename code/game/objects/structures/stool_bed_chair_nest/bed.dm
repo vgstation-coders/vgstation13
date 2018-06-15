@@ -14,10 +14,15 @@
 	icon = 'icons/obj/stools-chairs-beds.dmi'
 	layer = BELOW_OBJ_LAYER
 	anchored = 1
-	var/sheet_type = /obj/item/stack/sheet/metal
-	var/sheet_amt = 1
+	sheet_type = /obj/item/stack/sheet/metal
+	sheet_amt = 1
 
 	var/lock_type = /datum/locking_category/buckle/bed
+
+/obj/structure/bed/New()
+	..()
+	if(material_type)
+		sheet_type = material_type.sheettype
 
 /obj/structure/bed/alien
 	name = "resting contraption"

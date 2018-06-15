@@ -169,9 +169,9 @@ Attach to transfer valve and open. BOOM.
 
 	//since the air is processed in fractions, we need to make sure not to have any minuscle residue or
 	//the amount of moles might get to low for some functions to catch them and thus result in wonky behaviour
-	if(air_contents.oxygen < 0.1)
+	if(air_contents.molar_density("oxygen") < 0.1 / CELL_VOLUME)
 		air_contents.oxygen = 0
-	if(air_contents.toxins < 0.1)
+	if(air_contents.molar_density("toxins") < 0.1 / CELL_VOLUME)
 		air_contents.toxins = 0
 	if(fuel)
 		if(fuel.moles < 0.1)
@@ -240,7 +240,7 @@ Attach to transfer valve and open. BOOM.
 
 	//seperate part of the present gas
 	//this is done to prevent the fire burning all gases in a single pass
-	var/datum/gas_mixture/flow = air_contents.remove_ratio(zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate))
+	var/datum/gas_mixture/flow = air_contents.remove_volume(zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate) * CELL_VOLUME)
 ///////////////////////////////// FLOW HAS BEEN CREATED /// DONT DELETE THE FIRE UNTIL IT IS MERGED BACK OR YOU WILL DELETE AIR ///////////////////////////////////////////////
 
 	if(flow)
@@ -350,9 +350,9 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
 
 	if(oxygen && (toxins || fuel))
-		if(QUANTIZE((toxins / volume * CELL_VOLUME) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE)
+		if(QUANTIZE(molar_density("toxins") * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
 			return 1
-		if(fuel && QUANTIZE((fuel.moles / volume * CELL_VOLUME) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ)
+		if(fuel && QUANTIZE((fuel.moles / volume) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ / CELL_VOLUME) //Not bothering to make molar_density() support trace_gases since I'm removing those soon anyway
 			return 1
 
 	// Check if we're actually in a turf or not before trying to check object fires.
@@ -394,9 +394,9 @@ datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
 	var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
 
 	if(oxygen && (toxins || fuel))
-		if(QUANTIZE(toxins * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE)
+		if(QUANTIZE(molar_density("toxins") * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
 			return 1
-		if(fuel && QUANTIZE(fuel.moles * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ)
+		if(fuel && QUANTIZE((fuel.moles / volume) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ / CELL_VOLUME)
 			return 1
 
 	if(objects && istype(T))

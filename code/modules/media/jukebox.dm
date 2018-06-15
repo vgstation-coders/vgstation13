@@ -418,7 +418,8 @@ var/global/list/loopModeNames=list(
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"NOT ENOUGH FUNDS\" on the screen.</span>","You hear a buzz.")
 			return
 		visible_message("<span class='notice'>The machine beeps happily.</span>","You hear a beep.")
-		acct.charge(credits_needed,linked_account,"Song selection at [areaMaster.name]'s [name].")
+		var/area/this_area = get_area(src)
+		acct.charge(credits_needed,linked_account,"Song selection at [this_area.name]'s [name].")
 		credits_needed = 0
 
 		successful_purchase()

@@ -61,7 +61,10 @@
 		"target" = A
 	))
 	if(modifiers["middle"])
-		MiddleClickOn(A)
+		if(modifiers["shift"])
+			MiddleShiftClickOn(A)
+		else
+			MiddleClickOn(A)
 		return
 	if(modifiers["shift"])
 		ShiftClickOn(A)
@@ -237,6 +240,9 @@
 /atom/proc/MiddleClick(var/mob/M as mob)
 	return
 */
+
+/mob/proc/MiddleShiftClickOn(var/atom/A)
+	pointed(A)
 
 /*
 	Shift click

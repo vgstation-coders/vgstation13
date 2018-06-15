@@ -2686,7 +2686,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full/New()
 	..()
 
-	reagents.add_reagent("nutriment", 4)
+	reagents.add_reagent(NUTRIMENT, 4)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/orangecake
 	name = "orange cake"

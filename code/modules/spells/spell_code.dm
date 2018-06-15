@@ -66,6 +66,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/delay_reduc = 0
 	var/cooldown_min = 0 //minimum possible cooldown for a charging spell
 
+	var/spell_aspect_flags
+	//Flags for what this spell is 'based' upon, for interacting with other spells
+	//For instance, a fire-based spell would have the FIRE flag
+
 	var/overlay = 0
 	var/overlay_icon = 'icons/obj/wizard.dmi'
 	var/overlay_icon_state = "spell"

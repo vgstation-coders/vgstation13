@@ -319,7 +319,7 @@ Pipelines + Other Objects -> Pipe network
 			user.visible_message("[user] vents \the [src].",
 								"You have vented \the [src].",
 								"You hear a ratchet.")
-			var/datum/gas_mixture/internal_removed = int_air.remove(int_air.total_moles()*starting_volume/int_air.volume)
+			var/datum/gas_mixture/internal_removed = int_air.remove_volume(starting_volume)
 			env_air.merge(internal_removed)
 		else
 			to_chat(user, "<span class='warning'>You cannot unwrench this [src], it's too exerted due to internal pressure.</span>")

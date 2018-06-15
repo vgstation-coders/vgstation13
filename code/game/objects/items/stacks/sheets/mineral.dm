@@ -83,10 +83,13 @@ var/list/datum/stack_recipe/sandstone_recipes = list ( \
 	sheettype = "diamond"
 	melt_temperature = 3820 // In a vacuum, but fuck dat
 	recyck_mat = MAT_DIAMOND
+	mat_type = MAT_DIAMOND
 
 var/list/datum/stack_recipe/diamond_recipes = list ( \
 	new/datum/stack_recipe("diamond floor tile", /obj/item/stack/tile/mineral/diamond, 1, 4, 20), \
 	new/datum/stack_recipe("diamond door", /obj/machinery/door/mineral/transparent/diamond, 10, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair, 20, one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	12, time = 12,	on_floor = 1, inherit_material = TRUE)
 	)
 
 /obj/item/stack/sheet/mineral/diamond/New(var/loc, var/amount=null)
@@ -110,10 +113,13 @@ var/list/datum/stack_recipe/diamond_recipes = list ( \
 	sheettype = "uranium"
 	melt_temperature = 1132+T0C
 	recyck_mat = MAT_URANIUM
+	mat_type = MAT_URANIUM
 
 var/list/datum/stack_recipe/uranium_recipes = list ( \
 	new/datum/stack_recipe("uranium floor tile", /obj/item/stack/tile/mineral/uranium, 1, 4, 20), \
 	new/datum/stack_recipe("uranium door", /obj/machinery/door/mineral/uranium, 10, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair, 20, one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	12, time = 12,	on_floor = 1, inherit_material = TRUE)
 	)
 
 /obj/item/stack/sheet/mineral/uranium/New(var/loc, var/amount=null)
@@ -137,10 +143,13 @@ var/list/datum/stack_recipe/uranium_recipes = list ( \
 	sheettype = "plasma"
 	melt_temperature = MELTPOINT_STEEL + 500
 	recyck_mat = MAT_PLASMA
+	mat_type = MAT_PLASMA
 
 var/list/datum/stack_recipe/plasma_recipes = list ( \
 	new/datum/stack_recipe("plasma floor tile", /obj/item/stack/tile/mineral/plasma, 1, 4, 20), \
 	new/datum/stack_recipe("plasma door", /obj/machinery/door/mineral/transparent/plasma, 10, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair, 20, one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	12, time = 12,	on_floor = 1, inherit_material = TRUE)
 	)
 
 /obj/item/stack/sheet/mineral/plasma/New(var/loc, var/amount=null)
@@ -162,6 +171,7 @@ var/list/datum/stack_recipe/plasma_recipes = list ( \
 	melt_temperature = MELTPOINT_PLASTIC
 	sheettype = "plastic"
 	recyck_mat = MAT_PLASTIC
+	mat_type = MAT_PLASTIC
 
 var/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("plastic floor tile", /obj/item/stack/tile/mineral/plastic, 1, 4, 20), \
@@ -209,11 +219,14 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 	melt_temperature = 1064+T0C
 	sheettype = "gold"
 	recyck_mat = MAT_GOLD
+	mat_type = MAT_GOLD
 
 var/list/datum/stack_recipe/gold_recipes = list ( \
 	new/datum/stack_recipe("golden floor tile", /obj/item/stack/tile/mineral/gold, 1, 4, 20), \
 	new/datum/stack_recipe("golden door", /obj/machinery/door/mineral/gold, 10, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("gold tooth", /obj/item/stack/teeth/gold, 1, 1, 20), \
+	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair, 20,one_per_turf = 1, on_floor = 1, inherit_material = TRUE),\
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	12, time = 12,	on_floor = 1, inherit_material = TRUE)
 	)
 
 /obj/item/stack/sheet/mineral/gold/New(var/loc, var/amount=null)
@@ -225,6 +238,8 @@ var/list/datum/stack_recipe/gold_recipes = list ( \
  */
 var/list/datum/stack_recipe/phazon_recipes = list( \
 	new/datum/stack_recipe("phazon floor tile", /obj/item/stack/tile/mineral/phazon, 1, 40, 20), \
+	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair, 20,one_per_turf = 1, on_floor = 1, inherit_material = TRUE),\
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	12, time = 12,	on_floor = 1, inherit_material = TRUE)
 	)
 
 /obj/item/stack/sheet/mineral/phazon
@@ -241,6 +256,7 @@ var/list/datum/stack_recipe/phazon_recipes = list( \
 	siemens_coefficient = 1
 	origin_tech = Tc_MATERIALS + "=9"
 	recyck_mat = MAT_PHAZON
+	mat_type = MAT_PHAZON
 
 /obj/item/stack/sheet/mineral/phazon/New(var/loc, var/amount=null)
 		recipes = phazon_recipes
@@ -262,10 +278,13 @@ var/list/datum/stack_recipe/phazon_recipes = list( \
 	perunit = 2000
 	sheettype = "silver"
 	recyck_mat = MAT_SILVER
+	mat_type = MAT_SILVER
 
 var/list/datum/stack_recipe/silver_recipes = list ( \
 	new/datum/stack_recipe("silver floor tile", /obj/item/stack/tile/mineral/silver, 1, 4, 20), \
 	new/datum/stack_recipe("silver door", /obj/machinery/door/mineral/silver, 10, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair, 20,one_per_turf = 1, on_floor = 1, inherit_material = TRUE),\
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	12, time = 12,	on_floor = 1, inherit_material = TRUE)
 	)
 
 /obj/item/stack/sheet/mineral/silver/New(var/loc, var/amount=null)
@@ -288,9 +307,12 @@ var/list/datum/stack_recipe/silver_recipes = list ( \
 	perunit = 2000
 	sheettype = "clown"
 	recyck_mat = MAT_CLOWN
+	mat_type = MAT_CLOWN
 
 var/list/datum/stack_recipe/clown_recipes = list ( \
 	new/datum/stack_recipe("bananium floor tile", /obj/item/stack/tile/mineral/clown, 1, 40, 20), \
+	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair, 20, one_per_turf = 1, on_floor = 1, inherit_material = TRUE),\
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	12, time = 12,	on_floor = 1, inherit_material = TRUE)
 	)
 
 /obj/item/stack/sheet/mineral/clown/New(var/loc, var/amount=null)

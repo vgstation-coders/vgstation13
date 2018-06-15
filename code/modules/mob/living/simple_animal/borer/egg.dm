@@ -17,8 +17,8 @@
 	var/ping_cooldown = 50
 
 	var/list/required_mols=list(
-		"toxins"=MOLES_PLASMA_VISIBLE,
-		"oxygen"=5
+		"toxins" = MOLES_PLASMA_VISIBLE / CELL_VOLUME,
+		"oxygen" = 5 / CELL_VOLUME
 	)
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/New()
@@ -93,7 +93,7 @@
 	//testing("[type]/PROCESS() - plasma: [environment.toxins]")
 	var/meets_conditions=1
 	for(var/gas_id in required_mols)
-		if((environment.vars[gas_id] / environment.volume * CELL_VOLUME) <= required_mols[gas_id])
+		if(environment.molar_density(gas_id) < required_mols[gas_id])
 			meets_conditions=0
 	if(meets_conditions)
 		src.Hatch()

@@ -42,7 +42,7 @@
 
 	var/msg = "<span class='info'>*---------*\nThis is "
 
-	if( slot_w_uniform in obscured && skipface )
+	if((slot_w_uniform in obscured) && skipface)
 		t_He = "They"
 		t_his = "their"
 		t_him = "them"

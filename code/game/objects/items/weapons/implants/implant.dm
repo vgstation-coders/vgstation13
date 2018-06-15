@@ -431,7 +431,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 			if(loc:timestopped)
 				return
 		activate()
-	else if(M.stat == 2)
+	else if(M.isDead())
 		if(M.timestopped)
 			return
 		activate("death")

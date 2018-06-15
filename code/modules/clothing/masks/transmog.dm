@@ -125,7 +125,7 @@
 	..()
 	color = rgb(rand(0,255),rand(0,255),rand(0,255))
 	//Remove cockatrices because they're somewhat OP when player controlled
-	target_type = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof(/mob/living/simple_animal/hostile/humanoid) - typesof(/mob/living/simple_animal/hostile/retaliate/cockatrice) - typesof(/mob/living/simple_animal/hostile/giant_spider/hunter/dead) - typesof(/mob/living/simple_animal/hostile/asteroid/hivelordbrood))
+	target_type = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof_list(blacklisted_mobs))
 
 /obj/item/clothing/mask/morphing/ghost
 	name = "mask of the phantom"

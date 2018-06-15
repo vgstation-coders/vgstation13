@@ -1365,6 +1365,8 @@ var/global/num_vending_terminals = 1
 		"Try our new jerky!"
 	)
 	icon_state = "snack"
+	icon_vend = "snack-vend"
+	vend_delay = 25
 	products = list(
 		/obj/item/weapon/reagent_containers/food/snacks/candy = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating = 6,
@@ -1402,6 +1404,8 @@ var/global/num_vending_terminals = 1
 	name = "\improper Robust Softdrinks"
 	desc = "A softdrink vendor provided by Robust Industries, LLC."
 	icon_state = "Cola_Machine"
+	icon_vend = "Cola_Machine-vend"
+	vend_delay = 11
 	product_slogans = list(
 		"Robust Softdrinks: More robust than a toolbox to the head!",
 		"At least we aren't Dan!"
@@ -1482,6 +1486,7 @@ var/global/num_vending_terminals = 1
 	product_slogans = list("Carts to go!")
 	icon_state = "cart"
 	icon_deny = "cart-deny"
+	icon_vend = "cart-vend"
 	products = list(
 		/obj/item/weapon/cartridge/captain = 3,
 		/obj/item/weapon/cartridge/hop = 3,
@@ -1528,6 +1533,8 @@ var/global/num_vending_terminals = 1
 		"Award-winning cigs."
 	)
 	icon_state = "cigs"
+	icon_vend = "cigs-vend"
+	vend_delay = 21
 	products = list(
 		/obj/item/weapon/storage/fancy/cigarettes = 10,
 		/obj/item/weapon/storage/fancy/matchbox = 10,
@@ -1554,6 +1561,8 @@ var/global/num_vending_terminals = 1
 	req_access = list(access_medical)
 	icon_state = "med"
 	icon_deny = "med-deny"
+	icon_vend = "med-vend"
+	vend_delay = 18
 	product_ads = list(
 		"Go save some lives!",
 		"The best stuff for your medbay.",
@@ -1869,6 +1878,8 @@ var/global/num_vending_terminals = 1
 	)
 	icon_state = "sec"
 	icon_deny = "sec-deny"
+	icon_vend = "sec-vend"
+	vend_delay = 14
 	products = list(
 		/obj/item/weapon/handcuffs = 8,
 		/obj/item/weapon/grenade/flashbang = 4,
@@ -1926,6 +1937,8 @@ var/global/num_vending_terminals = 1
 	)
 	icon_state = "nutri"
 	icon_deny = "nutri-deny"
+	icon_vend = "nutri-vend"
+	vend_delay = 26
 	products = list(
 		/obj/item/weapon/reagent_containers/food/snacks/beezeez = 20,
 		/obj/item/weapon/reagent_containers/glass/fertilizer/ez = 35,
@@ -1958,6 +1971,8 @@ var/global/num_vending_terminals = 1
 		"Aw h'yeah son!"
 	)
 	icon_state = "seeds"
+	icon_vend = "seeds-vend"
+	vend_delay = 13
 	products = list(
 		/obj/item/seeds/bananaseed = 3,
 		/obj/item/seeds/berryseed = 3,
@@ -2114,6 +2129,7 @@ var/global/num_vending_terminals = 1
 		"You don't really need these..."
 	)
 	icon_state = "dinnerware"
+	icon_vend = "dinnerware-vend"
 	products = list(
 		/obj/item/weapon/tray = 8,
 		/obj/item/weapon/kitchen/utensil/fork = 6,
@@ -2142,6 +2158,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper BODA"
 	desc = "An old vending machine containing sweet water."
 	icon_state = "sovietsoda"
+	icon_vend = "sovietsoda-vend"
 	product_slogans = list(
 		"BODA: We sell drink.",
 		"BODA: Drink today.",
@@ -2176,7 +2193,8 @@ var/global/num_vending_terminals = 1
 	//req_access = list(access_maint_tunnels)
 	icon_state = "tool"
 	icon_deny = "tool-deny"
-
+	icon_vend = "tool-vend"
+	vend_delay = 11
 	products = list(
 		/obj/item/stack/cable_coil/random = 10,
 		/obj/item/weapon/crowbar = 5,
@@ -2205,6 +2223,8 @@ var/global/num_vending_terminals = 1
 	req_access = list(access_engine_equip)//Engineering Equipment access
 	icon_state = "engivend"
 	icon_deny = "engivend-deny"
+	icon_vend = "engivend-vend"
+	vend_delay = 21
 	products = list(
 		/obj/item/clothing/glasses/scanner/meson = 2,
 		/obj/item/clothing/glasses/scanner/material = 2,

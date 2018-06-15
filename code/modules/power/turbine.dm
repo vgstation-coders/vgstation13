@@ -67,9 +67,7 @@
 		return
 	rpm = 0.9* rpm + 0.1 * rpmtarget
 	var/datum/gas_mixture/environment = inturf.return_air()
-	var/transfer_moles = environment.total_moles()/10
-	//var/transfer_moles = rpm/10000*capacity
-	var/datum/gas_mixture/removed = inturf.remove_air(transfer_moles)
+	var/datum/gas_mixture/removed = environment.remove_volume(CELL_VOLUME / 10)
 	gas_contained.merge(removed)
 
 	rpm = max(0, rpm - (rpm*rpm)/COMPFRICTION)

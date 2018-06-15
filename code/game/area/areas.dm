@@ -413,8 +413,7 @@ var/area/space_area
 			used_environ += amount
 
 /area/Entered(atom/movable/Obj, atom/OldLoc)
-	var/area/oldArea = Obj.areaMaster
-	Obj.areaMaster = src
+	var/area/oldArea = get_area(OldLoc)
 
 	if(project_shadows)
 		Obj.update_shadow()
@@ -424,17 +423,15 @@ var/area/space_area
 	Obj.area_entered(src)
 	for(var/atom/movable/thing in get_contents_in_object(Obj))
 		thing.area_entered(src)
-		thing.areaMaster = src
 
 	for(var/mob/mob_in_obj in Obj.contents)
 
-		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = Obj.areaMaster, "old" = oldArea))
+		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = src, "old" = oldArea))
 
 	var/mob/M = Obj
-
 	if(istype(M))
-		CallHook("MobAreaChange", list("mob" = M, "new" = Obj.areaMaster, "old" = oldArea)) // /vg/ - EVENTS!
-		if(M.client && (M.client.prefs.toggles & SOUND_AMBIENCE) && isnull(M.areaMaster.media_source) && !M.client.ambience_playing)
+		CallHook("MobAreaChange", list("mob" = M, "new" = src, "old" = oldArea)) // /vg/ - EVENTS!
+		if(M.client && (M.client.prefs.toggles & SOUND_AMBIENCE) && isnull(media_source) && !M.client.ambience_playing)
 			M.client.ambience_playing = 1
 			var/sound = 'sound/ambience/shipambience.ogg'
 
@@ -576,7 +573,7 @@ var/area/space_area
 		for(var/atom/movable/AM in T.contents)
 			AM.change_area(old_area,src)
 
-var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z", "group", "contents", "air", "zone", "light", "areaMaster", "underlays", "lighting_overlay", "corners", "affecting_lights", "has_opaque_atom", "lighting_corners_initialised", "light_sources")
+var/list/ignored_keys = list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z", "group", "contents", "air", "zone", "light", "underlays", "lighting_overlay", "corners", "affecting_lights", "has_opaque_atom", "lighting_corners_initialised", "light_sources")
 var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are moved by move_area_to and move_contents_to
 var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f9","swall_f10") //icon_states for which to prepare an underlay
 

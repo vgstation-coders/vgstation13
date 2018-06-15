@@ -227,41 +227,41 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				bodytemperature += ((Environment.temperature - bodytemperature) / 5)
 
 			if(min_oxy)
-				if(Environment.oxygen / Environment.volume * CELL_VOLUME < min_oxy)
+				if(Environment.molar_density("oxygen") < min_oxy / CELL_VOLUME)
 					atmos_suitable = 0
 					oxygen_alert = 1
 				else
 					oxygen_alert = 0
 
 			if(max_oxy)
-				if(Environment.oxygen / Environment.volume * CELL_VOLUME > max_oxy)
+				if(Environment.molar_density("oxygen") > max_oxy / CELL_VOLUME)
 					atmos_suitable = 0
 
 			if(min_tox)
-				if(Environment.toxins / Environment.volume * CELL_VOLUME < min_tox)
+				if(Environment.molar_density("toxins") < min_tox / CELL_VOLUME)
 					atmos_suitable = 0
 
 			if(max_tox)
-				if(Environment.toxins / Environment.volume * CELL_VOLUME > max_tox)
+				if(Environment.molar_density("toxins") > max_tox / CELL_VOLUME)
 					atmos_suitable = 0
 					toxins_alert = 1
 				else
 					toxins_alert = 0
 
 			if(min_n2)
-				if(Environment.nitrogen / Environment.volume * CELL_VOLUME < min_n2)
+				if(Environment.molar_density("nitrogen") < min_n2 / CELL_VOLUME)
 					atmos_suitable = 0
 
 			if(max_n2)
-				if(Environment.nitrogen / Environment.volume * CELL_VOLUME > max_n2)
+				if(Environment.molar_density("nitrogen") > max_n2 / CELL_VOLUME)
 					atmos_suitable = 0
 
 			if(min_co2)
-				if(Environment.carbon_dioxide / Environment.volume * CELL_VOLUME < min_co2)
+				if(Environment.molar_density("carbon_dioxide") < min_co2 / CELL_VOLUME)
 					atmos_suitable = 0
 
 			if(max_co2)
-				if(Environment.carbon_dioxide / Environment.volume * CELL_VOLUME > max_co2)
+				if(Environment.molar_density("carbon_dioxide") > max_co2 / CELL_VOLUME)
 					atmos_suitable = 0
 
 	//Atmos effect
@@ -325,8 +325,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/proc/handle_automated_speech()
 
+	if(!speak_chance || !(speak.len || emote_hear.len || emote_see.len))
+		return
+
 	var/someone_in_earshot=0
-	if(!client && speak_chance && ckey == null) // Remove this if earshot is used elsewhere.
+	if(!client && ckey == null) // Remove this if earshot is used elsewhere.
 		// All we're doing here is seeing if there's any CLIENTS nearby.
 		for(var/mob/M in get_hearers_in_view(7, src))
 			if(M.client)
@@ -387,7 +390,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/MouseDrop(mob/living/carbon/M)
 	if(M != usr || !istype(M) || !Adjacent(M) || M.incapacitated())
-		return
+		return ..()
 
 	if(locked_to) //Atom locking
 		return
@@ -750,3 +753,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 /datum/locking_category/simple_animal
+
+
+/mob/living/simple_animal/resetVariables()
+	..("emote_hear", "emote_see", args)
+	emote_hear = list()
+	emote_see = list()

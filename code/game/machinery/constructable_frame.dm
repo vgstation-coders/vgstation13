@@ -122,7 +122,7 @@
 				if(iswrench(P))
 					playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 					to_chat(user, "<span class='notice'>You dismantle the frame.</span>")
-					drop_stack(/obj/item/stack/sheet/metal, get_turf(src), 5, user)
+					drop_stack(sheet_type, get_turf(src), 5, user)
 					qdel(src)
 		if(2)
 			if(!..())
@@ -203,6 +203,7 @@
 							else
 								circuit.forceMove(null)
 							new_machine.RefreshParts()
+							new_machine.power_change()
 							circuit.finish_building(new_machine, user)
 							components = null
 							qdel(src)

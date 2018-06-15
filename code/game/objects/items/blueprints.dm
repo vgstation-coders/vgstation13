@@ -158,7 +158,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 /obj/item/blueprints/proc/get_area()
 	var/turf/T = get_turf(usr)
-	var/area/A = get_area_master(T)
+	var/area/A = get_area(T)
 	return A
 
 /obj/item/blueprints/proc/get_area_type(var/area/A = get_area())

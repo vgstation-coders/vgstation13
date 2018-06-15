@@ -100,7 +100,7 @@
 				Frequency:
 				<A href='byond://?src=\ref[src];freq=-10'>-</A>
 				<A href='byond://?src=\ref[src];freq=-2'>-</A>
-				[format_frequency(frequency)]
+				<A href='byond://?src=\ref[src];set_freq=-1'>[format_frequency(frequency)]</a>
 				<A href='byond://?src=\ref[src];freq=2'>+</A>
 				<A href='byond://?src=\ref[src];freq=10'>+</A><BR>
 				"}
@@ -124,8 +124,13 @@
 			<B>[chan_name]</B>: <A href='byond://?src=\ref[src];ch_name=[chan_name];listen=[!list]'>[list ? "Engaged" : "Disengaged"]</A><BR>
 			"}
 
+/obj/item/device/radio/proc/check_traitor_uplink(frequency)
+	if(hidden_uplink)
+		if(hidden_uplink.check_trigger(usr, frequency, traitor_frequency))
+			usr << browse(null, "window=radio")
+			return 1
+
 /obj/item/device/radio/Topic(href, href_list)
-	//..()
 	if (usr.stat || !on)
 		return
 
@@ -164,15 +169,21 @@
 
 		return
 
-	else if (href_list["freq"])
-		var/new_frequency = (frequency + text2num(href_list["freq"]))
-		if (!freerange || (frequency < 1200 || frequency > 1600))
-			new_frequency = sanitize_frequency(new_frequency, maxf)
+	else if("set_freq" in href_list)
+		var/new_frequency
+		new_frequency = input(usr, "Set a new frequency (1200-1600 kHz).", src, frequency) as null|num
+		new_frequency = sanitize_frequency(new_frequency, maxf)
 		set_frequency(new_frequency)
-		if(hidden_uplink)
-			if(hidden_uplink.check_trigger(usr, frequency, traitor_frequency))
-				usr << browse(null, "window=radio")
-				return
+		if (check_traitor_uplink(frequency))
+			return
+
+	else if (href_list["freq"])
+		var/new_frequency
+		new_frequency = (frequency + text2num(href_list["freq"]))
+		new_frequency = sanitize_frequency(new_frequency, maxf)
+		set_frequency(new_frequency)
+		if (check_traitor_uplink(frequency))
+			return
 
 	else if (href_list["talk"])
 		broadcasting = text2num(href_list["talk"])
@@ -524,6 +535,7 @@
 	else
 		user.show_message("<span class = 'notice'>\The [src] can no longer be modified or attached!</span>")
 	updateDialog()
+	update_icon()
 	add_fingerprint(user)
 
 /obj/item/device/radio/emp_act(severity)

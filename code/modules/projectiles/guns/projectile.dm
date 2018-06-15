@@ -200,7 +200,7 @@
 		to_chat(user, "<span class='notice'>You load [num_loaded] shell\s into \the [src]!</span>")
 	A.update_icon()
 	update_icon()
-	return
+	..()
 
 /obj/item/weapon/gun/projectile/attack_self(mob/user as mob)
 	if (target)
