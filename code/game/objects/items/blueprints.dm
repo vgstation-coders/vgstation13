@@ -152,6 +152,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	text += "</BODY></HTML>"
 	usr << browse(text, "window=blueprints")
+	onclose(usr, "blueprints")
 
 /obj/item/blueprints/proc/get_area_type(var/area/A)
 	if(!A)
