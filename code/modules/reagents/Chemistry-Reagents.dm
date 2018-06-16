@@ -5204,7 +5204,7 @@
 /datum/reagent/ethanol/metabuddy/on_mob_life(var/mob/living/L)
 	if(..()) return 1
 	if(!metaclub.Find(L) && L.mind)
-		metaclub += L
+		metaclub += L.mind
 		var/datum/mind/new_buddy = L.mind
 		for(var/datum/mind/M in metaclub) //Update metaclub icons
 			if(M.current.client && new_buddy.current && new_buddy.current.client)
