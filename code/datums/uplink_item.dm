@@ -77,6 +77,10 @@ var/list/uplink_items = list()
 	if (!( istype(user, /mob/living/carbon/human)))
 		return 0
 
+	if(unique && times_bought >= 1)
+		to_chat(user, "<span class='warning'>This item is not available anymore.</span>")
+		return 0
+
 	// If the uplink's holder is in the user's contents
 	if ((U.loc in user.contents || (in_range(U.loc, user) && istype(U.loc.loc, /turf))))
 		user.set_machine(U)
@@ -105,6 +109,7 @@ var/list/uplink_items = list()
 
 			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [cost]."}
 			stat_collection.uplink_purchase(src, I, user)
+			times_bought += 1
 			if(user.mind)
 				user.mind.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename]"}
 				user.mind.spent_TC += cost
