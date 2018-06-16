@@ -26,6 +26,7 @@
 	var/mineral_overlay
 	var/mined_type = /turf/unsimulated/floor/asteroid
 	var/overlay_state = "rock_overlay"
+	var/no_finds = 0 //whether or not we want xenoarchaeology stuff here
 	var/rockernaut = NONE
 
 
@@ -49,6 +50,18 @@
 	nitrogen = MOLES_N2STANDARD
 	temperature = T20C
 	mined_type = /turf/unsimulated/floor/asteroid/air
+
+//These walls produce a simulated floor tile for easy interior area expansion (Roidstation)
+//they also can't contain xenoarch sites
+/turf/unsimulated/mineral/internal
+	no_finds = 1
+	mined_type = /turf/simulated/floor/asteroid
+
+/turf/unsimulated/mineral/internal/air
+	oxygen = MOLES_O2STANDARD
+	nitrogen = MOLES_N2STANDARD
+	temperature = T20C
+	mined_type = /turf/simulated/floor/asteroid/air
 
 /turf/unsimulated/mineral/hive
 	mined_type = /turf/unsimulated/floor/evil
@@ -546,6 +559,108 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	dug = 1
 	//icon_plating = "asteroid_dug"
 	update_icon()
+
+//***Simulated version of asteroid floors for use inside of stations (roidstation)***
+
+/turf/simulated/floor/asteroid
+	name = "Asteroid"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "asteroid"
+	intact = 0
+	oxygen = 0.01
+	nitrogen = 0.01
+	temperature = TCMB
+	plane = PLATING_PLANE
+	var/dug
+	var/sand_type = /obj/item/weapon/ore/glass
+
+/turf/simulated/floor/asteroid/air
+	oxygen = MOLES_O2STANDARD
+	nitrogen = MOLES_N2STANDARD
+	temperature = T20C
+
+/turf/simulated/floor/asteroid/New()
+	..()
+	qdel(floor_tile)
+	floor_tile = null
+	name = initial(name)
+	if(prob(20))
+		icon_state = "asteroid[rand(0,12)]"
+	icon_regular_floor = initial(icon_state)
+
+/turf/simulated/floor/asteroid/is_plating()
+	return 0
+
+/turf/simulated/floor/asteroid/canBuildCatwalk()
+	return BUILD_FAILURE
+
+/turf/simulated/floor/asteroid/canBuildLattice()
+	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+		return BUILD_FAILURE
+	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
+		return BUILD_FAILURE
+	else if(!(locate(/obj/structure/lattice) in contents))
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
+
+/turf/simulated/floor/asteroid/canBuildPlating()
+	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+		return BUILD_FAILURE
+	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
+		return BUILD_FAILURE
+	else if(!dug)
+		return BUILD_IGNORE
+	if(locate(/obj/structure/lattice) in contents)
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
+
+/turf/simulated/floor/asteroid/ex_act(severity)
+	switch(severity)
+		if(3.0)
+			return
+		if(2.0)
+			if (prob(70))
+				gets_dug()
+		if(1.0)
+			gets_dug()
+
+/turf/simulated/floor/asteroid/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(!W || !user)
+		return 0
+	if (istype(W, /obj/item/weapon/pickaxe))
+		var/obj/item/weapon/pickaxe/used_digging = W //cast for dig speed and flags
+		if (get_turf(user) != user.loc) //if we aren't somehow on the turf we're in
+			return
+		if(!(used_digging.diggables & DIG_SOIL)) //if the pickaxe can't dig soil, we don't
+			to_chat(user, "<span class='rose'>You can't dig soft soil with \the [W].</span>")
+			return
+		if (dug)
+			to_chat(user, "<span class='rose'>This area has already been dug.</span>")
+			return
+		to_chat(user, "<span class='rose'>You start digging.<span>")
+		playsound(src, 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
+		if(do_after(user, src, used_digging.digspeed) && user) //the better the drill, the faster the digging
+			playsound(src, 'sound/items/shovel.ogg', 50, 1)
+			to_chat(user, "<span class='notice'>You dug a hole.</span>")
+			gets_dug()
+	else
+		..(W,user)
+	return
+
+/turf/simulated/floor/asteroid/update_icon()
+	if(dug && ispath(sand_type, /obj/item/weapon/ore/glass))
+		icon_state = "asteroid_dug"
+
+/turf/simulated/floor/asteroid/proc/gets_dug()
+	if(dug)
+		return
+	for(var/i = 1 to 5)
+		new sand_type(src)
+	dug = 1
+	//icon_plating = "asteroid_dug"
+	update_icon()
+
+
 
 /turf/unsimulated/mineral/random
 	name = "Mineral deposit"

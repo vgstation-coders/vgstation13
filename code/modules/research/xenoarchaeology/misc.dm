@@ -4,8 +4,9 @@
 
 proc/SetupXenoarch()
 	for(var/turf/unsimulated/mineral/M in mineral_turfs)
-		if(!prob(XENOARCH_SPAWN_CHANCE))
+		if(M.no_finds || !prob(XENOARCH_SPAWN_CHANCE))
 			continue
+
 
 		var/digsite = get_random_digsite_type()
 		var/list/processed_turfs = list()
