@@ -5313,7 +5313,8 @@
 
 /datum/reagent/ethanol/weedeater/on_mob_life(var/mob/living/M)
 	if(..()) return 1
-	if(!/spell/targeted/genetic/eat_weed in M.spell_list)
+	var/spell = /spell/targeted/genetic/eat_weed
+	if(!(locate(spell) in M.spell_list))
 		to_chat(M, "<span class='notice'>You feel hungry like the diona.</span>")
 		M.add_spell(/spell/targeted/genetic/eat_weed)
 		M.spell_list += /spell/targeted/genetic/eat_weed //Why isn't this handled in add_spell?
