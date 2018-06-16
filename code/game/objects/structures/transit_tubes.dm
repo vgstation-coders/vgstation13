@@ -125,14 +125,16 @@ obj/structure/transit_tube_pod/ex_act(severity)
 	..()
 
 
-/obj/structure/transit_tube/station/attack_hand(mob/user as mob)
+/obj/structure/transit_tube/station/attack_hand(mob/user)
 	if(!pod_moving)
 		for(var/obj/structure/transit_tube_pod/pod in loc)
 			if(!pod.moving && pod.dir in directions())
 				if(open)
-					if(!user.lying)
+					if(!user.lying && user.loc != pod)
 						var/unloaded = FALSE
 						for(var/atom/movable/AM in pod)
+							if(isobserver(AM))
+								continue
 							AM.forceMove(get_turf(user))
 							unloaded = TRUE
 						if(unloaded)
@@ -141,6 +143,23 @@ obj/structure/transit_tube_pod/ex_act(severity)
 				else
 					open_animation()
 
+
+/obj/structure/transit_tube/station/attack_robot(mob/user)
+	if(Adjacent(user))
+		attack_hand(user)
+
+
+/obj/structure/transit_tube_pod/Entered(atom/movable/AM)
+	..()
+	if(ismob(AM) && contents.len > 1)
+		var/mob/M = AM
+		if(M.blinded)
+			return
+		var/others = contents.Copy() - M
+		for(var/atom/movable/O in others)
+			if(O.invisibility > M.see_invisible)
+				others -= O
+		to_chat(M, "<span class='info'>You notice the pod contains [english_list(others)]</span>.")
 
 
 /obj/structure/transit_tube/station/proc/open_animation()
