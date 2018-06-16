@@ -36,7 +36,7 @@
 			switch (randomizeguns)
 				if("taser")
 					new /obj/item/weapon/gun/energy/taser(get_turf(H))
-				if("taser")
+				if("stunrevolver")
 					new /obj/item/weapon/gun/energy/stunrevolver(get_turf(H))	
 				if("egun")
 					new /obj/item/weapon/gun/energy/gun(get_turf(H))
