@@ -1,3 +1,4 @@
+#define TUBE_POD_UNLOAD_LIMIT 20
 
 // Basic transit tubes. Straight pieces, curved sections,
 //  and basic splits/joins (no routing logic).
@@ -131,16 +132,25 @@ obj/structure/transit_tube_pod/ex_act(severity)
 			if(!pod.moving && pod.dir in directions())
 				if(open)
 					if(!user.lying && user.loc != pod)
-						var/unloaded = FALSE
+						var/unloaded = 0
+						var/incomplete = FALSE
+
 						for(var/atom/movable/AM in pod)
 							if(isobserver(AM))
 								continue
+							if(unloaded >= TUBE_POD_UNLOAD_LIMIT)
+								incomplete = TRUE
+								break
 							AM.forceMove(get_step(loc, dir))
-							unloaded = TRUE
+							unloaded++
+
 						if(unloaded)
-							user.visible_message("<span class='notice'>[user] unloads everything from the pod.</span>", "<span class='notice'>You unload everything from the pod.</span>")
+							user.visible_message("<span class='notice'>[user] unloads [incomplete ? "some things" : "everything"] from the tube pod.</span>", \
+							"<span class='notice'>You unload [incomplete ? "some things" : "everything"] from the tube pod.</span>")
 							return
+
 					close_animation()
+
 				else
 					open_animation()
 
@@ -161,7 +171,7 @@ obj/structure/transit_tube_pod/ex_act(severity)
 			if(O.invisibility > M.see_invisible)
 				others -= O
 		if(others.len)
-			to_chat(M, "<span class='info'>You notice the pod contains [english_list(others)]</span>.")
+			to_chat(M, "<span class='info'>You notice the tube pod contains [english_list(others)]</span>.")
 
 
 /obj/structure/transit_tube/station/proc/open_animation()
@@ -648,3 +658,5 @@ obj/structure/transit_tube_pod/ex_act(severity)
 			return "SW"
 		else
 	return
+
+#undef TUBE_POD_UNLOAD_LIMIT
