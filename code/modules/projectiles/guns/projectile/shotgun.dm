@@ -11,7 +11,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
-	caliber = list("shotgun" = 1, "flare" = 1) //flare shells are still shells
+	caliber = list(GAUGE12 = 1, GAUGEFLARE = 1) //flare shells are still shells
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 	var/recentpump = 0 // to prevent spammage
@@ -82,7 +82,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
-	caliber = list("shotgun" = 1, "flare" = 1)
+	caliber = list(GAUGE12 = 1, GAUGEFLARE = 1)
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=1"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 

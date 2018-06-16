@@ -6,7 +6,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	w_class = W_CLASS_MEDIUM
 	max_shells = 18
-	caliber = list("9mm" = 1)
+	caliber = list(MM9 = 1)
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
 	automatic = 1
@@ -86,7 +86,7 @@
 	w_class = W_CLASS_MEDIUM
 	max_shells = 10
 	burst_count = 3
-	caliber = list(".45" = 1)
+	caliber = list(POINT45 = 1)
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=8"
 	ammo_type = "/obj/item/ammo_casing/c45"
 	mag_type = "/obj/item/ammo_storage/magazine/uzi45"
@@ -103,7 +103,7 @@
 	w_class = W_CLASS_MEDIUM
 	max_shells = 20
 	burst_count = 4
-	caliber = list("12mm" = 1)
+	caliber = list(MM12 = 1)
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=8"
 	ammo_type = "/obj/item/ammo_casing/a12mm"
 	mag_type = "/obj/item/ammo_storage/magazine/a12mm/ops"
@@ -132,7 +132,7 @@
 	w_class = W_CLASS_MEDIUM
 	max_shells = 20
 	burst_count = 4
-	caliber = list("12mm" = 1)
+	caliber = list(MM12 = 1)
 	ammo_type = "/obj/item/ammo_casing/a12mm/assault"
 	mag_type = "/obj/item/ammo_storage/magazine/a12mm"
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
@@ -153,7 +153,7 @@
 	slot_flags = 0
 	max_shells = 50
 	burst_count = 5
-	caliber = list("a762" = 1)
+	caliber = list(POINT762 = 1)
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=1;" + Tc_SYNDICATE + "=2"
 	ammo_type = "/obj/item/ammo_casing/a762"
 	mag_type = "/obj/item/ammo_storage/magazine/a762"
