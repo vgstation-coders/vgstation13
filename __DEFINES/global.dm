@@ -384,3 +384,5 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/alien/queen/large,	// The bigger and beefier version of queens.
 	)
 
+// Set by traitor item, affects cargo supplies
+var/station_does_not_tip = FALSE

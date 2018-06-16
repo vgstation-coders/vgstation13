@@ -31,6 +31,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 		AM.forceMove(null)	//just to make sure they're deleted by the garbage collector
 	manifest += "</ul>"
 
+// Called after a crate containing the items specified by this datum is created
+/datum/supply_packs/proc/post_creation(var/atom/movable/container)
+	return
+
 //////SUPPLIES//////
 
 /datum/supply_packs/toner
@@ -1084,6 +1088,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/freezer
 	containername = "pizza crate"
 	group = "Hospitality"
+
+/datum/supply_packs/randomised/pizza/post_creation(var/atom/movable/container)
+	if(!station_does_not_tip)
+		return
+	for(var/obj/item/pizzabox/box in container)
+		var/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/pizza = box.pizza
+		if(!pizza)
+			continue
+		pizza.make_poisonous()
 
 /datum/supply_packs/cafe
 	name = "Cafe equipment"

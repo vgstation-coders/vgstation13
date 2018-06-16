@@ -56,6 +56,8 @@ var/list/uplink_items = list()
 	var/list/job = null
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
+	var/unique = FALSE	// Can only be bought once, globally
+	var/static/times_bought = 0
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	U.uses -= max(cost, 0)
@@ -278,6 +280,14 @@ var/list/uplink_items = list()
 	name = "Meat Cleaver"
 	desc = "A mean looking meat cleaver that does damage comparable to an Energy Sword but with the added benefit of chopping your victim into hunks of meat after they've died and the chance to stun when thrown."
 	item = /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver
+	cost = 10
+	job = list("Chef")
+
+/datum/uplink_item/jobspecific/does_not_tip_note
+	name = "\"Does Not Tip\" database backdoor"
+	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the cargo workers at Central Command. You can be sure all pizza orders will be poisoned from the moment the screen flashes red."
+	item = /obj/item/device/does_not_tip_backdoor
+	unique = TRUE
 	cost = 10
 	job = list("Chef")
 
