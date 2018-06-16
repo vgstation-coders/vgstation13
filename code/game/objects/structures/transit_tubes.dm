@@ -155,7 +155,7 @@ obj/structure/transit_tube_pod/ex_act(severity)
 		var/mob/M = AM
 		if(M.blinded || !M.client)
 			return
-		var/others = contents.Copy() - M
+		var/list/others = contents.Copy() - M
 		for(var/atom/movable/O in others)
 			if(O.invisibility > M.see_invisible)
 				others -= O
