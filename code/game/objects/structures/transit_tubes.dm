@@ -130,8 +130,14 @@ obj/structure/transit_tube_pod/ex_act(severity)
 		for(var/obj/structure/transit_tube_pod/pod in loc)
 			if(!pod.moving && pod.dir in directions())
 				if(open)
+					if(!user.lying)
+						var/unloaded = FALSE
+						for(var/atom/movable/AM in pod)
+							AM.forceMove(get_turf(user))
+							unloaded = TRUE
+						if(unloaded)
+							user.visible_message("<span class='notice'>[user] unloads everything from the pod.</span>", "<span class='notice'>You unload everything from the pod.</span>")
 					close_animation()
-
 				else
 					open_animation()
 
