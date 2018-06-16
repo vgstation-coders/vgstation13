@@ -153,13 +153,14 @@ obj/structure/transit_tube_pod/ex_act(severity)
 	..()
 	if(ismob(AM) && contents.len > 1)
 		var/mob/M = AM
-		if(M.blinded)
+		if(M.blinded || !M.client)
 			return
 		var/others = contents.Copy() - M
 		for(var/atom/movable/O in others)
 			if(O.invisibility > M.see_invisible)
 				others -= O
-		to_chat(M, "<span class='info'>You notice the pod contains [english_list(others)]</span>.")
+		if(others.len)
+			to_chat(M, "<span class='info'>You notice the pod contains [english_list(others)]</span>.")
 
 
 /obj/structure/transit_tube/station/proc/open_animation()
