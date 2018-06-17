@@ -248,6 +248,9 @@
 
 	check_health()
 
+	if(harvest && seed.harvest_repeat == 2)
+		autoharvest()
+
 	// If enough time (in cycles, not ticks) has passed since the plant was harvested, we're ready to harvest again.
 	if(!dead && seed.products && seed.products.len)
 		if (age > seed.production)
