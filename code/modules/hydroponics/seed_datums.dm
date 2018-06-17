@@ -590,7 +590,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 //Harvest without concern for the user
 /datum/seed/proc/autoharvest(var/turf/T, var/yield_mod = 1)
-	if(!T || isnull(products) || !products.len || yield <= 0)
+	if(T && (!isnull(products)) && products.len && (yield > 0))
 		generate_product(T, yield_mod)
 
 /datum/seed/proc/check_harvest(var/mob/user, var/obj/machinery/portable_atmospherics/hydroponics/tray)

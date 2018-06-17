@@ -100,7 +100,7 @@
 	mutants = null
 	packet_icon = "seed-amauri"
 	plant_icon = "amauri"
-	chems = list(POTASSIUM = list(0,10),SUGAR = list(0,10), PHOSPHOROUS = list(0,10))
+	chems = list(POTASSIUM = list(0,10),SUGAR = list(0,10),PHOSPHORUS = list(0,10))
 
 	lifespan = 25
 	maturation = 10
@@ -123,7 +123,8 @@
 	desc = "It is small, round and hard. Its skin is a thick dark purple."
 	icon_state = "amaurifruit"
 	plantname = "amauri"
-	hydroflags = HYDRO_PREHISTORIC | NOREACT
+	flags = NOREACT
+	hydroflags = HYDRO_PREHISTORIC
 
 /datum/seed/gelthi
 	name = "gelthi"
