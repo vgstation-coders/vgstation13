@@ -5143,9 +5143,11 @@
 	id = RAGSTORICHES
 	description = "The Spaceman Dream, incarnated as a cocktail."
 	color = "#664300"
+	dupeable = FALSE
 
 /datum/reagent/ethanol/rags_to_riches/on_mob_life(var/mob/living/M)
-	if(..()) return 1
+	if(..())
+		return 1
 	if(!M.loc || prob(70))
 		return
 	playsound(get_turf(M), pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
@@ -5172,10 +5174,7 @@
 /datum/reagent/ethanol/electric_sheep/on_mob_life(var/mob/living/M) //If it's human, shoot sparks every tick! If MoMMI, cause alcohol effects.
 	if(..()) return 1
 	if(ishuman(M))
-		var/datum/effect/effect/system/spark_spread/spark_system = new
-		spark_system.set_up(5, 0, M)
-		spark_system.attach(M)
-		spark_system.start()
+		spark(M, 5, FALSE)
 
 /datum/reagent/ethanol/electric_sheep/reaction_mob(var/mob/living/silicon/M)
 	M.Jitter(20)
@@ -5204,16 +5203,16 @@
 
 /datum/reagent/ethanol/metabuddy/on_mob_life(var/mob/living/L)
 	if(..()) return 1
-	if(!metaclub.Find(L) && L.mind)
-		metaclub += L.mind
-		var/datum/mind/new_buddy = L.mind
+	var/mob/mind/LM = L.mind
+	if(!metaclub.Find(LM) && LM)
+		metaclub += LM
+		var/datum/mind/new_buddy = LM
 		for(var/datum/mind/M in metaclub) //Update metaclub icons
 			if(M.current.client && new_buddy.current && new_buddy.current.client)
 				var/imageloc = new_buddy.current
 				var/imagelocB = M.current
 				if(istype(M.current.loc,/obj/mecha))
 					imageloc = M.current.loc
-				if(istype(M.current.loc,/obj/mecha))
 					imagelocB = M.current.loc
 				var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "metaclub")
 				I.plane = REV_ANTAG_HUD_PLANE
@@ -5234,7 +5233,7 @@
 		M.setGender(FEMALE)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(!istype(H.w_uniform,/obj/item/clothing/under/schoolgirl))
+		if(!is_wearing_item(/obj/item/clothing/under/schoolgirl))
 			var/turf/T = get_turf(H)
 			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = MOB_PLANE)
 			H.visible_message("<span class='warning'>[H] dons her magical girl outfit in a burst of light!</span>")
@@ -5252,6 +5251,7 @@
 	description = "Go ahead and blow the research budget on drinking this." //Can deconstruct a glass with this for loadsoftech
 	color = "#664300"
 	custom_metabolism = 0.01
+	dupeable = FALSE
 
 /datum/reagent/ethanol/beepskyclassic
 	name = "Beepsky Classic"
@@ -5298,8 +5298,7 @@
 	var/spell = /spell/targeted/genetic/eat_weed
 	if(!(locate(spell) in M.spell_list))
 		to_chat(M, "<span class='notice'>You feel hungry like the diona.</span>")
-		M.add_spell(/spell/targeted/genetic/eat_weed)
-		M.spell_list += /spell/targeted/genetic/eat_weed //Why isn't this handled in add_spell?
+		M.add_spell(spell)
 
 /datum/reagent/ethanol/deadrum
 	name = "Deadrum"
