@@ -237,33 +237,6 @@
 		user.bodytemperature += 3 * TEMPERATURE_DAMAGE_COEFFICIENT//only the first gulp will be hot.
 		lit = 0
 
-	if(isrobot(user))
-		reagents.remove_any(gulp_size)
-	/*	handled in electric sheep's reaction_mob instead
-	if(issilicon(user))
-		if(reagents.has_reagent(ELECTRIC_SHEEP))
-			var/partial_volume = reagents.get_reagent_amount(ELECTRIC_SHEEP) / reagents.total_volume
-			reagents.trans_id_to(user, ELECTRIC_SHEEP, max(partial_volume,gulp_size))
-			reagents.remove_any(reagents.total_volume-partial_volume) //In the case of containing Electric Sheep, you can drink that, but throw out everything else in the gulp
-		else
-			reagents.remove_any(gulp_size)
-		return 1
-	*/
-	if(reagents.total_volume)
-		if (ishuman(user))
-			var/mob/living/carbon/human/H = user
-			if(H.species.chem_flags & NO_DRINK)
-				reagents.reaction(get_turf(H), TOUCH)
-				H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
-				return 0
-
-		reagents.reaction(user, INGEST)
-		spawn(5)
-			reagents.trans_to(user, gulp_size)
-
-	update_brightness()
-	return 1
-
 	..()
 
 /obj/item/weapon/reagent_containers/food/drinks/New()
