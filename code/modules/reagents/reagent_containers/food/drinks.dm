@@ -237,6 +237,9 @@
 		user.bodytemperature += 3 * TEMPERATURE_DAMAGE_COEFFICIENT//only the first gulp will be hot.
 		lit = 0
 
+	if(isrobot(user))
+		reagents.remove_any(gulp_size)
+	/*	handled in electric sheep's reaction_mob instead
 	if(issilicon(user))
 		if(reagents.has_reagent(ELECTRIC_SHEEP))
 			var/partial_volume = reagents.get_reagent_amount(ELECTRIC_SHEEP) / reagents.total_volume
@@ -245,6 +248,7 @@
 		else
 			reagents.remove_any(gulp_size)
 		return 1
+	*/
 	if(reagents.total_volume)
 		if (ishuman(user))
 			var/mob/living/carbon/human/H = user
