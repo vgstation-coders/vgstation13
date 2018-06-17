@@ -558,7 +558,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		var/obj/item/product
 
 		if(ispath(product_type, /obj/item/stack))
-			product = drop_stack(product_type, T, 1)
+			product = drop_stack(product_type, T, 1, null)
 		else
 			product = new product_type(T)
 
