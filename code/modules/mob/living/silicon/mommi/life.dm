@@ -135,6 +135,9 @@
 	if (src.druggy > 0)
 		src.druggy--
 		src.druggy = max(0, src.druggy)
+	
+	handle_dizziness()
+	handle_jitteriness()
 
 	return 1
 
