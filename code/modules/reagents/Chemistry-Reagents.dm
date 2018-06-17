@@ -5176,10 +5176,11 @@
 		spark_system.set_up(5, 0, M)
 		spark_system.attach(M)
 		spark_system.start()
-	else if(issilicon(M))
-		M.Jitter(4)
-		M.Dizzy(4)
-		M.druggy = max(M.druggy, 60)
+
+/datum/reagent/ethanol/electric_sheep/reaction_mob(var/mob/living/silicon/M)
+	M.Jitter(20)
+	M.Dizzy(20)
+	M.druggy = max(M.druggy, 60)
 
 /datum/reagent/ethanol/suicide
 	name = "Suicide"
