@@ -124,7 +124,7 @@
 	if(druggy)
 		druggy--
 		druggy = max(0, druggy)
-	
+
 	handle_dizziness()
 	handle_jitteriness()
 
