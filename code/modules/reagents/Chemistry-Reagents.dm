@@ -5179,7 +5179,7 @@
 /datum/reagent/ethanol/bad_touch/on_mob_life(var/mob/living/M) //Hallucinate and take hallucination damage.
 	if(..()) return 1
 	M.hallucination = max(M.hallucination, 10)
-	M.halloss = 15
+	M.halloss += 5
 
 /datum/reagent/ethanol/electric_sheep
 	name = "Electric Sheep"
