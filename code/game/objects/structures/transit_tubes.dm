@@ -160,18 +160,28 @@ obj/structure/transit_tube_pod/ex_act(severity)
 		attack_hand(user)
 
 
-/obj/structure/transit_tube_pod/Entered(atom/movable/AM)
+/obj/structure/transit_tube_pod/examine(mob/user)
 	..()
-	if(ismob(AM) && contents.len > 1)
-		var/mob/M = AM
-		if(M.blinded || !M.client)
+	show_occupants(user)
+
+
+/obj/structure/transit_tube/examine(mob/user)
+	..()
+	for(var/obj/structure/transit_tube_pod/pod in loc)
+		pod.show_occupants(user)
+
+
+/obj/structure/transit_tube_pod/proc/show_occupants(mob/user)
+	if(contents.len)
+		var/list/occupants = contents.Copy()
+		for(var/atom/movable/O in occupants)
+			if(O.invisibility > user.see_invisible)
+				occupants -= O
+		if(occupants.len)
+			to_chat(user, "<span class='info'>The tube pod contains [english_list(occupants)].</span>")
 			return
-		var/list/others = contents.Copy() - M
-		for(var/atom/movable/O in others)
-			if(O.invisibility > M.see_invisible)
-				others -= O
-		if(others.len)
-			to_chat(M, "<span class='info'>You notice the tube pod contains [english_list(others)]</span>.")
+
+	to_chat(user, "<span class='info'>The tube pod looks empty.</span>")
 
 
 /obj/structure/transit_tube/station/proc/open_animation()
