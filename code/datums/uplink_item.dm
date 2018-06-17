@@ -288,14 +288,6 @@ var/list/uplink_items = list()
 	cost = 10
 	job = list("Chef")
 
-/datum/uplink_item/jobspecific/does_not_tip_note
-	name = "\"Does Not Tip\" database backdoor"
-	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the cargo workers at Central Command. You can be sure all pizza orders will be poisoned from the moment the screen flashes red."
-	item = /obj/item/device/does_not_tip_backdoor
-	unique = TRUE
-	cost = 10
-	job = list("Chef")
-
 //Janitor
 /datum/uplink_item/jobspecific/cautionsign
 	name = "Proximity Mine"
@@ -716,6 +708,13 @@ var/list/uplink_items = list()
 	item = /obj/structure/popout_cake
 	cost = 6
 	gamemodes = list("nuclear emergency")
+
+/datum/uplink_item/does_not_tip_note
+	name = "\"Does Not Tip\" database backdoor"
+	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the cargo workers at Central Command. You can be sure all pizza orders will be poisoned from the moment the screen flashes red."
+	item = /obj/item/device/does_not_tip_backdoor
+	unique = TRUE
+	cost = 10
 
 // IMPLANTS
 
