@@ -5195,10 +5195,11 @@
 	if(ishuman(M))
 		spark(M, 5, FALSE)
 
-/datum/reagent/ethanol/electric_sheep/reaction_mob(var/mob/living/silicon/M)
-	M.Jitter(20)
-	M.Dizzy(20)
-	M.druggy = max(M.druggy, 60)
+/datum/reagent/ethanol/electric_sheep/reaction_mob(var/mob/living/M)
+	if(isrobot(M))
+		M.Jitter(20)
+		M.Dizzy(20)
+		M.druggy = max(M.druggy, 60)
 
 /datum/reagent/ethanol/suicide
 	name = "Suicide"
