@@ -39,7 +39,6 @@
 		return 0
 
 	// Handle life.
-	if(harvest)
 	var/turf/simulated/T = get_turf(src)
 	if(istype(T))
 		var/datum/gas_mixture/environment = T.return_air()
@@ -53,14 +52,11 @@
 
 			// Kudzu does NOT need light, otherwise, you could just turn off the lights to kill it.
 
-	if(harvest)
 	if(health < max_health)
 		health = min(max_health, health + rand(3,5))
 
-	if(harvest)
 	if(prob(80))
 		age++
-	if(harvest)
 
 	if(harvest && (seed.harvest_repeat == 2))
 		autoharvest()
