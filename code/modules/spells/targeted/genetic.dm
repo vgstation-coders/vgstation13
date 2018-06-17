@@ -98,7 +98,7 @@ code\game\\dna\genes\goon_powers.dm
 
 	var/obj/machinery/portable_atmospherics/hydroponics/target = input(H,"Select a tray:") as null|anything in trays
 
-	if(!gcDestroyed || !target || target.weedlevel == 0)
+	if(!isnull(gcDestroyed) || !target || target.weedlevel == 0)
 		return
 
 	H.reagents.add_reagent(NUTRIMENT, target.weedlevel)

@@ -5222,7 +5222,7 @@
 
 /datum/reagent/ethanol/metabuddy/on_mob_life(var/mob/living/L)
 	if(..()) return 1
-	var/mob/mind/LM = L.mind
+	var/datum/mind/LM = L.mind
 	if(!metaclub.Find(LM) && LM)
 		metaclub += LM
 		var/datum/mind/new_buddy = LM
@@ -5252,7 +5252,7 @@
 		M.setGender(FEMALE)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(!is_wearing_item(/obj/item/clothing/under/schoolgirl))
+		if(!M.is_wearing_item(/obj/item/clothing/under/schoolgirl))
 			var/turf/T = get_turf(H)
 			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = MOB_PLANE)
 			H.visible_message("<span class='warning'>[H] dons her magical girl outfit in a burst of light!</span>")
