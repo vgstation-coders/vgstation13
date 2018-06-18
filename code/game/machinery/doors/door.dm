@@ -124,44 +124,21 @@ var/list/all_doors = list()
 		var/mob/living/carbon/human/H = user
 
 		if (H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
-			// TODO: analyze the called proc
 			playsound(src, 'sound/effects/bang.ogg', 25, 1)
-
+			H.visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
 			if (!istype(H.head, /obj/item/clothing/head/helmet))
-				visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
 				H.Stun(8)
 				H.Knockdown(5)
 				var/datum/organ/external/O = H.get_organ(LIMB_HEAD)
-
-				// TODO: analyze the called proc
-				if(O.take_damage(10, 0))
-					H.UpdateDamageIcon()
-					O = null
-			else
-				// TODO: fix sentence
-				visible_message("<span class='warning'>[user] headbutts the airlock. Good thing they're wearing a helmet.</span>")
-
-			H = null
+				O.take_damage(10, 0)
 			return
 
-		H = null
-
-	add_fingerprint(user)
-	attackby(null, user)
-
-
-/obj/machinery/door/attackby(obj/item/I as obj, mob/user as mob)
-	if(..())
-		return 1
-
-	if (istype(I, /obj/item/device/detective_scanner))
-		return
 
 	if(isobserver(user) && !isAdminGhost(user))
 		return
 
-	// borgs can't attack doors open
-	// because it conflicts with their AI-like interaction with them
+	add_fingerprint(user)
+
 	if (isrobot(user))
 		return
 
