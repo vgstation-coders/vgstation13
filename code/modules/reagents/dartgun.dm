@@ -33,7 +33,6 @@
 	var/dart_reagent_amount = 15
 	var/container_type = /obj/item/weapon/reagent_containers/glass/beaker
 	var/list/starting_chems = null
-	var/can_eject = TRUE
 
 /obj/item/weapon/gun/dartgun/isHandgun()
 	return TRUE
@@ -271,8 +270,7 @@
 					dat += text("<A href='?src=\ref[src];mix=[i]'><font color='red'>Not mixing</font></A> ")
 			else
 				dat += "nothing."
-			if(can_eject)
-				dat += " \[<A href='?src=\ref[src];eject=[i]'>Eject</A>\]<br>"
+			dat += " \[<A href='?src=\ref[src];eject=[i]'>Eject</A>\]<br>"
 			i++
 	else
 		dat += "There are no beakers inserted!<br><br>"
@@ -282,8 +280,7 @@
 			dat += "The dart cartridge has [cartridge.darts] shots remaining."
 		else
 			dat += "<font color='red'>The dart cartridge is empty!</font>"
-		if(can_eject)
-			dat += " \[<A href='?src=\ref[src];eject_cart=1'>Eject</A>\]"
+		dat += " \[<A href='?src=\ref[src];eject_cart=1'>Eject</A>\]"
 
 	user << browse(dat, "window=dartgun")
 	onclose(user, "dartgun", src)
