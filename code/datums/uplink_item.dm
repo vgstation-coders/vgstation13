@@ -704,13 +704,13 @@ var/list/uplink_items = list()
 	cost = 6
 	gamemodes = list("nuclear emergency")
 
-/datum/uplink_item/dangerous/robot
-	name = "Syndicate Robot Teleporter"
-	desc = "A single-use teleporter used to deploy a syndicate robot to help with your mission. Keep in mind that unlike NT cyborgs/androids these don't have access to most of the station's machinery."
-	item = /obj/item/weapon/robot_spawner/syndicate
-	cost = 40
-	gamemodes = list("nuclear emergency")
-	refundable = TRUE
+//datum/uplink_item/dangerous/robot
+//	name = "Syndicate Robot Teleporter"
+//	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT cyborgs/androids these don't have access to most of the station's machinery."
+//	item = /obj/item/weapon/robot_spawner/syndicate
+//	cost = 40
+//	gamemodes = list("nuclear emergency")
+//	refundable = TRUE
 
 // IMPLANTS
 
