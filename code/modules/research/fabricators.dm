@@ -156,7 +156,7 @@
 
 /obj/machinery/r_n_d/fabricator/process()
 	..()
-	if(busy || being_built)
+	if(busy || being_built || stat&(NOPOWER|BROKEN))
 		return
 	if(stopped)
 		if(auto_make && last_made && !queue.len)
