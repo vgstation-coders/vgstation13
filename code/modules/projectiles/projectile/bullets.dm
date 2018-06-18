@@ -779,6 +779,7 @@
 	damage = 10
 	penetration = 0
 	rotate = 0
+	var/pellet_angle = 10
 	var/total_amount_to_fire = 9
 	var/type_to_fire = /obj/item/projectile/bullet/buckshot
 	var/is_child = 0
@@ -792,14 +793,23 @@
 
 /obj/item/projectile/bullet/buckshot/OnFired()
 	if(!is_child)
-		var/list/turf/possible_turfs = list()
-		for(var/turf/T in get_radius_turfs(original))
-			possible_turfs += T
+		var/variance = 0
+		var/bullet_x = 0
+		var/bullet_y = 0
+		var/bullet_z = 0
+		var/beginning_angle = 0
+		var/final_angle = 0
 		for(var/I = 1; I <=total_amount_to_fire-1; I++)
 			var/obj/item/projectile/bullet/buckshot/B = new type_to_fire(src.loc, 1)
-			var/turf/targloc = pick(possible_turfs)
+			variance = rand(-pellet_angle/2, pellet_angle/2)
+			beginning_angle = get_angle(starting, original)
+			final_angle = beginning_angle + variance
+			bullet_x = src.x + (7 * cos(final_angle))
+			bullet_y = src.y + (7 * sin(final_angle))
+			bullet_z = src.z
+			to_chat(world, "Beginning [beginning_angle] variance [variance] final[final_angle] srcx [src.x] srcy [src.y] x [bullet_x] y [bullet_y]")
 			B.forceMove(get_turf(src))
-			B.launch_at(targloc,from = shot_from)
+			B.launch_at(locate(bullet_x, bullet_y, bullet_z), starting)
 	..()
 
 /obj/item/projectile/bullet/invisible
