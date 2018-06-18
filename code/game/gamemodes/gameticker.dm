@@ -510,12 +510,6 @@ var/datum/controller/gameticker/ticker
 	minesweeper_best_players["intermediate"] = "none"
 	minesweeper_best_players["expert"] = "none"
 
-/datum/controller/gameticker/proc/get_key(mob/M)
-	if(M.mind)
-		return M.mind.key
-	else
-		return null
-
 /datum/controller/gameticker/proc/declare_completion()
 	var/ai_completions = "<h1>Round End Information</h1><HR>"
 
