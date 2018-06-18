@@ -510,6 +510,12 @@ var/datum/controller/gameticker/ticker
 	minesweeper_best_players["intermediate"] = "none"
 	minesweeper_best_players["expert"] = "none"
 
+/datum/controller/gameticker/proc/get_key(mob/M)
+	if(M.mind)
+		return M.mind.key
+	else
+		return null
+
 /datum/controller/gameticker/proc/declare_completion()
 	var/ai_completions = "<h1>Round End Information</h1><HR>"
 
@@ -519,9 +525,9 @@ var/datum/controller/gameticker/ticker
 		end_icons += flat
 		var/tempstate = end_icons.len
 		if(ai.stat != 2)
-			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [ai.name] (Played by: [ai.key])'s laws at the end of the game were:</b>"}
+			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [ai.name] (Played by: [get_key(ai)])'s laws at the end of the game were:</b>"}
 		else
-			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [ai.name] (Played by: [ai.key])'s laws when it was deactivated were:</b>"}
+			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [ai.name] (Played by: [get_key(ai)])'s laws when it was deactivated were:</b>"}
 		ai_completions += "<br>[ai.write_laws()]"
 
 		if (ai.connected_robots.len)
@@ -529,7 +535,7 @@ var/datum/controller/gameticker/ticker
 			for(var/mob/living/silicon/robot/robo in ai.connected_robots)
 				if (!robo.connected_ai || !isMoMMI(robo)) // Don't report MoMMIs or unslaved robutts
 					continue
-				robolist += "[robo.name][robo.stat?" (Deactivated) (Played by: [robo.key]), ":" (Played by: [robo.key]), "]"
+				robolist += "[robo.name][robo.stat?" (Deactivated) (Played by: [get_key(robo)]), ":" (Played by: [get_key(robo)]), "]"
 			ai_completions += "[robolist]"
 
 	for (var/mob/living/silicon/robot/robo in mob_list)
@@ -540,11 +546,11 @@ var/datum/controller/gameticker/ticker
 		var/tempstate = end_icons.len
 		if (!robo.connected_ai)
 			if (robo.stat != 2)
-				ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [robo.key]) survived as an AI-less [isMoMMI(robo)?"MoMMI":"borg"]! Its laws were:</b>"}
+				ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [get_key(robo)]) survived as an AI-less [isMoMMI(robo)?"MoMMI":"borg"]! Its laws were:</b>"}
 			else
-				ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [robo.key]) was unable to survive the rigors of being a [isMoMMI(robo)?"MoMMI":"cyborg"] without an AI. Its laws were:</b>"}
+				ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [get_key(robo)]) was unable to survive the rigors of being a [isMoMMI(robo)?"MoMMI":"cyborg"] without an AI. Its laws were:</b>"}
 		else
-			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [robo.key]) [robo.stat!=2?"survived":"perished"] as a [isMoMMI(robo)?"MoMMI":"cyborg"] slaved to [robo.connected_ai]! Its laws were:</b>"}
+			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [get_key(robo)]) [robo.stat!=2?"survived":"perished"] as a [isMoMMI(robo)?"MoMMI":"cyborg"] slaved to [robo.connected_ai]! Its laws were:</b>"}
 		ai_completions += "<br>[robo.write_laws()]"
 
 	for(var/mob/living/silicon/pai/pAI in mob_list)
@@ -552,7 +558,7 @@ var/datum/controller/gameticker/ticker
 		flat = getFlatIcon(pAI)
 		end_icons += flat
 		var/tempstate = end_icons.len
-		ai_completions += {"<br><b><img src="logo_[tempstate].png"> [pAI.name] (Played by: [pAI.key]) [pAI.stat!=2?"survived":"perished"] as a pAI whose master was [pAI.master]! Its directives were:</b><br>[pAI.write_directives()]"}
+		ai_completions += {"<br><b><img src="logo_[tempstate].png"> [pAI.name] (Played by: [get_key(pAI)]) [pAI.stat!=2?"survived":"perished"] as a pAI whose master was [pAI.master]! Its directives were:</b><br>[pAI.write_directives()]"}
 
 	mode.declare_completion()//To declare normal completion.
 
