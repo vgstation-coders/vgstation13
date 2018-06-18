@@ -54,15 +54,8 @@
 				robot.cell.use(charge_cost) // take power from borg
 				reagents.add_reagent(reagent_ids[mode], 5) // and fill hypo with reagent.
 
-	//update_icon()
 	return 1
 
-// Purely for testing purposes I swear~
-/*
-/obj/item/weapon/reagent_containers/borghypo/verb/add_cyanide()
-	set src in world
-	add_reagent(CYANIDE)
-*/
 
 /obj/item/weapon/reagent_containers/borghypo/attack(mob/M as mob, mob/user as mob)
 	var/datum/reagents/reagents = reagent_list[mode]

@@ -36,8 +36,8 @@
 	var/obj/R = held[length(held)]
 	R.forceMove(get_turf(src))
 	held -= R
-	update_icon()
 	to_chat(user, "<span class='notice'>You deploy [R].</span>")
+	update_icon()
 
 /obj/item/robot_rack/preattack(obj/O, mob/user, proximity, params)
 	if(istype(O, object_type))
@@ -88,6 +88,7 @@
 		playsound(src, 'sound/machines/info.ogg',20)
 		held += ammo
 		charge = initial(charge)
+		update_icon()
 
 /obj/item/robot_rack/ammo/attackby(obj/O, mob/user)
 	if(istype(O, reload_type))
@@ -99,6 +100,7 @@
 				M.forceMove(G)
 				held -= M
 				G.LoadMag(M)
+				update_icon()
 				return TRUE
 		else
 			to_chat(user, "\The [name] is empty!")

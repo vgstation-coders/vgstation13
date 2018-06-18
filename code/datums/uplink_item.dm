@@ -56,6 +56,8 @@ var/list/uplink_items = list()
 	var/list/job = null
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
+	var/refundable = FALSE
+	var/refund_amount // specified refund amount in case there needs to be a TC penalty for refunds.
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	U.uses -= max(cost, 0)
@@ -701,6 +703,14 @@ var/list/uplink_items = list()
 	item = /obj/structure/popout_cake
 	cost = 6
 	gamemodes = list("nuclear emergency")
+
+/datum/uplink_item/dangerous/robot
+	name = "Syndicate Robot Teleporter"
+	desc = "A single-use teleporter used to deploy a syndicate robot to help with your mission. Keep in mind that unlike NT cyborgs/androids these don't have access to most of the station's machinery."
+	item = /obj/item/weapon/robot_spawner/syndicate
+	cost = 40
+	gamemodes = list("nuclear emergency")
+	refundable = TRUE
 
 // IMPLANTS
 

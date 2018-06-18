@@ -94,10 +94,13 @@
 /obj/item/weapon/robot_spawner/syndicate
 	name = "syndicate robot teleporter"
 	desc = "A single-use teleporter used to deploy a syndicate robot on the field."
-	borg_type = /mob/living/silicon/robot/syndie/blitz
+	borg_type = /mob/living/silicon/robot/syndie
 	role = ROLE_OPERATIVE
 	jobban_roles = list("Syndicate", "AI", "Cyborg", "Mobile MMI")
 	faction = "syndicate"
+
+/obj/item/weapon/robot_spawner/syndicate/check_uplink_validity()
+	return charge
 
 /obj/item/weapon/robot_spawner/syndicate/post_recruited(mob/living/silicon/robot/R)
 	..()
@@ -110,7 +113,7 @@
 	icon = 'icons/obj/assemblies.dmi'
 	autoqdel = TRUE
 
-/obj/item/weapon/robot_spawner/post_recruited(mob/living/silicon/robot/R)
+/obj/item/weapon/robot_spawner/strange/post_recruited(mob/living/silicon/robot/R)
 	..()
 	investigation_log(I_ARTIFACT, "|| [key_name(R)] spawned as [R.module.name].")
 

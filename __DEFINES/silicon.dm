@@ -16,8 +16,10 @@
 #define SOVIET_MOMMI "Soviet"
 #define GRAVEKEEPER_MOMMI "Gravekeeper"
 
-//Global list of all Cyborg/MoMMI modules.
-var/global/list/robot_modules = list(
+//Global list of all Cyborg/MoMMI modules. If you add a new list and forget to add it to this one i'll fucking break your neck.
+var/global/list/all_robot_modules = nanotrasen_robot_modules + syndicate_robot_modules + special_robot_modules + mommi_modules
+
+var/global/list/nanotrasen_robot_modules = list(
 	STANDARD_MODULE			= /obj/item/weapon/robot_module/standard,
 	SERVICE_MODULE			= /obj/item/weapon/robot_module/butler,
 	SUPPLY_MODULE 			= /obj/item/weapon/robot_module/miner,
@@ -26,8 +28,14 @@ var/global/list/robot_modules = list(
 	ENGINEERING_MODULE		= /obj/item/weapon/robot_module/engineering,
 	JANITOR_MODULE			= /obj/item/weapon/robot_module/janitor,
 	COMBAT_MODULE 			= /obj/item/weapon/robot_module/combat,
+    )
+
+var/global/list/syndicate_robot_modules = list(
 	SYNDIE_BLITZ_MODULE		= /obj/item/weapon/robot_module/syndicate/blitzkrieg,
 	SYNDIE_CRISIS_MODULE	= /obj/item/weapon/robot_module/syndicate/crisis,
+    )
+
+var/global/list/special_robot_modules = list(
 	HUG_MODULE				= /obj/item/weapon/robot_module/tg17355
     )
 
@@ -36,6 +44,12 @@ var/global/list/mommi_modules = list(
 	SOVIET_MOMMI 	    	= /obj/item/weapon/robot_module/mommi/soviet,
 	GRAVEKEEPER_MOMMI		= /obj/item/weapon/robot_module/mommi/cogspider
 	)
+
+/proc/getAvailableRobotModules()
+	var/list/modules = nanotrasen_robot_modules
+	if(security_level != SEC_LEVEL_RED)
+		modules.Cut(COMBAT_MODULE)
+	return modules
 
 //Module quirks
 #define MODULE_CAN_BE_PUSHED 1		//What says on the tin.

@@ -549,7 +549,6 @@
 	modules += new /obj/item/weapon/gun/projectile/automatic/c20r(src)
 	modules += new /obj/item/robot_rack/ammo/a12mm(src)
 	modules += new /obj/item/weapon/pickaxe/plasmacutter/heat_axe(src)
-	modules += new /obj/item/device/chameleon(src)
 	modules += new /obj/item/weapon/pinpointer/nukeop(src)
 
 	sensor_augs = list("Thermal", "Light Amplification", "Disable")
@@ -559,7 +558,7 @@
 /obj/item/weapon/robot_module/syndicate/crisis
 	name = "syndicate crisis robot module"
 	sprites = list(
-		"Droid" = "toilet-syndie" //Placeholder
+		"Droid" = "droid-crisis"
 		)
 
 /obj/item/weapon/robot_module/syndicate/crisis/New()
@@ -568,15 +567,17 @@
 	quirk_flags |= MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS
 
 	modules += new /obj/item/weapon/extinguisher/mini(src)
+	modules += new /obj/item/weapon/inflatable_dispenser(src)
+
+	modules += new /obj/item/device/chameleon(src)
+	modules += new /obj/item/weapon/gun/hookshot(src) //Testing
+
 	modules += new /obj/item/weapon/gripper/chemistry(src)
-	modules += new /obj/item/weapon/gun/dartgun/vox/raider(src) //Placeholder
-	modules += new /obj/item/weapon/pinpointer/syndicate_crisis(src)
 	modules += new /obj/item/device/healthanalyzer(src)
 	modules += new /obj/item/device/mass_spectrometer/adv(src)
 	modules += new /obj/item/weapon/revivalprod(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/crisis(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/biofoam(src)
-	modules += new /obj/item/weapon/inflatable_dispenser(src)
 
 	sensor_augs = list("Thermal", "Medical", "Disable")
 
