@@ -385,7 +385,7 @@
 "hu" = (/obj/effect/decal/cleanable/blood,/turf/simulated/floor{icon_state = "white"},/area/awaymission/labs/researchdivision)
 "hv" = (/obj/machinery/door/airlock/glass_research{name = "Development Labs"},/turf/simulated/floor{icon_state = "white"},/area/awaymission/labs/researchdivision)
 "hw" = (/obj/machinery/light{icon_state = "tube1"; dir = 8},/obj/machinery/r_n_d/circuit_imprinter,/turf/simulated/floor{icon_state = "bot"; dir = 1},/area/awaymission/labs/researchdivision)
-"hx" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; pixel_y = 0},/obj/machinery/r_n_d/destructive_analyzer,/turf/simulated/floor{icon_state = "bot"; dir = 1},/area/awaymission/labs/researchdivision)
+"hx" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; pixel_y = 0},/obj/machinery/computer/tetris,/turf/simulated/floor{icon_state = "bot"; dir = 1},/area/awaymission/labs/researchdivision)
 "hy" = (/turf/simulated/wall/r_wall,/area/awaymission/labs/solars)
 "hz" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/power/solar_control,/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor/plating,/area/awaymission/labs/solars)
 "hA" = (/obj/effect/decal/cleanable/dirt,/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating,/area/awaymission/labs/solars)

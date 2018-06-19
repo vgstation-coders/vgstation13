@@ -3289,7 +3289,7 @@
 "blm" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; pixel_y = 0},/turf/simulated/floor{icon_state = "white"},/area/medical/chemistry)
 "bln" = (/obj/machinery/reagentgrinder,/turf/simulated/floor{icon_state = "white"},/area/medical/chemistry)
 "blo" = (/obj/item/device/radio/intercom{pixel_x = -25},/obj/machinery/light{icon_state = "tube1"; dir = 8},/obj/machinery/r_n_d/circuit_imprinter,/turf/simulated/floor{icon_state = "bot"; dir = 1},/area/toxins/lab)
-"blp" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; pixel_y = 0},/obj/machinery/r_n_d/destructive_analyzer,/turf/simulated/floor{icon_state = "bot"; dir = 1},/area/toxins/lab)
+"blp" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; pixel_y = 0},/obj/machinery/computer/tetris,/turf/simulated/floor{icon_state = "bot"; dir = 1},/area/toxins/lab)
 "blq" = (/obj/structure/disposalpipe/segment{dir = 1},/obj/structure/stool/bed/chair{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/toxins/lab)
 "blr" = (/obj/item/weapon/stock_parts/console_screen,/obj/structure/table,/obj/item/weapon/stock_parts/console_screen,/obj/item/weapon/stock_parts/console_screen,/obj/item/weapon/stock_parts/matter_bin,/obj/item/weapon/stock_parts/matter_bin,/obj/machinery/light{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/toxins/lab)
 "bls" = (/obj/effect/sign/biohazard,/turf/simulated/wall/r_wall,/area/medical/research{name = "Research Division"})

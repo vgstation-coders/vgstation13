@@ -1990,7 +1990,7 @@
 "aMn" = (/obj/machinery/r_n_d/circuit_imprinter,/turf/simulated/floor{icon_state = "warning"},/area/toxins/supermatter)
 "aMo" = (/obj/machinery/r_n_d/protolathe,/obj/structure/closet/walllocker/emerglocker{pixel_y = 32},/obj/item/device/radio/intercom{broadcasting = 0; name = "Station Intercom (General)"; pixel_y = 20},/turf/simulated/floor{icon_state = "warning"},/area/toxins/supermatter)
 "aMp" = (/obj/machinery/computer/rdconsole{name = "Core R&D Console"},/obj/machinery/camera{c_tag = "SciLab"},/obj/machinery/light{dir = 1},/obj/machinery/alarm{frequency = 1437; pixel_y = 23},/turf/simulated/floor{icon_state = "warning"},/area/toxins/supermatter)
-"aMq" = (/obj/machinery/r_n_d/destructive_analyzer,/obj/structure/noticeboard{pixel_y = 27},/turf/simulated/floor{icon_state = "corner_east"},/area/toxins/supermatter)
+"aMq" = (/obj/machinery/computer/tetris,/obj/structure/noticeboard{pixel_y = 27},/turf/simulated/floor{icon_state = "corner_east"},/area/toxins/supermatter)
 "aMr" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 1; on = 1},/turf/simulated/floor{icon_state = "white"},/area/toxins/supermatter)
 "aMs" = (/obj/machinery/atmospherics/pipe/simple/general/hidden,/turf/simulated/wall,/area/toxins/supermatter)
 "aMt" = (/obj/structure/closet/l3closet/scientist,/obj/machinery/light{icon_state = "tube1"; dir = 8},/turf/simulated/floor{dir = 10; icon_state = "warning"},/area/toxins/hallway)
