@@ -51,7 +51,7 @@
 	set name = "Toggle Station Holomap"
 	set desc = "Toggle station holomap on your screen"
 
-	if(isDead() || !is_component_functioning("camera"))
+	if(!isUnconscious())
 		return
 
 	station_holomap.toggleHolomap(src)
