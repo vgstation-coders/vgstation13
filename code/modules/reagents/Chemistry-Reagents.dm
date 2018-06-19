@@ -5132,7 +5132,8 @@
 	color = "#664300"
 
 /datum/reagent/ethanol/smokyroom/on_mob_life(var/mob/living/M)
-	if(..()) return 1
+	if(..())
+		return 1
 	if(prob(4)) //Small chance per tick to some noir stuff and gain NOIRBLOCK if we don't have it.
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
@@ -5179,7 +5180,8 @@
 	color = "#664300"
 
 /datum/reagent/ethanol/bad_touch/on_mob_life(var/mob/living/M) //Hallucinate and take hallucination damage.
-	if(..()) return 1
+	if(..())
+		return 1
 	M.hallucination = max(M.hallucination, 10)
 	M.halloss += 5
 
@@ -5191,7 +5193,8 @@
 	custom_metabolism = 1
 
 /datum/reagent/ethanol/electric_sheep/on_mob_life(var/mob/living/M) //If it's human, shoot sparks every tick! If MoMMI, cause alcohol effects.
-	if(..()) return 1
+	if(..())
+		return 1
 	if(ishuman(M))
 		spark(M, 5, FALSE)
 
@@ -5209,7 +5212,8 @@
 	custom_metabolism = 2
 
 /datum/reagent/ethanol/suicide/on_mob_life(var/mob/living/M)  //Instant vomit. Every tick.
-	if(..()) return 1
+	if(..())
+		return 1
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		H.vomit(0,1)
@@ -5222,7 +5226,8 @@
 	var/global/list/datum/mind/metaclub = list()
 
 /datum/reagent/ethanol/metabuddy/on_mob_life(var/mob/living/L)
-	if(..()) return 1
+	if(..())
+		return 1
 	var/datum/mind/LM = L.mind
 	if(!metaclub.Find(LM) && LM)
 		metaclub += LM
@@ -5248,7 +5253,8 @@
 	color = "#664300"
 
 /datum/reagent/ethanol/waifu/on_mob_life(var/mob/living/M)
-	if(..()) return 1
+	if(..())
+		return 1
 	if(M.gender == MALE)
 		M.setGender(FEMALE)
 	if(ishuman(M))
@@ -5281,7 +5287,8 @@
 	custom_metabolism = 2 //Ten times the normal rate.
 
 /datum/reagent/ethanol/beepskyclassic/on_mob_life(var/mob/living/M)
-	if(..()) return 1
+	if(..())
+		return 1
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
@@ -5298,7 +5305,8 @@
 	custom_metabolism = 0.01 //Spiders really 'hang around'
 
 /datum/reagent/ethanol/spiders/on_mob_life(var/mob/living/M)
-	if(..()) return 1
+	if(..())
+		return 1
 	M.take_organ_damage(REM, 0) //Drinking a glass of live spiders is bad for you.
 	if(holder.get_reagent_amount(SPIDERS)>=4) //The main reason we need to have a minimum cost rather than just high custom metabolism is so that someone can't give themselves an IV of spiders for "fun"
 		var/calculate_offset = locate(M.x + pick(1,-1), M.y, M.z)
@@ -5314,7 +5322,8 @@
 	color = "#009933" //rgb(0, 153, 51)
 
 /datum/reagent/ethanol/weedeater/on_mob_life(var/mob/living/M)
-	if(..()) return 1
+	if(..())
+		return 1
 	var/spell = /spell/targeted/genetic/eat_weed
 	if(!(locate(spell) in M.spell_list))
 		to_chat(M, "<span class='notice'>You feel hungry like the diona.</span>")

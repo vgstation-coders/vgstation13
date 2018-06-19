@@ -88,7 +88,7 @@ code\game\\dna\genes\goon_powers.dm
 
 /spell/targeted/genetic/eat_weed/cast(list/targets, var/mob/user)
 	..()
-	if(!ishuman(usr))
+	if(!ishuman(user))
 		return //We'll have to add an exception for monkeys if this is ported to diona
 	var/mob/living/carbon/human/H = user
 	var/list/trays = list()
