@@ -224,6 +224,12 @@
 		add_fingerprint(user)
 		SwitchState()
 
+/obj/machinery/door/mineral/resin/bullet_act(var/obj/item/projectile/Proj)
+	if(Proj.damage_type == BRUTE || Proj.damage_type == BURN)
+		hardness -= Proj.damage/100
+		CheckHardness()
+	return
+
 /obj/machinery/door/mineral/resin/open()
 	..()
 	spawn(close_delay)
