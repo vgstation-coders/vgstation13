@@ -8,3 +8,6 @@
 
 /datum/objective/spray_blood/IsFulfilled()
     return (cult_fac.bloody_floors.len >= floor_limit)
+
+/datum/objective/summon_narsie/feedbackText()
+    return "<span class = 'sinister'>You succesfully defiled the floors of this station. The veil between this world and Nar'Sie grows thinner.</span>"

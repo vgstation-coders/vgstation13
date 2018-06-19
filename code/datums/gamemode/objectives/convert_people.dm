@@ -8,3 +8,6 @@
 
 /datum/objective/convert_people/IsFulfilled()
     return (cult_fac.members >= cultists_target)
+
+/datum/objective/summon_narsie/feedbackText()
+    return "<span class = 'sinister'>You succesfully converted enough people to server the Geometer of Blood. The veil between this world and Nar'Sie grows thinner.</span>"

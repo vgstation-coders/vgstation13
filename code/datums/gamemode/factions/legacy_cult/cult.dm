@@ -200,8 +200,12 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 #undef OBJ_SPRAY_BLOOD
 
 /datum/faction/cult/narsie/proc/AnnounceObjectiveCompletion()
-	for (var/datum/role/R in members)
-		to_chat(R.antag.current, current_objective.feedbackText())
+	var/text = current_objective.feedbackText()
+	if (text)
+		for (var/datum/role/R in members) // Cultists
+			to_chat(R.antag.current, text)
+		for (var/datum/mind/M in members) // Constructs
+			to_chat(M.current, text)
 
 // -- Clockwork Cult
 
