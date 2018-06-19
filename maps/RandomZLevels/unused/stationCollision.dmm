@@ -284,7 +284,7 @@
 "fx" = (/obj/structure/table,/obj/item/stack/sheet/metal{amount = 20; pixel_x = -3; pixel_y = -3},/obj/item/stack/sheet/glass{amount = 10; pixel_x = 3; pixel_y = 3},/turf/simulated/floor{icon_state = "showroomfloor"},/area/awaymission/research)
 "fy" = (/obj/machinery/r_n_d/fabricator/circuit_imprinter,/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor{icon_state = "showroomfloor"},/area/awaymission/research)
 "fz" = (/obj/machinery/r_n_d/fabricator/protolathe,/turf/simulated/floor{icon_state = "showroomfloor"},/area/awaymission/research)
-"fA" = (/obj/machinery/r_n_d/destructive_analyzer,/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor{icon_state = "showroomfloor"},/area/awaymission/research)
+"fA" = (/obj/machinery/computer/tetris,/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor{icon_state = "showroomfloor"},/area/awaymission/research)
 "fB" = (/obj/structure/table,/obj/item/device/analyzer,/obj/item/device/mass_spectrometer{pixel_x = 5; pixel_y = 5},/turf/simulated/floor{icon_state = "showroomfloor"},/area/awaymission/research)
 "fC" = (/obj/structure/table/holotable,/obj/item/weapon/gun/energy/floragun{pixel_x = 2; pixel_y = 3},/obj/machinery/light,/obj/item/weapon/gun/energy/taser{pixel_x = -2; pixel_y = -2},/turf/simulated/floor{icon_state = "showroomfloor"},/area/awaymission/research)
 "fD" = (/obj/structure/target_stake,/obj/item/weapon/grown/sunflower,/turf/simulated/floor{icon_state = "showroomfloor"},/area/awaymission/research)

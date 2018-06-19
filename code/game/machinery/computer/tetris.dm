@@ -2,7 +2,7 @@
 	name = "T.E.T.R.I.S."
 	desc = "The pinnacle of human technology."
 	icon = 'icons/obj/computer.dmi'
-	icon_state = "arcade"
+	icon_state = "tarcade"
 	circuit = "/obj/item/weapon/circuitboard/tetris"
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	light_color = LIGHT_COLOR_GREEN
@@ -12,8 +12,8 @@
 		return 1
 	else
 		usr.set_machine(src)
-		if(href_list["tetrisScore"])
-			var/temp_score = text2num(href_list["tetrisScore"])
+		if(href_list["iSolemnlySwearThatIAmNotHrefExploiting"])
+			var/temp_score = text2num(href_list["iSolemnlySwearThatIAmNotHrefExploiting"])
 			var/area/this_area = get_area(src)
 			if(!isarea(this_area) || isspace(this_area))
 				say("Unable to process synchronization")
@@ -59,7 +59,7 @@
 	<title>Telemetry Enhanced Testing and Research Informatic Simulator</title>
 	<script language='JavaScript'>
 	function submitScore(s){
-		window.location.href = 'byond://?src=\ref[src];tetrisScore=' + s;
+		window.location.href = 'byond://?src=\ref[src];iSolemnlySwearThatIAmNotHrefExploiting=' + s;
 	}
 	</script>
 	<script language='JavaScript1.2'>

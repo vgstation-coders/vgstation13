@@ -10,6 +10,16 @@
 	category = "Console Boards"
 	build_path = /obj/item/weapon/circuitboard/arcade
 
+/datum/design/tetris
+	name = "Circuit Design (T.E.T.R.I.S.)"
+	desc = "Allows for the construction of the Telemetry Enhanced Testing and Research Informatic Simulator."
+	id = "tetris"
+	req_tech = list(Tc_PROGRAMMING = 1)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Console Boards"
+	build_path = /obj/item/weapon/circuitboard/tetris
+
 /datum/design/ordercomp
 	name = "Circuit Design (Supply ordering console)"
 	desc = "Allows for the construction of circuit boards used to build a Supply ordering console."
