@@ -338,6 +338,27 @@
 		"spesspets_sleep.png"		= 'icons/pda_icons/spesspets_icons/spesspets_sleep.png'
 	)
 
+/datum/asset/simple/tetris
+	assets = list(
+		"tetris_0.gif"		= 'icons/tetris/tetris_0.gif',
+		"tetris_1.gif"		= 'icons/tetris/tetris_1.gif',
+		"tetris_2.gif"		= 'icons/tetris/tetris_2.gif',
+		"tetris_3.gif"		= 'icons/tetris/tetris_3.gif',
+		"tetris_4.gif"		= 'icons/tetris/tetris_4.gif',
+		"tetris_5.gif"		= 'icons/tetris/tetris_5.gif',
+		"tetris_6.gif"		= 'icons/tetris/tetris_6.gif',
+		"tetris_7.gif"		= 'icons/tetris/tetris_7.gif',
+		"tetrisp0.gif"		= 'icons/tetris/tetrisp0.gif',
+		"tetrisp1.gif"		= 'icons/tetris/tetrisp1.gif',
+		"tetrisp2.gif"		= 'icons/tetris/tetrisp2.gif',
+		"tetrisp3.gif"		= 'icons/tetris/tetrisp3.gif',
+		"tetrisp4.gif"		= 'icons/tetris/tetrisp4.gif',
+		"tetrisp5.gif"		= 'icons/tetris/tetrisp5.gif',
+		"tetrisp6.gif"		= 'icons/tetris/tetrisp6.gif',
+		"tetrisp7.gif"		= 'icons/tetris/tetrisp7.gif',
+		"tetris.js"			= 'js/tetris/tetris.js',
+		"tetris2.js"		= 'js/tetris/tetris2.js'
+	)
 
 //Registers HTML I assets.
 /datum/asset/HTML_interface/register()

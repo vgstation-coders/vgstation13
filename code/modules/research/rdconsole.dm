@@ -114,6 +114,12 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		if(KT.level < KT.max_level)
 			KT.level=KT.max_level
 
+/obj/machinery/computer/rdconsole/proc/GiveRandomResearch()
+	files.known_tech = tech_list.Copy()
+	var/datum/tech/KT = pick(files.known_tech)
+	if(KT.level < KT.max_level)
+		KT.level++
+
 /obj/machinery/computer/rdconsole/proc/CallTechName(var/ID) //A simple helper proc to find the name of a tech with a given ID.
 	var/datum/tech/check_tech
 	var/return_name = ""
