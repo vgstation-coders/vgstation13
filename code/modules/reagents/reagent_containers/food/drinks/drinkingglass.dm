@@ -632,7 +632,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/examine(mob/user)
 	..()
-	if(reagents.get_master_reagent_id() == METABUDDY && user.client)
+	if(reagents.get_master_reagent_id() == METABUDDY && istype(user) && user.client)
 		to_chat(user,"<span class='warning'>This one is made out to 'My very best friend, [user.client.ckey]'</span>")
 
 // for /obj/machinery/vending/sovietsoda
