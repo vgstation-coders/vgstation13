@@ -228,7 +228,6 @@
 	if(Proj.damage_type == BRUTE || Proj.damage_type == BURN)
 		hardness -= Proj.damage/100
 		CheckHardness()
-	return
 
 /obj/machinery/door/mineral/resin/open()
 	..()
