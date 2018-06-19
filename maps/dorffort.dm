@@ -205,7 +205,7 @@
 	spawntypes = list(
 		/obj/machinery/computer/rdconsole/core				= 2,
 		/obj/machinery/r_n_d/fabricator/circuit_imprinter	= 2,
-		/obj/machinery/r_n_d/destructive_analyzer			= 2,
+		/obj/machinery/computer/tetris			= 2,
 		/obj/item/toy/gooncode								= 1,
 		/obj/machinery/r_n_d/fabricator/mech				= 2,
 		/obj/machinery/computer/scan_consolenew				= 1,

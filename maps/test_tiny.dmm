@@ -125,7 +125,7 @@
 "cu" = (/obj/machinery/atmospherics/unary/cryo_cell,/turf/simulated/floor,/area/crew_quarters/bar)
 "cv" = (/obj/machinery/camera{c_tag = "Medbay Cryogenics"},/obj/machinery/light{dir = 4},/obj/structure/table/reinforced,/obj/item/weapon/crowbar,/obj/item/weapon/wrench{pixel_x = 5; pixel_y = -5},/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,/obj/item/weapon/reagent_containers/spray/cleaner,/turf/simulated/floor,/area/crew_quarters/bar)
 "cw" = (/obj/structure/extinguisher_cabinet,/turf/simulated/wall,/area/crew_quarters/bar)
-"cx" = (/obj/machinery/r_n_d/destructive_analyzer,/obj/machinery/light{dir = 8},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/crew_quarters/bar)
+"cx" = (/obj/machinery/computer/tetris,/obj/machinery/light{dir = 8},/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/crew_quarters/bar)
 "cy" = (/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/crew_quarters/bar)
 "cz" = (/obj/machinery/r_n_d/fabricator/protolathe,/obj/effect/decal/warning_stripes{tag = "icon-warning (NORTH)"; icon_state = "warning"; dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/crew_quarters/bar)
 "cA" = (/obj/item/weapon/reagent_containers/glass/beaker/noreact/large,/obj/item/weapon/reagent_containers/glass/beaker/noreact/large,/obj/item/weapon/reagent_containers/glass/beaker/noreact/large,/turf/simulated/floor,/area/crew_quarters/bar)
