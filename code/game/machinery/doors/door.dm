@@ -156,6 +156,24 @@ var/list/all_doors = list()
 
 	denied()
 
+/obj/machinery/door/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/device/detective_scanner))
+		return //It does its own thing on attack
+
+	if(isrobot(user))
+		return
+
+	if (allowed(user))
+		if (!density)
+			return close()
+		else
+			return open()
+
+	if(horror_force(user))
+		return
+
+	denied()
+
 /obj/machinery/door/proc/horror_force(var/mob/living/carbon/human/H) //H is for HORROR, BABY!
 	if(!ishorrorform(H))
 		return FALSE
