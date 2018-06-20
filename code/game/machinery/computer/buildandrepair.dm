@@ -156,11 +156,6 @@
 	build_path = "/obj/machinery/computer/arcade"
 	origin_tech = Tc_PROGRAMMING + "=1"
 	var/list/game_data = list()
-/obj/item/weapon/circuitboard/tetris
-	name = "Circuit board (T.E.T.R.I.S.)"
-	desc = "A circuit board for the Telemetry Enhanced Testing and Research Informatic Simulator."
-	build_path = "/obj/machinery/computer/tetris"
-	origin_tech = Tc_PROGRAMMING + "=1"
 /obj/item/weapon/circuitboard/turbine_control
 	name = "Circuit board (Turbine control)"
 	desc = "A circuit board for running an obsolete computer used for controlling a gas turbine."
