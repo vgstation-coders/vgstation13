@@ -139,7 +139,7 @@ var/list/all_doors = list()
 
 	add_fingerprint(user)
 
-	if (isrobot(user))
+	if (isrobot(user)) //So it brings up the ai window of door interaction instead.
 		return
 
 	if (!requiresID())
@@ -157,6 +157,9 @@ var/list/all_doors = list()
 	denied()
 
 /obj/machinery/door/attackby(obj/item/I, mob/user)
+	if(..())
+		return
+
 	if(istype(I, /obj/item/device/detective_scanner))
 		return //It does its own thing on attack
 
