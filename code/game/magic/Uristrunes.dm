@@ -99,8 +99,6 @@ var/list/word_to_uristrune_table = null
 		return "Deafen"
 	else if((word1 == cultwords["destroy"] && word2 == cultwords["see"] && word3 == cultwords["other"]))
 		return "Blind"
-	else if((word1 == cultwords["destroy"] && word2 == cultwords["see"] && word3 == cultwords["blood"]))
-		return "Blood Boil"
 	else if((word1 == cultwords["self"] && word2 == cultwords["other"] && word3 == cultwords["technology"]))
 		return "Communicate"
 	else if((word1 == cultwords["travel"] && word2 == cultwords["other"]))

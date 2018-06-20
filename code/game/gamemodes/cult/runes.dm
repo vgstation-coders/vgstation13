@@ -1264,44 +1264,6 @@
 		return fizzle()
 
 
-/obj/effect/rune/proc/bloodboil() //cultists need at least one DANGEROUS rune. Even if they're all stealthy.
-/*
-			var/list/mob/living/carbon/cultists = new
-			for(var/datum/mind/H in ticker.mode.cult)
-				if (istype(H.current,/mob/living/carbon))
-					cultists+=H.current
-*/
-	var/culcount = 0 //also, wording for it is old wording for obscure rune, which is now hide-see-blood.
-//	var/list/cultboil = list(cultists-usr) //and for this words are destroy-see-blood.
-	for(var/mob/living/C in orange(1,src))
-		if(iscultist(C) && !C.stat)
-			culcount++
-	if(culcount>=3)
-		for(var/mob/living/carbon/M in viewers(usr))
-			if(iscultist(M))
-				continue
-			nullblock = 0
-			for(var/turf/T in range(M,1))
-				findNullRod(T)
-			if(nullblock)
-				continue
-			M.take_overall_damage(51,51)
-			to_chat(M, "<span class='warning'>Your blood boils!</span>")
-			if(prob(5))
-				spawn(5)
-					M.gib()
-		for(var/obj/effect/rune/R in view(src))
-			if(prob(10))
-				explosion(R.loc, -1, 0, 1, 5)
-		for(var/mob/living/carbon/human/C in orange(1,src))
-			if(iscultist(C) && !C.stat)
-				C.say("Dedo ol[pick("'","`")]btoh!")
-				C.take_overall_damage(15, 0)
-		qdel(src)
-	else
-		return fizzle()
-	return
-
 // WIP rune, I'll wait for Rastaf0 to add limited blood.
 
 /obj/effect/rune/proc/burningblood()
