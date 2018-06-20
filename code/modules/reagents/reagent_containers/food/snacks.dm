@@ -2956,6 +2956,7 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/margherita/make_poisonous()
+	var/original_total_volume = reagents.total_volume
 	reagents.clear_reagents()
 	var/static/list/possible_poisons = list(
 		BLEACH,
@@ -2968,7 +2969,7 @@
 		IMPEDREZENE,
 		SOYSAUCE
 	)
-	for(var/i in 1 to 6)
+	while(reagents.total_volume < original_total_volume)
 		reagents.add_reagent(pick(possible_poisons), rand(5, 10))
 
 /obj/item/weapon/reagent_containers/food/snacks/margheritaslice
@@ -2993,6 +2994,7 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza/make_poisonous()
+	var/original_total_volume = reagents.total_volume
 	reagents.clear_reagents()
 
 	var/datum/disease2/disease/new_virus = new /datum/disease2/disease
@@ -3008,7 +3010,7 @@
 		"virus2" = list()
 	)
 	blood_data["virus2"]["[new_virus.uniqueID]"] = new_virus
-	reagents.add_reagent(BLOOD, 56, blood_data)
+	reagents.add_reagent(BLOOD, original_total_volume, blood_data)
 
 /obj/item/weapon/reagent_containers/food/snacks/meatpizzaslice
 	name = "Meatpizza slice"
@@ -3050,12 +3052,13 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/mushroompizza/make_poisonous()
+	var/original_total_volume = reagents.total_volume
 	reagents.clear_reagents()
 	var/static/list/possible_poisons = list(
 		MINDBREAKER,
 		SPIRITBREAKER
 	)
-	reagents.add_reagent(pick(possible_poisons), 35)
+	reagents.add_reagent(pick(possible_poisons), original_total_volume)
 
 /obj/item/weapon/reagent_containers/food/snacks/mushroompizzaslice
 	name = "Mushroompizza slice"
@@ -3080,8 +3083,9 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/vegetablepizza/make_poisonous()
+	var/original_total_volume = reagents.total_volume
 	reagents.clear_reagents()
-	reagents.add_reagent(MUTAGEN, 48)
+	reagents.add_reagent(MUTAGEN, original_total_volume)
 
 /obj/item/weapon/reagent_containers/food/snacks/vegetablepizzaslice
 	name = "Vegetable pizza slice"
