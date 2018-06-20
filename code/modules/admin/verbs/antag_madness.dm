@@ -298,13 +298,6 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 			to_chat(M, "Your previous belongings have been stored in your backpack.")
 
-			if(!cultwords["travel"])
-				runerandom()
-			for (var/word in engwords)
-				M.mind.store_memory("[cultwords[word]] is [word]<BR>")
-
-			to_chat(M, "<span class='danger'>You suddenly realize that you clearly remember every single rune word! Check your notes.</span>")
-
 			to_chat(M, "<span class='sinister'>A tome, a message from your new master, appears in your backpack.</span>")
 
 			to_chat(M, "<span class='sinister'>You have a talisman in your backpack, one that will help you start the cult on this station. Use it well and remember - there are others...or maybe not...</span>")//duh

@@ -121,7 +121,7 @@
 
 		if(seer == 1)
 			var/obj/effect/rune/R = locate() in loc
-			if(R && R.word1 == cultwords["see"] && R.word2 == cultwords["hell"] && R.word3 == cultwords["join"])
+			if(R && R.word1 == "see" && R.word2 == "hell" && R.word3 == "join")
 				see_invisible = SEE_INVISIBLE_OBSERVER
 			else
 				see_invisible = SEE_INVISIBLE_LIVING

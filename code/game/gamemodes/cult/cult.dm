@@ -162,7 +162,6 @@
 
 	for(var/datum/mind/cult_mind in cult)
 		equip_cultist(cult_mind.current)
-		grant_runeword(cult_mind.current)
 		update_cult_icons_added(cult_mind)
 		cult_mind.special_role = "Cultist"
 		var/wikiroute = role_wiki[ROLE_CULTIST]
@@ -404,25 +403,6 @@
 		to_chat(mob, "<span class='sinister'>You have a talisman in your [where], one that will help you start the cult on this station. Use it well and remember - there are others.</span>")
 		mob.update_icons()
 		return 1
-
-
-/datum/game_mode/cult/grant_runeword(mob/living/carbon/human/cult_mob, var/word)
-	if (!word)
-		if(startwords.len > 0)
-			word=pick(startwords)
-			startwords -= word
-	return ..(cult_mob,word)
-
-
-/datum/game_mode/proc/grant_runeword(mob/living/carbon/human/cult_mob, var/word)
-	if(!cultwords["travel"])
-		runerandom()
-	if (!word)
-		word=pick(allwords)
-	var/wordexp = "[cultwords[word]] is [word]..."
-	to_chat(cult_mob, "<span class='sinister'>You remember one thing from the dark teachings of your master... [wordexp]</span>")
-	cult_mob.mind.store_memory("<B>You remember that</B> [wordexp]", 0, 0)
-
 
 /datum/game_mode/proc/add_cultist(datum/mind/cult_mind) //BASE
 	if (!istype(cult_mind))
