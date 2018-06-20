@@ -139,9 +139,6 @@ var/list/all_doors = list()
 
 	add_fingerprint(user)
 
-	if (isrobot(user)) //So it brings up the ai window of door interaction instead.
-		return
-
 	if (!requiresID())
 		user = null
 
@@ -163,14 +160,14 @@ var/list/all_doors = list()
 	if(istype(I, /obj/item/device/detective_scanner))
 		return //It does its own thing on attack
 
-	if(isrobot(user))
-		return
-
 	if (allowed(user))
 		if (!density)
 			return close()
 		else
 			return open()
+
+	if(isrobot(user))
+		return
 
 	if(horror_force(user))
 		return

@@ -129,9 +129,9 @@
 		return 0
 	if(!operating) //in case of emag
 		operating = 1
-	flick(text("[]opening", base_state), src)
+	door_animate("opening")
 	playsound(src, soundeffect, 100, 1)
-	icon_state = text("[]open", base_state)
+	icon_state = "[base_state]open"
 	sleep(animation_delay)
 
 	explosion_resistance = 0
@@ -148,7 +148,7 @@
 	if (operating)
 		return 0
 	operating = 1
-	flick(text("[]closing", base_state), src)
+	door_animate("closing")
 	playsound(src, soundeffect, 100, 1)
 	icon_state = base_state
 
@@ -274,8 +274,8 @@
 		//don't care who they are or what they have, act as if they're NOTHING
 		user = null
 
-	if (!allowed(user) && density)
-		flick(text("[]deny", base_state), src)
+	if (!allowed(user))
+		return
 
 	return ..()
 
@@ -284,13 +284,24 @@
 		var/used_emag = (/obj/item/weapon/card/emag in user.contents) //TODO: Find a better way of checking this
 		return hackOpen(used_emag, user)
 
+/obj/machinery/door/window/door_animate(var/animation as text)
+	switch (animation)
+		if ("opening")
+			flick("[base_state]opening", src)
+		if ("closing")
+			flick("[base_state]closing", src)
+		if("deny")
+			flick("[base_state]deny", src)
+		if("emagged")
+			flick("[base_state]spark", src)
+
 /obj/machinery/door/window/proc/hackOpen(obj/item/I, mob/user)
 	operating = -1
 
 	if (electronics)
 		electronics.icon_state = "door_electronics_smoked"
 
-	flick("[base_state]spark", src)
+	door_animate("emagged")
 	sleep(6)
 	open()
 	return 1
