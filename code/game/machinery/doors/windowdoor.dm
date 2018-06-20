@@ -219,9 +219,6 @@
 	visible_message("<span class='warning'>\The [M] [M.attacktext] against \the [name].</span>", 1)
 	take_damage(M.melee_damage_upper)
 
-/obj/machinery/door/window/attack_hand(mob/user as mob)
-	return attackby(user, user)
-
 /obj/machinery/door/window/attackby(obj/item/weapon/I as obj, mob/living/user as mob)
 	// Make emagged/open doors able to be deconstructed
 	if (!density && operating != 1 && iscrowbar(I))
@@ -276,12 +273,6 @@
 	if (!requiresID())
 		//don't care who they are or what they have, act as if they're NOTHING
 		user = null
-
-	if (isrobot(user))
-		if (density)
-			return open()
-		else
-			return close()
 
 	if (!allowed(user) && density)
 		flick(text("[]deny", base_state), src)
