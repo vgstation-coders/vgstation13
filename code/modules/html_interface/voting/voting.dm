@@ -110,6 +110,7 @@ var/global/datum/controller/vote/vote = new()
 	voting.len = 0
 	total_votes = 0
 	discarded_votes = 0
+	discarded_choices.len = 0
 	current_votes.len = 0
 	weighted = FALSE
 	update(1)
