@@ -372,7 +372,8 @@ var/list/blacklisted_mobs = list(
 		/mob/living/slime_pile, // They are dead.
 		/mob/living/adamantine_dust, // Ditto
 		/mob/living/simple_animal/hostile/viscerator, //Nope.
-		/mob/living/simple_animal/hostile/mining_drone //This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
+		/mob/living/simple_animal/hostile/mining_drone, //This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
+		/mob/living/simple_animal/bee //Aren't set up to be playable
 		)
 
 //Boss monster list
