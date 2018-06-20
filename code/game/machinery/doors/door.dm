@@ -166,8 +166,6 @@ var/list/all_doors = list()
 		else
 			return open()
 
-	if(isrobot(user))
-		return
 
 	if(horror_force(user))
 		return
