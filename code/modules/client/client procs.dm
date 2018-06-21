@@ -258,7 +258,7 @@
 
 	var/sql_ckey = sanitizeSQL(ckey)
 	var/age
-	//testing("sql_ckey = [sql_ckey]")
+	testing("sql_ckey = [sql_ckey]")
 	var/DBQuery/query = dbcon.NewQuery("SELECT id, datediff(Now(),firstseen) as age, datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
 	query.Execute()
 	var/sql_id = 0
