@@ -124,7 +124,7 @@
 	activation_message = "You feel short of breath."
 	deactivation_message = "You can breathe normally again."
 	disability= ASTHMA
-
+	flags = GENE_UNNATURAL
 	mutation = M_ASTHMA
 
 /datum/dna/gene/disability/asthma/New()
