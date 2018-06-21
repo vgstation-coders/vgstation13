@@ -257,6 +257,8 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 				B2:amount = SP.amount
 			slip.info += "<li>[B2.name]</li>" //add the item to the manifest
 
+		SP.post_creation(A)
+
 		//manifest finalisation
 
 		slip.info += {"</ul><br>

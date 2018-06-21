@@ -56,6 +56,8 @@ var/list/uplink_items = list()
 	var/list/job = null
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
+	var/unique = FALSE	// Can only be bought once, globally
+	var/static/times_bought = 0
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	U.uses -= max(cost, 0)
@@ -73,6 +75,10 @@ var/list/uplink_items = list()
 		return 0
 
 	if (!( istype(user, /mob/living/carbon/human)))
+		return 0
+
+	if(unique && times_bought >= 1)
+		to_chat(user, "<span class='warning'>This item is not available anymore.</span>")
 		return 0
 
 	// If the uplink's holder is in the user's contents
@@ -103,6 +109,7 @@ var/list/uplink_items = list()
 
 			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [cost]."}
 			stat_collection.uplink_purchase(src, I, user)
+			times_bought += 1
 			if(user.mind)
 				user.mind.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename]"}
 				user.mind.spent_TC += cost
@@ -701,6 +708,13 @@ var/list/uplink_items = list()
 	item = /obj/structure/popout_cake
 	cost = 6
 	gamemodes = list("nuclear emergency")
+
+/datum/uplink_item/device_tools/does_not_tip_note
+	name = "\"Does Not Tip\" database backdoor"
+	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the cargo workers at Central Command. You can be sure all pizza orders will be poisoned from the moment the screen flashes red."
+	item = /obj/item/device/does_not_tip_backdoor
+	unique = TRUE
+	cost = 10
 
 // IMPLANTS
 

@@ -693,6 +693,7 @@
 #include "code\game\objects\items\devices\codebreaker.dm"
 #include "code\game\objects\items\devices\debugger.dm"
 #include "code\game\objects\items\devices\deskbell.dm"
+#include "code\game\objects\items\devices\does_not_tip.dm"
 #include "code\game\objects\items\devices\flash.dm"
 #include "code\game\objects\items\devices\flashlight.dm"
 #include "code\game\objects\items\devices\fuse_bomb.dm"
