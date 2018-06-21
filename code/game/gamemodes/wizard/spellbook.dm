@@ -851,4 +851,15 @@
 	user.gib()
 	qdel(src)
 
+///// WINTER SPELLBOOK /////
 
+/obj/item/weapon/spellbook/oneuse/ancient/winter //the winter spellbook contains spells that would otherwise only be avaliable at christmas
+	possible_spells = list(/spell/targeted/wrapping_paper, /spell/targeted/equip_item/clowncurse/christmas, /spell/aoe_turf/conjure/snowmobile, /spell/targeted/equip_item/horsemask/christmas)
+	icon_state = "winter"
+	desc = "A book of festive knowledge"
+	spellname = "winter"
+
+/obj/item/weapon/spellbook/oneuse/ancient/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal from santa!</span>")
+	user.gib()
+	qdel(src)
