@@ -147,7 +147,7 @@
 		to_chat(usr, "<span class='warning'>We must be in human form before activating Horror Form.</span>")
 		return
 
-	var/datum/changeling/changeling = changeling_power(0, 0, 100, deny_horror = TRUE)
+	var/datum/changeling/changeling = changeling_power(30, 0, 100, deny_horror = TRUE)
 	if(!changeling)
 		return
 
