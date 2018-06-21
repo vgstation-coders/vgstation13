@@ -2309,7 +2309,6 @@
 #include "maprendering\maprendering.dm"
 #include "maps\_map.dm"
 #include "maps\tgstation.dm"
-#include "maps\packedstation\telecomms.dm"
 #include "maps\randomvaults\dance_revolution.dm"
 #include "maps\randomvaults\objects.dm"
 #include "maps\randomvaults\spessmart.dm"
@@ -2319,4 +2318,8 @@
 #include "maps\RandomZLevels\stationCollision.dm"
 #include "maps\RandomZLevels\tomb.dm"
 #include "maps\RandomZLevels\wildwest.dm"
+#include "maps\stations\defficiency\areas.dm"
+#include "maps\stations\defficiency\pipes.dm"
+#include "maps\stations\packedstation\telecomms.dm"
+#include "maps\stations\tgstation\pipes.dm"
 // END_INCLUDE

@@ -27,7 +27,7 @@
 /obj/machinery/bodyscanner/New()
 	..()
 	if(map.nameShort == "deff")
-		icon = 'maps/defficiency/medbay.dmi'
+		icon = 'maps/stations/defficiency/medbay.dmi'
 	RefreshParts()
 
 /obj/machinery/bodyscanner/Destroy()

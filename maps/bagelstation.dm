@@ -44,5 +44,9 @@
 ////////////////////////////////////////////////////////////////
 #include "defficiency/pipes.dm" // Atmos layered pipes.
 
-#include "bagelstation.dmm"
-
+#include "stations/bagelstation.dmm"
+#include "centcomm.dmm"
+#include "commsats/bagel_commsat.dmm"
+#include "derelicts/bagel_derelict.dmm"
+#include "asteroids/bagel_asteroid.dmm"
+#include "deep_space/bagel_deepspace.dmm"

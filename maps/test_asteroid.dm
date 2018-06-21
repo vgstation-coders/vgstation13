@@ -15,4 +15,4 @@
 		)
 
 ////////////////////////////////////////////////////////////////
-#include "test_asteroid.dmm"
+#include "stations/test_asteroid.dmm"

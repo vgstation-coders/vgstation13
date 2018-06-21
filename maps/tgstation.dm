@@ -34,5 +34,10 @@
 	holomap_offset_y = list(0,0,0,94,10,0,0,)
 
 ////////////////////////////////////////////////////////////////
-#include "defficiency/pipes.dm" // Atmos layered pipes.
-#include "tgstation.dmm"
+#include "stations/defficiency/pipes.dm" // Atmos layered pipes.
+#include "stations/tgstation/tgstation.dmm"
+#include "centcomm.dmm"
+#include "commsats/tgstation_commsat.dmm"
+#include "derelicts/tgstation_derelict.dmm"
+#include "asteroids/tgstation_asteroid.dmm"
+#include "deep_space/tgstation_deepspace.dmm"

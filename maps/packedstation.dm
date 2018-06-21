@@ -40,7 +40,12 @@
 	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
 
 ////////////////////////////////////////////////////////////////
-#include "packedstation.dmm"
+#include "stations/packedstation.dmm"
+#include "centcomm.dmm"
+#include "commsats/packed_commsat.dmm"
+#include "derelicts/packed_derelict.dmm"
+#include "asteroids/packed_asteroid.dmm"
+#include "deep_space/packed_deepspace.dmm"
 
 #if !defined(MAP_OVERRIDE_FILES)
 	#define MAP_OVERRIDE_FILES
