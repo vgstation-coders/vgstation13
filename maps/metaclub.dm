@@ -45,4 +45,9 @@
 /area/shuttle/trade/start
 	requires_power = 1
 ////////////////////////////////////////////////////////////////
-#include "metaclub.dmm"
+#include "stations/metaclub.dmm"
+#include "centcomm.dmm"
+#include "commsats/metaclub_commsat.dmm"
+#include "derelicts/metaclub_derelict.dmm"
+#include "asteroids/metaclub_asteroid.dmm"
+#include "deep_space/metaclub_deepspace.dmm"

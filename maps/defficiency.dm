@@ -94,5 +94,9 @@
 
 #include "defficiency/jobs.dm"
 
-#include "defficiency.dmm"
-
+#include "stations/defficiency/defficiency.dmm"
+#include "centcomm.dmm"
+#include "commsats/deff_commsat.dmm"
+#include "derelicts/deff_derelict.dmm"
+#include "asteroids/deff_asteroid.dmm"
+#include "deep_space/deff_deepspace.dmm"

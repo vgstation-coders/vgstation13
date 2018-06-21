@@ -40,7 +40,7 @@
 /obj/machinery/sleeper/New()
 	..()
 	if(map.nameShort == "deff")
-		icon = 'maps/defficiency/medbay.dmi'
+		icon = 'maps/stations/defficiency/medbay.dmi'
 	RefreshParts()
 
 /obj/machinery/sleeper/Destroy()
@@ -488,7 +488,7 @@
 /obj/machinery/sleeper/mancrowave/New()
 	..()
 	if(map.nameShort == "deff")
-		icon = 'maps/defficiency/medbay.dmi'
+		icon = 'maps/stations/defficiency/medbay.dmi'
 	update_icon()
 
 /obj/machinery/sleeper/mancrowave/go_out(var/exit = loc)

@@ -1,0 +1,104 @@
+"aa" = (/turf/space,/area)
+"ab" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_f6"},/area/shuttle/escape/centcom)
+"ac" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/shuttle/escape/centcom)
+"ad" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"ae" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"af" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"ag" = (/turf/space,/turf/simulated/shuttle/wall{dir = 3; icon_state = "swall_f10"},/area/shuttle/escape/centcom)
+"ah" = (/turf/simulated/shuttle/wall{icon_state = "swall14"},/area/shuttle/escape/centcom)
+"ai" = (/turf/simulated/shuttle/floor{icon_state = "floor3"},/turf/simulated/shuttle/wall{icon_state = "swall_f9"},/area/shuttle/escape/centcom)
+"aj" = (/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/shuttle/escape/centcom)
+"ak" = (/obj/structure/bed/chair,/turf/simulated/shuttle/floor4,/area/shuttle/escape/centcom)
+"al" = (/obj/structure/table,/obj/item/weapon/storage/firstaid/fire,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"am" = (/obj/machinery/computer/atmos_alert,/obj/machinery/light{dir = 8},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"an" = (/obj/structure/bed/chair{dir = 8},/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"ao" = (/obj/structure/bed/chair,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"ap" = (/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"aq" = (/obj/machinery/computer/security,/obj/machinery/light{dir = 4},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"ar" = (/obj/structure/bed/chair{dir = 8},/obj/structure/extinguisher_cabinet{pixel_y = -30},/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"as" = (/obj/item/device/radio/intercom{name = "Station Intercom (General)"; pixel_y = -29},/obj/machinery/media/receiver/boombox/wallmount/shuttle{pixel_y = -40},/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"at" = (/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/shuttle/escape/centcom)
+"au" = (/obj/machinery/computer/communications,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"av" = (/obj/machinery/flasher_button{id_tag = "cockpit_flasher"; pixel_y = -26},/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"aw" = (/turf/simulated/shuttle/floor{icon_state = "floor3"},/turf/simulated/shuttle/wall{icon_state = "swall_f5"},/area/shuttle/escape/centcom)
+"ax" = (/obj/machinery/door/airlock/glass_command{name = "Escape Shuttle Cockpit"; req_access_txt = "19"},/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"ay" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"az" = (/turf/simulated/shuttle/floor4,/area/shuttle/escape/centcom)
+"aA" = (/obj/machinery/flasher{id_tag = "cockpit_flasher"; pixel_y = 27},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"aB" = (/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"aC" = (/obj/structure/closet/emcloset,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"aD" = (/obj/structure/bed/chair{dir = 1},/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"aE" = (/obj/structure/table,/obj/item/weapon/storage/firstaid/regular{pixel_x = 2; pixel_y = 3},/obj/item/weapon/crowbar,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"aF" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/emergency,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"aG" = (/obj/machinery/flasher_button{id_tag = "shuttle_flasher"; pixel_x = -25; pixel_y = -5},/obj/machinery/flasher{id_tag = "shuttle_flasher"; pixel_x = -25; pixel_y = 5},/obj/machinery/light{dir = 8},/turf/simulated/shuttle/floor4,/area/shuttle/escape/centcom)
+"aH" = (/obj/structure/bed/chair{dir = 1},/turf/simulated/shuttle/floor4,/area/shuttle/escape/centcom)
+"aI" = (/obj/machinery/door/airlock/glass_security{name = "Escape Shuttle Cell"; req_access_txt = "2"},/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"aJ" = (/obj/machinery/light{dir = 4},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"aK" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"aL" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"aM" = (/obj/machinery/door/unpowered/shuttle,/obj/docking_port/shuttle{dir = 8},/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"aN" = (/obj/machinery/status_display,/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/shuttle/escape/centcom)
+"aO" = (/obj/structure/bed/chair{dir = 8},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"aP" = (/obj/structure/table,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"aQ" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"aR" = (/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/shuttle/escape/centcom)
+"aS" = (/obj/machinery/computer/shuttle,/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"aT" = (/obj/machinery/sleeper{dir = 1},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"aU" = (/obj/item/device/radio/intercom{dir = 4; name = "Station Intercom (General)"; pixel_x = 31},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"aV" = (/obj/machinery/door/unpowered/shuttle,/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"aW" = (/obj/structure/extinguisher_cabinet{pixel_x = 5; pixel_y = 30},/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"aX" = (/obj/structure/extinguisher_cabinet{pixel_x = 27},/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"aY" = (/obj/structure/bed/chair{dir = 4},/obj/item/device/radio/intercom{dir = 8; name = "Station Intercom (General)"; pixel_x = -28},/obj/machinery/light{dir = 8},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"aZ" = (/obj/structure/bed/chair{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"ba" = (/obj/structure/bed/chair{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"bb" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"bc" = (/obj/structure/bed/chair{dir = 8},/obj/machinery/light{dir = 4},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"bd" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"be" = (/obj/structure/bed/chair{dir = 4},/obj/machinery/light{dir = 8},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"bf" = (/obj/structure/extinguisher_cabinet{pixel_y = -30},/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"bg" = (/obj/machinery/door/airlock/glass{name = "Escape Shuttle Storage"},/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"bh" = (/obj/machinery/computer/crew,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"bi" = (/obj/machinery/status_display,/turf/simulated/shuttle/wall{icon_state = "swall14"},/area/shuttle/escape/centcom)
+"bj" = (/obj/machinery/door/airlock/glass_medical{id_tag = null; name = "Escape Shuttle Infirmary"; req_access_txt = "0"},/turf/simulated/shuttle/floor,/area/shuttle/escape/centcom)
+"bk" = (/obj/machinery/door/unpowered/shuttle,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/shuttle/escape/centcom)
+"bl" = (/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/shuttle/escape/centcom)
+"bm" = (/turf/simulated/shuttle/wall{icon_state = "swall13"},/area/shuttle/escape/centcom)
+"bn" = (/obj/structure/extinguisher_cabinet{pixel_x = 27},/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/shuttle/escape/centcom)
+"bo" = (/obj/machinery/light{dir = 8},/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/shuttle/escape/centcom)
+"bp" = (/obj/machinery/vending/wallmed1{name = "Emergency NanoMed"; pixel_x = -28; req_access_txt = "0"},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"bq" = (/obj/machinery/iv_drip,/obj/machinery/light{dir = 4},/obj/structure/closet/walllocker/defiblocker{pixel_x = 30},/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"br" = (/obj/structure/closet,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/shuttle/escape/centcom)
+"bs" = (/obj/structure/closet/crate,/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/shuttle/escape/centcom)
+"bt" = (/turf/simulated/shuttle/wall{icon_state = "swall1"},/area/shuttle/escape/centcom)
+"bu" = (/obj/structure/table,/obj/item/weapon/storage/firstaid/fire,/obj/item/weapon/storage/firstaid/regular{pixel_x = 2; pixel_y = 3},/obj/item/weapon/crowbar,/obj/item/weapon/reagent_containers/blood/OMinus,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/shuttle/escape/centcom)
+"bv" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_f5"},/area/shuttle/escape/centcom)
+"bw" = (/obj/structure/shuttle/engine/heater,/obj/structure/window/reinforced/plasma{dir = 1},/turf/simulated/floor/plating/airless,/area/shuttle/escape/centcom)
+"bx" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_f9"},/area/shuttle/escape/centcom)
+"by" = (/obj/structure/shuttle/engine/propulsion/left,/turf/space,/area/shuttle/escape/centcom)
+"bz" = (/obj/structure/shuttle/engine/propulsion,/turf/space,/area/shuttle/escape/centcom)
+"bA" = (/obj/structure/shuttle/engine/propulsion/right,/turf/space,/area/shuttle/escape/centcom)
+
+(1,1,1) = {"
+aaaaabadaeaeaeafagaaaa
+aaabaialaDaSaDaEawagaa
+aaatamanapapapaKaqataa
+aaatbharasavapaKauataa
+abbmacacahacaxaNacbmag
+atakakakayaAapaBaCaFay
+ataGazazaIapapapapaJat
+aMazaHaHayaoaQaPapaBay
+aRacacacbmaPaPaPapaUat
+aVapaWapapapapapapaXat
+ataYapaZbaapaZbaapbcat
+bdaQapaZbaapaZbaapaObd
+aLaQapaZbaapaZbaapaOaL
+bbaQapaZbaapaZbaapaObb
+atbeapaZbaapaZbaapbcat
+aVapbfapapapapapapaXat
+aRacacbgacbiadafbjayaj
+bkblblblbnataTaBaBaCay
+atboblblblatbpaBaBbqat
+atbrbrbsbsbtaTaBaBbuay
+bvahbwbwbwbwbwbwbwahbx
+aabvbybzbzbzbzbzbAbxaa
+"}

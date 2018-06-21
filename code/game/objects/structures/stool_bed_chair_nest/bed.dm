@@ -149,7 +149,7 @@
 	lock_type = /datum/locking_category/buckle/bed/roller
 
 /obj/structure/bed/roller/deff
-	icon = 'maps/defficiency/medbay.dmi'
+	icon = 'maps/stations/defficiency/medbay.dmi'
 	roller_type = /obj/item/roller/deff
 
 /obj/item/roller
@@ -163,7 +163,7 @@
 	w_class = W_CLASS_LARGE // Can't be put in backpacks. Oh well.
 
 /obj/item/roller/deff
-	icon = 'maps/defficiency/medbay.dmi'
+	icon = 'maps/stations/defficiency/medbay.dmi'
 	bed_type = /obj/structure/bed/roller/deff
 
 /obj/item/roller/attack_self(mob/user)

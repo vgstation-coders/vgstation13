@@ -17,4 +17,4 @@
 	load_map_elements = list(/datum/map_element/dungeon/holodeck)
 
 ////////////////////////////////////////////////////////////////
-#include "test_tiny.dmm"
+#include "stations/test_tiny.dmm"
