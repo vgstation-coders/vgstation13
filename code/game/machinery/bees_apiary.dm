@@ -341,7 +341,7 @@ var/list/apiary_reservation = list()
 		return 0
 	if (A in apiary_reservation)//another queen has marked this one for herself
 		return 0
-	if (A.queen_bees_inside > 0 || is_type_in_list(/datum/bee/queen_bee,A.bees_outside_hive))//another queen made her way there somehow
+	if (A.queen_bees_inside > 0 || locate(/datum/bee/queen_bee) in A.bees_outside_hive)//another queen made her way there somehow
 		return 0
 	var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, get_turf(src), src)
 	var/datum/bee/queen_bee/new_queen = new species.queen_type(src)
