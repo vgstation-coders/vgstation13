@@ -18,23 +18,6 @@
 	if(achievements.len)
 		completions += "<br>[achievement_declare_completion()]"
 
-	//Print a list of antagonists to the server log
-	var/list/total_antagonists = list()
-	//Look into all mobs in world, dead or alive
-	for(var/datum/mind/Mind in minds)
-		var/temprole = Mind.special_role
-		if(temprole)							//If they are an antagonist of some sort.
-			if(temprole in total_antagonists)	//If the role exists already, add the name to it
-				total_antagonists[temprole] += ", [Mind.name]([Mind.key])"
-			else
-				total_antagonists.Add(temprole) //If the role doesnt exist in the list, create it and add the mob
-				total_antagonists[temprole] += ": [Mind.name]([Mind.key])"
-
-	//Now print them all into the log!
-	log_game("Antagonists at round end were...")
-	for(var/i in total_antagonists)
-		log_game("[i]s[total_antagonists[i]].")
-
 	//Score Calculation and Display
 
 	//Run through humans for diseases, also the Clown
@@ -88,6 +71,8 @@
 					score["dmgestname"] = player.real_name
 					score["dmgestjob"] = player.job
 					score["dmgestkey"] = player.key
+
+	completions += "<br>[mode.declare_completion()]"
 
 	/*
 
