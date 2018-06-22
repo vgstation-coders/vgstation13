@@ -1118,8 +1118,9 @@
 		if(src.species.abilities)
 			src.verbs -= species.abilities
 		if(species.spells)
-			for(var/spell in species.spells)
-				remove_spell(spell)
+			for(var/spell/spell in spell_list)
+				if(spell.type in species.spells)
+					remove_spell(spell)
 		for(var/L in species.known_languages)
 			remove_language(L)
 		species.clear_organs(src)
