@@ -378,7 +378,8 @@
 				 || istype(A, /obj/structure/grille)\
 				 || istype(A, /obj/structure/rack)\
 				 || istype(A, /obj/machinery/door/window)\
-				 || istype(A, /obj/item/tape)) && Adjacent(A))
+				 || istype(A, /obj/item/tape)\
+				 || istype(A, /obj/item/toy/balloon/inflated/decoy)) && Adjacent(A))
 					UnarmedAttack(A)
 	return
 

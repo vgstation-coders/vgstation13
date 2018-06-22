@@ -90,6 +90,13 @@
 			var/icon/original = icon(R.icon, R.icon_state)
 			if(mat.color)
 				original.ColorTone(mat.color)
+				var/obj/item/I = R
+				if(istype(I))
+					var/icon/t_state
+					for(var/hand in list("left_hand", "right_hand"))
+						t_state = icon(I.inhand_states[hand], I.item_state)
+						t_state.ColorTone(mat.color)
+						I.inhand_states[hand] = t_state
 			else if(mat.color_matrix)
 				R.color = mat.color_matrix
 			R.icon = original

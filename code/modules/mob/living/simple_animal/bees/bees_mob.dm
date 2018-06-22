@@ -371,7 +371,7 @@
 				calmed = 6
 				if (state == BEE_OUT_FOR_ENEMIES)
 					src.visible_message("<span class='notice'>The bees calm down!</span>")
-					for (var/datum/bee/B)
+					for(var/datum/bee/B in bees)
 						B.state = BEE_HEADING_HOME
 					state = BEE_HEADING_HOME
 				break
@@ -395,7 +395,7 @@
 					B_mob.calmed = calmed
 					B_mob.state = state
 					B_mob.home = home
-				B_mob.Move(get_turf(pick(orange(src,1))))
+				step_rand(B_mob)
 
 		//ATTACKING TARGET
 		else if(state == BEE_OUT_FOR_ENEMIES && M in view(src,1))
@@ -470,7 +470,7 @@
 			B_mob.update_icon()
 			B_mob.home = home
 			B_mob.add_plants(visited_plants)
-			B_mob.Move(get_turf(pick(orange(src,1))))
+			step_rand(B_mob)
 			updateDamage()
 
 		//REACHING FOR MOBS
@@ -509,9 +509,7 @@
 							B.homeCall()
 
 			if(target_turf)
-				var/tdir = get_dir(src,target_turf)
-				var/turf/move_to = get_step(src, tdir)
-				walk_to(src,move_to)
+				step_to(src, target_turf)
 
 				if(src.loc == target_turf)
 					wander = 1
@@ -536,10 +534,8 @@
 						if (B.fatigue > FATIGUE_TO_RETURN)
 							B.homeCall()
 			if(target_turf)
-				var/tdir = get_dir(src,target_turf)
-				var/turf/move_to = get_step(src, tdir)
 				if (calmed <= 0)
-					walk_to(src,move_to)
+					step_to(src, target_turf)
 
 				if(src.loc == target_turf)
 					visited_plants.Add(target_plant)
@@ -563,10 +559,8 @@
 			wander = 0
 			var/turf/target_turf = get_turf(home)
 			if(target_turf)
-				var/tdir = get_dir(src,target_turf)
-				var/turf/move_to = get_step(src, tdir)
 				if (calmed <= 0)
-					walk_to(src,move_to)
+					step_to(src, target_turf)
 
 				if(src.loc == target_turf)
 					if (!home.species || bee_species == home.species)

@@ -18,26 +18,35 @@
 	return last_puff < world.time - PUFF_COOLDOWN_TIME
 
 /obj/item/device/inhaler/attack_self(mob/user)
-	if(puff_ready() && ishuman(user))
-		puff(user)
+	puff(user, user)
 
-/obj/item/device/inhaler/attack(mob/living/M, mob/user)
-	if(!ishuman(M) || user.a_intent != I_HELP)
+/obj/item/device/inhaler/attack(mob/living/target, mob/user)
+	if(user.a_intent != I_HELP)
 		return ..()
-	if(puff_ready())
-		var/mob/living/carbon/human/H = M
-		var/obj/item/mouth_protection = H.get_body_part_coverage(MOUTH)
-		if(mouth_protection)
-			to_chat(user, "<span class='warning'>Remove their [mouth_protection.name] first!</span>")
-			return
-		if(!H.hasmouth)
-			to_chat(user, "<span class='warning'>There's nowhere to put \the [src] as [H] lacks a mouth!</span>")
-			return
-		puff(H)
+	puff(target, user)
 
-/obj/item/device/inhaler/proc/puff(mob/living/carbon/human/H)
-	playsound(H, 'sound/effects/spray2.ogg', 20, 1)
-	H.reagents.add_reagent(ALBUTEROL, 5)
+/obj/item/device/inhaler/proc/puff(mob/living/carbon/human/target, var/mob/living/user)
+	if(!ishuman(target))
+		return
+	if(!puff_ready())
+		return
+	var/used_on_self = target == user
+	if(!target.hasmouth)
+		if(used_on_self)
+			to_chat(user, "<span class='warning'>There's nowhere to put \the [src] as you lack a mouth!</span>")
+		else
+			to_chat(user, "<span class='warning'>There's nowhere to put \the [src] as [target] lacks a mouth!</span>")
+		return
+	var/obj/item/mouth_protection = target.get_body_part_coverage(MOUTH)
+	if(mouth_protection)
+		to_chat(user, "<span class='warning'>Remove [used_on_self ? "your" : "their"] [mouth_protection.name] first!</span>")
+		return
+	if(used_on_self)
+		user.visible_message("<span class='notice'>[user] takes a puff from \the [src].</span>", "<span class='notice'>You take a puff from \the [src].</span>")
+	else
+		user.visible_message("<span class='notice'>[user] helps [target] take a puff from \the [src].</span>", "<span class='notice'>You help [target] take a puff from \the [src].</span>")
+	playsound(target, 'sound/effects/spray2.ogg', 20, 1)
+	target.reagents.add_reagent(ALBUTEROL, 5)
 	last_puff = world.time
 
 #undef PUFF_COOLDOWN_TIME

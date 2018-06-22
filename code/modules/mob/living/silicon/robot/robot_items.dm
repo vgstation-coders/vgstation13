@@ -398,7 +398,7 @@
 	else
 		alpha = initial(alpha)
 	if(usr)
-		usr.update_action_buttons()
+		usr.update_action_buttons_icon()
 	..()
 
 /obj/item/weapon/gripper/examine(mob/user)

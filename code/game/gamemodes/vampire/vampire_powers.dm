@@ -31,7 +31,8 @@
 		to_chat(src, "<span class='warning'>You require at least [required_blood] units of usable blood to do that!</span>")
 		return 0
 	//chapel check
-	if(istype(areaMaster, /area/chapel))
+	var/area/this_area = get_area(src)
+	if(istype(this_area, /area/chapel))
 		if(!fullpower)
 			to_chat(src, "<span class='warning'>Your powers are useless on this holy ground.</span>")
 			return 0

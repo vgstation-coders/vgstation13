@@ -224,7 +224,7 @@
 
 	var/obj/item/device/multitool/P = get_multitool(usr)
 	if(!istype(P))
-		testing("get_multitool returned [P].")
+//		testing("get_multitool returned [P].")
 		return
 
 	if(href_list["input"])

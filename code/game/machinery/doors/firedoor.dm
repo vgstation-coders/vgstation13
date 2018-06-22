@@ -204,7 +204,7 @@ var/global/list/alert_overlays_global = list()
 	if(isobserver(user) || user.stat)
 		return
 	spawn()
-		var/area/A = get_area_master(src)
+		var/area/A = get_area(src)
 		ASSERT(istype(A)) // This worries me.
 		var/alarmed = A.doors_down || A.fire
 		var/old_density = src.density
@@ -269,7 +269,7 @@ var/global/list/alert_overlays_global = list()
 		to_chat(user, "<span class='warning'>\The [src] is welded solid!</span>")
 		return
 
-	var/area/A = get_area_master(src)
+	var/area/A = get_area(src)
 	ASSERT(istype(A)) // This worries me.
 	var/alarmed = A.doors_down || A.fire
 
@@ -335,7 +335,7 @@ var/global/list/alert_overlays_global = list()
 	..()
 	latetoggle()
 	layer = open_layer
-	var/area/A = get_area_master(src)
+	var/area/A = get_area(src)
 	ASSERT(istype(A)) // This worries me.
 	var/alarmed = A.doors_down || A.fire
 	if(alarmed)
@@ -343,7 +343,7 @@ var/global/list/alert_overlays_global = list()
 			close()
 
 /obj/machinery/door/firedoor/proc/force_open(mob/user, var/obj/C) //used in mecha/equipment/tools/tools.dm
-	var/area/A = get_area_master(src)
+	var/area/A = get_area(src)
 	ASSERT(istype(A)) // This worries me.
 	var/alarmed = A.doors_down || A.fire
 

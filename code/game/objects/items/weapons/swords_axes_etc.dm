@@ -277,4 +277,6 @@
 	name = "training sword"
 	desc = "A blunt object in the shape of a one handed sword."
 	icon_state = "grey_sword"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	item_state = "grey_sword"
 	force = 4

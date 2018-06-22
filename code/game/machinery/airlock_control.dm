@@ -236,7 +236,7 @@ obj/machinery/airlock_sensor/Topic(href,href_list)
 
 	if(!issilicon(usr))
 		if(!istype(usr.get_active_hand(), /obj/item/device/multitool))
-			testing("Not silicon, not using a multitool.")
+//			testing("Not silicon, not using a multitool.")
 			return
 	if("set_freq" in href_list)
 		var/newfreq=frequency
@@ -376,7 +376,7 @@ obj/machinery/access_button/Topic(href,href_list)
 
 	if(!issilicon(usr))
 		if(!istype(usr.get_active_hand(), /obj/item/device/multitool))
-			testing("Not silicon, not using a multitool.")
+//			testing("Not silicon, not using a multitool.")
 			return
 
 	var/obj/item/device/multitool/P = get_multitool(usr)

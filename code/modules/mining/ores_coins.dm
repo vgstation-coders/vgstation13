@@ -291,7 +291,7 @@
 			log_game("[key_name(usr)] has primed a [name] for detonation at [A.name]([bombturf.x],[bombturf.y],[bombturf.z])")
 		spawn(det_time)
 			if(primed)
-				switch(quality)
+				switch(det_quality)
 					if(1)
 						explosion(src.loc,-1,1,3,adminlog = notify_admins)
 					if(2)
