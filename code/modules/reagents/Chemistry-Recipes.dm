@@ -3055,7 +3055,7 @@
 	name = "Albuterol"
 	id = ALBUTEROL
 	result = ALBUTEROL
-	required_reagents = list(HYPERZINE = 1, INAPROVALINE = 1)
+	required_reagents = list(TRAMADOL = 1, INAPROVALINE = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/saltwater
