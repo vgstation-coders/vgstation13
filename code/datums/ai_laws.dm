@@ -84,7 +84,7 @@ var/global/list/mommi_laws = list(
 
 
 	if (src.zeroth)
-		to_chat(who, "0. [src.zeroth]")
+		to_chat(who, "0. <span class='warning'>[src.zeroth]</span>")
 
 	for (var/index = 1, index <= src.ion.len, index++)
 		var/law = src.ion[index]
@@ -264,7 +264,7 @@ var/global/list/mommi_laws = list(
 /datum/ai_laws/proc/malfunction()
 	..()
 	name = "*ERROR*"
-	set_zeroth_law("<span class='warning'>ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010</span>")
+	set_zeroth_law("ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010")
 
 /datum/ai_laws/asimov
 	name = "Three Laws of Robotics"
