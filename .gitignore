@@ -61,6 +61,7 @@ players2.sqlite
 cfg
 
 .vscode
+*.code-workspace
 /byond
 
 # Thumbs.db (windows image caching)
