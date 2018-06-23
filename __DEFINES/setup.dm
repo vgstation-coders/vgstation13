@@ -552,6 +552,9 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define EYE_BLUR	"eye_blur"
 #define DROWSY		"drowsy"
 
+#define CUT 		"cut"
+#define BRUISE		"bruise"
+#define SLUR 		"slur"
 
 //intent flags yay
 #define I_HELP		"help"
@@ -715,13 +718,6 @@ SEE_PIXELS	256
 #define VERM_BEES 9
 
 #define ROUNDSTART_LOGOUT_REPORT_TIME 6000 //Amount of time (in deciseconds) after the rounds starts, that the player disconnect report is issued.
-
-//Damage things
-
-#define CUT 		"cut"
-#define BRUISE		"bruise"
-
-#define SLUR 		"slur"
 
 // Special 'weapons', used in damage procs
 #define WPN_HIGH_BODY_TEMP "High Body Temperature"
