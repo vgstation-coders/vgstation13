@@ -62,3 +62,7 @@ cfg
 
 .vscode
 /byond
+
+# Thumbs.db (windows image caching)
+Thumbs.db
+
