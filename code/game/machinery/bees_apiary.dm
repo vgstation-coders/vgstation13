@@ -331,10 +331,10 @@ var/list/apiary_reservation = list()
 	var/mob/living/simple_animal/bee/lastBees = getFromPool(/mob/living/simple_animal/bee,get_turf(src))
 	for(var/i = 1 to worker_bees_inside)
 		worker_bees_inside--
-		lastBees.addBee(new species.bee_type(src))
+		lastBees.addBee(new species.bee_type())
 	for(var/i = 1 to queen_bees_inside)
 		queen_bees_inside--
-		lastBees.addBee(new species.queen_type(src))
+		lastBees.addBee(new species.queen_type())
 
 /obj/machinery/apiary/proc/exile_swarm(var/obj/machinery/apiary/A)
 	if (A == src)//can't colonize our own apiary
