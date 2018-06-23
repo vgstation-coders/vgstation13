@@ -216,7 +216,7 @@ What is the naming convention for planes or layers?
 #define FULLSCREEN_PLANE		22		// for fullscreen overlays that do not cover the hud.
 
 	#define FULLSCREEN_LAYER	 	0
-	#define DAMAGE_LAYER 			1
+	#define DAMAGE_HUD_LAYER 			1
 	#define IMPAIRED_LAYER 			2
 	#define BLIND_LAYER				3
 	#define CRIT_LAYER 				4
