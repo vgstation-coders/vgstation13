@@ -788,9 +788,6 @@
 	..(T)
 	is_child = C
 
-/obj/item/projectile/bullet/buckshot/proc/get_radius_turfs(turf/T)
-	return orange(T,1)
-
 /obj/item/projectile/bullet/buckshot/OnFired()
 	if(!is_child)
 		var/x = 0
@@ -850,9 +847,7 @@
 	type_to_fire = /obj/item/projectile/bullet/buckshot/bullet_storm
 	custom_impact = 1
 	embed_message = FALSE
-
-/obj/item/projectile/bullet/buckshot/bullet_storm/get_radius_turfs(turf/T)
-	return circlerangeturfs(original,5)
+	variance_angle = 50
 
 /obj/item/projectile/bullet/faggot
 	name = "high-speed faggot"
