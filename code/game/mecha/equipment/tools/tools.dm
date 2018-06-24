@@ -1487,7 +1487,7 @@
 		plating_active = 1
 		tiling_active = 1
 	to_chat(chassis.occupant, "Plating and tiling modes [plating_active?"enabled":"disabled"]")
-	update_equip_info
+	update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/tiler/get_equip_info()
 	return "[..()] \[<a href='?src=\ref[src];toggle_plating=0'>[plating_active ? "Deactivate" : "Activate"] automatic plating</a>\]\[<a href='?src=\ref[src];toggle_tiling=0'>[tiling_active ? "Deactivate" : "Activate"] automatic tiling</a>\]"
