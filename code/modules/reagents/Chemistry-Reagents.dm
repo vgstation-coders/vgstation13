@@ -2041,6 +2041,13 @@
 
 	for(var/obj/item/I in T)
 		I.decontaminate()
+	
+	T.color = ""
+
+/datum/reagent/space_cleaner/bleach/reaction_obj(obj/O, var/volume)
+	if(O)
+		O.color = ""
+	..()
 
 /datum/reagent/space_cleaner/bleach/on_mob_life(var/mob/living/M)
 
@@ -2066,6 +2073,8 @@
 
 	if(..())
 		return 1
+
+	M.color = ""
 
 	if(method == TOUCH)
 		if(ishuman(M))
