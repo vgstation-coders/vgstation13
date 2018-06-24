@@ -18,7 +18,6 @@
 	if(!..())
 		return FALSE
 	if((M_HULK in M.mutations) && (M_STRONG in M.mutations))
-		M.visible_message("<span class = 'warning'>\The [M] attempts to pick up \the [src].</span>")
 		return TRUE
 
 /obj/item/anvil/can_be_pulled(mob/user)
@@ -28,3 +27,7 @@
 			return TRUE
 	return FALSE
 
+/obj/item/anvil/check_airflow_movable(n)
+	if(n > 1000)
+		return TRUE
+	return FALSE
