@@ -320,7 +320,8 @@ mob/living/carbon/proc/handle_hallucinations()
 					L = pick(mob_list)
 
 				var/mob/living/simple_animal/random_mob = pick(existing_typesof(/mob/living/simple_animal/hostile))
-				var/image/horror = image(initial(random_mob.icon), initial(random_mob.icon_state))
+				var/image/horror
+				horror.appearance = initial(random_mob.appearance)
 
 				horror.loc = L
 				horror.override = 1 //Override the affected mob's appearance with the monster
@@ -330,7 +331,8 @@ mob/living/carbon/proc/handle_hallucinations()
 					C.images += horror //Give it the image!
 
 				var/duration = rand(60 SECONDS, 120 SECONDS)
-
+				if(src.client)
+					message_admins("[key_name(src)] just imagined that [L] looks like a [random_mob], spooky! [formatJumpTo(get_turf(src))]")
 				spawn(duration)
 					if(C)
 						C.images.Remove(horror) //Remove the image from hallucinating mob
