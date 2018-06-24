@@ -5,7 +5,8 @@
 // Automatically recharges air (unless off), will flush when ready if pre-set
 // Can hold items and human size things, no other draggables
 // Toilets are a type of disposal bin for small objects only and work on magic. By magic, I mean torque rotation
-#define SEND_PRESSURE 0.05*ONE_ATMOSPHERE
+#define SEND_PRESSURE 2*ONE_ATMOSPHERE
+#define SEND_VOLUME 0.21*CELL_VOLUME
 
 /obj/machinery/disposal
 	name = "disposal unit"
@@ -58,7 +59,7 @@
 		flush = 0
 
 	air_contents = new/datum/gas_mixture()
-	//gas.volume = 1.05 * CELLSTANDARD
+	air_contents.volume = SEND_VOLUME
 	update_icon()
 
 /obj/machinery/disposal/Destroy()
@@ -365,7 +366,7 @@
 	var/atom/L = loc						// recharging from loc turf
 
 	var/datum/gas_mixture/env = L.return_air()
-	var/pressure_delta = (SEND_PRESSURE*1.01) - air_contents.return_pressure()
+	var/pressure_delta = (SEND_PRESSURE*1.05) - air_contents.return_pressure()
 
 	if(env.temperature > 0)
 		var/transfer_moles = 0.1 * pressure_delta * air_contents.volume / (env.temperature * R_IDEAL_GAS_EQUATION)
@@ -399,7 +400,6 @@
 		H.tomail = 1
 
 
-	air_contents = new()		// new empty gas resv.
 
 	sleep(10)
 	if(last_sound < world.time + 1)
@@ -409,6 +409,9 @@
 
 
 	H.init(src)	// copy the contents of disposer to holder
+
+	air_contents = new()		// new empty gas resv.
+	air_contents.volume = SEND_VOLUME
 
 	H.start(src) // start the holder processing movement
 	flushing = 0
@@ -693,6 +696,15 @@
 /obj/structure/disposalholder/proc/vent_gas(var/atom/location)
 	location.assume_air(gas)  // vent all gas to turf
 	return
+
+/obj/structure/disposalholder/return_air()
+	return gas
+
+/obj/structure/disposalholder/handle_internal_lifeform(mob/lifeform_inside_me, breath_request)
+	if(breath_request > 0)
+		return gas.remove(breath_request)
+	else
+		return null
 
 // Disposal pipes
 

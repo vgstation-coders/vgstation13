@@ -177,6 +177,24 @@
 		H.destinationTag = "DISPOSALS"
 
 	air_contents = new()		// new empty gas resv.
+	air_contents.volume = SEND_VOLUME
+
+	var/atom/L = loc						// recharging from loc turf
+
+	var/datum/gas_mixture/env = L.return_air()
+	var/pressure_delta
+	var/transfer_moles
+	var/datum/gas_mixture/removed
+	var/max_cycles = 100
+
+	while(env.temperature > 0 && air_contents.return_pressure() < SEND_PRESSURE && max_cycles-- > 0)
+		pressure_delta = (SEND_PRESSURE*1.05) - air_contents.return_pressure()
+		transfer_moles = 0.1 * pressure_delta * air_contents.volume / (env.temperature * R_IDEAL_GAS_EQUATION)
+
+		//Actually transfer the gas
+		removed = env.remove(transfer_moles)
+		air_contents.merge(removed)
+
 
 	sleep(10)
 	playsound(src, 'sound/machines/disposalflush.ogg', 50, 0, 0)
