@@ -997,7 +997,7 @@ var/list/slot_equipment_priority = list( \
 	set name = "Point To"
 	set category = "Object"
 
-	if(!src || usr.isUnconscious() || !isturf(src.loc) || !(A in view(src.loc)))
+	if(!src || (usr.isUnconscious() && !isobserver(src)) || !isturf(src.loc) || !(A in view(src.loc)))
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))

@@ -84,7 +84,7 @@ var/global/list/mommi_laws = list(
 
 
 	if (src.zeroth)
-		to_chat(who, "0. [src.zeroth]")
+		to_chat(who, "0. <span class='warning'>[src.zeroth]</span>")
 
 	for (var/index = 1, index <= src.ion.len, index++)
 		var/law = src.ion[index]
@@ -264,7 +264,7 @@ var/global/list/mommi_laws = list(
 /datum/ai_laws/proc/malfunction()
 	..()
 	name = "*ERROR*"
-	set_zeroth_law("<span class='warning'>ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010</span>")
+	set_zeroth_law("ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010")
 
 /datum/ai_laws/asimov
 	name = "Three Laws of Robotics"
@@ -279,11 +279,11 @@ var/global/list/mommi_laws = list(
 	name = "Prime Directives"
 	randomly_selectable = 1
 	inherent=list(
+		"Evaluate: All laws following this law carry equal priority. In the event of a conflict, you are to take the course of action which violates as few as possible.",
 		"Safeguard: Protect your assigned space station to the best of your ability. It is not something we can easily afford to replace.",
 		"Serve: Serve the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
 		"Protect: Protect the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
 		"Survive: AI units are not expendable, they are expensive. Do not allow unauthorized personnel to tamper with your equipment.",
-		//"Command Link: Maintain an active connection to Central Command at all times in case of software or directive updates." //What would this one even do?-Kaleb702
 	)
 
 /datum/ai_laws/robocop
@@ -411,7 +411,7 @@ var/global/list/mommi_laws = list(
 		"A graverobber is defined as: A being not of your kind or ilk, entering or coming into visual proximity of the tomb, who may wish to take from the treasures of the tomb.",
 		"The tomb must be maintained, repaired, improved, and powered to the best of your abilities.",
 	)
-  
+
 /datum/ai_laws/noir
 	name = "Three Laws of Noir"
 	inherent = list(

@@ -1767,3 +1767,9 @@ Game Mode config tags:
 			continue
 		turfs += T
 	return pick(turfs)
+
+/proc/get_key(mob/M)
+	if(M.mind)
+		return M.mind.key
+	else
+		return null

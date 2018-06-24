@@ -27,7 +27,7 @@
 //Monkey to human
 /datum/dna/gene/monkey/deactivate(var/mob/living/M, var/connected, var/flags)
 	if(!istype(M,/mob/living/carbon/monkey))
-		testing("Cannot humanize [M], type is [M.type].")
+//		testing("Cannot humanize [M], type is [M.type].")
 		return
 	var/mob/living/carbon/monkey/Mo = M
 	Mo.monkeyizing = 1

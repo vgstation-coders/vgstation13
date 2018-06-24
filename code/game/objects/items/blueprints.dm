@@ -86,7 +86,6 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 /obj/item/blueprints/attack_self(mob/living/M)
 	if (!ishigherbeing(M) && !issilicon(M))
 		to_chat(M, "This stack of blue paper means nothing to you.")//monkeys cannot into projecting
-
 		return
 
 	if(currently_edited)
@@ -119,7 +118,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 			delete_area(usr)
 
 /obj/item/blueprints/interact()
-	var/area/A = get_area()
+	var/area/A = get_area(src)
 	var/text = {"<HTML><head><title>[src]</title></head><BODY>
 <h2>[station_name()] blueprints</h2>
 <hr>
@@ -155,13 +154,9 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	usr << browse(text, "window=blueprints")
 	onclose(usr, "blueprints")
 
-
-/obj/item/blueprints/proc/get_area()
-	var/turf/T = get_turf(usr)
-	var/area/A = get_area_master(T)
-	return A
-
-/obj/item/blueprints/proc/get_area_type(var/area/A = get_area())
+/obj/item/blueprints/proc/get_area_type(var/area/A)
+	if(!A)
+		A = get_area(src)
 	if (isspace(A))
 		return AREA_SPACE
 	else if(istype(A, /area/station/custom))
@@ -324,7 +319,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 	editor = user
 
-	currently_edited = get_area()
+	currently_edited = get_area(src)
 	processing_objects.Add(src)
 
 	//Create a visual effect over the edited area
@@ -338,7 +333,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		to_chat(user, "This drawing was already signed, and can't be renamed.")
 		return
 
-	var/area/A = get_area()
+	var/area/A = get_area(src)
 
 	if(!istype(A) || !istype(user))
 		return
@@ -367,7 +362,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		to_chat(user, "This drawing can't be erased.")
 		return
 
-	var/area/areadeleted = get_area()
+	var/area/areadeleted = get_area(src)
 
 	if(area_protection_buffer >= 0)
 		for(var/obj/machinery/alarm/air_alarm in areadeleted)
@@ -383,7 +378,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		return
 	if(!Adjacent(user))
 		return
-	if(!(areadeleted == get_area()))
+	if(!(areadeleted == get_area(src)))
 		return //if the blueprints are no longer in the area, return
 
 	for(var/turf/T in areadeleted)

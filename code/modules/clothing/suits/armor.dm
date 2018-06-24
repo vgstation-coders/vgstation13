@@ -10,6 +10,7 @@
 		/obj/item/weapon/gun/lawgiver,
 		/obj/item/weapon/gun/siren,
 		/obj/item/weapon/gun/mahoguny,
+		/obj/item/weapon/gun/grenadelauncher,
 		/obj/item/weapon/bikehorn/baton,
 		/obj/item/weapon/blunderbuss
 		)

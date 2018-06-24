@@ -325,6 +325,8 @@
 	force = 5.0
 	throwforce = 7.0
 	w_class = W_CLASS_SMALL
+	starting_materials = list(MAT_IRON = 50)
+	w_type = RECYK_METAL
 	attack_verb = list("slashes", "slices", "cuts", "claws")
 
 
@@ -418,6 +420,8 @@
 	siemens_coefficient = 1
 	force = 12.0
 	w_class = W_CLASS_SMALL
+	starting_materials = list(MAT_IRON = 5000)
+	w_type = RECYK_METAL
 	throwforce = 15.0
 	throw_speed = 4
 	throw_range = 4

@@ -41,7 +41,7 @@
 		return 1
 	if (mode & OSIPR_SECONDARY_FIRE && energy_balls)
 		return 1
-	
+
 /obj/item/weapon/gun/osipr/process_chambered()
 	if(in_chamber)
 		return 1
@@ -131,7 +131,7 @@
 	w_class = W_CLASS_SMALL
 	var/bullets = 10
 	var/max_bullets = 10
-	var/caliber = "osipr"	//base icon name
+	var/caliber = PULSE	//base icon name
 	var/bullet_type = /obj/item/projectile/bullet/osipr
 
 /obj/item/energy_magazine/New()
@@ -157,7 +157,7 @@
 	w_class = W_CLASS_SMALL
 	bullets = 30
 	max_bullets = 30
-	caliber = "osipr"
+	caliber = PULSE
 	bullet_type = /obj/item/projectile/bullet/osipr
 
 #undef OSIPR_PRIMARY_FIRE

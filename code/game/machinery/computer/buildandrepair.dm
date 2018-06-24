@@ -495,6 +495,9 @@
 					var/obj/machinery/computer/arcade/arcade = B
 					var/obj/item/weapon/circuitboard/arcade/C = circuit
 					arcade.import_game_data(C)
+				var/obj/machinery/MA = B
+				if(istype(MA))
+					MA.power_change()
 				qdel(src)
 				return 1
 	return 0

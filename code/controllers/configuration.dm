@@ -180,7 +180,7 @@
 	// Discord crap.
 	var/discord_url
 	var/discord_password
-	
+
 	// Weighted Votes
 	var/weighted_votes = 0
 
@@ -308,7 +308,7 @@
 
 				if ("log_pda")
 					config.log_pda = 1
-				
+
 				if ("log_rc")
 					config.log_rc = 1
 
@@ -566,13 +566,13 @@
 				if("enable_wages")
 					roundstart_enable_wages = 1
 				if("error_cooldown")
-					error_cooldown = value
+					error_cooldown = text2num(value)
 				if("error_limit")
-					error_limit = value
+					error_limit = text2num(value)
 				if("error_silence_time")
-					error_silence_time = value
+					error_silence_time = text2num(value)
 				if("error_msg_delay")
-					error_msg_delay = value
+					error_msg_delay = text2num(value)
 				if("discord_url")
 					discord_url = value
 				if("discord_password")
