@@ -851,7 +851,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			if (3)
 				dat += "<h4><span class='pda_icon pda_atmos'></span> Atmospheric Readings</h4>"
 
-				var/turf/T = get_turf(user.loc)
+				var/atom/T = user.loc
 				if (isnull(T))
 					dat += "Unable to obtain a reading.<br>"
 				else

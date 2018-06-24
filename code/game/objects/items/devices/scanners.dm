@@ -294,7 +294,14 @@ Subject's pulse: ??? BPM"})
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	var/turf/location = get_turf(user)
+	var/atom/location
+
+	var/mob/M = get_holder_of_type(src, /mob)
+
+	if(M == user)
+		location = M.loc
+	else //We're either in a mech's equipment loadout or something weird so get the outside air
+		location = get_turf(src)
 
 	if(!location) //Somehow
 		return
