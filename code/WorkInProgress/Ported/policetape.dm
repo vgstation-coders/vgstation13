@@ -192,10 +192,12 @@
 	if(!override && user.a_intent == I_HELP && (!W || !W.is_sharp()) && !src.allowed(user))
 		to_chat(user, "<span class='notice'>You can't break [src] [W ? "with \the [W] " : ""]unless you use force.</span>")
 		return
-	user.visible_message("<span class='warning'>[user] breaks [src]!</span>")
 
 	if (!destroy_tape(user, W)) // If we could destroy the tape or not.
+		user.visible_message("<span class='warning'>[user] fails to break [src]!</span>")
 		return FALSE
+
+	user.visible_message("<span class='warning'>[user] breaks [src]!</span>")
 	qdel(src)
 
 /obj/item/tape/proc/destroy_tape(var/mob/user, var/obj/item/weapon/W)
@@ -292,7 +294,7 @@
 			var/mob/living/carbon/human/H = user
 			if (H.has_organ_for_slot(slot_handcuffed))
 				H.visible_message("<span class='danger'>[H] wraps \his hands on the tape!</span>", "<span class='danger'>The tape wraps itself on your hands!</span>")
-				var/obj/item/taperoll/police/cuffs 
+				var/obj/item/taperoll/police/cuffs
 				cuffs = new(get_turf(src))
 				cuffs.on_restraint_apply(H)
 				H.put_in_hands(cuffs) // Unlike normal cuffs, those cuffs don't transfer from one inventory to another. We need to place them in an inventory first for the icon to show.
@@ -338,7 +340,7 @@
 /obj/item/tape/engineering/syndie/examine(mob/user)
 	. = ..()
 	if (get_dist(user, src) < 3 && charged)
-		to_chat(user, "<span class = 'warning'>This one has strange reflects.</span>")
+		to_chat(user, "<span class = 'warning'>The reflective strips on it seem strangely active, somehow.</span>")
 
 /obj/item/tape/engineering/syndie/emp_act(severity)
 	charged = FALSE
@@ -350,8 +352,11 @@
 	if (!W)
 		if (istype(user, /mob/living))
 			var/mob/living/L = user
-			to_chat(L, "<span class='danger'>You cut your hand on the tape!")
-			L.get_active_hand_organ().droplimb(1)
+			if(ishuman(L))
+				to_chat(L, "<span class='danger'>You cut your hand on the tape!")
+				L.get_active_hand_organ().droplimb(1)
+			else
+				to_chat(L, "<span class='danger'>You cut yourself on the tape!")
 			L.emote("scream", , , 1)
 			L.adjustBruteLoss(10)
 		return FALSE
