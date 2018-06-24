@@ -320,7 +320,7 @@ mob/living/carbon/proc/handle_hallucinations()
 					L = pick(mob_list)
 
 				var/mob/living/simple_animal/random_mob = pick(existing_typesof(/mob/living/simple_animal/hostile))
-				var/image/horror
+				var/image/horror = image(icon = null)
 				horror.appearance = initial(random_mob.appearance)
 
 				horror.loc = L
