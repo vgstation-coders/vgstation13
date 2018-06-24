@@ -743,7 +743,7 @@ steam.start() -- spawns the effect
 		icon += ccolor
 	var/savedtemp
 	//playsound(src, 'sound/effects/bubbles2.ogg', 80, 1, -3)
-	if(reagents.has_reagent(WATER))
+	if(reagents.has_any_reagents(list(WATER, HOLYWATER)))
 		var/turf/simulated/T = get_turf(src)
 		var/datum/gas_mixture/old_air = T.return_air()
 		savedtemp = old_air.temperature

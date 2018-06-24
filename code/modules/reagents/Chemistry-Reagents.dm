@@ -7,6 +7,7 @@
 
 // Use in chem.flags.
 #define CHEMFLAG_DISHONORABLE 1
+#define CHEMFLAG_WETSFLOOR 2
 
 /*	The reaction procs must ALWAYS set src = null, this detaches the proc from the object (the reagent)
 	so that it can continue working when the reagent is deleted while the proc is still active.
@@ -117,6 +118,9 @@
 		return 1
 	if(!istype(T))
 		return 1
+
+	if(flags & CHEMFLAG_WETSFLOOR && volume >= 3) //Hardcoded
+		T.wet(800)
 
 	src = null
 
@@ -409,6 +413,7 @@
 	alpha = 128
 	specheatcap = 4.184
 	density = 1
+	flags = CHEMFLAG_WETSFLOOR
 
 /datum/reagent/water/on_mob_life(var/mob/living/M, var/alien)
 
@@ -481,9 +486,9 @@
 	if(..())
 		return 1
 
-	if(volume >= 3) //Hardcoded
-		T.wet(800)
+	douse(T, volume)
 
+/datum/reagent/water/proc/douse(var/turf/simulated/T, var/volume)
 	var/hotspot = (locate(/obj/effect/fire) in T)
 	if(hotspot)
 		var/datum/gas_mixture/lowertemp = T.remove_air(T:air:total_moles())
@@ -895,7 +900,7 @@
 	if(prob(7))
 		M.emote(pick("twitch", "drool", "moan", "giggle"))
 
-/datum/reagent/holywater
+/datum/reagent/water/holywater
 	name = "Holy Water"
 	id = HOLYWATER
 	description = "An ashen-obsidian-water mix, this solution will alter certain sections of the brain's rationality."
@@ -903,8 +908,9 @@
 	color = "#0064C8" //rgb: 0, 100, 200
 	custom_metabolism = 5 //High metabolism to prevent extended uncult rolls. Approx 5 units per roll
 	specheatcap = 4.183
+	flags = 0
 
-/datum/reagent/holywater/reaction_obj(var/obj/O, var/volume)
+/datum/reagent/water/holywater/reaction_obj(var/obj/O, var/volume)
 
 	if(..())
 		return 1
@@ -912,7 +918,7 @@
 	if(volume >= 1)
 		O.bless()
 
-/datum/reagent/holywater/on_mob_life(var/mob/living/M, var/alien)
+/datum/reagent/water/holywater/on_mob_life(var/mob/living/M, var/alien)
 
 	if(..())
 		return 1
@@ -940,7 +946,7 @@
 			H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
 			"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 
-/datum/reagent/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
+/datum/reagent/water/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
 
 	if(..())
 		return 1
@@ -988,7 +994,7 @@
 						H.take_organ_damage(min(15, volume * 2))
 						H.mind.vampire.smitecounter += 5
 
-/datum/reagent/holywater/reaction_turf(var/turf/simulated/T, var/volume)
+/datum/reagent/water/holywater/reaction_turf(var/turf/simulated/T, var/volume)
 
 	if(..())
 		return 1
@@ -4009,6 +4015,7 @@
 	reagent_state = LIQUID
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
+	flags = CHEMFLAG_WETSFLOOR
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)
 
@@ -4022,15 +4029,7 @@
 	if(..())
 		return 1
 
-	if(volume >= 3)
-		T.wet(800)
-	var/hotspot = (locate(/obj/effect/fire) in T)
-	if(hotspot)
-		var/datum/gas_mixture/lowertemp = T.remove_air(T:air:total_moles())
-		lowertemp.temperature = max( min(lowertemp.temperature-2000,lowertemp.temperature / 2), 0)
-		lowertemp.react()
-		T.assume_air(lowertemp)
-		qdel(hotspot)
+	call(/datum/reagent/water/proc/douse)(T, volume)
 
 /datum/reagent/enzyme
 	name = "Universal Enzyme"
