@@ -101,6 +101,8 @@
 			var/obj/item/weapon/W = O
 			dtype = W.damtype
 		src.visible_message("<span class='warning'>[src] has been hit by [O].</span>")
+		if(O.impactsound)
+			playsound(loc, O.impactsound, 80, 1, -1)
 		var/zone_normal_name
 		switch(zone)
 			if(LIMB_LEFT_ARM)
