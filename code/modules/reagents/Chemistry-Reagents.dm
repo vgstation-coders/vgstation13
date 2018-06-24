@@ -2041,7 +2041,7 @@
 
 	for(var/obj/item/I in T)
 		I.decontaminate()
-	
+
 	T.color = ""
 
 /datum/reagent/space_cleaner/bleach/reaction_obj(obj/O, var/volume)
