@@ -750,7 +750,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/storage/box/flashbangs,
 					/obj/item/weapon/storage/box/bolas)
 	cost = 30
-	containertype = /obj/structure/closet/crate/secure/weapon
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = "weapons crate"
 	access = list(access_security)
 	group = "Security"
@@ -762,7 +762,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/gun/energy/laser/smart,
 					/obj/item/weapon/gun/energy/laser/smart)
 	cost = 60
-	containertype = /obj/structure/closet/crate/secure/weapon
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = "smart laser guns crate"
 	access = list(access_armory)
 	group = "Security"
@@ -777,7 +777,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/grenade/chem_grenade/incendiary,
 					/obj/item/weapon/grenade/chem_grenade/incendiary)
 	cost = 25
-	containertype = /obj/structure/closet/crate/secure/weapon
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = "incendiary weapons crate"
 	access = list(access_heads)
 	group = "Security"
@@ -789,7 +789,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/suit/armor/vest,
 					/obj/item/clothing/suit/armor/vest)
 	cost = 15
-	containertype = /obj/structure/closet/crate/secure
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = "armor crate"
 	access = list(access_security)
 	group = "Security"
@@ -817,7 +817,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/storage/box/bolas,
 					/obj/item/weapon/storage/box/bolas)
 	cost = 60
-	containertype = /obj/structure/closet/crate/secure
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = "riot gear crate"
 	access = list(access_armory)
 	group = "Security"
@@ -849,7 +849,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Loyalty implants"
 	contains = list (/obj/item/weapon/storage/lockbox/loyalty)
 	cost = 60
-	containertype = /obj/structure/closet/crate/secure
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = "loyalty implant crate"
 	access = list(access_armory)
 	group = "Security"
@@ -858,7 +858,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Tracking implants"
 	contains = list (/obj/item/weapon/storage/lockbox/tracking)
 	cost = 50
-	containertype = /obj/structure/closet/crate/secure
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = "tracking implant crate"
 	access = list(access_armory)
 	group = "Security"
@@ -867,7 +867,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Chemical implants"
 	contains = list (/obj/item/weapon/storage/lockbox/chem)
 	cost = 50
-	containertype = /obj/structure/closet/crate/secure
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = "chemical implant crate"
 	access = list(access_armory)
 	group = "Security"
@@ -879,7 +879,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/gun/projectile/shotgun/pump/combat,
 					/obj/item/weapon/gun/projectile/shotgun/pump/combat)
 	cost = 50
-	containertype = /obj/structure/closet/crate/secure
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = "ballistic gear crate"
 	access = list(access_armory)
 	group = "Security"
@@ -892,7 +892,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/storage/box/stunshells,
 					/obj/item/weapon/storage/box/dartshells)
 	cost = 20
-	containertype = /obj/structure/closet/crate/secure
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = "shotgun shells crate"
 	access = list(access_armory)
 	group = "Security"
@@ -904,7 +904,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/gun/energy/gun,
 					/obj/item/weapon/gun/energy/gun)
 	cost = 50
-	containertype = /obj/structure/closet/crate/secure
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = "experimental energy gear crate"
 	access = list(access_armory)
 	group = "Security"
@@ -916,7 +916,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/helmet/tactical/riot,
 					/obj/item/clothing/suit/armor/riot)
 	cost = 35
-	containertype = /obj/structure/closet/crate/secure
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = "experimental armor crate"
 	access = list(access_armory)
 	group = "Security"
@@ -929,7 +929,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/machinery/deployable/barrier,
 					/obj/machinery/detector)
 	cost = 10
-	containertype = /obj/structure/closet/crate/secure/gear
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = "security checkpoint crate"
 	group = "Security"
 
@@ -940,7 +940,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/voucher/free_item/glockammo,
 					/obj/item/voucher/free_item/glockammo)
 	cost = 60
-	containertype = /obj/structure/closet/crate/secure/weapon
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = ".380 pistols crate"
 	access = list(access_armory)
 	group = "Security"
@@ -964,7 +964,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/ammo_storage/magazine/m380auto/practice/empty,
 					/obj/item/ammo_storage/magazine/m380auto/practice)
 	cost = 10
-	containertype = /obj/structure/closet/crate/secure/gear
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = ".380 pistol practice ammo crate"
 	access = list(access_security)
 	group = "Security"
@@ -976,7 +976,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/ammo_storage/magazine/m380auto/rubber/empty,
 					/obj/item/ammo_storage/magazine/m380auto/rubber)
 	cost = 30
-	containertype = /obj/structure/closet/crate/secure/gear
+	containertype = /obj/structure/closet/crate/secure/anti_tamper
 	containername = ".380 pistol rubber ammo crate"
 	access = list(access_security)
 	group = "Security"
