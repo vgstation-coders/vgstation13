@@ -482,6 +482,26 @@ var/global/list/paper_folding_results = list ( \
 	<li>[SER_FREQ/10] - Service Channel</li> \
 	<li>[SUP_FREQ/10] - Supply Channel</li> \
 	</ul>"
+	..()
+
+/obj/item/weapon/paper/tcomms
+	name = "paper- 'Tcomms memo'"
+	info = "<b>Station frequencies :</b>"
+
+/obj/item/weapon/paper/djstation/initialize()
+	info = "<b>Station frequencies :</b> \
+	<ul> \
+	<li>[COMMON_FREQ/10] - Common Channel</li> \
+	<li>[AIPRIV_FREQ/10] - Private AI Channel</li> \
+	<li>[SEC_FREQ/10] - Security Channel</li> \
+	<li>[ENG_FREQ/10] - Engineering Channel</li> \
+	<li>[MED_FREQ/10] - Medical Channel</li> \
+	<li>[COMM_FREQ/10] - Command Channel</li> \
+	<li>[SCI_FREQ/10] - Science Channel</li> \
+	<li>[SER_FREQ/10] - Service Channel</li> \
+	<li>[SUP_FREQ/10] - Supply Channel</li> \
+	</ul>"
+	..()
 
 /obj/item/weapon/paper/intercoms
 	name = "paper - 'Ace Reporter Intercom manual'"
