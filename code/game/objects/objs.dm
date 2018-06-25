@@ -231,6 +231,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	set waitfor = FALSE
 	processing_objects.Remove(src)
 
+//At some point, this proc should be changed to work like remove_air() below does.
+//However, this would likely cause problems, such as CO2 buildup in mechs and spacepods, so I'm not doing it right now.
 /obj/assume_air(datum/gas_mixture/giver)
 	if(loc)
 		return loc.assume_air(giver)
@@ -238,10 +240,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return null
 
 /obj/remove_air(amount)
-	if(loc)
-		return loc.remove_air(amount)
-	else
-		return null
+	var/datum/gas_mixture/my_air = return_air()
+	return my_air?.remove(amount)
 
 /obj/return_air()
 	if(loc)
