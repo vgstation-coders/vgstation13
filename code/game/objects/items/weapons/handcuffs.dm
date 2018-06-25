@@ -19,7 +19,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1"
 	restraint_apply_sound = 'sound/weapons/handcuffs.ogg'
-	restraint_resist_time = 1 MINUTE
+	restraint_resist_time = 2 MINUTES
 
 /obj/item/weapon/handcuffs/restraint_apply_intent_check(mob/user)
 	return 1
