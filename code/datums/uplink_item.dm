@@ -273,6 +273,13 @@ var/list/uplink_items = list()
 	cost = 4
 	job = list("Botanist")
 
+/datum/uplink_item/jobspecific/hornetqueen
+	name = "Hornet Queen Packet"
+	desc = "Place her into an apiary tray, add a few packs of BeezEez, then lay it inside your nemesis' office. Surprise guaranteed. Protective gear won't be enough to shield you reliably from these."
+	item = /obj/item/queen_bee/hornet
+	cost = 2
+	job = list("Botanist")
+
 //Chef
 /datum/uplink_item/jobspecific/specialsauce
 	name = "Chef Excellence's Special Sauce"

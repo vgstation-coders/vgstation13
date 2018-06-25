@@ -3590,6 +3590,7 @@
 					"roaches" = VERM_ROACHES,
 					"gremlins" = VERM_GREMLINS,
 					"bees" = VERM_BEES,
+					"hornets" = VERM_HORNETS,
 					)
 				var/ov = vermins[input("What vermin should infest the station?", "Vermin Infestation") in vermins]
 				var/ol = locations[input("Where should they spawn?", "Vermin Infestation") in locations]
