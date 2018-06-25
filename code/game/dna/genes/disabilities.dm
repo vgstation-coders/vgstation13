@@ -35,10 +35,7 @@
 		M.disabilities |= disability
 	if(sdisability)
 		M.sdisabilities |= sdisability
-	if(activation_message)
-		to_chat(M, "<span class='warning'>[activation_message]</span>")
-//	else
-		//testing("[name] has no activation message.")
+	to_chat(M, "<span class='warning'>[activation_message]</span>")
 
 /datum/dna/gene/disability/deactivate(var/mob/M, var/connected, var/flags)
 	if(flags & GENE_NATURAL)
@@ -50,10 +47,7 @@
 		M.disabilities &= ~disability
 	if(sdisability)
 		M.sdisabilities &= ~sdisability
-	if(deactivation_message)
-		to_chat(M, "<span class='warning'>[deactivation_message]</span>")
-//	else
-//		testing("[name] has no deactivation message.")
+	to_chat(M, "<span class='warning'>[deactivation_message]</span>")
 	return ..()
 
 /datum/dna/gene/disability/hallucinate

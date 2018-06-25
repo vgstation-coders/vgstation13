@@ -56,7 +56,7 @@
 		M.Dizzy(300)
 
 
-/datum/dna/gene/disability/speech/sans
+/datum/dna/gene/disability/sans
 	name = "Wacky"
 	desc = "Forces the subject to talk in an odd manner."
 	activation_message = "You feel an off sensation in your voicebox.."
@@ -157,8 +157,8 @@ var/list/milk_reagents = list(
 /datum/dna/gene/disability/lactose
 	name = "Lactose intolerance"
 	desc = "A condition where your body is unable to digest Lactose, a sugar commonly found in milk."
-	activation_message = ""
-	deactivation_message = ""
+	activation_message = "Your stomach feels upset and bloated."
+	deactivation_message = "The discomfort in your stomach fades away."
 	disability = LACTOSE
 
 	mutation = M_LACTOSE

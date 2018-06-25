@@ -8,4 +8,3 @@
 			fail("[disability_type] does not specify an activation message.")
 		if(!instance.deactivation_message)
 			fail("[disability_type] does not specify a deactivation message.")
-
