@@ -17,13 +17,13 @@
 /obj/item/anvil/can_pickup(mob/living/M)
 	if(!..())
 		return FALSE
-	if((M_HULK in M.mutations) && (M_STRONG in M.mutations))
+	if(M.get_strength() > 2)
 		return TRUE
 
 /obj/item/anvil/can_be_pulled(mob/user)
 	if(istype(user, /mob/living))
 		var/mob/living/L = user
-		if(M_STRONG in L.mutations)
+		if(L.get_strength() >= 2)
 			return TRUE
 	return FALSE
 

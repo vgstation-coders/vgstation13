@@ -191,6 +191,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "ticking crate"
 	group = "Supplies"
 
+/datum/supply_packs/anvil
+	name = "Anvil"
+	contains = list(/obj/item/anvil)
+	cost = 150
+	containertype = /obj/structure/largecrate
+	containername = "anvil crate"
+	group = "Supplies"
+
 /datum/supply_packs/metal50
 	name = "50 metal sheets"
 	contains = list(/obj/item/stack/sheet/metal)

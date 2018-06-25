@@ -226,8 +226,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	null,
 	new/datum/stack_recipe("iron door", /obj/machinery/door/mineral/iron, 					20, 			one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("stove", /obj/machinery/space_heater/campfire/stove, 			5, time = 25, 	one_per_turf = 1, on_floor = 1),
-		new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE),
-	new/datum/stack_recipe/dorf("morning star",			 /obj/item/weapon/melee/morningstar,6, time = 25,	inherit_material = TRUE, other_reqs = list(/obj/item/stack/rods = 2, /obj/item/anvil = 1)),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE),
 	)
 
 /* ========================================================================
@@ -244,7 +243,6 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 	null,
 	new/datum/stack_recipe("Vault Door assembly",			/obj/structure/door_assembly/door_assembly_vault,	8,	time = 50,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
-	new/datum/stack_recipe("Plasteel Anvil",				/obj/item/anvil,									15, time = 100,	one_per_turf = 1,	on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/metal = 50)),
 	)
 
 /* ====================================================================
