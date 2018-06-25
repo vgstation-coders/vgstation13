@@ -144,5 +144,6 @@
 /obj/item/weapon/gun/gatling/beegun/hornetgun
 	name = "hornet gun"
 	desc = "Doesn't actually use .22 Hornet cartridges"
+	icon_state = "hornetgun"
 	base_icon_state = "hornetgun"
 	bug_ammo = /obj/item/projectile/bullet/beegun/hornet

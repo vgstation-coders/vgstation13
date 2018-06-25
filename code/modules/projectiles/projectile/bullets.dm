@@ -403,7 +403,7 @@
 	bumped = 1
 
 	var/turf/T = get_turf(src)
-	var/mob/living/simple_animal/bee/angry/BEE = new (T,BEESPECIES_NORMAL,tox,dam)
+	var/mob/living/simple_animal/bee/angry/BEE = new (T,null,bug_species,tox,dam)
 	if(istype(A,/mob/living))
 		var/mob/living/M = A
 		visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
