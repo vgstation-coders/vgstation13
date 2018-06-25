@@ -294,21 +294,16 @@ Subject's pulse: ??? BPM"})
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	var/atom/location
-
-	var/mob/M = get_holder_of_type(src, /mob)
-
-	if(M == user)
-		location = M.loc
-	else //We're either in a mech's equipment loadout or something weird so get the outside air
-		location = get_turf(src)
+	var/atom/location = is_holder_of(user, src) ? user.loc : get_turf(src) //If user isn't the holder we're either in a mech's equipment loadout or something weird so get the outside environment
 
 	if(!location) //Somehow
 		return
 
 	var/datum/gas_mixture/environment = location.return_air()
 
-	to_chat(user, output_gas_scan(environment, location, 1, CELL_VOLUME))
+	var/unit_vol = environment && environment.volume > CELL_VOLUME ? CELL_VOLUME : null
+
+	to_chat(user, output_gas_scan(environment, location, 1, unit_vol))
 
 	src.add_fingerprint(user)
 	return
