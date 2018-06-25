@@ -287,7 +287,7 @@ Doesn't work on other aliens/AI.*/
 	spell_flags = IGNORESPACE|NODUPLICATE
 
 	summon_type = list(/obj/effect/alien/egg)
-a
+
 /spell/aoe_turf/conjure/alienegg/cast(list/targets, mob/user)
 	. = ..()
 	if(!.) //Returning 1 if we failed to cast
