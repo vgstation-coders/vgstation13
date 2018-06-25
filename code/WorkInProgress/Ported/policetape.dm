@@ -187,7 +187,7 @@
 		return attack_hand(user)
 
 /obj/item/tape/allowed(mob/user)
-	if(isrobot(user))
+	if(isrobot(user) && !isMoMMI(user))
 		var/mob/living/silicon/robot/R = user
 		return R.module && (R.module.quirk_flags & robot_compatibility)
 
