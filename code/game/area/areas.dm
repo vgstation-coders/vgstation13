@@ -210,7 +210,7 @@ var/area/space_area
 	for(var/obj/machinery/door/firedoor/D in all_doors)
 		if(!D.blocked)
 			if(D.operating)
-				D.nextstate = CLOSED
+				D.nextstate = FD_CLOSED
 			else if(!D.density)
 				spawn()
 					D.close()
@@ -222,7 +222,7 @@ var/area/space_area
 	for(var/obj/machinery/door/firedoor/D in all_doors)
 		if(!D.blocked)
 			if(D.operating)
-				D.nextstate = OPEN
+				D.nextstate = FD_OPEN
 			else if(D.density)
 				spawn()
 					D.open()
