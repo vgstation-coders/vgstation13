@@ -87,7 +87,7 @@
 /////////////////////////
 
 // WAS: /datum/bioEffect/smile
-/datum/dna/gene/disability/speech/smile
+/datum/dna/gene/disability/smile
 	name = "Smile"
 	desc = "Causes the speech center of the subject's brain to produce large amounts of seratonin and a chemical resembling ecstacy when engaged."
 	activation_message = "You feel so happy. Nothing can be wrong with anything :)"
@@ -148,7 +148,7 @@
 
 
 // WAS: /datum/bioEffect/elvis
-/datum/dna/gene/disability/speech/elvis
+/datum/dna/gene/disability/elvis
 	name = "Elvis"
 	desc = "Forces the language center and primary motor cortex of the subject's brain to talk and act like the King of Rock and Roll."
 	activation_message = "You feel pretty good, honeydoll."
@@ -187,7 +187,7 @@
 
 
 // WAS: /datum/bioEffect/chav
-/datum/dna/gene/disability/speech/chav
+/datum/dna/gene/disability/chav
 	name = "Chav"
 	desc = "Forces the language center of the subject's brain to construct sentences in a more rudimentary manner."
 	activation_message = "Ye feel like a reet prat like, innit?"
@@ -224,7 +224,7 @@
 		speech.message = replacetext(speech.message,"security","coppers")
 
 // WAS: /datum/bioEffect/swedish
-/datum/dna/gene/disability/speech/swedish
+/datum/dna/gene/disability/swedish
 	name = "Swedish"
 	desc = "Forces the language center of the subject's brain to construct sentences in a vaguely norse manner."
 	activation_message = "You feel Swedish, however that works."
