@@ -85,7 +85,7 @@
 		lawtype=lawtypes[lawtype]
 		if(lawtype == null)
 			return
-		testing("Lawtype: [lawtype]")
+		//testing("Lawtype: [lawtype]")
 		if(lawtype==1)
 			lawtype=text2num(input("Enter desired law priority. (15-50)","Priority", 15) as num)
 			lawtype=Clamp(lawtype,15,50)
@@ -104,7 +104,7 @@
 		var/lawtype = input("Select a lawset.","Law Type",1) as null|anything in lawtypes
 		if(lawtype == null)
 			return
-		testing("Lawtype: [lawtype]")
+		//testing("Lawtype: [lawtype]")
 
 		var/law_zeroth=null
 		var/law_zeroth_borg=null

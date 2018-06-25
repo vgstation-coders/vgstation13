@@ -279,8 +279,8 @@
 			broadcast_status()
 		return //do not update_icon
 
-	if(!handled)
-		testing("\[[world.timeofday]\]: vent_pump/receive_signal: unknown command \n[signal.debug_print()]")
+//	if(!handled)
+		//testing("\[[world.timeofday]\]: vent_pump/receive_signal: unknown command \n[signal.debug_print()]")
 	spawn(2)
 		broadcast_status()
 	update_icon()
