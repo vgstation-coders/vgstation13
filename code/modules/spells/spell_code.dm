@@ -94,6 +94,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/gradual_casting = FALSE //equals TRUE while a Sp_GRADUAL spell is actively being cast
 
 	var/list/holiday_required = list() // The holiday this spell is restricted to ! Leave empty if none.
+	var/block = 0//prevents some spells from being spamed
 
 ///////////////////////
 ///SETUP AND PROCESS///
@@ -146,15 +147,17 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(!targets && (spell_flags & WAIT_FOR_CLICK))
 		channel_spell(user, skipcharge)
 		return
-	if(cast_check(1, user))
-		if(gradual_casting)
+	if(gradual_casting)
+		if(cast_check(1, user))
 			gradual_casting = FALSE
 			stop_casting(targets, user)
 			return
 	if(!cast_check(skipcharge, user))
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
+		block = 0
 		return
+	block = 0
 	if(before_target(user))
 		return
 
@@ -512,10 +515,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(!user || isnull(user))
 		return 0
 	if(numticks == 0)
-		return 1
+		return 0
 
 	var/delayfraction = round(delay/numticks)
-	var/Location = user.loc
 	var/originalstat = user.stat
 
 	var/image/progress_bar
@@ -534,6 +536,11 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			if(use_progress_bar)
 				stop_progress_bar(user, progress_bar)
 			return 0
+
+	if(user && user.client)
+		user.client.images -= progbar
+	if(progbar)
+		progbar.loc = null
 	return 1
 
 //UPGRADES

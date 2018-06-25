@@ -96,7 +96,7 @@
 		else
 			callOnLife -= toCall
 
-	if(mind)
+	/*if(mind)
 		if(mind in ticker.mode.implanted)
 			if(implanting)
 				return 0
@@ -106,7 +106,7 @@
 			if(!(locate(/obj/item/weapon/implant/traitor) in src.contents))
 //				to_chat(world, "doesn't have an implant")
 				ticker.mode.remove_traitor_mind(mind, head)
-				/*
+
 				if((head in ticker.mode.implanters))
 					ticker.mode.implanter[head] -= src.mind
 				ticker.mode.implanted -= src.mind
@@ -158,10 +158,6 @@
 			G.overlays += H.obj_overlays[HANDCUFF_LAYER]
 		G.invisibility = 0
 		to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
-
-		if(ticker.mode.name == "cult")
-			var/datum/game_mode/cult/mode_ticker = ticker.mode
-			mode_ticker.harvested++
 
 	else
 		dust()

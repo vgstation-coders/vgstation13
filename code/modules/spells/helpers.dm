@@ -5,6 +5,7 @@
  * USER_TYPE_GENETIC
  * USER_TYPE_XENOMORPH
  * USER_TYPE_MALFAI
+ * USER_TYPE_VAMPIRE
  * USER_TYPE_SPELLBOOK 	: found in spellbooks
  * USER_TYPE_ARTIFACT  	: used by artifacts
  * USER_TYPE_NOUSER    	: generic/abstract spells
@@ -35,4 +36,8 @@
 	for(var/spell/S in spell_list)
 		if(S.spell_aspect_flags & spell_flag)
 			return S
+	return 0
+
+/proc/getAllVampSpells()
+	return getAllSpellsByType(USER_TYPE_VAMPIRE)
 	return 0

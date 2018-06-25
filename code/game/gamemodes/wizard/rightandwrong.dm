@@ -9,6 +9,7 @@
 			continue
 		if(summon_type && iswizard(H))
 			continue
+		/* TODO - READD THIS
 		if(prob(35) && !is_special_character(H))
 			ticker.mode.traitors += H.mind
 			H.mind.special_role = "traitor"
@@ -27,7 +28,7 @@
 			var/obj_count = 1
 			for(var/datum/objective/OBJ in H.mind.objectives)
 				to_chat(H, "<B>Objective #[obj_count]</B>: [OBJ.explanation_text]")
-				obj_count++
+				obj_count++*/
 		var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol")
 		var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","disorient","staffchange","armor","scrying", "clowncurse", "mimecurse", "shoesnatch", "robesummon")
 		var/randomizeswords = pick("unlucky", "misc", "glass", "throw", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "spear", "katana", "axe", "venom", "boot", "saw", "scalpel", "bottle", "switchtool")
@@ -37,17 +38,17 @@
 				if("taser")
 					new /obj/item/weapon/gun/energy/taser(get_turf(H))
 				if("stunrevolver")
-					new /obj/item/weapon/gun/energy/stunrevolver(get_turf(H))	
+					new /obj/item/weapon/gun/energy/stunrevolver(get_turf(H))
 				if("egun")
 					new /obj/item/weapon/gun/energy/gun(get_turf(H))
 				if("laser")
 					new /obj/item/weapon/gun/energy/laser(get_turf(H))
 				if("retro")
-					new /obj/item/weapon/gun/energy/laser/retro(get_turf(H))	
+					new /obj/item/weapon/gun/energy/laser/retro(get_turf(H))
 				if("laserak")
-					new /obj/item/weapon/gun/energy/laser/LaserAK(get_turf(H))		
+					new /obj/item/weapon/gun/energy/laser/LaserAK(get_turf(H))
 				if("plasmapistol")
-					new /obj/item/weapon/gun/energy/plasma/pistol(get_turf(H))	
+					new /obj/item/weapon/gun/energy/plasma/pistol(get_turf(H))
 				if("revolver")
 					new /obj/item/weapon/gun/projectile(get_turf(H))
 				if("detective")
@@ -101,7 +102,7 @@
 				if("nagant")
 					new /obj/item/weapon/gun/projectile/nagant(get_turf(H))
 				if("obrez")
-					new /obj/item/weapon/gun/projectile/nagant/obrez(get_turf(H))	
+					new /obj/item/weapon/gun/projectile/nagant/obrez(get_turf(H))
 				if("beegun")
 					new /obj/item/weapon/gun/gatling/beegun(get_turf(H))
 				if("beretta")
@@ -113,7 +114,7 @@
 				if("luger")
 					new /obj/item/weapon/gun/projectile/luger(get_turf(H))
 				if("colt")
-					new /obj/item/weapon/gun/projectile/colt(get_turf(H))	
+					new /obj/item/weapon/gun/projectile/colt(get_turf(H))
 			playsound(H,'sound/effects/summon_guns.ogg', 50, 1)
 
 		else if(summon_type == "magic")

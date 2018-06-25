@@ -297,7 +297,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	..()
 
 //Gets human's own blood.
-/mob/living/carbon/proc/get_blood(datum/reagents/container)
+proc/get_blood(datum/reagents/container)
 	var/datum/reagent/blood/res = locate() in container.reagent_list //Grab some blood
 	if(res) // Make sure there's some blood at all
 		if(res.data["donor"] != src) //If it's not theirs, then we look for theirs
@@ -337,7 +337,7 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 
 	if(istype(source,/mob/living/carbon/human))
 		var/mob/living/carbon/human/M = source
-		var/datum/reagent/blood/is_there_blood = M.get_blood(M.vessel)
+		var/datum/reagent/blood/is_there_blood = get_blood(M.vessel)
 		if(!is_there_blood)
 			return //If there is no blood in the mob's blood vessel, there's no reason to make any sort of splatter.
 

@@ -42,8 +42,8 @@
 /mob/living/simple_animal/construct/construct_chat_check(setting)
 	if(!mind)
 		return
-
-	if(mind in ticker.mode.cult)
+	var/datum/faction/bloodcult = find_active_faction(BLOODCULT)
+	if(mind in bloodcult.members)
 		return 1
 
 /mob/living/simple_animal/construct/handle_inherent_channels(var/datum/speech/speech, var/message_mode)

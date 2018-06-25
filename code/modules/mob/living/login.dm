@@ -15,6 +15,10 @@
 		switch(ticker.mode.name)
 			if("sandbox")
 				CanBuild()
+
+		if (hasFactionIcons(src))
+			update_faction_icons()
+		/*
 		if((mind in ticker.mode.revolutionaries) || (mind in ticker.mode.head_revolutionaries))
 			ticker.mode.update_rev_icons_added(src.mind)
 		if(mind in ticker.mode.cult)
@@ -31,7 +35,7 @@
 		if((ref in ticker.mode.thralls) || (mind in ticker.mode.enthralled))
 			ticker.mode.update_vampire_icons_added(mind)
 		return
-	return .
+		*/
 
 //This stuff needs to be merged from cloning.dm but I'm not in the mood to be shouted at for breaking all the things :< ~Carn
 	/* clones

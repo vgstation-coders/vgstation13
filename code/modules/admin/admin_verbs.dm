@@ -18,7 +18,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/player_panel,			/*shows an interface for all players, with links to various panels (old style)*/
 	/client/proc/player_panel_new,		/*shows an interface for all players, with links to various panels*/
 	/client/proc/invisimin,				/*allows our mob to go invisible/visible*/
-//	/datum/admins/proc/show_traitor_panel,	/*interface which shows a mob's mind*/ -Removed due to rare practical use. Moved to debug verbs ~Errorage
+	/datum/admins/proc/show_role_panel,	/*interface which shows a mob's mind*/
 	/datum/admins/proc/toggleenter,		/*toggles whether people can join the current game*/
 	/datum/admins/proc/toggleguests,	/*toggles whether guests can join the current game*/
 	/datum/admins/proc/announce,		/*priority announce something to all clients.*/
@@ -51,7 +51,6 @@ var/list/admin_verbs_admin = list(
 	/client/proc/cmd_admin_local_narrate,	/*send text locally to all players in view, similar to direct narrate*/
 	/client/proc/cmd_admin_world_narrate,	/*sends text to all players with no padding*/
 	/client/proc/cmd_admin_create_centcom_report,
-	/client/proc/check_words,			/*displays cult-words*/
 	/client/proc/check_ai_laws,			/*shows AI and borg laws*/
 	/client/proc/admin_memo,			/*admin memo system. show/delete/write. +SERVER needed to delete admin memos of others*/
 	/client/proc/dsay,					/*talk in deadchat using our ckey/fakekey*/
@@ -96,8 +95,8 @@ var/list/admin_verbs_fun = list(
 	/client/proc/drop_bomb,
 	/client/proc/drop_emp,
 	/client/proc/cinematic,
-	/client/proc/one_click_antag,
-	/client/proc/antag_madness,
+	//client/proc/one_click_antag,
+	//client/proc/antag_madness,
 	/datum/admins/proc/toggle_aliens,
 	// FUUUUCKED /client/proc/zombie_event, // ZOMBB-B-BIES
 	/client/proc/cmd_admin_add_freeform_ai_law,
@@ -211,7 +210,7 @@ var/list/admin_verbs_polling = list(
 var/list/admin_verbs_hideable = list(
 	/client/proc/set_ooc,
 	/client/proc/deadmin_self,
-	/datum/admins/proc/show_traitor_panel,
+	/datum/admins/proc/show_role_panel,
 	/datum/admins/proc/toggleenter,
 	/datum/admins/proc/toggleguests,
 	/datum/admins/proc/announce,
@@ -227,7 +226,6 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/admin_cancel_shuttle,
 	/client/proc/cmd_admin_direct_narrate,
 	/client/proc/cmd_admin_world_narrate,
-	/client/proc/check_words,
 	/client/proc/play_local_sound,
 	/client/proc/play_sound,
 	/client/proc/object_talk,

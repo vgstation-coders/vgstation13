@@ -193,32 +193,39 @@
 #define issilent(A) (A.silent || (ishuman(A) && (A:miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 //Macros for antags
 
-#define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind && H.mind.vampire)
+#define isfaction(A) (istype(A, /datum/faction))
 
-#define iscult(H) (H.mind in ticker.mode.cult)
+#define isvampire(H) (H.mind ? H.mind.GetRole(VAMPIRE) : FALSE)
 
-#define isculthead(H) (iscult(H)&&(H.mind in ticker.mode.modePlayer))
+#define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define ischangeling(H) (H.mind in ticker.mode.changelings)
+#define hasFactionIcons(H) (H.mind && H.mind.hasFactionsWithHUDIcons())
 
-#define isrev(H) (H.mind in ticker.mode.revolutionaries)
+#define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
 
-#define isrevhead(H) (H.mind in ticker.mode.head_revolutionaries)
+#define ischangeling(H) (H.mind && H.mind.GetRole(CHANGELING))
 
-#define istraitor(H) (H.mind in ticker.mode.traitors)
+#define isrev(H) (isrevnothead(H) || isrevhead(H))
 
-#define ismalf(H) (H.mind in ticker.mode.malf_ai)
+#define isrevnothead(H) (H.mind && H.mind.GetRole(REV))
 
-#define isnukeop(H) (H.mind in ticker.mode.syndicates)
-#define isnukeopleader(H) (H.mind == ticker.mode.nukeop_leader)
+#define isrevhead(H) (H.mind && H.mind.GetRole(HEADREV))
 
-#define iswizard(H) (H.mind in ticker.mode.wizards)
+#define istraitor(H) (H.mind && H.mind.GetRole(TRAITOR))
 
-#define isapprentice(H) (H.mind in ticker.mode.apprentices)
+#define ismalf(H) (H.mind && H.mind.GetRole(MALF))
 
-#define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || H.mind in ticker.mode.infected_monkeys)
+#define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
 
-#define isdeathsquad(H) (H.mind in ticker.mode.deathsquads)
+#define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
+
+#define isapprentice(H) (H.mind && H.mind.GetRole(WIZAPP))
+
+#define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || (H.mind && H.mind.GetRole(MADMONKEY)))
+
+#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUAD))
+
+
 
 
 //Macro for AREAS!

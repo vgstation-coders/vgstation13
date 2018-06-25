@@ -107,7 +107,7 @@ mob/proc/remove_internal_organ()
 					src.update_colour(0,1,colour_to_apply)
 			else
 				bad_changing_colour_ckeys["[cached_ckey]"] = 1
-
+/*
 /proc/RemoveAllFactionIcons(var/datum/mind/M)
 	ticker.mode.update_cult_icons_removed(M)
 	ticker.mode.update_rev_icons_removed(M)
@@ -115,7 +115,7 @@ mob/proc/remove_internal_organ()
 
 /proc/ClearRoles(var/datum/mind/M)
 	ticker.mode.remove_revolutionary(M)
-
+*/
 /proc/isAdminGhost(A)
 	if(isobserver(A))
 		var/mob/dead/observer/O = A
