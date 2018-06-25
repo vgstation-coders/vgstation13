@@ -13,9 +13,9 @@
 	name = "electrode"
 	icon_state = "spark"
 	nodamage = 1
-	stun = 10
-	weaken = 10
-	stutter = 10
+	stun = 7
+	weaken = 7
+	stutter = 7
 	hitsound = 'sound/weapons/taserhit.ogg'
 
 /*/vg/ EDIT
