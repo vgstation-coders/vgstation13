@@ -1,9 +1,9 @@
 /datum/dna/gene/monkey
-	name="Monkey"
+	name = "Monkey"
 	flags = GENE_UNNATURAL
 
 /datum/dna/gene/monkey/New()
-	block=MONKEYBLOCK
+	block = MONKEYBLOCK
 
 /datum/dna/gene/monkey/can_activate(var/mob/M,var/flags)
 	return istype(M, /mob/living/carbon/human) || istype(M,/mob/living/carbon/monkey)
