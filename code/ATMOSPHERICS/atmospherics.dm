@@ -46,6 +46,10 @@ Pipelines + Other Objects -> Pipe network
 
 	internal_gravity = 1 // Ventcrawlers can move in pipes without gravity since they have traction.
 
+	//We brought this down to the atmospherics level. You don't need to use it for most pipes, but it's used for some things like machineries!
+	var/obj/machinery/atmospherics/node1
+	var/obj/machinery/atmospherics/node2
+
 	// If a pipe node isn't connected, should it be pixel shifted to fit the object?
 	var/ex_node_offset = 0
 

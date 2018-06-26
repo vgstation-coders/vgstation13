@@ -7,8 +7,7 @@ obj/machinery/atmospherics/trinary
 	var/datum/gas_mixture/air2
 	var/datum/gas_mixture/air3
 
-	var/obj/machinery/atmospherics/node1
-	var/obj/machinery/atmospherics/node2
+//see atmospherics.dm for the node1/2 defs, nerd.
 	var/obj/machinery/atmospherics/node3
 
 	var/datum/pipe_network/network1
