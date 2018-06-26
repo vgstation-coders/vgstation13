@@ -657,7 +657,17 @@
 		//BUILDING A WILD APIARY
 		if(state == BEE_BUILDING)
 			wander = 0
-			if(building)
+			var/datum/bee/queen_bee/queen = null
+			for (var/D in bees)
+				if (istype(D,/datum/bee/queen_bee))
+					queen = D
+			if(queen && building)
+				if (bees.len < 20)//Gathering some more volunteers.
+					var/turf/T = get_turf(loc)
+					for(var/mob/living/simple_animal/bee/B in range(src,3))
+						if (bee_species == B.bee_species && B.state == BEE_ROAMING && B.loc != T)
+							step_to(B, T)
+
 				if (building != loc)
 					step_to(src, building)
 				else
@@ -666,6 +676,8 @@
 						W.work()
 					else
 						new /obj/structure/wild_apiary(loc,bee_species.prefix)
+			else
+				mood_change(BEE_ROAMING)
 
 	update_icon()
 
@@ -770,13 +782,15 @@
 	update_icon()
 
 //BEE-NADE & BEE-ULLET
-/mob/living/simple_animal/bee/angry/New(loc, var/obj/machinery/apiary/new_home)
+/mob/living/simple_animal/bee/angry/New(loc, var/obj/machinery/apiary/new_home, var/spec=BEESPECIES_NORMAL, var/tox=50,var/dam=2)
 	..()
 	var/datum/bee/B = new()
-	B.toxic = 50
-	B.damage = 2
+	B.species = bees_species[spec]
+	B.toxic = tox
+	B.damage = dam
 	addBee(B)
 	mood_change(BEE_OUT_FOR_ENEMIES)
+	updateDamage()
 	update_icon()
 
 //BEE-IEFCASE
