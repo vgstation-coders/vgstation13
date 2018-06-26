@@ -108,9 +108,11 @@
 	item_state = "beegun0"
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_COMBAT + "=6;" + Tc_BIOTECH + "=5"
 	recoil = 0
+	var/base_icon_state = "beegun"
+	var/bug_ammo = /obj/item/projectile/bullet/beegun
 
 /obj/item/weapon/gun/gatling/beegun/update_wield(mob/user)
-	item_state = "beegun[wielded ? 1 : 0]"
+	item_state = "[base_icon_state][wielded ? 1 : 0]"
 	if(wielded)
 		slowdown = MINIGUN_SLOWDOWN_WIELDED
 	else
@@ -122,19 +124,26 @@
 	if(current_shells)
 		current_shells--
 		update_icon()
-		in_chamber = new/obj/item/projectile/bullet/beegun()
+		in_chamber = new bug_ammo()
 		return 1
 	return 0
 
 /obj/item/weapon/gun/gatling/beegun/update_icon()
 	switch(current_shells)
 		if(150 to INFINITY)
-			icon_state = "beegun100"
+			icon_state = "[base_icon_state]100"
 		if(100 to 149)
-			icon_state = "beegun75"
+			icon_state = "[base_icon_state]75"
 		if(50 to 99)
-			icon_state = "beegun50"
+			icon_state = "[base_icon_state]50"
 		if(1 to 49)
-			icon_state = "beegun25"
+			icon_state = "[base_icon_state]25"
 		else
-			icon_state = "beegun0"
+			icon_state = "[base_icon_state]0"
+
+/obj/item/weapon/gun/gatling/beegun/hornetgun
+	name = "hornet gun"
+	desc = "Doesn't actually use .22 Hornet cartridges"
+	icon_state = "hornetgun"
+	base_icon_state = "hornetgun"
+	bug_ammo = /obj/item/projectile/bullet/beegun/hornet

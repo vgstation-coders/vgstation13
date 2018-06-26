@@ -376,6 +376,17 @@
 	damage = 5
 	damage_type = TOX
 	flag = "bio"
+	var/bug_species = BEESPECIES_NORMAL
+	var/tox = 50
+	var/dam = 2
+
+/obj/item/projectile/bullet/beegun/hornet
+	name = "hornet"
+	icon_state = "hornetgun"
+	damage = 7
+	bug_species = BEESPECIES_HORNET
+	tox = 25
+	dam = 4
 
 /obj/item/projectile/bullet/beegun/OnFired()
 	..()
@@ -392,7 +403,7 @@
 	bumped = 1
 
 	var/turf/T = get_turf(src)
-	var/mob/living/simple_animal/bee/angry/BEE = new(T)
+	var/mob/living/simple_animal/bee/angry/BEE = new (T,null,bug_species,tox,dam)
 	if(istype(A,/mob/living))
 		var/mob/living/M = A
 		visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")

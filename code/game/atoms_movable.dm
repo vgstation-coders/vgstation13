@@ -965,3 +965,6 @@
 
 /atom/movable/proc/area_entered(var/area/A)
 	return
+
+/atom/movable/proc/can_be_pulled(var/mob/user)
+	return TRUE

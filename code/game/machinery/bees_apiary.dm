@@ -667,6 +667,13 @@ var/list/apiary_reservation = list()
 
 	health = 100
 
+/obj/machinery/apiary/wild/angry/hornet/New()
+	..()
+	reagents.clear_reagents()
+	reagents.add_reagent(ROYALJELLY,15)
+	reagents.add_reagent(NUTRIMENT, 64)
+	reagents.add_reagent(SUGAR, 21)
+
 /obj/machinery/apiary/wild/angry/hornet/initialize()
 	species = bees_species[BEESPECIES_HORNET]
 

@@ -368,6 +368,7 @@
 #define PETRITRICIN		"petritricin"
 #define APETRINE		"apetrine"
 #define SODIUMSILICATE	"sodiumsilicate"
+#define COLORFUL_REAGENT "colorful_reagent"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
