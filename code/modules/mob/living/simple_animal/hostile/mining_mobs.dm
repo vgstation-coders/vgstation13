@@ -532,6 +532,7 @@ obj/item/asteroid/basilisk_hide/New()
 	melee_damage_upper = 25
 	meat_amount = 0
 	vision_range = 4
+	faction = "neutral"
 	maxbodytemp = ARBITRARILY_PLANCK_NUMBER
 	var/fire_time
 	var/fire_extremity
