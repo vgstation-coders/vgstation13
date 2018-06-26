@@ -89,6 +89,7 @@
 	//Map elements that should be loaded together with this map. Stuff like the holodeck areas, etc.
 	var/list/load_map_elements = list()
 	var/snow_theme = 0
+	var/multiz = FALSE
 
 /datum/map/New()
 	. = ..()
