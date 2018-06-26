@@ -47,16 +47,18 @@
 	hitsound = active ? 'sound/weapons/blade1.ogg' : 'sound/weapons/empty.ogg'
 	playsound(src, active ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1) //Placeholder
 	update_icon()
-	active ? processing_objects.Add(src) : processing_objects.Remove(src)
+	(active && isrobot(loc)) ? processing_objects.Add(src) : processing_objects.Remove(src)
 
 /obj/item/weapon/pickaxe/plasmacutter/heat_axe/process()
-	if(isrobot(loc))
+	if(isrobot(loc)) //Sanity is never enough.
 		var/mob/living/silicon/robot/robot = loc
 		if(active && robot && robot.cell)
 			var/consume = rand(100,250)
 			if(robot.cell.charge <= consume)
 				toggleActive()
 			robot.cell.use(consume)
+	else
+		toggleActive()
 
 /obj/item/weapon/pickaxe/plasmacutter/heat_axe/attack(mob/living/target, mob/living/user)
 	..()
@@ -66,10 +68,13 @@
 		target.IgniteMob()
 
 		if(issilicon(target))
+			testing("burn to ashes, motherfucker!")
 			var/mob/living/silicon/robot/robot = target
 			if(prob(robot.getFireLoss())) //The more burn damage the have, the more likely they are to get a component overheated.
 				var/list/blacklisted_components = list("power cell", "armour plating")
 				var/datum/robot_component/C = pick(robot.components) - blacklisted_components
+				testing("Choosen component is: [C]")
 				if(robot.is_component_functioning(C) && C.toggled)
+					testing("[C] still works, time to overheat it.")
 					C.toggled = FALSE
 					to_chat(target, "<span class='danger'>DANGER: [C.name] [pick("Over Temperature", "Cooling")] Error!</span>")
