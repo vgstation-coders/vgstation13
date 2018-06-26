@@ -402,9 +402,10 @@
 	..()
 
 /obj/item/weapon/gripper/examine(mob/user)
-	. = ..()
 	if(wrapped)
-		to_chat(user, "It is holding \a [bicon(wrapped)] [wrapped].")
+		return wrapped.examine(user)
+	else
+		return ..()
 
 /obj/item/weapon/gripper/attackby(obj/item/thing, mob/living/user)
 	if(gripper_sanity_check(src))
