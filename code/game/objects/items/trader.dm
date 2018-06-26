@@ -62,6 +62,7 @@
 /obj/structure/closet/secure_closet/wonderful/New()
 	..()
 	var/random_clothes = clothing.Copy()
+	random_clothes = random_clothes - typesof(/obj/item/clothing/mask/stone) - typesof(/obj/item/clothing/mask/morphing) - typesof(/obj/item/clothing/accessory/holomap_chip) - typesof(/obj/item/clothing/suit/space/time) - typesof(/obj/item/clothing/head/helmet/space/time) - typesof(/obj/item/clothing/gloves/warping_claws)
 	for(var/amount = 1 to 20)
 		var/path = pick_n_take(random_clothes)
 		new path(src)

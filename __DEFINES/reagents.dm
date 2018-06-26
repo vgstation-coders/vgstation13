@@ -193,7 +193,6 @@
 #define SPECIALWHISKEY 			"specialwhiskey"
 #define GIN 			"gin"
 #define ABSINTHE 			"absinthe"
-#define RUM 			"rum"
 #define PWINE 			"pwine"
 #define RUM 			"rum"
 #define VODKA 			"vodka"
@@ -255,7 +254,6 @@
 #define NEUROTOXIN 			"neurotoxin"
 #define BANANAHONK 			"bananahonk"
 #define SILENCER 			"silencer"
-#define CHANGELINGSTING 			"changelingsting"
 #define ERIKASURPRISE 			"erikasurprise"
 #define IRISHCARBOMB 			"irishcarbomb"
 #define SYNDICATEBOMB 			"syndicatebomb"
@@ -382,6 +380,7 @@
 #define PETRITRICIN		"petritricin"
 #define APETRINE		"apetrine"
 #define SODIUMSILICATE	"sodiumsilicate"
+#define COLORFUL_REAGENT "colorful_reagent"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2

@@ -376,6 +376,17 @@
 	damage = 5
 	damage_type = TOX
 	flag = "bio"
+	var/bug_species = BEESPECIES_NORMAL
+	var/tox = 50
+	var/dam = 2
+
+/obj/item/projectile/bullet/beegun/hornet
+	name = "hornet"
+	icon_state = "hornetgun"
+	damage = 7
+	bug_species = BEESPECIES_HORNET
+	tox = 25
+	dam = 4
 
 /obj/item/projectile/bullet/beegun/OnFired()
 	..()
@@ -392,7 +403,7 @@
 	bumped = 1
 
 	var/turf/T = get_turf(src)
-	var/mob/living/simple_animal/bee/angry/BEE = new(T)
+	var/mob/living/simple_animal/bee/angry/BEE = new (T,null,bug_species,tox,dam)
 	if(istype(A,/mob/living))
 		var/mob/living/M = A
 		visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
@@ -779,6 +790,7 @@
 	damage = 10
 	penetration = 0
 	rotate = 0
+	var/variance_angle = 20
 	var/total_amount_to_fire = 9
 	var/type_to_fire = /obj/item/projectile/bullet/buckshot
 	var/is_child = 0
@@ -787,19 +799,21 @@
 	..(T)
 	is_child = C
 
-/obj/item/projectile/bullet/buckshot/proc/get_radius_turfs(turf/T)
-	return orange(T,1)
-
 /obj/item/projectile/bullet/buckshot/OnFired()
 	if(!is_child)
-		var/list/turf/possible_turfs = list()
-		for(var/turf/T in get_radius_turfs(original))
-			possible_turfs += T
+		var/x = 0
+		var/y = 0
+		var/z = 0
+		var/angle = 0
+		var/launch_at_range = 7 // Increasing this should make the bullet spread smoother or something
 		for(var/I = 1; I <=total_amount_to_fire-1; I++)
 			var/obj/item/projectile/bullet/buckshot/B = new type_to_fire(src.loc, 1)
-			var/turf/targloc = pick(possible_turfs)
+			angle = rand(-variance_angle/2, variance_angle/2) + get_angle(starting, original)
+			x = src.x + (launch_at_range * sin(angle))
+			y = src.y + (launch_at_range * cos(angle))
+			z = src.z
 			B.forceMove(get_turf(src))
-			B.launch_at(targloc,from = shot_from)
+			B.launch_at(locate(x, y, z), from = shot_from)
 	..()
 
 /obj/item/projectile/bullet/invisible
@@ -844,9 +858,7 @@
 	type_to_fire = /obj/item/projectile/bullet/buckshot/bullet_storm
 	custom_impact = 1
 	embed_message = FALSE
-
-/obj/item/projectile/bullet/buckshot/bullet_storm/get_radius_turfs(turf/T)
-	return circlerangeturfs(original,5)
+	variance_angle = 50
 
 /obj/item/projectile/bullet/faggot
 	name = "high-speed faggot"

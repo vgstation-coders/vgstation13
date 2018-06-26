@@ -181,7 +181,7 @@
 
 /datum/construction/reversible/crank_charger/spawn_result(mob/user as mob)
 	if(result)
-		testing("[user] finished a [result]!")
+//		testing("[user] finished a [result]!")
 
 		new result(get_turf(holder))
 

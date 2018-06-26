@@ -6,7 +6,7 @@
 	desc = "A classic revolver. Uses .357 ammo."
 	name = "revolver"
 	icon_state = "revolver"
-	caliber = list("357" = 1)
+	caliber = list(POINT357 = 1)
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 1000)

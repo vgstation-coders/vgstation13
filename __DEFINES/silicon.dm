@@ -61,3 +61,5 @@ var/global/list/mommi_modules = list(
 #define MODULE_CLEAN_ON_MOVE 32
 #define MODULE_HAS_MAGPULSE 64
 #define MODULE_IS_THE_LAW 128
+#define MODULE_CAN_LIFT_SECTAPE 256
+#define MODULE_CAN_LIFT_ENGITAPE 512

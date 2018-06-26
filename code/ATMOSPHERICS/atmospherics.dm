@@ -239,7 +239,7 @@ Pipelines + Other Objects -> Pipe network
 				continue
 			var/node_var="node[node_id]"
 			if(!(node_var in vars))
-				testing("[node_var] not in vars.")
+				//testing("[node_var] not in vars.")
 				return
 			if(!vars[node_var])
 				vars[node_var] = found

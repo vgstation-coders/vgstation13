@@ -295,7 +295,7 @@
 /obj/item/weapon/robot_module/engineering
 	name = "engineering robot module"
 	module_holder = "engineer"
-	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE
+	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_LIFT_ENGITAPE
 	networks = list(CAMERANET_ENGI)
 	radio_key = /obj/item/device/encryptionkey/headset_eng
 	sprites = list(
@@ -350,7 +350,7 @@
 /obj/item/weapon/robot_module/security
 	name = "security robot module"
 	module_holder = "security"
-	quirk_flags = MODULE_IS_THE_LAW
+	quirk_flags = MODULE_IS_THE_LAW | MODULE_CAN_LIFT_SECTAPE
 	radio_key = /obj/item/device/encryptionkey/headset_sec
 	sprites = list(
 		"Default" = "secbot",

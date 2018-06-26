@@ -528,6 +528,10 @@
 		var/mob/living/simple_animal/hostile/slime/S = M
 		S.calm()
 
+	if(istype(M,/mob/living/simple_animal/bee))
+		var/mob/living/simple_animal/bee/B = M
+		B.calming()
+
 /datum/reagent/lube
 	name = "Space Lube"
 	id = LUBE
@@ -2042,6 +2046,13 @@
 	for(var/obj/item/I in T)
 		I.decontaminate()
 
+	T.color = ""
+
+/datum/reagent/space_cleaner/bleach/reaction_obj(obj/O, var/volume)
+	if(O)
+		O.color = ""
+	..()
+
 /datum/reagent/space_cleaner/bleach/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -2066,6 +2077,8 @@
 
 	if(..())
 		return 1
+
+	M.color = ""
 
 	if(method == TOUCH)
 		if(ishuman(M))
@@ -3491,7 +3504,7 @@
 	reagent_state = LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
-	
+
 /datum/reagent/mustard
 	name = "Mustard"
 	id = MUSTARD
@@ -3499,7 +3512,7 @@
 	reagent_state = LIQUID
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#cccc33" //rgb: 204, 204, 51
-	
+
 /datum/reagent/relish
 	name = "Relish"
 	id = RELISH
@@ -6809,3 +6822,32 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		I.desc = "Looks like this was \an [O] some time ago."
 		O.visible_message("<span class='warning'>\The [O] melts.</span>")
 		qdel(O)
+
+/datum/reagent/colorful_reagent
+	name = "Colorful Reagent"
+	id = COLORFUL_REAGENT
+	description = "Thoroughly sample the rainbow."
+	reagent_state = LIQUID
+	color = "#C8A5DC"
+	var/list/random_color_list = list("#00aedb","#a200ff","#f47835","#d41243","#d11141","#00b159","#00aedb","#f37735","#ffc425","#008744","#0057e7","#d62d20","#ffa700")
+
+
+/datum/reagent/colorful_reagent/on_mob_life(mob/living/M)
+	if(M && isliving(M))
+		M.color = pick(random_color_list)
+	..()
+
+/datum/reagent/colorful_reagent/reaction_mob(mob/living/M, reac_volume)
+	if(M && isliving(M))
+		M.color = pick(random_color_list)
+	..()
+
+/datum/reagent/colorful_reagent/reaction_obj(obj/O, reac_volume)
+	if(O)
+		O.color = pick(random_color_list)
+	..()
+
+/datum/reagent/colorful_reagent/reaction_turf(turf/T, reac_volume)
+	if(T)
+		T.color = pick(random_color_list)
+	..()

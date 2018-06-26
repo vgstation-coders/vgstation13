@@ -1,7 +1,7 @@
 /obj/item/device/blinder
 	name = "camera"
 	icon = 'icons/obj/items.dmi'
-	desc = "A polaroid camera. The film chamber is filled with wire for some reason."
+	desc = "A polaroid camera."
 	icon_state = "polaroid"
 	item_state = "polaroid"
 	w_class = W_CLASS_SMALL
@@ -14,8 +14,9 @@
 	var/cell = null
 	var/obj/item/weapon/light/bulb/flashbulb = null
 	var/start_with_bulb = TRUE
-	var/decon_path = /obj/item/device/camera/empty
+	var/decon_path = /obj/item/device/camera
 	var/powercost = 10000
+	var/base_desc = ""
 
 /obj/item/device/blinder/Destroy()
 	if(cell)
@@ -26,14 +27,21 @@
 		flashbulb = null
 	..()
 
-/obj/item/device/blinder/New()
+/obj/item/device/blinder/New(var/empty = FALSE)
 	..()
+	if(empty == TRUE)
+		start_with_bulb = FALSE
 	if(start_with_bulb)
 		flashbulb = new(src)
 	update_verbs()
+	base_desc = desc
+	update_desc()
 
-/obj/item/device/blinder/empty
-	start_with_bulb = FALSE
+/obj/item/device/blinder/proc/update_desc()
+	if(cell)
+		desc = "[base_desc] There is a power cell in the film chamber for some reason."
+	else
+		desc = "[base_desc] The film chamber is filled with wire for some reason."
 
 /obj/item/device/blinder/examine(mob/user)
 	..()
@@ -118,7 +126,7 @@
 		C.forceMove(usr.loc)
 		usr.put_in_hands(C)
 		cell = null
-		desc = "A polaroid camera. The film chamber is filled with wire for some reason."
+		update_desc()
 		to_chat(usr, "You remove \the [C] from \the [src].")
 	update_verbs()
 
@@ -150,7 +158,7 @@
 			return 1
 		cell = W
 		user.visible_message("[user] inserts \the [W] into \the [src].","You insert \the [W] into \the [src].")
-		desc = "A polaroid camera. There is a power cell in the film chamber for some reason."
+		update_desc()
 		update_verbs()
 
 	if(istype(W, /obj/item/weapon/light/bulb))
@@ -187,11 +195,11 @@
 		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/obj/item/device/camera/empty/I = new decon_path(get_turf(user))
+			var/obj/item/device/camera/I = new decon_path(get_turf(user), empty = TRUE)
 			handle_camera(I)
 			user.put_in_hands(I)
 		else
-			var/obj/item/device/camera/empty/I = new decon_path(get_turf(loc))
+			var/obj/item/device/camera/I = new decon_path(get_turf(loc), empty = TRUE)
 			handle_camera(I)
 		var/obj/item/stack/cable_coil/C = new (get_turf(user))
 		C.amount = 5

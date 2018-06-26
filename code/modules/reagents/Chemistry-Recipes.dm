@@ -3164,6 +3164,13 @@
 	id = LEMON_LIME
 	result = LEMON_LIME
 	required_reagents = list(LIMEJUICE = 1, LEMONJUICE = 1, SODAWATER = 1)
+  result_amount = 3
+
+/datum/chemical_reaction/colorful_reagent
+	name = "Colorful Reagent"
+	id = COLORFUL_REAGENT
+	result = COLORFUL_REAGENT
+	required_reagents = list(MESCALINE = 1, PSILOCYBIN = 1, AMATOXIN = 1)
 	result_amount = 3
 
 #undef ALERT_AMOUNT_ONLY

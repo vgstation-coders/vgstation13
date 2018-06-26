@@ -31,6 +31,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 		AM.forceMove(null)	//just to make sure they're deleted by the garbage collector
 	manifest += "</ul>"
 
+// Called after a crate containing the items specified by this datum is created
+/datum/supply_packs/proc/post_creation(var/atom/movable/container)
+	return
+
 //////SUPPLIES//////
 
 /datum/supply_packs/toner
@@ -185,6 +189,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 40
 	containertype = /obj/structure/largecrate
 	containername = "ticking crate"
+	group = "Supplies"
+
+/datum/supply_packs/anvil
+	name = "Anvil"
+	contains = list(/obj/item/anvil)
+	cost = 150
+	containertype = /obj/structure/largecrate
+	containername = "anvil crate"
 	group = "Supplies"
 
 /datum/supply_packs/metal50
@@ -836,7 +848,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/shield/riot,
 					/obj/item/weapon/shield/riot)
 	cost = 120
-	containertype = /obj/structure/closet/crate/secure/anti_tamper
+	containertype = /obj/structure/closet/crate/secure
 	containername = "tactical assault gear crate"
 	access = list(access_armory)
 	group = "Security"
@@ -1084,6 +1096,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/freezer
 	containername = "pizza crate"
 	group = "Hospitality"
+
+/datum/supply_packs/randomised/pizza/post_creation(var/atom/movable/container)
+	if(!station_does_not_tip)
+		return
+	for(var/obj/item/pizzabox/box in container)
+		var/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/pizza = box.pizza
+		if(!pizza)
+			continue
+		pizza.make_poisonous()
 
 /datum/supply_packs/cafe
 	name = "Cafe equipment"
