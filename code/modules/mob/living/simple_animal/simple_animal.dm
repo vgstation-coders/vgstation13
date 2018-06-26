@@ -14,6 +14,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/icon_living = ""
 	var/icon_dead = ""
 	var/icon_gib = null	//We only try to show a gibbing animation if this exists.
+	var/icon_attack = null //We only try to show an attacking animation if it exists
+	var/icon_attack_time //How long the ahove animation runs, in deciseconds
+	var/icon_dying = null //We only try to show a dying animation if it exists.
+	var/icon_dying_time //How long the above animation runs in deciseconds
 
 	var/list/speak = list()
 	//var/list/speak_emote = list()//	Emotes while speaking IE: Ian [emote], [text] -- Ian barks, "WOOF!". Spoken text is generated from the speak variable.
@@ -500,7 +504,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return
 
 	if(!gibbed)
-		visible_message("<span class='danger'>\the [src] stops moving...</span>")
+		if(icon_dying && do_flick(icon_dying, src, icon_dying_time))
+			visible_message("<span class='danger'>\the [src] stops moving...</span>")
+		else
+			visible_message("<span class='danger'>\the [src] stops moving...</span>")
 
 	health = 0 // so /mob/living/simple_animal/Life() doesn't magically revive them
 	living_mob_list -= src
