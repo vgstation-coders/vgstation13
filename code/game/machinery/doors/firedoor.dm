@@ -1,5 +1,5 @@
-/var/const/OPEN = 1
-/var/const/CLOSED = 2
+/var/const/FD_OPEN = 1
+/var/const/FD_CLOSED = 2
 
 var/global/list/alert_overlays_global = list()
 
@@ -467,10 +467,10 @@ var/global/list/alert_overlays_global = list()
 		return
 
 	switch(nextstate)
-		if(OPEN)
+		if(FD_OPEN)
 			nextstate = null
 			open()
-		if(CLOSED)
+		if(FD_CLOSED)
 			nextstate = null
 			close()
 

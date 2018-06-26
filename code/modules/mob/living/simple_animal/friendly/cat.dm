@@ -56,6 +56,7 @@
 	icon_living= "salem"
 	icon_dead= "salem_dead"
 	gender = FEMALE
+	holder_type = /obj/item/weapon/holder/animal/salem
 
 /mob/living/simple_animal/cat/kitten
 	name = "kitten"

@@ -8,6 +8,7 @@
 > angry-bee hive
 
 */
+var/list/apiary_reservation = list()
 
 /obj/machinery/apiary
 	name = "apiary tray"
@@ -101,13 +102,14 @@
 			else
 				to_chat(user, "<span class='danger'>The [species_name] are violent and exhausted, the hive's toxicity is reaching critical levels.</span>")
 
-	switch(reagents.total_volume)
-		if(30 to 60)
-			to_chat(user, "<span class='info'>Looks like there's a bit of [reagent_name(species.worker_product)] in it.</span>")
-		if(60 to 90)
-			to_chat(user, "<span class='info'>There's a decent amount of [reagent_name(species.worker_product)] dripping from it!</span>")
-		if(90 to INFINITY)
-			to_chat(user, "<span class='info'>It's full of [reagent_name(species.worker_product)]!</span>")
+	if (species.worker_product)
+		switch(reagents.total_volume)
+			if(30 to 60)
+				to_chat(user, "<span class='info'>Looks like there's a bit of [reagent_name(species.worker_product)] in it.</span>")
+			if(60 to 90)
+				to_chat(user, "<span class='info'>There's a decent amount of [reagent_name(species.worker_product)] dripping from it!</span>")
+			if(90 to INFINITY)
+				to_chat(user, "<span class='info'>It's full of [reagent_name(species.worker_product)]!</span>")
 
 /obj/machinery/apiary/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
@@ -240,6 +242,7 @@
 		queen_bees_inside++
 		var/datum/bee/queen_bee/Q = B
 		if (Q.colonizing)
+			apiary_reservation.Remove(src)
 			nutrilevel = max(15,nutrilevel+15)
 	else
 		worker_bees_inside++
@@ -289,9 +292,9 @@
 				reagents.add_reagent(chemToAdd, amountToAdd * yieldmod)
 		if (!pollen.Find(S))
 			pollen.Add(S)
-		if (istype(B,/datum/bee/queen_bee))
+		if (istype(B,/datum/bee/queen_bee) && species.queen_product)
 			reagents.add_reagent(species.queen_product,0.75 * yieldmod)
-		else
+		else if (species.worker_product)
 			reagents.add_reagent(species.worker_product,0.75 * yieldmod)
 		reagents.add_reagent(SUGAR, 0.1 * yieldmod)
 
@@ -328,15 +331,17 @@
 	var/mob/living/simple_animal/bee/lastBees = getFromPool(/mob/living/simple_animal/bee,get_turf(src))
 	for(var/i = 1 to worker_bees_inside)
 		worker_bees_inside--
-		lastBees.addBee(new species.bee_type(src))
+		lastBees.addBee(new species.bee_type())
 	for(var/i = 1 to queen_bees_inside)
 		queen_bees_inside--
-		lastBees.addBee(new species.queen_type(src))
+		lastBees.addBee(new species.queen_type())
 
 /obj/machinery/apiary/proc/exile_swarm(var/obj/machinery/apiary/A)
-	if (A == src)
+	if (A == src)//can't colonize our own apiary
 		return 0
-	if (A.queen_bees_inside > 0 || is_type_in_list(/datum/bee/queen_bee,A.bees_outside_hive))
+	if (A in apiary_reservation)//another queen has marked this one for herself
+		return 0
+	if (A.queen_bees_inside > 0 || locate(/datum/bee/queen_bee) in A.bees_outside_hive)//another queen made her way there somehow
 		return 0
 	var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, get_turf(src), src)
 	var/datum/bee/queen_bee/new_queen = new species.queen_type(src)
@@ -347,7 +352,16 @@
 		B_mob.addBee(B)
 		worker_bees_inside--
 	new_queen.setHome(A)
+	A.reserve_apiary(B_mob)
 	return 1
+
+/obj/machinery/apiary/proc/reserve_apiary(var/mob/living/simple_animal/bee/B_swarm)
+	apiary_reservation.Add(B_swarm)
+	spawn (300)
+		apiary_reservation.Remove(B_swarm)
+		if (B_swarm)//so we can't reach the apiary somehow? then we've become homeless
+			B_swarm.visible_message("<span class='notice'>A swarm has lost its way.</span>")
+			B_swarm.mood_change(BEE_ROAMING)
 
 /obj/machinery/apiary/proc/angry_swarm(var/mob/M = null)
 	if (!species.angery)
@@ -362,7 +376,7 @@
 		B_mob.addBee(B)
 		worker_bees_inside--
 		bees_outside_hive.Add(B)
-		B.angerAt(M)
+	B_mob.mood_change(BEE_OUT_FOR_ENEMIES,M)
 	B_mob.update_icon()
 
 
@@ -451,10 +465,11 @@
 				worker_bees_inside--
 			bees_outside_hive.Add(B)
 			B_mob.addBee(B)
-			if (toxic > species.toxic_threshold_anger && prob(toxic/1.5))//if our beehive is full of toxicity, bees will become ANGRY
-				B.angerAt()
+			if (prob(species.aggressiveness) || (toxic > species.toxic_threshold_anger && prob(toxic/1.5)))//if our beehive is full of toxicity, bees will become ANGRY
+				B_mob.mood_change(BEE_OUT_FOR_ENEMIES)
 			else
-				B.goPollinate()
+				B_mob.mood_change(BEE_OUT_FOR_PLANTS)
+			B_mob.update_icon()
 
 		if(queen_bees_inside > 1 && worker_bees_inside >= 10)
 			for(var/obj/machinery/apiary/A in range(src,5))
@@ -465,36 +480,77 @@
 
 ///////////////////////////WILD BEEHIVES////////////////////////////
 
+/obj/structure/wild_apiary
+	name = "wild bug hive"
+	icon = 'icons/obj/apiary_bees_etc.dmi'
+	icon_state = "apiary-wild-inprogress0"
+	density = 0
+	anchored = 1
+	var/base_icon_state = "apiary-wild-inprogress"
+	var/prefix = ""
+	var/remaining_work = 10
+	var/health = 20
+
+/obj/structure/wild_apiary/New(turf/loc, var/p = "")
+	prefix = p
+	icon_state = "[prefix][base_icon_state]0"
+
+/obj/structure/wild_apiary/proc/work()
+	remaining_work--
+	switch(remaining_work)
+		if (1 to 3)
+			icon_state = "[prefix][base_icon_state]2"
+		if (4 to 6)
+			icon_state = "[prefix][base_icon_state]1"
+		if (7 to 9)
+			icon_state = "[prefix][base_icon_state]0"
+	if (remaining_work<=0)
+		var/obj/machinery/apiary/wild/W = new /obj/machinery/apiary/wild(loc)
+		W.icon_state = "[prefix][W.icon_state]"
+		for (var/mob/living/simple_animal/bee/B_mob in loc)
+			if (B_mob.state == BEE_BUILDING)
+				for(var/datum/bee/B in B_mob.bees)
+					W.enterHive(B)
+				qdel(B_mob)
+
+		qdel(src)
+
+
+/obj/structure/wild_apiary/bullet_act(var/obj/item/projectile/P)
+	..()
+	if(P.damage && P.damtype != HALLOSS)
+		health -= P.damage
+		updateHealth()
+
+/obj/structure/wild_apiary/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if(..())
+		return
+	else if(O.force)
+		user.delayNextAttack(10)
+		to_chat(user,"<span class='warning'>You hit \the [src] with your [O].</span>")
+		if(O.hitsound)
+			playsound(src, O.hitsound, 50, 1, -1)
+		health -= O.force
+		updateHealth()
+
+/obj/structure/wild_apiary/proc/updateHealth()
+	if(health <= 0)
+		visible_message("<span class='notice'>\The [src] falls apart.</span>")
+		qdel(src)
+
 /obj/machinery/apiary/wild
-	name = "angry-bee hive"
+	name = "hive"
 	icon = 'icons/obj/apiary_bees_etc.dmi'
 	icon_state = "apiary-wild"
 	density = 1
 	anchored = 1
-	nutrilevel = 100
-	damage = 1.5
-	toxic = 25
+	nutrilevel = 15
 
-	cycledelay = 50
+	cycledelay = 100
 
 	//we'll allow those to start pumping out bees right away
-	queen_bees_inside = 1
-	worker_bees_inside = 20
 	wild = 1
-
 	var/health = 100
-
-/obj/machinery/apiary/wild/New()
-	..()
-	reagents.add_reagent(ROYALJELLY,5)
-	reagents.add_reagent(HONEY,75)
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(SUGAR, 16)
-	update_icon()
-	initialize()
-
-/obj/machinery/apiary/wild/initialize()
-	species = bees_species[BEESPECIES_NORMAL]
 
 /obj/machinery/apiary/wild/bullet_act(var/obj/item/projectile/P)
 	..()
@@ -530,7 +586,42 @@
 
 		qdel(src)
 
-/obj/machinery/apiary/wild/process()
+/obj/machinery/apiary/wild/update_icon()
+	overlays.len = 0
+	return
+
+/obj/machinery/apiary/wild/angry
+	name = "angry-bee hive"
+	icon = 'icons/obj/apiary_bees_etc.dmi'
+	icon_state = "apiary-wild"
+	density = 1
+	anchored = 1
+	nutrilevel = 100
+	damage = 1.5
+	toxic = 25
+
+	cycledelay = 50
+
+	//we'll allow those to start pumping out bees right away
+	queen_bees_inside = 1
+	worker_bees_inside = 20
+	wild = 1
+
+	health = 100
+
+/obj/machinery/apiary/wild/angry/New()
+	..()
+	reagents.add_reagent(ROYALJELLY,5)
+	reagents.add_reagent(HONEY,75)
+	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(SUGAR, 16)
+	update_icon()
+	initialize()
+
+/obj/machinery/apiary/wild/angry/initialize()
+	species = bees_species[BEESPECIES_NORMAL]
+
+/obj/machinery/apiary/wild/angry/process()
 	if(world.time > (lastcycle + cycledelay))
 		lastcycle = world.time
 
@@ -553,10 +644,30 @@
 			worker_bees_inside--
 			bees_outside_hive.Add(B)
 			B_mob.addBee(B)
-			B.angerAt()
+			B_mob.mood_change(BEE_OUT_FOR_ENEMIES)
+			B_mob.update_icon()
 
-/obj/machinery/apiary/wild/update_icon()
-	overlays.len = 0
-	return
+
+/obj/machinery/apiary/wild/angry/hornet
+	name = "deadly hornet hive"
+	icon = 'icons/obj/apiary_bees_etc.dmi'
+	icon_state = "hornet_apiary-wild"
+	density = 1
+	anchored = 1
+	nutrilevel = 100
+	damage = 1//hornets are already pretty dangerous by themselves.
+	toxic = 0
+
+	cycledelay = 50
+
+	//we'll allow those to start pumping out bees right away
+	queen_bees_inside = 1
+	worker_bees_inside = 20
+	wild = 1
+
+	health = 100
+
+/obj/machinery/apiary/wild/angry/hornet/initialize()
+	species = bees_species[BEESPECIES_HORNET]
 
 #undef MAX_BEES_PER_HIVE

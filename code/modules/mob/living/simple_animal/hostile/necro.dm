@@ -623,7 +623,6 @@
 	break_doors = CANPLUS
 
 /mob/living/simple_animal/hostile/necro/zombie/leatherman
-	..()
 	name = "leatherman"
 	icon_dead = "zombie_leather"
 	icon_gib = "zombie_leather"

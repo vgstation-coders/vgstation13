@@ -60,8 +60,10 @@ var/global/list/mommi_modules = list(
 #define MODULE_CLEAN_ON_MOVE 32		//Will clean everything under it while moving
 #define MODULE_HAS_MAGPULSE 64		//Module isn't pushed b ZAS nor can slip in space
 #define MODULE_IS_THE_LAW 128		//Module can use *law and *halt
-#define MODULE_IS_SYNDICATE 256		//A hacked/syndicate module
-#define MODULE_IS_DEFINITIVE 512	//Can't get a module reset
+#define MODULE_CAN_LIFT_SECTAPE 256
+#define MODULE_CAN_LIFT_ENGITAPE 512
+#define MODULE_IS_SYNDICATE 1024		//A hacked/syndicate module
+#define MODULE_IS_DEFINITIVE 2048	//Can't get a module reset
 
 // Cyborgs & MoMMI defines
 #define CYBORG_STARTING_TONER 40
@@ -96,3 +98,5 @@ var/global/list/mommi_modules = list(
 
 #define SILICON_MOBILITY_MODULE_SPEED_MODIFIER 0.75 //Silicon's speed var is multiplied by the mobility module modifier
 #define SILICON_VTEC_SPEED_BONUS 0.25 //But the VTEC Bonus is ADDED to their movement_speed_modifier
+
+

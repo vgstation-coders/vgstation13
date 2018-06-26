@@ -528,6 +528,10 @@
 		var/mob/living/simple_animal/hostile/slime/S = M
 		S.calm()
 
+	if(istype(M,/mob/living/simple_animal/bee))
+		var/mob/living/simple_animal/bee/B = M
+		B.calming()
+
 /datum/reagent/lube
 	name = "Space Lube"
 	id = LUBE
@@ -3491,7 +3495,7 @@
 	reagent_state = LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
-	
+
 /datum/reagent/mustard
 	name = "Mustard"
 	id = MUSTARD
@@ -3499,7 +3503,7 @@
 	reagent_state = LIQUID
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#cccc33" //rgb: 204, 204, 51
-	
+
 /datum/reagent/relish
 	name = "Relish"
 	id = RELISH

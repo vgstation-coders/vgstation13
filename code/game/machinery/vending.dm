@@ -60,7 +60,10 @@ var/global/num_vending_terminals = 1
 	var/ads_chance = 50 // Chance of an ad appearing on screen
 	var/datum/data/vending_product/currently_vending = null // A /datum/data/vending_product instance of what we're paying for right now.
 	// To be filled out at compile time
-	var/list/accepted_coins	= list()	// Accepted coins by the machine.
+	var/list/accepted_coins = list(
+			/obj/item/weapon/coin,
+			/obj/item/weapon/reagent_containers/food/snacks/chococoin
+			)	// Accepted coins by the machine.
 
 	var/list/products	= list()	// For each, use the following pattern:
 	var/list/contraband	= list()	// list(/type/path = amount,/type/path2 = amount2)
@@ -117,11 +120,6 @@ var/global/num_vending_terminals = 1
 	num_vending_machines++
 
 	overlays_vending[1] = "[icon_state]-panel"
-
-	accepted_coins = list(
-			/obj/item/weapon/coin,
-			/obj/item/weapon/reagent_containers/food/snacks/chococoin
-			)
 
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/vendomat,\

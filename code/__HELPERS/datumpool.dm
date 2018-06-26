@@ -95,8 +95,6 @@
 	to_chat(world, text("DEBUG_DATUM_POOL: returnToPool([]) [] left.", D.type, length(masterdatumPool[D.type])))
 	#endif
 
-#undef MAINTAINING_DATUM_POOL_COUNT
-
 #ifdef DEBUG_DATUM_POOL
 #undef DEBUG_DATUM_POOL
 #endif

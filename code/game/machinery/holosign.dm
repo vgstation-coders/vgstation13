@@ -61,8 +61,8 @@ var/list/obj/machinery/holosign/holosigns = list()
 /obj/machinery/holosign_switch/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)
-/
-obj/machinery/holosign_switch/attack_paw(mob/user as mob)
+
+/obj/machinery/holosign_switch/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
 /obj/machinery/holosign_switch/attackby(obj/item/weapon/W, mob/user as mob)

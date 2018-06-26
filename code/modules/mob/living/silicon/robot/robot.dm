@@ -7,7 +7,7 @@
 	health = 300
 	flashed = FALSE
 
-	var/list/hud_list[2]
+	var/list/hud_list = list()
 	var/sight_mode = 0
 	var/custom_name = ""
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().

@@ -167,12 +167,11 @@ var/global/list/damage_icon_parts = list()
 			DI = get_damage_icon_part(O.damage_state, O.icon_name, (species.blood_color == DEFAULT_BLOOD ? "" : species.blood_color))
 
 			standing_image.overlays += DI
-	var/obj/abstract/Overlays/O = obj_overlays[DAMAGE_LAYER]
+	var/obj/abstract/Overlays/O = obj_overlays[DAMAGE_HUD_LAYER]
 	overlays -= O
 	O.overlays.len = 0
 	O.overlays += standing_image
-	obj_to_plane_overlay(O,DAMAGE_LAYER)
-	//overlays_standing[DAMAGE_LAYER]	= standing_image
+	obj_to_plane_overlay(O,DAMAGE_HUD_LAYER)
 
 
 
@@ -325,8 +324,8 @@ var/global/list/damage_icon_parts = list()
 			if(facial_hair_style.do_colouration)
 				facial_s.Blend(rgb(r_facial, g_facial, b_facial), ICON_ADD)
 			face_standing.Blend(facial_s, ICON_OVERLAY)
-		else
-			warning("Invalid f_style for [species.name]: [f_style]")
+//		else
+			//warning("Invalid f_style for [species.name]: [f_style]")
 
 	if(h_style && !check_hidden_head_flags(HIDEHEADHAIR))
 		var/datum/sprite_accessory/hair_style = hair_styles_list[h_style]
@@ -338,8 +337,8 @@ var/global/list/damage_icon_parts = list()
 				hair_s.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
 
 			face_standing.Blend(hair_s, ICON_OVERLAY)
-		else
-			warning("Invalid h_style for [species.name]: [h_style]")
+//		else
+			//warning("Invalid h_style for [species.name]: [h_style]")
 
 	if(body_alphas.len)
 		var/lowest_alpha = get_lowest_body_alpha()

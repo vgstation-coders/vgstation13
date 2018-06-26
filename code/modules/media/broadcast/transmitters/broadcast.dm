@@ -54,7 +54,7 @@
 		for(var/obj/machinery/media/source in orange(20, src))
 			if(source.id_tag in autolink)
 				sources.Add(source)
-				testing("Autolinked [source] -> [src]")
+				//testing("Autolinked [source] -> [src]")
 		hook_media_sources()
 	if(on)
 		update_on()

@@ -147,7 +147,7 @@
 		to_chat(usr, "<span class='warning'>We must be in human form before activating Horror Form.</span>")
 		return
 
-	var/datum/changeling/changeling = changeling_power(0,0,100)
+	var/datum/changeling/changeling = changeling_power(30, 0, 100, deny_horror = TRUE)
 	if(!changeling)
 		return
 
@@ -155,6 +155,12 @@
 
 	for(var/obj/item/slot in H.get_all_slots())
 		u_equip(slot, 1)
+
+	H.maxHealth = 800 /* Gonna need more than one egun to kill one of these bad boys*/
+	H.health = 800
+	H.set_species("Horror")
+	H.client.verbs |= H.species.abilities // Force ability equip.
+	H.update_icons()
 
 	monkeyizing = 1
 	canmove = 0
@@ -178,11 +184,6 @@
 	delayNextAttack(0)
 	icon = null
 	invisibility = initial(invisibility)
-	H.maxHealth = 800 /* Gonna need more than one egun to kill one of these bad boys*/
-	H.health = 800
-	H.set_species("Horror")
-	H.client.verbs |= H.species.abilities // Force ability equip.
-	H.update_icons()
 
 //removes our changeling verbs
 /mob/proc/remove_changeling_powers()

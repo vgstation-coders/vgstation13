@@ -87,15 +87,15 @@
 
 /obj/abstract/screen/fullscreen/brute
 	icon_state = "brutedamageoverlay"
-	layer = DAMAGE_LAYER
+	layer = DAMAGE_HUD_LAYER
 
 /obj/abstract/screen/fullscreen/oxy
 	icon_state = "oxydamageoverlay"
-	layer = DAMAGE_LAYER
+	layer = DAMAGE_HUD_LAYER
 
 /obj/abstract/screen/fullscreen/numb
 	icon_state = "numboverlay"
-	layer = DAMAGE_LAYER
+	layer = DAMAGE_HUD_LAYER
 
 /obj/abstract/screen/fullscreen/crit
 	icon_state = "passage"

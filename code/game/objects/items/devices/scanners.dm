@@ -294,14 +294,16 @@ Subject's pulse: ??? BPM"})
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	var/turf/location = get_turf(user)
+	var/atom/location = is_holder_of(user, src) ? user.loc : get_turf(src) //If user isn't the holder we're either in a mech's equipment loadout or something weird so get the outside environment
 
 	if(!location) //Somehow
 		return
 
 	var/datum/gas_mixture/environment = location.return_air()
 
-	to_chat(user, output_gas_scan(environment, location, 1, CELL_VOLUME))
+	var/unit_vol = environment && environment.volume > CELL_VOLUME ? CELL_VOLUME : null
+
+	to_chat(user, output_gas_scan(environment, location, 1, unit_vol))
 
 	src.add_fingerprint(user)
 	return
@@ -366,7 +368,7 @@ Subject's pulse: ??? BPM"})
 		if(unknown_concentration > 0.01)
 			message += "<br><span class='notice'>Unknown: [round(unknown_concentration*100)]%</span>"
 
-		message += "<br>[human_standard && !(scanned.temperature in range(BODYTEMP_COLD_DAMAGE_LIMIT, BODYTEMP_HEAT_DAMAGE_LIMIT)) ? "<span class='bad'>" : "<span class='notice'>"] Temperature: [round(scanned.temperature-T0C)]&deg;C"
+		message += "<br>[human_standard && !IsInRange(scanned.temperature, BODYTEMP_COLD_DAMAGE_LIMIT, BODYTEMP_HEAT_DAMAGE_LIMIT) ? "<span class='bad'>" : "<span class='notice'>"] Temperature: [round(scanned.temperature-T0C)]&deg;C"
 		message += "<br><span class='notice'>Heat capacity: [round(heat_capacity, 0.01)]</span>"
 	else
 		message += "<br><span class='warning'>No gasses detected[container && !istype(container, /turf) ? " in \the [container]." : ""]!</span>"
