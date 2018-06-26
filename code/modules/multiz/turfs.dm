@@ -31,7 +31,7 @@
 	var/turf/below
 
 /turf/simulated/open/initialize()
-	below = GetBelow(src)
+	var/turf/below = GetBelow(src)
 	vis_contents += below
 	..()
 	ASSERT(HasBelow(z))
