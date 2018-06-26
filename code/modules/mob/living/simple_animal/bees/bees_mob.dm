@@ -639,9 +639,10 @@
 					for (var/turf/simulated/floor/T in range(src,2))
 						if(!T.has_dense_content() && !(locate(/obj/structure/wild_apiary) in T))
 							available_turfs.Add(T)
-					building = pick(available_turfs)
-					if (building)
-						mood_change(BEE_BUILDING)
+					if (available_turfs.len>0)
+						building = pick(available_turfs)
+						if (building)
+							mood_change(BEE_BUILDING)
 
 
 			else
