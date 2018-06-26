@@ -152,7 +152,7 @@
 	obj_overlays[FIRE_LAYER]		= getFromPool(/obj/abstract/Overlays/fire_layer)
 	obj_overlays[MUTANTRACE_LAYER]	= getFromPool(/obj/abstract/Overlays/mutantrace_layer)
 	obj_overlays[MUTATIONS_LAYER]	= getFromPool(/obj/abstract/Overlays/mutations_layer)
-	obj_overlays[DAMAGE_HUD_LAYER]	= getFromPool(/obj/abstract/Overlays/damage_layer)
+	obj_overlays[DAMAGE_LAYER]	= getFromPool(/obj/abstract/Overlays/damage_layer)
 	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/abstract/Overlays/uniform_layer)
 	obj_overlays[ID_LAYER]			= getFromPool(/obj/abstract/Overlays/id_layer)
 	obj_overlays[SHOES_LAYER]		= getFromPool(/obj/abstract/Overlays/shoes_layer)

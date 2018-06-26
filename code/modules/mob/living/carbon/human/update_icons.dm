@@ -167,11 +167,11 @@ var/global/list/damage_icon_parts = list()
 			DI = get_damage_icon_part(O.damage_state, O.icon_name, (species.blood_color == DEFAULT_BLOOD ? "" : species.blood_color))
 
 			standing_image.overlays += DI
-	var/obj/abstract/Overlays/O = obj_overlays[DAMAGE_HUD_LAYER]
+	var/obj/abstract/Overlays/O = obj_overlays[DAMAGE_LAYER]
 	overlays -= O
 	O.overlays.len = 0
 	O.overlays += standing_image
-	obj_to_plane_overlay(O,DAMAGE_HUD_LAYER)
+	obj_to_plane_overlay(O,DAMAGE_LAYER)
 
 
 
