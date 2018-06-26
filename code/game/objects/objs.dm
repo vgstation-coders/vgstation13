@@ -43,6 +43,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/can_affix_to_dense_turf=0
 
 	var/has_been_invisible_sprayed = FALSE
+	var/impactsound
 
 // Whether this object can appear in holomaps
 /obj/proc/supports_holomap()

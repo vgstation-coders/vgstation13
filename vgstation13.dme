@@ -666,6 +666,7 @@
 #include "code\game\objects\effects\spawners\gibspawner.dm"
 #include "code\game\objects\effects\spawners\vaultspawner.dm"
 #include "code\game\objects\items\airbag.dm"
+#include "code\game\objects\items\anvil.dm"
 #include "code\game\objects\items\beacon.dm"
 #include "code\game\objects\items\blueprints.dm"
 #include "code\game\objects\items\bodybag.dm"
