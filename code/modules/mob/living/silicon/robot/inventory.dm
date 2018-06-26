@@ -45,6 +45,12 @@
 		to_chat(src, "<span class='warning'>Can't store something you're not holding!</span>")
 		return
 
+	if(isgripper(MA))
+		var/obj/item/weapon/gripper/G = MA
+		if(G.wrapped)
+			G.drop_item(force_drop = TRUE)
+			return
+
 	if(module_state_1 == module_active)
 		uneq_module(module_state_1)
 		module_state_1 = null
