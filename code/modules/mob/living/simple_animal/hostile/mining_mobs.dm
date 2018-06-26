@@ -532,11 +532,18 @@ obj/item/asteroid/basilisk_hide/New()
 	melee_damage_upper = 25
 	meat_amount = 0
 	vision_range = 4
+	maxbodytemp = ARBITRARILY_PLANCK_NUMBER
 	var/fire_time
 	var/fire_extremity
 
 /mob/living/simple_animal/hostile/asteroid/magmaw/fire_act(/datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(isDead() && exposed_temperature >= PLASMA_MINIMUM_BURN_TEMPERATURE)
+		resurrect()
+		revive()
+		visible_message("<span class = 'warning'>\The [src] reignites!</span>")
+
+/mob/living/simple_animal/hostile/asteroid/magmaw/IgniteMob()
+	if(isDead())
 		resurrect()
 		revive()
 		visible_message("<span class = 'warning'>\The [src] reignites!</span>")
@@ -555,7 +562,7 @@ obj/item/asteroid/basilisk_hide/New()
 		environment = T.return_air()
 
 	if(environment)
-		environment.add_thermal_energy(500)
+		environment.add_thermal_energy(50000)
 
 	if(world.time > fire_time)
 		return
@@ -563,15 +570,31 @@ obj/item/asteroid/basilisk_hide/New()
 	switch(fire_extremity)
 		if(1) // Fire spout
 			generic_projectile_fire(get_ranged_target_turf(src, dir, 10), src, /obj/item/projectile/fire_breath, 'sound/weapons/flamethrower.ogg')
-			environment.add_thermal_energy(3500)
+			if(environment)
+				environment.add_thermal_energy(350000)
 		if(2) //Fire blast
 			new /obj/effect/ring_of_fire(get_turf(src), range(src,4)-range(src,3), 3 SECONDS)
-			environment.add_thermal_energy(7000)
+			if(environment)
+				environment.add_thermal_energy(700000)
 
 /mob/living/simple_animal/hostile/asteroid/magmaw/CanAttack(var/atom/the_target)
+	if(world.time < fire_time)
+		return
 	if(istype(the_target, /obj/item/weapon/ore/plasma) || istype(the_target, /obj/item/stack/sheet/mineral/plasma))
 		return 1
+	if(istype(the_target, /turf/unsimulated/mineral))
+		var/turf/unsimulated/mineral/M = the_target
+		if(M.mineral && istype(M.mineral.ore, /obj/item/weapon/ore/plasma))
+			return 1
 	return 0
+
+/mob/living/simple_animal/hostile/asteroid/magmaw/EscapeConfinement()
+	..()
+	if(world.time < fire_time) //Not hungry enough to go smashing up asteroids yet
+		return
+	for(var/turf/unsimulated/mineral/M in range(src, 1))
+		if(prob(15))
+			UnarmedAttack(M, Adjacent(M))
 
 /mob/living/simple_animal/hostile/asteroid/magmaw/UnarmedAttack(var/atom/A, var/proximity, var/params)
 	if(proximity == 0)
@@ -588,4 +611,7 @@ obj/item/asteroid/basilisk_hide/New()
 			fire_extremity = 2
 		qdel(A)
 		return
+	if(istype(A,/turf/unsimulated/mineral))
+		var/turf/unsimulated/mineral/M = A
+		M.GetDrilled(0)
 	return ..()
