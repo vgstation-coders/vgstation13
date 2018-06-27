@@ -405,4 +405,4 @@
 // Used on Packed ; smartglassified roundstart
 /obj/machinery/door/window/plasma/secure/interogation_room/initialize()
 	smartwindow = new(src)
-	smartwindow.id_tag = "InterogatioRoomIDTag"
+	smartwindow.id_tag = "InterogationRoomIDTag"
