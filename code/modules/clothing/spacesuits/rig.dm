@@ -85,6 +85,19 @@
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
+	var/obj/item/weapon/cell/cell = null
+	var/cell_type = /obj/item/weapon/cell/high //The cell_type we're actually using
+	var/list/modules = list()
+
+/obj/item/clothing/suit/space/rig/New()
+	..()
+	cell = new cell_type
+
+/obj/item/clothing/suit/space/rig/Destroy()
+	qdel(cell)
+	cell = null
+	..()
+
 
 //Chief Engineer's rig
 /obj/item/clothing/head/helmet/space/rig/elite
@@ -97,6 +110,7 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	clothing_flags = PLASMAGUARD
+	cell_type = /obj/item/weapon/cell/super
 
 /obj/item/clothing/suit/space/rig/elite
 	icon_state = "rig-white"
