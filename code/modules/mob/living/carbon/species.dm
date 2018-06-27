@@ -1208,5 +1208,5 @@ var/list/has_died_as_golem = list()
 
 	species_intro = "You are a Lich<br>\
 					A more refined version of the skellington, you're not as brittle, but not quite as fast.<br>\
-					You have no skin, no blood, no lips, and only a brain to guide you.<br>\
-					You can not eat normally, as your necrotic state only permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe."
+					You have no skin, no blood, and only a brain to guide you.<br>\
+					You can not eat normally, as your necrotic state permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe."

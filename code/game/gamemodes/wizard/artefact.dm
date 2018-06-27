@@ -226,8 +226,14 @@
 /obj/item/phylactery/Destroy()
 	if(bound_soul.on_death)
 		bound_soul.on_death.Remove(soulbound)
+		bound_soul.on_z_transition.Remove(z_bound)
+	z_bound = null
 	soulbound = null
-	bound_soul = null
+	if(bound_soul)
+		to_chat(bound_soul, "<span class = 'warning'><b>You feel your form begin to unwind!</b></span>")
+		spawn(rand(5 SECONDS, 15 SECONDS))
+			bound_soul.dust()
+			bound_soul = null
 	..()
 
 
@@ -259,6 +265,8 @@
 	var/mob/living/original = arguments["user"]
 	if(original.mind)
 		var/mob/living/carbon/human/H = new /mob/living/carbon/human/lich(src)
+		H.real_name = original.real_name
+		H.flavor_text = original.flavor_text
 		for(var/spell/S in original.spell_list)
 			original.remove_spell(S)
 			H.add_spell(S)
@@ -294,7 +302,7 @@
 /obj/item/phylactery/proc/z_block(list/arguments)
 	if(arguments["to_z"] != src.z)
 		var/mob/user = arguments["user"]
+		to_chat(user, "<span class = 'warning'><b>As you stray further and further away from \the [src], you feel your form unravel!</b></span>")
 		spawn(rand(5 SECONDS, 15 SECONDS)) //Mr. Wizman, I don't feel so good
-			to_chat(user, "<span class = 'warning'>As you stray further and further away from \the [src], you feel your form unravel!</span>")
 			if(arguments["to_z"] != src.z)
 				user.dust()
