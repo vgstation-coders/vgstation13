@@ -660,111 +660,22 @@ Thanks.
 		else
 			return locked_to.Move(NewLoc, Dir)
 
-	if (restrained())
-		stop_pulling()
-
-	var/turf/T = loc
-
-	var/t7 = 1 //What the FUCK is this variable?
-	if (restrained())
-		for(var/mob/living/M in range(src, 1))
-			if ((M.pulling == src && M.stat == 0 && !( M.restrained() )))
-				t7 = null
-	if (t7 && pulling && (Adjacent(pulling) || pulling.loc == loc))
-		. = ..()
-
-		if (pulling && pulling.loc)
-			if(!isturf(pulling.loc))
-				stop_pulling()
-				return
-			else
-				if(Debug)
-					diary <<"pulling disappeared? at [__LINE__] in mob.dm - pulling = [pulling]"
-					diary <<"REPORT THIS"
-
-		/////
-		if(pulling && pulling.anchored)
+	if(pulling)
+		var/mob/living/pulling_living = pulling
+		if(istype(pulling_living) && pulling_living.pulling == src || restrained() || pulling.anchored || !isturf(pulling.loc) || !Adjacent(pulling))
 			stop_pulling()
-			return
 
-		var/mob/living/M = pulling
-		if (!restrained())
-			var/diag = get_dir(src, pulling)
-			if ((diag - 1) & diag)
-			else
-				diag = null
-			if ((get_dist(src, pulling) > 1 || diag))
-				if(!istype(pulling) || !pulling)
-					WARNING("Pulling disappeared! pulling = [pulling] old pulling = [M]")
-				else if(isturf(pulling.loc))
-					if (isliving(pulling))
-						M = pulling
-						var/ok = 1
-						if (locate(/obj/item/weapon/grab, M.grabbed_by))
-							if (prob(75))
-								var/obj/item/weapon/grab/G = pick(M.grabbed_by)
-								if (istype(G, /obj/item/weapon/grab))
-									visible_message("<span class='danger'>[src] has pulled [G.affecting] from [G.assailant]'s grip.</span>",
-										drugged_message="<span class='danger'>[src] has pulled [G.affecting] from [G.assailant]'s hug.</span>")
-									qdel(G)
-							else
-								ok = 0
-							if (locate(/obj/item/weapon/grab, M.grabbed_by.len))
-								ok = 0
-						if (ok)
-							var/atom/movable/secondarypull = M.pulling
-							M.stop_pulling()
-							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
-							if(M && secondarypull)
-								M.start_pulling(secondarypull)
+	var/original_loc = loc
+	. = ..()
 
-							/* Drag damage is here!*/
-							var/mob/living/carbon/human/HM = M
-							var/list/damaged_organs = HM.get_broken_organs()
-							var/list/bleeding_organs = HM.get_bleeding_organs()
-							if (T.has_gravity() && HM.lying)
-
-								if (damaged_organs.len)
-									if(!HM.isincrit())
-										if(prob(HM.getBruteLoss() / 5)) //Chance for damage based on current damage
-											for(var/datum/organ/external/damagedorgan in damaged_organs)
-												if((damagedorgan.brute_dam) < damagedorgan.max_damage) //To prevent organs from accruing thousands of damage
-													HM.apply_damage(2, BRUTE, damagedorgan)
-													HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen from being dragged!</span>")
-													HM.UpdateDamageIcon()
-									else
-										if(prob(15))
-											for(var/datum/organ/external/damagedorgan in damaged_organs)
-												if((damagedorgan.brute_dam) < damagedorgan.max_damage)
-													HM.apply_damage(4, BRUTE, damagedorgan)
-													HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen terribly from being dragged!</span>")
-													add_logs(src, HM, "caused drag damage to", admin = (M.ckey))
-													HM.UpdateDamageIcon()
-
-								if (bleeding_organs.len && !(HM.species.anatomy_flags & NO_BLOOD))
-									var/blood_volume = round(HM:vessel.get_reagent_amount("blood"))
-									/*Sometimes species with NO_BLOOD get blood, hence weird check*/
-									if(blood_volume > 0)
-										if(isturf(HM.loc))
-											if(!HM.isincrit())
-												if(prob(blood_volume / 89.6)) //Chance to bleed based on blood remaining
-													blood_splatter(HM.loc,HM)
-													HM.vessel.remove_reagent("blood",4)
-													HM.visible_message("<span class='warning'>\The [HM] loses some blood from being dragged!</span>")
-											else
-												if(prob(blood_volume / 44.8)) //Crit mode means double chance of blood loss
-													blood_splatter(HM.loc,HM,1)
-													HM.vessel.remove_reagent("blood",8)
-													HM.visible_message("<span class='danger'>\The [HM] loses a lot of blood from being dragged!</span>")
-													add_logs(src, HM, "caused drag damage bloodloss to", admin = (HM.ckey))
-					else
-						if (pulling)
-							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
-				else
-					stop_pulling()
-	else
-		stop_pulling()
-		. = ..()
+	if (isliving(pulling))
+		var/mob/living/pulling_living = pulling
+		if(pulling_living.grabbed_by.len > 1)
+			var/list/grabbers_that_are_not_me = pulling_living.grabbed_by - src
+			var/obj/item/weapon/grab/someones_grab = pick(grabbers_that_are_not_me)
+			visible_message("<span class='danger'>[src] pulls [someones_grab.affecting] from [someones_grab.assailant]'s grip.</span>",
+				drugged_message="<span class='danger'>[src] pulls [someones_grab.affecting] from [someones_grab.assailant]'s hug.</span>")
+			qdel(someones_grab)
 
 	if ((s_active && !is_holder_of(src, s_active)))
 		s_active.close(src)
@@ -773,7 +684,7 @@ Thanks.
 		for(var/mob/living/carbon/slime/M in view(1,src))
 			M.UpdateFeed(src)
 
-	if(T != loc)
+	if(original_loc != loc)
 		handle_hookchain(Dir)
 
 	if(.)
@@ -786,6 +697,43 @@ Thanks.
 				for(var/mob/living/M in G.target)
 					if(M && !(M in view(src)))
 						M.NotTargeted(G)
+		if(pulling)
+			pulling.Move(original_loc, get_dir(pulling, original_loc), glide_size_override = src.glide_size)
+			process_drag_damage(pulling)
+
+/mob/living/proc/process_drag_damage(var/mob/living/carbon/human/pulled)
+	if(!ishuman(pulled))
+		return
+	var/turf/this_turf = loc
+	if(!isturf(this_turf))
+		return
+	if (!this_turf.has_gravity() || !pulled.lying)
+		return
+	var/list/damaged_organs = pulled.get_broken_organs()
+	var/list/bleeding_organs = pulled.get_bleeding_organs()
+	if (damaged_organs.len)
+		var/chance_to_worsen_wounds = pulled.isincrit() ? 15 : pulled.getBruteLoss() / 5 //Chance for damage based on current damage, unless the guy is in crit (???)
+		if(prob(chance_to_worsen_wounds))
+			for(var/datum/organ/external/damaged_organ in damaged_organs)
+				if(damaged_organ.brute_dam >= damaged_organ.max_damage)
+					continue //To prevent organs from accruing thousands of damage
+				pulled.apply_damage(pulled.isincrit() ? 4 : 2, BRUTE, damaged_organ)
+				pulled.visible_message("<span class='warning'>The wounds on \the [pulled]'s [damaged_organ.display_name] worsen from being dragged!</span>")
+				if(pulled.isincrit())
+					add_logs(src, pulled, "caused drag damage to", admin = pulled.ckey)
+				pulled.UpdateDamageIcon()
+
+	if (bleeding_organs.len && !(pulled.species.anatomy_flags & NO_BLOOD))
+		var/blood_volume = round(pulled.vessel.get_reagent_amount("blood"))
+		/*Sometimes species with NO_BLOOD get blood, hence weird check*/
+		if(blood_volume > 0 && isturf(pulled.loc))
+			var/chance_to_lose_blood = pulled.isincrit() ? blood_volume / 44.8 : blood_volume / 89.6
+			if(prob(chance_to_lose_blood))
+				blood_splatter(pulled.loc, pulled)
+				pulled.vessel.remove_reagent("blood", pulled.isincrit() ? 8 : 4)
+				pulled.visible_message("<span class='danger'>\The [pulled] loses [pulled.isincrit() ? "a lot of" : "some"] blood from being dragged!</span>")
+				if(pulled.isincrit())
+					add_logs(src, pulled, "caused drag damage bloodloss to", admin = pulled.ckey)
 
 /mob/living/proc/handle_hookchain(var/direct)
 	for(var/obj/item/weapon/gun/hookshot/hookshot in src)
@@ -1304,9 +1252,24 @@ Thanks.
 				if(dense)
 					break
 			if((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent == I_HELP || src.restrained()) && tmob.canmove && canmove && !dense && can_move_mob(tmob, 1, 0)) // mutual brohugs all around!
-				var/turf/oldloc = loc
-				forceMove(tmob.loc)
-				tmob.forceMove(oldloc, glide_size_override = src.glide_size)
+				var/turf/my_oldloc = loc
+				var/turf/their_oldloc = tmob.loc
+
+				var/i_originally_had_pass_mob = (pass_flags & PASSMOB)
+				var/they_originally_had_pass_mob = (tmob.pass_flags & PASSMOB)
+
+				pass_flags |= PASSMOB
+				tmob.pass_flags |= PASSMOB
+
+				if(!Move(their_oldloc) || !tmob.Move(my_oldloc))
+					forceMove(their_oldloc)
+					tmob.forceMove(my_oldloc, glide_size_override = src.glide_size)
+
+				if(!i_originally_had_pass_mob)
+					pass_flags &= ~PASSMOB
+				if(!they_originally_had_pass_mob)
+					tmob.pass_flags &= ~PASSMOB
+
 				now_pushing = 0
 				for(var/mob/living/carbon/slime/slime in view(1,tmob))
 					if(slime.Victim == tmob)
