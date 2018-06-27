@@ -207,7 +207,7 @@
 /obj/machinery/door_control/mapped/interogation_room
 	name = "smartglass control"
 	desc = "Toogle smartglass"
-	id_tag = "InterogatioRoomIDTag"
+	id_tag = "InterogationRoomIDTag"
 
 
 /obj/machinery/door_control/mapped/interogation_room/attack_hand(var/mob/user)
