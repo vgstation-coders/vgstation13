@@ -56,7 +56,7 @@ var/list/uplink_items = list()
 	var/list/job = null
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
-	var/unique = FALSE	// Can only be bought once, globally
+	var/num_in_stock = 0	// Number of times this can be bought, globally. 0 is infinite
 	var/static/times_bought = 0
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
@@ -77,8 +77,8 @@ var/list/uplink_items = list()
 	if (!( istype(user, /mob/living/carbon/human)))
 		return 0
 
-	if(unique && times_bought >= 1)
-		to_chat(user, "<span class='warning'>This item is not available anymore.</span>")
+	if(num_in_stock && times_bought >= num_in_stock)
+		to_chat(user, "<span class='warning'>This item is out of stock.</span>")
 		return 0
 
 	// If the uplink's holder is in the user's contents
@@ -720,7 +720,7 @@ var/list/uplink_items = list()
 	name = "\"Does Not Tip\" database backdoor"
 	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the cargo workers at Central Command. You can be sure all pizza orders will be poisoned from the moment the screen flashes red."
 	item = /obj/item/device/does_not_tip_backdoor
-	unique = TRUE
+	num_in_stock = 1
 	cost = 10
 
 // IMPLANTS
