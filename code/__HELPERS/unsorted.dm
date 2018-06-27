@@ -883,6 +883,11 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		progbar.loc = null
 	return 1
 
+/proc/do_flick(var/atom/A, var/icon_state, var/time)
+	flick(icon_state, A)
+	sleep(time)
+	return 1
+
 //Takes: Anything that could possibly have variables and a varname to check.
 //Returns: 1 if found, 0 if not.
 /proc/hasvar(var/datum/A, var/varname)

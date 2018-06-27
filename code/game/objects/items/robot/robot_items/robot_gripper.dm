@@ -43,9 +43,11 @@
 		return FALSE
 	if(!target) //Just drop it, baka.
 		target = loc
-	if(!dontsay)
-		to_chat(usr, "<span class='warning'>You drop \the [wrapped].</span>")
-	wrapped.dropped(usr)
+	var/mob/holder = get_holder_of_type(src, /mob)
+	if(holder)
+		if(!dontsay)
+			to_chat(usr, "<span class='warning'>You drop \the [wrapped].</span>")
+		wrapped.dropped(usr)
 	if(force_drop)
 		wrapped.loc = get_turf(target)
 	else

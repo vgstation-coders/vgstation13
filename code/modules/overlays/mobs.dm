@@ -13,7 +13,7 @@
 	layer = FLOAT_LAYER - (TOTAL_LAYERS - MUTATIONS_LAYER)
 
 /obj/abstract/Overlays/damage_layer
-	layer = FLOAT_LAYER - (TOTAL_LAYERS - DAMAGE_HUD_LAYER)
+	layer = FLOAT_LAYER - (TOTAL_LAYERS - DAMAGE_LAYER)
 
 /obj/abstract/Overlays/uniform_layer
 	layer = FLOAT_LAYER - (TOTAL_LAYERS - UNIFORM_LAYER)
