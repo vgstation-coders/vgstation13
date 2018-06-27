@@ -879,7 +879,7 @@ var/global/num_vending_terminals = 1
 				can_vend = FALSE //all borgs can buy free items from vending machines
 		if(istype(usr,/mob/living/silicon/robot))
 			var/mob/living/silicon/robot/R = usr
-			if((R.module && (R.module.quirk_flags & MODULE_CAN_BUY)))
+			if(HAS_MODULE_QUIRK(R, MODULE_CAN_BUY))
 				can_vend = TRUE //But if their module allows it..
 		if(!can_vend)
 			to_chat(usr, "<span class='warning'>The vending machine refuses to interface with you, as you are not in its target demographic!</span>")

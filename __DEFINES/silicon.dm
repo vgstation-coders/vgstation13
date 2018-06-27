@@ -51,19 +51,22 @@ var/global/list/mommi_modules = list(
 		modules.Cut(COMBAT_MODULE)
 	return modules
 
+
 //Module quirks
-#define MODULE_CAN_BE_PUSHED 1		//What says on the tin.
-#define MODULE_CAN_HANDLE_MEDICAL 2	//Can use medbay's machinery
-#define MODULE_CAN_HANDLE_CHEMS 4	//Can use chemistry dispensers
-#define MODULE_CAN_HANDLE_FOOD 8	//Can use microwaves and bartending machinery
-#define MODULE_CAN_BUY 16			//Can use the station
-#define MODULE_CLEAN_ON_MOVE 32		//Will clean everything under it while moving
-#define MODULE_HAS_MAGPULSE 64		//Module isn't pushed b ZAS nor can slip in space
-#define MODULE_IS_THE_LAW 128		//Module can use *law and *halt
-#define MODULE_CAN_LIFT_SECTAPE 256
-#define MODULE_CAN_LIFT_ENGITAPE 512
+#define MODULE_CAN_BE_PUSHED 1			//What says on the tin.
+#define MODULE_CAN_HANDLE_MEDICAL 2		//Can use medbay's machinery
+#define MODULE_CAN_HANDLE_CHEMS 4		//Can use chemistry dispensers
+#define MODULE_CAN_HANDLE_FOOD 8		//Can use microwaves and bartending machinery
+#define MODULE_CAN_BUY 16				//Can use vending machines that need money(uses the station's account to pay)
+#define MODULE_CLEAN_ON_MOVE 32			//Will clean everything under it while moving
+#define MODULE_HAS_MAGPULSE 64			//Module isn't pushed b ZAS nor can slip in space
+#define MODULE_IS_THE_LAW 128			//Module can use *law and *halt
+#define MODULE_CAN_LIFT_SECTAPE 256		//Can lift security tape
+#define MODULE_CAN_LIFT_ENGITAPE 512	//Can lift atmos/engi tape
 #define MODULE_IS_SYNDICATE 1024		//A hacked/syndicate module
-#define MODULE_IS_DEFINITIVE 2048	//Can't get a module reset
+#define MODULE_IS_DEFINITIVE 2048		//Can't get a module reset
+
+#define HAS_MODULE_QUIRK(R, Q) (R.module && (R.module.quirk_flags & Q))
 
 // Cyborgs & MoMMI defines
 #define CYBORG_STARTING_TONER 40

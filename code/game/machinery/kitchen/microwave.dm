@@ -199,7 +199,7 @@
 /obj/machinery/microwave/attack_ai(mob/user as mob)
 	if(istype(user,/mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = user
-		if(R.module && (R.module.quirk_flags & MODULE_CAN_HANDLE_FOOD))
+		if(HAS_MODULE_QUIRK(R, MODULE_CAN_HANDLE_FOOD))
 			user.set_machine(src)
 			interact(user)
 			return 1

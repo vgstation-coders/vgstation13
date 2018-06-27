@@ -1,20 +1,10 @@
 //Grippers: Simple cyborg manipulator. Limited use... SLIPPERY SLOPE POWERCREEP
 /obj/item/weapon/gripper
 	icon = 'icons/obj/device.dmi'
-	actions_types = list(/datum/action/item_action/magrip_drop)
 	var/obj/item/wrapped = null // Item currently being held.
 	var/list/can_hold = list() //Has a list of items that it can hold.
 	var/list/blacklist = list() //This is a list of items that can't be held even if their parent is whitelisted.
 	var/force_holder = null
-
-/datum/action/item_action/magrip_drop
-	name = "Drop Item"
-
-/datum/action/item_action/magrip_drop/Trigger()
-	var/obj/item/weapon/gripper/G = target
-	if(!istype(G))
-		return
-	G.drop_item(force_drop = 1)
 
 /obj/item/weapon/gripper/proc/grip_item(obj/item/I as obj, mob/user, var/feedback = TRUE)
 	//This function returns TRUE if we successfully took the item, or FALSE if it was invalid. This information is useful to the caller
@@ -99,8 +89,6 @@
 		overlays += olay
 	else
 		alpha = initial(alpha)
-	if(usr)
-		usr.update_action_buttons()
 	..()
 
 /obj/item/weapon/gripper/examine(mob/user)

@@ -1,7 +1,7 @@
 /obj/item/weapon/pickaxe/plasmacutter/heat_axe
 	name = "heat axe type7 \"Caesar\""
 	desc = "And Caesar’s spirit, ranging for revenge, With Ate by his side come hot from hell, Shall in these confines with a monarch’s voice Cry “Havoc!” and let slip the dogs of war."
-	icon = 'icons/obj/weapons.dmi'
+	icon = 'icons/obj/syndieweapons.dmi'
 	icon_state = "heataxe_0"
 	damtype = BRUTE
 	heat_production = 0

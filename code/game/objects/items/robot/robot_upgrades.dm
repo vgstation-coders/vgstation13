@@ -89,7 +89,7 @@
 	if(..())
 		return FAILED_TO_ADD
 	
-	if(R.module.quirk_flags & MODULE_IS_DEFINITIVE)
+	if(HAS_MODULE_QUIRK(R, MODULE_IS_DEFINITIVE))
 		visible_message("<span class='notice'>[R] buzzes oddly, and ejects \the [src].</span>")
 		playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 		R.module.upgrades -= type
@@ -178,7 +178,7 @@
 		pop(R.module.sensor_augs)
 		R.module.sensor_augs.Add("Security", "Disable")
 	
-	if(!(R.module.quirk_flags & MODULE_IS_THE_LAW)) //Make them able to *law and *halt
+	if(!HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW)) //Make them able to *law and *halt
 		R.module.quirk_flags |= MODULE_IS_THE_LAW
 
 /obj/item/borg/upgrade/vtec
