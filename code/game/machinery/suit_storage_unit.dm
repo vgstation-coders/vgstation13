@@ -44,7 +44,6 @@
 	name = "Atmospheric Suit Storage Unit"
 	department = "atmos"
 	suit_type = /obj/item/clothing/suit/space/rig/atmos
-	helmet_type = /obj/item/clothing/head/helmet/space/rig/atmos
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots/atmos
 
@@ -52,7 +51,6 @@
 	name = "Prisoner Suit Storage Unit"
 	department = "jail"
 	suit_type = /obj/item/clothing/suit/space/prison
-	helmet_type = /obj/item/clothing/head/helmet/space/prison
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
 
@@ -60,7 +58,6 @@
 	name = "Engineering Suit Storage Unit"
 	department = "engie"
 	suit_type = /obj/item/clothing/suit/space/rig
-	helmet_type = /obj/item/clothing/head/helmet/space/rig
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
 
@@ -68,7 +65,6 @@
 	name = "Advanced Suit Storage Unit"
 	department = "ce"
 	suit_type = /obj/item/clothing/suit/space/rig/elite
-	helmet_type = /obj/item/clothing/head/helmet/space/rig/elite
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots/elite
 
@@ -76,7 +72,6 @@
 	name = "Miners Suit Storage Unit"
 	department = "mine"
 	suit_type = /obj/item/clothing/suit/space/rig/mining
-	helmet_type = /obj/item/clothing/head/helmet/space/rig/mining
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
 
@@ -100,7 +95,6 @@
 	name = "Security Suit Storage Unit"
 	department = "sec"
 	suit_type = /obj/item/clothing/suit/space/rig/security
-	helmet_type = /obj/item/clothing/head/helmet/space/rig/security
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
 
@@ -116,7 +110,6 @@
 	name = "Medical Suit Storage Unit"
 	department = "med"
 	suit_type = /obj/item/clothing/suit/space/rig/medical
-	helmet_type = /obj/item/clothing/head/helmet/space/rig/medical
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
 
@@ -704,5 +697,11 @@
 	to_chat(user, "<font color='blue'>The console controls are far too complicated for your tiny brain!</font>")
 	return
 
+/obj/machinery/suit_storage_unit/process()
+	if(suit && istype(suit, /obj/item/clothing/suit/space/rig))
+		var/obj/item/clothing/suit/space/rig/R = suit
+		if(R.cell && R.cell.charge < R.cell.maxcharge)
+			use_power(100)
+			R.cell.give(30)
 
 //////////////////////////////REMINDER: Make it lock once you place some fucker inside.

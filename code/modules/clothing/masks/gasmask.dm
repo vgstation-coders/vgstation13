@@ -35,7 +35,7 @@
 		stage = 2
 	if(istype(W,/obj/item/clothing/head/hardhat/red) && stage == 2)
 		to_chat(user,"<span class='notice'>You finish the ghetto helmet.</span>")
-		var/obj/ghetto = new /obj/item/clothing/head/helmet/space/rig/ghettorig (src.loc)
+		var/obj/ghetto = new /obj/item/clothing/head/helmet/space/ghetto (src.loc)
 		qdel(src)
 		qdel(W)
 		user.put_in_hands(ghetto)

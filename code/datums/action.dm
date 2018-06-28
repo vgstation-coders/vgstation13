@@ -213,3 +213,11 @@
 /datum/action/item_action/generic_toggle/New()
 	..()
 	name = "Toggle [target]"
+
+/datum/action/item_action/toggle_rig_helmet
+	name = "Toggle rig helmet"
+
+/datum/action/item_action/toggle_rig_helmet/Trigger()
+	if(IsAvailable() && owner && target && istype(target,/obj/item/clothing/suit/space/rig))
+		var/obj/item/clothing/suit/space/rig/R = target
+		R.toggle_helmet(owner)
