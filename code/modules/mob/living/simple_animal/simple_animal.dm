@@ -504,16 +504,15 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return
 
 	if(!gibbed)
-		if(icon_dying && do_flick(icon_dying, src, icon_dying_time))
-			visible_message("<span class='danger'>\the [src] stops moving...</span>")
-		else
-			visible_message("<span class='danger'>\the [src] stops moving...</span>")
+		visible_message("<span class='danger'>\the [src] stops moving...</span>")
 
 	health = 0 // so /mob/living/simple_animal/Life() doesn't magically revive them
 	living_mob_list -= src
 	dead_mob_list += src
-	icon_state = icon_dead
 	stat = DEAD
+	if(icon_dying && !gibbed)
+		do_flick(src, icon_dying, icon_dying_time)
+	icon_state = icon_dead
 	setDensity(FALSE)
 
 	animal_count[src.type]--
