@@ -274,9 +274,6 @@
 		//don't care who they are or what they have, act as if they're NOTHING
 		user = null
 
-	if (!allowed(user))
-		return
-
 	return ..()
 
 /obj/machinery/door/window/emag(mob/user)
