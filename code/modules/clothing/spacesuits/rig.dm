@@ -49,7 +49,7 @@
 
 /obj/item/clothing/head/helmet/space/rig/process()
 	if(on && rig)
-		if(!rig.cell.use(1))
+		if(!rig.cell.use(1) || rig.loc != loc)
 			on = !on
 			update_brightness()
 
@@ -69,7 +69,7 @@
 /obj/item/clothing/head/helmet/space/rig/attack_self(mob/user)
 	if(no_light)
 		return
-	if(rig && rig.cell && rig.cell.charge >= 1)
+	if(rig && is_worn_by(user) && rig.cell && rig.cell.charge >= 1)
 		on = !on
 		update_brightness()
 		user.update_inv_head()
