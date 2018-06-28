@@ -74,6 +74,12 @@
 		update_brightness()
 		user.update_inv_head()
 
+/obj/item/clothing/head/helmet/space/rig/unequipped(mob/living/carbon/human/user, var/from_slot = null)
+	..()
+	if(from_slot == slot_head && istype(user))
+		if(rig.is_worn_by(user))
+			rig.deactivate_suit(user)
+
 /obj/item/clothing/suit/space/rig
 	name = "engineering hardsuit"
 	desc = "A special suit that protects against hazardous, low pressure environments. Has radiation shielding."
@@ -107,12 +113,18 @@
 	H = null
 	..()
 
+/obj/item/clothing/suit/space/rig/unequipped(mob/living/carbon/human/user, var/from_slot = null)
+	..()
+	if(from_slot == slot_wear_suit && istype(user))
+		deactivate_suit(user)
+
 /obj/item/clothing/suit/space/rig/proc/toggle_helmet(mob/living/carbon/human/user)
 	if(H)
 		if(!user.head)
 			to_chat(user, "<span class = 'notice'>\The [H] extends from \the [src].</span>")
 			user.equip_to_slot(H, slot_head)
 			H = null
+			initialize_suit(user)
 	else
 		if(user.head && istype(user.head, head_type))
 			var/obj/I = user.head
@@ -120,6 +132,16 @@
 			user.u_equip(I,0)
 			I.forceMove(src)
 			H = I
+			deactivate_suit(user)
+
+
+/obj/item/clothing/suit/space/rig/proc/initialize_suit(mob/user)
+	for(var/obj/item/rig_module/R in modules)
+		R.activate(user,src)
+
+/obj/item/clothing/suit/space/rig/proc/deactivate_suit(mob/user)
+	for(var/obj/item/rig_module/R in modules)
+		R.deactivate(user,src)
 
 /obj/item/clothing/suit/space/rig/attackby(obj/W, mob/user)
 	if(!H && istype(W, head_type))
