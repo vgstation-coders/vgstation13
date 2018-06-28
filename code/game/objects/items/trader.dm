@@ -58,14 +58,17 @@
 	icon_opened = "cabinetdetective_open"
 	icon_broken = "cabinetdetective_broken"
 	icon_off = "cabinetdetective_broken"
+	var/wonder_whitelist = list(/obj/item/clothing/shoes/clown_shoes/advanced, /obj/item/clothing/mask/morphing/corgi, list(/obj/item/clothing/suit/space/plasmaman/security/captain, /obj/item/clothing/head/helmet/space/plasmaman/security/captain), /obj/item/clothing/shoes/magboots/magnificent)
 
 /obj/structure/closet/secure_closet/wonderful/New()
 	..()
-	var/random_clothes = clothing.Copy()
-	random_clothes = random_clothes - typesof(/obj/item/clothing/mask/stone) - typesof(/obj/item/clothing/mask/morphing) - typesof(/obj/item/clothing/accessory/holomap_chip) - typesof(/obj/item/clothing/suit/space/time) - typesof(/obj/item/clothing/head/helmet/space/time) - typesof(/obj/item/clothing/gloves/warping_claws)
-	for(var/amount = 1 to 20)
-		var/path = pick_n_take(random_clothes)
-		new path(src)
+	for(var/amount = 1 to 3) //Will be 10ish items in the future, only 3 for now due to lack of entries
+		var/wonder_clothing = pick_n_take(wonder_whitelist)
+		if(islist(wonder_clothing))
+			for(var/i in wonder_clothing)
+				new i(src)
+		else
+			new wonder_clothing(src)
 
 /*/obj/structure/cage/with_random_slime
 	..()
