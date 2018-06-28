@@ -108,7 +108,7 @@
 			return FALSE
 	return M.Move(T)
 
-/obj/structure/ladder/CanPass(obj/mover, turf/source, height, airflow)
+/obj/structure/ladder/Cross(obj/mover, turf/source, height, airflow)
 	return airflow || !density
 
 /obj/structure/ladder/update_icon()
@@ -154,7 +154,7 @@
 		return 0
 	return 1
 
-/obj/structure/stairs/CanPass(obj/mover, turf/source, height, airflow)
+/obj/structure/stairs/Cross(obj/mover, turf/source, height, airflow)
 	return airflow || !density
 
 // type paths to make mapping easier.

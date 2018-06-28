@@ -61,7 +61,7 @@
 		return 0
 	return 1
 
-/mob/observer/zMove(direction)
+/mob/abstract/observer/zMove(direction)
 	var/turf/destination = (direction == UP) ? GetAbove(src) : GetBelow(src)
 	if(destination)
 		forceMove(destination)
