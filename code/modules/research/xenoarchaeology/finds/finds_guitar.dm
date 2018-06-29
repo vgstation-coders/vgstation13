@@ -6,14 +6,14 @@
 /obj/item/device/instrument/guitar/magical/afterattack(atom/target, mob/user, proximity_flag)
 	..()
 	if(prob(20) && (wielded && song.playing) && proximity_flag) //20% chance to fire 4 bolts of lighting(33% damage each).
+		playsound(src, pick(lightning_sound), 75, 1)
 		for(var/i=0, i<4, i++)
 			eletric_music(target, user)
 
-/obj/item/device/instrument/guitar/magical/proc/eletric_music(var/atom/target, var/mob/user)
+/obj/item/device/instrument/guitar/magical/proc/eletric_music(var/atom/target, var/mob/user) //Kinda copypasty but eh, i don't want to make a new projectile for this.
 	var/turf/T = get_turf(user)
 	var/turf/U = get_turf(target)
 	var/obj/item/projectile/beam/lightning/L = getFromPool(/obj/item/projectile/beam/lightning, T)
-	playsound(src, pick(lightning_sound), 75, 1)
 	L.damage = round((force * 33) / 100)
 	L.tang = adjustAngle(get_angle(U,T))
 	L.icon = midicon
