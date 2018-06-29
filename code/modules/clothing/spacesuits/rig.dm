@@ -57,7 +57,7 @@
 /obj/item/clothing/head/helmet/space/rig/proc/update_brightness()
 	if(on)
 		processing_objects.Add(src)
-		set_light(brightness_on,0,color_on)
+		set_light(brightness_on,null,color_on)
 	else
 		processing_objects.Remove(src)
 		set_light(0)
@@ -147,6 +147,7 @@
 	if(!H && istype(W, head_type))
 		to_chat(user, "<span class = 'notice'>You attach \the [W] to \the [src].</span>")
 		user.drop_item(W, force_drop = 1)
+		W.forceMove(src)
 		H = W
 		return
 	..()

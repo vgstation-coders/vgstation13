@@ -1287,6 +1287,7 @@
 #include "code\modules\clothing\spacesuits\syndi.dm"
 #include "code\modules\clothing\spacesuits\time.dm"
 #include "code\modules\clothing\spacesuits\void.dm"
+#include "code\modules\clothing\spacesuits\rig_modules\rig_modules.dm"
 #include "code\modules\clothing\suits\alien.dm"
 #include "code\modules\clothing\suits\armor.dm"
 #include "code\modules\clothing\suits\bio.dm"
