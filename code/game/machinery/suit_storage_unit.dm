@@ -221,6 +221,9 @@
 			if(helmet && src.isopen)
 				dat+=text("<A href='?src=\ref[];dispense_helmet=1'>Dispense helmet</A><BR>",src)
 			dat+= text("<font color='black'>Suit storage compartment: <B>[]</B></font><BR>",(src.suit ? suit.name : "</font><font color ='grey'>No exosuit detected.") )
+			if(istype(suit, /obj/item/clothing/suit/space/rig))
+				var/obj/item/clothing/suit/space/rig/R = suit
+				dat += "<font color = 'black'>Rig internal cell charge: [R.cell.percent()]%<BR>"
 			if(suit && src.isopen)
 				dat+=text("<A href='?src=\ref[];dispense_suit=1'>Dispense suit</A><BR>",src)
 			dat+= text("<font color='black'>Breathmask storage compartment: <B>[]</B></font><BR>",(src.mask ? mask.name : "</font><font color ='grey'>No breathmask detected.") )

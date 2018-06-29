@@ -144,10 +144,8 @@
 		R.deactivate(user,src)
 
 /obj/item/clothing/suit/space/rig/attackby(obj/W, mob/user)
-	if(!H && istype(W, head_type))
+	if(!H && istype(W, head_type) && user.drop_item(W, src, force_drop = 1))
 		to_chat(user, "<span class = 'notice'>You attach \the [W] to \the [src].</span>")
-		user.drop_item(W, force_drop = 1)
-		W.forceMove(src)
 		H = W
 		return
 	..()
