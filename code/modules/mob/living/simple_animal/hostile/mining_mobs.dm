@@ -538,22 +538,20 @@ obj/item/asteroid/basilisk_hide/New()
 	var/fire_extremity
 
 /mob/living/simple_animal/hostile/asteroid/magmaw/fire_act(var/datum/gas_mixture/air, var/exposed_temperature, var/exposed_volume)
-	if(isDead() && exposed_temperature >= PLASMA_MINIMUM_BURN_TEMPERATURE)
-		resurrect()
-		revive()
-		visible_message("<span class = 'warning'>\The [src] reignites!</span>")
+	fire_resurrect(exposed_temperature)
 
 /mob/living/simple_animal/hostile/asteroid/magmaw/IgniteMob()
-	if(isDead())
+	fire_resurrect(PLASMA_MINIMUM_BURN_TEMPERATURE)
+
+/mob/living/simple_animal/hostile/asteroid/magmaw/FireBurn(var/firelevel, var/last_temperature, var/pressure)
+	fire_resurrect(last_temperature)
+
+/mob/living/simple_animal/hostile/asteroid/magmaw/proc/fire_resurrect(var/temperature)
+	if(isDead() && temperature > PLASMA_MINIMUM_BURN_TEMPERATURE)
 		resurrect()
 		revive()
 		visible_message("<span class = 'warning'>\The [src] reignites!</span>")
 
-/mob/living/simple_animal/hostile/asteroid/magmaw/FireBurn(var/firelevel, var/last_temperature, var/pressure)
-	if(isDead() && last_temperature > PLASMA_MINIMUM_BURN_TEMPERATURE)
-		resurrect()
-		revive()
-		visible_message("<span class = 'warning'>\The [src] reignites!</span>")
 
 /mob/living/simple_animal/hostile/asteroid/magmaw/adjustFireLoss()
 	return //We're a magma slime. We ARE FIRE.
