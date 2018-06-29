@@ -392,3 +392,8 @@
 	WA.secure = "secure_"
 	WA.update_icon()
 	return WA
+
+// Used on Packed ; smartglassified roundstart
+/obj/machinery/door/window/plasma/secure/interogation_room/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = "InterogationRoomIDTag"
