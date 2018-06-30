@@ -2202,6 +2202,7 @@
 #include "code\modules\spells\targeted\projectile\fireball.dm"
 #include "code\modules\spells\targeted\projectile\firebreath.dm"
 #include "code\modules\spells\targeted\projectile\magic_missile.dm"
+#include "code\modules\spells\targeted\projectile\pie_throw.dm"
 #include "code\modules\spells\targeted\projectile\projectile.dm"
 #include "code\modules\store\items.dm"
 #include "code\modules\store\store.dm"
