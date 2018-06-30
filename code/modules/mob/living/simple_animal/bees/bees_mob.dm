@@ -181,6 +181,19 @@
 		if (3)
 			adjustBruteLoss(20)
 
+/mob/living/simple_animal/bee/nuke_act()
+	//first of all, we don't want more bees to come out of a hive that got nuked (for now at least)
+	if (home && home.z == z)
+		home.queen_bees_inside = 0
+		home.worker_bees_inside = 0
+
+	//this may or may not kill them all, but it'll at least spawn a good amount of bee corpses
+	adjustBruteLoss(100)
+
+	//cleanup
+	if (src)
+		qdel(src)
+
 /mob/living/simple_animal/bee/unarmed_attacked(mob/living/attacker, damage, damage_type, zone)
 	..()
 	panic_attack(attacker)
