@@ -12,7 +12,7 @@
 
 /datum/faction/cult/AdminPanelEntry()
 	var/list/dat = ..()
-	dat += "<a href='?_src_=holder;cult_mindspeak=\ref[src]'>Voice of [deity_name]</a>"
+	dat += "<br/><a href='?_src_=holder;cult_mindspeak=\ref[src]'>Voice of [deity_name]</a>"
 	return dat
 
 /datum/faction/cult/proc/grant_runeword(mob/living/carbon/human/cult_mob, var/word)
@@ -34,6 +34,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	var/list/allwords = list("travel","self","see","hell","blood","join","tech","destroy", "other", "hide")
 	var/list/startwords = list("blood","join","self","hell")
 	var/list/bloody_floors = list()
+	hud_icons = list("cult-logo")
 
 	var/datum/objective/current_objective
 	var/narsie_condition_cleared =  FALSE
@@ -42,6 +43,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	var/cult_state = CULT_PRELUDE
 
 	roletype = /datum/role/legacy_cultist
+	required_pref = ROLE_LEGACY_CULTIST
 
 /datum/faction/cult/narsie/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/logos.dmi', "cult-logo")
@@ -129,7 +131,8 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	return FALSE
 
 
-/datum/faction/cult/narsie/HandleNewMind(var/datum/mind/M)
+// Latejoiners
+/datum/faction/cult/narsie/HandleRecruitedMind(var/datum/mind/M)
 	..()
 	if(M.current)
 		grant_runeword(M.current)
@@ -146,21 +149,41 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	var/wordexp = "[cult_words[word]] is [word]..."
 	to_chat(cult_mob, "<span class='sinister'>You remember one thing from the dark teachings of your master... [wordexp]</span>")
 	cult_mob.mind.store_memory("<B>You remember that</B> [wordexp]", 0, 0)
+	var/obj/item/weapon/paper/talisman/supply/A = new/obj/item/weapon/paper/talisman/supply
+	cult_mob.equip_to_slot_or_del(A, slot_in_backpack)
 
 /datum/faction/cult/narsie/AdminPanelEntry()
 	var/list/dat = ..()
-	dat += "<a href='?_src_=holder;check_words=\ref[src]'>Check cult words.</a>"
+	dat += "<br/><a href='?_src_=holder;check_words=\ref[src]'>Check cult words.</a>"
 	return dat
 
 /datum/faction/cult/narsie/OnPostSetup()
-	randomiseWords()
-	var/number_of_cultists = min(members.len, startwords.len)
-	for (var/i = 1 to number_of_cultists)
-		grant_runeword(members[i]) // No second arg = random word
+	for (var/datum/role/legacy_cultist/cultist in members)
+		cultist.Greet(TRUE)
+		cultist.AnnounceObjectives()
 
 #define OBJ_SAC 		"sacrifice"
 #define OBJ_SPRAY_BLOOD "spray bood"
 #define OBJ_CONVERT 	"convert"
+
+/datum/faction/cult/narsie/forgeObjectives()
+	var/datum/objective/next_objective
+	var/new_obj = pick(OBJ_SAC, 200, OBJ_SPRAY_BLOOD, 50, OBJ_CONVERT, 100)
+	switch (new_obj)
+		if (OBJ_SAC)
+			next_objective = new /datum/objective/target/assasinate/sacrifice
+		if (OBJ_SPRAY_BLOOD)
+			next_objective = new /datum/objective/spray_blood
+			var/datum/objective/spray_blood/O = next_objective
+			O.cult_fac = src
+		if (OBJ_CONVERT)
+			next_objective = new /datum/objective/convert_people
+			var/datum/objective/convert_people/O = next_objective
+			O.cult_fac = src
+
+	current_objective = next_objective
+	AppendObjective(next_objective)
+
 
 /datum/faction/cult/narsie/proc/getNewObjective() // Placeholder values for chances waiting for the real ones.
 	current_objective.force_success = TRUE // Because people can deconvert or clean up floors but you'll still have succeded in that objective

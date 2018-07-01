@@ -83,14 +83,16 @@
 
 /datum/gamemode/proc/PopulateFactions()
 	var/list/available_players = get_ready_players()
-
+	to_chat(world, available_players)
 	for(var/datum/faction/F in factions)
 		for(var/mob/new_player/P in available_players)
+			to_chat(world, "[P]")
 			if(F.max_roles && F.members.len >= F.max_roles)
 				break
 			if(!P.client || !P.mind)
 				continue
 			if(!P.client.desires_role(F.required_pref) || jobban_isbanned(P, F.required_pref))
+				to_chat(world, "[P] does not desires [F.required_pref]")
 				continue
 			if(!F.HandleNewMind(P.mind))
 				warning("[P.mind] failed [F] HandleNewMind!")

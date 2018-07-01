@@ -7,7 +7,7 @@
                                     "Scientist", "Roboticist",
                                     "Station Engineer", "Atmospheric Technician", "Mechanic",
                                     "Cargo Technician", "Quarter Master",
-                                    "Bartender", "Chef", "Botanist", "Mime", "Clown", "Assistant")
+                                    "Bartender", "Chef", "Botanist", "Mime", "Clown", "Assistant") // Basically anyone that is not sec or chaplain.
 
 /datum/objective/target/assassinate/sacrifice/find_target()
 	..()
@@ -24,5 +24,7 @@
 		return TRUE
 	return FALSE
 
-/datum/objective/summon_narsie/feedbackText()
-    return "<span class = 'sinister'>You succesfully sacrificied [target.real_name]. The veil between this world and Nar'Sie grows thinner.</span>"
+/datum/objective/target/assassinate/sacrifice/feedbackText()
+	if(target && target.current)
+		return "<span class = 'sinister'>You succesfully sacrificied [target.current.real_name]. The veil between this world and Nar'Sie grows thinner.</span>"
+  		//return "<span class = 'sinister'>You succesfully sacrificied [target.current.real_name]. The veil between this world and Nar'Sie grows thinner.</span>"

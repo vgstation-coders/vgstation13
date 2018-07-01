@@ -120,12 +120,12 @@
 
 	return 1
 
-/datum/role/proc/AssignToRole(var/datum/mind/M,var/override = 0)
+/datum/role/proc/AssignToRole(var/datum/mind/M, var/override = 0)
 	if(!istype(M) && !override)
-		WARNING("M is [M.type]!")
+		CRASH("M is [M.type]!")
 		return 0
 	if(!CanBeAssigned(M) && !override)
-		WARNING("[M] was to be assigned to [name] but failed CanBeAssigned!")
+		CRASH("[M] was to be assigned to [name] but failed CanBeAssigned!")
 		return 0
 
 	antag = M
