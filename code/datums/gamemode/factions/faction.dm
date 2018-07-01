@@ -73,6 +73,7 @@ var/list/factions_with_hud_icons = list()
 		return 0
 	var/datum/role/newRole = new initroletype(null, src, initial_role)
 	if(!newRole.AssignToRole(M))
+		to_chat(world, "Failed assign to role.")
 		newRole.Drop()
 		return 0
 	members.Add(newRole)

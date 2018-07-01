@@ -42,6 +42,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	var/list/cult_words = list()
 	var/cult_state = CULT_PRELUDE
 
+	initroletype = /datum/role/legacy_cultist
 	roletype = /datum/role/legacy_cultist
 	required_pref = ROLE_LEGACY_CULTIST
 
@@ -131,11 +132,13 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	return FALSE
 
 
-// Latejoiners
-/datum/faction/cult/narsie/HandleRecruitedMind(var/datum/mind/M)
-	..()
+// Roundstart cultos & latejoiners
+/datum/faction/cult/narsie/HandleNewMind(var/datum/mind/M)
+	var/ret = ..()
+	to_chat(world, "[ret]")
 	if(M.current)
 		grant_runeword(M.current)
+	return ..()
 
 /datum/faction/cult/narsie/grant_runeword(mob/living/carbon/human/cult_mob, var/word)
 	if (!word)
@@ -149,18 +152,12 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	var/wordexp = "[cult_words[word]] is [word]..."
 	to_chat(cult_mob, "<span class='sinister'>You remember one thing from the dark teachings of your master... [wordexp]</span>")
 	cult_mob.mind.store_memory("<B>You remember that</B> [wordexp]", 0, 0)
-	var/obj/item/weapon/paper/talisman/supply/A = new/obj/item/weapon/paper/talisman/supply
-	cult_mob.equip_to_slot_or_del(A, slot_in_backpack)
 
 /datum/faction/cult/narsie/AdminPanelEntry()
 	var/list/dat = ..()
 	dat += "<br/><a href='?_src_=holder;check_words=\ref[src]'>Check cult words.</a>"
+	dat += "<br/>Our current objective is : [current_objective.name] ([current_objective.explanation_text])"
 	return dat
-
-/datum/faction/cult/narsie/OnPostSetup()
-	for (var/datum/role/legacy_cultist/cultist in members)
-		cultist.Greet(TRUE)
-		cultist.AnnounceObjectives()
 
 #define OBJ_SAC 		"sacrifice"
 #define OBJ_SPRAY_BLOOD "spray bood"
@@ -168,7 +165,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 
 /datum/faction/cult/narsie/forgeObjectives()
 	var/datum/objective/next_objective
-	var/new_obj = pick(OBJ_SAC, 200, OBJ_SPRAY_BLOOD, 50, OBJ_CONVERT, 100)
+	var/new_obj = get_new_obj()
 	switch (new_obj)
 		if (OBJ_SAC)
 			next_objective = new /datum/objective/target/assasinate/sacrifice
@@ -184,6 +181,18 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	current_objective = next_objective
 	AppendObjective(next_objective)
 
+// Check if we can actually get the sac objective.
+/datum/faction/cult/narsie/proc/get_new_obj()
+	var/list/objs = list(OBJ_SAC, OBJ_SPRAY_BLOOD, OBJ_CONVERT)
+	var/list/ucs = list()
+	for(var/mob/living/carbon/human/player in mob_list)
+		if(player.mind)
+			var/role = player.mind.assigned_role
+			if(role in list("Captain", "Head of Security", "Security Officer", "Detective", "Warden"))
+				ucs += player.mind
+	if (!ucs.len)
+		objs -= OBJ_SAC
+	return pick(objs)
 
 /datum/faction/cult/narsie/proc/getNewObjective() // Placeholder values for chances waiting for the real ones.
 	current_objective.force_success = TRUE // Because people can deconvert or clean up floors but you'll still have succeded in that objective
@@ -196,7 +205,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 				next_objective = new /datum/objective/summon_narsie
 			else
 				cult_state = CULT_INTERMEDIATE
-				var/new_obj = pick(OBJ_SAC, 200, OBJ_SPRAY_BLOOD, 50, OBJ_CONVERT, 100)
+				var/new_obj = pick(OBJ_SAC, OBJ_SPRAY_BLOOD, OBJ_CONVERT)
 				switch (new_obj)
 					if (OBJ_SAC)
 						next_objective = new /datum/objective/target/assasinate/sacrifice
@@ -217,6 +226,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 			cult_state = CULT_FINALE
 			next_objective = new /datum/objective/defile
 
+	current_objective = next_objective
 	AppendObjective(next_objective)
 
 #undef OBJ_SAC
@@ -225,10 +235,8 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 /datum/faction/cult/narsie/proc/AnnounceObjectiveCompletion()
 	var/text = current_objective.feedbackText()
 	if (text)
-		for (var/datum/role/R in members) // Cultists
+		for (var/datum/role/R in members)
 			to_chat(R.antag.current, text)
-		for (var/datum/mind/M in members) // Constructs
-			to_chat(M.current, text)
 
 // -- Clockwork Cult
 

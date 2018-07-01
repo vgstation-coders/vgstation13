@@ -8,6 +8,31 @@
 	greets = list("default","custom","admintoggle")
 	required_pref = ROLE_LEGACY_CULTIST
 
+/datum/role/legacy_cultist/OnPostSetup()
+	. = ..()
+
+	var/mob/living/carbon/human/cult_mob = antag.current
+
+	if(!istype(cult_mob))
+		return
+
+	var/obj/item/weapon/paper/talisman/supply/T = new(cult_mob)
+	var/list/slots = list (
+		"backpack" = slot_in_backpack,
+		"left pocket" = slot_l_store,
+		"right pocket" = slot_r_store,
+	)
+
+	var/where = cult_mob.equip_in_one_of_slots(T, slots, EQUIP_FAILACTION_DROP, put_in_hand_if_fail = 1)
+
+	if (!where)
+		to_chat(cult_mob, "<span class='sinister'>Unfortunately, you weren't able to sneak in a talisman. Pray, and He most likely shall get you one.</span>")
+	else
+		to_chat(cult_mob, "<span class='sinister'>You have a talisman in your [where], one that will help you start the cult on this station. Use it well and remember - there are others.</span>")
+		cult_mob.update_icons()
+		return 1
+	
+
 /datum/role/legacy_cultist/Greet(var/greeting, var/custom)
 	if(!greeting)
 		return
@@ -30,3 +55,9 @@
 /datum/role/legacy_cultist/Drop()
 	antag.current.remove_language(LANGUAGE_CULT)
 	..()
+
+
+/datum/role/legacy_cultist/ReturnObjectivesString(var/check_success = FALSE, var/check_name = TRUE)
+	var/dat = ""
+	dat += faction.GetObjectives()
+	return dat

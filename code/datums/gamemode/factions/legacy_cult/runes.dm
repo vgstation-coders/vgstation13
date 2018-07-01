@@ -833,7 +833,9 @@
 		user.say("[input]")
 	else
 		user.whisper("[input]")
-	var/datum/faction/cult = find_active_faction_by_member(user.mind.GetRole(LEGACY_CULT))
+	var/datum/role/role = user.mind.GetRole(LEGACY_CULTIST)
+	to_chat(world, "[role.name]")
+	var/datum/faction/cult = find_active_faction_by_member(role)
 	for(var/datum/role/R in cult.members)
 		if (R.antag.current)
 			to_chat(R.antag.current, "<span class='game say'><b>[user.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[input]</span></B></span>")//changed from red to purple - Deity Link

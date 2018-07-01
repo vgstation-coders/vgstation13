@@ -197,7 +197,7 @@
 
 #define hasFactionIcons(H) (H.mind && H.mind.hasFactionsWithHUDIcons())
 
-#define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
+#define iscultist(H) (H.mind && (H.mind.GetRole(CULTIST) || H.mind.GetRole(LEGACY_CULTIST)))
 
 #define ischangeling(H) (H.mind && H.mind.GetRole(CHANGELING))
 
