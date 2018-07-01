@@ -53,10 +53,10 @@
 
 //Mediborg's bed rack
 /obj/item/robot_rack/bed
-	name = "hover bed rack"
-	desc = "A rack for carrying a collapsed rover or roller bed."
+	name = "bed rack"
+	desc = "A rack for carrying a collapsed bed."
 	icon = 'icons/obj/rollerbed.dmi'
-	icon_state = "borgbed_stored"
+	icon_state = "borgbed_"
 	object_type = /obj/structure/bed/roller
 	initial_type = /obj/structure/bed/roller/borg
 	var/obj/interact_type = /obj/structure/bed //Unbuckle dudes.
@@ -68,7 +68,11 @@
 	. = ..()
 
 /obj/item/robot_rack/bed/update_icon()
-	icon_state = "borgbed_[length(held) > 0 ? "stored" : "deployed"]"
+	icon_state = "[initial(icon_state)][length(held) > 0 ? "stored" : "deployed"]"
+
+/obj/item/robot_rack/bed/syndie
+	icon_state = "borgbed_" //Placeholder
+	initial_type = /obj/structure/bed/roller/borg //Placeholder
 
 //Ammo racks, they hold/make mags and borgs can attack it with projectile guns to load them.
 /obj/item/robot_rack/ammo

@@ -521,7 +521,7 @@
 /obj/item/weapon/robot_module/syndicate
 	name = "syndicate-modded combat robot module"
 	module_holder = "malf"
-	quirk_flags = MODULE_IS_SYNDICATE | MODULE_IS_DEFINITIVE
+	quirk_flags = MODULE_IS_DEFINITIVE
 	networks = list(CAMERANET_NUKE)
 	radio_key = /obj/item/device/encryptionkey/syndicate
 	speed_modifier = CYBORG_SYNDICATE_SPEED_MODIFIER
@@ -546,10 +546,10 @@
 	..()
 
 	modules += new /obj/item/weapon/wrench(src) //This thing supposed to be a hacked and modded combat cyborg, is it really going to be stopped by a chair or table?
+	modules += new /obj/item/weapon/pinpointer/nukeop(src)
 	modules += new /obj/item/weapon/gun/projectile/automatic/c20r(src)
 	modules += new /obj/item/robot_rack/ammo/a12mm(src)
 	modules += new /obj/item/weapon/pickaxe/plasmacutter/heat_axe(src)
-	modules += new /obj/item/weapon/pinpointer/nukeop(src)
 
 	sensor_augs = list("Thermal", "Light Amplification", "Disable")
 
@@ -570,14 +570,17 @@
 	modules += new /obj/item/weapon/inflatable_dispenser(src)
 
 	modules += new /obj/item/device/chameleon(src)
-	modules += new /obj/item/weapon/gun/hookshot(src) //Testing
+	modules += new /obj/item/weapon/gun/hookshot(src)
 
 	modules += new /obj/item/weapon/gripper/chemistry(src)
+
 	modules += new /obj/item/device/healthanalyzer(src)
 	modules += new /obj/item/device/mass_spectrometer/adv(src)
-	modules += new /obj/item/weapon/revivalprod(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/crisis(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/biofoam(src)
+
+	modules += new /obj/item/weapon/revivalprod(src)
+	modules += new /obj/item/robot_rack/bed/syndie(src)
 
 	sensor_augs = list("Thermal", "Medical", "Disable")
 

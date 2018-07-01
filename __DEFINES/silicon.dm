@@ -63,8 +63,7 @@ var/global/list/mommi_modules = list(
 #define MODULE_IS_THE_LAW 128			//Module can use *law and *halt
 #define MODULE_CAN_LIFT_SECTAPE 256		//Can lift security tape
 #define MODULE_CAN_LIFT_ENGITAPE 512	//Can lift atmos/engi tape
-#define MODULE_IS_SYNDICATE 1024		//A hacked/syndicate module
-#define MODULE_IS_DEFINITIVE 2048		//Can't get a module reset
+#define MODULE_IS_DEFINITIVE 1024		//Can't get a module reset
 
 #define HAS_MODULE_QUIRK(R, Q) (R.module && (R.module.quirk_flags & Q))
 
