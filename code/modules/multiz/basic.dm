@@ -79,4 +79,4 @@ var/z_levels = 0 // Each bit represents a connection between adjacent levels.  S
 				if(!obstacle.CanPass(mover, src, height, air_group))
 					return 0
 
-		return 1*/
+		return 1
