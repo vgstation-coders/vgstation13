@@ -216,7 +216,7 @@
 	new /obj/item/weapon/conversion_kit(src)
 	new /obj/item/ammo_storage/box/a357(src)
 	return
-/*
+
 /obj/item/weapon/storage/box/syndie_kit/greytide
 	name = "box (GT)"
 

@@ -1300,10 +1300,10 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 			var/datum/faction/malf/M = find_active_faction(MALF)
 			if (M && STATION_Z == z)
 				M.apcs--
-		areaMaster.power_light = 0
-		areaMaster.power_equip = 0
-		areaMaster.power_environ = 0
-		areaMaster.power_change()
+		this_area.power_light = 0
+		this_area.power_equip = 0
+		this_area.power_environ = 0
+		this_area.power_change()
 
 	if(occupant)
 		malfvacate(1)
