@@ -568,18 +568,14 @@
 
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/inflatable_dispenser(src)
-
 	modules += new /obj/item/device/chameleon(src)
-	modules += new /obj/item/weapon/gun/hookshot(src)
-
 	modules += new /obj/item/weapon/gripper/chemistry(src)
-
 	modules += new /obj/item/device/healthanalyzer(src)
 	modules += new /obj/item/device/mass_spectrometer/adv(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/crisis(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/biofoam(src)
-
 	modules += new /obj/item/weapon/revivalprod(src)
+	modules += new /obj/item/weapon/switchtool/surgery(src)
 	modules += new /obj/item/robot_rack/bed/syndie(src)
 
 	sensor_augs = list("Thermal", "Medical", "Disable")

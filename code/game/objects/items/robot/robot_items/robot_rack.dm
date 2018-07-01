@@ -65,19 +65,22 @@
 /obj/item/robot_rack/bed/preattack(obj/O, mob/user, proximity, params)
 	if(istype(O, interact_type)) //Move this to rack level if in the future anything else needs this.
 		O.attack_hand(user)
+	if(istype(O, /obj/item/roller))
+		var/obj/item/roller/folded = O
+		folded.attack_self(user) //If it is folded, unfold it.
 	. = ..()
 
 /obj/item/robot_rack/bed/update_icon()
 	icon_state = "[initial(icon_state)][length(held) > 0 ? "stored" : "deployed"]"
 
 /obj/item/robot_rack/bed/syndie
-	icon_state = "borgbed_" //Placeholder
-	initial_type = /obj/structure/bed/roller/borg //Placeholder
+	icon_state = "syndie_borgbed_"
+	initial_type = /obj/structure/bed/roller/borg/syndie
 
 //Ammo racks, they hold/make mags and borgs can attack it with projectile guns to load them.
 /obj/item/robot_rack/ammo
-	name = "magazine carrier"
-	desc = "DELET THIS"
+	name = "default magazine carrier"
+	desc = "ADMINS STOP SPAWNING ME"
 	initial_type = /obj/item/ammo_storage/magazine
 	object_type = /obj/item/ammo_storage/magazine
 	var/reload_type = /obj/item/weapon/gun/projectile/automatic

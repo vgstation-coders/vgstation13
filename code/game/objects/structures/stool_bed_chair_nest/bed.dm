@@ -210,19 +210,33 @@
 	. = ..()
 
 /obj/item/roller/borg
-	name = "hover roller bed"
-	desc = "A collapsed cyborg hover roller bed that can be carried around."
+	name = "hover bed"
+	desc = "A collapsed cyborg hover bed that can be carried around."
 	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "borgbed_stored"
 	bed_type = /obj/structure/bed/roller/borg
 
 /obj/structure/bed/roller/borg
-	name = "hover roller bed"
+	name = "hover bed"
 	icon = 'icons/obj/rollerbed.dmi'
 	icon_state = "borgbed_down"
 	up_state ="borgbed_up"
 	down_state = "borgbed_down"
 	roller_type = /obj/item/roller/borg
+
+/obj/item/roller/borg/syndie
+	name = "syndicate hover bed"
+	desc = "A syndicate-modded cyborg hover bed that can be carried around."
+	icon = 'icons/obj/rollerbed.dmi'
+	icon_state = "syndie_borgbed_stored"
+	bed_type = /obj/structure/bed/roller/borg/syndie
+
+/obj/structure/bed/roller/borg/syndie
+	name = "syndicate hover bed"
+	icon_state = "syndie_borgbed_down"
+	up_state ="syndie_borgbed_up"
+	down_state = "syndie_borgbed_down"
+	roller_type = /obj/item/roller/borg/syndie
 
 //A surgical roller bed that allows you to do surgery on it 100% of the time in place of the 75% chance of the normal one.
 /obj/item/roller/surgery
