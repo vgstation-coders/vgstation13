@@ -122,10 +122,10 @@
 
 /datum/role/proc/AssignToRole(var/datum/mind/M,var/override = 0)
 	if(!istype(M) && !override)
-		WARNING("M is [M.type]!")
+		stack_trace("M is [M.type]!")
 		return 0
 	if(!CanBeAssigned(M) && !override)
-		WARNING("[M] was to be assigned to [name] but failed CanBeAssigned!")
+		stack_trace("[M] was to be assigned to [name] but failed CanBeAssigned!")
 		return 0
 
 	antag = M
