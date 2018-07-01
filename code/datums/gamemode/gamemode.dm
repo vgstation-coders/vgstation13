@@ -93,7 +93,7 @@
 			if(!P.client.desires_role(F.required_pref) || jobban_isbanned(P, F.required_pref))
 				continue
 			if(!F.HandleNewMind(P.mind))
-				warning("[P.mind] failed [F] HandleNewMind!")
+				crash("[P.mind] failed [F] HandleNewMind!")
 				continue
 	return 1
 

@@ -66,12 +66,12 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/HandleNewMind(var/datum/mind/M) //Used on faction creation
 	for(var/datum/role/R in members)
 		if(R.antag == M)
-			WARNING("Mind was already a role in this faction")
+			warning("Mind was already a role in this faction")
 			return 0
 	if(M.GetRole(initial_role))
 		warning("Mind already had a role of [initial_role]!")
 		return 0
-	var/datum/role/newRole = new initroletype(src,null, initial_role)
+	var/datum/role/newRole = new initroletype(null, src, initial_role)
 	if(!newRole.AssignToRole(M))
 		newRole.Drop()
 		return 0
@@ -81,7 +81,7 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M)
 	for(var/datum/role/R in members)
 		if(R.antag == M)
-			WARNING("Mind was already a role in this faction")
+			warning("Mind was already a role in this faction")
 			return 0
 	if(M.GetRole(late_role))
 		warning("Mind already had a role of [late_role]!")
