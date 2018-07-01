@@ -97,6 +97,8 @@
 		return 0
 	if(!can_move)
 		return 0
+	if(lock_controls) //No moving while using the Gravpult!
+		return 0
 	if(zoom)
 		occupant_message("Unable to move while in zoom mode.", TRUE)
 		return 0
@@ -181,6 +183,8 @@
 	set src = usr.loc
 	set popup_menu = 0
 	if(usr!=src.occupant)
+		return
+	if(lock_controls)
 		return
 	if(src.occupant)
 		if(dash_ready && get_charge() > 0)
