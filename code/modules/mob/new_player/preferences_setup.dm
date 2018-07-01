@@ -31,7 +31,7 @@
 	var/green
 	var/blue
 
-	var/col = pick ("blonde", "black", "chestnut", "copper", "brown", "wheat", "old", "punk")
+	var/col = pick ("blonde", "black", "chestnut", "copper", "brown", "wheat", "old", 15;"punk")
 	switch(col)
 		if("blonde")
 			red = 255
@@ -62,9 +62,9 @@
 			green = red
 			blue = red
 		if("punk")
-			red = rand (0, 255)
-			green = rand (0, 255)
-			blue = rand (0, 255)
+			red = rand(0, 255)
+			green = rand(0, 255)
+			blue = rand(0, 255)
 
 	red = max(min(red + rand (-25, 25), 255), 0)
 	green = max(min(green + rand (-25, 25), 255), 0)
@@ -271,8 +271,9 @@
 				if(HOP)
 					clothes_s = new /icon(uniform_dmi, "hop_s")
 					clothes_s.Blend(new /icon(feet_dmi, "brown"), ICON_UNDERLAY)
-					clothes_s.Blend(new /icon(suit_dmi, "armor"), ICON_OVERLAY)
-					clothes_s.Blend(new /icon('icons/mob/head.dmi', "helmet"), ICON_OVERLAY)
+					clothes_s.Blend(new /icon(suit_dmi, "HoP_Coat"), ICON_OVERLAY)
+					clothes_s.Blend(new /icon('icons/mob/head.dmi', "hopcap"), ICON_OVERLAY)
+					clothes_s.Blend(new /icon('icons/mob/eyes.dmi', "sun"), ICON_OVERLAY)
 					clothes_s=blend_backpack(clothes_s,backbag,"satchel-norm",null,"courierbag")
 				if(BARTENDER)
 					clothes_s = new /icon(uniform_dmi, "ba_suit_s")

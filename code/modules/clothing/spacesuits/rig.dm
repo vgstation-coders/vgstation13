@@ -306,13 +306,13 @@
 	icon_state = "rig0-storm"
 	_color = "storm"
 	name = "stormtrooper helmet"
-	desc = "Now even more vulnerable to teddy bears!"
+	desc = "Even with the finest vision enhancement tech, you still can't hit shit."
 	no_light = 1
 
 /obj/item/clothing/suit/space/rig/security/stormtrooper
 	icon_state = "rig-storm"
 	name = "stormtrooper hardsuit"
-	desc = "Even with the finest vision enhancement tech, you still can't hit shit."
+	desc = "Now even more vulnerable to teddy bears!"
 
 //Atmospherics Rig (BS12)
 /obj/item/clothing/head/helmet/space/rig/atmos

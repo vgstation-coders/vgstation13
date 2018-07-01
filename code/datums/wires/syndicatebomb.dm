@@ -47,7 +47,7 @@ var/const/WIRE_ACTIVATE = 16	// Will start a bombs timer if pulsed, will hint if
 				P.loc.visible_message("<span class='notice'>[bicon(holder)] The bomb seems to hesitate for a moment.</span>")
 				P.timer += 5
 
-/datum/wires/syndicatebomb/UpdateCut(var/index, var/mended)
+/datum/wires/syndicatebomb/UpdateCut(var/index, var/mended, var/mob/user)
 	var/obj/machinery/syndicatebomb/P = holder
 	if(P.degutted)
 		return

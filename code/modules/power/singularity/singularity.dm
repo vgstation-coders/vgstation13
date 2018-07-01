@@ -359,6 +359,10 @@
 		catch(var/exception/e)
 			error("Singularity eat() caught exception:")
 			error(e)
+
+			spawn(0) //So the following line doesn't stop execution
+				throw e //So ALL debug information is sent to the runtime log
+
 			continue
 
 	//for(var/turf/T in trange(grav_pull, src)) // TODO: Create a similar trange for orange to prevent snowflake of self check.
@@ -441,10 +445,10 @@
 	var/dir2 = 0
 	var/dir3 = 0
 	switch(direction)
-		if(NORTH || SOUTH)
+		if(NORTH, SOUTH)
 			dir2 = 4
 			dir3 = 8
-		if(EAST || WEST)
+		if(EAST, WEST)
 			dir2 = 1
 			dir3 = 2
 	var/turf/T2 = T

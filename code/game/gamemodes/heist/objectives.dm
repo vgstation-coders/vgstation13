@@ -40,9 +40,9 @@
 		if(isnull(target.current)/* || target.current.stat == DEAD*/) // Removed dead check, we can clone them after we get them back anyway.
 			return FALSE // they're destroyed. fail.
 
-		var/end_area = get_area_master(locate(/area/shuttle/vox/station))
+		var/end_area = get_area(locate(/area/shuttle/vox/station))
 
-		if(get_area_master(target.current) != end_area)
+		if(get_area(target.current) != end_area)
 			return FALSE
 
 		//if(!target.current.restrained())

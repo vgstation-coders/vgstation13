@@ -112,20 +112,8 @@
 		var/turf/simulated/L = loc
 		if(istype(L))
 			var/datum/gas_mixture/env = L.return_air()
-			if(env.temperature < (heat_amt+T0C))
-
-				var/transfer_moles = 0.25 * env.total_moles()
-
-				var/datum/gas_mixture/removed = env.remove(transfer_moles)
-
-				if(removed)
-
-					var/heat_capacity = removed.heat_capacity()
-					if(heat_capacity == 0 || heat_capacity == null)
-						heat_capacity = 1
-					removed.temperature = min((removed.temperature*heat_capacity + heating_power)/heat_capacity, 1000)
-
-				env.merge(removed)
+			if(env.temperature < (heat_amt + T0C))
+				env.add_thermal_energy(min(heating_power, env.get_thermal_energy_change(1000)))
 
 /obj/machinery/r_n_d/server/attack_hand(mob/user as mob)
 	if (disabled)

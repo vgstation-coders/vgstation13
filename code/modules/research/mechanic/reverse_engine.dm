@@ -11,7 +11,7 @@
 
 	var/list/datum/design/research_queue = list()//all the designs we are waiting to research
 	var/list/datum/design/ready_queue = list()//all the designs we HAVE researched, and are ready to print
-	var/max_queue_len = 0 as num //maximum number of items in the research queue
+	var/max_queue_len = 0 //maximum number of items in the research queue
 
 	var/scan_rating = 1 //the scanner rating
 	var/cap_rating = 1 //the capacitor rating

@@ -74,6 +74,9 @@ var/list/poddoors = list()
 			return
 	return
 
+/obj/machinery/door/poddoor/allowed(mob/M)
+	return 0
+
 /obj/machinery/door/poddoor/open()
 	if (src.operating == 1) //doors can still open when emag-disabled
 		return

@@ -1,15 +1,14 @@
 /obj/item/weapon/robot_module
 	name = "robot module"
 	w_class = W_CLASS_GIANT
-	item_state = "electronic"
-	flags = FPRINT
-	siemens_coefficient = 1
 
 	var/speed_modifier = CYBORG_STANDARD_SPEED_MODIFIER
-	var/can_be_pushed = TRUE
-	var/no_slip = FALSE
 	var/default_modules = TRUE //Do we start with a flash/light?
 
+	//Quirks
+	var/quirk_flags = MODULE_CAN_BE_PUSHED
+
+	//Icons
 	var/list/sprites = list()
 
 	//Modules
@@ -131,11 +130,11 @@
 		R.radio.reset_key()
 
 /obj/item/weapon/robot_module/proc/ApplyStatusFlags(var/mob/living/silicon/robot/R)
-	if(!can_be_pushed)
+	if(!(quirk_flags & MODULE_CAN_BE_PUSHED))
 		R.status_flags &= ~CANPUSH
 
 /obj/item/weapon/robot_module/proc/RemoveStatusFlags(var/mob/living/silicon/robot/R)
-	if(!can_be_pushed)
+	if(!(quirk_flags & MODULE_CAN_BE_PUSHED))
 		R.status_flags |= CANPUSH
 
 /obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable clicking the slot of a module to equip it.
@@ -226,9 +225,9 @@
 /obj/item/weapon/robot_module/medical
 	name = "medical robot module"
 	module_holder = "medical"
+	quirk_flags = MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS
 	networks = list(CAMERANET_MEDBAY)
 	radio_key = /obj/item/device/encryptionkey/headset_med
-	can_be_pushed = FALSE
 	sprites = list(
 		"Default" = "medbot",
 		"Needles" = "needles",
@@ -296,9 +295,9 @@
 /obj/item/weapon/robot_module/engineering
 	name = "engineering robot module"
 	module_holder = "engineer"
+	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_LIFT_ENGITAPE
 	networks = list(CAMERANET_ENGI)
 	radio_key = /obj/item/device/encryptionkey/headset_eng
-	no_slip = TRUE
 	sprites = list(
 		"Default" = "engibot",
 		"Engiseer" = "engiseer",
@@ -351,8 +350,8 @@
 /obj/item/weapon/robot_module/security
 	name = "security robot module"
 	module_holder = "security"
+	quirk_flags = MODULE_IS_THE_LAW | MODULE_CAN_LIFT_SECTAPE
 	radio_key = /obj/item/device/encryptionkey/headset_sec
-	can_be_pushed = FALSE
 	sprites = list(
 		"Default" = "secbot",
 		"Bloodhound" = "bloodhound",
@@ -386,6 +385,7 @@
 /obj/item/weapon/robot_module/janitor
 	name = "janitorial robot module"
 	module_holder = "janitor"
+	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_CLEAN_ON_MOVE
 	sprites = list(
 		"Default" = "janbot",
 		"Mechaduster" = "mechaduster",
@@ -419,6 +419,7 @@
 /obj/item/weapon/robot_module/butler
 	name = "service robot module"
 	module_holder = "service"
+	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_HANDLE_FOOD | MODULE_CAN_BUY
 	radio_key = /obj/item/device/encryptionkey/headset_service
 	sprites = list(
 		"Default - 'Butler'" = "servbot_m",
@@ -513,9 +514,9 @@
 /obj/item/weapon/robot_module/syndicate
 	name = "syndicate robot module"
 	module_holder = "malf"
+	quirk_flags = null
 	networks = list(CAMERANET_NUKE)
 	radio_key = /obj/item/device/encryptionkey/syndicate
-	can_be_pushed = FALSE
 	sprites = list(
 		"Droid - 'Rottweiler'" = "rottweiler-combat"
 		)
@@ -536,8 +537,8 @@
 /obj/item/weapon/robot_module/combat
 	name = "combat robot module"
 	module_holder = "malf"
+	quirk_flags = MODULE_IS_THE_LAW
 	radio_key = /obj/item/device/encryptionkey/headset_sec
-	can_be_pushed = FALSE
 	sprites = list(
 		"Bladewolf" = "bladewolf",
 		"Bladewolf MK-2" = "bladewolfmk2",

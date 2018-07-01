@@ -231,7 +231,7 @@
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 	add_fingerprint(user)
-	if(!user.put_in_active_hand(src))
+	if(can_pickup(user) && !user.put_in_active_hand(src))
 		forceMove(get_turf(user))
 
 	return
@@ -811,7 +811,7 @@
 	if(anchored) //Object isn't anchored
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return FALSE
-	if(!istype(loc, /turf)) //Object is not on a turf
+	if(!istype(loc, /turf) && !is_holder_of(user, src)) //Object is not on a turf
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return FALSE
 	return TRUE

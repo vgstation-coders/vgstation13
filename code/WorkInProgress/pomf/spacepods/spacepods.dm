@@ -28,6 +28,7 @@
 	var/next_firetime = 0
 	var/list/pod_overlays
 	var/health = 400
+	var/maxHealth = 400
 	appearance_flags = 0
 
 	var/datum/delay_controller/move_delayer = new(0.1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
@@ -113,25 +114,17 @@
 
 /obj/spacepod/bullet_act(var/obj/item/projectile/P)
 	if(P.damage && !P.nodamage)
-		deal_damage(P.damage)
+		adjust_health(P.damage)
 
-/obj/spacepod/proc/deal_damage(var/damage)
+/obj/spacepod/proc/adjust_health(var/damage)
 	var/oldhealth = health
-	health = max(0, health - damage)
+	health = Clamp(health-damage,0, maxHealth)
 	var/percentage = (health / initial(health)) * 100
 	if(occupant && oldhealth > health && percentage <= 25 && percentage > 0)
-		var/sound/S = sound('sound/effects/engine_alert2.ogg')
-		S.wait = 0 //No queue
-		S.channel = 0 //Any channel
-		S.volume = 50
-		occupant << S
+		occupant.playsound_local(occupant, 'sound/effects/engine_alert2.ogg', 50, 0, 0, 0, 0)
 	if(occupant && oldhealth > health && !health)
-		var/sound/S = sound('sound/effects/engine_alert1.ogg')
-		S.wait = 0
-		S.channel = 0
-		S.volume = 50
-		occupant << S
-	if(!health)
+		occupant.playsound_local(occupant, 'sound/effects/engine_alert1.ogg', 50, 0, 0, 0, 0)
+	if(health <= 0)
 		spawn(0)
 			if(occupant)
 				to_chat(occupant, "<big><span class='warning'>Critical damage to the vessel detected, core explosion imminent!</span></big>")
@@ -162,15 +155,30 @@
 			ion_trail = null // Should be nulled by qdel src in next line but OH WELL
 			qdel(src)
 		if(2)
-			deal_damage(100)
+			adjust_health(100)
 		if(3)
 			if(prob(40))
-				deal_damage(50)
+				adjust_health(50)
 
 /obj/spacepod/attackby(obj/item/W as obj, mob/user as mob)
 	if(iscrowbar(W))
 		hatch_open = !hatch_open
 		to_chat(user, "<span class='notice'>You [hatch_open ? "open" : "close"] the maintenance hatch.</span>")
+	if(health < maxHealth && iswelder(W))
+		var/obj/item/weapon/weldingtool/WT = W
+		if(!WT.isOn())
+			return
+		if (WT.get_fuel() < 5)
+			to_chat(user, "<span class='warning'>You need more fuel to complete this task.</span>")
+
+		playsound(src, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
+		if(do_after(user, src, 30))
+			if(!src || !WT.remove_fuel(5, user))
+				return
+			to_chat(user, "<span class='notice'>You patch up \the [src].</span>")
+			adjust_health(-rand(15,30))
+			return
+
 	if(istype(W, /obj/item/weapon/cell))
 		if(!hatch_open)
 			return ..()
@@ -441,7 +449,7 @@
 			var/transfer_moles = 0
 			if(pressure_delta > 0) //cabin pressure lower than release pressure
 				if(tank_air.return_temperature() > 0)
-					transfer_moles = pressure_delta*cabin_air.return_volume()/(cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
+					transfer_moles = pressure_delta * cabin_air.return_volume() / (cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
 					var/datum/gas_mixture/removed = tank_air.remove(transfer_moles)
 					cabin_air.merge(removed)
 			else if(pressure_delta < 0) //cabin pressure higher than release pressure
@@ -450,7 +458,7 @@
 				if(t_air)
 					pressure_delta = min(cabin_pressure - t_air.return_pressure(), pressure_delta)
 				if(pressure_delta > 0) //if location pressure is lower than cabin pressure
-					transfer_moles = pressure_delta*cabin_air.return_volume()/(cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
+					transfer_moles = pressure_delta * cabin_air.return_volume() / (cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
 					var/datum/gas_mixture/removed = cabin_air.remove(transfer_moles)
 					if(t_air)
 						t_air.merge(removed)

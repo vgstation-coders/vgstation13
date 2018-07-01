@@ -187,4 +187,3 @@
 		sleep(5 MINUTES) // we're called inside a spawn() so we'll be fine
 
 #undef STAT_TIMESTAMP_FORMAT
-#undef TICKERSTATE_PLAYING

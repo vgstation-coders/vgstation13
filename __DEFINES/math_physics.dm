@@ -35,10 +35,10 @@
 #define SPEED_OF_LIGHT 3e8 //not exact but hey!
 #define SPEED_OF_LIGHT_SQ 9e+16
 
-#define MELTPOINT_GLASS   1500+T0C
-#define MELTPOINT_STEEL   1510+T0C
+#define MELTPOINT_GLASS   (1500+T0C)
+#define MELTPOINT_STEEL   (1510+T0C)
 #define MELTPOINT_SILICON 1687 // KELVIN
-#define MELTPOINT_PLASTIC 180+T0C
+#define MELTPOINT_PLASTIC (180+T0C)
 #define MELTPOINT_SNOW	304.15	//about 30°C
 
 // The highest number supported is a signed 32-bit floating point number.

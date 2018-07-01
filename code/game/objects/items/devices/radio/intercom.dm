@@ -136,7 +136,7 @@
 					update_icon()
 					processing_objects.Add(src)
 					for(var/i, i<= 5, i++)
-						wires.UpdateCut(i,1)
+						wires.UpdateCut(i,1, user)
 				return 1
 		if(1)
 			if(iscablecoil(W))
@@ -194,11 +194,12 @@
 /obj/item/device/radio/intercom/process()
 	if(((world.timeofday - last_tick) > 30) || ((world.timeofday - last_tick) < 0))
 		last_tick = world.timeofday
-		if(!areaMaster)
+		var/area/this_area = get_area(src)
+		if(!this_area)
 			on = 0
 			update_icon()
 			return
-		on = areaMaster.powered(EQUIP) // set "on" to the power status
+		on = this_area.powered(EQUIP) // set "on" to the power status
 		update_icon()
 
 /obj/item/weapon/intercom_electronics

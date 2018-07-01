@@ -236,11 +236,9 @@ var/list/special_fruits = list()
 	var/picked = pick_rand_tele_turf(hit_atom, potency/15, potency/10) // Does nothing at base potency since inner_radius == 0
 	if(!isturf(picked))
 		return 0
-	var/list/mobs = new/list()
 	var/turf/hit_turf = get_turf(hit_atom)
-	for(var/mob/turfMobs in hit_turf)
-		mobs += M
-	if(prob(50) && (mobs.len > 0)) //50% chance to teleport the person who was hit by the fruit
+	var/turf_has_mobs = locate(/mob) in hit_turf
+	if((!istype(M) || prob(50)) && turf_has_mobs) //50% chance to teleport the person who was hit by the fruit
 		spark(hit_atom)
 		new/obj/effect/decal/cleanable/molten_item(hit_turf) //Leave a pile of goo behind for dramatic effect...
 		for(var/mob/A in hit_turf) //For the mobs in the tile that was hit...

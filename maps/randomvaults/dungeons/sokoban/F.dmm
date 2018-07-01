@@ -1,0 +1,48 @@
+"a" = (/turf/unsimulated/wall/other,/area/vault/sokoban/level)
+"b" = (/turf/unsimulated/wall/bomberman{color = "#FFCCCC"},/area/vault/sokoban/level)
+"c" = (/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"d" = (/obj/structure/closet/crate/sokoban,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"e" = (/obj/structure/ladder/sokoban/exit,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"f" = (/obj/structure/sokoban_teleporter,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"g" = (/obj/structure/ladder/sokoban/entrance,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"h" = (/obj/abstract/map/spawner/highrisk,/obj/structure/table/reinforced,/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"i" = (/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"j" = (/obj/machinery/door/airlock/highsecurity{icon_state = "door_locked"; locked = 1; name = "TRESPASSERS WILL BE SHOT"},/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"k" = (/obj/structure/sokoban_teleporter,/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"l" = (/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"m" = (/obj/effect/decal/cleanable/greenglow,/obj/effect/landmark/corpse/russian/ranged,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"n" = (/turf/simulated/floor/plating,/area/vault/sokoban/level)
+"o" = (/obj/abstract/map/spawner/highrisk,/obj/structure/table/reinforced,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"p" = (/obj/item/weapon/shard,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"q" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"r" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/vault/sokoban/level)
+"s" = (/obj/effect/decal/cleanable/greenglow,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/vault/sokoban/level)
+"t" = (/obj/abstract/map/spawner/highrisk,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"u" = (/obj/structure/table/reinforced,/obj/item/weapon/shard,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"v" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"w" = (/obj/effect/decal/cleanable/greenglow,/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"x" = (/obj/effect/decal/cleanable/blood/drip,/obj/effect/decal/cleanable/dirt,/obj/effect/landmark/corpse/mutilated,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"y" = (/obj/structure/table/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/item/toy/gasha/shard,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"z" = (/obj/effect/decal/cleanable/dirt,/mob/living/simple_animal/hostile/creature,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"A" = (/obj/effect/landmark/corpse/russian,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"B" = (/obj/effect/decal/cleanable/dirt,/obj/effect/landmark/corpse/russian,/turf/simulated/floor/plating,/area/vault/sokoban/level)
+"C" = (/mob/living/simple_animal/hostile/creature,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"D" = (/obj/effect/decal/cleanable/dirt,/obj/structure/cult/forge,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"E" = (/obj/structure/cult/tome,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaa
+abbbbbbbbbbbbbaopnDEa
+abccccccccbcccahmnria
+abcddccbddbcbcaycnsca
+abccbcdcdcbddcahCqtAa
+abbcbccbccbcbcauqvqna
+abcccbbcccccccahBqqia
+abcccbcdcbcccbahrqwqa
+abcdcbdcbcccbbahrzvxa
+abbdcbccbbbbbbaaaaaja
+abccdccccfffffffffkla
+abcccbcgbbbbbbaaaaaea
+abbbbbbbbbbbbbaaaaaaa
+aaaaaaaaaaaaaaaaaaaaa
+"}

@@ -143,7 +143,12 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 		var/moles_covered = environment.return_pressure()*volume_covered/(environment.temperature * R_IDEAL_GAS_EQUATION)
 //		to_chat(world, "<span class='notice'>moles_covered: [moles_covered]</span>")
 		//
-		var/datum/gas_mixture/gas_covered = environment.remove(moles_covered)
+
+		//Since nearly every mathematical expression in this file is wrong in some way, it actually relied on a bug in ZAS to not cause ridiculous nonsense.
+		//That bug got fixed, and ridiculous nonsense was caused.
+		//The min() in the following line of code simulates that bug, because god is dead.
+		//Obviously the correct solution would be to fix all the errors in here, but that would involve rebalancing every magic number in this file.
+		var/datum/gas_mixture/gas_covered = environment.remove(min(moles_covered, environment.molar_density() * CELL_VOLUME))
 		var/datum/gas_mixture/plasma_captured = new /datum/gas_mixture()
 		//
 		plasma_captured.toxins = round(gas_covered.toxins * transfer_ratio)

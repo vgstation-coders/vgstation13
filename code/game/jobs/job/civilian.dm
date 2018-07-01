@@ -134,6 +134,7 @@
 				H.equip_or_collect(new /obj/item/clothing/under/rank/botany(H), slot_w_uniform)
 			if("Beekeeper")
 				H.equip_or_collect(new /obj/item/clothing/under/rank/beekeeper(H), slot_w_uniform)
+				H.equip_or_collect(new /obj/item/queen_bee(H), slot_l_store)
 			if("Gardener")
 				H.equip_or_collect(new /obj/item/clothing/under/rank/gardener(H), slot_w_uniform)
 

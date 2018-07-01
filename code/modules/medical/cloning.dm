@@ -470,7 +470,7 @@
 			return
 	if(isrobot(usr))
 		var/mob/living/silicon/robot/robit = usr
-		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+		if(!(robit.module && (robit.module.quirk_flags & MODULE_CAN_HANDLE_MEDICAL)))
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 

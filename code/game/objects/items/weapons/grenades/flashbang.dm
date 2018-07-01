@@ -40,7 +40,7 @@
 	var/eye_safety = 0
 	var/ear_safety = 0
 
-	if(!ignore_protection)
+	if(!ignore_protection && loc != M.loc)
 		eye_safety = M.eyecheck()
 		ear_safety = M.earprot() //some arbitrary measurement of ear protection, I guess? doesn't even matter if it goes above 1
 

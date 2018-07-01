@@ -174,6 +174,9 @@
 		pop(R.module.sensor_augs)
 		R.module.sensor_augs.Add("Security", "Disable")
 
+	if(!(R.module.quirk_flags & MODULE_IS_THE_LAW)) //Make them able to *law and *halt
+		R.module.quirk_flags |= MODULE_IS_THE_LAW
+
 /obj/item/borg/upgrade/vtec
 	name = "cyborg VTEC upgrade board"
 	desc = "Used to kick in a robot's VTEC systems, increasing their speed."
@@ -334,6 +337,8 @@
 		C.Honkize()
 
 	playsound(R, 'sound/items/AirHorn.ogg', 50, 1)
+
+	R.module.quirk_flags |= MODULE_IS_A_CLOWN
 
 /obj/item/borg/upgrade/noir
 	name = "security cyborg N.O.I.R. upgrade board"

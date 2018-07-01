@@ -302,7 +302,6 @@ var/global/list/minesweeper_best_players = list()
 var/nanocoins_rates = 1
 var/nanocoins_lastchange = 0
 
-var/speciesinit = 0
 var/minimapinit = 0
 
 var/bees_species = list()
@@ -370,12 +369,16 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/giant_spider/hunter/dead, // They are dead.
 		/mob/living/simple_animal/hostile/asteroid/hivelordbrood, // They aren't supposed to be playable.
 		/mob/living/simple_animal/hologram, // Can't live outside the holodeck.
+		/mob/living/simple_animal/hostile/carp/holocarp, //These can but they're just a retarded hologram carp reskin for the love of god.
 		/mob/living/slime_pile, // They are dead.
-		/mob/living/adamantine_dust // Ditto
+		/mob/living/adamantine_dust, // Ditto
+		/mob/living/simple_animal/hostile/viscerator, //Nope.
+		/mob/living/simple_animal/hostile/mining_drone, //This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
+		/mob/living/simple_animal/bee //Aren't set up to be playable
 		)
 
 //Boss monster list
-var/list/boss_mobs = existing_typesof(
+var/list/boss_mobs = list(
 	/mob/living/simple_animal/scp_173,						// Just a statue.
 	/mob/living/simple_animal/hostile/hivebot/tele,			// Hivebot spawner WIP thing
 	/mob/living/simple_animal/hostile/wendigo,				// Stupid strong evolving creature things that scream for help
@@ -383,22 +386,5 @@ var/list/boss_mobs = existing_typesof(
 	/mob/living/simple_animal/hostile/alien/queen/large,	// The bigger and beefier version of queens.
 	)
 
-//Global list of all Cyborg/MoMMI modules.
-var/global/list/robot_modules = list(
-	"Standard"		= /obj/item/weapon/robot_module/standard,
-	"Service" 		= /obj/item/weapon/robot_module/butler,
-	"Supply" 		= /obj/item/weapon/robot_module/miner,
-	"Medical" 		= /obj/item/weapon/robot_module/medical,
-	"Security" 		= /obj/item/weapon/robot_module/security,
-	"Engineering"	= /obj/item/weapon/robot_module/engineering,
-	"Janitor" 		= /obj/item/weapon/robot_module/janitor,
-	"Combat" 		= /obj/item/weapon/robot_module/combat,
-	"Syndicate"		= /obj/item/weapon/robot_module/syndicate,
-	"TG17355"		= /obj/item/weapon/robot_module/tg17355
-    )
-
-var/global/list/mommi_modules = list(
-	"Nanotrasen"    = /obj/item/weapon/robot_module/mommi/nt,
-	"Soviet" 	    = /obj/item/weapon/robot_module/mommi/soviet,
-	"Gravekeeper"	= /obj/item/weapon/robot_module/mommi/cogspider
-	)
+// Set by traitor item, affects cargo supplies
+var/station_does_not_tip = FALSE

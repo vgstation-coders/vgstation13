@@ -7,7 +7,7 @@
 #define SS_INIT_SUN                24
 #define SS_INIT_GARBAGE            23
 #define SS_INIT_JOB                22
-#define SS_INIT_GENETICS           21
+#define SS_INIT_HUMANS             21
 #define SS_INIT_MAP                20
 #define SS_INIT_POWER              19
 #define SS_INIT_OBJECT             18

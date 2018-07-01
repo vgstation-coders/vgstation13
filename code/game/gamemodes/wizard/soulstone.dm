@@ -13,6 +13,13 @@
 /obj/item/device/soulstone/Destroy()
 	eject_shade()
 	..()
+
+/obj/item/device/soulstone/examine(mob/user)
+	..()
+	for(var/mob/living/simple_animal/shade/A in src)
+		if(!A.client)
+			to_chat(user, "<span class='warning'>The spirit within seems to be dormant.</span>")
+
 //////////////////////////////Capturing////////////////////////////////////////////////////////
 
 /obj/item/device/soulstone/attack(var/mob/living/M, mob/user as mob)
@@ -48,9 +55,6 @@
 	user << browse(dat, "window=aicard")
 	onclose(user, "aicard")
 	return
-
-
-
 
 /obj/item/device/soulstone/Topic(href, href_list)
 	var/mob/living/carbon/U = usr
@@ -108,7 +112,9 @@
 		L.forceMove(get_turf(src))
 		L.status_flags &= ~GODMODE
 		if(user)
-			to_chat(L, "<b>You have been released from your prison, but you are still bound to [user.name]'s will. Help them suceed in their goals at all costs.</b>")
+			to_chat(L, "<b>You have been released from your prison, but you are still bound to [user.name]'s will. Help them succeed in their goals at all costs.<br>\
+						Be warned, you are as fragile as glass and your attacks are not terribly strong. On the plus side, you fly and have no need for air.<br>\
+						You also cannot be stunned. If need be, your master can recapture you in the stone to heal you.</b>")
 		L.canmove = 1
 		L.cancel_camera()
 
@@ -379,7 +385,7 @@
 								ticker.mode.cult+=Z.mind
 							ticker.mode.update_cult_icons_added(Z.mind)
 						qdel(T)
-						to_chat(Z, "<B>You are a Juggernaut. Though slow, your shell can withstand extreme punishment, your body can reflect energy and laser weapons, and you can create temporary shields that blocks pathing and projectiles. You fists can punch people and regular walls appart.</B>")
+						to_chat(Z, "<B>You are a Juggernaut. Though slow, your shell can withstand extreme punishment, your body can reflect energy and laser weapons, and you can create temporary shields that block pathing and projectiles. Your fists can punch people and regular walls apart.</B>")
 						to_chat(Z, "<B>You are still bound to serve your creator, follow their orders and help them complete their goals at all costs.</B>")
 						Z.cancel_camera()
 						deleteafter = 1

@@ -1,14 +1,14 @@
 /spell/targeted/wrapping_paper
-	name = ""
+	name = "Wrap Gift"
 	desc = "This spell turns a single person into an inert statue for a long period of time."
 	user_type = USER_TYPE_ARTIFACT
 
 	school = "transmutation"
 	charge_max = 300
-	spell_flags = NEEDSCLOTHES | SELECTABLE
+	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK
 	range = 7
 	max_targets = 1
-	invocation = "You'll make a wonderful gift!"
+	invocation = "W'APPIN' PR'SN'TS!"
 	invocation_type = SpI_SHOUT
 	amt_stunned = 5//just exists to make sure the giftwrap "catches" them
 	cooldown_min = 30 //100 deciseconds reduction per rank

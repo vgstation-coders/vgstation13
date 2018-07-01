@@ -528,6 +528,10 @@
 		var/mob/living/simple_animal/hostile/slime/S = M
 		S.calm()
 
+	if(istype(M,/mob/living/simple_animal/bee))
+		var/mob/living/simple_animal/bee/B = M
+		B.calming()
+
 /datum/reagent/lube
 	name = "Space Lube"
 	id = LUBE
@@ -601,7 +605,8 @@
 		holder.remove_reagent(ZOMBIEPOWDER, 0.5 * REM)
 	if(holder.has_reagent(MINDBREAKER))
 		holder.remove_reagent(MINDBREAKER, 2 * REM)
-	M.hallucination = max(0, M.hallucination - 5 * REM)
+	var/lucidmod = M.sleeping ? 3 : M.lying + 1 //3x as effective if they're sleeping, 2x if they're lying down
+	M.hallucination = max(0, M.hallucination - 5 * REM * lucidmod)
 	M.adjustToxLoss(-2 * REM)
 
 /datum/reagent/phalanximine
@@ -2041,6 +2046,13 @@
 	for(var/obj/item/I in T)
 		I.decontaminate()
 
+	T.color = ""
+
+/datum/reagent/space_cleaner/bleach/reaction_obj(obj/O, var/volume)
+	if(O)
+		O.color = ""
+	..()
+
 /datum/reagent/space_cleaner/bleach/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -2065,6 +2077,8 @@
 
 	if(..())
 		return 1
+
+	M.color = ""
 
 	if(method == TOUCH)
 		if(ishuman(M))
@@ -2427,6 +2441,8 @@
 		holder.remove_reagent("zombiepowder", 5)
 	if(holder.has_reagent("mindbreaker"))
 		holder.remove_reagent("mindbreaker", 5)
+	if(holder.has_reagent("spiritbreaker"))
+		holder.remove_reagent("spiritbreaker", 5)
 	M.hallucination = 0
 	M.setBrainLoss(0)
 	M.disabilities = 0
@@ -2472,7 +2488,8 @@
 	M.AdjustKnockdown(-1)
 	if(holder.has_reagent("mindbreaker"))
 		holder.remove_reagent("mindbreaker", 5)
-	M.hallucination = max(0, M.hallucination - 10)
+	var/lucidmod = M.sleeping ? 3 : M.lying + 1
+	M.hallucination = max(0, M.hallucination - 10 * lucidmod)
 	if(prob(60))
 		M.adjustToxLoss(1)
 
@@ -2996,7 +3013,7 @@
 	id = SPIRITBREAKER
 	description = "An extremely dangerous hallucinogen often used for torture. Extracted from the leaves of the rare Ambrosia Cruciatus plant."
 	reagent_state = LIQUID
-	color = "3B0805" //rgb: 59, 8, 5
+	color = "#3B0805" //rgb: 59, 8, 5
 	custom_metabolism = 0.05
 
 /datum/reagent/spiritbreaker/on_mob_life(var/mob/living/M)
@@ -3487,6 +3504,22 @@
 	reagent_state = LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
+
+/datum/reagent/mustard
+	name = "Mustard"
+	id = MUSTARD
+	description = "A spicy yellow paste."
+	reagent_state = LIQUID
+	nutriment_factor = 3 * REAGENTS_METABOLISM
+	color = "#cccc33" //rgb: 204, 204, 51
+
+/datum/reagent/relish
+	name = "Relish"
+	id = RELISH
+	description = "A pickled cucumber jam. Tasty!"
+	reagent_state = LIQUID
+	nutriment_factor = 4 * REAGENTS_METABOLISM
+	color = "#336600" //rgb: 51, 102, 0
 
 /datum/reagent/dipping_sauce
 	name = "Dipping Sauce"
@@ -4271,7 +4304,8 @@
 	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
 	if(holder.has_reagent("discount"))
 		holder.remove_reagent("discount", 2 * REM)
-	M.hallucination = max(0, M.hallucination - 5 * REM)
+	var/lucidmod = M.sleeping ? 3 : M.lying + 1
+	M.hallucination = max(0, M.hallucination - 5 * REM * lucidmod)
 	M.adjustToxLoss(-2 * REM)
 
 /datum/reagent/clottingagent
@@ -6545,3 +6579,63 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#FFFFFF"
 	density = 2.211
 	specheatcap = 87.45
+
+/datum/reagent/sodium_silicate
+	name = "Sodium Silicate"
+	id = SODIUMSILICATE
+	description = "A white powder, commonly used in cements."
+	reagent_state = SOLID
+	color = "#E5E5E5"
+	density = 2.61
+	specheatcap = 111.8
+
+/datum/reagent/untable
+	name = "Untable Mutagen"
+	id = UNTABLE_MUTAGEN
+	description = "Untable Mutagen is a substance that is inert to most materials and objects, but highly corrosive to tables."
+	reagent_state = LIQUID
+	color = "#84121D" //rgb: 132, 18, 29
+	overdose_am = REAGENTS_OVERDOSE
+
+/datum/reagent/untable/reaction_obj(var/obj/O, var/volume)
+
+	if(..())
+		return 1
+
+	if(!O.acidable())
+		return
+
+	if(istype(O,/obj/structure/table))
+		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
+		I.desc = "Looks like this was \an [O] some time ago."
+		O.visible_message("<span class='warning'>\The [O] melts.</span>")
+		qdel(O)
+
+/datum/reagent/colorful_reagent
+	name = "Colorful Reagent"
+	id = COLORFUL_REAGENT
+	description = "Thoroughly sample the rainbow."
+	reagent_state = LIQUID
+	color = "#C8A5DC"
+	var/list/random_color_list = list("#00aedb","#a200ff","#f47835","#d41243","#d11141","#00b159","#00aedb","#f37735","#ffc425","#008744","#0057e7","#d62d20","#ffa700")
+
+
+/datum/reagent/colorful_reagent/on_mob_life(mob/living/M)
+	if(M && isliving(M))
+		M.color = pick(random_color_list)
+	..()
+
+/datum/reagent/colorful_reagent/reaction_mob(mob/living/M, reac_volume)
+	if(M && isliving(M))
+		M.color = pick(random_color_list)
+	..()
+
+/datum/reagent/colorful_reagent/reaction_obj(obj/O, reac_volume)
+	if(O)
+		O.color = pick(random_color_list)
+	..()
+
+/datum/reagent/colorful_reagent/reaction_turf(turf/T, reac_volume)
+	if(T)
+		T.color = pick(random_color_list)
+	..()

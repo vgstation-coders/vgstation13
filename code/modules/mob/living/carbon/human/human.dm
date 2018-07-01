@@ -7,7 +7,7 @@
 	icon_state = "body_m_s"
 	can_butcher = 1
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
-	var/list/hud_list[9]
+	var/list/hud_list = list()
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
 
@@ -116,11 +116,6 @@
 	static_overlays["letter"] = static_overlay
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
-	if(!hair_styles_list.len)
-		buildHairLists()
-	if(!all_species.len)
-		buildSpeciesLists()
-
 	if(new_species_name)
 		s_tone = random_skin_tone(new_species_name)
 	multicolor_skin_r = rand(0,255)	//Only used when the human has a species datum with the MULTICOLOR anatomical flag
@@ -157,7 +152,7 @@
 	obj_overlays[FIRE_LAYER]		= getFromPool(/obj/abstract/Overlays/fire_layer)
 	obj_overlays[MUTANTRACE_LAYER]	= getFromPool(/obj/abstract/Overlays/mutantrace_layer)
 	obj_overlays[MUTATIONS_LAYER]	= getFromPool(/obj/abstract/Overlays/mutations_layer)
-	obj_overlays[DAMAGE_LAYER]		= getFromPool(/obj/abstract/Overlays/damage_layer)
+	obj_overlays[DAMAGE_LAYER]	= getFromPool(/obj/abstract/Overlays/damage_layer)
 	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/abstract/Overlays/uniform_layer)
 	obj_overlays[ID_LAYER]			= getFromPool(/obj/abstract/Overlays/id_layer)
 	obj_overlays[SHOES_LAYER]		= getFromPool(/obj/abstract/Overlays/shoes_layer)
@@ -1123,8 +1118,9 @@
 		if(src.species.abilities)
 			src.verbs -= species.abilities
 		if(species.spells)
-			for(var/spell in species.spells)
-				remove_spell(spell)
+			for(var/spell/spell in spell_list)
+				if(spell.type in species.spells)
+					remove_spell(spell)
 		for(var/L in species.known_languages)
 			remove_language(L)
 		species.clear_organs(src)
@@ -1574,7 +1570,8 @@
 		plane = LYING_HUMAN_PLANE
 	else
 		plane = HUMAN_PLANE
-	if(istype(areaMaster) && areaMaster.project_shadows)
+	var/area/this_area = get_area(src)
+	if(istype(this_area) && this_area.project_shadows)
 		update_shadow()
 
 /mob/living/carbon/human/set_hand_amount(new_amount) //Humans need hand organs to use the new hands. This proc will give them some

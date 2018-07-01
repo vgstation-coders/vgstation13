@@ -10,6 +10,7 @@
 	var/state = BEE_ROAMING
 	var/fatigue = 0//increases after a successful pollination or when searching for flowers in vain
 	var/bored = 0//increases when searching for enemies in vain
+	var/exhaustion = 0//increases when roaming without a queen
 	var/corpse = /obj/effect/decal/cleanable/bee
 	var/toxins = 0
 	var/datum/bee_species/species = null

@@ -87,10 +87,10 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	nanomanager.update_uis(src) // update all UIs attached to src
 
 /obj/machinery/chem_dispenser/proc/can_use(var/mob/living/silicon/robot/R)
-	if(!isMoMMI(R) && !istype(R.module,/obj/item/weapon/robot_module/medical)) //default chem dispenser can only be used by MoMMIs and Mediborgs
-		return 0
+	if(!(R.module && (R.module.quirk_flags & MODULE_CAN_HANDLE_CHEMS)))
+		return FALSE
 	else
-		return 1
+		return TRUE
 
 /obj/machinery/chem_dispenser/process()
 	if(recharged < 0)
@@ -313,10 +313,10 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	energy = 100
 
 /obj/machinery/chem_dispenser/brewer/can_use(var/mob/living/silicon/robot/R)
-	if(!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
-		return 1
+	if(R.module && (R.module.quirk_flags & MODULE_CAN_HANDLE_FOOD))
+		return TRUE
 	else
-		return 0
+		return FALSE
 
 //Soda/booze dispensers.
 
@@ -344,10 +344,10 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	energy = 100
 
 /obj/machinery/chem_dispenser/soda_dispenser/can_use(var/mob/living/silicon/robot/R)
-	if(!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
-		return 1
+	if(R.module && (R.module.quirk_flags & MODULE_CAN_HANDLE_FOOD))
+		return TRUE
 	else
-		return 0
+		return FALSE
 
 /obj/machinery/chem_dispenser/booze_dispenser/
 	name = "Booze Dispenser"
@@ -373,10 +373,10 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	energy = 100
 
 /obj/machinery/chem_dispenser/booze_dispenser/can_use(var/mob/living/silicon/robot/R)
-	if(!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
-		return 1
+	if(R.module && (R.module.quirk_flags & MODULE_CAN_HANDLE_FOOD))
+		return TRUE
 	else
-		return 0
+		return FALSE
 
 #undef FORMAT_DISPENSER_NAME
 

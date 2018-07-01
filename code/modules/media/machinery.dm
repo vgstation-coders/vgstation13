@@ -30,7 +30,7 @@
 /obj/machinery/media/proc/update_music()
 	// Broadcasting shit
 	for(var/obj/machinery/media/transmitter/T in hooked)
-		testing("[src] Writing media to [T].")
+//		testing("[src] Writing media to [T].")
 		T.broadcast(media_url,media_start_time)
 
 	if(exclusive_hook)
@@ -49,7 +49,7 @@
 			M.update_music()
 
 /obj/machinery/media/proc/update_media_source()
-	var/area/A = get_area_master(src)
+	var/area/A = get_area(src)
 	if(!A)
 		return
 	// Check if there's a media source already.
@@ -66,7 +66,7 @@
 	master_area=A
 
 /obj/machinery/media/proc/disconnect_media_source()
-	var/area/A = get_area_master(src)
+	var/area/A = get_area(src)
 
 	// Sanity
 	if(!A)
