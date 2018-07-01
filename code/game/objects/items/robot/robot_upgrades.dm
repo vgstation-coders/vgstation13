@@ -342,6 +342,8 @@
 
 	playsound(R, 'sound/items/AirHorn.ogg', 50, 1)
 
+	R.module.quirk_flags |= MODULE_IS_A_CLOWN
+
 /obj/item/borg/upgrade/noir
 	name = "security cyborg N.O.I.R. upgrade board"
 	desc = "So that's the way you scientific detectives work. My god! for a fat, middle-aged, hard-boiled, pig-headed guy, you've got the vaguest way of doing things I ever heard of."

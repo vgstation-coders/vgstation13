@@ -63,7 +63,8 @@ var/global/list/mommi_modules = list(
 #define MODULE_IS_THE_LAW 128			//Module can use *law and *halt
 #define MODULE_CAN_LIFT_SECTAPE 256		//Can lift security tape
 #define MODULE_CAN_LIFT_ENGITAPE 512	//Can lift atmos/engi tape
-#define MODULE_IS_DEFINITIVE 1024		//Can't get a module reset
+#define MODULE_IS_A_CLOWN 1024			//Can handle clown-only items/machinery.
+#define MODULE_IS_DEFINITIVE 2048		//Can't get a module reset
 
 #define HAS_MODULE_QUIRK(R, Q) (R.module && (R.module.quirk_flags & Q))
 
@@ -100,5 +101,4 @@ var/global/list/mommi_modules = list(
 
 #define SILICON_MOBILITY_MODULE_SPEED_MODIFIER 0.75 //Silicon's speed var is multiplied by the mobility module modifier
 #define SILICON_VTEC_SPEED_BONUS 0.25 //But the VTEC Bonus is ADDED to their movement_speed_modifier
-
 

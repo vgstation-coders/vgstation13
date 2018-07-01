@@ -671,6 +671,12 @@ var/list/one_way_windows
 	health = 160
 	penetration_dampening = 7
 
+
+// Used on Packed ; smartglassified roundstart
+/obj/structure/window/reinforced/plasma/interogation_room/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = "InterogationRoomIDTag"
+
 /obj/structure/window/reinforced/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	return
 

@@ -274,9 +274,6 @@
 		//don't care who they are or what they have, act as if they're NOTHING
 		user = null
 
-	if (!allowed(user))
-		return
-
 	return ..()
 
 /obj/machinery/door/window/emag(mob/user)
@@ -395,3 +392,8 @@
 	WA.secure = "secure_"
 	WA.update_icon()
 	return WA
+
+// Used on Packed ; smartglassified roundstart
+/obj/machinery/door/window/plasma/secure/interogation_room/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = "InterogationRoomIDTag"
