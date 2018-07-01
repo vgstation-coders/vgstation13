@@ -30,8 +30,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	source_temperature = TEMPERATURE_FLAME
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1"
-	var/unlit_attack_verb = list("prods", "pokes")
-	var/lit_attack_verb = list("burns", "singes")
+	var/list/unlit_attack_verb = list("prods", "pokes")
+	var/list/lit_attack_verb = list("burns", "singes")
 	attack_verb = list("prods", "pokes")
 	light_color = LIGHT_COLOR_FIRE
 
