@@ -3,7 +3,7 @@
 /datum/objective/spray_blood
     explanation_text = "Spray blood on the station to thin the veil of reality and allow Nar-Sie to come closer from us."
     name = "Spray blood on the station."
-    var/floor_limit = 150 // Abritary, to fix later
+    var/floor_limit = 15 // Abritary, to fix later
 
     flags =  FACTION_OBJECTIVE
 

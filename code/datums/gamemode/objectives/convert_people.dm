@@ -3,7 +3,7 @@
 /datum/objective/convert_people
     explanation_text = "Gather an army of followers "
     name = "Convert people to the Cult of the Geometer of blood."
-    var/cultists_target = 9
+    var/cultists_target = 3
 
     flags =  FACTION_OBJECTIVE
 
