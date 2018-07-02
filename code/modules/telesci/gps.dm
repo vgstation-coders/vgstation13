@@ -185,11 +185,9 @@ var/list/SPS_list = list()
 	if(emped)
 		return
 	. = ..()
-	var/num = 0
 	for(var/E in SPS_list)
 		var/obj/item/device/gps/secure/S = E
-		S.announce(wearer, src, "has been stripped from their wearer",num)
-		num++
+		S.announce(wearer, src, "has been stripped from their wearer",SPS_list.Find(src))
 
 var/list/deathsound = list('sound/items/die1.wav', 'sound/items/die2.wav', 'sound/items/die3.wav','sound/items/die4.wav')
 
@@ -220,16 +218,16 @@ var/const/DEATHSOUND_CHANNEL = 300
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
 		else if(prob(33) && dead) // 25% chance if dead, 0% chance if stripped
 			playsound(src, 'sound/items/unitdownat.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(pos.x-WORLD_X_OFFSET[pos.z],pos,sound_channel,src)
+			playnum(pos.x-WORLD_X_OFFSET[pos.z],sound_channel,src)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(pos.y-WORLD_Y_OFFSET[pos.z],pos,sound_channel,src)
+			playnum(pos.y-WORLD_Y_OFFSET[pos.z],sound_channel,src)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(pos.z,pos,sound_channel,src)
+			playnum(pos.z,sound_channel,src)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
 		else if(prob(50)) 	// 25% chance if dead, 50% chance if stripped
 			playsound(src, 'sound/items/lostbiosignalforunit.wav',100, 0,channel = sound_channel,wait = TRUE)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(num,pos,sound_channel,src)
+			playnum(num,sound_channel,src)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
 		else	// 25% chance if dead, 50% chance if stripped
 			playsound(src, 'sound/items/allteamsrespondcode3.wav',100, 0,channel = sound_channel,wait = TRUE)
@@ -246,6 +244,7 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 	if(num)
 		var/base = round(log(10,num))
 		for(var/n = 0 to base)
-			splitnumber += num/(10**(base-n)) % 10
+			splitnumber += num2text(num/(10**(base-n)) % 10)
 	else splitnumber += "0"
 	for(var/n in splitnumber)
+		playsound(source, nums_to_hl_num[n], 100, 0, channel = sound_channel, wait = TRUE)
