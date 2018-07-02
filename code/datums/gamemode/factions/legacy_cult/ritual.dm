@@ -1,10 +1,10 @@
-var/runedec = 0 // Rune cap ? 
+var/runedec = 0 // Rune cap ?
 
 /obj/effect/rune_legacy
 	desc = "A strange collection of symbols drawn in blood."
 	anchored = 1
-	icon = 'icons/obj/rune.dmi'
-	icon_state = "1"
+	icon = 'icons/effects/uristrunes.dmi'
+	icon_state = "rune-1"
 	var/visibility = 0
 	layer = RUNE_LAYER
 	plane = ABOVE_TURF_PLANE
@@ -35,7 +35,7 @@ var/runedec = 0 // Rune cap ?
 			AI.client.images += blood_image
 	rune_list_legacy.Add(src)
 	my_cult = find_active_faction(LEGACY_CULT)
-	if (!our_cult)
+	if (!my_cult)
 		CRASH("Creating a rune without an active cult")
 	cultwords = my_cult.cult_words
 	stat_collection.cult_runes_written++
