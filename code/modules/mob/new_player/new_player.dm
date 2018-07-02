@@ -328,7 +328,6 @@
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
-
 	// TODO:  Job-specific latejoin overrides.
 	character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
 
@@ -359,15 +358,42 @@
 		to_chat(character, "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>")
 
 	ticker.mode.latespawn(character)
+	if(character.mind.assigned_role != "MODE")
+		if(character.mind.assigned_role != "Cyborg")
+			data_core.manifest_inject(character)
+			ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
+			if(character.mind.assigned_role == "Trader")
+				//If we're a trader, instead send a message to PDAs with the trader cartridge
+				for (var/obj/item/device/pda/P in PDAs)
+					if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
+						var/mob/living/L = get_holder_of_type(P,/mob/living)
+						if(L)
+							L.show_message("[bicon(P)] <b>Message from U¶ü…8•E1¿”–ã (T•u1B§’), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
+				for(var/mob/dead/observer/M in player_list)
+					if(M.stat == DEAD && M.client)
+						handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character] has arrived in the sector from space.</span></span>",character) //This should generate a Follow link
 
-	if(character.mind.assigned_role != "Cyborg")
-		data_core.manifest_inject(character)
-		ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
-		AnnounceArrival(character, rank)
-		FuckUpGenes(character)
-	else
-		character.Robotize()
+			else
+				AnnounceArrival(character, rank)
+			FuckUpGenes(character)
+		else
+			character.Robotize()
 	qdel(src)
+
+/mob/living/carbon/human/proc/Meteortype_Latejoin(rank)
+	var/obj/effect/landmark/start/endpoint = null
+	for(var/obj/effect/landmark/start/S in landmarks_list)
+		if(S.name == rank)
+			endpoint = S
+			break
+	if(!endpoint)
+		message_admins("ERROR - NO VALID TRADER SPAWN. Here's what I've got: [json_encode(landmarks_list)]")
+		//Error! We have no targetable spawn!
+		return
+	var/turf/start_point = locate(TRANSITIONEDGE + 2, rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2)), endpoint.z)
+	forceMove(start_point)
+	throw_at(endpoint)
+
 
 /proc/AnnounceArrival(var/mob/living/carbon/human/character, var/rank)
 	if (ticker.current_state == GAME_STATE_PLAYING)
