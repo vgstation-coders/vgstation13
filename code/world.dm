@@ -65,7 +65,7 @@ var/savefile/panicfile
 #ifdef BORDER_USE_TURF_EXIT
 	if(byond_version < 510)
 		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 507.1248 or comment BORDER_USE_TURF_EXIT in global.dm")
-#elif
+#else
 	if(byond_version < RECOMMENDED_VERSION)
 		world.log << "Your server's byond version does not meet the recommended requirements for this code. Please update BYOND"
 #endif
