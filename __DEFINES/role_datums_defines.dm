@@ -39,6 +39,7 @@
 #define VOXRAIDER "vox raider"
 #define BLOBOVERMIND "blob overmind"
 #define HIGHLANDER "highlander"
+#define IMPLANTSLAVE "Greytider"
 
 
 #define CULT_MENDED		-1
@@ -50,3 +51,7 @@
 #define CULT_EPILOGUE	5
 
 #define CULT_COST_RUNE	1
+
+#define BE_TRAITOR "Be_Traitor"
+#define BE_PAI "Be_PAI"
+#define BE_NINJA "Be_Ninja"

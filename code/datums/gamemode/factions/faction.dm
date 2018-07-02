@@ -69,7 +69,7 @@ var/list/factions_with_hud_icons = list()
 			WARNING("Mind was already a role in this faction")
 			return 0
 	if(M.GetRole(initial_role))
-		warning("Mind already had a role of [initial_role]!")
+		WARNING("Mind already had a role of [initial_role]!")
 		return 0
 	var/datum/role/newRole = new initroletype(null, src, initial_role)
 	if(!newRole.AssignToRole(M))
@@ -84,13 +84,14 @@ var/list/factions_with_hud_icons = list()
 			WARNING("Mind was already a role in this faction")
 			return 0
 	if(M.GetRole(late_role))
-		warning("Mind already had a role of [late_role]!")
+		WARNING("Mind already had a role of [late_role]!")
 		return 0
-	var/datum/role/R = new roletype(fac = src, new_id = late_role)
+	var/datum/role/R = new roletype(null,src, initial_role)
 	if(!R.AssignToRole(M))
 		R.Drop()
 		return 0
 	members.Add(R)
+	R.OnPostSetup()
 	return 1
 
 /datum/faction/proc/HandleRecruitedRole(var/datum/role/R)
@@ -118,11 +119,11 @@ var/list/factions_with_hud_icons = list()
 	return objective_holder.GetObjectiveString(check_success = TRUE)
 
 /datum/faction/proc/GetScoreboard()
-	var/list/score_results = list()
+	var/score_results = ""
 	for(var/datum/role/R in members)
 		var/results = R.GetScoreboard()
 		if(results)
-			score_results.Add(results)
+			score_results += results
 
 	return score_results
 

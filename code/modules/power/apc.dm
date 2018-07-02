@@ -1294,16 +1294,17 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 				sleep(1)
 
 /obj/machinery/power/apc/Destroy()
-	if(areaMaster.areaapc == src)
-		areaMaster.remove_apc(src)
+	var/area/this_area = get_area(src)
+	if(this_area.areaapc == src)
+		this_area.remove_apc(src)
 		if(malfai && operating)
 			var/datum/faction/malf/M = find_active_faction(MALF)
 			if (M && STATION_Z == z)
 				M.apcs--
-		areaMaster.power_light = 0
-		areaMaster.power_equip = 0
-		areaMaster.power_environ = 0
-		areaMaster.power_change()
+		this_area.power_light = 0
+		this_area.power_equip = 0
+		this_area.power_environ = 0
+		this_area.power_change()
 
 	if(occupant)
 		malfvacate(1)

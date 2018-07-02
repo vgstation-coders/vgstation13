@@ -229,5 +229,3 @@ var/VEGANBLOCK = 0
 
 			if(species.default_blocks.len)
 				all_species[name]=species
-
-	speciesinit = 1
