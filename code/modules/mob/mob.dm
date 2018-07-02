@@ -90,6 +90,14 @@
 	if(transmogged_to)
 		qdel(transmogged_to)
 		transmogged_to = null
+	if(control_object.len)
+		for(var/A in control_object)
+			qdel(A)
+		control_object = null
+	if(orient_object.len)
+		for(var/A in orient_object)
+			qdel(A)
+		orient_object = null
 
 	..()
 
@@ -950,7 +958,7 @@ var/list/slot_equipment_priority = list( \
 	set name = "Point To"
 	set category = "Object"
 
-	if(!src || usr.isUnconscious() || !isturf(src.loc) || !(A in view(src.loc)))
+	if(!src || (usr.isUnconscious() && !isobserver(src)) || !isturf(src.loc) || !(A in view(src.loc)))
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))
@@ -980,7 +988,7 @@ var/list/slot_equipment_priority = list( \
 
 //this and stop_pulling really ought to be /mob/living procs
 /mob/proc/start_pulling(var/atom/movable/AM)
-	if ( !AM || !src || src==AM || !isturf(AM.loc) )	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
+	if ( !AM || !src || src==AM || !isturf(AM.loc) || !AM.can_be_pulled(src))	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
 		return
 
 	if(!has_hand_check())
@@ -1007,7 +1015,7 @@ var/list/slot_equipment_priority = list( \
 
 		src.pulling = P
 		P.pulledby = src
-		P.on_pull_start(AM)
+		AM.on_pull_start(src)
 		update_pull_icon()
 		if(ismob(P))
 			var/mob/M = P
@@ -1355,6 +1363,8 @@ var/list/slot_equipment_priority = list( \
 		var/t1 = text("window=[href_list["mach_close"]]")
 		unset_machine()
 		src << browse(null, t1)
+	else
+		return ..()
 	//if (href_list["joinresponseteam"])
 	//	if(usr.client)
 	//		var/client/C = usr.client

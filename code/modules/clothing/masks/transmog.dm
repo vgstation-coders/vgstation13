@@ -26,6 +26,12 @@
 	if(cursed)
 		name = "cursed [name]"
 
+/obj/item/clothing/mask/morphing/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	M.visible_message("<span class = 'warning'>\The [M] attempts to put on \the [src].</span>")
+	if(do_after(M, src, 5 SECONDS))
+		return ..()
+	return CANNOT_EQUIP
+
 /obj/item/clothing/mask/morphing/equipped(mob/living/carbon/C, wear_mask)
 	if(target_type && istype(C))
 		if(C.get_item_by_slot(slot_wear_mask) == src)
@@ -125,8 +131,7 @@
 	..()
 	color = rgb(rand(0,255),rand(0,255),rand(0,255))
 	//Remove cockatrices because they're somewhat OP when player controlled
-	target_type = pick(existing_typesof(/mob/living/simple_animal) - existing_typesof(/mob/living/simple_animal/hostile/humanoid) - typesof(/mob/living/simple_animal/hostile/retaliate/cockatrice) - typesof(/mob/living/simple_animal/hostile/giant_spider/hunter/dead) - typesof(/mob/living/simple_animal/hostile/asteroid/hivelordbrood))
-
+	target_type = pick(existing_typesof(/mob/living/simple_animal) - (existing_typesof_list(blacklisted_mobs) + existing_typesof_list(boss_mobs)))
 /obj/item/clothing/mask/morphing/ghost
 	name = "mask of the phantom"
 	desc = "It appears to be modeled after a ghost. It looks as though it might disappear at any moment."

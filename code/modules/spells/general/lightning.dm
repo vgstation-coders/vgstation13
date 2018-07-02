@@ -94,7 +94,7 @@
 		connected_button.name = name
 		charge_counter = charge_max
 		user.overlays -= chargeoverlay
-		if(zapzap != multicast) //partial cast
+		if((zapzap != multicast) && (zapzap != 0)) //partial cast
 			take_charge(holder, 0)
 		zapzap = 0
 	return 1
@@ -110,10 +110,8 @@
 			to_chat(user, "<span class='info'>You can throw lightning [zapzap] more time\s</span>")
 			. = 1
 
-		invocation(user)
 		spawn()
 			zapmuthafucka(user, L, bounces)
-		src.process()
 
 /spell/lightning/proc/zapmuthafucka(var/mob/user, var/mob/living/target, var/chained = bounces, var/list/zapped = list(), var/oursound = null)
 	var/otarget = target

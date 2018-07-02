@@ -1,10 +1,11 @@
 /spell/targeted/fist
 	name = "Fist"
-	desc = "This spell punches everyone in view."
+	desc = "This spell punches up to three beings in view."
 	abbreviation = "FS"
 	user_type = USER_TYPE_WIZARD
 
 	charge_max = 50
+	spell_flags = 0 //So that it doesn't open a dialog box.
 	cooldown_min = 10
 	invocation = "I CAST FIST"
 	invocation_type = SpI_SHOUT

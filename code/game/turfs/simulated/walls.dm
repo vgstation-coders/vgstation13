@@ -13,7 +13,8 @@
 
 	var/walltype = "metal"
 	var/hardness = 60 //Higher numbers are harder (so that it actually makes sense). Walls are 60 hardness, reinforced walls are 90 hardness. No hardness over 100, PLEASE
-	var/engraving, engraving_quality //engraving on the wall
+	var/engraving
+	var/engraving_quality //engraving on the wall
 	var/del_suppress_resmoothing = 0 // Do not resmooth neighbors on Destroy. (smoothwall.dm)
 
 	var/dismantle_type = /turf/simulated/floor/plating

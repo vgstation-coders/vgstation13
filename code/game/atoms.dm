@@ -244,6 +244,7 @@ var/global/list/ghdel_profiling = list()
 	return
 
 /atom/proc/emp_act(var/severity)
+	set waitfor = FALSE
 	return
 
 /atom/proc/kick_act(mob/living/carbon/human/user) //Called when this atom is kicked. If returns 1, normal click action will be performed after calling this (so attack_hand() in most cases)
@@ -403,7 +404,7 @@ its easier to just keep the beam vertical.
 
 //Woo hoo. Overtime
 //All atoms
-/atom/proc/examine(mob/user, var/size = "", var/show_name = TRUE)
+/atom/proc/examine(mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE)
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src]."
 	if(src.blood_DNA && src.blood_DNA.len)
@@ -414,7 +415,7 @@ its easier to just keep the beam vertical.
 		f_name += "<span class='danger'>blood-stained</span> [name]!"
 
 	if(show_name)
-		to_chat(user, "[bicon(src)] That's [f_name]" + size)
+		to_chat(user, "[show_icon ? bicon(src) : ""] That's [f_name]" + size)
 	if(desc)
 		to_chat(user, desc)
 
@@ -653,7 +654,7 @@ its easier to just keep the beam vertical.
 		return
 	if(isnull(M.key))
 		return
-	if (!( src.flags ) & FPRINT)
+	if (!(src.flags & FPRINT))
 		return
 	if (ishuman(M))
 		//Add the list if it does not exist.

@@ -505,9 +505,9 @@
 
 /obj/structure/hive/proc/healthcheck()
 	if(health <= 0)
-		Die()
+		death()
 
-/obj/structure/hive/proc/Die()
+/obj/structure/hive/proc/death()
 	if(gibtype)
 		new gibtype(get_turf(src))
 
@@ -580,7 +580,7 @@ var/list/hive_pylons = list()
 
 	..()
 
-/obj/structure/hive/pylon/Die()
+/obj/structure/hive/pylon/death()
 	//One last pulse before dying
 	if(active)
 		emit_radiation(radiation_range, radiation_power)
@@ -717,7 +717,7 @@ var/list/hive_pylons = list()
 	health = 150
 	gibtype = /obj/effect/gibspawner/human
 
-/obj/structure/hive/communicator/Die()
+/obj/structure/hive/communicator/death()
 	..()
 
 	for(var/obj/structure/hive/pylon/P in hive_pylons)
@@ -751,7 +751,7 @@ var/list/hive_pylons = list()
 
 	dir = pick(cardinal)
 
-/obj/structure/hive/husk/Die()
+/obj/structure/hive/husk/death()
 	visible_message("<span class='notice'>\The [src] crumbles into dust!</span>")
 
 	return ..()

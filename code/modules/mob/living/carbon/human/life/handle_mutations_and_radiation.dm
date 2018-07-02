@@ -207,7 +207,7 @@
 			if(prob(10*minor_rad_multiplier))
 				//Blindness
 				var/datum/organ/internal/eyes/E = internal_organs_by_name["eyes"]
-				if(!E.robotic && !(sdisabilities & BLIND || disabilities & NEARSIGHTED))
+				if(E && !E.robotic && !(sdisabilities & BLIND || disabilities & NEARSIGHTED))
 					to_chat(src, "<span class = 'danger'>[pick("Your eyesight starts to fade!","Your eyes go cloudy!","Are you going blind?")]</span>")
 					E.take_damage(2.5, TRUE)
 					eye_blurry = min(eye_blurry+1.5,50)
@@ -303,3 +303,22 @@
 							Knockdown(3)
 							regenerate_icons()
 							visible_message("<span class='danger'>\The [src]'s form loses bulk as they collapse to the ground.</span>")
+
+/mob/living/proc/get_rad_stage()
+	switch(rad_tick)
+		if(0)
+			return "N/A"
+		if(1 to RADDOSELIGHT)
+			return "Early"
+		if(RADDOSELIGHT to RADDOSEMINOR)
+			return "Light"
+		if(RADDOSEMINOR to RADDOSEADVANCED)
+			return "Minor"
+		if(RADDOSEADVANCED to RADDOSECRITICAL)
+			return "Advanced"
+		if(RADDOSECRITICAL to RADDOSEDEADLY)
+			return "Critical"
+		if(RADDOSEDEADLY to RADDOSEFATAL)
+			return "Deadly"
+		if(RADDOSEFATAL to INFINITY)
+			return "Fatal"

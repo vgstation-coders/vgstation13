@@ -66,6 +66,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/delay_reduc = 0
 	var/cooldown_min = 0 //minimum possible cooldown for a charging spell
 
+	var/spell_aspect_flags
+	//Flags for what this spell is 'based' upon, for interacting with other spells
+	//For instance, a fire-based spell would have the FIRE flag
+
 	var/overlay = 0
 	var/overlay_icon = 'icons/obj/wizard.dmi'
 	var/overlay_icon_state = "spell"
@@ -80,6 +84,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/cast_delay = 1
 	var/cast_sound = ""
+	var/use_progress_bar = FALSE
 
 	var/hud_state = "" //name of the icon used in generating the spell hud object
 	var/override_base = ""
@@ -513,11 +518,21 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/Location = user.loc
 	var/originalstat = user.stat
 
+	var/image/progress_bar
+	if(use_progress_bar)
+		if(user.client && user.client.prefs.progress_bars)
+			progress_bar = create_progress_bar_on(user)
+			user.client.images += progress_bar
+
 	for(var/i = 0, i<numticks, i++)
+		if(use_progress_bar)
+			if(user && user.client && user.client.prefs.progress_bars)
+				progress_bar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 		sleep(delayfraction)
 
-
 		if(!user || (!(spell_flags & (STATALLOWED|GHOSTCAST)) && user.stat != originalstat)  || !(user.loc == Location))
+			if(use_progress_bar)
+				stop_progress_bar(user, progress_bar)
 			return 0
 	return 1
 

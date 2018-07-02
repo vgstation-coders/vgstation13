@@ -116,3 +116,17 @@
 	new /obj/item/stack/cable_coil(src,30,color)
 	new /obj/item/weapon/wirecutters(src)
 	new /obj/item/device/multitool(src)
+
+/obj/item/weapon/storage/toolbox/robotics
+	name = "robotics toolbox"
+
+/obj/item/weapon/storage/toolbox/robotics/New()
+	..()
+	var/color = pick("red","yellow","green","blue","pink","orange","cyan","white")
+	new /obj/item/device/robotanalyzer(src)
+	new /obj/item/weapon/crowbar(src)
+	new /obj/item/weapon/wrench(src)
+	new /obj/item/weapon/weldingtool(src)
+	new /obj/item/weapon/screwdriver(src)
+	new /obj/item/weapon/wirecutters(src)
+	new /obj/item/stack/cable_coil(src,30,color)

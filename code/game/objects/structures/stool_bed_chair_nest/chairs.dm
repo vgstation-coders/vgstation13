@@ -130,6 +130,8 @@
 
 	else
 		buckle_mob(M, user)
+	if(material_type)
+		material_type.on_use(src,M,user)
 
 // Chair types
 /obj/structure/bed/chair/wood

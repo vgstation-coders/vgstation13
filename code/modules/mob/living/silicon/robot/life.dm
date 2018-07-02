@@ -12,7 +12,7 @@
 
 	if(client)
 		handle_regular_hud_updates()
-		update_action_buttons()
+		update_action_buttons_icon()
 		update_items()
 	if(!isDead()) //still using power
 		use_power()
@@ -52,10 +52,13 @@
 			if(!is_component_functioning("actuator"))
 				Paralyse(3)
 
-			stat = 0
+			stat = CONSCIOUS
 	else
 		uneq_all()
-		stat = 1
+		if(station_holomap)
+			if(station_holomap.watching_mob)
+				station_holomap.stopWatching()
+		stat = UNCONSCIOUS
 
 
 /mob/living/silicon/robot/proc/handle_regular_status_updates()
@@ -86,9 +89,9 @@
 				AdjustKnockdown(-1)
 			if(paralysis > 0)
 				AdjustParalysis(-1)
-				blinded = 1
+				blinded = TRUE
 			else
-				blinded = 0
+				blinded = FALSE
 
 		else	//Not stunned.
 			stat = CONSCIOUS

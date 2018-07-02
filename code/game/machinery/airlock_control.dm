@@ -1,7 +1,7 @@
 #define AIRLOCK_CONTROL_RANGE 8
 
 // This code allows for airlocks to be controlled externally by setting an id_tag and comm frequency (disables ID access)
-obj/machinery/door/airlock
+/obj/machinery/door/airlock
 	var/id_tag
 	var/frequency
 	var/shockedby = list()
@@ -9,7 +9,7 @@ obj/machinery/door/airlock
 	explosion_resistance = 15
 
 
-obj/machinery/door/airlock/receive_signal(datum/signal/signal)
+/obj/machinery/door/airlock/receive_signal(datum/signal/signal)
 	if(!signal || signal.encryption)
 		return
 
@@ -236,7 +236,7 @@ obj/machinery/airlock_sensor/Topic(href,href_list)
 
 	if(!issilicon(usr))
 		if(!istype(usr.get_active_hand(), /obj/item/device/multitool))
-			testing("Not silicon, not using a multitool.")
+//			testing("Not silicon, not using a multitool.")
 			return
 	if("set_freq" in href_list)
 		var/newfreq=frequency
@@ -376,7 +376,7 @@ obj/machinery/access_button/Topic(href,href_list)
 
 	if(!issilicon(usr))
 		if(!istype(usr.get_active_hand(), /obj/item/device/multitool))
-			testing("Not silicon, not using a multitool.")
+//			testing("Not silicon, not using a multitool.")
 			return
 
 	var/obj/item/device/multitool/P = get_multitool(usr)

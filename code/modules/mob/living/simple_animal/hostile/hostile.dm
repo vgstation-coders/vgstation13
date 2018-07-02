@@ -266,9 +266,9 @@
 
 //////////////END HOSTILE MOB TARGETTING AND AGGRESSION////////////
 
-/mob/living/simple_animal/hostile/Die()
+/mob/living/simple_animal/hostile/death(var/gibbed = FALSE)
 	LoseAggro()
-	..()
+	..(gibbed)
 	walk(src, 0)
 
 /mob/living/simple_animal/hostile/inherit_mind(mob/living/simple_animal/from)
@@ -377,7 +377,9 @@
 				 || istype(A, /obj/structure/table)\
 				 || istype(A, /obj/structure/grille)\
 				 || istype(A, /obj/structure/rack)\
-				 || istype(A, /obj/machinery/door/window)) && Adjacent(A))
+				 || istype(A, /obj/machinery/door/window)\
+				 || istype(A, /obj/item/tape)\
+				 || istype(A, /obj/item/toy/balloon/inflated/decoy)) && Adjacent(A))
 					UnarmedAttack(A)
 	return
 

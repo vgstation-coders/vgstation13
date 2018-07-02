@@ -442,6 +442,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//icon_plating = "asteroid"
 	var/dug = 0       //0 = has not yet been dug, 1 = has already been dug
 	var/sand_type = /obj/item/weapon/ore/glass
+	plane = PLATING_PLANE
 
 /turf/unsimulated/floor/asteroid/air
 	oxygen = MOLES_O2STANDARD
@@ -512,7 +513,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	return
 
 /turf/unsimulated/floor/asteroid/update_icon()
-	if(dug && istype(sand_type,/obj/item/weapon/ore/glass))
+	if(dug && ispath(sand_type, /obj/item/weapon/ore/glass))
 		icon_state = "asteroid_dug"
 
 /turf/unsimulated/floor/asteroid/proc/gets_dug()
@@ -849,10 +850,10 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(stage == 2) //Gibtonite deposit is now benign and extractable. Depending on how close you were to it blowing up before defusing, you get better quality ore.
 		var/obj/item/weapon/gibtonite/G = new /obj/item/weapon/gibtonite/(src)
 		if(det_time <= 0)
-			G.quality = 3
+			G.det_quality = 3
 			G.icon_state = "Gibtonite ore 3"
 		if(det_time >= 1 && det_time <= 2)
-			G.quality = 2
+			G.det_quality = 2
 			G.icon_state = "Gibtonite ore 2"
 	ChangeTurf(/turf/unsimulated/floor/asteroid/gibtonite_remains)
 
@@ -868,7 +869,8 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		/mob/living/simple_animal/hostile/asteroid/goliath  = 5,
 		/mob/living/simple_animal/hostile/asteroid/goldgrub = 1,
 		/mob/living/simple_animal/hostile/asteroid/basilisk = 3,
-		/mob/living/simple_animal/hostile/asteroid/hivelord = 5
+		/mob/living/simple_animal/hostile/asteroid/hivelord = 5,
+		/mob/living/simple_animal/hostile/asteroid/magmaw = 4
 	)
 	var/sanity = 1
 

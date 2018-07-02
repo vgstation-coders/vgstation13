@@ -80,7 +80,7 @@
 		on = 0
 		return
 	mixing_chamber.flags |= NOREACT
-	while(target>0)
+	while(target>0 && !mixing_chamber.is_full())
 		//First, try to pull out from the main tank
 		if(reagents.has_reagent(rid))
 			target -= reagents.trans_id_to(mixing_chamber,rid,min(target,1))

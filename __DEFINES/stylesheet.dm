@@ -89,6 +89,7 @@ h1.alert, h2.alert		{color: #000000;}
 .good					{color: green;}
 .average				{color: #FF8000;}
 .bad					{color: #FF0000;}
+.mushroom				{color: #4B0082;}
 /* /vg/ Saycode Rewrite */
 .italics, .talkinto		{font-style:italic;}
 .whisper				{font-style:italic;color:#333333;}

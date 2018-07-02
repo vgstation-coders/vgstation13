@@ -109,7 +109,7 @@
 
 		if(istype (W, /obj/item/weapon/reagent_containers/food/snacks/grown/apple/poisoned))
 			spawn(rand(50,150))
-				Die() //You dick
+				death() //You dick
 		return
 	..()
 

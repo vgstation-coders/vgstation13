@@ -311,7 +311,7 @@
 			src.visible_message("*click click*")
 			playsound(src, empty_sound, 100, 1)
 
-/obj/item/weapon/gun/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
+/obj/item/weapon/gun/attack(mob/living/M, mob/living/user, def_zone)
 	//Suicide handling.
 	if (M == user && user.zone_sel.selecting == "mouth" && !mouthshoot)
 		if(istype(M.wear_mask, /obj/item/clothing/mask/happy))
@@ -403,3 +403,16 @@
 		return FALSE
 	else
 		return TRUE
+
+/obj/item/weapon/gun/attackby(var/obj/item/A, mob/user)
+	if(istype(A, /obj/item/weapon/gun))
+		var/obj/item/weapon/gun/G = A
+		if(isHandgun() && G.isHandgun())
+			var/obj/item/weapon/gun/akimbo/AA = new /obj/item/weapon/gun/akimbo(get_turf(src),src,G)
+			if(user.drop_item(G, AA) && user.drop_item(src, AA))
+				user.put_in_hands(AA)
+				AA.update_icon(user)
+			else
+				to_chat(user, "<span class = 'warning'>You can not combine \the [G] and \the [src].</span>")
+				qdel(AA)
+	..()

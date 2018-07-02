@@ -176,6 +176,10 @@
 	vulnerability = 0.35
 	isupgrade = TRUE
 
+/obj/item/robot_parts/robot_component/armour/kevlar
+	name = "kevlar-reinforced armour plating"
+	parent_type = /obj/item/robot_parts/robot_component/armour/reinforced
+
 /obj/item/robot_parts/robot_component/camera
 	name = "camera"
 	icon_state = "camera"

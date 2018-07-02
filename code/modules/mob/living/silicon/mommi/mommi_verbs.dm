@@ -12,10 +12,7 @@
 	set desc = "Allows to hide beneath tables or certain items. Toggled on or off."
 	set category = "Robot Commands"
 
-	if(stat != CONSCIOUS)
-		return
-	var/mob/living/silicon/robot/mommi/R = src
-	if(!R.canmove)
+	if(incapacitated())
 		return
 
 	if (plane != HIDING_MOB_PLANE)
@@ -36,7 +33,10 @@
 	set name = "Toggle Parking Brake"
 	set desc = "Lock yourself in place"
 	set category = "Robot Commands"
-	var/mob/living/silicon/robot/mommi/R = src
-	R.anchored=!R.anchored
-	R.update_canmove()
+	
+	if(incapacitated())
+		return
+
+	anchored = !anchored //This is fucking stupid
+	update_canmove()
 	updateicon()

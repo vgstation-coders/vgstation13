@@ -102,12 +102,16 @@
 		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "clock_window", sleeptime = 10)
 		qdel(src)
 
+/obj/structure/window/full/AltClick(var/mob/user)
+	var/turf/T = get_turf(src)
+	T.AltClick(user)
+
 /obj/structure/window/full/reinforced
 	name = "reinforced window"
 	desc = "A window with a rod matrice. It looks more solid than the average window."
 	icon_state = "rwindow0"
 	base_state = "rwindow"
-	sheettype = /obj/item/stack/sheet/glass/rglass
+	sheet_type = /obj/item/stack/sheet/glass/rglass
 	health = 40
 	penetration_dampening = 3
 	d_state = WINDOWSECURE
@@ -120,7 +124,7 @@
 	icon_state = "plasmawindow0"
 	base_state = "plasmawindow"
 	shardtype = /obj/item/weapon/shard/plasma
-	sheettype = /obj/item/stack/sheet/glass/plasmaglass
+	sheet_type = /obj/item/stack/sheet/glass/plasmaglass
 	health = 120
 	penetration_dampening = 5
 
@@ -133,7 +137,7 @@
 	icon_state = "plasmarwindow0"
 	base_state = "plasmarwindow"
 	shardtype = /obj/item/weapon/shard/plasma
-	sheettype = /obj/item/stack/sheet/glass/plasmarglass
+	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
 	penetration_dampening = 7
 
@@ -158,7 +162,7 @@
 	icon_state = "twindow0"
 	base_state = "twindow"
 	opacity = 1
-	sheettype = /obj/item/stack/sheet/glass/rglass //A glass type for this window doesn't seem to exist, so here's to you
+	sheet_type = /obj/item/stack/sheet/glass/rglass //A glass type for this window doesn't seem to exist, so here's to you
 
 /obj/structure/window/full/reinforced/tinted/frosted
 
@@ -167,7 +171,7 @@
 	icon_state = "fwindow0"
 	base_state = "fwindow"
 	health = 30
-	sheettype = /obj/item/stack/sheet/glass/rglass //Ditto above
+	sheet_type = /obj/item/stack/sheet/glass/rglass //Ditto above
 
 #undef WINDOWLOOSE
 #undef WINDOWLOOSEFRAME

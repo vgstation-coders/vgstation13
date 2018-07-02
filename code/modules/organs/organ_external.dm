@@ -1289,6 +1289,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "r_arm"
 	max_damage = 75
 	min_broken_damage = 30
+	w_class = W_CLASS_SMALL
 	body_part = ARM_RIGHT
 
 	grasp_id = GRASP_RIGHT_HAND

@@ -286,10 +286,6 @@
 	message = uppertext(jointext(temp_message, " "))
 	return ..(message)
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/Die()
-	..()
-	walk(src, 0)
-
 /mob/living/simple_animal/hostile/retaliate/cluwne/proc/handle_disabilities()
 	if ((prob(5) && paralysis < 10))
 		to_chat(src, "<span class='warning'>You have a seizure!</span>")
@@ -343,8 +339,8 @@
 		return
 	..()
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/goblin/Die()
-	..()
+/mob/living/simple_animal/hostile/retaliate/cluwne/goblin/death(var/gibbed = FALSE)
+	..(TRUE)
 	new /obj/item/clothing/mask/gas/clown_hat(src.loc)
 	new /obj/item/clothing/shoes/clown_shoes(src.loc)
 	qdel(src)

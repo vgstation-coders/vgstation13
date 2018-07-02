@@ -59,7 +59,7 @@
 					continue
 
 				if (areas.len)
-					if (!is_type_in_list(get_area_master(O), areas))
+					if (!is_type_in_list(get_area(O), areas))
 						continue
 
 				return 1
@@ -235,7 +235,7 @@
 					if(!is_at_least_one_alive)
 						continue
 				if(areas.len)
-					if(!is_type_in_list(get_area_master(I),areas))
+					if(!is_type_in_list(get_area(I),areas))
 						continue
 				found_amount += getAmountStolen(I)
 		return found_amount >= required_amount

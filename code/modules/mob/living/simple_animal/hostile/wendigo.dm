@@ -23,6 +23,7 @@
 	maxHealth = 150
 	speed = 1
 	stat_attack = DEAD //Gotta chow down somehow
+	size = SIZE_BIG
 	vision_range = 12 //Slightly larger vision range
 	harm_intent_damage = 8
 	melee_damage_lower = 15
@@ -109,12 +110,12 @@
 	icon_state = "wendigo"
 	icon_living = "wendigo"
 	icon_dead = "wendigo_dead"
-
+	size = SIZE_NORMAL
 	speed = 1
 
-/mob/living/simple_animal/hostile/wendigo/human/death()
+/mob/living/simple_animal/hostile/wendigo/human/death(var/gibbed = FALSE)
 	flick("wendigo_dying",src)
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/wendigo/human/check_evolve()
 	if(consumes > HUMEVOLV)
@@ -131,7 +132,6 @@
 	pixel_x = -8 * PIXEL_MULTIPLIER
 	health = 250
 	maxHealth = 250
-
 	melee_damage_lower = 20
 	melee_damage_upper = 35
 
@@ -221,6 +221,6 @@
 	melee_damage_lower = 20
 	melee_damage_upper = 40
 
-/mob/living/simple_animal/hostile/wendigo/skifree/death()
-	..()
+/mob/living/simple_animal/hostile/wendigo/skifree/death(var/gibbed = FALSE)
+	..(TRUE)
 	qdel(src)

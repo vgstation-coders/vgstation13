@@ -28,10 +28,8 @@
 
 /turf/simulated/wall/mineral/wood/ex_act(var/severity)
 	if(severity < 3)
-		ChangeTurf(get_underlying_turf())
 		getFromPool(/obj/item/stack/sheet/wood, src, 2)
-	else
-		dismantle_wall()
+	..()
 
 /turf/simulated/wall/mineral/brick
 	name = "brick wall"

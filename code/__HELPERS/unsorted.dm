@@ -883,6 +883,11 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		progbar.loc = null
 	return 1
 
+/proc/do_flick(var/atom/A, var/icon_state, var/time)
+	flick(icon_state, A)
+	sleep(time)
+	return 1
+
 //Takes: Anything that could possibly have variables and a varname to check.
 //Returns: 1 if found, 0 if not.
 /proc/hasvar(var/datum/A, var/varname)
@@ -1747,3 +1752,29 @@ Game Mode config tags:
 	ASSERT(Start.x < End.x && Start.y < End.y)
 
 	return block(Start, End) - block(locate(Start.x + 1, Start.y + 1, Start.z), locate(End.x - 1, End.y - 1, End.z))
+
+
+/proc/pick_rand_tele_turf(atom/hit_atom, var/inner_teleport_radius, var/outer_teleport_radius)
+	if((inner_teleport_radius < 1) || (outer_teleport_radius < inner_teleport_radius))
+		return 0
+
+	var/list/turfs = new/list()
+	var/turf/hit_turf = get_turf(hit_atom)
+	//This could likely use some standardization but I have no idea how to not break it.
+	for(var/turf/T in trange(outer_teleport_radius, hit_turf))
+		if(get_dist(T, hit_atom) <= inner_teleport_radius)
+			continue
+		if(is_blocked_turf(T) || istype(T, /turf/space))
+			continue
+		if(T.x > world.maxx-outer_teleport_radius || T.x < outer_teleport_radius)
+			continue
+		if(T.y > world.maxy-outer_teleport_radius || T.y < outer_teleport_radius)
+			continue
+		turfs += T
+	return pick(turfs)
+
+/proc/get_key(mob/M)
+	if(M.mind)
+		return M.mind.key
+	else
+		return null

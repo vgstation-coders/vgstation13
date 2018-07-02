@@ -299,20 +299,10 @@
 //Grippers: Simple cyborg manipulator. Limited use... SLIPPERY SLOPE POWERCREEP
 /obj/item/weapon/gripper
 	icon = 'icons/obj/device.dmi'
-	actions_types = list(/datum/action/item_action/magrip_drop)
 	var/obj/item/wrapped = null // Item currently being held.
 	var/list/can_hold = list() //Has a list of items that it can hold.
 	var/list/blacklist = list() //This is a list of items that can't be held even if their parent is whitelisted.
 	var/force_holder = null
-
-/datum/action/item_action/magrip_drop
-	name = "Drop Item"
-
-/datum/action/item_action/magrip_drop/Trigger()
-	var/obj/item/weapon/gripper/G = target
-	if(!istype(G))
-		return
-	G.drop_item(force_drop = 1)
 
 /obj/item/weapon/gripper/proc/grip_item(obj/item/I as obj, mob/user, var/feedback = TRUE)
 	//This function returns TRUE if we successfully took the item, or FALSE if it was invalid. This information is useful to the caller
@@ -351,9 +341,11 @@
 		return FALSE
 	if(!target) //Just drop it, baka.
 		target = loc
-	if(!dontsay)
-		to_chat(usr, "<span class='warning'>You drop \the [wrapped].</span>")
-	wrapped.dropped(usr)
+	var/mob/holder = get_holder_of_type(src, /mob)
+	if(holder)
+		if(!dontsay)
+			to_chat(holder, "<span class='warning'>You drop \the [wrapped].</span>")
+		wrapped.dropped(holder)
 	if(force_drop)
 		wrapped.loc = get_turf(target)
 	else
@@ -397,14 +389,13 @@
 		overlays += olay
 	else
 		alpha = initial(alpha)
-	if(usr)
-		usr.update_action_buttons()
 	..()
 
 /obj/item/weapon/gripper/examine(mob/user)
-	. = ..()
 	if(wrapped)
-		to_chat(user, "It is holding \a [bicon(wrapped)] [wrapped].")
+		return wrapped.examine(user)
+	else
+		return ..()
 
 /obj/item/weapon/gripper/attackby(obj/item/thing, mob/living/user)
 	if(gripper_sanity_check(src))
@@ -516,6 +507,17 @@
 		/obj/item/weapon/reagent_containers/food/drinks,
 		/obj/item/clothing/head/fedora,
 		/obj/item/trash
+		)
+
+/obj/item/weapon/gripper/service/noir
+	name = "worn-out gripper"
+	icon_state = "gripper-noir"
+	desc = "A repurposed and heavily worn-out service gripper. A simple grasping tool used to handle both forensic tasks and mugs, especially mugs."
+
+	can_hold = list(
+		/obj/item/weapon/reagent_containers/food/drinks,
+		/obj/item/device/detective_scanner,
+		/obj/item/weapon/f_card
 		)
 
 /obj/item/weapon/gripper/no_use //Used when you want to hold and put things in other things, but not able to 'use' the item

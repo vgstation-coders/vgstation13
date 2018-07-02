@@ -328,15 +328,17 @@ var/list/camera_messages = list()
 
 /obj/machinery/camera/proc/triggerCameraAlarm()
 	alarm_on = 1
+	var/area/this_area = get_area(src)
 	for(var/mob/living/silicon/S in mob_list)
-		S.triggerAlarm("Camera", areaMaster, list(src), src)
+		S.triggerAlarm("Camera", this_area, list(src), src)
 	adv_camera.update(z, TRUE, list(src))
 
 
 /obj/machinery/camera/proc/cancelCameraAlarm()
 	alarm_on = 0
+	var/area/this_area = get_area(src)
 	for(var/mob/living/silicon/S in mob_list)
-		S.cancelAlarm("Camera", areaMaster, src)
+		S.cancelAlarm("Camera", this_area, src)
 	adv_camera.update(z, TRUE, list(src))
 
 /obj/machinery/camera/proc/can_use()

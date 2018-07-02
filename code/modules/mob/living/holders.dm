@@ -159,6 +159,16 @@
 
 	update_itemstate_on_twohand = TRUE
 
+//SALEM
+
+/obj/item/weapon/holder/animal/salem
+	name = "salem holder"
+	desc = "Esp!"
+	item_state = "salem"
+
+	update_itemstate_on_twohand = TRUE
+
+
 //SLIMES
 /obj/item/weapon/holder/animal/slime
 	name = "slime holder"

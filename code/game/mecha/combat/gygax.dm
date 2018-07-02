@@ -92,6 +92,9 @@
 	else
 		icon_state = initial_icon
 
+/obj/mecha/combat/gygax/dark/stopMechWalking()
+	icon_state = initial_icon
+
 /obj/mecha/combat/gygax/dyndomove(direction)
 	if(!..())
 		return

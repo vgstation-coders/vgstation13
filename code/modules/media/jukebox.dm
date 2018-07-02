@@ -21,7 +21,7 @@ var/global/global_playlists = list()
 		return
 	for(var/playlist_id in list("bar", "jazz", "rock", "muzak", "emagged", "endgame", "clockwork", "vidyaone", "vidyatwo", "vidyathree", "vidyafour"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
-		testing("Updating playlist from [url]...")
+		//testing("Updating playlist from [url]...")
 
 		//  Media Server 2 requires a secret key in order to tell the jukebox
 		// where the music files are. It's set in config with MEDIA_SECRET_KEY
@@ -57,7 +57,7 @@ var/global/global_playlists = list()
 
 	else
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
-		testing("[src] - Updating playlist from [url]...")
+		//testing("[src] - Updating playlist from [url]...")
 
 		//  Media Server 2 requires a secret key in order to tell the jukebox
 		// where the music files are. It's set in config with MEDIA_SECRET_KEY
@@ -418,7 +418,8 @@ var/global/list/loopModeNames=list(
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"NOT ENOUGH FUNDS\" on the screen.</span>","You hear a buzz.")
 			return
 		visible_message("<span class='notice'>The machine beeps happily.</span>","You hear a beep.")
-		acct.charge(credits_needed,linked_account,"Song selection at [areaMaster.name]'s [name].")
+		var/area/this_area = get_area(src)
+		acct.charge(credits_needed,linked_account,"Song selection at [this_area.name]'s [name].")
 		credits_needed = 0
 
 		successful_purchase()

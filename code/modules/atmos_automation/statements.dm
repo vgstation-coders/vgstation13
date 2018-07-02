@@ -408,7 +408,7 @@ var/global/automation_types=typesof(/datum/automation) - /datum/automation
 
 	if(href_list["set_condition"])
 		var/new_condition = selectValidChildFor(usr, valid_conditions)
-		testing("Selected condition: [new_condition]")
+		//testing("Selected condition: [new_condition]")
 		if(!new_condition)
 			return 1
 

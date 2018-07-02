@@ -74,7 +74,6 @@ What is the naming convention for planes or layers?
 
 #define ABOVE_PLATING_PLANE		-3
 
-	#define HOLOMAP_LAYER			1 // NOTE: ENSURE this is equal to the one at ABOVE_TURF_PLANE!
 	#define CATWALK_LAYER			2
 	#define DISPOSALS_PIPE_LAYER	3
 	#define LATTICE_LAYER			4
@@ -216,7 +215,7 @@ What is the naming convention for planes or layers?
 #define FULLSCREEN_PLANE		22		// for fullscreen overlays that do not cover the hud.
 
 	#define FULLSCREEN_LAYER	 	0
-	#define DAMAGE_LAYER 			1
+	#define DAMAGE_HUD_LAYER 			1
 	#define IMPAIRED_LAYER 			2
 	#define BLIND_LAYER				3
 	#define CRIT_LAYER 				4

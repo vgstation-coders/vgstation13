@@ -34,7 +34,8 @@
 
 //	faction = "necro" //don't want him to get killed by skeletons before his transformation
 
-//mob/living/simple_animal/hostile/humanoid/surgeon/boss/Die()
+//mob/living/simple_animal/hostile/humanoid/surgeon/boss/death(var/gibbed = FALSE)
+//	..(gibbed)
 //	visible_message("<span class=danger><B>Before he can die, the mad surgeon takes a drink of a foul-smelling concoction and begins to mutate! </span></B>")
 //	say("[pick("YOU CAN'T KILL ME THAT EASILY!", "I WONT LET YOU STOP ME!", "GET OUT OF MY FACILITY!", "I MUST CONTINUE MY RESEARCH!", "I'M GONNA WRECK IT!", "I'VE GOT A BONE TO PICK WITH YOU!")]")
 //	var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(get_turf(src))
