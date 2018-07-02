@@ -31,7 +31,6 @@
 		to_chat(cult_mob, "<span class='sinister'>You have a talisman in your [where], one that will help you start the cult on this station. Use it well and remember - there are others.</span>")
 		cult_mob.update_icons()
 		return 1
-	
 
 /datum/role/legacy_cultist/Greet(var/greeting, var/custom)
 	if(!greeting)
@@ -56,8 +55,18 @@
 	antag.current.remove_language(LANGUAGE_CULT)
 	..()
 
+/datum/role/legacy_cultist/MemorizeObjectives()
+	var/datum/faction/cult/narsie/our_cult = faction
+	var/text="<b>Our Cult's objectives:</b> <br/>"
+	text += "[our_cult.current_objective.name]. [our_cult.current_objective.explanation_text]<br/>"
+	to_chat(antag.current, "[text]")
+	antag.memory += "[text]"
 
-/datum/role/legacy_cultist/ReturnObjectivesString(var/check_success = FALSE, var/check_name = TRUE)
-	var/dat = ""
-	dat += faction.GetObjectives()
-	return dat
+/datum/role/legacy_cultist/AnnounceObjectives()
+	if (!istype(faction, /datum/faction/cult/narsie))
+		WARNING("Wrong faction type for [src.antag.current], faction is [faction.type]")
+		return FALSE
+	var/datum/faction/cult/narsie/our_cult = faction
+	var/text = "[our_cult.current_objective.name]. [our_cult.current_objective.explanation_text]<br/>"
+	to_chat(antag.current, "Our new objective is: [text]")
+	antag.memory += "[text]"

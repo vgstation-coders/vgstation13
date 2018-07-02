@@ -1,13 +1,14 @@
 // For legacy cult
 
 /datum/objective/target/assasinate/sacrifice
-    name = "Sacrifice <target>"
-    bad_assassinate_targets = list("AI","Cyborg","Mobile MMI","Trader", "Chief Medical Officer", "Research Director", "Chief Engineer", 
+	name = "Sacrifice <target>"
+	bad_assassinate_targets = list("AI","Cyborg","Mobile MMI","Trader", "Chief Medical Officer", "Research Director", "Chief Engineer", 
                                     "Medical Doctor", "Paramedic", "Chemist", "Geneticist", "Virologist",
                                     "Scientist", "Roboticist",
                                     "Station Engineer", "Atmospheric Technician", "Mechanic",
                                     "Cargo Technician", "Quarter Master",
                                     "Bartender", "Chef", "Botanist", "Mime", "Clown", "Assistant") // Basically anyone that is not sec or chaplain.
+	flags = FACTION_OBJECTIVE
 
 /datum/objective/target/assassinate/sacrifice/find_target()
 	..()
@@ -27,4 +28,3 @@
 /datum/objective/target/assassinate/sacrifice/feedbackText()
 	if(target && target.current)
 		return "<span class = 'sinister'>You succesfully sacrificied [target.current.real_name]. The veil between this world and Nar'Sie grows thinner.</span>"
-  		//return "<span class = 'sinister'>You succesfully sacrificied [target.current.real_name]. The veil between this world and Nar'Sie grows thinner.</span>"

@@ -73,7 +73,6 @@ var/list/factions_with_hud_icons = list()
 		return 0
 	var/datum/role/newRole = new initroletype(null, src, initial_role)
 	if(!newRole.AssignToRole(M))
-		to_chat(world, "Failed assign to role.")
 		newRole.Drop()
 		return 0
 	members.Add(newRole)
@@ -221,6 +220,45 @@ var/list/factions_with_hud_icons = list()
 		for(var/image/I in Removed_R.antag.current.client.images)
 			if(I.icon_state in hud_icons)
 				Removed_R.antag.current.client.images -= I
+
+// Generic proc for added/removed faction objectives
+// Override this in the proper faction if you need to notify the players or if the objective is important.
+
+/datum/faction/proc/handleNewObjective(var/datum/objective/O)
+	ASSERT(O)
+	O.faction = src
+	if (O in objective_holder.objectives)
+		WARNING("Trying to add an objective ([O]) to faction ([src]) when it already has it.")
+		return FALSE
+	
+	var/setup = TRUE
+	if (istype(O,/datum/objective/target))
+		var/datum/objective/target/new_O = O
+		if (alert("Do you want to specify a target?", "New Objective", "Yes", "No") == "No")
+			setup = new_O.find_target()
+		else
+			setup = new_O.select_target()
+	if(!setup)
+		alert("Couldn't set-up a proper target.", "New Objective")
+		return
+	AppendObjective(O)
+	return TRUE
+	
+/datum/faction/proc/handleRemovedObjective(var/datum/objective/O)
+	ASSERT(O)
+	if (!(O in objective_holder.objectives))
+		WARNING("Trying to remove an objective ([O]) to faction ([src]) who never had it.")
+		return FALSE
+	objective_holder.objectives.Remove(O)
+	O.faction = null
+	qdel(O)
+
+/datum/faction/proc/handleForcedCompletedObjective(var/datum/objective/O)
+	ASSERT(O)
+	if (!(O in objective_holder.objectives))
+		WARNING("Trying to force completion of an objective ([O]) to faction ([src]) who never had it.")
+		return FALSE
+	O.force_success = TRUE
 
 
 /////////////////////////////THESE FACTIONS SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////

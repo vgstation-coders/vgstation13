@@ -5,6 +5,8 @@
 	var/force_success = FALSE //Allows admins to toggle the completion of custom objectives.
 	var/name = ""
 
+	var/flags = 0 // Objective flags.
+
 /datum/objective/target/New(var/text,var/auto_target = TRUE)
 	if(text)
 		explanation_text = text

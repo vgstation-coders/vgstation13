@@ -4,9 +4,12 @@
     explanation_text = "Spray blood on the station to thin the veil of reality and allow Nar-Sie to come closer from us."
     name = "Spray blood on the station."
     var/floor_limit = 150 // Abritary, to fix later
-    var/datum/faction/cult/narsie/cult_fac = null
+
+    flags =  FACTION_OBJECTIVE
+
 
 /datum/objective/spray_blood/IsFulfilled()
+    var/datum/faction/cult/narsie/cult_fac = faction
     return (cult_fac.bloody_floors.len >= floor_limit)
 
 /datum/objective/summon_narsie/feedbackText()

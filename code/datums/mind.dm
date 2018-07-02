@@ -584,6 +584,11 @@
 
 		var/datum/objective/new_objective = new obj_type(null,FALSE)
 
+		if (new_objective.flags & FACTION_OBJECTIVE)
+			var/datum/faction/fac = input("To which faction shall we give this?", "Faction-wide objective", null) as null|anything in ticker.mode.factions
+			fac.handleNewObjective(new_objective)
+			return TRUE // It's a faction objective, let's not move any further.
+
 		if (obj_holder.owner)//so objectives won't target their owners.
 			new_objective.owner = obj_holder.owner
 
@@ -612,20 +617,25 @@
 
 		ASSERT(istype(objective) && istype(obj_holder))
 
-		obj_holder.objectives.Remove(objective)
-
 		if (obj_holder.owner)
 			log_admin("[usr.key]/([usr.name]) removed [key]/([name])'s objective ([objective.explanation_text])")
 		else if (obj_holder.faction)
 			log_admin("[usr.key]/([usr.name]) removed \the [obj_holder.faction.ID]'s objective ([objective.explanation_text])")
+			objective.faction.handleRemovedObjective(objective)
+		
+		obj_holder.objectives.Remove(objective)
 
 	else if(href_list["obj_completed"])
 		var/datum/objective/objective = locate(href_list["obj_completed"])
 
 		ASSERT(istype(objective))
 
+		if (objective.faction)
+			objective.faction.handleForcedCompletedObjective(objective)
+
 		objective.force_success = !objective.force_success
 		log_admin("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
+
 
 	else if(href_list["role"]) //Something role specific
 		var/datum/role/R = locate(href_list["role"])

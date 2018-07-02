@@ -12,7 +12,7 @@
 
 /datum/faction/cult/AdminPanelEntry()
 	var/list/dat = ..()
-	dat += "<br/><a href='?_src_=holder;cult_mindspeak=\ref[src]'>Voice of [deity_name]</a>"
+	dat += "<br/><a href='?src=\ref[src];cult_mindspeak=\ref[src]'>Voice of [deity_name]</a>"
 	return dat
 
 /datum/faction/cult/proc/grant_runeword(mob/living/carbon/human/cult_mob, var/word)
@@ -134,8 +134,6 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 
 // Roundstart cultos & latejoiners
 /datum/faction/cult/narsie/HandleNewMind(var/datum/mind/M)
-	var/ret = ..()
-	to_chat(world, "[ret]")
 	if(M.current)
 		grant_runeword(M.current)
 	return ..()
@@ -155,13 +153,18 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 
 /datum/faction/cult/narsie/AdminPanelEntry()
 	var/list/dat = ..()
-	dat += "<br/><a href='?_src_=holder;check_words=\ref[src]'>Check cult words.</a>"
-	dat += "<br/>Our current objective is : [current_objective.name] ([current_objective.explanation_text])"
+	dat += "<br/><a href='?src=\ref[src];check_words=\ref[src]'>Check cult words.</a>"
+	if (current_objective)
+		dat += "<br/>Our current objective is : [current_objective.name] ([current_objective.explanation_text])"
+	else
+		dat += "<br/>No current objective."
 	return dat
 
 #define OBJ_SAC 		"sacrifice"
 #define OBJ_SPRAY_BLOOD "spray bood"
 #define OBJ_CONVERT 	"convert"
+
+// -- Objectives --
 
 /datum/faction/cult/narsie/forgeObjectives()
 	var/datum/objective/next_objective
@@ -171,14 +174,11 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 			next_objective = new /datum/objective/target/assasinate/sacrifice
 		if (OBJ_SPRAY_BLOOD)
 			next_objective = new /datum/objective/spray_blood
-			var/datum/objective/spray_blood/O = next_objective
-			O.cult_fac = src
 		if (OBJ_CONVERT)
 			next_objective = new /datum/objective/convert_people
-			var/datum/objective/convert_people/O = next_objective
-			O.cult_fac = src
 
 	current_objective = next_objective
+	next_objective.faction = src
 	AppendObjective(next_objective)
 
 // Check if we can actually get the sac objective.
@@ -211,23 +211,22 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 						next_objective = new /datum/objective/target/assasinate/sacrifice
 					if (OBJ_SPRAY_BLOOD)
 						next_objective = new /datum/objective/spray_blood
-						var/datum/objective/spray_blood/O = next_objective
-						O.cult_fac = src
 					if (OBJ_CONVERT)
 						next_objective = new /datum/objective/convert_people
-						var/datum/objective/convert_people/O = next_objective
-						O.cult_fac = src
-		
+
 		if (CULT_INTERMEDIATE)
 			cult_state = CULT_SUMMON
 			next_objective = new /datum/objective/summon_narsie
-	
+
 		if (CULT_SUMMON)
 			cult_state = CULT_FINALE
 			next_objective = new /datum/objective/defile
 
 	current_objective = next_objective
+	next_objective.faction = src
 	AppendObjective(next_objective)
+	for (var/datum/role/R in members)
+		R.AnnounceObjectives()
 
 #undef OBJ_SAC
 #undef OBJ_SPRAY_BLOOD
@@ -238,6 +237,57 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 		for (var/datum/role/R in members)
 			to_chat(R.antag.current, text)
 
+/datum/faction/cult/narsie/handleNewObjective(var/datum/objective/O)
+	if (current_objective)
+		message_admins("Trying to add objective [O] to [src], which already has an objective. Remove the objective first.")
+		return FALSE
+	. = ..()
+	if (!.)
+		return FALSE
+	current_objective = O
+	for (var/datum/role/R in members)
+		R.AnnounceObjectives()
+
+/datum/faction/cult/narsie/handleRemovedObjective(var/datum/objective/O)
+	ASSERT(O)
+	if (!current_objective)
+		message_admins("Trying to remove objective [O] to [src], but the faction has no current objective.")
+		return FALSE
+	if (!(O in objective_holder.objectives) || current_objective != O) // We're trying to remove an objective that's already been completed, or something that never was in our objectives
+		return FALSE
+	current_objective = null
+	objective_holder.objectives.Remove(O)
+	for (var/datum/role/R in members)
+		to_chat(R.antag.current, "<span class='sinister'>Nar-Sie's plans have changed. We do not need to do the current objective : [O.name]. A new objective should be annouced soon.")
+	qdel(O)
+
+/datum/faction/cult/narsie/handleForcedCompletedObjective(var/datum/objective/O)
+	ASSERT(O)
+	if (!current_objective)
+		message_admins("Trying to force completion of objective [O] to [src], but the faction has no current objective.")
+		return FALSE
+	if (!(O in objective_holder.objectives) || current_objective != O) // Same as previous
+		return FALSE
+	getNewObjective()
+
+// -- Topic/hrefs --
+/datum/faction/cult/narsie/Topic(href, href_list)
+	if (href_list["cult_mindspeak"])
+		if (!usr.client.holder)
+			return FALSE
+		var/message = input("What message shall we send?",
+                    "Voice of [deity_name]",
+                    "")
+		for (var/datum/role/R in members)
+			var/mob/M = R.antag.current
+			to_chat(M, "<span class='danger'>You hear [deity_name]'s voice whisper to you...</span> <span class='sinister'>[message]</span>")
+	if (href_list["check_words"])
+		if (!usr.client.holder)
+			return FALSE
+		for (var/word in cult_words)
+			to_chat(usr, "[word] is [cult_words[word]].")
+
+
 // -- Clockwork Cult
 
 /datum/faction/cult/machine
@@ -247,5 +297,5 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 
 #undef CULT_PRELUDE
 #undef CULT_INTERMEDIATE
-#undef CULT_SUMMON 
-#undef CULT_FINALE	
+#undef CULT_SUMMON
+#undef CULT_FINALE
