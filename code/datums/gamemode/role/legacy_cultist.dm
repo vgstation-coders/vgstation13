@@ -10,7 +10,7 @@
 
 /datum/role/legacy_cultist/OnPostSetup()
 	. = ..()
-
+	antag.current.add_language(LANGUAGE_CULT)
 	var/mob/living/carbon/human/cult_mob = antag.current
 
 	if(!istype(cult_mob))
