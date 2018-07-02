@@ -29,7 +29,7 @@
 			for(var/datum/objective/OBJ in H.mind.objectives)
 				to_chat(H, "<B>Objective #[obj_count]</B>: [OBJ.explanation_text]")
 				obj_count++*/
-		var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol")
+		var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","obrez","beegun","usp","glock","luger","colt","plasmapistol")
 		var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","disorient","staffchange","armor","scrying", "clowncurse", "mimecurse", "shoesnatch", "robesummon")
 		var/randomizeswords = pick("unlucky", "misc", "glass", "throw", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "spear", "katana", "axe", "venom", "boot", "saw", "scalpel", "bottle", "switchtool")
 		var/randomizeknightcolor = pick("green", "yellow", "blue", "red", "templar")
@@ -105,8 +105,6 @@
 					new /obj/item/weapon/gun/projectile/nagant/obrez(get_turf(H))
 				if("beegun")
 					new /obj/item/weapon/gun/gatling/beegun(get_turf(H))
-				if("beretta")
-					new /obj/item/weapon/gun/projectile/beretta(get_turf(H))
 				if("usp")
 					new /obj/item/weapon/gun/projectile/NTUSP/fancy(get_turf(H))
 				if("glock")

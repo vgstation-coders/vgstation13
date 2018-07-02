@@ -328,16 +328,11 @@
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
+	// TODO:  Job-specific latejoin overrides.
+	character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
 
 	job_master.EquipRank(character, rank, 1)					//equips the human
 	EquipCustomItems(character)
-
-	var/datum/job/J = job_master.GetJob(rank)
-	if(J.spawns_from_edge)
-		character.Meteortype_Latejoin(rank)
-	else
-		character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
-
 
 	character.store_position()
 
@@ -493,9 +488,6 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	if(client.prefs.disabilities & DISABILITY_FLAG_VEGAN)
 		new_character.dna.SetSEState(VEGANBLOCK, 1, 1)
-
-	if(client.prefs.disabilities & DISABILITY_FLAG_ASTHMA)
-		new_character.dna.SetSEState(ASTHMABLOCK, 1, 1)
 
 	chosen_species = all_species[client.prefs.species]
 	if( (client.prefs.disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
