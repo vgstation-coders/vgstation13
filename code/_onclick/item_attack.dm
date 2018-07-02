@@ -237,8 +237,13 @@ obj/item/proc/get_clamped_volume()
 		. = TRUE //The attack always lands
 		M.updatehealth()
 	I.add_fingerprint(user)
+	I.on_attack(M,user)
 
+
+/obj/item/proc/on_attack(var/atom/attacked, var/mob/user)
+	user.do_attack_animation(attacked, src)
+	user.delayNextAttack(attack_delay)
 	if(hitsound)
-		playsound(M.loc, I.hitsound, 50, 1, -1)
+		playsound(attacked.loc, hitsound, 50, 1, -1)
 	if(material_type)
-		material_type.on_use(src,M, user)
+		material_type.on_use(src,attacked, user)

@@ -526,10 +526,8 @@ var/list/apiary_reservation = list()
 	if(..())
 		return
 	else if(O.force)
-		user.delayNextAttack(10)
 		to_chat(user,"<span class='warning'>You hit \the [src] with your [O].</span>")
-		if(O.hitsound)
-			playsound(src, O.hitsound, 50, 1, -1)
+		O.on_attack(src, user)
 		health -= O.force
 		updateHealth()
 
@@ -566,12 +564,10 @@ var/list/apiary_reservation = list()
 	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/beezeez))
 		to_chat(user, "<span class='warning'>These bees don't want your candies, they want your blood!</span>")
 	else if(O.force)
-		user.delayNextAttack(10)
 		to_chat(user,"<span class='warning'>You hit \the [src] with your [O].</span>")
 		if(queen_bees_inside || worker_bees_inside)
 			angry_swarm(user)
-		if(O.hitsound)
-			playsound(src, O.hitsound, 50, 1, -1)
+		O.on_attack(src, user)
 		health -= O.force
 		updateHealth()
 
