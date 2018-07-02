@@ -75,7 +75,6 @@ var/global/datum/controller/plants/plant_controller // Set in New().
 	processing = 1
 	spawn(0)
 		set background = 1
-		var/processed = 0
 		while(1)
 			if(!processing)
 				sleep(plant_tick_time)
@@ -94,6 +93,8 @@ var/global/datum/controller/plants/plant_controller // Set in New().
 				sleep(plant_tick_time)
 
 /datum/controller/plants/proc/add_plant(var/obj/effect/plantsegment/plant)
+	if(!plant || plant.gcDestroyed)
+		return
 	plant_queue |= plant
 
 /datum/controller/plants/proc/remove_plant(var/obj/effect/plantsegment/plant)
