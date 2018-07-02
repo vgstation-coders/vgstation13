@@ -9,7 +9,7 @@
 			continue
 		if(summon_type && iswizard(H))
 			continue
-		/*TODO: Re-add this
+		/* TODO - READD THIS
 		if(prob(35) && !is_special_character(H))
 			ticker.mode.traitors += H.mind
 			H.mind.special_role = "traitor"
