@@ -12,6 +12,7 @@
  * 		Revolver Conversion Kit(made sense)
  *		Soldering Tool
  *		Fuel Can
+ *		Carabiner
  */
 
 /* Used for fancy tool subtypes that are faster or slower than the standard tool.
@@ -816,3 +817,67 @@
 
 /obj/item/weapon/reagent_containers/glass/fuelcan/update_icon()
 	icon_state = "fueljar[slot]"
+
+
+////
+//C-Clip
+//
+////
+
+/obj/item/device/carabiner
+	name = "carabiner"
+	desc = "A carabiner, or Karabinerhaken, is used to secure precious cargo. It is compatible with crates, air pumps, air scrubbers, space heaters, air conditioners, and canisters."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "carabiner-open"
+	hitsound = "sound/weapons/toolhit.ogg"
+	flags = FPRINT
+	siemens_coefficient = 1
+	slot_flags = SLOT_BELT
+	force = 3.0
+	throwforce = 5.0
+	item_state = "syringe_kit"
+	w_class = 2.0
+	starting_materials = list(MAT_IRON = 50)
+	w_type = RECYK_METAL
+	melt_temperature = MELTPOINT_STEEL
+	origin_tech = "engineering=1"
+	var/can_pull = list(/obj/structure/mopbucket,/obj/structure/closet/crate,/obj/machinery/portable_atmospherics/pump,/obj/machinery/portable_atmospherics/scrubber,/obj/machinery/portable_atmospherics/canister,/obj/machinery/space_heater,/obj/machinery/space_heater/air_conditioner,/obj/structure/bed/roller)
+	var/datum/tether/carabiner_tether = null //This is what we're pulling
+
+/obj/item/device/carabiner/Destroy()
+	carabiner_tether.Destroy()
+	carabiner_tether = null
+	..()
+
+/obj/item/device/carabiner/update_icon()
+	icon_state = "carabiner-[carabiner_tether ? "closed" : "open"]"
+
+/obj/item/device/carabiner/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>It is currently attached to [carabiner_tether ? "[carabiner_tether.slave]" : "nothing"].</span>")
+
+/obj/item/device/carabiner/preattack(atom/movable/target, mob/user, proximity_flag, click_parameters)
+	if(!proximity_flag) return
+	if(target == carabiner_tether) return attack_self(user)
+	if(!is_type_in_list(target,can_pull)) return
+	//var/turf/t0 = get_turf(target)
+	//var/turf/t1 = get_turf(user)
+	//if(t0.x!=t1.x&&t0.y!=t1.y) return //Kill diagonals - this is like the adjacent code but only partial
+	//mob_movement.dm should stop moving the puller
+	if(carabiner_tether)
+		to_chat(user, "<span class='warning'>The [carabiner_tether] is already attached!</span>")
+		return
+	to_chat(user, "<span class='notice'>You clip onto the [target.name].</span>")
+	carabiner_tether = tether_equal(user, target, 1)
+	update_icon()
+	return 1
+
+/obj/item/device/carabiner/attack_self(mob/user)
+	if(carabiner_tether)
+		to_chat(user, "<span class='notice'>The [carabiner_tether.slave] pops off of the [src].</span>")
+		carabiner_tether.break_tether()
+		carabiner_tether = null
+	update_icon()
+
+/obj/item/device/carabiner/dropped(mob/user) //Not called if put into pocket, but yes called if put into bag
+	attack_self(user)

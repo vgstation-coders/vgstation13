@@ -143,7 +143,7 @@ proc/tether_equal(atom/movable/first, atom/movable/second, var/distance, var/res
 	else
 		E = new()
 	E.make_tether(first,second,distance)
-	return TRUE
+	return E
 
 proc/tether_equal_restrictive(atom/movable/first, atom/movable/second, var/distance)
 	return tether_equal(first, second, distance, TRUE)
@@ -155,7 +155,7 @@ proc/tether_master_slave(atom/movable/M, atom/movable/S, var/distance)
 		return FALSE
 	var/datum/tether/master_slave/T = new()
 	T.make_tether(M,S,distance)
-	return TRUE
+	return T
 
 //Uncomment for easy testing of tethers.
 /*
