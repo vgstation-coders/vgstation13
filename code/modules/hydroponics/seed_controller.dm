@@ -80,20 +80,18 @@ var/global/datum/controller/plants/plant_controller // Set in New().
 			if(!processing)
 				sleep(plant_tick_time)
 			else
-				processed = 0
 				if(plant_queue.len)
 					var/target_to_process = min(plant_queue.len,plants_per_tick)
 					for(var/x=0;x<target_to_process;x++)
-						if(!plant_queue.len)
-							break
-						var/obj/effect/plantsegment/plant = pick(plant_queue)
-						plant_queue -= plant
-						if(!istype(plant))
-							continue
-						plant.process()
-						processed++
-						sleep(1) // Stagger processing out so previous tick can resolve (overlapping plant segments etc)
-				sleep(max(1,(plant_tick_time-processed)))
+						spawn(rand(1, plant_tick_time)) // Stagger processing out so previous tick can resolve (overlapping plant segments etc)
+							if(!plant_queue.len)
+								break
+							var/obj/effect/plantsegment/plant = pick(plant_queue)
+							plant_queue -= plant
+							if(!istype(plant))
+								continue
+							plant.process()
+				sleep(plant_tick_time)
 
 /datum/controller/plants/proc/add_plant(var/obj/effect/plantsegment/plant)
 	plant_queue |= plant
