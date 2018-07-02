@@ -845,7 +845,7 @@
 	var/datum/tether/carabiner_tether = null //This is what we're pulling
 
 /obj/item/device/carabiner/Destroy()
-	carabiner_tether.Destroy()
+	qdel(carabiner_tether)
 	carabiner_tether = null
 	..()
 
@@ -865,7 +865,7 @@
 	//if(t0.x!=t1.x&&t0.y!=t1.y) return //Kill diagonals - this is like the adjacent code but only partial
 	//mob_movement.dm should stop moving the puller
 	if(carabiner_tether)
-		to_chat(user, "<span class='warning'>The [carabiner_tether] is already attached!</span>")
+		to_chat(user, "<span class='warning'>The [src] is already attached!</span>")
 		return
 	to_chat(user, "<span class='notice'>You clip onto the [target.name].</span>")
 	carabiner_tether = tether_equal(user, target, 1)
