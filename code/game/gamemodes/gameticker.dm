@@ -549,8 +549,6 @@ var/datum/controller/gameticker/ticker
 		var/tempstate = end_icons.len
 		ai_completions += {"<br><b><img src="logo_[tempstate].png"> [pAI.name] (Played by: [get_key(pAI)]) [pAI.stat!=2?"survived":"perished"] as a pAI whose master was [pAI.master]! Its directives were:</b><br>[pAI.write_directives()]"}
 
-	mode.declare_completion()//To declare normal completion.
-
 	ai_completions += "<HR><BR><h2>Mode Result</h2>"
 	//ai_completions += "<br>[mode.completion_text]"
 

@@ -132,11 +132,6 @@ var/list/factions_with_hud_icons = list()
 	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'>"}
 	return header
 
-
-/datum/faction/proc/DeclareAll()
-	for(var/datum/role/R in members)
-		R.Declare()
-
 /datum/faction/proc/AdminPanelEntry(var/datum/admins/A)
 	var/dat = "<br>"
 	dat += GetObjectivesMenuHeader()
@@ -221,6 +216,17 @@ var/list/factions_with_hud_icons = list()
 		for(var/image/I in Removed_R.antag.current.client.images)
 			if(I.icon_state in hud_icons)
 				Removed_R.antag.current.client.images -= I
+
+/datum/faction/proc/Declare()
+	var/dat = GetObjectivesMenuHeader()
+	dat += "<br><b>Faction objectives</b><br>"
+	dat += CheckObjectives()
+	dat += "<br><b>Faction members.</b><br"
+	var/list/score_results = GetScoreboard()
+	for(var/i in score_results)
+		dat += i
+
+	return dat
 
 
 /////////////////////////////THESE FACTIONS SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
