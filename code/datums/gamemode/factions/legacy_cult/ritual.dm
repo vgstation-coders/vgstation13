@@ -267,7 +267,7 @@ var/runedec = 0 // Rune cap ?
 		our_cult = find_active_faction(LEGACY_CULT) // No cult given, let's find ours
 	if (!istype(our_cult))
 		message_admins("Error: trying to spawn a cult tome without an active cult! Create one first.")
-		visible_message("<span class='warning'>The tome suddendly catches fire and fades out in a dark puff of smoke.")
+		visible_message("<span class='warning'>The tome suddendly catches fire and fades out in a dark puff of smoke.</span>")
 		qdel(src)
 		return FALSE
 	my_cult = our_cult

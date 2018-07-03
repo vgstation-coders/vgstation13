@@ -173,7 +173,6 @@
 /////////////////////////////////////////THIRD RUNE
 
 /obj/effect/rune_legacy/proc/convert()
-	var/datum/faction/cult/narsie/cult = find_active_faction_by_member(usr.mind.GetRole(LEGACY_CULT))
 	for(var/mob/living/carbon/M in src.loc)
 		if(iscultist(M))
 			to_chat(usr, "<span class='warning'>You cannot convert what is already a follower of Nar-Sie.</span>")
@@ -184,8 +183,8 @@
 		if(!M.mind)
 			to_chat(usr, "<span class='warning'>You cannot convert that which has no soul</span>")
 			return 0
-		if(cult && cult.is_sacrifice_target(M.mind))
-			to_chat(usr, "<span class='warning'>\The [cult.deity_name] wants this mortal for himself.</span>")
+		if(my_cult && my_cult.is_sacrifice_target(M.mind))
+			to_chat(usr, "<span class='warning'>\The [my_cult.deity_name] wants this mortal for himself.</span>")
 			return 0
 		usr.say("Mah[pick("'","`")]weyh pleggh at e'ntrath!")
 		nullblock = 0
@@ -199,13 +198,13 @@
 		"<span class='danger'>AAAAAAHHHH!.</span>", \
 		"<span class='warning'>You hear an anguished scream.</span>")
 		if(is_convertable_to_cult_legacy(M.mind) && !jobban_isbanned(M, "cultist"))//putting jobban check here because is_convertable uses mind as argument
-			cult.HandleRecruitedMind(M.mind)
+			my_cult.HandleRecruitedMind(M.mind)
 			to_chat(M, "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>")
 			to_chat(M, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 			to_chat(M, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
 			M.add_language(LANGUAGE_CULT)
-			log_admin("[usr]([ckey(usr.key)]) has converted [M] ([ckey(M.key)]) to the [cult.deity_name] cult at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.loc.x];Y=[M.loc.y];Z=[M.loc.z]'>([M.loc.x], [M.loc.y], [M.loc.z])</a>")
-			add_attacklogs(usr, M, "converted to the Cult of [cult.deity_name]!")
+			log_admin("[usr]([ckey(usr.key)]) has converted [M] ([ckey(M.key)]) to the [my_cult.deity_name] cult at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.loc.x];Y=[M.loc.y];Z=[M.loc.z]'>([M.loc.x], [M.loc.y], [M.loc.z])</a>")
+			add_attacklogs(usr, M, "converted to the Cult of [my_cult.deity_name]!")
 			stat_collection.cult_converted++
 			if(M.client)
 				spawn(600)
@@ -222,8 +221,8 @@
 				//death(M) //toggles SPS from going off or not.
 				sleep(1) //Ensure everything has time to drop without getting deleted
 				qdel(M)
-				if(cult)
-					cult.grant_runeword(usr) //Chance to get a rune word for sacrificing a live player is 100%, so.
+				if(my_cult)
+					my_cult.grant_runeword(usr) //Chance to get a rune word for sacrificing a live player is 100%, so.
 				ticker.rune_controller.revive_counter ++
 				to_chat(usr, "<span class='danger'>The ritual didn't work! Looks like this person just isn't suited to be part of our cult.</span>")
 				to_chat(usr, "<span class='notice'>Instead, the ritual has taken the lifeforce of this heretic, to be used for our benefit later.</span>")
@@ -235,8 +234,8 @@
 				to_chat(usr, "<span class='danger'>[M] now knows the truth! Stop \him!</span>")
 			to_chat(M, "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>")
 			to_chat(M, "<span class='danger'>And you were able to force it out of your mind. You now know the truth, there's something horrible out there, stop it and its minions at all costs.</span>")
-			if (cult.has_enough_adepts())
-				cult.getNewObjective()
+			if (my_cult.has_enough_adepts())
+				my_cult.getNewObjective()
 			return 0
 
 	usr.say("Mah[pick("'","`")]weyh pleggh at e'ntrath!")
@@ -263,14 +262,11 @@
 			to_chat(M, "<span class='warning'>This plane of reality has already been torn into Nar-Sie's realm.</span>")
 		return
 
-	var/mob/cultist = pick(active_cultists)
-	var/datum/faction/cult/cult_round = find_active_faction_by_member(cultist.mind.GetRole(LEGACY_CULT))
-
-	if(cult_round.eldergod)
+	if(my_cult.eldergod)
 		// Sanity checks
 		// Are we permitted to spawn Nar-Sie?
 
-		if(!cult_round)//if the game mode wasn't cult to begin with, there won't be need to complete a first objective to prepare the summoning.
+		if(!my_cult)//if the game mode wasn't cult to begin with, there won't be need to complete a first objective to prepare the summoning.
 			if(active_cultists.len >= 9)
 				if(z != map.zMainStation)
 					for(var/mob/M in active_cultists)
@@ -332,9 +328,8 @@
 			for(var/mob/M in active_cultists)
 				// Only chant when Nar-Sie spawns
 				M.say("Tok-lyr rqa'nap g[pick("'","`")]lt-ulotf!")
-			var/mob/cultist = pick(active_cultists)
-			var/datum/faction/cult/succesful_cultists = find_active_faction_by_member(cultist.mind.GetRole(LEGACY_CULT))
-			succesful_cultists.eldergod = 0
+			my_cult.eldergod = 0
+			my_cult.getNewObjective()
 			summonturfs = list()
 			summoning = 0
 			new /obj/machinery/singularity/narsie/large(src.loc)
@@ -476,12 +471,10 @@
 	var/mob/living/carbon/human/corpse_to_raise
 	var/mob/living/carbon/human/body_to_sacrifice
 
-	var/datum/faction/cult/narsie/cult_round = find_active_faction_by_member(usr.mind.GetRole(LEGACY_CULT))
-
 	var/is_sacrifice_target = 0
 	for(var/mob/living/carbon/human/M in src.loc)
 		if(M.stat == DEAD)
-			if(cult_round && cult_round.is_sacrifice_target(M.mind))
+			if(my_cult && my_cult.is_sacrifice_target(M.mind))
 				is_sacrifice_target = 1
 			else
 				corpse_to_raise = M
@@ -501,7 +494,7 @@
 		for(var/obj/effect/rune_legacy/R in rune_list_legacy)
 			if(R.word1==my_cult.cult_words["blood"] && R.word2==my_cult.cult_words["join"] && R.word3==my_cult.cult_words["hell"])
 				for(var/mob/living/carbon/human/N in R.loc)
-					if(cult_round && (N.mind) && cult_round.is_sacrifice_target(N.mind))
+					if(my_cult && (N.mind) && my_cult.is_sacrifice_target(N.mind))
 						is_sacrifice_target = 1
 					else
 						if(N.stat!= DEAD)
@@ -549,15 +542,15 @@
 		"<span class='sinister'>You are ingulfed by pain as your blood boils, tearing you apart.</span>", \
 		"<span class='sinister'>You hear a thousand voices, all crying in pain.</span>")
 		body_to_sacrifice.gib()
-	if(cult_round)
+	if(my_cult)
 		if (ticker.rune_controller && !body_to_sacrifice)
 			corpse_to_raise.visible_message("<span class='warning'>A dark mass begins to form above [corpse_to_raise], Gaining mass steadily before penetrating deep into \his heart. [corpse_to_raise]'s eyes glow with a faint red as he stands up, slowly starting to breathe again.</span>", \
 			"<span class='warning'>Life? I'm alive? I live, again!</span>", \
 			"<span class='warning'>You hear a faint, slightly familiar whisper.</span>")
 			ticker.rune_controller --
 
-//	if(cult_round)
-//		cult_round.add_cultist(corpse_to_raise.mind)
+//	if(my_cult)
+//		my_cult.add_cultist(corpse_to_raise.mind)
 //	else
 //		ticker.mode.cult |= corpse_to_raise.mind
 
@@ -672,9 +665,9 @@
 		D.real_name = "[pick(first_names_male)] [pick(last_names)]"
 	D.status_flags &= ~GODMODE
 
-	var/datum/faction/cult/cult_round = find_active_faction_by_member(usr.mind.GetRole(LEGACY_CULT))
-	if(cult_round)
-		cult_round.HandleRecruitedMind(D.mind)
+	var/datum/faction/cult/my_cult = find_active_faction_by_member(usr.mind.GetRole(LEGACY_CULT))
+	if(my_cult)
+		my_cult.HandleRecruitedMind(D.mind)
 	/*else
 		ticker.mode.cult += D.mind*/
 
@@ -833,10 +826,7 @@
 		user.say("[input]")
 	else
 		user.whisper("[input]")
-	var/datum/role/role = user.mind.GetRole(LEGACY_CULTIST)
-	to_chat(world, "[role.name]")
-	var/datum/faction/cult = find_active_faction_by_member(role)
-	for(var/datum/role/R in cult.members)
+	for(var/datum/role/R in my_cult.members)
 		if (R.antag.current)
 			to_chat(R.antag.current, "<span class='game say'><b>[user.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[input]</span></B></span>")//changed from red to purple - Deity Link
 
@@ -870,7 +860,6 @@
 		to_chat(usr, "<span class='warning'>The presence of a null rod is perturbing the ritual.</span>")
 		return
 
-	var/datum/faction/cult/narsie/cult_round = find_active_faction_by_member(usr.mind.GetRole(LEGACY_CULT))
 	var/datum/rune_controller/R = ticker.rune_controller
 	for(var/atom/A in loc)
 		if(ismob(A))
@@ -881,7 +870,7 @@
 //Humans and Animals
 		if(istype(A,/mob/living/carbon) || istype(A,/mob/living/simple_animal))//carbon mobs and simple animals
 			var/mob/living/M = A
-			if (cult_round)
+			if (my_cult)
 				if(cultsinrange.len >= 3)
 					R.sacrificed += M.mind
 					M.gib()
@@ -924,7 +913,7 @@
 			var/mob/living/silicon/robot/B = A
 			var/obj/item/device/mmi/O = locate() in B
 			if(O)
-				if(cult_round)
+				if(my_cult)
 					if(cultsinrange.len >= 3)
 						R.sacrificed += O.brainmob.mind
 						sacrificedone = 1
@@ -951,7 +940,7 @@
 			var/obj/item/device/mmi/I = A
 			var/mob/living/carbon/brain/N = I.brainmob
 			if(N)//the MMI has a player's brain in it
-				if(cult_round)
+				if(my_cult)
 					ritualresponse += "You need to place that brain back inside a body before you can complete your objective."
 				else
 					ritualresponse += "The Geometer of Blood accepts to destroy that pile of machinery."
@@ -964,7 +953,7 @@
 			var/obj/item/organ/internal/brain/B = A
 			var/mob/living/carbon/brain/N = B.brainmob
 			if(N)//the brain is a player's
-				if(cult_round)
+				if(my_cult)
 					ritualresponse += "You need to place that brain back inside a body before you can complete your objective."
 				else
 					ritualresponse += "The Geometer of Blood accepts to destroy that brain."
@@ -977,7 +966,7 @@
 			var/obj/item/organ/external/head/H = A
 			var/mob/living/carbon/brain/N = H.brainmob
 			if(N)//the brain is a player's
-				if(cult_round && cult_round.is_sacrifice_target(N.mind))
+				if(my_cult && my_cult.is_sacrifice_target(N.mind))
 					ritualresponse += "You need to place that head back on a body before you can complete your objective."
 				else
 					ritualresponse += "The Geometer of Blood accepts to destroy the head."
@@ -990,7 +979,7 @@
 			var/obj/item/device/aicard/D = A
 			var/mob/living/silicon/ai/T = locate() in D
 			if(T)//there is an AI on the card
-				if(cult_round)
+				if(my_cult)
 					R.sacrificed += T.mind
 				sacrificedone = 1
 				invocation("rune_sac")
@@ -1005,7 +994,7 @@
 			if(ritualresponse != "")
 				to_chat(C, "<span class='sinister'>[ritualresponse]</span>")
 				if(prob(satisfaction))
-					cult_round.grant_runeword(C)
+					my_cult.grant_runeword(C)
 
 	if(!sacrificedone)
 		for(var/mob/living/C in cultsinrange)
@@ -1360,11 +1349,10 @@
 			var/mob/living/carbon/human/P = user
 			usr.visible_message("<span class='warning'> In flash of red light, a set of armor appears on [usr].</span>", \
 			"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor.</span>")
-			var/datum/faction/cult/narsie/mode_ticker = find_active_faction_by_member(user.mind.GetRole(LEGACY_CULT))
 			if(isplasmaman(P))
 				P.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(P), slot_head)
 				P.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/cultist(P), slot_wear_suit)
-			else if((istype(mode_ticker) && mode_ticker.narsie_condition_cleared) || (universe.name == "Hell Rising"))
+			else if((istype(my_cult) && my_cult.narsie_condition_cleared) || (universe.name == "Hell Rising"))
 				user.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/cult(user), slot_head)
 				user.equip_to_slot_or_del(new /obj/item/clothing/suit/space/cult(user), slot_wear_suit)
 			else
@@ -1392,11 +1380,10 @@
 					var/mob/living/carbon/human/P = M
 					M.visible_message("<span class='warning'> In flash of red light, and a set of armor appears on [M]...</span>", \
 					"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor.</span>")
-					var/datum/faction/cult/narsie/mode_ticker = find_active_faction_by_member(M.mind.GetRole(LEGACY_CULT))
 					if(isplasmaman(P))
 						P.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(P), slot_head)
 						P.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/cultist(P), slot_wear_suit)
-					else if((istype(mode_ticker) && mode_ticker.narsie_condition_cleared) || (universe.name == "Hell Rising"))
+					else if((istype(my_cult) && my_cult.narsie_condition_cleared) || (universe.name == "Hell Rising"))
 						M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/cult(M), slot_head)
 						M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/cult(M), slot_wear_suit)
 					else
