@@ -149,7 +149,7 @@
 	desc = "A paper-thin pane of translucent yet reinforced brass."
 	icon_state = "clockworkwindow0"
 	base_state = "clockworkwindow"
-	sheettype = /obj/item/stack/sheet/brass
+	sheet_type = /obj/item/stack/sheet/brass
 	canSmoothWith = null
 
 /obj/structure/window/full/reinforced/clockwork/clockify()
