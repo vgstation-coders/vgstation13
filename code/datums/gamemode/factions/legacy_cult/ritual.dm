@@ -26,7 +26,7 @@ var/runedec = 0 // Rune cap ?
 	var/summoning = 0
 	var/list/summonturfs = list()
 
-/obj/effect/rune_legacy/New(var/datum/faction/cult/narsie/our_cult)
+/obj/effect/rune_legacy/New()
 	..()
 	blood_image = image(loc = src)
 	blood_image.override = 1
@@ -34,11 +34,7 @@ var/runedec = 0 // Rune cap ?
 		if(AI.client)
 			AI.client.images += blood_image
 	rune_list_legacy.Add(src)
-	if (!our_cult)
-		our_cult = find_active_faction(LEGACY_CULT)
-	if (!our_cult)
-		CRASH("Creating a rune without an active cult")
-	my_cult = our_cult
+	my_cult = find_active_faction(LEGACY_CULT)
 	cultwords = my_cult.cult_words
 	stat_collection.cult_runes_written++
 
