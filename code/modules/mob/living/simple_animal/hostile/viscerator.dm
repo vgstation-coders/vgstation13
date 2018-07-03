@@ -44,7 +44,7 @@
 		var/mob/mob_target = the_target
 		if((isnukeop(mob_target) && faction == "syndicate") || (iswizard(mob_target) && faction == "wizard"))
 			return 0
-	return ..(the_target)*/
+	return ..(the_target)
 
 /mob/living/simple_animal/hostile/viscerator/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || (height == 0))

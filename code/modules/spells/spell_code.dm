@@ -518,6 +518,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return 0
 
 	var/delayfraction = round(delay/numticks)
+	var/original_location = user.loc
 	var/originalstat = user.stat
 
 	var/image/progress_bar
@@ -532,7 +533,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 				progress_bar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 		sleep(delayfraction)
 
-		if(!user || (!(spell_flags & (STATALLOWED|GHOSTCAST)) && user.stat != originalstat)  || !(user.loc == Location))
+		if(!user || (!(spell_flags & (STATALLOWED|GHOSTCAST)) && user.stat != originalstat)  || !(user.loc == original_location))
 			if(use_progress_bar)
 				stop_progress_bar(user, progress_bar)
 			return 0

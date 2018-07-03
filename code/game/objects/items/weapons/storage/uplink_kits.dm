@@ -222,8 +222,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/implanter/traitor(src)
-		new /obj/item/weapon/implanter/traitor(src)
+		//new /obj/item/weapon/implanter/traitor(src)
+		//new /obj/item/weapon/implanter/traitor(src)
 		new /obj/item/clothing/glasses/sunglasses/sechud/syndishades(src)
 
 /obj/item/weapon/storage/box/syndie_kit/boolets
