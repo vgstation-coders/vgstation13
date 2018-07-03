@@ -262,9 +262,6 @@
 			to_chat(M, "<span class='warning'>This plane of reality has already been torn into Nar-Sie's realm.</span>")
 		return
 
-	var/mob/cultist = pick(active_cultists)
-	var/datum/faction/cult/my_cult = find_active_faction_by_member(cultist.mind.GetRole(LEGACY_CULT))
-
 	if(my_cult.eldergod)
 		// Sanity checks
 		// Are we permitted to spawn Nar-Sie?
