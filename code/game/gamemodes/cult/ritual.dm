@@ -173,8 +173,6 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		return deafen()
 	if(word1 == cultwords["destroy"] && word2 == cultwords["see"] && word3 == cultwords["other"])
 		return blind()
-	if(word1 == cultwords["destroy"] && word2 == cultwords["see"] && word3 == cultwords["blood"])
-		return bloodboil()
 	if(word1 == cultwords["self"] && word2 == cultwords["other"] && word3 == cultwords["technology"])
 		return communicate()
 	if(word1 == cultwords["travel"] && word2 == cultwords["other"])
@@ -251,7 +249,6 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				<b>Stun: </b>Join Hide Technology<br>
 				<b>Cult Armor: </b>Hell Destroy Other<br>
 				<b>See Invisible: </b>See Hell Join<br>
-				<b>Blood Boil: </b>Destroy See Blood<br>
 				</p>
 				<h2>Rune Descriptions</h2>
 				<h3>Teleport self</h3>
@@ -298,8 +295,6 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				When this rune is invoked, either from a rune or a talisman, it will equip the user with the armor of the followers of Nar-Sie. To use this rune to its fullest extent, make sure you are not wearing any form of headgear, armor, gloves or shoes, and make sure you are not holding anything in your hands.<br>Small-sized individuals will be provided with a fitting armor.<br><br>You may also use this rune to change a construct's type. Simply ask the construct to stand on the rune then touch it.<br>
 				<h3>See Invisible</h3>
 				When invoked when standing on it, this rune allows the user to see the the world beyond as long as he does not move.<br>
-				<h3>Blood boil</h3>
-				This rune boils the blood all non-cultists in visible range. The damage is enough to instantly critically hurt any person. You need 3 cultists invoking the rune for it to work. This rune is unreliable and may cause unpredicted effect when invoked. It also drains significant amount of your health when successfully invoked.<br>
 				</body>
 				</html>
 				"}
@@ -515,7 +510,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 			var/r
 			if (!istype(user.loc,/turf))
 				to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
-			var/list/runes = list("teleport", "itemport", "tome", "armor", "convert", "tear in reality", "emp", "drain", "seer", "raise", "obscure", "reveal", "astral journey", "manifest", "imbue talisman", "sacrifice", "wall", "freedom", "cultsummon", "deafen", "blind", "bloodboil", "communicate", "stun")
+			var/list/runes = list("teleport", "itemport", "tome", "armor", "convert", "tear in reality", "emp", "drain", "seer", "raise", "obscure", "reveal", "astral journey", "manifest", "imbue talisman", "sacrifice", "wall", "freedom", "cultsummon", "deafen", "blind", "communicate", "stun")
 			r = input("Choose a rune to scribe", "Rune Scribing") in runes //not cancellable.
 			var/obj/effect/rune/R = new /obj/effect/rune
 			if(istype(user, /mob/living/carbon/human))
@@ -655,12 +650,6 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 					R.word1=cultwords["destroy"]
 					R.word2=cultwords["see"]
 					R.word3=cultwords["other"]
-					R.forceMove(user.loc)
-					R.check_icon()
-				if("bloodboil")
-					R.word1=cultwords["destroy"]
-					R.word2=cultwords["see"]
-					R.word3=cultwords["blood"]
 					R.forceMove(user.loc)
 					R.check_icon()
 				if("communicate")
