@@ -34,8 +34,7 @@
 
 	. = ..()
 
-/mob/living/examine(mob/user) //Show the mob's size and whether it's been butchered
-	var/size
+/mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
 	switch(src.size)
 		if(SIZE_TINY)
 			size = "tiny"
@@ -56,7 +55,7 @@
 	else if(src.gender == PLURAL)
 		pronoun = "they are"
 
-	..(user, " [capitalize(pronoun)] [size].")
+	..(user, " [capitalize(pronoun)] [size].", show_name, FALSE)
 	if(meat_taken > 0)
 		to_chat(user, "<span class='info'>[capitalize(pronoun)] partially butchered.</span>")
 
@@ -521,13 +520,11 @@ Thanks.
 	if(iscarbon(src))
 		var/mob/living/carbon/C = src
 
-		if (C.handcuffed && !initial(C.handcuffed))
+		if(C.handcuffed)
 			C.drop_from_inventory(C.handcuffed)
-		C.handcuffed = initial(C.handcuffed)
 
-		if (C.legcuffed && !initial(C.legcuffed))
+		if (C.legcuffed)
 			C.drop_from_inventory(C.legcuffed)
-		C.legcuffed = initial(C.legcuffed)
 	hud_updateflag |= 1 << HEALTH_HUD
 	hud_updateflag |= 1 << STATUS_HUD
 
@@ -611,9 +608,6 @@ Thanks.
 			IO.status = 0
 			IO.robotic = 0
 		H.updatehealth()
-	if(iscarbon(src))
-		var/mob/living/carbon/C = src
-		C.handcuffed = initial(C.handcuffed)
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
 	if(stat == DEAD)
@@ -1408,12 +1402,7 @@ Thanks.
 		return
 
 	if(!can_butcher)
-		if(meat_taken)
-			to_chat(user, "<span class='notice'>[src] has already been butchered.</span>")
-			return
-		else
-			to_chat(user, "<span class='notice'>You can't butcher [src]!")
-			return
+		to_chat(user, "<span class='notice'>You can't butcher [src]!")
 		return
 
 	var/obj/item/tool = null	//The tool that is used for butchering
@@ -1459,13 +1448,16 @@ Thanks.
 
 	if(src.butchering_drops && src.butchering_drops.len)
 		var/list/actions = list()
-		actions += "Butcher"
+		if(meat_taken < meat_amount)
+			actions += "Butcher"
 		for(var/datum/butchering_product/B in src.butchering_drops)
 			if(B.amount <= 0)
 				continue
-
 			actions |= capitalize(B.verb_name)
 			actions[capitalize(B.verb_name)] = B
+		if(!actions.len)
+			to_chat(user, "<span class='notice'>[src] has already been butchered.</span>")
+			return
 		actions += "Cancel"
 
 		var/choice = input(user,"What would you like to do with \the [src]?","Butchering") in actions
@@ -1492,6 +1484,10 @@ Thanks.
 				src.update_icons()
 			return
 
+	else if(meat_taken >= meat_amount)
+		to_chat(user, "<span class='notice'>[src] has already been butchered.</span>")
+		return
+
 	user.visible_message("<span class='notice'>[user] starts butchering \the [src][tool ? " with \the [tool]" : ""].</span>",\
 		"<span class='info'>You start butchering \the [src].</span>")
 	src.being_butchered = 1
@@ -1513,7 +1509,6 @@ Thanks.
 		return
 
 	to_chat(user, "<span class='info'>You butcher \the [src].</span>")
-	can_butcher = 0
 
 	if(istype(src, /mob/living/simple_animal)) //Animals can be butchered completely, humans - not so
 		if(src.size > SIZE_TINY) //Tiny animals don't produce gibs

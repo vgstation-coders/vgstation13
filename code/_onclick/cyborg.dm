@@ -39,12 +39,10 @@
 		return
 	face_atom(A) // change direction to face what you clicked on
 
-	/*
-	cyborg restrained() currently does nothing
-	if(restrained())
-		RestrainedClickOn(A)
+	if(aicamera.in_camera_mode) //Cyborg picture taking
+		aicamera.toggle_camera_mode(src)
+		aicamera.captureimage(A, src)
 		return
-	*/
 
 	var/obj/item/W = get_active_hand()
 
@@ -52,10 +50,6 @@
 	if(!W)
 		A.add_hiddenprint(src)
 		A.attack_robot(src)
-		return
-
-	// locked_to cannot prevent machine interlinking but stops arm movement
-	if(locked_to)
 		return
 
 	if(W == A)

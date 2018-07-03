@@ -64,19 +64,19 @@ var/const/APC_WIRE_AI_CONTROL = 8
 
 	A.updateDialog()
 
-/datum/wires/apc/UpdateCut(var/index, var/mended)
+/datum/wires/apc/UpdateCut(var/index, var/mended, var/mob/user)
 	var/obj/machinery/power/apc/A = holder
-
+	var/obj/I = user.get_active_hand()
 	switch(index)
 		if(APC_WIRE_MAIN_POWER1, APC_WIRE_MAIN_POWER2)
 
 			if(!mended)
-				A.shock(usr, 50)
+				A.shock(user, 50,get_conductivity(I))
 				A.shorted = 1
 
 			else if(!IsIndexCut(APC_WIRE_MAIN_POWER1) && !IsIndexCut(APC_WIRE_MAIN_POWER2))
 				A.shorted = 0
-				A.shock(usr, 50)
+				A.shock(user, 50,get_conductivity(I))
 
 		if(APC_WIRE_AI_CONTROL)
 

@@ -10,6 +10,17 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/recharge_station
 
+/datum/design/recharger
+	name = "Circuit Design (Recharger)"
+	desc = "Allows for the construction of circuit boards used to build Weapon Rechargers"
+	id="recharger"
+	req_tech = list(Tc_POWERSTORAGE = 2, Tc_COMBAT = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 3)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/recharger
+
+
 /datum/design/photocopier
 	name = "Circuit Design (Photocopier)"
 	desc = "Allows for the construction of circuit boards to build photocopiers."
@@ -82,7 +93,7 @@
 	id = "vendomat"
 	req_tech = list(Tc_MATERIALS = 1, Tc_ENGINEERING = 1, Tc_POWERSTORAGE = 1)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Misc"
 	build_path = /obj/item/weapon/circuitboard/vendomat
 

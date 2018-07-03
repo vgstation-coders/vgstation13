@@ -44,6 +44,7 @@ var/global/list/juice_items = list (
 		/obj/item/weapon/grown/nettle         = list(FORMIC_ACID = 0),
 		/obj/item/weapon/grown/deathnettle    = list(PHENOL = 0),
 		/obj/item/stack/sheet/charcoal        = list("charcoal" = 20),
+		/obj/item/stack/sheet/bone	          = list(BONEMARROW = 20),
 
 		//Blender Stuff
 		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans = list(SOYMILK = -10), //I have no fucking idea what most of these numbers mean and I hate them.
@@ -332,7 +333,7 @@ var/global/list/juice_items = list (
 		return
 	if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
 		return
-	playsound(get_turf(src), speed_multiplier < 2 ? 'sound/machines/juicer.ogg' : 'sound/machines/juicerfast.ogg', 30, 1)
+	playsound(src, speed_multiplier < 2 ? 'sound/machines/juicer.ogg' : 'sound/machines/juicerfast.ogg', 30, 1)
 	inuse = 1
 	spawn(50/speed_multiplier)
 		inuse = 0
@@ -366,7 +367,7 @@ var/global/list/juice_items = list (
 		return
 	if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
 		return
-	playsound(get_turf(src), speed_multiplier < 2 ? 'sound/machines/blender.ogg' : 'sound/machines/blenderfast.ogg', 50, 1)
+	playsound(src, speed_multiplier < 2 ? 'sound/machines/blender.ogg' : 'sound/machines/blenderfast.ogg', 50, 1)
 	inuse = 1
 	spawn(60/speed_multiplier)
 		inuse = 0

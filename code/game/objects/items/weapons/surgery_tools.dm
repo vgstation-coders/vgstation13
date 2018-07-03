@@ -220,7 +220,7 @@
 	if(isscrewdriver(used_item) && cauterymode)
 		if(held)
 			to_chat(user, "<span class='notice'>You detach \the [held] and \the [src] switches to cutting mode.</span>")
-			playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
+			playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 			held.add_fingerprint(user)
 			held.forceMove(get_turf(src))
 			held = null
@@ -233,7 +233,7 @@
 			to_chat(user, "<span class='notice'>There's already a cautery attached to \the [src].</span>")
 		else if(!held && user.drop_item(used_item, src))
 			to_chat(user, "<span class='notice'>You attach \the [used_item] to \the [src].</span>")
-			playsound(get_turf(src), "sound/items/screwdriver.ogg", 10, 1)
+			playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 			src.held = used_item
 		else
 			to_chat(user, "<span class='danger'>You can't let go of \the [used_item]!</span>")
@@ -324,7 +324,8 @@
 
 
 /obj/item/weapon/FixOVein
-	name = "FixOVein"
+	name = "fixOVein"
+	desc = "A small tube that contains synthetic vein to repair or replace damaged veins."
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "fixovein"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
@@ -334,6 +335,54 @@
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=3"
 	var/usage_amount = 10
+
+/obj/item/weapon/FixOVein/clot
+	name = "capillary laying operation tool" //C.L.O.T.
+	desc = "A canister like tool that has two containers on it that stores synthetic vein or biofoam. There's a small processing port on the side where gauze can be inserted to produce biofoam."
+	icon = 'icons/obj/surgery.dmi'
+	icon_state = "clot"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
+	item_state = "clot"
+	sharpness = null
+	sharpness_flags = null
+	surgery_speed = 0.5
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
+	var/foam = 0
+
+/obj/item/weapon/FixOVein/clot/examine(mob/user)
+	..()
+	to_chat(user, "<span class='notice'>\The [src] contains [foam] unit[foam > 1 ? "s" : ""][foam == 0 ? "s" : ""] of biofoam.</span>")
+
+/obj/item/weapon/FixOVein/clot/attack_self(mob/user)
+	if(foam)
+		if(!sharpness)
+			sharpness= 0.5
+			sharpness_flags = SHARP_TIP
+			icon_state = "clot-F"
+		else
+			sharpness = null
+			sharpness_flags = null
+			icon_state = "clot"
+		to_chat(user, "<span class='notice'>You toggle \the [src]'s tip to [sharpness == 0.5 ? "inject biofoam" : "repair veins"].</span>")
+	else
+		to_chat(user, "<span class='notice'>\The [src] requires biofoam to use the injection tip.</span")
+
+/obj/item/weapon/FixOVein/clot/attackby(var/obj/item/stack/W, mob/user)
+	if((istype(W, /obj/item/stack/medical)) && (foam < 5))
+		if(istype(W, /obj/item/stack/medical/bruise_pack))
+			foam += 1
+			to_chat(user, "<span class='notice'>You insert a bit of \the [W] into \the [src].</span>")
+			W.use(1)
+			return
+		else if(istype(W, /obj/item/stack/medical/advanced/bruise_pack))
+			foam = 5
+			to_chat(user, "<span class='notice'>You insert a bit of \the [W] into \the [src].</span>")
+			W.use(1)
+		else
+			to_chat(user, "<span class='notice'>You can't see any way to use \the [W] on \the [src].</span>")
+	else
+		to_chat(user, "<span class='warning'>[foam == 5 ? "The [src] is full!" : ""]</span> <span class='notice'>You can't see any way to use \the [W] on \the [src].</span>")
+
 
 /obj/item/weapon/bonesetter
 	name = "bone setter"
@@ -380,7 +429,7 @@
 		target.AdjustParalysis(-3)
 		target.AdjustStunned(-3)
 		target.AdjustKnockdown(-3)
-		playsound(get_turf(target), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+		playsound(target, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 		target.visible_message(
 			"<span class='notice'>[user] prods [target] trying to wake \him up!</span>",
 			"<span class='notice'>You prod [target] trying to wake \him up!</span>",

@@ -233,47 +233,24 @@ var/list/special_fruits = list()
 	var/datum/zLevel/L = get_z_level(src)
 	if(!L || L.teleJammed)
 		return 0
-
-	var/outer_teleport_radius = potency/10 //Plant potency determines radius of teleport.
-	var/inner_teleport_radius = potency/15 //At base potency, nothing will happen, since the radius is 0.
-	if(inner_teleport_radius < 1)
-		return 0
-
-	var/list/turfs = new/list()
-	//This could likely use some standardization but I have no idea how to not break it.
-	for(var/turf/T in trange(outer_teleport_radius, get_turf(hit_atom)))
-		if(get_dist(T, hit_atom) <= inner_teleport_radius)
-			continue
-		if(is_blocked_turf(T) || istype(T, /turf/space))
-			continue
-		if(T.x > world.maxx-outer_teleport_radius || T.x < outer_teleport_radius)
-			continue
-		if(T.y > world.maxy-outer_teleport_radius || T.y < outer_teleport_radius)
-			continue
-		turfs += T
-	if(!turfs.len)
-		var/list/turfs_to_pick_from = list()
-		for(var/turf/T in trange(outer_teleport_radius, get_turf(hit_atom)))
-			if(get_dist(T, hit_atom) > inner_teleport_radius)
-				turfs_to_pick_from += T
-		turfs += pick(/turf in turfs_to_pick_from)
-	var/turf/picked = pick(turfs)
+	var/picked = pick_rand_tele_turf(hit_atom, potency/15, potency/10) // Does nothing at base potency since inner_radius == 0
 	if(!isturf(picked))
 		return 0
-	switch(rand(1, 2)) //50-50 % chance to teleport the thrower or the target.
-		if(1) //Teleports the person who threw the fruit
-			spark(M)
-			new/obj/effect/decal/cleanable/molten_item(M.loc) //Leaves a pile of goo behind for dramatic effect.
-			M.forceMove(picked) //Send then to that location we picked previously
+	var/turf/hit_turf = get_turf(hit_atom)
+	var/turf_has_mobs = locate(/mob) in hit_turf
+	if((!istype(M) || prob(50)) && turf_has_mobs) //50% chance to teleport the person who was hit by the fruit
+		spark(hit_atom)
+		new/obj/effect/decal/cleanable/molten_item(hit_turf) //Leave a pile of goo behind for dramatic effect...
+		for(var/mob/A in hit_turf) //For the mobs in the tile that was hit...
+			A.forceMove(picked) //And teleport them to the chosen location.
 			spawn()
-				spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
-		if(2) //Teleports the target instead.
-			spark(hit_atom)
-			new/obj/effect/decal/cleanable/molten_item(get_turf(hit_atom)) //Leave a pile of goo behind for dramatic effect...
-			for(var/mob/A in get_turf(hit_atom)) //For the mobs in the tile that was hit...
-				A.forceMove(picked) //And teleport them to the chosen location.
-				spawn()
-					spark(A)
+				spark(A)
+	else //Teleports the thrower instead.
+		spark(M)
+		new/obj/effect/decal/cleanable/molten_item(M.loc) //Leaves a pile of goo behind for dramatic effect.
+		M.forceMove(picked) //Send then to that location we picked previously
+		spawn()
+			spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
 	return 1
 
 
@@ -574,6 +551,21 @@ var/list/special_fruits = list()
 	trash = /obj/item/weapon/bananapeel
 	plantname = "banana"
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana
+	name = "bluespace banana"
+	desc = "It's an excellent prop for a comedy."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "bluespacebanana"
+	item_state = "bluespacebanana"
+	filling_color = "#FCF695"
+	plantname = "bluespacebanana"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana/after_consume(var/mob/user, var/datum/reagents/reagentreference)
+	var/obj/item/weapon/bananapeel/bluespace/peel = new
+	peel.potency = potency
+	trash = peel
+	..()
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/chili
 	name = "chili"
 	desc = "It's spicy! Wait... IT'S BURNING ME!!"
@@ -694,7 +686,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper/spook()
 	visible_message("<span class='warning'>A specter takes a bite of \the [src] from beyond the grave!</span>")
-	playsound(get_turf(src),'sound/items/eatfood.ogg', rand(10,50), 1)
+	playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
 	bitecount++
 	reagents.remove_any(bitesize)
 	if(!reagents.total_volume)
@@ -872,7 +864,7 @@ var/list/special_fruits = list()
 		if(C.CheckSlip() < 1)
 			continue
 		C.Knockdown(5)
-	playsound(get_turf(src), 'sound/effects/bang.ogg', 10, 1)
+	playsound(src, 'sound/effects/bang.ogg', 10, 1)
 	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit
@@ -938,11 +930,11 @@ var/list/special_fruits = list()
 	if(get_turf(user))
 		switch(N)
 			if(1)
-				playsound(get_turf(user), 'sound/weapons/genhit1.ogg', 50, 1)
+				playsound(user, 'sound/weapons/genhit1.ogg', 50, 1)
 			if(2)
-				playsound(get_turf(user), 'sound/weapons/genhit2.ogg', 50, 1)
+				playsound(user, 'sound/weapons/genhit2.ogg', 50, 1)
 			if(3)
-				playsound(get_turf(user), 'sound/weapons/genhit3.ogg', 50, 1)
+				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
 	if(W)
 		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
 	else

@@ -33,7 +33,7 @@
 	maxbodytemp = 323	//Above 50 Degrees Celcius
 	universal_speak = 0
 	treadmill_speed = 0.2 //You can still do it, but you're not going to generate much power.
-	speak_override = TRUE
+	speak_override = FALSE
 
 	size = SIZE_TINY
 	holder_type = /obj/item/weapon/holder/animal/mouse
@@ -189,7 +189,7 @@
 			to_chat(user, "<span class = 'danger'>It seems a bit hungry.</span>")
 
 /mob/living/simple_animal/mouse/proc/splat()
-	Die()
+	death()
 	src.icon_dead = "mouse_[_color]_splat"
 	src.icon_state = "mouse_[_color]_splat"
 	if(client)
@@ -262,10 +262,10 @@
 			M << 'sound/effects/mousesqueek.ogg'
 	..()
 
-/mob/living/simple_animal/mouse/Die()
+/mob/living/simple_animal/mouse/death(var/gibbed = FALSE)
 	if(client)
 		client.time_died_as_mouse = world.time
-	..()
+	..(gibbed)
 
 /*
  * Mouse types

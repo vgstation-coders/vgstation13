@@ -574,3 +574,16 @@ th.misc {
 .red {
 	color: red;
 }
+
+/* Fabricators */
+
+#cost
+{
+	width:470px;
+	float:left;
+}
+#misc
+{
+	width:350px;
+	float:left;
+}

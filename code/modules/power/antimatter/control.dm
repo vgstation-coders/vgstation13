@@ -66,7 +66,7 @@
 	if(stat & (NOPOWER|BROKEN) || !active)//can update the icons even without power
 		return
 
-	if(!fueljar)//No fuel but we are on, shutdown
+	if(!fueljar || fueljar.fuel <= 0)//No fuel but we are on, shutdown
 		toggle_power()
 		//Angry buzz or such here
 		return
@@ -84,7 +84,7 @@
 
 
 /obj/machinery/power/am_control_unit/proc/produce_power()
-	playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
+	playsound(src, 'sound/effects/bang.ogg', 25, 1)
 	var/core_power = reported_core_efficiency//Effectively how much fuel we can safely deal with
 	if(core_power <= 0)
 		return 0//Something is wrong
@@ -105,7 +105,7 @@
 		for(var/obj/machinery/am_shielding/AMS in linked_cores)
 			AMS.stability -= core_damage
 			AMS.check_stability(1)
-		playsound(get_turf(src), 'sound/effects/bang.ogg', 50, 1)
+		playsound(src, 'sound/effects/bang.ogg', 50, 1)
 	return
 
 
@@ -173,7 +173,7 @@
 		return
 	if(iswrench(W))
 		if(!anchored)
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 			user.visible_message("[user.name] secures the [src.name] to the floor.", \
 				"You secure the anchor bolts to the floor.", \
 				"You hear a ratchet")
@@ -182,7 +182,7 @@
 			check_shield_icons()
 			connect_to_network()
 		else if(!linked_shielding.len > 0)
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 			user.visible_message("[user.name] unsecures the [src.name].", \
 				"You remove the anchor bolts.", \
 				"You hear a ratchet")

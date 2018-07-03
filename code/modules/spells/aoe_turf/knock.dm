@@ -24,6 +24,25 @@
 					var/obj/machinery/door/airlock/AL = door //casting is important
 					AL.locked = 0
 				door.open()
+		for(var/obj/structure/closet/C in T.contents)
+			spawn(1)
+				if(istype(C,/obj/structure/closet))
+					var/obj/structure/closet/LC = C
+					LC.locked = 0
+					LC.welded = 0
+				C.open()
+		for(var/obj/structure/safe/S in T.contents)
+			spawn(1)
+				if(istype(S,/obj/structure/safe))
+					var/obj/structure/safe/SA = S
+					SA.open = 1
+				S.update_icon()
+		for(var/obj/item/weapon/storage/lockbox/L in T.contents)
+			spawn(1)
+				if(istype(L,/obj/item/weapon/storage/lockbox))
+					var/obj/item/weapon/storage/lockbox/LL = L
+					LL.locked = 0
+				L.update_icon()
 	return
 
 

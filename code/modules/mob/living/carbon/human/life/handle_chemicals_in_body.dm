@@ -34,7 +34,7 @@
 		var/light_amount = 0 //How much light there is in the place, affects receiving nutrition and healing
 		if(isturf(loc)) //Else, there's considered to be no light
 			var/turf/T = loc
-			light_amount = T.get_lumcount() * 10
+			light_amount = (T.get_lumcount() * 10) - 5
 
 		nutrition += light_amount
 		pain_shock_stage -= light_amount
@@ -47,6 +47,23 @@
 				adjustToxLoss(-(light_amount))
 				adjustOxyLoss(-(light_amount))
 				//TODO: heal wounds, heal broken limbs.
+
+	if(species.flags & REQUIRE_DARK)
+		var/light_amount = 0
+		if(isturf(loc))
+			var/turf/T = loc
+			light_amount = T.get_lumcount() * 10
+
+		nutrition -= -3+light_amount
+		pain_shock_stage += -3+light_amount
+
+		if(species.flags & IS_PLANT)
+			if(nutrition > 500)
+				nutrition = 500
+			if(!reagents.has_reagent(HYPERZINE))
+				adjustBruteLoss(-10+light_amount)
+				adjustToxLoss(-10+light_amount)
+				adjustOxyLoss(-10+light_amount)
 
 	if(dna && dna.mutantrace == "shadow")
 		var/light_amount = 0

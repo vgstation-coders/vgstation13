@@ -53,7 +53,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/breath_type = "oxygen"   // Non-oxygen gas breathed, if any.
 	var/survival_gear = /obj/item/weapon/storage/box/survival // For spawnin'.
 
-	var/cold_level_1 = 260  // Cold damage level 1 below this point.
+	var/cold_level_1 = 220  // Cold damage level 1 below this point.
 	var/cold_level_2 = 200  // Cold damage level 2 below this point.
 	var/cold_level_3 = 120  // Cold damage level 3 below this point.
 
@@ -141,6 +141,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/gender	//For races with only one or neither
 
 	var/list/inventory_offsets
+
+	var/species_intro //What intro you're given when you become this species.
 
 
 /datum/species/New()
@@ -326,7 +328,7 @@ var/global/list/whitelisted_species = list("Human")
 	primitive = /mob/living/carbon/monkey/unathi
 	darksight = 3
 
-	cold_level_1 = 280 //Default 260 - Lower is better
+	cold_level_1 = 260 //Default 220 - Lower is better
 	cold_level_2 = 220 //Default 200
 	cold_level_3 = 130 //Default 120
 
@@ -350,7 +352,7 @@ var/global/list/whitelisted_species = list("Human")
 	known_languages = list(LANGUAGE_CLATTER)
 	flags = IS_WHITELISTED | NO_BREATHE
 	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD
-
+	meat_type = /obj/item/stack/sheet/bone
 	chem_flags = NO_EAT | NO_INJECT
 
 	default_mutations=list(SKELETON)
@@ -363,6 +365,11 @@ var/global/list/whitelisted_species = list("Human")
 	move_speed_multiplier = 1.5
 
 	primitive = /mob/living/carbon/monkey/skellington
+
+	species_intro = "You are a Skellington<br>\
+					You have no skin, no blood, no lips, and only just enough brain to function.<br>\
+					You can not eat normally, as your necrotic state only permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe.<br>\
+					You are also incredibly weak to brute damage and are rather slow, but you don't need to breathe, so that's going for you."
 
 /datum/species/skellington/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if (prob(25))
@@ -543,6 +550,10 @@ var/global/list/whitelisted_species = list("Human")
 		"eyes" =     /datum/organ/internal/eyes/grey
 	)
 
+	species_intro = "You are a Grey.<br>\
+					You are particularly allergic to water, which acts like acid to you, but the inverse is so for acid, so you're fun at parties.<br>\
+					You're not as good in a fist fight as a regular baseline human, but you make up for this by bullying them from afar by talking directly into peoples minds."
+
 /datum/species/muton // /vg/
 	name = "Muton"
 	icobase = 'icons/mob/human_races/r_muton.dmi'
@@ -644,6 +655,11 @@ var/global/list/whitelisted_species = list("Human")
 		"appendix" = /datum/organ/internal/appendix,
 		"eyes" =     /datum/organ/internal/eyes/vox
 	)
+
+	species_intro = "You are a Vox.<br>\
+					You are somewhat more adept at handling the lower pressures of space and colder temperatures.<br>\
+					You have talons with which you can slice others in a fist fight, and a beak which can be used to butcher corpses without the need for finer tools.<br>\
+					However, Oxygen is incredibly toxic to you, in breathing it or consuming it. You can only breathe nitrogen."
 
 /datum/species/vox/equip(var/mob/living/carbon/human/H)
 	// Unequip existing suits and hats.
@@ -753,7 +769,7 @@ var/global/list/whitelisted_species = list("Human")
 		H.equip_or_collect(new/obj/item/weapon/tank/nitrogen(H), tank_slot)
 	else
 		H.put_in_hands(new/obj/item/weapon/tank/nitrogen(H))
-	to_chat(H, "<span class='info'>You are now running on nitrogen internals from the [H.s_store] in your [tank_slot_name]. Your species finds oxygen toxic, so <b>you must breathe nitrogen (AKA N<sub>2</sub>) only</b>.</span>")
+	to_chat(H, "<span class='info'>You are now running on nitrogen internals from the [H.s_store] in your [tank_slot_name].</span>")
 	H.internal = H.get_item_by_slot(tank_slot)
 	if (H.internals)
 		H.internals.icon_state = "internal1"
@@ -825,6 +841,12 @@ var/global/list/whitelisted_species = list("Human")
 
 	move_speed_mod = 7
 
+	species_intro = "You are a Diona.<br>\
+					You are a plant, so light is incredibly helpful for you, in both photosynthesis, and regenerating damage you have received.<br>\
+					You absorb radiation which helps you in a similar way to sunlight. You are incredibly slow as you are rooted to the ground.<br>\
+					You do not need to breathe, do not feel pain,  you are incredibly resistant to cold and low pressure, and have no blood to bleed.<br>\
+					However, as you are a plant, you are incredibly susceptible to burn damage, which is something you can not regenerate normally."
+
 /datum/species/golem
 	name = "Golem"
 	icobase = 'icons/mob/human_races/r_golem.dmi'
@@ -886,7 +908,7 @@ var/list/has_died_as_golem = list()
 	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g", sleeptime = 15)
 	var/mob/living/adamantine_dust/A = new(H.loc)
 	if(golemmind)
-		has_died_as_golem.Add(H.mind.key = world.time)
+		has_died_as_golem[H.mind.key] = world.time
 		A.mind = golemmind
 		H.mind = null
 		golemmind.current = A
@@ -1114,3 +1136,51 @@ var/list/has_died_as_golem = list()
 
 				to_chat(user, "<span class='notice'>You place \the [O] into \the [src].</span>")
 				qdel(O)
+
+
+/datum/species/mushroom
+	name = "Mushroom"
+	icobase = 'icons/mob/human_races/r_mushman.dmi'
+	deform = 'icons/mob/human_races/r_mushman.dmi'
+	known_languages = list()
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
+
+	flags = IS_WHITELISTED | NO_BREATHE | IS_PLANT | REQUIRE_DARK | IS_SPECIES_MUTE
+
+	gender = NEUTER
+
+	darksight = 5
+	tox_mod = 0.8
+	brute_mod = 1.8
+	burn_mod = 0.6
+
+	primitive = /mob/living/carbon/monkey/mushroom
+
+	spells = list(/spell/targeted/genetic/invert_eyes)
+
+	default_mutations=list(M_REMOTE_TALK)
+	default_block_names=list("REMOTETALK")
+
+	blood_color = "#D3D3D3"
+	flesh_color = "#D3D3D3"
+
+	//Copypaste of Dionae
+	cold_level_1 = 50
+	cold_level_2 = -1
+	cold_level_3 = -1
+
+	heat_level_1 = T0C + 50
+	heat_level_2 = T0C + 75
+	heat_level_3 = T0C + 100
+
+	has_mutant_race = 0
+
+	has_organ = list(
+		"brain" =    /datum/organ/internal/brain/mushroom_brain,
+		)
+
+	species_intro = "You are a Mushroom Person.<br>\
+					You are an odd creature, light harms you and makes you hunger, but the darkness heals you and feeds you.<br>\
+					You have a resistance to burn and toxin, but a weakness to brute damage. You are adept at seeing in the dark, moreso with your light inversion ability.<br>\
+					However, you lack a mouth with which to talk. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
+					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"

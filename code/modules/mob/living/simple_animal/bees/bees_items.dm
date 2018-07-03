@@ -11,6 +11,9 @@
 
 */
 
+
+#define MAX_BEES_PER_NET	100
+
 /obj/item/queen_bee
 	name = "queen bee packet"
 	desc = "Place her into an apiary so she can get busy."
@@ -21,6 +24,9 @@
 
 /obj/item/queen_bee/New()
 	..()
+	initialize()
+
+/obj/item/queen_bee/initialize()
 	species = bees_species[BEESPECIES_NORMAL]
 
 /obj/item/weapon/bee_net
@@ -49,6 +55,10 @@
 	var/turf/T = get_turf(A)
 	var/caught = 0
 	for(var/mob/living/simple_animal/bee/B in T)
+		if (caught_bees.len >= MAX_BEES_PER_NET)
+			to_chat(user, "<span class='warning'>There are too many [current_species.common_name] inside \the [src] already! You have to release some before you can catch more.</span>")
+			return
+
 		if (current_species)
 			if (current_species != B.bee_species)
 				to_chat(user, "<span class='warning'>You gotta empty \the [src] of [current_species.common_name] before you can catch [B.bee_species.common_name] with it!</span>")
@@ -98,9 +108,9 @@
 		else
 			to_chat(M, "<span class='notice'>You empty \the [src].</span>")
 		//release a few swarms
-		while(caught_bees.len > 5)
+		while(caught_bees.len > 20)
 			var/mob/living/simple_animal/bee/B = new(get_turf(src))
-			for (var/i = 1 to 5)
+			for (var/i = 1 to 20)
 				var/datum/bee/BEE = pick(caught_bees)
 				caught_bees.Remove(BEE)
 				if (current_species.angery)
@@ -237,3 +247,5 @@
 				</body>
 				</html>
 				"}
+
+#undef MAX_BEES_PER_NET

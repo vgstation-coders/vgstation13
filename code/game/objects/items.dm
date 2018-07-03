@@ -92,6 +92,9 @@
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
 
+/obj/item/proc/is_hidden_identity()
+	return is_slot_hidden(body_parts_covered,HIDEFACE)
+
 /obj/item/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -228,7 +231,7 @@
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 	add_fingerprint(user)
-	if(!user.put_in_active_hand(src))
+	if(can_pickup(user) && !user.put_in_active_hand(src))
 		forceMove(get_turf(user))
 
 	return
@@ -789,7 +792,7 @@
 
 	else if(ismartian(M))
 		//why
-		var/mob/living/carbon/martian/MA = M
+		var/mob/living/carbon/complex/martian/MA = M
 		switch(slot)
 			if(slot_head)
 				if(MA.head)
@@ -808,7 +811,7 @@
 	if(anchored) //Object isn't anchored
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return FALSE
-	if(!istype(loc, /turf)) //Object is not on a turf
+	if(!istype(loc, /turf) && !is_holder_of(user, src)) //Object is not on a turf
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return FALSE
 	return TRUE
@@ -1189,7 +1192,7 @@ var/global/list/image/blood_overlays = list()
 			return
 
 	if(restraint_apply_sound)
-		playsound(get_turf(src), restraint_apply_sound, 30, 1, -2)
+		playsound(src, restraint_apply_sound, 30, 1, -2)
 	user.visible_message("<span class='danger'>[user] is trying to restrain \the [C] with \the [src]!</span>",
 						 "<span class='danger'>You try to restrain \the [C] with \the [src]!</span>")
 
@@ -1225,3 +1228,6 @@ var/global/list/image/blood_overlays = list()
 //Called when user clicks on an object while looking through a camera (passed to the proc as [eye])
 /obj/item/proc/remote_attack(atom/target, mob/user, atom/movable/eye)
 	return
+
+/obj/item/proc/recyclable() //Called by RnD machines, for added object-specific sanity.
+	return TRUE

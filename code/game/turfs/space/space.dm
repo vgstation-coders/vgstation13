@@ -13,17 +13,30 @@
 	dynamic_lighting = 0
 	luminosity = 1
 	can_border_transition = 1
+	var/static/list/parallax_appearances
 
 /turf/space/New()
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
-	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
-	var/image/I = image('icons/turf/space_parallax1.dmi',"[icon_state]")
-	I.plane = SPACE_DUST_PLANE
-	I.alpha = 80
-	I.blend_mode = BLEND_ADD
-	overlays += I
+
+/turf/space/initialize()
+	if(!parallax_appearances)
+		parallax_appearances = list()
+		for(var/i in 0 to 25)
+			var/I = "[i]"
+			icon_state = I
+			var/image/parallax_overlay = image('icons/turf/space_parallax1.dmi', I)
+			parallax_overlay.plane = SPACE_DUST_PLANE
+			parallax_overlay.alpha = 80
+			parallax_overlay.blend_mode = BLEND_ADD
+			overlays += parallax_overlay
+			parallax_appearances[I] = appearance
+			overlays.Cut()
+	appearance = parallax_appearances["[((x + y) ^ ~(x * y) + z) % 26]"]
+
+/turf/space/spawned_by_map_element(var/datum/map_element/ME, var/list/objects)
+	initialize()
 
 /turf/space/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -183,6 +196,9 @@
 	plane = ABOVE_PARALLAX_PLANE
 
 /turf/space/void/New()
+	return
+
+/turf/space/void/initialize()
 	return
 
 /turf/space/has_gravity()

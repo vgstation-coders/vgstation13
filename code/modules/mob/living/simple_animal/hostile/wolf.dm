@@ -31,6 +31,7 @@
 	icon_living = "wolf"
 	icon_dead = "wolf_dead"
 	speak_chance = 5
+	emote_hear = list("growls", "howls")
 	turns_per_move = 4
 	response_help = "pets"
 	response_disarm = "gently pushes aside"
@@ -156,7 +157,7 @@
 				var/self_loc = src.loc
 				spawn(5 SECONDS)
 					if(mob_target.loc == target_loc && self_loc == src.loc) //Not moved
-						playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
+						playsound(src, 'sound/weapons/bite.ogg', 50, 1)
 						var/damage = rand(melee_damage_lower, melee_damage_upper)
 						mob_target.adjustBruteLoss(damage)
 						nutrition += damage*3
@@ -170,19 +171,14 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/F = W
 
 		if(F.food_flags & FOOD_MEAT) //Any meaty dish goes!
-			playsound(get_turf(src),'sound/items/eatfood.ogg', rand(10,50), 1)
+			playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='info'>\The [src] gobbles up \the [W]!")
 			nutrition += 15
 			if(prob(25))
 				if(!pack_alpha)
 					pack_alpha = user
 					to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
-					var/n_name = copytext(sanitize(input(user, "What would you like to name your new friend?", "Wolf Name", null) as text|null), 1, MAX_NAME_LEN)
-					if(n_name && !user.incapacitated())
-						name = n_name
-					var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-					heart.plane = ABOVE_HUMAN_PLANE
-					flick_overlay(heart, list(user.client), 20)
+					name_mob(user)
 				else
 					if(istype(pack_alpha, /mob/living/simple_animal/hostile/wolf))
 						var/mob/living/simple_animal/hostile/wolf/alpha = pack_alpha
@@ -391,7 +387,7 @@
 			alpha_target = target
 
 /mob/living/simple_animal/hostile/wolf/pointed_at(mob/pointer)
-	if(!isDead())
+	if(!isDead() && see_invisible >= pointer.invisibility)
 		if(pointer == pack_alpha)
 			switch(alpha_stance)
 				if(ALPHAFOLLOW)

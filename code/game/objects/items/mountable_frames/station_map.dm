@@ -103,7 +103,7 @@
 
 /datum/construction/reversible/station_map/spawn_result(mob/user as mob)
 	if(result)
-		testing("[user] finished a [result]!")
+		//testing("[user] finished a [result]!")
 
 		var/obj/machinery/station_map/S = new result(get_turf(holder))
 		S.dir = holder.dir

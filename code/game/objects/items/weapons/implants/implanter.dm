@@ -7,107 +7,83 @@
 	throw_range = 5
 	w_class = W_CLASS_SMALL
 	var/obj/item/weapon/implant/imp = null
+	var/imp_type = null
 
 /obj/item/weapon/implanter/proc/update()
-
-
-
-/obj/item/weapon/implanter/update()
-	if (src.imp)
-		src.icon_state = "implanter1"
-	else
-		src.icon_state = "implanter0"
-	return
-
+	icon_state = "implanter[imp? 1:0]"
 
 /obj/item/weapon/implanter/attack(mob/M as mob, mob/user as mob)
-	if (!istype(M, /mob/living/carbon))
+	if(!istype(M, /mob/living/carbon))
 		return
-	if (user && src.imp)
+	if(user && imp)
 		for (var/mob/O in viewers(M, null))
 			O.show_message("<span class='warning'>[user] is attempting to implant [M].</span>", 1)
 
 		var/turf/T1 = get_turf(M)
-		if (T1 && ((M == user) || do_after(user,M, 50)))
-			if(user && M && (get_turf(M) == T1) && src && src.imp)
+		if(T1 && ((M == user) || do_after(user,M, 50)))
+			if(user && M && (get_turf(M) == T1) && src && imp)
 				for (var/mob/O in viewers(M, null))
 					O.show_message("<span class='warning'>[M] has been implanted by [user].</span>", 1)
 
-				M.attack_log += text("\[[time_stamp()]\] <font color='orange'> Implanted with [src.name] ([src.imp.name])  by [user.name] ([user.ckey])</font>")
-				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] ([src.imp.name]) to implant [M.name] ([M.ckey])</font>")
-				msg_admin_attack("[user.name] ([user.ckey]) implanted [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+				M.attack_log += text("\[[time_stamp()]\] <font color='orange'> Implanted with [name] ([imp.name])  by [user.name] ([user.ckey])</font>")
+				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] ([imp.name]) to implant [M.name] ([M.ckey])</font>")
+				msg_admin_attack("[user.name] ([user.ckey]) implanted [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
 				user.show_message("<span class='warning'>You implanted the implant into [M].</span>")
-				if(src.imp.implanted(M, user))
-					src.imp.forceMove(M)
-					src.imp.imp_in = M
-					src.imp.implanted = 1
-					if (ishuman(M))
+				if(imp.implanted(M, user))
+					imp.forceMove(M)
+					imp.imp_in = M
+					imp.implanted = 1
+					if(ishuman(M))
 						var/mob/living/carbon/human/H = M
 						var/datum/organ/external/affected = H.get_organ(user.zone_sel.selecting)
-						affected.implants += src.imp
+						affected.implants += imp
 						imp.part = affected
 				M:implanting = 0
-				src.imp = null
+				imp = null
 				update()
-	return
 
 /*
+/obj/item/weapon/implanter/New()
+	if(imp_type)
+		imp = new imp_type(src)
+		..()
+		update()
+
 /obj/item/weapon/implanter/traitor
 	name = "greytide conversion kit"
 	desc = "Any humanoid injected with this implant will become loyal to the injector and the greytide, unless of course the host is already loyal to someone else."
-
-/obj/item/weapon/implanter/traitor/New()
-	src.imp = new /obj/item/weapon/implant/traitor(src)
-	..()
-	update()
-	return*/
+	imp_type = /obj/item/weapon/implant/traitor
+*/
 
 /obj/item/weapon/implanter/loyalty
 	name = "implanter-loyalty"
-
-/obj/item/weapon/implanter/loyalty/New()
-	src.imp = new /obj/item/weapon/implant/loyalty( src )
-	..()
-	update()
-	return
-
-
+	imp_type = /obj/item/weapon/implant/loyalty
 
 /obj/item/weapon/implanter/explosive
 	name = "implanter (E)"
-
-/obj/item/weapon/implanter/explosive/New()
-	src.imp = new /obj/item/weapon/implant/explosive( src )
-	..()
-	update()
-	return
+	imp_type = /obj/item/weapon/implant/explosive
 
 /obj/item/weapon/implanter/adrenalin
 	name = "implanter-adrenalin"
+	imp_type = /obj/item/weapon/implant/adrenalin
 
-/obj/item/weapon/implanter/adrenalin/New()
-	src.imp = new /obj/item/weapon/implant/adrenalin(src)
-	..()
-	update()
-	return
+/obj/item/weapon/implanter/peace
+	name = "implanter-pax"
+	desc = "An implanter containing a pax implant"
+	imp_type = /obj/item/weapon/implant/peace
 
 /obj/item/weapon/implanter/compressed
 	name = "implanter (C)"
 	icon_state = "cimplanter1"
+	imp_type = /obj/item/weapon/implant/compressed
 
 	var/list/forbidden_types=list(
 		// /obj/item/weapon/storage/bible // VG #11 - Recursion.
 	)
 
-/obj/item/weapon/implanter/compressed/New()
-	imp = new /obj/item/weapon/implant/compressed( src )
-	..()
-	update()
-	return
-
 /obj/item/weapon/implanter/compressed/update()
-	if (imp)
+	if(imp)
 		var/obj/item/weapon/implant/compressed/c = imp
 		if(!c.scanned)
 			icon_state = "cimplanter1"
@@ -115,16 +91,15 @@
 			icon_state = "cimplanter2"
 	else
 		icon_state = "cimplanter0"
-	return
 
 /obj/item/weapon/implanter/compressed/attack(mob/M as mob, mob/user as mob)
 	// Attacking things in your hands tends to make this fuck up.
 	if(!istype(M))
 		return
 	var/obj/item/weapon/implant/compressed/c = imp
-	if (!c)
+	if(!c)
 		return
-	if (c.scanned == null)
+	if(c.scanned == null)
 		to_chat(user, "Please scan an object with the implanter first.")
 		return
 	..()
@@ -135,7 +110,7 @@
 		return
 	if(istype(I) && imp)
 		var/obj/item/weapon/implant/compressed/c = imp
-		if (c.scanned)
+		if(c.scanned)
 			if(istype(I,/obj/item/weapon/storage))
 				..()
 				return

@@ -33,9 +33,9 @@
 
 	var/obj/item/device/pda/ai/pai/pda = null
 
-	var/secHUD = 0			// Toggles whether the Security HUD is active or not
-	var/medHUD = 0			// Toggles whether the Medical  HUD is active or not
-	var/lighted = 0			// Toggles whether light is active or not
+	var/secHUD = FALSE			// Toggles whether the Security HUD is active or not
+	var/medHUD = FALSE			// Toggles whether the Medical  HUD is active or not
+	var/lighted = FALSE			// Toggles whether light is active or not
 
 	var/datum/data/record/medicalActive1		// Datacore record declarations for record software
 	var/datum/data/record/medicalActive2
@@ -49,15 +49,14 @@
 
 	var/obj/item/radio/integrated/signal/sradio // AI's signaller
 
-	var/pPS = 0 //Are we a pPS in the GPS list?
-	var/ppstag = "PAI0" // Our pPS tag
+	var/obj/item/device/gps/pai/pps_device = null //Our GPS device.
 
-	var/obj/item/device/station_map/holomap_device // Our holomap device.
+	var/obj/item/device/station_map/holomap_device = null // Our holomap device.
 	var/holo_target = "show_map" // Our holomap target.
 
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
 	change_sight(removing = BLIND)
-	canmove = 0
+	canmove = FALSE
 	src.forceMove(paicard)
 	card = paicard
 	sradio = new(src)
@@ -152,6 +151,8 @@
 		// 66% chance no effect
 
 	to_chat(src, "<font color=green><b>Communication circuit overload. Shutting down and reloading communication circuits - speech and messaging functionality will be unavailable until the reboot is complete.</b></font>")
+	if(pps_device)
+		pps_device.emp_act(severity)
 	if(!software.Find("redundant threading"))
 		src.silence_time = world.timeofday + 120 * 10		// Silence for 2 minutes
 	else
@@ -187,19 +188,19 @@
 	if(flags & INVULNERABLE)
 		return
 
-	flash_eyes(visual = 1, affects_silicon = 1)
+	flash_eyes(visual = TRUE, affects_silicon = TRUE)
 
 	switch(severity)
 		if(1.0)
-			if (src.stat != 2)
+			if (!isDead())
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
 		if(2.0)
-			if (src.stat != 2)
+			if (!isDead())
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
 		if(3.0)
-			if (src.stat != 2)
+			if (!isDead())
 				adjustBruteLoss(30)
 
 	src.updatehealth()
@@ -215,16 +216,16 @@
 	if (!C)
 		src.unset_machine()
 		src.reset_view(null)
-		return 0
-	if (stat == 2 || !C.status || !(src.network in C.network))
-		return 0
+		return FALSE
+	if (isDead() || !C.status || !(src.network in C.network))
+		return FALSE
 
 	// ok, we're alive, camera is good and in our network...
 
 	src.set_machine(src)
 	src:current = C
 	src.reset_view(C)
-	return 1
+	return TRUE
 
 
 /mob/living/silicon/pai/cancel_camera()
@@ -284,7 +285,7 @@
 	set name = "Activate Held Object"
 	set category = "IC"
 	set src = usr
-	set hidden = 1
+	set hidden = TRUE
 
 	if(ispAI(src))
 		var/mob/living/silicon/pai/P = src
@@ -297,7 +298,7 @@
 
 /mob/living/silicon/pai/a_intent_change(input as text)
 	set name = "a-intent"
-	set hidden = 1
+	set hidden = TRUE
 
 	if(ispAI(src))
 		var/mob/living/silicon/pai/P = src

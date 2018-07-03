@@ -48,8 +48,8 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/oldnewavail = 0
 	var/oldload = 0
 
-	holomap      = TRUE
-	auto_holomap = TRUE
+/obj/structure/cable/supports_holomap()
+	return TRUE
 
 /obj/structure/cable/yellow
 	_color = "yellow"
@@ -99,6 +99,10 @@ By design, d1 is the smallest direction and d2 is the highest
 		hide(T.intact)
 
 	cable_list += src		//add it to the global cable list
+
+/obj/structure/cable/initialize()
+	..()
+	add_self_to_holomap()
 
 /obj/structure/cable/Destroy()			// called when a cable is deleted
 	if(powernet)
@@ -188,7 +192,7 @@ By design, d1 is the smallest direction and d2 is the highest
 		return
 
 	if(iswirecutter(W))
-		if(shock(user, 50))
+		if(shock(user, 50, W.siemens_coefficient))
 			return
 		cut(user, T)
 		return
@@ -202,14 +206,14 @@ By design, d1 is the smallest direction and d2 is the highest
 			R.is_empty()
 	else if(istype(W, /obj/item/device/multitool))
 		if((powernet) && (powernet.avail > 0))		// is it powered?
-			to_chat(user, "<SPAN CLASS='warning'>[powernet.avail]W in power network.</SPAN>")
+			to_chat(user, "<SPAN CLASS='warning'>Power network status report - Load: [powernet.load]W - Available: [powernet.avail]W.</SPAN>")
 		else
 			to_chat(user, "<SPAN CLASS='notice'>The cable is not powered.</SPAN>")
 
 		shock(user, 5, 0.2)
 	else
 		if(src.d1 && W.is_conductor()) // d1 determines if this is a cable end
-			shock(user, 50, 0.7)
+			shock(user, 50, W.siemens_coefficient)
 
 	src.add_fingerprint(user)
 

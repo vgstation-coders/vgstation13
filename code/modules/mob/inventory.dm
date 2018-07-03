@@ -183,7 +183,7 @@
 	W.hud_layerise()
 	W.pixel_x = initial(W.pixel_x)
 	W.pixel_y = initial(W.pixel_y)
-	W.equipped(src, null, index)
+	W.equipped(src,null,index)
 
 	if(client)
 		client.screen |= W
@@ -513,7 +513,7 @@
 	return equipped
 
 /mob/proc/get_id_card()
-	for(var/obj/item/I in src.get_all_slots())
+	for(var/obj/item/I in src.get_all_slots() + held_items)
 		. = I.GetID()
 		if(.)
 			break

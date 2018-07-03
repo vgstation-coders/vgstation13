@@ -1,13 +1,12 @@
-proc
-	getIconMask(atom/A)//By yours truly. Creates a dynamic mask for a mob/whatever. /N
-		var/icon/alpha_mask = new(A.icon,A.icon_state)//So we want the default icon and icon state of A.
-		for(var/I in A.overlays)//For every image in overlays. var/image/I will not work, don't try it.
-			if(I:layer>A.layer)
-				continue//If layer is greater than what we need, skip it.
-			var/icon/image_overlay = new(I:icon,I:icon_state)//Blend only works with icon objects.
-			//Also, icons cannot directly set icon_state. Slower than changing variables but whatever.
-			alpha_mask.Blend(image_overlay,ICON_OR)//OR so they are lumped together in a nice overlay.
-		return alpha_mask//And now return the mask.
+/proc/getIconMask(atom/A)//By yours truly. Creates a dynamic mask for a mob/whatever. /N
+	var/icon/alpha_mask = new(A.icon,A.icon_state)//So we want the default icon and icon state of A.
+	for(var/I in A.overlays)//For every image in overlays. var/image/I will not work, don't try it.
+		if(I:layer>A.layer)
+			continue//If layer is greater than what we need, skip it.
+		var/icon/image_overlay = new(I:icon,I:icon_state)//Blend only works with icon objects.
+		//Also, icons cannot directly set icon_state. Slower than changing variables but whatever.
+		alpha_mask.Blend(image_overlay,ICON_OR)//OR so they are lumped together in a nice overlay.
+	return alpha_mask//And now return the mask.
 
 /mob/proc/AddCamoOverlay(atom/A)//A is the atom which we are using as the overlay.
 	var/icon/opacity_icon = new(A.icon, A.icon_state)//Don't really care for overlays/underlays.
@@ -141,3 +140,19 @@ proc/adjust_brightness(var/color, var/value)
 			if (I.GetPixel(x_pixel, y_pixel))
 				return y_pixel - 1
 	return null
+
+/proc/has_icon(var/icon/I, var/wanted_state = null)
+	if(!I)
+		return FALSE
+
+	var/found = FALSE
+
+	for(var/found_state in icon_states(I,1))
+		if(found_state == wanted_state)
+			found = TRUE
+			break
+		
+	if(found)
+		return TRUE
+	else
+		return FALSE

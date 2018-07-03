@@ -84,32 +84,32 @@
 	//Add 3000 joules when active.  This is about 0.6 degrees per tick.
 	//May need adjustment
 	if(use_power == 1)
-		var/heat_added = active_power_usage *XENOARCH_HEAT_COEFFICIENT
+		var/heat_added = active_power_usage * XENOARCH_HEAT_COEFFICIENT
 
 		if(temperature < XENOARCH_MAX_HEAT_INCREASE_TEMP)
-			temperature += heat_added/XENOARCH_HEAT_CAPACITY
+			temperature += heat_added / XENOARCH_HEAT_CAPACITY
 
-		var/temperature_difference = abs(environmental_temp-temperature)
-		var/datum/gas_mixture/removed = loc.remove_air(env.total_moles*0.25)
+		var/temperature_difference = abs(environmental_temp - temperature)
+		var/datum/gas_mixture/removed = env.remove_volume(0.25 * CELL_VOLUME)
 		var/heat_capacity = removed.heat_capacity()
 
-		heat_added = min(temperature_difference*heat_capacity, XENOARCH_MAX_ENERGY_TRANSFER)
+		heat_added = min(temperature_difference * heat_capacity, XENOARCH_MAX_ENERGY_TRANSFER)
 
 		if(temperature > environmental_temp)
 			//cool down to match the air
-			temperature = max(TCMB, temperature - heat_added/XENOARCH_HEAT_CAPACITY)
-			removed.temperature = max(TCMB, removed.temperature + heat_added/heat_capacity)
+			temperature = max(TCMB, temperature - heat_added / XENOARCH_HEAT_CAPACITY)
+			removed.temperature = max(TCMB, removed.temperature + heat_added / heat_capacity)
 
 			if(temperature_difference > 10 && prob(5))
 				visible_message("<span class='notice'>[bicon(src)] hisses softly.</span>", "You hear a soft hiss.")
 
 		else
 			//heat up to match the air
-			temperature = max(TCMB, temperature + heat_added/XENOARCH_HEAT_CAPACITY)
-			removed.temperature = max(TCMB, removed.temperature - heat_added/heat_capacity)
+			temperature = max(TCMB, temperature + heat_added / XENOARCH_HEAT_CAPACITY)
+			removed.temperature = max(TCMB, removed.temperature - heat_added / heat_capacity)
 
 			if(temperature_difference > 10 && prob(5))
-				visible_message("<span class='notice'>[bicon(src)] plinks quietly.</span>", "You hear a soft hiss.")
+				visible_message("<span class='notice'>[bicon(src)] plinks quietly.</span>", "You hear a quiet plink.")
 
 		env.merge(removed)
 

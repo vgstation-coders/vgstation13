@@ -193,7 +193,7 @@
 			for(var/mob/living/carbon/human/H in view(7,src))
 				if(H.vessel.get_reagent_amount(BLOOD) && !(H.species.anatomy_flags & NO_BLOOD))
 					possible_targets += H
-			if(possible_targets)
+			if(possible_targets.len)
 				target = pick(possible_targets)
 			else
 				return
@@ -241,7 +241,7 @@
 			return
 		H.vessel.remove_reagent(BLOOD,DANGER_DRINK_RATE)
 		getFromPool(/obj/effect/decal/cleanable/blood, get_turf(src))
-		playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
+		playsound(src, 'sound/effects/splat.ogg', 50, 1)
 		spawn(1 SECONDS)
 			drink(H)
 

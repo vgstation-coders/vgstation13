@@ -46,6 +46,9 @@
 	//next_move = world.time + 8
 
 	var/list/modifiers = params2list(params)
+	if(modifiers["middle"] && modifiers["shift"])
+		MiddleShiftClickOn(A)
+		return
 	if(modifiers["middle"])
 		MiddleClickOn(A)
 		return

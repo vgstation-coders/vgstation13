@@ -71,11 +71,9 @@
 	spawn(0)
 		if ((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
 			var/obj/machinery/door/D = M
-			if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(src.botcard))
+			if (!istype(D, /obj/machinery/door/firedoor) && !istype(D, /obj/machinery/door/poddoor) && D.check_access(src.botcard))
 				D.open()
 				src.frustration = 0
-		return
-	return
 
 /obj/machinery/bot/farmbot/turn_on()
 	. = ..()
@@ -301,7 +299,7 @@
 /obj/machinery/bot/farmbot/proc/find_target()
 	if ( emagged ) //Find a human and help them!
 		for ( var/mob/living/carbon/human/human in view(7,src) )
-			if (human.stat == 2)
+			if (human.isDead())
 				continue
 
 			var list/options = list(FARMBOT_MODE_WEED)
@@ -470,7 +468,7 @@
 	if ( emagged ) // warning, humans are thirsty!
 		var splashAmount = min(70,tank.reagents.total_volume)
 		src.visible_message("<span class='warning'>[src] splashes [target] with a bucket of water!</span>")
-		playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 		if ( prob(50) )
 			tank.reagents.reaction(target, TOUCH) //splash the human!
 		else
@@ -489,7 +487,7 @@
 				b_amount = 100 - tray.waterlevel
 			tank.reagents.remove_reagent(WATER, b_amount)
 			tray.adjust_water(b_amount)
-			playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+			playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 
 		//tray.updateicon()
 		mode = FARMBOT_MODE_WAITING
@@ -503,13 +501,13 @@
 		return
 
 	mode = FARMBOT_MODE_WAITING
-	playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+	playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 	src.visible_message("<span class='notice'>[src] starts filling it's tank from [target].</span>")
 	spawn(300)
 		src.visible_message("<span class='notice'>[src] finishes filling it's tank.</span>")
 		src.mode = 0
 		tank.reagents.add_reagent(WATER, tank.reagents.maximum_volume - tank.reagents.total_volume )
-		playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 
 
 /obj/item/weapon/farmbot_arm_assembly

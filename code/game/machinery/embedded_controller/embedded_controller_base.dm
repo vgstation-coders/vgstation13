@@ -41,7 +41,7 @@
 					to_chat(usr, "You begin removing screws from \the [src] backplate...")
 					if(do_after(user, src, 50))
 						to_chat(usr, "<span class='notice'>You unscrew \the [src] from the wall.</span>")
-						playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+						playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 						new /obj/item/mounted/frame/airlock_controller(get_turf(src))
 						qdel(src)
 					return 1
@@ -55,7 +55,7 @@
 						if(user.drop_item(C, src))
 							to_chat(usr, "<span class='notice'>You secure \the [C]!</span>")
 							_circuitboard=C
-							playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+							playsound(src, 'sound/effects/pop.ogg', 50, 0)
 							build++
 							update_icon()
 					return 1
@@ -63,7 +63,7 @@
 				if(iscrowbar(W))
 					to_chat(usr, "You begin to pry out \the [W] into \the [src].")
 					if(do_after(user, src, 10))
-						playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+						playsound(src, 'sound/effects/pop.ogg', 50, 0)
 						build--
 						update_icon()
 						var/obj/item/weapon/circuitboard/C
@@ -80,7 +80,7 @@
 				if(istype(W, /obj/item/stack/cable_coil))
 					var/obj/item/stack/cable_coil/C=W
 					to_chat(user, "You start adding cables to \the [src]...")
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					if(do_after(user, src, 20) && C.amount >= 10)
 						C.use(5)
 						build++
@@ -101,7 +101,7 @@
 					return 1
 				if(isscrewdriver(W))
 					to_chat(user, "You begin to complete \the [src]...")
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 					if(do_after(user, src, 20))
 						if(!_circuitboard)
 							_circuitboard=new boardtype(src)

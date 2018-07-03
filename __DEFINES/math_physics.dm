@@ -12,6 +12,11 @@
 #define R_IDEAL_GAS_EQUATION	8.314 //kPa*L/(K*mol)
 #define ONE_ATMOSPHERE		101.325	//kPa
 
+#define MEGAWATT 1000000
+#define TEN_MEGAWATTS 10000000
+#define HUNDRED_MEGAWATTS 100000000
+#define GIGAWATT 1000000000
+
 // Radiation constants.
 #define STEFAN_BOLTZMANN_CONSTANT    5.6704e-8 // W/(m^2*K^4).
 #define COSMIC_RADIATION_TEMPERATURE 3.15      // K.
@@ -30,10 +35,10 @@
 #define SPEED_OF_LIGHT 3e8 //not exact but hey!
 #define SPEED_OF_LIGHT_SQ 9e+16
 
-#define MELTPOINT_GLASS   1500+T0C
-#define MELTPOINT_STEEL   1510+T0C
+#define MELTPOINT_GLASS   (1500+T0C)
+#define MELTPOINT_STEEL   (1510+T0C)
 #define MELTPOINT_SILICON 1687 // KELVIN
-#define MELTPOINT_PLASTIC 180+T0C
+#define MELTPOINT_PLASTIC (180+T0C)
 #define MELTPOINT_SNOW	304.15	//about 30°C
 
 // The highest number supported is a signed 32-bit floating point number.

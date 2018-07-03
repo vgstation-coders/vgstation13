@@ -10,7 +10,7 @@
 	if(flying)
 		return // Calculate none of the following because we're technically on a vehicle
 	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
-		return // Hyperzine ignores slowdown
+		return // Hyperzine ignores base slowdown
 	if(istype(loc, /turf/space))
 		return // Space ignores slowdown
 

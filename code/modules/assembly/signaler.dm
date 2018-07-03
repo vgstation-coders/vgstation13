@@ -270,7 +270,7 @@
 		return
 	if(iscrowbar(W))
 		to_chat(user, "You begin prying \the [src] off the wall.")
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src,10))
 			to_chat(user, "<span class='notice'>You pry the button off of the wall.</span>")
 			var/obj/item/mounted/frame/driver_button/signaler_button/I = new (get_turf(user))
@@ -284,6 +284,6 @@
 
 /obj/item/device/assembly/signaler/set_value(var/var_name, var/new_value)
 	if(var_name == "frequency")
-		new_value = sanitize_frequency(new_value)
-
-	return ..(var_name, new_value)
+		set_frequency(sanitize_frequency(new_value))
+	else
+		return ..()

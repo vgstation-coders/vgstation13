@@ -12,6 +12,7 @@
 	slot_flags = SLOT_BELT
 	var/active = 0
 	var/det_time = 50
+	mech_flags = MECH_SCAN_ILLEGAL
 
 /obj/item/weapon/grenade/proc/clown_check(var/mob/living/user)
 	if(clumsy_check(user) && prob(50))

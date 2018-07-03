@@ -71,7 +71,7 @@
 	flags = FPRINT
 	siemens_coefficient = 0 //no conduct
 	max_amount = 60
-
+	sheet_type = /obj/item/stack/sheet/wood
 	material = "wood"
 
 /obj/item/stack/tile/wood/proc/build(turf/S as turf)
@@ -93,7 +93,7 @@
 				to_chat(user, "<span class='warning'>You can't get that deck up without some support!</span>")
 				return
 			if(S.use(1))
-				playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
+				playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 				S.build(T)
 				if(T.canBuildPlating(S) == BUILD_SUCCESS)
 					qdel(L)
@@ -101,8 +101,8 @@
 /obj/item/stack/tile/wood/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(iswrench(W))
 		if(use(4))
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-			drop_stack(/obj/item/stack/sheet/wood, get_turf(user), 1, user)
+			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+			drop_stack(sheet_type, get_turf(user), 1, user)
 		else
 			to_chat(user, "<span class='warning'>You need at least 4 [src]\s to get a wooden plank back!</span>")
 		return
@@ -158,8 +158,6 @@ obj/item/stack/tile/slime
 	max_amount = 60
 
 /obj/item/stack/tile/slime/adjust_slowdown(mob/living/L, current_slowdown)
-	if(ishuman(L))
-		var/mob/living/carbon/human/H = L
-		if(isslimeperson(H))
-			return -1
+	if(isslimeperson(L) || isslime(L))
+		return -1
 	return current_slowdown+5

@@ -359,11 +359,21 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen
 	name = "Cup Ramen"
-	desc = "Just add 10ml water, self heats! A taste that reminds you of your school years."
+	desc = "A taste that reminds you of your school years."
 	icon_state = "ramen"
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/New()
 	..()
 	reagents.add_reagent(DRY_RAMEN, 30)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating //vendor version
+	name = "Cup Ramen"
+	desc = "Just add 12ml water, self heats!"
+	icon_state = "ramen"
+/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating/New()
+	..()
+	reagents.add_reagent(CALCIUMOXIDE, 2)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
@@ -1030,14 +1040,20 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing
 	name = "Bottle of Nothing"
-	desc = "A bottle filled with nothing"
 	icon_state = "bottleofnothing"
+	desc = ""
 	isGlass = 1
 	molotov = -1
 	smashtext = ""
 /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing/New()
 	..()
-	reagents.add_reagent(NOTHING, 100)
+	if(Holiday == APRIL_FOOLS_DAY)
+		name = "Bottle of Something"
+		desc = "A bottle filled with something"
+		reagents.add_reagent(pick(BEER, VOMIT, ZOMBIEPOWDER, SOYSAUCE, KETCHUP, HONEY, BANANA, ABSINTHE, SALTWATER, WATER, BLOOD, LUBE, MUTATIONTOXIN, AMUTATIONTOXIN, GOLD, TRICORDRAZINE, GRAVY), 100)
+	else
+		desc = "A bottle filled with nothing"
+		reagents.add_reagent(NOTHING, 100)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/patron
 	name = "Wrapp Artiste Patron"
@@ -1231,8 +1247,8 @@
 		src.visible_message("<span  class='warning'>The [smashtext][src.name] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
 		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		if(reagents.total_volume)
-			if(molotov || reagents.has_reagent(FUEL))
-				user.attack_log += text("\[[time_stamp()]\] <span class='danger'>Threw a [lit ? "lit" : "unlit"] molotov to \the [hit_atom], containing [reagents.get_reagent_ids()]</span>")
+			if(molotov == 1 || reagents.has_reagent(FUEL))
+				user?.attack_log += text("\[[time_stamp()]\] <span class='danger'>Threw a [lit ? "lit" : "unlit"] molotov to \the [hit_atom], containing [reagents.get_reagent_ids()]</span>")
 				log_attack("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name(user)] and containing [reagents.get_reagent_ids()]")
 				message_admins("[lit ? "Lit" : "Unlit"] molotov shattered at [formatJumpTo(get_turf(hit_atom))], thrown by [key_name_admin(user)] and containing [reagents.get_reagent_ids()]")
 			src.reagents.reaction(get_turf(src), TOUCH) //splat the floor AND the thing we hit, otherwise fuel wouldn't ignite when hitting anything that wasn't a floor

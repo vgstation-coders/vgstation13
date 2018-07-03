@@ -34,7 +34,7 @@
 	return(BRUTELOSS)
 
 /obj/item/weapon/sord/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	playsound(get_turf(src), 'sound/weapons/bladeslice.ogg', 50, 1, -1)
+	playsound(src, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 	user.adjustBruteLoss(0.5)
 	return ..()
 
@@ -460,6 +460,7 @@ obj/item/weapon/banhammer/admin
 			to_add.pixel_x -= 12 * PIXEL_MULTIPLIER
 	to_add.plane = FLOAT_PLANE
 	underlays += to_add.appearance
+
 //	if(!base_overlay)
 //		base_overlay = new
 //		base_overlay.appearance = appearance

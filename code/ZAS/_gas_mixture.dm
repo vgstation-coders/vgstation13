@@ -54,7 +54,7 @@
 
 	var/volume = CELL_VOLUME
 
-	var/temperature = 0 //in Kelvin, use calculate_temperature() to modify
+	var/temperature = 0 //in Kelvin
 
 	var/graphics=0
 
@@ -203,7 +203,11 @@
 
 
 /datum/gas_mixture/proc/thermal_energy()
-	return temperature*heat_capacity()
+	return temperature * heat_capacity()
+
+
+/datum/gas_mixture/proc/molar_density(gas) //Per liter. You should probably be using pressure instead, but considering this had to be made, you wouldn't be the first not to.
+	return (gas ? vars[gas] : total_moles) / volume //Should verify if gas is actually a valid gas, but this shouldn't be in use for long anyway.
 
 ///////////////////////////////
 //PV=nRT - related procedures//
@@ -364,7 +368,7 @@
 	//Inputs: Percentage to remove.
 	//Outputs: Removed air.
 
-	if(ratio <= 0)
+	if(ratio <= 0 || total_moles <= 0)
 		return null
 
 	ratio = min(ratio, 1)
@@ -399,8 +403,9 @@
 //Removes a volume of gas from the mixture and returns a gas_mixture containing the removed air with the given volume.
 /datum/gas_mixture/proc/remove_volume(removed_volume)
 	var/datum/gas_mixture/removed = remove_ratio(removed_volume/volume)
-	removed.volume = removed_volume
-	removed.update_values()
+	if(removed)
+		removed.volume = removed_volume
+		removed.update_values()
 	return removed
 
 

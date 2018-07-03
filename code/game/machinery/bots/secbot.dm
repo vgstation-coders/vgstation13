@@ -71,6 +71,7 @@
 		else
 			set_light(0)
 
+	var/obj/item/weapon/melee/baton/baton = null
 
 /obj/machinery/bot/secbot/beepsky
 	name = "Officer Beep O'sky"
@@ -270,7 +271,7 @@ Auto Patrol: []"},
 					return
 				if(get_dist(src, src.target) <= 1)		// if right next to perp
 					if(istype(src.target,/mob/living/carbon))
-						playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
+						playsound(src, 'sound/weapons/Egloves.ogg', 50, 1, -1)
 						src.icon_state = "[src.icon_initial]-c"
 						spawn(2)
 							src.icon_state = "[icon_initial][src.on]"
@@ -298,6 +299,8 @@ Auto Patrol: []"},
 							broadcast_security_hud_message("[src.name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[target]</b> in <b>[location]</b>", src)
 						//visible_message("<span class='danger'>[src.target] has been stunned by [src]!</span>")
 
+						check_if_rigged()
+
 						mode = SECBOT_PREP_ARREST
 						src.anchored = 1
 						src.target_lastloc = M.loc
@@ -306,7 +309,7 @@ Auto Patrol: []"},
 						//just harmbaton them until dead
 						if(world.time > next_harm_time)
 							next_harm_time = world.time + 15
-							playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
+							playsound(src, 'sound/weapons/Egloves.ogg', 50, 1, -1)
 							visible_message("<span class='danger'>[src] beats [src.target] with the stun baton!</span>")
 							src.icon_state = "[src.icon_initial]-c"
 							spawn(2)
@@ -316,9 +319,10 @@ Auto Patrol: []"},
 							if(S && istype(S))
 								S.AdjustStunned(10)
 								S.adjustBruteLoss(15)
+								check_if_rigged()
 								if(S.stat)
 									src.frustration = 8
-									playsound(get_turf(src), pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
+									playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
 
 				else								// not next to perp
 					var/turf/olddist = get_dist(src, src.target)
@@ -341,7 +345,7 @@ Auto Patrol: []"},
 			if(istype(src.target,/mob/living/carbon) && !isalien(target))
 				var/mob/living/carbon/C = target
 				if(!C.handcuffed && !src.arrest_type)
-					playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
+					playsound(src, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
 					mode = SECBOT_ARREST
 					visible_message("<span class='danger'>[src] is trying to put handcuffs on [src.target]!</span>",\
 						"<span class='danger'>[src] is trying to cut [src.target]'s hands off!</span>")
@@ -363,7 +367,7 @@ Auto Patrol: []"},
 							src.last_found = world.time
 							src.frustration = 0
 
-							playsound(get_turf(src), pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
+							playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
 		//					var/arrest_message = pick("Have a secure day!","I AM THE LAW.", "God made tomorrow for the crooks we don't catch today.","You can't outrun a radio.")
 		//					src.speak(arrest_message)
 
@@ -689,7 +693,7 @@ Auto Patrol: []"},
 			src.target = M
 			src.oldtarget_name = M.name
 			src.speak("Level [src.threatlevel] infraction alert!")
-			playsound(get_turf(src), pick('sound/voice/bcriminal.ogg', 'sound/voice/bjustice.ogg', 'sound/voice/bfreeze.ogg'), 50, 0)
+			playsound(src, pick('sound/voice/bcriminal.ogg', 'sound/voice/bjustice.ogg', 'sound/voice/bfreeze.ogg'), 50, 0)
 			src.visible_message("<b>[src]</b> points at [M.name]!")
 			mode = SECBOT_HUNT
 			spawn(0)
@@ -786,7 +790,11 @@ Auto Patrol: []"},
 	Sa.overlays += image('icons/obj/aibots.dmi', "hs_hole")
 	Sa.created_name = src.name
 	new /obj/item/device/assembly/prox_sensor(Tsec)
-	new /obj/item/weapon/melee/baton/loaded(Tsec)
+	if(baton)
+		if(is_holder_of(src, baton))
+			baton.forceMove(Tsec)
+	else
+		new /obj/item/weapon/melee/baton/loaded(Tsec)
 
 	if(prob(50))
 		new /obj/item/robot_parts/l_arm(Tsec)
@@ -853,7 +861,8 @@ Auto Patrol: []"},
 			var/obj/machinery/bot/secbot/S = new /obj/machinery/bot/secbot
 			S.forceMove(get_turf(src))
 			S.name = src.created_name
-			qdel(W)
+			W.forceMove(S)
+			S.baton = W
 			qdel(src)
 
 	else if(istype(W, /obj/item/weapon/pen))
@@ -874,6 +883,19 @@ Auto Patrol: []"},
 		if(!(slot_item.type in safe_weapons))
 			return 1
 	return 0
+
+/obj/machinery/bot/secbot/Destroy()
+	if(baton)
+		if(is_holder_of(src, baton))
+			qdel(baton)
+		baton = null
+
+	return ..()
+
+/obj/machinery/bot/secbot/proc/check_if_rigged()
+	if(baton && baton.bcell && baton.bcell.rigged && is_holder_of(src, baton))
+		if(baton.bcell.explode())
+			explode()
 
 /obj/machinery/bot/secbot/beepsky/cheapsky
 	name = "Officer Cheapsky"

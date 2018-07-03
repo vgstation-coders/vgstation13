@@ -167,7 +167,7 @@
 		location.assume_air(air_contents)
 
 		src.destroyed = 1
-		playsound(get_turf(src), 'sound/effects/spray.ogg', 10, 1, -3)
+		playsound(src, 'sound/effects/spray.ogg', 10, 1, -3)
 		setDensity(FALSE)
 		update_icon()
 		investigation_log(I_ATMOS, "was destoyed by excessive damage.")
@@ -191,10 +191,13 @@
 
 	if(valve_open)
 		var/datum/gas_mixture/environment
+		var/transfer_vol //A band-aid fix for the fact the equation used below doesn't work as intended
 		if(holding)
 			environment = holding.air_contents
+			transfer_vol = holding.volume
 		else
 			environment = loc.return_air()
+			transfer_vol = CELL_VOLUME
 
 		var/env_pressure = environment.return_pressure()
 		var/pressure_delta = min(release_pressure - env_pressure, (air_contents.return_pressure() - env_pressure)/2)
@@ -202,7 +205,7 @@
 
 		var/transfer_moles = 0
 		if((air_contents.temperature > 0) && (pressure_delta > 0))
-			transfer_moles = pressure_delta*environment.volume/(air_contents.temperature * R_IDEAL_GAS_EQUATION)
+			transfer_moles = pressure_delta * transfer_vol / (air_contents.temperature * R_IDEAL_GAS_EQUATION)
 
 			//Actually transfer the gas
 			var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
@@ -303,7 +306,7 @@
 						 "<span class='danger'>You slash away at \the [src]!</span>")
 	user.delayNextAttack(10) //Hold on there amigo
 	investigation_log(I_ATMOS, "<span style='danger'>was slashed at by alien [key_name(user)]</span>")
-	playsound(get_turf(src), 'sound/weapons/slice.ogg', 25, 1, -1)
+	playsound(src, 'sound/weapons/slice.ogg', 25, 1, -1)
 	healthcheck()
 
 /obj/machinery/portable_atmospherics/canister/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
@@ -471,7 +474,7 @@
 
 	// Do after stuff here
 	to_chat(user, "<span class='notice'>You start to slice away at \the [src]...</span>")
-	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+	playsound(src, 'sound/items/Welder.ogg', 50, 1)
 	WT.eyecheck(user)
 	busy = 1
 	if(do_after(user, src, 50))

@@ -111,7 +111,7 @@
 							new /obj/effect/gibspawner/generic(get_turf(user))
 							qdel(user)
 					else
-						playsound(get_turf(user), get_sfx("soulstone"), 50,1)
+						playsound(user, get_sfx("soulstone"), 50,1)
 						make_tracker_effects(get_turf(user), get_turf(src))
 						user.dust()
 				else
@@ -359,6 +359,10 @@
 		catch(var/exception/e)
 			error("Singularity eat() caught exception:")
 			error(e)
+
+			spawn(0) //So the following line doesn't stop execution
+				throw e //So ALL debug information is sent to the runtime log
+
 			continue
 
 	//for(var/turf/T in trange(grav_pull, src)) // TODO: Create a similar trange for orange to prevent snowflake of self check.
@@ -441,10 +445,10 @@
 	var/dir2 = 0
 	var/dir3 = 0
 	switch(direction)
-		if(NORTH || SOUTH)
+		if(NORTH, SOUTH)
 			dir2 = 4
 			dir3 = 8
-		if(EAST || WEST)
+		if(EAST, WEST)
 			dir2 = 1
 			dir3 = 2
 	var/turf/T2 = T
@@ -581,9 +585,7 @@
 	return
 
 /obj/machinery/singularity/proc/pulse()
-	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
-		if(get_dist(R, src) <= 15) //Better than using orange() every process.
-			R.receive_pulse(energy)
+	emitted_harvestable_radiation(get_turf(src), energy, range = 15)
 
 /obj/machinery/singularity/proc/on_capture()
 	chained = 1

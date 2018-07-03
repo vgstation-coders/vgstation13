@@ -67,9 +67,7 @@
 		return
 	rpm = 0.9* rpm + 0.1 * rpmtarget
 	var/datum/gas_mixture/environment = inturf.return_air()
-	var/transfer_moles = environment.total_moles()/10
-	//var/transfer_moles = rpm/10000*capacity
-	var/datum/gas_mixture/removed = inturf.remove_air(transfer_moles)
+	var/datum/gas_mixture/removed = environment.remove_volume(CELL_VOLUME / 10)
 	gas_contained.merge(removed)
 
 	rpm = max(0, rpm - (rpm*rpm)/COMPFRICTION)
@@ -221,7 +219,7 @@
 
 /obj/machinery/computer/turbine_computer/attackby(I as obj, user as mob)
 	if(isscrewdriver(I))
-		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(do_after(user, src, 20))
 			if (src.stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")

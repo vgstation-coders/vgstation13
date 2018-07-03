@@ -11,6 +11,7 @@
 	w_class = W_CLASS_MEDIUM
 	flags = 0
 	var/created_name = "Floorbot"
+	var/skin = null
 
 /obj/item/weapon/toolbox_tiles_sensor
 	desc = "It's a toolbox with tiles sticking out the top and a sensor attached."
@@ -24,6 +25,7 @@
 	w_class = W_CLASS_MEDIUM
 	flags = 0
 	var/created_name = "Floorbot"
+	var/skin = null
 
 // Tell other floorbots what we're fucking with so two floorbots don't dick with the same tile.
 var/global/list/floorbot_targets=list()
@@ -72,6 +74,8 @@ var/global/list/floorbot_targets=list()
 
 	var/nearest_beacon			// the nearest beacon's tag
 	var/turf/nearest_beacon_loc	// the nearest beacon's location
+
+	var/skin = null
 
 
 /obj/machinery/bot/floorbot/New()
@@ -413,7 +417,7 @@ var/global/list/floorbot_targets=list()
 	if(src.amount <= 0)
 		return
 	src.anchored = 1
-	src.icon_state = "[src.icon_initial]-c"
+	src.icon_state = "[skin][src.icon_initial]-c"
 	if(istype(target, /turf/space/))
 		visible_message("<span class='warning'>[src] begins to repair the hole</span>")
 		var/obj/item/stack/tile/plasteel/T = new /obj/item/stack/tile/plasteel
@@ -499,9 +503,9 @@ var/global/list/floorbot_targets=list()
 
 /obj/machinery/bot/floorbot/proc/updateicon()
 	if(src.amount > 0)
-		src.icon_state = "[src.icon_initial][src.on]"
+		src.icon_state = "[skin][src.icon_initial][src.on]"
 	else
-		src.icon_state = "[src.icon_initial][src.on]e"
+		src.icon_state = "[skin][src.icon_initial][src.on]e"
 
 
 /obj/machinery/bot/floorbot/proc/calc_path(var/turf/avoid = null)
@@ -679,8 +683,16 @@ var/global/list/floorbot_targets=list()
 	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
-	var/obj/item/weapon/storage/toolbox/mechanical/N = new /obj/item/weapon/storage/toolbox/mechanical(Tsec)
-	N.contents = list()
+	switch(skin)
+		if("y")
+			var/obj/item/weapon/storage/toolbox/electrical/N = new(Tsec)
+			N.contents = list()
+		if("r")
+			var/obj/item/weapon/storage/toolbox/emergency/N = new(Tsec)
+			N.contents = list()
+		else
+			var/obj/item/weapon/storage/toolbox/mechanical/N = new(Tsec)
+			N.contents = list()
 
 	new /obj/item/device/assembly/prox_sensor(Tsec)
 
@@ -704,9 +716,20 @@ var/global/list/floorbot_targets=list()
 	qdel(src)
 	return
 
+/obj/item/weapon/storage/toolbox/proc/floorbot_type()
+	return "no_build"
 
-/obj/item/weapon/storage/toolbox/mechanical/attackby(var/obj/item/stack/tile/plasteel/T, mob/user as mob)
-	if(!istype(T, /obj/item/stack/tile/plasteel) || src.contents.len >= 1) //Only do this if the thing is empty
+/obj/item/weapon/storage/toolbox/mechanical/floorbot_type()
+	return null
+
+/obj/item/weapon/storage/toolbox/emergency/floorbot_type()
+	return "r"
+
+/obj/item/weapon/storage/toolbox/electrical/floorbot_type()
+	return "y"
+
+/obj/item/weapon/storage/toolbox/attackby(var/obj/item/stack/tile/plasteel/T, mob/user as mob)
+	if(!istype(T, /obj/item/stack/tile/plasteel) || src.contents.len >= 1 || floorbot_type() == "no_build") //Only do this if the thing is empty
 		return ..()
 	/*if(user.s_active)
 		user.s_active.close(user)*/
@@ -714,6 +737,8 @@ var/global/list/floorbot_targets=list()
 	qdel(T)
 	T = null
 	var/obj/item/weapon/toolbox_tiles/B = new /obj/item/weapon/toolbox_tiles
+	B.skin = floorbot_type()
+	B.icon_state = "[B.skin]toolbox_tiles"
 	user.put_in_hands(B)
 	to_chat(user, "<span class='notice'>You add the tiles into the empty toolbox. They protrude from the top.</span>")
 	user.drop_from_inventory(src)
@@ -726,6 +751,8 @@ var/global/list/floorbot_targets=list()
 		W = null
 		var/obj/item/weapon/toolbox_tiles_sensor/B = new /obj/item/weapon/toolbox_tiles_sensor()
 		B.created_name = src.created_name
+		B.skin = src.skin
+		B.icon_state = "[B.skin]toolbox_tiles_sensor"
 		user.put_in_hands(B)
 		to_chat(user, "<span class='notice'>You add the sensor to the toolbox and tiles!</span>")
 		user.drop_from_inventory(src)
@@ -747,6 +774,8 @@ var/global/list/floorbot_targets=list()
 		var/turf/T = get_turf(user.loc)
 		var/obj/machinery/bot/floorbot/A = new /obj/machinery/bot/floorbot(T)
 		A.name = src.created_name
+		A.skin = src.skin
+		A.updateicon()
 		to_chat(user, "<span class='notice'>You add the robot arm to the odd looking toolbox assembly! Boop beep!</span>")
 		user.drop_from_inventory(src)
 		qdel(src)

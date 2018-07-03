@@ -309,9 +309,9 @@
 	else
 		if(empty_sound)
 			src.visible_message("*click click*")
-			playsound(get_turf(src), empty_sound, 100, 1)
+			playsound(src, empty_sound, 100, 1)
 
-/obj/item/weapon/gun/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
+/obj/item/weapon/gun/attack(mob/living/M, mob/living/user, def_zone)
 	//Suicide handling.
 	if (M == user && user.zone_sel.selecting == "mouth" && !mouthshoot)
 		if(istype(M.wear_mask, /obj/item/clothing/mask/happy))
@@ -341,7 +341,7 @@
 				user.stat=2 // Just to be sure
 				user.death()
 				var/suicidesound = pick('sound/misc/suicide/suicide1.ogg','sound/misc/suicide/suicide2.ogg','sound/misc/suicide/suicide3.ogg','sound/misc/suicide/suicide4.ogg','sound/misc/suicide/suicide5.ogg','sound/misc/suicide/suicide6.ogg')
-				playsound(get_turf(src), pick(suicidesound), 10, channel = 125)
+				playsound(src, pick(suicidesound), 10, channel = 125)
 				log_attack("<font color='red'>[key_name(user)] committed suicide with \the [src].</font>")
 				user.attack_log += "\[[time_stamp()]\] <font color='red'> [user.real_name] committed suicide with \the [src]</font>"
 			else
@@ -403,3 +403,16 @@
 		return FALSE
 	else
 		return TRUE
+
+/obj/item/weapon/gun/attackby(var/obj/item/A, mob/user)
+	if(istype(A, /obj/item/weapon/gun))
+		var/obj/item/weapon/gun/G = A
+		if(isHandgun() && G.isHandgun())
+			var/obj/item/weapon/gun/akimbo/AA = new /obj/item/weapon/gun/akimbo(get_turf(src),src,G)
+			if(user.drop_item(G, AA) && user.drop_item(src, AA))
+				user.put_in_hands(AA)
+				AA.update_icon(user)
+			else
+				to_chat(user, "<span class = 'warning'>You can not combine \the [G] and \the [src].</span>")
+				qdel(AA)
+	..()

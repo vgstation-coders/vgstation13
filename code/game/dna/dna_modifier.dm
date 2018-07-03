@@ -20,6 +20,7 @@
 	var/ckey=null
 	var/mind=null
 	var/list/languages = list()
+	var/times_cloned=0
 
 /datum/dna2/record/proc/GetData()
 	var/list/ser=list("data" = null, "owner" = null, "label" = null, "type" = null, "ue" = 0)
@@ -182,7 +183,7 @@
 		return
 	if(isrobot(user))
 		var/mob/living/silicon/robot/robit = usr
-		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+		if(!(robit.module && (robit.module.quirk_flags & MODULE_CAN_HANDLE_MEDICAL)))
 			to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 	var/mob/living/L = O
@@ -213,7 +214,7 @@
 		return
 	if(isrobot(usr))
 		var/mob/living/silicon/robot/robit = usr
-		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+		if(!(robit.module && (robit.module.quirk_flags & MODULE_CAN_HANDLE_MEDICAL)))
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 	if(!istype(over_location) || over_location.density)
@@ -534,7 +535,7 @@
 	if(!connected)
 		src.visible_message("[bicon(src)]<span class='notice'>No scanner connected!<span>")
 		return
-	
+
 	if(user == connected.occupant)
 		return
 

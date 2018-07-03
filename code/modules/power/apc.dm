@@ -98,8 +98,9 @@
 	var/make_alerts = TRUE // Should this APC make power alerts to the area?
 
 	machine_flags = WIREJACK
-	holomap = TRUE
-	auto_holomap = TRUE
+
+/obj/machinery/power/apc/supports_holomap()
+	return TRUE
 
 /obj/machinery/power/apc/no_alerts
 	make_alerts = FALSE
@@ -113,9 +114,10 @@
 
 /obj/machinery/power/apc/New(loc, var/ndir, var/building=0)
 	..(loc)
-
-	if(areaMaster.areaapc)
-		world.log << "Second APC detected in area: [areaMaster.name]. Deleting the second APC."
+	var/area/this_area = get_area(src)
+	if(this_area.areaapc)
+		var/turf/T = get_turf(src)
+		world.log << "Second APC detected in area: [this_area.name] [T.x], [T.y], [T.z]. Deleting the second APC."
 		qdel(src)
 		return
 
@@ -127,7 +129,7 @@
 	src.tdir = dir		// to fix Vars bug
 	dir = SOUTH
 
-	areaMaster.set_apc(src)
+	this_area.set_apc(src)
 
 	if(src.tdir & 3)
 		pixel_x = 0
@@ -143,8 +145,9 @@
 		operating = 0
 		stat |= MAINT
 
-	if(ticker)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
+		update()
 
 /obj/machinery/power/apc/proc/init()
 	has_electronics = 2 //installed and secured
@@ -159,22 +162,18 @@
 /obj/machinery/power/apc/finalise_terminal()
 	// create a terminal object at the same position as original turf loc
 	// wires will attach to this
-	terminal = new/obj/machinery/power/terminal {auto_holomap = 0} (src.loc)
+	terminal = new/obj/machinery/power/terminal(src.loc)
 	terminal.dir = tdir
 	terminal.master = src
-	var/turf/T = loc
-	if (istype(T))
-		T.soft_add_holomap(terminal)
+	terminal.add_self_to_holomap()
 
 /obj/machinery/power/apc/initialize()
 	..()
-
-	name = "[areaMaster.name] APC"
+	var/area/this_area = get_area(src)
+	name = "[this_area.name] APC"
 
 	update_icon()
-
-	spawn(5)
-		update()
+	add_self_to_holomap()
 
 /obj/machinery/power/apc/examine(mob/user)
 	..()
@@ -389,7 +388,7 @@
 			if (terminal)
 				to_chat(user, "<span class='warning'>Disconnect wires first.</span>")
 				return
-			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+			playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
 			to_chat(user, "You are trying to remove the power control board...")//lpeters - fixed grammar issues
 
 			if (do_after(user, src, 50) && opened && !terminal && has_electronics == 1)
@@ -448,12 +447,12 @@
 				if (has_electronics==1 && terminal)
 					has_electronics = 2
 					stat &= ~MAINT
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 					to_chat(user, "You screw the circuit electronics into place.")
 				else if (has_electronics==2)
 					has_electronics = 1
 					stat |= MAINT
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 					to_chat(user, "You unfasten the electronics.")
 				else /* has_electronics==0 */
 					to_chat(user, "<span class='warning'>There is nothing to secure.</span>")
@@ -518,7 +517,7 @@
 			to_chat(user, "<span class='warning'>You must remove the floor plating in front of the APC first.</span>")
 			return
 		to_chat(user, "You begin to cut the cables...")
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if (do_after(user, src, 50) && opened && terminal && has_electronics != 2 && !T.intact)
 			if (prob(50) && electrocute_mob(usr, terminal.get_powernet(), terminal))
 				spark(src, 5)
@@ -531,7 +530,7 @@
 			terminal = null
 	else if (istype(W, /obj/item/weapon/circuitboard/power_control) && opened && has_electronics==0 && !((stat & BROKEN) || malfhack))
 		to_chat(user, "You begin to insert the power control board into the frame...")
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if (do_after(user, src, 10) && opened && has_electronics == 0 && !((stat & BROKEN) || malfhack))
 			has_electronics = 1
 			to_chat(user, "You place the power control board inside the frame.")
@@ -546,7 +545,7 @@
 			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 			return
 		to_chat(user, "You start welding the APC frame...")
-		playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
+		playsound(src, 'sound/items/Welder.ogg', 50, 1)
 		if (do_after(user, src, 50))
 			if(!src || !WT.remove_fuel(3, user))
 				return
@@ -658,7 +657,7 @@
 	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user.name] slashes at the [src.name]!</span>", "<span class='notice'>You slash at the [src.name]!</span>")
-	playsound(get_turf(src), 'sound/weapons/slash.ogg', 100, 1)
+	playsound(src, 'sound/weapons/slash.ogg', 100, 1)
 
 	var/allcut = wires.IsAllCut()
 
@@ -758,7 +757,8 @@
 	if (!ui)
 		// the ui does not exist, so we'll create a new one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "apc.tmpl", "[areaMaster.name] - APC", 520, data["siliconUser"] ? 465 : 440)
+		var/area/this_area = get_area(src)
+		ui = new(user, src, ui_key, "apc.tmpl", "[this_area.name] - APC", 520, data["siliconUser"] ? 465 : 440)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
 		// open the new ui window
@@ -767,23 +767,20 @@
 		ui.set_auto_update(1)
 
 /obj/machinery/power/apc/proc/report()
-	return "[areaMaster.name] : [equipment]/[lighting]/[environ] ([lastused_equip+lastused_light+lastused_environ]) : [cell? cell.percent() : "N/C"] ([charging])"
+	var/area/this_area = get_area(src)
+	return "[this_area.name] : [equipment]/[lighting]/[environ] ([lastused_equip+lastused_light+lastused_environ]) : [cell? cell.percent() : "N/C"] ([charging])"
 
 /obj/machinery/power/apc/proc/update()
+	var/area/this_area = get_area(src)
 	if(operating && !shorted)
-		areaMaster.power_light = (lighting > 1)
-		areaMaster.power_equip = (equipment > 1)
-		areaMaster.power_environ = (environ > 1)
-//		if (area.name == "AI Chamber")
-//			spawn(10)
-//				to_chat(world, " [area.name] [area.power_equip]")
+		this_area.power_light = (lighting > 1)
+		this_area.power_equip = (equipment > 1)
+		this_area.power_environ = (environ > 1)
 	else
-		areaMaster.power_light = 0
-		areaMaster.power_equip = 0
-		areaMaster.power_environ = 0
-//		if (area.name == "AI Chamber")
-//			to_chat(world, "[area.power_equip]")
-	areaMaster.power_change()
+		this_area.power_light = 0
+		this_area.power_equip = 0
+		this_area.power_environ = 0
+	this_area.power_change()
 
 /obj/machinery/power/apc/proc/isWireCut(var/wireIndex)
 	return wires.IsIndexCut(wireIndex)
@@ -1047,7 +1044,8 @@
 
 	if(stat & (BROKEN|MAINT|FORCEDISABLE))
 		return
-	if(!areaMaster.requires_power)
+	var/area/this_area = get_area(src)
+	if(!this_area.requires_power)
 		return
 
 	/*
@@ -1060,13 +1058,13 @@
 
 	area.calc_lighting() */
 
-	lastused_light = areaMaster.usage(LIGHT)
-	lastused_light += areaMaster.usage(STATIC_LIGHT)
-	lastused_equip = areaMaster.usage(EQUIP)
-	lastused_light += areaMaster.usage(STATIC_EQUIP)
-	lastused_environ = areaMaster.usage(ENVIRON)
-	lastused_light += areaMaster.usage(STATIC_ENVIRON)
-	areaMaster.clear_usage()
+	lastused_light = this_area.usage(LIGHT)
+	lastused_light += this_area.usage(STATIC_LIGHT)
+	lastused_equip = this_area.usage(EQUIP)
+	lastused_light += this_area.usage(STATIC_EQUIP)
+	lastused_environ = this_area.usage(ENVIRON)
+	lastused_light += this_area.usage(STATIC_ENVIRON)
+	this_area.clear_usage()
 
 	lastused_total = lastused_light + lastused_equip + lastused_environ
 
@@ -1129,26 +1127,26 @@
 			equipment = autoset(equipment, 0)
 			lighting = autoset(lighting, 0)
 			environ = autoset(environ, 0)
-			if(areaMaster.poweralm && make_alerts)
-				areaMaster.poweralert(0, src)
+			if(this_area.poweralm && make_alerts)
+				this_area.poweralert(0, src)
 		else if(cell.percent() < 15 && longtermpower < 0)	// <15%, turn off lighting & equipment
 			equipment = autoset(equipment, 2)
 			lighting = autoset(lighting, 2)
 			environ = autoset(environ, 1)
-			if(areaMaster.poweralm && make_alerts)
-				areaMaster.poweralert(0, src)
+			if(this_area.poweralm && make_alerts)
+				this_area.poweralert(0, src)
 		else if(cell.percent() < 30 && longtermpower < 0)			// <30%, turn off equipment
 			equipment = autoset(equipment, 2)
 			lighting = autoset(lighting, 1)
 			environ = autoset(environ, 1)
-			if(areaMaster.poweralm && make_alerts)
-				areaMaster.poweralert(0, src)
+			if(this_area.poweralm && make_alerts)
+				this_area.poweralert(0, src)
 		else									// otherwise all can be on
 			equipment = autoset(equipment, 1)
 			lighting = autoset(lighting, 1)
 			environ = autoset(environ, 1)
-			if(cell.percent() > 35 && !areaMaster.poweralm && make_alerts) // 35% to prevent spamming alerts if it fluctuates
-				areaMaster.poweralert(1, src)
+			if(cell.percent() > 35 && !this_area.poweralm && make_alerts) // 35% to prevent spamming alerts if it fluctuates
+				this_area.poweralert(1, src)
 
 		// now trickle-charge the cell
 
@@ -1193,7 +1191,7 @@
 		lighting = autoset(lighting, 0)
 		environ = autoset(environ, 0)
 		if(!make_alerts)
-			areaMaster.poweralert(0, src)
+			this_area.poweralert(0, src)
 
 	// update icon & area power if anything changed
 	if(last_lt != lighting || last_eq != equipment || last_en != environ)
@@ -1288,7 +1286,8 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	if( cell && cell.charge>=20)
 		cell.use(20);
 		spawn(0)
-			for(var/obj/machinery/light/L in areaMaster)
+			var/area/this_area = get_area(src)
+			for(var/obj/machinery/light/L in this_area)
 				L.on = 1
 				L.broken()
 				sleep(1)

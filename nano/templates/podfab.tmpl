@@ -1,9 +1,9 @@
-<!-- 
-Title: Mech Fabricator UI 
+<!--
+Title: Mech Fabricator UI
 Used In File(s): \code\game\mecha\mech_fabricator.dm
 -->
 
-<!-- 
+<!--
 #define POD_SCREEN_MAIN			1
 #define	POD_SCREEN_QUEUE		2
 
@@ -14,31 +14,17 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 
 #define	MECH_SCREEN_MISC		10
 -->
-<style type='text/css'>
-	#cost
-	{
-		width:360px;
-		float:left;
-	}
-	#misc
-	{
-		width:350px;
-		float:left;
-	}
-</style>
-
-
 	<div class="item">
 		<div class="itemLabel">
-			Commands: 
+			Commands:
 		</div>
 		<div class="itemContent">
 			{{:helper.link('Sync', 'transferthick-e-w', {'sync':1}, null, 'fixedLeft')}}
 		</div>
 	</div>
-		
+
 	<div class="item">&nbsp;</div>
-	
+
 		<div class="item">
 		<div class="itemLabel">Type</div>
 		<div class="line">
@@ -60,7 +46,7 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="item">&nbsp;</div>
 
 	{{if data.screen == 1}}
@@ -74,7 +60,7 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 			</div>
 		</div>
 	{{/if}}
-	
+
 	{{if data.screen == 14}}
 		<div class="item">
 			<div class="itemLabel">
@@ -82,7 +68,7 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 			</div>
 			<div class="line">
 				{{:helper.link('Materials', 'gear',{'screen':14},(data.screen==14)?'linkOn':'', 'fixedLeft')}}
-				{{:helper.link('Parts', 'gear', {'screen':15},(data.screen==15)?'linkOn':'', 'fixedLeft')}}			
+				{{:helper.link('Parts', 'gear', {'screen':15},(data.screen==15)?'linkOn':'', 'fixedLeft')}}
 			</div>
 		</div>
 			<div class="itemContentWide">
@@ -112,7 +98,7 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 			</div>
 			<div class="line">
 				{{:helper.link('Materials', 'gear',{'screen':14},(data.screen==14)?'linkOn':'', 'fixedLeft')}}
-				{{:helper.link('Parts', 'gear', {'screen':15},(data.screen==15)?'linkOn':'', 'fixedLeft')}}			
+				{{:helper.link('Parts', 'gear', {'screen':15},(data.screen==15)?'linkOn':'', 'fixedLeft')}}
 			</div>
 		</div>
 			<div class="itemContentWide">
@@ -124,7 +110,7 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 			</div>
 		</div>
 	{{/if}}
-	
+
 	{{if data.screen == 2}}
 		<div class="item">
 			<div class="itemLabel">
@@ -153,7 +139,7 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 			</div>
 		</div>
 	{{/if}}
-	
+
 	{{if data.screen == 3}}
 		<div class="item">
 			<div class="itemLabel">
@@ -179,7 +165,7 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 			</div>
 		</div>
 	{{/if}}
-	
+
 	{{if data.screen == 4}}
 		<div class="item">
 			<div class="itemLabel">
@@ -205,7 +191,7 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 			</div>
 		</div>
 	{{/if}}
-	
+
 	{{if data.screen == 5}}
 		<div class="item">
 			<div class="itemLabel">
@@ -231,7 +217,7 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 			</div>
 		</div>
 	{{/if}}
-	
+
 	{{if data.screen == 6}}
 		<div class="item">
 			<div class="itemLabel">
@@ -257,7 +243,7 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 			</div>
 		</div>
 	{{/if}}
-	
+
 
 	{{if data.screen == 10}}
 		<div class="item">
@@ -284,6 +270,5 @@ Used In File(s): \code\game\mecha\mech_fabricator.dm
 			</div>
 		</div>
 	{{/if}}
-	
-	
-	
+
+

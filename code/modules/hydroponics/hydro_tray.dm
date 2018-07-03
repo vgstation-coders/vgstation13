@@ -512,13 +512,13 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/HasProximity(mob/living/simple_animal/M)
 	if(seed && !dead && seed.carnivorous == 2 && age > seed.maturation)
-		if(istype(M, /mob/living/simple_animal/mouse) || istype(M, /mob/living/simple_animal/lizard) && !M.locked_to && !M.anchored)
+		if(istype(M, /mob/living/simple_animal/mouse) || istype(M, /mob/living/simple_animal/hostile/lizard) && !M.locked_to && !M.anchored)
 			spawn(10)
 				if(!M || !Adjacent(M) || M.locked_to || M.anchored)
 					return // HasProximity() will likely fire a few times almost simultaneously, so spawn() is tricky with it's sanity
 				visible_message("<span class='warning'>\The [seed.display_name] hungrily lashes a vine at \the [M]!</span>")
 				if(M.health > 0)
-					M.Die()
+					M.death()
 				lock_atom(M, /datum/locking_category/hydro_tray)
 				spawn(30)
 					if(M && M.loc == get_turf(src))
@@ -554,5 +554,8 @@
 			return
 
 	..()
+
+/obj/machinery/portable_atmospherics/hydroponics/AltClick()
+	close_lid()
 
 /datum/locking_category/hydro_tray

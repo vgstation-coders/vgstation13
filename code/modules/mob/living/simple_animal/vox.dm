@@ -1,5 +1,14 @@
-/mob/living/simple_animal/vox/armalis/
+/mob/living/simple_animal/vox
+	min_oxy = 0
+	max_oxy = 1
+	min_tox = 0
+	max_tox = 1
+	min_co2 = 0
+	max_co2 = 5
+	min_n2 = 5 //breathe N2
+	max_n2 = 0
 
+/mob/living/simple_animal/vox/armalis
 	name = "serpentine alien"
 	real_name = "serpentine alien"
 	desc = "A one-eyed, serpentine creature, half-machine, easily nine feet from tail to beak!"
@@ -17,15 +26,14 @@
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS // WALLS
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	status_flags = 0
+	max_oxy = 0
 
 	var/armour = null
 	var/amp = null
 	var/quills = 3
 
-/mob/living/simple_animal/vox/armalis/Die()
-	living_mob_list -= src
-	dead_mob_list += src
-	stat = DEAD
+/mob/living/simple_animal/vox/armalis/death(var/gibbed = FALSE)
+	..(TRUE)
 	var/turf/gloc = get_turf(loc)
 	visible_message("<span class='danger'><B>[src] shudders violently and explodes!</B>","<span class='warning'>You feel your body rupture!</span></span>")
 	gib()

@@ -246,7 +246,7 @@
 		if(iswrench(I))
 			user.visible_message("<span class='warning'>[user] starts adjusting the bolts on \the [src].</span>", \
 								 "<span class='notice'>You start adjusting the bolts on \the [src].</span>")
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 			if(do_after(user, src, 50))
 				if(anchored == 1)
 					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
@@ -490,7 +490,7 @@
 	busy = 0
 	M.clean_blood()
 	if(M.reagents.maximum_volume > M.reagents.total_volume)
-		playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 		M.reagents.add_reagent(WATER, min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
 		user.visible_message("<span class='notice'>[user] finishes soaking \the [M], \he could clean the entire station with that.</span>","<span class='notice'>You finish soaking \the [M], you feel as if you could clean anything now, even the Chef's backroom...</span>")
 	else

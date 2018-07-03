@@ -57,10 +57,12 @@
 	proc/announce_law_changes(var/mob/user)
 		to_chat(current, "These are your laws now:")
 		current.show_laws()
+		current << sound('sound/machines/lawsync.ogg')
 		for(var/mob/living/silicon/robot/R in mob_list)
 			if(R.lawupdate && (R.connected_ai == current))
 				to_chat(R, "These are your laws now:")
 				R.show_laws()
+				R << sound('sound/machines/lawsync.ogg')
 		to_chat(user, "<span class='notice'>Upload complete. The AI's laws have been modified.</span>")
 
 	attackby(obj/item/weapon/O as obj, mob/user as mob)
@@ -142,6 +144,7 @@
 	proc/announce_law_changes()
 		to_chat(current, "These are your laws now:")
 		current.show_laws()
+		current << sound('sound/machines/lawsync.ogg')
 		to_chat(usr, "<span class='notice'>Upload complete. The robot's laws have been modified.</span>")
 
 	proc/install_module(var/obj/item/weapon/aiModule/M,var/mob/user)

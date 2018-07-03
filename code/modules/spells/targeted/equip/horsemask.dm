@@ -46,7 +46,7 @@
 	name = "Curse of the Reindeer"
 	desc = "This spell triggers a curse on a target, causing them to wield an unremovable reindeer head mask. They will speak like a horse! Any masks they are wearing will be disintegrated. This spell does not require robes."
 	abbreviation = "RH"
-	holiday_required = list("Christmas")
+	holiday_required = list(XMAS)
 
 	invocation = "KN'A RUD'LPH, XMAS 'BTHNK!"
 

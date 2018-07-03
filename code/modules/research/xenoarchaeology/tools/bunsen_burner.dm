@@ -90,8 +90,8 @@
 	if(iswrench(W))
 		user.visible_message("<span class = 'warning'>[user] starts to deconstruct \the [src]!</span>","<span class = 'notice'>You start to deconstruct \the [src].</span>")
 		if(do_after(user, src, 5 SECONDS))
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-			drop_stack(/obj/item/stack/sheet/metal, loc, rand(3,4), user)
+			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+			drop_stack(sheet_type, loc, rand(3,4), user)
 			qdel(src)
 	else
 		..()
@@ -100,7 +100,7 @@
 	if(held_container && heating == BUNSEN_ON)
 		var/turf/T = get_turf(src)
 		var/datum/gas_mixture/G = T.return_air()
-		if(!G || G.oxygen < 0.1)
+		if(!G || G.molar_density("oxygen") < 0.1 / CELL_VOLUME)
 			visible_message("<span class = 'warning'>\The [src] splutters out from lack of oxygen.</span>","<span class = 'warning'>You hear something cough.</span>")
 			toggle()
 			return

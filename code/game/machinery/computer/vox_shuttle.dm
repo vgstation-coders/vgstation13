@@ -22,21 +22,21 @@ var/global/vox_shuttle_location
 		return
 
 	var/area/dest_location = locate(destination)
-
-	if(areaMaster == dest_location)
+	var/area/this_area = get_area(src)
+	if(this_area == dest_location)
 		return
 
 	moving = TRUE
 	lastMove = world.time
 
-	if(areaMaster.z != dest_location.z)
+	if(this_area.z != dest_location.z)
 		var/area/transit_location = locate(/area/vox_station/transit)
-		areaMaster.move_contents_to(transit_location)
-		areaMaster = transit_location // let do this while move_contents_to proc is not using Move()
+		this_area.move_contents_to(transit_location)
+		this_area = transit_location // let do this while move_contents_to proc is not using Move()
 		sleep(VOX_SHUTTLE_MOVE_TIME)
 
-	areaMaster.move_contents_to(dest_location)
-	areaMaster = dest_location
+	this_area.move_contents_to(dest_location)
+	this_area = dest_location
 	moving = FALSE
 
 	return 1
@@ -58,9 +58,9 @@ var/global/vox_shuttle_location
 		return
 
 	user.set_machine(src)
-
+	var/area/this_area = get_area(src)
 	var/dat = {"
-		Location: [areaMaster]<br>
+		Location: [this_area]<br>
 		Ready to move[max(lastMove + VOX_SHUTTLE_COOLDOWN - world.time, 0) ? " in [max(round((lastMove + VOX_SHUTTLE_COOLDOWN - world.time) * 0.1), 0)] seconds" : ": now"]<br>
 		<a href='?src=\ref[src];move=start'>Return to dark space</a><br>
 		<a href='?src=\ref[src];move=solars_fore_port'>Fore port solar</a> |

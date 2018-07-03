@@ -59,7 +59,7 @@
 				qdel(target)
 				target = null
 				to_chat(user, "<span class='notice'>You stuff the monkey in the machine.")
-				playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1)
+				playsound(src, 'sound/machines/juicer.ogg', 50, 1)
 				use_power(500)
 				src.grinded++
 				to_chat(user, "<span class='notice'>The machine now has [grinded] monkeys worth of material stored.</span>")
@@ -76,7 +76,7 @@
 		else
 			qdel(target)
 			to_chat(user, "<span class='notice'>You stuff the monkey in the machine.</span>")
-			playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1)
+			playsound(src, 'sound/machines/juicer.ogg', 50, 1)
 			use_power(500)
 			src.grinded++
 			to_chat(user, "<span class='notice'>The machine now has [grinded] monkeys worth of material stored.</span>")
@@ -87,7 +87,7 @@
 		return 1
 	if(grinded >= minimum_monkeys)
 		to_chat(user, "<span class='notice'>The machine hisses loudly as it condenses the grinded monkey meat. After a moment, it dispenses a brand new monkey cube.</span>")
-		playsound(get_turf(src), 'sound/machines/hiss.ogg', 50, 1)
+		playsound(src, 'sound/machines/hiss.ogg', 50, 1)
 		grinded -= minimum_monkeys
 		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped(src.loc)
 		to_chat(user, "<span class='notice'>The machine's display flashes that it has [grinded] monkeys worth of material left.</span>")

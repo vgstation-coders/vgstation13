@@ -56,7 +56,7 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 
 		holder = patient.hud_list[HEALTH_HUD]
 		if(holder)
-			if(patient.stat == 2)
+			if(patient.isDead())
 				holder.icon_state = "hudhealth-100"
 			else
 				holder.icon_state = "hud[RoundHealth(patient.health)]"
@@ -64,7 +64,7 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 
 		holder = patient.hud_list[STATUS_HUD]
 		if(holder)
-			if(patient.stat == 2)
+			if(patient.isDead())
 				holder.icon_state = "huddead"
 			else if(patient.status_flags & XENO_HOST)
 				holder.icon_state = "hudxeno"
@@ -120,7 +120,6 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 					else
 						continue
 					C.images += holder
-					break
 
 		var/perpname = perp.get_face_name()
 		if(lowertext(perpname) == "unknown" || !perpname)
@@ -133,7 +132,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 					if("*Arrest*")
 						holder.icon_state = "hudwanted"
 					if("Incarcerated")
-						holder.icon_state = "hudprisoner"
+						holder.icon_state = "hudincarcerated"
 					if("Parolled")
 						holder.icon_state = "hudparolled"
 					if("Released")
@@ -182,7 +181,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 			C.images += holder
 			var/integrity_ratio = exosuit.health / initial(exosuit.health)
 			holder.icon_state = mech_integrity_to_icon_state(integrity_ratio)
-		
+
 		holder = exosuit.hud_list[DIAG_CELL_HUD]
 		if(holder)
 			C.images += holder
@@ -192,7 +191,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 			else
 				var/charge_ratio = exosuit_cell.charge / exosuit_cell.maxcharge
 				holder.icon_state = power_cell_charge_to_icon_state(charge_ratio)
-			
+
 
 //Unsure of where to put this, but since most of it is HUDs it seemed fitting to go here.
 /mob/proc/handle_glasses_vision_updates(var/obj/item/clothing/glasses/G)

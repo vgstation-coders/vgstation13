@@ -127,8 +127,7 @@
 	chatOutput = new /datum/chatOutput(src) // Right off the bat.
 	// world.log << "Done creating chatOutput"
 	if(config)
-		winset(src, null, "outputwindow.output.style=[config.world_style_config];")
-		winset(src, null, "window1.msay_output.style=[config.world_style_config];") // it isn't possible to set two window elements in the same winset so we need to call it for each element we're assigning a stylesheet.
+		winset(src, null, "window1.msay_output.style=[config.world_style_config];")
 	else
 		to_chat(src, "<span class='warning'>The stylesheet wasn't properly setup call an administrator to reload the stylesheet or relog.</span>")
 

@@ -1,4 +1,10 @@
-#define DNA_SE_LENGTH 56
+/proc/writeglobal(var/which, var/what)
+	global.vars[which] = what
+
+/proc/readglobal(var/which)
+	return global.vars[which]
+
+#define DNA_SE_LENGTH 58
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
 
@@ -51,9 +57,6 @@ var/list/paper_blacklist = list("java","onblur","onchange","onclick","ondblclick
 	"onkeypress","onkeyup","onload","onmousedown","onmousemove","onmouseout","onmouseover",	\
 	"onmouseup","onreset","onselect","onsubmit","onunload")
 
-
-var/skipupdate = 0
-	///////////////
 var/eventchance = 10 //% per 5 mins
 var/event = 0
 var/hadevent = 0
@@ -65,7 +68,6 @@ var/endicon = null
 var/diary = null
 var/diaryofmeanpeople = null
 var/admin_diary = null
-var/href_logfile = null
 var/station_name = null
 var/game_version = "veegee"
 var/changelog_hash = ""
@@ -81,22 +83,16 @@ var/ooc_allowed = 1
 var/looc_allowed = 1
 var/dooc_allowed = 1
 var/traitor_scaling = 1
-//var/goonsay_allowed = 0
-var/dna_ident = 1
 var/abandon_allowed = 1
 var/enter_allowed = 1
 var/guests_allowed = 1
-var/shuttle_frozen = 0
-var/shuttle_left = 0
 var/tinted_weldhelh = 1
 
-var/list/jobMax = list()
 var/list/bombers = list(  )
 var/list/admin_log = list (  )
 var/list/lawchanges = list(  ) //Stores who uploaded laws to which silicon-based lifeform, and what the law was
 var/list/shuttles = list(  )
 var/list/reg_dna = list(  )
-//	list/traitobj = list(  )
 
 var/CELLRATE = 0.002  // multiplier for watts per tick <> cell storage (eg: .002 means if there is a load of 1000 watts, 20 units will be taken from a cell per second)
 var/CHARGELEVEL = 0.001 // Cap for how fast cells charge, as a percentage-per-tick (.001 means cellcharge is capped to 1% per second)
@@ -140,11 +136,6 @@ var/global/universal_cult_chat = 0 //if set to 1, even human cultists can use cu
 var/datum/station_state/start_state = null
 var/datum/configuration/config = null
 
-var/list/combatlog = list()
-var/list/IClog = list()
-var/list/OOClog = list()
-var/list/adminlog = list()
-
 var/suspend_alert = 0
 
 var/Debug = 0	// global debug switch
@@ -154,13 +145,9 @@ var/datum/debug/debugobj
 
 var/datum/moduletypes/mods = new()
 
-var/wavesecret = 0
 var/gravity_is_on = 1
 
-var/shuttlecoming = 0
-
 var/join_motd = null
-var/forceblob = 0
 
 var/polarstar = 0 //1 means that the polar star has been found, 2 means that the spur modification kit has been found
 
@@ -272,9 +259,6 @@ var/global/event/on_login
 var/global/event/on_ban
 var/global/event/on_unban
 
-// List of /plugins
-var/global/list/plugins = list()
-
 // Space get this to return for things i guess?
 var/global/datum/gas_mixture/space_gas = new
 
@@ -317,7 +301,6 @@ var/global/list/minesweeper_best_players = list()
 var/nanocoins_rates = 1
 var/nanocoins_lastchange = 0
 
-var/speciesinit = 0
 var/minimapinit = 0
 
 var/bees_species = list()
@@ -385,7 +368,22 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/giant_spider/hunter/dead, // They are dead.
 		/mob/living/simple_animal/hostile/asteroid/hivelordbrood, // They aren't supposed to be playable.
 		/mob/living/simple_animal/hologram, // Can't live outside the holodeck.
+		/mob/living/simple_animal/hostile/carp/holocarp, //These can but they're just a retarded hologram carp reskin for the love of god.
 		/mob/living/slime_pile, // They are dead.
-		/mob/living/adamantine_dust // Ditto
+		/mob/living/adamantine_dust, // Ditto
+		/mob/living/simple_animal/hostile/viscerator, //Nope.
+		/mob/living/simple_animal/hostile/mining_drone, //This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
+		/mob/living/simple_animal/bee //Aren't set up to be playable
 		)
 
+//Boss monster list
+var/list/boss_mobs = list(
+	/mob/living/simple_animal/scp_173,						// Just a statue.
+	/mob/living/simple_animal/hostile/hivebot/tele,			// Hivebot spawner WIP thing
+	/mob/living/simple_animal/hostile/wendigo,				// Stupid strong evolving creature things that scream for help
+	/mob/living/simple_animal/hostile/mechahitler,			// Sieg heil!
+	/mob/living/simple_animal/hostile/alien/queen/large,	// The bigger and beefier version of queens.
+	)
+
+// Set by traitor item, affects cargo supplies
+var/station_does_not_tip = FALSE

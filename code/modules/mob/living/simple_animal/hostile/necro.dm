@@ -4,16 +4,18 @@
 	faction = "necro"
 	mob_property_flags = MOB_UNDEAD
 
-/mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, datum/mind/Controller)
+/mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, var/mob/living/Victim, datum/mind/Controller)
 	..()
-	if(Controller)
-		mind = Controller
-		ckey = ckey(mind.key)
+	if(Victim && Victim.mind)
+		Victim.mind.transfer_to(src)
+		var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
+		if(ghost && ghost.can_reenter_corpse)
+			key = mind.key // Force the ghost in here
 	if(Owner)
 		faction = "\ref[Owner]"
 		friends.Add(Owner)
 		creator = Owner
-		if(Controller)
+		if(client)
 			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner]. Do his bidding so long as he lives, for when he falls so do you.</span></big>")
 
 	if(name == initial(name) && !unique_name)
@@ -282,7 +284,7 @@
 			time_mult += 1
 	stop_automated_movement = 1
 	D.visible_message("<span class='warning'>\The [D]'s motors whine as something attempts to brute force their way through it!</span>")
-	playsound(get_turf(D), 'sound/effects/grillehit.ogg', 50, 1)
+	playsound(D, 'sound/effects/grillehit.ogg', 50, 1)
 	D.shake(1, 8)
 	busy = TRUE
 	var/target_loc = D.loc
@@ -305,7 +307,7 @@
 						D.open(1)
 					else
 						to_chat(src, "<span class = 'notice'>You fail to open \the [D]</span>")
-						playsound(get_turf(D), 'sound/effects/grillehit.ogg', 50, 1)
+						playsound(D, 'sound/effects/grillehit.ogg', 50, 1)
 						D.shake(1, 8)
 		busy = FALSE
 	stop_automated_movement = 0
@@ -327,7 +329,7 @@
 	//Deal a random amount of brute damage to the corpse in question, heal the zombie by the damage dealt halved
 	visible_message("<span class='warning'>\The [src] takes a bite out of \the [target].</span>")
 	stop_automated_movement = 1
-	playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
+	playsound(src, 'sound/weapons/bite.ogg', 50, 1)
 	var/damage = rand(melee_damage_lower, melee_damage_upper)
 	target.adjustBruteLoss(damage)
 	if(maxHealth < health_cap)
@@ -406,8 +408,8 @@
 	lying = 0
 	update_transform()
 
-/mob/living/simple_animal/hostile/necro/zombie/Die()
-	..()
+/mob/living/simple_animal/hostile/necro/zombie/death(var/gibbed = FALSE)
+	..(gibbed)
 	lying = 1
 	update_transform()
 
@@ -444,6 +446,7 @@
 	health = 50
 	can_evolve = TRUE
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
+	var/being_unzombified = FALSE
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/check_evolve()
 	..()
@@ -461,13 +464,16 @@
 	..()
 	if(stat == DEAD) //Can only attempt to unzombify if they're dead
 		if(istype (W, /obj/item/weapon/storage/bible)) //This calls for divine intervention
+			if(being_unzombified)
+				to_chat(user, "<span class='warning'>\The [src] is already being repeatedly whacked!</span>")
+				return
+			being_unzombified = TRUE
 			var/obj/item/weapon/storage/bible/bible = W
 			user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.my_rel.deity_name] to bring this poor soul back from the brink.</span>")
 
 			var/chaplain = 0 //Are we the Chaplain ? Used for simplification
 			if(user.mind && (user.mind.assigned_role == "Chaplain"))
 				chaplain = TRUE //Indeed we are
-
 			if(do_after(user, src, 25)) //So there's a nice delay
 				if(!chaplain)
 					if(prob(5)) //Let's be generous, they'll only get one regen for this
@@ -493,12 +499,15 @@
 						unzombify()
 					else
 						to_chat (user, "<span class='notice'>Well, that didn't work.</span>")
+			being_unzombified = FALSE
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/proc/unzombify()
-	if(host)
+	if(host && mind)
 		host.loc = get_turf(src)
-		if(!host.mind && src.mind) //This is assuming that, somehow, the host lost their soul, and it ended up in the zombie
-			mind.transfer_to(host)
+		mind.transfer_to(host)
+		var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
+		if(ghost && ghost.can_reenter_corpse)
+			key = mind.key
 		host.resurrect() //It's a miracle!
 		host.revive()
 		visible_message("<span class='notice'>\The [src]'s eyes regain focus, the smell of decay vanishing, [host] has come back to their senses!.</span>")
@@ -557,6 +566,7 @@
 	get_clothes(target, new_zombie)
 	new_zombie.name = target.real_name
 	new_zombie.host = target
+	target.ghostize()
 	target.loc = null
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/get_clothes(var/mob/target, var/mob/living/simple_animal/hostile/necro/zombie/new_zombie)
@@ -602,7 +612,6 @@
 	break_doors = CANPLUS
 
 /mob/living/simple_animal/hostile/necro/zombie/leatherman
-	..()
 	name = "leatherman"
 	icon_dead = "zombie_leather"
 	icon_gib = "zombie_leather"
@@ -671,6 +680,9 @@
 			visible_message("<span class = 'blob'>\The [src] glows with a brilliant light!</span>")
 		set_light(vision_range/2, vision_range, "#a1d68b")
 		spawn(1 SECONDS)
+			/
+			emitted_harvestable_radiation(get_turf(src), rand(250, 500), range = 7)
+
 			var/list/can_see = view(src, vision_range)
 			for(var/mob/living/carbon/human/H in can_see)
 				var/rad_cost = min(radiation, rand(10,20))

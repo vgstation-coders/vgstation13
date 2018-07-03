@@ -42,7 +42,7 @@
 	corpseuniform = /obj/item/clothing/under/mummy_rags
 	corpsehelmet = /obj/item/clothing/head/mummy_rags
 
-/mob/living/simple_animal/hostile/humanoid/mummy/Die()
+/mob/living/simple_animal/hostile/humanoid/mummy/death(var/gibbed = FALSE)
 	if(!isturf(loc))
 		return
 
@@ -53,7 +53,7 @@
 	spawn(0)
 		S.start()
 
-	..()
+	..(gibbed)
 
 /datum/effect/effect/system/smoke_spread/chem/rot/set_up(var/mob/M, n = 5, c = 0, loca, direct)
 	if(n > 20)

@@ -117,6 +117,14 @@
 				name = KETCHUP
 				desc = "You feel more American already."
 				icon_state = KETCHUP
+			if(MUSTARD)
+				name = "mustard"
+				desc = "A spicy yellow paste."
+				icon_state = MUSTARD
+			if(RELISH)
+				name = "relish"
+				desc = "A pickled cucumber jam. Tasty!"
+				icon_state = RELISH
 			if(CAPSAICIN)
 				name = "hotsauce"
 				desc = "You can almost TASTE the stomach ulcers now!"
@@ -232,6 +240,22 @@
 /obj/item/weapon/reagent_containers/food/condiment/ketchup/New()
 	..()
 	reagents.add_reagent(KETCHUP, 50)
+	
+/obj/item/weapon/reagent_containers/food/condiment/mustard
+	name = "mustard"
+	desc = "A spicy yellow paste."
+
+/obj/item/weapon/reagent_containers/food/condiment/mustard/New()
+	..()
+	reagents.add_reagent(MUSTARD, 50)
+	
+/obj/item/weapon/reagent_containers/food/condiment/relish
+	name = "relish"
+	desc = "A pickled cucumber jam. Tasty!"
+
+/obj/item/weapon/reagent_containers/food/condiment/relish/New()
+	..()
+	reagents.add_reagent(RELISH, 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/hotsauce
 	name = "hotsauce"
@@ -390,7 +414,7 @@
 	name = "exotic bottle"
 	desc = "If you can see this label, something is wrong."
 	//~9% chance of anything but special sauce, which is .09 chance
-	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,ROYALJELLY=5,KETCHUP=10,COCO=10)
+	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,ROYALJELLY=5,KETCHUP=10,MUSTARD=10,RELISH=10,COCO=10)
 
 /obj/item/weapon/reagent_containers/food/condiment/exotic/New()
 	..()

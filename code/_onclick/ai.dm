@@ -53,8 +53,8 @@
 		return
 
 	if(aicamera.in_camera_mode)
-		aicamera.camera_mode_off()
-		aicamera.captureimage(A, usr)
+		aicamera.toggle_camera_mode()
+		aicamera.captureimage(A, src)
 		return
 
 	/*

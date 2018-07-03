@@ -687,7 +687,7 @@ var/global/floorIsLava = 0
 				<a href="?src=\ref[src];set_base_laws=ai"><b>Default Cyborg/AI Laws:</b>[base_law_type]</a>
 			</li>
 			<li>
-				<a href="?src=\ref[src];set_base_laws=mommi"><b>Default MoMMI Laws:</b>[mommi_base_law_type]</a>
+				<a href="?src=\ref[src];set_base_laws=mommi"><b>Default MoMMI Laws:</b>[mommi_laws["Default"]]</a>
 			</li>
 		</ul>
 		<hr />
@@ -851,7 +851,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=hellonearth'>Summon Nar-Sie</A><BR>
 			<A href='?src=\ref[src];secretsfun=supermattercascade'>Start a Supermatter Cascade</A><BR>
 			<A href='?src=\ref[src];secretsfun=meteorstorm'>Trigger an undending Meteor Storm</A><BR>
-			<A href='?src=\ref[src];secretsfun=halloween'>Awaken the damned for some spooky shenanigans</A><BR>
+			<A href='?src=\ref[src];secretsfun=halloween'>Trigger the blood moon</A><BR>
 			<A href='?src=\ref[src];secretsfun=christmas_vic'>Make the station christmasy</A><BR>
 			"}
 
@@ -1116,6 +1116,9 @@ var/global/floorIsLava = 0
 	if(!check_rights(R_ADMIN))
 		return
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
+		var/response = alert("Toggle round end delay? It is currently [ticker.delay_end?"delayed":"not delayed"]","Toggle round end delay","Yes","No")
+		if(response != "Yes")
+			return
 		if(ticker.delay_end == 2)
 			to_chat(world, "<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
 			log_admin("<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")

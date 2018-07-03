@@ -267,8 +267,7 @@
 				var/obj/location_as_object = loc
 				breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
 			else if(istype(loc, /turf/))
-				var/breath_moles = environment.total_moles()/environment.volume*CELL_VOLUME*BREATH_PERCENTAGE
-				breath = loc.remove_air(breath_moles)
+				breath = environment.remove_volume(CELL_VOLUME * BREATH_PERCENTAGE)
 
 				// Handle chem smoke effect  -- Doohl
 				var/block = 0
@@ -458,7 +457,7 @@
 	if(hat && istype(hat, /obj/item/clothing/head/helmet/space) && uniform && istype(uniform, /obj/item/clothing/monkeyclothes/space))
 		spaceproof = 1	//quick and dirt cheap. no need for the Life() of monkeys to become as complicated as the Life() of humans. man that's deep.
 	var/loc_temp = get_loc_temp(environment)
-	var/environment_heat_capacity = environment.heat_capacity()
+	var/environment_heat_capacity = environment.heat_capacity() / environment.volume * CELL_VOLUME
 	if(istype(get_turf(src), /turf/space))
 		var/turf/heat_turf = get_turf(src)
 		environment_heat_capacity = heat_turf.heat_capacity
@@ -520,7 +519,7 @@
 		if(isturf(loc)) //else, there's considered to be no light
 			var/turf/T = loc
 			if(T.dynamic_lighting)
-				light_amount = T.get_lumcount() * 10
+				light_amount = (T.get_lumcount() * 10) - 5
 			else
 				light_amount = 5
 		nutrition += light_amount

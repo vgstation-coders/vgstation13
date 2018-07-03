@@ -125,7 +125,7 @@
 /obj/item/mecha_parts/mecha_equipment/Topic(href,href_list)
 	if(usr.incapacitated() || usr != chassis.occupant)
 		return TRUE
-	testing("[src] topic")
+//	testing("[src] topic")
 	if(href_list["detach"])
 		detach()
 	return

@@ -17,6 +17,7 @@
 	var/list/req_component_names = null
 	var/list/components_in_use = null
 	var/build_state = 1
+	var/build_path = 0 //0 = Default path. 1 = Glass Frame
 
 	// For pods
 	var/list/connected_parts = list()
@@ -49,12 +50,58 @@
 	if(P.crit_fail)
 		to_chat(user, "<span class='warning'>This part is faulty, you cannot add this to the machine!</span>")
 		return
+
+	if (build_path == 1)
+		var/obj/item/weapon/circuitboard/airlock/C = circuit
+		switch(build_state)
+			if(1)
+				if(iscrowbar(P))
+					build_path = 0
+					new /obj/item/stack/sheet/glass/glass(get_turf(src))
+					icon_state = "box_0"
+					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				if(istype(P, /obj/item/weapon/circuitboard/airlock) && P:icon_state != "door_electronics_smoked")
+					if (!C)
+						if(user.drop_item(P, src))
+							build_state++
+							C = P
+							circuit = C
+							C.installed = 1
+							icon_state="box_glass_circuit"
+				if (iswelder(P))
+					to_chat(user, "<span class='notice'>You use the machine frame as a vice and shape the glass with the welder into a fish bowl.</span>")
+					getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
+					new /obj/machinery/fishtank/bowl(get_turf(src))
+					qdel(src)
+				return
+			if (2)
+				if(iscrowbar(P))
+					if (C != null)
+						C.forceMove(get_turf(src))
+						C.installed = 0
+						C = null
+						circuit = null
+					build_state--
+					icon_state = "box_glass"
+					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				if(isscrewdriver(P) && C)
+					var/obj/structure/displaycase/new_display_case = new(get_turf(src))
+					new_display_case.circuit = C
+					C.forceMove(new_display_case)
+					circuit = null
+					C = null
+					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					qdel(src)
+				return
+		return
+
+
 	switch(build_state)
 		if(1)
 			if(istype(P, /obj/item/stack/cable_coil))
 				var/obj/item/stack/cable_coil/C = P
 				if(C.amount >= 5)
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					to_chat(user, "<span class='notice'>You start to add cables to the frame.</span>")
 					if(do_after(user, src, 20))
 						if(C && C.amount >= 5) // Check again
@@ -64,19 +111,18 @@
 			else if(istype(P, /obj/item/stack/sheet/glass/glass))
 				var/obj/item/stack/sheet/glass/glass/G=P
 				if(G.amount<1)
-					to_chat(user, "<span class='warning'>How...?</span>")
 					return
 				G.use(1)
 				to_chat(user, "<span class='notice'>You add the glass to the frame.</span>")
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-				new /obj/structure/displaycase_frame(src.loc)
-				qdel(src)
+				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+				build_path = 1
+				icon_state="box_glass"
 				return
 			else
 				if(iswrench(P))
-					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+					playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 					to_chat(user, "<span class='notice'>You dismantle the frame.</span>")
-					drop_stack(/obj/item/stack/sheet/metal, get_turf(src), 5, user)
+					drop_stack(sheet_type, get_turf(src), 5, user)
 					qdel(src)
 		if(2)
 			if(!..())
@@ -87,7 +133,7 @@
 							user << "<span class='warning'>You can't let go of \the [B]!</span>"
 							return
 
-						playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+						playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 						to_chat(user, "<span class='notice'>You add the circuit board to the frame.</span>")
 						circuit = P
 						set_build_state(3)
@@ -111,7 +157,7 @@
 						to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
 				else
 					if(iswirecutter(P))
-						playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
+						playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
 						to_chat(user, "<span class='notice'>You remove the cables.</span>")
 						set_build_state(1)
 						var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil( src.loc )
@@ -120,7 +166,7 @@
 		if(3)
 			if(!..())
 				if(iscrowbar(P))
-					playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
+					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
 					set_build_state(2)
 					circuit.forceMove(src.loc)
 					circuit = null
@@ -141,7 +187,7 @@
 								component_check = 0
 								break
 						if(component_check)
-							playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+							playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
 							for(var/obj/O in new_machine.component_parts)
 								returnToPool(O)
@@ -157,6 +203,7 @@
 							else
 								circuit.forceMove(null)
 							new_machine.RefreshParts()
+							new_machine.power_change()
 							circuit.finish_building(new_machine, user)
 							components = null
 							qdel(src)
@@ -189,7 +236,7 @@
 							if(istype(P, /obj/item/weapon) || istype(P, /obj/item/stack))
 								for(var/I in req_components)
 									if(istype(P, text2path(I)) && (req_components[I] > 0))
-										playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+										playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 										if(istype(P, /obj/item/stack))
 											var/obj/item/stack/CP = P
 											if(CP.amount >= req_components[I])
@@ -209,6 +256,8 @@
 											components += P
 											req_components[I]--
 											update_desc()
+											if(P.is_open_container())
+												. = 1
 											break
 								to_chat(user, desc)
 
@@ -241,7 +290,20 @@ to destroy them and players will be able to make replacements.
 	icon = 'icons/obj/module.dmi'
 	icon_state = "blank_mod"
 	//var/datum/circuits/local_fuses = null
-	var/list/allowed_boards = list("autolathe"=/obj/item/weapon/circuitboard/autolathe,"intercom"=/obj/item/weapon/intercom_electronics,"air alarm"=/obj/item/weapon/circuitboard/air_alarm,"fire alarm"=/obj/item/weapon/circuitboard/fire_alarm,"airlock"=/obj/item/weapon/circuitboard/airlock,"APC"=/obj/item/weapon/circuitboard/power_control,"vendomat"=/obj/item/weapon/circuitboard/vendomat,"microwave"=/obj/item/weapon/circuitboard/microwave,"station map"=/obj/item/weapon/circuitboard/station_map,"cell charger"=/obj/item/weapon/circuitboard/cell_charger,"fishtank filter"=/obj/item/weapon/circuitboard/fishtank,"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall)
+	var/list/allowed_boards = list(
+	"autolathe"=/obj/item/weapon/circuitboard/autolathe,
+	"intercom"=/obj/item/weapon/intercom_electronics,
+	"air alarm"=/obj/item/weapon/circuitboard/air_alarm,
+	"fire alarm"=/obj/item/weapon/circuitboard/fire_alarm,
+	"airlock"=/obj/item/weapon/circuitboard/airlock,
+	"APC"=/obj/item/weapon/circuitboard/power_control,
+	"vendomat"=/obj/item/weapon/circuitboard/vendomat,
+	"microwave"=/obj/item/weapon/circuitboard/microwave,
+	"station map"=/obj/item/weapon/circuitboard/station_map,
+	"cell charger"=/obj/item/weapon/circuitboard/cell_charger,
+	"recharger"=/obj/item/weapon/circuitboard/recharger,
+	"fishtank filter"=/obj/item/weapon/circuitboard/fishtank,
+	"large fishtank filter"=/obj/item/weapon/circuitboard/fishwall)
 	var/soldering = 0 //Busy check
 
 /obj/item/weapon/circuitboard/blank/New()
@@ -426,8 +488,8 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/smes
 	name = "Circuit Board (SMES)"
-	desc = "A circuit board used to run a gas freezer."
-	build_path = "/obj/machinery/power/battery/smes"
+	desc = "A circuit board used to run a giant battery."
+	build_path = "/obj/machinery/power/battery/smes/pristine"
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=4;" + Tc_PROGRAMMING + "=4"
 	req_components = list(
@@ -914,6 +976,16 @@ obj/item/weapon/circuitboard/rdserver
 
 // Telecomms circuit boards:
 
+/obj/item/weapon/circuitboard/pda_multicaster
+	name = "Circuit Board (PDA multicaster)"
+	desc = "A circuit board used to run a machine that resends messages."
+	build_path = "/obj/machinery/pda_multicaster"
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=2"
+	req_components = list(
+							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
+							"/obj/item/weapon/stock_parts/manipulator" = 1)
+
 /obj/item/weapon/circuitboard/telecomms/receiver
 	name = "Circuit Board (telecommunications subspace receiver)"
 	desc = "A circuit board used to run a machine that receives subspace transmissions in telecommunications systems."
@@ -1146,6 +1218,16 @@ obj/item/weapon/circuitboard/rdserver
 							"/obj/item/weapon/stock_parts/scanning_module" = 1,
 							"/obj/item/weapon/stock_parts/capacitor" = 2)
 
+/obj/item/weapon/circuitboard/recharger
+	name = "Circuit Board (Recharger)"
+	desc = "A circuit board used to run a machine that replenishes energy weapon charge"
+	board_type = MACHINE
+	build_path = "/obj/machinery/recharger"
+	origin_tech = Tc_POWERSTORAGE + "=2;" + Tc_COMBAT + "=2"
+	req_components = list(
+						"/obj/item/weapon/stock_parts/scanning_module" = 1,
+						"/obj/item/weapon/stock_parts/capacitor" = 2)
+
 /obj/item/weapon/circuitboard/washing_machine
 	name = "Circuit Board (Washing Machine)"
 	desc = "A circuit board used to run a machine that cleans clothing and kills pets."
@@ -1287,6 +1369,7 @@ obj/item/weapon/circuitboard/rdserver
 						"/obj/item/weapon/stock_parts/scanning_module" = 1,
 						"/obj/item/weapon/stock_parts/micro_laser" = 1)
 
+
 /*
  * Fishtanks
 */
@@ -1307,3 +1390,11 @@ obj/item/weapon/circuitboard/rdserver
 	origin_tech = Tc_PROGRAMMING + "=1"
 	req_components = list (
 	"/obj/item/stack/sheet/glass/glass" = 10)
+
+/obj/item/weapon/circuitboard/conduction_plate
+	name = "Circuit Board (Conduction Plate)"
+	build_path = "/obj/machinery/power/conduction_plate"
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=1;" + Tc_ENGINEERING + "=4"
+	req_components = list(
+							"/obj/item/weapon/stock_parts/capacitor" = 1)

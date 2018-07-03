@@ -827,7 +827,7 @@ var/global/blood_virus_spreading_disabled = 0
 	set desc = "Reload the Style Sheet (be careful)."
 
 	for(var/client/C in clients)
-		winset(C, null, "outputwindow.output.style=[config.world_style_config];")
+		winset(C, null, "window1.msay_output.style=[config.world_style_config];")
 	message_admins("The style sheet has been reloaded by [src.ckey]")
 
 /client/proc/reset_style_sheet()
@@ -836,7 +836,7 @@ var/global/blood_virus_spreading_disabled = 0
 	set desc = "Reset the Style Sheet (restore to default)."
 
 	for(var/client/C in clients)
-		winset(C, null, "outputwindow.output.style=[world_style];")
+		winset(C, null, "window1.msay_output.style=[world_style];")
 	config.world_style_config = world_style
 	message_admins("The style sheet has been reset by [src.ckey]")
 

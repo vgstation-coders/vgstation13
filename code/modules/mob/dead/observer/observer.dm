@@ -350,7 +350,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		for(var/obj/effect/step_trigger/S in NewLoc)
 			S.Crossed(src)
 
-		var/area/A = get_area_master(src)
+		var/area/A = get_area(src)
 		if(A)
 			A.Entered(src)
 
@@ -368,7 +368,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	for(var/obj/effect/step_trigger/S in get_turf(src))	//<-- this is dumb
 		S.Crossed(src)
 
-	var/area/A = get_area_master(src)
+	var/area/A = get_area(src)
 	if(A)
 		A.Entered(src)
 */
@@ -682,7 +682,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			to_chat(src, "<span class='warning'>Unknown: [round(unknown_concentration * 100)]% ([round(unknown_concentration * total_moles / tiles, 0.01)] moles)</span>")
 
 		to_chat(src, "<span class='notice'>Temperature: [round(environment.temperature - T0C, 0.1)]&deg;C</span>")
-		to_chat(src, "<span class='notice'>Heat Capacity: [round(environment.heat_capacity(), 0.1)]</span>")
+		to_chat(src, "<span class='notice'>Heat Capacity: [round(environment.heat_capacity() / tiles, 0.1)]</span>")
 
 
 /mob/dead/observer/verb/toggle_darkness()
@@ -1006,3 +1006,18 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		if(HUD_SECURITY)
 			return selectedHUD == HUD_SECURITY
 	return
+
+/mob/dead/observer/proc/can_reenter_corpse()
+	var/mob/M = get_top_transmogrification()
+	return (M && M.client && can_reenter_corpse)
+
+/mob/dead/observer/verb/pai_signup()
+	set name = "Sign up as pAI"
+	set category = "Ghost"
+	set desc = "Create and submit your pAI personality"
+
+	if(!paiController.check_recruit(src))
+		to_chat(src, "<span class='warning'>Not available. You may have been pAI-banned.</span>")
+		return
+
+	paiController.recruitWindow(src)

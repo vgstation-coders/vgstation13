@@ -59,7 +59,7 @@
 	var/cached_temp = runner.bodytemperature
 	if(runner.burn_calories(HUNGER_FACTOR*2))
 		flick("treadmill-running", src)
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+		playsound(src, 'sound/machines/click.ogg', 50, 1)
 		var/calc = DEFAULT_BUMP_ENERGY * power_efficiency * runner.treadmill_speed
 		if(runner.reagents) //Sanity
 			for(var/datum/reagent/R in runner.reagents.reagent_list)

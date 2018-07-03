@@ -145,7 +145,7 @@ var/global/list/organ_damage_overlays = list(
 				location_as_object.handle_internal_lifeform(src, 0)
 				last_processed = "Interacted with our container"
 		if(check_mutations)
-			testing("Updating [src.real_name]'s mutations: "+english_list(mutations))
+//			testing("Updating [src.real_name]'s mutations: "+english_list(mutations))
 			domutcheck(src,null,MUTCHK_FORCED)
 			update_mutations()
 			check_mutations = 0

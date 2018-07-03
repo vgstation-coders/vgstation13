@@ -212,8 +212,14 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 
 		var/datum/supply_order/SO = S
 		var/datum/supply_packs/SP = SO.object
-
-		var/atom/A = new SP.containertype(pickedloc)
+		var/atom/A
+		if(Holiday == APRIL_FOOLS_DAY && prob(10))
+			if(prob(5))
+				A = new /mob/living/simple_animal/hostile/mimic/crate/chest(pickedloc)
+			else
+				A = new /mob/living/simple_animal/hostile/mimic/crate(pickedloc)
+		else
+			A = new SP.containertype(pickedloc)
 		A.name = "[SP.containername] [SO.comment ? "([SO.comment])":"" ]"
 
 		//supply manifest generation begin
@@ -250,6 +256,8 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 			if(SP.amount && B2:amount)
 				B2:amount = SP.amount
 			slip.info += "<li>[B2.name]</li>" //add the item to the manifest
+
+		SP.post_creation(A)
 
 		//manifest finalisation
 

@@ -53,10 +53,14 @@
 		A.attack_stump(src, params)
 
 	if(src.lying && !(isUnconscious() || stunned || paralysis) && check_crawl_ability() && isfloor(A) && isfloor(get_turf(src)) && proximity && !pulledby && !locked_to && !client.move_delayer.blocked())
-		var/delay = round(1 + base_movement_tally()/5) * 1 SECONDS
-		if (do_after(src, A, delay))
-			Move(A, get_dir(src,A), glide_size_override = delay) // So that we're still smooth
-			delayNextMove(delay, additive=1)
+		var/crawldelay = round(1 + base_movement_tally()/5) * 1 SECONDS
+		Move(A, get_dir(src,A), glide_size_override = crawldelay)
+		delayNextMove(crawldelay, additive=1)
+
+	if(proximity && isobj(A))
+		var/obj/O = A
+		if(O.material_type)
+			O.material_type.on_use(O, src, null)
 
 /atom/proc/attack_hand(mob/user as mob, params, var/proximity)
 	return
@@ -218,12 +222,12 @@
 	return 0
 
 //Martians
-/mob/living/carbon/martian/UnarmedAttack(atom/A)
+/mob/living/carbon/complex/martian/UnarmedAttack(atom/A)
 	if(ismob(A))
 		delayNextAttack(10)
 	A.attack_martian(src)
 
-/mob/living/carbon/martian/RangedAttack(atom/A)
+/mob/living/carbon/complex/martian/RangedAttack(atom/A)
 	if(mutations.len)
 		if((M_LASER in mutations) && a_intent == I_HURT)
 			LaserEyes(A) // moved into a proc below

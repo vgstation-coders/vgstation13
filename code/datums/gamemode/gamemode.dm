@@ -202,6 +202,8 @@
 	for(var/datum/faction/F in factions)
 		dat += F.GetScoreboard()
 		dat += "\n\n"
+	for(var/datum/role/R in orphaned_roles)
+		dat += R.GetScoreboard()
 	return dat
 
 /datum/gamemode/proc/get_player_count()
@@ -237,3 +239,4 @@
 
 
 /datum/gamemode/proc/declare_completion()
+	return GetScoreboard()

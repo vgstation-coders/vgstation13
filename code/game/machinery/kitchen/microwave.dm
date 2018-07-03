@@ -199,7 +199,7 @@
 /obj/machinery/microwave/attack_ai(mob/user as mob)
 	if(istype(user,/mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = user
-		if(istype(R.module, /obj/item/weapon/robot_module/butler))
+		if(R.module && (R.module.quirk_flags & MODULE_CAN_HANDLE_FOOD))
 			user.set_machine(src)
 			interact(user)
 			return 1
@@ -244,6 +244,17 @@
 				display_name = "Turnovers"
 				items_measures[display_name] = "turnover"
 				items_measures_p[display_name] = "turnovers"
+			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans))
+				items_measures[display_name] = "soybean"
+				items_measures_p[display_name] = "soybeans"
+			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/grapes))
+				display_name = "Grapes"
+				items_measures[display_name] = "bunch of grapes"
+				items_measures_p[display_name] = "bunches of grapes"
+			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes))
+				display_name = "Green Grapes"
+				items_measures[display_name] = "bunch of green grapes"
+				items_measures_p[display_name] = "bunches of green grapes"
 			items_counts[display_name]++
 		for (var/O in items_counts)
 			var/N = items_counts[O]
@@ -379,7 +390,7 @@
 	src.updateUsrDialog()
 
 /obj/machinery/microwave/proc/stop()
-	playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
+	playsound(src, 'sound/machines/ding.ogg', 50, 1)
 	src.operating = 0 // Turn it off again aferwards
 	src.icon_state = "mw"
 	src.updateUsrDialog()
@@ -398,11 +409,11 @@
 	src.updateUsrDialog()
 
 /obj/machinery/microwave/proc/muck_start()
-	playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1) // Play a splat sound
+	playsound(src, 'sound/effects/splat.ogg', 50, 1) // Play a splat sound
 	src.icon_state = "mwbloody1" // Make it look dirty!!
 
 /obj/machinery/microwave/proc/muck_finish()
-	playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
+	playsound(src, 'sound/machines/ding.ogg', 50, 1)
 	src.visible_message("<span class='warning'>The microwave gets covered in muck!</span>")
 	src.dirty = 100 // Make it dirty so it can't be used util cleaned
 	src.flags &= ~OPENCONTAINER //So you can't add condiments
