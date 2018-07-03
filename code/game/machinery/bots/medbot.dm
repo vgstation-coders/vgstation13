@@ -317,7 +317,7 @@
 			speak(message)
 
 		for (var/mob/living/carbon/C in view(7,src)) //Time to find a patient!
-			if ((C.stat == 2) || !istype(C, /mob/living/carbon/human))
+			if ((C.isDead()) || !istype(C, /mob/living/carbon/human))
 				continue
 
 			if ((C == oldpatient) && (world.time < last_found + 100))
@@ -382,7 +382,7 @@
 
 /obj/machinery/bot/medbot/proc/assess_patient(mob/living/carbon/C as mob)
 	//Time to see if they need medical help!
-	if(C.stat == 2)
+	if(C.isDead())
 		return 0 //welp too late for them!
 
 	if(C.suiciding)
@@ -434,7 +434,7 @@
 		last_found = world.time
 		return
 
-	if(C.stat == 2)
+	if(C.isDead())
 		playsound(src.loc, 'sound/medbot/Flatline_custom.ogg', 35, channel = CHANNEL_MEDBOTS)
 		visible_message("<b>[src]</b> points at [C.name]!")
 		oldpatient = patient
@@ -759,5 +759,3 @@
 		to_chat(P.pai, "<span class='info'>- Click on somebody: Depending on your mode, you inject or analyze a person.</span>")
 		to_chat(P.pai, "<span class='info'>What you inject depends on the medbot's configuration. You can't modify it</span>")
 		to_chat(P.pai, "<span class='info'>If you want to exit the medbot, somebody has to right-click you and press 'Remove pAI'.</span>")
-
-#undefine

@@ -91,8 +91,8 @@
 		for(var/obj/item/toy/balloon/inflated/long/shaped/B in living_balloons)
 			if(get_turf(src) in view(B))
 				B.live()
-	Die()
+	death()
 
-/mob/living/simple_animal/hostile/balloon/Die()
-	..()
+/mob/living/simple_animal/hostile/balloon/death(var/gibbed = FALSE)
+	..(TRUE)
 	qdel(src)

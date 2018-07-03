@@ -53,8 +53,8 @@
 /mob/living/simple_animal/hostile/humanoid/getarmor(var/def_zone, var/type)
 	return armor[type]
 
-/mob/living/simple_animal/hostile/humanoid/Die()
-	..()
+/mob/living/simple_animal/hostile/humanoid/death(var/gibbed = FALSE)
+	..(gibbed)
 	if(corpse)
 		new corpse(loc)
 
@@ -69,7 +69,6 @@
 				A.forceMove(get_turf(src))
 
 	qdel(src)
-	return
 
 /mob/living/simple_animal/hostile/humanoid/Shoot()
 	if(!needs_to_reload)

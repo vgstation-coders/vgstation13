@@ -278,7 +278,6 @@
 	if(isliving(src))
 		var/mob/living/L = src
 		new_human.languages |= L.languages
-		new_human.default_language = L.default_language
 	new_human.generate_name()
 	Postmorph(new_human)
 	return new_human

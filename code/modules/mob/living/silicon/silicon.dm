@@ -269,17 +269,24 @@
 /mob/living/silicon/can_speak_lang(datum/language/speaking)
 	return universal_speak || (speaking in src.speech_synthesizer_langs)	//need speech synthesizer support to vocalize a language
 
-/mob/living/silicon/add_language(var/language, var/can_speak=1)
-	if (..(language) && can_speak)
-		speech_synthesizer_langs |= (all_languages[language])
+/mob/living/silicon/add_language(var/language_name, var/can_speak=1)
+	var/var/datum/language/added_language = all_languages[language_name]
+	if(!added_language) //Are you trying to pull my leg? This language does not exist.
+		return
+
+	. = ..(language_name)
+	if(can_speak && (added_language in languages) && !(added_language in speech_synthesizer_langs)) //This got changed because we couldn't give borgs the ability to speak a language that they already understood. Bay's solution.
+		speech_synthesizer_langs |= added_language
 		return 1
 
-/mob/living/silicon/remove_language(var/rem_language)
-	..(rem_language)
+/mob/living/silicon/remove_language(var/rem_language, var/can_understand=0)
+	var/var/datum/language/removed_language = all_languages[rem_language]
+	if(!removed_language) //Oh, look. Now you're trying to remove what does not exist.
+		return
 
-	for (var/datum/language/L in speech_synthesizer_langs)
-		if (L.name == rem_language)
-			speech_synthesizer_langs -= L
+	if(!can_understand)
+		..(rem_language)
+	speech_synthesizer_langs -= removed_language
 
 /mob/living/silicon/check_languages()
 	set name = "Check Known Languages"

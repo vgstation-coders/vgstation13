@@ -666,10 +666,10 @@
 	can_breed = FALSE //tfw no gf
 	var/obj/item/weapon/reagent_containers/glass/replenishing/rescue/barrel = null
 
-/mob/living/simple_animal/corgi/saint/Die()
+/mob/living/simple_animal/corgi/saint/death(var/gibbed = FALSE)
 	if(barrel)
 		qdel(barrel)
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/corgi/saint/Topic(href, href_list)
 	if(href_list["remove_inv"] || href_list["add_inv"])

@@ -55,7 +55,8 @@
 		return
 
 	user.set_machine(src)
-	var/t = "<TT><B>Foam Dispenser</B> ([areaMaster.name])<HR>"
+	var/area/this_area = get_area(src)
+	var/t = "<TT><B>Foam Dispenser</B> ([this_area.name])<HR>"
 
 	if(src.locked && (!istype(user, /mob/living/silicon)))
 		t += "<I>(Swipe ID card to unlock control panel.)</I><BR>"

@@ -12,6 +12,9 @@
 	material = /obj/item/stack/sheet/wood
 	construction_length = 20
 
+/obj/structure/girder/clockify()
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/girder/clockwork)
+
 /obj/structure/girder/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSGIRDER))
 		return 1
@@ -196,6 +199,45 @@
 						if(!istype(Tsrc))
 							return 0
 						var/turf/simulated/wall/X = Tsrc.ChangeTurf(/turf/simulated/wall)
+						if(X)
+							X.add_hiddenprint(user)
+							X.add_fingerprint(user)
+						qdel(src)
+					return
+			if(/obj/item/stack/sheet/brass)
+				if(state) //We are trying to finish a reinforced girder with brass
+					return
+				if(!anchored) //Not right now.
+					if(S.amount < 2)
+						return
+					var/pdiff = performWallPressureCheck(src.loc)
+					if(!pdiff) //Should really not be that precise, 10 kPa is the usual breaking point
+						S.use(2)
+						user.visible_message("<span class='warning'>[user] creates a false wall!</span>", \
+						"<span class='notice'>You create a false wall. Push on it to open or close the passage.</span>")
+						var/obj/structure/falsewall/clockwork/FW = new /obj/structure/falsewall/clockwork (src.loc)
+						FW.add_hiddenprint(user)
+						FW.add_fingerprint(user)
+						qdel(src)
+					else
+						to_chat(user, "<span class='warning'>There is too much air moving through the gap!  The door wouldn't stay closed if you built it.</span>")
+						message_admins("Attempted false wall made by [user.real_name] ([formatPlayerPanel(user,user.ckey)]) at [formatJumpTo(loc)] had a pressure difference of [pdiff]!")
+						log_admin("Attempted false wall made by [user.real_name] (user.ckey) at [loc] had a pressure difference of [pdiff]!")
+						return
+				else
+					if(S.amount < 2)
+						return ..() // ?
+					user.visible_message("<span class='notice'>[user] starts installing plating to \the [src].</span>", \
+					"<span class='notice'>You start installing plating to \the [src].</span>")
+					if(do_after(user, src, construction_length))
+						if(!S.use(2)) //User being tricky
+							return			
+						user.visible_message("<span class='notice'>[user] finishes installing plating to \the [src].</span>", \
+						"<span class='notice'>You finish installing plating to \the [src].</span>")
+						var/turf/Tsrc = get_turf(src)
+						if(!istype(Tsrc))
+							return 0
+						var/turf/simulated/wall/X = Tsrc.ChangeTurf(/turf/simulated/wall/clockwork)
 						if(X)
 							X.add_hiddenprint(user)
 							X.add_fingerprint(user)
@@ -461,3 +503,19 @@
 	new /obj/effect/decal/remains/human(loc)
 	qdel(src)
 	return
+
+/obj/structure/girder/clockwork
+	name = "clockwork girder"
+	icon_state = "clockwork"
+	material = /obj/item/stack/sheet/brass
+
+/obj/structure/girder/clockwork/clockify()
+	return
+
+/obj/structure/girder/clockwork/update_icon()
+	if(anchored)
+		name = initial(name)
+		icon_state = initial(icon_state)
+	else
+		name = "displaced [initial(name)]"
+		icon_state = "displaced_[initial(icon_state)]"

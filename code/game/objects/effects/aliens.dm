@@ -519,7 +519,7 @@
 				return
 			child.forceMove(loc)
 			if(kill && istype(child))
-				child.Die()
+				child.death()
 			else
 				for(var/mob/M in range(1,src))
 					if(CanHug(M, child))

@@ -56,6 +56,8 @@ var/list/uplink_items = list()
 	var/list/job = null
 	var/only_on_month	//two-digit month as string
 	var/only_on_day		//two-digit day as string
+	var/num_in_stock = 0	// Number of times this can be bought, globally. 0 is infinite
+	var/static/times_bought = 0
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	U.uses -= max(cost, 0)
@@ -73,6 +75,10 @@ var/list/uplink_items = list()
 		return 0
 
 	if (!( istype(user, /mob/living/carbon/human)))
+		return 0
+
+	if(num_in_stock && times_bought >= num_in_stock)
+		to_chat(user, "<span class='warning'>This item is out of stock.</span>")
 		return 0
 
 	// If the uplink's holder is in the user's contents
@@ -103,6 +109,7 @@ var/list/uplink_items = list()
 
 			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [cost]."}
 			stat_collection.uplink_purchase(src, I, user)
+			times_bought += 1
 			if(user.mind)
 				user.mind.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename]"}
 				user.mind.spent_TC += cost
@@ -229,6 +236,13 @@ var/list/uplink_items = list()
 	cost = 4
 	job = list("Security Officer", "Warden", "Head of Security")
 
+/datum/uplink_item/jobspecific/syndietape_police
+	name = "Syndicate Tape"
+	desc = "A length of police tape rigged with adapative electronics that will wraps itself around the hands unathorised personnel who crosses it, cuffing them.  Do not (let them) cross. Can be used 3 times."
+	item = /obj/item/taperoll/syndie/police
+	cost = 8
+	job = list("Security Officer", "Warden", "Head of Security")
+
 //Detective
 /datum/uplink_item/jobspecific/evidenceforger
 	name = "Evidence Forger"
@@ -257,6 +271,13 @@ var/list/uplink_items = list()
 	desc = "A briefcase containing twenty angry bees."
 	item = /obj/item/weapon/storage/briefcase/bees
 	cost = 4
+	job = list("Botanist")
+
+/datum/uplink_item/jobspecific/hornetqueen
+	name = "Hornet Queen Packet"
+	desc = "Place her into an apiary tray, add a few packs of BeezEez, then lay it inside your nemesis' office. Surprise guaranteed. Protective gear won't be enough to shield you reliably from these."
+	item = /obj/item/queen_bee/hornet
+	cost = 2
 	job = list("Botanist")
 
 //Chef
@@ -293,7 +314,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/greytide
 	name = "Greytide Implant"
-	desc = "A box containing an implanter filled with a greytide implant when injected into another person makes them loyal to the greytide and your cause, unless they're already implanted by someone else. Loyalty ends if he or she no longer has the implant."
+	desc = "A box containing two greytide implanters that when injected into another person makes them loyal to the greytide and your cause, unless they're already implanted by someone else. Loyalty ends if he or she no longer has the implant. CAUTION: WILL NOT WORK ON SUBJECTS WITH NT LOYALTY IMPLANTS. Now with disguised sechud sunglasses. These will have limited access until you can get your hands on some containing security codes."
 	item = /obj/item/weapon/storage/box/syndie_kit/greytide
 	cost = 14
 	job = list("Assistant")
@@ -344,12 +365,26 @@ var/list/uplink_items = list()
 	cost = 12
 	job = list("Station Engineer", "Chief Engineer")
 
+/datum/uplink_item/jobspecific/syndietape_engineering
+	name = "Syndicate Tape"
+	desc = "A length of engineering tape charged with a powerful electric potential. Will spark and shock people who attempt to remove it, creating fires. Can be used 3 times."
+	item = /obj/item/taperoll/syndie/engineering
+	cost = 4
+	job = list("Station Engineer", "Chief Engineer")
+
 //Atmos Tech
 /datum/uplink_item/jobspecific/contortionist
 	name = "Contortionist's Jumpsuit"
 	desc = "A highly flexible jumpsuit that will help you navigate the ventilation loops of the station internally. Comes with pockets and ID slot, but can't be used without stripping off most gear, including backpack, belt, helmet, and exosuit. Free hands are also necessary to crawl around inside."
 	item = /obj/item/clothing/under/contortionist
 	cost = 6
+	job = list("Atmospheric Technician", "Chief Engineer")
+
+/datum/uplink_item/jobspecific/syndietape_atmos
+	name = "Syndicate Tape"
+	desc = "A length of atmospherics tape made of an extremely sharp material that will cuts the hands of trespassers. Very difficult to remove. Can be used 3 times."
+	item = /obj/item/taperoll/syndie/atmos
+	cost = 4
 	job = list("Atmospheric Technician", "Chief Engineer")
 
 //Geneticist
@@ -680,6 +715,13 @@ var/list/uplink_items = list()
 	item = /obj/structure/popout_cake
 	cost = 6
 	gamemodes = list("nuclear emergency")
+
+/datum/uplink_item/device_tools/does_not_tip_note
+	name = "\"Does Not Tip\" database backdoor"
+	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the cargo workers at Central Command. You can be sure all pizza orders will be poisoned from the moment the screen flashes red."
+	item = /obj/item/device/does_not_tip_backdoor
+	num_in_stock = 1
+	cost = 10
 
 // IMPLANTS
 

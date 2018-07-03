@@ -37,6 +37,10 @@
 				log_admin("[key_name(usr)] has spawned a nuke team.")
 				if(!src.makeNukeTeam())
 					to_chat(usr, "<span class='warning'>Unfortunately there weren't enough candidates available.</span>")
+			if("8")
+				log_admin("[key_name(usr)] has spawned a count of vampires.")
+				if(!src.makeVampires())
+					to_chat(usr, "<span class='warning'>Unfortunately there weren't enough candidates available.</span>")
 			if("9")
 				log_admin("[key_name(usr)] has spawned aliens.")
 				if(!src.makeAliens())
@@ -81,7 +85,7 @@
 		lawtype=lawtypes[lawtype]
 		if(lawtype == null)
 			return
-		testing("Lawtype: [lawtype]")
+		//testing("Lawtype: [lawtype]")
 		if(lawtype==1)
 			lawtype=text2num(input("Enter desired law priority. (15-50)","Priority", 15) as num)
 			lawtype=Clamp(lawtype,15,50)
@@ -100,7 +104,7 @@
 		var/lawtype = input("Select a lawset.","Law Type",1) as null|anything in lawtypes
 		if(lawtype == null)
 			return
-		testing("Lawtype: [lawtype]")
+		//testing("Lawtype: [lawtype]")
 
 		var/law_zeroth=null
 		var/law_zeroth_borg=null
@@ -2534,7 +2538,7 @@
 				base_law_type = selected_law
 				subject = "AIs and Cyborgs"
 			if("mommi")
-				mommi_base_law_type = selected_law
+				mommi_laws["Default"] = selected_law
 				subject = "MoMMIs"
 		to_chat(usr, "<span class='notice'>New [subject] will spawn with the [selected_law] lawset.</span>")
 		log_admin("[key_name(src.owner)] set the default laws of [subject] to: [selected_law]")
@@ -3586,6 +3590,7 @@
 					"roaches" = VERM_ROACHES,
 					"gremlins" = VERM_GREMLINS,
 					"bees" = VERM_BEES,
+					"hornets" = VERM_HORNETS,
 					)
 				var/ov = vermins[input("What vermin should infest the station?", "Vermin Infestation") in vermins]
 				var/ol = locations[input("Where should they spawn?", "Vermin Infestation") in locations]

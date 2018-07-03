@@ -34,8 +34,7 @@
 
 	. = ..()
 
-/mob/living/examine(mob/user) //Show the mob's size and whether it's been butchered
-	var/size
+/mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
 	switch(src.size)
 		if(SIZE_TINY)
 			size = "tiny"
@@ -56,7 +55,7 @@
 	else if(src.gender == PLURAL)
 		pronoun = "they are"
 
-	..(user, " [capitalize(pronoun)] [size].")
+	..(user, " [capitalize(pronoun)] [size].", show_name, FALSE)
 	if(meat_taken > 0)
 		to_chat(user, "<span class='info'>[capitalize(pronoun)] partially butchered.</span>")
 
@@ -166,6 +165,16 @@
 
 	else
 		dust()
+
+/mob/living/clockify()
+	if(iscultist(src))
+		gib()
+	if(isclockwork(src))
+		if(get_species() != "Clockwork Golem")
+			to_chat(src, "<span class='brass'>The Clockwork Justiciar is overjoyed to be reunited with its followers, and accepts your body in sacrifice. As reward, you have been gifted with the body of a Clockwork Golem.</span>")
+			Humanize("Clockwork Golem")
+		return
+	dust()
 
 /mob/living/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
@@ -525,13 +534,11 @@ Thanks.
 	if(iscarbon(src))
 		var/mob/living/carbon/C = src
 
-		if (C.handcuffed && !initial(C.handcuffed))
+		if(C.handcuffed)
 			C.drop_from_inventory(C.handcuffed)
-		C.handcuffed = initial(C.handcuffed)
 
-		if (C.legcuffed && !initial(C.legcuffed))
+		if (C.legcuffed)
 			C.drop_from_inventory(C.legcuffed)
-		C.legcuffed = initial(C.legcuffed)
 	hud_updateflag |= 1 << HEALTH_HUD
 	hud_updateflag |= 1 << STATUS_HUD
 
@@ -615,9 +622,6 @@ Thanks.
 			IO.status = 0
 			IO.robotic = 0
 		H.updatehealth()
-	if(iscarbon(src))
-		var/mob/living/carbon/C = src
-		C.handcuffed = initial(C.handcuffed)
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
 	if(stat == DEAD)

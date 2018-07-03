@@ -43,7 +43,8 @@
 	overlays += image(icon = icon, icon_state = "bloodlust-adult")
 
 
-/mob/living/simple_animal/hostile/slime/adult/Die()
+/mob/living/simple_animal/hostile/slime/adult/death(var/gibbed = FALSE)
+	..(gibbed)
 	for(var/i=0;i<2;i++)
 		var/mob/living/simple_animal/hostile/slime/rabid = new /mob/living/simple_animal/hostile/slime (src.loc)
 		rabid.icon_state = "[src.colour] baby slime eat"

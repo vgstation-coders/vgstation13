@@ -142,7 +142,7 @@
 /obj/item/clothing/mask/facehugger/proc/healthcheck()
 	if(health <= 0)
 		icon_state = "[initial(icon_state)]_dead"
-		Die()
+		death()
 
 /obj/item/clothing/mask/facehugger/attack(mob/living/M as mob, mob/user as mob)
 	..()
@@ -183,7 +183,7 @@
 
 /obj/item/clothing/mask/facehugger/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > 300)
-		Die()
+		death()
 	return
 
 /obj/item/clothing/mask/facehugger/equipped(mob/M)
@@ -265,7 +265,7 @@
 			else
 				H.visible_message("<span class='danger'>\The [src] bounces off of \the [mouth_protection]!</span>")
 				if(prob(CHANCE_TO_DIE_AFTER_HEAD_DENIED) && !sterile)
-					Die()
+					death()
 					return
 				else
 					GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
@@ -317,7 +317,7 @@
 			else
 				C.visible_message("<span class='danger'>\The [src] bounces off of \the [headwear]!</span>")
 				if(prob(CHANCE_TO_DIE_AFTER_HEAD_DENIED) && !sterile)
-					Die()
+					death()
 					return
 				else
 					GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
@@ -352,7 +352,7 @@
 		target.visible_message("<span class='danger'>\The [src] falls limp after violating [target]'s face !</span>")
 		stat_collection.xeno_faces_hugged++
 
-		Die()
+		death()
 		//target.drop_from_inventory(src)
 		icon_state = "[initial(icon_state)]_impregnated"
 
@@ -387,7 +387,7 @@
 		GoActive()
 	return
 
-/obj/item/clothing/mask/facehugger/proc/Die()
+/obj/item/clothing/mask/facehugger/proc/death()
 	if(stat == DEAD || !real)
 		return
 	target = null
@@ -399,7 +399,6 @@
 
 	visible_message("<span class='danger'>\The [src] curls up into a ball!</span>")
 
-	return
 
 /proc/CanHug(mob/living/M, obj/item/clothing/mask/facehugger/hugger = null)
 	if(isalien(M))

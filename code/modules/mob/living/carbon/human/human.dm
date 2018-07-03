@@ -7,7 +7,7 @@
 	icon_state = "body_m_s"
 	can_butcher = 1
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
-	var/list/hud_list[9]
+	var/list/hud_list = list()
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
 
@@ -67,6 +67,10 @@
 	h_style = "Bald"
 	..(new_loc, "Golem")
 
+/mob/living/carbon/human/clockwork/New(var/new_loc, delay_ready_dna = 0)
+	h_style = "Bald"
+	..(new_loc, "Clockwork Golem")
+
 /mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
 	h_style = "Bald"
 	..(new_loc, "Grue")
@@ -116,11 +120,6 @@
 	static_overlays["letter"] = static_overlay
 
 /mob/living/carbon/human/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
-	if(!hair_styles_list.len)
-		buildHairLists()
-	if(!all_species.len)
-		buildSpeciesLists()
-
 	if(new_species_name)
 		s_tone = random_skin_tone(new_species_name)
 	multicolor_skin_r = rand(0,255)	//Only used when the human has a species datum with the MULTICOLOR anatomical flag
@@ -157,7 +156,7 @@
 	obj_overlays[FIRE_LAYER]		= getFromPool(/obj/abstract/Overlays/fire_layer)
 	obj_overlays[MUTANTRACE_LAYER]	= getFromPool(/obj/abstract/Overlays/mutantrace_layer)
 	obj_overlays[MUTATIONS_LAYER]	= getFromPool(/obj/abstract/Overlays/mutations_layer)
-	obj_overlays[DAMAGE_LAYER]		= getFromPool(/obj/abstract/Overlays/damage_layer)
+	obj_overlays[DAMAGE_LAYER]	= getFromPool(/obj/abstract/Overlays/damage_layer)
 	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/abstract/Overlays/uniform_layer)
 	obj_overlays[ID_LAYER]			= getFromPool(/obj/abstract/Overlays/id_layer)
 	obj_overlays[SHOES_LAYER]		= getFromPool(/obj/abstract/Overlays/shoes_layer)
@@ -258,9 +257,6 @@
 			var/obj/spacepod/S = loc
 			stat("Spacepod Charge", "[istype(S.battery) ? "[S.battery.charge] / [S.battery.maxcharge]" : "No cell detected"]")
 			stat("Spacepod Integrity", "[!S.health ? "0" : "[(S.health / initial(S.health)) * 100]"]%")
-
-/mob/living/carbon/human/attack_animal(mob/living/simple_animal/M as mob)
-	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
 	for(var/L in M.contents)
@@ -1126,8 +1122,9 @@
 		if(src.species.abilities)
 			src.verbs -= species.abilities
 		if(species.spells)
-			for(var/spell in species.spells)
-				remove_spell(spell)
+			for(var/spell/spell in spell_list)
+				if(spell.type in species.spells)
+					remove_spell(spell)
 		for(var/L in species.known_languages)
 			remove_language(L)
 		species.clear_organs(src)
@@ -1151,6 +1148,18 @@
 			add_spell(spell, "racial_spell_ready", /obj/abstract/screen/movable/spell_master/racial)
 	if(force_organs || !src.organs || !src.organs.len)
 		src.species.create_organs(src)
+	else
+		for(var/datum/organ/external/current_organ in organs)
+			if(species.anatomy_flags & NO_BLOOD)
+				current_organ.status &= ~ORGAN_BLEEDING
+			if(species.anatomy_flags & NO_BONES)
+				current_organ.status &= ~ORGAN_BROKEN
+				current_organ.status &= ~ORGAN_SPLINTED
+			if(species.anatomy_flags & NO_STRUCTURE && current_organ.status & ORGAN_DESTROYED)
+				current_organ.status |= ORGAN_ATTACHABLE
+				current_organ.amputated = 1
+				current_organ.setAmputatedTree()
+				current_organ.open = 0
 	var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 	if(E)
 		src.see_in_dark = E.see_in_dark //species.darksight
@@ -1165,6 +1174,8 @@
 		src.dna.species = new_species_name
 		src.species.handle_post_spawn(src)
 		src.update_icons()
+		if(species.species_intro)
+			to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
 	return 1
 
 /mob/living/carbon/human/proc/bloody_doodle()
@@ -1430,6 +1441,22 @@
 	make_robot_limbs_organic()
 	make_robot_internals_organic()
 
+// Makes all limbs robotic.
+/mob/living/carbon/human/proc/make_organic_limbs_robotic()
+	for(var/datum/organ/external/O in organs)
+		O.robotize()
+	update_icons()
+
+// Makes all internal organs robotic.
+/mob/living/carbon/human/proc/make_organic_internals_robotic()
+	for(var/datum/organ/internal/O in organs)
+		O.robotic = TRUE
+
+// Makes all organs, internal and external, robotic.
+/mob/living/carbon/human/proc/make_all_organic_parts_robotic()
+	make_organic_limbs_robotic()
+	make_organic_internals_robotic()
+
 /mob/living/carbon/human/proc/set_attack_type(new_type = NORMAL_ATTACK)
 	kick_icon.icon_state = "act_kick"
 	bite_icon.icon_state = "act_bite"
@@ -1547,7 +1574,8 @@
 		plane = LYING_HUMAN_PLANE
 	else
 		plane = HUMAN_PLANE
-	if(istype(areaMaster) && areaMaster.project_shadows)
+	var/area/this_area = get_area(src)
+	if(istype(this_area) && this_area.project_shadows)
 		update_shadow()
 
 /mob/living/carbon/human/set_hand_amount(new_amount) //Humans need hand organs to use the new hands. This proc will give them some
@@ -1764,6 +1792,7 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	return TRUE
 
 /mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE)
+	ghostize()
 	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? mind : null))
 	T.get_clothes(src, T)
 	T.name = real_name
@@ -1786,5 +1815,8 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 		if(HUD_MEDICAL)
 			return istype(glasses, /obj/item/clothing/glasses/hud/health)
 		if(HUD_SECURITY)
+			if(istype(glasses, /obj/item/clothing/glasses/sunglasses/sechud/syndishades))
+				var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/S = glasses
+				return S.full_access
 			return is_type_in_list(glasses, list(/obj/item/clothing/glasses/hud/security, /obj/item/clothing/glasses/sunglasses/sechud))
 	return FALSE

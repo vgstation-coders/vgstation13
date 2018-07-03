@@ -10,6 +10,7 @@
 		/obj/item/weapon/gun/lawgiver,
 		/obj/item/weapon/gun/siren,
 		/obj/item/weapon/gun/mahoguny,
+		/obj/item/weapon/gun/grenadelauncher,
 		/obj/item/weapon/bikehorn/baton,
 		/obj/item/weapon/blunderbuss
 		)
@@ -132,6 +133,17 @@
 	armor = list(melee = 10, bullet = 10, laser = 80, energy = 50, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0
 	var/basereflectchance = 60
+
+/obj/item/clothing/suit/armor/laserproof/advanced
+	name = "Vest of Reflection"
+	desc = "This modified version of a common ablative armor vest is guaranteed to reflect every single energy projectile coming your way. As a slight tradeoff though, it doesn't provide any protection."
+	icon_state = "armor_reflec_adv"
+	item_state = "armor_reflec_adv"
+
+	//Reflect literally everything
+	basereflectchance = 300
+
+	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/laserproof/become_defective()
 	if(!defective)

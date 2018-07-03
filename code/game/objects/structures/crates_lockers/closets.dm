@@ -223,7 +223,7 @@
 /obj/structure/closet/beam_connect(var/obj/effect/beam/B)
 	if(!processing_objects.Find(src))
 		processing_objects.Add(src)
-		testing("Connected [src] with [B]!")
+//		testing("Connected [src] with [B]!")
 	return ..()
 
 /obj/structure/closet/beam_disconnect(var/obj/effect/beam/B)

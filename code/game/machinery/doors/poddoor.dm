@@ -22,6 +22,9 @@ var/list/poddoors = list()
 	var/closingicon = "pdoorc1"
 	var/openingicon = "pdoorc0"
 
+/obj/machinery/door/poddoor/clockify()
+	return
+
 /obj/machinery/door/poddoor/preopen
 	icon_state = "pdoor0"
 	density = 0
@@ -73,6 +76,9 @@ var/list/poddoors = list()
 			src.operating = 0
 			return
 	return
+
+/obj/machinery/door/poddoor/allowed(mob/M)
+	return 0
 
 /obj/machinery/door/poddoor/open()
 	if (src.operating == 1) //doors can still open when emag-disabled

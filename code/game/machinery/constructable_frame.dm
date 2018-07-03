@@ -122,7 +122,7 @@
 				if(iswrench(P))
 					playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 					to_chat(user, "<span class='notice'>You dismantle the frame.</span>")
-					drop_stack(/obj/item/stack/sheet/metal, get_turf(src), 5, user)
+					drop_stack(sheet_type, get_turf(src), 5, user)
 					qdel(src)
 		if(2)
 			if(!..())
@@ -203,6 +203,7 @@
 							else
 								circuit.forceMove(null)
 							new_machine.RefreshParts()
+							new_machine.power_change()
 							circuit.finish_building(new_machine, user)
 							components = null
 							qdel(src)
@@ -975,10 +976,10 @@ obj/item/weapon/circuitboard/rdserver
 
 // Telecomms circuit boards:
 
-/obj/item/weapon/circuitboard/telecomms/pda_multicaster
+/obj/item/weapon/circuitboard/pda_multicaster
 	name = "Circuit Board (PDA multicaster)"
 	desc = "A circuit board used to run a machine that resends messages."
-	build_path = "/obj/machinery/telecomms/pda_multicaster"
+	build_path = "/obj/machinery/pda_multicaster"
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=2"
 	req_components = list(

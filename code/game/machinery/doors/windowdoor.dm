@@ -129,9 +129,9 @@
 		return 0
 	if(!operating) //in case of emag
 		operating = 1
-	flick(text("[]opening", base_state), src)
+	door_animate("opening")
 	playsound(src, soundeffect, 100, 1)
-	icon_state = text("[]open", base_state)
+	icon_state = "[base_state]open"
 	sleep(animation_delay)
 
 	explosion_resistance = 0
@@ -148,7 +148,7 @@
 	if (operating)
 		return 0
 	operating = 1
-	flick(text("[]closing", base_state), src)
+	door_animate("closing")
 	playsound(src, soundeffect, 100, 1)
 	icon_state = base_state
 
@@ -219,9 +219,6 @@
 	visible_message("<span class='warning'>\The [M] [M.attacktext] against \the [name].</span>", 1)
 	take_damage(M.melee_damage_upper)
 
-/obj/machinery/door/window/attack_hand(mob/user as mob)
-	return attackby(user, user)
-
 /obj/machinery/door/window/attackby(obj/item/weapon/I as obj, mob/living/user as mob)
 	// Make emagged/open doors able to be deconstructed
 	if (!density && operating != 1 && iscrowbar(I))
@@ -277,15 +274,6 @@
 		//don't care who they are or what they have, act as if they're NOTHING
 		user = null
 
-	if (isrobot(user))
-		if (density)
-			return open()
-		else
-			return close()
-
-	if (!allowed(user) && density)
-		flick(text("[]deny", base_state), src)
-
 	return ..()
 
 /obj/machinery/door/window/emag(mob/user)
@@ -293,13 +281,16 @@
 		var/used_emag = (/obj/item/weapon/card/emag in user.contents) //TODO: Find a better way of checking this
 		return hackOpen(used_emag, user)
 
+/obj/machinery/door/window/door_animate(var/animation)
+	flick("[base_state][animation]", src)
+
 /obj/machinery/door/window/proc/hackOpen(obj/item/I, mob/user)
 	operating = -1
 
 	if (electronics)
 		electronics.icon_state = "door_electronics_smoked"
 
-	flick("[base_state]spark", src)
+	door_animate("spark")
 	sleep(6)
 	open()
 	return 1
@@ -357,6 +348,9 @@
 			AE.one_access = 1
 	AE.forceMove(loc)
 
+/obj/machinery/door/window/clockify()
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/machinery/door/window/clockwork)
+
 /obj/machinery/door/window/brigdoor
 	name = "Secure Window Door"
 	icon = 'icons/obj/doors/windoor.dmi'
@@ -373,6 +367,20 @@
 	WA.secure = "secure_"
 	WA.update_icon()
 	return WA
+
+/obj/machinery/door/window/clockwork
+	name = "brass windoor"
+	desc = "A thin door with translucent brass paneling."
+	icon_state = "clockwork"
+	base_state = "clockwork"
+
+/obj/machinery/door/window/clockwork/make_assembly(mob/user as mob)
+	var/obj/structure/windoor_assembly/clockwork/WA = new /obj/structure/windoor_assembly/clockwork(loc)
+	set_assembly(user, WA)
+	return WA
+
+/obj/machinery/door/window/clockwork/clockify()
+	return
 
 /obj/machinery/door/window/plasma
 	name = "Plasma Window Door"
@@ -401,3 +409,8 @@
 	WA.secure = "secure_"
 	WA.update_icon()
 	return WA
+
+// Used on Packed ; smartglassified roundstart
+/obj/machinery/door/window/plasma/secure/interogation_room/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = "InterogationRoomIDTag"

@@ -222,9 +222,9 @@
 
 	New()
 		..()
-		var/obj/item/weapon/implanter/O = new(src)
-		O.imp = new /obj/item/weapon/implant/traitor(O)
-		O.update()
+		new /obj/item/weapon/implanter/traitor(src)
+		new /obj/item/weapon/implanter/traitor(src)
+		new /obj/item/clothing/glasses/sunglasses/sechud/syndishades(src)
 
 /obj/item/weapon/storage/box/syndie_kit/boolets
 	name = "Shotgun shells"

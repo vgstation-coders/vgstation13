@@ -7,7 +7,7 @@
 	charge_max = 1
 	school = "conjuration"
 	spell_flags = Z2NOCAST
-	invocation = "How much did Santa pay for his sleigh? Nothing, it was on the house!"
+	invocation = "SL'IGH B'LLS RIN'!"
 	invocation_type = SpI_SHOUT
 	range = 0
 

@@ -170,7 +170,7 @@
 		return
 	if(isrobot(user))
 		var/mob/living/silicon/robot/robit = usr
-		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+		if(!(robit.module && (robit.module.quirk_flags & MODULE_CAN_HANDLE_MEDICAL)))
 			to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 	var/mob/living/L = O
@@ -216,7 +216,7 @@
 		return
 	if(isrobot(usr))
 		var/mob/living/silicon/robot/robit = usr
-		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+		if(!(robit.module && (robit.module.quirk_flags & MODULE_CAN_HANDLE_MEDICAL)))
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 	if(!istype(over_location) || over_location.density)
@@ -258,38 +258,42 @@
 		return
 	return ..()
 
-/obj/machinery/sleeper/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(..())
-		return TRUE
-	if(!istype(W, /obj/item/weapon/grab))
+/obj/machinery/sleeper/attackby(obj/item/weapon/obj_used, mob/user)
+
+	if(!istype(obj_used, /obj/item/weapon/grab))
 		return ..()
-	var/obj/item/weapon/grab/G = W
-	if(!(ismob(G.affecting)) || G.affecting.locked_to)
+	else
+		if(..())
+			return TRUE
+
+	var/obj/item/weapon/grab/tar_grab = obj_used
+	if(!(ismob(tar_grab.affecting)) || tar_grab.affecting.locked_to)
 		return
+
 	if(occupant)
 		to_chat(user, "<span class='notice'><B>The sleeper is already occupied!</B></span>")
 		return
 
-	for(var/mob/living/carbon/slime/M in range(1,G.affecting))
-		if(M.Victim == G.affecting)
-			to_chat(usr, "[G.affecting.name] will not fit into \the [src] because they have a slime latched onto their head.")
+	for(var/mob/living/carbon/slime/tar_slime in range(1,tar_grab.affecting))
+		if(tar_slime.Victim == tar_grab.affecting)
+			to_chat(usr, "[tar_grab.affecting.name] will not fit into \the [src] because they have a slime latched onto their head.")
 			return
 
-	visible_message("[user] places [G.affecting.name] into \the [src].")
+	visible_message("[user] places [tar_grab.affecting.name] into \the [src].")
 
-	var/mob/M = G.affecting
-	if(!isliving(M) || M.locked_to)
+	var/mob/tar_mob = tar_grab.affecting
+	if(!isliving(tar_mob) || tar_mob.locked_to)
 		return
-	M.forceMove(src)
-	M.reset_view()
-	occupant = M
+	tar_mob.forceMove(src)
+	tar_mob.reset_view()
+	occupant = tar_mob
 
-	to_chat(M, "<span class='notice'><b>You feel an anaesthetising air surround you. You go numb as your senses turn inward.</b></span>")
+	to_chat(tar_mob, "<span class='notice'><b>You feel an anaesthetising air surround you. You go numb as your senses turn inward.</b></span>")
 	process()
-	for(var/obj/O in src)
-		O.forceMove(loc)
+	for(var/obj/tar_obj in src)
+		tar_obj.forceMove(loc)
 	add_fingerprint(user)
-	qdel(G)
+	qdel(tar_grab)
 	if(!(stat & (BROKEN|NOPOWER)))
 		set_light(light_range_on, light_power_on)
 	update_icon()
@@ -630,7 +634,7 @@
 		if(occupant)
 			if(ishuman(occupant))
 				var/mob/living/carbon/human/H = occupant
-				if(isdiona(H)) 
+				if(isdiona(H))
 					if(H.h_style != "Popped Hair")
 						to_chat(H, "<span class = 'notice'>Your head pops!</span>")
 						playsound(src, 'sound/effects/pop.ogg', 50, 1)

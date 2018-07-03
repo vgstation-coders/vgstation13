@@ -17,10 +17,12 @@ var/global/list/narsie_list = list()
 	dissipate = 0 // Do we lose energy over time?
 	grav_pull = 10 //How many tiles out do we pull?
 	consume_range = 3 //How many tiles out do we eat
-
+	var/announce_text = null
 
 /obj/machinery/singularity/narsie/New()
 	..()
+	if(!announce_text)
+		announce_text = "<font size='15' color='red'><b>[uppertext(name)] HAS RISEN</b></font>"
 	narsie_list.Add(src)
 
 /obj/machinery/singularity/narsie/Destroy()
@@ -48,7 +50,7 @@ var/global/list/narsie_list = list()
 /obj/machinery/singularity/narsie/large/New()
 	..()
 	if(announce)
-		to_chat(world, "<font size='15' color='red'><b>[uppertext(name)] HAS RISEN</b></font>")
+		to_chat(world, announce_text)
 		world << sound('sound/effects/wind/wind_5_1.ogg')
 		if(narnar)
 			narsie_spawn_animation()
@@ -58,7 +60,7 @@ var/global/list/narsie_list = list()
 			if (mode_ticker.objectives[mode_ticker.current_objective] == "eldergod")
 				mode_ticker.third_phase()
 
-		if (emergency_shuttle)
+		if(emergency_shuttle)
 			emergency_shuttle.incall()
 			emergency_shuttle.can_recall = 0
 			if(emergency_shuttle.endtime > world.timeofday + 1800 && emergency_shuttle.location != 1 && !emergency_shuttle.departed)
@@ -67,17 +69,6 @@ var/global/list/narsie_list = list()
 		if(narnar)
 			SetUniversalState(/datum/universal_state/hell)
 		narsie_cometh = 1
-
-	/* //For animating narsie manually, doesn't work well
-	//Begin narsie vision
-	for(var/mob/M in player_list)
-		if(M.client)
-			M.see_narsie(src)
-	alpha = 0
-	*/
-/*
-	updateicon()
-*/
 
 /obj/machinery/singularity/narsie/process()
 	eat()
@@ -555,3 +546,72 @@ var/global/mr_clean_targets = list(
 	sleep(10)
 	icon = 'icons/obj/narsie.dmi'
 	icon_state = "narsie"
+
+/obj/machinery/singularity/narsie/large/clockwork //Rushed copypaste of nar-sie because i don't give a fuck.
+	name = "Ratvar, the Clockwork Justiciar"
+	desc = "..."
+	icon = 'icons/obj/ratvar.dmi'
+	icon_state = ""
+	narnar = FALSE
+	announce_text = "<span class='ratvar'>ONCE AGAIN MY LIGHT SHINES AMONG THESE PATHETIC STARS</span>"
+
+/obj/machinery/singularity/narsie/large/clockwork/New()
+	narsie_cometh = 1//so we don't force a shuttle call
+	..()
+	narsie_cometh = 0
+
+/obj/machinery/singularity/narsie/large/clockwork/on_capture()
+	chained = TRUE
+	move_self = FALSE
+
+/obj/machinery/singularity/narsie/large/clockwork/on_release()
+	chained = FALSE
+	move_self = TRUE
+
+/obj/machinery/singularity/narsie/large/clockwork/consume(const/atom/A)
+	//MOB PROCESSING
+	if(istype(A, /mob/) && (get_dist(A, src) <= 7))
+		var/mob/M = A
+		if(M.flags & INVULNERABLE)
+			return FALSE
+		M.clockify()
+
+	//ITEM PROCESSING
+	else if(istype(A, /obj/))
+		var/obj/O = A
+		O.clockify()
+
+	//TURF PROCESSING
+	else if(isturf(A))
+		var/dist = get_dist(A, src)
+
+		for(var/atom/movable/AM in A.contents)
+			if(dist <= consume_range)
+				consume(AM)
+				continue
+
+			if(dist > consume_range && canPull(AM))
+				if(AM.invisibility == 101)
+					continue
+
+		if(dist <= consume_range && !istype(A, /turf/space))
+			var/turf/T = A
+			if(T.holy) //Whatever.
+				T.holy = FALSE
+			T.clockify()
+
+/obj/machinery/singularity/narsie/large/clockwork/mezzer()
+	for(var/mob/living/M in oviewers(8, src))
+		if(M.stat == CONSCIOUS)
+			if(M.flags & INVULNERABLE)
+				continue
+			if(isclockwork(M))
+				continue
+			to_chat(M, "<span class='heavy_brass'>You see an abomination of rusting parts and hear the whooshing steam and cl[pick("ank", "ink", "unk", "ang")]ing cogs. The sound</span> <span class='danger'>is a meaningless cacophony.</span>.")
+			M.apply_effect(3, STUN)
+
+/obj/machinery/singularity/narsie/large/clockwork/narsiewall() //We don't make snowflake cult walls
+	return
+
+/obj/machinery/singularity/narsie/large/clockwork/narsiefloor() //We don't make snowflake cult floors
+	return

@@ -42,15 +42,13 @@
 
 	var/msg = "<span class='info'>*---------*\nThis is "
 
-	if( slot_w_uniform in obscured && skipface )
+	if((slot_w_uniform in obscured) && skipface)
 		t_He = "They"
 		t_his = "their"
 		t_him = "them"
 		t_has = "have"
 		t_is = "are"
 	else
-		if(icon)
-			msg += "[bicon(src)] " //note, should we ever go back to runtime-generated icons (please don't), you will need to change this to [bicon(icon)] to prevent crashes.
 		switch(gender)
 			if(MALE)
 				t_He = "He"

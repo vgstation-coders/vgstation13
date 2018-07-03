@@ -421,10 +421,10 @@
 				additional_desc += " There seems to be some sort of slot in the handle."
 
 			//let's get some ammunition in this gun : weighted to pick available ammo
-			new_gun.caliber = pick(50;list("357" = 1),
-								   10;list("75" = 1),
-								   30;list("38" = 1),
-								   10;list("12mm" = 1))
+			new_gun.caliber = pick(50;list(POINT357 = 1),
+								   10;list(POINT75 = 1),
+								   30;list(POINT38 = 1),
+								   10;list(MM12 = 1))
 
 			//33% chance to fill it with a random amount of bullets
 			new_gun.max_shells = rand(1,12)

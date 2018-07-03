@@ -23,6 +23,7 @@
 	siemens_coefficient = 1
 	origin_tech = Tc_MATERIALS + "=1"
 	melt_temperature = MELTPOINT_STEEL
+	mat_type = MAT_IRON
 
 /obj/item/stack/sheet/metal/resetVariables()
 	return ..("recipes", "pixel_x", "pixel_y")
@@ -94,6 +95,7 @@
 	sheettype = "wood"
 	w_type = RECYK_WOOD
 	siemens_coefficient = 0 //no conduct
+	mat_type = MAT_WOOD
 
 
 /obj/item/stack/sheet/wood/afterattack(atom/Target, mob/user, adjacent, params)
@@ -163,10 +165,22 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 		recipes = charcoal_recipes
 		return ..()
 
+/obj/item/stack/sheet/brass
+	name = "brass"
+	desc = "Large sheets made out of brass."
+	singular_name = "brass sheet"
+	icon_state = "sheet-brass"
+	sheettype = "clockwork"
+	origin_tech = Tc_ANOMALY + "=1"
+	starting_materials = list(MAT_BRASS = CC_PER_SHEET_METAL)
+
+/obj/item/stack/sheet/brass/New(var/loc, var/amount=null)
+		recipes = brass_recipes
+		return ..()
 		
 /obj/item/stack/sheet/bone
 	name = "bone"
-	desc = "Boney.  Probably has some marrow left."
+	desc = "Boney. Probably has some marrow left."
 	singular_name = "bone"
 	origin_tech = Tc_BIOTECH + "=1"
 	icon_state = "sheet-bone"

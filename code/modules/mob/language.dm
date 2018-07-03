@@ -65,7 +65,6 @@
 	exclaim_verb = "roars"
 	colour = "soghun"
 	key = "o"
-	flags = RESTRICTED
 	syllables = list("ss","ss","ss","ss","skak","seeki","resh","las","esi","kor","sh")
 
 /datum/language/tajaran
@@ -76,7 +75,6 @@
 	exclaim_verb = "yowls"
 	colour = "tajaran"
 	key = "j"
-	flags = RESTRICTED
 	syllables = list("rr","rr","tajr","kir","raj","kii","mir","kra","ahk","nal","vah","khaz","jri","ran","darr", \
 	"mi","jri","dynh","manq","rhe","zar","rrhaz","kal","chur","eech","thaa","dra","jurl","mah","sanu","dra","ii'r", \
 	"ka","aasi","far","wa","baq","ara","qara","zir","sam","mak","hrar","nja","rir","khan","jun","dar","rik","kah", \
@@ -90,7 +88,6 @@
 	exclaim_verb = "warbles"
 	colour = "skrell"
 	key = "k"
-	flags = RESTRICTED
 	syllables = list("qr","qrr","xuq","qil","quum","xuqm","vol","xrim","zaoo","qu-uu","qix","qoo","zix","*","!")
 
 /datum/language/vox
@@ -101,7 +98,6 @@
 	exclaim_verb = "shrieks"
 	colour = "vox"
 	key = "v"
-	flags = RESTRICTED
 	syllables = list("ti","ti","ti","hi","hi","ki","ki","ki","ki","ya","ta","ha","ka","ya","chi","cha","kah", \
 	"SKRE","AHK","EHK","RAWK","KRA","AAA","EEE","KI","II","KRI","KA")
 
@@ -113,7 +109,6 @@
 	exclaim_verb = "rustles"
 	colour = "soghun"
 	key = "q"
-	flags = RESTRICTED
 	syllables = list("hs","zt","kr","st","sh")
 
 /datum/language/common
@@ -130,7 +125,6 @@
 	desc = "A bastardized hybrid of informal English and elements of Mandarin Chinese; the common language of the Sol system."
 	key = "7"
 	colour = "solcom"
-	flags = RESTRICTED
 
 /datum/language/human/monkey
 	name = LANGUAGE_MONKEY
@@ -149,6 +143,7 @@
 	colour = "say_quote"
 	key = "2"
 	space_chance = 100
+	flags = CAN_BE_SECONDARY_LANGUAGE
 	syllables = list("lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit",
 					 "sed", "do", "eiusmod", "tempor", "incididunt", "ut", "labore", "et", "dolore",
 					 "magna", "aliqua", "ut", "enim", "ad", "minim", "veniam", "quis", "nostrud",
@@ -164,6 +159,7 @@
 	speech_verb = "growls"
 	colour = "gutter"
 	key = "3"
+	flags = CAN_BE_SECONDARY_LANGUAGE
 	syllables = list("gra","ba","ba","breh","bra","rah","dur","ra","ro","gro","go","ber","bar","geh","heh","gra")
 
 /datum/language/grey
@@ -175,7 +171,6 @@
 	exclaim_verb = "quacks loudly"
 	colour = "grey"
 	native=1
-	flags = RESTRICTED
 	space_chance = 100
 	syllables = list("ACK", "AKACK", "ACK")
 
@@ -196,7 +191,6 @@
 	exclaim_verb = "chatters loudly"
 	colour = "sinister"
 	native=1
-	flags = RESTRICTED
 	space_chance = 95
 	syllables = list("CLICK", "CLACK")
 
@@ -210,7 +204,6 @@
 	colour = "golem"
 	native = 1
 	key = "8"
-	flags = RESTRICTED
 	syllables = list("oa","ur","ae","um","tu","gor","an","lo","ag","oon","po")
 
 /datum/language/slime
@@ -223,7 +216,6 @@
 	colour = "slime"
 	native = 1
 	key = "f"
-	flags = RESTRICTED
 	syllables = list("ba","ab","be","eb","bi","ib","bo","ob","bu","ub")
 
 /datum/language/skellington/say_misunderstood(mob/M, message)
@@ -266,6 +258,40 @@
 		"gal'h'rfikk", "harfrandid", "mud'gib", "fuu", "ma'jin", "dedo", "ol'btoh", "n'ath", "reth", "sh'yro", "eth", \
 		"d'rekkathnor", "khari'd", "gual'te", "nikka", "nikt'o", "barada", "kla'atu", "barhah", "hra" ,"zar'garis")
 
+/datum/language/clockworkcommon
+	name = LANGUAGE_CLOCKWORK
+	desc = "The language of the Justiciar, the incomprehensible." // "An archaic language of an otherworldly civilization. Incomprehensible to all but the eternal and their servants." until I realised Velard already defined a clockcult language.
+	speech_verb = "recites"
+	ask_verb = "chatters"
+	exclaim_verb = "bellows"
+	colour = "brass"
+	key	= "r"
+	flags = RESTRICTED
+	space_chance = 30
+
+	// Yes I literally took the most common syllables in english (google) and ran them through Rot 13.
+	syllables = list(
+		"gur", "naq", "vat", "ure", "lbh", "ire",
+		"jnf", "ung", "abg", "sbe", "guv", "gun",
+		"uvf", "rag", "vgu", "vba", "rer", "jvg",
+		"nyy", "rir", "bhy", "hyq", "gvb", "gre",
+		"ura", "unq", "fub", "bhe", "uva", "ren",
+		"ner", "grq", "bzr", "ohg",
+
+		"gu", "ur", "na", "re", "va", "er", "aq",
+		"bh", "ra", "ba", "rq", "gb", "vg", "un",
+		"ng", "ir", "be", "nf", "uv", "ne", "gr",
+		"rf", "at", "vf", "fg", "yr", "ny", "gv",
+		"fr", "jn", "rn", "zr", "ag", "ar",
+
+		// To add some semi frequent ' to the mix.
+		"'", "'", "'", "'", "'", "'", "'", "'"
+	)
+
+/datum/language/clockworkcommon/say_misunderstood(var/mob/M, var/message)
+	//TODO: make a rot13 proc and then jumble shit around
+	return speech_verb
+
 /datum/language/mouse
 	name = LANGUAGE_MOUSE
 	desc = "Literally just squeaks"
@@ -274,7 +300,6 @@
 	key = "9"
 	space_chance = 80
 	syllables = list("squeak")
-	flags = RESTRICTED
 
 /datum/language/martian
 	name = LANGUAGE_MARTIAN
@@ -284,9 +309,9 @@
 	exclaim_verb = "blurbs"
 	key = "@"
 	colour = "grey"
+	flags = RESTRICTED
 	space_chance = 35
 	native = 1
-	flags = RESTRICTED
 	syllables = list("khah","kig","kitol","kaor","bar","dar","dator","lok","ma","mu","o","och","gort","gal")
 
 // Language handling.
@@ -350,9 +375,9 @@
 	src << browse(dat, "window=checklanguage")
 
 /mob/living/Topic(href, href_list)
-	if(usr != src)
-		return
 	if(href_list["default_lang"])
+		if(usr != src)
+			return
 		if(href_list["default_lang"] == "reset")
 			set_default_language(null)
 		else

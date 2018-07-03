@@ -99,8 +99,7 @@ var/list/wood_icons = list("wood","wood-broken")
 	if(!(locate(/obj/effect/decal/cleanable/dirt) in contents))
 		getFromPool(/obj/effect/decal/cleanable/dirt,src)
 
-turf/simulated/floor/update_icon()
-
+/turf/simulated/floor/update_icon()
 	if(lava)
 		return
 	else if(is_plasteel_floor())
@@ -109,6 +108,8 @@ turf/simulated/floor/update_icon()
 	else if(is_plating())
 		if(!broken && !burnt)
 			icon_state = icon_plating //Because asteroids are 'platings' too.
+	else if(is_clockwork_floor())
+		icon_state = "clockwork"
 	else if(is_slime_floor())
 		icon_state = "tile-slime"
 	else if(is_light_floor())
@@ -228,32 +229,27 @@ turf/simulated/floor/update_icon()
 /turf/simulated/floor/is_plasteel_floor()
 	if(istype(floor_tile,/obj/item/stack/tile/plasteel))
 		return 1
-	else
-		return 0
+	return 0
 
 /turf/simulated/floor/is_light_floor()
 	if(istype(floor_tile,/obj/item/stack/tile/light))
 		return 1
-	else
-		return 0
+	return 0
 
 /turf/simulated/floor/is_grass_floor()
 	if(istype(floor_tile,/obj/item/stack/tile/grass))
 		return 1
-	else
-		return 0
+	return 0
 
 /turf/simulated/floor/is_wood_floor()
 	if(istype(floor_tile,/obj/item/stack/tile/wood))
 		return 1
-	else
-		return 0
+	return 0
 
 /turf/simulated/floor/is_carpet_floor()
 	if(istype(floor_tile,/obj/item/stack/tile/carpet))
 		return 1
-	else
-		return 0
+	return 0
 
 /turf/simulated/floor/is_arcade_floor()
 	if(istype(floor_tile,/obj/item/stack/tile/arcade))
@@ -263,8 +259,7 @@ turf/simulated/floor/update_icon()
 /turf/simulated/floor/is_slime_floor()
 	if(istype(floor_tile,/obj/item/stack/tile/slime))
 		return 1
-	else
-		return 0
+	return 0
 
 /turf/simulated/floor/is_plating()
 	if(!floor_tile)
@@ -275,6 +270,11 @@ turf/simulated/floor/update_icon()
 	if(istype(floor_tile,/obj/item/stack/tile/mineral))
 		return 1
 	return 0
+
+/turf/simulated/floor/is_clockwork_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/brass))
+		return TRUE
+	return FALSE
 
 /turf/simulated/floor/proc/break_tile()
 	if(istype(src,/turf/simulated/floor/engine))
@@ -299,6 +299,8 @@ turf/simulated/floor/update_icon()
 	else if(is_grass_floor())
 		src.icon_state = "sand[pick("1","2","3")]"
 		broken = 1
+	else if(is_clockwork_floor())
+		return //it's fucking magic
 	else if(is_slime_floor())
 		spawn(rand(2,10))
 			make_plating()
@@ -321,6 +323,8 @@ turf/simulated/floor/update_icon()
 		return
 	if(istype(src,/turf/unsimulated/floor/asteroid))
 		return//Asteroid tiles don't burn
+	if(is_clockwork_floor())
+		return // it's fucking magic
 	if(is_plasteel_floor())
 		src.icon_state = "damaged[pick(1,2,3,4,5)]"
 		burnt = 1
@@ -702,6 +706,13 @@ turf/simulated/floor/update_icon()
 		icon_state = "cult"
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
 	return
+
+/turf/simulated/floor/clockify()
+	if(icon_state != "clockwork")
+		name = "clockwork floor"
+		desc = "It's filled with rotating and moving clockwork components."
+		icon_state = "clockwork"
+		turf_animation('icons/effects/effects.dmi',"clock_floor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
 
 /turf/simulated/floor/adjust_slowdown(mob/living/L, current_slowdown)
 	//Phazon floors make movement faster

@@ -59,14 +59,14 @@
 	Bumped(Obstacle)
 	..()
 
-/mob/living/simple_animal/hostile/rattlemebones/Die()
+/mob/living/simple_animal/hostile/rattlemebones/death(var/gibbed = FALSE)
 	visible_message("<span class='warning'>\The [src] collapses into a pile of bones!</span>")
 	name = "pile of bones"
 	desc = "It looks like a pile of human bones."
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "remains"
 	icon_dead = "remains"
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/rattlemebones/ListTargets()
 	if(!rattled)

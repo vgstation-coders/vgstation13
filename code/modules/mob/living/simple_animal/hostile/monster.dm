@@ -83,12 +83,11 @@
 			visible_message("<b><span class='warning'>[src] injects something from its flailing arm!</span>")
 			L.reagents.add_reagent(MEDNANOBOTS, 2)
 
-/mob/living/simple_animal/hostile/monster/cyber_horror/Die()
-	..()
+/mob/living/simple_animal/hostile/monster/cyber_horror/death(var/gibbed = FALSE)
+	..(gibbed)
 	visible_message("<b>[src]</b> blows apart!")
 	new /obj/effect/gibspawner/robot(src.loc)
 	qdel(src)
-	return
 
 /mob/living/simple_animal/hostile/monster/cyber_horror/Vox
 	name = "vox cyber horror"

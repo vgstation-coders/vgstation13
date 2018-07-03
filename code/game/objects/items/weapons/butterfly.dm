@@ -65,11 +65,11 @@
 		else
 			fold()
 
-/obj/item/weapon/butterflyknife/proc/rearm(mob/user)
+/obj/item/weapon/butterflyknife/proc/rearm()
 	counting = null
 	bug = initial(bug)
 	playsound(src, 'sound/items/healthanalyzer.ogg', 10, 1)
-	to_chat(user, "<span class='notice'>\The [src] chimes.</span>")
+	visible_message("<span class='notice'>\The [src] chimes.</span>")
 
 /obj/item/weapon/butterflyknife/proc/unfold()
 	open = TRUE

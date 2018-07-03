@@ -149,6 +149,15 @@
 /turf/simulated/floor/engine/cult/cultify()
 	return
 
+/turf/simulated/floor/engine/clockwork
+	name = "clockwork floor"
+	desc = "It's filled with rotating and moving clockwork components."
+	icon_state = "clockwork"
+	floor_tile = /obj/item/stack/tile/brass
+
+/turf/simulated/floor/engine/clockwork/clockify()
+	return
+
 /turf/simulated/floor/engine/airless
 	oxygen = 0.01
 	nitrogen = 0.01

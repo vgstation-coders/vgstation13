@@ -1,11 +1,11 @@
 /datum/component/ai/atmos_checker
 	//Atmos effect - Yes, you can make creatures that require plasma or co2 to survive. N2O is a trace gas and handled separately, hence why it isn't here. It'd be hard to add it. Hard and me don't mix (Yes, yes make all the dick jokes you want with that.) - Errorage
-	var/min_oxy = 5
+	var/min_oxy = 5 / CELL_VOLUME
 	var/max_oxy = 0					//Leaving something at 0 means it's off - has no maximum
 	var/min_tox = 0
-	var/max_tox = 1
+	var/max_tox = 1 / CELL_VOLUME
 	var/min_co2 = 0
-	var/max_co2 = 5
+	var/max_co2 = 5 / CELL_VOLUME
 	var/min_n2 = 0
 	var/max_n2 = 0
 	var/unsuitable_damage = 2	//This damage is taken when atmos doesn't fit all the requirements above
@@ -46,41 +46,41 @@
 				SendSignal(COMSIG_ADJUST_BODYTEMP, list("temp"=((Environment.temperature - controller.getBodyTemperature()) / 5)))
 
 			if(min_oxy)
-				if(Environment.oxygen < min_oxy)
+				if(Environment.molar_density("oxygen") < min_oxy)
 					atmos_suitable = 0
 					oxygen_alert = 1
 				else
 					oxygen_alert = 0
 
 			if(max_oxy)
-				if(Environment.oxygen > max_oxy)
+				if(Environment.molar_density("oxygen") > max_oxy)
 					atmos_suitable = 0
 
 			if(min_tox)
-				if(Environment.toxins < min_tox)
+				if(Environment.molar_density("toxins") < min_tox)
 					atmos_suitable = 0
 
 			if(max_tox)
-				if(Environment.toxins > max_tox)
+				if(Environment.molar_density("toxins") > max_tox)
 					atmos_suitable = 0
 					toxins_alert = 1
 				else
 					toxins_alert = 0
 
 			if(min_n2)
-				if(Environment.nitrogen < min_n2)
+				if(Environment.molar_density("nitrogen") < min_n2)
 					atmos_suitable = 0
 
 			if(max_n2)
-				if(Environment.nitrogen > max_n2)
+				if(Environment.molar_density("nitrogen") > max_n2)
 					atmos_suitable = 0
 
 			if(min_co2)
-				if(Environment.carbon_dioxide < min_co2)
+				if(Environment.molar_density("carbon_dioxide") < min_co2)
 					atmos_suitable = 0
 
 			if(max_co2)
-				if(Environment.carbon_dioxide > max_co2)
+				if(Environment.molar_density("carbon_dioxide") > max_co2)
 					atmos_suitable = 0
 
 	//Atmos effect

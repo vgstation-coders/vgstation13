@@ -107,19 +107,21 @@
 					if(ispath(user.get_inactive_hand(), looking_for))
 						if(req_amount)
 							var/obj/item/stack/S = user.get_inactive_hand()
-							if(S.amount > req_amount)
+							if(S.amount >= req_amount)
 								can_build = 1
+								continue
 					if(!can_build)
 						for(var/obj/I in range(get_turf(src),1))
 							if(ispath(looking_for, I))
 								if(req_amount) //It's of a stack/sheet subtype
 									var/obj/item/stack/S = I
-									if(S.amount > req_amount)
+									if(S.amount >= req_amount)
 										can_build = 1
+										continue
 								else
 									can_build = 1
-							if(can_build)
-								break
+									continue
+					break
 			if (can_build)
 				t1 += text("<A href='?src=\ref[src];sublist=[recipes_sublist];make=[i]'>[title]</A>)")
 			else
@@ -160,15 +162,14 @@
 		if (!multiplier)
 			multiplier = 1
 		if (src.amount < R.req_amount*multiplier)
-			if (R.req_amount*multiplier>1)
-				to_chat(usr, "<span class='warning'>You haven't got enough [src] to build \the [R.req_amount*multiplier] [R.title]\s!</span>")
+			if (R.res_amount*multiplier>1)
+				to_chat(usr, "<span class='warning'>You haven't got enough [irregular_plural ? irregular_plural : "[singular_name]\s"] to build [R.res_amount*multiplier] [R.title]\s!</span>")
 			else
-				to_chat(usr, "<span class='warning'>You haven't got enough [src] to build \the [R.title]!</span>")
+				to_chat(usr, "<span class='warning'>You haven't got enough [irregular_plural ? irregular_plural : "[singular_name]\s"] to build \the [R.title]!</span>")
 			return
 		if (!R.can_build_here(usr, usr.loc))
 			return
 		if (R.time)
-			to_chat(usr, "<span class='notice'>Building [R.title] ...</span>")
 			if (!do_after(usr, get_turf(src), R.time))
 				return
 		if (src.amount < R.req_amount*multiplier)
@@ -223,7 +224,7 @@
 		//	//new_item.add_to_stacks(usr)
 
 		src.use(R.req_amount*multiplier)
-		for(var/obj/item/stack/sheet/S in stacks_to_consume)
+		for(var/obj/item/stack/S in stacks_to_consume)
 			S.use(stacks_to_consume[S])
 		if (src.amount<=0)
 			var/oldsrc = src

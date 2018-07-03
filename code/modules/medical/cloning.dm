@@ -216,7 +216,6 @@
 					if((G.mind && (G.mind.current.stat != DEAD) ||  G.mind != clonemind))
 						return FALSE
 
-
 	heal_level = rand(10,40) //Randomizes what health the clone is when ejected
 	working = TRUE //One at a time!!
 	locked = TRUE
@@ -235,6 +234,9 @@
 		icon_state = "pod_e"
 
 	connected.update_icon()
+
+	if(isplasmaman(H))
+		H.fire_sprite = "Plasmaman"
 
 	//Get the clone body ready
 	H.dna = R.dna.Clone()
@@ -318,14 +320,15 @@
 			//Premature clones may have brain damage.
 			occupant.adjustBrainLoss(-1*time_coeff) //Ditto above
 
-			//So clones don't die of oxyloss in a running pod.
-			if (occupant.reagents.get_reagent_amount(INAPROVALINE) < 30)
-				occupant.reagents.add_reagent(INAPROVALINE, 60)
-
 			var/mob/living/carbon/human/H = occupant
 
-			if(istype(H.species, /datum/species/vox) & occupant.reagents.get_reagent_amount(NITROGEN) < 30)
-				occupant.reagents.add_reagent(NITROGEN, 60)
+			if(isvox(H))
+				if(occupant.reagents.get_reagent_amount(NITROGEN) < 30)
+					occupant.reagents.add_reagent(NITROGEN, 60)
+
+			//So clones don't die of oxyloss in a running pod.
+			else if(occupant.reagents.get_reagent_amount(INAPROVALINE) < 30) //Done like this because inaprovaline is toxic to vox
+				occupant.reagents.add_reagent(INAPROVALINE, 60)
 
 			//Also heal some oxyloss ourselves because inaprovaline is so bad at preventing it!!
 			occupant.adjustOxyLoss(-4)
@@ -467,7 +470,7 @@
 			return
 	if(isrobot(usr))
 		var/mob/living/silicon/robot/robit = usr
-		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+		if(!(robit.module && (robit.module.quirk_flags & MODULE_CAN_HANDLE_MEDICAL)))
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 

@@ -31,3 +31,15 @@
 		dismantle_wall(1)
 		return 1
 	return 0
+
+/turf/simulated/wall/clockwork
+	name = "clockwork wall"
+	desc = "A huge chunk of warm metal. The clanging of machinery emanates from within."
+	icon_state = "clockwork"
+	walltype = "clockwork"
+	mineral = "brass"
+	dismantle_type = /turf/simulated/floor/engine/clockwork
+	girder_type = /obj/structure/girder/clockwork
+
+/turf/simulated/wall/clockwork/clockify()
+	return

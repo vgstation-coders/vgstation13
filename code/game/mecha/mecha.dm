@@ -21,7 +21,7 @@
 	layer = MOB_LAYER //icon draw layer
 	plane = MOB_PLANE
 	infra_luminosity = 15 //byond implementation is bugged.
-	var/hud_list[2]
+	var/list/hud_list = list()
 	var/initial_icon = null //Mech type for resetting icon. Only used for reskinning kits (see custom items)
 	var/can_move = 1
 	var/mob/living/carbon/occupant = null
@@ -111,8 +111,45 @@
 /obj/mecha/Destroy()
 	src.go_out(loc, TRUE)
 	mechas_list -= src //global mech list
+	if(cell)
+		qdel(cell)
+		cell = null
+	if(internal_tank)
+		qdel(internal_tank)
+		internal_tank = null
+	if(cabin_air)
+		qdel(cabin_air)
+		cabin_air = null
+	connected_port = null
+	if(radio)
+		qdel(radio)
+		radio = null
+	if(electropack)
+		qdel(electropack)
+		electropack = null
+	if(tracking)
+		qdel(tracking)
+		tracking = null
+	if(pr_int_temp_processor)
+		qdel(pr_int_temp_processor)
+		pr_int_temp_processor = null
+	if(pr_inertial_movement)
+		qdel(pr_inertial_movement)
+		pr_inertial_movement = null
+	if(pr_give_air)
+		qdel(pr_give_air)
+		pr_give_air = null
+	if(pr_internal_damage)
+		qdel(pr_internal_damage)
+		pr_internal_damage = null
+	for(var/obj/item/mecha_parts/mecha_equipment/eq in equipment)
+		qdel(eq)
+	equipment = null
+	selected = null
+	if(events)
+		qdel(events)
+		events = null
 	..()
-	return
 
 /obj/mecha/can_apply_inertia()
 	return 1 //No anchored check - so that mechas can fly off into space
@@ -2022,7 +2059,7 @@
 			var/transfer_moles = 0
 			if(pressure_delta > 0) //cabin pressure lower than release pressure
 				if(tank_air.return_temperature() > 0)
-					transfer_moles = pressure_delta*cabin_air.return_volume()/(cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
+					transfer_moles = pressure_delta * cabin_air.return_volume() / (cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
 					var/datum/gas_mixture/removed = tank_air.remove(transfer_moles)
 					cabin_air.merge(removed)
 			else if(pressure_delta < 0) //cabin pressure higher than release pressure
@@ -2031,7 +2068,7 @@
 				if(t_air)
 					pressure_delta = min(cabin_pressure - t_air.return_pressure(), pressure_delta)
 				if(pressure_delta > 0) //if location pressure is lower than cabin pressure
-					transfer_moles = pressure_delta*cabin_air.return_volume()/(cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
+					transfer_moles = pressure_delta * cabin_air.return_volume() / (cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
 					var/datum/gas_mixture/removed = cabin_air.remove(transfer_moles)
 					if(t_air)
 						t_air.merge(removed)

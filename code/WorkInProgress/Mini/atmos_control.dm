@@ -104,12 +104,13 @@ var/global/list/atmos_controllers = list()
 
 	var/list/alarms=list()
 	for(var/obj/machinery/alarm/alarm in sortNames(machines)) // removing sortAtom because nano updates it just enough for the lag to happen
-		if(!is_in_filter(alarm.areaMaster.type))
+		var/area/alarm_area = get_area(alarm)
+		if(!is_in_filter(alarm_area.type))
 			continue // NO ACCESS 4 U
 		var/turf/pos = get_turf(alarm)
 		var/list/alarm_data=list()
 		alarm_data["ID"]="\ref[alarm]"
-		alarm_data["danger"] = max(alarm.local_danger_level, alarm.areaMaster.atmosalm-1)
+		alarm_data["danger"] = max(alarm.local_danger_level, alarm_area.atmosalm-1)
 		alarm_data["name"] = "[alarm]"
 		alarm_data["area"] = get_area(alarm)
 		alarm_data["x"] = pos.x
@@ -254,14 +255,16 @@ var/global/list/atmos_controllers = list()
 
 		if(href_list["atmos_alarm"])
 			current.alarmActivated=1
-			current.areaMaster.updateDangerLevel()
+			var/area/current_area = get_area(current)
+			current_area.updateDangerLevel()
 			//spawn(1)
 				//src.updateUsrDialog()
 			current.update_icon()
 
 		if(href_list["atmos_reset"])
 			current.alarmActivated=0
-			current.areaMaster.updateDangerLevel()
+			var/area/current_area = get_area(current)
+			current_area.updateDangerLevel()
 			//spawn(1)
 				//src.updateUsrDialog()
 			current.update_icon()

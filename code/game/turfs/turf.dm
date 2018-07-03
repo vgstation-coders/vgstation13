@@ -282,6 +282,8 @@
 	return 0
 /turf/proc/is_mineral_floor()
 	return 0
+/turf/proc/is_clockwork_floor()
+	return FALSE
 /turf/proc/return_siding_icon_state()		//used for grass floors, which have siding.
 	return 0
 
@@ -640,6 +642,9 @@
 	if(istype(src, get_underlying_turf())) //Don't cultify the base turf, ever
 		return
 	ChangeTurf(get_base_turf(src.z))
+
+/turf/proc/clockify()
+	return
 
 /turf/projectile_check()
 	return PROJREACT_WALLS

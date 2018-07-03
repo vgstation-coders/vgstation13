@@ -142,6 +142,8 @@ var/global/list/whitelisted_species = list("Human")
 
 	var/list/inventory_offsets
 
+	var/species_intro //What intro you're given when you become this species.
+
 
 /datum/species/New()
 	..()
@@ -364,6 +366,11 @@ var/global/list/whitelisted_species = list("Human")
 
 	primitive = /mob/living/carbon/monkey/skellington
 
+	species_intro = "You are a Skellington<br>\
+					You have no skin, no blood, no lips, and only just enough brain to function.<br>\
+					You can not eat normally, as your necrotic state only permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe.<br>\
+					You are also incredibly weak to brute damage and are rather slow, but you don't need to breathe, so that's going for you."
+
 /datum/species/skellington/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if (prob(25))
 		speech.message += "  ACK ACK!"
@@ -543,6 +550,10 @@ var/global/list/whitelisted_species = list("Human")
 		"eyes" =     /datum/organ/internal/eyes/grey
 	)
 
+	species_intro = "You are a Grey.<br>\
+					You are particularly allergic to water, which acts like acid to you, but the inverse is so for acid, so you're fun at parties.<br>\
+					You're not as good in a fist fight as a regular baseline human, but you make up for this by bullying them from afar by talking directly into peoples minds."
+
 /datum/species/muton // /vg/
 	name = "Muton"
 	icobase = 'icons/mob/human_races/r_muton.dmi'
@@ -644,6 +655,11 @@ var/global/list/whitelisted_species = list("Human")
 		"appendix" = /datum/organ/internal/appendix,
 		"eyes" =     /datum/organ/internal/eyes/vox
 	)
+
+	species_intro = "You are a Vox.<br>\
+					You are somewhat more adept at handling the lower pressures of space and colder temperatures.<br>\
+					You have talons with which you can slice others in a fist fight, and a beak which can be used to butcher corpses without the need for finer tools.<br>\
+					However, Oxygen is incredibly toxic to you, in breathing it or consuming it. You can only breathe nitrogen."
 
 /datum/species/vox/equip(var/mob/living/carbon/human/H)
 	// Unequip existing suits and hats.
@@ -753,7 +769,7 @@ var/global/list/whitelisted_species = list("Human")
 		H.equip_or_collect(new/obj/item/weapon/tank/nitrogen(H), tank_slot)
 	else
 		H.put_in_hands(new/obj/item/weapon/tank/nitrogen(H))
-	to_chat(H, "<span class='info'>You are now running on nitrogen internals from the [H.s_store] in your [tank_slot_name]. Your species finds oxygen toxic, so <b>you must breathe nitrogen (AKA N<sub>2</sub>) only</b>.</span>")
+	to_chat(H, "<span class='info'>You are now running on nitrogen internals from the [H.s_store] in your [tank_slot_name].</span>")
 	H.internal = H.get_item_by_slot(tank_slot)
 	if (H.internals)
 		H.internals.icon_state = "internal1"
@@ -825,6 +841,12 @@ var/global/list/whitelisted_species = list("Human")
 
 	move_speed_mod = 7
 
+	species_intro = "You are a Diona.<br>\
+					You are a plant, so light is incredibly helpful for you, in both photosynthesis, and regenerating damage you have received.<br>\
+					You absorb radiation which helps you in a similar way to sunlight. You are incredibly slow as you are rooted to the ground.<br>\
+					You do not need to breathe, do not feel pain,  you are incredibly resistant to cold and low pressure, and have no blood to bleed.<br>\
+					However, as you are a plant, you are incredibly susceptible to burn damage, which is something you can not regenerate normally."
+
 /datum/species/golem
 	name = "Golem"
 	icobase = 'icons/mob/human_races/r_golem.dmi'
@@ -869,6 +891,7 @@ var/global/list/whitelisted_species = list("Human")
 	has_organ = list(
 		"brain" =    /datum/organ/internal/brain,
 		)
+	var/dust_type = /mob/living/golem_dust/adamantine
 
 /datum/species/golem/makeName()
 	return capitalize(pick(golem_names))
@@ -884,7 +907,7 @@ var/list/has_died_as_golem = list()
 	for(var/atom/movable/I in H.contents)
 		I.forceMove(H.loc)
 	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g", sleeptime = 15)
-	var/mob/living/adamantine_dust/A = new(H.loc)
+	var/mob/living/golem_dust/A = new dust_type(H.loc)
 	if(golemmind)
 		has_died_as_golem[H.mind.key] = world.time
 		A.mind = golemmind
@@ -897,18 +920,18 @@ var/list/has_died_as_golem = list()
 	qdel(H)
 
 /datum/species/golem/can_artifact_revive()
-	return 0
+	return FALSE
 
-/mob/living/adamantine_dust //serves as the corpse of adamantine golems
+/mob/living/golem_dust/adamantine //serves as the corpse of adamantine golems
 	name = "adamantine dust"
 	desc = "The remains of an adamantine golem."
 	stat = DEAD
 	icon = 'icons/mob/human_races/r_golem.dmi'
 	icon_state = "golem_dust"
-	density = 0
+	density = FALSE
 	meat_type = /obj/item/weapon/ore/diamond
 
-/mob/living/adamantine_dust/attackby(obj/item/I, mob/user)
+/mob/living/golem_dust/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/slime_extract/adamantine))
 		var/obj/item/slime_extract/adamantine/A = I
 		if(A.Uses)
@@ -938,10 +961,32 @@ var/list/has_died_as_golem = list()
 					dustmind.current = G
 					mind = null
 					G.key = key
-					to_chat(G, "You are an adamantine golem. You move slowly, but are highly resistant to heat and cold as well as impervious to burn damage. You are unable to wear most clothing, but can still use most tools. Serve [user], and assist them in completing their goals at any cost.")
+					to_chat(G, "You are \an [G]. You move slowly, but are highly resistant to heat and cold as well as impervious to burn damage. You are unable to wear most clothing, but can still use most tools. Serve [user], and assist them in completing their goals at any cost.")
 					qdel(src)
 		else
 			to_chat(user, "<span class='warning'>The used extract doesn't have any effect on \the [src].</span>")
+
+/datum/species/golem/clockwork
+	name = "Clockwork Golem"
+	icobase = 'icons/mob/human_races/r_cgolem.dmi'
+	deform = 'icons/mob/human_races/r_def_cgolem.dmi'
+	known_languages = list(LANGUAGE_CLOCKWORK)
+	meat_type = /obj/item/stack/sheet/brass
+	attack_verb = "smashes"
+
+	primitive = null
+
+	blood_color = "#BE8700"
+	flesh_color = "#42474D"
+
+	dust_type = /mob/living/golem_dust/clockwork
+
+/mob/living/golem_dust/clockwork //serves as the corpse of adamantine golems
+	name = "clockwork remains"
+	desc = "The remains of a clockwork golem."
+	icon = 'icons/mob/human_races/r_cgolem.dmi'
+	icon_state = "clockgolem_dead"
+	meat_type = /obj/item/stack/sheet/brass
 
 /datum/species/grue
 	name = "Grue"
@@ -1156,3 +1201,9 @@ var/list/has_died_as_golem = list()
 	has_organ = list(
 		"brain" =    /datum/organ/internal/brain/mushroom_brain,
 		)
+
+	species_intro = "You are a Mushroom Person.<br>\
+					You are an odd creature, light harms you and makes you hunger, but the darkness heals you and feeds you.<br>\
+					You have a resistance to burn and toxin, but a weakness to brute damage. You are adept at seeing in the dark, moreso with your light inversion ability.<br>\
+					However, you lack a mouth with which to talk. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
+					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"

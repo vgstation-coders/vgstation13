@@ -1,0 +1,39 @@
+"a" = (/turf/unsimulated/wall/other,/area/vault/sokoban/level)
+"b" = (/turf/unsimulated/wall/bomberman{color = "#DDDDFF"},/area/vault/sokoban/level)
+"c" = (/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"d" = (/obj/structure/closet/crate/sokoban,/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"e" = (/obj/structure/ladder/sokoban/exit,/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"f" = (/obj/structure/ladder/sokoban/entrance,/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"g" = (/obj/structure/sokoban_teleporter,/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"h" = (/obj/machinery/power/treadmill{icon_state = "treadmill"; dir = 1},/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"i" = (/obj/structure/punching_bag/captain,/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"j" = (/obj/structure/punching_bag/wizard,/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"k" = (/obj/structure/punching_bag/clown,/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"l" = (/obj/structure/punching_bag/syndie,/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"m" = (/obj/structure/weightlifter,/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"n" = (/obj/structure/mirror{pixel_y = 32},/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"o" = (/obj/machinery/power/treadmill{icon_state = "treadmill"; dir = 1},/obj/structure/mirror{pixel_y = 32},/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"p" = (/obj/structure/mirror{pixel_x = 32},/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"q" = (/obj/machinery/door/airlock{name = "Gym"},/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"r" = (/obj/structure/table/reinforced,/obj/abstract/map/spawner/misc/gym,/obj/abstract/map/spawner/misc/gym,/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"s" = (/obj/machinery/power/treadmill{icon_state = "treadmill"; dir = 1},/obj/abstract/map/spawner/misc/gym,/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"t" = (/obj/item/clothing/under/darkholme,/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+"u" = (/mob/living/simple_animal/hostile/necro/zombie/leatherman{name = "weatherman"},/turf/simulated/floor{icon_state = "pattern_blue"},/area/vault/sokoban/level)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaaa
+abbbbbbbbbbbancncohoca
+abbbcbccccbbacccccccpa
+abcccdccccbbaciccshhca
+abcbcddbddbcacccccccpa
+abcddbccccccacjcucccma
+abcbccdcbcccaccccctcpa
+abccccbdbbdbackcccccma
+abccddccdcccacccccccpa
+abcbbcccbcccaclcccccma
+abccccbdbbbbacccrrrcpa
+abbbccdcbbbbaaaaaaaqaa
+abbbccdfgggggggggggcea
+abbbbbbbbbbbaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaa
+"}

@@ -178,9 +178,10 @@
 
 /mob/living/simple_animal/hostile/necromorph/exploder/AttackingTarget()
 	visible_message("<span class='warning'>\The [src] hits \the [target] with their left arm!</span>")
-	Die()
+	death()
 
-/mob/living/simple_animal/hostile/necromorph/exploder/Die()
+/mob/living/simple_animal/hostile/necromorph/exploder/death(var/gibbed = FALSE)
+	..(TRUE)
 	visible_message("<span class='warning'>\The [src] explodes!</span>")
 	var/turf/T = get_turf(src)
 	new /obj/effect/gibspawner/generic(T)

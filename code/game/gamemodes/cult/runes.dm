@@ -263,7 +263,7 @@
 
 		if(!cult_round || cult_round.narsie_condition_cleared)//if the game mode wasn't cult to begin with, there won't be need to complete a first objective to prepare the summoning.
 			if(active_cultists.len >= 9)
-				if(z != map.zMainStation)
+				if(z != map.zMainStation || Holiday == APRIL_FOOLS_DAY)
 					for(var/mob/M in active_cultists)
 						to_chat(M, "<span class='danger'>YOU HAVE A TERRIBLE FEELING. IS SOMETHING WRONG WITH THE RITUAL?</span>")//You get one warning
 
@@ -311,13 +311,17 @@
 		return
 
 	if(currentCountdown <= 0)
-		if(z != map.zMainStation)//No more summonings on the Asteroid!
+		if(z != map.zMainStation || Holiday == APRIL_FOOLS_DAY)//No more summonings on the Asteroid!
 			for(var/mob/M in active_cultists)
 				M.say("Tok-lyr rqa'nap g[pick("'","`")]lt-ulotf!")
 			summonturfs = list()
 			summoning = 0
 			for(var/mob/M in active_cultists)
-				to_chat(M, "<span class='sinister'>THE GEOMETER OF BLOOD IS HIGHLY DISAPOINTED WITH YOUR INABILITY TO PERFORM THE RITUAL IN ITS REQUESTED LOCATION.</span>")
+				if(Holiday != APRIL_FOOLS_DAY)
+					to_chat(M, "<span class='sinister'>THE GEOMETER OF BLOOD IS HIGHLY DISAPOINTED WITH YOUR INABILITY TO PERFORM THE RITUAL IN ITS REQUESTED LOCATION.</span>")
+				else
+					to_chat(M, "<span class='heavy_brass'>You fool.</span>")
+					new /obj/machinery/singularity/narsie/large/clockwork(src.loc)
 				M.gib()
 		else
 			for(var/mob/M in active_cultists)
@@ -456,7 +460,7 @@
 			usr.seer = 1
 		return
 	usr.say("Rash'tla sektath mal[pick("'","`")]zua. Zasan therium vivira. Itonis al'ra matum!")
-	usr.show_message("\<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>", 1, "<span class='warning'>You hear a faint fizzle.</span>", 2)
+	usr.show_message("<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>", 1, "<span class='warning'>You hear a faint fizzle.</span>", 2)
 	to_chat(usr, "<span class='notice'>You remembered the words correctly, but the rune isn't reacting. Maybe you should position yourself differently.</span>")
 
 /////////////////////////////////////////EIGHTH RUNE
@@ -478,7 +482,7 @@
 					M.ghostize(1)	//kick them out of their body
 				break
 	if(!corpse_to_raise)
-		if (cult_round.revivecounter)
+		if (cult_round && cult_round.revivecounter)
 			to_chat(usr, "<span class='notice'>Enough lifeforce haunts this place to return [cult_round.revivecounter] of ours to the mortal plane.</span>")
 		if(is_sacrifice_target)
 			to_chat(usr, "<span class='warning'>The Geometer of blood wants this mortal for himself.</span>")
@@ -503,7 +507,7 @@
 								body_to_sacrifice = N
 								break find_sacrifice
 
-	if(!body_to_sacrifice && !cult_round.revivecounter)
+	if(!body_to_sacrifice && (!cult_round || !cult_round.revivecounter))
 		if (is_sacrifice_target)
 			to_chat(usr, "<span class='warning'>The Geometer of blood wants that corpse for himself.</span>")
 		else
@@ -883,7 +887,8 @@
 						if(M.mind)				//living players
 							ritualresponse += "The Geometer of Blood gladly accepts this sacrifice."
 							satisfaction = 100
-							cult_round.revivecounter ++
+							if(cult_round)
+								cult_round.revivecounter ++
 						else					//living NPCs
 							ritualresponse += "The Geometer of Blood accepts this being in sacrifice. Somehow you get the feeling that beings with souls would make a better offering."
 							satisfaction = 50
@@ -896,7 +901,8 @@
 					if(M.mind)					//dead players
 						ritualresponse += "The Geometer of Blood accepts this sacrifice."
 						satisfaction = 50
-						cult_round.revivecounter ++
+						if(cult_round)
+							cult_round.revivecounter ++
 					else						//dead NPCs
 						ritualresponse += "The Geometer of Blood accepts your meager sacrifice."
 						satisfaction = 10

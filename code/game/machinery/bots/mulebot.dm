@@ -477,6 +477,8 @@ var/global/mulebot_count = 0
 
 	mode = 1
 	overlays.len = 0
+	if(integratedpai)
+		overlays += image('icons/obj/aibots.dmi', "mulebot1_pai")
 
 	load.forceMove(src.loc)
 	load.pixel_y -= 9 * PIXEL_MULTIPLIER

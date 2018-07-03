@@ -16,6 +16,7 @@ client/proc/one_click_antag()
 		<a href='?src=\ref[src];makeAntag=3'>Make Revs</a><br>
 		<a href='?src=\ref[src];makeAntag=4'>Make Cult</a><br>
 		<a href='?src=\ref[src];makeAntag=5'>Make Malf AI</a><br>
+		<a href='?src=\ref[src];makeAntag=8'>Make Vampires</a><br>
 		<a href='?src=\ref[src];makeAntag=6'>Make Wizard (Requires Ghosts)</a><br>
 		<a href='?src=\ref[src];makeAntag=11'>Make Vox Raiders (Requires Ghosts)</a><br>
 		<a href='?src=\ref[src];makeAntag=7'>Make Nuke Team (Requires Ghosts)</a><br>
@@ -112,12 +113,13 @@ client/proc/one_click_antag()
 								candidates += applicant
 
 	if(candidates.len)
-		var/numChanglings = min(candidates.len, 3)
+		var/numChanglings = min(candidates.len, input("Create how many changelings?", "Make Changelings", 3) as num|null)
 
 		for(var/i = 0, i<numChanglings, i++)
 			H = pick(candidates)
 			H.mind.make_Changling()
 			candidates.Remove(H)
+			log_admin("[key_name(owner)] has changeling'ed [key_name(H)] via create antagonist verb.")
 
 		return 1
 
@@ -481,3 +483,36 @@ client/proc/one_click_antag()
 	new_vox.equip_vox_raider()
 
 	return new_vox
+
+/datum/admins/proc/makeVampires()
+
+
+	var/datum/game_mode/vampire/temp = new
+	if(config.protect_roles_from_antagonist)
+		temp.restricted_jobs += temp.protected_jobs
+
+	var/list/mob/living/carbon/human/candidates = list()
+	var/mob/living/carbon/human/H = null
+
+	for(var/mob/living/carbon/human/applicant in player_list)
+		if(applicant.client.desires_role(ROLE_VAMPIRE))
+			if(!applicant.stat)
+				if(applicant.mind)
+					if (!applicant.mind.special_role)
+						if(!jobban_isbanned(applicant, ROLE_VAMPIRE) && !jobban_isbanned(applicant, "Syndicate"))
+							if(!(applicant.job in temp.restricted_jobs))
+								candidates += applicant
+
+	if(candidates.len)
+		var/numVamps = min(candidates.len, input("Create how many vampires?", "Make Vampires", 3) as num|null)
+
+		for(var/i = 0, i<numVamps, i++)
+			H = pick(candidates)
+			H.mind.make_new_vampire()
+			log_admin("[key_name(owner)] has made [key_name(H)] a vampire via create antagonist verb.")
+			temp.greet_vampire(H.mind)
+			candidates.Remove(H)
+
+		return 1
+
+	return 0

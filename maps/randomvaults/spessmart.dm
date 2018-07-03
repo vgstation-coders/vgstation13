@@ -193,7 +193,7 @@ var/list/shop_prices = list( //Cost in space credits
 
 var/list/circuitboards = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Spessmart
 var/list/circuitboard_prices = list()	//gets filled on initialize()
-var/list/clothing = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - list(/obj/item/clothing/suit/space/rig/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman, /obj/item/clothing/mask/stone/infinite) //What in the world could go wrong
+var/list/clothing = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - list(/obj/item/clothing/suit/space/rig/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman, /obj/item/clothing/mask/stone/infinite, /obj/item/clothing/suit/armor/laserproof/advanced) //What in the world could go wrong
 var/list/clothing_prices = list()	//gets filled on initialize()
 
 /area/vault/supermarket
@@ -351,9 +351,8 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	if(icon == 'icons/mob/robots.dmi')
 		overlays.Add(image('icons/mob/robots.dmi', icon_state = "eyes-[src.icon_state]"))
 
-/mob/living/simple_animal/robot/Die()
-	..()
-
+/mob/living/simple_animal/robot/death(var/gibbed = FALSE)
+	..(TRUE)
 	robogibs(get_turf(src))
 	qdel(src)
 
@@ -451,12 +450,12 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	var/loaded_cash = 0
 	var/help_cd = 0
 
-/mob/living/simple_animal/robot/robot_cashier/Die()
+/mob/living/simple_animal/robot/robot_cashier/death(var/gibbed = FALSE)
 	var/area/vault/supermarket/shop/A = get_area(src)
 	if(istype(A))
 		A.on_robot_kill()
 
-	return ..()
+	..(gibbed)
 
 /mob/living/simple_animal/robot/robot_cashier/attack_hand(mob/user)
 	if(user.a_intent == I_HELP)
@@ -668,9 +667,8 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	overlays.Add(image('icons/mob/robots.dmi', icon_state = "eyes-securitron"))
 
-/mob/living/simple_animal/hostile/spessmart_guardian/Die()
-	..()
-
+/mob/living/simple_animal/hostile/spessmart_guardian/death(var/gibbed = FALSE)
+	..(TRUE)
 	robogibs(get_turf(src))
 	qdel(src)
 

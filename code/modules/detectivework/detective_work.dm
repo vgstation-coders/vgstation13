@@ -100,9 +100,9 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 		return
 	user.set_machine(src)
 	var/dat = ""
-	var/isai = 0
-	if(istype(usr,/mob/living/silicon))
-		isai = 1
+	var/isai = FALSE
+	if(isAI(user))
+		isai = TRUE
 	if(temp)
 		dat += "<tt>[temp]</tt><br><br>"
 		if(canclear)
@@ -146,11 +146,10 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 	switch(href_list["operation"])
 		if("login")
 			var/mob/M = usr
-			if(istype(M,/mob/living/silicon))
+			if(issilicon(M))
 				authenticated = 1
 				updateDialog()
-				return
-			if (allowed(M))
+			if(allowed(M))
 				authenticated = 1
 		if("logout")
 			authenticated = 0
@@ -167,14 +166,20 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 			var/mob/M = usr
 			var/obj/item/I = M.get_active_hand()
 			if(I && istype(I))
-				if(istype(I, /obj/item/weapon/evidencebag))
-					scanning = I.contents[1]
-					scanning.forceMove(src)
-					I.overlays.len = 0
-					I.icon_state = "evidenceobj"
-				else
-					if(M.drop_item(I, src))
-						scanning = I
+				if(isgripper(I))
+					var/obj/item/weapon/gripper/G = I
+					if(G.wrapped)
+						scanning = G.wrapped //We add it as scanned object first because we'll lose the wrapped reference once we drop it.
+						G.drop_item(G.wrapped, src)
+				else 
+					if(istype(I, /obj/item/weapon/evidencebag))
+						scanning = I.contents[1]
+						scanning.forceMove(src)
+						I.overlays.len = 0
+						I.icon_state = "evidenceobj"		
+					else
+						if(M.drop_item(I, src))
+							scanning = I
 			else
 				to_chat(usr, "Invalid Object Rejected.")
 		if("card")  //Processing a fingerprint card.
