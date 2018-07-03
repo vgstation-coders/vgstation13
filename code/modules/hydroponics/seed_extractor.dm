@@ -167,7 +167,7 @@ obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
 	usr.set_machine(src)
 
 	var/amt = text2num(href_list["amt"])
-	var/datum/seed/S = plant_controller.seeds[href_list["seed"]]
+	var/datum/seed/S = SSplant.seeds[href_list["seed"]]
 
 	for(var/datum/seed_pile/P in piles)
 		if(P.seed == S)

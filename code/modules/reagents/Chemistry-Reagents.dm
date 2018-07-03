@@ -2176,10 +2176,10 @@
 		for(var/obj/effect/plantsegment/KV in orange(O,1))
 			KV.health -= dmg*0.4
 			KV.check_health()
-			plant_controller.add_plant(KV)
+			SSplant.add_plant(KV)
 		K.health -= dmg
 		K.check_health()
-		plant_controller.add_plant(K)
+		SSplant.add_plant(K)
 	else if(istype(O,/obj/machinery/portable_atmospherics/hydroponics))
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = O
 		if(tray.seed)

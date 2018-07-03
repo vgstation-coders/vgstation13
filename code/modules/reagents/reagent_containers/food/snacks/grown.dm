@@ -35,7 +35,7 @@ var/list/special_fruits = list()
 	spawn(1)
 		//Fill the object up with the appropriate reagents.
 		if(!isnull(plantname))
-			seed = plant_controller.seeds[plantname]
+			seed = SSplant.seeds[plantname]
 			if(!seed || !seed.chems)
 				return
 
