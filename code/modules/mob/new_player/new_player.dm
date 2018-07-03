@@ -309,7 +309,6 @@
 		if(prob(10)) // 10% of those have a good mut.
 			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
 
-
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
 		return 0
@@ -328,11 +327,17 @@
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
-	// TODO:  Job-specific latejoin overrides.
-	character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
 
 	job_master.EquipRank(character, rank, 1)					//equips the human
 	EquipCustomItems(character)
+
+	var/datum/job/J = job_master.GetJob(rank)
+	if(J.spawns_from_edge)
+		character.Meteortype_Latejoin(rank)
+	else
+		// TODO:  Job-specific latejoin overrides.
+		character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
+
 
 	character.store_position()
 
@@ -368,16 +373,30 @@
 					if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
 						var/mob/living/L = get_holder_of_type(P,/mob/living)
 						if(L)
-							L.show_message("[bicon(P)] <b>Message from U¦ŸÉ8¥E1ÀÓÐ‹ (T¥u1B¤Õ), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
+							L.show_message("[bicon(P)] <b>Message from Uï¿½ï¿½ï¿½8ï¿½E1ï¿½ï¿½Ð‹ (Tï¿½u1Bï¿½ï¿½), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
 				for(var/mob/dead/observer/M in player_list)
 					if(M.stat == DEAD && M.client)
 						handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character] has arrived in the sector from space.</span></span>",character) //This should generate a Follow link
 
-			else
-				AnnounceArrival(character, rank)
-			FuckUpGenes(character)
+	if(character.mind.assigned_role != "Cyborg")
+		data_core.manifest_inject(character)
+		ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
+		if(character.mind.assigned_role == "Trader")
+			//If we're a trader, instead send a message to PDAs with the trader cartridge
+			for (var/obj/item/device/pda/P in PDAs)
+				if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
+					var/mob/living/L = get_holder_of_type(P,/mob/living)
+					if(L)
+						L.show_message("[bicon(P)] <b>Message from Uï¿½ï¿½ï¿½8ï¿½E1ï¿½ï¿½Ð‹ (Tï¿½u1Bï¿½ï¿½), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
+			for(var/mob/dead/observer/M in player_list)
+				if(M.stat == DEAD && M.client)
+					handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character] has arrived in the sector from space.</span></span>",character) //This should generate a Follow link
+
 		else
-			character.Robotize()
+			AnnounceArrival(character, rank)
+		FuckUpGenes(character)
+	else
+		character.Robotize()
 	qdel(src)
 
 /mob/living/carbon/human/proc/Meteortype_Latejoin(rank)
@@ -488,6 +507,9 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	if(client.prefs.disabilities & DISABILITY_FLAG_VEGAN)
 		new_character.dna.SetSEState(VEGANBLOCK, 1, 1)
+
+	if(client.prefs.disabilities & DISABILITY_FLAG_ASTHMA)
+		new_character.dna.SetSEState(ASTHMABLOCK, 1, 1)
 
 	chosen_species = all_species[client.prefs.species]
 	if( (client.prefs.disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )

@@ -208,6 +208,12 @@
 	..()
 
 /mob/living/carbon/human/proc/perform_cpr(mob/living/target)
+	if(!get_lungs())
+		to_chat(src, "<span class='notice'><B>You have no lungs with which to perform CPR with!</B></span>")
+		return 0
+	if(src.species && src.species.flags & NO_BREATHE)
+		to_chat(src, "<span class='notice'><B>You don't breathe, so you can't help \the [target]!</B></span>")
+		return 0
 	if(src.check_body_part_coverage(MOUTH))
 		to_chat(src, "<span class='notice'><B>Remove your [src.get_body_part_coverage(MOUTH)]!</B></span>")
 		return 0

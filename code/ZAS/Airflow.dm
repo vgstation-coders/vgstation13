@@ -221,7 +221,7 @@ atom/movable/GotoAirflowDest(n)
 		return //Slamming into a mouse/roach doesn't make much sense
 	if(!sound_override)
 		visible_message(message = "<span class='danger'>\The [src] slams into \a [A]!</span>", blind_message = "<span class='danger'>You hear a loud slam!</span>")
-	//playsound(get_turf(src), "smash.ogg", 25, 1, -1)
+	//playsound(src, "smash.ogg", 25, 1, -1)
 	if(istype(A,/obj/item))
 		var/obj/item/item = A
 		SetKnockdown(item.w_class)
@@ -232,7 +232,7 @@ atom/movable/GotoAirflowDest(n)
 /obj/airflow_hit(atom/A)
 	if(!sound_override)
 		visible_message(message = "<span class='danger'>\The [src] slams into \a [A]!</span>", blind_message = "<span class='warning'>You hear a loud slam!</span>")
-	//playsound(get_turf(src), "smash.ogg", 25, 1, -1)
+	//playsound(src, "smash.ogg", 25, 1, -1)
 	. = ..()
 
 /obj/item/airflow_hit(atom/A)

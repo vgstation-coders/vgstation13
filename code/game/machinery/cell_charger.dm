@@ -75,7 +75,8 @@
 			to_chat(user, "<span class='warning'>There is already a cell in [src].</span>")
 			return
 		else
-			if(areaMaster.power_equip == 0) // There's no APC in this area, don't try to cheat power!
+			var/area/this_area = get_area(src)
+			if(this_area.power_equip == 0) // There's no APC in this area, don't try to cheat power!
 				to_chat(user, "<span class='warning'>[src] blinks red as you try to insert the cell!</span>")
 				return
 
@@ -180,7 +181,7 @@
 
 /datum/construction/reversible/crank_charger/spawn_result(mob/user as mob)
 	if(result)
-		testing("[user] finished a [result]!")
+//		testing("[user] finished a [result]!")
 
 		new result(get_turf(holder))
 
@@ -234,7 +235,8 @@
 			stored.charge += 100
 			state = !state
 			update_icon()
-			playsound(get_turf(src), 'sound/items/crank.ogg',50,1)
+			stored.updateicon()
+			playsound(src, 'sound/items/crank.ogg',50,1)
 			if(stored.charge>stored.maxcharge)
 				stored.charge = stored.maxcharge
 	else
@@ -242,6 +244,7 @@
 
 /obj/item/device/crank_charger/attack_hand(mob/user)
 	if(stored && user.get_inactive_hand() == src)
+		stored.updateicon()
 		user.put_in_hands(stored)
 		stored = null
 		update_icon()

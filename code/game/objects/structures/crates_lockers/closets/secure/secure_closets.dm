@@ -110,7 +110,7 @@
 		src.icon_state = src.icon_opened
 		src.opened = 1
 		setDensity(FALSE)
-		playsound(get_turf(src), 'sound/machines/click.ogg', 15, 1, -3)
+		playsound(src, 'sound/machines/click.ogg', 15, 1, -3)
 	else
 		if(!can_open())
 			to_chat(user, "<span class='notice'>It won't budge!</span>")

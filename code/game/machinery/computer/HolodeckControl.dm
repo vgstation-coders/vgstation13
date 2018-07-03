@@ -12,6 +12,8 @@
 	var/list/holographic_items = list()
 	var/damaged = 0
 	var/last_change = 0
+
+	var/holopeople_enabled = FALSE //Set this to true to allow observers become holodudes
 	var/list/connected_holopeople = list()
 	var/maximum_holopeople = 4
 
@@ -37,9 +39,11 @@
 		return
 	var/turf/spawnturf
 	var/list/L = get_area_turfs(linkedholodeck.type)
-	var/turf/T = pick(L)
-	while(is_blocked_turf(T))
-		T = pick(L)
+
+	spawnturf = pick_n_take(L)
+	while(is_blocked_turf(spawnturf) && L.len)
+		spawnturf = pick_n_take(L)
+
 	if(spawnturf)
 		user.forceMove(spawnturf)
 		var/mob/living/simple_animal/hologram/advanced/H = user.transmogrify(/mob/living/simple_animal/hologram/advanced, TRUE)
@@ -59,8 +63,16 @@
 	var/dat
 
 	dat += {"<B>Holodeck Control System</B><BR>"}
-//	if(isobserver(user))
-//		dat += {"<HR><A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram\]</font></A><BR>"}
+	if(isobserver(user))
+		if(holopeople_enabled)
+			dat += "<HR><A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram\]</font></A><BR>"
+		else
+			dat += "<HR>\[Advanced Holograms Unavailable\]</font><BR>"
+	if(isAdminGhost(user))
+		dat += "<BR><b>ADMIN OPTIONS:</b><BR>"
+		dat += "Advanced hologram spawning is: <A href='?src=\ref[src];toggle_holopeople=1'>[holopeople_enabled ? "ENABLED" : "DISABLED"]</A><BR>"
+		dat += "<A href='?src=\ref[src];spawn_holoperson=1'>\[Become Advanced Hologram (Admin)\]</font></A><HR>"
+
 	dat += {"<HR>Current Loaded Programs:<BR>
 		<A href='?src=\ref[src];basketball=1'>((Basketball Court)</font>)</A><BR>
 		<A href='?src=\ref[src];beach=1'>((Beach)</font>)</A><BR>
@@ -118,7 +130,14 @@
 	usr.set_machine(src)
 
 	if(href_list["spawn_holoperson"])
-		spawn_holoperson(usr)
+		if(holopeople_enabled || isAdminGhost(usr))
+			spawn_holoperson(usr)
+	if(href_list["toggle_holopeople"])
+		holopeople_enabled = !holopeople_enabled
+		src.updateUsrDialog()
+
+		message_admins("[key_name(usr)] has [holopeople_enabled ? "enabled" : "disabled"] advanced hologram spawning at [formatJumpTo(src)]")
+		to_chat(usr, "Advanced holograms are now [holopeople_enabled ? "enabled" : "disabled"].")
 
 	if(..())
 		return 1
@@ -281,7 +300,7 @@
 	return
 
 /obj/machinery/computer/HolodeckControl/emag(mob/user as mob)
-	playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
+	playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 	if(emagged)
 		return //No spamming
 	emagged = 1

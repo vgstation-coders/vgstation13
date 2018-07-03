@@ -32,8 +32,8 @@ proc/get_infection_chance(var/mob/living/M, var/vector = "Airborne")
 		if(MM.disease_carrier)
 			return 1
 
-	if(istype(M, /mob/living/carbon/martian)) //Martians are incredibly susceptible to viruses
-		var/mob/living/carbon/martian/MR = M
+	if(istype(M, /mob/living/carbon/complex/martian)) //Martians are incredibly susceptible to viruses
+		var/mob/living/carbon/complex/martian/MR = M
 		if (vector == "Airborne")
 			if(MR.head && istype(MR.head, /obj/item/clothing/head/helmet/space/martian))
 				score += 40

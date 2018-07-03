@@ -1,13 +1,14 @@
 // TODO: remove the robot.mmi and robot.cell variables and completely rely on the robot component system
 
 /datum/robot_component/var/name
-/datum/robot_component/var/installed = 0
-/datum/robot_component/var/powered = 0
-/datum/robot_component/var/toggled = 1
+/datum/robot_component/var/installed = COMPONENT_MISSING
+/datum/robot_component/var/powered = FALSE
+/datum/robot_component/var/toggled = TRUE
 /datum/robot_component/var/brute_damage = 0
 /datum/robot_component/var/electronics_damage = 0
+/datum/robot_component/var/vulnerability = 1
 /datum/robot_component/var/energy_consumption = 0
-/datum/robot_component/var/max_damage = 30
+/datum/robot_component/var/max_damage = 30 //WHY THE FUCK IS THE DEFAULT MAX DAMAGE 30 ARE YOU STUPID
 /datum/robot_component/var/mob/living/silicon/robot/owner
 
 // The actual device object that has to be installed for this.
@@ -29,53 +30,53 @@
 	wrapped = G
 
 	// The thing itself isn't there anymore, but some fried remains are.
-	installed = -1
+	installed = COMPONENT_BROKEN
 	uninstall()
 	if(owner.can_diagnose())
 		to_chat(owner, "<span class='alert' style=\"font-family:Courier\">Warning: Critical damage to [brokenpartname] sustained. Component offline.</span>")
 
 /datum/robot_component/proc/take_damage(brute, electronics, sharp)
-	if(installed != 1)
+	if(installed != COMPONENT_INSTALLED)
 		return
 
-	brute_damage += brute
-	electronics_damage += electronics
+	brute_damage += brute * vulnerability
+	electronics_damage += electronics * vulnerability
 
 	if(brute_damage + electronics_damage >= max_damage)
 		destroy()
 
 /datum/robot_component/proc/heal_damage(brute, electronics)
-	if(installed != 1)
+	if(installed != COMPONENT_INSTALLED)
 		// If it's not installed, can't repair it.
-		return 0
+		return FALSE
 
 	brute_damage = max(0, brute_damage - brute)
 	electronics_damage = max(0, electronics_damage - electronics)
 
 /datum/robot_component/proc/is_powered()
-	return (installed == 1) && (brute_damage + electronics_damage < max_damage) && (!energy_consumption || powered)
+	return (installed == COMPONENT_INSTALLED) && (brute_damage + electronics_damage < max_damage) && (!energy_consumption || powered)
 
 
 /datum/robot_component/proc/consume_power()
-	if(toggled == 0)
-		powered = 0
+	if(toggled == FALSE)
+		powered = FALSE
 		return
 	if(owner.cell.charge >= energy_consumption)
 		owner.cell.use(energy_consumption)
-		powered = 1
+		powered = TRUE
 	else
-		powered = 0
+		powered = FALSE
 
 /datum/robot_component/armour
 	name = "armour plating"
-	energy_consumption = 0
 	external_type = /obj/item/robot_parts/robot_component/armour
+	energy_consumption = 0
 	max_damage = 60
 
 /datum/robot_component/actuator
 	name = "actuator"
-	energy_consumption = 0 // seeing as we can move without any charge...
 	external_type = /obj/item/robot_parts/robot_component/actuator
+	energy_consumption = 0 // seeing as we can move without any charge...
 	max_damage = 50
 
 /datum/robot_component/cell
@@ -107,8 +108,8 @@
 
 /datum/robot_component/diagnosis_unit
 	name = "self-diagnosis unit"
-	energy_consumption = 0
 	external_type = /obj/item/robot_parts/robot_component/diagnosis_unit
+	energy_consumption = 0
 	max_damage = 30
 
 /mob/living/silicon/robot/proc/initialize_components()
@@ -124,7 +125,7 @@
 
 /mob/living/silicon/robot/proc/is_component_functioning(module_name)
 	var/datum/robot_component/C = components[module_name]
-	return C && C.installed == 1 && C.toggled && C.is_powered()
+	return C && C.installed == COMPONENT_INSTALLED && C.toggled && C.is_powered()
 
 /obj/item/broken_device
 	name = "broken component"
@@ -137,30 +138,77 @@
 	icon_state = "working"
 	var/brute_damage = 0
 	var/electronics_damage = 0
+	var/vulnerability = 1 //Multiplies the damage taken by this ammount. 0.35 is a MAGIC NUMBER.
+	var/isupgrade = FALSE //Set this to true for any parts that are children of the basic ones. Required for auto upgrading with upgrade_components() in \silicon\robot\robot.dm
+
+/obj/item/robot_parts/robot_component/examine(mob/user)
+	..()
+	if(brute_damage || electronics_damage)
+		to_chat(user, "<span class='warning'>It looks[brute_damage ? " dented" : ""][(brute_damage && electronics_damage) ? " and" : ""][electronics_damage ? " charred" : ""].</span>")
 
 /obj/item/robot_parts/robot_component/binary_communication_device
 	name = "binary communication device"
 	icon_state = "binary_translator"
 
+/obj/item/robot_parts/robot_component/binary_communication_device/reinforced
+	name = "reinforced binary communication device"
+	icon_state = "ref_binary_translator"
+	vulnerability = 0.35
+	isupgrade = TRUE
+
 /obj/item/robot_parts/robot_component/actuator
 	name = "actuator"
 	icon_state = "actuator"
+
+/obj/item/robot_parts/robot_component/actuator/reinforced
+	name = "reinforced actuator"
+	icon_state = "ref_actuator"
+	vulnerability = 0.35
+	isupgrade = TRUE
 
 /obj/item/robot_parts/robot_component/armour
 	name = "armour plating"
 	icon_state = "armor_plating"
 
+/obj/item/robot_parts/robot_component/armour/reinforced
+	name = "reinforced armour plating"
+	icon_state = "ref_armor_plating"
+	vulnerability = 0.35
+	isupgrade = TRUE
+
+/obj/item/robot_parts/robot_component/armour/kevlar
+	name = "kevlar-reinforced armour plating"
+	parent_type = /obj/item/robot_parts/robot_component/armour/reinforced
+
 /obj/item/robot_parts/robot_component/camera
 	name = "camera"
 	icon_state = "camera"
+
+/obj/item/robot_parts/robot_component/camera/reinforced
+	name = "reinforced camera"
+	icon_state = "ref_camera"
+	vulnerability = 0.35
+	isupgrade = TRUE
 
 /obj/item/robot_parts/robot_component/diagnosis_unit
 	name = "diagnosis unit"
 	icon_state = "diagnosis_unit"
 
+/obj/item/robot_parts/robot_component/diagnosis_unit/reinforced
+	name = "reinforced diagnosis unit"
+	icon_state = "ref_diagnosis_unit"
+	vulnerability = 0.35
+	isupgrade = TRUE
+
 /obj/item/robot_parts/robot_component/radio
 	name = "radio"
 	icon_state = "radio"
+
+/obj/item/robot_parts/robot_component/radio/reinforced
+	name = "reinforced radio"
+	icon_state = "ref_radio"
+	vulnerability = 0.35
+	isupgrade = TRUE
 
 /obj/item/broken_device/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W, /obj/item/stack/nanopaste))
@@ -172,8 +220,9 @@
 			qdel(src)
 
 //
-//Robotic Component Analyser, basically a health analyser for robots
+//Robotic Component Analyser, basically a health analyser for robots. Why is this here? FUCKING OLDCODERS
 //
+
 /obj/item/device/robotanalyzer
 	name = "cyborg analyzer"
 	icon_state = "robotanalyzer"

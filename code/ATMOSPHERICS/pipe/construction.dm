@@ -532,7 +532,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 	P.setPipingLayer(src.piping_layer)
 	if(P.buildFrom(usr,src))
 		investigation_log(I_ATMOS,"was created by [user]/([user.ckey]) at [formatJumpTo(loc)].")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		user.visible_message( \
 			"[user] fastens \the [src].", \
 			"<span class='notice'>You have fastened \the [src].</span>", \
@@ -573,7 +573,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 		to_chat(user, "<span class='warning'>You need to fasten it to a pipe.</span>")
 		return 1
 	new/obj/machinery/meter(src.loc, pipe)
-	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+	playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 	to_chat(user, "<span class='notice'>You have fastened the meter to the pipe.</span>")
 	qdel(src)
 
@@ -601,6 +601,6 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 	if (!iswrench(W))
 		return ..()
 	new/obj/machinery/air_sensor( src.loc )
-	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+	playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 	to_chat(user, "<span class='notice'>You have fastened the gas sensor.</span>")
 	qdel(src)

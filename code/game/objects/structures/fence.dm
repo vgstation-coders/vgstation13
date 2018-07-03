@@ -67,7 +67,7 @@
 	hole_size = LARGE_HOLE
 
 /obj/structure/fence/attackby(obj/item/W, mob/user)
-	if(iswirecutter(W) && !shock(user, 100))
+	if(iswirecutter(W) && !shock(user, 100, W.siemens_coefficient))
 		if(!cuttable)
 			to_chat(user, "<span class='notice'>This section of the fence can't be cut.</span>")
 			return
@@ -114,7 +114,7 @@
 			strength = H.get_strength()
 
 		user.visible_message("<span class='danger'>\The [user] hits \the [src]!</span>")
-		playsound(get_turf(src), 'sound/effects/fence_smash.ogg', 30 * strength, 1) //Sound is louder the stronger you are
+		playsound(src, 'sound/effects/fence_smash.ogg', 30 * strength, 1) //Sound is louder the stronger you are
 		shock(user, 100)
 		return 1
 
@@ -167,7 +167,7 @@
 			return !density
 
 //Mostly copied from grille.dm
-/obj/structure/fence/proc/shock(mob/user, prb = 100)
+/obj/structure/fence/proc/shock(mob/user, prb = 100, siemens_coefficient = 1)
 	if(!prob(prb)) //If the probability roll failed, don't go further
 		return 0
 	if(!in_range(src, user)) //To prevent TK and mech users from getting shocked
@@ -176,7 +176,7 @@
 	var/turf/T = get_turf(src)
 	var/obj/structure/cable/C = T.get_cable_node()
 	if(C)
-		if(electrocute_mob(user, C, src))
+		if(electrocute_mob(user, C, src, siemens_coefficient))
 			spark(src)
 			return 1
 		else
@@ -217,7 +217,7 @@
 			open = FALSE
 
 	update_door_status()
-	playsound(get_turf(src), 'sound/machines/click.ogg', 100, 1)
+	playsound(src, 'sound/machines/click.ogg', 100, 1)
 
 /obj/structure/fence/door/proc/update_door_status()
 	switch(open)

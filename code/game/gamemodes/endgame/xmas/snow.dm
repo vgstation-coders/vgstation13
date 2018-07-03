@@ -77,13 +77,13 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 /obj/structure/snow/Crossed(mob/user)
 	..()
 	if(isliving(user) && !user.locked_to && !user.lying && !user.flying)
-		playsound(get_turf(src), pick(snowsound), 10, 1, -1, channel = 123)
+		playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
 
 
 /obj/structure/snow/attack_hand(mob/user)
 	if(snow_amount != SNOWCOVERING_FULL)
 		return
-	playsound(get_turf(src), "rustle", 50, 1)
+	playsound(src, "rustle", 50, 1)
 	to_chat(user, "<span class='notice'>You start digging the snow with your hands.</span>")
 	if(do_after(user, src, 30))
 		snow_amount = SNOWCOVERING_MEDIUM

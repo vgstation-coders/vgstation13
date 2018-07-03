@@ -69,6 +69,47 @@
 		return 0
 	return 1
 
+/datum/stack_recipe/dorf
+	var/inherit_material
+	var/gen_quality
+
+/datum/stack_recipe/dorf/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list(), inherit_material = FALSE, gen_quality = FALSE)
+	..()
+	src.inherit_material = inherit_material
+	src.gen_quality = gen_quality
+
+
+/datum/stack_recipe/dorf/finish_building(mob/usr, var/obj/item/stack/S, var/obj/R)
+	if(inherit_material)
+		var/datum/material/mat
+		var/datum/materials/materials_list = new
+		if(istype(S, /obj/item/stack/sheet/))
+			var/obj/item/stack/sheet/SS = S
+			mat = materials_list.getMaterial(SS.mat_type)
+		if(mat)
+			var/icon/original = icon(R.icon, R.icon_state)
+			if(mat.color)
+				original.ColorTone(mat.color)
+				var/obj/item/I = R
+				if(istype(I))
+					var/icon/t_state
+					for(var/hand in list("left_hand", "right_hand"))
+						t_state = icon(I.inhand_states[hand], I.item_state)
+						t_state.ColorTone(mat.color)
+						I.inhand_states[hand] = t_state
+			else if(mat.color_matrix)
+				R.color = mat.color_matrix
+			R.icon = original
+			R.alpha = mat.alpha
+			R.material_type = mat
+			R.sheet_type = mat.sheettype
+			//if(gen_quality)
+			R.gen_quality()
+			if(R.quality > SUPERIOR)
+				R.gen_description()
+		if(!findtext(lowertext(R.name), lowertext(mat.name)))
+			R.name = "[R.quality == NORMAL ? "": "[lowertext(qualityByString[R.quality])] "][lowertext(mat.name)] [R.name]"
+
 var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/plasteel, 1, 4, 60),
 	new/datum/stack_recipe("metal rod",  /obj/item/stack/rods,          1, 2, 60),
@@ -76,6 +117,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	null,
 	new/datum/stack_recipe("computer frame", /obj/structure/computerframe,                      5, time = 25, one_per_turf = 1			    ),
 	new/datum/stack_recipe("wall girders",   /obj/structure/girder,                             2, time = 50, one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe("firelock frame", /obj/item/firedoor_frame,                          5, time = 50),
 	new/datum/stack_recipe("machine frame",  /obj/machinery/constructable_frame/machine_frame,  5, time = 25, one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("mirror frame",   /obj/structure/mirror_frame,                       5, time = 25, one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("turret frame",   /obj/machinery/porta_turret_construct,             5, time = 25, one_per_turf = 1, on_floor = 1),
@@ -93,6 +135,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe/chair("chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("folding chair",      /obj/structure/bed/chair/folding,         one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe("bed",                      /obj/structure/bed,                    2, one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
 		)),
 	new/datum/stack_recipe_list("couch parts", list(
 		new/datum/stack_recipe/chair("beige couch left end",      /obj/structure/bed/chair/comfy/couch/left/beige,         2, one_per_turf = 1, on_floor = 1),
@@ -183,6 +226,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	null,
 	new/datum/stack_recipe("iron door", /obj/machinery/door/mineral/iron, 					20, 			one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("stove", /obj/machinery/space_heater/campfire/stove, 			5, time = 25, 	one_per_turf = 1, on_floor = 1),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE),
 	)
 
 /* ========================================================================
@@ -198,6 +242,7 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 	new/datum/stack_recipe("Fireaxe cabinet",				/obj/item/mounted/frame/fireaxe_cabinet_frame,		2,	time = 50									),
 	null,
 	new/datum/stack_recipe("Vault Door assembly",			/obj/structure/door_assembly/door_assembly_vault,	8,	time = 50,	one_per_turf = 1,	on_floor = 1),
+	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
 	)
 
 /* ====================================================================
@@ -229,6 +274,8 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("trophy mount",		/obj/item/mounted/frame/trophy_mount,	2,		time = 15									),
 	new/datum/stack_recipe("throne",			/obj/structure/bed/chair/wood/throne,	40,		time = 100,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("chest",				/obj/structure/closet/crate/chest,		10,		time = 50,	one_per_turf = 1,	on_floor = 1, other_reqs = list(/obj/item/stack/sheet/plasteel = 5)),
+	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE)
 	)
 
 /* =========================================================================

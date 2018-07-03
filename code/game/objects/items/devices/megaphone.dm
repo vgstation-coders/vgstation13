@@ -42,18 +42,13 @@
 		if(user.client.prefs.muted & MUTE_IC)
 			to_chat(src, "<span class='warning'>You cannot speak in IC (muted).</span>")
 			return 0
-	if(user.silent)
+	if(issilent(user))
 		to_chat(user, "<span class='warning'>You find yourself unable to speak at all.</span>")
 		return 0
 	if(spamcheck)
 		to_chat(user, "<span class='warning'>\The [src] needs to recharge!</span>")
 		return 0
 	if(ishuman(user)) //humans can use it, borgs can, mommis can't
-		to_chat(user, "<span class='warning'>You don't know how to use this!</span>")
-		var/mob/living/carbon/human/H = user
-		if(istype(H) && (H.miming)) //Humans get their muteness checked
-			to_chat(user, "<span class='warning'>You find yourself unable to speak at all.</span>")
-			return 0
 		return 1
 
 	if(isrobot(user) && !isMoMMI(user))

@@ -446,7 +446,8 @@ steam.start() -- spawns the effect
 			n = 20
 		number = n
 		cardinals = c
-		carry.copy_to(chemholder, carry.total_volume)
+		if(carry)
+			carry.copy_to(chemholder, carry.total_volume)
 
 
 		if(istype(loca, /turf/))
@@ -747,8 +748,8 @@ steam.start() -- spawns the effect
 		var/datum/gas_mixture/old_air = T.return_air()
 		savedtemp = old_air.temperature
 		if(istype(T) && savedtemp > lowest_temperature)
-			var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles() / T.air.volume * CELL_VOLUME )
-			lowertemp.temperature = max( min(lowertemp.temperature-500,lowertemp.temperature / 2) ,0)
+			var/datum/gas_mixture/lowertemp = old_air.remove_volume(CELL_VOLUME)
+			lowertemp.temperature = max(min(lowertemp.temperature - 500, lowertemp.temperature / 2), 0)
 			lowertemp.react()
 			T.assume_air(lowertemp)
 	spawn(3)
@@ -759,9 +760,9 @@ steam.start() -- spawns the effect
 		var/turf/simulated/T = get_turf(src)
 		var/datum/gas_mixture/local_air = T.return_air()
 		flick("[icon_state]-disolve", src)
-		if((local_air.temperature  < lowest_temperature)&&(savedtemp > lowest_temperature)) //ie, we have over-chilled
+		if((local_air.temperature < lowest_temperature) && (savedtemp > lowest_temperature)) //ie, we have over-chilled
 			local_air.temperature = lowest_temperature
-		else if ((local_air.temperature  < lowest_temperature)&&(savedtemp < lowest_temperature) && savedtemp) //ie it chilled when it shouldn't have
+		else if((local_air.temperature < lowest_temperature) && (savedtemp < lowest_temperature) && savedtemp) //ie it chilled when it shouldn't have
 			local_air.temperature = savedtemp
 		sleep(5)
 		qdel(src)
@@ -980,6 +981,7 @@ steam.start() -- spawns the effect
 	icon_regular_floor = "foamedmetal"
 	icon_plating = "foamedmetal"
 	can_exist_under_lattice = 1
+	plane = PLATING_PLANE
 
 /turf/simulated/floor/foamedmetal/attack_hand(mob/living/user as mob)
 	user.delayNextAttack(10)

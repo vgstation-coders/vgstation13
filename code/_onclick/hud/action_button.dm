@@ -2,29 +2,39 @@
 	var/datum/action/linked_action
 	var/actiontooltipstyle = ""
 	screen_loc = null
-	globalscreen = 1
+	globalscreen = TRUE
 
 /obj/abstract/screen/movable/action_button/Click(location,control,params)
 	var/list/modifiers = params2list(params)
 	if(modifiers["shift"])
-		moved = 0
+		moved = FALSE
 		usr.update_action_buttons() //redraw buttons that are no longer considered "moved"
-		return 1
+		return TRUE
 	linked_action.Trigger()
-	return 1
+	return TRUE
+
+/obj/abstract/screen/movable/action_button/MouseDrop(over_object, src_location, over_location, src_control, over_control, params)
+	if(istype(over_object, /obj/abstract/screen/movable/action_button) && !istype(over_object, /obj/abstract/screen/movable/action_button/hide_toggle))
+		var/obj/abstract/screen/movable/action_button/B = over_object
+		var/list/actions = usr.actions
+		actions.Swap(actions.Find(src.linked_action), actions.Find(B.linked_action))
+		usr.update_action_buttons()
 
 //Hide/Show Action Buttons ... Button
 /obj/abstract/screen/movable/action_button/hide_toggle
 	name = "Hide Buttons"
 	icon = 'icons/mob/actions.dmi'
 	icon_state = "bg_default"
-	var/hidden = 0
+	var/hidden = FALSE
+
+/obj/abstract/screen/movable/action_button/hide_toggle/MouseDrop(over_object, src_location, over_location, src_control, over_control, params)
+	return
 
 /obj/abstract/screen/movable/action_button/hide_toggle/Click(location,control,params)
 	var/list/modifiers = params2list(params)
 	if(modifiers["shift"])
-		moved = 0
-		return 1
+		moved = FALSE
+		return TRUE
 	usr.hud_used.action_buttons_hidden = !usr.hud_used.action_buttons_hidden
 
 	hidden = usr.hud_used.action_buttons_hidden
@@ -34,7 +44,6 @@
 		name = "Hide Buttons"
 	UpdateIcon()
 	usr.update_action_buttons()
-
 
 /obj/abstract/screen/movable/action_button/hide_toggle/proc/InitialiseIcon(mob/living/user)
 	if(isalien(user))
@@ -80,22 +89,22 @@
 			button_number++
 			A.UpdateButtonIcon()
 			var/obj/abstract/screen/movable/action_button/B = A.button
-			if(!B.moved)
-				B.screen_loc = hud_used.ButtonNumberToScreenCoords(button_number)
-			else
+			if(B.moved)
 				B.screen_loc = B.moved
+			else
+				B.screen_loc = hud_used.ButtonNumberToScreenCoords(button_number)
 			if(reload_screen)
 				client.screen += B
 
 		if(!button_number)
 			hud_used.hide_actions_toggle.screen_loc = null
 			return
-	if(!hud_used.hide_actions_toggle.screen_loc)
-		reload_screen = 1
+
 	if(!hud_used.hide_actions_toggle.moved)
 		hud_used.hide_actions_toggle.screen_loc = hud_used.ButtonNumberToScreenCoords(button_number+1)
 	else
 		hud_used.hide_actions_toggle.screen_loc = hud_used.hide_actions_toggle.moved
+
 	if(reload_screen)
 		client.screen += hud_used.hide_actions_toggle
 

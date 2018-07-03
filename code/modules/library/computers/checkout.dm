@@ -315,14 +315,29 @@
 			if("6")
 				if(!bibledelay)
 
-					var/obj/item/weapon/storage/bible/B = new /obj/item/weapon/storage/bible(src.loc)
-					if(ticker && ( ticker.Bible_icon_state && ticker.Bible_item_state) )
+					bibledelay = 1
+
+					var/obj/item/weapon/storage/bible/B = new
+					B = new(src.loc)
+					if (usr.mind && usr.mind.faith) // The user has a faith
+						var/datum/religion/R = usr.mind.faith
+						var/obj/item/weapon/storage/bible/HB = R.holy_book
+						if (!HB)
+							B = chooseBible(R, usr)
+						else
+							B.icon_state = HB.icon_state
+							B.item_state = HB.item_state
+						B.name = R.bible_name
+						B.my_rel = R
+
+					else if (ticker && (ticker.Bible_icon_state && ticker.Bible_item_state)) // No faith
 						B.icon_state = ticker.Bible_icon_state
 						B.item_state = ticker.Bible_item_state
 						B.name = ticker.Bible_name
-						B.my_rel.deity_name = ticker.Bible_deity_name
+						B.my_rel = ticker.chap_rel
 
-					bibledelay = 1
+					B.forceMove(src.loc)
+
 					spawn(60)
 						bibledelay = 0
 

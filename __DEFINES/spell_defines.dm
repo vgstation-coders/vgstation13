@@ -61,6 +61,7 @@
 #define USER_TYPE_ARTIFACT "artifact"
 #define USER_TYPE_VAMPIRE "vampire"
 
+
 //Spell aspect flags
 #define SPELL_FIRE 1 //Fire based spells
 #define SPELL_WATER 2 //Water/liquid based spells

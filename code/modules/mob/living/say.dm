@@ -24,34 +24,64 @@
 			return "cultchat"
 		if(MODE_ANCIENT)
 			return "ancientchat"
+		if(MODE_MUSHROOM)
+			return "sporechat"
 		else
 			return "Unknown"
 var/list/department_radio_keys = list(
-	  ":0" = "Deathsquad",	"#0" = "Deathsquad",	".0" = "Deathsquad",
-
-	  ":r" = "right ear",	"#r" = "right ear",		".r" = "right ear", "!r" = "fake right ear",
-	  ":l" = "left ear",	"#l" = "left ear",		".l" = "left ear",  "!l" = "fake left ear",
-	  ":i" = "intercom",	"#i" = "intercom",		".i" = "intercom",
-	  ":h" = "department",	"#h" = "department",	".h" = "department",
-	  ":c" = "Command",		"#c" = "Command",		".c" = "Command",
-	  ":n" = "Science",		"#n" = "Science",		".n" = "Science",
-	  ":m" = "Medical",		"#m" = "Medical",		".m" = "Medical",
-	  ":e" = "Engineering", "#e" = "Engineering",	".e" = "Engineering",
-	  ":s" = "Security",	"#s" = "Security",		".s" = "Security",
-	  ":w" = "whisper",		"#w" = "whisper",		".w" = "whisper",
-	  ":b" = "binary",		"#b" = "binary",		".b" = "binary",
+	  ":0" = "Deathsquad",	 "#0" = "Deathsquad",	".0" = "Deathsquad",
+	  //1 Used by LANGUAGE_GALACTIC_COMMON
+	  //2 Used by LANGUAGE_TRADEBAND
+	  //3 Used by LANGUAGE_GUTTER
+	  //4 Used by LANGUAGE_XENO
+	  //5 Used by LANGUAGE_CULT
+	  //6 Used by LANGUAGE_MONKEY
+	  //7 Used by LANGUAGE_HUMAN
+	  //8 Used by LANGUAGE_GOLEM
+	  //9 Used by LANGUAGE_MOUSE
+	  ":-" = "Response Team","#-" = "Response Team",".-" = "Response Team",
 	  ":a" = "alientalk",	"#a" = "alientalk",		".a" = "alientalk",
-	  ":t" = "Syndicate",	"#t" = "Syndicate",		".t" = "Syndicate",
-	  ":r" = "Response Team","#r" = "Response Team",".r" = "Response Team",
-	  ":u" = "Supply",		"#u" = "Supply",		".u" = "Supply",
+	  ":b" = "binary",		"#b" = "binary",		".b" = "binary",
+	  ":c" = "Command",		"#c" = "Command",		".c" = "Command",
 	  ":d" = "Service",     "#d" = "Service",       ".d" = "Service",
+	  ":e" = "Engineering", "#e" = "Engineering",	".e" = "Engineering",
+	  //f Used by LANGUAGE_SLIME
 	  ":g" = "changeling",	"#g" = "changeling",	".g" = "changeling",
+	  ":h" = "department",	"#h" = "department",	".h" = "department",
+	  ":i" = "intercom",	"#i" = "intercom",		".i" = "intercom",
+	  //j Used by LANGUAGE_TAJARAN
+	  //k Used by LANGUAGE_SKRELLIAN and LANGUAGE_GREY
+	  ":l" = "left hand",	"#l" = "left hand",		".l" = "left hand",  "!l" = "fake left hand",
+	  ":m" = "Medical",		"#m" = "Medical",		".m" = "Medical",
+	  ":n" = "Science",		"#n" = "Science",		".n" = "Science",
+	  //o Used by LANGUAGE_UNATHI
+	  ":p" = "AI Private",	"#p" = "AI Private",	".p" = "AI Private",
+	  //q Used by LANGUAGE_ROOTSPEAK
+	  ":r" = "right hand",	"#r" = "right hand",	".r" = "right hand", "!r" = "fake right hand",
+	  ":s" = "Security",	"#s" = "Security",		".s" = "Security",
+	  ":t" = "Syndicate",	"#t" = "Syndicate",		".t" = "Syndicate",
+	  ":u" = "Supply",		"#u" = "Supply",		".u" = "Supply",
+	  //v Used by LANGUAGE_VOX
+	  ":w" = "whisper",		"#w" = "whisper",		".w" = "whisper",
 	  ":x" = "cultchat",	"#x" = "cultchat",		".x" = "cultchat",
 	  ":y" = "ancientchat",	"#y" = "ancientchat",	".y" = "ancientchat",
-	  ":p" = "AI Private",	"#p" = "AI Private",	".p" = "AI Private",
+	  //z Used by LANGUAGE_CLATTER
+	  //@ Used by LANGUAGE_MARTIAN
+	  ":~" = "sporechat",	"#~" = "sporechat",	    ".~" = "sporechat",
 
-	  ":R" = "right ear",	"#R" = "right ear",		".R" = "right ear", "!R" = "fake right ear",
-	  ":L" = "left ear",	"#L" = "left ear",		".L" = "left ear",  "!L" = "fake left ear",
+
+
+
+
+
+
+
+
+
+
+
+	  ":R" = "right hand",	"#R" = "right hand",	".R" = "right hand", "!R" = "fake right hand",
+	  ":L" = "left hand",	"#L" = "left hand",		".L" = "left hand",  "!L" = "fake left hand",
 	  ":I" = "intercom",	"#I" = "intercom",		".I" = "intercom",
 	  ":H" = "department",	"#H" = "department",	".H" = "department",
 	  ":C" = "Command",		"#C" = "Command",		".C" = "Command",
@@ -63,7 +93,6 @@ var/list/department_radio_keys = list(
 	  ":B" = "binary",		"#B" = "binary",		".B" = "binary",
 	  ":A" = "alientalk",	"#A" = "alientalk",		".A" = "alientalk",
 	  ":T" = "Syndicate",	"#T" = "Syndicate",		".T" = "Syndicate",
-	  ":R" = "Response Team","#R" = "Response Team",".R" = "Response Team",
 	  ":U" = "Supply",		"#U" = "Supply",		".U" = "Supply",
 	  ":D" = "Service",     "#D" = "Service",       ".D" = "Service",
 	  ":G" = "changeling",	"#G" = "changeling",	".G" = "changeling",
@@ -73,21 +102,21 @@ var/list/department_radio_keys = list(
 
 	  //kinda localization -- rastaf0
 	  //same keys as above, but on russian keyboard layout. This file uses cp1251 as encoding.
-	  ":ê" = "right ear",	"#ê" = "right ear",		".ê" = "right ear",
-	  ":ä" = "left ear",	"#ä" = "left ear",		".ä" = "left ear",
+	  ":ê" = "right hand",	"#ê" = "right hand",	".ê" = "right hand",
+	  ":ä" = "left hand",	"#ä" = "left hand",	".ä" = "left hand",
 	  ":ø" = "intercom",	"#ø" = "intercom",		".ø" = "intercom",
 	  ":ð" = "department",	"#ð" = "department",	".ð" = "department",
-	  ":ñ" = "Command",		"#ñ" = "Command",		".ñ" = "Command",
-	  ":ò" = "Science",		"#ò" = "Science",		".ò" = "Science",
-	  ":ü" = "Medical",		"#ü" = "Medical",		".ü" = "Medical",
-	  ":ó" = "Engineering",	"#ó" = "Engineering",	".ó" = "Engineering",
+	  ":ñ" = "Command",	"#ñ" = "Command",		".ñ" = "Command",
+	  ":ò" = "Science",	"#ò" = "Science",		".ò" = "Science",
+	  ":ü" = "Medical",	"#ü" = "Medical",		".ü" = "Medical",
+	  ":ó" = "Engineering","#ó" = "Engineering",	".ó" = "Engineering",
 	  ":û" = "Security",	"#û" = "Security",		".û" = "Security",
-	  ":ö" = "whisper",		"#ö" = "whisper",		".ö" = "whisper",
+	  ":ö" = "whisper",	"#ö" = "whisper",		".ö" = "whisper",
 	  ":è" = "binary",		"#è" = "binary",		".è" = "binary",
-	  ":ô" = "alientalk",	"#ô" = "alientalk",		".ô" = "alientalk",
-	  ":å" = "Syndicate",	"#å" = "Syndicate",		".å" = "Syndicate",
+	  ":ô" = "alientalk",	"#ô" = "alientalk",	".ô" = "alientalk",
+	  ":å" = "Syndicate",	"#å" = "Syndicate",	".å" = "Syndicate",
 	  ":é" = "Supply",		"#é" = "Supply",		".é" = "Supply",
-	  ":â" = "Service",     "#â" = "Service",       ".â" = "Service",
+	  ":â" = "Service",    "#â" = "Service",      ".â" = "Service",
 	  ":ï" = "changeling",	"#ï" = "changeling",	".ï" = "changeling"
 )
 
@@ -361,6 +390,17 @@ var/list/department_radio_keys = list(
 						if(!istype(M,/mob/new_player))
 							handle_render(M,themessage,src)
 					return 1
+		if(MODE_MUSHROOM)
+			var/message = text("<span class='mushroom'>Sporemind, <b>[]:</b> []</span>", src.name, html_encode(speech.message))
+			var/turf/T = get_turf(src)
+			log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Spore chat: [html_encode(speech.message)]")
+			for(var/mob/M in player_list)
+				if(iscarbon(M))
+					var/mob/living/carbon/human/H = M
+					if(ismushroom(H))
+						handle_render(M, message,src)
+				if((M in dead_mob_list) && !istype(M, /mob/new_player))
+					handle_render(M, message,src)
 	return 0
 
 /mob/living/proc/treat_speech(var/datum/speech/speech, genesay = 0)
@@ -456,7 +496,7 @@ var/list/department_radio_keys = list(
 			display_bubble_to_clientlist(image('icons/mob/talk.dmi', get_holder_at_turf_level(src), "h[bubble_type][say_test(message)]",MOB_LAYER+1), tracking_speech_bubble_recipients)
 
 /proc/display_bubble_to_clientlist(var/image/speech_bubble, var/clientlist)
-	speech_bubble.plane = BASE_PLANE
+	speech_bubble.plane = ABOVE_LIGHTING_PLANE
 	speech_bubble.appearance_flags = RESET_COLOR
 	flick_overlay(speech_bubble, clientlist, 30)
 

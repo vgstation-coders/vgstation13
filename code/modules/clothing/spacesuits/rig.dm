@@ -238,6 +238,7 @@
 	wizard_garb = 1
 
 	species_restricted = null
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/teleportation_scroll,/obj/item/weapon/gun/energy/staff)
 
 /obj/item/clothing/suit/space/rig/wizard/acidable()
 	return 0
@@ -294,7 +295,8 @@
 		/obj/item/ammo_storage,
 		/obj/item/ammo_casing,
 		/obj/item/weapon/handcuffs,
-		/obj/item/weapon/bikehorn/baton)
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/blunderbuss)
 	siemens_coefficient = 0.7
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
@@ -304,13 +306,13 @@
 	icon_state = "rig0-storm"
 	_color = "storm"
 	name = "stormtrooper helmet"
-	desc = "Now even more vulnerable to teddy bears!"
+	desc = "Even with the finest vision enhancement tech, you still can't hit shit."
 	no_light = 1
 
 /obj/item/clothing/suit/space/rig/security/stormtrooper
 	icon_state = "rig-storm"
 	name = "stormtrooper hardsuit"
-	desc = "Even with the finest vision enhancement tech, you still can't hit shit."
+	desc = "Now even more vulnerable to teddy bears!"
 
 //Atmospherics Rig (BS12)
 /obj/item/clothing/head/helmet/space/rig/atmos

@@ -172,7 +172,7 @@
 			// Database
 
 			dat += {"<h4>Database Functions</h4>
-				<a href='byond://?src=\ref[src];menu=2'>View Records</a><br>"}
+				<a href='byond://?src=\ref[src];menu=2'>View Records[records.len?"([records.len])":""]</a><br>"}
 			if (src.diskette)
 				dat += "<a href='byond://?src=\ref[src];disk=eject'>Eject Disk</a>"
 
@@ -491,6 +491,7 @@
 	R.name=R.dna.real_name
 	R.types=DNA2_BUF_UI|DNA2_BUF_UE|DNA2_BUF_SE
 	R.languages = subject.languages.Copy()
+	R.times_cloned = subject.times_cloned
 
 	//Add an implant if needed
 	var/obj/item/weapon/implant/health/imp = locate(/obj/item/weapon/implant/health, subject)

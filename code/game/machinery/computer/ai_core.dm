@@ -14,6 +14,7 @@
 	var/datum/ai_laws/laws
 	var/obj/item/weapon/circuitboard/circuit = null
 	var/obj/item/device/mmi/brain = null
+	sheet_type = /obj/item/stack/sheet/plasteel
 
 /obj/structure/AIcore/New()
 	. = ..()
@@ -47,7 +48,7 @@
 					if(!src || state != NOCIRCUITBOARD || !WT.remove_fuel(0, user))
 						return
 					to_chat(user, "<span class='notice'>You deconstruct the frame.</span>")
-					drop_stack(/obj/item/stack/sheet/plasteel, loc, 4, user)
+					drop_stack(sheet_type, loc, 4, user)
 					qdel(src)
 			if(istype(P, /obj/item/weapon/circuitboard/aicore) && !circuit)
 				if(user.drop_item(P, src))

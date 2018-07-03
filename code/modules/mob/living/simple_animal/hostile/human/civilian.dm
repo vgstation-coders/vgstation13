@@ -77,15 +77,15 @@
 /mob/living/simple_animal/hostile/humanoid/janitor/Shoot(var/atom/target, var/atom/start, var/mob/user)
 	if(prob(30) && CS.reagents.has_reagent(LUBE))
 		visible_message("<span class = 'warning'>\The [src] lets loose a blast of lubricant from their chemical sprayer!</span>")
-		playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
+		playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 		CS.make_puff(target, user)
 	else
 		..()
 
-/mob/living/simple_animal/hostile/humanoid/janitor/Die()
+/mob/living/simple_animal/hostile/humanoid/janitor/death(var/gibbed = FALSE)
 	CS.forceMove(loc)
 	CS = null
-	..()
+	..(gibbed)
 
 
 /mob/living/simple_animal/hostile/humanoid/pilot

@@ -68,7 +68,7 @@
 		return
 	in_use = TRUE
 	user.visible_message("<span class='danger'>[user] activates \the [src]!</span>", "You level the extractor at [H] and hold down the trigger.")
-	playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+	playsound(src, 'sound/machines/click.ogg', 50, 1)
 	if(do_after(user, src, delay, needhand=TRUE))
 		if(O && istype(O) && O.CanRemove(H, user, quiet=TRUE))
 			O.Remove(H, user)
@@ -93,7 +93,7 @@
 				// ???? affected.internal_organs -= OO.organ_data
 				OO.removed(H,user)
 				OO.forceMove(get_turf(H))
-			playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1)
+			playsound(src, 'sound/machines/juicer.ogg', 50, 1)
 	in_use = FALSE
 
 /obj/item/weapon/organ_remover/proc/can_use(var/mob/user)

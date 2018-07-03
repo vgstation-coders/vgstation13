@@ -16,7 +16,7 @@
 	max_combined_w_class = 21
 
 /obj/item/weapon/storage/backpack/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	playsound(get_turf(src), "rustle", 50, 1, -5)
+	playsound(src, "rustle", 50, 1, -5)
 	. = ..()
 
 /*

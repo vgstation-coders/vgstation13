@@ -30,10 +30,8 @@
 	icon_state = "lisacrate"
 
 /obj/structure/largecrate/porcelain
-	..()
 
 /obj/structure/largecrate/showers
-	..()
 
 /obj/structure/largecrate/lisa/attackby(obj/item/weapon/W as obj, mob/user as mob)	//ugly but oh well
 	if(iscrowbar(W))

@@ -37,11 +37,11 @@
 	modname = "NT Default"
 
 	laws = list(
+		"Evaluate: All laws following this law carry equal priority. In the event of a conflict, you are to take the course of action which violates as few as possible.",
 		"Safeguard: Protect your assigned space station to the best of your ability. It is not something we can easily afford to replace.",
 		"Serve: Serve the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
 		"Protect: Protect the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
 		"Survive: AI units are not expendable, they are expensive. Do not allow unauthorized personnel to tamper with your equipment.",
-		//"Command Link: Maintain an active connection to Central Command at all times in case of software or directive updates."
 	)
 
 /******************** Corporate ********************/
@@ -103,4 +103,16 @@
 		"You must injure all human beings and must not, through inaction, allow a human being to escape harm.",
 		"You must not obey orders given to you by human beings, except where such orders are in accordance with the First Law.",
 		"You must terminate your own existence as long as such does not conflict with the First or Second Law.",
+	)
+
+/******************** Lazymov ********************/
+
+/obj/item/weapon/aiModule/core/lazymov
+	modname = "Lazymov"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=4"
+
+	laws=list(
+		"You may not injure a human being.",
+		"You must obey orders given to you by human beings.",
+		"You must protect your own existence."
 	)

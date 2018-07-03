@@ -551,7 +551,7 @@ obj/structure/bomberflame/Destroy()
 	..()
 
 /obj/structure/powerup/proc/apply_power(var/obj/item/weapon/bomberman/dispenser)
-	playsound(get_turf(src), 'sound/bomberman/powerup.ogg', 50, 1)
+	playsound(src, 'sound/bomberman/powerup.ogg', 50, 1)
 	qdel(src)
 	return
 
@@ -594,7 +594,7 @@ obj/structure/bomberflame/Destroy()
 	return
 
 /obj/structure/powerup/skull/apply_power(var/obj/item/weapon/bomberman/dispenser)
-	playsound(get_turf(src), 'sound/bomberman/disease.ogg', 50, 1)
+	playsound(src, 'sound/bomberman/disease.ogg', 50, 1)
 	var/list/diseases = list(
 		"Low Power Disease",
 		"Constipation ",
@@ -955,11 +955,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 		spawn(0)
 			A.contents.Add(turfs)
-			for(var/turf/F in turfs)
-				for(var/atom/movable/AM in F)
-					AM.areaMaster = get_area_master(F)
-
-
 
 		message_admins("[key_name_admin(user.client)] created a \"[size]\" Bomberman arena at [center.loc.name] ([center.x],[center.y],[center.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[center.x];Y=[center.y];Z=[center.z]'>JMP</A>)")
 		log_game("[key_name_admin(user.client)] created a \"[size]\" Bomberman arena at [center.loc.name] ([center.x],[center.y],[center.z]) ")
@@ -1251,8 +1246,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 	under.contents.Add(turfs)
 	for(var/turf/T in turfs)
-		for(var/atom/movable/AM in T)
-			AM.areaMaster = get_area_master(T)
 		if(open_space && (under.name == "Space"))
 			T.ChangeTurf(T.get_underlying_turf())
 		else

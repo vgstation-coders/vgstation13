@@ -52,7 +52,7 @@
 	if (user.a_intent == I_HURT)
 		if(!..())
 			return
-		playsound(get_turf(src), "swing_hit", 50, 1, -1)
+		playsound(src, "swing_hit", 50, 1, -1)
 		if (M.stuttering < 8 && (!(M_HULK in M.mutations))  /*&& (!istype(H:wear_suit, /obj/item/clothing/suit/judgerobe))*/)
 			M.stuttering = 8
 		M.Stun(8)
@@ -61,7 +61,7 @@
 			if (O.client)
 				O.show_message("<span class='danger'>[M] has been beaten with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
 	else
-		playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1, -1)
+		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1, -1)
 		M.Stun(5)
 		M.Knockdown(5)
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
@@ -120,7 +120,7 @@
 		w_class = initial(w_class)
 		force = initial(force) //not so robust now
 		attack_verb = list("hits", "punches")
-	playsound(get_turf(src), 'sound/weapons/empty.ogg', 50, 1)
+	playsound(src, 'sound/weapons/empty.ogg', 50, 1)
 	add_fingerprint(user)
 
 	if(!blood_overlays["[type][icon_state]"])
@@ -156,11 +156,11 @@
 			if(!..())
 				return
 			if(!isrobot(target))
-				playsound(get_turf(src), "swing_hit", 50, 1, -1)
+				playsound(src, "swing_hit", 50, 1, -1)
 				//target.Stun(4)	//naaah
 				target.Knockdown(4)
 		else
-			playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1, -1)
+			playsound(src, 'sound/weapons/Genhit.ogg', 50, 1, -1)
 			target.Knockdown(2)
 			target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [target.name] ([target.ckey])</font>")
@@ -272,3 +272,11 @@
 	else
 		parent_borer.chemicals -= 5
 		sleep(10)
+
+/obj/item/weapon/melee/training_sword
+	name = "training sword"
+	desc = "A blunt object in the shape of a one handed sword."
+	icon_state = "grey_sword"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	item_state = "grey_sword"
+	force = 4

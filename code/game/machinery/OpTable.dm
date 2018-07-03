@@ -151,9 +151,9 @@
 
 /obj/machinery/optable/attackby(obj/item/weapon/W as obj, mob/living/carbon/user as mob)
 	if(iswrench(W))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src, 40))
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 			switch(rating)
 				if(1)
 					new /obj/item/weapon/stock_parts/scanning_module(src.loc)
@@ -172,4 +172,31 @@
 	if(isrobot(user))
 		return
 	//user.drop_item(W, src.loc) why?
-	return
+
+/obj/machinery/optable/npc_tamper_act(mob/living/user)
+	//Messages are overridden for this proc
+	. = NPC_TAMPER_ACT_NOMSG
+
+	if(!victim)
+		return
+
+	var/list/pickable_items = list()
+
+	for(var/obj/item/I in adjacent_atoms(user))
+		pickable_items.Add(I)
+
+	if(!pickable_items.len)
+		user.visible_message("<span class='notice'>\The [user] tries to think of a way to screw \the [victim] up without any tools nearby, but fails miserably.</span>")
+		return
+
+	var/obj/item/tool = pick(pickable_items)
+
+	user.visible_message(pick(
+	"<span class='danger'>\The [user] grabs \a nearby [tool] and contemplates using it on \the [victim]!</span>",
+	"<span class='danger'>\The [user]'s eyes light up as \he tries to use \the [tool] to operate on \the [victim]</span>",
+	"<span class='danger'>\The [user] rubs its hands devilishly and attempts to operate on \the [victim] with \the [tool].</span>"))
+	if(isgremlin(user))
+		var/mob/living/simple_animal/hostile/gremlin/G = user
+		G.stand_still(4)
+
+	global.do_surgery(victim, user, tool)

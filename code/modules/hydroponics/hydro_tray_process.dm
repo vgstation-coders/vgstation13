@@ -176,17 +176,11 @@
 		for(var/gas in seed.exude_gasses)
 			environment.adjust_gas(gas, max(1,round((seed.exude_gasses[gas]*round(seed.potency))/seed.exude_gasses.len)))
 
-	// This was adapted from the air alarm code
-	// I've never done atmos or touched atmos code before so there's a chance I've fucked this up
 	if(seed.alter_temp)
-		if(istype(T, /turf/simulated/))
-			var/datum/gas_mixture/room = T.remove_air(environment.total_moles)
-			if(room.temperature < seed.ideal_heat-seed.heat_tolerance)
-				room.temperature += (seed.potency*3)
-			else if (room.temperature > seed.ideal_heat+seed.heat_tolerance)
-				room.temperature -= (seed.potency*3)
-			room.react()
-			T.assume_air(room)
+		if((environment.temperature < seed.ideal_heat - seed.heat_tolerance) || (environment.temperature > seed.ideal_heat + seed.heat_tolerance))
+			var/energy_cap = seed.potency * 60 * MOLES_CELLSTANDARD //This is totally arbitrary. It just serves to approximate the behavior from when this modified temperature rather than thermal energy.
+			var/energy_change = Clamp(environment.get_thermal_energy_change(seed.ideal_heat), -energy_cap, energy_cap)
+			environment.add_thermal_energy(energy_change)
 
 	// If we're attached to a pipenet, then we should let the pipenet know we might have modified some gasses
 	//if (closed_system && connected_port)

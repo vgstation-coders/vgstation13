@@ -18,9 +18,13 @@ var/list/processing_objects = list()
 
 
 /datum/subsystem/obj/Initialize()
-	for(var/atom/movable/object in world)
+	for(var/atom/object in world)
 		object.initialize()
-
+		CHECK_TICK
+	for(var/area/place in areas)
+		var/obj/machinery/power/apc/place_apc = place.areaapc
+		if(place_apc)
+			place_apc.update()
 	..()
 
 

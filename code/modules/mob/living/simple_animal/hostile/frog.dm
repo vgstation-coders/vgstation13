@@ -73,12 +73,12 @@
 
 	.=..()
 
-/mob/living/simple_animal/hostile/frog/Die()
+/mob/living/simple_animal/hostile/frog/death(var/gibbed = FALSE)
 	for(var/obj/item/I in contents)
 		I.forceMove(get_turf(src))
 
 	update_spear()
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/frog/Cross(obj/item/weapon/spear/S)
 	.=..()

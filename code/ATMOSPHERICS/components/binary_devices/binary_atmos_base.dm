@@ -121,9 +121,7 @@
 	node2 = findConnecting(dir)
 
 	update_icon()
-	var/turf/T = loc
-	if (istype(T))
-		T.soft_add_holomap(src)
+	add_self_to_holomap()
 
 /obj/machinery/atmospherics/binary/build_network()
 	if(!network1 && node1)

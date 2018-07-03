@@ -1,4 +1,4 @@
-#define MOLE_TRIGGER 10
+#define MOLE_TRIGGER (10 / CELL_VOLUME)
 
 /datum/artifact_trigger/gas
 	triggertype = TRIGGER_GAS
@@ -7,7 +7,7 @@
 
 /datum/artifact_trigger/gas/New()
 	..()
-	trigger_gas = pick("TOXINS","CARBON_DIOXIDE","NITROGEN","OXYGEN")
+	trigger_gas = pick("TOXINS", "CARBON_DIOXIDE", "NITROGEN", "OXYGEN")
 
 
 /datum/artifact_trigger/gas/CheckTrigger()
@@ -15,24 +15,9 @@
 	var/datum/gas_mixture/env = T.return_air()
 	if(env)
 		if(!my_effect.activated)
-			if(trigger_gas == "TOXINS" && env.toxins >= MOLE_TRIGGER)
-				Triggered(0, trigger_gas, 0)
-			if(trigger_gas == "CARBON_DIOXIDE" && env.carbon_dioxide >= MOLE_TRIGGER)
-				Triggered(0, trigger_gas, 0)
-			if(trigger_gas == "NITROGEN" && env.nitrogen >= MOLE_TRIGGER)
-				Triggered(0, trigger_gas, 0)
-			if(trigger_gas == "OXYGEN" && env.oxygen >= MOLE_TRIGGER)
+			if(env.molar_density(lowertext(trigger_gas)) >= MOLE_TRIGGER)
 				Triggered(0, trigger_gas, 0)
 
 		else
-			if(trigger_gas == "TOXINS" && env.toxins < MOLE_TRIGGER)
+			if(env.molar_density(lowertext(trigger_gas)) < MOLE_TRIGGER)
 				Triggered(0, trigger_gas, 0)
-			if(trigger_gas == "CARBON_DIOXIDE" && env.carbon_dioxide < MOLE_TRIGGER)
-				Triggered(0, trigger_gas, 0)
-			if(trigger_gas == "NITROGEN" && env.nitrogen < MOLE_TRIGGER)
-				Triggered(0, trigger_gas, 0)
-			if(trigger_gas == "OXYGEN" && env.oxygen < MOLE_TRIGGER)
-				Triggered(0, trigger_gas, 0)
-
-/datum/artifact_trigger/gas/Destroy()
-	..()

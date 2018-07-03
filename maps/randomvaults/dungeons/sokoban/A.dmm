@@ -1,0 +1,24 @@
+"a" = (/turf/unsimulated/wall/other,/area/vault/sokoban/level)
+"b" = (/turf/unsimulated/wall/bomberman,/area/vault/sokoban/level)
+"c" = (/obj/structure/lattice,/turf/unsimulated/wall/other,/area/vault/sokoban/level)
+"d" = (/obj/structure/ladder/sokoban/exit,/turf/simulated/floor,/area/vault/sokoban/level)
+"e" = (/obj/structure/ladder/sokoban/entrance,/turf/simulated/floor,/area/vault/sokoban/level)
+"f" = (/turf/simulated/floor,/area/vault/sokoban/level)
+"g" = (/obj/structure/sokoban_teleporter,/turf/simulated/floor,/area/vault/sokoban/level)
+"h" = (/obj/structure/closet/crate/sokoban,/turf/simulated/floor,/area/vault/sokoban/level)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaa
+abbbbbbbbbbbbbbbc
+abdbefffbbbffffba
+abgbbfhhffffhffba
+abgbbffhhbfhfhfba
+abgbbffffbfffffba
+abgbbbbbbbhbbbbba
+abgbbbbbbffffffba
+abgbbbbbbffffffba
+abffgggghhhhfffba
+abffbbbbbffffffba
+abbbbbbbbbbbbbbba
+aaaaaaaaaaaaaaaaa
+"}

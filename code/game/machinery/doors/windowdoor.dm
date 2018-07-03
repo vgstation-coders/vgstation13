@@ -129,9 +129,9 @@
 		return 0
 	if(!operating) //in case of emag
 		operating = 1
-	flick(text("[]opening", base_state), src)
-	playsound(get_turf(src), soundeffect, 100, 1)
-	icon_state = text("[]open", base_state)
+	door_animate("opening")
+	playsound(src, soundeffect, 100, 1)
+	icon_state = "[base_state]open"
 	sleep(animation_delay)
 
 	explosion_resistance = 0
@@ -148,8 +148,8 @@
 	if (operating)
 		return 0
 	operating = 1
-	flick(text("[]closing", base_state), src)
-	playsound(get_turf(src), soundeffect, 100, 1)
+	door_animate("closing")
+	playsound(src, soundeffect, 100, 1)
 	icon_state = base_state
 
 	setDensity(TRUE)
@@ -188,7 +188,7 @@
 		tforce = 40
 	else
 		tforce = AM:throwforce
-	playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 100, 1)
+	playsound(src, 'sound/effects/Glasshit.ogg', 100, 1)
 	take_damage(tforce)
 
 /obj/machinery/door/window/attack_ai(mob/user as mob)
@@ -201,16 +201,11 @@
 			return
 		user.delayNextAttack(8)
 		user.do_attack_animation(src, user)
-		health = max(0, health - 25)
-		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 		visible_message("<span class='warning'>\The [user] smashes against \the [name].</span>", 1)
-		if (health <= 0)
-			getFromPool(shard, loc)
-			getFromPool(/obj/item/stack/cable_coil, loc, 2)
-			qdel(src)
+		take_damage(25)
 	else
 		return attack_hand(user)
-
 
 /obj/machinery/door/window/attack_animal(mob/living/user as mob)
 	if(operating)
@@ -220,23 +215,15 @@
 		return
 	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)
-	health = max(0, health - M.melee_damage_upper)
-	playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+	playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 	visible_message("<span class='warning'>\The [M] [M.attacktext] against \the [name].</span>", 1)
-	if (health <= 0)
-		getFromPool(shard, loc)
-		getFromPool(/obj/item/stack/cable_coil, loc, 2)
-		qdel(src)
-
-
-/obj/machinery/door/window/attack_hand(mob/user as mob)
-	return attackby(user, user)
+	take_damage(M.melee_damage_upper)
 
 /obj/machinery/door/window/attackby(obj/item/weapon/I as obj, mob/living/user as mob)
 	// Make emagged/open doors able to be deconstructed
 	if (!density && operating != 1 && iscrowbar(I))
 		user.visible_message("[user] removes the electronics from the windoor assembly.", "You start to remove the electronics from the windoor assembly.")
-		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 100, 1)
+		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 		if (do_after(user, src, 40) && src && !density && operating != 1)
 			to_chat(user, "<span class='notice'>You removed the windoor electronics!</span>")
 			make_assembly(user)
@@ -276,29 +263,16 @@
 		var/aforce = I.force
 		user.do_attack_animation(src, I)
 		user.delayNextAttack(8)
-		if(I.damtype == BRUTE || I.damtype == BURN)
-			health = max(0, health - aforce)
-		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 		visible_message("<span class='danger'>[src] was hit by [I].</span>")
-		if (health <= 0)
-			getFromPool(shard, loc)
-			getFromPool(/obj/item/stack/cable_coil, loc, 2)
-			qdel(src)
+		if(I.damtype == BRUTE || I.damtype == BURN)
+			take_damage(aforce)
 		return
 
 	add_fingerprint(user)
 	if (!requiresID())
 		//don't care who they are or what they have, act as if they're NOTHING
 		user = null
-
-	if (isrobot(user))
-		if (density)
-			return open()
-		else
-			return close()
-
-	if (!allowed(user) && density)
-		flick(text("[]deny", base_state), src)
 
 	return ..()
 
@@ -307,13 +281,16 @@
 		var/used_emag = (/obj/item/weapon/card/emag in user.contents) //TODO: Find a better way of checking this
 		return hackOpen(used_emag, user)
 
+/obj/machinery/door/window/door_animate(var/animation)
+	flick("[base_state][animation]", src)
+
 /obj/machinery/door/window/proc/hackOpen(obj/item/I, mob/user)
 	operating = -1
 
 	if (electronics)
 		electronics.icon_state = "door_electronics_smoked"
 
-	flick("[base_state]spark", src)
+	door_animate("spark")
 	sleep(6)
 	open()
 	return 1
@@ -415,3 +392,8 @@
 	WA.secure = "secure_"
 	WA.update_icon()
 	return WA
+
+// Used on Packed ; smartglassified roundstart
+/obj/machinery/door/window/plasma/secure/interogation_room/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = "InterogationRoomIDTag"

@@ -10,7 +10,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 									"shrimp" = /obj/item/weapon/reagent_containers/food/snacks/shrimp,
 									"electric eel" = /obj/item/weapon/fish/electric_eel,
 									"glofish" = /obj/item/weapon/fish/glofish
-,
+,									"sea devil" = /obj/item/fish_eggs/seadevil //You can fish a sea devil straight back out and stick it in another tank.
 									)
 
 //////////////////////////////////////////////
@@ -84,7 +84,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 /obj/item/weapon/reagent_containers/food/snacks/shrimp/New()
 	..()
 	desc = pick("Anyway, like I was sayin', shrimp is the fruit of the sea.", "You can barbecue it, boil it, broil it, bake it, saute it.")
-	reagents.add_reagent("NUTRIMENT", 1)
+	reagents.add_reagent(NUTRIMENT, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/feederfish
 	name = "feeder fish"
@@ -96,7 +96,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/reagent_containers/food/snacks/feederfish/New()
 	..()
-	reagents.add_reagent("NUTRIMENT", 1)
+	reagents.add_reagent(NUTRIMENT, 1)
 
 /obj/item/weapon/fish
 	name = "fish"
@@ -116,6 +116,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	name = "glofish"
 	desc = "A small bio-luminescent fish. Not very bright, but at least it's pretty!"
 	icon_state = "glofish"
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/glofishmeat
 
 /obj/item/weapon/fish/glofish/New()
 	..()
@@ -137,7 +138,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	if(istype(O, /obj/item/weapon/wirecutters))
 		to_chat(user, "You rip out the teeth of \the [src]!")
 		new /obj/item/weapon/fish/toothless_shark(get_turf(src))
-		new /obj/item/stack/teeth/shark(get_turf(src))
+		new /obj/item/stack/teeth/shark(get_turf(src), 10)
 		qdel(src)
 		return
 	..()
@@ -171,6 +172,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	name = "goldfish"
 	desc = "A goldfish, just like the one you never won at the county fair."
 	icon_state = "goldfish"
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/goldfishmeat
 
 /obj/item/weapon/fish/salmon
 	name = "salmon"
@@ -201,6 +203,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	icon_state = "clownfish"
 	throwforce = 1
 	force = 1
+	hitsound = 'sound/items/bikehorn.ogg'
 	attack_verb = list("slapped", "humiliated", "hit", "rubbed")
 
 /obj/item/weapon/fish/attackby(var/obj/item/O, var/mob/user)

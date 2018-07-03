@@ -37,10 +37,15 @@
 	slot_flags = SLOT_POCKET
 	throw_range = 1 //It just scatters to the ground as soon as you throw it.
 
+/obj/item/weapon/ore/glass/cave
+	name = "cave sand"
+	icon_state = "cavesand"
+
 /obj/item/weapon/ore/glass/throw_impact(atom/hit_atom)
 	//Intentionally not calling ..()
 	if(isturf(hit_atom))
-		new/obj/effect/decal/cleanable/scattered_sand(hit_atom)
+		if(!locate(/obj/effect/decal/cleanable/scattered_sand) in hit_atom)
+			new/obj/effect/decal/cleanable/scattered_sand(hit_atom)
 		qdel(src)
 	else if(ishuman(hit_atom))
 		var/mob/living/carbon/human/H = hit_atom
@@ -242,7 +247,7 @@
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND
 	var/primed = 0
 	var/det_time = 100
-	var/quality = 1 //How pure this gibtonite is, determines the explosion produced by it and is derived from the det_time of the rock wall it was taken from, higher shipping_value = better
+	var/det_quality = 1 //How pure this gibtonite is, determines the explosion produced by it and is derived from the det_time of the rock wall it was taken from, higher shipping_value = better
 
 /obj/item/weapon/gibtonite/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/weapon/pickaxe) || istype(I, /obj/item/weapon/resonator))
@@ -252,7 +257,7 @@
 		primed = 0
 		user.visible_message("<span class='notice'>The chain reaction was stopped! ...The ore's quality went down.</span>")
 		icon_state = "Gibtonite ore"
-		quality = 1
+		det_quality = 1
 		return
 	..()
 
@@ -286,7 +291,7 @@
 			log_game("[key_name(usr)] has primed a [name] for detonation at [A.name]([bombturf.x],[bombturf.y],[bombturf.z])")
 		spawn(det_time)
 			if(primed)
-				switch(quality)
+				switch(det_quality)
 					if(1)
 						explosion(src.loc,-1,1,3,adminlog = notify_admins)
 					if(2)

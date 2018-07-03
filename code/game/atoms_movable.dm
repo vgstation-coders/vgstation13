@@ -18,8 +18,6 @@
 	var/mob/pulledby = null
 	var/pass_flags = 0
 
-	var/area/areaMaster
-
 	var/sound_override = 0 //Do we make a sound when bumping into something?
 	var/hard_deleted = 0
 	var/pressure_resistance = ONE_ATMOSPHERE
@@ -53,10 +51,10 @@
 	var/atom/movable/tether_master
 	var/list/tether_slaves
 	var/list/current_tethers
+	var/obj/shadow/shadow
 
 /atom/movable/New()
 	. = ..()
-	areaMaster = get_area_master(src)
 	if((flags & HEAR) && !ismob(src))
 		getFromPool(/mob/virtualhearer, src)
 
@@ -105,6 +103,9 @@
 		for(var/mob/virtualhearer/VH in virtualhearers)
 			if(VH.attached == src)
 				returnToPool(VH)
+
+	for(var/atom/movable/AM in src)
+		qdel(AM)
 
 	..()
 
@@ -420,7 +421,7 @@
 
 		loc.Entered(src, old_loc)
 		if(isturf(loc))
-			var/area/A = get_area_master(loc)
+			var/area/A = get_area(loc)
 			A.Entered(src, old_loc)
 
 			for(var/atom/movable/AM in loc)
@@ -459,7 +460,7 @@
 		loc = destination
 		loc.Entered(src)
 		if(isturf(destination))
-			var/area/A = get_area_master(destination)
+			var/area/A = get_area(destination)
 			A.Entered(src)
 
 		for(var/atom/movable/AM in locked_atoms)
@@ -624,10 +625,6 @@
 	src.throwing = 0
 	if(isobj(src))
 		src.throw_impact(get_turf(src), speed, user)
-
-/atom/movable/change_area(oldarea, newarea)
-	areaMaster = newarea
-	..()
 
 //Overlays
 /atom/movable/overlay
@@ -965,3 +962,9 @@
 
 /atom/movable/proc/on_tether_broken(atom/movable/other_end)	//To allow for code based on when a tether with a specific thing is broken
 	return
+
+/atom/movable/proc/area_entered(var/area/A)
+	return
+
+/atom/movable/proc/can_be_pulled(var/mob/user)
+	return TRUE

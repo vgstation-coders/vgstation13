@@ -15,7 +15,7 @@
 	response_harm   = "punches"
 	melee_damage_lower = 5
 	melee_damage_upper = 15
-	attacktext = "drains the life from"
+	attacktext = "torments"
 	minbodytemp = 0
 	maxbodytemp = 4000
 	min_oxy = 0
@@ -70,7 +70,8 @@
 			if(istype(O,/obj/item/weapon/nullrod))
 				damage *= 2
 				purge = 3
-			health -= damage
+			adjustBruteLoss(damage)
+			O.on_attack(src, user)
 			for(var/mob/M in viewers(src, null))
 				if ((M.client && !( M.blinded )))
 					M.show_message("<span class='warning'> <B>[src] has been attacked with [O] by [user].</span></B>")
@@ -85,6 +86,11 @@
 	if(!(src.flags & INVULNERABLE))
 		health -= rand(5,45) //These guys are like ghosts, a collision with a shuttle wouldn't destroy one outright
 	return
+
+/mob/living/simple_animal/shade/examine(mob/user)
+	..()
+	if(!client)
+		to_chat(user, "<span class='warning'>It appears to be dormant.</span>")
 
 ////////////////HUD//////////////////////
 
@@ -123,7 +129,8 @@
 			else
 				healths.icon_state = "shade_health7"
 
-/mob/living/simple_animal/shade/happiest/Die()
+/mob/living/simple_animal/shade/happiest/death(var/gibbed = FALSE)
+	..(TRUE)
 	transmogrify()
 	if(!gcDestroyed)
 		qdel(src)
@@ -145,11 +152,11 @@
 		suiciding = TRUE
 
 	visible_message("<span class='danger'>[src] shudders violently for a moment, then becomes motionless, its aura fading and eyes slowly darkening.</span>")
-	Die()
+	death()
 
-/mob/living/simple_animal/shade/sword/Die()
+/mob/living/simple_animal/shade/sword/death(var/gibbed = FALSE)
 	if(istype(loc, /obj/item/weapon/nullrod/sword/chaos))
 		var/obj/item/weapon/nullrod/sword/chaos/C = loc
 		C.possessed = FALSE
 		C.icon_state = "talking_sword"
-	..()
+	..(gibbed)

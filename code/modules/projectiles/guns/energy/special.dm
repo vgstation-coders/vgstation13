@@ -205,17 +205,17 @@
 		"YOUR TIME HAS NOT COME, YET.",\
 		"YOUR SOUL MAY BELONG TO [uppertext(ticker.Bible_deity_name)] BUT YOU BELONG TO ME."))
 
-	playsound(get_turf(src), get_sfx("soulstone"), 50,1)
+	playsound(src, get_sfx("soulstone"), 50,1)
 
 	switch(raisetype)
 		if(ZOMBIE)
-			var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(target), user, H.mind)
+			var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(target), user, H)
 			T.get_clothes(H, T)
 			T.name = H.real_name
 			T.host = H
 			H.loc = null
 		if(SKELETON)
-			new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(target), user, H.mind)
+			new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(target), user, H)
 			H.gib()
 	charges--
 
@@ -413,7 +413,7 @@
 			projectile_type = "/obj/item/projectile/energy/floramut/emag"
 			to_chat(user, "<span class='warning'>You short out the safety limit of the [src.name]!</span>")
 			desc += " It seems to have it's safety features de-activated."
-			playsound(get_turf(user), 'sound/effects/sparks4.ogg', 50, 1)
+			playsound(user, 'sound/effects/sparks4.ogg', 50, 1)
 			modifystate = "floraemag"
 			update_icon()
 
@@ -504,6 +504,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	projectile_type = "/obj/item/projectile/kinetic"
 	cell_type = "/obj/item/weapon/cell/crap"
 	charge_cost = 50
+	icon_charge_multiple = 20
 	var/overheat = 0
 	var/recent_reload = 1
 /*
@@ -521,10 +522,6 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	playsound(src.loc, 'sound/weapons/shotgunpump.ogg', 60, 1)
 	recent_reload = 1
 	update_icon()
-	return
-
-// /vg/ - Broken until we update to /tg/ guncode.
-/obj/item/weapon/gun/energy/kinetic_accelerator/update_icon()
 	return
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg
@@ -651,10 +648,10 @@ obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/l
 	pumping = 1
 	power_supply.charge = min(power_supply.charge + 200,power_supply.maxcharge)
 	if(power_supply.charge >= power_supply.maxcharge)
-		playsound(get_turf(src), 'sound/machines/click.ogg', 25, 1)
+		playsound(src, 'sound/machines/click.ogg', 25, 1)
 		to_chat(user, "<span class='rose'>You pull the pump at the back of the gun. Looks like the inner battery is fully charged now.</span>")
 	else
-		playsound(get_turf(src), 'sound/weapons/bison_reload.ogg', 25, 1)
+		playsound(src, 'sound/weapons/bison_reload.ogg', 25, 1)
 		to_chat(user, "<span class='rose'>You pull the pump at the back of the gun.</span>")
 	sleep(5)
 	pumping = 0
@@ -696,7 +693,7 @@ obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/l
 
 /obj/item/weapon/gun/energy/polarstar/New()
 	..()
-	playsound(get_turf(src), 'sound/weapons/spur_spawn.ogg', 50, 0, null, FALLOFF_SOUNDS, 0)
+	playsound(src, 'sound/weapons/spur_spawn.ogg', 50, 0, null, FALLOFF_SOUNDS, 0)
 
 /obj/item/weapon/gun/energy/polarstar/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
 	levelChange()

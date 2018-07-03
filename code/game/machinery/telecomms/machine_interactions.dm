@@ -28,7 +28,7 @@
 		if (!S.remove_fuel(2, user))
 			to_chat(user, "You need more fuel.")
 			return
-		playsound(get_turf(user), 'sound/items/Welder.ogg', 100, 1)
+		playsound(user, 'sound/items/Welder.ogg', 100, 1)
 		integrity = TELECOMMS_MAX_INTEGRITY
 		to_chat(user, "<span class='notice'>You repair the damaged internals of \the [src].</span>")
 		updateUsrDialog()
@@ -224,7 +224,7 @@
 
 	var/obj/item/device/multitool/P = get_multitool(usr)
 	if(!istype(P))
-		testing("get_multitool returned [P].")
+//		testing("get_multitool returned [P].")
 		return
 
 	if(href_list["input"])

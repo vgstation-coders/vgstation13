@@ -246,7 +246,7 @@
 	setCloneLoss(100)
 	updatehealth()
 
-//Default for all simple animals, using the Die() proc. Custom cases below
+//Default for all simple animals, using the death() proc. Custom cases below
 /mob/living/simple_animal/attempt_suicide(forced = 0, suicide_set = 1)
 
 	if(!forced)
@@ -266,4 +266,4 @@
 
 	visible_message(pick("<span class='danger'>[src] suddenly starts thrashing around wildly! It looks like \he's trying to commit suicide.</span>", \
 						 "<span class='danger'>[src] suddenly starts mauling \himself! It looks like \he's trying to commit suicide.</span>"))
-	Die()
+	death()

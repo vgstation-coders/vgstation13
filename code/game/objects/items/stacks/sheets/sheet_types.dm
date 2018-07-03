@@ -5,6 +5,7 @@
  *		Wood
  *		Cloth
  *		Cardboard
+ *		Bones
  */
 
 /*
@@ -22,6 +23,7 @@
 	siemens_coefficient = 1
 	origin_tech = Tc_MATERIALS + "=1"
 	melt_temperature = MELTPOINT_STEEL
+	mat_type = MAT_IRON
 
 /obj/item/stack/sheet/metal/resetVariables()
 	return ..("recipes", "pixel_x", "pixel_y")
@@ -93,6 +95,7 @@
 	sheettype = "wood"
 	w_type = RECYK_WOOD
 	siemens_coefficient = 0 //no conduct
+	mat_type = MAT_WOOD
 
 
 /obj/item/stack/sheet/wood/afterattack(atom/Target, mob/user, adjacent, params)
@@ -103,7 +106,7 @@
 			if(T.canBuildLattice(src))
 				if(src.use(1))
 					to_chat(user, "<span class='notice'>Constructing some foundations ...</span>")
-					playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
+					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 					new /obj/structure/lattice/wood(T)
 
 /obj/item/stack/sheet/wood/cultify()
@@ -161,3 +164,12 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 /obj/item/stack/sheet/charcoal/New(var/loc, var/amount=null)
 		recipes = charcoal_recipes
 		return ..()
+
+		
+/obj/item/stack/sheet/bone
+	name = "bone"
+	desc = "Boney.  Probably has some marrow left."
+	singular_name = "bone"
+	origin_tech = Tc_BIOTECH + "=1"
+	icon_state = "sheet-bone"
+	//item_state = "bone"

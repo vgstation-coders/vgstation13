@@ -64,11 +64,11 @@
 		return open()
 
 /obj/machinery/door/mineral/open()
-	playsound(get_turf(src), soundeffect, 100, 1)
+	playsound(src, soundeffect, 100, 1)
 	return ..()
 
 /obj/machinery/door/mineral/close()
-	playsound(get_turf(src), soundeffect, 100, 1)
+	playsound(src, soundeffect, 100, 1)
 	return ..()
 
 /obj/machinery/door/mineral/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -224,6 +224,11 @@
 		add_fingerprint(user)
 		SwitchState()
 
+/obj/machinery/door/mineral/resin/bullet_act(var/obj/item/projectile/Proj)
+	if(Proj.damage_type == BRUTE || Proj.damage_type == BURN)
+		hardness -= Proj.damage/100
+		CheckHardness()
+
 /obj/machinery/door/mineral/resin/open()
 	..()
 	spawn(close_delay)
@@ -235,7 +240,7 @@
 	return
 
 /obj/machinery/door/mineral/resin/CheckHardness()
-	playsound(get_turf(src), soundeffect, 100, 1)
+	playsound(src, soundeffect, 100, 1)
 	return ..()
 
 /obj/machinery/door/mineral/resin/acidable()

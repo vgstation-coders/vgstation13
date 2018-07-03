@@ -250,7 +250,7 @@ var/global/ingredientLimit = 10
 	src.icon_state = src.icon_state_on
 	if (cook_after(src.cookTime, 25))
 		src.makeFood(foodType)
-		playsound(get_turf(src),src.cookSound,100,1)
+		playsound(src,src.cookSound,100,1)
 	src.active = 0
 	src.icon_state = initial(src.icon_state)
 	return
@@ -400,7 +400,7 @@ var/global/ingredientLimit = 10
 	reagents.update_total() //make the values refresh
 	if(ingredient)
 		icon_state = "fryer_on"
-		playsound(get_turf(src),'sound/machines/deep_fryer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
+		playsound(src,'sound/machines/deep_fryer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
 	else if(reagents.total_volume < DEEPFRY_MINOIL)
 		icon_state = "fryer_empty"
 	else
@@ -469,7 +469,7 @@ var/global/ingredientLimit = 10
 	//Deepfry a random nearby item
 	var/list/pickable_items = list()
 
-	for(var/obj/item/I in range(1, L))
+	for(var/obj/item/I in adjacent_atoms(L))
 		pickable_items.Add(I)
 
 	if(!pickable_items.len)
@@ -531,7 +531,7 @@ var/global/ingredientLimit = 10
 	reagents.update_total() //make the values refresh
 	if(ingredient)
 		icon_state = "confectionator_on"
-		playsound(get_turf(src),'sound/machines/juicer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
+		playsound(src,'sound/machines/juicer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
 	else if(reagents.total_volume < CONFECTIONATOR_MINSUGAR)
 		icon_state = "confectionator_empty"
 	else
@@ -606,7 +606,7 @@ var/global/ingredientLimit = 10
 			if (cook_after(src.cookTime/3, 14))
 				src.makeFood()
 				if(use_power)
-					playsound(get_turf(src),src.cookSound,100,1)
+					playsound(src,src.cookSound,100,1)
 				else
 					src.visible_message("<span class='notice'>\the [foodname] looks ready to eat!</span>")
 	src.icon_state = initial(src.icon_state)

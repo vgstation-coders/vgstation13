@@ -142,18 +142,12 @@ var/savefile/panicfile
 
 	src.update_status()
 
-	sleep_offline = 1
+	sleep_offline = 0
 
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
-	spawn(10)
-		Master.Setup()
-
-	for(var/plugin_type in typesof(/plugin))
-		var/plugin/P = new plugin_type()
-		plugins[P.name] = P
-		P.on_world_loaded()
+	Master.Setup()
 
 	process_teleport_locs()				//Sets up the wizard teleport locations
 	process_ghost_teleport_locs()		//Sets up ghost teleport locations.
@@ -167,7 +161,6 @@ var/savefile/panicfile
 			KickInactiveClients()*/
 
 #undef RECOMMENDED_VERSION
-
 	return ..()
 
 //world/Topic(href, href_list[])

@@ -96,11 +96,12 @@
 
 /obj/item/clothing/head/helmet/space/cult
 	name = "cult helmet"
-	desc = "A space worthy helmet used by the followers of Nar-Sie"
+	desc = "A space worthy helmet used by the followers of Nar-Sie."
 	icon_state = "cult_helmet"
 	item_state = "cult_helmet"
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0
+	species_restricted = null //So dionas can wear it, mainly.
 
 /obj/item/clothing/suit/space/cult
 	name = "cult armor"
@@ -112,3 +113,4 @@
 	slowdown = NO_SLOWDOWN
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0
+	species_restricted = null

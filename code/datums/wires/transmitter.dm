@@ -46,11 +46,12 @@ var/const/TRANS_SETTINGS = 16 //Pulse shows percentage given by environment temp
 			var/datum/gas_mixture/env = T.loc.return_air()
 			counter = 100*(env.temperature / (T20C + 20))
 
-/datum/wires/transmitter/UpdateCut(var/index, var/mended)
+/datum/wires/transmitter/UpdateCut(var/index, var/mended, var/mob/user)
 	var/obj/machinery/media/transmitter/broadcast/T = holder
+	var/obj/I = user.get_active_hand()
 	switch(index)
 		if(TRANS_POWER)
 			T.power_change()
-			T.shock(usr, 50)
+			T.shock(user, 50, get_conductivity(I))
 		if(TRANS_LINK)
-			T.shock(usr, 50)
+			T.shock(user, 50, get_conductivity(I))

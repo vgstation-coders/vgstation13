@@ -85,13 +85,13 @@
 		user.visible_message("<span class='notice'>[user] honks at [src].</span>", \
 		"<span class='notice'>You honk at [src].</span>", \
 		"<span class='notice'>You hear honking.</span>")
-		playsound(get_turf(src), W.hitsound, 50, 1)
+		playsound(src, W.hitsound, 50, 1)
 		if(reagents.get_reagent_amount(BANANA) <= 5 && max_health < HEALTH_FOR_FREE_MOVEMENT)
 			if(activated)
 				visible_message("<span class='warning'>[nick] lets out a last honk before running out of fuel and activating its ejection seat.</span>")
 				if(ishigherbeing(user)) //This shouldn't be needed, but fucks sakes
 					user.Knockdown(5)
-				playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
+				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 				activated = 0
 				reagents.remove_reagent(BANANA, 5)
 			else
@@ -100,7 +100,7 @@
 			spawn(5)
 				activated = 1
 				src.visible_message("<span class='notice'>[nick] honks back happily.</span>")
-				playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
+				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 		honk = world.timeofday
 	else if(istype(W, /obj/item/weapon/reagent_containers))
 		if(feed(W,user))
@@ -160,7 +160,7 @@
 		ST.use(1)
 	else if(istype(W, /obj/item/weapon/coin/clown)) //Bananium coin
 		user.visible_message("<span class='warning'>[user] inserts a bananium coin into [src].</span>", "<span class='notice'>You insert a bananium coin into [src].</span>")
-		playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 1)
+		playsound(src, 'sound/machines/ping.ogg', 50, 1)
 		mode += 1
 		if(mode > 2) //only 3 modes, so when it raises above 2 reset to 0
 			mode = 0
@@ -168,7 +168,7 @@
 			if(MODE_NORMAL)
 				spawn(5)
 					visible_message("<span class='warning'>[src]'s SynthPeel Generator turns off with a buzz.</span>")
-					playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
+					playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 1)
 			if(MODE_DRAWING)
 				visible_message("<span class='notice'>[src]'s SmartCrayon Mk.II deploys, ready to draw!</span>")
 				to_chat(user, {"<span class='notice'>Use a crayon to decide what you want to draw.<br>
@@ -176,9 +176,9 @@
 			if(MODE_PEELS)
 				visible_message("<span class='warning'>[src]'s SmartCrayon Mk.II disappears in a puff of art!</span>")
 				spawn(5)
-					playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 1)
+					playsound(src, 'sound/machines/ping.ogg', 50, 1)
 					visible_message("<span class='notice'>You hear a ping as [src]'s SynthPeel Generator starts transforming banana juice into slippery peels.</span>")
-					playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 1)
+					playsound(src, 'sound/machines/ping.ogg', 50, 1)
 		qdel(W)
 		W = null
 	else if(istype(W, /obj/item/toy/crayon/)) //Any crayon
@@ -298,7 +298,7 @@
 /obj/structure/bed/chair/vehicle/clowncart/die()
 	setDensity(FALSE)
 	visible_message("<span class='warning'>[nick] explodes in a puff of pure potassium!</span>")
-	playsound(get_turf(src), 'sound/items/bikehorn.ogg', 75, 1)
+	playsound(src, 'sound/items/bikehorn.ogg', 75, 1)
 	explosion(src.loc, -1, 0, 3, 7, 10)
 	for(var/a = 0, a < round(reagents.total_volume*0.25), a++) //Spawn banana peels in place of the cart
 		new /obj/item/weapon/bananapeel(get_turf(src)) // WHAT STUPID ASSHOLE MADE THESE TATORPEELS
@@ -359,7 +359,7 @@
 
 		reagents.add_reagent(BANANA, added_banana*modifier)
 		if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/pie))
-			playsound(get_turf(src), 'sound/effects/bubbles.ogg', 50, 1)
+			playsound(src, 'sound/effects/bubbles.ogg', 50, 1)
 			to_chat(user, "<span class='warning'>[W] starts boiling inside \the [src]!</span>")
 			trail+=5
 		return added_banana*modifier

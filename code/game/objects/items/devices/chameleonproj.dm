@@ -46,7 +46,7 @@
 		return
 	if(!active_dummy)
 		if(istype(target, /obj/item) && !istype(target, /obj/item/weapon/disk/nuclear) || istype(target, /mob))
-			playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1, -6)
+			playsound(src, 'sound/weapons/flash.ogg', 100, 1, -6)
 			to_chat(user, "<span class='notice'>Scanned [target].</span>")
 			saved_item = target.type
 			saved_icon = target.icon
@@ -59,7 +59,7 @@
 		return
 	if(active_dummy)
 		eject_all()
-		//playsound(get_turf(src), 'sound/effects/pop.ogg', 100, 1, -6)
+		//playsound(src, 'sound/effects/pop.ogg', 100, 1, -6)
 		qdel(active_dummy)
 		active_dummy = null
 		to_chat(usr, "<span class='notice'>You deactivate [src].</span>")
@@ -72,7 +72,7 @@
 		spawn(20) //Stop spamming this shit
 			can_use = 1
 	else
-		//playsound(get_turf(src), 'sound/effects/pop.ogg', 100, 1, -6)
+		//playsound(src, 'sound/effects/pop.ogg', 100, 1, -6)
 		var/obj/O = new saved_item(src)
 		if(!O)
 			return

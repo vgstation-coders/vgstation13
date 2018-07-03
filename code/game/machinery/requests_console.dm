@@ -255,6 +255,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				else
 					priority = -1
 		else
+			to_chat(usr, "<span class='warning'>Invalid characters found in the text.</span>")
 			dpt = "";
 			msgVerified = ""
 			msgStamped = ""
@@ -271,6 +272,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				else
 					priority = -1
 		else
+			to_chat(usr, "<span class='warning'>Invalid characters found in the text.</span>")
 			message = ""
 			announceAuth = 0
 			screen = 0
@@ -442,7 +444,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			to_chat(user, "You can't do much with that.")
 	if(iswrench(O) && open && !departmentType)
 		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 		new /obj/item/stack/sheet/metal (src.loc,2)
 		qdel(src)
 		return

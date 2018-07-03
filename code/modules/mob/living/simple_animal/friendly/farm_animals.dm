@@ -194,8 +194,7 @@
 	if(!stat && !ckey)
 		amount_grown += rand(1,2)
 		if(amount_grown >= 100)
-			new /mob/living/simple_animal/chicken(src.loc)
-			qdel(src)
+			grow_up()
 
 /mob/living/simple_animal/chicken
 	name = "chicken"
@@ -347,8 +346,8 @@
 	if(fat>BOX_GROWTH_BAR)
 		updatefat()
 
-/mob/living/simple_animal/hostile/retaliate/box/Die()
-	..()
+/mob/living/simple_animal/hostile/retaliate/box/death(var/gibbed = FALSE)
+	..(gibbed)
 	playsound(src, 'sound/effects/box_scream.ogg', 100, 1)
 
 /mob/living/simple_animal/hostile/retaliate/box/attackby(var/obj/item/O as obj, var/mob/user as mob)

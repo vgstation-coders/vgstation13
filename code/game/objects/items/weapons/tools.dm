@@ -341,7 +341,7 @@
 	if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && !src.welding)
 		O.reagents.trans_to(src, max_fuel)
 		to_chat(user, "<span class='notice'>Welder refueled</span>")
-		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
+		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		return
 	else if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && src.welding)
 		message_admins("[key_name_admin(user)] triggered a fueltank explosion.")
@@ -404,6 +404,7 @@
 /obj/item/weapon/weldingtool/proc/setWelding(var/temp_welding)
 	//If we're turning it on
 	if(temp_welding > 0)
+		src.welding = 1
 		if (remove_fuel(1))
 			to_chat(usr, "<span class='notice'>\The [src] switches on.</span>")
 			src.force = 15
@@ -526,7 +527,7 @@
 	start_fueled = 0
 
 /obj/item/weapon/weldingtool/largetank
-	name = "Industrial Welding Tool"
+	name = "industrial welding tool"
 	desc = "The cutting edge between portability and tank size."
 	icon_state = "welder_large"
 	max_fuel = 40
@@ -537,7 +538,7 @@
 	start_fueled = 0
 
 /obj/item/weapon/weldingtool/hugetank
-	name = "Upgraded Welding Tool"
+	name = "upgraded welding tool"
 	desc = "A large tank for a large job."
 	icon_state = "welder_larger"
 	max_fuel = 80
@@ -566,7 +567,7 @@
 
 
 /obj/item/weapon/weldingtool/experimental
-	name = "Experimental Welding Tool"
+	name = "experimental welding tool"
 	max_fuel = 40
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
@@ -724,8 +725,8 @@
 	to_chat(user, "It contains [reagents.get_reagent_amount(SACID) + reagents.get_reagent_amount(FORMIC_ACID)]/[src.max_fuel] units of fuel!")
 
 /obj/item/weapon/solder/attackby(obj/item/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/reagent_containers/glass/))
-		var/obj/item/weapon/reagent_containers/glass/G = W
+	if(istype(W,/obj/item/weapon/reagent_containers/) && W.flags & OPENCONTAINER)
+		var/obj/item/weapon/reagent_containers/G = W
 		if(G.reagents.reagent_list.len>1)
 			user.simple_message("<span class='warning'>The mixture is rejected by the tool.</span>",
 				"<span class='warning'>The tool isn't THAT thirsty.</span>")

@@ -10,6 +10,48 @@
 	siemens_coefficient = 0.7
 	species_fit = list(GREY_SHAPED)
 
+/obj/item/clothing/head/helmet/visor
+	name = "visor helmet"
+	desc = "For when you need to protect your face from the backblast of your pepperspray"
+	icon_state = "riot_helm"
+	item_state = "riot_helm"
+	armor = list(melee = 50, bullet = 25, laser = 45, energy = 15, bomb = 30, bio = 0, rad = 0)
+	actions_types = list(/datum/action/item_action/toggle_helmet)
+	body_parts_covered = FULL_HEAD
+	var/state = 1
+
+/obj/item/clothing/head/helmet/visor/New()
+	..()
+	update_icon()
+
+/obj/item/clothing/head/helmet/visor/attack_self(mob/user)
+	state = !state
+	to_chat(user, "<span class = 'notice'>You flick \the [src] [state ? "down" : "up"].</span>")
+	switch(state)
+		if(1) //FACE COVERED
+			body_parts_covered = FULL_HEAD
+		if(0) //VISOR UP
+			body_parts_covered = HEAD|EARS
+	update_icon(user)
+
+/obj/item/clothing/head/helmet/visor/update_icon(mob/user)
+	switch(state)
+		if(1) //FACE COVERED
+			armor = initial(armor)
+			icon_state = "[initial(icon_state)]_down"
+			item_state = "[initial(item_state)]_down"
+		if(0)
+			armor = list(melee = 50, bullet = 10, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
+			icon_state = "[initial(icon_state)]_up"
+			item_state = "[initial(item_state)]_down"
+	if(user)
+		user.update_inv_head()
+		user.update_inv_wear_mask()
+		user.update_inv_glasses()
+		user.update_hair()
+		user.update_inv_ears()
+
+
 /obj/item/clothing/head/helmet/siren
 	name = "siren helmet"
 	desc = "For the officer that's off patrolling all the nation."
@@ -24,7 +66,7 @@
 /obj/item/clothing/head/helmet/siren/attack_self(mob/user)
 	if(spamcheck)
 		return
-	playsound(get_turf(src), 'sound/voice/woopwoop.ogg', 100, 1, vary = 0)
+	playsound(src, 'sound/voice/woopwoop.ogg', 100, 1, vary = 0)
 	user.visible_message("<span class='warning'>[user]'s [name] rasps, \"WOOP WOOP!\"</span>", \
 						"<span class='warning'>Your [name] rasps, \"WOOP WOOP!\"</span>", \
 						"<span class='warning'>You hear a siren: \"WOOP WOOP!\"</span>")
@@ -71,6 +113,7 @@
 	armor = list(melee = 20, bullet = 0, laser = 20, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "roman"
 	item_state = "roman"
+	body_parts_covered = HEAD|EARS
 
 /obj/item/clothing/head/helmet/roman/legionaire
 	name = "roman legionaire helmet"
@@ -78,6 +121,7 @@
 	armor = list(melee = 25, bullet = 0, laser = 25, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "roman_c"
 	item_state = "roman_c"
+	body_parts_covered = HEAD|EARS
 
 /obj/item/clothing/head/helmet/hopcap
 	name = "Head of Personnel's Cap"
@@ -106,7 +150,7 @@
 	desc = "This helmet should protect you from russians and masked vigilantes."
 	armor = list(melee = 25, bullet = 15, laser = 20, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "biker_helmet"
-	body_parts_covered = FULL_HEAD
+	body_parts_covered = FULL_HEAD|BEARD
 
 /obj/item/clothing/head/helmet/richard
 	name = "Richard"
@@ -120,6 +164,7 @@
 	desc = "The helmet of the DRN-001 model. A simple, sturdy blue helmet."
 	icon_state = "megahelmet"
 	flags = FPRINT
+	body_parts_covered = HEAD|EARS
 	item_state = "megahelmet"
 	siemens_coefficient = 1
 
@@ -145,6 +190,7 @@
 	desc = "Heavily armored upgrade to the DRN-001 model's helmet, now comes with a pointless red crystal thing!"
 	icon_state = "megaxhelmet"
 	flags = FPRINT
+	body_parts_covered = HEAD|EARS
 	item_state = "megaxhelmet"
 	siemens_coefficient = 1
 
@@ -153,6 +199,7 @@
 	desc = "A sturdy helmet, fortified to protect from falling rocks or buster shots."
 	icon_state = "volnutthelmet"
 	flags = FPRINT
+	body_parts_covered = HEAD|EARS
 	item_state = "volnutthelmet"
 	armor = list(melee = 50, bullet = 40, laser = 40,energy = 40, bomb = 5, bio = 0, rad = 0)
 	siemens_coefficient = 1
@@ -172,6 +219,7 @@
 	icon_state = "doom"
 	flags = FPRINT
 	item_state = "doom"
+	body_parts_covered = FULL_HEAD|BEARD
 	armor = list(melee = 50, bullet = 40, laser = 40,energy = 40, bomb = 5, bio = 0, rad = 0)
 	siemens_coefficient = 1
 
@@ -209,6 +257,7 @@
 	icon_state = "nr_helmet"
 	item_state = "nr_helmet"
 	body_parts_covered = EARS|HEAD
+	heat_conductivity = INS_HELMET_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/head/helmet/police
 	name = "police custodian helmet"

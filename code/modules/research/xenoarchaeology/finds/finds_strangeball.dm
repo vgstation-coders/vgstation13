@@ -13,16 +13,12 @@
 /obj/item/device/mmi/posibrain/strangeball/transfer_personality(var/mob/candidate)
 	src.searching = 0
 	var/turf/T = get_turf(src)
-	var/mob/living/silicon/robot/M = new /mob/living/silicon/robot(T)
-	M.UnlinkSelf() //No Lawsync, No robotics console, No camera, final destination.
-	M.laws = new /datum/ai_laws/asimov() // WOOP WOOP HUMAN HARM
-	M.cell.maxcharge = 15000
-	M.cell.charge = 15000
-	M.pick_module(forced_module="TG17355")
+	var/mob/living/silicon/robot/M = new /mob/living/silicon/robot/hugborg(T)
 	M.icon_state = burger
 	M.updateicon()
 	M.ckey = candidate.ckey
-	M.Namepick()
+	spawn()
+		M.Namepick()
 	M.updatename()
 	src.investigation_log(I_ARTIFACT, "|| [key_name(M)] spawned as TG17355 Cyborg.")
 	qdel(src)

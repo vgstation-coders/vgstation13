@@ -18,6 +18,7 @@ var/global/list/rnd_machines = list()
 	var/stopped		= 0
 	var/base_state	= ""
 	var/build_time	= 0
+	var/auto_make = 0
 
 	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
@@ -140,7 +141,7 @@ var/global/list/rnd_machines = list()
 
 /obj/machinery/r_n_d/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (shocked)
-		shock(user,50)
+		shock(user,50, O.siemens_coefficient)
 	if (busy)
 		to_chat(user, "<span class='warning'>The [src.name] is busy. Please wait for completion of previous operation.</span>")
 		return 1

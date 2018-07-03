@@ -388,7 +388,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					matching_container = 1
 
 				else
-					if(my_atom.type == C.required_container)
+					if(istype(my_atom, C.required_container))
 						matching_container = 1
 
 				if(!C.required_other)
@@ -417,7 +417,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 							preserved_data = get_data(B)
 						remove_reagent(B, (multiplier * C.required_reagents[B]), safety = 1)
 
-					chem_temp -= C.reaction_temp_cost
+					chem_temp += C.reaction_temp_change
 
 					var/created_volume = C.result_amount*multiplier
 					if(C.result)
@@ -451,7 +451,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 							ME2.desc = "This extract has been used up."
 
 					if(!quiet)
-						playsound(get_turf(my_atom), 'sound/effects/bubbles.ogg', 80, 1)
+						playsound(my_atom, 'sound/effects/bubbles.ogg', 80, 1)
 
 					C.on_reaction(src, created_volume)
 					if(C.react_discretely)
@@ -521,7 +521,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 						R.reaction_mob(A, TOUCH, R.volume+volume_modifier)
 				if(isturf(A))
 					R.reaction_turf(A, R.volume+volume_modifier)
-				if(isobj(A))
+				if(istype(A, /obj))
 					R.reaction_obj(A, R.volume+volume_modifier)
 		if(INGEST)
 			for(var/datum/reagent/R in reagent_list)
@@ -532,11 +532,11 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 						R.reaction_mob(A, INGEST, R.volume+volume_modifier)
 				if(isturf(A) && R)
 					R.reaction_turf(A, R.volume+volume_modifier)
-				if(isobj(A) && R)
+				if(istype(A, /obj) && R)
 					R.reaction_obj(A, R.volume+volume_modifier)
 	return
 
-/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = 300)
+/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20)
 	if(!my_atom)
 		return 0
 	if(!isnum(amount))

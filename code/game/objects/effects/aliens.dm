@@ -498,7 +498,7 @@
 	status = GROWN
 	new /obj/item/clothing/mask/facehugger(src)
 
-	for(var/mob/M in range(2,src))
+	for(var/mob/living/M in range(2,src))
 		if(CanHug(M))
 			Burst(0)
 			break
@@ -519,10 +519,10 @@
 				return
 			child.forceMove(loc)
 			if(kill && istype(child))
-				child.Die()
+				child.death()
 			else
 				for(var/mob/M in range(1,src))
-					if(CanHug(M))
+					if(CanHug(M, child))
 						child.Attach(M)
 						break
 				if(!ismob(child.loc))
@@ -573,11 +573,12 @@
 
 /obj/effect/alien/egg/HasProximity(atom/movable/AM as mob|obj)
 	if(status == GROWN)
-		if(!CanHug(AM))
+		if(!isliving(AM))
 			return
-
-		var/mob/living/carbon/C = AM
-		if(C.stat == CONSCIOUS && C.status_flags & XENO_HOST)
+		var/mob/living/L = AM
+		if(!CanHug(L))
+			return
+		if(L.isUnconscious())
 			return
 
 		Burst(0)
