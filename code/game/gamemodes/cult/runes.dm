@@ -40,7 +40,7 @@
 	for(var/obj/effect/rune/R in rune_list)
 		if(R == src)
 			continue
-		if(R.word1 == cultwords["travel"] && R.word2 == cultwords["self"] && R.word3 == key && R.z != map.zCentcomm)
+		if(R.word1 == "travel" && R.word2 == "self" && R.word3 == key && R.z != map.zCentcomm)
 			index++
 			allrunesloc.len = index
 			allrunesloc[index] = R.loc
@@ -88,7 +88,7 @@
 	for(var/obj/effect/rune/R in rune_list)
 		if(R == src)
 			continue
-		if(R.word1 == cultwords["travel"] && R.word2 == cultwords["other"] && R.word3 == key)
+		if(R.word1 == "travel" && R.word2 == "other" && R.word3 == key)
 			IP = R
 			runecount++
 	if(runecount >= 2)
@@ -216,7 +216,6 @@
 				//death(M) //toggles SPS from going off or not.
 				sleep(1) //Ensure everything has time to drop without getting deleted
 				qdel(M)
-				ticker.mode:grant_runeword(usr) //Chance to get a rune word for sacrificing a live player is 100%, so.
 				if (cult_round)
 					cult_round.revivecounter ++
 				to_chat(usr, "<span class='danger'>The ritual didn't work! Looks like this person just isn't suited to be part of our cult.</span>")
@@ -384,7 +383,7 @@
 	var/drain = 0
 	var/list/drain_turflist = list()
 	for(var/obj/effect/rune/R in rune_list)
-		if(R.word1==cultwords["travel"] && R.word2==cultwords["blood"] && R.word3==cultwords["self"])
+		if(R.word1=="travel" && R.word2=="blood" && R.word3=="self")
 			for(var/mob/living/carbon/D in R.loc)
 				if(D.stat!=2)
 					nullblock = 0
@@ -488,7 +487,7 @@
 	is_sacrifice_target = 0
 	find_sacrifice:
 		for(var/obj/effect/rune/R in rune_list)
-			if(R.word1==cultwords["blood"] && R.word2==cultwords["join"] && R.word3==cultwords["hell"])
+			if(R.word1=="blood" && R.word2=="join" && R.word3=="hell")
 				for(var/mob/living/carbon/human/N in R.loc)
 					if(cult_round && (N.mind) && (N.mind == cult_round.sacrifice_target))
 						is_sacrifice_target = 1
@@ -719,52 +718,52 @@
 	for(var/obj/effect/rune/R in orange(1,src))
 		if(R==src)
 			continue
-		if(R.word1==cultwords["travel"] && R.word2==cultwords["self"])  //teleport
+		if(R.word1=="travel" && R.word2=="self")  //teleport
 			T = new(src.loc)
 			T.imbue = "[R.word3]"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["see"] && R.word2==cultwords["blood"] && R.word3==cultwords["hell"]) //tome
+		if(R.word1=="see" && R.word2=="blood" && R.word3=="hell") //tome
 			T = new(src.loc)
 			T.imbue = "newtome"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["destroy"] && R.word2==cultwords["see"] && R.word3==cultwords["technology"]) //emp
+		if(R.word1=="destroy" && R.word2=="see" && R.word3=="technology") //emp
 			T = new(src.loc)
 			T.imbue = "emp"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["hide"] && R.word2==cultwords["see"] && R.word3==cultwords["blood"]) //conceal
+		if(R.word1=="hide" && R.word2=="see" && R.word3=="blood") //conceal
 			T = new(src.loc)
 			T.imbue = "conceal"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["hell"] && R.word2==cultwords["destroy"] && R.word3==cultwords["other"]) //armor
+		if(R.word1=="hell" && R.word2=="destroy" && R.word3=="other") //armor
 			T = new(src.loc)
 			T.imbue = "armor"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["blood"] && R.word2==cultwords["see"] && R.word3==cultwords["hide"]) //reveal
+		if(R.word1=="blood" && R.word2=="see" && R.word3=="hide") //reveal
 			T = new(src.loc)
 			T.imbue = "revealrunes"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["hide"] && R.word2==cultwords["other"] && R.word3==cultwords["see"]) //deafen
+		if(R.word1=="hide" && R.word2=="other" && R.word3=="see") //deafen
 			T = new(src.loc)
 			T.imbue = "deafen"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["destroy"] && R.word2==cultwords["see"] && R.word3==cultwords["other"]) //blind
+		if(R.word1=="destroy" && R.word2=="see" && R.word3=="other") //blind
 			T = new(src.loc)
 			T.imbue = "blind"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["self"] && R.word2==cultwords["other"] && R.word3==cultwords["technology"]) //communicate
+		if(R.word1=="self" && R.word2=="other" && R.word3=="technology") //communicate
 			T = new(src.loc)
 			T.imbue = "communicate"
 			imbued_from = R
 			break
-		if(R.word1==cultwords["join"] && R.word2==cultwords["hide"] && R.word3==cultwords["technology"]) //stun
+		if(R.word1=="join" && R.word2=="hide" && R.word3=="technology") //stun
 			T = new(src.loc)
 			T.imbue = "runestun"
 			imbued_from = R
@@ -862,7 +861,6 @@
 	for(var/atom/A in loc)
 		if(iscultist(A))
 			continue
-		var/satisfaction = 0
 //Humans and Animals
 		if(istype(A,/mob/living/carbon) || istype(A,/mob/living/simple_animal))//carbon mobs and simple animals
 			var/mob/living/M = A
@@ -882,12 +880,10 @@
 					if(cultsinrange.len >= 3)
 						if(M.mind)				//living players
 							ritualresponse += "The Geometer of Blood gladly accepts this sacrifice."
-							satisfaction = 100
 							if(cult_round)
 								cult_round.revivecounter ++
 						else					//living NPCs
 							ritualresponse += "The Geometer of Blood accepts this being in sacrifice. Somehow you get the feeling that beings with souls would make a better offering."
-							satisfaction = 50
 						sacrificedone = 1
 						invocation("rune_sac")
 						M.gib()
@@ -896,12 +892,10 @@
 				else
 					if(M.mind)					//dead players
 						ritualresponse += "The Geometer of Blood accepts this sacrifice."
-						satisfaction = 50
 						if(cult_round)
 							cult_round.revivecounter ++
 					else						//dead NPCs
 						ritualresponse += "The Geometer of Blood accepts your meager sacrifice."
-						satisfaction = 10
 					sacrificedone = 1
 					invocation("rune_sac")
 					M.gib()
@@ -998,8 +992,6 @@
 		for(var/mob/living/C in cultsinrange)
 			if(ritualresponse != "")
 				to_chat(C, "<span class='sinister'>[ritualresponse]</span>")
-				if(prob(satisfaction))
-					ticker.mode:grant_runeword(C)
 
 	if(!sacrificedone)
 		for(var/mob/living/C in cultsinrange)

@@ -6,7 +6,7 @@ var/list/word_to_uristrune_table = null
 		word_to_uristrune_table = list()
 
 		var/bit = 1
-		var/list/words = list("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "mgar", "balaq", "karazet", "geeri")
+		var/list/words = list("travel", "blood", "join", "hell", "destroy", "technology", "self", "see", "other", "hide")
 
 		while(length(words))
 			var/w = pick(words)
@@ -23,29 +23,29 @@ var/list/word_to_uristrune_table = null
 /obj/effect/rune/proc/get_uristrune_cult(word1, word2, word3,var/mob/living/M = null)
 	var/animated
 
-	if((word1 == cultwords["travel"] && word2 == cultwords["self"])						\
-	|| (word1 == cultwords["join"] && word2 == cultwords["blood"] && word3 == cultwords["self"])	\
-	|| (word1 == cultwords["hell"] && word2 == cultwords["join"] && word3 == cultwords["self"])	\
-	|| (word1 == cultwords["see"] && word2 == cultwords["blood"] && word3 == cultwords["hell"])	\
-	|| (word1 == cultwords["hell"] && word2 == cultwords["destroy"] && word3 == cultwords["other"])	\
-	|| (word1 == cultwords["destroy"] && word2 == cultwords["see"] && word3 == cultwords["technology"])	\
-	|| (word1 == cultwords["travel"] && word2 == cultwords["blood"] && word3 == cultwords["self"])	\
-	|| (word1 == cultwords["see"] && word2 == cultwords["hell"] && word3 == cultwords["join"])		\
-	|| (word1 == cultwords["blood"] && word2 == cultwords["join"] && word3 == cultwords["hell"])	\
-	|| (word1 == cultwords["hide"] && word2 == cultwords["see"] && word3 == cultwords["blood"])	\
-	|| (word1 == cultwords["hell"] && word2 == cultwords["travel"] && word3 == cultwords["self"])	\
-	|| (word1 == cultwords["hell"] && word2 == cultwords["technology"] && word3 == cultwords["join"])	\
-	|| (word1 == cultwords["hell"] && word2 == cultwords["blood"] && word3 == cultwords["join"])	\
-	|| (word1 == cultwords["blood"] && word2 == cultwords["see"] && word3 == cultwords["hide"])	\
-	|| (word1 == cultwords["destroy"] && word2 == cultwords["travel"] && word3 == cultwords["self"])	\
-	|| (word1 == cultwords["travel"] && word2 == cultwords["technology"] && word3 == cultwords["other"])	\
-	|| (word1 == cultwords["join"] && word2 == cultwords["other"] && word3 == cultwords["self"])	\
-	|| (word1 == cultwords["hide"] && word2 == cultwords["other"] && word3 == cultwords["see"])	\
-	|| (word1 == cultwords["destroy"] && word2 == cultwords["see"] && word3 == cultwords["other"])	\
-	|| (word1 == cultwords["destroy"] && word2 == cultwords["see"] && word3 == cultwords["blood"])	\
-	|| (word1 == cultwords["self"] && word2 == cultwords["other"] && word3 == cultwords["technology"])	\
-	|| (word1 == cultwords["travel"] && word2 == cultwords["other"])						\
-	|| (word1 == cultwords["join"] && word2 == cultwords["hide"] && word3 == cultwords["technology"])	)
+	if((word1 == "travel" && word2 == "self")						\
+	|| (word1 == "join" && word2 == "blood" && word3 == "self")	\
+	|| (word1 == "hell" && word2 == "join" && word3 == "self")	\
+	|| (word1 == "see" && word2 == "blood" && word3 == "hell")	\
+	|| (word1 == "hell" && word2 == "destroy" && word3 == "other")	\
+	|| (word1 == "destroy" && word2 == "see" && word3 == "technology")	\
+	|| (word1 == "travel" && word2 == "blood" && word3 == "self")	\
+	|| (word1 == "see" && word2 == "hell" && word3 == "join")		\
+	|| (word1 == "blood" && word2 == "join" && word3 == "hell")	\
+	|| (word1 == "hide" && word2 == "see" && word3 == "blood")	\
+	|| (word1 == "hell" && word2 == "travel" && word3 == "self")	\
+	|| (word1 == "hell" && word2 == "technology" && word3 == "join")	\
+	|| (word1 == "hell" && word2 == "blood" && word3 == "join")	\
+	|| (word1 == "blood" && word2 == "see" && word3 == "hide")	\
+	|| (word1 == "destroy" && word2 == "travel" && word3 == "self")	\
+	|| (word1 == "travel" && word2 == "technology" && word3 == "other")	\
+	|| (word1 == "join" && word2 == "other" && word3 == "self")	\
+	|| (word1 == "hide" && word2 == "other" && word3 == "see")	\
+	|| (word1 == "destroy" && word2 == "see" && word3 == "other")	\
+	|| (word1 == "destroy" && word2 == "see" && word3 == "blood")	\
+	|| (word1 == "self" && word2 == "other" && word3 == "technology")	\
+	|| (word1 == "travel" && word2 == "other")						\
+	|| (word1 == "join" && word2 == "hide" && word3 == "technology")	)
 		animated = 1
 	else
 		animated = 0
@@ -61,51 +61,51 @@ var/list/word_to_uristrune_table = null
 		return get_uristrune(bits, animated)
 
 /proc/get_uristrune_name(word1, word2, word3)
-	if((word1 == cultwords["travel"] && word2 == cultwords["self"]))
+	if((word1 == "travel" && word2 == "self"))
 		return "Travel Self"
-	else if((word1 == cultwords["join"] && word2 == cultwords["blood"] && word3 == cultwords["self"]))
+	else if((word1 == "join" && word2 == "blood" && word3 == "self"))
 		return "Convert"
-	else if((word1 == cultwords["hell"] && word2 == cultwords["join"] && word3 == cultwords["self"]))
+	else if((word1 == "hell" && word2 == "join" && word3 == "self"))
 		return "Tear Reality"
-	else if((word1 == cultwords["see"] && word2 == cultwords["blood"] && word3 == cultwords["hell"]))
+	else if((word1 == "see" && word2 == "blood" && word3 == "hell"))
 		return "Summon Tome"
-	else if((word1 == cultwords["hell"] && word2 == cultwords["destroy"] && word3 == cultwords["other"]))
+	else if((word1 == "hell" && word2 == "destroy" && word3 == "other"))
 		return "Armor"
-	else if((word1 == cultwords["destroy"] && word2 == cultwords["see"] && word3 == cultwords["technology"]))
+	else if((word1 == "destroy" && word2 == "see" && word3 == "technology"))
 		return "EMP"
-	else if((word1 == cultwords["travel"] && word2 == cultwords["blood"] && word3 == cultwords["self"]))
+	else if((word1 == "travel" && word2 == "blood" && word3 == "self"))
 		return "Drain"
-	else if((word1 == cultwords["see"] && word2 == cultwords["hell"] && word3 == cultwords["join"]))
+	else if((word1 == "see" && word2 == "hell" && word3 == "join"))
 		return "See Invisible"
-	else if((word1 == cultwords["blood"] && word2 == cultwords["join"] && word3 == cultwords["hell"]))
+	else if((word1 == "blood" && word2 == "join" && word3 == "hell"))
 		return "Raise Dead"
-	else if((word1 == cultwords["hide"] && word2 == cultwords["see"] && word3 == cultwords["blood"]))
+	else if((word1 == "hide" && word2 == "see" && word3 == "blood"))
 		return "Hide Runes"
-	else if((word1 == cultwords["hell"] && word2 == cultwords["travel"] && word3 == cultwords["self"]))
+	else if((word1 == "hell" && word2 == "travel" && word3 == "self"))
 		return "Astral Journey"
-	else if((word1 == cultwords["hell"] && word2 == cultwords["technology"] && word3 == cultwords["join"]))
+	else if((word1 == "hell" && word2 == "technology" && word3 == "join"))
 		return "Imbue Talisman"
-	else if((word1 == cultwords["hell"] && word2 == cultwords["blood"] && word3 == cultwords["join"]))
+	else if((word1 == "hell" && word2 == "blood" && word3 == "join"))
 		return "Sacrifice"
-	else if((word1 == cultwords["blood"] && word2 == cultwords["see"] && word3 == cultwords["hide"]))
+	else if((word1 == "blood" && word2 == "see" && word3 == "hide"))
 		return "Reveal Runes"
-	else if((word1 == cultwords["destroy"] && word2 == cultwords["travel"] && word3 == cultwords["self"]))
+	else if((word1 == "destroy" && word2 == "travel" && word3 == "self"))
 		return "Wall"
-	else if((word1 == cultwords["travel"] && word2 == cultwords["technology"] && word3 == cultwords["other"]))
+	else if((word1 == "travel" && word2 == "technology" && word3 == "other"))
 		return "Free Cultist"
-	else if((word1 == cultwords["join"] && word2 == cultwords["other"] && word3 == cultwords["self"]))
+	else if((word1 == "join" && word2 == "other" && word3 == "self"))
 		return "Summon Cultist"
-	else if((word1 == cultwords["hide"] && word2 == cultwords["other"] && word3 == cultwords["see"]))
+	else if((word1 == "hide" && word2 == "other" && word3 == "see"))
 		return "Deafen"
-	else if((word1 == cultwords["destroy"] && word2 == cultwords["see"] && word3 == cultwords["other"]))
+	else if((word1 == "destroy" && word2 == "see" && word3 == "other"))
 		return "Blind"
-	else if((word1 == cultwords["destroy"] && word2 == cultwords["see"] && word3 == cultwords["blood"]))
+	else if((word1 == "destroy" && word2 == "see" && word3 == "blood"))
 		return "Blood Boil"
-	else if((word1 == cultwords["self"] && word2 == cultwords["other"] && word3 == cultwords["technology"]))
+	else if((word1 == "self" && word2 == "other" && word3 == "technology"))
 		return "Communicate"
-	else if((word1 == cultwords["travel"] && word2 == cultwords["other"]))
+	else if((word1 == "travel" && word2 == "other"))
 		return "Travel Other"
-	else if((word1 == cultwords["join"] && word2 == cultwords["hide"] && word3 == cultwords["technology"]))
+	else if((word1 == "join" && word2 == "hide" && word3 == "technology"))
 		return "Stun"
 	else
 		return null

@@ -103,7 +103,7 @@
 							to_chat(user, "<span class='info'>You spot an Hide Runes talisman on top.</span>")
 						if("revealrunes")
 							to_chat(user, "<span class='info'>You spot a Reveal Runes talisman on top.</span>")
-						if("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "balaq", "mgar", "karazet", "geeri")
+						if("travel", "blood", "join", "hell", "destroy", "technology", "self", "see", "other", "hide")
 							to_chat(user, "<span class='info'>You spot a Teleport talisman on top, linked to <i>[T.imbue]</i></span>")
 						if("communicate")
 							to_chat(user, "<span class='info'>You spot a Communicate talisman on top.</span>")

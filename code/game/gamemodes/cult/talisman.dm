@@ -8,7 +8,7 @@
 	var/suffix = ""
 	if(imbue)
 		suffix = imbue
-		if(imbue in list("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "balaq", "mgar", "karazet", "geeri"))
+		if(imbue in list("travel", "blood", "join", "hell", "destroy", "technology", "self", "see", "other", "hide"))
 			suffix = "travel" // if the imbue is one of the words, it means it's a travel rune. a single "travel" sprite is used, instead of one per-word.
 	if(suffix)
 		icon_state = "[initial(icon_state)]_[suffix]"
@@ -29,7 +29,7 @@
 				to_chat(user, "This talisman has been imbued with the power of concealing nearby runes.")
 			if("revealrunes")
 				to_chat(user, "This talisman has been imbued with the power of revealing hidden nearby runes.")
-			if("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "balaq", "mgar", "karazet", "geeri")
+			if("travel", "blood", "join", "hell", "destroy", "technology", "self", "see", "other", "hide")
 				to_chat(user, "This talisman has been imbued with the power of taking you to someplace else. You can read <i>[imbue]</i> on it.")
 			if("communicate")
 				to_chat(user, "This talisman has been imbued with the power of communicating your whispers to your allies.")
@@ -79,7 +79,7 @@
 				call(/obj/effect/rune/proc/obscure)(2)
 			if("revealrunes")
 				call(/obj/effect/rune/proc/revealrunes)(src)
-			if("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "balaq", "mgar", "karazet", "geeri")
+			if("travel", "blood", "join", "hell", "destroy", "technology", "self", "see", "other", "hide")
 				var/turf/T1 = get_turf(user)
 				call(/obj/effect/rune/proc/teleport)(imbue)
 				var/turf/T2 = get_turf(user)
@@ -161,7 +161,7 @@
 				T.imbue = "newtome"
 			if("teleport")
 				T = new /obj/item/weapon/paper/talisman(get_turf(usr))
-				var/list/words = list("ire" = "ire", "ego" = "ego", "nahlizet" = "nahlizet", "certum" = "certum", "veri" = "veri", "jatkaa" = "jatkaa", "balaq" = "balaq", "mgar" = "mgar", "karazet" = "karazet", "geeri" = "geeri")
+				var/list/words = list("travel", "blood", "join", "hell", "destroy", "technology", "self", "see", "other", "hide")
 				T.imbue = input("Write your teleport destination rune:", "Rune Scribing") in words
 			if("emp")
 				T = new /obj/item/weapon/paper/talisman(get_turf(usr))
