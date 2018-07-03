@@ -39,7 +39,7 @@ var/const/BORG_WIRE_LAWCHECK    = 16 // Not used on MoMMIs
 	. += text("<br>\n[(R.lockcharge ? "The lockdown light is on." : "The lockdown light is off.")]")
 	return .
 
-/datum/wires/robot/UpdateCut(var/index, var/mended)
+/datum/wires/robot/UpdateCut(var/index, var/mended, var/mob/user)
 
 	var/mob/living/silicon/robot/R = holder
 	switch(index)
@@ -60,7 +60,7 @@ var/const/BORG_WIRE_LAWCHECK    = 16 // Not used on MoMMIs
 		if (BORG_WIRE_CAMERA)
 			if(!isnull(R.camera) && !R.scrambledcodes)
 				R.camera.status = mended
-				R.camera.deactivate(usr, 0) // Will kick anyone who is watching the Cyborg's camera.
+				R.camera.deactivate(user, 0) // Will kick anyone who is watching the Cyborg's camera.
 
 		if(BORG_WIRE_LAWCHECK)	//Forces a law update if the borg is set to receive them. Since an update would happen when the borg checks its laws anyway, not much use, but eh
 			if (R.lawupdate)
@@ -83,6 +83,8 @@ var/const/BORG_WIRE_LAWCHECK    = 16 // Not used on MoMMIs
 				R.camera.deactivate(usr, 0) // Kick anyone watching the Cyborg's camera, doesn't display you disconnecting the camera.
 				R.visible_message("[R]'s camera lense focuses loudly.")
 				to_chat(R, "Your camera lense focuses loudly.")
+				if(R.aicamera)
+					R.aicamera.sync(R)
 
 		if(BORG_WIRE_LOCKED_DOWN)
 			R.SetLockdown(!R.lockcharge) // Toggle

@@ -40,7 +40,9 @@
 		"/obj/item/device/t_scanner",
 		"/obj/item/device/analyzer",
 		"/obj/item/taperoll/engineering",
+		"/obj/item/taperoll/syndie/engineering",
 		"/obj/item/taperoll/atmos",
+		"/obj/item/taperoll/syndie/atmos",
 		"/obj/item/weapon/extinguisher",
 		"/obj/item/weapon/rcd_ammo",
 		"/obj/item/weapon/reagent_containers/glass/fuelcan",
@@ -98,7 +100,9 @@
 		"/obj/item/device/t_scanner",
 		"/obj/item/device/analyzer",
 		"/obj/item/taperoll/engineering",
+		"/obj/item/taperoll/syndie/engineering",
 		"/obj/item/taperoll/atmos",
+		"/obj/item/taperoll/syndie/atmos",
 		"/obj/item/weapon/extinguisher",
 		"/obj/item/device/rcd/matter/engineering",
 		"/obj/item/device/rcd/rpd",
@@ -196,6 +200,7 @@
 		"/obj/item/device/radio/headset",
 		"/obj/item/weapon/melee/baton",
 		"/obj/item/taperoll/police",
+		"/obj/item/taperoll/syndie/police",
 		"/obj/item/weapon/gun/energy/taser",
 		"/obj/item/weapon/gun/projectile/sec",
 		"/obj/item/weapon/legcuffs/bolas",
@@ -329,6 +334,8 @@
 /obj/item/weapon/storage/belt/lazarus/antag/New(loc, mob/user)
 	var/blocked = list(
 	/mob/living/simple_animal/hostile/hivebot/tele,
+	/mob/living/simple_animal/hostile/wendigo/evolved,
+	/mob/living/simple_animal/hostile/wendigo/alpha,
 	)
 	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
 	critters = shuffle(critters)

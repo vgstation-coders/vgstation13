@@ -871,7 +871,7 @@
 			else
 				destroyed = 1
 				getFromPool(/obj/item/weapon/shard, loc)
-				playsound(get_turf(src), "shatter", 100, 1)
+				playsound(src, "shatter", 100, 1)
 				shield = 0
 				update_icon()
 		if (2)
@@ -906,10 +906,10 @@
 			destroyed = 1
 			locked = 0
 			getFromPool(/obj/item/weapon/shard, loc)
-			playsound(get_turf(src), "shatter", 100, 1)
+			playsound(src, "shatter", 100, 1)
 			update_icon()
 		else
-			playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+			playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 
 	if(health <= 0)
 		visible_message("\The [src] collapses.")
@@ -1038,7 +1038,7 @@
 
 /obj/structure/mannequin/cyber/kick_act(mob/living/carbon/human/H)
 	if(locked)
-		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
+		playsound(src, 'sound/effects/glassknock.ogg', 100, 1)
 	..()
 
 
@@ -1156,7 +1156,7 @@
 
 /datum/construction/mannequin/spawn_result(mob/user as mob)
 	if(result)
-		testing("[user] finished a [result]!")
+//		testing("[user] finished a [result]!")
 
 		var/obj/structure/mannequin_frame/const_holder = holder
 		var/obj/structure/mannequin/cyber/C = new result(get_turf(holder))

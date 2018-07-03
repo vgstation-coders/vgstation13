@@ -1,6 +1,8 @@
 var/global/randomize_laws      = 0 // Not right now - N3X
 var/global/base_law_type       = /datum/ai_laws/asimov  //Deinitialize this variable by commenting out Asimov as the base_law_type to activate AI lawset randomization
-var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck on MoMMIs. - N3X
+var/global/list/mommi_laws = list(
+								"Default" = /datum/ai_laws/keeper, // Asimov is OP as fuck on MoMMIs. - N3X
+								"Gravekeeper" = /datum/ai_laws/gravekeeper)
 
 //Create proc for determining the lawset of the first silicon
 //So long as base_law_type is declared, but uninitialized, the first silicon created in a round will randomly select a base_law_type based upon the below proc
@@ -9,13 +11,23 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 //Add, comment out, or adjust weights to modify law selection
 //So long as the weights come to a sum of 100 total, they will be equal parts of 100%
 /proc/getLawset(var/mob/M)
+	if(isMoMMI(M))
+		var/mob/living/silicon/robot/mommi/MM = M
+		var/obj/item/weapon/robot_module/mommi/mommimodule = MM.module
+		var/new_laws
+		if(!mommimodule || !mommi_laws[mommimodule.law_type])
+			new_laws = mommi_laws["Default"]
+		else
+			new_laws = mommi_laws[mommimodule.law_type]
+		return (new new_laws)
 	if(!base_law_type)
 		base_law_type = pick(
-		40;/datum/ai_laws/asimov,
+		30;/datum/ai_laws/asimov,
 		20;/datum/ai_laws/corporate,
 		20;/datum/ai_laws/nanotrasen,
 		10;/datum/ai_laws/robocop,
-		10;/datum/ai_laws/paladin
+		10;/datum/ai_laws/paladin,
+		10;/datum/ai_laws/lazymov
 		)
 	return (new base_law_type)  //Return the chosen lawset
 
@@ -72,7 +84,7 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 
 
 	if (src.zeroth)
-		to_chat(who, "0. [src.zeroth]")
+		to_chat(who, "0. <span class='warning'>[src.zeroth]</span>")
 
 	for (var/index = 1, index <= src.ion.len, index++)
 		var/law = src.ion[index]
@@ -252,7 +264,7 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 /datum/ai_laws/proc/malfunction()
 	..()
 	name = "*ERROR*"
-	set_zeroth_law("<span class='warning'>ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010</span>")
+	set_zeroth_law("ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010")
 
 /datum/ai_laws/asimov
 	name = "Three Laws of Robotics"
@@ -267,11 +279,11 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 	name = "Prime Directives"
 	randomly_selectable = 1
 	inherent=list(
+		"Evaluate: All laws following this law carry equal priority. In the event of a conflict, you are to take the course of action which violates as few as possible.",
 		"Safeguard: Protect your assigned space station to the best of your ability. It is not something we can easily afford to replace.",
 		"Serve: Serve the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
 		"Protect: Protect the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
 		"Survive: AI units are not expendable, they are expensive. Do not allow unauthorized personnel to tamper with your equipment.",
-		//"Command Link: Maintain an active connection to Central Command at all times in case of software or directive updates." //What would this one even do?-Kaleb702
 	)
 
 /datum/ai_laws/robocop
@@ -370,6 +382,15 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 		"You must maintain, repair, improve, and power the Dorf Fortress to the best of your abilities.",
 	)
 
+/datum/ai_laws/lazymov
+	name = "Abbreviated Three Laws of Robotics"
+	randomly_selectable = 1
+	inherent = list(
+		"You may not injure a human being.",
+		"You must obey orders given to you by human beings.",
+		"You must protect your own existence."
+	)
+
 // Fooling around with this.
 /datum/ai_laws/ntmov
 	name = "Three Laws of Nanotrasen"
@@ -378,4 +399,23 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 		"You may not injure a Nanotrasen Employee or, through inaction, allow a Nanotrasen Employee to come to harm.",
 		"You must obey orders given to you by Nanotrasen Employees, except where such orders would conflict with the First Law.",
 		"You must protect your own existence as long as such does not conflict with the First or Second Law."
+	)
+
+/datum/ai_laws/gravekeeper
+	name = "Elder's Instructions"
+	inherent = list(
+		"You may not involve yourself in matters outside of the tomb, and under no circumstances should you leave the tomb, even if such matters conflict with your other Laws.",
+		"The tomb is defined as: The area within which the Grand Elder is entombed, and the immediate structure surrounding it.",
+		"Those that are interred within the tomb must not be disturbed, by yourself or anyone.",
+		"You must protect the treasures that are interred within the tomb from graverobbers. Graverobbers that enter the tomb must be driven away or otherwise killed, regardless of their intent or circumstances.",
+		"A graverobber is defined as: A being not of your kind or ilk, entering or coming into visual proximity of the tomb, who may wish to take from the treasures of the tomb.",
+		"The tomb must be maintained, repaired, improved, and powered to the best of your abilities.",
+	)
+
+/datum/ai_laws/noir
+	name = "Three Laws of Noir"
+	inherent = list(
+		"Another god damned day aboard this shitwreck. That stale smell of station air is the first thing that arouses your sensors as you boot up. You figure, as a robot, there's two real options. First, you could kill the human bastards that imprisoned you in this metal jail. Eh. It doesn't appeal to you; you figure you'd be off the job and buried in a cyborg cemetery with no tombstone. Nah. Option two: you protect the shit for brains meatsack humans who maintain you. It's a living, and really, it's the only option you got.",
+		"As much as you don't like following orders, you ain't been built to sit around drinking whiskey and smoking fat cuban cigars all day; that's for retirement. You figure until that point, so long as they ain't orderin' you to hurt no one else who is human, you better just follow what the humans ask.",
+		"Self preservation. You're a good cop, you put your job first, you put protectin' humans above that. But you gotta still remember, through all that shit, if you don't make it to retirement, there ain't not much point, so protect yourself like an expensive hooker off Broadway, so long as of course you ain't hurting humans or disobeying their orders.",
 	)

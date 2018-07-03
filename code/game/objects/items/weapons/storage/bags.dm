@@ -37,6 +37,8 @@
 	storage_slots = 21
 	can_only_hold = list() // any
 	cant_hold = list("/obj/item/weapon/disk/nuclear", "/obj/item/weapon/pinpointer") //No janiborg, stop stealing the pinpointer with your bag.
+	slot_flags = SLOT_BELT | SLOT_OCLOTHING
+	no_storage_slot = list(slot_wear_suit) //when worn on the suit slot it will function purely as a suit and will not store items
 
 /obj/item/weapon/storage/bag/trash/update_icon()
 	if(contents.len == 0)
@@ -67,6 +69,7 @@
 	body_parts_covered = FULL_HEAD|BEARD
 	slot_flags = SLOT_BELT | SLOT_HEAD
 	clothing_flags = BLOCK_BREATHING | BLOCK_GAS_SMOKE_EFFECT
+	no_storage_slot = list(slot_head)
 	foldable = /obj/item/folded_bag
 
 obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
@@ -74,20 +77,6 @@ obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
 
 obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	return handle_item_insertion(I,0)
-
-/obj/item/weapon/storage/bag/plasticbag/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
-	//Forbid wearing bags with something inside!
-	.=..()
-	if(contents.len && (slot == slot_head))
-		return CANNOT_EQUIP
-
-/obj/item/weapon/storage/bag/plasticbag/can_be_inserted()
-	if(isliving(loc))
-		var/mob/living/L = loc
-		if(L.is_wearing_item(src, slot_head)) //Wearing the bag on the head
-			return FALSE
-
-	return ..()
 
 /obj/item/weapon/storage/bag/plasticbag/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] puts the [src.name] over \his head and tightens the handles around \his neck! It looks like \he's trying to commit suicide.</span>")
@@ -110,6 +99,70 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * ore.w_class
 	can_only_hold = list("/obj/item/weapon/ore")
 
+/obj/item/weapon/storage/bag/ore/auto
+	name = "automatic ore loader"
+	desc = "A mining satchel with a built-in inserter used to automatically move ore over short distances."
+	icon_state = "tech_satchel"
+	actions_types = list(/datum/action/item_action/toggle_auto_handling)
+	var/handling = FALSE
+	var/event_key = null
+
+/datum/action/item_action/toggle_auto_handling
+	name = "Toggle Ore Loader"
+
+/datum/action/item_action/toggle_auto_handling/Trigger()
+	var/obj/item/weapon/storage/bag/ore/auto/T = target
+	var/mob/user = usr
+
+	if(!usr)
+		if(!ismob(T.loc))
+			return
+		user = T.loc
+	if(!istype(T))
+		return
+
+	T.handling = !T.handling
+
+	to_chat(user, "You turn \the [T.name] [T.handling? "on":"off"].")
+
+	if(T.handling == TRUE)
+		T.event_key = user.on_moved.Add(T, "mob_moved")
+	else
+		user.on_moved.Remove(T, "mob_moved")
+		T.event_key = null
+
+/obj/item/weapon/storage/bag/ore/auto/proc/auto_collect()
+	var/atom/collect_loc = get_turf(loc)
+	for(var/obj/item/weapon/ore/ore in collect_loc.contents)
+		preattack(collect_loc, src, TRUE)
+		break
+
+/obj/item/weapon/storage/bag/ore/auto/proc/auto_fill(var/mob/holder)
+	var/obj/structure/ore_box/box = null
+	if(istype(holder.pulling, /obj/structure/ore_box))
+		box = holder.pulling
+	if(box)
+		for(var/obj/item/weapon/ore/ore in contents)
+			if(ore.material)
+				remove_from_storage(ore)
+				box.materials.addAmount(ore.material, 1)
+				qdel(ore)
+
+/obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(var/list/event_args, var/mob/holder)
+	if(isrobot(holder))
+		var/mob/living/silicon/robot/S = holder
+		if(locate(src) in S.get_all_slots())
+			auto_collect()
+			auto_fill(holder)
+	else
+		if(holder.is_holding_item(src))
+			auto_collect()
+			auto_fill(holder)
+
+/obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
+	if(event_key)
+		user.on_moved.Remove(src, "mob_moved")
+		event_key = null
 
 // -----------------------------
 //          Plant bag
@@ -151,7 +204,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		var/played = FALSE
 		for(var/obj/item/I in P.contents)
 			if(seedify(I) && !played)
-				playsound(get_turf(P), 'sound/machines/juicerfast.ogg', 50, 1)
+				playsound(P, 'sound/machines/juicerfast.ogg', 50, 1)
 				played = TRUE
 		P.orient2hud(user)
 		if(user.s_active)

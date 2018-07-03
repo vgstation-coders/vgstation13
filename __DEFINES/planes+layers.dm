@@ -74,7 +74,6 @@ What is the naming convention for planes or layers?
 
 #define ABOVE_PLATING_PLANE		-3
 
-	#define HOLOMAP_LAYER			1 // NOTE: ENSURE this is equal to the one at ABOVE_TURF_PLANE!
 	#define CATWALK_LAYER			2
 	#define DISPOSALS_PIPE_LAYER	3
 	#define LATTICE_LAYER			4
@@ -86,6 +85,8 @@ What is the naming convention for planes or layers?
 #define FLOOR_PLANE -2
 
 #define BELOW_TURF_PLANE 		-1 		// objects that are below turfs and darkness but above platings. Useful for asteroid smoothing or other such magic.
+	#define CORNER_LAYER 		2
+	#define SIDE_LAYER			3
 
 #define BASE_PLANE 				0		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
@@ -161,6 +162,7 @@ What is the naming convention for planes or layers?
 
 #define ABOVE_HUMAN_PLANE 		16			// For things that should appear above humans.
 
+	#define SHADOW_LAYER			0
 	#define VEHICLE_LAYER 			0
 	#define CHAIR_ARMREST_LAYER 	0
 	#define WINDOOR_LAYER 			1
@@ -188,6 +190,7 @@ What is the naming convention for planes or layers?
 	#define SINGULARITY_LAYER 		6
 	#define ABOVE_SINGULO_LAYER 	7
 	#define GRAVITYGRID_LAYER 		8
+	#define SNOW_OVERLAY_LAYER		9
 
 #define LIGHTING_PLANE 			19
 
@@ -200,7 +203,7 @@ What is the naming convention for planes or layers?
 	#define SUPER_PORTAL_LAYER		6
 	#define NARSIE_GLOW 			7
 
-#define AREA_PLANE				20
+#define ABOVE_LIGHTING_PLANE		20
 	#define MAPPING_AREA_LAYER	999
 
 #define STATIC_PLANE 			21		// For AI's static.
@@ -208,7 +211,7 @@ What is the naming convention for planes or layers?
 #define FULLSCREEN_PLANE		22		// for fullscreen overlays that do not cover the hud.
 
 	#define FULLSCREEN_LAYER	 	0
-	#define DAMAGE_LAYER 			1
+	#define DAMAGE_HUD_LAYER 			1
 	#define IMPAIRED_LAYER 			2
 	#define BLIND_LAYER				3
 	#define CRIT_LAYER 				4
@@ -231,6 +234,7 @@ What is the naming convention for planes or layers?
 
 /obj/abstract/screen/plane_master/clickmaster
 	plane = BASE_PLANE
+	mouse_opacity = 0
 
 var/obj/abstract/screen/plane_master/clickmaster/clickmaster = new()
 
@@ -241,3 +245,17 @@ var/obj/abstract/screen/plane_master/clickmaster/clickmaster = new()
 	plane = BASE_PLANE
 
 var/obj/abstract/screen/plane_master/clickmaster_dummy/clickmaster_dummy = new()
+
+// returns a list with the objects sorted depending on their layer, with the lowest objects being the first in the list and the highest objects being last
+/proc/plane_layer_sort(var/list/to_sort)
+	var/list/sorted = list()
+	for(var/current_atom in to_sort)
+		var/compare_index
+		for(compare_index = sorted.len, compare_index > 0, --compare_index) // count down from the length of the list to zero.
+			var/atom/compare_atom = sorted[compare_index] // compare to the next object down the list.
+			if(compare_atom.plane < current_atom:plane) // is this object below our current atom?
+				break
+			else if((compare_atom.plane == current_atom:plane) && (compare_atom.layer <= current_atom:layer))	// is this object below our current atom?
+				break
+		sorted.Insert(compare_index+1, current_atom) // insert it just above the atom it was higher than - or at the bottom if it was higher than nothing.
+	return sorted // return the sorted list.

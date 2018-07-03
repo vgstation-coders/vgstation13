@@ -13,6 +13,7 @@
 	melee_damage_upper = 10
 	poison_per_bite = 10
 	poison_type = STOXIN
+	species_type = /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider
 	var/fed = 0
 	var/atom/cocoon_target
 
@@ -25,10 +26,8 @@
 			stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/proc/check_evolve()
-	if(spider_queens.len < MAX_SQUEENS && !key)	//don't evolve if there's a player inside
-		var/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/NQ = new(src.loc)
-		NQ.inherit_mind(src)
-		qdel(src)
+	if(animal_count[species_type] < MAX_SQUEENS && !key)	//don't evolve if there's a player inside
+		grow_up()
 		return 1
 	return 0
 
@@ -180,8 +179,6 @@
 			busy = 0
 			stop_automated_movement = 0
 
-var/list/spider_queens = list()
-
 /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider
 	name = "spider queen"
 	desc = "Massive, dark, and very furry. This is an absolutely massive spider. Its fangs are almost as big as you!"
@@ -200,14 +197,6 @@ var/list/spider_queens = list()
 	ranged = 1
 	size = SIZE_HUGE
 	delimbable_icon = FALSE
-
-/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/New()
-	..()
-	spider_queens += src
-
-/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/Destroy()
-	..()
-	spider_queens -= src
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider/check_evolve()
 	return 0

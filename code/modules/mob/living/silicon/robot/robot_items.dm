@@ -91,7 +91,7 @@
 	var/mode = 1
 
 /obj/item/weapon/pen/robopen/attack_self(mob/user as mob)
-	playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+	playsound(src, 'sound/effects/pop.ogg', 50, 0)
 	if (mode == 1)
 		mode = 2
 		to_chat(user, "Changed printing mode to 'Rename Paper'")
@@ -228,7 +228,7 @@
 
 	I.forceMove(T)
 	I.inflate()
-	user.visible_message("<span class='danger'>[user] deploy an inflatable [mode ? "door" : "wall"].</span>", \
+	user.visible_message("<span class='danger'>[user] deploys an inflatable [mode ? "door" : "wall"].</span>", \
 	"<span class='notice'>You deploy an inflatable [mode ? "door" : "wall"].</span>")
 
 /obj/item/weapon/inflatable_dispenser/proc/pick_up(var/obj/A, var/mob/living/user)
@@ -299,20 +299,10 @@
 //Grippers: Simple cyborg manipulator. Limited use... SLIPPERY SLOPE POWERCREEP
 /obj/item/weapon/gripper
 	icon = 'icons/obj/device.dmi'
-	actions_types = list(/datum/action/item_action/magrip_drop)
 	var/obj/item/wrapped = null // Item currently being held.
 	var/list/can_hold = list() //Has a list of items that it can hold.
 	var/list/blacklist = list() //This is a list of items that can't be held even if their parent is whitelisted.
 	var/force_holder = null
-
-/datum/action/item_action/magrip_drop
-	name = "Drop Item"
-
-/datum/action/item_action/magrip_drop/Trigger()
-	var/obj/item/weapon/gripper/G = target
-	if(!istype(G))
-		return
-	G.drop_item(force_drop = 1)
 
 /obj/item/weapon/gripper/proc/grip_item(obj/item/I as obj, mob/user, var/feedback = TRUE)
 	//This function returns TRUE if we successfully took the item, or FALSE if it was invalid. This information is useful to the caller
@@ -351,9 +341,11 @@
 		return FALSE
 	if(!target) //Just drop it, baka.
 		target = loc
-	if(!dontsay)
-		to_chat(usr, "<span class='warning'>You drop \the [wrapped].</span>")
-	wrapped.dropped(usr)
+	var/mob/holder = get_holder_of_type(src, /mob)
+	if(holder)
+		if(!dontsay)
+			to_chat(holder, "<span class='warning'>You drop \the [wrapped].</span>")
+		wrapped.dropped(holder)
 	if(force_drop)
 		wrapped.loc = get_turf(target)
 	else
@@ -384,7 +376,7 @@
 
 /obj/item/weapon/gripper/Destroy()
 	if(gripper_sanity_check(src))
-		drop_item(force_drop = 1)
+		drop_item(force_drop = 1, dontsay = TRUE)
 	..()
 
 /obj/item/weapon/gripper/update_icon()
@@ -397,14 +389,13 @@
 		overlays += olay
 	else
 		alpha = initial(alpha)
-	if(usr)
-		usr.update_action_buttons()
 	..()
 
 /obj/item/weapon/gripper/examine(mob/user)
-	. = ..()
 	if(wrapped)
-		to_chat(user, "It is holding \a [bicon(wrapped)] [wrapped].")
+		return wrapped.examine(user)
+	else
+		return ..()
 
 /obj/item/weapon/gripper/attackby(obj/item/thing, mob/living/user)
 	if(gripper_sanity_check(src))
@@ -518,6 +509,17 @@
 		/obj/item/trash
 		)
 
+/obj/item/weapon/gripper/service/noir
+	name = "worn-out gripper"
+	icon_state = "gripper-noir"
+	desc = "A repurposed and heavily worn-out service gripper. A simple grasping tool used to handle both forensic tasks and mugs, especially mugs."
+
+	can_hold = list(
+		/obj/item/weapon/reagent_containers/food/drinks,
+		/obj/item/device/detective_scanner,
+		/obj/item/weapon/f_card
+		)
+
 /obj/item/weapon/gripper/no_use //Used when you want to hold and put things in other things, but not able to 'use' the item
 
 /obj/item/weapon/gripper/no_use/attack_self(mob/user as mob)
@@ -541,7 +543,7 @@
 		/obj/item/stack/sheet
 		)
 
-/obj/item/weapon/gripper/no_use/magnetic //No use because they don't need to open held tanks.
+/obj/item/weapon/gripper/magnetic
 	name = "magnetic gripper"
 	desc = "A simple grasping tool specialized in construction and engineering work."
 	icon_state = "gripper"
@@ -552,7 +554,11 @@
 		/obj/item/weapon/tank,
 		/obj/item/weapon/circuitboard,
 		/obj/item/weapon/am_containment,
-		/obj/item/device/am_shielding_container
+		/obj/item/device/am_shielding_container,
+		/obj/item/weapon/table_parts,
+		/obj/item/weapon/rack_parts,
+		/obj/item/mounted/frame,
+		/obj/item/weapon/intercom_electronics
 		)
 
 	blacklist = list(
@@ -563,6 +569,12 @@
 		/obj/item/weapon/circuitboard/aiupload,
 		/obj/item/weapon/circuitboard/borgupload
 		)
+
+/obj/item/borg/fire_shield
+	name = "fire shield"
+	desc = "A shield that makes you immune to fire."
+	icon = 'icons/obj/decals.dmi'
+	icon_state = "fire"
 
 //Cyborg Instrument Synth. Remember to always play REMOVE KEBAB on malf rounds.
 /obj/item/device/instrument/instrument_synth

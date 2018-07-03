@@ -106,7 +106,7 @@
 	use_power = 2
 	update_icon()
 	if(handle_growth(contents))
-		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1) //Only ding once per process
+		playsound(src, 'sound/machines/ding.ogg', 50, 1) //Only ding once per process
 
 	src.updateUsrDialog()
 

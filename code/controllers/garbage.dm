@@ -84,8 +84,8 @@ world/loop_checks = 0
 				found += LookForRefs(R, D)
 			for(var/datum/R)
 				found += LookForRefs(R, D)
-			for(var/A in _all_globals)
-				found += LookForListRefs(readglobal(A), D, null, A)
+			for(var/A in global.vars)
+				found += LookForListRefs(global.vars[A], D, null, A)
 			to_chat(world, "we found [found]")
 			#endif
 

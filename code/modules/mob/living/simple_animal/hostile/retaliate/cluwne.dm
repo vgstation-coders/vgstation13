@@ -17,7 +17,7 @@
 	response_harm = "hits the"
 	speak = list("HONK", "Honk!", "PLEASE KILL ME")
 	speak_emote = list("squeals", "cries","sobs")
-	emote_see = list("honks sadly")
+	emote_hear = list("honks sadly")
 	speak_chance = 1
 	a_intent = I_HELP
 	var/footstep=0 // For clownshoe noises
@@ -286,10 +286,6 @@
 	message = uppertext(jointext(temp_message, " "))
 	return ..(message)
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/Die()
-	..()
-	walk(src, 0)
-
 /mob/living/simple_animal/hostile/retaliate/cluwne/proc/handle_disabilities()
 	if ((prob(5) && paralysis < 10))
 		to_chat(src, "<span class='warning'>You have a seizure!</span>")
@@ -300,7 +296,6 @@
 		return //under effects of time magick
 
 	var/msg = pick("quietly sobs into a dirty handkerchief","cries into [gender==MALE?"his":"her"] hands","bawls like a cow")
-	msg = "<B>[src]</B> [msg]"
 	return ..(msg)
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
@@ -325,7 +320,7 @@
 	response_help = "honks the"
 	speak = list("Honk!")
 	speak_emote = list("sqeaks")
-	emote_see = list("honks")
+	emote_hear = list("honks")
 	maxHealth = 100
 	health = 100
 	size = 1
@@ -344,8 +339,8 @@
 		return
 	..()
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/goblin/Die()
-	..()
+/mob/living/simple_animal/hostile/retaliate/cluwne/goblin/death(var/gibbed = FALSE)
+	..(TRUE)
 	new /obj/item/clothing/mask/gas/clown_hat(src.loc)
 	new /obj/item/clothing/shoes/clown_shoes(src.loc)
 	qdel(src)

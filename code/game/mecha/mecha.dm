@@ -21,7 +21,7 @@
 	layer = MOB_LAYER //icon draw layer
 	plane = MOB_PLANE
 	infra_luminosity = 15 //byond implementation is bugged.
-	var/hud_list[2]
+	var/list/hud_list = list()
 	var/initial_icon = null //Mech type for resetting icon. Only used for reskinning kits (see custom items)
 	var/can_move = 1
 	var/mob/living/carbon/occupant = null
@@ -111,8 +111,45 @@
 /obj/mecha/Destroy()
 	src.go_out(loc, TRUE)
 	mechas_list -= src //global mech list
+	if(cell)
+		qdel(cell)
+		cell = null
+	if(internal_tank)
+		qdel(internal_tank)
+		internal_tank = null
+	if(cabin_air)
+		qdel(cabin_air)
+		cabin_air = null
+	connected_port = null
+	if(radio)
+		qdel(radio)
+		radio = null
+	if(electropack)
+		qdel(electropack)
+		electropack = null
+	if(tracking)
+		qdel(tracking)
+		tracking = null
+	if(pr_int_temp_processor)
+		qdel(pr_int_temp_processor)
+		pr_int_temp_processor = null
+	if(pr_inertial_movement)
+		qdel(pr_inertial_movement)
+		pr_inertial_movement = null
+	if(pr_give_air)
+		qdel(pr_give_air)
+		pr_give_air = null
+	if(pr_internal_damage)
+		qdel(pr_internal_damage)
+		pr_internal_damage = null
+	for(var/obj/item/mecha_parts/mecha_equipment/eq in equipment)
+		qdel(eq)
+	equipment = null
+	selected = null
+	if(events)
+		qdel(events)
+		events = null
 	..()
-	return
 
 /obj/mecha/can_apply_inertia()
 	return 1 //No anchored check - so that mechas can fly off into space
@@ -552,12 +589,12 @@
 	if(!prob(src.deflect_chance))
 		src.take_damage(15)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-		playsound(get_turf(src), 'sound/weapons/slash.ogg', 50, 1, -1)
+		playsound(src, 'sound/weapons/slash.ogg', 50, 1, -1)
 		to_chat(user, "<span class='warning'>You slash at the armored suit!</span>")
 		visible_message("<span class='warning'>The [user] slashes at [src.name]'s armor!</span>")
 	else
 		src.log_append_to_last("Armor saved.")
-		playsound(get_turf(src), 'sound/weapons/slash.ogg', 50, 1, -1)
+		playsound(src, 'sound/weapons/slash.ogg', 50, 1, -1)
 		to_chat(user, "<span class='good'>Your claws had no effect!</span>")
 		src.occupant_message("<span class='notice'>The [user]'s claws are stopped by the armor.</span>")
 		visible_message("<span class='notice'>The [user] rebounds off [src.name]'s armor!</span>")
@@ -579,7 +616,7 @@
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
 		else
 			src.log_append_to_last("Armor saved.")
-			playsound(get_turf(src), 'sound/weapons/slash.ogg', 50, 1, -1)
+			playsound(src, 'sound/weapons/slash.ogg', 50, 1, -1)
 			src.occupant_message("<span class='notice'>The [user]'s attack is stopped by the armor.</span>")
 			visible_message("<span class='notice'>The [user] rebounds off [src.name]'s armor!</span>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
@@ -710,14 +747,14 @@
 	if(!prob(src.deflect_chance))
 		src.take_damage(6)
 		src.check_for_internal_damage(list(MECHA_INT_TEMP_CONTROL,MECHA_INT_TANK_BREACH,MECHA_INT_CONTROL_LOST))
-		playsound(get_turf(src), 'sound/effects/blobattack.ogg', 50, 1, -1)
+		playsound(src, 'sound/effects/blobattack.ogg', 50, 1, -1)
 		to_chat(user, "<span class='warning'>You smash at the armored suit!</span>")
 		for (var/mob/V in viewers(src))
 			if(V.client && !(V.blinded))
 				V.show_message("<span class='warning'>The [user] smashes against [src.name]'s armor!</span>", 1)
 	else
 		src.log_append_to_last("Armor saved.")
-		playsound(get_turf(src), 'sound/effects/blobattack.ogg', 50, 1, -1)
+		playsound(src, 'sound/effects/blobattack.ogg', 50, 1, -1)
 		to_chat(user, "<span class='good'>Your attack had no effect!</span>")
 		src.occupant_message("<span class='notice'>The [user]'s attack is stopped by the armor.</span>")
 		for (var/mob/V in viewers(src))
@@ -788,7 +825,7 @@
 				if(user.drop_item(W))
 					E.attach(src)
 					user.visible_message("[user] attaches [W] to [src]", "You attach [W] to [src]")
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			else
 				to_chat(user, "You were unable to attach [W] to [src]")
 		return
@@ -839,7 +876,7 @@
 				if ("electropack")
 					electropack.forceMove(src.loc)
 					electropack = null
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			to_chat(user, "<span class='notice'>You pry out \the [remove] from \the [src].</span>")
 			src.log_message("Internal component removed - [remove]")
 		return
@@ -2024,7 +2061,7 @@
 			var/transfer_moles = 0
 			if(pressure_delta > 0) //cabin pressure lower than release pressure
 				if(tank_air.return_temperature() > 0)
-					transfer_moles = pressure_delta*cabin_air.return_volume()/(cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
+					transfer_moles = pressure_delta * cabin_air.return_volume() / (cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
 					var/datum/gas_mixture/removed = tank_air.remove(transfer_moles)
 					cabin_air.merge(removed)
 			else if(pressure_delta < 0) //cabin pressure higher than release pressure
@@ -2033,7 +2070,7 @@
 				if(t_air)
 					pressure_delta = min(cabin_pressure - t_air.return_pressure(), pressure_delta)
 				if(pressure_delta > 0) //if location pressure is lower than cabin pressure
-					transfer_moles = pressure_delta*cabin_air.return_volume()/(cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
+					transfer_moles = pressure_delta * cabin_air.return_volume() / (cabin_air.return_temperature() * R_IDEAL_GAS_EQUATION)
 					var/datum/gas_mixture/removed = cabin_air.remove(transfer_moles)
 					if(t_air)
 						t_air.merge(removed)

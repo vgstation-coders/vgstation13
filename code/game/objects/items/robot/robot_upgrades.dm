@@ -3,8 +3,6 @@
 
 #define FAILED_TO_ADD 1
 
-/obj/item/borg/upgrade/var/vtec_bonus = 0.25 //Define when
-
 /obj/item/borg/upgrade
 	name = "A borg upgrade module."
 	desc = "Protected by FRM."
@@ -31,34 +29,33 @@
 		return null
 	return I
 
-/obj/item/borg/upgrade/proc/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+/obj/item/borg/upgrade/proc/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user, var/ignore_cover = FALSE)
 	if(!R.module)
 		to_chat(user, "<span class='warning'>The borg must choose a module before he can be upgraded!</span>")
 		return FAILED_TO_ADD
 
-
 	if(isMoMMI(R))
 		if(!add_to_mommis)
-			to_chat(user, "<span class='warning'>\The [src] only functions on Nanotrasen Cyborgs.</span>")
+			to_chat(user, "<span class='warning'>\The [src] only functions on Cyborgs.</span>")
 			return FAILED_TO_ADD
 	else if(required_module.len)
 		if(!(R.module.type in required_module))
 			to_chat(user, "<span class='warning'>\The [src] will not fit into \the [R.module.name]!</span>")
 			return FAILED_TO_ADD
 
-	if(R.stat == DEAD)
+	if(R.isDead())
 		to_chat(user, "<span class='warning'>\The [src] will not function on a deceased robot.</span>")
 		return FAILED_TO_ADD
 
-	if(!R.opened)
+	if(!R.opened && !ignore_cover)
 		to_chat(user, "<span class='warning'>You must first open \the [src]'s cover!</span>")
 		return FAILED_TO_ADD
 
-	if(!multi_upgrades && (src.type in R.module.upgrades))
+	if(!multi_upgrades && (type in R.module.upgrades))
 		to_chat(user, "<span class='warning'>There is already \a [src] in [R].</span>")
 		return FAILED_TO_ADD
 
-	R.module.upgrades += src.type
+	R.module.upgrades += type
 
 	if(modules_to_add.len)
 		for(var/module_to_add in modules_to_add)
@@ -95,18 +92,12 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	if (/obj/item/borg/upgrade/vtec in R.module.upgrades)
-		R.movement_speed_modifier -= vtec_bonus
+	if(/obj/item/borg/upgrade/vtec in R.module.upgrades)
+		R.movement_speed_modifier -= SILICON_VTEC_SPEED_BONUS
 
 	qdel(R.module)
-	if(R.hands)
-		R.hands.icon_state = "nomod"
-	R.icon_state = "robot"
-	R.base_icon = "robot"
-	R.camera.network.Remove(list(CAMERANET_ENGI,CAMERANET_MEDBAY,CAMERANET_MINE))
+	R.set_module_sprites(list("Default" = "robot"))
 	R.updatename("Default")
-	R.status_flags |= CANPUSH
-	R.updateicon()
 
 /obj/item/borg/upgrade/rename
 	var/heldname = ""
@@ -149,17 +140,42 @@
 
 
 /obj/item/borg/upgrade/restart/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	playsound(R, "sound/machines/click.ogg", 20, 1)
+	to_chat(user, "You plug the board into the robot's core circuitry.")
+
+	sleep(5)
+
 	if(R.health < 0)
+		playsound(R, "sound/machines/buzz-two.ogg", 50, 0)
 		to_chat(user, "You have to repair the robot before using this module!")
 		return FALSE
+
+	playsound(R, "sound/machines/paistartup.ogg", 50, 1)
+	to_chat(user, "<span style=\"font-family:Courier\">Systems reboot initialized successfully.</span>")
+
+	sleep(5)
 
 	if(!R.key)
 		for(var/mob/dead/observer/ghost in player_list)
 			if(ghost.mind && ghost.mind.current == R)
 				R.key = ghost.key
 
+	playsound(R, "sound/voice/liveagain.ogg", 75, 1)
 	R.stat = CONSCIOUS
 	R.resurrect()
+
+/obj/item/borg/upgrade/proc/securify_module(var/mob/living/silicon/robot/R)
+	if(!istype(R.module.radio_key, /obj/item/device/encryptionkey/headset_sec)) //If they have no sec key, give them one.
+		R.module.ResetEncryptionKey(R)
+		R.module.radio_key = /obj/item/device/encryptionkey/headset_sec
+		R.module.AddEncryptionKey(R)
+
+	if(!("Security" in R.module.sensor_augs)) //If they don't have a SECHUD, give them one.
+		pop(R.module.sensor_augs)
+		R.module.sensor_augs.Add("Security", "Disable")
+
+	if(!(R.module.quirk_flags & MODULE_IS_THE_LAW)) //Make them able to *law and *halt
+		R.module.quirk_flags |= MODULE_IS_THE_LAW
 
 /obj/item/borg/upgrade/vtec
 	name = "cyborg VTEC upgrade board"
@@ -172,7 +188,7 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	R.movement_speed_modifier += vtec_bonus
+	R.movement_speed_modifier += SILICON_VTEC_SPEED_BONUS
 
 
 /obj/item/borg/upgrade/tasercooler
@@ -202,7 +218,7 @@
 	name = "cyborg jetpack module board"
 	desc = "A carbon dioxide jetpack suitable for low-gravity operations."
 	icon_state = "cyborg_upgrade3"
-	required_module = list(/obj/item/weapon/robot_module/miner,/obj/item/weapon/robot_module/engineering,/obj/item/weapon/robot_module/combat)
+	required_module = list(/obj/item/weapon/robot_module/miner, /obj/item/weapon/robot_module/engineering, /obj/item/weapon/robot_module/combat)
 	modules_to_add = list(/obj/item/weapon/tank/jetpack/carbondioxide/silicon)
 	add_to_mommis = TRUE
 
@@ -212,10 +228,6 @@
 
 	for(var/obj/item/weapon/tank/jetpack/carbondioxide in R.module.modules)
 		R.internals = src
-		if(isMoMMI(R))
-			for(var/X in carbondioxide.actions)
-				var/datum/action/A = X
-				A.Grant(R)
 
 /obj/item/borg/upgrade/syndicate/
 	name = "cyborg illegal equipment board"
@@ -223,8 +235,7 @@
 	icon_state = "cyborg_upgrade3"
 
 /obj/item/borg/upgrade/syndicate/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-
-	if(R.emagged == TRUE)
+	if(R.illegal_weapons == TRUE)
 		return FAILED_TO_ADD
 
 	if(..())
@@ -232,7 +243,8 @@
 
 	message_admins("[key_name_admin(user)] ([user.type]) used \a [name] on [R] (a [R.type]).")
 
-	R.SetEmagged(2)
+	R.illegal_weapons = TRUE
+	R.SetEmagged()
 
 /obj/item/borg/upgrade/engineering/
 	name = "engineering cyborg MK-2 upgrade board"
@@ -276,7 +288,7 @@
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper"
 	required_module = list(/obj/item/weapon/robot_module/engineering)
-	modules_to_add = list(/obj/item/weapon/gripper/no_use/magnetic)
+	modules_to_add = list(/obj/item/weapon/gripper/magnetic)
 
 /obj/item/borg/upgrade/organ_gripper
 	name = "medical cyborg organ gripper upgrade"
@@ -289,7 +301,7 @@
 /obj/item/borg/upgrade/hydro
 	name = "service cyborg H.U.E.Y. upgrade board"
 	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds and glass containers."
-	icon_state = "cyborg_upgrade"
+	icon_state = "mainboard"
 	required_module = list(/obj/item/weapon/robot_module/butler)
 	modules_to_add = list(/obj/item/weapon/minihoe, /obj/item/weapon/wirecutters/clippers, /obj/item/weapon/storage/bag/plants/portactor, /obj/item/device/analyzer/plant_analyzer)
 
@@ -305,8 +317,8 @@
 
 /obj/item/borg/upgrade/honk
 	name = "service cyborg H.O.N.K. upgrade board"
-	desc = "Used to give a service cyborg fun toys!"
-	icon_state = "cyborg_upgrade2"
+	desc = "Used to give a service cyborg fun toys, Honk!"
+	icon_state = "gooncode"
 	required_module = list(/obj/item/weapon/robot_module/butler, /obj/item/weapon/robot_module/tg17355)
 	modules_to_add = list(/obj/item/weapon/bikehorn, /obj/item/weapon/stamp/clown, /obj/item/toy/crayon/rainbow, /obj/item/toy/waterflower, /obj/item/device/soundsynth)
 
@@ -314,7 +326,72 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	if(istype(R.module,/obj/item/weapon/robot_module/tg17355) && R.icon_state == "peaceborg") //Honk!
-		R.icon_state = "clownegg"
-		R.update_icons()
-	playsound(get_turf(R), 'sound/items/AirHorn.ogg', 50, 1)
+	if(has_icon(R.icon, "[R.base_icon]-clown")) //Honk!
+		R.set_module_sprites(list("Honk" = "[R.base_icon]-clown"))
+
+	var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R, user)
+	if(H)
+		H.Honkize()
+	var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R, user)
+	if(C)
+		C.Honkize()
+
+	playsound(R, 'sound/items/AirHorn.ogg', 50, 1)
+
+	R.module.quirk_flags |= MODULE_IS_A_CLOWN
+
+/obj/item/borg/upgrade/noir
+	name = "security cyborg N.O.I.R. upgrade board"
+	desc = "So that's the way you scientific detectives work. My god! for a fat, middle-aged, hard-boiled, pig-headed guy, you've got the vaguest way of doing things I ever heard of."
+	icon_state = "mainboard"
+	required_module = list(/obj/item/weapon/robot_module/security, /obj/item/weapon/robot_module/tg17355)
+	modules_to_add = list(/obj/item/weapon/gripper/service/noir, /obj/item/weapon/evidencebag, /obj/item/cyborglens, /obj/item/device/taperecorder, /obj/item/weapon/gun/projectile/detective, /obj/item/ammo_storage/speedloader/c38/cyborg)
+
+/obj/item/borg/upgrade/noir/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+
+	var/list/new_icons = list()
+	if(has_icon(R.icon, "[R.base_icon]-noir"))
+		new_icons += list("Hardboiled" = "[R.base_icon]-noir")
+	if(has_icon(R.icon, "[R.base_icon]-noirbw"))
+		new_icons += list("Noir" = "[R.base_icon]-noirbw")
+	if(new_icons.len > 0)
+		R.set_module_sprites(new_icons)
+
+	securify_module(R)
+
+	var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R, user)
+	if(C)
+		C.Noirize()
+
+/obj/item/borg/upgrade/warden
+	name = "cyborg warden upgrade board"
+	desc = "Used to give a security cyborg supervisory enforcement tools."
+	icon_state = "mcontroller"
+	required_module = list(/obj/item/weapon/robot_module/security, /obj/item/weapon/robot_module/tg17355)
+	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/cyborg, /obj/item/weapon/card/robot/security, /obj/item/weapon/wrench)
+
+/obj/item/borg/upgrade/warden/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+
+	//Trusty warden armor.
+	R.component_extension = "/kevlar"
+	R.upgrade_components()
+
+	var/list/new_icons = list()
+	if(has_icon(R.icon, "[R.base_icon]-warden"))
+		new_icons += list("Warden" = "[R.base_icon]-warden")
+	if(has_icon(R.icon, "[R.base_icon]-H"))
+		new_icons += list("Heavy" = "[R.base_icon]-H")
+	if(new_icons.len > 0)
+		R.set_module_sprites(new_icons)
+
+	securify_module(R)
+
+	var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R, user)
+	if(C)
+		C.Lawize()
+
+#undef FAILED_TO_ADD

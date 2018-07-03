@@ -7,7 +7,7 @@
 	force = 10
 	throwforce = 10
 	w_class = W_CLASS_HUGE
-	var/sheet_path = /obj/item/stack/sheet/metal
+	sheet_type = /obj/item/stack/sheet/metal
 
 /obj/item/weapon/stool/bar
 	name = "bar stool"
@@ -15,7 +15,7 @@
 	icon_state = "bar-stool"
 
 /obj/item/weapon/stool/hologram
-	sheet_path = null
+	sheet_type = null
 
 /obj/item/weapon/stool/piano
 	name = "piano stool"
@@ -23,7 +23,7 @@
 	icon_state = "stool_piano"
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 3
-	sheet_path = /obj/item/stack/sheet/wood
+	sheet_type = /obj/item/stack/sheet/wood
 
 /obj/item/weapon/stool/piano/initialize()
 	..()
@@ -34,9 +34,9 @@
 	return
 
 /obj/item/weapon/stool/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(iswrench(W) && sheet_path)
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		drop_stack(sheet_path, loc, 1, user)
+	if(iswrench(W) && sheet_type)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		drop_stack(sheet_type, loc, 1, user)
 		qdel(src)
 
 	. = ..()
@@ -47,11 +47,11 @@
 	. = ..()
 
 /obj/item/weapon/stool/attack(mob/M as mob, mob/user as mob)
-	if(prob(5) && istype(M, /mob/living) && sheet_path)
+	if(prob(5) && istype(M, /mob/living) && sheet_type)
 		user.visible_message("<span class='warning'>[user] breaks \the [src] over [M]'s back!.</span>")
 		user.u_equip(src, 0)
 
-		getFromPool(sheet_path, get_turf(src), 1)
+		getFromPool(sheet_type, get_turf(src), 1)
 		qdel(src)
 
 		var/mob/living/T = M

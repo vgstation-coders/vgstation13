@@ -107,6 +107,7 @@
 #define FLUOROSURFACTANT 			"fluorosurfactant"
 #define NICOTINE 			"nicotine"
 #define AMMONIA 			"ammonia"
+#define SALINE				"saline"
 #define GLUE 			"glue"
 #define DIETHYLAMINE 			"diethylamine"
 #define ETHYLREDOXRAZINE 			"ethylredoxrazine"
@@ -192,7 +193,6 @@
 #define SPECIALWHISKEY 			"specialwhiskey"
 #define GIN 			"gin"
 #define ABSINTHE 			"absinthe"
-#define RUM 			"rum"
 #define PWINE 			"pwine"
 #define RUM 			"rum"
 #define VODKA 			"vodka"
@@ -254,7 +254,6 @@
 #define NEUROTOXIN 			"neurotoxin"
 #define BANANAHONK 			"bananahonk"
 #define SILENCER 			"silencer"
-#define CHANGELINGSTING 			"changelingsting"
 #define ERIKASURPRISE 			"erikasurprise"
 #define IRISHCARBOMB 			"irishcarbomb"
 #define SYNDICATEBOMB 			"syndicatebomb"
@@ -328,6 +327,15 @@
 #define HEMOSCYANINE	"hemoscyanine"
 #define ANTHRACENE		"anthracene"
 #define PINTPOINTER		"pintpointer"
+#define MUCUS			"mucus"
+#define ALBUTEROL		"albuterol"
+#define LIQUIDBUTTER	"liquidbutter"
+#define SALTWATER		"saltwater"
+#define CALCIUMOXIDE		"calciumoxide"
+#define CALCIUMHYDROXIDE	"calciumhydroxide"
+#define MUSTARD			"mustard"
+#define RELISH			"relish"
+#define UNTABLE_MUTAGEN		"untable"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -355,9 +363,12 @@
 #define CORIAMYRTIN		"coriamyrtin"
 #define THYMOL			"thymol"
 #define POTASSIUMCARBONATE "potassium_carbonate"
-
+#define TOBACCO			"tobacco"
+#define DANBACCO		"danbacco"
 #define PETRITRICIN		"petritricin"
 #define APETRINE		"apetrine"
+#define SODIUMSILICATE	"sodiumsilicate"
+#define COLORFUL_REAGENT "colorful_reagent"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2

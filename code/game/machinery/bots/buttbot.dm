@@ -42,7 +42,7 @@ Here it is: Buttbot.
 
 /obj/machinery/bot/buttbot/proc/fart()
 	if(can_fart())
-		playsound(get_turf(src), 'sound/misc/fart.ogg', 50, 1)
+		playsound(src, 'sound/misc/fart.ogg', 50, 1)
 		sincelastfart = world.timeofday
 
 /obj/machinery/bot/buttbot/Hear(var/datum/speech/speech, var/rendered_speech="")
@@ -73,7 +73,7 @@ Here it is: Buttbot.
 /obj/machinery/bot/buttbot/explode()
 	src.on = 0
 	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
-	playsound(get_turf(src), 'sound/effects/superfart.ogg', 50, 1) //A fitting end
+	playsound(src, 'sound/effects/superfart.ogg', 50, 1) //A fitting end
 	var/turf/Tsec = get_turf(src)
 	new /obj/item/clothing/head/butt(Tsec)
 

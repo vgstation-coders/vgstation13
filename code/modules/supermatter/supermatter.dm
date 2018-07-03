@@ -356,14 +356,12 @@
 		"<span class=\"danger\">You reach out and touch \the [src]. Everything starts burning and all you can hear is ringing. Your last thought is \"That was not a wise decision.\"</span>",\
 		"<span class=\"warning\">You hear an unearthly noise as a wave of heat washes over you.</span>")
 
-	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
+	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 
 	Consume(user)
 
 /obj/machinery/power/supermatter/proc/transfer_energy()
-	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
-		if(get_dist(R, src) <= 15) // Better than using orange() every process
-			R.receive_pulse(power)
+	emitted_harvestable_radiation(get_turf(src), power, range = 15)
 
 /obj/machinery/power/supermatter/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	. = ..()
@@ -377,7 +375,7 @@
 		"<span class='danger'>You touch \the [W] to \the [src] when everything suddenly goes silent.</span>\n<span class='notice'>\The [W] flashes into dust as you flinch away from \the [src].</span>",\
 		"<span class='warning'>Everything suddenly goes silent.</span>")
 
-	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
+	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 
 	user.drop_from_inventory(W)
 	Consume(W)
@@ -389,7 +387,7 @@
 	if(istype(AM, /obj/machinery/power/supermatter))
 		AM.visible_message("<span class='sinister'>As \the [src] bumps into \the [AM] an otherworldly resonance ringing begins to shake the room, you ponder for a moment all the incorrect choices in your life that led you here, to this very moment, to witness this. You take one final sigh before it all ends.</span>")
 		sleep(10) //Adds to the hilarity
-		playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
+		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 		explode()
 		return
 	if(istype(AM, /mob/living))
@@ -402,7 +400,7 @@
 	else
 		return ..()
 
-	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
+	playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 
 	Consume(AM)
 

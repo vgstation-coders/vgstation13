@@ -166,9 +166,9 @@
 	hostile_time = 0
 	walk(src,0)
 
-/mob/living/simple_animal/hostile/retaliate/malf_drone/Die()
+/mob/living/simple_animal/hostile/retaliate/malf_drone/death(var/gibbed = FALSE)
 	src.visible_message("<span class='notice'> [bicon(src)] [src] suddenly breaks apart.</span>")
-	..()
+	..(TRUE)
 	qdel(src)
 
 /mob/living/simple_animal/hostile/retaliate/malf_drone/Destroy()

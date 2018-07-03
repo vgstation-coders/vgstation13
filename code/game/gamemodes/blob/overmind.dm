@@ -11,7 +11,7 @@
 	pass_flags = PASSBLOB
 	faction = "blob"
 
-	plane = BASE_PLANE
+	plane = ABOVE_LIGHTING_PLANE
 
 	var/obj/effect/blob/core/blob_core = null // The blob overmind's core
 	var/blob_points = 0

@@ -3,7 +3,7 @@
 	flag = TRADER
 	department_flag = CIVILIAN
 	faction = "Station"
-	total_positions = 0
+	total_positions = 3
 	spawn_positions = 3
 	supervisors = "nobody"
 	selection_color = "#dddddd"
@@ -20,6 +20,8 @@
 	//Don't spawn with any of the average crew member's luxuries (only an ID)
 	no_starting_money = 1
 	no_pda = 1
+
+	spawns_from_edge = 1
 
 	idtype = /obj/item/weapon/card/id/vox
 
@@ -57,12 +59,13 @@
 	if(!job_title)
 		job_title = src.title
 
+	if(!trader_account)
+		trader_account = create_account("Trader Shoal", 0, null, 0) //Starts 0 credits, not sourced from any database, earns 0 credits
+	M.mind.store_memory("<b>The joint trader account is:</b> #[trader_account.account_number]<br><b>Your shared account pin is:</b> [trader_account.remote_access_pin]<br>")
+
 	to_chat(M, "<B>You are a [job_title].</B>")
 
-	if(map && map.nameShort == "meta") //Shitty way to do it, but whatever - traders start on a shuttle wreckage on metaclub, not on the vox outpost
-		to_chat(M, "<b>A while ago you got your equipment together and boarded a small shuttle, heading for your destination (whatever it may be). Everything was great, until the shuttle somehow crashed into an asteroid. You're still alive, but you're not quite sure where you are. Maybe some of your friends know - unless they died in the crash...</b>")
-	else
-		to_chat(M, "<b>You've finally got your equipment together, such as it is. Now it's time for action and adventure! In the rush of excitement, you've forgotten where you were going to go. If only you had any friends that could remind you...</b>")
+	to_chat(M, "<b>You've finally got your equipment together, such as it is. Now it's time for action and adventure! In the rush of excitement, you've forgotten where you were going to go. If only you had any friends that could remind you...</b>")
 
 	to_chat(M, "<b>Despite not being a member of the crew, by default you are <u>not</u> an antagonist. Cooperating with antagonists is allowed - within reason. Ask admins via adminhelp if you're not sure.</b>")
 

@@ -16,7 +16,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
-	caliber = list("rpg" = 1)
+	caliber = list(ROCKETGRENADE = 1)
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=2"
 	ammo_type = "/obj/item/ammo_casing/rocket_rpg"
 	attack_verb = list("strikes", "hits", "bashes")
@@ -66,7 +66,7 @@
 	slot_flags = SLOT_BACK
 	w_class = W_CLASS_LARGE
 	fire_delay = 2
-	caliber = list("nikita" = 1)
+	caliber = list(GUIDEDROCKET = 1)
 	origin_tech = null
 	fire_sound = 'sound/weapons/rocket.ogg'
 	ammo_type = "/obj/item/ammo_casing/rocket_rpg/nikita"
@@ -78,7 +78,7 @@
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita/attack_self(mob/user)
 	if(fired)
-		playsound(get_turf(src), 'sound/weapons/stickybomb_det.ogg', 30, 1)
+		playsound(src, 'sound/weapons/stickybomb_det.ogg', 30, 1)
 		fired.detonate()
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita/suicide_act(var/mob/user)
@@ -111,7 +111,7 @@
 	desc = "A miniature cruise missile"
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "nikita"
-	caliber = "nikita"
+	caliber = GUIDEDROCKET
 	projectile_type = "/obj/item/projectile/nikita"
 
 /obj/item/ammo_casing/rocket_rpg/nikita/New()

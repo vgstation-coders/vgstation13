@@ -58,6 +58,7 @@
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
+	var/potency = 0
 
 /obj/item/weapon/bananapeel/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>")
@@ -395,6 +396,8 @@
 	layer = OPEN_DOOR_LAYER
 	icon_state = "beartrap0"
 	desc = "A trap used to catch bears and other legged creatures."
+	starting_materials = list(MAT_IRON = 50000)
+	w_type = RECYK_METAL
 	var/armed = 0
 	var/obj/item/weapon/grenade/iedcasing/IED = null
 

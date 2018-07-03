@@ -8,8 +8,8 @@
 	var/atom/atom_to_mimic
 
 
-/mob/living/simple_animal/hologram/Die()
-	..()
+/mob/living/simple_animal/hologram/death(var/gibbed = FALSE)
+	..(gibbed)
 	visible_message("<span class = 'notice>\The [src] dissipates from view.</span>")
 	qdel(src)
 
@@ -126,7 +126,7 @@
 /mob/living/simple_animal/hologram/advanced/attack_hand(mob/living/M)
 	switch(M.a_intent)
 		if(I_HELP)
-			playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+			playsound(src, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			M.visible_message( \
 				"<span class='notice'>[M] gives [src] a [pick("hug","warm embrace")].</span>", \
 				"<span class='notice'>You hug [src].</span>", \

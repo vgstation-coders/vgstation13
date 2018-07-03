@@ -21,7 +21,7 @@ var/global/global_playlists = list()
 		return
 	for(var/playlist_id in list("bar", "jazz", "rock", "muzak", "emagged", "endgame", "clockwork", "vidyaone", "vidyatwo", "vidyathree", "vidyafour"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
-		testing("Updating playlist from [url]...")
+		//testing("Updating playlist from [url]...")
 
 		//  Media Server 2 requires a secret key in order to tell the jukebox
 		// where the music files are. It's set in config with MEDIA_SECRET_KEY
@@ -57,7 +57,7 @@ var/global/global_playlists = list()
 
 	else
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
-		testing("[src] - Updating playlist from [url]...")
+		//testing("[src] - Updating playlist from [url]...")
 
 		//  Media Server 2 requires a secret key in order to tell the jukebox
 		// where the music files are. It's set in config with MEDIA_SECRET_KEY
@@ -351,7 +351,9 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/proc/ScreenSettings(var/mob/user)
 	if(!linked_account)
 		linked_account = station_account
-	var/dat={"<h1>Settings</h1>
+	var/dat
+
+	dat += {"<h1>Settings</h1>
 		<form action="?src=\ref[src]" method="get">
 		<input type="hidden" name="src" value="\ref[src]" />
 		<fieldset>
@@ -382,8 +384,12 @@ var/global/list/loopModeNames=list(
 				<input type="radio" name="lock" id="lock_cap" value="[access_captain]"[change_access == list(access_captain) ? " checked='selected'":""] /> <label for="lock_cap">Captain</label>
 			</div>
 		</fieldset>
-		<input type="submit" name="act" value="Save Settings" />
-		</form>"}
+		<input type="submit" name="act" value="Save Settings" /></form>"}
+
+	dat += "<BR><b>Media</b><BR>"
+	for(var/element in playlists)
+		dat += "[playlists[element]] <a href='?src=\ref[src];eject=[element]'>Eject</a><BR>"
+	dat += "<a href='?src=\ref[src];insert=1'>Insert Vinyl</a><BR>"
 	return dat
 
 
@@ -412,7 +418,8 @@ var/global/list/loopModeNames=list(
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"NOT ENOUGH FUNDS\" on the screen.</span>","You hear a buzz.")
 			return
 		visible_message("<span class='notice'>The machine beeps happily.</span>","You hear a beep.")
-		acct.charge(credits_needed,linked_account,"Song selection at [areaMaster.name]'s [name].")
+		var/area/this_area = get_area(src)
+		acct.charge(credits_needed,linked_account,"Song selection at [this_area.name]'s [name].")
 		credits_needed = 0
 
 		successful_purchase()
@@ -589,6 +596,20 @@ var/global/list/loopModeNames=list(
 		update_music()
 		update_icon()
 
+	if (href_list["insert"])
+		if(isobserver(usr) && !canGhostWrite(usr,src,""))
+			to_chat(usr, "<span class='warning'>You can't do that.</span>")
+			return
+		var/obj/item/weapon/vinyl/V = usr.get_active_hand()
+		if(istype(V))
+			insert(V)
+
+	if (href_list["eject"])
+		if(isobserver(usr) && !canGhostWrite(usr,src,""))
+			to_chat(usr, "<span class='warning'>You can't do that.</span>")
+			return
+		eject(href_list["eject"])
+
 	if (href_list["song"])
 		if(wires.IsIndexCut(JUKE_CAPITAL))
 			to_chat(usr, "<span class='warning'>You select a song, but [src] is unresponsive...</span>")
@@ -647,6 +668,26 @@ var/global/list/loopModeNames=list(
 						update_icon()
 						return
 			update_music()
+
+/obj/machinery/media/jukebox/proc/eject(var/playlist_name)
+	if(playlists.Find(playlist_name))
+		new /obj/item/weapon/vinyl(get_turf(src), playlist_name, playlists[playlist_name])
+		playlists.Remove(playlist_name)
+		if(playlist == playlist_name)
+			stop_playing()
+			playlist = playlists[1]
+	else
+		visible_message("<span class='warning'>[bicon(src)] \The [src] buzzes, unable to eject the vinyl.</span>")
+
+/obj/machinery/media/jukebox/proc/insert(var/obj/O)
+	var/obj/item/weapon/vinyl/V = O
+	if(!istype(V))
+		return
+	if(playlists.Find(V.unformatted))
+		visible_message("<span class='warning'>[bicon(src)] \The [src] buzzes, rejecting the vinyl.</span>")
+	else
+		playlists[V.unformatted] = V.formatted
+		qdel(V)
 
 /obj/machinery/media/jukebox/update_music()
 	if(!playlist)
@@ -853,3 +894,88 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/superjuke/adminbus/cultify()
 	return
+
+
+/obj/item/weapon/vinyl
+	name = "nanovinyl"
+	desc = "In reality, the bulk of the disc serves only decorative purposes and the many songs are recorded on a very small microchip near the center."
+	icon = 'icons/obj/jukebox.dmi'
+	icon_state = "vinyl"
+	flags = FPRINT
+	siemens_coefficient = 1
+	sharpness = 1
+	force = 7
+	throwforce = 7
+	throw_speed = 7
+	throw_range = 7
+	w_class = W_CLASS_SMALL
+	attack_verb = list("plays out", "records", "frisbees") //Fuck it, we'll do it live. Fucking thing sucks!
+	var/unformatted
+	var/formatted
+
+/obj/item/weapon/vinyl/New(loc,U,F)
+	..(loc)
+	unformatted = U
+	formatted = F
+	name = "nanovinyl - [formatted]"
+
+//Premades
+/obj/item/weapon/vinyl/vidyaone
+	name = "nanovinyl - video games, volume one"
+	unformatted = "vidyaone"
+	formatted = "Vidya Pt.1"
+
+/obj/item/weapon/vinyl/vidyatwo
+	name = "nanovinyl - video games, volume two"
+	unformatted = "vidyatwo"
+	formatted = "Vidya Pt.2"
+
+/obj/item/weapon/vinyl/vidyathree
+	name = "nanovinyl - video games, volume three"
+	unformatted = "vidyathree"
+	formatted = "Vidya Pt.3"
+
+/obj/item/weapon/vinyl/vidyafour
+	name = "nanovinyl - video games, volume four"
+	unformatted = "vidyafour"
+	formatted = "Vidya Pt.4"
+
+/obj/item/weapon/vinyl/jazz
+	name = "nanovinyl - jazz"
+	unformatted = "jazz"
+	formatted = "Jazz"
+
+/obj/item/weapon/vinyl/rock
+	name = "nanovinyl - rock"
+	unformatted = "rock"
+	formatted = "Rock"
+
+/obj/item/weapon/vinyl/muzak
+	name = "nanovinyl - muzak"
+	unformatted = "muzak"
+	formatted = "Muzak"
+
+/obj/item/weapon/vinyl/shuttle
+	name = "nanovinyl - shuttle"
+	unformatted = "shuttle"
+	formatted = "Shuttle"
+
+/obj/item/weapon/vinyl/syndie
+	name = "nanovinyl - syndicate"
+	unformatted = "emagged"
+	formatted = "Syndie Mix"
+
+/obj/item/weapon/vinyl/endgame
+	name = "nanovinyl - apocalypse"
+	unformatted = "endgame"
+	formatted =	"Apocalypse"
+
+/obj/item/weapon/vinyl/clockwork
+	name = "nanovinyl - clockwork"
+	unformatted = "clockwork"
+	formatted =	"Clockwork"
+
+/obj/item/weapon/vinyl/thunderdome
+	name = "nanovinyl - thunderdome"
+	unformatted = "thunderdome"
+	formatted =	"Thunderdome"

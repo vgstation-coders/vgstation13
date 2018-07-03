@@ -35,7 +35,7 @@
 			if(istype(L) && L.stuttering)
 				return
 			if(istype(speech.speaker, /obj/item/device/assembly) || istype(speech.speaker, /obj/item/device/assembly_frame))
-				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 25, 1)
+				playsound(src, 'sound/machines/buzz-sigh.ogg', 25, 1)
 			else
 				pulse(0)
 				var/mob/living/speaker = speech.speaker

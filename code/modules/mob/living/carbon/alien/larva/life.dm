@@ -101,16 +101,13 @@
 				var/obj/location_as_object = loc
 				breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
 			else if(istype(loc, /turf/))
-				var/breath_moles = 0
 				/*if(environment.return_pressure() > ONE_ATMOSPHERE)
 					// Loads of air around (pressure effect will be handled elsewhere), so lets just take a enough to fill our lungs at normal atmos pressure (using n = Pv/RT)
 					breath_moles = (ONE_ATMOSPHERE*BREATH_VOLUME/R_IDEAL_GAS_EQUATION*environment.temperature)
 				else
 					*/
 					// Not enough air around, take a percentage of what's there to model this properly
-				breath_moles = environment.total_moles()/environment.volume*CELL_VOLUME*BREATH_PERCENTAGE
-
-				breath = loc.remove_air(breath_moles)
+				breath = environment.remove_volume(CELL_VOLUME * BREATH_PERCENTAGE)
 
 				// Handle chem smoke effect  -- Doohl
 				for(var/obj/effect/effect/smoke/chem/smoke in view(1, src))
@@ -159,14 +156,15 @@
 		return 0
 
 	var/toxins_used = 0
-	var/breath_pressure = (breath.total_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/BREATH_VOLUME
+	breath.volume = BREATH_VOLUME
+	breath.update_values()
 
 	//Partial pressure of the toxins in our breath
-	var/Toxins_pp = (breath.toxins/breath.total_moles())*breath_pressure
+	var/Toxins_pp = (breath.toxins / breath.total_moles()) * breath.pressure
 
 	if(Toxins_pp) // Detect toxins in air
 
-		AdjustPlasma(breath.toxins*250)
+		AdjustPlasma(breath.toxins * 250)
 		toxins_alert = max(toxins_alert, 1)
 
 		toxins_used = breath.toxins

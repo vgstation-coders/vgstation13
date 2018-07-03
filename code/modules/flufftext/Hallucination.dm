@@ -67,10 +67,8 @@ mob/living/carbon/proc/handle_hallucinations()
 								halitem.name = "Revolver"
 							if(2) //c4
 								halitem.icon = 'icons/obj/assemblies.dmi'
-								halitem.icon_state = "plastic-explosive0"
+								halitem.icon_state = pick("plastic-explosive0", "plastic-explosive2")
 								halitem.name = "Mysterious Package"
-								if(prob(25))
-									halitem.icon_state = "c4small_1"
 							if(3) //sword
 								halitem.icon = 'icons/obj/weapons.dmi'
 								halitem.icon_state = "sword1"
@@ -311,7 +309,35 @@ mob/living/carbon/proc/handle_hallucinations()
 						spawn(duration)
 							if(C)
 								C.images.Remove(foodie) //Remove the image from hallucinating mob
-			if(87 to 88) //Turns your screen
+			if(87)
+				var/mob/living/L
+
+				var/list/mob_list=list()
+				for(var/mob/living/M in viewers(src))
+					mob_list |= M
+
+				if(mob_list.len)
+					L = pick(mob_list)
+
+				var/mob/living/simple_animal/random_mob = pick(existing_typesof(/mob/living/simple_animal/hostile))
+				var/image/horror = image(icon = null)
+				horror.appearance = initial(random_mob.appearance)
+
+				horror.loc = L
+				horror.override = 1 //Override the affected mob's appearance with the monster
+
+				var/client/C = src.client //Get client of the hallucinating mob
+				if(C)
+					C.images += horror //Give it the image!
+
+				var/duration = rand(60 SECONDS, 120 SECONDS)
+				if(src.client)
+					message_admins("[key_name(src)] just imagined that [L] looks like a [random_mob], spooky! [formatJumpTo(get_turf(src))]")
+				spawn(duration)
+					if(C)
+						C.images.Remove(horror) //Remove the image from hallucinating mob
+
+			if(88) //Turns your screen
 				var/angle = rand(1,3)*90
 				var/duration = rand(10 SECONDS, 40 SECONDS)
 

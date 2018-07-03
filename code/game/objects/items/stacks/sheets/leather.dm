@@ -58,6 +58,22 @@
 	source_string = "alien"
 	origin_tech = ""
 
+/obj/item/stack/sheet/animalhide/deer
+	name = "deer hide"
+	desc = "The skin of a deer."
+	singular_name = "deer hide piece"
+	icon_state = "sheet-deer"
+	source_string = "deer"
+	origin_tech = ""
+
+/obj/item/stack/sheet/animalhide/gondola
+	name = "gondola skin"
+	desc = "It's all quiet now."
+	singular_name = "gondola skin piece"
+	icon_state = "sheet-gondola"
+	source_string = "gondola"
+	origin_tech = ""
+
 //don't see anywhere else to put these, maybe together they could be used to make the xenos suit?
 /obj/item/stack/sheet/xenochitin
 	name = "alien chitin"
@@ -97,6 +113,29 @@
 	icon = 'icons/mob/alien.dmi'
 	icon_state = "weed_extract"
 	origin_tech = ""
+
+/obj/item/deer_head
+	name = "deer head"
+	desc = "Not something you want to find in your bed in the morning."
+	icon = 'icons/obj/butchering_products.dmi'
+	icon_state = "deer-head"
+	origin_tech = ""
+
+/obj/item/deer_head/attackby(obj/item/W, mob/user)
+	.=..()
+
+	if(W.sharpness_flags & SHARP_BLADE)
+		user.visible_message("<span class='notice'>[user] finishes butchering \the [src].</span>", \
+		"<span class='notice'>You slice the antlers off \the [src].</span>", drugged_message = "<span class='notice'>[user] gives \the [src] a nice haircut.</span>")
+		new /obj/item/antlers(get_turf(src))
+		new /obj/effect/gibspawner/generic(get_turf(src))
+		qdel(src)
+
+/obj/item/antlers
+	name = "deer antlers"
+	desc = "A bit horny."
+	icon = 'icons/obj/butchering_products.dmi'
+	icon_state = "antlers"
 
 /obj/item/stack/sheet/hairlesshide
 	name = "hairless hide"

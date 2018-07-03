@@ -302,7 +302,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			return
 
 	if (copytext(message, 1, 2) == "*")
-		return emote(copytext(message, 2))
+		to_chat(src, "<span class = 'notice'>This type of mob doesn't support this. Use the Me verb instead.</span>")
+		return
 
 	if (copytext(message, 1, 2) == ";") //Brain borer hivemind.
 		return borer_speak(copytext(message,2))
@@ -883,7 +884,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		to_chat(src, "You cannot infest a target in your current state.")
 		return
 
-	if(M.stat == 2)
+	if(M.isDead())
 		to_chat(src, "That is not an appropriate target.")
 		return
 
@@ -1168,6 +1169,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 /mob/living/simple_animal/borer/ClickOn( var/atom/A, var/params )
 	..()
+	if(params2list(params)["shift"])
+		return
 	if(host)
 		if(extend_o_arm_unlocked)
 			if(hostlimb == LIMB_RIGHT_ARM || hostlimb == LIMB_LEFT_ARM)

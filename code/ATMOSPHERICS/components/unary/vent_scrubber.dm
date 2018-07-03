@@ -45,7 +45,8 @@
 
 /obj/machinery/atmospherics/unary/vent_scrubber/New()
 	..()
-	area_uid = areaMaster.uid
+	var/area/this_area = get_area(src)
+	area_uid = this_area.uid
 	if (!id_tag)
 		assign_uid()
 		id_tag = num2text(uid)
@@ -81,8 +82,9 @@
 	radio_connection = radio_controller.add_object(src, frequency, radio_filter_in)
 
 	if(frequency != 1439)
-		areaMaster.air_scrub_info -= id_tag
-		areaMaster.air_scrub_names -= id_tag
+		var/area/this_area = get_area(src)
+		this_area.air_scrub_info -= id_tag
+		this_area.air_scrub_names -= id_tag
 		name = "Air Scrubber"
 	else
 		broadcast_status()
@@ -115,11 +117,12 @@
 		"sigtype" = "status"
 	)
 	if(frequency == 1439)
-		if(!areaMaster.air_scrub_names[id_tag])
-			var/new_name = "[areaMaster.name] Air Scrubber #[areaMaster.air_scrub_names.len+1]"
-			areaMaster.air_scrub_names[id_tag] = new_name
+		var/area/this_area = get_area(src)
+		if(!this_area.air_scrub_names[id_tag])
+			var/new_name = "[this_area.name] Air Scrubber #[this_area.air_scrub_names.len+1]"
+			this_area.air_scrub_names[id_tag] = new_name
 			src.name = new_name
-		areaMaster.air_scrub_info[id_tag] = signal.data
+		this_area.air_scrub_info[id_tag] = signal.data
 
 	radio_connection.post_signal(src, signal, radio_filter_out)
 
@@ -159,7 +162,7 @@
 			(scrub_N2O && environment.trace_gases.len > 0) ||\
 			(scrub_O2 && environment.oxygen > 0) ||\
 			(scrub_N2 && environment.nitrogen > 0))
-			var/transfer_moles = min(1, volume_rate/environment.volume)*environment.total_moles()
+			var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles()
 
 			//Take a gas sample
 			var/datum/gas_mixture/removed = loc.remove_air(transfer_moles)
@@ -317,7 +320,7 @@
 			if(do_after(user, src, 20))
 				if(!src || !WT.isOn())
 					return
-				playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
+				playsound(src, 'sound/items/Welder2.ogg', 50, 1)
 				if(!welded)
 					user.visible_message("[user] welds the scrubber shut.", "You weld the vent scrubber.", "You hear welding.")
 					investigation_log(I_ATMOS, "has been welded shut by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
@@ -349,8 +352,9 @@
 	"}
 
 /obj/machinery/atmospherics/unary/vent_scrubber/Destroy()
-	areaMaster.air_scrub_info.Remove(id_tag)
-	areaMaster.air_scrub_names.Remove(id_tag)
+	var/area/this_area = get_area(src)
+	this_area.air_scrub_info.Remove(id_tag)
+	this_area.air_scrub_names.Remove(id_tag)
 	..()
 
 /obj/machinery/atmospherics/unary/vent_scrubber/multitool_topic(var/mob/user, var/list/href_list, var/obj/O)
@@ -360,8 +364,9 @@
 			return
 
 		if(frequency == 1439)
-			areaMaster.air_scrub_info -= id_tag
-			areaMaster.air_scrub_names -= id_tag
+			var/area/this_area = get_area(src)
+			this_area.air_scrub_info -= id_tag
+			this_area.air_scrub_names -= id_tag
 
 		id_tag = newid
 		broadcast_status()
@@ -371,10 +376,10 @@
 	return ..()
 
 /obj/machinery/atmospherics/unary/vent_scrubber/change_area(var/area/oldarea, var/area/newarea)
-	areaMaster.air_scrub_info.Remove(id_tag)
-	areaMaster.air_scrub_names.Remove(id_tag)
+	oldarea.air_scrub_info.Remove(id_tag)
+	oldarea.air_scrub_names.Remove(id_tag)
 	..()
-	area_uid = areaMaster.uid
+	area_uid = newarea.uid
 	broadcast_status()
 
 /obj/machinery/atmospherics/unary/vent_scrubber/canClone(var/obj/O)
@@ -382,8 +387,9 @@
 
 /obj/machinery/atmospherics/unary/vent_scrubber/clone(var/obj/machinery/atmospherics/unary/vent_scrubber/O)
 	if(frequency == 1439) // Note: if the frequency stays at 1439 we'll be readded to the area in set_frequency().
-		areaMaster.air_scrub_info -= id_tag
-		areaMaster.air_scrub_names -= id_tag
+		var/area/this_area = get_area(src)
+		this_area.air_scrub_info -= id_tag
+		this_area.air_scrub_names -= id_tag
 	id_tag = O.id_tag
 
 	set_frequency(O.frequency)

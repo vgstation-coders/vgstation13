@@ -241,6 +241,12 @@
 				visible_message("<span class='notice'>\The [user] puts out the fire on \the [target].</span>")
 		return
 
+/obj/item/clothing/proc/get_armor(var/type)
+	return armor[type]
+
+/obj/item/clothing/proc/get_armor_absorb(var/type)
+	return armor_absorb[type]
+
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
 	name = "ears"
@@ -423,6 +429,7 @@ BLIND     // can't see anything
 			body_parts_covered &= ~(MOUTH|HEAD|BEARD|FACE)
 		usr.update_inv_wear_mask()
 		usr.update_hair()
+		usr.update_inv_glasses()
 
 /obj/item/clothing/mask/New()
 	if(!can_flip /*&& !istype(/obj/item/clothing/mask/gas/voice)*/) //the voice changer has can_flip = 1 anyways but it's worth noting that it exists if anybody changes this in the future

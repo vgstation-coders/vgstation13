@@ -9,7 +9,7 @@
 	var/desc = null
 	var/obj/target = null
 	var/check_flags = 0
-	var/processing = 0
+	var/processing = FALSE
 	var/obj/abstract/screen/movable/action_button/button = null
 	var/button_icon = 'icons/mob/actions.dmi'
 	var/background_icon_state = "bg_default"
@@ -20,6 +20,15 @@
 	var/mob/owner
 
 /datum/action/New(Target)
+	link_to(Target)
+	button = new
+	button.linked_action = src
+	button.name = name
+	button.actiontooltipstyle = buttontooltipstyle
+	if(desc)
+		button.desc = desc
+
+/datum/action/proc/link_to(Target)
 	target = Target
 
 /datum/action/Destroy()
@@ -31,54 +40,52 @@
 	return ..()
 
 /datum/action/proc/Grant(mob/M)
-	if(owner)
-		if(owner == M)
-			return
+	if(M)
+		if(owner)
+			if(owner == M)
+				return
+			Remove(owner)
+		owner = M
+		M.actions += src
+		if(M.client)
+			M.client.screen += button
+		M.update_action_buttons()
+	else
 		Remove(owner)
-	owner = M
-	M.actions += src
-	button = new
-	button.linked_action = src
-	button.name = name
-	button.actiontooltipstyle = buttontooltipstyle
-	if(desc)
-		button.desc = desc
-	if(M.client)
-		M.client.screen += button
-	M.update_action_buttons()
 
 /datum/action/proc/Remove(mob/M)
-	if(M.client)
-		M.client.screen -= button
+	if(M)
+		if(M.client)
+			M.client.screen -= button
+		M.actions -= src
+		M.update_action_buttons()
 	button.moved = FALSE //so the button appears in its normal position when given to another owner.
-	M.actions -= src
-	M.update_action_buttons()
 	owner = null
 
 /datum/action/proc/Trigger()
 	if(!IsAvailable())
-		return 0
-	return 1
+		return FALSE
+	return TRUE
 
 /datum/action/proc/Process()
 	return
 
 /datum/action/proc/IsAvailable()
 	if(!owner)
-		return 0
+		return FALSE
 	if(check_flags & AB_CHECK_RESTRAINED)
 		if(owner.restrained())
-			return 0
+			return FALSE
 	if(check_flags & AB_CHECK_STUNNED)
 		if(owner.stunned || owner.knockdown)
-			return 0
+			return FALSE
 	if(check_flags & AB_CHECK_LYING)
 		if(owner.lying)
-			return 0
+			return FALSE
 	if(check_flags & AB_CHECK_CONSCIOUS)
 		if(owner.stat)
-			return 0
-	return 1
+			return FALSE
+	return TRUE
 
 /datum/action/proc/UpdateButtonIcon()
 	if(button)
@@ -91,7 +98,7 @@
 			button.color = rgb(128,0,0,128)
 		else
 			button.color = rgb(255,255,255,255)
-			return 1
+			return TRUE
 
 /datum/action/proc/ApplyIcon(obj/abstract/screen/movable/action_button/current_button)
 	current_button.overlays = null
@@ -123,11 +130,11 @@
 
 /datum/action/item_action/Trigger()
 	if(!..())
-		return 0
+		return FALSE
 	if(target)
 		var/obj/item/I = target
 		I.attack_self(owner)
-	return 1
+	return TRUE
 
 /datum/action/item_action/ApplyIcon(obj/abstract/screen/movable/action_button/current_button)
 	current_button.overlays = null
@@ -182,3 +189,27 @@
 
 /datum/action/item_action/toggle_hood
 	name = "Toggle Hood"
+
+//toggle_helmet_mask has to have its own functions as to not conflict with plasmamen lights
+/datum/action/item_action/toggle_helmet_mask
+	name = "Toggle Helmet Mask"
+	var/up = TRUE
+
+/datum/action/item_action/toggle_helmet_mask/Trigger()
+	if(IsAvailable() && owner && target)
+		var/obj/item/clothing/I = target
+		to_chat(owner, "You toggle the built-in welding mask [src.up ? "on" : "off"].")
+		src.up = !src.up
+		if(src.up)
+			I.eyeprot = 0
+			I.body_parts_covered &= ~EYES
+		else
+			I.eyeprot = 3
+			I.body_parts_covered |= EYES
+		return TRUE
+
+	return FALSE
+
+/datum/action/item_action/generic_toggle/New()
+	..()
+	name = "Toggle [target]"

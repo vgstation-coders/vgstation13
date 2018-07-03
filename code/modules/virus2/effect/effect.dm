@@ -417,7 +417,7 @@
 			to_chat(H, "<span class='warning'>Your [glass_hand.display_name] resonates with the glass in \the [glass_to_shatter], shattering it to bits!</span>")
 			glass_to_shatter.reagents.reaction(H.loc, TOUCH)
 			new/obj/effect/decal/cleanable/generic(get_turf(H))
-			playsound(get_turf(H), 'sound/effects/Glassbr1.ogg', 25, 1)
+			playsound(H, 'sound/effects/Glassbr1.ogg', 25, 1)
 			spawn(1 SECONDS)
 				if (H && glass_hand)
 					if (prob(50 * multiplier))
@@ -558,6 +558,44 @@
 	mob.dna.check_integrity()
 	mob.dna.SetSEState(VEGANBLOCK,1)
 	domutcheck(mob, null)
+
+/datum/disease2/effect/famine
+	name = "Faminous Potation"
+	stage = 2
+	max_multiplier = 3
+
+/datum/disease2/effect/famine/activate(var/mob/living/carbon/mob)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		if(H.dna)
+			if(H.species.flags & IS_PLANT) //Plantmen take a LOT of damage
+				H.adjustCloneLoss(5 * multiplier)
+
+	for(var/obj/machinery/portable_atmospherics/hydroponics/H in range(3*multiplier,mob))
+		if(H.seed && !H.dead) // Get your xenobotanist/vox trader/hydroponist mad with you in less than 1 minute with this simple trick.
+			switch(rand(1,3))
+				if(1)
+					if(H.waterlevel >= 10)
+						H.waterlevel -= rand(1,10)
+					if(H.nutrilevel >= 5)
+						H.nutrilevel -= rand(1,5)
+				if(2)
+					if(H.toxins <= 50)
+						H.toxins += rand(1,50)
+				if(3)
+					H.weed_coefficient++
+					H.weedlevel++
+					H.pestlevel++
+					if(prob(5))
+						H.dead = 1
+
+
+	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in range(2*multiplier,mob))
+		G.visible_message("<span class = 'warning'>\The [G] rots at an alarming rate!</span>")
+		new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(G))
+		qdel(G)
+		if(prob(30/multiplier))
+			break
 
 ////////////////////////STAGE 3/////////////////////////////////
 

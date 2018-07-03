@@ -72,7 +72,7 @@
 	if(user.stat)
 		return
 	if(iswrench(W))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,get_turf(src))
 		M.amount = 2
 		if(src.beaker)
@@ -139,7 +139,7 @@
 				return
 			if(!T.dna)
 				return
-			if(M_NOCLONE in T.mutations)
+			if(M_HUSK in T.mutations)
 				return
 
 			// If the human is losing too much blood, beep.

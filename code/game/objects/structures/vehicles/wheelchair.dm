@@ -276,7 +276,7 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/proc/crush(var/mob/living/H,var/bloodcolor) //Basically identical to the MULE, see mulebot.dm
 	src.visible_message("<span class='warning'>[src] drives over [H]!</span>")
-	playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
+	playsound(src, 'sound/effects/splat.ogg', 50, 1)
 	var/damage = rand(5,10) //We're not as heavy as a MULE. Where it does 30-90 damage, we do 15-30 damage
 	H.apply_damage(damage, BRUTE, LIMB_CHEST)
 	H.apply_damage(damage, BRUTE, LIMB_LEFT_LEG)

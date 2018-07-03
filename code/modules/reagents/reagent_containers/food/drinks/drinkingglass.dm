@@ -596,6 +596,11 @@
 		reagents.add_reagent(COLA, 50)
 		on_reagent_change()
 
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/toxinsspecial/New()
+	..()
+	reagents.add_reagent(TOXINSSPECIAL, 30)
+	on_reagent_change()
+
 // Cafe Stuff. Mugs act the same as drinking glasses, but they don't break when thrown.
 
 /obj/item/weapon/reagent_containers/food/drinks/mug

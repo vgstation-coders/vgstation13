@@ -9,8 +9,8 @@
 
 	speak = list("Schweinhunds!","Can you feel ze Schadenfreude?","Ach, was ist los?")
 	speak_emote = list("says")
-	emote_hear = list("says")
-	emote_see = list("hums")
+	emote_hear = list("hums")
+	emote_see = list("goose-steps", "heils")
 	attacktext = "punches"
 	attack_sound = "punch"
 	speak_chance = 5
@@ -55,9 +55,9 @@
 			if (melee_damage_upper > 10)
 				overlays += icon('icons/mob/in-hand/right/swords_axes.dmi',"knifenazi")
 
-/mob/living/simple_animal/hostile/humanoid/nazi/Die()
+/mob/living/simple_animal/hostile/humanoid/nazi/death(var/gibbed = FALSE)
 	droploot()
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/humanoid/nazi/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
 	if(..())
@@ -309,8 +309,8 @@
 
 	speak = list("Die, Allied schweinhund!","Die Welt ist unser!","Guten Tag!" ,"Scheise!")
 	speak_emote = list("says")
-	emote_hear = list("says")
-	emote_see = list("hums")
+	emote_hear = list("hums")
+	emote_see = list("stomps")
 	attacktext = "crushes"
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	speak_chance = 20
@@ -363,8 +363,9 @@
 /mob/living/simple_animal/hostile/mechahitler/Process_Spacemove(var/check_drift = 0)
 	return 1
 
-/mob/living/simple_animal/hostile/mechahitler/Die()
+/mob/living/simple_animal/hostile/mechahitler/death(var/gibbed = FALSE)
 	set waitfor = 0
+	..(TRUE)
 	dir = 2
 	say("Eva, auf wiedersehen!")
 	ranged = 0

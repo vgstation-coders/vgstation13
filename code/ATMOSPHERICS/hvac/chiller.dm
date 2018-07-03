@@ -93,8 +93,7 @@
 	var/turf/simulated/L = loc
 	if(istype(L))
 		var/datum/gas_mixture/env = L.return_air()
-		var/transfer_moles = 0.25 * env.total_moles() / env.volume * CELL_VOLUME
-		var/datum/gas_mixture/removed = env.remove(transfer_moles)
+		var/datum/gas_mixture/removed = env.remove_volume(0.25 * CELL_VOLUME)
 		if(removed)
 			if(removed.temperature > (set_temperature + T0C))
 				var/air_heat_capacity = removed.heat_capacity()
@@ -102,8 +101,8 @@
 				//var/old_temperature = removed.temperature
 
 				if(combined_heat_capacity > 0)
-					var/combined_energy = set_temperature*cooling_power + air_heat_capacity*removed.temperature
-					removed.temperature = combined_energy/combined_heat_capacity
+					var/combined_energy = set_temperature * cooling_power + removed.thermal_energy()
+					removed.temperature = combined_energy / combined_heat_capacity
 				env.merge(removed)
 				return 1
 			env.merge(removed)

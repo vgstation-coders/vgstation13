@@ -53,6 +53,8 @@
 		qdel(reagents)
 	..()
 
+
+
 var/global/tracking_implants = list() //fuck me
 
 /obj/item/weapon/implant/tracking
@@ -101,7 +103,8 @@ Implant Specifics:<BR>"}
 	spawn(delay)
 		malfunction--
 
-//BS12 Explosive
+
+
 /obj/item/weapon/implant/explosive
 	name = "explosive implant"
 	desc = "A military grade micro bio-explosive. Highly dangerous."
@@ -202,6 +205,8 @@ Implant Specifics:<BR>"}
 /obj/item/weapon/implant/explosive/nuclear/emp_act(severity)
 	return
 
+
+
 /obj/item/weapon/implant/chem
 	name = "chem"
 	desc = "Injects things."
@@ -294,6 +299,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards Nanotrasen.</span>")
 	return 1
 
+
+
 /obj/item/weapon/implant/traitor
 	name = "Greytide Implant"
 	desc = "Greytide Station wide"
@@ -364,7 +371,6 @@ the implant may become unstable and either pre-maturely inject the subject or si
 <b>Integrity:</b> Implant can only be used three times before the nanobots are depleted."}
 		return dat
 
-
 /obj/item/weapon/implant/adrenalin/trigger(emote, mob/source as mob)
 	if (src.uses < 1)
 		return 0
@@ -377,11 +383,12 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 	return
 
-
 /obj/item/weapon/implant/adrenalin/implanted(mob/source)
 		source.mind.store_memory("A implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.", 0, 0)
 		to_chat(source, "The implanted freedom implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.")
 		return 1
+
+
 
 
 /obj/item/weapon/implant/death_alarm
@@ -466,6 +473,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	processing_objects.Add(src)
 	return 1
 
+
+
 /obj/item/weapon/implant/compressed
 	name = "compressed matter implant"
 	desc = "Based on compressed matter technology, can store a single item."
@@ -511,6 +520,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 /obj/item/weapon/implant/compressed/islegal()
 	return 0
+
+
 
 /obj/item/weapon/implant/cortical
 	name = "cortical stack"

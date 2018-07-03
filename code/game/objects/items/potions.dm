@@ -21,9 +21,9 @@
 	if(!full)
 		return
 	user.visible_message("<span class='danger'>\The [user] drinks \the [src].</span>", "<span class='notice'>You drink \the [src].</span>")
-	playsound(get_turf(src),'sound/items/uncorking.ogg', rand(10,50), 1)
+	playsound(src,'sound/items/uncorking.ogg', rand(10,50), 1)
 	spawn(6)
-		playsound(get_turf(src),'sound/items/drink.ogg', rand(10,50), 1)
+		playsound(src,'sound/items/drink.ogg', rand(10,50), 1)
 	imbibe(user)
 
 /obj/item/potion/update_icon()
@@ -56,7 +56,7 @@
 		user.visible_message("<span class='danger'>\The [user] attempts to feed \the [M] \the [src].</span>", "<span class='danger'>You attempt to feed \the [M] \the [src].</span>")
 		if(!do_mob(user, M))
 			return
-		playsound(get_turf(src),'sound/items/drink.ogg', rand(10,50), 1)
+		playsound(src,'sound/items/drink.ogg', rand(10,50), 1)
 		user.visible_message("<span class='danger'>\The [user] feeds \the [M] \the [src].</span>", "<span class='danger'>You feed \the [M] \the [src].</span>")
 
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fed [src.name] by [user.name] ([user.ckey])</font>")

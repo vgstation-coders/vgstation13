@@ -37,6 +37,9 @@
 						message_admins("<font color='red'><B>Notice: </B><font color='blue'><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has the same [matches] as [key_name_admin(M)] (no longer logged in). </font>", 1)
 						log_access("Notice: [key_name(src)] has the same [matches] as [key_name(M)] (no longer logged in).")
 
+// Do not call ..()
+// If you do so and the mob is in nullspace BYOND will attempt to move the mob a gorillion times
+// See http://www.byond.com/docs/ref/info.html#/mob/proc/Login and http://www.byond.com/forum/?post=2151126
 /mob/Login()
 	player_list |= src
 	update_Login_details()
@@ -60,14 +63,14 @@
 
 	regular_hud_updates()
 
+	update_action_buttons(TRUE)
+
 	if(round_end_info == "")
 		winset(client, "rpane.round_end", "is-visible=false")
 
 	delayNextMove(0)
 
 	change_sight(adding = (SEE_SELF|SEE_BLACKNESS))
-
-	..()
 
 	reset_view()
 

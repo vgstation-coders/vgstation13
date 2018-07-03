@@ -1,93 +1,93 @@
 /obj/item/ammo_casing/a357
 	desc = "A .357 bullet casing."
-	caliber = "357"
+	caliber = POINT357
 	projectile_type = "/obj/item/projectile/bullet"
 	w_type = RECYK_METAL
 
 /obj/item/ammo_casing/a50
 	desc = "A .50AE bullet casing."
-	caliber = ".50"
+	caliber = POINT50
 	projectile_type = "/obj/item/projectile/bullet"
 	w_type = RECYK_METAL
 
 /obj/item/ammo_casing/a418
 	desc = "A .418 bullet casing."
-	caliber = "357"
+	caliber = POINT357
 	projectile_type = "/obj/item/projectile/bullet/suffocationbullet"
 	w_type = RECYK_METAL
 
 
 /obj/item/ammo_casing/a75
 	desc = "A .75 bullet casing."
-	caliber = "75"
+	caliber = POINT75
 	projectile_type = "/obj/item/projectile/bullet/gyro"
 	w_type = RECYK_METAL
 
 
 /obj/item/ammo_casing/a666
 	desc = "A .666 bullet casing."
-	caliber = "357"
+	caliber = POINT357
 	projectile_type = "/obj/item/projectile/bullet/cyanideround"
 	w_type = RECYK_METAL
 
 
 /obj/item/ammo_casing/c38
 	desc = "A .38 bullet casing."
-	caliber = "38"
+	caliber = POINT38
 	projectile_type = "/obj/item/projectile/bullet/weakbullet"
 	w_type = RECYK_METAL
 
 /* Not entirely ready to be implemented yet. Get a server vote on bringing these in
 /obj/item/ammo_casing/c38/lethal
 	desc = "A .38 bullet casing. This is the lethal variant."
-	caliber = "38"
+	caliber = POINT38
 	projectile_type = "/obj/item/projectile/bullet" //HAHA, why is this a good idea
 	w_type = RECYK_METAL
 */
 
 /obj/item/ammo_casing/c9mm
 	desc = "A 9mm bullet casing."
-	caliber = "9mm"
+	caliber = MM9
 	projectile_type = "/obj/item/projectile/bullet/midbullet2"
 	w_type = RECYK_METAL
 
 /obj/item/ammo_casing/c45
 	desc = "A .45 bullet casing."
-	caliber = ".45"
+	caliber = POINT45
 	projectile_type = "/obj/item/projectile/bullet/fourtyfive"
 
 /obj/item/ammo_casing/c45/practice
 	desc = "A .45 practice bullet casing."
-	caliber = ".45"
+	caliber = POINT45
 	projectile_type = "/obj/item/projectile/bullet/fourtyfive/practice"
 	icon_state = "s-p-casing"
 
 /obj/item/ammo_casing/c45/rubber
 	desc = "A .45 rubber bullet casing."
-	caliber = ".45"
+	caliber = POINT45
 	projectile_type = "/obj/item/projectile/bullet/fourtyfive/rubber"
 	icon_state = "s-r-casing"
 
 /obj/item/ammo_casing/c380auto
 	desc = "A .380AUTO bullet casing."
-	caliber = ".380AUTO"
+	caliber = POINT380
 	projectile_type = "/obj/item/projectile/bullet/auto380"
 
 /obj/item/ammo_casing/c380auto/practice
 	desc = "A .380AUTO practice bullet casing."
-	caliber = ".380AUTO"
+	caliber = POINT380
 	projectile_type = "/obj/item/projectile/bullet/auto380/practice"
 	icon_state = "s-p-casing"
 
 /obj/item/ammo_casing/c380auto/rubber
 	desc = "A .380AUTO rubber bullet casing."
-	caliber = ".380AUTO"
+	caliber = POINT380
 	projectile_type = "/obj/item/projectile/bullet/auto380/rubber"
 	icon_state = "s-r-casing"
-	
+
 /obj/item/ammo_casing/a12mm
 	desc = "A 12mm bullet casing."
-	caliber = "12mm"
+	caliber = MM12
 	projectile_type = "/obj/item/projectile/bullet/midbullet"
 	w_type = RECYK_METAL
 
@@ -102,7 +102,7 @@
 	name = "shotgun shell"
 	desc = "A 12 gauge slug."
 	icon_state = "gshell"
-	caliber = "shotgun"
+	caliber = GAUGE12
 	projectile_type = "/obj/item/projectile/bullet"
 	starting_materials = list(MAT_IRON = 12500)
 	w_type = RECYK_METAL
@@ -117,7 +117,7 @@
 	name = "blank shell"
 	desc = "A blank shell.  Does not contain any projectile material."
 	icon_state = "blshell"
-	projectile_type = ""
+	projectile_type = "/obj/item/projectile/bullet/blank"
 	starting_materials = list(MAT_IRON = 250)
 	w_type = RECYK_METAL
 
@@ -162,13 +162,13 @@
 
 /obj/item/ammo_casing/a762
 	desc = "A 7.62 bullet casing."
-	caliber = "a762"
+	caliber = POINT762
 	projectile_type = "/obj/item/projectile/bullet"
 	w_type = RECYK_METAL
 
 /obj/item/ammo_casing/BMG50
 	desc = "A .50 BMG bullet casing."
-	caliber = ".50BMG"
+	caliber = BROWNING50
 	projectile_type = "/obj/item/projectile/bullet/hecate"
 	w_type = RECYK_METAL
 	icon_state = "l-casing"
@@ -182,7 +182,7 @@
 
 /obj/item/ammo_casing/a762x55
 	desc = "A 7.62x55mmR bullet casing."
-	caliber = "7.62x55"
+	caliber = POINT762X55
 	projectile_type = "/obj/item/projectile/bullet/a762x55"
 	w_type = RECYK_METAL
 	icon_state = "762x55-casing-live"

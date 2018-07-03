@@ -43,7 +43,7 @@
 /obj/effect/blob/factory/Destroy()
 	if(spores.len)
 		for(var/mob/living/simple_animal/hostile/blobspore/S in spores)
-			S.Die()
+			S.death()
 	if(!manual_remove && overmind)
 		to_chat(overmind,"<span class='warning'>A factory blob that you had created has been destroyed.</span> <b><a href='?src=\ref[overmind];blobjump=\ref[loc]'>(JUMP)</a></b>")
 		overmind.special_blobs -= src
@@ -112,9 +112,10 @@
 		return 1
 	return ..()
 
-/mob/living/simple_animal/hostile/blobspore/Die()
+/mob/living/simple_animal/hostile/blobspore/death(var/gibbed = FALSE)
+	..(TRUE) //Gibs regardless
 	var/sound = pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg')
-	playsound(get_turf(src), sound, 50, 1)
+	playsound(src, sound, 50, 1)
 	qdel(src)
 
 /mob/living/simple_animal/hostile/blobspore/Destroy()

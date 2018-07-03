@@ -224,6 +224,12 @@ var/const/POWER = 8
 	else
 		CRASH("[colour] is not a key in wires.")
 
+/datum/wires/proc/GetColour(var/index)
+	for(var/i in wires)
+		if(wires[i] == index)
+			return i
+	CRASH("[index] is not in wires.")
+
 //
 // Is Index/Colour Cut procs
 //
@@ -273,6 +279,13 @@ var/const/POWER = 8
 			PulseColour(colour)
 			holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire pulsed by \a [S] \ref[S] ([src.type])")
 			break
+
+/datum/wires/proc/SignalIndex(var/index)
+	if(IsIndexCut(index))
+		return
+	var/obj/item/device/assembly/signaler/S = GetAttached(GetColour(index))
+	if(S)
+		S.activate()
 
 
 //

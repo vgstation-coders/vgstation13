@@ -22,7 +22,7 @@ var/list/one_way_windows
 	var/ini_dir = null //This really shouldn't exist, but it does and I don't want to risk deleting it because it's likely mapping-related
 	var/d_state = WINDOWLOOSEFRAME //Normal windows have one step (unanchor), reinforced windows have three
 	var/shardtype = /obj/item/weapon/shard
-	var/sheettype = /obj/item/stack/sheet/glass/glass //Used for deconstruction
+	sheet_type = /obj/item/stack/sheet/glass/glass //Used for deconstruction
 	var/sheetamount = 1 //Number of sheets needed to build this window (determines how much shit is spawned via Destroy())
 	var/reinforced = 0 //Used for deconstruction steps
 	penetration_dampening = 1
@@ -66,6 +66,11 @@ var/list/one_way_windows
 /obj/structure/window/examine(mob/user)
 	..()
 	examine_health(user)
+
+/obj/structure/window/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		return
+	rotate()
 
 /obj/structure/window/proc/examine_health(mob/user)
 	if(!anchored)
@@ -161,7 +166,7 @@ var/list/one_way_windows
 		if(O.onBuckledUserKick(H, src))
 			return //don't return 1! we will do the normal "touch" action if so!
 
-	playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
+	playsound(src, 'sound/effects/glassknock.ogg', 100, 1)
 
 	H.do_attack_animation(src, H)
 	H.visible_message("<span class='danger'>\The [H] kicks \the [src].</span>", \
@@ -227,7 +232,7 @@ var/list/one_way_windows
 	else if(usr.a_intent == I_HURT)
 		user.do_attack_animation(src, user)
 		user.delayNextAttack(10)
-		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
+		playsound(src, 'sound/effects/glassknock.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] bangs against \the [src]!</span>", \
 		"<span class='warning'>You bang against \the [src]!</span>", \
 		"You hear banging.")
@@ -235,7 +240,7 @@ var/list/one_way_windows
 	//Knock against it
 	else
 		user.delayNextAttack(10)
-		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 50, 1)
+		playsound(src, 'sound/effects/glassknock.ogg', 50, 1)
 		user.visible_message("<span class='notice'>[user] knocks on \the [src].</span>", \
 		"<span class='notice'>You knock on \the [src].</span>", \
 		"You hear knocking.")
@@ -463,7 +468,7 @@ var/list/one_way_windows
 							playsound(src, 'sound/items/Welder.ogg', 100, 1)
 							user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
 							"<span class='notice'>You disassemble \the [src].</span>")
-							drop_stack(sheettype, get_turf(src), sheetamount, user)
+							drop_stack(sheet_type, get_turf(src), sheetamount, user)
 							qdel(src)
 							return
 					else
@@ -493,7 +498,7 @@ var/list/one_way_windows
 					playsound(src, 'sound/items/Welder.ogg', 100, 1)
 					user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
 					"<span class='notice'>You disassemble \the [src].</span>")
-					drop_stack(sheettype, get_turf(src), sheetamount, user)
+					drop_stack(sheet_type, get_turf(src), sheetamount, user)
 					Destroy()
 					return
 			else
@@ -561,7 +566,7 @@ var/list/one_way_windows
 	update_nearby_icons()
 	if(brokenup) //If the instruction we were sent clearly states we're breaking the window, not deleting it !
 		if(loc)
-			playsound(get_turf(src), "shatter", 70, 1)
+			playsound(src, "shatter", 70, 1)
 		spawnBrokenPieces()
 	if(one_way)
 		one_way_windows.Remove(src)
@@ -633,7 +638,7 @@ var/list/one_way_windows
 	name = "reinforced window"
 	desc = "A window with a rod matrice. It looks more solid than the average window."
 	icon_state = "rwindow"
-	sheettype = /obj/item/stack/sheet/glass/rglass
+	sheet_type = /obj/item/stack/sheet/glass/rglass
 	health = 40
 	d_state = WINDOWSECURE
 	reinforced = 1
@@ -649,7 +654,7 @@ var/list/one_way_windows
 	desc = "A window made out of a plasma-silicate alloy. It looks insanely tough to break and burn through."
 	icon_state = "plasmawindow"
 	shardtype = /obj/item/weapon/shard/plasma
-	sheettype = /obj/item/stack/sheet/glass/plasmaglass
+	sheet_type = /obj/item/stack/sheet/glass/plasmaglass
 	health = 120
 	penetration_dampening = 5
 
@@ -662,9 +667,15 @@ var/list/one_way_windows
 	desc = "A window made out of a plasma-silicate alloy and a rod matrice. It looks hopelessly tough to break and is most likely nigh fireproof."
 	icon_state = "plasmarwindow"
 	shardtype = /obj/item/weapon/shard/plasma
-	sheettype = /obj/item/stack/sheet/glass/plasmarglass
+	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
 	penetration_dampening = 7
+
+
+// Used on Packed ; smartglassified roundstart
+/obj/structure/window/reinforced/plasma/interogation_room/initialize()
+	smartwindow = new(src)
+	smartwindow.id_tag = "InterogationRoomIDTag"
 
 /obj/structure/window/reinforced/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	return
@@ -675,7 +686,7 @@ var/list/one_way_windows
 	desc = "A window with a rod matrice. Its surface is completely tinted, making it opaque. Why not a wall ?"
 	icon_state = "twindow"
 	opacity = 1
-	sheettype = /obj/item/stack/sheet/glass/rglass //A glass type for this window doesn't seem to exist, so here's to you
+	sheet_type = /obj/item/stack/sheet/glass/rglass //A glass type for this window doesn't seem to exist, so here's to you
 
 /obj/structure/window/reinforced/tinted/frosted
 
@@ -683,7 +694,7 @@ var/list/one_way_windows
 	desc = "A window with a rod matrice. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
 	icon_state = "fwindow"
 	health = 30
-	sheettype = /obj/item/stack/sheet/glass/rglass //Ditto above
+	sheet_type = /obj/item/stack/sheet/glass/rglass //Ditto above
 
 /obj/structure/window/send_to_past(var/duration)
 	..()

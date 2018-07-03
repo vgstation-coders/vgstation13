@@ -114,7 +114,7 @@
 				M.take_organ_damage(2) // Was 5 -- TLE
 				M.visible_message("<span class='warning'>[M] slips on the floor!</span>", \
 				"<span class='warning'>You slip on the floor!</span>")
-				playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
+				playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 				M.Knockdown(10)
 
 			if(3) // Ice
@@ -122,3 +122,10 @@
 					step(M, M.dir)
 					M.visible_message("<span class='warning'>[M] slips on the icy floor!</span>", \
 					"<span class='warning'>You slip on the icy floor!</span>")
+
+	if(isrobot(AM) && wet == 1) //Only exactly water makes borgs glitch
+		var/mob/living/silicon/robot/R = AM
+		if(R.Slip(5,3))
+			//Don't step forward as a robot, we're not slipping just glitching.
+			R.visible_message("<span class='warning'>[R] short circuits on the water!</span>", \
+					"<span class='warning'>You short circuit on the water!</span>")

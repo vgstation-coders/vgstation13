@@ -17,6 +17,7 @@
 	response_disarm = "shoves"
 	response_harm = "strikes"
 	status_flags = 0
+	size = SIZE_BIG
 	a_intent = I_HURT
 	var/throw_message = "bounces off of"
 	var/icon_aggro = null // for swapping to when we get aggressive
@@ -219,10 +220,10 @@ obj/item/asteroid/basilisk_hide/New()
 	visible_message("<span class='danger'>The [P.name] was repelled by [src.name]'s girth!</span>")
 	return
 
-/mob/living/simple_animal/hostile/asteroid/goldgrub/Die()
+/mob/living/simple_animal/hostile/asteroid/goldgrub/death(var/gibbed = FALSE)
 	alerted = 0
 	Reward()
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/asteroid/hivelord
 	name = "hivelord"
@@ -264,9 +265,9 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/hivelord/AttackingTarget()
 	OpenFire()
 
-/mob/living/simple_animal/hostile/asteroid/hivelord/Die()
+/mob/living/simple_animal/hostile/asteroid/hivelord/death(var/gibbed = FALSE)
 	mouse_opacity = 1
-	..()
+	..(gibbed)
 	update_icons()
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/update_icons()
@@ -313,7 +314,7 @@ obj/item/asteroid/basilisk_hide/New()
 
 /obj/item/asteroid/hivelord_core/process()
 	if(reagents && reagents.has_reagent(FROSTOIL, 5))
-		playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
+		playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
 		desc = "All that remains of a hivelord, it seems to be what allows it to break pieces of itself off without being hurt. It is covered in a thin coat of frost."
 		processing_objects.Remove(src)
 		return
@@ -371,7 +372,7 @@ obj/item/asteroid/basilisk_hide/New()
 	else
 		to_chat(user, "<span class='notice'>You chomp into \the [src], barely managing to hold it down, but feel amazingly refreshed in mere moments.</span>")
 
-	playsound(get_turf(src), 'sound/items/eatfood.ogg', rand(10, 50), 1)
+	playsound(src, 'sound/items/eatfood.ogg', rand(10, 50), 1)
 	target.revive()
 
 	user.drop_from_inventory(src)
@@ -407,7 +408,8 @@ obj/item/asteroid/basilisk_hide/New()
 	spawn(100)
 		returnToPool(src)
 
-/mob/living/simple_animal/hostile/asteroid/hivelordbrood/Die()
+/mob/living/simple_animal/hostile/asteroid/hivelordbrood/death(var/gibbed = FALSE)
+	..(TRUE)
 	returnToPool(src)
 
 /mob/living/simple_animal/hostile/asteroid/goliath
@@ -510,3 +512,111 @@ obj/item/asteroid/basilisk_hide/New()
 			else
 				to_chat(user, "<span class='info'>You can't improve [C] any further.</span>")
 	return
+
+/mob/living/simple_animal/hostile/asteroid/magmaw
+	name = "magmaw"
+	desc = "A living furnace. These things are drawn to crystallized plasma, which they feast upon to stoke their internal fires."
+	icon_state = "lavagoop"
+	icon_living = "lavagoop"
+	icon_aggro = "lavagoop"
+	icon_attack = "lavagoop_attack"
+	icon_attack_time = 7
+	icon_dying = "lavagoop_dying"
+	icon_dying_time = 19
+	icon_dead = "lavagoop_dead"
+	attack_sound = 'sound/weapons/bite.ogg'
+	search_objects = 3
+	health = 125
+	maxHealth = 125
+	melee_damage_lower = 10
+	melee_damage_upper = 25
+	meat_amount = 0
+	vision_range = 4
+	faction = "neutral"
+	maxbodytemp = ARBITRARILY_PLANCK_NUMBER
+	var/fire_time
+	var/fire_extremity
+
+/mob/living/simple_animal/hostile/asteroid/magmaw/fire_act(var/datum/gas_mixture/air, var/exposed_temperature, var/exposed_volume)
+	fire_resurrect(exposed_temperature)
+
+/mob/living/simple_animal/hostile/asteroid/magmaw/IgniteMob()
+	fire_resurrect(PLASMA_MINIMUM_BURN_TEMPERATURE)
+
+/mob/living/simple_animal/hostile/asteroid/magmaw/FireBurn(var/firelevel, var/last_temperature, var/pressure)
+	fire_resurrect(last_temperature)
+
+/mob/living/simple_animal/hostile/asteroid/magmaw/proc/fire_resurrect(var/temperature)
+	if(isDead() && temperature > PLASMA_MINIMUM_BURN_TEMPERATURE)
+		resurrect()
+		revive()
+		visible_message("<span class = 'warning'>\The [src] reignites!</span>")
+
+
+/mob/living/simple_animal/hostile/asteroid/magmaw/adjustFireLoss()
+	return //We're a magma slime. We ARE FIRE.
+
+
+/mob/living/simple_animal/hostile/asteroid/magmaw/Life()
+	if(!..())
+		return
+	var/datum/gas_mixture/environment
+
+	if(isturf(loc))
+		var/turf/T = loc
+		environment = T.return_air()
+
+	if(environment)
+		environment.add_thermal_energy(50000)
+
+	if(world.time > fire_time)
+		return
+
+	switch(fire_extremity)
+		if(1) // Fire spout
+			generic_projectile_fire(get_ranged_target_turf(src, dir, 10), src, /obj/item/projectile/fire_breath, 'sound/weapons/flamethrower.ogg')
+			if(environment)
+				environment.add_thermal_energy(350000)
+		if(2) //Fire blast
+			new /obj/effect/ring_of_fire(get_turf(src), range(src,4)-range(src,3), 3 SECONDS)
+			if(environment)
+				environment.add_thermal_energy(700000)
+
+/mob/living/simple_animal/hostile/asteroid/magmaw/CanAttack(var/atom/the_target)
+	if(world.time < fire_time)
+		return
+	if(istype(the_target, /obj/item/weapon/ore/plasma) || istype(the_target, /obj/item/stack/sheet/mineral/plasma))
+		return 1
+	if(istype(the_target, /turf/unsimulated/mineral))
+		var/turf/unsimulated/mineral/M = the_target
+		if(M.mineral && istype(M.mineral.ore, /obj/item/weapon/ore/plasma))
+			return 1
+	return 0
+
+/mob/living/simple_animal/hostile/asteroid/magmaw/EscapeConfinement()
+	..()
+	if(world.time < fire_time) //Not hungry enough to go smashing up asteroids yet
+		return
+	for(var/turf/unsimulated/mineral/M in range(src, 1))
+		if(prob(15))
+			UnarmedAttack(M, Adjacent(M))
+
+/mob/living/simple_animal/hostile/asteroid/magmaw/UnarmedAttack(var/atom/A, var/proximity, var/params)
+	if(proximity == 0)
+		return
+	var/is_ore = istype(A, /obj/item/weapon/ore/plasma)
+	var/is_sheet = istype(A, /obj/item/stack/sheet/mineral/plasma)
+	if(is_ore || is_sheet)
+		visible_message("<span class = 'warning'>\The [src] eats \the [A]!</span>")
+		if(is_ore)
+			fire_time = world.time + 25 SECONDS
+			fire_extremity = 1
+		else if(is_sheet)
+			fire_time = world.time + 90 SECONDS
+			fire_extremity = 2
+		qdel(A)
+		return
+	if(istype(A,/turf/unsimulated/mineral))
+		var/turf/unsimulated/mineral/M = A
+		M.GetDrilled(0)
+	return ..()

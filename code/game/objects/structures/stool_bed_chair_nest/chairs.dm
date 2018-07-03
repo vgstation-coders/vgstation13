@@ -47,7 +47,7 @@
 		var/obj/item/assembly/shock_kit/SK = W
 		if(user.drop_item(W))
 			var/obj/structure/bed/chair/e_chair/E = new /obj/structure/bed/chair/e_chair(src.loc)
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			E.dir = dir
 			E.part = SK
 			SK.forceMove(E)
@@ -56,7 +56,7 @@
 			return
 
 	if(iswrench(W))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		drop_stack(sheet_type, loc, sheet_amt, user)
 		qdel(src)
 		return
@@ -130,6 +130,8 @@
 
 	else
 		buckle_mob(M, user)
+	if(material_type)
+		material_type.on_use(src,M,user)
 
 // Chair types
 /obj/structure/bed/chair/wood

@@ -393,7 +393,8 @@ Code:
 					var/list/chg = list("N","C","F")
 
 					for(var/obj/machinery/power/apc/A in L)
-						menu += copytext(add_tspace(A.areaMaster.name, 30), 1, 30)
+						var/area/APC_area = get_area(A)
+						menu += copytext(add_tspace(APC_area.name, 30), 1, 30)
 						menu += " [S[A.equipment+1]] [S[A.lighting+1]] [S[A.environ+1]] [add_lspace(A.lastused_total, 6)]  [A.cell ? "[add_lspace(round(A.cell.percent()), 3)]% [chg[A.charging+1]]" : "  N/C"]<BR>"
 
 				menu += "</FONT></PRE>"

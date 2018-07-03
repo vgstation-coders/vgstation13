@@ -1,6 +1,6 @@
 //Corgi
 /mob/living/simple_animal/corgi
-	name = "\improper corgi"
+	name = "corgi"
 	real_name = "corgi"
 
 	desc = "It's a corgi."
@@ -34,7 +34,7 @@
 
 	var/obj/item/inventory_head
 	var/obj/item/inventory_back
-	var/facehugger
+	var/obj/item/clothing/mask/facehugger/facehugger
 	var/list/spin_emotes = list("dances around","chases its tail")
 //	colourmatrix = list(1,0.0,0.0,0,\
 						0,0.5,0.5,0,\
@@ -133,6 +133,12 @@
 					M.show_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
 			if(health>0 && prob(15))
 				emote("looks at [user] with [pick("an amused","an annoyed","a confused","a resentful", "a happy", "an excited")] expression")
+			return
+	else
+		var/obj/item/clothing/mask/facehugger/F = O
+		if(istype(F))
+			user.drop_from_inventory(F)
+			F.Attach(src)
 			return
 	..()
 
@@ -640,3 +646,74 @@
 		to_chat(usr, "<span class='warning'>[src] won't wear that!</span>")
 		return
 	..()
+
+/obj/item/weapon/reagent_containers/glass/replenishing/rescue
+	name = "rescue barrel"
+	reagent_list = list(LEPORAZINE)
+
+/mob/living/simple_animal/corgi/saint
+	name = "saint corgi"
+	real_name = "saint corgi"
+	desc = "It's a saint bernard corgi mix breed. It has a tiny rescue barrel strapped around his collar to warm up travelers."
+	icon_state = "saint_corgi"
+	icon_living = "saint_corgi"
+	icon_dead = "saint_corgi_dead"
+	health = 60
+	maxHealth = 60
+	minbodytemp = 0
+	var/turns_since_scan = 0
+	var/mob/living/carbon/victim = null
+	can_breed = FALSE //tfw no gf
+	var/obj/item/weapon/reagent_containers/glass/replenishing/rescue/barrel = null
+
+/mob/living/simple_animal/corgi/saint/death(var/gibbed = FALSE)
+	if(barrel)
+		qdel(barrel)
+	..(gibbed)
+
+/mob/living/simple_animal/corgi/saint/Topic(href, href_list)
+	if(href_list["remove_inv"] || href_list["add_inv"])
+		to_chat(usr, "<span class='warning'>[src] already has a rescue barrel!</span>")
+		return
+	..()
+
+/mob/living/simple_animal/corgi/saint/proc/rescue(var/mob/M)
+	if(!M || !Adjacent(M))
+		return
+	if(!barrel)
+		barrel = new /obj/item/weapon/reagent_containers/glass/replenishing/rescue(src)
+	barrel.attack(M,src)
+
+/mob/living/simple_animal/corgi/saint/proc/IsVictim(var/mob/M)
+	if(iscarbon(M))
+		var/mob/living/carbon/victim = M
+		if(victim.undergoing_hypothermia() && !victim.isDead())
+			return TRUE
+	return FALSE
+
+/mob/living/simple_animal/corgi/saint/UnarmedAttack(var/atom/A)
+	if(client && IsVictim(A))
+		rescue(A)
+		return
+	return ..()
+
+/mob/living/simple_animal/corgi/saint/Life()
+	if(timestopped)
+		return FALSE //under effects of time magick
+	..()
+
+	if(!incapacitated() && !resting && !locked_to && !client)
+		var/list/can_see() = view(src, 6) //Might need tweaking.
+		if(victim && (!IsVictim(victim) || !(victim.loc in can_see)))
+			victim = null
+			stop_automated_movement = FALSE
+		if(!victim)
+			for(var/mob/living/carbon/M in can_see)
+				if(IsVictim(M))
+					victim = M //Oh shit.
+					break
+		if(victim)
+			stop_automated_movement = TRUE
+			step_towards(src,victim)
+			if(Adjacent(victim) && IsVictim(victim)) //Seriously don't try to rescue the dead.
+				rescue(victim)

@@ -251,6 +251,7 @@
 /mob/living/simple_animal/hostile/proc/LoseAggro()
 	stop_automated_movement = 0
 	vision_range = idle_vision_range
+	search_objects = initial(search_objects)
 
 /mob/living/simple_animal/hostile/proc/LoseTarget()
 	stance = HOSTILE_STANCE_IDLE
@@ -265,9 +266,9 @@
 
 //////////////END HOSTILE MOB TARGETTING AND AGGRESSION////////////
 
-/mob/living/simple_animal/hostile/Die()
+/mob/living/simple_animal/hostile/death(var/gibbed = FALSE)
 	LoseAggro()
-	..()
+	..(gibbed)
 	walk(src, 0)
 
 /mob/living/simple_animal/hostile/inherit_mind(mob/living/simple_animal/from)
@@ -299,6 +300,8 @@
 		ranged_cooldown = ranged_cooldown_cap
 		if(ranged_message)
 			visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
+		if(ckey)
+			add_attacklogs(src, target, "[ranged_message ? ranged_message : "shot"] at")
 		if(casingtype)
 			new casingtype(get_turf(src),1)// empty casing
 
@@ -374,7 +377,9 @@
 				 || istype(A, /obj/structure/table)\
 				 || istype(A, /obj/structure/grille)\
 				 || istype(A, /obj/structure/rack)\
-				 || istype(A, /obj/machinery/door/window)) && Adjacent(A))
+				 || istype(A, /obj/machinery/door/window)\
+				 || istype(A, /obj/item/tape)\
+				 || istype(A, /obj/item/toy/balloon/inflated/decoy)) && Adjacent(A))
 					UnarmedAttack(A)
 	return
 

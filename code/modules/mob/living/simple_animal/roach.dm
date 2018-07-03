@@ -22,6 +22,8 @@
 	response_disarm = "pokes"
 	response_harm   = "stomps on"
 
+	faction = "roach"
+
 	density = 0
 
 	minbodytemp = 273.15		//Can't survive at below 0 C
@@ -63,7 +65,7 @@
 	maxHealth = rand(1,6)
 	health = maxHealth
 
-/mob/living/simple_animal/cockroach/Die(var/gore = 1)
+/mob/living/simple_animal/cockroach/death(var/gore = 1)
 	if(gore)
 
 		var/obj/effect/decal/remains = new /obj/effect/decal/cleanable/cockroach_remains(src.loc)
@@ -74,7 +76,7 @@
 		if(flying)
 			animate(remains, pixel_y = pixel_y - 8 * PIXEL_MULTIPLIER, 5, 1) //Fall down gracefully
 
-		playsound(get_turf(src), pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat
+		playsound(src, pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat
 
 		..()
 
@@ -98,7 +100,7 @@
 		return
 
 	if(prob(15))
-		Die(gore = 1)
+		death(gore = 1)
 
 /mob/living/simple_animal/cockroach/wander_move(turf/dest)
 	..()
@@ -259,7 +261,7 @@
 		if(P.use(1))
 			to_chat(user, "You spray \the [src] with \the [P].")
 			playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)
-			Die(gore = 0)
+			death(gore = 0)
 	else
 		return ..()
 
@@ -280,16 +282,40 @@
 
 	switch(id)
 		if(TOXIN)
-			Die(gore = 0)
+			death(gore = 0)
+		if(MUTAGEN)
+			if(prob(10)) //10% chance to become a big roach
+
+				//Unless there are already a lot of big roaches
+				if(animal_count[/mob/living/simple_animal/hostile/bigroach] >= ANIMAL_CHILD_CAP)
+					death(gore = 0)
+					return
+
+				visible_message("<span class='danger'>\The [src] evolves!</span>")
+				message_admins("Created a mutated cockroach at [formatJumpTo(get_turf(src))]; usr = [key_name(usr)]")
+				grow_up(/mob/living/simple_animal/hostile/bigroach)
+			else if(prob(20)) //After that, 20% chance to die
+				death(gore = 0)
+			else if(prob(0.5)) //After that, 0.5% chance to become a roach queen
+
+				//Unless there is already a roach queen nearby
+				if(locate(/mob/living/simple_animal/hostile/bigroach/queen) in orange(world.view, src))
+					death(gore = 0)
+					return
+
+				playsound(src, 'sound/effects/lingextends.ogg', 100)
+				visible_message("<span class='userdanger'>\The [src] rapidly evolves, twisting and deforming into something terrifying before your own very eyes!</span>")
+				message_admins("Created a mutated cockroach matriarch at [formatJumpTo(get_turf(src))]; usr = [key_name(usr)]")
+				grow_up(/mob/living/simple_animal/hostile/bigroach/queen)
 
 /mob/living/simple_animal/cockroach/bite_act(mob/living/carbon/human/H)
 	if(size >= H.size)
 		return
 
-	playsound(get_turf(H),'sound/items/eatfood.ogg', rand(10,50), 1)
+	playsound(H,'sound/items/eatfood.ogg', rand(10,50), 1)
 	H.visible_message("<span class='notice'>[H] eats \the [src]!</span>", "<span class='notice'>You eat \the [src]!</span>")
 
-	Die(gore = 1)
+	death(gore = 1)
 	qdel(src)
 
 	H.vomit()

@@ -109,16 +109,16 @@
 
 	usr.set_machine(src)
 	if(href_list["eject"])
-		for(var/obj/item/weapon/virusdish/O in src.contents)
-			if("[O.virus2.uniqueID]" == href_list["name"])
-				O.forceMove(src.loc)
-				if(toscan["O"])
-					toscan -= O
+		var/obj/item/weapon/virusdish/O = locate(href_list["dishI"])
+		if(O && O in contents)
+			O.forceMove(loc)
+			if(O in toscan)
+				toscan -= O
 		src.updateUsrDialog()
 	else if(href_list["print"])
-		for(var/obj/item/weapon/virusdish/O in src.contents)
-			if("[O.virus2.uniqueID]" == href_list["name"])
-				PrintPaper(O)
+		var/obj/item/weapon/virusdish/O = locate(href_list["dishI"])
+		if(O && O in contents)
+			PrintPaper(O)
 
 /obj/machinery/disease2/diseaseanalyser/attack_hand(var/mob/user as mob)
 	. = ..()
@@ -148,8 +148,8 @@
 			if(B == dish)
 				dat += "<td></td>"
 			else
-				dat += "<td><A href='?src=\ref[src];eject=1;name=["[ID]"];'>Eject</a>"
-				dat += "<br>[B.analysed ? "<A href='?src=\ref[src];print=1;name=["[ID]"];'>Print</a>" : ""]</td>"
+				dat += "<td><A href='?src=\ref[src];eject=1;dishI=\ref[B];'>Eject</a>"
+				dat += "<br>[B.analysed ? "<A href='?src=\ref[src];print=1;dishI=\ref[B];'>Print</a>" : ""]</td>"
 			dat += "</tr>"
 		dat += "</table>"
 	dat = jointext(dat,"")

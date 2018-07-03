@@ -90,7 +90,7 @@
 		add_logs(user, M, "injected [transferred]u [reagent_ids[mode]] with \the [src]", admin = (user.ckey && M.ckey)) //We don't care about monkeymen, right?
 
 /obj/item/weapon/reagent_containers/borghypo/attack_self(mob/user as mob)
-	playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0) // change the mode
+	playsound(src, 'sound/effects/pop.ogg', 50, 0) // change the mode
 
 	if(++mode > reagent_list.len)
 		mode = 1

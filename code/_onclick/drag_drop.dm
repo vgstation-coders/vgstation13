@@ -17,6 +17,10 @@
 /atom/proc/MouseDrop_T(atom/dropping, mob/user)
 	return
 
+/obj/MouseDrop_T(atom/dropping, mob/user)
+	if(material_type)
+		material_type.on_use(src, dropping, user)
+
 /atom/proc/can_MouseDrop(atom/otheratom, mob/user = usr)
 	if(!user || !otheratom)
 		return FALSE

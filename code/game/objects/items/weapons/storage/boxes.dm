@@ -458,46 +458,51 @@
 /obj/item/weapon/storage/box/lethalshells
 	name = "lethal shells"
 	icon_state = "lethal shells"
+	storage_slots = 16
 
 /obj/item/weapon/storage/box/lethalshells/New()
 	..()
-	for(var/i=0,i<15,i++)
+	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun(src)
 
 /obj/item/weapon/storage/box/beanbagshells
 	name = "bean bag shells"
 	icon_state = "bean bag shells"
+	storage_slots = 16
 
 /obj/item/weapon/storage/box/beanbagshells/New()
 	..()
-	for(var/i=0,i<15,i++)
+	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/beanbag(src)
 
 /obj/item/weapon/storage/box/stunshells
 	name = "stun shells"
 	icon_state = "stun shells"
+	storage_slots = 16
 
 /obj/item/weapon/storage/box/stunshells/New()
 	..()
-	for(var/i=0,i<15,i++)
+	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/stunshell(src)
 
 /obj/item/weapon/storage/box/dartshells
 	name = "shotgun darts"
 	icon_state = "dart shells"
+	storage_slots = 16
 
 /obj/item/weapon/storage/box/dartshells/New()
 	..()
-	for(var/i=0,i<15,i++)
+	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/dart(src)
 
 /obj/item/weapon/storage/box/buckshotshells
 	name = "buckshot shells"
 	icon_state = "lethal shells"
+	storage_slots = 16
 
 /obj/item/weapon/storage/box/buckshotshells/New()
 	..()
-	for(var/i=0,i<15,i++)
+	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/buckshot(src)
 
 /obj/item/weapon/storage/box/labels

@@ -219,6 +219,10 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/is_open_container()
 	return flags & OPENCONTAINER
 
+// For when we want an open container that doesn't show its reagents on examine
+/atom/proc/hide_own_reagents()
+	return FALSE
+
 // As a rule of thumb, should smoke be able to pop out from inside this object?
 // Currently only used for chemical reactions, see Chemistry-Recipes.dm
 /atom/proc/is_airtight()
@@ -240,6 +244,7 @@ var/global/list/ghdel_profiling = list()
 	return
 
 /atom/proc/emp_act(var/severity)
+	set waitfor = FALSE
 	return
 
 /atom/proc/kick_act(mob/living/carbon/human/user) //Called when this atom is kicked. If returns 1, normal click action will be performed after calling this (so attack_hand() in most cases)
@@ -399,7 +404,7 @@ its easier to just keep the beam vertical.
 
 //Woo hoo. Overtime
 //All atoms
-/atom/proc/examine(mob/user, var/size = "", var/show_name = TRUE)
+/atom/proc/examine(mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE)
 	//This reformat names to get a/an properly working on item descriptions when they are bloody
 	var/f_name = "\a [src]."
 	if(src.blood_DNA && src.blood_DNA.len)
@@ -410,11 +415,11 @@ its easier to just keep the beam vertical.
 		f_name += "<span class='danger'>blood-stained</span> [name]!"
 
 	if(show_name)
-		to_chat(user, "[bicon(src)] That's [f_name]" + size)
+		to_chat(user, "[show_icon ? bicon(src) : ""] That's [f_name]" + size)
 	if(desc)
 		to_chat(user, desc)
 
-	if(reagents && is_open_container() && !ismob(src)) //is_open_container() isn't really the right proc for this, but w/e
+	if(reagents && is_open_container() && !ismob(src) && !hide_own_reagents()) //is_open_container() isn't really the right proc for this, but w/e
 		if(get_dist(user,src) > 3)
 			to_chat(user, "<span class='info'>You can't make out the contents.</span>")
 		else
@@ -649,7 +654,7 @@ its easier to just keep the beam vertical.
 		return
 	if(isnull(M.key))
 		return
-	if (!( src.flags ) & FPRINT)
+	if (!(src.flags & FPRINT))
 		return
 	if (ishuman(M))
 		//Add the list if it does not exist.
@@ -859,6 +864,9 @@ its easier to just keep the beam vertical.
 /atom/proc/acidable()
 	return 0
 
+/atom/proc/isacidhardened()
+	return FALSE
+
 /atom/proc/holomapAlwaysDraw()
 	return 1
 
@@ -901,3 +909,6 @@ its easier to just keep the beam vertical.
 	for(var/client/C in clients)
 		if(uppertext(C.ckey) == uppertext(fingerprintslast))
 			return C.mob
+
+/atom/proc/initialize()
+	return

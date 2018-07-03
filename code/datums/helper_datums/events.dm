@@ -10,6 +10,12 @@
 	..()
 	events = new
 
+/datum/events/Destroy()
+	for(var/datum/event/E in events)
+		qdel(E)
+	events = null
+	..()
+
 /datum/events/proc/addEventType(event_type as text)
 	if(!(event_type in events) || !islist(events[event_type]))
 		events[event_type] = list()
@@ -58,6 +64,10 @@
 	listener = tlistener
 	proc_name = tprocname
 	return ..()
+
+/datum/event/Destroy()
+	listener = null
+	..()
 
 /datum/event/proc/Fire()
 //	to_chat(world, "Event fired")

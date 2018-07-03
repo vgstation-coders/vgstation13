@@ -222,7 +222,7 @@
 	var/obj/item/I = get_held_item_by_index(GRASP_LEFT_HAND)
 	if(I && I.is_visible())
 		var/t_state = I.item_state
-		var/t_inhand_states = I.inhand_states["right_hand"]
+		var/t_inhand_states = I.inhand_states["left_hand"]
 		if(!t_state)
 			t_state = I.icon_state
 		var/image/IM = image("icon" = t_inhand_states, "icon_state" = t_state)

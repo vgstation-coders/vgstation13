@@ -465,7 +465,7 @@
 			usr.seer = 1
 		return
 	usr.say("Rash'tla sektath mal[pick("'","`")]zua. Zasan therium vivira. Itonis al'ra matum!")
-	usr.show_message("\<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>", 1, "<span class='warning'>You hear a faint fizzle.</span>", 2)
+	usr.show_message("<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>", 1, "<span class='warning'>You hear a faint fizzle.</span>", 2)
 	to_chat(usr, "<span class='notice'>You remembered the words correctly, but the rune isn't reacting. Maybe you should position yourself differently.</span>")
 
 /////////////////////////////////////////EIGHTH RUNE
@@ -487,8 +487,8 @@
 					M.ghostize(1)	//kick them out of their body
 				break
 	if(!corpse_to_raise)
-		if (ticker.rune_controller.revive_counter)
-			to_chat(usr, "<span class='notice'>Enough lifeforce haunts this place to return [ticker.rune_controller.revive_counter] of ours to the mortal plane.</span>")
+		if (cult_round && cult_round.revivecounter)
+			to_chat(usr, "<span class='notice'>Enough lifeforce haunts this place to return [cult_round.revivecounter] of ours to the mortal plane.</span>")
 		if(is_sacrifice_target)
 			to_chat(usr, "<span class='warning'>The Geometer of blood wants this mortal for himself.</span>")
 		return fizzle()
@@ -512,7 +512,7 @@
 								body_to_sacrifice = N
 								break find_sacrifice
 
-	if(!body_to_sacrifice && !ticker.rune_controller.revive_counter)
+	if(!body_to_sacrifice && (!cult_round || !cult_round.revivecounter))
 		if (is_sacrifice_target)
 			to_chat(usr, "<span class='warning'>The Geometer of blood wants that corpse for himself.</span>")
 		else
@@ -779,6 +779,7 @@
 			imbued_from = R
 			break
 	if (imbued_from)
+		T.uses = talisman_charges(T.imbue)
 		for (var/mob/V in viewers(src))
 			V.show_message("<span class='warning'>The runes turn into dust, which then forms into an arcane image on the paper.</span>", 1)
 		usr.say("H'drak v[pick("'","`")]loso, mir'kanas verbot!")
@@ -891,7 +892,8 @@
 						if(M.mind)				//living players
 							ritualresponse += "The Geometer of Blood gladly accepts this sacrifice."
 							satisfaction = 100
-							R.revive_counter ++
+							if(cult_round)
+								cult_round.revivecounter += 1
 						else					//living NPCs
 							ritualresponse += "The Geometer of Blood accepts this being in sacrifice. Somehow you get the feeling that beings with souls would make a better offering."
 							satisfaction = 50
@@ -904,7 +906,8 @@
 					if(M.mind)					//dead players
 						ritualresponse += "The Geometer of Blood accepts this sacrifice."
 						satisfaction = 50
-						R.revive_counter ++
+						if(cult_round)
+							cult_round.revivecounter += 1
 					else						//dead NPCs
 						ritualresponse += "The Geometer of Blood accepts your meager sacrifice."
 						satisfaction = 10
@@ -1133,8 +1136,9 @@
 			var/obj/machinery/dna_scannernew/dna_scannernew = cultist.loc
 			if (dna_scannernew.locked)
 				dna_scannernew.locked = 0
+		var/rune_damage = 20 / (users.len)
 		for(var/mob/living/carbon/C in users)
-			user.take_overall_damage(10, 0)
+			C.take_overall_damage(rune_damage, 0)
 			C.say("Khari[pick("'","`")]d! Gual'te nikka!")
 		to_chat(cultist, "<span class='warning'>You feel a tingle as you find yourself freed from your restraints.</span>")
 		qdel(src)
@@ -1162,7 +1166,19 @@
 		if(iscultist(C) && !C.stat)
 			users+=C
 	if(users.len>=2)
-		var/mob/living/carbon/cultist = input("Choose the one who you want to summon", "Followers of Geometer") as null|anything in (cultists - user)
+		cultists-=users
+		var/list/mob/living/carbon/annotated_cultists = new
+		var/status = ""
+		var/list/visible_mobs = viewers(user)
+		for(var/mob/living/carbon/C in cultists)
+			status = ""
+			if(C in visible_mobs)
+				status = "(Present)"
+			else if(C.isDead())
+				status = "(Dead)"
+			annotated_cultists["[C.name] [status]"] = C
+		var/choice = input("Choose the one who you want to summon", "Followers of Geometer") as null|anything in annotated_cultists
+		var/mob/living/carbon/cultist = annotated_cultists[choice]
 		if(!cultist)
 			return fizzle()
 		if (cultist == user) //just to be sure.
@@ -1176,10 +1192,11 @@
 		cultist.lying = 1
 		cultist.regenerate_icons()
 		to_chat(T, visible_message("<span class='warning'>[cultist] suddenly disappears in a flash of red light!</span>"))
+		var/rune_damage = 30 / (users.len)
 		for(var/mob/living/carbon/human/C in orange(1,src))
 			if(iscultist(C) && !C.stat)
 				C.say("N'ath reth sh'yro eth d[pick("'","`")]rekkathnor!")
-				C.take_overall_damage(15, 0)
+				C.take_overall_damage(rune_damage, 0)
 				if(C != cultist)
 					to_chat(C, "<span class='warning'>Your body take its toll as you drag your fellow cultist through dimensions.</span>")
 				else

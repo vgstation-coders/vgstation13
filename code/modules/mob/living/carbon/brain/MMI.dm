@@ -66,7 +66,7 @@ obj/item/device/mmi/Destroy()
 		//canmove = 0
 		icon = null
 		invisibility = 101
-		var/mob/living/silicon/robot/mommi/M = new /mob/living/silicon/robot/mommi(get_turf(loc))
+		var/mob/living/silicon/robot/mommi/M = new /mob/living/silicon/robot/mommi/nt(get_turf(loc))
 		if(!M)
 			return
 		M.invisibility = 0
@@ -278,7 +278,7 @@ obj/item/device/mmi/Destroy()
 			else if(!src.brainmob.key)
 				to_chat(user, "<span class='warning'>It seems to be in a deep dream-state</span>")//ghosted
 
-		to_chat(user, "<span class='info'>It's interface is [locked ? "locked" : "unlocked"] </span>")
+		to_chat(user, "<span class='info'>Its interface is [locked ? "locked" : "unlocked"] </span>")
 	to_chat(user, "<span class='info'>*---------*</span>")
 
 /obj/item/device/mmi/OnMobDeath(var/mob/living/carbon/brain/B)

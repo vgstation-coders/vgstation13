@@ -2433,3 +2433,156 @@
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_Unagi
+
+/datum/recipe/sushi_avocado
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/boiledrice,
+	/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sushi_avocado
+
+/datum/recipe/friedshrimp
+	reagents = list(CORNOIL = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/shrimp
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/friedshrimp
+
+/datum/recipe/soyscampi
+	reagents = list(SOYSAUCE = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/shrimp
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/soyscampi
+
+/datum/recipe/shrimpcocktail
+	reagents = list(KETCHUP = 10)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/shrimp,
+	/obj/item/weapon/reagent_containers/food/snacks/grown/lemon
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/shrimpcocktail
+
+/datum/recipe/friedcatfish
+	reagents = list(CORNOIL = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/catfishmeat
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/friedcatfish
+
+/datum/recipe/gumbo
+	reagents = list(WATER = 10)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/catfishmeat,
+	/obj/item/weapon/reagent_containers/food/snacks/grown/garlic
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/catfishgumbo
+
+/datum/recipe/catfishcourtbouillon
+	reagents = list(CAPSAICIN = 5, FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/catfishmeat
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/catfishcourtbouillon
+
+/datum/recipe/smokedsalmon
+	reagents = list(BLACKPEPPER = 1)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/salmonmeat,
+	/obj/item/weapon/reagent_containers/food/snacks/grown/chili
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/smokedsalmon
+
+/datum/recipe/planksalmon
+	reagents = list(HONEY = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/salmonmeat,
+	/obj/item/stack/sheet/wood
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/planksalmon
+
+/datum/recipe/citrussalmon
+	reagents = list(BLACKPEPPER = 1)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/salmonmeat,
+	/obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
+	/obj/item/weapon/reagent_containers/food/snacks/grown/orange
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/citrussalmon
+
+/datum/recipe/salmonavocado
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/salmonmeat,
+	/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chanterelle,
+	/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/salmonavocado
+
+/datum/recipe/rumshark
+	reagents = list(BLACKPEPPER = 15, RUM = 15)
+	items = list(/obj/item/weapon/fish/toothless_shark,
+	/obj/item/weapon/reagent_containers/food/snacks/grown/garlic
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/rumshark
+
+/datum/recipe/akutaq
+	reagents = list(MILK = 10)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/glofishmeat,
+	/obj/item/weapon/reagent_containers/food/snacks/grown/glowberries
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/akutaq
+
+/datum/recipe/carpcurry
+	reagents = list(VINEGAR = 5, RICE = 10)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/goldfishmeat
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/carpcurry
+
+/datum/recipe/carpconsomme
+	reagents = list(WATER = 10)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/goldfishmeat,
+	/obj/item/weapon/reagent_containers/food/snacks/egg
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/carpconsomme
+
+/datum/recipe/butterstick
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/butter,
+	/obj/item/stack/rods
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/butterstick
+
+/datum/recipe/ambrosia_brownies
+	reagents = list(COCO = 10, SUGAR = 10, FLOUR = 15)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/butter,
+	/obj/item/weapon/reagent_containers/food/snacks/egg,
+	/obj/item/weapon/reagent_containers/food/snacks/egg,
+	/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris,
+	/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris,
+	)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/ambrosia_brownies
+	
+/datum/recipe/butterfingers_r
+	items = list(/obj/item/organ/external/r_hand,
+	/obj/item/weapon/reagent_containers/food/snacks/butter,
+	)
+
+ result = /obj/item/weapon/reagent_containers/food/snacks/butterfingers_r/
+ 
+/datum/recipe/butterfingers_l
+	items = list(/obj/item/organ/external/l_hand,
+	/obj/item/weapon/reagent_containers/food/snacks/butter,
+	)
+
+ result = /obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/
+ 
+/datum/recipe/butteredtoast
+	reagents = list(LIQUIDBUTTER = 2)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/breadslice,
+	)
+
+ result = /obj/item/weapon/reagent_containers/food/snacks/butteredtoast

@@ -49,16 +49,13 @@
 				var/obj/location_as_object = loc
 				breath = location_as_object.handle_internal_lifeform(src, BREATH_MOLES)
 			else if(isturf(loc))
-				var/breath_moles = 0
 				/*if(environment.return_pressure() > ONE_ATMOSPHERE)
 					//Loads of air around (pressure effect will be handled elsewhere), so lets just take a enough to fill our lungs at normal atmos pressure (using n = Pv/RT)
 					breath_moles = (ONE_ATMOSPHERE*BREATH_VOLUME/R_IDEAL_GAS_EQUATION*environment.temperature)
 				else
 					*/
 					//Not enough air around, take a percentage of what's there to model this properly
-				breath_moles = (environment.total_moles() / environment.volume * CELL_VOLUME) * BREATH_PERCENTAGE
-
-				breath = loc.remove_air(breath_moles)
+				breath = environment.remove_volume(CELL_VOLUME * BREATH_PERCENTAGE)
 
 				if(!breath || breath.total_moles < BREATH_MOLES / 5 || breath.total_moles > BREATH_MOLES * 5)
 					if(prob(15)) // 15% chance for lung damage if air intake is less of a fifth, or more than five times the threshold
@@ -112,9 +109,13 @@
 					adjust_fire_stacks(0.5)
 					IgniteMob()
 		else
-			if(fire_stacks > 0)
-				var/obj/item/clothing/suit/space/plasmaman/PS=wear_suit
-				PS.Extinguish(src)
+			var/obj/item/clothing/suit/space/plasmaman/PS=wear_suit
+			if(istype(PS))
+				if(fire_stacks > 0)
+					PS.Extinguish(src)
+				else
+					PS.regulate_temp_of_wearer(src)
+
 
 	if(breath)
 		loc.assume_air(breath)

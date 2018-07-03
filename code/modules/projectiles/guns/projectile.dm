@@ -6,7 +6,7 @@
 	desc = "A classic revolver. Uses .357 ammo."
 	name = "revolver"
 	icon_state = "revolver"
-	caliber = list("357" = 1)
+	caliber = list(POINT357 = 1)
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 1000)
@@ -21,7 +21,7 @@
 	var/mag_type = ""
 	var/mag_drop_sound ='sound/weapons/magdrop_1.ogg'
 	var/automagdrop_delay_time = 5 // delays the automagdrop
-
+	var/spawn_mag = TRUE
 	var/gun_flags = EMPTYCASINGS	//Yay, flags
 
 /obj/item/weapon/gun/projectile/isHandgun() //fffuuuuuuck non-abstract base types
@@ -29,7 +29,7 @@
 
 /obj/item/weapon/gun/projectile/New()
 	..()
-	if(mag_type && load_method == 2)
+	if(mag_type && load_method == 2 && spawn_mag)
 		stored_magazine = new mag_type(src)
 		chamber_round()
 	else
@@ -146,13 +146,13 @@
 /obj/item/weapon/gun/projectile/can_discharge()
 	var/obj/item/ammo_casing/AC = getAC()
 	if(in_chamber)
-		return 1 
+		return 1
 	if(isnull(AC) || !istype(AC))
 		return 0
 	else
 		return 1
-	
-	
+
+
 /obj/item/weapon/gun/projectile/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(istype(A, /obj/item/gun_part/silencer) && src.gun_flags &SILENCECOMP)
 		if(!user.is_holding_item(src))	//if we're not in his hands
@@ -189,18 +189,18 @@
 				if(user.drop_item(AC, src))
 					chambered = AC
 					num_loaded++
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+					playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
 			else if(getAmmo() < max_shells && load_method != MAGAZINE)
 				if(user.drop_item(AC, src))
 					loaded += AC
 					num_loaded++
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+					playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
 
 	if(num_loaded)
 		to_chat(user, "<span class='notice'>You load [num_loaded] shell\s into \the [src]!</span>")
 	A.update_icon()
 	update_icon()
-	return
+	..()
 
 /obj/item/weapon/gun/projectile/attack_self(mob/user as mob)
 	if (target)

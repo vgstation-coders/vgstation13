@@ -62,6 +62,8 @@
 				H.fire_alert = max(H.fire_alert, 1)
 		else
 			switch(breath.temperature)
+				if(H.species.cold_level_1 to H.species.heat_level_1)
+					return
 				if(-INFINITY to H.species.cold_level_3)
 					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_3, BURN, LIMB_HEAD, used_weapon = "Excessive Cold")
 					H.fire_alert = max(H.fire_alert, 1)
@@ -88,6 +90,9 @@
 
 /datum/organ/internal/lungs/process()
 	..()
+	if((owner.species && owner.species.flags & NO_BREATHE) || M_NO_BREATH in owner.mutations)
+		return
+
 	if (germ_level > INFECTION_LEVEL_ONE)
 		if(prob(5))
 			owner.audible_cough()		//respitory tract infection
@@ -99,8 +104,8 @@
 			if (owner.losebreath <= 30)
 				owner.losebreath += 5
 		else if(prob(chance))
-			spawn owner.emote("me", 1, "coughs up blood!")
-			owner.drip(10)
+			if(owner.drip(10))
+				spawn owner.emote("me", 1, "coughs up blood!")
 
 
 /datum/organ/internal/lungs/vox

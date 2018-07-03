@@ -235,6 +235,12 @@
 	name="Box of Crayons"
 	result=/obj/item/weapon/storage/fancy/crayons
 
+/datum/biogen_recipe/misc/rice_hat
+	name = "Rice Hat"
+	id = "rice_hat"
+	cost = 300
+	result = /obj/item/clothing/head/rice_hat
+
 /datum/biogen_recipe/flooring
 	category="Flooring"
 
@@ -477,7 +483,7 @@
 		processing = 1
 		update_icon()
 		updateUsrDialog()
-		playsound(get_turf(src), 'sound/machines/blender.ogg', 50, 1)
+		playsound(src, 'sound/machines/blender.ogg', 50, 1)
 		use_power(S*30)
 		sleep(speed_coefficient*(S+15))
 		processing = 0

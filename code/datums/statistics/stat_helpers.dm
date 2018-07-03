@@ -4,8 +4,6 @@
 // at least I can keep the format consistent though
 #define STAT_TIMESTAMP_FORMAT "YYYY-MM-DD hh:mm:ss"
 
-#define TICKERSTATE_PLAYING 3 // haha include orders I guess I can't just use the define from gameticker code
-
 /datum/stat_collector/proc/get_research_score()
 	var/obj/machinery/r_n_d/server/server = null
 	var/tech_level_total
@@ -23,7 +21,7 @@
 	return tech_level_total
 
 /datum/stat_collector/proc/add_explosion_stat(turf/epicenter, const/dev_range, const/hi_range, const/li_range)
-	if(ticker.current_state != TICKERSTATE_PLAYING) return
+	if(ticker.current_state != GAME_STATE_PLAYING) return
 
 	var/datum/stat/explosion_stat/e = new
 	e.epicenter_x = epicenter.x
@@ -37,7 +35,7 @@
 /datum/stat_collector/proc/add_death_stat(var/mob/living/M)
 	if(!istype(M, /mob/living)) return 0
 	if(M.iscorpse) return 0 // only ever 1 if they are a corpse landmark spawned mob
-	if(ticker.current_state != TICKERSTATE_PLAYING)
+	if(ticker.current_state != GAME_STATE_PLAYING)
 		return 0 // We don't care about pre-round or post-round deaths. 3 is TICKERSTATE_PLAYING which is undefined I guess
 	var/datum/stat/death_stat/d = new
 	d.time_of_death = M.timeofdeath
@@ -102,7 +100,7 @@
 
 /datum/stat_collector/proc/uplink_purchase(var/datum/uplink_item/bundle, var/obj/resulting_item, var/mob/user )
 	var/was_traitor = TRUE
-	if(ticker.current_state != TICKERSTATE_PLAYING) return
+	if(ticker.current_state != GAME_STATE_PLAYING) return
 
 	// if(user.mind && user.mind.special_role != "traitor")
 	// 	was_traitor = FALSE
@@ -146,7 +144,7 @@
 
 
 /datum/stat/population_stat/New(pop as num)
-	if(ticker.current_state != TICKERSTATE_PLAYING) return
+	if(ticker.current_state != GAME_STATE_PLAYING) return
 
 	time = time2text(world.realtime, STAT_TIMESTAMP_FORMAT)
 	popcount = pop
@@ -189,4 +187,3 @@
 		sleep(5 MINUTES) // we're called inside a spawn() so we'll be fine
 
 #undef STAT_TIMESTAMP_FORMAT
-#undef TICKERSTATE_PLAYING

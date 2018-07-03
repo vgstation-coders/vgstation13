@@ -20,6 +20,11 @@
 	. = ..()
 	air_contents.adjust((6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
 
+/obj/item/weapon/tank/oxygen/empty/New()
+	..()
+	air_contents.oxygen = 0
+	air_contents.update_values()
+
 /obj/item/weapon/tank/oxygen/yellow
 	desc = "A tank of oxygen, this one is yellow."
 	icon_state = "oxygen_f"
@@ -68,6 +73,11 @@
 /obj/item/weapon/tank/plasma/New()
 	. = ..()
 	air_contents.adjust(, , , (3 * ONE_ATMOSPHERE) * 70 / (R_IDEAL_GAS_EQUATION * T20C))
+
+/obj/item/weapon/tank/plasma/empty/New()
+	..()
+	air_contents.toxins = 0
+	air_contents.update_values()
 
 /obj/item/weapon/tank/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()

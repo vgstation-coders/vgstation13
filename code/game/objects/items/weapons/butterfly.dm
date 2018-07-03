@@ -45,18 +45,15 @@
 		fold()
 		to_chat(L, "You flip \the [src] closed.")
 		if(bug)
-			if(bug == (/mob/living/simple_animal/hostile/viscerator/butterfly || /mob/living/simple_animal/hostile/viscerator/butterfly/magic))
-				var/mob/living/simple_animal/hostile/viscerator/butterfly/X = new bug(get_turf(src))
-				X.autodie = TRUE
-				if(istype(L))
-					handle_faction(X,L)
-			else //In case someone decides to make a knife spawn something other than a viscerator.
-				var/mob/living/simple_animal/X = new bug(get_turf(src))
-				if(istype(L))
-					handle_faction(X,L)
+			var/mob/living/simple_animal/X = new bug(get_turf(src))
+			if(istype(L))
+				handle_faction(X,L)
+			if(istype(X, /mob/living/simple_animal/hostile/viscerator/butterfly))
+				var/mob/living/simple_animal/hostile/viscerator/butterfly/B = X
+				B.autodie = TRUE
 			bug = null
 			counting = world.time
-	playsound(get_turf(src),'sound/items/zippo_open.ogg', 50, 1)
+	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
 
 /obj/item/weapon/butterflyknife/preattack(var/mob/living/target, mob/user) //"Putting away" a butterfly early.
 	if((istype(target, /mob/living/simple_animal/hostile/viscerator/butterfly)) && (knifetype != "plain"))
@@ -68,11 +65,11 @@
 		else
 			fold()
 
-/obj/item/weapon/butterflyknife/proc/rearm(mob/user)
+/obj/item/weapon/butterflyknife/proc/rearm()
 	counting = null
 	bug = initial(bug)
 	playsound(src, 'sound/items/healthanalyzer.ogg', 10, 1)
-	to_chat(user, "<span class='notice'>\The [src] chimes.</span>")
+	visible_message("<span class='notice'>\The [src] chimes.</span>")
 
 /obj/item/weapon/butterflyknife/proc/unfold()
 	open = TRUE

@@ -144,12 +144,14 @@
 	if (!R) // No religion, may as well be a good time to remove the icon if it's there
 		Remove(M)
 		return FALSE
-
 	if (R.isReligiousLeader(M))
 		to_chat(M, "<span class='warning'>You are the leader of this flock and cannot forsake them. If you have to, pray to the Gods for release.</span>")
 		return FALSE
-	Remove(owner)
+	if (alert("Do you wish to renounce [R.name]?","Renouncing a religion","Yes","No") != "Yes")
+		return FALSE
+
 	R.renounce(owner)
+	Remove(owner)
 
 /proc/chooseBible(var/datum/religion/R, var/mob/user)
 
@@ -161,8 +163,8 @@
 
 	var/book_style = "Bible"
 
-	book_style = input(user, "Which bible style would you like?") as null|anything in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "[R.holy_book.name == "clockwork slab" ? "Slab":"Tome"]", "The King in Yellow", "Ithaqua", "Scientology", \
-																		   "the bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
+	book_style = input(user, "Which bible style would you like?") as null|anything in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "[R.holy_book.name == "Clockwork slab" ? "Slab":"Tome"]", "The King in Yellow", "Ithaqua", "Scientology", \
+																		   "The Bible melts", "Unaussprechlichen Kulten", "Necronomicon", "Book of Shadows", "Torah", "Burning", "Honk", "Ianism", "The Guide")
 	switch(book_style)
 		if("Koran")
 			R.holy_book.icon_state = "koran"
@@ -194,7 +196,7 @@
 		if("Scientology")
 			R.holy_book.icon_state = "scientology"
 			R.holy_book.item_state = "scientology"
-		if("the bible melts")
+		if("The Bible melts")
 			R.holy_book.icon_state = "melted"
 			R.holy_book.item_state = "melted"
 		if("Unaussprechlichen Kulten")
@@ -261,6 +263,12 @@
 	deity_name = "Cthulhu" //I hope it's spelt correctly
 	bible_names = list("The Necronomicon", "The Book of Eibon", "De Vermis Mysteriis", "Unaussprechlichen Kulten")
 	keys = list("cthulhu", "old ones", "great old ones", "outer gods", "elder gods", "esoteric order of dagon")
+
+/datum/religion/hastur
+	name = "Brotherhood of The Yellow Sign" //I'm fed up with people think I worship Dagon. We're moving out.
+	deity_name = "Hastur"
+	bible_name = "The King in Yellow" //The name of the titular fictional play in the 1895 book by Robert Chambers
+	keys = list("hastur","yellow sign","king in yellow","brotherhood of the yellow sign")
 
 /datum/religion/islam
 	name = "Islam"
@@ -840,7 +848,9 @@
 	keys = list("samurai", "honor", "bushido", "weaboo")
 
 /datum/religion/samurai/equip_chaplain(var/mob/living/carbon/human/H)
-	H.equip_or_collect(new /obj/item/clothing/suit/sakura_kimono(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/clothing/head/rice_hat(H), slot_head)
+	H.equip_or_collect(new /obj/item/clothing/suit/kimono/ronin(H), slot_wear_suit)
+	H.equip_or_collect(new /obj/item/clothing/shoes/sandal(H), slot_shoes)
 
 /datum/religion/clockworkcult
 	name = "Clockwork Cult"
@@ -878,3 +888,25 @@
 	//Add veganism disability
 	H.dna.SetSEState(VEGANBLOCK, 1)
 	domutcheck(H, null, 1)
+
+/datum/religion/dorf
+	name = "Dorfism"
+	deity_name = "Armok, God of Blood"
+	bible_names = list("How to Play Dwarf Fortress", "Book of Grudges", "Strike the Earth", "Lazy Newb Pack", "The Will of Armok", "Mining 101", "Hidden Fun Stuff and You")
+	male_adept = "Expedition Leader"
+	female_adept = "Expedition Leader"
+	keys = list("armok", "dwarf", "dorf", "dwarf fortress", "dorf fort")
+
+/datum/religion/art
+	name = "The Joy of Painting"
+	deity_name = "Bob Ross"
+	bible_name = "The Joy of Painting"
+	male_adept = "Painter"
+	female_adept = "Painter"
+	keys = list("art", "bob ross", "happy little trees", "happy little clouds")
+
+/datum/religion/art/equip_chaplain(var/mob/living/carbon/human/H)
+	H.put_in_hands(new /obj/item/mounted/frame/painting)
+	H.h_style = "Big Afro"
+	H.f_style = "Full Beard"
+	H.update_hair()

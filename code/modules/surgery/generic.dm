@@ -18,8 +18,6 @@
 			return 0
 		if (affected.status & ORGAN_DESTROYED)
 			return 0
-		if (affected.status & ORGAN_ROBOT)
-			return 0
 		if (affected.status & ORGAN_PEG)
 			return 0
 		// N3X:  Patient must be sleeping, dead, or unconscious.
@@ -441,3 +439,52 @@
 	"<span class='warning'>Your hand slips, sawing through the bone in [target]'s [affected.display_name] with \the [tool]!</span>")
 	affected.createwound(CUT, 30)
 	affected.fracture()
+
+
+
+/////////BIOFOAM INJECTION///////
+/datum/surgery_step/generic/injectfoam/tool_quality(obj/item/tool)
+	. = ..()
+	if(!tool.is_sharp())
+		return 0
+
+/datum/surgery_step/generic/injectfoam
+	allowed_tools = list(
+	/obj/item/weapon/FixOVein/clot = 100,
+	)
+
+	priority = 0.1 //Tries to inject biofoam before other steps
+
+	min_duration = 10
+	max_duration = 20
+
+/datum/surgery_step/generic/injectfoam/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	if(..())
+		if(target.species && (target.species.anatomy_flags & NO_BLOOD))
+			to_chat(user, "<span class='info'>[target] has nothing to inject biofoam into!</span>")
+			return 0
+//		var/datum/organ/external/affected = target.get_organ(target_zone)
+		return 1 //You can inject biofoam at any time.
+
+/datum/surgery_step/generic/injectfoam/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	user.visible_message("[user] begins to inject [target] with \the [tool]'s biofoam injector." , \
+	"You begin to inject [target] with \the [tool]'s biofoam injector.")
+	target.custom_pain("You feel a tiny prick in your [affected.display_name]!",1)
+	..()
+
+/datum/surgery_step/generic/injectfoam/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/weapon/FixOVein/clot/tool)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	var/amount = tool.foam
+	user.visible_message("<span class='notice'>[user] injects biofoam into [target]'s [affected.display_name] with \the [tool].</span>", \
+	"<span class='notice'>You inject biofoam in [target] with \the [tool].</span>")
+	target.reagents.add_reagent(BIOFOAM, amount)
+	playsound(get_turf(target), 'sound/items/hypospray.ogg', 50, 1)
+	tool.attack_self(user)
+	tool.foam = 0
+
+/datum/surgery_step/generic/injectfoam/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	user.visible_message("<span class='warning'>[user]'s hand slips, tearing \the [tool]'s needle out of [target]'s [affected.display_name]!</span>", \
+	"<span class='warning'>Your hand slips, tearing \the [tool]'s needle out of [target]'s [affected.display_name]!</span>")
+	affected.createwound(CUT, 5)

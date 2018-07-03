@@ -85,7 +85,7 @@
 	if(user.spell_channeling && !force_remove)
 		user.overlays += chargeoverlay
 		if(world.time >= last_active_sound + 50)
-			playsound(get_turf(user), 'sound/effects/lightning/chainlightning_activate.ogg', 100, 1, "vary" = 0)
+			playsound(user, 'sound/effects/lightning/chainlightning_activate.ogg', 100, 1, "vary" = 0)
 			last_active_sound = world.time
 		zapzap = multicast
 		//give user overlay
@@ -94,7 +94,7 @@
 		connected_button.name = name
 		charge_counter = charge_max
 		user.overlays -= chargeoverlay
-		if(zapzap != multicast) //partial cast
+		if((zapzap != multicast) && (zapzap != 0)) //partial cast
 			take_charge(holder, 0)
 		zapzap = 0
 	return 1
@@ -110,10 +110,8 @@
 			to_chat(user, "<span class='info'>You can throw lightning [zapzap] more time\s</span>")
 			. = 1
 
-		invocation(user)
 		spawn()
 			zapmuthafucka(user, L, bounces)
-		src.process()
 
 /spell/lightning/proc/zapmuthafucka(var/mob/user, var/mob/living/target, var/chained = bounces, var/list/zapped = list(), var/oursound = null)
 	var/otarget = target
@@ -126,7 +124,7 @@
 	if(!oursound)
 		oursound = pick(lightning_sound)
 	L.our_spell = src
-	playsound(get_turf(user), oursound, 100, 1, "vary" = 0)
+	playsound(user, oursound, 100, 1, "vary" = 0)
 	L.tang = adjustAngle(get_angle(U,T))
 	L.icon = midicon
 	L.icon_state = "[L.tang]"
@@ -163,7 +161,8 @@
 			target.emp_act(2)
 			target.apply_damage((issilicon(target) ? basedamage*0.66 : basedamage), BURN, LIMB_CHEST, "blocked" = 0)
 	else if(target)
-		var/obj/item/projectile/beam/B = getFromPool(/obj/item/projectile/beam/lightning/spell)
+		var/obj/item/projectile/beam/lightning/spell/B = getFromPool(/obj/item/projectile/beam/lightning/spell)
+		B.our_spell = src
 		B.damage = basedamage
 		target.bullet_act(B)
 		returnToPool(B)

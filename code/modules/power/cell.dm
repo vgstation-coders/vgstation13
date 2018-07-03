@@ -42,7 +42,7 @@
 		explode()
 		return 0
 
-	if(maxcharge < amount)
+	if(maxcharge <= charge)
 		return 0
 	var/power_used = min(maxcharge-charge,amount)
 	if(crit_fail)
@@ -100,8 +100,10 @@
 	if (light_impact_range==0)
 		rigged = 0
 		corrupt()
-		return
+		return FALSE
 	//explosion(T, 0, 1, 2, 2)
+
+	. = TRUE
 
 	log_admin("LOG: Rigged power cell explosion, last touched by [fingerprintslast]")
 	message_admins("LOG: Rigged power cell explosion, last touched by [fingerprintslast]")

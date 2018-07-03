@@ -28,6 +28,11 @@ var/list/datum/map_element/map_elements = list()
 		A.spawned_by_map_element(src, objects)
 
 /datum/map_element/proc/load(x, y, z)
+	//Location is always lower left corner.
+	//In some cases, location is set to null (when creating a new z-level, for example)
+	//To account for that, location is set again in maploader's load_map() proc
+	location = locate(x+1, y+1, z)
+
 	pre_load()
 
 	if(file_path)
@@ -38,7 +43,6 @@ var/list/datum/map_element/map_elements = list()
 			return L
 	else //No file specified - empty map element
 		//These variables are usually set by the map loader. Here we have to set them manually
-		location = locate(x+1, y+1, z) //Location is always lower left corner
 		initialize(list()) //Initialize with an empty list
 		return 1
 

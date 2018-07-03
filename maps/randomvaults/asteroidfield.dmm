@@ -1,0 +1,32 @@
+"a" = (/turf/space,/area)
+"b" = (/turf/unsimulated/mineral/random/high_chance_clown,/area/vault/automap)
+"c" = (/obj/item/weapon/pickaxe/diamond,/obj/item/weapon/storage/belt/mining,/obj/item/weapon/storage/bag/ore,/turf/unsimulated/floor/asteroid/air,/area/vault/automap)
+"d" = (/obj/effect/landmark/corpse/clown,/obj/item/weapon/paper/asteroidfield,/turf/unsimulated/floor/asteroid/air,/area/vault/automap)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaabbaaaaa
+aaaaaaaaaaabbaaaaaabbaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaa
+aaabbaaaaaaaaaaaaaaaaaaaa
+aabbaaaabaaaaaaabaaaaaaaa
+aaaaaaaabaaaaaaaaaaabaaaa
+aaaaaaaaaaaabbaaaaaabbbaa
+aaabbaaaaabbbaaaaaaaaaaaa
+aaabaaaaaabaaaaaaaaaaaaaa
+aaabaaaaaaaaaabaaaaaabaaa
+aaaaaaaaaaaaacbaaabaabaaa
+aabaaaaaaaaaadaaaabbabaaa
+aabaaaabaaaaaaaaaaabaaaaa
+aaaaaabbaaaaaaaabaaaaaaaa
+aaaaaaaaaaabaaaabaaaaabaa
+aaaaaaaaaaaaaaaabbaaaabaa
+aaaabaaaaaabbbaaaaaabbaaa
+aaaabbaaaaaaaaaaaaaaabaaa
+aaaaabaaaaaaaaaaaaaaaaaaa
+aaabbaaaabbaaaaaabaabbaaa
+aaaaaaaaabbbaaaaaaaabaaaa
+aabaaaaaabaaaaaaaaaaaaaaa
+aaaaaaaaaaaaabbaaaaaaaaaa
+abaabbbaaaaaabbaaaaaaaaaa
+aaaaaaaaaaaaabaaaaaaaaaaa
+"}

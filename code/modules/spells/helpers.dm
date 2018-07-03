@@ -33,3 +33,9 @@
 	return getAllSpellsByType(USER_TYPE_XENOMORPH)
 /proc/getAllVampSpells()
 	return getAllSpellsByType(USER_TYPE_VAMPIRE)
+
+/mob/proc/has_spell_with_flag(var/spell_flag)
+	for(var/spell/S in spell_list)
+		if(S.spell_aspect_flags & spell_flag)
+			return S
+	return 0
