@@ -476,7 +476,12 @@
 		if(L.stat!=DEAD)
 			e.amount *= 0.5
 	e.start()
-	holder.clear_reagents()
+		if(ismob(holder))
+		holder.del_reagent(GLYCEROL)
+		holder.del_reagent(PACID)
+		holder.del_reagent(SACID)
+	else
+		holder.clear_reagents()
 
 /datum/chemical_reaction/sodiumchloride
 	name = "Sodium Chloride"
