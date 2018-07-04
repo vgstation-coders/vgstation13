@@ -224,9 +224,27 @@
 	desc = "Looks unfinished."
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "wizrune"
-	
-/obj/effect/decal/cleanable/smashed_butter 
+
+/obj/effect/decal/cleanable/smashed_butter
 	name = "smashed butter"
 	desc = "Looks like some one has butter fingers."
 	icon = 'icons/effects/tomatodecal.dmi'
 	icon_state = "smashed_butter"
+
+/obj/effect/decal/cleanable/chem_puddle
+	name = "puddle of reagents"
+	desc = "Somebody didn't put the lid on their beaker!"
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "puddle"
+
+/obj/effect/decal/cleanable/chem_puddle/New()
+	..()
+	create_reagents(50)
+
+/obj/effect/decal/cleanable/chem_puddle/update_icon()
+	if(reagents && reagents.total_volume)
+		color = mix_color_from_reagents(reagents.reagent_list)
+		alpha = mix_alpha_from_reagents(reagents.reagent_list)
+
+/obj/effect/decal/cleanable/chem_puddle/on_reagent_change()
+	update_icon()

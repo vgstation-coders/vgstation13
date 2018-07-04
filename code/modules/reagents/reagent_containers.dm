@@ -42,7 +42,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		usr.investigation_log(I_CHEMS, "has emptied \a [src] ([type]) containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
 		reagents.reaction(usr.loc)
 		spawn()
-			src.reagents.clear_reagents()
+			reagents.make_puddle(get_turf(src))
 		usr.visible_message("<span class='warning'>[usr] splashes something onto the floor!</span>",
 						 "<span class='notice'>You empty \the [src] onto the floor.</span>")
 

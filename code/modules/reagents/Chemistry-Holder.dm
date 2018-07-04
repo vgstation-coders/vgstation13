@@ -834,6 +834,31 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	else
 		chem_temp = max(chem_temp + temp_change, received_temperature, 0)
 	handle_reactions()
+
+/datum/reagents/proc/make_puddle(var/turf/origin, var/starting_range = 0)
+	var/number_of_puddles = total_volume/20
+	if(!number_of_puddles)
+		return
+	var/current_range = starting_range
+	while(number_of_puddles > 0)
+		if(current_range == 0)
+			if(!locate(/obj/effect/decal/cleanable/chem_puddle) in origin)
+				var/obj/effect/decal/cleanable/chem_puddle/C = new(origin)
+				trans_to(C, 20)
+				number_of_puddles--
+		var/list/turfs = range(current_range, origin)-range(current_range-1, origin)
+		for(var/turf/T in turfs)
+			if(!number_of_puddles)
+				break
+			if(!isfloor(T))
+				continue
+			if(!locate(/obj/effect/decal/cleanable/chem_puddle) in T)
+				var/obj/effect/decal/cleanable/chem_puddle/C = new(T)
+				trans_to(C, 20)
+				number_of_puddles--
+		current_range++
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 
