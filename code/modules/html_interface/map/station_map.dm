@@ -41,6 +41,9 @@
 	for (var/obj/machinery/station_map/S in station_holomaps)
 		S.initialize()
 
+	for (var/obj/structure/deathsquad_gravpult/G in station_holomaps)
+		G.initialize_holomaps()
+
 /proc/generateMarkers(var/ZLevel)
 	//generating specific markers
 	if(ZLevel == map.zMainStation)
