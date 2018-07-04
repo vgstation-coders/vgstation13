@@ -275,6 +275,18 @@
 	corpseidjob = "Medical Doctor"
 	corpseidaccess = "Medical Doctor"
 
+/obj/effect/landmark/corpse/surgeon
+	name = "Surgeon"
+	corpseradio = /obj/item/device/radio/headset/headset_med
+	corpsehelmet = /obj/item/clothing/head/surgery/green
+	corpseuniform = /obj/item/clothing/under/rank/medical/green
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat
+	corpsepocket1 = /obj/item/weapon/scalpel
+	corpseshoes = /obj/item/clothing/shoes/leather
+	corpseid = 1
+	corpseidjob = "Surgeon"
+	corpseidaccess = "Medical Doctor"
+
 /obj/effect/landmark/corpse/engineer
 	name = "Engineer"
 	corpseradio = /obj/item/device/radio/headset/headset_eng

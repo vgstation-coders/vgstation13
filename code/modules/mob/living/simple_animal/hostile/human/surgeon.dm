@@ -16,7 +16,7 @@ mob/living/simple_animal/hostile/humanoid/surgeon/
 	ranged = 0
 	gender = MALE
 
-	//corpse = /obj/effect/landmark/corpse/surgeon
+	corpse = /obj/effect/landmark/corpse/surgeon
 	items_to_drop = list(/obj/item/weapon/circular_saw/plasmasaw)
 
 mob/living/simple_animal/hostile/humanoid/surgeon/boss
@@ -49,6 +49,8 @@ mob/living/simple_animal/hostile/humanoid/surgeon/skeleton
 	icon = 'icons/mob/surgeon.dmi'
 	icon_state = "skelesurgeon"
 	icon_living = "skelesurgeon"
+	icon_dying = "skelesurgeon_death"
+	icon_dying_time = 33
 	maxHealth = 400
 	health = 400
 
@@ -60,7 +62,7 @@ mob/living/simple_animal/hostile/humanoid/surgeon/skeleton
 	attacktext = "crushes"
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 
-	//corpse = /obj/effect/landmark/corpse/surgeon/skeleton
+	corpse = /obj/effect/decal/remains/skelesurgeon
 
 	faction = "necro"
 	mob_property_flags = MOB_UNDEAD
@@ -70,9 +72,3 @@ mob/living/simple_animal/hostile/humanoid/surgeon/skeleton/New()
 	..()
 	flick("skelesurgeon_laugh", src)
 
-mob/living/simple_animal/hostile/humanoid/surgeon/skeleton/death()
-	set waitfor = 0
-	canmove = 0
-	flick("skelesurgeon_death", src)
-	sleep(4 SECONDS)
-	..()
