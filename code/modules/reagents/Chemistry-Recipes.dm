@@ -476,7 +476,7 @@
 		if(L.stat!=DEAD)
 			e.amount *= 0.5
 	e.start()
-		if(ismob(holder))
+	if(ismob(holder))
 		holder.del_reagent(GLYCEROL)
 		holder.del_reagent(PACID)
 		holder.del_reagent(SACID)
