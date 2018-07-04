@@ -9,7 +9,7 @@ var/list/admin_verbs_default = list(
 	/client/proc/advwho,				/*in addition to listing connected ckeys, shows character name and living/dead/antag status for each*/
 	/datum/admins/proc/checkCID,
 	/datum/admins/proc/checkCKEY,
-	/datum/admins/proc/other_admins_verbs,
+	/datum/admins/proc/other_admins_verbs_admin,
 //	/client/proc/deadchat				/*toggles deadchat on/off*/
 	)
 var/list/admin_verbs_admin = list(
@@ -81,7 +81,7 @@ var/list/admin_verbs_spawn = list(
 	/client/proc/debug_reagents, //Allows us to spawn reagents in mobs/containers
 	/client/proc/create_awaymission, //Allows us to summon away missions
 	/client/proc/create_map_element,
-	/client/proc/cmd_admin_equip_loadout //Allows us to equip sets of items to mobs
+	/client/proc/cmd_admin_equip_loadout, //Allows us to equip sets of items to mobs
 	)
 var/list/admin_verbs_server = list(
 	/client/proc/Set_Holiday,
@@ -100,55 +100,21 @@ var/list/admin_verbs_server = list(
 	/datum/admins/proc/adjump,
 	/datum/admins/proc/toggle_aliens,
 	/client/proc/toggle_random_events,
-	/client/proc/check_customitem_activity,
 	/client/proc/dump_chemreactions,
 	/client/proc/save_coordinates
 	)
 var/list/admin_verbs_debug = list(
-	/client/proc/gc_dump_hdl,
-	/client/proc/debug_pooling,
-	/client/proc/cmd_admin_list_open_jobs,
-	/proc/getbrokeninhands,
-	/client/proc/Debug2,
-	/client/proc/cmd_debug_make_powernets,
-	/client/proc/kill_airgroup,
-	/client/proc/debug_controller,
-	/client/proc/cmd_debug_mob_lists,
-	/client/proc/cmd_admin_delete,
-	/client/proc/cmd_debug_del_all,
-	/client/proc/cmd_debug_tog_aliens,
-	/client/proc/air_report,
-	/client/proc/reload_admins,
-	/client/proc/restart_controller,
-	/client/proc/enable_debug_verbs,
 	/client/proc/callproc,
-	/client/proc/cmd_admin_dump_instances, // /vg/
-	/client/proc/cmd_admin_dump_machine_type_list, // /vg/
-	/client/proc/disable_bloodvirii,       // /vg
-	/client/proc/handle_paperwork, //this is completely experimental
-	/client/proc/reload_style_sheet,
-	/client/proc/reset_style_sheet,
-	/client/proc/test_movable_UI,
-	/client/proc/test_snap_UI,
-	/client/proc/configFood,
-	/client/proc/cmd_dectalk,
-	/client/proc/debug_reagents,
-	/client/proc/create_awaymission,
-	/client/proc/make_invulnerable,
-	/client/proc/cmd_admin_dump_delprofile,
-	/client/proc/mob_list,
-	/client/proc/cure_disease,
-	/client/proc/check_bomb,
-	/client/proc/set_teleport_pref,
-	/client/proc/check_convertables,
-	/client/proc/check_spiral,
-	/client/proc/check_striketeams,
-	/client/proc/cmd_admin_find_bad_blood_tracks,
-	/client/proc/debugNatureMapGenerator,
 	/client/proc/callatomproc,
 	/client/proc/view_runtimes,
-	/client/proc/cmd_mass_modify_object_variables,
-	/client/proc/emergency_shuttle_panel,
+	/client/proc/make_invulnerable,
+	/client/proc/gc_dump_hdl,
+	/client/proc/debug_controller,
+	/client/proc/restart_controller,
+	/client/proc/debug_reagents,
+	/client/proc/create_awaymission,
+	/client/proc/check_striketeams,
+	/datum/admins/proc/other_admins_verbs_debug
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -212,13 +178,11 @@ var/list/admin_verbs_hideable = list(
 	/datum/admins/proc/adrev,
 	/datum/admins/proc/adspawn,
 	/datum/admins/proc/adjump,
-	/client/proc/restart_controller,
 	/client/proc/cmd_admin_list_open_jobs,
 	/client/proc/callproc,
 	/client/proc/Debug2,
 	/client/proc/reload_admins,
 	/client/proc/cmd_debug_make_powernets,
-	/client/proc/kill_airgroup,
 	/client/proc/debug_controller,
 	/client/proc/startSinglo,
 	/client/proc/cheat_power,
@@ -226,8 +190,6 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/cmd_debug_mob_lists,
 	/client/proc/cmd_debug_del_all,
 	/client/proc/cmd_debug_tog_aliens,
-	/client/proc/air_report,
-	/client/proc/enable_debug_verbs,
 	/client/proc/mob_list,
 	/proc/possess,
 	/proc/release,
