@@ -366,7 +366,7 @@
 		C.Noirize()
 
 /obj/item/borg/upgrade/warden
-	name = "cyborg warden upgrade board"
+	name = "security cyborg warden upgrade board"
 	desc = "Used to give a security cyborg supervisory enforcement tools."
 	icon_state = "mcontroller"
 	required_module = list(/obj/item/weapon/robot_module/security, /obj/item/weapon/robot_module/tg17355)
@@ -393,5 +393,13 @@
 	var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R, user)
 	if(C)
 		C.Lawize()
+
+/obj/item/borg/upgrade/hook
+	name = "supply cyborg hookshot upgrade"
+	desc = "Used to give a supply cyborg a hookshot."
+	icon = 'icons/obj/gun_experimental.dmi'
+	icon_state = "hookshot"
+	required_module = list(/obj/item/weapon/robot_module/miner)
+	modules_to_add = list(/obj/item/weapon/gun/hookshot)
 
 #undef FAILED_TO_ADD
