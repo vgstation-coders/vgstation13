@@ -371,8 +371,8 @@ var/list/impact_master = list()
 /obj/item/projectile/proc/OnDeath()	//if assigned, allows for code when the projectile disappears
 	return 1
 
-/obj/item/projectile/proc/OnFired()	//if assigned, allows for code when the projectile gets fired
-	target = get_turf(original)
+/obj/item/projectile/proc/OnFired(var/proj_target = original)	//if assigned, allows for code when the projectile gets fired
+	target = get_turf(proj_target) //target is getting overwritten here, shunt the launch_at_range shit into here to avoid the problem maybe
 	dist_x = abs(target.x - starting.x)
 	dist_y = abs(target.y - starting.y)
 
@@ -724,16 +724,20 @@ var/list/impact_master = list()
 /obj/item/projectile/acidable()
 	return 0
 
-/obj/item/projectile/proc/launch_at(var/atom/target,var/tar_zone = "chest",var/atom/curloc = get_turf(src),var/from = null) // doot doot shitcode alert
+/obj/item/projectile/proc/launch_at(var/atom/target,var/tar_zone = "chest",var/atom/curloc = get_turf(src),var/from = null,var/variance_angle = 0) // doot doot shitcode alert
 	original = target
 	starting = curloc
 	shot_from = from
 	current = curloc
-	OnFired()
-	yo = target.loc.y - curloc.y
-	xo = target.loc.x - curloc.x
+	var/angle = rand(-variance_angle/2, variance_angle/2) + get_angle(starting, original)
+	var/launch_at_range = 7 // Increasing this should make the bullet spread smoother or something
+	yo = launch_at_range * cos(angle)
+	xo = launch_at_range * sin(angle)
+	var/trajectory = locate(src.x + xo, src.y + yo, src.z) //Send projectile towards a not-original tile while preserving original for targetting stunned/lying mobs.
+	OnFired(trajectory)
 	def_zone = tar_zone
 	spawn()
 		process()
+
 /obj/item/projectile/proc/apply_projectile_color(var/proj_color)
 	color = proj_color
