@@ -84,6 +84,27 @@ var/list/admins_verbs = list(
 	/client/proc/debugNatureMapGenerator,
 	/client/proc/cmd_mass_modify_object_variables,
 	/client/proc/emergency_shuttle_panel,
+    // Fun
+    /datum/admins/proc/media_stop_all,
+	/client/proc/drop_bomb,
+	/client/proc/drop_emp,
+	/client/proc/one_click_antag,
+	/datum/admins/proc/toggle_aliens,
+	// FUUUUCKED /client/proc/zombie_event, // ZOMBB-B-BIES
+	/client/proc/cmd_admin_add_freeform_ai_law,
+	/client/proc/cmd_admin_add_random_ai_law,
+	/client/proc/toggle_random_events,
+	/client/proc/commandname,
+	/client/proc/delete_all_adminbus,
+	/client/proc/delete_all_bomberman,
+	/client/proc/create_bomberman_arena,
+	/client/proc/control_bomberman_arena,
+	/client/proc/gib_money, // /vg/
+	/client/proc/smissmas,
+	/client/proc/achievement,
+	/client/proc/mommi_static,
+	/client/proc/makepAI,
+	/client/proc/set_blob_looks,
 )
 
 /client/proc/call_admin_verb(var/proc_path)
@@ -140,6 +161,22 @@ var/list/datum/admin_verbs/verbs_debug= list()
 
     usr << browse(dat, "window=powers;size=500x480")
 
+/datum/admins/proc/other_admins_verbs_fun()
+    set category = "Debug"
+    set name = "Other admin verbs/commands (fun)."
+
+    if (!verbs_admin.len)
+        sort_verbs_out()
+        
+    var/dat = "<h3>Fun verbs:</h3>"
+    dat += "<ul>"
+    for (var/verb_ in verbs_admin)
+        var/datum/admin_verbs/V = new verb_
+        if (V.category == "FUN")
+            dat += "<li><b>[V.name]</b> - [V.desc] (<a href='?src=\ref[usr.client.holder];verb=[V.type]'>Use</a>)"
+    dat += "<ul/>"
+
+    usr << browse(dat, "window=powers;size=500x480")
 
 // -- Admin verbs datums --
 
@@ -667,3 +704,119 @@ var/list/datum/admin_verbs/verbs_debug= list()
     desc = "Allows you to (re)call it, or to set a custom shuttle as the emergency shuttle."
     proc_path = /client/proc/emergency_shuttle_panel
     category = "DEBUG"
+
+// -- Fun
+
+/datum/admin_verbs/admin_parent/media_stop_all
+    name = "Stop broadcasted media"
+    desc = "Stop all music and video."
+    proc_path = /datum/admins/proc/media_stop_all
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/drop_bomb
+    name = "Drop bomb"
+    desc = "Creates an admin explosion."
+    proc_path = /client/proc/drop_bomb
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/drop_bomb
+    name = "Drop bomb"
+    desc = "Creates an admin explosion."
+    proc_path = /client/proc/drop_bomb
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/drop_emp
+    name = "Drop emp"
+    desc = "Creates an admin electro-magnetic pulse."
+    proc_path = /client/proc/drop_emp
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/one_click_antag
+    name = "One-click antagonist"
+    desc = "Spawn a number of antagonists."
+    proc_path = /client/proc/one_click_antag
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/one_click_antag
+    name = "One-click antagonist"
+    desc = "Spawn a number of antagonists."
+    proc_path = /client/proc/one_click_antag
+    category = "FUN"
+
+/datum/admin_verbs/admin_parent/toggle_aliens
+    name = "Toggle aliens"
+    desc = "Let you change if aliens are allowed or not."
+    proc_path = /datum/admins/proc/toggle_aliens
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/toggle_random_events
+    name = "Toggle random events"
+    desc = "Choose if events happens during the course of the shift or not."
+    proc_path = /client/proc/toggle_random_events
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/commandname
+    name = "Command name"
+    desc = "Change the name of the active central command."
+    proc_path = /client/proc/commandname
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/delete_all_adminbus
+    name = "Delete all adminbuses"
+    desc = "Delete all spawned adminbuses."
+    proc_path = /client/proc/delete_all_adminbus
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/delete_all_bomberman
+    name = "Delete all bomberman"
+    desc = "Delete all bomberman mobs."
+    proc_path = /client/proc/delete_all_bomberman
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/create_bomberman_arena
+    name = "Create a bomberman arena"
+    desc = "Create a bomberman arena for players."
+    proc_path = /client/proc/cmd_admin_add_random_ai_law
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/control_bomberman_arena
+    name = "Control a bomberman arena"
+    desc = "Control or Remove an existing Bomberman-type arena."
+    proc_path = /client/proc/control_bomberman_arena
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/gib_money
+    name = "Give money"
+    desc = "Throw some money at someone."
+    proc_path = /client/proc/gib_money
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/smissmas
+    name = "Execute Smissmas"
+    desc = "Change the Universe's state to smissmas."
+    proc_path = /client/proc/smissmas
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/achievement
+    name = "Give a player an achievement"
+    desc = "Give a player a nice trophy with a chosen title and description."
+    proc_path = /client/proc/achievement
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/mommi_static
+    name = "Toggle MoMMI static"
+    desc = "Toggle the MoMMI custom overlay for carbons."
+    proc_path = /client/proc/mommi_static
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/makepAI
+    name = "Make pAI"
+    desc = "Creates a pAI."
+    proc_path = /client/proc/makepAI
+    category = "FUN"
+
+/datum/admin_verbs/client_parent/set_blob_looks
+    name = "Set blob looks"
+    desc = "Change the appearance of the blob."
+    proc_path = /client/proc/set_blob_looks
+    category = "FUN"
