@@ -3,7 +3,7 @@ var/list/SPS_list = list()
 
 /obj/item/device/gps
 	name = "global positioning system"
-	desc = "Helping lost spacemen find their way through the planets since 2016."
+	desc = "Helping lost spacemen find their way through the planets since 2016. Has an option to transmit a signal to other GPS devices."
 	icon = 'icons/obj/telescience.dmi'
 	icon_state = "gps-c"
 	w_class = W_CLASS_SMALL
@@ -16,6 +16,7 @@ var/list/SPS_list = list()
 	var/emped = FALSE
 	var/autorefreshing = FALSE
 	var/builtin = FALSE
+	var/transmitting = FALSE
 
 /obj/item/device/gps/proc/gen_id()
 	return GPS_list.len
@@ -30,7 +31,6 @@ var/list/SPS_list = list()
 	..()
 	gpstag = "[base_tag][gen_id()]"
 	update_name()
-	overlays += image(icon = icon, icon_state = "working")
 	handle_list()
 
 /obj/item/device/gps/proc/handle_list()
@@ -45,15 +45,25 @@ var/list/SPS_list = list()
 
 /obj/item/device/gps/emp_act(severity)
 	emped = TRUE
+	transmitting = FALSE
 	overlays -= image(icon = icon, icon_state = "working")
 	overlays += image(icon = icon, icon_state = "emp")
 	spawn(30 SECONDS)
-		emped = FALSE
 		overlays -= image(icon = icon, icon_state = "emp")
-		overlays += image(icon = icon, icon_state = "working")
+		emped = FALSE
 
 /obj/item/device/gps/attack_self(mob/user)
-	ui_interact(user)
+	if (emped)
+		return
+	else if (!transmitting)
+		switch(alert("Would you like to turn on the GPS?",,"Yes","No"))
+			if ("Yes")
+				transmitting = TRUE
+				to_chat(usr, "<span class = 'caution'>You need to have the GPS in your hand to do that!</span>")
+				overlays += image(icon = icon, icon_state = "working")
+				ui_interact(user)
+	else
+		ui_interact(user)
 
 /obj/item/device/gps/examine(mob/user)
 	if(Adjacent(user) || isobserver(user))
@@ -64,9 +74,7 @@ var/list/SPS_list = list()
 /obj/item/device/gps/proc/get_location_name()
 	var/turf/device_turf = get_turf(src)
 	var/area/device_area = get_area(src)
-	if(emped)
-		return "ERROR"
-	else if(!device_turf || !device_area)
+	if(!device_turf || !device_area)
 		return "UNKNOWN"
 	else if(device_turf.z > WORLD_X_OFFSET.len)
 		return "[format_text(device_area.name)] (UNKNOWN, UNKNOWN, UNKNOWN)"
@@ -78,14 +86,14 @@ var/list/SPS_list = list()
 	var/data[0]
 	if(emped)
 		data["emped"] = TRUE
-	else
+	else if (transmitting)
 		data["gpstag"] = gpstag
 		data["autorefresh"] = autorefreshing
 		data["location_text"] = get_location_name()
 		var/list/devices = list()
 		for(var/D in get_list())
 			var/obj/item/device/gps/G = D
-			if(src != G)
+			if(G.transmitting && src != G)
 				var/device_data[0]
 				device_data["tag"] = G.gpstag
 				device_data["location_text"] = G.get_location_name()
@@ -125,6 +133,10 @@ var/list/SPS_list = list()
 	if(href_list["toggle_refresh"])
 		autorefreshing = !autorefreshing
 		return TRUE
+		if(emped)
+			transmitting = FALSE
+
+		return TRUE
 
 	if(..())
 		return FALSE
@@ -160,7 +172,7 @@ var/list/SPS_list = list()
 
 /obj/item/device/gps/secure
 	base_name = "secure positioning system"
-	desc = "A secure channel SPS. It announces the position of the wearer if killed or stripped off."
+	desc = "A secure channel SPS. If it is transmitting its signal, it will announce the position of the wearer if killed or stripped off to other SPS devices."
 	icon_state = "sps"
 	base_tag = "SEC"
 
@@ -174,15 +186,14 @@ var/list/SPS_list = list()
 	return SPS_list
 
 /obj/item/device/gps/secure/OnMobDeath(mob/wearer)
-	if(emped)
+	if(!transmitting)
 		return
-
 	for(var/E in SPS_list)
 		var/obj/item/device/gps/secure/S = E //No idea why casting it like this makes it work better instead of just defining it in the for each
 		S.announce(wearer, src, "has detected the death of their wearer",dead=TRUE)
 
 /obj/item/device/gps/secure/stripped(mob/wearer)
-	if(emped)
+	if(!transmitting)
 		return
 	. = ..()
 	var/num = 0
