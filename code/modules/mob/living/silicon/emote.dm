@@ -1,10 +1,28 @@
 /datum/emote/silicon
 	mob_type_allowed_typecache = list(/mob/living/silicon)
 	emote_type = EMOTE_AUDIBLE
+	var/module_required
 
 /datum/emote/sound/silicon
 	mob_type_allowed_typecache = list(/mob/living/silicon)
 	emote_type = EMOTE_AUDIBLE
+	var/module_required
+
+/datum/emote/sound/silicon/can_run_emote(var/mob/user, var/status_check = TRUE)
+	. = ..()
+	var/mob/living/silicon/robot/R = user
+	if (!istype(R))
+		return FALSE
+	if (!(R.module && (R.module.quirk_flags & module_required)))
+		return FALSE
+
+/datum/emote/silicon/can_run_emote(var/mob/user, var/status_check = TRUE)
+	. = ..()
+	var/mob/living/silicon/robot/R = user
+	if (!istype(R))
+		return FALSE
+	if (!(R.module && (R.module.quirk_flags & module_required)))
+		return FALSE
 
 /datum/emote/silicon/boop
 	key = "boop"
@@ -35,6 +53,7 @@
 	message = "honks."
 	vary = TRUE
 	sound = 'sound/items/bikehorn.ogg'
+	module_required = MODULE_IS_A_CLOWN 
 
 /datum/emote/sound/silicon/ping
 	key = "ping"
@@ -53,6 +72,7 @@
 	key = "sad"
 	message = "plays a sad trombone..."
 	sound = 'sound/misc/sadtrombone.ogg'
+	module_required = MODULE_IS_A_CLOWN 
 
 /datum/emote/sound/silicon/warn
 	key = "warn"
@@ -63,26 +83,7 @@
 	key = "law"
 	message = "shows its legal authorization barcode."
 	sound = 'sound/voice/biamthelaw.ogg'
-
-/datum/emote/sound/silicon/law/can_run_emote(var/mob/user, var/status_check = TRUE)
-	. = ..()
-	var/mob/living/silicon/robot/R = user
-	if (!istype(R))
-		return FALSE
-	if (!(R.module && (R.module.quirk_flags & MODULE_IS_THE_LAW)))
-		return FALSE
-
-/datum/emote/sound/silicon/mommi
-	mob_type_allowed_typecache = list(/mob/living/silicon/robot/mommi)
-	emote_type = EMOTE_AUDIBLE
-
-/datum/emote/sound/silicon/mommi/comment
-	key = "comment"
-	message = "vocalizes."
-	message_param = "cheerily vocalizes at %t."
-
-/datum/emote/sound/silicon/mommi/comment/run_emote(mob/user, params, type_override)
-	sound = get_sfx("mommicomment")
+	module_required = MODULE_IS_THE_LAW
 
 /mob/living/silicon/robot/verb/powerwarn()
 	set category = "Robot Commands"
