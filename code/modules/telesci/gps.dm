@@ -3,7 +3,7 @@ var/list/SPS_list = list()
 
 /obj/item/device/gps
 	name = "global positioning system"
-	desc = "Helping lost spacemen find their way through the planets since 2016. Has an option to transmit a signal to other GPS devices."
+	desc = "Helping lost spacemen find their way through the planets since 2016. Needs to be activated before it can start transmitting."
 	icon = 'icons/obj/telescience.dmi'
 	icon_state = "gps-c"
 	w_class = W_CLASS_SMALL
@@ -59,7 +59,7 @@ var/list/SPS_list = list()
 		switch(alert("Would you like to turn on the GPS?",,"Yes","No"))
 			if ("Yes")
 				transmitting = TRUE
-				to_chat(usr, "<span class = 'caution'>You need to have the GPS in your hand to do that!</span>")
+				to_chat(usr, "<span class = 'notice'>You activate the [src].</span>")
 				overlays += image(icon = icon, icon_state = "working")
 				ui_interact(user)
 	else
@@ -74,7 +74,9 @@ var/list/SPS_list = list()
 /obj/item/device/gps/proc/get_location_name()
 	var/turf/device_turf = get_turf(src)
 	var/area/device_area = get_area(src)
-	if(!device_turf || !device_area)
+	if (emped)
+		return "ERROR"
+	else if(!device_turf || !device_area)
 		return "UNKNOWN"
 	else if(device_turf.z > WORLD_X_OFFSET.len)
 		return "[format_text(device_area.name)] (UNKNOWN, UNKNOWN, UNKNOWN)"
