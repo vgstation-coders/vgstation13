@@ -372,7 +372,7 @@ var/list/impact_master = list()
 	return 1
 
 /obj/item/projectile/proc/OnFired(var/proj_target = original)	//if assigned, allows for code when the projectile gets fired
-	target = get_turf(proj_target) //target is getting overwritten here, shunt the launch_at_range shit into here to avoid the problem maybe
+	target = get_turf(proj_target)
 	dist_x = abs(target.x - starting.x)
 	dist_y = abs(target.y - starting.y)
 
