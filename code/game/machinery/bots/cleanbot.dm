@@ -47,6 +47,7 @@
 
 /obj/machinery/bot/cleanbot/New()
 	..()
+	cleanbot_list.Add(src)
 	src.get_targets()
 	src.icon_state = "[src.icon_initial][src.on]"
 
@@ -60,6 +61,10 @@
 
 	if(radio_controller)
 		radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
+
+/obj/machinery/bot/cleanbot/Destroy()
+	cleanbot_list.Remove(src)
+	..()
 
 
 /obj/machinery/bot/cleanbot/turn_on()
