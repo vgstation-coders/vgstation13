@@ -39,9 +39,8 @@ var/datum/subsystem/plant/SSplant
 		if(seed.consume_gasses)
 			seed.consume_gasses["plasma"] = null //PHORON DOES NOT EXIST
 			seed.consume_gasses["carbon_dioxide"] = null
-		if(seed.chems && !isnull(seed.chems[PHENOL]))
-			seed.chems[PHENOL] = null // Eating through the hull will make these plants completely inviable, albeit very dangerous.
-			seed.chems -= null // Setting to null does not actually remove the entry, which is weird.
+		if(seed.chems)
+			seed.chems.Remove(PHENOL) // Eating through the hull will make these plants completely inviable, albeit very dangerous.
 		seed.ideal_heat = initial(seed.ideal_heat)
 		seed.heat_tolerance = initial(seed.heat_tolerance)
 		seed.ideal_light = initial(seed.ideal_light)
