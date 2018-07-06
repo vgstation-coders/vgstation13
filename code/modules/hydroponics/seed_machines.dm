@@ -163,12 +163,17 @@
 		return
 
 	var/list/data = list()
-
-	var/list/geneMasks[0]
-	for(var/gene_tag in SSplant.gene_tag_list)
-		geneMasks[list("tag" = gene_tag)] = null // For some reason the JSON writer sees it as assoc if it's a list of strings.
-
-	data["geneMasks"] = geneMasks
+	var/static/list/gene_tag_list = list(
+		list("tag" = GENE_PHYTOCHEMISTRY),
+		list("tag" = GENE_MORPHOLOGY),
+		list("tag" = GENE_BIOLUMINESCENCE),
+		list("tag" = GENE_ECOLOGY),
+		list("tag" = GENE_ECOPHYSIOLOGY),
+		list("tag" = GENE_METABOLISM),
+		list("tag" = GENE_NUTRITION),
+		list("tag" = GENE_DEVELOPMENT)
+	)
+	data["geneTags"] = gene_tag_list
 
 	data["activity"] = active
 	data["degradation"] = degradation

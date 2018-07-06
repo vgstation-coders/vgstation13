@@ -11,7 +11,6 @@ var/datum/subsystem/plant/SSplant
 	var/list/processing_plants = list()
 	var/list/currentrun
 	var/list/datum/seed/seeds = list() // All seed data stored here.
-	var/list/gene_tag_list = list()    // List of gene tags, how they appear in the centrifuge and bioballistic.
 
 /datum/subsystem/plant/New()
 	NEW_SS_GLOBAL(SSplant)
@@ -27,13 +26,6 @@ var/datum/subsystem/plant/SSplant
 		seeds[S.name] = S
 		S.uid = "[seeds.len]"
 		S.roundstart = TRUE
-	//Might as well mask the gene types while we're at it.
-	var/list/gene_tags = list(GENE_PHYTOCHEMISTRY, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_NUTRITION, GENE_DEVELOPMENT)
-	while(gene_tags.len)
-		var/gene_tag = pick(gene_tags)
-
-		gene_tags -= gene_tag
-		gene_tag_list += gene_tag
 	..()
 
 /datum/subsystem/plant/proc/create_random_seed(var/survive_on_station)
