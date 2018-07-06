@@ -316,11 +316,14 @@
 	anchored = 1
 	var/id_tag = null
 
-	New()
-		..()
-		new /obj/item/clothing/under/color/prisoner(src)
-		new /obj/item/clothing/shoes/orange(src)
-		return
+/obj/structure/closet/secure_closet/brig/New()
+	..()
+	new /obj/item/clothing/under/color/prisoner(src)
+	new /obj/item/clothing/shoes/orange(src)
+	brig_lockers.Add(src)
+
+/obj/structure/closet/secure_closet/brig/Destroy()
+	brig_lockers.Remove(src)
 
 
 
