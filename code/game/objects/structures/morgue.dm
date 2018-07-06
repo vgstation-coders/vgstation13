@@ -222,6 +222,13 @@
 	var/id = 1
 	var/locked = 0
 
+/obj/structure/crematorium/New()
+	..()
+	crematorium_list.Add(src)
+
+/obj/structure/crematorium/Destroy()
+	crematorium_list.Remove(src)
+
 /obj/structure/crematorium/proc/update()
 	if (cremating)
 		icon_state = "crema_active"
@@ -418,7 +425,7 @@
 
 /obj/machinery/crema_switch/attack_hand(mob/user as mob)
 	if (allowed(user))
-		for (var/obj/structure/crematorium/C in world)
+		for (var/obj/structure/crematorium/C in crematorium_list)
 			if (C.id == id)
 				C.cremate(user)
 	else

@@ -24,7 +24,7 @@
 	var/dat = "<html><head><title>[src.name]</title><style>h3 {margin: 0px; padding: 0px;}</style></head><body>"
 	if(screen == 0)
 		dat += "<h3>Tracking beacons data</h3>"
-		for(var/obj/item/mecha_parts/mecha_tracking/TR in world)
+		for(var/obj/item/mecha_parts/mecha_tracking/TR in mech_tracking_beacons)
 			var/answer = TR.get_mecha_info()
 			if(answer)
 				dat += {"<hr>[answer]<br/>
@@ -97,6 +97,14 @@
 	icon_state = "motion2"
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MAGNETS + "=2"
 	var/lockdown = 0
+
+/obj/item/mecha_parts/mecha_tracking/New()
+	..()
+	mech_tracking_beacons.Add(src)
+
+/obj/item/mecha_parts/mecha_tracking/Destroy()
+	mech_tracking_beacons.Remove(src)
+	..()
 
 /obj/item/mecha_parts/mecha_tracking/proc/get_mecha_info()
 	if(!in_mecha())

@@ -674,7 +674,7 @@ var/global/ports_open = TRUE
 
 	..()
 
-/obj/item/weapon/circuitboard/communications/New(var/where)
+/obj/item/weapon/circuitboard/communications/New()
 	..()
 	communications_circuitboards.Add(src)
 
