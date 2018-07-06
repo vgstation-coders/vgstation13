@@ -56,12 +56,13 @@ var/list/SPS_list = list()
 	if (emped)
 		return
 	else if (!transmitting)
-		switch(alert("Would you like to turn on the GPS?",,"Yes","No"))
+		switch(alert(user,"Would you like to turn on the GPS?",,"Yes","No"))
 			if ("Yes")
-				transmitting = TRUE
-				to_chat(usr, "<span class = 'notice'>You activate the [src].</span>")
-				overlays += image(icon = icon, icon_state = "working")
-				ui_interact(user)
+				if(!emped && !transmitting && Adjacent(user) && !user.incapacitated())
+					transmitting = TRUE
+					to_chat(user, "<span class = 'notice'>You activate \the [src].</span>")
+					overlays += image(icon = icon, icon_state = "working")
+					ui_interact(user)
 	else
 		ui_interact(user)
 
@@ -135,11 +136,6 @@ var/list/SPS_list = list()
 	if(href_list["toggle_refresh"])
 		autorefreshing = !autorefreshing
 		return TRUE
-		if(emped)
-			transmitting = FALSE
-
-		return TRUE
-
 	if(..())
 		return FALSE
 
