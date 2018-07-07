@@ -120,6 +120,25 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	goliath_reinforce = TRUE
+	var/hidecount = 0
+
+/obj/item/clothing/head/helmet/space/rig/mining/attackby(var/obj/P, mob/user)
+	..()
+	if(istype(P,  /obj/item/asteroid/goliath_hide))
+		if(!isturf(loc))
+			to_chat(user, "<span class='warning'>\The [src] must be safely placed on the ground for modification.</span>")
+			return
+		hidecount ++
+		if(hidecount >= 1)
+			name = "reinforced mining helmet"S
+			icon_state = "rig0-mining_goliath1"
+			item_state = "rig0-mining_goliath1"
+			_color = "mining_goliath1"
+		if(hidecount >= 3)
+			name = "goliath hide helmet"
+			icon_state = "rig0-mining_goliath2"
+			item_state = "rig0-mining_goliath2"
+			_color = "mining_goliath2"
 
 /obj/item/clothing/suit/space/rig/mining
 	icon_state = "rig-mining"
@@ -129,6 +148,23 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	goliath_reinforce = TRUE
+	var/hidecount = 0
+
+obj/item/clothing/suit/space/rig/mining/attackby(var/obj/P, mob/user)
+	..()
+	if(istype(P,  /obj/item/asteroid/goliath_hide))
+		if(!isturf(loc))
+			to_chat(user, "<span class='warning'>\The [src] must be safely placed on the ground for modification.</span>")
+			return
+		hidecount ++
+		if(hidecount >= 1)
+			name = "reinforced mining hardsuit"
+			icon_state = "rig-mining_goliath1"
+			item_state = "rig-mining_goliath1"
+		if(hidecount >= 3)
+			name = "goliath hardsuit"
+			icon_state = "rig-mining_goliath2"
+			item_state = "rig-mining_goliath2"
 
 //Syndicate rig
 /obj/item/clothing/head/helmet/space/rig/syndi
