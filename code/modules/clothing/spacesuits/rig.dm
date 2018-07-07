@@ -130,7 +130,7 @@
 			return
 		hidecount ++
 		if(hidecount >= 1)
-			name = "reinforced mining helmet"S
+			name = "reinforced mining helmet"
 			icon_state = "rig0-mining_goliath1"
 			item_state = "rig0-mining_goliath1"
 			_color = "mining_goliath1"
