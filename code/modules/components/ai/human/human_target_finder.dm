@@ -26,6 +26,6 @@
 		var/assailant = args["assailant"]
 		var/damage_done = args["damage"]
 		if(damage_done > 15) //Intent to kill!
-			B.friends &= assailant
+			B.friends.Remove(assailant)
 		if(damage_done > 2)
 			B.enemies |= assailant

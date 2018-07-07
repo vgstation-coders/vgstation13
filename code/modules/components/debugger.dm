@@ -10,6 +10,6 @@
 		to_chat(world, "<a HREF='?src=\ref[src];pause=1'>\[Press here to stop and start the spam\]</a>")
 
 /datum/component/debugger/Topic(href, href_list)
-	.=.()
+	.=..()
 	if(href_list["pause"])
 		spam = !spam
