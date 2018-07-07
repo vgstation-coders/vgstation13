@@ -25,7 +25,7 @@
 	if(message_type == COMSIG_ATTACKEDBY) //YOU HAVE JUST MADE AN ENEMY FOR LIFE
 		var/assailant = args["assailant"]
 		var/damage_done = args["damage"]
-		if(B.friends.Find(assailant) && damage_done > 15) //Intent to kill!
-			B.friends.Remove(assailant)
-		if(damage_done > 2 && !B.enemies.Find(assailant))
-			B.enemies.Add(assailant)
+		if(damage_done > 15) //Intent to kill!
+			B.friends &= assailant
+		if(damage_done > 2)
+			B.enemies |= assailant

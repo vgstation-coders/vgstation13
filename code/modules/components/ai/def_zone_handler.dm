@@ -2,14 +2,14 @@
 	if(message_type == COMSIG_GETDEFZONE)
 		var/mob/living/target = args["target"]
 		var/damagetype = args["damage_type"]
-		ASSERT(target && istype(target))
+		ASSERT(istype(target))
 		return EvaluateTarget(target, damagetype)
 
 /datum/component/ai/targetting_handler/proc/EvaluateTarget(var/mob/living/target, var/damagetype) //Center mass.
 	return LIMB_CHEST
 
 /datum/component/ai/targetting_handler/dumb/EvaluateTarget(var/mob/living/target, var/damagetype) //Random
-	var/list/potential_targets = list(
+	var/list/static/potential_targets = list(
 		LIMB_HEAD,
 		LIMB_CHEST,
 		LIMB_GROIN,
@@ -25,7 +25,7 @@
 	return pick(potential_targets)
 
 /datum/component/ai/targetting_handler/smart/EvaluateTarget(var/mob/living/target, var/damagetype) //Goes for the part with the least armor
-	var/list/potential_target = list(
+	var/list/static/potential_target = list(
 		LIMB_HEAD,
 		LIMB_CHEST,
 		LIMB_GROIN,
