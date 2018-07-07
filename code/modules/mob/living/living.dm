@@ -1722,6 +1722,11 @@ Thanks.
 		return THREW_SOMETHING
 
 /mob/living/proc/handle_addictions()
+	for(var/A in trace_chems)
+		var/datum/reagent/R = A
+		if(!addictions.Find(A) && initial(R.addiction_tick) < trace_chems[A])
+			R.on_addiction(src)
+
 	for(var/datum/addiction/A in addictions)
 		A.handle_addiction()
 

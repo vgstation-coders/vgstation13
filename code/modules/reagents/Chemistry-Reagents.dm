@@ -186,7 +186,7 @@
 	if(M.addictions[src.id])
 		return
 	var/datum/addiction/A = new(M, src.id)
-	A.add_effect(new /datum/addiction_effect, 100)
+	A.add_random_effects()
 
 
 /datum/reagent/send_to_past(var/duration)

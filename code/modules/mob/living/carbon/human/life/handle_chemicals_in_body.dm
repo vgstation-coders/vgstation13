@@ -154,3 +154,12 @@
 	updatehealth()
 
 	return //TODO: DEFERRED
+
+
+//Handles chem traces
+/mob/living/carbon/human/proc/handle_trace_chems()
+	//New are added for reagents to random organs.
+	for(var/datum/reagent/A in reagents.reagent_list)
+		var/datum/organ/O = pick(organs)
+		O.trace_chemicals[A.name] = 100
+		trace_chems[A.type]++
