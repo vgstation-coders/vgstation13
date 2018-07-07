@@ -121,11 +121,14 @@
 	name = who_we_were.name+" cyber horror"
 	desc = "What was once \a [who_we_were], twisted by machine."
 	var/multiplier = who_we_were.reagents.has_reagent(MEDNANOBOTS)?who_we_were.reagents.get_reagent_amount(MEDNANOBOTS)/10:1
-
-	if(isanimal(who_we_were) && who_we_were:icon_living && has_icon(icon, who_we_were:icon_living))
-		icon_state = who_we_were:icon_living
-		icon_living = who_we_were:icon_living
-	else
+	var/has_robo_icon = FALSE
+	if(isanimal(who_we_were)
+		var/mob/living/simple_animal/S = who_we_were
+		if(has_icon(icon, who_we_were.icon_living)
+			has_robo_icon = TRUE
+			icon_state = who_we_were.icon_living
+			icon_living = who_we_were.icon_living
+	if(!has_robo_icon)
 		var/icon/original = icon(who_we_were.icon, who_we_were.icon_state)
 		original.ColorTone("#71E3E0")
 		icon = original
