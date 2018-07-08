@@ -36,7 +36,7 @@
 		Aggro()
 	if(P.damage < 30)
 		P.damage = (P.damage / 2)
-		visible_message("<span class='danger'>The [P] has a reduced effect on [src]!</span>")
+		visible_message("<span class='danger'>\The [P] has a reduced effect on \the [src]!</span>")
 	..()
 
 /mob/living/simple_animal/hostile/asteroid/hitby(atom/movable/AM, speed)//No floor tiling them to death, wiseguy
@@ -48,9 +48,8 @@
 		if(!stat)
 			Aggro()
 		if(T.throwforce <= 15 && speed < 10)
-			visible_message("<span class='notice'>The [T.name] [src.throw_message] [src.name]!</span>")
+			visible_message("<span class='notice'>\The [T] [src.throw_message] \the [src]!</span>")
 			return
-	..()
 
 /mob/living/simple_animal/hostile/asteroid/basilisk
 	name = "basilisk"
@@ -100,8 +99,7 @@
 			var/mob/living/L = target
 			L.bodytemperature = max(L.bodytemperature-1,T0C+25)
 			L.apply_damage(5, BURN, null, used_weapon = "Excessive Cold")
-			visible_message("<span class='danger'>The [src.name]'s stare chills [L.name] to the bone!</span>")
-	return
+			visible_message("<span class='danger'>\The [src.name]'s stare chills \the [L] to the bone!</span>")
 
 /mob/living/simple_animal/hostile/asteroid/basilisk/ex_act(severity)
 	if(flags & INVULNERABLE)
@@ -166,18 +164,16 @@ obj/item/asteroid/basilisk_hide/New()
 	target = new_target
 	if(target != null)
 		if(istype(target, /obj/item/weapon/ore))
-			visible_message("<span class='notice'>The [src.name] looks at [target.name] with hungry eyes.</span>")
+			visible_message("<span class='notice'>\The [src] looks at \the [target] with hungry eyes.</span>")
 			stance = HOSTILE_STANCE_ATTACK
 			return
 		if(isliving(target))
 			Aggro()
 			stance = HOSTILE_STANCE_ATTACK
-			visible_message("<span class='danger'>The [src.name] tries to flee from [target.name]!</span>")
+			visible_message("<span class='danger'>\The [src] tries to flee from \the [target]!</span>")
 			retreat_distance = 10
 			minimum_distance = 10
 			Burrow()
-			return
-	return
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/AttackingTarget()
 	if(istype(target, /obj/item/weapon/ore))
@@ -194,20 +190,38 @@ obj/item/asteroid/basilisk_hide/New()
 		O = null
 	if(ore_eaten > 5)//Limit the scope of the reward you can get, or else things might get silly
 		ore_eaten = 5
-	visible_message("<span class='notice'>The ore was swallowed whole!</span>")
+	visible_message("<span class='notice'>\The [targeted_ore] was swallowed whole!</span>")
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/Burrow()//Begin the chase to kill the goldgrub in time
 	if(!alerted)
 		alerted = 1
 		spawn(chase_time)
-		if(alerted)
-			visible_message("<span class='danger'>The [src.name] buries into the ground, vanishing from sight!</span>")
-			qdel(src)
+			if(alerted)
+				visible_message("<span class='danger'>\The [src] burrows into the ground, vanishing from sight!</span>")
+				var/turf/T = get_turf(src)
+				forceMove(null)
+				T.ex_act(2)
+				spawn(rand(30 SECONDS,90 SECONDS))
+					var/turf/new_turf
+					for(var/turf/TT in orange(T, 12)-orange(T,4))
+						if(prob(70))
+							continue
+						if(isspace(TT))
+							continue
+						new_turf = TT
+						break
+					new_turf.visible_message("<span class = 'warning'>A rumbling noise eminates from \the [new_turf].</span>")
+					spawn(5 SECONDS)
+						explosion(new_turf,-1,1,3)
+						spawn(1 SECONDS)
+							forceMove(new_turf)
+							LoseAggro()
+							alerted = FALSE
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/Reward()
 	if(!ore_eaten || ore_types_eaten.len == 0)
 		return
-	visible_message("<span class='danger'>[src] spits up the contents of its stomach before dying!</span>")
+	visible_message("<span class='danger'>\The [src] spits up the contents of its stomach before dying!</span>")
 	var/counter
 	for(var/R in ore_types_eaten)
 		for(counter=0, counter < ore_eaten, counter++)
@@ -217,7 +231,7 @@ obj/item/asteroid/basilisk_hide/New()
 
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/bullet_act(var/obj/item/projectile/P)
-	visible_message("<span class='danger'>The [P.name] was repelled by [src.name]'s girth!</span>")
+	visible_message("<span class='danger'>\The [P.name] was repelled by \the [src]'s girth!</span>")
 	return
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/death(var/gibbed = FALSE)
@@ -344,31 +358,31 @@ obj/item/asteroid/basilisk_hide/New()
 
 /obj/item/asteroid/hivelord_core/proc/consume(var/mob/living/user, var/mob/living/carbon/target)
 	if (inert)
-		to_chat(user, "<span class='notice'>[src] have become inert, its healing properties are no more.</span>")
+		to_chat(user, "<span class='notice'>\The [src] have become inert, its healing properties are no more.</span>")
 		return TRUE
 
 	if (target.stat == DEAD)
-		to_chat(user, "<span class='notice'>[src] are useless on the dead.</span>")
+		to_chat(user, "<span class='notice'>\The [src] are useless on the dead.</span>")
 		return
 
 	// revive() requires a check for suiciding
 	if (target.suiciding)
-		to_chat(user, "<span class='notice'>It's dead, Jim.</span>")
+		to_chat(user, "<span class='notice'>\The [target] refuses \the [src].</span>")
 		return
 
 	if (!target.hasmouth)
 		if (target != user)
-			to_chat(user, "<span class='warning'>You attempt to feed \the [src] to [target], but you realize they don't have a mouth. How dumb!</span>")
+			to_chat(user, "<span class='warning'>You attempt to feed \the [src] to \the [target], but you realize they don't have a mouth. How dumb!</span>")
 		else
 			to_chat(user, "<span class='warning'>You don't have a mouth to eat \the [src] with.</span>")
 		return
 
 	// Delay feeding to others, just like in regular food
 	if (target != user)
-		user.visible_message("<span class='danger'>[user] attempts to feed [target] \the [src].</span>", "<span class='danger'>You attempt to feed [target] \the [src].</span>")
+		user.visible_message("<span class='danger'>\The [user] attempts to feed \the [target] \the [src].</span>", "<span class='danger'>You attempt to feed \the [target] \the [src].</span>")
 		if (!do_mob(user, target))
 			return
-		user.visible_message("<span class='notice'>[user] feeds [target] the [src]... They look better!</span>")
+		user.visible_message("<span class='notice'>\The [user] feeds \the [target] \the [src]... They look better!</span>")
 	else
 		to_chat(user, "<span class='notice'>You chomp into \the [src], barely managing to hold it down, but feel amazingly refreshed in mere moments.</span>")
 
@@ -483,8 +497,7 @@ obj/item/asteroid/basilisk_hide/New()
 /obj/effect/goliath_tentacle/proc/Trip()
 	for(var/mob/living/M in src.loc)
 		M.Knockdown(5)
-		visible_message("<span class='warning'>The [src.name] knocks [M.name] down!</span>")
-
+		visible_message("<span class='warning'>\The [src.name] knocks \the [M] down!</span>")
 	qdel(src)
 
 /obj/effect/goliath_tentacle/Crossed(atom/movable/O)
