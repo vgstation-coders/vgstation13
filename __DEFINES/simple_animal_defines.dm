@@ -3,3 +3,4 @@
 #define SMASH_CONTAINERS 2	//closets, crates
 #define SMASH_WALLS 4
 #define SMASH_RWALLS 8
+#define SMASH_ASTEROID 16

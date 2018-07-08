@@ -155,6 +155,7 @@ obj/item/asteroid/basilisk_hide/New()
 	wanted_objects = list(/obj/item/weapon/ore/diamond, /obj/item/weapon/ore/gold, /obj/item/weapon/ore/silver,
 						  /obj/item/weapon/ore/uranium)
 
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | SMASH_ASTEROID
 	var/list/ore_types_eaten = list()
 	var/alerted = 0
 	var/ore_eaten = 1
@@ -547,6 +548,7 @@ obj/item/asteroid/basilisk_hide/New()
 	vision_range = 4
 	faction = "neutral"
 	maxbodytemp = ARBITRARILY_PLANCK_NUMBER
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | SMASH_ASTEROID
 	var/fire_time
 	var/fire_extremity
 
@@ -607,12 +609,9 @@ obj/item/asteroid/basilisk_hide/New()
 	return 0
 
 /mob/living/simple_animal/hostile/asteroid/magmaw/EscapeConfinement()
-	..()
 	if(world.time < fire_time) //Not hungry enough to go smashing up asteroids yet
 		return
-	for(var/turf/unsimulated/mineral/M in range(src, 1))
-		if(prob(15))
-			UnarmedAttack(M, Adjacent(M))
+	..()
 
 /mob/living/simple_animal/hostile/asteroid/magmaw/UnarmedAttack(var/atom/A, var/proximity, var/params)
 	if(proximity == 0)
@@ -627,9 +626,10 @@ obj/item/asteroid/basilisk_hide/New()
 		else if(is_sheet)
 			fire_time = world.time + 90 SECONDS
 			fire_extremity = 2
-		qdel(A)
+		if(is_sheet)
+			var/obj/item/stack/sheet/S = A
+			S.use(1)
+		else
+			qdel(A)
 		return
-	if(istype(A,/turf/unsimulated/mineral))
-		var/turf/unsimulated/mineral/M = A
-		M.GetDrilled(0)
 	return ..()
