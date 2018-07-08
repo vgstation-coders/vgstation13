@@ -15,7 +15,7 @@
 	volume = 50
 	flags = FPRINT  | OPENCONTAINER
 	layer = ABOVE_OBJ_LAYER
-
+	var/opaque = FALSE //when true no reagent filling overlay is applied to the icon.
 	//This is absolutely terrible
 	// TODO To remove this, return 1 on every attackby() that handles reagent_containers.
 	var/list/can_be_placed_into = list(
@@ -198,7 +198,8 @@
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 
-		overlays += filling
+		if (!opaque)
+			overlays += filling
 
 	if(!is_open_container())
 		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
@@ -226,9 +227,10 @@
 	volume = 50
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
-
+	opaque = TRUE
+/*
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/update_icon()
-	return
+	return */
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 	name = "large stasis beaker"
@@ -248,9 +250,10 @@
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,200)
 	flags = FPRINT  | OPENCONTAINER
 	origin_tech = Tc_BLUESPACE + "=2;" + Tc_MATERIALS + "=3"
-
+	opaque = TRUE
+/*
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/update_icon()
-	return
+	return */
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
 	name = "large bluespace beaker"
