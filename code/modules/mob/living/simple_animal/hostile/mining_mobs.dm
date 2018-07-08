@@ -505,6 +505,7 @@ obj/item/asteroid/basilisk_hide/New()
 		var/obj/item/clothing/C = target
 		var/current_armor = C.armor
 		if(!isturf(C.loc))
+			to_chat(user, "<span class='warning'>\The [C] must be safely placed on the ground for modification.</span>")
 			return
 		if(C.goliath_reinforce)
 			if(current_armor.["melee"] < 90)
@@ -513,7 +514,30 @@ obj/item/asteroid/basilisk_hide/New()
 				qdel(src)
 			else
 				to_chat(user, "<span class='info'>You can't improve [C] any further.</span>")
-	return
+	if(istype(target, /obj/item/clothing/head/helmet/space/rig/mining))
+		var/obj/item/clothing/head/helmet/space/rig/mining/P = target
+		if(P.hidecount < 2)
+			P.hidecount ++
+			P.name = "reinforced mining helmet"
+			P.icon_state = "rig0-mining_goliath1"
+			P.item_state = "rig0-mining_goliath1"
+			P._color = "mining_goliath1"
+		else
+			P.name = "goliath hide helmet"
+			P.icon_state = "rig0-mining_goliath2"
+			P.item_state = "rig0-mining_goliath2"
+			P._color = "mining_goliath2"
+	if(istype(target, /obj/item/clothing/suit/space/rig/mining))
+		var/obj/item/clothing/suit/space/rig/mining/P = target
+		if(P.hidecount < 2)
+			P.hidecount ++
+			P.name = "reinforced mining hardsuit"
+			P.icon_state = "rig-mining_goliath1"
+			P.item_state = "rig-mining_goliath1"
+		else
+			P.name = "goliath hardsuit"
+			P.icon_state = "rig-mining_goliath2"
+			P.item_state = "rig-mining_goliath2"
 
 /mob/living/simple_animal/hostile/asteroid/magmaw
 	name = "magmaw"
