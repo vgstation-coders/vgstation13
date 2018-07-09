@@ -220,6 +220,7 @@ What is the naming convention for planes or layers?
 	#define BLIND_LAYER				3
 	#define CRIT_LAYER 				4
 	#define HALLUCINATION_LAYER 	5
+	#define TOP_FULLSCREEN_LAYER	6
 
 #define HUD_PLANE 				23		// For the Head-Up Display
 
@@ -227,6 +228,11 @@ What is the naming convention for planes or layers?
 	#define HUD_BASE_LAYER		 	1
 	#define HUD_ITEM_LAYER 			2
 	#define HUD_ABOVE_ITEM_LAYER 	3
+
+#define ABOVE_HUD_PLANE			24
+	#define SCANLINES_LAYER			1
+	#define COVERALL_LAYER 			2
+	#define ABOVE_COVERALL_LAYER	3
 
 /atom/proc/hud_layerise()
 	plane = HUD_PLANE
