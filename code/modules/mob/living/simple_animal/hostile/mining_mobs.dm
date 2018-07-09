@@ -516,11 +516,11 @@ obj/item/asteroid/basilisk_hide/New()
 			else
 				to_chat(user, "<span class='info'>You can't improve [C] any further.</span>")
 		if(has_icon(C.icon, "[initial(C.item_state)]_goliath[C.hidecount]"))
-			C.name = "reinforced mining hardsuit"
+			C.name = "reinforced [initial(C.name)]"
 			C.icon_state = "[initial(C.item_state)]_goliath[C.hidecount]"
 			C.item_state = "[initial(C.item_state)]_goliath[C.hidecount]"
 		if(has_icon(C.icon, "[initial(C.icon_state)]_goliath[C.hidecount]"))
-			C.name = "reinforced mining helmet"
+			C.name = "reinforced [initial(C.name)]"
 			C.icon_state = "[initial(C.icon_state)]_goliath[C.hidecount]"
 			C.item_state = "[initial(C.item_state)]_goliath[C.hidecount]"
 			C._color = "mining_goliath[C.hidecount]"
