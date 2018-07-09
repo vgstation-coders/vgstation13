@@ -21,15 +21,16 @@
 	if(W.material_type)
 		W.material_type.on_use(W, src, user)
 
-/mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null)
+/mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null, var/def_zone = null)
 	if(!no_delay)
 		user.delayNextAttack(10)
 	if(istype(I) && ismob(user))
 		if(originator)
-			I.attack(src, user, null, originator)
+			I.attack(src, user, def_zone, originator)
 		else
-			I.attack(src, user)
-
+			I.attack(src, user, def_zone)
+	if(BrainContainer)
+		BrainContainer.SendSignal(COMSIG_ATTACKEDBY, list("assailant"=user,"damage"=I.force))
 
 
 // Proximity_flag is 1 if this afterattack was called on something adjacent, in your square, or on your person.
