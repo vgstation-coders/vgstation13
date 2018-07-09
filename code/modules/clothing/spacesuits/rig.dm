@@ -120,7 +120,7 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	goliath_reinforce = TRUE
-	var/hidecount = 0
+	hidecount = 0
 
 /obj/item/clothing/suit/space/rig/mining
 	icon_state = "rig-mining"
@@ -130,7 +130,7 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	goliath_reinforce = TRUE
-	var/hidecount = 0
+	hidecount = 0
 
 //Syndicate rig
 /obj/item/clothing/head/helmet/space/rig/syndi

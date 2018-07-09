@@ -12,6 +12,7 @@
 
 	var/list/obj/item/clothing/accessory/accessories = list()
 	var/goliath_reinforce = FALSE
+	var/hidecount = 0
 	var/extinguishingProb = 15
 	var/can_extinguish = FALSE
 

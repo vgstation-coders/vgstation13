@@ -508,36 +508,22 @@ obj/item/asteroid/basilisk_hide/New()
 			to_chat(user, "<span class='warning'>\The [C] must be safely placed on the ground for modification.</span>")
 			return
 		if(C.goliath_reinforce)
+			C.hidecount ++
 			if(current_armor.["melee"] < 90)
 				current_armor.["melee"] = min(current_armor.["melee"] + 10, 90)
 				to_chat(user, "<span class='info'>You strengthen [target], improving its resistance against melee attacks.</span>")
 				qdel(src)
 			else
 				to_chat(user, "<span class='info'>You can't improve [C] any further.</span>")
-	if(istype(target, /obj/item/clothing/head/helmet/space/rig/mining))
-		var/obj/item/clothing/head/helmet/space/rig/mining/P = target
-		if(P.hidecount < 2)
-			P.hidecount ++
-			P.name = "reinforced mining helmet"
-			P.icon_state = "rig0-mining_goliath1"
-			P.item_state = "rig0-mining_goliath1"
-			P._color = "mining_goliath1"
-		else
-			P.name = "goliath hide helmet"
-			P.icon_state = "rig0-mining_goliath2"
-			P.item_state = "rig0-mining_goliath2"
-			P._color = "mining_goliath2"
-	if(istype(target, /obj/item/clothing/suit/space/rig/mining))
-		var/obj/item/clothing/suit/space/rig/mining/P = target
-		if(P.hidecount < 2)
-			P.hidecount ++
-			P.name = "reinforced mining hardsuit"
-			P.icon_state = "rig-mining_goliath1"
-			P.item_state = "rig-mining_goliath1"
-		else
-			P.name = "goliath hardsuit"
-			P.icon_state = "rig-mining_goliath2"
-			P.item_state = "rig-mining_goliath2"
+		if(has_icon(C.icon, "[initial(C.item_state)]_goliath[C.hidecount]"))
+			C.name = "reinforced mining hardsuit"
+			C.icon_state = "[initial(C.item_state)]_goliath[C.hidecount]"
+			C.item_state = "[initial(C.item_state)]_goliath[C.hidecount]"
+		if(has_icon(C.icon, "[initial(C.icon_state)]_goliath[C.hidecount]"))
+			C.name = "reinforced mining helmet"
+			C.icon_state = "[initial(C.icon_state)]_goliath[C.hidecount]"
+			C.item_state = "[initial(C.item_state)]_goliath[C.hidecount]"
+			C._color = "mining_goliath[C.hidecount]"
 
 /mob/living/simple_animal/hostile/asteroid/magmaw
 	name = "magmaw"
