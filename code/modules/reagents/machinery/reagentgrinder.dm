@@ -155,7 +155,7 @@ var/global/list/juice_items = list (
 				if(items_transferred > 0)
 					to_chat(user, "You fill \the [src] to the brim.")
 				else
-					to_chat(usr, "\The [src] is too full for \the [G].")
+					to_chat(user, "\The [src] is too full for \the [G].")
 				break
 			B.remove_from_storage(G,src)
 			holdingitems += G
