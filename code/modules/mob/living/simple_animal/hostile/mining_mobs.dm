@@ -99,7 +99,7 @@
 			var/mob/living/L = target
 			L.bodytemperature = max(L.bodytemperature-1,T0C+25)
 			L.apply_damage(5, BURN, null, used_weapon = "Excessive Cold")
-			visible_message("<span class='danger'>\The [src.name]'s stare chills \the [L] to the bone!</span>")
+			visible_message("<span class='danger'>\The [src]'s stare chills \the [L] to the bone!</span>")
 
 /mob/living/simple_animal/hostile/asteroid/basilisk/ex_act(severity)
 	if(flags & INVULNERABLE)
@@ -232,7 +232,7 @@ obj/item/asteroid/basilisk_hide/New()
 
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/bullet_act(var/obj/item/projectile/P)
-	visible_message("<span class='danger'>\The [P.name] was repelled by \the [src]'s girth!</span>")
+	visible_message("<span class='danger'>\The [P] was repelled by \the [src]'s girth!</span>")
 	return
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/death(var/gibbed = FALSE)
@@ -498,7 +498,7 @@ obj/item/asteroid/basilisk_hide/New()
 /obj/effect/goliath_tentacle/proc/Trip()
 	for(var/mob/living/M in src.loc)
 		M.Knockdown(5)
-		visible_message("<span class='warning'>\The [src.name] knocks \the [M] down!</span>")
+		visible_message("<span class='warning'>\The [src] knocks \the [M] down!</span>")
 	qdel(src)
 
 /obj/effect/goliath_tentacle/Crossed(atom/movable/O)
