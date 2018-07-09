@@ -122,12 +122,12 @@
 	desc = "What was once \a [who_we_were], twisted by machine."
 	var/multiplier = who_we_were.reagents.has_reagent(MEDNANOBOTS)?who_we_were.reagents.get_reagent_amount(MEDNANOBOTS)/10:1
 	var/has_robo_icon = FALSE
-	if(isanimal(who_we_were)
+	if(isanimal(who_we_were))
 		var/mob/living/simple_animal/S = who_we_were
-		if(has_icon(icon, who_we_were.icon_living)
+		if(has_icon(icon, S.icon_living))
 			has_robo_icon = TRUE
-			icon_state = who_we_were.icon_living
-			icon_living = who_we_were.icon_living
+			icon_state = S.icon_living
+			icon_living = S.icon_living
 	if(!has_robo_icon)
 		var/icon/original = icon(who_we_were.icon, who_we_were.icon_state)
 		original.ColorTone("#71E3E0")
