@@ -41,7 +41,6 @@
 		left.forceMove(get_turf(src))
 		right.forceMove(get_turf(src))
 		if(user)
-			user.drop_item(src, force_drop = TRUE)
 			user.put_in_hands(left)
 			user.put_in_hands(right)
 		left = null
@@ -56,11 +55,5 @@
 	if(inhand_states != left.inhand_states)
 		inhand_states = left.inhand_states
 	overlays += image("icon" = right.icon, "icon_state" = right.icon_state, "pixel_x" = 6, "pixel_y" = -5)
-	if(wielded)
-		wielded.icon = right.icon
-		wielded.icon_state = right.icon_state
-		wielded.item_state = right.item_state
-		if(wielded.inhand_states != right.inhand_states)
-			wielded.inhand_states = right.inhand_states
 	if(user)
 		user.update_inv_hands()
