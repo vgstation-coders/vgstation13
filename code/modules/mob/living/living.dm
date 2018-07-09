@@ -95,7 +95,10 @@
 	//handles "call on life", allowing external life-related things to be processed
 	for(var/toCall in src.callOnLife)
 		if(locate(toCall) && callOnLife[toCall])
-			call(locate(toCall),callOnLife[toCall])()
+			try
+				call(locate(toCall),callOnLife[toCall])()
+			catch(var/exception/e)
+				stack_trace(e)
 		else
 			callOnLife -= toCall
 
