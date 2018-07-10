@@ -391,8 +391,7 @@
 		UnarmedAttack(A) //Bang on it till we get out
 	if(environment_smash_flags & SMASH_ASTEROID)
 		for(var/turf/unsimulated/mineral/M in range(src, 1))
-			if(prob(15))
-				UnarmedAttack(M, Adjacent(M))
+			UnarmedAttack(M, Adjacent(M))
 
 /mob/living/simple_animal/hostile/proc/FindHidden(var/atom/hidden_target)
 	if(istype(target.loc, /obj/structure/closet) || istype(target.loc, /obj/machinery/disposal) || istype(target.loc, /obj/machinery/sleeper))
