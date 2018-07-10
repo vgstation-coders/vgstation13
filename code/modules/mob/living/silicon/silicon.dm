@@ -153,6 +153,11 @@
 	return 1
 
 /mob/living/silicon/bullet_act(var/obj/item/projectile/Proj)
+	if(istype(Proj, /obj/item/projectile/energy/electrode/tesla))
+		var/obj/item/projectile/energy/electrode/tesla/S = Proj
+		Stun(S.siliconstun)
+		playsound(loc, 'sound/weapons/taserhit.ogg', 50, 0)
+		spark(loc, 5)
 	if(!Proj.nodamage)
 		adjustBruteLoss(Proj.damage)
 	Proj.on_hit(src,2)

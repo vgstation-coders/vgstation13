@@ -24,6 +24,16 @@
 */
 	//Damage will be handled on the MOB side, to prevent window shattering.
 
+/obj/item/projectile/energy/electrode/tesla
+	icon_state = "sparkblue"
+	nodamage = 1
+	stun = 0
+	weaken = 0
+	stutter = 0
+	var/siliconstun = 10
+	hitsound = null
+//An electrode that stuns silicons. Stun is applied on the SILICON side.
+
 /obj/item/projectile/energy/tag
 	name = "tag electrode"
 	icon_state = "sparkblue"
