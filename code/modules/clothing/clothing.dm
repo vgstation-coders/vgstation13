@@ -629,6 +629,8 @@ BLIND     // can't see anything
 /obj/item/clothing/under/AltClick()
 	if(is_holder_of(usr, src))
 		set_sensors(usr)
+	else
+		return ..()
 
 /datum/action/item_action/toggle_minimap
 	name = "Toggle Minimap"
