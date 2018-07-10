@@ -78,6 +78,8 @@
 /obj/item/device/radio/AltClick()
 	if(!usr.incapacitated() && is_holder_of(usr, src))
 		attack_self(usr)
+	else
+		return ..()
 
 /obj/item/device/radio/attack_self(mob/user as mob)
 	user.set_machine(src)
