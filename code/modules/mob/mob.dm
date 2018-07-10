@@ -993,7 +993,7 @@ var/list/slot_equipment_priority = list( \
 //note: ghosts can point, this is intended
 //visible_message will handle invisibility properly
 //overriden here and in /mob/dead/observer for different point span classes and sanity checks
-/mob/verb/pointed(atom/A as turf | obj | mob in view())
+/mob/verb/pointed(atom/A as turf | obj | mob in view(), params as null)
 	set name = "Point To"
 	set category = "Object"
 
@@ -1024,6 +1024,17 @@ var/list/slot_equipment_priority = list( \
 	point.invisibility = invisibility
 	point.pointer = src
 	point.target = A
+	if(params && !(A in get_all_slots()))
+		var/list/params_list = params2list(params)
+		point.pixel_x = text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2
+		if(abs(A.pixel_x) > WORLD_ICON_SIZE/2) //Is wall-mounted, and thus looks like it's on a different turf
+			point.pixel_x += A.pixel_x
+		point.pixel_y = text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2
+		if(abs(A.pixel_y) > WORLD_ICON_SIZE/2) //Is wall-mounted, and thus looks like it's on a different turf
+			point.pixel_y += A.pixel_y
+	else
+		point.pixel_x = A.pixel_x
+		point.pixel_y = A.pixel_y
 	spawn(20)
 		if(point)
 			qdel(point)
