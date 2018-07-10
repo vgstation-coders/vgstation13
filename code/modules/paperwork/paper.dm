@@ -452,7 +452,7 @@ var/global/list/paper_folding_results = list ( \
 	return 1
 
 /obj/item/weapon/paper/AltClick()
-	if(Adjacent(usr) && canfold(usr))
+	if(is_holder_of(usr, src) && canfold(usr))
 		fold()
 	else
 		return ..()
