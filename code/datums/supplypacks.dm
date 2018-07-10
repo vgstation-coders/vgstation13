@@ -909,7 +909,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Experimental energy gear"
 	contains = list(/obj/item/weapon/gun/energy/gun,
 					/obj/item/weapon/gun/energy/gun)
-	cost = 50
+	cost = 30
 	containertype = /obj/structure/closet/crate/secure
 	containername = "experimental energy gear crate"
 	access = list(access_armory)
