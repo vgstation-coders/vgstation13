@@ -119,7 +119,6 @@
 		return
 	chassis.occupant << browse(get_occupant_stats(),"window=msleeper")
 	onclose(chassis.occupant, "msleeper")
-	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/Topic(href,href_list)
 	if(..())

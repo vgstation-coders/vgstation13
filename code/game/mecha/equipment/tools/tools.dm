@@ -435,7 +435,6 @@
 /obj/item/mecha_parts/mecha_equipment/jetpack/attach(obj/mecha/M as obj)
 	..()
 	MS = new /spell/mech/jetpack(M, src)
-	return
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/activate()
 	toggle()
@@ -741,10 +740,10 @@
 
 /obj/item/mecha_parts/mecha_equipment/gravcatapult/alt_action()
 	if(mode == 1)
-		mode = 2;
+		mode = 2
 		to_chat(chassis.occupant, "<span class='notice'>Push mode activated.</span>")
 	else
-		mode = 1;
+		mode = 1
 		to_chat(chassis.occupant, "<span class='notice'>Pull mode activated.</span>")
 
 /obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster //what is that noise? A BAWWW from TK mutants.
@@ -1298,8 +1297,6 @@
 	name = ME.name
 
 /spell/mech/generator/cast(list/targets, mob/user)
-	/* var/output = ..() TODO: Address this, what is output
-	if(output) */
 	ME.activate()
 
 //This is pretty much just for the death-ripley so that it is harmless

@@ -200,11 +200,11 @@
 		return
 	if(M.occupant)
 		var/obj/mecha/combat/marauder/Marauder = M
-		if(lock_controls)
+		if(Marauder.lock_controls)
 			return
-		if(src.occupant)
-			if(dash_ready && get_charge() > 0)
-				crashing = null
+		if(Marauder.occupant)
+			if(Marauder.dash_ready && Marauder.get_charge() > 0)
+				Marauder.crashing = null
 
 		Marauder.crashing = null
 		var/landing = get_distant_turf(get_turf(M), Marauder.dir, 5)

@@ -1991,26 +1991,31 @@
 	charge_counter = 0
 	hud_state = "mecha_equip"
 	override_base = "mech"
-	var/obj/mecha/M
-	var/obj/item/mecha_parts/mecha_equipment/ME
+	var/obj/mecha/linked_mech
+	var/obj/item/mecha_parts/mecha_equipment/linked_equipment
 
 /spell/mech/New(var/obj/mecha/M, var/obj/item/mecha_parts/mecha_equipment/ME)
-	src.M = M
+	src.linked_mech = M
 	if(ME)
-		src.ME = ME
+		src.linked_equipment = ME
 		name = ME.name
 		hud_state = ME.icon_state
 		override_icon = ME.icon
 	charge_counter = charge_max
 	desc = "[name]"
 
-/spell/mech/cast(list/targets, mob/user)
-	if(M.selected != ME)
-		ME.activate()
-	else
-		ME.alt_action()
+/spell/mech/Destroy()
+	..()
+	linked_mech = null
+	linked_equipment = null
 
-/spell/mech/choose_targets(mob/user = user)
+/spell/mech/cast(list/targets, mob/user)
+	if(linked_mech.selected != linked_equipment)
+		linked_equipment.activate()
+	else
+		linked_equipment.alt_action()
+
+/spell/mech/choose_targets(mob/user = usr)
 	return list(user)
 
 /obj/mecha/proc/refresh_spells()
@@ -2032,7 +2037,6 @@
 		src.occupant_message("You switch to [ME]")
 		src.visible_message("[src] raises [ME]")
 		send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
-	return
 
 ///////////////////////
 ///// Power stuff /////
