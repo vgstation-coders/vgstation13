@@ -12,6 +12,14 @@
 /obj/item/weapon/gun/energy/taser/isHandgun()
 	return TRUE
 
+//This one stuns silicons.
+/obj/item/weapon/gun/energy/taser/tesla
+	name = "tesla gun"
+	desc = "A small, low capacity gun used to disable robots."
+	icon_state = "energy"
+	projectile_type = "/obj/item/projectile/energy/electrode/tesla"
+
+//This is the one's silicons use.
 /obj/item/weapon/gun/energy/taser/cyborg
 	name = "taser gun"
 	desc = "A small, low capacity gun used for non-lethal takedowns."

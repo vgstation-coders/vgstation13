@@ -1,8 +1,8 @@
 /obj/item/weapon/melee/baton
 	name = "stun baton"
 	desc = "A stun baton for incapacitating people with."
-	icon_state = "stun baton"
-	item_state = "baton0"
+	icon_state = "stunbaton"
+	item_state = "stunbaton_baton0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	flags = FPRINT
 	slot_flags = SLOT_BELT
@@ -15,6 +15,7 @@
 	var/status = 0
 	var/obj/item/weapon/cell/bcell = null
 	var/hitcost = 100 // 10 hits on crap cell
+	var/stunsilicons = FALSE //For tesla batons.
 
 /obj/item/weapon/melee/baton/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is putting the live [src.name] in \his mouth! It looks like \he's trying to commit suicide.</span>")
@@ -55,14 +56,14 @@
 
 /obj/item/weapon/melee/baton/update_icon()
 	if(status)
-		icon_state = "[initial(name)]_active"
-		item_state = "baton1"
+		icon_state = "[initial(icon_state)]_active"
+		item_state = "[initial(icon_state)]_baton1"
 	else if(!bcell)
-		icon_state = "[initial(name)]_nocell"
-		item_state = "baton0"
+		icon_state = "[initial(icon_state)]_nocell"
+		item_state = "[initial(icon_state)]_baton0"
 	else
-		icon_state = "[initial(name)]"
-		item_state = "baton0"
+		icon_state = "[initial(icon_state)]"
+		item_state = "[initial(icon_state)]_baton0"
 
 	if (istype(loc,/mob/living/carbon))
 		var/mob/living/carbon/M = loc
@@ -151,13 +152,17 @@
 		deductcharge(hitcost)
 		return
 
-	if(isrobot(M))
-		..()
-		return
 	if(!isliving(M))
 		return
 
 	var/mob/living/L = M
+
+	if((isrobot(L) && !stunsilicons) || (!isrobot(L) && stunsilicons))
+		if(user.a_intent != I_HURT)
+			L.visible_message("<span class='attack'>\The [user] prods \the [L] with \the [src] but it has no effect!</span>")
+		else
+			..()
+		return
 
 	if(user.a_intent == I_HURT) // Harm intent : possibility to miss (in exchange for doing actual damage)
 		. = ..() // Does the actual damage and missing chance. Returns null on sucess ; 0 on failure (blame oldcoders)
@@ -201,6 +206,8 @@
 		return ..()
 	if(!isliving(hit_atom) || !status)
 		return
+	if(isrobot(hit_atom) && !stunsilicons)
+		return
 	var/client/foundclient = directory[ckey(fingerprintslast)]
 	var/mob/foundmob = foundclient.mob
 	var/mob/living/L = hit_atom
@@ -239,6 +246,23 @@
 /obj/item/weapon/melee/baton/restock()
 	if(bcell)
 		bcell.charge = bcell.maxcharge
+
+
+/obj/item/weapon/melee/baton/tesla
+	name = "tesla baton"
+	desc = "A tesla baton for incapacitating robot with."
+	icon_state = "teslabaton"
+	item_state = "teslabaton_baton0"
+	stunsilicons = TRUE
+
+/obj/item/weapon/melee/baton/tesla/loaded/New()
+	..()
+	bcell = new(src)
+	bcell.charge=bcell.maxcharge
+	update_icon()
+
+
+
 
 //Makeshift stun baton. Replacement for stun gloves.
 /obj/item/weapon/melee/baton/cattleprod
