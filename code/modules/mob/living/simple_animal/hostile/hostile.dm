@@ -268,8 +268,8 @@
 
 /mob/living/simple_animal/hostile/death(var/gibbed = FALSE)
 	LoseAggro()
-	..(gibbed)
 	walk(src, 0)
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/inherit_mind(mob/living/simple_animal/from)
 	..()

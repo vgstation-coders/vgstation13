@@ -113,12 +113,13 @@ client/proc/one_click_antag()
 								candidates += applicant
 
 	if(candidates.len)
-		var/numChanglings = min(candidates.len, 3)
+		var/numChanglings = min(candidates.len, input("Create how many changelings?", "Make Changelings", 3) as num|null)
 
 		for(var/i = 0, i<numChanglings, i++)
 			H = pick(candidates)
 			H.mind.make_Changling()
 			candidates.Remove(H)
+			log_admin("[key_name(owner)] has changeling'ed [key_name(H)] via create antagonist verb.")
 
 		return 1
 
@@ -503,12 +504,12 @@ client/proc/one_click_antag()
 								candidates += applicant
 
 	if(candidates.len)
-		var/numVamps = min(candidates.len, 3)
+		var/numVamps = min(candidates.len, input("Create how many vampires?", "Make Vampires", 3) as num|null)
 
 		for(var/i = 0, i<numVamps, i++)
 			H = pick(candidates)
 			H.mind.make_new_vampire()
-			log_admin("[H] has been made a vampire through makeVampires().")
+			log_admin("[key_name(owner)] has made [key_name(H)] a vampire via create antagonist verb.")
 			temp.greet_vampire(H.mind)
 			candidates.Remove(H)
 

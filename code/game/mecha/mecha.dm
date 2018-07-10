@@ -21,7 +21,7 @@
 	layer = MOB_LAYER //icon draw layer
 	plane = MOB_PLANE
 	infra_luminosity = 15 //byond implementation is bugged.
-	var/hud_list[2]
+	var/list/hud_list = list()
 	var/initial_icon = null //Mech type for resetting icon. Only used for reskinning kits (see custom items)
 	var/can_move = 1
 	var/mob/living/carbon/occupant = null
@@ -85,6 +85,8 @@
 						/obj/item/mecha_parts/mecha_tracking,
 						/obj/item/device/radio/electropack,
 						/obj/machinery/portable_atmospherics/scrubber/mech)
+
+	var/lock_controls = 0
 
 /obj/mecha/New()
 	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
@@ -339,12 +341,18 @@
 	if(connected_port)
 		occupant_message("Unable to move while connected to the air system port.", TRUE)
 		return 0
+	if(lock_controls) //No moving while using the Gravpult!
+		return 0
 	if(throwing)
 		return 0
 	if(state)
 		occupant_message("<font color='red'>Maintenance protocols in effect.</font>", TRUE)
 		return
 	return domove(direction)
+
+/obj/mecha/proc/set_control_lock(var/lock=0,var/delay=0)
+	spawn(delay)
+		lock_controls = lock
 
 /obj/mecha/proc/domove(direction)
 	return call((proc_res["dyndomove"]||src), "dyndomove")(direction)
@@ -356,6 +364,8 @@
 	if(src.pr_inertial_movement.active())
 		return 0
 	if(!has_charge(step_energy_drain))
+		return 0
+	if(lock_controls) //No moving while using the Gravpult!
 		return 0
 	var/move_result = 0
 	startMechWalking()
@@ -469,7 +479,7 @@
 			src.crashing = null
 
 		if(breakthrough)
-			if(crashing)
+			if(crashing && !istype(crashing,/turf/space))
 				spawn(1)
 					src.throw_at(crashing, 50, src.throw_speed)
 			else
@@ -1339,6 +1349,9 @@
 	if(!src.occupant)
 		return
 
+	if(lock_controls) //No ejecting while using the Gravpult!
+		return
+
 	if(!exploding && exit == loc) //We don't actually want to eject our occupant on the same tile that we are, that puts them "under" us, which lets them use the mech like a personal forcefield they can shoot out of.
 		var/list/turf_candidates = list(get_step(loc, dir)) + trange(1, loc) //Evaluate all 9 turfs around us, but put "directly in front of us" as the first choice.
 		for(var/turf/simulated/T in turf_candidates)
@@ -1354,6 +1367,7 @@
 		mob_container = brain.container
 	else
 		return
+	var/obj/structure/deathsquad_gravpult/G = locate() in get_turf(src)
 	if(mob_container.forceMove(exit))//ejecting mob container
 	/*
 		if(ishuman(occupant) && (return_pressure() > HAZARD_HIGH_PRESSURE))
@@ -1409,6 +1423,8 @@
 		src.occupant = null
 		src.icon_state = src.reset_icon()+"-open"
 		src.dir = dir_in
+		if (G)
+			G.hud_off()
 
 	return
 

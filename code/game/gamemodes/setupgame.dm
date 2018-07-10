@@ -214,7 +214,7 @@ var/LACTOSEBLOCK = 0
 					warning("DNA2: Gene [gene.name] trying to add to already assigned gene block list (used by [english_list(assigned_gene_blocks[block])])")
 				assigned_gene_blocks[block] = gene
 
-	testing("DNA2: [numsToAssign.len] blocks are unused: [english_list(numsToAssign)]")
+	//testing("DNA2: [numsToAssign.len] blocks are unused: [english_list(numsToAssign)]")
 
 // Run AFTER genetics setup and AFTER species setup.
 /proc/setup_species()

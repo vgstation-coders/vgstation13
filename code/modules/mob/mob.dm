@@ -997,7 +997,15 @@ var/list/slot_equipment_priority = list( \
 	set name = "Point To"
 	set category = "Object"
 
-	if(!src || (usr.isUnconscious() && !isobserver(src)) || !isturf(src.loc) || !(A in view(src.loc)))
+	if(!src || (usr.isUnconscious() && !isobserver(src)) || !isturf(src.loc))
+		return 0
+
+	if(isitem(A) && is_holding_item(A))
+		var/obj/item/I = A
+		I.showoff(src)
+		return 0
+
+	if(!(A in view(src.loc) + get_all_slots()))
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))
@@ -1027,7 +1035,7 @@ var/list/slot_equipment_priority = list( \
 
 //this and stop_pulling really ought to be /mob/living procs
 /mob/proc/start_pulling(var/atom/movable/AM)
-	if ( !AM || !src || src==AM || !isturf(AM.loc) )	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
+	if ( !AM || !src || src==AM || !isturf(AM.loc) || !AM.can_be_pulled(src))	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
 		return
 
 	if(!has_hand_check())

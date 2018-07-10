@@ -3039,7 +3039,7 @@
 	name = "Albuterol"
 	id = ALBUTEROL
 	result = ALBUTEROL
-	required_reagents = list(HYPERZINE = 1, INAPROVALINE = 1)
+	required_reagents = list(TRAMADOL = 1, HYPERZINE = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/saltwater
@@ -3080,6 +3080,12 @@
 	required_reagents = list(FORMIC_ACID = 1, PHENOL = 1, RADIUM = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/colorful_reagent
+	name = "Colorful Reagent"
+	id = COLORFUL_REAGENT
+	result = COLORFUL_REAGENT
+	required_reagents = list(MESCALINE = 1, PSILOCYBIN = 1, AMATOXIN = 1)
+	result_amount = 3
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

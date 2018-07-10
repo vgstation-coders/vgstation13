@@ -552,6 +552,9 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define EYE_BLUR	"eye_blur"
 #define DROWSY		"drowsy"
 
+#define CUT 		"cut"
+#define BRUISE		"bruise"
+#define SLUR 		"slur"
 
 //intent flags yay
 #define I_HELP		"help"
@@ -693,6 +696,7 @@ SEE_PIXELS	256
 #define BEE_OUT_FOR_ENEMIES 2
 #define BEE_HEADING_HOME 3
 #define BEE_SWARM 4
+#define BEE_BUILDING 5
 
 #define LOC_KITCHEN 0
 #define LOC_ATMOS 1
@@ -713,28 +717,9 @@ SEE_PIXELS	256
 #define VERM_ROACHES 7
 #define VERM_GREMLINS 8
 #define VERM_BEES 9
+#define VERM_HORNETS 10
 
 #define ROUNDSTART_LOGOUT_REPORT_TIME 6000 //Amount of time (in deciseconds) after the rounds starts, that the player disconnect report is issued.
-
-//Damage things
-
-#define CUT 		"cut"
-#define BRUISE		"bruise"
-#define BRUTE		"brute"
-#define BURN		"fire"
-#define TOX			"tox"
-#define OXY			"oxy"
-#define CLONE		"clone"
-#define HALLOSS		"halloss"
-
-#define STUN		"stun"
-#define WEAKEN		"weaken"
-#define PARALYZE	"paralize"
-#define IRRADIATE	"irradiate"
-#define STUTTER		"stutter"
-#define SLUR 		"slur"
-#define EYE_BLUR	"eye_blur"
-#define DROWSY		"drowsy"
 
 // Special 'weapons', used in damage procs
 #define WPN_HIGH_BODY_TEMP "High Body Temperature"
@@ -1267,7 +1252,7 @@ var/proccalls = 1
 
 #else
 	#define writepanic(a) null << a
-#endif*/
+#endif
 
 //Default frequencies of signal based RC stuff, because comic and his magic numbers.
 #define FREQ_DISPOSAL 1367
@@ -1518,6 +1503,8 @@ var/proccalls = 1
 
 #define BEESPECIES_NORMAL	"bees"
 #define BEESPECIES_VOX		"chill bugs"
+#define BEESPECIES_HORNET	"hornets"
+#define BEESPECIES_BLOOD	"hell bugs"
 
 //mob/proc/is_pacified()
 #define VIOLENCE_SILENT		0

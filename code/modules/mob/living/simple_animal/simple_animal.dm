@@ -14,6 +14,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/icon_living = ""
 	var/icon_dead = ""
 	var/icon_gib = null	//We only try to show a gibbing animation if this exists.
+	var/icon_attack = null //We only try to show an attacking animation if it exists
+	var/icon_attack_time //How long the ahove animation runs, in deciseconds
+	var/icon_dying = null //We only try to show a dying animation if it exists.
+	var/icon_dying_time //How long the above animation runs in deciseconds
 
 	var/list/speak = list()
 	//var/list/speak_emote = list()//	Emotes while speaking IE: Ian [emote], [text] -- Ian barks, "WOOF!". Spoken text is generated from the speak variable.
@@ -505,8 +509,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	health = 0 // so /mob/living/simple_animal/Life() doesn't magically revive them
 	living_mob_list -= src
 	dead_mob_list += src
-	icon_state = icon_dead
 	stat = DEAD
+	if(icon_dying && !gibbed)
+		do_flick(src, icon_dying, icon_dying_time)
+	icon_state = icon_dead
 	setDensity(FALSE)
 
 	animal_count[src.type]--

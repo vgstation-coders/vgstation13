@@ -118,7 +118,7 @@ var/global/list/ghdel_profiling = list()
 			step(O, src.dir)
 		O.hitby(src,speed)
 
-	else if(isturf(hit_atom))
+	else if(isturf(hit_atom) && !istype(src,/obj/mecha))//heavy mechs don't just bounce off walls, also it can fuck up rocket dashes
 		var/turf/T = hit_atom
 		if(T.density)
 			spawn(2)
@@ -244,6 +244,7 @@ var/global/list/ghdel_profiling = list()
 	return
 
 /atom/proc/emp_act(var/severity)
+	set waitfor = FALSE
 	return
 
 /atom/proc/kick_act(mob/living/carbon/human/user) //Called when this atom is kicked. If returns 1, normal click action will be performed after calling this (so attack_hand() in most cases)

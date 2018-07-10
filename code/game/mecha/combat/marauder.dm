@@ -97,6 +97,8 @@
 		return 0
 	if(!can_move)
 		return 0
+	if(lock_controls) //No moving while using the Gravpult!
+		return 0
 	if(zoom)
 		occupant_message("Unable to move while in zoom mode.", TRUE)
 		return 0
@@ -198,6 +200,11 @@
 		return
 	if(M.occupant)
 		var/obj/mecha/combat/marauder/Marauder = M
+		if(lock_controls)
+			return
+		if(src.occupant)
+			if(dash_ready && get_charge() > 0)
+				crashing = null
 
 		Marauder.crashing = null
 		var/landing = get_distant_turf(get_turf(M), Marauder.dir, 5)

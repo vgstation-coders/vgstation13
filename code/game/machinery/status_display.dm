@@ -428,7 +428,7 @@ var/global/list/status_display_images = list(
 #undef MODE_BSOD
 
 #undef CHARS_PER_LINE
-#undef FOND_SIZE
+#undef FONT_SIZE
 #undef FONT_COLOR
 #undef FONT_STYLE
 #undef SCROLL_SPEED

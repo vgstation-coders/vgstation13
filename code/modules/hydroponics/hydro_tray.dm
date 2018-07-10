@@ -170,7 +170,7 @@
 	//Remove the seed if something is already planted.
 	if(seed)
 		remove_plant()
-	seed = plant_controller.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds"))]
+	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds"))]
 	if(!seed)
 		return //Weed does not exist, someone fucked up.
 

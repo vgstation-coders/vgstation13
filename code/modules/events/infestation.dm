@@ -48,7 +48,7 @@
 	var/list/spawn_types = list()
 	var/max_number = 4
 
-	vermin = pick(VERM_MICE, VERM_LIZARDS, VERM_SPIDERS, VERM_SLIMES, VERM_BATS, VERM_BORERS, VERM_MIMICS, VERM_ROACHES, VERM_GREMLINS, VERM_BEES)
+	vermin = pick(VERM_MICE, VERM_LIZARDS, VERM_SPIDERS, VERM_SLIMES, VERM_BATS, VERM_BORERS, VERM_MIMICS, VERM_ROACHES, VERM_GREMLINS, VERM_BEES, VERM_HORNETS)
 
 	if (override_vermin)
 		vermin = override_vermin
@@ -88,9 +88,13 @@
 			vermstring = "gremlins"
 			max_number = 4 //2 to 4
 		if(VERM_BEES)
-			spawn_types = /obj/machinery/apiary/wild
+			spawn_types = /obj/machinery/apiary/wild/angry
 			vermstring = "angry bees"
 			max_number = 2
+		if(VERM_HORNETS)
+			spawn_types = /obj/machinery/apiary/wild/angry/hornet
+			vermstring = "deadly hornets"
+			max_number = 1
 
 	var/number = rand(2, max_number)
 

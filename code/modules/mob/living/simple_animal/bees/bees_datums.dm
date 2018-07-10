@@ -10,6 +10,7 @@
 	var/state = BEE_ROAMING
 	var/fatigue = 0//increases after a successful pollination or when searching for flowers in vain
 	var/bored = 0//increases when searching for enemies in vain
+	var/exhaustion = 0//increases when roaming without a queen
 	var/corpse = /obj/effect/decal/cleanable/bee
 	var/toxins = 0
 	var/datum/bee_species/species = null
@@ -62,6 +63,7 @@
 	maxHealth = 15
 	corpse = /obj/effect/decal/cleanable/bee/queen_bee
 	var/colonizing = 0
+	var/searching = 0//only attempt building our own hive once we've searched for a while already.
 
 /datum/bee/queen_bee/proc/setHome(var/obj/machinery/apiary/A)
 	state = BEE_SWARM

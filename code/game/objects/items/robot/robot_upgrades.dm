@@ -173,7 +173,7 @@
 	if(!("Security" in R.module.sensor_augs)) //If they don't have a SECHUD, give them one.
 		pop(R.module.sensor_augs)
 		R.module.sensor_augs.Add("Security", "Disable")
-	
+
 	if(!(R.module.quirk_flags & MODULE_IS_THE_LAW)) //Make them able to *law and *halt
 		R.module.quirk_flags |= MODULE_IS_THE_LAW
 
@@ -338,6 +338,8 @@
 
 	playsound(R, 'sound/items/AirHorn.ogg', 50, 1)
 
+	R.module.quirk_flags |= MODULE_IS_A_CLOWN
+
 /obj/item/borg/upgrade/noir
 	name = "security cyborg N.O.I.R. upgrade board"
 	desc = "So that's the way you scientific detectives work. My god! for a fat, middle-aged, hard-boiled, pig-headed guy, you've got the vaguest way of doing things I ever heard of."
@@ -364,7 +366,7 @@
 		C.Noirize()
 
 /obj/item/borg/upgrade/warden
-	name = "cyborg warden upgrade board"
+	name = "security cyborg warden upgrade board"
 	desc = "Used to give a security cyborg supervisory enforcement tools."
 	icon_state = "mcontroller"
 	required_module = list(/obj/item/weapon/robot_module/security, /obj/item/weapon/robot_module/tg17355)
@@ -391,5 +393,13 @@
 	var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R, user)
 	if(C)
 		C.Lawize()
+
+/obj/item/borg/upgrade/hook
+	name = "supply cyborg hookshot upgrade"
+	desc = "Used to give a supply cyborg a hookshot."
+	icon = 'icons/obj/gun_experimental.dmi'
+	icon_state = "hookshot"
+	required_module = list(/obj/item/weapon/robot_module/miner)
+	modules_to_add = list(/obj/item/weapon/gun/hookshot)
 
 #undef FAILED_TO_ADD

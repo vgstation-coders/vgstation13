@@ -7,6 +7,7 @@
 	desc = "Used to restore fibrillating patients."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "defib_full"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "defib"
 	w_class = W_CLASS_MEDIUM
 	force = 5

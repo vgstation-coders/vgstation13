@@ -7,7 +7,7 @@
 	icon_state = "body_m_s"
 	can_butcher = 1
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
-	var/list/hud_list[9]
+	var/list/hud_list = list()
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
 
@@ -152,7 +152,7 @@
 	obj_overlays[FIRE_LAYER]		= getFromPool(/obj/abstract/Overlays/fire_layer)
 	obj_overlays[MUTANTRACE_LAYER]	= getFromPool(/obj/abstract/Overlays/mutantrace_layer)
 	obj_overlays[MUTATIONS_LAYER]	= getFromPool(/obj/abstract/Overlays/mutations_layer)
-	obj_overlays[DAMAGE_LAYER]		= getFromPool(/obj/abstract/Overlays/damage_layer)
+	obj_overlays[DAMAGE_LAYER]	= getFromPool(/obj/abstract/Overlays/damage_layer)
 	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/abstract/Overlays/uniform_layer)
 	obj_overlays[ID_LAYER]			= getFromPool(/obj/abstract/Overlays/id_layer)
 	obj_overlays[SHOES_LAYER]		= getFromPool(/obj/abstract/Overlays/shoes_layer)
@@ -1759,16 +1759,20 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
 /mob/living/carbon/human/proc/initialize_barebones_NPC_components()	//doesn't actually do anything, but contains tools needed for other types to do things
-	NPC_brain = new (src)
-	NPC_brain.AddComponent(/datum/component/controller/mob)
-	NPC_brain.AddComponent(/datum/component/ai/hand_control)
+	BrainContainer = new (src)
+	BrainContainer.AddComponent(/datum/component/controller/mob)
+	BrainContainer.AddComponent(/datum/component/ai/hand_control)
+	BrainContainer.AddComponent(/datum/component/controller/movement/astar)
 
 /mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
 	initialize_barebones_NPC_components()
-	NPC_brain.AddComponent(/datum/component/ai/human_brain)
-	NPC_brain.AddComponent(/datum/component/ai/target_finder/human)
-	NPC_brain.AddComponent(/datum/component/ai/target_holder/prioritizing)
-	NPC_brain.AddComponent(/datum/component/ai/melee/attack_human)
+	BrainContainer.AddComponent(/datum/component/ai/human_brain)
+	BrainContainer.AddComponent(/datum/component/ai/target_finder/human)
+	BrainContainer.AddComponent(/datum/component/ai/target_holder/prioritizing)
+	BrainContainer.AddComponent(/datum/component/ai/melee/attack_human)
+	BrainContainer.AddComponent(/datum/component/ai/melee/throw_attack)
+	BrainContainer.AddComponent(/datum/component/ai/crowd_attack)
+	BrainContainer.AddComponent(pick(typesof(/datum/component/ai/targetting_handler)))
 
 /mob/living/carbon/human/can_show_flavor_text()
 	// Wearing a mask...

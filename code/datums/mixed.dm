@@ -25,7 +25,7 @@
 	var/counter = 1
 	while(fields["com_[counter]"])
 		counter++
-	fields["com_[counter]"] = "Made by [usr.identification_string()] on [time2text(world.realtime, "DDD MMM DD hh:mm:ss")], [game_year]<br>[comment]"
+	fields["com_[counter]"] = "Made by [usr.identification_string()] on [time2text(world.realtime, "DDD MMM DD")] [worldtime2text(give_seconds = TRUE)], [game_year]<br>[comment]"
 
 /datum/data/text
 	name = "text"

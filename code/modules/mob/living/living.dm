@@ -32,6 +32,9 @@
 			qdel(B)
 			B = null
 
+	if(BrainContainer)
+		qdel(BrainContainer)
+		BrainContainer = null
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -92,7 +95,10 @@
 	//handles "call on life", allowing external life-related things to be processed
 	for(var/toCall in src.callOnLife)
 		if(locate(toCall) && callOnLife[toCall])
-			call(locate(toCall),callOnLife[toCall])()
+			try
+				call(locate(toCall),callOnLife[toCall])()
+			catch(var/exception/e)
+				stack_trace(e)
 		else
 			callOnLife -= toCall
 
@@ -115,6 +121,8 @@
 					special_role = null
 					to_chat(current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now..(You don't remember who enslaved you)</FONT></span>")
 				*/
+	if(BrainContainer)
+		BrainContainer.SendSignal(COMSIG_LIFE,list())
 	return 1
 
 // Apply connect damage
@@ -1636,7 +1644,7 @@ Thanks.
 
 /mob/living/throw_item(var/atom/target,var/atom/movable/what=null)
 	src.throw_mode_off()
-	if(usr.stat || !target)
+	if(src.stat || !target)
 		return FAILED_THROW
 
 	if(!istype(loc,/turf))

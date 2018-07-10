@@ -40,7 +40,7 @@
 
 	// Handle life.
 	var/turf/simulated/T = get_turf(src)
-	if(T && istype(T))
+	if(istype(T))
 		var/datum/gas_mixture/environment = T.return_air()
 		if(environment)
 			if(environment.return_pressure() > seed.highkpa_tolerance) //Kudzu can live at 0KPA, otherwise you could just vent the room to kill it.
@@ -111,8 +111,8 @@
 	// We shouldn't have spawned if the controller doesn't exist.
 	check_health()
 	// Keep processing us until we've done all there is for us to do in life.
-	if(neighbors.len || health != max_health || !harvest || is_locking(/datum/locking_category/plantsegment))
-		plant_controller.add_plant(src)
+	if(!neighbors.len && (health == max_health || health <= 0) && harvest && !is_locking(/datum/locking_category))
+		SSplant.remove_plant(src)
 
 /obj/effect/plantsegment/proc/die_off()
 	if(seed && harvest)
@@ -124,9 +124,7 @@
 			continue
 		for(var/obj/effect/plantsegment/neighbor in check_turf.contents)
 			neighbor.neighbors |= check_turf
-			plant_controller.add_plant(neighbor)
-	spawn(1)
-		if(src)
-			qdel(src)
+			SSplant.add_plant(neighbor)
+	qdel(src)
 
 #undef NEIGHBOR_REFRESH_TIME
