@@ -1024,7 +1024,7 @@ var/list/slot_equipment_priority = list( \
 	point.invisibility = invisibility
 	point.pointer = src
 	point.target = A
-	if(params && isturf(A.loc))
+	if(params && (isturf(A) || isturf(A.loc)))
 		var/list/params_list = params2list(params)
 		point.pixel_x = text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2
 		if(abs(A.pixel_x) > WORLD_ICON_SIZE/2) //Is wall-mounted, and thus looks like it's on a different turf
