@@ -384,6 +384,8 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/mechahitler,			// Sieg heil!
 	/mob/living/simple_animal/hostile/alien/queen/large,	// The bigger and beefier version of queens.
 	/mob/living/simple_animal/hostile/asteroid/rockernaut/boss, //Angie
+	/mob/living/simple_animal/hostile/humanoid/surgeon/boss, //first stage of Doctor Placeholder
+	/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton, //second stage of Doctor Placeholder
 	)
 
 // Set by traitor item, affects cargo supplies
