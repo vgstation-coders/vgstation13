@@ -79,7 +79,7 @@
 		if(L.stat != DEAD)
 			e.amount *= 0.5
 	e.start()
-	if(holder.my_atom.is_open_container())
+	if(!holder.my_atom.is_open_container() || ismob(holder.my_atom))
 		holder.del_reagent(POTASSIUM)
 		holder.del_reagent(WATER)
 	else
@@ -476,7 +476,7 @@
 		if(L.stat!=DEAD)
 			e.amount *= 0.5
 	e.start()
-	if(holder.my_atom.is_open_container())
+	if(!holder.my_atom.is_open_container() || ismob(holder.my_atom))
 		holder.del_reagent(GLYCEROL)
 		holder.del_reagent(PACID)
 		holder.del_reagent(SACID)
