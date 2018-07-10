@@ -84,10 +84,19 @@
 	name = "dead [initial(name)]"
 	if(dead_icon)
 		icon_state = dead_icon
+	var/icon/original = icon(icon, icon_state)
+	original.GrayScale()
+	icon = original
 	health = 0
 	processing_objects -= src
-	//TODO: Grey out the icon state.
 	//TODO: Inject an organ with peridaxon to make it alive again.
+
+/obj/item/organ/internal/proc/revive()
+	name = initial(name)
+	icon_state = initial(icon_state)
+	icon = initial(icon)
+	health = 1
+	processing_objects += src
 
 /obj/item/organ/internal/proc/roboticize()
 
