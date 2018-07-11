@@ -175,7 +175,7 @@
 /obj/item/weapon/reagent_containers/glass/beaker/update_icon()
 	overlays.len = 0
 
-	if(reagents.total_volume)
+	if(!opaque && reagents.total_volume)
 		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]10")
 
 		var/percent = round((reagents.total_volume / volume) * 100)
@@ -198,8 +198,7 @@
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 
-		if (!opaque)
-			overlays += filling
+		overlays += filling
 
 	if(!is_open_container())
 		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
