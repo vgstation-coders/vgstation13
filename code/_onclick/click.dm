@@ -62,7 +62,7 @@
 	))
 	if(modifiers["middle"])
 		if(modifiers["shift"])
-			MiddleShiftClickOn(A)
+			MiddleShiftClickOn(A, params)
 		else
 			MiddleClickOn(A)
 		return
@@ -247,8 +247,8 @@
 	return
 */
 
-/mob/proc/MiddleShiftClickOn(var/atom/A)
-	pointed(A)
+/mob/proc/MiddleShiftClickOn(var/atom/A, params)
+	pointed(A, params)
 
 /*
 	Shift click
