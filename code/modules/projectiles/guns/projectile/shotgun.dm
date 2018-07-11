@@ -85,6 +85,8 @@
 	caliber = list(GAUGE12 = 1, GAUGEFLARE = 1)
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=1"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
+	var/doubleshot = 0
+	var/doubleshooting = 0
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/process_chambered()
 	if(in_chamber)
@@ -143,6 +145,45 @@
 			if(istype(user, /mob/living/carbon/human) && src.loc == user)
 				var/mob/living/carbon/human/H = user
 				H.update_inv_hands()
+
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel/verb/toggle_doubleshot()
+	set name = "Toggle Shooting Both Barrels"
+	set category = "Object"
+	if((world.time >= last_fired + fire_delay) && !doubleshooting)
+		doubleshot = !doubleshot
+		if(!doubleshot)
+			fire_delay = initial(fire_delay)
+		to_chat(usr, "You switch \the [src]'s fire selector to [doubleshot ? "fire both barrels at once" : "fire one barrel at a time"].")
+
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+	if(doubleshot && (getLiveAmmo() == 2)) //ANGERY
+		if(ready_to_fire())
+			fire_delay = 0
+		else
+			return
+		if(defective && prob(5))
+			to_chat(user, "<span class='danger'>\The [src] can't handle the pressure of firing two shells at once!.</span>")
+			explosion(get_turf(loc), -1, 0, 2)
+			user.drop_item(src, force_drop = 1)
+			qdel(src)
+		else
+			doubleshooting = 1
+			recoil = 2 * initial(recoil)
+			..()
+			..()
+			message_admins("[usr] just fired both barrels out of their [src].")
+			fire_delay = 20
+			recoil = initial(recoil)
+			doubleshooting = 0
+	else
+		..()
+
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel/proc/getLiveAmmo() // Mad.
+	var/bullets = 0
+	for(var/obj/item/ammo_casing/AC in loaded)
+		if(istype(AC) && AC.BB)
+			bullets += 1
+	return bullets
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff
 	name = "sawn-off shotgun"
