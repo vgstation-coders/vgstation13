@@ -518,10 +518,7 @@ obj/item/asteroid/basilisk_hide/New()
 		if(has_icon(C.icon, "[initial(C.item_state)]_goliath[C.hidecount]"))
 			C.name = "reinforced [initial(C.name)]"
 			C.item_state = "[initial(C.item_state)]_goliath[C.hidecount]"
-		if(has_icon(C.icon, "[initial(C.icon_state)]_goliath[C.hidecount]"))
-			C.name = "reinforced [initial(C.name)]"
 			C.icon_state = "[initial(C.icon_state)]_goliath[C.hidecount]"
-			C.item_state = "[initial(C.item_state)]_goliath[C.hidecount]"
 			C._color = "mining_goliath[C.hidecount]"
 
 /mob/living/simple_animal/hostile/asteroid/magmaw
