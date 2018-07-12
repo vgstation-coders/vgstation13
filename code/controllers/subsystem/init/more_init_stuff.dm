@@ -27,6 +27,7 @@ var/datum/subsystem/more_init/SSmore_init
 	log_startup_progress("  Finished holominimaps in [stop_watch(watch)]s.")
 
 	buildcamlist()
+	sort_verbs_out()
 
 	if(config.media_base_url)
 		watch = start_watch()

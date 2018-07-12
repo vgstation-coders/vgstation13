@@ -105,6 +105,16 @@ var/list/admins_verbs = list(
 	/client/proc/mommi_static,
 	/client/proc/makepAI,
 	/client/proc/set_blob_looks,
+    // Server
+    /client/proc/Set_Holiday,
+	/client/proc/ToRban,
+    /client/proc/toggle_log_hrefs,
+    /datum/admins/proc/adrev,
+	/datum/admins/proc/adspawn,
+	/datum/admins/proc/adjump,
+    /client/proc/toggle_random_events,
+	/client/proc/dump_chemreactions,
+	/client/proc/save_coordinates
 )
 
 /client/proc/call_admin_verb(var/proc_path)
@@ -123,23 +133,25 @@ var/list/admins_verbs = list(
                 verbs_admin += V
             if ("DEBUG")
                 verbs_debug += V
+            if ("FUN")
+                verbs_fun += V
+            if ("SERVER")
+                verbs_server += V
 
-var/list/datum/admin_verbs/verbs_admin = list()
-var/list/datum/admin_verbs/verbs_debug= list()
+var/list/datum/admin_verbs/verbs_admin  = list()
+var/list/datum/admin_verbs/verbs_debug  = list()
+var/list/datum/admin_verbs/verbs_fun    = list()
+var/list/datum/admin_verbs/verbs_server = list()
 
 /datum/admins/proc/other_admins_verbs_admin()
     set category = "Admin"
     set name = "Other admin verbs/commands."
-
-    if (!verbs_admin.len)
-        sort_verbs_out()
         
     var/dat = "<h3>Admin verbs:</h3>"
     dat += "<ul>"
     for (var/verb_ in verbs_admin)
         var/datum/admin_verbs/V = new verb_
-        if (V.category == "ADMIN")
-            dat += "<li><b>[V.name]</b> - [V.desc] (<a href='?src=\ref[usr.client.holder];verb=[V.type]'>Use</a>)"
+        dat += "<li><b>[V.name]</b> - [V.desc] (<a href='?src=\ref[usr.client.holder];verb=[V.type]'>Use</a>)"
     dat += "<ul/>"
 
     usr << browse(dat, "window=powers;size=500x480")
@@ -147,36 +159,43 @@ var/list/datum/admin_verbs/verbs_debug= list()
 /datum/admins/proc/other_admins_verbs_debug()
     set category = "Debug"
     set name = "Other admin verbs/commands (debug)."
-
-    if (!verbs_admin.len)
-        sort_verbs_out()
         
     var/dat = "<h3>Debug verbs:</h3>"
     dat += "<ul>"
-    for (var/verb_ in verbs_admin)
+    for (var/verb_ in verbs_debug)
         var/datum/admin_verbs/V = new verb_
-        if (V.category == "DEBUG")
-            dat += "<li><b>[V.name]</b> - [V.desc] (<a href='?src=\ref[usr.client.holder];verb=[V.type]'>Use</a>)"
+        dat += "<li><b>[V.name]</b> - [V.desc] (<a href='?src=\ref[usr.client.holder];verb=[V.type]'>Use</a>)"
     dat += "<ul/>"
 
     usr << browse(dat, "window=powers;size=500x480")
 
 /datum/admins/proc/other_admins_verbs_fun()
-    set category = "Debug"
+    set category = "Fun"
     set name = "Other admin verbs/commands (fun)."
-
-    if (!verbs_admin.len)
-        sort_verbs_out()
         
     var/dat = "<h3>Fun verbs:</h3>"
     dat += "<ul>"
-    for (var/verb_ in verbs_admin)
+    for (var/verb_ in verbs_fun)
         var/datum/admin_verbs/V = new verb_
-        if (V.category == "FUN")
+        dat += "<li><b>[V.name]</b> - [V.desc] (<a href='?src=\ref[usr.client.holder];verb=[V.type]'>Use</a>)"
+    dat += "<ul/>"
+
+    usr << browse(dat, "window=powers;size=500x480")
+
+/datum/admins/proc/other_admins_verbs_server()
+    set category = "Server"
+    set name = "Other admin verbs/commands (server)."
+        
+    var/dat = "<h3>Server verbs:</h3>"
+    dat += "<ul>"
+    for (var/verb_ in verbs_server)
+        var/datum/admin_verbs/V = new verb_
+        if (V.category == "SERVER")
             dat += "<li><b>[V.name]</b> - [V.desc] (<a href='?src=\ref[usr.client.holder];verb=[V.type]'>Use</a>)"
     dat += "<ul/>"
 
     usr << browse(dat, "window=powers;size=500x480")
+
 
 // -- Admin verbs datums --
 
@@ -820,3 +839,59 @@ var/list/datum/admin_verbs/verbs_debug= list()
     desc = "Change the appearance of the blob."
     proc_path = /client/proc/set_blob_looks
     category = "FUN"
+
+// -- Server
+
+/datum/admin_verbs/client_parent/Set_Holiday
+    name = "Set Holiday"
+    desc = "Forces a holiday, making the code believe it is that holiday."
+    proc_path = /client/proc/Set_Holiday
+    category = "SERVER"
+
+/datum/admin_verbs/client_parent/ToRban
+    name = "ToRBan"
+    desc = "Toggle/Manage the list of ToR ips banned."
+    proc_path = /client/proc/ToRban
+    category = "SERVER"
+
+/datum/admin_verbs/client_parent/toggle_log_hrefs
+    name = "Toggle Href logging"
+    desc = "(Caution) Toggle if hrefs are logged or not."
+    proc_path = /client/proc/toggle_log_hrefs
+    category = "SERVER"
+
+/datum/admin_verbs/admin_parent/adrev
+    name = "Toggle admin revive"
+    desc = "Toggle if admins are allowed to revive people or not."
+    proc_path = /datum/admins/proc/adrev
+    category = "SERVER"
+
+/datum/admin_verbs/admin_parent/adspawn
+    name = "Toggle admin revive"
+    desc = "Toggle if admins are allowed to spawn objects."
+    proc_path = /datum/admins/proc/adspawn
+    category = "SERVER"
+
+/datum/admin_verbs/admin_parent/adjump
+    name = "Toggle admin revive"
+    desc = "Toggle if admins are allowed to jump to other people or not."
+    proc_path = /datum/admins/proc/adjump
+    category = "SERVER"
+
+/datum/admin_verbs/client_parent/toggle_random_events
+    name = "Toggle random events"
+    desc = "Toggle if random events happen or not."
+    proc_path = /client/proc/toggle_random_events
+    category = "SERVER"
+
+/datum/admin_verbs/client_parent/dump_chemreactions
+    name = "Dump chem reactions"
+    desc = "Show the log of chemical reactions of the round."
+    proc_path = /client/proc/dump_chemreactions
+    category = "SERVER"
+
+/datum/admin_verbs/client_parent/save_coordinates
+    name = "Save map"
+    desc = "Save the map between two turfs. It will be saved in your user directory."
+    proc_path = /client/proc/save_coordinates
+    category = "SERVER"

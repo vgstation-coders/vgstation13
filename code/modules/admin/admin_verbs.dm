@@ -68,23 +68,13 @@ var/list/admin_verbs_spawn = list(
 	/client/proc/cmd_admin_equip_loadout, //Allows us to equip sets of items to mobs
 	)
 var/list/admin_verbs_server = list(
-	/client/proc/Set_Holiday,
-	/client/proc/ToRban,
 	/datum/admins/proc/startnow,
 	/datum/admins/proc/restart,
 	/datum/admins/proc/toggleaban,
-	/client/proc/toggle_log_hrefs,
 	/datum/admins/proc/immreboot,
 	/client/proc/everyone_random,
 	/datum/admins/proc/toggleAI,
-	/client/proc/cmd_admin_delete,		/*delete an instance/object/mob/etc*/
-	/client/proc/cmd_debug_del_all,
-	/datum/admins/proc/adrev,
-	/datum/admins/proc/adspawn,
-	/datum/admins/proc/adjump,
-	/client/proc/toggle_random_events,
-	/client/proc/dump_chemreactions,
-	/client/proc/save_coordinates
+	/datum/admins/proc/other_admins_verbs_server,
 	)
 var/list/admin_verbs_debug = list(
 	/client/proc/callproc,
