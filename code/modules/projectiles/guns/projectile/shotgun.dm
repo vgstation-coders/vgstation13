@@ -108,7 +108,11 @@
 	if(!(locate(/obj/item/ammo_casing/shotgun) in src) && !getAmmo())
 		to_chat(user, "<span class='notice'>\The [src] is empty.</span>")
 		return
-
+	if(jammed)
+		to_chat(user, "<span class='warning'>You break open \the [src], but the shells inside seem to be stuck...</span>")
+		sleep(10)
+		to_chat(user, "<span class='notice'>You should get a rod to loosen them, fumbling won't get you anywhere.</span>")
+		return
 	var/i = 0
 	for(var/obj/item/ammo_casing/shotgun/loaded_shell in src) //This feels like a hack. don't code at 3:30am kids!!
 		loaded_shell.forceMove(get_turf(src))
@@ -118,7 +122,7 @@
 			loaded -= loaded_shell
 		i++
 
-	to_chat(user, "<span class='notice'>You break \the [src].</span>")
+	to_chat(user, "<span class='notice'>You break open \the [src], and [i] shell\s fl[i == 1 ? "ies" : "y"] out of the barrel\s.</span>")
 	update_icon()
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/attackby(var/obj/item/A as obj, mob/user as mob)
@@ -145,6 +149,11 @@
 			if(istype(user, /mob/living/carbon/human) && src.loc == user)
 				var/mob/living/carbon/human/H = user
 				H.update_inv_hands()
+	if(istype(A, /obj/item/stack/rods))
+		to_chat(user, "<span class='notice'>You start jamming a rod into \the [src]'s barrels to try and loosen the shells...</span>")
+		if(do_after(user, src, 60))
+			jammed = 0
+			to_chat(user, "<span class='notice'>You manage to loosen the shells.</span>")
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/verb/toggle_doubleshot()
 	set name = "Toggle Shooting Both Barrels"
@@ -157,12 +166,14 @@
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	if(doubleshot && (getLiveAmmo() == 2)) //ANGERY
+		var/atom/reverse = locate(2*user.x - target.x, 2*user.y - target.y, target.z)
+
 		if(ready_to_fire())
 			fire_delay = 0
 		else
 			return
 		if(defective && prob(5))
-			to_chat(user, "<span class='danger'>\The [src] can't handle the pressure of firing two shells at once!.</span>")
+			to_chat(user, "<span class='danger'>\The [src] can't handle the pressure of firing two shells at once!</span>")
 			explosion(get_turf(loc), -1, 0, 2)
 			user.drop_item(src, force_drop = 1)
 			qdel(src)
@@ -171,10 +182,29 @@
 			recoil = 2 * initial(recoil)
 			..()
 			..()
-			message_admins("[usr] just fired both barrels out of their [src].")
+			message_admins("[usr] just fired both barrels out of \his [src].")
 			fire_delay = 20
 			recoil = initial(recoil)
 			doubleshooting = 0
+			if(prob(50)) // Total chance to fuck up
+				var/mob/living/carbon/human/H = user
+				switch(pick(1,2,3,4))
+					if(1)
+						jammed = 1 // Needs some work to be unloaded and reloaded again
+					if(2)
+						if(user.drop_item(src)) // Launches it from your hands behind you, letting someone else steal it
+							src.throw_at(reverse, 2, 10)
+							to_chat(user, "<span class='danger'>The recoil is too strong and \the [src] flies out of your hand!</span>")
+						else
+							to_chat(user, "<span class='notice'>You barely manage to withstand the recoil.</span>")
+					if(3)
+						H.Stun(3) //Drops you on your ass, this is a death sentence if you're in combat
+						H.Knockdown(3)
+						to_chat(user, "<span class='danger'>The recoil throws you off balance!</span>")
+					if(4)
+						var/datum/organ/external/org = H.find_organ_by_grasp_index(user.is_holding_item(src)).parent // It should break your arm, not your hand, the gun still has a stock you're bracing against.
+						org.take_damage(rand(15,40), null , null, null)// I have no idea what the fuck I am doing, adjustBruteLossByPart() doesn't work for some reason.
+						to_chat(user, "<span class='danger'>The recoil kicks your arm like a mule!</span>")
 	else
 		..()
 
