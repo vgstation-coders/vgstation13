@@ -169,6 +169,7 @@
 
 /datum/rune_spell/raisestructure/cast_talisman()//we spawn an invisible rune under our feet that works like the regular one
 	var/obj/effect/rune/R = new(get_turf(activator))
+	R.icon_state = "temp"
 	R.active_spell = new type(activator,R)
 	qdel(src)
 
@@ -424,15 +425,17 @@
 				if (!istype(M))
 					continue
 				else
-					valid_tomes.Add("[i] - Tome carried by [M.real_name]")
-					valid_tomes["[i] - Tome carried by [M.real_name]"] = T
+					valid_tomes.Add("[i] - Tome carried by [M.real_name] ([T.talismans.len]/[MAX_TALISMAN_PER_TOME])")
+					valid_tomes["[i] - Tome carried by [M.real_name] ([T.talismans.len]/[MAX_TALISMAN_PER_TOME])"] = T
 			if (valid_tomes.len <= 0)
 				to_chat(user, "<span class='warning'>No cultists are currently carrying a tome.</span>")
+				qdel(src)
 				return
 
 			var/datum/rune_spell/spell = AT.spell_type
 			var/chosen_tome = input(user,"Choose a tome where to transfer this [initial(spell.name)] talisman.", "Transfer talisman", null) as null|anything in valid_tomes
 			if (!chosen_tome)
+				qdel(src)
 				return
 
 			target = valid_tomes[chosen_tome]

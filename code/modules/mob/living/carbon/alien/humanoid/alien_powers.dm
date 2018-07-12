@@ -310,7 +310,6 @@ Doesn't work on other aliens/AI.*/
 
 	cast_sound = 'sound/effects/evolve.ogg'
 	cast_delay = 50
-	use_progress_bar = TRUE
 
 /spell/aoe_turf/evolve/drone
 	desc = "Produce an interal egg sac capable of spawning children. Only one queen can exist at a time."
