@@ -58,7 +58,8 @@
 /obj/item/device/mmi/posibrain/proc/recruiter_not_recruiting(var/list/args)
 	var/mob/dead/observer/O = args["player"]
 	var/controls = args["controls"]
-	to_chat(O, "<span class=\"recruit\">Someone is requesting a personality for \a [src]. ([controls])</span>")
+	if(O.client && get_role_desire_str(O.client.prefs.roles[ROLE_POSIBRAIN]) != "Never")
+		to_chat(O, "<span class=\"recruit\">Someone is requesting a personality for \a [src]. ([controls])</span>")
 
 /obj/item/device/mmi/posibrain/proc/recruiter_recruited(var/list/args)
 	var/mob/dead/observer/O = args["player"]
