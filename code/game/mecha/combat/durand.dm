@@ -39,9 +39,9 @@
 	charge_counter = 10
 
 /spell/mech/durand/defence_mode/cast(list/targets, mob/user)
-	if(user!=M.occupant)
+	if(user!=linked_mech.occupant)
 		return
-	var/obj/mecha/combat/durand/Durand = M
+	var/obj/mecha/combat/durand/Durand = linked_mech
 	Durand.defence = !Durand.defence
 	if(Durand.defence)
 		Durand.icon_state = 0
@@ -50,7 +50,7 @@
 			Durand.icon_state = "durand-lockdown"
 		Durand.deflect_chance = Durand.defence_deflect
 		Durand.occupant_message("<font color='blue'>You enable [Durand] defence mode.</font>")
-		playsound(src.M, 'sound/mecha/mechlockdown.ogg', 60, 1)
+		playsound(src.linked_mech, 'sound/mecha/mechlockdown.ogg', 60, 1)
 	else
 		Durand.deflect_chance = initial(Durand.deflect_chance)
 		if(!istype(Durand,/obj/mecha/combat/durand/old))

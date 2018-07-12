@@ -52,9 +52,9 @@
 	override_icon = 'icons/mecha/mecha.dmi'
 
 /spell/mech/phazon/phasing/cast(list/targets, mob/user)
-	if(user!=M.occupant)
+	if(user!=linked_mech.occupant)
 		return
-	var/obj/mecha/combat/phazon/Phazon = M
+	var/obj/mecha/combat/phazon/Phazon = linked_mech
 	Phazon.phasing = !Phazon.phasing
 	Phazon.occupant_message("<font color=\"[Phazon.phasing?"#00f\">En":"#f00\">Dis"]abled phasing.</font>")
 

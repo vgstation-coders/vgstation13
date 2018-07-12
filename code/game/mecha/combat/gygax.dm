@@ -60,9 +60,9 @@
 	override_icon = 'icons/mecha/mecha.dmi'
 
 /spell/mech/gygax/overload/cast(list/targets, mob/user)
-	if(user!=M.occupant)
+	if(user!=linked_mech.occupant)
 		return
-	var/obj/mecha/combat/gygax/Gygax = M
+	var/obj/mecha/combat/gygax/Gygax = linked_mech
 	if(Gygax.overload)
 		Gygax.overload = 0
 		Gygax.step_in = initial(Gygax.step_in)

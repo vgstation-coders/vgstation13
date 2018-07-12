@@ -2023,8 +2023,8 @@
 		return
 	for(var/obj/item/mecha_parts/mecha_equipment/W in equipment)
 		var/spell/mech/MS
-		if(W.MS)
-			MS = W.MS
+		if(W.linked_spell)
+			MS = W.linked_spell
 			occupant.add_spell(MS, "mech_spell_ready", /obj/abstract/screen/movable/spell_master/mech)
 
 /obj/mecha/proc/remove_mech_spells()

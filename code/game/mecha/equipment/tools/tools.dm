@@ -434,13 +434,13 @@
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/attach(obj/mecha/M as obj)
 	..()
-	MS = new /spell/mech/jetpack(M, src)
+	linked_spell = new /spell/mech/jetpack(M, src)
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/activate()
 	toggle()
 
 /spell/mech/jetpack/cast(list/targets, mob/user)
-	ME.activate()
+	linked_equipment.activate()
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/proc/turn_on()
 	set_ready_state(0)
@@ -894,7 +894,7 @@
 	..()
 	droid_overlay = new(src.icon, icon_state = "repair_droid")
 	M.overlays += droid_overlay
-	MS = new /spell/mech/repair(M, src)
+	linked_spell = new /spell/mech/repair(M, src)
 	return
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/destroy()
@@ -975,7 +975,7 @@
 	desc = "Automated repair droid. Scans exosuit for damage and repairs it. Can fix almost all types of external or internal damage."
 
 /spell/mech/repair/cast(list/targets, mob/user)
-	ME.activate()
+	linked_equipment.activate()
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay
@@ -1012,7 +1012,7 @@
 	..()
 	chassis.proc_res["dyngetcharge"] = src
 //		chassis.proc_res["dynusepower"] = src
-	MS = new /spell/mech/tesla(M, src)
+	linked_spell = new /spell/mech/tesla(M, src)
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/can_attach(obj/mecha/M)
@@ -1078,7 +1078,7 @@
 	desc = "Wirelessly drains energy from any available power channel in area. The performance index is quite low."
 
 /spell/mech/tesla/cast(list/targets, mob/user)
-	ME.activate()
+	linked_equipment.activate()
 
 /datum/global_iterator/mecha_energy_relay/process(var/obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/ER)
 	if(!ER.chassis || ER.chassis.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
@@ -1292,12 +1292,12 @@
 	desc = "Generates power using uranium. Pollutes the environment."
 
 /spell/mech/generator/New(var/obj/mecha/M, var/obj/item/mecha_parts/mecha_equipment/generator/ME)
-	src.M = M
+	src.linked_mech = M
 	charge_counter = charge_max
 	name = ME.name
 
 /spell/mech/generator/cast(list/targets, mob/user)
-	ME.activate()
+	linked_equipment.activate()
 
 //This is pretty much just for the death-ripley so that it is harmless
 /obj/item/mecha_parts/mecha_equipment/tool/safety_clamp

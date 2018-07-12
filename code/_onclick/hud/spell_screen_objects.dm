@@ -127,7 +127,7 @@
 
 /obj/abstract/screen/movable/spell_master/mech/add_spell(var/spell/mech/MS)
 	..()
-	var/mechaIcon = MS.M.initial_icon
+	var/mechaIcon = MS.linked_mech.initial_icon
 	open_state = "[mechaIcon]-open"
 	closed_state = "[mechaIcon]"
 	toggle_open(2)

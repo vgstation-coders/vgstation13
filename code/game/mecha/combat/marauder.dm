@@ -173,9 +173,9 @@
 	override_icon = 'icons/obj/tank.dmi'
 
 /spell/mech/marauder/thrusters/cast(list/targets, mob/user)
-	if(user!=M.occupant)
+	if(user!=linked_mech.occupant)
 		return
-	var/obj/mecha/combat/marauder/Marauder = M
+	var/obj/mecha/combat/marauder/Marauder = linked_mech
 	if(Marauder.occupant)
 		Marauder.thrusters = !Marauder.thrusters
 		Marauder.log_message("Toggled thrusters.")
@@ -193,13 +193,13 @@
 
 /spell/mech/marauder/dash/New()
 	..()
-	hud_state = "[M.initial_icon]-dash"
+	hud_state = "[linked_mech.initial_icon]-dash"
 
 /spell/mech/marauder/dash/cast(list/targets, mob/user)
-	if(user!=M.occupant)
+	if(user!=linked_mech.occupant)
 		return
-	if(M.occupant)
-		var/obj/mecha/combat/marauder/Marauder = M
+	if(linked_mech.occupant)
+		var/obj/mecha/combat/marauder/Marauder = linked_mech
 		if(Marauder.lock_controls)
 			return
 		if(Marauder.occupant)
@@ -207,7 +207,7 @@
 				Marauder.crashing = null
 
 		Marauder.crashing = null
-		var/landing = get_distant_turf(get_turf(M), Marauder.dir, 5)
+		var/landing = get_distant_turf(get_turf(linked_mech), Marauder.dir, 5)
 		Marauder.throw_at(landing, 5 , 2)
 
 		Marauder.dash_ready = 0
@@ -229,9 +229,9 @@
 	hud_state = "wiz_smoke"
 
 /spell/mech/marauder/smoke/cast(list/targets, mob/user)
-	if(user!=M.occupant)
+	if(user!=linked_mech.occupant)
 		return
-	var/obj/mecha/combat/marauder/Marauder = M
+	var/obj/mecha/combat/marauder/Marauder = linked_mech
 	if(Marauder.smoke>0)
 		Marauder.smoke_system.start()
 		Marauder.smoke--
@@ -244,10 +244,10 @@
 	hud_state = "binoculars"
 
 /spell/mech/marauder/zoom/cast(list/targets, mob/user)
-	if(user!=M.occupant)
+	if(user!=linked_mech.occupant)
 		return
-	if(M.occupant.client)
-		var/obj/mecha/combat/marauder/Marauder = M
+	if(linked_mech.occupant.client)
+		var/obj/mecha/combat/marauder/Marauder = linked_mech
 		Marauder.zoom = !Marauder.zoom
 		Marauder.log_message("Toggled zoom mode.")
 		Marauder.occupant_message("<font color='[Marauder.zoom?"blue":"red"]'>Zoom mode [Marauder.zoom?"en":"dis"]abled.</font>")
