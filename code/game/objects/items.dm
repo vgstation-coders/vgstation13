@@ -1036,6 +1036,9 @@ var/global/list/image/blood_overlays = list()
 
 
 /obj/item/proc/showoff(mob/user)
+	if(abstract)
+		return
+
 	for (var/mob/M in view(user))
 		M.show_message("[user] holds up [src]. <a HREF='?src=\ref[M];lookitem=\ref[src]'>Take a closer look.</a>",1)
 
@@ -1043,8 +1046,12 @@ var/global/list/image/blood_overlays = list()
 	set name = "Show Held Item"
 	set category = "Object"
 
+	if(attack_delayer.blocked())
+		return
+	delayNextAttack(SHOW_HELD_ITEM_AND_POINTING_DELAY)
+
 	var/obj/item/I = get_active_hand()
-	if(I && !I.abstract)
+	if(I)
 		I.showoff(src)
 
 // /vg/ Affects wearers.
