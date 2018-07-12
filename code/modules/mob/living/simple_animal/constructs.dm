@@ -39,6 +39,9 @@
 
 	var/list/construct_spells = list()
 
+/mob/living/simple_animal/construct/say(var/message)
+	. = ..(message, "C")
+
 /mob/living/simple_animal/construct/construct_chat_check(setting)
 	if(!mind)
 		return

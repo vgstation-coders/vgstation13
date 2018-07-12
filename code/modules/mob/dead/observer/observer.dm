@@ -128,18 +128,13 @@
 
 /mob/dead/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/weapon/tome))
-		var/mob/dead/M = src
-		if(src.invisibility != 0)
-			M.invisibility = 0
+		if(invisibility != 0 || icon_state != "ghost-narsie")
+			cultify()
 			user.visible_message(
-				"<span class='warning'>[user] drags ghost, [M], to our plane of reality!</span>",
-				"<span class='warning'>You drag [M] to our plane of reality!</span>"
+				"<span class='warning'>[user] drags a ghost to our plane of reality!</span>",
+				"<span class='warning'>You drag a ghost to our plane of reality!</span>"
 			)
-		else
-			user.visible_message (
-				"<span class='warning'>[user] just tried to smash his book into that ghost!  It's not very effective</span>",
-				"<span class='warning'>You get the feeling that the ghost can't become any more visible.</span>"
-			)
+		return
 
 	if(istype(W,/obj/item/weapon/storage/bible) || istype(W,/obj/item/weapon/nullrod))
 		var/mob/dead/M = src

@@ -42,6 +42,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	//Used when a nullrod is preventing a rune's activation
 	var/nullblock = 0
 
+	var/atom/movable/overlay/c_animation = null
 
 	var/datum/rune_spell/active_spell = null
 
@@ -275,6 +276,11 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		to_chat(user, "<span class='notice'>You disrupt the vile magic with the deadening field of \the [I]!</span>")
 		qdel(src)
 		return
+	if(istype(I, /obj/item/weapon/tome))
+		trigger(user)
+	if(istype(I, /obj/item/weapon/talisman))
+		var/obj/item/weapon/talisman/T = I
+		T.imbue(user,src)
 	return
 
 /proc/write_rune_word(var/turf/T,var/datum/reagent/blood/source,var/word = null)
@@ -414,9 +420,11 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 
 	active_spell = get_rune_spell(user, src, "ritual" , word1, word2, word3)
 
+
 	if (!active_spell)
 		return fizzle(user)
-
+	else if (active_spell.destroying_self)
+		active_spell = null
 
 /obj/effect/rune/proc/fizzle(var/mob/living/user)
 	user.say(pick("B'ADMINES SP'WNIN SH'T","IC'IN O'OC","RO'SHA'M I'SA GRI'FF'N ME'AI","TOX'IN'S O'NM FI'RAH","IA BL'AME TOX'IN'S","FIR'A NON'AN RE'SONA","A'OI I'RS ROUA'GE","LE'OAN JU'STA SP'A'C Z'EE SH'EF","IA PT'WOBEA'RD, IA A'DMI'NEH'LP"))
@@ -424,3 +432,21 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	visible_message("<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\
 	"<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\
 	"<span class='warning'>You hear a faint fizzle.</span>")
+
+//salvaged from my old rune code
+/obj/effect/rune/proc/invocation_effect(var/animation_icon)
+	if(c_animation) // if you've more than one, it won't go away
+		return
+	c_animation = new /atom/movable/overlay(src.loc)
+	c_animation.name = "cultification"
+	c_animation.anchored = 1
+	c_animation.icon = 'icons/effects/effects.dmi'
+	c_animation.plane = EFFECTS_PLANE
+	c_animation.master = src.loc
+	c_animation.icon_state = "[animation_icon]"
+	flick("cultification",c_animation)
+	spawn(10)
+		if(c_animation)
+			c_animation.master = null
+			qdel(c_animation)
+			c_animation = null

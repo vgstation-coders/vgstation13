@@ -20,18 +20,24 @@
 	var/list/data = list()
 	var/datum/cultword/word = null
 	var/obj/effect/rune/rune = null
+	var/datum/rune_spell/spell = null
+	var/remember = 0
 
 /spell/cult/trace_rune/choose_targets(var/mob/user = usr)
 	return list(user)
 
 
 /spell/cult/trace_rune/before_channel(mob/user)
+	if (remember)
+		remember = 0
+	else
+		spell = null//so we're not stuck trying to write the same spell over and over again
+
 	var/mob/living/carbon/C = user
 	var/muted = C.muted()
 	if (muted)
 		to_chat(user,"<span class='danger'>You find yourself unable to focus your mind on the words of Nar-Sie.</span>")
 	return muted
-
 
 /spell/cult/trace_rune/spell_do_after(var/mob/user, var/delay, var/numticks = 3)
 
@@ -39,19 +45,64 @@
 		return 0
 
 	block = 1
+	var/tome = 0
 
 	if(!istype(user.loc, /turf))
 		to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
 		return 0
 
-	var/turf/T = user.loc
+	var/obj/item/weapon/tome/A = null
+	A = user.get_active_hand()
+	tome = (istype(A) && A.state == TOME_OPEN)
+	if (!tome)
+		A = user.get_inactive_hand()
+		tome = (istype(A) && A.state == TOME_OPEN)
 
+	var/turf/T = get_turf(user)
 	rune = locate() in T
+
 	if (rune && rune.word1 && rune.word2 && rune.word3)
 		to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 		return 0
 
-	word = input(user,"Choose a word to add to the rune.", "Trace Rune", null) as null|anything in cultwords
+	if (spell || tome)
+		if (spell)
+			if (!tome)
+				to_chat(user, "<span class='warning'>Without reading the tome, you have trouble remembering the arcane words.</span>")
+				return 0
+		else
+			var/list/available_runes = list()
+			var/i = 1
+			for(var/subtype in subtypesof(/datum/rune_spell))
+				var/datum/rune_spell/instance = subtype
+				if (initial(instance.Act_restriction) <= 1000)//TODO: SET TO CURRENT CULT FACTION ACT
+					available_runes.Add("\Roman[i]-[initial(instance.name)]")
+					available_runes["\Roman[i]-[initial(instance.name)]"] = instance
+				i++
+			var/spell_name = input(user,"Draw a rune with the help of the Arcane Tome.", "Trace Complete Rune", null) as null|anything in available_runes
+			spell = available_runes[spell_name]
+
+		var/datum/cultword/instance
+		if (!rune)
+			instance = initial(spell.word1)
+		else if (rune.word1.type != initial(spell.word1))
+			to_chat(user, "<span class='warning'>This rune's first word conflicts with the [initial(spell.name)] rune's syntax.</span>")
+			return 0
+		else if (!rune.word2)
+			instance = initial(spell.word2)
+		else if (rune.word2.type != initial(spell.word2))
+			to_chat(user, "<span class='warning'>This rune's second word conflicts with the [initial(spell.name)] rune's syntax.</span>")
+			return 0
+		else if (!rune.word3)
+			instance = initial(spell.word3)
+		else//wtf?
+			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
+			return 0
+
+		word = initial(instance.english)
+	else
+
+		word = input(user,"Choose a word to add to the rune.", "Trace Rune Word", null) as null|anything in cultwords
 
 	if (!word)
 		return 0
@@ -80,6 +131,7 @@
 		to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 		return
 	if (write_rune_word(get_turf(user) ,data["blood"] ,word = cultwords[word]) > 1)
+		remember = 1
 		perform(user)//imediately try writing another word
 
 //SPELL II
