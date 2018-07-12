@@ -9,3 +9,4 @@
 
 /datum/emote/sound/silicon/mommi/comment/run_emote(mob/user, params, type_override)
 	sound = get_sfx("mommicomment")
+	. = ..()
