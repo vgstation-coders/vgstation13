@@ -243,6 +243,22 @@
 /obj/item/clothing/suit/space/rig/wizard/acidable()
 	return 0
 
+/obj/item/clothing/head/helmet/space/rig/wizard/lich_king
+	name = "helm of domination"
+	desc = "Worn by a lich with too much summoning time on their hands."
+	icon_state = "rig0-domination"
+	item_state = "lich_helm"
+	_color = "domination"
+	species_restricted = list(UNDEAD_SHAPED)
+
+/obj/item/clothing/suit/space/rig/wizard/lich_king
+	name = "plate of the damned"
+	desc = "Previous incarnations were rumoured to make the user invulnerable. This itteration is famous for having its own in-built cloak."
+	icon_state = "rig-lich"
+	item_state = "rig-lich"
+	species_restricted = list(UNDEAD_SHAPED)
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|HANDS
+
 //Medical Rig
 /obj/item/clothing/head/helmet/space/rig/medical
 	name = "medical hardsuit helmet"

@@ -31,18 +31,19 @@
 
 /spell/targeted/equip_item/robesummon/cast(list/targets, mob/user = usr)
 	if(islich(user))
-		/*switch(pick(valid_outfits))
+		delete_old = TRUE //No duping baller lich outfits
+		switch(pick(valid_outfits))
 			if(ROBES_SUIT)
-				equipped_summons = list("[slot_head]" = /obj/item/clothing/head/helmet/space/helm_of_domination,
-										"[slot_wear_suit]" = /obj/item/clothing/suit/space/lich_king,
-										"[slot_shoes]" = /obj/item/clothing/shoes/sandal,
+				equipped_summons = list("[slot_head]" = /obj/item/clothing/head/helmet/space/rig/wizard/lich_king,
+										"[slot_wear_suit]" = /obj/item/clothing/suit/space/rig/wizard/lich_king,
+										"[slot_shoes]" = /obj/item/clothing/shoes/lich_king,
 										"[slot_wear_mask]" = /obj/item/clothing/mask/breath,
 										"[slot_s_store]" = /obj/item/weapon/tank/oxygen/yellow)
 
-			else*/
-		equipped_summons = list("[slot_head]" = /obj/item/clothing/head/wizard/skelelich,
-								"[slot_wear_suit]" = /obj/item/clothing/suit/wizrobe/skelelich,
-								"[slot_shoes]" = /obj/item/clothing/shoes/sandal)
+			else
+				equipped_summons = list("[slot_head]" = /obj/item/clothing/head/wizard/skelelich,
+										"[slot_wear_suit]" = /obj/item/clothing/suit/wizrobe/skelelich,
+										"[slot_shoes]" = /obj/item/clothing/shoes/sandal)
 	else
 		switch(pick(valid_outfits))
 
