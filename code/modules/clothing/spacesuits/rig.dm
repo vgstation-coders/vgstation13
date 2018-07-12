@@ -254,8 +254,8 @@
 /obj/item/clothing/suit/space/rig/wizard/lich_king
 	name = "plate of the damned"
 	desc = "Previous incarnations were rumoured to make the user invulnerable. This itteration is famous for having its own in-built cloak."
-	icon_state = "rig-lich"
-	item_state = "rig-lich"
+	icon_state = "lichking_armour"
+	item_state = "lichking_armour"
 	species_restricted = list(UNDEAD_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|HANDS
 
