@@ -56,5 +56,9 @@
 #define	TOME_CLOSED	1
 #define	TOME_OPEN	2
 
+#define	RUNE_CAN_ATTUNE	0
+#define	RUNE_CAN_IMBUE	1
+#define	RUNE_CANNOT		2
+
 #define	MAX_TALISMAN_PER_TOME	5
 

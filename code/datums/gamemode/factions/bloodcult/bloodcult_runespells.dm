@@ -22,7 +22,7 @@
 	var/accumulated_blood = 0
 	var/destroying_self = 0
 	var/cancelling = 3
-	var/talisman_absorb = 1//1 = blank talisman absorbs the rune, 0 = blank talisman links with the rune.
+	var/talisman_absorb = RUNE_CAN_IMBUE
 	var/page = "Lorem ipsum dolor sit amet, consectetur adipiscing elit,\
 			 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\
 			  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut\
@@ -395,7 +395,7 @@
 	cost_invoke = 2
 	cost_upkeep = 1
 	remaining_cost = 5
-	talisman_absorb = 2
+	talisman_absorb = RUNE_CANNOT
 	var/obj/item/weapon/tome/target = null
 	var/obj/item/weapon/talisman/tool = null
 	page = "Runes are powerful, but they're not always convenient. They require time to be set up, cannot be moved, and more importantly, are highly visible, unless hidden, \
@@ -542,7 +542,7 @@
 	word1 = /datum/cultword/join
 	word2 = /datum/cultword/blood
 	word3 = /datum/cultword/self
-	talisman_absorb = 0
+	talisman_absorb = RUNE_CAN_ATTUNE
 
 //RUNE VI
 /datum/rune_spell/stun
@@ -624,7 +624,7 @@
 	word1 = /datum/cultword/destroy
 	word2 = /datum/cultword/travel
 	word3 = /datum/cultword/self
-	talisman_absorb = 0
+	talisman_absorb = RUNE_CAN_ATTUNE
 
 //RUNE XIV
 /datum/rune_spell/fervor
@@ -655,7 +655,7 @@
 	word1 = /datum/cultword/travel
 	word2 = /datum/cultword/self
 	teleporter = 1
-	talisman_absorb = 0
+	talisman_absorb = RUNE_CAN_ATTUNE
 
 /datum/rune_spell/portalentrance/New(var/mob/user, var/obj/holder, var/datum/cultword/w3)
 	..()
@@ -670,7 +670,7 @@
 	word1 = /datum/cultword/travel
 	word2 = /datum/cultword/other
 	teleporter = 1
-	talisman_absorb = 0
+	talisman_absorb = RUNE_CAN_ATTUNE
 
 /datum/rune_spell/portalexit/New(var/mob/user, var/obj/holder, var/datum/cultword/w3)
 	..()

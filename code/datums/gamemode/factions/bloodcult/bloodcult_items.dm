@@ -302,7 +302,7 @@ var/list/arcane_tomes = list()
 	if (!user || !R) return
 
 	var/datum/rune_spell/spell = get_rune_spell(user,null,"examine",R.word1, R.word2, R.word3)
-	if(initial(spell.talisman_absorb) == 2)
+	if(initial(spell.talisman_absorb) == RUNE_CANNOT)
 		user.drop_item(src)
 		src.forceMove(get_turf(R))
 		R.attack_hand(user)
@@ -333,15 +333,15 @@ var/list/arcane_tomes = list()
 
 		spell_type = spell
 		switch(initial(spell.talisman_absorb))
-			if (0)
+			if (RUNE_CAN_ATTUNE)
 				user.playsound_local(src, 'sound/effects/talisman_attune.ogg', 50, 0, 0, 0, 0)
 				to_chat(user, "<span class='notice'>The talisman can now remotely trigger the [initial(spell.name)] rune.</span>")
 				attuned_rune = R
-			if (1)
+			if (RUNE_CAN_IMBUE)
 				user.playsound_local(src, 'sound/effects/talisman_imbue.ogg', 50, 0, 0, 0, 0)
 				to_chat(user, "<span class='notice'>The talisman absorbs the power of the [initial(spell.name)] rune.</span>")
 				qdel(R)
-			if (2)
+			if (RUNE_CANNOT)
 				message_admins("Error! Some bloke managed to imbue a Conjure Talisman rune. That shouldn't be possible!")
 				return
 
