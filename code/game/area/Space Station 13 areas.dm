@@ -124,6 +124,7 @@ proc/process_adminbus_teleport_locs()
 /area/station//TODO: make every area in the MAIN station inherit from this.
 	name = "Station"
 	shuttle_can_crush = FALSE
+	icon_state = "station"
 
 /area/station/custom //For blueprints!
 	power_equip = 0
