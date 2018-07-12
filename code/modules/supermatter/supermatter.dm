@@ -1,4 +1,3 @@
-
 #define NITROGEN_RETARDATION_FACTOR 4        //Higher == N2 slows reaction more
 #define THERMAL_RELEASE_MODIFIER 10                //Higher == less heat released during reaction
 #define PLASMA_RELEASE_MODIFIER 1500                //Higher == less plasma released by reaction
@@ -11,8 +10,6 @@
 
 #define WARNING_DELAY 30 		//seconds between warnings.
 #define AUDIO_WARNING_DELAY 30
-
-var/global/total_supermatter_objects = 0
 
 /obj/machinery/power/supermatter
 	name = "Supermatter Crystal"
@@ -97,8 +94,7 @@ var/global/total_supermatter_objects = 0
 	if(frequency)
 		set_frequency(frequency)
 	if(!id_tag)
-		id_tag = "supermatter_[total_supermatter_objects]"
-	total_supermatter_objects++
+		id_tag = "supermatter_[rand(9999)]" //It is conceivable that there might default to two with the same, but it's unlikely.
 
 /obj/machinery/power/supermatter/Destroy()
 	qdel(radio)
@@ -469,13 +465,14 @@ var/global/total_supermatter_objects = 0
 	return 1
 
 /obj/machinery/computer/supermatter
-	name = "Supermatter Monitoring Computer"
+	name = "supermatter monitoring computer"
 	desc = "Monitors ambient temperature and stability of a linked shard to provide early warning information regarding delamination."
 	icon_state = "sme"
 	circuit = "/obj/item/weapon/circuitboard/supermatter"
 	light_color = LIGHT_COLOR_YELLOW
 	var/id_tag = null //Mappable
 	var/obj/machinery/power/supermatter/linked = null
+	var/screen = 0 //0 = Main display, 1 = select target
 
 /obj/machinery/computer/supermatter/New()
 	..()
@@ -483,13 +480,10 @@ var/global/total_supermatter_objects = 0
 
 
 /obj/machinery/computer/supermatter/attack_hand(mob/user)
-	add_fingerprint(user)
-	if(stat & (BROKEN|NOPOWER))
+	. = ..()
+	if(!.)
 		return
-	return ui_interact(user)
-
-/obj/machinery/computer/supermatter/attack_ai(mob/user)
-	return attack_hand(user)
+	ui_interact(user)
 
 /obj/machinery/computer/supermatter/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if (gcDestroyed || !get_turf(src) || !anchored)
@@ -513,23 +507,25 @@ var/global/total_supermatter_objects = 0
 			var/turf/T = linked.loc //We know it's a turf, we just checked
 			data["oxygen"] = round(T.oxygen)
 		data["location"] = linked.areaMaster.name
+		data["screen"] = screen
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+	ui.set_auto_update()
 	if (!ui)
-		ui = new(user, src, ui_key, "supermatter.tmpl", "Supermatter Monitoring Computer", 520, 340)
+		ui = new(user, src, ui_key, "supermatter.tmpl", name, 520, 340)
 		ui.set_initial_data(data)
 		ui.open()
 
 /obj/machinery/computer/supermatter/Topic(href, href_list)
-	if(..())
-		return
-	if(usr.incapacitated() || (!Adjacent(usr)&&!issilicon(usr)) || !usr.dexterity_check())
-		return
+	. = ..()
+	if(.)
+		return .
 	if(href_list["select"])
 		var/new_id = input("New target ID tag","Selecting Supermatter",id_tag) as text|null
 		if(!new_id)
-			return
+			return TRUE
 		try_link(new_id)
+		return TRUE
 	if(href_list["list"])
 		var/list/local_supermatter = list()
 		for(var/obj/machinery/power/supermatter/S in power_machines)
@@ -537,9 +533,11 @@ var/global/total_supermatter_objects = 0
 			if(T.z == z)
 				local_supermatter += S.id_tag
 		to_chat(usr,"<span class='info'>\The [src] flashes briefly, displaying the following ID tags: [json_encode(local_supermatter)]</span>")
-	return 1
+	return TRUE
 
 /obj/machinery/computer/supermatter/proc/try_link(var/new_id)
+	id_tag = null
+	linked = null
 	if(new_id)
 		id_tag = new_id
 		for(var/obj/machinery/power/supermatter/S in power_machines)
@@ -549,14 +547,10 @@ var/global/total_supermatter_objects = 0
 					linked = S
 				else
 					visible_message("<span class='warning'>\The [src] buzzes.</span>")
+					playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 				return
 	else
 		for(var/obj/machinery/power/supermatter/S in power_machines)
 			if(S.z == z) //It's supermatter and it's on our Z-level
 				linked = S
 				return
-
-/obj/machinery/computer/supermatter/process()
-	if(!..())
-		return 0
-	nanomanager.update_uis(src)
