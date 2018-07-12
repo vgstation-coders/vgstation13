@@ -177,25 +177,29 @@ var/list/SPS_list = list()
 	if(emped)
 		return
 
+	var/channel_index = 0
+	var/sps_index = SPS_list.Find(src)
 	for(var/E in SPS_list)
 		var/obj/item/device/gps/secure/S = E //No idea why casting it like this makes it work better instead of just defining it in the for each
-		S.announce(wearer, src, "has detected the death of their wearer",dead=TRUE)
+		S.announce(wearer, src, "has detected the death of their wearer", sps_index, DEATHSOUND_CHANNEL + channel_index, dead = TRUE)
+		channel_index++
 
 /obj/item/device/gps/secure/stripped(mob/wearer)
 	if(emped)
 		return
 	. = ..()
-	var/num = 0
+	var/sps_index = SPS_list.Find(src)
+	var/channel_index = 0
 	for(var/E in SPS_list)
 		var/obj/item/device/gps/secure/S = E
-		S.announce(wearer, src, "has been stripped from their wearer",num)
-		num++
+		S.announce(wearer, src, "has been stripped from their wearer", sps_index, DEATHSOUND_CHANNEL + channel_index)
+		channel_index++
 
 var/list/deathsound = list('sound/items/die1.wav', 'sound/items/die2.wav', 'sound/items/die3.wav','sound/items/die4.wav')
 
-/obj/item/device/gps/secure/proc/announce(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/reason,var/num,var/dead=FALSE)
+/obj/item/device/gps/secure/proc/announce(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/reason,var/num,var/sound_channel,var/dead=FALSE)
 	var/turf/pos = get_turf(SPS)
-	deathsound(pos,dead,num)
+	deathsound(pos,dead,num,sound_channel)
 	var/mob/living/L = get_holder_of_type(src, /mob/living/)
 	if(L)
 		L.show_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>", MESSAGE_HEAR)
@@ -205,8 +209,7 @@ var/list/deathsound = list('sound/items/die1.wav', 'sound/items/die2.wav', 'soun
 
 var/const/DEATHSOUND_CHANNEL = 300
 
-/obj/item/device/gps/secure/proc/deathsound(var/turf/pos,var/dead=FALSE,num)
-	var/sound_channel = DEATHSOUND_CHANNEL + num
+/obj/item/device/gps/secure/proc/deathsound(var/turf/pos,var/dead=FALSE,num,var/sound_channel)
 	if(dead)
 		playsound(src, pick(deathsound), 100, 0,channel = sound_channel,wait = TRUE)
 	if(prob(75))
@@ -220,16 +223,16 @@ var/const/DEATHSOUND_CHANNEL = 300
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
 		else if(prob(33) && dead) // 25% chance if dead, 0% chance if stripped
 			playsound(src, 'sound/items/unitdownat.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(pos.x-WORLD_X_OFFSET[pos.z],pos,sound_channel,src)
+			playnum(pos.x-WORLD_X_OFFSET[pos.z],sound_channel,src)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(pos.y-WORLD_Y_OFFSET[pos.z],pos,sound_channel,src)
+			playnum(pos.y-WORLD_Y_OFFSET[pos.z],sound_channel,src)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(pos.z,pos,sound_channel,src)
+			playnum(pos.z,sound_channel,src)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
 		else if(prob(50)) 	// 25% chance if dead, 50% chance if stripped
 			playsound(src, 'sound/items/lostbiosignalforunit.wav',100, 0,channel = sound_channel,wait = TRUE)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(num,pos,sound_channel,src)
+			playnum(SPS_list.Find(src),sound_channel,src)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
 		else	// 25% chance if dead, 50% chance if stripped
 			playsound(src, 'sound/items/allteamsrespondcode3.wav',100, 0,channel = sound_channel,wait = TRUE)
@@ -246,6 +249,7 @@ var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/t
 	if(num)
 		var/base = round(log(10,num))
 		for(var/n = 0 to base)
-			splitnumber += num/(10**(base-n)) % 10
+			splitnumber += num2text(num/(10**(base-n)) % 10)
 	else splitnumber += "0"
 	for(var/n in splitnumber)
+		playsound(source, nums_to_hl_num[n], 100, 0, channel = sound_channel, wait = TRUE)

@@ -58,14 +58,17 @@
 	icon_opened = "cabinetdetective_open"
 	icon_broken = "cabinetdetective_broken"
 	icon_off = "cabinetdetective_broken"
+	var/wonder_whitelist = list(/obj/item/clothing/shoes/clown_shoes/advanced, /obj/item/clothing/mask/morphing/corgi, list(/obj/item/clothing/suit/space/plasmaman/security/captain, /obj/item/clothing/head/helmet/space/plasmaman/security/captain), /obj/item/clothing/shoes/magboots/magnificent, /obj/item/clothing/under/aqua, /obj/item/clothing/under/purple, /obj/item/clothing/under/lightgreen, /obj/item/clothing/under/lightblue, /obj/item/clothing/under/lightbrown, /obj/item/clothing/under/brown, /obj/item/clothing/under/yellowgreen, /obj/item/clothing/under/darkblue, /obj/item/clothing/under/lightred, /obj/item/clothing/under/darkred, /obj/item/clothing/under/bluepants, /obj/item/clothing/under/blackpants, /obj/item/clothing/under/redpants, /obj/item/clothing/under/greypants, /obj/item/clothing/under/dress/plaid_purple, /obj/item/clothing/under/dress/plaid_red, /obj/item/clothing/under/dress/plaid_blue, /obj/item/clothing/under/greaser, /obj/item/clothing/under/sl_suit, /obj/item/clothing/under/syndicate/tacticool, /obj/item/clothing/under/color/orange, /obj/item/clothing/under/psyche, /obj/item/clothing/under/rainbow)
 
 /obj/structure/closet/secure_closet/wonderful/New()
 	..()
-	var/random_clothes = clothing.Copy()
-	random_clothes = random_clothes - typesof(/obj/item/clothing/mask/stone) - typesof(/obj/item/clothing/mask/morphing) - typesof(/obj/item/clothing/accessory/holomap_chip) - typesof(/obj/item/clothing/suit/space/time) - typesof(/obj/item/clothing/head/helmet/space/time) - typesof(/obj/item/clothing/gloves/warping_claws)
-	for(var/amount = 1 to 20)
-		var/path = pick_n_take(random_clothes)
-		new path(src)
+	for(var/amount = 1 to 10)
+		var/wonder_clothing = pick_n_take(wonder_whitelist)
+		if(islist(wonder_clothing))
+			for(var/i in wonder_clothing)
+				new i(src)
+		else
+			new wonder_clothing(src)
 
 /*/obj/structure/cage/with_random_slime
 	..()

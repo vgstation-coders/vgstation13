@@ -77,7 +77,19 @@
 		if(C.enabled && istype(C, desired_type))
 			if(C.RecieveSignal(message_type, args)) // return 1 to accept signal.
 				return
+/**
+ * Send a signal, and see if anyone replies with information.
+ *
+ * @param message_type: String(DEFINE): The message to send
+ * @param args: List(ref): The arguments associated with this message
+ */
 
+/datum/component_container/proc/ReturnFromSignalFirst(var/message_type, var/list/args)
+	for(var/datum/component/C in components)
+		if(C.enabled)
+			var/received_information = C.RecieveAndReturnSignal(message_type, args)
+			if(received_information)
+				return received_information
 
 /**
  * Get the first component matching the specified type.

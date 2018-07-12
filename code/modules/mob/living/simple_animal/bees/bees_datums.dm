@@ -63,6 +63,7 @@
 	maxHealth = 15
 	corpse = /obj/effect/decal/cleanable/bee/queen_bee
 	var/colonizing = 0
+	var/searching = 0//only attempt building our own hive once we've searched for a while already.
 
 /datum/bee/queen_bee/proc/setHome(var/obj/machinery/apiary/A)
 	state = BEE_SWARM

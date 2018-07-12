@@ -53,10 +53,6 @@
 		qdel(reagents)
 	..()
 
-
-
-var/global/tracking_implants = list() //fuck me
-
 /obj/item/weapon/implant/tracking
 	name = "tracking"
 	desc = "Track with this."
@@ -229,6 +225,14 @@ Can only be loaded while still in its original case.<BR>
 <b>Integrity:</b> Implant will last so long as the subject is alive. However, if the subject suffers from malnutrition,<BR>
 the implant may become unstable and either pre-maturely inject the subject or simply break."}
 		return dat
+
+/obj/item/weapon/implant/chem/New()
+	..()
+	chemical_implants.Add(src)
+
+/obj/item/weapon/implant/chem/Destroy()
+	chemical_implants.Remove(src)
+	..()
 
 /obj/item/weapon/implant/chem/trigger(emote, source as mob)
 	if(emote == "deathgasp")

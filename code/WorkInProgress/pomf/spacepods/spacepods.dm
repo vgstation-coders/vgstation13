@@ -160,10 +160,11 @@
 			if(prob(40))
 				adjust_health(50)
 
-/obj/spacepod/attackby(obj/item/W as obj, mob/user as mob)
+/obj/spacepod/attackby(obj/item/W, mob/user)
 	if(iscrowbar(W))
 		hatch_open = !hatch_open
 		to_chat(user, "<span class='notice'>You [hatch_open ? "open" : "close"] the maintenance hatch.</span>")
+		return
 	if(health < maxHealth && iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(!WT.isOn())
@@ -208,6 +209,12 @@
 					equipment_system.weapon_system.my_atom = src
 					//new/obj/item/device/spacepod_equipment/weaponry/proc/fire_weapon_system(src, equipment_system.weapon_system.verb_name, equipment_system.weapon_system.verb_desc) //Yes, it has to be referenced like that. W.verb_name/desc doesn't compile.
 					return
+
+	if(W.force)
+		visible_message("<span class = 'warning'>\The [user] hits \the [src] with \the [W]</span>")
+		adjust_health(W.force)
+		W.on_attack(src, user)
+
 
 /obj/spacepod/attack_hand(mob/user as mob)
 	if(!hatch_open)
@@ -257,8 +264,6 @@
 			else
 				to_chat(user, "<span class='warning'>You need an open hand to do that.</span>")
 		*/
-
-	return
 
 /obj/spacepod/civilian
 	icon_state = "pod_civ"

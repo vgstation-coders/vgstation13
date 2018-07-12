@@ -59,9 +59,6 @@
 		qdel(vessel)
 		vessel = null
 
-	if(NPC_brain)
-		qdel(NPC_brain)
-		NPC_brain = null
 
 	..()
 
