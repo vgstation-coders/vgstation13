@@ -210,6 +210,11 @@ SOCKET_TALK 0
 ## How long the delay is before the Away Mission gate opens. Default is half an hour.
 GATEWAY_DELAY 18000
 
+## LATEJOIN_DELAY
+## Configures the delay latejoiners have to wait before joining in on the server
+## In deciseconds (seconds *10)
+LATEJOIN_DELAY 18000
+
 ## Remove the # to give assistants maint access.
 #ASSISTANT_MAINT
 

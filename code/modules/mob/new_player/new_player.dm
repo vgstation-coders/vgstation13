@@ -174,6 +174,14 @@
 			to_chat(usr, "<span class='warning'>The round is either not ready, or has already finished...</span>")
 			return
 
+		if (config && config.delay_latejoin && ticker.current_state == GAME_STATE_PLAYING && world.timeofday <= config.delay_latejoin && !check_rights())
+
+			var/time_left = config.delay_latejoin - world.timeofday
+			var/minutes = round(time_left/60)
+			var/seconds = time_left - 60*minutes
+			to_chat(usr, "<span class='warning'>Early latejoining is disabled. [minutes]:[seconds >= 10 ? seconds : "0[seconds]"] remaining.</span>")
+			return
+
 		if(client.prefs.species != "Human")
 
 			if(!is_alien_whitelisted(src, client.prefs.species) && config.usealienwhitelist)
@@ -372,7 +380,7 @@
 				if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
 					var/mob/living/L = get_holder_of_type(P,/mob/living)
 					if(L)
-						L.show_message("[bicon(P)] <b>Message from U¦ŸÉ8¥E1ÀÓÐ‹ (T¥u1B¤Õ), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
+						L.show_message("[bicon(P)] <b>Message from Uï¿½ï¿½ï¿½8ï¿½E1ï¿½ï¿½Ð‹ (Tï¿½u1Bï¿½ï¿½), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
 			for(var/mob/dead/observer/M in player_list)
 				if(M.stat == DEAD && M.client)
 					handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character] has arrived in the sector from space.</span></span>",character) //This should generate a Follow link

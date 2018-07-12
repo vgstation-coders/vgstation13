@@ -86,6 +86,8 @@
 	if(revdata)
 		feedback_set_details("revision","[revdata.revision]")
 	feedback_set_details("server_ip","[world.internet_address]:[world.port]")
+	if (player_list.len < 15)
+		config.delay_latejoin = 0 // No delay if we're on lowpop.
 	return 1
 
 

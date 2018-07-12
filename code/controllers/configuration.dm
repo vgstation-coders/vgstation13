@@ -120,6 +120,8 @@
 	var/bones_can_break = 0
 	var/limbs_can_break = 0
 
+	var/delay_latejoin = 0
+
 	var/revival_pod_plants = 1
 	var/revival_cloning = 1
 	var/revival_brain_life = -1
@@ -579,6 +581,8 @@
 					discord_password = value
 				if("weighted_votes")
 					weighted_votes = TRUE
+				if("delay_latejoin")
+					config.delay_latejoin = value
 
 				else
 					diary << "Unknown setting in configuration: '[name]'"
