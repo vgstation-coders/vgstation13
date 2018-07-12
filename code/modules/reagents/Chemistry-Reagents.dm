@@ -3164,72 +3164,75 @@
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona")
-					if(H.getOxyLoss()>0 || H.getBruteLoss(ignore_inorganic = TRUE)>0 || H.getToxLoss()>0 || H.getFireLoss(ignore_inorganic = TRUE)>0 || H.getCloneLoss()>0)
-						if(holder.has_reagent("mednanobots"))
-							H.adjustOxyLoss(-5)
-							H.heal_organ_damage(5, 5)
-							H.adjustToxLoss(-5)
-							H.adjustCloneLoss(-5)
-							holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
-					if(percent_machine>5)
-						if(holder.has_reagent("mednanobots"))
-							percent_machine-=1
-							if(prob(20))
-								to_chat(H, pick("You feel more like yourself again."))
-					if(H.dizziness != 0)
-						H.dizziness = max(0, H.dizziness - 15)
-					if(H.confused != 0)
-						H.confused = max(0, H.confused - 5)
-					for(var/datum/disease/D in M.viruses)
-						D.spread = "Remissive"
-						D.stage--
-						if(D.stage < 1)
-							D.cure()
+					return
+			if(M.getOxyLoss()>0 || M.getBruteLoss(ignore_inorganic = TRUE)>0 || M.getToxLoss()>0 || M.getFireLoss(ignore_inorganic = TRUE)>0 || M.getCloneLoss()>0)
+				if(holder.has_reagent("mednanobots"))
+					M.adjustOxyLoss(-5)
+					M.heal_organ_damage(5, 5)
+					M.adjustToxLoss(-5)
+					M.adjustCloneLoss(-5)
+					holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
+			if(percent_machine>5)
+				if(holder.has_reagent("mednanobots"))
+					percent_machine-=1
+					if(prob(20))
+						to_chat(M, pick("You feel more like yourself again."))
+			if(M.dizziness != 0)
+				M.dizziness = max(0, M.dizziness - 15)
+			if(M.confused != 0)
+				M.confused = max(0, M.confused - 5)
+			for(var/datum/disease/D in M.viruses)
+				D.spread = "Remissive"
+				D.stage--
+				if(D.stage < 1)
+					D.cure()
 		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona")
-					if(H.getOxyLoss()>0 || H.getBruteLoss()>0 || H.getToxLoss()>0 || H.getFireLoss()>0 || H.getCloneLoss()>0)
-						if(holder.has_reagent("mednanobots"))
-							H.adjustOxyLoss(-5)
-							H.heal_organ_damage(5, 5)
-							H.adjustToxLoss(-5)
-							H.adjustCloneLoss(-5)
-							holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
-							percent_machine +=1/2
-							if(prob(20))
-								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
-							else
-					if(H.dizziness != 0)
-						H.dizziness = max(0, H.dizziness - 15)
-					if(H.confused != 0)
-						H.confused = max(0, H.confused - 5)
-					for(var/datum/disease/D in M.viruses)
-						D.spread = "Remissive"
-						D.stage--
-						if(D.stage < 1)
-							D.cure()
-					if(prob(percent_machine))
-						holder.add_reagent("mednanobots", 20)
-						to_chat(H, pick("<b><span class='warning'>Your body lurches!</b></span>"))
+					return
+			if(M.getOxyLoss()>0 || M.getBruteLoss()>0 || M.getToxLoss()>0 || M.getFireLoss()>0 || M.getCloneLoss()>0)
+				if(holder.has_reagent("mednanobots"))
+					M.adjustOxyLoss(-5)
+					M.heal_organ_damage(5, 5)
+					M.adjustToxLoss(-5)
+					M.adjustCloneLoss(-5)
+					holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
+					percent_machine +=1/2
+					if(prob(20))
+						to_chat(M, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
+					else
+			if(M.dizziness != 0)
+				M.dizziness = max(0, M.dizziness - 15)
+			if(M.confused != 0)
+				M.confused = max(0, M.confused - 5)
+			for(var/datum/disease/D in M.viruses)
+				D.spread = "Remissive"
+				D.stage--
+				if(D.stage < 1)
+					D.cure()
+			if(prob(percent_machine))
+				holder.add_reagent("mednanobots", 20)
+				to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
 		if(20 to INFINITY)
-			if(ishuman(M))
-				spawning_horror = 1
-				var/mob/living/carbon/human/H = M
-				to_chat(H, pick("<b><span class='warning'>Something doesn't feel right...</span></b>", "<b><span class='warning'>Something is growing inside you!</span></b>", "<b><span class='warning'>You feel your insides rearrange!</span></b>"))
-				spawn(60)
-					if(spawning_horror == 1)
-						to_chat(H, "<b><span class='warning'>Something bursts out from inside you!</span></b>")
-						message_admins("[key_name(H)] has gibbed and spawned a new cyber horror due to nanobots. ([formatJumpTo(H)])")
-						var/typepath = text2path("/mob/living/simple_animal/hostile/monster/cyber_horror/[H.species.name]")
+			spawning_horror = 1
+			to_chat(M, pick("<b><span class='warning'>Something doesn't feel right...</span></b>", "<b><span class='warning'>Something is growing inside you!</span></b>", "<b><span class='warning'>You feel your insides rearrange!</span></b>"))
+			spawn(60)
+				if(spawning_horror == 1)
+					to_chat(M, "<b><span class='warning'>Something bursts out from inside you!</span></b>")
+					message_admins("[key_name(M)] has gibbed and spawned a new cyber horror due to nanobots. ([formatJumpTo(M)])")
+					if(ishuman(M))
+						var/mob/living/carbon/human/H = M
+						var/typepath
+						typepath = text2path("/mob/living/simple_animal/hostile/monster/cyber_horror/[H.species.name]")
 						if(ispath(typepath))
-							new typepath(H.loc)
-							spawning_horror = 0
-							H.gib()
+							new typepath(M.loc)
 						else
-							new /mob/living/simple_animal/hostile/monster/cyber_horror(H.loc)
-							spawning_horror = 0
-							H.gib()
+							new /mob/living/simple_animal/hostile/monster/cyber_horror(M.loc)
+					else
+						new /mob/living/simple_animal/hostile/monster/cyber_horror/monster(M.loc,M)
+					spawning_horror = 0
+					M.gib()
 
 /datum/reagent/comnanobots
 	name = "Combat Nanobots"

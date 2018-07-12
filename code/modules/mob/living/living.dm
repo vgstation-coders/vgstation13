@@ -259,11 +259,7 @@
 	return temperature
 
 
-// ++++ROCKDTBEN++++ MOB PROCS -- Ask me before touching.
-// Stop! ... Hammertime! ~Carn
-// I touched them without asking... I'm soooo edgy ~Erro (added nodamage checks)
-
-/mob/living/proc/getBruteLoss()
+/mob/living/proc/getBruteLoss(var/ignore_inorganic)
 	return bruteloss
 
 /mob/living/proc/adjustBruteLoss(var/amount)
@@ -315,7 +311,7 @@
 		return 0	//godmode
 	toxloss = amount
 
-/mob/living/proc/getFireLoss()
+/mob/living/proc/getFireLoss(var/ignore_inorganic)
 	return fireloss
 
 /mob/living/proc/adjustFireLoss(var/amount)
