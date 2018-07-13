@@ -59,6 +59,7 @@
 	icon_broken = "cabinetdetective_broken"
 	icon_off = "cabinetdetective_broken"
 	var/wonder_whitelist = list(
+	/obj/item/clothing/mask/morphing/corgi,
 	/obj/item/clothing/under/rank/vice,
 	/obj/item/clothing/shoes/clown_shoes/advanced,
 	list(/obj/item/clothing/suit/space/clown, /obj/item/clothing/head/helmet/space/clown),
