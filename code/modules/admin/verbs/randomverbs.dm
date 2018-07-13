@@ -1091,6 +1091,23 @@ Traitors and the like can also be revived with the previous role mostly intact.
 
 	feedback_add_details("admin_verb", "SCO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+/client/proc/toggle_latejoin_delay()
+	set category = "Admin"
+	set name = "Toggle latejoin delay"
+
+	if (!check_rights(R_ADMIN))
+		return FALSE
+	
+	if (config && config.delay_latejoin)
+		config.delay_latejoin = 0
+		log_admin("[key_name(usr)] has turned latejoin delay off.")
+		message_admins("<span class='notice'>[key_name(usr)] has turned latejoin delay off.</span>", 1)
+		return TRUE
+
+	if (!config || !config.delay_latejoin) 
+		to_chat(usr, "<span class='warning'>No delay on latejoining already.</span>")
+		return FALSE
+
 /client/proc/cmd_admin_equip_loadout(mob/M as mob in mob_list)
 	set category = "Fun"
 	set name = "Equip Loadout"
