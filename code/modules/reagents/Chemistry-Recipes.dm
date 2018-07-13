@@ -2040,11 +2040,25 @@
 	timestop(get_turf(holder.my_atom), 25,5)
 
 //Pyrite
+/datum/chemical_reaction/slimechange
+	name = "Slime Change"
+	id = "m_change"
+	result = null
+	required_reagents = list(PLASMA = 5)
+	result_amount = 1
+	required_container = /obj/item/slime_extract/pyrite
+	required_other = 1
+
+/datum/chemical_reaction/slimechange/on_reaction(var/datum/reagents/holder)
+	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
+	var/obj/item/weapon/slimechange/P = new /obj/item/weapon/slimechange
+	P.forceMove(get_turf(holder.my_atom))
+
 /datum/chemical_reaction/slimepaint
 	name = "Slime Paint"
 	id = "s_paint"
 	result = null
-	required_reagents = list(PLASMA = 5)
+	required_reagents = list(WATER = 5)
 	result_amount = 1
 	required_container = /obj/item/slime_extract/pyrite
 	required_other = 1
