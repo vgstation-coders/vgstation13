@@ -147,6 +147,7 @@ var/global/list/ghdel_profiling = list()
 	..()
 
 /atom/Destroy()
+	flags &= ~INITIALIZED
 	if(reagents)
 		qdel(reagents)
 		reagents = null
@@ -171,11 +172,25 @@ var/global/list/ghdel_profiling = list()
 		beams.len = 0
 	*/
 
-/atom/New()
+/atom/New(var/loc, ...)
 	on_destroyed = new("owner"=src)
 	on_density_change = new("owner"=src)
 	. = ..()
 	AddToProfiler()
+
+	var/datum/subsystem/atoms/SSatoms = global.SSatoms
+	if(!SSatoms)
+		return
+	var/do_initialize = SSatoms.initialized
+	if(do_initialize != INITIALIZATION_INSSATOMS)
+		args[1] = do_initialize == INITIALIZATION_INNEW_MAPLOAD
+		if(SSatoms.InitAtom(src, args))
+			//we were deleted
+			return
+
+	var/list/created = SSatoms.created_atoms
+	if(created)
+		created += src
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
 	return null
@@ -911,4 +926,14 @@ its easier to just keep the beam vertical.
 			return C.mob
 
 /atom/proc/initialize()
+	if(flags & INITIALIZED)
+		stack_trace("Warning: [src] ([type]) initialized multiple times!")
+	flags |= INITIALIZED
+	return INITIALIZE_HINT_NORMAL
+
+/atom/proc/late_initialize()
+	return
+
+// Put your AddComponent() calls here
+/atom/proc/ComponentInitialize()
 	return
