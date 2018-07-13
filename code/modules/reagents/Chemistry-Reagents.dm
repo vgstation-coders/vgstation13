@@ -2653,6 +2653,8 @@
 
 	if(istype(O, /obj/item/organ/internal))
 		var/obj/item/organ/internal/I = O
+		if(I.health <= 0)
+			I.revive()
 		if(I.health < initial(I.health))
 			I.health = min(I.health+rand(1,3), initial(I.health))
 		if(I.organ_data)
