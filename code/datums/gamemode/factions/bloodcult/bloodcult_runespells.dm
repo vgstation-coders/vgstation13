@@ -273,7 +273,7 @@
 
 	var/datum/faction/bloodcult = find_active_faction(BLOODCULT)
 	for(var/datum/mind/M in bloodcult.members)
-		to_chat(M.current, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[speech.message]</span></B></span>")
+		to_chat(M.current, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[message]</span></B></span>")
 
 	for(var/mob/dead/observer/O in player_list)
 		to_chat(O, "<span class='game say'><b>[activator.real_name]</b> communicates, <span class='sinister'>[message]</span></span>")
