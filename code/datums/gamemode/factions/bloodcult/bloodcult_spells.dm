@@ -1,11 +1,14 @@
+/spell/cult
+	panel = "Cult"
+	override_base = "cult"
+	user_type = USER_TYPE_CULT
+
 
 //SPELL I
 /spell/cult/trace_rune
 	name = "Trace Rune"
 	desc = "Use available blood to write down words. Three words form a rune."
-	panel = "Cult"
 	hud_state = "cult_word"
-	override_base = "cult"
 
 	invocation_type = SpI_NONE
 	charge_type = Sp_RECHARGE
@@ -138,9 +141,7 @@
 /spell/cult/erase_rune
 	name = "Erase Rune"
 	desc = "Remove the last word written of the rune you're standing above."
-	panel = "Cult"
 	hud_state = "cult_erase"
-	override_base = "cult"
 
 	invocation_type = SpI_NONE
 	charge_type = Sp_RECHARGE
