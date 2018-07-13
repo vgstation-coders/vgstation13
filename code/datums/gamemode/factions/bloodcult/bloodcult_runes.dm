@@ -42,8 +42,6 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	//Used when a nullrod is preventing a rune's activation
 	var/nullblock = 0
 
-	var/atom/movable/overlay/c_animation = null
-
 	var/datum/rune_spell/active_spell = null
 
 /obj/effect/rune/New()
@@ -432,21 +430,3 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	visible_message("<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\
 	"<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\
 	"<span class='warning'>You hear a faint fizzle.</span>")
-
-//salvaged from my old rune code
-/obj/effect/rune/proc/invocation_effect(var/animation_icon)
-	if(c_animation) // if you've more than one, it won't go away
-		return
-	c_animation = new /atom/movable/overlay(src.loc)
-	c_animation.name = "cultification"
-	c_animation.anchored = 1
-	c_animation.icon = 'icons/effects/effects.dmi'
-	c_animation.plane = EFFECTS_PLANE
-	c_animation.master = src.loc
-	c_animation.icon_state = "[animation_icon]"
-	flick("cultification",c_animation)
-	spawn(10)
-		if(c_animation)
-			c_animation.master = null
-			qdel(c_animation)
-			c_animation = null

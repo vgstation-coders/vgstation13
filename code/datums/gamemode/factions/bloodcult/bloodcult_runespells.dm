@@ -158,7 +158,6 @@
 /datum/rune_spell/raisestructure/cast()
 	var/mob/living/user = activator
 	contributors.Add(user)
-	contributors[user] = ""
 	update_progbar()
 	if (user.client)
 		user.client.images |= progbar
@@ -178,7 +177,6 @@
 		return
 	add_cultist.say(invocation)
 	contributors.Add(add_cultist)
-	contributors[add_cultist] = ""
 	if (add_cultist.client)
 		add_cultist.client.images |= progbar
 
@@ -272,12 +270,16 @@
 	var/message = sanitize(input("Write a message to send to your acolytes.", "Blood Letter", "") as null|message, MAX_MESSAGE_LEN)
 	if(!message)
 		return
-	for(var/mob/living/L in player_list)
-		if (iscultist(L))
-			to_chat(L, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[message]</span></B></span>")
+
+	var/datum/faction/bloodcult = find_active_faction(BLOODCULT)
+	for(var/datum/mind/M in bloodcult.members)
+		to_chat(M.current, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[speech.message]</span></B></span>")
+
 	for(var/mob/dead/observer/O in player_list)
 		to_chat(O, "<span class='game say'><b>[activator.real_name]</b> communicates, <span class='sinister'>[message]</span></span>")
+
 	log_cultspeak("[key_name(activator)] Cult Communicate Talisman: [message]")
+
 	qdel(src)
 
 /datum/rune_spell/communication/Destroy()
@@ -323,10 +325,11 @@
 			var/mob/living/carbon/human/H = speech.speaker
 			speaker_name = H.real_name
 		rendered_message = speech.render_message()
-		for(var/mob/living/L in player_list)
-			if (L == speech.speaker)	continue//echoes are annoying
-			if (iscultist(L))
-				to_chat(L, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinister'>[speech.message]</span></B></span>")
+		var/datum/faction/bloodcult = find_active_faction(BLOODCULT)
+		for(var/datum/mind/M in bloodcult.members)
+			if (M.current == speech.speaker)//echoes are annoying
+				continue
+			to_chat(M.current, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinister'>[speech.message]</span></B></span>")
 		for(var/mob/dead/observer/O in player_list)
 			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinister'>[speech.message]</span></span>")
 		log_cultspeak("[key_name(speech.speaker)] Cult Communicate Rune: [rendered_message]")
@@ -425,7 +428,6 @@
 				if (!istype(M))
 					continue
 				else
-					valid_tomes.Add("[i] - Tome carried by [M.real_name] ([T.talismans.len]/[MAX_TALISMAN_PER_TOME])")
 					valid_tomes["[i] - Tome carried by [M.real_name] ([T.talismans.len]/[MAX_TALISMAN_PER_TOME])"] = T
 			if (valid_tomes.len <= 0)
 				to_chat(user, "<span class='warning'>No cultists are currently carrying a tome.</span>")
@@ -446,7 +448,6 @@
 				abort("no room")
 
 			contributors.Add(user)
-			contributors[user] = ""
 			update_progbar()
 			if (user.client)
 				user.client.images |= progbar

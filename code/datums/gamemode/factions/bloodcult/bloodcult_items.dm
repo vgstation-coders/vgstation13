@@ -74,7 +74,10 @@ var/list/arcane_tomes = list()
 
 	for (var/obj/item/weapon/talisman/T in talismans)
 		var/datum/rune_spell/instance = T.spell_type
-		dat += {"<label> * </label><li>  <a style="color:#AE250F" href='byond://?src=\ref[src];talisman=\ref[T]'>[initial(instance.name)]</a> <a style="color:#AE250F" href='byond://?src=\ref[src];remove=\ref[T]'>(x)</a> </li>"}
+		var/talisman_name = "\[blank\]"
+		if (instance)
+			talisman_name = initial(instance.name)
+		dat += {"<label> * </label><li>  <a style="color:#AE250F" href='byond://?src=\ref[src];talisman=\ref[T]'>[talisman_name]</a> <a style="color:#AE250F" href='byond://?src=\ref[src];remove=\ref[T]'>(x)</a> </li>"}
 
 	dat += {"</ul></b></div><div style="margin: 0px 20px;" align="justify">"}
 
@@ -281,11 +284,12 @@ var/list/arcane_tomes = list()
 		trigger(user)
 
 /obj/item/weapon/talisman/proc/trigger(var/mob/user)
-	if (!user) return
+	if (!user)
+		return
 
 	if (!spell_type)
-		if (src != user.get_active_hand())
-			user.put_in_hands(src)//removing from a tome
+		if (!(src in user.held_items))//triggering an empty rune from a tome removes it.
+			user.put_in_hands(src)
 		return
 
 	if (attuned_rune)
@@ -299,7 +303,8 @@ var/list/arcane_tomes = list()
 	qdel(src)
 
 /obj/item/weapon/talisman/proc/imbue(var/mob/user, var/obj/effect/rune/R)
-	if (!user || !R) return
+	if (!user || !R)
+		return
 
 	var/datum/rune_spell/spell = get_rune_spell(user,null,"examine",R.word1, R.word2, R.word3)
 	if(initial(spell.talisman_absorb) == RUNE_CANNOT)
@@ -308,7 +313,7 @@ var/list/arcane_tomes = list()
 		R.attack_hand(user)
 	else
 		if (attuned_rune)
-			to_chat(user, "<span class='warning'>This [src] is already linked to a rune.</span>")
+			to_chat(user, "<span class='warning'>This talisman is already linked to a rune.</span>")
 			return
 		if (attuned_rune)
 			to_chat(user, "<span class='warning'>This talisman is already imbued with the power of a rune.</span>")
@@ -341,8 +346,8 @@ var/list/arcane_tomes = list()
 				user.playsound_local(src, 'sound/effects/talisman_imbue.ogg', 50, 0, 0, 0, 0)
 				to_chat(user, "<span class='notice'>The talisman absorbs the power of the [initial(spell.name)] rune.</span>")
 				qdel(R)
-			if (RUNE_CANNOT)
-				message_admins("Error! Some bloke managed to imbue a Conjure Talisman rune. That shouldn't be possible!")
+			if (RUNE_CANNOT)//like, that shouldn't even be possible because of the earlier if() check, but just in case.
+				message_admins("Error! Some bloke ([key_name(user)]) managed to imbue a Conjure Talisman rune. That shouldn't be possible!")
 				return
 
 
