@@ -1937,6 +1937,19 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_hydroponics)
 	group = "Hydroponics"
 
+/datum/supply_packs/insectcontrol
+	name = "Insect control equipment"
+	contains = list(/obj/item/weapon/reagent_containers/glass/bottle/toxin,
+					/obj/item/weapon/reagent_containers/glass/bottle/toxin,
+					/obj/item/weapon/reagent_containers/glass/bottle/toxin,
+					/obj/item/weapon/reagent_containers/spray/bugzapper,
+					/obj/item/weapon/reagent_containers/spray/bugzapper)
+	cost = 40
+	containertype = /obj/structure/largecrate/hissing
+	containername = "hissing crate"
+	access = list(access_hydroponics)
+	group = "Hydroponics"
+
 /datum/supply_packs/exoticseeds
 	name = "Exotic seeds"
 	contains = list(/obj/item/seeds/dionanode,
