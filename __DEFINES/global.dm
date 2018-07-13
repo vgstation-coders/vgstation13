@@ -387,3 +387,7 @@ var/list/boss_mobs = list(
 
 // Set by traitor item, affects cargo supplies
 var/station_does_not_tip = FALSE
+
+// Literally just a datum
+// Used by components to register global signals
+var/datum/signal_handler = new

@@ -32,9 +32,6 @@
 			qdel(B)
 			B = null
 
-	if(BrainContainer)
-		qdel(BrainContainer)
-		BrainContainer = null
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -121,8 +118,6 @@
 					special_role = null
 					to_chat(current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now..(You don't remember who enslaved you)</FONT></span>")
 				*/
-	if(BrainContainer)
-		BrainContainer.SendSignal(COMSIG_LIFE,list())
 	return 1
 
 // Apply connect damage
