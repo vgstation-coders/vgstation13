@@ -72,7 +72,7 @@
 	list(/obj/item/clothing/suit/wintercoat/ce, /obj/item/clothing/suit/wintercoat/cmo, /obj/item/clothing/suit/wintercoat/security/hos, /obj/item/clothing/suit/wintercoat/hop, /obj/item/clothing/suit/wintercoat/captain, /obj/item/clothing/suit/wintercoat/clown, /obj/item/clothing/suit/wintercoat/slimecoat),
 	list(/obj/item/clothing/head/helmet/space/rig/wizard, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple, /obj/item/clothing/shoes/sandal),
 	list(/obj/item/clothing/head/helmet/space/rig/knight, /obj/item/clothing/head/helmet/space/rig/knight),
-	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/wintercoat),
+	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/ancient),
 	list(/obj/item/clothing/shoes/clockwork_boots, /obj/item/clothing/head/clockwork_hood, /obj/item/clothing/suit/clockwork_robes),
 	/obj/item/clothing/mask/necklace/xeno_claw
 	)
