@@ -66,7 +66,7 @@
 
 /mob/new_player/Stat()
 	..()
-
+	var/time_to_start = (round(ticker.pregame_timeleft - world.timeofday) / 10)
 	if(statpanel("Status") && ticker)
 		if (ticker.current_state != GAME_STATE_PREGAME)
 			stat(null, "Station Time: [worldtime2text()]")
@@ -79,13 +79,13 @@
 
 		if(SSticker.initialized)
 			if((ticker.current_state == GAME_STATE_PREGAME) && going)
-				stat("Time To Start:", (round(ticker.pregame_timeleft - world.timeofday) / 10)) //rounding because people freak out at decimals i guess
+				stat("Time To Start:", time_to_start) //rounding because people freak out at decimals i guess
 			if((ticker.current_state == GAME_STATE_PREGAME) && !going)
 				stat("Time To Start:", "DELAYED")
 		else
 			stat("Time To Start:", "LOADING...")
 
-		if(SSticker.initialized && ticker.current_state == GAME_STATE_PREGAME)
+		if(SSticker.initialized && ticker.current_state == GAME_STATE_PREGAME && check_rights(0)) // Only admins can see who readied up
 			stat("Players: [totalPlayers]", "Players Ready: [totalPlayersReady]")
 			totalPlayers = 0
 			totalPlayersReady = 0
@@ -372,7 +372,7 @@
 				if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
 					var/mob/living/L = get_holder_of_type(P,/mob/living)
 					if(L)
-						L.show_message("[bicon(P)] <b>Message from U¶ü…8•E1¿”–ã (T•u1B§’), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
+						L.show_message("[bicon(P)] <b>Message from U¬¶√â8¬•E1√Ä√ì√ê< (T¬•u1B¬§√ï), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
 			for(var/mob/dead/observer/M in player_list)
 				if(M.stat == DEAD && M.client)
 					handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character] has arrived in the sector from space.</span></span>",character) //This should generate a Follow link
