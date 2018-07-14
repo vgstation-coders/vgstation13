@@ -203,7 +203,7 @@ obj/structure/safe/ex_act(severity)
 		/obj/item/weapon/spellbook/oneuse/mime,
 		/obj/item/weapon/spellbook/oneuse/shoesnatch,
 		/obj/item/weapon/spellbook/oneuse/bound_object,
-		/obj/item/weapon/gun/energy/staff,
+		/obj/item/weapon/gun/energy/staff/change,
 		/obj/item/weapon/gun/energy/staff/animate,
 		/obj/item/weapon/gun/energy/staff/focus,
 		/obj/abstract/loadout/gemsuit
