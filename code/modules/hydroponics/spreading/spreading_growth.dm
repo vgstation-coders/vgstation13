@@ -66,9 +66,13 @@
 	if(is_mature() && special_cooldown())
 		if(is_locking_type(/mob, /datum/locking_category/plantsegment))
 			var/mob/V = locate(/mob) in get_locked(/datum/locking_category/plantsegment)
-			if(istype(V, /mob/living/carbon/human))
-				do_chem_inject(V)
-				do_carnivorous_bite(V, seed.potency)
+			if (V.loc != loc)
+				unlock_atom(V)
+				to_chat(V, "<span class='danger'>You broke free from \the [src]!</span>")
+			else
+				if(istype(V, /mob/living/carbon/human))
+					do_chem_inject(V)
+					do_carnivorous_bite(V, seed.potency)
 		else
 			if(seed.carnivorous == 2)
 				var/mob/living/victim = locate() in range(src,1)
