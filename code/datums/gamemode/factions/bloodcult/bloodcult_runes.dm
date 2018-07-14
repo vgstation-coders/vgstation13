@@ -42,7 +42,6 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	//Used when a nullrod is preventing a rune's activation
 	var/nullblock = 0
 
-
 	var/datum/rune_spell/active_spell = null
 
 /obj/effect/rune/New()
@@ -275,6 +274,11 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		to_chat(user, "<span class='notice'>You disrupt the vile magic with the deadening field of \the [I]!</span>")
 		qdel(src)
 		return
+	if(istype(I, /obj/item/weapon/tome))
+		trigger(user)
+	if(istype(I, /obj/item/weapon/talisman))
+		var/obj/item/weapon/talisman/T = I
+		T.imbue(user,src)
 	return
 
 /proc/write_rune_word(var/turf/T,var/datum/reagent/blood/source,var/word = null)
@@ -414,9 +418,11 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 
 	active_spell = get_rune_spell(user, src, "ritual" , word1, word2, word3)
 
+
 	if (!active_spell)
 		return fizzle(user)
-
+	else if (active_spell.destroying_self)
+		active_spell = null
 
 /obj/effect/rune/proc/fizzle(var/mob/living/user)
 	user.say(pick("B'ADMINES SP'WNIN SH'T","IC'IN O'OC","RO'SHA'M I'SA GRI'FF'N ME'AI","TOX'IN'S O'NM FI'RAH","IA BL'AME TOX'IN'S","FIR'A NON'AN RE'SONA","A'OI I'RS ROUA'GE","LE'OAN JU'STA SP'A'C Z'EE SH'EF","IA PT'WOBEA'RD, IA A'DMI'NEH'LP"))

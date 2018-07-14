@@ -4,6 +4,8 @@
 	name = "bible"
 	desc = "Apply to head repeatedly."
 	icon_state = "bible"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/books.dmi', "right_hand" = 'icons/mob/in-hand/right/books.dmi')
+	item_state = "bible"
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_MEDIUM
