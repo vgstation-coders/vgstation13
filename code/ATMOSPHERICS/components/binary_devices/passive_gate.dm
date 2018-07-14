@@ -94,7 +94,7 @@
 	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_pump")
 	onclose(user, "atmo_pump")
 
-/obj/machinery/atmospherics/binary/passive_gate/initialize()
+/obj/machinery/atmospherics/binary/passive_gate/atmos_init()
 	..()
 	if(frequency)
 		set_frequency(frequency)
