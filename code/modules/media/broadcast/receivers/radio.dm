@@ -8,6 +8,7 @@
 	var/on=0
 
 /obj/machinery/media/receiver/boombox/initialize()
+	. = ..()
 	if(on)
 		update_on()
 	update_icon()
@@ -103,7 +104,7 @@
 	return TRUE
 
 /obj/machinery/media/receiver/boombox/wallmount/initialize()
-	..()
+	. = ..()
 	add_self_to_holomap()
 
 /obj/machinery/media/receiver/boombox/wallmount/New(turf/loc,var/ndir=0,var/building=2)

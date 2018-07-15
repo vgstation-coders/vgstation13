@@ -33,7 +33,7 @@
 	if(L.len)
 		destination = pick(L)
 
-	..()
+	. = ..()
 
 	if(!destination)
 		name = "blank shuttle destination disk"
@@ -41,20 +41,17 @@
 
 //This disk will link to station's arrivals when spawned
 
-/obj/item/weapon/disk/shuttle_coords/New()
-	..()
-
-	if(ticker)
-		initialize()
-
 /obj/item/weapon/disk/shuttle_coords/initialize()
+	. = ..()
 	if(ispath(destination))
-		spawn()
-			destination = locate(destination) in all_docking_ports
-			if(destination)
-				destination.disk_references.Add(src)
+		. = INITIALIZE_HINT_LATELOAD
 	else
 		header = "ERROR"
+
+/obj/item/weapon/disk/shuttle_coords/late_initialize()
+	destination = locate(destination) in all_docking_ports
+	if(destination)
+		destination.disk_references.Add(src)
 
 /obj/item/weapon/disk/shuttle_coords/Destroy()
 	if(destination)

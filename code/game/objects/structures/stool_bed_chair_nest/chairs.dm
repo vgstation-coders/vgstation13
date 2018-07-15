@@ -15,7 +15,7 @@
 		initialize()
 
 /obj/structure/bed/chair/initialize()
-	..()
+	. = ..()
 	handle_layer()
 
 /obj/structure/bed/chair/lock_atom(var/atom/movable/AM)

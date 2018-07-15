@@ -38,10 +38,8 @@
 	var/burn_dmg = 0
 	var/toxin_dmg = 0
 
-/obj/effect/landmark/corpse/New()
-	AddToProfiler()
-
 /obj/effect/landmark/corpse/initialize()
+	. = ..()
 	var/mob/living/carbon/human/H = createCorpse()
 	equipCorpse(H)
 

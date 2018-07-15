@@ -8,6 +8,7 @@
 	var/vin = null
 
 /obj/item/key/initialize()
+	. = ..()
 	if(vin)
 		for(var/obj/structure/bed/chair/vehicle/V in vehicle_list)
 			if(V.vin == vin)

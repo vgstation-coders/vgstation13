@@ -104,7 +104,7 @@ display round(lastgen) and plasmatank amount
 	var/heat = 0
 
 /obj/machinery/power/port_gen/pacman/initialize()
-	..()
+	. = ..()
 	if(anchored)
 		connect_to_network()
 

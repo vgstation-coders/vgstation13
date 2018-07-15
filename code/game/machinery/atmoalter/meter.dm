@@ -22,6 +22,7 @@
 	return 1
 
 /obj/machinery/meter/initialize()
+	. = ..()
 	if (!target)
 		for(var/obj/machinery/atmospherics/pipe/pipe in src.loc)
 			if(pipe.piping_layer == target_layer)
@@ -171,6 +172,7 @@
 
 
 /obj/machinery/meter/turf/initialize()
+	. = ..()
 	if (!target)
 		src.target = loc
 

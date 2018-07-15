@@ -147,6 +147,7 @@ var/global/num_vending_terminals = 1
 	return
 
 /obj/machinery/vending/initialize()
+	. = ..()
 	build_inventories()
 	link_to_account()
 

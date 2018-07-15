@@ -28,7 +28,7 @@
 	return .
 
 /obj/machinery/power/initialize()
-	..()
+	. = ..()
 
 	if(starting_terminal)
 		find_terminal()
