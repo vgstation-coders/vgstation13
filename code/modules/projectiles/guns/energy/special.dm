@@ -339,11 +339,11 @@
 
 /obj/item/weapon/gun/energy/staff/swapper/update_wield(mob/user)
 	..()
-	switch(wielded)
-		if(TRUE)
-			projectile_type = "/obj/item/projectile/swap/advanced"
-		else
-			projectile_type = initial(projectile_type)
+	to_chat(user, "<span class = 'notice'>[wielded?"Holding \the [src] in both hands grants it more power!":"As you hold \the [src] in one hand, it sighs."]</span>")
+	if(wielded)
+		projectile_type = "/obj/item/projectile/swap/advanced"
+	else
+		projectile_type = initial(projectile_type)
 
 /obj/item/weapon/gun/energy/floragun
 	name = "floral somatoray"
