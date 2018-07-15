@@ -120,13 +120,13 @@
 		else if(dir & (EAST|WEST))
 			initialize_directions = EAST|WEST
 
-		initialize()
+		atmos_init()
 		build_network()
 		if (node1)
-			node1.initialize()
+			node1.atmos_init()
 			node1.build_network()
 		if (node2)
-			node2.initialize()
+			node2.atmos_init()
 			node2.build_network()
 
 		var/gendir = turn(dir, -90)

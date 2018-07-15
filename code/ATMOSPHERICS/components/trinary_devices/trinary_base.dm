@@ -64,16 +64,16 @@ obj/machinery/atmospherics/trinary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	var/turf/T = loc
 	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
 	update_planes_and_layers()
-	initialize()
+	atmos_init()
 	build_network()
 	if (node1)
-		node1.initialize()
+		node1.atmos_init()
 		node1.build_network()
 	if (node2)
-		node2.initialize()
+		node2.atmos_init()
 		node2.build_network()
 	if (node3)
-		node3.initialize()
+		node3.atmos_init()
 		node3.build_network()
 	return 1
 
@@ -115,7 +115,7 @@ obj/machinery/atmospherics/trinary/Destroy()
 
 	..()
 
-obj/machinery/atmospherics/trinary/initialize()
+obj/machinery/atmospherics/trinary/atmos_init()
 	if(node1 && node2 && node3)
 		return
 

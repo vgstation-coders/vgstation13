@@ -34,7 +34,7 @@ obj/machinery/atmospherics/trinary/filter/proc/set_frequency(new_frequency)
 
 obj/machinery/atmospherics/trinary/filter/New()
 	if(radio_controller)
-		initialize()
+		atmos_init()
 	..()
 
 obj/machinery/atmospherics/trinary/filter/update_icon()
@@ -118,7 +118,7 @@ obj/machinery/atmospherics/trinary/filter/process()
 
 	return 1
 
-obj/machinery/atmospherics/trinary/filter/initialize()
+obj/machinery/atmospherics/trinary/filter/atmos_init()
 	set_frequency(frequency)
 	..()
 

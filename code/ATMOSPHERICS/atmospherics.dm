@@ -403,3 +403,10 @@ Pipelines + Other Objects -> Pipe network
 // Only needs to be overridden if a pipe can connect on different layers
 /obj/machinery/atmospherics/proc/get_layer_of_dir(var/direction)
 	return piping_layer
+
+/obj/machinery/atmospherics/proc/atmos_init()
+	return
+
+/obj/machinery/atmospherics/initialize()
+	. = ..()
+	atmos_init()

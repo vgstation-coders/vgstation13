@@ -153,17 +153,17 @@
 	var/turf/T = loc
 	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
 	update_planes_and_layers()
-	initialize(1)
+	atmos_init(1)
 	if(!node1&&!node2)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this pipe section to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon()
 	build_network()
 	if (node1)
-		node1.initialize()
+		node1.atmos_init()
 		node1.build_network()
 	if (node2)
-		node2.initialize()
+		node2.atmos_init()
 		node2.build_network()
 	return 1
 
@@ -339,7 +339,7 @@
 	if(!node1&&!node2)
 		qdel(src) //TODO: silent deleting looks weird
 
-/obj/machinery/atmospherics/pipe/simple/initialize(var/suppress_icon_check=0)
+/obj/machinery/atmospherics/pipe/simple/atmos_init(var/suppress_icon_check=0)
 	normalize_dir()
 
 	findAllConnections(initialize_directions)
@@ -468,20 +468,20 @@
 	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
 	update_planes_and_layers()
 
-	initialize(1)
+	atmos_init(1)
 	if(!node1&&!node2&&!node3)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
-	update_icon() // Skipped in initialize()!
+	update_icon() // Skipped in atmos_init()!
 	build_network()
 	if (node1)
-		node1.initialize()
+		node1.atmos_init()
 		node1.build_network()
 	if (node2)
-		node2.initialize()
+		node2.atmos_init()
 		node2.build_network()
 	if (node3)
-		node3.initialize()
+		node3.atmos_init()
 		node3.build_network()
 	return 1
 
@@ -584,7 +584,7 @@
 	if(!node1 && !node2 && !node3)
 		qdel(src)
 
-/obj/machinery/atmospherics/pipe/manifold/initialize(var/skip_icon_update=0)
+/obj/machinery/atmospherics/pipe/manifold/atmos_init(var/skip_icon_update=0)
 	var/connect_directions = (NORTH|SOUTH|EAST|WEST)&(~dir)
 
 	findAllConnections(connect_directions)
@@ -691,23 +691,23 @@
 	var/turf/T = loc
 	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
 	update_planes_and_layers()
-	initialize(1)
+	atmos_init(1)
 	if(!node1 && !node2 && !node3 && !node4)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon()
 	build_network()
 	if (node1)
-		node1.initialize()
+		node1.atmos_init()
 		node1.build_network()
 	if (node2)
-		node2.initialize()
+		node2.atmos_init()
 		node2.build_network()
 	if (node3)
-		node3.initialize()
+		node3.atmos_init()
 		node3.build_network()
 	if (node4)
-		node4.initialize()
+		node4.atmos_init()
 		node4.build_network()
 	return 1
 
@@ -806,7 +806,7 @@
 	if(!node1 && !node2 && !node3 && !node4)
 		qdel(src)
 
-/obj/machinery/atmospherics/pipe/manifold4w/initialize(var/skip_update_icon=0)
+/obj/machinery/atmospherics/pipe/manifold4w/atmos_init(var/skip_update_icon=0)
 
 	findAllConnections(initialize_directions)
 
@@ -963,17 +963,17 @@
 	var/turf/T = loc
 	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
 	update_planes_and_layers()
-	initialize(1)
+	atmos_init(1)
 	if(!(locate(/obj/machinery/atmospherics) in layer_nodes) && !other_node)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon()
 	build_network()
 	for(var/obj/machinery/atmospherics/node in layer_nodes)
-		node.initialize()
+		node.atmos_init()
 		node.build_network()
 	if (other_node)
-		other_node.initialize()
+		other_node.atmos_init()
 		other_node.build_network()
 	return 1
 
@@ -1054,7 +1054,7 @@
 	invisibility = is_partially_exposed ? 0 : 101
 	alpha = is_partially_exposed ? 255 : 128
 
-/obj/machinery/atmospherics/pipe/layer_manifold/initialize(var/skip_update_icon=0)
+/obj/machinery/atmospherics/pipe/layer_manifold/atmos_init(var/skip_update_icon=0)
 
 	findAllConnections(initialize_directions)
 
@@ -1169,17 +1169,17 @@
 	var/turf/T = loc
 	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
 	update_planes_and_layers()
-	initialize(1)
+	atmos_init(1)
 	if(!mid_node && !layer_node)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this adapter to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon()
 	build_network()
 	if (mid_node)
-		mid_node.initialize()
+		mid_node.atmos_init()
 		mid_node.build_network()
 	if (layer_node)
-		layer_node.initialize()
+		layer_node.atmos_init()
 		layer_node.build_network()
 	return 1
 
@@ -1235,7 +1235,7 @@
 	else
 		invisibility = 101
 
-/obj/machinery/atmospherics/pipe/layer_adapter/initialize(var/skip_update_icon=0)
+/obj/machinery/atmospherics/pipe/layer_adapter/atmos_init(var/skip_update_icon=0)
 
 	findAllConnections(initialize_directions)
 

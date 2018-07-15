@@ -103,7 +103,7 @@ Thus, the two variables affect pump operation are set in New():
 
 
 
-/obj/machinery/atmospherics/binary/volume_pump/initialize()
+/obj/machinery/atmospherics/binary/volume_pump/atmos_init()
 	..()
 
 	set_frequency(frequency)
@@ -169,9 +169,9 @@ Thus, the two variables affect pump operation are set in New():
 		var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag for this machine", src, id_tag) as null|text), 1, MAX_MESSAGE_LEN)
 		if(newid)
 			id_tag = newid
-			initialize()
+			atmos_init()
 		return MT_UPDATE
-		
+
 	if("set_freq" in href_list)
 		var/newfreq=frequency
 		if(href_list["set_freq"]!="-1")
@@ -183,7 +183,7 @@ Thus, the two variables affect pump operation are set in New():
 				newfreq *= 10 // shift the decimal one place
 			if(newfreq < 10000)
 				frequency = newfreq
-				initialize()
+				atmos_init()
 		return MT_UPDATE
 
 	return ..()
