@@ -180,13 +180,40 @@ world/loop_checks = 0
 	var/processing_interval = 0
 
 /datum/controller/proc/recover() // If we are replacing an existing controller (due to a crash) we attempt to preserve as much as we can.
+
 */
 /*
  * Like Del(), but for qdel.
  * Called BEFORE qdel moves shit.
  */
-/datum/proc/Destroy()
-	qdel(src, 1, 1)
+/datum/proc/Destroy(var/force = FALSE, ...)
+	weak_reference = null
+
+	var/list/dc = datum_components
+	if(dc)
+		var/all_components = dc[/datum/component]
+		if(length(all_components))
+			for(var/I in all_components)
+				var/datum/component/C = I
+				qdel(C, FALSE, TRUE)
+		else
+			var/datum/component/C = all_components
+			qdel(C, FALSE, TRUE)
+		dc.Cut()
+
+	var/list/lookup = comp_lookup
+	if(lookup)
+		for(var/sig in lookup)
+			var/list/comps = lookup[sig]
+			if(length(comps))
+				for(var/i in comps)
+					var/datum/component/comp = i
+					comp.UnregisterSignal(src, sig)
+			else
+				var/datum/component/comp = comps
+				comp.UnregisterSignal(src, sig)
+		comp_lookup = lookup = null
+	qdel(src, TRUE, TRUE)
 
 #ifdef GC_FINDREF
 /datum/garbage_collector/proc/LookForRefs(var/datum/D, var/datum/targ)
