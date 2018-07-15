@@ -57,14 +57,12 @@
 	icon = left.icon
 	icon_state = left.icon_state
 	item_state = left.item_state
-	if(inhand_states != left.inhand_states)
-		inhand_states = left.inhand_states
+	inhand_states = left.inhand_states
 	if(wielded)
 		wielded.icon = right.icon
 		wielded.icon_state = right.icon_state
 		wielded.item_state = right.item_state
-		if(wielded.inhand_states != right.inhand_states)
-			wielded.inhand_states = right.inhand_states
+		wielded.inhand_states = right.inhand_states
 	overlays += image("icon" = right.icon, "icon_state" = right.icon_state, "pixel_x" = 6, "pixel_y" = -5)
 	if(user)
 		user.update_inv_hands()
