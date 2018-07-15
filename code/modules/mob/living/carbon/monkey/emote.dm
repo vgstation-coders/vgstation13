@@ -1,5 +1,5 @@
 /datum/emote/living/carbon/monkey
-	mob_type_allowed_typecache = list(/mob/living/carbon/monkey)
+	mob_type_allowed_typelist = list(/mob/living/carbon/monkey)
 
 /datum/emote/living/carbon/monkey/tail
 	key = "tail"

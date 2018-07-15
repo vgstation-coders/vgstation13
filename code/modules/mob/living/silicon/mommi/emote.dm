@@ -1,5 +1,5 @@
 /datum/emote/sound/silicon/mommi
-	mob_type_allowed_typecache = list(/mob/living/silicon/robot/mommi)
+	mob_type_allowed_typelist = list(/mob/living/silicon/robot/mommi)
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/sound/silicon/mommi/comment

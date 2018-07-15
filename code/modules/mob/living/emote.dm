@@ -1,7 +1,7 @@
 
 /* EMOTE DATUMS */
 /datum/emote/living
-	mob_type_allowed_typecache = list(/mob/living)
+	mob_type_allowed_typelist = list(/mob/living)
 	mob_type_blacklist_typecache = list(/mob/living/simple_animal/slime, /mob/living/carbon/brain)
 
 /datum/emote/living/blush
@@ -219,7 +219,7 @@
 	message = "screams!"
 	message_mime = "acts out a scream!"
 	emote_type = EMOTE_AUDIBLE
-	mob_type_allowed_typecache = list(/mob/living/carbon/)
+	mob_type_allowed_typelist = list(/mob/living/carbon/)
 	var/list/male_sounds =  list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg', 'sound/misc/wilhelm.ogg', 'sound/misc/goofy.ogg')
 	var/list/female_sounds = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
 

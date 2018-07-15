@@ -19,7 +19,7 @@
 	var/emote_type = EMOTE_VISIBLE //Whether the emote is visible or audible
 	var/restraint_check = FALSE //Checks if the mob is restrained before performing the emote
 	var/muzzle_ignore = FALSE //Will only work if the emote is EMOTE_AUDIBLE
-	var/list/mob_type_allowed_typecache = list(/mob) //Types that are allowed to use that emote
+	var/list/mob_type_allowed_typelist = list(/mob) //Types that are allowed to use that emote
 	var/list/mob_type_blacklist_typecache //Types that are NOT allowed to use that emote
 	var/list/mob_type_ignore_stat_typecache
 	var/stat_allowed = CONSCIOUS
@@ -114,7 +114,7 @@
 	return replacetext(message_param, "%t", params)
 
 /datum/emote/proc/can_run_emote(mob/user, var/status_check = TRUE)
-	if(!is_type_in_list(user, mob_type_allowed_typecache))
+	if(!is_type_in_list(user, mob_type_allowed_typelist))
 		return FALSE
 	if(is_type_in_list(user, mob_type_blacklist_typecache))
 		return FALSE
@@ -135,7 +135,7 @@
 /datum/emote/sound
 	var/sound //Sound to play when emote is called
 	var/vary = FALSE	//used for the honk borg emote
-	mob_type_allowed_typecache = list(/mob/living/carbon/brain, /mob/living/silicon)
+	mob_type_allowed_typelist = list(/mob/living/carbon/brain, /mob/living/silicon)
 
 /datum/emote/sound/run_emote(mob/user, params)
 	. = ..()

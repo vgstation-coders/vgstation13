@@ -1,5 +1,5 @@
 /datum/emote/living/alien
-	mob_type_allowed_typecache = list(/mob/living/carbon/alien)
+	mob_type_allowed_typelist = list(/mob/living/carbon/alien)
 
 /datum/emote/living/alien/gnarl
 	key = "gnarl"
