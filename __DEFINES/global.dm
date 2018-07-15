@@ -336,8 +336,6 @@ var/list/extraMiniMaps = list()
 
 var/list/holomap_markers = list()
 
-var/holomaps_initialized = 0
-
 //Staff of change
 #define SOC_CHANGETYPE_COOLDOWN 2 MINUTES
 #define SOC_MONKEY "Primate"
@@ -387,3 +385,7 @@ var/list/boss_mobs = list(
 
 // Set by traitor item, affects cargo supplies
 var/station_does_not_tip = FALSE
+
+// Literally just a datum
+// Used by components to register global signals
+var/datum/signal_handler = new

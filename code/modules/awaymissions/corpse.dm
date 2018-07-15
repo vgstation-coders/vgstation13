@@ -40,8 +40,6 @@
 
 /obj/effect/landmark/corpse/New()
 	AddToProfiler()
-	if(ticker)
-		initialize()
 
 /obj/effect/landmark/corpse/initialize()
 	var/mob/living/carbon/human/H = createCorpse()
