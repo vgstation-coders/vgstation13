@@ -75,10 +75,6 @@
 	h_style = "Bald"
 	..(new_loc, "Slime")
 
-/mob/living/carbon/human/NPC/New(var/new_loc, delay_ready_dna = 0)
-	..(new_loc)
-	initialize_basic_NPC_components()
-
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
 	f_style = pick(facial_hair_styles_list)
 	h_style = pick(hair_styles_list)
@@ -1773,6 +1769,7 @@ mob/living/carbon/human/isincrit()
 		return image(icon = 'icons/mob/attackanims.dmi', icon_state = "hulk")
 	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
+/*
 /mob/living/carbon/human/proc/initialize_barebones_NPC_components()	//doesn't actually do anything, but contains tools needed for other types to do things
 	BrainContainer = new (src)
 	BrainContainer.AddComponent(/datum/component/controller/mob)
@@ -1789,7 +1786,7 @@ mob/living/carbon/human/isincrit()
 	BrainContainer.AddComponent(/datum/component/ai/melee/throw_attack)
 	BrainContainer.AddComponent(/datum/component/ai/crowd_attack)
 	BrainContainer.AddComponent(pick(typesof(/datum/component/ai/targetting_handler)))
-
+*/
 /mob/living/carbon/human/can_show_flavor_text()
 	// Wearing a mask...
 	if(wear_mask && wear_mask.is_hidden_identity())

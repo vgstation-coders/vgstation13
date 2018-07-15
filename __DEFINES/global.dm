@@ -435,3 +435,7 @@ var/list/bank_security_text2num_associative = list(
 
 //Radial menus currently existing in the world.
 var/global/list/radial_menus = list()
+
+// Literally just a datum
+// Used by components to register global signals
+var/datum/signal_handler = new
