@@ -176,7 +176,7 @@
 	if(!C)
 		return
 
-	if (user.is_pacified(VIOLENCE_DEFAULT,C))
+	if (M.current.is_pacified(VIOLENCE_DEFAULT,C))
 		return
 
 	if(!C in view(1))
@@ -215,7 +215,7 @@
 	if(!C)
 		return
 
-	if (user.is_pacified(VIOLENCE_DEFAULT,C))
+	if (M.current.is_pacified(VIOLENCE_DEFAULT,C))
 		return
 
 	if(!M.current.vampire_can_reach(C, 1))
@@ -256,7 +256,7 @@
 	if(!M)
 		return
 
-	if (user.is_pacified())
+	if (M.current.is_pacified())
 		return
 
 	if(M.current.vampire_power(0, 1))
@@ -331,7 +331,7 @@
 		return
 
 
-	if (user.is_pacified())
+	if (M.current.is_pacified())
 		return
 
 	if(M.current.vampire_power(30, 0))
@@ -370,7 +370,7 @@
 	var/mob/living/carbon/C = M.current.vampire_active(150, 0, 1)
 	if(!C)
 		return
-	if (user.is_pacified(VIOLENCE_DEFAULT,C))
+	if (M.current.is_pacified(VIOLENCE_DEFAULT,C))
 		return
 	if(!ishuman(C))
 		to_chat(M.current, "<span class='warning'>You can only enthrall humanoids.</span>")
@@ -509,7 +509,7 @@
 	var/datum/mind/M = usr.mind
 	if(!M)
 		return
-	if (user.is_pacified())
+	if (M.current.is_pacified())
 		return
 	if(M.current.vampire_power(50, 0))
 		var/list/turf/locs = new
