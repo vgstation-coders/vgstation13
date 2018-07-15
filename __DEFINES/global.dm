@@ -339,8 +339,6 @@ var/list/extraMiniMaps = list()
 
 var/list/holomap_markers = list()
 
-var/holomaps_initialized = 0
-
 //Staff of change
 #define SOC_CHANGETYPE_COOLDOWN 2 MINUTES
 #define SOC_MONKEY "Primate"

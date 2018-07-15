@@ -36,8 +36,6 @@
 		generateStationMinimap(map.zDerelict)
 	//If they were built on another Z-Level, they will display an error screen.
 
-	holomaps_initialized = 1
-
 	for (var/obj/machinery/station_map/S in station_holomaps)
 		S.initialize()
 

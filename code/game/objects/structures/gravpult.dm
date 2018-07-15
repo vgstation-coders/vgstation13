@@ -32,7 +32,7 @@ var/list/gravpults = list()
 	gravpults += src
 	station_holomaps += src
 	aim -= ID*2
-	if(ticker && holomaps_initialized)
+	if(SS_READY(SSmore_init))
 		initialize_holomaps()
 
 /obj/structure/deathsquad_gravpult/Destroy()
