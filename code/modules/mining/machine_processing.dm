@@ -17,13 +17,8 @@
 
 	var/obj/item/weapon/card/id/id //Ref to the inserted ID card (for claiming points via the smelter).
 
-/obj/machinery/computer/smelting/New()
-	. = ..()
-
-	if(ticker && ticker.current_state == 3)
-		initialize()
-
 /obj/machinery/computer/smelting/initialize()
+	. = ..()
 	set_frequency(frequency)
 
 /obj/machinery/computer/smelting/proc/set_frequency(new_frequency)
@@ -83,7 +78,7 @@
 
 	else if(id)	//I don't care but the ID got in there in some way, allow them to eject it atleast.
 		dat += "<br><A href='?src=\ref[src];eject=1'>Eject ID.</A>"
-	
+
 	dat += {"</div>
 	<div style="float:left;" class="block">
 	<table>
@@ -346,6 +341,7 @@
 		broadcast_status()
 
 /obj/machinery/mineral/processing_unit/initialize()
+	. = ..()
 	set_frequency(frequency)
 
 /obj/machinery/mineral/processing_unit/proc/broadcast_status()

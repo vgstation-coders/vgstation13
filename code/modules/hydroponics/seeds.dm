@@ -11,14 +11,10 @@
 	var/modified = 0
 	var/hydroflags = 0 // HYDRO_*, used for no-fruit exclusion lists, at the moment.
 
-/obj/item/seeds/New()
-	..()
+/obj/item/seeds/initialize()
+	. = ..()
 	pixel_x = rand(-3,3) * PIXEL_MULTIPLIER
 	pixel_y = rand(-3,3) * PIXEL_MULTIPLIER
-	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
-		initialize()
-
-/obj/item/seeds/initialize()
 	update_seed()
 
 //Grabs the appropriate seed datum from the global list.

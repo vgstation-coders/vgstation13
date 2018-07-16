@@ -10,6 +10,7 @@ var/list/gateways = list() //List containing the gateways on away missions
 	var/active = 0
 
 /obj/machinery/gateway/initialize()
+	. = ..()
 	update_icon()
 	if(dir == 2)
 		setDensity(FALSE)
@@ -38,7 +39,7 @@ var/list/gateways = list() //List containing the gateways on away missions
 	var/obj/machinery/gateway/centeraway/awaygate = null
 
 /obj/machinery/gateway/centerstation/initialize()
-	update_icon()
+	. = ..()
 	wait = world.time + config.gateway_delay	//+ thirty minutes default
 	awaygate = locate(/obj/machinery/gateway/centeraway)
 
@@ -173,7 +174,7 @@ obj/machinery/gateway/centerstation/process()
 
 /obj/machinery/gateway/centeraway/Destroy()
 	gateways.Remove(src)
-	
+
 	..()
 
 /obj/machinery/gateway/centeraway/initialize()

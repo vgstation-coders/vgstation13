@@ -149,7 +149,7 @@ var/const/POS_HEADER = {"<html>
 	update_icon()
 
 /obj/machinery/pos/initialize()
-	..()
+	. = ..()
 	if(department)
 		linked_account = department_accounts[department]
 	else

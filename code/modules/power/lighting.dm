@@ -190,7 +190,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	..()
 
 /obj/machinery/light/initialize()
-	..()
+	. = ..()
 	add_self_to_holomap()
 
 // create a new lighting fixture

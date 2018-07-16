@@ -66,6 +66,11 @@ var/list/station_holomaps = list()
 	return -1
 
 /obj/machinery/station_map/initialize()
+	. = ..()
+	snowflake_initialize()
+
+/obj/machinery/station_map/proc/snowflake_initialize()
+	. = ..()
 	bogus = 0
 	var/turf/T = get_turf(src)
 	original_zLevel = T.z
@@ -348,7 +353,7 @@ var/list/station_holomaps = list()
 	holomap_datum = new /datum/station_holomap/strategic()
 	original_zLevel = map.zMainStation
 
-/obj/machinery/station_map/strategic/initialize()
+/obj/machinery/station_map/strategic/snowflake_initialize()
 	holomap_datum.initialize_holomap()
 
 	small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[map.zMainStation]"])

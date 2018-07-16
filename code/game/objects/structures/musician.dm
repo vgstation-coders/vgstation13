@@ -304,8 +304,8 @@
 	..()
 
 /obj/structure/piano/initialize()
+	. = ..()
 	song.tempo = song.sanitize_tempo(song.tempo) // tick_lag isn't set when the map is loaded
-	..()
 
 /obj/structure/piano/attack_hand(mob/user)
 	if(!user.IsAdvancedToolUser())

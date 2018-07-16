@@ -43,6 +43,7 @@
 	..()
 
 /obj/machinery/computer/cloning/initialize()
+	. = ..()
 	pod1 = findcloner()
 	if(pod1 && !pod1.connected)
 		pod1.connected = src

@@ -106,6 +106,7 @@
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
 
 /obj/machinery/air_sensor/initialize()
+	. = ..()
 	set_frequency(frequency)
 
 /obj/machinery/air_sensor/New()
@@ -246,6 +247,7 @@ font-weight:bold;
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
 
 /obj/machinery/computer/general_air_control/initialize()
+	. = ..()
 	set_frequency(frequency)
 
 /obj/machinery/computer/general_air_control/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
