@@ -26,11 +26,11 @@
 
 	output += {"<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"}
 	if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
+		output += "<a href='byond://?src=\ref[src];predict=1'>Manifest Prediction (Unreliable)</A><br>"
 		if(!ready)
 			output += "<p><a href='byond://?src=\ref[src];ready=1'>Declare Ready</A></p>"
 		else
 			output += "<p><b>You are ready</b> (<a href='byond://?src=\ref[src];ready=2'>Cancel</A>)</p>"
-
 	else
 		ready = 0 // prevent setup character issues
 		output += {"<a href='byond://?src=\ref[src];manifest=1'>View the Crew Manifest</A><br>
@@ -181,7 +181,13 @@
 				return 0
 
 		LateChoices()
+	if(href_list["predict"])
+		var/dat = {"<html><body>
+		<h4>High Job Preferences</h4>"}
+		dat += job_master.display_prediction()
 
+		src << browse(dat, "window=manifest;size=400x420;can_close=1")
+		return 1 //This lets us keep it on top
 	if(href_list["manifest"])
 		ViewManifest()
 

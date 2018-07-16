@@ -198,6 +198,147 @@
 	dat = replacetext(dat, "\t", "")
 	return dat
 
+/* Predicting the manifest is much less intense than building a real one.
+We don't care about names, DNA, accounts, activity, any of that. We're just gonna loop through high job prefs.*/
+
+/datum/controller/occupations/proc/display_prediction()
+	predict_manifest()
+	if(!crystal_ball.len)
+		return "No prediction has been made!" //This only gets shown the first time ever. If everyone unreadies it's blank.
+	var/dat = {"
+	<head><style>
+	{border-collapse:collapse;}
+	td, th {border:1px solid "#DEF; background-color:white; color:black"; padding:.25em}
+	th {height: 2em; "background-color: #48C; color:white";}
+	tr.head th {"background-color: #488";}
+	tr.alt td {"background-color: #DEF"]}
+	</style></head>
+	<table class="manifest" width='350px'>
+	<tr class='head'><th>Rank</th><th>Quantity</th></tr>
+	"}
+
+	var/color = 0
+	for(var/job in crystal_ball)
+		if(!crystal_ball[job])
+			continue //If 0, skip
+		dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
+		color = !color
+
+	return dat
+
+/datum/controller/occupations/proc/predict_manifest()
+	crystal_ball = list("AI" = 0, "Cyborg" = 0, "Captain" = 0, "Head of Personnel" = 0, "Head of Security" = 0, "Chief Engineer" = 0, "Chief Medical Officer" = 0, "Research Director" = 0)
+	//We always want to list these first, the rest can be random for all we care.
+	for(var/mob/new_player/player in player_list)
+		if(!player.ready)
+			continue
+		//Prefs are only stored as a bitflag, so we have to look up the job name.
+		//Only one of these should have a value
+
+		var/J = null
+		if(player.client.prefs.job_engsec_high)
+			J = flags_to_job(player.client.prefs.job_engsec_high,ENGSEC)
+		else if(player.client.prefs.job_medsci_high)
+			J = flags_to_job(player.client.prefs.job_medsci_high,MEDSCI)
+		else if(player.client.prefs.job_civilian_high)
+			J = flags_to_job(player.client.prefs.job_civilian_high,CIVILIAN)
+		else
+			continue //They don't have a high pref!
+
+		if(!J)
+			continue //sanity
+		crystal_ball[J] += 1
+
+/datum/controller/occupations/proc/flags_to_job(var/flags, var/department)
+	//Takes a flag and returns a job. First it tries to get it from a hardcoded list for speed, but if that doesn't work we just loop through (for forward compatibility)
+	switch(department)
+		if(CIVILIAN)
+			switch(flags)
+				if(1)
+					return "Head of Personnel" //datum/job/hop
+				if(2)
+					return "Bartender" //datum/job/bartender
+				if(4)
+					return "Botanist" //datum/job/hydro
+				if(8)
+					return "Chef" //datum/job/chef
+				if(16)
+					return "Janitor" //datum/job/janitor
+				if(32)
+					return "Librarian" //datum/job/librarian
+				if(64)
+					return "Quartermaster" //datum/job/qm
+				if(128)
+					return "Cargo Technician" //datum/job/cargo_tech
+				if(256)
+					return "Shaft Miner" //datum/job/mining
+				if(512)
+					return "Internal Affairs" //datum/job/lawyer
+				if(1024)
+					return "Chaplain" //datum/job/chaplain
+				if(2048)
+					return "Clown" //datum/job/clown
+				if(4096)
+					return "Mime" //datum/job/mime
+				if(8192)
+					return "Assistant" //datum/job/assistant
+				if(16384)
+					return "Trader" //datum/job/trader
+		if(MEDSCI)
+			switch(flags)
+				if(1)
+					return "Research Director" //datum/job/rd
+				if(2)
+					return "Scientist" //datum/job/scientist
+				if(4)
+					return "Chemist" //datum/job/chemist
+				if(8)
+					return "Chief Medical Officer" //datum/job/cmo
+				if(16)
+					return "Medical Doctor" //datum/job/doctor
+				if(32)
+					return "Geneticist" //datum/job/geneticist
+				if(64)
+					return "Virologist" //datum/job/virologist
+				if(128)
+					return "Paramedic" //datum/job/paramedic
+		if(ENGSEC)
+			switch(flags)
+				if(1)
+					return "Captain" //datum/job/captain
+				if(2)
+					return "Head of Security" //datum/job/hos
+				if(4)
+					return "Warden" //datum/job/warden
+				if(8)
+					return "Detective" //datum/job/detective
+				if(16)
+					return "Security Officer" //datum/job/officer
+				if(32)
+					return "Chief Engineer" //datum/job/chief_engineer
+				if(64)
+					return "Station Engineer" //datum/job/engineer
+				if(128)
+					return "Atmospherics Tech." //datum/job/atmos
+				if(256)
+					return "Roboticist" //datum/job/roboticist //Why is this here? Mystery
+				if(512)
+					return "A.I." //datum/job/ai
+				if(1024)
+					return "Cyborg" //datum/job/cyborg
+				if(2048)
+					return "Mobile MMI" //datum/job/mommi
+				if(4096)
+					return "Mechanic" //datum/job/mechanic
+	//Still haven't found anything? Let's try this the hard way.
+	var/list/searchable_jobs = typesof(/datum/job) - /datum/job
+	for(var/datum/job/J in searchable_jobs)
+		if(J.department_flag != department)
+			continue
+		if(J.flag != flags)
+			continue
+		return J.title
+	return null //Still nothing? Null it is
 
 /*
 We can't just insert in HTML into the nanoUI so we need the raw data to play with.
