@@ -321,3 +321,21 @@ var/list/datum/stack_recipe/leather_recipes = list (
 	new/datum/stack_recipe/leather("Leather helmet",/obj/item/clothing/head/leather,			3,	time = 90,on_floor = 1),
 	new/datum/stack_recipe/leather("Leather armor",/obj/item/clothing/suit/leather,				6,	time = 90,on_floor = 1),
 	)
+
+/* ========================================================================
+							BRASS RECIPES
+======================================================================== */
+
+var/list/datum/stack_recipe/brass_recipes = list (
+	new/datum/stack_recipe/dorf("dorf chair", /obj/structure/bed/chair, one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword, 4, time = 12,	on_floor = 1, inherit_material = TRUE)
+	)
+
+/* ========================================================================
+							REPLICANT ALLOY RECIPES
+======================================================================== */
+
+var/list/datum/stack_recipe/ralloy_recipes = list (
+	new/datum/stack_recipe/dorf("dorf chair", /obj/structure/bed/chair, one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword, 4, time = 12,	on_floor = 1, inherit_material = TRUE)
+	)
