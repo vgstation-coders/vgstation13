@@ -407,6 +407,8 @@ Pipelines + Other Objects -> Pipe network
 /obj/machinery/atmospherics/proc/atmos_init()
 	return
 
-/obj/machinery/atmospherics/initialize()
+/obj/machinery/atmospherics/initialize(var/mapload)
 	. = ..()
+	if(!mapload)
+		return
 	atmos_init()
