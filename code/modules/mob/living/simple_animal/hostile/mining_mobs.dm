@@ -661,6 +661,33 @@ obj/item/asteroid/basilisk_hide/New()
 	speed = 4
 	var/possessed_ore
 
+/mob/living/simple_animal/hostile/asteroid/rockernaut/Life()
+	.=..()
+	if(!.)
+		return 0
+
+	if(stance == HOSTILE_STANCE_IDLE && !client)
+		var/list/can_see = view(get_turf(src), vision_range/2)
+
+		for(var/turf/unsimulated/mineral/M in can_see)
+			if(!M.mineral)
+				continue
+			if(M.rockernaut)
+				continue
+			if(Adjacent(M))
+				//Climb in
+				visible_message("<span class = 'warning'>\The [src] burrows itself into \the [M]!</span>")
+				M.rockernaut = istype(src, /mob/living/simple_animal/hostile/asteroid/rockernaut/boss)?2:TRUE
+				qdel(src)
+				return
+			else
+				if(prob(30))
+					step_towards(src, M)//Step towards it
+					if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
+						EscapeConfinement()
+				break
+
+
 /mob/living/simple_animal/hostile/asteroid/rockernaut/death()
 	..()
 	visible_message("<span class = 'warning'>\The [src] collapses into a mound of loose rock[possessed_ore?", revealing glittering ore within!":"."]</span>")
@@ -688,6 +715,8 @@ obj/item/asteroid/basilisk_hide/New()
 	pixel_y = 16 * PIXEL_MULTIPLIER
 	melee_damage_lower = 35
 	melee_damage_upper = 50
+	ranged = 1
+	var/charging = 0
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/boss/New()
 	..()
@@ -706,3 +735,32 @@ obj/item/asteroid/basilisk_hide/New()
 	for(var/i = 0 to rand(5,13))
 		new /obj/item/weapon/strangerock(src.loc, new /datum/find(get_random_digsite_type(), 0))
 	new /obj/structure/boulder(src.loc)
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/OpenFire(target)
+	var/turf/T = get_turf(target)
+	var/frustration = 0
+	ranged_cooldown = ranged_cooldown_cap
+	visible_message("<span class = 'warning'>\The [src] charges at \the [target]!</span>")
+	charging = TRUE
+	move_to_delay = 5
+	while(get_turf(src) != T || frustration < 5)
+		step_towards(src, T)
+		frustration++
+		sleep(move_to_delay)
+
+	charging = FALSE
+	move_to_delay = initial(move_to_delay)
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/to_bump(atom/movable/AM)
+	..()
+	if(charging && istype(AM, /mob/living))
+		UnarmedAttack(AM)
+		var/mob/living/M = AM
+		visible_message("<span class = 'warning'>\The [src] swats [M] aside!</span>")
+		var/turf/T = get_turf(src)
+		var/turf/target_turf
+		if(istype(T, /turf/space)) // if ended in space, then range is unlimited
+			target_turf = get_edge_target_turf(T, dir)
+		else
+			target_turf = get_ranged_target_turf(T, dir, size)
+			M.throw_at(target_turf,100,move_to_delay)
