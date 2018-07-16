@@ -34,6 +34,8 @@
 			parallax_appearances[I] = appearance
 			overlays.Cut()
 	appearance = parallax_appearances["[((x + y) ^ ~(x * y) + z) % 26]"]
+	flags |= INITIALIZED
+	return INITIALIZE_HINT_NORMAL
 
 /turf/space/spawned_by_map_element(var/datum/map_element/ME, var/list/objects)
 	initialize()
@@ -199,7 +201,8 @@
 	return
 
 /turf/space/void/initialize()
-	return
+	flags |= INITIALIZED
+	return INITIALIZE_HINT_NORMAL
 
 /turf/space/has_gravity()
 	return 0

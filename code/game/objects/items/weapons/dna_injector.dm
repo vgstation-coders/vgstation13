@@ -17,13 +17,8 @@
 	var/datatype=0
 	var/value=0
 
-/obj/item/weapon/dnainjector/New()
-	. = ..()
-
-	if(ticker)
-		initialize()
-
 /obj/item/weapon/dnainjector/initialize()
+	. = ..()
 	if(datatype && block)
 		buf=new
 		buf.dna=new
@@ -842,7 +837,7 @@
 	datatype = DNA2_BUF_SE
 	value = 0x001
 	//block = 11
-	
+
 /obj/item/weapon/dnainjector/nofail/asthmamut
 	name = "DNA-Injector (Asthma)"
 	desc = "Makes you asthmatic."

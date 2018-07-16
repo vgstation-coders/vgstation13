@@ -15,6 +15,7 @@
 	return TRUE
 
 /obj/machinery/light_switch/initialize()
+	. = ..()
 	add_self_to_holomap()
 
 /obj/machinery/light_switch/New(var/loc, var/ndir, var/building = 2)

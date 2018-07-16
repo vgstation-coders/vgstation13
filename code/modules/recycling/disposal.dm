@@ -29,7 +29,7 @@
 	return TRUE
 
 /obj/machinery/disposal/initialize()
-	..()
+	. = ..()
 	add_self_to_holomap()
 
 /obj/machinery/disposal/no_deconstruct
@@ -737,7 +737,7 @@
 	return TRUE
 
 /obj/structure/disposalpipe/initialize()
-	..()
+	. = ..()
 	add_self_to_holomap()
 
 // new pipe, set the icon_state as on map
@@ -1536,7 +1536,7 @@
 	return TRUE
 
 /obj/structure/disposaloutlet/initialize()
-	..()
+	. = ..()
 	add_self_to_holomap()
 
 /obj/structure/disposaloutlet/no_deconstruct

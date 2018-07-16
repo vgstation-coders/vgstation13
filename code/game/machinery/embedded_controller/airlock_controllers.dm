@@ -23,7 +23,7 @@
 
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(!program)//we need to initialize the controller to get a program
-		initialize()
+		initialize_radio_and_program()
 	var/data[0]
 
 	data = list(
@@ -211,7 +211,7 @@
 
 /obj/machinery/embedded_controller/radio/airlock_controller/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(!program)//we need to initialize the controller to get a program
-		initialize()
+		initialize_radio_and_program()
 	var/data[0]
 
 	data = list(
@@ -379,7 +379,7 @@
 
 /obj/machinery/embedded_controller/radio/access_controller/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(!program)//we need to initialize the controller to get a program
-		initialize()
+		initialize_radio_and_program()
 	var/data[0]
 
 	data = list(
@@ -490,7 +490,7 @@
 
 /obj/machinery/embedded_controller/radio/pressure_regulator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(!program)//we need to initialize the controller to get a program
-		initialize()
+		initialize_radio_and_program()
 	var/data[0]
 
 	data = list(

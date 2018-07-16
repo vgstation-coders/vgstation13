@@ -178,7 +178,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	spawn_with_bulb = null
 
 /obj/machinery/light/initialize()
-	..()
+	. = ..()
 	add_self_to_holomap()
 
 // create a new lighting fixture

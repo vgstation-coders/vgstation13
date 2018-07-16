@@ -24,6 +24,7 @@
 				initialize()
 
 /obj/item/device/radio/electropack/initialize()
+	. = ..()
 	if(frequency < MINIMUM_FREQUENCY || frequency > MAXIMUM_FREQUENCY)
 		src.frequency = sanitize_frequency(src.frequency)
 

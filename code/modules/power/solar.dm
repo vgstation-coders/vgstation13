@@ -19,7 +19,7 @@ var/list/solars_list = list()
 	..()
 
 /obj/machinery/power/solar/initialize()
-	..()
+	. = ..()
 	connect_to_network()
 
 // this is here because it is fucking here. If you found this, you're lucky !

@@ -115,6 +115,7 @@ obj/machinery/door/airlock/proc/set_frequency(new_frequency)
 
 
 obj/machinery/door/airlock/initialize()
+	. = ..()
 	if(frequency)
 		set_frequency(frequency)
 
@@ -194,7 +195,8 @@ obj/machinery/airlock_sensor/proc/set_frequency(new_frequency)
 	frequency = new_frequency
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_AIRLOCK)
 
-obj/machinery/airlock_sensor/initialize()
+/obj/machinery/airlock_sensor/initialize()
+	. = ..()
 	set_frequency(frequency)
 
 obj/machinery/airlock_sensor/New()
@@ -352,7 +354,8 @@ obj/machinery/access_button/proc/set_frequency(new_frequency)
 	radio_connection = radio_controller.add_object(src, frequency, customfilter)
 
 
-obj/machinery/access_button/initialize()
+/obj/machinery/access_button/initialize()
+	. = ..()
 	set_frequency(frequency)
 
 
@@ -396,9 +399,9 @@ obj/machinery/access_button/Topic(href,href_list)
 			var/newfilter = input(usr, RADIO_FILTER_EXPLANATION, "Radio Filter", customfilter) as null|anything in radiofilters
 			if (newfilter)
 				if(usr.incapacitated() || (!issilicon(usr) && !Adjacent(usr)))
-					return	
+					return
 				customfilter = newfilter
-			
+
 		if("set_freq" in href_list)
 			var/newfreq=frequency
 			if(href_list["set_freq"]!="-1")
@@ -413,5 +416,5 @@ obj/machinery/access_button/Topic(href,href_list)
 					initialize()
 
 		update_multitool_menu(usr)
-		
+
 #undef RADIO_FILTER_EXPLANATION

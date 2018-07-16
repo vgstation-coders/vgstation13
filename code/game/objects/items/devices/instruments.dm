@@ -19,8 +19,8 @@
 	..()
 
 /obj/item/device/instrument/initialize()
+	. = ..()
 	song.tempo = song.sanitize_tempo(song.tempo) // tick_lag isn't set when the map is loaded
-	..()
 
 /obj/item/device/instrument/attack_self(mob/user as mob)
 	if(!user.dexterity_check())

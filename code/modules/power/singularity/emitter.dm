@@ -62,8 +62,7 @@
 	return 1
 
 /obj/machinery/power/emitter/initialize()
-
-	..()
+	. = ..()
 	if(state == 2 && anchored)
 		connect_to_network()
 		update_icon()

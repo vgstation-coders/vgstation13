@@ -56,6 +56,7 @@
 	icon_state = "conveyor[operating]"
 
 /obj/machinery/conveyor/initialize()
+	. = ..()
 	if(frequency)
 		set_frequency(frequency)
 	update()
@@ -477,6 +478,7 @@
 		icon_state = "switch-off"
 
 /obj/machinery/conveyor_switch/initialize()
+	. = ..()
 	if(frequency)
 		set_frequency(frequency)
 	update()

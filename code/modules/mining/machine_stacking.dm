@@ -13,11 +13,6 @@
 
 	var/list/stacker_data
 
-/obj/machinery/computer/stacking_unit/New()
-	. = ..()
-	if(ticker)
-		initialize()
-
 /obj/machinery/computer/stacking_unit/attack_ai(mob/user)
 	add_hiddenprint(user)
 	interact(user)
@@ -85,6 +80,7 @@
 	radio_connection.post_signal(src, signal)
 
 /obj/machinery/computer/stacking_unit/initialize()
+	. = ..()
 	if(frequency)
 		set_frequency(frequency)
 
@@ -170,9 +166,6 @@
 	RefreshParts()
 
 	mover = new
-
-	if(ticker)
-		initialize()
 
 /obj/machinery/mineral/stacking_machine/update_icon()
 	if(stat & (NOPOWER | BROKEN))
@@ -277,6 +270,7 @@
 	send_signal(data)
 
 /obj/machinery/mineral/stacking_machine/initialize()
+	. = ..()
 	if(frequency)
 		set_frequency(frequency)
 

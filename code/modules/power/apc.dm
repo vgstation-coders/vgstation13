@@ -171,7 +171,7 @@
 	terminal.add_self_to_holomap()
 
 /obj/machinery/power/apc/initialize()
-	..()
+	. = ..()
 	var/area/this_area = get_area(src)
 	name = "[this_area.name] APC"
 

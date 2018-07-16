@@ -49,6 +49,7 @@
 	update_icon()
 
 /obj/machinery/media/transmitter/broadcast/initialize()
+	. = ..()
 	//testing("[type]/initialize() called!")
 	if(autolink && autolink.len)
 		for(var/obj/machinery/media/source in orange(20, src))

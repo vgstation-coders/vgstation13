@@ -59,10 +59,10 @@
 /obj/structure/closet/proc/canweld()
 	return 1
 
-/obj/structure/closet/initialize()
-	..()
+/obj/structure/closet/initialize(var/mapload)
+	. = ..()
 	spawn_contents()
-	if(!opened)		// if closed, any item at the crate's loc is put in the contents
+	if(!opened && mapload)		// if closed, any item at the crate's loc is put in the contents
 		take_contents()
 	else
 		setDensity(FALSE)

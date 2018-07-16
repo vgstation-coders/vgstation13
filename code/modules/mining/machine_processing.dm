@@ -18,13 +18,8 @@
 
 	var/obj/item/weapon/card/id/id //Ref to the inserted ID card (for claiming points via the smelter).
 
-/obj/machinery/computer/smelting/New()
-	. = ..()
-
-	if(ticker && ticker.current_state == 3)
-		initialize()
-
 /obj/machinery/computer/smelting/initialize()
+	. = ..()
 	set_frequency(frequency)
 
 /obj/machinery/computer/smelting/proc/set_frequency(new_frequency)
@@ -351,6 +346,7 @@
 		broadcast_status()
 
 /obj/machinery/mineral/processing_unit/initialize()
+	. = ..()
 	set_frequency(frequency)
 
 /obj/machinery/mineral/processing_unit/proc/broadcast_status()

@@ -27,11 +27,15 @@
 	icon_state = "tallcabinet"
 
 
-/obj/structure/filingcabinet/initialize()
+/obj/structure/filingcabinet/initialize(var/mapload)
+	. = ..()
+	if(mapload)
+		. = INITIALIZE_HINT_LATELOAD
+
+/obj/structure/filingcabinet/late_initialize()
 	for(var/obj/item/I in loc)
 		if(istype(I, /obj/item/weapon/paper) || istype(I, /obj/item/weapon/folder) || istype(I, /obj/item/weapon/photo))
 			I.forceMove(src)
-
 
 /obj/structure/filingcabinet/attackby(obj/item/P as obj, mob/user as mob)
 	if(istype(P, /obj/item/weapon/paper) || istype(P, /obj/item/weapon/folder) || istype(P, /obj/item/weapon/photo))

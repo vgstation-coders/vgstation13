@@ -40,7 +40,7 @@
 	..()
 
 /obj/machinery/power/battery/portable/initialize()
-	..()
+	. = ..()
 	if(anchored)
 		var/obj/machinery/power/battery_port/port = locate() in src.loc
 		if(port)

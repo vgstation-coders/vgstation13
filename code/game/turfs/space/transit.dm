@@ -10,7 +10,8 @@
 	update_icon()
 
 /turf/space/transit/initialize()
-	return
+	flags |= INITIALIZED
+	return INITIALIZE_HINT_NORMAL
 
 /turf/space/transit/update_icon()
 	icon_state = ""

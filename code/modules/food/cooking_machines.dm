@@ -89,13 +89,8 @@ var/global/ingredientLimit = 10
 	new /obj/structure/cult_legacy/talisman(loc)
 	..()
 
-/obj/machinery/cooking/New()
-	if (ticker)
-		initialize()
-
-	return ..()
-
 /obj/machinery/cooking/initialize()
+	. = ..()
 	if (foodChoices)
 		var/obj/item/food
 
@@ -392,7 +387,7 @@ var/global/ingredientLimit = 10
 	cooks_in_reagents = 1
 
 /obj/machinery/cooking/deepfryer/initialize()
-	..()
+	. = ..()
 	reagents.add_reagent(CORNOIL, 300)
 
 /obj/machinery/cooking/deepfryer/proc/empty_icon() //sees if the value is empty, and changes the icon if it is
