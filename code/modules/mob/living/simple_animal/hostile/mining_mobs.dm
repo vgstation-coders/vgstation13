@@ -736,7 +736,13 @@ obj/item/asteroid/basilisk_hide/New()
 		new /obj/item/weapon/strangerock(src.loc, new /datum/find(get_random_digsite_type(), 0))
 	new /obj/structure/boulder(src.loc)
 
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/MoveToTarget()
+	if(!charging)
+		..()
+
 /mob/living/simple_animal/hostile/asteroid/rockernaut/boss/OpenFire(target)
+	if(charging)
+		return
 	var/turf/T = get_turf(target)
 	var/frustration = 0
 	ranged_cooldown = ranged_cooldown_cap
@@ -751,13 +757,14 @@ obj/item/asteroid/basilisk_hide/New()
 	charging = FALSE
 	move_to_delay = initial(move_to_delay)
 
-/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/to_bump(atom/movable/AM)
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/to_bump(atom/A)
 	..()
-	if(charging && istype(AM, /mob/living))
-		UnarmedAttack(AM)
-		var/mob/living/M = AM
-		visible_message("<span class = 'warning'>\The [src] swats [M] aside!</span>")
+	if(charging && istype(A, /mob/living))
+		var/mob/living/M = A
 		var/turf/T = get_turf(src)
+		UnarmedAttack(M)
+		visible_message("<span class = 'warning'>\The [src] swats [M] aside!</span>")
+
 		var/turf/target_turf
 		if(istype(T, /turf/space)) // if ended in space, then range is unlimited
 			target_turf = get_edge_target_turf(T, dir)
