@@ -179,6 +179,9 @@ var/global/list/ghdel_profiling = list()
 	*/
 
 /atom/New(var/loc, ...)
+	//atom creation method that preloads variables at creation
+	if(global.use_preloader && (src.type == global._preloader.target_path))//in case the instanciated atom is creating other atoms in New()
+		global._preloader.load(src)
 	on_destroyed = new("owner"=src)
 	on_density_change = new("owner"=src)
 	on_z_transition = new("owner"=src)

@@ -3,7 +3,8 @@
 //////////////////////////////////////////////////////////////
 
 //global datum that will preload variables on atoms instanciation
-var/global/dmm_suite/preloader/_preloader = null
+var/use_preloader = FALSE
+var/dmm_suite/preloader/_preloader = new
 
 /**
  * Returns a list with two numbers. First number is the map's width. Second number is the map's height.
@@ -238,7 +239,7 @@ var/list/map_dimension_cache = list()
 	//first instance the /area and remove it from the members list
 	index = members.len
 	var/atom/instance
-	_preloader = new(members_attributes[index])//preloader for assigning  set variables on atom creation
+	global._preloader.setup(members_attributes[index])//preloader for assigning  set variables on atom creation
 
 	//Locate the area object
 	instance = locate(members[index])
@@ -247,8 +248,8 @@ var/list/map_dimension_cache = list()
 		instance.contents.Add(locate(xcrd,ycrd,zcrd))
 		spawned_atoms.Add(instance)
 
-	if(_preloader && instance)
-		_preloader.load(instance)
+	if(global.use_preloader && instance)
+		global._preloader.load(instance)
 
 	//The areas list doesn't contain areas without objects by default
 	//We have to add it manually
@@ -303,7 +304,7 @@ var/list/map_dimension_cache = list()
 	if(!path)
 		return
 	var/atom/instance
-	_preloader = new(attributes, path)
+	global._preloader.setup(attributes, path)
 
 	if(ispath(path, /turf)) //Turfs use ChangeTurf
 		var/turf/oldTurf = locate(x,y,z)
@@ -312,8 +313,8 @@ var/list/map_dimension_cache = list()
 	else
 		instance = new path (locate(x,y,z))//first preloader pass
 
-	if(_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
-		_preloader.load(instance)
+	if(global.use_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
+		global._preloader.load(instance)
 
 	return instance
 
@@ -406,13 +407,6 @@ var/list/map_dimension_cache = list()
 		placed.opacity = 1
 	placed.underlays += turfs_underlays
 
-//atom creation method that preloads variables at creation
-/atom/New()
-	if(_preloader && (src.type == _preloader.target_path))//in case the instanciated atom is creating other atoms in New()
-		_preloader.load(src)
-
-	. = ..()
-
 //////////////////
 //Preloader datum
 //////////////////
@@ -422,15 +416,15 @@ var/list/map_dimension_cache = list()
 	var/list/attributes
 	var/target_path
 
-/dmm_suite/preloader/New(var/list/the_attributes, var/path)
-	.=..()
-	if(!the_attributes.len)
-		Del()
-		return
-	attributes = the_attributes
-	target_path = path
+/dmm_suite/preloader/proc/setup(var/list/the_attributes, var/path)
+	if(the_attributes.len)
+		attributes = the_attributes
+		target_path = path
 
 /dmm_suite/preloader/proc/load(atom/what)
 	for(var/attribute in attributes)
-		what.vars[attribute] = attributes[attribute]
-	Del()
+		var/value = attributes[attribute]
+		if(islist(value))
+			value = deepCopyList(value)
+		what.vars[attribute] = value
+	global.use_preloader = FALSE
