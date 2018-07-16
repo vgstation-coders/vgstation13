@@ -641,3 +641,68 @@ obj/item/asteroid/basilisk_hide/New()
 			qdel(A)
 		return
 	return ..()
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut
+	name = "rockernaut"
+	desc = "While a rolling stone may gather no moss, a spinning asteroid may gather semi-sentient moss in the form of a Rockernaut infestation."
+	icon_state = "rocknormal"
+	icon_living = "rocknormal"
+	icon_aggro = "rockcrikey"
+	icon_attack = "rocknormal_to_crikey"
+	icon_attack_time = 5
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
+	attack_sound = 'sound/weapons/heavysmash.ogg'
+	move_to_delay = 20
+	melee_damage_lower = 30
+	melee_damage_upper = 30
+	maxHealth = 350
+	health = 350
+	vision_range = 7
+	speed = 4
+	var/possessed_ore
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/death()
+	..()
+	visible_message("<span class = 'warning'>\The [src] collapses into a mound of loose rock[possessed_ore?", revealing glittering ore within!":"."]</span>")
+	drop_loot()
+	qdel(src)
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/proc/drop_loot()
+	if(possessed_ore)
+		for(var/i = 0 to rand(3,9))
+			new possessed_ore(src.loc)
+
+	if(prob(1))
+		new /obj/item/weapon/vinyl/rock(src.loc) //It is a rock monster after all
+
+	for(var/i = 0 to rand(0,3))
+		new /obj/item/weapon/strangerock(src.loc, new /datum/find(get_random_digsite_type(), 0))
+	new /obj/structure/boulder(src.loc)
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss
+	name = "Angie"
+	size = SIZE_HUGE
+	maxHealth = 900
+	move_to_delay = 60
+	health = 900
+	pixel_y = 16 * PIXEL_MULTIPLIER
+	melee_damage_lower = 35
+	melee_damage_upper = 50
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/New()
+	..()
+	appearance_flags |= PIXEL_SCALE
+	var/matrix/M = matrix()
+	M.Scale(2,2)
+	transform = M
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/drop_loot()
+	if(possessed_ore)
+		for(var/i = 0 to rand(24,46))
+			new possessed_ore(src.loc)
+
+	new /obj/item/weapon/vinyl/rock(src.loc) //It is a rock monster after all
+
+	for(var/i = 0 to rand(5,13))
+		new /obj/item/weapon/strangerock(src.loc, new /datum/find(get_random_digsite_type(), 0))
+	new /obj/structure/boulder(src.loc)
