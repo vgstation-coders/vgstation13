@@ -60,21 +60,22 @@
 	else
 		toggleActive()
 
-/obj/item/weapon/pickaxe/plasmacutter/heat_axe/attack(mob/living/target, mob/living/user)
-	..()
-	if(isliving(target) && active)
-		to_chat(target, "<span class='danger'>You are lit on fire from the intense heat of the [name]!</span>")
-		target.adjust_fire_stacks(1)
-		target.IgniteMob()
+/obj/item/weapon/pickaxe/plasmacutter/heat_axe/proc/HellFire(var/mob/living/victim)
+	if(isliving(victim) && active) //Just to be sure.
+		victim.adjust_fire_stacks(1)
+		if(victim.IgniteMob())
+			to_chat(victim, "<span class='danger'>You are lit on fire from the intense heat of the [name]!</span>")
 
-		if(issilicon(target))
-			testing("burn to ashes, motherfucker!")
-			var/mob/living/silicon/robot/robot = target
-			if(prob(robot.getFireLoss())) //The more burn damage the have, the more likely they are to get a component overheated.
-				var/list/blacklisted_components = list("power cell", "armour plating")
-				var/datum/robot_component/C = pick(robot.components) - blacklisted_components
-				testing("Choosen component is: [C]")
-				if(robot.is_component_functioning(C) && C.toggled)
-					testing("[C] still works, time to overheat it.")
-					C.toggled = FALSE
-					to_chat(target, "<span class='danger'>DANGER: [C.name] [pick("Over Temperature", "Cooling")] Error!</span>")
+/obj/item/weapon/pickaxe/plasmacutter/heat_axe/preattack(atom/target, mob/user, proximity_flag)
+	if(!proximity_flag)
+		return
+	if(ismecha(target) && active)
+		var/obj/mecha/M = target
+		if(M.occupant)
+			HellFire(M.occupant)
+	..()
+
+/obj/item/weapon/pickaxe/plasmacutter/heat_axe/attack(mob/living/target, mob/living/user)
+	if(target)
+		HellFire(target)
+	..()
