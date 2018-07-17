@@ -53,6 +53,10 @@ var/list/diagnostic_hud_users = list() // list of all entities using a diagnosti
 		surgery_steps += S
 	sort_surgeries()
 
+	for(var/path in subtypesof(/datum/emote))
+		var/datum/emote/E = new path()
+		E.emote_list[E.key] = E
+
 
 /* // Uncomment to debug chemical reaction list.
 /client/verb/debug_chemical_list()

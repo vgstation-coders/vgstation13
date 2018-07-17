@@ -5886,12 +5886,6 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 
 	if(prob(30))
 		M.emote("spin")
-	var/prev_dir = M.dir
-	M.confused++
-	for(var/i in list(1, 4, 2, 8, 1, 4, 2, 8, 1, 4, 2, 8, 1, 4, 2, 8))
-		M.dir = i
-		sleep(1)
-	M.dir = prev_dir
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		for(var/zone in list(LIMB_LEFT_LEG, LIMB_RIGHT_LEG, LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT))
