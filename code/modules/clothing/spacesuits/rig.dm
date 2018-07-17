@@ -451,6 +451,7 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	_color = "knight"
 	clothing_flags = PLASMAGUARD
+	goliath_reinforce = TRUE
 
 /obj/item/clothing/suit/space/rig/knight
 	name = "Space-Knight armour"
@@ -464,6 +465,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	clothing_flags = PLASMAGUARD
+	goliath_reinforce = TRUE
 
 /obj/item/clothing/head/helmet/space/rig/knight/black
 	name = "Black Knight's helm"
