@@ -146,7 +146,6 @@
 	name = "\improper Signal Ace 2"
 	desc = "Complete with integrated radio signaler!"
 	icon_state = "cart-tox"
-	access_reagent_scanner = 1
 	access_atmos = 1
 
 /obj/item/weapon/cartridge/signal/New()
@@ -219,7 +218,6 @@
 	icon_state = "cart-rd"
 	access_manifest = 1
 	access_status_display = 1
-	access_reagent_scanner = 1
 	access_robotics = 1
 	access_atmos = 1
 
@@ -661,7 +659,7 @@ Code:
 				menu += {"Current Orbital Location: <b>\[[cl.x-WORLD_X_OFFSET[cl.z]],[cl.y-WORLD_Y_OFFSET[cl.z]]\]</b>
 					<h4>Located Mops:</h4>"}
 				var/ldat
-				for (var/obj/item/weapon/mop/M in world)
+				for (var/obj/item/weapon/mop/M in mop_list)
 					var/turf/ml = get_turf(M)
 
 					if(ml)
@@ -678,7 +676,7 @@ Code:
 				menu += "<h4>Located Mop Buckets:</h4>"
 
 				ldat = null
-				for (var/obj/structure/mopbucket/B in world)
+				for (var/obj/structure/mopbucket/B in mopbucket_list)
 					var/turf/bl = get_turf(B)
 
 					if(bl)
@@ -695,7 +693,7 @@ Code:
 				menu += "<h4>Located Cleanbots:</h4>"
 
 				ldat = null
-				for (var/obj/machinery/bot/cleanbot/B in world)
+				for (var/obj/machinery/bot/cleanbot/B in cleanbot_list)
 					var/turf/bl = get_turf(B)
 
 					if(bl)

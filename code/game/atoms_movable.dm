@@ -41,7 +41,7 @@
 	// Can we send relaymove() if gravity is disabled or we are in space? (Should be handled by relaymove, but shitcode abounds)
 	var/internal_gravity = 0
 	var/inertia_dir = null
-
+	var/kinetic_acceleration = 0
 	var/throwpass = 0
 	var/level = 2
 
@@ -501,7 +501,7 @@
 	if(override)
 		sound_override = 1
 	//use a modified version of Bresenham's algorithm to get from the atom's current position to that of the target
-
+	var/kinetic_sum = 0
 	throwing = 1
 	if(!speed)
 		speed = throw_speed
@@ -554,6 +554,9 @@
 				tS = 1
 			while((loc.timestopped || timestopped) && dist_travelled)
 				sleep(3)
+			if(kinetic_acceleration>kinetic_sum)
+				fly_speed += kinetic_acceleration-kinetic_sum
+				kinetic_sum = kinetic_acceleration
 			if(error < 0)
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -590,6 +593,9 @@
 			if(timestopped)
 				sleep(1)
 				continue
+			if(kinetic_acceleration>0)
+				fly_speed += kinetic_acceleration
+				kinetic_acceleration = 0
 			if(error < 0)
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -623,6 +629,7 @@
 
 	//done throwing, either because it hit something or it finished moving
 	src.throwing = 0
+	kinetic_acceleration = 0
 	if(isobj(src))
 		src.throw_impact(get_turf(src), speed, user)
 

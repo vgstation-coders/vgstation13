@@ -176,6 +176,9 @@
 	if(!C)
 		return
 
+	if (M.current.is_pacified(VIOLENCE_DEFAULT,C))
+		return
+
 	if(!C in view(1))
 		to_chat(M, "<span class='warning'>You're not close enough to [C.name] to stare into \his eyes.</span>")
 		return
@@ -211,6 +214,10 @@
 	var/mob/living/carbon/C = M.current.vampire_active(50, 0, 1)
 	if(!C)
 		return
+
+	if (M.current.is_pacified(VIOLENCE_DEFAULT,C))
+		return
+
 	if(!M.current.vampire_can_reach(C, 1))
 		to_chat(M.current, "<span class='danger'>You cannot touch [C.name] from where you are standing!</span>")
 		return
@@ -248,6 +255,10 @@
 	var/datum/mind/M = usr.mind
 	if(!M)
 		return
+
+	if (M.current.is_pacified())
+		return
+
 	if(M.current.vampire_power(0, 1))
 		if(istype(M.current:glasses, /obj/item/clothing/glasses/sunglasses/blindfold))
 			to_chat(M.current, "<span class='warning'>You're blindfolded!</span>")
@@ -318,6 +329,11 @@
 	var/datum/mind/M = usr.mind
 	if(!M)
 		return
+
+
+	if (M.current.is_pacified())
+		return
+
 	if(M.current.vampire_power(30, 0))
 		M.current.visible_message("<span class='warning'>[M.current.name] lets out an ear piercing shriek!</span>", "<span class='warning'>You let out a loud shriek.</span>", "<span class='warning'>You hear a loud painful shriek!</span>")
 		for(var/mob/living/carbon/C in hearers(4, M.current))
@@ -353,6 +369,8 @@
 		return
 	var/mob/living/carbon/C = M.current.vampire_active(150, 0, 1)
 	if(!C)
+		return
+	if (M.current.is_pacified(VIOLENCE_DEFAULT,C))
 		return
 	if(!ishuman(C))
 		to_chat(M.current, "<span class='warning'>You can only enthrall humanoids.</span>")
@@ -490,6 +508,8 @@
 	set desc = "You summon a trio of space bats who attack nearby targets until they or their target is dead."
 	var/datum/mind/M = usr.mind
 	if(!M)
+		return
+	if (M.current.is_pacified())
 		return
 	if(M.current.vampire_power(50, 0))
 		var/list/turf/locs = new

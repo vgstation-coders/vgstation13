@@ -398,9 +398,9 @@
 	return
 
 var/global/list/paper_folding_results = list ( \
+	"ball of paper" = /obj/item/weapon/p_folded/ball,
 	"paper plane" = /obj/item/weapon/p_folded/plane,
 	"paper hat" = /obj/item/weapon/p_folded/hat,
-	"ball of paper" = /obj/item/weapon/p_folded/ball,
 	"folded note" = /obj/item/weapon/p_folded/note_small,
 	"origami crane" = /obj/item/weapon/p_folded/crane,
 	"origami boat" = /obj/item/weapon/p_folded/boat,
@@ -450,6 +450,12 @@ var/global/list/paper_folding_results = list ( \
 		to_chat(user, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
 		return 0
 	return 1
+
+/obj/item/weapon/paper/AltClick()
+	if(is_holder_of(usr, src) && canfold(usr))
+		fold()
+	else
+		return ..()
 
 /*
  * Premade paper

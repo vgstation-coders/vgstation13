@@ -46,11 +46,6 @@
 	var/list/datum/disease2/disease/virus2 = list() //For disease carrying
 	var/antibodies = 0
 
-/mob/living/simple_animal/mouse/New()
-	..()
-	create_reagents(100)
-
-
 /mob/living/simple_animal/mouse/Life()
 	if(timestopped)
 		return 0 //under effects of time magick

@@ -10,7 +10,7 @@
 
 		if(turfs.len) //Pick a turf to spawn at if we can
 			var/turf/simulated/floor/T = pick(turfs)
-			var/datum/seed/seed = plant_controller.create_random_seed(1)
+			var/datum/seed/seed = SSplant.create_random_seed(1)
 			seed.spread = 2 // So it will function properly as vines.
 			seed.potency = rand(potency_min, potency_max) // 70-100 potency will help guarantee a wide spread and powerful effects.
 			seed.maturation = rand(maturation_min, maturation_max)

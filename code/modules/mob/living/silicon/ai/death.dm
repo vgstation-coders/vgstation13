@@ -23,7 +23,7 @@
 			break
 		callshuttle++
 
-	for(var/obj/item/weapon/circuitboard/communications/commboard in world)
+	for(var/obj/item/weapon/circuitboard/communications/commboard in communications_circuitboards)
 		if(commboard.z == map.zCentcomm)
 			continue
 		if(istype(commboard.loc,/turf) || istype(commboard.loc,/obj/item/weapon/storage))

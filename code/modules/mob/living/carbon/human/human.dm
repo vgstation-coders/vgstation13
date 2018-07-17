@@ -1759,16 +1759,20 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
 /mob/living/carbon/human/proc/initialize_barebones_NPC_components()	//doesn't actually do anything, but contains tools needed for other types to do things
-	NPC_brain = new (src)
-	NPC_brain.AddComponent(/datum/component/controller/mob)
-	NPC_brain.AddComponent(/datum/component/ai/hand_control)
+	BrainContainer = new (src)
+	BrainContainer.AddComponent(/datum/component/controller/mob)
+	BrainContainer.AddComponent(/datum/component/ai/hand_control)
+	BrainContainer.AddComponent(/datum/component/controller/movement/astar)
 
 /mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
 	initialize_barebones_NPC_components()
-	NPC_brain.AddComponent(/datum/component/ai/human_brain)
-	NPC_brain.AddComponent(/datum/component/ai/target_finder/human)
-	NPC_brain.AddComponent(/datum/component/ai/target_holder/prioritizing)
-	NPC_brain.AddComponent(/datum/component/ai/melee/attack_human)
+	BrainContainer.AddComponent(/datum/component/ai/human_brain)
+	BrainContainer.AddComponent(/datum/component/ai/target_finder/human)
+	BrainContainer.AddComponent(/datum/component/ai/target_holder/prioritizing)
+	BrainContainer.AddComponent(/datum/component/ai/melee/attack_human)
+	BrainContainer.AddComponent(/datum/component/ai/melee/throw_attack)
+	BrainContainer.AddComponent(/datum/component/ai/crowd_attack)
+	BrainContainer.AddComponent(pick(typesof(/datum/component/ai/targetting_handler)))
 
 /mob/living/carbon/human/can_show_flavor_text()
 	// Wearing a mask...

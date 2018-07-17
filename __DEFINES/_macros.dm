@@ -261,6 +261,9 @@ proc/get_space_area()
 //Yes, this is the fastest known way to do it.
 #define get_turf(A) (get_step(A, 0))
 
+//Helper to check if two things are in the same z-level
+#define	atoms_share_level(A, B) (A && B && A.z == B.z)
+
 //HARDCORE MODE STUFF (mainly hunger)
 
 #define hardcore_mode_on (hardcore_mode)//((ticker) && (ticker.hardcore_mode))

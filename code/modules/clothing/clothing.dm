@@ -12,6 +12,7 @@
 
 	var/list/obj/item/clothing/accessory/accessories = list()
 	var/goliath_reinforce = FALSE
+	var/hidecount = 0
 	var/extinguishingProb = 15
 	var/can_extinguish = FALSE
 
@@ -629,6 +630,8 @@ BLIND     // can't see anything
 /obj/item/clothing/under/AltClick()
 	if(is_holder_of(usr, src))
 		set_sensors(usr)
+	else
+		return ..()
 
 /datum/action/item_action/toggle_minimap
 	name = "Toggle Minimap"

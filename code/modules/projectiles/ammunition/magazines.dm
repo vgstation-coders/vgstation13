@@ -177,10 +177,17 @@
 	ammo_type = "/obj/item/ammo_casing/c45"
 	max_ammo = 16
 	multiple_sprites = 1
-	sprite_modulo = 2
+	sprite_modulo = 16
 
 /obj/item/ammo_storage/magazine/uzi45/empty
 	starting_ammo = 0
+
+/obj/item/ammo_storage/magazine/uzi45/extended
+	name = "extended magazine (.45)"
+	icon_state = "uzi45_ext"
+	max_ammo = 24
+	multiple_sprites = 1
+	sprite_modulo = 4
 
 /obj/item/ammo_storage/magazine/lawgiver
 	name = "lawgiver magazine"
