@@ -1,5 +1,4 @@
 var/list/GPS_list = list()
-var/list/SPS_list = list()
 
 /obj/item/device/gps
 	name = "global positioning system"
@@ -37,10 +36,7 @@ var/list/SPS_list = list()
 	GPS_list.Add(src)
 
 /obj/item/device/gps/Destroy()
-	if(istype(src,/obj/item/device/gps/secure))
-		SPS_list.Remove(src)
-	else
-		GPS_list.Remove(src)
+	GPS_list.Remove(src)
 	..()
 
 /obj/item/device/gps/emp_act(severity)
