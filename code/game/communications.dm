@@ -89,10 +89,10 @@ Radiochat range: 1441 to 1489 (most devices refuse to be tune to other frequency
 Radio:
 1459 - standard radio chat
 1351 - Science
-1353 - Command
+XXXX - Command // Randomly generated at roundstart
 1355 - Medical
 1357 - Engineering
-1359 - Security
+XXXX - Security // Randomly generated at roundstart
 1441 - death squad
 1443 - Confession Intercom
 1349 - Botany, chef, bartender
@@ -136,6 +136,49 @@ var/list/radiochannels = list(
 	"DJ" = 1201
 )
 
+// The channels the AI and the Librarian have access to.
+var/list/radiochannels_access = list(
+	"Common" = TRUE,
+	"AI Private" = TRUE,
+	"Deathsquad" = FALSE,
+	"Security" = TRUE,
+	"Engineering" = TRUE,
+	"Command" = TRUE,
+	"Medical" = TRUE,
+	"Science" = TRUE,
+	"Service" = TRUE,
+	"Supply" = TRUE,
+	"Response Team" = TRUE,
+	"Raider" = FALSE,
+	"Syndicate" = FALSE,
+	"DJ" = FALSE
+)
+
+var/list/random_radiochannels = list(
+	"Common" = FALSE,
+	"AI Private" = TRUE,
+	"Deathsquad" = TRUE,
+	"Security" = TRUE,
+	"Engineering" = FALSE,
+	"Command" = TRUE,
+	"Medical" = FALSE,
+	"Science" = FALSE,
+	"Service" = FALSE,
+	"Supply" = FALSE,
+	"Response Team" = TRUE,
+	"Raider" = TRUE,
+	"Syndicate" = TRUE,
+	"DJ" = TRUE,
+)
+
+var/list/crypted_radiochannels_reverse = list(
+	"1213" = "Syndicate",
+	"1215" = "Raider",
+	"1359" = "Security",
+	"1353" = "Command",
+	"1345" = "Response Team"
+)
+
 var/list/radiochannelsreverse = list(
 	"1201" = "DJ",
 	"1213" = "Syndicate",
@@ -153,30 +196,69 @@ var/list/radiochannelsreverse = list(
 	"1459" = "Common"
 )
 
+// Make random frequencies for the "secure" channels so that they are not easily listened to.
+
+/proc/makeSecureChannels()
+	var/old_freqs = list()
+	for (var/channel in random_radiochannels)
+		if (random_radiochannels[channel]) // If it's indeed secured
+			var/old_freq = radiochannels[channel]
+			var/assigned = FALSE
+			while (!assigned)
+				var/new_freq = 2*rand(600, 698)+1 // We want an odd frequency
+				if (!(new_freq in radiochannels) && !(new_freq in old_freqs)) // If there's no channel associated to that frequence, or if it's not an old one (prevent some problem with span being wrongly attributed)
+					assigned = TRUE
+					var/new_freq_txt = num2text(new_freq)
+					var/old_freq_txt = num2text(old_freq)
+
+					old_freqs += old_freq_txt
+
+					radiochannels[channel] = new_freq
+					radiochannelsreverse[new_freq_txt] = channel
+
+					var/span = freqtospan[old_freq_txt]
+					freqtospan[new_freq_txt] = span
+
+					freqtoname[new_freq_txt] = channel
+
+					if (old_freq_txt in crypted_radiochannels_reverse)
+						crypted_radiochannels_reverse[new_freq_txt] = channel
+						crypted_radiochannels_reverse -= old_freq_txt
+
+	for (var/old_freq in old_freqs)
+		radiochannelsreverse -= old_freq
+		freqtospan -= old_freq
+		freqtoname -= old_freq
+
+/proc/store_frequencies_in_memory(var/mob/living/L)
+	var/data = ("<h3>Frequencies of the station:</h3>")
+	for (var/channel in radiochannels_access)
+		if (radiochannels_access[channel] && channel in radiochannels) // We know about it and it actually exists in the channel list
+			data += ("<b>[channel]</b>: <i>[radiochannels[channel]/10]</i> <br />")
+	L.mind.store_memory(data)
 
 //depenging helpers
-var/const/SUPP_FREQ = 1347 //supply, coloured light brown in chat window
-var/const/SERV_FREQ = 1349 //service, coloured green in chat window
-var/const/DSQUAD_FREQ = 1441 //death squad frequency, coloured grey in chat window
-var/const/RESTEAM_FREQ = 1345 //response team frequency, uses the deathsquad color at the moment.
-var/const/AIPRIV_FREQ = 1447 //AI private, colored magenta in chat window
-var/const/DJ_FREQ = 1201 //Media
-var/const/COMMON_FREQ = 1459
+#define DSQUAD_FREQ radiochannels["Deathsquad"] //death squad frequency, coloured grey in chat window
+#define RESTEAM_FREQ radiochannels["Response Team"] //response team frequency, uses the deathsquad color at the moment.
+#define AIPRIV_FREQ radiochannels["AI Private"] //AI private, colored magenta in chat window
+#define DJ_FREQ radiochannels["DJ"] //Media
+#define COMMON_FREQ radiochannels["Common"]
 
 // central command channels, i.e deathsquid & response teams
-var/list/CENT_FREQS = list(1345, 1441)
+#define CENT_FREQS = list(radiochannels["Deathsquad"], radiochannels["Response Team"])
 
-var/const/COMM_FREQ = 1353 //command, colored gold in chat window
-var/const/SYND_FREQ = 1213
-var/const/RAID_FREQ = 1215 // for raiders
+#define COMM_FREQ radiochannels["Command"] //command, colored gold in chat window
+#define SYND_FREQ radiochannels["Syndicate"]
+#define RAID_FREQ radiochannels["Raider"] // for raiders
 
 // department channels
-var/const/SEC_FREQ = 1359
-var/const/ENG_FREQ = 1357
-var/const/SCI_FREQ = 1351
-var/const/MED_FREQ = 1355
-var/const/SUP_FREQ = 1347
-var/const/SER_FREQ = 1349
+#define SEC_FREQ radiochannels["Security"]
+#define ENG_FREQ radiochannels["Engineering"]
+#define SCI_FREQ radiochannels["Science"]
+#define MED_FREQ radiochannels["Medical"]
+#define SUP_FREQ radiochannels["Supply"]
+#define SER_FREQ radiochannels["Service"]
+#define ERT_FREQ radiochannels["Response Team"]
 
 #define TRANSMISSION_WIRE	0
 #define TRANSMISSION_RADIO	1

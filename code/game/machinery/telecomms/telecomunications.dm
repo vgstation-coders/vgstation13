@@ -55,16 +55,22 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	if(netlag > signal.data["slow"])
 		signal.data["slow"] = netlag
 
+	say_testing(mob, "We have [links.len] linked machines. src is [src].")
+
 // Loop through all linked machines and send the signal or copy.
 	for(var/obj/machinery/telecomms/machine in links)
+		say_testing(mob, "Machine is [machine]")
 		if(!machine.loc)
 			world.log << "DEBUG: telecomms machine has null loc: [machine.name]"
 			continue
 		if(filter && !istype( machine, text2path(filter) ))
+			say_testing(mob, "Aborted because we've been filtered.")
 			continue
 		if(!machine.on)
+			say_testing(mob, "Aborted because the machine isn't on.")
 			continue
 		if(amount && send_count >= amount)
+			say_testing(mob, "Aborted because send_count > amount.")
 			break
 		if(machine.loc.z != listening_level)
 			if(long_range_link == 0 && machine.long_range_link == 0)
@@ -72,7 +78,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 		// If we're sending a copy, be sure to create the copy for EACH machine and paste the data
 		var/datum/signal/copy = getFromPool(/datum/signal)
 		if(copysig)
-
+			say_testing(mob, "Signal properly copied.")
 			copy.transmission_method = 2
 			copy.frequency = signal.frequency
 			// Copy the main data contents! Workaround for some nasty bug where the actual array memory is copied and not its contents.
@@ -124,6 +130,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	if(send_count > 0 && is_freq_listening(signal))
 		traffic++
 
+	say_testing(mob, "send_count is finally : [send_count]")
 	return send_count
 
 /obj/machinery/telecomms/proc/relay_direct_information(datum/signal/signal, obj/machinery/telecomms/machine)
@@ -314,10 +321,13 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 #endif
 
 	if(!on) // has to be on to receive messages
+		say_testing(mob, "<span class='warning'>[src] isn't on!</span>")
 		return
 	if(!signal)
+		say_testing(mob, "<span class='warning'>No signal</span>")
 		return
 	if(!check_receive_level(signal))
+		say_testing(mob, "<span class='warning'>Cannot recieve signal</span>")
 		return
 	say_testing(mob, "[src] is on, has signal, and receive is good")
 
