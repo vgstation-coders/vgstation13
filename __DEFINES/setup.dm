@@ -1235,6 +1235,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 	#define say_testing(a,x) to_chat(a, ("([__FILE__]:[__LINE__] say_testing) [x]"))
 #else
 	#define say_testing(a,x)
+//	null << "[x][a]")
 #endif
 
 //#define JUSTFUCKMYSHITUP 1

@@ -8,7 +8,6 @@
 	var/number = 0
 	var/anyai = 1
 	var/circuitry_installed=1
-	var/obj/item/device/encryptionkey/keyslot
 	var/mob/living/silicon/ai/ai = list()
 	var/last_tick //used to delay the powercheck
 	var/buildstage = 0
@@ -56,27 +55,23 @@
 
 /obj/item/device/radio/intercom/receive_range(freq, level)
 	if (!on || b_stat || isWireCut(WIRE_RECEIVE))
-		return CANT_RECIEVE
+		return -1
 	if(!(0 in level))
 		var/turf/position = get_turf(src)
 		if(isnull(position) || !(position.z in level))
-			return CANT_RECIEVE
+			return -1
 	if (!src.listening)
-		return CANT_RECIEVE
+		return -1
+	if(freq == SYND_FREQ)
+		if(!(src.syndie))
+			return -1//Prevents broadcast of messages over devices lacking the encryption
 
-	var/freq_txt = num2text(freq)
-
-	if (freq_txt in crypted_radiochannels_reverse) // Do we have the encryption key for it
-		var/channel = crypted_radiochannels_reverse[freq_txt]
-		if (!handle_crypted_channels(channel))
-			return CANT_RECIEVE
+	if(freq == RAID_FREQ)
+		if(!(src.raider))
+			return -1//Prevents broadcast of messages over devices lacking the encryption, birb edition
 
 	return canhear_range
 
-/obj/item/device/radio/intercom/handle_crypted_channels(var/channel)
-	if (istype(keyslot) && channel in keyslot.secured_channels)
-		return TRUE
-	return FALSE
 
 /obj/item/device/radio/intercom/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(speech.speaker && !src.anyai && !(speech.speaker in src.ai))
@@ -84,31 +79,6 @@
 	..()
 
 /obj/item/device/radio/intercom/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	// If we're not constructing one...
-	if(isscrewdriver(W))
-		if(keyslot)
-			for(var/ch_name in channels)
-				radio_controller.remove_object(src, radiochannels[ch_name])
-				secure_radio_connections[ch_name] = null
-
-			var/turf/T = get_turf(user)
-			if(T)
-				keyslot.forceMove(T)
-				keyslot = null
-			to_chat(user, "You pop out the encryption key in the intercom!")
-
-		else
-			to_chat(user, "This intercom doesn't have an encryption key!  How useless...")
-
-	if(istype(W, /obj/item/device/encryptionkey))
-		to_chat(user, "You put the encryption key in \the [src].")
-		if(keyslot)
-			to_chat(user, "This intercom can't hold another key!")
-			return
-
-		if(user.drop_item(W, src))
-			keyslot = W
-		
 	switch(buildstage)
 		if(3)
 			if(iswirecutter(W) && b_stat && wires.IsAllCut())
@@ -177,14 +147,6 @@
 					qdel(src)
 					return 1
 
-/obj/item/device/radio/intercom/recalculateChannels()
-	if(keyslot.translate_binary)
-		src.translate_binary = 1
-
-	if(keyslot.translate_hive)
-		src.translate_hive = 1
-
-
 /obj/item/device/radio/intercom/update_icon()
 	if(!circuitry_installed)
 		icon_state="intercom-frame"
@@ -219,47 +181,3 @@
 /obj/item/device/radio/intercom/medbay/broadcast_nospeaker
 	broadcasting = 1
 	listening = 0
-
-/obj/item/device/radio/intercom/ai_private
-	name = "Private AI Channel"
-	broadcasting = TRUE
-
-/obj/item/device/radio/intercom/ai_private/initialize()
-	frequency = AIPRIV_FREQ
-	..()
-
-// Mapped intercoms
-
-/obj/item/device/radio/intercom/syndicate
-	name = "Syndicate intercom"
-	desc = "Talk through this. Evily."
-
-/obj/item/device/radio/intercom/syndicate/initialize()
-	keyslot = new /obj/item/device/encryptionkey/syndicate
-	frequency = SYND_FREQ
-	..()
-
-// Can't remove keys from mapped intercoms
-/obj/item/device/radio/intercom/mapped/attackby(var/obj/item/weapon/W, var/mob/user)
-	if (isscrewdriver(W) && buildstage != 2)
-		to_chat(user, "<span class='notice'>You can't seem to pull out the encryption key of this one.</span>")
-	return ..()
-
-/obj/item/device/radio/intercom/mapped/ace_reporter
-	name = "Ace Reporter intercom"
-	desc = "Alert cargo before security raids them!"
-	freerange = TRUE
-
-/obj/item/device/radio/intercom/mapped/ace_reporter/initialize()
-	frequency = pick(COMM_FREQ, SEC_FREQ, COMMON_FREQ)
-	keyslot = new /obj/item/device/encryptionkey/mapped
-	..()
-
-/obj/item/device/radio/intercom/mapped/dj_sat
-	name = "Pirate Radio Listening Channel"
-	desc = "The sickest tunes this side of Tau Ceti."
-	freerange = TRUE
-
-/obj/item/device/radio/intercom/mapped/dj_sat/initialize()
-	keyslot = new /obj/item/device/encryptionkey/mapped
-	..()
