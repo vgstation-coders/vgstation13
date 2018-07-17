@@ -2,7 +2,7 @@
 /* EMOTE DATUMS */
 /datum/emote/living
 	mob_type_allowed_typelist = list(/mob/living)
-	mob_type_blacklist_typecache = list(/mob/living/simple_animal/slime, /mob/living/carbon/brain)
+	mob_type_blacklist_typelist = list(/mob/living/simple_animal/slime, /mob/living/carbon/brain)
 
 /datum/emote/living/blush
 	key = "blush"
@@ -431,7 +431,7 @@
 
 	var/datum/emote/E
 	var/list/emote_list = E.emote_list
-	for(var/e in emote_list)
+	for(var/datum/emote/e in emote_list)
 		if(e in keys)
 			continue
 		E = emote_list[e]

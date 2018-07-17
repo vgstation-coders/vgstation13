@@ -167,7 +167,8 @@
 						H.throw_at(get_edge_target_turf(H, H.dir), 5, 5)
 				else
 					to_chat(H, "<span class = 'notice'>You were interrupted and couldn't fart! Rude!</span>")
-					
+					return
+
 		H.lastFart=world.time
 
 		var/obj/item/weapon/storage/bible/B = locate(/obj/item/weapon/storage/bible) in H.loc
@@ -181,19 +182,20 @@
 					F.tip_fedora()
 				else
 					to_chat(src, "<span class='danger'>You feel incredibly guilty for farting on [B]!</span>")
-					if(prob(80)) //20% chance to escape God's justice
-						spawn(rand(10,30))
+				if(prob(80)) //20% chance to escape God's justice
+					spawn(rand(10,30))
+						if(H && B)
+							H.show_message("<span class='game say'><span class='name'>[B.my_rel.deity_name]</span> says, \"Thou hast angered me, mortal!\"",2)
+
+							sleep(10)
 							if(H && B)
-								H.show_message("<span class='game say'><span class='name'>[B.my_rel.deity_name]</span> says, \"Thou hast angered me, mortal!\"",2)
+								to_chat(H, "<span class='danger'>You were disintegrated by [B.my_rel.deity_name]'s bolt of lightning.</span>")
+								H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Farted on a bible and suffered [B.my_rel.deity_name]'s wrath.</font>")
 
-								sleep(10)
-								if(H && B)
-									to_chat(H, "<span class='danger'>You were disintegrated by [B.my_rel.deity_name]'s bolt of lightning.</span>")
-									H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Farted on a bible and suffered [B.my_rel.deity_name]'s wrath.</font>")
+								explosion(get_turf(H),-1,-1,1,5) //Tiny explosion with flash
 
-									explosion(get_turf(H),-1,-1,1,5) //Tiny explosion with flash
-
-									H.dust()
+								H.dust()
+			return
 		else
 			message = "<b>[H]</b> strains, and nothing happens."
 			emote_type = EMOTE_VISIBLE

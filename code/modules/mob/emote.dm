@@ -19,7 +19,7 @@
 	key_third_person = "flips"
 	restraint_check = TRUE
 	mob_type_allowed_typelist = list(/mob/living, /mob/dead/observer)
-	mob_type_ignore_stat_typecache = list(/mob/dead/observer)
+	mob_type_ignore_stat_typelist = list(/mob/dead/observer)
 
 /datum/emote/flip/run_emote(mob/user, params)
 	. = ..()
@@ -35,7 +35,7 @@
 	key_third_person = "spins"
 	restraint_check = TRUE
 	mob_type_allowed_typelist = list(/mob/living, /mob/dead/observer)
-	mob_type_ignore_stat_typecache = list(/mob/dead/observer)
+	mob_type_ignore_stat_typelist = list(/mob/dead/observer)
 
 /datum/emote/spin/run_emote(mob/user)
 	. = ..()
@@ -45,6 +45,22 @@
 			user.dir = i
 			sleep(1)
 		user.dir = prev_dir
+	
+/datum/emote/me
+	key = "me"
+	restraint_check = FALSE
+
+/datum/emote/me/run_emote(mob/user, params, m_type)
+
+	var/msg = "<b>[user]</b> " + params
+
+	for(var/mob/O in viewers(user))
+		O.show_message(msg, m_type)
+		return TRUE
+	
+	for(var/mob/O in hearers(user))
+		O.show_message(msg, m_type)
+		return TRUE
 
 /mob/proc/emote_dead(var/message)
 	if(client.prefs.muted & MUTE_DEADCHAT)

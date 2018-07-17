@@ -20,8 +20,8 @@
 	var/restraint_check = FALSE //Checks if the mob is restrained before performing the emote
 	var/muzzle_ignore = FALSE //Will only work if the emote is EMOTE_AUDIBLE
 	var/list/mob_type_allowed_typelist = list(/mob) //Types that are allowed to use that emote
-	var/list/mob_type_blacklist_typecache //Types that are NOT allowed to use that emote
-	var/list/mob_type_ignore_stat_typecache
+	var/list/mob_type_blacklist_typelist //Types that are NOT allowed to use that emote
+	var/list/mob_type_ignore_stat_typelist
 	var/stat_allowed = CONSCIOUS
 	var/static/list/emote_list = list()
 
@@ -58,10 +58,10 @@
 
 	if (emote_type == EMOTE_VISIBLE)
 		for(var/mob/O in viewers(user))
-			O.show_message(message, emote_type)
+			O.show_message(msg, emote_type)
 	else
 		for(var/mob/O in hearers(user))
-			O.show_message(message, emote_type)
+			O.show_message(msg, emote_type)
 	
 	log_emote("[user.name]/[user.key] (@[user.x],[user.y],[user.z]): [message]")
 
@@ -114,11 +114,11 @@
 	return replacetext(message_param, "%t", params)
 
 /datum/emote/proc/can_run_emote(mob/user, var/status_check = TRUE)
-	if(!is_type_in_list(user, mob_type_allowed_typelist))
+	if(!(is_type_in_list(user, mob_type_allowed_typelist)))
 		return FALSE
-	if(is_type_in_list(user, mob_type_blacklist_typecache))
+	if(is_type_in_list(user, mob_type_blacklist_typelist))
 		return FALSE
-	if(status_check && !is_type_in_list(user, mob_type_ignore_stat_typecache))
+	if(status_check && !(is_type_in_list(user, mob_type_ignore_stat_typelist)))
 		if(user.stat > stat_allowed)
 			to_chat(user, "<span class='warning'>You cannot [key] while unconscious.</span>")
 			return FALSE
@@ -131,6 +131,8 @@
 		if(L.silent)
 			to_chat(user, "<span class='warning'>You cannot do that while silenced.</span>")
 			return FALSE
+	
+	return TRUE
 
 /datum/emote/sound
 	var/sound //Sound to play when emote is called
