@@ -199,6 +199,5 @@
 			emote_type = EMOTE_VISIBLE
 			. = ..()
 	else
-		emote_type = EMOTE_VISIBLE
-		. = ..()
+		return FALSE // Can't fart without an arse (dummy)
 //Ayy lmao
