@@ -30,7 +30,6 @@
 		new /obj/item/clothing/suit/armor/captain(src)
 		new /obj/item/weapon/melee/telebaton(src)
 		new /obj/item/clothing/under/dress/dress_cap(src)
-		new /obj/item/device/gps/secure(src)
 
 		return
 
@@ -58,7 +57,6 @@
 		new /obj/item/weapon/storage/box/ids(src)
 		new /obj/item/weapon/gun/energy/gun(src)
 		new /obj/item/device/flash(src)
-		new /obj/item/device/gps/secure(src)
 		return
 
 /obj/structure/closet/secure_closet/hop2
