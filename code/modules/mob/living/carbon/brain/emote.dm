@@ -1,7 +1,7 @@
 
 /datum/emote/brain
 	mob_type_allowed_typelist = list(/mob/living/carbon/brain)
-	mob_type_blacklist_typecache = list()
+	mob_type_blacklist_typelist = list()
 
 /datum/emote/brain/can_run_emote(mob/user, var/status_check = TRUE)
 	. = ..()
