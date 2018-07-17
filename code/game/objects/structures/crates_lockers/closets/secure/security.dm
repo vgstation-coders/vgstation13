@@ -128,7 +128,6 @@
 	new /obj/item/ammo_storage/magazine/lawgiver(src)
 	new /obj/item/clothing/accessory/holster/handgun/waist(src)
 	new /obj/item/weapon/melee/telebaton(src)
-	new /obj/item/device/gps/secure(src)
 	new /obj/item/clothing/suit/armor/hos(src)
 	new /obj/item/taperoll/police(src)
 	new /obj/item/device/hailer(src)
@@ -169,7 +168,6 @@
 	new /obj/item/weapon/gun/energy/taser(src)
 	new /obj/item/weapon/storage/box/bolas(src)
 	new /obj/item/weapon/batteringram(src)
-	new /obj/item/device/gps/secure(src)
 	new /obj/item/taperoll/police(src)
 	new /obj/item/device/hailer(src)
 	new /obj/item/weapon/reagent_containers/spray/pepper(src)
@@ -212,7 +210,6 @@
 	new /obj/item/taperoll/police(src)
 	new /obj/item/device/hailer(src) //wonder if vg would spam this
 	new /obj/item/clothing/gloves/black(src)
-	new /obj/item/device/gps/secure(src)
 
 /obj/structure/closet/secure_closet/security/cargo
 
@@ -276,7 +273,6 @@
 		new /obj/item/ammo_storage/box/c38(src)
 		new /obj/item/weapon/gun/projectile/detective(src)
 		new /obj/item/clothing/accessory/holster/handgun/wornout(src)
-		new /obj/item/device/gps/secure(src)
 		new /obj/item/binoculars(src)
 		new /obj/item/weapon/storage/box/surveillance(src)
 		new /obj/item/device/handtv(src)
