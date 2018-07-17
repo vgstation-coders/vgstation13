@@ -21,3 +21,6 @@
 // Xenobotany machines
 #define GENEGUN_MODE_SPLICE 1
 #define GENEGUN_MODE_PURGE 2
+
+#define HYDRO_PREHISTORIC 1
+#define HYDRO_VOX 2

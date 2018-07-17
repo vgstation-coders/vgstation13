@@ -163,12 +163,17 @@
 		return
 
 	var/list/data = list()
-
-	var/list/geneMasks[0]
-	for(var/gene_tag in plant_controller.gene_tag_list)
-		geneMasks[list("tag" = gene_tag)] = null // For some reason the JSON writer sees it as assoc if it's a list of strings.
-
-	data["geneMasks"] = geneMasks
+	var/static/list/gene_tag_list = list(
+		list("tag" = GENE_PHYTOCHEMISTRY),
+		list("tag" = GENE_MORPHOLOGY),
+		list("tag" = GENE_BIOLUMINESCENCE),
+		list("tag" = GENE_ECOLOGY),
+		list("tag" = GENE_ECOPHYSIOLOGY),
+		list("tag" = GENE_METABOLISM),
+		list("tag" = GENE_NUTRITION),
+		list("tag" = GENE_DEVELOPMENT)
+	)
+	data["geneTags"] = gene_tag_list
 
 	data["activity"] = active
 	data["degradation"] = degradation
@@ -212,10 +217,10 @@
 			return
 		loaded_seed.forceMove(get_turf(src))
 
-		if(loaded_seed.seed.name == "new line" || isnull(plant_controller.seeds[loaded_seed.seed.name]))
-			loaded_seed.seed.uid = plant_controller.seeds.len + 1
+		if(loaded_seed.seed.name == "new line" || isnull(SSplant.seeds[loaded_seed.seed.name]))
+			loaded_seed.seed.uid = SSplant.seeds.len + 1
 			loaded_seed.seed.name = "[loaded_seed.seed.uid]"
-			plant_controller.seeds[loaded_seed.seed.name] = loaded_seed.seed
+			SSplant.seeds[loaded_seed.seed.name] = loaded_seed.seed
 
 		loaded_seed.update_seed()
 		visible_message("[bicon(src)] [src] beeps and spits out [loaded_seed].")
@@ -369,7 +374,7 @@
 		last_action = world.time
 		active = 1
 
-		if(!isnull(plant_controller.seeds[loaded_seed.seed.name]))
+		if(!isnull(SSplant.seeds[loaded_seed.seed.name]))
 			loaded_seed.seed = loaded_seed.seed.diverge(1)
 			loaded_seed.seed_type = loaded_seed.seed.name
 			loaded_seed.update_seed()

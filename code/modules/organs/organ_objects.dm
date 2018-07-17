@@ -48,7 +48,7 @@
 	if(!had_mind)
 		user.simple_message("<span class='warning'>The organ seems limp and lifeless.  Perhaps it never was controlled by an intelligent mind?</span>","<span class='warning'>This thing is bummed.</span>")
 	else
-		user.simple_message("<span class='info'>The organ seems to be full of life!</span>","<span class='info'>It's making happy little cooing noises at you. Aw.</span>")
+		user.simple_message("<span class='info'>The organ seems [health ? "to be full of life!" : "like it was full of life once."]</span>","<span class='info'>It's making [health ? "happy" : "spooky"] little cooing noises at you. Aw.</span>")
 
 /obj/item/organ/internal/process()
 
@@ -84,10 +84,19 @@
 	name = "dead [initial(name)]"
 	if(dead_icon)
 		icon_state = dead_icon
+	var/icon/original = icon(icon, icon_state)
+	original.GrayScale()
+	icon = original
 	health = 0
 	processing_objects -= src
-	//TODO: Grey out the icon state.
 	//TODO: Inject an organ with peridaxon to make it alive again.
+
+/obj/item/organ/internal/proc/revive()
+	name = initial(name)
+	icon_state = initial(icon_state)
+	icon = initial(icon)
+	health = 1
+	processing_objects += src
 
 /obj/item/organ/internal/proc/roboticize()
 

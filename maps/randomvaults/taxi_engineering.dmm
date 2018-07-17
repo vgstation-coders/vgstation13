@@ -46,9 +46,9 @@
 "aT" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_x = 0},/turf/simulated/floor/plating/airless,/area/vault/taxi_engi/engine)
 "aU" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor/plating/airless,/area/vault/taxi_engi/engine)
 "aV" = (/obj/structure/grille/broken,/turf/space,/area)
-"aW" = (/obj/structure/girder,/turf/space,/area)
-"aX" = (/obj/structure/grille,/turf/space,/area)
-"aY" = (/turf/simulated/floor/plating,/area)
+"aW" = (/obj/structure/girder,/turf/space,/area/vault/taxi_engi)
+"aX" = (/obj/structure/grille,/turf/space,/area/vault/taxi_engi)
+"aY" = (/turf/simulated/floor/plating,/area/vault/taxi_engi)
 "aZ" = (/obj/machinery/door/airlock/maintenance{req_access_txt = "12"},/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/structure/disposalpipe/segment,/turf/simulated/floor/plating,/area/vault/taxi_engi/atmos)
 "ba" = (/turf/simulated/wall/r_wall,/area/vault/taxi_engi/atmos)
 "bb" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/grille,/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor/plating,/area/vault/taxi_engi/atmos)
@@ -82,13 +82,13 @@
 "bD" = (/obj/machinery/portable_atmospherics/canister/oxygen,/obj/machinery/light/small{dir = 1},/turf/simulated/floor/plating,/area/vault/taxi_engi/engine)
 "bE" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor/plating,/area/vault/taxi_engi/engine)
 "bF" = (/obj/structure/sign/vacuum,/turf/simulated/wall/r_wall,/area/vault/taxi_engi/engine)
-"bG" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating/airless,/area/vault/taxi_engi/engine)
+"bG" = (/obj/effect/decal/slag,/turf/simulated/floor/plating/airless,/area/vault/taxi_engi)
 "bH" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor/plating,/area/vault/taxi_engi/engine)
 "bI" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating,/area/vault/taxi_engi/engine)
 "bJ" = (/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/machinery/power/rad_collector{anchored = 1},/turf/simulated/floor/plating,/area/vault/taxi_engi/engine)
 "bK" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/grille/broken,/turf/simulated/floor/plating,/area/vault/taxi_engi/engine)
-"bL" = (/obj/effect/decal/slag,/turf/simulated/floor/plating/airless,/area)
-"bM" = (/turf/simulated/floor/plating/airless,/area)
+"bL" = (/turf/simulated/floor/plating/airless,/area/vault/taxi_engi)
+"bM" = (/obj/machinery/field_generator{anchored = 1; state = 2},/turf/simulated/floor/plating/airless,/area/vault/taxi_engi)
 "bN" = (/obj/structure/lattice,/turf/space,/area/vault/taxi_engi/engine)
 "bO" = (/obj/structure/disposalpipe/segment,/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 8},/turf/simulated/floor/damaged,/area/vault/taxi_engi/lobby)
 "bP" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/effect/decal/cleanable/ash,/turf/simulated/floor,/area/vault/taxi_engi/lobby)
@@ -105,7 +105,7 @@
 "ca" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/light{dir = 8},/obj/machinery/door_control{id_tag = "Singularity"; name = "Shutters Control"; pixel_x = -25; pixel_y = 0; req_access_txt = "10"},/turf/simulated/floor/plating,/area/vault/taxi_engi/engine)
 "cb" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/vault/taxi_engi/engine)
 "cc" = (/obj/machinery/power/emitter{anchored = 1; dir = 4; state = 2},/obj/structure/cable,/turf/simulated/floor/plating/airless,/area/vault/taxi_engi/engine)
-"cd" = (/obj/machinery/field_generator{anchored = 1; state = 2},/turf/simulated/floor/plating/airless,/area)
+"cd" = (/obj/structure/grille/broken,/turf/space,/area/vault/taxi_engi)
 "ce" = (/obj/machinery/power/emitter{anchored = 1; dir = 8; state = 2},/obj/structure/cable,/turf/simulated/floor/plating/airless,/area/vault/taxi_engi/engine)
 "cf" = (/obj/item/ammo_casing,/obj/item/ammo_casing,/obj/item/ammo_casing,/turf/simulated/floor/plating{icon_state = "platingdmg2"},/area/vault/taxi_engi/lobby)
 "cg" = (/turf/space,/area/vault/taxi_engi/lobby)
@@ -204,11 +204,11 @@
 "dV" = (/obj/structure/particle_accelerator/particle_emitter/center{dir = 4},/turf/simulated/floor/plating,/area/vault/taxi_engi/engine)
 "dW" = (/obj/effect/decal/cleanable/ash,/turf/simulated/floor{dir = 4; icon_state = "warnwhite"},/area/vault/taxi_engi/engine)
 "dX" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/item/weapon/shard{icon_state = "small"},/turf/simulated/floor/plating,/area/vault/taxi_engi/engine)
-"dY" = (/obj/effect/decal/cleanable/blood/oil,/turf/simulated/floor/plating/airless,/area)
-"dZ" = (/obj/effect/decal/cleanable/blood/tracks/wheels,/turf/simulated/floor/plating/airless,/area)
-"ea" = (/obj/item/broken_device,/turf/simulated/floor/plating/airless,/area)
-"eb" = (/obj/effect/decal/remains/robot,/turf/simulated/floor/plating/airless,/area)
-"ec" = (/obj/machinery/the_singularitygen{anchored = 1},/turf/simulated/floor/plating/airless,/area)
+"dY" = (/obj/effect/decal/cleanable/blood/oil,/turf/simulated/floor/plating/airless,/area/vault/taxi_engi)
+"dZ" = (/obj/effect/decal/cleanable/blood/tracks/wheels,/turf/simulated/floor/plating/airless,/area/vault/taxi_engi)
+"ea" = (/obj/item/broken_device,/turf/simulated/floor/plating/airless,/area/vault/taxi_engi)
+"eb" = (/obj/effect/decal/remains/robot,/turf/simulated/floor/plating/airless,/area/vault/taxi_engi)
+"ec" = (/obj/machinery/the_singularitygen{anchored = 1},/turf/simulated/floor/plating/airless,/area/vault/taxi_engi)
 "ed" = (/obj/machinery/r_n_d/blueprinter,/turf/simulated/floor{dir = 1; icon_state = "dark vault stripe"},/area/vault/taxi_engi/mechanics)
 "ee" = (/obj/machinery/r_n_d/fabricator/mechanic_fab/flatpacker,/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/damaged,/area/vault/taxi_engi/mechanics)
 "ef" = (/obj/structure/cable{icon_state = "0-2"; pixel_y = 1; d2 = 2},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 6},/obj/machinery/computer/rdconsole/mechanic,/obj/machinery/power/apc/no_alerts{dir = 1; pixel_y = 24},/turf/simulated/floor{dir = 9; icon_state = "dark vault stripe"},/area/vault/taxi_engi/mechanics)
@@ -324,8 +324,8 @@
 "gl" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/plating/airless,/area/vault/taxi_engi/engine)
 "gm" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating{icon_state = "panelscorched"},/area/vault/taxi_engi/engine)
 "gn" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/plating/airless,/area/vault/taxi_engi/engine)
-"go" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/damaged,/area)
-"gp" = (/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/effect/decal/cleanable/blood/tracks/footprints/clown,/turf/simulated/floor,/area)
+"go" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/damaged,/area/vault/taxi_engi)
+"gp" = (/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/effect/decal/cleanable/blood/tracks/footprints/clown,/turf/simulated/floor,/area/vault/taxi_engi)
 "gq" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 8},/turf/simulated/floor{tag = "icon-dark vault corner (EAST)"; icon_state = "dark vault corner"; dir = 4},/area/vault/taxi_engi/podbay)
 "gr" = (/obj/structure/lattice,/turf/space,/area/vault/taxi_engi/podbay)
 "gs" = (/obj/effect/decal/warning_stripes{icon_state = "bot"},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/obj/effect/decal/cleanable/blood/tracks/footprints/vox,/turf/simulated/floor{tag = "icon-dark vault corner (EAST)"; icon_state = "dark vault corner"; dir = 4},/area/vault/taxi_engi/podbay)
@@ -337,9 +337,9 @@
 "gy" = (/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/vault/taxi_engi/storage)
 "gz" = (/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/vault/taxi_engi/storage)
 "gA" = (/obj/machinery/shield_capacitor,/turf/simulated/floor/plating,/area/vault/taxi_engi/storage)
-"gB" = (/turf/simulated/wall/r_wall,/area)
-"gC" = (/obj/structure/girder,/turf/simulated/floor/plating,/area)
-"gD" = (/obj/structure/bed/chair,/turf/simulated/floor,/area)
+"gB" = (/turf/simulated/wall/r_wall,/area/vault/taxi_engi)
+"gC" = (/obj/structure/girder,/turf/simulated/floor/plating,/area/vault/taxi_engi)
+"gD" = (/obj/structure/bed/chair,/turf/simulated/floor,/area/vault/taxi_engi)
 "gE" = (/obj/structure/lattice,/obj/effect/decal/cleanable/blood/tracks/footprints/clown,/turf/space,/area)
 "gF" = (/obj/structure/girder,/turf/simulated/floor/plating,/area/vault/taxi_engi/podbay)
 "gG" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/structure/extinguisher_cabinet{pixel_x = -25},/turf/simulated/floor{tag = "icon-dark vault corner (EAST)"; icon_state = "dark vault corner"; dir = 4},/area/vault/taxi_engi/podbay)
@@ -351,7 +351,7 @@
 "gM" = (/obj/structure/closet/crate/secure/large/reinforced/shard,/turf/simulated/floor/plating,/area/vault/taxi_engi/storage)
 "gN" = (/obj/machinery/shield_gen/external,/turf/simulated/floor/plating,/area/vault/taxi_engi/storage)
 "gO" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'HIGH VOLTAGE'"; icon_state = "shock"; name = "HIGH VOLTAGE"; pixel_y = 32},/turf/space,/area)
-"gP" = (/obj/item/device/radio/intercom{pixel_x = 25; pixel_y = 0},/obj/structure/bed/chair,/obj/effect/decal/cleanable/blood/tracks/footprints/clown,/turf/simulated/floor,/area)
+"gP" = (/obj/item/device/radio/intercom{pixel_x = 25; pixel_y = 0},/obj/structure/bed/chair,/obj/effect/decal/cleanable/blood/tracks/footprints/clown,/turf/simulated/floor,/area/vault/taxi_engi)
 "gQ" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 5},/obj/item/stack/sheet/plasteel,/turf/simulated/floor{tag = "icon-dark vault corner (EAST)"; icon_state = "dark vault corner"; dir = 4},/area/vault/taxi_engi/podbay)
 "gR" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/turf/simulated/floor{tag = "icon-dark vault corner (EAST)"; icon_state = "dark vault corner"; dir = 4},/area/vault/taxi_engi/podbay)
 "gS" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 10},/obj/effect/decal/cleanable/blood/tracks/footprints/vox,/turf/simulated/floor{tag = "icon-dark vault corner (EAST)"; icon_state = "dark vault corner"; dir = 4},/area/vault/taxi_engi/podbay)
@@ -362,7 +362,7 @@
 "gX" = (/obj/machinery/atmospherics/miner/oxygen{on = 0},/turf/simulated/floor/plating,/area/vault/taxi_engi/storage)
 "gY" = (/obj/machinery/portable_atmospherics/canister/plasma,/turf/simulated/floor/plating,/area/vault/taxi_engi/storage)
 "gZ" = (/obj/machinery/portable_atmospherics/canister/plasma,/obj/machinery/light/small{dir = 4},/turf/simulated/floor/plating,/area/vault/taxi_engi/storage)
-"ha" = (/turf/simulated/floor/damaged,/area)
+"ha" = (/turf/simulated/floor/damaged,/area/vault/taxi_engi)
 "hb" = (/turf/space,/area/vault/taxi_engi/storage)
 "hc" = (/obj/structure/girder,/turf/space,/area/vault/taxi_engi/storage)
 
@@ -372,19 +372,19 @@ aaaaaaaaaaaaabacadaeafagahaiacajakalalalamamamamamamaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaanaoapaqarasatauavawalaxayazaaaAaBaaaaamaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaamaaaaaaaCaDaEaFaGaHaIaJaKaLaMaNaOazaPaQaRaSaSaSaRaTaUaaamaaaVaaaaaWaVaaaaaaaXaaaaaa
 aaaYaaamaaaZbabbbcbdbebfbgaCbhazbiazazazbjbkaBaBaBaBaBaBblaSbmbnaSaRboaSbmaSaSbpbqbrbqbs
-aaaaaaamaabtbubvbwbxaBbybzbAbBaAbCbDbEbFbGbkaBbHbIbIbJbKbGambLamamamambMamambMaaaabGbNbG
-aaaaaaamambObPbQbRbSbTbUbVbWbIbXbnbYbIbXbZbkaBcabIbnbJcbccamcdamamaaamcdaaaacdamaacebkbG
-cfbRcgchcicjckclcmcncocpcqcrcsaBaBaBaBaBaBaBaBctcucvcwcxcyaaamaaaaaaaaaaaaaaaaamaaaabNbG
-cgbRczcAcBcCcDcEcFcGcHcIcJcKbIcLcMcNcOcPcQcRcScTcUcVcUcWcXaaamaaaacYaVaaaaaaaaamaaaabNbG
-bRcZdadbdcdddedfdgdhaBdidjdkbNdldmdndodpdqdrdsdtbNdudvdwcbamcdaaaaamamamaaaaaaamaaaabNdx
-dydzdAdBdCdDcgdEdFdGaBdHdIdJdKdLdMdNdNdOdPdQdRdSdTdUdVdWdXdYdZbMeaebecamaaaaaaamaaaabNdx
-edeeefegeheiejekelekaBemeneobIepeqdleresdqeteuevewexeyezeAaaamaaaaeBamamaaaacdamaaaabkdx
-eCeDeEeFeGeHejeIeJeKaBeLeMeMeNdleOcUePaBeQeRcLeSeTcUcUcUcbaaamaaaaaaaaaaaaaaaaamaaaabNbG
+aaaaaaamaabtbubvbwbxaBbybzbAbBaAbCbDbEbFfVbkaBbHbIbIbJbKfVambGamamamambLamambLaaaafVbNfV
+aaaaaaamambObPbQbRbSbTbUbVbWbIbXbnbYbIbXbZbkaBcabIbnbJcbccambMamamaaambMaaaabMamaacebkfV
+cfbRcgchcicjckclcmcncocpcqcrcsaBaBaBaBaBaBaBaBctcucvcwcxcyaaamaaaaaaaaaaaaaaaaamaaaabNfV
+cgbRczcAcBcCcDcEcFcGcHcIcJcKbIcLcMcNcOcPcQcRcScTcUcVcUcWcXaaamaaaacYcdaaaaaaaaamaaaabNfV
+bRcZdadbdcdddedfdgdhaBdidjdkbNdldmdndodpdqdrdsdtbNdudvdwcbambMaaaaamamamaaaaaaamaaaabNdx
+dydzdAdBdCdDcgdEdFdGaBdHdIdJdKdLdMdNdNdOdPdQdRdSdTdUdVdWdXdYdZbLeaebecamaaaaaaamaaaabNdx
+edeeefegeheiejekelekaBemeneobIepeqdleresdqeteuevewexeyezeAaaamaaaaeBamamaaaabMamaaaabkdx
+eCeDeEeFeGeHejeIeJeKaBeLeMeMeNdleOcUePaBeQeRcLeSeTcUcUcUcbaaamaaaaaaaaaaaaaaaaamaaaabNfV
 eUeVeWeXeYeZfafbfcfdaBfefefefffgfhfifjaAaBaBaActfkflcvfmfnaaamamaaaaaaaaaVaaaaamaaaabNdx
-fofpfqfrfsftejfueJfvaBaBaBaBaAaBfwaBaBaBfxekekfybIbIfzfAfBamcdamamcdamamamamcdamaafCdkfD
+fofpfqfrfsftejfueJfvaBaBaBaBaAaBfwaBaBaBfxekekfybIbIfzfAfBambMamambMamamamambMamaafCdkfD
 dyeHdAfEdAfFejfGfHfIfJfKfLfMekfNfHfOfPfQfRfSekfTbIbIbJfUfVaaaaaaaaaaaaaaaaaaaaaaaafWfXfY
 amamfZgagbgcgdgdgdgdgdgegfggekghgifPgigigjfRekgkaBaAaBaBglgmaSaSaSbnaRaSaQaSaSaSaSgnaSbZ
-gogpfZgqgrgsgtgugvgwgdgxgygzfxghghfPgigigAgAekamamaaaaaaaVgBgCgBaXaaaaaaaVaagBgBaVaaaaaa
+gogpfZgqgrgsgtgugvgwgdgxgygzfxghghfPgigigAgAekamamaaaaaacdgBgCgBaXaaaaaacdaagBgBcdaaaaaa
 gDgEgFgGgHgIgJgrgKgwfZaaaaaaaaghghgigLgMgNgNekamaaaaaaaaaagOaaaaaaaaaaaaaaaagOaaaaaaaaaa
 gDgPfZgQgugRgSgvgTgUgFaaaaaagVgWghgXgYgYgigZekaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 haaagvgFfZgFgvgvgvgFaaamamamekhbhbhbekhcgVgVekaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

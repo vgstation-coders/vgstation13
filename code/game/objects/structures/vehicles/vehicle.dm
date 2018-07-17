@@ -7,9 +7,9 @@
 	var/obj/structure/bed/chair/vehicle/paired_to = null
 	var/vin = null
 
-/obj/item/key/New()
+/obj/item/key/initialize()
 	if(vin)
-		for(var/obj/structure/bed/chair/vehicle/V in world)
+		for(var/obj/structure/bed/chair/vehicle/V in vehicle_list)
 			if(V.vin == vin)
 				paired_to = V
 				V.mykey = src
@@ -68,10 +68,14 @@
 /obj/structure/bed/chair/vehicle/New()
 	..()
 	processing_objects |= src
-
+	vehicle_list.Add(src)
 	if(!nick)
 		nick=name
 	set_keys()
+
+/obj/structure/bed/chair/vehicle/Destroy()
+	vehicle_list.Remove(src)
+	..()
 
 /obj/structure/bed/chair/vehicle/proc/set_keys()
 	if(keytype && !vin)

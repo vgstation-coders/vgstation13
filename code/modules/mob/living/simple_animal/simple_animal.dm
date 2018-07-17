@@ -119,6 +119,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return 1
 /mob/living/simple_animal/New()
 	..()
+	if(!(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC)))
+		create_reagents(100)
 	verbs -= /mob/verb/observe
 	if(!real_name)
 		real_name = name
@@ -283,6 +285,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(can_breed)
 		make_babies()
+
+	if(reagents)
+		reagents.metabolize(src)
 
 	return 1
 

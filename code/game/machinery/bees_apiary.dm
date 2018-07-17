@@ -1,6 +1,7 @@
 //http://www.youtube.com/watch?v=-1GadTfGFvU
 
 #define MAX_BEES_PER_HIVE	40
+#define EXILE_RESTRICTION	200
 
 /*
 
@@ -39,6 +40,8 @@ var/list/apiary_reservation = list()
 
 	var/datum/bee_species/species = null
 
+	var/open_for_exile = 0
+
 	machine_flags = WRENCHMOVE
 
 /obj/machinery/apiary/New()
@@ -46,6 +49,8 @@ var/list/apiary_reservation = list()
 	overlays += image('icons/obj/apiary_bees_etc.dmi', icon_state=apiary_icon)
 	create_reagents(100)
 	consume = new()
+	spawn(EXILE_RESTRICTION)
+		open_for_exile = 1
 
 /obj/machinery/apiary/Destroy()
 	for (var/datum/bee/B in bees_outside_hive)
@@ -339,6 +344,8 @@ var/list/apiary_reservation = list()
 /obj/machinery/apiary/proc/exile_swarm(var/obj/machinery/apiary/A)
 	if (A == src)//can't colonize our own apiary
 		return 0
+	if (!A.open_for_exile)//This hive was made recently, homeless queen bees have priority to claim it for themselves
+		return 0
 	if (A in apiary_reservation)//another queen has marked this one for herself
 		return 0
 	if (A.queen_bees_inside > 0 || locate(/datum/bee/queen_bee) in A.bees_outside_hive)//another queen made her way there somehow
@@ -471,6 +478,7 @@ var/list/apiary_reservation = list()
 				B_mob.mood_change(BEE_OUT_FOR_PLANTS)
 			B_mob.update_icon()
 
+		//OFF TO COLONIZE EMPTY BEE-HIVES
 		if(queen_bees_inside > 1 && worker_bees_inside >= 10)
 			for(var/obj/machinery/apiary/A in range(src,5))
 				if (exile_swarm(A))
@@ -508,11 +516,17 @@ var/list/apiary_reservation = list()
 		var/obj/machinery/apiary/wild/W = new /obj/machinery/apiary/wild(loc)
 		W.icon_state = "[prefix][W.icon_state]"
 		for (var/mob/living/simple_animal/bee/B_mob in loc)
+			//The bees that built the hive become its starting population
 			if (B_mob.state == BEE_BUILDING)
 				for(var/datum/bee/B in B_mob.bees)
 					W.enterHive(B)
 				qdel(B_mob)
 
+			//Nearby homeless bees get a free invite.
+			if (W.species && W.species == B_mob.bee_species && (B_mob.bees + W.worker_bees_inside + W.queen_bees_inside) <= MAX_BEES_PER_HIVE)
+				for(var/datum/bee/B in B_mob.bees)
+					W.enterHive(B)
+				qdel(B_mob)
 		qdel(src)
 
 
@@ -526,10 +540,8 @@ var/list/apiary_reservation = list()
 	if(..())
 		return
 	else if(O.force)
-		user.delayNextAttack(10)
 		to_chat(user,"<span class='warning'>You hit \the [src] with your [O].</span>")
-		if(O.hitsound)
-			playsound(src, O.hitsound, 50, 1, -1)
+		O.on_attack(src, user)
 		health -= O.force
 		updateHealth()
 
@@ -566,12 +578,10 @@ var/list/apiary_reservation = list()
 	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/beezeez))
 		to_chat(user, "<span class='warning'>These bees don't want your candies, they want your blood!</span>")
 	else if(O.force)
-		user.delayNextAttack(10)
 		to_chat(user,"<span class='warning'>You hit \the [src] with your [O].</span>")
 		if(queen_bees_inside || worker_bees_inside)
 			angry_swarm(user)
-		if(O.hitsound)
-			playsound(src, O.hitsound, 50, 1, -1)
+		O.on_attack(src, user)
 		health -= O.force
 		updateHealth()
 
@@ -678,3 +688,4 @@ var/list/apiary_reservation = list()
 	species = bees_species[BEESPECIES_HORNET]
 
 #undef MAX_BEES_PER_HIVE
+#undef EXILE_RESTRICTION

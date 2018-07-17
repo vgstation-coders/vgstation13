@@ -317,6 +317,11 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	else
 		return attack_hand(user)
 
+/turf/unsimulated/mineral/attack_animal(var/mob/living/simple_animal/M)
+	M.delayNextAttack(8)
+	if(M.environment_smash_flags & SMASH_ASTEROID && prob(30))
+		GetDrilled(0)
+
 /turf/unsimulated/mineral/proc/DropMineral()
 	if(!mineral)
 		return

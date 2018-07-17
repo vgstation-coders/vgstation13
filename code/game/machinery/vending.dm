@@ -3200,6 +3200,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/pickaxe/silver = 1,
 		/obj/item/weapon/pickaxe/gold = 1,
 		/obj/item/weapon/pickaxe/diamond = 1,
+		/obj/item/borg/upgrade/hook = 1,
 		)
 	prices = list(
 		/obj/item/toy/canary = 100,
@@ -3224,6 +3225,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/gun/hookshot = 3000,
 		/obj/item/weapon/lazarus_injector/advanced = 3000,
 		/obj/item/weapon/pickaxe/diamond = 3000,
+		/obj/item/borg/upgrade/hook = 3000,
 		)
 
 	pack = /obj/structure/vendomatpack/mining

@@ -15,6 +15,7 @@
 /obj/item/device/paicard/New()
 	..()
 	overlays += image(icon=icon, icon_state = "pai-off")
+	paicard_list.Add(src)
 
 #ifdef DEBUG_ROLESELECT
 /obj/item/device/paicard/test/New()
@@ -23,6 +24,7 @@
 #endif
 
 /obj/item/device/paicard/Destroy()
+	paicard_list.Remove(src)
 	//Will stop people throwing friend pAIs into the singularity so they can respawn
 	if(!isnull(pai))
 		pai.death(0)

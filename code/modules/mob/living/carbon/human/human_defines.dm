@@ -85,8 +85,6 @@
 
 	var/obj/item/organ/external/head/decapitated = null //to keep track of a decapitated head, for debug and soulstone purposes
 
-	var/datum/component_container/NPC_brain
-
 	fire_dmi = 'icons/mob/OnFire.dmi'
 	fire_sprite = "Standing"
 	plane = HUMAN_PLANE

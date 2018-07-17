@@ -20,7 +20,7 @@
 	spawn(1)
 		// Fill the object up with the appropriate reagents.
 		if(!isnull(plantname))
-			var/datum/seed/S = plant_controller.seeds[plantname]
+			var/datum/seed/S = SSplant.seeds[plantname]
 			if(!S || !S.chems)
 				return
 

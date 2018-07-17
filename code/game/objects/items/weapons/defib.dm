@@ -174,8 +174,6 @@
 			//we couldn't find a suitable ghost.
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No brainwaves detected.</span>")
 			return
-		if(prob(25))
-			heart.damage += 5 //Allow the defibrilator to possibly worsen heart damage. Still rare enough to just be the "clone damage" of the defib
 		target.apply_damage(-target.getOxyLoss(),OXY)
 		target.updatehealth()
 		target.visible_message("<span class='danger'>[target]'s body convulses a bit.</span>")

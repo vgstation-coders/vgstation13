@@ -522,10 +522,10 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 //This may be a new line. Update the global if it is.
 /datum/seed/proc/add_newline_to_controller()
-	if(name == "new line" || !(name in plant_controller.seeds))
-		uid = plant_controller.seeds.len + 1
+	if(name == "new line" || !(name in SSplant.seeds))
+		uid = SSplant.seeds.len + 1
 		name = "[uid]"
-		plant_controller.seeds[name] = src
+		SSplant.seeds[name] = src
 
 //Place the plant products at the feet of the user.
 /datum/seed/proc/harvest(var/mob/user,var/yield_mod = 1)

@@ -104,13 +104,17 @@
 			if(2) //Lube
 				step(M, M.dir)
 				spawn(1)
-					step(M, M.dir)
+					if(!M.locked_to)
+						step(M, M.dir)
 				spawn(2)
-					step(M, M.dir)
+					if(!M.locked_to)
+						step(M, M.dir)
 				spawn(3)
-					step(M, M.dir)
+					if(!M.locked_to)
+						step(M, M.dir)
 				spawn(4)
-					step(M, M.dir)
+					if(!M.locked_to)
+						step(M, M.dir)
 				M.take_organ_damage(2) // Was 5 -- TLE
 				M.visible_message("<span class='warning'>[M] slips on the floor!</span>", \
 				"<span class='warning'>You slip on the floor!</span>")

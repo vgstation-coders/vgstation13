@@ -36,10 +36,9 @@
 	spread_chance = 0
 
 /obj/effect/plantsegment/Destroy()
-	if(plant_controller)
-		plant_controller.remove_plant(src)
+	SSplant.remove_plant(src)
 	for(var/obj/effect/plantsegment/neighbor in range(1,src)) //i ded, tell my neighbors to wake up so they can take up my space
-		plant_controller.add_plant(neighbor)
+		SSplant.add_plant(neighbor)
 	..()
 
 /obj/effect/plantsegment/New(var/newloc, var/datum/seed/newseed, var/turf/newepicenter, var/start_fully_mature = 0)
@@ -50,15 +49,12 @@
 	else
 		epicenter = newepicenter
 
-	if(!plant_controller)
-		sleep(250) // ugly hack, should mean roundstart plants are fine.
-	if(!plant_controller)
-		error("<span class='danger'>Plant controller does not exist and [src] requires it. Aborting.</span>")
+	if(!SSplant)
 		qdel(src)
-		return
+		CRASH("<span class='danger'>SSplant does not exist and [type] requires it. Aborting.</span>")
 
 	if(!istype(newseed))
-		newseed = plant_controller.seeds[DEFAULT_SEED]
+		newseed = SSplant.seeds[DEFAULT_SEED]
 	seed = newseed
 	if(!seed)
 		qdel(src)
@@ -78,7 +74,7 @@
 		mature_time = 0
 
 	spawn(1) // Plants will sometimes be spawned in the turf adjacent to the one they need to end up in, for the sake of correct dir/etc being set.
-		plant_controller.add_plant(src)
+		SSplant.add_plant(src)
 		// Some plants eat through plating.
 		if(seed.chems && !isnull(seed.chems[PHENOL]))
 			var/turf/T = get_turf(src)
@@ -171,7 +167,7 @@
 		seed.spawn_seed_packet(get_turf(user))
 		health -= (rand(3,5)*5)
 		sampled = 1
-		plant_controller.add_plant(src)
+		SSplant.add_plant(src)
 	else if (istype(W, /obj/item/weapon/storage/bag/plants))
 		attack_hand(user)
 		var/obj/item/weapon/storage/bag/plants/S = W

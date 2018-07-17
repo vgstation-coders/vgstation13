@@ -997,7 +997,17 @@ var/list/slot_equipment_priority = list( \
 	set name = "Point To"
 	set category = "Object"
 
-	if(!src || (usr.isUnconscious() && !isobserver(src)) || !isturf(src.loc) || !(A in view(src.loc)))
+	if((usr.isUnconscious() && !isobserver(src)) || !isturf(src.loc) || attack_delayer.blocked())
+		return 0
+
+	delayNextAttack(SHOW_HELD_ITEM_AND_POINTING_DELAY)
+
+	if(isitem(A) && is_holding_item(A))
+		var/obj/item/I = A
+		I.showoff(src)
+		return 0
+
+	if(!(A in view(src.loc) + get_all_slots()))
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))
@@ -1016,6 +1026,8 @@ var/list/slot_equipment_priority = list( \
 	point.invisibility = invisibility
 	point.pointer = src
 	point.target = A
+	point.pixel_x = A.pixel_x
+	point.pixel_y = A.pixel_y
 	spawn(20)
 		if(point)
 			qdel(point)

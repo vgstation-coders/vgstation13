@@ -114,7 +114,7 @@
 	name = "mining hardsuit helmet"
 	desc = "A special helmet designed for work in a hazardous, low pressure environment. Has reinforced plating."
 	icon_state = "rig0-mining"
-	item_state = "mining_helm"
+	item_state = "rig0-mining"
 	_color = "mining"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
@@ -125,7 +125,7 @@
 	icon_state = "rig-mining"
 	name = "mining hardsuit"
 	desc = "A special suit that protects against hazardous, low pressure environments. Has reinforced plating."
-	item_state = "mining_hardsuit"
+	item_state = "rig-mining"
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	goliath_reinforce = TRUE
@@ -451,6 +451,7 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	_color = "knight"
 	clothing_flags = PLASMAGUARD
+	goliath_reinforce = TRUE
 
 /obj/item/clothing/suit/space/rig/knight
 	name = "Space-Knight armour"
@@ -464,6 +465,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	clothing_flags = PLASMAGUARD
+	goliath_reinforce = TRUE
 
 /obj/item/clothing/head/helmet/space/rig/knight/black
 	name = "Black Knight's helm"

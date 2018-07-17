@@ -398,9 +398,9 @@
 	return
 
 var/global/list/paper_folding_results = list ( \
+	"ball of paper" = /obj/item/weapon/p_folded/ball,
 	"paper plane" = /obj/item/weapon/p_folded/plane,
 	"paper hat" = /obj/item/weapon/p_folded/hat,
-	"ball of paper" = /obj/item/weapon/p_folded/ball,
 	"folded note" = /obj/item/weapon/p_folded/note_small,
 	"origami crane" = /obj/item/weapon/p_folded/crane,
 	"origami boat" = /obj/item/weapon/p_folded/boat,
@@ -451,6 +451,12 @@ var/global/list/paper_folding_results = list ( \
 		return 0
 	return 1
 
+/obj/item/weapon/paper/AltClick()
+	if(is_holder_of(usr, src) && canfold(usr))
+		fold()
+	else
+		return ..()
+
 /*
  * Premade paper
  */
@@ -472,11 +478,45 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/djstation
 	name = "paper - 'DJ Listening Outpost'"
-	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies. Here is a step by step guide to start listening in on those saucy radio channels:<br><ol><li>Equip yourself with a multi-tool</li><li>Use the multitool on each machine, that is the broadcaster, receiver and the relay.</li><li>Turn all the machines on, it has already been configured for you to listen on.</li></ol> Simple as that. Now to listen to the private channels, you'll have to configure the intercoms, located on the front desk. Here is a list of frequencies for you to listen on.<br><ul><li>145.9 - Common Channel</li><li>144.7 - Private AI Channel</li><li>135.9 - Security Channel</li><li>135.7 - Engineering Channel</li><li>135.5 - Medical Channel</li><li>135.3 - Command Channel</li><li>135.1 - Science Channel</li><li>134.9 - Service Channel</li><li>134.7 - Supply Channel</li>"
+	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies."
+
+/obj/item/weapon/paper/djstation/initialize()
+	info = "Here is a step by step guide to start listening in on those saucy radio channels:<br><ol><li>Equip yourself with a multi-tool</li><li>Use the multitool on each machine, that is the broadcaster, receiver and the relay.</li><li>Turn all the machines on, it has already been configured for you to listen on.</li></ol> Simple as that. Now to listen to the private channels, you'll have to configure the intercoms, located on the front desk. Here is a list of frequencies for you to listen on.<br> \
+	<ul> \
+	<li>[COMMON_FREQ/10] - Common Channel</li> \
+	<li>[AIPRIV_FREQ/10] - Private AI Channel</li> \
+	<li>[SEC_FREQ/10] - Security Channel</li> \
+	<li>[ENG_FREQ/10] - Engineering Channel</li> \
+	<li>[MED_FREQ/10] - Medical Channel</li> \
+	<li>[COMM_FREQ/10] - Command Channel</li> \
+	<li>[SCI_FREQ/10] - Science Channel</li> \
+	<li>[SER_FREQ/10] - Service Channel</li> \
+	<li>[SUP_FREQ/10] - Supply Channel</li> \
+	</ul>"
+	..()
+
+/obj/item/weapon/paper/tcomms
+	name = "paper- 'Tcomms memo'"
+	info = "<b>Station frequencies :</b>"
+
+/obj/item/weapon/paper/djstation/initialize()
+	info = "<b>Station frequencies :</b> \
+	<ul> \
+	<li>[COMMON_FREQ/10] - Common Channel</li> \
+	<li>[AIPRIV_FREQ/10] - Private AI Channel</li> \
+	<li>[SEC_FREQ/10] - Security Channel</li> \
+	<li>[ENG_FREQ/10] - Engineering Channel</li> \
+	<li>[MED_FREQ/10] - Medical Channel</li> \
+	<li>[COMM_FREQ/10] - Command Channel</li> \
+	<li>[SCI_FREQ/10] - Science Channel</li> \
+	<li>[SER_FREQ/10] - Service Channel</li> \
+	<li>[SUP_FREQ/10] - Supply Channel</li> \
+	</ul>"
+	..()
 
 /obj/item/weapon/paper/intercoms
 	name = "paper - 'Ace Reporter Intercom manual'"
-	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies.Now to listen to the private channels, you'll have to configure the intercoms.<br> Here is a list of frequencies for you to listen on.<br><ul><li>145.9 - Common Channel</li><li>144.7 - Private AI Channel</li><li>135.9 - Security Channel</li><li>135.7 - Engineering Channel</li><li>135.5 - Medical Channel</li><li>135.3 - Command Channel</li><li>135.1 - Science Channel</li><li>134.9 - Service Channel</li><li>134.7 - Supply Channel</li>"
+	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies.Now to listen to the private channels, you'll have to configure the intercoms.<br> The list of frequencies has been passed down orally between Ace Reporters, and you should have it remembered by now."
 
 /obj/item/weapon/paper/flag
 	icon_state = "flag_neutral"
