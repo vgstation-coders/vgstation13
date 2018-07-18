@@ -665,3 +665,24 @@
 
 /obj/structure/closet/crate/secure/weapon/experimental/gravitywell
 	chosen_set = "gravitywell"
+
+/obj/structure/closet/crate/medical/surgeonloot //Loot crate from killing the surgeon boss
+	name = "old medical crate"
+	desc = "I wonder what could be inside it?"
+	var/possible_loot = null
+
+/obj/structure/closet/crate/medical/surgeonloot/New()
+	..()
+	if(!possible_loot) //big loot
+		possible_loot = pick(/obj/item/clothing/mask/morphing/skelegiant)
+
+	new possible_loot(src)
+	new /obj/item/weapon/reagent_containers/pill/hyperzine(src) //small loot
+	new /obj/item/weapon/reagent_containers/pill/bicaridine(src)
+	new /obj/item/weapon/storage/firstaid/internalbleed(src)
+	new /obj/item/weapon/storage/firstaid/adv(src)
+
+
+
+
+

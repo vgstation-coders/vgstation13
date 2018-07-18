@@ -155,3 +155,9 @@
 				M.forceMove(T)
 				to_chat(M, "<span class='warning'>\The [src] dissipates into thin air!</span>")
 				qdel(src)
+
+/obj/item/clothing/mask/morphing/skelegiant //potential loot from defeating the skeleton surgeon mini-boss
+	name = "mask of the skeleton"
+	desc = "It appears to be modeled after a large skeleton."
+	target_type = /mob/living/simple_animal/hostile/humanoid/surgeon/skeleton/morph
+	icon_state = "skeleton_mask"
