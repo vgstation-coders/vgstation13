@@ -206,7 +206,6 @@
 		"/obj/item/weapon/legcuffs/bolas",
 		"/obj/item/device/hailer",
 		"obj/item/weapon/melee/telebaton",
-		"/obj/item/device/gps/secure",
 		"/obj/item/clothing/accessory/holobadge"
 		)
 /obj/item/weapon/storage/belt/security/batmanbelt
