@@ -112,7 +112,7 @@
 					playsound(src, scream, 50, 0)
 					H.last_emote_sound = world.time
 					return ..()
-				else
-					return ..()
+			else
+				return ..()
 		else
 			message = "makes a very loud noise."

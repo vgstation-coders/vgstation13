@@ -169,10 +169,11 @@
 					to_chat(H, "<span class = 'notice'>You were interrupted and couldn't fart! Rude!</span>")
 					return
 
-		H.lastFart=world.time
+			H.lastFart=world.time
 
-		var/obj/item/weapon/storage/bible/B = locate(/obj/item/weapon/storage/bible) in H.loc
-		if(B)
+			var/obj/item/weapon/storage/bible/B = locate(/obj/item/weapon/storage/bible) in H.loc
+			if (!B)
+				return
 			if(iscult(H))
 				to_chat(H, "<span class='sinister'>Nar-Sie shields you from [B.my_rel.deity_name]'s wrath!</span>")
 			else
@@ -186,16 +187,13 @@
 					spawn(rand(10,30))
 						if(H && B)
 							H.show_message("<span class='game say'><span class='name'>[B.my_rel.deity_name]</span> says, \"Thou hast angered me, mortal!\"",2)
-
 							sleep(10)
+
 							if(H && B)
 								to_chat(H, "<span class='danger'>You were disintegrated by [B.my_rel.deity_name]'s bolt of lightning.</span>")
 								H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Farted on a bible and suffered [B.my_rel.deity_name]'s wrath.</font>")
-
 								explosion(get_turf(H),-1,-1,1,5) //Tiny explosion with flash
-
 								H.dust()
-			return
 		else
 			message = "strains, and nothing happens."
 			emote_type = EMOTE_VISIBLE

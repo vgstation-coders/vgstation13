@@ -74,6 +74,8 @@
 		if(H.wear_mask)
 			skipface |= H.check_hidden_head_flags(HIDEFACE)
 		if((slot_w_uniform in obscured) && skipface)
+			if(findtext(message, "%s"))
+				message = replacetext(message, "%s", "")
 			return message
 		else
 			switch(H.gender)
@@ -82,11 +84,19 @@
 						message = replacetext(message, "their", "his")
 					if(findtext(message, "them"))
 						message = replacetext(message, "them", "him")
+					if(findtext(message, "they"))
+						message = replacetext(message, "they", "he")
+					if(findtext(message, "%s"))
+						message = replacetext(message, "%s", "s")
 				if(FEMALE)
 					if(findtext(message, "their"))
 						message = replacetext(message, "their", "her")
 					if(findtext(message, "them"))
 						message = replacetext(message, "them", "her")
+					if(findtext(message, "they"))
+						message = replacetext(message, "they", "she")
+					if(findtext(message, "%s"))
+						message = replacetext(message, "%s", "s")
 	return message
 
 /datum/emote/proc/select_message_type(mob/user)
