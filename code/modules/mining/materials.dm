@@ -349,7 +349,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype = /obj/item/stack/sheet/brass
 	cointype = null
 	cc_per_sheet = CC_PER_SHEET_METAL
-	color = "#BE8700"
+	color = "#A97F1B"
 
 /datum/material/ralloy
 	name = "Replicant Alloy"
@@ -359,7 +359,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype = /obj/item/stack/sheet/ralloy
 	cointype = null
 	cc_per_sheet = CC_PER_SHEET_METAL
-	color = "#0A0A0A"
+	color = "#363636"
 
 /* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium
