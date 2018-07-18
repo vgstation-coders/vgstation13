@@ -1096,6 +1096,10 @@ Thanks.
 				jailcell.break_out(L)
 		return
 
+	if(src.loc && istype(src.loc, /obj/structure/inflatable/shelter))
+		var/obj/O = src.loc
+		O.container_resist(L)
+
 
 	else if(iscarbon(L))
 		var/mob/living/carbon/CM = L
