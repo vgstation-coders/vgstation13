@@ -310,7 +310,7 @@
 	key_third_person = "trembles"
 	message = "trembles in fear!"
 
-/datum/emote/living/
+/datum/emote/living/twitch
 	key = "twitch"
 	key_third_person = "twitches"
 	message = "twitches violently."
