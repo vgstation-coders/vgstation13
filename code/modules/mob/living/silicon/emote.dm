@@ -29,6 +29,14 @@
 	key_third_person = "boops"
 	message = "boops."
 
+
+/datum/emote/sound/silicon/beep
+	key = "beep"
+	key_third_person = "beeps"
+	message = "beeps."
+	message_param = "beeps at %t."
+	sound = 'sound/machines/twobeep.ogg'
+
 /datum/emote/sound/silicon/buzz
 	key = "buzz"
 	key_third_person = "buzzes"

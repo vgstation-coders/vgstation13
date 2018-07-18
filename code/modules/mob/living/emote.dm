@@ -291,7 +291,7 @@
 /datum/emote/living/surrender
 	key = "surrender"
 	key_third_person = "surrenders"
-	message = "puts their hands on their head and falls to the ground, they surrender!"
+	message = "puts their hands on their head and falls to the ground, they surrender%s!"
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/surrender/run_emote(mob/user, params)
@@ -342,8 +342,7 @@
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/custom
-	key = "me"
-	key_third_person = "custom"
+	key = "custom"
 	message = null
 
 /datum/emote/living/custom/proc/check_invalid(mob/user, input)
@@ -396,10 +395,10 @@
 /datum/emote/living/help/run_emote(mob/user, params)
 	var/list/keys = list()
 	var/list/message = list("Available emotes, you can use them with say \"*emote\": ")
-
+	
 	var/datum/emote/E
-	var/list/emote_list = E.emote_list
-	for(var/datum/emote/e in emote_list)
+
+	for(var/e in emote_list)
 		if(e in keys)
 			continue
 		E = emote_list[e]
@@ -419,10 +418,3 @@
 	message = jointext(message, "")
 
 	to_chat(user, message)
-
-/datum/emote/sound/beep
-	key = "beep"
-	key_third_person = "beeps"
-	message = "beeps."
-	message_param = "beeps at %t."
-	sound = 'sound/machines/twobeep.ogg'
