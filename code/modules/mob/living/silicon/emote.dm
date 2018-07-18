@@ -13,7 +13,7 @@
 	var/mob/living/silicon/robot/R = user
 	if (!istype(R))
 		return FALSE
-	if (!(R.module && (R.module.quirk_flags & module_quirk_required)))
+	if (module_quirk_required && !(R.module && (R.module.quirk_flags & module_quirk_required)))
 		return FALSE
 
 /datum/emote/silicon/can_run_emote(var/mob/user, var/status_check = TRUE)
@@ -21,7 +21,7 @@
 	var/mob/living/silicon/robot/R = user
 	if (!istype(R))
 		return FALSE
-	if (!(R.module && (R.module.quirk_flags & module_quirk_required)))
+	if (module_quirk_required && !(R.module && (R.module.quirk_flags & module_quirk_required)))
 		return FALSE
 
 /datum/emote/silicon/boop
