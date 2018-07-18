@@ -1,4 +1,5 @@
 var/list/GPS_list = list()
+var/list/SPS_list = list()
 
 /obj/item/device/gps
 	name = "global positioning system"
@@ -36,7 +37,10 @@ var/list/GPS_list = list()
 	GPS_list.Add(src)
 
 /obj/item/device/gps/Destroy()
-	GPS_list.Remove(src)
+	if(istype(src,/obj/item/device/gps/secure))
+		SPS_list.Remove(src)
+	else
+		GPS_list.Remove(src)
 	..()
 
 /obj/item/device/gps/emp_act(severity)
@@ -153,3 +157,99 @@ var/list/GPS_list = list()
 	icon_state = "gps-b"
 	base_tag = "PAI"
 	builtin = TRUE
+
+/obj/item/device/gps/secure
+	base_name = "secure positioning system"
+	desc = "A secure channel SPS. It announces the position of the wearer if killed or stripped off."
+	icon_state = "sps"
+	base_tag = "SEC"
+
+/obj/item/device/gps/secure/handle_list()
+	SPS_list.Add(src)
+
+/obj/item/device/gps/secure/gen_id()
+	return SPS_list.len
+
+/obj/item/device/gps/secure/get_list()
+	return SPS_list
+
+/obj/item/device/gps/secure/OnMobDeath(mob/wearer)
+	if(emped)
+		return
+
+	var/channel_index = 0
+	var/sps_index = SPS_list.Find(src)
+	for(var/E in SPS_list)
+		var/obj/item/device/gps/secure/S = E //No idea why casting it like this makes it work better instead of just defining it in the for each
+		S.announce(wearer, src, "has detected the death of their wearer", sps_index, DEATHSOUND_CHANNEL + channel_index, dead = TRUE)
+		channel_index++
+
+/obj/item/device/gps/secure/stripped(mob/wearer)
+	if(emped)
+		return
+	. = ..()
+	var/sps_index = SPS_list.Find(src)
+	var/channel_index = 0
+	for(var/E in SPS_list)
+		var/obj/item/device/gps/secure/S = E
+		S.announce(wearer, src, "has been stripped from their wearer", sps_index, DEATHSOUND_CHANNEL + channel_index)
+		channel_index++
+
+var/list/deathsound = list('sound/items/die1.wav', 'sound/items/die2.wav', 'sound/items/die3.wav','sound/items/die4.wav')
+
+/obj/item/device/gps/secure/proc/announce(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/reason,var/num,var/sound_channel,var/dead=FALSE)
+	var/turf/pos = get_turf(SPS)
+	deathsound(pos,dead,num,sound_channel)
+	var/mob/living/L = get_holder_of_type(src, /mob/living/)
+	if(L)
+		L.show_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>", MESSAGE_HEAR)
+	else if(isturf(loc))
+		visible_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>")
+
+
+var/const/DEATHSOUND_CHANNEL = 300
+
+/obj/item/device/gps/secure/proc/deathsound(var/turf/pos,var/dead=FALSE,num,var/sound_channel)
+	if(dead)
+		playsound(src, pick(deathsound), 100, 0,channel = sound_channel,wait = TRUE)
+	if(prob(75))
+		playsound(src, 'sound/items/on3.wav',100, 0,channel = sound_channel,wait = TRUE)
+		playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		if(prob(50))
+			playsound(src, 'sound/items/attention.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		if(prob(25) && dead) // 25% chance if dead, 0% chance if stripped
+			playsound(src, 'sound/items/unitdeserviced.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		else if(prob(33) && dead) // 25% chance if dead, 0% chance if stripped
+			playsound(src, 'sound/items/unitdownat.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playnum(pos.x-WORLD_X_OFFSET[pos.z],sound_channel,src)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playnum(pos.y-WORLD_Y_OFFSET[pos.z],sound_channel,src)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playnum(pos.z,sound_channel,src)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		else if(prob(50)) 	// 25% chance if dead, 50% chance if stripped
+			playsound(src, 'sound/items/lostbiosignalforunit.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playnum(SPS_list.Find(src),sound_channel,src)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		else	// 25% chance if dead, 50% chance if stripped
+			playsound(src, 'sound/items/allteamsrespondcode3.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		if(prob(50))
+			playsound(src, 'sound/items/investigateandreport.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		playsound(src, 'sound/items/off2.wav',100, 0,channel = sound_channel,wait = TRUE)
+
+
+var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/two.wav', "3" = 'sound/items/three.wav',"4" = 'sound/items/four.wav',"5" = 'sound/items/five.wav',"6" = 'sound/items/six.wav',"7" = 'sound/items/seven.wav',"8" = 'sound/items/eight.wav',"9" = 'sound/items/nine.wav',"0" = 'sound/items/zero.wav')
+/proc/playnum(var/num,var/sound_channel,var/source)
+	var/list/splitnumber = list()
+	if(num)
+		var/base = round(log(10,num))
+		for(var/n = 0 to base)
+			splitnumber += num2text(num/(10**(base-n)) % 10)
+	else splitnumber += "0"
+	for(var/n in splitnumber)
+		playsound(source, nums_to_hl_num[n], 100, 0, channel = sound_channel, wait = TRUE)
