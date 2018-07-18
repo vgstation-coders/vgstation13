@@ -283,3 +283,7 @@ proc/get_space_area()
 #define SNOW_THEME (map.snow_theme || Holiday == XMAS || Holiday == XMAS_EVE)
 
 #define get_conductivity(A) (A ? A.siemens_coefficient : 1)
+
+//Swaps the contents of the variables A and B. The if(TRUE) is there simply to restrict the scope of _.
+//Yes, _ is a shitty variable name. Hopefully so shitty it won't ever be used anywhere it could conflict with this.
+#define swap_vars(A, B) if(TRUE){var/_ = A; A = B; B = _}
