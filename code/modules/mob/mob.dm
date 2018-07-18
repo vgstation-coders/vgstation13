@@ -663,6 +663,8 @@ var/list/slot_equipment_priority = list( \
 		return 0
 
 	for(var/slot in slot_equipment_priority)
+		if(!is_holding_item(W))
+			return 0
 		var/obj/item/S = get_item_by_slot(slot)
 		if(S && S.can_quick_store(W))
 			return S.quick_store(W)
