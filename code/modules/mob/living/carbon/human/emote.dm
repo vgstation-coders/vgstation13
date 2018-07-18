@@ -197,7 +197,7 @@
 								H.dust()
 			return
 		else
-			message = "<b>[H]</b> strains, and nothing happens."
+			message = "strains, and nothing happens."
 			emote_type = EMOTE_VISIBLE
 			. = ..()
 	else
