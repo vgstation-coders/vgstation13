@@ -383,6 +383,7 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/wendigo,				// Stupid strong evolving creature things that scream for help
 	/mob/living/simple_animal/hostile/mechahitler,			// Sieg heil!
 	/mob/living/simple_animal/hostile/alien/queen/large,	// The bigger and beefier version of queens.
+	/mob/living/simple_animal/hostile/asteroid/rockernaut/boss, //Angie
 	)
 
 // Set by traitor item, affects cargo supplies
