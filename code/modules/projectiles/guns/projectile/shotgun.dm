@@ -87,6 +87,7 @@
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 	var/doubleshot = 0
 	var/doubleshooting = 0
+	var/recoileffectchance = 50
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/process_chambered()
 	if(in_chamber)
@@ -164,6 +165,11 @@
 			fire_delay = initial(fire_delay)
 		to_chat(usr, "You switch \the [src]'s fire selector to [doubleshot ? "fire both barrels at once" : "fire one barrel at a time"].")
 
+#define JAMMED 1
+#define DROPGUN 2
+#define KNOCKDOWN 3
+#define RECOILBRUISE 4
+
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	if(doubleshot && (getLiveAmmo() == 2)) //ANGERY
 		var/atom/reverse = locate(2*user.x - target.x, 2*user.y - target.y, target.z)
@@ -186,22 +192,22 @@
 			fire_delay = 20
 			recoil = initial(recoil)
 			doubleshooting = 0
-			if(prob(50)) // Total chance to fuck up
+			if(prob(recoileffectchance)) // Total chance to fuck up
 				var/mob/living/carbon/human/H = user
-				switch(pick(1,2,3,4))
-					if(1)
+				switch(pick(JAMMED,DROPGUN,KNOCKDOWN,RECOILBRUISE))
+					if(JAMMED)
 						jammed = 1 // Needs some work to be unloaded and reloaded again
-					if(2)
+					if(DROPGUN)
 						if(user.drop_item(src)) // Launches it from your hands behind you, letting someone else steal it
 							src.throw_at(reverse, 2, 10)
 							to_chat(user, "<span class='danger'>The recoil is too strong and \the [src] flies out of your hand!</span>")
 						else
 							to_chat(user, "<span class='notice'>You barely manage to withstand the recoil.</span>")
-					if(3)
+					if(KNOCKDOWN)
 						H.Stun(3) //Drops you on your ass, this is a death sentence if you're in combat
 						H.Knockdown(3)
 						to_chat(user, "<span class='danger'>The recoil throws you off balance!</span>")
-					if(4)
+					if(RECOILBRUISE)
 						var/datum/organ/external/org = H.find_organ_by_grasp_index(user.is_holding_item(src)).parent // It should break your arm, not your hand, the gun still has a stock you're bracing against.
 						org.take_damage(rand(15,40), null , null, null)// I have no idea what the fuck I am doing, adjustBruteLossByPart() doesn't work for some reason.
 						to_chat(user, "<span class='danger'>The recoil kicks your arm like a mule!</span>")
