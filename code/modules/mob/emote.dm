@@ -53,14 +53,13 @@
 /datum/emote/me/run_emote(mob/user, params, m_type)
 
 	var/msg = "<b>[user]</b> " + params
+	switch (m_type)
+		if (EMOTE_VISIBLE)
+			user.visible_message(msg)
 
-	for(var/mob/O in viewers(user))
-		O.show_message(msg, m_type)
-		return TRUE
-	
-	for(var/mob/O in hearers(user))
-		O.show_message(msg, m_type)
-		return TRUE
+		if (EMOTE_AUDIBLE)
+			for(var/mob/O in hearers(user))
+				O.show_message(msg, m_type)
 
 /mob/proc/emote_dead(var/message)
 	if(client.prefs.muted & MUTE_DEADCHAT)
