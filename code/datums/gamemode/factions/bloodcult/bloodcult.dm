@@ -45,6 +45,7 @@ var/veil_thickness = CULT_PROLOGUE
 			return TRUE
 			*/
 	return FALSE
+
 /proc/is_convertable_to_cult(datum/mind/mind)
 	if(!istype(mind))
 		return 0
@@ -369,3 +370,22 @@ var/veil_thickness = CULT_PROLOGUE
 
 	data["blood"] = blood
 	return data
+
+
+/obj/item/proc/get_cult_power()
+	return 0
+
+/mob/proc/get_cult_power()
+	var/power = 0
+	var/list/valid_slots = list(
+		slot_wear_suit,
+		slot_head,
+		slot_shoes,
+		)
+
+	for (var/slot in valid_slots)
+		var/obj/item/I = get_item_by_slot(slot)
+		if (istype(I))
+			power += I.get_cult_power()
+
+	return power

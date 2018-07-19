@@ -281,6 +281,10 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		T.imbue(user,src)
 	return
 
+/obj/effect/rune/Uncrossed(var/atom/movable/mover)
+	if (active_spell && ismob(mover))
+		active_spell.Removed(mover)
+
 /proc/write_rune_word(var/turf/T,var/datum/reagent/blood/source,var/word = null)
 	if (!word)
 		return 0
@@ -362,7 +366,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		rune.blood3 = null
 		rune.update_icon()
 		if (rune.active_spell)
-			rune.active_spell.abort()
+			rune.active_spell.abort("erased")
 			rune.active_spell = null
 	else if (rune.word2)
 		word_erased = rune.word2.rune
