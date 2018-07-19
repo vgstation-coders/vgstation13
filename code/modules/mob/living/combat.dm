@@ -123,6 +123,7 @@
 		damage += sharpness
 		damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
 
+	SEND_SIGNAL(target, COMSIG_ATTACKEDBY, src, damage_done)
 	target.unarmed_attacked(src, damage, damage_type, zone)
 	after_unarmed_attack(target, damage, damage_type, affecting, armor_block)
 

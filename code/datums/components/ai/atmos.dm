@@ -1,0 +1,96 @@
+/datum/component/ai/atmos_checker
+	//Atmos effect - Yes, you can make creatures that require plasma or co2 to survive. N2O is a trace gas and handled separately, hence why it isn't here. It'd be hard to add it. Hard and me don't mix (Yes, yes make all the dick jokes you want with that.) - Errorage
+	var/min_oxy = 5 / CELL_VOLUME
+	var/max_oxy = 0					//Leaving something at 0 means it's off - has no maximum
+	var/min_tox = 0
+	var/max_tox = 1 / CELL_VOLUME
+	var/min_co2 = 0
+	var/max_co2 = 5 / CELL_VOLUME
+	var/min_n2 = 0
+	var/max_n2 = 0
+	var/unsuitable_damage = 2	//This damage is taken when atmos doesn't fit all the requirements above
+
+	var/minbodytemp = 250
+	var/maxbodytemp = 350
+	var/heat_damage_per_tick = 3	//amount of damage applied if animal's body temperature is higher than maxbodytemp
+	var/cold_damage_per_tick = 2	//same as heat_damage_per_tick, only if the bodytemperature it's lower than minbodytemp
+	var/fire_alert = 0
+	var/oxygen_alert = 0
+	var/toxins_alert = 0
+
+	var/min_overheat_temp=40
+
+/datum/component/ai/atmos_checker/Initialize()
+	..()
+	if(!isliving(parent))
+		return COMPONENT_INCOMPATIBLE
+	RegisterSignal(parent, COMSIG_LIFE, .proc/OnLife)
+
+/datum/component/ai/atmos_checker/proc/OnLife()
+	var/mob/living/parent = src.parent
+	if(parent & INVULNERABLE)
+		return 1
+
+	var/atmos_suitable = TRUE
+
+	var/atom/A = parent.loc
+
+	if(isturf(A))
+		var/turf/T = A
+		var/datum/gas_mixture/Environment = T.return_air()
+
+		if(Environment)
+			if(abs(Environment.temperature - parent.bodytemperature) > min_overheat_temp)
+				//SEND_SIGNAL(parent, COMSIG_ADJUST_BODYTEMP, (Environment.temperature - parent.bodytemperature) / 5)
+				parent.bodytemperature += ((Environment.temperature - parent.bodytemperature) / 5)
+
+			if(min_oxy)
+				if(Environment.molar_density("oxygen") < min_oxy)
+					atmos_suitable = FALSE
+					oxygen_alert = TRUE
+				else
+					oxygen_alert = FALSE
+
+			if(max_oxy)
+				if(Environment.molar_density("oxygen") > max_oxy)
+					atmos_suitable = FALSE
+
+			if(min_tox)
+				if(Environment.molar_density("toxins") < min_tox)
+					atmos_suitable = FALSE
+
+			if(max_tox)
+				if(Environment.molar_density("toxins") > max_tox)
+					atmos_suitable = FALSE
+					toxins_alert = TRUE
+				else
+					toxins_alert = FALSE
+
+			if(min_n2)
+				if(Environment.molar_density("nitrogen") < min_n2)
+					atmos_suitable = FALSE
+
+			if(max_n2)
+				if(Environment.molar_density("nitrogen") > max_n2)
+					atmos_suitable = FALSE
+
+			if(min_co2)
+				if(Environment.molar_density("carbon_dioxide") < min_co2)
+					atmos_suitable = FALSE
+
+			if(max_co2)
+				if(Environment.molar_density("carbon_dioxide") > max_co2)
+					atmos_suitable = FALSE
+
+	//Atmos effect
+	if(parent.bodytemperature < minbodytemp)
+		fire_alert = 2
+		SEND_SIGNAL(parent, COMSIG_ADJUST_BRUTE, cold_damage_per_tick)
+	else if(parent.bodytemperature > maxbodytemp)
+		fire_alert = 1
+		SEND_SIGNAL(parent, COMSIG_ADJUST_BRUTE, heat_damage_per_tick)
+	else
+		fire_alert = 0
+
+	if(!atmos_suitable)
+		SEND_SIGNAL(parent, COMSIG_ADJUST_BRUTE, unsuitable_damage)
