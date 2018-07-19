@@ -342,7 +342,6 @@
 		var/obj/effect/decal/cleanable/blood/D= locate(/obj/effect/decal/cleanable/blood) in get_turf(mob)
 		if(D==null)
 			D = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(mob))
-			D.New(D.loc)
 
 		D.virus2 |= virus_copylist(mob.virus2)
 
@@ -358,7 +357,6 @@
 		var/obj/effect/decal/cleanable/blood/viralsputum/D= locate(/obj/effect/decal/cleanable/blood/viralsputum) in get_turf(mob)
 		if(!D)
 			D = getFromPool(/obj/effect/decal/cleanable/blood/viralsputum, get_turf(mob))
-			D.New(D.loc)
 
 		D.virus2 |= virus_copylist(mob.virus2)
 
@@ -1296,8 +1294,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 					meatslab.throw_at(Tx, i, 3)
 
 					if(!Tx.density)
-						var/obj/effect/decal/cleanable/blood/gibs/D = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
-						D.New(Tx,i)
+						getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx, i)
 
 			if(2)
 				for(var/datum/organ/external/E in H.organs)

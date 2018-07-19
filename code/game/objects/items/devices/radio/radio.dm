@@ -50,9 +50,7 @@
 		wires.CutWireIndex(WIRE_TRANSMIT)
 
 	secure_radio_connections = new
-	..(loc)
-	if(radio_controller)
-		initialize()
+	..()
 
 /obj/item/device/radio/Destroy()
 	wires = null
