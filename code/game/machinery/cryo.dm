@@ -110,13 +110,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(M.Victim == L)
 			to_chat(usr, "[L.name] will not fit into the cryo cell because they have a slime latched onto their head.")
 			return
-	if(put_mob(L))
-		if(L == user)
-			visible_message("[user] climbs into \the [src].")
-		else
-			visible_message("[user] puts [L.name] into \the [src].")
-			if(user.pulling == L)
-				user.pulling = null
+	put_mob(L)
 
 /obj/machinery/atmospherics/unary/cryo_cell/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!ishigherbeing(usr) && !isrobot(usr) || occupant == usr || usr.incapacitated() || usr.lying)
@@ -143,6 +137,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			return
 	visible_message("[usr] starts to remove [occupant.name] from \the [src].")
 	go_out(over_location)
+
 /obj/machinery/atmospherics/unary/cryo_cell/process()
 	..()
 
@@ -563,39 +558,46 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/put_mob(mob/living/M as mob)
-	if (!istype(M))
+	if(!istype(M))
 		to_chat(usr, "<span class='danger'>The cryo cell cannot handle such a lifeform!</span>")
 		return
 	if(M.size > SIZE_NORMAL)
 		to_chat(usr, "<span class='danger'>\The [src] cannot fit such a large lifeform!</span>")
 		return
-	if (occupant)
+	if(occupant)
 		to_chat(usr, "<span class='danger'>The cryo cell is already occupied!</span>")
 		return
-	/*if (M.abiotic())
-		to_chat(usr, "<span class='warning'>Subject may not have abiotic items on.</span>")
-		return*/
-	if(M.locked_to)
-		M.unlock_from()
 	if(!node)
 		to_chat(usr, "<span class='warning'>The cell is not correctly connected to its pipe network!</span>")
 		return
-	if(usr.pulling == M)
-		usr.stop_pulling()
-	M.stop_pulling()
-	M.forceMove(src)
-	M.reset_view()
-	if(M.health > -100 && (M.health < 0 || M.sleeping))
-		to_chat(M, "<span class='bnotice'>You feel a cold liquid surround you. Your skin starts to freeze up.</span>")
-	occupant = M
-	for(var/obj/item/I in M.held_items)
-		M.drop_item(I) // to avoid visual fuckery bobing. Doesn't do anything to items with cant_drop to avoid magic healing tube abuse.
-	//M.metabslow = 1
-	add_fingerprint(usr)
-	update_icon()
-	nanomanager.update_uis(src)
-	M.ExtinguishMob()
-	return 1
+
+	if(M != usr)
+		usr.visible_message("<span class='warning'>[usr] starts putting [M.name] into \the [src].</span>", "<span class='notice'>You start putting [M.name] into the [src].</span>", "You hear some glass knocking.")
+	if(do_after_many(usr, list(src, M), M.lying ? 1 SECONDS : 3 SECONDS, needhand = FALSE))
+		if(M.locked_to)
+			M.unlock_from()
+		if(usr.pulling == M)
+			usr.stop_pulling()
+		M.stop_pulling()
+		M.ExtinguishMob()
+		M.forceMove(src)
+		M.reset_view()
+		occupant = M
+		if(M.health > -100 && (M.health < 0 || M.sleeping))
+			to_chat(M, "<span class='bnotice'>You feel a cold liquid surround you. Your skin starts to freeze up.</span>")
+		for(var/obj/item/I in M.held_items)
+			M.drop_item(I) // to avoid visual fuckery bobing. Doesn't do anything to items with cant_drop to avoid magic healing tube abuse.
+		add_fingerprint(usr)
+		update_icon()
+		nanomanager.update_uis(src)
+		if(M == usr)
+			visible_message("[usr] climbs into \the [src].")
+		else
+			visible_message("[usr] puts [M.name] into \the [src].")
+			log_attack("<font color='red'>[usr] ([usr.ckey]) put [M] ([M.ckey]) in a cryo tube containing [beaker.reagents.get_reagent_ids(1)].</font>")
+		return 1
+	else
+		return 0
 
 /obj/machinery/atmospherics/unary/cryo_cell/verb/move_eject()
 	set name = "Eject occupant"
