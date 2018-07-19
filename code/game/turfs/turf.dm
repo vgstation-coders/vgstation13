@@ -767,3 +767,7 @@
 	spawn(duration)
 		being_sent_to_past = FALSE
 		ChangeTurf(current_type)
+
+
+/turf/MouseDrop_T(var/atom/movable/C, mob/user)
+	user.Move_Pulled(src, C)
