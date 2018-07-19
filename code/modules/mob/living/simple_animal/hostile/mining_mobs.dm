@@ -706,6 +706,9 @@ obj/item/asteroid/basilisk_hide/New()
 		new /obj/item/weapon/strangerock(src.loc, new /datum/find(get_random_digsite_type(), 0))
 	new /obj/structure/boulder(src.loc)
 
+/mob/living/simple_animal/hostile/asteroid/rockernaut/attack_icon()
+	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "rockernaut")
+
 /mob/living/simple_animal/hostile/asteroid/rockernaut/boss
 	name = "Angie"
 	size = SIZE_HUGE
@@ -734,6 +737,7 @@ obj/item/asteroid/basilisk_hide/New()
 
 	for(var/i = 0 to rand(5,13))
 		new /obj/item/weapon/strangerock(src.loc, new /datum/find(get_random_digsite_type(), 0))
+	new /obj/item/clothing/gloves/mining(src.loc)
 	new /obj/structure/boulder(src.loc)
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/boss/MoveToTarget()
@@ -770,4 +774,4 @@ obj/item/asteroid/basilisk_hide/New()
 			target_turf = get_edge_target_turf(T, dir)
 		else
 			target_turf = get_ranged_target_turf(T, dir, size)
-			M.throw_at(target_turf,100,move_to_delay)
+		M.throw_at(target_turf,100,move_to_delay)
