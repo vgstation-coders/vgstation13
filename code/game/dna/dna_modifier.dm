@@ -84,7 +84,7 @@
 	return 0
 
 /obj/machinery/dna_scannernew/relaymove(mob/user as mob)
-	if (user.stat)
+	if(user.stat)
 		return
 	src.go_out()
 	return
@@ -98,7 +98,7 @@
 	if(usr.isUnconscious() || istype(usr, /mob/living/simple_animal))
 		return
 
-	eject_occupant()
+	go_out()
 
 	add_fingerprint(usr)
 	return
@@ -124,14 +124,6 @@
 
 	. = ..()
 
-/obj/machinery/dna_scannernew/proc/eject_occupant(var/exit = loc)
-	src.go_out(exit)
-
-	if(!occupant)
-		for(var/mob/M in src)//Failsafe so you can get mobs out
-			if(!M.gcDestroyed)
-				M.forceMove(get_turf(src))
-
 /obj/machinery/dna_scannernew/verb/move_inside()
 	set src in oview(1)
 	set category = "Object"
@@ -149,9 +141,6 @@
 	if (src.occupant)
 		to_chat(usr, "<span class='notice'> <B>The scanner is already occupied!</B></span>")
 		return
-	/*if (usr.abiotic())
-		to_chat(usr, "<span class='notice'> <B>Subject cannot have abiotic items on.</B></span>")
-		return*/
 	usr.stop_pulling()
 	usr.forceMove(src)
 	usr.reset_view()
@@ -166,13 +155,17 @@
 		return
 	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
 		return
-	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
+	if(!Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob too far away from you, or are you too far away from the source
+		return
+	if(O.locked_to)
+		var/datum/locking_category/category = O.locked_to.get_lock_cat_for(O)
+		if(!istype(category, /datum/locking_category/buckle/bed/roller))
+			return
+	else if(O.anchored)
 		return
 	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
 		return
 	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the scanner
-		return
-	if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
 		return
 	if(occupant)
 		to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
@@ -187,24 +180,21 @@
 			to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 	var/mob/living/L = O
-	if(!istype(L) || L.locked_to)
+	if(!istype(L))
 		return
-	/*if(L.abiotic())
-		to_chat(user, "<span class='danger'>Subject cannot have abiotic items on.</span>")
-		return*/
 	for(var/mob/living/carbon/slime/M in range(1,L))
 		if(M.Victim == L)
 			to_chat(usr, "[L.name] will not fit into the DNA Scanner because they have a slime latched onto their head.")
 			return
+
 	if(L == user)
 		visible_message("[user] climbs into \the [src].")
 	else
 		visible_message("[user] places [L] into \the [src].")
+	L.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
 	if(user.pulling == L)
 		user.stop_pulling()
 	put_in(L)
-	if(user.pulling == L)
-		user.pulling = null
 
 /obj/machinery/dna_scannernew/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
@@ -232,7 +222,7 @@
 		visible_message("[usr] climbs out of \the [src].")
 	else
 		visible_message("[usr] removes [occupant.name] from \the [src].")
-	eject_occupant(over_location)
+	go_out(over_location)
 
 /obj/machinery/dna_scannernew/attackby(var/obj/item/weapon/item as obj, var/mob/user as mob)
 	if(istype(item, /obj/item/weapon/reagent_containers/glass))
@@ -295,7 +285,10 @@
 #define DNASCANNER_MESSAGE_INTERVAL 1 SECONDS
 
 /obj/machinery/dna_scannernew/proc/go_out(var/exit = src.loc)
-	if (!occupant)
+	if(!occupant)
+		for(var/mob/M in src)//Failsafe so you can get mobs out
+			if(!M.gcDestroyed)
+				M.forceMove(get_turf(src))
 		return 0
 	if(locked)
 		if(world.time - last_message > DNASCANNER_MESSAGE_INTERVAL)
@@ -308,7 +301,7 @@
 	occupant = null
 	icon_state = "scanner_0"
 
-	for (var/atom/movable/x in src.contents)//Ejects items that manage to get in there (exluding the components and beaker)
+	for(var/atom/movable/x in src.contents) //Ejects items that manage to get in there (exluding the components and beaker)
 		if((x in component_parts) || (x == src.beaker))
 			continue
 		x.forceMove(src.loc)
@@ -917,7 +910,7 @@
 		return 1
 
 	if(href_list["ejectOccupant"])
-		connected.eject_occupant()
+		connected.go_out()
 		return 1
 
 	// Transfer Buffer Management

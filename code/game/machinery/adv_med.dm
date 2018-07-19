@@ -57,14 +57,18 @@
 		return
 	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
 		return
-	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
+	if(!Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob too far away from you, or are you too far away from the source
+		return
+	if(O.locked_to)
+		var/datum/locking_category/category = O.locked_to.get_lock_cat_for(O)
+		if(!istype(category, /datum/locking_category/buckle/bed/roller))
+			return
+	else if(O.anchored)
 		return
 	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
 		return
 	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
-		return
-	if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
 		return
 	if(occupant)
 		to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
@@ -75,15 +79,22 @@
 			to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 	var/mob/living/L = O
-	if(!istype(L) || L.locked_to)
+	if(!istype(L))
 		return
-	/*if(L.abiotic())
-		to_chat(user, "<span class='notice'>Subject cannot have abiotic items on.</span>")
-		return*/
 	for(var/mob/living/carbon/slime/M in range(1, L))
 		if(M.Victim == L)
 			to_chat(usr, "<span class='notice'>[L] will not fit into \the [src] because they have a slime latched onto their head.</span>")
 			return
+
+	if(L.locked_to)
+		var/datum/locking_category/category = L.locked_to.get_lock_cat_for(L)
+		if(istype(category, /datum/locking_category/buckle/bed/roller))
+			L.unlock_from()
+		else
+			return
+	if(L.anchored) //This has to be down here for the locked_to check
+		return
+
 	if(L == user)
 		visible_message("[user] climbs into \the [src].")
 	else
@@ -155,9 +166,6 @@
 	if(src.occupant)
 		to_chat(usr, "<span class='notice'>\The [src] is already occupied!</span>")
 		return
-	/*if(usr.abiotic())
-		to_chat(usr, "<span class='notice'>Subject cannot have abiotic items on.</span>")
-		return*/
 	if(usr.locked_to)
 		return
 	usr.pulling = null
