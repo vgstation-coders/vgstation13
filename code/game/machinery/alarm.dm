@@ -505,7 +505,10 @@
 /obj/machinery/alarm/attack_hand(mob/user)
 	. = ..()
 
-	if (.)
+	if(wiresexposed)
+		wires.Interact(user)
+		return
+	else if (.)
 		return
 
 	interact(user)
@@ -672,9 +675,6 @@
 
 /obj/machinery/alarm/interact(mob/user)
 	if(buildstage!=2)
-		return
-	if(wiresexposed)
-		wires.Interact(user)
 		return
 	if(!shorted)
 		ui_interact(user)
