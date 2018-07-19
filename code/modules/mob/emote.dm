@@ -55,7 +55,7 @@
 	var/msg = "<b>[user]</b> " + params
 	switch (m_type)
 		if (EMOTE_VISIBLE)
-			visible_message(msg)
+			user.visible_message(msg)
 
 		if (EMOTE_AUDIBLE)
 			for(var/mob/O in hearers(user))
