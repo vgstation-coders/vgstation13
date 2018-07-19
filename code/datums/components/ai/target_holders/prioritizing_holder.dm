@@ -14,7 +14,7 @@
 
 /datum/component/ai/target_holder/prioritizing/proc/attach()
 	if(!finder)
-		finder = GetComponent(/datum/component/ai/target_finder)
+		finder = parent.GetComponent(/datum/component/ai/target_finder)
 
 /datum/component/ai/target_holder/prioritizing/AddTarget(var/atom/A)
 	var/priority=-1

@@ -2,38 +2,36 @@
 	var/pressure_check=TRUE
 	var/max_pressure_diff=-1
 
-/datum/component/ai/door_opener/RecieveSignal(var/message_type, var/list/args)
-	switch(message_type)
-		if(COMSIG_ATTACKING) // list("target"=A)
-			OnAttackingTarget(args["target"])
-		else
-			..(message_type, args)
+/datum/component/ai/door_opener/Initialize()
+	..()
+	RegisterSignal(parent, COMSIG_ATTACKING, .proc/OnAttackingTarget)
 
 /datum/component/ai/door_opener/proc/OnAttackingTarget(var/atom/target)
-	if(istype(target,/obj/machinery/door))
-		var/obj/machinery/door/D = target
-		if(CanOpenDoor(D))
-			if(get_dist(src, target) > 1)
-				return // keep movin'.
-			controller.setBusy(TRUE)
-			SendSignal(COMSIG_MOVE, "dir"=0) // Stop movement?
-			D.visible_message("<span class='warning'>\The [D]'s motors whine as four arachnid claws begin trying to force it open!</span>")
-			spawn(50)
-				if(CanOpenDoor(D) && prob(25))
-					D.open(1)
-					D.visible_message("<span class='warning'>\The [src] forces \the [D] open!</span>")
-
-					// Open firedoors, too.
-					for(var/obj/machinery/door/firedoor/FD in D.loc)
-						if(FD && FD.density)
-							FD.open(1)
-
-					// Reset targetting
-					controller.setBusy(FALSE)
-					controller.setTarget(null)
-			return
-		controller.setBusy(FALSE)
+	var/obj/machinery/door/D = target
+	if(!istype(D))
 		return
+	if(CanOpenDoor(D))
+		if(get_dist(src, target) > 1)
+			return // keep movin'.
+		controller.setBusy(TRUE)
+		SEND_SIGNAL(parent, COMSIG_MOVE, null, 0) // Stop movement?
+		D.visible_message("<span class='warning'>\The [D]'s motors whine as four arachnid claws begin trying to force it open!</span>")
+		spawn(50)
+			if(CanOpenDoor(D) && prob(25))
+				D.open(1)
+				D.visible_message("<span class='warning'>\The [src] forces \the [D] open!</span>")
+
+				// Open firedoors, too.
+				for(var/obj/machinery/door/firedoor/FD in D.loc)
+					if(FD && FD.density)
+						FD.open(1)
+
+				// Reset targetting
+				controller.setBusy(FALSE)
+				controller.setTarget(null)
+		return
+	controller.setBusy(FALSE)
+	return
 
 /datum/component/ai/door_opener/proc/performPressureCheck(var/turf/loc)
 	var/turf/simulated/lT=loc

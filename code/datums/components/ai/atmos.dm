@@ -20,37 +20,36 @@
 
 	var/min_overheat_temp=40
 
-/datum/component/ai/atmos_checker/RecieveSignal(var/message_type, var/list/args)
-	switch(message_type)
-		if("life")
-			OnLife()
-		else
-			..(message_type, args)
+/datum/component/ai/atmos_checker/Initialize()
+	..()
+	if(!isliving(parent))
+		return COMPONENT_INCOMPATIBLE
+	RegisterSignal(parent, COMSIG_LIFE, .proc/OnLife)
 
 /datum/component/ai/atmos_checker/proc/OnLife()
-	if(!isliving(container.holder))
-		return 1
-	if(container.holder & INVULNERABLE)
+	var/mob/living/parent = src.parent
+	if(parent & INVULNERABLE)
 		return 1
 
-	var/atmos_suitable = 1
+	var/atmos_suitable = TRUE
 
-	var/atom/A = container.holder.loc
+	var/atom/A = parent.loc
 
 	if(isturf(A))
 		var/turf/T = A
 		var/datum/gas_mixture/Environment = T.return_air()
 
 		if(Environment)
-			if(abs(Environment.temperature - controller.getBodyTemperature()) > min_overheat_temp)
-				SendSignal(COMSIG_ADJUST_BODYTEMP, list("temp"=((Environment.temperature - controller.getBodyTemperature()) / 5)))
+			if(abs(Environment.temperature - parent.bodytemperature) > min_overheat_temp)
+				//SEND_SIGNAL(parent, COMSIG_ADJUST_BODYTEMP, (Environment.temperature - parent.bodytemperature) / 5)
+				parent.bodytemperature += ((Environment.temperature - parent.bodytemperature) / 5)
 
 			if(min_oxy)
 				if(Environment.molar_density(GAS_OXYGEN) < min_oxy)
 					atmos_suitable = 0
 					oxygen_alert = 1
 				else
-					oxygen_alert = 0
+					oxygen_alert = FALSE
 
 			if(max_oxy)
 				if(Environment.molar_density(GAS_OXYGEN) > max_oxy)
@@ -65,7 +64,7 @@
 					atmos_suitable = 0
 					toxins_alert = 1
 				else
-					toxins_alert = 0
+					toxins_alert = FALSE
 
 			if(min_n2)
 				if(Environment.molar_density(GAS_NITROGEN) < min_n2)
@@ -84,14 +83,14 @@
 					atmos_suitable = 0
 
 	//Atmos effect
-	if(controller.getBodyTemperature() < minbodytemp)
+	if(parent.bodytemperature < minbodytemp)
 		fire_alert = 2
-		SendSignal(COMSIG_ADJUST_BRUTE, list("amount"=cold_damage_per_tick))
-	else if(controller.getBodyTemperature() > maxbodytemp)
+		SEND_SIGNAL(parent, COMSIG_ADJUST_BRUTE, cold_damage_per_tick)
+	else if(parent.bodytemperature > maxbodytemp)
 		fire_alert = 1
-		SendSignal(COMSIG_ADJUST_BRUTE, list("amount"=heat_damage_per_tick))
+		SEND_SIGNAL(parent, COMSIG_ADJUST_BRUTE, heat_damage_per_tick)
 	else
 		fire_alert = 0
 
 	if(!atmos_suitable)
-		SendSignal(COMSIG_ADJUST_BRUTE, list("amount"=unsuitable_damage))
+		SEND_SIGNAL(parent, COMSIG_ADJUST_BRUTE, unsuitable_damage)

@@ -4,5 +4,5 @@
 /datum/component/controller/simple_animal/setBusy(var/yes)
 	..(yes)
 	if(disable_automove_on_busy)
-		var/mob/living/simple_animal/SA = holder
+		var/mob/living/simple_animal/SA = parent
 		SA.stop_automated_movement = yes

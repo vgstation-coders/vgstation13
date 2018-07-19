@@ -222,8 +222,8 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/on_reagent_change()
 	return
 
-/atom/proc/Bumped(AM as mob|obj)
-	return
+/atom/proc/Bumped(var/atom/movable/AM)
+	SEND_SIGNAL(src, COMSIG_BUMPED, AM)
 
 /atom/proc/setDensity(var/density)
 	if (density == src.density)
@@ -944,6 +944,7 @@ its easier to just keep the beam vertical.
 	if(flags & INITIALIZED)
 		stack_trace("Warning: [src] ([type]) initialized multiple times!")
 	flags |= INITIALIZED
+	ComponentInitialize()
 	return INITIALIZE_HINT_NORMAL
 
 /atom/proc/late_initialize()

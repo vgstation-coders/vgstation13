@@ -1769,6 +1769,17 @@ mob/living/carbon/human/isincrit()
 		return image(icon = 'icons/mob/attackanims.dmi', icon_state = "hulk")
 	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
+/mob/living/carbon/human/NPC/ComponentInitialize()
+	AddComponent(/datum/component/controller/mob)
+	AddComponent(/datum/component/ai/hand_control)
+	AddComponent(/datum/component/controller/movement/astar)
+	AddComponent(/datum/component/ai/human_brain)
+	AddComponent(/datum/component/ai/target_finder/human)
+	AddComponent(/datum/component/ai/target_holder/prioritizing)
+	AddComponent(/datum/component/ai/melee/attack_human)
+	AddComponent(/datum/component/ai/melee/throw_attack)
+	AddComponent(/datum/component/ai/crowd_attack)
+	AddComponent(pick(typesof(/datum/component/ai/targetting_handler)))
 /*
 /mob/living/carbon/human/proc/initialize_barebones_NPC_components()	//doesn't actually do anything, but contains tools needed for other types to do things
 	BrainContainer = new (src)

@@ -5,7 +5,7 @@
 	var/max_poison = 0 // Maximum mols in target's blood. 0 = INF
 
 /datum/component/ai/melee/inject_reagent/OnAttackingTarget(var/atom/target)
-	if(..(target))
+	if(..())
 		var/mob/living/L = target
 		if(L.reagents)
 			if(inject_prob == -1 || prob(inject_prob))
@@ -13,7 +13,8 @@
 				var/newamt = max_poison - curamt
 				if(newamt >= 1)
 					// TEXT-FORMATTING FUNCTIONS WHEN BYOND?
-					container.holder.visible_message("<span class='warning'>\The [src] injects something into \the [target]!</span>")
+					var/atom/parent = src.parent
+					parent.visible_message("<span class='warning'>\The [src] injects something into \the [target]!</span>")
 					L.reagents.add_reagent(poison_type, poison_per_bite)
 					return 1 // Accepted signal
 	return 0 // Did not accept signal

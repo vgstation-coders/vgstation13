@@ -110,6 +110,7 @@
 					special_role = null
 					to_chat(current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now..(You don't remember who enslaved you)</FONT></span>")
 				*/
+	SEND_SIGNAL(src, COMSIG_LIFE)
 	return 1
 
 // Apply connect damage
