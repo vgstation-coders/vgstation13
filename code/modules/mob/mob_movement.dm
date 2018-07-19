@@ -503,7 +503,7 @@
 		return
 	if(!istype(target) || target.anchored || !target.can_be_pulled(src))
 		return
-	if(src.locked_to == target)
+	if(src.locked_to == target || target == src)
 		return
 	if(!target.Adjacent(src))
 		return
