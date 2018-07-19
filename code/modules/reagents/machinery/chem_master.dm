@@ -168,6 +168,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		usr.unset_machine()
 		return 1
 
+	else if(href_list["pill_sprite"])
+		pillsprite = href_list["pill_sprite"]
+		src.updateUsrDialog()
+		return 1
+
 	if(beaker)
 		var/datum/reagents/R = beaker.reagents
 		if(href_list["analyze"])
@@ -369,34 +374,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				reagents.trans_to(P, 50)
 				src.updateUsrDialog()
 				return 1
-
-		/*
-		else if(href_list["change_bottle"])
-			#define MAX_BOTTLE_SPRITE 20 //max icon state of the bottle sprites
-			var/dat = "<table>"
-			for(var/i = 1 to MAX_BOTTLE_SPRITE)
-				if ( i%4==1 )
-					dat += "<tr>"
-
-				dat += "<td><a href=\"?src=\ref[src]&bottle_sprite=[i]\"><img src=\"bottle[i].png\" /></a></td>"
-
-				if ( i%4==0 )
-					dat +="</tr>"
-
-			dat += "</table>"
-			usr << browse(dat, "window=chem_master")
-			return
-		*/
-
-		else if(href_list["pill_sprite"])
-			pillsprite = href_list["pill_sprite"]
-			src.updateUsrDialog()
-			return 1
-
-		/*
-		else if(href_list["bottle_sprite"])
-			bottlesprite = href_list["bottle_sprite"]
-		*/
 
 /obj/machinery/chem_master/proc/detach()
 	if(beaker)
