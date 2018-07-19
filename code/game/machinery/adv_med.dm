@@ -86,15 +86,6 @@
 			to_chat(usr, "<span class='notice'>[L] will not fit into \the [src] because they have a slime latched onto their head.</span>")
 			return
 
-	if(L.locked_to)
-		var/datum/locking_category/category = L.locked_to.get_lock_cat_for(L)
-		if(istype(category, /datum/locking_category/buckle/bed/roller))
-			L.unlock_from()
-		else
-			return
-	if(L.anchored) //This has to be down here for the locked_to check
-		return
-
 	if(L == user)
 		visible_message("[user] climbs into \the [src].")
 	else
