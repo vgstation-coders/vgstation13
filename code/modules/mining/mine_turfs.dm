@@ -1,6 +1,3 @@
-#define YES_THERE_IS_A_ROCKERNAUT 1
-#define ITS_A_BIG_ROCKERNAUT_WOW  2
-
 /**********************Mineral deposits**************************/
 
 /turf/unsimulated/mineral //wall piece
@@ -138,9 +135,9 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				var/turf/unsimulated/mineral/random/target_turf = get_step(src, trydir)
 				if(istype(target_turf) && !target_turf.mineral)
 					if(prob(1))
-						rockernaut = YES_THERE_IS_A_ROCKERNAUT
+						rockernaut = TURF_CONTAINS_REGULAR_ROCKERNAUT
 						if(prob(1))
-							rockernaut = ITS_A_BIG_ROCKERNAUT_WOW
+							rockernaut = TURF_CONTAINS_BOSS_ROCKERNAUT
 					target_turf.mineral = mineral
 					target_turf.UpdateMineral()
 					target_turf.MineralSpread()
@@ -345,10 +342,10 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		for (var/i = 1 to mineral.result_amount - mined_ore)
 			DropMineral()
 	switch(rockernaut)
-		if(YES_THERE_IS_A_ROCKERNAUT)
+		if(TURF_CONTAINS_REGULAR_ROCKERNAUT)
 			var/mob/living/simple_animal/hostile/asteroid/rockernaut/R = new(src)
 			R.possessed_ore = mineral.ore
-		if(ITS_A_BIG_ROCKERNAUT_WOW)
+		if(TURF_CONTAINS_BOSS_ROCKERNAUT)
 			var/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/R = new(src)
 			R.possessed_ore = mineral.ore
 	//destroyed artifacts have weird, unpleasant effects
@@ -999,7 +996,3 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(locate(/obj/structure/lattice) in contents)
 		return BUILD_SUCCESS
 	return BUILD_FAILURE
-
-
-#undef YES_THERE_IS_A_ROCKERNAUT
-#undef ITS_A_BIG_ROCKERNAUT_WOW

@@ -669,7 +669,7 @@ obj/item/asteroid/basilisk_hide/New()
 			if(Adjacent(M))
 				//Climb in
 				visible_message("<span class = 'warning'>\The [src] burrows itself into \the [M]!</span>")
-				M.rockernaut = istype(src, /mob/living/simple_animal/hostile/asteroid/rockernaut/boss) ? ITS_A_BIG_ROCKERNAUT_WOW : YES_THERE_IS_A_ROCKERNAUT
+				M.rockernaut = istype(src, /mob/living/simple_animal/hostile/asteroid/rockernaut/boss) ? TURF_CONTAINS_BOSS_ROCKERNAUT : TURF_CONTAINS_REGULAR_ROCKERNAUT
 				qdel(src)
 				return
 			else
