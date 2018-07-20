@@ -58,7 +58,7 @@
 			visible_message("<span class='info'>\The [src] is brushed away revealing \The [inside].</span>")
 			inside = null
 		else
-			visible_message("<span class='info'>\The [src] reveals nothing!</span>",1)
+			visible_message("<span class='info'>\The [src] reveals nothing!</span>")
 		qdel(src)
 
 	else if(istype(W,/obj/item/device/core_sampler/))
