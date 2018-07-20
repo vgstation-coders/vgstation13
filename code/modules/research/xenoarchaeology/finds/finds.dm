@@ -56,9 +56,9 @@
 		if(inside)
 			inside.forceMove(get_turf(src))
 			inside = null
-				M.visible_message("<span class='info'>[src] is brushed away revealing [inside].</span>",1)
+				visible_message("<span class='info'>[src] is brushed away revealing [inside].</span>",1)
 		else
-			M.visible_message("<span class='info'>[src] reveals nothing!</span>",1)
+			visible_message("<span class='info'>[src] reveals nothing!</span>",1)
 		qdel(src)
 
 	else if(istype(W,/obj/item/device/core_sampler/))
