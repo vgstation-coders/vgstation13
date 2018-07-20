@@ -67,7 +67,8 @@ var/list/station_holomaps = list()
 
 /obj/machinery/station_map/initialize()
 	. = ..()
-	snowflake_initialize()
+	if(SS_READY(SSmore_init))
+		snowflake_initialize()
 
 /obj/machinery/station_map/proc/snowflake_initialize()
 	. = ..()

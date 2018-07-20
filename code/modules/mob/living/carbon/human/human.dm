@@ -1227,7 +1227,6 @@
 			to_chat(src, "<span class='warning'>You ran out of blood to write with!</span>")
 
 		var/obj/effect/decal/cleanable/blood/writing/W = getFromPool(/obj/effect/decal/cleanable/blood/writing, T)
-		W.New(T)
 		W.basecolor = (hand_blood_color) ? hand_blood_color : DEFAULT_BLOOD
 		W.update_icon()
 		W.message = message

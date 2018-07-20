@@ -476,7 +476,6 @@
 	floor_tile = new/obj/item/stack/tile/grass
 
 	New()
-		floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
 		icon_state = "grass[pick("1","2","3","4")]"
 		..()
 		spawn(4)

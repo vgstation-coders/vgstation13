@@ -802,8 +802,7 @@ Auto Patrol: []"},
 
 	spark(src)
 
-	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
-	O.New(O.loc)
+	getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
 	qdel(src)
 
 /obj/machinery/bot/secbot/attack_alien(var/mob/living/carbon/alien/user as mob)
@@ -1054,8 +1053,7 @@ Auto Patrol: []"},
 
 	spark(src)
 
-	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
-	O.New(O.loc)
+	getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
 	qdel(src)
 
 //Cheapsky Construction

@@ -5,6 +5,7 @@
 	icon_state = "arcade"
 	circuit = "/obj/item/weapon/circuitboard/arcade"
 	var/datum/arcade_game/game
+	var/game_to_initialize = /datum/arcade_game/space_villain
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	emag_cost = 0 // because fun
 	light_color = LIGHT_COLOR_GREEN
@@ -16,9 +17,14 @@
 	haunted = 1
 	icon_state = "arcadeh"
 
-/obj/machinery/computer/arcade/New()
-	..()
-	game = new /datum/arcade_game/space_villain(src)
+/obj/machinery/computer/arcade/initialize()
+	. = ..()
+	update_game()
+
+/obj/machinery/computer/arcade/proc/update_game()
+	if(game)
+		qdel(game)
+	game = new game_to_initialize(src)
 	name = game.name
 
 /obj/machinery/computer/arcade/Destroy()

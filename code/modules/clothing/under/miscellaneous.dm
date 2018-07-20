@@ -620,6 +620,7 @@
 	item_state = "greaser_default"
 
 /obj/item/clothing/under/greaser/New()
+	..()
 	var/greaser_colour = "default"
 	switch(rand(1,4))
 		if(1)
