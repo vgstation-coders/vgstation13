@@ -259,10 +259,17 @@
 	required_reagents = list(SODIUM_POLYACRYLATE = 0.3, LUBE = 1)
 	result_amount = 0.3
 
-/datum/chemical_reaction/sludge
-	name = "Sludge"
+/datum/chemical_reaction/toxic_waste
+	name = "Toxic Waste"
 	id = TOXICWASTE
 	result = TOXICWASTE
+	required_reagents = list(URANIUM = 1, SODIUMCHLORIDE = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/sludge
+	name = "Sludge"
+	id = CHEMICAL_WASTE
+	result = CHEMICAL_WASTE
 	required_reagents = list(LUBE = 1)
 	result_amount = 0.2
 	required_temp = 3500
@@ -273,7 +280,7 @@
 	name = "Degrease"
 	id = "degrease"
 	result = null
-	required_reagents = list(TOXICWASTE = 1, ETHANOL = 1) //Turns out it really WAS an engine degreaser
+	required_reagents = list(CHEMICAL_WASTE = 1, ETHANOL = 1) //Turns out it really WAS an engine degreaser
 	result_amount = 0
 
 /datum/chemical_reaction/pacid
