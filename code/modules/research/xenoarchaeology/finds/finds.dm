@@ -56,11 +56,9 @@
 		if(inside)
 			inside.forceMove(get_turf(src))
 			inside = null
-			for(var/mob/M in viewers(world.view, user))
 				M.visible_message("<span class='info'>[src] is brushed away revealing [inside].</span>",1)
 		else
-			for(var/mob/M in viewers(world.view, user))
-				M.visible_message("<span class='info'>[src] reveals nothing!</span>",1)
+			M.visible_message("<span class='info'>[src] reveals nothing!</span>",1)
 		qdel(src)
 
 	else if(istype(W,/obj/item/device/core_sampler/))
