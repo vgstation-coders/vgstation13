@@ -214,6 +214,12 @@
 	else
 		..()
 
+#undef JAMMED
+#undef DROPGUN
+#undef KNOCKDOWN
+#undef RECOILBRUISE
+
+
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/proc/getLiveAmmo() // Mad.
 	var/bullets = 0
 	for(var/obj/item/ammo_casing/AC in loaded)
