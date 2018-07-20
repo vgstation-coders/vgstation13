@@ -55,7 +55,7 @@
 	if(istype(W,/obj/item/weapon/pickaxe/brush))
 		if(inside)
 			inside.forceMove(get_turf(src))
-				visible_message("<span class='info'>[src] is brushed away revealing [inside].</span>",1)
+				visible_message("<span class='info'>[src] is brushed away revealing [inside].</span>")
 			inside = null
 		else
 			visible_message("<span class='info'>[src] reveals nothing!</span>",1)
