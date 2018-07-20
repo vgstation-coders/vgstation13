@@ -1,3 +1,6 @@
+#define YES_THERE_IS_A_ROCKERNAUT 1
+#define ITS_A_BIG_ROCKERNAUT_WOW  2
+
 /**********************Mineral deposits**************************/
 
 /turf/unsimulated/mineral //wall piece
@@ -996,3 +999,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(locate(/obj/structure/lattice) in contents)
 		return BUILD_SUCCESS
 	return BUILD_FAILURE
+
+
+#undef YES_THERE_IS_A_ROCKERNAUT
+#undef ITS_A_BIG_ROCKERNAUT_WOW
