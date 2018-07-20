@@ -685,11 +685,29 @@ About the new airlock wires panel:
 				spark(src, 5)
 	return ..()
 
+#define ID_SCAN 1
+#define DISRUPT_MAIN_POWER 2
+#define DISRUPT_BACKUP_POWER 3
+#define DROP_DOOR_BOLTS 4
+#define UNELECTRIFY_DOOR 5
+#define CLOSE_DOOR 7 // Where did the 6 go ?
+#define DOOR_SAFETIES 8
+#define DOOR_SPEED 9
+#define BOLT_LIGHTS 10
+
+#define RAISE_DOOR_BOLTS 4
+#define ELECTRIFY_30SEC 5
+#define ELECTRIFY_4EVER 6
+#define OPEN_DOOR 7
+
 /obj/machinery/door/airlock/Topic(href, href_list, var/nowindow = 0)
 	// If you add an if(..()) check you must first remove the var/nowindow parameter.
 	// Otherwise it will runtime with this kind of error: null.Topic()
 	var/turf/T = get_turf(usr)
-	if(!isAI(usr) && T.z != z)
+
+	var/user_is_AI = isAI(usr)
+
+	if(!user_is_AI && T.z != z)
 		return 1
 	if(!nowindow)
 		..()
@@ -705,14 +723,14 @@ About the new airlock wires panel:
 			return
 
 	if(isAdminGhost(usr) || (istype(usr, /mob/living/silicon) && src.canAIControl() && operating != -1))
+		if (user_is_AI && src.isWireCut(AIRLOCK_WIRE_AI_CONTROL))
+			to_chat(usr, "<span class='warning'>Error: unable to interface.</span>")
+			return FALSE
 		//AI
-		//aiDisable - 1 idscan, 2 disrupt main power, 3 disrupt backup power, 4 drop door bolts, 5 un-electrify door, 7 close door, 8 door safties, 9 door speed
-		//aiEnable - 1 idscan, 4 raise door bolts, 5 electrify door for 30 seconds, 6 electrify door indefinitely, 7 open door,  8 door safties, 9 door speed
 		if(href_list["aiDisable"])
 			var/code = text2num(href_list["aiDisable"])
 			switch (code)
-				if(1)
-					//disable idscan
+				if(ID_SCAN)
 					if(src.isWireCut(AIRLOCK_WIRE_IDSCAN))
 						to_chat(usr, "The IdScan wire has been cut - So, you can't disable it, but it is already disabled anyways.")
 					else if(src.aiDisabledIdScanner)
@@ -723,8 +741,7 @@ About the new airlock wires panel:
 							return 0
 						src.aiDisabledIdScanner = 1
 						investigation_log(I_WIRES, "|| IDscan disabled via robot interface by [key_name(usr)]")
-				if(2)
-					//disrupt main power
+				if(DISRUPT_MAIN_POWER)
 					if(src.secondsMainPowerLost == 0)
 						if(isobserver(usr) && !canGhostWrite(usr,src,"disrupted main power on"))
 							to_chat(usr, "<span class='warning'>Nope.</span>")
@@ -733,8 +750,7 @@ About the new airlock wires panel:
 						investigation_log(I_WIRES, "|| main power disrupted via robot interface by [key_name(usr)]")
 					else
 						to_chat(usr, "Main power is already offline.")
-				if(3)
-					//disrupt backup power
+				if(DISRUPT_BACKUP_POWER)
 					if(src.secondsBackupPowerLost == 0)
 						if(isobserver(usr) && !canGhostWrite(usr,src,"disrupted backup power on"))
 							to_chat(usr, "<span class='warning'>Nope.</span>")
@@ -743,8 +759,7 @@ About the new airlock wires panel:
 						investigation_log(I_WIRES, "|| backup power disrupted via robot interface by [key_name(usr)]")
 					else
 						to_chat(usr, "Backup power is already offline.")
-				if(4)
-					//drop door bolts
+				if(DROP_DOOR_BOLTS)
 					if(src.isWireCut(AIRLOCK_WIRE_DOOR_BOLTS))
 						to_chat(usr, "You can't drop the door bolts - The door bolt dropping wire has been cut.")
 					else if(src.locked!=1)
@@ -755,8 +770,7 @@ About the new airlock wires panel:
 						to_chat(usr, "The door is now bolted.")
 						investigation_log(I_WIRES, "|| bolted via robot interface by [key_name(usr)]")
 						update_icon()
-				if(5)
-					//un-electrify door
+				if(UNELECTRIFY_DOOR)
 					if(src.isWireCut(AIRLOCK_WIRE_ELECTRIFY))
 						to_chat(usr, text("Can't un-electrify the airlock - The electrification wire is cut."))
 					else if(src.secondsElectrified==-1)
@@ -774,7 +788,7 @@ About the new airlock wires panel:
 						to_chat(usr, "The door is now un-electrified.")
 						investigation_log(I_WIRES, "|| un-electrified via robot interface by [key_name(usr)]")
 
-				if(8)
+				if(DOOR_SAFETIES)
 					// Safeties!  We don't need no stinking safeties!
 					if (src.isWireCut(AIRLOCK_WIRE_SAFETY))
 						to_chat(usr, text("Control to door sensors is disabled."))
@@ -790,8 +804,7 @@ About the new airlock wires panel:
 
 
 
-				if(9)
-					// Door speed control
+				if(DOOR_SPEED)
 					if(src.isWireCut(AIRLOCK_WIRE_SPEED))
 						to_chat(usr, text("Control to door timing circuitry has been severed."))
 					else if (src.normalspeed)
@@ -803,8 +816,7 @@ About the new airlock wires panel:
 					else
 						to_chat(usr, text("Door timing circurity already accellerated."))
 
-				if(7)
-					//close door
+				if(CLOSE_DOOR)
 					if(src.welded)
 						to_chat(usr, text("The airlock has been welded shut!"))
 					else if(src.locked)
@@ -824,7 +836,7 @@ About the new airlock wires panel:
 						open()
 						investigation_log(I_WIRES, "|| opened via robot interface by [key_name(usr)]")
 
-				if(10)
+				if(BOLT_LIGHTS)
 					// Bolt lights
 					if(src.isWireCut(AIRLOCK_WIRE_LIGHT))
 						to_chat(usr, text("Control to door bolt lights has been severed.</a>"))
@@ -841,9 +853,9 @@ About the new airlock wires panel:
 
 		else if(href_list["aiEnable"])
 			var/code = text2num(href_list["aiEnable"])
+
 			switch (code)
-				if(1)
-					//enable idscan
+				if(ID_SCAN)
 					if(src.isWireCut(AIRLOCK_WIRE_IDSCAN))
 						to_chat(usr, "You can't enable IdScan - The IdScan wire has been cut.")
 					else if(src.aiDisabledIdScanner)
@@ -854,8 +866,7 @@ About the new airlock wires panel:
 						investigation_log(I_WIRES, "|| IDscan disabled via robot interface by [key_name(usr)]")
 					else
 						to_chat(usr, "The IdScan feature is not disabled.")
-				if(4)
-					//raise door bolts
+				if(RAISE_DOOR_BOLTS)
 					if(src.isWireCut(AIRLOCK_WIRE_DOOR_BOLTS))
 						to_chat(usr, text("The door bolt drop wire is cut - you can't raise the door bolts.<br>\n"))
 					else if(!src.locked)
@@ -872,8 +883,7 @@ About the new airlock wires panel:
 						else
 							to_chat(usr, text("Cannot raise door bolts due to power failure.<br>\n"))
 
-				if(5)
-					//electrify door for 30 seconds
+				if(ELECTRIFY_30SEC)
 					if(src.isWireCut(AIRLOCK_WIRE_ELECTRIFY))
 						to_chat(usr, text("The electrification wire has been cut.<br>\n"))
 					else if(src.secondsElectrified==-1)
@@ -895,7 +905,7 @@ About the new airlock wires panel:
 									src.secondsElectrified = 0
 								src.updateUsrDialog()
 								sleep(10)
-				if(6)
+				if(ELECTRIFY_4EVER)
 					//electrify door indefinitely
 					if(src.isWireCut(AIRLOCK_WIRE_ELECTRIFY))
 						to_chat(usr, text("The electrification wire has been cut.<br>\n"))
@@ -913,7 +923,7 @@ About the new airlock wires panel:
 							return 0
 						src.secondsElectrified = -1
 
-				if (8) // Not in order >.>
+				if (DOOR_SAFETIES) // Not in order >.>
 					// Safeties!  Maybe we do need some stinking safeties!
 					if (src.isWireCut(AIRLOCK_WIRE_SAFETY))
 						to_chat(usr, text("Control to door sensors is disabled."))
@@ -928,7 +938,7 @@ About the new airlock wires panel:
 					else
 						to_chat(usr, text("Firmware reports safeties already in place."))
 
-				if(9)
+				if(DOOR_SPEED)
 					// Door speed control
 					if(src.isWireCut(AIRLOCK_WIRE_SPEED))
 						to_chat(usr, text("Control to door timing circuitry has been severed."))
@@ -942,7 +952,7 @@ About the new airlock wires panel:
 					else
 						to_chat(usr, text("Door timing circurity currently operating normally."))
 
-				if(7)
+				if(OPEN_DOOR)
 					//open door
 					if(src.welded)
 						to_chat(usr, text("The airlock has been welded shut!"))
@@ -963,7 +973,7 @@ About the new airlock wires panel:
 						if(!safe)
 							add_attacklogs(usr, null, " forced close [src] at [x] [y] [z] with safeties disabled.", admin_warn = FALSE)
 
-				if(10)
+				if(BOLT_LIGHTS)
 					// Bolt lights
 					if(src.isWireCut(AIRLOCK_WIRE_LIGHT))
 						to_chat(usr, text("Control to door bolt lights has been severed.</a>"))
@@ -981,7 +991,6 @@ About the new airlock wires panel:
 	update_icon()
 	if(!nowindow)
 		updateUsrDialog()
-	return
 
 /obj/machinery/door/airlock/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	var/dat=""
