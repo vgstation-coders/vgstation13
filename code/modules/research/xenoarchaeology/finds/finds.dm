@@ -52,25 +52,17 @@
 		src.visible_message("The [src] crumbles away, leaving some dust and gravel behind.")*/
 
 /obj/item/weapon/strangerock/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/weldingtool/))
-		var/obj/item/weapon/weldingtool/w = W
-		if(w.isOn())
-			if(w.get_fuel() >= 4 && !src.method)
-				if(inside)
-					inside.forceMove(get_turf(src))
-					inside = null
-					for(var/mob/M in viewers(world.view, user))
-						M.show_message("<span class='info'>[src] burns away revealing [inside].</span>",1)
-				else
-					for(var/mob/M in viewers(world.view, user))
-						M.show_message("<span class='info'>[src] burns away into nothing.</span>",1)
-				qdel(src)
-				w.remove_fuel(4)
-			else
-				for(var/mob/M in viewers(world.view, user))
-					M.show_message("<span class='info'>A few sparks fly off [src], but nothing else happens.</span>",1)
-				w.remove_fuel(1)
-			return
+	if(istype(W,/obj/item/weapon/pickaxe/brush))
+		if(inside)
+			inside.forceMove(get_turf(src))
+			inside = null
+			for(var/mob/M in viewers(world.view, user))
+				M.show_message("<span class='info'>[src] is brushed away revealing [inside].</span>",1)
+		else
+			for(var/mob/M in viewers(world.view, user))
+				M.show_message("<span class='info'>[src] reveals nothing!</span>",1)
+		qdel(src)
+		return
 
 	else if(istype(W,/obj/item/device/core_sampler/))
 		var/obj/item/device/core_sampler/S = W
