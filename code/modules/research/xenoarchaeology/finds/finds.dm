@@ -55,10 +55,10 @@
 	if(istype(W,/obj/item/weapon/pickaxe/brush))
 		if(inside)
 			inside.forceMove(get_turf(src))
-				visible_message("<span class='info'>[src] is brushed away revealing [inside].</span>")
+			visible_message("<span class='info'>\The [src] is brushed away revealing \The [inside].</span>")
 			inside = null
 		else
-			visible_message("<span class='info'>[src] reveals nothing!</span>",1)
+			visible_message("<span class='info'>\The [src] reveals nothing!</span>",1)
 		qdel(src)
 
 	else if(istype(W,/obj/item/device/core_sampler/))
@@ -68,7 +68,7 @@
 
 	..()
 	if(prob(33))
-		src.visible_message("<span class='warning'>[src] crumbles away, leaving some dust and gravel behind.</span>")
+		src.visible_message("<span class='warning'>\The [src] crumbles away, leaving some dust and gravel behind.</span>")
 		qdel(src)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
