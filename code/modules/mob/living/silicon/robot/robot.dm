@@ -598,7 +598,7 @@
 
 				return
 
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if(iswelder(W))
 		if(!getBruteLoss())
 			to_chat(user, "Nothing to fix here!")
 			return

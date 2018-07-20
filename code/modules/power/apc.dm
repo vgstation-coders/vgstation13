@@ -539,16 +539,10 @@
 	else if (istype(W, /obj/item/weapon/circuitboard/power_control) && opened && has_electronics==0 && ((stat & BROKEN) || malfhack))
 		to_chat(user, "<span class='warning'>You cannot put the board inside, the frame is damaged.</span>")
 		return
-	else if (istype(W, /obj/item/weapon/weldingtool) && opened && has_electronics==0 && !terminal)
+	else if (iswelder(W) && opened && has_electronics==0 && !terminal)
 		var/obj/item/weapon/weldingtool/WT = W
-		if (WT.get_fuel() < 3)
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
-			return
 		to_chat(user, "You start welding the APC frame...")
-		playsound(src, 'sound/items/Welder.ogg', 50, 1)
-		if (do_after(user, src, 50))
-			if(!src || !WT.remove_fuel(3, user))
-				return
+		if (WT.do_weld(user, src, 50, 3))
 			if (emagged || malfhack || (stat & BROKEN) || opened==2)
 				getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 1)
 				user.visible_message(\

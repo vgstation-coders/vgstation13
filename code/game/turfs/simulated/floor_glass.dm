@@ -297,29 +297,23 @@
 
 			if(iswelder(W))
 				var/obj/item/weapon/weldingtool/WT = W
-				if(WT.remove_fuel(0, user))
-					user.visible_message("<span class='notice'>[user] begins removing \the [src].</span>", \
-					"<span class='notice'>You begin removing \the [src].</span>", \
+				user.visible_message("<span class='notice'>[user] begins removing \the [src].</span>", \
+				"<span class='notice'>You begin removing \the [src].</span>", \
+				"<span class='warning'>You hear welding noises.</span>")
+				if(WT.do_weld(user, src, 40, 0) && construction_state == 0)
+					user.visible_message("<span class='notice'>[user] removes \the [src].</span>", \
+					"<span class='notice'>You remove \the [src].</span>", \
 					"<span class='warning'>You hear welding noises.</span>")
-					playsound(src, 'sound/items/Welder.ogg', 100, 1)
-					if(do_after(user, src, 40) && construction_state == 0)
-						playsound(src, 'sound/items/Welder.ogg', 100, 1)
-						user.visible_message("<span class='notice'>[user] removes \the [src].</span>", \
-						"<span class='notice'>You remove \the [src].</span>", \
-						"<span class='warning'>You hear welding noises.</span>")
-						var/pressure = 0
-						if(src.zone)
-							var/datum/gas_mixture/environment = src.return_air()
-							pressure = environment.return_pressure()
-						if (pressure > 0)
-							message_admins("Glass floor with pressure [pressure]kPa deconstructed by [user.real_name] ([formatPlayerPanel(user,user.ckey)]) at [formatJumpTo(src)]!")
-							log_admin("Window with pressure [pressure]kPa deconstructed by [user.real_name] ([user.ckey]) at [src]!")
+					var/pressure = 0
+					if(src.zone)
+						var/datum/gas_mixture/environment = src.return_air()
+						pressure = environment.return_pressure()
+					if (pressure > 0)
+						message_admins("Glass floor with pressure [pressure]kPa deconstructed by [user.real_name] ([formatPlayerPanel(user,user.ckey)]) at [formatJumpTo(src)]!")
+						log_admin("Window with pressure [pressure]kPa deconstructed by [user.real_name] ([user.ckey]) at [src]!")
 
-						getFromPool(sheettype, src, sheetamount)
-						src.ReplaceWithLattice()
-				else
-					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
-				return
+					getFromPool(sheettype, src, sheetamount)
+					src.ReplaceWithLattice()
 	unhandled_attackby(W, user)
 
 /turf/simulated/floor/glass/proc/unhandled_attackby(var/obj/item/W, var/mob/user)

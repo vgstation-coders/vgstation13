@@ -40,12 +40,8 @@
 		if(NOCIRCUITBOARD)
 			if(iswelder(P))
 				var/obj/item/weapon/weldingtool/WT = P
-				if(!WT.isOn())
-					to_chat(user, "The welder must be on for this task.")
-					return
-				playsound(loc, 'sound/items/Welder.ogg', 50, 1)
-				if(do_after(user, src, 2 SECONDS))
-					if(!src || state != NOCIRCUITBOARD || !WT.remove_fuel(0, user))
+				if(WT.do_weld(user, src, 2 SECONDS, 0))
+					if(!src || state != NOCIRCUITBOARD)
 						return
 					to_chat(user, "<span class='notice'>You deconstruct the frame.</span>")
 					drop_stack(sheet_type, loc, 4, user)

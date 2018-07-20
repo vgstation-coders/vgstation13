@@ -938,19 +938,13 @@
 	if(!deconstructable)
 		return
 	src.add_fingerprint(user)
-	if(istype(I, /obj/item/weapon/weldingtool))
+	if(iswelder(I))
 		var/obj/item/weapon/weldingtool/W = I
-
-		if(W.remove_fuel(0,user))
-			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-			to_chat(user, "You start slicing the disposal pipe.")
-			if(do_after(user, src, 3 SECONDS))
-				if(gcDestroyed || !W.isOn())
-					return
-				welded()
-		else
-			to_chat(user, "You need more welding fuel to cut the pipe.")
-			return
+		to_chat(user, "You start slicing the disposal pipe.")
+		if(W.do_weld(user, src, 3 SECONDS, 0))
+			if(gcDestroyed)
+				return
+			welded()
 
 // called when pipe is cut with welder
 /obj/structure/disposalpipe/proc/welded()
@@ -1443,19 +1437,13 @@
 	if(!deconstructable)
 		return
 	src.add_fingerprint(user)
-	if(istype(I, /obj/item/weapon/weldingtool))
+	if(iswelder(I))
 		var/obj/item/weapon/weldingtool/W = I
-
-		if(W.remove_fuel(0,user))
-			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-			to_chat(user, "You start slicing the disposal pipe.")
-			if(do_after(user, src, 3 SECONDS))
-				if(gcDestroyed || !W.isOn())
-					return
-				welded()
-		else
-			to_chat(user, "You need more welding fuel to cut the pipe.")
-			return
+		to_chat(user, "You start slicing the disposal pipe.")
+		if(W.do_weld(user, src, 3 SECONDS))
+			if(gcDestroyed)
+				return
+			welded()
 
 	// would transfer to next pipe segment, but we are in a trunk
 	// if not entering from disposal bin,

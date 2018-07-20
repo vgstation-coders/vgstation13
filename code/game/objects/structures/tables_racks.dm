@@ -608,29 +608,24 @@
 				user << "<span class='warning'>\The [W] is stuck to your hands!</span>"
 				return
 
-	else if (istype(W, /obj/item/weapon/weldingtool))
+	else if (iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(!(WT.welding)/* || (params_list.len && text2num(params_list["icon-y"]) > 8)*/) //8 above the bottom of the icon
-			return ..()
-		if(WT.remove_fuel(0, user))
+		if(WT.do_weld(user, src, 50, 0))
 			if(src.status == 2)
 				to_chat(user, "<span class='notice'>Now weakening the reinforced table.</span>")
 				playsound(src, 'sound/items/Welder.ogg', 50, 1)
-				if (do_after(user, src, 50))
-					if(!src || !WT.isOn())
-						return
-					to_chat(user, "<span class='notice'>Table weakened.</span>")
-					src.status = 1
+				if(!src)
+					return
+				to_chat(user, "<span class='notice'>Table weakened.</span>")
+				src.status = 1
 			else
 				to_chat(user, "<span class='notice'>Now strengthening the reinforced table.</span>")
 				playsound(src, 'sound/items/Welder.ogg', 50, 1)
-				if (do_after(user, src, 50))
-					if(!src || !WT.isOn())
-						return
-					to_chat(user, "<span class='notice'>Table strengthened.</span>")
-					src.status = 2
+				if(!src)
+					return
+				to_chat(user, "<span class='notice'>Table strengthened.</span>")
+				src.status = 2
 			return
-		return
 	return ..()
 
 /*

@@ -574,7 +574,7 @@ proc/move_mining_shuttle()
 	mob_property_flags = MOB_ROBOTIC
 
 /mob/living/simple_animal/hostile/mining_drone/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I, /obj/item/weapon/weldingtool))
+	if(iswelder(I))
 		var/obj/item/weapon/weldingtool/W = I
 		if(W.welding && !stat)
 			if(stance != HOSTILE_STANCE_IDLE)

@@ -167,15 +167,7 @@
 		return
 	if(health < maxHealth && iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(!WT.isOn())
-			return
-		if (WT.get_fuel() < 5)
-			to_chat(user, "<span class='warning'>You need more fuel to complete this task.</span>")
-
-		playsound(src, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
-		if(do_after(user, src, 30))
-			if(!src || !WT.remove_fuel(5, user))
-				return
+		if(WT.do_weld(user, src, 30, 5))
 			to_chat(user, "<span class='notice'>You patch up \the [src].</span>")
 			adjust_health(-rand(15,30))
 			return
