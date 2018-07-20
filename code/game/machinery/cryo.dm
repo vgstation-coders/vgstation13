@@ -133,6 +133,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(!(robit.module && (robit.module.quirk_flags & MODULE_CAN_HANDLE_MEDICAL)))
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
+	over_location = get_turf(over_location)
 	if(!istype(over_location) || over_location.density)
 		return
 	if(!Adjacent(over_location) || !Adjacent(usr) || !usr.Adjacent(over_location))
@@ -143,7 +144,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 				continue
 			return
 	visible_message("[usr] starts to remove [occupant.name] from \the [src].")
-	go_out(over_location)
+	go_out(over_location, ejector = usr)
 
 /obj/machinery/atmospherics/unary/cryo_cell/process()
 	..()
@@ -185,7 +186,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(user.stat)
 		return
 
-	go_out()
+	go_out(ejector = usr)
 
 
 /obj/machinery/atmospherics/unary/cryo_cell/examine(mob/user)
@@ -327,7 +328,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(href_list["ejectOccupant"])
 		if(!occupant || isslime(usr) || ispAI(usr))
 			return 0 // don't update UIs attached to this object
-		go_out()
+		go_out(ejector = usr)
 
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object
@@ -528,11 +529,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	//expel_gas.temperature = T20C // Lets expel hot gas and see if that helps people not die as they are removed
 	//loc.assume_air(expel_gas)
 
-/obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit = src.loc)
+/obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit = src.loc, var/ejector)
 	if(!occupant || ejecting)
 		return 0
 	if (occupant.bodytemperature > T0C+31)
-		boot_contents(exit, regulatetemp = 0) //No temperature regulation cycle required
+		boot_contents(exit, FALSE, ejector) //No temperature regulation cycle required
 	else
 		ejecting = 1
 		playsound(src, 'sound/machines/pressurehiss.ogg', 40, 1)
@@ -542,10 +543,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			if(!src || !src.ejecting)
 				return
 			ejecting = 0
-			boot_contents(exit)
+			boot_contents(exit, TRUE, ejector)
 	return 1
 
-/obj/machinery/atmospherics/unary/cryo_cell/proc/boot_contents(var/exit = src.loc, var/regulatetemp = 1)
+/obj/machinery/atmospherics/unary/cryo_cell/proc/boot_contents(var/exit = src.loc, var/regulatetemp = TRUE, var/ejector)
 	for (var/atom/movable/x in src.contents)
 		if((x in component_parts) || (x == src.beaker))
 			continue
@@ -558,6 +559,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		occupant.reset_view()
 		if (regulatetemp && occupant.bodytemperature < T0C+34.5)
 			occupant.bodytemperature = T0C+34.5 //just a little bit chilly still
+		if(ejector && ejector != occupant)
+			var/obj/structure/bed/roller/B = locate() in exit
+			if(B)
+				B.buckle_mob(occupant, ejector)
+				ejector.start_pulling(B)
 	//	occupant.metabslow = 0
 		occupant = null
 	update_icon()
@@ -642,7 +648,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		message_admins("[key_name(L)] has turned \the [src] [on?"on":"off"]! [formatJumpTo(src)]")
 	else if(occupant && !ejecting) //Eject occupant
 		message_admins("[key_name(L)] has ejected [occupant] from \the [src]! [formatJumpTo(src)]")
-		go_out()
+		go_out(ejector = L)
 
 /obj/machinery/atmospherics/unary/cryo_cell/AltClick(mob/user) // AltClick = most common action = removing the patient
 	if(!Adjacent(user))
@@ -657,11 +663,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		sleep(300)
 		if(!src || !user || !occupant || (occupant != user)) //Check if someone's released/replaced/bombed him already
 			return
-		go_out()//and release him from the eternal prison.
+		go_out(ejector = user)//and release him from the eternal prison.
 	else
 		if (user.isUnconscious() || istype(user, /mob/living/simple_animal))
 			return
-		go_out()
+		go_out(ejector = user)
 	add_fingerprint(user)
 
 /obj/machinery/atmospherics/unary/cryo_cell/CtrlClick(mob/user) // CtrlClick = less common action = retrieving the beaker

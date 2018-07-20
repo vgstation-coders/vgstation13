@@ -221,6 +221,7 @@
 		if(!(robit.module && (robit.module.quirk_flags & MODULE_CAN_HANDLE_MEDICAL)))
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
+	over_location = get_turf(over_location)
 	if(!istype(over_location) || over_location.density)
 		return
 	if(!Adjacent(over_location))
@@ -236,7 +237,7 @@
 		visible_message("[usr] climbs out of \the [src].")
 	else
 		visible_message("[usr] removes [occupant.name] from \the [src].")
-	go_out(over_location)
+	go_out(over_location, ejector = usr)
 
 /obj/machinery/sleeper/allow_drop()
 	return FALSE
@@ -376,19 +377,24 @@
 			occupant.resting = 0
 		on = FALSE
 		if(auto_eject_after)
-			go_out()
+			go_out(ejector = user)
 		process()
 
-/obj/machinery/sleeper/proc/go_out(var/exit = loc)
+/obj/machinery/sleeper/proc/go_out(var/exit = loc, var/ejector)
 	if(!occupant)
 		return FALSE
-	for (var/atom/movable/x in contents)
+	for(var/atom/movable/x in contents)
 		if(x in component_parts)
 			continue
 		x.forceMove(loc)
 	if(!occupant.gcDestroyed)
 		occupant.forceMove(exit)
 		occupant.reset_view()
+		if(ejector && ejector != occupant)
+			var/obj/structure/bed/roller/B = locate() in exit
+			if(B)
+				B.buckle_mob(occupant, ejector)
+				ejector.start_pulling(B)
 	occupant = null
 	update_icon()
 	return TRUE
@@ -413,7 +419,7 @@
 	set src in oview(1)
 	if(usr.isUnconscious())
 		return
-	go_out()
+	go_out(ejector = usr)
 	add_fingerprint(usr)
 	set_light(0)
 	return
@@ -493,7 +499,7 @@
 		icon = 'maps/defficiency/medbay.dmi'
 	update_icon()
 
-/obj/machinery/sleeper/mancrowave/go_out(var/exit = loc)
+/obj/machinery/sleeper/mancrowave/go_out(var/exit = loc, var/ejector)
 	if(on && !emagged)
 		return FALSE
 	else
@@ -580,7 +586,7 @@
 		automatic = !automatic
 	if(href_list["turnoff"])
 		on = FALSE
-		go_out()
+		go_out(ejector = usr)
 		update_icon()
 	if(href_list["security"])
 		if(on)

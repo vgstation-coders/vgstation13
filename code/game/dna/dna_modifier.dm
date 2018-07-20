@@ -86,7 +86,7 @@
 /obj/machinery/dna_scannernew/relaymove(mob/user as mob)
 	if(user.stat)
 		return
-	src.go_out()
+	src.go_out(ejector = user)
 	return
 
 
@@ -98,7 +98,7 @@
 	if(usr.isUnconscious() || istype(usr, /mob/living/simple_animal))
 		return
 
-	go_out()
+	go_out(ejector = usr)
 
 	add_fingerprint(usr)
 	return
@@ -207,6 +207,7 @@
 		if(!(robit.module && (robit.module.quirk_flags & MODULE_CAN_HANDLE_MEDICAL)))
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
+	over_location = get_turf(over_location)
 	if(!istype(over_location) || over_location.density)
 		return
 	if(!Adjacent(over_location))
@@ -222,7 +223,7 @@
 		visible_message("[usr] climbs out of \the [src].")
 	else
 		visible_message("[usr] removes [occupant.name] from \the [src].")
-	go_out(over_location)
+	go_out(over_location, ejector = usr)
 
 /obj/machinery/dna_scannernew/attackby(var/obj/item/weapon/item as obj, var/mob/user as mob)
 	if(istype(item, /obj/item/weapon/reagent_containers/glass))
@@ -284,7 +285,7 @@
 
 #define DNASCANNER_MESSAGE_INTERVAL 1 SECONDS
 
-/obj/machinery/dna_scannernew/proc/go_out(var/exit = src.loc)
+/obj/machinery/dna_scannernew/proc/go_out(var/exit = src.loc, var/ejector)
 	if(!occupant)
 		for(var/mob/M in src)//Failsafe so you can get mobs out
 			if(!M.gcDestroyed)
@@ -298,6 +299,11 @@
 	if(!occupant.gcDestroyed)
 		occupant.forceMove(exit)
 		occupant.reset_view()
+		if(ejector && ejector != occupant)
+			var/obj/structure/bed/roller/B = locate() in exit
+			if(B)
+				B.buckle_mob(occupant, ejector)
+				ejector.start_pulling(B)
 	occupant = null
 	icon_state = "scanner_0"
 
