@@ -906,7 +906,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 
 /datum/supply_packs/expenergy
-	name = "High-Tech energy weapons"
+	name = "\improper High-Tech energy weapons"
 	contains = list(/obj/item/weapon/gun/energy/gun,
 					/obj/item/weapon/gun/energy/gun)
 	cost = 30
