@@ -173,7 +173,7 @@
 		set_light(light_range_on, light_power_on)
 	return
 
-/obj/machinery/bodyscanner/proc/go_out(var/exit = loc, var/ejector)
+/obj/machinery/bodyscanner/proc/go_out(var/exit = loc, var/mob/ejector)
 	if(!src.occupant)
 		return
 	for (var/atom/movable/x in src.contents)
@@ -184,7 +184,7 @@
 	if(!occupant.gcDestroyed)
 		occupant.forceMove(exit)
 		occupant.reset_view()
-		if(ejector && ejector != occupant)
+		if(istype(ejector) && ejector != occupant)
 			var/obj/structure/bed/roller/B = locate() in exit
 			if(B)
 				B.buckle_mob(occupant, ejector)

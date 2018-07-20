@@ -380,7 +380,7 @@
 			go_out(ejector = user)
 		process()
 
-/obj/machinery/sleeper/proc/go_out(var/exit = loc, var/ejector)
+/obj/machinery/sleeper/proc/go_out(var/exit = loc, var/mob/ejector)
 	if(!occupant)
 		return FALSE
 	for(var/atom/movable/x in contents)
@@ -390,7 +390,7 @@
 	if(!occupant.gcDestroyed)
 		occupant.forceMove(exit)
 		occupant.reset_view()
-		if(ejector && ejector != occupant)
+		if(istype(ejector) && ejector != occupant)
 			var/obj/structure/bed/roller/B = locate() in exit
 			if(B)
 				B.buckle_mob(occupant, ejector)

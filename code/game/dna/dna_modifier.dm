@@ -285,7 +285,7 @@
 
 #define DNASCANNER_MESSAGE_INTERVAL 1 SECONDS
 
-/obj/machinery/dna_scannernew/proc/go_out(var/exit = src.loc, var/ejector)
+/obj/machinery/dna_scannernew/proc/go_out(var/exit = src.loc, var/mob/ejector)
 	if(!occupant)
 		for(var/mob/M in src)//Failsafe so you can get mobs out
 			if(!M.gcDestroyed)
@@ -299,7 +299,7 @@
 	if(!occupant.gcDestroyed)
 		occupant.forceMove(exit)
 		occupant.reset_view()
-		if(ejector && ejector != occupant)
+		if(istype(ejector) && ejector != occupant)
 			var/obj/structure/bed/roller/B = locate() in exit
 			if(B)
 				B.buckle_mob(occupant, ejector)
