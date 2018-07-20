@@ -154,7 +154,7 @@ var/veil_thickness = CULT_PROLOGUE
 		return data
 
 
-	var/obj/item/weapon/reagent_containers/glass/G_held = H_user.get_active_hand()
+	var/obj/item/weapon/reagent_containers/G_held = H_user.get_active_hand()
 	if (!istype(G_held) || !round(G_held.reagents.get_reagent_amount(BLOOD)))
 		G_held = H_user.get_inactive_hand()
 
@@ -194,7 +194,7 @@ var/veil_thickness = CULT_PROLOGUE
 
 
 	//Is there a reagent container on the turf that has blood in it?
-	for (var/obj/item/weapon/reagent_containers/glass/G in T)
+	for (var/obj/item/weapon/reagent_containers/G in T)
 		var/blood_volume = round(G.reagents.get_reagent_amount(BLOOD))
 		if (blood_volume)
 			data["container"] = G
@@ -269,7 +269,7 @@ var/veil_thickness = CULT_PROLOGUE
 									"<span class='rose'>You dip your fingers inside \the [data["bleeder"]]'s wounds to draw some blood from them.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if ("held")
-			var/obj/item/weapon/reagent_containers/glass/G = data["held"]
+			var/obj/item/weapon/reagent_containers/G = data["held"]
 			blood = locate() in G.reagents.reagent_list
 			if (previous_result != "held")
 				user.visible_message("<span class='warning'>\The [user] tips \the [data["held"]], pouring blood!</span>",
@@ -283,7 +283,7 @@ var/veil_thickness = CULT_PROLOGUE
 									"<span class='rose'>You squeeze \the [data["bloodpack"]] to pour the blood contained inside.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if ("container")
-			var/obj/item/weapon/reagent_containers/glass/G = data["container"]
+			var/obj/item/weapon/reagent_containers/G = data["container"]
 			blood = locate() in G.reagents.reagent_list
 			if (previous_result != "container")
 				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data["container"]], covering them in blood!</span>",
@@ -344,11 +344,11 @@ var/veil_thickness = CULT_PROLOGUE
 			H.take_overall_damage(data["bleeder_amount"] ? 0.1 : 0)
 		if (data["held"])
 			data["total"] += data["held_amount"]
-			var/obj/item/weapon/reagent_containers/glass/G = data["held"]
+			var/obj/item/weapon/reagent_containers/G = data["held"]
 			G.reagents.remove_reagent(BLOOD, data["held_amount"])
 		if (data["container"])
 			data["total"] += data["container_amount"]
-			var/obj/item/weapon/reagent_containers/glass/G = data["container"]
+			var/obj/item/weapon/reagent_containers/G = data["container"]
 			G.reagents.remove_reagent(BLOOD, data["container_amount"])
 		if (data["user"])
 			data["total"] += data["user_amount"]

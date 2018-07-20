@@ -666,6 +666,7 @@
 	victim.Stun(5)
 	conversion = new(T)
 	flick("rune_convert_start",conversion)
+	playsound(R, 'sound/effects/convert_start.ogg', 75, 0, -4)
 
 	if (victim.mind)
 		if (victim.mind.assigned_role in impede_medium)
@@ -689,6 +690,7 @@
 				return
 			//first let's make sure they're on the rune
 			if (victim.loc != T)//Removed() should take care of it, but just in case
+				playsound(R, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 				conversion.icon_state = ""
 				flick("rune_convert_abort",conversion)
 				abort("victim removed")
@@ -698,12 +700,14 @@
 			if (!spell_holder.Adjacent(activator))
 				cancelling--
 				if (cancelling <= 0)
+					playsound(R, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 					conversion.icon_state = ""
 					flick("rune_convert_abort",conversion)
 					abort("moved away")
 					return
 
 			else
+				playsound(R, 'sound/effects/convert_process.ogg', 10, 0, -4)
 				//then progress through the ritual
 				victim.Silent(5)
 				victim.Knockdown(5)
@@ -800,6 +804,7 @@
 			return
 
 		if (victim.loc != T)//Removed() should take care of it, but just in case
+			playsound(R, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 			conversion.icon_state = ""
 			flick("rune_convert_abort",conversion)
 			abort("victim removed")
@@ -807,6 +812,7 @@
 
 		switch (success)
 			if (1)
+				playsound(R, 'sound/effects/convert_success.ogg', 75, 0, -4)
 				//new cultists get purged of the debuffs
 				victim.SetKnockdown(0)
 				victim.SetStunned(0)
@@ -827,6 +833,7 @@
 				to_chat(victim, "<span class='danger'>Your mind was impervious to the teachings of Nar-Sie. Being of no use for the cult, your body was be devoured when the ritual ended. Your blood and equipment now belong to the cult.</span>")
 
 
+		playsound(R, 'sound/effects/convert_failure.ogg', 75, 0, -4)
 		conversion.icon_state = ""
 		flick("rune_convert_failure",conversion)
 
@@ -863,6 +870,7 @@
 
 /datum/rune_spell/conversion/Removed(var/mob/M)
 	if (victim==M)
+		playsound(spell_holder, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 		conversion.icon_state = ""
 		flick("rune_convert_abort",conversion)
 		abort("victim removed")
@@ -876,8 +884,8 @@
 	icon_state = "rune_convert_process"
 	pixel_x = -WORLD_ICON_SIZE/2
 	pixel_y = -WORLD_ICON_SIZE/2
-	layer = LIGHTING_PLANE
-	plane = NARSIE_GLOW
+	layer = NARSIE_GLOW
+	plane = LIGHTING_PLANE
 	mouse_opacity = 0
 
 /obj/effect/cult_ritual/conversion/proc/Die()
@@ -926,8 +934,9 @@
 	qdel(src)
 
 /datum/rune_spell/stun/cast_touch(var/mob/M)
-	anim(target = M, a_icon = 'icons/effects/64x64.dmi', flick_anim = "touch_stun", lay = LIGHTING_PLANE, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = NARSIE_GLOW)
+	anim(target = M, a_icon = 'icons/effects/64x64.dmi', flick_anim = "touch_stun", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
 
+	playsound(spell_holder, 'sound/effects/stun_talisman.ogg', 25, 0, -5)
 	if (prob(5))//for old times' sake
 		activator.whisper("Dream sign ''Evil sealing talisman'[pick("'","`")]!")
 	else
@@ -954,8 +963,8 @@
 	icon_state = ""
 	pixel_x = -WORLD_ICON_SIZE/2
 	pixel_y = -WORLD_ICON_SIZE/2
-	layer = LIGHTING_PLANE
-	plane = NARSIE_GLOW
+	layer = NARSIE_GLOW
+	plane = LIGHTING_PLANE
 	mouse_opacity = 0
 	var/stun_duration = 5
 
@@ -969,6 +978,7 @@
 			stun_duration--
 			flick("talisman_stun",src)
 
+	playsound(src, 'sound/effects/stun_rune.ogg', 75, 0, 0)
 	spawn(10)
 		visible_message("<span class='warning'>The rune explodes in a bright flash of chaotic energies.</span>")
 

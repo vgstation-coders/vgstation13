@@ -349,11 +349,11 @@ var/list/arcane_tomes = list()
 		spell_type = spell
 		switch(initial(spell.talisman_absorb))
 			if (RUNE_CAN_ATTUNE)
-				user.playsound_local(src, 'sound/effects/talisman_attune.ogg', 50, 0, 0, 0, 0)
+				playsound(src, 'sound/effects/talisman_attune.ogg', 50, 0, -5)
 				to_chat(user, "<span class='notice'>The talisman can now remotely trigger the [initial(spell.name)] rune.</span>")
 				attuned_rune = R
 			if (RUNE_CAN_IMBUE)
-				user.playsound_local(src, 'sound/effects/talisman_imbue.ogg', 50, 0, 0, 0, 0)
+				playsound(src, 'sound/effects/talisman_imbue.ogg', 50, 0, -5)
 				to_chat(user, "<span class='notice'>The talisman absorbs the power of the [initial(spell.name)] rune.</span>")
 				qdel(R)
 			if (RUNE_CANNOT)//like, that shouldn't even be possible because of the earlier if() check, but just in case.
