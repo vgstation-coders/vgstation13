@@ -205,6 +205,9 @@
 			return 1
 		to_chat(user, "<span class='warning'>You aren't equipped to interface with technology this old!</span>")
 		return 0
+	if(isAdminGhost(user))
+		user.set_machine(src)
+		interact(user)
 
 /obj/machinery/microwave/attack_hand(mob/user as mob)
 	user.set_machine(src)
@@ -447,7 +450,7 @@
 	return ffuu
 
 /obj/machinery/microwave/CtrlClick(mob/user)
-	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && anchored)
+	if(isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check() && anchored))
 		if(issilicon(user) && !attack_ai(user))
 			return ..()
 		cook() //Cook checks for power, brokenness, and contents internally
@@ -458,7 +461,7 @@
 	if(operating)
 		to_chat(user, "<span class='warning'>Too late, the microwave is already turned on!</span>")
 		return
-	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check())
+	if(isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check()))
 		if(issilicon(user) && !attack_ai(user))
 			return ..()
 		dispose()
