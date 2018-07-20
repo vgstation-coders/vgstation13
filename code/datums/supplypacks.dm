@@ -906,12 +906,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 
 /datum/supply_packs/expenergy
-	name = "Experimental energy gear"
+	name = "High-Tech energy weapons"
 	contains = list(/obj/item/weapon/gun/energy/gun,
 					/obj/item/weapon/gun/energy/gun)
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure
-	containername = "experimental energy gear crate"
+	containername = "High-Tech energy weapons crate"
 	access = list(access_armory)
 	group = "Security"
 
