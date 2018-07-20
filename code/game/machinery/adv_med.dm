@@ -91,6 +91,7 @@
 	else
 		visible_message("[user] places [L] into \the [src].")
 
+	L.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
 	L.forceMove(src)
 	L.reset_view()
 	occupant = L
