@@ -26,7 +26,7 @@
 	var/mineral_overlay
 	var/mined_type = /turf/unsimulated/floor/asteroid
 	var/overlay_state = "rock_overlay"
-	var/rockernaut = 0
+	var/rockernaut = NONE
 
 
 /turf/unsimulated/mineral/snow
@@ -135,9 +135,9 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				var/turf/unsimulated/mineral/random/target_turf = get_step(src, trydir)
 				if(istype(target_turf) && !target_turf.mineral)
 					if(prob(1))
-						rockernaut = TRUE
+						rockernaut = YES_THERE_IS_A_ROCKERNAUT
 						if(prob(1))
-							rockernaut = 2
+							rockernaut = ITS_A_BIG_ROCKERNAUT_WOW
 					target_turf.mineral = mineral
 					target_turf.UpdateMineral()
 					target_turf.MineralSpread()
@@ -342,10 +342,10 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		for (var/i = 1 to mineral.result_amount - mined_ore)
 			DropMineral()
 	switch(rockernaut)
-		if(TRUE)
+		if(YES_THERE_IS_A_ROCKERNAUT)
 			var/mob/living/simple_animal/hostile/asteroid/rockernaut/R = new(src)
 			R.possessed_ore = mineral.ore
-		if(2)
+		if(ITS_A_BIG_ROCKERNAUT_WOW)
 			var/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/R = new(src)
 			R.possessed_ore = mineral.ore
 	//destroyed artifacts have weird, unpleasant effects
