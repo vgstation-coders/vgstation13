@@ -14,7 +14,6 @@
 	var/smoke = 5
 	var/smoke_ready = 1
 	var/smoke_cooldown = 100
-	var/dash_ready = 1
 	var/dash_cooldown = 30
 	var/datum/effect/effect/system/smoke_spread/smoke_system = new
 	var/image/rockets = null
@@ -176,7 +175,7 @@
 	if(user!=linked_mech.occupant)
 		return
 	var/obj/mecha/combat/marauder/Marauder = linked_mech
-	if(Marauder.occupant)
+	if(Marauder.occupant && (Marauder.get_charge() > 0))
 		Marauder.thrusters = !Marauder.thrusters
 		Marauder.log_message("Toggled thrusters.")
 		Marauder.occupant_message("<font color='[Marauder.thrusters?"blue":"red"]'>Thrusters [Marauder.thrusters?"en":"dis"]abled.")
@@ -203,18 +202,13 @@
 		if(Marauder.lock_controls)
 			return
 		if(Marauder.occupant)
-			if(Marauder.dash_ready && Marauder.get_charge() > 0)
-				Marauder.crashing = null
+			if(Marauder.get_charge() <= 0)
+				return
 
 		Marauder.crashing = null
 		var/landing = get_distant_turf(get_turf(linked_mech), Marauder.dir, 5)
 		Marauder.throw_at(landing, 5 , 2)
 
-		Marauder.dash_ready = 0
-		/*
-		spawn(dash_cooldown)
-			Marauder.dash_ready = 1
-		*/
 		Marauder.log_message("Performed Rocket-Dash.")
 		Marauder.occupant_message("Triggered Rocket-Dash sub-routine")
 	return
@@ -281,7 +275,5 @@
 	output += {"<b>Smoke:</b> [smoke]
 					<br>
 					<b>Thrusters:</b> [thrusters?"on":"off"]
-					<br>
-					<b>Rocket-Dash:</b> [dash_ready?"ready":"recharging"]
 					"}
 	return output
