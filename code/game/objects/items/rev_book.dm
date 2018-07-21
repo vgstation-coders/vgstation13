@@ -5,6 +5,8 @@
     icon_state = "book"
     flags = FPRINT
     w_class = 1
+	infinite_uses = 0
+	uses = 1
 /obj/item/rev_book/New()
 	if(prob(10))
 		name = "A Guide to Becoming Poor and Hungry: 3rd edition"
@@ -22,7 +24,7 @@
         if(H.mind)
             var/datum/mind/M = H.mind
             if(!isrevolutionary(H))
-        user.visible_message("<span class='notice'>[user] opens [src.name] and starts reading intently.</span>","<span class='notice'>You open [src.name] and start reading intently.</span>")
+        		user.visible_message("<span class='notice'>[user] opens [src.name] and starts reading intently.</span>","<span class='notice'>You open [src.name] and start reading intently.</span>")
                 sleep(50)
                 to_chat(H, <span class='notice'>[pick("You suddenly realize how oppressed you really are under NT", "You start to question your allegiance to NT", "You wonder to yourself, what exactly happened to KC13?", "You suddenly realize how little freedom you have here", "You read something that deeply resonates with you and makes you question your beliefs"].)
                 sleep(100)
@@ -34,6 +36,10 @@
          	   //wip requires coder help
 				if(prob(25))
 					H.nutrition = 10 // le holodomor memes
+				uses = uses - 1
+				if(uses = 0 && infinite_uses != 1)
+					user.visible_message("<span class='notice'>[src.name] is engulfed in a blue light and vanishes!</span>")
+					qdel(src)
             else
                 to_chat(user, "<span class='notice'>You skim through this book, while you don't learn anything more from it, rereading it reinvigorates the fire in your heart, Vive la révolution!</span>")
     else
