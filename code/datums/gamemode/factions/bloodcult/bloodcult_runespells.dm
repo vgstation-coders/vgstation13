@@ -664,6 +664,10 @@
 	victim.Silent(5)
 	victim.Knockdown(5)
 	victim.Stun(5)
+	victim.overlay_fullscreen("conversionborder", /obj/abstract/screen/fullscreen/conversion_border)
+	victim.overlay_fullscreen("conversionred", /obj/abstract/screen/fullscreen/conversion_red)
+	victim.update_fullscreen_alpha("conversionred", 255, 5)
+	victim.update_fullscreen_alpha("conversionborder", 255, 5)
 	conversion = new(T)
 	flick("rune_convert_start",conversion)
 	playsound(R, 'sound/effects/convert_start.ogg', 75, 0, -4)
@@ -690,6 +694,8 @@
 				return
 			//first let's make sure they're on the rune
 			if (victim.loc != T)//Removed() should take care of it, but just in case
+				victim.clear_fullscreen("conversionred", 10)
+				victim.clear_fullscreen("conversionborder", 10)
 				playsound(R, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 				conversion.icon_state = ""
 				flick("rune_convert_abort",conversion)
@@ -700,6 +706,8 @@
 			if (!spell_holder.Adjacent(activator))
 				cancelling--
 				if (cancelling <= 0)
+					victim.clear_fullscreen("conversionred", 10)
+					victim.clear_fullscreen("conversionborder", 10)
 					playsound(R, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 					conversion.icon_state = ""
 					flick("rune_convert_abort",conversion)
@@ -732,6 +740,7 @@
 					progress = max(1,min(10,progress))
 				remaining -= progress
 				update_progbar()
+				victim.update_fullscreen_alpha("conversionred", 164-remaining, 8)
 
 				//spawning some messages
 				var/threshold = min(100,round((100-remaining), 10))
@@ -772,13 +781,13 @@
 			if ("No","???")
 				to_chat(activator, "<span class='sinister'>The ritual arrives in its final phase. How it ends depends now of \the [victim].</span>")
 				spawn()
-					if (alert("You feel the gaze of an alien entity, it speaks into your mind. It has much to share with you, but time is of the essence. Will you open your mind to it? Or will you become its sustenance?","You have 10 seconds","Join the Cult","Be Devoured") == "Join the Cult")
+					if (alert(victim, "You feel the gaze of an alien entity, it speaks into your mind. It has much to share with you, but time is of the essence. Will you open your mind to it? Or will you become its sustenance? Decide now!","You have 10 seconds","Join the Cult","Be Devoured") == "Join the Cult")
 						conversion.icon_state = "rune_convert_good"
 						success = 1
 						to_chat(victim, "<span class='sinister'>As you let the strange words into your mind, you find yourself suddenly understanding their meaning. A sense of dread and fascination comes over you.</span>")
 					else
 						conversion.icon_state = "rune_convert_bad"
-						to_chat(victim, "<span class='danger'>You won't let it have its way with you! Better die now as a human, than serve them. You feel it closing in.</span>")
+						to_chat(victim, "<span class='danger'>You won't let it have its way with you! Better die now as a human, than serve them.</span>")
 						success = -1
 
 			if ("Never","Banned")
@@ -804,6 +813,8 @@
 			return
 
 		if (victim.loc != T)//Removed() should take care of it, but just in case
+			victim.clear_fullscreen("conversionred", 10)
+			victim.clear_fullscreen("conversionborder", 10)
 			playsound(R, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 			conversion.icon_state = ""
 			flick("rune_convert_abort",conversion)
@@ -812,6 +823,10 @@
 
 		switch (success)
 			if (1)
+				conversion.layer = BELOW_OBJ_LAYER
+				conversion.plane = OBJ_PLANE
+				victim.clear_fullscreen("conversionred", 10)
+				victim.clear_fullscreen("conversionborder", 10)
 				playsound(R, 'sound/effects/convert_success.ogg', 75, 0, -4)
 				//new cultists get purged of the debuffs
 				victim.SetKnockdown(0)
@@ -844,6 +859,10 @@
 			victim.take_blood(cup, cup.volume)//Up to 60u
 			cup.on_reagent_change()//so we get the reagentsfillings overlay
 			new/obj/item/weapon/skull(coffer)
+		if (isslime(victim))
+			cup.reagents.add_reagent(SLIMEJELLY, 50)
+		if (isalien(victim))//w/e
+			cup.reagents.add_reagent(RADIUM, 50)
 
 		for(var/obj/item/weapon/implant/loyalty/I in victim)
 			I.implanted = 0
@@ -870,6 +889,8 @@
 
 /datum/rune_spell/conversion/Removed(var/mob/M)
 	if (victim==M)
+		victim.clear_fullscreen("conversionred", 10)
+		victim.clear_fullscreen("conversionborder", 10)
 		playsound(spell_holder, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 		conversion.icon_state = ""
 		flick("rune_convert_abort",conversion)
