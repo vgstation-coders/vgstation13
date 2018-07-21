@@ -551,6 +551,7 @@
 	icon_state = "rorsuit"
 	item_state = "rorsuit"
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
+	goliath_reinforce = TRUE
 
 /obj/item/clothing/head/helmet/space/rig/ror
 	name = "survivor's hardsuit helmet"
@@ -558,6 +559,7 @@
 	icon_state = "rorhelm"
 	item_state = "rorhelm"
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
+	goliath_reinforce = TRUE
 
 /obj/item/clothing/head/helmet/space/rig/ror/update_icon()
 	return
