@@ -31,7 +31,9 @@
           		to_chat(H, "<span class='notice'>You renounce your allegiance to nanotransen and decide to join the fight against corporate tyranny, oppression, and persecution. Death to the capitalist oppressors, Vive la révolution!</span>")
         		var/wikiroute = role_wiki[ROLE_REVOLUTIONARY]
                 to_chat(H, "<span class='info'><a HREF='?src=\ref[H];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-            //wip requires coder help
+         	   //wip requires coder help
+				if(prob(25))
+					H.nutrition = 10 // le holodomor memes
             else
                 to_chat(user, "<span class='notice'>You skim through this book, while you don't learn anything more from it, rereading it reinvigorates the fire in your heart, Vive la révolution!</span>")
     else
