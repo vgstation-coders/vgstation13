@@ -630,6 +630,11 @@ About the new airlock wires panel:
 
 
 /obj/machinery/door/airlock/proc/hack(mob/user as mob)
+
+	if (!(isAI(user) && user.mind && user.mind.special_role))
+		to_chat(user, "Airlock AI control has been blocked. Dispatch a cyborg, or a carbon engineer, for maintenance.")
+		return FALSE
+
 	if(src.aiHacking==0)
 		src.aiHacking=1
 		spawn(20)
