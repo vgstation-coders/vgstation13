@@ -44,7 +44,7 @@
                     H.nutrition = 10 // le holodomor memes
                 uses = uses - 1
                 if (!uses && !infinite_uses)
-                    user.visible_message("<span class='notice'>[\The [src] is engulfed in a blue light and vanishes!</span>")
+                    user.visible_message("<span class='notice'>\The [src] is engulfed in a blue light and vanishes!</span>")
                     qdel(src)
             else
                 to_chat(user, "<span class='notice'>You skim through this book, while you don't learn anything more from it, rereading it reinvigorates the fire in your heart, Vive la révolution!</span>")
