@@ -527,7 +527,7 @@ Class Procs:
 		"You start to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
 		"You hear welding.")
 	if (WT.do_weld(user, src,20, 0))
-		if(!src)
+		if(gcDestroyed)
 			return -1
 		switch(state)
 			if(0)

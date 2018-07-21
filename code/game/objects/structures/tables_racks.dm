@@ -610,18 +610,15 @@
 
 	else if (iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
+		to_chat(user, "<span class='notice'>Now [status == 2?"weakening":"strenghening"] the reinforced table.</span>")
 		if(WT.do_weld(user, src, 50, 0))
 			if(src.status == 2)
-				to_chat(user, "<span class='notice'>Now weakening the reinforced table.</span>")
-				playsound(src, 'sound/items/Welder.ogg', 50, 1)
-				if(!src)
+				if(gcDestroyed)
 					return
 				to_chat(user, "<span class='notice'>Table weakened.</span>")
 				src.status = 1
 			else
-				to_chat(user, "<span class='notice'>Now strengthening the reinforced table.</span>")
-				playsound(src, 'sound/items/Welder.ogg', 50, 1)
-				if(!src)
+				if(gcDestroyed)
 					return
 				to_chat(user, "<span class='notice'>Table strengthened.</span>")
 				src.status = 2

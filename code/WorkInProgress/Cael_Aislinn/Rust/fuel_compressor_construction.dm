@@ -134,7 +134,7 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		to_chat(user, "You start welding the compressor frame...")
 		if (WT.do_weld(user, src, 50, 3))
-			if(!src)
+			if(gcDestroyed)
 				return
 			new /obj/item/mounted/frame/rust_fuel_assembly_port(loc)
 			user.visible_message(\

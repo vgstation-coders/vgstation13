@@ -77,7 +77,7 @@ obj/structure/windoor_assembly/Destroy()
 				var/obj/item/weapon/weldingtool/WT = W
 				user.visible_message("[user] dissassembles the windoor assembly.", "You start to dissassemble the windoor assembly.")
 				if(WT.do_weld(user, src, 40, 0))
-					if(!src)
+					if(gcDestroyed)
 						return
 					to_chat(user, "<span class='notice'>You dissasembled the windoor assembly!</span>")
 					if(plasma)

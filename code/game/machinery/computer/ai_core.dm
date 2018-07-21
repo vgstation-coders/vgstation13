@@ -41,7 +41,7 @@
 			if(iswelder(P))
 				var/obj/item/weapon/weldingtool/WT = P
 				if(WT.do_weld(user, src, 2 SECONDS, 0))
-					if(!src || state != NOCIRCUITBOARD)
+					if(gcDestroyed || state != NOCIRCUITBOARD)
 						return
 					to_chat(user, "<span class='notice'>You deconstruct the frame.</span>")
 					drop_stack(sheet_type, loc, 4, user)

@@ -385,7 +385,7 @@
 				var/obj/item/weapon/weldingtool/WT = P
 				to_chat(user, "<span class='notice'>You start welding the frame back into metal.</span>")
 				if(WT.do_weld(user, src, 10, 0) && state == 0)
-					if(!src || !WT.isOn())
+					if(gcDestroyed)
 						return
 					playsound(src, 'sound/items/Welder.ogg', 50, 1)
 					user.visible_message("[user] welds the frame back into metal.", "You weld the frame back into metal.", "You hear welding.")

@@ -306,7 +306,7 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		to_chat(user, "<span class='notice'>Now welding the vent.</span>")
 		if (WT.do_weld(user, src, 20, 1))
-			if(!src)
+			if(gcDestroyed)
 				return
 			if(!welded)
 				user.visible_message("[user] welds the vent shut.", "You weld the vent shut.", "You hear welding.")

@@ -694,7 +694,7 @@ Status: []<BR>"},
 			else if(iswelder(W))
 				var/obj/item/weapon/weldingtool/WT = W
 				if (WT.do_weld(user, src, 20, 5))
-					if(!src)
+					if(gcDestroyed)
 						return
 					build_step = 1
 					to_chat(user, "You remove the turret's interior metal armor.")
