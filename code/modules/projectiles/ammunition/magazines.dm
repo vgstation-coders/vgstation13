@@ -252,3 +252,58 @@
 	desc = "Reading how many shots you had left just got a lot more difficult."
 	ammo_type = "/obj/item/ammo_casing/invisible"
 	max_ammo = 2
+
+//Norf dart mags.
+/obj/item/ammo_storage/magazine/foam //mags6, 12, 18. drums 18, 25, 35, 50
+	name = "magazine (foam darts)"
+	desc = "A magazine capable of holding foam darts. This one can hold up to 6 darts."
+	icon_state = "foam6"
+	ammo_type = "/obj/item/ammo_casing/foam"
+	max_ammo = 6
+//	sprite_modulo = 8
+//	multiple_sprites = 1
+/obj/item/ammo_storage/magazine/foam/empty
+	starting_ammo = 0
+
+/obj/item/ammo_storage/magazine/foam/twelve
+	desc = "A magazine capable of holding foam darts. This one can hold up to 12 darts."
+	icon_state = "foam12"
+	max_ammo = 12
+/obj/item/ammo_storage/magazine/foam/twelve/empty
+	starting_ammo = 0
+
+/obj/item/ammo_storage/magazine/foam/eighteen
+	desc = "A magazine capable of holding foam darts. This one can hold up to 18 darts."
+	icon_state = "foam18"
+	max_ammo = 18
+/obj/item/ammo_storage/magazine/foam/eighteen/empty
+	starting_ammo = 0
+/*
+//An extra 18 dart drum mag.
+/obj/item/ammo_storage/magazine/foam/eighteendrum
+	desc = "A drum magazine capable of holding foam darts. This one can hold up to 18 darts."
+	icon_state = "foam18-D"
+	max_ammo = 18
+/obj/item/ammo_storage/magazine/foam/eighteendrum/empty
+	starting_ammo = 0
+*/
+/obj/item/ammo_storage/magazine/foam/twentyfive
+	desc = "A drum magazine capable of holding foam darts. This one can hold up to 25 darts."
+	icon_state = "foam25"
+	max_ammo = 25
+/obj/item/ammo_storage/magazine/foam/twentyfive/empty
+	starting_ammo = 0
+
+/obj/item/ammo_storage/magazine/foam/thirtyfive
+	desc = "A drum magazine capable of holding foam darts. This one can hold up to 35 darts."
+	icon_state = "foam35"
+	max_ammo = 35
+/obj/item/ammo_storage/magazine/foam/thirtyfive/empty
+	starting_ammo = 0
+
+/obj/item/ammo_storage/magazine/foam/fifty
+	desc = "A drum magazine capable of holding foam darts. This one can hold up to 50 darts."
+	icon_state = "foam50"
+	max_ammo = 50
+/obj/item/ammo_storage/magazine/foam/fifty/empty
+	starting_ammo = 0
