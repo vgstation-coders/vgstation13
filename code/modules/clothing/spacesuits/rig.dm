@@ -544,3 +544,20 @@
 	heat_conductivity = 0 //thanks, blanket
 	gas_transfer_coefficient = 0.60
 	permeability_coefficient = 0.30
+
+/obj/item/clothing/suit/space/rig/ror
+	name = "survivor's hardsuit"
+	desc = "..and so he left the asteroid, with everything but his humanity."
+	icon_state = "rorsuit"
+	item_state = "rorsuit"
+	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
+
+/obj/item/clothing/head/helmet/space/rig/ror
+	name = "survivor's hardsuit helmet"
+	desc = "..and so he left the asteroid, with everything but his humanity."
+	icon_state = "rorhelm"
+	item_state = "rorhelm"
+	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
+
+/obj/item/clothing/head/helmet/space/rig/ror/update_icon()
+	return
