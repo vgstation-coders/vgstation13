@@ -18,7 +18,7 @@ var/global/num_vending_terminals = 1
 	var/mini_icon = null
 
 //this proc is only used when an item is inserted into a custom vending machine.
-/datum/data/vending_product/proc/custom_entry(var/obj/item/item)
+/datum/data/vending_product/proc/custom_entry(obj/item/item)
 	if(istype(item, /obj/item/stack))
 		var/obj/item/stack/S = item
 		stack_amount = S.amount
@@ -105,9 +105,8 @@ var/global/num_vending_terminals = 1
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK
 
 	var/account_first_linked = 1
-	var/inserting_mode = FALSE // insert items directly into the machine (used for custom vending machines)
 	var/is_custom_machine = FALSE // true if this vendor supports editing the prices
-	var/edit_mode = FALSE // Used for editing prices
+	var/edit_mode = FALSE // Used for editing machine stock and information
 	var/is_being_filled = FALSE // `in_use` from /obj is already used for tracking users of this machine's UI
 
 /obj/machinery/vending/cultify()
@@ -505,28 +504,33 @@ var/global/num_vending_terminals = 1
 			connect_account(user, W)
 			src.updateUsrDialog()
 			return
+
+		if(account_first_linked) // Account check
+			if(!user.Adjacent(src))
+				return 0
+			if(!user.Adjacent(src))
+				return 0
+			if(W.get_owner_name_from_ID() != linked_account.owner_name)
+				to_chat(user, "[bicon(src)]<span class='warning'>Access denied. Your ID doesn't match the vending machine's connected account.</span>")
+				return 0
+			visible_message("<span class='info'>[user] swipes a card through [src].</span>")
+			edit_mode = !edit_mode
+			src.updateUsrDialog()
+			return
+		if(!user.Adjacent(src))
+			return 0
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(!linked_account)
 			connect_to_user_account(user)
 			return
 
-		if(account_first_linked)
-			if(!user.Adjacent(src))
-				return 0
-			var/account_try = input(user,"Please enter the already connected account number","Security measure") as num
-			if(!user.Adjacent(src))
-				return 0
-			if(account_try != linked_account.account_number)
-				to_chat(user, "[bicon(src)]<span class='warning'>Access denied. Your input doesn't match the vending machine's connected account.</span>")
-				return 0
-		if(!user.Adjacent(src))
-			return 0
 		connect_to_user_account(user)
-		return
 
-	else if(istype(W, /obj/item/) && inserting_mode)
+
+	else if(istype(W, /obj/item/) && edit_mode)
 		if(user.drop_item(W, src))
 			insert_item(W)
+			src.updateUsrDialog()
 
 /obj/machinery/vending/proc/connect_to_user_account(mob/user)
 	var/new_account = input(user,"Please enter the account to connect to.","New account link") as num
@@ -539,6 +543,8 @@ var/global/num_vending_terminals = 1
 				account_first_linked = 1
 			playsound(src, 'sound/machines/twobeep.ogg', 50, 0)
 			to_chat(user, "[bicon(src)]<span class='notice'>New connection established: [D.owner_name].</span>")
+			edit_mode = !edit_mode
+			src.updateUsrDialog()
 			return TRUE
 	to_chat(user, "[bicon(src)]<span class='warning'>The specified account doesn't exist.</span>")
 	return FALSE
@@ -555,7 +561,6 @@ var/global/num_vending_terminals = 1
 	R.custom_entry(item)
 	product_records += R
 	products += item
-//H.wear_id
 
 /**
  *  Receive payment with cashmoney.
@@ -594,6 +599,11 @@ var/global/num_vending_terminals = 1
 		var/obj/item/weapon/card/id/C = I
 		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")
 		if(linked_account)
+			if(I.get_owner_name_from_ID() == linked_account.owner_name) //owner is the one buying things so he gets them for free
+				src.vend(src.currently_vending, usr)
+				currently_vending = null
+				return
+
 			//we start by checking the ID card's virtual wallet
 			var/datum/money_account/D = C.virtual_wallet
 			var/using_account = "Virtual Wallet"
@@ -673,6 +683,9 @@ var/global/num_vending_terminals = 1
 			dat += " <a href='byond://?src=\ref[src];set_price=[idx];cat=[P.category]'>(Set Price)</A>"
 	else
 		dat += " <span class='warning'>SOLD OUT</span>"
+		if(edit_mode)
+			var/idx=GetProductIndex(P)
+			dat += " <a href='byond://?src=\ref[src];delete_entry=[idx];cat=[P.category]'>(Delete Entry)</A>"
 	dat += "<br>"
 
 	return dat
@@ -792,7 +805,7 @@ var/global/num_vending_terminals = 1
 		dat += "<b>Coin slot:</b> [coin ? coin : "No coin inserted"] (<a href='byond://?src=\ref[src];remove_coin=1'>Remove</A>)<br><br>"
 
 	if (src.product_records.len == 0)
-		dat += "<font color = 'red'>No products loaded!</font>"
+		dat += "<font color = 'red'>No products loaded!</font><br><br>"
 	else
 		var/list/display_records = src.product_records.Copy()
 
@@ -815,8 +828,14 @@ var/global/num_vending_terminals = 1
 			else
 				categories["default"] += R
 
-		for (var/datum/data/vending_product/R in categories["default"])
-			dat += GetProductLine(R)
+		if(is_custom_machine)
+			for(var/datum/data/vending_product/VP in product_records)
+				if(!istype(VP))
+					continue
+				dat += GetProductLine(VP)
+		else
+			for (var/datum/data/vending_product/R in categories["default"])
+				dat += GetProductLine(R)
 		dat += "<br>"
 
 		for(var/cat_name in category_names)
@@ -843,19 +862,20 @@ var/global/num_vending_terminals = 1
 		dat += wires()
 
 		if(product_slogans != "")
-			dat += "The speaker switch is [shut_up ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>Toggle</a>"
-			dat += "<br>"
+			dat += "The speaker switch is [shut_up ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>(Toggle)</a><br>"
 
-		if(is_custom_machine)
-			dat += "Insert items mode is [inserting_mode ? "on" : "off"]. <a href='?src=\ref[src];toggle_insert_mode=[1]'>Toggle</a>"
-			dat += "<br>"
-			dat += "The prices edit mode is [edit_mode ? "on" : "off"]. <a href='?src=\ref[src];toggle_edit_mode=[1]'>Toggle</a>"
-			dat += "<br><br>"
-			dat += "<i>Note: Remember to slide your ID on this machine if you don't want random people to change your prices.</i>"
+	if(is_custom_machine)
+		if(edit_mode)
+			dat += "Machine name: [src.name] <a href='?src=\ref[src];rename=1'>(Rename)</a><br>"
+			dat += "Current slogans: " + (product_slogans.len >= CUSTOM_VENDING_MAX_SLOGANS ? "" : "<a href='?src=\ref[src];add_slogan=1'>(Add a Slogan)</a>") + "<br>"
+			for(var/i = 1, i <= product_slogans.len, i++) // list slogans
+				dat += "[product_slogans[i]] <a href='?src=\ref[src];delete_slogan_line=[i]'>(Delete)</a><br>"
+			dat += "Edit mode is on."
+		if(!account_first_linked)
+			dat += "<br><br><i>Note: Remember to slide your ID on this machine to link your account. Once this is done, sliding your ID will enable editing and loading.</i>"
 
 	user << browse(dat, "window=vending;size=400x[vertical]")
 	onclose(user, "vending")
-	return
 
 // returns the wire panel text
 /obj/machinery/vending/proc/wires()
@@ -867,7 +887,6 @@ var/global/num_vending_terminals = 1
 		return 1
 
 	//testing("..(): [href]")
-
 	var/free_vend = 0
 	if(istype(usr,/mob/living/silicon))
 		var/can_vend = 1
@@ -881,7 +900,7 @@ var/global/num_vending_terminals = 1
 			var/mob/living/silicon/robot/R = usr
 			if((R.module && (R.module.quirk_flags & MODULE_CAN_BUY)))
 				can_vend = TRUE //But if their module allows it..
-		if(!can_vend)
+		if(!can_vend || is_custom_machine) //currently made it so that silicon cannot buy from custom machine. Could make it so that selling to silicon is a toggleable option that bills the station.
 			to_chat(usr, "<span class='warning'>The vending machine refuses to interface with you, as you are not in its target demographic!</span>")
 			return
 		else
@@ -949,6 +968,38 @@ var/global/num_vending_terminals = 1
 			new_price = R.price
 		R.price = new_price
 
+	else if (href_list["delete_entry"] && src.vend_ready && !currently_vending)
+		//testing("vend: [href]")
+
+		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
+			to_chat(usr, "<span class='warning'>Access denied.</span>")//Unless emagged of course
+
+			flick(src.icon_deny,src)
+			return
+
+		var/idx=text2num(href_list["delete_entry"])
+		var/cat=text2num(href_list["cat"])
+
+		var/datum/data/vending_product/R = GetProductByID(idx,cat)
+		if (!R || !istype(R) || !R.product_path)
+			message_admins("Invalid vend request by [formatJumpTo(src.loc)]: [href]")
+			return
+
+		if(!ispath(R.product_path))
+			var/obj/item/A = R.product_path
+			for(var/obj/item/I in products)
+				if(I.type == A.type)
+					products -= I
+					break
+			R.product_path = null
+		else
+			for(var/obj/item/I in products)
+				if(I.type == R.product_path)
+					products -= I
+					break
+		product_records -= R
+		qdel(R)
+
 	else if (href_list["cancel_buying"])
 		src.currently_vending = null
 
@@ -962,18 +1013,21 @@ var/global/num_vending_terminals = 1
 	else if ((href_list["togglevoice"]) && (src.panel_open))
 		src.shut_up = !src.shut_up
 
-	else if ((href_list["toggle_edit_mode"]))
-		if(is_custom_machine)
-			edit_mode = !edit_mode
+	else if (href_list["rename"])
+		var/newname = input(usr,"Please enter a new name for the vending machine.","Rename Machine") as text
+		if(length(newname) > 0 && length(newname) <= CUSTOM_VENDING_MAX_NAME_LENGTH)
+			src.name = newname
 
-	else if ((href_list["toggle_insert_mode"]))
-		if(is_custom_machine)
-			inserting_mode = !inserting_mode
+	else if (href_list["add_slogan"])
+		var/newslogan = input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text
+		if(length(newslogan) > 0 && length(newslogan) <= CUSTOM_VENDING_MAX_SLOGAN_LENGTH)
+			product_slogans += newslogan
+
+	else if (href_list["delete_slogan_line"])
+		product_slogans -= product_slogans[text2num(href_list["delete_slogan_line"])]
 
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
-
-	return
 
 /obj/machinery/vending/proc/add_item(var/obj/item/I)
 	var/found = FALSE
@@ -1042,13 +1096,11 @@ var/global/num_vending_terminals = 1
 	if (src.icon_vend) //Show the vending animation if needed
 		flick(src.icon_vend,src)
 	spawn(vend_delay)
-
 		if(ispath(R.product_path)) //this if else clause is a little hack to detect if the item is a typepath or an in-game object with references and shit
 			new R.product_path(get_turf(src))
-		else
-			if(istype(R.product_path, /obj))
-				var/obj/A = R.product_path
-				A.forceMove(get_turf(src))
+		else if(istype(R.product_path, /obj))
+			var/obj/item/A = R.product_path
+			A.forceMove(get_turf(src))
 		src.vend_ready = 1
 		return
 
@@ -3154,10 +3206,13 @@ var/global/num_vending_terminals = 1
 	return
 
 /obj/machinery/vending/toggleSecuredPanelOpen(var/obj/toggleitem, var/mob/user)
-	if(!account_first_linked)
+	if(!is_custom_machine)
+		return ..()
+	if(!account_first_linked || (user.get_visible_id() && user.get_visible_id().get_owner_name_from_ID() == linked_account.owner_name))
 		togglePanelOpen(toggleitem, user)
 		return 1
-	return ..()
+	to_chat(user, "<span class='warning'>The machine requires an ID to unlock it.</span>")
+	return 0
 
 /obj/machinery/vending/mining
 	name = "\improper Dwarven Mining Equipment"
