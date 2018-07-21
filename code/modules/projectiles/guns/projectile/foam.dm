@@ -76,10 +76,62 @@
 	else
 		.=..()
 
+/obj/item/weapon/gun/projectile/foam/continuous
+	name = "heavy foam dart gun"
+	desc = "A heavy norf gun"
+	icon_state = "basic norf"
+	item_state = null
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	w_class = W_CLASS_LARGE
+	slot_flags = SLOT_BACK
+	slowdown = MINIGUN_SLOWDOWN_NONWIELDED
+	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
+	//mag_type = "/obj/item/ammo_storage/magazine/foambelt"
+	max_shells = 25
+	load_method = 1
+	recoil = 1
+	fire_delay = 0
+	fire_sound = 'sound/weapons/gatling_fire.ogg'
 
+/obj/item/weapon/gun/projectile/foam/continuous/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+	if(flag)
+		return
+	if(wielded)
+		Fire(A,user,params, "struggle" = struggle)
+	else
+		to_chat(user, "<span class='warning'>You must dual-wield \the [src] before you can fire it!</span>")
 
+/obj/item/weapon/gun/projectile/foam/continuous/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0)
+	..()
+	var/list/turf/possible_turfs = list()
+	for(var/turf/T in orange(target,1))
+		possible_turfs += T
+	spawn()
+		for(var/i = 1; i <= 3; i++)
+			sleep(1)
+			var/newturf = pick(possible_turfs)
+			..(newturf,user,params,reflex,struggle)
 
+/obj/item/weapon/gun/projectile/foam/continuous/update_wield(mob/user)
+	item_state = "continorfgun[wielded ? 1 : 0]"
+	if(wielded)
+		slowdown = MINIGUN_SLOWDOWN_WIELDED
+	else
+		slowdown = MINIGUN_SLOWDOWN_NONWIELDED
+/*
+/obj/item/weapon/gun/projectile/foam/continuous/can_discharge()
+	if (current_shells && wielded)
+		return TRUE
+*/
+/obj/item/weapon/gun/projectile/foam/continuous/attack_self(mob/user)
+	if(wielded)
+		unwield(user)
+	else
+		wield(user)
 
-
-
+/obj/item/weapon/gun/projectile/foam/continuous/attackby(obj/item/A)
+	if(istype(A, /obj/item/ammo_storage/box/foambelt))
+		var/obj/item/ammo_storage/box/foambelt/B
+		max_shells = B.max_ammo
+	..()
 

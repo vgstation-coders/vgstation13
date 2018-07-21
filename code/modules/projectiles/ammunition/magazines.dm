@@ -254,7 +254,7 @@
 	max_ammo = 2
 
 //Norf dart mags.
-/obj/item/ammo_storage/magazine/foam //mags6, 12, 18. drums 18, 25, 35, 50
+/obj/item/ammo_storage/magazine/foam
 	name = "magazine (foam darts)"
 	desc = "A magazine capable of holding foam darts. This one can hold up to 6 darts."
 	icon_state = "foam6"
@@ -307,3 +307,21 @@
 	max_ammo = 50
 /obj/item/ammo_storage/magazine/foam/fifty/empty
 	starting_ammo = 0
+/*
+/obj/item/ammo_storage/magazine/foambelt
+	name = "belt (foam darts)"
+	desc = "A belt capable of holding foam darts. This one can hold up to 25 darts."
+	icon_state = "foambelt25"
+	ammo_type = "/obj/item/ammo_casing/foam"
+	max_ammo = 25
+
+/obj/item/ammo_storage/magazine/foambelt/empty
+	starting_ammo = 0
+
+/obj/item/ammo_storage/magazine/foambelt/hundred
+	desc = "An extended belt capable of holding foam darts. This one can hold up to 100 darts."
+	icon_state = "foambelt100"
+	max_ammo = 100
+/obj/item/ammo_storage/magazine/foambelt/hundred/empty
+	starting_ammo = 0
+*/

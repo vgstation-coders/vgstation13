@@ -129,21 +129,15 @@
 	icon_state = "foambox-blue"
 */
 /obj/item/ammo_storage/box/foambelt
-	name = "belt ammo box (foam darts)"
-	desc = "A belt capable of holding foam darts. This one can hold up to 25 darts."
+	name = "ammo belt (foam darts)"
+	desc = "A belt of foam darts."
 	icon_state = "foambelt25"
 	ammo_type = "/obj/item/ammo_casing/foam"
 	max_ammo = 25
 
-/obj/item/ammo_storage/box/foambelt/empty
-	starting_ammo = 0
-
-/obj/item/ammo_storage/box/foambelt/super
-	name = "belt mag box (foam dart belt)"
-	desc = "A belt capable of holding foam darts. This one can hold up to 100 darts."
-	icon_state = "foambelt100"
+/obj/item/ammo_storage/box/foambelt/extended
+	name = "ammo belt (foam darts)"
+	desc = "A belt of foam darts."
+	icon_state = "foambelt25"
 	ammo_type = "/obj/item/ammo_casing/foam"
 	max_ammo = 100
-
-/obj/item/ammo_storage/box/foambelt/super/empty
-	starting_ammo = 0
