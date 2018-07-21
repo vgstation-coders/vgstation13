@@ -174,7 +174,7 @@
 		return
 	else if(W.IsSpecialAssembly())
 		attach_special(W, user)
-	else if(istype(W,/obj/item/weapon/weldingtool))
+	else if(iswelder(W))
 		if(!a_left || !a_right)
 			to_chat(user, "<span class='warning'>BUG:Assembly part missing, please report this!</span>")
 			return
@@ -182,22 +182,14 @@
 			to_chat(user, "<span class='warning'>You can't make an igniter without an igniting component!</span>")
 			return
 		var/obj/item/weapon/weldingtool/WT = W
-		if (WT.remove_fuel(0,user))
-			playsound(src, 'sound/items/Welder2.ogg', 50, 1)
-			to_chat(user, "<span class='notice'>You begin to weld \the [src] to the floor...</span>")
-			if (do_after(user, src, 40))
-				var/obj/machinery/igniter/igniter=new(src.loc)
-				igniter.assembly=src
-				src.forceMove(igniter)
-				to_chat(user, "<span class='notice'>You attach the assembly to the floor with a few spot welds.</span>")
-		else
-			:
-			to_chat(user, "<span class='warning'>You need more welder fuel to do that.</span>")
-			return
-
-	else
-		..()
-	return
+		to_chat(user, "<span class='notice'>You begin to weld \the [src] to the floor...</span>")
+		if (WT.do_weld(user, src, 40, 0))
+			var/obj/machinery/igniter/igniter=new(src.loc)
+			igniter.assembly=src
+			src.forceMove(igniter)
+			to_chat(user, "<span class='notice'>You attach the assembly to the floor with a few spot welds.</span>")
+		return
+	..()
 
 
 /obj/item/device/assembly_holder/attack_self(mob/user as mob)
