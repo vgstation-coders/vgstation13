@@ -769,5 +769,7 @@
 		ChangeTurf(current_type)
 
 
-/turf/MouseDrop_T(var/atom/movable/C, mob/user)
-	user.Move_Pulled(src, C)
+/turf/MouseDrop_T(var/atom/movable/C, mob/user, src_location,over_location,src_control,over_control,params)
+	if(istype(C))
+		if(C.loc != src)
+			user.Move_Pulled(src, C)

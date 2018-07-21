@@ -646,7 +646,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/mob/M = usr
 	if((!istype(over_object, /obj/abstract/screen)) && can_use(M))
 		return attack_self(M)
-	return
+	return ..()
 
 //NOTE: graphic resources are loaded on client login
 /obj/item/device/pda/attack_self(mob/user as mob)

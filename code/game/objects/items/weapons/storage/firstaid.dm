@@ -179,7 +179,7 @@
 				usr.s_active.close(usr)
 			src.show_to(usr)
 			return
-	return
+	return ..()
 
 /obj/item/weapon/storage/pill_bottle/AltClick()
 	if(!usr.isUnconscious() && Adjacent(usr))
