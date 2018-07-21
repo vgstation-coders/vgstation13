@@ -1134,9 +1134,9 @@
 			environ = autoset(environ, 1)
 			if(this_area.poweralm && make_alerts)
 				this_area.poweralert(0, src)
-		else if(cell.percent() < 30 && longtermpower < 0)			// <30%, turn off equipment
-			equipment = autoset(equipment, 2)
-			lighting = autoset(lighting, 1)
+		else if(cell.percent() < 30 && longtermpower < 0)			// <30%, turn off lighting
+			equipment = autoset(equipment, 1)
+			lighting = autoset(lighting, 2)
 			environ = autoset(environ, 1)
 			if(this_area.poweralm && make_alerts)
 				this_area.poweralert(0, src)
