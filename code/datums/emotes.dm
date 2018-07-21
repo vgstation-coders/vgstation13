@@ -15,7 +15,7 @@
 	var/message_monkey = "" //Message displayed if the user is a monkey
 	var/message_simple = "" //Message to display if the user is a simple_animal
 	var/message_param = "" //Message to display if a param was given
-	var/message_mommi = ""
+	var/message_mommi = "" //Message to display if the user is a mommi. Defaults to message_robot if none specified
 	var/emote_type = EMOTE_VISIBLE //Whether the emote is visible or audible
 	var/restraint_check = FALSE //Checks if the mob is restrained before performing the emote
 	var/muzzle_ignore = FALSE //Will only work if the emote is EMOTE_AUDIBLE
@@ -28,6 +28,8 @@
 /datum/emote/New()
 	if(key_third_person)
 		emote_list[key_third_person] = src
+	if(!message_mommi)
+		message_mommi = message_robot
 
 /datum/emote/proc/run_emote(mob/user, params, type_override)
 	. = TRUE
@@ -46,7 +48,7 @@
 
 	if(!msg)
 		return
-	
+
 	msg = "<b>[user]</b> " + msg
 
 	for(var/mob/M in dead_mob_list)
@@ -62,11 +64,11 @@
 	else
 		for(var/mob/O in hearers(user))
 			O.show_message(msg, emote_type)
-	
+
 	log_emote("[user.name]/[user.key] (@[user.x],[user.y],[user.z]): [message]")
 
 // TODO : gender & all
-/datum/emote/proc/replace_pronoun(mob/user, message)	
+/datum/emote/proc/replace_pronoun(mob/user, message)
 	var/mob/living/carbon/human/H = user
 	if (istype(H))
 		var/skipface = FALSE
@@ -111,14 +113,14 @@
 		. = message_larva
 	else if(isAI(user) && message_AI)
 		. = message_AI
+	else if(isMoMMI(user) && message_mommi)
+		. = message_mommi
 	else if(issilicon(user) && message_robot)
 		. = message_robot
 	else if(ismonkey(user) && message_monkey)
 		. = message_monkey
 	else if(isanimal(user) && message_simple)
 		. = message_simple
-	else if(isMoMMI(user) && message_mommi)
-		. = message_robot
 
 /datum/emote/proc/select_param(mob/user, params)
 	return replacetext(message_param, "%t", params)
@@ -141,7 +143,7 @@
 		if(L.silent)
 			to_chat(user, "<span class='warning'>You cannot do that while silenced.</span>")
 			return FALSE
-	
+
 	return TRUE
 
 /datum/emote/sound

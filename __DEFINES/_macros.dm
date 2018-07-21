@@ -22,6 +22,8 @@
 
 #define isskellington(A) (ishuman(A) && istype(A:species, /datum/species/skellington))
 
+#define isskelevox(A) (ishuman(A) && istype(A:species, /datum/species/skellington/skelevox))
+
 #define iscatbeast(A) (ishuman(A) && istype(A:species, /datum/species/tajaran))
 
 #define isunathi(A) (ishuman(A) && istype(A:species, /datum/species/unathi))
