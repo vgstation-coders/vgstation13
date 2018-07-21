@@ -199,5 +199,7 @@
 			emote_type = EMOTE_VISIBLE
 			. = ..()
 	else
-		return FALSE // Can't fart without an arse (dummy)
+		message = "lets out a [pick("disgusting","revolting","horrible","strangled","god awful")] noise out of their mutilated asshole." // Copypasting that gave me brain damage.
+		emote_type = EMOTE_VISIBLE
+		. = ..()
 //Ayy lmao
