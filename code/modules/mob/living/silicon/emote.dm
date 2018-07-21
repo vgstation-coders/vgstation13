@@ -61,7 +61,7 @@
 	message = "honks."
 	vary = TRUE
 	sound = 'sound/items/bikehorn.ogg'
-	module_quirk_required = MODULE_IS_A_CLOWN 
+	module_quirk_required = MODULE_IS_A_CLOWN
 
 /datum/emote/sound/silicon/ping
 	key = "ping"
@@ -80,7 +80,7 @@
 	key = "sad"
 	message = "plays a sad trombone..."
 	sound = 'sound/misc/sadtrombone.ogg'
-	module_quirk_required = MODULE_IS_A_CLOWN 
+	module_quirk_required = MODULE_IS_A_CLOWN
 
 /datum/emote/sound/silicon/warn
 	key = "warn"
@@ -91,6 +91,12 @@
 	key = "law"
 	message = "shows its legal authorization barcode."
 	sound = 'sound/voice/biamthelaw.ogg'
+	module_quirk_required = MODULE_IS_THE_LAW
+
+/datum/emote/sound/silicon/halt
+	key = "halt"
+	message = "'s speakers screech. \"Halt! Security!\"."
+	sound = 'sound/voice/halt.ogg'
 	module_quirk_required = MODULE_IS_THE_LAW
 
 /mob/living/silicon/robot/verb/powerwarn()
