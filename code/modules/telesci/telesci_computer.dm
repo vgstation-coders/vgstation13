@@ -106,7 +106,7 @@
 /obj/machinery/computer/telescience/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	if(stat & (BROKEN|NOPOWER))
 		return
-	if(user.stat || user.restrained())
+	if(!isAdminGhost(user) && (user.stat || user.restrained()))
 		return
 
 	var/list/cell_data=null
