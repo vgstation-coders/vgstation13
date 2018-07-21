@@ -768,8 +768,11 @@
 		being_sent_to_past = FALSE
 		ChangeTurf(current_type)
 
+/turf/attack_hand(mob/user as mob)
+	user.Move_Pulled(src)
 
 /turf/MouseDrop_T(var/atom/movable/C, mob/user, src_location,over_location,src_control,over_control,params)
 	if(istype(C))
 		if(C.loc != src)
 			user.Move_Pulled(src, C)
+			user.face_atom(src)
