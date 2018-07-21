@@ -20,7 +20,7 @@
 	return ..()
 
 /obj/item/device/radio/intercom/initialize()
-	..()
+	. = ..()
 	add_self_to_holomap()
 
 /obj/item/device/radio/intercom/New(turf/loc, var/ndir = 0, var/building = 3)
@@ -74,7 +74,7 @@
 	return canhear_range
 
 /obj/item/device/radio/intercom/handle_crypted_channels(var/channel)
-	if (istype(keyslot) && channel in keyslot.secured_channels)
+	if (istype(keyslot) && (channel in keyslot.secured_channels))
 		return TRUE
 	return FALSE
 
@@ -226,7 +226,7 @@
 
 /obj/item/device/radio/intercom/ai_private/initialize()
 	frequency = AIPRIV_FREQ
-	..()
+	. = ..()
 
 // Mapped intercoms
 
@@ -237,7 +237,7 @@
 /obj/item/device/radio/intercom/syndicate/initialize()
 	keyslot = new /obj/item/device/encryptionkey/syndicate
 	frequency = SYND_FREQ
-	..()
+	. = ..()
 
 // Can't remove keys from mapped intercoms
 /obj/item/device/radio/intercom/mapped/attackby(var/obj/item/weapon/W, var/mob/user)
@@ -253,7 +253,7 @@
 /obj/item/device/radio/intercom/mapped/ace_reporter/initialize()
 	frequency = pick(COMM_FREQ, SEC_FREQ, COMMON_FREQ)
 	keyslot = new /obj/item/device/encryptionkey/mapped
-	..()
+	. = ..()
 
 /obj/item/device/radio/intercom/mapped/dj_sat
 	name = "Pirate Radio Listening Channel"
@@ -262,4 +262,4 @@
 
 /obj/item/device/radio/intercom/mapped/dj_sat/initialize()
 	keyslot = new /obj/item/device/encryptionkey/mapped
-	..()
+	. = ..()

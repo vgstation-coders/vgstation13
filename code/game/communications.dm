@@ -120,55 +120,55 @@ On the map:
 */
 
 var/list/radiochannels = list(
-	"Common" = 1459,
-	"AI Private" = 1447,
-	"Deathsquad" = 1441,
-	"Security" = 1359,
-	"Engineering" = 1357,
-	"Command" = 1353,
-	"Medical" = 1355,
-	"Science" = 1351,
-	"Service" = 1349,
-	"Supply" = 1347,
+	"Common" 		= 1459,
+	"AI Private" 	= 1447,
+	"Deathsquad" 	= 1441,
+	"Security" 		= 1359,
+	"Engineering" 	= 1357,
+	"Command" 		= 1353,
+	"Medical" 		= 1355,
+	"Science" 		= 1351,
+	"Service" 		= 1349,
+	"Supply" 		= 1347,
 	"Response Team" = 1345,
-	"Raider" = 1215,
-	"Syndicate" = 1213,
-	"DJ" = 1201
+	"Raider"	 	= 1215,
+	"Syndicate" 	= 1213,
+	"DJ" 			= 1201
 )
 
 // The channels the AI and the Librarian have access to.
 var/list/radiochannels_access = list(
-	"Common" = TRUE,
-	"AI Private" = TRUE,
-	"Deathsquad" = FALSE,
-	"Security" = TRUE,
-	"Engineering" = TRUE,
-	"Command" = TRUE,
-	"Medical" = TRUE,
-	"Science" = TRUE,
-	"Service" = TRUE,
-	"Supply" = TRUE,
+	"Common" 		= TRUE,
+	"AI Private" 	= TRUE,
+	"Deathsquad" 	= FALSE,
+	"Security" 		= TRUE,
+	"Engineering" 	= TRUE,
+	"Command" 		= TRUE,
+	"Medical" 		= TRUE,
+	"Science" 		= TRUE,
+	"Service" 		= TRUE,
+	"Supply" 		= TRUE,
 	"Response Team" = TRUE,
-	"Raider" = FALSE,
-	"Syndicate" = FALSE,
-	"DJ" = FALSE
+	"Raider" 		= FALSE,
+	"Syndicate" 	= FALSE,
+	"DJ" 			= FALSE
 )
 
 var/list/random_radiochannels = list(
-	"Common" = FALSE,
-	"AI Private" = TRUE,
-	"Deathsquad" = TRUE,
-	"Security" = TRUE,
-	"Engineering" = FALSE,
-	"Command" = TRUE,
-	"Medical" = FALSE,
-	"Science" = FALSE,
-	"Service" = FALSE,
-	"Supply" = FALSE,
+	"Common" 		= FALSE,
+	"AI Private" 	= TRUE,
+	"Deathsquad" 	= TRUE,
+	"Security" 		= TRUE,
+	"Engineering" 	= TRUE,
+	"Command" 		= TRUE,
+	"Medical" 		= TRUE,
+	"Science" 		= TRUE,
+	"Service" 		= TRUE,
+	"Supply" 		= TRUE,
 	"Response Team" = TRUE,
-	"Raider" = TRUE,
-	"Syndicate" = TRUE,
-	"DJ" = TRUE,
+	"Raider" 		= TRUE,
+	"Syndicate" 	= TRUE,
+	"DJ" 			= TRUE,
 )
 
 var/list/crypted_radiochannels_reverse = list(
@@ -199,7 +199,8 @@ var/list/radiochannelsreverse = list(
 // Make random frequencies for the "secure" channels so that they are not easily listened to.
 
 /proc/makeSecureChannels()
-	var/old_freqs = list()
+	var/list/old_freqs = list()
+	var/list/old_freqtospan = freqtospan.Copy()
 	for (var/channel in random_radiochannels)
 		if (random_radiochannels[channel]) // If it's indeed secured
 			var/old_freq = radiochannels[channel]
@@ -211,24 +212,23 @@ var/list/radiochannelsreverse = list(
 					var/new_freq_txt = num2text(new_freq)
 					var/old_freq_txt = num2text(old_freq)
 
+					radiochannelsreverse -= old_freq
+					freqtospan -= old_freq
+					freqtoname -= old_freq
+
 					old_freqs += old_freq_txt
 
 					radiochannels[channel] = new_freq
 					radiochannelsreverse[new_freq_txt] = channel
 
-					var/span = freqtospan[old_freq_txt]
+					var/span = old_freqtospan[old_freq_txt]
 					freqtospan[new_freq_txt] = span
-
 					freqtoname[new_freq_txt] = channel
 
 					if (old_freq_txt in crypted_radiochannels_reverse)
 						crypted_radiochannels_reverse[new_freq_txt] = channel
 						crypted_radiochannels_reverse -= old_freq_txt
 
-	for (var/old_freq in old_freqs)
-		radiochannelsreverse -= old_freq
-		freqtospan -= old_freq
-		freqtoname -= old_freq
 
 /proc/store_frequencies_in_memory(var/mob/living/L)
 	var/data = ("<h3>Frequencies of the station:</h3>")
@@ -238,11 +238,11 @@ var/list/radiochannelsreverse = list(
 	L.mind.store_memory(data)
 
 //depenging helpers
-#define DSQUAD_FREQ radiochannels["Deathsquad"] //death squad frequency, coloured grey in chat window
-#define RESTEAM_FREQ radiochannels["Response Team"] //response team frequency, uses the deathsquad color at the moment.
-#define AIPRIV_FREQ radiochannels["AI Private"] //AI private, colored magenta in chat window
-#define DJ_FREQ radiochannels["DJ"] //Media
-#define COMMON_FREQ radiochannels["Common"]
+#define DSQUAD_FREQ 	radiochannels["Deathsquad"] //death squad frequency, coloured grey in chat window
+#define RESTEAM_FREQ 	radiochannels["Response Team"] //response team frequency, uses the deathsquad color at the moment.
+#define AIPRIV_FREQ 	radiochannels["AI Private"] //AI private, colored magenta in chat window
+#define DJ_FREQ 		radiochannels["DJ"] //Media
+#define COMMON_FREQ 	radiochannels["Common"]
 
 // central command channels, i.e deathsquid & response teams
 #define CENT_FREQS = list(radiochannels["Deathsquad"], radiochannels["Response Team"])

@@ -54,7 +54,7 @@
 
 /obj/machinery/telecomms/receiver/preset_left/initialize()
 	freq_listening = list(SCI_FREQ, MED_FREQ, SUP_FREQ, SER_FREQ) // science, medical, supply, service
-	..()
+	. = ..()
 
 //--PRESET RIGHT--//
 
@@ -67,7 +67,7 @@
 	freq_listening = list(ERT_FREQ, COMM_FREQ, ENG_FREQ, SEC_FREQ) //ert, command, engineering, security
 	for(var/i = 1441, i < 1489, i += 2)
 		freq_listening |= i
-	..()
+	. = ..()
 
 /obj/machinery/telecomms/receiver/preset_complete
 	name = "Receiver"
@@ -82,7 +82,7 @@
 
 /obj/machinery/telecomms/receiver/preset_one/initialize()
 	freq_listening = list(SCI_FREQ, MED_FREQ)
-	..()
+	. = ..()
 
 /obj/machinery/telecomms/bus/preset_two
 	id = "Bus 2"
@@ -91,7 +91,7 @@
 
 /obj/machinery/telecomms/receiver/preset_two/initialize()
 	freq_listening = list(SUP_FREQ, SER_FREQ)
-	..()
+	. = ..()
 
 /obj/machinery/telecomms/bus/preset_three
 	id = "Bus 3"
@@ -100,7 +100,7 @@
 
 /obj/machinery/telecomms/bus/preset_three/initialize()
 	freq_listening = list(SEC_FREQ, COMM_FREQ)
-	..()
+	. = ..()
 
 /obj/machinery/telecomms/bus/preset_four
 	id = "Bus 4"
@@ -109,12 +109,12 @@
 
 /obj/machinery/telecomms/bus/preset_four/initialize()
 	freq_listening = list(ENG_FREQ, COMMON_FREQ)
-	..()
+	. = ..()
 
 /obj/machinery/telecomms/bus/preset_four/New()
 	for(var/i = 1441, i < 1489, i += 2)
 		freq_listening |= i
-	..()
+	. = ..()
 
 /obj/machinery/telecomms/bus/preset_complete
 	id = "Bus Complete"
@@ -154,7 +154,7 @@
 	network = "tcommsat"
 
 /obj/machinery/telecomms/server/presets/New()
-	..()
+	. = ..()
 	name = id
 
 
@@ -164,7 +164,7 @@
 
 /obj/machinery/telecomms/server/presets/science/initialize()
 	freq_listening = list(SCI_FREQ)
-	..()
+	. = ..()
 
 /obj/machinery/telecomms/server/presets/medical
 	id = "Medical Server"
@@ -172,7 +172,7 @@
 
 /obj/machinery/telecomms/server/presets/science/initialize()
 	freq_listening = list(MED_FREQ)
-	..()
+	. = ..()
 
 /obj/machinery/telecomms/server/presets/supply
 	id = "Supply Server"
@@ -180,7 +180,7 @@
 
 /obj/machinery/telecomms/server/presets/supply/initialize()
 	freq_listening = list(SUP_FREQ)
-	..()
+	. = ..()
 
 //Using old mining channel frequency for a service channel for the bartender, botanist and chef.
 //Also cleaned up all the references to the mining channel I could find, it most likely will never be used again anyway. - Duny
@@ -190,7 +190,7 @@
 
 /obj/machinery/telecomms/server/presets/service/initialize()
 	freq_listening = list(SER_FREQ)
-	..()
+	. = ..()
 
 /obj/machinery/telecomms/server/presets/common
 	id = "Common Server"
@@ -198,14 +198,14 @@
 
 /obj/machinery/telecomms/server/presets/common/initialize()
 	freq_listening = list(COMMON_FREQ)
-	..()
+	. = ..()
 
 	//Common and other radio frequencies for people to freely use
 	// 1441 to 1489
 /obj/machinery/telecomms/server/presets/common/New()
 	for(var/i = 1441, i < 1489, i += 2)
 		freq_listening |= i
-	..()
+	. = ..()
 
 /obj/machinery/telecomms/server/presets/complete
 	id = "Master Server"
@@ -217,7 +217,7 @@
 
 /obj/machinery/telecomms/server/presets/command/initialize()
 	freq_listening = list(COMM_FREQ)
-	..()
+	. = ..()
 
 /obj/machinery/telecomms/server/presets/engineering
 	id = "Engineering Server"
@@ -225,7 +225,7 @@
 
 /obj/machinery/telecomms/server/presets/engineering/initialize()
 	freq_listening = list(ENG_FREQ)
-	..()
+	. = ..()
 
 /obj/machinery/telecomms/server/presets/security
 	id = "Security Server"
@@ -233,7 +233,7 @@
 
 /obj/machinery/telecomms/server/presets/security/initialize()
 	freq_listening = list(SEC_FREQ)
-	..()
+	. = ..()
 
 //Broadcasters
 

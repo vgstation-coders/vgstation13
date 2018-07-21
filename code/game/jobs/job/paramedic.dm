@@ -40,4 +40,5 @@
 		else
 			H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
 			H.equip_or_collect(new /obj/item/device/healthanalyzer(H.back), slot_in_backpack)
+		H.mind.store_memory("<b>Medical frequency: </b> <i>[MED_FREQ/10]</i> <br/>")
 		return 1

@@ -33,7 +33,7 @@
 //lipstick wiping is in code/game/objects/items/weapons/cosmetics.dm!
 
 /obj/item/weapon/paper/New()
-	..()
+	. = ..()
 	pixel_y = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_x = rand(-9, 9) * PIXEL_MULTIPLIER
 	spawn(2)
@@ -487,13 +487,13 @@ var/global/list/paper_folding_results = list ( \
 	<li>[SER_FREQ/10] - Service Channel</li> \
 	<li>[SUP_FREQ/10] - Supply Channel</li> \
 	</ul>"
-	..()
+	. = ..()
 
 /obj/item/weapon/paper/tcomms
 	name = "paper- 'Tcomms memo'"
 	info = "<b>Station frequencies :</b>"
 
-/obj/item/weapon/paper/djstation/initialize()
+/obj/item/weapon/paper/tcomms/initialize()
 	info = "<b>Station frequencies :</b> \
 	<ul> \
 	<li>[COMMON_FREQ/10] - Common Channel</li> \
@@ -506,7 +506,7 @@ var/global/list/paper_folding_results = list ( \
 	<li>[SER_FREQ/10] - Service Channel</li> \
 	<li>[SUP_FREQ/10] - Supply Channel</li> \
 	</ul>"
-	..()
+	. = ..()
 
 /obj/item/weapon/paper/intercoms
 	name = "paper - 'Ace Reporter Intercom manual'"
