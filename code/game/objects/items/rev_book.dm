@@ -33,7 +33,11 @@
                 to_chat(H, "<span class='notice'>You renounce your allegiance to nanotransen and decide to join the fight against corporate tyranny, oppression, and persecution. Death to the capitalist oppressors, Vive la révolution!</span>")
                 var/wikiroute = role_wiki[ROLE_REVOLUTIONARY]
                 to_chat(H, "<span class='info'><a HREF='?src=\ref[H];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-                //wip requires coder help
+                ticker.mode.head_revolutionaries += M.mind
+                ticker.mode.update_rev_icons_added(M.mind)
+                M.mind.special_role = "Head Revolutionary"
+                ticker.mode.forge_revolutionary_objectives(M.mind)    
+                M.equip_to_slot_or_del(new/obj/item/device/flash, slot_l_store)
                 if(prob(25))
                     H.nutrition = 10 // le holodomor memes
                 uses = uses - 1
