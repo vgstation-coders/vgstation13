@@ -39,7 +39,7 @@
                 ticker.mode.update_rev_icons_added(M.mind)
                 M.mind.special_role = "Head Revolutionary"
                 ticker.mode.forge_revolutionary_objectives(M.mind)    
-                M.equip_to_slot_or_del(new/obj/item/device/flash, slot_l_store)
+                H.equip_to_slot_or_del(new/obj/item/device/flash, slot_l_store)
                 if(prob(25))
                     H.nutrition = 10 // le holodomor memes
                 uses = uses - 1
