@@ -65,7 +65,7 @@
 	list(/obj/item/clothing/suit/space/clown, /obj/item/clothing/head/helmet/space/clown),
 	/obj/item/clothing/shoes/magboots/magnificent,
 	list(/obj/item/clothing/suit/space/plasmaman/bee, /obj/item/clothing/head/helmet/space/plasmaman/bee),
-	list(/obj/item/clothing/head/celtic, /obj/item/clothing/suit/armor/ice),
+	list(/obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich, /obj/item/clothing/suit/wizrobe/skelelich),
 	list(/obj/item/clothing/suit/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/cultist),
 	list(/obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain),
 	/obj/item/clothing/under/skelevoxsuit,
