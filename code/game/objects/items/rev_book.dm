@@ -17,9 +17,9 @@
     for(var/obj/item/weapon/implant/loyalty/L in user) // check loyalty implant in the contents
         if(L.imp_in == user) // a check if it's actually implanted
             to_chat("<span class='danger'>As you start to open the book, you feel a crippling pain in your head!</span>")
-            user.Stun = 10
+            user.Stun(10)
             return 0
-    if(istype(user, /mob/living/carbon/human) && !(jobban_isbanned(user, "Syndicate") || jobban_isbanned(user, "revolutionary")))
+    if(ishuman(user) && !(jobban_isbanned(user, "Syndicate") || jobban_isbanned(user, "revolutionary")))
         var/mob/living/carbon/human/H = user
         if(H.mind)
             var/datum/mind/M = H.mind
@@ -31,7 +31,9 @@
                 to_chat(H, "<span class='notice'>[pick("Wait, they can't really be behind the lunar bombings of 2100, can they?", "This isn't the NT I joined.", "Oh god, they really did that, all those people, gone, and for what, some plasma?", "Dear lord, who have I been working for?", "The syndicate may be bad, but this is worse.")]</span>")
                 sleep(10)
                 to_chat(H, "<span class='notice'>You renounce your allegiance to nanotransen and decide to join the fight against corporate tyranny, oppression, and persecution. Death to the capitalist oppressors, Vive la révolution!</span>")
-                var/wikiroute = role_wiki[ROLE_REVOLUTIONARY]
+                if(!H.mind)
+				    return 0 // FUCK
+		        var/wikiroute = role_wiki[ROLE_REVOLUTIONARY]
                 to_chat(H, "<span class='info'><a HREF='?src=\ref[H];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
                 ticker.mode.head_revolutionaries += M.mind
                 ticker.mode.update_rev_icons_added(M.mind)
@@ -41,7 +43,7 @@
                 if(prob(25))
                     H.nutrition = 10 // le holodomor memes
                 uses = uses - 1
-                if(uses == 0 && infinite_uses != 1)
+                if (!uses && !infinite_uses)
                     user.visible_message("<span class='notice'>[\The [src] is engulfed in a blue light and vanishes!</span>")
                     qdel(src)
             else
