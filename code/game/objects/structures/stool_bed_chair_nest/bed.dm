@@ -54,9 +54,6 @@
 	if(Adjacent(user))
 		manual_unbuckle(user)
 
-/obj/structure/bed/MouseDrop(atom/over_object)
-	return
-
 /obj/structure/bed/MouseDrop_T(mob/M as mob, mob/user as mob)
 	if(!istype(M))
 		return ..()
