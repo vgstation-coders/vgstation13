@@ -97,19 +97,25 @@
 		var/mob/living/L = user
 		L.SetSleeping(200)
 
+/datum/emote/living/flap
+	key = "flap"
+	key_third_person = "flaps"
+	message = "flaps their wings."
+	message_mommi = "flaps its utility arms as though they were wings."
+	restraint_check = TRUE
+
 /datum/emote/living/flap/aflap
 	key = "aflap"
 	key_third_person = "aflaps"
 	message = "flaps their wings ANGRILY!"
-	message_robot = "flaps their utility wings ANGRILY!"
-	restraint_check = TRUE
+	message_mommi = "flaps its utility arms ANGRILY!"
 
-/datum/emote/living/flap/aflap/can_run_emote(var/mob/user, var/status_check)
+/datum/emote/living/flap/can_run_emote(var/mob/user, var/status_check)
 	if (isMoMMI(user))
 		return TRUE
 	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if (H.species == "Vox")
+		if (isvox(H) || isskelevox(H))
 			return TRUE
 
 /datum/emote/living/frown
@@ -395,7 +401,7 @@
 /datum/emote/living/help/run_emote(mob/user, params)
 	var/list/keys = list()
 	var/list/message = list("Available emotes, you can use them with say \"*emote\": ")
-	
+
 	var/datum/emote/E
 
 	for(var/e in emote_list)
