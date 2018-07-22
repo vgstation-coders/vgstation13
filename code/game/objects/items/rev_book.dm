@@ -32,8 +32,8 @@
                 sleep(10)
                 to_chat(H, "<span class='notice'>You renounce your allegiance to nanotransen and decide to join the fight against corporate tyranny, oppression, and persecution. Death to the capitalist oppressors, Vive la révolution!</span>")
                 if(!H.mind)
-				    return 0 // FUCK
-		        var/wikiroute = role_wiki[ROLE_REVOLUTIONARY]
+                    return 0 // FUCK
+                var/wikiroute = role_wiki[ROLE_REVOLUTIONARY]
                 to_chat(H, "<span class='info'><a HREF='?src=\ref[H];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
                 ticker.mode.head_revolutionaries += M.mind
                 ticker.mode.update_rev_icons_added(M.mind)
