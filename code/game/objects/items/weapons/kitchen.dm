@@ -231,7 +231,7 @@
 	..()
 	if(user.is_in_modules(src))
 		return
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			to_chat(user, "You slice the handle off of \the [src].")

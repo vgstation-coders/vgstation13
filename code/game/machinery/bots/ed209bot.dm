@@ -987,7 +987,7 @@ Auto Patrol: []"},
 					icon_state = "[lasercolor]ed209_shell"
 
 		if(3)
-			if( istype(W, /obj/item/weapon/weldingtool) )
+			if( iswelder(W) )
 				var/obj/item/weapon/weldingtool/WT = W
 				if(WT.remove_fuel(0,user))
 					build_step++

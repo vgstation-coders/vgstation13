@@ -472,7 +472,7 @@
 /obj/item/weapon/switchtool/engineering/deploy(var/module)
 	if(!..())
 		return FALSE
-	if(istype(deployed, /obj/item/weapon/weldingtool))
+	if(iswelder(deployed))
 		var/obj/item/weapon/weldingtool/W = deployed
 		W.welding = 1
 		W.status = 1

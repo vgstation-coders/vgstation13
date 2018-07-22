@@ -383,16 +383,15 @@
 				return 1
 			if(iswelder(P))
 				var/obj/item/weapon/weldingtool/WT = P
-				if(WT.remove_fuel(0, user))
-					to_chat(user, "<span class='notice'>You start welding the frame back into metal.</span>")
-					if(do_after(user, src, 10) && state == 0)
-						if(!src || !WT.isOn())
-							return
-						playsound(src, 'sound/items/Welder.ogg', 50, 1)
-						user.visible_message("[user] welds the frame back into metal.", "You weld the frame back into metal.", "You hear welding.")
-						drop_stack(sheet_type, loc, 5, user)
-						state = -1
-						qdel(src)
+				to_chat(user, "<span class='notice'>You start welding the frame back into metal.</span>")
+				if(WT.do_weld(user, src, 10, 0) && state == 0)
+					if(gcDestroyed)
+						return
+					playsound(src, 'sound/items/Welder.ogg', 50, 1)
+					user.visible_message("[user] welds the frame back into metal.", "You weld the frame back into metal.", "You hear welding.")
+					drop_stack(sheet_type, loc, 5, user)
+					state = -1
+					qdel(src)
 				return 1
 		if(1)
 			if(iswrench(P) && wrenchAnchor(user))

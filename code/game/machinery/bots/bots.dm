@@ -131,7 +131,7 @@
 	if(!locked && (isscrewdriver(W) || iscrowbar(W)))
 		open = !open
 		to_chat(user, "<span class='notice'>Maintenance panel is now [src.open ? "opened" : "closed"].</span>")
-	else if(istype(W, /obj/item/weapon/weldingtool))
+	else if(iswelder(W))
 		if(health < maxhealth)
 			if(open)
 				health = min(maxhealth, health+10)

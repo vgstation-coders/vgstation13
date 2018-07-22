@@ -202,7 +202,7 @@ Auto Patrol: []"},
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 	else
 		..()
-	if(istype(W, /obj/item/weapon/weldingtool) && user.a_intent != "harm") // Any intent but harm will heal, so we shouldn't get angry.
+	if(iswelder(W) && user.a_intent != "harm") // Any intent but harm will heal, so we shouldn't get angry.
 		return
 	if(!isscrewdriver(W) && (W.force) && (!target) ) // Added check for welding tool to fix #2432. Welding tool behavior is handled in superclass.
 		threatlevel = user.assess_threat(src)
@@ -831,7 +831,7 @@ Auto Patrol: []"},
 
 /obj/item/weapon/secbot_assembly/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if((istype(W, /obj/item/weapon/weldingtool)) && (!src.build_step))
+	if((iswelder(W)) && (!src.build_step))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0,user))
 			src.build_step++
