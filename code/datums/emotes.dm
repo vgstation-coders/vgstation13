@@ -64,8 +64,10 @@
 	else
 		for(var/mob/O in hearers(user))
 			O.show_message(msg, emote_type)
+	var/turf/T = get_turf(user)
+	var/location = T ? "[T.x],[T.y],[T.z]" : "nullspace"
+	log_emote("[user.name]/[user.key] (@[location]): [message]")
 
-	log_emote("[user.name]/[user.key] (@[user.x],[user.y],[user.z]): [message]")
 
 // TODO : gender & all
 /datum/emote/proc/replace_pronoun(mob/user, message)
