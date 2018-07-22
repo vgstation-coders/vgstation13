@@ -1014,7 +1014,7 @@ var/global/num_vending_terminals = 1
 		if(length(newslogan) > 0 && length(newslogan) <= CUSTOM_VENDING_MAX_SLOGAN_LENGTH)
 			product_slogans += html_encode(newslogan)
 
-	else if (href_list["delete_slogan_line"] && edit_mode)
+	else if (href_list["delete_slogan_line"] && edit_mode && product_slogans.len > 0)
 		product_slogans -= product_slogans[text2num(href_list["delete_slogan_line"])]
 
 	src.add_fingerprint(usr)
