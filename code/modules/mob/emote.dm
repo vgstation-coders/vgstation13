@@ -61,8 +61,8 @@
 			for(var/mob/O in hearers(user))
 				O.show_message(msg, m_type)
 	
-	log_emote("[user.name]/[user.key] (@[user.x],[user.y],[user.z]): [params]")
-
+	var/turf/T = get_turf(user)
+	log_emote("[user.name]/[user.key] (@[T.x],[T.y],[T.z]): [params]")
 
 /mob/proc/emote_dead(var/message)
 	if(client.prefs.muted & MUTE_DEADCHAT)
