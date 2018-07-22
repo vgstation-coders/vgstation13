@@ -55,8 +55,28 @@
 #define CULT_ACT_IV		4
 #define CULT_EPILOGUE	5
 
+#define BLOODCOST_TARGET_BLEEDER	"bleeder"
+#define BLOODCOST_AMOUNT_BLEEDER	"bleeder_amount"
+#define BLOODCOST_TARGET_GRAB	"grabbed"
+#define BLOODCOST_AMOUNT_GRAB	"grabbed_amount"
+#define BLOODCOST_TARGET_HANDS	"hands"
+#define BLOODCOST_AMOUNT_HANDS	"hands_amount"
+#define BLOODCOST_TARGET_HELD	"held"
+#define BLOODCOST_AMOUNT_HELD	"held_amount"
+#define BLOODCOST_LID_HELD		"held_lid"
+#define BLOODCOST_TARGET_SPLATTER	"splatter"
+#define BLOODCOST_AMOUNT_SPLATTER	"splatter_amount"
+#define BLOODCOST_TARGET_BLOODPACK	"bloodpack"
+#define BLOODCOST_AMOUNT_BLOODPACK	"bloodpack_amount"
+#define BLOODCOST_HOLES_BLOODPACK	"bloodpack_noholes"
+#define BLOODCOST_TARGET_CONTAINER	"container"
+#define BLOODCOST_AMOUNT_CONTAINER	"container_amount"
+#define BLOODCOST_LID_CONTAINER	"container_lid"
+#define BLOODCOST_TARGET_USER	"user"
+#define BLOODCOST_AMOUNT_USER	"user_amount"
 #define BLOODCOST_TOTAL		"total"
 #define BLOODCOST_RESULT	"result"
+#define BLOODCOST_FAILURE	"failure"
 
 #define RITUALABORT_ERASED	"erased"
 #define RITUALABORT_STAND	"too far"

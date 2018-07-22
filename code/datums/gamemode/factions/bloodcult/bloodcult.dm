@@ -67,25 +67,25 @@ var/veil_thickness = CULT_PROLOGUE
 
 /proc/get_available_blood(var/mob/user, var/amount_needed = 0)
 	var/data = list(
-		"bleeder" = null,
-		"bleeder_amount" = 0,
-		"grabbed" = null,
-		"grabbed_amount" = 0,
-		"hands" = null,
-		"hands_amount" = 0,
-		"held" = null,
-		"held_amount" = 0,
-		"held_lid" = 0,
-		"splatter" = null,
-		"splatter_amount" = 0,
-		"bloodpack" = null,
-		"bloodpack_amount" = 0,
-		"bloodpack_noholes" = 0,
-		"container" = null,
-		"container_amount" = 0,
-		"container_lid" = 0,
-		"user" = null,
-		"user_amount" = 0,
+		BLOODCOST_TARGET_BLEEDER = null,
+		BLOODCOST_AMOUNT_BLEEDER = 0,
+		BLOODCOST_TARGET_GRAB = null,
+		BLOODCOST_AMOUNT_GRAB = 0,
+		BLOODCOST_TARGET_HANDS = null,
+		BLOODCOST_AMOUNT_HANDS = 0,
+		BLOODCOST_TARGET_HELD = null,
+		BLOODCOST_AMOUNT_HELD = 0,
+		BLOODCOST_LID_HELD = 0,
+		BLOODCOST_TARGET_SPLATTER = null,
+		BLOODCOST_AMOUNT_SPLATTER = 0,
+		BLOODCOST_TARGET_BLOODPACK = null,
+		BLOODCOST_AMOUNT_BLOODPACK = 0,
+		BLOODCOST_HOLES_BLOODPACK = 0,
+		BLOODCOST_TARGET_CONTAINER = null,
+		BLOODCOST_AMOUNT_CONTAINER = 0,
+		BLOODCOST_LID_CONTAINER = 0,
+		BLOODCOST_TARGET_USER = null,
+		BLOODCOST_AMOUNT_USER = 0,
 		BLOODCOST_RESULT = "",
 		BLOODCOST_TOTAL = 0,
 		)
@@ -95,26 +95,26 @@ var/veil_thickness = CULT_PROLOGUE
 	//Is there blood on our hands?
 	var/mob/living/carbon/human/H_user = user
 	if (istype (H_user) && H_user.bloody_hands)
-		data["hands"] = H_user
+		data[BLOODCOST_TARGET_HANDS] = H_user
 		var/blood_gathered = min(amount_needed,H_user.bloody_hands)
-		data["hands_amount"] = blood_gathered
+		data[BLOODCOST_AMOUNT_HANDS] = blood_gathered
 		amount_gathered += blood_gathered
 
 	if (amount_gathered >= amount_needed)
-		data[BLOODCOST_RESULT] = "hands"
+		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_HANDS
 		return data
 
 	//Is there a fresh blood splatter on the turf?
 	for (var/obj/effect/decal/cleanable/blood/B in T)
 		var/blood_volume = B.amount
 		if (blood_volume && B.counts_as_blood)
-			data["splatter"] = B
+			data[BLOODCOST_TARGET_SPLATTER] = B
 			var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-			data["splatter_amount"] = blood_gathered
+			data[BLOODCOST_AMOUNT_SPLATTER] = blood_gathered
 			amount_gathered += blood_gathered
 
 	if (amount_gathered >= amount_needed)
-		data[BLOODCOST_RESULT] = "splatter"
+		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_SPLATTER
 		return data
 
 	//Is the cultist currently grabbing a bleeding mob/corpse that still has blood in it?
@@ -126,12 +126,12 @@ var/veil_thickness = CULT_PROLOGUE
 				if(org.status & ORGAN_BLEEDING)
 					var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
 					var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-					data["grabbed"] = H
-					data["grabbed_amount"] = blood_gathered
+					data[BLOODCOST_TARGET_GRAB] = H
+					data[BLOODCOST_AMOUNT_GRAB] = blood_gathered
 					amount_gathered += blood_gathered
 
 	if (amount_gathered >= amount_needed)
-		data[BLOODCOST_RESULT] = "grabbed"
+		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_GRAB
 		return data
 
 	//Is there a bleeding mob/corpse on the turf that still has blood in it?
@@ -141,15 +141,15 @@ var/veil_thickness = CULT_PROLOGUE
 				if(org.status & ORGAN_BLEEDING)
 					var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
 					var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-					data["bleeder"] = H
-					data["bleeder_amount"] = blood_gathered
+					data[BLOODCOST_TARGET_BLEEDER] = H
+					data[BLOODCOST_AMOUNT_BLEEDER] = blood_gathered
 					amount_gathered += blood_gathered
 					break
-		if (data["bleeder"])
+		if (data[BLOODCOST_TARGET_BLEEDER])
 			break
 
 	if (amount_gathered >= amount_needed)
-		data[BLOODCOST_RESULT] = "bleeder"
+		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_BLEEDER
 		return data
 
 
@@ -160,16 +160,16 @@ var/veil_thickness = CULT_PROLOGUE
 	if (istype(G_held))
 		var/blood_volume = round(G_held.reagents.get_reagent_amount(BLOOD))
 		if (blood_volume)
-			data["held"] = G_held
+			data[BLOODCOST_TARGET_HELD] = G_held
 			if (G_held.is_open_container())
 				var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-				data["held_amount"] = blood_gathered
+				data[BLOODCOST_AMOUNT_HELD] = blood_gathered
 				amount_gathered += blood_gathered
 			else
-				data["held_lid"] = 1
+				data[BLOODCOST_LID_HELD] = 1
 
 	if (amount_gathered >= amount_needed)
-		data[BLOODCOST_RESULT] = "held"
+		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_HELD
 		return data
 
 	var/obj/item/weapon/reagent_containers/blood/blood_pack = H_user.get_active_hand()
@@ -179,16 +179,16 @@ var/veil_thickness = CULT_PROLOGUE
 	if (istype(blood_pack))
 		var/blood_volume = round(blood_pack.reagents.get_reagent_amount(BLOOD))
 		if (blood_volume)
-			data["bloodpack"] = blood_pack
+			data[BLOODCOST_TARGET_BLOODPACK] = blood_pack
 			if (blood_pack.holes)
 				var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-				data["bloodpack_amount"] = blood_gathered
+				data[BLOODCOST_AMOUNT_BLOODPACK] = blood_gathered
 				amount_gathered += blood_gathered
 			else
-				data["bloodpack_noholes"] = 1
+				data[BLOODCOST_HOLES_BLOODPACK] = 1
 
 	if (amount_gathered >= amount_needed)
-		data[BLOODCOST_RESULT] = "bloodpack"
+		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_BLOODPACK
 		return data
 
 
@@ -196,17 +196,17 @@ var/veil_thickness = CULT_PROLOGUE
 	for (var/obj/item/weapon/reagent_containers/G in T)
 		var/blood_volume = round(G.reagents.get_reagent_amount(BLOOD))
 		if (blood_volume)
-			data["container"] = G
+			data[BLOODCOST_TARGET_CONTAINER] = G
 			if (G.is_open_container())
 				var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-				data["container_amount"] = blood_gathered
+				data[BLOODCOST_AMOUNT_CONTAINER] = blood_gathered
 				amount_gathered += blood_gathered
 				break
 			else
-				data["container_lid"] = 1
+				data[BLOODCOST_LID_CONTAINER] = 1
 
 	if (amount_gathered >= amount_needed)
-		data[BLOODCOST_RESULT] = "container"
+		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_CONTAINER
 		return data
 
 	//Does the user have blood? (the user can pay in blood without having to bleed first)
@@ -214,15 +214,15 @@ var/veil_thickness = CULT_PROLOGUE
 	if (istype (H))
 		var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
 		var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-		data["user"] = H
-		data["user_amount"] = blood_gathered
+		data[BLOODCOST_TARGET_USER] = H
+		data[BLOODCOST_AMOUNT_USER] = blood_gathered
 		amount_gathered += blood_gathered
 
 	if (amount_gathered >= amount_needed)
-		data[BLOODCOST_RESULT] = "user"
+		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_USER
 		return data
 
-	data[BLOODCOST_RESULT] = "failure"
+	data[BLOODCOST_RESULT] = BLOODCOST_FAILURE
 	return data
 
 
@@ -234,70 +234,70 @@ var/veil_thickness = CULT_PROLOGUE
 
 	//Flavour text and blood data transfer
 	switch (data[BLOODCOST_RESULT])
-		if ("hands")
+		if (BLOODCOST_TARGET_HANDS)
 			var/mob/living/carbon/human/H = user
 			blood = new()
 			blood.data["blood_colour"] = H.hand_blood_color
 			blood.data["blood_DNA"] = H.blood_DNA
-			if (previous_result != "hands")
+			if (previous_result != BLOODCOST_TARGET_HANDS)
 				user.visible_message("<span class='warning'>The blood on \the [user]'s hands drips onto the floor!</span>",
 									"<span class='rose'>You let the blood smeared on your hands join the pool of your summoning.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
-		if ("splatter")
-			var/obj/effect/decal/cleanable/blood/B = data["splatter"]
+		if (BLOODCOST_TARGET_SPLATTER)
+			var/obj/effect/decal/cleanable/blood/B = data[BLOODCOST_TARGET_SPLATTER]
 			blood = new()
 			blood.data["blood_colour"] = B.basecolor
 			blood.data["blood_DNA"] = B.blood_DNA
 			blood.data["virus2"] = B.virus2
-			if (previous_result != "splatter")
+			if (previous_result != BLOODCOST_TARGET_SPLATTER)
 				user.visible_message("<span class='warning'>The blood on the floor bellow \the [user] starts moving!</span>",
 									"<span class='rose'>You redirect the flow of blood inside the splatters on the floor toward the pool of your summoning.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
-		if ("grabbed")
-			var/mob/living/carbon/human/H = data["grabbed"]
+		if (BLOODCOST_TARGET_GRAB)
+			var/mob/living/carbon/human/H = data[BLOODCOST_TARGET_GRAB]
 			blood = get_blood(H.vessel)
-			if (previous_result != "grabbed")
-				user.visible_message("<span class='warning'>\The [user] stabs their nails inside \the [data["grabbed"]], drawing blood from them!</span>",
-									"<span class='rose'>You stab your nails inside \the [data["grabbed"]] to draw some blood from them.</span>",
+			if (previous_result != BLOODCOST_TARGET_GRAB)
+				user.visible_message("<span class='warning'>\The [user] stabs their nails inside \the [data[BLOODCOST_TARGET_GRAB]], drawing blood from them!</span>",
+									"<span class='rose'>You stab your nails inside \the [data[BLOODCOST_TARGET_GRAB]] to draw some blood from them.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
-		if ("bleeder")
-			var/mob/living/carbon/human/H = data["bleeder"]
+		if (BLOODCOST_TARGET_BLEEDER)
+			var/mob/living/carbon/human/H = data[BLOODCOST_TARGET_BLEEDER]
 			blood = get_blood(H.vessel)
-			if (previous_result != "bleeder")
-				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data["bleeder"]]'s wounds!</span>",
-									"<span class='rose'>You dip your fingers inside \the [data["bleeder"]]'s wounds to draw some blood from them.</span>",
+			if (previous_result != BLOODCOST_TARGET_BLEEDER)
+				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data[BLOODCOST_TARGET_BLEEDER]]'s wounds!</span>",
+									"<span class='rose'>You dip your fingers inside \the [data[BLOODCOST_TARGET_BLEEDER]]'s wounds to draw some blood from them.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
-		if ("held")
-			var/obj/item/weapon/reagent_containers/G = data["held"]
+		if (BLOODCOST_TARGET_HELD)
+			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_HELD]
 			blood = locate() in G.reagents.reagent_list
-			if (previous_result != "held")
-				user.visible_message("<span class='warning'>\The [user] tips \the [data["held"]], pouring blood!</span>",
-									"<span class='rose'>You tip \the [data["held"]] to pour the blood contained inside.</span>",
+			if (previous_result != BLOODCOST_TARGET_HELD)
+				user.visible_message("<span class='warning'>\The [user] tips \the [data[BLOODCOST_TARGET_HELD]], pouring blood!</span>",
+									"<span class='rose'>You tip \the [data[BLOODCOST_TARGET_HELD]] to pour the blood contained inside.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
-		if ("bloodpack")
-			var/obj/item/weapon/reagent_containers/blood/B = data["bloodpack"]
+		if (BLOODCOST_TARGET_BLOODPACK)
+			var/obj/item/weapon/reagent_containers/blood/B = data[BLOODCOST_TARGET_BLOODPACK]
 			blood = locate() in B.reagents.reagent_list
-			if (previous_result != "bloodpack")
-				user.visible_message("<span class='warning'>\The [user] squeezes \the [data["bloodpack"]], pouring blood!</span>",
-									"<span class='rose'>You squeeze \the [data["bloodpack"]] to pour the blood contained inside.</span>",
+			if (previous_result != BLOODCOST_TARGET_BLOODPACK)
+				user.visible_message("<span class='warning'>\The [user] squeezes \the [data[BLOODCOST_TARGET_BLOODPACK]], pouring blood!</span>",
+									"<span class='rose'>You squeeze \the [data[BLOODCOST_TARGET_BLOODPACK]] to pour the blood contained inside.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
-		if ("container")
-			var/obj/item/weapon/reagent_containers/G = data["container"]
+		if (BLOODCOST_TARGET_CONTAINER)
+			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_CONTAINER]
 			blood = locate() in G.reagents.reagent_list
-			if (previous_result != "container")
-				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data["container"]], covering them in blood!</span>",
-									"<span class='rose'>You dip your fingers inside \the [data["container"]], covering them in blood.</span>",
+			if (previous_result != BLOODCOST_TARGET_CONTAINER)
+				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data[BLOODCOST_TARGET_CONTAINER]], covering them in blood!</span>",
+									"<span class='rose'>You dip your fingers inside \the [data[BLOODCOST_TARGET_CONTAINER]], covering them in blood.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
-		if ("user")
-			if (data["bloodpack_noholes"])
-				to_chat(user, "<span class='warning'>You must puncture \the [data["bloodpack"]] before you can squeeze blood from it!</span>")
-			else if (data["held_lid"])
-				to_chat(user, "<span class='warning'>Remove \the [data["held"]]'s lid first!</span>")
-			else if (data["container_lid"])
-				to_chat(user, "<span class='warning'>Remove \the [data["container"]]'s lid first!</span>")
+		if (BLOODCOST_TARGET_USER)
+			if (data[BLOODCOST_HOLES_BLOODPACK])
+				to_chat(user, "<span class='warning'>You must puncture \the [data[BLOODCOST_TARGET_BLOODPACK]] before you can squeeze blood from it!</span>")
+			else if (data[BLOODCOST_LID_HELD])
+				to_chat(user, "<span class='warning'>Remove \the [data[BLOODCOST_TARGET_HELD]]'s lid first!</span>")
+			else if (data[BLOODCOST_LID_CONTAINER])
+				to_chat(user, "<span class='warning'>Remove \the [data[BLOODCOST_TARGET_CONTAINER]]'s lid first!</span>")
 			var/mob/living/carbon/human/H = user
 			blood = get_blood(H.vessel)
-			if (previous_result != "user")
+			if (previous_result != BLOODCOST_TARGET_USER)
 				if(istype(H))
 					var/obj/item/weapon/W = H.get_active_hand()
 					if (W && W.sharpness_flags & SHARP_BLADE)
@@ -308,52 +308,52 @@ var/veil_thickness = CULT_PROLOGUE
 							to_chat(user, "<span class='rose'>You slice open your finger with \the [W] to let a bit of blood flow.</span>")
 						else
 							to_chat(user, "<span class='rose'>You bite your finger and let the blood pearl up.</span>")
-		if ("failure")
-			if (data["bloodpack_noholes"])
-				to_chat(user, "<span class='danger'>You must puncture \the [data["bloodpack"]] before you can squeeze blood from it!</span>")
-			else if (data["held_lid"])
-				to_chat(user, "<span class='danger'>Remove \the [data["held"]]'s lid first!</span>")
-			else if (data["container_lid"])
-				to_chat(user, "<span class='danger'>Remove \the [data["held"]]'s lid first!</span>")
+		if (BLOODCOST_FAILURE)
+			if (data[BLOODCOST_HOLES_BLOODPACK])
+				to_chat(user, "<span class='danger'>You must puncture \the [data[BLOODCOST_TARGET_BLOODPACK]] before you can squeeze blood from it!</span>")
+			else if (data[BLOODCOST_LID_HELD])
+				to_chat(user, "<span class='danger'>Remove \the [data[BLOODCOST_TARGET_HELD]]'s lid first!</span>")
+			else if (data[BLOODCOST_LID_CONTAINER])
+				to_chat(user, "<span class='danger'>Remove \the [data[BLOODCOST_TARGET_HELD]]'s lid first!</span>")
 			else
 				to_chat(user, "<span class='danger'>There is no blood available. Not even in your own body!</span>")
 
 	//Blood is only consumed if there is enough of it
-	if (!data["failure"])
-		if (data["hands"])
-			data[BLOODCOST_TOTAL] += data["hands_amount"]
+	if (!data[BLOODCOST_FAILURE])
+		if (data[BLOODCOST_TARGET_HANDS])
+			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_HANDS]
 			var/mob/living/carbon/human/H = user
-			H.bloody_hands = max(0, H.bloody_hands - data["hands_amount"])
+			H.bloody_hands = max(0, H.bloody_hands - data[BLOODCOST_AMOUNT_HANDS])
 			if (!H.bloody_hands)
 				H.clean_blood()
 				H.update_inv_gloves()
-		if (data["splatter"])
-			data[BLOODCOST_TOTAL] += data["splatter_amount"]
-			var/obj/effect/decal/cleanable/blood/B = data["splatter"]
-			B.amount = max(0 , B.amount - data["splatter_amount"])
-		if (data["grabbed"])
-			data[BLOODCOST_TOTAL] += data["grabbed_amount"]
-			var/mob/living/carbon/human/H = data["grabbed"]
-			H.vessel.remove_reagent(BLOOD, data["grabbed_amount"])
-			H.take_overall_damage(data["grabbed_amount"] ? 0.1 : 0)
-		if (data["bleeder"])
-			data[BLOODCOST_TOTAL] += data["bleeder_amount"]
-			var/mob/living/carbon/human/H = data["bleeder"]
-			H.vessel.remove_reagent(BLOOD, data["bleeder_amount"])
-			H.take_overall_damage(data["bleeder_amount"] ? 0.1 : 0)
-		if (data["held"])
-			data[BLOODCOST_TOTAL] += data["held_amount"]
-			var/obj/item/weapon/reagent_containers/G = data["held"]
-			G.reagents.remove_reagent(BLOOD, data["held_amount"])
-		if (data["container"])
-			data[BLOODCOST_TOTAL] += data["container_amount"]
-			var/obj/item/weapon/reagent_containers/G = data["container"]
-			G.reagents.remove_reagent(BLOOD, data["container_amount"])
-		if (data["user"])
-			data[BLOODCOST_TOTAL] += data["user_amount"]
+		if (data[BLOODCOST_TARGET_SPLATTER])
+			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_SPLATTER]
+			var/obj/effect/decal/cleanable/blood/B = data[BLOODCOST_TARGET_SPLATTER]
+			B.amount = max(0 , B.amount - data[BLOODCOST_AMOUNT_SPLATTER])
+		if (data[BLOODCOST_TARGET_GRAB])
+			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_GRAB]
+			var/mob/living/carbon/human/H = data[BLOODCOST_TARGET_GRAB]
+			H.vessel.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_GRAB])
+			H.take_overall_damage(data[BLOODCOST_AMOUNT_GRAB] ? 0.1 : 0)
+		if (data[BLOODCOST_TARGET_BLEEDER])
+			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_BLEEDER]
+			var/mob/living/carbon/human/H = data[BLOODCOST_TARGET_BLEEDER]
+			H.vessel.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_BLEEDER])
+			H.take_overall_damage(data[BLOODCOST_AMOUNT_BLEEDER] ? 0.1 : 0)
+		if (data[BLOODCOST_TARGET_HELD])
+			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_HELD]
+			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_HELD]
+			G.reagents.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_HELD])
+		if (data[BLOODCOST_TARGET_CONTAINER])
+			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_CONTAINER]
+			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_CONTAINER]
+			G.reagents.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_CONTAINER])
+		if (data[BLOODCOST_TARGET_USER])
+			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_USER]
 			var/mob/living/carbon/human/H = user
 			var/blood_before = H.vessel.get_reagent_amount(BLOOD)
-			H.vessel.remove_reagent(BLOOD, data["user_amount"])
+			H.vessel.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_USER])
 			var/blood_after = H.vessel.get_reagent_amount(BLOOD)
 			if (blood_before > BLOOD_VOLUME_SAFE && blood_after < BLOOD_VOLUME_SAFE)
 				to_chat(user, "<span class='sinister'>You start looking pale.</span>")
@@ -365,7 +365,7 @@ var/veil_thickness = CULT_PROLOGUE
 				to_chat(user, "<span class='sinister'>You have trouble focusing, things will go bad if you keep using your blood.</span>")
 			else if (blood_before > BLOOD_VOLUME_SURVIVE && blood_after < BLOOD_VOLUME_SURVIVE)
 				to_chat(user, "<span class='sinister'>It will be all over soon.</span>")
-			H.take_overall_damage(data["user_amount"] ? 0.1 : 0)
+			H.take_overall_damage(data[BLOODCOST_AMOUNT_USER] ? 0.1 : 0)
 
 	data["blood"] = blood
 	return data

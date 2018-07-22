@@ -112,7 +112,7 @@
 		return 0
 
 	data = use_available_blood(user, blood_cost)
-	if (data[BLOODCOST_RESULT] == "failure")
+	if (data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)
 		return 0
 
 	if (rune)

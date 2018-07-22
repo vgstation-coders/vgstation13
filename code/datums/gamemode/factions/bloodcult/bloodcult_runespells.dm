@@ -74,7 +74,7 @@
 
 /datum/rune_spell/proc/blood_pay()
 	var/data = use_available_blood(activator, cost_invoke)
-	if (data[BLOODCOST_RESULT] == "failure")
+	if (data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)
 		to_chat(activator, "<span class='warning'>This ritual requires more blood than you can offer.</span>")
 		return 0
 	else
@@ -235,7 +235,7 @@
 		var/amount_paid = 0
 		for(var/mob/living/L in contributors)
 			var/data = use_available_blood(L, cost_upkeep,contributors[L])
-			if (data[BLOODCOST_RESULT] == "failure")//out of blood are we?
+			if (data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)//out of blood are we?
 				contributors.Remove(L)
 			else
 				amount_paid += data[BLOODCOST_TOTAL]
@@ -539,7 +539,7 @@
 		var/amount_paid = 0
 		for(var/mob/living/L in contributors)
 			var/data = use_available_blood(L, cost_upkeep,contributors[L])
-			if (data[BLOODCOST_RESULT] == "failure")//out of blood are we?
+			if (data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)//out of blood are we?
 				contributors.Remove(L)
 			else
 				amount_paid += data[BLOODCOST_TOTAL]
@@ -683,7 +683,7 @@
 			to_chat(activator, "<span class='warning'>Their willpower is amazing, the ritual will be exhausting.</span>")
 
 	for(var/obj/item/weapon/implant/loyalty/I in victim)
-		if(I.implanted))
+		if(I.implanted)
 			to_chat(victim, "<span class='warning'>Your loyalty implants drastically slows down the ritual's progression.</span>")
 			to_chat(activator, "<span class='warning'>Their mind seems to reject the ritual by reflex. The ritual will take much longer.</span>")
 			break
