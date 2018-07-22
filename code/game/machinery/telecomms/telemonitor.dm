@@ -89,7 +89,10 @@
 	return
 
 /obj/machinery/computer/telecomms/monitor/update_icon()
-	icon_state = screen == 3 ? "network_unlinked" : "network_monitor" //Special icon if on screen 3
+	if(stat)
+		..() //Handles off or broken
+	else
+		icon_state = screen == 3 ? "network_unlinked" : "network_monitor" //Special icon if on screen 3
 
 /obj/machinery/computer/telecomms/monitor/Topic(href, href_list)
 	if(..())
