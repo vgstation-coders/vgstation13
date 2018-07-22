@@ -217,10 +217,10 @@ var/global/list/alert_overlays_global = list()
 			return
 		investigation_log(I_ATMOS, "[density ? "closed" : "opened"] [alarmed ? "while alarming" : ""] by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 
-/obj/machinery/door/firedoor/AIShiftClick(mob/user)
+/obj/machinery/door/firedoor/AICtrlClick(mob/user)
 	attack_ai(user,TRUE) //sanity for stat etc. in attack_ai
 
-/obj/machinery/door/firedoor/ShiftClick(mob/user)
+/obj/machinery/door/firedoor/CtrlClick(mob/user)
 	if(isAdminGhost(user))
 		attack_ai(user,TRUE)
 	else
