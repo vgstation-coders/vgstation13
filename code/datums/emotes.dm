@@ -158,4 +158,4 @@
 	emote("coughs")
 
 /mob/proc/audible_scream()
-	emote("screams")
+	emote("screams", TRUE) // So it's forced
