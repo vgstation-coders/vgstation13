@@ -366,7 +366,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		rune.blood3 = null
 		rune.update_icon()
 		if (rune.active_spell)
-			rune.active_spell.abort("erased")
+			rune.active_spell.abort(RITUALABORT_ERASED)
 			rune.active_spell = null
 	else if (rune.word2)
 		word_erased = rune.word2.rune

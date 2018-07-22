@@ -1738,4 +1738,4 @@ Thanks.
 	silent = max(max(silent,amount),0)
 
 /mob/living/proc/SetSilent(amount)
-	knockdown = max(amount,0)
+	silent = max(amount,0)

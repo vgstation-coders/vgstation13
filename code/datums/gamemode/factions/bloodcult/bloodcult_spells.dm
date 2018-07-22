@@ -25,6 +25,7 @@
 	var/obj/effect/rune/rune = null
 	var/datum/rune_spell/spell = null
 	var/remember = 0
+	var/blood_cost = 1
 
 /spell/cult/trace_rune/choose_targets(var/mob/user = usr)
 	return list(user)
@@ -110,8 +111,8 @@
 	if (!word)
 		return 0
 
-	data = use_available_blood(user, CULT_COST_RUNE)
-	if (data["result"] == "failure")
+	data = use_available_blood(user, blood_cost)
+	if (data[BLOODCOST_RESULT] == "failure")
 		return 0
 
 	if (rune)

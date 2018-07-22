@@ -38,7 +38,15 @@
 #define HIGHLANDER "highlander"
 #define IMPLANTSLAVE "Greytider"
 
+#define GREET_DEFAULT		"default"
+#define GREET_ROUNDSTART	"roundstart"
+#define GREET_ADMINTOGGLE	"admintoggle"
+#define GREET_CUSTOM		"custom"
 
+#define GREET_CONVERTED		"converted"
+#define GREET_PAMPHLET		"pamphlet"
+
+//////////////////////////////////CULT STUFF////////////////////////////////////
 #define CULT_MENDED		-1
 #define CULT_PROLOGUE	0
 #define CULT_ACT_I		1
@@ -47,11 +55,18 @@
 #define CULT_ACT_IV		4
 #define CULT_EPILOGUE	5
 
-#define CULT_COST_RUNE	1
+#define BLOODCOST_TOTAL		"total"
+#define BLOODCOST_RESULT	"result"
 
-#define BE_TRAITOR "Be_Traitor"
-#define BE_PAI "Be_PAI"
-#define BE_NINJA "Be_Ninja"
+#define RITUALABORT_ERASED	"erased"
+#define RITUALABORT_STAND	"too far"
+#define RITUALABORT_GONE	"moved away"
+#define RITUALABORT_BLOOD	"channel cancel"
+#define RITUALABORT_TOOLS	"moved talisman"
+#define RITUALABORT_REMOVED	"victim removed"
+#define RITUALABORT_CONVERT	"convert success"
+#define RITUALABORT_SACRIFICE	"convert failure"
+#define RITUALABORT_FULL	"no room"
 
 #define	TOME_CLOSED	1
 #define	TOME_OPEN	2
@@ -62,3 +77,9 @@
 
 #define	MAX_TALISMAN_PER_TOME	5
 
+////////////////////////////////////////////////////////////////////////////////
+
+
+#define BE_TRAITOR "Be_Traitor"
+#define BE_PAI "Be_PAI"
+#define BE_NINJA "Be_Ninja"

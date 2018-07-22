@@ -3,7 +3,7 @@
 	name = "Cultist"
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
 	logo_state = "cult-logo"
-	greets = list("default","custom","roundstart","admintoggle")
+	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_ADMINTOGGLE)
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
@@ -31,7 +31,7 @@
 
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	switch(greeting)
-		if ("roundstart")
+		if (GREET_ROUNDSTART)
 			to_chat(antag.current, {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'><font size=3>You are a cultist of <span class='danger'><font size=3>Nar-Sie</font></span>!</font><br>
 				I, the Geometer of Blood, want you to thin the veil between your reality and my realm<br>
 				so I can pull this place onto my plane of existence.<br>
@@ -40,15 +40,15 @@
 				Other cultists made their way into the crew. Talk to them. <span class='danger'>Self Other Technology</span>!<br>
 				Meet up with them. Raise an altar in my name. <span class='danger'>Blood Technology Join</span>!<br>
 				</span>"})
-		if ("admintoggle")
+		if (GREET_ADMINTOGGLE)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 			to_chat(antag.current, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
-		if ("custom")
+		if (GREET_CUSTOM)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'>[custom]</span>")
-		if ("converted")
+		if (GREET_CONVERTED)
 			to_chat(antag.current, "<span class='sinister'>You feel like you've broken past the veil of reality, your mind has seen worlds from beyond this plane, you've listened to the words of the Geometer of Blood for what felt like both an instant and ages, and now share both his knowledge and his ambition.</span>")
 			to_chat(antag.current, "<span class='sinister'>The Cult of Nar-Sie now counts you as its newest member. Your fellow cultists will guide you. You remember the last three words that Nar-Sie spoke to you: <span class='danger'>See Blood Hell</span></span>")
-		if ("pamphlet")
+		if (GREET_PAMPHLET)
 			to_chat(antag.current, "<span class='sinister'>Wow, that pamphlet was very convincing, in fact you're like totally a cultist now, hail Nar-Sie!</span>")//remember, debug item
 		else
 			if (faction && faction.ID == BLOODCULT)

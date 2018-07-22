@@ -284,13 +284,12 @@ var/list/arcane_tomes = list()
 		trigger(user)
 
 /obj/item/weapon/talisman/attack(var/mob/living/target, var/mob/living/user)
-	if(iscultist(user))
-		if(spell_type)
-			var/datum/rune_spell/instance = spell_type
-			if (initial(instance.touch_cast))
-				new spell_type(user, src, "touch", target)
-				qdel(src)
-				return
+	if(iscultist(user) && spell_type)
+		var/datum/rune_spell/instance = spell_type
+		if (initial(instance.touch_cast))
+			new spell_type(user, src, "touch", target)
+			qdel(src)
+			return
 	..()
 
 /obj/item/weapon/talisman/proc/trigger(var/mob/user)
@@ -466,16 +465,13 @@ var/list/arcane_tomes = list()
 	item_state = "cultpack_0skull"
 	var/skulls = 0
 
-/obj/item/weapon/storage/backpack/cultpack/attack_self(mob/user as mob)
+/obj/item/weapon/storage/backpack/cultpack/attack_self(var/mob/user)
 	..()
-	if(skulls)
-		for(,skulls > 0,skulls--)
-			new/obj/item/weapon/skull(get_turf(src))
-		update_icon(user)
+	for(var/i = 1 to skulls)
+		new/obj/item/weapon/skull(get_turf(src))
+	update_icon(user)
 
-/obj/item/weapon/storage/backpack/cultpack/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W == src)
-		return
+/obj/item/weapon/storage/backpack/cultpack/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W, /obj/item/weapon/skull) && (skulls < 3))
 		user.u_equip(W,1)
 		qdel(W)
@@ -597,7 +593,7 @@ var/list/arcane_tomes = list()
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 	cult.HandleRecruitedRole(newCultist)
 	newCultist.OnPostSetup(FALSE)
-	newCultist.Greet("pamphlet")
+	newCultist.Greet(GREET_PAMPHLET)
 
 ///////////////////////////////////////CULT BOX////////////////////////////////////////////////
 
@@ -614,7 +610,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/reagent_containers/food/drinks/cult
 	name = "cup"
-	desc = "An spooky looking cup with a skull motif."
+	desc = "A spooky looking cup with a skull motif."
 	icon_state = "cult"
 	item_state = "cult"
 	isGlass = 0

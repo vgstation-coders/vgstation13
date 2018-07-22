@@ -61,7 +61,7 @@
 
 	if (istype (spell_holder,/obj/effect/rune))
 		if ((rune_flags & RUNE_STAND) && (user.loc != spell_holder.loc))
-			abort("too far")
+			abort(RITUALABORT_STAND)
 		else
 			user.say(invocation,"C")
 			cast()
@@ -74,7 +74,7 @@
 
 /datum/rune_spell/proc/blood_pay()
 	var/data = use_available_blood(activator, cost_invoke)
-	if (data["result"] == "failure")
+	if (data[BLOODCOST_RESULT] == "failure")
 		to_chat(activator, "<span class='warning'>This ritual requires more blood than you can offer.</span>")
 		return 0
 	else
@@ -94,26 +94,26 @@
 
 /datum/rune_spell/proc/abort(var/cause)
 	switch (cause)
-		if ("erased")
+		if (RITUALABORT_ERASED)
 			if (istype (spell_holder,/obj/effect/rune))
 				spell_holder.visible_message("<span class='warning'>The rune's destruction ended the ritual.</span>")
-		if ("too far")
+		if (RITUALABORT_STAND)
 			if (activator)
 				to_chat(activator, "<span class='warning'>The [name] ritual requires you to stand on top of the rune.</span>")
-		if ("moved away")
+		if (RITUALABORT_GONE)
 			if (activator)
 				to_chat(activator, "<span class='warning'>The ritual ends as you move away from the rune.</span>")
-		if ("channel cancel")
+		if (RITUALABORT_BLOOD)
 			spell_holder.visible_message("<span class='warning'>Deprived of blood, the channeling is disrupted.</span>")
-		if ("moved talisman")
+		if (RITUALABORT_TOOLS)
 			if (activator)
 				to_chat(activator, "<span class='warning'>The necessary tools have been misplaced.</span>")
-		if ("victim removed")
+		if (RITUALABORT_TOOLS)
 			spell_holder.visible_message("<span class='warning'>The ritual ends as the victim gets pulled away from the rune.</span>")
-		if ("convert success")
+		if (RITUALABORT_CONVERT)
 			if (activator)
 				to_chat(activator, "<span class='notice'>The conversion ritual successfully brought a new member to the cult. Inform them of the current situation so they can take action.</span>")
-		if ("convert failure")
+		if (RITUALABORT_SACRIFICE)
 			if (activator)
 				to_chat(activator, "<span class='warning'>Whether because of their defiance, or Nar-Sie's thirst for their blood, the ritual ends leaving behind nothing but a creepy chest.</span>")
 
@@ -235,11 +235,11 @@
 		var/amount_paid = 0
 		for(var/mob/living/L in contributors)
 			var/data = use_available_blood(L, cost_upkeep,contributors[L])
-			if (data["result"] == "failure")//out of blood are we?
+			if (data[BLOODCOST_RESULT] == "failure")//out of blood are we?
 				contributors.Remove(L)
 			else
-				amount_paid += data["total"]
-				contributors[L] = data["result"]
+				amount_paid += data[BLOODCOST_TOTAL]
+				contributors[L] = data[BLOODCOST_RESULT]
 				make_tracker_effects(L.loc,spell_holder, 1, "soul", 3, /obj/effect/tracker/drain, 1)//visual feedback
 
 		accumulated_blood += amount_paid
@@ -253,7 +253,7 @@
 				if(accumulated_blood && !(locate(/obj/effect/decal/cleanable/blood/splatter) in spell_holder.loc))
 					var/obj/effect/decal/cleanable/blood/splatter/S = new(spell_holder.loc)//splash
 					S.amount = 2
-				abort("channel cancel")
+				abort(RITUALABORT_BLOOD)
 				return
 
 		//do we have multiple cultists? let's reward their cooperation
@@ -374,7 +374,7 @@
 /obj/effect/cult_ritual/cult_communication/HasProximity(var/atom/movable/AM)
 	if (!caster || caster.loc != loc)
 		if (source)
-			source.abort("moved away")
+			source.abort(RITUALABORT_GONE)
 		qdel(src)
 
 /obj/effect/cult_ritual/cultify()
@@ -489,7 +489,8 @@
 
 			if (target.talismans.len >= MAX_TALISMAN_PER_TOME)
 				to_chat(activator, "<span class='warning'>This tome cannot contain any more talismans.</span>")
-				abort("no room")
+				abort(RITUALABORT_FULL)
+				return
 
 			R.one_pulse()
 			contributors.Add(user)
@@ -526,7 +527,7 @@
 		failsafe++
 
 		if (tool && tool.loc != spell_holder.loc)
-			abort("moved talisman")
+			abort(RITUALABORT_TOOLS)
 
 		//are our payers still here and about?
 		for(var/mob/living/L in contributors)
@@ -538,11 +539,11 @@
 		var/amount_paid = 0
 		for(var/mob/living/L in contributors)
 			var/data = use_available_blood(L, cost_upkeep,contributors[L])
-			if (data["result"] == "failure")//out of blood are we?
+			if (data[BLOODCOST_RESULT] == "failure")//out of blood are we?
 				contributors.Remove(L)
 			else
-				amount_paid += data["total"]
-				contributors[L] = data["result"]
+				amount_paid += data[BLOODCOST_TOTAL]
+				contributors[L] = data[BLOODCOST_RESULT]
 				make_tracker_effects(L.loc,spell_holder, 1, "soul", 3, /obj/effect/tracker/drain, 1)//visual feedback
 
 		accumulated_blood += amount_paid
@@ -553,7 +554,7 @@
 		else
 			cancelling--
 			if (cancelling <= 0)
-				abort("channel cancel")
+				abort(RITUALABORT_BLOOD)
 				return
 
 
@@ -678,11 +679,11 @@
 			to_chat(activator, "<span class='warning'>Their will is strong, the ritual will take longer.</span>")
 
 		if (victim.mind.assigned_role in impede_hard)
-			to_chat(victim, "<span class='warning'>Your devotion to Nanotrasen impedes the ritual.</span>")
+			to_chat(victim, "<span class='warning'>Your devotion to higher causes impedes the ritual.</span>")
 			to_chat(activator, "<span class='warning'>Their willpower is amazing, the ritual will be exhausting.</span>")
 
-	for(var/obj/item/weapon/implant/I in victim)
-		if(I.implanted && istype(I,/obj/item/weapon/implant/loyalty))
+	for(var/obj/item/weapon/implant/loyalty/I in victim)
+		if(I.implanted))
 			to_chat(victim, "<span class='warning'>Your loyalty implants drastically slows down the ritual's progression.</span>")
 			to_chat(activator, "<span class='warning'>Their mind seems to reject the ritual by reflex. The ritual will take much longer.</span>")
 			break
@@ -699,7 +700,7 @@
 				playsound(R, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 				conversion.icon_state = ""
 				flick("rune_convert_abort",conversion)
-				abort("victim removed")
+				abort(RITUALABORT_REMOVED)
 				return
 
 			//and that we're next to them
@@ -711,7 +712,7 @@
 					playsound(R, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 					conversion.icon_state = ""
 					flick("rune_convert_abort",conversion)
-					abort("moved away")
+					abort(RITUALABORT_GONE)
 					return
 
 			else
@@ -723,8 +724,8 @@
 				var/progress = 10//10 seconds to reach second phase for a naked cultist
 				progress += activator.get_cult_power()//down to 1-2 seconds when wearing cult gear
 				var/delay = 0
-				for(var/obj/item/weapon/implant/I in victim)
-					if(I.implanted && istype(I,/obj/item/weapon/implant/loyalty))
+				for(var/obj/item/weapon/implant/loyalty/I in victim)
+					if(I.implanted)
 						delay = 1
 						progress = progress/3
 						break
@@ -818,7 +819,7 @@
 			playsound(R, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 			conversion.icon_state = ""
 			flick("rune_convert_abort",conversion)
-			abort("victim removed")
+			abort(RITUALABORT_REMOVED)
 			return
 
 		switch (success)
@@ -840,7 +841,7 @@
 				convert(victim)
 				conversion.icon_state = ""
 				flick("rune_convert_success",conversion)
-				abort("convert success")
+				abort(RITUALABORT_CONVERT)
 				return
 			if (0)
 				to_chat(victim, "<span class='danger'>As you stood there, unable to make a choice for yourself, the Geometer of Blood ran out of patience and chose for you.</span>")
@@ -875,7 +876,7 @@
 				I.forceMove(coffer)
 
 		qdel(victim)
-		abort("convert failure")
+		abort(RITUALABORT_SACRIFICE)
 
 /datum/rune_spell/conversion/proc/convert(var/mob/M)
 	var/datum/role/cultist/newCultist = new
@@ -885,7 +886,7 @@
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 	cult.HandleRecruitedRole(newCultist)
 	newCultist.OnPostSetup(FALSE)
-	newCultist.Greet("converted")
+	newCultist.Greet(GREET_CONVERTED)
 
 /datum/rune_spell/conversion/Removed(var/mob/M)
 	if (victim==M)
@@ -894,7 +895,7 @@
 		playsound(spell_holder, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 		conversion.icon_state = ""
 		flick("rune_convert_abort",conversion)
-		abort("victim removed")
+		abort(RITUALABORT_REMOVED)
 
 /datum/rune_spell/conversion/cast_talisman()//handled by /obj/item/weapon/talisman/proc/trigger instead
 	return

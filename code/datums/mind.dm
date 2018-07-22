@@ -477,10 +477,10 @@
 		var/custom_greeting
 		if (R.greets.len)
 			chosen_greeting = input("Choose a greeting", "Assigned role", null) as null|anything in R.greets
-			if (chosen_greeting == "custom")
+			if (chosen_greeting == GREET_CUSTOM)
 				custom_greeting = input("Choose a custom greeting", "Assigned role", "") as null|text
 
-			if ((chosen_greeting && chosen_greeting != "custom") || (chosen_greeting == "custom" && custom_greeting))
+			if ((chosen_greeting && chosen_greeting != GREET_CUSTOM) || (chosen_greeting == GREET_CUSTOM && custom_greeting))
 				R.Greet(chosen_greeting,custom_greeting)
 
 	if (href_list["add_role"])

@@ -64,7 +64,6 @@ var/veil_thickness = CULT_PROLOGUE
 // * If they are holding a container that has blood in it (such as a beaker or a blood pack), they can pour/squeeze blood from them
 // * If they are standing above a container that has blood in it, they can dip their fingers into them
 // * Finally if there are no alternative blood sources, you can always use your own blood.
-//TODO: include warnings when victims or the user go pale from excessive blood payment.
 
 /proc/get_available_blood(var/mob/user, var/amount_needed = 0)
 	var/data = list(
@@ -87,8 +86,8 @@ var/veil_thickness = CULT_PROLOGUE
 		"container_lid" = 0,
 		"user" = null,
 		"user_amount" = 0,
-		"result" = "",
-		"total" = 0,
+		BLOODCOST_RESULT = "",
+		BLOODCOST_TOTAL = 0,
 		)
 	var/turf/T = get_turf(user)
 	var/amount_gathered = 0
@@ -102,7 +101,7 @@ var/veil_thickness = CULT_PROLOGUE
 		amount_gathered += blood_gathered
 
 	if (amount_gathered >= amount_needed)
-		data["result"] = "hands"
+		data[BLOODCOST_RESULT] = "hands"
 		return data
 
 	//Is there a fresh blood splatter on the turf?
@@ -115,7 +114,7 @@ var/veil_thickness = CULT_PROLOGUE
 			amount_gathered += blood_gathered
 
 	if (amount_gathered >= amount_needed)
-		data["result"] = "splatter"
+		data[BLOODCOST_RESULT] = "splatter"
 		return data
 
 	//Is the cultist currently grabbing a bleeding mob/corpse that still has blood in it?
@@ -132,7 +131,7 @@ var/veil_thickness = CULT_PROLOGUE
 					amount_gathered += blood_gathered
 
 	if (amount_gathered >= amount_needed)
-		data["result"] = "grabbed"
+		data[BLOODCOST_RESULT] = "grabbed"
 		return data
 
 	//Is there a bleeding mob/corpse on the turf that still has blood in it?
@@ -150,7 +149,7 @@ var/veil_thickness = CULT_PROLOGUE
 			break
 
 	if (amount_gathered >= amount_needed)
-		data["result"] = "bleeder"
+		data[BLOODCOST_RESULT] = "bleeder"
 		return data
 
 
@@ -170,7 +169,7 @@ var/veil_thickness = CULT_PROLOGUE
 				data["held_lid"] = 1
 
 	if (amount_gathered >= amount_needed)
-		data["result"] = "held"
+		data[BLOODCOST_RESULT] = "held"
 		return data
 
 	var/obj/item/weapon/reagent_containers/blood/blood_pack = H_user.get_active_hand()
@@ -189,7 +188,7 @@ var/veil_thickness = CULT_PROLOGUE
 				data["bloodpack_noholes"] = 1
 
 	if (amount_gathered >= amount_needed)
-		data["result"] = "bloodpack"
+		data[BLOODCOST_RESULT] = "bloodpack"
 		return data
 
 
@@ -207,7 +206,7 @@ var/veil_thickness = CULT_PROLOGUE
 				data["container_lid"] = 1
 
 	if (amount_gathered >= amount_needed)
-		data["result"] = "container"
+		data[BLOODCOST_RESULT] = "container"
 		return data
 
 	//Does the user have blood? (the user can pay in blood without having to bleed first)
@@ -220,10 +219,10 @@ var/veil_thickness = CULT_PROLOGUE
 		amount_gathered += blood_gathered
 
 	if (amount_gathered >= amount_needed)
-		data["result"] = "user"
+		data[BLOODCOST_RESULT] = "user"
 		return data
 
-	data["result"] = "failure"
+	data[BLOODCOST_RESULT] = "failure"
 	return data
 
 
@@ -234,7 +233,7 @@ var/veil_thickness = CULT_PROLOGUE
 	var/datum/reagent/blood/blood
 
 	//Flavour text and blood data transfer
-	switch (data["result"])
+	switch (data[BLOODCOST_RESULT])
 		if ("hands")
 			var/mob/living/carbon/human/H = user
 			blood = new()
@@ -322,36 +321,36 @@ var/veil_thickness = CULT_PROLOGUE
 	//Blood is only consumed if there is enough of it
 	if (!data["failure"])
 		if (data["hands"])
-			data["total"] += data["hands_amount"]
+			data[BLOODCOST_TOTAL] += data["hands_amount"]
 			var/mob/living/carbon/human/H = user
 			H.bloody_hands = max(0, H.bloody_hands - data["hands_amount"])
 			if (!H.bloody_hands)
 				H.clean_blood()
 				H.update_inv_gloves()
 		if (data["splatter"])
-			data["total"] += data["splatter_amount"]
+			data[BLOODCOST_TOTAL] += data["splatter_amount"]
 			var/obj/effect/decal/cleanable/blood/B = data["splatter"]
 			B.amount = max(0 , B.amount - data["splatter_amount"])
 		if (data["grabbed"])
-			data["total"] += data["grabbed_amount"]
+			data[BLOODCOST_TOTAL] += data["grabbed_amount"]
 			var/mob/living/carbon/human/H = data["grabbed"]
 			H.vessel.remove_reagent(BLOOD, data["grabbed_amount"])
 			H.take_overall_damage(data["grabbed_amount"] ? 0.1 : 0)
 		if (data["bleeder"])
-			data["total"] += data["bleeder_amount"]
+			data[BLOODCOST_TOTAL] += data["bleeder_amount"]
 			var/mob/living/carbon/human/H = data["bleeder"]
 			H.vessel.remove_reagent(BLOOD, data["bleeder_amount"])
 			H.take_overall_damage(data["bleeder_amount"] ? 0.1 : 0)
 		if (data["held"])
-			data["total"] += data["held_amount"]
+			data[BLOODCOST_TOTAL] += data["held_amount"]
 			var/obj/item/weapon/reagent_containers/G = data["held"]
 			G.reagents.remove_reagent(BLOOD, data["held_amount"])
 		if (data["container"])
-			data["total"] += data["container_amount"]
+			data[BLOODCOST_TOTAL] += data["container_amount"]
 			var/obj/item/weapon/reagent_containers/G = data["container"]
 			G.reagents.remove_reagent(BLOOD, data["container_amount"])
 		if (data["user"])
-			data["total"] += data["user_amount"]
+			data[BLOODCOST_TOTAL] += data["user_amount"]
 			var/mob/living/carbon/human/H = user
 			var/blood_before = H.vessel.get_reagent_amount(BLOOD)
 			H.vessel.remove_reagent(BLOOD, data["user_amount"])
