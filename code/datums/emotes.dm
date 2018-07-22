@@ -64,7 +64,8 @@
 			O.show_message(msg, emote_type)
 	
 	var/turf/T = get_turf(user)
-	log_emote("[user.name]/[user.key] (@[T.x],[T.y],[T.z]): [message]")
+	var/location = T ? "[T.x],[T.y],[T.z]" : "nullspace"
+	log_emote("[user.name]/[user.key] (@[location]): [message]")
 
 // TODO : gender & all
 /datum/emote/proc/replace_pronoun(mob/user, message)	

@@ -62,7 +62,8 @@
 				O.show_message(msg, m_type)
 	
 	var/turf/T = get_turf(user)
-	log_emote("[user.name]/[user.key] (@[T.x],[T.y],[T.z]): [params]")
+	var/location = T ? "[T.x],[T.y],[T.z]" : "nullspace"
+	log_emote("[user.name]/[user.key] (@[location]): [message]")
 
 /mob/proc/emote_dead(var/message)
 	if(client.prefs.muted & MUTE_DEADCHAT)
