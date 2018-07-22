@@ -40,7 +40,7 @@
 	var/name = ""
 	var/obj/machinery/smartfridge/fridge
 	var/amount = 1
-	var/shelf = 1
+	var/shelf = 2
 	var/mini_icon
 
 /datum/fridge_pile/New(var/name, var/fridge, var/amount, var/mini_icon)

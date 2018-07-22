@@ -201,7 +201,7 @@ var/global/list/alert_overlays_global = list()
 	return
 
 /obj/machinery/door/firedoor/attack_ai(mob/user)
-	if(isobserver(user) || user.stat)
+	if(!isAdminGhost(user) && (isobserver(user) || user.stat))
 		return
 	spawn()
 		var/area/A = get_area(src)

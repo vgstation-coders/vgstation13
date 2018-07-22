@@ -161,8 +161,6 @@ var/global/datum/money_account/trader_account
 	var/activated = 1
 
 	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
-	ghost_read=0
-	ghost_write=0
 
 /obj/machinery/account_database/New(loc)
 	..(loc)
@@ -204,12 +202,12 @@ var/global/datum/money_account/trader_account
 	. = ..()
 	if(.)
 		return
-	if(ishuman(user) && !user.stat && get_dist(src,user) <= 1)
+	if(isAdminGhost(user) || (ishuman(user) && !user.stat && get_dist(src,user) <= 1))
 		var/dat = "<b>Accounts Database</b><br>"
 
 		dat += {"<i>[machine_id]</i><br>
 			Confirm identity: <a href='?src=\ref[src];choice=insert_card'>[held_card ? held_card : "-----"]</a><br>"}
-		if(access_level > 0)
+		if(access_level > 0 || isAdminGhost(user))
 
 			dat += {"<a href='?src=\ref[src];toggle_activated=1'>[activated ? "Disable" : "Enable"] remote access</a><br>
 				You may not edit accounts at this terminal, only create and view them.<br>"}

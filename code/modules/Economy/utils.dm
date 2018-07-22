@@ -48,7 +48,7 @@
 			if(D.remote_access_pin != attempt_pin)
 				return null
 		return D
-	else if(issilicon(src))
+	else if(issilicon(src) || isAdminGhost(src))
 		return station_account
 
 /datum/money_account/proc/fmtBalance()

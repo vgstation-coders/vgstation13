@@ -752,7 +752,7 @@ var/global/num_vending_terminals = 1
 		to_chat(user, "<span class='notice'>\The [src] is dark and unresponsive.</span>")
 		return
 
-	if(user.lying || user.incapacitated())
+	if(!isAdminGhost(usr) && (user.lying || user.incapacitated()))
 		return 0
 
 	if(M_TK in user.mutations && user.a_intent == "hurt" && iscarbon(user))
@@ -869,6 +869,8 @@ var/global/num_vending_terminals = 1
 	//testing("..(): [href]")
 
 	var/free_vend = 0
+	if(isAdminGhost(usr))
+		free_vend = 1
 	if(istype(usr,/mob/living/silicon))
 		var/can_vend = 1
 		if (href_list["vend"] && src.vend_ready && !currently_vending)

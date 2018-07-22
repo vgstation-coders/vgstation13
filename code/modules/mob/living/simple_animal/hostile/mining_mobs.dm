@@ -518,22 +518,14 @@ obj/item/asteroid/basilisk_hide/New()
 	if(proximity_flag && istype(target, /obj/item/clothing))
 		var/obj/item/clothing/C = target
 		var/current_armor = C.armor
-		if(!isturf(C.loc))
-			to_chat(user, "<span class='warning'>\The [C] must be safely placed on the ground for modification.</span>")
-			return
 		if(C.goliath_reinforce)
-			C.hidecount ++
 			if(current_armor.["melee"] < 90)
 				current_armor.["melee"] = min(current_armor.["melee"] + 10, 90)
 				to_chat(user, "<span class='info'>You strengthen [target], improving its resistance against melee attacks.</span>")
 				qdel(src)
 			else
 				to_chat(user, "<span class='info'>You can't improve [C] any further.</span>")
-		if(has_icon(C.icon, "[initial(C.item_state)]_goliath[C.hidecount]"))
-			C.name = "reinforced [initial(C.name)]"
-			C.item_state = "[initial(C.item_state)]_goliath[C.hidecount]"
-			C.icon_state = "[initial(C.icon_state)]_goliath[C.hidecount]"
-			C._color = "mining_goliath[C.hidecount]"
+	return
 
 /mob/living/simple_animal/hostile/asteroid/magmaw
 	name = "magmaw"
@@ -641,3 +633,137 @@ obj/item/asteroid/basilisk_hide/New()
 			qdel(A)
 		return
 	return ..()
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut
+	name = "rockernaut"
+	desc = "While a rolling stone may gather no moss, a spinning asteroid may gather semi-sentient moss in the form of a Rockernaut infestation."
+	icon_state = "rocknormal"
+	icon_living = "rocknormal"
+	icon_aggro = "rockcrikey"
+	icon_attack = "rocknormal_to_crikey"
+	icon_attack_time = 5
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
+	attack_sound = 'sound/weapons/heavysmash.ogg'
+	move_to_delay = 20
+	melee_damage_lower = 30
+	melee_damage_upper = 30
+	maxHealth = 350
+	health = 350
+	vision_range = 7
+	speed = 4
+	var/possessed_ore
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/Life()
+	.=..()
+	if(!.)
+		return 0
+
+	if(stance == HOSTILE_STANCE_IDLE && !client)
+		var/list/can_see = view(get_turf(src), vision_range/2)
+
+		for(var/turf/unsimulated/mineral/M in can_see)
+			if(!M.mineral)
+				continue
+			if(M.rockernaut)
+				continue
+			if(Adjacent(M))
+				//Climb in
+				visible_message("<span class = 'warning'>\The [src] burrows itself into \the [M]!</span>")
+				M.rockernaut = istype(src, /mob/living/simple_animal/hostile/asteroid/rockernaut/boss) ? TURF_CONTAINS_BOSS_ROCKERNAUT : TURF_CONTAINS_REGULAR_ROCKERNAUT
+				qdel(src)
+				return
+			else
+				if(prob(30))
+					step_towards(src, M)//Step towards it
+					if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
+						EscapeConfinement()
+				break
+
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/death()
+	..()
+	visible_message("<span class = 'warning'>\The [src] collapses into a mound of loose rock[possessed_ore?", revealing glittering ore within!":"."]</span>")
+	drop_loot()
+	qdel(src)
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/proc/drop_loot()
+	if(possessed_ore)
+		for(var/i = 0 to rand(3,9))
+			new possessed_ore(src.loc)
+
+	if(prob(1))
+		new /obj/item/weapon/vinyl/rock(src.loc) //It is a rock monster after all
+
+	for(var/i = 0 to rand(0,3))
+		new /obj/item/weapon/strangerock(src.loc, new /datum/find(get_random_digsite_type(), 0))
+	new /obj/structure/boulder(src.loc)
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/attack_icon()
+	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "rockernaut")
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss
+	name = "Angie"
+	size = SIZE_HUGE
+	maxHealth = 900
+	move_to_delay = 60
+	health = 900
+	pixel_y = 16 * PIXEL_MULTIPLIER
+	melee_damage_lower = 35
+	melee_damage_upper = 50
+	ranged = 1
+	var/charging = 0
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/New()
+	..()
+	appearance_flags |= PIXEL_SCALE
+	var/matrix/M = matrix()
+	M.Scale(2,2)
+	transform = M
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/drop_loot()
+	if(possessed_ore)
+		for(var/i = 0 to rand(24,46))
+			new possessed_ore(src.loc)
+
+	new /obj/item/weapon/vinyl/rock(src.loc) //It is a rock monster after all
+
+	for(var/i = 0 to rand(5,13))
+		new /obj/item/weapon/strangerock(src.loc, new /datum/find(get_random_digsite_type(), 0))
+	new /obj/item/clothing/gloves/mining(src.loc)
+	new /obj/structure/boulder(src.loc)
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/MoveToTarget()
+	if(!charging)
+		..()
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/OpenFire(target)
+	if(charging)
+		return
+	var/turf/T = get_turf(target)
+	var/frustration = 0
+	ranged_cooldown = ranged_cooldown_cap
+	visible_message("<span class = 'warning'>\The [src] charges at \the [target]!</span>")
+	charging = TRUE
+	move_to_delay = 5
+	while(get_turf(src) != T || frustration < 5)
+		step_towards(src, T)
+		frustration++
+		sleep(move_to_delay)
+
+	charging = FALSE
+	move_to_delay = initial(move_to_delay)
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/to_bump(atom/A)
+	..()
+	if(charging && istype(A, /mob/living))
+		var/mob/living/M = A
+		var/turf/T = get_turf(src)
+		UnarmedAttack(M)
+		visible_message("<span class = 'warning'>\The [src] swats [M] aside!</span>")
+
+		var/turf/target_turf
+		if(istype(T, /turf/space)) // if ended in space, then range is unlimited
+			target_turf = get_edge_target_turf(T, dir)
+		else
+			target_turf = get_ranged_target_turf(T, dir, size)
+		M.throw_at(target_turf,100,move_to_delay)

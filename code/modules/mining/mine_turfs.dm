@@ -22,11 +22,11 @@
 	var/excav_overlay = ""
 	var/obj/item/weapon/last_find
 	var/datum/artifact_find/artifact_find
-	var/scan_state = null //Holder for the image we display when we're pinged by a mining scanner
 	var/busy = 0 //Used for a bunch of do_after actions, because we can walk into the rock to trigger them
 	var/mineral_overlay
 	var/mined_type = /turf/unsimulated/floor/asteroid
 	var/overlay_state = "rock_overlay"
+	var/rockernaut = NONE
 
 
 /turf/unsimulated/mineral/snow
@@ -134,12 +134,15 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			if(prob(mineral.spread_chance))
 				var/turf/unsimulated/mineral/random/target_turf = get_step(src, trydir)
 				if(istype(target_turf) && !target_turf.mineral)
+					if(prob(1))
+						rockernaut = TURF_CONTAINS_REGULAR_ROCKERNAUT
+						if(prob(1))
+							rockernaut = TURF_CONTAINS_BOSS_ROCKERNAUT
 					target_turf.mineral = mineral
 					target_turf.UpdateMineral()
 					target_turf.MineralSpread()
 
 /turf/unsimulated/mineral/proc/UpdateMineral()
-	icon_state = "rock"
 	if(!mineral)
 		name = "\improper Rock"
 		return
@@ -338,7 +341,13 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if (mineral && mineral.result_amount)
 		for (var/i = 1 to mineral.result_amount - mined_ore)
 			DropMineral()
-
+	switch(rockernaut)
+		if(TURF_CONTAINS_REGULAR_ROCKERNAUT)
+			var/mob/living/simple_animal/hostile/asteroid/rockernaut/R = new(src)
+			R.possessed_ore = mineral.ore
+		if(TURF_CONTAINS_BOSS_ROCKERNAUT)
+			var/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/R = new(src)
+			R.possessed_ore = mineral.ore
 	//destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
 	if(artifact_find && artifact_fail)
@@ -364,6 +373,14 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 /turf/unsimulated/mineral/proc/DropAbandonedCrate()
 	var/crate_type = pick(valid_abandoned_crate_types)
 	new crate_type(src)
+
+/turf/unsimulated/mineral/proc/GetScanState()
+	if(mineral)
+		var/mineral_name = mineral.display_name
+		if(rockernaut)
+			return "embed_[mineral_name]"
+		return mineral_name
+	return null
 
 /turf/unsimulated/mineral/proc/excavate_find(var/prob_clean = 0, var/datum/find/F)
 	//with skill and luck, players can cleanly extract finds
@@ -640,7 +657,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	name = "Uranium deposit"
 	icon_state = "rock_Uranium"
 	mineral = new /mineral/uranium
-	scan_state = "rock_Uranium"
 
 
 /turf/unsimulated/mineral/iron
@@ -653,42 +669,36 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	name = "Diamond deposit"
 	icon_state = "rock_Diamond"
 	mineral = new /mineral/diamond
-	scan_state = "rock_Diamond"
 
 
 /turf/unsimulated/mineral/gold
 	name = "Gold deposit"
 	icon_state = "rock_Gold"
 	mineral = new /mineral/gold
-	scan_state = "rock_Gold"
 
 
 /turf/unsimulated/mineral/silver
 	name = "Silver deposit"
 	icon_state = "rock_Silver"
 	mineral = new /mineral/silver
-	scan_state = "rock_Silver"
 
 
 /turf/unsimulated/mineral/plasma
 	name = "Plasma deposit"
 	icon_state = "rock_Plasma"
 	mineral = new /mineral/plasma
-	scan_state = "rock_Plasma"
 
 
 /turf/unsimulated/mineral/clown
 	name = "Bananium deposit"
 	icon_state = "rock_Clown"
 	mineral = new /mineral/clown
-	scan_state = "rock_Clown"
 
 
 /turf/unsimulated/mineral/phazon
 	name = "Phazite deposit"
 	icon_state = "rock_Phazon"
 	mineral = new /mineral/phazon
-	scan_state = "rock_Phazon"
 
 /turf/unsimulated/mineral/pharosium
 	name = "Pharosium deposit"
@@ -760,7 +770,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	name = "Diamond deposit" //honk
 	icon_state = "rock_Gibtonite"
 	mineral = new /mineral/gibtonite
-	scan_state = "rock_Gibtonite"
 	var/det_time = 8 //Countdown till explosion, but also rewards the player for how close you were to detonation when you defuse it
 	var/stage = 0 //How far into the lifecycle of gibtonite we are, 0 is untouched, 1 is active and attempting to detonate, 2 is benign and ready for extraction
 	var/activated_ckey = null //These are to track who triggered the gibtonite deposit for logging purposes
