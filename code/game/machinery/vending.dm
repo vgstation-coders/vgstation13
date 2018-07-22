@@ -143,8 +143,6 @@ var/global/num_vending_terminals = 1
 	if(ticker)
 		initialize()
 
-	return
-
 /obj/machinery/vending/initialize()
 	build_inventories()
 	link_to_account()
@@ -928,7 +926,6 @@ var/global/num_vending_terminals = 1
 
 		var/datum/data/vending_product/R = GetProductByID(idx,cat)
 		if (!R || !istype(R) || !R.product_path || R.amount <= 0)
-			message_admins("Invalid vend request by [formatJumpTo(src.loc)]: [href]")
 			return
 
 		if(R.price == null || !R.price)
@@ -941,7 +938,7 @@ var/global/num_vending_terminals = 1
 
 		return
 
-	else if (href_list["set_price"] && src.vend_ready && !currently_vending)
+	else if (href_list["set_price"] && src.vend_ready && !currently_vending && edit_mode)
 		//testing("vend: [href]")
 
 		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
@@ -963,7 +960,7 @@ var/global/num_vending_terminals = 1
 			new_price = R.price
 		R.price = new_price
 
-	else if (href_list["delete_entry"] && src.vend_ready && !currently_vending)
+	else if (href_list["delete_entry"] && src.vend_ready && !currently_vending && edit_mode)
 		//testing("vend: [href]")
 
 		if (!allowed(usr) && !emagged && scan_id) //For SECURE VENDING MACHINES YEAH
@@ -976,7 +973,7 @@ var/global/num_vending_terminals = 1
 		var/cat=text2num(href_list["cat"])
 
 		var/datum/data/vending_product/R = GetProductByID(idx,cat)
-		if (!R || !istype(R) || !R.product_path)
+		if (!R || !istype(R) || !R.product_path || R.amount > 0)
 			return
 
 		if(!ispath(R.product_path))
@@ -1007,17 +1004,17 @@ var/global/num_vending_terminals = 1
 	else if ((href_list["togglevoice"]) && (src.panel_open))
 		src.shut_up = !src.shut_up
 
-	else if (href_list["rename"])
+	else if (href_list["rename"] && edit_mode)
 		var/newname = input(usr,"Please enter a new name for the vending machine.","Rename Machine") as text
 		if(length(newname) > 0 && length(newname) <= CUSTOM_VENDING_MAX_NAME_LENGTH)
 			src.name = html_encode(newname)
 
-	else if (href_list["add_slogan"])
+	else if (href_list["add_slogan"] && edit_mode)
 		var/newslogan = input(usr,"Please enter a new slogan that is between 1 and [CUSTOM_VENDING_MAX_SLOGAN_LENGTH] characters long.","Add a New Slogan") as text
 		if(length(newslogan) > 0 && length(newslogan) <= CUSTOM_VENDING_MAX_SLOGAN_LENGTH)
 			product_slogans += html_encode(newslogan)
 
-	else if (href_list["delete_slogan_line"])
+	else if (href_list["delete_slogan_line"] && edit_mode)
 		product_slogans -= product_slogans[text2num(href_list["delete_slogan_line"])]
 
 	src.add_fingerprint(usr)
@@ -1119,8 +1116,6 @@ var/global/num_vending_terminals = 1
 	if(src.shoot_inventory && prob(shoot_chance))
 		src.throw_item()
 
-	return
-
 /obj/machinery/vending/proc/speak(var/message)
 	if(stat & NOPOWER)
 		return
@@ -1152,7 +1147,6 @@ var/global/num_vending_terminals = 1
 		lost_inventory--
 	stat |= BROKEN
 	src.icon_state = "[initial(icon_state)]-broken"
-	return
 
 //Somebody cut an important wire and now we're following a new definition of "pitch."
 /obj/machinery/vending/proc/throw_item()
