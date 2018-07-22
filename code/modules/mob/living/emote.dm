@@ -15,24 +15,29 @@
 	message = "bows."
 	message_param = "bows to %t."
 	restraint_check = TRUE
+	mob_type_blacklist_typelist = list(/mob/living/silicon/pai)
 
 /datum/emote/living/burp
 	key = "burp"
 	key_third_person = "burps"
 	message = "burps."
 	emote_type = EMOTE_AUDIBLE
+	mob_type_blacklist_typelist = list(/mob/living/silicon)
 
 /datum/emote/living/choke
 	key = "choke"
 	key_third_person = "chokes"
 	message = "chokes!"
 	emote_type = EMOTE_AUDIBLE
+	mob_type_blacklist_typelist = list(/mob/living/silicon)
 
 /datum/emote/living/cross
 	key = "cross"
 	key_third_person = "crosses"
 	message = "crosses their arms."
+	message_mommi = "crosses their utility arms."
 	restraint_check = TRUE
+	mob_type_blacklist_typelist = list(/mob/living/silicon/pai)
 
 /datum/emote/living/chuckle
 	key = "chuckle"
@@ -45,6 +50,7 @@
 	key_third_person = "collapses"
 	message = "collapses!"
 	emote_type = EMOTE_AUDIBLE
+	mob_type_blacklist_typelist = list(/mob/living/silicon/pai)
 
 /datum/emote/living/collapse/run_emote(mob/user, params)
 	. = ..()
@@ -57,12 +63,14 @@
 	key_third_person = "coughs"
 	message = "coughs!"
 	emote_type = EMOTE_AUDIBLE
+	mob_type_blacklist_typelist = list(/mob/living/silicon/pai)
 
 /datum/emote/living/dance
 	key = "dance"
 	key_third_person = "dances"
 	message = "dances around happily."
 	restraint_check = TRUE
+	mob_type_blacklist_typelist = list(/mob/living/silicon/pai)
 
 /datum/emote/living/deathgasp
 	key = "deathgasp"
@@ -85,11 +93,13 @@
 	key = "drool"
 	key_third_person = "drools"
 	message = "drools."
+	mob_type_blacklist_typelist = list(/mob/living/silicon)
 
 /datum/emote/living/faint
 	key = "faint"
 	key_third_person = "faints"
 	message = "faints."
+	mob_type_blacklist_typelist = list(/mob/living/silicon/pai)
 
 /datum/emote/living/faint/run_emote(mob/user, params)
 	. = ..()
@@ -128,6 +138,7 @@
 	key_third_person = "gags"
 	message = "gags."
 	emote_type = EMOTE_AUDIBLE
+	mob_type_blacklist_typelist = list(/mob/living/silicon)
 
 /datum/emote/living/gasp
 	key = "gasp"
@@ -135,6 +146,7 @@
 	message = "gasps!"
 	emote_type = EMOTE_AUDIBLE
 	stat_allowed = UNCONSCIOUS
+	mob_type_blacklist_typelist = list(/mob/living/silicon)
 
 /datum/emote/living/giggle
 	key = "giggle"
@@ -161,6 +173,7 @@
 	key_third_person = "groans"
 	message = "groans!"
 	message_mime = "appears to groan!"
+	mob_type_blacklist_typelist = list(/mob/living/silicon)
 
 /datum/emote/living/grimace
 	key = "grimace"
@@ -172,6 +185,7 @@
 	key_third_person = "jumps"
 	message = "jumps!"
 	restraint_check = TRUE
+	mob_type_blacklist_typelist = list(/mob/living/silicon/pai)
 
 /datum/emote/living/kiss
 	key = "kiss"
@@ -247,6 +261,7 @@
 	key = "sit"
 	key_third_person = "sits"
 	message = "sits down."
+	mob_type_blacklist_typelist = list(/mob/living/silicon/pai)
 
 /datum/emote/living/smile
 	key = "smile"
@@ -269,6 +284,7 @@
 	key_third_person = "sniffs"
 	message = "sniffs."
 	emote_type = EMOTE_AUDIBLE
+	mob_type_blacklist_typelist = list(/mob/living/silicon)
 
 /datum/emote/living/snore
 	key = "snore"
@@ -288,6 +304,7 @@
 	key = "stretch"
 	key_third_person = "stretches"
 	message = "stretches their arms."
+	mob_type_blacklist_typelist = list(/mob/living/silicon/pai)
 
 /datum/emote/living/sulk
 	key = "sulk"
@@ -310,6 +327,7 @@
 	key = "sway"
 	key_third_person = "sways"
 	message = "sways around dizzily."
+	mob_type_blacklist_typelist = list(/mob/living/silicon/pai)
 
 /datum/emote/living/tremble
 	key = "tremble"
@@ -335,6 +353,7 @@
 	key_third_person = "whimpers"
 	message = "whimpers."
 	message_mime = "appears hurt."
+	mob_type_blacklist_typelist = list(/mob/living/silicon/pai)
 
 /datum/emote/living/wsmile
 	key = "wsmile"

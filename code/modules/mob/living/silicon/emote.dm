@@ -100,12 +100,14 @@
 	message = "shows its legal authorization barcode."
 	sound = 'sound/voice/biamthelaw.ogg'
 	module_quirk_required = MODULE_IS_THE_LAW
+	pai_software_required = SOFT_SS
 
 /datum/emote/sound/silicon/halt
 	key = "halt"
 	message = "'s speakers screech. \"Halt! Security!\"."
 	sound = 'sound/voice/halt.ogg'
 	module_quirk_required = MODULE_IS_THE_LAW
+	pai_software_required = SOFT_SS
 
 /mob/living/silicon/robot/verb/powerwarn()
 	set category = "Robot Commands"
