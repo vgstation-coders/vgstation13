@@ -2,14 +2,19 @@
 	mob_type_allowed_typelist = list(/mob/living/silicon)
 	emote_type = EMOTE_AUDIBLE
 	var/module_quirk_required
+	var/pai_software_required
 
 /datum/emote/sound/silicon
 	mob_type_allowed_typelist = list(/mob/living/silicon)
 	emote_type = EMOTE_AUDIBLE
 	var/module_quirk_required
+	var/pai_software_required
 
 /datum/emote/sound/silicon/can_run_emote(var/mob/user, var/status_check = TRUE)
 	. = ..()
+	var/mob/living/silicon/pai/the_pai = user
+	if (. && istype(the_pai) && (!pai_software_required || (pai_software_required in the_pai.software)))
+		return TRUE
 	var/mob/living/silicon/robot/R = user
 	if (!istype(R))
 		return FALSE
@@ -18,6 +23,9 @@
 
 /datum/emote/silicon/can_run_emote(var/mob/user, var/status_check = TRUE)
 	. = ..()
+	var/mob/living/silicon/pai/the_pai = user
+	if (. && istype(the_pai) && (!pai_software_required || (pai_software_required in the_pai.software)))
+		return TRUE
 	var/mob/living/silicon/robot/R = user
 	if (!istype(R))
 		return FALSE
@@ -92,12 +100,14 @@
 	message = "shows its legal authorization barcode."
 	sound = 'sound/voice/biamthelaw.ogg'
 	module_quirk_required = MODULE_IS_THE_LAW
+	pai_software_required = SOFT_SS
 
 /datum/emote/sound/silicon/halt
 	key = "halt"
 	message = "'s speakers screech. \"Halt! Security!\"."
 	sound = 'sound/voice/halt.ogg'
 	module_quirk_required = MODULE_IS_THE_LAW
+	pai_software_required = SOFT_SS
 
 /mob/living/silicon/robot/verb/powerwarn()
 	set category = "Robot Commands"

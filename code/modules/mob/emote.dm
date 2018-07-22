@@ -53,15 +53,23 @@
 /datum/emote/me/run_emote(mob/user, params, m_type)
 
 	var/msg = "<b>[user]</b> " + params
+
+	var/turf/T = get_turf(user) // for pAIs
+	var/broadcast = T ? T : user
+
 	switch (m_type)
 		if (EMOTE_VISIBLE)
-			user.visible_message(msg)
+			for(var/mob/O in viewers(broadcast))
+				O.show_message(msg, emote_type)
+			if (!(user in viewers(broadcast)))
+				user.show_message(msg, emote_type)
 
 		if (EMOTE_AUDIBLE)
-			for(var/mob/O in hearers(user))
+			for(var/mob/O in hearers(broadcast))
 				O.show_message(msg, m_type)
+			if (!(user in viewers(broadcast)))
+				user.show_message(msg, emote_type)
 	
-	var/turf/T = get_turf(user)
 	var/location = T ? "[T.x],[T.y],[T.z]" : "nullspace"
 	log_emote("[user.name]/[user.key] (@[location]): [message]")
 
