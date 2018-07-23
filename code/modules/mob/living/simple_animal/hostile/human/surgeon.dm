@@ -54,7 +54,6 @@
 	maxHealth = 400
 	health = 400
 
-
 	move_to_delay = 5 //slow
 	harm_intent_damage = 30
 	melee_damage_lower = 25
@@ -72,6 +71,7 @@
 /mob/living/simple_animal/hostile/humanoid/surgeon/skeleton/New()
 	..()
 	flick("skelesurgeon_laugh", src)
+
 
 
 /mob/living/simple_animal/hostile/humanoid/surgeon/skeleton/morph //morph mask version
