@@ -665,3 +665,22 @@
 
 /obj/structure/closet/crate/secure/weapon/experimental/gravitywell
 	chosen_set = "gravitywell"
+
+/obj/structure/closet/crate/medical/surgeonloot //Loot crate from killing the surgeon boss
+	name = "old medical crate"
+	desc = "I wonder what could be inside it?"
+	var/possible_loot = null //major loot from killing the boss
+	var/possible_potion = null //random potion from killing the boss
+
+/obj/structure/closet/crate/medical/surgeonloot/New()
+	..()
+	if(!possible_loot) //at the moment there is only one major reward, but more will be created eventually.
+		possible_loot = pick(/obj/item/clothing/mask/morphing/skelegiant)
+
+	if(!possible_potion)
+		possible_potion = pick(/obj/item/potion/transform, /obj/item/potion/stoneskin, /obj/item/potion/invisibility, /obj/item/potion/speed/major, /obj/item/potion/zombie)
+
+	new possible_loot(src)
+	new possible_potion(src)
+	new /obj/item/potion/healing(src) //you always get a guarnteed healing potion
+
