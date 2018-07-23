@@ -987,7 +987,6 @@ var/global/num_vending_terminals = 1
 		for(var/obj/item/I in custom_stock)
 			if(I.product_name() == R.product_name)
 				custom_stock -= I
-				break
 	else
 		for(var/obj/item/I in products)
 			if(I.type == R.product_path)
