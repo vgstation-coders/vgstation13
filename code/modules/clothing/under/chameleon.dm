@@ -81,3 +81,6 @@
 	for(var/U in typesof(/obj/item/clothing/under)-blocked)
 		var/obj/item/clothing/under/V = new U
 		src.clothing_choices += V
+
+/obj/item/clothing/under/chameleon/cold
+	heat_conductivity = 1000
