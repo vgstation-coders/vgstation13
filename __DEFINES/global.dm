@@ -10,6 +10,8 @@
 
 #define GREY_SHAPED "Grey"
 
+#define UNDEAD_SHAPED "Skellington","Undead","Plasmaman"
+
 //Content of the Round End Information window
 var/round_end_info = ""
 
