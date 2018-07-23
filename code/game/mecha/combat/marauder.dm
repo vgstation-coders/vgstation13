@@ -61,6 +61,12 @@
 	rockets = image('icons/effects/160x160.dmi', icon_state= initial_icon + "_burst")
 	rockets.pixel_x = -64 * PIXEL_MULTIPLIER
 	rockets.pixel_y = -64 * PIXEL_MULTIPLIER
+	intrinsic_spells = list(
+							new /spell/mech/marauder/thrusters(src),
+							new /spell/mech/marauder/dash(src),
+							new /spell/mech/marauder/smoke(src),
+							new /spell/mech/marauder/zoom(src)
+						)
 	return
 
 /obj/mecha/combat/marauder/series/New()//Manually-built marauders have no equipments
@@ -172,8 +178,6 @@
 	override_icon = 'icons/obj/tank.dmi'
 
 /spell/mech/marauder/thrusters/cast(list/targets, mob/user)
-	if(user!=linked_mech.occupant)
-		return
 	var/obj/mecha/combat/marauder/Marauder = linked_mech
 	if(Marauder.occupant && (Marauder.get_charge() > 0))
 		Marauder.thrusters = !Marauder.thrusters
@@ -194,25 +198,20 @@
 	..()
 	hud_state = "[linked_mech.initial_icon]-dash"
 
+/spell/mech/marauder/dash/cast_check(skipcharge = FALSE, mob/user = usr)
+	if(linked_mech.lock_controls)
+		return FALSE
+	else
+		return ..()
+
 /spell/mech/marauder/dash/cast(list/targets, mob/user)
-	if(user!=linked_mech.occupant)
-		return
-	if(linked_mech.occupant)
-		var/obj/mecha/combat/marauder/Marauder = linked_mech
-		if(Marauder.lock_controls)
-			return
-		if(Marauder.occupant)
-			if(Marauder.get_charge() <= 0)
-				return
+	var/obj/mecha/combat/marauder/Marauder = src.linked_mech
+	Marauder.crashing = null
+	var/landing = get_distant_turf(get_turf(linked_mech), Marauder.dir, 5)
+	Marauder.throw_at(landing, 5 , 2)
 
-		Marauder.crashing = null
-		var/landing = get_distant_turf(get_turf(linked_mech), Marauder.dir, 5)
-		Marauder.throw_at(landing, 5 , 2)
-
-		Marauder.log_message("Performed Rocket-Dash.")
-		Marauder.occupant_message("Triggered Rocket-Dash sub-routine")
-	return
-
+	Marauder.log_message("Performed Rocket-Dash.")
+	Marauder.occupant_message("Triggered Rocket-Dash sub-routine")
 
 /spell/mech/marauder/smoke
 	name = "Smoke"
@@ -223,8 +222,6 @@
 	hud_state = "wiz_smoke"
 
 /spell/mech/marauder/smoke/cast(list/targets, mob/user)
-	if(user!=linked_mech.occupant)
-		return
 	var/obj/mecha/combat/marauder/Marauder = linked_mech
 	if(Marauder.smoke>0)
 		Marauder.smoke_system.start()
@@ -238,8 +235,6 @@
 	hud_state = "binoculars"
 
 /spell/mech/marauder/zoom/cast(list/targets, mob/user)
-	if(user!=linked_mech.occupant)
-		return
 	if(linked_mech.occupant.client)
 		var/obj/mecha/combat/marauder/Marauder = linked_mech
 		Marauder.zoom = !Marauder.zoom
@@ -251,16 +246,6 @@
 		else
 			Marauder.occupant.client.changeView()//world.view - default mob view size
 	return
-
-
-/obj/mecha/combat/marauder/refresh_spells()
-	if(!occupant)
-		return
-	occupant.add_spell(new /spell/mech/marauder/thrusters(src), "mech_spell_ready", /obj/abstract/screen/movable/spell_master/mech)
-	occupant.add_spell(new /spell/mech/marauder/dash(src), "mech_spell_ready", /obj/abstract/screen/movable/spell_master/mech)
-	occupant.add_spell(new /spell/mech/marauder/smoke(src), "mech_spell_ready", /obj/abstract/screen/movable/spell_master/mech)
-	occupant.add_spell(new /spell/mech/marauder/zoom(src), "mech_spell_ready", /obj/abstract/screen/movable/spell_master/mech)
-	..()
 
 /obj/mecha/combat/marauder/go_out()
 	if(src.occupant && src.occupant.client)

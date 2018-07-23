@@ -15,14 +15,15 @@
 	var/defence_deflect = 35
 	wreckage = /obj/effect/decal/mecha_wreckage/durand
 
-/*
 /obj/mecha/combat/durand/New()
 	..()
+	intrinsic_spells = list(new /spell/mech/durand/defence_mode(src))
+/*
 	weapons += new /datum/mecha_weapon/ballistic/lmg(src)
 	weapons += new /datum/mecha_weapon/ballistic/scattershot(src)
 	selected_weapon = weapons[1]
-	return
 */
+	return
 
 /obj/mecha/combat/durand/relaymove(mob/user,direction)
 	if(defence)
@@ -39,8 +40,6 @@
 	charge_counter = 10
 
 /spell/mech/durand/defence_mode/cast(list/targets, mob/user)
-	if(user!=linked_mech.occupant)
-		return
 	var/obj/mecha/combat/durand/Durand = linked_mech
 	Durand.defence = !Durand.defence
 	if(Durand.defence)
@@ -58,13 +57,6 @@
 		Durand.occupant_message("<font color='red'>You disable [Durand] defence mode.</font>")
 	Durand.log_message("Toggled defence mode.")
 	return
-
-/obj/mecha/combat/durand/refresh_spells()
-	if(!occupant)
-		return
-	occupant.add_spell(new /spell/mech/durand/defence_mode(src), "mech_spell_ready", /obj/abstract/screen/movable/spell_master/mech)
-	..()
-
 
 /obj/mecha/combat/durand/get_stats_part()
 	var/output = ..()

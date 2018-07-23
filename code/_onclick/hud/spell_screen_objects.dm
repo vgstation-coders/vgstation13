@@ -130,6 +130,7 @@
 	var/mechaIcon = MS.linked_mech.initial_icon
 	open_state = "[mechaIcon]-open"
 	closed_state = "[mechaIcon]"
+	//Force it to be open
 	toggle_open(2)
 
 /obj/abstract/screen/movable/spell_master/proc/remove_spell(var/spell/spell)

@@ -30,6 +30,10 @@
 	max_equip = 4
 	step_energy_drain = 5
 
+/obj/mecha/combat/gygax/New()
+	..()
+	intrinsic_spells = list(new /spell/mech/gygax/overload(src))
+
 /obj/mecha/combat/gygax/dark/New()
 	..()
 	var/obj/item/mecha_parts/mecha_equipment/ME = new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot
@@ -60,8 +64,6 @@
 	override_icon = 'icons/mecha/mecha.dmi'
 
 /spell/mech/gygax/overload/cast(list/targets, mob/user)
-	if(user!=linked_mech.occupant)
-		return
 	var/obj/mecha/combat/gygax/Gygax = linked_mech
 	if(Gygax.overload)
 		Gygax.overload = 0
@@ -81,12 +83,6 @@
 			Gygax.icon_state = "gygax-gofast"
 	Gygax.log_message("Toggled leg actuators overload.")
 	return
-
-/obj/mecha/combat/gygax/refresh_spells()
-	if(!occupant)
-		return
-	occupant.add_spell(new /spell/mech/gygax/overload(src), "mech_spell_ready", /obj/abstract/screen/movable/spell_master/mech)
-	..()
 
 /*
 /obj/mecha/combat/gygax/startMechWalking()

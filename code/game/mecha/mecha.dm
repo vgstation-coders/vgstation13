@@ -87,6 +87,7 @@
 						/obj/machinery/portable_atmospherics/scrubber/mech)
 
 	var/lock_controls = 0
+	var/list/intrinsic_spells = null
 
 /obj/mecha/New()
 	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
@@ -1981,9 +1982,10 @@
 /////// Spells ///////
 //////////////////////
 /spell/mech
+	user_type = USER_TYPE_MECH
 	range = 0
 	invocation = "none"
-	invocation_type = "SpI_NONE"
+	invocation_type = SpI_NONE
 	panel = "Mech Modules"
 	spell_flags = null
 	charge_type = Sp_RECHARGE
@@ -2015,12 +2017,20 @@
 	else
 		linked_equipment.alt_action()
 
+/spell/mech/cast_check(skipcharge = 0, mob/user = usr)
+	if((user!=linked_mech.occupant) || (linked_mech.get_charge() <= 0))
+		return FALSE
+	else
+		return ..()
+
 /spell/mech/choose_targets(mob/user = usr)
 	return list(user)
 
 /obj/mecha/proc/refresh_spells()
 	if(!occupant)
 		return
+	for(var/spell/mech/MS in intrinsic_spells)
+		occupant.add_spell(MS, "mech_spell_ready", /obj/abstract/screen/movable/spell_master/mech)
 	for(var/obj/item/mecha_parts/mecha_equipment/W in equipment)
 		var/spell/mech/MS
 		if(W.linked_spell)
