@@ -563,7 +563,7 @@ var/list/uplink_items = list()
 
 datum/uplink_item/stealthy_tools/cold_jumpsuit
 	name = "Quick Vent Jumpsuit"
-	desc = "A variant of the Chameleon Jumpsuit that quickly vents the wearer's body heat, causing them to quickly suffer latent hypothermia"
+	desc = "A variant of the Chameleon Jumpsuit that quickly vents the wearer's body heat, causing them to suffer latent hypothermia"
 	item = /obj/item/clothing/under/chameleon/cold
 	cost = 2
 
