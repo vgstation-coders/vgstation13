@@ -367,7 +367,6 @@ About the new airlock wires panel:
 			to_chat(user, "<span class='danger'>You feel a powerful shock course through your body!</span>")
 			user.halloss += 10
 			user.stunned += 10
-			return
 	..(user)
 
 /obj/machinery/door/Bumped(atom/AM)
