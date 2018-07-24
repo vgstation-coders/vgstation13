@@ -43,6 +43,10 @@
 					C.transmogrify(target_type)
 				else
 					C.transmogrify(target_type, revert_spell_type || TRUE)
+				var/turf/T = get_turf(C)
+				var/location = T ? "[T.x], [T.y], [T.z]" : "nullspace"
+				src.investigation_log(I_ARTIFACT, "[key_name(C)] has used a mask of morphing ([src]) to transform into a [target_type]. (@[location])")
+				message_admins("[key_name(C)] has used a mask of morphing ([src]) to transform into a [target_type]. (@[formatJumpTo(C, "JMP")])")
 
 /obj/item/clothing/mask/morphing/attackby(obj/item/weapon/W, mob/user)
 	if(!target_type)
