@@ -259,6 +259,20 @@
 	required_reagents = list(SODIUM_POLYACRYLATE = 0.3, LUBE = 1)
 	result_amount = 0.3
 
+/datum/chemical_reaction/toxic_waste
+	name = "Used Uranium"
+	id = "useduranium"
+	result = TOXICWASTE
+	required_reagents = list(URANIUM = 5, WATER = 10)
+	result_amount = 15
+	required_temp = 1000
+
+/datum/chemical_reaction/toxic_waste/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/location = get_turf(holder.my_atom)
+	for(var/mob/living/L in view(location, 4))
+		L.apply_radiation(10, RAD_EXTERNAL)
+		emitted_harvestable_radiation(location, 10, range = 4)
+
 /datum/chemical_reaction/sludge
 	name = "Sludge"
 	id = TOXICWASTE
