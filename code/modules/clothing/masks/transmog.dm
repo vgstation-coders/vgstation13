@@ -41,7 +41,7 @@
 				C.visible_message("<span class='danger'>As [C] puts on \the [src], \his body begins to shift and contort!</span>","<span class='danger'>As you put on \the [src], your body begins to shift and contort!</span>")
 				var/turf/T = get_turf(C)
 				var/location = T ? "[T.x], [T.y], [T.z]" : "nullspace"
-				src.investigation_log(I_ARTIFACT, "[key_name(C)] has used a [cursed ? "cursed" : ""] mask of morphing ([src]) to transform into a [target_type]. (@[location])")
+				src.investigation_log(I_ARTIFACT, "|| [key_name(C)] has used a [cursed ? "cursed" : ""] mask of morphing ([src]) to transform into a [target_type]. (@[location])")
 				message_admins("[key_name(C)] has used a [cursed ? "cursed" : ""] mask of morphing ([src]) to transform into a [target_type]. (@[formatJumpTo(C, "JMP")])")
 				if(cursed)
 					C.transmogrify(target_type)
@@ -152,6 +152,9 @@
 				C.visible_message("<span class='danger'>As [C] puts on \the [src], \his body begins to shift and contort!</span>","<span class='danger'>As you put on \the [src], your body begins to shift and contort!</span>")
 				var/mob/M
 				var/turf/T = get_turf(C)
+				var/location = T ? "[T.x], [T.y], [T.z]" : "nullspace"
+				src.investigation_log(I_ARTIFACT, "|| [key_name(C)] has used a [cursed ? "cursed" : ""] mask of morphing ([src]) to transform into a [target_type]. (@[location])")
+				message_admins("[key_name(C)] has used a [cursed ? "cursed" : ""] mask of morphing ([src]) to transform into a [target_type]. (@[formatJumpTo(C, "JMP")])")
 				if(cursed)
 					M = C.transmogrify(target_type)
 				else
