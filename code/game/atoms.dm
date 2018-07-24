@@ -270,6 +270,14 @@ var/global/list/ghdel_profiling = list()
 		return 1
 	return
 
+/atom/proc/recursive_in_contents_of(var/atom/container, var/atom/searching_for = src)
+	if(isturf(searching_for))
+		return FALSE
+	if(loc == container)
+		return TRUE
+	return recursive_in_contents_of(container, src.loc)
+
+
 /atom/proc/projectile_check()
 	return
 
