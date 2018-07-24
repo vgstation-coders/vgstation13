@@ -99,6 +99,10 @@
 	h_style = "Bald"
 	..(new_loc, "Mushroom")
 
+/mob/living/carbon/human/lich/New(var/new_loc, delay_ready_dna = 0)
+	h_style = "Bald"
+	..(new_loc, "Undead")
+
 /mob/living/carbon/human/generate_static_overlay()
 	if(!istype(static_overlays,/list))
 		static_overlays = list()

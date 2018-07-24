@@ -33,6 +33,8 @@
 		on_damaged.holder = null
 	if(on_irradiate)
 		on_irradiate.holder = null
+	if(on_death)
+		on_death.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -77,12 +79,14 @@
 	qdel(on_damaged)
 	qdel(on_clickon)
 	qdel(on_irradiate)
+	qdel(on_death)
 
 	on_spellcast = null
 	on_uattack = null
 	on_damaged = null
 	on_clickon = null
 	on_irradiate = null
+	on_death = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -265,6 +269,7 @@
 	on_damaged = new(owner = src)
 	on_clickon = new(owner = src)
 	on_irradiate = new(owner = src)
+	on_death = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 

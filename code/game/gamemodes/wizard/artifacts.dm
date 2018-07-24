@@ -203,3 +203,9 @@
 
 /datum/spellbook_artifact/santa_bundle/can_buy()
 	return (Holiday == XMAS && !istype(universe, /datum/universal_state/christmas))
+
+/datum/spellbook_artifact/phylactery
+	name = "phylactery"
+	desc = "Creates a soulbinding artifact that, upon the death of the user, resurrects them as best it can. You must bind yourself to this through making an incision on your palm, holding the phylactery in that hand, and squeezing it."
+	price = 2 * Sp_BASE_PRICE
+	spawned_items = list(/obj/item/phylactery)
