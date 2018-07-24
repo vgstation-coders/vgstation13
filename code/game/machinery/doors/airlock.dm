@@ -363,9 +363,6 @@ About the new airlock wires panel:
 					user.delayNextMove(10)
 					spawn (10)
 						src.justzap = 0
-					return
-			else /*if(src.justzap)*/
-				return
 		else if(user.hallucination > 50 && prob(10) && src.operating == 0)
 			to_chat(user, "<span class='danger'>You feel a powerful shock course through your body!</span>")
 			user.halloss += 10
@@ -1005,7 +1002,6 @@ About the new airlock wires panel:
 			// TODO: analyze the called proc
 			if (shock(user, 100))
 				user.delayNextAttack(10)
-				return
 	//Basically no open panel, not opening already, door has power, area has power, door isn't bolted
 	if (!panel_open && !operating && arePowerSystemsOn() && !(stat & (NOPOWER|BROKEN)) && !locked)
 		..(user)
@@ -1056,7 +1052,6 @@ About the new airlock wires panel:
 			// TODO: analyze the called proc
 			if (shock(user, 75, I.siemens_coefficient))
 				user.delayNextAttack(10)
-				return
 
 	if(istype(I, /obj/item/weapon/batteringram))
 		user.delayNextAttack(30)
