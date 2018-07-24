@@ -150,7 +150,7 @@
 		drop_stack(sheet_type, user.loc, 1, user)
 		qdel(src)
 		return
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			to_chat(user, "You begin slicing through \the [src].")

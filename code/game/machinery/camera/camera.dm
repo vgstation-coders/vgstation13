@@ -188,7 +188,7 @@ var/list/camera_messages = list()
 	else if(panel_open && iswiretool(W))
 		wires.Interact(user)
 
-	else if(istype(W, /obj/item/weapon/weldingtool) && wires.CanDeconstruct())
+	else if(iswelder(W) && wires.CanDeconstruct())
 		if(weld(W, user))
 			if(assembly)
 				assembly.state = 1
@@ -392,18 +392,12 @@ var/list/camera_messages = list()
 
 	if(busy)
 		return 0
-	if(!WT.isOn())
-		return 0
 
 	// Do after stuff here
 	to_chat(user, "<span class='notice'>You start to weld the [src].</span>")
-	playsound(src, 'sound/items/Welder.ogg', 50, 1)
-	WT.eyecheck(user)
 	busy = 1
-	if(do_after(user, src, 100))
+	if(WT.do_weld(user, src, 100, 0))
 		busy = 0
-		if(!WT.isOn())
-			return 0
 		return 1
 	busy = 0
 	return 0

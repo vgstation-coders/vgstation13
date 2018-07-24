@@ -2444,8 +2444,6 @@ obj/item/device/pda/AltClick()
 	for(var/A in applications)
 		qdel(A)
 
-	for(var/obj/A in src) //Clear out any items that may still be left inside ie pens
-		qdel(A)
 	..()
 
 /obj/item/device/pda/Del()

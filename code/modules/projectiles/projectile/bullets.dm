@@ -801,19 +801,10 @@
 
 /obj/item/projectile/bullet/buckshot/OnFired()
 	if(!is_child)
-		var/x = 0
-		var/y = 0
-		var/z = 0
-		var/angle = 0
-		var/launch_at_range = 7 // Increasing this should make the bullet spread smoother or something
 		for(var/I = 1; I <=total_amount_to_fire-1; I++)
 			var/obj/item/projectile/bullet/buckshot/B = new type_to_fire(src.loc, 1)
-			angle = rand(-variance_angle/2, variance_angle/2) + get_angle(starting, original)
-			x = src.x + (launch_at_range * sin(angle))
-			y = src.y + (launch_at_range * cos(angle))
-			z = src.z
-			B.forceMove(get_turf(src))
-			B.launch_at(locate(x, y, z), from = shot_from)
+			B.damage = src.damage
+			B.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
 	..()
 
 /obj/item/projectile/bullet/invisible

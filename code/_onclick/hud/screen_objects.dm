@@ -92,6 +92,7 @@
 /obj/abstract/screen/interface
 	name = "Button"
 	mouse_opacity = 1
+	layer = HUD_ABOVE_ITEM_LAYER
 	var/mob/user = null
 	var/obj/machine = null
 	var/action = ""

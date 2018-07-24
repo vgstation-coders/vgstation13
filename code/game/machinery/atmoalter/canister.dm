@@ -469,18 +469,12 @@
 
 	if(busy)
 		return 0
-	if(!WT.isOn())
-		return 0
 
 	// Do after stuff here
 	to_chat(user, "<span class='notice'>You start to slice away at \the [src]...</span>")
-	playsound(src, 'sound/items/Welder.ogg', 50, 1)
-	WT.eyecheck(user)
 	busy = 1
-	if(do_after(user, src, 50))
+	if(WT.do_weld(user, src, 50,0))
 		busy = 0
-		if(!WT.isOn())
-			return 0
 		return 1
 	busy = 0
 	return 0

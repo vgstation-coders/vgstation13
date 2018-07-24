@@ -107,3 +107,24 @@
  */
 #define COMSIG_EQUIPACTVHAND "equipactvhand"
 
+/** Sent when a mob is attacking the controller.
+ * @param assailant /mob: The mob attacking the controller
+ * @param damage int: Damage done in this attack
+ */
+
+#define COMSIG_ATTACKEDBY "attacked_by"
+
+/** Sent when a mob wants to update their current target zone.
+ * @param target /mob: What the mob wants to attack
+ * @param damagetype string: What damagetype will be used (melee, bullet, laser, etc.)
+ */
+
+#define COMSIG_GETDEFZONE "get_def_zone"
+
+/** Sent when a mob wants whatever damage type (according to the armor list values) they may be wanting to use.
+ * @param user /mob: What mob in question is asking for a damage type
+ * @return a damage type ("melee","laser","energy", etc.)
+ */
+
+#define COMSIG_GETDAMTYPE "get_dam_type"
+

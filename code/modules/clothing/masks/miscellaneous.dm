@@ -211,3 +211,21 @@ obj/item/clothing/mask/joy
 		glowy_fangs = TRUE
 		icon_state = "fangs_glow"
 		wearer.overlays += glow_fangs
+
+
+/obj/item/clothing/mask/goldface
+	name = "golden mask"
+	desc = "Previously used in strange pantomimes, after one of the actors went mad on stage these masks have avoided use. You swear its face contorts when you're not looking."
+	icon_state = "goldenmask"
+	item_state = "goldenmask"
+
+/obj/item/clothing/mask/goldface/equipped()
+	..()
+	update_icon()
+
+/obj/item/clothing/mask/goldface/unequipped()
+	..()
+	update_icon()
+
+/obj/item/clothing/mask/goldface/update_icon()
+	icon_state = pick("goldenmask","goldenmask_anger","goldenmask_joy","goldenmask_despair")

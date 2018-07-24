@@ -259,15 +259,13 @@
 /obj/machinery/conveyor/attackby(obj/item/W, mob/user)
 	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(0,user))
-			playsound(src, 'sound/items/Welder2.ogg', 50, 1)
-			if(do_after(user, src, 30))
-				user.visible_message("<span class='warning'>Plates of metal are cut off \the [src] by [user.name] with the welding tool.</span>", \
-				"<span class='warning'>You cut the metal plates off \the [src] with the welding tool.</span>", \
-				"<span class='warning'>You hear welding.</span>")
-				new /obj/structure/conveyor_assembly(loc,dir)
-				getFromPool(/obj/item/stack/sheet/metal, loc, 3)
-				qdel(src)
+		if(WT.do_weld(user, src, 30, 0))
+			user.visible_message("<span class='warning'>Plates of metal are cut off \the [src] by [user.name] with the welding tool.</span>", \
+			"<span class='warning'>You cut the metal plates off \the [src] with the welding tool.</span>", \
+			"<span class='warning'>You hear welding.</span>")
+			new /obj/structure/conveyor_assembly(loc,dir)
+			getFromPool(/obj/item/stack/sheet/metal, loc, 3)
+			qdel(src)
 			return 1
 	. = ..()
 	if(.)

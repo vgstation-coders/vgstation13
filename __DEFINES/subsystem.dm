@@ -7,6 +7,7 @@
 #define SS_INIT_SUN                24
 #define SS_INIT_GARBAGE            23
 #define SS_INIT_JOB                22
+#define SS_INIT_PLANT              21.5
 #define SS_INIT_HUMANS             21
 #define SS_INIT_MAP                20
 #define SS_INIT_POWER              19
@@ -37,6 +38,7 @@
 #define SS_PRIORITY_EVENT          65
 #define SS_PRIORITY_DISEASE        60
 #define SS_PRIORITY_FAST_MACHINERY 55
+#define SS_PRIORITY_PLANT          40
 #define SS_PRIORITY_UNSPECIFIED    30
 #define SS_PRIORITY_LIGHTING       20
 #define SS_PRIORITY_SUN            3
@@ -55,6 +57,7 @@
 #define SS_DISPLAY_MACHINERY      -50
 #define SS_DISPLAY_PIPENET        -40
 #define SS_DISPLAY_FAST_MACHINERY -30
+#define SS_DISPLAY_PLANT          -25
 #define SS_DISPLAY_POWER          -20
 #define SS_DISPLAY_TICKER         -10
 #define SS_DISPLAY_UNSPECIFIED     0

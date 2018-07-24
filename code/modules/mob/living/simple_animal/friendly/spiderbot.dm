@@ -79,7 +79,7 @@
 		src.update_icon()
 		return 1
 
-	if (istype(O, /obj/item/weapon/weldingtool))
+	if (iswelder(O))
 		var/obj/item/weapon/weldingtool/WT = O
 		if (WT.remove_fuel(0))
 			if(health < maxHealth)

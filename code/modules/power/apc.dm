@@ -539,16 +539,10 @@
 	else if (istype(W, /obj/item/weapon/circuitboard/power_control) && opened && has_electronics==0 && ((stat & BROKEN) || malfhack))
 		to_chat(user, "<span class='warning'>You cannot put the board inside, the frame is damaged.</span>")
 		return
-	else if (istype(W, /obj/item/weapon/weldingtool) && opened && has_electronics==0 && !terminal)
+	else if (iswelder(W) && opened && has_electronics==0 && !terminal)
 		var/obj/item/weapon/weldingtool/WT = W
-		if (WT.get_fuel() < 3)
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
-			return
 		to_chat(user, "You start welding the APC frame...")
-		playsound(src, 'sound/items/Welder.ogg', 50, 1)
-		if (do_after(user, src, 50))
-			if(!src || !WT.remove_fuel(3, user))
-				return
+		if (WT.do_weld(user, src, 50, 3))
 			if (emagged || malfhack || (stat & BROKEN) || opened==2)
 				getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 1)
 				user.visible_message(\
@@ -970,7 +964,7 @@
 	src.occupant.add_spell(new /spell/aoe_turf/corereturn, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 	src.occupant.cancel_camera()
 	if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
-		for(var/obj/item/weapon/pinpointer/point in world)
+		for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
 			point.target = src //the pinpointer will detect the shunted AI
 
 	stat_collection.malf_shunted = TRUE
@@ -986,7 +980,7 @@
 		qdel(src.occupant)
 		src.occupant = null
 		if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
-			for(var/obj/item/weapon/pinpointer/point in world)
+			for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
 				for(var/datum/mind/AI_mind in ticker.mode.malf_ai)
 					var/mob/living/silicon/ai/A = AI_mind.current // the current mob the mind owns
 					if(A.stat != DEAD)
@@ -997,7 +991,7 @@
 			src.occupant.forceMove(src.loc)
 			src.occupant.death()
 			src.occupant.gib()
-			for(var/obj/item/weapon/pinpointer/point in world)
+			for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
 				point.target = null //the pinpointer will go back to pointing at the nuke disc.
 
 

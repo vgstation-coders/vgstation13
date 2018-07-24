@@ -938,6 +938,8 @@ var/list/datum/dna/hivemind_bank = list()
 	var/mob/living/carbon/T
 	if (victims)
 		T = victims[1]
+		if (is_pacified(VIOLENCE_DEFAULT,T))
+			return
 		if (victims.len > 1)
 			T = input(src, "Who will we sting?") as null|anything in victims
 	if(!T)

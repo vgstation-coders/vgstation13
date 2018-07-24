@@ -48,6 +48,14 @@
 		if(isclothing(MO.uniform))
 			for(var/obj/item/clothing/accessory/lasertag/L in MO.uniform.accessories)
 				return L.source_vest
+	if(ishologram(M))
+		var/mob/living/simple_animal/hologram/advanced/AH = M
+		if(istype(AH.wear_suit, /obj/item/clothing/suit/tag))
+			return AH.wear_suit
+		if(isclothing(AH.w_uniform))
+			var/obj/item/clothing/C = AH.w_uniform
+			for(var/obj/item/clothing/accessory/lasertag/L in C.accessories)
+				return L.source_vest
 
 /obj/item/clothing/suit/tag/bluetag
 	name = "blue laser tag armour"

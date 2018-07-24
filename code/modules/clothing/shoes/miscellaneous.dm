@@ -463,3 +463,10 @@
 		var/datum/organ/external/affecting = victim.get_organ(ran_zone(user.zone_sel.selecting))
 		//Sharpness 1.5, force 10, edge = SHARP_TIP | SHARP_BLADE
 		victim.apply_damage(victim.run_armor_absorb(affecting, "melee", 10), BRUTE, affecting, victim.run_armor_check(affecting, "melee"), sharp = 1.5, edge = SHARP_TIP | SHARP_BLADE, used_weapon = src)
+
+/obj/item/clothing/shoes/lich_king
+	name = "old knight greaves"
+	desc = "Battered by time, and questionably comfortable."
+	icon_state = "lichking_boots"
+	item_state = "lichking_boots"
+	wizard_garb = 1

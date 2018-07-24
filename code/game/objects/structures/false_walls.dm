@@ -189,9 +189,9 @@
 				T.ChangeTurf(text2path("/turf/simulated/wall/mineral/[mineral]"))
 			qdel(src)
 
-		if( istype(W, /obj/item/weapon/weldingtool) )
+		if( iswelder(W) )
 			var/obj/item/weapon/weldingtool/WT = W
-			if( WT:welding )
+			if(WT.welding )
 				if(!mineral)
 					T.ChangeTurf(/turf/simulated/wall)
 				else
@@ -296,7 +296,7 @@
 		T.ChangeTurf(/turf/simulated/wall/r_wall) //Why not make rwall?
 		qdel(src)
 
-	if( istype(W, /obj/item/weapon/weldingtool) )
+	if( iswelder(W) )
 		var/obj/item/weapon/weldingtool/WT = W
 		if( WT.remove_fuel(0,user) )
 			var/turf/T = get_turf(src)

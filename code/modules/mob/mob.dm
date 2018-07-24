@@ -33,6 +33,8 @@
 		on_damaged.holder = null
 	if(on_irradiate)
 		on_irradiate.holder = null
+	if(on_death)
+		on_death.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -77,12 +79,14 @@
 	qdel(on_damaged)
 	qdel(on_clickon)
 	qdel(on_irradiate)
+	qdel(on_death)
 
 	on_spellcast = null
 	on_uattack = null
 	on_damaged = null
 	on_clickon = null
 	on_irradiate = null
+	on_death = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -265,6 +269,7 @@
 	on_damaged = new(owner = src)
 	on_clickon = new(owner = src)
 	on_irradiate = new(owner = src)
+	on_death = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -663,6 +668,8 @@ var/list/slot_equipment_priority = list( \
 		return 0
 
 	for(var/slot in slot_equipment_priority)
+		if(!is_holding_item(W))
+			return 0
 		var/obj/item/S = get_item_by_slot(slot)
 		if(S && S.can_quick_store(W))
 			return S.quick_store(W)
@@ -997,7 +1004,17 @@ var/list/slot_equipment_priority = list( \
 	set name = "Point To"
 	set category = "Object"
 
-	if(!src || (usr.isUnconscious() && !isobserver(src)) || !isturf(src.loc) || !(A in view(src.loc)))
+	if((usr.isUnconscious() && !isobserver(src)) || !isturf(src.loc) || attack_delayer.blocked())
+		return 0
+
+	delayNextAttack(SHOW_HELD_ITEM_AND_POINTING_DELAY)
+
+	if(isitem(A) && is_holding_item(A))
+		var/obj/item/I = A
+		I.showoff(src)
+		return 0
+
+	if(!(A in view(src.loc) + get_all_slots()))
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))
@@ -1016,6 +1033,8 @@ var/list/slot_equipment_priority = list( \
 	point.invisibility = invisibility
 	point.pointer = src
 	point.target = A
+	point.pixel_x = A.pixel_x
+	point.pixel_y = A.pixel_y
 	spawn(20)
 		if(point)
 			qdel(point)

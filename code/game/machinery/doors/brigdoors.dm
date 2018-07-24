@@ -23,30 +23,27 @@
 	var/list/obj/machinery/targets = list()
 
 
-	New()
+	initialize()
 		..()
 
 		pixel_x = ((src.dir & 3)? (0) : (src.dir == 4 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE))
 		pixel_y = ((src.dir & 3)? (src.dir ==1 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE) : (0))
 
-		spawn(20)
-			for(var/obj/machinery/door/window/brigdoor/M in all_doors)
-				if (M.id_tag == src.id_tag)
-					targets += M
+		for(var/obj/machinery/door/window/brigdoor/M in all_doors)
+			if (M.id_tag == src.id_tag)
+				targets += M
 
-			for(var/obj/machinery/flasher/F in flashers)
-				if(F.id_tag == src.id_tag)
-					targets += F
+		for(var/obj/machinery/flasher/F in flashers)
+			if(F.id_tag == src.id_tag)
+				targets += F
 
-			for(var/obj/structure/closet/secure_closet/brig/C in world)
-				if(C.id_tag == src.id_tag)
-					targets += C
+		for(var/obj/structure/closet/secure_closet/brig/C in brig_lockers)
+			if(C.id_tag == src.id_tag)
+				targets += C
 
-			if(targets.len==0)
-				stat |= BROKEN
-			update_icon()
-			return
-		return
+		if(targets.len==0)
+			stat |= BROKEN
+		update_icon()
 
 
 //Main door timer loop, if it's timing and time is >0 reduce time by 1.

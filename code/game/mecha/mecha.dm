@@ -74,7 +74,6 @@
 	var/list/equipment = new
 	var/obj/item/mecha_parts/mecha_equipment/selected
 	var/max_equip = 3
-	var/datum/events/events
 
 	var/turf/crashing = null
 	var/list/mech_parts = list(/obj/item/weapon/cell,
@@ -92,7 +91,6 @@
 	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
 	hud_list[DIAG_CELL_HUD] = image('icons/mob/hud.dmi', src, "hudbattmax")
 	..()
-	events = new
 	add_radio()
 	add_cabin()
 	if(!add_airtank()) //we check this here in case mecha does not have an internal tank available by default - WIP
@@ -148,9 +146,6 @@
 		qdel(eq)
 	equipment = null
 	selected = null
-	if(events)
-		qdel(events)
-		events = null
 	..()
 
 /obj/mecha/can_apply_inertia()
@@ -326,12 +321,6 @@
 //////////////////////////////////
 ////////  Movement procs  ////////
 //////////////////////////////////
-
-/obj/mecha/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	. = ..()
-	if(.)
-		events.fireEvent("onMove",get_turf(src))
-	return
 
 /obj/mecha/relaymove(mob/user,direction)
 	if(user != src.occupant) //While not "realistic", this piece is player friendly.

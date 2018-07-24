@@ -806,8 +806,9 @@
 		return FALSE
 	if(user.incapacitated() || !Adjacent(user))
 		return FALSE
-	if((!istype(user, /mob/living/carbon) && !isMoMMI(user)) || istype(user, /mob/living/carbon/brain)) //Is not a carbon being, MoMMI, or is a brain
+	if((!iscarbon(user) && !isMoMMI(user)) && !ishologram(user) || isbrain(user)) //Is not a carbon being, MoMMI, advanced hologram, or is a brain
 		to_chat(user, "You can't pick things up!")
+		return FALSE
 	if(anchored) //Object isn't anchored
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return FALSE
@@ -1035,6 +1036,9 @@ var/global/list/image/blood_overlays = list()
 
 
 /obj/item/proc/showoff(mob/user)
+	if(abstract)
+		return
+
 	for (var/mob/M in view(user))
 		M.show_message("[user] holds up [src]. <a HREF='?src=\ref[M];lookitem=\ref[src]'>Take a closer look.</a>",1)
 
@@ -1042,8 +1046,12 @@ var/global/list/image/blood_overlays = list()
 	set name = "Show Held Item"
 	set category = "Object"
 
+	if(attack_delayer.blocked())
+		return
+	delayNextAttack(SHOW_HELD_ITEM_AND_POINTING_DELAY)
+
 	var/obj/item/I = get_active_hand()
-	if(I && !I.abstract)
+	if(I)
 		I.showoff(src)
 
 // /vg/ Affects wearers.

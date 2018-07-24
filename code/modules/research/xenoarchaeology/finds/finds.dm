@@ -623,6 +623,14 @@
 			apply_material_decorations = FALSE
 			apply_image_decorations = FALSE
 			anomaly_factor = 4
+		if(ARCHAEO_GUITAR)
+			//An his music was eletric
+			item_type = "instrument"
+			apply_prefix = TRUE
+			new_item = new /obj/item/device/instrument/guitar/magical(loc)
+			apply_material_decorations = FALSE
+			apply_image_decorations = FALSE
+			anomaly_factor = 3
 
 	var/decorations = ""
 	if(apply_material_decorations)

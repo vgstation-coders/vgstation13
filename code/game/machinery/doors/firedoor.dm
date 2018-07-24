@@ -201,7 +201,7 @@ var/global/list/alert_overlays_global = list()
 	return
 
 /obj/machinery/door/firedoor/attack_ai(mob/user)
-	if(isobserver(user) || user.stat)
+	if(!isAdminGhost(user) && (isobserver(user) || user.stat))
 		return
 	spawn()
 		var/area/A = get_area(src)
@@ -226,7 +226,7 @@ var/global/list/alert_overlays_global = list()
 	add_fingerprint(user)
 	if(operating)
 		return//Already doing something.
-	if(istype(C, /obj/item/weapon/weldingtool))
+	if(iswelder(C))
 		var/obj/item/weapon/weldingtool/W = C
 		if(W.remove_fuel(0, user))
 			blocked = !blocked
