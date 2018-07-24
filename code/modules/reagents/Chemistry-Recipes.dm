@@ -259,13 +259,6 @@
 	required_reagents = list(SODIUM_POLYACRYLATE = 0.3, LUBE = 1)
 	result_amount = 0.3
 
-/datum/chemical_reaction/toxic_waste
-	name = "Toxic Waste"
-	id = TOXICWASTE
-	result = TOXICWASTE
-	required_reagents = list(URANIUM = 1, SODIUMCHLORIDE = 1)
-	result_amount = 2
-
 /datum/chemical_reaction/sludge
 	name = "Sludge"
 	id = CHEMICAL_WASTE
