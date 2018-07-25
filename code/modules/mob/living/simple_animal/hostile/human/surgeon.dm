@@ -23,8 +23,18 @@
 	name = "Doctor Peter Holden"
 	desc = "A deranged surgeon lost deep in space."
 	icon_dead = null //this isn't even his final form
-	maxHealth = 80
-	health = 80
+	maxHealth = 150
+	health = 150
+
+	min_oxy = 0
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 0
+	min_co2 = 0
+	max_co2 = 0
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 0
 
 	harm_intent_damage = 15
 	melee_damage_lower = 13
@@ -53,6 +63,16 @@
 	icon_dying_time = 33
 	maxHealth = 400
 	health = 400
+
+	min_oxy = 0
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 0
+	min_co2 = 0
+	max_co2 = 0
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 0
 
 	move_to_delay = 5 //slow
 	harm_intent_damage = 30
