@@ -509,6 +509,9 @@
 	adjustFireLoss(burn)
 	src.updatehealth()
 
+	return brute + burn
+
+
 /mob/living/proc/restore_all_organs()
 	return
 
