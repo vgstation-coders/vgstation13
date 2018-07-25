@@ -436,6 +436,9 @@
 
 	// Update on_moved listeners.
 	INVOKE_EVENT(on_moved,list("loc"=loc))
+	var/turf/T = get_turf(destination)
+	if(old_loc && T && old_loc.z != T.z)
+		INVOKE_EVENT(on_z_transition, list("user" = src, "from_z" = old_loc.z, "to_z" = T.z))
 	return 1
 
 /atom/movable/proc/update_client_hook(atom/destination)
