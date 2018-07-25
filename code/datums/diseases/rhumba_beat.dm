@@ -36,7 +36,7 @@
 			if(affected_mob.ckey == "rosham")
 				src.cure()
 			if(prob(10))
-				affected_mob.emote("gasp")
+				affected_mob.emote("gasp", null, null, TRUE)
 				to_chat(affected_mob, "<span class='warning'>You feel a burning beat inside...</span>")
 			if(prob(20))
 				affected_mob.adjustToxLoss(5)
