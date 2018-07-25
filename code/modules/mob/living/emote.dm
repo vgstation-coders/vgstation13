@@ -94,7 +94,12 @@
 	key_third_person = "drools"
 	message = "drools."
 	mob_type_blacklist_typelist = list(/mob/living/silicon, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
-	stat_allowed = UNCONSCIOUS
+
+/datum/emote/living/drool/can_run_emote(mob/living/user, var/status_check = FALSE)
+	. = ..()
+	if(. && iscarbon(user))
+		var/mob/living/carbon/C = user
+		return !C.silent
 
 /datum/emote/living/faint
 	key = "faint"
@@ -339,12 +344,10 @@
 	key = "twitch"
 	key_third_person = "twitches"
 	message = "twitches violently."
-	stat_allowed = UNCONSCIOUS
 
 /datum/emote/living/twitch_s
 	key = "twitch_s"
 	message = "twitches."
-	stat_allowed = UNCONSCIOUS
 
 /datum/emote/living/wave
 	key = "wave"
