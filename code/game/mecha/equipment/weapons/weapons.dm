@@ -6,9 +6,9 @@
 	var/fire_sound
 
 
-/obj/item/mecha_parts/mecha_equipment/weapon/can_attach(var/obj/mecha/combat/M as obj)
+/obj/item/mecha_parts/mecha_equipment/weapon/can_attach(var/obj/mecha/combat/M as obj, var/override = FALSE)
 	if(..())
-		if(istype(M))
+		if(istype(M) || override)
 			return 1
 	return 0
 
@@ -411,7 +411,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/can_attach(var/obj/mecha/working/clarke/M)
 	if(istype(M))
-		return 1
+		return ..(M,TRUE)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable
 	name = "\improper Inflatable Barrier Launcher"
@@ -466,7 +466,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/can_attach(var/obj/mecha/working/clarke/M)
 	if(istype(M))
-		return 1
+		return ..(M,TRUE)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar
 	name = "\improper Banana Mortar"
