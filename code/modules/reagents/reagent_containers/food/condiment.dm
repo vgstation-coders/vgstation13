@@ -240,7 +240,7 @@
 /obj/item/weapon/reagent_containers/food/condiment/ketchup/New()
 	..()
 	reagents.add_reagent(KETCHUP, 50)
-	
+
 /obj/item/weapon/reagent_containers/food/condiment/mustard
 	name = "mustard"
 	desc = "A spicy yellow paste."
@@ -248,7 +248,7 @@
 /obj/item/weapon/reagent_containers/food/condiment/mustard/New()
 	..()
 	reagents.add_reagent(MUSTARD, 50)
-	
+
 /obj/item/weapon/reagent_containers/food/condiment/relish
 	name = "relish"
 	desc = "A pickled cucumber jam. Tasty!"
@@ -376,7 +376,7 @@
 	reagents.add_reagent(BLACKPEPPER, 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/syndisauce
-	name = "Chef Excellence's Special Sauce"
+	name = "Horatio Sauce"
 	desc = "A potent sauce distilled from the toxin glands of 1000 Space Carp with an extra touch of LSD, because why not?"
 	amount_per_transfer_from_this = 1
 
