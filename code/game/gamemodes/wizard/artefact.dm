@@ -304,12 +304,14 @@
 	if(user != bound_soul)
 		unbind()
 		return
-	if(recursive_in_contents_of(user))
+	if(is_holder_of(user, src))
 		return //We're in their pocket, you ash-happy bottle of soul!
 	var/turf/T = get_turf(src)
 	if(arguments["to_z"] != T.z)
 		to_chat(user, "<span class = 'warning'><b>As you stray further and further away from \the [src], you feel your form unravel!</b></span>")
 		spawn(rand(5 SECONDS, 15 SECONDS)) //Mr. Wizman, I don't feel so good
+			if(user.gcDestroyed)
+				return
 			T = get_turf(src)
-			if(arguments["to_z"] != T.z)
+			if(user.z != T.z || is_holder_of(user, src))
 				user.dust()
