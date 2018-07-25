@@ -29,7 +29,7 @@
 			if(prob(5))
 				to_chat(affected_mob, "<span class='warning'>You feel the urge to dance...</span>")
 			else if(prob(5))
-				affected_mob.emote("gasp")
+				affected_mob.emote("gasp", null, null, TRUE)
 			else if(prob(10))
 				to_chat(affected_mob, "<span class='warning'>You feel the need to chick chicky boom...</span>")
 		if(4)
