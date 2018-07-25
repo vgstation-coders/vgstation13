@@ -95,12 +95,6 @@
 	message = "drools."
 	mob_type_blacklist_typelist = list(/mob/living/silicon, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
 
-/datum/emote/living/drool/can_run_emote(mob/living/user, var/status_check = FALSE)
-	. = ..()
-	if(. && iscarbon(user))
-		var/mob/living/carbon/C = user
-		return !C.silent
-
 /datum/emote/living/faint
 	key = "faint"
 	key_third_person = "faints"
