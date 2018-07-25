@@ -64,7 +64,7 @@
 	desc = "Tesla Energy Relay"
 	id = "mech_energy_relay"
 	build_type = MECHFAB
-	req_tech = list(Tc_MAGNETS = 4, Tc_POWERSTORAGE = 3, Tc_ANOMALY = 2)
+	req_tech = list(Tc_MAGNETS = 4, Tc_POWERSTORAGE = 3)
 	build_path = /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay
 	category = "Exosuit_Modules"
 	materials = list(MAT_IRON=10000,MAT_GOLD=2000,MAT_SILVER=3000,MAT_GLASS=2000)
