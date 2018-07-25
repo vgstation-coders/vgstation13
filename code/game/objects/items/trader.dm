@@ -58,8 +58,24 @@
 	icon_opened = "cabinetdetective_open"
 	icon_broken = "cabinetdetective_broken"
 	icon_off = "cabinetdetective_broken"
-	var/wonder_whitelist = list(/obj/item/clothing/shoes/clown_shoes/advanced, /obj/item/clothing/mask/morphing/corgi, list(/obj/item/clothing/suit/space/plasmaman/security/captain, /obj/item/clothing/head/helmet/space/plasmaman/security/captain), /obj/item/clothing/shoes/magboots/magnificent, /obj/item/clothing/under/aqua, /obj/item/clothing/under/purple, /obj/item/clothing/under/lightgreen, /obj/item/clothing/under/lightblue, /obj/item/clothing/under/lightbrown, /obj/item/clothing/under/brown, /obj/item/clothing/under/yellowgreen, /obj/item/clothing/under/darkblue, /obj/item/clothing/under/lightred, /obj/item/clothing/under/darkred, /obj/item/clothing/under/bluepants, /obj/item/clothing/under/blackpants, /obj/item/clothing/under/redpants, /obj/item/clothing/under/greypants, /obj/item/clothing/under/dress/plaid_purple, /obj/item/clothing/under/dress/plaid_red, /obj/item/clothing/under/dress/plaid_blue, /obj/item/clothing/under/greaser, /obj/item/clothing/under/sl_suit, /obj/item/clothing/under/syndicate/tacticool, /obj/item/clothing/under/color/orange, /obj/item/clothing/under/psyche, /obj/item/clothing/under/rainbow)
-
+	var/wonder_whitelist = list(
+	/obj/item/clothing/mask/morphing/corgi,
+	/obj/item/clothing/under/rank/vice,
+	/obj/item/clothing/shoes/clown_shoes/advanced,
+	list(/obj/item/clothing/suit/space/clown, /obj/item/clothing/head/helmet/space/clown),
+	/obj/item/clothing/shoes/magboots/magnificent,
+	list(/obj/item/clothing/suit/space/plasmaman/bee, /obj/item/clothing/head/helmet/space/plasmaman/bee),
+	list(/obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich, /obj/item/clothing/suit/wizrobe/skelelich),
+	list(/obj/item/clothing/suit/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/cultist),
+	list(/obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain),
+	/obj/item/clothing/under/skelevoxsuit,
+	list(/obj/item/clothing/suit/wintercoat/ce, /obj/item/clothing/suit/wintercoat/cmo, /obj/item/clothing/suit/wintercoat/security/hos, /obj/item/clothing/suit/wintercoat/hop, /obj/item/clothing/suit/wintercoat/captain, /obj/item/clothing/suit/wintercoat/clown, /obj/item/clothing/suit/wintercoat/slimecoat),
+	list(/obj/item/clothing/head/helmet/space/rig/wizard, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple, /obj/item/clothing/shoes/sandal),
+	list(/obj/item/clothing/head/helmet/space/rig/knight, /obj/item/clothing/head/helmet/space/rig/knight),
+	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/ancient),
+	list(/obj/item/clothing/shoes/clockwork_boots, /obj/item/clothing/head/clockwork_hood, /obj/item/clothing/suit/clockwork_robes),
+	/obj/item/clothing/mask/necklace/xeno_claw
+	)
 /obj/structure/closet/secure_closet/wonderful/New()
 	..()
 	for(var/amount = 1 to 10)
