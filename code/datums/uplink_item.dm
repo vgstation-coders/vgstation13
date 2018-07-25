@@ -281,12 +281,12 @@ var/list/uplink_items = list()
 	job = list("Botanist")
 
 //Chef
-/datum/uplink_item/jobspecific/specialsauce
-	name = "Chef Excellence's Special Sauce"
+/datum/uplink_item/stealthy_weapons/specialsauce
+	name = "Horatio Sauce"
 	desc = "A custom made sauce made from the toxin glands of many space carp. If one ingests enough, he or she will be dead in 3 minutes or less."
 	item = /obj/item/weapon/reagent_containers/food/condiment/syndisauce
 	cost = 2
-	job = list("Chef")
+	//job = list("Chef")
 
 /datum/uplink_item/jobspecific/meatcleaver
 	name = "Meat Cleaver"
@@ -296,21 +296,21 @@ var/list/uplink_items = list()
 	job = list("Chef")
 
 //Janitor
-/datum/uplink_item/jobspecific/cautionsign
+/datum/uplink_item/stealthy_weapons/cautionsign
 	name = "Proximity Mine"
 	desc = "An Anti-Personnel proximity mine cleverly disguised as a wet floor caution sign that is triggered by running past it. Interact with it to start the 15 second timer and activate again to disarm."
 	item = /obj/item/weapon/caution/proximity_sign
 	cost = 4
-	job = list("Janitor")
+	//job = list("Janitor")
 
 
 //Assistant
-/datum/uplink_item/jobspecific/pickpocketgloves
+/datum/uplink_item/stealthy_tools/pickpocketgloves
 	name = "Pickpocket's Gloves"
 	desc = "A pair of sleek gloves to aid in pickpocketing, while wearing these you can sneakily strip any item without the other person being alerted. Pickpocketed items will also be put into your hand rather than fall to the ground."
 	item = /obj/item/clothing/gloves/black/thief
 	cost = 6
-	job = list("Assistant")
+	//job = list("Assistant")
 
 /datum/uplink_item/jobspecific/greytide
 	name = "Greytide Implant"
