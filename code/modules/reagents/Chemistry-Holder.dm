@@ -607,7 +607,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		return 1
 
 	for(var/id in reagent_list)
-		if(has_reagent(id, amount))
+		if(has_reagent(id))
 			remove_reagent(id, amount, safety)
 	return 1
 
