@@ -974,7 +974,7 @@
 									if(head_organ.take_damage(30, 0))
 										H.UpdateDamageIcon(1)
 									head_organ.disfigure("burn")
-									H.emote("scream", TRUE)
+									H.emote("scream")
 								else
 									to_chat(H, "<span class='warning'>A freezing liquid covers your face. Your vampiric powers protect you!</span>")
 									H.mind.vampire.smitecounter += 12 //Ditto above
@@ -1398,7 +1398,7 @@
 					if(head_organ.take_damage(25, 0))
 						H.UpdateDamageIcon(1)
 					head_organ.disfigure("burn")
-					H.emote("scream", TRUE)
+					H.emote("scream")
 			else
 				M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 	else
@@ -1475,7 +1475,7 @@
 				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 				if(head_organ.take_damage(15, 0))
 					H.UpdateDamageIcon(1)
-				H.emote("scream", TRUE)
+				H.emote("scream")
 
 		else if(ismonkey(M))
 			var/mob/living/carbon/monkey/MK = M
@@ -1498,7 +1498,7 @@
 				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 				if(head_organ.take_damage(15, 0))
 					H.UpdateDamageIcon(1)
-				H.emote("scream", TRUE)
+				H.emote("scream")
 				head_organ.disfigure("burn")
 			else
 				M.take_organ_damage(min(15, volume * 4))
@@ -2088,7 +2088,7 @@
 				to_chat(H,"<span class='warning'>Your [eyes_covered] protects your eyes from the bleach!</span>")
 				return
 			else //This stuff is a little more corrosive but less irritative than pepperspray
-				H.emote("scream", TRUE)
+				H.emote("scream")
 				to_chat(H,"<span class='danger'>You are sprayed directly in the eyes with bleach!</span>")
 				H.eye_blurry = max(M.eye_blurry, 15)
 				H.eye_blind = max(M.eye_blind, 5)
@@ -2301,7 +2301,7 @@
 		M.take_organ_damage(REM, 0, ignore_inorganics = TRUE)
 	M.adjustOxyLoss(3)
 	if(prob(20))
-		M.emote("gasp", TRUE)
+		M.emote("gasp", null, null, TRUE)
 
 /datum/reagent/kelotane
 	name = "Kelotane"
@@ -2514,7 +2514,7 @@
 	if(prob(50))
 		M.drowsyness = max(M.drowsyness, 3)
 	if(prob(10))
-		M.emote("drool", TRUE)
+		M.emote("drool", null, null, TRUE)
 
 /datum/reagent/hyronalin
 	name = "Hyronalin"
