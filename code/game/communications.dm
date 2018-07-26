@@ -184,14 +184,15 @@ var/const/SER_FREQ = 1349
 /* filters */
 var/const/RADIO_TO_AIRALARM = "1"
 var/const/RADIO_FROM_AIRALARM = "2"
-var/const/RADIO_CHAT = "3" //deprecated
+var/const/RADIO_CHAT = "3" //deskbells and remote signallers
 var/const/RADIO_ATMOSIA = "4"
 var/const/RADIO_NAVBEACONS = "5"
 var/const/RADIO_AIRLOCK = "6"
 var/const/RADIO_SECBOT = "7"
 var/const/RADIO_MULEBOT = "8"
-var/const/RADIO_MAGNETS = "9"
+var/const/RADIO_MAGNETS = "9" //for the firing range "magnet" target mover
 var/const/RADIO_CONVEYORS = "10"
+var/const/RADIO_SUPERMATTER = "11"
 
 var/global/datum/controller/radio/radio_controller
 

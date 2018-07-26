@@ -60,7 +60,7 @@
 	var/obj/item/device/radio/radio
 
 	// Monitoring shit
-	var/frequency = 1439
+	var/frequency = 1333
 	var/id_tag
 	var/datum/radio_frequency/radio_connection
 
@@ -91,10 +91,10 @@
 /obj/machinery/power/supermatter/New()
 	. = ..()
 	radio = new (src)
-	if(frequency)
-		set_frequency(frequency)
-	if(!id_tag)
-		id_tag = "supermatter_[rand(9999)]" //It is conceivable that there might default to two with the same, but it's unlikely.
+
+/obj/machinery/power/supermatter/initialize()
+	..()
+	set_frequency(frequency) //also broadcasts
 
 /obj/machinery/power/supermatter/Destroy()
 	qdel(radio)
@@ -435,7 +435,8 @@
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
-		radio_connection = radio_controller.add_object(src, frequency, filter = RADIO_ATMOSIA)
+		radio_connection = radio_controller.add_object(src, frequency, RADIO_SUPERMATTER)
+	broadcast_status()
 
 /obj/machinery/power/supermatter/proc/broadcast_status()
 	if(!radio_connection)
@@ -453,7 +454,7 @@
 		"power" = power,
 		"sigtype" = "status"
 	)
-	radio_connection.post_signal(src, signal)
+	radio_connection.post_signal(src, signal, RADIO_SUPERMATTER, SS_INIT_RUST)
 	return 1
 
 /obj/machinery/power/supermatter/canClone(var/obj/O)
@@ -466,22 +467,47 @@
 
 /obj/machinery/computer/supermatter
 	name = "supermatter monitoring computer"
-	desc = "Monitors ambient temperature and stability of a linked shard to provide early warning information regarding delamination."
+	desc = "Monitors ambient temperature and stability of a linked shard to provide early warning information regarding delamination. Can be linked up to supermatter with a matching frequency and id_tag using a multitool. While using a multitool on supermatter is safe, Nanotrasen accepts no responsibility or liability for sudden rushes of wind or radiation poisoning."
 	icon_state = "sme"
 	circuit = "/obj/item/weapon/circuitboard/supermatter"
 	light_color = LIGHT_COLOR_YELLOW
-	var/id_tag = null //Mappable
+	var/frequency = 1333
+	var/id_tag //mappable
+	var/datum/radio_frequency/radio_connection
 	var/obj/machinery/power/supermatter/linked = null
+	//"LIST" BUTTON
 	var/screen = 0 //0 = Main display, 1 = select target
+	var/list/cached_smlist = list()
 
-/obj/machinery/computer/supermatter/New()
+/obj/machinery/computer/supermatter/initialize()
 	..()
-	try_link(id_tag) //If we have a mapped id, looks for matching supermatter. If not, looks for one on the z-level.
+	set_frequency(frequency)
 
+/obj/machinery/computer/supermatter/receive_signal(datum/signal/signal, var/receive_method as num, var/receive_param)
+	..()
+	//Become unlinked if we receive a new signal from the thing we're linked from.
+	if(linked && signal.source && signal.source == linked)
+		linked = null
+	//Link to broadcasts with our id_tag
+	if(id_tag == signal.data["tag"] && istype(signal.source,/obj/machinery/power/supermatter))
+		linked = signal.source
+
+/obj/machinery/computer/supermatter/proc/set_frequency(new_frequency)
+	radio_controller.remove_object(src, frequency)
+	frequency = new_frequency
+	if(frequency)
+		radio_connection = radio_controller.add_object(src, frequency, RADIO_SUPERMATTER)
+
+/obj/machinery/computer/supermatter/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
+	return {"
+	<b>Main</b>
+	<ul>
+		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(frequency)]">Reset</a>)</li>
+		<li>[format_tag("ID Tag","id_tag")]</li>
+	</ul>"}
 
 /obj/machinery/computer/supermatter/attack_hand(mob/user)
-	. = ..()
-	if(!.)
+	if(..())
 		return
 	ui_interact(user)
 
@@ -494,6 +520,7 @@
 		return
 
 	var/data[0]
+	data["screen"] = FALSE //Leaving data["screen"] in so someone else can salvage that button if they want to.
 	if(linked) //We really want to be linked, but the template can survive even without a link
 		var/datum/gas_mixture/env = linked.loc.return_air()
 		data["id"] = linked.id_tag
@@ -507,50 +534,30 @@
 			var/turf/T = linked.loc //We know it's a turf, we just checked
 			data["oxygen"] = round(T.oxygen)
 		data["location"] = linked.areaMaster.name
-		data["screen"] = screen
+	else
+		data["id"] = FALSE
 
+	if(screen)
+		cached_smlist = list()
+		for(var/obj/O in radio_connection.devices[RADIO_SUPERMATTER])
+			if(istype(O,/obj/machinery/power/supermatter))
+				var/obj/machinery/power/supermatter/SM = O
+				var/sm_name = SM.name
+				cached_smlist += list("type" =  sm_name, "id" = SM.id_tag, "location" = SM.areaMaster.name) //For whatever reason, this runtimes because SM.name is read as null.name
+		data["smlist"] = cached_smlist
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
-	ui.set_auto_update()
+
 	if (!ui)
 		ui = new(user, src, ui_key, "supermatter.tmpl", name, 520, 340)
 		ui.set_initial_data(data)
 		ui.open()
+		ui.set_auto_update()
 
 /obj/machinery/computer/supermatter/Topic(href, href_list)
 	. = ..()
 	if(.)
 		return .
-	if(href_list["select"])
-		var/new_id = input("New target ID tag","Selecting Supermatter",id_tag) as text|null
-		if(!new_id)
-			return TRUE
-		try_link(new_id)
-		return TRUE
-	if(href_list["list"])
-		var/list/local_supermatter = list()
-		for(var/obj/machinery/power/supermatter/S in power_machines)
-			var/turf/T = get_turf(S) //Allowed to see into crates
-			if(T.z == z)
-				local_supermatter += S.id_tag
-		to_chat(usr,"<span class='info'>\The [src] flashes briefly, displaying the following ID tags: [json_encode(local_supermatter)]</span>")
-	return TRUE
+	if(href_list["list"]) SCRAPPED
+		screen = !screen
 
-/obj/machinery/computer/supermatter/proc/try_link(var/new_id)
-	id_tag = null
-	linked = null
-	if(new_id)
-		id_tag = new_id
-		for(var/obj/machinery/power/supermatter/S in power_machines)
-			if(S.id_tag == id_tag)
-				var/turf/simulated/T = get_turf(S) //Allowed to see into crates
-				if(T.z == z)
-					linked = S
-				else
-					visible_message("<span class='warning'>\The [src] buzzes.</span>")
-					playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
-				return
-	else
-		for(var/obj/machinery/power/supermatter/S in power_machines)
-			if(S.z == z) //It's supermatter and it's on our Z-level
-				linked = S
-				return
+	return TRUE
