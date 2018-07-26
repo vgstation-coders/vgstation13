@@ -44,13 +44,12 @@
 			overlays += filling
 
 /obj/machinery/iv_drip/MouseDrop(over_object, src_location, over_location)
-	..()
 	if(isobserver(usr))
-		return
+		return ..()
 	if(usr.incapacitated()) // Stop interacting with shit while dead pls
-		return
+		return ..()
 	if(isanimal(usr))
-		return
+		return ..()
 	if(attached)
 		visible_message("[src.attached] is detached from \the [src]")
 		src.attached = null
@@ -65,6 +64,8 @@
 		visible_message("[usr] attaches \the [src] to \the [over_object].")
 		src.attached = over_object
 		src.update_icon()
+	else
+		return ..()
 
 /obj/machinery/iv_drip/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(isobserver(user))
