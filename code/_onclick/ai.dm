@@ -103,24 +103,20 @@
 	return
 
 /obj/machinery/door/airlock/AIShiftClick()  // Opens and closes doors!
-	if(density)
-		Topic("aiEnable=7", list("aiEnable"="7"), 1) // 1 meaning no window (consistency!)
-	else
+	if(allowed(usr))
 		Topic("aiDisable=7", list("aiDisable"="7"), 1)
-	return
 
 
 /atom/proc/AICtrlClick()
 	return
 
 /obj/machinery/door/airlock/AICtrlClick() // Bolts doors
-	if(locked)
-		Topic("aiEnable=4", list("aiEnable"="4"), 1)// 1 meaning no window (consistency!)
-	else
+	if(allowed(usr))
 		Topic("aiDisable=4", list("aiDisable"="4"), 1)
 
 /obj/machinery/power/apc/AICtrlClick() // turns off APCs.
-	Topic("breaker=1", list("breaker"="1"), 0) // 0 meaning no window (consistency! wait...)
+	if(allowed(usr))
+		Topic("breaker=1", list("breaker"="1"), 0) // 0 meaning no window (consistency! wait...)
 
 
 /atom/proc/AIAltClick(var/mob/living/silicon/ai/user)
@@ -128,13 +124,13 @@
 	return
 
 /obj/machinery/door/airlock/AIAltClick() // Eletrifies doors.
-	if(!secondsElectrified)
-		// permenant shock
-		Topic("aiEnable=6", list("aiEnable"="6"), 1) // 1 meaning no window (consistency!)
-	else
-		// disable/6 is not in Topic; disable/5 disables both temporary and permenant shock
-		Topic("aiDisable=5", list("aiDisable"="5"), 1)
-	return
+	if(allowed(usr))
+		if(!secondsElectrified)
+			// permenant shock
+			Topic("aiEnable=6", list("aiEnable"="6"), 1) // 1 meaning no window (consistency!)
+		else
+			// disable/6 is not in Topic; disable/5 disables both temporary and permenant shock
+			Topic("aiDisable=5", list("aiDisable"="5"), 1)
 
 /obj/machinery/door/firedoor/AIShiftClick(var/mob/living/silicon/ai/user) // Allows examining firelocks
 	examine(user)

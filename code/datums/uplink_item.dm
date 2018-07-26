@@ -58,6 +58,9 @@ var/list/uplink_items = list()
 	var/only_on_day		//two-digit day as string
 	var/num_in_stock = 0	// Number of times this can be bought, globally. 0 is infinite
 	var/static/times_bought = 0
+	var/refundable = FALSE
+	var/refund_amount // specified refund amount in case there needs to be a TC penalty for refunds.
+
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
 	U.uses -= max(cost, 0)
@@ -722,6 +725,14 @@ var/list/uplink_items = list()
 	item = /obj/item/device/does_not_tip_backdoor
 	num_in_stock = 1
 	cost = 10
+
+//datum/uplink_item/dangerous/robot
+//	name = "Syndicate Robot Teleporter"
+//	desc = "A single-use teleporter used to deploy a syndicate robot that will help with your mission. Keep in mind that unlike NT cyborgs/androids these don't have access to most of the station's machinery."
+//	item = /obj/item/weapon/robot_spawner/syndicate
+//	cost = 40
+//	gamemodes = list("nuclear emergency")
+//	refundable = TRUE
 
 // IMPLANTS
 

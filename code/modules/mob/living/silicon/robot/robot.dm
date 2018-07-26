@@ -14,8 +14,9 @@
 	var/base_icon
 	var/image/eyes = null
 
-	//New() stuff
+	//Sound
 	var/startup_sound = 'sound/voice/liveagain.ogg'
+	var/startup_vary = TRUE //Does the startup sounds vary?
 
 	// Alerts
 	var/pressure_alert = FALSE
@@ -97,7 +98,7 @@
 
 /mob/living/silicon/robot/New(loc, var/unfinished = FALSE)
 	ident = rand(1, 999)
-	updatename("Default")
+	updatename(modtype)
 	updateicon()
 
 	laws = getLawset(src)
@@ -144,7 +145,7 @@
 		cell_component.wrapped = cell
 		cell_component.installed = COMPONENT_INSTALLED
 
-	playsound(get_turf(src), startup_sound, 75, 1)
+	playsound(src, startup_sound, 75, startup_vary)
 
 	//Borgs speak all common languages by default.
 	add_language(LANGUAGE_GALACTIC_COMMON)
@@ -226,17 +227,14 @@
 			client.screen -= sensor
 		sensor = null
 
-/proc/getAvailableRobotModules()
-	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Security")
-	if (security_level == SEC_LEVEL_RED)
-		modules+="Combat"
-	return modules
+/mob/living/silicon/robot/proc/getModules()
+	return getAvailableRobotModules()
 
 // /vg/: Enable forcing module type
 /mob/living/silicon/robot/proc/pick_module(var/forced_module=null)
 	if(module)
 		return
-	var/list/modules = getAvailableRobotModules()
+	var/list/modules = getModules()
 	if(forced_module)
 		modtype = forced_module
 	else
@@ -245,16 +243,16 @@
 
 	if(module)
 		return
-	if(!(modtype in robot_modules))
+	if(!(modtype in all_robot_modules))
 		return
 
-	var/module_type = robot_modules[modtype]
+	var/module_type = all_robot_modules[modtype]
 	module = new module_type(src)
 
 	feedback_inc("cyborg_[lowertext(modtype)]",1)
 	updatename()
 
-	if(modtype == ("Security" || "Combat" || "Syndicate"))
+	if(modtype == (SECURITY_MODULE || COMBAT_MODULE))
 		to_chat(src, "<span class='big warning'><b>Regardless of your module, your wishes, or the needs of the beings around you, absolutely nothing takes higher priority than following your silicon lawset.</b></span>")
 
 	set_module_sprites(module.sprites)
@@ -1126,7 +1124,7 @@
 	. = ..()
 
 	if(module)
-		if(module.quirk_flags & MODULE_CLEAN_ON_MOVE)
+		if(HAS_MODULE_QUIRK(src, MODULE_CLEAN_ON_MOVE))
 			var/turf/tile = loc
 			if(isturf(tile))
 				tile.clean_blood()
@@ -1304,58 +1302,11 @@
 	new_upgrade.attempt_action(src, user, TRUE)
 	qdel(new_upgrade)
 
-//Combat module debug subtype.
-/mob/living/silicon/robot/debug_droideka
-	cell_type = /obj/item/weapon/cell/hyper
+/mob/living/silicon/robot/GetAccess()
+	if(isDead()) //Dead cyborgs need no access.
+		return
+	if(module) //Pick a module you lil shit.
+		return module.access
 
-/mob/living/silicon/robot/debug_droideka/New()
-	..()
-
-	UnlinkSelf()
-	laws = new /datum/ai_laws/ntmov()
-	pick_module("Combat")
-	set_module_sprites(list("Droid" = "droid-combat"))
-	install_upgrade(src, /obj/item/borg/upgrade/vtec)
-
-//Syndicate subtype because putting this on new() is fucking retarded.
-/mob/living/silicon/robot/syndie
-	cell_type = /obj/item/weapon/cell/hyper
-
-/mob/living/silicon/robot/syndie/New()
-	..()
-
-	UnlinkSelf()
-	laws = new /datum/ai_laws/syndicate_override()
-	pick_module("Syndicate")
-	install_upgrade(src, /obj/item/borg/upgrade/vtec)
-
-//Moving hugborgs to an easy-to-spawn subtype because they were as retarded as the syndie one.
-/mob/living/silicon/robot/hugborg
-	cell_type = /obj/item/weapon/cell/super
-
-/mob/living/silicon/robot/hugborg/New()
-	..()
-
-	UnlinkSelf()
-	laws = new /datum/ai_laws/asimov()
-
-	pick_module("TG17355")
-	set_module_sprites(list("Peacekeeper" = "peaceborg"))
-
-/mob/living/silicon/robot/hugborg/clown/New()
-	..()
-	install_upgrade(src, /obj/item/borg/upgrade/honk)
-
-/mob/living/silicon/robot/hugborg/noir/New()
-	..()
-	laws = new /datum/ai_laws/noir()
-	install_upgrade(src, /obj/item/borg/upgrade/noir)
-
-/mob/living/silicon/robot/hugborg/warden/New()
-	..()
-	laws = new /datum/ai_laws/robocop() //I. AM. THE. LAW.
-	install_upgrade(src, /obj/item/borg/upgrade/warden)
-
-/mob/living/silicon/robot/hugborg/ball/New()
-	..()
-	set_module_sprites(list("Omoikane" = "omoikane"))
+/mob/living/silicon/robot/hasFullAccess()
+	return FALSE

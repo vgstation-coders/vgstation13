@@ -54,15 +54,8 @@
 				robot.cell.use(charge_cost) // take power from borg
 				reagents.add_reagent(reagent_ids[mode], 5) // and fill hypo with reagent.
 
-	//update_icon()
 	return 1
 
-// Purely for testing purposes I swear~
-/*
-/obj/item/weapon/reagent_containers/borghypo/verb/add_cyanide()
-	set src in world
-	add_reagent(CYANIDE)
-*/
 
 /obj/item/weapon/reagent_containers/borghypo/attack(mob/M as mob, mob/user as mob)
 	var/datum/reagents/reagents = reagent_list[mode]
@@ -126,3 +119,24 @@
 	reagent_ids = list(CYANIDE)
 	volume = 10
 	recharge_time = 10
+
+/obj/item/weapon/reagent_containers/borghypo/biofoam
+	name = "biofoam hypospray"
+	icon_state = "biofoam1"
+	reagent_ids = list(BIOFOAM)
+	volume = 15
+	recharge_time = 30
+
+/obj/item/weapon/reagent_containers/borghypo/biofoam/update_icon()
+	if(reagents.total_volume > 0)
+		icon_state = "biofoam1"
+	else
+		icon_state = "biofoam0"
+
+/obj/item/weapon/reagent_containers/borghypo/crisis
+	name = "crisis hypospray"
+	desc = "A syndicate-exclusive emergency hypospray filled with potent stimulants and painkillers."
+	icon_state = "borghypo_s"
+	reagent_ids = list(TRICORDRAZINE, INAPROVALINE, COCAINE, OXYCODONE, TRAMADOL)
+	volume = 10
+	amount_per_transfer_from_this = 10
