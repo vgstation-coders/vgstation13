@@ -35,22 +35,29 @@
 	return TRUE
 
 /obj/item/weapon/storage/MouseDrop(obj/over_object as obj)
-	if (ishuman(usr) || ismonkey(usr) || isrobot(usr) && is_holder_of(usr, src)) //so monkeys can take off their backpacks -- Urist
+	if(over_object == usr && (in_range(src, usr) || is_holder_of(usr, src)))
+		orient2hud(usr)
+		if(usr.s_active)
+			usr.s_active.close(usr)
+		src.show_to(usr)
+		return
+	if(ishuman(usr) || ismonkey(usr) || isrobot(usr) && is_holder_of(usr, src)) //so monkeys can take off their backpacks -- Urist
 		var/mob/M = usr
 		if(istype(over_object, /obj/structure/table) && M.Adjacent(over_object) && Adjacent(M))
 			var/mob/living/L = usr
 			if(istype(L) && !(L.incapacitated() || L.lying))
 				if(can_use())
 					empty_contents_to(over_object)
+					return
 
 		if(isrobot(usr))
-			return
+			return ..()
 
 		if(!( istype(over_object, /obj/abstract/screen/inventory) ))
 			return ..()
 
 		if(!(src.loc == usr) || (src.loc && src.loc.loc == usr))
-			return
+			return ..()
 
 		playsound(src, "rustle", 50, 1, -5)
 		if(!( M.restrained() ) && !( M.stat ))
@@ -62,12 +69,7 @@
 				src.add_fingerprint(usr)
 
 			return
-		if(over_object == usr && in_range(src, usr) || usr.contents.Find(src))
-			if (usr.s_active)
-				usr.s_active.close(usr)
-			src.show_to(usr)
-			return
-	return
+	return ..()
 
 /obj/item/weapon/storage/proc/empty_contents_to(var/atom/place)
 	var/turf = get_turf(place)
@@ -448,15 +450,6 @@
 
 /obj/item/weapon/storage/dropped(mob/user as mob)
 	..()
-
-/obj/item/weapon/storage/MouseDrop(over_object, src_location, over_location)
-	..()
-	orient2hud(usr)
-	if (over_object == usr && (in_range(src, usr) || is_holder_of(usr, src)))
-		if (usr.s_active)
-			usr.s_active.close(usr)
-		src.show_to(usr)
-	return
 
 /obj/item/weapon/storage/attack_hand(mob/user as mob)
 	playsound(src, "rustle", 50, 1, -5)

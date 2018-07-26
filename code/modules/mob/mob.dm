@@ -1429,15 +1429,14 @@ var/list/slot_equipment_priority = list( \
 	//		C.JoinResponseTeam()
 
 /mob/MouseDrop(mob/M as mob)
-	..()
 	if(M != usr)
-		return
+		return ..()
 	if(usr == src)
-		return
+		return ..()
 	if(!Adjacent(usr))
-		return
+		return ..()
 	if(istype(M,/mob/living/silicon/ai))
-		return
+		return ..()
 	show_inv(usr)
 
 
