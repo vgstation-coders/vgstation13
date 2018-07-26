@@ -87,7 +87,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/use_progress_bar = FALSE
 
 	var/hud_state = "" //name of the icon used in generating the spell hud object
+	var/override_icon = ""
 	var/override_base = ""
+	var/icon_direction = SOUTH //Needs override_icon to be not null
 
 	var/obj/abstract/screen/spell/connected_button
 	var/currently_channeled = 0
