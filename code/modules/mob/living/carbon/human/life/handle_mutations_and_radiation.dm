@@ -291,6 +291,7 @@
 					if(set_species("Ghoul"))
 						to_chat(src, "<span class = 'notice'>You feel strangely at peace.</span>")
 						spawn(1 SECONDS)
+							setCloneLoss(0)
 							Knockdown(3)
 							regenerate_icons()
 							visible_message("<span class='danger'>\The [src]'s form loses bulk as they collapse to the ground.</span>")
