@@ -518,14 +518,22 @@ obj/item/asteroid/basilisk_hide/New()
 	if(proximity_flag && istype(target, /obj/item/clothing))
 		var/obj/item/clothing/C = target
 		var/current_armor = C.armor
+		if(!isturf(C.loc))
+			to_chat(user, "<span class='warning'>\The [C] must be safely placed on the ground for modification.</span>")
+			return
 		if(C.goliath_reinforce)
+			C.hidecount ++
 			if(current_armor.["melee"] < 90)
 				current_armor.["melee"] = min(current_armor.["melee"] + 10, 90)
 				to_chat(user, "<span class='info'>You strengthen [target], improving its resistance against melee attacks.</span>")
 				qdel(src)
 			else
 				to_chat(user, "<span class='info'>You can't improve [C] any further.</span>")
-	return
+		if(has_icon(C.icon, "[initial(C.item_state)]_goliath[C.hidecount]"))
+			C.name = "reinforced [initial(C.name)]"
+			C.item_state = "[initial(C.item_state)]_goliath[C.hidecount]"
+			C.icon_state = "[initial(C.icon_state)]_goliath[C.hidecount]"
+			C._color = "mining_goliath[C.hidecount]"
 
 /mob/living/simple_animal/hostile/asteroid/magmaw
 	name = "magmaw"
