@@ -261,8 +261,8 @@
 
 /datum/chemical_reaction/sludge
 	name = "Sludge"
-	id = TOXICWASTE
-	result = TOXICWASTE
+	id = CHEMICAL_WASTE
+	result = CHEMICAL_WASTE
 	required_reagents = list(LUBE = 1)
 	result_amount = 0.2
 	required_temp = 3500
@@ -273,7 +273,7 @@
 	name = "Degrease"
 	id = "degrease"
 	result = null
-	required_reagents = list(TOXICWASTE = 1, ETHANOL = 1) //Turns out it really WAS an engine degreaser
+	required_reagents = list(CHEMICAL_WASTE = 1, ETHANOL = 1) //Turns out it really WAS an engine degreaser
 	result_amount = 0
 
 /datum/chemical_reaction/pacid

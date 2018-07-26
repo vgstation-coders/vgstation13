@@ -4217,7 +4217,7 @@
 /datum/reagent/toxicwaste
 	name = "Toxic Waste"
 	id = TOXICWASTE
-	description = "A type of sludge created by heating space lubricant to extreme temperatures."
+	description = "A type of sludge."
 	reagent_state = LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	density = 5.59
