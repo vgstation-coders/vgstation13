@@ -520,7 +520,7 @@
 		return
 
 	var/data[0]
-	data["screen"] = FALSE //Leaving data["screen"] in so someone else can salvage that button if they want to.
+	data["screen"] = screen
 	if(linked) //We really want to be linked, but the template can survive even without a link
 		var/datum/gas_mixture/env = linked.loc.return_air()
 		data["id"] = linked.id_tag
@@ -533,17 +533,18 @@
 			data["dps"] = (env.temperature-800)/150
 			var/turf/T = linked.loc //We know it's a turf, we just checked
 			data["oxygen"] = round(T.oxygen)
-		data["location"] = linked.areaMaster.name
+		data["location"] = get_area(linked).name
 	else
 		data["id"] = FALSE
 
 	if(screen)
 		cached_smlist = list()
-		for(var/obj/O in radio_connection.devices[RADIO_SUPERMATTER])
-			if(istype(O,/obj/machinery/power/supermatter))
-				var/obj/machinery/power/supermatter/SM = O
-				var/sm_name = SM.name
-				cached_smlist += list("type" =  sm_name, "id" = SM.id_tag, "location" = SM.areaMaster.name) //For whatever reason, this runtimes because SM.name is read as null.name
+		var/i = 0
+		for(var/obj/machinery/power/supermatter/SM in radio_connection.devices[RADIO_SUPERMATTER])
+			var/area/sm_loc = get_area(SM)
+			if(sm_loc) //Otherwise it's nullspaced or something
+				cached_smlist[i] = list("type" =  SM.name, "id" = SM.id_tag, "location" = sm_loc.name) //Add doesn't work for this
+				i++
 		data["smlist"] = cached_smlist
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 
@@ -557,7 +558,7 @@
 	. = ..()
 	if(.)
 		return .
-	if(href_list["list"]) SCRAPPED
+	if(href_list["list"])
 		screen = !screen
 
 	return TRUE
