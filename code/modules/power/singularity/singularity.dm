@@ -103,7 +103,7 @@
 				if(prob(50)) //50/50 of becoming unrecoverable
 					user.visible_message("<span class = 'danger'>\The [user] screams as they are consumed from within!</span>")
 					if(prob(50))
-						user.emote("scream",auto=1)
+						user.emote("scream")
 						var/matrix/M = matrix()
 						M.Scale(0)
 						animate(user, alpha = 0, transform = M, time = 3 SECONDS, easing = SINE_EASING)
