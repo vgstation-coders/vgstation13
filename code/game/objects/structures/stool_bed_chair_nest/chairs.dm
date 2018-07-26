@@ -106,7 +106,7 @@
 
 /obj/structure/bed/chair/MouseDrop_T(mob/M as mob, mob/user as mob)
 	if(!istype(M))
-		return
+		return ..()
 	var/mob/living/carbon/human/target = null
 	if(ishuman(M))
 		target = M
