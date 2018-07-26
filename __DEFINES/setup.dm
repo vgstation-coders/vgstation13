@@ -756,6 +756,8 @@ SEE_PIXELS	256
 #define MAT_PLASTIC		"$plastic"
 #define MAT_CARDBOARD   "$cardboard"
 #define MAT_WOOD		"$wood"
+#define MAT_BRASS   	"$brass"
+#define MAT_RALLOY   	"$ralloy"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
