@@ -104,7 +104,10 @@
 
 /obj/machinery/door/airlock/AIShiftClick()  // Opens and closes doors!
 	if(allowed(usr))
-		Topic("aiDisable=7", list("aiDisable"="7"), 1)
+		if(density)
+			Topic("aiEnable=7", list("aiEnable"="7"), 1)
+		else
+			Topic("aiDisable=7", list("aiDisable"="7"), 1)
 
 
 /atom/proc/AICtrlClick()
@@ -112,7 +115,10 @@
 
 /obj/machinery/door/airlock/AICtrlClick() // Bolts doors
 	if(allowed(usr))
-		Topic("aiDisable=4", list("aiDisable"="4"), 1)
+		if(locked)
+			Topic("aiEnable=4", list("aiEnable"="4"), 1)
+		else
+			Topic("aiDisable=4", list("aiDisable"="4"), 1)
 
 /obj/machinery/power/apc/AICtrlClick() // turns off APCs.
 	if(allowed(usr))
