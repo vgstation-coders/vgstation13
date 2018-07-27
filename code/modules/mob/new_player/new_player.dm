@@ -187,7 +187,7 @@
 		dat += job_master.display_prediction()
 
 		src << browse(dat, "window=manifest;size=400x420;can_close=1")
-		return 1 //This lets us keep it on top
+		return 1
 	if(href_list["manifest"])
 		ViewManifest()
 
