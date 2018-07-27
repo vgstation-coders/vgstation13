@@ -590,7 +590,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			var/turf/targetloc = get_turf(target)
 			var/area/targetarea = get_area(target)
 			if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
-				to_chat(usr, "<span class='sinister'>You can sense a sinister force surrounditing that mob, your spooky body itself refuses to jump to it.</span>")
+				to_chat(usr, "<span class='sinister'>You can sense a sinister force surrounding that mob, your spooky body itself refuses to jump to it.</span>")
 				return
 			if(targetloc && targetloc.holy && ((src.invisibility == 0) || islegacycultist(src)))
 				to_chat(usr, "<span class='warning'>The mob that you are trying to follow is standing on holy grounds, you cannot reach him!</span>")
