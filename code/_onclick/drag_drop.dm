@@ -58,6 +58,8 @@
 	if(!T)
 		return
 
+	if(usr.incapacitated() || !usr.Adjacent(T))
+		return
 	usr.Move_Pulled(T, src)
 	usr.face_atom(T)
 
