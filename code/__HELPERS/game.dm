@@ -427,6 +427,37 @@ var/list/DummyCache = list()
 		GetBluePart(hexa),
 		)
 
+//Converts hex to RGB, then describes it.
+proc/hex2eng(var/hexa)
+	var/output = "white"
+	var/list/rgb_list = list("red" = getr(hexa), "green" = getg(hexa), "blue" = getb(hexa))
+	var/list/rgb_sorted = sortTim(rgb_list,/proc/cmp_numeric_dsc,TRUE)
+	//First, describe the hue
+	if(rgb_sorted[1]>168)
+		output = "bright"
+	else if(rgb_sorted[1]>86)
+		output = "murky"
+	else
+		output = "dark"
+
+	//Next, describe the color
+	if(rgb_sorted[1]-rgb_sorted[2]>80)
+		//One distinct color stands out
+		//Since we know [1] has a different value than [2], we can use this helper
+		output += " [get_key_by_element(rgb_sorted,rgb_sorted[1])]ish"
+	else
+		//In this case, the master color is no more than a third dominant.
+		//Is the last color that weak?
+		if(rgb_sorted[1]-rgb_sorted[3]>80)
+			//Just two colors dominate, let's combine the keys
+			pop(rgb_sorted)
+			for(var/key in rgb_sorted)
+				output += " [key]ish" //e.g.: reddish blueish
+
+		else
+			//They're all about the same
+			output += " grayish"
+
 /proc/rgb2hsl(var/red, var/grn, var/blu)
 
 	red /= 255

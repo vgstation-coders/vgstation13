@@ -120,6 +120,9 @@
 	ghostMulti = null
 	observers.Remove(src)
 
+/mob/dead/observer/can_see_reagents()
+	return TRUE
+
 /mob/dead/observer/hasFullAccess()
 	return isAdminGhost(src)
 

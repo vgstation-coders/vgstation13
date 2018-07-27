@@ -53,6 +53,9 @@ mob/proc/remove_internal_organ()
 /mob/proc/get_bleeding_organs()
 	return list()
 
+/mob/proc/can_see_reagents()
+	return FALSE
+
 //Helper proc for do_after. Checks if the user is holding 'held_item' in his active arm. Return 0 to stop the do_after
 /mob/proc/do_after_hand_check(held_item)
 	return (get_active_hand() == held_item)

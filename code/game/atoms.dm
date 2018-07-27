@@ -225,6 +225,10 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/is_open_container()
 	return flags & OPENCONTAINER
 
+// True if the container lets you examine reagents without special eyewear
+/atom/proc/is_smart_container()
+	return FALSE
+
 // For when we want an open container that doesn't show its reagents on examine
 /atom/proc/hide_own_reagents()
 	return FALSE
@@ -433,15 +437,22 @@ its easier to just keep the beam vertical.
 	if(desc)
 		to_chat(user, desc)
 
-	if(reagents && is_open_container() && !ismob(src) && !hide_own_reagents()) //is_open_container() isn't really the right proc for this, but w/e
+	if(reagents && !ismob(src) && !hide_own_reagents() && is_open_container())
 		if(get_dist(user,src) > 3)
 			to_chat(user, "<span class='info'>You can't make out the contents.</span>")
 		else
 			to_chat(user, "It contains:")
 			if(!user.hallucinating())
 				if(reagents.reagent_list.len)
-					for(var/datum/reagent/R in reagents.reagent_list)
-						to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
+					if(is_smart_container() || user.can_see_reagents())
+						for(var/datum/reagent/R in reagents.reagent_list)
+							to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
+					else
+						//Let's try to figure out what's in there!
+						var/hex = mix_color_from_reagents(reagents.reagent_list)
+						to_chat(user,  "<span class='info'>It seems to be about [round(reagents.total_volume/maximum_volume*100,10)]% full with [hex2eng(hex)] reagent.</span>")
+
+
 				else
 					to_chat(user, "<span class='info'>Nothing.</span>")
 

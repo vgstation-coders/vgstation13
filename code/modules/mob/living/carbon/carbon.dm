@@ -690,6 +690,9 @@
 				return 0
 	return 1
 
+/mob/living/carbon/can_see_reagents()
+	return H.head && istype(H.head,/obj/item/clothing/glasses/science)
+
 /mob/living/carbon/make_invisible(var/source_define, var/time, var/include_clothing)
 	if(invisibility || alpha <= 1 || !source_define)
 		return

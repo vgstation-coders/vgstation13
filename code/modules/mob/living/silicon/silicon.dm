@@ -28,6 +28,9 @@
 /mob/living/silicon/GetAccess()
 	return get_all_accesses()
 
+/mob/living/silicon/can_see_reagents()
+	return TRUE //Is this creep?
+
 /mob/living/silicon/feels_pain()
 	return FALSE
 
