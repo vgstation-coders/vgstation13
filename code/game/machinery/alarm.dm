@@ -676,7 +676,7 @@
 /obj/machinery/alarm/interact(mob/user)
 	if(buildstage!=2)
 		return
-	if(!shorted)
+	if(!shorted && !(stat & (NOPOWER|BROKEN)))
 		ui_interact(user)
 
 /obj/machinery/alarm/Topic(href, href_list)
