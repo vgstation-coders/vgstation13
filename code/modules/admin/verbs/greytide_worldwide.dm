@@ -42,32 +42,27 @@
 
 
 /datum/greytide_worldwide
-	var/name = "" //What to show in the list of choices. Does not appear in the list if left blank.
-	var/list/eligible_mobs //List of mobs to CHECK for eligibility. Not the final list of mobs to convert. Assigned in New() because BYOND a shit.
+	var/name = ""
+	var/list/eligible_mobs
 
-//Only used for assigning eligible_mobs at the moment. It doesn't work in the type definition.
 /datum/greytide_worldwide/New()
 	eligible_mobs = player_list
 
-//Called at the beginning of the event. Cancels the event if it returns false, so use this to start anything you want to start immediately and/or check if the event can't happen.
 /datum/greytide_worldwide/proc/event_setup_start()
 	return 1
 
-//Used to retrieve the list of mobs to convert. Called on each mob in eligible_mobs. Any mob this returns true for is added to the final conversion list.
 /datum/greytide_worldwide/proc/check_eligibility(var/mob/M)
 	if(M.stat == DEAD)
 		return 0
 	if(ishuman(M) || issilicon(M))
 		return 1
 
-//Does the actual converting of mobs. Called on each mob in the final conversion list. Returns the converted mob, in case conversion requires spawning a new one.
-//The base version of this proc turns just turns silicons into humans, so any events that require that need only call the parent and convert the mob returned.
 /datum/greytide_worldwide/proc/convert_mob(var/mob/M)
 	if(issilicon(M))
 		var/mob/living/silicon/S = M
 		var/mob/living/carbon/human/new_human = new /mob/living/carbon/human(S.loc, delay_ready_dna=1)
-		new_human.setGender(pick(MALE, FEMALE)) //The new human's gender will be random
-		var/datum/preferences/A = new()	//Randomize appearance for the human
+		new_human.setGender(pick(MALE, FEMALE))
+		var/datum/preferences/A = new()
 		A.randomize_appearance_for(new_human)
 		new_human.generate_name()
 		new_human.languages |= S.languages
@@ -81,11 +76,9 @@
 		M = new_human
 	return M
 
-//Called at the end of the event setup. Provided with the list of converted mobs in case something has to be done with them after everything else is done.
 /datum/greytide_worldwide/proc/event_setup_end(var/list/converted_mobs)
 
 
-//The classic.
 /datum/greytide_worldwide/greytide
 	name = "Greytide Worldwide"
 
@@ -100,21 +93,14 @@
 	var/mob/living/carbon/human/H = ..(M)
 
 	ticker.mode.traitors += H.mind
-	H.mind.special_role = GREYTIDE // NEEDED FOR CHEAT CHECKS!
+	H.mind.special_role = GREYTIDER
 
-	H.mutations.Add(M_HULK) //all greytiders are permahulks
-	H.set_species("Human", force_organs=TRUE) // No Dionae
+	H.mutations.Add(M_HULK)
+	H.set_species("Human", force_organs=TRUE)
 	H.a_intent = I_HURT
 
 	H.update_mutations()
 	H.update_body()
-
-	/* This never worked.
-	var/datum/objective/steal/steal_objective = new
-	steal_objective.owner = H.mind
-	steal_objective.set_target("nuclear authentication disk")
-	H.mind.objectives += steal_objective
-	*/
 
 	var/datum/objective/hijack/hijack_objective = new
 	hijack_objective.owner = H.mind
@@ -128,10 +114,10 @@
 	for (var/obj/item/I in H)
 		if (istype(I, /obj/item/weapon/implant))
 			continue
-		if(isplasmaman(H)) //Plasmamen don't lose their plasma gear since they need it to live.
+		if(isplasmaman(H))
 			if(!(istype(I, /obj/item/clothing/suit/space/plasmaman) || istype(I, /obj/item/clothing/head/helmet/space/plasmaman) || istype(I, /obj/item/weapon/tank/plasma/plasmaman) || istype(I, /obj/item/clothing/mask/breath)))
 				qdel(I)
-		else if(isvox(H)) //Vox don't lose their N2 gear since they need it to live.
+		else if(isvox(H))
 			if(!(istype(I, /obj/item/weapon/tank/nitrogen) || istype(I, /obj/item/clothing/mask/breath/vox)))
 				qdel(I)
 		else
@@ -144,7 +130,7 @@
 	var/obj/item/weapon/card/id/W = new(H)
 	W.name = "[H.real_name]'s ID Card"
 	W.icon_state = "centcom"
-	W.access = access_maint_tunnels()
+	W.access = access_maint_tunnels
 	W.assignment = "Greytider"
 	W.registered_name = H.real_name
 	H.equip_to_slot_or_del(W, slot_wear_id)
