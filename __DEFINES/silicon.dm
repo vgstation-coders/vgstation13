@@ -16,9 +16,6 @@
 #define SOVIET_MOMMI "Soviet"
 #define GRAVEKEEPER_MOMMI "Gravekeeper"
 
-//Global list of all Cyborg/MoMMI modules. If you add a new list and forget to add it to this one i'll fucking break your neck.
-var/global/list/all_robot_modules = nanotrasen_robot_modules + syndicate_robot_modules + special_robot_modules + mommi_modules
-
 var/global/list/nanotrasen_robot_modules = list(
 	STANDARD_MODULE			= /obj/item/weapon/robot_module/standard,
 	SERVICE_MODULE			= /obj/item/weapon/robot_module/butler,
@@ -45,11 +42,14 @@ var/global/list/mommi_modules = list(
 	GRAVEKEEPER_MOMMI		= /obj/item/weapon/robot_module/mommi/cogspider
 	)
 
+//Global list of all Cyborg/MoMMI modules. If you add a new list and forget to add it to this one i'll fucking break your neck.
+var/global/list/all_robot_modules = nanotrasen_robot_modules + syndicate_robot_modules + special_robot_modules + mommi_modules
+
 /proc/getAvailableRobotModules()
-	var/list/modules = nanotrasen_robot_modules
+	var/list/pickable_modules = nanotrasen_robot_modules
 	if(security_level != SEC_LEVEL_RED)
-		modules.Cut(COMBAT_MODULE)
-	return modules
+		pop(pickable_modules) //Removes the last module in the list, the combat one.
+	return pickable_modules
 
 
 //Module quirks
