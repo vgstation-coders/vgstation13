@@ -343,13 +343,17 @@
 			. = t_air.return_temperature()
 	return
 
-/obj/spacepod/MouseDropTo(mob/M as mob, mob/user as mob)
+/obj/spacepod/MouseDropTo(mob/M, mob/user)
 	if(M != user)
+		return
+	if(!Adjacent(M) || !Adjacent(user))
 		return
 	move_inside(M, user)
 
 /obj/spacepod/MouseDropFrom(atom/over)
 	if(!usr || !over)
+		return
+	if(!Adjacent(usr) || !Adjacent(over))
 		return
 	if(occupant != usr && !passengers.Find(usr))
 		return ..() //Handle mousedrop T

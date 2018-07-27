@@ -65,7 +65,7 @@
 
 /obj/structure/closet/body_bag/MouseDropFrom(over_object, src_location, over_location)
 	..()
-	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
+	if(!usr.incapacitated() && over_object == usr && (in_range(src, usr) || usr.contents.Find(src)))
 		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
 			return
 		if(opened)
@@ -119,7 +119,7 @@
 		qdel(src)
 
 /obj/structure/closet/body_bag/cryobag/MouseDropFrom(over_object, src_location, over_location)
-	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
+	if(!usr.incapacitated() && over_object == usr && (in_range(src, usr) || usr.contents.Find(src)))
 		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
 			return
 		to_chat(usr, "<span class='warning'>You can't fold that up anymore.</span>")

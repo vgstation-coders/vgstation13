@@ -196,6 +196,11 @@ var/global/num_vending_terminals = 1
 	if(stat & (BROKEN|NOPOWER))
 		return
 
+	if(user.incapacitated() || user.lying)
+		return
+	if(!Adjacent(user) || !user.Adjacent(src))
+		return
+
 	if(istype(O,/obj/structure/vendomatpack))
 		var/obj/structure/vendomatpack/P = O
 		if(!anchored)
@@ -1833,6 +1838,10 @@ var/global/num_vending_terminals = 1
 	..()
 
 /obj/machinery/wallmed_frame/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
+	if(user.incapacitated() || user.lying)
+		return
+	if(!Adjacent(user) || !user.Adjacent(O))
+		return
 	if(build==3)
 		if(istype(O,/obj/structure/vendomatpack))
 			if(istype(O,/obj/structure/vendomatpack/medical))

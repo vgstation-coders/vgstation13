@@ -1137,9 +1137,11 @@
 	set name = "Enter Exosuit"
 	set src in oview(1)
 
-	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
+	if(usr.incapacitated() || usr.lying)
 		return
-	if (!ishuman(usr))
+	if(!Adjacent(usr) || !usr.Adjacent(src))
+		return
+	if(!ishuman(usr))
 		return
 	src.log_message("[usr] tries to move in.")
 	if (src.occupant)

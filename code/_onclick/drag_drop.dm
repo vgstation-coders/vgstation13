@@ -6,9 +6,6 @@
 	almost anything into a trash can.
 */
 /atom/MouseDrop(atom/over_object,src_location,over_location,src_control,over_control,params)
-	if(!can_MouseDrop(over_object))
-		return FALSE
-
 	var/list/params_list = params2list(params)
 	if(params_list["ctrl"]) //More modifiers can be added - check click.dm
 		spawn(0)
@@ -66,10 +63,3 @@
 
 /atom/proc/CtrlMouseDropTo(atom/over_object,mob/user,src_location,over_location,src_control,over_control,params)
 	return
-
-/atom/proc/can_MouseDrop(atom/otheratom, mob/user = usr)
-	if(!user || !otheratom)
-		return FALSE
-	if(!Adjacent(user) || !otheratom.Adjacent(user))
-		return FALSE
-	return TRUE

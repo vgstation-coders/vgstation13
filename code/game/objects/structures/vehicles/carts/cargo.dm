@@ -4,6 +4,10 @@
 
 /obj/machinery/cart/cargo/MouseDropTo(var/atom/movable/C, mob/user)
 	..()
+	if(user.incapacitated() || user.lying)
+		return
+	if(!Adjacent(user) || !user.Adjacent(src) || !src.Adjacent(C))
+		return
 	if (load || istype(C, /obj/machinery/cart/))
 		return
 
@@ -12,7 +16,7 @@
 /obj/machinery/cart/cargo/MouseDropFrom(obj/over_object as obj, src_location, over_location)
 	..()
 	var/mob/user = usr
-	if (user.incapacitated() || !in_range(user, src))
+	if (user.incapacitated() || !in_range(user, src) || !in_range(src, over_object))
 		return
 	if (!load)
 		return

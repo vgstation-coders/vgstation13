@@ -472,6 +472,8 @@
 	//We are restrained or can't move, this will compromise taking out the trash
 	if(user.restrained() || !user.canmove)
 		return
+	if(!Adjacent(dropping) || !Adjacent(user))
+		return
 
 	if(!ismob(dropping)) //Not a mob, so we can expect it to be an item
 		if(istype(dropping, /obj/item))

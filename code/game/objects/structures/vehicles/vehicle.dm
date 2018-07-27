@@ -240,7 +240,7 @@
 /obj/structure/bed/chair/vehicle/MouseDropTo(var/atom/movable/C, mob/user)
 	..()
 
-	if (user.incapacitated() || !in_range(user, src) || !can_have_carts)
+	if (user.incapacitated() || !in_range(user, src) || !in_range(src, C) || !can_have_carts)
 		return
 
 	if (istype(C, /obj/machinery/cart))
