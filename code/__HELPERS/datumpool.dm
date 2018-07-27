@@ -37,15 +37,21 @@
 		else
 			return new type()
 
-	var/datum/O = masterdatumPool[type][1]
-	masterdatumPool[type] -= O
+	var/datum/O
+	var/list/L = masterdatumPool[type]
+	if(L.len > 1)
+		O = L[1]
+		L -= O
 
 	#ifdef DEBUG_DATUM_POOL
 	to_chat(world, text("DEBUG_DATUM_POOL: getFromPool([]) [] left arglist([]).", type, length(masterdatumPool[type]), list2params(B)))
 	#endif
 
 	if(!O || !istype(O))
-		O = new type(arglist(B))
+		if(length(B))
+			O = new type(arglist(B))
+		else
+			O = new type()
 	else
 		if(istype(O, /atom/movable) && B.len) // B.len check so we don't OoB.
 			var/atom/movable/AM = O
