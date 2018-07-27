@@ -2,14 +2,14 @@
 	name = "cargo cart"
 	var/atom/movable/load = null
 
-/obj/machinery/cart/cargo/MouseDrop_T(var/atom/movable/C, mob/user)
+/obj/machinery/cart/cargo/MouseDropTo(var/atom/movable/C, mob/user)
 	..()
 	if (load || istype(C, /obj/machinery/cart/))
 		return
 
 	load(C)
 
-/obj/machinery/cart/cargo/MouseDrop(obj/over_object as obj, src_location, over_location)
+/obj/machinery/cart/cargo/MouseDropFrom(obj/over_object as obj, src_location, over_location)
 	..()
 	var/mob/user = usr
 	if (user.incapacitated() || !in_range(user, src))

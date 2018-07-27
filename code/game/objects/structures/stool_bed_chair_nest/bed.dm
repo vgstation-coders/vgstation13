@@ -54,7 +54,7 @@
 	if(Adjacent(user))
 		manual_unbuckle(user)
 
-/obj/structure/bed/MouseDrop_T(mob/M as mob, mob/user as mob)
+/obj/structure/bed/MouseDropTo(mob/M as mob, mob/user as mob)
 	if(!istype(M))
 		return ..()
 
@@ -182,7 +182,7 @@
 
 	icon_state = down_state
 
-/obj/structure/bed/roller/MouseDrop(over_object, src_location, over_location)
+/obj/structure/bed/roller/MouseDropFrom(over_object, src_location, over_location)
 	..()
 	if(over_object == usr && Adjacent(usr))
 		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)

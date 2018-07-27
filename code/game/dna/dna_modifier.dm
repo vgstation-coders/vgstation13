@@ -148,7 +148,7 @@
 	src.icon_state = "scanner_1"
 	src.add_fingerprint(usr)
 
-/obj/machinery/dna_scannernew/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+/obj/machinery/dna_scannernew/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 	if(!ismob(O)) //mobs only
 		return
 	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
@@ -196,7 +196,7 @@
 		user.stop_pulling()
 	put_in(L)
 
-/obj/machinery/dna_scannernew/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+/obj/machinery/dna_scannernew/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
 		return
 	if(!occupant)

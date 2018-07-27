@@ -1428,7 +1428,7 @@ var/list/slot_equipment_priority = list( \
 	//		var/client/C = usr.client
 	//		C.JoinResponseTeam()
 
-/mob/MouseDrop(mob/M as mob)
+/mob/MouseDropFrom(mob/M as mob)
 	if(M != usr)
 		return ..()
 	if(usr == src)

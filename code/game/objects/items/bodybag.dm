@@ -63,7 +63,7 @@
 	..()
 	src.overlays.len = 0
 
-/obj/structure/closet/body_bag/MouseDrop(over_object, src_location, over_location)
+/obj/structure/closet/body_bag/MouseDropFrom(over_object, src_location, over_location)
 	..()
 	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
 		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
@@ -118,7 +118,7 @@
 		O.desc = "Pretty useless now.."
 		qdel(src)
 
-/obj/structure/closet/body_bag/cryobag/MouseDrop(over_object, src_location, over_location)
+/obj/structure/closet/body_bag/cryobag/MouseDropFrom(over_object, src_location, over_location)
 	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
 		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
 			return

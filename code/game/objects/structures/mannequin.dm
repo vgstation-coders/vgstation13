@@ -91,7 +91,7 @@
 	return 0
 
 
-/obj/structure/mannequin/MouseDrop(var/atom/over_object)
+/obj/structure/mannequin/MouseDropFrom(var/atom/over_object)
 	..()
 	var/mob/user = usr
 	if(user != over_object)

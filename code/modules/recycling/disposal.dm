@@ -464,7 +464,7 @@
 /obj/machinery/disposal/proc/can_load_crates()
 	return TRUE
 
-/obj/machinery/disposal/MouseDrop_T(atom/movable/dropping, mob/user)
+/obj/machinery/disposal/MouseDropTo(atom/movable/dropping, mob/user)
 
 	if(isAI(user))
 		return

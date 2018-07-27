@@ -9,13 +9,34 @@
 	if(!can_MouseDrop(over_object))
 		return FALSE
 
+	var/list/params_list = params2list(params)
+	if(params_list["ctrl"]) //More modifiers can be added - check click.dm
+		spawn(0)
+			over_object.CtrlMouseDropTo(src,usr,src_location,over_location,src_control,over_control,params)
+		return CtrlMouseDropFrom(over_object,src_location,over_location,src_control,over_control,params)
+
 	spawn(0)
-		over_object.MouseDrop_T(src,usr,src_location,over_location,src_control,over_control,params)
-	return TRUE
+		over_object.MouseDropTo(src,usr,src_location,over_location,src_control,over_control,params)
+	return MouseDropFrom(over_object,src_location,over_location,src_control,over_control,params)
+
+// mousedrop issued from us
+/atom/proc/MouseDropFrom(atom/over_object,src_location,over_location,src_control,over_control,params)
+	return
 
 // recieve a mousedrop
-/atom/proc/MouseDrop_T(over_object,mob/user,src_location,over_location,src_control,over_control,params)
-	var/turf/T = get_turf(src)
+/atom/proc/MouseDropTo(atom/over_object,mob/user,src_location,over_location,src_control,over_control,params)
+	return
+
+/obj/MouseDropTo(atom/over_object, mob/user)
+	if(material_type)
+		material_type.on_use(src, over_object, user)
+	..()
+
+/atom/proc/CtrlMouseDropFrom(atom/over_object,src_location,over_location,src_control,over_control,params)
+	return
+
+/atom/movable/CtrlMouseDropFrom(atom/over_object,src_location,over_location,src_control,over_control,params)
+	var/turf/T = get_turf(over_object)
 	if(!T)
 		return
 	//What's this doing here?
@@ -23,8 +44,8 @@
 	//"clicking" one turf, but the game still thinks you clicked the turf that that object is in.
 	//This effectively finds the real turf you clicked as if you had clicked the floor instead.
 	var/list/params_list = params2list(params)
-	var/deltax = pixel_x + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2
-	var/deltay = pixel_y + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2
+	var/deltax = over_object.pixel_x + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2
+	var/deltay = over_object.pixel_y + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2
 	while(deltax > WORLD_ICON_SIZE/2)
 		T = get_step(T, EAST)
 		deltax -= WORLD_ICON_SIZE
@@ -39,15 +60,12 @@
 		deltay += WORLD_ICON_SIZE
 	if(!T)
 		return
-	params_list["icon-x"] = deltax + WORLD_ICON_SIZE/2
-	params_list["icon-y"] = deltay + WORLD_ICON_SIZE/2
-	params = list2params(params_list)
-	T.MouseDrop_T(over_object,user,src_location,over_location,src_control,over_control,params)
 
-/obj/MouseDrop_T(atom/over_object, mob/user)
-	if(material_type)
-		material_type.on_use(src, over_object, user)
-	..()
+	usr.Move_Pulled(T, src)
+	usr.face_atom(T)
+
+/atom/proc/CtrlMouseDropTo(atom/over_object,mob/user,src_location,over_location,src_control,over_control,params)
+	return
 
 /atom/proc/can_MouseDrop(atom/otheratom, mob/user = usr)
 	if(!user || !otheratom)

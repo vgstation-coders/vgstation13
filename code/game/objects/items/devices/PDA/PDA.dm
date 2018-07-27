@@ -642,7 +642,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 /obj/item/device/pda/get_owner_name_from_ID()
 	return owner
 
-/obj/item/device/pda/MouseDrop(obj/over_object as obj, src_location, over_location)
+/obj/item/device/pda/MouseDropFrom(obj/over_object as obj, src_location, over_location)
 	var/mob/M = usr
 	if((!istype(over_object, /obj/abstract/screen)) && can_use(M))
 		return attack_self(M)

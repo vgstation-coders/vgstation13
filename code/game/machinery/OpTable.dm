@@ -66,7 +66,7 @@
 		return 0
 
 
-/obj/machinery/optable/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+/obj/machinery/optable/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 
 	if(((istype(O, /obj/item/weapon)) || user.get_active_hand() == O)) //Honestly why is this a thing
 		if(user.drop_item(O))

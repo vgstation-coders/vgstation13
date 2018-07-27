@@ -104,7 +104,7 @@
 	change_dir(direction)
 	return 1
 
-/obj/structure/bed/chair/MouseDrop_T(mob/M as mob, mob/user as mob)
+/obj/structure/bed/chair/MouseDropTo(mob/M as mob, mob/user as mob)
 	if(!istype(M))
 		return ..()
 	var/mob/living/carbon/human/target = null
@@ -527,7 +527,7 @@
 	user.drop_item(src, force_drop = 1)
 	forceMove(unfolded)
 
-/obj/structure/bed/chair/folding/MouseDrop(over_object, src_location, over_location)
+/obj/structure/bed/chair/folding/MouseDropFrom(over_object, src_location, over_location)
 	..()
 	if(over_object == usr && Adjacent(usr))
 		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)

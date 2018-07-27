@@ -1127,7 +1127,7 @@
 	src.log_message("Now taking air from [use_internal_tank?"internal airtank":"environment"].")
 	return
 
-/obj/mecha/MouseDrop_T(mob/M as mob, mob/user as mob)
+/obj/mecha/MouseDropTo(mob/M as mob, mob/user as mob)
 	if(M != user)
 		return
 	move_inside(M, user)
@@ -1313,7 +1313,7 @@
 		return
 	lock_dir = !lock_dir
 
-/obj/mecha/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+/obj/mecha/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(usr != src.occupant || usr.incapacitated())
 		return
 	if(!istype(over_location) || over_location.density)

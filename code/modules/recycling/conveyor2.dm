@@ -272,7 +272,7 @@
 		return .
 	user.drop_item(W, src.loc)
 
-/obj/machinery/conveyor/MouseDrop(over_object,src_location,over_location,src_control,over_control,params)
+/obj/machinery/conveyor/MouseDropFrom(over_object,src_location,over_location,src_control,over_control,params)
 	var/mob/user = usr
 	if(user.incapacitated() || user.lying)
 		return

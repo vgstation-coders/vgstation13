@@ -39,7 +39,7 @@
 	hold.emp_act(severity)
 	..()
 
-/obj/item/clothing/suit/storage/MouseDrop(atom/over_object)
+/obj/item/clothing/suit/storage/MouseDropFrom(atom/over_object)
 	if(ishuman(usr) || ismonkey(usr))
 		var/mob/M = usr
 		if(istype(over_object, /obj/abstract/screen/inventory)) //was clickdragged to an inventory slot, we want to be able to take our coat off
@@ -54,7 +54,7 @@
 					src.add_fingerprint(usr)
 				return
 		else if(over_object == usr) //show container to user
-			return hold.MouseDrop(over_object)
+			return hold.MouseDropFrom(over_object)
 		else if(istype(over_object, /obj/structure/table)) //empty on table
-			return hold.MouseDrop(over_object)
+			return hold.MouseDropFrom(over_object)
 	return ..() //don't let us move the coat's abstract internal storage!

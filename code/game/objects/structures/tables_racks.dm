@@ -355,7 +355,7 @@
 			return !density
 	return 1
 
-/obj/structure/table/MouseDrop_T(atom/movable/O,mob/user,src_location,over_location,src_control,over_control,params)
+/obj/structure/table/MouseDropTo(atom/movable/O,mob/user,src_location,over_location,src_control,over_control,params)
 	if(O == user)
 		if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
 			return

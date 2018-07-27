@@ -34,7 +34,7 @@
 /obj/item/weapon/storage/proc/can_use()
 	return TRUE
 
-/obj/item/weapon/storage/MouseDrop(obj/over_object as obj)
+/obj/item/weapon/storage/MouseDropFrom(obj/over_object as obj)
 	if(over_object == usr && (in_range(src, usr) || is_holder_of(usr, src)))
 		orient2hud(usr)
 		if(usr.s_active)

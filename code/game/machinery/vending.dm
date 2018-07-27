@@ -192,7 +192,7 @@ var/global/num_vending_terminals = 1
 		return 1
 	return ..()
 
-/obj/machinery/vending/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+/obj/machinery/vending/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 	if(stat & (BROKEN|NOPOWER))
 		return
 
@@ -1832,7 +1832,7 @@ var/global/num_vending_terminals = 1
 				return 1
 	..()
 
-/obj/machinery/wallmed_frame/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+/obj/machinery/wallmed_frame/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 	if(build==3)
 		if(istype(O,/obj/structure/vendomatpack))
 			if(istype(O,/obj/structure/vendomatpack/medical))

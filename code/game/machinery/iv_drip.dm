@@ -43,7 +43,7 @@
 			filling.icon += mix_color_from_reagents(reagents.reagent_list)
 			overlays += filling
 
-/obj/machinery/iv_drip/MouseDrop(over_object, src_location, over_location)
+/obj/machinery/iv_drip/MouseDropFrom(over_object, src_location, over_location)
 	..()
 	if(isobserver(usr))
 		return
