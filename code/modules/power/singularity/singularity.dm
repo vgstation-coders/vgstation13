@@ -103,7 +103,7 @@
 				if(prob(50)) //50/50 of becoming unrecoverable
 					user.visible_message("<span class = 'danger'>\The [user] screams as they are consumed from within!</span>")
 					if(prob(50))
-						user.emote("scream",auto=1)
+						user.emote("scream")
 						var/matrix/M = matrix()
 						M.Scale(0)
 						animate(user, alpha = 0, transform = M, time = 3 SECONDS, easing = SINE_EASING)
@@ -533,16 +533,11 @@
 /obj/machinery/singularity/proc/toxmob()
 	var/toxrange = 10
 	var/toxdamage = 4
-	var/radiation = 15
-	var/radiationmin = 3
 	if(src.energy > 200)
 		toxdamage = round(((src.energy-150)/50)*4,1)
-		radiation = round(((src.energy-150)/50)*5,1)
-		radiationmin = round((radiation/5),1)
 	for(var/mob/living/M in view(toxrange, src.loc))
 		if(M.flags & INVULNERABLE)
 			continue
-		M.apply_radiation(rand(radiationmin,radiation), RAD_EXTERNAL)
 		toxdamage = (toxdamage - (toxdamage*M.getarmor(null, "rad")))
 		M.apply_effect(toxdamage, TOX)
 	return

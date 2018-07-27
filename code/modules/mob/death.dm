@@ -41,6 +41,8 @@
 	living_mob_list -= src
 	dead_mob_list += src
 	stat_collection.add_death_stat(src)
+	if(client)
+		client.color = initial(client.color)
 	for(var/obj/item/I in src)
 		I.OnMobDeath(src)
 	if(spell_masters && spell_masters.len)

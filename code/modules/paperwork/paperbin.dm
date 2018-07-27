@@ -40,7 +40,7 @@
 					if( !usr.get_active_hand() )		//if active hand is empty
 						usr.put_in_hands(src)
 						usr.visible_message("<span class='notice'>[usr] picks up the [src].</span>", "<span class='notice'>You pick up \the [src].</span>")
-	return
+	return ..()
 
 
 /obj/item/weapon/paper_bin/attack_paw(mob/user as mob)

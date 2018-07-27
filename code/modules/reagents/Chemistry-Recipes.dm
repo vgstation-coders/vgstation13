@@ -79,7 +79,11 @@
 		if(L.stat != DEAD)
 			e.amount *= 0.5
 	e.start()
-	holder.clear_reagents()
+	if(!holder.my_atom.is_open_container() || ismob(holder.my_atom))
+		holder.del_reagent(POTASSIUM)
+		holder.del_reagent(WATER)
+	else
+		holder.clear_reagents()
 
 /datum/chemical_reaction/creatine
 	name = "Creatine"
@@ -261,8 +265,8 @@
 
 /datum/chemical_reaction/sludge
 	name = "Sludge"
-	id = TOXICWASTE
-	result = TOXICWASTE
+	id = CHEMICAL_WASTE
+	result = CHEMICAL_WASTE
 	required_reagents = list(LUBE = 1)
 	result_amount = 0.2
 	required_temp = 3500
@@ -273,7 +277,7 @@
 	name = "Degrease"
 	id = "degrease"
 	result = null
-	required_reagents = list(TOXICWASTE = 1, ETHANOL = 1) //Turns out it really WAS an engine degreaser
+	required_reagents = list(CHEMICAL_WASTE = 1, ETHANOL = 1) //Turns out it really WAS an engine degreaser
 	result_amount = 0
 
 /datum/chemical_reaction/pacid
@@ -472,7 +476,12 @@
 		if(L.stat!=DEAD)
 			e.amount *= 0.5
 	e.start()
-	holder.clear_reagents()
+	if(!holder.my_atom.is_open_container() || ismob(holder.my_atom))
+		holder.del_reagent(GLYCEROL)
+		holder.del_reagent(PACID)
+		holder.del_reagent(SACID)
+	else
+		holder.clear_reagents()
 
 /datum/chemical_reaction/sodiumchloride
 	name = "Sodium Chloride"

@@ -455,7 +455,7 @@
 					return
 				if (21 to 40)
 					to_chat(H, "<span class='sinister'>There's [pick("somebody","a monster","a little girl","a zombie","a ghost","a catbeast","a demon")] standing behind you!</span>")
-					H.emote("scream", auto=1)
+					H.emote("scream")
 					H.dir = turn(H.dir, 180)
 					return
 				if (41 to 50)

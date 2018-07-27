@@ -20,7 +20,7 @@
 	var/datum/wires/transmitter/wires = null
 	var/datum/power_connection/consumer/cable/power_connection = null
 
-	var/const/RADS_PER_TICK=150
+	var/const/RADS_PER_TICK=75
 	var/const/MAX_TEMP=70 // Celsius
 	machine_flags = MULTITOOL_MENU | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK
 
@@ -221,8 +221,8 @@
 
 		// Radiation
 		for(var/mob/living/carbon/M in view(src,3))
-			var/rads = RADS_PER_TICK * sqrt( 1 / (get_dist(M, src) + 1) )
-			M.apply_radiation((rads*count_rad_wires()),RAD_EXTERNAL)
+			var/rads = RADS_PER_TICK * sqrt( 1 / (get_dist(M, src) + 1) ) //Distance/rads: 1 = 27, 2 = 21, 3 = 19
+			M.apply_radiation(round(rads*count_rad_wires()/2),RAD_EXTERNAL)
 
 		// Heat output
 		var/turf/simulated/L = loc

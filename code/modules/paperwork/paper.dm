@@ -329,7 +329,7 @@
 				clown = TRUE
 			if(isrobot(user))
 				var/mob/living/silicon/robot/R = user
-				if(R.module && R.module.quirk_flags & MODULE_IS_A_CLOWN)
+				if(HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN))
 					clown = TRUE
 			if(!clown)
 				to_chat(user, "<span class='notice'>You are totally unable to use the stamp. HONK!</span>")

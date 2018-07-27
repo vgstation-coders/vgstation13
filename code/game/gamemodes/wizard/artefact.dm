@@ -300,9 +300,18 @@
 	bound_soul = to_bind
 
 /obj/item/phylactery/proc/z_block(list/arguments)
-	if(arguments["to_z"] != src.z)
-		var/mob/user = arguments["user"]
+	var/mob/user = arguments["user"]
+	if(user != bound_soul)
+		unbind()
+		return
+	if(is_holder_of(user, src))
+		return //We're in their pocket, you ash-happy bottle of soul!
+	var/turf/T = get_turf(src)
+	if(arguments["to_z"] != T.z)
 		to_chat(user, "<span class = 'warning'><b>As you stray further and further away from \the [src], you feel your form unravel!</b></span>")
 		spawn(rand(5 SECONDS, 15 SECONDS)) //Mr. Wizman, I don't feel so good
-			if(arguments["to_z"] != src.z)
+			if(user.gcDestroyed)
+				return
+			T = get_turf(src)
+			if(user.z != T.z || is_holder_of(user, src))
 				user.dust()
