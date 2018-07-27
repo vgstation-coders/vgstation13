@@ -73,10 +73,9 @@ mob/proc/remove_internal_organ()
 		return .
 	else if(has_reagent_in_blood(DETCOFFEE))
 		return NOIRMATRIX
-	else if(get_item_by_slot(slot_glasses) && istype(get_item_by_slot(slot_glasses), /obj/item/clothing/glasses/scanner))
-		var/obj/item/clothing/glasses/scanner/S = get_item_by_slot(slot_glasses)
-		if(S.on && S.color_matrix)
-			return S.color_matrix
+	var/obj/item/clothing/glasses/scanner/S = is_wearing_item(slot_glasses)
+	if(S && S.on && S.color_matrix)
+		return S.color_matrix
 	var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
 	if(eyes && eyes.colourmatrix.len && !(eyes.robotic))
 		return eyes.colourmatrix
@@ -93,7 +92,7 @@ mob/proc/remove_internal_organ()
 		difference = difflist(client.color,colour_to_apply)
 	if(!difference) // otherwise !difference.len throws a runtime since null.len isn't a thing
 		return
-	if(!difference.len || !istype(difference))
+	else if(!difference.len)
 		client.updating_colour = 1
 		var/cached_ckey = client.ckey
 		if(forceupdate)
