@@ -286,7 +286,7 @@
 			l.hallucination = max(0, min(200, l.hallucination + power * config_hallucination_power * sqrt( 1 / max(1,get_dist(l, src)) ) ) )
 
 	for(var/mob/living/l in range(src, round((power / 100) ** 0.25)))
-		var/rads = (power / 10) * sqrt(1/(max(get_dist(l, src), 1)))
+		var/rads = (power / 50) * sqrt(1/(max(get_dist(l, src), 1)))
 		l.apply_radiation(rads, RAD_EXTERNAL)
 
 	power -= (power/500)**3
@@ -380,7 +380,7 @@
 	user.drop_from_inventory(W)
 	Consume(W)
 
-	user.apply_radiation(150, RAD_EXTERNAL)
+	user.apply_radiation(50, RAD_EXTERNAL)
 
 
 /obj/machinery/power/supermatter/Bumped(atom/AM as mob|obj)
@@ -424,7 +424,7 @@
 				"<span class=\"warning\">The unearthly ringing subsides and you notice you have new radiation burns.</span>", 2)
 		else
 			l.show_message("<span class=\"warning\">You hear an uneartly ringing and notice your skin is covered in fresh radiation burns.</span>", 2)
-		var/rads = 500 * sqrt( 1 / (get_dist(l, src) + 1) )
+		var/rads = 75 * sqrt( 1 / (get_dist(l, src) + 1) )
 		l.apply_radiation(rads, RAD_EXTERNAL) // Permit blocking
 
 

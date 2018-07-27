@@ -86,6 +86,7 @@
 						/obj/machinery/portable_atmospherics/scrubber/mech)
 
 	var/lock_controls = 0
+	var/list/intrinsic_spells = null
 
 /obj/mecha/New()
 	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
@@ -1171,6 +1172,7 @@
 	if(enter_after(40,usr))
 		if(!src.occupant)
 			moved_inside(usr)
+			refresh_spells()
 		else if(src.occupant!=usr)
 			to_chat(usr, "[src.occupant] was faster. Try better next time, loser.")
 	else
@@ -1387,6 +1389,7 @@
 		*/
 		empty_bad_contents()
 		src.occupant << browse(null, "window=exosuit")
+		remove_mech_spells()
 		if(istype(mob_container, /obj/item/device/mmi) || istype(mob_container, /obj/item/device/mmi/posibrain))
 			var/obj/item/device/mmi/mmi = mob_container
 			if(mmi.brainmob)
@@ -1963,6 +1966,76 @@
 			src.occupant = cur_occupant
 */
 	return
+
+//////////////////////
+/////// Spells ///////
+//////////////////////
+/spell/mech
+	user_type = USER_TYPE_MECH
+	range = 0
+	invocation = "none"
+	invocation_type = SpI_NONE
+	panel = "Mech Modules"
+	spell_flags = null
+	charge_type = Sp_RECHARGE
+	charge_max = 0
+	charge_counter = 0
+	hud_state = "mecha_equip"
+	override_base = "mech"
+	var/obj/mecha/linked_mech
+	var/obj/item/mecha_parts/mecha_equipment/linked_equipment
+
+/spell/mech/New(var/obj/mecha/M, var/obj/item/mecha_parts/mecha_equipment/ME)
+	src.linked_mech = M
+	if(ME)
+		src.linked_equipment = ME
+		name = ME.name
+		hud_state = ME.icon_state
+		override_icon = ME.icon
+	charge_counter = charge_max
+	desc = "[name]"
+
+/spell/mech/Destroy()
+	..()
+	linked_mech = null
+	linked_equipment = null
+
+/spell/mech/cast(list/targets, mob/user)
+	if(linked_mech.selected != linked_equipment)
+		linked_equipment.activate()
+	else
+		linked_equipment.alt_action()
+
+/spell/mech/cast_check(skipcharge = 0, mob/user = usr)
+	if((user!=linked_mech.occupant) || (linked_mech.get_charge() <= 0))
+		return FALSE
+	else
+		return ..()
+
+/spell/mech/choose_targets(mob/user = usr)
+	return list(user)
+
+/obj/mecha/proc/refresh_spells()
+	if(!occupant)
+		return
+	for(var/spell/mech/MS in intrinsic_spells)
+		occupant.add_spell(MS, "mech_spell_ready", /obj/abstract/screen/movable/spell_master/mech)
+	for(var/obj/item/mecha_parts/mecha_equipment/W in equipment)
+		var/spell/mech/MS
+		if(W.linked_spell)
+			MS = W.linked_spell
+			occupant.add_spell(MS, "mech_spell_ready", /obj/abstract/screen/movable/spell_master/mech)
+
+/obj/mecha/proc/remove_mech_spells()
+	for(var/spell/mech/MS in occupant.spell_list)
+		occupant.remove_spell(MS)
+
+/obj/mecha/proc/equip_module(var/obj/item/mecha_parts/mecha_equipment/ME)
+	if(ME)
+		src.selected = ME
+		src.occupant_message("You switch to [ME]")
+		src.visible_message("[src] raises [ME]")
+		send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
 
 ///////////////////////
 ///// Power stuff /////

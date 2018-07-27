@@ -15,5 +15,5 @@
 
 
 /mob/living/silicon/robot/mommi/cogspider/New()
-	pick_module("Gravekeeper")
+	pick_module(GRAVEKEEPER_MOMMI)
 	..()

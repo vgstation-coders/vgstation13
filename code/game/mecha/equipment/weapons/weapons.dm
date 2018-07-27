@@ -6,9 +6,9 @@
 	var/fire_sound
 
 
-/obj/item/mecha_parts/mecha_equipment/weapon/can_attach(var/obj/mecha/combat/M as obj)
+/obj/item/mecha_parts/mecha_equipment/weapon/can_attach(var/obj/mecha/combat/M as obj, var/override = FALSE)
 	if(..())
-		if(istype(M))
+		if(istype(M) || override)
 			return 1
 	return 0
 
@@ -168,6 +168,10 @@
 	..()
 	projectiles = max_projectiles
 
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/alt_action()
+	rearm()
+
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/become_defective()
 	if(!defective)
 		..()
@@ -195,6 +199,7 @@
 			chassis.use_power(projectile_energy_cost)
 	send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
 	log_message("Rearmed [src.name].")
+	to_chat(chassis.occupant, "<span class='notice'>Rearmed [src.name].</span>")
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/Topic(href, href_list)
@@ -411,7 +416,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam/can_attach(var/obj/mecha/working/clarke/M)
 	if(istype(M))
-		return 1
+		return ..(M,TRUE)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable
 	name = "\improper Inflatable Barrier Launcher"
@@ -466,7 +471,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable/can_attach(var/obj/mecha/working/clarke/M)
 	if(istype(M))
-		return 1
+		return ..(M,TRUE)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar
 	name = "\improper Banana Mortar"

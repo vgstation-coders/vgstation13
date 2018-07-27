@@ -179,7 +179,7 @@
 				brute -= brute / 2
 
 	if(is_broken() && prob(40) && brute)
-		owner.emote("scream", , , 1) //Getting hit on broken and unsplinted limbs hurts
+		owner.emote("scream") //Getting hit on broken and unsplinted limbs hurts
 
 	if(used_weapon)
 		add_autopsy_data("[used_weapon]", brute + burn)
@@ -925,7 +925,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	"<span class='danger'>You hear a sickening crack.</span>")
 
 	if(owner.feels_pain())
-		owner.emote("scream", , , 1)
+		owner.emote("scream")
 
 	playsound(owner.loc, "fracture", 100, 1, -2)
 	status |= ORGAN_BROKEN

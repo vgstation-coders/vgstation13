@@ -218,7 +218,7 @@
 	stage = 2
 
 /datum/disease2/effect/scream/activate(var/mob/living/carbon/mob)
-	mob.emote("scream",,, 1)
+	mob.emote("scream")
 
 
 /datum/disease2/effect/drowsness

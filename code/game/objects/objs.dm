@@ -669,3 +669,6 @@ a {
 		additional_description += "It is accented in hues of [pick("red","orange","yellow","green","blue","indigo","violet","white","black","cinnamon")]. "
 	if(additional_description)
 		desc = "[initial(desc)] \n [additional_description]"
+
+/obj/proc/check_uplink_validity()
+	return TRUE
