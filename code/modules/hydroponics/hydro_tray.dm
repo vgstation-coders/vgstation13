@@ -142,9 +142,6 @@
 
 	seed.autoharvest(get_turf(src))
 	after_harvest()
-	return
-
-
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/after_harvest()
 
