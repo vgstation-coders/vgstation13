@@ -1,5 +1,6 @@
 //admin verb groups - They can overlap if you so wish. Only one of each verb will exist in the verbs list regardless
 var/list/admin_verbs_default = list(
+	/client/proc/Jump,
 	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
 	/client/proc/deadmin_self,			/*destroys our own admin datum so we can play as a regular player*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game. +VAREDIT needed to modify*/
@@ -7,6 +8,7 @@ var/list/admin_verbs_default = list(
 	/client/proc/advwho,				/*in addition to listing connected ckeys, shows character name and living/dead/antag status for each*/
 	/datum/admins/proc/checkCID,
 	/datum/admins/proc/checkCKEY,
+	/client/proc/jumptomapelement,			/*allows us to jump to a specific vault*/
 	/datum/admins/proc/other_admins_verbs_admin,
 //	/client/proc/deadchat				/*toggles deadchat on/off*/
 	)
