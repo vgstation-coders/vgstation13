@@ -168,7 +168,7 @@
 			return
 
 
-		if(iscultist(M))
+		if(islegacycultist(M))
 			return
 		if(!ishuman(M) && !isrobot(M))
 			return

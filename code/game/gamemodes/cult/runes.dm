@@ -162,10 +162,10 @@
 	"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that now instead of the rune there's a book.</span>", \
 	"<span class='warning'>You hear a pop and smell ozone.</span>")
 	if(istype(src,/obj/effect/rune))
-		new /obj/item/weapon/tome(src.loc)
+		new /obj/item/weapon/tome_legacy(src.loc)
 		src.invocation("tome_spawn")
 	else
-		new /obj/item/weapon/tome(usr.loc)
+		new /obj/item/weapon/tome_legacy(usr.loc)
 	qdel(src)
 	stat_collection.cult_tomes_created++
 	return

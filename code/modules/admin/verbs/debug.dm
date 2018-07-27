@@ -343,7 +343,7 @@ Pressure: [env.return_pressure()]"}
 		else
 			if(alert("Spawn that person a tome?",,"Yes","No")=="Yes")
 				to_chat(M, "<span class='warning'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie. A tome, a message from your new master, appears on the ground.</span>")
-				new /obj/item/weapon/tome(M.loc)
+				new /obj/item/weapon/tome_legacy(M.loc)
 			else
 				to_chat(M, "<span class='warning'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 			var/glimpse=pick("1","2","3","4","5","6","7","8")

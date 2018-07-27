@@ -37,7 +37,7 @@
 	//IF WE ARE CULT MONSTERS (those who spawn after Nar-Sie has risen) THEN WE DON'T ATTACK CULTISTS
 	if(ismob(the_target))
 		var/mob/M = the_target
-		if(iscultist(M))
+		if(isanycultist(M))
 			return 0
 	return ..(the_target)
 

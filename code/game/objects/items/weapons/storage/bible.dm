@@ -63,7 +63,7 @@
 			user.IgniteMob()
 			user.emote("scream",,, 1)
 			V.smitecounter += 50 //Once we are extinguished, we will be quite vulnerable regardless
-		else if(iscultist(user)) //Cultist trying to use it
+		else if(isanycultist(user)) //Cultist trying to use it
 			to_chat(user, "<span class='danger'>[my_rel.deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
 			user.fire_stacks += 5
 			user.IgniteMob()
@@ -160,7 +160,7 @@
 	if(ishuman(user)) //We are checking for antagonists, only humans can be antagonists
 		var/mob/living/carbon/human/H = user
 		var/datum/role/vampire/V = isvampire(H)
-		var/datum/role/cultist/C = iscultist(H)
+		var/datum/role/cultist/C = isanycultist(H)
 		if(V && (!(VAMP_UNDYING in V.powers))) //We are a Vampire, we aren't very smart
 			to_chat(H, "<span class ='danger'>[my_rel.deity_name]'s power channels through \the [src]. You feel extremely uneasy as you grab it!</span>")
 			V.smitecounter += 10

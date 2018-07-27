@@ -8,13 +8,17 @@
 	greets = list("default","custom","admintoggle")
 	required_pref = ROLE_LEGACY_CULTIST
 
-/datum/role/legacy_cultist/OnPostSetup()
+/datum/role/legacy_cultist/OnPostSetup(var/equip = FALSE)
 	. = ..()
 	antag.current.add_language(LANGUAGE_CULT)
 	var/mob/living/carbon/human/cult_mob = antag.current
+	update_faction_icons()
 
 	if(!istype(cult_mob))
 		return
+
+	if (!equip)
+		return 1
 
 	var/obj/item/weapon/paper/talisman/supply/T = new(cult_mob)
 	var/list/slots = list (
@@ -49,11 +53,17 @@
 				Avoid the Chaplain, the chapel, Security and especially Holy Water.")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+	AnnounceObjectives()
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
 /datum/role/legacy_cultist/Drop()
 	antag.current.remove_language(LANGUAGE_CULT)
-	..()
+	to_chat(antag.current, "<span class='danger'><FONT size = 3>An unfamiliar white light flashes through your mind, cleansing the taint of the dark-one and removing all of the memories of your time as his servant, except the one who converted you, with it.</FONT></span>")
+	to_chat(antag.current, "<span class='danger'>You find yourself unable to mouth the words of the forgotten...</span>")
+	antag.current.visible_message("<span class='big danger'>It looks like [antag.current] just reverted to their old faith!</span>")
+	log_admin("[key_name(antag.current)] has been deconverted from the cult.")
+	stat_collection.cult_deconverted++
+	. = ..()
 
 /datum/role/legacy_cultist/MemorizeObjectives()
 	var/datum/faction/cult/narsie/our_cult = faction

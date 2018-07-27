@@ -54,13 +54,13 @@ var/runedec = 0 // Rune cap ?
 
 /obj/effect/rune_legacy/examine(mob/user)
 	..()
-	if(iscultist(user) || isobserver(user))
+	if(islegacycultist(user) || isobserver(user))
 		var/rune_name = my_cult.get_uristrune_name(word1,word2,word3)
 		to_chat(user, "A spell circle drawn in blood. It reads: <i>[word1] [word2] [word3]</i>.[rune_name ? " From [pick("your intuition, you are pretty sure that","deep memories, you determine that","the rune's energies, you deduct that","Nar-Sie's murmurs, you know that")] this is \a <b>[rune_name]</b> rune." : ""]")
 
 
 /obj/effect/rune_legacy/attackby(obj/I, mob/user)
-	if(istype(I, /obj/item/weapon/tome) && iscultist(user))
+	if(istype(I, /obj/item/weapon/tome_legacy) && islegacycultist(user))
 		to_chat(user, "You retrace your steps, carefully undoing the lines of the rune.")
 		qdel(src)
 		return
@@ -81,7 +81,7 @@ var/runedec = 0 // Rune cap ?
 
 /obj/effect/rune_legacy/attack_hand(mob/living/user as mob)
 	user.delayNextAttack(5)
-	if(!iscultist(user))
+	if(!islegacycultist(user))
 		to_chat(user, "You can't mouth the arcane scratchings without fumbling over them.")
 		return
 	if(istype(user.wear_mask, /obj/item/clothing/mask/muzzle))
@@ -154,7 +154,7 @@ var/runedec = 0 // Rune cap ?
 /obj/effect/rune_legacy/proc/check_icon(var/mob/M = null)
 	get_uristrune_cult(word1, word2, word3, M)
 
-/obj/item/weapon/tome
+/obj/item/weapon/tome_legacy
 	name = "arcane tome"
 	desc = "An old, dusty tome with frayed edges and a sinister looking cover."
 	icon = 'icons/obj/cult.dmi'
@@ -262,7 +262,7 @@ var/runedec = 0 // Rune cap ?
 				</html>
 				"}
 
-/obj/item/weapon/tome/New(var/datum/faction/cult/narsie/our_cult) // Multiple cults with multiple words ? Why not
+/obj/item/weapon/tome_legacy/New(var/datum/faction/cult/narsie/our_cult) // Multiple cults with multiple words ? Why not
 	if (!istype(our_cult))
 		our_cult = find_active_faction(LEGACY_CULT) // No cult given, let's find ours
 	if (!istype(our_cult))
@@ -274,7 +274,7 @@ var/runedec = 0 // Rune cap ?
 	cultwords = my_cult.cult_words
 	return ..()
 
-/obj/item/weapon/tome/Topic(href,href_list[])
+/obj/item/weapon/tome_legacy/Topic(href,href_list[])
 	if (src.loc == usr)
 		var/number = text2num(href_list["number"])
 		if (usr.stat || usr.restrained())
@@ -301,13 +301,13 @@ var/runedec = 0 // Rune cap ?
 					[words[10]] is <a href='byond://?src=\ref[src];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=\ref[src];number=10;action=clear'>Clear</A><BR>
 					"}
 		usr << browse("[notedat]", "window=notes")
-//		call(/obj/item/weapon/tome/proc/edit_notes)()
+//		call(/obj/item/weapon/tome_legacy/proc/edit_notes)()
 	else
 		usr << browse(null, "window=notes")
 		return
 
 /*
-/obj/item/weapon/tome/proc/edit_notes()     FUCK IT. Cant get it to work properly. - K0000
+/obj/item/weapon/tome_legacy/proc/edit_notes()     FUCK IT. Cant get it to work properly. - K0000
 	to_chat(world, "its been called! [usr]")
 	notedat = {"
 	<br><b>Word translation notes</b> <br>
@@ -326,7 +326,7 @@ var/runedec = 0 // Rune cap ?
 	usr << browse(null, "window=tank")
 */
 
-/obj/item/weapon/tome/attack(mob/living/M as mob, mob/living/user as mob)
+/obj/item/weapon/tome_legacy/attack(mob/living/M as mob, mob/living/user as mob)
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had the [name] used on him by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used [name] on [M.name] ([M.ckey])</font>")
 	msg_admin_attack("[user.name] ([user.ckey]) used [name] on [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
@@ -344,9 +344,9 @@ var/runedec = 0 // Rune cap ?
 		return
 	if(!istype(M))
 		return
-	if(!iscultist(user))
+	if(!islegacycultist(user))
 		return ..()
-	if(iscultist(M))
+	if(islegacycultist(M))
 		return
 	M.take_organ_damage(0,rand(5,20)) //really lucky - 5 hits for a crit
 	for(var/mob/O in viewers(M, null))
@@ -354,13 +354,13 @@ var/runedec = 0 // Rune cap ?
 	to_chat(M, "<span class='warning'>You feel searing heat inside!</span>")
 
 
-/obj/item/weapon/tome/attack_self(mob/living/user as mob)
+/obj/item/weapon/tome_legacy/attack_self(mob/living/user as mob)
 	if(!usr.canmove || usr.stat || usr.restrained())
 		return
 
 	if(!cultwords["travel"])
 		my_cult.randomiseWords()
-	if(iscultist(user))
+	if(islegacycultist(user))
 		if (!istype(user.loc,/turf))
 			to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
 			return
@@ -397,7 +397,7 @@ var/runedec = 0 // Rune cap ?
 				[words[9]] is <a href='byond://?src=\ref[src];number=9;action=change'>[words[words[9]]]</A> <A href='byond://?src=\ref[src];number=9;action=clear'>Clear</A><BR>
 				[words[10]] is <a href='byond://?src=\ref[src];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=\ref[src];number=10;action=clear'>Clear</A><BR>
 				"}
-//						call(/obj/item/weapon/tome/proc/edit_notes)()
+//						call(/obj/item/weapon/tome_legacy/proc/edit_notes)()
 					user << browse("[notedat]", "window=notes")
 					return
 		if(usr.get_active_hand() != src)
@@ -486,8 +486,8 @@ var/runedec = 0 // Rune cap ?
 		to_chat(user, "The book seems full of illegible scribbles. Is this a joke?")
 		return
 
-/obj/item/weapon/tome/attackby(obj/item/weapon/tome/T as obj, mob/living/user as mob)
-	if(istype(T, /obj/item/weapon/tome) && iscultist(user)) // sanity check to prevent a runtime error
+/obj/item/weapon/tome_legacy/attackby(obj/item/weapon/tome_legacy/T as obj, mob/living/user as mob)
+	if(istype(T, /obj/item/weapon/tome_legacy) && islegacycultist(user)) // sanity check to prevent a runtime error
 		switch(alert("Copy the runes from your tome?",,"Copy", "Cancel"))
 			if("Cancel")
 				return
@@ -497,19 +497,19 @@ var/runedec = 0 // Rune cap ?
 		flick("tome-copied",src)
 
 
-/obj/item/weapon/tome/examine(mob/user)
+/obj/item/weapon/tome_legacy/examine(mob/user)
 	..()
-	if(iscultist(user))
+	if(islegacycultist(user))
 		to_chat(user, "The scriptures of Nar-Sie, The One Who Sees, The Geometer of Blood. Contains the details of every ritual his followers could think of. Most of these are useless, though.")
 
-/obj/item/weapon/tome/cultify()
+/obj/item/weapon/tome_legacy/cultify()
 	return
 
-/obj/item/weapon/tome/imbued //admin tome, spawns working runes without waiting
+/obj/item/weapon/tome_legacy/imbued //admin tome, spawns working runes without waiting
 	w_class = W_CLASS_SMALL
 	var/cultistsonly = 1
 	attack_self(mob/user as mob)
-		if(src.cultistsonly && !iscultist(usr))
+		if(src.cultistsonly && !islegacycultist(usr))
 			return
 		if(!cultwords["travel"])
 			my_cult.randomiseWords()

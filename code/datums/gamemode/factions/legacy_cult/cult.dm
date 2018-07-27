@@ -1,10 +1,5 @@
 /* Legacy cult (Cult 2.0), by Deity and Urist */
 
-#define CULT_PRELUDE 		0 // First objective
-#define CULT_INTERMEDIATE	1 // Second (objective)
-#define CULT_SUMMON 		2 // Summon objective
-#define CULT_FINALE			3 // Nar-Sie cometh
-
 /datum/faction/cult
 	ID = list(CULT)
 	var/eldergod
@@ -50,6 +45,11 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	var/icon/logo = icon('icons/logos.dmi', "cult-logo")
 	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Cult of Nar-Sie</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
 	return header
+
+/datum/faction/cult/narsie/OnPostSetup()
+	forgeObjectives()
+	for(var/datum/role/R in members)
+		R.OnPostSetup(equip = TRUE)
 
 // Related to word randomisation
 /datum/faction/cult/narsie/proc/randomiseWords()
@@ -285,7 +285,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 		if (!usr.client.holder)
 			return FALSE
 		for (var/word in cult_words)
-			to_chat(usr, "[word] is [cult_words[word]].")
+			to_chat(usr, "[cult_words[word]] is [word].")
 
 
 // -- Clockwork Cult
@@ -294,8 +294,3 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	name = "Cult of Ratvar"
 	desc = "When engineers go just too far."
 	deity_name = "The Exiled One"
-
-#undef CULT_PRELUDE
-#undef CULT_INTERMEDIATE
-#undef CULT_SUMMON
-#undef CULT_FINALE

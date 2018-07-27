@@ -374,7 +374,7 @@
 						to_chat(Z, "<B>You are still bound to serve your creator, follow their orders and help them complete their goals at all costs.</B>")
 						Z.cancel_camera()
 						deleteafter = 1
-				if(iscultist(U))
+				if(islegacycultist(U))
 					var/datum/faction/cult/narsie/cult_round = find_active_faction(LEGACY_CULT)
 					if(cult_round)
 						cult_round.HandleRecruitedMind(Z.mind)

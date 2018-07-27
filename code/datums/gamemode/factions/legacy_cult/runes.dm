@@ -11,6 +11,9 @@
 /obj/effect/rune_legacy/cultify()
 	return
 
+/obj/effect/rune_legacy
+	name = "Rune"
+
 /obj/effect/rune_legacy/proc/findNullRod(var/atom/target)
 	if(istype(target,/obj/item/weapon/nullrod))
 		var/turf/T = get_turf(target)
@@ -106,7 +109,7 @@
 			user.take_overall_damage(5, 0)
 		qdel(src)
 	for(var/mob/living/C in orange(1,src))
-		if(iscultist(C) && !C.stat)
+		if(islegacycultist(C) && !C.stat)
 			culcount++
 	if(culcount>=2)
 		user.say("Sas[pick("'","`")]so c'arta forbici tarem!")
@@ -162,10 +165,10 @@
 	"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that now instead of the rune there's a book.</span>", \
 	"<span class='warning'>You hear a pop and smell ozone.</span>")
 	if(istype(src,/obj/effect/rune_legacy))
-		new /obj/item/weapon/tome(src.loc)
+		new /obj/item/weapon/tome_legacy(src.loc)
 		src.invocation("tome_spawn")
 	else
-		new /obj/item/weapon/tome(usr.loc)
+		new /obj/item/weapon/tome_legacy(usr.loc)
 	qdel(src)
 	stat_collection.cult_tomes_created++
 	return
@@ -174,14 +177,14 @@
 
 /obj/effect/rune_legacy/proc/convert()
 	for(var/mob/living/carbon/M in src.loc)
-		if(iscultist(M))
+		if(islegacycultist(M))
 			to_chat(usr, "<span class='warning'>You cannot convert what is already a follower of Nar-Sie.</span>")
 			return 0
 		if(M.stat==DEAD)
 			to_chat(usr, "<span class='warning'>You cannot convert the dead.</span>")
 			return 0
 		if(!M.mind)
-			to_chat(usr, "<span class='warning'>You cannot convert that which has no soul</span>")
+			to_chat(usr, "<span class='warning'>You cannot convert that which has no soul.</span>")
 			return 0
 		if(my_cult && my_cult.is_sacrifice_target(M.mind))
 			to_chat(usr, "<span class='warning'>\The [my_cult.deity_name] wants this mortal for himself.</span>")
@@ -202,7 +205,6 @@
 			to_chat(M, "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>")
 			to_chat(M, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 			to_chat(M, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
-			M.add_language(LANGUAGE_CULT)
 			log_admin("[usr]([ckey(usr.key)]) has converted [M] ([ckey(M.key)]) to the [my_cult.deity_name] cult at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.loc.x];Y=[M.loc.y];Z=[M.loc.z]'>([M.loc.x], [M.loc.y], [M.loc.z])</a>")
 			add_attacklogs(usr, M, "converted to the Cult of [my_cult.deity_name]!")
 			stat_collection.cult_converted++
@@ -244,53 +246,59 @@
 
 /////////////////////////////////////////FOURTH RUNE
 
+#define NUMBER_OF_NERDS_NEEDED 9
+
 /obj/effect/rune_legacy/proc/tearreality()
 	if(summoning)
 		return
 
 	var/list/active_cultists=list()
-	var/ghostcount = 0
 
 	for(var/mob/M in range(1,src))
-		if(iscultist(M) && !M.stat)
+		if(islegacycultist(M) && !M.stat)
 			active_cultists.Add(M)
-			if (istype(M, /mob/living/carbon/human/manifested))
-				ghostcount++
 
 	if(universe.name == "Hell Rising")
 		for(var/mob/M in active_cultists)
 			to_chat(M, "<span class='warning'>This plane of reality has already been torn into Nar-Sie's realm.</span>")
 		return
 
-	if(my_cult.eldergod)
+	if(universe.name != "Supermatter Cascade")
 		// Sanity checks
 		// Are we permitted to spawn Nar-Sie?
 
 		if(!my_cult)//if the game mode wasn't cult to begin with, there won't be need to complete a first objective to prepare the summoning.
-			if(active_cultists.len >= 9)
-				if(z != map.zMainStation)
-					for(var/mob/M in active_cultists)
-						to_chat(M, "<span class='danger'>YOU HAVE A TERRIBLE FEELING. IS SOMETHING WRONG WITH THE RITUAL?</span>")//You get one warning
-
-				summoning = 1
-				log_admin("NAR-SIE SUMMONING: [active_cultists.len] are summoning Nar-Sie at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>). [6 + (ghostcount * 5)] seconds remaining.")
-				message_admins("NAR-SIE SUMMONING: [active_cultists.len] are summoning Nar-Sie at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>). [6 + (ghostcount * 5)] seconds remaining.")
-				updatetear(6 + (ghostcount * 5))	//the summoning takes 6 seconds by default , but for each manifested ghost around it takes 5 more seconds.
-				return								//with 8 manifested ghosts summoned by a single human, it'd take 46 seconds, which would cause 46*8 = 368 brute damage over time to the human.
-													//no more lone human summoning nar-sie all by himself (as all the ghosts would die as soon as he goes uncounscious)
+			attempt_summon(active_cultists)
+			return		
 		else
-			for(var/mob/M in active_cultists)
-				to_chat(M, "<span class='sinister'>The Geometer of Blood has required of you to perform a certain task. This place cannot welcome him until this task has been cleared.</span>")
-			return
+			if (my_cult.cult_state != CULT_SUMMON)
+				for(var/mob/M in active_cultists)
+					to_chat(M, "<span class='danger'>We are not ready to tear reality yet! Nar'Sie still has a mission for us.</span>")
+				return FALSE
+			else
+				attempt_summon(active_cultists)
+				return
 
 	else
 		for(var/mob/M in active_cultists)
 			to_chat(M, "<span class='danger'>Nar-Sie has lost interest in this universe.</span>")//narsie won't appear if a supermatter cascade has started
-
 		return
 
 	return fizzle()
 
+/obj/effect/rune_legacy/proc/attempt_summon(var/list/active_cultists)
+	if(active_cultists.len >= NUMBER_OF_NERDS_NEEDED)
+		if(z != map.zMainStation)
+			for(var/mob/M in active_cultists)
+				to_chat(M, "<span class='danger'>YOU HAVE A TERRIBLE FEELING. IS SOMETHING WRONG WITH THE RITUAL?</span>")//You get one warning
+
+		summoning = 1
+		log_admin("NAR-SIE SUMMONING: [active_cultists.len] are summoning Nar-Sie at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>). 6 seconds remaining.")
+		message_admins("NAR-SIE SUMMONING: [active_cultists.len] are summoning Nar-Sie at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>). 6 seconds remaining.")
+		updatetear(6)
+	else
+		for(var/mob/M in active_cultists)
+			to_chat(M, "<span class='danger'>We are not numerous enough to summon Nar'Sie!</span>")
 
 /obj/effect/rune_legacy/proc/updatetear(var/currentCountdown)
 	if(!summoning)
@@ -299,7 +307,7 @@
 	summonturfs = list()
 	var/list/active_cultists=list()
 	for(var/mob/M in range(1,src))
-		if(iscultist(M) && !M.stat)
+		if(islegacycultist(M) && !M.stat)
 			active_cultists.Add(M)
 			var/turf/T = get_turf(M)
 			summonturfs += T
@@ -308,7 +316,7 @@
 				S.init(src)
 
 
-	if(active_cultists.len < 9)
+	if(active_cultists.len < NUMBER_OF_NERDS_NEEDED)
 		summoning = 0
 		summonturfs = list()
 		for(var/mob/M in active_cultists)
@@ -332,6 +340,7 @@
 			my_cult.getNewObjective()
 			summonturfs = list()
 			summoning = 0
+			my_cult.getNewObjective()
 			new /obj/machinery/singularity/narsie/large(src.loc)
 			stat_collection.cult_narsie_summoned = TRUE
 		return
@@ -341,7 +350,6 @@
 	sleep(10)
 
 	updatetear(currentCountdown)
-	return
 
 /obj/effect/summoning
 	name = "summoning"
@@ -848,7 +856,7 @@
 
 	//how many cultists do we have near the rune
 	for(var/mob/living/C in orange(1,src))
-		if(iscultist(C) && !C.stat)
+		if(islegacycultist(C) && !C.stat)
 			cultsinrange += C
 			C.say("Barhah hra zar[pick("'","`")]garis!")
 
@@ -864,7 +872,7 @@
 	for(var/atom/A in loc)
 		if(ismob(A))
 			var/mob/M = A
-			if(iscultist(M))
+			if(islegacycultist(M))
 				continue
 		var/satisfaction = 0
 //Humans and Animals
@@ -1068,7 +1076,7 @@
 			cultists+=H.current
 	var/list/mob/living/carbon/users = new
 	for(var/mob/living/C in orange(1,src))
-		if(iscultist(C) && !C.stat)
+		if(islegacycultist(C) && !C.stat)
 			users+=C
 
 	var/list/possible_targets = list()
@@ -1156,7 +1164,7 @@
 			cultists+=H.current
 	var/list/mob/living/carbon/users = new
 	for(var/mob/living/C in orange(1,src))
-		if(iscultist(C) && !C.stat)
+		if(islegacycultist(C) && !C.stat)
 			users+=C
 	if(users.len>=2)
 		var/mob/living/carbon/cultist = input("Choose the one who you want to summon", "Followers of Geometer") as null|anything in (cultists - user)
@@ -1174,7 +1182,7 @@
 		cultist.regenerate_icons()
 		to_chat(T, visible_message("<span class='warning'>[cultist] suddenly disappears in a flash of red light!</span>"))
 		for(var/mob/living/carbon/human/C in orange(1,src))
-			if(iscultist(C) && !C.stat)
+			if(islegacycultist(C) && !C.stat)
 				C.say("N'ath reth sh'yro eth d[pick("'","`")]rekkathnor!")
 				C.take_overall_damage(15, 0)
 				if(C != cultist)
@@ -1202,7 +1210,7 @@
 /obj/effect/rune_legacy/proc/deafen()
 	var/affected = 0
 	for(var/mob/living/carbon/C in range(7,src))
-		if (iscultist(C))
+		if (islegacycultist(C))
 			continue
 		nullblock = 0
 		for(var/turf/T in range(C,1))
@@ -1224,7 +1232,7 @@
 /obj/effect/rune_legacy/proc/blind()
 	var/affected = 0
 	for(var/mob/living/carbon/C in viewers(src))
-		if (iscultist(C))
+		if (islegacycultist(C))
 			continue
 		nullblock = 0
 		for(var/turf/T in range(C,1))
@@ -1257,11 +1265,11 @@
 	var/culcount = 0 //also, wording for it is old wording for obscure rune, which is now hide-see-blood.
 //	var/list/cultboil = list(cultists-usr) //and for this words are destroy-see-blood.
 	for(var/mob/living/C in orange(1,src))
-		if(iscultist(C) && !C.stat)
+		if(islegacycultist(C) && !C.stat)
 			culcount++
 	if(culcount>=3)
 		for(var/mob/living/carbon/M in viewers(usr))
-			if(iscultist(M))
+			if(islegacycultist(M))
 				continue
 			nullblock = 0
 			for(var/turf/T in range(M,1))
@@ -1277,7 +1285,7 @@
 			if(prob(10))
 				explosion(R.loc, -1, 0, 1, 5)
 		for(var/mob/living/carbon/human/C in orange(1,src))
-			if(iscultist(C) && !C.stat)
+			if(islegacycultist(C) && !C.stat)
 				C.say("Dedo ol[pick("'","`")]btoh!")
 				C.take_overall_damage(15, 0)
 		qdel(src)
@@ -1290,7 +1298,7 @@
 /obj/effect/rune_legacy/proc/burningblood()
 	var/culcount = 0
 	for(var/mob/living/carbon/C in orange(1,src))
-		if(iscultist(C) && !C.stat)
+		if(islegacycultist(C) && !C.stat)
 			culcount++
 	if(culcount >= 5)
 		for(var/obj/effect/rune_legacy/R in rune_list_legacy)
@@ -1375,7 +1383,7 @@
 	else
 		usr.say("Sa tatha najin")
 		for(var/mob/living/M in src.loc)
-			if(iscultist(M))
+			if(islegacycultist(M))
 				if(ishuman(M))
 					var/mob/living/carbon/human/P = M
 					M.visible_message("<span class='warning'> In flash of red light, and a set of armor appears on [M]...</span>", \

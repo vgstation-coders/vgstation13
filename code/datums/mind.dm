@@ -905,7 +905,7 @@
 			if("tome")
 				var/mob/living/carbon/human/H = current
 				if (istype(H))
-					var/obj/item/weapon/tome/T = new(H)
+					var/obj/item/weapon/tome_legacy/T = new(H)
 
 					var/list/slots = list (
 						"backpack" = slot_in_backpack,
@@ -1473,7 +1473,7 @@ proc/clear_memory(var/silent = 1)
 
 	var/mob/living/carbon/human/H = current
 	if (istype(H))
-		var/obj/item/weapon/tome/T = new(H)
+		var/obj/item/weapon/tome_legacy/T = new(H)
 
 		var/list/slots = list (
 			"backpack" = slot_in_backpack,

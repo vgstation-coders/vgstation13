@@ -75,7 +75,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 
 
 /obj/effect/rune/attackby(obj/I, mob/user)
-	if(istype(I, /obj/item/weapon/tome) && iscultist(user))
+	if(istype(I, /obj/item/weapon/tome_legacy) && iscultist(user))
 		to_chat(user, "You retrace your steps, carefully undoing the lines of the rune.")
 		qdel(src)
 		return
@@ -169,7 +169,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 /obj/effect/rune/proc/check_icon(var/mob/M = null)
 	get_uristrune_cult(word1, word2, word3, M)
 
-/obj/item/weapon/tome
+/obj/item/weapon/tome_legacy
 	name = "arcane tome"
 	desc = "An old, dusty tome with frayed edges and a sinister looking cover."
 	icon = 'icons/obj/cult.dmi'
@@ -276,7 +276,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				"}
 
 
-/obj/item/weapon/tome/Topic(href,href_list[])
+/obj/item/weapon/tome_legacy/Topic(href,href_list[])
 	if (src.loc == usr)
 		var/number = text2num(href_list["number"])
 		if (usr.stat || usr.restrained())
@@ -303,13 +303,13 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 					[words[10]] is <a href='byond://?src=\ref[src];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=\ref[src];number=10;action=clear'>Clear</A><BR>
 					"}
 		usr << browse("[notedat]", "window=notes")
-//		call(/obj/item/weapon/tome/proc/edit_notes)()
+//		call(/obj/item/weapon/tome_legacy/proc/edit_notes)()
 	else
 		usr << browse(null, "window=notes")
 		return
 
 /*
-/obj/item/weapon/tome/proc/edit_notes()     FUCK IT. Cant get it to work properly. - K0000
+/obj/item/weapon/tome_legacy/proc/edit_notes()     FUCK IT. Cant get it to work properly. - K0000
 	to_chat(world, "its been called! [usr]")
 	notedat = {"
 	<br><b>Word translation notes</b> <br>
@@ -328,7 +328,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	usr << browse(null, "window=tank")
 */
 
-/obj/item/weapon/tome/attack(mob/living/M as mob, mob/living/user as mob)
+/obj/item/weapon/tome_legacy/attack(mob/living/M as mob, mob/living/user as mob)
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had the [name] used on him by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used [name] on [M.name] ([M.ckey])</font>")
 	msg_admin_attack("[user.name] ([user.ckey]) used [name] on [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
@@ -356,7 +356,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	to_chat(M, "<span class='warning'>You feel searing heat inside!</span>")
 
 
-/obj/item/weapon/tome/attack_self(mob/living/user as mob)
+/obj/item/weapon/tome_legacy/attack_self(mob/living/user as mob)
 	usr = user
 	if(!usr.canmove || usr.stat || usr.restrained())
 		return
@@ -400,7 +400,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				[words[9]] is <a href='byond://?src=\ref[src];number=9;action=change'>[words[words[9]]]</A> <A href='byond://?src=\ref[src];number=9;action=clear'>Clear</A><BR>
 				[words[10]] is <a href='byond://?src=\ref[src];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=\ref[src];number=10;action=clear'>Clear</A><BR>
 				"}
-//						call(/obj/item/weapon/tome/proc/edit_notes)()
+//						call(/obj/item/weapon/tome_legacy/proc/edit_notes)()
 					user << browse("[notedat]", "window=notes")
 					return
 		if(usr.get_active_hand() != src)
@@ -457,8 +457,8 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		to_chat(user, "The book seems full of illegible scribbles. Is this a joke?")
 		return
 
-/obj/item/weapon/tome/attackby(obj/item/weapon/tome/T as obj, mob/living/user as mob)
-	if(istype(T, /obj/item/weapon/tome) && iscultist(user)) // sanity check to prevent a runtime error
+/obj/item/weapon/tome_legacy/attackby(obj/item/weapon/tome/T as obj, mob/living/user as mob)
+	if(istype(T, /obj/item/weapon/tome_legacy) && iscultist(user)) // sanity check to prevent a runtime error
 		switch(alert("Copy the runes from your tome?",,"Copy", "Cancel"))
 			if("Cancel")
 				return
@@ -468,15 +468,15 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		flick("tome-copied",src)
 
 
-/obj/item/weapon/tome/examine(mob/user)
+/obj/item/weapon/tome_legacy/examine(mob/user)
 	..()
 	if(iscultist(user))
 		to_chat(user, "The scriptures of Nar-Sie, The One Who Sees, The Geometer of Blood. Contains the details of every ritual his followers could think of. Most of these are useless, though.")
 
-/obj/item/weapon/tome/cultify()
+/obj/item/weapon/tome_legacy/cultify()
 	return
 
-/obj/item/weapon/tome/imbued //admin tome, spawns working runes without waiting
+/obj/item/weapon/tome_legacy/imbued //admin tome, spawns working runes without waiting
 	w_class = W_CLASS_SMALL
 	var/cultistsonly = 1
 	attack_self(mob/user as mob)

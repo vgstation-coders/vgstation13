@@ -9,5 +9,5 @@
 
 /datum/objective/defile/IsFulfilled()
     for (var/mob/living/player in player_list)
-        if (!iscultist(player) && !isconstruct(player))
+        if (!islegacycultist(player) && !isconstruct(player))
             return FALSE

@@ -21,7 +21,7 @@
 	return
 
 /obj/item/weapon/melee/legacy_cultblade/attack(mob/living/target as mob, mob/living/carbon/human/user as mob)
-	if(!checkcult || iscultist(user))
+	if(!checkcult || islegacycultist(user))
 		playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 		return ..()
 	else
@@ -33,7 +33,7 @@
 
 
 /obj/item/weapon/melee/legacy_cultblade/pickup(mob/living/user as mob)
-	if(checkcult && !iscultist(user))
+	if(checkcult && !islegacycultist(user))
 		to_chat(user, "<span class='warning'>An overwhelming feeling of dread comes over you as you pick up the cultist's sword. It would be wise to rid yourself of this blade quickly.</span>")
 		user.Dizzy(120)
 
@@ -64,7 +64,7 @@
 	icon_state = "cultrobes"
 	item_state = "cultrobes"
 	flags = FPRINT
-	allowed = list(/obj/item/weapon/tome,/obj/item/weapon/melee/legacy_cultblade)
+	allowed = list(/obj/item/weapon/tome_legacy,/obj/item/weapon/melee/legacy_cultblade)
 	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
 	siemens_coefficient = 0
 
@@ -88,7 +88,7 @@
 	item_state = "magusred"
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
-	allowed = list(/obj/item/weapon/tome,/obj/item/weapon/melee/legacy_cultblade)
+	allowed = list(/obj/item/weapon/tome_legacy,/obj/item/weapon/melee/legacy_cultblade)
 	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
 	siemens_coefficient = 0
 
@@ -107,7 +107,7 @@
 	item_state = "cult_armour"
 	desc = "A bulky suit of armor bristling with spikes. It looks space proof."
 	w_class = W_CLASS_MEDIUM
-	allowed = list(/obj/item/weapon/tome,/obj/item/weapon/melee/legacy_cultblade,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
+	allowed = list(/obj/item/weapon/tome_legacy,/obj/item/weapon/melee/legacy_cultblade,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
 	slowdown = NO_SLOWDOWN
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0

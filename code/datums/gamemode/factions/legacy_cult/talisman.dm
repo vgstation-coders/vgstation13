@@ -17,7 +17,7 @@
 
 /obj/item/weapon/paper/talisman/examine(mob/user)
 	..()
-	if(iscultist(user) || isobserver(user))
+	if(islegacycultist(user) || isobserver(user))
 		switch(imbue)
 			if("newtome")
 				to_chat(user, "This talisman has been imbued with the power of spawning a new Arcane Tome.")
@@ -64,7 +64,7 @@
 
 
 /obj/item/weapon/paper/talisman/attack_self(mob/living/user as mob)
-	if(iscultist(user))
+	if(islegacycultist(user))
 		var/delete = 1
 		switch(imbue)
 			if("newtome")
@@ -108,7 +108,7 @@
 
 
 /obj/item/weapon/paper/talisman/attack(mob/living/carbon/T as mob, mob/living/user as mob)
-	if(iscultist(user))
+	if(islegacycultist(user))
 		if(imbue == "runestun")
 			user.take_organ_damage(5, 0)
 			runestun(T)
@@ -213,7 +213,7 @@
 /obj/item/weapon/paper/talisman/proc/blind()
 	var/affected = 0
 	for(var/mob/living/carbon/C in view(3,usr))
-		if (iscultist(C))
+		if (islegacycultist(C))
 			continue
 		nullblock = 0
 		for(var/turf/T in range(C,1))
@@ -233,7 +233,7 @@
 /obj/item/weapon/paper/talisman/proc/deafen()
 	var/affected = 0
 	for(var/mob/living/carbon/C in range(7,usr))
-		if (iscultist(C))
+		if (islegacycultist(C))
 			continue
 		nullblock = 0
 		for(var/turf/T in range(C,1))
@@ -248,5 +248,5 @@
 		usr.whisper("Sti[pick("'","`")] kaliedir!")
 		to_chat(usr, "<span class='warning'>Your talisman turns into gray dust, deafening everyone around.</span>")
 		for (var/mob/V in orange(1,src))
-			if(!(iscultist(V)))
+			if(!(islegacycultist(V)))
 				V.show_message("<span class='warning'>Dust flows from [usr]'s hands for a moment, and the world suddenly becomes quiet..</span>")
