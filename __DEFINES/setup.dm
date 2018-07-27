@@ -1441,6 +1441,7 @@ var/proccalls = 1
 
 #define HIGHLANDER "highlander"
 #define BOMBERMAN "bomberman"
+#define GREYTIDER "greytider"
 
 // /proc/is_honorable() flags.
 #define HONORABLE_BOMBERMAN  1
