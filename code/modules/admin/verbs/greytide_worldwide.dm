@@ -18,7 +18,7 @@
 	if(!event_type)
 		return
 
-	var/datum/only_one/event = new event_type()
+	var/datum/greytide_worldwide/event = new event_type()
 
 	if(!event.event_setup_start())
 		message_admins("<span class='notice'>[key_name_admin(usr)] tried to use GREYTIDE WORLDWIDE, but it failed in setup. (Type: [event_type_name])</span>", 1)
