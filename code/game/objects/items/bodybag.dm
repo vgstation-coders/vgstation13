@@ -64,19 +64,20 @@
 	src.overlays.len = 0
 
 /obj/structure/closet/body_bag/MouseDrop(over_object, src_location, over_location)
-	..()
 	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
 		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)
-			return
+			return ..()
 		if(opened)
-			return 0
+			return ..()
 		if(contents.len)
-			return 0
+			return ..()
 		visible_message("[usr] folds up the [src.name]")
 		new/obj/item/bodybag(get_turf(src))
 		spawn(0)
 			qdel(src)
 		return
+	else
+		return ..()
 
 /obj/structure/closet/body_bag/update_icon()
 	if(!opened)
