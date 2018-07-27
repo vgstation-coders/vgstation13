@@ -50,7 +50,7 @@
 	else
 		set_light(0)
 
-/obj/machinery/bodyscanner/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+/obj/machinery/bodyscanner/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 	if(!ismob(O)) //humans only
 		return
 	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
@@ -103,7 +103,7 @@
 		set_light(light_range_on, light_power_on)
 	return
 
-/obj/machinery/bodyscanner/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+/obj/machinery/bodyscanner/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
 		return
 	if(!occupant)

@@ -160,7 +160,7 @@
 	overlays += colour_overlay
 
 
-/obj/item/weapon/storage/pill_bottle/MouseDrop(obj/over_object as obj) //Quick pillbottle fix. -Agouri
+/obj/item/weapon/storage/pill_bottle/MouseDropFrom(obj/over_object as obj) //Quick pillbottle fix. -Agouri
 	if (ishuman(usr) || ismonkey(usr)) //Can monkeys even place items in the pocket slots? Leaving this in just in case~
 		var/mob/M = usr //I don't see how this is necessary
 		if (!( istype(over_object, /obj/abstract/screen/inventory) ))

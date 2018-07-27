@@ -238,7 +238,7 @@ for (var/client/C)
 	to_chat(C, "Dela.")
 */
 
-/obj/machinery/rail_car/MouseDrop_T(var/atom/movable/C, mob/user)
+/obj/machinery/rail_car/MouseDropTo(var/atom/movable/C, mob/user)
 
 	if(user.stat)
 		return

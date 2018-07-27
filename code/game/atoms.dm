@@ -488,9 +488,6 @@ its easier to just keep the beam vertical.
 		if(ishuman(usr) && !usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
 			bug.removed(usr)
 
-// /atom/proc/MouseDrop_T()
-// 	return
-
 /atom/proc/relaymove()
 	return
 

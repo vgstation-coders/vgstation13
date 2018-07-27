@@ -397,7 +397,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	return
 
-/mob/living/simple_animal/MouseDrop(mob/living/carbon/M)
+/mob/living/simple_animal/MouseDropFrom(mob/living/carbon/M)
 	if(M != usr || !istype(M) || !Adjacent(M) || M.incapacitated())
 		return ..()
 

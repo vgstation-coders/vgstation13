@@ -464,13 +464,15 @@
 /obj/machinery/disposal/proc/can_load_crates()
 	return TRUE
 
-/obj/machinery/disposal/MouseDrop_T(atom/movable/dropping, mob/user)
+/obj/machinery/disposal/MouseDropTo(atom/movable/dropping, mob/user)
 
 	if(isAI(user))
 		return
 
 	//We are restrained or can't move, this will compromise taking out the trash
 	if(user.restrained() || !user.canmove)
+		return
+	if(!Adjacent(user) || !user.Adjacent(dropping))
 		return
 
 	if(!ismob(dropping)) //Not a mob, so we can expect it to be an item

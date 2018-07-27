@@ -149,7 +149,7 @@
 		add_fingerprint(usr)
 	return
 
-/obj/machinery/sleeper/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+/obj/machinery/sleeper/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 	if(!ismob(O)) //mobs only
 		return
 	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
@@ -199,8 +199,6 @@
 	for(var/obj/OO in src)
 		OO.forceMove(loc)
 	add_fingerprint(user)
-	if(user.pulling == L)
-		user.stop_pulling()
 	if(!(stat & (BROKEN|NOPOWER)))
 		set_light(light_range_on, light_power_on)
 	sedativeblock = TRUE
@@ -210,7 +208,7 @@
 	return
 
 
-/obj/machinery/sleeper/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+/obj/machinery/sleeper/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
 		return
 	if(!occupant)

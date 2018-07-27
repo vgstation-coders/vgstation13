@@ -1127,7 +1127,7 @@
 	src.log_message("Now taking air from [use_internal_tank?"internal airtank":"environment"].")
 	return
 
-/obj/mecha/MouseDrop_T(mob/M as mob, mob/user as mob)
+/obj/mecha/MouseDropTo(mob/M as mob, mob/user as mob)
 	if(M != user)
 		return
 	move_inside(M, user)
@@ -1137,9 +1137,11 @@
 	set name = "Enter Exosuit"
 	set src in oview(1)
 
-	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
+	if(usr.incapacitated() || usr.lying)
 		return
-	if (!ishuman(usr))
+	if(!Adjacent(usr) || !usr.Adjacent(src))
+		return
+	if(!ishuman(usr))
 		return
 	src.log_message("[usr] tries to move in.")
 	if (src.occupant)
@@ -1313,7 +1315,7 @@
 		return
 	lock_dir = !lock_dir
 
-/obj/mecha/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+/obj/mecha/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(usr != src.occupant || usr.incapacitated())
 		return
 	if(!istype(over_location) || over_location.density)
