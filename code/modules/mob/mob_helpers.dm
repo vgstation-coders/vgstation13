@@ -73,7 +73,7 @@ mob/proc/remove_internal_organ()
 		return .
 	else if(has_reagent_in_blood(DETCOFFEE))
 		return NOIRMATRIX
-	var/obj/item/clothing/glasses/scanner/S = is_wearing_item(/obj/item/clothing/glasses/scanner)
+	var/obj/item/clothing/glasses/scanner/S = is_wearing_item(/obj/item/clothing/glasses/scanner, slot_glasses)
 	if(S && S.on && S.color_matrix)
 		return S.color_matrix
 	var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
