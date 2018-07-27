@@ -131,9 +131,7 @@
 	if(amount > 0)
 		if(papers.len > 0)
 			var/obj/item/weapon/paper/P = papers[papers.len]
-			if(istype(P,/obj/item/weapon/paper/talisman))
-				icon_state = "paper_bin3"
-			else if(P.info)
+			if(P.info)
 				icon_state = "paper_bin2"
 			else
 				icon_state = "paper_bin1"

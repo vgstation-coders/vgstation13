@@ -131,15 +131,14 @@
 		var/mob/dead/M = src
 		if(src.invisibility != 0)
 			M.invisibility = 0
+	if(istype(W,/obj/item/weapon/tome))
+		if(invisibility != 0 || icon_state != "ghost-narsie")
+			cultify()
 			user.visible_message(
-				"<span class='warning'>[user] drags ghost, [M], to our plane of reality!</span>",
-				"<span class='warning'>You drag [M] to our plane of reality!</span>"
+				"<span class='warning'>[user] drags a ghost to our plane of reality!</span>",
+				"<span class='warning'>You drag a ghost to our plane of reality!</span>"
 			)
-		else
-			user.visible_message (
-				"<span class='warning'>[user] just tried to smash his book into that ghost!  It's not very effective</span>",
-				"<span class='warning'>You get the feeling that the ghost can't become any more visible.</span>"
-			)
+		return
 
 	if(istype(W,/obj/item/weapon/storage/bible) || istype(W,/obj/item/weapon/nullrod))
 		var/mob/dead/M = src
@@ -591,7 +590,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			var/turf/targetloc = get_turf(target)
 			var/area/targetarea = get_area(target)
 			if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
-				to_chat(usr, "<span class='sinister'>You can sense a sinister force surrounding that mob, your spooky body itself refuses to jump to it.</span>")
+				to_chat(usr, "<span class='sinister'>You can sense a sinister force surrounditing that mob, your spooky body itself refuses to jump to it.</span>")
 				return
 			if(targetloc && targetloc.holy && ((src.invisibility == 0) || islegacycultist(src)))
 				to_chat(usr, "<span class='warning'>The mob that you are trying to follow is standing on holy grounds, you cannot reach him!</span>")
