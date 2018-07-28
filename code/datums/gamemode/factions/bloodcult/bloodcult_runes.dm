@@ -168,6 +168,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		I.Blend(I2, ICON_OVERLAY)
 		I.Blend(I3, ICON_OVERLAY)
 		icon = I
+		uristrune_cache[lookup] = I
 
 	if(animated)
 		idle_pulse()
@@ -415,6 +416,10 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 
 	if(user.is_wearing_item(/obj/item/clothing/mask/muzzle, slot_wear_mask))
 		to_chat(user, "<span class='danger'>You are unable to speak the words of the rune because of \the [user.wear_mask].</span>")//TODO; SILENT CASTING ALLOWS MUZZLED CAST
+		return
+
+	if(user.is_mute())
+		to_chat(user, "<span class='danger'>You don't have the ability to perform rituals without voicing the incantations, there has to be some way...</span>")
 		return
 
 	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss()))

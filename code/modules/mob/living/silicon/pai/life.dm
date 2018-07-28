@@ -66,6 +66,8 @@
 
 	if (ear_deaf > 0)
 		ear_deaf--
+	if (say_mute > 0)
+		say_mute--
 	if (ear_damage < 25)
 		ear_damage -= 0.05
 		ear_damage = max(ear_damage, 0)

@@ -326,7 +326,7 @@ var/list/department_radio_keys = list(
 	if(!message)
 		return
 
-	if(sdisabilities & MUTE)
+	if(is_mute())
 		return
 
 	if(is_muzzled())
