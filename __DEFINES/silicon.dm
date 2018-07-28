@@ -16,7 +16,7 @@
 #define SOVIET_MOMMI "Soviet"
 #define GRAVEKEEPER_MOMMI "Gravekeeper"
 
-var/global/list/nanotrasen_robot_modules = list(
+var/global/list/default_nanotrasen_robot_modules = list(
 	STANDARD_MODULE			= /obj/item/weapon/robot_module/standard,
 	SERVICE_MODULE			= /obj/item/weapon/robot_module/butler,
 	SUPPLY_MODULE 			= /obj/item/weapon/robot_module/miner,
@@ -24,8 +24,11 @@ var/global/list/nanotrasen_robot_modules = list(
 	SECURITY_MODULE			= /obj/item/weapon/robot_module/security,
 	ENGINEERING_MODULE		= /obj/item/weapon/robot_module/engineering,
 	JANITOR_MODULE			= /obj/item/weapon/robot_module/janitor,
-	COMBAT_MODULE 			= /obj/item/weapon/robot_module/combat,
     )
+
+var/global/list/emergency_nanotrasen_robot_modules = list(
+	COMBAT_MODULE 			= /obj/item/weapon/robot_module/combat
+	)
 
 var/global/list/syndicate_robot_modules = list(
 	SYNDIE_BLITZ_MODULE		= /obj/item/weapon/robot_module/syndicate/blitzkrieg,
@@ -43,12 +46,12 @@ var/global/list/mommi_modules = list(
 	)
 
 //Global list of all Cyborg/MoMMI modules. If you add a new list and forget to add it to this one i'll fucking break your neck.
-var/global/list/all_robot_modules = nanotrasen_robot_modules + syndicate_robot_modules + special_robot_modules + mommi_modules
+var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency_nanotrasen_robot_modules + syndicate_robot_modules + special_robot_modules + mommi_modules
 
 /proc/getAvailableRobotModules()
-	var/list/pickable_modules = nanotrasen_robot_modules
-	if(security_level != SEC_LEVEL_RED)
-		pop(pickable_modules) //Removes the last module in the list, the combat one.
+	var/list/pickable_modules = default_nanotrasen_robot_modules.Copy()
+	if(security_level == SEC_LEVEL_RED)
+		pickable_modules += emergency_nanotrasen_robot_modules
 	return pickable_modules
 
 
