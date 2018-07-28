@@ -1038,7 +1038,7 @@ var/list/blind_victims = list()
 		their allies from our believers. The effects of surprise is especially powerful in the first few seconds. The confusion expires after half a minute, \
 		a bit less when cast from a talisman. A side effect of the ritual appears to obscure the screens of cameras in range, and until anyone repairs them. \
 		This makes it essential for keeping cult activities undercover from the eyes of the authorities. Robots will be briefly blinded by the ritual."
-	var/rune_duration=300//times are in tenth of second
+	var/rune_duration=300//times are in tenths of a second
 	var/talisman_duration=200
 	var/hallucination_radius=25
 
@@ -1165,7 +1165,7 @@ var/list/blind_victims = list()
 //RUNE VIII
 /datum/rune_spell/deafmute
 	name = "Deaf-Mute"
-	desc = "Silence and deafen nearby enemies. Robots"
+	desc = "Silence and deafen nearby enemies. Including robots"
 	Act_restriction = CULT_ACT_I
 	invocation = "Sti' kaliedir!"
 	word1 = /datum/cultword/hide
