@@ -1616,7 +1616,7 @@ Game Mode config tags:
 	var/found_faction = null
 	if(ticker && ticker.mode && ticker.mode.factions.len)
 		for(var/datum/faction/F in ticker.mode.factions)
-			if(faction_name in F.ID)
+			if(faction_name == F.ID)
 				found_faction = F
 				break
 	return found_faction

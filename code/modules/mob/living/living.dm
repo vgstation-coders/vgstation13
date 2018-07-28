@@ -1733,3 +1733,9 @@ Thanks.
 		"suiciding")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
+/mob/living/proc/Silent(amount)
+	silent = max(max(silent,amount),0)
+
+/mob/living/proc/SetSilent(amount)
+	silent = max(amount,0)

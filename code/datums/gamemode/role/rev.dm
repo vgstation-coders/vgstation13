@@ -3,6 +3,7 @@
 	id = REV
 	restricted_jobs = list("Security Officer", "Warden", "Detective", "AI", "Cyborg","Mobile MMI","Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer", "Internal Affairs Agent")
 	logo_state = "rev-logo"
+	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_ADMINTOGGLE)
 
 /datum/role/revolutionary/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -10,11 +11,11 @@
 
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	switch(greeting)
-		if ("roundstart")
+		if (GREET_ROUNDSTART)
 			to_chat(antag.current, {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/><span class = 'notice'>You are a member of the revolutionaries' leadership!</span>"})
-		if ("admintoggle")
+		if (GREET_ADMINTOGGLE)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='warning'>You suddenly feel rather annoyed with this stations leadership!</span>")
-		if ("custom")
+		if (GREET_CUSTOM)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='warning'>[custom]</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")

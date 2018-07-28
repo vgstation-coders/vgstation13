@@ -9,7 +9,7 @@
 	disallow_job = FALSE
 	restricted_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain")
 	logo_state = "vampire-logo"
-	greets = list("default","custom","admintoggle")
+	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ADMINTOGGLE)
 	required_pref = ROLE_VAMPIRE
 
 	// -- Vampire mechanics --
@@ -45,9 +45,9 @@
 
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	switch(greeting)
-		if ("custom")
+		if (GREET_CUSTOM)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [custom]")
-		if ("admintoggle")
+		if (GREET_ADMINTOGGLE)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>Your powers are awoken. Your lust for blood grows... You are a Vampire!</span></B>")
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Vampire!</br></span>")
