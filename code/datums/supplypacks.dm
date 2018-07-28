@@ -35,6 +35,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/proc/post_creation(var/atom/movable/container)
 	return
 
+/datum/supply_packs/proc/OnConfirmed(var/mob/user)
+
 //////SUPPLIES//////
 
 /datum/supply_packs/toner
@@ -1453,6 +1455,21 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "supermatter shard crate"
 	group = "Engineering"
 	access = list(access_engine_equip)
+	var/static/list/shard_counts_by_user = list()
+
+/datum/supply_packs/supermatter_shard/OnConfirmed(var/mob/user)
+	shard_counts_by_user[user]++
+	var/i = shard_counts_by_user[user]
+	var/span = ""
+	switch (i)
+		if (1)
+			span = "notice"
+		if (2 to 5)
+			span = "warning"
+		else
+			span = "danger"
+	message_admins("<span class='[span]'>\The [user] has ordered a supermatter shard supplypack, this is his #[i] order. @[formatJumpTo(user)]</span>")
+	log_admin("\The [user] has ordered a supermatter shard supplypack, this is his #[i] order. @([user.x], [user.y], [user.z])")
 
 /datum/supply_packs/portable_smes
 	contains = list(/obj/machinery/power/battery/portable,
