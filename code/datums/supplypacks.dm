@@ -1468,8 +1468,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 			span = "warning"
 		else
 			span = "danger"
-	message_admins("<span class='[span]'>\The [user] has ordered a supermatter shard supplypack, this is his #[i] order. @[formatJumpTo(user)]</span>")
-	log_admin("\The [user] has ordered a supermatter shard supplypack, this is his #[i] order. @([user.x], [user.y], [user.z])")
+	message_admins("<span class='[span]'>\The [user] has ordered a supermatter shard supplypack, this is their #[i] order. @[formatJumpTo(user)]</span>")
+	log_admin("\The [user] has ordered a supermatter shard supplypack, this is their #[i] order. @([user.x], [user.y], [user.z])")
 
 /datum/supply_packs/portable_smes
 	contains = list(/obj/machinery/power/battery/portable,
