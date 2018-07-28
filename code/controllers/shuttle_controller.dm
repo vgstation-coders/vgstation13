@@ -396,11 +396,9 @@ datum/emergency_shuttle/proc/process()
 
 /proc/shuttle_autocall()
 	if (emergency_shuttle.departed)
-		to_chat(world, "Shuttle autocall, but not called")
 		return
 	
 	if (emergency_shuttle.location == SHUTTLE_ON_STATION)
-		to_chat(world, "Shuttle autocall, but not called")
 		return
 
 	emergency_shuttle.incall(2)
