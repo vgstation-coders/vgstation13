@@ -22,8 +22,6 @@
 		gene.OnMobLife(src)
 
 	if(radiation)
-		rad_tick += round(radiation/50)
-
 		if(radiation < 0)
 			radiation = 0
 
