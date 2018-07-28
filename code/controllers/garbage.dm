@@ -145,7 +145,7 @@ world/loop_checks = 0
 		return
 
 	//We are object pooling this.
-	if(("[D.type]" in masterdatumPool) && !ignore_pooling)
+	if((D.type in masterdatumPool) && !ignore_pooling)
 		returnToPool(D)
 		return
 
