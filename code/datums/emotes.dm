@@ -160,7 +160,7 @@
 	var/vary = FALSE	//used for the honk borg emote
 	mob_type_allowed_typelist = list(/mob/living/carbon/brain, /mob/living/silicon)
 
-/datum/emote/sound/run_emote(mob/user, params)
+/datum/emote/sound/run_emote(mob/user, params, ignore_status = FALSE)
 	. = ..()
 	if(.)
 		playsound(user.loc, sound, 50, vary)
@@ -169,4 +169,4 @@
 	emote("coughs")
 
 /mob/proc/audible_scream()
-	emote("screams", TRUE) // So it's forced
+	emote("screams", message = TRUE) // So it's forced

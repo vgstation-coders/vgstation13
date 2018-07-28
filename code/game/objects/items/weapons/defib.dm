@@ -110,7 +110,7 @@
 	target.visible_message("<span class='danger'>[target] has been shocked in the chest with the [src] by [user]!</span>")
 	target.Knockdown(rand(6,12))
 	target.apply_damage(rand(30,60),BURN,LIMB_CHEST)
-	target.emote("scream") //If we're going this route, it kinda hurts
+	target.audible_scream() //If we're going this route, it kinda hurts
 	target.updatehealth()
 	spawn() //Logging
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> Shocked [target.name] ([target.ckey]) with an emagged [src.name]</font>"
