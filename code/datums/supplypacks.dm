@@ -1459,9 +1459,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 
 /datum/supply_packs/supermatter_shard/OnConfirmed(var/mob/user)
-	var/id = key_name(user)
-	shard_counts_by_user[id]++
-	var/i = shard_counts_by_user[id]
+	shard_counts_by_user[user.ckey]++
+	var/i = shard_counts_by_user[user.ckey]
 	var/span = ""
 	switch (i)
 		if (1)
@@ -1470,8 +1469,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 			span = "warning"
 		else
 			span = "danger"
-	message_admins("<span class='[span]'>[id] has ordered a supermatter shard supplypack, this is his #[i] order. @[formatJumpTo(user)]</span>")
-	log_admin("[id] has ordered a supermatter shard supplypack, this is his #[i] order. @([user.x], [user.y], [user.z])")
+	message_admins("<span class='[span]'>[key_name(user)] has ordered a supermatter shard supplypack, this is his #[i] order. @[formatJumpTo(user)]</span>")
+	log_admin("[key_name(user)] has ordered a supermatter shard supplypack, this is his #[i] order. @([user.x], [user.y], [user.z])")
 
 /datum/supply_packs/portable_smes
 	contains = list(/obj/machinery/power/battery/portable,
