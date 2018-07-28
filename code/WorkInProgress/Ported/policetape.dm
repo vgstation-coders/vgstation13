@@ -372,7 +372,7 @@
 				L.get_active_hand_organ().droplimb(1)
 			else
 				to_chat(L, "<span class='danger'>You cut yourself on the tape!")
-			L.emote("scream")
+			L.audible_scream()
 			L.adjustBruteLoss(10)
 		return FALSE
 	if (!W.is_sharp() || !(W.force >= 10))

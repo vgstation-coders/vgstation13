@@ -357,7 +357,7 @@
 
 		for (var/mob/living/M in inside)
 			if (M.stat!=2)
-				M.emote("scream")
+				M.audible_scream()
 			//Logging for this causes runtimes resulting in the cremator locking up. Commenting it out until that's figured out.
 			//M.attack_log += "\[[time_stamp()]\] Has been cremated by <b>[user]/[user.ckey]</b>" //No point in this when the mob's about to be qdeleted
 			//user.attack_log +="\[[time_stamp()]\] Cremated <b>[M]/[M.ckey]</b>"
