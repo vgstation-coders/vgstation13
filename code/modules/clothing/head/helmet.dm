@@ -9,6 +9,7 @@
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.7
 	species_fit = list(GREY_SHAPED)
+	airflow_remove = FALSE
 
 /obj/item/clothing/head/helmet/visor
 	name = "visor helmet"

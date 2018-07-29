@@ -39,18 +39,6 @@ atom/movable/GotoAirflowDest(n)
 
 */
 
-// Hats which can't be removed by airflow
-var/list/unremovable_hats = list(
-	/obj/item/clothing/head/that/armored,
-	/obj/item/clothing/head/chicken,
-	/obj/item/clothing/head/justice,
-	/obj/item/clothing/head/cardborg,
-	/obj/item/clothing/head/syndicatefake,
-	/obj/item/clothing/head/xenos,
-	/obj/item/clothing/head/batman,
-	/obj/item/clothing/head/helmet,
-	/obj/item/clothing/head/hardhat,
-)
 
 /mob/var/tmp/last_airflow_stun = 0
 /mob/proc/airflow_stun()
@@ -96,9 +84,9 @@ var/list/unremovable_hats = list(
 	drop_hat()
 	SetKnockdown(rand(1,5))
 
-/mob/living/carbon/human/proc/drop_hat()
+/mob/living/proc/drop_hat()
 	var/obj/item/I = get_item_by_slot(slot_head)
-	if (I && I.canremove && !is_type_in_list(I, unremovable_hats) && prob(25))
+	if (istype(I) && I.canremove && I.airflow_remove && prob(25))
 		u_equip(I, TRUE)
 		to_chat(src, "<span class='warning'>Your hat is blown away by the wind!</span>")
 
@@ -164,9 +152,9 @@ var/list/unremovable_hats = list(
 		return
 	if(ismob(src))
 		to_chat(src, "<span class='warning'>You are sucked away by airflow!</span>")
-		if (ishuman(src))
-			var/mob/living/carbon/human/H = src
-			H.drop_hat()
+		if (ishuman(src) || isMoMMi(src))
+			var/mob/living/L = src
+			L.drop_hat()
 
 	var/xo = airflow_dest.x - x
 	var/yo = airflow_dest.y - y

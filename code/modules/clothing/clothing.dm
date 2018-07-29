@@ -380,6 +380,7 @@ BLIND     // can't see anything
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
 	species_restricted = list("exclude","Muton")
+	var/airflow_remove = TRUE
 
 //Mask
 /obj/item/clothing/mask

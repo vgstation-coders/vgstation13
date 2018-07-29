@@ -33,6 +33,7 @@
 	name = "armored top-hat"
 	desc = "It's an amish looking top hat. This one looks sturdier."
 	armor = list(melee = 35, bullet = 15, laser = 30, energy = 5, bomb = 10, bio = 0, rad = 0)
+	airflow_remove = FALSE
 
 /obj/item/clothing/head/redcoat
 	name = "redcoat's hat"
@@ -76,6 +77,7 @@
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD
 	siemens_coefficient = 2.0
+	airflow_remove = FALSE
 
 /obj/item/clothing/head/cueball
 	name = "cueball helmet"
@@ -101,6 +103,7 @@
 	body_parts_covered = FULL_HEAD|BEARD
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
+	airflow_remove = FALSE
 
 /obj/item/clothing/head/justice
 	name = "justice hat"
@@ -109,6 +112,7 @@
 	item_state = "justicered"
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD
+	airflow_remove = FALSE
 
 /obj/item/clothing/head/justice/blue
 	icon_state = "justiceblue"
@@ -251,6 +255,7 @@
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD
 	siemens_coefficient = 2.0
+	airflow_remove = FALSE
 
 /obj/item/clothing/head/bearpelt
 	name = "cheap bear pelt hat"
@@ -273,6 +278,7 @@
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD
 	siemens_coefficient = 2.0
+	airflow_remove = FALSE
 
 /obj/item/clothing/head/batman
 	name = "bathelmet"
@@ -281,6 +287,7 @@
 	item_state = "bmhead"
 	flags = FPRINT
 	body_parts_covered = HEAD|EARS|EYES
+	airflow_remove = FALSE
 
 /obj/item/clothing/head/stalhelm
 	name = "Stalhelm"
