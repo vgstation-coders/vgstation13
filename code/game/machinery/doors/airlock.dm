@@ -518,7 +518,7 @@ About the new airlock wires panel:
 	return
 
 /obj/machinery/door/airlock/attack_ai(mob/user as mob)
-	if(!allowed(user))
+	if(!allowed(user) && !isobserver(user))
 		return //So i heard you tried to interface with doors you have no access to
 	src.add_hiddenprint(user)
 	if(isAI(user))
