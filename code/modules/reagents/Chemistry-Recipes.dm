@@ -3044,6 +3044,23 @@
 	required_temp = T0C + 450
 	result_amount = 1
 
+/datum/chemical_reaction/vomit_all
+	name = "Vomit induction"
+	id = CHARCOAL
+	result = null
+	required_reagents = list(FLUORINE = 15, CARBON = 15, CHARCOAL = 5)
+	required_container = /mob/living/carbon/human
+
+/datum/chemical_reaction/vomit_all/on_reaction(var/datum/reagents/holder, var/created_volume)
+	if(ishuman(holder.my_atom))
+		var/mob/living/carbon/human/H = holder.my_atom
+		var/datum/organ/internal/stomach/S = H.get_stomach()
+		if(!S)
+			return
+		H.vomit()
+		S.take_damage(created_volume/10)
+		holder.remove_reagents(created_volume*5)
+
 /datum/chemical_reaction/albuterol
 	name = "Albuterol"
 	id = ALBUTEROL

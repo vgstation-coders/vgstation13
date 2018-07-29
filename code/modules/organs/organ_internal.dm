@@ -229,7 +229,7 @@
 	removed_type = /obj/item/organ/internal/appendix
 
 /datum/organ/internal/proc/remove(var/mob/user, var/quiet=0)
-
+	to_chat(world, "remove called")
 
 	if(!removed_type)
 		return 0
