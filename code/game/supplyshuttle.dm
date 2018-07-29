@@ -17,6 +17,9 @@ var/datum/controller/supply_shuttle/supply_shuttle = new
 	var/orderedby = null
 	var/comment = null
 
+/datum/supply_order/proc/OnConfirmed(var/mob/user)
+	object.OnConfirmed(user)
+
 /datum/controller/supply_shuttle
 	var/processing = 1
 	var/processing_interval = 300
