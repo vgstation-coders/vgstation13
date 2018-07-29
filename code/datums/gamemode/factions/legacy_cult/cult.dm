@@ -32,7 +32,8 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	hud_icons = list("cult-logo")
 
 	var/datum/objective/current_objective
-	var/narsie_condition_cleared =  FALSE
+	var/list/objs = list()
+	var/harvested = 0
 
 	var/list/cult_words = list()
 	var/cult_state = CULT_PRELUDE
@@ -163,12 +164,13 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 #define OBJ_SAC 		"sacrifice"
 #define OBJ_SPRAY_BLOOD "spray bood"
 #define OBJ_CONVERT 	"convert"
+#define OBJ_SUMMON		"summon"
 
 // -- Objectives --
 
 /datum/faction/cult/narsie/forgeObjectives()
 	var/datum/objective/next_objective
-	var/new_obj = get_new_obj()
+	var/new_obj = pick_objective()
 	switch (new_obj)
 		if (OBJ_SAC)
 			next_objective = new /datum/objective/target/assasinate/sacrifice
@@ -176,36 +178,52 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 			next_objective = new /datum/objective/spray_blood
 		if (OBJ_CONVERT)
 			next_objective = new /datum/objective/convert_people
+		if (OBJ_SUMMON)
+			next_objective = new /datum/objective/summon_narsie
+			cult_state = CULT_SUMMON
 
+	objs += new_obj
 	current_objective = next_objective
 	next_objective.faction = src
 	AppendObjective(next_objective)
 
-// Check if we can actually get the sac objective.
-/datum/faction/cult/narsie/proc/get_new_obj()
-	var/list/objs = list(OBJ_SAC, OBJ_SPRAY_BLOOD, OBJ_CONVERT)
-	var/list/ucs = list()
-	for(var/mob/living/carbon/human/player in mob_list)
-		if(player.mind)
-			var/role = player.mind.assigned_role
-			if(role in list("Captain", "Head of Security", "Security Officer", "Detective", "Warden"))
-				ucs += player.mind
-	if (!ucs.len)
-		objs -= OBJ_SAC
-	return pick(objs)
 
-/datum/faction/cult/narsie/proc/getNewObjective() // Placeholder values for chances waiting for the real ones.
-	current_objective.force_success = TRUE // Because people can deconvert or clean up floors but you'll still have succeded in that objective
-	AnnounceObjectiveCompletion()
+/datum/faction/cult/narsie/proc/pick_objective()
+	var/list/possible_objectives = list()
+
+	if (!(OBJ_SPRAY_BLOOD in objs))
+		possible_objectives |= OBJ_SPRAY_BLOOD
+
+	if(!(OBJ_SAC in objs))
+		var/datum/objective/target/assassinate/sacrifice/S = new
+		if (S.get_targets())
+			possible_objectives |= OBJ_SAC
+
+	if(!(OBJ_CONVERT in objs))
+		var/datum/objective/convert_people/C = new
+		if (C.get_number())
+			possible_objectives |= OBJ_CONVERT
+
+	if(!possible_objectives.len)//No more possible objectives, time to summon Nar-Sie
+		message_admins("No suitable objectives left! Nar-Sie objective unlocked.")
+		return OBJ_SUMMON
+	else
+		return pick(possible_objectives)
+
+/datum/faction/cult/narsie/proc/getNewObjective(var/debug = FALSE) // Placeholder values for chances waiting for the real ones.
+	if (!debug)
+		current_objective.force_success = TRUE // Because people can deconvert or clean up floors but you'll still have succeded in that objective
+		AnnounceObjectiveCompletion()
 	var/datum/objective/next_objective
 	switch (cult_state)
 		if (CULT_PRELUDE)
 			if (members.len <= 4) // We only got 4 members : to the summon phase
 				cult_state = CULT_SUMMON
 				next_objective = new /datum/objective/summon_narsie
+				message_admins("Only 4 cultists left : Nar-Sie objective unlocked.")
 			else
 				cult_state = CULT_INTERMEDIATE
-				var/new_obj = pick(OBJ_SAC, OBJ_SPRAY_BLOOD, OBJ_CONVERT)
+				var/new_obj = pick_objective()
 				switch (new_obj)
 					if (OBJ_SAC)
 						next_objective = new /datum/objective/target/assasinate/sacrifice
@@ -213,6 +231,8 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 						next_objective = new /datum/objective/spray_blood
 					if (OBJ_CONVERT)
 						next_objective = new /datum/objective/convert_people
+					if (OBJ_SUMMON)
+						next_objective = new /datum/objective/summon_narsie
 
 		if (CULT_INTERMEDIATE)
 			cult_state = CULT_SUMMON
@@ -220,7 +240,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 
 		if (CULT_SUMMON)
 			cult_state = CULT_FINALE
-			next_objective = new /datum/objective/defile
+			next_objective = pick(new /datum/objective/massacre, new /datum/objective/hijack/cult, new /datum/objective/harvest)
 
 	current_objective = next_objective
 	next_objective.faction = src
@@ -230,6 +250,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 
 #undef OBJ_SAC
 #undef OBJ_SPRAY_BLOOD
+#undef OBJ_CONVERT
 
 /datum/faction/cult/narsie/proc/AnnounceObjectiveCompletion()
 	var/text = current_objective.feedbackText()
@@ -287,6 +308,37 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 		for (var/word in cult_words)
 			to_chat(usr, "[cult_words[word]] is [word].")
 
+// -- Process : reroll the sac target
+
+/datum/faction/cult/narsie/process()
+	if (!istype(current_objective, /datum/objective/target/assasinate/sacrifice))
+		return
+	var/datum/objective/target/assasinate/sacrifice/S = current_objective
+
+	if (!S.target)
+		message_admins("No longer a valid target for the sacrifice: rerolling.")
+		reroll_sac()
+		return
+
+	if (S.target.current.z != map.zMainStation || S.target.current.z != map.zAsteroid) // Our target is un deep space, and we can't really have that
+		message_admins("Sacrifice target is in deep space : rerolling.")
+		reroll_sac()
+		return
+	
+	if (!S.target.current) // No body for the target, means it was gibbed
+		message_admins("Sacrifice target is gibbed : rerolling.")
+		reroll_sac()
+		return
+
+/datum/faction/cult/narsie/proc/reroll_sac(var/datum/objective/target/assassinate/sacrifice/S)
+	S.target = pick(S.get_targets())
+	if (!S.target) // No targets still ? Time to reroll the objective.
+		objective_holder.objectives -= current_objective
+		qdel(current_objective)
+		getNewObjective(debug = TRUE) // This objective never happened.
+	for (var/datum/role/R in members)
+		to_chat(R.antag.current, "<span class='sinister'>Our target escaped! We have a new objective...</span>")
+		R.AnnounceObjectives()
 
 // -- Clockwork Cult
 

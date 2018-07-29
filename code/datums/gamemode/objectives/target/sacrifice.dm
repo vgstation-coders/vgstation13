@@ -2,26 +2,41 @@
 
 /datum/objective/target/assasinate/sacrifice
 	name = "Sacrifice <target>"
-	bad_assassinate_targets = list("AI","Cyborg","Mobile MMI","Trader", "Chief Medical Officer", "Research Director", "Chief Engineer", 
-                                    "Medical Doctor", "Paramedic", "Chemist", "Geneticist", "Virologist",
-                                    "Scientist", "Roboticist",
-                                    "Station Engineer", "Atmospheric Technician", "Mechanic",
-                                    "Cargo Technician", "Quarter Master",
-                                    "Bartender", "Chef", "Botanist", "Mime", "Clown", "Assistant") // Basically anyone that is not sec or chaplain.
 	flags = FACTION_OBJECTIVE
 
 /datum/objective/target/assassinate/sacrifice/find_target()
-	..()
+	target = pick(get_targets())
 	if(target && target.current)
-		explanation_text = "Sacrifice [target.current.real_name], the [target.assigned_role=="MODE" ? (target.special_role) : (target.assigned_role)]."
+		explanation_text = "We need to sacrifice [target.name], the [target.assigned_role=="MODE" ? (target.special_role) : (target.assigned_role)], for his blood is the key that will lead our master to this realm. You will need 3 cultists around a Sacrifice rune (Hell Blood Join) to perform the ritual."
 		return TRUE
 	return FALSE
 
+/datum/objective/target/assassinate/sacrifice/proc/get_targets()
+	var/list/possible_targets = list()
+	for(var/mob/living/carbon/human/player in player_list)
+		if(player.z == map.zCentcomm) //We can't sacrifice people that are on the centcom z-level
+			continue
+		if(player.mind && !is_convertable_to_cult(player.mind) && (player.stat != DEAD))
+			possible_targets += player.mind
+
+	if(!possible_targets.len)
+		//There are no living Unconvertables on the station. Looking for a Sacrifice Target among the ordinary crewmembers
+		for(var/mob/living/carbon/human/player in player_list)
+			if(player.z == map.zCentcomm) //We can't sacrifice people that are on the centcom z-level
+				continue
+			if(player.mind && !(islegacycultist(player)))
+				possible_targets += player.mind
+
+	if(!possible_targets.len)
+		message_admins("Didn't find a suitable sacrifice target...what the hell? Shout at Deity.")
+		return FALSE
+
+	return possible_targets
 
 /datum/objective/target/assassinate/sacrifice/find_target_by_role(role, role_type=0)
-	..(role, role_type)
+	target = pick(get_targets())
 	if(target && target.current)
-		explanation_text = "Sacrifice [target.current.real_name], the [!role_type ? target.assigned_role : target.special_role]."
+		explanation_text = "We need to sacrifice [target.name], the [target.assigned_role=="MODE" ? (target.special_role) : (target.assigned_role)], for his blood is the key that will lead our master to this realm. You will need 3 cultists around a Sacrifice rune (Hell Blood Join) to perform the ritual."
 		return TRUE
 	return FALSE
 

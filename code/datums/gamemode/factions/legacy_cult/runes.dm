@@ -269,7 +269,7 @@
 
 		if(!my_cult)//if the game mode wasn't cult to begin with, there won't be need to complete a first objective to prepare the summoning.
 			attempt_summon(active_cultists)
-			return		
+			return
 		else
 			if (my_cult.cult_state != CULT_SUMMON)
 				for(var/mob/M in active_cultists)
@@ -1360,7 +1360,7 @@
 			if(isplasmaman(P))
 				P.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(P), slot_head)
 				P.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/cultist(P), slot_wear_suit)
-			else if((istype(my_cult) && my_cult.narsie_condition_cleared) || (universe.name == "Hell Rising"))
+			else if((istype(my_cult) && my_cult.cult_state > CULT_SUMMON) || (universe.name == "Hell Rising"))
 				user.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/cult(user), slot_head)
 				user.equip_to_slot_or_del(new /obj/item/clothing/suit/space/cult(user), slot_wear_suit)
 			else
@@ -1391,7 +1391,7 @@
 					if(isplasmaman(P))
 						P.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(P), slot_head)
 						P.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/cultist(P), slot_wear_suit)
-					else if((istype(my_cult) && my_cult.narsie_condition_cleared) || (universe.name == "Hell Rising"))
+					else if((istype(my_cult) && my_cult.cult_state > CULT_SUMMON) || (universe.name == "Hell Rising"))
 						M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/cult(M), slot_head)
 						M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/cult(M), slot_wear_suit)
 					else
@@ -1485,7 +1485,7 @@
 var/list/word_to_uristrune_table = null
 
 /obj/effect/rune_legacy/proc/get_uristrune_cult(var/word1, var/word2, var/word3, var/mob/M)
-	
+
 	var/animated
 
 	if((word1 == my_cult.cult_words["travel"] && word2 == my_cult.cult_words["self"])						\
@@ -1597,7 +1597,7 @@ var/list/uristrune_cache_legacy = list()
 		animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)//4
 		animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)//3
 		animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)//2
-	
+
 /proc/word_to_uristrune_bit(word)
 	if(word_to_uristrune_table == null)
 		word_to_uristrune_table = list()

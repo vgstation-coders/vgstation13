@@ -1,12 +1,15 @@
 // Legacy cult
 
 /datum/objective/spray_blood
-    explanation_text = "Spray blood on the station to thin the veil of reality and allow Nar-Sie to come closer from us."
+    explanation_text = "We must prepare this place for the Geometer of Blood's coming. Spread blood and gibs over X of the Station's floor tiles."
     name = "Spray blood on the station."
     var/floor_limit = 15 // Abritary, to fix later
 
     flags =  FACTION_OBJECTIVE
 
+/datum/objective/spray_blood/New()
+    floor_limit = round(rand(1,5))*50
+    explanation_text = "We must prepare this place for the Geometer of Blood's coming. Spread blood and gibs over [floor_limit] of the Station's floor tiles."
 
 /datum/objective/spray_blood/IsFulfilled()
     var/datum/faction/cult/narsie/cult_fac = faction

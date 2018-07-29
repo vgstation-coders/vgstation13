@@ -314,6 +314,8 @@ var/global/list/narsie_list = list()
 /obj/machinery/singularity/narsie/proc/pickcultist() //Narsie rewards his cultists with being devoured first, then picks a ghost to follow. --NEO
 	var/list/cultists = list()
 	var/datum/faction/cult = find_active_faction(BLOODCULT)
+	if (!cult)
+		cult = find_active_faction(LEGACY_CULT)
 	for(var/datum/mind/cult_nh_mind in cult.members)
 		if(!cult_nh_mind.current)
 			continue

@@ -77,6 +77,6 @@
 		WARNING("Wrong faction type for [src.antag.current], faction is [faction.type]")
 		return FALSE
 	var/datum/faction/cult/narsie/our_cult = faction
-	var/text = "[our_cult.current_objective.name]. [our_cult.current_objective.explanation_text]<br/>"
-	to_chat(antag.current, "Our new objective is: [text]")
+	var/text = "<span class='danger'>[our_cult.current_objective.name]</span> : <span class='warning'>[our_cult.current_objective.explanation_text]</span><br/>"
+	to_chat(antag.current, "<span class = 'warning'>Our new objective is:</span> [text]")
 	antag.memory += "[text]"
