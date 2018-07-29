@@ -132,13 +132,6 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 		return conv.IsFulfilled()
 	return FALSE
 
-
-// Roundstart cultos & latejoiners
-/datum/faction/cult/narsie/HandleNewMind(var/datum/mind/M)
-	if(M.current)
-		grant_runeword(M.current)
-	return ..()
-
 /datum/faction/cult/narsie/grant_runeword(mob/living/carbon/human/cult_mob, var/word)
 	if (!word)
 		if(startwords.len > 0)

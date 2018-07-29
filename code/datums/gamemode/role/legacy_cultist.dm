@@ -13,7 +13,8 @@
 	antag.current.add_language(LANGUAGE_CULT)
 	var/mob/living/carbon/human/cult_mob = antag.current
 	update_faction_icons()
-
+	var/datum/faction/cult/narise/cult_fac = faction
+	cult_fac.grant_runeword(antag.current)
 	if(!istype(cult_mob))
 		return
 
