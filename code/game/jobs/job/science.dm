@@ -43,8 +43,6 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-	to_chat(H, "<span class = 'notice'>As a head of staff, you have access to the command channel frequency. It is stored in your memory. Use the 'Notes' verb in the IC tab to access it.")
-	H.mind.store_memory("<b>Command frequency: </b> <i>[COMM_FREQ/10]</i> <br/> <b>Science frequency: </b> <i>[SCI_FREQ/10]</i> <br/> ")
 	return 1
 
 /datum/job/scientist
@@ -101,7 +99,6 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-	H.mind.store_memory("<b>Science frequency: </b> <i>[SCI_FREQ/10]</i> <br/> ")
 	return 1
 
 /datum/job/roboticist
@@ -149,5 +146,4 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-	H.mind.store_memory("<b>Science frequency: </b> <i>[SCI_FREQ/10]</i> <br/> ")
 	return 1

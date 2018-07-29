@@ -21,32 +21,30 @@
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/heads/cmo
 
-/datum/job/cmo/equip(var/mob/living/carbon/human/H)
-	if(!H)
-		return 0
-	H.equip_or_collect(new /obj/item/device/radio/headset/heads/cmo(H), slot_ears)
-	switch(H.backbag)
-		if(2)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic(H), slot_back)
-		if(3)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_med(H), slot_back)
-		if(4)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-		if(5)
-			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/med(H), slot_back)
-	H.equip_or_collect(new /obj/item/clothing/under/rank/chief_medical_officer(H), slot_w_uniform)
-	H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
-	//H.equip_or_collect(new /obj/item/device/pda/heads/cmo(H), slot_belt)
-	H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/cmo(H), slot_wear_suit)
-	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(H))
-	H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
-	if(H.backbag == 1)
-		H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
-	else
-		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-	to_chat(H, "<span class = 'notice'>As a head of staff, you have access to the command channel frequency. It is stored in your memory. Use the 'Notes' verb in the IC tab to access it.")
-	H.mind.store_memory("<b>Command frequency: </b> <i>[COMM_FREQ/10]</i> <br/> <b>Medical frequency: </b> <i>[MED_FREQ/10]</i> <br/>")
-	return 1
+	equip(var/mob/living/carbon/human/H)
+		if(!H)
+			return 0
+		H.equip_or_collect(new /obj/item/device/radio/headset/heads/cmo(H), slot_ears)
+		switch(H.backbag)
+			if(2)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic(H), slot_back)
+			if(3)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_med(H), slot_back)
+			if(4)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(5)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/med(H), slot_back)
+		H.equip_or_collect(new /obj/item/clothing/under/rank/chief_medical_officer(H), slot_w_uniform)
+		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
+		//H.equip_or_collect(new /obj/item/device/pda/heads/cmo(H), slot_belt)
+		H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat/cmo(H), slot_wear_suit)
+		H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(H))
+		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
+		if(H.backbag == 1)
+			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
+		else
+			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+		return 1
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -113,7 +111,6 @@
 			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-		H.mind.store_memory("<b>Medical frequency: </b> <i>[MED_FREQ/10]</i> <br/>")
 		return 1
 
 
@@ -161,7 +158,6 @@
 			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-		H.mind.store_memory("<b>Medical frequency: </b> <i>[MED_FREQ/10]</i> <br/>")
 		return 1
 
 /datum/job/geneticist
@@ -202,7 +198,6 @@
 			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-		H.mind.store_memory("<b>Medical frequency: </b> <i>[MED_FREQ/10]</i> <br/> <b>Science frequency: </b> <i>[SCI_FREQ/10]</i> <br/>")
 		return 1
 
 /datum/job/virologist
@@ -243,7 +238,6 @@
 			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-		H.mind.store_memory("<b>Medical frequency: </b> <i>[MED_FREQ/10]</i> <br/>")
 		return 1
 
 /*
