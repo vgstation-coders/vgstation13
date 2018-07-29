@@ -1177,6 +1177,8 @@ var/list/datum/dna/hivemind_bank = list()
 	if(!target)
 		return
 
+	to_chat(target, "<span class='userdanger'>You feel a tiny prick.</span>")
+
 	if(target.reagents)
 		target.reagents.add_reagent(CHEFSPECIAL, 5)
 
