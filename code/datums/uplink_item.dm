@@ -359,7 +359,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/organ_remover
 	name = "Modified Organics Extractor"
-	desc = "A tool used by vox raiders to extract organs from unconscious victims has been reverse-engineered by syndicate scientists to be used by anyone, but it cannot extract hearts. Click on it to select the type of organ to extract, and then select the appropiate body zone."
+	desc = "A tool used by vox raiders to extract organs from unconscious victims has been reverse-engineered by syndicate scientists to be used by anyone, but it cannot extract hearts. It works twice as fast as the vox-only variant. Click on it to select the type of organ to extract, and then select the appropiate body zone."
 	item = /obj/item/weapon/organ_remover/traitor
 	cost = 6
 	job = list("Medical Doctor", "Chief Medical Officer")
