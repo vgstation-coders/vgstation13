@@ -228,11 +228,11 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 				var/new_obj = pick_objective()
 				switch (new_obj)
 					if (OBJ_SAC)
-						next_objective = new /datum/objective/target/assassinate/sacrifice(src)
+						next_objective = new /datum/objective/target/assassinate/sacrifice
 					if (OBJ_SPRAY_BLOOD)
 						next_objective = new /datum/objective/spray_blood
 					if (OBJ_CONVERT)
-						next_objective = new /datum/objective/convert_people(src)
+						next_objective = new /datum/objective/convert_people
 					if (OBJ_SUMMON)
 						next_objective = new /datum/objective/summon_narsie
 
