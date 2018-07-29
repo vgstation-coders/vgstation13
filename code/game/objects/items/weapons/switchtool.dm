@@ -161,7 +161,7 @@
 	var/list/potential_modules = list()
 	for(var/module in stored_modules)
 		if(stored_modules[module])
-			potential_modules += addtext(get_module_name(module),"(",(stored_modules[module]).name,")")//get_module_name(module)
+			potential_modules += addtext(get_module_name(module),"(",(stored_modules[module]).name,")")
 
 	if(!potential_modules.len)
 		to_chat(user, "No modules to deploy.")
@@ -204,6 +204,17 @@
 						"/obj/item/weapon/hemostat:hemostat" = null,
 						"/obj/item/weapon/retractor:retractor" = null,
 						"/obj/item/weapon/bonesetter:bonesetter" = null)
+
+/obj/item/weapon/switchtool/surgery/undeploy()
+	playsound(src, undeploy_sound, 10, 1)
+	edit_deploy(0)
+	if(istype(deployed, /obj/item/weapon/scalpel/laser))
+		var/obj/item/weapon/scalpel/laser/L = deployed
+		L.icon_state += (L.cauterymode) ? "_on" : "_off" //since edit_deploy(0) reverts icon_state to its initial value ("scalpel_laser1(or 2)") which doesn't actually exist
+	deployed = null
+	overlays.len = 0
+	w_class = initial(w_class)
+	update_icon()
 
 /obj/item/weapon/switchtool/swiss_army_knife
 	name = "swiss army knife"
