@@ -211,6 +211,9 @@
 	if(istype(deployed, /obj/item/weapon/scalpel/laser))
 		var/obj/item/weapon/scalpel/laser/L = deployed
 		L.icon_state += (L.cauterymode) ? "_on" : "_off" //since edit_deploy(0) reverts icon_state to its initial value ("scalpel_laser1(or 2)") which doesn't actually exist
+	else if(istype(deployed, /obj/item/weapon/retractor/manager))
+		var/obj/item/weapon/retractor/manager/M = deployed
+		M.icon_state += "_off"
 	deployed = null
 	overlays.len = 0
 	w_class = initial(w_class)
