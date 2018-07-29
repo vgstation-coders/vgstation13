@@ -1536,3 +1536,8 @@ var/proccalls = 1
 #else
 #define DELAY2GLIDESIZE(delay) (Ceiling(WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1)))
 #endif
+
+//Custom vending machines
+#define CUSTOM_VENDING_MAX_SLOGAN_LENGTH	50
+#define CUSTOM_VENDING_MAX_NAME_LENGTH	25
+#define CUSTOM_VENDING_MAX_SLOGANS	5
