@@ -393,3 +393,16 @@ datum/emergency_shuttle/proc/process()
 
 		else
 			return 1
+
+/proc/shuttle_autocall()
+	if (emergency_shuttle.departed)
+		return
+	
+	if (emergency_shuttle.location == SHUTTLE_ON_STATION)
+		return
+
+	emergency_shuttle.incall(2)
+	log_game("All the AIs, comm consoles and boards are destroyed. Shuttle called.")
+	message_admins("All the AIs, comm consoles and boards are destroyed. Shuttle called.", 1)
+	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
+	world << sound('sound/AI/shuttlecalled.ogg')

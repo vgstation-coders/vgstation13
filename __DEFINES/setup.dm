@@ -5,6 +5,11 @@
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
 
+// Defines for the shuttle
+#define SHUTTLE_ON_STANDBY 0
+#define SHUTTLE_ON_STATION 1
+#define SHUTTLE_ON_CENTCOM 2
+
 #ifndef RUNWARNING
 #warn If you have issues with retrieving logs update byond on the server and client to 507.1277 or greater, or uncomment RUNWARNING
 #endif
