@@ -11,9 +11,6 @@
 /mob/living/silicon/robot/syndie/getModules()
 	return syndicate_robot_modules
 
-/mob/living/silicon/robot/syndie/GetRobotAccess()
-	return get_all_syndicate_access()
-
 /mob/living/silicon/robot/syndie/New()
 	..()
 	UnlinkSelf()

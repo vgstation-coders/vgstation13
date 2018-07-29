@@ -67,6 +67,7 @@
 	var/illegal_weapons = FALSE
 	var/wiresexposed = FALSE
 	var/locked = TRUE
+	var/list/req_access = list(access_robotics)
 	var/ident = FALSE
 	var/hasbutt = TRUE //Needed for bootyborgs... and buckling too.
 	var/alarms = list("Motion"=list(), "Fire"=list(), "Atmosphere"=list(), "Power"=list(), "Camera"=list())
@@ -95,17 +96,12 @@
 	var/toner = CYBORG_STARTING_TONER
 	var/tonermax = CYBORG_MAX_TONER
 
-//Access
-	var/list/req_access = list(access_robotics) //Access needed to open cover
-	var/list/robot_access = list(access_ai_upload, access_robotics, access_maint_tunnels, access_external_airlocks) //Our current access
-
 /mob/living/silicon/robot/New(loc, var/unfinished = FALSE)
 	ident = rand(1, 999)
 	updatename(modtype)
 	updateicon()
 
 	laws = getLawset(src)
-	robot_access = GetRobotAccess()
 	wires = new wiring_type(src)
 	station_holomap = new(src)
 	radio = new /obj/item/device/radio/borg(src)
@@ -1309,10 +1305,8 @@
 /mob/living/silicon/robot/GetAccess()
 	if(isDead()) //Dead cyborgs need no access.
 		return
-	return robot_access
-
-/mob/living/silicon/robot/proc/GetRobotAccess()
-	return get_all_accesses()
+	if(module) //Pick a module you lil shit.
+		return module.access
 
 /mob/living/silicon/robot/hasFullAccess()
 	return FALSE
