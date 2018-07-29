@@ -78,6 +78,12 @@
 /obj/item/weapon/switchtool/proc/get_module_name(var/module)
 	return copytext(module, findtext(module, ":") + 1)
 
+/obj/item/weapon/switchtool/proc/change_module_name(var/module, var/new_name)
+	var/module_item = stored_modules[module]
+	stored_modules -= module
+	var/new_module_path = addtext(get_module_type(module), ":", new_name)
+	stored_modules[new_module_path] = module_item
+
 //makes the string list of modules ie "a screwdriver, a knife, and a clown horn"
 //does not end with a full stop, but does contain commas
 /obj/item/weapon/switchtool/proc/get_formatted_modules()
@@ -86,24 +92,25 @@
 	for(var/module in stored_modules)
 		counter++
 		if(counter == stored_modules.len)
-			module_string += "and \a [get_module_name(module)]"
+			module_string += "and \a [stored_modules[module].name]" //"and \a [get_module_name(module)]"
 		else
-			module_string += "\a [get_module_name(module)], "
+			module_string += "\a [stored_modules[module].name], " //"\a [get_module_name(module)], "
 	return module_string
 
 /obj/item/weapon/switchtool/proc/add_module(var/obj/item/used_item, mob/user)
 	if(!used_item || !user)
-		return
+		return FALSE
 
 	for(var/module in stored_modules)
 		var/type_path = text2path(get_module_type(module))
 		if(istype(used_item, type_path))
 			if(stored_modules[module])
 				to_chat(user, "\The [src] already has a [get_module_name(module)].")
-				return
+				return FALSE
 			else
 				if(user.drop_item(used_item, src))
 					stored_modules[module] = used_item
+					//change_module_name(module, used_item.name)
 					to_chat(user, "You successfully load \the [used_item] into \the [src]'s [get_module_name(module)] slot.")
 					return TRUE
 
@@ -161,24 +168,31 @@
 	var/list/potential_modules = list()
 	for(var/module in stored_modules)
 		if(stored_modules[module])
-			potential_modules += get_module_name(module)
+			potential_modules += addtext(get_module_name(module),"(",(stored_modules[module]).name,")")//get_module_name(module)
 
 	if(!potential_modules.len)
 		to_chat(user, "No modules to deploy.")
 		return
 
 	else if(potential_modules.len == 1)
-		deploy(potential_modules[1])
-		to_chat(user, "You deploy \the [potential_modules[1]]")
-		edit_deploy(1)
-		return TRUE
+		for(var/m in stored_modules)
+			if(stored_modules[m])
+				deploy(m)
+				edit_deploy(1)
+				return TRUE
+		//to_chat(user, "[potential_modules[1]] and [copytext(potential_modules[1], 1, findtext(potential_modules[1], "("))]")
+		//deploy(copytext(potential_modules[1], 1, findtext(potential_modules[1], "(")))  //potential_modules[1])
+		//to_chat(user, "You deploy \the [potential_modules[1]]")
+		return
+
 
 	else
 		var/chosen_module = input(user,"What do you want to deploy?", "[src]", "Cancel") as anything in potential_modules
 		if(chosen_module != "Cancel")
 			var/true_module = ""
 			for(var/checkmodule in stored_modules)
-				if(get_module_name(checkmodule) == chosen_module)
+				//if(get_module_name(checkmodule) == chosen_module)
+				if(get_module_name(checkmodule) == copytext(chosen_module, 1, findtext(chosen_module, "(")))
 					true_module = checkmodule
 					break
 			if(deploy(true_module))
