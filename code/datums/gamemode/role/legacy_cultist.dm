@@ -53,7 +53,6 @@
 				Avoid the Chaplain, the chapel, Security and especially Holy Water.")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-	AnnounceObjectives()
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
 /datum/role/legacy_cultist/Drop()
@@ -66,17 +65,15 @@
 	. = ..()
 
 /datum/role/legacy_cultist/MemorizeObjectives()
-	var/datum/faction/cult/narsie/our_cult = faction
-	var/text="<b>Our Cult's objectives:</b> <br/>"
-	text += "[our_cult.current_objective.name]. [our_cult.current_objective.explanation_text]<br/>"
-	to_chat(antag.current, "[text]")
-	antag.memory += "[text]"
+	AnnounceObjectives()
 
 /datum/role/legacy_cultist/AnnounceObjectives()
 	if (!istype(faction, /datum/faction/cult/narsie))
 		WARNING("Wrong faction type for [src.antag.current], faction is [faction.type]")
 		return FALSE
 	var/datum/faction/cult/narsie/our_cult = faction
-	var/text = "<span class='danger'>[our_cult.current_objective.name]</span> : <span class='warning'>[our_cult.current_objective.explanation_text]</span><br/>"
-	to_chat(antag.current, "<span class = 'warning'>Our new objective is:</span> [text]")
-	antag.memory += "[text]"
+	to_chat(antag.current, "<span class = 'warning'>Our new objective is:</span>")
+	to_chat(antag.current, "Objective #[faction.objective_holder.objectives.len]: <span class='danger'>[our_cult.current_objective.name]</span>")
+	to_chat(antag.current, "<span class='warning'>[our_cult.current_objective.explanation_text]</span><br/>")
+	antag.memory += "Objective #[faction.objective_holder.objectives.len]: <span class='danger'>[our_cult.current_objective.name]</span>"
+	antag.memory += "<span class='warning'>[our_cult.current_objective.explanation_text]</span><br/>"

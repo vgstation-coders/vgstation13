@@ -21,7 +21,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 
 /datum/faction/cult/narsie
 	name = "Ancient Cult of Nar-Sie"
-	ID = list(LEGACY_CULT)
+	ID = LEGACY_CULT
 	desc = "A group of shady blood-obsessed individuals whose souls are devoted to Nar-Sie, the Geometer of Blood.\
 	From his teachings, they were granted the ability to perform blood magic rituals allowing them to fight and grow their ranks, and given the goal of pushing his agenda.\
 	Nar-Sie's ultimate goal is to tear open a breach through reality so he can pull the station into his realm and feast on the crew's blood and souls."
@@ -114,8 +114,8 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 		return null
 
 /datum/faction/cult/narsie/proc/is_sacrifice_target(var/datum/mind/M)
-	if (istype(current_objective, /datum/objective/target/assasinate/sacrifice))
-		var/datum/objective/target/assasinate/sacrifice/S = current_objective
+	if (istype(current_objective, /datum/objective/target/assassinate/sacrifice))
+		var/datum/objective/target/assassinate/sacrifice/S = current_objective
 		if(S.target == M)
 			return TRUE
 	return FALSE
@@ -173,7 +173,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	var/new_obj = pick_objective()
 	switch (new_obj)
 		if (OBJ_SAC)
-			next_objective = new /datum/objective/target/assasinate/sacrifice
+			next_objective = new /datum/objective/target/assassinate/sacrifice
 		if (OBJ_SPRAY_BLOOD)
 			next_objective = new /datum/objective/spray_blood
 		if (OBJ_CONVERT)
@@ -196,11 +196,13 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 
 	if(!(OBJ_SAC in objs))
 		var/datum/objective/target/assassinate/sacrifice/S = new
+		S.faction = src
 		if (S.get_targets())
 			possible_objectives |= OBJ_SAC
 
 	if(!(OBJ_CONVERT in objs))
 		var/datum/objective/convert_people/C = new
+		C.faction = src
 		if (C.get_number())
 			possible_objectives |= OBJ_CONVERT
 
@@ -211,7 +213,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 		return pick(possible_objectives)
 
 /datum/faction/cult/narsie/proc/getNewObjective(var/debug = FALSE) // Placeholder values for chances waiting for the real ones.
-	if (!debug)
+	if (!debug) // Debug = we're getting a new objective because something bad happened, we want to erase it from the scoreboard.
 		current_objective.force_success = TRUE // Because people can deconvert or clean up floors but you'll still have succeded in that objective
 		AnnounceObjectiveCompletion()
 	var/datum/objective/next_objective
@@ -226,11 +228,11 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 				var/new_obj = pick_objective()
 				switch (new_obj)
 					if (OBJ_SAC)
-						next_objective = new /datum/objective/target/assasinate/sacrifice
+						next_objective = new /datum/objective/target/assassinate/sacrifice(src)
 					if (OBJ_SPRAY_BLOOD)
 						next_objective = new /datum/objective/spray_blood
 					if (OBJ_CONVERT)
-						next_objective = new /datum/objective/convert_people
+						next_objective = new /datum/objective/convert_people(src)
 					if (OBJ_SUMMON)
 						next_objective = new /datum/objective/summon_narsie
 
@@ -311,31 +313,29 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 // -- Process : reroll the sac target
 
 /datum/faction/cult/narsie/process()
-	if (!istype(current_objective, /datum/objective/target/assasinate/sacrifice))
+	if (!istype(current_objective, /datum/objective/target/assassinate/sacrifice))
 		return
-	var/datum/objective/target/assasinate/sacrifice/S = current_objective
+	var/datum/objective/target/assassinate/sacrifice/S = current_objective
 
 	if (!S.target)
 		message_admins("No longer a valid target for the sacrifice: rerolling.")
-		reroll_sac()
+		reroll_sac(S)
 		return
 
-	if (S.target.current.z != map.zMainStation || S.target.current.z != map.zAsteroid) // Our target is un deep space, and we can't really have that
-		message_admins("Sacrifice target is in deep space : rerolling.")
-		reroll_sac()
+	if (S.target.current.z != map.zMainStation && S.target.current.z != map.zAsteroid) // Our target is in deep space, and we can't really have that
+		message_admins("Sacrifice target is in deep space, or dead : rerolling.")
+		reroll_sac(S)
 		return
 	
-	if (!S.target.current) // No body for the target, means it was gibbed
-		message_admins("Sacrifice target is gibbed : rerolling.")
-		reroll_sac()
-		return
 
 /datum/faction/cult/narsie/proc/reroll_sac(var/datum/objective/target/assassinate/sacrifice/S)
-	S.target = pick(S.get_targets())
+	var/list/possible_targets = S.get_targets()
+	S.target = pick(possible_targets)
 	if (!S.target) // No targets still ? Time to reroll the objective.
 		objective_holder.objectives -= current_objective
 		qdel(current_objective)
 		getNewObjective(debug = TRUE) // This objective never happened.
+		return
 	for (var/datum/role/R in members)
 		to_chat(R.antag.current, "<span class='sinister'>Our target escaped! We have a new objective...</span>")
 		R.AnnounceObjectives()

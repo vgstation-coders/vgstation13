@@ -246,7 +246,7 @@
 
 /////////////////////////////////////////FOURTH RUNE
 
-#define NUMBER_OF_NERDS_NEEDED 9
+#define NUMBER_OF_NERDS_NEEDED 2
 
 /obj/effect/rune_legacy/proc/tearreality()
 	if(summoning)
