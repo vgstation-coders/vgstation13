@@ -88,6 +88,7 @@
 	var/doubleshot = 0
 	var/doubleshooting = 0
 	var/recoileffectchance = 50
+	var/recentbreak = 0 //Healthy recycling
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/process_chambered()
 	if(in_chamber)
@@ -106,13 +107,17 @@
 	return 0
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/attack_self(mob/living/user as mob)
+	if(recentbreak)
+		return
 	if(!(locate(/obj/item/ammo_casing/shotgun) in src) && !getAmmo())
 		to_chat(user, "<span class='notice'>\The [src] is empty.</span>")
 		return
 	if(jammed)
+		recentbreak = 1
 		to_chat(user, "<span class='warning'>You break open \the [src], but the shells inside seem to be stuck...</span>")
-		sleep(10)
-		to_chat(user, "<span class='notice'>You should get a rod to loosen them, fumbling won't get you anywhere.</span>")
+		spawn(1 SECONDS)
+			to_chat(user, "<span class='notice'>You should get a rod to loosen them, fumbling won't get you anywhere.</span>")
+			recentbreak = 0
 		return
 	var/i = 0
 	for(var/obj/item/ammo_casing/shotgun/loaded_shell in src) //This feels like a hack. don't code at 3:30am kids!!
@@ -172,8 +177,6 @@
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	if(doubleshot && (getLiveAmmo() == 2)) //ANGERY
-		var/atom/reverse = locate(2*user.x - target.x, 2*user.y - target.y, target.z)
-
 		if(ready_to_fire())
 			fire_delay = 0
 		else
@@ -188,7 +191,6 @@
 			recoil = 2 * initial(recoil)
 			..()
 			..()
-			message_admins("[usr] just fired both barrels out of \his [src].")
 			fire_delay = 20
 			recoil = initial(recoil)
 			doubleshooting = 0
@@ -199,6 +201,7 @@
 						jammed = 1 // Needs some work to be unloaded and reloaded again
 					if(DROPGUN)
 						if(user.drop_item(src)) // Launches it from your hands behind you, letting someone else steal it
+							var/atom/reverse = locate(2*user.x - target.x, 2*user.y - target.y, target.z)
 							src.throw_at(reverse, 2, 10)
 							to_chat(user, "<span class='danger'>The recoil is too strong and \the [src] flies out of your hand!</span>")
 						else
@@ -209,7 +212,7 @@
 						to_chat(user, "<span class='danger'>The recoil throws you off balance!</span>")
 					if(RECOILBRUISE)
 						var/datum/organ/external/org = H.find_organ_by_grasp_index(user.is_holding_item(src)).parent // It should break your arm, not your hand, the gun still has a stock you're bracing against.
-						org.take_damage(rand(15,40), null , null, null)// I have no idea what the fuck I am doing, adjustBruteLossByPart() doesn't work for some reason.
+						org.take_damage(rand(15,40))// I have no idea what the fuck I am doing, adjustBruteLossByPart() doesn't work for some reason.
 						to_chat(user, "<span class='danger'>The recoil kicks your arm like a mule!</span>")
 	else
 		..()
