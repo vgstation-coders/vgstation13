@@ -266,6 +266,7 @@ var/global/datum/gas_mixture/space_gas = new
 
 //Announcement intercom
 var/global/obj/item/device/radio/intercom/universe/announcement_intercom = new
+#define CANT_RECIEVE -1 // For radios & intercoms, special return code
 
 //used by jump-to-area etc. Updated by area/updateName()
 var/list/sortedAreas = list()

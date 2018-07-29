@@ -76,13 +76,13 @@
 	interpreter.SetVar("WEST",	 	WEST)			// WEST  (8)
 
 	// Channel macros
-	interpreter.SetVar("$common",		1459)
-	interpreter.SetVar("$science",		1351)
-	interpreter.SetVar("$command",		1353)
-	interpreter.SetVar("$medical",		1355)
-	interpreter.SetVar("$engineering",	1357)
-	interpreter.SetVar("$security",		1359)
-	interpreter.SetVar("$supply",		1347)
+	interpreter.SetVar("$common",		COMMON_FREQ)
+	interpreter.SetVar("$science",		SCI_FREQ)
+	interpreter.SetVar("$command",		COMM_FREQ)
+	interpreter.SetVar("$medical",		MED_FREQ)
+	interpreter.SetVar("$engineering",	ENG_FREQ)
+	interpreter.SetVar("$security",		SEC_FREQ)
+	interpreter.SetVar("$supply",		SUP_FREQ)
 
 	// Signal data
 

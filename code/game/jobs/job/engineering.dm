@@ -23,30 +23,32 @@
 	pdatype=/obj/item/device/pda/heads/ce
 
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		H.equip_or_collect(new /obj/item/device/radio/headset/heads/ce(H), slot_ears)
-		switch(H.backbag)
-			if(2)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
-			if(3)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
-			if(4)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
-			if(5)
-				H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/engi(H), slot_back)
-		H.equip_or_collect(new /obj/item/clothing/under/rank/chief_engineer(H), slot_w_uniform)
-		//H.equip_or_collect(new /obj/item/device/pda/heads/ce(H), slot_l_store)
-		H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
-		H.equip_or_collect(new /obj/item/clothing/head/hardhat/white(H), slot_head)
-		H.equip_or_collect(new /obj/item/weapon/storage/belt/utility/complete(H), slot_belt)
-		H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
-		else
-			H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
-		return 1
+/datum/job/chief_engineer/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	H.equip_or_collect(new /obj/item/device/radio/headset/heads/ce(H), slot_ears)
+	switch(H.backbag)
+		if(2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/industrial(H), slot_back)
+		if(3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_eng(H), slot_back)
+		if(4)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+		if(5)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/messenger/engi(H), slot_back)
+	H.equip_or_collect(new /obj/item/clothing/under/rank/chief_engineer(H), slot_w_uniform)
+	//H.equip_or_collect(new /obj/item/device/pda/heads/ce(H), slot_l_store)
+	H.equip_or_collect(new /obj/item/clothing/shoes/workboots(H), slot_shoes)
+	H.equip_or_collect(new /obj/item/clothing/head/hardhat/white(H), slot_head)
+	H.equip_or_collect(new /obj/item/weapon/storage/belt/utility/complete(H), slot_belt)
+	H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
+	if(H.backbag == 1)
+		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
+	else
+		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+	to_chat(H, "<span class = 'notice'>As a head of staff, you have access to the command channel frequency. It is stored in your memory. Use the 'Notes' verb in the IC tab to access it.")
+	H.mind.store_memory("<b>Command frequency: </b> <i>[COMM_FREQ/10]</i> <br/> <b>Engineering frequency: </b> <i>[ENG_FREQ/10]</i>")
+	return 1
 
 
 
@@ -99,6 +101,7 @@
 			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
 		else
 			H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+		H.mind.store_memory("<b>Engineering frequency: </b> <i>[ENG_FREQ/10]</i> <br/> ")
 		return 1
 
 
@@ -141,6 +144,7 @@
 			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
 		else
 			H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+		H.mind.store_memory("<b>Engineering frequency: </b> <i>[ENG_FREQ/10]</i> <br/> ")
 		return 1
 
 /datum/job/mechanic
@@ -190,4 +194,5 @@
 			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
 		else
 			H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+		H.mind.store_memory("<b>Engineering frequency: </b> <i>[ENG_FREQ/10]</i> <br/> <b>Science frequency: </b> <i>[SCI_FREQ/10]</i> <br/>")
 		return 1

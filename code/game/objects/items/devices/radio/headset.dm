@@ -10,8 +10,8 @@
 	canhear_range = 0 // can't hear headsets from very far away
 
 	slot_flags = SLOT_EARS
-	var/translate_binary = 0
-	var/translate_hive = 0
+	translate_binary = 0
+	translate_hive = 0
 	var/obj/item/device/encryptionkey/keyslot1 = null
 	var/obj/item/device/encryptionkey/keyslot2 = null
 	maxf = 1489
@@ -30,11 +30,11 @@
 
 /obj/item/device/radio/headset/syndicate
 	origin_tech = Tc_SYNDICATE + "=3"
+
 /obj/item/device/radio/headset/syndicate/New()
 	..()
 	qdel(keyslot1)
 	keyslot1 = new /obj/item/device/encryptionkey/syndicate
-	syndie = 1
 	recalculateChannels()
 
 /obj/item/device/radio/headset/syndicate/commando/New()
@@ -47,7 +47,6 @@
 	..()
 	qdel(keyslot1)
 	keyslot1 = new /obj/item/device/encryptionkey/raider
-	raider = 1
 	recalculateChannels()
 
 /obj/item/device/radio/headset/raider/pretuned/New() // pre tuned radio to 1215 aka raider freq
@@ -276,6 +275,13 @@
 	keyslot2 = new /obj/item/device/encryptionkey/ert
 	..()
 
+/obj/item/device/radio/headset/handle_crypted_channels(var/channel)
+	var/list/obj/item/device/encryptionkey/keyslots = list(keyslot1, keyslot2) // In the future we'll have more than 2 keyslots.
+	for (var/obj/item/device/encryptionkey/key in keyslots)
+		if (channel in key.secured_channels) // We're actually able to decipher that channel.
+			return TRUE
+	return FALSE
+
 /obj/item/device/radio/headset/attackby(obj/item/weapon/W as obj, mob/user as mob)
 //	..()
 	user.set_machine(src)
@@ -296,8 +302,6 @@
 				if(T)
 					keyslot1.forceMove(T)
 					keyslot1 = null
-
-
 
 			if(keyslot2)
 				var/turf/T = get_turf(user)
@@ -330,12 +334,10 @@
 	return
 
 
-/obj/item/device/radio/headset/proc/recalculateChannels()
+/obj/item/device/radio/headset/recalculateChannels()
 	src.channels = list()
 	src.translate_binary = 0
 	src.translate_hive = 0
-	src.syndie = 0
-	src.raider = 0
 
 	if(keyslot1)
 		for(var/ch_name in keyslot1.channels)
@@ -350,12 +352,6 @@
 		if(keyslot1.translate_hive)
 			src.translate_hive = 1
 
-		if(keyslot1.syndie)
-			src.syndie = 1
-
-		if(keyslot1.raider)
-			src.raider = 1
-
 	if(keyslot2)
 		for(var/ch_name in keyslot2.channels)
 			if(ch_name in src.channels)
@@ -368,12 +364,6 @@
 
 		if(keyslot2.translate_hive)
 			src.translate_hive = 1
-
-		if(keyslot2.syndie)
-			src.syndie = 1
-
-		if(keyslot2.raider)
-			src.raider = 1
 
 
 	for (var/ch_name in channels)
