@@ -266,8 +266,17 @@
 	density = 1.05
 	specheatcap = 3.49
 
-	data = new/list("donor"= null, "viruses" = null, "blood_DNA" = null, "blood_type" = null, \
-	"blood_colour" = DEFAULT_BLOOD, "resistances" = null, "trace_chem" = null, "antibodies" = null)
+	data = list(
+		"donor"= null,
+		"viruses" = null,
+		"blood_DNA" = null,
+		"blood_type" = null,
+		"blood_colour" = DEFAULT_BLOOD,
+		"resistances" = null,
+		"trace_chem" = null,
+		"virus2" = null,
+		"antibodies" = null,
+		)
 
 /datum/reagent/blood/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 

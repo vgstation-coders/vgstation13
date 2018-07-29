@@ -1364,8 +1364,8 @@
 				user.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/cult(user), slot_head)
 				user.equip_to_slot_or_del(new /obj/item/clothing/suit/space/cult(user), slot_wear_suit)
 			else
-				user.equip_to_slot_or_del(new /obj/item/clothing/head/culthood/alt(user), slot_head)
-				user.equip_to_slot_or_del(new /obj/item/clothing/suit/cultrobes/alt(user), slot_wear_suit)
+				user.equip_to_slot_or_del(new /obj/item/clothing/head/legacy_culthood/alt(user), slot_head)
+				user.equip_to_slot_or_del(new /obj/item/clothing/suit/legacy_cultrobes/alt(user), slot_wear_suit)
 			user.equip_to_slot_or_del(new /obj/item/clothing/shoes/cult(user), slot_shoes)
 			user.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/cultpack(user), slot_back)
 			//the above update their overlay icons cache but do not call update_icons()
@@ -1376,7 +1376,7 @@
 			K.visible_message("<span class='warning'> The rune disappears with a flash of red light, [K] now looks like the cutest of all followers of Nar-Sie...</span>", \
 			"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor. Might not offer much protection due to its size though.</span>")
 			K.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes, slot_w_uniform)
-			K.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood/alt, slot_head)
+			K.equip_to_slot_or_drop(new /obj/item/clothing/head/legacy_culthood/alt, slot_head)
 			K.equip_to_slot_or_drop(new /obj/item/weapon/storage/backpack/cultpack, slot_back)
 			K.put_in_hands(new /obj/item/weapon/melee/cultblade(K))
 		return
@@ -1395,8 +1395,8 @@
 						M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/cult(M), slot_head)
 						M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/cult(M), slot_wear_suit)
 					else
-						M.equip_to_slot_or_del(new /obj/item/clothing/head/culthood/alt(M), slot_head)
-						M.equip_to_slot_or_del(new /obj/item/clothing/suit/cultrobes/alt(M), slot_wear_suit)
+						M.equip_to_slot_or_del(new /obj/item/clothing/head/legacy_culthood/alt(M), slot_head)
+						M.equip_to_slot_or_del(new /obj/item/clothing/suit/legacy_cultrobes/alt(M), slot_wear_suit)
 					M.equip_to_slot_or_del(new /obj/item/clothing/shoes/cult(M), slot_shoes)
 					M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/cultpack(M), slot_back)
 					M.put_in_hands(new /obj/item/weapon/melee/cultblade(M))
@@ -1405,7 +1405,7 @@
 					K.visible_message("<span class='warning'> The rune disappears with a flash of red light, [K] now looks like the cutest of all followers of Nar-Sie...</span>", \
 					"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor. Might not offer much protection due to its size though.</span>")
 					K.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes, slot_w_uniform)
-					K.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood/alt, slot_head)
+					K.equip_to_slot_or_drop(new /obj/item/clothing/head/legacy_culthood/alt, slot_head)
 					K.equip_to_slot_or_drop(new /obj/item/weapon/storage/backpack/cultpack, slot_back)
 					K.put_in_hands(new /obj/item/weapon/melee/cultblade(K))
 				else if(isconstruct(M))

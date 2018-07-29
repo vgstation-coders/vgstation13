@@ -273,15 +273,24 @@ var/list/arcane_tomes = list()
 
 	if (iscultist(user) || isobserver(user))
 		if (attuned_rune)
-			to_chat(user, "<span class='info'>This one was attuned to a <b>[initial(instance.name)]</b> rune.</span>")
+			to_chat(user, "<span class='info'>This one was attuned to a <b>[initial(instance.name)]</b> rune. [initial(instance.desc_talisman)]</span>")
 		else
-			to_chat(user, "<span class='info'>This one was imbued with a <b>[initial(instance.name)]</b> rune.</span>")
+			to_chat(user, "<span class='info'>This one was imbued with a <b>[initial(instance.name)]</b> rune. [initial(instance.desc_talisman)]</span>")
 	else
 		to_chat(user, "<span class='info'>This one was some arcane drawings on it. You cannot read them.</span>")
 
 /obj/item/weapon/talisman/attack_self(var/mob/living/user)
 	if (iscultist(user))
 		trigger(user)
+
+/obj/item/weapon/talisman/attack(var/mob/living/target, var/mob/living/user)
+	if(iscultist(user) && spell_type)
+		var/datum/rune_spell/instance = spell_type
+		if (initial(instance.touch_cast))
+			new spell_type(user, src, "touch", target)
+			qdel(src)
+			return
+	..()
 
 /obj/item/weapon/talisman/proc/trigger(var/mob/user)
 	if (!user)
@@ -339,17 +348,19 @@ var/list/arcane_tomes = list()
 		spell_type = spell
 		switch(initial(spell.talisman_absorb))
 			if (RUNE_CAN_ATTUNE)
-				user.playsound_local(src, 'sound/effects/talisman_attune.ogg', 50, 0, 0, 0, 0)
+				playsound(src, 'sound/effects/talisman_attune.ogg', 50, 0, -5)
 				to_chat(user, "<span class='notice'>The talisman can now remotely trigger the [initial(spell.name)] rune.</span>")
 				attuned_rune = R
 			if (RUNE_CAN_IMBUE)
-				user.playsound_local(src, 'sound/effects/talisman_imbue.ogg', 50, 0, 0, 0, 0)
+				playsound(src, 'sound/effects/talisman_imbue.ogg', 50, 0, -5)
 				to_chat(user, "<span class='notice'>The talisman absorbs the power of the [initial(spell.name)] rune.</span>")
 				qdel(R)
 			if (RUNE_CANNOT)//like, that shouldn't even be possible because of the earlier if() check, but just in case.
 				message_admins("Error! Some bloke ([key_name(user)]) managed to imbue a Conjure Talisman rune. That shouldn't be possible!")
 				return
 
+
+///////////////////////////////////////CULT BLADE////////////////////////////////////////////////
 
 /obj/item/weapon/melee/cultblade
 	name = "cult blade"
@@ -391,6 +402,8 @@ var/list/arcane_tomes = list()
 		user.Dizzy(120)
 
 
+///////////////////////////////////////CULT HOOD////////////////////////////////////////////////
+
 /obj/item/clothing/head/culthood
 	name = "cult hood"
 	icon_state = "culthood"
@@ -401,16 +414,31 @@ var/list/arcane_tomes = list()
 	siemens_coefficient = 0
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 
+/obj/item/clothing/head/culthood/get_cult_power()
+	return 20
+
 /obj/item/clothing/head/culthood/cultify()
 	return
 
-/obj/item/clothing/head/culthood/alt
-	icon_state = "cult_hoodalt"
-	item_state = "cult_hoodalt"
+///////////////////////////////////////CULT SHOES////////////////////////////////////////////////
 
-/obj/item/clothing/suit/cultrobes/alt
-	icon_state = "cultrobesalt"
-	item_state = "cultrobesalt"
+/obj/item/clothing/shoes/cult
+	name = "boots"
+	desc = "A pair of boots worn by the followers of Nar-Sie."
+	icon_state = "cult"
+	item_state = "cult"
+	_color = "cult"
+	siemens_coefficient = 0.7
+	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
+	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
+
+/obj/item/clothing/head/culthood/get_cult_power()
+	return 10
+
+/obj/item/clothing/shoes/cult/cultify()
+	return
+
+///////////////////////////////////////CULT ROBES////////////////////////////////////////////////
 
 /obj/item/clothing/suit/cultrobes
 	name = "cult robes"
@@ -422,29 +450,52 @@ var/list/arcane_tomes = list()
 	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
 	siemens_coefficient = 0
 
+/obj/item/clothing/suit/cultrobes/get_cult_power()
+	return 50
+
 /obj/item/clothing/suit/cultrobes/cultify()
 	return
 
-/obj/item/clothing/head/magus
-	name = "magus helm"
-	icon_state = "magus"
-	item_state = "magus"
-	desc = "A helm worn by the followers of Nar-Sie."
-	flags = FPRINT
-	body_parts_covered = FULL_HEAD|BEARD
-	armor = list(melee = 30, bullet = 30, laser = 30,energy = 20, bomb = 0, bio = 0, rad = 0)
-	siemens_coefficient = 0
+///////////////////////////////////////CULT BACKPACK (TROPHY RACK)////////////////////////////////////////////////
 
-/obj/item/clothing/suit/magusred
-	name = "magus robes"
-	desc = "A set of armored robes worn by the followers of Nar-Sie."
-	icon_state = "magusred"
-	item_state = "magusred"
-	flags = FPRINT
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
-	allowed = list(/obj/item/weapon/tome_legacy,/obj/item/weapon/melee/cultblade)
-	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
-	siemens_coefficient = 0
+/obj/item/weapon/storage/backpack/cultpack
+	name = "trophy rack"
+	desc = "It's useful for both carrying extra gear and proudly declaring your insanity."
+	icon_state = "cultpack_0skull"
+	item_state = "cultpack_0skull"
+	var/skulls = 0
+
+/obj/item/weapon/storage/backpack/cultpack/attack_self(var/mob/user)
+	..()
+	for(var/i = 1 to skulls)
+		new/obj/item/weapon/skull(get_turf(src))
+	update_icon(user)
+
+/obj/item/weapon/storage/backpack/cultpack/attackby(var/obj/item/weapon/W, var/mob/user)
+	if(istype(W, /obj/item/weapon/skull) && (skulls < 3))
+		user.u_equip(W,1)
+		qdel(W)
+		skulls++
+		update_icon(user)
+		to_chat(user,"<span class='warning'>You plant the skull on the trophy rack.</span>")
+		return
+	. = ..()
+
+/obj/item/weapon/storage/backpack/cultpack/update_icon(var/mob/living/carbon/user)
+	icon_state = "cultpack_[skulls]skull"
+	item_state = "cultpack_[skulls]skull"
+	if(istype(user))
+		user.update_inv_back()
+		user.update_inv_hands()
+
+/obj/item/weapon/storage/backpack/cultpack/get_cult_power()
+	return 30
+
+/obj/item/weapon/storage/backpack/cultpack/cultify()
+	return
+
+
+///////////////////////////////////////CULT HELMET////////////////////////////////////////////////
 
 
 /obj/item/clothing/head/helmet/space/cult
@@ -454,6 +505,14 @@ var/list/arcane_tomes = list()
 	item_state = "cult_helmet"
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0
+
+/obj/item/clothing/head/helmet/space/cult/get_cult_power()
+	return 30
+
+/obj/item/clothing/head/helmet/space/cult/cultify()
+	return
+
+///////////////////////////////////////CULT ARMOR////////////////////////////////////////////////
 
 /obj/item/clothing/suit/space/cult
 	name = "cult armor"
@@ -466,6 +525,49 @@ var/list/arcane_tomes = list()
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0
 
+/obj/item/clothing/suit/space/cult/get_cult_power()
+	return 60
+
+/obj/item/clothing/suit/space/cult/cultify()
+	return
+
+
+
+///////////////////////////////////////I'LL HAVE TO DEAL WITH THIS STUFF LATER////////////////////////////////////////////////
+
+/obj/item/clothing/head/culthood/old
+	icon_state = "culthood_old"
+	item_state = "culthood_old"
+
+/obj/item/clothing/suit/cultrobes/old
+	icon_state = "cultrobes_old"
+	item_state = "cultrobes_old"
+
+/obj/item/clothing/head/magus
+	name = "magus helm"
+	icon_state = "magus"
+	item_state = "magus"
+	desc = "A helm."
+	flags = FPRINT
+	body_parts_covered = FULL_HEAD|BEARD
+	armor = list(melee = 30, bullet = 30, laser = 30,energy = 20, bomb = 0, bio = 0, rad = 0)
+	siemens_coefficient = 0
+
+/obj/item/clothing/suit/magusred
+	name = "magus robes"
+	desc = "A set of armored robes."
+	icon_state = "magusred"
+	item_state = "magusred"
+	flags = FPRINT
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	allowed = list(/obj/item/weapon/tome,/obj/item/weapon/melee/cultblade)
+	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
+	siemens_coefficient = 0
+
+
+
+
+///////////////////////////////////////DEBUG ITEM (FOR NOW)////////////////////////////////////////////////
 
 /obj/item/weapon/bloodcult_pamphlet
 	name = "cult of Nar-Sie pamphlet"
@@ -483,12 +585,45 @@ var/list/arcane_tomes = list()
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 1
 
-/*
 /obj/item/weapon/bloodcult_pamphlet/attack_self(var/mob/user)
-	initialize_cultwords()
+	var/datum/role/cultist/newCultist = new
+	newCultist.AssignToRole(user.mind,1)
 	var/datum/faction/bloodcult/cult = find_active_faction(BLOODCULT)
-	if (cult)
-		cult.HandleRecruitedMind(user.mind)
-	user.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-	user.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-*/
+	if (!cult)
+		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+	cult.HandleRecruitedRole(newCultist)
+	newCultist.OnPostSetup(FALSE)
+	newCultist.Greet(GREET_PAMPHLET)
+
+///////////////////////////////////////CULT BOX////////////////////////////////////////////////
+
+/obj/item/weapon/storage/cult
+	name = "coffer"
+	desc = "A gloomy-looking storage chest"
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "cult"
+	item_state = "syringe_kit"
+	starting_materials = list(MAT_IRON = 3750)
+	w_type=RECYK_METAL
+
+///////////////////////////////////////CULT GLASS////////////////////////////////////////////////
+
+/obj/item/weapon/reagent_containers/food/drinks/cult
+	name = "cup"
+	desc = "A spooky looking cup with a skull motif."
+	icon_state = "cult"
+	item_state = "cult"
+	isGlass = 0
+	amount_per_transfer_from_this = 10
+	volume = 60
+	starting_materials = list(MAT_IRON = 500)
+
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/on_reagent_change()
+	..()
+	overlays.len = 0
+	if (reagents.reagent_list.len > 0)
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "cult")
+		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		overlays += filling
