@@ -119,8 +119,9 @@
 	vox_only = FALSE
 
 /obj/item/weapon/organ_remover/traitor
-	desc = "A knock-off of the vox-only organ extractor, this one has been modified to be able to be used by anyone. However, it can no longer extract hearts."
+	desc = "A knock-off of the vox-only organ extractor, this one has been modified to be able to be used by anyone, and works twice as fast as the real deal. However, it can no longer extract hearts."
 	vox_only = FALSE
+	delay=7.5 SECONDS
 	valid_targets=list(
 		"eyes",
 		"kidneys",
