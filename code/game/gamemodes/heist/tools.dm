@@ -128,7 +128,6 @@
 		"liver",
 		"lungs"
 	)
-	//shout-out to aceedex for helping
 
 /obj/item/weapon/organ_remover/traitor/examine(var/mob/user)
-    ..(user, TRUE) //shout-out to panthid for helping
+    ..(user, TRUE)
