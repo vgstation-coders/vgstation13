@@ -32,8 +32,7 @@
 	)
 	var/target_type="eyes"
 
-/obj/item/weapon/organ_remover/examine(var/mob/user)
-	// Only vox know what these are.
+/obj/item/weapon/organ_remover/examine(var/mob/user, var/override = FALSE)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H
 		if(isvox(H))
@@ -41,6 +40,8 @@
 			to_chat(user, "Subject must be still and incapacitated. Remember to set target organs before use!")
 			return
 	to_chat(user, "Some weird alien thing, doesn't look like it'd even fit in human hands.")
+	if(override)
+		return ..()
 
 /obj/item/weapon/organ_remover/attack(var/mob/living/M, var/mob/living/user)
 	if(!can_use(user))
@@ -115,4 +116,18 @@
 	to_chat(user, "<span class='info'>[target_type] selected.</span>")
 
 /obj/item/weapon/organ_remover/adminbus_edition
-	vox_only=FALSE
+	vox_only = FALSE
+
+/obj/item/weapon/organ_remover/traitor
+	desc = "A knock-off of the vox-only organ extractor, this one has been modified to be able to be used by anyone. However, it can no longer extract hearts."
+	vox_only = FALSE
+	valid_targets=list(
+		"eyes",
+		"kidneys",
+		"liver",
+		"lungs"
+	)
+	//shout-out to aceedex for helping
+
+/obj/item/weapon/organ_remover/traitor/examine(var/mob/user)
+    ..(user, TRUE) //shout-out to panthid for helping
