@@ -106,6 +106,9 @@ Please contact me on #coderbus IRC. ~Carn x
 	update_hud()		//TODO: remove the need for this
 	update_overlays_standing()
 	update_transform()
+	if(istype(loc,/obj/structure/inflatable/shelter))
+		var/obj/O = loc
+		O.update_icon() //Shelters use an overlay of the human inside, so if we change state we want the appearance to reflect that.
 
 /mob/living/carbon/human/proc/update_overlays_standing()
 	if(species && species.override_icon)

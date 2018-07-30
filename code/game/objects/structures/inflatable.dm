@@ -83,25 +83,18 @@
 	icon_state = "folded"
 	deploy_path = /obj/structure/inflatable/shelter
 
-/obj/item/inflatable/shelter/attack_self(mob/user)
-	user.anchored = 1
+/*/obj/item/inflatable/shelter/attack_self(mob/user)
+	user.anchored = 1 Previously, this would anchor the user in place until it inflated and put them inside
 	..()
 	spawn()
-		user.anchored = 0
+		user.anchored = 0*/
 
 /obj/item/inflatable/shelter/inflate(mob/user)
 	playsound(loc, 'sound/items/zip.ogg', 75, 1)
 	var/obj/structure/inflatable/shelter/R = new deploy_path(get_turf(src))
 	transfer_fingerprints_to(R)
 	visible_message("<span class='notice'>\The [src] inflates.</span>")
-	user.forceMove(R)
-	R.occupant = user
-	R.update_icon()
-	user.reset_view()
-	user.reagents.add_reagent(STOXIN,3)
-	user.reagents.add_reagent(KELOTANE,6)
-	user.reagents.add_reagent(PEPTOBISMOL,6)
-	to_chat(user,"<span class='warning'>You feel calmed by the anesthetizing gasses inside the shelter.</span>")
+	//R.enter_shelter(user)
 	qdel(src)
 
 /obj/item/inflatable/torn
@@ -127,6 +120,7 @@
 	var/spawn_undeployed = TRUE
 	var/tmp/deflating = 0
 	var/health = 30
+	var/ctrl_deflate = TRUE
 
 /obj/structure/inflatable/wall
 	name = "inflatable wall"
@@ -192,7 +186,10 @@
 	return 0
 
 /obj/structure/inflatable/CtrlClick()
-	hand_deflate()
+	if(ctrl_deflate)
+		hand_deflate()
+	else
+		..()
 
 /obj/structure/inflatable/proc/deflate(var/violent=0, var/deflatespeed = 50)
 	playsound(loc, 'sound/machines/hiss.ogg', 75, 1)
@@ -294,9 +291,11 @@
 
 /obj/structure/inflatable/shelter
 	name = "inflatable shelter"
+	desc = "A shelter designed to protect from extreme heat and pressure, but vulnerable to popping by other forms of trauma. Filled with soporific gasses that promote health."
 	icon_state = "shelter_base"
+	anchored = 0
 	undeploy_path = /obj/item/inflatable/shelter
-	var/mob/living/carbon/occupant = null
+	ctrl_deflate = FALSE
 	var/datum/gas_mixture/cabin_air
 
 /obj/structure/inflatable/shelter/New()
@@ -310,16 +309,30 @@
 
 /obj/structure/inflatable/shelter/examine(mob/user)
 	..()
-	if(occupant)
-		to_chat(user,"<span class='info'>You can see [occupant] inside.</span>")
+	var/list/living_contents = list()
+	for(var/mob/living/L in contents)
+		living_contents += L.name //Shelters can frequently end up with dropped items because people fall asleep.
+	if(living_contents.len)
+		to_chat(user,"<span class='info'>You can see [english_list(living_contents)] inside.</span>")
+
+/obj/structure/inflatable/shelter/forceMove() //Like an unanchored window, we can block if pushed into place.
+	..()
+	update_nearby_tiles()
+
+/obj/structure/inflatable/shelter/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	update_nearby_tiles()
+	..()
+	update_nearby_tiles()
 
 /obj/structure/inflatable/shelter/is_airtight()
 	return TRUE
 
 /obj/structure/inflatable/shelter/update_icon()
 	overlays = list()
-	var/image/occupant_overlay = occupant.appearance
-	overlays += occupant_overlay
+	var/mob/living/carbon/human/occupant = locate(/mob/living/carbon/human) in contents
+	if(occupant)
+		var/image/occupant_overlay = occupant.appearance
+		overlays += occupant_overlay
 	var/image/cover_overlay = image('icons/obj/inflatable.dmi', icon_state = "shelter_top", layer = FLY_LAYER)
 	cover_overlay.plane = ABOVE_HUMAN_PLANE
 	overlays += cover_overlay
@@ -329,13 +342,24 @@
 		if(!laundry(user))
 			to_chat(user,"<span class='warning'>You are not wearing any contaminated clothes. Did you mean to Resist free?</span>")
 	else
+		to_chat(user,"<span class='notice'>You begin to climb into the shelter.</span>")
+		if(do_after(user, src, 10))
+			enter_shelter(user)
+
+/obj/structure/inflatable/shelter/attackby(obj/item/weapon/W,mob/user)
+	if(istype(W,/obj/item/weapon/grab))
+		var/obj/item/weapon/grab/G = W
+		var/mob/living/target = G.affecting
+		visible_message(user,"<span class='danger'>[user] begins to drag [target] into the shelter!</span>")
+		if(do_after(target,src,20)) //Twice the normal time
+			enter_shelter(target)
+	else
 		..()
 
 /obj/structure/inflatable/shelter/Destroy()
 	for(var/atom/movable/AM in src)
 		AM.forceMove(src.loc)
 	..()
-	occupant = null
 	qdel(cabin_air)
 	cabin_air = null
 
@@ -344,6 +368,17 @@
 
 /obj/structure/inflatable/shelter/return_air()
 	return cabin_air
+
+/obj/structure/inflatable/shelter/proc/enter_shelter(mob/user)
+	user.forceMove(src)
+	update_icon()
+	user.reset_view()
+	user.reagents.add_reagent(STOXIN,3)
+	user.reagents.add_reagent(KELOTANE,4)
+	user.reagents.add_reagent(PEPTOBISMOL,4)
+	user.reagents.add_reagent(TRAMADOL,3)
+	user.reagents.add_reagent(LEPORAZINE,1)
+	to_chat(user,"<span class='warning'>You feel calmed by the anesthetizing gasses inside the shelter.</span>")
 
 /obj/structure/inflatable/shelter/proc/laundry(var/mob/living/carbon/human/user)
 	if(user.loc != src)
@@ -381,11 +416,13 @@
 /obj/structure/inflatable/shelter/ex_act(severity)
 	if(severity<3)
 		for(var/atom/movable/A as mob|obj in src)//pulls everything out and hits it with an explosion
-			A.forceMove(src.loc)
+			A.forceMove(loc)
 			A.ex_act(severity++)
 	..()
 
 /obj/structure/inflatable/shelter/container_resist(mob/user)
 	user.delayNext(DELAY_ALL,10 SECONDS)
-	visible_message("<span class='warning'>[user] begins to deflate \the [src]!</span>")
-	deflate(FALSE,10 SECONDS)
+	visible_message("<span class='warning'>[user] begins to climb free of the \the [src]!</span>")
+	spawn(10 SECONDS)
+		user.forceMove(loc)
+		update_icon()
