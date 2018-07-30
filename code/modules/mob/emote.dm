@@ -52,6 +52,9 @@
 
 /datum/emote/me/run_emote(mob/user, params, m_type)
 
+	if (user.stat)
+		return
+
 	var/msg = "<b>[user]</b> " + params
 
 	var/turf/T = get_turf(user) // for pAIs
