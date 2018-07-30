@@ -91,12 +91,18 @@ BREATHALYZER
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_BIOTECH + "=1"
+	attack_delay = 0
+	var/tmp/last_scantime = 0
 	var/last_reading = null
 	var/mode = 1
 
 /obj/item/device/healthanalyzer/attack(mob/living/M as mob, mob/living/user as mob)
 	if(!user.hallucinating())
-		last_reading = healthanalyze(M, user, mode)
+		if(last_scantime + 1 SECONDS < world.time)
+			last_reading = healthanalyze(M, user, mode, silent = FALSE)
+			last_scantime = world.time
+		else
+			last_reading = healthanalyze(M, user, mode, silent = TRUE)
 	else
 		if(M.isDead())
 			user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"It's dead, Jim.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows black.</span>")
