@@ -119,3 +119,4 @@
 	else
 		message = "makes a very loud noise."
 		return ..()
+	..()
