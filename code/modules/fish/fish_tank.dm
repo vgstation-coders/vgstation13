@@ -85,7 +85,7 @@
 	has_lid = TRUE
 	max_health = 50				// Average strength, will take a couple hits from a toolbox.
 	cur_health = 50
-	shard_count = 2
+	shard_count = 4
 
 
 /obj/machinery/fishtank/wall
@@ -103,7 +103,7 @@
 	has_lid = TRUE
 	max_health = 100			// This thing is a freaking wall, it can handle abuse.
 	cur_health = 100
-	shard_count = 3
+	shard_count = 9
 
 /obj/machinery/fishtank/wall/full
 	water_level = 500
