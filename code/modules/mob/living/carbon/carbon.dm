@@ -388,23 +388,21 @@
 		if(PULSE_NONE)
 			return "0"
 		if(PULSE_2SLOW)
-			temp = rand(20, 40)
-			return num2text(method ? temp : temp + rand(-10, 10))
+			temp = 30 + sin(life_tick / 2) * 10
 		if(PULSE_SLOW)
-			temp = rand(40, 60)
-			return num2text(method ? temp : temp + rand(-10, 10))
+			temp = 50 + sin(life_tick / 2) * 10
 		if(PULSE_NORM)
-			temp = rand(60, 90)
-			return num2text(method ? temp : temp + rand(-10, 10))
+			temp = 75 + sin(life_tick / 2) * 15
 		if(PULSE_FAST)
-			temp = rand(90, 120)
-			return num2text(method ? temp : temp + rand(-10, 10))
+			temp = 105 + sin(life_tick / 2) * 15
 		if(PULSE_2FAST)
-			temp = rand(120, 160)
-			return num2text(method ? temp : temp + rand(-10, 10))
+			temp = 140 + sin(life_tick / 2) * 20
 		if(PULSE_THREADY)
 			return method ? ">250" : "extremely weak and fast, patient's artery feels like a thread"
 //			output for machines^	^^^^^^^output for people^^^^^^^^^
+	if(method == GETPULSE_HAND)
+		temp += rand(-10, 10)
+	return num2text(round(temp))
 
 /mob/living/carbon/verb/mob_sleep()
 	set name = "Sleep"

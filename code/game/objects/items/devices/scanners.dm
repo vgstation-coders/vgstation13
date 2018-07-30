@@ -155,7 +155,7 @@ Subject's pulse: ??? BPM"})
 		message += "<br><span class='notice'>Analyzing Results for [M]:<br>Overall Status: [M.stat > 1 ? "Dead" : "[M.health - M.halloss]% Healthy"]</span>"
 	message += "<br>Key: <font color='blue'>Suffocation</font>/<font color='green'>Toxin</font>/<font color='#FFA500'>Burns</font>/<font color='red'>Brute</font>"
 	message += "<br>Damage Specifics: <font color='blue'>[OX]</font> - <font color='green'>[TX]</font> - <font color='#FFA500'>[BU]</font> - <font color='red'>[BR]</font>"
-	message += "<br>[(M.undergoing_hypothermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: [M.bodytemperature-T0C]&deg;C ([M.bodytemperature*1.8-459.67]&deg;F)</span>"
+	message += "<br>[(M.undergoing_hypothermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: [round(M.bodytemperature-T0C,0.1)]&deg;C ([round(M.bodytemperature*1.8-459.67,0.1)]&deg;F)</span>"
 	if(M.tod && M.isDead())
 		message += "<br><span class='notice'>Time of Death: [M.tod]</span>"
 	if(istype(M, /mob/living/carbon/human) && mode)
