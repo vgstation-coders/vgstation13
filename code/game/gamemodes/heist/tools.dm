@@ -33,6 +33,8 @@
 	var/target_type="eyes"
 
 /obj/item/weapon/organ_remover/examine(var/mob/user, var/override = FALSE)
+	if(override)
+		return ..(user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H
 		if(isvox(H))
@@ -40,8 +42,6 @@
 			to_chat(user, "Subject must be still and incapacitated. Remember to set target organs before use!")
 			return
 	to_chat(user, "Some weird alien thing, doesn't look like it'd even fit in human hands.")
-	if(override)
-		return ..()
 
 /obj/item/weapon/organ_remover/attack(var/mob/living/M, var/mob/living/user)
 	if(!can_use(user))
