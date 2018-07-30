@@ -18,7 +18,6 @@
 
 /datum/organ/internal/stomach/remove(var/mob/user, var/quiet=0)
 	var/obj/item/organ/internal/stomach/S = ..()
-	to_chat(world, "reagents transfer.")
 	owner.reagents.trans_to(S, owner.reagents.total_volume)
 	owner.reagents.maximum_volume = 25
 	return S
