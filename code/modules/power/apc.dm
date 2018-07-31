@@ -626,6 +626,9 @@
 //		return
 	if(!user)
 		return
+	if(wiresexposed && !issilicon(user))
+		to_chat(user, "Unexpose the wires first!")
+		return
 	if(!isobserver(user))
 		src.add_fingerprint(user)
 		if(usr == user && opened)
