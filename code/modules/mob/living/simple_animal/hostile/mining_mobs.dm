@@ -537,7 +537,7 @@ obj/item/asteroid/basilisk_hide/New()
 
 /mob/living/simple_animal/hostile/asteroid/goliath/david
 	name = "david"
-	desc = "Goliaths are fiercely protective of their young, threatening them is not advised under any conditions."
+	desc = "I don't think this one can use a slingshot very well."
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "david"
 	icon_living = "david"
