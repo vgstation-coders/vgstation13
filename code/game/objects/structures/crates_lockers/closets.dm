@@ -319,7 +319,7 @@
 		return 0
 	if(user.incapacitated())
 		return 0
-	if((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1))
+	if((!( istype(O, /atom/movable) ) || O.anchored || !user.Adjacent(O) || !user.Adjacent(src)))
 		return 0
 	if(!istype(user.loc, /turf)) // are you in a container/closet/pod/etc? Will also check for null loc
 		return 0

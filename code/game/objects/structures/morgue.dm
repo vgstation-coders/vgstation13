@@ -191,7 +191,7 @@
 		qdel(src) //this should not happen but if it does happen we should not be here
 
 /obj/structure/m_tray/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
-	if (!istype(O) || O.anchored || !Adjacent(user) || !Adjacent(O) || user.contents.Find(O))
+	if (!istype(O) || O.anchored || !user.Adjacent(O) || !user.Adjacent(src) || user.contents.Find(O))
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
@@ -413,7 +413,7 @@
 		qdel(src)
 
 /obj/structure/c_tray/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
-	if ((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src) || user.contents.Find(O)))
+	if ((!( istype(O, /atom/movable) ) || O.anchored || !user.Adjacent(O) || !user.Adjacent(src) || user.contents.Find(O)))
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
