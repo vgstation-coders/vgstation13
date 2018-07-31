@@ -624,6 +624,8 @@
 		if(usr == user && opened)
 			if(cell && Adjacent(user))
 				if(isAI(user))
+					if(malfai && user != malfai) //malf hacked APCs are under their exclusive control
+						return
 					interact(user)
 					return
 				else if(issilicon(user) && !isMoMMI(user)) // MoMMIs can hold one item in their tool slot.
@@ -843,6 +845,9 @@
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
+	if(malfai && usr != malfai) //malf hacked APCs are under their exclusive control
+		to_chat(usr, "Access refused.")
+		return 0
 	if(!can_use(usr, 1))
 		return 0
 	if(!(istype(usr, /mob/living/silicon) || isAdminGhost(usr)) && locked)
