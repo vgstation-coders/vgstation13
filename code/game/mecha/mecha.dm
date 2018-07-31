@@ -51,7 +51,7 @@
 	var/datum/gas_mixture/cabin_air
 	var/obj/machinery/atmospherics/unary/portables_connector/connected_port = null
 	
-	/var/cursor_enabled = 0 //whether to display the mecha cursor	
+	var/cursor_enabled = 0 //whether to display the mecha cursor	
 	
 	var/obj/item/device/radio/radio = null
 	var/obj/item/device/radio/electropack/electropack = null
