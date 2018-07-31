@@ -518,7 +518,7 @@
 	radio_key = /obj/item/device/encryptionkey/syndicate
 	speed_modifier = CYBORG_SYNDICATE_SPEED_MODIFIER
 
-/obj/item/weapon/robot_module/syndicate/blitzkrieg/New()
+/obj/item/weapon/robot_module/syndicate/New()
 	..()
 
 	modules += new /obj/item/weapon/card/emag(src)
