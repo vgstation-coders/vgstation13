@@ -12,6 +12,7 @@
 	starting_materials = null
 //	starting_materials = list(MAT_IRON = 5) //What?
 	w_type = RECYK_METAL
+	attack_delay = 0
 
 /obj/item/weapon/reagent_containers/pill/New()
 	..()
@@ -90,7 +91,7 @@
 /obj/item/weapon/reagent_containers/pill/creatine/New()
 	..()
 	reagents.add_reagent(CREATINE, 50)
-	
+
 /obj/item/weapon/reagent_containers/pill/laststand
 	name = "Creatine \"Last Stand\" suicide pill"
 	desc = "For when you really want to spend your last moments punching things to death."
