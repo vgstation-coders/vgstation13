@@ -5,6 +5,7 @@
 	var/list/destroyable_obj = list(/obj/mecha, /obj/structure/window, /obj/structure/grille, /turf/simulated/wall)
 	internal_damage_threshold = 50
 	light_range_off = 0 //combat mechs leak no cabin light for stealth operation
+	cursor_enabled = 1 //cursor enabled by default
 	maint_access = 0
 	//add_req_access = 0
 	//operation_req_access = list(access_hos)
