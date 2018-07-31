@@ -1,6 +1,8 @@
 /mob/living/silicon/ai/death(gibbed)
 	if(stat == DEAD)
 		return
+	if(!gibbed)
+		emote("deathgasp")
 	stat = DEAD
 	if("[icon_state]-crash" in icon_states(src.icon,1))
 		icon_state = "[icon_state]-crash"
