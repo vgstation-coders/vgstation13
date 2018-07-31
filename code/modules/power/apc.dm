@@ -675,6 +675,8 @@
 
 	if (wiresexposed)
 		wires.Interact(user)
+		if (issilicon(user))
+			ui_interact(user)
 		return
 
 	if (stat & (BROKEN | MAINT | EMPED))
