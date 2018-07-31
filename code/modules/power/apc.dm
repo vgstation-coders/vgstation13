@@ -380,9 +380,16 @@
 
 //attack with an item - open/close cover, insert cell, or (un)lock interface
 /obj/machinery/power/apc/attackby(obj/item/W, mob/living/user)
+
+	src.add_fingerprint(user)
+	
+	if (iswiretool(W) && wiresexposed)
+		wires.Interact(user)
+		return
+		
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
 		return src.attack_hand(user)
-	src.add_fingerprint(user)
+		
 	if (iscrowbar(W) && opened)
 		if (has_electronics==1)
 			if (terminal)
@@ -617,6 +624,9 @@
 //		return
 	if(!user)
 		return
+	if(wiresexposed && !issilicon(user))
+		to_chat(user, "Unexpose the wires first!")
+		return
 	if(!isobserver(user))
 		src.add_fingerprint(user)
 		if(usr == user && opened)
@@ -672,14 +682,10 @@
 /obj/machinery/power/apc/interact(mob/user)
 	if (!user)
 		return
-
-	if (wiresexposed)
-		wires.Interact(user)
-		return
-
+	
 	if (stat & (BROKEN | MAINT | EMPED))
 		return
-
+		
 	ui_interact(user)
 
 /obj/machinery/power/apc/proc/get_malf_status(mob/user)
