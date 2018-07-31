@@ -1678,6 +1678,9 @@ var/list/slot_equipment_priority = list( \
 /mob/proc/Dizzy(amount)
 	dizziness = max(dizziness,amount,0)
 
+/mob/proc/AdjustDizzy(amount)
+	dizziness = max(dizziness+amount, 0)
+
 
 /mob/proc/Paralyse(amount)
 	if(status_flags & CANPARALYSE)
