@@ -194,7 +194,7 @@ var/global/num_vending_terminals = 1
 
 	if(user.incapacitated() || user.lying)
 		return
-	if(!Adjacent(user) || !user.Adjacent(src))
+	if(!Adjacent(user) || !user.Adjacent(src) || !user.Adjacent(O))
 		return
 
 	if(istype(O,/obj/structure/vendomatpack))

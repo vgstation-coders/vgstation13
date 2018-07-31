@@ -535,7 +535,7 @@
 	if(issilicon(user))
 		return //*buzz
 
-	if(!Adjacent(user) || !user.Adjacent(src) || M.loc == user || !isturf(M.loc) || !isturf(user.loc) || user.loc==null)
+	if(!Adjacent(user) || !user.Adjacent(src) || !user.Adjacent(M) || M.loc == user || !isturf(M.loc) || !isturf(user.loc) || user.loc==null)
 		return
 
 	if(user.incapacitated() || user.lying)

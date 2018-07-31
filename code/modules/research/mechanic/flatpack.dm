@@ -151,7 +151,7 @@
 			return
 		if(!ishigherbeing(user) && !isrobot(user)) //check mob type
 			return
-		if(!user.Adjacent(src))
+		if(!user.Adjacent(src) || !user.Adjacent(dropping))
 			return
 		user.visible_message("[user] adds [stacking.stacked.len + 1] flatpack\s to the stack.",
 								"You add [stacking.stacked.len + 1] flatpack\s to the stack.")
