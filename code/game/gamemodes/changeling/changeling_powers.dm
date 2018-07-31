@@ -1167,7 +1167,7 @@ var/list/datum/dna/hivemind_bank = list()
 /obj/item/verbs/changeling/proc/changeling_DEATHsting()
 	set category = "Changeling"
 	set name = "Death Sting (40)"
-	set desc = "Causes spasms onto death."
+	set desc = "Causes a delayed death."
 
 	var/mob/M = loc
 	if(!istype(M))
@@ -1177,12 +1177,10 @@ var/list/datum/dna/hivemind_bank = list()
 	if(!target)
 		return
 
-	to_chat(target, "<span class='userdanger'>You feel a tiny prick. Your chest starts tightening.</span>")
-	target.silent = 10
-	target.Paralyse(10)
-	target.Jitter(1000)
+	to_chat(target, "<span class='userdanger'>You feel a tiny prick.</span>")
+
 	if(target.reagents)
-		target.reagents.add_reagent(CYANIDE, 20)
+		target.reagents.add_reagent(CHEFSPECIAL, 5)
 
 	feedback_add_details("changeling_powers", "DTHS")
 	return 1
