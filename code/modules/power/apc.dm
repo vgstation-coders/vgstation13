@@ -679,6 +679,24 @@
 	return
 
 
+/obj/machinery/power/apc/updateDialog()
+	if(in_use)
+		var/list/nearby = viewers(1, src)
+		var/is_in_use = 0
+		for(var/mob/M in _using) 
+			if (!M || !M.client || M.machine != src)
+				_using.Remove(M)
+				continue
+			if(!isAI(M) && !isrobot(M) && !(M in nearby))
+				_using.Remove(M)
+				continue
+			is_in_use = 1
+			if (wiresexposed)
+				wires.Interact(M)
+			else
+				interact(M)
+		in_use = is_in_use
+	
 /obj/machinery/power/apc/interact(mob/user)
 	if (!user)
 		return
@@ -825,8 +843,13 @@
 				to_chat(user, "<span class='warning'>\The [src] have AI control disabled!</span>")
 				nanomanager.close_user_uis(user, src)
 			return 0
+	
 	else
 		if ((!in_range(src, user) || !istype(src.loc, /turf)))
+			nanomanager.close_user_uis(user, src)
+			
+		if (wiresexposed)
+			to_chat(user, "<span class='warning'>Unexpose the wires first!</span>")
 			nanomanager.close_user_uis(user, src)
 
 			return 0
