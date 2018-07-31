@@ -933,6 +933,10 @@
 			else
 				locked = !locked
 				update_icon()
+				
+	else if (href_list["malflock"])
+		if(get_malf_status(usr))
+			malflocked = !malflocked
 
 	return 1
 
