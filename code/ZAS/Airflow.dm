@@ -39,6 +39,7 @@ atom/movable/GotoAirflowDest(n)
 
 */
 
+
 /mob/var/tmp/last_airflow_stun = 0
 /mob/proc/airflow_stun()
 	if(isDead() || (flags & INVULNERABLE) || (status_flags & GODMODE))
@@ -78,8 +79,16 @@ atom/movable/GotoAirflowDest(n)
 
 	if(knockdown <= 0)
 		to_chat(src, "<span class='warning'>The sudden rush of air knocks you over!</span>")
-	SetKnockdown(rand(1,5))
+
 	last_airflow_stun = world.time
+	drop_hat()
+	SetKnockdown(rand(1,5))
+
+/mob/living/proc/drop_hat()
+	var/obj/item/I = get_item_by_slot(slot_head)
+	if (istype(I) && I.canremove && I.airflow_remove && prob(25))
+		u_equip(I, TRUE)
+		to_chat(src, "<span class='warning'>Your hat is blown away by the wind!</span>")
 
 /atom/movable/proc/check_airflow_movable(n)
 	return (!anchored && n >= zas_settings.Get(/datum/ZAS_Setting/airflow_dense_pressure))
@@ -143,6 +152,9 @@ atom/movable/GotoAirflowDest(n)
 		return
 	if(ismob(src))
 		to_chat(src, "<span class='warning'>You are sucked away by airflow!</span>")
+		if (ishuman(src) || isMoMMi(src))
+			var/mob/living/L = src
+			L.drop_hat()
 
 	var/xo = airflow_dest.x - x
 	var/yo = airflow_dest.y - y
