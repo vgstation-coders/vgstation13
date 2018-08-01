@@ -1085,6 +1085,11 @@ Thanks.
 						BD.attack_hand(usr)
 					C.open()
 
+	// Breaking out of a cage
+	if (src.locked_to && istype(src.locked_to, /obj/structure/cage))
+		locked_to.attack_hand(src)
+		return
+
 	if(src.loc && istype(src.loc, /obj/item/mecha_parts/mecha_equipment/tool/jail))
 		var/breakout_time = 30 SECONDS
 		var/obj/item/mecha_parts/mecha_equipment/tool/jail/jailcell = src.loc
