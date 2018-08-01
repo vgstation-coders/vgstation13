@@ -78,7 +78,7 @@
 		if(world.time-H.lastFart >= 400)
 			for(var/mob/living/M in view(0))
 				if(M != H && M.loc == H.loc)
-					if(!H.miming)
+					if(!H.mind.miming)
 						H.visible_message("<span class = 'warning'><b>[H]</b> farts in <b>[M]</b>'s face!</span>")
 					else
 						H.visible_message("<span class = 'warning'><b>[H]</b> silently farts in <b>[M]</b>'s face!</span>")
@@ -92,12 +92,12 @@
 				"farts [pick("lightly", "tenderly", "softly", "with care")]",
 			)
 
-			if(H.miming)
+			if(H.mind.miming)
 				farts = list("silently farts.", "acts out a fart.", "lets out a silent fart.")
 
 			var/fart = pick(farts)
 
-			if(!H.miming)
+			if(!H.mind.miming)
 				message = "<b>[H]</b> [fart]."
 				if(H.mind && H.mind.assigned_role == "Clown")
 					playsound(H, pick('sound/items/bikehorn.ogg','sound/items/AirHorn.ogg'), 50, 1)
