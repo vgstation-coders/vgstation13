@@ -44,8 +44,6 @@
 	..()
 
 /obj/machinery/dialysis/MouseDropFrom(over_object, src_location, over_location)
-	if(isobserver(usr))
-		return ..()
 	if(usr.incapacitated())
 		return ..()
 	if(isanimal(usr))
@@ -53,9 +51,8 @@
 	if(!usr.Adjacent(src))
 		return ..()
 
-	if(connections.Find(over_object))
+	if(connections.Remove(over_object))
 		visible_message("[over_object] is detached from \the [src]")
-		connections.Remove(over_object)
 		return
 
 	if(ismob(over_object) && Adjacent(over_object))
@@ -65,7 +62,7 @@
 				H.visible_message("<span class='warning'>[usr] struggles to place the IV into [H] but fails.</span>","<span class='notice'>[usr] tries to place the IV into your arm but is unable to.</span>")
 				return
 
-		if(connections.len > max_connections)
+		if(connections.len >= max_connections)
 			to_chat(usr, "<span class = 'notice'>\The [src] has too many connections. Disconnect something.</span>")
 			return
 		visible_message("[usr] attaches \the [src] to \the [over_object].")
@@ -85,7 +82,7 @@
 		if(!M.reagents.remove_any(reagent_removal_rate))
 			if(prob(35))
 				visible_message("<span class = 'warning'>\The [src] beeps loudly!</span>")
-			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
+				playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
 			continue
 		M.AdjustDizzy(5*reagent_removal_rate)
 		M.nutrition = max(M.nutrition-10, 0)

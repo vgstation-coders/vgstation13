@@ -269,7 +269,7 @@
 
 /obj/item/organ/internal/stomach/update()
 	.=..()
-	if(organ_data && istype(organ_data, /datum/organ/internal/stomach))
+	if(istype(organ_data, /datum/organ/internal/stomach))
 		var/datum/organ/internal/stomach/S = organ_data
 		if(!reagents || reagents.maximum_volume != S.reagent_size)
 			create_reagents(S.reagent_size)
