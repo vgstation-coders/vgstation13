@@ -1104,8 +1104,8 @@ Thanks.
 				jailcell.break_out(L)
 		return
 
-	if(src.loc && istype(src.loc, /obj/structure/inflatable/shelter))
-		var/obj/O = src.loc
+	if(L.loc && istype(L.loc, /obj/structure/inflatable/shelter))
+		var/obj/O = L.loc
 		O.container_resist(L)
 
 

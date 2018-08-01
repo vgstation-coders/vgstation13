@@ -358,10 +358,10 @@
 
 /obj/structure/inflatable/shelter/Destroy()
 	for(var/atom/movable/AM in src)
-		AM.forceMove(src.loc)
-	..()
+		AM.forceMove(loc)
 	qdel(cabin_air)
 	cabin_air = null
+	..()
 
 /obj/structure/inflatable/shelter/remove_air(amount)
 	return cabin_air.remove(amount)
@@ -424,5 +424,7 @@
 	user.delayNext(DELAY_ALL,10 SECONDS)
 	visible_message("<span class='warning'>[user] begins to climb free of the \the [src]!</span>")
 	spawn(10 SECONDS)
-		user.forceMove(loc)
-		update_icon()
+		if(loc)
+			user.forceMove(loc)
+			update_icon()
+		//If not loc, it was probably deflated
