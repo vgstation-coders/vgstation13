@@ -427,36 +427,50 @@ var/list/DummyCache = list()
 		GetBluePart(hexa),
 		)
 
-//Converts hex to RGB, then describes it.
-proc/hex2eng(var/hexa)
-	var/output = "white"
-	var/list/rgb_list = list("red" = getr(hexa), "green" = getg(hexa), "blue" = getb(hexa))
-	var/list/rgb_sorted = sortTim(rgb_list,/proc/cmp_numeric_dsc,TRUE)
-	//First, describe the hue
-	if(rgb_sorted[1]>168)
-		output = "bright"
-	else if(rgb_sorted[1]>86)
-		output = "murky"
+/*(1,0,0, "red"), "Ideal" colors
+(1,0.6,0, "orange"),
+(1,1,0, "yellow"),
+(0,0.3,0, "green"),
+(0,0,1, "blue"),
+(0.9,0.5,0.9, "violet"),
+(0.6,0.15,0.15, "brown",
+(0,0,0, "black"),
+(0.3,0.3,0.3, "grey"),
+(1,1,1, "white"))*/
+proc/rgb2eng(var/red, var/grn, var/blu) //Describes RGB
+	red /= 255
+	grn /= 255
+	blu /= 255
+	var/list/all = list(red,grn,blu)
+	var/lo = min(red, grn, blu)
+	var/hi = max(red, grn, blu)
+	all -= list(hi,lo)
+	var/med = all[1]
+	if(hi-lo<0.25) //All of the colors are within 25% of each other. It's grayish.
+		if(hi<0.1)
+			return "black"
+		if(lo>0.9)
+			return "white"
+		return "gray" //US pride worldwide
 	else
-		output = "dark"
+		if(hi-med<0.5) //Two colors dominate with a forgiving margin
+			if(lo==red)
+				return "cyan"
+			else if(lo==grn)
+				return "violet"
+			else(blu)
+				return "orange"
 
-	//Next, describe the color
-	if(rgb_sorted[1]-rgb_sorted[2]>80)
-		//One distinct color stands out
-		//Since we know [1] has a different value than [2], we can use this helper
-		output += " [get_key_by_element(rgb_sorted,rgb_sorted[1])]ish"
-	else
-		//In this case, the master color is no more than a third dominant.
-		//Is the last color that weak?
-		if(rgb_sorted[1]-rgb_sorted[3]>80)
-			//Just two colors dominate, let's combine the keys
-			pop(rgb_sorted)
-			for(var/key in rgb_sorted)
-				output += " [key]ish" //e.g.: reddish blueish
+		else //One color is dominant
+			if(hi==red)
+				return "red"
+			if(hi==blu)
+				return "blue"
+			else
+				return "green"
 
-		else
-			//They're all about the same
-			output += " grayish"
+
+
 
 /proc/rgb2hsl(var/red, var/grn, var/blu)
 

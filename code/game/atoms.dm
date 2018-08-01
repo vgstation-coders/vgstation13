@@ -449,8 +449,8 @@ its easier to just keep the beam vertical.
 							to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
 					else
 						//Let's try to figure out what's in there!
-						var/hex = mix_color_from_reagents(reagents.reagent_list)
-						to_chat(user,  "<span class='info'>It seems to be about [round(reagents.total_volume/maximum_volume*100,10)]% full with [hex2eng(hex)] reagent.</span>")
+						var/rgb = GetHexColors(mix_color_from_reagents(reagents.reagent_list))
+						to_chat(user,  "<span class='info'>It seems to be about [round(reagents.total_volume/reagents.maximum_volume*100,10)]% full with [rgb2eng(rgb)] reagent.</span>")
 
 
 				else
