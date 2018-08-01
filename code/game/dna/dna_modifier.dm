@@ -38,6 +38,21 @@
 			ser["type"] = "se"
 	return ser
 
+/datum/dna2/record/proc/Clone()
+	var/datum/dna2/record/new_copy = new
+	if(dna)
+		new_copy.dna = dna.Clone()
+	new_copy.types = types
+	new_copy.name = name
+	new_copy.id = id
+	new_copy.implant = implant
+	new_copy.ckey = ckey
+	new_copy.mind = mind
+	new_copy.languages = languages.Copy()
+	new_copy.times_cloned = times_cloned
+
+	return new_copy
+
 /////////////////////////// DNA MACHINES
 /obj/machinery/dna_scannernew
 	name = "\improper DNA modifier"
