@@ -286,6 +286,7 @@
 		var/obj/machinery/computer/cloning/C = locate(/obj/machinery/computer/cloning) in get_step(src, dir)
 		if(C)
 			C.update_icon()
+			C.updateUsrDialog()
 			if(!M.client && M.mind)
 				var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
 				if(ghost)
@@ -331,6 +332,7 @@
 		var/obj/machinery/computer/cloning/C = locate(/obj/machinery/computer/cloning) in get_step(src, dir)
 		if(C)
 			C.update_icon()
+			C.updateUsrDialog()
 
 	if(connected)
 		nanomanager.update_uis(connected)
