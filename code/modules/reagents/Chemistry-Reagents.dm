@@ -1665,7 +1665,7 @@
 	if(..())
 		return 1
 
-	M.adjustFireLoss(REM)
+	M.adjustFireLoss(1)
 
 /datum/reagent/paracetamol
 	name = "Paracetamol"
