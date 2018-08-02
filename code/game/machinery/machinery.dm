@@ -115,6 +115,7 @@ Class Procs:
 	var/icon_state_open = ""
 
 	w_type = NOT_RECYCLABLE
+	layer = MACHINERY_LAYER
 
 	penetration_dampening = 5
 

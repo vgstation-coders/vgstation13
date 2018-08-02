@@ -6,7 +6,6 @@
 	name = "\improper SmartFridge"
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "smartfridge"
-	layer = BELOW_OBJ_LAYER
 	density = 1
 	anchored = 1
 	use_power = 1
@@ -345,7 +344,7 @@
 	else if(istype(O, /obj/item/weapon/paper) && user.drop_item(O, src.loc))
 		if(O.loc == src.loc && params)
 			O.setPixelOffsetsFromParams(params)
-			O.layer = BELOW_OBJ_LAYER //so it layers below the pills we'll be ejecting from the fridge. resets when picked up - i guess someone COULD drag the paper away but I'm not about to lose sleep over that
+			O.layer = MACHINERY_LAYER + 0.1 //so it layers below the pills we'll be ejecting from the fridge. resets when picked up - i guess someone COULD drag the paper away but I'm not about to lose sleep over that
 			to_chat(user, "<span class='notice'>You hang \the [O.name] on the fridge.</span>")
 	else
 		to_chat(user, "<span class='notice'>\The [src] smartly refuses [O].</span>")
