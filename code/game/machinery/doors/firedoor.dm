@@ -200,7 +200,7 @@ var/global/list/alert_overlays_global = list()
 		stat |= NOPOWER
 	return
 
-/obj/machinery/door/firedoor/attack_ai(mob/user)
+/obj/machinery/door/firedoor/attack_ai(mob/user,var/override=FALSE)
 	if(!isAdminGhost(user) && (isobserver(user) || user.stat))
 		return
 	spawn()
@@ -208,13 +208,20 @@ var/global/list/alert_overlays_global = list()
 		ASSERT(istype(A)) // This worries me.
 		var/alarmed = A.doors_down || A.fire
 		var/old_density = src.density
-		if(old_density && alert("Override the [alarmed ? "alarming " : ""]firelock's safeties and open \the [src]?" ,,"Yes", "No") == "Yes")
-			open()
+		if(old_density)
+			if(override || alert("Override the [alarmed ? "alarming " : ""]firelock's safeties and open \the [src]?" ,,"Yes", "No") == "Yes")
+				open()
 		else if(!old_density)
 			close()
 		else
 			return
 		investigation_log(I_ATMOS, "[density ? "closed" : "opened"] [alarmed ? "while alarming" : ""] by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
+
+/obj/machinery/door/firedoor/CtrlClick(mob/user)
+	if(isAdminGhost(user))
+		attack_ai(user,TRUE)
+	else
+		..()
 
 /obj/machinery/door/firedoor/attack_hand(mob/user as mob)
 	return attackby(null, user)

@@ -42,7 +42,5 @@
 	add_dock(/obj/docking_port/destination/trade/station)
 	add_dock(/obj/docking_port/destination/trade/extra)
 
-/area/shuttle/trade/start
-	requires_power = 1
 ////////////////////////////////////////////////////////////////
 #include "metaclub.dmm"

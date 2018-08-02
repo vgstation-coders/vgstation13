@@ -91,6 +91,7 @@
 	message = "screams!"
 	message_mime = "acts out a scream!"
 	emote_type = EMOTE_AUDIBLE
+	stat_allowed = UNCONSCIOUS
 	var/list/male_sounds =  list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg', 'sound/misc/wilhelm.ogg', 'sound/misc/goofy.ogg')
 	var/list/female_sounds = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
 
@@ -98,21 +99,24 @@
 	var/mob/living/carbon/human/H = user
 	if (!istype(H))
 		return ..()
-	if(!H.stat)
-		if (!H.is_muzzled())
-			if (params == TRUE) // Forced scream
-				if(world.time-H.last_emote_sound >= 30)//prevent scream spam with things like poly spray
-					message = "screams in agony!"
-					var/scream
-					switch(H.gender)
-						if (MALE)
-							scream = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
-						if (FEMALE)
-							scream = pick(female_sounds)
-					playsound(src, scream, 50, 0)
-					H.last_emote_sound = world.time
-					return ..()
+	if (H.stat == DEAD)
+		return
+	if (!H.is_muzzled())
+		if (params == TRUE) // Forced scream
+			if(world.time-H.last_emote_sound >= 30)//prevent scream spam with things like poly spray
+				message = "screams in agony!"
+				var/scream
+				switch(H.gender)
+					if (MALE)
+						scream = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
+					if (FEMALE)
+						scream = pick(female_sounds)
+				playsound(user, scream, 50, 0)
+				H.last_emote_sound = world.time
+				return ..()
 			else
 				return ..()
-		else
-			message = "makes a very loud noise."
+	else
+		message = "makes a very loud noise."
+		return ..()
+	..()

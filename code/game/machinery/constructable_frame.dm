@@ -174,8 +174,8 @@
 						to_chat(user, "<span class='notice'>You remove the circuit board.</span>")
 					else
 						to_chat(user, "<span class='notice'>You remove the circuit board and other components.</span>")
-						for(var/obj/item/weapon/W in components)
-							W.forceMove(src.loc)
+						for(var/obj/item/I in components)
+							I.forceMove(src.loc)
 					desc = initial(desc)
 					req_components = null
 					components = null

@@ -23,7 +23,7 @@
 
 	//Languages
 	var/list/languages = list()
-	var/list/added_languages //Bookkeeping
+	var/list/added_languages = list() //Bookkeeping
 
 	//Radio
 	var/radio_key = null
@@ -36,9 +36,6 @@
 	var/recharge_tick = 0
 	var/list/respawnables
 	var/respawnables_max_amount = 0
-
-	//Access
-	var/list/access = list()
 
 /obj/item/weapon/robot_module/Destroy()
 	if(istype(loc, /mob/living/silicon/robot))
@@ -82,7 +79,6 @@
 
 /obj/item/weapon/robot_module/New(var/mob/living/silicon/robot/R)
 	..()
-	added_languages = list()
 	add_languages(R)
 	AddToProfiler()
 	if(default_modules)
@@ -91,7 +87,6 @@
 	AddCameraNetworks(R)
 	AddEncryptionKey(R)
 	ApplyStatusFlags(R)
-	access = GetModuleAccess()
 
 /obj/item/weapon/robot_module/proc/AddDefaultModules()
 	modules += new /obj/item/device/flashlight(src)
@@ -178,9 +173,6 @@
 	for(var/language_name in added_languages)
 		R.remove_language(language_name, TRUE) //We remove the ability to speak but keep the ability to understand.
 	added_languages.Cut()
-
-/obj/item/weapon/robot_module/proc/GetModuleAccess()
-	return get_all_accesses()
 
 //Modules
 /obj/item/weapon/robot_module/standard
@@ -526,10 +518,7 @@
 	radio_key = /obj/item/device/encryptionkey/syndicate
 	speed_modifier = CYBORG_SYNDICATE_SPEED_MODIFIER
 
-/obj/item/weapon/robot_module/syndicate/GetModuleAccess()
-	return get_all_syndicate_access()
-
-/obj/item/weapon/robot_module/syndicate/blitzkrieg/New()
+/obj/item/weapon/robot_module/syndicate/New()
 	..()
 
 	modules += new /obj/item/weapon/card/emag(src)

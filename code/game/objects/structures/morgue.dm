@@ -191,7 +191,7 @@
 		qdel(src) //this should not happen but if it does happen we should not be here
 
 /obj/structure/m_tray/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
-	if (!istype(O) || O.anchored || !Adjacent(user) || !Adjacent(O) || user.contents.Find(O))
+	if (!istype(O) || O.anchored || !user.Adjacent(O) || !user.Adjacent(src) || user.contents.Find(O))
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
@@ -357,7 +357,7 @@
 
 		for (var/mob/living/M in inside)
 			if (M.stat!=2)
-				M.emote("scream")
+				M.audible_scream()
 			//Logging for this causes runtimes resulting in the cremator locking up. Commenting it out until that's figured out.
 			//M.attack_log += "\[[time_stamp()]\] Has been cremated by <b>[user]/[user.ckey]</b>" //No point in this when the mob's about to be qdeleted
 			//user.attack_log +="\[[time_stamp()]\] Cremated <b>[M]/[M.ckey]</b>"
@@ -413,7 +413,7 @@
 		qdel(src)
 
 /obj/structure/c_tray/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
-	if ((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src) || user.contents.Find(O)))
+	if ((!( istype(O, /atom/movable) ) || O.anchored || !user.Adjacent(O) || !user.Adjacent(src) || user.contents.Find(O)))
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return

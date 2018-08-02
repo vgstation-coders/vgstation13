@@ -161,11 +161,8 @@ var/list/impact_master = list()
 	return output //Send it back to the gun!
 
 /obj/item/projectile/resetVariables()
-	if(!istype(permutated,/list))
-		permutated = list()
-	else
-		permutated.len = 0
 	..("permutated")
+	permutated = list()
 
 /obj/item/projectile/proc/admin_warn(mob/living/M)
 	if(istype(firer, /mob))

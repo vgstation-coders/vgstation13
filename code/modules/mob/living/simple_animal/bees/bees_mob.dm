@@ -194,6 +194,18 @@
 	if (src)
 		qdel(src)
 
+/mob/living/simple_animal/bee/reagent_act(id, method, volume)
+	if(isDead())
+		return
+
+	.=..()
+
+	switch(id)
+		if(TOXIN)
+			visible_message("<span class='danger'>The bees stop moving...</span>")
+			adjustBruteLoss(rand(40,110)) //Kills 4-11 bees. Maximum bees per swarm 20.
+			panic_attack() //Bees don't know who is responsible, but they'll get mad at everyone!
+
 /mob/living/simple_animal/bee/unarmed_attacked(mob/living/attacker, damage, damage_type, zone)
 	..()
 	panic_attack(attacker)
@@ -528,6 +540,8 @@
 					if(istype(G, /mob/living/simple_animal/bee))
 						continue
 					if(istype(G, /mob/living/silicon/robot/mommi)) //Do not bully the crab
+						continue
+					if(istype(G, /mob/living/simple_animal/hostile/lizard) && bee_species.aggressiveness < 50) //natural predator, need to be pretty aggressive to fight them
 						continue
 					if (G.stat != DEAD)
 						nearbyMobs += G

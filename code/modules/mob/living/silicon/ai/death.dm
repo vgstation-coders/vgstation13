@@ -1,6 +1,8 @@
 /mob/living/silicon/ai/death(gibbed)
 	if(stat == DEAD)
 		return
+	if(!gibbed)
+		emote("deathgasp")
 	stat = DEAD
 	if("[icon_state]-crash" in icon_states(src.icon,1))
 		icon_state = "[icon_state]-crash"
@@ -41,11 +43,7 @@
 		callshuttle = 0
 
 	if(callshuttle == 3) //if all three conditions are met
-		emergency_shuttle.incall(2)
-		log_game("All the AIs, comm consoles and boards are destroyed. Shuttle called.")
-		message_admins("All the AIs, comm consoles and boards are destroyed. Shuttle called.", 1)
-		captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
-		world << sound('sound/AI/shuttlecalled.ogg')
+		shuttle_autocall()
 
 	if(explosive)
 		spawn(10)

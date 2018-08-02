@@ -5,6 +5,11 @@
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
 
+// Defines for the shuttle
+#define SHUTTLE_ON_STANDBY 0
+#define SHUTTLE_ON_STATION 1
+#define SHUTTLE_ON_CENTCOM 2
+
 #ifndef RUNWARNING
 #warn If you have issues with retrieving logs update byond on the server and client to 507.1277 or greater, or uncomment RUNWARNING
 #endif
@@ -1531,3 +1536,8 @@ var/proccalls = 1
 #else
 #define DELAY2GLIDESIZE(delay) (Ceiling(WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1)))
 #endif
+
+//Custom vending machines
+#define CUSTOM_VENDING_MAX_SLOGAN_LENGTH	50
+#define CUSTOM_VENDING_MAX_NAME_LENGTH	25
+#define CUSTOM_VENDING_MAX_SLOGANS	5

@@ -465,7 +465,7 @@
 							if(head_organ.take_damage(25, 0))
 								H.UpdateDamageIcon(1)
 							head_organ.disfigure("burn")
-							H.emote("scream")
+							H.audible_scream()
 					else
 						M.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 			else
@@ -975,7 +975,7 @@
 									if(head_organ.take_damage(30, 0))
 										H.UpdateDamageIcon(1)
 									head_organ.disfigure("burn")
-									H.emote("scream")
+									H.audible_scream()
 								else
 									to_chat(H, "<span class='warning'>A freezing liquid covers your face. Your vampiric powers protect you!</span>")
 									H.mind.vampire.smitecounter += 12 //Ditto above
@@ -1399,7 +1399,7 @@
 					if(head_organ.take_damage(25, 0))
 						H.UpdateDamageIcon(1)
 					head_organ.disfigure("burn")
-					H.emote("scream")
+					H.audible_scream()
 			else
 				M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 	else
@@ -1476,7 +1476,7 @@
 				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 				if(head_organ.take_damage(15, 0))
 					H.UpdateDamageIcon(1)
-				H.emote("scream")
+				H.audible_scream()
 
 		else if(ismonkey(M))
 			var/mob/living/carbon/monkey/MK = M
@@ -1499,7 +1499,7 @@
 				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 				if(head_organ.take_damage(15, 0))
 					H.UpdateDamageIcon(1)
-				H.emote("scream")
+				H.audible_scream()
 				head_organ.disfigure("burn")
 			else
 				M.take_organ_damage(min(15, volume * 4))
@@ -2089,7 +2089,7 @@
 				to_chat(H,"<span class='warning'>Your [eyes_covered] protects your eyes from the bleach!</span>")
 				return
 			else //This stuff is a little more corrosive but less irritative than pepperspray
-				H.emote("scream")
+				H.audible_scream()
 				to_chat(H,"<span class='danger'>You are sprayed directly in the eyes with bleach!</span>")
 				H.eye_blurry = max(M.eye_blurry, 15)
 				H.eye_blind = max(M.eye_blind, 5)
@@ -3608,11 +3608,11 @@
 				return
 			else if(eyes_covered) //Eye cover is better than mouth cover
 				H << "<span class='warning'>Your [eyes_covered] protects your eyes from the pepperspray!</span>"
-				H.emote("scream")
+				H.audible_scream()
 				H.eye_blurry = max(M.eye_blurry, 5)
 				return
 			else //Oh dear
-				H.emote("scream")
+				H.audible_scream()
 				H << "<span class='danger'>You are sprayed directly in the eyes with pepperspray!</span>"
 				H.eye_blurry = max(M.eye_blurry, 25)
 				H.eye_blind = max(M.eye_blind, 10)
