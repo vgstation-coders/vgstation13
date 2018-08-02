@@ -76,6 +76,7 @@
 	powernet = 0		// set so that APCs aren't found as powernet nodes //Hackish, Horrible, was like this before I changed it :(
 	var/malfhack = 0 //New var for my changes to AI malf. --NeoFite
 	var/mob/living/silicon/ai/malfai = null //See above --NeoFite
+	var/malflocked = 0 //used for malfs locking down APCs
 //	luminosity = 1
 	var/has_electronics = 0 // 0 - none, 1 - plugged in, 2 - secured by screwdriver
 	var/overload = 1 //used for the Blackout malf module
@@ -734,6 +735,7 @@
 		"totalLoad" = lastused_equip + lastused_light + lastused_environ,
 		"coverLocked" = coverlocked,
 		"siliconUser" = istype(user, /mob/living/silicon) || isAdminGhost(user), // Allow aghosts to fuck with APCs
+		"malfLocked"= malflocked,
 		"malfStatus" = get_malf_status(user),
 
 		"powerChannels" = list(
@@ -872,6 +874,9 @@
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
+	if((!aidisabled) && malflocked && usr != malfai) //exclusive control enabled
+		to_chat(usr, "Access refused.")
+		return 0
 	if(!can_use(usr, 1))
 		return 0
 	if(!(istype(usr, /mob/living/silicon) || isAdminGhost(usr)) && locked)
@@ -934,6 +939,7 @@
 						src.malfai = usr:parent
 					else
 						src.malfai = usr
+					src.malflocked = 1
 					to_chat(malfai, "Hack complete. The APC is now under your exclusive control.")
 					update_icon()
 
@@ -952,6 +958,10 @@
 			else
 				locked = !locked
 				update_icon()
+				
+	else if (href_list["malflock"])
+		if(get_malf_status(usr))
+			malflocked = !malflocked
 
 	return 1
 
