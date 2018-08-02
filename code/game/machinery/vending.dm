@@ -221,14 +221,13 @@ var/global/num_vending_terminals = 1
 				if(istype(P, /obj/structure/vendomatpack/custom))
 					for(var/obj/item/I in P.contents)
 						newmachine.loadCustomItem(I)
-				else
+				else if(P.stock.len) //This is true if the vendopack is a used recharge pack. "Stock" packs have nada.
 					newmachine.products = P.stock
 					newmachine.contraband = P.secretstock
 					newmachine.premium = P.preciousstock
 					newmachine.product_records = P.product_records
 					newmachine.hidden_records = P.hidden_records
 					newmachine.coin_records = P.coin_records
-					newmachine.build_inventories()
 				qdel(P)
 				if(user.machine==src)
 					newmachine.attack_hand(user)
@@ -782,7 +781,7 @@ var/global/num_vending_terminals = 1
 		dat += "<b>Coin slot:</b> [coin ? coin : "No coin inserted"] (<a href='byond://?src=\ref[src];remove_coin=1'>Remove</A>)<br><br>"
 
 	if (src.product_records.len == 0)
-		dat += "<font color = 'red'>No products loaded!</font><br><br>"
+		dat += "<font color = 'red'>No products loaded!</font><br><br></TT>"
 	else
 		var/list/display_records = src.product_records.Copy()
 
