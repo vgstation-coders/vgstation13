@@ -11,7 +11,6 @@ var/global/num_vending_terminals = 1
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "empty"
 	var/obj/structure/vendomatpack/pack = null
-	layer = BELOW_OBJ_LAYER
 	anchored = 1
 	density = 1
 	var/health = 100
