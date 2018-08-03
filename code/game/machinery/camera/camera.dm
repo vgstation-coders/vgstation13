@@ -77,6 +77,11 @@ var/list/camera_names=list()
 		ASSERT(src.network)
 		ASSERT(src.network.len > 0)
 
+	//allow mappers to use the name field for the camera instead of c_tag
+	//this helps organize the camera object list in DreamMaker
+	if(name != initial(name) && !c_tag)
+		c_tag = name
+		name = initial(name)
 	if(!c_tag)
 		name_camera()
 	..()
