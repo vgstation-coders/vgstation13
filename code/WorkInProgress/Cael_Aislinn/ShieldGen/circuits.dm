@@ -6,7 +6,7 @@
 	name = "Circuit board (Starscreen-EX external shield generator)"
 	desc = "A circuit board used to run a Starscreen-EX external shield generator. There's a plate soldered just over one of the identifying chips."
 	board_type = MACHINE
-	build_path = "/obj/machinery/shield_gen/external"
+	build_path = /obj/machinery/shield_gen/external
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PLASMATECH + "=3"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator/nano/pico" = 2,
@@ -27,7 +27,7 @@
 	name = "Circuit board (Starscreen shield generator)"
 	desc = "A circuit board used to run a Starscreen shield generator. There's a plate soldered just under one of the identifying chips."
 	board_type = MACHINE
-	build_path = "/obj/machinery/shield_gen"
+	build_path = /obj/machinery/shield_gen
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PLASMATECH + "=3"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/manipulator/nano/pico" = 2,
@@ -48,7 +48,7 @@
 	name = "Circuit board (Starscreen shield capacitor)"
 	desc = "A circuit board used to run a Starscreen shield capacitor."
 	board_type = MACHINE
-	build_path = "/obj/machinery/shield_capacitor"
+	build_path = /obj/machinery/shield_capacitor
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_POWERSTORAGE + "=4"
 	req_components = list(
 							"/obj/item/weapon/stock_parts/capacitor" = 2,
