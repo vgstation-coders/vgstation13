@@ -1,8 +1,5 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
-#define MACHINE "machine"
-#define COMPUTER "computer"
-#define EMBEDDED_CONTROLLER "embedded controller"
-#define OTHER "other"
+
 /obj/machinery/constructable_frame //Made into a seperate type to make future revisions easier.
 	name = "machine frame"
 	desc = "A metal frame ready to recieve wires, a circuit board and parts."
@@ -142,14 +139,8 @@
 						for(var/A in circuit.req_components)
 							req_components[A] = circuit.req_components[A]
 						req_component_names = circuit.req_components.Copy()
-						/* Are you fucking kidding me
 						for(var/A in req_components)
-							var/cp = text2path(A)
-							var/obj/ct = new cp() // have to quickly instantiate it get name
-							req_component_names[A] = ct.name
-							del(ct)*/
-						for(var/A in req_components)
-							var/atom/path = text2path(A)
+							var/atom/path = A
 							req_component_names[A] = initial(path.name)
 						update_desc() // sets the description based on req_components
 						to_chat(user, desc)
@@ -217,8 +208,8 @@
 							part_list = sortTim(part_list, /proc/cmp_rped_sort)
 
 							for(var/path in req_components)
-								while(req_components[path] > 0 && (locate(text2path(path)) in part_list))
-									var/obj/item/part = (locate(text2path(path)) in part_list)
+								while(req_components[path] > 0 && (locate(path) in part_list))
+									var/obj/item/part = (locate(path) in part_list)
 									if(!part.crit_fail)
 										added_components[part] = path
 										replacer.remove_from_storage(part, src)
@@ -235,13 +226,13 @@
 						else
 							if(istype(P, /obj/item/weapon) || istype(P, /obj/item/stack))
 								for(var/I in req_components)
-									if(istype(P, text2path(I)) && (req_components[I] > 0))
+									if(istype(P, I) && (req_components[I] > 0))
 										playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 										if(istype(P, /obj/item/stack))
 											var/obj/item/stack/CP = P
 											if(CP.amount >= req_components[I])
 												var/camt = min(CP.amount, req_components[I]) // amount of the stack to take, idealy amount required, but limited by amount provided
-												var/obj/item/stack/CC = getFromPool(text2path(I), src)
+												var/obj/item/stack/CC = getFromPool(I, src)
 												CC.amount = camt
 												CC.update_icon()
 												CP.use(camt)
@@ -289,6 +280,7 @@ to destroy them and players will be able to make replacements.
 	desc = "A blank circuitboard ready for design."
 	icon = 'icons/obj/module.dmi'
 	icon_state = "blank_mod"
+	board_type = OTHER
 	//var/datum/circuits/local_fuses = null
 	var/list/allowed_boards = list(
 	"autolathe"=/obj/item/weapon/circuitboard/autolathe,
@@ -358,9 +350,9 @@ to destroy them and players will be able to make replacements.
 	board_type = MACHINE
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/scanning_module" = 1,
-							"/obj/item/weapon/stock_parts/manipulator" = 1,
-							"/obj/item/weapon/stock_parts/micro_laser" = 1)
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/micro_laser = 1)
 
 /obj/item/weapon/circuitboard/autolathe
 	name = "Circuit board (Autolathe)"
@@ -369,9 +361,9 @@ to destroy them and players will be able to make replacements.
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 3,
-							"/obj/item/weapon/stock_parts/manipulator" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/matter_bin = 3,
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/protolathe
 	name = "Circuit board (Protolathe)"
@@ -380,8 +372,8 @@ to destroy them and players will be able to make replacements.
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/manipulator" = 2)
+							/obj/item/weapon/stock_parts/matter_bin = 2,
+							/obj/item/weapon/stock_parts/manipulator = 2)
 
 /obj/item/weapon/circuitboard/circuit_imprinter
 	name = "Circuit board (Circuit Imprinter)"
@@ -390,9 +382,9 @@ to destroy them and players will be able to make replacements.
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 1,
-							"/obj/item/weapon/stock_parts/manipulator" = 1,
-							"/obj/item/weapon/reagent_containers/glass/beaker" = 2)
+							/obj/item/weapon/stock_parts/matter_bin = 1,
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/reagent_containers/glass/beaker = 2)
 
 /obj/item/weapon/circuitboard/pacman
 	name = "Circuit Board (PACMAN-type Generator)"
@@ -401,9 +393,9 @@ to destroy them and players will be able to make replacements.
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_POWERSTORAGE + "=3;" + Tc_PLASMATECH + "=3;" + Tc_ENGINEERING + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 1,
-							"/obj/item/weapon/stock_parts/micro_laser" = 1,
-							"/obj/item/weapon/stock_parts/capacitor" = 1)
+							/obj/item/weapon/stock_parts/matter_bin = 1,
+							/obj/item/weapon/stock_parts/micro_laser = 1,
+							/obj/item/weapon/stock_parts/capacitor = 1)
 
 /obj/item/weapon/circuitboard/pacman/super
 	name = "Circuit Board (SUPERPACMAN-type Generator)"
@@ -448,8 +440,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/capacitor" = 2,
-							"/obj/item/weapon/stock_parts/scanning_module" = 1)
+							/obj/item/weapon/stock_parts/capacitor = 2,
+							/obj/item/weapon/stock_parts/scanning_module = 1)
 
 /obj/item/weapon/circuitboard/mechfab
 	name = "Circuit board (Exosuit Fabricator)"
@@ -458,10 +450,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 2,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/matter_bin = 2,
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 2,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/podfab
 	name = "Circuit board (Spacepod Fabricator)"
@@ -470,9 +462,9 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 3,
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 2)
+							/obj/item/weapon/stock_parts/matter_bin = 3,
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 2)
 
 /obj/item/weapon/circuitboard/defib_recharger
 	name = "Circuit Board (Defib Recharger)"
@@ -481,10 +473,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=4;" + Tc_ENGINEERING + "=2;" + Tc_POWERSTORAGE + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/matter_bin = 2,
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 1,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/smes
 	name = "Circuit Board (SMES)"
@@ -493,9 +485,9 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_ENGINEERING + "=4;" + Tc_PROGRAMMING + "=4"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/capacitor" = 4,
-							"/obj/item/weapon/stock_parts/micro_laser" = 4,
-							"/obj/item/weapon/stock_parts/console_screen" = 2)
+							/obj/item/weapon/stock_parts/capacitor = 4,
+							/obj/item/weapon/stock_parts/micro_laser = 4,
+							/obj/item/weapon/stock_parts/console_screen = 2)
 
 /obj/item/weapon/circuitboard/port_smes
 	name = "Circuit Board (Portable SMES)"
@@ -504,9 +496,9 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=5;" + Tc_ENGINEERING + "=4;" + Tc_PROGRAMMING + "=4"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/capacitor" = 4,
-							"/obj/item/weapon/stock_parts/micro_laser" = 4,
-							"/obj/item/weapon/stock_parts/console_screen" = 2)
+							/obj/item/weapon/stock_parts/capacitor = 4,
+							/obj/item/weapon/stock_parts/micro_laser = 4,
+							/obj/item/weapon/stock_parts/console_screen = 2)
 
 /obj/item/weapon/circuitboard/battery_port
 	name = "Circuit Board (SMES Port)"
@@ -515,8 +507,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=5;" + Tc_ENGINEERING + "=4;" + Tc_PROGRAMMING + "=4"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/capacitor" = 3,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/capacitor = 3,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/treadmill
 	name = "Circuit Board (Treadmill Generator)"
@@ -525,8 +517,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_POWERSTORAGE + "=4"
 	req_components = list (
-							"/obj/item/weapon/stock_parts/capacitor" = 4,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/capacitor = 4,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/chemheater
 	name = "Circuit Board (Directed Laser Heater)"
@@ -535,8 +527,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=4;" + Tc_ENGINEERING + "=3;" + Tc_POWERSTORAGE + "=4"
 	req_components = list (
-							"/obj/item/weapon/stock_parts/micro_laser" = 1,
-							"/obj/item/weapon/stock_parts/capacitor" = 1)
+							/obj/item/weapon/stock_parts/micro_laser = 1,
+							/obj/item/weapon/stock_parts/capacitor = 1)
 
 /obj/item/weapon/circuitboard/chemcooler
 	name = "Circuit Board (Cryonic Wave Projector)"
@@ -545,8 +537,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=4;" + Tc_ENGINEERING + "=3;" + Tc_POWERSTORAGE + "=4"
 	req_components = list (
-							"/obj/item/weapon/stock_parts/scanning_module" = 1,
-							"/obj/item/weapon/stock_parts/capacitor" = 1)
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/capacitor = 1)
 
 /obj/item/weapon/circuitboard/chem_dispenser
 	name = "Circuit Board (Chemistry Dispenser)"
@@ -555,10 +547,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
 	req_components = list (
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 3,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 3,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/chem_dispenser/brewer
 	name = "Circuit Board (Brewer)"
@@ -582,10 +574,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=4"
 	req_components = list (
-							"/obj/item/weapon/stock_parts/manipulator" = 1,
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 2,
-							"/obj/item/weapon/stock_parts/console_screen" = 2)
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 2,
+							/obj/item/weapon/stock_parts/console_screen = 2)
 
 /obj/item/weapon/circuitboard/condimaster
 	name = "Circuit Board (CondiMaster)"
@@ -594,10 +586,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=4"
 	req_components = list (
-							"/obj/item/weapon/stock_parts/manipulator" = 1,
-							"/obj/item/weapon/stock_parts/scanning_module" = 3,
-							"/obj/item/weapon/stock_parts/micro_laser" = 2,
-							"/obj/item/weapon/stock_parts/console_screen" = 2)
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/scanning_module = 3,
+							/obj/item/weapon/stock_parts/micro_laser = 2,
+							/obj/item/weapon/stock_parts/console_screen = 2)
 
 /obj/item/weapon/circuitboard/snackbar_machine
 	name = "Circuit Board (SnackBar Machine)"
@@ -606,10 +598,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=4"
 	req_components = list (
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 2,
-							"/obj/item/weapon/stock_parts/console_screen" = 2)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 2,
+							/obj/item/weapon/stock_parts/console_screen = 2)
 
 /obj/item/weapon/circuitboard/recharge_station
 	name = "Circuit Board (Cyborg Recharging Station)"
@@ -618,9 +610,9 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_PROGRAMMING + "=3"
 	req_components = list (
-							"/obj/item/weapon/stock_parts/capacitor" = 2,
-							"/obj/item/weapon/stock_parts/manipulator" = 1,
-							"/obj/item/weapon/stock_parts/matter_bin" = 1)
+							/obj/item/weapon/stock_parts/capacitor = 2,
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/matter_bin = 1)
 
 /obj/item/weapon/circuitboard/heater
 	name = "Circuit Board (Heater)"
@@ -629,8 +621,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=3;" + Tc_ENGINEERING + "=5;" + Tc_BIOTECH + "=4"
 	req_components = list (
-							"/obj/item/weapon/stock_parts/micro_laser" = 3,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/micro_laser = 3,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/freezer
 	name = "Circuit Board (Freezer)"
@@ -639,8 +631,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=3;" + Tc_ENGINEERING + "=4;" + Tc_BIOTECH + "=4"
 	req_components = list (
-							"/obj/item/weapon/stock_parts/micro_laser" = 3,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/micro_laser = 3,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/photocopier
 	name = "Circuit Board (Photocopier)"
@@ -649,10 +641,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2"
 	req_components = list (
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 2,)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 1,
+							/obj/item/weapon/stock_parts/console_screen = 2,)
 
 /obj/item/weapon/circuitboard/cryo
 	name = "Circuit Board (Cryo)"
@@ -661,9 +653,9 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=3;" + Tc_ENGINEERING + "=2"
 	req_components = list (
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/manipulator" = 3,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/manipulator = 3,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/clonepod
 	name = "Circuit board (Clone Pod)"
@@ -672,9 +664,9 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/clonescanner
 	name = "Circuit board (Cloning Scanner)"
@@ -683,10 +675,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/scanning_module" = 1,
-							"/obj/item/weapon/stock_parts/manipulator" = 1,
-							"/obj/item/weapon/stock_parts/micro_laser" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/micro_laser = 1,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/fullbodyscanner
 	name = "Circuit board (Full Body Scanner)"
@@ -695,7 +687,7 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/scanning_module" = 3)
+							/obj/item/weapon/stock_parts/scanning_module = 3)
 
 /obj/item/weapon/circuitboard/sleeper
 	name = "Circuit board (Sleeper)"
@@ -704,8 +696,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/scanning_module" = 1,
-							"/obj/item/weapon/stock_parts/manipulator" = 2)
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/manipulator = 2)
 
 /obj/item/weapon/circuitboard/sleeper/mancrowave
 	name = "Circuit board (Thermal Homeostasis Regulator)"
@@ -719,12 +711,12 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 3,
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/console_screen" = 2,
-							"/obj/item/weapon/reagent_containers/glass/beaker/large" = 1)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/matter_bin = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 3,
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/console_screen = 2,
+							/obj/item/weapon/reagent_containers/glass/beaker/large = 1)
 
 /obj/item/weapon/circuitboard/seed_extractor
 	name = "Circuit Board (Seed Extractor)"
@@ -733,11 +725,11 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/matter_bin" = 1,
-							"/obj/item/weapon/stock_parts/micro_laser" = 1,
-							"/obj/item/weapon/stock_parts/scanning_module" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/matter_bin = 1,
+							/obj/item/weapon/stock_parts/micro_laser = 1,
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/microwave
 	name = "Circuit Board (Microwave)"
@@ -746,9 +738,9 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_ENGINEERING + "=2;" + Tc_MAGNETS + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/micro_laser" = 1,
-							"/obj/item/weapon/stock_parts/scanning_module" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/micro_laser = 1,
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/reagentgrinder
 	name = "Circuit Board (All-In-One Grinder)"
@@ -757,10 +749,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 1,
-							"/obj/item/weapon/stock_parts/scanning_module" = 1,
-							"/obj/item/weapon/reagent_containers/glass/beaker/large" = 1)
+							/obj/item/weapon/stock_parts/matter_bin = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 1,
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/reagent_containers/glass/beaker/large = 1)
 
 /obj/item/weapon/circuitboard/smartfridge
 	name = "Circuit Board (SmartFridge)"
@@ -769,10 +761,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/matter_bin" = 4,
-							"/obj/item/weapon/stock_parts/scanning_module" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 2)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/matter_bin = 4,
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/console_screen = 2)
 
 
 
@@ -835,11 +827,11 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/scanning_module" = 1,
-							"/obj/item/weapon/stock_parts/capacitor" = 1,
-							"/obj/item/weapon/reagent_containers/glass/beaker" = 2,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/matter_bin = 2,
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/capacitor = 1,
+							/obj/item/weapon/reagent_containers/glass/beaker = 2,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/gibber
 	name = "Circuit Board (Gibber)"
@@ -848,11 +840,11 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/capacitor" = 2,
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/manipulator" = 4,
-							"/obj/item/weapon/stock_parts/micro_laser/high" = 4)
+							/obj/item/weapon/stock_parts/matter_bin = 2,
+							/obj/item/weapon/stock_parts/capacitor = 2,
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/manipulator = 4,
+							/obj/item/weapon/stock_parts/micro_laser/high = 4)
 
 /obj/item/weapon/circuitboard/processor
 	name = "Circuit Board (Food Processor)"
@@ -861,8 +853,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/scanning_module" = 1,
-							"/obj/item/weapon/stock_parts/manipulator" = 2)
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/manipulator = 2)
 
 /obj/item/weapon/circuitboard/egg_incubator
 	name = "Circuit Board (Egg Incubator)"
@@ -871,8 +863,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 1,
-							"/obj/item/weapon/stock_parts/capacitor" = 2)
+							/obj/item/weapon/stock_parts/matter_bin = 1,
+							/obj/item/weapon/stock_parts/capacitor = 2)
 
 /obj/item/weapon/circuitboard/box_cloner
 	name = "Circuit Board (Box Cloner)"
@@ -881,8 +873,8 @@ obj/item/weapon/circuitboard/rdserver
 	origin_tech = Tc_SYNDICATE + "=3"
 	board_type = MACHINE
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 1,
-							"/obj/item/weapon/stock_parts/capacitor" = 2)
+							/obj/item/weapon/stock_parts/matter_bin = 1,
+							/obj/item/weapon/stock_parts/capacitor = 2)
 
 /obj/item/weapon/circuitboard/monkey_recycler
 	name = "Circuit Board (Monkey Recycler)"
@@ -891,9 +883,9 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 1,
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 1)
+							/obj/item/weapon/stock_parts/matter_bin = 1,
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 1)
 
 /*
 /obj/item/weapon/circuitboard/hydroseeds
@@ -902,10 +894,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/capacitor" = 1,
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/manipulator" = 2)
+							/obj/item/weapon/stock_parts/matter_bin = 2,
+							/obj/item/weapon/stock_parts/capacitor = 1,
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/manipulator = 2)
 
 /obj/item/weapon/circuitboard/hydronutrients
 	name = "Circuit Board (Nutrimax)"
@@ -913,10 +905,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/capacitor" = 1,
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/manipulator" = 2)
+							/obj/item/weapon/stock_parts/matter_bin = 2,
+							/obj/item/weapon/stock_parts/capacitor = 1,
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/manipulator = 2)
 */
 
 /obj/item/weapon/circuitboard/pipedispenser
@@ -926,10 +918,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/capacitor" = 1,
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/manipulator" = 2)
+							/obj/item/weapon/stock_parts/matter_bin = 2,
+							/obj/item/weapon/stock_parts/capacitor = 1,
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/manipulator = 2)
 
 /obj/item/weapon/circuitboard/pipedispenser/disposal
 	name = "Circuit Board (Disposal Pipe Dispenser)"
@@ -938,10 +930,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/capacitor" = 1,
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/manipulator" = 2)
+							/obj/item/weapon/stock_parts/matter_bin = 2,
+							/obj/item/weapon/stock_parts/capacitor = 1,
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/manipulator = 2)
 
 
 
@@ -954,13 +946,13 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/scanning_module/adv/phasic" = 2,
-							"/obj/item/weapon/stock_parts/capacitor/adv/super" = 3,
-							"/obj/item/weapon/stock_parts/subspace/ansible" = 2,
-							"/obj/item/weapon/stock_parts/subspace/filter" = 2,
-							"/obj/item/weapon/stock_parts/subspace/treatment" = 1,
-							"/obj/item/weapon/stock_parts/subspace/crystal" = 2,
-							"/obj/item/weapon/stock_parts/subspace/transmitter" = 4)
+							/obj/item/weapon/stock_parts/scanning_module/adv/phasic = 2,
+							/obj/item/weapon/stock_parts/capacitor/adv/super = 3,
+							/obj/item/weapon/stock_parts/subspace/ansible = 2,
+							/obj/item/weapon/stock_parts/subspace/filter = 2,
+							/obj/item/weapon/stock_parts/subspace/treatment = 1,
+							/obj/item/weapon/stock_parts/subspace/crystal = 2,
+							/obj/item/weapon/stock_parts/subspace/transmitter = 4)
 
 /obj/item/weapon/circuitboard/telestation
 	name = "Circuit Board (Teleporter Station)"
@@ -969,10 +961,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/scanning_module/adv/phasic" = 2,
-							"/obj/item/weapon/stock_parts/capacitor/adv/super" = 2,
-							"/obj/item/weapon/stock_parts/subspace/ansible" = 2,
-							"/obj/item/weapon/stock_parts/subspace/analyzer" = 4)
+							/obj/item/weapon/stock_parts/scanning_module/adv/phasic = 2,
+							/obj/item/weapon/stock_parts/capacitor/adv/super = 2,
+							/obj/item/weapon/stock_parts/subspace/ansible = 2,
+							/obj/item/weapon/stock_parts/subspace/analyzer = 4)
 
 // Telecomms circuit boards:
 
@@ -983,8 +975,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
-							"/obj/item/weapon/stock_parts/manipulator" = 1)
+							/obj/item/weapon/stock_parts/subspace/filter = 1,
+							/obj/item/weapon/stock_parts/manipulator = 1)
 
 /obj/item/weapon/circuitboard/telecomms/receiver
 	name = "Circuit Board (telecommunications subspace receiver)"
@@ -993,10 +985,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/subspace/ansible" = 1,
-							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 1)
+							/obj/item/weapon/stock_parts/subspace/ansible = 1,
+							/obj/item/weapon/stock_parts/subspace/filter = 1,
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 1)
 
 /obj/item/weapon/circuitboard/telecomms/hub
 	name = "Circuit Board (telecommunications hub)"
@@ -1005,8 +997,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/subspace/filter" = 2)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/subspace/filter = 2)
 
 /obj/item/weapon/circuitboard/telecomms/relay
 	name = "Circuit Board (telecommunications relay)"
@@ -1015,8 +1007,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=4;" + Tc_BLUESPACE + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/subspace/filter" = 2)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/subspace/filter = 2)
 
 /obj/item/weapon/circuitboard/telecomms/bus
 	name = "Circuit Board (telecommunications bus)"
@@ -1025,8 +1017,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/subspace/filter" = 1)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/subspace/filter = 1)
 
 /obj/item/weapon/circuitboard/telecomms/processor
 	name = "Circuit Board (telecommunications processor)"
@@ -1035,11 +1027,11 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator" = 3,
-							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
-							"/obj/item/weapon/stock_parts/subspace/treatment" = 2,
-							"/obj/item/weapon/stock_parts/subspace/analyzer" = 1,
-							"/obj/item/weapon/stock_parts/subspace/amplifier" = 1)
+							/obj/item/weapon/stock_parts/manipulator = 3,
+							/obj/item/weapon/stock_parts/subspace/filter = 1,
+							/obj/item/weapon/stock_parts/subspace/treatment = 2,
+							/obj/item/weapon/stock_parts/subspace/analyzer = 1,
+							/obj/item/weapon/stock_parts/subspace/amplifier = 1)
 
 /obj/item/weapon/circuitboard/telecomms/server
 	name = "Circuit Board (telecommunications server)"
@@ -1048,8 +1040,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/subspace/filter" = 1)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/subspace/filter = 1)
 
 /obj/item/weapon/circuitboard/telecomms/broadcaster
 	name = "Circuit Board (telecommunications subspace broadcaster)"
@@ -1058,10 +1050,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=4;" + Tc_BLUESPACE + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/subspace/filter" = 1,
-							"/obj/item/weapon/stock_parts/subspace/crystal" = 1,
-							"/obj/item/weapon/stock_parts/micro_laser/high" = 2)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/subspace/filter = 1,
+							/obj/item/weapon/stock_parts/subspace/crystal = 1,
+							/obj/item/weapon/stock_parts/micro_laser/high = 2)
 
 /obj/item/weapon/circuitboard/bioprinter
 	name = "Circuit Board (Bioprinter)"
@@ -1070,11 +1062,11 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2;" + Tc_BIOTECH + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 3,
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/matter_bin = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 3,
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/reverse_engine
 	name = "Circuit Board (Reverse Engine)"
@@ -1083,10 +1075,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=6;" + Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=3;" + Tc_POWERSTORAGE + "=4"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/capacitor" = 2,
-							"/obj/item/weapon/stock_parts/manipulator" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/capacitor = 2,
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/generalfab
 	name = "Circuit Board (General Fabricator)"
@@ -1095,9 +1087,9 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 2,
-							"/obj/item/weapon/stock_parts/matter_bin" = 2)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 2,
+							/obj/item/weapon/stock_parts/matter_bin = 2)
 
 /obj/item/weapon/circuitboard/flatpacker
 	name = "Circuit Board (Flatpack Fabricator)"
@@ -1106,11 +1098,11 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_ENGINEERING + "=4;" + Tc_POWERSTORAGE + "=3;" + Tc_PROGRAMMING + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 2,
-							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/reagent_containers/glass/beaker" = 1)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 2,
+							/obj/item/weapon/stock_parts/matter_bin = 2,
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/reagent_containers/glass/beaker = 1)
 
 /obj/item/weapon/circuitboard/blueprinter
 	name = "Circuit Board (Blueprint Printer)"
@@ -1119,9 +1111,9 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_PROGRAMMING + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/manipulator" = 1,
-							"/obj/item/weapon/stock_parts/scanning_module" = 1)
+							/obj/item/weapon/stock_parts/matter_bin = 2,
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/scanning_module = 1)
 
 /obj/item/weapon/circuitboard/vendomat
 	name = "Circuit Board (Vending Machine)"
@@ -1130,9 +1122,9 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1;" + Tc_POWERSTORAGE + "=1"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 1,
-							"/obj/item/weapon/stock_parts/manipulator" = 1,
-							"/obj/item/weapon/stock_parts/scanning_module" = 1)
+							/obj/item/weapon/stock_parts/matter_bin = 1,
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/scanning_module = 1)
 
 /obj/item/weapon/circuitboard/pdapainter
 	name = "Circuit Board (PDA Painter)"
@@ -1141,10 +1133,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_ENGINEERING + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator" = 1,
-							"/obj/item/weapon/stock_parts/micro_laser" = 2,
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/micro_laser = 2,
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/incubator
 	name = "Circuit Board (Pathogenic Incubator)"
@@ -1153,10 +1145,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_BIOTECH + "=5;" + Tc_MAGNETS + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 1,
-							"/obj/item/weapon/stock_parts/micro_laser" = 2,
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/reagent_containers/glass/beaker" = 1)
+							/obj/item/weapon/stock_parts/matter_bin = 1,
+							/obj/item/weapon/stock_parts/micro_laser = 2,
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/reagent_containers/glass/beaker = 1)
 
 /obj/item/weapon/circuitboard/diseaseanalyser
 	name = "Circuit Board (Disease Analyser)"
@@ -1165,9 +1157,9 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=3;" + Tc_PROGRAMMING + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator" = 1,
-							"/obj/item/weapon/stock_parts/micro_laser" = 1,
-							"/obj/item/weapon/stock_parts/scanning_module" = 3)
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/micro_laser = 1,
+							/obj/item/weapon/stock_parts/scanning_module = 3)
 
 /obj/item/weapon/circuitboard/centrifuge
 	name = "Circuit Board (Isolation Centrifuge)"
@@ -1176,7 +1168,7 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator" = 2)
+							/obj/item/weapon/stock_parts/manipulator = 2)
 
 /obj/item/weapon/circuitboard/mech_bay_power_port
 	name = "Circuit Board (Power Port)"
@@ -1185,8 +1177,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_POWERSTORAGE + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/micro_laser" = 2,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/micro_laser = 2,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/mech_bay_recharge_station
 	name = "Circuit Board (Recharge Station)"
@@ -1195,8 +1187,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_POWERSTORAGE + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/scanning_module" = 1,
-							"/obj/item/weapon/stock_parts/capacitor" = 2)
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/capacitor = 2)
 
 /obj/item/weapon/circuitboard/prism
 	name = "Circuit Board (Prism)"
@@ -1205,8 +1197,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=3;" + Tc_POWERSTORAGE + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/micro_laser/high" = 3,
-							"/obj/item/weapon/stock_parts/capacitor" = 6)
+							/obj/item/weapon/stock_parts/micro_laser/high = 3,
+							/obj/item/weapon/stock_parts/capacitor = 6)
 
 /obj/item/weapon/circuitboard/cell_charger
 	name = "Circuit Board (Cell Charger)"
@@ -1215,8 +1207,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_POWERSTORAGE + "=3"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/scanning_module" = 1,
-							"/obj/item/weapon/stock_parts/capacitor" = 2)
+							/obj/item/weapon/stock_parts/scanning_module = 1,
+							/obj/item/weapon/stock_parts/capacitor = 2)
 
 /obj/item/weapon/circuitboard/recharger
 	name = "Circuit Board (Recharger)"
@@ -1225,8 +1217,8 @@ obj/item/weapon/circuitboard/rdserver
 	build_path = /obj/machinery/recharger
 	origin_tech = Tc_POWERSTORAGE + "=2;" + Tc_COMBAT + "=2"
 	req_components = list(
-						"/obj/item/weapon/stock_parts/scanning_module" = 1,
-						"/obj/item/weapon/stock_parts/capacitor" = 2)
+						/obj/item/weapon/stock_parts/scanning_module = 1,
+						/obj/item/weapon/stock_parts/capacitor = 2)
 
 /obj/item/weapon/circuitboard/washing_machine
 	name = "Circuit Board (Washing Machine)"
@@ -1235,8 +1227,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=1"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 1,
-							"/obj/item/weapon/stock_parts/manipulator" = 1)
+							/obj/item/weapon/stock_parts/matter_bin = 1,
+							/obj/item/weapon/stock_parts/manipulator = 1)
 
 /obj/item/weapon/circuitboard/sorting_machine
 	name = "Circuit Board (Sorting Machine)"
@@ -1244,8 +1236,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=3"
 	req_components = list(  //Matter bins because it's moving matter, I guess, and a capacitor because else the recipe is boring.
-							"/obj/item/weapon/stock_parts/matter_bin" = 3,
-							"/obj/item/weapon/stock_parts/capacitor" = 1)
+							/obj/item/weapon/stock_parts/matter_bin = 3,
+							/obj/item/weapon/stock_parts/capacitor = 1)
 
 /obj/item/weapon/circuitboard/sorting_machine/recycling
 	name = "Circuit Board (Recycling Sorting Machine)"
@@ -1264,8 +1256,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 2)
+							/obj/item/weapon/stock_parts/matter_bin = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 2)
 
 /obj/item/weapon/circuitboard/processing_unit/recycling
 	name = "Circuit Board (Recycling Furnace)"
@@ -1279,8 +1271,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2"
 	req_components = list(  //Matter bins because it's moving matter, I guess, and a capacitor because else the recipe is boring.
-							"/obj/item/weapon/stock_parts/matter_bin" = 3,
-							"/obj/item/weapon/stock_parts/capacitor" = 1)
+							/obj/item/weapon/stock_parts/matter_bin = 3,
+							/obj/item/weapon/stock_parts/capacitor = 1)
 
 /obj/item/weapon/circuitboard/fax
 	name = "Circuit Board (Fax Machine)"
@@ -1289,8 +1281,8 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_BLUESPACE + "=2"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/subspace/ansible" = 1,
-							"/obj/item/weapon/stock_parts/scanning_module" = 1)
+							/obj/item/weapon/stock_parts/subspace/ansible = 1,
+							/obj/item/weapon/stock_parts/scanning_module = 1)
 
 /*
  * Xenobotany
@@ -1303,11 +1295,11 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=3"
 	req_components = list (
-							"/obj/item/weapon/stock_parts/manipulator" = 1,
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 2,
-							"/obj/item/weapon/stock_parts/console_screen" = 2,
-							"/obj/item/weapon/stock_parts/matter_bin" = 1)
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 2,
+							/obj/item/weapon/stock_parts/console_screen = 2,
+							/obj/item/weapon/stock_parts/matter_bin = 1)
 
 /obj/item/weapon/circuitboard/botany_bioballistic
 	name = "Circuit Board (Bioballistic Delivery System)"
@@ -1316,10 +1308,10 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=3"
 	req_components = list (
-							"/obj/item/weapon/stock_parts/manipulator" = 1,
-							"/obj/item/weapon/stock_parts/scanning_module" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser" = 2,
-							"/obj/item/weapon/stock_parts/console_screen" = 1,)
+							/obj/item/weapon/stock_parts/manipulator = 1,
+							/obj/item/weapon/stock_parts/scanning_module = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 2,
+							/obj/item/weapon/stock_parts/console_screen = 1,)
 
 
 /obj/item/weapon/circuitboard/dialysis
@@ -1329,9 +1321,9 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=3" + Tc_MAGNETS + "=2"
 	req_components = list(
-						"/obj/item/weapon/stock_parts/manipulator" = 3,
-						"/obj/item/weapon/stock_parts/micro_laser" = 2,
-						"/obj/item/weapon/stock_parts/console_screen" = 1,
+						/obj/item/weapon/stock_parts/manipulator = 3,
+						/obj/item/weapon/stock_parts/micro_laser = 2,
+						/obj/item/weapon/stock_parts/console_screen = 1,
 				)
 /*
  * Xenoarcheology
@@ -1344,7 +1336,7 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4"
 	req_components = list (
-							"/obj/item/weapon/stock_parts/scanning_module" = 3)
+							/obj/item/weapon/stock_parts/scanning_module = 3)
 
 /obj/item/weapon/circuitboard/anom/accelerator
 	name = "Circuit Board (Accelerator Spectrometer)"
@@ -1378,9 +1370,9 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	build_path = /obj/machinery/cooking/deepfryer/confectionator
 	req_components = list(
-						"/obj/item/weapon/stock_parts/matter_bin" = 1,
-						"/obj/item/weapon/stock_parts/scanning_module" = 1,
-						"/obj/item/weapon/stock_parts/micro_laser" = 1)
+						/obj/item/weapon/stock_parts/matter_bin = 1,
+						/obj/item/weapon/stock_parts/scanning_module = 1,
+						/obj/item/weapon/stock_parts/micro_laser = 1)
 
 
 /*
@@ -1394,7 +1386,7 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=1"
 	req_components = list (
-							"/obj/item/stack/sheet/glass/glass" = 5)
+							/obj/item/stack/sheet/glass/glass = 5)
 
 /obj/item/weapon/circuitboard/fishwall
 	name = "Circuit Board (Large Fishtank Filter)"
@@ -1402,7 +1394,7 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=1"
 	req_components = list (
-	"/obj/item/stack/sheet/glass/glass" = 10)
+	/obj/item/stack/sheet/glass/glass = 10)
 
 /obj/item/weapon/circuitboard/conduction_plate
 	name = "Circuit Board (Conduction Plate)"
@@ -1410,4 +1402,4 @@ obj/item/weapon/circuitboard/rdserver
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=1;" + Tc_ENGINEERING + "=4"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/capacitor" = 1)
+							/obj/item/weapon/stock_parts/capacitor = 1)
