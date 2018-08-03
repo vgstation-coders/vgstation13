@@ -53,10 +53,10 @@
 	board_type = MACHINE
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_PLASMATECH + "=4;" + Tc_MAGNETS + "=5;" + Tc_POWERSTORAGE + "=6"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator/nano/pico" = 2,
-							"/obj/item/weapon/stock_parts/micro_laser/high/ultra" = 1,
-							"/obj/item/weapon/stock_parts/subspace/crystal" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/manipulator/nano/pico = 2,
+							/obj/item/weapon/stock_parts/micro_laser/high/ultra = 1,
+							/obj/item/weapon/stock_parts/subspace/crystal = 1,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 //////////////////////////////////////
 // RUST Fuel Injector board
@@ -68,10 +68,10 @@
 	board_type = MACHINE
 	origin_tech = Tc_POWERSTORAGE + "=3;" + Tc_ENGINEERING + "=4;" + Tc_PLASMATECH + "=4;" + Tc_MATERIALS + "=6"
 	req_components = list(
-							"/obj/item/weapon/stock_parts/manipulator/nano/pico" = 2,
-							"/obj/item/weapon/stock_parts/scanning_module/adv/phasic" = 1,
-							"/obj/item/weapon/stock_parts/matter_bin/adv/super" = 1,
-							"/obj/item/weapon/stock_parts/console_screen" = 1)
+							/obj/item/weapon/stock_parts/manipulator/nano/pico = 2,
+							/obj/item/weapon/stock_parts/scanning_module/adv/phasic = 1,
+							/obj/item/weapon/stock_parts/matter_bin/adv/super = 1,
+							/obj/item/weapon/stock_parts/console_screen = 1)
 
 //Gyrotron controller board.
 /obj/item/weapon/circuitboard/rust_gyrotron_control
