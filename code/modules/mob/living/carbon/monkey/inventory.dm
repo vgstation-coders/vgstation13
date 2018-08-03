@@ -125,3 +125,6 @@
 
 /mob/living/carbon/monkey/reversestrip_time()
 	return MONKEY_REVERSESTRIP_DELAY
+
+/mob/living/carbon/monkey/can_see_reagents()
+	return glasses && istype(glasses,/obj/item/clothing/glasses/science)

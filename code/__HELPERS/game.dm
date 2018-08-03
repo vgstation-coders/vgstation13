@@ -427,47 +427,51 @@ var/list/DummyCache = list()
 		GetBluePart(hexa),
 		)
 
-/*(1,0,0, "red"), "Ideal" colors
-(1,0.6,0, "orange"),
-(1,1,0, "yellow"),
-(0,0.3,0, "green"),
-(0,0,1, "blue"),
-(0.9,0.5,0.9, "violet"),
-(0.6,0.15,0.15, "brown",
-(0,0,0, "black"),
-(0.3,0.3,0.3, "grey"),
-(1,1,1, "white"))*/
-proc/rgb2eng(var/red, var/grn, var/blu) //Describes RGB
-	red /= 255
-	grn /= 255
-	blu /= 255
-	var/list/all = list(red,grn,blu)
-	var/lo = min(red, grn, blu)
-	var/hi = max(red, grn, blu)
+/*Colors that we use a lot that might be worth describing:
+- Orange
+- Brown*/
+proc/rgb2eng(var/list/all) //Describes RGB
+	//message_admins(json_encode(all)) DEBUG
+	var/red = all[1]
+	var/grn = all[2]
+	var/blu = all[3]
+	var/lo = min(all)
+	var/hi = max(all)
 	all -= list(hi,lo)
 	var/med = all[1]
-	if(hi-lo<0.25) //All of the colors are within 25% of each other. It's grayish.
-		if(hi<0.1)
+	var/modifier
+	if(hi<110)
+		modifier += "dark "
+	else if(hi>200)
+		modifier += "bright "
+	if(hi/2<=lo) //No color is twice another
+		if(hi<30)
 			return "black"
-		if(lo>0.9)
+		if(lo>220)
 			return "white"
-		return "gray" //US pride worldwide
+		return "[modifier]gray" //US pride worldwide
 	else
-		if(hi-med<0.5) //Two colors dominate with a forgiving margin
+		if(med/hi>0.80) //Two colors dominate with a tight margin
 			if(lo==red)
-				return "cyan"
+				return "[modifier]cyan"
 			else if(lo==grn)
-				return "violet"
-			else(blu)
-				return "orange"
+				return "[modifier]purple"
+			else
+				return "[modifier]yellow"
 
 		else //One color is dominant
 			if(hi==red)
-				return "red"
+				if(grn/red>=0.3) //We are on the orange-brown spectrum
+					if(hi>=110) //It's mostly bright
+						return "[modifier]orange" //Bright red with between 30% and 87% green
+					else
+						return "brown" //A dark orange
+				else
+					return "[modifier]red"
 			if(hi==blu)
-				return "blue"
+				return "[modifier]blue"
 			else
-				return "green"
+				return "[modifier]green"
 
 
 

@@ -497,3 +497,6 @@
 	if(active_only && istype(get_inactive_hand(),/obj/item/device/multitool))
 		return get_inactive_hand()
 	return null
+
+/mob/living/carbon/human/can_see_reagents()
+	return glasses && istype(glasses,/obj/item/clothing/glasses/science)
