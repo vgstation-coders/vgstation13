@@ -126,7 +126,8 @@
 		"eyes",
 		"kidneys",
 		"liver",
-		"lungs"
+		"lungs",
+		"appendix"
 	)
 
 /obj/item/weapon/organ_remover/traitor/examine(var/mob/user)
