@@ -66,6 +66,8 @@
 
 	var/image/viewblock
 
+	var/junction = 0
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)

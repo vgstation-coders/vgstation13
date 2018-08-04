@@ -374,15 +374,15 @@ var/veil_thickness = CULT_PROLOGUE
 /obj/item/proc/get_cult_power()
 	return 0
 
+var/static/list/valid_cultpower_slots = list(
+	slot_wear_suit,
+	slot_head,
+	slot_shoes,
+	)//might add more slots later as I add more items that could fit in them
+
 /mob/proc/get_cult_power()
 	var/power = 0
-	var/list/valid_slots = list(
-		slot_wear_suit,
-		slot_head,
-		slot_shoes,
-		)
-
-	for (var/slot in valid_slots)
+	for (var/slot in valid_cultpower_slots)
 		var/obj/item/I = get_item_by_slot(slot)
 		if (istype(I))
 			power += I.get_cult_power()

@@ -738,7 +738,7 @@
 						progress = progress/4
 
 				if (delay)
-					progress = max(1,min(10,progress))
+					progress = Clamp(progress,1,10)
 				remaining -= progress
 				update_progbar()
 				victim.update_fullscreen_alpha("conversionred", 164-remaining, 8)
@@ -1023,26 +1023,188 @@
 				S.Knockdown(duration)//TODO: TEST THAT
 		qdel(src)
 
+var/list/blind_victims = list()
+
 //RUNE VII
 /datum/rune_spell/blind
-	name = "Blind"
-	desc = "Get the edge over nearby enemies by removing their senses."
+	name = "Confusion"//Can't just call it "blind" anymore, can we?
+	desc = "Sow panic in the mind of your enemies, and obscure cameras."
 	Act_restriction = CULT_ACT_I
 	invocation = "Sti' kaliesin!"
 	word1 = /datum/cultword/destroy
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/other
-	word3 = /datum/cultword/other
+	page = "This ritual projects the thoughts of Nar-Sie onto any visible enemy, giving them a taste of the future, and making them unable to differentiate \
+		their allies from our believers. The effects of surprise is especially powerful in the first few seconds. The confusion expires after half a minute, \
+		a bit less when cast from a talisman. A side effect of the ritual appears to obscure the screens of cameras in range, and until anyone repairs them. \
+		This makes it essential for keeping cult activities undercover from the eyes of the authorities. Robots will be briefly blinded by the ritual."
+	var/rune_duration=300//times are in tenths of a second
+	var/talisman_duration=200
+	var/hallucination_radius=25
+
+/datum/rune_spell/blind/cast(var/duration = rune_duration)
+	//Alright, this is a pretty interesting rune, first of all we prepare the fake cult floors & walls that the victims will see.
+	var/turf/T = get_turf(spell_holder)
+	var/list/hallucinated_turfs = list()
+	playsound(T, 'sound/effects/confusion_start.ogg', 75, 0, 0)
+	for(var/turf/U in range(T,hallucination_radius))
+		if (istype(U,/area/chapel))//the chapel is protected against such illusions, the mobs in it will still be affected however.
+			continue
+		var/dist = cheap_pythag(U.x - T.x, U.y - T.y)
+		if (dist < 15 || prob((hallucination_radius-dist)*4))
+			var/image/I_turf
+			if (U.density)
+				I_turf = image(icon = 'icons/turf/walls.dmi', loc = U, icon_state = "cult[U.junction]")//will preserve wall smoothing
+			else
+				I_turf = image(icon = 'icons/turf/floors.dmi', loc = U, icon_state = "cult")
+				//if it's a floor, give it a chance to have some runes written on top
+				if (prob(7))
+					var/lookup = pick(uristrune_cache)//finally a good use for that cache
+					var/icon/I = uristrune_cache[lookup]
+					I_turf.overlays.Add(I)
+			hallucinated_turfs.Add(I_turf)
+
+	//now let's round up our victims: any non-cultist with an unobstructed line of sight to the rune/talisman will be affected
+	var/list/victims = list()
+	for(var/mob/living/M in viewers(T))
+		if (iscarbon(M))//mite do something with silicons later
+			var/mob/living/carbon/C = M
+			if (iscultist(C))
+				continue
+			shadow(C,T)//shadow trail moving from the spell_holder to the victim
+			anim(target = C, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+			if (!(C in blind_victims))
+				C.overlay_fullscreen("blindborder", /obj/abstract/screen/fullscreen/conversion_border)//victims DO still get blinded for a second
+				C.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)//which will allow us to subtly reveal the surprise
+				C.update_fullscreen_alpha("blindblack", 255, 5)
+			else
+				C.update_fullscreen_alpha("blindblack", 255, 5)
+			C.playsound_local(C, 'sound/effects/confusion.ogg', 50, 0, 0, 0, 0)
+			victims.Add(C)
+		if (issilicon(M) && !isAI(M))//Silicons get a fade to black, then just a flash, until I can think of something else
+			shadow(M,T)
+			M.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)
+			M.update_fullscreen_alpha("blindblack", 255, 5)
+			spawn(5)
+				M.clear_fullscreen("blindblack", animate = 0)
+				M.flash_eyes(visual = 1)
+
+	for(var/obj/machinery/camera/C in view(T))//the effects on cameras do not time out, but they can be fixed
+		shadow(C,T)
+		var/col = C.color
+		animate(C, color = col, time = 4)
+		animate(color = "black", time = 5)
+		animate(color = col, time = 5)
+		C.vision_flags = BLIND//Anyone using a security cameras computer will only see darkness
+		C.setViewRange(-1)//The camera won't reveal the area for the AI anymore
+
+	spawn(10)
+		for(var/mob/living/carbon/C in victims)
+			var/new_victim = 0
+			if (!(C in blind_victims))
+				new_victim = 1
+				C.overlay_fullscreen("blindblind", /obj/abstract/screen/fullscreen/blind)
+			C.update_fullscreen_alpha("blindblind", 255, 0)
+			C.update_fullscreen_alpha("blindblack", 0, 10)
+			C.update_fullscreen_alpha("blindblind", 0, 80)
+			C.update_fullscreen_alpha("blindborder", 150, 5)
+			if (C.client)
+				var/list/my_hallucinated_stuff = hallucinated_turfs.Copy()
+				for(var/mob/living/L in range(T,25))//All mobs in a large radius will look like monsters to the victims.
+					if (L == C || !("cult" in L.static_overlays))
+						continue//the victims still see themselves as humans (or whatever they are)
+					my_hallucinated_stuff.Add(L.static_overlays["cult"])
+				if (!new_victim)
+					my_hallucinated_stuff.Add(blind_victims[C])
+					C.client.images.Remove(blind_victims[C])//removing the images from client.images after adding them to my_hallucinated_stuff
+				blind_victims[C] = my_hallucinated_stuff//allows us to seamlessly refresh their duration.
+				C.client.images.Add(blind_victims[C])
+				var/hallenght = my_hallucinated_stuff.len
+				spawn(duration-5)
+					if (C in blind_victims)
+						var/list/LI = blind_victims[C]
+						if (LI.len == hallenght)//this checks whether this proc comes from the last blind rune the victim was affected from
+							C.update_fullscreen_alpha("blindborder", 0, 5)
+							C.overlay_fullscreen("blindwhite", /obj/abstract/screen/fullscreen/white)
+							C.update_fullscreen_alpha("blindwhite", 255, 3)
+							sleep(5)
+							blind_victims.Remove(C)
+							C.update_fullscreen_alpha("blindwhite", 0, 12)
+							C.clear_fullscreen("blindblack", animate = 0)
+							C.clear_fullscreen("blindborder", animate = 0)
+							C.clear_fullscreen("blindblind", animate = 0)
+							anim(target = C, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind_remove", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+							C.client.images.Remove(my_hallucinated_stuff)//removing images caused by every blind rune used consecutively on that mob
+							sleep(15)
+							C.clear_fullscreen("blindwhite", animate = 0)
+
+	qdel(spell_holder)
+
+/datum/rune_spell/blind/cast_talisman()//talismans have the same range, but the effect lasts shorter.
+	cast(talisman_duration)
+
+/datum/rune_spell/blind/proc/shadow(var/atom/C,var/turf/T)//based on the holopad rays I made a few months ago
+	var/disty = C.y - T.y
+	var/distx = C.x - T.x
+	var/newangle
+	if(!disty)
+		if(distx >= 0)
+			newangle = 90
+		else
+			newangle = 270
+	else
+		newangle = arctan(distx/disty)
+		if(disty < 0)
+			newangle += 180
+		else if(distx < 0)
+			newangle += 360
+	var/matrix/M1 = matrix()
+	var/matrix/M2 = turn(M1.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
+	anim(target = C, a_icon = 'icons/effects/96x96.dmi', flick_anim = "rune_blind", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = LIGHTING_PLANE, trans = M2)
 
 //RUNE VIII
-/datum/rune_spell/mute
+/datum/rune_spell/deafmute
 	name = "Deaf-Mute"
-	desc = "Silence and deafen nearby enemies."
+	desc = "Silence and deafen nearby enemies. Including robots"
 	Act_restriction = CULT_ACT_I
 	invocation = "Sti' kaliedir!"
 	word1 = /datum/cultword/hide
 	word2 = /datum/cultword/other
 	word3 = /datum/cultword/see
+	page = "Hear no evil, Speak no evil, what your enemies will see remains for you to decide. This ritual inspire its victims with fright, making them unable to hear or speak for around half a minute. \
+		Note that their speech will come back a bit sooner than their hearing, and that this ritual won't prevent them from writing down messages or using non-vocal means of communication. \
+		Still, it appears to affect robots the same way it affects humans. Furthermore, the ritual isn't flashy, and affects people in range even behind obstacles, so cultists may abuse this spell \
+		without exposing themselves directly. People near you when using the talisman may still hear you whisper however."
+	var/deaf_rune_duration=50//times are in seconds
+	var/deaf_talisman_duration=30
+	var/mute_rune_duration=25
+	var/mute_talisman_duration=15
+	var/effect_range=7
+
+/datum/rune_spell/deafmute/cast(var/deaf_duration = deaf_rune_duration, var/mute_duration = mute_rune_duration)
+	for(var/mob/living/M in range(effect_range,get_turf(spell_holder)))
+		if (iscultist(M))
+			continue
+		M.overlay_fullscreen("deafborder", /obj/abstract/screen/fullscreen/conversion_border)//victims DO still get blinded for a second
+		M.update_fullscreen_alpha("deafborder", 100, 5)
+		M.Deafen(deaf_duration)
+		M.Mute(mute_duration)
+		if (!(M.sdisabilities & DEAF))
+			to_chat(M,"<span class='notice'>The world around you suddenly becomes quiet.</span>")
+		if (!(M.sdisabilities & MUTE))
+			if (iscarbon(M))
+				to_chat(M,"<span class='warning'>You feel a terrible chill! You find yourself unable to speak a word...</span>")
+			else if (issilicon(M))
+				to_chat(M,"<span class='warning'>A shortcut appears to have temporarily disabled your speaker!</span>")
+		spawn(8)
+			M.update_fullscreen_alpha("deafborder", 0, 5)
+			sleep(8)
+			M.clear_fullscreen("deafborder", animate = 0)
+
+	qdel(spell_holder)
+
+/datum/rune_spell/deafmute/cast_talisman()
+	cast(deaf_talisman_duration, mute_talisman_duration)
 
 //RUNE IX
 /datum/rune_spell/hide
