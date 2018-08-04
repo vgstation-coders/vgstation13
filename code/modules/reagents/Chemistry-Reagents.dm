@@ -49,6 +49,7 @@
 	var/flags = 0
 	var/density = 1 //(g/cm^3) Everything is water unless specified otherwise. round to 2dp
 	var/specheatcap = 1 //how much energy in joules it takes to heat this thing up by 1 degree (J/g). round to 2dp
+	var/digestion_rate = 1 // multiplier that affects reagents transfer from stomach to body. Higher means faster, lower means slower, 0 means the reagent stays in the stomach
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
@@ -130,6 +131,25 @@
 			return
 	holder.remove_reagent(src.id, custom_metabolism) // If we aren't human, we don't have a liver, so just metabolize it the old fashioned way.
 
+// process the chemicals within the stomach, called by /datum/organ/internal/stomach in process() on all stomach contents
+// takes the mob and the stomach reagent volume at the start of process() as mandatory arguments
+// reagent damage to the stomach and threshold for stomach damage are optional arguments
+// if volume >= amount_for_damage then the stomach will take the specified amount of damage every time process() is called on the stomach (about once a second)
+// damage < 0 will heal the stomach
+/datum/reagent/proc/digest(var/mob/living/carbon/human/M, var/current_stomach_volume, var/damage = 0, var/amount_for_damage = 0)
+	var/datum/organ/internal/stomach/S = M.get_stomach()
+	if(!S)
+		return // can't digest without a stomach
+
+	on_mob_life(M)
+
+	// deal damage - damage < 0 means it will heal the stomach
+	if(volume >= amount_for_damage)
+		S.damage += damage
+
+	// move part of the stomach contents to the body
+	S.get_reagents().trans_id_to(M, id, (volume / current_stomach_volume) * digestion_rate * S.base_intake_rate)
+
 /datum/reagent/proc/on_mob_life(var/mob/living/M, var/alien)
 	set waitfor = 0
 
@@ -144,7 +164,12 @@
 			// TODO: HONORABLE_* checks.
 			return 1
 
-	if((overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)) //Too much chems, or been in your system too long
+	var/datum/organ/internal/stomach/S = M.get_stomach()
+	var/volume_in_stomach = 0 // volume in stomach counts for overdose amounts
+	if(S)
+		volume_in_stomach = S.get_reagent_volume(id)
+
+	if((overdose_am && (volume + volume_in_stomach) >= overdose_am) || (overdose_tick && tick >= overdose_tick)) //Too much chems, or been in your system too long
 		on_overdose(M)
 
 /datum/reagent/proc/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
@@ -578,6 +603,9 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.49033
 	specheatcap = 0.55536
+
+/datum/reagent/anti_toxin/digest(var/mob/living/carbon/human/M, var/current_stomach_volume)
+	..(M, current_stomach_volume, damage = 0.1, amount_for_damage = 15)
 
 /datum/reagent/anti_toxin/on_mob_life(var/mob/living/M)
 
@@ -2027,6 +2055,9 @@
 					H.update_inv_shoes(0)
 		M.clean_blood()
 
+/datum/reagent/space_cleaner/digest(var/mob/living/carbon/human/M, var/current_stomach_volume)
+	..(M, current_stomach_volume, damage = 1)
+
 /datum/reagent/space_cleaner/bleach
 	name = "Bleach"
 	id = BLEACH
@@ -2594,6 +2625,9 @@
 	density = 1.92
 	specheatcap = 5.45
 
+/datum/reagent/imidazoline/digest(var/mob/living/carbon/human/M, var/current_stomach_volume)
+	..(M, current_stomach_volume, damage = -0.5)
+
 /datum/reagent/imidazoline/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -3141,6 +3175,7 @@
 	color = "#3E3959" //rgb: 62, 57, 89
 	density = 236.6
 	specheatcap = 199.99
+	digestion_rate = 100
 
 //Great healing powers. Metabolizes extremely slowly, but gets used up when it heals damage.
 //Dangerous in amounts over 5 units, healing that occurs while over 5 units adds to a counter. That counter affects gib chance. Guaranteed gib over 20 units.
@@ -3156,6 +3191,7 @@
 	var/percent_machine = 0
 	density = 96.64
 	specheatcap = 199.99
+	digestion_rate = 100
 
 /datum/reagent/mednanobots/on_mob_life(var/mob/living/M)
 
@@ -3250,6 +3286,7 @@
 	data = 1 //Used as a tally
 	density = 134.21
 	specheatcap = 5143.18
+	digestion_rate = 100
 
 /datum/reagent/comnanobots/reagent_deleted()
 
@@ -4878,6 +4915,9 @@
 	var/pass_out = 450 //Amount absorbed after which mob starts passing out
 	var/common_data = 1 //Needed to add all ethanol subtype's datas
 
+/datum/reagent/ethanol/digest(var/mob/living/carbon/human/M, var/current_stomach_volume)
+	..(M, current_stomach_volume, damage = 0.08)
+
 /datum/reagent/ethanol/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -6168,6 +6208,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = LIQUID
 	custom_metabolism = 0
 	color = "#B0B0B0"
+	digestion_rate = 2
 
 /datum/reagent/blockizine/on_mob_life(var/mob/living/carbon/human/H)
 	if(..())
@@ -6189,6 +6230,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Just looking at this liquid makes you feel tranquil and peaceful. You aren't sure if you want to drink any however."
 	reagent_state = LIQUID
 	color = "#12A7C9"
+
+/datum/reagent/fishbleach/digest(var/mob/living/carbon/human/M, var/current_stomach_volume)
+	..(M, current_stomach_volume, damage = 1)
 
 /datum/reagent/fishbleach/on_mob_life(var/mob/living/carbon/human/H)
 	if(..())
@@ -6344,6 +6388,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Petritricin is a venom produced by cockatrices. The extraction process causes a major potency loss, but a right dose of this can still petrify somebody."
 	color = "#002000" //rgb: 0, 32, 0
 	dupeable = FALSE
+	digestion_rate = 2
 
 	var/minimal_dosage = 1 //At least 1 unit is needed for petriication
 
