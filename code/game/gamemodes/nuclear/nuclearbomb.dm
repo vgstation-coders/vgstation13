@@ -287,7 +287,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 			off_station = 1
 	else
 		off_station = 2
-
+	forceMove(null)
 	if(ticker)
 		if(ticker.mode && ticker.mode.name == "nuclear emergency")
 			var/datum/game_mode/nuclear/GM = ticker.mode
