@@ -1,3 +1,6 @@
+
+/datum/cult_ritual//placeholder, this will serve with cult building rituals, and stuff like the new Nar-Sie summoning
+
 /obj/structure/cult
 	density = 1
 	anchored = 1
@@ -6,7 +9,41 @@
 	var/maxHealth = 50
 	var/sound_damaged = null
 	var/sound_destroyed = null
+	var/conceal_cooldown = 0
 
+/obj/structure/cult/proc/conceal()
+	var/obj/structure/cult/concealed/C = new(loc)
+	forceMove(C)
+	C.held = src
+	C.icon_state = icon_state
+	anim(location = C.loc,target = C.loc,a_icon = 'icons/obj/cult.dmi', flick_anim = "[icon_state]-conceal")
+
+/obj/structure/cult/proc/reveal()
+	conceal_cooldown = 1
+	spawn (100)
+		if (src && loc)
+			conceal_cooldown = 0
+
+/obj/structure/cult/concealed
+	density = 0
+	anchored = 1
+	alpha = 127
+	invisibility = INVISIBILITY_OBSERVER
+	var/obj/structure/cult/held = null
+
+/obj/structure/cult/concealed/reveal()
+	if (held)
+		held.forceMove(loc)
+		flick("[held.icon_state]-spawn", held)
+		held.reveal()
+		held = null
+	qdel(src)
+
+/obj/structure/cult/concealed/conceal()
+	return
+
+/obj/structure/cult/concealed/takeDamage(var/damage)
+	return
 
 //if you want indestructible buildings, just make a custom takeDamage() proc
 /obj/structure/cult/proc/takeDamage(var/damage)
@@ -114,6 +151,7 @@
 	health = 100
 	maxHealth = 100
 	sound_damaged = 'sound/effects/stone_hit.ogg'
+	layer = TABLE_LAYER
 
 
 /obj/structure/cult/altar/New()
@@ -190,6 +228,16 @@
 
 	O.forceMove(loc)
 	to_chat(user, "<span class='warning'>You move \the [O] on top of \the [src]</span>")
+
+/obj/structure/cult/altar/conceal()
+	for (var/mob/living/carbon/C in loc)
+		Uncrossed(C)
+	..()
+
+/obj/structure/cult/altar/reveal()
+	..()
+	for (var/mob/living/carbon/C in loc)
+		Crossed(C)
 
 /obj/structure/cult/altar/cultist_act(var/mob/user,var/menu="default")
 	.=..()

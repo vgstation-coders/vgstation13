@@ -161,8 +161,6 @@
 	var/obj/item/weapon/back = null
 	var/obj/item/clothing/mask/wear_mask = null
 
-	var/seer = 0 //for cult//Carbon, probably Human
-
 	var/datum/hud/hud_used = null
 	var/datum/ui_icons/gui_icons = null
 

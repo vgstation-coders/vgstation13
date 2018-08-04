@@ -1666,6 +1666,9 @@ var/list/slot_equipment_priority = list( \
 /mob/proc/Mute(amount)
 	say_mute = max(max(say_mute,amount),0)
 
+/mob/proc/AdjustMute(amount)
+	say_mute = max(say_mute + amount,0)
+
 /mob/proc/Paralyse(amount)
 	if(status_flags & CANPARALYSE)
 		paralysis = max(max(paralysis,amount),0)

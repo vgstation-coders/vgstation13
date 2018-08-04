@@ -23,6 +23,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	layer = RUNE_LAYER
 	plane = ABOVE_TURF_PLANE
 
+	//Whether the rune is pulsating
 	var/animated = 0
 
 	//A rune is made of up to 3 words
@@ -39,10 +40,14 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	var/datum/reagent/blood/blood3
 	var/list/datum/disease2/disease/virus2 = list()
 
-	//Used when a nullrod is preventing a rune's activation
+	//Used when a nullrod is preventing a rune's activation TODO: REWORK NULL ROD INTERACTIONS
 	var/nullblock = 0
 
+	//The spell currently triggered by the rune. Prevents a rune from being used by different cultists at the same time.
 	var/datum/rune_spell/active_spell = null
+
+	//Prevents the same rune from being concealed/revealed several times on a row.
+	var/conceal_cooldown = 0
 
 /obj/effect/rune/New()
 	..()
@@ -425,6 +430,8 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss()))
 		return fizzle(user)
 
+	reveal()//concealed rune get automatically revealed upon use (either through using Seer or an attuned talisman)
+
 	active_spell = get_rune_spell(user, src, "ritual" , word1, word2, word3)
 
 
@@ -439,3 +446,23 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	visible_message("<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\
 	"<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\
 	"<span class='warning'>You hear a faint fizzle.</span>")
+
+/obj/effect/rune/proc/conceal()
+	if (active_spell)
+		active_spell.abort(RITUALABORT_CONCEAL)
+	animate(src, alpha = 0, time = 5)
+	spawn(6)
+		invisibility=INVISIBILITY_OBSERVER
+		alpha = 127
+
+/obj/effect/rune/proc/reveal()
+	if (invisibility != 0)
+		alpha = 0
+		invisibility=0
+		animate(src, alpha = 255, time = 5)
+		conceal_cooldown = 1
+		spawn (100)
+			if (src && loc)
+				conceal_cooldown = 0
+		return 1
+	return 0

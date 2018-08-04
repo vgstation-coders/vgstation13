@@ -75,6 +75,8 @@ var/list/arcane_tomes = list()
 	for (var/obj/item/weapon/talisman/T in talismans)
 		var/datum/rune_spell/instance = T.spell_type
 		var/talisman_name = "\[blank\]"
+		if (T.blood_text)
+			talisman_name = "\[blood message\]"
 		if (instance)
 			talisman_name = initial(instance.name)
 		dat += {"<label> * </label><li>  <a style="color:#AE250F" href='byond://?src=\ref[src];talisman=\ref[T]'>[talisman_name]</a> <a style="color:#AE250F" href='byond://?src=\ref[src];remove=\ref[T]'>(x)</a> </li>"}
@@ -255,8 +257,10 @@ var/list/arcane_tomes = list()
 	attack_verb = list("slaps")
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 1
+	var/blood_text = ""
 	var/obj/effect/rune/attuned_rune = null
 	var/spell_type = null
+	var/uses = 1
 
 /obj/item/weapon/talisman/New()
 	..()
@@ -265,6 +269,12 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/talisman/examine(var/mob/user)
 	..()
+	if (blood_text)
+		user << browse_rsc(file("goon/browserassets/css/fonts/youmurdererbb_reg.otf"))
+		user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY text=#612014>[blood_text]</BODY></HTML>", "window=[name]")
+		onclose(user, "[name]")
+		return
+
 	if (!spell_type)
 		to_chat(user, "<span class='info'>This one however seems pretty unremarkable.</span>")
 		return
@@ -276,10 +286,19 @@ var/list/arcane_tomes = list()
 			to_chat(user, "<span class='info'>This one was attuned to a <b>[initial(instance.name)]</b> rune. [initial(instance.desc_talisman)]</span>")
 		else
 			to_chat(user, "<span class='info'>This one was imbued with a <b>[initial(instance.name)]</b> rune. [initial(instance.desc_talisman)]</span>")
+		if (uses > 1)
+			to_chat(user, "<span class='info'>Its powers can be used [uses] more times.</span>")
 	else
 		to_chat(user, "<span class='info'>This one was some arcane drawings on it. You cannot read them.</span>")
 
 /obj/item/weapon/talisman/attack_self(var/mob/living/user)
+	if (blood_text)
+		user << browse_rsc(file("goon/browserassets/css/fonts/youmurdererbb_reg.otf"))
+		user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY text=#612014>[blood_text]</BODY></HTML>", "window=[name]")
+		onclose(user, "[name]")
+		onclose(user, "[name]")
+		return
+
 	if (iscultist(user))
 		trigger(user)
 
@@ -296,15 +315,30 @@ var/list/arcane_tomes = list()
 	if (!user)
 		return
 
+	if (blood_text)
+		user << browse_rsc(file("goon/browserassets/css/fonts/youmurdererbb_reg.otf"))
+		user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY text=#612014>[blood_text]</BODY></HTML>", "window=[name]")
+		onclose(user, "[name]")
+		return
+
 	if (!spell_type)
 		if (!(src in user.held_items))//triggering an empty rune from a tome removes it.
 			user.put_in_hands(src)
+			if (istype(loc, /obj/item/weapon/tome))
+				var/obj/item/weapon/tome/T = loc
+				T.talismans.Remove(src)
+				user << browse_rsc('icons/tomebg.png', "tomebg.png")
+				user << browse(T.tome_text(), "window=arcanetome;size=512x375")
 		return
 
 	if (attuned_rune)
 		attuned_rune.trigger(user)
 	else
 		new spell_type(user, src)
+
+	uses--
+	if (uses > 0)
+		return
 
 	if (istype(loc,/obj/item/weapon/tome))
 		var/obj/item/weapon/tome/T = loc
@@ -315,8 +349,12 @@ var/list/arcane_tomes = list()
 	if (!user || !R)
 		return
 
+	if (blood_text)
+		to_chat(user, "<span class='warning'>Cannot imbue a talisman that has been written on.</span>")
+		return
+
 	var/datum/rune_spell/spell = get_rune_spell(user,null,"examine",R.word1, R.word2, R.word3)
-	if(initial(spell.talisman_absorb) == RUNE_CANNOT)
+	if(initial(spell.talisman_absorb) == RUNE_CANNOT)//placing a talisman on a Conjure Talisman rune to try and fax it
 		user.drop_item(src)
 		src.forceMove(get_turf(R))
 		R.attack_hand(user)
@@ -346,6 +384,8 @@ var/list/arcane_tomes = list()
 		overlays += image(icon,"talisman-[R.word3.icon_state]")
 
 		spell_type = spell
+		uses = initial(spell.talisman_uses)
+
 		switch(initial(spell.talisman_absorb))
 			if (RUNE_CAN_ATTUNE)
 				playsound(src, 'sound/effects/talisman_attune.ogg', 50, 0, -5)
