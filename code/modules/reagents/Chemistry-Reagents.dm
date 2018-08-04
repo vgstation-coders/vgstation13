@@ -141,8 +141,6 @@
 	if(!S)
 		return // can't digest without a stomach
 
-	on_mob_life(M)
-
 	// deal damage - damage < 0 means it will heal the stomach
 	if(volume >= amount_for_damage)
 		S.damage += damage
