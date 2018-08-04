@@ -28,7 +28,8 @@
 		"heart",
 		"kidneys",
 		"liver",
-		"lungs"
+		"lungs",
+		"appendix"
 	)
 	var/target_type="eyes"
 
