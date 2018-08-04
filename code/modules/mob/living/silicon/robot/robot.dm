@@ -895,7 +895,7 @@
 			cell.updateicon()
 			cell.add_fingerprint(user)
 			user.put_in_hands(cell)
-			visible_message("<span class='warning'>[user] removes [src]'s [cell.name].</span>", \
+			user.visible_message("<span class='warning'>[user] removes [src]'s [cell.name].</span>", \
 			"<span class='notice'>You remove [src]'s [cell.name].</span>")
 			if(can_diagnose())
 				to_chat(src, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
