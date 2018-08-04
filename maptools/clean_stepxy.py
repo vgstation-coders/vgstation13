@@ -8,7 +8,7 @@ for line in fileinput.input(tkFileDialog.askopenfilename(), inplace = 1):
     #"q" = (/obj/structure/table,/obj/machinery/pos{name = "Chemistry Point of Sale"; step_x = -1; step_y = 1; department = "Medical"},/turf/simulated/floor{dir = 4; icon_state = "whiteyellow"},/area/medical/chemistry)
     for item in re.findall('\{(.*?)\}',line):
         #name = "Chemistry Point of Sale"; step_x = -1; step_y = 1; department = "Medical"
-        if(item.find("step_x") >= 0 or item.find("step_y") >= 0 or item.find("step_w") >= 0 or item.find("step_z") >= 0):
+        if(item.find("step_x") >= 0 or item.find("step_y") >= 0 or item.find("step_w") >= 0 or item.find("step_z") >= 0 or item.find("pixel_w") >= 0 or item.find("pixel_z") >= 0): #if it's lazy and it works
             pixel_x = 0;
             pixel_y = 0;
             var_dict = {}
@@ -18,11 +18,11 @@ for line in fileinput.input(tkFileDialog.askopenfilename(), inplace = 1):
                 var = var.split(" = ");
                 var_dict[var[0]] = var[1]
 
-            for s in ["pixel_x", "step_x", "step_w"]:
+            for s in ["pixel_x", "pixel_w", "step_x", "step_w"]:
                 if s in var_dict:
                     pixel_x += int(var_dict[s])
                     del var_dict[s]
-            for s in ["pixel_y", "step_y", "step_z"]:
+            for s in ["pixel_y", "pixel_z", "step_y", "step_z"]:
                 if s in var_dict:
                     pixel_y += int(var_dict[s])
                     del var_dict[s]
