@@ -22,7 +22,7 @@ for line in fileinput.input(tkFileDialog.askopenfilename(), inplace = 1):
                 if s in var_dict:
                     pixel_x += int(var_dict[s])
                     del var_dict[s]
-            for s in ["pixel_y", "step_y", "step_y"]:
+            for s in ["pixel_y", "step_y", "step_z"]:
                 if s in var_dict:
                     pixel_y += int(var_dict[s])
                     del var_dict[s]
