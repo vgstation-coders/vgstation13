@@ -6,6 +6,7 @@
 	desc = "A fuel-consuming device designed for bringing chemical mixtures to boil."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "bunsen0"
+	pass_flags = PASSTABLE
 	var/heating = BUNSEN_OFF //whether the bunsen is turned on
 	var/obj/item/weapon/reagent_containers/held_container
 	var/list/possible_fuels = list(
