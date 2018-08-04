@@ -771,7 +771,11 @@
 
 /datum/chemical_reaction/explosion_bicarodyne/on_reaction(var/datum/reagents/holder, var/created_volume)
 	explosion(get_turf(holder.my_atom),1,2,4)
-	holder.clear_reagents()
+	if(!holder.my_atom.is_open_container() || ismob(holder.my_atom))
+		holder.del_reagent(BICARODYNE)
+		holder.del_reagent(PARACETAMOL)
+	else
+		holder.clear_reagents()
 
 /datum/chemical_reaction/nanobots
 	name = "Nanobots"
