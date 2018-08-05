@@ -49,10 +49,3 @@
 
 /datum/organ/internal/stomach/proc/get_reagents()
 	return reagents_holder.reagents
-
-// return volume of a given reagent
-/datum/organ/internal/stomach/proc/get_reagent_volume(var/id)
-	var/datum/reagent/R = reagents_holder.reagents.get_reagent(id)
-	if(R)
-		return R.volume
-	return 0

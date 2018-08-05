@@ -50,6 +50,7 @@
 	var/density = 1 //(g/cm^3) Everything is water unless specified otherwise. round to 2dp
 	var/specheatcap = 1 //how much energy in joules it takes to heat this thing up by 1 degree (J/g). round to 2dp
 	var/digestion_rate = 1 // multiplier that affects reagents transfer from stomach to body. Higher means faster, lower means slower, 0 means the reagent stays in the stomach
+	var/overdose_includes_stomach = FALSE // if true, the volume of reagent in the stomach will count for overdose quantity
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
@@ -164,8 +165,8 @@
 
 	var/datum/organ/internal/stomach/S = M.get_stomach()
 	var/volume_in_stomach = 0 // volume in stomach counts for overdose amounts
-	if(S)
-		volume_in_stomach = S.get_reagent_volume(id)
+	if(S && overdose_includes_stomach)
+		volume_in_stomach = S.get_reagents().get_reagent_amount(id)
 
 	if((overdose_am && (volume + volume_in_stomach) >= overdose_am) || (overdose_tick && tick >= overdose_tick)) //Too much chems, or been in your system too long
 		on_overdose(M)
