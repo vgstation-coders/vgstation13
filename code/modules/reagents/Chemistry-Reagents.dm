@@ -132,11 +132,11 @@
 	holder.remove_reagent(src.id, custom_metabolism) // If we aren't human, we don't have a liver, so just metabolize it the old fashioned way.
 
 // process the chemicals within the stomach, called by /datum/organ/internal/stomach in process() on all stomach contents
-// takes the mob and the stomach reagent volume at the start of process() as mandatory arguments
+// takes the mob as a mandatory argument
 // reagent damage to the stomach and threshold for stomach damage are optional arguments
 // if volume >= amount_for_damage then the stomach will take the specified amount of damage every time process() is called on the stomach (about once a second)
 // damage < 0 will heal the stomach
-/datum/reagent/proc/digest(var/mob/living/carbon/human/M, var/current_stomach_volume, var/damage = 0, var/amount_for_damage = 0)
+/datum/reagent/proc/digest(var/mob/living/carbon/human/M, var/damage = 0, var/amount_for_damage = 0)
 	var/datum/organ/internal/stomach/S = M.get_stomach()
 	if(!S)
 		return // can't digest without a stomach
@@ -146,7 +146,7 @@
 		S.damage += damage
 
 	// move part of the stomach contents to the body
-	S.get_reagents().trans_id_to(M, id, (volume / current_stomach_volume) * digestion_rate * S.base_intake_rate)
+	S.get_reagents().trans_id_to(M, id, (volume / S.current_volume) * digestion_rate * S.base_intake_rate)
 
 /datum/reagent/proc/on_mob_life(var/mob/living/M, var/alien)
 	set waitfor = 0
@@ -602,8 +602,8 @@
 	density = 1.49033
 	specheatcap = 0.55536
 
-/datum/reagent/anti_toxin/digest(var/mob/living/carbon/human/M, var/current_stomach_volume)
-	..(M, current_stomach_volume, damage = 0.1, amount_for_damage = 15)
+/datum/reagent/anti_toxin/digest(var/mob/living/carbon/human/M)
+	..(M, damage = 0.1, amount_for_damage = 15)
 
 /datum/reagent/anti_toxin/on_mob_life(var/mob/living/M)
 
@@ -2053,8 +2053,8 @@
 					H.update_inv_shoes(0)
 		M.clean_blood()
 
-/datum/reagent/space_cleaner/digest(var/mob/living/carbon/human/M, var/current_stomach_volume)
-	..(M, current_stomach_volume, damage = 1)
+/datum/reagent/space_cleaner/digest(var/mob/living/carbon/human/M)
+	..(M, damage = 1)
 
 /datum/reagent/space_cleaner/bleach
 	name = "Bleach"
@@ -2623,8 +2623,8 @@
 	density = 1.92
 	specheatcap = 5.45
 
-/datum/reagent/imidazoline/digest(var/mob/living/carbon/human/M, var/current_stomach_volume)
-	..(M, current_stomach_volume, damage = -0.5)
+/datum/reagent/imidazoline/digest(var/mob/living/carbon/human/M)
+	..(M, damage = -0.5)
 
 /datum/reagent/imidazoline/on_mob_life(var/mob/living/M)
 
@@ -4913,8 +4913,8 @@
 	var/pass_out = 450 //Amount absorbed after which mob starts passing out
 	var/common_data = 1 //Needed to add all ethanol subtype's datas
 
-/datum/reagent/ethanol/digest(var/mob/living/carbon/human/M, var/current_stomach_volume)
-	..(M, current_stomach_volume, damage = 0.08)
+/datum/reagent/ethanol/digest(var/mob/living/carbon/human/M)
+	..(M, damage = 0.08)
 
 /datum/reagent/ethanol/on_mob_life(var/mob/living/M)
 
@@ -6229,8 +6229,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = LIQUID
 	color = "#12A7C9"
 
-/datum/reagent/fishbleach/digest(var/mob/living/carbon/human/M, var/current_stomach_volume)
-	..(M, current_stomach_volume, damage = 1)
+/datum/reagent/fishbleach/digest(var/mob/living/carbon/human/M)
+	..(M, damage = 1)
 
 /datum/reagent/fishbleach/on_mob_life(var/mob/living/carbon/human/H)
 	if(..())

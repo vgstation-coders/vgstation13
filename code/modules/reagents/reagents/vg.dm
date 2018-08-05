@@ -15,7 +15,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.06
 	digestion_rate = 0 // will not transfer from stomach to body
 
-/datum/reagent/charcoal/digest(var/mob/living/carbon/human/M, var/current_stomach_volume)
+/datum/reagent/charcoal/digest(var/mob/living/carbon/human/M)
 	var/datum/organ/internal/stomach/S = M.get_stomach()
 	if(!S)
 		return
