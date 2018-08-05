@@ -1130,7 +1130,8 @@ FIRE ALARM
 		else if (href_list["shelter"])
 			if(shelter)
 				var/obj/O = new /obj/item/inflatable/shelter(loc)
-				usr.put_in_hands(O)
+				if(Adjacent(usr)) //This way, silicons can still deploy it
+					usr.put_in_hands(O)
 				shelter = FALSE
 				update_icon()
 			else
