@@ -378,7 +378,7 @@
 	user.reagents.add_reagent(PEPTOBISMOL,4)
 	user.reagents.add_reagent(TRAMADOL,3)
 	user.reagents.add_reagent(LEPORAZINE,1)
-	to_chat(user,"<span class='warning'>You feel calmed by the anesthetizing gasses inside the shelter.</span>")
+	to_chat(user,"<span class='warning'>You feel a prick upon entering \the [src] and your muscles relax.</span>")
 
 /obj/structure/inflatable/shelter/proc/laundry(var/mob/living/carbon/human/user)
 	if(user.loc != src)
