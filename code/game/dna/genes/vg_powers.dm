@@ -169,17 +169,15 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 
 	spelltype = /spell/targeted/genetic/headcannon
 
-/datum/dna/gene/basic/grant_spell/headcannon/deactivate(var/mob/M, var/connected, var/flags)
-	M.mutations.Remove(M_HULK)
-	M.update_mutations()
-	if (ishuman(M))
-		var/mob/living/carbon/human/H = M
-		H.update_body()
-	return ..()
-
 /datum/dna/gene/basic/grant_spell/headcannon/New()
 	..()
 	block = HEADCANNONBLOCK
+
+/datum/dna/gene/basic/grant_spell/headcannon/activate(var/mob/M)
+	if(ishuman(M)) // only humans with a brain can use this spell
+		var/mob/living/carbon/human/H = M
+		if(H.internal_organs_by_name["brain"])
+			..()
 
 /spell/targeted/genetic/headcannon
 	name = "Free the Brain"
@@ -201,23 +199,30 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	..()
 
 /spell/targeted/genetic/headcannon/cast(list/targets, mob/user)
-	if (istype(user.loc, /mob))
+	if(istype(user.loc, /mob))
 		to_chat(usr, "<span class='warning'>You can't launch your brain right now!</span>")
 		return 1
-	for(var/mob/living/carbon/human/M in targets)
-		var/datum/organ/external/head/head_organ = M.get_organ(LIMB_HEAD)
-		var/obj/item/organ/internal/brain/B = M.remove_internal_organ(M, M.internal_organs_by_name["brain"], head_organ)
-		M.death(0)
-		M.ghostize(0) // set so they can't come back
-		head_organ.explode()
-		fire(M)
-		qdel(B) // make sure the actual brain doesn't drop
-		log_admin("[key_name(M)] has launched their brain! ([formatJumpTo(M)])")
-		message_admins("[key_name(M)] has launched their brain! ([formatJumpTo(M)])")
-	return
+
+	if(!ishuman(user))
+		return // needs to be human
+
+	var/mob/living/carbon/human/M = user
+
+	if(!M.internal_organs_by_name["brain"])
+		return // no brain means no explosion
+
+	var/datum/organ/external/head/head_organ = M.get_organ(LIMB_HEAD)
+	var/obj/item/organ/internal/brain/B = M.remove_internal_organ(M, M.internal_organs_by_name["brain"], head_organ)
+	M.death(0)
+	M.ghostize(0) // set so they can't come back
+	head_organ.explode()
+	fire(M)
+	qdel(B) // make sure the actual brain doesn't drop
+	log_admin("[key_name(M)] has launched their brain! ([formatJumpTo(M)])")
+	message_admins("[key_name(M)] has launched their brain! ([formatJumpTo(M)])")
 
 /spell/targeted/genetic/headcannon/proc/fire(var/mob/living/carbon/human/user)
-	// taken from the wheelchair cannon
+	// stolen/adapted from the wheelchair cannon
 	var/obj/item/projectile/brain/cannonbrain = new()
 	var/target = null
 	switch(user.dir)
