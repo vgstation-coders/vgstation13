@@ -87,7 +87,6 @@ var/list/camera_names=list()
 	..()
 	if(adv_camera && adv_camera.initialized && !(src in adv_camera.camerasbyzlevel["[z]"]))
 		adv_camera.update(z, TRUE, list(src))
-	name = initial(name) //reset the name for mapping convenience
 	update_hear()
 
 /obj/machinery/camera/proc/name_camera()
