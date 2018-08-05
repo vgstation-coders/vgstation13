@@ -72,7 +72,7 @@ var/NOIRBLOCK = 0
 var/VEGANBLOCK = 0
 var/ASTHMABLOCK = 0
 var/LACTOSEBLOCK = 0
-
+var/HEADCANNONBLOCK = 0
 
 /proc/getAssignedBlock(var/name,var/list/blocksLeft, var/activity_bounds=DNA_DEFAULT_BOUNDS, var/good=0)
 	if(blocksLeft.len==0)
@@ -182,6 +182,7 @@ var/LACTOSEBLOCK = 0
 	VEGANBLOCK     = getAssignedBlock("VEGAN",      numsToAssign)
 	ASTHMABLOCK    = getAssignedBlock("ASTHMA",     numsToAssign)
 	LACTOSEBLOCK   = getAssignedBlock("LACTOSE",    numsToAssign)
+	HEADCANNONBLOCK   = getAssignedBlock("HEADCANNON",    numsToAssign)
 
 	//
 	// Static Blocks

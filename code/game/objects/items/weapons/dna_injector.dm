@@ -842,7 +842,7 @@
 	datatype = DNA2_BUF_SE
 	value = 0x001
 	//block = 11
-	
+
 /obj/item/weapon/dnainjector/nofail/asthmamut
 	name = "DNA-Injector (Asthma)"
 	desc = "Makes you asthmatic."
@@ -1346,6 +1346,26 @@
 
 /obj/item/weapon/dnainjector/nofail/antiremotesay/New()
 	block = REMOTETALKBLOCK
+	..()
+
+/obj/item/weapon/dnainjector/nofail/headcannon
+	name = "DNA-Injector (Headcannon)"
+	desc = "One hell of a migraine."
+	datatype = DNA2_BUF_SE
+	value = 0xFFF
+
+/obj/item/weapon/dnainjector/nofail/headcannon/New()
+	block = HEADCANNONBLOCK
+	..()
+
+/obj/item/weapon/dnainjector/nofail/antiheadcannon
+	name = "DNA-Injector (Anti-Headcannon)"
+	desc = "Take with 2 aspirins."
+	datatype = DNA2_BUF_SE
+	value = 0x001
+
+/obj/item/weapon/dnainjector/nofail/antiheadcannon/New()
+	block = HEADCANNONBLOCK
 	..()
 
 /obj/item/weapon/dnainjector/nofail/randompower/New(newloc)

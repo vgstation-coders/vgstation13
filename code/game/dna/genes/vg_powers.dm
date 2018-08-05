@@ -158,3 +158,128 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 		M.update_colour()
 		if(M.client)
 			M.client.screen -= noir_master
+
+/datum/dna/gene/basic/grant_spell/headcannon
+	name = "Headcannon"
+	desc = "Aggressively frees the brain through the forehead."
+	activation_messages = list("It feels as if a spring in the back of your head is being compressed.", "You feel a strange pressure in the back of your head increasing.")
+	deactivation_messages = list("The tension in the back of your head disappears.")
+
+	flags = GENE_UNNATURAL // Do NOT spawn on roundstart.
+
+	spelltype = /spell/targeted/genetic/headcannon
+
+/datum/dna/gene/basic/grant_spell/headcannon/deactivate(var/mob/M, var/connected, var/flags)
+	M.mutations.Remove(M_HULK)
+	M.update_mutations()
+	if (ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.update_body()
+	return ..()
+
+/datum/dna/gene/basic/grant_spell/headcannon/New()
+	..()
+	block = HEADCANNONBLOCK
+
+/spell/targeted/genetic/headcannon
+	name = "Free the Brain"
+	panel = "Mutant Powers"
+	user_type = USER_TYPE_GENETIC
+	range = SELFCAST
+
+	duration = 1
+
+	spell_flags = INCLUDEUSER
+
+	invocation_type = SpI_NONE
+
+	override_base = "genetic"
+	hud_state = "headcannon"
+
+/spell/targeted/genetic/headcannon/New()
+	desc = "Relieve the tension in the back of your head."
+	..()
+
+/spell/targeted/genetic/headcannon/cast(list/targets, mob/user)
+	if (istype(user.loc, /mob))
+		to_chat(usr, "<span class='warning'>You can't launch your brain right now!</span>")
+		return 1
+	for(var/mob/living/carbon/human/M in targets)
+		var/datum/organ/external/head/head_organ = M.get_organ(LIMB_HEAD)
+		var/obj/item/organ/internal/brain/B = M.remove_internal_organ(M, M.internal_organs_by_name["brain"], head_organ)
+		M.death(0)
+		M.ghostize(0) // set so they can't come back
+		head_organ.explode()
+		fire(M)
+		qdel(B) // make sure the actual brain doesn't drop
+		log_admin("[key_name(M)] has launched their brain! ([formatJumpTo(M)])")
+		message_admins("[key_name(M)] has launched their brain! ([formatJumpTo(M)])")
+	return
+
+/spell/targeted/genetic/headcannon/proc/fire(var/mob/living/carbon/human/user)
+	// taken from the wheelchair cannon
+	var/obj/item/projectile/brain/cannonbrain = new()
+	var/target = null
+	switch(user.dir)
+		if(1)
+			target = locate(user.x, user.y+20, user.z)
+		if(2)
+			target = locate(user.x, user.y-20, user.z)
+		if(4)
+			target = locate(user.x+20, user.y, user.z)
+		if(8)
+			target = locate(user.x-20, user.y, user.z)
+
+	var/turf/curloc = get_turf(user)
+	var/turf/targloc = get_turf(target)
+	if (!istype(targloc) || !istype(curloc))
+		return
+
+	user.visible_message("<span class='danger'>Something explodes out of [user]'s forehead!</span>","<span class='danger'>You fire your brain from your head!</span>")
+	log_attack("[user.name] ([user.ckey]) fired their brain (proj:[cannonbrain.name]) at coordinates ([user.x],[user.y],[user.z])" )
+
+	// recoil body (copied from code/module/projectile/gun.dm)
+	var/movementdirection = get_dir(target,user)
+	spawn()
+		shake_camera(user, 6, 5)
+	if(user.locked_to && isobj(user.locked_to) && !user.locked_to.anchored)
+		spawn()
+			var/obj/B = user.locked_to
+			B.Move(get_step(user,movementdirection), movementdirection)
+			sleep(1)
+			B.Move(get_step(user,movementdirection), movementdirection)
+			sleep(1)
+			B.Move(get_step(user,movementdirection), movementdirection)
+			sleep(1)
+			B.Move(get_step(user,movementdirection), movementdirection)
+			sleep(2)
+			B.Move(get_step(user,movementdirection), movementdirection)
+			sleep(2)
+			B.Move(get_step(user,movementdirection), movementdirection)
+			sleep(3)
+			B.Move(get_step(user,movementdirection), movementdirection)
+			sleep(3)
+			B.Move(get_step(user,movementdirection), movementdirection)
+			sleep(3)
+			B.Move(get_step(user,movementdirection), movementdirection)
+	else
+		user.Move(get_step(user,movementdirection), movementdirection)
+		sleep(1)
+		user.Move(get_step(user,movementdirection), movementdirection)
+	user.apply_inertia(movementdirection)
+
+	// projectile stuff
+	cannonbrain.def_zone = LIMB_CHEST // always target chest
+	cannonbrain.original = target
+	cannonbrain.forceMove(curloc)
+	cannonbrain.starting = curloc
+	cannonbrain.shot_from = user
+	cannonbrain.firer = user
+	cannonbrain.current = curloc
+	cannonbrain.OnFired()
+	cannonbrain.yo = targloc.y - curloc.y
+	cannonbrain.xo = targloc.x - curloc.x
+	playsound(user, cannonbrain.fire_sound, 50, 1)
+	spawn()
+		cannonbrain.process()
+	sleep(1)

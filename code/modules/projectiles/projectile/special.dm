@@ -438,3 +438,23 @@ obj/item/projectile/kinetic/New()
 
 /obj/item/projectile/napalm_bomb/on_hit(var/atom/target, var/blocked = 0)
 	new /obj/effect/fire_blast/blue(get_turf(target), fire_damage, 0, 1, pressure, temperature, fire_duration)
+
+/obj/item/projectile/brain
+	name = "cannonbrain"
+	icon = 'icons/obj/surgery.dmi'
+	icon_state = "brain2"
+	damage = 60
+	damage_type = BRUTE
+	nodamage = 0
+	phase_type = PROJREACT_WINDOWS
+	penetration = 3 //bullets can now by default move through up to 5 windows, or 2 reinforced windows, or 1 plasma window. (reinforced plasma windows still have enough dampening to completely block them)
+	flag = "bullet"
+	fire_sound = 'sound/weapons/rocket.ogg'
+
+/obj/item/projectile/brain/on_hit(var/atom/target, var/blocked = 0)
+	explosion(loc, 0, 0, 1, 3)
+	..(target, blocked)
+	if(istype(firer, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = firer
+		var/datum/species/S = H.species
+		hgibs(loc, H.viruses, H.dna, S.flesh_color, S.blood_color, 0)
