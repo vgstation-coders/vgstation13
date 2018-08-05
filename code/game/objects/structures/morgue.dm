@@ -76,6 +76,10 @@
 /obj/structure/morgue/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
+/obj/structure/morgue/attack_robot(mob/living/silicon/robot/user)
+	if(HAS_MODULE_QUIRK(user, MODULE_CAN_HANDLE_MEDICAL))
+		attack_hand(user)
+
 /obj/structure/morgue/attack_hand(mob/user as mob)
 	if (connected)
 		close_up()
