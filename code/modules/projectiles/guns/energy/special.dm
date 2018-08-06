@@ -333,6 +333,10 @@
 	name = "staff of swip-swap"
 	desc = "The head and handle of this strange device keep switching places."
 	icon = 'icons/obj/wizard.dmi'
+	inhand_states = list(
+	"left_hand" = 'icons/mob/in-hand/left/guns.dmi',
+	"right_hand" = 'icons/mob/in-hand/right/guns.dmi')
+	item_state = "staffswap"
 	icon_state = "staff_swap"
 	projectile_type = "/obj/item/projectile/swap"
 	flags = FPRINT | TWOHANDABLE
