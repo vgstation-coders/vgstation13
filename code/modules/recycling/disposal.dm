@@ -550,7 +550,7 @@
 	var/active = 0	// true if the holder is moving, otherwise inactive
 	dir = 0
 	var/count = 1000	//*** can travel 1000 steps before going inactive (in case of loops)
-	var/destinationTag = "DISPOSALS"// changes if contains a delivery container
+	var/destinationTag = DISP_DISPOSALS // changes if contains a delivery container
 	var/tomail = 0 //changes if contains wrapped package
 	var/hasmob = 0 //If it contains a mob
 
@@ -656,6 +656,10 @@
 // merge two holder objects
 // used when a a holder meets a stuck holder
 /obj/structure/disposalholder/proc/merge(var/obj/structure/disposalholder/other)
+	if(other.destinationTag != DISP_DISPOSALS && src.destinationTag == DISP_DISPOSALS)
+		// Lets make sure we don't accidentally dispose of stuff.
+		// Of course, if this happened before sorting this is a non-issue but if someone jammed the pipe after sorting, then it's a problem.
+		src.destinationTag = other.destinationTag
 	for(var/atom/movable/AM in other)
 		AM.forceMove(src)		// move everything in other holder to this one
 		if(ismob(AM))
