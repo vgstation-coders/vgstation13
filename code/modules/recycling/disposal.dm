@@ -681,6 +681,8 @@
 			var/mob/M = AM
 			if(M.client)	// if a client mob, update eye to follow this holder
 				M.client.eye = src
+				if(!other.active)
+					to_chat(M, "Something hits and dislodges you from the pipe!")
 
 	qdel(other)
 
