@@ -248,7 +248,7 @@
 	user.examination(src)
 
 /obj/machinery/processor/MouseDropTo(atom/movable/O, mob/user)
-	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc))
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O))
 		return
 	if(user.incapacitated() || user.lying)
 		return

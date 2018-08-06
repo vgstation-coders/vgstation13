@@ -75,7 +75,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 /obj/machinery/atmospherics/unary/cryo_cell/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 	if(!ismob(O))
 		return
-	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) //no you can't pull things out of your ass
 		return
 	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
 		return

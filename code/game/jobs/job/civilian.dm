@@ -373,7 +373,7 @@
 			H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing(H), slot_in_backpack)
 		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 		H.add_spell(new /spell/targeted/oathbreak/)
-		H.miming = 1
+		H.mind.miming = MIMING_OUT_OF_CHOICE
 		H.rename_self("mime")
 		return 1
 
@@ -397,7 +397,7 @@
 		var/response = alert(M, "Are you -sure- you want to break your oath of silence?\n(This removes your ability to create invisible walls and cannot be undone!)","Are you sure you want to break your oath?","Yes","No")
 		if(response != "Yes")
 			return
-		M.miming=0
+		M.mind.miming=0
 		for(var/spell/aoe_turf/conjure/forcewall/mime/spell in M.spell_list)
 			M.remove_spell(spell)
 		for(var/spell/targeted/oathbreak/spell in M.spell_list)

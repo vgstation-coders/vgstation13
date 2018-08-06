@@ -3,7 +3,6 @@
 	desc = "A machine used for recycling dead monkeys into monkey cubes."
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "grinder"
-	layer = BELOW_OBJ_LAYER
 	density = 1
 	anchored = 1
 	use_power = 1
@@ -98,7 +97,7 @@
 /obj/machinery/monkey_recycler/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob) //copypasted from sleepers
 	if(!ismob(O))
 		return
-	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc))
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O))
 		return
 	if(user.incapacitated() || user.lying)
 		return

@@ -771,7 +771,11 @@
 
 /datum/chemical_reaction/explosion_bicarodyne/on_reaction(var/datum/reagents/holder, var/created_volume)
 	explosion(get_turf(holder.my_atom),1,2,4)
-	holder.clear_reagents()
+	if(!holder.my_atom.is_open_container() || ismob(holder.my_atom))
+		holder.del_reagent(BICARODYNE)
+		holder.del_reagent(PARACETAMOL)
+	else
+		holder.clear_reagents()
 
 /datum/chemical_reaction/nanobots
 	name = "Nanobots"
@@ -3043,6 +3047,23 @@
 	required_reagents = list(CARBON = 1, SACID = 2)
 	required_temp = T0C + 450
 	result_amount = 1
+
+/datum/chemical_reaction/vomit_all
+	name = "Vomit induction"
+	id = CHARCOAL
+	result = null
+	required_reagents = list(FLUORINE = 5, CARBON = 5, CHARCOAL = 5)
+	required_container = /mob/living/carbon/human
+	result_amount = 5
+
+/datum/chemical_reaction/vomit_all/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/mob/living/carbon/human/H = holder.my_atom
+	var/datum/organ/internal/stomach/S = H.get_stomach()
+	if(!S)
+		return
+	H.vomit()
+	S.take_damage(created_volume/10)
+	holder.remove_reagents(created_volume*25)
 
 /datum/chemical_reaction/albuterol
 	name = "Albuterol"

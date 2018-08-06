@@ -229,8 +229,6 @@
 	removed_type = /obj/item/organ/internal/appendix
 
 /datum/organ/internal/proc/remove(var/mob/user, var/quiet=0)
-
-
 	if(!removed_type)
 		return 0
 	var/obj/item/organ/internal/removed_organ

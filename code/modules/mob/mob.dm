@@ -663,12 +663,12 @@ var/list/slot_equipment_priority = list( \
 
 //puts the item "W" into an appropriate slot in a human's inventory
 //returns 0 if it cannot, 1 if successful
-/mob/proc/equip_to_appropriate_slot(obj/item/W)
+/mob/proc/equip_to_appropriate_slot(obj/item/W, var/override = FALSE)
 	if(!istype(W))
 		return 0
 
 	for(var/slot in slot_equipment_priority)
-		if(!is_holding_item(W))
+		if(!is_holding_item(W) && !override)
 			return 0
 		var/obj/item/S = get_item_by_slot(slot)
 		if(S && S.can_quick_store(W))
@@ -708,7 +708,7 @@ var/list/slot_equipment_priority = list( \
 	while(has_succeeded_once)
 		has_succeeded_once = FALSE
 		for(var/obj/item/I in L)
-			if(equip_to_appropriate_slot(I))
+			if(equip_to_appropriate_slot(I, TRUE)) // The proc wants the item to be in our hands, like in the case of a quick-equip
 				has_succeeded_once = TRUE
 				L.Remove(I)
 	if(L.len)
@@ -1677,6 +1677,9 @@ var/list/slot_equipment_priority = list( \
 
 /mob/proc/Dizzy(amount)
 	dizziness = max(dizziness,amount,0)
+
+/mob/proc/AdjustDizzy(amount)
+	dizziness = max(dizziness+amount, 0)
 
 
 /mob/proc/Paralyse(amount)

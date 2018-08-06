@@ -115,6 +115,7 @@ Class Procs:
 	var/icon_state_open = ""
 
 	w_type = NOT_RECYCLABLE
+	layer = MACHINERY_LAYER
 
 	penetration_dampening = 5
 
@@ -686,7 +687,6 @@ Class Procs:
 			var/P
 			for(var/obj/item/A in component_parts)
 				for(var/D in CB.req_components)
-					D = text2path(D) //For some stupid reason these are strings by default.
 					if(ispath(A.type, D))
 						P = D
 						break

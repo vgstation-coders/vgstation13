@@ -10,6 +10,7 @@
 	name = "conveyor belt"
 	desc = "A conveyor belt.\
 	<br><span class='info'>It can be pried into a different direction using a crowbar, but cannot be moved without welding it apart.</span>"
+	layer = BELOW_TABLE_LAYER
 	anchored = 1
 
 	var/operating = 0	// 1 if running forward, -1 if backwards, 0 if off
