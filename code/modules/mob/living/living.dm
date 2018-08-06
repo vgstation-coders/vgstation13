@@ -724,46 +724,6 @@ Thanks.
 							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
-
-							/* Drag damage is here!*/
-							var/mob/living/carbon/human/HM = M
-							var/list/damaged_organs = HM.get_broken_organs()
-							var/list/bleeding_organs = HM.get_bleeding_organs()
-							if (T.has_gravity() && HM.lying)
-
-								if (damaged_organs.len)
-									if(!HM.isincrit())
-										if(prob(HM.getBruteLoss() / 5)) //Chance for damage based on current damage
-											for(var/datum/organ/external/damagedorgan in damaged_organs)
-												if((damagedorgan.brute_dam) < damagedorgan.max_damage) //To prevent organs from accruing thousands of damage
-													HM.apply_damage(2, BRUTE, damagedorgan)
-													HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen from being dragged!</span>")
-													HM.UpdateDamageIcon()
-									else
-										if(prob(15))
-											for(var/datum/organ/external/damagedorgan in damaged_organs)
-												if((damagedorgan.brute_dam) < damagedorgan.max_damage)
-													HM.apply_damage(4, BRUTE, damagedorgan)
-													HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen terribly from being dragged!</span>")
-													add_logs(src, HM, "caused drag damage to", admin = (M.ckey))
-													HM.UpdateDamageIcon()
-
-								if (bleeding_organs.len && !(HM.species.anatomy_flags & NO_BLOOD))
-									var/blood_volume = round(HM:vessel.get_reagent_amount("blood"))
-									/*Sometimes species with NO_BLOOD get blood, hence weird check*/
-									if(blood_volume > 0)
-										if(isturf(HM.loc))
-											if(!HM.isincrit())
-												if(prob(blood_volume / 89.6)) //Chance to bleed based on blood remaining
-													blood_splatter(HM.loc,HM)
-													HM.vessel.remove_reagent("blood",4)
-													HM.visible_message("<span class='warning'>\The [HM] loses some blood from being dragged!</span>")
-											else
-												if(prob(blood_volume / 44.8)) //Crit mode means double chance of blood loss
-													blood_splatter(HM.loc,HM,1)
-													HM.vessel.remove_reagent("blood",8)
-													HM.visible_message("<span class='danger'>\The [HM] loses a lot of blood from being dragged!</span>")
-													add_logs(src, HM, "caused drag damage bloodloss to", admin = (HM.ckey))
 					else
 						if (pulling)
 							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
