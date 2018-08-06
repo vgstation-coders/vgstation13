@@ -134,10 +134,8 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			if(prob(mineral.spread_chance))
 				var/turf/unsimulated/mineral/random/target_turf = get_step(src, trydir)
 				if(istype(target_turf) && !target_turf.mineral)
-					if(prob(1))
+					if(prob(1) && prob(25)) //People wanted them rarer
 						rockernaut = TURF_CONTAINS_REGULAR_ROCKERNAUT
-						if(prob(1))
-							rockernaut = TURF_CONTAINS_BOSS_ROCKERNAUT
 					target_turf.mineral = mineral
 					target_turf.UpdateMineral()
 					target_turf.MineralSpread()
