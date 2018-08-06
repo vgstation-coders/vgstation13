@@ -656,9 +656,9 @@
 // merge two holder objects
 // used when a a holder meets a stuck holder
 /obj/structure/disposalholder/proc/merge(var/obj/structure/disposalholder/other)
-	if(other.destinationTag != DISP_DISPOSALS && src.destinationTag == DISP_DISPOSALS)
+	if(src.destinationTag == DISP_DISPOSALS && other.destinationTag != DISP_DISPOSALS)
 		// Lets make sure we don't accidentally dispose of stuff.
-		// Of course, if this happened before sorting this is a non-issue but if someone jammed the pipe after sorting, then it's a problem.
+		// Of course, if this happened before the cargo office this is a non-issue but if someone jammed the pipe after the office, then it's a problem.
 		src.destinationTag = other.destinationTag
 	for(var/atom/movable/AM in other)
 		AM.forceMove(src)		// move everything in other holder to this one
