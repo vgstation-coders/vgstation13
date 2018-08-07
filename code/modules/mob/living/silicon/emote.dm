@@ -12,6 +12,8 @@
 
 /datum/emote/sound/silicon/can_run_emote(var/mob/user, var/status_check = TRUE)
 	. = ..()
+	if (. && isAI(user) && !module_quirk_required)
+		return TRUE
 	var/mob/living/silicon/pai/the_pai = user
 	if (. && istype(the_pai) && (!pai_software_required || (pai_software_required in the_pai.software)))
 		return TRUE
