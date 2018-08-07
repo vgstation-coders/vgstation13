@@ -434,6 +434,7 @@ var/global/list/loopModeNames=list(
 			return
 		var/obj/item/weapon/spacecash/C=W
 		credits_held += C.worth*C.amount
+		qdel(C)
 		if(credits_held >= credits_needed)
 			visible_message("<span class='notice'>The machine beeps happily.</span>","You hear a beep.")
 			credits_held -= credits_needed
