@@ -295,3 +295,7 @@ proc/get_space_area()
 //Swaps the contents of the variables A and B. The if(TRUE) is there simply to restrict the scope of _.
 //Yes, _ is a shitty variable name. Hopefully so shitty it won't ever be used anywhere it could conflict with this.
 #define swap_vars(A, B) if(TRUE){var/_ = A; A = B; B = _}
+
+// To prevent situations of trying to take funds that are factions of our lowest denomination
+#define LOWEST_DENOMINATION 1
+#define round_to_lowest_denomination(A) (round(A, LOWEST_DENOMINATION))
