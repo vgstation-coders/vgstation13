@@ -488,10 +488,8 @@
 		qdel(src)
 
 /obj/machinery/computer/scan_consolenew/proc/findScanner()
-	for(dir in list(NORTH,EAST,SOUTH,WEST))
-		var/foundmachine = locate(/obj/machinery/dna_scannernew, get_step(src, dir))
-		if(foundmachine)
-			return foundmachine
+	for(var/obj/machinery/dna_scannernew/DN in oview(1, src)) // All 8 directions.
+		return DN
 
 /obj/machinery/computer/scan_consolenew/proc/all_dna_blocks(var/list/buffer)
 	var/list/arr = list()
