@@ -24,6 +24,7 @@ BAD_STRINGS = {
     "step_x": re.compile(r"\bstep_x\b"),
     "step_y": re.compile(r"\bstep_y\b"),
     "layer": re.compile(r"\blayer\b")
+    "pixel_w" : re.compile(r"\bpixel_w\b") # This causes the map to require 511/512 to play on.
 }
 
 def main():
