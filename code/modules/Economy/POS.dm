@@ -4,6 +4,11 @@
 * Takes cash or credit.
 *************************/
 
+/*
+	For anyone confused why products["[products.len+1]"] = LI is used, it's so there's no type conversion required since href_list[] always produces a string.
+	Of course, this is what I've observed and assumed - CW
+*/
+
 /line_item
 	parent_type = /datum
 
@@ -296,7 +301,8 @@ var/const/POS_HEADER = {"<html>
 			</tr>"}
 	for(var/i in products)
 		var/line_item/LI = products[i]
-		dat += {"<tr class=\"[(i%2)?"even":"odd"]\">
+		var/pid = text2num(i)
+		dat += {"<tr class="[(pid%2)?"even":"odd"]">
 			<th><a href="?src=\ref[src];setpname=[i]">[LI.name]</a></th>
 			<td><a href="?src=\ref[src];setprice=[i]">$[num2septext(LI.price)]</a></td>
 			<td>[LI.units]</td>
