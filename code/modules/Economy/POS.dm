@@ -391,7 +391,7 @@ var/const/POS_HEADER = {"<html>
 	user.set_machine(src)
 	var/logindata=""
 	if(logged_in)
-		logindata={"<a href="?src=\ref[src];logout=1">[logged_in.name]</a>"}
+		logindata={"<a href="?src=\ref[src];logout=1">[logged_in.name]</a> |"}
 	var/dat = POS_HEADER + {"
 	<div class="navbar">
 		[worldtime2text()], [current_date_string]<br />
