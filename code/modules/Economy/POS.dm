@@ -369,6 +369,13 @@ var/const/POS_HEADER = {"<html>
 				<b>Tax Rate:</b> <input type="textbox" name="taxes" value="[POS_TAX_RATE*100]" disabled="disabled" />% (LOCKED)
 			</div>
 		</fieldset>
+		<fieldset>
+			<legend>Denomination Settings</legend>
+			<div>
+				<b>Lowest Denomination:</b> $<input type="textbox" name="lowestdenomination" value="[LOWEST_DENOMINATION]" disabled="disabled" /> (LOCKED)<br />
+				<i>Subtotals and Taxes are rounded to the nearest, lowest denomination</i>
+			</div>
+		</fieldset>
 		<input type="submit" name="act" value="Save Settings" />
 		</form>"}
 	return dat
