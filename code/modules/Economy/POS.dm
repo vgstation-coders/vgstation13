@@ -165,6 +165,12 @@ var/const/POS_HEADER = {"<html>
 	else
 		linked_account = station_account
 
+/obj/machinery/pos/proc/dispense_change(var/amount)
+	var/obj/item/weapon/storage/box/B = new(loc)
+	dispense_cash(amount,B)
+	B.name="change"
+	B.desc="A box of change."
+
 /obj/machinery/pos/proc/AddToOrder(var/name, var/units)
 	if(!(name in products))
 		return 0
@@ -446,6 +452,11 @@ var/const/POS_HEADER = {"<html>
 	if("act" in href_list)
 		switch(href_list["act"])
 			if("Reset")
+				if(credits_held > 0){
+					visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
+					dispense_change(credits_held)
+					credits_held=0
+				}
 				NewOrder()
 				screen=POS_SCREEN_ORDER
 			if("Finalize Sale")
@@ -572,14 +583,12 @@ var/const/POS_HEADER = {"<html>
 			visible_message("<span class='notice'>The machine beeps, and begins printing a receipt</span>","You hear a beep and the sound of paper being shredded.")
 			PrintReceipt()
 			NewOrder()
+			linked_account.charge(-credits_needed, null, "Purchase at POS #[id].", dest_name = linked_account.owner_name)
 			credits_held -= credits_needed
 			credits_needed=0
 			screen=POS_SCREEN_ORDER
 			if(credits_held>0)
-				var/obj/item/weapon/storage/box/B = new(loc)
-				dispense_cash(credits_held,B)
-				B.name="change"
-				B.desc="A box of change."
+				dispense_change(credits_held)
 			credits_held=0
 	..()
 
