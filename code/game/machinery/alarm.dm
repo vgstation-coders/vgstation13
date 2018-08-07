@@ -1193,6 +1193,14 @@ var/global/list/firealarms = list() //shrug
 /obj/machinery/firealarm/npc_tamper_act(mob/living/L)
 	alarm()
 
+/obj/machinery/firealarm/kick_act(mob/living/carbon/human/H)
+	..()
+	if(shelter && prob(50))
+		new /obj/item/inflatable/shelter(loc)
+		shelter = FALSE
+		update_icon()
+		visible_message("<span class='notice'>\The shelter detaches from \the [src]!</span>")
+
 /obj/machinery/partyalarm
 	name = "\improper PARTY BUTTON"
 	desc = "Cuban Pete is in the house!"
