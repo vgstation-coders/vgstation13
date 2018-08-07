@@ -9,6 +9,11 @@
 	Of course, this is what I've observed and assumed - CW
 */
 
+#define to_valid_product_price(A) (max(LOWEST_DENOMINATION, round_to_lowest_denomination(A)))
+
+// Prevents McAsshat from cheaping out the local shop by buying a faction of something and causing the subtotal to be rounded down to zero.
+#define to_valid_subtotal(A) (A>0 ? to_valid_product_price(A) : A)
+
 /line_item
 	parent_type = /datum
 
@@ -193,12 +198,14 @@ var/const/POS_HEADER = {"<html>
 				<th>Line Total</th>
 			</tr>"}
 	var/subtotal=0
-	for(var/i=1;i<=line_items.len;i++)
-		var/line_item/LI = line_items[i]
-		var/linetotal=LI.units*LI.price
-		receipt += "<tr class=\"[(i%2)?"even":"odd"]\"><th>[LI.name]</th><td>[LI.units]</td><td>$[num2septext(LI.price)]</td><td>$[num2septext(linetotal)]</td></tr>"
-		subtotal += linetotal
-	var/taxes = POS_TAX_RATE*subtotal
+	if(line_items.len>0)
+		for(var/i=1;i<=line_items.len;i++)
+			var/line_item/LI = line_items[i]
+			var/linetotal=LI.units*LI.price
+			receipt += "<tr class=\"[(i%2)?"even":"odd"]\"><th>[LI.name]</th><td>[LI.units]</td><td>$[num2septext(LI.price)]</td><td>$[num2septext(linetotal)]</td></tr>"
+			subtotal += linetotal
+		subtotal = to_valid_subtotal(subtotal)
+	var/taxes = round_to_lowest_denomination(POS_TAX_RATE*subtotal)
 	receipt += {"
 		<tr class="calculated">
 			<th colspan="3">SUBTOTAL</th><td>$[num2septext(subtotal)]</td>
@@ -257,7 +264,8 @@ var/const/POS_HEADER = {"<html>
 				<td><a href="?src=\ref[src];removefromorder=[i]" style="color:red;">&times;</a></td>
 			</tr>"}
 			subtotal += linetotal
-	var/taxes = POS_TAX_RATE*subtotal
+		subtotal = to_valid_subtotal(subtotal)
+	var/taxes = round_to_lowest_denomination(POS_TAX_RATE*subtotal)
 	var/presets = "<i>(No presets available)</i>"
 	if(products.len>0)
 		presets = {"<select name="preset">""}
@@ -417,7 +425,7 @@ var/const/POS_HEADER = {"<html>
 	if(..(href,href_list))
 		return
 	if("logout" in href_list)
-		if(alert(src, "You sure you want to log out?", "Confirm", "Yes", "No")!="Yes")
+		if(alert(usr, "You sure you want to log out?", "Confirm", "Yes", "No")!="Yes")
 			return
 		logged_in=null
 		screen=POS_SCREEN_LOGIN
@@ -439,14 +447,15 @@ var/const/POS_HEADER = {"<html>
 					for(var/i=1;i<=line_items.len;i++)
 						var/line_item/LI = line_items[i]
 						subtotal += LI.units*LI.price
-				var/taxes = POS_TAX_RATE*subtotal
+					subtotal = to_valid_subtotal(subtotal)
+				var/taxes = round_to_lowest_denomination(POS_TAX_RATE*subtotal)
 				credits_needed=taxes+subtotal
 				say("Your total is $[num2septext(credits_needed)].  Please insert credit chips or swipe your ID.")
 				screen=POS_SCREEN_FINALIZE
 			if("Add Product")
 				var/line_item/LI = new
 				LI.name=sanitize(href_list["name"])
-				LI.price=max(1, text2num(href_list["price"]))
+				LI.price=to_valid_product_price(text2num(href_list["price"]))
 				products["[products.len+1]"]=LI
 			if("Add to Order")
 				AddToOrder(href_list["preset"],text2num(href_list["units"]))
@@ -459,7 +468,7 @@ var/const/POS_HEADER = {"<html>
 						return
 					var/line_item/LI = new
 					LI.name=sanitize(cells[1])
-					LI.price=max(1, text2num(cells[2]))
+					LI.price=to_valid_product_price(text2num(cells[2]))
 					products["[products.len+1]"]=LI
 			if("Export Products")
 				screen=POS_SCREEN_EXPORT
@@ -550,7 +559,7 @@ var/const/POS_HEADER = {"<html>
 			flick(src,"pos-error")
 			return
 		var/obj/item/weapon/spacecash/C=A
-		credits_held += C.worth*C.amount
+		credits_held += C.get_total()
 		qdel(C)
 		if(credits_held >= credits_needed)
 			visible_message("<span class='notice'>The machine beeps, and begins printing a receipt</span>","You hear a beep and the sound of paper being shredded.")
@@ -566,3 +575,6 @@ var/const/POS_HEADER = {"<html>
 				B.desc="A box of change."
 			credits_held=0
 	..()
+
+#undef to_valid_product_price
+#undef to_valid_subtotal
