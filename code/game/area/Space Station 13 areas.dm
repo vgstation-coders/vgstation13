@@ -1484,6 +1484,11 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Morgue"
 	icon_state = "morgue"
 
+/area/medical/coldstorage
+	name = "Morgue"
+	icon_state = "morgue"
+//for Roidstation - this area is radshielded.
+
 /area/medical/chemistry
 	name = "Chemistry"
 	icon_state = "chem"
