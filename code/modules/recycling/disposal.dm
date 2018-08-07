@@ -556,8 +556,21 @@
 
 /obj/structure/disposalholder/proc/has_fat_guy()
 	for(var/mob/living/carbon/human/H in src)
-		if(((M_FAT in H.mutations) && (H.species && H.species.anatomy_flags & CAN_BE_FAT)) || H.species.anatomy_flags & IS_BULKY)
+		if(H.is_fat() || H.is_bulky())
 			return TRUE
+	
+// Dislodge players whenever they're no longer fat or the holder is active for some reason.
+/obj/structure/disposalholder/proc/until_skinny()
+	spawn while(1) // Checking this is not a priority. Check whenever the server has a moment.
+		if(!has_fat_guy() || active) // If the person is no longer fat or something made the holder active again.
+			for(var/mob/living/carbon/human/H in src)
+				to_chat(H, "You become dislodged from the grip of the pipe!")
+			active = 1
+			move()
+			break
+		else
+			sleep(10) // Probably unwise to keep constantly checking, so just wait some time before doing it again.
+	return
 
 	// initialize a holder from the contents of a disposal unit
 /obj/structure/disposalholder/proc/init(var/obj/machinery/disposal/D)
@@ -619,7 +632,13 @@
 				active = 0
 			// find the fat guys
 				for(var/mob/living/carbon/human/H in src)
-
+					if(H.is_fat())
+						to_chat(H, "<span class='danger'>You suddenly stop by your own fat holding onto the pipe!</span> <span class='warning'>You hope something knocks you free.</span>")
+					else if(H.is_bulky())
+						to_chat(H, "<span class='danger'>You suddenly stop by your own bulky anatomy!</span> <span class='warning'>You hope something knocks you free.</span>")
+					else
+						to_chat(H, "<span class='danger'>You suddenly stop by the fatass with you!</span> <span class='warning'>You hope something knocks you free.</span>")
+				until_skinny()
 				break
 		sleep(1)		// was 1
 		if(!loc || isnull(loc))
@@ -662,6 +681,8 @@
 			var/mob/M = AM
 			if(M.client)	// if a client mob, update eye to follow this holder
 				M.client.eye = src
+				if(!other.active)
+					to_chat(M, "Something hits and dislodges you from the pipe!")
 
 	qdel(other)
 

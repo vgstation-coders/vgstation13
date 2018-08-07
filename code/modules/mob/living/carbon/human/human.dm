@@ -1594,6 +1594,10 @@
 /mob/living/carbon/human/is_fat()
 	return (M_FAT in mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
 
+// Bulky checks are often enough that it might as well be a proc for readability. -CW
+/mob/living/carbon/human/proc/is_bulky()
+	return species.anatomy_flags & IS_BULKY
+
 mob/living/carbon/human/isincrit()
 	if (health - halloss <= config.health_threshold_softcrit)
 		return 1
