@@ -194,6 +194,10 @@
 	else
 		qdel(src) //this should not happen but if it does happen we should not be here
 
+/obj/structure/m_tray/attack_robot(mob/living/silicon/robot/user)
+	if(HAS_MODULE_QUIRK(user, MODULE_CAN_HANDLE_MEDICAL))
+		attack_hand(user)
+
 /obj/structure/m_tray/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 	if (!istype(O) || O.anchored || !user.Adjacent(O) || !user.Adjacent(src) || user.contents.Find(O))
 		return
