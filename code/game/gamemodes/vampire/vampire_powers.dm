@@ -182,6 +182,11 @@
 	if(!C in view(1))
 		to_chat(M, "<span class='warning'>You're not close enough to [C.name] to stare into \his eyes.</span>")
 		return
+
+	if(C.is_blind())
+		to_chat(M, "<span class='warning'>[C.name]'s eyes are unresponsive! Hypnosis won't work if your victim can't see!</span>")
+		return
+
 	M.current.visible_message("<span class='warning'>[M.current.name]'s eyes flash briefly as he stares into [C.name]'s eyes</span>")
 	M.current.verbs -= /client/proc/vampire_hypnotise
 	spawn(1800)
@@ -275,7 +280,7 @@
 		var/list/close_mobs = list()
 		var/list/dist_mobs = list()
 		for(var/mob/living/carbon/C in view(1))
-			if(!C.vampire_affected(M))
+			if(!C.vampire_affected(M) || C.is_blind())
 				continue
 			//if(!M.current.vampire_can_reach(C, 1)) continue
 			if(istype(C))
@@ -343,7 +348,7 @@
 				var/mob/living/carbon/human/H = C
 				if(H.earprot())
 					continue
-			if(!C.vampire_affected(M))
+			if(!C.vampire_affected(M) || C.is_deaf())
 				continue
 			to_chat(C, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
 			C.Knockdown(8)
@@ -643,7 +648,7 @@
 	for(var/mob/living/carbon/C in oview(6))
 		if(prob(35))
 			continue //to prevent fearspam
-		if(!C.vampire_affected(mind.current))
+		if(!C.vampire_affected(mind.current) || C.is_blind())
 			continue
 		C.stuttering += 20
 		C.Jitter(20)
