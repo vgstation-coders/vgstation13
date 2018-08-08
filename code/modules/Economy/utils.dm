@@ -90,7 +90,7 @@
 		transaction_log.Add(T)
 		return 1
 	else
-		to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money!</span>")
+		to_chat(usr, "[bicon(src)] <span class='warning'>Not enough funds in account.</span>")
 		return 0
 
 // Charging cards is an absolute mess so let's make it consistent.
@@ -176,5 +176,5 @@
 			else
 				return CARD_CAPTURE_FAILURE_SECURITY_LEVEL
 	}
-	source_money_account.charge(transaction_amount, dest, transaction_purpose, terminal_name, terminal_id, dest_name)
-	return CARD_CAPTURE_SUCCESS
+	
+	return source_money_account.charge(transaction_amount, dest, transaction_purpose, terminal_name, terminal_id, dest_name) ? CARD_CAPTURE_SUCCESS : CARD_CAPTURE_NOT_ENOUGH_FUNDS
