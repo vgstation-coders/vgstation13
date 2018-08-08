@@ -126,7 +126,7 @@
 		
 		if(source_money_account.money < transaction_amount)
 			// Not enough funds in the virtual wallet so let's get the one from the card.
-			source_money_account = get_card_account(card_id)
+			source_money_account = linked_db.get_account(card_id.associated_account_number)
 			if(!source_money_account)
 				to_chat(user, "[bicon(src)] <span class='warning'>Bad account/pin combination.</span>")
 				return CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO
