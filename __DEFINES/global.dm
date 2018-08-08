@@ -396,7 +396,7 @@ var/station_does_not_tip = FALSE
 
 #define CARD_CAPTURE_SUCCESS 0 // Successful charge
 #define CARD_CAPTURE_FAILURE_GENERAL 1 // General error
-#define CARD_CAPTURE_NOT_ENOUGH_FUNDS 2 // Not enough funds in the account.
+#define CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS 2 // Not enough funds in the account.
 #define CARD_CAPTURE_ACCOUNT_DISABLED 3 // (FUTURE USE) Account locked
 #define CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO 4 // Bad account/pin combo
 #define CARD_CAPTURE_FAILURE_SECURITY_LEVEL 5 // Security level didn't allow current authorization or another exception occurred
