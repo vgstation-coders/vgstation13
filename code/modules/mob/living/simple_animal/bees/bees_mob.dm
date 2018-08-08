@@ -566,7 +566,7 @@
 				if (bee_species.slow)
 					step_to(src, target_turf)//1 step per Life()
 				else
-					walk_to(src, target, 0, 2)
+					start_walk_to(target, 0, 2)
 
 				if(src.loc == target_turf)
 					wander = 1

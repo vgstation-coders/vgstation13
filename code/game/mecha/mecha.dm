@@ -50,9 +50,9 @@
 	var/obj/machinery/portable_atmospherics/canister/internal_tank
 	var/datum/gas_mixture/cabin_air
 	var/obj/machinery/atmospherics/unary/portables_connector/connected_port = null
-	
-	var/cursor_enabled = 0 //whether to display the mecha cursor	
-	
+
+	var/cursor_enabled = 0 //whether to display the mecha cursor
+
 	var/obj/item/device/radio/radio = null
 	var/obj/item/device/radio/electropack/electropack = null
 	var/obj/item/mecha_parts/mecha_tracking/tracking = null
@@ -399,6 +399,8 @@
 /obj/mecha/proc/mechstep(direction)
 	var/current_dir = dir
 	set_glide_size(DELAY2GLIDESIZE(step_in))
+	if(occupant) //Workaround for mechs not setting the client's eye properly, remove this if that gets fixed
+		occupant.set_glide_size(DELAY2GLIDESIZE(step_in))
 	var/result = step(src,direction)
 	if(lock_dir)
 		dir = current_dir
@@ -409,6 +411,8 @@
 
 /obj/mecha/proc/mechsteprand()
 	set_glide_size(DELAY2GLIDESIZE(step_in))
+	if(occupant) //Workaround for mechs not setting the client's eye properly, remove this if that gets fixed
+		occupant.set_glide_size(DELAY2GLIDESIZE(step_in))
 	var/result = step_rand(src)
 	if(result)
 	 playsound(src, get_sfx("mechstep"),40,1)
@@ -1115,7 +1119,7 @@
 	src.occupant_message("Toggled lights [lights?"on":"off"].")
 	log_message("Toggled lights [lights?"on":"off"].")
 	return
-	
+
 /obj/mecha/verb/toggle_cursor()
 	set name = "Toggle Cursor"
 	set category = "Exosuit Interface"
@@ -1223,7 +1227,7 @@
 		//change the cursor
 		if(H.client && cursor_enabled)
 			H.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
-			
+
 		// -- Mode/mind specific stuff goes here
 		if(H.mind)
 			if(isrev(H) || isrevhead(H))
@@ -1295,11 +1299,11 @@
 		src.log_message("[mmi_as_oc] moved in as pilot.")
 		if(!hasInternalDamage())
 			src.occupant << sound('sound/mecha/nominalsyndi.ogg',volume=50)
-			
+
 		//change the cursor
 		if(occupant.client && cursor_enabled)
 			occupant.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
-			
+
 		return 1
 	else
 		return 0
@@ -1428,11 +1432,11 @@
 			mmi.mecha = null
 			src.occupant.canmove = 0
 			src.verbs += /obj/mecha/verb/eject
-			
+
 		//change the cursor
 		if(src.occupant && src.occupant.client)
 			src.occupant.client.mouse_pointer_icon = initial(src.occupant.client.mouse_pointer_icon)
-			
+
 		// -- Mode/mind specific stuff goes here
 		if(src.occupant.mind)
 			if(isrev(src.occupant) || isrevhead(src.occupant))

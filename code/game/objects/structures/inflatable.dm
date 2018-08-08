@@ -315,7 +315,7 @@
 	if(living_contents.len)
 		to_chat(user,"<span class='info'>You can see [english_list(living_contents)] inside.</span>")
 
-/obj/structure/inflatable/shelter/forceMove() //Like an unanchored window, we can block if pushed into place.
+/obj/structure/inflatable/shelter/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0) //Like an unanchored window, we can block if pushed into place.
 	..()
 	update_nearby_tiles()
 

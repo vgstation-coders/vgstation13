@@ -590,6 +590,7 @@ var/global/mulebot_count = 0
 							T.AddTracks(/obj/effect/decal/cleanable/blood/tracks/wheels,list(),0,goingdir,currentBloodColor)
 						bloodiness--
 
+					set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
 					var/moved = step_towards(src, next)	// attempt to move
 					if(cell)
 						cell.use(1)
