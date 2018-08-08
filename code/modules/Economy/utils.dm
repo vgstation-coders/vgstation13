@@ -95,7 +95,7 @@
 
 // Charging cards is an absolute mess so let's make it consistent.
 /*
-	charge_flow(
+	obj/proc/charge_flow(
 		obj/machinery/account_database/linked_db	= The account database we will use to look up accounts.
 		obj/item/weapon/card/card					= The card we will attempt to charge, but it is optional if the terminal will allow manual entry
 		mob/user									= The user who we will prompt for pins, account information, and such.
