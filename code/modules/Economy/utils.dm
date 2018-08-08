@@ -175,9 +175,6 @@
 					return CARD_CAPTURE_FAILURE_SECURITY_LEVEL
 			else
 				return CARD_CAPTURE_FAILURE_SECURITY_LEVEL
-		
-		
-		return CARD_CAPTURE_SUCCESS
 	}
 	source_money_account.charge(transaction_amount, dest, transaction_purpose, terminal_name, terminal_id, dest_name)
 	return CARD_CAPTURE_SUCCESS
