@@ -33,3 +33,5 @@
 	key_third_person = "whistles"
 	message = "whistles."
 	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/sound/brain/
