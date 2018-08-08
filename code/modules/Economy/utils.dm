@@ -110,7 +110,10 @@
 
 /obj/proc/charge_flow(var/obj/machinery/account_database/linked_db, var/obj/item/weapon/card/card, var/mob/user, var/transaction_amount, var/datum/money_account/dest, var/transaction_purpose, var/terminal_name="", var/terminal_id=0, var/dest_name = "UNKNOWN")
 	var/datum/money_account/source_money_account
+	var/datum/money_account/secondary_money_account
 	var/card_present = 0
+	var/transaction_amount_primary = transaction_amount
+	var/transaction_amount_secondary = 0
 	if(!dest)
 		to_chat(user, "[bicon(src)] <span class='warning'>No destination account.</span>")
 		return CARD_CAPTURE_FAILURE_NO_DESTINATION
@@ -125,6 +128,12 @@
 			source_money_account = card_id.virtual_wallet
 		
 		if(source_money_account.money < transaction_amount)
+			if(source_money_account.money > 0)
+				// We'll use the wallet to help pay for the rest.
+				secondary_money_account = source_money_account
+				transaction_amount_secondary = source_money_account.money
+				transaction_amount_primary -= transaction_amount_secondary
+				to_chat(user, "[bicon(src)] <span class='notice'>Using remaining virtual wallet balance of $[num2septext(transaction_amount_secondary)]</span>")
 			// Not enough funds in the virtual wallet so let's get the one from the card.
 			source_money_account = linked_db.get_account(card_id.associated_account_number)
 			if(!source_money_account)
@@ -142,12 +151,12 @@
 			to_chat(user, "[bicon(src)] <span class='warning'>Bad account/pin combination.</span>")
 			return CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO
 	if(source_money_account.virtual){
-		to_chat(user, "[bicon(src)] <span class='notice'>Using virtual wallet to charge $[num2septext(transaction_amount)]</span>")
+		to_chat(user, "[bicon(src)] <span class='notice'>Using virtual wallet to charge $[num2septext(transaction_amount_primary)]</span>")
 	} else {
 		if(card_present)
-			to_chat(user, "[bicon(src)] <span class='notice'>Using account associated with card to charge $[num2septext(transaction_amount)]...</span>")
+			to_chat(user, "[bicon(src)] <span class='notice'>Using account associated with card to charge $[num2septext(transaction_amount_primary)]...</span>")
 		else
-			to_chat(user, "[bicon(src)] <span class='notice'>Using account [source_money_account.account_number] to charge $[num2septext(transaction_amount)]...</span>")
+			to_chat(user, "[bicon(src)] <span class='notice'>Using account [source_money_account.account_number] to charge $[num2septext(transaction_amount_primary)]...</span>")
 		switch(source_money_account.security_level)
 			if(0)
 				// Easy. We already have everything we need to authorize or more.
@@ -176,5 +185,12 @@
 			else
 				return CARD_CAPTURE_FAILURE_SECURITY_LEVEL
 	}
+	if(transaction_amount_primary > source_money_account.money || (transaction_amount_secondary && transaction_amount_primary > secondary_money_account.money) ) // Another check to be safe.
+		to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
+		return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
 	
-	return source_money_account.charge(transaction_amount, dest, transaction_purpose, terminal_name, terminal_id, dest_name) ? CARD_CAPTURE_SUCCESS : CARD_CAPTURE_NOT_ENOUGH_FUNDS
+	if(transaction_amount_secondary)
+		secondary_money_account.charge(transaction_amount_secondary, dest, transaction_purpose, terminal_name, terminal_id, dest_name)
+
+	source_money_account.charge(transaction_amount_primary, dest, transaction_purpose, terminal_name, terminal_id, dest_name)
+	return CARD_CAPTURE_SUCCESS
