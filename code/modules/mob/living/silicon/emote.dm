@@ -12,7 +12,7 @@
 
 /datum/emote/sound/silicon/can_run_emote(var/mob/user, var/status_check = TRUE)
 	. = ..()
-	if (. && istype(user, /mob/living/carbon/brain) && !module_quirk_required)
+	if (. && isbrain(user) && !module_quirk_required)
 		return TRUE
 	if (. && isAI(user) && !module_quirk_required)
 		return TRUE
