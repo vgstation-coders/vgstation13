@@ -406,7 +406,6 @@ var/global/list/loopModeNames=list(
 				linked_account.charge(-credits_held, null, "Cash Deposit", pos_name, 0, linked_account.owner_name)
 				credits_held=0
 			credits_needed=0
-			screen=POS_SCREEN_ORDER
 			successful_purchase()
 			return
 		if(CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS)
