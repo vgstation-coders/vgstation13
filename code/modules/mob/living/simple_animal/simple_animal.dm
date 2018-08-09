@@ -145,6 +145,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 // For changing wander behavior
 /mob/living/simple_animal/proc/wander_move(var/turf/dest)
 	if(space_check())
+		if(istype(src, /mob/living/simple_animal/hostile))
+			var/mob/living/simple_animal/hostile/H = src
+			set_glide_size(DELAY2GLIDESIZE(H.move_to_delay))
+		else
+			set_glide_size(DELAY2GLIDESIZE(0.5 SECONDS))
 		Move(dest)
 
 /mob/living/simple_animal/Life()
