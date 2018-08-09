@@ -114,6 +114,7 @@
 	var/card_present = 0
 	var/transaction_amount_primary = transaction_amount
 	var/transaction_amount_secondary = 0
+	var/user_loc = user.loc
 	if(!linked_db || !linked_db.activated || linked_db.stat & (BROKEN|NOPOWER))
 		to_chat(user, "[bicon(src)] <span class='warning'>No connection to account database.</span>")
 		return CARD_CAPTURE_FAILURE_NO_CONNECTION
@@ -146,6 +147,8 @@
 	else 
 		// Okay, we don't have a card, so let's prompt the user for the account information.
 		var/account_number = input(user, "Enter account number", "Card Transaction") as null|num
+		if(user_loc != user.loc)
+			return CARD_CAPTURE_FAILURE_USER_CANCELED
 		if(!account_number)
 			visible_message("<span class='info'>[user] firmly presses 'CANCEL' on [src]'s PIN pad.</span>")
 			return CARD_CAPTURE_FAILURE_USER_CANCELED
@@ -166,6 +169,8 @@
 				// Easy. We already have everything we need to authorize or more.
 			if(1)
 				var/account_pin = input(user, "Enter account pin", "Card Transaction") as null|num
+				if(user_loc != user.loc)
+					return CARD_CAPTURE_FAILURE_USER_CANCELED
 				if(!account_pin)
 					visible_message("<span class='info'>[user] firmly presses 'CANCEL' on [src]'s PIN pad.</span>")
 					return CARD_CAPTURE_FAILURE_USER_CANCELED
@@ -176,6 +181,8 @@
 			if(2)
 				if(card_present) // Card has to be present else the transaction fails.
 					var/account_pin = input(user, "Enter account pin", "Card Transaction") as null|num
+					if(user_loc != user.loc)
+						return CARD_CAPTURE_FAILURE_USER_CANCELED
 					if(!account_pin)
 						visible_message("<span class='info'>[user] firmly presses 'CANCEL' on [src]'s PIN pad.</span>")
 						return CARD_CAPTURE_FAILURE_USER_CANCELED
