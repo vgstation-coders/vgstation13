@@ -114,7 +114,7 @@
 	var/card_present = 0
 	var/transaction_amount_primary = transaction_amount
 	var/transaction_amount_secondary = 0
-	if(!linked_db || linked_db.activated)
+	if(!linked_db || !linked_db.activated)
 		to_chat(user, "[bicon(src)] <span class='warning'>No connection to account database.</span>")
 		return CARD_CAPTURE_FAILURE_NO_CONNECTION
 	if(!dest)
