@@ -505,7 +505,7 @@
 		playsound(src, 'sound/effects/phasein.ogg', 25, 1)
 
 		for(var/mob/living/M in viewers(get_turf(holder.my_atom), null))
-			if(M.is_blind())
+			if(M.blinded)
 				continue
 			var/eye_safety = 0
 			if(iscarbon(M))
