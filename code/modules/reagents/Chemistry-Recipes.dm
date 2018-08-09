@@ -1422,7 +1422,7 @@
 	for(var/mob/O in viewers(get_turf(holder.my_atom), null))
 		if(O.is_blind())
 			if(O.is_deaf())
-				return
+				continue
 			to_chat(O, "<span class='caution'>You think you can hear bottles rolling on the floor!</span>")
 		if(ishuman(O))
 			var/mob/living/carbon/human/H = O

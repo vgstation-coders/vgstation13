@@ -295,18 +295,14 @@
 			C.Stun(8)
 			C.Knockdown(8)
 			C.stuttering += 20
-			if(!C.blinded)
-				C.blinded = 1
-			C.blinded += 5
+			C.flash_eyes(intensity = 4, visual = 1)
 		for(var/mob/living/carbon/C in dist_mobs)
 			var/distance_value = max(0, abs((get_dist(C, M.current)-3)) + 1)
 			C.Stun(distance_value)
 			if(distance_value > 1)
 				C.Knockdown(distance_value)
 			C.stuttering += 5+distance_value * ((VAMP_CHARISMA in M.vampire.powers) ? 2 : 1) //double stutter time with Charisma
-			if(!C.blinded)
-				C.blinded = 1
-			C.blinded += max(1, distance_value)
+			C.flash_eyes(intensity = 4, visual = 1)
 		to_chat((dist_mobs + close_mobs), "<span class='warning'>You are blinded by [M.current.name]'s glare</span>")
 
 
