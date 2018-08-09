@@ -178,11 +178,11 @@
 		var/charge_response = charge_flow(linked_db, I, usr, transaction_amount, linked_account, transaction_purpose, eftpos_name, machine_id)
 		if(charge_response == CARD_CAPTURE_SUCCESS)
 			playsound(src, 'sound/machines/chime.ogg', 50, 1)
-			visible_message("[bicon(src)] The [src] chimes.")
+			visible_message("[bicon(src)] \The [src] chimes.")
 			transaction_paid = 1
 		else
 			playsound(src, 'sound/machines/alert.ogg', 50, 1)
-			visible_message("[bicon(src)] The [src] buzzes.")
+			visible_message("[bicon(src)] \The [src] buzzes.")
 
 
 /obj/item/device/eftpos/proc/scan_card(var/obj/item/weapon/card/I)
