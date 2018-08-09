@@ -96,7 +96,6 @@
 /proc/asteroid_can_be_placed(var/datum/map_element/E, var/turf/start_turf)
 	var/list/dimensions = E.get_dimensions()
 	var/result = check_complex_placement(start_turf,dimensions[1], dimensions[2])
-	to_chat(world, "placed at returns [result] at [start_turf] [start_turf.x] [start_turf.y] [start_turf.z]")
 	return result
 //Proc that populates a single area with many vaults, randomly
 //A is the area OR a list of turfs where the placement happens
