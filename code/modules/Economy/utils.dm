@@ -134,6 +134,9 @@
 		
 		if(source_money_account.money < transaction_amount)
 			if(source_money_account.money > 0 && alert(user, "Apply remaining balance of $[num2septext(source_money_account.money)] from your virtual wallet?", "Card Transaction", "Yes", "No") == "Yes")
+				if(user_loc != user.loc)
+					to_chat(user, "[bicon(src)] <span class='warning'>You have to keep still to enter information.</span>")
+					return CARD_CAPTURE_FAILURE_USER_CANCELED
 				// We'll use the wallet to help pay for the rest.
 				secondary_money_account = source_money_account
 				transaction_amount_secondary = source_money_account.money
