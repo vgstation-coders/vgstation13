@@ -1,7 +1,7 @@
 /**********************Mineral deposits**************************/
 
 /turf/unsimulated/mineral //wall piece
-	name = "Rock"
+	name = "rock"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "rock"
 	var/base_icon_state = "rock" // above is for mappers.
@@ -10,6 +10,7 @@
 	opacity = 1
 	density = 1
 	blocks_air = 1
+	canSmoothWith = "/turf/unsimulated/wall/r_rock=0&/turf/unsimulated/mineral=0"
 	//temperature = TCMB
 	var/mineral/mineral
 	var/mined_ore = 0
@@ -28,6 +29,7 @@
 	var/overlay_state = "rock_overlay"
 	var/no_finds = 0 //whether or not we want xenoarchaeology stuff here
 	var/rockernaut = NONE
+	var/minimum_mine_time = 0
 
 
 /turf/unsimulated/mineral/snow
@@ -57,11 +59,39 @@
 	no_finds = 1
 	mined_type = /turf/simulated/floor/asteroid
 
+/turf/simulated/wall/r_rock
+	name = "reinforced rock"
+	desc = "It has metal struts that need to be welded away before it can be mined."
+	icon_state = "porousbar"
+	dismantle_type = /turf/unsimulated/mineral
+	girder_type = null
+	canSmoothWith = "/turf/unsimulated/wall/r_rock=0&/turf/unsimulated/mineral=0"
+
+/turf/simulated/wall/r_rock/New()
+	add_rock_overlay()
+
+/turf/simulated/wall/r_rock/relativewall()
+	return //No smoothin'
+
+/turf/simulated/wall/r_rock/proc/add_rock_overlay(var/image/img = image('icons/turf/rock_overlay.dmi', "rock_overlay",layer = SIDE_LAYER),var/offset=-4)
+	img.pixel_x = offset*PIXEL_MULTIPLIER
+	img.pixel_y = offset*PIXEL_MULTIPLIER
+	img.plane = BELOW_TURF_PLANE
+	overlays += img
+
+/turf/simulated/wall/r_rock/porous
+	name = "reinforced porous rock"
+	desc = "This rock is filled with pockets of breathable air. It has metal struts to protect it from mining."
+	dismantle_type = /turf/unsimulated/mineral/internal/air
+
 /turf/unsimulated/mineral/internal/air
+	name = "porous rock"
+	desc = "This rock is filled with pockets of breathable air, which interfere with the efficiency of some high speed mining equipment."
 	oxygen = MOLES_O2STANDARD
 	nitrogen = MOLES_N2STANDARD
 	temperature = T20C
 	mined_type = /turf/simulated/floor/asteroid/air
+	minimum_mine_time = 30 //3 seconds
 
 /turf/unsimulated/mineral/hive
 	mined_type = /turf/unsimulated/floor/evil
@@ -155,7 +185,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/proc/UpdateMineral()
 	if(!mineral)
-		name = "\improper Rock"
+		name = "rock"
 		return
 	name = "\improper [mineral.display_name] deposit"
 	update_icon()
@@ -187,6 +217,27 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		user.visible_message("<span class='notice'>[user] extends [P] towards [src].</span>","<span class='notice'>You extend [P] towards [src].</span>")
 		to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [2*excavation_level]cm.</span>")
 		return
+
+	if(istype(W,/obj/item/stack/sheet/metal))
+		var/obj/item/stack/sheet/S = W
+		if(S.amount < 2)
+			return
+		user.visible_message("<span class='notice'>[user] starts installing reinforcements to \the [src].</span>", \
+			"<span class='notice'>You start installing reinforcements to \the [src].</span>")
+		if(do_after(user, src, 40))
+			if(S.amount < 2)
+				return
+			S.use(2)
+			user.visible_message("<span class='notice'>[user] finishes installing reinforcements to \the [src].</span>", \
+				"<span class='notice'>You finish installing reinforcements to \the [src].</span>")
+			var/old_type = type
+			var/old_name = name
+			var/turf/simulated/wall/X = ChangeTurf(/turf/simulated/wall/r_rock)
+			if(X)
+				X.name = "reinforced [old_name]"
+				X.dismantle_type = old_type
+				X.add_hiddenprint(user)
+				X.add_fingerprint(user)
 
 	if (istype(W, /obj/item/weapon/pickaxe))
 		if(user.loc != get_turf(user))
@@ -226,7 +277,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 		busy = 1
 
-		if(do_after(user, src, P.digspeed) && user)
+		if(do_after(user, src, max(P.digspeed,minimum_mine_time)) && user)
 			busy = 0
 
 			if(finds && finds.len)
