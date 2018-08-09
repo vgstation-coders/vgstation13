@@ -207,4 +207,6 @@
 		secondary_money_account.charge(transaction_amount_secondary, dest, transaction_purpose, terminal_name, terminal_id, dest_name)
 
 	source_money_account.charge(transaction_amount_primary, dest, transaction_purpose, terminal_name, terminal_id, dest_name)
+	var/account_type = source_money_account.virtual ? "virtual wallet" : "bank account"
+	to_chat(user, "[bicon(src)] <span class='notice'>Remaining balance on [account_type], $[num2septext(source_money_account.money)].</span>")
 	return CARD_CAPTURE_SUCCESS
