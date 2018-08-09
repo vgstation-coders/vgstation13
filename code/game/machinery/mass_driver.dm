@@ -9,6 +9,7 @@ var/list/mass_drivers = list()
 	idle_power_usage = 2
 	active_power_usage = 50
 	machine_flags = EMAGGABLE | MULTITOOL_MENU
+	layer = BELOW_TABLE_LAYER
 
 	var/power = 1.0
 	var/code = 1.0
