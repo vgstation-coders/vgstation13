@@ -1,7 +1,7 @@
 /**********************Mint**************************/
 
 /obj/machinery/mineral/mint
-	name = "\improper coin press"
+	name = "coin press"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "coinpress0"
 	density = 1
@@ -61,10 +61,6 @@
 	for(var/obj/item/weapon/stock_parts/manipulator/A in component_parts)
 		i += A.rating
 	coins_per_sheet = initial(coins_per_sheet) * (i / 2) //Better coin ratio, it's something.
-
-/obj/machinery/mineral/mint/attack_ai(mob/user)
-	add_hiddenprint(user)
-	attack_hand(user)
 
 /obj/machinery/mineral/mint/attack_hand(mob/user)
 	add_fingerprint(user)
@@ -236,7 +232,6 @@
 	return
 
 /obj/machinery/mineral/mint/Destroy()
-	. = ..()
 	qdel(mover)
 	mover = null
 	..()
