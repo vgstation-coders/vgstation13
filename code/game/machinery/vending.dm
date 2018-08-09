@@ -71,6 +71,7 @@ var/global/num_vending_terminals = 1
 	var/is_custom_machine = FALSE // true if this vendor supports editing the prices
 	var/edit_mode = FALSE // Used for editing machine stock and information
 	var/is_being_filled = FALSE // `in_use` from /obj is already used for tracking users of this machine's UI
+	var/credits_held = 0 // How many credits in the machine
 
 /atom/movable/proc/product_name()
 	return name
@@ -181,6 +182,11 @@ var/global/num_vending_terminals = 1
 	if(coinbox)
 		coinbox.forceMove(get_turf(src))
 	..()
+
+/obj/machinery/vending/examine(var/mob/user)
+	..()
+	if(currently_vending)
+		to_chat(user, "<span class='notice'>It's small, red segmented display reads $[num2septext(currently_vending.price - credits_held)]</span>")
 
 /obj/machinery/vending/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSMACHINE))
@@ -534,6 +540,13 @@ var/global/num_vending_terminals = 1
 			return TRUE
 	to_chat(user, "[bicon(src)]<span class='warning'>The specified account doesn't exist.</span>")
 	return FALSE
+/obj/machinery/vending/proc/dispense_change(var/amount = 0)
+	if(!amount)
+		amount = credits_held
+		credits_held = 0
+	if(amount > 0)
+		dispense_cash(amount,src.loc)
+
 /**
  *  Receive payment with cashmoney.
  *
@@ -542,38 +555,31 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/proc/pay_with_cash(var/obj/item/weapon/spacecash/cashmoney, mob/user)
 	if(!currently_vending)
 		return
-	if(currently_vending.price > cashmoney.get_total())
-		// This is not a status display message, since it's something the character
-		// themselves is meant to see BEFORE putting the money in
-		to_chat(user, "[bicon(cashmoney)] <span class='warning'>That is not enough money.</span>")
-		return 0
-
-	// Bills (banknotes) cannot really have worth different than face value,
-	// so we have to eat the bill and spit out change in a bundle
-	// This is really dirty, but there's no superclass for all bills, so we
-	// just assume that all spacecash that's not something else is a bill
-
-	visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")
-	var/left = cashmoney.get_total() - currently_vending.price
+	visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>", "You hear a whirr.")
+	credits_held += cashmoney.get_total()
 	qdel(cashmoney)
-
-	if(left)
-		dispense_cash(left, src.loc)
-
-	src.vend(src.currently_vending, usr)
-	currently_vending = null
-	src.updateUsrDialog()
-	return 1
+	if(credits_held >= currently_vending.price)
+		credits_held -= currently_vending.price
+		dispense_change()
+		vend(src.currently_vending, usr)
+		currently_vending = null
+		updateUsrDialog()
+		return 1
+	else
+		return 0
 
 /obj/machinery/vending/scan_card(var/obj/item/weapon/card/I)
 	if(!currently_vending)
 		return
 	if (istype(I, /obj/item/weapon/card/id))
-		var/charge_response = charge_flow(linked_db, I, usr, currently_vending.price, linked_account, "Purchase of [currently_vending.product_name]", src.name, machine_id)
+		var/charge_response = charge_flow(linked_db, I, usr, currently_vending.price - credits_held, linked_account, "Purchase of [currently_vending.product_name]", src.name, machine_id)
 		switch(charge_response)
 			if(CARD_CAPTURE_SUCCESS)
 				playsound(src, 'sound/machines/chime.ogg', 50, 1)
 				visible_message("[bicon(src)] \The [src] chimes.")
+				if(credits_held)
+					linked_account.charge(-credits_held, null, "Partial purchase of [currently_vending.product_name]", src.name, machine_id, linked_account.owner_name)
+					credits_held=0
 				// Vend the item
 				src.vend(src.currently_vending, usr)
 				currently_vending = null
@@ -906,6 +912,7 @@ var/global/num_vending_terminals = 1
 		deleteEntry(R)
 
 	else if (href_list["cancel_buying"])
+		dispense_change()
 		src.currently_vending = null
 
 	else if (href_list["buy"])
