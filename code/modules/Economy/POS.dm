@@ -553,18 +553,22 @@ var/const/POS_HEADER = {"<html>
 				flick(src,"pos-error")
 				return
 			var/datum/money_account/acct = get_card_account(I)
+			var/remaining_credits_needed = credits_needed - credits_held
 			if(!acct)
 				visible_message("<span class='warning'>The machine buzzes, and flashes \"NO ACCOUNT\" on the screen.</span>","You hear a buzz.")
 				flick(src,"pos-error")
 				return
-			if(credits_needed > acct.money)
+			if(remaining_credits_needed > acct.money)
 				visible_message("<span class='warning'>The machine buzzes, and flashes \"NOT ENOUGH FUNDS\" on the screen.</span>","You hear a buzz.")
 				flick(src,"pos-error")
 				return
 			visible_message("<span class='notice'>The machine beeps, and begins printing a receipt</span>","You hear a beep.")
 			PrintReceipt()
 			NewOrder()
-			acct.charge(credits_needed,linked_account,"Purchase at POS #[id].")
+			acct.charge(remaining_credits_needed,linked_account,"Purchase at POS #[id].")
+			if(credits_held)
+				linked_account.charge(-credits_held, null, "Purchase at POS #[id].", dest_name = linked_account.owner_name)
+				credits_held=0
 			credits_needed=0
 			screen=POS_SCREEN_ORDER
 	else if(istype(A,/obj/item/weapon/spacecash))
@@ -590,6 +594,8 @@ var/const/POS_HEADER = {"<html>
 			if(credits_held>0)
 				dispense_change(credits_held)
 			credits_held=0
+		else
+			say("Your total is now $[num2septext(credits_needed-credits_held)].  Please insert more credit chips or swipe your ID.")
 	..()
 
 #undef to_valid_product_price
