@@ -101,11 +101,13 @@
 	var/opening = 0
 
 	// WHY DO WE SMOOTH WITH FALSE R-WALLS WHEN WE DON'T SMOOTH WITH REAL R-WALLS.
-	canSmoothWith = list(
+/obj/structure/falsewall/canSmoothWith()
+	var/static/list/smoothables = list(
 		/turf/simulated/wall,
 		/obj/structure/falsewall,
 		/obj/structure/falserwall,
 	)
+	return smoothables
 
 /obj/structure/falsewall/closed
 	density = 1
@@ -243,9 +245,9 @@
 	anchored = 1
 	var/mineral = "metal"
 	var/opening = 0
-
-	// WHY DO WE SMOOTH WITH FALSE R-WALLS WHEN WE DON'T SMOOTH WITH REAL R-WALLS.
-	canSmoothWith = list(
+// WHY DO WE SMOOTH WITH FALSE R-WALLS WHEN WE DON'T SMOOTH WITH REAL R-WALLS.
+/obj/structure/falserwall/canSmoothWith()
+	var/static/list/smoothables = list(
 		/turf/simulated/wall,
 		/obj/structure/falsewall,
 		/obj/structure/falserwall,

@@ -42,14 +42,16 @@
 	speed = 1                    //Spiderbots gotta go fast.
 	//pass_flags = PASSTABLE      //Maybe griefy?
 	speak_emote = list("beeps","clicks","chirps")
-	canEnterVentWith = list(
+	size = SIZE_SMALL
+	meat_type = null
+
+/mob/living/simple_animal/spiderbot/canEnterVentWith()
+	var/static/list/allowed_items = list(
 		/obj/item/device/radio/borg,
 		/obj/machinery/camera,
 		/obj/item/device/mmi,
 	)
-
-	size = SIZE_SMALL
-	meat_type = null
+	return allowed_items
 
 /mob/living/simple_animal/spiderbot/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
