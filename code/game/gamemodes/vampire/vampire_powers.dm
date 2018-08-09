@@ -183,7 +183,7 @@
 		to_chat(M, "<span class='warning'>You're not close enough to [C.name] to stare into \his eyes.</span>")
 		return
 
-	if(C.is_blind())
+	if(C.blinded)
 		to_chat(M, "<span class='warning'>[C.name]'s eyes are unresponsive! Hypnosis won't work if your victim can't see!</span>")
 		return
 
@@ -280,13 +280,13 @@
 		var/list/close_mobs = list()
 		var/list/dist_mobs = list()
 		for(var/mob/living/carbon/C in view(1))
-			if(!C.vampire_affected(M) || C.is_blind())
+			if(!C.vampire_affected(M) || C.blinded)
 				continue
 			//if(!M.current.vampire_can_reach(C, 1)) continue
 			if(istype(C))
 				close_mobs |= C // using |= prevents adding 'large bounded' mobs twice with how the loop works
 		for(var/mob/living/carbon/C in view(3))
-			if(!C.vampire_affected(M) || C.is_blind())
+			if(!C.vampire_affected(M) || C.blinded)
 				continue
 			if(istype(C))
 				dist_mobs |= C

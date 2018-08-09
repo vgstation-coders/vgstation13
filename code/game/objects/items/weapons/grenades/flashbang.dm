@@ -54,7 +54,7 @@
 			ear_safety += 1
 
 //Flashing everyone
-	if(eye_safety < 1 && !M.is_blind())
+	if(eye_safety < 1 && !M.blinded)
 		M.flash_eyes(visual = 1, affect_silicon = 1)
 		if (get_dist(M, T) <= 3)
 			M.Stun(8)
