@@ -8,7 +8,7 @@
 	plane = ABOVE_PLATING_PLANE
 	layer = CATWALK_LAYER
 
-	canSmoothWith = "/obj/structure/catwalk=0"
+	canSmoothWith = list(/obj/structure/catwalk)
 
 /obj/structure/catwalk/New(loc)
 

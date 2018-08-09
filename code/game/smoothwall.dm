@@ -25,12 +25,12 @@
 /atom/proc/isSmoothableNeighbor(atom/A)
 	if(!A)
 		return 0
-	return isInTypes(A, canSmoothWith)
+	return is_type_in_list(A, canSmoothWith)
 
 /turf/simulated/wall/isSmoothableNeighbor(atom/A)
 	if(!A)
 		return 0
-	if(isInTypes(A, canSmoothWith))
+	if(is_type_in_list(A, canSmoothWith))
 		// COLON OPERATORS ARE TERRIBLE BUT I HAVE NO CHOICE
 		if(src.mineral == A:mineral)
 			return 1

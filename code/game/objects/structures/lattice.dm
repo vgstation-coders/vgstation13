@@ -10,7 +10,11 @@
 
 	//	flags = CONDUCT
 
-	canSmoothWith = "/obj/structure/lattice=0&/obj/structure/catwalk=0&/turf=0"
+	canSmoothWith = list(
+		/obj/structure/lattice,
+		/obj/structure/catwalk,
+		/turf,
+	)
 
 /obj/structure/lattice/New(loc)
 	..(loc)
