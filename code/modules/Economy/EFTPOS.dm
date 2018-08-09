@@ -156,7 +156,7 @@
 					reconnect_database()
 				if(linked_db && linked_account)
 					var/obj/item/I = usr.get_active_hand()
-					scan_card(I)
+					charge_card(I)
 				else
 					to_chat(usr, "[bicon(src)]<span class='warning'>Unable to link accounts.</span>")
 			if("reset")
@@ -173,17 +173,21 @@
 
 	src.attack_self(usr)
 
+/obj/item/device/eftpos/proc/charge_card(var/obj/item/weapon/card/I)
+	if(transaction_locked && !transaction_paid)
+		var/charge_response = charge_flow(linked_db, I, usr, transaction_amount, linked_account, transaction_purpose, eftpos_name, machine_id)
+		if(charge_response == CARD_CAPTURE_SUCCESS)
+			playsound(src, 'sound/machines/chime.ogg', 50, 1)
+			visible_message("[bicon(src)] \The [src] chimes.")
+			transaction_paid = 1
+		else
+			playsound(src, 'sound/machines/alert.ogg', 50, 1)
+			visible_message("[bicon(src)] \The [src] buzzes.")
+
+
 /obj/item/device/eftpos/proc/scan_card(var/obj/item/weapon/card/I)
 	if (istype(I, /obj/item/weapon/card/id))
-		if(transaction_locked && !transaction_paid)
-			var/charge_response = charge_flow(linked_db, I, usr, transaction_amount, linked_account, transaction_purpose, eftpos_name, machine_id)
-			if(charge_response == CARD_CAPTURE_SUCCESS)
-				playsound(src, 'sound/machines/chime.ogg', 50, 1)
-				visible_message("[bicon(src)] \The [src] chimes.")
-				transaction_paid = 1
-			else
-				playsound(src, 'sound/machines/alert.ogg', 50, 1)
-				visible_message("[bicon(src)] \The [src] buzzes.")
+		charge_card(I)
 	else
 		..()
 
