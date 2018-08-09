@@ -449,7 +449,6 @@ var/global/list/loopModeNames=list(
 			visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
 			return
 		var/obj/item/weapon/card/id/I = W
-		visible_message("<span class='notice'>The machine beeps happily.</span>","You hear a beep.")
 		connect_account(user, I)
 		attack_hand(user)
 	else if(istype(W,/obj/item/weapon/spacecash))
