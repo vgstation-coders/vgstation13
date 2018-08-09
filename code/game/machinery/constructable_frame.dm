@@ -1264,6 +1264,17 @@ obj/item/weapon/circuitboard/rdserver
 	desc = "A circuit board used to run a machine that smelts items into mineral sheets."
 	build_path = /obj/machinery/mineral/processing_unit/recycle
 
+/obj/item/weapon/circuitboard/coin_press
+	name = "Circuit Board (Coin Press)"
+	desc = "A circuit board used to run a machine that produces coins from mineral sheets."
+	build_path = "/obj/machinery/mineral/mint"
+	board_type = MACHINE
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2"
+	req_components = list(
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/matter_bin = 1,
+							/obj/item/weapon/stock_parts/micro_laser = 1)
+
 /obj/item/weapon/circuitboard/stacking_unit
 	name = "Circuit Board (Stacking Machine)"
 	desc = "A circuit board used to run a machine that stacks mineral sheets."
