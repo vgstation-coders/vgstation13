@@ -148,6 +148,7 @@
 		// Okay, we don't have a card, so let's prompt the user for the account information.
 		var/account_number = input(user, "Enter account number", "Card Transaction") as null|num
 		if(user_loc != user.loc)
+			to_chat(user, "[bicon(src)] <span class='warning'>You have to keep still to enter information.</span>")
 			return CARD_CAPTURE_FAILURE_USER_CANCELED
 		if(!account_number)
 			visible_message("<span class='info'>[user] firmly presses 'CANCEL' on [src]'s PIN pad.</span>")
@@ -170,6 +171,7 @@
 			if(1)
 				var/account_pin = input(user, "Enter account pin", "Card Transaction") as null|num
 				if(user_loc != user.loc)
+					to_chat(user, "[bicon(src)] <span class='warning'>You have to keep still to enter information.</span>")
 					return CARD_CAPTURE_FAILURE_USER_CANCELED
 				if(!account_pin)
 					visible_message("<span class='info'>[user] firmly presses 'CANCEL' on [src]'s PIN pad.</span>")
@@ -182,6 +184,7 @@
 				if(card_present) // Card has to be present else the transaction fails.
 					var/account_pin = input(user, "Enter account pin", "Card Transaction") as null|num
 					if(user_loc != user.loc)
+						to_chat(user, "[bicon(src)] <span class='warning'>You have to keep still to enter information.</span>")
 						return CARD_CAPTURE_FAILURE_USER_CANCELED
 					if(!account_pin)
 						visible_message("<span class='info'>[user] firmly presses 'CANCEL' on [src]'s PIN pad.</span>")
