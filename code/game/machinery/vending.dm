@@ -186,7 +186,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/examine(var/mob/user)
 	..()
 	if(currently_vending)
-		to_chat(user, "<span class='notice'>It's small, red segmented display reads $[num2septext(currently_vending.price - credits_held)]</span>")
+		to_chat(user, "<span class='notice'>Its small, red segmented display reads $[num2septext(currently_vending.price - credits_held)]</span>")
 
 /obj/machinery/vending/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSMACHINE))
