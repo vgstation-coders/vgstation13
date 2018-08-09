@@ -569,74 +569,21 @@ var/global/num_vending_terminals = 1
 	if(!currently_vending)
 		return
 	if (istype(I, /obj/item/weapon/card/id))
-		var/obj/item/weapon/card/id/C = I
-		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")
-		if(linked_account)
-			if(I.get_owner_name_from_ID() == linked_account.owner_name) //owner is the one buying things so he gets them for free
+		var/charge_response = charge_flow(linked_db, I, usr, currently_vending.price, linked_account, "Purchase of [currently_vending.product_name]", src.name, machine_id)
+		switch(charge_response)
+			if(CARD_CAPTURE_SUCCESS)
+				playsound(src, 'sound/machines/chime.ogg', 50, 1)
+				visible_message("[bicon(src)] \The [src] chimes.")
+				// Vend the item
 				src.vend(src.currently_vending, usr)
 				currently_vending = null
 				src.updateUsrDialog()
-				return
-
-			//we start by checking the ID card's virtual wallet
-			var/datum/money_account/D = C.virtual_wallet
-			var/using_account = "Virtual Wallet"
-
-			//if there isn't one for some reason we create it, that should never happen but oh well.
-			if(!D)
-				C.update_virtual_wallet()
-				D = C.virtual_wallet
-
-			var/transaction_amount = currently_vending.price
-
-			//if there isn't enough money in the virtual wallet, then we check the bank account connected to the ID
-			if(D.money < transaction_amount)
-				D = linked_db.attempt_account_access(C.associated_account_number, 0, 2, 0)
-				using_account = "Bank Account"
-				if(!D)								//first we check if there IS a bank account in the first place
-					to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money on your virtual wallet!</span>")
-					to_chat(usr, "[bicon(src)]<span class='warning'>Unable to access your bank account.</span>")
-					return 0
-				else if(D.security_level > 0)		//next we check if the security is low enough to pay directly from it
-					to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money on your virtual wallet!</span>")
-					to_chat(usr, "[bicon(src)]<span class='warning'>Lower your bank account's security settings if you wish to pay directly from it.</span>")
-					return 0
-				else if(D.money < transaction_amount)//and lastly we check if there's enough money on it, duh
-					to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money on your bank account!</span>")
-					return 0
-
-			//transfer the money
-			D.money -= transaction_amount
-			linked_account.money += transaction_amount
-
-			to_chat(usr, "[bicon(src)]<span class='notice'>Remaining balance ([using_account]): [D.money]$</span>")
-
-			//create an entry on the buy's account's transaction log
-			var/datum/transaction/T = new()
-			T.target_name = "[linked_account.owner_name] (via [src.name])"
-			T.purpose = "Purchase of [currently_vending.product_name]"
-			T.amount = "-[transaction_amount]"
-			T.source_terminal = machine_id
-			T.date = current_date_string
-			T.time = worldtime2text()
-			D.transaction_log.Add(T)
-
-			//and another entry on the vending machine's vendor account's transaction log
-			T = new()
-			T.target_name = D.owner_name
-			T.purpose = "Purchase of [currently_vending.product_name]"
-			T.amount = "[transaction_amount]"
-			T.source_terminal = machine_id
-			T.date = current_date_string
-			T.time = worldtime2text()
-			linked_account.transaction_log.Add(T)
-
-			// Vend the item
-			src.vend(src.currently_vending, usr)
-			currently_vending = null
-			src.updateUsrDialog()
-		else
-			to_chat(usr, "[bicon(src)]<span class='warning'>EFTPOS is not connected to an account.</span>")
+			if(CARD_CAPTURE_FAILURE_USER_CANCELED)
+				currently_vending = null
+				src.updateUsrDialog()
+			else
+				playsound(src, 'sound/machines/alert.ogg', 50, 1)
+				visible_message("[bicon(src)] \The [src] buzzes.")
 
 /obj/machinery/vending/attack_paw(mob/user as mob)
 	return attack_hand(user)
