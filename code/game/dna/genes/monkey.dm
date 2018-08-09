@@ -81,7 +81,7 @@
 
 	for(var/obj/item/W in (Mo.contents))
 		Mo.drop_from_inventory(W)
-	Mo.transferBorers(O)
+	Mo.dropBorers() //transforming drops borers outta ya
 	if (connected) //inside dna thing
 		var/obj/machinery/dna_scannernew/C = connected
 		O.forceMove(C)
