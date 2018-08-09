@@ -6,7 +6,7 @@
 	density = 1
 	explosion_block = 2
 	blocks_air = 1
-	canSmoothWith = "/turf/unsimulated/wall=0"
+	canSmoothWith = list(/turf/unsimulated/wall)
 
 	var/walltype = "riveted"
 

@@ -41,7 +41,10 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	friendly = "prods"
 	wander = 0
 	pass_flags = PASSTABLE
-	canEnterVentWith = "/mob/living/captive_brain=0&/obj/item/verbs/borer=0"
+	canEnterVentWith = list(
+		/mob/living/captive_brain,
+		/obj/item/verbs/borer,
+	)
 	universal_understand=1
 
 	var/busy = 0 // So we aren't trying to lay many eggs at once.
