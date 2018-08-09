@@ -402,3 +402,4 @@ var/station_does_not_tip = FALSE
 #define CARD_CAPTURE_FAILURE_SECURITY_LEVEL 5 // Security level didn't allow current authorization or another exception occurred
 #define CARD_CAPTURE_FAILURE_USER_CANCELED 6 // The user canceled the transaction
 #define CARD_CAPTURE_FAILURE_NO_DESTINATION 7 // There was no linked account to send funds to.
+#define CARD_CAPTURE_FAILURE_NO_CONNECTION 8 // Account database not available.

@@ -114,6 +114,9 @@
 	var/card_present = 0
 	var/transaction_amount_primary = transaction_amount
 	var/transaction_amount_secondary = 0
+	if(!linked_db || linked_db.activated)
+		to_chat(user, "[bicon(src)] <span class='warning'>No connection to account database.</span>")
+		return CARD_CAPTURE_FAILURE_NO_CONNECTION
 	if(!dest)
 		to_chat(user, "[bicon(src)] <span class='warning'>No destination account.</span>")
 		return CARD_CAPTURE_FAILURE_NO_DESTINATION
@@ -124,6 +127,7 @@
 		source_money_account = card_id.virtual_wallet
 		if(!source_money_account)
 			// A lot of machines keep doing this so for the sake of conformity we'll do it here too.
+			// Supposed to make sure the id always comes with a virtual wallet if it hasn't been made yet.
 			card_id.update_virtual_wallet()
 			source_money_account = card_id.virtual_wallet
 		
@@ -141,7 +145,7 @@
 				return CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO
 	else 
 		// Okay, we don't have a card, so let's prompt the user for the account information.
-		var/account_number = input(user, "Enter account number", "Card Transaction") as num
+		var/account_number = input(user, "Enter account number", "Card Transaction") as null|num
 		if(!account_number)
 			visible_message("<span class='info'>[user] firmly presses 'CANCEL' on [src]'s PIN pad.</span>")
 			return CARD_CAPTURE_FAILURE_USER_CANCELED
@@ -161,7 +165,7 @@
 			if(0)
 				// Easy. We already have everything we need to authorize or more.
 			if(1)
-				var/account_pin = input(user, "Enter account pin", "Card Transaction") as num
+				var/account_pin = input(user, "Enter account pin", "Card Transaction") as null|num
 				if(!account_pin)
 					visible_message("<span class='info'>[user] firmly presses 'CANCEL' on [src]'s PIN pad.</span>")
 					return CARD_CAPTURE_FAILURE_USER_CANCELED
@@ -171,7 +175,7 @@
 					return CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO
 			if(2)
 				if(card_present) // Card has to be present else the transaction fails.
-					var/account_pin = input(user, "Enter account pin", "Card Transaction") as num
+					var/account_pin = input(user, "Enter account pin", "Card Transaction") as null|num
 					if(!account_pin)
 						visible_message("<span class='info'>[user] firmly presses 'CANCEL' on [src]'s PIN pad.</span>")
 						return CARD_CAPTURE_FAILURE_USER_CANCELED
@@ -185,7 +189,7 @@
 			else
 				return CARD_CAPTURE_FAILURE_SECURITY_LEVEL
 	}
-	if(transaction_amount_primary > source_money_account.money || (transaction_amount_secondary && transaction_amount_primary > secondary_money_account.money) ) // Another check to be safe.
+	if(transaction_amount_primary > source_money_account.money || (transaction_amount_secondary && transaction_amount_secondary > secondary_money_account.money) ) // Another check to be safe.
 		to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
 		return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
 	
