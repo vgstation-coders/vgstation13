@@ -234,6 +234,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				if(!C.unlockable)
 					avail_chems[C.name]=C
 			avail_chems += unlocked_chems_leg
+	if(host && istype(host, /mob/living/carbon/monkey)) //allow borers to control monkeys
+		to_chat(src, "<span class='danger'>This host appears sufficiently simple for you to assume control.</span>")
+		verb_holders+=new /obj/item/verbs/borer/special(src)
 	for(var/verbtype in verbtypes)
 		verb_holders+=new verbtype(src)
 
@@ -395,6 +398,16 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 			to_chat(M, "<span class='cortical'>Cortical link, <b>[truename]</b>[controls]: [message]</span>")
 
+/obj/item/verbs/borer/special/verb/bond_brain()
+	set category = "Alien"
+	set name = "Assume Control"
+	set desc = "Fully connect to the brain of your host."
+
+	var/mob/living/simple_animal/borer/B=loc
+	if(!istype(B))
+		return
+	B.bond_brain()
+
 /mob/living/simple_animal/borer/proc/bond_brain()
 	set category = "Alien"
 	set name = "Assume Control"
@@ -405,6 +418,10 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	if(hostlimb != LIMB_HEAD)
 		to_chat(src, "You are not attached to your host's brain.")
+		return
+	
+	if(host.ckey || !istype(host, /mob/living/carbon/monkey))
+		to_chat(src, "<span class='danger'>The host consciousness resists your attempts to overwhelm it!</span>")
 		return
 
 	to_chat(src, "You begin delicately adjusting your connection to the host brain...")
@@ -419,6 +436,10 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 /mob/living/simple_animal/borer/proc/do_bonding(var/rptext=0)
 	if(!host || host.stat==DEAD || !src || controlling || research.unlocking)
 		return
+	
+	if(host.ckey || !istype(host, /mob/living/carbon/monkey)) //check again just to be sure
+		to_chat(src, "<span class='danger'>You attempt to interface with the host's nervous system, but their consciousness resists!</span>")
+		return
 
 	to_chat(src, "<span class='danger'>You plunge your probosci deep into the cortex of the host brain, interfacing directly with their nervous system.</span>")
 	to_chat(host, "<span class='danger'>You feel a strange shifting sensation behind your eyes as an alien consciousness displaces yours.</span>")
@@ -428,8 +449,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	host.ckey = src.ckey
 	controlling = 1
 
-	/* Broken
+	//hopefully not broken
 	host.verbs += /mob/living/carbon/proc/release_control
+	/* Broken
 	host.verbs += /mob/living/carbon/proc/punish_host
 	host.verbs += /mob/living/carbon/proc/spawn_larvae
 	*/
@@ -906,10 +928,10 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		return 0
 
 	hostlimb = body_region
+	src.host = M
 
 	update_verbs(limb_to_mode(hostlimb)) // Must be called before being removed from turf. (BYOND verb transfer bug)
 
-	src.host = M
 	src.forceMove(M)
 
 	if(istype(M,/mob/living/carbon/human))
