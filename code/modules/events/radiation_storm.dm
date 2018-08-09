@@ -10,7 +10,10 @@
 		/area/security/brig,
 		/area/shuttle,
 		/area/vox_station,
-		/area/syndicate_station
+		/area/syndicate_station,
+		/area/medical/coldstorage,
+		/area/mine,
+		/area/prison,
 	)
 
 

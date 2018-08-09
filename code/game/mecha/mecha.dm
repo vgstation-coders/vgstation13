@@ -51,6 +51,8 @@
 	var/datum/gas_mixture/cabin_air
 	var/obj/machinery/atmospherics/unary/portables_connector/connected_port = null
 
+	var/cursor_enabled = 0 //whether to display the mecha cursor
+
 	var/obj/item/device/radio/radio = null
 	var/obj/item/device/radio/electropack/electropack = null
 	var/obj/item/mecha_parts/mecha_tracking/tracking = null
@@ -397,6 +399,8 @@
 /obj/mecha/proc/mechstep(direction)
 	var/current_dir = dir
 	set_glide_size(DELAY2GLIDESIZE(step_in))
+	if(occupant) //Workaround for mechs not setting the client's eye properly, remove this if that gets fixed
+		occupant.set_glide_size(DELAY2GLIDESIZE(step_in))
 	var/result = step(src,direction)
 	if(lock_dir)
 		dir = current_dir
@@ -407,6 +411,8 @@
 
 /obj/mecha/proc/mechsteprand()
 	set_glide_size(DELAY2GLIDESIZE(step_in))
+	if(occupant) //Workaround for mechs not setting the client's eye properly, remove this if that gets fixed
+		occupant.set_glide_size(DELAY2GLIDESIZE(step_in))
 	var/result = step_rand(src)
 	if(result)
 	 playsound(src, get_sfx("mechstep"),40,1)
@@ -1114,6 +1120,24 @@
 	log_message("Toggled lights [lights?"on":"off"].")
 	return
 
+/obj/mecha/verb/toggle_cursor()
+	set name = "Toggle Cursor"
+	set category = "Exosuit Interface"
+	set src = usr.loc
+	set popup_menu = 0
+	if(usr!=src.occupant)
+		return
+	cursor_enabled = !cursor_enabled
+	if(cursor_enabled)
+		if(src.occupant && src.occupant.client)
+			src.occupant.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
+	else
+		if(src.occupant && src.occupant.client)
+			src.occupant.client.mouse_pointer_icon = initial(src.occupant.client.mouse_pointer_icon)
+	src.occupant_message("Toggled cursor [cursor_enabled?"on":"off"].")
+	log_message("Toggled cursor [cursor_enabled?"on":"off"].")
+	return
+
 
 /obj/mecha/verb/toggle_internal_tank()
 	set name = "Toggle internal airtank usage."
@@ -1200,6 +1224,10 @@
 		if(!hasInternalDamage())
 			src.occupant << sound('sound/mecha/nominalsyndi.ogg',volume=50)
 
+		//change the cursor
+		if(H.client && cursor_enabled)
+			H.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
+
 		// -- Mode/mind specific stuff goes here
 		if(H.mind)
 			if(isrev(H) || isrevhead(H))
@@ -1271,6 +1299,11 @@
 		src.log_message("[mmi_as_oc] moved in as pilot.")
 		if(!hasInternalDamage())
 			src.occupant << sound('sound/mecha/nominalsyndi.ogg',volume=50)
+
+		//change the cursor
+		if(occupant.client && cursor_enabled)
+			occupant.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
+
 		return 1
 	else
 		return 0
@@ -1399,6 +1432,10 @@
 			mmi.mecha = null
 			src.occupant.canmove = 0
 			src.verbs += /obj/mecha/verb/eject
+
+		//change the cursor
+		if(src.occupant && src.occupant.client)
+			src.occupant.client.mouse_pointer_icon = initial(src.occupant.client.mouse_pointer_icon)
 
 		// -- Mode/mind specific stuff goes here
 		if(src.occupant.mind)
@@ -1570,6 +1607,7 @@
 						<div class='header'>Electronics</div>
 						<div class='links'>
 						<a href='?src=\ref[src];toggle_lights=1'>Toggle Lights</a><br>
+						<a href='?src=\ref[src];toggle_cursor=1'>Toggle Cursor</a><br>
 						<b>Radio settings:</b><br>
 						Microphone: <a href='?src=\ref[src];rmictoggle=1'><span id="rmicstate">[radio.broadcasting?"Engaged":"Disengaged"]</span></a><br>
 						Speaker: <a href='?src=\ref[src];rspktoggle=1'><span id="rspkstate">[radio.listening?"Engaged":"Disengaged"]</span></a><br>
@@ -1754,6 +1792,11 @@
 		if(usr != src.occupant)
 			return
 		src.toggle_lights()
+		return
+	if (href_list["toggle_cursor"])
+		if(usr != src.occupant)
+			return
+		src.toggle_cursor()
 		return
 	if(href_list["toggle_airtank"])
 		if(usr != src.occupant)

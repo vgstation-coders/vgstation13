@@ -1541,3 +1541,8 @@ var/proccalls = 1
 #define CUSTOM_VENDING_MAX_SLOGAN_LENGTH	50
 #define CUSTOM_VENDING_MAX_NAME_LENGTH	25
 #define CUSTOM_VENDING_MAX_SLOGANS	5
+
+#define MACHINE "machine"
+#define COMPUTER "computer"
+#define EMBEDDED_CONTROLLER "embedded controller"
+#define OTHER "other"

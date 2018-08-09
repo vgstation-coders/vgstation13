@@ -535,6 +535,44 @@ obj/item/asteroid/basilisk_hide/New()
 			C.icon_state = "[initial(C.icon_state)]_goliath[C.hidecount]"
 			C._color = "mining_goliath[C.hidecount]"
 
+/mob/living/simple_animal/hostile/asteroid/goliath/david
+	name = "david"
+	desc = "I don't think this one can use a slingshot very well."
+	icon = 'icons/mob/animal.dmi'
+	icon_state = "david"
+	icon_living = "david"
+	icon_aggro = "david_alert"
+	icon_dead = "david_dead"
+	attack_sound = 'sound/weapons/heavysmash.ogg'
+	move_to_delay = 20
+	speed = 3
+	maxHealth = 120
+	health = 120
+	harm_intent_damage = 5
+	melee_damage_lower = 10
+	melee_damage_upper = 15
+	ranged = FALSE
+	attacktext = "smashes"
+	throw_message = "does little to the sturdy hide of the"
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
+	size = SIZE_NORMAL
+
+/mob/living/simple_animal/hostile/asteroid/goliath/david/dave
+	name = "Dave"
+	desc = "As the engineering crew decided where in the asteroid to build the station, they followed a small crevice where he was eventually found. Nobody knows how this little guy got separated from his family or why he became so attached to the crew that found him."
+	gender = MALE
+	faction = "neutral"
+	maxHealth = 100
+	health = 100
+	melee_damage_lower = 5
+	melee_damage_upper = 7
+	environment_smash_flags = null
+	stop_automated_movement_when_pulled = TRUE
+	move_to_delay = 10
+	can_butcher = FALSE
+	ranged = TRUE
+	retreat_distance = 1 //Unlike normal davids, dave will kite its foes, or at least try to. REMEMBER THE BASICS OF CQC
+
 /mob/living/simple_animal/hostile/asteroid/magmaw
 	name = "magmaw"
 	desc = "A living furnace. These things are drawn to crystallized plasma, which they feast upon to stoke their internal fires."

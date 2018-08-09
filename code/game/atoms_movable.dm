@@ -991,3 +991,9 @@
 	else
 		pixel_x = base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2
 		pixel_y = base_pixy + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2
+
+//Overwriting BYOND proc used for simple animal and NPCbot movement, Pomf help me
+/atom/movable/proc/start_walk_to(Trg,Min=0,Lag=0,Speed=0)
+	if(Lag > 0)
+		set_glide_size(DELAY2GLIDESIZE(Lag))
+	walk_to(src,Trg,Min,Lag,Speed)

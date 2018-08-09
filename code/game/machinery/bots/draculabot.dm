@@ -178,6 +178,7 @@
 		if(!quiet && prob(5))
 			speak(pick("Donate blood here!","I'm going to want another blood sample.","Give blood so others may live.","Share life. Donate blood.","C'mon! We know you've got it in you!","Hey -- you're somebody's type!"))
 		if(!currently_drawing_blood && prob(5)) //Wander
+			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
 			Move(get_step(src, pick(cardinal)))
 	else //First priority: drink an adjacent target. Otherwise, pick a target and move toward it if we have none.
 		if(prob(5))
@@ -198,7 +199,7 @@
 			else
 				return
 		if(target)
-			walk_to(src,get_turf(target),1,0,1)
+			start_walk_to(get_turf(target),1,0,1)
 
 /obj/machinery/bot/bloodbot/proc/drink(mob/living/carbon/human/H)
 	if(!on || !istype(H))

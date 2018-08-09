@@ -19,6 +19,7 @@
 	key_third_person = "flips"
 	restraint_check = TRUE
 	mob_type_allowed_typelist = list(/mob/living, /mob/dead/observer)
+	mob_type_blacklist_typelist = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/carbon/brain)
 	mob_type_ignore_stat_typelist = list(/mob/dead/observer)
 
 /datum/emote/flip/run_emote(mob/user, params)
@@ -35,6 +36,7 @@
 	key_third_person = "spins"
 	restraint_check = TRUE
 	mob_type_allowed_typelist = list(/mob/living, /mob/dead/observer)
+	mob_type_blacklist_typelist = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/carbon/brain)
 	mob_type_ignore_stat_typelist = list(/mob/dead/observer)
 
 /datum/emote/spin/run_emote(mob/user)

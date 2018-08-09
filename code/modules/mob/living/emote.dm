@@ -1,13 +1,7 @@
-
 /* EMOTE DATUMS */
 /datum/emote/living
 	mob_type_allowed_typelist = list(/mob/living)
-	mob_type_blacklist_typelist = list(/mob/living/simple_animal/slime, /mob/living/carbon/brain)
-
-/datum/emote/living/blush
-	key = "blush"
-	key_third_person = "blushes"
-	message = "blushes."
+	mob_type_blacklist_typelist = list(/mob/living/simple_animal/slime, /mob/living/carbon/brain, /mob/living/silicon/ai, /mob/living/silicon/pai)
 
 /datum/emote/living/bow
 	key = "bow"
@@ -15,21 +9,6 @@
 	message = "bows."
 	message_param = "bows to %t."
 	restraint_check = TRUE
-	mob_type_blacklist_typelist = list(/mob/living/silicon/pai, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
-
-/datum/emote/living/burp
-	key = "burp"
-	key_third_person = "burps"
-	message = "burps."
-	emote_type = EMOTE_AUDIBLE
-	mob_type_blacklist_typelist = list(/mob/living/silicon, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
-
-/datum/emote/living/choke
-	key = "choke"
-	key_third_person = "chokes"
-	message = "chokes!"
-	emote_type = EMOTE_AUDIBLE
-	mob_type_blacklist_typelist = list(/mob/living/silicon, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
 
 /datum/emote/living/cross
 	key = "cross"
@@ -37,20 +16,20 @@
 	message = "crosses their arms."
 	message_mommi = "crosses their utility arms."
 	restraint_check = TRUE
-	mob_type_blacklist_typelist = list(/mob/living/silicon/pai)
-
-/datum/emote/living/chuckle
-	key = "chuckle"
-	key_third_person = "chuckles"
-	message = "chuckles."
-	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/collapse
 	key = "collapse"
 	key_third_person = "collapses"
 	message = "collapses!"
 	emote_type = EMOTE_AUDIBLE
-	mob_type_blacklist_typelist = list(/mob/living/silicon/pai, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
+
+/datum/emote/living/glare
+	key = "glare"
+	key_third_person = "glares"
+	message = "glares."
+	message_mommi = "glares as best a robot spider can glare."
+	message_param = "glares at %t."
+	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/collapse/run_emote(mob/user, params)
 	. = ..()
@@ -58,19 +37,11 @@
 		var/mob/living/L = user
 		L.Knockdown(10)
 
-/datum/emote/living/cough
-	key = "cough"
-	key_third_person = "coughs"
-	message = "coughs!"
-	emote_type = EMOTE_AUDIBLE
-	mob_type_blacklist_typelist = list(/mob/living/silicon/pai, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
-
 /datum/emote/living/dance
 	key = "dance"
 	key_third_person = "dances"
 	message = "dances around happily."
 	restraint_check = TRUE
-	mob_type_blacklist_typelist = list(/mob/living/silicon/pai, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
 
 /datum/emote/living/deathgasp
 	key = "deathgasp"
@@ -83,23 +54,22 @@
 	message_monkey = "lets out a faint chimper as it collapses and stops moving..."
 	message_simple =  "stops moving..."
 	stat_allowed = UNCONSCIOUS
+	mob_type_blacklist_typelist = list(/mob/living/carbon/brain) // Everyone can deathgasp
 
 /datum/emote/living/deathgasp/run_emote(mob/user, params)
 	. = ..()
 	if(. && isalienadult(user))
 		playsound(user.loc, 'sound/voice/hiss6.ogg', 80, 1, 1)
 
-/datum/emote/living/drool
+/datum/emote/living/carbon/drool
 	key = "drool"
 	key_third_person = "drools"
 	message = "drools."
-	mob_type_blacklist_typelist = list(/mob/living/silicon, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
 
 /datum/emote/living/faint
 	key = "faint"
 	key_third_person = "faints"
 	message = "faints."
-	mob_type_blacklist_typelist = list(/mob/living/silicon/pai, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
 
 /datum/emote/living/faint/run_emote(mob/user, params)
 	. = ..()
@@ -133,73 +103,11 @@
 	key_third_person = "frowns"
 	message = "frowns."
 
-/datum/emote/living/gag
-	key = "gag"
-	key_third_person = "gags"
-	message = "gags."
-	emote_type = EMOTE_AUDIBLE
-	mob_type_blacklist_typelist = list(/mob/living/silicon, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
-
-/datum/emote/living/gasp
-	key = "gasp"
-	key_third_person = "gasps"
-	message = "gasps!"
-	emote_type = EMOTE_AUDIBLE
-	stat_allowed = UNCONSCIOUS
-	mob_type_blacklist_typelist = list(/mob/living/silicon, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
-
-/datum/emote/living/giggle
-	key = "giggle"
-	key_third_person = "giggles"
-	message = "giggles."
-	message_mime = "giggles silently!"
-	emote_type = EMOTE_AUDIBLE
-
-/datum/emote/living/glare
-	key = "glare"
-	key_third_person = "glares"
-	message = "glares."
-	message_mommi = "glares as best a robot spider can glare."
-	message_param = "glares at %t."
-	emote_type = EMOTE_AUDIBLE
-
-/datum/emote/living/grin
-	key = "grin"
-	key_third_person = "grins"
-	message = "grins."
-
-/datum/emote/living/groan
-	key = "groan"
-	key_third_person = "groans"
-	message = "groans!"
-	message_mime = "appears to groan!"
-	mob_type_blacklist_typelist = list(/mob/living/silicon, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
-
-/datum/emote/living/grimace
-	key = "grimace"
-	key_third_person = "grimaces"
-	message = "grimaces."
-
 /datum/emote/living/jump
 	key = "jump"
 	key_third_person = "jumps"
 	message = "jumps!"
 	restraint_check = TRUE
-	mob_type_blacklist_typelist = list(/mob/living/silicon/pai, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
-
-/datum/emote/living/kiss
-	key = "kiss"
-	key_third_person = "kisses"
-	message = "blows a kiss."
-	message_param = "blows a kiss to %t."
-	emote_type = EMOTE_AUDIBLE
-
-/datum/emote/living/laugh
-	key = "laugh"
-	key_third_person = "laughs"
-	message = "laughs."
-	message_mime = "laughs silently!"
-	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/laugh/can_run_emote(mob/living/user, var/status_check = TRUE)
 	. = ..()
@@ -227,30 +135,6 @@
 	message_param = "points at %t."
 	restraint_check = TRUE
 
-/datum/emote/living/pout
-	key = "pout"
-	key_third_person = "pouts"
-	message = "pouts."
-	emote_type = EMOTE_AUDIBLE
-
-/datum/emote/living/scowl
-	key = "scowl"
-	key_third_person = "scowls"
-	message = "scowls."
-	emote_type = EMOTE_AUDIBLE
-
-/datum/emote/living/shake
-	key = "shake"
-	key_third_person = "shakes"
-	message = "shakes their head."
-	emote_type = EMOTE_AUDIBLE
-
-/datum/emote/living/shiver
-	key = "shiver"
-	key_third_person = "shiver"
-	message = "shivers."
-	emote_type = EMOTE_AUDIBLE
-
 /datum/emote/living/sigh
 	key = "sigh"
 	key_third_person = "sighs"
@@ -261,14 +145,13 @@
 	key = "sit"
 	key_third_person = "sits"
 	message = "sits down."
-	mob_type_blacklist_typelist = list(/mob/living/silicon/pai, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
 
 /datum/emote/living/smile
 	key = "smile"
 	key_third_person = "smiles"
 	message = "smiles."
 
-/datum/emote/living/sneeze
+/datum/emote/living/carbon/sneeze
 	key = "sneeze"
 	key_third_person = "sneezes"
 	message = "sneezes."
@@ -278,21 +161,6 @@
 	key = "smug"
 	key_third_person = "smugs"
 	message = "grins smugly."
-
-/datum/emote/living/sniff
-	key = "sniff"
-	key_third_person = "sniffs"
-	message = "sniffs."
-	emote_type = EMOTE_AUDIBLE
-	mob_type_blacklist_typelist = list(/mob/living/silicon, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
-
-/datum/emote/living/snore
-	key = "snore"
-	key_third_person = "snores"
-	message = "snores."
-	message_mime = "sleeps soundly."
-	emote_type = EMOTE_AUDIBLE
-	stat_allowed = UNCONSCIOUS
 
 /datum/emote/living/stare
 	key = "stare"
@@ -304,7 +172,6 @@
 	key = "stretch"
 	key_third_person = "stretches"
 	message = "stretches their arms."
-	mob_type_blacklist_typelist = list(/mob/living/silicon/pai, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
 
 /datum/emote/living/sulk
 	key = "sulk"
@@ -327,48 +194,17 @@
 	key = "sway"
 	key_third_person = "sways"
 	message = "sways around dizzily."
-	mob_type_blacklist_typelist = list(/mob/living/silicon/pai, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
 
 /datum/emote/living/tremble
 	key = "tremble"
 	key_third_person = "trembles"
 	message = "trembles in fear!"
 
-/datum/emote/living/twitch
-	key = "twitch"
-	key_third_person = "twitches"
-	message = "twitches violently."
-
-/datum/emote/living/twitch_s
-	key = "twitch_s"
-	message = "twitches."
-
-/datum/emote/living/wave
-	key = "wave"
-	key_third_person = "waves"
-	message = "waves."
-
-/datum/emote/living/whimper
-	key = "whimper"
-	key_third_person = "whimpers"
-	message = "whimpers."
-	message_mime = "appears hurt."
-	mob_type_blacklist_typelist = list(/mob/living/silicon/pai, /mob/living/simple_animal/slime, /mob/living/carbon/brain)
-
-/datum/emote/living/wsmile
-	key = "wsmile"
-	key_third_person = "wsmiles"
-	message = "smiles weakly."
-
-/datum/emote/living/yawn
-	key = "yawn"
-	key_third_person = "yawns"
-	message = "yawns."
-	emote_type = EMOTE_AUDIBLE
-
 /datum/emote/living/custom
 	key = "custom"
 	message = null
+
+	mob_type_blacklist_typelist = list() // Everyone can custom emote.
 
 /datum/emote/living/custom/proc/check_invalid(mob/user, input)
 	. = TRUE
