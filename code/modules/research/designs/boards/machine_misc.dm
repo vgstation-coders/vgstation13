@@ -120,3 +120,13 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	build_path = /obj/item/weapon/circuitboard/washing_machine
+
+/datum/design/holopad
+	name = "Circuit Design (Holopad)"
+	desc = "Allows for the construction of circuit boards used to build holopads."
+	id = "holopad"
+	req_tech = list(Tc_MAGNETS = 2, Tc_PROGRAMMING = 2, Tc_BLUESPACE = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/holopad
