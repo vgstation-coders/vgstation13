@@ -114,7 +114,7 @@
 	var/card_present = 0
 	var/transaction_amount_primary = transaction_amount
 	var/transaction_amount_secondary = 0
-	if(!linked_db || !linked_db.activated)
+	if(!linked_db || !linked_db.activated || linked_db.stat & (BROKEN|NOPOWER))
 		to_chat(user, "[bicon(src)] <span class='warning'>No connection to account database.</span>")
 		return CARD_CAPTURE_FAILURE_NO_CONNECTION
 	if(!dest)
@@ -132,7 +132,7 @@
 			source_money_account = card_id.virtual_wallet
 		
 		if(source_money_account.money < transaction_amount)
-			if(source_money_account.money > 0)
+			if(source_money_account.money > 0 && alert(user, "Apply remaining balance of $[num2septext(source_money_account.money)] from your virtual wallet?", "Card Transaction", "Yes", "No") == "Yes")
 				// We'll use the wallet to help pay for the rest.
 				secondary_money_account = source_money_account
 				transaction_amount_secondary = source_money_account.money
