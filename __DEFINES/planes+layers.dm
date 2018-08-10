@@ -313,9 +313,9 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	if(ghost_planemaster)
 		screen -= ghost_planemaster
 		qdel(ghost_planemaster)
-	if(ghost_planemaster)
-		screen -= ghost_planemaster
-		qdel(ghost_planemaster)
+	if(ghost_planemaster_dummy)
+		screen -= ghost_planemaster_dummy
+		qdel(ghost_planemaster_dummy)
 	ghost_planemaster = getFromPool(/obj/abstract/screen/plane_master/ghost_planemaster)
 	screen |= ghost_planemaster
 	ghost_planemaster_dummy = getFromPool(/obj/abstract/screen/plane_master/ghost_planemaster_dummy)
