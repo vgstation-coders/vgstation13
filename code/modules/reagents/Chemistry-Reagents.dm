@@ -1721,7 +1721,7 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC"
 	pain_resistance = 80
-
+	custom_metabolism = 0.1
 	density = 1.2
 	specheatcap = 1.79
 
