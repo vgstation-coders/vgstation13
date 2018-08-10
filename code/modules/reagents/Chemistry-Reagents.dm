@@ -1443,7 +1443,7 @@
 	if(..())
 		return 1
 
-	M.adjustFireLoss(12 * REM)
+	M.adjustFireLoss(3 * REM)
 
 /datum/reagent/pacid/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
