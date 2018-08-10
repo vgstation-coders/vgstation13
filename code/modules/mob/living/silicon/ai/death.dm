@@ -4,10 +4,7 @@
 	if(!gibbed)
 		emote("deathgasp")
 	stat = DEAD
-	if("[icon_state]-crash" in icon_states(src.icon,1))
-		icon_state = "[icon_state]-crash"
-	else
-		icon_state = "ai-crash"
+	update_icon()
 
 	update_canmove()
 	if(src.eyeobj)
