@@ -207,8 +207,8 @@
 				// 2 Requires the card as along with the requirements in 1.
 				if(source_money_account.security_level == 2 && !card_present)
 					// Security level is 2 and the card is not present, fail.
-                    to_chat(user, "[bicon(src)] <span class='warning'>Card Not Present transactions are not allowed for this account.</span>")
-                    return CARD_CAPTURE_FAILURE_SECURITY_LEVEL
+					to_chat(user, "[bicon(src)] <span class='warning'>Card Not Present transactions are not allowed for this account.</span>")
+					return CARD_CAPTURE_FAILURE_SECURITY_LEVEL
 				var/account_pin = input(user, "Enter account pin", "Card Transaction") as null|num
 				// Get the account pin.
 				if(user_loc != user.loc)
