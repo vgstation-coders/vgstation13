@@ -1267,6 +1267,22 @@
 
 	M.nutrition += REM
 
+/datum/reagent/caramel
+	name = "Caramel"
+	id = CARAMEL
+	description = "Created from the removal of water from sugar."
+	reagent_state = SOLID
+	color = "#844b06" //rgb: 132, 75, 6
+	specheatcap = 1.244
+	density = 1.59
+
+/datum/reagent/caramel/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.nutrition += (2 * REM)
+
 /datum/reagent/honey
 	name = "Honey"
 	id = HONEY
@@ -2585,6 +2601,25 @@
 
 	M.adjustBrainLoss(-3 * REM)
 
+/datum/reagent/alkycosine
+	name = "Alkycosine"
+	id = ALKYCOSINE
+	description = "A mind stablizing brain bleach."
+	reagent_state = LIQUID
+	color = "#EDEDED" //rgb: 237, 237, 237
+	custom_metabolism = 0.05
+	overdose_am = REAGENTS_OVERDOSE
+	pain_resistance = 15
+	density = 5.98
+	specheatcap = 1.75
+
+/datum/reagent/alkycosine/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.adjustBrainLoss(-4 * REM)
+
 /datum/reagent/imidazoline
 	name = "Imidazoline"
 	id = IMIDAZOLINE
@@ -2692,6 +2727,23 @@
 		for(var/datum/organ/external/E in H.organs)
 			for(var/datum/wound/W in E.wounds)
 				W.heal_damage(0.2, TRUE)
+
+/datum/reagent/synthocarisol
+	name = "Synthocarisol"
+	id = SYNTHOCARISOL
+	description = "Synthocarisol is an advanced analgesic medication and can be used to treat blunt trauma."
+	reagent_state = LIQUID
+	color = "#580082" //rgb: 88, 0, 130
+	overdose_am = REAGENTS_OVERDOSE
+	density = 4.67
+	specheatcap = 0.57
+
+/datum/reagent/pickadie/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.heal_organ_damage(2 * REM)
 
 /datum/reagent/hyperzine
 	name = "Hyperzine"
@@ -3010,6 +3062,23 @@
 		return 1
 
 	M.hallucination += 10
+
+/datum/reagent/heartbreaker
+	name = "Heartbreaker Toxin"
+	id = HEARTBREAKER
+	description = "A powerful hallucinogen and suffocant. Not a thing to be messed with."
+	reagent_state = LIQUID
+	color = "#ff91b7" //rgb: 255, 145, 183
+	density = 0.78
+	specheatcap = 5.47
+
+/datum/reagent/heartbreaker/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.hallucination += 5
+	M.adjustOxyLoss(4 * REM)
 
 /datum/reagent/spiritbreaker
 	name = "Spiritbreaker Toxin"
