@@ -1332,6 +1332,7 @@
 	description = "A strong mineral acid with the molecular formula H2SO4."
 	reagent_state = LIQUID
 	color = "#DB5008" //rgb: 219, 80, 8
+	custom_metabolism = 1
 	density = 1.84
 	specheatcap = 1.38
 
@@ -1345,7 +1346,7 @@
 		if(H.species.name == "Grey")
 			return //Greys lurve dem some sacid
 
-	M.adjustToxLoss(REM)
+	M.adjustFireLoss(REM)
 	M.take_organ_damage(0, REM)
 
 /datum/reagent/sacid/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -1433,6 +1434,7 @@
 	description = "Polytrinic acid is a an extremely corrosive chemical substance."
 	reagent_state = LIQUID
 	color = "#8E18A9" //rgb: 142, 24, 169
+	custom_metabolism = 1
 	density = 1.98
 	specheatcap = 1.39
 
@@ -1441,7 +1443,7 @@
 	if(..())
 		return 1
 
-	M.adjustToxLoss(REM)
+	M.adjustFireLoss(12 * REM)
 
 /datum/reagent/pacid/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -1719,7 +1721,7 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC"
 	pain_resistance = 80
-	custom_metabolism = 0.1
+
 	density = 1.2
 	specheatcap = 1.79
 
