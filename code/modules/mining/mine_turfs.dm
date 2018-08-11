@@ -1,7 +1,7 @@
 /**********************Mineral deposits**************************/
 
 /turf/unsimulated/mineral //wall piece
-	name = "rock"
+	name = "Rock"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "rock"
 	var/base_icon_state = "rock" // above is for mappers.
@@ -10,7 +10,7 @@
 	opacity = 1
 	density = 1
 	blocks_air = 1
-	canSmoothWith = "/turf/unsimulated/wall/r_rock=0&/turf/unsimulated/mineral=0"
+	//canSmoothWith = "/turf/unsimulated/wall/r_rock=0&/turf/unsimulated/mineral=0"
 	//temperature = TCMB
 	var/mineral/mineral
 	var/mined_ore = 0
@@ -62,16 +62,15 @@
 /turf/simulated/wall/r_rock
 	name = "reinforced rock"
 	desc = "It has metal struts that need to be welded away before it can be mined."
-	icon_state = "porousbar"
+	icon_state = "rock_rf0"
 	dismantle_type = /turf/unsimulated/mineral
 	girder_type = null
-	canSmoothWith = "/turf/unsimulated/wall/r_rock=0&/turf/unsimulated/mineral=0"
+	walltype = "rock_rf"
+	canSmoothWith = list(/turf/unsimulated/wall/r_rock)
 
 /turf/simulated/wall/r_rock/New()
+	..()
 	add_rock_overlay()
-
-/turf/simulated/wall/r_rock/relativewall()
-	return //No smoothin'
 
 /turf/simulated/wall/r_rock/proc/add_rock_overlay(var/image/img = image('icons/turf/rock_overlay.dmi', "rock_overlay",layer = SIDE_LAYER),var/offset=-4)
 	img.pixel_x = offset*PIXEL_MULTIPLIER
@@ -221,13 +220,14 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(istype(W,/obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/S = W
 		if(S.amount < 2)
+			to_chat(user,"<span class='warning>You don't have enough material.</span>")
 			return
 		user.visible_message("<span class='notice'>[user] starts installing reinforcements to \the [src].</span>", \
 			"<span class='notice'>You start installing reinforcements to \the [src].</span>")
-		if(do_after(user, src, 40))
-			if(S.amount < 2)
+		if(do_after(user, src, 4 SECONDS))
+			if(!S.use(2))
+				to_chat(user,"<span class='warning>You don't have enough material.</span>")
 				return
-			S.use(2)
 			user.visible_message("<span class='notice'>[user] finishes installing reinforcements to \the [src].</span>", \
 				"<span class='notice'>You finish installing reinforcements to \the [src].</span>")
 			var/old_type = type
@@ -236,7 +236,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			if(X)
 				X.name = "reinforced [old_name]"
 				X.dismantle_type = old_type
-				X.add_hiddenprint(user)
 				X.add_fingerprint(user)
 
 	if (istype(W, /obj/item/weapon/pickaxe))
