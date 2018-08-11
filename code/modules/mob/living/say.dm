@@ -184,7 +184,8 @@ var/list/department_radio_keys = list(
 		message = copytext(message, 2)
 	else if(message_mode)
 		say_testing(src, "Message mode is [message_mode]")
-		message = copytext(message, 3)
+		if(message_mode != MODE_HOLOPAD)
+			message = copytext(message, 3)
 
 	// SAYCODE 90.0!
 	// We construct our speech object here.
