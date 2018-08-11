@@ -48,6 +48,10 @@
 	name = "Fore Primary Hallway Toilets"
 	icon_state = "toilet"
 
+/area/hallway/secondary/port
+	name = "\improper Port Secondary Hallway"
+	icon_state = "hallP"
+
 /area/prison/hallway/central
 	name = "\improper Prison Central Hallway"
 	icon_state = "yellow"
