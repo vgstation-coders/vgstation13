@@ -89,6 +89,10 @@
 	if(!toggle)
 		return
 
+	if(toggle == "camera" && incapacitated())
+		to_chat(src, "<span class='warning'>You can't do that while you're incapacitated.</span>")
+		return
+
 	var/datum/robot_component/C = components[toggle]
 	if(C.toggled)
 		C.toggled = FALSE

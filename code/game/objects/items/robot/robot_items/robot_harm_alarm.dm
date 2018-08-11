@@ -31,7 +31,7 @@
 		playsound(src, alarm_sound, 70, 3, vary = src.vary)
 		add_gamelogs(user, "used \the [src]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "notice")
 		for(var/mob/living/carbon/M in hearers(9, user))
-			if(M.earprot())
+			if(M.earprot() || M.is_deaf())
 				continue
 			to_chat(M, "<span class='warning'>[user] blares out a near-deafening siren from its speakers!</span>")
 			to_chat(M, "<span class='danger'>The siren pierces your hearing!</span>")
