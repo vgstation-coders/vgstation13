@@ -106,7 +106,7 @@
 		<p><b><A href="?src=\ref[src];makeCoins=[1]">Make Coins</A></b></p>"}
 	dat += "<table><tr><td align='right'><b>Input:</b></td><td><a href='?src=\ref[src];changedir=1'>[capitalize(dir2text(in_dir))]</a></td></tr><tr><td><b>Output:</b></td><td><a href='?src=\ref[src];changedir=2'>[capitalize(dir2text(out_dir))]</a></td></tr></table>"
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "mint", "Coin Press", 410, 400, src)
+	var/datum/browser/popup = new(user, "mint", "Coin Press", 420, 410, src)
 	popup.set_content(dat)
 	popup.open()
 
@@ -212,19 +212,20 @@
 				processing=0
 				return
 			while(materials.storage[chosen] > 0 && coinsToProduce > 0)
-				var/dest = out_T
-				if (locate(/obj/item/weapon/storage/bag/money,out_T)) //So we can put them in a bag instead of spewing them on the floor
-					dest = locate(/obj/item/weapon/storage/bag/money,out_T)
-				var/coinsleft = coins_per_sheet //coins left to produce for that single sheet.
-				while(coinsleft > 0)
-					new po.cointype(dest)
-					coinsleft--
+				var/obj/item/weapon/storage/bag/money/tempbag = locate(/obj/item/weapon/storage/bag/money,out_T)
+				materials.removeAmount(chosen, 1) //We'll get that money up front don't you worry.
+				for(var/i=0,i<coins_per_sheet,i++)
+					var/obj/item/weapon/coin/co = new po.cointype
+					if(tempbag)
+						if(tempbag.can_be_inserted(co, 1))
+							tempbag.handle_item_insertion(co, 1)
+					else
+						co.forceMove(out_T)
 					coinsToProduce--
 					newCoins++
-					sleep(2)
-				materials.removeAmount(chosen, 1)
-				src.updateUsrDialog()
-				sleep(5)
+					src.updateUsrDialog()
+					sleep(3)
+				sleep(3)
 			icon_state = "coinpress0"
 			processing = 0
 			coinsToProduce = temp_coins
@@ -241,5 +242,4 @@
 		if (materials)
 			for(var/matID in materials.storage)
 				DropSheet(matID)
-		qdel(src)
-	return -1
+	return 1
