@@ -3,11 +3,28 @@
 		Available Targets on Frequency
 	</div>
 	<div class="statusDisplay">
-		{{for data.smlist}}
-			{{:value.type}}, as {{:value.id}} in {{:value.location}} 
-		{{/for}}
-		{{:helper.link('Return', 'arrowreturn-1-w', {'list' : 1}, null)}}
+	{{if data.smlist.length}}
+		<table>
+			<thead>
+				<th>Type</th>
+				<th>ID Tag</th>
+				<th>Location</th>
+			</thead>
+			<tbody>
+			{{for data.smlist}}
+				<tr>
+					<td>{{:value.type}}</td>
+					<td>{{:value.id}}</td>
+					<td>{{:value.location}}</td>
+				</tr>
+			{{/for}}
+			</tbody>
+		</table>
+	{{else}}
+		No signals received on this frequency.
+	{{/if}}
 	</div>
+	{{:helper.link('Return', 'arrowreturn-1-w', {'list' : 1}, null)}}
 {{else}}
 	{{if data.id}}
 		<div class="item">
@@ -15,7 +32,7 @@
 				Target Supermatter
 			</div>
 			<div class="itemContent">
-				{{:data.id}} <!-- {{:helper.link('List Available', 'search', {'list' : 1}, null)}} -->
+				{{:data.id}} {{:helper.link('List Available', 'search', {'list' : 1}, null)}}
 			</div>
 			<div class="itemLabel">
 				Target Location
@@ -40,7 +57,7 @@
 			</div>
 			<div class="line">
 				<div class="statusLabel">
-					Instability Per Tick:
+					Instability Rate:
 				</div>
 				<div class="statusValue">
 					{{if data.dps>0}}
@@ -65,7 +82,7 @@
 				</div>
 				<div class="statusValue">
 					{{:helper.displayBar(data.oxygen, 0, 100, data.oxygen > 80 ? "good" : "neutral")}}
-					{{:data.oxygen}}% Oxygen
+					{{:helper.round(data.oxygen)}}% Oxygen
 				</div>
 			</div>
 			<div class="line">
@@ -82,7 +99,7 @@
 				Target Supermatter:
 			</div>
 			<div class="itemContent">
-				Not Linked <!-- {{:helper.link('List Available', 'search', {'list' : 1}, null)}} -->
+				Not Linked {{:helper.link('List Available', 'search', {'list' : 1}, null)}}
 			</div>
 		</div>
 	{{/if}}

@@ -47,6 +47,7 @@
 	var/power = 0
 	var/max_power = 2000 // Used for lighting scaling.
 
+	var/list/last_data = list("temperature" = 293, "oxygen" = 0.2)
 	var/oxygen = 0				  // Moving this up here for easier debugging.
 
 	//Temporary values so that we can optimize this
@@ -258,6 +259,8 @@
 
 	//We've generated power, now let's transfer it to the collectors for storing/usage
 	transfer_energy()
+	last_data["temperature"] = removed.temperature
+	last_data["oxygen"] = oxygen
 
 	var/device_energy = power * REACTION_POWER_MODIFIER
 
@@ -435,9 +438,10 @@
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
-		radio_connection = radio_controller.add_object(src, frequency, RADIO_SUPERMATTER)
+		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
 	broadcast_status()
 
+#define SMM_RANGE 26
 /obj/machinery/power/supermatter/proc/broadcast_status()
 	if(!radio_connection)
 		return 0
@@ -454,8 +458,9 @@
 		"power" = power,
 		"sigtype" = "status"
 	)
-	radio_connection.post_signal(src, signal, RADIO_SUPERMATTER, SS_INIT_RUST)
+	radio_connection.post_signal(src, signal, RADIO_ATMOSIA, SMM_RANGE)
 	return 1
+#undef SMM_RANGE
 
 /obj/machinery/power/supermatter/canClone(var/obj/O)
 	return istype(O, /obj/machinery/power/supermatter)
@@ -474,7 +479,7 @@
 	var/frequency = 1333
 	var/id_tag //mappable
 	var/datum/radio_frequency/radio_connection
-	var/obj/machinery/power/supermatter/linked = null
+	var/obj/machinery/power/supermatter/linked = null //Gets cleared in process if the shard explodes
 	//"LIST" BUTTON
 	var/screen = 0 //0 = Main display, 1 = select target
 	var/list/cached_smlist = list()
@@ -482,6 +487,11 @@
 /obj/machinery/computer/supermatter/initialize()
 	..()
 	set_frequency(frequency)
+
+/obj/machinery/computer/supermatter/process()
+	if(linked && linked.gcDestroyed)
+		linked = null
+	..()
 
 /obj/machinery/computer/supermatter/receive_signal(datum/signal/signal, var/receive_method as num, var/receive_param)
 	..()
@@ -496,7 +506,7 @@
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
-		radio_connection = radio_controller.add_object(src, frequency, RADIO_SUPERMATTER)
+		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
 
 /obj/machinery/computer/supermatter/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return {"
@@ -522,29 +532,26 @@
 	var/data[0]
 	data["screen"] = screen
 	if(linked) //We really want to be linked, but the template can survive even without a link
-		var/datum/gas_mixture/env = linked.loc.return_air()
 		data["id"] = linked.id_tag
-		data["temperature"] = env.temperature
+		data["temperature"] = linked.last_data["temperature"]
 		data["stability"] = linked.stability()
 		if(!istype(linked.loc, /turf)||istype(linked.loc, /turf/space))
 			data["dps"] = 0 //If crated or in space, damage is exactly 0
 			data["oxygen"] = 0 //This doesn't really matter because power isn't generated in this state
 		else
-			data["dps"] = (env.temperature-800)/150
-			var/turf/T = linked.loc //We know it's a turf, we just checked
-			data["oxygen"] = round(T.oxygen)
-		data["location"] = get_area(linked).name
+			data["dps"] = (linked.last_data["temperature"]-800)/150
+			data["oxygen"] = linked.last_data["oxygen"]*100
+		var/area/SME_loc = get_area(linked)
+		data["location"] = SME_loc.name
 	else
 		data["id"] = FALSE
 
 	if(screen)
 		cached_smlist = list()
-		var/i = 0
-		for(var/obj/machinery/power/supermatter/SM in radio_connection.devices[RADIO_SUPERMATTER])
+		for(var/obj/machinery/power/supermatter/SM in radio_connection.devices[RADIO_ATMOSIA])
 			var/area/sm_loc = get_area(SM)
 			if(sm_loc) //Otherwise it's nullspaced or something
-				cached_smlist[i] = list("type" =  SM.name, "id" = SM.id_tag, "location" = sm_loc.name) //Add doesn't work for this
-				i++
+				cached_smlist.Add(list(list("type" =  SM.name, "id" = SM.id_tag, "location" = sm_loc.name)))
 		data["smlist"] = cached_smlist
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 

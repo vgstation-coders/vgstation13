@@ -192,7 +192,6 @@ var/const/RADIO_SECBOT = "7"
 var/const/RADIO_MULEBOT = "8"
 var/const/RADIO_MAGNETS = "9" //for the firing range "magnet" target mover
 var/const/RADIO_CONVEYORS = "10"
-var/const/RADIO_SUPERMATTER = "11"
 
 var/global/datum/controller/radio/radio_controller
 
