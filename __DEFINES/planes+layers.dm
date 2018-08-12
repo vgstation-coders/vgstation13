@@ -258,6 +258,7 @@ What is the naming convention for planes or layers?
 /obj/abstract/screen/plane_master
 	appearance_flags = PLANE_MASTER
 	screen_loc = "CENTER,CENTER"
+	icon_state = "blank"
 	globalscreen = 1
 
 // CLICKMASTER
