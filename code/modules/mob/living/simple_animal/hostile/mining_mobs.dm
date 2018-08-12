@@ -560,6 +560,9 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/goliath/david/dave
 	name = "Dave"
 	desc = "As the engineering crew decided where in the asteroid to build the station, they followed a small crevice where he was eventually found. Nobody knows how this little guy got separated from his family or why he became so attached to the crew that found him."
+	response_help  = "pets"
+	response_disarm = "bops"
+	response_harm   = "kicks"
 	gender = MALE
 	faction = "neutral"
 	maxHealth = 100
