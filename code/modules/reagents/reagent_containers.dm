@@ -343,6 +343,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 	if(isrobot(user))
 		reagents.remove_any(amount_per_imbibe)
+		reagents.reaction(user, TOUCH)
 		return 1
 	if(reagents.total_volume)
 		if(can_drink(user))
