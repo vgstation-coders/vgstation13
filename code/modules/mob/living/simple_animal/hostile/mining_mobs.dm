@@ -561,7 +561,7 @@ obj/item/asteroid/basilisk_hide/New()
 	name = "Dave"
 	desc = "As the engineering crew decided where in the asteroid to build the station, they followed a small crevice where he was eventually found. Nobody knows how this little guy got separated from his family or why he became so attached to the crew that found him."
 	response_help  = "pets"
-	response_disarm = "bops"
+	response_disarm = "pokes"
 	response_harm   = "kicks"
 	gender = MALE
 	faction = "neutral"
