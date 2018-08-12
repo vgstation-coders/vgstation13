@@ -1240,3 +1240,19 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/recyclable() //Called by RnD machines, for added object-specific sanity.
 	return TRUE
+
+/obj/item/MouseDropFrom(var/obj/over_object)
+	if(!istype(over_object, /obj/abstract/screen/inventory))
+		return ..()
+	if(!ishuman(usr) && !ismonkey(usr))
+		return ..()
+	if(!usr.is_wearing_item(src) || !canremove)
+		return ..()
+	if(usr.incapacitated())
+		return ..()
+	var/obj/abstract/screen/inventory/OI = over_object
+
+	if(OI.hand_index && usr.put_in_hand_check(src, OI.hand_index))
+		usr.u_equip(src, TRUE)
+		usr.put_in_hand(OI.hand_index, src)
+		add_fingerprint(usr)
