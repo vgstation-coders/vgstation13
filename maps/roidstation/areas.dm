@@ -38,7 +38,7 @@
 
 /area/tcomms/storage2
 	name = "Telecoms Auxiliary Storage"
-	icon_state = "primarystorage"
+	icon_state = "storage"
 
 /area/hallway/primary/central/toilet
 	name = "Central Primary Hallway Toilets"
@@ -94,6 +94,16 @@
 	name = "Cyborg Station"
 	icon_state = "ai"
 
+/area/research_outpost/lockers
+	name = "Hardsuit Storage"
+	icon_state = "anog"
+
+/area/tcomms/computer
+	name = "\improper Telecomms Control Room"
+	icon_state = "tcomsatcomp"
+
+
+
 
 //**Renamed areas**
 /area/mine/lobby
@@ -120,6 +130,11 @@
 /area/turret_protected/aisat_interior
 	name = "\improper AI Satellite Foyer"
 	icon_state = "ai_foyer"
+
+/area/research_outpost/med
+	name = "Research Wing Infirmary"
+
+
 
 //*******Areas from Defficiency*******
 /area/maintenance/vault
