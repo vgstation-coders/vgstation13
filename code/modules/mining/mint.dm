@@ -237,7 +237,8 @@
 
 /obj/machinery/mineral/mint/crowbarDestroy(mob/user)
 	if(..() == 1)
-		if (materials)
+		if(materials)
 			for(var/matID in materials.storage)
 				DropSheet(matID)
-	return 1
+		return 1
+	return -1
