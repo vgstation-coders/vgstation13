@@ -31,6 +31,38 @@
 	spawn(1)
 		qdel(src)
 
+//Autocuffer is like a cyborg handcuff dispenser for carbons
+/obj/item/weapon/autocuffer
+	name = "autocuffer"
+	desc = "An experimental prototype handcuff dispenser that mysteriously went missing from a research facility on Alcatraz VI."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "autocuffer"
+	siemens_coefficient = 0
+	slot_flags = SLOT_BELT
+	w_class = W_CLASS_SMALL
+	origin_tech = Tc_COMBAT += "=4"
+	restraint_resist_time = TRUE //This doesn't actually matter as long as it is nonzero
+	req_access = list(access_brig) //Brig timers
+	var/obj/item/weapon/handcuffs/cyborg/stored
+
+/obj/item/weapon/autocuffer/Destroy()
+	if(stored)
+		qdel(stored)
+		stored = null
+	..()
+
+/obj/item/weapon/autocuffer/attempt_apply_restraints(mob/M, mob/user)
+	if(!allowed(user))
+		to_chat(user, "<span class='warning'>The access light on \the [src] blinks red.</span>")
+		return FALSE
+	if(!stored) //No cuffs primed. Let's generate new ones.
+		stored = new(loc)
+	if(stored.attempt_apply_restraints(M,user))
+		stored = null //We applied these, so next time make new ones.
+		return TRUE
+	else
+		return FALSE
+
 //Syndicate Cuffs. Disguised as regular cuffs, they are pretty explosive
 /obj/item/weapon/handcuffs/syndicate
 	var/countdown_time   = 3 SECONDS
