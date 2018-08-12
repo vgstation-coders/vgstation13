@@ -88,7 +88,6 @@
 /obj/structure/morgue/proc/open_up()
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	connected = new /obj/structure/m_tray(loc)
-	connected.layer = OBJ_LAYER
 	step(connected, src.dir)
 	var/turf/T = get_step(src, src.dir)
 	if(T.contents.Find(connected))
@@ -287,7 +286,6 @@
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		src.connected = new /obj/structure/c_tray( src.loc )
 		step(src.connected, SOUTH)
-		src.connected.layer = OBJ_LAYER
 		var/turf/T = get_step(src, SOUTH)
 		if (T.contents.Find(src.connected))
 			src.connected.connected = src
@@ -311,7 +309,6 @@
 		return
 	src.connected = new /obj/structure/c_tray( src.loc )
 	step(src.connected, SOUTH)
-	src.connected.layer = OBJ_LAYER
 	var/turf/T = get_step(src, SOUTH)
 	if (T.contents.Find(src.connected))
 		src.connected.connected = src
@@ -392,6 +389,7 @@
 	density = 1
 	var/obj/structure/crematorium/connected = null
 	anchored = 1.0
+	layer = TABLE_LAYER
 
 /obj/structure/c_tray/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover, /obj/item/weapon/dummy))
