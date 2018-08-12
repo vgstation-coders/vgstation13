@@ -215,17 +215,15 @@
 				var/obj/item/weapon/storage/bag/money/tempbag = locate(/obj/item/weapon/storage/bag/money,out_T)
 				materials.removeAmount(chosen, 1) //We'll get that money up front don't you worry.
 				for(var/i=0,i<coins_per_sheet,i++)
-					var/obj/item/weapon/coin/co = new po.cointype
+					var/obj/item/weapon/coin/co = new po.cointype(out_T)
 					if(tempbag)
 						if(tempbag.can_be_inserted(co, 1))
 							tempbag.handle_item_insertion(co, 1)
-					else
-						co.forceMove(out_T)
 					coinsToProduce--
 					newCoins++
 					src.updateUsrDialog()
-					sleep(3)
-				sleep(3)
+					sleep(2)
+				sleep(2)
 			icon_state = "coinpress0"
 			processing = 0
 			coinsToProduce = temp_coins
