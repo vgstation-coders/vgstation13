@@ -649,6 +649,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			implanted.implants -= src
 
 	src.forceMove(get_turf(src))
+	src.client.eye = src
 	controlling = 0
 
 	reset_view(null)
@@ -917,6 +918,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	src.host = M
 	src.forceMove(M)
+	src.client.eye = M
 
 	if(istype(M,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
