@@ -116,7 +116,7 @@
 		if(!stat)
 			user.visible_message("<span class='notice'>[user] baps [name] on the nose with the rolled up [O]</span>")
 			spawn(0)
-				emote("whines")
+				emote("me", 1, "whines")
 				for(var/i in list(1,2,4,8,4,2,1,2))
 					dir = i
 					sleep(1)
@@ -132,7 +132,7 @@
 				for (var/mob/M in viewers(src, null))
 					M.show_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
 			if(health>0 && prob(15))
-				emote("looks at [user] with [pick("an amused","an annoyed","a confused","a resentful", "a happy", "an excited")] expression")
+				emote("me", 1, "looks at [user] with [pick("an amused","an annoyed","a confused","a resentful", "a happy", "an excited")] expression")
 			return
 	else
 		var/obj/item/clothing/mask/facehugger/F = O
@@ -423,7 +423,7 @@
     if(!stat && !resting && !locked_to)
         if(prob(1))
             if (ckey == null)
-                emote(pick(emotes))
+                emote("me", 1, pick(emotes))
                 spawn(0)
                     for(var/i in list(1,2,4,8,4,2,1,2,4,8,4,2,1,2,4,8,4,2))
                         dir = i
@@ -531,7 +531,7 @@
 							movement_target.attack_animal(src)
 						else if(ishuman(movement_target.loc) )
 							if(prob(20))
-								emote("stares at [movement_target.loc]'s [movement_target] with a sad puppy-face")
+								emote("me", 1, "stares at [movement_target.loc]'s [movement_target] with a sad puppy-face")
 //PC stuff-Sieve
 
 /mob/living/simple_animal/corgi/regenerate_icons()
@@ -620,10 +620,10 @@
 				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 				heart.plane = ABOVE_HUMAN_PLANE
 				flick_overlay(heart, list(M.client), 20)
-				emote("yaps happily")
+				emote("me", 1, "yaps happily.")
 		else
 			if(M && !isUnconscious()) // Same check here, even though emote checks it as well (poor form to check it only in the help case)
-				emote("growls")
+				emote("me", 1, "growls.")
 
 
 //Sasha isn't even a corgi you dummy!

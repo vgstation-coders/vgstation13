@@ -576,6 +576,32 @@ obj/item/asteroid/basilisk_hide/New()
 	ranged = TRUE
 	retreat_distance = 1 //Unlike normal davids, dave will kite its foes, or at least try to. REMEMBER THE BASICS OF CQC
 
+//Stolen from corgi code
+/mob/living/simple_animal/hostile/asteroid/goliath/david/dave/attack_hand(mob/living/carbon/human/M)
+	. = ..()
+	switch(M.a_intent)
+		if(I_HELP)
+			wuv(1,M)
+		if(I_HURT)
+			wuv(-1,M)
+
+/mob/living/simple_animal/hostile/asteroid/goliath/david/dave/proc/wuv(change, mob/M)
+	var/list/responses_good = list("bleats happily.", "rumbles affectionately.", "emits a content crackle.")
+	var/list/responses_bad = list("whimpers.", "lets out an upset gurgle.")
+
+	if(change)
+		if(change > 0)
+			if(M && !isUnconscious())
+				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+				heart.plane = ABOVE_HUMAN_PLANE
+				flick_overlay(heart, list(M.client), 20)
+				emote("me", 1, pick(responses_good))
+				//calm down when petted.
+				LoseAggro()
+		else
+			if(M && !isUnconscious())
+				emote("me", 1, pick(responses_bad))
+
 /mob/living/simple_animal/hostile/asteroid/magmaw
 	name = "magmaw"
 	desc = "A living furnace. These things are drawn to crystallized plasma, which they feast upon to stoke their internal fires."
