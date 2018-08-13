@@ -10,7 +10,6 @@
 	opacity = 1
 	density = 1
 	blocks_air = 1
-	//canSmoothWith = "/turf/unsimulated/wall/r_rock=0&/turf/unsimulated/mineral=0"
 	//temperature = TCMB
 	var/mineral/mineral
 	var/mined_ore = 0
@@ -66,9 +65,8 @@
 	dismantle_type = /turf/unsimulated/mineral
 	girder_type = null
 	walltype = "rock_rf"
-	canSmoothWith = list(/turf/unsimulated/wall/r_rock)
 
-/turf/simulated/wall/r_rock/New()
+/*turf/simulated/wall/r_rock/New()
 	..()
 	add_rock_overlay()
 
@@ -76,7 +74,7 @@
 	img.pixel_x = offset*PIXEL_MULTIPLIER
 	img.pixel_y = offset*PIXEL_MULTIPLIER
 	img.plane = BELOW_TURF_PLANE
-	overlays += img
+	overlays += img*/
 
 /turf/simulated/wall/r_rock/porous
 	name = "reinforced porous rock"
