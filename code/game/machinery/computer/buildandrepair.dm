@@ -137,6 +137,10 @@
 	name = "Circuit board (Atmospheric Alert)"
 	desc = "A circuit board for running a computer used for viewing air alarm alerts."
 	build_path = /obj/machinery/computer/atmos_alert
+/obj/item/weapon/circuitboard/supermatter
+	name = "Circuit board (Supermatter Monitor)"
+	desc = "A circuit board for the supermatter monitoring computer."
+	build_path = /obj/machinery/computer/supermatter
 /obj/item/weapon/circuitboard/pod
 	name = "Circuit board (Massdriver control)"
 	desc = "A circuit board for running a computer used for controlling mass drivers and blast doors."
