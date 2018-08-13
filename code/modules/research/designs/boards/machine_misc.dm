@@ -87,6 +87,16 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/stacking_unit
 
+/datum/design/coin_press
+	name = "Circuit Design (Coin Press)"
+	desc = "Allows for the construction of circuit boards used to build a coin press."
+	id = "coin_press"
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_MATERIALS = 3, Tc_ENGINEERING = 3)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/coin_press
+
 /datum/design/vendomat
 	name = "Circuit Design (Vending Machine)"
 	desc = "Allows for the construction of circuit boards used to build a vending machines."
