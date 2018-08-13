@@ -429,7 +429,7 @@ obj/item/projectile/kinetic/New()
 	flag = "bio"
 	fire_sound = 'sound/weapons/rocket.ogg'
 
-	projectile_slowdown = 0.5
+	projectile_speed = 1.33
 
 	var/fire_damage = 5
 	var/pressure = ONE_ATMOSPHERE * 4.5

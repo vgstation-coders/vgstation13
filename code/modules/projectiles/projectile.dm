@@ -70,8 +70,6 @@ var/list/impact_master = list()
 	var/penetration = 0	//if set to -1, will always phase through obstacles
 	var/mark_type = "trace"	//what marks will the bullet leave on a wall that it penetrates? from 'icons/effects/96x96.dmi'
 
-	var/step_delay = 0 //how long it goes between moving. You should probably leave this as 0 for a lot of things
-
 	var/inaccurate = 0
 
 	var/turf/target = null
@@ -102,26 +100,17 @@ var/list/impact_master = list()
 	animate_movement = 0
 	var/linear_movement = 1
 
-	var/projectile_slowdown = 0 //The extra time spent sleeping after each step. Increasing this will make the projectile move more slowly.
+	var/projectile_speed = 1 //Time in deciseconds between steps. Lower is faster. Bear in mind that this should be divisible by (or close to) the server's tick_lag (at the time of writing this, 0.33)
 
 	var/penetration_message = 1 //Message that is shown when a projectile penetrates an object
 	var/fire_sound = 'sound/weapons/Gunshot.ogg' //sound that plays when the projectile is fired
 	var/rotate = 1 //whether the projectile is rotated based on angle or not
-	var/superspeed = 0 //When set to 1, the projectile will travel at twice the normal speed
-	var/super_speed = 0 //This exists just for proper functionality
 	var/travel_range = 0	//if set, the projectile will be deleted when its distance from the firing location exceeds this
 
 /obj/item/projectile/New()
 	..()
 	initial_pixel_x = pixel_x
 	initial_pixel_y = pixel_y
-	if(superspeed)
-		super_speed = 1
-
-/obj/item/projectile/New()
-	..()
-	if(superspeed)
-		super_speed = 1
 
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)
 	if(blocked >= 2)
@@ -410,13 +399,13 @@ var/list/impact_master = list()
 
 	return 1
 
+
 /obj/item/projectile/proc/process_step()
-	var/sleeptime = 1
 	if(src.loc)
 		if(dist_x > dist_y)
-			sleeptime = bresenham_step(dist_x,dist_y,dx,dy)
+			bresenham_step(dist_x,dist_y,dx,dy)
 		else
-			sleeptime = bresenham_step(dist_y,dist_x,dy,dx)
+			bresenham_step(dist_y,dist_x,dy,dx)
 		if(linear_movement)
 			update_pixel()
 			pixel_x = PixelX
@@ -424,28 +413,10 @@ var/list/impact_master = list()
 
 		bumped = 0
 
-		sleeptime += projectile_slowdown
-
-		sleep(sleeptime)
+		sleep(projectile_speed)
 
 
 /obj/item/projectile/proc/bresenham_step(var/distA, var/distB, var/dA, var/dB)
-	if(!superspeed)
-		return make_bresenham_step(distA, distB, dA, dB)
-	else
-		if(make_bresenham_step(distA, distB, dA, dB))
-			if(super_speed)
-				super_speed = 0
-				return 1
-			else
-				super_speed = 1
-				return 0
-		else
-			return 0
-
-/obj/item/projectile/proc/make_bresenham_step(var/distA, var/distB, var/dA, var/dB)
-	if(step_delay)
-		sleep(step_delay)
 	if(kill_count < 1)
 		bullet_die()
 		return 1
@@ -527,7 +498,7 @@ var/list/impact_master = list()
 			tS = 1
 			timestopped = 0
 		while((loc.timestopped || timestopped) && !first)
-			sleep(3)
+			sleep(projectile_speed)
 		first = 0
 		src.process_step()
 		if(tS)
