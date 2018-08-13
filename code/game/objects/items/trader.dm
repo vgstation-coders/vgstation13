@@ -187,3 +187,284 @@
 		qdel(S)
 		return
 	..()
+
+/obj/item/clothing/accessory/bangerboy
+	name = "Banger Boy Advance"
+	desc = "The beloved sequel to the Banger Boy Color. Tap it or the clothing item it is attached to with grenades to easily configure their onboard timers. Straps nicely onto security armor."
+	icon_state = "bangerboy"
+	origin_tech = Tc_COMBAT + "=2"
+	var/obj/item/weapon/screwdriver/S
+
+/obj/item/clothing/accessory/bangerboy/attackby(obj/item/W, mob/user)
+	if(istype(W,/obj/item/weapon/grenade))
+		W.attackby(S,user)
+	else
+		..()
+
+/obj/item/clothing/accessory/can_attach_to(obj/item/clothing/C)
+	return istype(C, /obj/item/clothing/suit/armor/vest)
+
+/obj/item/clothing/head/helmet/donutgiver
+	name = "donutgiver"
+	desc = "The Donutgiver III. A twenty-five sprinkle headgear with mission-variable voice-programmed confections."
+	icon_state = "helmet_sec"
+	item_state = "helmet"
+	flags = HEAR | FPRINT
+	var/dna_profile = null
+
+/obj/item/clothing/head/helmet/donutgiver/GetVoice()
+	var/the_name = "The [name]"
+	return the_name
+
+/obj/item/clothing/head/helmet/donutgiver/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	if(!..())
+		return CANNOT_EQUIP
+	if(!isjusthuman(H))
+		to_chat(usr, "<span class='warning'>Your nonhuman DNA is rejected by \the [src].</span>")
+		return CANNOT_EQUIP
+	if(!dna_profile)
+		to_chat(usr, "<span class='warning'>There is no stored DNA profile.</span>")
+		return CANNOT_EQUIP
+	if(!(dna_profile == H.dna.unique_enzymes))
+		to_chat(usr, "<span class='warning'>Your DNA does not match the stored DNA sample.</span>")
+		return CANNOT_EQUIP
+	else
+		return CAN_EQUIP
+
+/obj/item/clothing/head/helmet/donutgiver/verb/submit_DNA_sample()
+	set name = "Submit DNA sample"
+	set category = "Object"
+	set src in usr
+
+	var/mob/living/carbon/human/H = loc
+
+	if(!isjusthuman(H))
+		to_chat(usr, "<span class='warning'>Your nonhuman DNA is rejected by \the [src].</span>")
+		return 0
+
+	if(!dna_profile)
+		dna_profile = H.dna.unique_enzymes
+		to_chat(usr, "<span class='notice'>You submit a DNA sample to \the [src].</span>")
+		verbs += /obj/item/weapon/gun/lawgiver/verb/erase_DNA_sample
+		verbs -= /obj/item/weapon/gun/lawgiver/verb/submit_DNA_sample
+		update_icon()
+		return 1
+
+/obj/item/clothing/head/helmet/donutgiver/AltClick()
+	if(submit_DNA_sample())
+		return
+	return ..()
+
+/obj/item/clothing/head/helmet/donutgiver/verb/erase_DNA_sample()
+	set name = "Erase DNA sample"
+	set category = "Object"
+	set src in usr
+
+	var/mob/living/carbon/human/H = loc
+
+	if(dna_profile)
+		if(dna_profile == H.dna.unique_enzymes)
+			dna_profile = null
+			to_chat(usr, "<span class='notice'>You erase the DNA profile from \the [src].</span>")
+			verbs += /obj/item/weapon/gun/lawgiver/verb/submit_DNA_sample
+			verbs -= /obj/item/weapon/gun/lawgiver/verb/erase_DNA_sample
+			update_icon()
+		else
+			self_destruct(H)
+
+/obj/item/clothing/head/helmet/donutgiver/proc/self_destruct(mob/user)
+	var/req_access = list(access_security)
+	if(can_access(user.GetAccess(),req_access))
+		say("ERROR: DNA PROFILE DOES NOT MATCH.")
+		return
+	say("UNAUTHORIZED ACCESS DETECTED.")
+	var/datum/organ/external/active_hand = user.get_active_hand_organ()
+	if(active_hand)
+		active_hand.explode()
+	explosion(user, -1, 0, 2)
+	qdel(src)
+
+/obj/item/clothing/head/helmet/donutgiver/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if(world.timeofday < last_donut+60)
+		return
+	var/dispense_path
+	set waitfor = FALSE // The lawgiver should speak AFTER the user
+	if(speech.speaker == loc && !speech.frequency && dna_profile)
+		var/mob/living/carbon/human/H = loc
+		if(dna_profile == H.dna.unique_enzymes)
+			if((findtext(speech.message, "standard")) || (findtext(speech.message, "sprinkle" || (findtext(speech.message, "traditional")))
+				dispense_path = /obj/item/weapon/reagent_containers/food/snacks/donut/normal
+				sleep(3)
+				say("SPRINKLE.")
+			else if((findtext(speech.message, "jelly")) || (findtext(speech.message, "berry")) || (findtext(speech.message, "juicy")))
+				dispense_path = /obj/item/weapon/reagent_containers/food/snacks/donut/jelly
+				sleep(3)
+				say("JELLY.")
+			else if((findtext(speech.message, "chaos")) || (findtext(speech.message, "gump")) || (findtext(speech.message, "two-face")))
+				dispense_path = /obj/item/weapon/reagent_containers/food/snacks/donut/chaos
+				sleep(3)
+				say("CHAOS.")
+			else if((findtext(speech.message, "favorite") || (findtext(speech.message, "4Kids") || (findtext(speech.message, "rice"))
+				dispense_path = /obj/item/weapon/reagent_containers/food/snacks/riceball
+				sleep(3)
+				say("FAVORITE.")
+		if(dispense_path)
+			var/obj/item/I = new dispense_path(get_turf(src))
+			I.put_in_hands(H)
+			last_donut = timeofday
+
+/obj/item/clothing/under/securityskirt/elite
+	name = "elite security skirt"
+	desc = "For demonstrating who is in charge."
+	icon_state = "secskirt"
+	item_state = "r_suit"
+	_color = "secred"
+	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+	clothing_flags = ONESIZEFITSALL
+	siemens_coefficient = 0.9
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	body_parts_covered = FULL_TORSO|ARMS
+
+/obj/item/clothing/under/securityskirt/elite/equipped(var/mob/user, var/slot)
+	..()
+	processing_objects += src
+
+/obj/item/clothing/under/securityskirt/elite/unequipped(mob/user, var/from_slot = null)
+	processing_objects -= src
+	..()
+
+/obj/item/clothing/under/securityskirt/elite/process()
+	if(prob(1))
+		if(ishuman(loc))
+			visible_message("<span class='warning'>[loc]'s [src] swishes threateningly.</span>")
+
+/obj/item/weapon/ram_kit
+	name = "battering ram drop-leaf kit"
+	desc = "A device so ingenius there is no way the Vox invented it. Exploits volt-induced superposition to allow battering ram to fold into itself."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "kit"
+	flags = FPRINT
+	siemens_coefficient = 0
+	w_class = W_CLASS_SMALL
+	origin_tech = Tc_COMBAT + "=5"
+
+/obj/structure/largecrate/wolf
+	name = "security wolf crate"
+	desc = "An access-locked crate containing a security wolf. Handlers are responsible for obedience: wolves require regular meat or they will lash out at small animals and, if desperate, humans."
+	req_access = (access_brig)
+	icon = 'icons/obj/cage.dmi'
+	icon_state = "cage_secure"
+
+/obj/structure/largecrate/wolf/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(iscrowbar(W) && allowed(user))
+		new /obj/item/stack/sheet/metal(src)
+		var/turf/T = get_turf(src)
+		for(var/i = 1 to 4)
+			new /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh(T)
+		new /mob/living/simple_animal/hostile/wolf(T)
+		user.visible_message("<span class='notice'>[user] pries \the [src] open.</span>", \
+							 "<span class='notice'>You pry open \the [src].</span>", \
+							 "<span class='notice'>You hear creaking metal.</span>")
+		qdel(src)
+	else
+		return attack_hand(user)
+
+/obj/item/device/law_planner
+	name = "law planning frame"
+	desc = "A large data pad with buttons for crimes. Used for planning a brig sentence."
+	w_class = W_CLASS_SMALL
+	origin_tech = Tc_PROGRAMMING + "=6"
+	icon = 'icons/obj/module.dmi'
+	icon_state = "planning frame"
+	item_state = "electronic"
+	req_access = list(access_brig)
+	var/announce = 1 //0 = Off, 1 = On select, 2 = On upload
+	var/start_timer = FALSE //If true, automatically start the timer on upload
+	var/upload_crimes = null //If has DNA, will look for an associated datacore file and upload crimes
+	var/list/rapsheet = list()
+	var/total_time = 0
+
+	var/list/minor_crimes = list(
+							"RESISTING ARREST"=2
+							"PETTY CRIME"=3
+							"DRUGGING"=4
+							"POSSESSION"=5
+							"MANHUNT"=5
+							"ESCAPE"=5
+							"FRAMING"=5
+							"WORKPLACE HAZARD"=5
+							"ASSAULT"=6
+							"POSS. WEAPON"=7
+							"POSS. EXPLOSIVE"=8)
+	var/list/major_crimes = list(
+							"B&E RESTRICTED"=10
+							"INTERFERENCE"=10
+							"UNLAWFUL UPLOAD"=10
+							"ABUSE OF POWER"=10
+							"ASSAULT ON SEC"=10
+							"MAJOR TRESPASS"=10
+							"MAJOR B&E"=15
+							"GRAND THEFT"=15)
+
+/obj/item/device/law_planner/proc/announce()
+	say(english_list(rapsheet))
+	say("[total_time] minutes.")
+
+/obj/item/device/law_planner/afterattack(var/atom/A, var/mob/user, var/proximity_flag)
+	if(!proximity_flag)
+		to_chat(user, "<span class='warning'>You can't seem to reach \the [A].</span>")
+		return 0
+	if(!allowed)
+		to_chat(user, "<span class='warning'>You must wear your ID!</span>")
+		return 0
+	if(ishuman(A)&&!(A==user))
+		for(var/datum/data/record/E in data_core.security)
+			if(E.fields["name"] == A.name)
+				say("Verified. Found record match for [A].")
+				upload_crimes = E
+	if(istype(A,/obj/machinery/door_timer))
+		if(announce==2)
+			announce()
+		if(upload_crimes)
+			upload_crimes.fields["criminal"] = "Incarcerated"
+			var/counter = 1
+			while(upload_crimes.fields["com_[counter]"])
+				counter++
+			upload_crimes.fields["com_[counter]"] = text("Made by [user] (Automated) on [time2text(world.realtime, "DDD MMM DD")]<BR>[english_list(rapsheet)]")
+		var/obj/machinery/door_timer/D = A
+		if(D.timeleft())
+			//We're adding time
+			D.releasetime += total_time*60
+		else
+			//Setting time
+			D.timeset(total_time*60)
+		if(start_timer && !D.timing)
+			D.timer_start()
+		upload_crimes = null
+		rapsheet = null
+		total_time = null
+	else
+		..()
+
+
+/obj/item/weapon/boxofsnow
+	name = "box of winter"
+	desc = "It has a single red button on top. Probably want to be careful where you open this."
+	icon = 'icons/obj/storage/smallboxes.dmi'
+	icon_state = "box_of_doom"
+	item_state = "box_of_doom"
+
+/obj/item/weapon/boxofsnow/attack_self(mob/user)
+	var/turf/center = get_turf(loc)
+	for(var/i = 1 to rand(8,24))
+		new /obj/item/stack/sheet/snow(center)
+	for(var/turf/simulated/T in view(3))
+		if(istype(T,/turf/simulated/floor))
+			new /obj/structure/snow(T) //Floors get snow
+		if(istype(T,/turf/simulated/wall))
+			new /obj/machinery/xmas_light(T) //Walls get lights
+	if(prob(50)) //Snowman or St. Corgi
+		/mob/living/simple_animal/hostile/retaliate/snowman(center)
+	else
+		/mob/living/simple_animal/corgi/saint(center)
+	qdel(src)
