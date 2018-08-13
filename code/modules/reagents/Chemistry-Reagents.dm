@@ -3092,6 +3092,26 @@
 	else if(M.bodytemperature < 311)
 		M.bodytemperature = min(310, M.bodytemperature + (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
+/datum/reagent/preslomite
+	name = "Preslomite"
+	id = PRESLOMITE
+	description = "A stabilizing chemical used in industrial relief efforts."
+	reagent_state = LIQUID
+	color = "#FFFFFF" //rgb: 255, 255, 255
+	custom_metabolism = 0.05
+
+/datum/reagent/preslomite/on_mob_life(var/mob/living/M, var/alien)
+
+	if(..())
+		return 1
+	if(!iscarbon(M))
+		return //We can't do anything for you
+	var/mob/living/carbon/C = M
+	if(C.isInCrit())
+		C.adjustToxLoss(-2 * REM)
+		C.heal_organ_damage(0, 2 * REM)
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
