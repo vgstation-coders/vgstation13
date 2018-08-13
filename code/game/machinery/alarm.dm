@@ -918,7 +918,7 @@ FIRE ALARM
 	name = "Fire Alarm"
 	desc = "<i>\"Pull this in case of emergency\"</i>. Thus, keep pulling it forever."
 	icon = 'icons/obj/monitors.dmi'
-	icon_state = "fire0"
+	icon_state = "fire0s"
 	var/detecting = 1.0
 	var/working = 1.0
 	var/time = 10.0
@@ -1192,6 +1192,14 @@ var/global/list/firealarms = list() //shrug
 
 /obj/machinery/firealarm/npc_tamper_act(mob/living/L)
 	alarm()
+
+/obj/machinery/firealarm/kick_act(mob/living/carbon/human/H)
+	..()
+	if(shelter && prob(50))
+		new /obj/item/inflatable/shelter(loc)
+		shelter = FALSE
+		update_icon()
+		visible_message("<span class='notice'>\The shelter detaches from \the [src]!</span>")
 
 /obj/machinery/partyalarm
 	name = "\improper PARTY BUTTON"

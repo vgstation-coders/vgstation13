@@ -237,6 +237,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 				if (next_dest_loc)
 					src.patrol_path = AStar(src.loc, next_dest_loc, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 120, id=botcard, exclude=null)
 		else
+			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
 			patrol_move()
 
 		return

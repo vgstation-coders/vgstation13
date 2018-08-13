@@ -221,7 +221,7 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/getMovementDelay()
 	if(internal_battery && internal_battery.charge)
-		return 0
+		return 1
 	else
 		return (..() * 2) //It's not designed to move this way!
 

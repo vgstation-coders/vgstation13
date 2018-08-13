@@ -20,11 +20,17 @@
 	var/dismantle_type = /turf/simulated/floor/plating
 	var/girder_type = /obj/structure/girder
 
-	canSmoothWith = "/turf/simulated/wall=0&/obj/structure/falsewall=0&/obj/structure/falserwall=0"
-
 	soot_type = null
 
 	explosion_block = 1
+
+/turf/simulated/wall/canSmoothWith()
+	var/static/list/smoothables = list(
+		/turf/simulated/wall,
+		/obj/structure/falsewall,
+		/obj/structure/falserwall,
+	)
+	return smoothables
 
 /turf/simulated/wall/examine(mob/user)
 	..()

@@ -41,7 +41,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	friendly = "prods"
 	wander = 0
 	pass_flags = PASSTABLE
-	canEnterVentWith = "/mob/living/captive_brain=0&/obj/item/verbs/borer=0"
 	universal_understand=1
 
 	var/busy = 0 // So we aren't trying to lay many eggs at once.
@@ -93,6 +92,13 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/static/list/name_prefixes = list("Primary","Secondary","Tertiary","Quaternary","Quinary","Senary","Septenary","Octonary","Nonary","Denary")
 	var/name_prefix_index = 1
 	held_items = list()
+
+/mob/living/simple_animal/borer/canEnterVentWith()
+	var/static/list/allowed_items = list(
+		/mob/living/captive_brain,
+		/obj/item/verbs/borer,
+	)
+	return allowed_items
 
 /mob/living/simple_animal/borer/defected_borer
 	name = "special borer"

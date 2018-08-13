@@ -16,7 +16,7 @@
 // Use this when setting the aiEye's location.
 // It will also stream the chunk that the new loc is in.
 
-/mob/camera/aiEye/forceMove(var/atom/destination)
+/mob/camera/aiEye/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	if(ai)
 		if(!isturf(ai.loc))
 			return

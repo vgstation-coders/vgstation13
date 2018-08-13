@@ -533,7 +533,7 @@
 			parrot_state = PARROT_SWOOP | PARROT_RETURN
 			return
 
-		walk_to(src, parrot_interest, 1, parrot_speed)
+		start_walk_to(parrot_interest, 1, parrot_speed)
 		if(isStuck())
 			return
 
@@ -554,7 +554,7 @@
 			icon_state = "parrot_sit"
 			return
 
-		walk_to(src, parrot_perch, 1, parrot_speed)
+		start_walk_to(parrot_perch, 1, parrot_speed)
 		if(isStuck())
 			return
 
@@ -608,7 +608,7 @@
 			L.attack_animal(src)//Time for the hurt to begin!
 		//Otherwise, fly towards the mob!
 		else
-			walk_to(src, parrot_interest, 1, parrot_speed)
+			start_walk_to(parrot_interest, 1, parrot_speed)
 			if(isStuck())
 				return
 

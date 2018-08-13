@@ -1403,3 +1403,13 @@ obj/item/weapon/circuitboard/rdserver
 	origin_tech = Tc_PROGRAMMING + "=1;" + Tc_ENGINEERING + "=4"
 	req_components = list(
 							/obj/item/weapon/stock_parts/capacitor = 1)
+
+/obj/item/weapon/circuitboard/holopad
+	name = "Circuit Board (Holopad)"
+	build_path = /obj/machinery/hologram/holopad
+	board_type = MACHINE
+	origin_tech = Tc_MAGNETS + "=2;" + Tc_PROGRAMMING + "=2;" + Tc_BLUESPACE + "=2"
+	req_components = list(
+		/obj/item/weapon/stock_parts/console_screen = 1,
+		/obj/item/weapon/stock_parts/micro_laser = 3,
+	)
