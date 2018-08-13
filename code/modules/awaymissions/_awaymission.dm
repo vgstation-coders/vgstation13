@@ -119,7 +119,7 @@ Example of the second method:
 	file_path = "maps/RandomZLevels/tomb.dmm"
 	desc = "On a distant planet, an ancient civilization built a great pyramid to bury their leader. After a team of archaeologists disappeared while attempting to unlock the tomb, a gateway was set up and a rescue team requested."
 
-/datum/map_element/away_mission/tomb
+/datum/map_element/away_mission/snowplanet
 	name = "Snow Planet"
 	file_path = "maps/RandomZLevels/snowplanet.dmm"
 	desc = "A small little planetoid with a cold atmosphere and a wooden cabin with a gateway. Be sure to pack some sweaters!"	
