@@ -426,8 +426,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	to_chat(src, "You begin delicately adjusting your connection to the host brain...")
 
-	spawn(300+(host.brainloss*5))
-
+	var/mod = 100 - host.brainloss/2 >= 0 ? 100 - host.brainloss/2 : 0 //braindamaged hosts are overwhelmed faster
+	spawn(mod)
 		if(!host || !src || controlling)
 			return
 		else
@@ -443,6 +443,19 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	to_chat(src, "<span class='danger'>You plunge your probosci deep into the cortex of the host brain, interfacing directly with their nervous system.</span>")
 	to_chat(host, "<span class='danger'>You feel a strange shifting sensation behind your eyes as an alien consciousness displaces yours.</span>")
+
+	//Let borers namepick when assuming control
+	var/newname
+	for(var/i = 1 to 3)
+		newname = trimcenter(trim(stripped_input(src,"You may assume a new identity for the host you've infested. Enter a name, or cancel to keep your host's original name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN))
+		if(newname == "")
+			if(alert(src,"Are you sure you want to keep your host's original name?",,"Yes","No") == "Yes")
+				break
+		else
+			if(alert(src,"Do you really want the name:\n[newname]?",,"Yes","No") == "Yes")
+				break
+	if(newname)
+		host.name = newname
 
 	host_brain.ckey = host.ckey
 	host_brain.name = host.real_name
