@@ -155,12 +155,12 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				health += 0.5
 			if(chemicals < 250 && !channeling)
 				chemicals++
-			if(controlling)
-				if(prob(5))
-					host.adjustBrainLoss(rand(1,2))
+			// if(controlling)
+			// 	if(prob(5))
+			// 		host.adjustBrainLoss(rand(1,2))
 
-				if(prob(host.brainloss/20))
-					host.say("*[pick(list("blink","blink_r","choke","aflap","drool","twitch","twitch_s","gasp"))]")
+			// 	if(prob(host.brainloss/20))
+			// 		host.say("*[pick(list("blink","blink_r","choke","aflap","drool","twitch","twitch_s","gasp"))]")
 
 	if(client)
 		regular_hud_updates()
@@ -395,7 +395,10 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				if(M.client.holder)
 					controls+= " | <A HREF='?_src_=holder;adminmoreinfo=\ref[src]'>?</A>"
 				controls += ") in [host]"
-
+			if(isborer (M)) //for borers that are IN CONTROL
+				var/mob/living/simple_animal/borer/B = M //why it no typecast
+				if(B.controlling)
+					M = B.host
 			to_chat(M, "<span class='cortical'>Cortical link, <b>[truename]</b>[controls]: [message]</span>")
 
 /obj/item/verbs/borer/special/verb/bond_brain()
