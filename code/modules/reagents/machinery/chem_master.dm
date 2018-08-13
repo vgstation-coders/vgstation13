@@ -21,6 +21,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/last_bottle_amt = 3
 	//var/bottlesprite = "1" //yes, strings
 	var/pillsprite = "1"
+	var/tmp/last_sound_time = 0
 
 	var/global/list/pill_icon_cache
 
@@ -292,6 +293,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		else if(href_list["createpill"] || href_list["createpill_multiple"])
 			if(!href_list["createempty"] && reagents.total_volume == 0)
 				to_chat(usr, "<span class='warning'>[bicon(src)] Buffer is empty!</span>")
+				if(last_sound_time + 1 SECONDS < world.time)
+					playsound(src, 'sound/machines/chime.ogg', 50)
+					last_sound_time = world.time
 				return
 
 			var/count = 1
