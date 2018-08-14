@@ -51,6 +51,9 @@ var/const/HOLOPAD_MODE = 0
 		/obj/item/weapon/stock_parts/micro_laser
 	)
 
+/obj/machinery/hologram/holopad/GhostsAlwaysHear()
+	return TRUE
+
 /obj/machinery/hologram/holopad/attack_hand(var/mob/living/carbon/human/user) //Carn: Hologram requests.
 	if(!istype(user))
 		return
