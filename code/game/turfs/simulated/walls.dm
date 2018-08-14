@@ -54,7 +54,8 @@
 	if(devastated)
 		getFromPool(/obj/item/stack/sheet/metal, src)
 	else
-		new girder_type(src)
+		if(girder_type)
+			new girder_type(src)
 
 	for(var/obj/O in src.contents) //Eject contents!
 		if(istype(O,/obj/structure/sign/poster))
