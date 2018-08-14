@@ -250,12 +250,12 @@
 	R.illegal_weapons = TRUE
 	R.SetEmagged()
 
-/obj/item/borg/upgrade/engineering/
+/obj/item/borg/upgrade/engineering
 	name = "engineering cyborg MK-2 upgrade board"
 	desc = "Adds several tools and materials for the robot to use."
 	icon_state = "cyborg_upgrade3"
 	required_module = list(/obj/item/weapon/robot_module/engineering)
-	modules_to_add = list(/obj/item/weapon/wrench/socket)
+	modules_to_add = list(/obj/item/weapon/wrench/socket, /obj/item/robot_rack/atmos)
 
 /obj/item/borg/upgrade/engineering/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())

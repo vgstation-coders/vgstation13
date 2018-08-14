@@ -4,7 +4,7 @@
 /obj/item/robot_rack
 	name = "generic robot rack"
 	desc = "A rack for carrying objects as a robot."
-	var/obj/object_type = null //The types of object the rack holds (subtypes are allowed).
+	var/obj/object_type = null //The type of object the rack holds (subtypes are allowed).
 	var/obj/initial_type = null //What type we start with. Useful if we start with a subtype of the type we can held.
 	var/starting_objects = 0 //How many things we start with.
 	var/capacity = 1 //How many things can be held.
@@ -128,3 +128,21 @@
 	icon_state = "ammopack_[length(held)]"
 
 #undef NEEDED_CHARGE_TO_RESTOCK_MAG
+
+/obj/item/robot_rack/atmos
+	name = "portable atmospherics rack"
+	desc = "Used by engineering cyborgs for convenient transport of portable atmospherics machinery."
+	icon = 'icons/obj/rollerbed.dmi'
+	icon_state = "borgbed_deployed"
+	object_type = "/obj/machinery/portable_atmospherics" //WHAT CAN GO WRONG
+	initial_type = "/obj/machinery/portable_atmospherics/scrubber"
+	starting_objects = 1
+
+/obj/item/robot_rack/bed/update_icon()
+	icon = "[held ? held.icon : initial(icon)]"
+	icon_state = "[held ? held.icon_state : initial(icon_state)]"
+
+/obj/item/robot_rack/preattack(obj/O, mob/user, proximity, params)
+	if(O.anchored || O.locked_to) //We don't want no trouble.
+		return
+	..()
