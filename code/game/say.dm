@@ -79,7 +79,7 @@ var/list/freqtoname = list(
 	var/rendered = render_speech(speech)
 	var/list/listeners = get_hearers_in_view(range, src)
 	if(speech.speaker.GhostsAlwaysHear())
-		listeners += observers
+		listeners |= observers
 	for(var/atom/movable/AM in listeners)
 		AM.Hear(speech, rendered)
 
