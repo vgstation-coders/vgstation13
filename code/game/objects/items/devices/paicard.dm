@@ -187,7 +187,6 @@
 		src.overlays += image(icon=icon, icon_state = "pai-off-notify")
 
 /obj/item/device/paicard/proc/removeNotification()
-	to_chat(world, "aa2a")
 	src.overlays.len = 0
 
 /obj/item/device/paicard/emp_act(severity)
