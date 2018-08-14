@@ -1064,7 +1064,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		// tl;dr
 		to_chat(src, "<span class='danger'>You are a Borer!</span>")
 		to_chat(src, "<span class='info'>You are a small slug-like symbiote that attaches to your host's body.  Your only goals are to survive and procreate. However, there are those who would like to destroy you, and hosts don't take kindly to jerks.  Being as helpful to your host as possible is the best option for survival.</span>")
-		to_chat(src, "<span class='info'>Borers can speak with other borers over the Cortical Link.  To do so, release control and use <code>say \";message\"</code>.  To communicate with your host only, speak normally.</span>")
+		to_chat(src, "<span class='info'>Borers can speak with other borers over the Cortical Link by prefixing their messages with :&.  To communicate with your host only, speak normally.</span>")
 		to_chat(src, "<span class='info'><b>New:</b> To get new abilities for you and your host, use <em>Evolve</em> to unlock things.  Borers are now symbiotic biological pAIs.</span>")
 		if(config.borer_takeover_immediately)
 			to_chat(src, "<span class='info'><b>Important:</b> While you receive full control at the start, <em>it is asked that you release control at some point so your host has a chance to play.</em>  If they misbehave, you are permitted to kill them.</span>")
