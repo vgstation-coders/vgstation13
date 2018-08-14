@@ -283,70 +283,50 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			to_chat(src, "<span class='info'>You learned how to secrete [C.name]!</span>")
 
 
-/mob/living/simple_animal/borer/say(var/message)
-	message = trim(copytext(message, 1, MAX_MESSAGE_LEN))
-	message = capitalize(message)
+/mob/living/simple_animal/borer/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
+	. = ..()
+	if(.)
+		return .
 
-	if(!message)
-		return
-
-	if (stat == 2)
-		return say_dead(message)
-
-	if (stat)
-		return
-
-	if (src.client)
-		if(client.prefs.muted & MUTE_IC)
-			to_chat(src, "<span class='warning'>You cannot speak in IC (muted).</span>")
+	var/mob/living/simple_animal/borer/B = src
+	var/mob/living/carbon/human/host = B.host
+	if(host)
+		speech.message = trim(speech.message)
+		if (!speech.message)
 			return
-		if (src.client.handle_spam_prevention(message,MUTE_IC))
-			return
+		var/encoded_message = html_encode(speech.message)
 
-	if (copytext(message, 1, 2) == "*")
-		to_chat(src, "<span class = 'notice'>This type of mob doesn't support this. Use the Me verb instead.</span>")
-		return
+		to_chat(src, "You drop words into [host]'s body: <span class='borer2host'>\"[encoded_message]\"</span>")
+		if(host.transmogged_to)
+			to_chat(host.transmogged_to, "<b>Something speaks within you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
+		else if(hostlimb == LIMB_HEAD)
+			to_chat(host, "<b>Your mind speaks to you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
+		else
+			to_chat(host, "<b>Your [limb_to_name(hostlimb)] speaks to you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
+		var/list/borers_in_host = host.get_brain_worms()
+		borers_in_host.Remove(src)
+		if(borers_in_host.len)
+			for(var/I in borers_in_host)
+				to_chat(I, "<b>[truename]</b> speaks from your host's [limb_to_name(hostlimb)]: <span class='borer2host'>\"[encoded_message]\"</span>")
 
-	if (copytext(message, 1, 2) == ";") //Brain borer hivemind.
-		return borer_speak(copytext(message,2))
+		var/turf/T = get_turf(src)
+		log_say("[truename] [key_name(src)] (@[T.x],[T.y],[T.z]) -> [host]([key_name(host)]) Borer->Host Speech: [encoded_message]")
 
-	if(!host)
-		to_chat(src, "You have no host to speak to.")
-		return //No host, no audible speech.
-
-	var/encoded_message = html_encode(message)
-
-	to_chat(src, "You drop words into [host]'s body: <span class='borer2host'>\"[encoded_message]\"</span>")
-	if(host.transmogged_to)
-		to_chat(host.transmogged_to, "<b>Something speaks within you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
-	else if(hostlimb == LIMB_HEAD)
-		to_chat(host, "<b>Your mind speaks to you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
+		for(var/mob/M in player_list)
+			if(istype(M, /mob/new_player))
+				continue
+			if(istype(M,/mob/dead/observer)  && (M.client && M.client.prefs.toggles & CHAT_GHOSTEARS || (get_turf(src) in view(M))))
+				var/controls = "<a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>Follow</a>"
+				if(M.client.holder)
+					controls+= " | <A HREF='?_src_=holder;adminmoreinfo=\ref[src]'>?</A>"
+				var/rendered="<span class='thoughtspeech'>Thought-speech, <b>[truename]</b> ([controls]) in <b>[host]</b>'s [limb_to_name(hostlimb)]: [encoded_message]</span>"
+				M.show_message(rendered, 2) //Takes into account blindness and such.
+		return 1
 	else
-		to_chat(host, "<b>Your [limb_to_name(hostlimb)] speaks to you:</b> <span class='borer2host'>\"[encoded_message]\"</span>")
-	var/list/borers_in_host = host.get_brain_worms()
-	borers_in_host.Remove(src)
-	if(borers_in_host.len)
-		for(var/I in borers_in_host)
-			to_chat(I, "<b>[truename]</b> speaks from your host's [limb_to_name(hostlimb)]: <span class='borer2host'>\"[encoded_message]\"</span>")
+		to_chat(src, "You have no host to speak to.")
+		return 1 //this ensures we don't end up speaking out loud
 
-	var/turf/T = get_turf(src)
-	log_say("[truename] [key_name(src)] (@[T.x],[T.y],[T.z]) -> [host]([key_name(host)]) Borer->Host Speech: [message]")
 
-	for(var/mob/M in player_list)
-		if(istype(M, /mob/new_player))
-			continue
-		if(istype(M,/mob/dead/observer)  && (M.client && M.client.prefs.toggles & CHAT_GHOSTEARS || (get_turf(src) in view(M))))
-			var/controls = "<a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>Follow</a>"
-			if(M.client.holder)
-				controls+= " | <A HREF='?_src_=holder;adminmoreinfo=\ref[src]'>?</A>"
-			var/rendered="<span class='thoughtspeech'>Thought-speech, <b>[truename]</b> ([controls]) in <b>[host]</b>'s [limb_to_name(hostlimb)]: [encoded_message]</span>"
-			M.show_message(rendered, 2) //Takes into account blindness and such.
-
-	/*
-	for(var/mob/M in mob_list)
-		if(M.mind && (istype(M, /mob/dead/observer)))
-			to_chat(M, "<i>Thought-speech, <b>[truename]</b> -> <b>[host]:</b> [copytext(html_encode(message), 2)]</i>")
-	*/
 
 /mob/living/simple_animal/borer/Stat()
 	..()
@@ -374,33 +354,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		return ..()
 
 // VERBS!
-/mob/living/simple_animal/borer/proc/borer_speak(var/message)
-	set category = "Alien"
-	set name = "Borer Speak"
-	set desc = "Communicate with your brethren."
-	if(!message)
-		return
-
-	var/turf/T = get_turf(src)
-	log_say("[truename] [key_name(src)] (@[T.x],[T.y],[T.z]) Borer Cortical Hivemind: [message]")
-
-	for(var/mob/M in mob_list)
-		if(istype(M, /mob/new_player))
-			continue
-
-		if( isborer(M) || (istype(M,/mob/dead/observer) && M.client && M.client.prefs.toggles & CHAT_GHOSTEARS))
-			var/controls = ""
-			if(isobserver(M))
-				controls = " (<a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>Follow</a>"
-				if(M.client.holder)
-					controls+= " | <A HREF='?_src_=holder;adminmoreinfo=\ref[src]'>?</A>"
-				controls += ") in [host]"
-			if(isborer (M)) //for borers that are IN CONTROL
-				var/mob/living/simple_animal/borer/B = M //why it no typecast
-				if(B.controlling)
-					M = B.host
-			to_chat(M, "<span class='cortical'>Cortical link, <b>[truename]</b>[controls]: [message]</span>")
-
 /obj/item/verbs/borer/special/verb/bond_brain()
 	set category = "Alien"
 	set name = "Assume Control"
@@ -451,7 +404,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/newname
 	for(var/i = 1 to 3)
 		newname = trimcenter(trim(stripped_input(src,"You may assume a new identity for the host you've infested. Enter a name, or cancel to keep your host's original name.", "Name change [4-i] [0-i != 1 ? "tries":"try"] left",""),1,MAX_NAME_LEN))
-		if(newname == "")
+		if(!newname || newname == "")
 			if(alert(src,"Are you sure you want to keep your host's original name?",,"Yes","No") == "Yes")
 				break
 		else
