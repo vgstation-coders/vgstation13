@@ -327,7 +327,7 @@
 
 	// Break the syringe and transfer some of the reagents to the target
 	src.reagents.reaction(target, INGEST)
-	var/syringestab_amount_transferred = max(rand(min(reagents.total_volume, 2), (reagents.total_volume - 5), 0) //nerfed by popular demand.
+	var/syringestab_amount_transferred = max(rand(min(reagents.total_volume, 2), (reagents.total_volume - 5), 0)) //nerfed by popular demand.
 	src.reagents.trans_to(target, syringestab_amount_transferred)
 	src.desc += " It is broken."
 	src.mode = SYRINGE_BROKEN
