@@ -210,7 +210,7 @@
 //Medical Stuff
 /obj/item/borg/upgrade/medical
 	name = "medical cyborg MK-2 upgrade board"
-	desc = "Used to give a medical cyborg advanced care tools and upgrade their chemistry gripper to be able to handle pills and pill bottles."
+	desc = "Used to give a medical cyborg advanced care tools."
 	icon_state = "cyborg_upgrade"
 	required_module = list(/obj/item/weapon/robot_module/medical, /obj/item/weapon/robot_module/syndicate/crisis)
 	modules_to_add = list(/obj/item/weapon/melee/defibrillator,/obj/item/weapon/reagent_containers/borghypo/upgraded)

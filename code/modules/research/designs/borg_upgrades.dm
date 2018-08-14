@@ -90,7 +90,7 @@
 
 /datum/design/medical_module_surgery
 	name = "Medical cyborg MK-2 upgrade"
-	desc = "Used to give a medical cyborg advanced care tools and upgrade their chemistry gripper to be able to handle pills and pill bottles."
+	desc = "Used to give a medical cyborg advanced care tools."
 	id = "medical_module_surgery"
 	req_tech = list(Tc_BIOTECH = 3, Tc_ENGINEERING = 3)
 	build_type = MECHFAB
