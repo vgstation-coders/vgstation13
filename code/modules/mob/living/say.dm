@@ -406,7 +406,6 @@ var/list/department_radio_keys = list(
 		if(MODE_BORER)
 			//this is sent to and usable by borers and mobs controlled by borers
 			var/mob/living/simple_animal/borer/head = src.has_brain_worms(LIMB_HEAD)
-			world.log << "Borer status: [isborer(src)]"
 			if(isborer(src) || head && head.controlling)
 				var/mob/living/simple_animal/borer/B = head && head.controlling ? head : src
 				var/message = text("<span class='cortical'>Cortical link, <b>[]</b>: []</span>",B.truename, html_encode(speech.message))
