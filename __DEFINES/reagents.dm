@@ -98,6 +98,7 @@
 #define METHYLIN 			"methylin"
 #define BICARODYNE 			"bicarodyne"
 #define STABILIZINE 			"stabilizine"
+#define PRESLOMITE			"preslomite"
 #define NANITES 			"nanites"
 #define AUTISTNANITES 			"autistnanites"
 #define XENOMICROBES 			"xenomicrobes"
