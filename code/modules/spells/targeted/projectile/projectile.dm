@@ -13,7 +13,7 @@ If the spell_projectile is seeking, it will update its target every process and 
 
 	var/proj_type = /obj/item/projectile/spell_projectile //use these. They are very nice
 
-	var/proj_step_delay = 1 //lower = faster
+	var/projectile_speed = 1.33 //lower = faster
 	var/cast_prox_range = 1
 
 /spell/targeted/projectile/proc/spawn_projectile(var/location, var/direction)
@@ -41,7 +41,7 @@ If the spell_projectile is seeking, it will update its target every process and 
 		projectile.yo = target.y - user.y
 		projectile.xo = target.x - user.x
 		projectile.kill_count = src.duration
-		projectile.step_delay = proj_step_delay
+		projectile.projectile_speed = projectile_speed
 		if(istype(projectile, /obj/item/projectile/spell_projectile))
 			var/obj/item/projectile/spell_projectile/SP = projectile
 			SP.carried = src //casting is magical
