@@ -123,6 +123,9 @@
 		if (RITUALABORT_CONCEAL)
 			if (activator)
 				to_chat(activator, "<span class='warning'>The ritual is disrupted by the rune's sudden phasing out.</span>")
+		if (RITUALABORT_NEAR)
+			if (activator)
+				to_chat(activator, "<span class='warning'>You cannot perform this ritual that close from another similar structure.</span>")
 
 	for(var/mob/living/L in contributors)
 		if (L.client)
@@ -1407,7 +1410,8 @@ var/list/blind_victims = list()
 //RUNE XI
 /datum/rune_spell/seer
 	name = "Seer"
-	desc = "See the invisible, the dead, hear their voice."
+	desc = "See the invisible, the dead, the concealed. If you give them a writing sheet, they may relay a message to you."
+	desc_talisman = "For a few seconds, you may see the invisible, the dead, the concealed. If you give them a writing sheet, they may relay a message to you."
 	Act_restriction = CULT_ACT_I
 	invocation = "Rash'tla sektath mal'zua. Zasan therium viortia."
 	rune_flags = RUNE_STAND
@@ -1491,23 +1495,99 @@ var/list/blind_victims = list()
 //RUNE XII
 /datum/rune_spell/summonrobes
 	name = "Summon Robes"
-	desc = "Wear the robes of those who follow Nar-Sie."
+	desc = "Swap your clothes for the robes of Nar-Sie's followers. Significantly improves the efficiency of some rituals. Provides a tesseract to instantly swap back to your old clothes."
+	desc_talisman = "Swap your clothes for the robes of Nar-Sie's followers. Significantly improves the efficiency of some rituals. Provides a tesseract to instantly swap back to your old clothes. Using the tesseract will also give you the talisman back, granted it has some uses left."
 	Act_restriction = CULT_ACT_II
 	invocation = "Sa tatha najin"
 	word1 = /datum/cultword/hell
 	word2 = /datum/cultword/destroy
 	word3 = /datum/cultword/other
+	rune_flags = RUNE_STAND
+	talisman_uses = 3
+	page = ""
+	var/list/slots_to_store = list(
+		slot_shoes,
+		slot_head,
+		slot_back,
+		slot_wear_suit,
+		slot_s_store,
+		)
+
+/datum/rune_spell/summonrobes/cast()
+	var/obj/effect/rune/R = spell_holder
+	if (istype(R))
+		R.one_pulse()
+
+	anim(target = activator, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_robes", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
+
+	var/obj/item/weapon/blood_tesseract/BT = new(get_turf(activator))
+	if (istype (spell_holder,/obj/item/weapon/talisman))
+		activator.u_equip(spell_holder)
+		spell_holder.forceMove(BT)
+		BT.remaining = spell_holder
+
+	for(var/slot in slots_to_store)
+		var/obj/item/user_slot = activator.get_item_by_slot(slot)
+		if (user_slot)
+			BT.stored_gear[num2text(slot)] = user_slot
+	//looping again in case the suit had a stored item
+	for(var/slot in BT.stored_gear)
+		var/obj/item/user_slot = BT.stored_gear[slot]
+		BT.stored_gear[slot] = user_slot
+		if(istype(user_slot, /obj/item/weapon/storage))
+			var/obj/item/weapon/storage/S = user_slot
+			S.close(activator)
+		activator.u_equip(user_slot)
+		user_slot.forceMove(BT)
+
+	if(isplasmaman(activator))
+		activator.equip_to_slot_or_drop(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(activator), slot_head)
+		activator.equip_to_slot_or_drop(new /obj/item/clothing/suit/space/plasmaman/cultist(activator), slot_wear_suit)
+	else
+		activator.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood(activator), slot_head)
+		activator.equip_to_slot_or_drop(new /obj/item/clothing/suit/cultrobes(activator), slot_wear_suit)
+
+	activator.equip_to_slot_or_drop(new /obj/item/clothing/shoes/cult(activator), slot_shoes)
+
+	//transferring backpack items
+	var/obj/item/weapon/storage/backpack/cultpack/new_pack = new (activator)
+	if ((num2text(slot_back) in BT.stored_gear))
+		var/obj/item/stored_slot = BT.stored_gear[num2text(slot_back)]
+		if (istype (stored_slot,/obj/item/weapon/storage/backpack))
+			for(var/obj/item/I in stored_slot)
+				I.forceMove(new_pack)
+	activator.equip_to_slot_or_drop(new_pack, slot_back)
+
+	activator.put_in_hands(BT)
+	qdel(src)
+
 
 //RUNE XIII
 /datum/rune_spell/door
 	name = "Door"
-	desc = "More obstacles for your enemies to overcome."
+	desc = "Raise a door to impede your enemies. It automatically opens and closes behind you, but the others may eventually break it down."
+	desc_talisman = "Use to remotely trigger the rune and have it spawn a door to block your enemies."
 	Act_restriction = CULT_ACT_II
 	invocation = "Khari'd! Eske'te tannin!"
 	word1 = /datum/cultword/destroy
 	word2 = /datum/cultword/travel
 	word3 = /datum/cultword/self
 	talisman_absorb = RUNE_CAN_ATTUNE
+	page = ""
+	cost_invoke = 10
+
+/datum/rune_spell/door/cast()
+	var/obj/effect/rune/R = spell_holder
+	if (istype(R))
+		R.one_pulse()
+
+	if (blood_pay())
+		if (locate(/obj/machinery/door/mineral/cult) in range(spell_holder,1))
+			abort(RITUALABORT_NEAR)
+		else
+			new /obj/machinery/door/mineral/cult(get_turf(spell_holder))
+			qdel(spell_holder)
+	qdel(src)
 
 //RUNE XIV
 /datum/rune_spell/fervor

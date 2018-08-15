@@ -151,6 +151,7 @@
 	health = 100
 	maxHealth = 100
 	sound_damaged = 'sound/effects/stone_hit.ogg'
+	sound_destroyed = 'sound/effects/stone_crumble.ogg'
 	layer = TABLE_LAYER
 
 
