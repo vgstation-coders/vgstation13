@@ -2140,7 +2140,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		P.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[reply]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
 		for(var/mob/dead/observer/M in player_list)
 			if(!multicast_message && M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
-				M.show_message("<span class='game say'>PDA Message - <span class='name'>[U][U.real_name == owner ? "" : " (as [owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
+				M.show_message("<a href='?src=\ref[M];follow=\ref[U]'>(Follow)</a> <span class='game say'>PDA Message - <span class='name'>\
+					[U.real_name][U.real_name == owner ? "" : " (as [owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
 
 
 		if (prob(15)&&!multicast_message) //Give the AI a chance of intercepting the message
