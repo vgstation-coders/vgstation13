@@ -358,6 +358,14 @@
 	required_reagents = list(CHLORINE = 1, NITROGEN = 1, ANTI_TOXIN = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/alkycosine
+	name = "Alkycosine"
+	id = ALKYCOSINE
+	result = ALKYCOSINE
+	required_reagents = list(ALKYSINE = 1, BLEACH = 1, ANTI_TOXIN = 1)
+	required_temp = T0C + 40
+	result_amount = 4
+
 /datum/chemical_reaction/dexalin
 	name = "Dexalin"
 	id = DEXALIN
@@ -385,6 +393,14 @@
 	id = BICARIDINE
 	result = BICARIDINE
 	required_reagents = list(INAPROVALINE = 1, CARBON = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/synthocarisol
+	name = "Synthocarisol"
+	id = SYNTHOCARISOL
+	result = SYNTHOCARISOL
+	required_reagents = list(BICARIDINE = 1, INAPROVALINE = 1)
+	required_temp = T0C + 77
 	result_amount = 2
 
 /datum/chemical_reaction/hyperzine
@@ -613,6 +629,14 @@
 	id = MINDBREAKER
 	result = MINDBREAKER
 	required_reagents = list(SILICON = 1, HYDROGEN = 1, ANTI_TOXIN = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/heartbreaker
+	name = "Heartbreaker Toxin"
+	id = HEARTBREAKER
+	result = HEARTBREAKER
+	required_reagents = list(MINDBREAKER = 1, DEXALIN = 1)
+	required_temp = T0C + 37
 	result_amount = 5
 
 /datum/chemical_reaction/lipozine
@@ -3064,6 +3088,14 @@
 	result = CHARCOAL
 	required_reagents = list(CARBON = 1, SACID = 2)
 	required_temp = T0C + 450
+	result_amount = 1
+
+/datum/chemical_reaction/caramel
+	name = "Heated Sugar"
+	id = CARAMEL
+	result = CARAMEL
+	required_reagents = list(SUGAR = 1)
+	required_temp = T0C + 170
 	result_amount = 1
 
 /datum/chemical_reaction/vomit_all
