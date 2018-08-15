@@ -633,10 +633,11 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 	return compare(other)
 
 /datum/gas_mixture/proc/share_space(datum/gas_mixture/unsim_air, connecting_tiles)
-	unsim_air = new(unsim_air) //First, copy unsim_air so it doesn't get changed.
-	unsim_air.volume += volume + 3 * CELL_VOLUME //Then increase the copy's volume so larger rooms don't drain slowly as fuck.
+	var/datum/gas_mixture/sharer = new() //Make a new gas_mixture to copy unsim_air into so it doesn't get changed.
+	sharer.volume = unsim_air.volume + volume + 3 * CELL_VOLUME //Then increase the copy's volume so larger rooms don't drain slowly as fuck.
 		//Why add the 3 * CELL_VOLUME, you ask? To mirror the old behavior. Why did the old behavior add three tiles to the total? I have no idea.
-	return share_tiles(unsim_air, connecting_tiles)
+	sharer.copy_from(unsim_air) //Finally, perform the actual copy
+	return share_tiles(sharer, connecting_tiles)
 
 /datum/gas_mixture/proc/english_contents_list()
 	var/all_contents = list()
