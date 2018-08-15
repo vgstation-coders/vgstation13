@@ -81,12 +81,14 @@
 #define RITUALABORT_ERASED	"erased"
 #define RITUALABORT_STAND	"too far"
 #define RITUALABORT_GONE	"moved away"
+#define RITUALABORT_BLOCKED	"blocked"
 #define RITUALABORT_BLOOD	"channel cancel"
 #define RITUALABORT_TOOLS	"moved talisman"
 #define RITUALABORT_REMOVED	"victim removed"
 #define RITUALABORT_CONVERT	"convert success"
 #define RITUALABORT_SACRIFICE	"convert failure"
 #define RITUALABORT_FULL	"no room"
+#define RITUALABORT_CONCEAL	"conceal"
 
 #define	TOME_CLOSED	1
 #define	TOME_OPEN	2
