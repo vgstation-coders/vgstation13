@@ -68,10 +68,10 @@ Example of the second method:
 	..()
 	desc = "[world.maxx]x[world.maxy] tiles of pure space. No structures, no humans, absolutely nothing. Not even a gateway - you'll have to spawn one yourself."
 
-/datum/map_element/away_mission/arcticwaste
-	name = "arctic waste"
+/datum/map_element/away_mission/arcticwasteland
+	name = "arctic wasteland"
 	file_path = "maps/RandomZLevels/arcticwaste.dmm"
-	desc = "A frozen wasteland with an underground bunker. Features a gateway."
+	desc = "A 200x200  frozen wasteland with some trees, some wolves, and a bunker in a cave. Features a gateway."
 
 /datum/map_element/away_mission/assistantchamber
 	name = "assistant chamber"

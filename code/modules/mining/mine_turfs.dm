@@ -89,6 +89,21 @@
 	temperature = T20C
 	mined_type = /turf/simulated/floor/asteroid/air
 	minimum_mine_time = 30 //3 seconds
+	
+//this one's for the snowmaps
+/turf/unsimulated/mineral/internal/ice
+	icon_state = "snow_rock"
+	base_icon_state = "snow_rock"
+	overlay_state = "snow_rock_overlay"
+	no_finds = 1
+	oxygen = MOLES_O2STANDARD
+	nitrogen = MOLES_N2STANDARD
+	temperature = T0C	
+	mined_type = /turf/simulated/floor/plating/snow/cold
+
+/turf/unsimulated/mineral/internal/ice/New()
+	base_icon_state = pick("snow_rock","snow_rock1","snow_rock2","snow_rock3","snow_rock4")
+	..()
 
 /turf/unsimulated/mineral/hive
 	mined_type = /turf/unsimulated/floor/evil
