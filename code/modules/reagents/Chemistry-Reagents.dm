@@ -2731,14 +2731,14 @@
 /datum/reagent/synthocarisol
 	name = "Synthocarisol"
 	id = SYNTHOCARISOL
-	description = "Synthocarisol is an advanced analgesic medication and can be used to treat blunt trauma."
+	description = "Synthocarisol a synthetic version of Carisol, a reagent that used to be found in traditional medicines made from the horn of the now-extinct Space African Rhino. Tragically, the horns also contained an equal amount of Anticarisol, which led to the medical community dismissing the remedies as nothing more than placebo and overlooking this reagent for several centuries."
 	reagent_state = LIQUID
 	color = "#580082" //rgb: 88, 0, 130
 	overdose_am = REAGENTS_OVERDOSE
 	density = 4.67
 	specheatcap = 0.57
 
-/datum/reagent/pickadie/on_mob_life(var/mob/living/M)
+/datum/reagent/synthocarisol/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
