@@ -244,6 +244,24 @@ proc/get_space_area()
 
 	return global.space_area
 
+/**
+	checks if the given atom is on a shuttle (non-specific)
+	args: atom
+	returns: shuttle type (or null if not on shuttle)
+**/
+
+proc/is_on_shuttle(var/atom/A)
+	var/area/AA = get_area(A)
+
+	if(!AA) //How doth
+		return 0
+
+	for(var/datum/shuttle/S in shuttles)
+		if(S.linked_area == AA)
+			return S
+
+	return 0
+
 //1 line helper procs compressed into defines.
 #define Clamp(x, y, z) 	(x <= y ? y : (x >= z ? z : x))
 //x is the number you want to clamp
