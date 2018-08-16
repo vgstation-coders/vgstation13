@@ -280,3 +280,11 @@
 			affecting.status |= ORGAN_SPLINTED
 			use(1)
 		return
+
+/obj/item/stack/medical/splint/ghetto
+	name = "ghetto splints"
+	icon_state = "ghettosplintcomplete"
+	desc = "A makeshift splint made out of rods, cable and a newspaper."
+	singular_name = "ghetto splint"
+	amount = 1
+	max_amount = 5
