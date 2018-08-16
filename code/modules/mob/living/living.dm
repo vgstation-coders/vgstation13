@@ -731,7 +731,7 @@ Thanks.
 							var/mob/living/carbon/human/HM = M
 							var/list/damaged_organs = HM.get_broken_organs()
 							var/list/bleeding_organs = HM.get_bleeding_organs()
-							if (T.has_gravity() && HM.lying)
+							if (T.has_gravity() && HM.lying && m_intent != "walk")
 
 								if (damaged_organs.len)
 									if(prob(HM.getBruteLoss() / 8)) //Chance for damage based on current damage
