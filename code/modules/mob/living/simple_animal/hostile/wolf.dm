@@ -319,7 +319,7 @@
 			to_chat(user, "<span class='info'>It seems friendly to you.</span>")
 		var/remaining_health_percent = round((health/maxHealth)*100)
 		switch(remaining_health_percent)
-			if(60 to 100)
+			//if(60 to 100)
 				//Do nuthin
 			if(30 to 59)
 				to_chat(user, "<span class='warning'>It seems quite hurt.</span>")
