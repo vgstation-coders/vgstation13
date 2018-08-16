@@ -145,7 +145,7 @@
 		return 0
 	var/datum/organ/internal/lungs/L = internal_organs_by_name["lungs"]
 	if(!breath || (breath.total_moles() == 0) || suiciding || !L)
-		if(reagents.has_reagent(INAPROVALINE))
+		if(reagents.has_reagent(INAPROVALINE)||reagents.has_reagent(PRESLOMITE))
 			return 0
 		if(suiciding)
 			adjustOxyLoss(2) //If you are suiciding, you should die a little bit faster

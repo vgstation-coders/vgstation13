@@ -3173,10 +3173,12 @@
 
 	if(..())
 		return 1
+	if(M.losebreath>10)
+		M.losebreath = max(10, M.losebreath - 5)
 	if(!iscarbon(M))
-		return //We can't do anything for you
+		return //We can't do anything else for you
 	var/mob/living/carbon/C = M
-	if(C.isInCrit())
+	if(C.health < config.health_threshold_crit + 10)
 		C.adjustToxLoss(-2 * REM)
 		C.heal_organ_damage(0, 2 * REM)
 
