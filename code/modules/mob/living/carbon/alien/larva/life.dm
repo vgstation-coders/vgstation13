@@ -244,7 +244,7 @@
 			//if( health <= 20 && prob(1) )
 			//	spawn(0)
 			//		emote("gasp")
-			if(!reagents.has_reagent(INAPROVALINE)&&!reagents.has_reagent(PRESLOMITE))
+			if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
 				adjustOxyLoss(1)
 			Paralyse(3)
 
