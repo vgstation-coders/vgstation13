@@ -111,8 +111,6 @@
 	//Tell user about the height. Note that normally height ranges from 3 to 8 (with a 5% chance of having 6 to 15 instead)
 	to_chat(user, "<span class='info'>It appears to be about [height*3] feet tall.</span>")
 	switch(health / maxHealth)
-		if(1.0)
-			//It's healthy
 		if(0.6 to 0.9)
 			to_chat(user, "<span class='info'>It's been partially cut down.</span>")
 		if(0.2 to 0.6)
