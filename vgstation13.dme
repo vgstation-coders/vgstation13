@@ -1025,6 +1025,7 @@
 #include "code\game\turfs\simulated\invulnerable_wall.dm"
 #include "code\game\turfs\simulated\mineral.dm"
 #include "code\game\turfs\simulated\shuttle.dm"
+#include "code\game\turfs\simulated\snow.dm"
 #include "code\game\turfs\simulated\walls.dm"
 #include "code\game\turfs\simulated\walls_mineral.dm"
 #include "code\game\turfs\simulated\walls_misc.dm"

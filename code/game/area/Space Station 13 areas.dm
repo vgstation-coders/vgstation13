@@ -2444,12 +2444,10 @@ proc/process_adminbus_teleport_locs()
 /area/awaymission/articwasteland
 	name = "artic wasteland"
 	icon_state = "away"
-	dynamic_lighting = 0
-	requires_power = 0
 	
 /area/awaymission/articwasteland/gateway
 	name = "artic wasteland gateway shelter"
-	icon_state = "away"
+	icon_state = "away2"
 	
 /////////////////////////////////////////////////////////////////////
 /*
