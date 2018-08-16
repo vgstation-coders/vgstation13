@@ -44,7 +44,7 @@
 	if(M)
 		investigate_text += " in \a [A], carried by [M.real_name] ([M.key])<br />"
 	else
-		investigate_text += " in \a [A], last touched by [(A.fingerprintslast ? A.fingerprintslast : "N/A (Last user processed: [usr.ckey])")]<br />"
+		investigate_text += " in \a [A], last touched by [(A.fingerprintslast ? A.fingerprintslast : "N/A (Last user processed: [usr ? usr.ckey : "N/A"])")]<br />"
 
 	I.write(investigate_text)
 
