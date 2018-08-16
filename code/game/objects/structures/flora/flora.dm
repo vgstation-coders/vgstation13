@@ -113,11 +113,11 @@
 	switch(health / maxHealth)
 		if(1.0)
 			//It's healthy
-		if(0.9 to 0.6)
+		if(0.6 to 0.9)
 			to_chat(user, "<span class='info'>It's been partially cut down.</span>")
-		if(0.6 to 0.2)
+		if(0.2 to 0.6)
 			to_chat(user, "<span class='notice'>It's almost cut down, [falling_dir ? "and it's leaning towards the [dir2text(falling_dir)]." : "but it still stands upright."]</span>")
-		if(0.2 to 0)
+		if(0 to 0.2)
 			to_chat(user, "<span class='danger'>It's going to fall down any minute now!</span>")
 
 /obj/structure/flora/tree/attackby(obj/item/W, mob/living/user)
