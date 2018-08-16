@@ -190,9 +190,7 @@
 		else
 			new /obj/item/stack/medical/splint/ghetto(get_turf(src.loc))
 		qdel(src)	
-
-/obj/item/weapon/splint_assembly
-		
+	
 /obj/item/weapon/cylinder
 	name = "beaker"
 	desc = "A beaker. There appear to be six holes drilled through the bottom."
