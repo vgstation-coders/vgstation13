@@ -48,6 +48,9 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 			RemoveAllFactionIcons(card.pai.mind)
 
 			pai_candidates -= candidate
+			for(var/obj/item/device/paicard/p in paicard_list)
+				if(!p.pai && !pai_candidates.len)
+					p.removeNotification()
 			usr << browse(null, "window=findPai")
 
 	if(href_list["new"])
