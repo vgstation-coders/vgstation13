@@ -44,7 +44,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 /obj/machinery/chem_master/New()
 	. = ..()
 
-	create_reagents(100)
+	create_reagents(300)
 
 	component_parts = newlist(
 		/obj/item/weapon/stock_parts/manipulator,
@@ -65,28 +65,16 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		generate_pill_icon_cache()
 
 /obj/machinery/chem_master/RefreshParts()
-	var/scancount = 0
 	var/lasercount = 0
 	var/manipcount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
 			manipcount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
-			scancount += SP.rating-1
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
 	max_bottle_size = initial(max_bottle_size) + lasercount*5
 	max_pill_count = initial(max_pill_count) + manipcount*5
-	handle_new_reservoir(scancount*25+100)
-	max_pill_size = initial(max_pill_size)+manipcount*25 // i suck at math
-
-
-/obj/machinery/chem_master/proc/handle_new_reservoir(var/newvol)
-	if(reagents.maximum_volume == newvol)
-		return //Volume did not change
-	if(reagents.maximum_volume>newvol)
-		reagents.remove_any(reagents.maximum_volume-newvol) //If we have more than our new max, remove equally until we reach new max
-	reagents.maximum_volume = newvol
+	max_pill_size = initial(max_pill_size) + manipcount*25
 
 /obj/machinery/chem_master/ex_act(severity)
 	switch(severity)
