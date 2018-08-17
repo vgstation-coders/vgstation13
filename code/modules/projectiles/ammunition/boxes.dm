@@ -117,3 +117,27 @@
 	ammo_type = "/obj/item/ammo_casing/shotgun/flare"
 	max_ammo = 7
 	multiple_sprites = 1
+
+/obj/item/ammo_storage/box/foam
+	name = "ammo box (foam darts)"
+	desc = "A box of foam darts."
+	icon_state = "foambox"
+	ammo_type = "/obj/item/ammo_casing/foam"
+	max_ammo = 40
+/*
+/obj/item/ammo_storage/box/foam/blue
+	icon_state = "foambox-blue"
+*/
+/obj/item/ammo_storage/box/foambelt
+	name = "ammo belt (foam darts)"
+	desc = "A belt of foam darts."
+	icon_state = "foambelt25"
+	ammo_type = "/obj/item/ammo_casing/foam"
+	max_ammo = 25
+
+/obj/item/ammo_storage/box/foambelt/extended
+	name = "ammo belt (foam darts)"
+	desc = "A belt of foam darts."
+	icon_state = "foambelt25"
+	ammo_type = "/obj/item/ammo_casing/foam"
+	max_ammo = 100

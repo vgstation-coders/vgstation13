@@ -16,7 +16,7 @@
 #define ROCKETGRENADE "rpg"
 #define GUIDEDROCKET "guided rocket"
 
-
+#define FOAM "foam"
 #define PULSE "pulse"
 #define GAUGE12 "12 gauge"
 #define GAUGEFLARE "flare"

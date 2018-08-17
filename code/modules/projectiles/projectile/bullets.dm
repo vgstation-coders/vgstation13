@@ -855,3 +855,26 @@
 	icon = 'icons/obj/food.dmi'
 	icon_state = "faggot"
 	damage = 10
+
+/obj/item/projectile/bullet/foam
+	name = "foam dart"
+	icon_state = "foamdart"
+	damage = 0
+	weaken = 5
+	embed = 0
+	penetration = 0
+	fire_sound = 'sound/items/syringeproj.ogg'
+
+/obj/item/projectile/bullet/foam/to_bump(atom/A)
+/*
+	if(!bumped)//to land before the hit
+		new /obj/item/ammo_casing/foam(get_turf(src))//So it "sticks" to where it hits.
+	..()
+*/
+	if(!bumped)
+		new /obj/item/ammo_casing/foam(get_turf(A))//So it "sticks" to where it hits.
+	..()
+/*
+/obj/item/projectile/bullet/foam
+	icon_state = "foamdartblue"
+*/

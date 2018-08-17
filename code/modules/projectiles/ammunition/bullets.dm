@@ -197,3 +197,21 @@
 	desc = "An invisible bullet casing, it's hard to tell if it's been spent or not."
 	projectile_type = "/obj/item/projectile/bullet/invisible"
 	icon_state = null
+
+/obj/item/ammo_casing/foam
+	name = "foam dart"
+	desc = "A foam dart."
+	icon_state = "foam-casing"
+	caliber = FOAM
+	projectile_type = "/obj/item/projectile/bullet/foam"
+	w_type = RECYK_METAL
+
+/*
+/obj/item/ammo_casing/foam/blue
+	name = "foam dart"
+	desc = "A foam dart."
+	icon_state = "foamblue-casing"
+	caliber = FOAM
+	projectile_type = "/obj/item/projectile/bullet/foam/blue"
+	w_type = RECYK_METAL
+*/
