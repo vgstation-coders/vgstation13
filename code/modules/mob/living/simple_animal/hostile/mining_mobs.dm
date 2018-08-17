@@ -579,28 +579,23 @@ obj/item/asteroid/basilisk_hide/New()
 //Stolen from corgi code
 /mob/living/simple_animal/hostile/asteroid/goliath/david/dave/attack_hand(mob/living/carbon/human/M)
 	. = ..()
-	switch(M.a_intent)
-		if(I_HELP)
-			wuv(1,M)
-		if(I_HURT)
-			wuv(-1,M)
+	react_to_touch(M)
 
-/mob/living/simple_animal/hostile/asteroid/goliath/david/dave/proc/wuv(change, mob/M)
+/mob/living/simple_animal/hostile/asteroid/goliath/david/dave/proc/react_to_touch(mob/M)
 	var/list/responses_good = list("bleats happily.", "rumbles affectionately.", "emits a content crackle.")
 	var/list/responses_bad = list("whimpers.", "lets out an upset gurgle.")
 
-	if(change)
-		if(change > 0)
-			if(M && !isUnconscious())
+	if(M && !isUnconscious())
+		switch(M.a_intent)
+			if(I_HELP)
 				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 				heart.plane = ABOVE_HUMAN_PLANE
-				flick_overlay(heart, list(M.client), 20)
-				emote("me", 1, pick(responses_good))
+				flick_overlay(heart, list(M.client), 2 SECONDS)
+				emote("me", EMOTE_AUDIBLE, pick(responses_good))
 				//calm down when petted.
 				LoseAggro()
-		else
-			if(M && !isUnconscious())
-				emote("me", 1, pick(responses_bad))
+			if(I_HURT)
+				emote("me", EMOTE_AUDIBLE, pick(responses_bad))
 
 /mob/living/simple_animal/hostile/asteroid/magmaw
 	name = "magmaw"

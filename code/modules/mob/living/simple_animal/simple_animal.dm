@@ -383,24 +383,24 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return 0
 
 /mob/living/simple_animal/attack_hand(mob/living/carbon/human/M as mob)
-	..()
+	. = ..()
 
 	switch(M.a_intent)
-
 		if(I_HELP)
 			if(health > 0)
 				visible_message("<span class='notice'>[M] [response_help] [src].</span>")
 
 		if(I_GRAB)
 			M.grab_mob(src)
-
-		if(I_HURT, I_DISARM)
+		
+		if(I_DISARM)
+			visible_message("<span class ='notice'>[M] [response_disarm] [src].</span>")
+		
+		if(I_HURT)
 			M.unarmed_attack_mob(src)
 			//adjustBruteLoss(harm_intent_damage)
-
 			//visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
 
-	return
 
 /mob/living/simple_animal/MouseDropFrom(mob/living/carbon/M)
 	if(M != usr || !istype(M) || !Adjacent(M) || M.incapacitated())

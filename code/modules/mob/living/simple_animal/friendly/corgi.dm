@@ -596,7 +596,7 @@
 	response_harm   = "kicks"
 	var/turns_since_scan = 0
 	var/puppies = 0
-	spin_emotes = list("dances around","chases her of a tail")
+	spin_emotes = list("dances around","chases her tail")
 
 //Lisa already has a cute bow!
 /mob/living/simple_animal/corgi/Lisa/Topic(href, href_list)
@@ -607,23 +607,18 @@
 
 /mob/living/simple_animal/corgi/attack_hand(mob/living/carbon/human/M)
 	. = ..()
-	switch(M.a_intent)
-		if(I_HELP)
-			wuv(1,M)
-		if(I_HURT)
-			wuv(-1,M)
+	react_to_touch(M)
 
-/mob/living/simple_animal/corgi/proc/wuv(change, mob/M)
-	if(change)
-		if(change > 0)
-			if(M && !isUnconscious()) // Added check to see if this mob (the corgi) is dead to fix issue 2454
+/mob/living/simple_animal/corgi/proc/react_to_touch(mob/M)
+	if(M && !isUnconscious())
+		switch(M.a_intent)
+			if(I_HELP)
 				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 				heart.plane = ABOVE_HUMAN_PLANE
 				flick_overlay(heart, list(M.client), 20)
-				emote("me", 1, "yaps happily.")
-		else
-			if(M && !isUnconscious()) // Same check here, even though emote checks it as well (poor form to check it only in the help case)
-				emote("me", 1, "growls.")
+				emote("me", EMOTE_AUDIBLE, "yaps happily.")
+			if(I_HURT)
+				emote("me", EMOTE_AUDIBLE, "growls.")
 
 
 //Sasha isn't even a corgi you dummy!
