@@ -25,6 +25,7 @@
 	var/cancelling = 3
 	var/touch_cast = 0
 	var/talisman_absorb = RUNE_CAN_IMBUE
+	var/talisman_uses = 1//Allows certain spells to be used many times from a single talisman. The talisman disappears upon the last use.
 	var/page = "Lorem ipsum dolor sit amet, consectetur adipiscing elit,\
 			 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\
 			  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut\
@@ -103,6 +104,9 @@
 		if (RITUALABORT_GONE)
 			if (activator)
 				to_chat(activator, "<span class='warning'>The ritual ends as you move away from the rune.</span>")
+		if (RITUALABORT_BLOCKED)
+			if (activator)
+				to_chat(activator, "<span class='warning'>There is already building blocking the ritual..</span>")
 		if (RITUALABORT_BLOOD)
 			spell_holder.visible_message("<span class='warning'>Deprived of blood, the channeling is disrupted.</span>")
 		if (RITUALABORT_TOOLS)
@@ -116,6 +120,9 @@
 		if (RITUALABORT_SACRIFICE)
 			if (activator)
 				to_chat(activator, "<span class='warning'>Whether because of their defiance, or Nar-Sie's thirst for their blood, the ritual ends leaving behind nothing but a creepy chest.</span>")
+		if (RITUALABORT_CONCEAL)
+			if (activator)
+				to_chat(activator, "<span class='warning'>The ritual is disrupted by the rune's sudden phasing out.</span>")
 
 	for(var/mob/living/L in contributors)
 		if (L.client)
@@ -190,6 +197,11 @@
 /datum/rune_spell/raisestructure/cast()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
+
+	if (locate(/obj/structure/cult) in R.loc)
+		abort(RITUALABORT_BLOCKED)
+		return
+
 	var/mob/living/user = activator
 	contributors.Add(user)
 	update_progbar()
@@ -289,6 +301,7 @@
 	Act_restriction = CULT_PROLOGUE
 	invocation = "O bidai nabora se'sma!"
 	rune_flags = RUNE_STAND
+	talisman_uses = 5
 	var/obj/effect/cult_ritual/cult_communication/comms = null
 	word1 = /datum/cultword/self
 	word2 = /datum/cultword/other
@@ -309,7 +322,8 @@
 		return
 
 	var/datum/faction/bloodcult = find_active_faction(BLOODCULT)
-	for(var/datum/mind/M in bloodcult.members)
+	for(var/datum/role/cultist/C in bloodcult.members)
+		var/datum/mind/M = C.antag
 		to_chat(M.current, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[message]</span></B></span>")
 
 	for(var/mob/dead/observer/O in player_list)
@@ -363,7 +377,8 @@
 			speaker_name = H.real_name
 		rendered_message = speech.render_message()
 		var/datum/faction/bloodcult = find_active_faction(BLOODCULT)
-		for(var/datum/mind/M in bloodcult.members)
+		for(var/datum/role/cultist/C in bloodcult.members)
+			var/datum/mind/M = C.antag
 			if (M.current == speech.speaker)//echoes are annoying
 				continue
 			to_chat(M.current, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinister'>[speech.message]</span></B></span>")
@@ -738,7 +753,7 @@
 						progress = progress/4
 
 				if (delay)
-					progress = max(1,min(10,progress))
+					progress = Clamp(progress,1,10)
 				remaining -= progress
 				update_progbar()
 				victim.update_fullscreen_alpha("conversionred", 164-remaining, 8)
@@ -1008,6 +1023,7 @@
 			var/duration = stun_duration
 			if (type == 2 && get_dist(L,src)>=5)//talismans have a reduced range
 				continue
+			shadow(L,loc,"rune_stun")
 			if (iscultist(L))
 				duration--
 			if(iscarbon(L))
@@ -1023,46 +1039,370 @@
 				S.Knockdown(duration)//TODO: TEST THAT
 		qdel(src)
 
+var/list/blind_victims = list()
+
 //RUNE VII
 /datum/rune_spell/blind
-	name = "Blind"
-	desc = "Get the edge over nearby enemies by removing their senses."
+	name = "Confusion"//Can't just call it "blind" anymore, can we?
+	desc = "Sow panic in the mind of your enemies, and obscure cameras."
+	desc_talisman = "Sow panic in the mind of your enemies, and obscure cameras. The effect is shorter than when used from a rune."
 	Act_restriction = CULT_ACT_I
 	invocation = "Sti' kaliesin!"
 	word1 = /datum/cultword/destroy
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/other
-	word3 = /datum/cultword/other
+	page = "This ritual projects the thoughts of Nar-Sie onto any visible enemy, giving them a taste of the future, and making them unable to differentiate \
+		their allies from our believers. The effects of surprise is especially powerful in the first few seconds. The confusion expires after half a minute, \
+		a bit less when cast from a talisman. A side effect of the ritual appears to obscure the screens of cameras in range, and until anyone repairs them. \
+		This makes it essential for keeping cult activities undercover from the eyes of the authorities. Robots will be briefly blinded by the ritual."
+	var/rune_duration=300//times are in tenths of a second
+	var/talisman_duration=200
+	var/hallucination_radius=25
+
+/datum/rune_spell/blind/cast(var/duration = rune_duration)
+	//Alright, this is a pretty interesting rune, first of all we prepare the fake cult floors & walls that the victims will see.
+	var/turf/T = get_turf(spell_holder)
+	var/list/hallucinated_turfs = list()
+	playsound(T, 'sound/effects/confusion_start.ogg', 75, 0, 0)
+	for(var/turf/U in range(T,hallucination_radius))
+		if (istype(U,/area/chapel))//the chapel is protected against such illusions, the mobs in it will still be affected however.
+			continue
+		var/dist = cheap_pythag(U.x - T.x, U.y - T.y)
+		if (dist < 15 || prob((hallucination_radius-dist)*4))
+			var/image/I_turf
+			if (U.density)
+				I_turf = image(icon = 'icons/turf/walls.dmi', loc = U, icon_state = "cult[U.junction]")//will preserve wall smoothing
+			else
+				I_turf = image(icon = 'icons/turf/floors.dmi', loc = U, icon_state = "cult")
+				//if it's a floor, give it a chance to have some runes written on top
+				if (prob(7))
+					var/lookup = pick(uristrune_cache)//finally a good use for that cache
+					var/icon/I = uristrune_cache[lookup]
+					I_turf.overlays.Add(I)
+			hallucinated_turfs.Add(I_turf)
+
+	//now let's round up our victims: any non-cultist with an unobstructed line of sight to the rune/talisman will be affected
+	var/list/victims = list()
+	for(var/mob/living/M in viewers(T))
+		if (iscarbon(M))//mite do something with silicons later
+			var/mob/living/carbon/C = M
+			if (iscultist(C))
+				continue
+			to_chat(C, "<span class='danger'>Your vision goes dark, panic and paranoia take their toll on your mind.</span>")
+			shadow(C,T)//shadow trail moving from the spell_holder to the victim
+			anim(target = C, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+			if (!(C in blind_victims))
+				C.overlay_fullscreen("blindborder", /obj/abstract/screen/fullscreen/conversion_border)//victims DO still get blinded for a second
+				C.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)//which will allow us to subtly reveal the surprise
+				C.update_fullscreen_alpha("blindblack", 255, 5)
+			else
+				C.update_fullscreen_alpha("blindblack", 255, 5)
+			C.playsound_local(C, 'sound/effects/confusion.ogg', 50, 0, 0, 0, 0)
+			victims.Add(C)
+		if (issilicon(M) && !isAI(M))//Silicons get a fade to black, then just a flash, until I can think of something else
+			shadow(M,T)
+			M.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)
+			M.update_fullscreen_alpha("blindblack", 255, 5)
+			spawn(5)
+				M.clear_fullscreen("blindblack", animate = 0)
+				M.flash_eyes(visual = 1)
+
+	for(var/obj/machinery/camera/C in view(T))//the effects on cameras do not time out, but they can be fixed
+		shadow(C,T)
+		var/col = C.color
+		animate(C, color = col, time = 4)
+		animate(color = "black", time = 5)
+		animate(color = col, time = 5)
+		C.vision_flags = BLIND//Anyone using a security cameras computer will only see darkness
+		C.setViewRange(-1)//The camera won't reveal the area for the AI anymore
+
+	spawn(10)
+		for(var/mob/living/carbon/C in victims)
+			var/new_victim = 0
+			if (!(C in blind_victims))
+				new_victim = 1
+				C.overlay_fullscreen("blindblind", /obj/abstract/screen/fullscreen/blind)
+			C.update_fullscreen_alpha("blindblind", 255, 0)
+			C.update_fullscreen_alpha("blindblack", 0, 10)
+			C.update_fullscreen_alpha("blindblind", 0, 80)
+			C.update_fullscreen_alpha("blindborder", 150, 5)
+			if (C.client)
+				var/list/my_hallucinated_stuff = hallucinated_turfs.Copy()
+				for(var/mob/living/L in range(T,25))//All mobs in a large radius will look like monsters to the victims.
+					if (L == C || !("cult" in L.static_overlays))
+						continue//the victims still see themselves as humans (or whatever they are)
+					my_hallucinated_stuff.Add(L.static_overlays["cult"])
+				if (!new_victim)
+					my_hallucinated_stuff.Add(blind_victims[C])
+					C.client.images.Remove(blind_victims[C])//removing the images from client.images after adding them to my_hallucinated_stuff
+				blind_victims[C] = my_hallucinated_stuff//allows us to seamlessly refresh their duration.
+				C.client.images.Add(blind_victims[C])
+				var/hallenght = my_hallucinated_stuff.len
+				spawn(duration-5)
+					if (C in blind_victims)
+						var/list/LI = blind_victims[C]
+						if (LI.len == hallenght)//this checks whether this proc comes from the last blind rune the victim was affected from
+							C.update_fullscreen_alpha("blindborder", 0, 5)
+							C.overlay_fullscreen("blindwhite", /obj/abstract/screen/fullscreen/white)
+							C.update_fullscreen_alpha("blindwhite", 255, 3)
+							sleep(5)
+							blind_victims.Remove(C)
+							C.update_fullscreen_alpha("blindwhite", 0, 12)
+							C.clear_fullscreen("blindblack", animate = 0)
+							C.clear_fullscreen("blindborder", animate = 0)
+							C.clear_fullscreen("blindblind", animate = 0)
+							anim(target = C, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind_remove", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+							C.client.images.Remove(my_hallucinated_stuff)//removing images caused by every blind rune used consecutively on that mob
+							sleep(15)
+							C.clear_fullscreen("blindwhite", animate = 0)
+
+	qdel(spell_holder)
+
+/datum/rune_spell/blind/cast_talisman()//talismans have the same range, but the effect lasts shorter.
+	cast(talisman_duration)
+
+/proc/shadow(var/atom/C,var/turf/T,var/sprite="rune_blind")//based on the holopad rays I made a few months ago
+	var/disty = C.y - T.y
+	var/distx = C.x - T.x
+	var/newangle
+	if(!disty)
+		if(distx >= 0)
+			newangle = 90
+		else
+			newangle = 270
+	else
+		newangle = arctan(distx/disty)
+		if(disty < 0)
+			newangle += 180
+		else if(distx < 0)
+			newangle += 360
+	var/matrix/M1 = matrix()
+	var/matrix/M2 = turn(M1.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
+	return anim(target = C, a_icon = 'icons/effects/96x96.dmi', flick_anim = sprite, lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE, offY = -WORLD_ICON_SIZE, plane = LIGHTING_PLANE, trans = M2)
 
 //RUNE VIII
-/datum/rune_spell/mute
+/datum/rune_spell/deafmute
 	name = "Deaf-Mute"
-	desc = "Silence and deafen nearby enemies."
+	desc = "Silence and deafen nearby enemies. Including robots."
+	desc_talisman = "Silence and deafen nearby enemies. Including robots. The effect is shorter than when used from a rune."
 	Act_restriction = CULT_ACT_I
 	invocation = "Sti' kaliedir!"
 	word1 = /datum/cultword/hide
 	word2 = /datum/cultword/other
 	word3 = /datum/cultword/see
+	page = "Hear no evil, Speak no evil, what your enemies will see remains for you to decide. This ritual inspire its victims with fright, making them unable to hear or speak for around half a minute. \
+		Note that their speech will come back a bit sooner than their hearing, and that this ritual won't prevent them from writing down messages or using non-vocal means of communication. \
+		Still, it appears to affect robots the same way it affects humans. Furthermore, the ritual isn't flashy, and affects people in range even behind obstacles, so cultists may abuse this spell \
+		without exposing themselves directly. People near you when using the talisman may still hear you whisper however."
+	var/deaf_rune_duration=50//times are in seconds
+	var/deaf_talisman_duration=30
+	var/mute_rune_duration=25
+	var/mute_talisman_duration=15
+	var/effect_range=7
+
+/datum/rune_spell/deafmute/cast(var/deaf_duration = deaf_rune_duration, var/mute_duration = mute_rune_duration)
+	for(var/mob/living/M in range(effect_range,get_turf(spell_holder)))
+		if (iscultist(M))
+			continue
+		M.overlay_fullscreen("deafborder", /obj/abstract/screen/fullscreen/conversion_border)//victims DO still get blinded for a second
+		M.update_fullscreen_alpha("deafborder", 100, 5)
+		M.Deafen(deaf_duration)
+		M.Mute(mute_duration)
+		if (!(M.sdisabilities & DEAF))
+			to_chat(M,"<span class='notice'>The world around you suddenly becomes quiet.</span>")
+		if (!(M.sdisabilities & MUTE))
+			if (iscarbon(M))
+				to_chat(M,"<span class='warning'>You feel a terrible chill! You find yourself unable to speak a word...</span>")
+			else if (issilicon(M))
+				to_chat(M,"<span class='warning'>A shortcut appears to have temporarily disabled your speaker!</span>")
+		spawn(8)
+			M.update_fullscreen_alpha("deafborder", 0, 5)
+			sleep(8)
+			M.clear_fullscreen("deafborder", animate = 0)
+
+	qdel(spell_holder)
+
+/datum/rune_spell/deafmute/cast_talisman()
+	cast(deaf_talisman_duration, mute_talisman_duration)
 
 //RUNE IX
 /datum/rune_spell/hide
-	name = "Hide"
+	name = "Conceal"
 	desc = "Hide runes, blood stains, corpses, structures, and other compromising items."
+	desc_talisman = "Hide runes, blood stains, corpses, structures, and other compromising items. Covers a smaller range than when used from a rune."
 	Act_restriction = CULT_ACT_I
 	invocation = "Kla'atu barada nikt'o!"
 	word1 = /datum/cultword/hide
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/blood
+	page = ""
+	var/rune_effect_range=7
+	var/talisman_effect_range=5
+
+/datum/rune_spell/hide/cast(var/effect_range = rune_effect_range,var/size='icons/effects/480x480.dmi')
+	var/turf/T = get_turf(spell_holder)
+	var/atom/movable/overlay/animation = anim(target = T, a_icon = size, a_icon_state = "rune_conceal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE*effect_range, offY = -WORLD_ICON_SIZE*effect_range, plane = LIGHTING_PLANE)
+	animation.alpha = 0
+	animate(animation, alpha = 255, time = 2)
+	animate(alpha = 0, time = 3)
+	//for(var/turf/U in range(effect_range,T))//DEBUG
+	//	var/dist = cheap_pythag(U.x - T.x, U.y - T.y)
+	//	if (dist <= effect_range+0.5)
+	//		U.color = "red"
+	to_chat(activator, "<span class='notice'>All runes and cult structures in range hide themselves behind a thin layer of reality.</span>")
+	playsound(T, 'sound/effects/conceal.ogg', 50, 0, -4)
+
+	for(var/obj/structure/cult/S in range(effect_range,T))
+		var/dist = cheap_pythag(S.x - T.x, S.y - T.y)
+		if (S.conceal_cooldown)
+			continue
+		if (dist <= effect_range+0.5)
+			S.conceal()
+
+	for(var/obj/effect/rune/R in range(effect_range,T))
+		if (R == spell_holder)
+			continue
+		if (R.conceal_cooldown)
+			continue
+		var/dist = cheap_pythag(R.x - T.x, R.y - T.y)
+		if (dist <= effect_range+0.5)
+			R.conceal()
+			var/atom/movable/overlay/trail = shadow(R,T,"rune_conceal")
+			trail.alpha = 0
+			animate(trail, alpha = 200, time = 2)
+			animate(alpha = 0, time = 3)
+	qdel(spell_holder)
+
+/datum/rune_spell/hide/cast_talisman()
+	cast(talisman_effect_range,'icons/effects/352x352.dmi')
 
 //RUNE X
 /datum/rune_spell/reveal
 	name = "Reveal"
-	desc = "Reveal what you have previously hidden."
+	desc = "Reveal what you have previously hidden, terrifying enemies in the process."
+	desc_talisman = "Reveal what you have previously hidden, terrifying enemies in the process. The effect is shorter than when used from a rune."
 	Act_restriction = CULT_ACT_I
 	invocation = "Nikt'o barada kla'atu!"
 	word1 = /datum/cultword/blood
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/hide
+	page = ""
+	var/effect_range=7
+	var/shock_range=3
+	var/shock_per_obj=2
+	var/max_shock=10
+
+/datum/rune_spell/reveal/cast()
+	var/turf/T = get_turf(spell_holder)
+	//for(var/turf/U in range(effect_range,T))//DEBUG
+	//	var/dist = cheap_pythag(U.x - T.x, U.y - T.y)
+	//	if (dist <= effect_range+0.5)
+	//		U.color = "red"
+
+	var/list/shocked = list()
+	to_chat(activator, "<span class='notice'>All concealed runes and cult structures in range phase back into reality, stunning nearby foes.</span>")
+	playsound(T, 'sound/effects/reveal.ogg', 50, 0, -2)
+
+	for(var/obj/structure/cult/concealed/S in range(effect_range,T))//only concealed structures trigger the effect
+		var/dist = cheap_pythag(S.x - T.x, S.y - T.y)
+		if (dist <= effect_range+0.5)
+			anim(target = S, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE*shock_range, offY = -WORLD_ICON_SIZE*shock_range, plane = LIGHTING_PLANE)
+			for(var/mob/living/L in viewers(S))
+				if (iscultist(L))
+					continue
+				var/dist2 = cheap_pythag(L.x - S.x, L.y - S.y)
+				if (dist2 > shock_range+0.5)
+					continue
+				shadow(L,S.loc,"rune_reveal")
+				if (L in shocked)
+					shocked[L] = min(shocked[L]+shock_per_obj,max_shock)
+				else
+					shocked[L] = 2
+			S.reveal()
+
+	for(var/obj/effect/rune/R in range(effect_range,T))
+		var/dist = cheap_pythag(R.x - T.x, R.y - T.y)
+		if (dist <= effect_range+0.5)
+			if (R.reveal())//only hidden runes trigger the effect
+				anim(target = R, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE*shock_range, offY = -WORLD_ICON_SIZE*shock_range, plane = LIGHTING_PLANE)
+				for(var/mob/living/L in viewers(R))
+					if (iscultist(L))
+						continue
+					var/dist2 = cheap_pythag(L.x - R.x, L.y - R.y)
+					if (dist2 > shock_range+0.5)
+						continue
+					shadow(L,R.loc,"rune_reveal")
+					if (L in shocked)
+						shocked[L] = min(shocked[L]+shock_per_obj,max_shock)
+					else
+						shocked[L] = 2
+
+	for(var/mob/living/L in shocked)
+		new /obj/effect/cult_ritual/reveal(L.loc, L, shocked[L])
+		to_chat(L, "<span class='danger'>The shock of having occult symbols suddenly revealed to you leaves you temporarily unable to move or talk.</span>")
+		L.update_fullscreen_alpha("shockborder", 100, 5)
+		spawn(8)
+			L.update_fullscreen_alpha("shockborder", 0, 5)
+			sleep(8)
+			L.clear_fullscreen("shockborder", animate = 0)
+
+	qdel(spell_holder)
+
+/datum/rune_spell/reveal/cast_talisman()
+	shock_per_obj = 1.5
+	max_shock = 8
+	cast()
+
+
+/obj/effect/cult_ritual/reveal
+	anchored = 1
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "rune_reveal"
+	layer = NARSIE_GLOW
+	plane = LIGHTING_PLANE
+	mouse_opacity = 0
+	flags = PROXMOVE
+	var/mob/living/victim = null
+	var/duration = 2
+
+/obj/effect/cult_ritual/reveal/Destroy()
+	victim = null
+	anim(target = loc, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_reveal-stop", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+	..()
+
+/obj/effect/cult_ritual/reveal/New(var/turf/loc,var/mob/living/vic=null,var/dur=2)
+	..()
+	if (!vic)
+		vic = locate() in loc
+		if (!vic)
+			qdel(src)
+			return
+	playsound(loc, 'sound/effects/shock.ogg', 20, 0, 0)
+	victim = vic
+	duration = dur
+	victim.Stun(duration)
+	victim.Mute(duration/2)
+	spawn (duration*10)
+		if (src && loc && victim && victim.loc == loc && !victim.knockdown)
+			to_chat(victim, "<span class='warning'>You come back to your senses.</span>")
+			victim.AdjustStunned(-duration)
+			victim.AdjustMute(-duration/2)
+			victim = null
+		qdel(src)
+
+/obj/effect/cult_ritual/reveal/HasProximity(var/atom/movable/AM)//Pulling victims will immediately dispel the effects
+	if (!victim)
+		qdel(src)
+		return
+
+	if (victim.loc != loc)
+		if (!victim.knockdown)//if knockdown (by any cause), moving away doesn't purge you from the remaining stun.
+			if (victim.pulledby)
+				to_chat(victim, "<span class='warning'>You come back to your senses as \the [victim.pulledby] drags you away.</span>")
+			victim.AdjustStunned(-duration)
+			victim.AdjustMute(-duration/2)
+			victim = null
+		qdel(src)
 
 //RUNE XI
 /datum/rune_spell/seer
@@ -1070,9 +1410,83 @@
 	desc = "See the invisible, the dead, hear their voice."
 	Act_restriction = CULT_ACT_I
 	invocation = "Rash'tla sektath mal'zua. Zasan therium viortia."
+	rune_flags = RUNE_STAND
+	talisman_uses = 5
 	word1 = /datum/cultword/see
 	word2 = /datum/cultword/hell
 	word3 = /datum/cultword/join
+	page = ""
+	cost_invoke = 5
+	var/obj/effect/cult_ritual/seer/seer_ritual = null
+	var/talisman_duration = 80 //tenths of a second
+
+/datum/rune_spell/seer/Destroy()
+	if (destroying_self)
+		return
+	destroying_self = 1
+	qdel(seer_ritual)
+	seer_ritual = null
+	..()
+
+/datum/rune_spell/seer/cast()
+	var/obj/effect/rune/R = spell_holder
+	R.one_pulse()
+
+	if (blood_pay())
+		seer_ritual = new /obj/effect/cult_ritual/seer(R.loc,activator,src)
+
+/datum/rune_spell/seer/cast_talisman()
+	var/mob/living/M = activator
+	M.see_invisible_override = SEE_INVISIBLE_OBSERVER
+	M.apply_vision_overrides()
+	anim(target = M, a_icon = 'icons/effects/160x160.dmi', a_icon_state = "rune_seer", lay = ABOVE_OBJ_LAYER, offX = -WORLD_ICON_SIZE*2, offY = -WORLD_ICON_SIZE*2, plane = OBJ_PLANE, invis = INVISIBILITY_OBSERVER, alph = 200, sleeptime = talisman_duration)
+	spawn(talisman_duration)
+		M.see_invisible_override = 0
+		M.apply_vision_overrides()
+	qdel(src)
+
+/obj/effect/cult_ritual/seer
+	anchored = 1
+	icon = 'icons/effects/160x160.dmi'
+	icon_state = "rune_seer"
+	pixel_x = -WORLD_ICON_SIZE*2
+	pixel_y = -WORLD_ICON_SIZE*2
+	alpha = 200
+	invisibility=INVISIBILITY_OBSERVER
+	layer = ABOVE_OBJ_LAYER
+	plane = OBJ_PLANE
+	mouse_opacity = 0
+	flags = PROXMOVE
+	var/mob/living/caster = null
+	var/datum/rune_spell/seer/source = null
+
+
+/obj/effect/cult_ritual/seer/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/seer/runespell)
+	..()
+	caster = user
+	source = runespell
+	if (!caster)
+		if (source)
+			source.abort(RITUALABORT_GONE)
+		qdel(src)
+		return
+	caster.see_invisible_override = SEE_INVISIBLE_OBSERVER
+	caster.apply_vision_overrides()
+
+/obj/effect/cult_ritual/seer/Destroy()
+	if (caster)
+		caster.see_invisible_override = 0
+		caster.apply_vision_overrides()
+	caster = null
+	source = null
+	..()
+
+/obj/effect/cult_ritual/seer/HasProximity(var/atom/movable/AM)
+	if (!caster || caster.loc != loc)
+		if (source)
+			source.abort(RITUALABORT_GONE)
+		qdel(src)
+
 
 //RUNE XII
 /datum/rune_spell/summonrobes

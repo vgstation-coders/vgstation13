@@ -117,6 +117,8 @@
 
 	if (src.ear_deaf > 0)
 		src.ear_deaf--
+	if (say_mute > 0)
+		say_mute--
 	if (src.ear_damage < 25)
 		src.ear_damage -= 0.05
 		src.ear_damage = max(src.ear_damage, 0)

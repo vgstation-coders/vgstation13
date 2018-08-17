@@ -65,9 +65,14 @@
 	var/turf/T = get_turf(user)
 	rune = locate() in T
 
-	if (rune && rune.word1 && rune.word2 && rune.word3)
-		to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
-		return 0
+	if (rune)
+		if (rune.invisibility == INVISIBILITY_OBSERVER)
+			to_chat(user, "<span class='warning'>You can feel the presence of a concealed rune here, you have to reveal it before you can add more words to it.</span>")
+			return 0
+		else if (rune.word1 && rune.word2 && rune.word3)
+			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
+			return 0
+
 
 	if (spell || tome)
 		if (spell)
@@ -159,6 +164,12 @@
 
 /spell/cult/erase_rune/cast(var/list/targets, var/mob/living/carbon/user)
 	..()
+	var/turf/T = get_turf(user)
+	var/obj/effect/rune/rune = locate() in T
+	if (rune && rune.invisibility == INVISIBILITY_OBSERVER)
+		to_chat(user, "<span class='warning'>You can feel the presence of a concealed rune here, you have to reveal it before you can erase words from it.</span>")
+		return 0
+
 	var/removed_word = erase_rune_word(get_turf(user))
 	if (removed_word)
 		to_chat(user, "<span class='notice'>You retrace your steps, carefully undoing the lines of the [removed_word] rune.</span>")

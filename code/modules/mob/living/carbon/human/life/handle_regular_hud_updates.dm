@@ -118,7 +118,7 @@
 			see_in_dark = 8
 			if(!druggy)
 				see_invisible = SEE_INVISIBLE_LEVEL_TWO
-
+    // Legacy Cult
 		if(seer == 1)
 			var/obj/effect/rune_legacy/R = locate() in loc
 			var/datum/faction/cult/narsie/blood_cult = find_active_faction(LEGACY_CULT)
@@ -133,11 +133,9 @@
 				see_invisible = SEE_INVISIBLE_LIVING
 				seer = 0
 
-
 		if(glasses)
 			handle_glasses_vision_updates(glasses)
-
-		else if(!seer)
+		else
 			see_invisible = SEE_INVISIBLE_LIVING
 
 		apply_vision_overrides()

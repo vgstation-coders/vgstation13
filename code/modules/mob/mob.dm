@@ -1660,6 +1660,14 @@ var/list/slot_equipment_priority = list( \
 /mob/proc/Dizzy(amount)
 	dizziness = max(dizziness,amount,0)
 
+/mob/proc/Deafen(amount)
+	ear_deaf = max(max(ear_deaf,amount),0)
+
+/mob/proc/Mute(amount)
+	say_mute = max(max(say_mute,amount),0)
+
+/mob/proc/AdjustMute(amount)
+	say_mute = max(say_mute + amount,0)
 
 /mob/proc/Paralyse(amount)
 	if(status_flags & CANPARALYSE)
@@ -1812,6 +1820,11 @@ mob/proc/on_foot()
 
 /mob/proc/is_blind()
 	if(sdisabilities & BLIND || blinded || paralysis)
+		return 1
+	return 0
+
+/mob/proc/is_mute()
+	if(sdisabilities & MUTE || say_mute)
 		return 1
 	return 0
 

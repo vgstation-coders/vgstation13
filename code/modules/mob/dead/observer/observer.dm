@@ -127,6 +127,7 @@
 	return isAdminGhost(src) ? get_all_accesses() : list()
 
 /mob/dead/attackby(obj/item/W, mob/user)
+// Legacy Cult stuff
 	if(istype(W,/obj/item/weapon/tome_legacy))
 		var/mob/dead/M = src
 		if(src.invisibility != 0)
@@ -139,6 +140,65 @@
 				"<span class='warning'>You drag a ghost to our plane of reality!</span>"
 			)
 		return
+    // Big boy modern Cult 3.0 stuff
+	if (iscultist(user))
+		if(istype(W,/obj/item/weapon/tome))
+			if(invisibility != 0 || icon_state != "ghost-narsie")
+				cultify()
+				user.visible_message(
+					"<span class='warning'>[user] drags a ghost to our plane of reality!</span>",
+					"<span class='warning'>You drag a ghost to our plane of reality!</span>"
+				)
+			return
+		else if (istype(W,/obj/item/weapon/talisman))
+			var/obj/item/weapon/talisman/T = W
+			if (T.blood_text)
+				to_chat(user, "<span class='warning'>This [W] has already been written on.</span>")
+			var/data = use_available_blood(user, 1)
+			if (data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)
+				to_chat(user, "<span class='warning'>You must provide the ghost some blood before it can write upon \the [W].</span>")
+			else
+				user.drop_item(W)
+				W.forceMove(get_turf(src))
+				var/message = sanitize(input(src,"\the [user] lends you a few drops of blood and \a [W], you may write down a message upon it. You have to remain above it.", "Blood Letter", "") as null|message, MAX_MESSAGE_LEN)
+				if(!message)
+					return
+				if (W.loc != loc)
+					to_chat(src, "<span class='warning'>You must remain above \the [W] to write down a message.</span>")
+					return
+				T.blood_text = message
+				to_chat(src, "<span class='warning'>You write upon \the [W].</span>")
+				visible_message("<span class='warning'>Words appear upon \the [W], written in blood.</span>")
+				T.icon_state = "talisman-ghost"
+				if (ishuman(user))
+					var/mob/living/carbon/human/M = user
+					if(!(M.dna.unique_enzymes in W.blood_DNA))
+						W.blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
+
+		else if (istype(W,/obj/item/weapon/paper))
+			var/obj/item/weapon/paper/P = W
+			if (P.info)
+				to_chat(user, "<span class='warning'>This [W] has already been written on.</span>")
+			var/data = use_available_blood(user, 1)
+			if (data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)
+				to_chat(user, "<span class='warning'>You must provide the ghost some blood before it can write upon \the [W].</span>")
+			else
+				user.drop_item(W)
+				W.forceMove(get_turf(src))
+				var/message = sanitize(input(src,"\the [user] lends you a few drops of blood and \a [W], you may write down a message upon it. You have to remain above it.", "Blood Letter", "") as null|message, MAX_MESSAGE_LEN)
+				if(!message)
+					return
+				if (W.loc != loc)
+					to_chat(src, "<span class='warning'>You must remain above \the [W] to write down a message.</span>")
+					return
+				P.info = message
+				to_chat(src, "<span class='warning'>You write upon \the [W].</span>")
+				visible_message("<span class='warning'>Words appear upon \the [W], written in blood.</span>")
+				P.icon_state = "paper_words-blood"
+				if (ishuman(user))
+					var/mob/living/carbon/human/M = user
+					if(!(M.dna.unique_enzymes in W.blood_DNA))
+						W.blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 
 	if(istype(W,/obj/item/weapon/storage/bible) || istype(W,/obj/item/weapon/nullrod))
 		var/mob/dead/M = src
