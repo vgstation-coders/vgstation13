@@ -250,7 +250,7 @@ proc/get_space_area()
 	returns: shuttle type (or null if not on shuttle)
 **/
 
-proc/is_on_shuttle(var/atom/A)
+/proc/is_on_shuttle(var/atom/A)
 	var/area/AA = get_area(A)
 
 	if(!AA) //How doth
