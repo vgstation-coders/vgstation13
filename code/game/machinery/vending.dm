@@ -71,6 +71,7 @@ var/global/num_vending_terminals = 1
 	var/is_custom_machine = FALSE // true if this vendor supports editing the prices
 	var/edit_mode = FALSE // Used for editing machine stock and information
 	var/is_being_filled = FALSE // `in_use` from /obj is already used for tracking users of this machine's UI
+	var/credits_held = 0 // How many credits in the machine
 
 /atom/movable/proc/product_name()
 	return name
@@ -181,6 +182,11 @@ var/global/num_vending_terminals = 1
 	if(coinbox)
 		coinbox.forceMove(get_turf(src))
 	..()
+
+/obj/machinery/vending/examine(var/mob/user)
+	..()
+	if(currently_vending)
+		to_chat(user, "<span class='notice'>Its small, red segmented display reads $[num2septext(currently_vending.price - credits_held)]</span>")
 
 /obj/machinery/vending/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSMACHINE))
@@ -534,6 +540,13 @@ var/global/num_vending_terminals = 1
 			return TRUE
 	to_chat(user, "[bicon(src)]<span class='warning'>The specified account doesn't exist.</span>")
 	return FALSE
+/obj/machinery/vending/proc/dispense_change(var/amount = 0)
+	if(!amount)
+		amount = credits_held
+		credits_held = 0
+	if(amount > 0)
+		dispense_cash(amount,src.loc)
+
 /**
  *  Receive payment with cashmoney.
  *
@@ -542,101 +555,41 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/proc/pay_with_cash(var/obj/item/weapon/spacecash/cashmoney, mob/user)
 	if(!currently_vending)
 		return
-	if(currently_vending.price > cashmoney.get_total())
-		// This is not a status display message, since it's something the character
-		// themselves is meant to see BEFORE putting the money in
-		to_chat(user, "[bicon(cashmoney)] <span class='warning'>That is not enough money.</span>")
-		return 0
-
-	// Bills (banknotes) cannot really have worth different than face value,
-	// so we have to eat the bill and spit out change in a bundle
-	// This is really dirty, but there's no superclass for all bills, so we
-	// just assume that all spacecash that's not something else is a bill
-
-	visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")
-	var/left = cashmoney.get_total() - currently_vending.price
+	visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>", "You hear a whirr.")
+	credits_held += cashmoney.get_total()
 	qdel(cashmoney)
-
-	if(left)
-		dispense_cash(left, src.loc)
-
-	src.vend(src.currently_vending, usr)
-	currently_vending = null
-	src.updateUsrDialog()
-	return 1
+	if(credits_held >= currently_vending.price)
+		credits_held -= currently_vending.price
+		dispense_change()
+		vend(src.currently_vending, usr)
+		currently_vending = null
+		updateUsrDialog()
+		return 1
+	else
+		return 0
 
 /obj/machinery/vending/scan_card(var/obj/item/weapon/card/I)
 	if(!currently_vending)
 		return
 	if (istype(I, /obj/item/weapon/card/id))
-		var/obj/item/weapon/card/id/C = I
-		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")
-		if(linked_account)
-			if(I.get_owner_name_from_ID() == linked_account.owner_name) //owner is the one buying things so he gets them for free
+		var/charge_response = charge_flow(linked_db, I, usr, currently_vending.price - credits_held, linked_account, "Purchase of [currently_vending.product_name]", src.name, machine_id)
+		switch(charge_response)
+			if(CARD_CAPTURE_SUCCESS)
+				playsound(src, 'sound/machines/chime.ogg', 50, 1)
+				visible_message("[bicon(src)] \The [src] chimes.")
+				if(credits_held)
+					linked_account.charge(-credits_held, null, "Partial purchase of [currently_vending.product_name]", src.name, machine_id, linked_account.owner_name)
+					credits_held=0
+				// Vend the item
 				src.vend(src.currently_vending, usr)
 				currently_vending = null
 				src.updateUsrDialog()
-				return
-
-			//we start by checking the ID card's virtual wallet
-			var/datum/money_account/D = C.virtual_wallet
-			var/using_account = "Virtual Wallet"
-
-			//if there isn't one for some reason we create it, that should never happen but oh well.
-			if(!D)
-				C.update_virtual_wallet()
-				D = C.virtual_wallet
-
-			var/transaction_amount = currently_vending.price
-
-			//if there isn't enough money in the virtual wallet, then we check the bank account connected to the ID
-			if(D.money < transaction_amount)
-				D = linked_db.attempt_account_access(C.associated_account_number, 0, 2, 0)
-				using_account = "Bank Account"
-				if(!D)								//first we check if there IS a bank account in the first place
-					to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money on your virtual wallet!</span>")
-					to_chat(usr, "[bicon(src)]<span class='warning'>Unable to access your bank account.</span>")
-					return 0
-				else if(D.security_level > 0)		//next we check if the security is low enough to pay directly from it
-					to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money on your virtual wallet!</span>")
-					to_chat(usr, "[bicon(src)]<span class='warning'>Lower your bank account's security settings if you wish to pay directly from it.</span>")
-					return 0
-				else if(D.money < transaction_amount)//and lastly we check if there's enough money on it, duh
-					to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money on your bank account!</span>")
-					return 0
-
-			//transfer the money
-			D.money -= transaction_amount
-			linked_account.money += transaction_amount
-
-			to_chat(usr, "[bicon(src)]<span class='notice'>Remaining balance ([using_account]): [D.money]$</span>")
-
-			//create an entry on the buy's account's transaction log
-			var/datum/transaction/T = new()
-			T.target_name = "[linked_account.owner_name] (via [src.name])"
-			T.purpose = "Purchase of [currently_vending.product_name]"
-			T.amount = "-[transaction_amount]"
-			T.source_terminal = machine_id
-			T.date = current_date_string
-			T.time = worldtime2text()
-			D.transaction_log.Add(T)
-
-			//and another entry on the vending machine's vendor account's transaction log
-			T = new()
-			T.target_name = D.owner_name
-			T.purpose = "Purchase of [currently_vending.product_name]"
-			T.amount = "[transaction_amount]"
-			T.source_terminal = machine_id
-			T.date = current_date_string
-			T.time = worldtime2text()
-			linked_account.transaction_log.Add(T)
-
-			// Vend the item
-			src.vend(src.currently_vending, usr)
-			currently_vending = null
-			src.updateUsrDialog()
-		else
-			to_chat(usr, "[bicon(src)]<span class='warning'>EFTPOS is not connected to an account.</span>")
+			if(CARD_CAPTURE_FAILURE_USER_CANCELED)
+				currently_vending = null
+				src.updateUsrDialog()
+			else
+				playsound(src, 'sound/machines/alert.ogg', 50, 1)
+				visible_message("[bicon(src)] \The [src] buzzes.")
 
 /obj/machinery/vending/attack_paw(mob/user as mob)
 	return attack_hand(user)
@@ -959,6 +912,7 @@ var/global/num_vending_terminals = 1
 		deleteEntry(R)
 
 	else if (href_list["cancel_buying"])
+		dispense_change()
 		src.currently_vending = null
 
 	else if (href_list["buy"])
@@ -1042,6 +996,7 @@ var/global/num_vending_terminals = 1
 		flick(src.icon_vend,src)
 	R.amount--
 	src.updateUsrDialog()
+	visible_message("\The [src.name] whirrs as it vends", "You hear a whirr")
 	spawn(vend_delay)
 		if(!R.custom)
 			new R.product_path(get_turf(src))
