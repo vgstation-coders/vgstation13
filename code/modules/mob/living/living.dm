@@ -735,7 +735,7 @@ Thanks.
 
 								if (damaged_organs.len)
 									for(var/datum/organ/external/damagedorgan in damaged_organs)
-										if((damagedorgan.brute_dam) < (damagedorgan.max_damage - 1)) //To prevent organs from accruing thousands of damage or exploding
+										if((damagedorgan.brute_dam) < (damagedorgan.max_damage - 3)) //To prevent organs from accruing thousands of damage or exploding
 											if(prob(damagedorgan.brute_dam / 5)) //Chance for damage based on current damage
 												HM.apply_damage(2, BRUTE, damagedorgan)
 												HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen from being dragged!</span>")
