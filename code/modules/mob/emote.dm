@@ -63,9 +63,7 @@
 	
 	for(var/mob/M in dead_mob_list)
 		if (!M.client)
-			continue //skip monkeys and leavers
-		if(findtext(message," snores.")) //Because we have so many sleeping people.
-			break
+			continue //skip leavers
 		if(M.client.prefs && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(src,null)))
 			M.show_message(message)
 
