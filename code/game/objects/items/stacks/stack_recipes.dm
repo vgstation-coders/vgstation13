@@ -332,8 +332,9 @@ var/list/datum/stack_recipe/leather_recipes = list (
 ======================================================================== */
 
 var/list/datum/stack_recipe/brass_recipes = list (
-	new/datum/stack_recipe/dorf("dorf chair", /obj/structure/bed/chair, one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
-	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword, 4, time = 12,	on_floor = 1, inherit_material = TRUE)
+	new/datum/stack_recipe/dorf("dorf chair", /obj/structure/bed/chair, one_per_turf = TRUE, on_floor = TRUE, inherit_material = TRUE),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword, 4, time = 12,	on_floor = TRUE, inherit_material = TRUE),
+	new/datum/stack_recipe("clockwork girders",   /obj/structure/girder/clockwork, 5, time = 70, one_per_turf = TRUE, on_floor = TRUE),
 	)
 
 /* ========================================================================
