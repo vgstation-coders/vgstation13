@@ -560,6 +560,9 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/goliath/david/dave
 	name = "Dave"
 	desc = "As the engineering crew decided where in the asteroid to build the station, they followed a small crevice where he was eventually found. Nobody knows how this little guy got separated from his family or why he became so attached to the crew that found him."
+	response_help  = "pets"
+	response_disarm = "pokes"
+	response_harm   = "kicks"
 	gender = MALE
 	faction = "neutral"
 	maxHealth = 100
@@ -572,6 +575,27 @@ obj/item/asteroid/basilisk_hide/New()
 	can_butcher = FALSE
 	ranged = TRUE
 	retreat_distance = 1 //Unlike normal davids, dave will kite its foes, or at least try to. REMEMBER THE BASICS OF CQC
+
+//Stolen from corgi code
+/mob/living/simple_animal/hostile/asteroid/goliath/david/dave/attack_hand(mob/living/carbon/human/M)
+	. = ..()
+	react_to_touch(M)
+
+/mob/living/simple_animal/hostile/asteroid/goliath/david/dave/proc/react_to_touch(mob/M)
+	var/list/responses_good = list("bleats happily.", "rumbles affectionately.", "emits a content crackle.")
+	var/list/responses_bad = list("whimpers.", "lets out an upset gurgle.")
+
+	if(M && !isUnconscious())
+		switch(M.a_intent)
+			if(I_HELP)
+				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+				heart.plane = ABOVE_HUMAN_PLANE
+				flick_overlay(heart, list(M.client), 2 SECONDS)
+				emote("me", EMOTE_AUDIBLE, pick(responses_good))
+				//calm down when petted.
+				LoseAggro()
+			if(I_HURT)
+				emote("me", EMOTE_AUDIBLE, pick(responses_bad))
 
 /mob/living/simple_animal/hostile/asteroid/magmaw
 	name = "magmaw"
