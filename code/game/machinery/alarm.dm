@@ -505,7 +505,10 @@
 /obj/machinery/alarm/attack_hand(mob/user)
 	. = ..()
 
-	if (.)
+	if(wiresexposed)
+		wires.Interact(user)
+		return
+	else if (.)
 		return
 
 	interact(user)
@@ -672,9 +675,6 @@
 
 /obj/machinery/alarm/interact(mob/user)
 	if(buildstage!=2)
-		return
-	if(wiresexposed)
-		wires.Interact(user)
 		return
 	if(!shorted)
 		ui_interact(user)
@@ -918,7 +918,7 @@ FIRE ALARM
 	name = "Fire Alarm"
 	desc = "<i>\"Pull this in case of emergency\"</i>. Thus, keep pulling it forever."
 	icon = 'icons/obj/monitors.dmi'
-	icon_state = "fire0"
+	icon_state = "fire0s"
 	var/detecting = 1.0
 	var/working = 1.0
 	var/time = 10.0
@@ -932,6 +932,10 @@ FIRE ALARM
 	var/last_process = 0
 	var/wiresexposed = 0
 	var/buildstage = 2 // 2 = complete, 1 = no wires,  0 = circuit gone
+	var/shelter = 1
+
+/obj/machinery/firealarm/empty
+	shelter = 0
 
 /obj/machinery/firealarm/supports_holomap()
 	return TRUE
@@ -943,13 +947,7 @@ FIRE ALARM
 /obj/machinery/firealarm/update_icon()
 	overlays.len = 0
 	if(wiresexposed)
-		switch(buildstage)
-			if(2)
-				icon_state="fire_b2"
-			if(1)
-				icon_state="fire_b1"
-			if(0)
-				icon_state="fire_b0"
+		icon_state = "fire_b[buildstage]"
 		return
 
 	if(stat & BROKEN)
@@ -957,10 +955,7 @@ FIRE ALARM
 	else if(stat & NOPOWER)
 		icon_state = "firep"
 	else
-		if(!src.detecting)
-			icon_state = "fire1"
-		else
-			icon_state = "fire0"
+		icon_state = "fire[detecting ? "0" : "1"][shelter ? "s" : "e"]"
 		if(z == 1 && security_level)
 			src.overlays += image('icons/obj/monitors.dmi', "overlay_[get_security_level()]")
 		else
@@ -988,6 +983,13 @@ FIRE ALARM
 
 /obj/machinery/firealarm/attackby(obj/item/W as obj, mob/user as mob)
 	src.add_fingerprint(user)
+
+	if (istype(W,/obj/item/inflatable/shelter))
+		qdel(W)
+		shelter = TRUE
+		update_icon()
+		attack_hand(user)
+		return
 
 	if (isscrewdriver(W) && buildstage == 2)
 		wiresexposed = !wiresexposed
@@ -1048,9 +1050,19 @@ FIRE ALARM
 
 	src.alarm()
 
-/obj/machinery/firealarm/process()//Note: this processing was mostly phased out due to other code, and only runs when needed
+/obj/machinery/firealarm/process()
 	if(stat & (NOPOWER|BROKEN))
 		return
+
+	var/turf/simulated/location = loc
+	if(shelter && istype(location)) //If simulated turf and we have a shelter to drop
+		var/datum/gas_mixture/environment = location.return_air()
+		if(environment.toxins>1) //The simpler sensors aren't elaborate as air alarms to sense partial pressure or other threats
+			var/obj/item/inflatable/shelter/S = new /obj/item/inflatable/shelter(loc)
+			S.inflate()
+			shelter = FALSE
+			update_icon()
+			visible_message("<span class='warning'>\The [S] springs free of the fire alarm autonomously and inflates!</span>")
 
 	if(src.timing)
 		if(src.time > 0)
@@ -1059,7 +1071,6 @@ FIRE ALARM
 			src.alarm()
 			src.time = 0
 			src.timing = 0
-			processing_objects.Remove(src)
 		src.updateDialog()
 	last_process = world.timeofday
 
@@ -1085,38 +1096,22 @@ FIRE ALARM
 		return
 
 	user.set_machine(src)
-	var/d1
-	var/d2
 	var/area/this_area = get_area(src)
-	if (istype(user, /mob/living/carbon/human) || istype(user, /mob/living/silicon) || isobserver(user))
-		if (this_area.fire)
-			d1 = text("<A href='?src=\ref[];reset=1'>Reset - Lockdown</A>", src)
-		else
-			d1 = text("<A href='?src=\ref[];alarm=1'>Alarm - Lockdown</A>", src)
-		if (src.timing)
-			d2 = text("<A href='?src=\ref[];time=0'>Stop Time Lock</A>", src)
-		else
-			d2 = text("<A href='?src=\ref[];time=1'>Initiate Time Lock</A>", src)
-		var/second = round(src.time) % 60
-		var/minute = (round(src.time) - second) / 60
-		var/dat = "<HTML><HEAD></HEAD><BODY><TT><B>Fire alarm</B> [d1]\n<HR>The current alert level is: [get_security_level()]</b><br><br>\nTimer System: [d2]<BR>\nTime Left: [(minute ? "[minute]:" : null)][second] <A href='?src=\ref[src];tp=-30'>-</A> <A href='?src=\ref[src];tp=-1'>-</A> <A href='?src=\ref[src];tp=1'>+</A> <A href='?src=\ref[src];tp=30'>+</A>\n</TT></BODY></HTML>"
-		user << browse(dat, "window=firealarm")
-		onclose(user, "firealarm")
+	var/second = round(src.time) % 60
+	var/minute = (round(src.time) - second) / 60
+	var/dat = {"<HTML><HEAD></HEAD><BODY><TT><B>Fire alarm</B>
+	<A href='?src=\ref[src];alarm=1'>[this_area.fire ? "Reset" : "Alarm"] - Lockdown</A>\n
+	<HR>The current alert level is: [get_security_level()]</b><br><br>\n
+	Timer System: <A href='?src=\ref[src];time=1'>[timing ? "Stop Time Lock" : "Initiate Time Lock"]</A><BR>\n
+	Time Left: [(minute ? "[minute]:" : null)][second]
+	<A href='?src=\ref[src];tp=-30'>-</A> <A href='?src=\ref[src];tp=-1'>-</A> <A href='?src=\ref[src];tp=1'>+</A> <A href='?src=\ref[src];tp=30'>+</A>\n</TT></BODY></HTML><BR><BR>"}
+
+	if(shelter)
+		dat += "An emergency shelter is mounted within. <A href='?src=\ref[src];shelter=1'>Retrieve</A>"
 	else
-		if (this_area.fire)
-			d1 = text("<A href='?src=\ref[];reset=1'>[]</A>", src, stars("Reset - Lockdown"))
-		else
-			d1 = text("<A href='?src=\ref[];alarm=1'>[]</A>", src, stars("Alarm - Lockdown"))
-		if (src.timing)
-			d2 = text("<A href='?src=\ref[];time=0'>[]</A>", src, stars("Stop Time Lock"))
-		else
-			d2 = text("<A href='?src=\ref[];time=1'>[]</A>", src, stars("Initiate Time Lock"))
-		var/second = round(src.time) % 60
-		var/minute = (round(src.time) - second) / 60
-		var/dat = "<HTML><HEAD></HEAD><BODY><TT><B>[stars("Fire alarm")]</B> [d1]\n<HR><b>The current alert level is: [stars(get_security_level())]</b><br><br>\nTimer System: [d2]<BR>\nTime Left: [(minute ? text("[]:", minute) : null)][second] <A href='?src=\ref[src];tp=-30'>-</A> <A href='?src=\ref[src];tp=-1'>-</A> <A href='?src=\ref[src];tp=1'>+</A> <A href='?src=\ref[src];tp=30'>+</A>\n</TT></BODY></HTML>"
-		user << browse(dat, "window=firealarm")
-		onclose(user, "firealarm")
-	return
+		dat += "The shelter has been removed. <A href='?src=\ref[src];shelter=1'>Insert</A>"
+	user << browse(dat, "window=firealarm")
+	onclose(user, "firealarm")
 
 /obj/machinery/firealarm/Topic(href, href_list)
 	if(..())
@@ -1127,18 +1122,32 @@ FIRE ALARM
 
 	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
 		usr.set_machine(src)
-		if (href_list["reset"])
-			src.reset()
-		else if (href_list["alarm"])
-			src.alarm()
+		if (href_list["alarm"])
+			var/area/A = get_area(src)
+			if(A.fire) //This var doesn't actually represent whether there is a fire, only if it's alarming or not
+				reset()
+			else
+				alarm()
 		else if (href_list["time"])
-			src.timing = text2num(href_list["time"])
+			timing = !timing
 			last_process = world.timeofday
-			processing_objects.Add(src)
 		else if (href_list["tp"])
 			var/tp = text2num(href_list["tp"])
-			src.time += tp
-			src.time = min(max(round(src.time), 0), 120)
+			time += tp
+			time = min(max(round(src.time), 0), 120)
+		else if (href_list["shelter"])
+			if(shelter)
+				var/obj/O = new /obj/item/inflatable/shelter(loc)
+				if(Adjacent(usr)&&!isAdminGhost(usr)) //Silicons AND adminghosts drop it to the floor
+					usr.put_in_hands(O)
+				shelter = FALSE
+				update_icon()
+			else
+				var/obj/item/I = usr.get_active_hand()
+				if(istype(I,/obj/item/inflatable/shelter))
+					qdel(I)
+					shelter = TRUE
+					update_icon()
 
 		src.updateUsrDialog()
 
@@ -1183,6 +1192,7 @@ var/global/list/firealarms = list() //shrug
 
 	machines.Remove(src)
 	firealarms |= src
+	processing_objects += src
 	update_icon()
 
 /obj/machinery/firealarm/Destroy()
@@ -1191,6 +1201,14 @@ var/global/list/firealarms = list() //shrug
 
 /obj/machinery/firealarm/npc_tamper_act(mob/living/L)
 	alarm()
+
+/obj/machinery/firealarm/kick_act(mob/living/carbon/human/H)
+	..()
+	if(shelter && prob(50))
+		new /obj/item/inflatable/shelter(loc)
+		shelter = FALSE
+		update_icon()
+		visible_message("<span class='notice'>\The shelter detaches from \the [src]!</span>")
 
 /obj/machinery/partyalarm
 	name = "\improper PARTY BUTTON"

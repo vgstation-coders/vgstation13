@@ -7,6 +7,8 @@
 
 	volatility = 0.02
 
+	basecolor = "#6D5757"
+
 /obj/effect/decal/cleanable/liquid_fuel/New(newLoc,amt=1)
 	src.amount = amt
 

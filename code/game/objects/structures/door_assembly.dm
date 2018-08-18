@@ -157,7 +157,7 @@
 		created_name = t
 		return
 
-	if (istype(W, /obj/item/weapon/weldingtool) && ( (istext(glass)) || (glass == 1) || (!anchored) ))
+	if (iswelder(W) && ( (istext(glass)) || (glass == 1) || (!anchored) ))
 		var/obj/item/weapon/weldingtool/WT = W
 
 		if (WT.remove_fuel(0, user))

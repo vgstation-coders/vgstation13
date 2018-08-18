@@ -76,6 +76,10 @@
 /obj/structure/morgue/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
+/obj/structure/morgue/attack_robot(mob/living/silicon/robot/user)
+	if(HAS_MODULE_QUIRK(user, MODULE_CAN_HANDLE_MEDICAL))
+		attack_hand(user)
+
 /obj/structure/morgue/attack_hand(mob/user as mob)
 	if (connected)
 		close_up()
@@ -88,7 +92,6 @@
 /obj/structure/morgue/proc/open_up()
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	connected = new /obj/structure/m_tray(loc)
-	connected.layer = OBJ_LAYER
 	step(connected, src.dir)
 	var/turf/T = get_step(src, src.dir)
 	if(T.contents.Find(connected))
@@ -174,6 +177,7 @@
 	density = 1
 	var/obj/structure/morgue/connected = null
 	anchored = 1.0
+	layer = TABLE_LAYER
 
 /obj/structure/m_tray/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover, /obj/item/weapon/dummy))
@@ -190,8 +194,12 @@
 	else
 		qdel(src) //this should not happen but if it does happen we should not be here
 
-/obj/structure/m_tray/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if (!istype(O) || O.anchored || !Adjacent(user) || !Adjacent(O) || user.contents.Find(O))
+/obj/structure/m_tray/attack_robot(mob/living/silicon/robot/user)
+	if(HAS_MODULE_QUIRK(user, MODULE_CAN_HANDLE_MEDICAL))
+		attack_hand(user)
+
+/obj/structure/m_tray/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
+	if (!istype(O) || O.anchored || !user.Adjacent(O) || !user.Adjacent(src) || user.contents.Find(O))
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
@@ -286,7 +294,6 @@
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		src.connected = new /obj/structure/c_tray( src.loc )
 		step(src.connected, SOUTH)
-		src.connected.layer = OBJ_LAYER
 		var/turf/T = get_step(src, SOUTH)
 		if (T.contents.Find(src.connected))
 			src.connected.connected = src
@@ -310,7 +317,6 @@
 		return
 	src.connected = new /obj/structure/c_tray( src.loc )
 	step(src.connected, SOUTH)
-	src.connected.layer = OBJ_LAYER
 	var/turf/T = get_step(src, SOUTH)
 	if (T.contents.Find(src.connected))
 		src.connected.connected = src
@@ -357,7 +363,7 @@
 
 		for (var/mob/living/M in inside)
 			if (M.stat!=2)
-				M.emote("scream",,, 1)
+				M.audible_scream()
 			//Logging for this causes runtimes resulting in the cremator locking up. Commenting it out until that's figured out.
 			//M.attack_log += "\[[time_stamp()]\] Has been cremated by <b>[user]/[user.ckey]</b>" //No point in this when the mob's about to be qdeleted
 			//user.attack_log +="\[[time_stamp()]\] Cremated <b>[M]/[M.ckey]</b>"
@@ -391,6 +397,7 @@
 	density = 1
 	var/obj/structure/crematorium/connected = null
 	anchored = 1.0
+	layer = TABLE_LAYER
 
 /obj/structure/c_tray/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover, /obj/item/weapon/dummy))
@@ -412,8 +419,8 @@
 		//SN src = null
 		qdel(src)
 
-/obj/structure/c_tray/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if ((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src) || user.contents.Find(O)))
+/obj/structure/c_tray/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
+	if ((!( istype(O, /atom/movable) ) || O.anchored || !user.Adjacent(O) || !user.Adjacent(src) || user.contents.Find(O)))
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return

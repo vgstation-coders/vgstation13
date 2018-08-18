@@ -68,10 +68,10 @@ Example of the second method:
 	..()
 	desc = "[world.maxx]x[world.maxy] tiles of pure space. No structures, no humans, absolutely nothing. Not even a gateway - you'll have to spawn one yourself."
 
-/datum/map_element/away_mission/arcticwaste
-	name = "arctic waste"
+/datum/map_element/away_mission/arcticwasteland
+	name = "arctic wasteland"
 	file_path = "maps/RandomZLevels/arcticwaste.dmm"
-	desc = "A frozen wasteland with an underground bunker. Features a gateway."
+	desc = "A 200x200  frozen wasteland with some trees, some wolves, and a bunker in a cave. Features a gateway."
 
 /datum/map_element/away_mission/assistantchamber
 	name = "assistant chamber"
@@ -119,6 +119,11 @@ Example of the second method:
 	file_path = "maps/RandomZLevels/tomb.dmm"
 	desc = "On a distant planet, an ancient civilization built a great pyramid to bury their leader. After a team of archaeologists disappeared while attempting to unlock the tomb, a gateway was set up and a rescue team requested."
 
+/datum/map_element/away_mission/snowplanet
+	name = "Snow Planet"
+	file_path = "maps/RandomZLevels/snowplanet.dmm"
+	desc = "A small little planetoid with a cold atmosphere and a wooden cabin with a gateway. Be sure to pack some sweaters!"	
+	
 var/static/list/away_mission_subtypes = typesof(/datum/map_element/away_mission) - /datum/map_element/away_mission
 
 //Returns a list containing /datum/map_element/away_mission objects.

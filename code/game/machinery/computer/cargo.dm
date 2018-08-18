@@ -15,6 +15,9 @@ For vending packs, see vending_packs.dm*/
 			return 0
 		acc_info["idname"] = usr_id.registered_name
 		acc_info["idrank"] = usr_id.GetJobName()
+	else if(isAdminGhost(user))
+		acc_info["idname"] = "Commander Green"
+		acc_info["idrank"] = "Central Commander"
 	else if(isAI(user))
 		acc_info["idname"] = user.real_name
 		acc_info["idrank"] = "AI"
@@ -48,10 +51,10 @@ For vending packs, see vending_packs.dm*/
 
 /obj/machinery/computer/supplycomp/New()
 	..()
-	supply_shuttle.supply_consoles.Add(src)
+	SSsupply_shuttle.supply_consoles.Add(src)
 
 /obj/machinery/computer/supplycomp/Destroy()
-	supply_shuttle.supply_consoles.Remove(src)
+	SSsupply_shuttle.supply_consoles.Remove(src)
 	..()
 
 
@@ -63,7 +66,7 @@ For vending packs, see vending_packs.dm*/
 	if(!user)
 		return FALSE
 	var/result = FALSE
-	switch(supply_shuttle.restriction)
+	switch(SSsupply_shuttle.restriction)
 		if(0)
 			result = TRUE
 		if(1)
@@ -153,8 +156,8 @@ For vending packs, see vending_packs.dm*/
 
 	// list of packs we are displaying
 	var/packs_list[0]
-	for(var/set_name in supply_shuttle.supply_packs)
-		var/datum/supply_packs/pack = supply_shuttle.supply_packs[set_name]
+	for(var/set_name in SSsupply_shuttle.supply_packs)
+		var/datum/supply_packs/pack = SSsupply_shuttle.supply_packs[set_name]
 		// Check if the pack is allowed to be shown
 		if((pack.hidden && src.hacked) || (pack.contraband && src.can_order_contraband) || (!pack.contraband && !pack.hidden))
 			if(last_viewed_group == pack.group)
@@ -164,7 +167,7 @@ For vending packs, see vending_packs.dm*/
 	data["supply_packs"] = packs_list
 
 	var/requests_list[0]
-	for(var/set_name in supply_shuttle.requestlist)
+	for(var/set_name in SSsupply_shuttle.requestlist)
 		var/datum/supply_order/SO = set_name
 		if(SO)
 			if(!SO.comment)
@@ -173,24 +176,24 @@ For vending packs, see vending_packs.dm*/
 	data["requests"] = requests_list
 
 	var/orders_list[0]
-	for(var/set_name in supply_shuttle.shoppinglist)
+	for(var/set_name in SSsupply_shuttle.shoppinglist)
 		var/datum/supply_order/SO = set_name
 		if(SO)
 			orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name, "orderedby" = SO.orderedby, "comment" = SO.comment)))
 	data["orders"] = orders_list
 
 	var/centcomm_list[0]
-	for(var/datum/centcomm_order/O in supply_shuttle.centcomm_orders)
+	for(var/datum/centcomm_order/O in SSsupply_shuttle.centcomm_orders)
 		centcomm_list.Add(list(list("id" = O.id, "requested" = O.getRequestsByName(), "fulfilled" = O.getFulfilledByName(), "name" = O.name, "worth" = O.worth, "to" = O.acct_by_string)))
 	data["centcomm_orders"] = centcomm_list
 
 	data["money"] = current_acct.fmtBalance()
 	data["send"] = list("send" = 1)
-	data["moving"] = supply_shuttle.moving
-	data["at_station"] = supply_shuttle.at_station
+	data["moving"] = SSsupply_shuttle.moving
+	data["at_station"] = SSsupply_shuttle.at_station
 	data["show_permissions"] = permissions_screen
-	data["restriction"] = supply_shuttle.restriction
-	data["requisition"] = supply_shuttle.requisition
+	data["restriction"] = SSsupply_shuttle.restriction
+	data["requisition"] = SSsupply_shuttle.requisition
 
 	data["screen"] = screen
 
@@ -201,9 +204,6 @@ For vending packs, see vending_packs.dm*/
 		ui.open()
 
 /obj/machinery/computer/supplycomp/Topic(href, href_list)
-	if(!supply_shuttle)
-		world.log << "## ERROR: Eek. The supply_shuttle controller datum is missing somehow."
-		return
 	if(..())
 		return 1
 	var/list/account_info = get_account_info(usr)
@@ -212,7 +212,7 @@ For vending packs, see vending_packs.dm*/
 	var/idname = account_info["idname"]
 	var/idrank = account_info["idrank"]
 	var/datum/money_account/account = account_info["account"]
-	if(supply_shuttle.requisition)
+	if(SSsupply_shuttle.requisition)
 		account = department_accounts["Cargo"]
 	//Handle access and requisitions
 	if(href_list["permissions"])
@@ -225,19 +225,19 @@ For vending packs, see vending_packs.dm*/
 	else if(href_list["send"])
 		if(!map.linked_to_centcomm)
 			to_chat(usr, "<span class='warning'>You aren't able to establish contact with central command, so the shuttle won't move.</span>")
-		else if(!supply_shuttle.can_move())
+		else if(!SSsupply_shuttle.can_move())
 			to_chat(usr, "<span class='warning'>For safety reasons the automated supply shuttle cannot transport live organisms, classified nuclear weaponry or homing beacons.</span>")
 		else if(!check_restriction(usr))
 			to_chat(usr, "<span class='warning'>Your credentials were rejected by the current permissions protocol.</span>")
 
-		else if(supply_shuttle.at_station)
-			supply_shuttle.moving = -1
-			supply_shuttle.sell()
-			supply_shuttle.send()
+		else if(SSsupply_shuttle.at_station)
+			SSsupply_shuttle.moving = -1
+			SSsupply_shuttle.sell()
+			SSsupply_shuttle.send()
 		else
-			supply_shuttle.moving = 1
-			supply_shuttle.buy()
-			supply_shuttle.eta_timeofday = (world.timeofday + supply_shuttle.movetime) % 864000
+			SSsupply_shuttle.moving = 1
+			SSsupply_shuttle.buy()
+			SSsupply_shuttle.eta_timeofday = (world.timeofday + SSsupply_shuttle.movetime) % 864000
 			post_signal("supply")
 		return 1
 	else if (href_list["doorder"])
@@ -251,7 +251,7 @@ For vending packs, see vending_packs.dm*/
 		if(!isnum(multi))
 			return
 		//Find the correct supply_pack datum
-		var/datum/supply_packs/P = supply_shuttle.supply_packs[pack_name]
+		var/datum/supply_packs/P = SSsupply_shuttle.supply_packs[pack_name]
 		if(!istype(P))
 			return
 		var/crates = 1
@@ -261,8 +261,8 @@ For vending packs, see vending_packs.dm*/
 
 		// Calculate money tied up in requests
 		var/total_money_req = 0
-		for(var/i = 1; i <= length(supply_shuttle.requestlist); i++)
-			var/datum/supply_order/R = supply_shuttle.requestlist[i]
+		for(var/i = 1; i <= length(SSsupply_shuttle.requestlist); i++)
+			var/datum/supply_order/R = SSsupply_shuttle.requestlist[i]
 			var/datum/money_account/R_acc = R.account
 			if(R_acc.account_number == account.account_number)
 				var/datum/supply_packs/R_pack = R.object
@@ -282,7 +282,7 @@ For vending packs, see vending_packs.dm*/
 		var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(loc)
 		reqform.name = "[P.name] Requisition Form - [idname], [idrank]"
 		reqform.info += {"<h3>[station_name] Supply Requisition Form</h3><hr>
-			INDEX: #[supply_shuttle.ordernum]<br>
+			INDEX: #[SSsupply_shuttle.ordernum]<br>
 			REQUESTED BY: [idname]<br>
 			RANK: [idrank]<br>
 			REASON: [reason]<br>
@@ -297,18 +297,18 @@ For vending packs, see vending_packs.dm*/
 		reqtime = (world.time + 5) % 1e5
 		//make our supply_order datum
 		for(var/i = 1; i <= crates; i++)
-			supply_shuttle.ordernum++
+			SSsupply_shuttle.ordernum++
 			var/datum/supply_order/O = new /datum/supply_order()
-			O.ordernum = supply_shuttle.ordernum
+			O.ordernum = SSsupply_shuttle.ordernum
 			O.object = P
 			O.orderedby = idname
 			O.account = account
 			O.comment = reason
 
-			supply_shuttle.requestlist += O
+			SSsupply_shuttle.requestlist += O
 
-			if(!supply_shuttle.restriction) //If set to 0 restriction, auto-approve
-				supply_shuttle.confirm_order(O,usr,supply_shuttle.requestlist.len)
+			if(!SSsupply_shuttle.restriction) //If set to 0 restriction, auto-approve
+				SSsupply_shuttle.confirm_order(O,usr,SSsupply_shuttle.requestlist.len)
 		return 1
 	else if(href_list["confirmorder"])
 		//Find the correct supply_order datum
@@ -316,21 +316,22 @@ For vending packs, see vending_packs.dm*/
 			return
 		var/ordernum = text2num(href_list["confirmorder"])
 		var/datum/supply_order/O
-		for(var/i=1, i<=supply_shuttle.requestlist.len, i++)
-			var/datum/supply_order/SO = supply_shuttle.requestlist[i]
+		for(var/i=1, i<=SSsupply_shuttle.requestlist.len, i++)
+			var/datum/supply_order/SO = SSsupply_shuttle.requestlist[i]
 			if(SO.ordernum == ordernum)
 				O = SO
-				supply_shuttle.confirm_order(O,usr,i)
+				SSsupply_shuttle.confirm_order(O,usr,i)
+				O.OnConfirmed(usr)
 				break
 		return 1
 	else if (href_list["rreq"])
 		if(!check_restriction(usr))
 			return
 		var/ordernum = text2num(href_list["rreq"])
-		for(var/i=1, i<=supply_shuttle.requestlist.len, i++)
-			var/datum/supply_order/SO = supply_shuttle.requestlist[i]
+		for(var/i=1, i<=SSsupply_shuttle.requestlist.len, i++)
+			var/datum/supply_order/SO = SSsupply_shuttle.requestlist[i]
 			if(SO.ordernum == ordernum)
-				supply_shuttle.requestlist.Cut(i,i+1)
+				SSsupply_shuttle.requestlist.Cut(i,i+1)
 				break
 		return 1
 	else if (href_list["last_viewed_group"])
@@ -339,12 +340,12 @@ For vending packs, see vending_packs.dm*/
 	else if (href_list["access_restriction"])
 		if(!check_restriction(usr))
 			return
-		supply_shuttle.restriction = text2num(href_list["access_restriction"])
+		SSsupply_shuttle.restriction = text2num(href_list["access_restriction"])
 		return 1
 	else if (href_list["requisition_status"])
 		if(!check_restriction(usr))
 			return
-		supply_shuttle.requisition = text2num(href_list["requisition_status"])
+		SSsupply_shuttle.requisition = text2num(href_list["requisition_status"])
 		return 1
 	else if (href_list["screen"])
 		if(!check_restriction(usr))
@@ -414,8 +415,8 @@ For vending packs, see vending_packs.dm*/
 
 	// current supply group packs being displayed
 	var/packs_list[0]
-	for(var/set_name in supply_shuttle.supply_packs)
-		var/datum/supply_packs/pack = supply_shuttle.supply_packs[set_name]
+	for(var/set_name in SSsupply_shuttle.supply_packs)
+		var/datum/supply_packs/pack = SSsupply_shuttle.supply_packs[set_name]
 		if(!pack.contraband && !pack.hidden)
 			if(last_viewed_group == pack.group)
 				packs_list.Add(list(list("name" = pack.name, "amount" = pack.amount, "cost" = pack.cost, "command1" = list("doorder" = "[set_name]0"), "command2" = list("doorder" = "[set_name]1"))))
@@ -425,7 +426,7 @@ For vending packs, see vending_packs.dm*/
 	var/obj/item/weapon/card/id/I = user.get_id_card()
 	// current usr's cargo requests
 	var/requests_list[0]
-	for(var/set_name in supply_shuttle.requestlist)
+	for(var/set_name in SSsupply_shuttle.requestlist)
 		var/datum/supply_order/SO = set_name
 		if(SO)
 			// Check if usr owns the request
@@ -434,7 +435,7 @@ For vending packs, see vending_packs.dm*/
 	data["requests"] = requests_list
 
 	var/orders_list[0]
-	for(var/set_name in supply_shuttle.shoppinglist)
+	for(var/set_name in SSsupply_shuttle.shoppinglist)
 		var/datum/supply_order/SO = set_name
 		if(SO )
 			// Check if usr owns the order
@@ -475,7 +476,7 @@ For vending packs, see vending_packs.dm*/
 		var/multi = text2num(copytext(href_list["doorder"], -1))
 		if(!isnum(multi))
 			return
-		var/datum/supply_packs/P = supply_shuttle.supply_packs[pack_name]
+		var/datum/supply_packs/P = SSsupply_shuttle.supply_packs[pack_name]
 		if(!istype(P))
 			return
 		var/crates = 1
@@ -486,8 +487,8 @@ For vending packs, see vending_packs.dm*/
 
 		// Calculate money tied up in usr's requests
 		var/total_money_req = 0
-		for(var/i = 1; i <= length(supply_shuttle.requestlist); i++)
-			var/datum/supply_order/R = supply_shuttle.requestlist[i]
+		for(var/i = 1; i <= length(SSsupply_shuttle.requestlist); i++)
+			var/datum/supply_order/R = SSsupply_shuttle.requestlist[i]
 			var/datum/money_account/R_acc = R.account
 			if(R_acc.account_number == account.account_number)
 				var/datum/supply_packs/R_pack = R.object
@@ -508,7 +509,7 @@ For vending packs, see vending_packs.dm*/
 		reqform.name = "[P.name] Requisition Form - [idname], [idrank]"
 
 		reqform.info += {"<h3>[station_name] Supply Requisition Form</h3><hr>
-			INDEX: #[supply_shuttle.ordernum]<br>
+			INDEX: #[SSsupply_shuttle.ordernum]<br>
 			REQUESTED BY: [idname]<br>
 			RANK: [idrank]<br>
 			REASON: [reason]<br>
@@ -525,28 +526,28 @@ For vending packs, see vending_packs.dm*/
 
 		//make our supply_order datum
 		for(var/i = 1; i <= crates; i++)
-			supply_shuttle.ordernum++
+			SSsupply_shuttle.ordernum++
 			var/datum/supply_order/O = new /datum/supply_order()
-			O.ordernum = supply_shuttle.ordernum
+			O.ordernum = SSsupply_shuttle.ordernum
 			O.object = P
 			O.orderedby = idname
 			O.account = account
 			O.comment = reason
-			supply_shuttle.requestlist += O
+			SSsupply_shuttle.requestlist += O
 			stat_collection.crates_ordered++
 
-			if(!supply_shuttle.restriction) //Restriction = 0, auto order
-				supply_shuttle.confirm_order(O,usr,supply_shuttle.requestlist.len) //Position: last
+			if(!SSsupply_shuttle.restriction) //Restriction = 0, auto order
+				SSsupply_shuttle.confirm_order(O,usr,SSsupply_shuttle.requestlist.len) //Position: last
 		return 1
 	else if (href_list["last_viewed_group"])
 		last_viewed_group = href_list["last_viewed_group"]
 		return 1
 	else if (href_list["rreq"])
 		var/ordernum = text2num(href_list["rreq"])
-		for(var/i=1, i<=supply_shuttle.requestlist.len, i++)
-			var/datum/supply_order/SO = supply_shuttle.requestlist[i]
+		for(var/i=1, i<=SSsupply_shuttle.requestlist.len, i++)
+			var/datum/supply_order/SO = SSsupply_shuttle.requestlist[i]
 			if(SO.ordernum == ordernum)
-				supply_shuttle.requestlist.Cut(i,i+1)
+				SSsupply_shuttle.requestlist.Cut(i,i+1)
 				break
 		return 1
 	else if (href_list["close"])

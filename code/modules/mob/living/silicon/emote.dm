@@ -2,32 +2,52 @@
 	mob_type_allowed_typelist = list(/mob/living/silicon)
 	emote_type = EMOTE_AUDIBLE
 	var/module_quirk_required
+	var/pai_software_required
 
 /datum/emote/sound/silicon
-	mob_type_allowed_typelist = list(/mob/living/silicon)
+	mob_type_allowed_typelist = list(/mob/living/silicon, /mob/living/carbon/brain)
 	emote_type = EMOTE_AUDIBLE
 	var/module_quirk_required
+	var/pai_software_required
 
 /datum/emote/sound/silicon/can_run_emote(var/mob/user, var/status_check = TRUE)
 	. = ..()
+	if (. && isbrain(user) && !module_quirk_required)
+		return TRUE
+	if (. && isAI(user) && !module_quirk_required)
+		return TRUE
+	var/mob/living/silicon/pai/the_pai = user
+	if (. && istype(the_pai) && (!pai_software_required || (pai_software_required in the_pai.software)))
+		return TRUE
 	var/mob/living/silicon/robot/R = user
 	if (!istype(R))
 		return FALSE
-	if (!(R.module && (R.module.quirk_flags & module_quirk_required)))
+	if (module_quirk_required && !(R.module && (R.module.quirk_flags & module_quirk_required)))
 		return FALSE
 
 /datum/emote/silicon/can_run_emote(var/mob/user, var/status_check = TRUE)
 	. = ..()
+	var/mob/living/silicon/pai/the_pai = user
+	if (. && istype(the_pai) && (!pai_software_required || (pai_software_required in the_pai.software)))
+		return TRUE
 	var/mob/living/silicon/robot/R = user
 	if (!istype(R))
 		return FALSE
-	if (!(R.module && (R.module.quirk_flags & module_quirk_required)))
+	if (module_quirk_required && !(R.module && (R.module.quirk_flags & module_quirk_required)))
 		return FALSE
 
 /datum/emote/silicon/boop
 	key = "boop"
 	key_third_person = "boops"
 	message = "boops."
+
+
+/datum/emote/sound/silicon/beep
+	key = "beep"
+	key_third_person = "beeps"
+	message = "beeps."
+	message_param = "beeps at %t."
+	sound = 'sound/machines/twobeep.ogg'
 
 /datum/emote/sound/silicon/buzz
 	key = "buzz"
@@ -53,7 +73,7 @@
 	message = "honks."
 	vary = TRUE
 	sound = 'sound/items/bikehorn.ogg'
-	module_quirk_required = MODULE_IS_A_CLOWN 
+	module_quirk_required = MODULE_IS_A_CLOWN
 
 /datum/emote/sound/silicon/ping
 	key = "ping"
@@ -72,7 +92,7 @@
 	key = "sad"
 	message = "plays a sad trombone..."
 	sound = 'sound/misc/sadtrombone.ogg'
-	module_quirk_required = MODULE_IS_A_CLOWN 
+	module_quirk_required = MODULE_IS_A_CLOWN
 
 /datum/emote/sound/silicon/warn
 	key = "warn"
@@ -84,6 +104,14 @@
 	message = "shows its legal authorization barcode."
 	sound = 'sound/voice/biamthelaw.ogg'
 	module_quirk_required = MODULE_IS_THE_LAW
+	pai_software_required = SOFT_SS
+
+/datum/emote/sound/silicon/halt
+	key = "halt"
+	message = "'s speakers screech. \"Halt! Security!\"."
+	sound = 'sound/voice/halt.ogg'
+	module_quirk_required = MODULE_IS_THE_LAW
+	pai_software_required = SOFT_SS
 
 /mob/living/silicon/robot/verb/powerwarn()
 	set category = "Robot Commands"

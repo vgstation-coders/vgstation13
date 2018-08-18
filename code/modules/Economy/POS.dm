@@ -4,6 +4,16 @@
 * Takes cash or credit.
 *************************/
 
+/*
+	For anyone confused why products["[products.len+1]"] = LI is used, it's so there's no type conversion required since href_list[] always produces a string.
+	Of course, this is what I've observed and assumed - CW
+*/
+
+#define to_valid_product_price(A) (max(LOWEST_DENOMINATION, round_to_lowest_denomination(A)))
+
+// Prevents McAsshat from cheaping out the local shop by buying a faction of something and causing the subtotal to be rounded down to zero.
+#define to_valid_subtotal(A) (A>0 ? to_valid_product_price(A) : A)
+
 /line_item
 	parent_type = /datum
 
@@ -155,6 +165,16 @@ var/const/POS_HEADER = {"<html>
 	else
 		linked_account = station_account
 
+/obj/machinery/pos/proc/dispense_change(var/amount = 0)
+	if(!amount)
+		amount = credits_held
+		credits_held = 0
+	if(amount > 0)
+		var/obj/item/weapon/storage/box/B = new(loc)
+		dispense_cash(amount,B)
+		B.name="change"
+		B.desc="A box of change."
+
 /obj/machinery/pos/proc/AddToOrder(var/name, var/units)
 	if(!(name in products))
 		return 0
@@ -188,12 +208,14 @@ var/const/POS_HEADER = {"<html>
 				<th>Line Total</th>
 			</tr>"}
 	var/subtotal=0
-	for(var/i=1;i<=line_items.len;i++)
-		var/line_item/LI = line_items[i]
-		var/linetotal=LI.units*LI.price
-		receipt += "<tr class=\"[(i%2)?"even":"odd"]\"><th>[LI.name]</th><td>[LI.units]</td><td>$[num2septext(LI.price)]</td><td>$[num2septext(linetotal)]</td></tr>"
-		subtotal += linetotal
-	var/taxes = POS_TAX_RATE*subtotal
+	if(line_items.len>0)
+		for(var/i=1;i<=line_items.len;i++)
+			var/line_item/LI = line_items[i]
+			var/linetotal=LI.units*LI.price
+			receipt += "<tr class=\"[(i%2)?"even":"odd"]\"><th>[LI.name]</th><td>[LI.units]</td><td>$[num2septext(LI.price)]</td><td>$[num2septext(linetotal)]</td></tr>"
+			subtotal += linetotal
+		subtotal = to_valid_subtotal(subtotal)
+	var/taxes = round_to_lowest_denomination(POS_TAX_RATE*subtotal)
 	receipt += {"
 		<tr class="calculated">
 			<th colspan="3">SUBTOTAL</th><td>$[num2septext(subtotal)]</td>
@@ -252,7 +274,8 @@ var/const/POS_HEADER = {"<html>
 				<td><a href="?src=\ref[src];removefromorder=[i]" style="color:red;">&times;</a></td>
 			</tr>"}
 			subtotal += linetotal
-	var/taxes = POS_TAX_RATE*subtotal
+		subtotal = to_valid_subtotal(subtotal)
+	var/taxes = round_to_lowest_denomination(POS_TAX_RATE*subtotal)
 	var/presets = "<i>(No presets available)</i>"
 	if(products.len>0)
 		presets = {"<select name="preset">""}
@@ -296,7 +319,8 @@ var/const/POS_HEADER = {"<html>
 			</tr>"}
 	for(var/i in products)
 		var/line_item/LI = products[i]
-		dat += {"<tr class=\"[(i%2)?"even":"odd"]\">
+		var/pid = text2num(i)
+		dat += {"<tr class="[(pid%2)?"even":"odd"]">
 			<th><a href="?src=\ref[src];setpname=[i]">[LI.name]</a></th>
 			<td><a href="?src=\ref[src];setprice=[i]">$[num2septext(LI.price)]</a></td>
 			<td>[LI.units]</td>
@@ -355,6 +379,13 @@ var/const/POS_HEADER = {"<html>
 				<b>Tax Rate:</b> <input type="textbox" name="taxes" value="[POS_TAX_RATE*100]" disabled="disabled" />% (LOCKED)
 			</div>
 		</fieldset>
+		<fieldset>
+			<legend>Denomination Settings</legend>
+			<div>
+				<b>Lowest Denomination:</b> $<input type="textbox" name="lowestdenomination" value="[LOWEST_DENOMINATION]" disabled="disabled" /> (LOCKED)<br />
+				<i>Subtotals and Taxes are rounded to the nearest, lowest denomination</i>
+			</div>
+		</fieldset>
 		<input type="submit" name="act" value="Save Settings" />
 		</form>"}
 	return dat
@@ -377,7 +408,7 @@ var/const/POS_HEADER = {"<html>
 	user.set_machine(src)
 	var/logindata=""
 	if(logged_in)
-		logindata={"<a href="?src=\ref[src];logout=1">[logged_in.name]</a>"}
+		logindata={"<a href="?src=\ref[src];logout=1">[logged_in.name]</a> |"}
 	var/dat = POS_HEADER + {"
 	<div class="navbar">
 		[worldtime2text()], [current_date_string]<br />
@@ -407,11 +438,47 @@ var/const/POS_HEADER = {"<html>
 	onclose(user, "pos")
 	return
 
+/obj/machinery/pos/scan_card(var/obj/item/weapon/card/id/C)
+	var/remaining_credits_needed = credits_needed - credits_held
+	var/area/this_area = get_area(src)
+	var/pos_name = "[this_area.name] POS#[id]"
+	var/charge_response = charge_flow(linked_db, C, usr, remaining_credits_needed, linked_account, "POS Purchase", pos_name, id)
+	switch(charge_response)
+		if(CARD_CAPTURE_SUCCESS)
+			visible_message("<span class='notice'>The machine beeps, and begins printing a receipt</span>","You hear a beep and the sound of paper being shredded.")
+			PrintReceipt()
+			NewOrder()
+			if(credits_held)
+				linked_account.charge(-credits_held, null, "Cash Deposit", pos_name, id, linked_account.owner_name)
+				credits_held=0
+			credits_needed=0
+			screen=POS_SCREEN_ORDER
+			updateUsrDialog()
+			return
+		if(CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"NOT ENOUGH FUNDS\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_ACCOUNT_DISABLED)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"ACCOUNT DISABLED\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"BAD ACCOUNT/PIN COMBO\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_FAILURE_SECURITY_LEVEL)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"SECURITY EXCEPTION\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_FAILURE_USER_CANCELED)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"ORDER CANCELED\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_FAILURE_NO_DESTINATION)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_FAILURE_NO_CONNECTION)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"DATABASE UNAVAILABLE\" on the screen.</span>","You hear a buzz.")
+		else
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"CARD CAPTURE ERROR\" on the screen.</span>","You hear a buzz.")
+	flick(src,"pos-error")
+	
+
 /obj/machinery/pos/Topic(var/href, var/list/href_list)
 	if(..(href,href_list))
 		return
 	if("logout" in href_list)
-		if(alert(src, "You sure you want to log out?", "Confirm", "Yes", "No")!="Yes")
+		if(alert(usr, "You sure you want to log out?", "Confirm", "Yes", "No")!="Yes")
 			return
 		logged_in=null
 		screen=POS_SCREEN_LOGIN
@@ -425,6 +492,10 @@ var/const/POS_HEADER = {"<html>
 	if("act" in href_list)
 		switch(href_list["act"])
 			if("Reset")
+				if(credits_held > 0){
+					visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
+					dispense_change()
+				}
 				NewOrder()
 				screen=POS_SCREEN_ORDER
 			if("Finalize Sale")
@@ -433,14 +504,15 @@ var/const/POS_HEADER = {"<html>
 					for(var/i=1;i<=line_items.len;i++)
 						var/line_item/LI = line_items[i]
 						subtotal += LI.units*LI.price
-				var/taxes = POS_TAX_RATE*subtotal
+					subtotal = to_valid_subtotal(subtotal)
+				var/taxes = round_to_lowest_denomination(POS_TAX_RATE*subtotal)
 				credits_needed=taxes+subtotal
 				say("Your total is $[num2septext(credits_needed)].  Please insert credit chips or swipe your ID.")
 				screen=POS_SCREEN_FINALIZE
 			if("Add Product")
 				var/line_item/LI = new
 				LI.name=sanitize(href_list["name"])
-				LI.price=max(1, text2num(href_list["price"]))
+				LI.price=to_valid_product_price(text2num(href_list["price"]))
 				products["[products.len+1]"]=LI
 			if("Add to Order")
 				AddToOrder(href_list["preset"],text2num(href_list["units"]))
@@ -453,7 +525,7 @@ var/const/POS_HEADER = {"<html>
 						return
 					var/line_item/LI = new
 					LI.name=sanitize(cells[1])
-					LI.price=max(1, text2num(cells[2]))
+					LI.price=to_valid_product_price(text2num(cells[2]))
 					products["[products.len+1]"]=LI
 			if("Export Products")
 				screen=POS_SCREEN_EXPORT
@@ -511,29 +583,11 @@ var/const/POS_HEADER = {"<html>
 			src.attack_hand(user) //why'd you use usr nexis, why
 			return
 		else
-			if(!linked_account)
-				visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
-				flick(src,"pos-error")
-				return
 			if(screen!=POS_SCREEN_FINALIZE)
 				visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
 				flick(src,"pos-error")
 				return
-			var/datum/money_account/acct = get_card_account(I)
-			if(!acct)
-				visible_message("<span class='warning'>The machine buzzes, and flashes \"NO ACCOUNT\" on the screen.</span>","You hear a buzz.")
-				flick(src,"pos-error")
-				return
-			if(credits_needed > acct.money)
-				visible_message("<span class='warning'>The machine buzzes, and flashes \"NOT ENOUGH FUNDS\" on the screen.</span>","You hear a buzz.")
-				flick(src,"pos-error")
-				return
-			visible_message("<span class='notice'>The machine beeps, and begins printing a receipt</span>","You hear a beep.")
-			PrintReceipt()
-			NewOrder()
-			acct.charge(credits_needed,linked_account,"Purchase at POS #[id].")
-			credits_needed=0
-			screen=POS_SCREEN_ORDER
+			connect_account(user, I)
 	else if(istype(A,/obj/item/weapon/spacecash))
 		if(!linked_account)
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
@@ -544,19 +598,20 @@ var/const/POS_HEADER = {"<html>
 			flick(src,"pos-error")
 			return
 		var/obj/item/weapon/spacecash/C=A
-		credits_held += C.worth*C.amount
+		credits_held += C.get_total()
 		qdel(C)
 		if(credits_held >= credits_needed)
 			visible_message("<span class='notice'>The machine beeps, and begins printing a receipt</span>","You hear a beep and the sound of paper being shredded.")
 			PrintReceipt()
 			NewOrder()
+			linked_account.charge(-credits_needed, null, "Purchase at POS #[id].", dest_name = linked_account.owner_name)
 			credits_held -= credits_needed
 			credits_needed=0
 			screen=POS_SCREEN_ORDER
-			if(credits_held>0)
-				var/obj/item/weapon/storage/box/B = new(loc)
-				dispense_cash(credits_held,B)
-				B.name="change"
-				B.desc="A box of change."
-			credits_held=0
+			dispense_change()
+		else
+			say("Your total is now $[num2septext(credits_needed-credits_held)].  Please insert more credit chips or swipe your ID.")
 	..()
+
+#undef to_valid_product_price
+#undef to_valid_subtotal

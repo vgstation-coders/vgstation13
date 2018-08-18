@@ -227,16 +227,16 @@ var/global/list/battery_online =	list(
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
-	if (usr.stat || usr.restrained() )
+	if (!isAdminGhost(usr) && (usr.stat || usr.restrained()))
 		return
 	if (!(istype(usr, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
-		if(!istype(usr, /mob/living/silicon/ai))
+		if(!istype(usr, /mob/living/silicon/ai) && !isAdminGhost(usr))
 			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 			return
 
 //to_chat(world, "[href] ; [href_list[href]]")
 
-	if (!isturf(src.loc) && !istype(usr, /mob/living/silicon/))
+	if (!isturf(src.loc) && !istype(usr, /mob/living/silicon/) && !isAdminGhost(usr))
 		return 0 // Do not update ui
 
 	if( href_list["cmode"] )

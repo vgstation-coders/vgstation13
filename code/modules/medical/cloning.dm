@@ -282,6 +282,11 @@
 
 	// -- End mode specific stuff
 
+	if (H.mind.miming)
+		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
+		if (H.mind.miming == MIMING_OUT_OF_CHOICE)
+			H.add_spell(new /spell/targeted/oathbreak/)
+
 	H.UpdateAppearance()
 	H.set_species(R.dna.species)
 	randmutb(H) // sometimes the clones come out wrong.
@@ -456,7 +461,7 @@
 
 	return TRUE
 
-/obj/machinery/cloning/clonepod/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+/obj/machinery/cloning/clonepod/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!occupant || occupant == usr || (!ishigherbeing(usr) && !isrobot(usr)) || usr.incapacitated() || usr.lying)
 		return
 	if(!istype(over_location) || over_location.density)
@@ -470,7 +475,7 @@
 			return
 	if(isrobot(usr))
 		var/mob/living/silicon/robot/robit = usr
-		if(!(robit.module && (robit.module.quirk_flags & MODULE_CAN_HANDLE_MEDICAL)))
+		if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 
@@ -525,7 +530,7 @@
 		else
 	return
 
-/obj/machinery/cloning/clonepod/MouseDrop_T(obj/item/weapon/reagent_containers/food/snacks/meat/M, mob/living/user)
+/obj/machinery/cloning/clonepod/MouseDropTo(obj/item/weapon/reagent_containers/food/snacks/meat/M, mob/living/user)
 	var/busy = FALSE
 	var/visible_message = FALSE
 
@@ -535,7 +540,7 @@
 	if(issilicon(user))
 		return //*buzz
 
-	if(!Adjacent(user) || !user.Adjacent(src) || M.loc == user || !isturf(M.loc) || !isturf(user.loc) || user.loc==null)
+	if(!Adjacent(user) || !user.Adjacent(src) || !user.Adjacent(M) || M.loc == user || !isturf(M.loc) || !isturf(user.loc) || user.loc==null)
 		return
 
 	if(user.incapacitated() || user.lying)

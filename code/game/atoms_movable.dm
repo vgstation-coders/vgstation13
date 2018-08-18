@@ -144,8 +144,10 @@
 	..()
 
 //TODO move this somewhere else
-/atom/movable/proc/set_glide_size(glide_size_override = 0)
-	glide_size = glide_size_override
+/atom/movable/proc/set_glide_size(glide_size_override = 0, var/min = 0.9, var/max = WORLD_ICON_SIZE/2)
+	glide_size = max(min, glide_size_override)
+	if(glide_size > max)
+		glide_size = 0
 
 /atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
 	if(!loc || !NewLoc)
@@ -436,6 +438,9 @@
 
 	// Update on_moved listeners.
 	INVOKE_EVENT(on_moved,list("loc"=loc))
+	var/turf/T = get_turf(destination)
+	if(old_loc && T && old_loc.z != T.z)
+		INVOKE_EVENT(on_z_transition, list("user" = src, "from_z" = old_loc.z, "to_z" = T.z))
 	return 1
 
 /atom/movable/proc/update_client_hook(atom/destination)
@@ -975,3 +980,22 @@
 
 /atom/movable/proc/can_be_pulled(var/mob/user)
 	return TRUE
+
+/atom/movable/proc/setPixelOffsetsFromParams(params, mob/user, base_pixx = 0, base_pixy = 0, clamp = TRUE)
+	if(anchored)
+		return
+	if(user && (!Adjacent(user) || !src.Adjacent(user) || user.incapacitated() || !src.can_be_pulled(user)))
+		return
+	var/list/params_list = params2list(params)
+	if(clamp)
+		pixel_x = Clamp(base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2, -WORLD_ICON_SIZE/2, WORLD_ICON_SIZE/2)
+		pixel_y = Clamp(base_pixy + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2, -WORLD_ICON_SIZE/2, WORLD_ICON_SIZE/2)
+	else
+		pixel_x = base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2
+		pixel_y = base_pixy + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2
+
+//Overwriting BYOND proc used for simple animal and NPCbot movement, Pomf help me
+/atom/movable/proc/start_walk_to(Trg,Min=0,Lag=0,Speed=0)
+	if(Lag > 0)
+		set_glide_size(DELAY2GLIDESIZE(Lag))
+	walk_to(src,Trg,Min,Lag,Speed)

@@ -21,7 +21,6 @@ log transactions
 	anchored = 1
 	use_power = 1
 	idle_power_usage = 10
-	layer = BELOW_OBJ_LAYER
 	var/datum/money_account/authenticated_account
 	var/number_incorrect_tries = 0
 	var/previous_account_number = 0
@@ -129,13 +128,13 @@ log transactions
 		..()
 
 /obj/machinery/atm/attack_hand(mob/user as mob,var/fail_safe=0)
-	if(isobserver(user))
+	if(isobserver(user) && !isAdminGhost(user))
 		to_chat(user, "<span class='warning'>Your ghostly limb passes right through \the [src].</span>")
 		return
 	if(istype(user, /mob/living/silicon))
 		to_chat(user, "<span class='warning'>Artificial unit recognized. Artificial units do not currently receive monetary compensation, as per Nanotrasen regulation #1005.</span>")
 		return
-	if(get_dist(src,user) <= 1)
+	if(get_dist(src,user) <= 1 || isAdminGhost(user))
 		//check to see if the user has low security enabled
 		if(!fail_safe)
 			scan_user(user)

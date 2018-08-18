@@ -1,5 +1,5 @@
 //The code execution of the emote datum is located at code/datums/emotes.dm
-/mob/proc/emote(act, m_type = null, message = null)
+/mob/proc/emote(act, m_type = null, message = null, ignore_status = FALSE)
 	act = lowertext(act)
 	var/param = message
 	var/custom_param = findtext(act, " ") // Someone was given as a parameter
@@ -12,14 +12,15 @@
 	if(!E)
 		to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
 		return
-	E.run_emote(src, param, m_type)
+	E.run_emote(src, param, m_type, ignore_status)
 
 /datum/emote/flip
 	key = "flip"
 	key_third_person = "flips"
 	restraint_check = TRUE
 	mob_type_allowed_typelist = list(/mob/living, /mob/dead/observer)
-	mob_type_ignore_stat_typecache = list(/mob/dead/observer)
+	mob_type_blacklist_typelist = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/carbon/brain)
+	mob_type_ignore_stat_typelist = list(/mob/dead/observer)
 
 /datum/emote/flip/run_emote(mob/user, params)
 	. = ..()
@@ -35,7 +36,8 @@
 	key_third_person = "spins"
 	restraint_check = TRUE
 	mob_type_allowed_typelist = list(/mob/living, /mob/dead/observer)
-	mob_type_ignore_stat_typecache = list(/mob/dead/observer)
+	mob_type_blacklist_typelist = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/carbon/brain)
+	mob_type_ignore_stat_typelist = list(/mob/dead/observer)
 
 /datum/emote/spin/run_emote(mob/user)
 	. = ..()
@@ -45,6 +47,36 @@
 			user.dir = i
 			sleep(1)
 		user.dir = prev_dir
+
+/datum/emote/me
+	key = "me"
+	restraint_check = FALSE
+
+/datum/emote/me/run_emote(mob/user, params, m_type)
+
+	if (user.stat)
+		return
+
+	var/msg = "<b>[user]</b> " + params
+
+	var/turf/T = get_turf(user) // for pAIs
+	var/broadcast = T ? T : user
+
+	switch (m_type)
+		if (EMOTE_VISIBLE)
+			for(var/mob/O in viewers(broadcast))
+				O.show_message(msg, emote_type)
+			if (!(user in viewers(broadcast)))
+				user.show_message(msg, emote_type)
+
+		if (EMOTE_AUDIBLE)
+			for(var/mob/O in hearers(broadcast))
+				O.show_message(msg, m_type)
+			if (!(user in viewers(broadcast)))
+				user.show_message(msg, emote_type)
+
+	var/location = T ? "[T.x],[T.y],[T.z]" : "nullspace"
+	log_emote("[user.name]/[user.key] (@[location]): [message]")
 
 /mob/proc/emote_dead(var/message)
 	if(client.prefs.muted & MUTE_DEADCHAT)

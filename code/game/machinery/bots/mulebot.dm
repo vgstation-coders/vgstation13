@@ -406,7 +406,7 @@ var/global/mulebot_count = 0
 // mousedrop a crate to load the bot
 // can load anything if emagged
 
-/obj/machinery/bot/mulebot/MouseDrop_T(var/atom/movable/C, mob/user)
+/obj/machinery/bot/mulebot/MouseDropTo(var/atom/movable/C, mob/user)
 
 	if(user.stat)
 		return
@@ -590,6 +590,7 @@ var/global/mulebot_count = 0
 							T.AddTracks(/obj/effect/decal/cleanable/blood/tracks/wheels,list(),0,goingdir,currentBloodColor)
 						bloodiness--
 
+					set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
 					var/moved = step_towards(src, next)	// attempt to move
 					if(cell)
 						cell.use(1)

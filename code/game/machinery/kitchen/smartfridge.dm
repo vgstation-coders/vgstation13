@@ -6,7 +6,6 @@
 	name = "\improper SmartFridge"
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "smartfridge"
-	layer = BELOW_OBJ_LAYER
 	density = 1
 	anchored = 1
 	use_power = 1
@@ -40,7 +39,7 @@
 	var/name = ""
 	var/obj/machinery/smartfridge/fridge
 	var/amount = 1
-	var/shelf = 1
+	var/shelf = 2
 	var/mini_icon
 
 /datum/fridge_pile/New(var/name, var/fridge, var/amount, var/mini_icon)
@@ -343,24 +342,15 @@
 		piles = sortList(piles)
 		return 1
 	else if(istype(O, /obj/item/weapon/paper) && user.drop_item(O, src.loc))
-		var/list/params_list = params2list(params)
-		if(O.loc == src.loc && params_list.len)
-			var/clamp_x = clicked.Width() / 2
-			var/clamp_y = clicked.Height() / 2
-			O.layer = BELOW_OBJ_LAYER //so it layers below the pills we'll be ejecting from the fridge. resets when picked up - i guess someone COULD drag the paper away but I'm not about to lose sleep over that
-			O.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
-			O.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
+		if(O.loc == src.loc && params)
+			O.setPixelOffsetsFromParams(params)
+			O.layer = MACHINERY_LAYER + 0.1 //so it layers below the pills we'll be ejecting from the fridge. resets when picked up - i guess someone COULD drag the paper away but I'm not about to lose sleep over that
 			to_chat(user, "<span class='notice'>You hang \the [O.name] on the fridge.</span>")
 	else
 		to_chat(user, "<span class='notice'>\The [src] smartly refuses [O].</span>")
 		return 1
 	updateUsrDialog()
 	return 1
-
-/obj/machinery/smartfridge/var/icon/clicked //Because BYOND can't give us runtime icon access, this is basically just a click catcher
-/obj/machinery/smartfridge/New()
-	. = ..()
-	clicked = new/icon(src.icon, src.icon_state, src.dir)
 
 /obj/machinery/smartfridge/attack_paw(mob/user as mob)
 	return src.attack_hand(user)

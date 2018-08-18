@@ -135,7 +135,7 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 				else
 					if(sleep_fail)
 						to_chat(user, "<span class='warning'>The patient is squirming around in pain!</span>")
-						M.emote("scream",,, 1)
+						M.audible_scream()
 					M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] failed by [user.name] ([user.ckey])</font>")
 					user.attack_log += text("\[[time_stamp()]\] <font color='red'>Failed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
 					log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to fail the surgery type [S.type] on [M.name] ([M.ckey])</font>")

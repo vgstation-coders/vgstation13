@@ -465,7 +465,7 @@
 							if(head_organ.take_damage(25, 0))
 								H.UpdateDamageIcon(1)
 							head_organ.disfigure("burn")
-							H.emote("scream", , , 1)
+							H.audible_scream()
 					else
 						M.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 			else
@@ -740,6 +740,7 @@
 			to_chat(M, "<span class='warning'>Your flesh rapidly mutates!</span>")
 			human.set_species("Evolved Slime")
 			human.regenerate_icons()
+			M.setCloneLoss(0)
 
 /datum/reagent/aslimetoxin
 	name = "Advanced Mutation Toxin"
@@ -897,7 +898,7 @@
 				step(M, pick(cardinal))
 
 	if(prob(7))
-		M.emote(pick("twitch", "drool", "moan", "giggle"))
+		M.emote(pick("twitch", "drool", "moan", "giggle"), null, null, TRUE)
 
 /datum/reagent/holywater
 	name = "Holy Water"
@@ -974,7 +975,7 @@
 									if(head_organ.take_damage(30, 0))
 										H.UpdateDamageIcon(1)
 									head_organ.disfigure("burn")
-									H.emote("scream",,, 1)
+									H.audible_scream()
 								else
 									to_chat(H, "<span class='warning'>A freezing liquid covers your face. Your vampiric powers protect you!</span>")
 									H.mind.vampire.smitecounter += 12 //Ditto above
@@ -1016,7 +1017,7 @@
 		return 1
 
 	if(prob(7))
-		M.emote(pick("twitch", "drool", "moan", "gasp"))
+		M.emote(pick("twitch", "drool", "moan", "gasp"), null, null, TRUE)
 
 	M.druggy = max(M.druggy, 50)
 
@@ -1119,7 +1120,7 @@
 		step(M, pick(cardinal))
 
 	if(prob(5))
-		M.emote(pick("twitch","drool","moan"))
+		M.emote(pick("twitch","drool","moan"), null, null, TRUE)
 
 	M.adjustBrainLoss(2)
 
@@ -1247,7 +1248,7 @@
 	if(M.canmove && !M.restrained() && istype(M.loc, /turf/space))
 		step(M, pick(cardinal))
 	if(prob(5))
-		M.emote(pick("twitch","drool","moan"))
+		M.emote(pick("twitch","drool","moan"), null, null, TRUE)
 
 /datum/reagent/sugar
 	name = "Sugar"
@@ -1265,6 +1266,22 @@
 		return 1
 
 	M.nutrition += REM
+
+/datum/reagent/caramel
+	name = "Caramel"
+	id = CARAMEL
+	description = "Created from the removal of water from sugar."
+	reagent_state = SOLID
+	color = "#844b06" //rgb: 132, 75, 6
+	specheatcap = 1.244
+	density = 1.59
+
+/datum/reagent/caramel/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.nutrition += (2 * REM)
 
 /datum/reagent/honey
 	name = "Honey"
@@ -1331,6 +1348,7 @@
 	description = "A strong mineral acid with the molecular formula H2SO4."
 	reagent_state = LIQUID
 	color = "#DB5008" //rgb: 219, 80, 8
+	custom_metabolism = 1
 	density = 1.84
 	specheatcap = 1.38
 
@@ -1344,7 +1362,7 @@
 		if(H.species.name == "Grey")
 			return //Greys lurve dem some sacid
 
-	M.adjustToxLoss(REM)
+	M.adjustFireLoss(REM)
 	M.take_organ_damage(0, REM)
 
 /datum/reagent/sacid/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -1398,7 +1416,7 @@
 					if(head_organ.take_damage(25, 0))
 						H.UpdateDamageIcon(1)
 					head_organ.disfigure("burn")
-					H.emote("scream", , , 1)
+					H.audible_scream()
 			else
 				M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 	else
@@ -1432,6 +1450,7 @@
 	description = "Polytrinic acid is a an extremely corrosive chemical substance."
 	reagent_state = LIQUID
 	color = "#8E18A9" //rgb: 142, 24, 169
+	custom_metabolism = 1
 	density = 1.98
 	specheatcap = 1.39
 
@@ -1440,7 +1459,7 @@
 	if(..())
 		return 1
 
-	M.adjustToxLoss(REM)
+	M.adjustFireLoss(3 * REM)
 
 /datum/reagent/pacid/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -1475,7 +1494,7 @@
 				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 				if(head_organ.take_damage(15, 0))
 					H.UpdateDamageIcon(1)
-				H.emote("scream", , , 1)
+				H.audible_scream()
 
 		else if(ismonkey(M))
 			var/mob/living/carbon/monkey/MK = M
@@ -1498,7 +1517,7 @@
 				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 				if(head_organ.take_damage(15, 0))
 					H.UpdateDamageIcon(1)
-				H.emote("scream", , , 1)
+				H.audible_scream()
 				head_organ.disfigure("burn")
 			else
 				M.take_organ_damage(min(15, volume * 4))
@@ -1665,7 +1684,7 @@
 	if(..())
 		return 1
 
-	M.adjustFireLoss(REM)
+	M.adjustFireLoss(2 * REM)
 
 /datum/reagent/paracetamol
 	name = "Paracetamol"
@@ -2088,7 +2107,7 @@
 				to_chat(H,"<span class='warning'>Your [eyes_covered] protects your eyes from the bleach!</span>")
 				return
 			else //This stuff is a little more corrosive but less irritative than pepperspray
-				H.emote("scream", , , 1)
+				H.audible_scream()
 				to_chat(H,"<span class='danger'>You are sprayed directly in the eyes with bleach!</span>")
 				H.eye_blurry = max(M.eye_blurry, 15)
 				H.eye_blind = max(M.eye_blind, 5)
@@ -2301,7 +2320,7 @@
 		M.take_organ_damage(REM, 0, ignore_inorganics = TRUE)
 	M.adjustOxyLoss(3)
 	if(prob(20))
-		M.emote("gasp")
+		M.emote("gasp", null, null, TRUE)
 
 /datum/reagent/kelotane
 	name = "Kelotane"
@@ -2514,7 +2533,7 @@
 	if(prob(50))
 		M.drowsyness = max(M.drowsyness, 3)
 	if(prob(10))
-		M.emote("drool")
+		M.emote("drool", null, null, TRUE)
 
 /datum/reagent/hyronalin
 	name = "Hyronalin"
@@ -2583,6 +2602,25 @@
 		return 1
 
 	M.adjustBrainLoss(-3 * REM)
+
+/datum/reagent/alkycosine
+	name = "Alkycosine"
+	id = ALKYCOSINE
+	description = "A mind stablizing brain bleach."
+	reagent_state = LIQUID
+	color = "#EDEDED" //rgb: 237, 237, 237
+	custom_metabolism = 0.05
+	overdose_am = REAGENTS_OVERDOSE
+	pain_resistance = 15
+	density = 5.98
+	specheatcap = 1.75
+
+/datum/reagent/alkycosine/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.adjustBrainLoss(-4 * REM)
 
 /datum/reagent/imidazoline
 	name = "Imidazoline"
@@ -2692,6 +2730,23 @@
 			for(var/datum/wound/W in E.wounds)
 				W.heal_damage(0.2, TRUE)
 
+/datum/reagent/synthocarisol
+	name = "Synthocarisol"
+	id = SYNTHOCARISOL
+	description = "Synthocarisol is a synthetic version of Carisol, a powerful analgesic that used to be found in traditional medicines made from the horn of the now-extinct Space African Rhino. Tragically, the horns also contained an equal amount of Anticarisol, which led to the medical community dismissing the remedies as nothing more than placebo and overlooking this reagent for several centuries."
+	reagent_state = LIQUID
+	color = "#580082" //rgb: 88, 0, 130
+	overdose_am = REAGENTS_OVERDOSE
+	density = 4.67
+	specheatcap = 0.57
+
+/datum/reagent/synthocarisol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.heal_organ_damage(2 * REM)
+
 /datum/reagent/hyperzine
 	name = "Hyperzine"
 	id = HYPERZINE
@@ -2708,7 +2763,7 @@
 	if(..())
 		return 1
 
-	if(prob(5))
+	if(prob(5) && M.stat == CONSCIOUS)
 		M.emote(pick("twitch","blink_r","shiver"))
 
 /datum/reagent/hypozine //syndie hyperzine
@@ -3010,6 +3065,23 @@
 
 	M.hallucination += 10
 
+/datum/reagent/heartbreaker
+	name = "Heartbreaker Toxin"
+	id = HEARTBREAKER
+	description = "A powerful hallucinogen and suffocant. Not a thing to be messed with."
+	reagent_state = LIQUID
+	color = "#ff91b7" //rgb: 255, 145, 183
+	density = 0.78
+	specheatcap = 5.47
+
+/datum/reagent/heartbreaker/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.hallucination += 5
+	M.adjustOxyLoss(4 * REM)
+
 /datum/reagent/spiritbreaker
 	name = "Spiritbreaker Toxin"
 	id = SPIRITBREAKER
@@ -3090,6 +3162,26 @@
 		M.bodytemperature = max(310, M.bodytemperature - (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
 	else if(M.bodytemperature < 311)
 		M.bodytemperature = min(310, M.bodytemperature + (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
+
+/datum/reagent/preslomite
+	name = "Preslomite"
+	id = PRESLOMITE
+	description = "A stabilizing chemical used in industrial relief efforts."
+	reagent_state = LIQUID
+	color = "#FFFFFF" //rgb: 255, 255, 255
+	custom_metabolism = 0.05
+
+/datum/reagent/preslomite/on_mob_life(var/mob/living/M, var/alien)
+
+	if(..())
+		return 1
+	if(!iscarbon(M))
+		return //We can't do anything for you
+	var/mob/living/carbon/C = M
+	if(C.isInCrit())
+		C.adjustToxLoss(-2 * REM)
+		C.heal_organ_damage(0, 2 * REM)
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -3607,11 +3699,11 @@
 				return
 			else if(eyes_covered) //Eye cover is better than mouth cover
 				H << "<span class='warning'>Your [eyes_covered] protects your eyes from the pepperspray!</span>"
-				H.emote("scream", , , 1)
+				H.audible_scream()
 				H.eye_blurry = max(M.eye_blurry, 5)
 				return
 			else //Oh dear
-				H.emote("scream", , , 1)
+				H.audible_scream()
 				H << "<span class='danger'>You are sprayed directly in the eyes with pepperspray!</span>"
 				H.eye_blurry = max(M.eye_blurry, 25)
 				H.eye_blind = max(M.eye_blind, 10)
@@ -4216,7 +4308,7 @@
 /datum/reagent/toxicwaste
 	name = "Toxic Waste"
 	id = TOXICWASTE
-	description = "A type of sludge created by heating space lubricant to extreme temperatures."
+	description = "A type of sludge."
 	reagent_state = LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	density = 5.59
@@ -6486,7 +6578,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		if(M_ASTHMA in H.mutations)
 			H.adjustOxyLoss(2)
 			if(prob(30))
-				H.emote("gasp")
+				H.emote("gasp", null, null, TRUE)
 
 /datum/reagent/albuterol
 	name = "Albuterol"

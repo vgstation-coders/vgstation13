@@ -123,7 +123,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
-	build_path = "/obj/item/weapon/circuitboard/rust_gyrotron_control"
+	build_path = /obj/item/weapon/circuitboard/rust_gyrotron_control
 
 /datum/design/rust_fuel_control
 	name = "Circuit Design (R-UST Mk. 7 fuel controller)"
@@ -133,7 +133,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
-	build_path = "/obj/item/weapon/circuitboard/rust_fuel_control"
+	build_path = /obj/item/weapon/circuitboard/rust_fuel_control
 
 /datum/design/rust_core_monitor
 	name = "Circuit Design (R-UST Mk. 7 core monitor)"
@@ -143,7 +143,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
-	build_path = "/obj/item/weapon/circuitboard/rust_core_monitor"
+	build_path = /obj/item/weapon/circuitboard/rust_core_monitor
 
 /datum/design/rust_core_control
 	name = "Circuit Design (R-UST Mk. 7 core controller)"
@@ -153,4 +153,14 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
-	build_path = "/obj/item/weapon/circuitboard/rust_core_control"
+	build_path = /obj/item/weapon/circuitboard/rust_core_control
+
+/datum/design/supermattermonitor
+	name = "Circuit Design (Supermatter Monitor)"
+	desc = "Allows for the construction of circuit boards used to build a supermatter monitoring computer"
+	id = "supermattermonitor"
+	req_tech = list(Tc_ENGINEERING = 5)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Misc"
+	build_path = /obj/item/weapon/circuitboard/supermatter

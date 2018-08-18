@@ -145,6 +145,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 // For changing wander behavior
 /mob/living/simple_animal/proc/wander_move(var/turf/dest)
 	if(space_check())
+		if(istype(src, /mob/living/simple_animal/hostile))
+			var/mob/living/simple_animal/hostile/H = src
+			set_glide_size(DELAY2GLIDESIZE(H.move_to_delay))
+		else
+			set_glide_size(DELAY2GLIDESIZE(0.5 SECONDS))
 		Move(dest)
 
 /mob/living/simple_animal/Life()
@@ -397,7 +402,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	return
 
-/mob/living/simple_animal/MouseDrop(mob/living/carbon/M)
+/mob/living/simple_animal/MouseDropFrom(mob/living/carbon/M)
 	if(M != usr || !istype(M) || !Adjacent(M) || M.incapacitated())
 		return ..()
 
@@ -509,7 +514,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return
 
 	if(!gibbed)
-		visible_message("<span class='danger'>\the [src] stops moving...</span>")
+		emote("deathgasp")
 
 	health = 0 // so /mob/living/simple_animal/Life() doesn't magically revive them
 	living_mob_list -= src

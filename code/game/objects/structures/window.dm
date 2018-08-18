@@ -458,19 +458,17 @@ var/list/one_way_windows
 						drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
 					return
 
-				if(istype(W, /obj/item/weapon/weldingtool))
+				if(iswelder(W))
 					var/obj/item/weapon/weldingtool/WT = W
-					if(WT.remove_fuel(0))
-						playsound(src, 'sound/items/Welder.ogg', 100, 1)
-						user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
+					user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 						"<span class='notice'>You start disassembling \the [src].</span>")
-						if(do_after(user, src, 40) && d_state == WINDOWLOOSE) //Extra condition needed to avoid cheesing
-							playsound(src, 'sound/items/Welder.ogg', 100, 1)
-							user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
-							"<span class='notice'>You disassemble \the [src].</span>")
-							drop_stack(sheet_type, get_turf(src), sheetamount, user)
-							qdel(src)
-							return
+					if(WT.do_weld(user, src, 40, 0) && d_state == WINDOWLOOSE) //Extra condition needed to avoid cheesing
+						playsound(src, 'sound/items/Welder.ogg', 100, 1)
+						user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
+						"<span class='notice'>You disassemble \the [src].</span>")
+						drop_stack(sheet_type, get_turf(src), sheetamount, user)
+						qdel(src)
+						return
 					else
 						to_chat(user, "<span class='warning'>You need more welding fuel to complete this task.</span>")
 						return
@@ -488,21 +486,15 @@ var/list/one_way_windows
 			update_icon()
 			return
 
-		if(istype(W, /obj/item/weapon/weldingtool) && !d_state)
+		if(iswelder(W) && !d_state)
 			var/obj/item/weapon/weldingtool/WT = W
-			if(WT.remove_fuel(0))
-				playsound(src, 'sound/items/Welder.ogg', 100, 1)
-				user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
+			user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 				"<span class='notice'>You start disassembling \the [src].</span>")
-				if(do_after(user, src, 40) && d_state == WINDOWLOOSE) //Ditto above
-					playsound(src, 'sound/items/Welder.ogg', 100, 1)
-					user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
-					"<span class='notice'>You disassemble \the [src].</span>")
-					drop_stack(sheet_type, get_turf(src), sheetamount, user)
-					Destroy()
-					return
-			else
-				to_chat(user, "<span class='warning'>You need more welding fuel to complete this task.</span>")
+			if(WT.do_weld(user, src, 40, 0) && d_state == WINDOWLOOSE) //Ditto above
+				user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
+				"<span class='notice'>You disassemble \the [src].</span>")
+				drop_stack(sheet_type, get_turf(src), sheetamount, user)
+				Destroy()
 				return
 
 	user.do_attack_animation(src, W)
@@ -615,7 +607,7 @@ var/list/one_way_windows
 		for(var/obj/structure/window/W in get_step(T,direction))
 			W.update_icon()
 
-/obj/structure/window/forceMove()
+/obj/structure/window/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	var/turf/T = loc
 	..()
 	update_nearby_icons(T)

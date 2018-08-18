@@ -6,8 +6,9 @@
 		var/mob/living/M=container.holder
 		if(COMSIG_MOVE)
 			if("loc" in args)
-				walk_to(M, args["loc"], 1, walk_delay)
+				M.start_walk_to(args["loc"], 1, walk_delay)
 			if("dir" in args)
+				M.set_glide_size(DELAY2GLIDESIZE(walk_delay))
 				walk(M, args["dir"], walk_delay)
 
 /datum/component/controller/movement/astar

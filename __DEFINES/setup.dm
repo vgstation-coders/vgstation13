@@ -5,6 +5,11 @@
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
 
+// Defines for the shuttle
+#define SHUTTLE_ON_STANDBY 0
+#define SHUTTLE_ON_STATION 1
+#define SHUTTLE_ON_CENTCOM 2
+
 #ifndef RUNWARNING
 #warn If you have issues with retrieving logs update byond on the server and client to 507.1277 or greater, or uncomment RUNWARNING
 #endif
@@ -756,6 +761,8 @@ SEE_PIXELS	256
 #define MAT_PLASTIC		"$plastic"
 #define MAT_CARDBOARD   "$cardboard"
 #define MAT_WOOD		"$wood"
+#define MAT_BRASS   	"$brass"
+#define MAT_RALLOY   	"$ralloy"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -1235,6 +1242,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 	#define say_testing(a,x) to_chat(a, ("([__FILE__]:[__LINE__] say_testing) [x]"))
 #else
 	#define say_testing(a,x)
+//	null << "[x][a]")
 #endif
 
 //#define JUSTFUCKMYSHITUP 1
@@ -1528,3 +1536,13 @@ var/proccalls = 1
 #else
 #define DELAY2GLIDESIZE(delay) (Ceiling(WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1)))
 #endif
+
+//Custom vending machines
+#define CUSTOM_VENDING_MAX_SLOGAN_LENGTH	50
+#define CUSTOM_VENDING_MAX_NAME_LENGTH	25
+#define CUSTOM_VENDING_MAX_SLOGANS	5
+
+#define MACHINE "machine"
+#define COMPUTER "computer"
+#define EMBEDDED_CONTROLLER "embedded controller"
+#define OTHER "other"

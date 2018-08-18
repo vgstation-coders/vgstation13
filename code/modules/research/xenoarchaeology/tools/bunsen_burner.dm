@@ -6,6 +6,7 @@
 	desc = "A fuel-consuming device designed for bringing chemical mixtures to boil."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "bunsen0"
+	pass_flags = PASSTABLE
 	var/heating = BUNSEN_OFF //whether the bunsen is turned on
 	var/obj/item/weapon/reagent_containers/held_container
 	var/list/possible_fuels = list(
@@ -77,15 +78,17 @@
 					var/reagent_transfer = R.reagents.trans_id_to(src, possible_fuel, 10)
 					if(reagent_transfer)
 						to_chat(user, "<span class='notice'>You transfer [reagent_transfer]u of [possible_fuel] from \the [R] to \the [src]</span>")
+						add_fingerprint(user)
 						return
 		else
 			if(!held_container && user.drop_item(W, src))
 				held_container = W
 				to_chat(user, "<span class='notice'>You put \the [held_container] onto \the [src].</span>")
 				var/image/I = image("icon"=W, "layer"=FLOAT_LAYER, "pixel_y" = 13 * PIXEL_MULTIPLIER)
-				var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER, "pixel_y" = src.pixel_y, "pixel_x" = src.pixel_x)
+				var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER)
 				overlays += I
 				overlays += I2
+				add_fingerprint(user)
 				return 1 // avoid afterattack() being called
 	if(iswrench(W))
 		user.visible_message("<span class = 'warning'>[user] starts to deconstruct \the [src]!</span>","<span class = 'notice'>You start to deconstruct \the [src].</span>")
@@ -149,6 +152,7 @@
 		held_container.forceMove(src.loc)
 		held_container.attack_hand(user)
 		held_container = null
+		add_fingerprint(user)
 	else
 		toggle()
 

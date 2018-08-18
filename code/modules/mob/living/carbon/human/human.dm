@@ -99,6 +99,10 @@
 	h_style = "Bald"
 	..(new_loc, "Mushroom")
 
+/mob/living/carbon/human/lich/New(var/new_loc, delay_ready_dna = 0)
+	h_style = "Bald"
+	..(new_loc, "Undead")
+
 /mob/living/carbon/human/generate_static_overlay()
 	if(!istype(static_overlays,/list))
 		static_overlays = list()
@@ -1590,6 +1594,10 @@
 /mob/living/carbon/human/is_fat()
 	return (M_FAT in mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
 
+// Bulky checks are often enough that it might as well be a proc for readability. -CW
+/mob/living/carbon/human/proc/is_bulky()
+	return species.anatomy_flags & IS_BULKY
+
 mob/living/carbon/human/isincrit()
 	if (health - halloss <= config.health_threshold_softcrit)
 		return 1
@@ -1625,10 +1633,13 @@ mob/living/carbon/human/isincrit()
 /mob/living/carbon/human/get_appendix()
 	return internal_organs_by_name["appendix"]
 
+/mob/living/carbon/human/get_stomach()
+	return internal_organs_by_name["stomach"]
+
 //Moved from internal organ surgery
 //Removes organ from src, places organ object under user
 //example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
-mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
+/mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
 	var/obj/item/organ/internal/extractedorgan
 	if(targetorgan && istype(targetorgan))
 		extractedorgan = targetorgan.remove(user) //The organ that comes out at the end

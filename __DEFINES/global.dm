@@ -10,6 +10,8 @@
 
 #define GREY_SHAPED "Grey"
 
+#define UNDEAD_SHAPED "Skellington","Undead","Plasmaman"
+
 //Content of the Round End Information window
 var/round_end_info = ""
 
@@ -264,7 +266,6 @@ var/global/datum/gas_mixture/space_gas = new
 
 //Announcement intercom
 var/global/obj/item/device/radio/intercom/universe/announcement_intercom = new
-#define CANT_RECIEVE -1 // For radios & intercoms, special return code
 
 //used by jump-to-area etc. Updated by area/updateName()
 var/list/sortedAreas = list()
@@ -363,28 +364,42 @@ var/list/available_staff_transforms = list(
 
 //Broken mob list
 var/list/blacklisted_mobs = list(
-		/mob/living/simple_animal/space_worm, // Unfinished. Very buggy, they seem to just spawn additional space worms everywhere and eating your own tail results in new worms spawning.
-		/mob/living/simple_animal/hostile/humanoid, // JUST DON'T DO IT, OK?
-		/mob/living/simple_animal/hostile/retaliate/cockatrice, // I'm just copying this from transmog.
-		/mob/living/simple_animal/hostile/giant_spider/hunter/dead, // They are dead.
-		/mob/living/simple_animal/hostile/asteroid/hivelordbrood, // They aren't supposed to be playable.
-		/mob/living/simple_animal/hologram, // Can't live outside the holodeck.
-		/mob/living/simple_animal/hostile/carp/holocarp, //These can but they're just a retarded hologram carp reskin for the love of god.
-		/mob/living/slime_pile, // They are dead.
-		/mob/living/adamantine_dust, // Ditto
-		/mob/living/simple_animal/hostile/viscerator, //Nope.
-		/mob/living/simple_animal/hostile/mining_drone, //This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
-		/mob/living/simple_animal/bee //Aren't set up to be playable
+		/mob/living/simple_animal/space_worm,							// Unfinished. Very buggy, they seem to just spawn additional space worms everywhere and eating your own tail results in new worms spawning.
+		/mob/living/simple_animal/hostile/humanoid,						// JUST DON'T DO IT, OK?
+		/mob/living/simple_animal/hostile/retaliate/cockatrice,			// I'm just copying this from transmog.
+		/mob/living/simple_animal/hostile/giant_spider/hunter/dead,		// They are dead.
+		/mob/living/simple_animal/hostile/asteroid/hivelordbrood,		// They aren't supposed to be playable.
+		/mob/living/simple_animal/hologram,								// Can't live outside the holodeck.
+		/mob/living/simple_animal/hostile/carp/holocarp,				// These can but they're just a retarded hologram carp reskin for the love of god.
+		/mob/living/slime_pile,											// They are dead.
+		/mob/living/adamantine_dust, 									// Ditto
+		/mob/living/simple_animal/hostile/viscerator,					// Nope.
+		/mob/living/simple_animal/hostile/mining_drone,					// This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
+		/mob/living/simple_animal/bee,									// Aren't set up to be playable
+		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,	// Isn't supposed to be spawnable by xenobio
 		)
 
 //Boss monster list
 var/list/boss_mobs = list(
-	/mob/living/simple_animal/scp_173,						// Just a statue.
-	/mob/living/simple_animal/hostile/hivebot/tele,			// Hivebot spawner WIP thing
-	/mob/living/simple_animal/hostile/wendigo,				// Stupid strong evolving creature things that scream for help
-	/mob/living/simple_animal/hostile/mechahitler,			// Sieg heil!
-	/mob/living/simple_animal/hostile/alien/queen/large,	// The bigger and beefier version of queens.
+	/mob/living/simple_animal/scp_173,								// Just a statue.
+	/mob/living/simple_animal/hostile/hivebot/tele,					// Hivebot spawner WIP thing
+	/mob/living/simple_animal/hostile/wendigo,						// Stupid strong evolving creature things that scream for help
+	/mob/living/simple_animal/hostile/mechahitler,					// Sieg heil!
+	/mob/living/simple_animal/hostile/alien/queen/large,			// The bigger and beefier version of queens.
+	/mob/living/simple_animal/hostile/asteroid/rockernaut/boss, 	// Angie
+	/mob/living/simple_animal/hostile/humanoid/surgeon/boss, 		// First stage of Doctor Placeholder
+	/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton,	// Second stage of Doctor Placeholder
 	)
 
 // Set by traitor item, affects cargo supplies
 var/station_does_not_tip = FALSE
+
+#define CARD_CAPTURE_SUCCESS 0 // Successful charge
+#define CARD_CAPTURE_FAILURE_GENERAL 1 // General error
+#define CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS 2 // Not enough funds in the account.
+#define CARD_CAPTURE_ACCOUNT_DISABLED 3 // (FUTURE USE) Account locked
+#define CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO 4 // Bad account/pin combo
+#define CARD_CAPTURE_FAILURE_SECURITY_LEVEL 5 // Security level didn't allow current authorization or another exception occurred
+#define CARD_CAPTURE_FAILURE_USER_CANCELED 6 // The user canceled the transaction
+#define CARD_CAPTURE_FAILURE_NO_DESTINATION 7 // There was no linked account to send funds to.
+#define CARD_CAPTURE_FAILURE_NO_CONNECTION 8 // Account database not available.

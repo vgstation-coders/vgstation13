@@ -6,7 +6,7 @@
 	var/obj/machinery/cart/next_cart = null
 	var/obj/machinery/cart/previous_cart = null
 
-/obj/machinery/cart/MouseDrop_T(var/atom/movable/C, mob/user)
+/obj/machinery/cart/MouseDropTo(var/atom/movable/C, mob/user)
 	if (user.incapacitated() || !in_range(user, src))
 		return
 
