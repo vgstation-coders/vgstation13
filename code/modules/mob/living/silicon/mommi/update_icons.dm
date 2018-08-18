@@ -37,7 +37,9 @@
 		overlays += eyes
 
 		if(anchored) //anchored, really?
-			overlays += image(icon,"[base_icon]-park",overlay_layer)
+			var/image/parking_lights = image(icon,"[base_icon]-park",overlay_layer)
+			parking_lights.plane = overlay_plane
+			overlays += parking_lights
 
 	if(opened)
 		if(wiresexposed)
