@@ -60,20 +60,20 @@
 	var/msg = "<b>[user]</b> " + params
 
 	var/turf/T = get_turf(user) // for pAIs
-	var/broadcast = T ? T : user
+	
+	for(var/mob/M in dead_mob_list)
+		if (!M.client)
+			continue //skip monkeys and leavers
+		if(findtext(message," snores.")) //Because we have so many sleeping people.
+			break
+		if(M.client.prefs && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(src,null)))
+			M.show_message(message)
 
-	switch (m_type)
-		if (EMOTE_VISIBLE)
-			for(var/mob/O in viewers(broadcast))
-				O.show_message(msg, emote_type)
-			if (!(user in viewers(broadcast)))
-				user.show_message(msg, emote_type)
-
-		if (EMOTE_AUDIBLE)
-			for(var/mob/O in hearers(broadcast))
-				O.show_message(msg, m_type)
-			if (!(user in viewers(broadcast)))
-				user.show_message(msg, emote_type)
+	if (emote_type == EMOTE_VISIBLE)
+		user.visible_message(msg)
+	else
+		for(var/mob/O in get_hearers_in_view(world.view, user))
+			O.show_message(msg)
 
 	var/location = T ? "[T.x],[T.y],[T.z]" : "nullspace"
 	log_emote("[user.name]/[user.key] (@[location]): [message]")
