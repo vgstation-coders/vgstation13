@@ -968,7 +968,8 @@
 	overlays.Cut()
 	update_fire()
 	if(!stat && cell != null)
-		eyes = image(icon,"eyes-[icon_state]", ABOVE_LIGHTING_LAYER)
+		eyes = image(icon,"eyes-[icon_state]", overlay_layer)
+		eyes.plane = overlay_plane
 		overlays += eyes
 
 	if(opened)
