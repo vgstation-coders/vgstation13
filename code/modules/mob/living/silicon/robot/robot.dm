@@ -102,7 +102,6 @@
 /mob/living/silicon/robot/New(loc, var/unfinished = FALSE)
 	ident = rand(1, 999)
 	updatename(modtype)
-	updateicon()
 
 	laws = getLawset(src)
 	robot_access = GetRobotAccess()
@@ -138,6 +137,8 @@
 
 	if(!cell)
 		cell = new cell_type(src)
+
+	updateicon()
 
 	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
 	hud_list[DIAG_CELL_HUD] = image('icons/mob/hud.dmi', src, "hudbattmax")
