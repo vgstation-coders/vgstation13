@@ -57,21 +57,14 @@
 		var/T = get_turf(user)
 		if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(T, null)))
 			M.show_message(msg)
-
-	var/turf/T = get_turf(user) // for pAIs
-	var/broadcast = T ? T : user
-
+		
 	if (emote_type == EMOTE_VISIBLE)
-		for(var/mob/O in viewers(broadcast))
-			O.show_message(msg, emote_type)
-		if (!(user in viewers(broadcast)))
-			user.show_message(msg, emote_type)
+		user.visible_message(msg)
 	else
-		for(var/mob/O in hearers(broadcast))
-			O.show_message(msg, emote_type)
-		if (!(user in hearers(broadcast)))
-			user.show_message(msg, emote_type)
+		for(var/mob/O in get_hearers_in_view(world.view, user))
+			O.show_message(msg)
 
+	var/turf/T = get_turf(user)
 	var/location = T ? "[T.x],[T.y],[T.z]" : "nullspace"
 	log_emote("[user.name]/[user.key] (@[location]): [message]")
 
