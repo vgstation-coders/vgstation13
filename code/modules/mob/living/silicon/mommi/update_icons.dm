@@ -32,6 +32,7 @@
 			overlay_layer = FLOAT_LAYER
 		if(!emagged)
 			eyes.plane = overlay_plane
+			eyes.layer = overlay_layer
 		else
 			eyes.plane = LIGHTING_PLANE //Emagged MoMMIs don't hide their eyes.
 		overlays += eyes
