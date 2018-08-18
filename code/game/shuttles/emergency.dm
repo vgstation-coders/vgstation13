@@ -67,7 +67,7 @@ var/global/datum/shuttle/escape/pod/four/EP4 = new(starting_area=/area/shuttle/e
 
 var/global/datum/shuttle/escape/pod/five/EP5 = new(starting_area=/area/shuttle/escape_pod5)
 
-/datum/shuttle/escae/pod/one/name = "Escape pod 1"
+/datum/shuttle/escape/pod/one/name = "Escape pod 1"
 
 /datum/shuttle/escape/pod/one/initialize()
 	.=..()
@@ -85,7 +85,7 @@ var/global/datum/shuttle/escape/pod/five/EP5 = new(starting_area=/area/shuttle/e
 /obj/docking_port/destination/pod1/transit
 	areaname = "hyperspace (pod 1)"
 
-/datum/shuttle/escae/pod/two/name = "Escape pod 2"
+/datum/shuttle/escape/pod/two/name = "Escape pod 2"
 
 /datum/shuttle/escape/pod/two/initialize()
 	.=..()
@@ -104,7 +104,7 @@ var/global/datum/shuttle/escape/pod/five/EP5 = new(starting_area=/area/shuttle/e
 	areaname = "hyperspace (pod 2)"
 
 
-/datum/shuttle/escae/pod/three/name = "Escape pod 3"
+/datum/shuttle/escape/pod/three/name = "Escape pod 3"
 
 /datum/shuttle/escape/pod/three/initialize()
 	.=..()
@@ -122,7 +122,7 @@ var/global/datum/shuttle/escape/pod/five/EP5 = new(starting_area=/area/shuttle/e
 /obj/docking_port/destination/pod3/transit
 	areaname = "hyperspace (pod 3)"
 
-/datum/shuttle/escae/pod/four/name = "Escape pod 4"
+/datum/shuttle/escape/pod/four/name = "Escape pod 4"
 
 /datum/shuttle/escape/pod/four/initialize()
 	.=..()
@@ -140,7 +140,7 @@ var/global/datum/shuttle/escape/pod/five/EP5 = new(starting_area=/area/shuttle/e
 /obj/docking_port/destination/pod4/transit
 	areaname = "hyperspace (pod 4)"
 
-/datum/shuttle/escae/pod/five/name = "Escape pod 5"
+/datum/shuttle/escape/pod/five/name = "Escape pod 5"
 
 /datum/shuttle/escape/pod/five/initialize()
 	.=..()
