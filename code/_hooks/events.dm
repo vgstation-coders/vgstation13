@@ -34,6 +34,8 @@
 	return handlers.Remove(key)
 
 /event/proc/Invoke(var/list/args)
+	if(handlers == null)
+		return
 	if(handlers.len==0)
 		return
 	for(var/key in handlers)

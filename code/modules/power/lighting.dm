@@ -575,6 +575,8 @@ var/global/list/obj/machinery/light/alllights = list()
 /obj/machinery/light/power_change()
 	spawn(10)
 		var/area/this_area = get_area(src)
+		if(this_area == null)
+			return
 		seton(this_area.lightswitch && this_area.power_light)
 
 // called when on fire

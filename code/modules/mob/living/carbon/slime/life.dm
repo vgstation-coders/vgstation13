@@ -387,6 +387,8 @@
 
 		else
 			if(!client)
+				if(adulttype == null)
+					return
 				var/mob/living/carbon/slime/adult/A = new adulttype(src.loc)
 				A.nutrition = nutrition
 //				A.nutrition += 100
