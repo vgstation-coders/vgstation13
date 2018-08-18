@@ -306,7 +306,7 @@ var/list/potential_theft_objectives=list(
 			continue
 		if(player == owner.current) //We are this boy
 			continue
-		if(player.stat == 2) //They are dead
+		if(player.stat == DEAD) //They are dead
 			continue
 		if(!player.mind)
 			continue
@@ -329,7 +329,7 @@ var/list/potential_theft_objectives=list(
 	for(var/mob/living/player in escape_shuttle.get_occupants(TRUE))
 		if(is_type_in_list(player, protected_mobs)) //These boys are okay to be on the shuttle
 			continue
-		if(player.stat == 2) //Do not suffer the human to live
+		if(player.stat == DEAD) //Do not suffer the human to live
 			continue
 		if(!player.mind)
 			continue

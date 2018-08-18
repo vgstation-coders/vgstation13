@@ -141,36 +141,6 @@ datum/emergency_shuttle/proc/move_pod(var/pod,var/destination)
 			else
 				D.open()
 
-	/*
-	var/area/start_location=locate(text2path("/area/shuttle/escape_pod[pod]/[escape_pods[pod]]"))
-	var/area/end_location=locate(text2path("/area/shuttle/escape_pod[pod]/[destination]"))
-
-
-
-	start_location.move_contents_to(end_location, null, NORTH)
-
-	escape_pods[pod] = destination
-
-	for(var/obj/machinery/door/D in all_doors)
-		if (get_area(D) == end_location)
-			spawn(0)
-				if(destination == "transit")
-					D.close()
-				else
-					D.open()
-
-	for(var/mob/M in end_location)
-		if (M.client)
-			spawn()
-				if (M.locked_to)
-					shake_camera(M, 4, 1) // locked_to, not a lot of shaking
-				else
-					shake_camera(M, 10, 2) // unlocked_to, HOLY SHIT SHAKE THE ROOM
-		if (istype(M, /mob/living/carbon))
-			if (!M.locked_to)
-				M.Knockdown(5)
-	*/
-
 datum/emergency_shuttle/proc/force_shutdown()
 	online=0
 	shutdown=1
