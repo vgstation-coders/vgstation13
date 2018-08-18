@@ -97,6 +97,20 @@
 		var/mob/living/carbon/human/H = user
 		if (isvox(H) || isskelevox(H))
 			return TRUE
+		if(H.is_wearing_item(/obj/item/clothing/suit/clownpiece, slot_wear_suit))
+			return TRUE
+
+/datum/emote/living/flap/run_emote(mob/user, params)
+	. = ..()
+	if(. && ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/obj/item/clothing/suit/clownpiece/wings = H.is_wearing_item(/obj/item/clothing/suit/clownpiece, slot_wear_suit)
+		if(wings)
+			wings.icon_state = "clownpiece-fly"
+			H.update_inv_wear_suit(1)
+			spawn(5)
+				wings.icon_state = initial(wings.icon_state)
+				H.update_inv_wear_suit(1)
 
 /datum/emote/living/frown
 	key = "frown"
