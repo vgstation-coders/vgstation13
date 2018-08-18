@@ -250,7 +250,7 @@
 		return ..()
 	if (H.stat == DEAD)
 		return
-	if (!H.is_muzzled())
+	if (!H.is_muzzled() && !issilent(H)) // Silent = mime, mute species.
 		if (params == TRUE) // Forced scream
 			if(world.time-H.last_emote_sound >= 30)//prevent scream spam with things like poly spray
 				message = "screams in agony!"
