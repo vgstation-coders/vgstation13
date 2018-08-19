@@ -79,7 +79,7 @@ var/list/arcane_tomes = list()
 			talisman_name = "\[blood message\]"
 		if (instance)
 			talisman_name = initial(instance.name)
-		dat += {"<label> * </label><li>  <a style="color:#AE250F" href='byond://?src=\ref[src];talisman=\ref[T]'>[talisman_name]</a> <a style="color:#AE250F" href='byond://?src=\ref[src];remove=\ref[T]'>(x)</a> </li>"}
+		dat += {"<label> * </label><li>  <a style="color:#AE250F" href='byond://?src=\ref[src];talisman=\ref[T]'>[talisman_name][(T.uses > 1) ? " [T.uses] uses" : ""]</a> <a style="color:#AE250F" href='byond://?src=\ref[src];remove=\ref[T]'>(x)</a> </li>"}
 
 	dat += {"</ul></b></div><div style="margin: 0px 20px;" align="justify">"}
 
@@ -128,7 +128,7 @@ var/list/arcane_tomes = list()
 		usr.put_in_hands(T)
 
 	usr << browse_rsc('icons/tomebg.png', "tomebg.png")
-	usr << browse(tome_text(), "window=arcanetome;size=512x375")
+	usr << browse(tome_text(), "window=arcanetome;size=537x375")
 
 /obj/item/weapon/tome/attack(var/mob/living/M, var/mob/living/user)
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had the [name] used on him by [user.name] ([user.ckey])</font>")
@@ -170,7 +170,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/tome/pickup(var/mob/user)
 	if(iscultist(user) && state == TOME_OPEN)
 		usr << browse_rsc('icons/tomebg.png', "tomebg.png")
-		usr << browse(tome_text(), "window=arcanetome;size=512x375")
+		usr << browse(tome_text(), "window=arcanetome;size=537x375")
 
 /obj/item/weapon/tome/dropped(var/mob/user)
 	usr << browse(null, "window=arcanetome")
@@ -232,7 +232,7 @@ var/list/arcane_tomes = list()
 				to_chat(user, "<span class='notice'>You slip \the [I] into \the [src].</span>")
 				if (state == TOME_OPEN)
 					usr << browse_rsc('icons/tomebg.png', "tomebg.png")
-					usr << browse(tome_text(), "window=arcanetome;size=512x375")
+					usr << browse(tome_text(), "window=arcanetome;size=537x375")
 		else
 			to_chat(user, "<span class='warning'>This tome cannot contain any more talismans. Use or remove some first.</span>")
 
@@ -328,7 +328,7 @@ var/list/arcane_tomes = list()
 				var/obj/item/weapon/tome/T = loc
 				T.talismans.Remove(src)
 				user << browse_rsc('icons/tomebg.png', "tomebg.png")
-				user << browse(T.tome_text(), "window=arcanetome;size=512x375")
+				user << browse(T.tome_text(), "window=arcanetome;size=537x375")
 		return
 
 	if (attuned_rune)
