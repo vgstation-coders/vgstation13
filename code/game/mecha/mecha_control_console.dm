@@ -60,10 +60,11 @@
 	if(href_list["lockdown"])
 		var/obj/item/mecha_parts/mecha_tracking/MT = topic_filter.getObj("lockdown")
 		var/obj/mecha/M = MT.in_mecha()
-		switch(alert("Are you sure? The exosuit will enter maintenance mode.","Transmit Beacon Lockdown Code","Yes","No"))
+		switch(alert("Are you sure? The exosuit will [M.state?"exit":"enter"] maintenance mode.","Transmit Beacon Lockdown Code","Yes","No"))
 			if ("Yes")
-				to_chat(usr, "<span class = 'notice'>You [MT.lockdown()?"lock down":"remove the lockdown"] on \the [M]</span>")
-				log_game("[key_name_admin(usr)] locked down [M] via exosuit control console.")
+				var/lockdown = MT.lockdown()
+				to_chat(usr, "<span class = 'notice'>You [lockdown?"lock down":"remove the lockdown"] on \the [M]</span>")
+				log_game("[key_name_admin(usr)] [lockdown?"locked down":"unlocked"] [M] via exosuit control console.")
 			if ("No")
 				to_chat(usr, "You have second thoughts.")
 	if(href_list["shock"])
@@ -114,10 +115,11 @@
 						<b>Airtank:</b> [M.return_pressure()]kPa<br>
 						<b>Pilot:</b> [M.occupant||"None"]<br>
 						<b>Location:</b> [get_area(M)||"Unknown"]<br>
-						<b>Active equipment:</b> [M.selected||"None"]"}
+						<b>Active equipment:</b> [M.selected||"None"]<br>
+						<b>Current status: [M.state?"locked down for maintenance":"functional"]</b>"}
 	if(istype(M, /obj/mecha/working))
 		var/obj/mecha/working/WM = M
-		answer += "<b> Used cargo space:</b> [WM.cargo.len/WM.cargo_capacity*100]%<br>"
+		answer += "<br><b> Used cargo space:</b> [WM.cargo.len/WM.cargo_capacity*100]%<br>"
 
 	return answer
 
