@@ -332,7 +332,11 @@ var/list/arcane_tomes = list()
 		return
 
 	if (attuned_rune)
-		attuned_rune.trigger(user)
+		if (attuned_rune.loc)
+			attuned_rune.trigger(user)
+		else//darn, the rune got destroyed one way or another
+			attuned_rune = null
+			to_chat(user, "<span class='warning'>The talisman disappears into dust. The rune it was attuned to appears to no longer exist.</span>")
 	else
 		new spell_type(user, src)
 
@@ -446,6 +450,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/head/culthood
 	name = "cult hood"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
 	icon_state = "culthood"
 	desc = "A hood worn by the followers of Nar-Sie."
 	flags = FPRINT
@@ -465,6 +470,7 @@ var/list/arcane_tomes = list()
 /obj/item/clothing/shoes/cult
 	name = "boots"
 	desc = "A pair of boots worn by the followers of Nar-Sie."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
 	icon_state = "cult"
 	item_state = "cult"
 	_color = "cult"
@@ -483,6 +489,7 @@ var/list/arcane_tomes = list()
 /obj/item/clothing/suit/cultrobes
 	name = "cult robes"
 	desc = "A set of armored robes worn by the followers of Nar-Sie."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
 	icon_state = "cultrobes"
 	item_state = "cultrobes"
 	flags = FPRINT
@@ -501,8 +508,9 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/storage/backpack/cultpack
 	name = "trophy rack"
 	desc = "It's useful for both carrying extra gear and proudly declaring your insanity."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
 	icon_state = "cultpack_0skull"
-	item_state = "cultpack_0skull"
+	item_state = "cultpack"
 	var/skulls = 0
 
 /obj/item/weapon/storage/backpack/cultpack/attack_self(var/mob/user)
@@ -523,10 +531,9 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/storage/backpack/cultpack/update_icon(var/mob/living/carbon/user)
 	icon_state = "cultpack_[skulls]skull"
-	item_state = "cultpack_[skulls]skull"
+	item_state = "cultpack"
 	if(istype(user))
 		user.update_inv_back()
-		user.update_inv_hands()
 
 /obj/item/weapon/storage/backpack/cultpack/get_cult_power()
 	return 30
@@ -667,3 +674,97 @@ var/list/arcane_tomes = list()
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 		overlays += filling
+
+///////////////////////////////////////BLOOD TESSERACT////////////////////////////////////////////////
+
+/obj/item/weapon/blood_tesseract
+	name = "blood tesseract"
+	desc = "A small totem. Cultists use them as anchors from the other side of the veil to quickly swap gear."
+	gender = NEUTER
+	icon = 'icons/obj/cult.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
+	icon_state = "tesseract"
+	item_state = "tesseract"
+	throwforce = 2
+	w_class = W_CLASS_TINY
+	layer = ABOVE_DOOR_LAYER
+
+	var/discarded_types = list(
+		/obj/item/clothing/head/culthood,
+		/obj/item/clothing/shoes/cult,
+		/obj/item/clothing/suit/cultrobes,
+		)
+
+	var/list/stored_gear = list()
+
+	var/obj/item/weapon/talisman/remaining = null
+
+/obj/item/weapon/blood_tesseract/Destroy()
+	if (loc)
+		var/turf/T = get_turf(src)
+		for(var/slot in stored_gear)
+			var/obj/item/I = stored_gear[slot]
+			stored_gear.Remove(I)
+			I.forceMove(T)
+	if (remaining)
+		qdel(remaining)
+		remaining = null
+	..()
+
+/obj/item/weapon/blood_tesseract/throw_impact(atom/hit_atom)
+	var/turf/T = get_turf(src)
+	playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "tesseract_break", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+	qdel(src)
+
+/obj/item/weapon/blood_tesseract/examine(var/mob/user)
+	..()
+	if (iscultist(user))
+		to_chat(user, "<span class='info'>Press it in your hands to discard currently equiped cult clothing and re-equip your stored items.</span>")
+
+/obj/item/weapon/blood_tesseract/attack_self(var/mob/living/user)
+	if (iscultist(user))
+		//Alright so we'll discard cult gear and equip the stuff stored inside.
+		anim(target = user, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_tesseract", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
+		user.u_equip(src)
+		if (remaining)
+			remaining.forceMove(get_turf(user))
+			user.put_in_hands(remaining)
+			remaining = null
+
+		for(var/obj/item/I in user)
+			if (is_type_in_list(I, discarded_types))
+				user.u_equip(I)
+				qdel(I)
+
+		for(var/slot in stored_gear)
+			var/nslot = text2num(slot)
+			var/obj/item/stored_slot = stored_gear[slot]
+			var/obj/item/user_slot = user.get_item_by_slot(nslot)
+			if (!user_slot)
+				user.equip_to_slot_or_drop(stored_slot,nslot)
+			else
+				if(istype(user_slot, /obj/item/weapon/storage))
+					var/obj/item/weapon/storage/S = user_slot
+					S.close(user)
+				if (istype(user_slot,/obj/item/weapon/storage/backpack/cultpack))
+					if (istype(stored_slot,/obj/item/weapon/storage/backpack))
+						//swapping backpacks
+						for(var/obj/item/I in user_slot)
+							I.forceMove(stored_slot)
+						user.u_equip(user_slot)
+						qdel(user_slot)
+						user.equip_to_slot_or_drop(stored_slot,nslot)
+					else
+						//free backpack
+						var/obj/item/weapon/storage/backpack/B = new(user)
+						for(var/obj/item/I in user_slot)
+							I.forceMove(B)
+						user.u_equip(user_slot)
+						qdel(user_slot)
+						user.equip_to_slot_or_drop(B,nslot)
+						user.put_in_hands(stored_slot)
+				else
+					user.equip_to_slot_or_drop(stored_slot,nslot)
+			stored_gear.Remove(slot)
+		qdel(src)
