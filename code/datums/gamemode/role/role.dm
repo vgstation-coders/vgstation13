@@ -125,7 +125,7 @@
 		stack_trace("M is [M.type]!")
 		return 0
 	if(!CanBeAssigned(M) && !override)
-		stack_trace("[M] was to be assigned to [name] but failed CanBeAssigned!")
+		stack_trace("[M.name] was to be assigned to [name] but failed CanBeAssigned!")
 		return 0
 
 	antag = M
