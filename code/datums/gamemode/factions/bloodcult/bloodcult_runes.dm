@@ -61,7 +61,6 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	rune_list.Add(src)
 
 /obj/effect/rune/Destroy()
-
 	for(var/mob/living/silicon/ai/AI in player_list)
 		if (AI.client)
 			AI.client.images -= blood_image
