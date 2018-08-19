@@ -446,18 +446,18 @@
 
 		if (href_list["move_escape_pod"] == "all")
 			for (var/pod in emergency_shuttle.escape_pods)
-				if (emergency_shuttle.escape_pods[pod] == href_list["move_destination"])
-					continue
 				emergency_shuttle.move_pod(pod,href_list["move_destination"])
 			log_admin("[key_name(usr)] moved all escape pods to [href_list["move_destination"]]")
 			message_admins("<span class='notice'>[key_name_admin(usr)] moved all escape pods to [href_list["move_destination"]]</span>", 1)
 		else
-			var/old_loc = emergency_shuttle.escape_pods[href_list["move_escape_pod"]]
-			emergency_shuttle.move_pod(href_list["move_escape_pod"],href_list["move_destination"])
-			var/area/pod_area = locate(text2path("/area/shuttle/escape_pod[href_list["move_escape_pod"]]/[emergency_shuttle.escape_pods[href_list["move_escape_pod"]]]"))
-			var/turf/T = pick(pod_area.area_turfs)
-			log_admin("[key_name(usr)] moved [pod_area.name] from [old_loc] to [href_list["move_destination"]]")
-			message_admins("<span class='notice'>[key_name_admin(usr)] moved <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[pod_area.name]</a> from [old_loc] to [href_list["move_destination"]]</span>", 1)
+			var/datum/shuttle/escape/S = locate(href_list["move_escape_pod"])
+			if(!emergency_shuttle.escape_pods.Find(S))
+				return
+			var/obj/docking_port/destination/D = S.current_port
+			emergency_shuttle.move_pod(S,href_list["move_destination"])
+			var/turf/T = get_turf(D)
+			log_admin("[key_name(usr)] moved [S.name] from [D.areaname] to [href_list["move_destination"]]")
+			message_admins("<span class='notice'>[key_name_admin(usr)] moved <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[S.name]</a> from [D.areaname] to [href_list["move_destination"]]</span>", 1)
 		href_list["secretsadmin"] = "emergency_shuttle_panel"
 
 	else if(href_list["delay_round_end"])
