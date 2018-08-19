@@ -2983,6 +2983,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/fish_eggs/seadevil = 1,
 		/obj/machinery/power/antiquesynth = 1,
 		/obj/item/crackerbox = 1,
+		/obj/structure/closet/crate/chest/alcatraz = 1,
+		/obj/structure/largecrate/wolf = 1,
+		/obj/item/weapon/boxofsnow = 3
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
@@ -2999,6 +3002,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/shoes/clown_shoes/advanced = 50,
 		/obj/item/fish_eggs/seadevil = 50,
 		/obj/machinery/power/antiquesynth = 350,
+		/obj/structure/closet/crate/chest/alcatraz = 350,
+		/obj/structure/largecrate/wolf = 100,
+		/obj/item/weapon/boxofsnow = 50,
 		/obj/item/crackerbox = 200,
 		)
 

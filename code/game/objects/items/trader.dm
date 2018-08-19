@@ -188,6 +188,22 @@
 		return
 	..()
 
+/obj/structure/closet/crate/chest/alcatraz
+	name = "Alcatraz IV security crate"
+	desc = "It came from Alcatraz IV!"
+
+/obj/structure/closet/crate/chest/alcatraz/New()
+	..()
+	new /obj/item/clothing/head/helmet/donutgiver(src)
+	new /obj/item/weapon/ram_kit(src)
+	new /obj/item/clothing/under/securityskirt/elite(src)
+	new /obj/item/device/law_planner(src)
+	new /obj/item/clothing/accessory/bangerboy(src)
+	new /obj/item/weapon/autocuffer(src)
+	new /obj/item/device/vampirehead(src)
+	new /obj/item/key/security/spare(src)
+	new /obj/item/weapon/depocket_wand(src)
+
 /obj/item/clothing/accessory/bangerboy
 	name = "Banger Boy Advance"
 	desc = "The beloved sequel to the Banger Boy Color. Tap it or the clothing item it is attached to with grenades to easily configure their onboard timers. Straps nicely onto security armor."
@@ -313,16 +329,17 @@
 			I.put_in_hands(H)
 			last_donut = timeofday
 
+//Security Skirt spritework is coutesy of TG, AGPL license
 /obj/item/clothing/under/securityskirt/elite
 	name = "elite security skirt"
 	desc = "For demonstrating who is in charge."
 	icon_state = "secskirt"
 	item_state = "r_suit"
-	_color = "secred"
-	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+	_color = "secskirt"
+	armor = list(melee = 10, bullet = 10, laser = 10,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(GREY_SHAPED) //Unlike normal skirts this is not VOX_SHAPED
 	body_parts_covered = FULL_TORSO|ARMS
 
 /obj/item/clothing/under/securityskirt/elite/equipped(var/mob/user, var/slot)
@@ -356,6 +373,9 @@
 	icon_state = "cage_secure"
 
 /obj/structure/largecrate/wolf/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(!allowed(user))
+		to_chat("<span class='warning'>\The [src]'s secure bolting system flashes hostily.</span>")
+		//Not using elseif here because we want it to continue to attack_hand
 	if(iscrowbar(W) && allowed(user))
 		new /obj/item/stack/sheet/metal(src)
 		var/turf/T = get_turf(src)
@@ -374,8 +394,8 @@
 	desc = "A large data pad with buttons for crimes. Used for planning a brig sentence."
 	w_class = W_CLASS_SMALL
 	origin_tech = Tc_PROGRAMMING + "=6"
-	icon = 'icons/obj/module.dmi'
-	icon_state = "planning frame"
+	icon = 'icons/obj/pda.dmi'
+	icon_state = "aicard"
 	item_state = "electronic"
 	req_access = list(access_brig)
 	var/announce = 1 //0 = Off, 1 = On select, 2 = On upload
@@ -468,3 +488,33 @@
 	else
 		/mob/living/simple_animal/corgi/saint(center)
 	qdel(src)
+<<<<<<< 2fe3ffac9e2182b35df6f17383ae1fd3a5d4df92
+=======
+
+/obj/item/key/security/spare
+	name = "warden's spare secway key"
+	desc = "It has a tag that reads:"
+	var/home_map
+
+/New()
+	..()
+	var/list/map_names = list("Defficiency","Bagelstation","Meta Club","Packed Station","Asteroid Station","Box Station")
+	map_names -= map.nameLong
+	home_map = pick(map_names)
+
+/obj/item/key/security/spare/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>If found, please return to [home_map]."
+
+/obj/item/weapon/depocket_wand
+	name = "depocket wand"
+	desc = "Depocketers were invented by thieves to read pocket contents and identify marks, then force them to drop those items for muggings. This one has been permanently peace-bonded so that it can only check pocket contents."
+
+/obj/item/weapon/depocket_wand/attack(mob/living/M as mob, mob/living/user as mob)
+	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		to_chat(user,"<span class='info'>Pocket Scan Results:<BR>Left: [M.l_store]<BR>Right: [M.r_store]</span>")
+	else
+		..()
+>>>>>>> added chest
