@@ -442,7 +442,7 @@
 				to_chat(mob, "<span class='sinister'>A dark forcefield prevents you from entering the area.</span>")
 			else
 				var/datum/faction/cult = find_active_faction(BLOODCULT)
-				if((T && T.holy) && isobserver(mob) && ((mob.invisibility == 0) || mob.mind in cult.members))
+				if((T && T.holy) && isobserver(mob) && ((mob.invisibility == 0) || (cult && mob.mind in cult.members)))
 					to_chat(mob, "<span class='warning'>You cannot get past holy grounds while you are in this plane of existence!</span>")
 				else
 					mob.forceEnter(get_step(mob, direct))

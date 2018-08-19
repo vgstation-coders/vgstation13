@@ -580,6 +580,9 @@
 			available_objectives[initial(O.name)] = O
 
 		var/new_obj = input("Select a new objective", "New Objective", null) as null|anything in available_objectives
+
+		if(new_obj == null)
+			return
 		var/obj_type = available_objectives[new_obj]
 
 		var/datum/objective/new_objective = new obj_type(null,FALSE)

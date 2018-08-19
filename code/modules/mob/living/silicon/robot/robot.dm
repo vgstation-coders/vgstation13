@@ -373,6 +373,8 @@
 /mob/living/silicon/robot/show_malf_ai()
 	..()
 	var/datum/faction/malf/malf = find_active_faction(MALF)
+	if(!malf)
+		return FALSE
 	for (var/datum/mind/malfai in malf.members)
 		if(connected_ai)
 			if(connected_ai.mind == malfai)
