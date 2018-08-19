@@ -187,6 +187,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod1
 	name = "\improper Escape Pod One"
+	icon_state = "shuttle2"
 	music = "music/escape.ogg"
 	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
 
@@ -201,6 +202,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod2
 	name = "\improper Escape Pod Two"
+	icon_state = "shuttle2"
 	music = "music/escape.ogg"
 	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
 
@@ -215,6 +217,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod3
 	name = "\improper Escape Pod Three"
+	icon_state = "shuttle2"
 	music = "music/escape.ogg"
 	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
 
@@ -227,8 +230,15 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/escape_pod3/transit
 	icon_state = "shuttle"
 
+/area/shuttle/escape_pod4
+	name = "\improper Escape Pod Four"
+	icon_state = "shuttle2"
+	music = "music/escape.ogg"
+	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
+
 /area/shuttle/escape_pod5 //Pod 4 was lost to meteors
 	name = "\improper Escape Pod Five"
+	icon_state = "shuttle2"
 	music = "music/escape.ogg"
 	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
 
