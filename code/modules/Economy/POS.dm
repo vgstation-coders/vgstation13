@@ -438,7 +438,7 @@ var/const/POS_HEADER = {"<html>
 	onclose(user, "pos")
 	return
 
-/obj/machinery/pos/scan_card(var/obj/item/weapon/card/id/C)
+/obj/machinery/pos/scan_card(var/obj/item/weapon/card/C)
 	var/remaining_credits_needed = credits_needed - credits_held
 	var/area/this_area = get_area(src)
 	var/pos_name = "[this_area.name] POS#[id]"
@@ -572,9 +572,9 @@ var/const/POS_HEADER = {"<html>
 	src.attack_hand(usr)
 
 /obj/machinery/pos/attackby(var/atom/movable/A, var/mob/user)
-	if(istype(A,/obj/item/weapon/card/id))
-		var/obj/item/weapon/card/id/I = A
-		if(!logged_in)
+	if(istype(A,/obj/item/weapon/card))
+		var/obj/item/weapon/card/id/C = A
+		if(istype(C,/obj/item/weapon/card/id) && !logged_in)
 			// /atom/mob/visible_message(all_message, self_message, blind_message,...)
 			user.visible_message("<span class='notice'>The machine beeps, and logs [user] in.</span>", "<span class='notice'>The machine beeps, and logs you in.</span>", "You hear a beep.")
 			logged_in = user
@@ -587,7 +587,7 @@ var/const/POS_HEADER = {"<html>
 				visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
 				flick(src,"pos-error")
 				return
-			connect_account(user, I)
+			connect_account(user, C)
 	else if(istype(A,/obj/item/weapon/spacecash))
 		if(!linked_account)
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
