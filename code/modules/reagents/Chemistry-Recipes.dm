@@ -3113,7 +3113,7 @@
 		return
 	H.vomit()
 	S.take_damage(created_volume/10)
-	holder.remove_reagents(created_volume*25)
+	S.get_reagents().remove_reagents(created_volume*25)
 
 /datum/chemical_reaction/albuterol
 	name = "Albuterol"
