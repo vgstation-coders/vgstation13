@@ -5004,9 +5004,6 @@
 	var/pass_out = 450 //Amount absorbed after which mob starts passing out
 	var/common_data = 1 //Needed to add all ethanol subtype's datas
 
-/datum/reagent/ethanol/digest(var/mob/living/carbon/human/M)
-	..(M, damage = 0.08)
-
 /datum/reagent/ethanol/on_mob_life(var/mob/living/M)
 
 	if(..())
