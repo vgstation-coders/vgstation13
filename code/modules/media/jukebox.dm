@@ -395,7 +395,7 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/proc/generate_name()
 	return "[get_area(src).name] [name]"
 
-/obj/machinery/media/jukebox/scan_card(var/obj/item/weapon/card/id/C)
+/obj/machinery/media/jukebox/scan_card(var/obj/item/weapon/card/C)
 	var/remaining_credits_needed = credits_needed - credits_held
 	var/pos_name = generate_name()
 	var/charge_response = charge_flow(linked_db, C, usr, remaining_credits_needed, linked_account, "Song Selection", pos_name, 0)
@@ -443,11 +443,11 @@ var/global/list/loopModeNames=list(
 		if(panel_open)
 			wires.Interact(user)
 		return
-	if(istype(W,/obj/item/weapon/card/id))
+	if(istype(W,/obj/item/weapon/card))
 		if(!selected_song || screen!=JUKEBOX_SCREEN_PAYMENT)
 			visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
 			return
-		var/obj/item/weapon/card/id/I = W
+		var/obj/item/weapon/card/I = W
 		connect_account(user, I)
 		attack_hand(user)
 	else if(istype(W,/obj/item/weapon/spacecash))
