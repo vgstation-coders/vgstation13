@@ -57,7 +57,7 @@
 		var/T = get_turf(user)
 		if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(T, null)))
 			M.show_message(msg)
-		
+
 	if (emote_type == EMOTE_VISIBLE)
 		user.visible_message(msg)
 	else
@@ -159,7 +159,7 @@
 		playsound(user.loc, sound, 50, vary)
 
 /mob/proc/audible_cough()
-	emote("coughs")
+	emote("coughs", message = TRUE, ignore_status = TRUE)
 
 /mob/proc/audible_scream()
-	emote("screams", message = TRUE) // So it's forced
+	emote("screams", message = TRUE, ignore_status = TRUE) // So it's forced
