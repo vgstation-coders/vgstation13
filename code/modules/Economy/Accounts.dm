@@ -365,7 +365,7 @@ var/global/datum/money_account/trader_account
 	src.attack_hand(usr)
 
 /obj/machinery/account_database/proc/charge_to_account(var/attempt_account_number, var/source_name, var/purpose, var/terminal_id, var/amount)
-	if(!activated)
+	if(!activated || !attempt_account_number)
 		return 0
 	for(var/datum/money_account/D in all_money_accounts)
 		if(D.account_number == attempt_account_number)
@@ -390,7 +390,7 @@ var/global/datum/money_account/trader_account
 
 //this returns the first account datum that matches the supplied accnum/pin combination, it returns null if the combination did not match any account
 /obj/machinery/account_database/proc/attempt_account_access(var/attempt_account_number, var/attempt_pin_number, var/security_level_passed = 0,var/pin_needed=1)
-	if(!activated)
+	if(!activated || !attempt_account_number)
 		return 0
 	for(var/datum/money_account/D in all_money_accounts)
 		if(D.account_number == attempt_account_number)
@@ -398,6 +398,9 @@ var/global/datum/money_account/trader_account
 				return D
 
 /obj/machinery/account_database/proc/get_account(var/account_number)
+	if(!account_number)
+		// Don't bother searching if there's no account number.
+		return null
 	for(var/datum/money_account/D in all_money_accounts)
 		if(D.account_number == account_number)
 			return D
