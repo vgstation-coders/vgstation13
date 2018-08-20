@@ -518,6 +518,16 @@
 		if(.)
 			break
 
+/mob/proc/get_card()
+	for(var/obj/item/I in held_items + src.get_all_slots())
+		if(istype(I, /obj/item/weapon/card))
+			var/obj/item/weapon/card/card = I
+			return card
+		else
+			. = I.GetID()
+			if(.)
+				break
+
 /mob/proc/slotID2slotname(slot_id)
 	switch (slot_id)
 		if (slot_back)
