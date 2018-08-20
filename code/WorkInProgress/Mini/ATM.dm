@@ -12,6 +12,7 @@ log transactions
 #define TRANSFER_FUNDS 2
 #define VIEW_TRANSACTION_LOGS 3
 #define PRINT_DELAY 100
+#define DEBIT_CARD_COST 5
 
 /obj/machinery/atm
 	name = "Nanotrasen Automatic Teller Machine"
@@ -229,6 +230,7 @@ log transactions
 						<A href='?src=\ref[src];choice=view_screen;view_screen=2'>Make transfer to another bank account</a><br>
 						<A href='?src=\ref[src];choice=view_screen;view_screen=3'>View transaction log</a><br>
 						<A href='?src=\ref[src];choice=balance_statement'>Print balance statement</a><br>
+						<A href='?src=\ref[src];choice=create_debit_card'>Print new debit card ($5)</a><br>
 						<A href='?src=\ref[src];choice=logout'>Logout</a><br>
 						"}
 		else if(linked_db)
@@ -288,7 +290,7 @@ log transactions
 			if("attempt_auth")
 				if(linked_db && !ticks_left_locked_down)
 					var/tried_account_num = text2num(href_list["account_num"])
-					if(!tried_account_num)
+					if(!tried_account_num && scan)
 						tried_account_num = scan.associated_account_number
 					var/tried_pin = text2num(href_list["account_pin"])
 
@@ -448,11 +450,20 @@ log transactions
 					R.stamped += /obj/item/weapon/stamp
 					R.overlays += stampoverlay
 					R.stamps += "<HR><i>This paper has been stamped by the Automatic Teller Machine.</i>"
+					playsound(loc, pick('sound/items/polaroid1.ogg', 'sound/items/polaroid2.ogg'), 50, 1)
+			if("create_debit_card")
+				if(authenticated_account)
+					if(world.timeofday < lastprint + PRINT_DELAY)
+						to_chat(usr, "<span class='notice'>The [src.name] flashes an error on its display.</span>")
+						return
+					if(authenticated_account.charge(DEBIT_CARD_COST, null, "New debit card", machine_id, null, "Terminal"))
+						lastprint = world.timeofday
+						var/obj/item/weapon/card/debit/debit_card = new(src.loc, authenticated_account.account_number)
+						debit_card.name = authenticated_account.owner_name + "'s " + debit_card.name
+						playsound(loc, pick('sound/items/polaroid1.ogg', 'sound/items/polaroid2.ogg'), 50, 1)
+					else
+						playsound(loc, 'sound/machines/buzz-sigh.ogg', 50, 1)
 
-				if(prob(50))
-					playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
-				else
-					playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
 			if("insert_card")
 				if(scan)
 					scan.forceMove(src.loc)
