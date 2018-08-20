@@ -28,7 +28,7 @@
 			user.visible_message("<span class='warning'>\The [user] cuts \the [src] with \the [item], destroying it.</span>", "<span class='warning'>You destroy \the [src] with \the [item]</span>", "You hear plastic being cut.")
 			qdel(src)
 			return
-		else if(O.is_hot() >= MELTPOINT_PLASTIC)
+		else if(O.is_hot() >= melt_temperature)
 			user.visible_message("<span class='warning'>\The [user] melts \the [src] with \the [item], destroying it.</span>", "<span class='warning'>You destroy \the [src] with \the [item]</span>")
 			qdel(src)
 			return
