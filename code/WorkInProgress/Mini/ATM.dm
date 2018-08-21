@@ -31,6 +31,7 @@ log transactions
 	var/machine_id = ""
 	var/view_screen = NO_SCREEN
 	var/lastprint = 0 // Printer needs time to cooldown
+	var/obj/item/weapon/card/atm_card = null // Since there's debit cards now, scan doesn't work for us.
 
 	machine_flags = PURCHASER //not strictly true, but it connects it to the account
 
@@ -42,9 +43,9 @@ log transactions
 		initialize()
 
 /obj/machinery/atm/Destroy()
-	if(scan)
-		qdel(scan)
-		scan = null
+	if(atm_card)
+		qdel(atm_card)
+		atm_card = null
 	..()
 
 /obj/machinery/atm/process()
@@ -89,17 +90,16 @@ log transactions
 			user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
 			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 			new /obj/item/stack/sheet/metal (src.loc,2)
-			if(scan)
-				scan.forceMove(get_turf(src))
-				scan = null
+			if(atm_card)
+				atm_card.forceMove(get_turf(src))
+				atm_card = null
 			qdel(src)
 			return
-	if(istype(I, /obj/item/weapon/card/id))
-		var/obj/item/weapon/card/id/idcard = I
-		if(!scan)
-			if(usr.drop_item(idcard, src))
-				scan = idcard
-				if(authenticated_account && scan.associated_account_number != authenticated_account.account_number)
+	if(istype(I, /obj/item/weapon/card))
+		if(!atm_card && is_valid_atm_card(I))
+			if(usr.drop_item(I, src))
+				atm_card = I
+				if(authenticated_account && atm_card.associated_account_number != authenticated_account.account_number)
 					authenticated_account = null
 				src.attack_hand(user)
 	else if(authenticated_account)
@@ -128,6 +128,21 @@ log transactions
 	else
 		..()
 
+/obj/machinery/atm/proc/is_valid_atm_card(obj/item/I)
+	// Since we can now have IDs and debit cards that can be used
+	if(istype(I, /obj/item/weapon/card/debit) || istype(I, /obj/item/weapon/card/id))
+		return TRUE
+	else
+		return FALSE
+/obj/machinery/atm/proc/get_card_name_or_account()
+	if(!atm_card)
+		return "------"
+	if(istype(atm_card, /obj/item/weapon/card/debit))
+		return "DEBIT [atm_card.associated_account_number]"
+	if(istype(atm_card, /obj/item/weapon/card/id))
+		var/obj/item/weapon/card/id/card_id = atm_card
+		return card_id.name
+
 /obj/machinery/atm/attack_hand(mob/user as mob,var/fail_safe=0)
 	if(isobserver(user) && !isAdminGhost(user))
 		to_chat(user, "<span class='warning'>Your ghostly limb passes right through \the [src].</span>")
@@ -144,7 +159,7 @@ log transactions
 		var/dat = {"<h1>Nanotrasen Automatic Teller Machine</h1>
 			For all your monetary needs!<br>
 			<i>This terminal is</i> [machine_id]. <i>Report this code when contacting Nanotrasen IT Support</i><br/>
-			Card: <a href='?src=\ref[src];choice=insert_card'>[scan ? scan.name : "------"]</a><br><br><hr>"}
+			Card: <a href='?src=\ref[src];choice=insert_card'>[get_card_name_or_account()]</a><br><br><hr>"}
 
 		if(ticks_left_locked_down > 0)
 			dat += "<span class='alert'>Maximum number of pin attempts exceeded! Access to this ATM has been temporarily disabled.</span>"
@@ -207,9 +222,10 @@ log transactions
 						<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Withdraw funds'><br>
 						</form><hr>
 						"}
-					if(scan)
+					if(atm_card && istype(atm_card, /obj/item/weapon/card/id))
+						var/obj/item/weapon/card/id/card_id = atm_card
 						dat += {"
-							<b>Virtual Wallet balance:</b> $[scan.virtual_wallet.money]<br>
+							<b>Virtual Wallet balance:</b> $[card_id.virtual_wallet.money]<br>
 							<form name='withdraw_to_wallet' action='?src=\ref[src]' method='get'>
 							<input type='hidden' name='src' value='\ref[src]'>
 							<input type='hidden' name='choice' value='withdraw_to_wallet'>
@@ -290,11 +306,11 @@ log transactions
 			if("attempt_auth")
 				if(linked_db && !ticks_left_locked_down)
 					var/tried_account_num = text2num(href_list["account_num"])
-					if(!tried_account_num && scan)
-						tried_account_num = scan.associated_account_number
+					if(!tried_account_num && atm_card)
+						tried_account_num = atm_card.associated_account_number
 					var/tried_pin = text2num(href_list["account_pin"])
 
-					authenticated_account = linked_db.attempt_account_access(tried_account_num, tried_pin, scan && scan.associated_account_number == tried_account_num ? 2 : 1)
+					authenticated_account = linked_db.attempt_account_access(tried_account_num, tried_pin, atm_card && atm_card.associated_account_number == tried_account_num ? 2 : 1)
 					if(!authenticated_account)
 						number_incorrect_tries++
 						if(previous_account_number == tried_account_num)
@@ -365,19 +381,21 @@ log transactions
 						to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
 			if("withdraw_to_wallet")
 				var/amount = max(text2num(href_list["funds_amount"]),0)
-				if(!scan)
+				if(!istype(atm_card, /obj/item/weapon/card/id))
 					to_chat(usr, "<span class='notice'>You must insert your ID card before you can transfer funds to it.</span>")
 					return
+				
+				var/obj/item/weapon/card/id/card_id = atm_card
 				if(amount <= 0)
 					alert("That is not a valid amount.")
 				else if(authenticated_account && amount > 0)
 					if(amount <= authenticated_account.money)
 						authenticated_account.money -= amount
-						scan.virtual_wallet.money += amount
+						card_id.virtual_wallet.money += amount
 
 						//create an entry in the account transaction log
 						var/datum/transaction/T = new()
-						T.target_name = scan.virtual_wallet.owner_name
+						T.target_name = card_id.virtual_wallet.owner_name
 						T.purpose = "Credit transfer to wallet"
 						T.amount = "-[amount]"
 						T.source_terminal = machine_id
@@ -392,24 +410,26 @@ log transactions
 						T.source_terminal = machine_id
 						T.date = current_date_string
 						T.time = worldtime2text()
-						scan.virtual_wallet.transaction_log.Add(T)
+						card_id.virtual_wallet.transaction_log.Add(T)
 					else
 						to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
 			if("deposit_from_wallet")
 				var/amount = max(text2num(href_list["funds_amount"]),0)
-				if(!scan)
+				if(!istype(atm_card, /obj/item/weapon/card/id))
 					to_chat(usr, "<span class='notice'>You must insert your ID card before you can transfer funds from its virtual wallet.</span>")
 					return
+
+				var/obj/item/weapon/card/id/card_id = atm_card
 				if(amount <= 0)
 					alert("That is not a valid amount.")
 				else if(authenticated_account && amount > 0)
-					if(amount <= scan.virtual_wallet.money)
+					if(amount <= card_id.virtual_wallet.money)
 						authenticated_account.money += amount
-						scan.virtual_wallet.money -= amount
+						card_id.virtual_wallet.money -= amount
 
 						//create an entry in the account transaction log
 						var/datum/transaction/T = new()
-						T.target_name = scan.virtual_wallet.owner_name
+						T.target_name = card_id.virtual_wallet.owner_name
 						T.purpose = "Credit transfer from wallet"
 						T.amount = "[amount]"
 						T.source_terminal = machine_id
@@ -424,7 +444,7 @@ log transactions
 						T.source_terminal = machine_id
 						T.date = current_date_string
 						T.time = worldtime2text()
-						scan.virtual_wallet.transaction_log.Add(T)
+						card_id.virtual_wallet.transaction_log.Add(T)
 					else
 						to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
 			if("balance_statement")
@@ -465,19 +485,19 @@ log transactions
 						playsound(loc, 'sound/machines/buzz-sigh.ogg', 50, 1)
 
 			if("insert_card")
-				if(scan)
-					scan.forceMove(src.loc)
+				if(atm_card)
+					atm_card.forceMove(src.loc)
 					authenticated_account = null
 
 					if(ishuman(usr) && !usr.get_active_hand())
-						usr.put_in_hands(scan)
-					scan = null
+						usr.put_in_hands(atm_card)
+					atm_card = null
 
 				else
 					var/obj/item/I = usr.get_active_hand()
-					if (istype(I, /obj/item/weapon/card/id))
+					if (is_valid_atm_card(I))
 						if(usr.drop_item(I, src))
-							scan = I
+							atm_card = I
 			if("logout")
 				authenticated_account = null
 				failsafe = 1
