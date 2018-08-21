@@ -94,11 +94,11 @@
 	if(reagents.total_volume < 10)
 		return 1
 
-/obj/item/weapon/gun/siren/cadaceus
-	name = "Cadaceus"
+/obj/item/weapon/gun/siren/caduceus
+	name = "Caduceus"
 	desc = "For smiting and revitalizing. A paladin's friend, with handy refilling barrels and an ultra-sharp blade for butchering zombies instantly."
-	icon_state = "cadaceus"
-	item_state = "cadaceus"
+	icon_state = "caduceus"
+	item_state = "caduceus"
 	var/spawning_ammo = DOCTORSDELIGHT
 	max_reagents = 100
 	sharpness = 25
@@ -109,13 +109,13 @@
 	light_range = 6
 	light_color = LIGHT_COLOR_SLIME_LAMP
 
-/obj/item/weapon/gun/siren/cadaceus/New()
+/obj/item/weapon/gun/siren/caduceus/New()
 	..()
 	processing_objects.Add(src)
 	create_reagents(max_reagents)
 	reagents.add_reagent(spawning_ammo, max_reagents)
 
-/obj/item/weapon/gun/siren/cadaceus/process()
+/obj/item/weapon/gun/siren/caduceus/process()
 	reagents.add_reagent(spawning_ammo, 10)
 
 /obj/item/weapon/gun/siren/supersoaker
