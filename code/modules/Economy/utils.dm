@@ -214,7 +214,7 @@
 			// We'll charge the virtual wallet first.
 			if(source_money_account.money < transaction_amount)
 				// Not enough funds in the virtual wallet so we'll need the bank account.
-				if(source_money_account.money > 0 && alert(user, "Apply remaining balance of $[num2septext(source_money_account.money)] from your virtual wallet?", "Card Transaction", "Yes", "No") == "Yes")
+				if(source_money_account.money > 0 && alert(user, "Apply remaining balance of $[num2septext(source_money_account.money)] from \the [card] virtual wallet?", "Card Transaction", "Yes", "No") == "Yes")
 					// But lets check if there's an amount on the virtual card and ask if the user would like to apply that balance.
 					if(user_loc != user.loc)
 						to_chat(user, "[bicon(src)] <span class='warning'>You have to keep still to enter information.</span>")
@@ -225,7 +225,7 @@
 					// Apply the full balance of the virtual wallet.
 					transaction_amount_primary -= transaction_amount_secondary
 					// Adjust the primary.
-					to_chat(user, "[bicon(src)] <span class='notice'>Using remaining virtual wallet on [bicon(card)] \the [card] with a balance of $[num2septext(transaction_amount_secondary)]</span>")
+					to_chat(user, "[bicon(src)] <span class='notice'>Using remaining virtual wallet on \the [bicon(card)] [card] with a balance of $[num2septext(transaction_amount_secondary)]</span>")
 				
 				source_money_account = null
 				// We need another source.
@@ -260,12 +260,12 @@
 
 	if(source_money_account.virtual)
 		// If our primary is a virtual wallet we don't have to do any security checks.
-		to_chat(user, "[bicon(src)] <span class='notice'>Using virtual wallet on [bicon(card)] \the [card] to charge $[num2septext(transaction_amount_primary)]</span>")
+		to_chat(user, "[bicon(src)] <span class='notice'>Using virtual wallet on \the [bicon(card)] [card] to charge $[num2septext(transaction_amount_primary)]</span>")
 	else
 		// Otherwise we'll need to fulfill the security checks.
 		if(card)
 			// If the card was used, don't show the account number.
-			to_chat(user, "[bicon(src)] <span class='notice'>Using account associated with [bicon(card)] \the [card] to charge $[num2septext(transaction_amount_primary)]...</span>")
+			to_chat(user, "[bicon(src)] <span class='notice'>Using account associated with \the [bicon(card)] [card] to charge $[num2septext(transaction_amount_primary)]...</span>")
 		else
 			// Otherwise show.
 			to_chat(user, "[bicon(src)] <span class='notice'>Using account [source_money_account.account_number] to charge $[num2septext(transaction_amount_primary)]...</span>")
