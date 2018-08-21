@@ -123,6 +123,10 @@
 		else
 			to_chat(user, "[bicon(src)] <span class='warning'>Internal Error.</span>")
 			return CARD_CAPTURE_FAILURE_GENERAL
+	if(card && card.associated_account_number != account.account_number)
+		// Using card, but account number doesn't match what's on the card.
+		to_chat(user, "[bicon(src)] <span class='warning'>The account information on \the [bicon(card)] does not match the requested account.</span>")
+		return CARD_CAPTURE_FAILURE_SECURITY_LEVEL
 	switch(account.security_level)
 		if(0)
 			return CARD_CAPTURE_SUCCESS
