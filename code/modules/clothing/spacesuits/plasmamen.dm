@@ -290,17 +290,14 @@
 	armor = list(melee = 40, bullet = 15, laser = 35,energy = 5, bomb = 35, bio = 100, rad = 20)
 	eyeprot = 1
 
-/obj/item/clothing/suit/space/plasmaman/detective
+/obj/item/clothing/suit/space/plasmaman/security/detective
 	name = "plasmaman detective suit"
 	icon_state = "plasmamanDetective_suit"
-	armor = list(melee = 40, bullet = 15, laser = 35,energy = 5, bomb = 35, bio = 100, rad = 20)
 
-/obj/item/clothing/head/helmet/space/plasmaman/detective
+/obj/item/clothing/head/helmet/space/plasmaman/security/detective
 	name = "plasmaman detective helmet"
 	icon_state = "plasmamanDetective_helmet0"
 	base_state = "plasmamanDetective_helmet"
-	armor = list(melee = 40, bullet = 15, laser = 35,energy = 5, bomb = 35, bio = 100, rad = 20)
-	eyeprot = 1
 
 /obj/item/clothing/suit/space/plasmaman/security/hos
 	name = "plasmaman head of security suit"

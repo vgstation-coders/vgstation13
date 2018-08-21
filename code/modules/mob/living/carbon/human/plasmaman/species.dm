@@ -68,8 +68,8 @@
 			suit=/obj/item/clothing/suit/space/plasmaman/security/
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/
 		if("Detective")
-			suit=/obj/item/clothing/suit/space/storage/plasmaman/detective/
-			helm=/obj/item/clothing/head/helmet/space/plasmaman/detective/
+			suit=/obj/item/clothing/suit/space/plasmaman/security/detective/
+			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/detective/
 		if("Head of Security")
 			suit=/obj/item/clothing/suit/space/plasmaman/security/hos
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/hos
