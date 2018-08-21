@@ -725,8 +725,10 @@ SEE_PIXELS	256
 #define VERM_GREMLINS 8
 #define VERM_BEES 9
 #define VERM_HORNETS 10
-#define VERM_BLOODSPLOT 11
-#define VERM_SYPHONER 12
+#define VERM_SYPHONER 11
+#define VERM_GREMTIDE 12
+#define VERM_CRABS 13
+
 
 #define MONSTER_BEAR    0
 #define MONSTER_CREATURE 1
@@ -740,6 +742,8 @@ SEE_PIXELS	256
 #define MONSTER_DAVID 9
 #define MONSTER_MADCRAB 10
 #define MONSTER_MEATBALLER 11
+#define MONSTER_BIG_ROACH 12
+#define MONSTER_ROACH_QUEEN 13
 
 #define ROUNDSTART_LOGOUT_REPORT_TIME 6000 //Amount of time (in deciseconds) after the rounds starts, that the player disconnect report is issued.
 

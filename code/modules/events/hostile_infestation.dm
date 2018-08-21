@@ -51,7 +51,7 @@
 	var/spawn_monster_type
 	var/max_number
 	var/monster = pick(MONSTER_BEAR, MONSTER_CREATURE, MONSTER_XENO, MONSTER_HIVEBOT, MONSTER_ZOMBIE, MONSTER_SKRITE, MONSTER_SQUEEN, MONSTER_FROG, MONSTER_GOLIATH, MONSTER_DAVID,
-	MONSTER_MADCRAB, MONSTER_MEATBALLER)
+	MONSTER_MADCRAB, MONSTER_MEATBALLER, MONSTER_BIG_ROACH, MONSTER_ROACH_QUEEN)
 	if (override_monster)
 		monster = override_monster
 	switch(monster)
@@ -102,6 +102,14 @@
 		if(MONSTER_MEATBALLER)
 			spawn_monster_type = /mob/living/simple_animal/hostile/humanoid/kitchen/meatballer
 			monsterstring = "spaghetti dropping everywhere"
+			max_number = 2
+		if(MONSTER_BIG_ROACH)
+			spawn_monster_type = /mob/living/simple_animal/hostile/bigroach
+			monsterstring = "heavy mutation"
+			max_number = 6
+		if(MONSTER_ROACH_QUEEN)
+			spawn_monster_type = /mob/living/simple_animal/hostile/bigroach/queen
+			monsterstring = "extreme mutation"
 			max_number = 2
 
 	var/number = rand(1, max_number)

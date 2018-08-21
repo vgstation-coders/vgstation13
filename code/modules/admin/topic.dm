@@ -3591,6 +3591,9 @@
 					"gremlins" = VERM_GREMLINS,
 					"bees" = VERM_BEES,
 					"hornets" = VERM_HORNETS,
+					"syphoners" = VERM_SYPHONER,
+					"greytide gremlins" = VERM_GREMTIDE,
+					"crabs" = VERM_CRABS,
 					)
 				var/ov = vermins[input("What vermin should infest the station?", "Vermin Infestation") in vermins]
 				var/ol = locations[input("Where should they spawn?", "Vermin Infestation") in locations]
@@ -3626,6 +3629,8 @@
 					"davids" = MONSTER_DAVID,
 					"megamadcrabs" = MONSTER_MADCRAB,
 					"spaghetti monster" = MONSTER_MEATBALLER,
+					"mutated cockroaches" = MONSTER_BIG_ROACH,
+					"cockroach queen" = MONSTER_ROACH_QUEEN,
 					)
 				var/om = hostiles[input("What hostile mob should infest the station?", "Hostile Infestation") in hostiles]
 				var/ol = locations[input("Where should they spawn?", "Hostile Infestation") in locations]
