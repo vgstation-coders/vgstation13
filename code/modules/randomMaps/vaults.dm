@@ -193,6 +193,7 @@
 		if(ME.load(vault_x, vault_y, vault_z))
 			spawned.Add(ME)
 			message_admins("<span class='info'>Loaded [ME.file_path]: [formatJumpTo(locate(vault_x, vault_y, vault_z))].")
+			world.log << "Loaded [ME.file_path] at [vault_x],[vault_y].[vault_z]"
 
 			successes++
 			if(amount > 0)

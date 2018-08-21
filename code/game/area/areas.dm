@@ -418,6 +418,8 @@ var/area/space_area
 /area/Entered(atom/movable/Obj, atom/OldLoc)
 	var/area/oldArea = get_area(OldLoc)
 
+	if(oldArea == src)
+		return 1
 	if(project_shadows)
 		Obj.update_shadow()
 	else if(istype(oldArea) && oldArea.project_shadows)
@@ -430,7 +432,7 @@ var/area/space_area
 	for(var/mob/mob_in_obj in Obj.contents)
 
 		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = src, "old" = oldArea))
-	INVOKE_EVENT(on_area_enter, list("enterer"=Obj, "oldarea" = oldArea))
+	INVOKE_EVENT(on_area_enter, list("enterer"=Obj, "oldarea" = oldArea, "newarea" = src))
 	var/mob/M = Obj
 	if(istype(M))
 		CallHook("MobAreaChange", list("mob" = M, "new" = src, "old" = oldArea)) // /vg/ - EVENTS!

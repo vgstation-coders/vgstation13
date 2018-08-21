@@ -15,7 +15,7 @@
 
 /datum/component/ai/area_territorial/proc/area_enter(var/list/args)
 	var/signal = on_enter["signal"]
-	var/list/signal_args = on_enter["args"]
+	var/list/signal_args = on_enter["args"].Copy()
 	signal_args.Add(args)
-	SendSignal(signal, args)
+	SendSignal(signal, signal_args)
 

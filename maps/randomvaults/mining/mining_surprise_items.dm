@@ -1,5 +1,5 @@
 /area/mining_bar
-	name = "Armok's Bar and Grill."
+	name = "Armok's Bar and Grill"
 	icon_state = "bar"
 
 /mob/living/silicon/robot/NPC/updatename()
@@ -17,13 +17,14 @@
 
 
 /mob/living/silicon/robot/NPC/dusky
-	name = "dusky"
+	name = "Dusky"
 	desc = "A little rusted at the creases, but this barbot is still happy to serve so long as the generator is running"
 	icon_state = "kodiak-service"
 
 /mob/living/silicon/robot/NPC/dusky/initialize_NPC_components()
 	..()
 	BrainContainer.AddComponent(/datum/component/ai/target_finder/simple_view)
+	BrainContainer.AddComponent(/datum/component/debugger) //REMOVE THIS
 	var/datum/component/ai/conversation/C = BrainContainer.AddComponent(/datum/component/ai/conversation/auto)
 	C.messages = list("I hear the weather on some of them planets ain't too nice to be caught out in. Especially them 'Gas Giants'.",
 				"Still's on the fritz again. Sorry if you're tasting pulp or ashes in your liquor.",

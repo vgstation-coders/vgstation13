@@ -53,30 +53,30 @@
 "ba" = (/obj/item/weapon/stool,/turf/simulated/floor/wood,/area/mining_bar)
 "bb" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor/wood,/area/mining_bar)
 "bc" = (/turf/simulated/floor/plating,/area/mining_bar)
-"bd" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/floor/plating,/area/mining_bar)
+"bd" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{icon_state = "intact"; dir = 1},/turf/simulated/floor/plating,/area/mining_bar)
 "be" = (/obj/machinery/atmospherics/unary/tank/oxygen{starting_volume = 3200},/turf/simulated/floor/plating,/area/mining_bar)
-"bf" = (/obj/machinery/power/terminal{dir = 1},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/machinery/power/apc{dir = 1; environ = 0; equipment = 1; lighting = 0; locked = 0; name = "apc"; pixel_y = 24},/turf/simulated/floor/plating,/area/mining_bar)
+"bf" = (/obj/machinery/power/terminal{dir = 1},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/machinery/power/apc{dir = 1; environ = 1; equipment = 1; lighting = 1; locked = 0; name = "apc"; pixel_y = 24},/turf/simulated/floor/plating,/area/mining_bar)
 "bg" = (/obj/machinery/power/battery/smes,/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/plating,/area/mining_bar)
 "bh" = (/obj/machinery/power/terminal{dir = 8},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/turf/simulated/floor/plating,/area/mining_bar)
 "bi" = (/obj/machinery/power/terminal{dir = 4},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/plating,/area/mining_bar)
 "bj" = (/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{dir = 4},/turf/simulated/floor/wood,/area/mining_bar)
 "bk" = (/obj/machinery/light{dir = 8},/turf/simulated/floor/plating,/area/mining_bar)
 "bl" = (/obj/machinery/atmospherics/pipe/manifold/supply{icon_state = "map"; dir = 8},/turf/simulated/floor/plating,/area/mining_bar)
-"bm" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/turf/simulated/floor/plating,/area/mining_bar)
+"bm" = (/obj/machinery/atmospherics/pipe/simple/supply/visible{icon_state = "intact"; dir = 8},/turf/simulated/floor/plating,/area/mining_bar)
 "bn" = (/obj/machinery/atmospherics/trinary/mixer{dir = 4; icon_state = "intact_on"; name = "Gas mixer (N2/O2)"; node1_concentration = 0.2; node2_concentration = 0.8; on = 1; target_pressure = 4500},/turf/simulated/floor/plating,/area/mining_bar)
 "bo" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden,/turf/simulated/floor/wood,/area/mining_bar)
 "bp" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 8; on = 1},/turf/simulated/floor/wood,/area/mining_bar)
-"bq" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 5},/turf/simulated/floor/plating,/area/mining_bar)
+"bq" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{icon_state = "intact"; dir = 5},/turf/simulated/floor/plating,/area/mining_bar)
 "br" = (/obj/machinery/atmospherics/trinary/filter/mirrored{icon_state = "hintactm_off"; dir = 8},/turf/simulated/floor/plating,/area/mining_bar)
-"bs" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/turf/simulated/floor/plating,/area/mining_bar)
-"bt" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 10},/turf/simulated/floor/plating,/area/mining_bar)
-"bu" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor/plating,/area/mining_bar)
+"bs" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{icon_state = "intact"; dir = 8},/turf/simulated/floor/plating,/area/mining_bar)
+"bt" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{icon_state = "intact"; dir = 10},/turf/simulated/floor/plating,/area/mining_bar)
+"bu" = (/obj/machinery/atmospherics/pipe/simple/supply/visible{icon_state = "intact"; dir = 1},/turf/simulated/floor/plating,/area/mining_bar)
 "bv" = (/obj/machinery/light{dir = 4},/turf/simulated/floor/plating,/area/mining_bar)
 "bw" = (/obj/machinery/door/airlock/external,/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor/plating,/area/mining_bar)
 "bx" = (/obj/structure/bed/chair/wood/normal,/turf/simulated/floor/wood,/area/mining_bar)
 "by" = (/obj/structure/bed/chair/wood/normal,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/floor/wood,/area/mining_bar)
 "bz" = (/obj/machinery/atmospherics/trinary/filter/mirrored{icon_state = "hintactm_off"; dir = 1},/turf/simulated/floor/plating,/area/mining_bar)
-"bA" = (/obj/machinery/atmospherics/pipe/manifold/supply,/turf/simulated/floor/plating,/area/mining_bar)
+"bA" = (/obj/machinery/atmospherics/pipe/manifold/supply/visible,/turf/simulated/floor/plating,/area/mining_bar)
 "bB" = (/obj/machinery/atmospherics/unary/tank/nitrogen{dir = 8},/turf/simulated/floor/plating,/area/mining_bar)
 "bC" = (/obj/machinery/suit_storage_unit,/turf/simulated/floor/plating,/area/mining_bar)
 "bD" = (/obj/machinery/atmospherics/unary/vent_pump{dir = 1; external_pressure_bound = 101.325; on = 1},/turf/simulated/floor/plating,/area/mining_bar)
@@ -103,6 +103,7 @@
 "bY" = (/turf/unsimulated/mineral/random,/area/mine/unexplored)
 "bZ" = (/turf/unsimulated/floor/asteroid,/area/mine/unexplored)
 "ca" = (/turf/unsimulated/floor/asteroid/cave,/area/mine/unexplored)
+"cb" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/visible,/turf/simulated/floor/plating,/area/mining_bar)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -117,7 +118,7 @@ aaabbcbdbebfbgbhbiabararararararbbaCbjaFaGaHarabaa
 aaabbkbdblbmbmbnbmaxauatatauauaubobpaXaFaSaHarabaa
 aaabbcbqbrbsbtbubvababbwbwajabarbxbxbyararararabaa
 aaabbcbcbcbcbzbAbBabbCbDbDbEbFbGbHbIbJararararabaa
-aaabbcbcbcbcbdbcbcabbKbcbcbLbMbNbObObOararbaarabaa
+aaabbcbcbcbccbbcbcabbKbcbcbLbMbNbObObOararbaarabaa
 aaababbPababbQbRabababbSbSababababababababbTababaa
 aaaaabababbUbVbWbWbWbWbWbWbUbWbWbWbWbUbUabababaaaa
 aaaaaaaaaabUbWbXbWbWbWbWbWbWbUbWbXbWbWbXaaaaaaaaaa
