@@ -703,6 +703,8 @@ SEE_PIXELS	256
 #define BEE_SWARM 4
 #define BEE_BUILDING 5
 
+
+//for infestation events
 #define LOC_KITCHEN 0
 #define LOC_ATMOS 1
 #define LOC_INCIN 2
@@ -723,6 +725,21 @@ SEE_PIXELS	256
 #define VERM_GREMLINS 8
 #define VERM_BEES 9
 #define VERM_HORNETS 10
+#define VERM_BLOODSPLOT 11
+#define VERM_SYPHONER 12
+
+#define MONSTER_BEAR    0
+#define MONSTER_CREATURE 1
+#define MONSTER_XENO 2
+#define MONSTER_HIVEBOT  3
+#define MONSTER_ZOMBIE    4
+#define MONSTER_SKRITE  5
+#define MONSTER_SQUEEN  6
+#define MONSTER_FROG 7
+#define MONSTER_GOLIATH 8
+#define MONSTER_DAVID 9
+#define MONSTER_MADCRAB 10
+#define MONSTER_MEATBALLER 11
 
 #define ROUNDSTART_LOGOUT_REPORT_TIME 6000 //Amount of time (in deciseconds) after the rounds starts, that the player disconnect report is issued.
 
