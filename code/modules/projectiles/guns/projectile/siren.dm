@@ -101,8 +101,9 @@
 	item_state = "cadaceus"
 	var/spawning_ammo = DOCTORSDELIGHT
 	max_reagents = 100
-	sharpness = 30
+	sharpness = 25
 	sharpness_flags = SHARP_BLADE
+	attack_verb = list("grinds open", "cleaves apart", "rends", "gelds", "rips and tears", "shreds")
 	force = 10
 	light_power = 1
 	light_range = 6
