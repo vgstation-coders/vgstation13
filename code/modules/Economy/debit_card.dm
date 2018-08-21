@@ -94,7 +94,7 @@
 		if(easter_egg)
 			old_name = name
 		if(set_department_account(department) && easter_egg)
-			to_chat(user, "<span class='sinister'>\The [old_name] glows as numbers and letters begin to etch themselves onto the card.</span> <span class='warning'>Spooky</span>")
+			to_chat(user, "<span class='sinister'>\The [old_name] glows as numbers and letters begin to etch themselves onto the card.</span> <span class='warning'>Spooky.</span>")
 	. = ..(user)
 
 /obj/item/weapon/card/debit/preferred/department/proc/set_department_account(var/desired_department)
