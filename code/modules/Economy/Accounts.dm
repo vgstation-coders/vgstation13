@@ -135,6 +135,10 @@ var/global/datum/money_account/trader_account
 							//2 - require card and manual login
 	var/virtual = 0
 	var/wage_gain = 0 // How much an account gains per 'wage' tick.
+	var/disabled = 0
+	// 0 Unlocked
+	// 1 User locked
+	// 2 Admin locked
 
 /datum/transaction
 	var/target_name = ""
@@ -233,6 +237,18 @@ var/global/datum/money_account/trader_account
 						<b>Account holder:</b> [detailed_account_view.owner_name]<br>
 						<b>Account balance:</b> $[detailed_account_view.money]<br>
 						<b>Assigned wage payout:</b> $[detailed_account_view.wage_gain]<br>
+						<b>Account status:</b> "}
+					switch(detailed_account_view.disabled)
+						if(0)
+							dat += "Enabled"
+						if(1)
+							dat += "User Disabled"
+						if(2)
+							dat += "Administratively Disabled"
+						else
+							dat += "???ERROR???"
+					dat += {"<br>
+						<a href='?src=\ref[src];choice=toggle_account;'>Administratively disable account</a><br>
 						<table border=1 style='width:100%'>
 						<tr>
 						<td><b>Date</b></td>
@@ -361,6 +377,9 @@ var/global/datum/money_account/trader_account
 			if("view_accounts_list")
 				detailed_account_view = null
 				creating_new_account = 0
+			if("toggle_account")
+				if(detailed_account_view)
+					detailed_account_view.disabled = detailed_account_view.disabled ? 0 : 2
 
 	src.attack_hand(usr)
 

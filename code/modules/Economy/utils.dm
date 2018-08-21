@@ -109,6 +109,7 @@ var/global/no_pin_for_debit = TRUE
 	)
 	CARD_CAPTURE_SUCCESS
 	CARD_CAPTURE_FAILURE_GENERAL
+	CARD_CAPTURE_ACCOUNT_DISABLED
 	CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO
 	CARD_CAPTURE_FAILURE_SECURITY_LEVEL
 	CARD_CAPTURE_FAILURE_USER_CANCELED
@@ -131,6 +132,9 @@ var/global/no_pin_for_debit = TRUE
 		// Using card, but account number doesn't match what's on the card.
 		to_chat(user, "[bicon(src)] <span class='warning'>The account information on \the [bicon(card)] does not match the requested account.</span>")
 		return CARD_CAPTURE_FAILURE_SECURITY_LEVEL
+	if(account.disabled)
+		to_chat(user, "[bicon(src)] <span class='warning'>Account disabled.</span>")
+		return CARD_CAPTURE_ACCOUNT_DISABLED
 	switch(account.security_level)
 		if(0)
 			return CARD_CAPTURE_SUCCESS
@@ -181,7 +185,8 @@ var/global/no_pin_for_debit = TRUE
 		CARD_CAPTURE_SUCCESS
 		CARD_CAPTURE_FAILURE_GENERAL
 		CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
-		[FUTURE USE] CARD_CAPTURE_ACCOUNT_DISABLED
+		CARD_CAPTURE_ACCOUNT_DISABLED
+		CARD_CAPTURE_ACCOUNT_DISABLED_MERCHANT
 		CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO
 		CARD_CAPTURE_FAILURE_SECURITY_LEVEL
 		CARD_CAPTURE_FAILURE_USER_CANCELED
@@ -209,7 +214,9 @@ var/global/no_pin_for_debit = TRUE
 		// We have to have a destination to charge to.
 		to_chat(user, "[bicon(src)] <span class='warning'>No destination account.</span>")
 		return CARD_CAPTURE_FAILURE_NO_DESTINATION
-
+	if(dest.disabled)
+		to_chat(user, "[bicon(src)] <span class='warning'>Destination account disabled.</span>")
+		return CARD_CAPTURE_ACCOUNT_DISABLED_MERCHANT
 	if(istype(card, /obj/item/weapon/card))
 		// The card is present, so we can fetch the account information ourselves.
 		visible_message("<span class='info'>[user] swipes a card through [src].</span>")

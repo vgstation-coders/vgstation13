@@ -412,6 +412,8 @@ var/global/list/loopModeNames=list(
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"NOT ENOUGH FUNDS\" on the screen.</span>","You hear a buzz.")
 		if(CARD_CAPTURE_ACCOUNT_DISABLED)
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"ACCOUNT DISABLED\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_ACCOUNT_DISABLED_MERCHANT)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"MERCHANT ACCOUNT DISABLED\" on the screen.</span>","You hear a buzz.")
 		if(CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO)
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"BAD ACCOUNT/PIN COMBO\" on the screen.</span>","You hear a buzz.")
 		if(CARD_CAPTURE_FAILURE_SECURITY_LEVEL)

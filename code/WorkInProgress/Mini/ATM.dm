@@ -13,6 +13,7 @@ log transactions
 #define VIEW_TRANSACTION_LOGS 3
 #define PRINT_DELAY 100
 #define DEBIT_CARD_COST 5
+#define CAN_INTERACT_WITH_ACCOUNT authenticated_account && linked_db && !authenticated_account.disabled
 
 /obj/machinery/atm
 	name = "Nanotrasen Automatic Teller Machine"
@@ -67,7 +68,7 @@ log transactions
 		if(ticks_left_locked_down <= 0)
 			number_incorrect_tries = 0
 
-	if(authenticated_account)
+	if(CAN_INTERACT_WITH_ACCOUNT)
 		var/turf/T = get_turf(src)
 		if(istype(T) && locate(/obj/item/weapon/spacecash) in T)
 			var/list/cash_found = list()
@@ -102,7 +103,7 @@ log transactions
 				if(authenticated_account && atm_card.associated_account_number != authenticated_account.account_number)
 					authenticated_account = null
 				src.attack_hand(user)
-	else if(authenticated_account)
+	else if(CAN_INTERACT_WITH_ACCOUNT)
 		if(istype(I,/obj/item/weapon/spacecash))
 			var/obj/item/weapon/spacecash/dosh = I
 			//consume the money
@@ -164,91 +165,100 @@ log transactions
 		if(ticks_left_locked_down > 0)
 			dat += "<span class='alert'>Maximum number of pin attempts exceeded! Access to this ATM has been temporarily disabled.</span>"
 		else if(authenticated_account)
-			switch(view_screen)
-				if(CHANGE_SECURITY_LEVEL)
-					dat += "Select a new security level for this account:<br><hr>"
-					var/text = "Zero - Either the account number or card is required to access this account. Vendor transactions will pay from your bank account if your virtual wallet has insufficient funds."
-					if(authenticated_account.security_level != 0)
-						text = "<A href='?src=\ref[src];choice=change_security_level;new_security_level=0'>[text]</a>"
-					dat += "[text]<hr>"
-					text = "One - An account number and pin must be manually entered to access this account and process transactions."
-					if(authenticated_account.security_level != 1)
-						text = "<A href='?src=\ref[src];choice=change_security_level;new_security_level=1'>[text]</a>"
-					dat += "[text]<hr>"
-					text = "Two - In addition to account number and pin, a card is required to access this account and process transactions."
-					if(authenticated_account.security_level != 2)
-						text = "<A href='?src=\ref[src];choice=change_security_level;new_security_level=2'>[text]</a>"
-					dat += {"[text]<hr><br>
-						<A href='?src=\ref[src];choice=view_screen;view_screen=0'>Back</a>"}
-				if(VIEW_TRANSACTION_LOGS)
-					dat += {"<b>Transaction logs</b><br>
-						<A href='?src=\ref[src];choice=view_screen;view_screen=0'>Back</a>
-						<table border=1 style='width:100%'>
-						<tr>
-						<td><b>Date</b></td>
-						<td><b>Time</b></td>
-						<td><b>Target</b></td>
-						<td><b>Purpose</b></td>
-						<td><b>Value</b></td>
-						<td><b>Source terminal ID</b></td>
-						</tr>"}
-					for(var/datum/transaction/T in authenticated_account.transaction_log)
-						dat += {"<tr>
-							<td>[T.date]</td>
-							<td>[T.time]</td>
-							<td>[T.target_name]</td>
-							<td>[T.purpose]</td>
-							<td>$[T.amount]</td>
-							<td>[T.source_terminal]</td>
-							</tr>"}
-					dat += "</table>"
-				if(TRANSFER_FUNDS)
-					dat += {"<b>Bank Account balance:</b> $[authenticated_account.money]<br>
-						<A href='?src=\ref[src];choice=view_screen;view_screen=0'>Back</a><br><br>
-						<form name='transfer' action='?src=\ref[src]' method='get'>
-						<input type='hidden' name='src' value='\ref[src]'>
-						<input type='hidden' name='choice' value='transfer'>
-						Target account number: <input type='text' name='target_acc_number' value='' style='width:200px; background-color:white;'><br>
-						Funds to transfer: <input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><br>
-						Transaction purpose: <input type='text' name='purpose' value='Funds transfer' style='width:200px; background-color:white;'><br>
-						<input type='submit' value='Transfer funds'><br>
-						</form>"}
+			if(authenticated_account.disabled)
+				dat += "<b>ACCOUNT DISABLED</b><br><hr>"
+				if(authenticated_account.disabled < 2)
+					dat += "<A href='?src=\ref[src];choice=toggle_account'>Toggle account status</a><br>"
+					dat += "<A href='?src=\ref[src];choice=logout'>Logout</a><br>"
 				else
-					dat += {"Welcome, <b>[authenticated_account.owner_name].</b><br/>
-						<b>Account balance:</b> $[authenticated_account.money]
-						<form name='withdrawal' action='?src=\ref[src]' method='get'>
-						<input type='hidden' name='src' value='\ref[src]'>
-						<input type='hidden' name='choice' value='withdrawal'>
-						<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Withdraw funds'><br>
-						</form><hr>
-						"}
-					if(atm_card && istype(atm_card, /obj/item/weapon/card/id))
-						var/obj/item/weapon/card/id/card_id = atm_card
-						dat += {"
-							<b>Virtual Wallet balance:</b> $[card_id.virtual_wallet.money]<br>
-							<form name='withdraw_to_wallet' action='?src=\ref[src]' method='get'>
+					dat += "Contact your Head of Personnel for more information.<br>"
+			else
+				switch(view_screen)
+					if(CHANGE_SECURITY_LEVEL)
+						dat += "Select a new security level for this account:<br><hr>"
+						var/text = "Zero - Either the account number or card is required to access this account. Vendor transactions will pay from your bank account if your virtual wallet has insufficient funds."
+						if(authenticated_account.security_level != 0)
+							text = "<A href='?src=\ref[src];choice=change_security_level;new_security_level=0'>[text]</a>"
+						dat += "[text]<hr>"
+						text = "One - An account number and pin must be manually entered to access this account and process transactions."
+						if(authenticated_account.security_level != 1)
+							text = "<A href='?src=\ref[src];choice=change_security_level;new_security_level=1'>[text]</a>"
+						dat += "[text]<hr>"
+						text = "Two - In addition to account number and pin, a card is required to access this account and process transactions."
+						if(authenticated_account.security_level != 2)
+							text = "<A href='?src=\ref[src];choice=change_security_level;new_security_level=2'>[text]</a>"
+						dat += {"[text]<hr><br>
+							<A href='?src=\ref[src];choice=view_screen;view_screen=0'>Back</a>"}
+					if(VIEW_TRANSACTION_LOGS)
+						dat += {"<b>Transaction logs</b><br>
+							<A href='?src=\ref[src];choice=view_screen;view_screen=0'>Back</a>
+							<table border=1 style='width:100%'>
+							<tr>
+							<td><b>Date</b></td>
+							<td><b>Time</b></td>
+							<td><b>Target</b></td>
+							<td><b>Purpose</b></td>
+							<td><b>Value</b></td>
+							<td><b>Source terminal ID</b></td>
+							</tr>"}
+						for(var/datum/transaction/T in authenticated_account.transaction_log)
+							dat += {"<tr>
+								<td>[T.date]</td>
+								<td>[T.time]</td>
+								<td>[T.target_name]</td>
+								<td>[T.purpose]</td>
+								<td>$[T.amount]</td>
+								<td>[T.source_terminal]</td>
+								</tr>"}
+						dat += "</table>"
+					if(TRANSFER_FUNDS)
+						dat += {"<b>Bank Account balance:</b> $[authenticated_account.money]<br>
+							<A href='?src=\ref[src];choice=view_screen;view_screen=0'>Back</a><br><br>
+							<form name='transfer' action='?src=\ref[src]' method='get'>
 							<input type='hidden' name='src' value='\ref[src]'>
-							<input type='hidden' name='choice' value='withdraw_to_wallet'>
-							<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Withdraw to virtual wallet'><br>
-							</form>
-							<form name='deposit_from_wallet' action='?src=\ref[src]' method='get'>
+							<input type='hidden' name='choice' value='transfer'>
+							Target account number: <input type='text' name='target_acc_number' value='' style='width:200px; background-color:white;'><br>
+							Funds to transfer: <input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><br>
+							Transaction purpose: <input type='text' name='purpose' value='Funds transfer' style='width:200px; background-color:white;'><br>
+							<input type='submit' value='Transfer funds'><br>
+							</form>"}
+					else
+						dat += {"Welcome, <b>[authenticated_account.owner_name].</b><br/>
+							<b>Account balance:</b> $[authenticated_account.money]
+							<form name='withdrawal' action='?src=\ref[src]' method='get'>
 							<input type='hidden' name='src' value='\ref[src]'>
-							<input type='hidden' name='choice' value='deposit_from_wallet'>
-							<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Deposit from virtual wallet'><br>
+							<input type='hidden' name='choice' value='withdrawal'>
+							<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Withdraw funds'><br>
 							</form><hr>
 							"}
-					else
+						if(atm_card && istype(atm_card, /obj/item/weapon/card/id))
+							var/obj/item/weapon/card/id/card_id = atm_card
+							dat += {"
+								<b>Virtual Wallet balance:</b> $[card_id.virtual_wallet.money]<br>
+								<form name='withdraw_to_wallet' action='?src=\ref[src]' method='get'>
+								<input type='hidden' name='src' value='\ref[src]'>
+								<input type='hidden' name='choice' value='withdraw_to_wallet'>
+								<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Withdraw to virtual wallet'><br>
+								</form>
+								<form name='deposit_from_wallet' action='?src=\ref[src]' method='get'>
+								<input type='hidden' name='src' value='\ref[src]'>
+								<input type='hidden' name='choice' value='deposit_from_wallet'>
+								<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Deposit from virtual wallet'><br>
+								</form><hr>
+								"}
+						else
+							dat += {"
+								<i>Insert an ID card to perform fund transfers to/from it.</i><br>
+								"}
 						dat += {"
-							<i>Insert an ID card to perform fund transfers to/from it.</i><br>
+							<A href='?src=\ref[src];choice=view_screen;view_screen=1'>Change account security level</a><br>
+							<A href='?src=\ref[src];choice=view_screen;view_screen=2'>Make transfer to another bank account</a><br>
+							<A href='?src=\ref[src];choice=view_screen;view_screen=3'>View transaction log</a><br>
+							<A href='?src=\ref[src];choice=balance_statement'>Print balance statement</a><br>
+							<A href='?src=\ref[src];choice=create_debit_card'>Print new debit card ($5)</a><br>
+							<A href='?src=\ref[src];choice=toggle_account'>Toggle account status</a><br>
+							<A href='?src=\ref[src];choice=logout'>Logout</a><br>
 							"}
-					dat += {"
-						<A href='?src=\ref[src];choice=view_screen;view_screen=1'>Change account security level</a><br>
-						<A href='?src=\ref[src];choice=view_screen;view_screen=2'>Make transfer to another bank account</a><br>
-						<A href='?src=\ref[src];choice=view_screen;view_screen=3'>View transaction log</a><br>
-						<A href='?src=\ref[src];choice=balance_statement'>Print balance statement</a><br>
-						<A href='?src=\ref[src];choice=create_debit_card'>Print new debit card ($5)</a><br>
-						<A href='?src=\ref[src];choice=logout'>Logout</a><br>
-						"}
 		else if(linked_db)
 			dat += {"<form name='atm_auth' action='?src=\ref[src]' method='get'>
 				<input type='hidden' name='src' value='\ref[src]'>
@@ -271,8 +281,12 @@ log transactions
 	var/failsafe = 0
 	if(href_list["choice"])
 		switch(href_list["choice"])
+			if("toggle_account")
+				if(authenticated_account && linked_db && authenticated_account.disabled < 2)
+					authenticated_account.disabled = !authenticated_account.disabled
+					to_chat(usr, "[bicon(src)]<span class='info'>Account [authenticated_account.disabled ? "disabled" : "enabled"].</span>")
 			if("transfer")
-				if(authenticated_account && linked_db)
+				if(CAN_INTERACT_WITH_ACCOUNT)
 					var/transfer_amount = text2num(href_list["funds_amount"])
 					if(transfer_amount <= 0)
 						alert("That is not a valid amount.")
@@ -300,7 +314,7 @@ log transactions
 			if("view_screen")
 				view_screen = text2num(href_list["view_screen"])
 			if("change_security_level")
-				if(authenticated_account)
+				if(CAN_INTERACT_WITH_ACCOUNT)
 					var/new_sec_level = max( min(text2num(href_list["new_security_level"]), 2), 0)
 					authenticated_account.security_level = new_sec_level
 			if("attempt_auth")
@@ -354,101 +368,104 @@ log transactions
 
 					previous_account_number = tried_account_num
 			if("withdrawal")
-				var/amount = max(text2num(href_list["funds_amount"]),0)
-				if(amount <= 0)
-					alert("That is not a valid amount.")
-				else if(authenticated_account && amount > 0)
-					if(amount <= authenticated_account.money)
-						playsound(src, 'sound/machines/chime.ogg', 50, 1)
+				if(CAN_INTERACT_WITH_ACCOUNT)
+					var/amount = max(text2num(href_list["funds_amount"]),0)
+					if(amount <= 0)
+						alert("That is not a valid amount.")
+					else if(authenticated_account && amount > 0)
+						if(amount <= authenticated_account.money)
+							playsound(src, 'sound/machines/chime.ogg', 50, 1)
 
-						//remove the money
-						if(amount > 10000) // prevent crashes
-							to_chat(usr, "<span class='notice'>The ATM's screen flashes, 'Maximum single withdrawl limit reached, defaulting to 10,000.'</span>")
-							amount = 10000
-						authenticated_account.money -= amount
-						withdraw_arbitrary_sum(usr,amount)
+							//remove the money
+							if(amount > 10000) // prevent crashes
+								to_chat(usr, "<span class='notice'>The ATM's screen flashes, 'Maximum single withdrawl limit reached, defaulting to 10,000.'</span>")
+								amount = 10000
+							authenticated_account.money -= amount
+							withdraw_arbitrary_sum(usr,amount)
 
-						//create an entry in the account transaction log
-						var/datum/transaction/T = new()
-						T.target_name = authenticated_account.owner_name
-						T.purpose = "Credit withdrawal"
-						T.amount = "-[amount]"
-						T.source_terminal = machine_id
-						T.date = current_date_string
-						T.time = worldtime2text()
-						authenticated_account.transaction_log.Add(T)
-					else
-						to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
+							//create an entry in the account transaction log
+							var/datum/transaction/T = new()
+							T.target_name = authenticated_account.owner_name
+							T.purpose = "Credit withdrawal"
+							T.amount = "-[amount]"
+							T.source_terminal = machine_id
+							T.date = current_date_string
+							T.time = worldtime2text()
+							authenticated_account.transaction_log.Add(T)
+						else
+							to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
 			if("withdraw_to_wallet")
-				var/amount = max(text2num(href_list["funds_amount"]),0)
-				if(!istype(atm_card, /obj/item/weapon/card/id))
-					to_chat(usr, "<span class='notice'>You must insert your ID card before you can transfer funds to it.</span>")
-					return
-				
-				var/obj/item/weapon/card/id/card_id = atm_card
-				if(amount <= 0)
-					alert("That is not a valid amount.")
-				else if(authenticated_account && amount > 0)
-					if(amount <= authenticated_account.money)
-						authenticated_account.money -= amount
-						card_id.virtual_wallet.money += amount
+				if(CAN_INTERACT_WITH_ACCOUNT)
+					var/amount = max(text2num(href_list["funds_amount"]),0)
+					if(!istype(atm_card, /obj/item/weapon/card/id))
+						to_chat(usr, "<span class='notice'>You must insert your ID card before you can transfer funds to it.</span>")
+						return
+					
+					var/obj/item/weapon/card/id/card_id = atm_card
+					if(amount <= 0)
+						alert("That is not a valid amount.")
+					else if(authenticated_account && amount > 0)
+						if(amount <= authenticated_account.money)
+							authenticated_account.money -= amount
+							card_id.virtual_wallet.money += amount
 
-						//create an entry in the account transaction log
-						var/datum/transaction/T = new()
-						T.target_name = card_id.virtual_wallet.owner_name
-						T.purpose = "Credit transfer to wallet"
-						T.amount = "-[amount]"
-						T.source_terminal = machine_id
-						T.date = current_date_string
-						T.time = worldtime2text()
-						authenticated_account.transaction_log.Add(T)
+							//create an entry in the account transaction log
+							var/datum/transaction/T = new()
+							T.target_name = card_id.virtual_wallet.owner_name
+							T.purpose = "Credit transfer to wallet"
+							T.amount = "-[amount]"
+							T.source_terminal = machine_id
+							T.date = current_date_string
+							T.time = worldtime2text()
+							authenticated_account.transaction_log.Add(T)
 
-						T = new()
-						T.target_name = authenticated_account.owner_name
-						T.purpose = "Credit transfer to wallet"
-						T.amount = "[amount]"
-						T.source_terminal = machine_id
-						T.date = current_date_string
-						T.time = worldtime2text()
-						card_id.virtual_wallet.transaction_log.Add(T)
-					else
-						to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
+							T = new()
+							T.target_name = authenticated_account.owner_name
+							T.purpose = "Credit transfer to wallet"
+							T.amount = "[amount]"
+							T.source_terminal = machine_id
+							T.date = current_date_string
+							T.time = worldtime2text()
+							card_id.virtual_wallet.transaction_log.Add(T)
+						else
+							to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
 			if("deposit_from_wallet")
-				var/amount = max(text2num(href_list["funds_amount"]),0)
-				if(!istype(atm_card, /obj/item/weapon/card/id))
-					to_chat(usr, "<span class='notice'>You must insert your ID card before you can transfer funds from its virtual wallet.</span>")
-					return
+				if(CAN_INTERACT_WITH_ACCOUNT)
+					var/amount = max(text2num(href_list["funds_amount"]),0)
+					if(!istype(atm_card, /obj/item/weapon/card/id))
+						to_chat(usr, "<span class='notice'>You must insert your ID card before you can transfer funds from its virtual wallet.</span>")
+						return
 
-				var/obj/item/weapon/card/id/card_id = atm_card
-				if(amount <= 0)
-					alert("That is not a valid amount.")
-				else if(authenticated_account && amount > 0)
-					if(amount <= card_id.virtual_wallet.money)
-						authenticated_account.money += amount
-						card_id.virtual_wallet.money -= amount
+					var/obj/item/weapon/card/id/card_id = atm_card
+					if(amount <= 0)
+						alert("That is not a valid amount.")
+					else if(authenticated_account && amount > 0)
+						if(amount <= card_id.virtual_wallet.money)
+							authenticated_account.money += amount
+							card_id.virtual_wallet.money -= amount
 
-						//create an entry in the account transaction log
-						var/datum/transaction/T = new()
-						T.target_name = card_id.virtual_wallet.owner_name
-						T.purpose = "Credit transfer from wallet"
-						T.amount = "[amount]"
-						T.source_terminal = machine_id
-						T.date = current_date_string
-						T.time = worldtime2text()
-						authenticated_account.transaction_log.Add(T)
+							//create an entry in the account transaction log
+							var/datum/transaction/T = new()
+							T.target_name = card_id.virtual_wallet.owner_name
+							T.purpose = "Credit transfer from wallet"
+							T.amount = "[amount]"
+							T.source_terminal = machine_id
+							T.date = current_date_string
+							T.time = worldtime2text()
+							authenticated_account.transaction_log.Add(T)
 
-						T = new()
-						T.target_name = authenticated_account.owner_name
-						T.purpose = "Credit transfer from wallet"
-						T.amount = "-[amount]"
-						T.source_terminal = machine_id
-						T.date = current_date_string
-						T.time = worldtime2text()
-						card_id.virtual_wallet.transaction_log.Add(T)
-					else
-						to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
+							T = new()
+							T.target_name = authenticated_account.owner_name
+							T.purpose = "Credit transfer from wallet"
+							T.amount = "-[amount]"
+							T.source_terminal = machine_id
+							T.date = current_date_string
+							T.time = worldtime2text()
+							card_id.virtual_wallet.transaction_log.Add(T)
+						else
+							to_chat(usr, "[bicon(src)]<span class='warning'>You don't have enough funds to do that!</span>")
 			if("balance_statement")
-				if(authenticated_account)
+				if(CAN_INTERACT_WITH_ACCOUNT)
 					if(world.timeofday < lastprint + PRINT_DELAY)
 						to_chat(usr, "<span class='notice'>The [src.name] flashes an error on its display.</span>")
 						return
@@ -472,7 +489,7 @@ log transactions
 					R.stamps += "<HR><i>This paper has been stamped by the Automatic Teller Machine.</i>"
 					playsound(loc, pick('sound/items/polaroid1.ogg', 'sound/items/polaroid2.ogg'), 50, 1)
 			if("create_debit_card")
-				if(authenticated_account)
+				if(CAN_INTERACT_WITH_ACCOUNT)
 					if(world.timeofday < lastprint + PRINT_DELAY)
 						to_chat(usr, "<span class='notice'>The [src.name] flashes an error on its display.</span>")
 						return
