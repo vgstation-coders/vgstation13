@@ -223,6 +223,8 @@ var/list/department_radio_keys = list(
 	if(!say_understands((istype(AM) ? AM : speech.speaker),speech.language)|| force_compose) //force_compose is so AIs don't end up without their hrefs.
 		rendered_message = render_speech(speech)
 	show_message(rendered_message, type, deaf_message, deaf_type)
+	if(BrainContainer)
+		BrainContainer.SendSignal(COMSIG_HEAR, list("message" = speech.message, "speaker" = speech.speaker))
 	return rendered_message
 
 /mob/living/proc/hear_radio_only()

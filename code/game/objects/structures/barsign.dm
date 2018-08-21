@@ -92,3 +92,7 @@
 	desc = "ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4#*?"
 	pixel_x = 0
 	pixel_y = 0
+
+/obj/structure/sign/double/barsign/mining
+	name = "Armok's Bar N Grill"
+	icon_state = "armokbar"
