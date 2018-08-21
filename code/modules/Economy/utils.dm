@@ -4,6 +4,10 @@
 // Economy system is such a mess of spaghetti.  This should help.
 ////////////////////////
 
+var/global/no_pin_for_debit = TRUE
+// If you want to engage the fun, go for TRUE.
+// Otherwise everyone has to use a PIN to swipe debits like normal.
+
 /proc/get_money_account(var/account_number, var/from_z=-1)
 	for(var/obj/machinery/account_database/DB in account_DBs)
 		if(from_z > -1 && DB.z != from_z)
@@ -110,7 +114,7 @@
 	CARD_CAPTURE_FAILURE_USER_CANCELED
 */
 
-/obj/proc/charge_flow_verify_security(var/obj/machinery/account_database/linked_db, var/obj/item/weapon/card/card, var/mob/user, var/datum/money_account/account)
+/obj/proc/charge_flow_verify_security(var/obj/machinery/account_database/linked_db, var/obj/item/weapon/card/card, var/mob/user, var/datum/money_account/account, var/ignore_debit_pin_override)
 	if(!account)
 		if(linked_db)
 			if(!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER))
@@ -136,6 +140,12 @@
 				// Security level is 2 and the card is not present, fail.
 				to_chat(user, "[bicon(src)] <span class='warning'>Card Not Present transactions are not allowed for this account.</span>")
 				return CARD_CAPTURE_FAILURE_SECURITY_LEVEL
+			if(no_pin_for_debit && !ignore_debit_pin_override && account.security_level != 2 && istype(card, /obj/item/weapon/card/debit))
+				// Oh boy. The fun is engaged and everyone can swipe a debit without it's PIN.
+				// May your select deity help you if you lost your debit and have a security level of 0,
+				// letting free the flow of your funds to anyone who made a debit card with your account on it.
+				return CARD_CAPTURE_SUCCESS
+
 			var/account_pin = input(user, "Enter account pin", "Card Transaction") as null|num
 			// Get the account pin.
 			if(user_loc != user.loc)
