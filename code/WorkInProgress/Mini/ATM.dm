@@ -165,10 +165,11 @@ log transactions
 		if(ticks_left_locked_down > 0)
 			dat += "<span class='alert'>Maximum number of pin attempts exceeded! Access to this ATM has been temporarily disabled.</span>"
 		else if(authenticated_account)
-			if(authenticated_account.disabled)
+			if(authenticated_account.disabled && view_screen != CHANGE_SECURITY_LEVEL)
 				dat += "<b>ACCOUNT DISABLED</b><br><hr>"
 				if(authenticated_account.disabled < 2)
 					dat += "<A href='?src=\ref[src];choice=toggle_account'>Toggle account status</a><br>"
+					dat += "<A href='?src=\ref[src];choice=view_screen;view_screen=1'>Change account security level</a><br>"
 					dat += "<A href='?src=\ref[src];choice=logout'>Logout</a><br>"
 				else
 					dat += "Contact your Head of Personnel for more information.<br>"
@@ -178,7 +179,10 @@ log transactions
 						dat += "Select a new security level for this account:<br><hr>"
 						var/text = "Zero - Either the account number or card is required to access this account. Vendor transactions will pay from your bank account if your virtual wallet has insufficient funds."
 						if(authenticated_account.security_level != 0)
-							text = "<A href='?src=\ref[src];choice=change_security_level;new_security_level=0'>[text]</a>"
+							if(authenticated_account.disabled)
+								text = "<b>ACCOUNT DISABLED CAN NOT USE</b><br><s>[text]</s>"
+							else
+								text = "<A href='?src=\ref[src];choice=change_security_level;new_security_level=0'>[text]</a>"
 						dat += "[text]<hr>"
 						text = "One - An account number and pin must be manually entered to access this account and process transactions."
 						if(authenticated_account.security_level != 1)
@@ -314,8 +318,9 @@ log transactions
 			if("view_screen")
 				view_screen = text2num(href_list["view_screen"])
 			if("change_security_level")
-				if(CAN_INTERACT_WITH_ACCOUNT)
-					var/new_sec_level = max( min(text2num(href_list["new_security_level"]), 2), 0)
+				if(authenticated_account && linked_db && authenticated_account.disabled < 2)
+					var/new_sec_level = max( min(text2num(href_list["new_security_level"]), 2), authenticated_account.disabled ? 1 : 0)
+					// If the account is disabled, prevent downgrading to level 0
 					authenticated_account.security_level = new_sec_level
 			if("attempt_auth")
 				if(linked_db && !ticks_left_locked_down)
