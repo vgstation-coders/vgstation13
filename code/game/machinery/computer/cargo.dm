@@ -527,7 +527,7 @@ For vending packs, see vending_packs.dm*/
 		return
 	var/idname = account_info["idname"]
 	var/idrank = account_info["idrank"]
-	var/datum/money_account/account = account_info["account"]
+	var/datum/money_account/account = current_acct
 
 	if (href_list["doorder"])
 		if(world.time < reqtime)
