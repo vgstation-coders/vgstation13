@@ -1,3 +1,6 @@
+#define DEBIT_MAX_AUTHORIZED_NAME_LENGTH 22
+// MasterCard limits it to 22 characters on the authorized user field.
+
 /obj/item/weapon/card/debit
 	name = "\improper debit card"
 	desc = "A flimsy piece of plastic with cheap near field circuitry backed by digits representing funds in a bank account."
@@ -8,18 +11,29 @@
 	starting_materials = list(MAT_PLASTIC = 10)
 	w_type = RECYK_MISC
 	var/to_cut = 0.8
+	var/authorized_name = "" // The name of the card. Edited at any ATM.
 
-/obj/item/weapon/card/debit/New(var/new_loc, var/account_number)
+/obj/item/weapon/card/debit/New(var/new_loc, var/account_number, var/desired_authorized_name)
 	. = ..(new_loc)
 	associated_account_number = account_number
+	if(desired_authorized_name)
+		change_authorized_name(desired_authorized_name)
 
 /obj/item/weapon/card/debit/examine(var/mob/user)
 	. = ..()
 	if(user.Adjacent(src) || istype(user, /mob/dead))
 		if(associated_account_number)
-			to_chat(user, "<span class='notice'>The account number on the card reads [associated_account_number].</span>")
+			to_chat(user, "<span class='notice'>The account number on the card reads: [associated_account_number]</span>")
 		else
 			to_chat(user, "<span class='warning'>The account number appears to be scratched off.</span>")
+		
+		if(authorized_name)
+			to_chat(user, "<span class='notice'>The authorized user on the card reads: [authorized_name]</span>")
+		else
+			to_chat(user, "<span class='notice'>The authorized user field on the card is blank.</span>")
+
+/obj/item/weapon/card/debit/proc/change_authorized_name(var/desired_authorized_name)
+	authorized_name = uppertext(sanitize_simple(strip_html_simple(desired_authorized_name, DEBIT_MAX_AUTHORIZED_NAME_LENGTH)))
 
 /obj/item/weapon/card/debit/attack_self(var/mob/user)
 	if(user.attack_delayer.blocked())
@@ -78,8 +92,8 @@
 	var/department = ""
 	var/easter_egg = TRUE
 
-/obj/item/weapon/card/debit/preferred/department/New(var/new_loc, var/desired_department)
-	. = ..(new_loc)
+/obj/item/weapon/card/debit/preferred/department/New(var/new_loc, var/desired_department, var/desired_authorized_name)
+	. = ..(new_loc, null, desired_authorized_name)
 	department = desired_department
 	if(desired_department)
 		set_department_account(desired_department)
@@ -102,6 +116,7 @@
 		var/datum/money_account/department_account = department_accounts[desired_department]
 		associated_account_number = department_account.account_number
 		name = "\improper [department_account.owner_name] debit card"
+		change_authorized_name(desired_department + " DEPT")
 		return TRUE
 	else
 		warning("A debit card \"\ref[src]\" is trying to use a department \"[desired_department]\" that does not exist in the global department_accounts.\n[department_accounts]")
@@ -113,3 +128,5 @@
 	starting_materials = list(MAT_IRON = 20)
 	to_cut = 1.5
 	examine_held = "<span class='notice'>You feel <b>incredibly</b> important just by holding it</span>"
+
+#undef DEBIT_MAX_AUTHORIZED_NAME_LENGTH

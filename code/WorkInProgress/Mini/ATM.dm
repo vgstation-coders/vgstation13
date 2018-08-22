@@ -235,21 +235,32 @@ log transactions
 							<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Withdraw funds'><br>
 							</form><hr>
 							"}
-						if(atm_card && istype(atm_card, /obj/item/weapon/card/id))
-							var/obj/item/weapon/card/id/card_id = atm_card
-							dat += {"
-								<b>Virtual Wallet balance:</b> $[card_id.virtual_wallet.money]<br>
-								<form name='withdraw_to_wallet' action='?src=\ref[src]' method='get'>
-								<input type='hidden' name='src' value='\ref[src]'>
-								<input type='hidden' name='choice' value='withdraw_to_wallet'>
-								<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Withdraw to virtual wallet'><br>
-								</form>
-								<form name='deposit_from_wallet' action='?src=\ref[src]' method='get'>
-								<input type='hidden' name='src' value='\ref[src]'>
-								<input type='hidden' name='choice' value='deposit_from_wallet'>
-								<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Deposit from virtual wallet'><br>
-								</form><hr>
-								"}
+						if(atm_card)
+							if(istype(atm_card, /obj/item/weapon/card/id))
+								var/obj/item/weapon/card/id/card_id = atm_card
+								dat += {"
+									<b>Virtual Wallet balance:</b> $[card_id.virtual_wallet.money]<br>
+									<form name='withdraw_to_wallet' action='?src=\ref[src]' method='get'>
+									<input type='hidden' name='src' value='\ref[src]'>
+									<input type='hidden' name='choice' value='withdraw_to_wallet'>
+									<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Withdraw to virtual wallet'><br>
+									</form>
+									<form name='deposit_from_wallet' action='?src=\ref[src]' method='get'>
+									<input type='hidden' name='src' value='\ref[src]'>
+									<input type='hidden' name='choice' value='deposit_from_wallet'>
+									<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Deposit from virtual wallet'><br>
+									</form><hr>
+									"}
+							else if(istype(atm_card, /obj/item/weapon/card/debit))
+								var/obj/item/weapon/card/debit/card_debit = atm_card
+								dat += {"
+									<b>Debit Card Authorized User:</b> [card_debit.authorized_name]<br>
+									<form name='change_debit_authorized_name' action='?src=\ref[src]' method='get'>
+									<input type='hidden' name='src' value='\ref[src]'>
+									<input type='hidden' name='choice' value='change_debit_authorized_name'>
+									<input type='text' name='new_debit_name' value='[card_debit.authorized_name]' style='width:200px; background-color:white;'><input type='submit' value='Change'><br>
+									</form><hr>
+									"}
 						else
 							dat += {"
 								<i>Insert an ID card to perform fund transfers to/from it.</i><br>
@@ -498,14 +509,18 @@ log transactions
 					if(world.timeofday < lastprint + PRINT_DELAY)
 						to_chat(usr, "<span class='notice'>The [src.name] flashes an error on its display.</span>")
 						return
+					var/desired_authorized_name = input(usr, "Enter authorized name", "Set Authorized Name", authenticated_account.owner_name) as text
 					if(authenticated_account.charge(DEBIT_CARD_COST, null, "New debit card", machine_id, null, "Terminal"))
 						lastprint = world.timeofday
-						var/obj/item/weapon/card/debit/debit_card = new(src.loc, authenticated_account.account_number)
+						var/obj/item/weapon/card/debit/debit_card = new(src.loc, authenticated_account.account_number, desired_authorized_name)
 						debit_card.name = authenticated_account.owner_name + "'s " + debit_card.name
 						playsound(loc, pick('sound/items/polaroid1.ogg', 'sound/items/polaroid2.ogg'), 50, 1)
 					else
 						playsound(loc, 'sound/machines/buzz-sigh.ogg', 50, 1)
-
+			if("change_debit_authorized_name")
+				if(atm_card && istype(atm_card, /obj/item/weapon/card/debit/))
+					var/obj/item/weapon/card/debit/debit_card = atm_card
+					debit_card.change_authorized_name(href_list["new_debit_name"])
 			if("insert_card")
 				if(atm_card)
 					atm_card.forceMove(src.loc)

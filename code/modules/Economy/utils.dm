@@ -58,7 +58,7 @@ var/global/no_pin_for_debit = TRUE
 /datum/money_account/proc/fmtBalance()
 	return "$[num2septext(money)]"
 
-/datum/money_account/proc/charge(var/transaction_amount,var/datum/money_account/dest,var/transaction_purpose, var/terminal_name="", var/terminal_id=0, var/dest_name = "UNKNOWN")
+/datum/money_account/proc/charge(var/transaction_amount,var/datum/money_account/dest,var/transaction_purpose, var/terminal_name="", var/terminal_id=0, var/dest_name = "UNKNOWN", var/authorized_name = "")
 	if(transaction_amount <= money || account_number == dest.account_number)
 		//transfer the money
 		money -= transaction_amount
@@ -66,10 +66,11 @@ var/global/no_pin_for_debit = TRUE
 			dest.money += transaction_amount
 
 		//create entries in the two account transaction logs
+		transaction_purpose = copytext(sanitize(transaction_purpose),1,MAX_MESSAGE_LEN)
 		var/datum/transaction/T
 		if(dest)
 			T = new()
-			T.target_name = owner_name
+			T.target_name = owner_name + ( authorized_name ? " charged as [authorized_name]" : "")
 			if(terminal_name!="")
 				T.target_name += " (via [terminal_name])"
 			T.purpose = transaction_purpose
@@ -80,7 +81,7 @@ var/global/no_pin_for_debit = TRUE
 			dest.transaction_log.Add(T)
 		//
 		T = new()
-		T.target_name = (!dest) ? dest_name : dest.owner_name
+		T.target_name = ((!dest) ? dest_name : dest.owner_name) + ( authorized_name ? " as [authorized_name]" : "")
 		if(terminal_name!="")
 			T.target_name += " (via [terminal_name])"
 		T.purpose = transaction_purpose
@@ -211,6 +212,8 @@ var/global/no_pin_for_debit = TRUE
 	// The amount to charge on our secondary payment.
 	var/user_loc = user.loc
 	// To keep track of the user just so we can can cancel if they move.
+	var/authorized = ""
+	// For debit cards.
 	if(!linked_db || !linked_db.activated || linked_db.stat & (BROKEN|NOPOWER))
 		// The account database has to avaiable, active, and not broken.
 		to_chat(user, "[bicon(src)] <span class='warning'>No connection to account database.</span>")
@@ -308,11 +311,16 @@ var/global/no_pin_for_debit = TRUE
 		to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
 		return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
 	
+	if(card && istype(card, /obj/item/weapon/card/debit))
+		// Using debit, find the authorized name.
+		var/obj/item/weapon/card/debit/debit_card = card
+		authorized = debit_card.authorized_name
+
 	if(transaction_amount_secondary)
 		// If we have a vaild secondary amount, charge the secondary payment method.
-		secondary_money_account.charge(transaction_amount_secondary, dest, transaction_purpose, terminal_name, terminal_id, dest_name)
+		secondary_money_account.charge(transaction_amount_secondary, dest, transaction_purpose, terminal_name, terminal_id, dest_name, authorized)
 
-	primary_money_account.charge(transaction_amount_primary, dest, transaction_purpose, terminal_name, terminal_id, dest_name)
+	primary_money_account.charge(transaction_amount_primary, dest, transaction_purpose, terminal_name, terminal_id, dest_name, authorized)
 	// Finally charge the primary
 	var/account_type = primary_money_account.virtual ? "virtual wallet" : "bank account"
 	to_chat(user, "[bicon(src)] <span class='notice'>Remaining balance on [account_type], $[num2septext(primary_money_account.money)].</span>")
