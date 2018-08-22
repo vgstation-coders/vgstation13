@@ -43,6 +43,7 @@ For vending packs, see vending_packs.dm*/
 	var/datum/money_account/current_acct
 	var/current_authorized_name
 	var/screen = SCR_MAIN
+	var/mob/last_user = null
 	light_color = LIGHT_COLOR_BROWN
 
 /obj/machinery/computer/supplycomp/New()
@@ -96,33 +97,39 @@ For vending packs, see vending_packs.dm*/
 	if(..())
 		return
 	
+	last_user = user
+
 	if((!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER)) && !isAdminGhost(user))
 		to_chat(user, "<span class='warning'>Account database connection lost. Please retry.</span>")
 		return
 	
-	if(issilicon(user) || isAdminGhost(user))
-		current_acct = user.get_worn_id_account()
-		if(issilicon(user))
-			current_authorized_name = user.name
-		else
-			current_authorized_name = ""
+	if(SSsupply_shuttle.requisition)
+		current_acct = department_accounts["Cargo"]
+		current_authorized_name = ""
 	else
-		var/obj/item/weapon/card/card = user.get_card()
-
-		if(!card) // Don't do anything if they don't have an card they can use
-			to_chat(user, "<span class='warning'>Please present a valid card.</span>")
-			return
-
-		current_acct = linked_db.get_account(card.associated_account_number)
-
-		if(!current_acct)
-			to_chat(user, "<span class='warning'>[bicon(card)] [card] does not have a valid account number.</span>")
-
-		if(istype(card, /obj/item/weapon/card/debit))
-			var/obj/item/weapon/card/debit/debit_card = card
-			current_authorized_name = debit_card.authorized_name
+		if(issilicon(user) || isAdminGhost(user))
+			current_acct = user.get_worn_id_account()
+			if(issilicon(user))
+				current_authorized_name = user.name
+			else
+				current_authorized_name = ""
 		else
-			current_authorized_name = ""
+			var/obj/item/weapon/card/card = user.get_card()
+
+			if(!card) // Don't do anything if they don't have an card they can use
+				to_chat(user, "<span class='warning'>Please present a valid card.</span>")
+				return
+
+			current_acct = linked_db.get_account(card.associated_account_number)
+
+			if(!current_acct)
+				to_chat(user, "<span class='warning'>[bicon(card)] [card] does not have a valid account number.</span>")
+
+			if(istype(card, /obj/item/weapon/card/debit))
+				var/obj/item/weapon/card/debit/debit_card = card
+				current_authorized_name = debit_card.authorized_name
+			else
+				current_authorized_name = ""
 
 	user.set_machine(src)
 	post_signal("supply")
@@ -231,6 +238,8 @@ For vending packs, see vending_packs.dm*/
 /obj/machinery/computer/supplycomp/Topic(href, href_list)
 	if(..())
 		return 1
+	if(last_user != usr)
+		attack_hand(usr)
 	var/list/account_info = get_account_info(usr)
 	if(!account_info)
 		to_chat(usr, "<span class='warning'>Please present a valid ID.</span>")
@@ -238,6 +247,8 @@ For vending packs, see vending_packs.dm*/
 	var/idname = account_info["idname"]
 	var/idrank = account_info["idrank"]
 	var/datum/money_account/account = current_acct
+	if(!account)
+		to_chat(usr, "<span class='warning'>No account.</span>")
 	if(SSsupply_shuttle.requisition)
 		account = department_accounts["Cargo"]
 	//Handle access and requisitions
@@ -372,6 +383,7 @@ For vending packs, see vending_packs.dm*/
 		if(!check_restriction(usr))
 			return
 		SSsupply_shuttle.requisition = text2num(href_list["requisition_status"])
+		attack_hand(usr)
 		return 1
 	else if (href_list["screen"])
 		if(!check_restriction(usr))
@@ -413,7 +425,7 @@ For vending packs, see vending_packs.dm*/
 	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
 	var/datum/money_account/current_acct
 	var/current_authorized_name = ""
-
+	var/last_user = null
 	light_color = LIGHT_COLOR_BROWN
 
 /obj/machinery/computer/ordercomp/New()
@@ -431,6 +443,8 @@ For vending packs, see vending_packs.dm*/
 	if(..())
 		return
 	
+	last_user = user
+
 	if((!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER)) && !isAdminGhost(user))
 		to_chat(user, "<span class='warning'>Account database connection lost. Please retry.</span>")
 		return
@@ -521,6 +535,8 @@ For vending packs, see vending_packs.dm*/
 	if( isturf(loc) && (in_range(src, usr) || istype(usr, /mob/living/silicon)) )
 		usr.set_machine(src)
 
+	if(last_user != usr)
+		attack_hand(usr)
 	var/list/account_info = get_account_info(usr)
 	if(!account_info)
 		to_chat(usr, "<span class='warning'>Please present a valid ID.</span>")
@@ -528,6 +544,8 @@ For vending packs, see vending_packs.dm*/
 	var/idname = account_info["idname"]
 	var/idrank = account_info["idrank"]
 	var/datum/money_account/account = current_acct
+	if(!account)
+		to_chat(usr, "<span class='warning'>No account.</span>")
 
 	if (href_list["doorder"])
 		if(world.time < reqtime)
