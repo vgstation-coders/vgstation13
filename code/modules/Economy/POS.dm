@@ -365,10 +365,16 @@ var/const/POS_HEADER = {"<html>
 	return "<center><b>Waiting for Credit</b><br /><a href=\"?src=\ref[src];act=Reset\">Cancel</a></center>"
 
 /obj/machinery/pos/proc/SettingsScreen()
+	if(!linked_account)
+		// Should not happen, but it happens.
+		linked_account = station_account
 	var/dat={"<form action="?src=\ref[src]" method="get">
 		<input type="hidden" name="src" value="\ref[src]" />
 		<fieldset>
 			<legend>Account Settings</legend>
+			<div>
+				<b>Name of Account:</b> [linked_account.owner_name]
+			</div>
 			<div>
 				<b>Payable Account:</b> <input type="textbox" name="payableto" value="[linked_account.account_number]" />
 			</div>
