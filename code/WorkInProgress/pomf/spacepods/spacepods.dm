@@ -29,7 +29,7 @@
 	var/list/pod_overlays
 	var/health = 400
 	var/maxHealth = 400
-	appearance_flags = 0
+	appearance_flags = LONG_GLIDE
 
 	var/datum/delay_controller/move_delayer = new(0.1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
 	var/passenger_fire = 0 //Whether or not a passenger can fire weapons attached to this pod
