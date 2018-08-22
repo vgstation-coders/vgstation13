@@ -24,11 +24,6 @@ For vending packs, see vending_packs.dm*/
 	else if(issilicon(user))
 		acc_info["idname"] = user.real_name
 		acc_info["idrank"] = "Cyborg"
-	var/datum/money_account/account = user.get_worn_id_account()
-	if(!account)
-		to_chat(user, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
-		return 0
-	acc_info["account"] = account
 	return acc_info
 
 #define SCR_MAIN 1
@@ -46,12 +41,17 @@ For vending packs, see vending_packs.dm*/
 	var/permissions_screen = FALSE
 	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
 	var/datum/money_account/current_acct
+	var/current_authorized_name
 	var/screen = SCR_MAIN
 	light_color = LIGHT_COLOR_BROWN
 
 /obj/machinery/computer/supplycomp/New()
 	..()
 	SSsupply_shuttle.supply_consoles.Add(src)
+	reconnect_database()
+
+/obj/machinery/computer/supplycomp/initialize()
+	reconnect_database()
 
 /obj/machinery/computer/supplycomp/Destroy()
 	SSsupply_shuttle.supply_consoles.Remove(src)
@@ -95,11 +95,34 @@ For vending packs, see vending_packs.dm*/
 
 	if(..())
 		return
-
-	current_acct = user.get_worn_id_account()
-	if(current_acct == null) // don't do anything if they don't have an account they can use
-		to_chat(user, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
+	
+	if((!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER)) && !isAdminGhost(user))
+		to_chat(user, "<span class='warning'>Account database connection lost. Please retry.</span>")
 		return
+	
+	if(issilicon(user) || isAdminGhost(user))
+		current_acct = user.get_worn_id_account()
+		if(issilicon(user))
+			current_authorized_name = user.name
+		else
+			current_authorized_name = ""
+	else
+		var/obj/item/weapon/card/card = user.get_card()
+
+		if(!card) // Don't do anything if they don't have an card they can use
+			to_chat(user, "<span class='warning'>Please present a valid card.</span>")
+			return
+
+		current_acct = linked_db.get_account(card.associated_account_number)
+
+		if(!current_acct)
+			to_chat(user, "<span class='warning'>[bicon(card)] [card] does not have a valid account number.</span>")
+
+		if(istype(card, /obj/item/weapon/card/debit))
+			var/obj/item/weapon/card/debit/debit_card = card
+			current_authorized_name = debit_card.authorized_name
+		else
+			current_authorized_name = ""
 
 	user.set_machine(src)
 	post_signal("supply")
@@ -187,6 +210,8 @@ For vending packs, see vending_packs.dm*/
 		centcomm_list.Add(list(list("id" = O.id, "requested" = O.getRequestsByName(), "fulfilled" = O.getFulfilledByName(), "name" = O.name, "worth" = O.worth, "to" = O.acct_by_string)))
 	data["centcomm_orders"] = centcomm_list
 
+	data["name_of_source_account"] = current_acct.owner_name
+	data["authorized_name"] = current_authorized_name
 	data["money"] = current_acct.fmtBalance()
 	data["send"] = list("send" = 1)
 	data["moving"] = SSsupply_shuttle.moving
@@ -208,10 +233,11 @@ For vending packs, see vending_packs.dm*/
 		return 1
 	var/list/account_info = get_account_info(usr)
 	if(!account_info)
+		to_chat(usr, "<span class='warning'>Please present a valid ID.</span>")
 		return
 	var/idname = account_info["idname"]
 	var/idrank = account_info["idrank"]
-	var/datum/money_account/account = account_info["account"]
+	var/datum/money_account/account = current_acct
 	if(SSsupply_shuttle.requisition)
 		account = department_accounts["Cargo"]
 	//Handle access and requisitions
@@ -355,6 +381,8 @@ For vending packs, see vending_packs.dm*/
 			screen = result
 		return 1
 	else if (href_list["close"])
+		current_authorized_name = ""
+		current_acct = null
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
@@ -384,8 +412,16 @@ For vending packs, see vending_packs.dm*/
 	var/reqtime = 0 //Cooldown for requisitions - Quarxink
 	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
 	var/datum/money_account/current_acct
+	var/current_authorized_name = ""
 
 	light_color = LIGHT_COLOR_BROWN
+
+/obj/machinery/computer/ordercomp/New()
+	. = ..()
+	reconnect_database()
+
+/obj/machinery/computer/ordercomp/initialize()
+	reconnect_database()
 
 /obj/machinery/computer/ordercomp/attack_ai(var/mob/user as mob)
 	add_hiddenprint(user)
@@ -394,10 +430,36 @@ For vending packs, see vending_packs.dm*/
 /obj/machinery/computer/ordercomp/attack_hand(var/mob/user as mob)
 	if(..())
 		return
-	current_acct = user.get_worn_id_account()
-	if(current_acct == null) // don't do anything if they don't have an account they can use
-		to_chat(user, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
+	
+	if((!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER)) && !isAdminGhost(user))
+		to_chat(user, "<span class='warning'>Account database connection lost. Please retry.</span>")
 		return
+	
+	if(issilicon(user) || isAdminGhost(user))
+		current_acct = user.get_worn_id_account()
+		if(issilicon(user))
+			current_authorized_name = user.name
+		else
+			current_authorized_name = ""
+	else
+		current_acct = null
+		var/obj/item/weapon/card/card = user.get_card()
+
+		if(!card) // Don't do anything if they don't have an card they can use
+			to_chat(user, "<span class='warning'>Please present a valid card.</span>")
+			return
+
+		current_acct = linked_db.get_account(card.associated_account_number)
+
+		if(!current_acct)
+			to_chat(user, "<span class='warning'>[bicon(card)] [card] does not have a valid account number.</span>")
+
+		if(istype(card, /obj/item/weapon/card/debit))
+			var/obj/item/weapon/card/debit/debit_card = card
+			current_authorized_name = debit_card.authorized_name
+		else
+			current_authorized_name = ""
+	
 	user.set_machine(src)
 	ui_interact(user)
 	onclose(user, "computer")
@@ -442,6 +504,8 @@ For vending packs, see vending_packs.dm*/
 			if(I && SO.orderedby == I.registered_name)
 				orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name)))
 	data["orders"] = orders_list
+	data["name_of_source_account"] = current_acct.owner_name
+	data["authorized_name"] = current_authorized_name
 	data["money"] = current_acct.fmtBalance()
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
@@ -459,6 +523,7 @@ For vending packs, see vending_packs.dm*/
 
 	var/list/account_info = get_account_info(usr)
 	if(!account_info)
+		to_chat(usr, "<span class='warning'>Please present a valid ID.</span>")
 		return
 	var/idname = account_info["idname"]
 	var/idrank = account_info["idrank"]
@@ -551,6 +616,8 @@ For vending packs, see vending_packs.dm*/
 				break
 		return 1
 	else if (href_list["close"])
+		current_authorized_name = ""
+		current_acct = null
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
