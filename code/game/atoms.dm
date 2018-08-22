@@ -105,7 +105,7 @@ var/global/list/ghdel_profiling = list()
 
 // NOTE FROM AMATEUR CODER WHO STRUGGLED WITH RUNTIMES
 // throw_impact is called multiple times when an item is thrown: see /atom/movable/proc/hit_check at atoms_movable.dm
-// Do NOT delete an item as part of it's throw_impact unless you've checked the hit_atom is a turf, as that's effectively the last time throw_impact is called in a single throw.
+// Do NOT delete an item as part of its throw_impact unless you've checked the hit_atom is a turf, as that's effectively the last time throw_impact is called in a single throw.
 // Otherwise, shit will runtime in the subsequent throw_impact calls.
 /atom/proc/throw_impact(atom/hit_atom, var/speed, mob/user)
 	if(istype(hit_atom,/mob/living))
@@ -116,6 +116,7 @@ var/global/list/ghdel_profiling = list()
 	else if(isobj(hit_atom))
 		var/obj/O = hit_atom
 		if(!O.anchored)
+			O.set_glide_size(0)
 			step(O, src.dir)
 		O.hitby(src,speed)
 
