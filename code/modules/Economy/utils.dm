@@ -108,6 +108,7 @@ var/global/no_pin_for_debit = TRUE
 		mob/user								 = Who to prompt for information and send informational messages.
 		datum/money_account/account				 = The account to check security for. It can be null if a card is present.
 	)
+	Possible returns:
 	CARD_CAPTURE_SUCCESS
 	CARD_CAPTURE_FAILURE_GENERAL
 	CARD_CAPTURE_ACCOUNT_DISABLED
