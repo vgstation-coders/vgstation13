@@ -402,8 +402,6 @@
 /obj/mecha/proc/mechstep(direction)
 	var/current_dir = dir
 	set_glide_size(DELAY2GLIDESIZE(step_in))
-	if(occupant) //Workaround for mechs not setting the client's eye properly, remove this if that gets fixed
-		occupant.set_glide_size(DELAY2GLIDESIZE(step_in))
 	var/result = step(src,direction)
 	if(lock_dir)
 		dir = current_dir
@@ -414,8 +412,6 @@
 
 /obj/mecha/proc/mechsteprand()
 	set_glide_size(DELAY2GLIDESIZE(step_in))
-	if(occupant) //Workaround for mechs not setting the client's eye properly, remove this if that gets fixed
-		occupant.set_glide_size(DELAY2GLIDESIZE(step_in))
 	var/result = step_rand(src)
 	if(result)
 	 playsound(src, get_sfx("mechstep"),40,1)
@@ -1213,10 +1209,6 @@
 /obj/mecha/proc/moved_inside(var/mob/living/carbon/human/H as mob)
 	if(!isnull(src.loc) && H && H.client && H in range(1))
 		H.reset_view(src)
-		/*
-		H.client.perspective = EYE_PERSPECTIVE
-		H.client.eye = src
-		*/
 		H.stop_pulling()
 		H.forceMove(src)
 		src.occupant = H
@@ -1290,10 +1282,6 @@
 		user.drop_from_inventory(mmi_as_oc)
 		var/mob/brainmob = mmi_as_oc.brainmob
 		brainmob.reset_view(src)
-	/*
-		brainmob.client.eye = src
-		brainmob.client.perspective = EYE_PERSPECTIVE
-	*/
 		occupant = brainmob
 		brainmob.forceMove(src) //should allow relaymove
 		brainmob.canmove = 1
