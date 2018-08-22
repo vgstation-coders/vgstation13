@@ -1371,6 +1371,7 @@ Thanks.
 						for(var/obj/structure/window/win in get_step(AM,t))
 							now_pushing = 0
 							return
+					AM.set_glide_size(src.glide_size)
 					step(AM, t)
 				now_pushing = 0
 			return

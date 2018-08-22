@@ -145,9 +145,12 @@
 
 //TODO move this somewhere else
 /atom/movable/proc/set_glide_size(glide_size_override = 0, var/min = 0.9, var/max = WORLD_ICON_SIZE/2)
-	glide_size = max(min, glide_size_override)
-	if(glide_size > max)
+	if(!glide_size_override || glide_size_override > max)
 		glide_size = 0
+	else
+		glide_size = max(min, glide_size_override)
+	for(var/atom/movable/AM in contents)
+		AM.set_glide_size(glide_size, min, max)
 
 /atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
 	if(!loc || !NewLoc)
