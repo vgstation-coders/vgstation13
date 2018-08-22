@@ -560,3 +560,11 @@ log transactions
 					T.date = current_date_string
 					T.time = worldtime2text()
 					authenticated_account.transaction_log.Add(T)
+
+#undef NO_SCREEN
+#undef CHANGE_SECURITY_LEVEL
+#undef TRANSFER_FUNDS
+#undef VIEW_TRANSACTION_LOGS
+#undef PRINT_DELAY
+#undef DEBIT_CARD_COST
+#undef CAN_INTERACT_WITH_ACCOUNT
