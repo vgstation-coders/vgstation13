@@ -248,7 +248,7 @@ var/global/datum/money_account/trader_account
 						else
 							dat += "???ERROR???"
 					dat += {"<br>
-						<a href='?src=\ref[src];choice=toggle_account;'>Administratively disable account</a><br>
+						<a href='?src=\ref[src];choice=toggle_account;'>Administratively [detailed_account_view.disabled ? "enable" : "disable"] account</a><br>
 						<table border=1 style='width:100%'>
 						<tr>
 						<td><b>Date</b></td>
