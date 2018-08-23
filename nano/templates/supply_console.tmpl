@@ -110,6 +110,9 @@ Used In File(s): \code\game\supplyshuttle.dm
 					{{for data.requests}}
 						<div class="line">
 							{{:value.ordernum}} - {{:value.supply_type}} for {{:value.orderedby}}
+							{{if value.authorized_name != ""}}
+								<br/>DEBIT AS: {{:value.authorized_name}}
+							{{/if}}
 								<div class="line" style="font-style: italic;">
 									{{:value.comment}}
 								</div>
@@ -124,6 +127,9 @@ Used In File(s): \code\game\supplyshuttle.dm
 					{{for data.orders}}
 						<div class="line">
 							#{{:value.ordernum}} - {{:value.supply_type}} for {{:value.orderedby}}
+							{{if value.authorized_name != ""}}
+								<br/>DEBIT AS: {{:value.authorized_name}}
+							{{/if}}
 						</div>
 					{{empty}}
 						No confirmed orders.

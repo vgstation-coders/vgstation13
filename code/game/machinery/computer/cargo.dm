@@ -6,25 +6,99 @@ For cargo crates, see supplypacks.dm
 For vending packs, see vending_packs.dm*/
 
 // returns an associate list of information needed for cargo consoles.  returns 0 if ID or account is missing
-/proc/get_account_info(mob/user)
+
+#define ACCOUNT_DB_OFFLINE (!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER))
+#define MENTION_DB_OFFLINE to_chat(user, "<span class='warning'>Account database connection lost. Please retry.</span>")
+#define USE_ACCOUNT_ON_ID acc_info["account"] = user.get_worn_id_account(0, user)
+#define USE_CARGO_ACCOUNT acc_info["account"] = department_accounts["Cargo"]
+#define REQUISITION SSsupply_shuttle.requisition
+
+/proc/get_account_info(mob/user, var/obj/machinery/account_database/linked_db)
 	var/list/acc_info = new
 	var/obj/item/weapon/card/id/usr_id = user.get_id_card()
+	acc_info["authorized_name"] = ""
 	if(ishuman(user))
 		if(usr_id == null)
-			to_chat(user, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
+			to_chat(user, "<span class='warning'>Please wear an ID for authentication.</span>")
 			return 0
+		if(ACCOUNT_DB_OFFLINE)
+			MENTION_DB_OFFLINE
+			return
+		
+		var/datum/money_account/bank_account
+		if(REQUISITION)
+			bank_account = department_accounts["Cargo"]
+		else
+			// Humans, or really physical people at the terminal, can present a debit card. Let's find one or just find the same ID.
+			var/obj/item/weapon/card/debit/debit_card = user.get_card()
+			var/using_debit = FALSE
+			var/account_number = null
+			if(istype(debit_card))
+				account_number = debit_card.associated_account_number
+				acc_info["authorized_name"] = debit_card.authorized_name
+				using_debit = TRUE
+			else
+				account_number = usr_id.associated_account_number
+			bank_account = linked_db.get_account(account_number)
+			if(!bank_account)
+				to_chat(user, "<span class='warning'>A valid bank account does not exist for \the [using_debit ? "[bicon(debit_card)] [debit_card]" : "[bicon(usr_id)] [usr_id]"]. Please try a different card.</span>")
+				return
 		acc_info["idname"] = usr_id.registered_name
 		acc_info["idrank"] = usr_id.GetJobName()
+		acc_info["account"] = bank_account
 	else if(isAdminGhost(user))
 		acc_info["idname"] = "Commander Green"
 		acc_info["idrank"] = "Central Commander"
+		if(REQUISITION)
+			USE_CARGO_ACCOUNT
+		else
+			USE_ACCOUNT_ON_ID
 	else if(isAI(user))
 		acc_info["idname"] = user.real_name
 		acc_info["idrank"] = "AI"
+		if(ACCOUNT_DB_OFFLINE)
+			MENTION_DB_OFFLINE
+			return
+		if(REQUISITION)
+			USE_CARGO_ACCOUNT
+		else
+			USE_ACCOUNT_ON_ID
 	else if(issilicon(user))
 		acc_info["idname"] = user.real_name
 		acc_info["idrank"] = "Cyborg"
+		if(ACCOUNT_DB_OFFLINE)
+			MENTION_DB_OFFLINE
+			return
+		if(REQUISITION)
+			USE_CARGO_ACCOUNT
+		else
+			USE_ACCOUNT_ON_ID
+	
 	return acc_info
+
+#undef ACCOUNT_DB_OFFLINE
+#undef MENTION_DB_OFFLINE
+#undef USE_ACCOUNT_ON_ID
+
+/obj/item/weapon/paper/request_form/New(var/loc, var/list/account_information, var/datum/supply_packs/pack, var/number_of_crates, var/reason = "No reason provided.")
+	. = ..(loc)
+	name = "[pack.name] Requisition Form - [account_information["idname"]], [account_information["idrank"]]"
+	info += {"<h3>[station_name] Supply Requisition Form</h3><hr>
+		INDEX: #[SSsupply_shuttle.ordernum]<br>
+		REQUESTED BY: [account_information["idname"]]<br>"}
+	if(account_information["authorized_name"] != "")
+		info += "USING DEBIT AS: [account_information["authorized_name"]]<br>"
+	
+	info+= {"RANK: [account_information["idrank"]]<br>
+		REASON: [reason]<br>
+		SUPPLY CRATE TYPE: [pack.name]<br>
+		NUMBER OF CRATES: [number_of_crates]<br>
+		ACCESS RESTRICTION: [get_access_desc(pack.access)]<br>
+		CONTENTS:<br>"}
+	info += pack.manifest
+	info += {"<hr>
+		STAMP BELOW TO APPROVE THIS REQUISITION:<br>"}
+	update_icon()
 
 #define SCR_MAIN 1
 #define SCR_CENTCOM 2
@@ -40,10 +114,8 @@ For vending packs, see vending_packs.dm*/
 	var/can_order_contraband = 0
 	var/permissions_screen = FALSE
 	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
-	var/datum/money_account/current_acct
-	var/current_authorized_name
+	var/list/current_acct
 	var/screen = SCR_MAIN
-	var/mob/last_user = null
 	light_color = LIGHT_COLOR_BROWN
 
 /obj/machinery/computer/supplycomp/New()
@@ -97,39 +169,7 @@ For vending packs, see vending_packs.dm*/
 	if(..())
 		return
 	
-	last_user = user
-
-	if((!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER)) && !isAdminGhost(user))
-		to_chat(user, "<span class='warning'>Account database connection lost. Please retry.</span>")
-		return
-	
-	if(SSsupply_shuttle.requisition)
-		current_acct = department_accounts["Cargo"]
-		current_authorized_name = ""
-	else
-		if(issilicon(user) || isAdminGhost(user))
-			current_acct = user.get_worn_id_account()
-			if(issilicon(user))
-				current_authorized_name = user.name
-			else
-				current_authorized_name = ""
-		else
-			var/obj/item/weapon/card/card = user.get_card()
-
-			if(!card) // Don't do anything if they don't have an card they can use
-				to_chat(user, "<span class='warning'>Please present a valid card.</span>")
-				return
-
-			current_acct = linked_db.get_account(card.associated_account_number)
-
-			if(!current_acct)
-				to_chat(user, "<span class='warning'>[bicon(card)] [card] does not have a valid account number.</span>")
-
-			if(istype(card, /obj/item/weapon/card/debit))
-				var/obj/item/weapon/card/debit/debit_card = card
-				current_authorized_name = debit_card.authorized_name
-			else
-				current_authorized_name = ""
+	current_acct = get_account_info(user, linked_db)
 
 	user.set_machine(src)
 	post_signal("supply")
@@ -202,14 +242,14 @@ For vending packs, see vending_packs.dm*/
 		if(SO)
 			if(!SO.comment)
 				SO.comment = "No reason provided."
-			requests_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name, "orderedby" = SO.orderedby, "comment" = SO.comment, "command1" = list("confirmorder" = SO.ordernum), "command2" = list("rreq" = SO.ordernum))))
+			requests_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name, "orderedby" = SO.orderedby, "authorized_name" = SO.authorized_name, "comment" = SO.comment, "command1" = list("confirmorder" = SO.ordernum), "command2" = list("rreq" = SO.ordernum))))
 	data["requests"] = requests_list
 
 	var/orders_list[0]
 	for(var/set_name in SSsupply_shuttle.shoppinglist)
 		var/datum/supply_order/SO = set_name
 		if(SO)
-			orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name, "orderedby" = SO.orderedby, "comment" = SO.comment)))
+			orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name, "orderedby" = SO.orderedby, "authorized_name" = SO.authorized_name, "comment" = SO.comment)))
 	data["orders"] = orders_list
 
 	var/centcomm_list[0]
@@ -217,9 +257,9 @@ For vending packs, see vending_packs.dm*/
 		centcomm_list.Add(list(list("id" = O.id, "requested" = O.getRequestsByName(), "fulfilled" = O.getFulfilledByName(), "name" = O.name, "worth" = O.worth, "to" = O.acct_by_string)))
 	data["centcomm_orders"] = centcomm_list
 
-	data["name_of_source_account"] = current_acct.owner_name
-	data["authorized_name"] = current_authorized_name
-	data["money"] = current_acct.fmtBalance()
+	data["name_of_source_account"] = current_acct["account"].owner_name
+	data["authorized_name"] = current_acct["authorized_name"]
+	data["money"] = current_acct["account"].fmtBalance()
 	data["send"] = list("send" = 1)
 	data["moving"] = SSsupply_shuttle.moving
 	data["at_station"] = SSsupply_shuttle.at_station
@@ -238,19 +278,15 @@ For vending packs, see vending_packs.dm*/
 /obj/machinery/computer/supplycomp/Topic(href, href_list)
 	if(..())
 		return 1
-	if(last_user != usr)
-		attack_hand(usr)
-	var/list/account_info = get_account_info(usr)
-	if(!account_info)
-		to_chat(usr, "<span class='warning'>Please present a valid ID.</span>")
+	add_fingerprint(usr)
+	current_acct = get_account_info(usr, linked_db)
+	var/idname
+	var/datum/money_account/account
+	if(!current_acct && !href_list["close"])
 		return
-	var/idname = account_info["idname"]
-	var/idrank = account_info["idrank"]
-	var/datum/money_account/account = current_acct
-	if(!account)
-		to_chat(usr, "<span class='warning'>No account.</span>")
-	if(SSsupply_shuttle.requisition)
-		account = department_accounts["Cargo"]
+	else
+		idname = current_acct["idname"]
+		account = current_acct["account"]
 	//Handle access and requisitions
 	if(href_list["permissions"])
 		if(!permissions_screen && pin_query(usr))
@@ -316,21 +352,7 @@ For vending packs, see vending_packs.dm*/
 		if(!reason)
 			return
 
-		var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(loc)
-		reqform.name = "[P.name] Requisition Form - [idname], [idrank]"
-		reqform.info += {"<h3>[station_name] Supply Requisition Form</h3><hr>
-			INDEX: #[SSsupply_shuttle.ordernum]<br>
-			REQUESTED BY: [idname]<br>
-			RANK: [idrank]<br>
-			REASON: [reason]<br>
-			SUPPLY CRATE TYPE: [P.name]<br>
-			NUMBER OF CRATES: [crates]<br>
-			ACCESS RESTRICTION: [get_access_desc(P.access)]<br>
-			CONTENTS:<br>"}
-		reqform.info += P.manifest
-		reqform.info += {"<hr>
-			STAMP BELOW TO APPROVE THIS REQUISITION:<br>"}
-		reqform.update_icon()	//Fix for appearing blank when printed.
+		new /obj/item/weapon/paper/request_form(loc, current_acct, P, crates, reason)
 		reqtime = (world.time + 5) % 1e5
 		//make our supply_order datum
 		for(var/i = 1; i <= crates; i++)
@@ -339,6 +361,7 @@ For vending packs, see vending_packs.dm*/
 			O.ordernum = SSsupply_shuttle.ordernum
 			O.object = P
 			O.orderedby = idname
+			O.authorized_name = current_acct["authorized_name"]
 			O.account = account
 			O.comment = reason
 
@@ -383,7 +406,7 @@ For vending packs, see vending_packs.dm*/
 		if(!check_restriction(usr))
 			return
 		SSsupply_shuttle.requisition = text2num(href_list["requisition_status"])
-		attack_hand(usr)
+		current_acct = get_account_info(usr, linked_db)
 		return 1
 	else if (href_list["screen"])
 		if(!check_restriction(usr))
@@ -393,13 +416,10 @@ For vending packs, see vending_packs.dm*/
 			screen = result
 		return 1
 	else if (href_list["close"])
-		current_authorized_name = ""
 		current_acct = null
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
-
-	add_fingerprint(usr)
 
 /obj/machinery/computer/supplycomp/proc/post_signal(var/command)
 
@@ -423,9 +443,7 @@ For vending packs, see vending_packs.dm*/
 	circuit = "/obj/item/weapon/circuitboard/ordercomp"
 	var/reqtime = 0 //Cooldown for requisitions - Quarxink
 	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
-	var/datum/money_account/current_acct
-	var/current_authorized_name = ""
-	var/last_user = null
+	var/list/current_acct
 	light_color = LIGHT_COLOR_BROWN
 
 /obj/machinery/computer/ordercomp/New()
@@ -442,37 +460,7 @@ For vending packs, see vending_packs.dm*/
 /obj/machinery/computer/ordercomp/attack_hand(var/mob/user as mob)
 	if(..())
 		return
-	
-	last_user = user
-
-	if((!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER)) && !isAdminGhost(user))
-		to_chat(user, "<span class='warning'>Account database connection lost. Please retry.</span>")
-		return
-	
-	if(issilicon(user) || isAdminGhost(user))
-		current_acct = user.get_worn_id_account()
-		if(issilicon(user))
-			current_authorized_name = user.name
-		else
-			current_authorized_name = ""
-	else
-		current_acct = null
-		var/obj/item/weapon/card/card = user.get_card()
-
-		if(!card) // Don't do anything if they don't have an card they can use
-			to_chat(user, "<span class='warning'>Please present a valid card.</span>")
-			return
-
-		current_acct = linked_db.get_account(card.associated_account_number)
-
-		if(!current_acct)
-			to_chat(user, "<span class='warning'>[bicon(card)] [card] does not have a valid account number.</span>")
-
-		if(istype(card, /obj/item/weapon/card/debit))
-			var/obj/item/weapon/card/debit/debit_card = card
-			current_authorized_name = debit_card.authorized_name
-		else
-			current_authorized_name = ""
+	current_acct = get_account_info(user, linked_db)
 	
 	user.set_machine(src)
 	ui_interact(user)
@@ -518,9 +506,9 @@ For vending packs, see vending_packs.dm*/
 			if(I && SO.orderedby == I.registered_name)
 				orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name)))
 	data["orders"] = orders_list
-	data["name_of_source_account"] = current_acct.owner_name
-	data["authorized_name"] = current_authorized_name
-	data["money"] = current_acct.fmtBalance()
+	data["name_of_source_account"] = current_acct["account"].owner_name
+	data["authorized_name"] = current_acct["authorized_name"]
+	data["money"] = current_acct["account"].fmtBalance()
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
@@ -531,21 +519,15 @@ For vending packs, see vending_packs.dm*/
 /obj/machinery/computer/ordercomp/Topic(href, href_list)
 	if(..())
 		return 1
-
-	if( isturf(loc) && (in_range(src, usr) || istype(usr, /mob/living/silicon)) )
-		usr.set_machine(src)
-
-	if(last_user != usr)
-		attack_hand(usr)
-	var/list/account_info = get_account_info(usr)
-	if(!account_info)
-		to_chat(usr, "<span class='warning'>Please present a valid ID.</span>")
+	add_fingerprint(usr)
+	current_acct = get_account_info(usr, linked_db)
+	var/idname
+	var/datum/money_account/account
+	if(!current_acct && !href_list["close"])
 		return
-	var/idname = account_info["idname"]
-	var/idrank = account_info["idrank"]
-	var/datum/money_account/account = current_acct
-	if(!account)
-		to_chat(usr, "<span class='warning'>No account.</span>")
+	else
+		idname = current_acct["idname"]
+		account = current_acct["account"]
 
 	if (href_list["doorder"])
 		if(world.time < reqtime)
@@ -588,23 +570,7 @@ For vending packs, see vending_packs.dm*/
 		if(!reason)
 			return
 
-		var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(loc)
-		reqform.name = "[P.name] Requisition Form - [idname], [idrank]"
-
-		reqform.info += {"<h3>[station_name] Supply Requisition Form</h3><hr>
-			INDEX: #[SSsupply_shuttle.ordernum]<br>
-			REQUESTED BY: [idname]<br>
-			RANK: [idrank]<br>
-			REASON: [reason]<br>
-			SUPPLY CRATE TYPE: [P.name]<br>
-			NUMBER OF CRATES: [crates]<br>
-			ACCESS RESTRICTION: [get_access_desc(P.access)]<br>
-			CONTENTS:<br>"}
-		reqform.info += P.manifest
-
-		reqform.info += {"<hr>
-			STAMP BELOW TO APPROVE THIS REQUISITION:<br>"}
-		reqform.update_icon()	//Fix for appearing blank when printed.
+		new /obj/item/weapon/paper/request_form(loc, current_acct, P, crates, reason)
 		reqtime = (world.time + 5) % 1e5
 
 		//make our supply_order datum
@@ -614,6 +580,7 @@ For vending packs, see vending_packs.dm*/
 			O.ordernum = SSsupply_shuttle.ordernum
 			O.object = P
 			O.orderedby = idname
+			O.authorized_name = current_acct["authorized_name"]
 			O.account = account
 			O.comment = reason
 			SSsupply_shuttle.requestlist += O
@@ -634,13 +601,10 @@ For vending packs, see vending_packs.dm*/
 				break
 		return 1
 	else if (href_list["close"])
-		current_authorized_name = ""
 		current_acct = null
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
-
-	add_fingerprint(usr)
 
 #undef SCR_MAIN
 #undef SCR_CENTCOM
