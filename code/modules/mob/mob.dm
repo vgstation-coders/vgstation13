@@ -2145,5 +2145,8 @@ mob/proc/on_foot()
 
 	return 0
 
+/mob/proc/handle_regular_hud_updates()
+	return
+
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING
