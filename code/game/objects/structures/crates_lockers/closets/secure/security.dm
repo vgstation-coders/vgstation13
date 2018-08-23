@@ -128,8 +128,8 @@
 	new /obj/item/weapon/storage/belt/security(src)
 	new /obj/item/device/flash(src)
 	new /obj/item/weapon/melee/baton/loaded(src)
-	new /obj/item/weapon/storage/lockbox/lawgiver(src)
-	new /obj/item/ammo_storage/magazine/lawgiver(src)
+	var/obj/lblg = new /obj/item/weapon/storage/lockbox/lawgiver(src)
+	new /obj/item/ammo_storage/magazine/lawgiver(lblg)
 	new /obj/item/clothing/accessory/holster/handgun/waist(src)
 	new /obj/item/weapon/melee/telebaton(src)
 	new /obj/item/device/gps/secure(src)
@@ -139,17 +139,6 @@
 	new /obj/item/weapon/reagent_containers/spray/pepper(src)
 	new /obj/item/weapon/gun/energy/taser(src)
 	new /obj/item/weapon/card/debit/preferred/department(src, "Security")
-
-// TODO: Add this object to a map and move attire related garbage here.
-/obj/structure/closet/secure_closet/hos2
-	name = "Head of Security's Attire -- SEE COMMENT"
-	req_access = list(access_hos)
-	icon_state = "hossecure1"
-	icon_closed = "hossecure"
-	icon_locked = "hossecure1"
-	icon_opened = "hossecureopen"
-	icon_broken = "hossecurebroken"
-	icon_off = "hossecureoff"
 
 /obj/structure/closet/secure_closet/warden
 	name = "Warden's Locker"
