@@ -377,7 +377,7 @@
 	return //TODO: DEFERRED
 
 
-/mob/living/carbon/complex/proc/handle_regular_hud_updates()
+/mob/living/carbon/complex/handle_regular_hud_updates()
 	if(!client)
 		return
 

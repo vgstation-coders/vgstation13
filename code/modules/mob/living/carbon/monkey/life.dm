@@ -643,7 +643,7 @@
 	return 1
 
 
-/mob/living/carbon/monkey/proc/handle_regular_hud_updates()
+/mob/living/carbon/monkey/handle_regular_hud_updates()
 	if(!client)
 		return
 

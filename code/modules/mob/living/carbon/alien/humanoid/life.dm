@@ -380,7 +380,7 @@
 		return 1
 
 
-	proc/handle_regular_hud_updates()
+	handle_regular_hud_updates()
 
 
 		if (stat == 2 || (M_XRAY in mutations))
