@@ -116,7 +116,7 @@
 					if(stance_step in list(1,4,7)) //every 3 ticks
 						var/action = pick( list( "growls at [target]", "stares angrily at [target]", "prepares to attack [target]", "closely watches [target]" ) )
 						if(action)
-							emote(action)
+							emote("me",, action)
 			if(!found_mob)
 				stance_step--
 
@@ -127,7 +127,7 @@
 
 		if(HOSTILE_STANCE_ATTACKING)
 			if(stance_step >= 20)	//attacks for 20 ticks, then it gets tired and needs to rest
-				emote( "is worn out and needs to rest" )
+				emote("me",,"is worn out and needs to rest" )
 				stance = HOSTILE_STANCE_TIRED
 				stance_step = 0
 				walk(src, 0) //This stops the bear's walking
@@ -161,7 +161,7 @@
 /mob/living/simple_animal/hostile/bear/FindTarget()
 	. = ..()
 	if(.)
-		emote("stares alertly at [.]")
+		emote("me",,"stares alertly at [.].")
 		stance = HOSTILE_STANCE_ALERT
 
 /mob/living/simple_animal/hostile/bear/LoseTarget()

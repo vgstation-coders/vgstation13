@@ -100,7 +100,7 @@
 		..()
 
 /obj/machinery/bunsen_burner/process()
-	if(held_container && heating == BUNSEN_ON)
+	if(heating == BUNSEN_ON)
 		var/turf/T = get_turf(src)
 		var/datum/gas_mixture/G = T.return_air()
 		if(!G || G.molar_density("oxygen") < 0.1 / CELL_VOLUME)
@@ -126,7 +126,8 @@
 				co2_consumption = fuel_stats["co2_cons"]
 
 				reagents.remove_reagent(possible_fuel, consumption_rate)
-				held_container.reagents.heating(thermal_energy_transfer, max_temperature)
+				if(held_container)
+					held_container.reagents.heating(thermal_energy_transfer, max_temperature)
 				G.adjust(o2 = -o2_consumption, co2 = -co2_consumption)
 				if(prob(unsafety) && T)
 					T.hotspot_expose(max_temperature, 5)
@@ -161,7 +162,7 @@
 	set name = "Toggle bunsen burner"
 	set category = "Object"
 
-	if (!usr.Adjacent(src) || usr.incapacitated())
+	if ((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
 		return
 
 	toggle()
@@ -180,16 +181,14 @@
 
 
 /obj/machinery/bunsen_burner/AltClick()
-	toggle()
+	verb_toggle()
 
 /obj/machinery/bunsen_burner/verb/verb_toggle_fuelport()
 	set src in view(1)
 	set name = "Toggle Bunsen burner fuelport"
 	set category = "Object"
 
-	if(isjustobserver(usr))
-		return
-	if(!usr.Adjacent(src) || usr.incapacitated())
+	if((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
 		return
 
 	toggle_fuelport(usr)

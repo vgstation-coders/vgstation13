@@ -327,15 +327,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(act == "scream")
 		desc = "makes a loud and pained whimper!"  //ugly hack to stop animals screaming when crushed :P
 		act = "me"
-	if(!desc && act != "me")
-		desc = "[act]."
-		act = "me"
 	..(act, type, desc)
 
-/mob/living/simple_animal/check_emote(message)
-	if(copytext(message, 1, 2) == "*")
-		to_chat(src, "<span class = 'notice'>This type of mob doesn't support this. Use the Me verb instead.</span>")
-		return 1
 
 /mob/living/simple_animal/proc/handle_automated_speech()
 
@@ -392,10 +385,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 		if(I_GRAB)
 			M.grab_mob(src)
-		
+
 		if(I_DISARM)
 			visible_message("<span class ='notice'>[M] [response_disarm] [src].</span>")
-		
+
 		if(I_HURT)
 			M.unarmed_attack_mob(src)
 			//adjustBruteLoss(harm_intent_damage)
@@ -752,8 +745,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		walk(src,0)
 	return !spaced
 
-/mob/living/simple_animal/say()
-	if(speak_override)
+/mob/living/simple_animal/say(message, bubble_type)
+	if(speak_override && copytext(message, 1, 2) != "*")
 		return ..(pick(speak))
 	else
 		return ..()

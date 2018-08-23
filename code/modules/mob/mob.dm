@@ -1486,7 +1486,7 @@ var/list/slot_equipment_priority = list( \
 			else if(statpanel(listed_turf.name))
 				statpanel(listed_turf.name, null, listed_turf)
 				for(var/atom/A in listed_turf)
-					if(!A.mouse_opacity)
+					if(!A.mouse_opacity && !A.name)
 						continue
 					if(A.invisibility > see_invisible)
 						continue
