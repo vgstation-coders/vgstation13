@@ -132,7 +132,7 @@
 /mob/living/simple_animal/hostile/mannequin/cult/CanAttack(var/atom/the_target)
 	if(ismob(the_target))
 		var/mob/M = the_target
-		if(iscultist(M))
+		if(isanycultist(M))
 			return 0
 	return ..(the_target)
 

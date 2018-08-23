@@ -83,7 +83,6 @@
 
 /datum/gamemode/proc/PopulateFactions()
 	var/list/available_players = get_ready_players()
-
 	for(var/datum/faction/F in factions)
 		for(var/mob/new_player/P in available_players)
 			if(F.max_roles && F.members.len >= F.max_roles)

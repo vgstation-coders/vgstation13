@@ -176,7 +176,7 @@
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
-#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune))
+#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy))
 
 #define ismatrix(A) (istype(A, /matrix))
 
@@ -202,6 +202,10 @@
 #define hasFactionIcons(H) (H.mind && H.mind.hasFactionsWithHUDIcons())
 
 #define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
+
+#define islegacycultist(H) (H.mind && H.mind.GetRole(LEGACY_CULTIST))
+
+#define isanycultist(H) (H.mind && (H.mind.GetRole(LEGACY_CULTIST) || H.mind.GetRole(CULTIST)))
 
 #define ischangeling(H) (H.mind && H.mind.GetRole(CHANGELING))
 

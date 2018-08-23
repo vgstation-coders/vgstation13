@@ -127,6 +127,20 @@
 	return isAdminGhost(src) ? get_all_accesses() : list()
 
 /mob/dead/attackby(obj/item/W, mob/user)
+// Legacy Cult stuff
+	if(istype(W,/obj/item/weapon/tome_legacy))
+		var/mob/dead/M = src
+		if(src.invisibility != 0)
+			M.invisibility = 0
+	if(istype(W,/obj/item/weapon/tome))
+		if(invisibility != 0 || icon_state != "ghost-narsie")
+			cultify()
+			user.visible_message(
+				"<span class='warning'>[user] drags a ghost to our plane of reality!</span>",
+				"<span class='warning'>You drag a ghost to our plane of reality!</span>"
+			)
+		return
+    // Big boy modern Cult 3.0 stuff
 	if (iscultist(user))
 		if(istype(W,/obj/item/weapon/tome))
 			if(invisibility != 0 || icon_state != "ghost-narsie")
@@ -185,9 +199,6 @@
 					var/mob/living/carbon/human/M = user
 					if(!(M.dna.unique_enzymes in W.blood_DNA))
 						W.blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
-
-
-
 
 	if(istype(W,/obj/item/weapon/storage/bible) || istype(W,/obj/item/weapon/nullrod))
 		var/mob/dead/M = src
@@ -452,8 +463,14 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		to_chat(usr, "<span class='warning'>Another consciousness is in your body...It is resisting you.</span>")
 		return
 	if(mind.current.ajourn && mind.current.stat != DEAD) 	//check if the corpse is astral-journeying (it's client ghosted using a cultist rune).
-		var/obj/effect/rune/R = mind.current.ajourn	//whilst corpse is alive, we can only reenter the body if it's on the rune
-		if(!(R && R.word1 == cultwords["hell"] && R.word2 == cultwords["travel"] && R.word3 == cultwords["self"]))	//astral journeying rune
+		var/obj/effect/rune_legacy/R = mind.current.ajourn	//whilst corpse is alive, we can only reenter the body if it's on the rune
+		var/datum/faction/cult/narsie/blood_cult = find_active_faction(LEGACY_CULT)
+		var/list/cultwords
+		if (istype(blood_cult))
+			cultwords = blood_cult.cult_words
+		else
+			cultwords = null
+		if(cultwords && !(R && R.word1 == cultwords["hell"] && R.word2 == cultwords["travel"] && R.word3 == cultwords["self"]))	//astral journeying rune
 			to_chat(usr, "<span class='warning'>The astral cord that ties your body and your spirit has been severed. You are likely to wander the realm beyond until your body is finally dead and thus reunited with you.</span>")
 			return
 	completely_untransmogrify()
@@ -547,7 +564,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	var/list/L = list()
 	var/holyblock = 0
 
-	if((usr.invisibility == 0) || iscultist(usr))
+	if((usr.invisibility == 0) || islegacycultist(usr))
 		for(var/turf/T in get_area_turfs(thearea.type))
 			if(!T.holy)
 				L+=T
@@ -593,7 +610,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
 			to_chat(usr, "<span class='sinister'>You can sense a sinister force surrounding that mob, your spooky body itself refuses to follow it.</span>")
 			return
-		if(targetloc && targetloc.holy && (!invisibility || iscultist(src)))
+		if(targetloc && targetloc.holy && (!invisibility || islegacycultist(src)))
 			to_chat(usr, "<span class='warning'>You cannot follow a mob standing on holy grounds!</span>")
 			return
 		if(target != src)
@@ -635,7 +652,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
 				to_chat(usr, "<span class='sinister'>You can sense a sinister force surrounding that mob, your spooky body itself refuses to jump to it.</span>")
 				return
-			if(targetloc && targetloc.holy && ((src.invisibility == 0) || iscultist(src)))
+			if(targetloc && targetloc.holy && ((src.invisibility == 0) || islegacycultist(src)))
 				to_chat(usr, "<span class='warning'>The mob that you are trying to follow is standing on holy grounds, you cannot reach him!</span>")
 				return
 			var/mob/M = dest[target] //Destination mob
@@ -802,7 +819,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return 0 //something is terribly wrong
 
 	var/ghosts_can_write
-	var/datum/faction/C = find_active_faction(BLOODCULT)
+	var/datum/faction/C = find_active_faction(LEGACY_CULT)
 	if(C && C.members.len > config.cult_ghostwriter_req_cultists)
 		ghosts_can_write = 1
 

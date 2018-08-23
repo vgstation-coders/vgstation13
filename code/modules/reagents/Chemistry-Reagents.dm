@@ -940,6 +940,12 @@
 			else if (prob(30))
 				H.confused = 2
 			H.eye_blurry = max(H.eye_blurry, 3)
+		if (islegacycultist(H))
+			if (prob(10))
+				var/datum/role/legacy_cultist/LC = H.mind.GetRole(LEGACY_CULTIST)
+				LC.Drop()
+			else
+				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your arcane knowledge is becoming obscure again.</span>")
 		//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
 		var/datum/role/vampire/V = isvampire(H)
 		if(V)

@@ -25,3 +25,17 @@
 				if(get_turf(player) in shuttle)
 					return FALSE
 	return TRUE
+
+/datum/objective/hijack/cult
+	explanation_text = "Nar-Sie wishes for his troops to start the assault on Centcom immediately. Hijack the escape shuttle and don't let a single unbeliever board it."
+	flags =  FACTION_OBJECTIVE
+
+/datum/objective/hijack/cult/IsFulfilled()
+	for(var/mob/living/L in player_list)
+		if(L.stat != DEAD)
+			if(!islegacycultist(L))
+				var/turf/T = get_turf(L)
+				if(istype(T.loc, /area/shuttle/escape/centcom))
+					return FALSE
+				else if(istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))
+					return FALSE
