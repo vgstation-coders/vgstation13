@@ -28,6 +28,7 @@ For vending packs, see vending_packs.dm*/
 		var/datum/money_account/bank_account
 		if(REQUISITION)
 			bank_account = department_accounts["Cargo"]
+			acc_info["check"] = FALSE
 		else
 			// Humans, or really physical people at the terminal, can present a debit card. Let's find one or just find the same ID.
 			var/obj/item/weapon/card/debit/debit_card = user.get_card()
@@ -43,12 +44,15 @@ For vending packs, see vending_packs.dm*/
 			if(!bank_account)
 				to_chat(user, "<span class='warning'>A valid bank account does not exist for \the [using_debit ? "[bicon(debit_card)] [debit_card]" : "[bicon(usr_id)] [usr_id]"]. Please try a different card.</span>")
 				return
+			acc_info["card"] = using_debit ? debit_card : usr_id
+			acc_info["check"] = TRUE
 		acc_info["idname"] = usr_id.registered_name
 		acc_info["idrank"] = usr_id.GetJobName()
 		acc_info["account"] = bank_account
 	else if(isAdminGhost(user))
 		acc_info["idname"] = "Commander Green"
 		acc_info["idrank"] = "Central Commander"
+		acc_info["check"] = FALSE
 		if(REQUISITION)
 			USE_CARGO_ACCOUNT
 		else
@@ -56,6 +60,7 @@ For vending packs, see vending_packs.dm*/
 	else if(isAI(user))
 		acc_info["idname"] = user.real_name
 		acc_info["idrank"] = "AI"
+		acc_info["check"] = FALSE
 		if(ACCOUNT_DB_OFFLINE)
 			MENTION_DB_OFFLINE
 			return
@@ -66,6 +71,7 @@ For vending packs, see vending_packs.dm*/
 	else if(issilicon(user))
 		acc_info["idname"] = user.real_name
 		acc_info["idrank"] = "Cyborg"
+		acc_info["check"] = FALSE
 		if(ACCOUNT_DB_OFFLINE)
 			MENTION_DB_OFFLINE
 			return
@@ -215,6 +221,8 @@ For vending packs, see vending_packs.dm*/
 		return ..()
 
 /obj/machinery/computer/supplycomp/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
+	if(!current_acct)
+		return
 	// data to send to ui
 	var/data[0]
 	// make assoc list for supply groups because either I'm retarded or nanoui is retarded
@@ -327,6 +335,11 @@ For vending packs, see vending_packs.dm*/
 		var/datum/supply_packs/P = SSsupply_shuttle.supply_packs[pack_name]
 		if(!istype(P))
 			return
+		
+		if(current_acct["check"] && charge_flow_verify_security(linked_db, current_acct["card"], usr, account) != CARD_CAPTURE_SUCCESS)
+			to_chat(usr, "<span class='warning'>Security violation when attempting to authenticate with bank account.</span>")
+			return
+		
 		var/crates = 1
 		if(multi)
 			var/tempcount = input(usr, "Amount:", "How many crates?", "") as num
@@ -461,13 +474,15 @@ For vending packs, see vending_packs.dm*/
 	if(..())
 		return
 	current_acct = get_account_info(user, linked_db)
-	
+
 	user.set_machine(src)
 	ui_interact(user)
 	onclose(user, "computer")
 	return
 
 /obj/machinery/computer/ordercomp/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
+	if(!current_acct)
+		return
 	// ui data
 	var/data[0]
 	// make assoc list for supply groups because either I'm retarded or nanoui is retarded
@@ -544,6 +559,11 @@ For vending packs, see vending_packs.dm*/
 		var/datum/supply_packs/P = SSsupply_shuttle.supply_packs[pack_name]
 		if(!istype(P))
 			return
+		
+		if(current_acct["check"] && charge_flow_verify_security(linked_db, current_acct["card"], usr, account) != CARD_CAPTURE_SUCCESS)
+			to_chat(usr, "<span class='warning'>Security violation when attempting to authenticate with bank account.</span>")
+			return
+		
 		var/crates = 1
 		if(multi)
 			var/num_input = input(usr, "Amount:", "How many crates?", "") as num
