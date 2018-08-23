@@ -31,6 +31,7 @@
 		new /obj/item/weapon/melee/telebaton(src)
 		new /obj/item/clothing/under/dress/dress_cap(src)
 		new /obj/item/device/gps/secure(src)
+		new /obj/item/weapon/card/debit/preferred/department/elite(src, "Command")
 
 		return
 
@@ -59,6 +60,7 @@
 		new /obj/item/weapon/gun/energy/gun(src)
 		new /obj/item/device/flash(src)
 		new /obj/item/device/gps/secure(src)
+		new /obj/item/weapon/card/debit/preferred/department(src, "Civilian")
 		return
 
 /obj/structure/closet/secure_closet/hop2
@@ -137,6 +139,7 @@
 	new /obj/item/weapon/reagent_containers/spray/pepper(src)
 	new /obj/item/weapon/grenade/flashbang(src)
 	new /obj/item/weapon/gun/energy/taser(src)
+	new /obj/item/weapon/card/debit/preferred/department(src, "Security")
 
 /obj/structure/closet/secure_closet/warden
 	name = "Warden's Locker"

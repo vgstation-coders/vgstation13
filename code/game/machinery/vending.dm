@@ -482,12 +482,14 @@ var/global/num_vending_terminals = 1
 		if(account_first_linked && linked_account) // Account check
 			if(!user.Adjacent(src))
 				return 0
-			if(!user.Adjacent(src))
-				return 0
-			if(W.get_owner_name_from_ID() != linked_account.owner_name)
-				to_chat(user, "[bicon(src)]<span class='warning'>Access denied. Your ID doesn't match the vending machine's connected account.</span>")
-				return 0
+			var/obj/item/weapon/card/card_swiped = W
 			visible_message("<span class='info'>[user] swipes a card through [src].</span>")
+			if(card_swiped.associated_account_number != linked_account.account_number)
+				to_chat(user, "[bicon(src)]<span class='warning'> Access denied. Your ID doesn't match the vending machine's connected account.</span>")
+				return 0
+			else if (!edit_mode && charge_flow_verify_security(linked_db, card_swiped, user, null, TRUE) != CARD_CAPTURE_SUCCESS)
+				to_chat(user, "[bicon(src)]<span class='warning'> Access denied. Security Violation.</span>")
+				return 0
 			edit_mode = !edit_mode
 			src.updateUsrDialog()
 			return
@@ -571,7 +573,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/scan_card(var/obj/item/weapon/card/I)
 	if(!currently_vending)
 		return
-	if (istype(I, /obj/item/weapon/card/id))
+	if (istype(I, /obj/item/weapon/card))
 		var/charge_response = charge_flow(linked_db, I, usr, currently_vending.price - credits_held, linked_account, "Purchase of [currently_vending.product_name]", src.name, machine_id)
 		switch(charge_response)
 			if(CARD_CAPTURE_SUCCESS)
@@ -916,7 +918,7 @@ var/global/num_vending_terminals = 1
 		src.currently_vending = null
 
 	else if (href_list["buy"])
-		var/obj/item/weapon/card/card = usr.get_id_card()
+		var/obj/item/weapon/card/card = usr.get_card()
 		if(card)
 			connect_account(usr, card)
 		else
