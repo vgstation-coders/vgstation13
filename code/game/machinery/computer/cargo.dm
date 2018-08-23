@@ -322,9 +322,6 @@ For vending packs, see vending_packs.dm*/
 			post_signal("supply")
 		return 1
 	else if (href_list["doorder"])
-		if(current_acct["check"] && charge_flow_verify_security(linked_db, current_acct["card"], usr, account) != CARD_CAPTURE_SUCCESS)
-			to_chat(usr, "<span class='warning'>Security violation when attempting to authenticate with bank account.</span>")
-			return
 		if(world.time < reqtime)
 			for(var/mob/V in hearers(src))
 				V.show_message("<b>[src]</b>'s monitor flashes, \"[world.time - reqtime] seconds remaining until another requisition form may be printed.\"")
@@ -338,6 +335,11 @@ For vending packs, see vending_packs.dm*/
 		var/datum/supply_packs/P = SSsupply_shuttle.supply_packs[pack_name]
 		if(!istype(P))
 			return
+		
+		if(current_acct["check"] && charge_flow_verify_security(linked_db, current_acct["card"], usr, account) != CARD_CAPTURE_SUCCESS)
+			to_chat(usr, "<span class='warning'>Security violation when attempting to authenticate with bank account.</span>")
+			return
+		
 		var/crates = 1
 		if(multi)
 			var/tempcount = input(usr, "Amount:", "How many crates?", "") as num
@@ -543,9 +545,6 @@ For vending packs, see vending_packs.dm*/
 		account = current_acct["account"]
 
 	if (href_list["doorder"])
-		if(current_acct["check"] && charge_flow_verify_security(linked_db, current_acct["card"], usr, account) != CARD_CAPTURE_SUCCESS)
-			to_chat(usr, "<span class='warning'>Security violation when attempting to authenticate with bank account.</span>")
-			return
 		if(world.time < reqtime)
 			for(var/mob/V in hearers(src))
 				V.show_message("<b>[src]</b>'s monitor flashes, \"[world.time - reqtime] seconds remaining until another requisition form may be printed.\"")
@@ -560,6 +559,11 @@ For vending packs, see vending_packs.dm*/
 		var/datum/supply_packs/P = SSsupply_shuttle.supply_packs[pack_name]
 		if(!istype(P))
 			return
+		
+		if(current_acct["check"] && charge_flow_verify_security(linked_db, current_acct["card"], usr, account) != CARD_CAPTURE_SUCCESS)
+			to_chat(usr, "<span class='warning'>Security violation when attempting to authenticate with bank account.</span>")
+			return
+		
 		var/crates = 1
 		if(multi)
 			var/num_input = input(usr, "Amount:", "How many crates?", "") as num
