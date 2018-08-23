@@ -1192,6 +1192,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/coffee = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/mug = 10
 		)
+	premium = list(
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/pwine = 1
+	)
 	product_slogans = list(
 		"I hope nobody asks me for a bloody cup o' tea...",
 		"Alcohol is humanity's friend. Would you abandon a friend?",
