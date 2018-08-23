@@ -137,9 +137,19 @@
 	new /obj/item/taperoll/police(src)
 	new /obj/item/device/hailer(src)
 	new /obj/item/weapon/reagent_containers/spray/pepper(src)
-	new /obj/item/weapon/grenade/flashbang(src)
 	new /obj/item/weapon/gun/energy/taser(src)
 	new /obj/item/weapon/card/debit/preferred/department(src, "Security")
+
+// TODO: Add this object to a map and move attire related garbage here.
+/obj/structure/closet/secure_closet/hos2
+	name = "Head of Security's Attire -- SEE COMMENT"
+	req_access = list(access_hos)
+	icon_state = "hossecure1"
+	icon_closed = "hossecure"
+	icon_locked = "hossecure1"
+	icon_opened = "hossecureopen"
+	icon_broken = "hossecurebroken"
+	icon_off = "hossecureoff"
 
 /obj/structure/closet/secure_closet/warden
 	name = "Warden's Locker"
