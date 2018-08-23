@@ -5308,8 +5308,7 @@
 		return 1
 	M.take_organ_damage(REM, 0) //Drinking a glass of live spiders is bad for you.
 	if(holder.get_reagent_amount(SPIDERS)>=4) //The main reason we need to have a minimum cost rather than just high custom metabolism is so that someone can't give themselves an IV of spiders for "fun"
-		var/calculate_offset = locate(M.x + pick(1,-1), M.y, M.z)
-		new /mob/living/simple_animal/hostile/giant_spider/spiderling(calculate_offset)
+		new /mob/living/simple_animal/hostile/giant_spider/spiderling(get_turf(M))
 		holder.remove_reagent(SPIDERS,4)
 		M.emote("scream", , , 1)
 		M.visible_message("<span class='warning'>[M] recoils as a spider emerges from \his mouth!</span>")
