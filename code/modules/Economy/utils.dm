@@ -130,6 +130,8 @@ var/global/no_pin_for_debit = TRUE
 		else
 			to_chat(user, "[bicon(src)] <span class='warning'>Internal Error.</span>")
 			return CARD_CAPTURE_FAILURE_GENERAL
+	if(card)
+		to_chat(user, "[bicon(src)] <span class='notice'>Using \the [bicon(card)] [card] to authenticate transaction...</span>")
 	if(card && card.associated_account_number != account.account_number)
 		// Using card, but account number doesn't match what's on the card.
 		to_chat(user, "[bicon(src)] <span class='warning'>The account information on \the [bicon(card)] does not match the requested account.</span>")
@@ -159,9 +161,9 @@ var/global/no_pin_for_debit = TRUE
 				return CARD_CAPTURE_FAILURE_USER_CANCELED
 			if(account_pin == null)
 				// If the user canceled, fail.
-				visible_message("<span class='info'>[user] firmly presses 'CANCEL' on [src]'s PIN pad.</span>")
+				visible_message("<span class='info'>[user] firmly presses 'CANCEL' on \the [src]'s PIN pad.</span>")
 				return CARD_CAPTURE_FAILURE_USER_CANCELED
-			visible_message("<span class='info'>[user] enters some digits into [src]'s PIN pad.</span>")
+			visible_message("<span class='info'>[user] enters some digits into \the [src]'s PIN pad.</span>")
 			if(account_pin != account.remote_access_pin)
 				// If the pin does not match the account pin, fail.
 				to_chat(user, "[bicon(src)] <span class='warning'>Bad account/pin combination.</span>")
@@ -281,10 +283,10 @@ var/global/no_pin_for_debit = TRUE
 			
 		if(account_number == null)
 			// If the user canceled, fail.
-			visible_message("<span class='info'>[user] firmly presses 'CANCEL' on [src]'s PIN pad.</span>")
+			visible_message("<span class='info'>[user] firmly presses 'CANCEL' on \the [src]'s PIN pad.</span>")
 			return CARD_CAPTURE_FAILURE_USER_CANCELED
 
-		visible_message("<span class='info'>[user] enters some digits into [src]'s PIN pad.</span>")
+		visible_message("<span class='info'>[user] enters some digits into \the [src]'s PIN pad.</span>")
 		primary_money_account = linked_db.get_account(account_number)
 		if(!primary_money_account)
 			// Couldn't find a matching account so fail.
