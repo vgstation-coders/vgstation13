@@ -296,6 +296,7 @@
 	anchored = 0
 	undeploy_path = /obj/item/inflatable/shelter
 	ctrl_deflate = FALSE
+	var/list/exiting = list()
 	var/datum/gas_mixture/cabin_air
 
 /obj/structure/inflatable/shelter/New()
@@ -309,6 +310,10 @@
 
 /obj/structure/inflatable/shelter/examine(mob/user)
 	..()
+	if(!(user.loc == src))
+		to_chat(user, "<span class='notice'>Click to enter. Use grab on shelter to force target inside.</span>")
+	else
+		to_chat(user, "<span class='notice'>Click to package contaminated clothes. Resist to exit/cancel exit.</span>")
 	var/list/living_contents = list()
 	for(var/mob/living/L in contents)
 		living_contents += L.name //Shelters can frequently end up with dropped items because people fall asleep.
@@ -373,12 +378,12 @@
 	user.forceMove(src)
 	update_icon()
 	user.reset_view()
-	user.reagents.add_reagent(STOXIN,3)
-	user.reagents.add_reagent(KELOTANE,4)
-	user.reagents.add_reagent(PEPTOBISMOL,4)
-	user.reagents.add_reagent(TRAMADOL,3)
-	user.reagents.add_reagent(LEPORAZINE,1)
-	to_chat(user,"<span class='warning'>You feel a prick upon entering \the [src] and your muscles relax.</span>")
+	if(!user.reagents.has_reagent(PRESLOMITE))
+		user.reagents.add_reagent(PRESLOMITE,3)
+		user.reagents.add_reagent(LEPORAZINE,1)
+		to_chat(user,"<span class='warning'>You feel a prick upon entering \the [src].</span>")
+	else
+		to_chat(user,"<span class='notice'>You enter \the [src].</span>")
 
 /obj/structure/inflatable/shelter/proc/laundry(var/mob/living/carbon/human/user)
 	if(user.loc != src)
@@ -421,10 +426,16 @@
 	..()
 
 /obj/structure/inflatable/shelter/container_resist(mob/user)
-	user.delayNext(DELAY_ALL,10 SECONDS)
+	if(exiting.Find(user))
+		exiting -= user
+		to_chat(user,"<span class='warning'>You stop climbing free of \the [src].</span>")
+		return
 	visible_message("<span class='warning'>[user] begins to climb free of the \the [src]!</span>")
-	spawn(10 SECONDS)
-		if(loc)
+	exiting += user
+	spawn(6 SECONDS)
+		if(loc && exiting.Find(user)) //If not loc, it was probably deflated
 			user.forceMove(loc)
+			exiting -= user
 			update_icon()
-		//If not loc, it was probably deflated
+			to_chat(user,"<span class='notice'>You climb free of the shelter.</span>")
+

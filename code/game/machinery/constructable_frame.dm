@@ -1264,6 +1264,17 @@ obj/item/weapon/circuitboard/rdserver
 	desc = "A circuit board used to run a machine that smelts items into mineral sheets."
 	build_path = /obj/machinery/mineral/processing_unit/recycle
 
+/obj/item/weapon/circuitboard/coin_press
+	name = "Circuit Board (Coin Press)"
+	desc = "A circuit board used to run a machine that produces coins from mineral sheets."
+	build_path = /obj/machinery/mineral/mint
+	board_type = MACHINE
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2"
+	req_components = list(
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/matter_bin = 1,
+							/obj/item/weapon/stock_parts/micro_laser = 1)
+
 /obj/item/weapon/circuitboard/stacking_unit
 	name = "Circuit Board (Stacking Machine)"
 	desc = "A circuit board used to run a machine that stacks mineral sheets."
@@ -1382,6 +1393,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/fishtank
 	name = "Circuit Board (Fishtank Filter)"
+	desc = "A circuit board used to run a machine that holds fish"
 	build_path = /obj/machinery/fishtank/tank
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=1"
@@ -1390,6 +1402,7 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/fishwall
 	name = "Circuit Board (Large Fishtank Filter)"
+	desc = "A circuit board used to run a machine that holds fish and acts as a wall"
 	build_path = /obj/machinery/fishtank/wall
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=1"
@@ -1398,8 +1411,20 @@ obj/item/weapon/circuitboard/rdserver
 
 /obj/item/weapon/circuitboard/conduction_plate
 	name = "Circuit Board (Conduction Plate)"
+	desc = "A circuit board used to run a machine that can be placed under a fishtank to conduct electricity from electric eels"
 	build_path = /obj/machinery/power/conduction_plate
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=1;" + Tc_ENGINEERING + "=4"
 	req_components = list(
 							/obj/item/weapon/stock_parts/capacitor = 1)
+
+/obj/item/weapon/circuitboard/holopad
+	name = "Circuit Board (Holopad)"
+	desc = "A circuit board used to run a machine that allows AIs to project holograms in areas"
+	build_path = /obj/machinery/hologram/holopad
+	board_type = MACHINE
+	origin_tech = Tc_MAGNETS + "=2;" + Tc_PROGRAMMING + "=2;" + Tc_BLUESPACE + "=2"
+	req_components = list(
+		/obj/item/weapon/stock_parts/console_screen = 1,
+		/obj/item/weapon/stock_parts/micro_laser = 3,
+	)

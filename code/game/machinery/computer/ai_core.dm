@@ -206,6 +206,7 @@ That prevents a few funky behaviors.
 						if(A)//If AI exists on the card. Else nothing since both are empty.
 							A.control_disabled = 0
 							A.forceMove(T.loc)//To replace the terminal.
+							A.update_icon()
 							C.icon_state = "aicard"
 							C.name = "inteliCard"
 							C.overlays.len = 0

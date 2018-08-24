@@ -10,15 +10,7 @@ Used In File(s): \code\game\supplyshuttle.dm
 		float:left;
 	}
 </style>
-<div class="item" style="float: left; width:66%; margin-bottom: 3px;">
-	<div class="itemLabel">
-		Account:
-	</div>
-	<div class="itemContent">
-		{{:data.money}}
-	</div>
-</div>
-<div style="float: right; width: 33%; margin-top: 3px;">
+<div style="float: right; width: 32%; margin-top: 3px;">
 	<div class="line">
 		{{:helper.link('Permissions', 'key', {'permissions' : 1})}}
 	</div>
@@ -29,6 +21,26 @@ Used In File(s): \code\game\supplyshuttle.dm
 	{{else data.moving}}
 		<div class="line">Shuttle is en route.</div>
 	{{/if}}
+</div>
+<div class="item" style="float: left; width:67%; margin-bottom: 3px;">
+	<div class="itemLabel">
+		Account Name:
+	</div>
+	<div class="itemContent">
+		{{if data.authorized_name != ""}}
+			{{:data.name_of_source_account}} as {{:data.authorized_name}}
+		{{else}}
+			{{:data.name_of_source_account}}
+		{{/if}}
+	</div>
+</div>
+<div class="item" style="width:67%; margin-bottom: 3px;">
+	<div class="itemLabel">
+		Account Funds:
+	</div>
+	<div class="itemContent">
+		{{:data.money}}
+	</div>
 </div>
 {{if data.show_permissions}}
 	<div class="item">
@@ -98,6 +110,9 @@ Used In File(s): \code\game\supplyshuttle.dm
 					{{for data.requests}}
 						<div class="line">
 							{{:value.ordernum}} - {{:value.supply_type}} for {{:value.orderedby}}
+							{{if value.authorized_name != ""}}
+								<br/>DEBIT AS: {{:value.authorized_name}}
+							{{/if}}
 								<div class="line" style="font-style: italic;">
 									{{:value.comment}}
 								</div>
@@ -112,6 +127,9 @@ Used In File(s): \code\game\supplyshuttle.dm
 					{{for data.orders}}
 						<div class="line">
 							#{{:value.ordernum}} - {{:value.supply_type}} for {{:value.orderedby}}
+							{{if value.authorized_name != ""}}
+								<br/>DEBIT AS: {{:value.authorized_name}}
+							{{/if}}
 						</div>
 					{{empty}}
 						No confirmed orders.

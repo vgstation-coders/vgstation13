@@ -130,18 +130,6 @@
 /datum/proc/variable_edited(variable_name, old_value, new_value)
 	return
 
-/proc/isInTypes(atom/Object, types)
-	if(!Object)
-		return 0
-	var/prototype = Object.type
-	Object = null
-
-	for (var/type in params2list(types))
-		if (ispath(prototype, text2path(type)))
-			return 1
-
-	return 0
-
 /client/proc/debug_pooling()
 	set name = "Debug Pooling Type"
 	set category = "Debug"

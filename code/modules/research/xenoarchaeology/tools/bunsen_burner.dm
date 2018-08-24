@@ -78,6 +78,7 @@
 					var/reagent_transfer = R.reagents.trans_id_to(src, possible_fuel, 10)
 					if(reagent_transfer)
 						to_chat(user, "<span class='notice'>You transfer [reagent_transfer]u of [possible_fuel] from \the [R] to \the [src]</span>")
+						add_fingerprint(user)
 						return
 		else
 			if(!held_container && user.drop_item(W, src))
@@ -87,6 +88,7 @@
 				var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER)
 				overlays += I
 				overlays += I2
+				add_fingerprint(user)
 				return 1 // avoid afterattack() being called
 	if(iswrench(W))
 		user.visible_message("<span class = 'warning'>[user] starts to deconstruct \the [src]!</span>","<span class = 'notice'>You start to deconstruct \the [src].</span>")
@@ -98,7 +100,7 @@
 		..()
 
 /obj/machinery/bunsen_burner/process()
-	if(held_container && heating == BUNSEN_ON)
+	if(heating == BUNSEN_ON)
 		var/turf/T = get_turf(src)
 		var/datum/gas_mixture/G = T.return_air()
 		if(!G || G.molar_density("oxygen") < 0.1 / CELL_VOLUME)
@@ -124,7 +126,8 @@
 				co2_consumption = fuel_stats["co2_cons"]
 
 				reagents.remove_reagent(possible_fuel, consumption_rate)
-				held_container.reagents.heating(thermal_energy_transfer, max_temperature)
+				if(held_container)
+					held_container.reagents.heating(thermal_energy_transfer, max_temperature)
 				G.adjust(o2 = -o2_consumption, co2 = -co2_consumption)
 				if(prob(unsafety) && T)
 					T.hotspot_expose(max_temperature, 5)
@@ -150,6 +153,7 @@
 		held_container.forceMove(src.loc)
 		held_container.attack_hand(user)
 		held_container = null
+		add_fingerprint(user)
 	else
 		toggle()
 
@@ -158,7 +162,7 @@
 	set name = "Toggle bunsen burner"
 	set category = "Object"
 
-	if (!usr.Adjacent(src) || usr.incapacitated())
+	if ((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
 		return
 
 	toggle()
@@ -177,16 +181,14 @@
 
 
 /obj/machinery/bunsen_burner/AltClick()
-	toggle()
+	verb_toggle()
 
 /obj/machinery/bunsen_burner/verb/verb_toggle_fuelport()
 	set src in view(1)
 	set name = "Toggle Bunsen burner fuelport"
 	set category = "Object"
 
-	if(isjustobserver(usr))
-		return
-	if(!usr.Adjacent(src) || usr.incapacitated())
+	if((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
 		return
 
 	toggle_fuelport(usr)

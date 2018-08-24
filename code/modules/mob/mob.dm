@@ -1486,6 +1486,8 @@ var/list/slot_equipment_priority = list( \
 			else if(statpanel(listed_turf.name))
 				statpanel(listed_turf.name, null, listed_turf)
 				for(var/atom/A in listed_turf)
+					if(!A.mouse_opacity && !A.name)
+						continue
 					if(A.invisibility > see_invisible)
 						continue
 					statpanel(listed_turf.name, null, A)
@@ -2142,6 +2144,9 @@ mob/proc/on_foot()
 			return 1
 
 	return 0
+
+/mob/proc/handle_regular_hud_updates()
+	return
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

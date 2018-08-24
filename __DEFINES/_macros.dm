@@ -198,7 +198,7 @@
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor))
 
-#define issilent(A) (A.silent || (ishuman(A) && (A:mind.miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
+#define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 //Macros for antags
 
 #define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind && H.mind.vampire)
@@ -243,6 +243,24 @@ proc/get_space_area()
 		global.space_area = new_space_area
 
 	return global.space_area
+
+/**
+	checks if the given atom is on a shuttle (non-specific)
+	args: atom
+	returns: shuttle type (or null if not on shuttle)
+**/
+
+/proc/is_on_shuttle(var/atom/A)
+	var/area/AA = get_area(A)
+
+	if(!AA) //How doth
+		return 0
+
+	for(var/datum/shuttle/S in shuttles)
+		if(S.linked_area == AA)
+			return S
+
+	return 0
 
 //1 line helper procs compressed into defines.
 #define Clamp(x, y, z) 	(x <= y ? y : (x >= z ? z : x))
@@ -299,3 +317,5 @@ proc/get_space_area()
 // To prevent situations of trying to take funds that are factions of our lowest denomination
 #define LOWEST_DENOMINATION 1
 #define round_to_lowest_denomination(A) (round(A, LOWEST_DENOMINATION))
+
+#define create_trader_account create_account("Trader Shoal", 0, null, 0) //Starts 0 credits, not sourced from any database, earns 0 credits

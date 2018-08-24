@@ -12,7 +12,8 @@
 		/obj/item/weapon/gun/mahoguny,
 		/obj/item/weapon/gun/grenadelauncher,
 		/obj/item/weapon/bikehorn/baton,
-		/obj/item/weapon/blunderbuss
+		/obj/item/weapon/blunderbuss,
+		/obj/item/weapon/legcuffs/bolas,
 		)
 	body_parts_covered = FULL_TORSO
 	flags = FPRINT
