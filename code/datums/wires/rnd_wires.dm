@@ -46,6 +46,7 @@ var/const/RND_WIRE_JOBFINISHED = 16
 			rnd.update_hacked()
 		if(RND_WIRE_AUTOMAKE)
 			rnd.auto_make = !rnd.auto_make
+	rnd.updateUsrDialog()
 
 /datum/wires/rnd/UpdateCut(var/index, var/mended, var/mob/user)
 	var/obj/machinery/r_n_d/rnd = holder
@@ -59,3 +60,4 @@ var/const/RND_WIRE_JOBFINISHED = 16
 			rnd.update_hacked()
 		if(RND_WIRE_AUTOMAKE)
 			rnd.auto_make = 0
+	rnd.updateUsrDialog()

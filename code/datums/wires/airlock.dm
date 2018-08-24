@@ -136,7 +136,7 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 		if(AIRLOCK_WIRE_LIGHT)
 			A.lights = mended
 			A.update_icon()
-
+	A.updateUsrDialog()
 
 /datum/wires/airlock/UpdatePulsed(var/index, mob/user)
 
@@ -212,3 +212,4 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 		if(AIRLOCK_WIRE_LIGHT)
 			A.lights = !A.lights
 			A.update_icon()
+	A.updateUsrDialog()
