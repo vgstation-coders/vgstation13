@@ -278,6 +278,9 @@ var/const/POWER = 8
 		if(S == signallers[colour])
 			PulseColour(colour)
 			holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire pulsed by \a [S] \ref[S] ([src.type])")
+			//We don't really know who activated this signaler, but if the last processed user is standing next to us then it's prooobably them.
+			if(holder.Adjacent(usr) && CanUse(usr))
+				Interact(usr)
 			break
 
 /datum/wires/proc/SignalIndex(var/index)
@@ -329,4 +332,3 @@ var/const/POWER = 8
 	else
 		PulseColour(wire_to_screw, L)
 		log_game("[key_name(L)] has pulsed the [wire_to_screw] wire on \the [holder] ([formatJumpTo(holder)])")
-

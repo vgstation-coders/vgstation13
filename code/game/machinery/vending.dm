@@ -191,6 +191,11 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSMACHINE))
 		return 1
+	if(seconds_electrified > 0)
+		if(istype(mover, /obj/item))
+			var/obj/item/I = mover
+			if(I.siemens_coefficient > 0)
+				spark(src, 5)
 	return ..()
 
 /obj/machinery/vending/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
@@ -423,6 +428,9 @@ var/global/num_vending_terminals = 1
 		else
 			to_chat(user, "<span class='notice'>The glass in \the [src] is broken! Fix it first.</span>")
 			return
+	if(iswiretool(W) && panel_open)
+		wires.Interact(user)
+		return
 	. = ..()
 	if(.)
 		return .
@@ -433,10 +441,7 @@ var/global/num_vending_terminals = 1
 			to_chat(user, "<span class='notice'>You slot some cardboard into \the [src].</span>")
 			cardboard = 1
 			src.updateUsrDialog()
-	if(iswiretool(W))
-		if(panel_open)
-			attack_hand(user)
-		return
+			return
 	else if(premium.len > 0 && is_type_in_list(W, accepted_coins))
 		if (isnull(coin))
 			if(user.drop_item(W, src))
@@ -703,8 +708,7 @@ var/global/num_vending_terminals = 1
 			damaged()
 
 	if(seconds_electrified > 0)
-		if(shock(user, 100))
-			return
+		shock(user, 100)
 	else if (seconds_electrified)
 		seconds_electrified = 0
 
@@ -786,12 +790,6 @@ var/global/num_vending_terminals = 1
 
 		dat += "</TT>"
 
-	if(panel_open)
-		dat += wires()
-
-		if(product_slogans != "")
-			dat += "The speaker switch is [shut_up ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>(Toggle)</a><br>"
-
 	if(is_custom_machine)
 		if(edit_mode)
 			dat += "Machine name: [src.name] <a href='?src=\ref[src];rename=1'>(Rename)</a><br>"
@@ -804,10 +802,6 @@ var/global/num_vending_terminals = 1
 
 	user << browse(dat, "window=vending;size=400x[vertical]")
 	onclose(user, "vending")
-
-// returns the wire panel text
-/obj/machinery/vending/proc/wires()
-	return wires.GetInteractWindow()
 
 /obj/machinery/vending/Topic(href, href_list)
 	if(..())

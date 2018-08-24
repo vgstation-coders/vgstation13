@@ -63,6 +63,7 @@ var/const/AALARM_WIRE_AALARM = 16
 			//if (A.alarm_area.atmosalert(2))
 			//	A.post_alert(2)
 			A.update_icon()
+	A.updateDialog()
 
 /datum/wires/alarm/UpdatePulsed(var/index)
 	var/obj/machinery/alarm/A = holder
@@ -87,10 +88,10 @@ var/const/AALARM_WIRE_AALARM = 16
 //			to_chat(world, "AI Control wire pulsed")
 			if (A.aidisabled == 0)
 				A.aidisabled = 1
-			A.updateDialog()
 			spawn(100)
 				if (A.aidisabled == 1)
 					A.aidisabled = 0
+					A.updateDialog()
 
 		if(AALARM_WIRE_SYPHON)
 //			to_chat(world, "Syphon wire pulsed")
@@ -105,3 +106,4 @@ var/const/AALARM_WIRE_AALARM = 16
 			//if (A.alarm_area.atmosalert(0))
 			//	A.post_alert(0)
 			A.update_icon()
+	A.updateDialog()

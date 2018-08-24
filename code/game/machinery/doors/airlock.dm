@@ -922,7 +922,6 @@ About the new airlock wires panel:
 						safe = 1
 						investigation_log(I_WIRES, "|| safeties re-enabled via robot interface by [key_name(usr)]")
 						add_attacklogs(usr, null, " enabled safeties on [src] at [x] [y] [z]", admin_warn = FALSE)
-						src.updateUsrDialog()
 					else
 						to_chat(usr, text("Firmware reports safeties already in place."))
 
@@ -936,7 +935,6 @@ About the new airlock wires panel:
 							return 0
 						normalspeed = 1
 						investigation_log(I_WIRES, "|| timing set to normal via robot interface by [key_name(usr)]")
-						src.updateUsrDialog()
 					else
 						to_chat(usr, text("Door timing circurity currently operating normally."))
 
@@ -971,7 +969,6 @@ About the new airlock wires panel:
 							return 0
 						lights = 1
 						investigation_log(I_WIRES, "|| bolt lights re-enabled via robot interface by [key_name(usr)]")
-						src.updateUsrDialog()
 					else
 						to_chat(usr, text("Door bolt lights are already enabled!"))
 
