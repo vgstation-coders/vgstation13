@@ -255,25 +255,29 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		occupantData["fireLoss"] = occupant.getFireLoss()
 		occupantData["bodyTemperature"] = occupant.bodytemperature
 	data["occupant"] = occupantData;
-
+	data["siliconUser"] = istype(user, /mob/living/silicon) || isAdminGhost(user)
+	data["emagged"] = emagged
 	data["cellTemperature"] = round(air_contents.temperature)
 	data["cellTemperatureStatus"] = "good"
 	if(air_contents.temperature > T0C) // if greater than 273.15 kelvin (0 celcius)
 		data["cellTemperatureStatus"] = "bad"
 	else if(air_contents.temperature > 225)
 		data["cellTemperatureStatus"] = "average"
-	data["cellPressure"] = round(air_contents.pressure)
-	switch(air_contents.pressure)
-		if(HAZARD_HIGH_PRESSURE to INFINITY)
-			data["cellPressureStatus"] = "bad"
-		if(WARNING_HIGH_PRESSURE to HAZARD_HIGH_PRESSURE)
-			data["cellPressureStatus"] = "average"
-		if(WARNING_LOW_PRESSURE to WARNING_HIGH_PRESSURE)
-			data["cellPressureStatus"] = "good"
-		if(HAZARD_LOW_PRESSURE to WARNING_LOW_PRESSURE)
-			data["cellPressureStatus"] = "bad"
-		else
-			data["cellPressureStatus"] = "bad"
+	data["cellPressure"] = emagged ? 101 : round(air_contents.pressure)
+	if(emagged)
+		data["cellPressureStatus"] = "good"
+	else
+		switch(air_contents.pressure)
+			if(HAZARD_HIGH_PRESSURE to INFINITY)
+				data["cellPressureStatus"] = "bad"
+			if(WARNING_HIGH_PRESSURE to HAZARD_HIGH_PRESSURE)
+				data["cellPressureStatus"] = "average"
+			if(WARNING_LOW_PRESSURE to WARNING_HIGH_PRESSURE)
+				data["cellPressureStatus"] = "good"
+			if(HAZARD_LOW_PRESSURE to WARNING_LOW_PRESSURE)
+				data["cellPressureStatus"] = "bad"
+			else
+				data["cellPressureStatus"] = "bad"
 	if(air_contents.temperature > T0C) // if greater than 273.15 kelvin (0 celcius)
 		data["cellTemperatureStatus"] = "bad"
 	else if(air_contents.temperature > 225)
@@ -303,33 +307,34 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 	data["cellHabitabilityStatus"] = "good"
 	data["cellHabitability"] = "Safe."
-	if(data["cellPressureStatus"] == "bad")
-		if(data["cellTemperatureStatus"] == "bad")
-			data["cellHabitabilityStatus"] = "bad"
-			if(occupant)
-				data["cellHabitability"] = "DANGER! REMOVE OCCUPANT!"
-			else
-				data["cellHabitability"] = "Danger! Internal atmosphere unsuitable for occupants!"
-		else
-			if(data["beakerVolume"] > 0)
-				data["cellHabitabilityStatus"] = "average"
-				if(occupant)
-					data["cellHabitability"] = "Warning. Occupant healing slowed."
-				else
-					data["cellHabitability"] = "Warning. Current internal atmosphere will slow healing."
-			else
+	if(!emagged)
+		if(data["cellPressureStatus"] == "bad")
+			if(data["cellTemperatureStatus"] == "bad")
 				data["cellHabitabilityStatus"] = "bad"
 				if(occupant)
 					data["cellHabitability"] = "DANGER! REMOVE OCCUPANT!"
 				else
-					data["cellHabitability"] = "Danger! Internal atmosphere unsuitable for occupants without loaded medication!"
+					data["cellHabitability"] = "Danger! Internal atmosphere unsuitable for occupants!"
+			else
+				if(data["beakerVolume"] > 0)
+					data["cellHabitabilityStatus"] = "average"
+					if(occupant)
+						data["cellHabitability"] = "Warning. Occupant healing slowed."
+					else
+						data["cellHabitability"] = "Warning. Current internal atmosphere will slow healing."
+				else
+					data["cellHabitabilityStatus"] = "bad"
+					if(occupant)
+						data["cellHabitability"] = "DANGER! REMOVE OCCUPANT!"
+					else
+						data["cellHabitability"] = "Danger! Internal atmosphere unsuitable for occupants without loaded medication!"
 
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "cryo.tmpl", "Cryo Cell Control System", 520, 410)
+		ui = new(user, src, ui_key, "cryo.tmpl", "Cryo Cell Control System", 520, 420)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
 		// open the new ui window
@@ -368,6 +373,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(!occupant || isslime(usr) || ispAI(usr))
 			return 0 // don't update UIs attached to this object
 		go_out(ejector = usr)
+	
+	if(href_list["emag"])
+		Emag(usr)
 
 	add_fingerprint(usr)
 	return 1 // update UIs attached to this object
@@ -388,6 +396,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	return ..()
 
 /obj/machinery/atmospherics/unary/cryo_cell/attackby(var/obj/item/weapon/G as obj, var/mob/user as mob)
+	if(istype(G, /obj/item/weapon/card/emag))
+		Emag(user)
+		return
 	if(istype(G, /obj/item/weapon/reagent_containers/glass))
 		if(beaker)
 			to_chat(user, "<span class='warning'>A beaker is already loaded into the machine.</span>")
@@ -427,6 +438,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			G = null
 	updateUsrDialog()
 	return
+
+/obj/machinery/atmospherics/unary/cryo_cell/proc/Emag(mob/user as mob)
+	emagged = !emagged
+	to_chat(user, "<span class='warning'>You [emagged ? "reprogram" : "fix"] the display.</span>")
+	investigation_log(I_CHEMS, "was [emagged ? "emagged" : "fixed"] by [key_name(user)]")
 
 /obj/machinery/atmospherics/unary/cryo_cell/update_icon()
 	handle_update_icon()

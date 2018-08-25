@@ -113,6 +113,17 @@ Used In File(s): \code\game\machinery\cryo.dm
 		{{:helper.link('Eject Beaker', 'eject', {'ejectBeaker' : 1}, data.isBeakerLoaded ? null : 'disabled')}}
 	</div>
 </div>
+{{if data.siliconUser}}
+	<h3>System Overrides</h3>
+	<div class="item">
+		{{if data.emagged}}
+			<div class='notice'>Habitability Settings: Modified</div>
+		{{else}}
+			<div class='notice'>Habitability Settings: Default</div>
+		{{/if}}
+		{{:helper.link('Modify Habitability Settings', 'alert', {'emag' : 1})}}
+	</div>
+{{/if}}
 {{if data.ejecting}}
 	<div class="mask">
 		<div class="maskContent" style="margin: 160px 0">
