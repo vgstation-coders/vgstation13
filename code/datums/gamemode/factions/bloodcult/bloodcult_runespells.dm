@@ -94,6 +94,9 @@
 	qdel(src)
 
 /datum/rune_spell/proc/abort(var/cause)
+	if (destroying_self)
+		return
+	destroying_self = 1
 	switch (cause)
 		if (RITUALABORT_ERASED)
 			if (istype (spell_holder,/obj/effect/rune))
@@ -196,6 +199,7 @@
 	 You may use them to trap the souls of defeated foes, or channel those the dead. You can make even better use of them after raising a forge, and placing them \
 	 inside a Construct Shell, or a Cult Blade. Lastly, raising an Arcaneum will let you permanently imbue your skin with a gift from Nar Sie. Follow your purpose \
 	 and you may see even more gifts come your way."
+	var/turf/loc_memory = null
 
 /datum/rune_spell/raisestructure/cast()
 	var/obj/effect/rune/R = spell_holder
@@ -205,6 +209,7 @@
 		abort(RITUALABORT_BLOCKED)
 		return
 
+	loc_memory = spell_holder.loc
 	var/mob/living/user = activator
 	contributors.Add(user)
 	update_progbar()
@@ -265,8 +270,8 @@
 		else
 			cancelling--
 			if (cancelling <= 0)
-				if(accumulated_blood && !(locate(/obj/effect/decal/cleanable/blood/splatter) in spell_holder.loc))
-					var/obj/effect/decal/cleanable/blood/splatter/S = new(spell_holder.loc)//splash
+				if(accumulated_blood && !(locate(/obj/effect/decal/cleanable/blood/splatter) in loc_memory))
+					var/obj/effect/decal/cleanable/blood/splatter/S = new (loc_memory)//splash
 					S.amount = 2
 				abort(RITUALABORT_BLOOD)
 				return
@@ -394,19 +399,6 @@
 		if (source)
 			source.abort(RITUALABORT_GONE)
 		qdel(src)
-
-/obj/effect/cult_ritual/cultify()
-	return
-
-/obj/effect/cult_ritual/ex_act(var/severity)
-	return
-
-/obj/effect/cult_ritual/emp_act()
-	return
-
-/obj/effect/cult_ritual/blob_act()
-	return
-
 
 //RUNE III
 /datum/rune_spell/summontome
@@ -601,7 +593,7 @@
 		if (target.state == TOME_OPEN && ismob(target.loc))
 			var/mob/M = target.loc
 			M << browse_rsc('icons/tomebg.png', "tomebg.png")
-			M << browse(target.tome_text(), "window=arcanetome;size=512x375")
+			M << browse(target.tome_text(), "window=arcanetome;size=537x375")
 	else
 		to_chat(activator, "<span class='warning'>This tome cannot contain any more talismans.</span>")
 	qdel(src)
@@ -1443,10 +1435,12 @@ var/list/blind_victims = list()
 	var/mob/living/M = activator
 	M.see_invisible_override = SEE_INVISIBLE_OBSERVER
 	M.apply_vision_overrides()
+	to_chat(M, "<span class='notice'>As the talisman disappears into dust, you find yourself able to see through the gaps in the veil. You can see and interact with the other side, for a few seconds.</span>")
 	anim(target = M, a_icon = 'icons/effects/160x160.dmi', a_icon_state = "rune_seer", lay = ABOVE_OBJ_LAYER, offX = -WORLD_ICON_SIZE*2, offY = -WORLD_ICON_SIZE*2, plane = OBJ_PLANE, invis = INVISIBILITY_OBSERVER, alph = 200, sleeptime = talisman_duration)
 	spawn(talisman_duration)
 		M.see_invisible_override = 0
 		M.apply_vision_overrides()
+		to_chat(M, "<span class='notice'>You can no longer discern through the veil.</span>")
 	qdel(src)
 
 /obj/effect/cult_ritual/seer
@@ -1476,11 +1470,13 @@ var/list/blind_victims = list()
 		return
 	caster.see_invisible_override = SEE_INVISIBLE_OBSERVER
 	caster.apply_vision_overrides()
+	to_chat(caster, "<span class='notice'>You find yourself able to see through the gaps in the veil. You can see and interact with the other side.</span>")
 
 /obj/effect/cult_ritual/seer/Destroy()
 	if (caster)
 		caster.see_invisible_override = 0
 		caster.apply_vision_overrides()
+		to_chat(caster, "<span class='notice'>You can no longer discern through the veil.</span>")
 	caster = null
 	source = null
 	..()
@@ -1559,6 +1555,8 @@ var/list/blind_victims = list()
 	activator.equip_to_slot_or_drop(new_pack, slot_back)
 
 	activator.put_in_hands(BT)
+	to_chat(activator, "<span class='notice'>Robes and gear of the followers of Nar-Sie manifests around your body. You feel empowered.</span>")
+	to_chat(activator, "<span class='notice'>You \a [BT] materializes in your hand, you may use it to instantly swap back into your stored clothing.</span>")
 	qdel(src)
 
 
@@ -1593,21 +1591,287 @@ var/list/blind_victims = list()
 /datum/rune_spell/fervor
 	name = "Fervor"
 	desc = "Inspire nearby cultists to purge their stuns and raise their movement speed."
+	desc_talisman = "Use to inspire nearby cultists to purge their stuns and raise their movement speed."
 	Act_restriction = CULT_ACT_II
 	invocation = "Khari'd! Gual'te nikka!"
 	word1 = /datum/cultword/travel
 	word2 = /datum/cultword/technology
 	word3 = /datum/cultword/other
+	page = ""
+	cost_invoke = 20
+	var/effect_range = 7
+
+/datum/rune_spell/fervor/cast()
+	var/obj/effect/rune/R = spell_holder
+	if (istype(R))
+		R.one_pulse()
+
+	if (blood_pay())
+		for(var/mob/living/L in range(effect_range,get_turf(spell_holder)))
+			if(L.stat != DEAD && iscultist(L))
+				playsound(L, 'sound/effects/fervor.ogg', 50, 0, -2)
+				anim(target = L, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_fervor", lay = NARSIE_GLOW, plane = LIGHTING_PLANE, direction = L.dir)
+				L.oxyloss = 0
+				L.halloss = 0
+				L.paralysis = 0
+				L.stunned = 0
+				L.knockdown = 0
+				L.remove_jitter()
+				L.next_pain_time = 0
+				L.bodytemperature = 310
+				L.blinded = 0
+				L.eye_blind = 0
+				L.eye_blurry = 0
+				L.ear_deaf = 0
+				L.ear_damage = 0
+				L.say_mute = 0
+				if(istype(L, /mob/living/carbon/human))
+					var/mob/living/carbon/human/H = L
+					H.pain_shock_stage = 0
+				L.update_canmove()
+				L.stat = CONSCIOUS
+				L.reagents.del_reagent(HOLYWATER)
+				L.reagents.add_reagent(HYPERZINE,1)
+		qdel(spell_holder)
+	qdel(src)
 
 //RUNE XV
 /datum/rune_spell/summoncultist
-	name = "Summon Cultist"
+	name = "Blood Magnetism"
 	desc = "Bring forth one of your fellow believers, no matter how far they are, as long as their heart beats"
 	Act_restriction = CULT_ACT_II
 	invocation = "N'ath reth sh'yro eth d'rekkathnor!"
 	word1 = /datum/cultword/join
 	word2 = /datum/cultword/other
 	word3 = /datum/cultword/self
+	page = ""
+	remaining_cost = 10
+	cost_upkeep = 1
+	var/rejoin = 0
+	var/mob/target = null
+	var/list/feet_portals = list()
+	var/cost_summon = 50//you probably don't want to pay that up alone
+	var/cost_rejoin = 15//static cost for every contributor
+
+/datum/rune_spell/summoncultist/Destroy()
+	target = null
+	for (var/guy in feet_portals)
+		var/obj/O = feet_portals[guy]
+		qdel(O)
+		feet_portals -= guy
+	feet_portals = list()
+	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
+	spell_holder.overlays -= image('icons/effects/effects.dmi',"rune_summon")
+	..()
+
+
+/datum/rune_spell/summoncultist/abort()
+	for (var/guy in feet_portals)
+		var/obj/O = feet_portals[guy]
+		qdel(O)
+	..()
+
+/datum/rune_spell/summoncultist/cast()
+	var/obj/effect/rune/R = spell_holder
+	R.one_pulse()
+
+	rejoin = alert(activator, "Will you pull them toward you, or pull yourself toward them?","Blood Magnetism","Summon Cultist","Rejoin Cultist") == "Rejoin Cultist"
+
+	var/list/possible_targets = list()
+	var/datum/faction/bloodcult = find_active_faction(BLOODCULT)
+	for(var/datum/role/cultist/C in bloodcult.members)
+		var/datum/mind/M = C.antag
+		possible_targets.Add(M.current)
+
+	var/list/annotated_targets = list()
+	var/list/visible_mobs = viewers(activator)
+	var/i = 1
+	for(var/mob/M in possible_targets)
+		var/status = ""
+		if(M == activator)
+			status = " (You)"
+		else if(M in visible_mobs)
+			status = " (Visible)"
+		else if(M.isDead())
+			status = " (Dead)"
+		annotated_targets["\Roman[i]-[M.real_name][status]"] = M
+		i++
+
+	var/choice = input(activator, "Choose who you wish to [rejoin ? "rejoin" : "summon"]", "Blood Magnetism") as null|anything in annotated_targets
+	if (!choice)
+		qdel(src)
+		return
+	target = annotated_targets[choice]
+	if (!target)
+		qdel(src)
+		return
+
+	contributors.Add(activator)
+	update_progbar()
+	if (activator.client)
+		activator.client.images |= progbar
+	spell_holder.overlays += image('icons/obj/cult.dmi',"runetrigger-build")
+	if (!rejoin)
+		spell_holder.overlays += image('icons/effects/effects.dmi',"rune_summon")
+	else
+		feet_portals.Add(activator)
+		var/obj/effect/cult_ritual/feet_portal/P = new (activator.loc, activator, src)
+		feet_portals[activator] = P
+	to_chat(activator, "<span class='rose'>This ritual's blood toll can be substantially reduced by having multiple cultists partake in it.</span>")
+	spawn()
+		payment()
+
+/datum/rune_spell/summoncultist/cast_talisman()//we spawn an invisible rune under our feet that works like the regular one
+	var/obj/effect/rune/R = new(get_turf(activator))
+	R.icon_state = "temp"
+	R.active_spell = new type(activator,R)
+	qdel(src)
+
+/datum/rune_spell/summoncultist/midcast(var/mob/add_cultist)
+	if (add_cultist in contributors)
+		return
+	add_cultist.say(invocation)
+	contributors.Add(add_cultist)
+	if (add_cultist.client)
+		add_cultist.client.images |= progbar
+	if (rejoin)
+		feet_portals.Add(add_cultist)
+		var/obj/effect/cult_ritual/feet_portal/P = new (add_cultist.loc, add_cultist, src)
+		feet_portals[add_cultist] = P
+
+/datum/rune_spell/summoncultist/abort(var/cause)
+	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
+	spell_holder.overlays -= image('icons/effects/effects.dmi',"rune_summon")
+	..()
+
+/datum/rune_spell/summoncultist/proc/payment()//an extra payment is spent at the end of the channeling, and shared between contributors
+	var/failsafe = 0
+	while(failsafe < 1000)
+		failsafe++
+		//are our payers still here and about?
+		for(var/mob/living/L in contributors)
+			if (!iscultist(L) || !(L in range(spell_holder,1)) || (L.stat != CONSCIOUS))
+				if (L.client)
+					L.client.images -= progbar
+				var/obj/effect/cult_ritual/feet_portal/P = feet_portals[L]
+				qdel(P)
+				feet_portals.Remove(L)
+				contributors.Remove(L)
+		//alright then, time to pay in blood
+		var/amount_paid = 0
+		for(var/mob/living/L in contributors)
+			var/data = use_available_blood(L, cost_upkeep/contributors.len,contributors[L])//always 1u total per payment
+			if (data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)//out of blood are we?
+				contributors.Remove(L)
+				var/obj/effect/cult_ritual/feet_portal/P = feet_portals[L]
+				qdel(P)
+				feet_portals.Remove(L)
+			else
+				amount_paid += data[BLOODCOST_TOTAL]
+				contributors[L] = data[BLOODCOST_RESULT]
+				make_tracker_effects(L.loc,spell_holder, 1, "soul", 3, /obj/effect/tracker/drain, 1)//visual feedback
+
+		accumulated_blood += amount_paid
+
+		//if there's no blood for over 3 seconds, the channeling fails
+		if (amount_paid)
+			cancelling = 3
+		else
+			cancelling--
+			if (cancelling <= 0)
+				if(accumulated_blood && !(locate(/obj/effect/decal/cleanable/blood/splatter) in spell_holder.loc))
+					var/obj/effect/decal/cleanable/blood/splatter/S = new(spell_holder.loc)//splash
+					S.amount = 2
+				abort(RITUALABORT_BLOOD)
+				return
+
+		if (accumulated_blood >= remaining_cost)
+			success()
+			return
+
+		update_progbar()
+
+		sleep(10)
+	message_admins("A rune ritual has iterated for over 1000 blood payment procs. Something's wrong there.")
+
+/datum/rune_spell/summoncultist/proc/success()
+	if (rejoin)
+		var/list/valid_turfs = list()
+		for(var/turf/T in orange(target,1))
+			if(!T.has_dense_content())
+				valid_turfs.Add(T)
+		if (valid_turfs.len)
+			for(var/mob/living/L in contributors)
+				use_available_blood(L, cost_rejoin,contributors[L])
+				make_tracker_effects(L.loc,spell_holder, 1, "soul", 3, /obj/effect/tracker/drain, 3)
+				anim(target = L, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
+				playsound(L, 'sound/effects/cultjaunt_prepare.ogg', 75, 0, -3)
+				spawn(10)
+					playsound(L, 'sound/effects/cultjaunt_land.ogg', 50, 0, -3)
+					new /obj/effect/bloodcult_jaunt(get_turf(L),L,pick(valid_turfs))
+					anim(target = L, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_land", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
+	else
+		if(target.locked_to || !isturf(target.loc))
+			to_chat(target, "<span class='warning'>You feel that some force wants to pull you through the veil, but cannot proceed while buckled or inside something.</span>")
+			for(var/mob/living/L in contributors)
+				to_chat(activator, "<span class='warning'>The ritual failed, the target seems to be anchored to where they are.</span>")
+		else
+			for(var/mob/living/L in contributors)
+				use_available_blood(L, cost_summon/contributors.len,contributors[L])
+				make_tracker_effects(L.loc,spell_holder, 1, "soul", 3, /obj/effect/tracker/drain, 3)
+			anim(target = src.target, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
+			var/mob/M = target//so we keep track of them after the datum is ded until we jaunt
+			var/turf/T = get_turf(spell_holder)
+			playsound(M, 'sound/effects/cultjaunt_prepare.ogg', 75, 0, -3)
+			spawn(10)
+				playsound(M, 'sound/effects/cultjaunt_land.ogg', 50, 0, -3)
+				new /obj/effect/bloodcult_jaunt(get_turf(M),M,T)
+				anim(target = M, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_land", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
+
+	for(var/mob/living/L in contributors)
+		if (L.client)
+			L.client.images -= progbar
+		contributors.Remove(L)
+
+	if (activator && activator.client)
+		activator.client.images -= progbar
+
+	if (progbar)
+		progbar.loc = null
+
+	if (spell_holder.icon_state == "temp")
+		qdel(spell_holder)
+	else
+		qdel(src)
+
+/obj/effect/cult_ritual/feet_portal
+	anchored = 1
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "rune_rejoin"
+	pixel_y = -10
+	layer = ABOVE_OBJ_LAYER
+	plane = OBJ_PLANE
+	mouse_opacity = 0
+	flags = PROXMOVE
+	var/mob/living/caster = null
+	var/turf/source = null
+
+/obj/effect/cult_ritual/feet_portal/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/seer/runespell)
+	..()
+	caster = user
+	source = get_turf(runespell.spell_holder)
+	if (!caster)
+		qdel(src)
+		return
+
+/obj/effect/cult_ritual/feet_portal/Destroy()
+	caster = null
+	source = null
+	..()
+
+/obj/effect/cult_ritual/feet_portal/HasProximity(var/atom/movable/AM)
+	if (!caster || caster.loc != loc)
+		forceMove(get_turf(caster))
 
 //RUNE XVI
 /datum/rune_spell/portalentrance

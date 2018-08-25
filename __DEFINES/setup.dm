@@ -654,6 +654,9 @@ var/list/liftable_structures = list(\
 #define SEE_INVISIBLE_LEVEL_TWO 45	//Used by mobs under certain conditions.
 #define INVISIBILITY_LEVEL_TWO 45	//Used by turrets inside their covers.
 
+#define INVISIBILITY_CULTJAUNT 50	//Used by cult
+#define SEE_INVISIBLE_CULTJAUNT 50	//Used by cult
+
 #define INVISIBILITY_OBSERVER 60	//Used by Ghosts.
 #define SEE_INVISIBLE_OBSERVER 60	//Used by Ghosts.
 
