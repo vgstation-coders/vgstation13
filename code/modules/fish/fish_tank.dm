@@ -97,7 +97,7 @@
 	density = TRUE
 	anchored = TRUE
 	throwpass = FALSE				// This thing is the size of a wall, you can't throw past it.
-	circuitboard = /obj/machinery/fishtank/wall
+	circuitboard = /obj/item/weapon/circuitboard/fishwall
 
 	tank_type = "wall"
 	water_capacity = 500		// This thing fills an entire tile,5 large beakers worth
