@@ -333,7 +333,7 @@ var/list/arcane_tomes = list()
 
 	if (attuned_rune)
 		if (attuned_rune.loc)
-			attuned_rune.trigger(user)
+			attuned_rune.trigger(user,1)
 		else//darn, the rune got destroyed one way or another
 			attuned_rune = null
 			to_chat(user, "<span class='warning'>The talisman disappears into dust. The rune it was attuned to appears to no longer exist.</span>")
@@ -390,7 +390,11 @@ var/list/arcane_tomes = list()
 		spell_type = spell
 		uses = initial(spell.talisman_uses)
 
-		switch(initial(spell.talisman_absorb))
+		var/talisman_interaction = initial(spell.talisman_absorb)
+		if (R.active_spell)//some runes may change their interaction type dynamically (ie: Path Exit runes)
+			talisman_interaction = R.active_spell.talisman_absorb
+
+		switch(talisman_interaction)
 			if (RUNE_CAN_ATTUNE)
 				playsound(src, 'sound/effects/talisman_attune.ogg', 50, 0, -5)
 				to_chat(user, "<span class='notice'>The talisman can now remotely trigger the [initial(spell.name)] rune.</span>")

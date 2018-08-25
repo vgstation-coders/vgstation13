@@ -87,7 +87,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 
 	//cultists can read the words, and be informed if it calls a spell
 	if (iscultist(user))
-		to_chat(user, "<span class='info'>It reads: <i>[word1.rune] [word2.rune] [word3.rune]</i>.[rune_name ? " That's a <b>[initial(rune_name.name)]</b> rune." : "It doesn't match any rune spells."]</span>")
+		to_chat(user, "<span class='info'>It reads: <i>[word1 ? "[word1.rune]" : ""] [word2 ? "[word2.rune]" : ""] [word3 ? "[word3.rune]" : ""]</i>.[rune_name ? " That's a <b>[initial(rune_name.name)]</b> rune." : "It doesn't match any rune spells."]</span>")
 	if (rune_name)
 		if (initial(rune_name.Act_restriction) <= 1000)//TODO: SET TO CURRENT CULT FACTION ACT
 			to_chat(user, initial(rune_name.desc))
@@ -147,11 +147,11 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 
 	var/lookup = ""
 	if (word1)
-		lookup += "[word1.icon_state]-[animated]-[blood1.data["blood_colour"]]-"
+		lookup += "[word1.icon_state]-[animated]-[blood1.data["blood_colour"]]"
 	if (word2)
-		lookup += "[word2.icon_state]-[animated]-[blood2.data["blood_colour"]]-"
+		lookup += "-[word2.icon_state]-[animated]-[blood2.data["blood_colour"]]"
 	if (word3)
-		lookup += "[word3.icon_state]-[animated]-[blood3.data["blood_colour"]]"
+		lookup += "-[word3.icon_state]-[animated]-[blood3.data["blood_colour"]]"
 
 	if (lookup in uristrune_cache)
 		icon = uristrune_cache[lookup]
@@ -227,6 +227,8 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 
 /obj/effect/rune/proc/make_uristword(var/datum/cultword/word, var/datum/reagent/blood/blood, var/animated)
 	var/icon/I = icon('icons/effects/uristrunes.dmi', "")
+	if (!blood)
+		blood = new
 	var/lookupword = "[word.icon_state]-[animated]-[blood.data["blood_colour"]]"
 	if(lookupword in uristrune_cache)
 		I = uristrune_cache[lookupword]
@@ -372,6 +374,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		if (rune.active_spell)
 			rune.active_spell.abort(RITUALABORT_ERASED)
 			rune.active_spell = null
+			rune.overlays.len = 0
 	else if (rune.word2)
 		word_erased = rune.word2.rune
 		rune.word2 = null
@@ -401,12 +404,9 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 /obj/effect/rune/attack_hand(var/mob/living/user)
 	trigger(user)
 
-/obj/effect/rune/proc/trigger(var/mob/living/user)
-	if (active_spell)
-		active_spell.midcast(user)
-		return
-
+/obj/effect/rune/proc/trigger(var/mob/living/user,var/talisman_trigger=0)
 	user.delayNextAttack(5)
+
 	if(!iscultist(user))
 		to_chat(user, "<span class='danger'>You can't mouth the arcane scratchings without fumbling over them.</span>")
 		return
@@ -428,10 +428,16 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss()))
 		return fizzle(user)
 
-	reveal()//concealed rune get automatically revealed upon use (either through using Seer or an attuned talisman)
+	if (active_spell)//rune is already channeling a spell? let's see if we can interact with it somehow.
+		if (talisman_trigger)
+			active_spell.midcast_talisman(user)
+		else
+			active_spell.midcast(user)
+		return
+
+	reveal()//concealed rune get automatically revealed upon use (either through using Seer or an attuned talisman). Placed after midcast: exception for Path talismans.
 
 	active_spell = get_rune_spell(user, src, "ritual" , word1, word2, word3)
-
 
 	if (!active_spell)
 		return fizzle(user)
@@ -446,7 +452,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	"<span class='warning'>You hear a faint fizzle.</span>")
 
 /obj/effect/rune/proc/conceal()
-	if (active_spell)
+	if (active_spell && !active_spell.can_conceal)
 		active_spell.abort(RITUALABORT_CONCEAL)
 	animate(src, alpha = 0, time = 5)
 	spawn(6)
@@ -458,6 +464,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		alpha = 0
 		invisibility=0
 		animate(src, alpha = 255, time = 5)
+		one_pulse()
 		conceal_cooldown = 1
 		spawn (100)
 			if (src && loc)
