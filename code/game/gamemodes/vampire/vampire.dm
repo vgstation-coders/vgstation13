@@ -234,8 +234,8 @@
 /datum/game_mode/proc/forge_vampire_objectives(var/datum/mind/vampire)
 	if(!SOLO_ANTAG_OBJECTIVES)
 		var/datum/objective/bee/b = new
-		b.owner = wizard
-		wizard.objectives += b
+		b.owner = vampire
+		vampire.objectives += b
 		return
 	//Objectives are traitor objectives plus blood objectives
 
