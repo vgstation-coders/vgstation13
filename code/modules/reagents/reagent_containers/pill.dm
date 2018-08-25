@@ -270,11 +270,18 @@
 	if(!M)
 		return
 	var/timer = round(reagents.get_reagent_amount(SUGAR),1)
-	forceMove(M)
+	var/datum/organ/internal/stomach/S = M.get_stomach()
+	if(S)
+		forceMove(S) // God damn 4D chess your way to eating a death pill, removing your stomach, **and putting it into someone else to kill them**.
+	else
+		forceMove(M)
 	spawn(timer*30)
 		reagents.del_reagent(SUGAR)
-		..(M)
-		qdel(src) // It'll be removed by the parent ingest proc at time of writing but doing it just in case this changes due to future code changes.
+		if(S)
+			reagents.trans_to(S.get_reagents(), reagents.total_volume)
+		else
+			..(M)
+		qdel(src)
 
 /obj/item/weapon/storage/pill_bottle/random
 	name = "trail mix"
