@@ -466,6 +466,7 @@
 	name = "clockwork girder"
 	icon_state = "cog"
 	material = /obj/item/stack/sheet/brass
+	construction_length = 80
 
 /obj/structure/girder/clockwork/cultify()
 	return
