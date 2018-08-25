@@ -64,11 +64,8 @@
 		return
 
 	for(var/mob/living/target in targets)
-		if(target)
+		if (target)
 			if(target == user)
-				user.remoteview_target = null
-				user.reset_view(0)
-			else if(!user.can_mind_interact(target))
 				user.remoteview_target = null
 				user.reset_view(0)
 			else
@@ -142,7 +139,7 @@
 	for(var/T in targets)
 		var/mob/living/carbon/human/target = T
 
-		if(!T || !istype(target) || tinfoil_check(target) || !user.can_mind_interact(target))
+		if(!T || !istype(target) || tinfoil_check(target))
 			user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
 			return
 

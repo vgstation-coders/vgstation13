@@ -3591,9 +3591,6 @@
 					"gremlins" = VERM_GREMLINS,
 					"bees" = VERM_BEES,
 					"hornets" = VERM_HORNETS,
-					"syphoners" = VERM_SYPHONER,
-					"greytide gremlins" = VERM_GREMTIDE,
-					"crabs" = VERM_CRABS,
 					)
 				var/ov = vermins[input("What vermin should infest the station?", "Vermin Infestation") in vermins]
 				var/ol = locations[input("Where should they spawn?", "Vermin Infestation") in locations]
@@ -3604,42 +3601,10 @@
 				infestation_event.override_location = ol
 				infestation_event.override_vermin = ov
 			if("hostile_infestation")
-				var/list/locations = list(
-					"RANDOM" = null,
-					"kitchen" = LOC_KITCHEN,
-					"atmospherics" = LOC_ATMOS,
-					"incinerator" = LOC_INCIN,
-					"chapel" = LOC_CHAPEL,
-					"library" = LOC_LIBRARY,
-					"hydroponics" = LOC_HYDRO,
-					"vault" = LOC_VAULT,
-					"technical storage" = LOC_TECH,
-					)
-				var/list/hostiles = list(
-					"RANDOM" = null,
-					"space bears" = MONSTER_BEAR,
-					"creatures" = MONSTER_CREATURE,
-					"xenos" = MONSTER_XENO,
-					"hivebots" = MONSTER_HIVEBOT,
-					"zombies" = MONSTER_ZOMBIE,
-					"skrites" = MONSTER_SKRITE,
-					"xeno empress" = MONSTER_SQUEEN,
-					"frogs" = MONSTER_FROG,
-					"goliaths" = MONSTER_GOLIATH,
-					"davids" = MONSTER_DAVID,
-					"megamadcrabs" = MONSTER_MADCRAB,
-					"spaghetti monster" = MONSTER_MEATBALLER,
-					"mutated cockroaches" = MONSTER_BIG_ROACH,
-					"cockroach queen" = MONSTER_ROACH_QUEEN,
-					)
-				var/om = hostiles[input("What hostile mob should infest the station?", "Hostile Infestation") in hostiles]
-				var/ol = locations[input("Where should they spawn?", "Hostile Infestation") in locations]
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","HI")
 				message_admins("[key_name_admin(usr)] has triggered an infestation of hostile creatures.", 1)
-				var/datum/event/hostile_infestation/hostile_infestation_event = new()
-				hostile_infestation_event.override_location = ol
-				hostile_infestation_event.override_monster = om
+				new /datum/event/hostile_infestation
 			if("mass_hallucination")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","MH")

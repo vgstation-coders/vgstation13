@@ -35,7 +35,6 @@
 	new /obj/item/device/gps/engineering(src)
 	new /obj/item/weapon/storage/belt/utility/chief(src)
 	new /obj/item/clothing/glasses/scanner/material(src)
-	new /obj/item/weapon/card/debit/preferred/department(src, "Engineering")
 
 /obj/structure/closet/secure_closet/engineering_electrical
 	name = "electrical supplies locker"

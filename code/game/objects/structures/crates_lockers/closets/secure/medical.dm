@@ -145,7 +145,6 @@
 		new /obj/item/weapon/storage/belt/medical(src)
 		new /obj/item/device/flash(src)
 		new /obj/item/weapon/reagent_containers/hypospray(src)
-		new /obj/item/weapon/card/debit/preferred/department(src, "Medical")
 		return
 
 
