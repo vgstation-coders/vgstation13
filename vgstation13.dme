@@ -1268,6 +1268,7 @@
 #include "code\modules\detectivework\footprints_and_rag.dm"
 #include "code\modules\Economy\Accounts.dm"
 #include "code\modules\Economy\AdminTools.dm"
+#include "code\modules\Economy\debit_card.dm"
 #include "code\modules\Economy\Economy.dm"
 #include "code\modules\Economy\Economy_Events.dm"
 #include "code\modules\Economy\Economy_Events_Mundane.dm"

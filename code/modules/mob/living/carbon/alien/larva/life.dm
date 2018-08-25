@@ -302,7 +302,7 @@
 	return 1
 
 
-/mob/living/carbon/alien/larva/proc/handle_regular_hud_updates()
+/mob/living/carbon/alien/larva/handle_regular_hud_updates()
 
 
 	if (stat == 2 || (M_XRAY in mutations))

@@ -186,7 +186,7 @@
 
 
 /obj/item/device/eftpos/proc/scan_card(var/obj/item/weapon/card/I)
-	if (istype(I, /obj/item/weapon/card/id))
+	if (istype(I, /obj/item/weapon/card))
 		charge_card(I)
 	else
 		..()

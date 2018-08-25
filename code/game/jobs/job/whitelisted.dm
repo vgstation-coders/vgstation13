@@ -60,7 +60,7 @@
 		job_title = src.title
 
 	if(!trader_account)
-		trader_account = create_account("Trader Shoal", 0, null, 0) //Starts 0 credits, not sourced from any database, earns 0 credits
+		trader_account = create_trader_account
 	M.mind.store_memory("<b>The joint trader account is:</b> #[trader_account.account_number]<br><b>Your shared account pin is:</b> [trader_account.remote_access_pin]<br>")
 
 	to_chat(M, "<B>You are a [job_title].</B>")

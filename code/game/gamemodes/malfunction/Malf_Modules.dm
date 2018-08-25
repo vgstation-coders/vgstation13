@@ -283,7 +283,8 @@ rcd light flash thingy on matter drain
 			continue
 		var/image/I = image(C.icon, C.icon_state)
 		I.appearance = C.appearance
-		I.plane = ABOVE_LIGHTING_LAYER
+		I.plane = STATIC_PLANE
+		I.layer = REACTIVATE_CAMERA_LAYER
 		I.alpha = 128
 		I.loc = C
 		camera_images += I

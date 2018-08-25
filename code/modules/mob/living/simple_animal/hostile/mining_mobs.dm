@@ -803,37 +803,49 @@ obj/item/asteroid/basilisk_hide/New()
 	new /obj/structure/boulder(src.loc)
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/boss/MoveToTarget()
-	if(!charging)
-		..()
-
-/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/OpenFire(target)
 	if(charging)
 		return
-	var/turf/T = get_turf(target)
+	..()
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/Goto(var/target, var/delay, var/minimum_distance)
+	if(charging && !isturf(target))
+		return
+	..()
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/OpenFire(target)
+	set waitfor = FALSE
+	if(charging)
+		return
+	walk(src, 0)
+	var/distance = get_dist(src, target)+rand(1,4)
+	var/turf/T = get_ranged_target_turf(target, get_dir(src, target), distance)
 	var/frustration = 0
 	ranged_cooldown = ranged_cooldown_cap
 	visible_message("<span class = 'warning'>\The [src] charges at \the [target]!</span>")
 	charging = TRUE
-	move_to_delay = 5
-	while(get_turf(src) != T || frustration < 5)
-		step_towards(src, T)
+	move_to_delay = 3
+	set_glide_size(DELAY2GLIDESIZE(move_to_delay))
+	while(get_turf(src) != T && frustration < distance)
+		for(var/mob/living/M in view(src))
+			if(!M.client)
+				continue
+			var/int_distance = get_dist(M, src)
+			shake_camera(M, 5, 2/int_distance)
+		step_towards(src, T, 3)
 		frustration++
 		sleep(move_to_delay)
 
 	charging = FALSE
 	move_to_delay = initial(move_to_delay)
+	set_glide_size(DELAY2GLIDESIZE(move_to_delay))
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/boss/to_bump(atom/A)
 	..()
 	if(charging && istype(A, /mob/living))
 		var/mob/living/M = A
-		var/turf/T = get_turf(src)
 		UnarmedAttack(M)
 		visible_message("<span class = 'warning'>\The [src] swats [M] aside!</span>")
-
-		var/turf/target_turf
+		var/turf/T = get_ranged_target_turf(M, get_dir(src,M), size)
 		if(istype(T, /turf/space)) // if ended in space, then range is unlimited
-			target_turf = get_edge_target_turf(T, dir)
-		else
-			target_turf = get_ranged_target_turf(T, dir, size)
-		M.throw_at(target_turf,100,move_to_delay)
+			T = get_edge_target_turf(M, dir)
+		M.throw_at(T,100,move_to_delay)
