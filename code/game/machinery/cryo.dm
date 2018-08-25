@@ -262,6 +262,22 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		data["cellTemperatureStatus"] = "bad"
 	else if(air_contents.temperature > 225)
 		data["cellTemperatureStatus"] = "average"
+	data["cellPressure"] = round(air_contents.pressure)
+	switch(air_contents.pressure)
+		if(HAZARD_HIGH_PRESSURE to INFINITY)
+			data["cellPressureStatus"] = "bad"
+		if(WARNING_HIGH_PRESSURE to HAZARD_HIGH_PRESSURE)
+			data["cellPressureStatus"] = "average"
+		if(WARNING_LOW_PRESSURE to WARNING_HIGH_PRESSURE)
+			data["cellPressureStatus"] = "good"
+		if(HAZARD_LOW_PRESSURE to WARNING_LOW_PRESSURE)
+			data["cellPressureStatus"] = "bad"
+		else
+			data["cellPressureStatus"] = "bad"
+	if(air_contents.temperature > T0C) // if greater than 273.15 kelvin (0 celcius)
+		data["cellTemperatureStatus"] = "bad"
+	else if(air_contents.temperature > 225)
+		data["cellTemperatureStatus"] = "average"
 	data["occupantTemperatureStatus"] = "bad"
 	if(occupant)
 		if(occupant.bodytemperature <= 170) //Temperature at which Cryoxadone and Clonexadone start working
@@ -284,6 +300,29 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if (beaker.reagents && beaker.reagents.reagent_list.len)
 			for(var/datum/reagent/R in beaker.reagents.reagent_list)
 				data["beakerVolume"] += R.volume
+
+	data["cellHabitabilityStatus"] = "good"
+	data["cellHabitability"] = "Safe."
+	if(data["cellPressureStatus"] == "bad")
+		if(data["cellTemperatureStatus"] == "bad")
+			data["cellHabitabilityStatus"] = "bad"
+			if(occupant)
+				data["cellHabitability"] = "DANGER! REMOVE OCCUPANT!"
+			else
+				data["cellHabitability"] = "Danger! Internal atmosphere unsuitable for occupants!"
+		else
+			if(data["beakerVolume"] > 0)
+				data["cellHabitabilityStatus"] = "average"
+				if(occupant)
+					data["cellHabitability"] = "Warning. Occupant healing slowed."
+				else
+					data["cellHabitability"] = "Warning. Current internal atmosphere will slow healing."
+			else
+				data["cellHabitabilityStatus"] = "bad"
+				if(occupant)
+					data["cellHabitability"] = "DANGER! REMOVE OCCUPANT!"
+				else
+					data["cellHabitability"] = "Danger! Internal atmosphere unsuitable for occupants without loaded medication!"
 
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
