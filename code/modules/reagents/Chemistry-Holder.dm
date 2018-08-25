@@ -1,5 +1,5 @@
 
-
+#define NO_STOMACH_AS_HUMAN_PENALTY 0.25 // greatly reduced reagent absorption without a stomach
 var/const/TOUCH = 1
 var/const/INGEST = 2
 
@@ -165,6 +165,47 @@ var/const/INGEST = 2
 			[whodunnit ? " [formatJumpTo(whodunnit)]" : ""]")
 
 	return amount
+
+// Handles ingestion. Alternate of trans_to()
+// Should've done this in the beginning.
+/datum/reagents/proc/ingest(mob/target as mob, var/amount, var/react = 1, var/multiplier=1, var/preserve_data=1, var/log_transfer, var/whodunnit)
+	if(!target)
+		return FALSE
+	if(!amount)
+		amount = total_volume
+	else
+		amount = min(total_volume, amount)
+	if (is_empty())
+		return FALSE
+	if(react)
+		reaction(target, INGEST)
+	var/datum/organ/internal/stomach/S = target.get_stomach()
+	if(S)
+		trans_to(target = S.get_reagents(), amount = amount, multiplier = multiplier, preserve_data = preserve_data, log_transfer = log_transfer, whodunnit = whodunnit)
+	else if(istype(target, /mob/living/carbon/human))
+		trans_to(target = target, amount = amount * NO_STOMACH_AS_HUMAN_PENALTY, multiplier = multiplier, preserve_data = preserve_data, log_transfer = log_transfer, whodunnit = whodunnit)
+	else
+		trans_to(target = target, amount = amount, multiplier = multiplier, preserve_data = preserve_data, log_transfer = log_transfer, whodunnit = whodunnit)
+	return TRUE
+
+// Future
+// For when we want to do something with lungs, such as a bad chemical in the air, but for now is the same as a trans_to() with some checks.
+/datum/reagents/proc/inhale(mob/target as mob, var/amount, var/react = 1, var/multiplier=1, var/preserve_data=1, var/log_transfer, var/whodunnit, var/copy = 0)
+	if(!target)
+		return FALSE
+	if(!amount)
+		amount = total_volume
+	else
+		amount = min(total_volume, amount)
+	if (is_empty())
+		return FALSE
+	if(react)
+		reaction(target, INGEST)
+	if(copy)
+		copy_to(target = target, amount = amount, multiplier = multiplier, preserve_data = preserve_data)
+	else
+		trans_to(target = target, amount = amount, multiplier = multiplier, preserve_data = preserve_data, log_transfer = log_transfer, whodunnit = whodunnit)
+
 
 //I totally cannot tell why this proc exists
 /datum/reagents/proc/trans_to_holder(var/datum/reagents/target, var/amount=1, var/multiplier=1, var/preserve_data=1)//if preserve_data=0, the reagents data will be lost. Usefull if you use data for some strange stuff and don't want it to be transferred.
@@ -871,3 +912,5 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		if(my_atom)
 			var/atom/A = my_atom
 			A.reagents = src
+
+#undef NO_STOMACH_AS_HUMAN_PENALTY

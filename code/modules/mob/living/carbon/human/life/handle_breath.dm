@@ -81,10 +81,9 @@
 
 					for(var/obj/effect/effect/smoke/chem/smoke in view(1, src)) //If there is smoke within one tile
 						if(smoke.reagents.total_volume)
-							smoke.reagents.reaction(src, INGEST)
 							spawn(5)
 								if(smoke)
-									smoke.reagents.copy_to(src, 10) //I dunno, maybe the reagents enter the blood stream through the lungs?
+									smoke.reagents.inhale(src, 10, copy = TRUE) //I dunno, maybe the reagents enter the blood stream through the lungs?
 							break //If they breathe in the nasty stuff once, no need to continue checking
 
 		else //Still give containing object the chance to interact

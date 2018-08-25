@@ -68,15 +68,10 @@
 		to_chat(user, "<span class='notice'>\The [target] is full!</span>")
 
 //OOP, HO!
-/obj/item/weapon/reagent_containers/pill/proc/ingest(mob/M as mob)
-	if(!reagents)
-		return
-	if(!M)
-		return
-	if (!src.is_empty())
-		reagents.reaction(M, INGEST)
-		reagents.trans_to(M, reagents.total_volume)
-	qdel(src)
+/obj/item/weapon/reagent_containers/pill/ingest(mob/M as mob)
+	if(..(M))
+		qdel(src)
+	
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Pills. END
@@ -278,9 +273,8 @@
 	forceMove(M)
 	spawn(timer*30)
 		reagents.del_reagent(SUGAR)
-		reagents.reaction(M, INGEST)
-		reagents.trans_to(M, reagents.total_volume)
-		qdel(src)
+		..(M)
+		qdel(src) // It'll be removed by the parent ingest proc at time of writing but doing it just in case this changes due to future code changes.
 
 /obj/item/weapon/storage/pill_bottle/random
 	name = "trail mix"
