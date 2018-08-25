@@ -66,7 +66,6 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	var/datum/supply_packs/object = null
 	var/datum/money_account/account = null
 	var/orderedby = null
-	var/authorized_name = null
 	var/comment = null
 
 /datum/supply_order/proc/OnConfirmed(var/mob/user)

@@ -35,10 +35,6 @@ var/global/datum/shuttle/trade/trade_shuttle = new(starting_area = /area/shuttle
 	link_to(trade_shuttle)
 	.=..()
 
-/obj/machinery/computer/shuttle_control/trade/initialize()
-	. = ..()
-	new /obj/item/weapon/card/debit/trader(src.loc)
-
 /obj/machinery/computer/shuttle_control/trade/proc/notify_port_toggled(var/reason)
 	if(!reason)
 		//Port opened

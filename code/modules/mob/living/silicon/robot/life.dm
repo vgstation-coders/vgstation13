@@ -128,9 +128,6 @@
 		druggy--
 		druggy = max(0, druggy)
 
-	handle_dizziness()
-	handle_jitteriness()
-
 	if(!is_component_functioning("radio"))
 		radio.on = FALSE
 	else
@@ -177,7 +174,7 @@
 			see_invisible = SEE_INVISIBLE_MINIMUM
 
 
-/mob/living/silicon/robot/handle_regular_hud_updates()
+/mob/living/silicon/robot/proc/handle_regular_hud_updates()
 	handle_sensor_modes()
 
 	regular_hud_updates() //Handles MED/SEC HUDs for borgs.

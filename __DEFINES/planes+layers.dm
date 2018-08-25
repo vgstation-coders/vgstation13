@@ -216,9 +216,6 @@ What is the naming convention for planes or layers?
 
 #define STATIC_PLANE 			22		// For AI's static.
 
-	#define STATIC_LAYER			1
-	#define REACTIVATE_CAMERA_LAYER	2
-
 #define FULLSCREEN_PLANE		23		// for fullscreen overlays that do not cover the hud.
 
 	#define FULLSCREEN_LAYER	 	0

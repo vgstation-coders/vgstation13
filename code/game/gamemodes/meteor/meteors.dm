@@ -515,8 +515,7 @@ var/list/blob_candidates = list()
 	icon_state = "firework_sparkle"
 	pixel_x = -16 * PIXEL_MULTIPLIER
 	pixel_y = -16 * PIXEL_MULTIPLIER
-	plane = LIGHTING_PLANE
-	layer = ABOVE_LIGHTING_LAYER
+	plane = ABOVE_LIGHTING_LAYER
 
 /obj/effect/overlay/firework_sparkle/New()
 	..()
