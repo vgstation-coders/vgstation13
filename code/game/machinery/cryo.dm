@@ -306,28 +306,27 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 				data["beakerVolume"] += R.volume
 
 	data["cellHabitabilityStatus"] = "good"
-	data["cellHabitability"] = "Safe."
+	data["cellHabitability"] = "Safe"
 	if(!emagged)
-		if(data["cellPressureStatus"] == "bad")
-			if(data["cellTemperatureStatus"] == "bad")
+		if(data["cellPressureStatus"] == "bad") // Pressure's too high or low. So pressure crush/vacuum.
+			if(data["cellTemperatureStatus"] == "bad") // Temperature isn't cold enough so even with medication they're gonna die from pressure damage
 				data["cellHabitabilityStatus"] = "bad"
-				if(occupant)
-					data["cellHabitability"] = "DANGER! REMOVE OCCUPANT!"
-				else
-					data["cellHabitability"] = "Danger! Internal atmosphere unsuitable for occupants!"
+				data["cellHabitability"] = "DANGER"
 			else
-				if(data["beakerVolume"] > 0)
+				if(data["beakerVolume"] > 0) // Temprature is cold enough and we have medication to fight the pressure damage. Assuming it's medicine.
 					data["cellHabitabilityStatus"] = "average"
-					if(occupant)
-						data["cellHabitability"] = "Warning. Occupant healing slowed."
-					else
-						data["cellHabitability"] = "Warning. Current internal atmosphere will slow healing."
-				else
+					data["cellHabitability"] = "Warning"
+				else // Or not.
 					data["cellHabitabilityStatus"] = "bad"
-					if(occupant)
-						data["cellHabitability"] = "DANGER! REMOVE OCCUPANT!"
-					else
-						data["cellHabitability"] = "Danger! Internal atmosphere unsuitable for occupants without loaded medication!"
+					data["cellHabitability"] = "DANGER"
+		else
+			switch(air_contents.temperature)
+				if(T0C + 50 to BODYTEMP_HEAT_DAMAGE_LIMIT) // It's getting toasty.
+					data["cellHabitabilityStatus"] = "average"
+					data["cellHabitability"] = "Warning"
+				if(BODYTEMP_HEAT_DAMAGE_LIMIT to INFINITY) // It's gonna roast someone.
+					data["cellHabitabilityStatus"] = "bad"
+					data["cellHabitability"] = "DANGER"
 
 	// update the ui if it exists, returns null if no ui is passed/found
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
