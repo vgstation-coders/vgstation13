@@ -670,6 +670,8 @@
 	return
 
 /mob/living/carbon/human/proc/vomit(hairball = 0, instant = 0)
+	var/datum/organ/internal/stomach/S = target.get_stomach()
+	var/reagent_source = S ? S.get_reagents() : src.reagents
 	if(!lastpuke)
 		lastpuke = 1
 		to_chat(src, "<spawn class='warning'>You feel nauseous...</span>")
@@ -693,6 +695,8 @@
 				var/obj/structure/toilet/T = locate(/obj/structure/toilet) in location //Look for a toilet
 				if(T && T.open)
 					src.visible_message("<span class='warning'>[src] throws up into \the [T]!</span>", "<span class='danger'>You throw up into \the [T]!</span>")
+					if(reagent_source)
+						reagent_source.remove_any(1 + reagent_source.total_volume * 0.1) // Still need to remove some reagents.
 					skip_message = 1
 				else //Look for a bucket
 
@@ -706,8 +710,8 @@
 
 						if(G.reagents.total_volume <= G.reagents.maximum_volume-7) //Container can fit 7 more units of chemicals - vomit into it
 							G.reagents.add_reagent(VOMIT, rand(3,10))
-							if(src.reagents)
-								reagents.trans_to(G, 1 + reagents.total_volume * 0.1)
+							if(reagent_source)
+								reagent_source.trans_to(G, 1 + reagent_source.total_volume * 0.1)
 						else //Container is nearly full - fill it to the brim with vomit and spawn some more on the floor
 							G.reagents.add_reagent(VOMIT, 10)
 							spawn_vomit_on_floor = 1
@@ -726,6 +730,8 @@
 			if(spawn_vomit_on_floor)
 				if(istype(location, /turf/simulated))
 					location.add_vomit_floor(src, 1, (hairball ? 0 : 1), 1)
+				if(reagent_source)
+					reagent_source.remove_any(1 + reagent_source.total_volume * 0.1) // Still need to remove some reagents.
 
 			if(!hairball)
 				nutrition = max(nutrition-40,0)
