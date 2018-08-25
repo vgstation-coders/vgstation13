@@ -191,6 +191,11 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(PASSMACHINE))
 		return 1
+	if(seconds_electrified > 0)
+		if(istype(mover, /obj/item))
+			var/obj/item/I = mover
+			if(I.siemens_coefficient > 0)
+				spark(src, 5)
 	return ..()
 
 /obj/machinery/vending/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
