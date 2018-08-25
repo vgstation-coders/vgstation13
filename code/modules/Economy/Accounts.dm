@@ -135,10 +135,6 @@ var/global/datum/money_account/trader_account
 							//2 - require card and manual login
 	var/virtual = 0
 	var/wage_gain = 0 // How much an account gains per 'wage' tick.
-	var/disabled = 0
-	// 0 Unlocked
-	// 1 User locked
-	// 2 Admin locked
 
 /datum/transaction
 	var/target_name = ""
@@ -237,18 +233,6 @@ var/global/datum/money_account/trader_account
 						<b>Account holder:</b> [detailed_account_view.owner_name]<br>
 						<b>Account balance:</b> $[detailed_account_view.money]<br>
 						<b>Assigned wage payout:</b> $[detailed_account_view.wage_gain]<br>
-						<b>Account status:</b> "}
-					switch(detailed_account_view.disabled)
-						if(0)
-							dat += "Enabled"
-						if(1)
-							dat += "User Disabled"
-						if(2)
-							dat += "Administratively Disabled"
-						else
-							dat += "???ERROR???"
-					dat += {"<br>
-						<a href='?src=\ref[src];choice=toggle_account;'>Administratively [detailed_account_view.disabled ? "enable" : "disable"] account</a><br>
 						<table border=1 style='width:100%'>
 						<tr>
 						<td><b>Date</b></td>
@@ -377,14 +361,11 @@ var/global/datum/money_account/trader_account
 			if("view_accounts_list")
 				detailed_account_view = null
 				creating_new_account = 0
-			if("toggle_account")
-				if(detailed_account_view)
-					detailed_account_view.disabled = detailed_account_view.disabled ? 0 : 2
 
 	src.attack_hand(usr)
 
 /obj/machinery/account_database/proc/charge_to_account(var/attempt_account_number, var/source_name, var/purpose, var/terminal_id, var/amount)
-	if(!activated || !attempt_account_number)
+	if(!activated)
 		return 0
 	for(var/datum/money_account/D in all_money_accounts)
 		if(D.account_number == attempt_account_number)
@@ -409,7 +390,7 @@ var/global/datum/money_account/trader_account
 
 //this returns the first account datum that matches the supplied accnum/pin combination, it returns null if the combination did not match any account
 /obj/machinery/account_database/proc/attempt_account_access(var/attempt_account_number, var/attempt_pin_number, var/security_level_passed = 0,var/pin_needed=1)
-	if(!activated || !attempt_account_number)
+	if(!activated)
 		return 0
 	for(var/datum/money_account/D in all_money_accounts)
 		if(D.account_number == attempt_account_number)
@@ -417,9 +398,6 @@ var/global/datum/money_account/trader_account
 				return D
 
 /obj/machinery/account_database/proc/get_account(var/account_number)
-	if(!account_number)
-		// Don't bother searching if there's no account number.
-		return null
 	for(var/datum/money_account/D in all_money_accounts)
 		if(D.account_number == account_number)
 			return D

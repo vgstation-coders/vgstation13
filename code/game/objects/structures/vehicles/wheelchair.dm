@@ -2,7 +2,7 @@
 	name = "wheelchair"
 	nick = "cripplin' ride"
 	desc = "A chair with fitted wheels. Used by handicapped to make life easier, however it still requires hands to drive."
-	icon = 'icons/obj/vehicles.dmi'
+	icon = 'icons/obj/objects.dmi'
 	icon_state = "wheelchair"
 
 	anchored = 0
@@ -19,7 +19,7 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/New()
 	. = ..()
-	wheel_overlay = image("icons/obj/vehicles.dmi", "[icon_state]_overlay", MOB_LAYER + 0.1)
+	wheel_overlay = image("icons/obj/objects.dmi", "[icon_state]_overlay", MOB_LAYER + 0.1)
 	wheel_overlay.plane = MOB_PLANE
 
 /obj/structure/bed/chair/vehicle/wheelchair/attackby(obj/item/weapon/W, mob/user)
@@ -288,7 +288,7 @@
 /obj/item/syndicate_wheelchair_kit
 	name = "Compressed Wheelchair Kit"
 	desc = "Collapsed parts, prepared to immediately spring into the shape of a wheelchair. One use. The Syndicate is not responsible for injury related to the use of this product."
-	icon = 'icons/obj/vehicles.dmi'
+	icon = 'icons/obj/objects.dmi'
 	icon_state = "wheelchair-item"
 	item_state = "syringe_kit" //This is just a grayish square
 	w_class = W_CLASS_LARGE
