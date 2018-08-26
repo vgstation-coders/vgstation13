@@ -15,7 +15,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.06
 	digestion_rate = 0.1 // Slow to move into the blood stream so stomach contents can actually be processed through.
 
-/datum/reagent/ethanol/digest(var/mob/living/carbon/human/M)
+/datum/reagent/charcoal/digest(var/mob/living/carbon/human/M)
 	var/datum/organ/internal/stomach/S = M.get_stomach()
 	if(prob(5))
 		M.vomit()
