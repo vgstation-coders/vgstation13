@@ -86,11 +86,6 @@
 
 
 /datum/game_mode/proc/forge_traitor_objectives(var/datum/mind/traitor)
-	if(!SOLO_ANTAG_OBJECTIVES)
-		var/datum/objective/bee/b = new
-		b.owner = traitor
-		traitor.objectives += b
-		return
 	if(istype(traitor.current, /mob/living/silicon))
 		var/datum/objective/assassinate/kill_objective = new
 		kill_objective.owner = traitor
