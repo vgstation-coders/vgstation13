@@ -50,6 +50,7 @@
 	var/density = 1 //(g/cm^3) Everything is water unless specified otherwise. round to 2dp
 	var/specheatcap = 1 //how much energy in joules it takes to heat this thing up by 1 degree (J/g). round to 2dp
 	var/digestion_rate = 1 // multiplier that affects reagents transfer from stomach to body. Higher means faster, lower means slower, 0 means the reagent stays in the stomach
+	var/skip_stomach = FALSE // Skips the stomach and dumps it all into the blood system.
 	var/overdose_includes_stomach = FALSE // if true, the volume of reagent in the stomach will count for overdose quantity
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -133,21 +134,17 @@
 	holder.remove_reagent(src.id, custom_metabolism) // If we aren't human, we don't have a liver, so just metabolize it the old fashioned way.
 
 // process the chemicals within the stomach, called by /datum/organ/internal/stomach in process() on all stomach contents
-// takes the mob as a mandatory argument
-// reagent damage to the stomach and threshold for stomach damage are optional arguments
-// if volume >= amount_for_damage then the stomach will take the specified amount of damage every time process() is called on the stomach (about once a second)
-// damage < 0 will heal the stomach
-/datum/reagent/proc/digest(var/mob/living/carbon/human/M, var/damage = 0, var/amount_for_damage = 0)
-	var/datum/organ/internal/stomach/S = M.get_stomach()
+// takes the mob and stomach as a mandatory argument
+/datum/reagent/proc/digest(var/mob/living/carbon/human/M, var/datum/organ/internal/stomach/S)
 	if(!S)
-		return // can't digest without a stomach
-
-	// deal damage - damage < 0 means it will heal the stomach
-	if(volume >= amount_for_damage)
-		S.damage += damage
-
-	// move part of the stomach contents to the body
-	S.get_reagents().trans_id_to(M, id, (volume / S.current_volume) * digestion_rate * S.base_intake_rate)
+		return FALSE // can't digest without a stomach
+	var/move_amount = 0
+	if(skip_stomach)
+		move_amount = volume
+	else
+		move_amount = (volume / S.current_volume) * digestion_rate * S.base_intake_rate
+	// move part or all of the stomach contents to the body
+	return S.get_reagents().trans_id_to(M, id, move_amount)
 
 /datum/reagent/proc/on_mob_life(var/mob/living/M, var/alien)
 	set waitfor = 0
@@ -603,8 +600,10 @@
 	density = 1.49033
 	specheatcap = 0.55536
 
-/datum/reagent/anti_toxin/digest(var/mob/living/carbon/human/M)
-	..(M, damage = 0.1, amount_for_damage = 15)
+/datum/reagent/anti_toxin/digest(var/mob/living/carbon/human/M, var/datum/organ/internal/stomach/S)
+	if(volume >= 15)
+		S.damage += 0.1
+	return ..(M, S)
 
 /datum/reagent/anti_toxin/on_mob_life(var/mob/living/M)
 
@@ -2072,8 +2071,9 @@
 					H.update_inv_shoes(0)
 		M.clean_blood()
 
-/datum/reagent/space_cleaner/digest(var/mob/living/carbon/human/M)
-	..(M, damage = 1)
+/datum/reagent/space_cleaner/digest(var/mob/living/carbon/human/M, var/datum/organ/internal/stomach/S)
+	S.damage += 1
+	return ..(M, S)
 
 /datum/reagent/space_cleaner/bleach
 	name = "Bleach"
@@ -2661,8 +2661,9 @@
 	density = 1.92
 	specheatcap = 5.45
 
-/datum/reagent/imidazoline/digest(var/mob/living/carbon/human/M)
-	..(M, damage = -0.5)
+/datum/reagent/imidazoline/digest(var/mob/living/carbon/human/M, var/datum/organ/internal/stomach/S)
+	S.damage = Clamp(S.damage - 0.5, 0, INFINITY)
+	return ..(M, S)
 
 /datum/reagent/imidazoline/on_mob_life(var/mob/living/M)
 
@@ -3283,7 +3284,7 @@
 	var/percent_machine = 0
 	density = 96.64
 	specheatcap = 199.99
-	digestion_rate = 100
+	skip_stomach = TRUE
 
 /datum/reagent/mednanobots/on_mob_life(var/mob/living/M)
 
@@ -3378,7 +3379,7 @@
 	data = 1 //Used as a tally
 	density = 134.21
 	specheatcap = 5143.18
-	digestion_rate = 100
+	skip_stomach = TRUE
 
 /datum/reagent/comnanobots/reagent_deleted()
 
@@ -3846,6 +3847,7 @@
 	data = 1 //Used as a tally
 	density = 6.82
 	specheatcap = 678.67
+	skip_stomach = TRUE
 
 /datum/reagent/creatine/reagent_deleted()
 
@@ -4022,6 +4024,7 @@
 	custom_metabolism = 0.01
 	data = 1 //Used as a tally
 	var/activated = 0
+	skip_stomach = TRUE
 
 /datum/reagent/amanatin/on_mob_life(var/mob/living/M)
 
@@ -4297,41 +4300,49 @@
 	reagent_state = LIQUID
 	color = "#6F884F" //rgb: 111, 136, 79
 	data = 1 //Used as a tally
+	digestion_rate = 0 // This seems to be more of a stomach focused reagent.
 
 /datum/reagent/discount/New()
 	..()
 	density = rand(12,48)
 	specheatcap = rand(25,2500)/100
 
-/datum/reagent/discount/on_mob_life(var/mob/living/M)
-
-	if(..())
-		return 1
-
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		switch(volume)
-			if(1 to 20)
-				if(prob(5))
-					to_chat(H,"<span class='warning'>You don't feel very good.</span>")
-					holder.remove_reagent(src.id, 0.1 * FOOD_METABOLISM)
-			if(20 to 35)
-				if(prob(10))
-					to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
-				if(prob(5))
-					H.adjustToxLoss(0.1)
-					H.visible_message("[H] groans.")
-					holder.remove_reagent(src.id, 0.3 * FOOD_METABOLISM)
-			if(35 to INFINITY)
-				if(prob(10))
-					to_chat(H,"<span class='warning'>Your stomach grumbles unsettlingly.</span>")
-				if(prob(5))
+/datum/reagent/discount/handle_discount(var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return FALSE
+	switch(volume)
+		if(1 to 20)
+			if(prob(5))
+				to_chat(H,"<span class='warning'>You don't feel very good.</span>")
+				holder.remove_reagent(src.id, 0.1 * FOOD_METABOLISM)
+		if(20 to 35)
+			if(prob(10))
+				to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
+			if(prob(5))
+				H.adjustToxLoss(0.1)
+				H.visible_message("[H] groans.")
+				holder.remove_reagent(src.id, 0.3 * FOOD_METABOLISM)
+		if(35 to INFINITY)
+			if(prob(10))
+				to_chat(H,"<span class='warning'>Your stomach grumbles unsettlingly.</span>")
+			if(prob(5))
+				var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
+				if(istype(L))
 					to_chat(H,"<span class='warning'>Something feels wrong with your body.</span>")
-					var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
-					if(istype(L))
-						L.take_damage(0.1, 1)
-					H.adjustToxLoss(0.13)
-					holder.remove_reagent(src.id, 0.5 * FOOD_METABOLISM)
+					L.take_damage(0.1, 1)
+				H.adjustToxLoss(0.13)
+				holder.remove_reagent(src.id, 0.5 * FOOD_METABOLISM)
+	return TRUE
+
+/datum/reagent/discount/digest(var/mob/living/carbon/human/M, var/datum/organ/internal/stomach/S)
+	handle_discount(M)
+	return ..(M, S)
+
+/datum/reagent/discount/on_mob_life(var/mob/living/carbon/human/M) // In case it was injected.
+	if(..())
+		return TRUE
+	handle_discount(M)
+	return ..(M, S)
 
 /datum/reagent/irradiatedbeans
 	name = "Irradiated Beans"
@@ -4427,18 +4438,24 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 22.25
 	specheatcap = 10.55
+	digestion_rate = 0.1 // Slow digestion mostly because discount is usually eaten.
 
-/datum/reagent/peptobismol/on_mob_life(var/mob/living/M)
-
-	if(..())
-		return 1
-
+/datum/reagent/peptobismol/handle_peptobismol(var/mob/living/M)
 	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
 	if(holder.has_reagent("discount"))
 		holder.remove_reagent("discount", 2 * REM)
 	var/lucidmod = M.sleeping ? 3 : M.lying + 1
 	M.hallucination = max(0, M.hallucination - 5 * REM * lucidmod)
 	M.adjustToxLoss(-2 * REM)
+
+/datum/reagent/peptobismol/digest(var/mob/living/carbon/human/M, var/datum/organ/internal/stomach/S)
+	handle_peptobismol(M)
+	return ..(M, S)
+
+/datum/reagent/peptobismol/on_mob_life(var/mob/living/M)
+	if(..())
+		return TRUE
+	handle_peptobismol(M)
 
 /datum/reagent/clottingagent
 	name = "Clotting Agent"
@@ -5271,7 +5288,7 @@
 		M.say(pick("The streets were heartless and cold, like the fickle 'love' of some hysterical dame.",
 			"The lights, the smoke, the grime... the city itself seemed alive that day. Was it the pulse that made me think so? Or just all the blood?",
 			"I caressed my .44 magnum. Ever since Jimmy bit it against the Two Bit Gang, the gun and its six rounds were the only partner I could trust.",
-			"The whole reason I took the case to begin with was trouble, in the shape of a pinup blonde with shanks that’d make you dizzy. Wouldn’t give her name, said she was related to the captain",
+			"The whole reason I took the case to begin with was trouble, in the shape of a pinup blonde with shanks that'd make you dizzy. Wouldn't give her name, said she was related to the captain",
 			"Judging by the boys at the lab, the perp took a sander to the tooth profiles, but did a sloppy job. Lab report came in early this morning. Guess my vacation is on pause.",
 			"The blacktop was baking that day, and the broads working 19th and Main were wearing even less than usual.",
 			"The young dame was pride and joy of the station. Little did she know that looks can breed envy... or worse.",
@@ -6527,8 +6544,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = LIQUID
 	color = "#12A7C9"
 
-/datum/reagent/fishbleach/digest(var/mob/living/carbon/human/M)
-	..(M, damage = 1)
+/datum/reagent/fishbleach/digest(var/mob/living/carbon/human/M, var/datum/organ/internal/stomach/S)
+	S.damage += 1
+	return ..(M, S)
 
 /datum/reagent/fishbleach/on_mob_life(var/mob/living/carbon/human/H)
 	if(..())

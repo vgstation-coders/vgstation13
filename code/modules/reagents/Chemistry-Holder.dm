@@ -181,11 +181,11 @@ var/const/INGEST = 2
 		reaction(target, INGEST)
 	var/datum/organ/internal/stomach/S = target.get_stomach()
 	if(S)
-		trans_to(target = S.get_reagents(), amount = amount, multiplier = multiplier, preserve_data = preserve_data, log_transfer = log_transfer, whodunnit = whodunnit)
-	else if(istype(target, /mob/living/carbon/human))
-		trans_to(target = target, amount = amount * NO_STOMACH_AS_HUMAN_PENALTY, multiplier = multiplier, preserve_data = preserve_data, log_transfer = log_transfer, whodunnit = whodunnit)
+		return trans_to(target = S.get_reagents(), amount = amount, multiplier = multiplier, preserve_data = preserve_data, log_transfer = log_transfer, whodunnit = whodunnit)
+	else if(ishuman(target) && !isskellington(target))
+		return trans_to(target = target, amount = amount * NO_STOMACH_AS_HUMAN_PENALTY, multiplier = multiplier, preserve_data = preserve_data, log_transfer = log_transfer, whodunnit = whodunnit)
 	else
-		trans_to(target = target, amount = amount, multiplier = multiplier, preserve_data = preserve_data, log_transfer = log_transfer, whodunnit = whodunnit)
+		return trans_to(target = target, amount = amount, multiplier = multiplier, preserve_data = preserve_data, log_transfer = log_transfer, whodunnit = whodunnit)
 	return TRUE
 
 // Future
