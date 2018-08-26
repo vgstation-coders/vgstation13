@@ -4307,7 +4307,7 @@
 	density = rand(12,48)
 	specheatcap = rand(25,2500)/100
 
-/datum/reagent/discount/proc/handle_discount(var/mob/living/carbon/human/H)
+/datum/reagent/discount/proc/handle_discount(var/mob/living/carbon/human/H, var/modifier = 1)
 	if(!istype(H))
 		return FALSE
 	switch(volume)
@@ -4319,18 +4319,18 @@
 			if(prob(10))
 				to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
 			if(prob(5))
-				H.adjustToxLoss(0.1)
+				H.adjustToxLoss(0.1 * modifier)
 				H.visible_message("[H] groans.")
 				holder.remove_reagent(src.id, 0.3 * FOOD_METABOLISM)
 		if(35 to INFINITY)
 			if(prob(10))
-				to_chat(H,"<span class='warning'>Your stomach grumbles unsettlingly.</span>")
+				to_chat(H,"<span class='warning'>You shudder. You <b>really</b> don't feel very good.</span>")
 			if(prob(5))
 				var/datum/organ/internal/liver/L = H.internal_organs_by_name["liver"]
 				if(istype(L))
 					to_chat(H,"<span class='warning'>Something feels wrong with your body.</span>")
-					L.take_damage(0.1, 1)
-				H.adjustToxLoss(0.13)
+					L.take_damage(0.1 * modifier, 1)
+				H.adjustToxLoss(0.13 * modifier)
 				holder.remove_reagent(src.id, 0.5 * FOOD_METABOLISM)
 	return TRUE
 
@@ -4341,7 +4341,7 @@
 /datum/reagent/discount/on_mob_life(var/mob/living/carbon/human/M) // In case it was injected.
 	if(..())
 		return TRUE
-	handle_discount(M)
+	handle_discount(M, 2)
 
 /datum/reagent/irradiatedbeans
 	name = "Irradiated Beans"
