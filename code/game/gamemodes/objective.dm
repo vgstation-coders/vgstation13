@@ -729,10 +729,3 @@ var/list/potential_theft_objectives=list(
 	if(owner.kills.len>5)
 		return 0
 	return 1
-	
-// The only good objective.
-/datum/objective/bee
-	explanation_text = "Just bee yourself."
-
-/datum/objective/bee/check_completion()
-	return 1
