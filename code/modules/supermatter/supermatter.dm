@@ -45,7 +45,7 @@
 	var/lastaudiowarning = 0
 
 	var/power = 0
-	var/power_loss_modifier = 600 // Higher == less power lost every process(). Was 500. With three emitters and no O2, power should tend towards 3207.7 J.
+	var/power_loss_modifier = 2500 // Higher == less power lost every process(). Was 500. With three emitters and no O2, power should tend towards 13935.5 J.
 	var/max_power = 2000 // Used for lighting scaling.
 
 	var/list/last_data = list("temperature" = 293, "oxygen" = 0.2)
