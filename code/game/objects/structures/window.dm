@@ -22,6 +22,7 @@ var/list/one_way_windows
 	var/ini_dir = null //This really shouldn't exist, but it does and I don't want to risk deleting it because it's likely mapping-related
 	var/d_state = WINDOWLOOSEFRAME //Normal windows have one step (unanchor), reinforced windows have three
 	var/shardtype = /obj/item/weapon/shard
+	var/reinforcetype = /obj/item/stack/rods
 	sheet_type = /obj/item/stack/sheet/glass/glass //Used for deconstruction
 	var/sheetamount = 1 //Number of sheets needed to build this window (determines how much shit is spawned via Destroy())
 	var/reinforced = 0 //Used for deconstruction steps
@@ -566,9 +567,10 @@ var/list/one_way_windows
 	..()
 
 /obj/structure/window/proc/spawnBrokenPieces()
-	new shardtype(loc, sheetamount)
+	if(shardtype)
+		new shardtype(loc, sheetamount)
 	if(reinforced)
-		new /obj/item/stack/rods(loc, sheetamount)
+		new reinforcetype(loc, sheetamount)
 
 /obj/structure/window/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 
@@ -687,6 +689,19 @@ var/list/one_way_windows
 	icon_state = "fwindow"
 	health = 30
 	sheet_type = /obj/item/stack/sheet/glass/rglass //Ditto above
+
+/obj/structure/window/reinforced/clockwork
+	name = "brass window"
+	desc = "A paper-thin pane of translucent yet reinforced brass."
+	icon_state = "clockworkwindow"
+	shardtype = null
+	sheet_type = /obj/item/stack/sheet/brass
+	reinforcetype = /obj/item/stack/sheet/ralloy
+	sheetamount = 2
+	health = 80
+
+/obj/structure/window/reinforced/clockwork/cultify()
+	return
 
 /obj/structure/window/send_to_past(var/duration)
 	..()
