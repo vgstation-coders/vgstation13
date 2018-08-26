@@ -139,8 +139,10 @@
 	else if(iswelder(W) && user.a_intent != I_HURT)
 		if(health < maxhealth)
 			if(open)
-				health = min(maxhealth, health+10)
-				user.visible_message("<span class='danger'>[user] repairs [src]!</span>","<span class='notice'>You repair [src]!</span>")
+				var/obj/item/weapon/weldingtool/WT = W
+				if(WT.remove_fuel(0))
+					health = min(maxhealth, health+10)
+					user.visible_message("<span class='danger'>[user] repairs [src]!</span>","<span class='notice'>You repair [src]!</span>")
 			else
 				to_chat(user, "<span class='notice'>Unable to repair with the maintenance panel closed.</span>")
 		else
