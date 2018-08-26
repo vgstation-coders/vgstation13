@@ -23,7 +23,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	purge_from_reagent_source(S.get_reagents())
 	return ..(M)
 
-/datum/reagent/charcoal/purge_from_reagent_source(var/datum/reagents/R)
+/datum/reagent/charcoal/proc/purge_from_reagent_source(var/datum/reagents/R)
 	if(!R)
 		return
 	var/found_any = FALSE
