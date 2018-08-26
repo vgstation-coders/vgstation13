@@ -4307,7 +4307,7 @@
 	density = rand(12,48)
 	specheatcap = rand(25,2500)/100
 
-/datum/reagent/discount/handle_discount(var/mob/living/carbon/human/H)
+/datum/reagent/discount/proc/handle_discount(var/mob/living/carbon/human/H)
 	if(!istype(H))
 		return FALSE
 	switch(volume)
@@ -4342,7 +4342,6 @@
 	if(..())
 		return TRUE
 	handle_discount(M)
-	return ..(M, S)
 
 /datum/reagent/irradiatedbeans
 	name = "Irradiated Beans"
@@ -4440,7 +4439,7 @@
 	specheatcap = 10.55
 	digestion_rate = 0.1 // Slow digestion mostly because discount is usually eaten.
 
-/datum/reagent/peptobismol/handle_peptobismol(var/mob/living/M)
+/datum/reagent/peptobismol/proc/handle_peptobismol(var/mob/living/M)
 	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
 	if(holder.has_reagent("discount"))
 		holder.remove_reagent("discount", 2 * REM)
