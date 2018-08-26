@@ -424,7 +424,7 @@
 	corpseradio = /obj/item/device/radio/headset
 	corpseshoes = /obj/item/clothing/shoes/laceup
 	corpseid = 1
-	corpseidjob = "Captain"
+	corpseidjob = "Chaplain"
 	corpseidaccess = "Chaplain"
 
 /obj/effect/landmark/corpse/quartermaster
