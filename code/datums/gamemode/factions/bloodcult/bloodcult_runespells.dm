@@ -1953,8 +1953,8 @@ var/list/blind_victims = list()
 		new /obj/effect/bloodcult_jaunt(T,null,destination,T)
 		flick("cult_jaunt_land",landing_animation)
 
-/datum/rune_spell/portalentrance/cast_talisman()
-	midcast()
+/datum/rune_spell/portalentrance/midcast_talisman(var/mob/add_cultist)
+	midcast(add_cultist)
 
 //RUNE XVII
 var/list/bloodcult_exitportals = list()
@@ -2066,6 +2066,7 @@ var/list/bloodcult_exitportals = list()
 	var/datum/rune_spell/portalexit/PE = valid_choices[network]
 
 	T.attuned_rune = PE.spell_holder
+	T.word_pulse(cultwords[network])
 
 //RUNE XVIII
 /datum/rune_spell/pulse
