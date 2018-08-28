@@ -145,6 +145,7 @@
 				to_chat(user, "<span class='warning'>ERROR</span>")
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
+		return
 
 	if(istype(W,/obj/item/weapon/reagent_containers/blood))
 		var/obj/item/weapon/reagent_containers/blood/B = W
@@ -157,9 +158,10 @@
 			speak("Thanks, nurse! Now I've got [contained_bags.len]!")
 			update_icon()
 			updateUsrDialog()
-	if(health < maxhealth && !isscrewdriver(W) && W.force && !emagged) //Retreat if we're not hostile and we're under attack
-		step_to(src, get_step_away(src,user))
-	..()
+		return
+	. = ..()
+	if(. && !emagged) //Retreat if we're not hostile and we're under attack
+		step_away(src,user)
 
 /obj/machinery/bot/bloodbot/Emag(mob/user as mob)
 	if(!locked)
