@@ -731,8 +731,8 @@ var/list/potential_theft_objectives=list(
 	return 1
 	
 // The only good objective.
-/datum/objective/bee
-	explanation_text = "Just bee yourself."
+/datum/objective/freeform
+	explanation_text = "Do as you like."
 
-/datum/objective/bee/check_completion()
+/datum/objective/freeform/check_completion()
 	return 1
