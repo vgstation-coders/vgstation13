@@ -87,6 +87,11 @@
 
 
 /datum/game_mode/proc/forge_wizard_objectives(var/datum/mind/wizard)
+	if(!SOLO_ANTAG_OBJECTIVES)
+		var/datum/objective/bee/b = new
+		b.owner = wizard
+		wizard.objectives += b
+		return
 	switch(rand(1,100))
 		if(1 to 30)
 
