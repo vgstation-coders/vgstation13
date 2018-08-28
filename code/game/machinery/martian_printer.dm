@@ -17,7 +17,7 @@
 /obj/machinery/mob_printer/attack_ghost(var/mob/dead/observer/O)
 	if(!canSpawn())
 		return
-	if(cooldown_active == 1)
+	if(cooldown_active)
 		to_chat(O, "<span class='warning'>Error: printer still recharging. Time left: [round((cooldown_time - world.time + 20)/10)] seconds.</span>")
 		return
 
@@ -41,7 +41,7 @@
 /obj/machinery/mob_printer/process()
 	..()
 	if(world.time >= cooldown_time)
-		if (cooldown_active == 1)
+		if (cooldown_active)
 			cooldown_active = 0
 			playsound(src, 'sound/machines/ping.ogg', 50, 0)
 
