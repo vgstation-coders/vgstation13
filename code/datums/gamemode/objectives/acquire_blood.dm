@@ -3,10 +3,11 @@
 	explanation_text = "Acquire 150 units of blood."
 	name = "(vampire) Acquire blood"
 
-/datum/objective/acquire_blood/New()
+/datum/objective/acquire_blood/PostAppend()
 	blood_objective = round(rand(3, 8)) * 50 // Between 150 and 400.
 	explanation_text = "Acquire [blood_objective] units of blood."
-	
+	return TRUE
+
 /datum/objective/acquire_blood/IsFulfilled()
 	if (..())
 		return TRUE

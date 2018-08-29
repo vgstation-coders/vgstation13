@@ -2,12 +2,13 @@
 	var/datum/mind/target = null	//If they are focused on a particular person.
 	var/target_amount = 0	//If they are focused on a particular number. Steal objectives have their own counter.
 	var/list/bad_assassinate_targets = list("AI","Cyborg","Mobile MMI","Trader")
+	var/auto_target = TRUE //Whether we pick a target automatically on PostAppend()
 	name = ""
 
-/datum/objective/target/New(var/text,var/auto_target = TRUE)
-	..()
-	if (auto_target)
-		find_target()
+/datum/objective/target/PostAppend()
+	if(auto_target)
+		return find_target()
+	return TRUE
 
 /datum/objective/target/proc/find_target()
 	var/list/possible_targets = list()
@@ -36,9 +37,3 @@
 
 /datum/objective/target/proc/select_target()
 	return 0
-
-/datum/objective/target/IsFulfilled()
-	if (..())
-		return TRUE
-	if(!target) //BE YOURSELF
-		return TRUE

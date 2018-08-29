@@ -4614,10 +4614,11 @@
 		var/setup = TRUE
 		if (istype(new_objective,/datum/objective/target))
 			var/datum/objective/target/new_O = new_objective
-			if (alert("Do you want to specify a target?", "New Objective", "Yes", "No") == "No")
-				setup = new_O.find_target()
-			else
+			if (alert("Do you want to specify a target?", "New Objective", "Yes", "No") == "Yes")
 				setup = new_O.select_target()
+				new_O.auto_target = FALSE
+			else
+				setup = TRUE //Let it sort itself out
 
 		if(!setup)
 			alert("Couldn't set-up a proper target.", "New Objective")
@@ -4638,7 +4639,7 @@
 		if (obj_holder.faction)
 			log_admin("[usr.key]/([usr.name]) removed \the [obj_holder.faction.ID]'s objective ([objective.explanation_text])")
 			objective.faction.handleRemovedObjective(objective)
-	
+
 		obj_holder.objectives.Remove(objective)
 
 	if(href_list["obj_completed"])

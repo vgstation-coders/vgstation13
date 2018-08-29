@@ -25,10 +25,11 @@
 			return FALSE
 		return total
 
-/datum/objective/convert_people/New(var/text, var/auto_target = TRUE)
+/datum/objective/convert_people/PostAppend()
 	faction = find_active_faction(LEGACY_CULT)
 	cultists_target = get_number()
 	explanation_text = "We must increase our influence before we can summon Nar-Sie. Convert [cultists_target] crew members. Take it slowly to avoid raising suspicions."
+	return TRUE
 
 /datum/objective/convert_people/IsFulfilled()
 	return (faction.members.len >= cultists_target)

@@ -223,8 +223,7 @@
 		O = objective_type
 	else
 		O = new objective_type
-	if(O.PostAppend())
-		objectives.AddObjective(O, antag)
+	if(objectives.AddObjective(O, antag))
 		return TRUE
 	return FALSE
 

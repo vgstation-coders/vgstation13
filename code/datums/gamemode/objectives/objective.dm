@@ -11,6 +11,16 @@
 	if(text)
 		explanation_text = text
 
+/datum/objective/target/Destroy()
+	owner = null
+	faction = null
+	..()
+
+/**
+	Used for post-adding things, such as objective/target finding a target that isn't the owner of this objective.
+	Return: TRUE if succesful, FALSE otherwise
+*/
+
 /datum/objective/proc/PostAppend()
 	return TRUE
 
@@ -31,6 +41,12 @@
 	objectives.Add(O)
 	if(M)
 		O.owner = M
+	if(O.PostAppend())
+		return TRUE
+	else
+		objectives.Remove(O)
+		qdel(O)
+		return FALSE
 
 /datum/objective_holder/proc/GetObjectives()
 	return objectives

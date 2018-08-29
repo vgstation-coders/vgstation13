@@ -4,13 +4,15 @@
 	name = "Sacrifice <target>"
 	flags = FACTION_OBJECTIVE
 
-/datum/objective/target/assassinate/sacrifice/New()
+/datum/objective/target/assassinate/sacrifice/PostAppend()
 	faction = find_active_faction(LEGACY_CULT)
 	if (!find_target())
 		message_admins("Could not find a target to sacrifice, rerolling objectives the hard way.")
 		var/datum/faction/cult/narsie/cult = faction
 		cult.getNewObjective()
 		CRASH("Could not find a target to sacrifice, rereolling objectives the hard way.") // Crash, so that it doesn't try to pass the bugged objective to the rest of the proc.
+		return FALSE
+	return TRUE
 
 /datum/objective/target/assassinate/sacrifice/find_target()
 	target = pick(get_targets())
