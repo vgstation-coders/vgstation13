@@ -333,7 +333,7 @@ var/list/arcane_tomes = list()
 
 	if (attuned_rune)
 		if (attuned_rune.loc)
-			attuned_rune.trigger(user)
+			attuned_rune.trigger(user,1)
 		else//darn, the rune got destroyed one way or another
 			attuned_rune = null
 			to_chat(user, "<span class='warning'>The talisman disappears into dust. The rune it was attuned to appears to no longer exist.</span>")
@@ -390,7 +390,19 @@ var/list/arcane_tomes = list()
 		spell_type = spell
 		uses = initial(spell.talisman_uses)
 
-		switch(initial(spell.talisman_absorb))
+		var/talisman_interaction = initial(spell.talisman_absorb)
+		if (R.active_spell)//some runes may change their interaction type dynamically (ie: Path Exit runes)
+			talisman_interaction = R.active_spell.talisman_absorb
+			if (istype(R.active_spell,/datum/rune_spell/portalentrance))
+				var/datum/rune_spell/portalentrance/entrance = R.active_spell
+				if (entrance.network)
+					word_pulse(cultwords[entrance.network])
+			else if (istype(R.active_spell,/datum/rune_spell/portalexit))
+				var/datum/rune_spell/portalentrance/exit = R.active_spell
+				if (exit.network)
+					word_pulse(cultwords[exit.network])
+
+		switch(talisman_interaction)
 			if (RUNE_CAN_ATTUNE)
 				playsound(src, 'sound/effects/talisman_attune.ogg', 50, 0, -5)
 				to_chat(user, "<span class='notice'>The talisman can now remotely trigger the [initial(spell.name)] rune.</span>")
@@ -403,6 +415,23 @@ var/list/arcane_tomes = list()
 				message_admins("Error! Some bloke ([key_name(user)]) managed to imbue a Conjure Talisman rune. That shouldn't be possible!")
 				return
 
+/obj/item/weapon/talisman/proc/word_pulse(var/datum/cultword/W)
+	var/image/I1 = image(icon,"talisman-[W.icon_state]a")
+	animate(I1, color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5, loop = -1)
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
+	overlays += I1
+	var/image/I2 = image(icon,"talisman-[W.icon_state]")
+	animate(I2, color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5, loop = -1)
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
+	overlays += I2
 
 ///////////////////////////////////////CULT BLADE////////////////////////////////////////////////
 

@@ -12,18 +12,18 @@
 	var/datum/cultword/word1 = null
 	var/datum/cultword/word2 = null
 	var/datum/cultword/word3 = null
-	var/teleporter = 0//teleporter runes only need the first two words to be valid
 	var/invocation = "Lo'Rem Ip'Sum"
 	var/cost_invoke = 0//blood cost upon cast
 	var/cost_upkeep = 0//blood cost upon upkeep proc
 	var/rune_flags = null //RUNE_STAND
 	var/list/contributors = list()//multiple cultists can join a single summoning
-	var/image/progbar = null
+	var/image/progbar = null//progress bar
 	var/remaining_cost = 0
 	var/accumulated_blood = 0
 	var/destroying_self = 0
+	var/can_conceal = 0//if set to 1, concealing the rune will not abort the spell.
 	var/cancelling = 3
-	var/touch_cast = 0
+	var/touch_cast = 0//if set to 1, will proc cast_touch() when touching someone with an imbued talisman
 	var/talisman_absorb = RUNE_CAN_IMBUE
 	var/talisman_uses = 1//Allows certain spells to be used many times from a single talisman. The talisman disappears upon the last use.
 	var/page = "Lorem ipsum dolor sit amet, consectetur adipiscing elit,\
@@ -59,7 +59,7 @@
 
 /datum/rune_spell/proc/pre_cast()
 	var/mob/living/user = activator
-
+	//checking whether we're casting from a rune or a talisman.
 	if (istype (spell_holder,/obj/effect/rune))
 		if ((rune_flags & RUNE_STAND) && (user.loc != spell_holder.loc))
 			abort(RITUALABORT_STAND)
@@ -67,10 +67,13 @@
 			user.say(invocation,"C")
 			cast()
 	else if (istype (spell_holder,/obj/item/weapon/talisman))
-		user.whisper(invocation)
+		user.whisper(invocation)//talisman incantations are whispered
 		cast_talisman()
 
 /datum/rune_spell/proc/midcast(var/mob/add_cultist)
+	return
+
+/datum/rune_spell/proc/midcast_talisman(var/mob/add_cultist)
 	return
 
 /datum/rune_spell/proc/blood_pay()
@@ -83,7 +86,7 @@
 
 /datum/rune_spell/proc/Removed(var/mob/M)
 
-/datum/rune_spell/proc/cast_talisman(var/mob/user, var/mob/target)
+/datum/rune_spell/proc/cast_talisman()
 	cast()//by default, talismans work just like runes, but may be set to work differently.
 
 /datum/rune_spell/proc/cast_touch(var/mob/M)
@@ -93,7 +96,7 @@
 	spell_holder.visible_message("<span class='warning'>This rune wasn't properly set up, tell a coder.</span>")
 	qdel(src)
 
-/datum/rune_spell/proc/abort(var/cause)
+/datum/rune_spell/proc/abort(var/cause)//ritals can fail for a plethora of reasons
 	if (destroying_self)
 		return
 	destroying_self = 1
@@ -162,15 +165,7 @@
 		return
 	for(var/subtype in subtypesof(/datum/rune_spell))
 		var/datum/rune_spell/instance = subtype
-		if (initial(instance.teleporter) && word1.type == initial(instance.word1) && word2.type == initial(instance.word2))
-			switch (use)
-				if ("ritual")
-					return new subtype(user, spell_holder, use, word3)
-				if ("examine")
-					return instance
-				if ("imbue")
-					return subtype
-		else if (word1.type == initial(instance.word1) && word2.type == initial(instance.word2) && word3.type == initial(instance.word3))
+		if (word1.type == initial(instance.word1) && word2.type == initial(instance.word2) && word3.type == initial(instance.word3))
 			switch (use)
 				if ("ritual")
 					return new subtype(user, spell_holder, use)
@@ -229,7 +224,7 @@
 /datum/rune_spell/raisestructure/midcast(var/mob/add_cultist)
 	if (add_cultist in contributors)
 		return
-	add_cultist.say(invocation)
+	add_cultist.say(invocation,"C")
 	contributors.Add(add_cultist)
 	if (add_cultist.client)
 		add_cultist.client.images |= progbar
@@ -1639,6 +1634,7 @@ var/list/blind_victims = list()
 /datum/rune_spell/summoncultist
 	name = "Blood Magnetism"
 	desc = "Bring forth one of your fellow believers, no matter how far they are, as long as their heart beats"
+	desc_talisman = "Use to begin the Blood Magnetism ritual where you stand."
 	Act_restriction = CULT_ACT_II
 	invocation = "N'ath reth sh'yro eth d'rekkathnor!"
 	word1 = /datum/cultword/join
@@ -1730,7 +1726,7 @@ var/list/blind_victims = list()
 /datum/rune_spell/summoncultist/midcast(var/mob/add_cultist)
 	if (add_cultist in contributors)
 		return
-	add_cultist.say(invocation)
+	add_cultist.say(invocation,"C")
 	contributors.Add(add_cultist)
 	if (add_cultist.client)
 		add_cultist.client.images |= progbar
@@ -1804,12 +1800,12 @@ var/list/blind_victims = list()
 			for(var/mob/living/L in contributors)
 				use_available_blood(L, cost_rejoin,contributors[L])
 				make_tracker_effects(L.loc,spell_holder, 1, "soul", 3, /obj/effect/tracker/drain, 3)
-				anim(target = L, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
+				var/atom/movable/overlay/landing_animation = anim(target = L, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
 				playsound(L, 'sound/effects/cultjaunt_prepare.ogg', 75, 0, -3)
 				spawn(10)
-					playsound(L, 'sound/effects/cultjaunt_land.ogg', 50, 0, -3)
+					playsound(L, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
 					new /obj/effect/bloodcult_jaunt(get_turf(L),L,pick(valid_turfs))
-					anim(target = L, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_land", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
+					flick("cult_jaunt_land",landing_animation)
 	else
 		if(target.locked_to || !isturf(target.loc))
 			to_chat(target, "<span class='warning'>You feel that some force wants to pull you through the veil, but cannot proceed while buckled or inside something.</span>")
@@ -1819,14 +1815,14 @@ var/list/blind_victims = list()
 			for(var/mob/living/L in contributors)
 				use_available_blood(L, cost_summon/contributors.len,contributors[L])
 				make_tracker_effects(L.loc,spell_holder, 1, "soul", 3, /obj/effect/tracker/drain, 3)
-			anim(target = src.target, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
+			var/atom/movable/overlay/landing_animation = anim(target = src.target, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
 			var/mob/M = target//so we keep track of them after the datum is ded until we jaunt
 			var/turf/T = get_turf(spell_holder)
 			playsound(M, 'sound/effects/cultjaunt_prepare.ogg', 75, 0, -3)
 			spawn(10)
-				playsound(M, 'sound/effects/cultjaunt_land.ogg', 50, 0, -3)
+				playsound(M, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
 				new /obj/effect/bloodcult_jaunt(get_turf(M),M,T)
-				anim(target = M, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_land", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
+				flick("cult_jaunt_land",landing_animation)
 
 	for(var/mob/living/L in contributors)
 		if (L.client)
@@ -1875,44 +1871,221 @@ var/list/blind_victims = list()
 
 //RUNE XVI
 /datum/rune_spell/portalentrance
-	name = "Portal Entrance"
+	name = "Path Entrance"
 	desc = "Take a shortcut through the veil between this world and the other one."
+	desc_talisman = "Use to remotely trigger the rune and force objects and creatures on top through the Path."
 	Act_restriction = CULT_ACT_II
 	invocation = "Sas'so c'arta forbici!"
 	word1 = /datum/cultword/travel
 	word2 = /datum/cultword/self
-	teleporter = 1
+	word3 = /datum/cultword/other
 	talisman_absorb = RUNE_CAN_ATTUNE
+	can_conceal = 1
+	var/network = ""
 
-/datum/rune_spell/portalentrance/New(var/mob/user, var/obj/holder, var/datum/cultword/w3)
-	..()
-	if (w3)
-		word3 = w3.type
+/datum/rune_spell/portalentrance/cast()
+	var/obj/effect/rune/R = spell_holder
+	R.one_pulse()
+
+	var/list/available_networks = cultwords_english.Copy()
+
+	network = input(activator, "Choose an available Path, you may change paths later by erasing the rune.", "Path Entrance") as null|anything in available_networks
+	if (!network)
+		qdel(src)
+		return
+
+	var/datum/cultword/W = cultwords[network]
+
+	activator.say("[W.rune]","C")
+	var/image/I_crystals = image('icons/obj/cult.dmi',"path_pad")
+	I_crystals.plane = OBJ_PLANE
+	I_crystals.layer = BELOW_TABLE_LAYER
+	var/image/I_stone = image('icons/obj/cult.dmi',"path_entrance")
+	I_stone.plane = ABOVE_TURF_PLANE
+	I_stone.layer = ABOVE_TILE_LAYER
+	I_stone.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
+
+	var/image/I_network
+	var/lookup = "[W.icon_state]-0-[DEFAULT_BLOOD]"//0 because the rune will pulse anyway, and make this overlay pulse along
+	if (lookup in uristrune_cache)
+		var/icon/I = uristrune_cache[lookup]
+		I_network = image(I)
+	else
+		var/icon/I = icon('icons/effects/uristrunes.dmi', "")
+		I = R.make_uristword(W,null,0)
+		I_network = image(I)
+	I_network.plane = ABOVE_TURF_PLANE
+	I_network.layer = BLOOD_LAYER
+	I_network.transform /= 2
+	I_network.pixel_y = -3
+
+	spell_holder.overlays += I_crystals
+	spell_holder.overlays += I_stone
+	spell_holder.overlays += I_network
+
+	spell_holder.icon = initial(spell_holder.icon)
+
+	to_chat(activator, "<span class='notice'>This rune will now let you travel through the \"[network]\" Path.</span>")
+
+	talisman_absorb = RUNE_CAN_ATTUNE//once the network has been set, talismans will attune instead of imbue
+
+/datum/rune_spell/portalentrance/midcast(var/mob/add_cultist)
+	if (istype(spell_holder, /obj/item/weapon/talisman))
+		add_cultist.whisper(invocation)
+	else
+		add_cultist.say(invocation,"C")
+
+	var/turf/destination = null
+	for (var/datum/rune_spell/portalexit/P in bloodcult_exitportals)
+		if (P.network == network)
+			destination = get_turf(P.spell_holder)
+			break
+
+	if (!destination)
+		to_chat(activator, "<span class='warning'>The \"[network]\" Path is closed. Set up a Path Exit rune to establish a Path.</span>")
+		return
+
+	var/turf/T = get_turf(spell_holder)
+	var/atom/movable/overlay/landing_animation = anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
+	playsound(T, 'sound/effects/cultjaunt_prepare.ogg', 75, 0, -3)
+	spawn(10)
+		playsound(T, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
+		new /obj/effect/bloodcult_jaunt(T,null,destination,T)
+		flick("cult_jaunt_land",landing_animation)
+
+/datum/rune_spell/portalentrance/midcast_talisman(var/mob/add_cultist)
+	midcast(add_cultist)
 
 //RUNE XVII
+var/list/bloodcult_exitportals = list()
+
 /datum/rune_spell/portalexit
-	name = "Portal Exit"
+	name = "Path Exit"
 	desc = "We hope you enjoyed your flight with Air Nar-Sie"//might change it later or not.
+	desc_talisman = "Use to immediately jaunt through the Path."
 	Act_restriction = CULT_ACT_II
+	invocation = "Sas'so c'arta forbici!"
 	word1 = /datum/cultword/travel
 	word2 = /datum/cultword/other
-	teleporter = 1
-	talisman_absorb = RUNE_CAN_ATTUNE
+	word3 = /datum/cultword/self
+	talisman_absorb = RUNE_CAN_IMBUE
+	can_conceal = 1
+	var/network = ""
 
-/datum/rune_spell/portalexit/New(var/mob/user, var/obj/holder, var/datum/cultword/w3)
+/datum/rune_spell/portalexit/New()
 	..()
-	if (w3)
-		word3 = w3.type
+	bloodcult_exitportals.Add(src)
+
+/datum/rune_spell/portalexit/Destroy()
+	bloodcult_exitportals.Remove(src)
+	..()
+
+/datum/rune_spell/portalexit/cast()
+	var/obj/effect/rune/R = spell_holder
+	R.one_pulse()
+
+	var/list/available_networks = cultwords_english.Copy()
+	for (var/datum/rune_spell/portalexit/P in bloodcult_exitportals)
+		if (P.network)
+			available_networks -= P.network
+
+	if (available_networks.len <= 0)
+		to_chat(activator, "<span class='warning'>There is no room for any more Paths through the veil.</span>")
+		qdel(src)
+		return
+
+	network = input(activator, "Choose an available Path, you may free the path later by erasing the rune.", "Path Exit") as null|anything in available_networks
+	if (!network)
+		qdel(src)
+		return
+
+	var/datum/cultword/W = cultwords[network]
+
+	activator.say("[W.rune]","C")
+	var/image/I_crystals = image('icons/obj/cult.dmi',"path_crystals")
+	I_crystals.plane = OBJ_PLANE
+	I_crystals.layer = BELOW_TABLE_LAYER
+	var/image/I_stone = image('icons/obj/cult.dmi',"path_stone")
+	I_stone.plane = ABOVE_TURF_PLANE
+	I_stone.layer = ABOVE_TILE_LAYER
+	I_stone.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
+
+	var/image/I_network
+	var/lookup = "[W.icon_state]-0-[DEFAULT_BLOOD]"//0 because the rune will pulse anyway, and make this overlay pulse along
+	if (lookup in uristrune_cache)
+		var/icon/I = uristrune_cache[lookup]
+		I_network = image(I)
+	else
+		var/icon/I = icon('icons/effects/uristrunes.dmi', "")
+		I = R.make_uristword(W,null,0)
+		I_network = image(I)
+	I_network.plane = ABOVE_TURF_PLANE
+	I_network.layer = BLOOD_LAYER
+	I_network.transform /= 2
+	I_network.pixel_y = -3
+
+	spell_holder.overlays += I_crystals
+	spell_holder.overlays += I_stone
+	spell_holder.overlays += I_network
+
+	spell_holder.icon = initial(spell_holder.icon)
+
+	to_chat(activator, "<span class='notice'>This rune will now serve as a destination for the \"[network]\" Path.</span>")
+
+	talisman_absorb = RUNE_CAN_ATTUNE//once the network has been set, talismans will attune instead of imbue
+
+/datum/rune_spell/portalexit/midcast(var/mob/add_cultist)
+	to_chat(add_cultist, "<span class='notice'>You may teleport to this rune by using a Path Entrance, or a talisman attuned to it.</span>")
+
+/datum/rune_spell/portalexit/midcast_talisman(var/mob/add_cultist)
+	add_cultist.whisper(invocation)
+	anim(target = get_turf(add_cultist), a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_teleport")
+	new /obj/effect/bloodcult_jaunt (get_turf(add_cultist), add_cultist, get_turf(spell_holder))
+
+/datum/rune_spell/portalexit/cast_talisman()
+	var/obj/item/weapon/talisman/T = spell_holder
+	T.uses++//so the talisman isn't deleted when setting the network
+	var/list/valid_choices = list()
+	for (var/datum/rune_spell/portalexit/P in bloodcult_exitportals)
+		if (P.network)
+			valid_choices.Add(P.network)
+			valid_choices[P.network] = P
+	if (valid_choices.len <= 0)
+		to_chat(activator, "<span class='warning'>There are currently no Paths through the veil.</span>")
+		qdel(src)
+		return
+	var/network = input(activator, "Choose an available Path.", "Path Talisman") as null|anything in valid_choices
+	if (!network)
+		qdel(src)
+		return
+
+	activator.whisper("[cultwords_rune[cultwords_english.Find(network)]]!")
+
+	to_chat(activator, "<span class='notice'>This talisman will now serve as a key to the \"[network]\" Path.</span>")
+
+	var/datum/rune_spell/portalexit/PE = valid_choices[network]
+
+	T.attuned_rune = PE.spell_holder
+	T.word_pulse(cultwords[network])
 
 //RUNE XVIII
 /datum/rune_spell/pulse
 	name = "Pulse"
 	desc = "Scramble the circuits of nearby devices"
+	desc_talisman = "Use to scramble the circuits of nearby devices."
 	Act_restriction = CULT_ACT_II
 	invocation = "Ta'gh fara'qha fel d'amar det!"
 	word1 = /datum/cultword/destroy
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/technology
+	var/network = ""
+
+/datum/rune_spell/pulse/cast()
+	var/turf/T = get_turf(spell_holder)
+	playsound(T, 'sound/items/Welder2.ogg', 25, 1)
+	T.hotspot_expose(700,125,surfaces=1)
+	empulse(T, 1, 3)
+	qdel(spell_holder)
 
 //RUNE XIX
 /datum/rune_spell/astraljourney

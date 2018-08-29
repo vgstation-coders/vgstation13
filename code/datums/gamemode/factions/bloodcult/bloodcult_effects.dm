@@ -38,7 +38,8 @@
 	pixel_x = -WORLD_ICON_SIZE
 	pixel_y = -WORLD_ICON_SIZE
 	animate_movement = 0
-	var/atom/movable/rider = null
+	var/atom/movable/rider = null//lone user?
+	var/list/packed = list()//moving a lot of stuff?
 
 	var/turf/starting = null
 	var/turf/target = null
@@ -66,16 +67,31 @@
 	var/landing = 0
 
 
-/obj/effect/bloodcult_jaunt/New(var/turf/loc, var/mob/user, var/turf/destination)
+/obj/effect/bloodcult_jaunt/New(var/turf/loc, var/mob/user, var/turf/destination, var/turf/packup)
 	..()
-	user.forceMove(src)
-	rider = user
-	if (ismob(rider))
-		var/mob/M = rider
-		M.see_invisible = SEE_INVISIBLE_CULTJAUNT
-		M.see_invisible_override = SEE_INVISIBLE_CULTJAUNT
-		M.apply_vision_overrides()
-	rider.flags |= INVULNERABLE//let's not forget to turn that off later
+	if (!user && !packup)
+		qdel(src)
+		return
+	if (user)
+		user.forceMove(src)
+		rider = user
+		if (ismob(rider))
+			var/mob/M = rider
+			M.see_invisible = SEE_INVISIBLE_CULTJAUNT
+			M.see_invisible_override = SEE_INVISIBLE_CULTJAUNT
+			M.apply_vision_overrides()
+			M.flags |= INVULNERABLE
+	if (packup)
+		for (var/atom/movable/AM in packup)
+			if (!AM.anchored)
+				AM.forceMove(src)
+				packed.Add(AM)
+				if (ismob(AM))
+					var/mob/M = AM
+					M.see_invisible = SEE_INVISIBLE_CULTJAUNT
+					M.see_invisible_override = SEE_INVISIBLE_CULTJAUNT
+					M.apply_vision_overrides()
+					M.flags |= INVULNERABLE
 	starting = loc
 	target = destination
 	initial_pixel_x = pixel_x
@@ -96,6 +112,10 @@
 	if (rider)
 		qdel(rider)
 		rider = null
+	if (packed.len > 0)
+		for(var/atom/A in packed)
+			qdel(A)
+	packed = list()
 	..()
 
 /obj/effect/bloodcult_jaunt/cultify()
@@ -238,7 +258,7 @@
 		sleep(sleeptime)
 
 /obj/effect/bloodcult_jaunt/proc/init_jaunt()
-	if (!rider)
+	if (!rider && packed.len <= 0)
 		qdel(src)
 		return
 	spawn while(loc)
@@ -246,19 +266,34 @@
 			var/mob/M = rider
 			M.delayNextAttack(3)
 			M.click_delayer.setDelay(3)
+		for(var/mob/M in packed)
+			M.delayNextAttack(3)
+			M.click_delayer.setDelay(3)
 		process_step()
 
 /obj/effect/bloodcult_jaunt/proc/bump_target_check()
 	if (loc == target)
-		playsound(loc, 'sound/effects/cultjaunt_land.ogg', 50, 0, -3)
-		rider.forceMove(target)
-		rider.flags &= ~INVULNERABLE
-		if (ismob(rider))
-			var/mob/M = rider
-			M.see_invisible = SEE_INVISIBLE_LIVING
-			M.see_invisible_override = 0
-			M.apply_vision_overrides()
-		rider = null
+		playsound(loc, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
+		if (rider)
+			rider.forceMove(target)
+			if (ismob(rider))
+				var/mob/M = rider
+				M.flags &= ~INVULNERABLE
+				M.see_invisible = SEE_INVISIBLE_LIVING
+				M.see_invisible_override = 0
+				M.apply_vision_overrides()
+			rider = null
+		if (packed.len > 0)
+			for(var/atom/movable/AM in packed)
+				AM.forceMove(target)
+				if (ismob(AM))
+					var/mob/M = AM
+					M.flags &= ~INVULNERABLE
+					M.see_invisible = SEE_INVISIBLE_LIVING
+					M.see_invisible_override = 0
+					M.apply_vision_overrides()
+			packed = list()
+
 		if (landing_animation)
 			flick("cult_jaunt_land",landing_animation)
 		qdel(src)
