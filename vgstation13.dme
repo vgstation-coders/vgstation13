@@ -320,6 +320,7 @@
 #include "code\game\supplyshuttle.dm"
 #include "code\game\area\ai_monitored.dm"
 #include "code\game\area\ambience_datums.dm"
+#include "code\game\area\area_ambience.dm"
 #include "code\game\area\areas.dm"
 #include "code\game\area\shadows.dm"
 #include "code\game\area\Space Station 13 areas.dm"

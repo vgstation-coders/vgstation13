@@ -1,6 +1,3 @@
-/*
-					sound = pick('sound/ambience/ambigen1.ogg', 'sound/ambience/ambigen3.ogg', 'sound/ambience/ambigen4.ogg', 'sound/ambience/ambigen5.ogg', 'sound/ambience/ambigen6.ogg', 'sound/ambience/ambigen7.ogg', 'sound/ambience/ambigen8.ogg', 'sound/ambience/ambigen9.ogg', 'sound/ambience/ambigen10.ogg', 'sound/ambience/ambigen11.ogg', 'sound/ambience/ambigen12.ogg', 'sound/ambience/ambigen14.ogg')
-*/
 //the datums are more apt to be for things that can loop. But the "single use" files can still be done. they should just have a long cooldown on them.
 
 //generic ambience.
@@ -48,7 +45,7 @@
 
 /datum/ambience/generic11
 	sound = 'sound/ambience/ambigen11.ogg'
-	length = 15 SECONDS + 30 SECONDS 
+	length = 15 SECONDS + 30 SECONDS
 
 /datum/ambience/generic12
 	sound = 'sound/ambience/ambigen12.ogg'
@@ -127,19 +124,19 @@
 //engineering ambience
 /datum/ambience/engi1
 	length = 15 SECONDS + 2 MINUTES
-	sound = 'sound/ambience/ambis1.ogg' 
+	sound = 'sound/ambience/ambisin1.ogg'
 
 /datum/ambience/engi2
 	length = 12 SECONDS + 2 MINUTES
-	sound = 'sound/ambience/ambis2.ogg' 
+	sound = 'sound/ambience/ambisin2.ogg'
 
 /datum/ambience/engi3
 	length = 12 SECONDS + 2 MINUTES
-	sound = 'sound/ambience/ambis3.ogg' 
+	sound = 'sound/ambience/ambisin3.ogg'
 
 /datum/ambience/engi4
 	length = 15 SECONDS + 2 MINUTES
-	sound = 'sound/ambience/ambis4.ogg' 
+	sound = 'sound/ambience/ambisin4.ogg'
 
 
 
@@ -151,15 +148,15 @@
 
 /datum/ambience/holy2
 	length = 11 SECONDS + 2 MINUTES //two minutes extra so people aren't spammed in the chapel.
-	sound = 'sound/ambience/ambicha2.ogg' 
+	sound = 'sound/ambience/ambicha2.ogg'
 
 /datum/ambience/holy3
 	length = 12 SECONDS + 2 MINUTES
-	sound = 'sound/ambience/ambicha3.ogg' 
+	sound = 'sound/ambience/ambicha3.ogg'
 
 /datum/ambience/holy4
 	length = 18 SECONDS + 2 MINUTES
-	sound = 'sound/ambience/ambicha4.ogg' 
+	sound = 'sound/ambience/ambicha4.ogg'
 
 //Morgue Ambience
 
