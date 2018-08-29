@@ -28,6 +28,14 @@
 		///////////////
 	var/ambience_playing= null
 	var/played			= 0
+	var/last_ambient_noise
+
+	var/background_music_playing = null
+
+	var/last_ambient_sound
+	var/last_background_music //no repeats.
+	var/ambience_buffer // essentially world.time + the length of the ambience sound file. this is to prevent overlap.
+	var/backgroundmusic_buffer //same as the ambience_buffer but for music.
 
 		////////////
 		//SECURITY//
@@ -83,6 +91,7 @@
 	//One-way windows
 	var/list/ViewFilter = list()
 	var/list/ObscuredTurfs = list()
+
 
 var/list/person_animation_viewers = list()
 var/list/item_animation_viewers = list()

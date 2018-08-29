@@ -41,6 +41,7 @@
 #define SS_PRIORITY_PLANT          40
 #define SS_PRIORITY_UNSPECIFIED    30
 #define SS_PRIORITY_LIGHTING       20
+#define SS_PRIORITY_AMBIENCE       19
 #define SS_PRIORITY_SUN            3
 #define SS_PRIORITY_GARBAGE        2
 #define SS_PRIORITY_INACTIVITY     1
