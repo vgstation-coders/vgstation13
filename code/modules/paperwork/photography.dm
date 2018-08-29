@@ -133,21 +133,19 @@
 	var/panelopen = FALSE
 	var/obj/item/weapon/light/bulb/flashbulb = null
 	var/start_with_bulb = TRUE
-	var/decon_path = /obj/item/device/camera
 
-/obj/item/device/camera/New()
+/obj/item/device/camera/New(var/empty = FALSE)
 	..()
+	if(empty == TRUE)
+		start_with_bulb = FALSE
+		pictures_left = 0
 	if(start_with_bulb)
-		flashbulb = new /obj/item/weapon/light/bulb(src)
+		flashbulb = new(src)
 
 /obj/item/device/camera/Destroy()
 	qdel(flashbulb)
 	flashbulb = null
 	..()
-
-/obj/item/device/camera/empty
-	start_with_bulb = FALSE
-	pictures_left = 0
 
 /obj/item/device/camera/sepia
 	name = "camera"
@@ -157,35 +155,20 @@
 	icon_on = "sepia-camera"
 	icon_off = "sepia-camera_off"
 	mech_flags = MECH_SCAN_FAIL
-	decon_path = /obj/item/device/camera/sepia/empty
-
-/obj/item/device/camera/sepia/empty
-	start_with_bulb = FALSE
-	pictures_left = 0
 
 /obj/item/device/camera/big_photos
 	name = "\improper XL camera"
 	photo_size = 5
-	decon_path = /obj/item/device/camera/big_photos/empty
 
 /obj/item/device/camera/big_photos/set_zoom()
 	return
 
-/obj/item/device/camera/big_photos/empty
-	start_with_bulb = FALSE
-	pictures_left = 0
-
 /obj/item/device/camera/huge_photos
 	name = "\improper XXL camera"
 	photo_size = 7
-	decon_path = /obj/item/device/camera/huge_photos/empty
 
 /obj/item/device/camera/huge_photos/set_zoom()
 	return
-
-/obj/item/device/camera/huge_photos/empty
-	start_with_bulb = FALSE
-	pictures_left = 0
 
 /obj/item/device/camera/examine(mob/user)
 	..()
@@ -224,7 +207,10 @@
 		usr.simple_message("<span class='info'>You zoom the camera out.</span>", "<span class='danger'>You take a bite of the mysterious mushroom. Everything feels so tiny!</span>") //Second message is shown when hallucinating
 
 /obj/item/device/camera/AltClick()
-	set_zoom()
+	if(is_holder_of(usr, src))
+		set_zoom()
+	else
+		return ..()
 
 /obj/item/device/camera/silicon
 	name = "silicon photo camera"
@@ -241,6 +227,14 @@
 	set category ="Robot Commands"
 	set name = "Print Image"
 	set src in usr
+
+	if(!isrobot(usr))
+		return
+
+	var/mob/living/silicon/robot/R = usr
+
+	if(R.incapacitated())
+		return
 
 	borgprint()
 
@@ -260,11 +254,11 @@
 		to_chat(user, "You attach [C.amount > 5 ? "some" : "the"] wires to \the [src]'s flash circuit.")
 		if(loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/obj/item/device/blinder/empty/Q = new(get_turf(user))
+			var/obj/item/device/blinder/Q = new(get_turf(user), empty = TRUE)
 			handle_blinder(Q)
 			user.put_in_hands(Q)
 		else
-			var/obj/item/device/blinder/empty/Q = new(get_turf(loc))
+			var/obj/item/device/blinder/Q = new(get_turf(loc), empty = TRUE)
 			handle_blinder(Q)
 		C.use(5)
 		qdel(src)
@@ -292,11 +286,12 @@
 
 	blinder.name = name
 	blinder.icon = icon
-	blinder.desc = "[desc] The film chamber is filled with wire for some reason."
+	blinder.base_desc = desc
+	blinder.update_desc()
 	blinder.icon_state = icon_state
 	blinder.item_state = item_state
 	blinder.mech_flags = mech_flags
-	blinder.decon_path = decon_path
+	blinder.decon_path = type
 
 /obj/item/device/camera/proc/camera_get_icon(list/turfs, turf/center)
 	var/atoms[] = list()

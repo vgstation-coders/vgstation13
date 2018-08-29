@@ -199,7 +199,7 @@
 				for(var/datum/organ/external/arm in M.organs)
 					if(istype(arm, /datum/organ/external/r_arm) || istype(arm, /datum/organ/external/l_arm))
 						arm.droplimb(1)
-				M.emote("scream", auto=TRUE)
+				M.audible_scream()
 				visible_message("<span class='sinister'>[M] tried to [bad_behavior] [src]! [ticker.Bible_deity_name] has frowned upon the disgrace!</span>")
 				punishment = "disarmed"
 		if(M.mind.special_role == BOMBERMAN)

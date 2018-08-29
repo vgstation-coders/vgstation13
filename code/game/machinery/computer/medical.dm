@@ -135,7 +135,7 @@
 		src.active1 = null
 	if (!( data_core.medical.Find(src.active2) ))
 		src.active2 = null
-	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
+	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || isAdminGhost(usr) || (istype(usr, /mob/living/silicon)))
 		usr.set_machine(src)
 		if (href_list["temp"])
 			src.temp = null
@@ -166,6 +166,12 @@
 			src.active2 = null
 
 		else if (href_list["login"])
+			if(isAdminGhost(usr))
+				active1 = null
+				active2 = null
+				authenticated = "Commander Green"
+				rank = "Central Commander"
+				screen = 1
 
 			if (istype(usr, /mob/living/silicon/ai))
 				src.active1 = null
@@ -427,7 +433,7 @@
 				var/counter = 1
 				while(src.active2.fields[text("com_[]", counter)])
 					counter++
-				src.active2.fields[text("com_[counter]")] = text("Made by [authenticated] ([rank]) on [time2text(world.realtime, "DDD MMM DD hh:mm:ss")]<BR>[t1]")
+				src.active2.fields[text("com_[counter]")] = text("Made by [authenticated] ([rank]) on [time2text(world.realtime, "DDD MMM DD")] [worldtime2text(give_seconds = TRUE)], [game_year]<BR>[t1]")
 
 			if (href_list["del_c"])
 				if ((istype(src.active2, /datum/data/record) && src.active2.fields[text("com_[]", href_list["del_c"])]))

@@ -833,6 +833,21 @@
 	if(!success)
 		user.forceMove(pick(L))
 
+/obj/item/weapon/spellbook/oneuse/pie
+	spell = /spell/targeted/projectile/pie
+	spellname = "Summon Pastry"
+	icon_state = "cooked_bookold"
+	desc = "This book smells lightly of lemon meringue."
+
+/obj/item/weapon/spellbook/oneuse/pie/recoil(mob/living/carbon/user)
+	..()
+	var/pie_to_spawn = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/pie))
+	var/turf/T = get_turf(pick(oview(1, user)))
+	var/obj/pie = new pie_to_spawn(T)
+	spawn()
+		pie.throw_at(user, get_dist(pie,user),rand(40,90))
+
+
 ///// ANCIENT SPELLBOOK /////
 
 /obj/item/weapon/spellbook/oneuse/ancient //the ancient spellbook contains weird and dangerous spells that aren't otherwise avaliable to purchase, only avaliable via the spellbook bundle
@@ -851,4 +866,15 @@
 	user.gib()
 	qdel(src)
 
+///// WINTER SPELLBOOK /////
 
+/obj/item/weapon/spellbook/oneuse/ancient/winter //the winter spellbook contains spells that would otherwise only be avaliable at christmas
+	possible_spells = list(/spell/targeted/wrapping_paper, /spell/targeted/equip_item/clowncurse/christmas, /spell/aoe_turf/conjure/snowmobile, /spell/targeted/equip_item/horsemask/christmas)
+	icon_state = "winter"
+	desc = "A book of festive knowledge"
+	spellname = "winter"
+
+/obj/item/weapon/spellbook/oneuse/ancient/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal from santa!</span>")
+	user.gib()
+	qdel(src)

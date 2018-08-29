@@ -336,3 +336,23 @@
 		P2.owner = user
 		P1.teleport(user)
 
+/obj/item/clothing/gloves/mining
+	name = "fists of the rockernaut"
+	desc = "Start 'em up and rock and roll!"
+	icon_state = "rockernaut_gloves"
+	item_state = "rockernaut_gloves"
+	damage_added = 5
+	hitsound_added = 'sound/weapons/heavysmash.ogg'
+
+/obj/item/clothing/gloves/mining/dexterity_check()
+	return FALSE
+
+/obj/item/clothing/gloves/mining/Touch(var/atom/A, mob/user, proximity)
+	if(proximity && istype(A, /turf/unsimulated/mineral) && do_after(user, A, 6))
+		playsound(get_turf(src), hitsound_added, 100, 1, vary = 0)
+		user.do_attack_animation(A, src)
+		var/turf/unsimulated/mineral/T = A
+		T.GetDrilled(0)
+
+/obj/item/clothing/gloves/mining/attack_icon()
+	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "rockernaut")

@@ -9,7 +9,7 @@
 
 	var/min_seeds = 1 //better manipulators improve this
 	var/max_seeds = 4 //better scanning modules improve this
-
+	
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 
 /********************************************************************
@@ -110,14 +110,73 @@ obj/machinery/seed_extractor/interact(mob/user as mob)
 	if (contents.len == 0)
 		dat += "<font color='red'>No seeds in storage!</font>"
 	else
-		dat += "<table cellpadding='3' style='text-align:center;'><tr><td width=300>Name</td><td>Lifespan</td><td>Endurance</td><td>Maturation</td><td>Production</td><td>Yield</td><td>Potency</td><td width=180>Stock</td><td width=250>Notes (Mouseover for Info)</td></tr>"
+		dat += {"
+<table cellpadding='3' style='text-align:center;'>
+	<thead>
+	<tr>
+		<th>Name</th>
+		<th>Lifespan</th>
+		<th>Endurance</th>
+		<th>Maturation</th>
+		<th>Production</th>
+		<th>Yield</th>
+		<th>Potency</th>
+		<th>Stock</th>
+		<th>Notes (Mouseover for Info)</th>
+	</tr>
+	<tr>
+		<th>
+			<a href="?src=\ref[src];sortby=name_asc">&uarr;</a>
+			<a href="?src=\ref[src];sortby=name_dsc">&darr;</a>
+		</th>
+		<th>
+			<a href="?src=\ref[src];sortby=lifespan_asc">&uarr;</a>
+			<a href="?src=\ref[src];sortby=lifespan_dsc">&darr;</a>
+		</th>
+		<th>
+			<a href="?src=\ref[src];sortby=endurance_asc">&uarr;</a>
+			<a href="?src=\ref[src];sortby=endurance_dsc">&darr;</a>
+		</th>
+		<th>
+			<a href="?src=\ref[src];sortby=maturation_asc">&uarr;</a>
+			<a href="?src=\ref[src];sortby=maturation_dsc">&darr;</a>
+		</th>
+		<th>
+			<a href="?src=\ref[src];sortby=production_asc">&uarr;</a>
+			<a href="?src=\ref[src];sortby=production_dsc">&darr;</a>
+		</th>
+		<th>
+			<a href="?src=\ref[src];sortby=yield_asc">&uarr;</a>
+			<a href="?src=\ref[src];sortby=yield_dsc">&darr;</a>
+		</th>
+		<th>
+			<a href="?src=\ref[src];sortby=potency_asc">&uarr;</a>
+			<a href="?src=\ref[src];sortby=potency_dsc">&darr;</a>
+		</th>
+		<th>
+			<a href="?src=\ref[src];sortby=stock_asc">&uarr;</a>
+			<a href="?src=\ref[src];sortby=stock_dsc">&darr;</a>
+		</th>
+	</tr>
+	</thead>
+	<tbody>
+"}
 		for (var/datum/seed_pile/P in piles)
-			dat += "<tr><td width=300>[P.seed.display_name][P.seed.roundstart ? "":" (#[P.seed.uid])"]</td><td>[P.seed.lifespan]</td><td>[P.seed.endurance]</td><td>[P.seed.maturation]</td>"
-			dat += "<td>[P.seed.production]</td><td>[P.seed.yield]</td><td>[P.seed.potency]</td><td width=180>"
-			dat += "<a href='byond://?src=\ref[src];seed=[P.seed.name];amt=1'>Vend</a>"
-			dat += "<a href='byond://?src=\ref[src];seed=[P.seed.name];amt=5'>5x</a>"
-			dat += "<a href='byond://?src=\ref[src];seed=[P.seed.name];amt=[P.amount]'>All</a>"
-			dat += "([P.amount] left)</td><td width=250> "
+			dat += {"
+		<tr>
+			<td>[P.seed.display_name][P.seed.roundstart ? "":" (#[P.seed.uid])"]</td>
+			<td>[P.seed.lifespan]</td>
+			<td>[P.seed.endurance]</td>
+			<td>[P.seed.maturation]</td>
+			<td>[P.seed.production]</td>
+			<td>[P.seed.yield]</td>
+			<td>[P.seed.potency]</td>
+			<td>
+			<a href='byond://?src=\ref[src];seed=[P.seed.name];amt=1'>Vend</a>
+			<a href='byond://?src=\ref[src];seed=[P.seed.name];amt=5'>5x</a>
+			<a href='byond://?src=\ref[src];seed=[P.seed.name];amt=[P.amount]'>All</a>
+			([P.amount] left)</td>
+			<td>"}
 			if(P.seed.biolum && P.seed.biolum_colour)
 				dat += "<span title=\"This plant is bioluminescent.\" color=[P.seed.biolum_colour]>LUM </span>"
 			switch(P.seed.spread)
@@ -153,8 +212,8 @@ obj/machinery/seed_extractor/interact(mob/user as mob)
 				dat += "<span title=\"This is a ligneous plant with strong and robust stems.\">WOOD </span>"
 			if(P.seed.teleporting)
 				dat += "<span title=\"This plant possesses a high degree of temporal/spatial instability and may cause spontaneous bluespace disruptions.\">TELE </span>"
-			dat += "</td>"
-		dat += "</table>"
+			dat += "</td><tr>"
+		dat += "</tbody></table>"
 	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "seed_ext", name, 1000, 400)
 	popup.set_content(dat)
@@ -166,29 +225,55 @@ obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
 		return
 	usr.set_machine(src)
 
-	var/amt = text2num(href_list["amt"])
-	var/datum/seed/S = plant_controller.seeds[href_list["seed"]]
+	var/static/list/sorting_methods = list(
+		"name_asc" = /proc/cmp_seed_name_asc,
+		"name_dsc" = /proc/cmp_seed_name_dsc,
+		"lifespan_asc" = /proc/cmp_seed_lifespan_asc,
+		"lifespan_dsc" = /proc/cmp_seed_lifespan_dsc,
+		"endurance_asc" = /proc/cmp_seed_endurance_asc,
+		"endurance_dsc" = /proc/cmp_seed_endurance_dsc,
+		"maturation_asc" = /proc/cmp_seed_maturation_asc,
+		"maturation_dsc" = /proc/cmp_seed_maturation_dsc,
+		"production_asc" = /proc/cmp_seed_production_asc,
+		"production_dsc" = /proc/cmp_seed_production_dsc,
+		"yield_asc" = /proc/cmp_seed_yield_asc,
+		"yield_dsc" = /proc/cmp_seed_yield_dsc,
+		"potency_asc" = /proc/cmp_seed_potency_asc,
+		"potency_dsc" = /proc/cmp_seed_potency_dsc,
+		"stock_asc" = /proc/cmp_seed_stock_asc,
+		"stock_dsc" = /proc/cmp_seed_stock_dsc,
+	)
 
-	for(var/datum/seed_pile/P in piles)
-		if(P.seed == S)
-			if(P.amount <= 0)
-				return
-			P.amount -= amt
-			if (P.amount <= 0)
-				piles -= P
-				qdel(P)
-			break
+	var/sortby = href_list["sortby"]
+	if(sortby && (sortby in sorting_methods))
+		sortTim(piles, sorting_methods[sortby])
+		updateUsrDialog()
+		return
+	
+	if("amt" in href_list)
+		var/amt = text2num(href_list["amt"])
+		var/datum/seed/S = SSplant.seeds[href_list["seed"]]
 
-	for (var/obj/item/seeds/O in contents) //Now we find the seed we need to vend
-		//if (O.seed.display_name == href_list["name"] && O.seed.lifespan == href_list["li"] && O.seed.endurance == href_list["en"] && O.seed.maturation == href_list["ma"] && O.seed.production == href_list["pr"] && O.seed.yield == href_list["yi"] && O.seed.potency == href_list["pot"] && href_list["biolum_colour"] == O.seed.biolum_colour && href_list["gasexude"] == O.seed.exude_gasses.len && O.seed.spread == href_list["spread"] && O.seed.alter_temp == href_list["alter_temp"] && O.seed.carnivorous == href_list["carnivorous"] && O.seed.parasite == href_list["parasite"] && O.seed.hematophage == href_list["hematophage"] && O.seed.thorny == href_list["thorny"] && O.seed.stinging == href_list["stinging"] && O.seed.ligneous == href_list["ligneous"] && O.seed.teleporting == href_list["teleporting"] && O.seed.juicy == href_list["juicy"]) //If the spaghetti above wasn't proof enough, the length of of this line alone should tell you that something is probably very very wrong here and this whole fucking file probably shouldn't work the way it does. What it SHOULD do is just store the seed datum itself and check the stored seed's seed datum, which would be infinitely simpler. However, since no other machines use or are dependent on this shitcode, and due to the fact that seed datums will likely not be re-structured much if at all in the future, to that I say fuck it, it just werks. Sincerely, please don't git blame me I only intended well, oh god don't take my pomfcoins way no i didn't even come up with this system originally i just ported it and lazily expanded it please okay there I made it not shit chickenman no
-		if(O.seed == S)
-			O.forceMove(src.loc)
-			amt--
-			if (amt <= 0)
+		for(var/datum/seed_pile/P in piles)
+			if(P.seed == S)
+				if(P.amount <= 0)
+					return
+				P.amount -= amt
+				if (P.amount <= 0)
+					piles -= P
+					qdel(P)
 				break
 
-	src.updateUsrDialog()
-	return
+		for (var/obj/item/seeds/O in contents) //Now we find the seed we need to vend
+			//if (O.seed.display_name == href_list["name"] && O.seed.lifespan == href_list["li"] && O.seed.endurance == href_list["en"] && O.seed.maturation == href_list["ma"] && O.seed.production == href_list["pr"] && O.seed.yield == href_list["yi"] && O.seed.potency == href_list["pot"] && href_list["biolum_colour"] == O.seed.biolum_colour && href_list["gasexude"] == O.seed.exude_gasses.len && O.seed.spread == href_list["spread"] && O.seed.alter_temp == href_list["alter_temp"] && O.seed.carnivorous == href_list["carnivorous"] && O.seed.parasite == href_list["parasite"] && O.seed.hematophage == href_list["hematophage"] && O.seed.thorny == href_list["thorny"] && O.seed.stinging == href_list["stinging"] && O.seed.ligneous == href_list["ligneous"] && O.seed.teleporting == href_list["teleporting"] && O.seed.juicy == href_list["juicy"]) //If the spaghetti above wasn't proof enough, the length of of this line alone should tell you that something is probably very very wrong here and this whole fucking file probably shouldn't work the way it does. What it SHOULD do is just store the seed datum itself and check the stored seed's seed datum, which would be infinitely simpler. However, since no other machines use or are dependent on this shitcode, and due to the fact that seed datums will likely not be re-structured much if at all in the future, to that I say fuck it, it just werks. Sincerely, please don't git blame me I only intended well, oh god don't take my pomfcoins way no i didn't even come up with this system originally i just ported it and lazily expanded it please okay there I made it not shit chickenman no
+			if(O.seed == S)
+				O.forceMove(src.loc)
+				amt--
+				if (amt <= 0)
+					break
+
+		updateUsrDialog()
+		return
 
 obj/machinery/seed_extractor/proc/moveToStorage(var/obj/item/seeds/O as obj)
 	if(istype(O.loc,/obj/item/weapon/storage))
@@ -209,3 +294,43 @@ obj/machinery/seed_extractor/proc/hasSpaceCheck(mob/user as mob)
 		return 0
 	else
 		return 1
+
+/proc/cmp_seed_name_asc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return sorttext(b.seed.name, a.seed.name)
+/proc/cmp_seed_name_dsc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return sorttext(a.seed.name, b.seed.name)
+
+/proc/cmp_seed_lifespan_asc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return a.seed.lifespan - b.seed.lifespan
+/proc/cmp_seed_lifespan_dsc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return b.seed.lifespan - a.seed.lifespan
+
+/proc/cmp_seed_endurance_asc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return a.seed.endurance - b.seed.endurance
+/proc/cmp_seed_endurance_dsc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return b.seed.endurance - a.seed.endurance
+
+/proc/cmp_seed_maturation_asc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return a.seed.maturation - b.seed.maturation
+/proc/cmp_seed_maturation_dsc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return b.seed.maturation - a.seed.maturation
+
+/proc/cmp_seed_production_asc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return a.seed.production - b.seed.production
+/proc/cmp_seed_production_dsc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return b.seed.production - a.seed.production
+
+/proc/cmp_seed_yield_asc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return a.seed.yield - b.seed.yield
+/proc/cmp_seed_yield_dsc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return b.seed.yield - a.seed.yield
+
+/proc/cmp_seed_potency_asc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return a.seed.potency - b.seed.potency
+/proc/cmp_seed_potency_dsc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return b.seed.potency - a.seed.potency
+
+/proc/cmp_seed_stock_asc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return a.amount - b.amount
+/proc/cmp_seed_stock_dsc(var/datum/seed_pile/a, var/datum/seed_pile/b)
+	return b.amount - a.amount

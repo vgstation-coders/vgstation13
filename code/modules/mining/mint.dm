@@ -1,198 +1,244 @@
 /**********************Mint**************************/
 
 /obj/machinery/mineral/mint
-	name = "Coin press"
+	name = "coin press"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "coinpress0"
 	density = 1
 	anchored = 1
-	var/obj/machinery/mineral/input = null
-	var/obj/machinery/mineral/output = null
-
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	var/atom/movable/mover //see ore processing_unit, it's for input/output
 	starting_materials = list() //makes the new empty datum
-
-	var/newCoins = 0   //how many coins the machine made in it's last load
+	var/coins_per_sheet = 5 //Related to part quality
+	var/newCoins = 0   //how many coins the machine made last run
 	var/processing = 0
-	var/chosen = "iron" //which material will be used to make coins
+	var/chosen = null //which material will be used to make coins
 	var/coinsToProduce = 10
-
+	var/in_dir = WEST // Sheets go in
+	var/out_dir = EAST //Coins come out.
 
 /obj/machinery/mineral/mint/New()
 	..()
-	spawn( 5 )
-		for (var/dir in cardinal)
-			src.input = locate(/obj/machinery/mineral/input, get_step(src, dir))
-			if(src.input)
-				break
-		for (var/dir in cardinal)
-			src.output = locate(/obj/machinery/mineral/output, get_step(src, dir))
-			if(src.output)
-				break
 
-		return
-	return
-
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/coin_press,
+		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/micro_laser
+	)
+	RefreshParts()
 
 /obj/machinery/mineral/mint/process()
-	if ( src.input)
-		var/obj/item/stack/sheet/O
-		O = locate(/obj/item/stack/sheet, input.loc)
-		if(O)
-			for(var/ore_id in materials.storage)
-				var/datum/material/po = materials.getMaterial(ore_id)
-				if (po.cointype && istype(O,po.sheettype))
-					materials.addAmount(ore_id, 5 * O.amount) // 100/20 = 5 coins per sheet.
-					qdel(O)
-					break
+	if(stat & (NOPOWER|BROKEN)) //It still moves sheets when unbolted otherwise.
+		return 0
+	var/turf/in_T = get_step(src, in_dir)
+	var/turf/out_T = get_step(src, out_dir)
 
+	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
+		return
 
-/obj/machinery/mineral/mint/attack_hand(user as mob)
-	var/html = {"<html>
-	<head>
-		<title>Mint</title>
-		<style type="text/css">
-html,body {
-	font-family:sans-serif,verdana;
-	font-size:smaller;
-	color:#666;
-}
-h1 {
-	border-bottom:1px solid maroon;
-}
-table {
-	border-spacing: 0;
-	border-collapse: collapse;
-}
-td, th {
-	margin: 0;
-	font-size: small;
-	border-bottom: 1px solid #ccc;
-	padding: 3px;
-}
+	for(var/atom/movable/A in in_T)
+		if(A.anchored)
+			continue
 
-tr:nth-child(even) {
-	background: #efefef;
-}
+		if(!istype(A, /obj/item/stack/sheet))//Sheets only
+			A.forceMove(out_T)
+			continue
 
-a.smelting {
-	color:white;
-	font-weight:bold;
-	text-decoration:none;
-	background-color:green;
-}
+		var/obj/item/stack/sheet/O = A
 
-a.notsmelting {
-	color:white;
-	font-weight:bold;
-	text-decoration:none;
-	background-color:maroon;
-}
-		</style>
-	</head>
-	<body>
-		<h1>Mint</h1>
-		<p><b>Current Status:</b> (<a href='?src=\ref[user];mach_close=recyk_furnace'>Close</a>)</p>"}
+		for(var/sheet_id in materials.storage)
+			var/datum/material/mat = materials.getMaterial(sheet_id)
+			if (mat.cointype && istype(O,mat.sheettype))
+				materials.addAmount(sheet_id, O.amount)
+				src.updateUsrDialog()
+				qdel(O)
+				break
 
+/obj/machinery/mineral/mint/RefreshParts()
+	var/i = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/A in component_parts)
+		i += A.rating
+	coins_per_sheet = initial(coins_per_sheet) * (i / 2) //Better coin ratio, it's something.
 
-	if (!input)
-		html += "<p style='color:red;font-weight:bold;'>INPUT NOT SET</p>"
-	if (!output)
-		html += "<p style='color:red;font-weight:bold;'>OUTPUT NOT SET</p>"
-	html+={"
-		<table>
-			<tr>
-				<th>Material</th>
-				<th># Coins</th>
-				<th>Controls</th>
-			</tr>"}
-
+/obj/machinery/mineral/mint/attack_hand(mob/user)
+	add_fingerprint(user)
+	if(stat & (NOPOWER | BROKEN))
+		if(user.machine == src)
+			user.unset_machine(src)
+		return
+	user.set_machine(src)
+	var/dat = list()
+	dat += "<table><tr><td colspan='3'; align='center'><b>Sheets</b></td></tr><tr>"
 	var/nloaded=0
 	for(var/ore_id in materials.storage)
 		var/datum/material/ore_info = materials.getMaterial(ore_id)
 		if(materials.storage[ore_id] && ore_info.cointype)
-			html += {"
-			<tr>
-				<td class="clmName">[ore_info.processed_name]</td>
-				<td>[materials.storage[ore_id]]</td>
-				<td>
-					<a href="?src=\ref[src];choose=[ore_id]" "}
-			if (chosen==ore_id)
-				html += "class=\"smelting\">Selected"
+			if (chosen == null)
+				chosen = ore_id //Auto select the first sheet
+			dat += "<td align='right'>"
+			if (chosen == ore_id)
+				dat += "[ore_info.processed_name]</td>"
 			else
-				html += "class=\"notsmelting\">Select"
-			html += "</a></td></tr>"
+				dat += "<a href='?src=\ref[src];choose=[ore_id]'>[ore_info.processed_name]</a></td>"
+			dat += "<td>[materials.storage[ore_id]]</td>"
+			dat += "<td><a href='?src=\ref[src];eject=[ore_id]'>Eject</a></td></tr>"
 			nloaded++
 		else
-			if(chosen==ore_id)
-				chosen=null
+			if(chosen == ore_id)
+				chosen = null
 	if(nloaded)
-		html += {"
-			</table>"}
+		dat += "</table>"
 	else
-		html+="<tr><td colspan=\"3\"><em>No Materials Loaded</em></td></tr></table>"
+		dat+="<tr><td colspan='3'><em>No Sheets Loaded</em></td></tr></table>"
+	dat += "<p>The press will produce <b>[coinsToProduce]</b> coins at a rate of <b>[coins_per_sheet]</b> coins per sheet.</p>"
+	dat += "<p>\["
+	dat += "<a href='?src=\ref[src];chooseAmt=-10'>-10</a>"
+	dat += "<a href='?src=\ref[src];chooseAmt=-5'>-5</a>"
+			//"<a href='?src=\ref[src];chooseAmt=-1'>-1</a>"
+			//"<a href='?src=\ref[src];chooseAmt=1'>+1</a>"
+	dat += "<a href='?src=\ref[src];chooseAmt=5'>+5</a>"
+	dat += "<a href='?src=\ref[src];chooseAmt=10'>+10</a>"
 
-	html += "<p>Will produce [coinsToProduce] [chosen] coins if enough materials are available.</p>"
-	html += {"
-		<p>
-			\[
-				<A href='?src=\ref[src];chooseAmt=-10'>-10</A>
-				<A href='?src=\ref[src];chooseAmt=-5'>-5</A>
-				<A href='?src=\ref[src];chooseAmt=-1'>-1</A>
-				<A href='?src=\ref[src];chooseAmt=1'>+1</A>
-				<A href='?src=\ref[src];chooseAmt=5'>+5</A>
-				<A href='?src=\ref[src];chooseAmt=10'>+10</A>
-			\]
-		</p>
-		<p>In total, this machine produced <font color='green'><b>[newCoins]</b></font> coins.</p>
-		<p><A href="?src=\ref[src];makeCoins=[1]">Make coins</A></p>
-	</body>
-</html>
-	"}
-	user << browse(html, "window=mint")
-	onclose(user, "mint")
+	dat += {"\]</p>
+		<p>In total, <font color='green'><b>[newCoins]</b></font> coins have been minted.</p>
+		<p><b><A href="?src=\ref[src];makeCoins=[1]">Make Coins</A></b></p>"}
+	dat += "<table><tr><td align='right'><b>Input:</b></td><td><a href='?src=\ref[src];changedir=1'>[capitalize(dir2text(in_dir))]</a></td></tr><tr><td><b>Output:</b></td><td><a href='?src=\ref[src];changedir=2'>[capitalize(dir2text(out_dir))]</a></td></tr></table>"
+	dat = jointext(dat,"")
+	var/datum/browser/popup = new(user, "mint", "Coin Press", 420, 410, src)
+	popup.set_content(dat)
+	popup.open()
+
+/obj/machinery/mineral/mint/proc/Change_Dir(var/dir)
+	var/changingdir = dir //See ore processing_unit for original comments
+	changingdir = Clamp(changingdir, 1, 2)
+
+	var/newdir = input("Select the new direction", name, "North") as null|anything in list("North", "South", "East", "West")
+	if(!newdir)
+		return 1
+	newdir = text2dir(newdir)
+
+	var/list/dirlist = list(in_dir, out_dir)
+	var/olddir = dirlist[changingdir]
+	dirlist[changingdir] = -1
+
+	var/conflictingdir = dirlist.Find(newdir)
+	if(conflictingdir)
+		dirlist[conflictingdir] = olddir
+
+	dirlist[changingdir] = newdir
+
+	in_dir = dirlist[1]
+	out_dir = dirlist[2]
+	return 1
+
+/obj/machinery/mineral/mint/proc/DropSheet(var/matID)
+	var/datum/material/M = materials.getMaterial(matID)
+	var/obj/item/stack/sheet/sh = new M.sheettype(src.loc)
+	if(sh)
+		var/available_num_sheets = materials.storage[matID]
+		if(available_num_sheets>0)
+			//available_num_sheets % sh.max_amount
+			sh.amount = available_num_sheets
+			materials.removeAmount(matID, sh.amount)
+		else
+			qdel(sh)
+	return 1
 
 /obj/machinery/mineral/mint/Topic(href, href_list)
-	if(..())
+	. = ..()
+	if(.)
 		return
 	usr.set_machine(src)
 	src.add_fingerprint(usr)
+	var/turf/out_T = get_step(src, out_dir)
+
+	if(href_list["close"])
+		usr.unset_machine(src)
+		return 1
+
 	if(processing==1)
 		to_chat(usr, "<span class='notice'>The machine is processing.</span>")
 		return
+
+	if(href_list["eject"])
+		var/datum/material/ma = materials.getMaterial(href_list["eject"])
+		var/obj/item/stack/sheet/sh = new ma.sheettype(out_T)
+		sh.amount = materials.getAmount(href_list["eject"])
+		materials.removeAmount(href_list["eject"], sh.amount)
+		if (chosen == href_list["eject"])
+			chosen = null
+
+	if("changedir" in href_list)
+		//Change_Dir()
+		var/changingdir = text2num(href_list["changedir"]) //See ore processing_unit for original comments
+		changingdir = Clamp(changingdir, 1, 2)
+
+		var/newdir = input("Select the new direction", name, "North") as null|anything in list("North", "South", "East", "West")
+		if(!newdir)
+			return 1
+		newdir = text2dir(newdir)
+
+		var/list/dirlist = list(in_dir, out_dir)
+		var/olddir = dirlist[changingdir]
+		dirlist[changingdir] = -1
+
+		var/conflictingdir = dirlist.Find(newdir)
+		if(conflictingdir)
+			dirlist[conflictingdir] = olddir
+
+		dirlist[changingdir] = newdir
+
+		in_dir = dirlist[1]
+		out_dir = dirlist[2]
+
 	if(href_list["choose"])
 		chosen = href_list["choose"]
+
 	if(href_list["chooseAmt"])
 		coinsToProduce = Clamp(coinsToProduce + text2num(href_list["chooseAmt"]), 0, 1000)
+
 	if(href_list["makeCoins"])
+		if(chosen == null)
+			return
 		var/temp_coins = coinsToProduce
-		if (src.output)
+		if (src.out_dir)
 			processing = 1
 			icon_state = "coinpress1"
-			//var/obj/item/weapon/storage/bag/money/M
 			var/datum/material/po=materials.getMaterial(chosen)
 			if(!po)
 				chosen=null
 				processing=0
 				return
 			while(materials.storage[chosen] > 0 && coinsToProduce > 0)
-			/*	if (locate(/obj/item/weapon/storage/bag/money,output.loc))
-					M = locate(/obj/item/weapon/storage/bag/money,output.loc)
-					if(M.can_be_inserted(po.cointype, 1))
-						new po.cointype(M)
-					else
-						new po.cointype(output.loc)
-				else
-				//Can't seem to be able to get the can_be_inserted check to work, would always drop the coin at the output loc
-				*/
-					//M = new/obj/item/weapon/storage/bag/money(output.loc)
-				new po.cointype(output.loc)
-				materials.removeAmount(chosen, 1)
-				coinsToProduce--
-				newCoins++
-				src.updateUsrDialog()
-				sleep(5)
+				var/obj/item/weapon/storage/bag/money/tempbag = locate(/obj/item/weapon/storage/bag/money,out_T)
+				materials.removeAmount(chosen, 1) //We'll get that money up front don't you worry.
+				for(var/i=0,i<coins_per_sheet,i++)
+					var/obj/item/weapon/coin/co = new po.cointype(out_T)
+					if(tempbag)
+						if(tempbag.can_be_inserted(co, 1))
+							tempbag.handle_item_insertion(co, 1)
+					coinsToProduce--
+					newCoins++
+					src.updateUsrDialog()
+					sleep(2)
+				sleep(2)
 			icon_state = "coinpress0"
 			processing = 0
 			coinsToProduce = temp_coins
 	src.updateUsrDialog()
 	return
+
+/obj/machinery/mineral/mint/Destroy()
+	qdel(mover)
+	mover = null
+	..()
+
+/obj/machinery/mineral/mint/crowbarDestroy(mob/user)
+	if(..() == 1)
+		if(materials)
+			for(var/matID in materials.storage)
+				DropSheet(matID)
+		return 1
+	return -1

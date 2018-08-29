@@ -5,6 +5,7 @@
 	icon_state = "closed"
 	density = 1
 	flags = FPRINT
+	layer = BELOW_OBJ_LAYER
 	var/icon_closed = "closed"
 	var/icon_opened = "open"
 	var/opened = 0
@@ -223,7 +224,7 @@
 /obj/structure/closet/beam_connect(var/obj/effect/beam/B)
 	if(!processing_objects.Find(src))
 		processing_objects.Add(src)
-		testing("Connected [src] with [B]!")
+//		testing("Connected [src] with [B]!")
 	return ..()
 
 /obj/structure/closet/beam_disconnect(var/obj/effect/beam/B)
@@ -277,13 +278,13 @@
 		if(istype(W, /obj/item/weapon/grab))
 			if(src.large)
 				var/obj/item/weapon/grab/G = W
-				src.MouseDrop_T(G.affecting, user)	//act like they were dragged onto the closet
+				src.MouseDropTo(G.affecting, user)	//act like they were dragged onto the closet
 			else
 				to_chat(user, "<span class='notice'>The locker is too small to stuff [W] into!</span>")
 		if(istype(W,/obj/item/tk_grab))
 			return 0
 
-		if(istype(W, /obj/item/weapon/weldingtool) && canweld())
+		if(iswelder(W) && canweld())
 			var/obj/item/weapon/weldingtool/WT = W
 			if(!WT.remove_fuel(0,user))
 				to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
@@ -298,7 +299,7 @@
 
 	else if(istype(W, /obj/item/stack/package_wrap))
 		return
-	else if(istype(W, /obj/item/weapon/weldingtool) && canweld())
+	else if(iswelder(W) && canweld())
 		var/obj/item/weapon/weldingtool/WT = W
 		if(!WT.remove_fuel(0,user))
 			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
@@ -314,14 +315,12 @@
 /obj/structure/closet/proc/place(var/mob/user, var/obj/item/I)
 	return 0
 
-/obj/structure/closet/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob, var/needs_opened = 1, var/show_message = 1, var/move_them = 1)
-	if(istype(O, /obj/abstract/screen))	//fix for HUD elements making their way into the world	-Pete
-		return 0
+/obj/structure/closet/MouseDropTo(atom/movable/O, mob/user, var/needs_opened = 1, var/show_message = 1, var/move_them = 1)
 	if(!isturf(O.loc))
 		return 0
 	if(user.incapacitated())
 		return 0
-	if((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1))
+	if((!( istype(O, /atom/movable) ) || O.anchored || !user.Adjacent(O) || !user.Adjacent(src)))
 		return 0
 	if(!istype(user.loc, /turf)) // are you in a container/closet/pod/etc? Will also check for null loc
 		return 0

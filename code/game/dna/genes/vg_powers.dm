@@ -5,7 +5,7 @@ Obviously, requires DNA2.
 */
 
 // When hulk was first applied (world.time).
-/mob/living/carbon/human/var/hulk_time=0
+/mob/living/carbon/human/var/hulk_time = 0
 
 // In decaseconds.
 #define HULK_DURATION 300 // How long the effects last
@@ -17,8 +17,8 @@ Obviously, requires DNA2.
 	activation_messages = list("Your muscles hurt.")
 	deactivation_messages = list("Your muscles quit tensing.")
 
-	drug_activation_messages=list("You feel strong! You must've been working out lately.")
-	drug_deactivation_messages=list("You return to your old lifestyle.")
+	drug_activation_messages = list("You feel strong! You must've been working out lately.")
+	drug_deactivation_messages = list("You return to your old lifestyle.")
 
 	flags = GENE_UNNATURAL // Do NOT spawn on roundstart.
 
@@ -40,11 +40,10 @@ Obviously, requires DNA2.
 	if(!istype(M))
 		return
 	if(M_HULK in M.mutations)
-		var/timeleft=M.hulk_time - world.time
+		var/timeleft = M.hulk_time - world.time
 		if(M.health <= 25 || timeleft <= 0)
 			M.hulk_time=0 // Just to be sure.
 			M.mutations.Remove(M_HULK)
-			//M.dna.SetSEState(HULKBLOCK,0)
 			M.update_mutations()		//update our mutation overlays
 			M.update_body()
 			to_chat(M, "<span class='warning'>You suddenly feel very weak.</span>")
@@ -93,14 +92,15 @@ Obviously, requires DNA2.
 	activation_messages = list("Your eyes focus.")
 	deactivation_messages = list("Your eyes return to normal.")
 
-	drug_activation_messages=list("The world becomes huge! You feel like an ant.")
-	drug_deactivation_messages=list("You no longer feel like an insect.")
+	drug_activation_messages = list("The world becomes huge! You feel like an ant.")
+	drug_deactivation_messages = list("You no longer feel like an insect.")
 
 	mutation = M_FARSIGHT
 
 /datum/dna/gene/basic/farsight/New()
-	block=FARSIGHTBLOCK
+	block = FARSIGHTBLOCK
 	..()
+
 /datum/dna/gene/basic/farsight/activate(var/mob/M)
 	..()
 	if(M.client)
@@ -119,32 +119,16 @@ Obviously, requires DNA2.
 
 // NOIR
 
-/obj/abstract/screen/plane_master/noir_master
-	plane = NOIR_BLOOD_PLANE
-	color = list(1,0,0,0,
-				 0,1,0,0,
-				 0,0,1,0,
-				 0,0,0,1)
-	appearance_flags = NO_CLIENT_COLOR|PLANE_MASTER
-
-/obj/abstract/screen/plane_master/noir_dummy
-	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
-	alpha = 0
-	appearance_flags = 0
-	plane = NOIR_BLOOD_PLANE
-
-var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /obj/abstract/screen/plane_master/noir_dummy())
-
 /datum/dna/gene/basic/noir
-	name="Noir"
+	name = "Noir"
 	desc = "In recent years, there's been a real push towards 'Detective Noir' movies, but since the last black and white camera was lost many centuries ago, Scientists had to develop a way to turn any movie noir."
-	activation_messages=list("The Station's bright coloured light hits your eyes for the last time, and fades into a more appropriate tone, something's different about this place, but you can't put your finger on it. You feel a need to check out the bar, maybe get to the bottom of what's going on in this godforsaken place.")
+	activation_messages = list("The Station's bright coloured light hits your eyes for the last time, and fades into a more appropriate tone, something's different about this place, but you can't put your finger on it. You feel a need to check out the bar, maybe get to the bottom of what's going on in this godforsaken place.")
 	deactivation_messages = list("You now feel soft boiled.")
 
-	mutation=M_NOIR
+	mutation = M_NOIR
 
 /datum/dna/gene/basic/noir/New()
-	block=NOIRBLOCK
+	block = NOIRBLOCK
 	..()
 
 /datum/dna/gene/basic/noir/activate(var/mob/M)

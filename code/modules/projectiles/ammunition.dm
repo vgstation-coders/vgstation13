@@ -59,7 +59,7 @@
 	var/list/stored_ammo = list()
 	var/ammo_type = "/obj/item/ammo_casing/a357"
 	var/exact = 1 //whether or not the item only takes ammo_type, or also subtypes. Set to 1 to only take the specified ammo
-	var/caliber = "357" //lets us define what magazines can go into guns
+	var/caliber = POINT357 //lets us define what magazines can go into guns
 	var/max_ammo = 7
 	var/starting_ammo = -1 //-1 makes it spawn the max ammo, 0 and above makes it spawn that number
 	var/multiple_sprites = 0 //if it has multiple sprites. Please sprite more than 2 sprites if you set this to true, you fricks

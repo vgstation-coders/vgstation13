@@ -6,7 +6,6 @@
 "af" = (/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
 "ag" = (/obj/item/weapon/ore/glass,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
 "ah" = (/obj/item/stack/teeth,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
-"ai" = (/turf/unsimulated/floor/asteroid,/area)
 "aj" = (/obj/structure/hanging_lantern,/obj/item/stack/teeth,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
 "ak" = (/obj/structure/hanging_lantern,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
 "al" = (/turf/simulated/wall/invulnerable,/area/vault/meteorlogical)
@@ -79,7 +78,7 @@ aaaaabababababacacaaaaaaacacacacacacacacacabababaa
 aaaaaaacacacabacacacacacacacacacacacacacacaaacabaa
 aaaaabacacacacacacacadaeaeafagafagacacacacaaacabaa
 aaababacacacacacacacahafafafafagafacacacacacababaa
-abaiaiacacacacacacahajafafafafakafacacacacacababaa
+abafafacacacacacacahajafafafafakafacacacacacababaa
 abafacacacalalalalalalalalalalalalalalacacacacabaa
 aaafafacacalamanaoapaqarasatauavawaxalacacacacabab
 ababafacacalayananananazaAaBanananaCalacacacacacac
@@ -88,15 +87,15 @@ aaabacacacalanananananaHanaIananananalacacaJacabab
 aaabacacacalaKalalalalalalalalalalaLalacacafafabaa
 aaaaafacacalaMalaNaNaNaNaNaNaNaNaNalalacacacababaa
 aaaOafafacalanalaNaPaQaRaSaTaNaNaNaUalacacacaaaaaa
-aiabafacacalanalaNaVaVaWaXaIaYaNaNaNalacacacabaaab
+afabafacacalanalaNaVaVaWaXaIaYaNaNaNalacacacabaaab
 ababacacacalanalaNaZaVaVaVaVaVbabbaNaNacacacababab
 ababacacacalananbcbdbeaNbfbgbhaNbibjaNacacacacabab
 abaaafacacalbkalaNblblbmbnbnbnbobpbqaNacacacaaaaab
 aaacafacacalalalaNaNaNaNbrbnbsaNaNaNaNacacacaaaaaa
-abaiacafacacacacacacacacbtbnbuacacacacacacacaaaaaa
+abafacafacacacacacacacacbtbnbuacacacacacacacaaaaaa
 ababafafacacacacacacacacacafafacacacacacacacaaaaaa
 ababacacafacacbvacacacacacababacacacababacaaacabab
 aaaaafacabacacafafafafacacababababacacabababacabab
-aaabaaaaabafaaaaafaiabaiacababacacacacabacabacacaa
+aaabaaaaabafaaaaafafabafacababacacacacabacabacacaa
 ababaaabababaaabababaaaaabababafababababaaaaacafaa
 "}

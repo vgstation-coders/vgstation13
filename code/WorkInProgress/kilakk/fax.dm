@@ -50,10 +50,6 @@ var/list/alldepartments = list("Central Command")
 			scancount += SP.rating-1
 	cooldown_time = initial(cooldown_time) - 300*scancount
 
-/obj/machinery/faxmachine/attack_ghost(mob/user as mob)
-	to_chat(usr, "<span class='warning'>Nope.</span>")
-	return 0
-
 /obj/machinery/faxmachine/attack_ai(mob/user as mob)
 	return attack_hand(user)
 
@@ -80,7 +76,7 @@ var/list/alldepartments = list("Central Command")
 
 	dat += "<hr>"
 
-	if(authenticated)
+	if(authenticated || isAdminGhost(user))
 		dat += "<b>Logged in to:</b> Central Command Quantum Entanglement Network<br><br>"
 
 		if(tofax)

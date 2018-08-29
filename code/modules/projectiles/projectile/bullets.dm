@@ -101,7 +101,7 @@
 	damage = 10
 	stun = 0
 	weaken = 0
-	superspeed = 1
+	projectile_speed = 0.66
 
 /obj/item/projectile/bullet/midbullet/assault
 	damage = 20
@@ -342,8 +342,8 @@
 	weaken = 5
 	stutter = 5
 	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS|PROJREACT_BLOB
-	penetration = 20//can hit 3 mobs at once, or go through a wall and hit 2 more mobs, or go through an rwall/blast door and hit 1 mob
-	superspeed = 1
+	penetration = 20 //can hit 3 mobs at once, or go through a wall and hit 2 more mobs, or go through an rwall/blast door and hit 1 mob
+	projectile_speed = 0.66
 	fire_sound = 'sound/weapons/hecate_fire.ogg'
 
 /obj/item/projectile/bullet/hecate/OnFired()
@@ -376,6 +376,17 @@
 	damage = 5
 	damage_type = TOX
 	flag = "bio"
+	var/bug_species = BEESPECIES_NORMAL
+	var/tox = 50
+	var/dam = 2
+
+/obj/item/projectile/bullet/beegun/hornet
+	name = "hornet"
+	icon_state = "hornetgun"
+	damage = 7
+	bug_species = BEESPECIES_HORNET
+	tox = 25
+	dam = 4
 
 /obj/item/projectile/bullet/beegun/OnFired()
 	..()
@@ -392,7 +403,7 @@
 	bumped = 1
 
 	var/turf/T = get_turf(src)
-	var/mob/living/simple_animal/bee/angry/BEE = new(T)
+	var/mob/living/simple_animal/bee/angry/BEE = new (T,null,bug_species,tox,dam)
 	if(istype(A,/mob/living))
 		var/mob/living/M = A
 		visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
@@ -423,8 +434,7 @@
 /obj/item/projectile/bullet/APS/OnFired()
 	..()
 	if(damage >= 100)
-		superspeed = 1
-		super_speed = 1
+		projectile_speed = 0.66
 		for (var/mob/M in player_list)
 			if(M && M.client)
 				var/turf/M_turf = get_turf(M)
@@ -708,7 +718,7 @@
 	bounces = 1
 	fire_sound = 'sound/weapons/gunshot_1.ogg'
 	bounce_sound = null
-	projectile_slowdown = 0.5
+	projectile_speed = 1.33
 	kill_count = 100
 	embed = 0
 	rotate = 0
@@ -747,7 +757,7 @@
 	src.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 	..()
 
-/obj/item/projectile/bullet/liquid_blob/to_bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/bullet/liquid_blob/on_hit(atom/A as mob|obj|turf|area)
 	if(!A)
 		return
 	..()
@@ -779,6 +789,7 @@
 	damage = 10
 	penetration = 0
 	rotate = 0
+	var/variance_angle = 20
 	var/total_amount_to_fire = 9
 	var/type_to_fire = /obj/item/projectile/bullet/buckshot
 	var/is_child = 0
@@ -787,19 +798,12 @@
 	..(T)
 	is_child = C
 
-/obj/item/projectile/bullet/buckshot/proc/get_radius_turfs(turf/T)
-	return orange(T,1)
-
 /obj/item/projectile/bullet/buckshot/OnFired()
 	if(!is_child)
-		var/list/turf/possible_turfs = list()
-		for(var/turf/T in get_radius_turfs(original))
-			possible_turfs += T
 		for(var/I = 1; I <=total_amount_to_fire-1; I++)
 			var/obj/item/projectile/bullet/buckshot/B = new type_to_fire(src.loc, 1)
-			var/turf/targloc = pick(possible_turfs)
-			B.forceMove(get_turf(src))
-			B.launch_at(targloc,from = shot_from)
+			B.damage = src.damage
+			B.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
 	..()
 
 /obj/item/projectile/bullet/invisible
@@ -844,9 +848,7 @@
 	type_to_fire = /obj/item/projectile/bullet/buckshot/bullet_storm
 	custom_impact = 1
 	embed_message = FALSE
-
-/obj/item/projectile/bullet/buckshot/bullet_storm/get_radius_turfs(turf/T)
-	return circlerangeturfs(original,5)
+	variance_angle = 50
 
 /obj/item/projectile/bullet/faggot
 	name = "high-speed faggot"

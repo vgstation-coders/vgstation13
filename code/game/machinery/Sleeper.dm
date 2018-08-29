@@ -149,36 +149,37 @@
 		add_fingerprint(usr)
 	return
 
-/obj/machinery/sleeper/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+/obj/machinery/sleeper/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
 	if(!ismob(O)) //mobs only
 		return
-	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) //no you can't pull things out of your ass
 		return
 	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
 		return
-	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
+	if(!Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob too far away from you, or are you too far away from the source
+		return
+	if(O.locked_to)
+		var/datum/locking_category/category = O.locked_to.get_lock_cat_for(O)
+		if(!istype(category, /datum/locking_category/buckle/bed/roller))
+			return
+	else if(O.anchored)
 		return
 	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
 		return
 	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
-	if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
-		return
 	if(occupant)
 		to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
 		return
 	if(isrobot(user))
 		var/mob/living/silicon/robot/robit = usr
-		if(!(robit.module && (robit.module.quirk_flags & MODULE_CAN_HANDLE_MEDICAL)))
+		if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
 			to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 	var/mob/living/L = O
-	if(!istype(L) || L.locked_to)
+	if(!istype(L))
 		return
-	/*if(L.abiotic())
-		to_chat(user, "<span class='notice'><B>Subject cannot have abiotic items on.</B></span>")
-		return*/
 	for(var/mob/living/carbon/slime/M in range(1,L))
 		if(M.Victim == L)
 			to_chat(usr, "[L.name] will not fit into the sleeper because they have a slime latched onto their head.")
@@ -189,6 +190,7 @@
 	else
 		visible_message("[user] places [L.name] into \the [src].")
 
+	L.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
 	L.forceMove(src)
 	L.reset_view()
 	occupant = L
@@ -197,8 +199,6 @@
 	for(var/obj/OO in src)
 		OO.forceMove(loc)
 	add_fingerprint(user)
-	if(user.pulling == L)
-		user.stop_pulling()
 	if(!(stat & (BROKEN|NOPOWER)))
 		set_light(light_range_on, light_power_on)
 	sedativeblock = TRUE
@@ -208,7 +208,7 @@
 	return
 
 
-/obj/machinery/sleeper/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+/obj/machinery/sleeper/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!ishigherbeing(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
 		return
 	if(!occupant)
@@ -216,9 +216,10 @@
 		return
 	if(isrobot(usr))
 		var/mob/living/silicon/robot/robit = usr
-		if(!(robit.module && (robit.module.quirk_flags & MODULE_CAN_HANDLE_MEDICAL)))
+		if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
+	over_location = get_turf(over_location)
 	if(!istype(over_location) || over_location.density)
 		return
 	if(!Adjacent(over_location))
@@ -234,7 +235,7 @@
 		visible_message("[usr] climbs out of \the [src].")
 	else
 		visible_message("[usr] removes [occupant.name] from \the [src].")
-	go_out(over_location)
+	go_out(over_location, ejector = usr)
 
 /obj/machinery/sleeper/allow_drop()
 	return FALSE
@@ -374,19 +375,24 @@
 			occupant.resting = 0
 		on = FALSE
 		if(auto_eject_after)
-			go_out()
+			go_out(ejector = user)
 		process()
 
-/obj/machinery/sleeper/proc/go_out(var/exit = loc)
+/obj/machinery/sleeper/proc/go_out(var/exit = loc, var/mob/ejector)
 	if(!occupant)
 		return FALSE
-	for (var/atom/movable/x in contents)
+	for(var/atom/movable/x in contents)
 		if(x in component_parts)
 			continue
 		x.forceMove(loc)
 	if(!occupant.gcDestroyed)
 		occupant.forceMove(exit)
 		occupant.reset_view()
+		if(istype(ejector) && ejector != occupant)
+			var/obj/structure/bed/roller/B = locate() in exit
+			if(B)
+				B.buckle_mob(occupant, ejector)
+				ejector.start_pulling(B)
 	occupant = null
 	update_icon()
 	return TRUE
@@ -411,7 +417,7 @@
 	set src in oview(1)
 	if(usr.isUnconscious())
 		return
-	go_out()
+	go_out(ejector = usr)
 	add_fingerprint(usr)
 	set_light(0)
 	return
@@ -491,7 +497,7 @@
 		icon = 'maps/defficiency/medbay.dmi'
 	update_icon()
 
-/obj/machinery/sleeper/mancrowave/go_out(var/exit = loc)
+/obj/machinery/sleeper/mancrowave/go_out(var/exit = loc, var/ejector)
 	if(on && !emagged)
 		return FALSE
 	else
@@ -578,7 +584,7 @@
 		automatic = !automatic
 	if(href_list["turnoff"])
 		on = FALSE
-		go_out()
+		go_out(ejector = usr)
 		update_icon()
 	if(href_list["security"])
 		if(on)

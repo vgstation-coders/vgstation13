@@ -1,9 +1,6 @@
 "aa" = (/turf/space,/area)
-"ab" = (/turf/simulated/floor/grass{color = "#886688"},/area)
-"ac" = (/obj/structure/window/barricade{tag = "icon-barricade (NORTH)"; icon_state = "barricade"; dir = 1},/turf/simulated/floor/grass{color = "#8A7C8A"},/area)
-"ad" = (/obj/structure/window/barricade{tag = "icon-barricade (NORTH)"; icon_state = "barricade"; dir = 1},/turf/simulated/floor/grass{color = "#886688"},/area)
+"ab" = (/obj/structure/window/barricade{tag = "icon-barricade (NORTH)"; icon_state = "barricade"; dir = 1},/turf/simulated/floor/grass{color = "#8A7C8A"},/area/vault/zathura/surroundings)
 "ae" = (/obj/structure/lattice,/turf/space,/area)
-"af" = (/turf/simulated/floor/grass{color = "#8A7C8A"},/area)
 "ag" = (/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
 "ah" = (/turf/simulated/floor/grass{color = "#8A7C8A"},/area/vault/zathura/surroundings)
 "ai" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
@@ -119,10 +116,10 @@
 "co" = (/obj/item/stack/sheet/wood,/turf/simulated/floor/grass{color = "#8A7C8A"},/area/vault/zathura/surroundings)
 
 (1,1,1) = {"
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacacadaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaeaaaaaaaaaeaeaeafabaeaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaeaaaeaaagagagagaaaaaaaeaaafaeaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaagaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababanaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaeaaaaaaaaaeaeaeahagaeaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaeaaaeaaagagagagaaaaaaaeaaahaeaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaagahagagagaiaiaiajagaaaaaeaaaaaeaaaaaaaaaaaaaaaaaaaaaaaaaa
 aeahagakalalamamanagagagagaeaaaaaeaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaahagaoaiaiaiapaiaqaqaiagarasatagagagananauavaaaaaaaaaaaaaa

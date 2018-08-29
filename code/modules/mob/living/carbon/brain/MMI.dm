@@ -277,7 +277,7 @@ obj/item/device/mmi/Destroy()
 			else if(!src.brainmob.key)
 				to_chat(user, "<span class='warning'>It seems to be in a deep dream-state</span>")//ghosted
 
-		to_chat(user, "<span class='info'>It's interface is [locked ? "locked" : "unlocked"] </span>")
+		to_chat(user, "<span class='info'>Its interface is [locked ? "locked" : "unlocked"] </span>")
 	to_chat(user, "<span class='info'>*---------*</span>")
 
 /obj/item/device/mmi/OnMobDeath(var/mob/living/carbon/brain/B)

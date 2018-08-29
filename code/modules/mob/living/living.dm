@@ -32,6 +32,9 @@
 			qdel(B)
 			B = null
 
+	if(BrainContainer)
+		qdel(BrainContainer)
+		BrainContainer = null
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -92,7 +95,10 @@
 	//handles "call on life", allowing external life-related things to be processed
 	for(var/toCall in src.callOnLife)
 		if(locate(toCall) && callOnLife[toCall])
-			call(locate(toCall),callOnLife[toCall])()
+			try
+				call(locate(toCall),callOnLife[toCall])()
+			catch(var/exception/e)
+				stack_trace(e)
 		else
 			callOnLife -= toCall
 
@@ -115,6 +121,8 @@
 					special_role = null
 					to_chat(current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now..(You don't remember who enslaved you)</FONT></span>")
 				*/
+	if(BrainContainer)
+		BrainContainer.SendSignal(COMSIG_LIFE,list())
 	return 1
 
 // Apply connect damage
@@ -251,11 +259,7 @@
 	return temperature
 
 
-// ++++ROCKDTBEN++++ MOB PROCS -- Ask me before touching.
-// Stop! ... Hammertime! ~Carn
-// I touched them without asking... I'm soooo edgy ~Erro (added nodamage checks)
-
-/mob/living/proc/getBruteLoss()
+/mob/living/proc/getBruteLoss(var/ignore_inorganic)
 	return bruteloss
 
 /mob/living/proc/adjustBruteLoss(var/amount)
@@ -307,7 +311,7 @@
 		return 0	//godmode
 	toxloss = amount
 
-/mob/living/proc/getFireLoss()
+/mob/living/proc/getFireLoss(var/ignore_inorganic)
 	return fireloss
 
 /mob/living/proc/adjustFireLoss(var/amount)
@@ -504,6 +508,9 @@
 	adjustBruteLoss(brute)
 	adjustFireLoss(burn)
 	src.updatehealth()
+
+	return brute + burn
+
 
 /mob/living/proc/restore_all_organs()
 	return
@@ -873,7 +880,7 @@ Thanks.
 	else if(istype(src.loc, /obj/item/delivery/large)) //Syndie item
 		var/obj/item/delivery/large/package = src.loc
 		to_chat(L, "<span class='warning'>You attempt to unwrap yourself, this package is tight and will take some time.</span>")
-		if(do_after(src, src, 100))
+		if(do_after(src, src, 2 MINUTES))
 			L.visible_message("<span class='danger'>[L] successfully breaks out of [package]!</span>",\
 							  "<span class='notice'>You successfully break out!</span>")
 			forceMove(get_turf(src))
@@ -1078,6 +1085,11 @@ Thanks.
 						BD.attack_hand(usr)
 					C.open()
 
+	// Breaking out of a cage
+	if (src.locked_to && istype(src.locked_to, /obj/structure/cage))
+		locked_to.attack_hand(src)
+		return
+
 	if(src.loc && istype(src.loc, /obj/item/mecha_parts/mecha_equipment/tool/jail))
 		var/breakout_time = 30 SECONDS
 		var/obj/item/mecha_parts/mecha_equipment/tool/jail/jailcell = src.loc
@@ -1091,6 +1103,10 @@ Thanks.
 				//Well then break it!
 				jailcell.break_out(L)
 		return
+
+	if(L.loc && istype(L.loc, /obj/structure/inflatable/shelter))
+		var/obj/O = L.loc
+		O.container_resist(L)
 
 
 	else if(iscarbon(L))
@@ -1355,6 +1371,7 @@ Thanks.
 						for(var/obj/structure/window/win in get_step(AM,t))
 							now_pushing = 0
 							return
+					AM.set_glide_size(src.glide_size)
 					step(AM, t)
 				now_pushing = 0
 			return
@@ -1636,7 +1653,7 @@ Thanks.
 
 /mob/living/throw_item(var/atom/target,var/atom/movable/what=null)
 	src.throw_mode_off()
-	if(usr.stat || !target)
+	if(src.stat || !target)
 		return FAILED_THROW
 
 	if(!istype(loc,/turf))
@@ -1737,3 +1754,64 @@ Thanks.
 		"suiciding")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
+/mob/living/proc/handle_dizziness()
+	//Dizziness
+	if(dizziness || undergoing_hypothermia() == MODERATE_HYPOTHERMIA)
+		var/wasdizzy = 1
+		if(undergoing_hypothermia() == MODERATE_HYPOTHERMIA && !dizziness && prob(50))
+			dizziness = 120
+			wasdizzy = 0
+		var/client/C = client
+		var/pixel_x_diff = 0
+		var/pixel_y_diff = 0
+		var/temp
+		var/saved_dizz = dizziness
+		dizziness = max(dizziness - 1, 0)
+		if(C)
+			var/oldsrc = src
+			var/amplitude = dizziness * (sin(dizziness * 0.044 * world.time) + 1) / 70 //This shit is annoying at high strength
+			src = null
+			spawn(0)
+				if(C)
+					temp = amplitude * sin(0.008 * saved_dizz * world.time)
+					pixel_x_diff += temp
+					C.pixel_x += temp * PIXEL_MULTIPLIER
+					temp = amplitude * cos(0.008 * saved_dizz * world.time)
+					pixel_y_diff += temp
+					C.pixel_y += temp * PIXEL_MULTIPLIER
+					sleep(3)
+					if(C)
+						temp = amplitude * sin(0.008 * saved_dizz * world.time)
+						pixel_x_diff += temp
+						C.pixel_x += temp * PIXEL_MULTIPLIER
+						temp = amplitude * cos(0.008 * saved_dizz * world.time)
+						pixel_y_diff += temp
+						C.pixel_y += temp * PIXEL_MULTIPLIER
+					sleep(3)
+					if(C)
+						C.pixel_x -= pixel_x_diff * PIXEL_MULTIPLIER
+						C.pixel_y -= pixel_y_diff * PIXEL_MULTIPLIER
+			src = oldsrc
+		if(!wasdizzy)
+			dizziness = 0
+
+
+/mob/living/proc/handle_jitteriness()
+	if(jitteriness)
+		var/amplitude = min(8, (jitteriness/70) + 1)
+		var/pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+		var/pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+		spawn()
+			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
+			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
+
+			pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+			pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
+			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
+
+			pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+			pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
+			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)

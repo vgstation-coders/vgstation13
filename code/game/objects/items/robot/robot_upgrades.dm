@@ -19,11 +19,8 @@
 	if(!C || !R || !user)
 		return null
 
-	var/obj/item/I = locate(C) in R.module
-	if(!I)
-		I = locate(C) in R.module.contents
-	if(!I)
-		I = locate(C) in R.module.modules
+	var/obj/item/I = R.installed_module(C)
+
 	if(!I)
 		to_chat(user, "This cyborg is missing one of the needed components!")
 		return null
@@ -70,7 +67,7 @@
 	name = "medical cyborg MK-2 upgrade board"
 	desc = "Used to give a medical cyborg advanced care tools and upgrade their chemistry gripper to be able to handle pills and pill bottles."
 	icon_state = "cyborg_upgrade"
-	required_module = list(/obj/item/weapon/robot_module/medical)
+	required_module = list(/obj/item/weapon/robot_module/medical, /obj/item/weapon/robot_module/syndicate/crisis)
 	modules_to_add = list(/obj/item/weapon/melee/defibrillator,/obj/item/weapon/reagent_containers/borghypo/upgraded)
 
 /obj/item/borg/upgrade/medical/surgery/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
@@ -90,6 +87,13 @@
 
 /obj/item/borg/upgrade/reset/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
+		return FAILED_TO_ADD
+	
+	if(HAS_MODULE_QUIRK(R, MODULE_IS_DEFINITIVE))
+		visible_message("<span class='notice'>[R] buzzes oddly, and ejects \the [src].</span>")
+		playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
+		R.module.upgrades -= type
+		src.forceMove(R.loc)
 		return FAILED_TO_ADD
 
 	if(/obj/item/borg/upgrade/vtec in R.module.upgrades)
@@ -174,7 +178,7 @@
 		pop(R.module.sensor_augs)
 		R.module.sensor_augs.Add("Security", "Disable")
 	
-	if(!(R.module.quirk_flags & MODULE_IS_THE_LAW)) //Make them able to *law and *halt
+	if(!HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW)) //Make them able to *law and *halt
 		R.module.quirk_flags |= MODULE_IS_THE_LAW
 
 /obj/item/borg/upgrade/vtec
@@ -218,7 +222,7 @@
 	name = "cyborg jetpack module board"
 	desc = "A carbon dioxide jetpack suitable for low-gravity operations."
 	icon_state = "cyborg_upgrade3"
-	required_module = list(/obj/item/weapon/robot_module/miner, /obj/item/weapon/robot_module/engineering, /obj/item/weapon/robot_module/combat)
+	required_module = list(/obj/item/weapon/robot_module/miner, /obj/item/weapon/robot_module/engineering, /obj/item/weapon/robot_module/combat, /obj/item/weapon/robot_module/syndicate/blitzkrieg, /obj/item/weapon/robot_module/syndicate/crisis)
 	modules_to_add = list(/obj/item/weapon/tank/jetpack/carbondioxide/silicon)
 	add_to_mommis = TRUE
 
@@ -338,6 +342,8 @@
 
 	playsound(R, 'sound/items/AirHorn.ogg', 50, 1)
 
+	R.module.quirk_flags |= MODULE_IS_A_CLOWN
+
 /obj/item/borg/upgrade/noir
 	name = "security cyborg N.O.I.R. upgrade board"
 	desc = "So that's the way you scientific detectives work. My god! for a fat, middle-aged, hard-boiled, pig-headed guy, you've got the vaguest way of doing things I ever heard of."
@@ -364,7 +370,7 @@
 		C.Noirize()
 
 /obj/item/borg/upgrade/warden
-	name = "cyborg warden upgrade board"
+	name = "security cyborg warden upgrade board"
 	desc = "Used to give a security cyborg supervisory enforcement tools."
 	icon_state = "mcontroller"
 	required_module = list(/obj/item/weapon/robot_module/security, /obj/item/weapon/robot_module/tg17355)
@@ -391,5 +397,13 @@
 	var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R, user)
 	if(C)
 		C.Lawize()
+
+/obj/item/borg/upgrade/hook
+	name = "supply cyborg hookshot upgrade"
+	desc = "Used to give a supply cyborg a hookshot."
+	icon = 'icons/obj/gun_experimental.dmi'
+	icon_state = "hookshot"
+	required_module = list(/obj/item/weapon/robot_module/miner)
+	modules_to_add = list(/obj/item/weapon/gun/hookshot)
 
 #undef FAILED_TO_ADD

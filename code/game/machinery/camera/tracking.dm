@@ -76,7 +76,7 @@
 	for(var/obj/mecha/target_mecha in mechas_list)
 		if(!can_track_atom(target_mecha))
 			continue
-		
+
 		var/name = target_mecha.name
 		if(name in track.mecha_names)
 			track.mecha_namecounts[name]++
@@ -169,13 +169,10 @@
 
 		if(isalien(target))
 			return FALSE
-		
+
 		if(istype(target.loc, /obj/effect/dummy))
 			return FALSE
 
-		if(!near_camera(target))
-			return FALSE
-	
 	if(!near_camera(target))
 		return FALSE
 

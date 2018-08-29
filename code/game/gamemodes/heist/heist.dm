@@ -134,10 +134,10 @@
 	if(!is_raider_crew_alive())
 		return FALSE
 
-	var/end_area = get_area_master(locate(/area/shuttle/vox/station))
+	var/end_area = get_area(locate(/area/shuttle/vox/station))
 
 	for(var/datum/mind/raider in raiders)
-		if(get_area_master(raider.current) != end_area)
+		if(get_area(raider.current) != end_area)
 			return FALSE
 
 	return TRUE
@@ -238,7 +238,7 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 	end_icons += logo
 	var/tempstate = end_icons.len
 	var/text = {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The vox raiders were:</B></FONT> <img src="logo_[tempstate].png">"}
-	var/end_area = get_area_master(locate(/area/shuttle/vox/station))
+	var/end_area = get_area(locate(/area/shuttle/vox/station))
 
 	for(var/datum/mind/vox in raiders)
 
@@ -247,7 +247,7 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 			end_icons += flat
 			tempstate = end_icons.len
 			text += {"<br><img src="logo_[tempstate].png"> <b>[vox.key]</b> was <b>[vox.name]</b> ("}
-			if(get_area_master(vox.current) != end_area) // areaMaster var can be used on this if move_contents_to proc refactored to use Move()
+			if(get_area(vox.current) != end_area)
 				text += "left behind, "
 
 			if(vox.current.stat != DEAD)

@@ -6,7 +6,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	w_class = W_CLASS_MEDIUM
 	max_shells = 18
-	caliber = list("9mm" = 1)
+	caliber = list(MM9 = 1)
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
 	automatic = 1
@@ -34,21 +34,18 @@
 
 /obj/item/weapon/gun/projectile/automatic/update_icon()
 	..()
-	icon_state = "[initial(icon_state)][stored_magazine ? "-[stored_magazine.max_ammo]" : ""][chambered ? "" : "-e"]"
+	icon_state = "[initial(icon_state)][stored_magazine ? "-[stored_magazine.max_ammo]" : ""][silenced ? "-silencer":""][chambered ? "" : "-e"]"
 	return
 
 /obj/item/weapon/gun/projectile/automatic/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
-	if(burstfire == 1)
-		if(ready_to_fire())
-			fire_delay = 0
-		else
-			to_chat(usr, "<span class='warning'>\The [src] is still cooling down!</span>")
-			return
+	if(burstfire == TRUE)
+		if(!ready_to_fire())
+			return 1
 		var/shots_fired = 0 //haha, I'm so clever
 		var/to_shoot = min(burst_count, getAmmo())
 		if(defective && prob(20))
 			to_shoot = getAmmo()
-		for(var/i = 1; i <= to_shoot; i++)
+		for(var/i = 1 to to_shoot)
 			..()
 			burstfiring = 1
 			shots_fired++
@@ -61,12 +58,11 @@
 				explosion(get_turf(loc), -1, 0, 2)
 				user.drop_item(src, force_drop = 1)
 				qdel(src)
-		message_admins("[usr] just shot [shots_fired] burst fire bullets out of [getAmmo() + shots_fired] from their [src].")
-		fire_delay = shots_fired * 10
 		recoil = initial(recoil)
 		burstfiring = 0
+		return 1
 	else
-		..()
+		.=..()
 
 /obj/item/weapon/gun/projectile/automatic/failure_check(var/mob/living/carbon/human/M)
 	if(!burstfire && prob(5))
@@ -77,8 +73,8 @@
 /obj/item/weapon/gun/projectile/automatic/lockbox
 	mag_type = "/obj/item/ammo_storage/magazine/smg9mm/empty"
 
-/obj/item/weapon/gun/projectile/automatic/mini_uzi
-	name = "Uzi"
+/obj/item/weapon/gun/projectile/automatic/uzi
+	name = "\improper Uzi"
 	desc = "A lightweight, fast firing gun for when you definitely want someone dead. Uses .45 rounds."
 	icon_state = "mini-uzi"
 	item_state = null
@@ -86,13 +82,22 @@
 	w_class = W_CLASS_MEDIUM
 	max_shells = 10
 	burst_count = 3
-	caliber = list(".45" = 1)
+	caliber = list(POINT45 = 1)
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=8"
 	ammo_type = "/obj/item/ammo_casing/c45"
 	mag_type = "/obj/item/ammo_storage/magazine/uzi45"
 
-/obj/item/weapon/gun/projectile/automatic/mini_uzi/isHandgun()
+/obj/item/weapon/gun/projectile/automatic/uzi/isHandgun()
 	return TRUE
+
+/obj/item/weapon/gun/projectile/automatic/uzi/micro
+	name = "\improper Micro Uzi"
+	desc = "A concealable rapid-fire machine pistol for filling a target with lead. Chambered for .45 rounds. Has mounting for a silencer."
+	icon_state = "microsmg"
+	item_state = "microuzi"
+	gun_flags = EMPTYCASINGS | SILENCECOMP
+	w_class = W_CLASS_SMALL
+
 
 /obj/item/weapon/gun/projectile/automatic/c20r
 	name = "\improper C-20r SMG"
@@ -103,7 +108,7 @@
 	w_class = W_CLASS_MEDIUM
 	max_shells = 20
 	burst_count = 4
-	caliber = list("12mm" = 1)
+	caliber = list(MM12 = 1)
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=8"
 	ammo_type = "/obj/item/ammo_casing/a12mm"
 	mag_type = "/obj/item/ammo_storage/magazine/a12mm/ops"
@@ -132,7 +137,7 @@
 	w_class = W_CLASS_MEDIUM
 	max_shells = 20
 	burst_count = 4
-	caliber = list("12mm" = 1)
+	caliber = list(MM12 = 1)
 	ammo_type = "/obj/item/ammo_casing/a12mm/assault"
 	mag_type = "/obj/item/ammo_storage/magazine/a12mm"
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
@@ -153,7 +158,7 @@
 	slot_flags = 0
 	max_shells = 50
 	burst_count = 5
-	caliber = list("a762" = 1)
+	caliber = list(POINT762 = 1)
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=1;" + Tc_SYNDICATE + "=2"
 	ammo_type = "/obj/item/ammo_casing/a762"
 	mag_type = "/obj/item/ammo_storage/magazine/a762"

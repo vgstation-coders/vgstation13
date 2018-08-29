@@ -12,17 +12,19 @@
 	var/hydroflags = 0 // HYDRO_*, used for no-fruit exclusion lists, at the moment.
 
 /obj/item/seeds/New()
-	while(!plant_controller)
-		sleep(30)
-	update_seed()
 	..()
 	pixel_x = rand(-3,3) * PIXEL_MULTIPLIER
 	pixel_y = rand(-3,3) * PIXEL_MULTIPLIER
+	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
+		initialize()
+
+/obj/item/seeds/initialize()
+	update_seed()
 
 //Grabs the appropriate seed datum from the global list.
 /obj/item/seeds/proc/update_seed()
-	if(!seed && seed_type && !isnull(plant_controller.seeds) && plant_controller.seeds[seed_type])
-		seed = plant_controller.seeds[seed_type]
+	if(!seed && seed_type && !isnull(SSplant.seeds) && SSplant.seeds[seed_type])
+		seed = SSplant.seeds[seed_type]
 	update_appearance()
 
 //Updates strings and icon appropriately based on seed datum.
@@ -53,9 +55,9 @@
 	seed_type = null
 
 /obj/item/seeds/random/New()
-	seed = plant_controller.create_random_seed()
+	seed = SSplant.create_random_seed()
 	seed_type = seed.name
-	update_seed()
+	..()
 
 //the vegetable/fruit categories are made from a culinary standpoint. many of the "vegetables" in there are technically fruits. (tomatoes, pumpkins...)
 

@@ -193,7 +193,7 @@ to_chat(#define MP_DEBUG(x) owner, x)
 		if (forced || !owner)
 			return
 
-		var/area/A = get_area_master(mob)
+		var/area/A = get_area(mob)
 		if(!A)
 			//testing("[owner] in [mob.loc].  Aborting.")
 			stop_music()

@@ -363,14 +363,10 @@ About the new airlock wires panel:
 					user.delayNextMove(10)
 					spawn (10)
 						src.justzap = 0
-					return
-			else /*if(src.justzap)*/
-				return
 		else if(user.hallucination > 50 && prob(10) && src.operating == 0)
 			to_chat(user, "<span class='danger'>You feel a powerful shock course through your body!</span>")
 			user.halloss += 10
 			user.stunned += 10
-			return
 	..(user)
 
 /obj/machinery/door/Bumped(atom/AM)
@@ -518,6 +514,8 @@ About the new airlock wires panel:
 	return
 
 /obj/machinery/door/airlock/attack_ai(mob/user as mob)
+	if(!allowed(user) && !isobserver(user))
+		return //So i heard you tried to interface with doors you have no access to
 	src.add_hiddenprint(user)
 	if(isAI(user))
 		if(!src.canAIControl())
@@ -1005,7 +1003,6 @@ About the new airlock wires panel:
 			// TODO: analyze the called proc
 			if (shock(user, 100))
 				user.delayNextAttack(10)
-				return
 	//Basically no open panel, not opening already, door has power, area has power, door isn't bolted
 	if (!panel_open && !operating && arePowerSystemsOn() && !(stat & (NOPOWER|BROKEN)) && !locked)
 		..(user)
@@ -1056,7 +1053,6 @@ About the new airlock wires panel:
 			// TODO: analyze the called proc
 			if (shock(user, 75, I.siemens_coefficient))
 				user.delayNextAttack(10)
-				return
 
 	if(istype(I, /obj/item/weapon/batteringram))
 		user.delayNextAttack(30)
@@ -1080,8 +1076,6 @@ About the new airlock wires panel:
 	if (iswelder(I))
 		if (density && !operating)
 			var/obj/item/weapon/weldingtool/WT = I
-
-			// TODO: analyze the called proc
 			if (WT.remove_fuel(0, user))
 				if (!welded)
 					welded = 1
@@ -1272,7 +1266,7 @@ About the new airlock wires panel:
 					qdel(S)
 					S = null
 
-				L.emote("scream",,, 1)
+				L.audible_scream()
 
 				if (istype(loc, /turf/simulated))
 					T.add_blood(L)

@@ -124,6 +124,7 @@ var/global/list/whitelisted_species = list("Human")
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
 		"liver" =    /datum/organ/internal/liver,
+		"stomach" = /datum/organ/internal/stomach,
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
@@ -304,6 +305,7 @@ var/global/list/whitelisted_species = list("Human")
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
 		"liver" =    /datum/organ/internal/liver,
+		"stomach" = /datum/organ/internal/stomach,
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain/ash,
 		"appendix" = /datum/organ/internal/appendix,
@@ -463,6 +465,7 @@ var/global/list/whitelisted_species = list("Human")
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
 		"liver" =    /datum/organ/internal/liver,
+		"stomach" = /datum/organ/internal/stomach,
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
@@ -544,6 +547,7 @@ var/global/list/whitelisted_species = list("Human")
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
 		"liver" =    /datum/organ/internal/liver,
+		"stomach" = /datum/organ/internal/stomach,
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
@@ -578,6 +582,7 @@ var/global/list/whitelisted_species = list("Human")
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
 		"liver" =    /datum/organ/internal/liver,
+		"stomach" = /datum/organ/internal/stomach,
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
@@ -650,6 +655,7 @@ var/global/list/whitelisted_species = list("Human")
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs/vox,
 		"liver" =    /datum/organ/internal/liver,
+		"stomach" = /datum/organ/internal/stomach,
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
@@ -989,6 +995,7 @@ var/list/has_died_as_golem = list()
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
 		"liver" =    /datum/organ/internal/liver,
+		"stomach" = /datum/organ/internal/stomach,
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
@@ -1184,3 +1191,29 @@ var/list/has_died_as_golem = list()
 					You have a resistance to burn and toxin, but a weakness to brute damage. You are adept at seeing in the dark, moreso with your light inversion ability.<br>\
 					However, you lack a mouth with which to talk. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
+
+
+/datum/species/lich
+	name = "Undead"
+	icobase = 'icons/mob/human_races/r_lich.dmi'
+	deform = 'icons/mob/human_races/r_lich.dmi'
+	known_languages = list(LANGUAGE_CLATTER)
+	flags = IS_WHITELISTED | NO_BREATHE
+	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD
+	meat_type = /obj/item/stack/sheet/bone
+	chem_flags = NO_EAT | NO_INJECT
+
+	brute_mod = 1.2
+
+	has_organ = list(
+		"brain" =    /datum/organ/internal/brain,
+		)
+
+	move_speed_multiplier = 1
+
+	primitive = /mob/living/carbon/monkey/skellington
+
+	species_intro = "You are a Lich<br>\
+					A more refined version of the skellington, you're not as brittle, but not quite as fast.<br>\
+					You have no skin, no blood, and only a brain to guide you.<br>\
+					You can not eat normally, as your necrotic state permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe."

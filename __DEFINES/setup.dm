@@ -5,6 +5,11 @@
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
 
+// Defines for the shuttle
+#define SHUTTLE_ON_STANDBY 0
+#define SHUTTLE_ON_STATION 1
+#define SHUTTLE_ON_CENTCOM 2
+
 #ifndef RUNWARNING
 #warn If you have issues with retrieving logs update byond on the server and client to 507.1277 or greater, or uncomment RUNWARNING
 #endif
@@ -552,6 +557,9 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define EYE_BLUR	"eye_blur"
 #define DROWSY		"drowsy"
 
+#define CUT 		"cut"
+#define BRUISE		"bruise"
+#define SLUR 		"slur"
 
 //intent flags yay
 #define I_HELP		"help"
@@ -693,7 +701,10 @@ SEE_PIXELS	256
 #define BEE_OUT_FOR_ENEMIES 2
 #define BEE_HEADING_HOME 3
 #define BEE_SWARM 4
+#define BEE_BUILDING 5
 
+
+//for infestation events
 #define LOC_KITCHEN 0
 #define LOC_ATMOS 1
 #define LOC_INCIN 2
@@ -713,28 +724,28 @@ SEE_PIXELS	256
 #define VERM_ROACHES 7
 #define VERM_GREMLINS 8
 #define VERM_BEES 9
+#define VERM_HORNETS 10
+#define VERM_SYPHONER 11
+#define VERM_GREMTIDE 12
+#define VERM_CRABS 13
+
+
+#define MONSTER_BEAR    0
+#define MONSTER_CREATURE 1
+#define MONSTER_XENO 2
+#define MONSTER_HIVEBOT  3
+#define MONSTER_ZOMBIE    4
+#define MONSTER_SKRITE  5
+#define MONSTER_SQUEEN  6
+#define MONSTER_FROG 7
+#define MONSTER_GOLIATH 8
+#define MONSTER_DAVID 9
+#define MONSTER_MADCRAB 10
+#define MONSTER_MEATBALLER 11
+#define MONSTER_BIG_ROACH 12
+#define MONSTER_ROACH_QUEEN 13
 
 #define ROUNDSTART_LOGOUT_REPORT_TIME 6000 //Amount of time (in deciseconds) after the rounds starts, that the player disconnect report is issued.
-
-//Damage things
-
-#define CUT 		"cut"
-#define BRUISE		"bruise"
-#define BRUTE		"brute"
-#define BURN		"fire"
-#define TOX			"tox"
-#define OXY			"oxy"
-#define CLONE		"clone"
-#define HALLOSS		"halloss"
-
-#define STUN		"stun"
-#define WEAKEN		"weaken"
-#define PARALYZE	"paralize"
-#define IRRADIATE	"irradiate"
-#define STUTTER		"stutter"
-#define SLUR 		"slur"
-#define EYE_BLUR	"eye_blur"
-#define DROWSY		"drowsy"
 
 // Special 'weapons', used in damage procs
 #define WPN_HIGH_BODY_TEMP "High Body Temperature"
@@ -771,6 +782,8 @@ SEE_PIXELS	256
 #define MAT_PLASTIC		"$plastic"
 #define MAT_CARDBOARD   "$cardboard"
 #define MAT_WOOD		"$wood"
+#define MAT_BRASS   	"$brass"
+#define MAT_RALLOY   	"$ralloy"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -1267,7 +1280,7 @@ var/proccalls = 1
 
 #else
 	#define writepanic(a) null << a
-#endif*/
+#endif
 
 //Default frequencies of signal based RC stuff, because comic and his magic numbers.
 #define FREQ_DISPOSAL 1367
@@ -1518,6 +1531,8 @@ var/proccalls = 1
 
 #define BEESPECIES_NORMAL	"bees"
 #define BEESPECIES_VOX		"chill bugs"
+#define BEESPECIES_HORNET	"hornets"
+#define BEESPECIES_BLOOD	"hell bugs"
 
 //mob/proc/is_pacified()
 #define VIOLENCE_SILENT		0
@@ -1542,3 +1557,13 @@ var/proccalls = 1
 #else
 #define DELAY2GLIDESIZE(delay) (Ceiling(WORLD_ICON_SIZE / max(Ceiling(delay / world.tick_lag), 1)))
 #endif
+
+//Custom vending machines
+#define CUSTOM_VENDING_MAX_SLOGAN_LENGTH	50
+#define CUSTOM_VENDING_MAX_NAME_LENGTH	25
+#define CUSTOM_VENDING_MAX_SLOGANS	5
+
+#define MACHINE "machine"
+#define COMPUTER "computer"
+#define EMBEDDED_CONTROLLER "embedded controller"
+#define OTHER "other"

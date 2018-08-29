@@ -173,3 +173,32 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 	origin_tech = Tc_BIOTECH + "=1"
 	icon_state = "sheet-bone"
 	//item_state = "bone"
+
+/obj/item/stack/sheet/brass
+	name = "brass"
+	desc = "Large sheets made out of brass."
+	singular_name = "brass sheet"
+	icon_state = "sheet-brass"
+	sheettype = "clockwork"
+	flags = FPRINT
+	origin_tech = Tc_ANOMALY + "=1"
+	starting_materials = list(MAT_BRASS = CC_PER_SHEET_METAL)
+	mat_type = MAT_BRASS
+
+/obj/item/stack/sheet/brass/New(var/loc, var/amount=null)
+	recipes = brass_recipes
+	return ..()
+
+/obj/item/stack/sheet/ralloy
+	name = "replicant alloy"
+	desc = "It's as if it's calling to be moulded into something greater."
+	singular_name = "replicant alloy"
+	icon_state = "sheet-alloy"
+	flags = FPRINT
+	origin_tech = Tc_ANOMALY + "=1"
+	starting_materials = list(MAT_RALLOY = CC_PER_SHEET_METAL)
+	mat_type = MAT_RALLOY
+
+/obj/item/stack/sheet/ralloy/New(var/loc, var/amount=null)
+	recipes = ralloy_recipes
+	return ..()

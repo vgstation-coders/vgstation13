@@ -33,6 +33,8 @@
 		on_damaged.holder = null
 	if(on_irradiate)
 		on_irradiate.holder = null
+	if(on_death)
+		on_death.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -77,12 +79,14 @@
 	qdel(on_damaged)
 	qdel(on_clickon)
 	qdel(on_irradiate)
+	qdel(on_death)
 
 	on_spellcast = null
 	on_uattack = null
 	on_damaged = null
 	on_clickon = null
 	on_irradiate = null
+	on_death = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -265,6 +269,7 @@
 	on_damaged = new(owner = src)
 	on_clickon = new(owner = src)
 	on_irradiate = new(owner = src)
+	on_death = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -658,11 +663,13 @@ var/list/slot_equipment_priority = list( \
 
 //puts the item "W" into an appropriate slot in a human's inventory
 //returns 0 if it cannot, 1 if successful
-/mob/proc/equip_to_appropriate_slot(obj/item/W)
+/mob/proc/equip_to_appropriate_slot(obj/item/W, var/override = FALSE)
 	if(!istype(W))
 		return 0
 
 	for(var/slot in slot_equipment_priority)
+		if(!is_holding_item(W) && !override)
+			return 0
 		var/obj/item/S = get_item_by_slot(slot)
 		if(S && S.can_quick_store(W))
 			return S.quick_store(W)
@@ -701,7 +708,7 @@ var/list/slot_equipment_priority = list( \
 	while(has_succeeded_once)
 		has_succeeded_once = FALSE
 		for(var/obj/item/I in L)
-			if(equip_to_appropriate_slot(I))
+			if(equip_to_appropriate_slot(I, TRUE)) // The proc wants the item to be in our hands, like in the case of a quick-equip
 				has_succeeded_once = TRUE
 				L.Remove(I)
 	if(L.len)
@@ -997,7 +1004,17 @@ var/list/slot_equipment_priority = list( \
 	set name = "Point To"
 	set category = "Object"
 
-	if(!src || usr.isUnconscious() || !isturf(src.loc) || !(A in view(src.loc)))
+	if((usr.isUnconscious() && !isobserver(src)) || !isturf(src.loc) || attack_delayer.blocked())
+		return 0
+
+	delayNextAttack(SHOW_HELD_ITEM_AND_POINTING_DELAY)
+
+	if(isitem(A) && is_holding_item(A))
+		var/obj/item/I = A
+		I.showoff(src)
+		return 0
+
+	if(!(A in view(src.loc) + get_all_slots()))
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))
@@ -1016,6 +1033,8 @@ var/list/slot_equipment_priority = list( \
 	point.invisibility = invisibility
 	point.pointer = src
 	point.target = A
+	point.pixel_x = A.pixel_x
+	point.pixel_y = A.pixel_y
 	spawn(20)
 		if(point)
 			qdel(point)
@@ -1027,7 +1046,7 @@ var/list/slot_equipment_priority = list( \
 
 //this and stop_pulling really ought to be /mob/living procs
 /mob/proc/start_pulling(var/atom/movable/AM)
-	if ( !AM || !src || src==AM || !isturf(AM.loc) )	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
+	if ( !AM || !src || src==AM || !isturf(AM.loc) || !AM.can_be_pulled(src))	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
 		return
 
 	if(!has_hand_check())
@@ -1409,16 +1428,15 @@ var/list/slot_equipment_priority = list( \
 	//		var/client/C = usr.client
 	//		C.JoinResponseTeam()
 
-/mob/MouseDrop(mob/M as mob)
-	..()
+/mob/MouseDropFrom(mob/M as mob)
 	if(M != usr)
-		return
+		return ..()
 	if(usr == src)
-		return
+		return ..()
 	if(!Adjacent(usr))
-		return
+		return ..()
 	if(istype(M,/mob/living/silicon/ai))
-		return
+		return ..()
 	show_inv(usr)
 
 
@@ -1468,6 +1486,8 @@ var/list/slot_equipment_priority = list( \
 			else if(statpanel(listed_turf.name))
 				statpanel(listed_turf.name, null, listed_turf)
 				for(var/atom/A in listed_turf)
+					if(!A.mouse_opacity && !A.name)
+						continue
 					if(A.invisibility > see_invisible)
 						continue
 					statpanel(listed_turf.name, null, A)
@@ -1659,6 +1679,9 @@ var/list/slot_equipment_priority = list( \
 
 /mob/proc/Dizzy(amount)
 	dizziness = max(dizziness,amount,0)
+
+/mob/proc/AdjustDizzy(amount)
+	dizziness = max(dizziness+amount, 0)
 
 
 /mob/proc/Paralyse(amount)
@@ -2121,6 +2144,9 @@ mob/proc/on_foot()
 			return 1
 
 	return 0
+
+/mob/proc/handle_regular_hud_updates()
+	return
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

@@ -7,7 +7,7 @@
 	icon_state = "body_m_s"
 	can_butcher = 1
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
-	var/list/hud_list[9]
+	var/list/hud_list = list()
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
 
@@ -99,6 +99,10 @@
 	h_style = "Bald"
 	..(new_loc, "Mushroom")
 
+/mob/living/carbon/human/lich/New(var/new_loc, delay_ready_dna = 0)
+	h_style = "Bald"
+	..(new_loc, "Undead")
+
 /mob/living/carbon/human/generate_static_overlay()
 	if(!istype(static_overlays,/list))
 		static_overlays = list()
@@ -152,7 +156,7 @@
 	obj_overlays[FIRE_LAYER]		= getFromPool(/obj/abstract/Overlays/fire_layer)
 	obj_overlays[MUTANTRACE_LAYER]	= getFromPool(/obj/abstract/Overlays/mutantrace_layer)
 	obj_overlays[MUTATIONS_LAYER]	= getFromPool(/obj/abstract/Overlays/mutations_layer)
-	obj_overlays[DAMAGE_LAYER]		= getFromPool(/obj/abstract/Overlays/damage_layer)
+	obj_overlays[DAMAGE_LAYER]	= getFromPool(/obj/abstract/Overlays/damage_layer)
 	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/abstract/Overlays/uniform_layer)
 	obj_overlays[ID_LAYER]			= getFromPool(/obj/abstract/Overlays/id_layer)
 	obj_overlays[SHOES_LAYER]		= getFromPool(/obj/abstract/Overlays/shoes_layer)
@@ -1118,8 +1122,9 @@
 		if(src.species.abilities)
 			src.verbs -= species.abilities
 		if(species.spells)
-			for(var/spell in species.spells)
-				remove_spell(spell)
+			for(var/spell/spell in spell_list)
+				if(spell.type in species.spells)
+					remove_spell(spell)
 		for(var/L in species.known_languages)
 			remove_language(L)
 		species.clear_organs(src)
@@ -1569,7 +1574,8 @@
 		plane = LYING_HUMAN_PLANE
 	else
 		plane = HUMAN_PLANE
-	if(istype(areaMaster) && areaMaster.project_shadows)
+	var/area/this_area = get_area(src)
+	if(istype(this_area) && this_area.project_shadows)
 		update_shadow()
 
 /mob/living/carbon/human/set_hand_amount(new_amount) //Humans need hand organs to use the new hands. This proc will give them some
@@ -1587,6 +1593,10 @@
 
 /mob/living/carbon/human/is_fat()
 	return (M_FAT in mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
+
+// Bulky checks are often enough that it might as well be a proc for readability. -CW
+/mob/living/carbon/human/proc/is_bulky()
+	return species.anatomy_flags & IS_BULKY
 
 mob/living/carbon/human/isincrit()
 	if (health - halloss <= config.health_threshold_softcrit)
@@ -1623,10 +1633,13 @@ mob/living/carbon/human/isincrit()
 /mob/living/carbon/human/get_appendix()
 	return internal_organs_by_name["appendix"]
 
+/mob/living/carbon/human/get_stomach()
+	return internal_organs_by_name["stomach"]
+
 //Moved from internal organ surgery
 //Removes organ from src, places organ object under user
 //example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
-mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
+/mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/organ/internal/targetorgan, var/datum/organ/external/affectedarea)
 	var/obj/item/organ/internal/extractedorgan
 	if(targetorgan && istype(targetorgan))
 		extractedorgan = targetorgan.remove(user) //The organ that comes out at the end
@@ -1757,16 +1770,20 @@ mob/living/carbon/human/remove_internal_organ(var/mob/living/user, var/datum/org
 	else return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
 
 /mob/living/carbon/human/proc/initialize_barebones_NPC_components()	//doesn't actually do anything, but contains tools needed for other types to do things
-	NPC_brain = new (src)
-	NPC_brain.AddComponent(/datum/component/controller/mob)
-	NPC_brain.AddComponent(/datum/component/ai/hand_control)
+	BrainContainer = new (src)
+	BrainContainer.AddComponent(/datum/component/controller/mob)
+	BrainContainer.AddComponent(/datum/component/ai/hand_control)
+	BrainContainer.AddComponent(/datum/component/controller/movement/astar)
 
 /mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
 	initialize_barebones_NPC_components()
-	NPC_brain.AddComponent(/datum/component/ai/human_brain)
-	NPC_brain.AddComponent(/datum/component/ai/target_finder/human)
-	NPC_brain.AddComponent(/datum/component/ai/target_holder/prioritizing)
-	NPC_brain.AddComponent(/datum/component/ai/melee/attack_human)
+	BrainContainer.AddComponent(/datum/component/ai/human_brain)
+	BrainContainer.AddComponent(/datum/component/ai/target_finder/human)
+	BrainContainer.AddComponent(/datum/component/ai/target_holder/prioritizing)
+	BrainContainer.AddComponent(/datum/component/ai/melee/attack_human)
+	BrainContainer.AddComponent(/datum/component/ai/melee/throw_attack)
+	BrainContainer.AddComponent(/datum/component/ai/crowd_attack)
+	BrainContainer.AddComponent(pick(typesof(/datum/component/ai/targetting_handler)))
 
 /mob/living/carbon/human/can_show_flavor_text()
 	// Wearing a mask...

@@ -13,16 +13,15 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = LIQUID
 	color = "#333333" // rgb: 51, 51, 51
 	custom_metabolism = 0.06
+	digestion_rate = 0 // will not transfer from stomach to body
 
-/datum/reagent/charcoal/on_mob_life(var/mob/living/M)
-	if(!M)
-		M = holder.my_atom
-
-	if(ishuman(M) && prob(5))
-		var/mob/living/carbon/human/H=M
-		H.vomit()
+/datum/reagent/charcoal/digest(var/mob/living/carbon/human/M)
+	var/datum/organ/internal/stomach/S = M.get_stomach()
+	if(!S)
 		return
 
+	if(prob(5))
+		M.vomit()
 	var/found_any = FALSE
 	for(var/datum/reagent/reagent in holder.reagent_list)
 		if(reagent.id in charcoal_doesnt_remove)

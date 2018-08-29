@@ -43,6 +43,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/can_affix_to_dense_turf=0
 
 	var/has_been_invisible_sprayed = FALSE
+	var/impactsound
 
 // Whether this object can appear in holomaps
 /obj/proc/supports_holomap()
@@ -96,10 +97,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			install_pai(W)
 			state_controls_pai(W)
 			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
-
-	INVOKE_EVENT(W.on_use, list("user" = user, "target" = src))
-	if(W.material_type)
-		W.material_type.on_use(W, src, user)
+	if(W)
+		INVOKE_EVENT(W.on_use, list("user" = user, "target" = src))
+		if(W.material_type)
+			W.material_type.on_use(W, src, user)
 
 /obj/proc/state_controls_pai(obj/item/device/paicard/P)			//text the pAI receives when is inserted into something. EXAMPLE: to_chat(P.pai, "Welcome to your new body")
 	if(P.pai)
@@ -231,6 +232,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	set waitfor = FALSE
 	processing_objects.Remove(src)
 
+//At some point, this proc should be changed to work like remove_air() below does.
+//However, this would likely cause problems, such as CO2 buildup in mechs and spacepods, so I'm not doing it right now.
 /obj/assume_air(datum/gas_mixture/giver)
 	if(loc)
 		return loc.assume_air(giver)
@@ -238,10 +241,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return null
 
 /obj/remove_air(amount)
-	if(loc)
-		return loc.remove_air(amount)
-	else
-		return null
+	var/datum/gas_mixture/my_air = return_air()
+	return my_air?.remove(amount)
 
 /obj/return_air()
 	if(loc)
@@ -269,14 +270,14 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 					_using.Remove(M)
 					continue
 
-				if(!(M in nearby)) // NOT NEARBY
-					// AIs/Robots can do shit from afar.
-					if (isAI(M) || isrobot(M))
-						is_in_use = 1
-						src.attack_ai(M)
+				// AIs/Robots can do shit from afar.
+				if (isAI(M) || isrobot(M))
+					is_in_use = 1
+					src.attack_ai(M)
 
+				else if(!(M in nearby)) // NOT NEARBY
 					// check for TK users
-					else if(M.mutations && M.mutations.len)
+					if(M.mutations && M.mutations.len)
 						if(M_TK in M.mutations)
 							is_in_use = 1
 							src.attack_hand(M, TRUE) // The second param is to make sure brain damage on the user doesn't cause the UI to not update but the action to still happen.
@@ -668,3 +669,6 @@ a {
 		additional_description += "It is accented in hues of [pick("red","orange","yellow","green","blue","indigo","violet","white","black","cinnamon")]. "
 	if(additional_description)
 		desc = "[initial(desc)] \n [additional_description]"
+
+/obj/proc/check_uplink_validity()
+	return TRUE

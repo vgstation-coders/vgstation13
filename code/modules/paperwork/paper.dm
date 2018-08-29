@@ -312,9 +312,6 @@
 
 /obj/item/weapon/paper/attackby(obj/item/weapon/P as obj, mob/user as mob)
 	..()
-	var/clown = 0
-	if(user.mind && (user.mind.assigned_role == "Clown"))
-		clown = 1
 
 	if(istype(P, /obj/item/weapon/pen) || istype(P, /obj/item/toy/crayon))
 		if ( istype(P, /obj/item/weapon/pen/robopen) && P:mode == 2 )
@@ -326,9 +323,17 @@
 
 	else if(istype(P, /obj/item/weapon/stamp))
 
-		if(istype(P, /obj/item/weapon/stamp/clown) && !clown)
-			to_chat(user, "<span class='notice'>You are totally unable to use the stamp. HONK!</span>")
-			return
+		if(istype(P, /obj/item/weapon/stamp/clown))
+			var/clown = FALSE
+			if(user.mind && (user.mind.assigned_role == "Clown"))
+				clown = TRUE
+			if(isrobot(user))
+				var/mob/living/silicon/robot/R = user
+				if(HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN))
+					clown = TRUE
+			if(!clown)
+				to_chat(user, "<span class='notice'>You are totally unable to use the stamp. HONK!</span>")
+				return
 
 		stamps += (stamps=="" ? "<HR>" : "<BR>") + "<i>This [src.name] has been stamped with the [P.name].</i>"
 
@@ -393,9 +398,9 @@
 	return
 
 var/global/list/paper_folding_results = list ( \
+	"ball of paper" = /obj/item/weapon/p_folded/ball,
 	"paper plane" = /obj/item/weapon/p_folded/plane,
 	"paper hat" = /obj/item/weapon/p_folded/hat,
-	"ball of paper" = /obj/item/weapon/p_folded/ball,
 	"folded note" = /obj/item/weapon/p_folded/note_small,
 	"origami crane" = /obj/item/weapon/p_folded/crane,
 	"origami boat" = /obj/item/weapon/p_folded/boat,
@@ -445,6 +450,12 @@ var/global/list/paper_folding_results = list ( \
 		to_chat(user, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
 		return 0
 	return 1
+
+/obj/item/weapon/paper/AltClick()
+	if(is_holder_of(usr, src) && canfold(usr))
+		fold()
+	else
+		return ..()
 
 /*
  * Premade paper

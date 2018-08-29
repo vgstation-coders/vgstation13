@@ -10,7 +10,10 @@
 		/area/security/brig,
 		/area/shuttle,
 		/area/vox_station,
-		/area/syndicate_station
+		/area/syndicate_station,
+		/area/medical/coldstorage,
+		/area/mine,
+		/area/prison,
 	)
 
 
@@ -30,7 +33,7 @@
 		for(var/area/A in areas)
 			if(A.z != map.zMainStation || is_safe_zone(A))
 				continue
-			var/area/ma = get_area_master(A)
+			var/area/ma = get_area(A)
 			ma.radiation_alert()
 
 		make_maint_all_access()
@@ -72,7 +75,7 @@
 		for(var/area/A in areas)
 			if(A.z != map.zMainStation || is_safe_zone(A))
 				continue
-			var/area/ma = get_area_master(A)
+			var/area/ma = get_area(A)
 			ma.reset_radiation_alert()
 
 
