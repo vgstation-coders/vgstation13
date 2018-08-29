@@ -442,6 +442,8 @@ var/area/space_area
 				//Ambience goes down here -- make sure to list each area seperately for ease of adding things in later, thanks!
 				//Note: areas adjacent to each other should have the same sounds to prevent cutoff when possible.- LastyScratch.
 				//TODO: This is dumb - N3X.
+				//Sometimes. I dream of a world where stuff like this doesn't exist. where I'm not at risk of having a stroke when opening a DM file. alas. even with rules of logic set. man is not a species that follows rules.
+				/*
 				if(istype(src, /area/chapel))
 					sound = pick('sound/ambience/ambicha1.ogg', 'sound/ambience/ambicha2.ogg', 'sound/ambience/ambicha3.ogg', 'sound/ambience/ambicha4.ogg')
 				else if(istype(src, /area/medical/morgue))
@@ -470,7 +472,7 @@ var/area/space_area
 			spawn(600) // Ewww - this is very very bad.
 				if(M && M.client)
 					M.client.ambience_playing = 0
-
+			*/
 		if(narrator)
 			narrator.Crossed(M)
 
