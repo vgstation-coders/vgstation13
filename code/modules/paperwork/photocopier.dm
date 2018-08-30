@@ -383,7 +383,7 @@
 			toner = 0
 	return
 
-/obj/machinery/photocopier/MouseDrop_T(mob/target, mob/user)
+/obj/machinery/photocopier/MouseDropTo(mob/target, mob/user)
 	check_ass() //Just to make sure that you can re-drag somebody onto it after they moved off.
 	if (!istype(target) || target.locked_to || !Adjacent(user) || !user.Adjacent(target) || user.stat || istype(user, /mob/living/silicon/ai) || target == ass || copier_blocked(user))
 		return
@@ -410,7 +410,7 @@
 
 /obj/machinery/photocopier/npc_tamper_act(mob/living/L)
 	//Make a photocopy of the gremlin's ass
-	MouseDrop_T(L, L)
+	MouseDropTo(L, L)
 	copies = rand(1, MAX_COPIES)
 	make_copy(L)
 

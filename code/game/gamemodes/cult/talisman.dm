@@ -34,9 +34,9 @@
 			if("communicate")
 				to_chat(user, "This talisman has been imbued with the power of communicating your whispers to your allies.")
 			if("deafen")
-				to_chat(user, "This talisman has been imbued with the power of deafening visible enemies.")
+				to_chat(user, "This talisman has been imbued with the power of temporarily deafening visible enemies. Does not work on silicons.")
 			if("blind")
-				to_chat(user, "This talisman has been imbued with the power of blinding visible enemies.")
+				to_chat(user, "This talisman has been imbued with the power of temporarily blinding all enemies within three tiles. Does not work on silicons.")
 			if("runestun")
 				to_chat(user, "This talisman has been imbued with the power of paralyzing the beings you touch with it. The effect works on silicons as well, but humans will also be muted for a short time.")
 			if("supply")
@@ -258,3 +258,7 @@
 		for (var/mob/V in orange(1,src))
 			if(!(iscultist(V)))
 				V.show_message("<span class='warning'>Dust flows from [usr]'s hands for a moment, and the world suddenly becomes quiet..</span>")
+
+
+/obj/item/weapon/paper/talisman/show_text()
+	return

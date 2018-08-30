@@ -146,7 +146,7 @@ Doesn't work on other aliens/AI.*/
 	proj_type = /obj/item/projectile/energy/neurotoxin
 	cast_sound = 'sound/weapons/pierce.ogg'
 	duration = 20
-	proj_step_delay = 0.2
+	projectile_speed = 1
 
 /spell/targeted/projectile/alienneurotoxin/is_valid_target(var/target, mob/user)
 	if(!(spell_flags & INCLUDEUSER) && target == user)
@@ -287,7 +287,7 @@ Doesn't work on other aliens/AI.*/
 	spell_flags = IGNORESPACE|NODUPLICATE
 
 	summon_type = list(/obj/effect/alien/egg)
-a
+
 /spell/aoe_turf/conjure/alienegg/cast(list/targets, mob/user)
 	. = ..()
 	if(!.) //Returning 1 if we failed to cast
@@ -310,6 +310,7 @@ a
 
 	cast_sound = 'sound/effects/evolve.ogg'
 	cast_delay = 50
+	use_progress_bar = TRUE
 
 /spell/aoe_turf/evolve/drone
 	desc = "Produce an interal egg sac capable of spawning children. Only one queen can exist at a time."
@@ -328,7 +329,7 @@ a
 	return ..()
 
 /spell/aoe_turf/evolve/drone/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
-	user.visible_message("<span class='alien'>[user] begins to violently twist and contort!</span>", "<span class='alien'>You begin to evolve, stand still for a few moments</span>")
+	user.visible_message("<span class='danger'>[user] begins to violently twist and contort!</span>", "<span class='bold alien'>You begin to evolve, stand still for a few moments.</span>")
 	return ..()
 
 /spell/aoe_turf/evolve/drone/cast(list/targets, mob/living/carbon/user)

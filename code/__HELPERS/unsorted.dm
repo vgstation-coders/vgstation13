@@ -883,6 +883,11 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		progbar.loc = null
 	return 1
 
+/proc/do_flick(var/atom/A, var/icon_state, var/time)
+	flick(icon_state, A)
+	sleep(time)
+	return 1
+
 //Takes: Anything that could possibly have variables and a varname to check.
 //Returns: 1 if found, 0 if not.
 /proc/hasvar(var/datum/A, var/varname)
@@ -1710,12 +1715,12 @@ Game Mode config tags:
 	if(istype(O, /obj/item/weapon/grown))
 		var/obj/item/weapon/grown/F = O
 		if(F.plantname)
-			new_seed_type = plant_controller.seeds[F.plantname]
+			new_seed_type = SSplant.seeds[F.plantname]
 	else
 		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
 			var/obj/item/weapon/reagent_containers/food/snacks/grown/F = O
 			if(F.plantname)
-				new_seed_type = plant_controller.seeds[F.plantname]
+				new_seed_type = SSplant.seeds[F.plantname]
 		else
 			var/obj/item/F = O
 			if(F.nonplant_seed_type)
@@ -1767,3 +1772,9 @@ Game Mode config tags:
 			continue
 		turfs += T
 	return pick(turfs)
+
+/proc/get_key(mob/M)
+	if(M.mind)
+		return M.mind.key
+	else
+		return null

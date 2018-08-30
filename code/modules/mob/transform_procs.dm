@@ -110,11 +110,6 @@
 	var/mob/living/silicon/ai/O = new (get_turf(src), base_law_type,,1)//No MMI but safety is in effect.
 	O.invisibility = 0
 	O.aiRestorePowerRoutine = 0
-	if(mind)
-		mind.transfer_to(O)
-		O.mind.original = O
-	else
-		O.key = key
 	var/obj/loc_landmark
 	if(!spawn_here)
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
@@ -137,6 +132,11 @@
 		O.forceMove(loc_landmark.loc)
 		for (var/obj/item/device/radio/intercom/comm in O.loc)
 			comm.ai += O
+	if(mind)
+		mind.transfer_to(O)
+		O.mind.original = O
+	else
+		O.key = key
 	O.verbs += /mob/living/silicon/ai/proc/show_laws_verb
 	O.verbs += /mob/living/silicon/ai/proc/ai_statuschange
 	O.job = "AI"
@@ -278,7 +278,6 @@
 	if(isliving(src))
 		var/mob/living/L = src
 		new_human.languages |= L.languages
-		new_human.default_language = L.default_language
 	new_human.generate_name()
 	Postmorph(new_human)
 	return new_human

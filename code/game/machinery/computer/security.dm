@@ -201,7 +201,7 @@ What a mess.*/
 		active1 = null
 	if (!( data_core.security.Find(active2) ))
 		active2 = null
-	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(loc, /turf))) || (istype(usr, /mob/living/silicon)))
+	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(loc, /turf))) || isAdminGhost(usr) || (istype(usr, /mob/living/silicon)))
 		usr.set_machine(src)
 		switch(href_list["choice"])
 // SORTING!
@@ -245,6 +245,12 @@ What a mess.*/
 				active2 = null
 
 			if("Log In")
+				if(isAdminGhost(usr))
+					active1 = null
+					active2 = null
+					authenticated = "Commander Green"
+					rank = "Central Commander"
+					screen = 1
 				if (istype(usr, /mob/living/silicon))
 					active1 = null
 					active2 = null
@@ -363,7 +369,7 @@ What a mess.*/
 				var/counter = 1
 				while(active2.fields[text("com_[]", counter)])
 					counter++
-				active2.fields[text("com_[]", counter)] = text("Made by [] ([]) on [], 2053<BR>[]", authenticated, rank, time2text(world.realtime, "DDD MMM DD hh:mm:ss"), t1)
+				active2.fields[text("com_[]", counter)] = text("Made by [] ([]) on [], []<BR>[]", authenticated, rank, "[time2text(world.realtime, "DDD MMM DD")] [worldtime2text(give_seconds = TRUE)]", game_year, t1)
 
 			if ("Delete Record (ALL)")
 				if (active1)

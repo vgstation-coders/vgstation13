@@ -39,6 +39,14 @@ var/list/poddoors = list()
 	icon_state = "gpdoor0"
 	density = 0
 
+/obj/machinery/door/poddoor/glass/admin
+	name = "Explosion-proof Podlock"
+	desc = "Why it no open!!!"
+	explosion_block = 50
+	penetration_dampening = 200
+
+/obj/machinery/door/poddoor/glass/admin/ex_act(severity)
+
 /obj/machinery/door/poddoor/New()
 	. = ..()
 	if(density)
@@ -73,6 +81,9 @@ var/list/poddoors = list()
 			src.operating = 0
 			return
 	return
+
+/obj/machinery/door/poddoor/allowed(mob/M)
+	return 0
 
 /obj/machinery/door/poddoor/open()
 	if (src.operating == 1) //doors can still open when emag-disabled

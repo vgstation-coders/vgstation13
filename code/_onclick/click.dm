@@ -61,7 +61,10 @@
 		"target" = A
 	))
 	if(modifiers["middle"])
-		MiddleClickOn(A)
+		if(modifiers["shift"])
+			MiddleShiftClickOn(A)
+		else
+			MiddleClickOn(A)
 		return
 	if(modifiers["shift"])
 		ShiftClickOn(A)
@@ -118,7 +121,13 @@
 			item_attack_delay = held_item.attack_delay
 			var/resolved = held_item.preattack(A, src, 1, params)
 			if(!resolved)
-				resolved = A.attackby(held_item, src, params)
+				if(ismob(A) && modifiers["def_zone"])
+					var/mob/M = A
+					var/def_zone
+					def_zone = modifiers["def_zone"]
+					resolved = M.attackby(held_item,src,def_zone = def_zone, params)
+				else
+					resolved = A.attackby(held_item, src, params)
 				if(ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab))
 					delayNextAttack(item_attack_delay)
 				if(!resolved && A && !A.gcDestroyed && held_item)
@@ -237,6 +246,9 @@
 /atom/proc/MiddleClick(var/mob/M as mob)
 	return
 */
+
+/mob/proc/MiddleShiftClickOn(var/atom/A)
+	pointed(A)
 
 /*
 	Shift click

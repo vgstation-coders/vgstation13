@@ -61,6 +61,7 @@
 	var/restraint_resist_time = 0	//When set, allows the item to be applied as restraints, which take this amount of time to resist out of
 	var/restraint_apply_time = 3 SECONDS
 	var/restraint_apply_sound = null
+	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
@@ -231,7 +232,7 @@
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 	add_fingerprint(user)
-	if(!user.put_in_active_hand(src))
+	if(can_pickup(user) && !user.put_in_active_hand(src))
 		forceMove(get_turf(user))
 
 	return
@@ -806,12 +807,13 @@
 		return FALSE
 	if(user.incapacitated() || !Adjacent(user))
 		return FALSE
-	if((!istype(user, /mob/living/carbon) && !isMoMMI(user)) || istype(user, /mob/living/carbon/brain)) //Is not a carbon being, MoMMI, or is a brain
+	if((!iscarbon(user) && !isMoMMI(user)) && !ishologram(user) || isbrain(user)) //Is not a carbon being, MoMMI, advanced hologram, or is a brain
 		to_chat(user, "You can't pick things up!")
+		return FALSE
 	if(anchored) //Object isn't anchored
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return FALSE
-	if(!istype(loc, /turf)) //Object is not on a turf
+	if(!istype(loc, /turf) && !is_holder_of(user, src)) //Object is not on a turf
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
 		return FALSE
 	return TRUE
@@ -1035,6 +1037,9 @@ var/global/list/image/blood_overlays = list()
 
 
 /obj/item/proc/showoff(mob/user)
+	if(abstract)
+		return
+
 	for (var/mob/M in view(user))
 		M.show_message("[user] holds up [src]. <a HREF='?src=\ref[M];lookitem=\ref[src]'>Take a closer look.</a>",1)
 
@@ -1042,8 +1047,12 @@ var/global/list/image/blood_overlays = list()
 	set name = "Show Held Item"
 	set category = "Object"
 
+	if(attack_delayer.blocked())
+		return
+	delayNextAttack(SHOW_HELD_ITEM_AND_POINTING_DELAY)
+
 	var/obj/item/I = get_active_hand()
-	if(I && !I.abstract)
+	if(I)
 		I.showoff(src)
 
 // /vg/ Affects wearers.
@@ -1231,3 +1240,24 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/recyclable() //Called by RnD machines, for added object-specific sanity.
 	return TRUE
+
+/obj/item/proc/on_mousedrop_to_inventory_slot()
+	return
+
+/obj/item/MouseDropFrom(var/obj/over_object)
+	if(!istype(over_object, /obj/abstract/screen/inventory))
+		return ..()
+	if(!ishuman(usr) && !ismonkey(usr))
+		return ..()
+	if(!usr.is_wearing_item(src) || !canremove)
+		return ..()
+	if(usr.incapacitated())
+		return ..()
+
+	var/obj/abstract/screen/inventory/OI = over_object
+	on_mousedrop_to_inventory_slot()
+
+	if(OI.hand_index && usr.put_in_hand_check(src, OI.hand_index))
+		usr.u_equip(src, TRUE)
+		usr.put_in_hand(OI.hand_index, src)
+		add_fingerprint(usr)

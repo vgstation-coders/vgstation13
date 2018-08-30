@@ -112,8 +112,9 @@ var/list/sent_strike_teams = list()
 				break
 
 			var/mob/applicant = null
+			var/selected_key = pick(applicants)
 			for(var/mob/M in player_list)
-				if(M.key == pick(applicants))
+				if(M.key == selected_key)
 					applicant = M
 
 			if(!applicant || !applicant.key)
@@ -144,7 +145,7 @@ var/list/sent_strike_teams = list()
 
 				new_commando.key = applicant.key
 
-				new_commando.update_action_buttons(1)
+				new_commando.update_action_buttons_icon()
 				new_commando.mind.store_memory("<B>Mission:</B> <span class='warning'>[mission].</span>")
 
 				greet_commando(new_commando)

@@ -14,6 +14,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/icon_living = ""
 	var/icon_dead = ""
 	var/icon_gib = null	//We only try to show a gibbing animation if this exists.
+	var/icon_attack = null //We only try to show an attacking animation if it exists
+	var/icon_attack_time //How long the ahove animation runs, in deciseconds
+	var/icon_dying = null //We only try to show a dying animation if it exists.
+	var/icon_dying_time //How long the above animation runs in deciseconds
 
 	var/list/speak = list()
 	//var/list/speak_emote = list()//	Emotes while speaking IE: Ian [emote], [text] -- Ian barks, "WOOF!". Spoken text is generated from the speak variable.
@@ -115,6 +119,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return 1
 /mob/living/simple_animal/New()
 	..()
+	if(!(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC)))
+		create_reagents(100)
 	verbs -= /mob/verb/observe
 	if(!real_name)
 		real_name = name
@@ -139,6 +145,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 // For changing wander behavior
 /mob/living/simple_animal/proc/wander_move(var/turf/dest)
 	if(space_check())
+		if(istype(src, /mob/living/simple_animal/hostile))
+			var/mob/living/simple_animal/hostile/H = src
+			set_glide_size(DELAY2GLIDESIZE(H.move_to_delay))
+		else
+			set_glide_size(DELAY2GLIDESIZE(0.5 SECONDS))
 		Move(dest)
 
 /mob/living/simple_animal/Life()
@@ -280,6 +291,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(can_breed)
 		make_babies()
 
+	if(reagents)
+		reagents.metabolize(src)
+
 	return 1
 
 /mob/living/simple_animal/gib(var/animation = 0, var/meat = 1)
@@ -313,15 +327,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(act == "scream")
 		desc = "makes a loud and pained whimper!"  //ugly hack to stop animals screaming when crushed :P
 		act = "me"
-	if(!desc && act != "me")
-		desc = "[act]."
-		act = "me"
 	..(act, type, desc)
 
-/mob/living/simple_animal/check_emote(message)
-	if(copytext(message, 1, 2) == "*")
-		to_chat(src, "<span class = 'notice'>This type of mob doesn't support this. Use the Me verb instead.</span>")
-		return 1
 
 /mob/living/simple_animal/proc/handle_automated_speech()
 
@@ -369,10 +376,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return 0
 
 /mob/living/simple_animal/attack_hand(mob/living/carbon/human/M as mob)
-	..()
+	. = ..()
 
 	switch(M.a_intent)
-
 		if(I_HELP)
 			if(health > 0)
 				visible_message("<span class='notice'>[M] [response_help] [src].</span>")
@@ -380,15 +386,16 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		if(I_GRAB)
 			M.grab_mob(src)
 
-		if(I_HURT, I_DISARM)
+		if(I_DISARM)
+			visible_message("<span class ='notice'>[M] [response_disarm] [src].</span>")
+
+		if(I_HURT)
 			M.unarmed_attack_mob(src)
 			//adjustBruteLoss(harm_intent_damage)
-
 			//visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
 
-	return
 
-/mob/living/simple_animal/MouseDrop(mob/living/carbon/M)
+/mob/living/simple_animal/MouseDropFrom(mob/living/carbon/M)
 	if(M != usr || !istype(M) || !Adjacent(M) || M.incapacitated())
 		return ..()
 
@@ -500,13 +507,15 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return
 
 	if(!gibbed)
-		visible_message("<span class='danger'>\the [src] stops moving...</span>")
+		emote("deathgasp")
 
 	health = 0 // so /mob/living/simple_animal/Life() doesn't magically revive them
 	living_mob_list -= src
 	dead_mob_list += src
-	icon_state = icon_dead
 	stat = DEAD
+	if(icon_dying && !gibbed)
+		do_flick(src, icon_dying, icon_dying_time)
+	icon_state = icon_dead
 	setDensity(FALSE)
 
 	animal_count[src.type]--
@@ -736,8 +745,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		walk(src,0)
 	return !spaced
 
-/mob/living/simple_animal/say()
-	if(speak_override)
+/mob/living/simple_animal/say(message, bubble_type)
+	if(speak_override && copytext(message, 1, 2) != "*")
 		return ..(pick(speak))
 	else
 		return ..()
@@ -753,3 +762,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 /datum/locking_category/simple_animal
+
+
+/mob/living/simple_animal/resetVariables()
+	..("emote_hear", "emote_see", args)
+	emote_hear = list()
+	emote_see = list()

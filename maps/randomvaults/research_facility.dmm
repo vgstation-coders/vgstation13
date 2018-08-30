@@ -244,13 +244,13 @@
 "eJ" = (/obj/item/weapon/soap/nanotrasen,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/research)
 "eK" = (/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/research)
 "eL" = (/obj/machinery/door/airlock/maintenance,/obj/structure/window/barricade/full/block,/obj/machinery/door/poddoor/preopen{id_tag = "madagascar"; name = "Lockdown System"},/turf/simulated/floor/plating,/area/vault/research)
-"eM" = (/turf/simulated/wall/r_wall,/area)
+"eM" = (/obj/machinery/door/airlock/external,/obj/docking_port/destination/vault/research{dir = 2},/turf/simulated/floor/plating,/area/vault/research)
 "eN" = (/obj/item/clothing/under/rank/centcom/officer,/obj/item/clothing/head/beret/centcom/officer,/turf/simulated/floor/carpet,/area/vault/research)
 "eO" = (/obj/abstract/map/spawner/misc/medivault,/turf/simulated/floor/carpet,/area/vault/research)
 "eP" = (/obj/structure/flora/pottedplant,/obj/machinery/light,/turf/simulated/floor/wood,/area/vault/research)
 "eQ" = (/turf/simulated/floor{tag = "icon-warning"; icon_state = "warning"},/area/vault/research)
 "eR" = (/obj/structure/toilet{tag = "icon-toilet00 (NORTH)"; icon_state = "toilet00"; dir = 1},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/research)
-"eS" = (/obj/machinery/door/airlock/external,/obj/docking_port/destination/vault/research{dir = 2},/turf/simulated/floor/plating,/area)
+"eS" = (/mob/living/simple_animal/hostile/humanoid/surgeon/boss,/turf/simulated/floor{icon_state = "white"},/area/vault/research)
 
 (1,1,1) = {"
 aaaaabacacacacacacacacacacacacacacacacacacacacacacacacacacacacacabaaaa
@@ -259,7 +259,7 @@ aaacacadaeafacagahaiajajacacakalamamamamananamaoacacapaqaqaqarasacacaa
 aaacacatamatacamauavawaxacayazazaAazazazazazaAazaBacaqaqaCaqaqaDacacaa
 aaacacaEayaFacaGaHatamaIacatacacacacacacacaJacacatacaKaLaqaqaqaMacacaa
 abacacacaNaOacacacaNacacacaPacaQaRaSacaTaUaVaWacaXaYaZaqaqaqaqbaacacaa
-acacbbambcaAazbdbebfbgazazbhbibjbkblbmbnbobpbqacamacaqaqbaaqbaaqacacaa
+acacbbambcaAazbdbebfbgazazbhbibjbkblbmbnboeSbqacamacaqaqbaaqbaaqacacaa
 acacbracacacbsacacacacacacacacacacacacbtbubvbwacbxacacacacacacacacacaa
 acacamacbybzbAbBbBacbCbDacbEbFacbGbDacbmbHbIbJacamambKamauambKamacacaa
 acacamacbLbMbNbNbOacbGbPacbQbRacbSbTacbUbVbWbXacacacacaIaIaIacamacacaa
@@ -274,7 +274,7 @@ acacamacdCacacdDacacdmdEdsdFdmdmbIdGdmdHdIdJdKdtdLdMacdNcmdhacdOdPalac
 acacauaccjacdQdRdSacdTacacacacdTacdUdUacdVdWdXdsdYdZaceacmebecamedeeac
 acacamaccjefegeheiaccjejekelemenacacacacacacacaccwacaceoepeoacameqerac
 acacambsdjacacdDacaceseteuemevewacexeyacdmdxezacbMeAacacacacacedeqerac
-acacamaccjaceBeCeDaceEeEeFeEeGcjeHdmdmeIdmdsdmaceJeKeLeqeqamamauaceMeM
-eMaceeaccjefeNeOeiacePclcjdjeEePacacacaceQeQeQaceReRacacacacacaceMaaaa
-aaeMacacacacacacacacacacacacacaceMeMeMeMeMeSeMeMacaceMeMeMeMeMeMaaaaaa
+acacamaccjaceBeCeDaceEeEeFeEeGcjeHdmdmeIdmdsdmaceJeKeLeqeqamamauacacac
+acaceeaccjefeNeOeiacePclcjdjeEePacacacaceQeQeQaceReRacacacacacacacaaaa
+aaacacacacacacacacacacacacacacacacacacacaceMacacacacacacacacacacaaaaaa
 "}

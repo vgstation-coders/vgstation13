@@ -56,7 +56,7 @@
 	do_attack_animation(target, src)
 
 	if(prob(40)) //True chance of something happening per click is hit_chance*event_chance, so in this case the stun chance is actually 0.6*0.4=24%
-		target.apply_effect(4, WEAKEN, run_armor_check(affecting, "melee"))
+		target.apply_effect(4, WEAKEN, target.run_armor_check(affecting, "melee"))
 		playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 		visible_message("<span class='danger'>[src] has pushed [target]!</span>")
 		add_logs(src, target, "pushed", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player

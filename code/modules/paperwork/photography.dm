@@ -131,6 +131,21 @@
 	var/photo_size = 3 //Default is 3x3. 1x1, 5x5, 7x7 are also options
 
 	var/panelopen = FALSE
+	var/obj/item/weapon/light/bulb/flashbulb = null
+	var/start_with_bulb = TRUE
+
+/obj/item/device/camera/New(var/empty = FALSE)
+	..()
+	if(empty == TRUE)
+		start_with_bulb = FALSE
+		pictures_left = 0
+	if(start_with_bulb)
+		flashbulb = new(src)
+
+/obj/item/device/camera/Destroy()
+	qdel(flashbulb)
+	flashbulb = null
+	..()
 
 /obj/item/device/camera/sepia
 	name = "camera"
@@ -192,10 +207,14 @@
 		usr.simple_message("<span class='info'>You zoom the camera out.</span>", "<span class='danger'>You take a bite of the mysterious mushroom. Everything feels so tiny!</span>") //Second message is shown when hallucinating
 
 /obj/item/device/camera/AltClick()
-	set_zoom()
+	if(is_holder_of(usr, src))
+		set_zoom()
+	else
+		return ..()
 
 /obj/item/device/camera/silicon
 	name = "silicon photo camera"
+	start_with_bulb = FALSE
 	var/in_camera_mode = FALSE
 
 /obj/item/device/camera/silicon/ai_camera //camera AI can take pictures with
@@ -208,6 +227,14 @@
 	set category ="Robot Commands"
 	set name = "Print Image"
 	set src in usr
+
+	if(!isrobot(usr))
+		return
+
+	var/mob/living/silicon/robot/R = usr
+
+	if(R.incapacitated())
+		return
 
 	borgprint()
 
@@ -227,10 +254,12 @@
 		to_chat(user, "You attach [C.amount > 5 ? "some" : "the"] wires to \the [src]'s flash circuit.")
 		if(loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/obj/item/device/blinder/Q = new (get_turf(user))
+			var/obj/item/device/blinder/Q = new(get_turf(user), empty = TRUE)
+			handle_blinder(Q)
 			user.put_in_hands(Q)
 		else
-			new /obj/item/device/blinder(get_turf(loc))
+			var/obj/item/device/blinder/Q = new(get_turf(loc), empty = TRUE)
+			handle_blinder(Q)
 		C.use(5)
 		qdel(src)
 
@@ -249,6 +278,20 @@
 			return
 	..()
 
+/obj/item/device/camera/proc/handle_blinder(obj/item/device/blinder/blinder)
+	if(flashbulb)
+		blinder.flashbulb = flashbulb
+		flashbulb.forceMove(blinder)
+		flashbulb = null
+
+	blinder.name = name
+	blinder.icon = icon
+	blinder.base_desc = desc
+	blinder.update_desc()
+	blinder.icon_state = icon_state
+	blinder.item_state = item_state
+	blinder.mech_flags = mech_flags
+	blinder.decon_path = type
 
 /obj/item/device/camera/proc/camera_get_icon(list/turfs, turf/center)
 	var/atoms[] = list()

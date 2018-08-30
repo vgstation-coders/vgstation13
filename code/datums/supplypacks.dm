@@ -31,6 +31,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 		AM.forceMove(null)	//just to make sure they're deleted by the garbage collector
 	manifest += "</ul>"
 
+// Called after a crate containing the items specified by this datum is created
+/datum/supply_packs/proc/post_creation(var/atom/movable/container)
+	return
+
+/datum/supply_packs/proc/OnConfirmed(var/mob/user)
+
 //////SUPPLIES//////
 
 /datum/supply_packs/toner
@@ -177,6 +183,22 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 10
 	containertype = /obj/structure/largecrate/showers
 	containername = "showers crate"
+	group = "Supplies"
+
+/datum/supply_packs/clock
+	name = "Grandfather Clock"
+	contains = list(/obj/structure/clock/unanchored)
+	cost = 40
+	containertype = /obj/structure/largecrate
+	containername = "ticking crate"
+	group = "Supplies"
+
+/datum/supply_packs/anvil
+	name = "Anvil"
+	contains = list(/obj/item/anvil)
+	cost = 150
+	containertype = /obj/structure/largecrate
+	containername = "anvil crate"
 	group = "Supplies"
 
 /datum/supply_packs/metal50
@@ -828,7 +850,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/shield/riot,
 					/obj/item/weapon/shield/riot)
 	cost = 120
-	containertype = /obj/structure/closet/crate/secure/anti_tamper
+	containertype = /obj/structure/closet/crate/secure
 	containername = "tactical assault gear crate"
 	access = list(access_armory)
 	group = "Security"
@@ -886,14 +908,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 
 /datum/supply_packs/expenergy
-	name = "Experimental energy gear"
-	contains = list(/obj/item/clothing/suit/armor/laserproof,
-					/obj/item/clothing/suit/armor/laserproof,
-					/obj/item/weapon/gun/energy/gun,
+	name = "High-Tech energy weapons"
+	contains = list(/obj/item/weapon/gun/energy/gun,
 					/obj/item/weapon/gun/energy/gun)
-	cost = 50
+	cost = 30
 	containertype = /obj/structure/closet/crate/secure
-	containername = "experimental energy gear crate"
+	containername = "\improper High-Tech energy weapons crate"
 	access = list(access_armory)
 	group = "Security"
 
@@ -1076,6 +1096,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/freezer
 	containername = "pizza crate"
 	group = "Hospitality"
+
+/datum/supply_packs/randomised/pizza/post_creation(var/atom/movable/container)
+	if(!station_does_not_tip)
+		return
+	for(var/obj/item/pizzabox/box in container)
+		var/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/pizza = box.pizza
+		if(!pizza)
+			continue
+		pizza.make_poisonous()
 
 /datum/supply_packs/cafe
 	name = "Cafe equipment"
@@ -1426,6 +1455,22 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "supermatter shard crate"
 	group = "Engineering"
 	access = list(access_engine_equip)
+	var/static/list/shard_counts_by_user = list()
+
+
+/datum/supply_packs/supermatter_shard/OnConfirmed(var/mob/user)
+	shard_counts_by_user[user.ckey]++
+	var/i = shard_counts_by_user[user.ckey]
+	var/span = ""
+	switch (i)
+		if (1)
+			span = "notice"
+		if (2 to 5)
+			span = "warning"
+		else
+			span = "danger"
+	message_admins("<span class='[span]'>[key_name(user)] has ordered a supermatter shard supplypack, this is his #[i] order. @[formatJumpTo(user)]</span>")
+	log_admin("[key_name(user)] has ordered a supermatter shard supplypack, this is his #[i] order. @([user.x], [user.y], [user.z])")
 
 /datum/supply_packs/portable_smes
 	contains = list(/obj/machinery/power/battery/portable,
@@ -1654,6 +1699,24 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/scisec
 	containername = "robotics assembly crate"
 	access = list(access_robotics)
+	group = "Science"
+
+/datum/supply_packs/robot_maintenance
+	name = "Robot maintenance equipment"
+	contains = list(/obj/item/weapon/book/manual/robotics_cyborgs,
+					/obj/item/weapon/cell/high,
+					/obj/item/weapon/storage/toolbox/robotics,
+					/obj/item/robot_parts/robot_component/armour,
+					/obj/item/robot_parts/robot_component/actuator,
+					/obj/item/robot_parts/robot_component/radio,
+					/obj/item/robot_parts/robot_component/binary_communication_device,
+					/obj/item/robot_parts/robot_component/camera,
+					/obj/item/robot_parts/robot_component/diagnosis_unit,
+					/obj/item/borg/upgrade/restart
+					)
+	cost = 120
+	containertype = /obj/structure/closet/crate/sci
+	containername = "robot maintenance equipment crate"
 	group = "Science"
 
 /datum/supply_packs/suspension_gen
@@ -1887,6 +1950,19 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 20
 	containertype = /obj/structure/closet/crate/secure/hydrosec
 	containername = "weed control crate"
+	access = list(access_hydroponics)
+	group = "Hydroponics"
+
+/datum/supply_packs/insectcontrol
+	name = "Insect control equipment"
+	contains = list(/obj/item/weapon/reagent_containers/glass/bottle/toxin,
+					/obj/item/weapon/reagent_containers/glass/bottle/toxin,
+					/obj/item/weapon/reagent_containers/glass/bottle/toxin,
+					/obj/item/weapon/reagent_containers/spray/bugzapper,
+					/obj/item/weapon/reagent_containers/spray/bugzapper)
+	cost = 40
+	containertype = /obj/structure/largecrate/hissing
+	containername = "hissing crate"
 	access = list(access_hydroponics)
 	group = "Hydroponics"
 

@@ -396,6 +396,8 @@
 	layer = OPEN_DOOR_LAYER
 	icon_state = "beartrap0"
 	desc = "A trap used to catch bears and other legged creatures."
+	starting_materials = list(MAT_IRON = 50000)
+	w_type = RECYK_METAL
 	var/armed = 0
 	var/obj/item/weapon/grenade/iedcasing/IED = null
 
@@ -721,12 +723,14 @@
 	name = "power control module"
 	icon_state = "power_mod"
 	desc = "Heavy-duty switching circuits for power control."
+	board_type = OTHER
 
 /obj/item/weapon/circuitboard/station_map
 	icon = 'icons/obj/module.dmi'
 	name = "holomap module"
 	icon_state = "card_mod"
 	desc = "Holographic circuits for station holomaps."
+	board_type = OTHER
 
 /obj/item/weapon/module/id_auth
 	name = "\improper ID authentication module"

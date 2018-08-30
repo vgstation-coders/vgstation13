@@ -37,15 +37,21 @@
 		else
 			return new type()
 
-	var/datum/O = masterdatumPool[type][1]
-	masterdatumPool[type] -= O
+	var/datum/O
+	var/list/L = masterdatumPool[type]
+	if(L.len > 1)
+		O = L[1]
+		L -= O
 
 	#ifdef DEBUG_DATUM_POOL
 	to_chat(world, text("DEBUG_DATUM_POOL: getFromPool([]) [] left arglist([]).", type, length(masterdatumPool[type]), list2params(B)))
 	#endif
 
 	if(!O || !istype(O))
-		O = new type(arglist(B))
+		if(length(B))
+			O = new type(arglist(B))
+		else
+			O = new type()
 	else
 		if(istype(O, /atom/movable) && B.len) // B.len check so we don't OoB.
 			var/atom/movable/AM = O
@@ -74,7 +80,7 @@
 		to_chat(world, text("DEBUG_DATUM_POOL: returnToPool([]) exceeds [] discarding...", D.type, MAINTAINING_OBJECT_POOL_COUNT))
 		#endif
 
-		qdel(D)
+		qdel(D, TRUE)
 		return
 
 	if(isnull(masterdatumPool[D.type]))
@@ -94,8 +100,6 @@
 	#ifdef DEBUG_DATUM_POOL
 	to_chat(world, text("DEBUG_DATUM_POOL: returnToPool([]) [] left.", D.type, length(masterdatumPool[D.type])))
 	#endif
-
-#undef MAINTAINING_DATUM_POOL_COUNT
 
 #ifdef DEBUG_DATUM_POOL
 #undef DEBUG_DATUM_POOL
@@ -125,18 +129,6 @@
 //Return 1 to block the varedit!
 /datum/proc/variable_edited(variable_name, old_value, new_value)
 	return
-
-/proc/isInTypes(atom/Object, types)
-	if(!Object)
-		return 0
-	var/prototype = Object.type
-	Object = null
-
-	for (var/type in params2list(types))
-		if (ispath(prototype, text2path(type)))
-			return 1
-
-	return 0
 
 /client/proc/debug_pooling()
 	set name = "Debug Pooling Type"

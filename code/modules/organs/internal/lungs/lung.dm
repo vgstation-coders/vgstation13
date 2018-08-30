@@ -26,7 +26,7 @@
 	var/exhale_moles = 0
 
 /datum/organ/internal/lungs/proc/gasp()
-	owner.emote("gasp")
+	owner.emote("gasp", null, null, TRUE)
 
 /datum/organ/internal/lungs/proc/handle_breath(var/datum/gas_mixture/breath, var/mob/living/carbon/human/H)
 

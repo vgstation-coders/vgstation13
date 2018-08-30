@@ -432,6 +432,16 @@
 	!equip_ready? turn_off() : turn_on()
 	return equip_ready
 
+/obj/item/mecha_parts/mecha_equipment/jetpack/attach(obj/mecha/M as obj)
+	..()
+	linked_spell = new /spell/mech/jetpack(M, src)
+
+/obj/item/mecha_parts/mecha_equipment/jetpack/activate()
+	toggle()
+
+/spell/mech/jetpack/cast(list/targets, mob/user)
+	linked_equipment.activate()
+
 /obj/item/mecha_parts/mecha_equipment/jetpack/proc/turn_on()
 	set_ready_state(0)
 	chassis.proc_res["dyndomove"] = src
@@ -576,7 +586,9 @@
 	else
 		return "[..()] \[<a href='?src=\ref[src];RCDmenu=0'>Open construction menu</a>\]\[<a href='?src=\ref[src];swap=0'>Switch to piping mode</a>\]"
 
-
+/obj/item/mecha_parts/mecha_equipment/tool/red/alt_action()
+	var/obj/item/device/rcd/activeDevice = device ? RPD : RCD
+	activeDevice.attack_self(chassis.occupant)
 
 /obj/item/mecha_parts/mecha_equipment/teleporter
 	name = "\improper Exosuit-Mounted Teleporter"
@@ -726,6 +738,13 @@
 		send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
 	return
 
+/obj/item/mecha_parts/mecha_equipment/gravcatapult/alt_action()
+	if(mode == 1)
+		mode = 2
+		to_chat(chassis.occupant, "<span class='notice'>Push mode activated.</span>")
+	else
+		mode = 1
+		to_chat(chassis.occupant, "<span class='notice'>Pull mode activated.</span>")
 
 /obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster //what is that noise? A BAWWW from TK mutants.
 	name = "\improper Armor Booster Module (Close Combat Weaponry)"
@@ -737,6 +756,7 @@
 	range = 0
 	var/deflect_coeff = 1.15
 	var/damage_coeff = 0.8
+	is_activateable = 0
 
 /obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/can_attach(obj/mecha/M as obj)
 	if(..())
@@ -788,6 +808,7 @@
 	range = 0
 	var/deflect_coeff = 1.15
 	var/damage_coeff = 0.8
+	is_activateable = 0
 
 /obj/item/mecha_parts/mecha_equipment/antiproj_armor_booster/can_attach(obj/mecha/M as obj)
 	if(..())
@@ -873,6 +894,7 @@
 	..()
 	droid_overlay = new(src.icon, icon_state = "repair_droid")
 	M.overlays += droid_overlay
+	linked_spell = new /spell/mech/repair(M, src)
 	return
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/destroy()
@@ -886,6 +908,17 @@
 	pr_repair_droid.stop()
 	..()
 	return
+
+/obj/item/mecha_parts/mecha_equipment/repair_droid/activate()
+	chassis.overlays -= droid_overlay
+	if(pr_repair_droid.toggle())
+		droid_overlay = new(src.icon, icon_state = "repair_droid_a")
+		log_message("Activated.")
+	else
+		droid_overlay = new(src.icon, icon_state = "repair_droid")
+		log_message("Deactivated.")
+		set_ready_state(1)
+	chassis.overlays += droid_overlay
 
 /obj/item/mecha_parts/mecha_equipment/repair_droid/get_equip_info()
 	if(!chassis)
@@ -937,6 +970,13 @@
 		RD.set_ready_state(1)
 	return
 
+/spell/mech/repair
+	name = "Repair Droid Module"
+	desc = "Automated repair droid. Scans exosuit for damage and repairs it. Can fix almost all types of external or internal damage."
+
+/spell/mech/repair/cast(list/targets, mob/user)
+	linked_equipment.activate()
+	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay
 	name = "\improper Energy Relay Module"
@@ -972,6 +1012,7 @@
 	..()
 	chassis.proc_res["dyngetcharge"] = src
 //		chassis.proc_res["dynusepower"] = src
+	linked_spell = new /spell/mech/tesla(M, src)
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/can_attach(obj/mecha/M)
@@ -1005,12 +1046,7 @@
 	if(..())
 		return TRUE
 	if(href_list["toggle_relay"])
-		if(pr_energy_relay.toggle())
-			set_ready_state(0)
-			log_message("Activated.")
-		else
-			set_ready_state(1)
-			log_message("Deactivated.")
+		activate()
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/get_equip_info()
@@ -1026,6 +1062,23 @@
 			A.master.use_power(amount*coeff, pow_chan)
 			return 1
 	return chassis.dynusepower(amount)*/
+
+/obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/activate()
+	if(pr_energy_relay.toggle())
+		set_ready_state(0)
+		log_message("Activated.")
+		to_chat(chassis.occupant, "<span class='notice'>Relay enabled.</span>")
+	else
+		set_ready_state(1)
+		log_message("Deactivated.")
+		to_chat(chassis.occupant, "<span class='notice'>Relay disabled.</span>")
+
+/spell/mech/tesla
+	name = "Tesla Energy Relay"
+	desc = "Wirelessly drains energy from any available power channel in area. The performance index is quite low."
+
+/spell/mech/tesla/cast(list/targets, mob/user)
+	linked_equipment.activate()
 
 /datum/global_iterator/mecha_energy_relay/process(var/obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/ER)
 	if(!ER.chassis || ER.chassis.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
@@ -1092,6 +1145,13 @@
 	..()
 	return
 
+/obj/item/mecha_parts/mecha_equipment/generator/alt_action()
+	if(pr_mech_generator.toggle())
+		set_ready_state(0)
+		log_message("Activated.")
+	else
+		set_ready_state(1)
+		log_message("Deactivated.")
 
 /obj/item/mecha_parts/mecha_equipment/generator/Topic(href, href_list)
 	if(..())
@@ -1195,7 +1255,6 @@
 	EG.update_equip_info()
 	return 1
 
-
 /obj/item/mecha_parts/mecha_equipment/generator/nuclear
 	name = "\improper ExoNuclear Reactor"
 	desc = "Generates power using uranium. Pollutes the environment."
@@ -1224,7 +1283,21 @@
 			M.apply_radiation(EG.rad_per_cycle*3, RAD_EXTERNAL)
 	return 1
 
+/spell/mech/generator
+	name = "\improper Plasma Converter Module"
+	desc = "Generates power using solid plasma as fuel. Pollutes the environment."
 
+/spell/mech/generator/nuclear
+	name = "\improper ExoNuclear Reactor"
+	desc = "Generates power using uranium. Pollutes the environment."
+
+/spell/mech/generator/New(var/obj/mecha/M, var/obj/item/mecha_parts/mecha_equipment/generator/ME)
+	src.linked_mech = M
+	charge_counter = charge_max
+	name = ME.name
+
+/spell/mech/generator/cast(list/targets, mob/user)
+	linked_equipment.activate()
 
 //This is pretty much just for the death-ripley so that it is harmless
 /obj/item/mecha_parts/mecha_equipment/tool/safety_clamp
@@ -1343,6 +1416,9 @@
 		occupant_message("<span class='notice'>Automatic tool refilling activated.</span>")
 	update_equip_info()
 
+/obj/item/mecha_parts/mecha_equipment/tool/switchtool/alt_action()
+	switchtool.attack_self(chassis.occupant)
+
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/get_equip_info()
 	return "[..()] Current tool: [switchtool.deployed ? "[switchtool.deployed]" : "None"] \[<a href='?src=\ref[src];change=0'>change</a>\] [pr_switchtool.active() ? "" : "\[<a href='?src=\ref[src];refill=0'>activate refilling</a>\]"]"
 
@@ -1398,6 +1474,16 @@
 		plating_active = !plating_active
 	if(href_list["toggle_tiling"])
 		tiling_active = !tiling_active
+	update_equip_info()
+
+/obj/item/mecha_parts/mecha_equipment/tool/tiler/alt_action()
+	if(plating_active || tiling_active)
+		plating_active = 0
+		tiling_active = 0
+	else
+		plating_active = 1
+		tiling_active = 1
+	to_chat(chassis.occupant, "Plating and tiling modes [plating_active?"enabled":"disabled"]")
 	update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/tiler/get_equip_info()

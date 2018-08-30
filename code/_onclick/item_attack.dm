@@ -7,6 +7,8 @@
 				. = src.unwield(user)
 			else
 				. = src.wield(user)
+	if(material_type)
+		material_type.on_use(src, user, user)
 
 // No comment
 /atom/proc/attackby(obj/item/W, mob/user)
@@ -16,15 +18,19 @@
 	if(W && !(W.flags&NO_ATTACK_MSG))
 		user.do_attack_animation(src, W)
 		visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
+	if(W.material_type)
+		W.material_type.on_use(W, src, user)
 
-/mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null)
+/mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null, var/def_zone = null)
 	if(!no_delay)
 		user.delayNextAttack(10)
 	if(istype(I) && ismob(user))
 		if(originator)
-			I.attack(src, user, null, originator)
+			I.attack(src, user, def_zone, originator)
 		else
-			I.attack(src, user)
+			I.attack(src, user, def_zone)
+	if(BrainContainer)
+		BrainContainer.SendSignal(COMSIG_ATTACKEDBY, list("assailant"=user,"damage"=I.force))
 
 
 // Proximity_flag is 1 if this afterattack was called on something adjacent, in your square, or on your person.
@@ -232,6 +238,13 @@ obj/item/proc/get_clamped_volume()
 		. = TRUE //The attack always lands
 		M.updatehealth()
 	I.add_fingerprint(user)
+	I.on_attack(M,user)
 
+
+/obj/item/proc/on_attack(var/atom/attacked, var/mob/user)
+	user.do_attack_animation(attacked, src)
+	user.delayNextAttack(attack_delay)
 	if(hitsound)
-		playsound(M.loc, I.hitsound, 50, 1, -1)
+		playsound(attacked.loc, hitsound, 50, 1, -1)
+	if(material_type)
+		material_type.on_use(src,attacked, user)

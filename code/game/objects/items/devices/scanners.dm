@@ -91,12 +91,18 @@ BREATHALYZER
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_BIOTECH + "=1"
+	attack_delay = 0
+	var/tmp/last_scantime = 0
 	var/last_reading = null
 	var/mode = 1
 
 /obj/item/device/healthanalyzer/attack(mob/living/M as mob, mob/living/user as mob)
 	if(!user.hallucinating())
-		last_reading = healthanalyze(M, user, mode)
+		if(last_scantime + 1 SECONDS < world.time)
+			last_reading = healthanalyze(M, user, mode, silent = FALSE)
+			last_scantime = world.time
+		else
+			last_reading = healthanalyze(M, user, mode, silent = TRUE)
 	else
 		if(M.isDead())
 			user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"It's dead, Jim.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows black.</span>")
@@ -134,8 +140,7 @@ Blood Level Unknown: ???% ???cl
 Subject's pulse: ??? BPM"})
 			return
 	if(!silent)
-		user.visible_message("<span class='notice'>[user] analyzes [M]'s vitals.</span>", \
-		"<span class='notice'>You analyze [M]'s vitals.</span>")
+		user.visible_message("<span class='notice'>[user] analyzes [M]'s vitals.</span>", ignore_self = TRUE)
 		playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 	var/fake_oxy = max(rand(1, 40), M.getOxyLoss(), (300 - (M.getToxLoss() + M.getFireLoss() + M.getBruteLoss())))
 	var/OX = M.getOxyLoss() > 50   ? "<b>[M.getOxyLoss()]</b>"   : M.getOxyLoss()
@@ -146,10 +151,10 @@ Subject's pulse: ??? BPM"})
 		OX = fake_oxy > 50 ? "<b>[fake_oxy]</b>" : fake_oxy
 		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: Dead</span><br>"
 	else
-		message += "<br><span class='notice'>Analyzing Results for [M]:<br>Overall Status: [M.stat > 1 ? "Dead" : "[M.health - M.halloss]% Healthy"]</span>"
+		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: [M.stat > 1 ? "Dead" : "[M.health - M.halloss]% Healthy"]</span>"
 	message += "<br>Key: <font color='blue'>Suffocation</font>/<font color='green'>Toxin</font>/<font color='#FFA500'>Burns</font>/<font color='red'>Brute</font>"
 	message += "<br>Damage Specifics: <font color='blue'>[OX]</font> - <font color='green'>[TX]</font> - <font color='#FFA500'>[BU]</font> - <font color='red'>[BR]</font>"
-	message += "<br>[(M.undergoing_hypothermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: [M.bodytemperature-T0C]&deg;C ([M.bodytemperature*1.8-459.67]&deg;F)</span>"
+	message += "<br>[(M.undergoing_hypothermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: [round(M.bodytemperature-T0C,0.1)]&deg;C ([round(M.bodytemperature*1.8-459.67,0.1)]&deg;F)</span>"
 	if(M.tod && M.isDead())
 		message += "<br><span class='notice'>Time of Death: [M.tod]</span>"
 	if(istype(M, /mob/living/carbon/human) && mode)
@@ -181,7 +186,7 @@ Subject's pulse: ??? BPM"})
 		OX = fake_oxy > 50 ? "<font color='blue'><b>Severe oxygen deprivation detected</b></font>" : "Subject bloodstream oxygen level normal"
 	message += ("<br>[OX] | [TX] | [BU] | [BR]")
 
-	if(M.reagents.total_volume)
+	if(M.reagents && M.reagents.total_volume)
 		message += "<br><span class='warning'>Warning: Unknown substance detected in subject's blood.</span>"
 	if(hardcore_mode_on && ishuman(M) && eligible_for_hardcore_mode(M))
 		var/mob/living/carbon/human/H = M
@@ -294,14 +299,16 @@ Subject's pulse: ??? BPM"})
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	var/turf/location = get_turf(user)
+	var/atom/location = is_holder_of(user, src) ? user.loc : get_turf(src) //If user isn't the holder we're either in a mech's equipment loadout or something weird so get the outside environment
 
 	if(!location) //Somehow
 		return
 
 	var/datum/gas_mixture/environment = location.return_air()
 
-	to_chat(user, output_gas_scan(environment, location, 1, CELL_VOLUME))
+	var/unit_vol = environment && environment.volume > CELL_VOLUME ? CELL_VOLUME : null
+
+	to_chat(user, output_gas_scan(environment, location, 1, unit_vol))
 
 	src.add_fingerprint(user)
 	return
@@ -366,7 +373,7 @@ Subject's pulse: ??? BPM"})
 		if(unknown_concentration > 0.01)
 			message += "<br><span class='notice'>Unknown: [round(unknown_concentration*100)]%</span>"
 
-		message += "<br>[human_standard && !(scanned.temperature in range(BODYTEMP_COLD_DAMAGE_LIMIT, BODYTEMP_HEAT_DAMAGE_LIMIT)) ? "<span class='bad'>" : "<span class='notice'>"] Temperature: [round(scanned.temperature-T0C)]&deg;C"
+		message += "<br>[human_standard && !IsInRange(scanned.temperature, BODYTEMP_COLD_DAMAGE_LIMIT, BODYTEMP_HEAT_DAMAGE_LIMIT) ? "<span class='bad'>" : "<span class='notice'>"] Temperature: [round(scanned.temperature-T0C)]&deg;C"
 		message += "<br><span class='notice'>Heat capacity: [round(heat_capacity, 0.01)]</span>"
 	else
 		message += "<br><span class='warning'>No gasses detected[container && !istype(container, /turf) ? " in \the [container]." : ""]!</span>"

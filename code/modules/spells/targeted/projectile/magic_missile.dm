@@ -16,7 +16,7 @@
 
 	proj_type = /obj/item/projectile/spell_projectile/seeking/magic_missile
 	duration = 10
-	proj_step_delay = 5
+	projectile_speed = 5
 
 	hud_state = "wiz_mm"
 

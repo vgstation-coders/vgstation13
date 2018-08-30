@@ -6,6 +6,7 @@
 	desc = "A fuel-consuming device designed for bringing chemical mixtures to boil."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "bunsen0"
+	pass_flags = PASSTABLE
 	var/heating = BUNSEN_OFF //whether the bunsen is turned on
 	var/obj/item/weapon/reagent_containers/held_container
 	var/list/possible_fuels = list(
@@ -77,27 +78,29 @@
 					var/reagent_transfer = R.reagents.trans_id_to(src, possible_fuel, 10)
 					if(reagent_transfer)
 						to_chat(user, "<span class='notice'>You transfer [reagent_transfer]u of [possible_fuel] from \the [R] to \the [src]</span>")
+						add_fingerprint(user)
 						return
 		else
 			if(!held_container && user.drop_item(W, src))
 				held_container = W
 				to_chat(user, "<span class='notice'>You put \the [held_container] onto \the [src].</span>")
 				var/image/I = image("icon"=W, "layer"=FLOAT_LAYER, "pixel_y" = 13 * PIXEL_MULTIPLIER)
-				var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER, "pixel_y" = src.pixel_y, "pixel_x" = src.pixel_x)
+				var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER)
 				overlays += I
 				overlays += I2
+				add_fingerprint(user)
 				return 1 // avoid afterattack() being called
 	if(iswrench(W))
 		user.visible_message("<span class = 'warning'>[user] starts to deconstruct \the [src]!</span>","<span class = 'notice'>You start to deconstruct \the [src].</span>")
 		if(do_after(user, src, 5 SECONDS))
 			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
-			drop_stack(/obj/item/stack/sheet/metal, loc, rand(3,4), user)
+			drop_stack(sheet_type, loc, rand(3,4), user)
 			qdel(src)
 	else
 		..()
 
 /obj/machinery/bunsen_burner/process()
-	if(held_container && heating == BUNSEN_ON)
+	if(heating == BUNSEN_ON)
 		var/turf/T = get_turf(src)
 		var/datum/gas_mixture/G = T.return_air()
 		if(!G || G.molar_density("oxygen") < 0.1 / CELL_VOLUME)
@@ -123,7 +126,8 @@
 				co2_consumption = fuel_stats["co2_cons"]
 
 				reagents.remove_reagent(possible_fuel, consumption_rate)
-				held_container.reagents.heating(thermal_energy_transfer, max_temperature)
+				if(held_container)
+					held_container.reagents.heating(thermal_energy_transfer, max_temperature)
 				G.adjust(o2 = -o2_consumption, co2 = -co2_consumption)
 				if(prob(unsafety) && T)
 					T.hotspot_expose(max_temperature, 5)
@@ -149,6 +153,7 @@
 		held_container.forceMove(src.loc)
 		held_container.attack_hand(user)
 		held_container = null
+		add_fingerprint(user)
 	else
 		toggle()
 
@@ -157,7 +162,7 @@
 	set name = "Toggle bunsen burner"
 	set category = "Object"
 
-	if (!usr.Adjacent(src) || usr.incapacitated())
+	if ((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
 		return
 
 	toggle()
@@ -176,16 +181,14 @@
 
 
 /obj/machinery/bunsen_burner/AltClick()
-	toggle()
+	verb_toggle()
 
 /obj/machinery/bunsen_burner/verb/verb_toggle_fuelport()
 	set src in view(1)
 	set name = "Toggle Bunsen burner fuelport"
 	set category = "Object"
 
-	if(isjustobserver(usr))
-		return
-	if(!usr.Adjacent(src) || usr.incapacitated())
+	if((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
 		return
 
 	toggle_fuelport(usr)

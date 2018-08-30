@@ -162,7 +162,7 @@
 	hardness = 4
 
 /obj/machinery/door/mineral/transparent/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/weldingtool))
+	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			TemperatureAct(100)
@@ -223,6 +223,11 @@
 	if(isalien(user) && !operating)
 		add_fingerprint(user)
 		SwitchState()
+
+/obj/machinery/door/mineral/resin/bullet_act(var/obj/item/projectile/Proj)
+	if(Proj.damage_type == BRUTE || Proj.damage_type == BURN)
+		hardness -= Proj.damage/100
+		CheckHardness()
 
 /obj/machinery/door/mineral/resin/open()
 	..()

@@ -1391,6 +1391,12 @@
 /obj/item/toy/balloon/inflated/decoy/attack_paw(mob/user)
 	return attack_hand(user)
 
+/obj/item/toy/balloon/inflated/decoy/attack_animal(mob/living/simple_animal/user)
+	if((user.melee_damage_lower && prob(30*user.melee_damage_lower)) || user.environment_smash_flags)
+		pop()
+	else
+		attack_hand(user)
+
 /obj/item/toy/balloon/long
 	name = "long balloon"
 	desc = "A simple long balloon."

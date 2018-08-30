@@ -68,56 +68,6 @@ var/list/department_radio_keys = list(
 	  //z Used by LANGUAGE_CLATTER
 	  //@ Used by LANGUAGE_MARTIAN
 	  ":~" = "sporechat",	"#~" = "sporechat",	    ".~" = "sporechat",
-
-
-
-
-
-
-
-
-
-
-
-
-	  ":R" = "right hand",	"#R" = "right hand",	".R" = "right hand", "!R" = "fake right hand",
-	  ":L" = "left hand",	"#L" = "left hand",		".L" = "left hand",  "!L" = "fake left hand",
-	  ":I" = "intercom",	"#I" = "intercom",		".I" = "intercom",
-	  ":H" = "department",	"#H" = "department",	".H" = "department",
-	  ":C" = "Command",		"#C" = "Command",		".C" = "Command",
-	  ":N" = "Science",		"#N" = "Science",		".N" = "Science",
-	  ":M" = "Medical",		"#M" = "Medical",		".M" = "Medical",
-	  ":E" = "Engineering",	"#E" = "Engineering",	".E" = "Engineering",
-	  ":S" = "Security",	"#S" = "Security",		".S" = "Security",
-	  ":W" = "whisper",		"#W" = "whisper",		".W" = "whisper",
-	  ":B" = "binary",		"#B" = "binary",		".B" = "binary",
-	  ":A" = "alientalk",	"#A" = "alientalk",		".A" = "alientalk",
-	  ":T" = "Syndicate",	"#T" = "Syndicate",		".T" = "Syndicate",
-	  ":U" = "Supply",		"#U" = "Supply",		".U" = "Supply",
-	  ":D" = "Service",     "#D" = "Service",       ".D" = "Service",
-	  ":G" = "changeling",	"#G" = "changeling",	".G" = "changeling",
-	  ":X" = "cultchat",	"#X" = "cultchat",		".X" = "cultchat",
-	  ":Y" = "ancientchat",	"#Y" = "ancientchat", 	".Y" = "ancientchat",
-	  ":P" = "AI Private",	"#P" = "AI Private",	".P" = "AI Private",
-
-	  //kinda localization -- rastaf0
-	  //same keys as above, but on russian keyboard layout. This file uses cp1251 as encoding.
-	  ":ê" = "right hand",	"#ê" = "right hand",	".ê" = "right hand",
-	  ":ä" = "left hand",	"#ä" = "left hand",	".ä" = "left hand",
-	  ":ø" = "intercom",	"#ø" = "intercom",		".ø" = "intercom",
-	  ":ð" = "department",	"#ð" = "department",	".ð" = "department",
-	  ":ñ" = "Command",	"#ñ" = "Command",		".ñ" = "Command",
-	  ":ò" = "Science",	"#ò" = "Science",		".ò" = "Science",
-	  ":ü" = "Medical",	"#ü" = "Medical",		".ü" = "Medical",
-	  ":ó" = "Engineering","#ó" = "Engineering",	".ó" = "Engineering",
-	  ":û" = "Security",	"#û" = "Security",		".û" = "Security",
-	  ":ö" = "whisper",	"#ö" = "whisper",		".ö" = "whisper",
-	  ":è" = "binary",		"#è" = "binary",		".è" = "binary",
-	  ":ô" = "alientalk",	"#ô" = "alientalk",	".ô" = "alientalk",
-	  ":å" = "Syndicate",	"#å" = "Syndicate",	".å" = "Syndicate",
-	  ":é" = "Supply",		"#é" = "Supply",		".é" = "Supply",
-	  ":â" = "Service",    "#â" = "Service",      ".â" = "Service",
-	  ":ï" = "changeling",	"#ï" = "changeling",	".ï" = "changeling"
 )
 
 /mob/living/proc/get_default_language()
@@ -184,7 +134,8 @@ var/list/department_radio_keys = list(
 		message = copytext(message, 2)
 	else if(message_mode)
 		say_testing(src, "Message mode is [message_mode]")
-		message = copytext(message, 3)
+		if(message_mode != MODE_HOLOPAD)
+			message = copytext(message, 3)
 
 	// SAYCODE 90.0!
 	// We construct our speech object here.
@@ -347,7 +298,7 @@ var/list/department_radio_keys = list(
 	if(copytext(message, 1, 2) == ";")
 		return MODE_HEADSET
 	else if(length(message) > 2)
-		return department_radio_keys[copytext(message, 1, 3)]
+		return department_radio_keys[lowertext(copytext(message, 1, 3))]
 
 /mob/living/proc/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
 	switch(message_mode)

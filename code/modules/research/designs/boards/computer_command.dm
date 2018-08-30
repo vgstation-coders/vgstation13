@@ -12,6 +12,14 @@
 	locked = 1
 	req_lock_access = list(access_rnd, access_robotics, access_rd)
 
+/datum/design/aiupload/longrange
+	name = "Circuit Design (Long Range AI Upload)"
+	desc = "Allows for the construction of circuit boards used to build a Long Range AI Upload Console."
+	id = "aiuploadlongrange"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_MATERIALS = 9, Tc_BLUESPACE = 3, Tc_MAGNETS = 5)
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	build_path = /obj/item/weapon/circuitboard/aiupload/longrange
+
 /datum/design/borgupload
 	name = "Circuit Design (Cyborg Upload)"
 	desc = "Allows for the construction of circuit boards used to build a Cyborg Upload Console."

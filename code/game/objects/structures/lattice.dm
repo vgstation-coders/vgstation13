@@ -10,7 +10,13 @@
 
 	//	flags = CONDUCT
 
-	canSmoothWith = "/obj/structure/lattice=0&/obj/structure/catwalk=0&/turf=0"
+/obj/structure/lattice/canSmoothWith()
+	var/static/list/smoothables = list(
+		/obj/structure/lattice,
+		/obj/structure/catwalk,
+		/turf,
+	)
+	return smoothables
 
 /obj/structure/lattice/New(loc)
 	..(loc)
@@ -65,7 +71,8 @@
 	name = "wood foundations"
 	desc = "It's a foundation, for building on."
 	icon_state = "lattice-wood"
-	canSmoothWith = null
+/obj/structure/lattice/wood/canSmoothWith()
+	return null
 
 /obj/structure/lattice/wood/New()
 	return

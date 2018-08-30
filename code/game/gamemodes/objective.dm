@@ -297,19 +297,20 @@ var/list/potential_theft_objectives=list(
 		return 0
 	if(issilicon(owner.current))
 		return 0
-	var/area/shuttle = locate(/area/shuttle/escape/centcom)
-	var/list/protected_mobs = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/simple_animal/borer)
+	var/list/protected_mobs = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/simple_animal/borer, /mob/living/silicon/robot, /mob/living/silicon/robot/mommi)
 	// Implemented in response to 21/12/2013 player vote,  .
-	// Comment this if you want Borgs and MoMMIs counted.
 	// TODO: Check if borgs are subverted. Best I can think of is a fuzzy check for strings used in syndie laws. BYOND can't do regex, sadly. - N3X
-	protected_mobs += list(/mob/living/silicon/robot, /mob/living/silicon/robot/mommi)
-	for(var/mob/living/player in player_list)
-		if(player.type in protected_mobs)
+
+	for(var/mob/living/player in escape_shuttle.get_occupants(TRUE))
+		if(is_type_in_list(player, protected_mobs)) //These boys are okay to be on the shuttle
 			continue
-		if (player.mind && (player.mind != owner))
-			if(player.stat != DEAD)			//they're not dead!
-				if(get_turf(player) in shuttle)
-					return 0
+		if(player == owner.current) //We are this boy
+			continue
+		if(player.stat == DEAD) //They are dead
+			continue
+		if(!player.mind)
+			continue
+		return 0
 	return 1
 
 /datum/objective/block
@@ -324,15 +325,15 @@ var/list/potential_theft_objectives=list(
 		return 0
 	if(!owner.current)
 		return 0
-	var/area/shuttle = locate(/area/shuttle/escape/centcom)
-	var/protected_mobs[] = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/silicon/robot, /mob/living/silicon/robot/mommi, /mob/living/simple_animal/borer)
-	for(var/mob/living/player in player_list)
-		if(player.type in protected_mobs)
+	var/list/protected_mobs = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/silicon/robot, /mob/living/silicon/robot/mommi, /mob/living/simple_animal/borer)
+	for(var/mob/living/player in escape_shuttle.get_occupants(TRUE))
+		if(is_type_in_list(player, protected_mobs)) //These boys are okay to be on the shuttle
 			continue
-		if (player.mind)
-			if (player.stat != 2)
-				if (get_turf(player) in shuttle)
-					return 0
+		if(player.stat == DEAD) //Do not suffer the human to live
+			continue
+		if(!player.mind)
+			continue
+		return 0
 	return 1
 
 /datum/objective/silence
@@ -343,18 +344,12 @@ var/list/potential_theft_objectives=list(
 		return 0
 	if(emergency_shuttle.location<2)
 		return 0
+	var/list/escape_shuttle_list = list(emergency_shuttle.shuttle, emergency_shuttle.escape_pods)
 
-	for(var/mob/living/player in player_list)
-		if(player == owner.current)
-			continue
-		if(player.mind)
-			if(player.stat != DEAD)
-				var/turf/T = get_turf(player)
-				if(!T)
-					continue
-				switch(T.loc.type)
-					if(/area/shuttle/escape/centcom, /area/shuttle/escape_pod1/centcom, /area/shuttle/escape_pod2/centcom, /area/shuttle/escape_pod3/centcom, /area/shuttle/escape_pod5/centcom)
-						return 0
+	for(var/datum/shuttle/S in escape_shuttle_list)
+		var/list/shuttle_occupants = S.get_occupants(TRUE)
+		if(shuttle_occupants.len > 1 || (shuttle_occupants.len == 1 && shuttle_occupants.Find(owner.current)))
+			return 0
 	return 1
 
 /datum/objective/escape
@@ -375,30 +370,21 @@ var/list/potential_theft_objectives=list(
 	if(!location)
 		return 0
 
-	if(istype(location, /turf/simulated/shuttle/floor4)) // Fails tratiors if they are in the shuttle brig -- Polymorph
-		if(istype(owner.current, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = owner.current
-			if(!H.restrained()) // Technically, traitors will fail the objective if they are time stopped by a wizard
-				return 1
-		else if(istype(owner.current, /mob/living/carbon)) // I don't think non-humanoid carbons can get the escape objective, but I'm leaving it to be safe
-			var/mob/living/carbon/C = owner.current
-			if (!C.handcuffed)
-				return 1
-		return 0
+	var/datum/shuttle/S = is_on_shuttle(owner.current)
+	if(emergency_shuttle.shuttle == S || emergency_shuttle.escape_pods.Find(S))
+		if(istype(location, /turf/simulated/shuttle/floor4)) // Fails tratiors if they are in the shuttle brig -- Polymorph
+			if(istype(owner.current, /mob/living/carbon/human))
+				var/mob/living/carbon/human/H = owner.current
+				if(!H.restrained()) // Technically, traitors will fail the objective if they are time stopped by a wizard
+					return 1
+			else if(istype(owner.current, /mob/living/carbon)) // I don't think non-humanoid carbons can get the escape objective, but I'm leaving it to be safe
+				var/mob/living/carbon/C = owner.current
+				if (!C.handcuffed)
+					return 1
+			return 0
+		return 1
 
-	var/area/check_area = location.loc
-	if(istype(check_area, /area/shuttle/escape/centcom))
-		return 1
-	if(istype(check_area, /area/shuttle/escape_pod1/centcom))
-		return 1
-	if(istype(check_area, /area/shuttle/escape_pod2/centcom))
-		return 1
-	if(istype(check_area, /area/shuttle/escape_pod3/centcom))
-		return 1
-	if(istype(check_area, /area/shuttle/escape_pod5/centcom))
-		return 1
-	else
-		return 0
+	return 0
 
 /datum/objective/die
 	explanation_text = "Die a glorious death."

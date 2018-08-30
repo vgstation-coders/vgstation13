@@ -3,7 +3,6 @@
 	name = "Microwave"
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "mw"
-	layer = BELOW_OBJ_LAYER
 	density = 1
 	anchored = 1
 	use_power = 1
@@ -199,12 +198,15 @@
 /obj/machinery/microwave/attack_ai(mob/user as mob)
 	if(istype(user,/mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = user
-		if(R.module && (R.module.quirk_flags & MODULE_CAN_HANDLE_FOOD))
+		if(HAS_MODULE_QUIRK(R, MODULE_CAN_HANDLE_FOOD))
 			user.set_machine(src)
 			interact(user)
 			return 1
 		to_chat(user, "<span class='warning'>You aren't equipped to interface with technology this old!</span>")
 		return 0
+	if(isAdminGhost(user))
+		user.set_machine(src)
+		interact(user)
 
 /obj/machinery/microwave/attack_hand(mob/user as mob)
 	user.set_machine(src)
@@ -447,7 +449,7 @@
 	return ffuu
 
 /obj/machinery/microwave/CtrlClick(mob/user)
-	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && anchored)
+	if(isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check() && anchored))
 		if(issilicon(user) && !attack_ai(user))
 			return ..()
 		cook() //Cook checks for power, brokenness, and contents internally
@@ -458,7 +460,7 @@
 	if(operating)
 		to_chat(user, "<span class='warning'>Too late, the microwave is already turned on!</span>")
 		return
-	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check())
+	if(isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check()))
 		if(issilicon(user) && !attack_ai(user))
 			return ..()
 		dispose()

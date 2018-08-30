@@ -287,15 +287,16 @@
 					if(last_span)
 						assembly_data = copytext(assembly_data, last_span + 1) //Cut it off
 
-				switch(from_text(assembly_data, require_parts_for_import, used_parts))
-					if(1)
-						to_chat(user, "<span class='info'>Configuration imported successfully.</span>")
-						message_admins("[key_name_admin(user)] has imported a configuration with [assemblies.len] elements into an assembly frame! [formatJumpTo(get_turf(src))]")
-					if(null)
-						to_chat(user, "<span class='notice'>Unable to import configuration: corrupt input data.</span>")
-					if(0)
-						to_chat(user, "<span class='notice'>Unable to import configuration: encountered an error while enstablishing device connections.</span>")
-
+				var/from_text_result = from_text(assembly_data, require_parts_for_import, used_parts)
+				if(from_text_result == 1)
+					to_chat(user, "<span class='info'>Configuration imported successfully.</span>")
+					message_admins("[key_name_admin(user)] has imported a configuration with [assemblies.len] elements into an assembly frame! [formatJumpTo(get_turf(src))]")
+				else if(from_text_result == null)
+					to_chat(user, "<span class='notice'>Unable to import configuration: corrupt input data.</span>")
+				else if(from_text_result == 0)
+					to_chat(user, "<span class='notice'>Unable to import configuration: encountered an error while enstablishing device connections.</span>")
+				else if(islist(from_text_result))
+					to_chat(user, "<span class='notice'>Unable to import configuration: missing parts: [english_list(from_text_result)].")
 		return 1
 
 /obj/item/device/assembly_frame/proc/insert_assembly(obj/item/device/assembly/AS, mob/user = null)
@@ -395,7 +396,11 @@
 //assembly_data is the string given by to_text. use_parts is whether or not to get assemblies from an atom's contents, otherwise simply creating them. parts_from is the list of available assemblies to grab if use_parts is true.
 //Defaults to simply making the assemblies appear, in which case only assembly_data need be provided.
 //If use_parts is set to 1, parts_from must be given.
-//Returns 1 if successful, 0 if it fails due to a lack of assemblies or because the frame already has something in it, and null if assembly_data is invalid or something weird happens.
+//Returns:
+// 1 if successful;
+// a list of missing parts if it fails due to a lack of assemblies;
+// 0 if the frame already has something in it;
+// null if assembly_data is invalid or something weird happens.
 //Still returns 1 if there is a non-fatal error, such as invalid value or data type for a value. This may be fixed later.
 //MAKE SURE the assemblies in parts_from are located in a mob, a storage item, or something that won't have problems if items are just forceMove()d from its contents.
 //If that isn't possible, make insert_assembly() work properly with the atom assemblies are being removed from or remove the required assemblies first.
@@ -422,14 +427,20 @@
 
 	else
 		var/list/obj/item/device/assembly/parts_from_holder = parts_from.Copy() //I cannot fucking believe this is necessary, but here we are.
-		find_parts: //What the fuck kind of syntax is this?
+		var/list/missing_parts
+		find_parts:
 			for(var/list/req_part in data_list)
+				var/req_part_short_name = req_part["short_name"]
 				for(var/obj/item/device/assembly/check_part in parts_from_holder)
-					if(req_part["short_name"] == check_part.short_name)
+					if(req_part_short_name == check_part.short_name)
 						parts_to_add.Add(check_part)
 						parts_from_holder.Remove(check_part)
-						continue find_parts //I mean who the fuck came up with this?
-				return 0
+						continue find_parts
+				if(!missing_parts)
+					missing_parts = list()
+				missing_parts.Add(req_part_short_name)
+		if(missing_parts)
+			return missing_parts
 
 	for(var/obj/item/device/assembly/AS in parts_to_add)
 		insert_assembly(AS)

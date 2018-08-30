@@ -84,7 +84,19 @@
 
 	message_admins("<span class='info'>Loaded [result] out of [vault_number] vaults.</span>")
 
+/proc/generate_asteroid_secrets()
+	var/list/list_of_surprises = get_map_element_objects(/datum/map_element/mining_surprise)
 
+	var/surprise_number = rand(1, min(list_of_surprises.len, max_secret_rooms))
+
+	var/result = populate_area_with_vaults(/area/mine/unexplored, list_of_surprises, surprise_number, filter_function=/proc/asteroid_can_be_placed)
+
+	message_admins("<span class='info'>Loaded [result] out of [surprise_number] mining surprises.</span>")
+
+/proc/asteroid_can_be_placed(var/datum/map_element/E, var/turf/start_turf)
+	var/list/dimensions = E.get_dimensions()
+	var/result = check_complex_placement(start_turf,dimensions[1], dimensions[2])
+	return result
 //Proc that populates a single area with many vaults, randomly
 //A is the area OR a list of turfs where the placement happens
 //map_element_objects is a list of vaults that have to be placed. Defaults to subtypes of /datum/map_element/vault (meaning all vaults are spawned)
@@ -93,7 +105,7 @@
 //POPULATION_SCARCE is cheaper but may not do the job as well
 //NOTE: Vaults may be placed partially outside of the area. Only the lower left corner is guaranteed to be in the area
 
-/proc/populate_area_with_vaults(area/A, list/map_element_objects, var/amount = -1, population_density = POPULATION_DENSE)
+/proc/populate_area_with_vaults(area/A, list/map_element_objects, var/amount = -1, population_density = POPULATION_DENSE, filter_function)
 	var/list/area_turfs
 
 	if(ispath(A, /area))
@@ -120,6 +132,7 @@
 			continue
 
 		var/list/dimensions = ME.get_dimensions() //List with the element's width and height
+
 		var/new_width = dimensions[1]
 		var/new_height = dimensions[2]
 
@@ -141,7 +154,7 @@
 					var/y1 = max(1, T.y - new_height- 1)
 					var/turf/t1 = locate(x1, y1, T.z) //Corner #1: Old vault's coordinates minus new vault's dimensions (width and height)
 					var/turf/t2 = locate(T.x + conflict.width, T.y + conflict.height, T.z) //Corner #2: Old vault's coordinates plus old vault's dimensions
-					
+
 					//A rectangle defined by corners #1 and #2 is marked as invalid spawn area
 					valid_spawn_points.Remove(block(t1, t2))
 
@@ -154,11 +167,20 @@
 				//Since POPULATION_SCARCE assumes that every vault is the same size, if we ran out of spawn points we know for sure that we can't create any more vaults
 				message_admins("<span class='info'>Ran out of free space for vaults.</span>")
 				break
-			
+
 			//POPULATION_DENSE respects every vault's true size, so it's possible that another vault may fit in there - continue trying to place vaults
 			continue
-
-		var/turf/new_spawn_point = pick(valid_spawn_points)
+		var/sanity = 0
+		var/turf/new_spawn_point
+		while(1)
+			sanity++
+			if(sanity > 100)
+				break
+			new_spawn_point = pick(valid_spawn_points)
+			valid_spawn_points.Remove(new_spawn_point)
+			if(filter_function && !call(filter_function)(ME, new_spawn_point))
+				continue
+			break
 		var/vault_x = new_spawn_point.x
 		var/vault_y = new_spawn_point.y
 		var/vault_z = new_spawn_point.z

@@ -58,7 +58,15 @@ players2.sqlite
 # Investigate logs that have an annoying tendency to generate during testing
 /data/investigate/*
 
+# Round-end statistics
+/data/statfiles/*
+
 cfg
 
 .vscode
+*.code-workspace
 /byond
+
+# Thumbs.db (windows image caching)
+Thumbs.db
+

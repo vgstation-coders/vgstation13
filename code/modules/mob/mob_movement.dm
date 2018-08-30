@@ -230,20 +230,20 @@
 	return
 
 /client/proc/Move_object(direct)
-	if(mob && mob.control_object)
-		if(mob.control_object.density)
-			step(mob.control_object,direct)
-			if(!mob.control_object)
-				return
-			mob.control_object.dir = direct
-		else
-			mob.control_object.forceMove(get_step(mob.control_object,direct))
-	return
+	for(var/datum/control/C in mob.control_object)
+		if(!C.controller)
+			mob.control_object.Remove(C)
+			qdel(C)
+			continue
+		C.Move_object(direct)
 
 /client/proc/Dir_object(direct)
-	if(mob && mob.orient_object)
-		var/obj/O = mob.orient_object
-		O.dir = direct
+	for(var/datum/control/C in mob.orient_object)
+		if(!C.controller)
+			mob.orient_object.Remove(C)
+			qdel(C)
+			continue
+		C.Orient_object(direct)
 
 /client/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	if(move_delayer.next_allowed > world.time)
@@ -254,12 +254,10 @@
 		to_chat(src, "<span class='warning'>You cannot move this mob.</span>")
 		return
 
-	if(mob.control_object)
-		Move_object(Dir)
+	Move_object(Dir)
 
-	if(mob.orient_object)
-		Dir_object(Dir)
-		return
+	Dir_object(Dir)
+
 
 	if(mob.incorporeal_move)
 		Process_Incorpmove(Dir)
@@ -500,31 +498,31 @@
 	return(prob_slip)
 
 
-/mob/proc/Move_Pulled(var/atom/A)
-	if(!canmove || restrained() || !pulling)
+/mob/proc/Move_Pulled(var/atom/dest, var/atom/movable/target = pulling)
+	if(!canmove || restrained() || !has_hand_check())
 		return
-	if(pulling.anchored)
+	if(!istype(target) || target.anchored || !target.can_be_pulled(src))
 		return
-	if(src.locked_to == pulling)
+	if(src.locked_to == target || target == src)
 		return
-	if(!pulling.Adjacent(src))
+	if(!target.Adjacent(src))
 		return
-	if(!isturf(pulling.loc))
+	if(!isturf(target.loc))
 		return
-	if(A == loc && pulling.density)
+	if(dest == loc && target.density)
 		return
 	if(!Process_Spacemove(,1))
 		return
-	if(ismob(pulling))
-		var/mob/mobpulled = pulling
+	if(ismob(target))
+		var/mob/mobpulled = target
 		var/atom/movable/secondarypull = mobpulled.pulling
 		mobpulled.stop_pulling()
-		step(mobpulled, get_dir(mobpulled.loc, A))
+		step(mobpulled, get_dir(mobpulled.loc, dest))
 		if(mobpulled && secondarypull)
 			mobpulled.start_pulling(secondarypull)
 	else
-		step(pulling, get_dir(pulling.loc, A))
-	return
+		step(target, get_dir(target.loc, dest))
+	target.add_fingerprint(src)
 
 /mob/proc/movement_delay()
 	return (base_movement_tally() * movement_tally_multiplier())

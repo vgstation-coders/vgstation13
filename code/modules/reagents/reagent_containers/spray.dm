@@ -8,6 +8,8 @@
 	slot_flags = SLOT_BELT
 	throwforce = 3
 	w_class = W_CLASS_SMALL
+	starting_materials = list(MAT_GLASS = 3500)
+	w_type = RECYK_GLASS
 	throw_speed = 2
 	throw_range = 10
 	amount_per_transfer_from_this = 10
@@ -147,6 +149,17 @@
 	..()
 	reagents.add_reagent(PLANTBGONE, 100)
 
+/obj/item/weapon/reagent_containers/spray/bugzapper
+	name = "Bug Zapper"
+	desc = "Kills those pesky bugs!"
+	icon = 'icons/obj/hydroponics2.dmi'
+	icon_state = "plantbgone"
+	item_state = "plantbgone"
+	volume = 100
+
+/obj/item/weapon/reagent_containers/spray/bugzapper/New()
+	..()
+	reagents.add_reagent(TOXIN, 100)
 
 //chemsprayer
 /obj/item/weapon/reagent_containers/spray/chemsprayer

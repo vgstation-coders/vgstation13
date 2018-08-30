@@ -14,7 +14,6 @@
 	var/smoke = 5
 	var/smoke_ready = 1
 	var/smoke_cooldown = 100
-	var/dash_ready = 1
 	var/dash_cooldown = 30
 	var/datum/effect/effect/system/smoke_spread/smoke_system = new
 	var/image/rockets = null
@@ -62,6 +61,12 @@
 	rockets = image('icons/effects/160x160.dmi', icon_state= initial_icon + "_burst")
 	rockets.pixel_x = -64 * PIXEL_MULTIPLIER
 	rockets.pixel_y = -64 * PIXEL_MULTIPLIER
+	intrinsic_spells = list(
+							new /spell/mech/marauder/thrusters(src),
+							new /spell/mech/marauder/dash(src),
+							new /spell/mech/marauder/smoke(src),
+							new /spell/mech/marauder/zoom(src)
+						)
 	return
 
 /obj/mecha/combat/marauder/series/New()//Manually-built marauders have no equipments
@@ -96,6 +101,8 @@
 		to_chat(user, "You climb out from [src]")
 		return 0
 	if(!can_move)
+		return 0
+	if(lock_controls) //No moving while using the Gravpult!
 		return 0
 	if(zoom)
 		occupant_message("Unable to move while in zoom mode.", TRUE)
@@ -160,75 +167,85 @@
 	else
 		icon_state = initial_icon
 
+/spell/mech/marauder
+	hud_state = "marauder"
+	override_icon = 'icons/mecha/mecha.dmi'
 
-/obj/mecha/combat/marauder/verb/toggle_thrusters()
-	set category = "Exosuit Interface"
-	set name = "Toggle thrusters"
-	set src = usr.loc
-	set popup_menu = 0
-	if(usr!=src.occupant)
-		return
-	if(src.occupant)
-		if(get_charge() > 0)
-			thrusters = !thrusters
-			src.log_message("Toggled thrusters.")
-			src.occupant_message("<font color='[src.thrusters?"blue":"red"]'>Thrusters [thrusters?"en":"dis"]abled.")
+/spell/mech/marauder/thrusters
+	name = "Toggle thrusters"
+	desc = "Toggle mech thrusters."
+	hud_state = "jetpack-void"
+	override_icon = 'icons/obj/tank.dmi'
+
+/spell/mech/marauder/thrusters/cast(list/targets, mob/user)
+	var/obj/mecha/combat/marauder/Marauder = linked_mech
+	if(Marauder.occupant && (Marauder.get_charge() > 0))
+		Marauder.thrusters = !Marauder.thrusters
+		Marauder.log_message("Toggled thrusters.")
+		Marauder.occupant_message("<font color='[Marauder.thrusters?"blue":"red"]'>Thrusters [Marauder.thrusters?"en":"dis"]abled.")
 	return
 
-/obj/mecha/combat/marauder/verb/dash()
-	set category = "Exosuit Interface"
-	set name = "Perform Rocket-Dash"
-	set src = usr.loc
-	set popup_menu = 0
-	if(usr!=src.occupant)
-		return
-	if(src.occupant)
-		if(dash_ready && get_charge() > 0)
-			crashing = null
 
-			var/landing = get_distant_turf(get_turf(src), dir, 5)
-			throw_at(landing, 5 , 2)
+/spell/mech/marauder/dash
+	name = "Rocket-Dash"
+	desc = "Activate the mech's thrusters to charge in a line and knock down anything in your way."
+	icon_direction = EAST
+	override_icon = 'icons/mecha/mecha.dmi'
+	charge_max = 30
+	charge_counter = 30
 
-			dash_ready = 0
-			spawn(dash_cooldown)
-				dash_ready = 1
-			src.log_message("Performed Rocket-Dash.")
-			src.occupant_message("Triggered Rocket-Dash sub-routine")
+/spell/mech/marauder/dash/New()
+	..()
+	hud_state = "[linked_mech.initial_icon]-dash"
+
+/spell/mech/marauder/dash/cast_check(skipcharge = FALSE, mob/user = usr)
+	if(linked_mech.lock_controls)
+		return FALSE
+	else
+		return ..()
+
+/spell/mech/marauder/dash/cast(list/targets, mob/user)
+	var/obj/mecha/combat/marauder/Marauder = src.linked_mech
+	Marauder.crashing = null
+	var/landing = get_distant_turf(get_turf(linked_mech), Marauder.dir, 5)
+	Marauder.throw_at(landing, 5 , 2)
+
+	Marauder.log_message("Performed Rocket-Dash.")
+	Marauder.occupant_message("Triggered Rocket-Dash sub-routine")
+
+/spell/mech/marauder/smoke
+	name = "Smoke"
+	desc = "Deploy obscuring smoke to avoid retaliation."
+	charge_max = 100
+	charge_counter = 100
+	override_icon = 'icons/mob/screen_spells.dmi'
+	hud_state = "wiz_smoke"
+
+/spell/mech/marauder/smoke/cast(list/targets, mob/user)
+	var/obj/mecha/combat/marauder/Marauder = linked_mech
+	if(Marauder.smoke>0)
+		Marauder.smoke_system.start()
+		Marauder.smoke--
 	return
 
-/obj/mecha/combat/marauder/verb/smoke()
-	set category = "Exosuit Interface"
-	set name = "Smoke"
-	set src = usr.loc
-	set popup_menu = 0
-	if(usr!=src.occupant)
-		return
-	if(smoke_ready && smoke>0)
-		src.smoke_system.start()
-		smoke--
-		smoke_ready = 0
-		spawn(smoke_cooldown)
-			smoke_ready = 1
-	return
+/spell/mech/marauder/zoom
+	name = "Zoom"
+	desc = "Double your viewing distance."
+	override_icon = 'icons/obj/items.dmi'
+	hud_state = "binoculars"
 
-/obj/mecha/combat/marauder/verb/zoom()
-	set category = "Exosuit Interface"
-	set name = "Zoom"
-	set src = usr.loc
-	set popup_menu = 0
-	if(usr!=src.occupant)
-		return
-	if(src.occupant.client)
-		src.zoom = !src.zoom
-		src.log_message("Toggled zoom mode.")
-		src.occupant_message("<font color='[src.zoom?"blue":"red"]'>Zoom mode [zoom?"en":"dis"]abled.</font>")
-		if(zoom)
-			src.occupant.client.changeView(12)
-			src.occupant << sound('sound/mecha/imag_enh.ogg',volume=50)
+/spell/mech/marauder/zoom/cast(list/targets, mob/user)
+	if(linked_mech.occupant.client)
+		var/obj/mecha/combat/marauder/Marauder = linked_mech
+		Marauder.zoom = !Marauder.zoom
+		Marauder.log_message("Toggled zoom mode.")
+		Marauder.occupant_message("<font color='[Marauder.zoom?"blue":"red"]'>Zoom mode [Marauder.zoom?"en":"dis"]abled.</font>")
+		if(Marauder.zoom)
+			Marauder.occupant.client.changeView(12)
+			Marauder.occupant << sound('sound/mecha/imag_enh.ogg',volume=50)
 		else
-			src.occupant.client.changeView()//world.view - default mob view size
+			Marauder.occupant.client.changeView()//world.view - default mob view size
 	return
-
 
 /obj/mecha/combat/marauder/go_out()
 	if(src.occupant && src.occupant.client)
@@ -243,34 +260,5 @@
 	output += {"<b>Smoke:</b> [smoke]
 					<br>
 					<b>Thrusters:</b> [thrusters?"on":"off"]
-					<br>
-					<b>Rocket-Dash:</b> [dash_ready?"ready":"recharging"]
 					"}
 	return output
-
-
-/obj/mecha/combat/marauder/get_commands()
-	var/output = {"<div class='wr'>
-						<div class='header'>Special</div>
-						<div class='links'>
-						<a href='?src=\ref[src];toggle_thrusters=1'>Toggle thrusters</a><br>
-						<a href='?src=\ref[src];toggle_zoom=1'>Toggle zoom mode</a><br>
-						<a href='?src=\ref[src];smoke=1'>Smoke</a><br>
-						<a href='?src=\ref[src];dash=1'>Rocket-Dash</a>
-						</div>
-						</div>
-						"}
-	output += ..()
-	return output
-
-/obj/mecha/combat/marauder/Topic(href, href_list)
-	..()
-	if (href_list["toggle_thrusters"])
-		src.toggle_thrusters()
-	if (href_list["smoke"])
-		src.smoke()
-	if (href_list["toggle_zoom"])
-		src.zoom()
-	if (href_list["dash"])
-		src.dash()
-	return

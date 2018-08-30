@@ -47,19 +47,13 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	if (src.anchored)
 		switch(removal_stage)
 			if(0)
-				if(istype(O,/obj/item/weapon/weldingtool))
+				if(iswelder(O))
 
 					var/obj/item/weapon/weldingtool/WT = O
-					if(!WT.isOn())
-						return
-					if (WT.get_fuel() < 5) // uses up 5 fuel.
-						to_chat(user, "<span class='warning'>You need more fuel to complete this task.</span>")
-						return
-
 					user.visible_message("[user] starts cutting loose the anchoring bolt covers on [src].", "You start cutting loose the anchoring bolt covers with [O]...")
 
-					if(do_after(user, src, 40))
-						if(!src || !user || !WT.remove_fuel(5, user))
+					if(WT.do_weld(user, src, 40, 5))
+						if(gcDestroyed)
 							return
 						user.visible_message("[user] cuts through the bolt covers on [src].", "You cut through the bolt cover.")
 						removal_stage = 1
@@ -77,19 +71,13 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				return
 
 			if(2)
-				if(istype(O,/obj/item/weapon/weldingtool))
+				if(iswelder(O))
 
 					var/obj/item/weapon/weldingtool/WT = O
-					if(!WT.isOn())
-						return
-					if (WT.get_fuel() < 5) // uses up 5 fuel.
-						to_chat(user, "<span class='notice'>You need more fuel to complete this task.</span>")
-						return
-
 					user.visible_message("[user] starts cutting apart the anchoring system sealant on [src].", "You start cutting apart the anchoring system's sealant with [O]...")
 
-					if(do_after(user, src, 40))
-						if(!src || !user || !WT.remove_fuel(5, user))
+					if(WT.do_weld(user, src, 40, 5))
+						if(gcDestroyed)
 							return
 						user.visible_message("[user] cuts apart the anchoring system sealant on [src].", "You cut apart the anchoring system's sealant.")
 						removal_stage = 3
@@ -299,7 +287,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 			off_station = 1
 	else
 		off_station = 2
-
+	forceMove(null)
 	if(ticker)
 		if(ticker.mode && ticker.mode.name == "nuclear emergency")
 			var/datum/game_mode/nuclear/GM = ticker.mode
@@ -353,7 +341,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 
 /obj/machinery/nuclearbomb/isacidhardened() // Requires Aliens to channel acidspit on the nuke.
 	return TRUE
-	
+
 /obj/item/weapon/disk/nuclear
 	name = "nuclear authentication disk"
 	desc = "Better keep this safe."

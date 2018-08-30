@@ -30,11 +30,9 @@
 		return
 	if(healths)
 		healths.icon_state = "health5"
-	stat = DEAD
-
 	if(!gibbed)
-		for(var/mob/O in viewers(src, null))
-			O.show_message("<b>\The [name]</b> lets out a faint chimper as it collapses and stops moving...", 1) //ded -- Urist
+		emote("deathgasp")
+	stat = DEAD
 
 	update_canmove()
 	update_icons()

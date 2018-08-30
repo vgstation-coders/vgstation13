@@ -174,7 +174,7 @@
 							"<span class = 'notice'>You draw the [N] from the deck.")
 		update_icon()
 
-/obj/item/toy/cards/MouseDrop(atom/over_object)
+/obj/item/toy/cards/MouseDropFrom(atom/over_object)
 	var/mob/M = usr
 	if(!ishigherbeing(usr) || usr.incapacitated())
 		return

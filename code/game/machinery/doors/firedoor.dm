@@ -1,5 +1,5 @@
-/var/const/OPEN = 1
-/var/const/CLOSED = 2
+/var/const/FD_OPEN = 1
+/var/const/FD_CLOSED = 2
 
 var/global/list/alert_overlays_global = list()
 
@@ -200,21 +200,28 @@ var/global/list/alert_overlays_global = list()
 		stat |= NOPOWER
 	return
 
-/obj/machinery/door/firedoor/attack_ai(mob/user)
-	if(isobserver(user) || user.stat)
+/obj/machinery/door/firedoor/attack_ai(mob/user,var/override=FALSE)
+	if(!isAdminGhost(user) && (isobserver(user) || user.stat))
 		return
 	spawn()
-		var/area/A = get_area_master(src)
+		var/area/A = get_area(src)
 		ASSERT(istype(A)) // This worries me.
 		var/alarmed = A.doors_down || A.fire
 		var/old_density = src.density
-		if(old_density && alert("Override the [alarmed ? "alarming " : ""]firelock's safeties and open \the [src]?" ,,"Yes", "No") == "Yes")
-			open()
+		if(old_density)
+			if(override || alert("Override the [alarmed ? "alarming " : ""]firelock's safeties and open \the [src]?" ,,"Yes", "No") == "Yes")
+				open()
 		else if(!old_density)
 			close()
 		else
 			return
 		investigation_log(I_ATMOS, "[density ? "closed" : "opened"] [alarmed ? "while alarming" : ""] by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
+
+/obj/machinery/door/firedoor/CtrlClick(mob/user)
+	if(isAdminGhost(user))
+		attack_ai(user,TRUE)
+	else
+		..()
 
 /obj/machinery/door/firedoor/attack_hand(mob/user as mob)
 	return attackby(null, user)
@@ -226,7 +233,7 @@ var/global/list/alert_overlays_global = list()
 	add_fingerprint(user)
 	if(operating)
 		return//Already doing something.
-	if(istype(C, /obj/item/weapon/weldingtool))
+	if(iswelder(C))
 		var/obj/item/weapon/weldingtool/W = C
 		if(W.remove_fuel(0, user))
 			blocked = !blocked
@@ -269,7 +276,7 @@ var/global/list/alert_overlays_global = list()
 		to_chat(user, "<span class='warning'>\The [src] is welded solid!</span>")
 		return
 
-	var/area/A = get_area_master(src)
+	var/area/A = get_area(src)
 	ASSERT(istype(A)) // This worries me.
 	var/alarmed = A.doors_down || A.fire
 
@@ -335,7 +342,7 @@ var/global/list/alert_overlays_global = list()
 	..()
 	latetoggle()
 	layer = open_layer
-	var/area/A = get_area_master(src)
+	var/area/A = get_area(src)
 	ASSERT(istype(A)) // This worries me.
 	var/alarmed = A.doors_down || A.fire
 	if(alarmed)
@@ -343,7 +350,7 @@ var/global/list/alert_overlays_global = list()
 			close()
 
 /obj/machinery/door/firedoor/proc/force_open(mob/user, var/obj/C) //used in mecha/equipment/tools/tools.dm
-	var/area/A = get_area_master(src)
+	var/area/A = get_area(src)
 	ASSERT(istype(A)) // This worries me.
 	var/alarmed = A.doors_down || A.fire
 
@@ -467,10 +474,10 @@ var/global/list/alert_overlays_global = list()
 		return
 
 	switch(nextstate)
-		if(OPEN)
+		if(FD_OPEN)
 			nextstate = null
 			open()
-		if(CLOSED)
+		if(FD_CLOSED)
 			nextstate = null
 			close()
 

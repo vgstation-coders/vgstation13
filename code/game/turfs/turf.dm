@@ -234,6 +234,9 @@
 			if(!move_to_z)
 				return
 
+			INVOKE_EVENT(A.on_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			for(var/atom/AA in contents_brought)
+				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
 			A.z = move_to_z
 
 			if(src.x <= TRANSITIONEDGE)
@@ -767,3 +770,6 @@
 	spawn(duration)
 		being_sent_to_past = FALSE
 		ChangeTurf(current_type)
+
+/turf/attack_hand(mob/user as mob)
+	user.Move_Pulled(src)

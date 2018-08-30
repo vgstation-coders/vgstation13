@@ -36,13 +36,17 @@
 /mob/living/silicon/robot/death(gibbed)
 	if(stat == DEAD)
 		return
+	if(!gibbed)
+		emote("deathgasp")
 	stat = DEAD
 	update_canmove()
 	if(!gibbed)
-		emote("deathgasp")
 		updateicon() //Don't call updateicon if you're already null.
+		locked = FALSE //Cover unlocks.
 	if(camera)
 		camera.status = FALSE
+	if(station_holomap)
+		station_holomap.stopWatching()
 
 	if(in_contents_of(/obj/machinery/recharge_station))//exit the recharge station
 		var/obj/machinery/recharge_station/RC = loc

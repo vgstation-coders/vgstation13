@@ -16,7 +16,7 @@
 
 	if(client)
 		handle_regular_hud_updates()
-		update_action_buttons()
+		update_action_buttons_icon()
 		update_items()
 	if (src.stat != DEAD) //still using power
 		use_power()
@@ -135,6 +135,9 @@
 	if (src.druggy > 0)
 		src.druggy--
 		src.druggy = max(0, src.druggy)
+
+	handle_dizziness()
+	handle_jitteriness()
 
 	return 1
 

@@ -48,10 +48,9 @@
 	return !config.silent_ai
 
 /mob/living/silicon/ai/get_message_mode(message)
-	if(department_radio_keys[copytext(message, 1, 3)] == MODE_DEPARTMENT)
+	. = ..()
+	if(!. && istype(current, /obj/machinery/hologram/holopad))
 		return MODE_HOLOPAD
-	else
-		return ..()
 
 /mob/living/silicon/ai/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
 	say_testing(src, "[type]/handle_inherent_channels([message_mode])")
