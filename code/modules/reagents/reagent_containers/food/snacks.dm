@@ -1663,16 +1663,16 @@
 	icon_state = "jectie_red"
 /obj/item/weapon/reagent_containers/food/snacks/jectie/New()
 	..()
-	if(prob(20))
+	if(prob(40)) //approximate solo antag winrate
 		icon_state = "jectie_green"
 		desc = "<font color='green'><B>The jectie was successful!</B></font color>"
-		reagents.add_reagent(GREENTEA, 20)
+		reagents.add_reagent(GREENTEA, 18)
 		reagents.add_reagent(NUTRIMENT, 6)
-		bitesize = 2
+		bitesize = 4
 	else
-		reagents.add_reagent(REDTEA, 10)
+		reagents.add_reagent(REDTEA, 9)
 		reagents.add_reagent(NUTRIMENT, 3)
-		bitesize = 2
+		bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/poppypretzel
 	name = "Poppy pretzel"
