@@ -1,1 +1,2 @@
 /datum/antag
+/datum/nukeop
