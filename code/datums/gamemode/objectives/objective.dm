@@ -36,11 +36,13 @@
 	var/datum/mind/owner = null
 	var/datum/faction/faction = null
 
-/datum/objective_holder/proc/AddObjective(var/datum/objective/O, var/datum/mind/M)
+/datum/objective_holder/proc/AddObjective(var/datum/objective/O, var/datum/mind/M, var/datum/faction/F)
 	ASSERT(!objectives.Find(O))
 	objectives.Add(O)
 	if(M)
 		O.owner = M
+	if(F)
+		faction = F
 	if(O.PostAppend())
 		return TRUE
 	else

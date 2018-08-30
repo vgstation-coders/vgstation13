@@ -36,12 +36,11 @@
 	new_syndicate_commando.mind_initialize()
 	new_syndicate_commando.mind.assigned_role = "MODE"
 	new_syndicate_commando.mind.special_role = "Syndicate Commando"
-	var/datum/faction/syndiesquad = find_active_faction(SYNDIESQUAD)
+	var/datum/faction/syndiesquad = find_active_faction_by_type(/datum/faction/strike_team/syndiesquad)
 	if(syndiesquad)
 		syndiesquad.HandleRecruitedMind(new_syndicate_commando.mind)
 	else
-		ticker.mode.CreateFaction(/datum/faction/strike_team/syndiesquad)
-		syndiesquad = find_active_faction(SYNDIESQUAD)
+		syndiesquad = ticker.mode.CreateFaction(/datum/faction/strike_team/syndiesquad)
 		if(syndiesquad)
 			syndiesquad.HandleNewMind(new_syndicate_commando.mind) //First come, first served
 	new_syndicate_commando.equip_syndicate_commando(syndicate_leader_selected)

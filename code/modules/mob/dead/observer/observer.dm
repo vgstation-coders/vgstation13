@@ -439,9 +439,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	..()
 	if(statpanel("Status"))
 		stat(null, "Station Time: [worldtime2text()]")
-		var/datum/faction/malf/malf = find_active_faction(MALF)
-		if(malf && malf.malf_mode_declared)
-			stat(null, "Time left: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)]")
+		for(var/datum/faction/F in ticker.mode.factions)
+			var/f_stat = F.get_statpanel_addition()
+			if(f_stat && f_stat != null)
+				stat(null, f_stat)
 		if(emergency_shuttle)
 			if(emergency_shuttle.online && emergency_shuttle.location < 2)
 				var/timeleft = emergency_shuttle.timeleft()
@@ -464,7 +465,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 	if(mind.current.ajourn && mind.current.stat != DEAD) 	//check if the corpse is astral-journeying (it's client ghosted using a cultist rune).
 		var/obj/effect/rune_legacy/R = mind.current.ajourn	//whilst corpse is alive, we can only reenter the body if it's on the rune
-		var/datum/faction/cult/narsie/blood_cult = find_active_faction(LEGACY_CULT)
+		var/datum/faction/cult/narsie/blood_cult = find_active_faction_by_member(mind.GetRole(LEGACY_CULTIST))
 		var/list/cultwords
 		if (istype(blood_cult))
 			cultwords = blood_cult.cult_words
@@ -819,7 +820,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return 0 //something is terribly wrong
 
 	var/ghosts_can_write
-	var/datum/faction/C = find_active_faction(LEGACY_CULT)
+	var/datum/faction/cult/narsie/C = find_active_faction_by_type(/datum/faction/cult/narsie)
 	if(C && C.members.len > config.cult_ghostwriter_req_cultists)
 		ghosts_can_write = 1
 

@@ -141,7 +141,7 @@
 		to_chat(C, "<span class='sinister'>The Geometer of Blood is overjoyed to be reunited with its followers, and accepts your body in sacrifice. As reward, you have been gifted with the shell of an Harvester.<br>Your tendrils can use and draw runes without need for a tome, your eyes can see beings through walls, and your mind can open any door. Use these assets to serve Nar-Sie and bring him any remaining living human in the world.<br>You can teleport yourself back to Nar-Sie along with any being under yourself at any time using your \"Harvest\" spell.</span>")
 		dust()
 	else if(client)
-		var/datum/faction/cult/narsie/cult_fact = find_active_faction(LEGACY_CULT)
+		var/datum/faction/cult/narsie/cult_fact = find_active_faction_by_type(/datum/faction/cult/narsie)
 		if (cult_fact)
 			cult_fact.harvested++
 		var/mob/dead/G = (ghostize())

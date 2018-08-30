@@ -177,8 +177,7 @@ That prevents a few funky behaviors.
 						if(C.contents.len)//If there is an AI on card.
 							to_chat(U, "<span class='danger'>Transfer failed:</span> Existing AI found on this terminal. Remove existing AI to install a new one.")
 						else
-							var/datum/faction/malf/malf = find_active_faction(MALF)
-							if (malf && malf.malf_mode_declared && T.mind in malf.members)
+							if(T.mind.GetRole(MALF))
 								to_chat(U, "<span class='danger'>ERROR:</span> Remote transfer interface disabled.")//Do ho ho ho~
 								return
 							new /obj/structure/AIcore/deactivated(T.loc)//Spawns a deactivated terminal at AI location.

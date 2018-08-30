@@ -5,7 +5,6 @@
 	flags = FACTION_OBJECTIVE
 
 /datum/objective/target/assassinate/sacrifice/PostAppend()
-	faction = find_active_faction(LEGACY_CULT)
 	if (!find_target())
 		message_admins("Could not find a target to sacrifice, rerolling objectives the hard way.")
 		var/datum/faction/cult/narsie/cult = faction

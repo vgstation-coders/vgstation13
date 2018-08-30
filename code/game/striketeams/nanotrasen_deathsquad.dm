@@ -30,12 +30,11 @@
 	new_commando.mind_initialize()
 	new_commando.mind.assigned_role = "MODE"
 	new_commando.mind.special_role = "Death Commando"
-	var/datum/faction/deathsquad = find_active_faction(DEATHSQUAD)
+	var/datum/faction/deathsquad = find_active_faction_by_type(/datum/faction/strike_team/deathsquad)
 	if(deathsquad)
 		deathsquad.HandleRecruitedMind(new_commando.mind)
 	else
-		ticker.mode.CreateFaction(/datum/faction/strike_team/deathsquad)
-		deathsquad = find_active_faction(DEATHSQUAD)
+		deathsquad = ticker.mode.CreateFaction(/datum/faction/strike_team/deathsquad)
 		if(deathsquad)
 			deathsquad.HandleNewMind(new_commando.mind) //First come, first served
 	new_commando.equip_death_commando(leader_selected)
