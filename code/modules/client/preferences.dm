@@ -190,6 +190,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/usenanoui = 1 //Whether or not this client will use nanoUI, this doesn't do anything other than objects being able to check this.
 
 	var/progress_bars = 1 //Whether to show progress bars when doing delayed actions.
+
+	var/pulltoggle = 1 //If 1, the "pull" verb toggles between pulling/not pulling. If 0, the "pull" verb will always try to pull, and do nothing if already pulling.
 	var/client/client
 	var/saveloaded = 0
 
@@ -335,6 +337,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=progbar'><b>[(progress_bars) ? "Yes" : "No"]</b></a><br>
 	<b>Pause after first step:</b>
 	<a href='?_src_=prefs;preference=stumble'><b>[(stumble) ? "Yes" : "No"]</b></a><br>
+	<b>Pulling action:</b>
+	<a href='?_src_=prefs;preference=pulltoggle'><b>[(pulltoggle) ? "Toggle Pulling" : "Always Pull"]</b></a><br>
   </div>
   <div id="rightDiv" style="width:50%;height:100%;float:right;">
 	<b>Randomized Character Slot:</b>
@@ -1464,6 +1468,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					progress_bars = !progress_bars
 				if("stumble")
 					stumble = !stumble
+				if("pulltoggle")
+					pulltoggle = !pulltoggle
 
 				if("ghost_deadchat")
 					toggles ^= CHAT_DEAD
