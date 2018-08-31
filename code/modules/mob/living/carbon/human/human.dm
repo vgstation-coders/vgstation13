@@ -1774,6 +1774,7 @@ mob/living/carbon/human/isincrit()
 	BrainContainer.AddComponent(/datum/component/controller/mob)
 	BrainContainer.AddComponent(/datum/component/ai/hand_control)
 	BrainContainer.AddComponent(/datum/component/controller/movement/astar)
+	BrainContainer.register_for_updates()
 
 /mob/living/carbon/human/proc/initialize_basic_NPC_components()	//will wander around
 	initialize_barebones_NPC_components()
