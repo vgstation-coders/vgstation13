@@ -154,3 +154,13 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
 	build_path = /obj/item/weapon/circuitboard/rust_core_control
+
+/datum/design/supermattermonitor
+	name = "Circuit Design (Supermatter Monitor)"
+	desc = "Allows for the construction of circuit boards used to build a supermatter monitoring computer"
+	id = "supermattermonitor"
+	req_tech = list(Tc_ENGINEERING = 5)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Misc"
+	build_path = /obj/item/weapon/circuitboard/supermatter

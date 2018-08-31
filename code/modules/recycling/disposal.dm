@@ -550,14 +550,27 @@
 	var/active = 0	// true if the holder is moving, otherwise inactive
 	dir = 0
 	var/count = 1000	//*** can travel 1000 steps before going inactive (in case of loops)
-	var/destinationTag = "DISPOSALS"// changes if contains a delivery container
+	var/destinationTag = DISP_DISPOSALS // changes if contains a delivery container
 	var/tomail = 0 //changes if contains wrapped package
 	var/hasmob = 0 //If it contains a mob
 
 /obj/structure/disposalholder/proc/has_fat_guy()
 	for(var/mob/living/carbon/human/H in src)
-		if(((M_FAT in H.mutations) && (H.species && H.species.anatomy_flags & CAN_BE_FAT)) || H.species.anatomy_flags & IS_BULKY)
+		if(H.is_fat() || H.is_bulky())
 			return TRUE
+	
+// Dislodge players whenever they're no longer fat or the holder is active for some reason.
+/obj/structure/disposalholder/proc/until_skinny()
+	spawn while(1) // Checking this is not a priority. Check whenever the server has a moment.
+		if(!has_fat_guy() || active) // If the person is no longer fat or something made the holder active again.
+			for(var/mob/living/carbon/human/H in src)
+				to_chat(H, "You become dislodged from the grip of the pipe!")
+			active = 1
+			move()
+			break
+		else
+			sleep(10) // Probably unwise to keep constantly checking, so just wait some time before doing it again.
+	return
 
 	// initialize a holder from the contents of a disposal unit
 /obj/structure/disposalholder/proc/init(var/obj/machinery/disposal/D)
@@ -619,7 +632,13 @@
 				active = 0
 			// find the fat guys
 				for(var/mob/living/carbon/human/H in src)
-
+					if(H.is_fat())
+						to_chat(H, "<span class='danger'>You suddenly stop by your own fat holding onto the pipe!</span> <span class='warning'>You hope something knocks you free.</span>")
+					else if(H.is_bulky())
+						to_chat(H, "<span class='danger'>You suddenly stop by your own bulky anatomy!</span> <span class='warning'>You hope something knocks you free.</span>")
+					else
+						to_chat(H, "<span class='danger'>You suddenly stop by the fatass with you!</span> <span class='warning'>You hope something knocks you free.</span>")
+				until_skinny()
 				break
 		sleep(1)		// was 1
 		if(!loc || isnull(loc))
@@ -656,12 +675,18 @@
 // merge two holder objects
 // used when a a holder meets a stuck holder
 /obj/structure/disposalholder/proc/merge(var/obj/structure/disposalholder/other)
+	if(src.destinationTag == DISP_DISPOSALS && other.destinationTag != DISP_DISPOSALS)
+		// Lets make sure we don't accidentally dispose of stuff.
+		// Of course, if this happened before the cargo office this is a non-issue but if someone jammed the pipe after the office, then it's a problem.
+		src.destinationTag = other.destinationTag
 	for(var/atom/movable/AM in other)
 		AM.forceMove(src)		// move everything in other holder to this one
 		if(ismob(AM))
 			var/mob/M = AM
 			if(M.client)	// if a client mob, update eye to follow this holder
 				M.client.eye = src
+				if(!other.active)
+					to_chat(M, "Something hits and dislodges you from the pipe!")
 
 	qdel(other)
 

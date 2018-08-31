@@ -144,8 +144,10 @@
 	..()
 
 //TODO move this somewhere else
-/atom/movable/proc/set_glide_size(glide_size_override = 0)
-	glide_size = glide_size_override
+/atom/movable/proc/set_glide_size(glide_size_override = 0, var/min = 0.9, var/max = WORLD_ICON_SIZE/2)
+	glide_size = max(min, glide_size_override)
+	if(glide_size > max)
+		glide_size = 0
 
 /atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
 	if(!loc || !NewLoc)
@@ -991,3 +993,9 @@
 	else
 		pixel_x = base_pixx + text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2
 		pixel_y = base_pixy + text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2
+
+//Overwriting BYOND proc used for simple animal and NPCbot movement, Pomf help me
+/atom/movable/proc/start_walk_to(Trg,Min=0,Lag=0,Speed=0)
+	if(Lag > 0)
+		set_glide_size(DELAY2GLIDESIZE(Lag))
+	walk_to(src,Trg,Min,Lag,Speed)

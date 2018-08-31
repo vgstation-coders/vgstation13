@@ -134,7 +134,7 @@
 					if(!target_mob || SA_attackable(target_mob))
 						stance = CLOWN_STANCE_IDLE
 					if(target_mob in view(7,src))
-						walk_to(src, target_mob, 1, 3)
+						start_walk_to(target_mob, 1, 3)
 						stance = CLOWN_STANCE_ATTACKING
 
 				if(CLOWN_STANCE_ATTACKING)

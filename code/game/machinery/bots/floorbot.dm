@@ -227,7 +227,7 @@ var/global/list/floorbot_targets=list()
 
 	switch(mode)
 		if(FLOORBOT_IDLE)		// idle
-			walk_to(src,0)
+			start_walk_to(0)
 			if(checkforwork())	// see if any criminals are in range
 				return
 			if(!mode && auto_patrol)	// still idle, and set to patrol
@@ -255,8 +255,9 @@ var/global/list/floorbot_targets=list()
 
 
 		if(FLOORBOT_PATROL)		// patrol mode
+			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY/2))
 			patrol_step()
-			spawn(5)
+			spawn(SS_WAIT_MACHINERY/2)
 				if(mode == FLOORBOT_PATROL)
 					patrol_step()
 

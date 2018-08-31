@@ -54,7 +54,7 @@
 			ear_safety += 1
 
 //Flashing everyone
-	if(eye_safety < 1)
+	if(eye_safety < 1 && !M.blinded)
 		M.flash_eyes(visual = 1, affect_silicon = 1)
 		if (get_dist(M, T) <= 3)
 			M.Stun(8)
@@ -69,20 +69,23 @@
 				M.Knockdown(1)
 
 //Now applying sound
-	if(!ear_safety)
-		to_chat(M, "<span class='userdanger'>BANG</span>")
-		playsound(src, 'sound/effects/bang.ogg', 60, 1)
-	else
-		to_chat(M, "<span class='danger'>BANG</span>")
-		playsound(src, 'sound/effects/bang.ogg', 25, 1)
+	if(!M.is_deaf())
+		if(!ear_safety)
+			to_chat(M, "<span class='userdanger'>BANG</span>")
+			playsound(src, 'sound/effects/bang.ogg', 60, 1)
+		else
+			to_chat(M, "<span class='danger'>BANG</span>")
+			playsound(src, 'sound/effects/bang.ogg', 25, 1)
 
 	if((get_dist(M, T) <= 2 || src.loc == M.loc || src.loc == M))
 		if(ear_safety > 0)
-			M.Stun(2)
-			M.Knockdown(2)
+			if(!M.is_deaf())
+				M.Stun(2)
+				M.Knockdown(2)
 		else
-			M.Stun(8)
-			M.Knockdown(8)
+			if(!M.is_deaf())
+				M.Stun(8)
+				M.Knockdown(8)
 			if ((prob(14) || (M == src.loc && prob(70))))
 				M.ear_damage += rand(1, 10)
 			else
@@ -91,22 +94,25 @@
 
 	else if(get_dist(M, T) <= 3)
 		if(!ear_safety)
-			M.Stun(6)
-			M.Knockdown(6)
+			if(!M.is_deaf())
+				M.Stun(6)
+				M.Knockdown(6)
 			M.ear_damage += rand(0, 3)
 			M.ear_deaf = max(M.ear_deaf,10)
 
 	else if(get_dist(M, T) <= 5)
 		if(!ear_safety)
-			M.Stun(4)
-			M.Knockdown(4)
+			if(!M.is_deaf())
+				M.Stun(4)
+				M.Knockdown(4)
 			M.ear_damage += rand(0, 3)
 			M.ear_deaf = max(M.ear_deaf,10)
 
 	else if(!ear_safety)
-		if (issilicon(M))
-			M.Stun(4)
-		M.Knockdown(1)
+		if(!M.is_deaf())
+			if (issilicon(M))
+				M.Stun(4)
+			M.Knockdown(1)
 		M.ear_damage += rand(0, 1)
 		M.ear_deaf = max(M.ear_deaf,5)
 

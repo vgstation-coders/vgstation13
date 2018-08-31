@@ -1484,6 +1484,11 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Morgue"
 	icon_state = "morgue"
 
+/area/medical/coldstorage
+	name = "Morgue"
+	icon_state = "morgue"
+//for Roidstation - this area is radshielded.
+
 /area/medical/chemistry
 	name = "Chemistry"
 	icon_state = "chem"
@@ -2435,7 +2440,17 @@ proc/process_adminbus_teleport_locs()
 /area/awaymission/snowplanet
 	name = "snowplanet"
 	icon_state = "mining_production"
-
+	
+/area/awaymission/articwasteland
+	name = "artic wasteland"
+	icon_state = "away"
+	dynamic_lighting = 0
+	requires_power = 0
+	
+/area/awaymission/articwasteland/gateway
+	name = "artic wasteland gateway shelter"
+	icon_state = "away"
+	
 /////////////////////////////////////////////////////////////////////
 /*
  Lists of areas to be used with is_type_in_list.

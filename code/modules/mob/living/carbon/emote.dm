@@ -84,6 +84,155 @@
 	key = "wink"
 	key_third_person = "winks"
 	message = "winks."
+
+/datum/emote/living/carbon/twitch
+	key = "twitch"
+	key_third_person = "twitches"
+	message = "twitches violently."
+
+/datum/emote/living/carbon/twitch_s
+	key = "twitch_s"
+	message = "twitches."
+
+/datum/emote/living/carbon/wave
+	key = "wave"
+	key_third_person = "waves"
+	message = "waves."
+
+/datum/emote/living/carbon/whimper
+	key = "whimper"
+	key_third_person = "whimpers"
+	message = "whimpers."
+	message_mime = "appears hurt."
+
+/datum/emote/living/carbon/wsmile
+	key = "wsmile"
+	key_third_person = "wsmiles"
+	message = "smiles weakly."
+
+/datum/emote/living/carbon/yawn
+	key = "yawn"
+	key_third_person = "yawns"
+	message = "yawns."
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/sniff
+	key = "sniff"
+	key_third_person = "sniffs"
+	message = "sniffs."
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/snore
+	key = "snore"
+	key_third_person = "snores"
+	message = "snores."
+	message_mime = "sleeps soundly."
+	emote_type = EMOTE_AUDIBLE
+	stat_allowed = UNCONSCIOUS
+
+/datum/emote/living/carbon/pout
+	key = "pout"
+	key_third_person = "pouts"
+	message = "pouts."
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/scowl
+	key = "scowl"
+	key_third_person = "scowls"
+	message = "scowls."
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/shake
+	key = "shake"
+	key_third_person = "shakes"
+	message = "shakes their head."
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/shiver
+	key = "shiver"
+	key_third_person = "shiver"
+	message = "shivers."
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/kiss
+	key = "kiss"
+	key_third_person = "kisses"
+	message = "blows a kiss."
+	message_param = "blows a kiss to %t."
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/laugh
+	key = "laugh"
+	key_third_person = "laughs"
+	message = "laughs."
+	message_mime = "laughs silently!"
+	emote_type = EMOTE_AUDIBLE
+
+
+/datum/emote/living/carbon/gag
+	key = "gag"
+	key_third_person = "gags"
+	message = "gags."
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/gasp
+	key = "gasp"
+	key_third_person = "gasps"
+	message = "gasps!"
+	emote_type = EMOTE_AUDIBLE
+	stat_allowed = UNCONSCIOUS
+
+/datum/emote/living/carbon/giggle
+	key = "giggle"
+	key_third_person = "giggles"
+	message = "giggles."
+	message_mime = "giggles silently!"
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/grin
+	key = "grin"
+	key_third_person = "grins"
+	message = "grins."
+
+/datum/emote/living/carbon/groan
+	key = "groan"
+	key_third_person = "groans"
+	message = "groans!"
+	message_mime = "appears to groan!"
+
+/datum/emote/living/carbon/grimace
+	key = "grimace"
+	key_third_person = "grimaces"
+	message = "grimaces."
+
+/datum/emote/living/carbon/cough
+	key = "cough"
+	key_third_person = "coughs"
+	message = "coughs!"
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/burp
+	key = "burp"
+	key_third_person = "burps"
+	message = "burps."
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/choke
+	key = "choke"
+	key_third_person = "chokes"
+	message = "chokes!"
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/chuckle
+	key = "chuckle"
+	key_third_person = "chuckles"
+	message = "chuckles."
+	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/blush
+	key = "blush"
+	key_third_person = "blushes"
+	message = "blushes."
 	
 /datum/emote/living/carbon/scream
 	key = "scream"

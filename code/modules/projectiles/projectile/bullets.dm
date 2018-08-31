@@ -101,7 +101,7 @@
 	damage = 10
 	stun = 0
 	weaken = 0
-	superspeed = 1
+	projectile_speed = 0.66
 
 /obj/item/projectile/bullet/midbullet/assault
 	damage = 20
@@ -342,8 +342,8 @@
 	weaken = 5
 	stutter = 5
 	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS|PROJREACT_BLOB
-	penetration = 20//can hit 3 mobs at once, or go through a wall and hit 2 more mobs, or go through an rwall/blast door and hit 1 mob
-	superspeed = 1
+	penetration = 20 //can hit 3 mobs at once, or go through a wall and hit 2 more mobs, or go through an rwall/blast door and hit 1 mob
+	projectile_speed = 0.66
 	fire_sound = 'sound/weapons/hecate_fire.ogg'
 
 /obj/item/projectile/bullet/hecate/OnFired()
@@ -434,8 +434,7 @@
 /obj/item/projectile/bullet/APS/OnFired()
 	..()
 	if(damage >= 100)
-		superspeed = 1
-		super_speed = 1
+		projectile_speed = 0.66
 		for (var/mob/M in player_list)
 			if(M && M.client)
 				var/turf/M_turf = get_turf(M)
@@ -719,7 +718,7 @@
 	bounces = 1
 	fire_sound = 'sound/weapons/gunshot_1.ogg'
 	bounce_sound = null
-	projectile_slowdown = 0.5
+	projectile_speed = 1.33
 	kill_count = 100
 	embed = 0
 	rotate = 0

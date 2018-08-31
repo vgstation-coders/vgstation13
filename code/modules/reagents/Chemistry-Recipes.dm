@@ -358,6 +358,14 @@
 	required_reagents = list(CHLORINE = 1, NITROGEN = 1, ANTI_TOXIN = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/alkycosine
+	name = "Alkycosine"
+	id = ALKYCOSINE
+	result = ALKYCOSINE
+	required_reagents = list(ALKYSINE = 1, BLEACH = 1, ANTI_TOXIN = 1)
+	required_temp = T0C + 40
+	result_amount = 4
+
 /datum/chemical_reaction/dexalin
 	name = "Dexalin"
 	id = DEXALIN
@@ -385,6 +393,14 @@
 	id = BICARIDINE
 	result = BICARIDINE
 	required_reagents = list(INAPROVALINE = 1, CARBON = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/synthocarisol
+	name = "Synthocarisol"
+	id = SYNTHOCARISOL
+	result = SYNTHOCARISOL
+	required_reagents = list(BICARIDINE = 1, INAPROVALINE = 1)
+	required_temp = T0C + 77
 	result_amount = 2
 
 /datum/chemical_reaction/hyperzine
@@ -505,6 +521,8 @@
 		playsound(src, 'sound/effects/phasein.ogg', 25, 1)
 
 		for(var/mob/living/M in viewers(get_turf(holder.my_atom), null))
+			if(M.blinded)
+				continue
 			var/eye_safety = 0
 			if(iscarbon(M))
 				eye_safety = M.eyecheck()
@@ -611,6 +629,14 @@
 	id = MINDBREAKER
 	result = MINDBREAKER
 	required_reagents = list(SILICON = 1, HYDROGEN = 1, ANTI_TOXIN = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/heartbreaker
+	name = "Heartbreaker Toxin"
+	id = HEARTBREAKER
+	result = HEARTBREAKER
+	required_reagents = list(MINDBREAKER = 1, DEXALIN = 1)
+	required_temp = T0C + 37
 	result_amount = 5
 
 /datum/chemical_reaction/lipozine
@@ -1215,15 +1241,20 @@
 	playsound(holder.my_atom, 'sound/effects/phasein.ogg', 100, 1)
 
 	for(var/mob/O in viewers(get_turf(holder.my_atom), null))
-		if(ishuman(O))
+		if(O.is_blind())
+			if(O.is_deaf())
+				to_chat(O, "<span class='danger'>You feel a strange rumbling!</span>")
+			else
+				to_chat(O, "<span class='danger'>You hear a rumbling and terrifying noises!</span>")
+		else if(ishuman(O))
 			var/mob/living/carbon/human/H = O
 			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/science)))
 				H.flash_eyes(visual = 1)
-				to_chat(O, "<span class='danger'>A flash blinds you while you start hearing terrifying noises!</span>")
+				to_chat(O, "<span class='danger'>A flash blinds you[O.is_deaf() ? "" : " while you start hearing terrifying noises"]!</span>")
 			else
-				to_chat(O, "<span class='danger'>You hear a rumbling as a troup of monsters phases into existence!</span>")
+				to_chat(O, "<span class='danger'>[O.is_deaf() ? "A" : "You hear a rumbling as a"] troup of monsters phases into existence!</span>")
 		else
-			to_chat(O, "<span class='danger'>You hear a rumbling as a troup of monsters phases into existence!</span>")
+			to_chat(O, "<span class='danger'>[O.is_deaf() ? "A" : "You hear a rumbling as a"] troup of monsters phases into existence!</span>")
 
 	for(var/i = 1, i <= 5, i++)
 		var/chosen = pick(critters)
@@ -1263,15 +1294,20 @@
 	playsound(holder.my_atom, 'sound/effects/phasein.ogg', 100, 1)
 
 	for(var/mob/O in viewers(get_turf(holder.my_atom), null))
-		if(ishuman(O))
+		if(O.is_blind())
+			if(O.is_deaf())
+				to_chat(O, "<span class='rose'>There's a sudden whiff of ozone in the air!</span>")
+			else
+				to_chat(O, "<span class='rose'>You hear an eerie crackling!</span>")
+		else if(ishuman(O))
 			var/mob/living/carbon/human/H = O
 			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/science)))
 				H.flash_eyes(visual = 1)
 				to_chat(O, "<span class='rose'>A flash blinds and you can feel a new presence!</span>")
 			else
-				to_chat(O, "<span class='rose'>You hear a crackling as a creature manifests before you!</span>")
+				to_chat(O, "<span class='rose'>[O.is_deaf() ? "A" : "You hear a crackling as a"] creature manifests before you!</span>")
 		else
-			to_chat(O, "<span class='rose'>You hear a crackling as a creature manifests before you!</span>")
+			to_chat(O, "<span class='rose'>[O.is_deaf() ? "A" : "You hear a crackling as a"] creature manifests before you!</span>")
 
 	var/chosen = pick(critters)
 	var/mob/living/simple_animal/hostile/C = new chosen
@@ -1356,7 +1392,9 @@
 	playsound(holder.my_atom, 'sound/effects/phasein.ogg', 100, 1)
 
 	for(var/mob/O in viewers(get_turf(holder.my_atom), null))
-		if(ishuman(O))
+		if(O.is_blind())
+			to_chat(O,"<span class='notice'>you think you can smell some food nearby!</span>")
+		else if(ishuman(O))
 			var/mob/living/carbon/human/H = O
 			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/science)))
 				H.flash_eyes(visual = 1)
@@ -1410,11 +1448,15 @@
 	playsound(holder.my_atom, 'sound/effects/phasein.ogg', 100, 1)
 
 	for(var/mob/O in viewers(get_turf(holder.my_atom), null))
+		if(O.is_blind())
+			if(O.is_deaf())
+				continue
+			to_chat(O, "<span class='caution'>You think you can hear bottles rolling on the floor!</span>")
 		if(ishuman(O))
 			var/mob/living/carbon/human/H = O
 			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/science)))
 				H.flash_eyes(visual = 1)
-				to_chat(O, "<span class='caution'>A white light blinds you and you think you can hear bottles rolling on the floor!</span>")
+				to_chat(O, "<span class='caution'>A white light blinds you[O.is_deaf() ? "" : " and you think you can hear bottles rolling on the floor"]!</span>")
 			else
 				to_chat(O, "<span class='notice'>A bunch of drinks appears before you!</span>")
 		else
@@ -3046,6 +3088,14 @@
 	result = CHARCOAL
 	required_reagents = list(CARBON = 1, SACID = 2)
 	required_temp = T0C + 450
+	result_amount = 1
+
+/datum/chemical_reaction/caramel
+	name = "Heated Sugar"
+	id = CARAMEL
+	result = CARAMEL
+	required_reagents = list(SUGAR = 1)
+	required_temp = T0C + 170
 	result_amount = 1
 
 /datum/chemical_reaction/vomit_all

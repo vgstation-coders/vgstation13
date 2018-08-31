@@ -595,7 +595,7 @@ its easier to just keep the beam vertical.
 /atom/proc/shuttle_rotate(var/angle)
 	src.dir = turn(src.dir, -angle)
 
-	if(canSmoothWith) //Smooth the smoothable
+	if(canSmoothWith()) //Smooth the smoothable
 		spawn //Usually when this is called right after an atom is moved. Not having this "spawn" here will cause this atom to look for its neighbours BEFORE they have finished moving, causing bad stuff.
 			relativewall()
 			relativewall_neighbours()

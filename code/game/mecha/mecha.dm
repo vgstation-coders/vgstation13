@@ -20,7 +20,7 @@
 	anchored = 1 //no pulling around.
 	layer = MOB_LAYER //icon draw layer
 	plane = MOB_PLANE
-	infra_luminosity = 15 //byond implementation is bugged.
+	infra_luminosity = 15 //byond implementation is bugged. This is supposedly infrared brightness. Lower for combat mechs.
 	var/list/hud_list = list()
 	var/initial_icon = null //Mech type for resetting icon. Only used for reskinning kits (see custom items)
 	var/can_move = 1
@@ -41,7 +41,10 @@
 	var/dna	//dna-locking the mech
 	var/list/proc_res = list() //stores proc owners, like proc_res["functionname"] = owner reference
 	var/lights = 0
-	var/lights_power = 6
+	var/light_range_on = 8 //the distance in tiles the light radiates.
+	var/light_brightness_on = 2 //the brightness of the light. does not affect distance, but intensity.
+	var/light_range_off = 2 //the amount of light passively produced by the mech when lights are off (cockpit glow)
+	var/light_brightness_off = 1 //the brightness of the passively produced light
 	var/rad_protection = 50 	//How much the mech shields its pilot from radiation.
 	var/lock_dir = FALSE
 	//inner atmos
@@ -50,9 +53,9 @@
 	var/obj/machinery/portable_atmospherics/canister/internal_tank
 	var/datum/gas_mixture/cabin_air
 	var/obj/machinery/atmospherics/unary/portables_connector/connected_port = null
-	
-	var/cursor_enabled = 0 //whether to display the mecha cursor	
-	
+
+	var/cursor_enabled = 0 //whether to display the mecha cursor
+
 	var/obj/item/device/radio/radio = null
 	var/obj/item/device/radio/electropack/electropack = null
 	var/obj/item/mecha_parts/mecha_tracking/tracking = null
@@ -399,6 +402,8 @@
 /obj/mecha/proc/mechstep(direction)
 	var/current_dir = dir
 	set_glide_size(DELAY2GLIDESIZE(step_in))
+	if(occupant) //Workaround for mechs not setting the client's eye properly, remove this if that gets fixed
+		occupant.set_glide_size(DELAY2GLIDESIZE(step_in))
 	var/result = step(src,direction)
 	if(lock_dir)
 		dir = current_dir
@@ -409,6 +414,8 @@
 
 /obj/mecha/proc/mechsteprand()
 	set_glide_size(DELAY2GLIDESIZE(step_in))
+	if(occupant) //Workaround for mechs not setting the client's eye properly, remove this if that gets fixed
+		occupant.set_glide_size(DELAY2GLIDESIZE(step_in))
 	var/result = step_rand(src)
 	if(result)
 	 playsound(src, get_sfx("mechstep"),40,1)
@@ -1109,13 +1116,15 @@
 		return
 	lights = !lights
 	if(lights)
-		set_light(luminosity + lights_power)
+		light_power = light_brightness_on
+		set_light(light_range_on)
 	else
-		set_light(luminosity - lights_power)
+		light_power = light_brightness_off
+		set_light(light_range_off)
 	src.occupant_message("Toggled lights [lights?"on":"off"].")
 	log_message("Toggled lights [lights?"on":"off"].")
 	return
-	
+
 /obj/mecha/verb/toggle_cursor()
 	set name = "Toggle Cursor"
 	set category = "Exosuit Interface"
@@ -1216,6 +1225,9 @@
 		src.log_append_to_last("[H] moved in as pilot.")
 		src.icon_state = src.reset_icon()
 		dir = dir_in
+		if(!lights) //if the main lights are off, turn on cabin lights
+			light_power = light_brightness_off
+			set_light(light_range_off)
 		playsound(src, 'sound/mecha/mechentry.ogg', 50, 1)
 		if(!hasInternalDamage())
 			src.occupant << sound('sound/mecha/nominalsyndi.ogg',volume=50)
@@ -1223,7 +1235,7 @@
 		//change the cursor
 		if(H.client && cursor_enabled)
 			H.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
-			
+
 		// -- Mode/mind specific stuff goes here
 		if(H.mind)
 			if(isrev(H) || isrevhead(H))
@@ -1291,15 +1303,18 @@
 		src.Entered(mmi_as_oc)
 		src.Move(src.loc)
 		src.icon_state = src.reset_icon()
+		if(!lights) //if the main lights are off, turn on cabin lights
+			light_power = light_brightness_off
+			set_light(light_range_off)
 		dir = dir_in
 		src.log_message("[mmi_as_oc] moved in as pilot.")
 		if(!hasInternalDamage())
 			src.occupant << sound('sound/mecha/nominalsyndi.ogg',volume=50)
-			
+
 		//change the cursor
 		if(occupant.client && cursor_enabled)
 			occupant.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
-			
+
 		return 1
 	else
 		return 0
@@ -1428,11 +1443,11 @@
 			mmi.mecha = null
 			src.occupant.canmove = 0
 			src.verbs += /obj/mecha/verb/eject
-			
+
 		//change the cursor
 		if(src.occupant && src.occupant.client)
 			src.occupant.client.mouse_pointer_icon = initial(src.occupant.client.mouse_pointer_icon)
-			
+
 		// -- Mode/mind specific stuff goes here
 		if(src.occupant.mind)
 			if(isrev(src.occupant) || isrevhead(src.occupant))
@@ -1447,6 +1462,8 @@
 
 		src.occupant = null
 		src.icon_state = src.reset_icon()+"-open"
+		if(!lights) //if the lights are off, turn off the cabin lights
+			set_light(0)
 		src.dir = dir_in
 		if (G)
 			G.hud_off()

@@ -724,6 +724,31 @@ Thanks.
 							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
+
+							/* Drag damage is here! */
+							/* Dragging folk with broken bones hurts their broken organ */
+							/* Dragging folk that are bleeding without bandaging them makes them lose blood */
+							var/mob/living/carbon/human/HM = M
+							var/list/damaged_organs = HM.get_broken_organs()
+							var/list/bleeding_organs = HM.get_bleeding_organs()
+							if (T.has_gravity() && HM.lying && m_intent != "walk")
+
+								if (damaged_organs.len)
+									for(var/datum/organ/external/damagedorgan in damaged_organs)
+										if((damagedorgan.brute_dam) < (damagedorgan.max_damage - 3)) //To prevent organs from accruing thousands of damage or exploding
+											if(prob(damagedorgan.brute_dam / 5)) //Chance for damage based on current damage
+												HM.apply_damage(2, BRUTE, damagedorgan)
+												HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen from being dragged!</span>")
+												HM.UpdateDamageIcon()
+
+								if (bleeding_organs.len && !(HM.species.anatomy_flags & NO_BLOOD))
+									var/blood_volume = round(HM:vessel.get_reagent_amount("blood"))
+									if(blood_volume > 0)
+										if(isturf(HM.loc))
+											if(prob(blood_volume / 89.6)) //Chance to bleed based on blood remaining
+												blood_splatter(HM.loc,HM,0)
+												HM.vessel.remove_reagent("blood",2)
+												HM.visible_message("<span class='warning'>\The [HM] loses some blood from being dragged!</span>")
 					else
 						if (pulling)
 							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)

@@ -918,7 +918,7 @@ FIRE ALARM
 	name = "Fire Alarm"
 	desc = "<i>\"Pull this in case of emergency\"</i>. Thus, keep pulling it forever."
 	icon = 'icons/obj/monitors.dmi'
-	icon_state = "fire0"
+	icon_state = "fire0s"
 	var/detecting = 1.0
 	var/working = 1.0
 	var/time = 10.0
@@ -1050,9 +1050,19 @@ FIRE ALARM
 
 	src.alarm()
 
-/obj/machinery/firealarm/process()//Note: this processing was mostly phased out due to other code, and only runs when needed
+/obj/machinery/firealarm/process()
 	if(stat & (NOPOWER|BROKEN))
 		return
+
+	var/turf/simulated/location = loc
+	if(shelter && istype(location)) //If simulated turf and we have a shelter to drop
+		var/datum/gas_mixture/environment = location.return_air()
+		if(environment.toxins>1) //The simpler sensors aren't elaborate as air alarms to sense partial pressure or other threats
+			var/obj/item/inflatable/shelter/S = new /obj/item/inflatable/shelter(loc)
+			S.inflate()
+			shelter = FALSE
+			update_icon()
+			visible_message("<span class='warning'>\The [S] springs free of the fire alarm autonomously and inflates!</span>")
 
 	if(src.timing)
 		if(src.time > 0)
@@ -1061,7 +1071,6 @@ FIRE ALARM
 			src.alarm()
 			src.time = 0
 			src.timing = 0
-			processing_objects.Remove(src)
 		src.updateDialog()
 	last_process = world.timeofday
 
@@ -1122,7 +1131,6 @@ FIRE ALARM
 		else if (href_list["time"])
 			timing = !timing
 			last_process = world.timeofday
-			processing_objects.Add(src)
 		else if (href_list["tp"])
 			var/tp = text2num(href_list["tp"])
 			time += tp
@@ -1130,7 +1138,7 @@ FIRE ALARM
 		else if (href_list["shelter"])
 			if(shelter)
 				var/obj/O = new /obj/item/inflatable/shelter(loc)
-				if(Adjacent(usr)) //This way, silicons can still deploy it
+				if(Adjacent(usr)&&!isAdminGhost(usr)) //Silicons AND adminghosts drop it to the floor
 					usr.put_in_hands(O)
 				shelter = FALSE
 				update_icon()
@@ -1184,6 +1192,7 @@ var/global/list/firealarms = list() //shrug
 
 	machines.Remove(src)
 	firealarms |= src
+	processing_objects += src
 	update_icon()
 
 /obj/machinery/firealarm/Destroy()
@@ -1192,6 +1201,14 @@ var/global/list/firealarms = list() //shrug
 
 /obj/machinery/firealarm/npc_tamper_act(mob/living/L)
 	alarm()
+
+/obj/machinery/firealarm/kick_act(mob/living/carbon/human/H)
+	..()
+	if(shelter && prob(50))
+		new /obj/item/inflatable/shelter(loc)
+		shelter = FALSE
+		update_icon()
+		visible_message("<span class='notice'>\The shelter detaches from \the [src]!</span>")
 
 /obj/machinery/partyalarm
 	name = "\improper PARTY BUTTON"

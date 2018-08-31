@@ -1425,8 +1425,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/head/explode()
 	owner.remove_internal_organ(owner, owner.internal_organs_by_name["brain"], src)
-
 	.=..()
+	owner.update_hair()
 
 /datum/organ/external/head/get_icon()
 	if(!owner)
