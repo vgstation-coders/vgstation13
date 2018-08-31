@@ -34,7 +34,7 @@ var/runedec = 0 // Rune cap ?
 		if(AI.client)
 			AI.client.images += blood_image
 	rune_list_legacy.Add(src)
-	my_cult = find_active_faction(LEGACY_CULT)
+	my_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
 	if (!my_cult)
 		CRASH("Creating a rune without an active cult")
 	cultwords = my_cult.cult_words
@@ -264,7 +264,7 @@ var/runedec = 0 // Rune cap ?
 
 /obj/item/weapon/tome_legacy/New(var/datum/faction/cult/narsie/our_cult) // Multiple cults with multiple words ? Why not
 	if (!istype(our_cult))
-		our_cult = find_active_faction(LEGACY_CULT) // No cult given, let's find ours
+		our_cult = find_active_faction_by_type(/datum/faction/cult/narsie) // No cult given, let's find ours
 	if (!istype(our_cult))
 		message_admins("Error: trying to spawn a cult tome without an active cult! Create one first.")
 		visible_message("<span class='warning'>The tome suddendly catches fire and fades out in a dark puff of smoke.</span>")

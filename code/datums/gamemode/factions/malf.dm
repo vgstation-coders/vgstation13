@@ -64,3 +64,8 @@ You should now be able to use your Explode spell to interface with the nuclear f
 		malfAI.antag.current.add_spell(new /spell/aoe_turf/ai_win, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 
 	return
+
+/datum/faction/malf/get_statpanel_addition()
+	if(malf_mode_declared)
+		return "Time left: [max(AI_win_timeleft/(apcs/3), 0)]"
+	return null

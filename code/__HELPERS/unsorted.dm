@@ -1605,21 +1605,10 @@ Game Mode config tags:
 "raginmages""
 */
 
-/proc/find_active_mode(var/mode_ctag) //This should never be used //THEN WHY DOES IT EXIST??
-	var/found_mode = null
-	if(ticker && ticker.mode)
-		if(ticker.mode.name == mode_ctag)
-			found_mode = ticker.mode
-	return found_mode
-
-/proc/find_active_faction(var/faction_name)
-	var/found_faction = null
-	if(ticker && ticker.mode && ticker.mode.factions.len)
-		for(var/datum/faction/F in ticker.mode.factions)
-			if(faction_name == F.ID)
-				found_faction = F
-				break
-	return found_faction
+/proc/find_active_faction_by_type(var/faction_type)
+	if(!ticker || !ticker.mode)
+		return null
+	return locate(faction_type) in ticker.mode.factions
 
 /proc/find_active_faction_by_member(var/datum/role/R)
 	if(!R)

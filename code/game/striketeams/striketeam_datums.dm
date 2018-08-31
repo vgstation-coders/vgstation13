@@ -342,12 +342,11 @@ var/list/sent_strike_teams = list()
 	if(!(new_commando.mind in ticker.minds))
 		ticker.minds += new_commando.mind//Adds them to regular mind list.
 
-	var/datum/faction/customsquad = find_active_faction(CUSTOMSQUAD)
+	var/datum/faction/customsquad = find_active_faction_by_type(/datum/faction/strike_team/custom)
 	if(customsquad)
 		customsquad.HandleRecruitedMind(new_commando.mind)
 	else
-		ticker.mode.CreateFaction(/datum/faction/strike_team)
-		customsquad = find_active_faction(CUSTOMSQUAD)
+		customsquad = ticker.mode.CreateFaction(/datum/faction/strike_team/custom)
 		if(customsquad)
 			customsquad.HandleNewMind(new_commando.mind) //First come, first served
 	new_commando.equip_death_commando(leader_selected)

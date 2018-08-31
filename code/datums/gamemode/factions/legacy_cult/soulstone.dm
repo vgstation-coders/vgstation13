@@ -306,7 +306,7 @@
 		qdel(add_target)
 
 
-/obj/item/proc/transfer_soul(var/choice as text, var/target, var/mob/living/carbon/U as mob)
+/obj/item/proc/transfer_soul(var/choice as text, var/target, var/mob/living/carbon/U)
 	var/deleteafter = 0
 	switch(choice)
 		if("VICTIM")
@@ -375,8 +375,8 @@
 						Z.cancel_camera()
 						deleteafter = 1
 				if(islegacycultist(U))
-					var/datum/faction/cult/narsie/cult_round = find_active_faction(LEGACY_CULT)
-					if(cult_round)
+					var/datum/faction/cult/narsie/cult_round = find_active_faction_by_member(U.mind.GetRole(LEGACY_CULTIST))
+					if(cult_round && istype(cult_round))
 						cult_round.HandleRecruitedMind(Z.mind)
 
 				name = "Soul Stone Shard"

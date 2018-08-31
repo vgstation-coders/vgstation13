@@ -463,13 +463,14 @@ var/list/department_radio_keys = list(
 
 	if(setting == 0) //overridden for constructs
 		return
-	var/datum/faction/cult = find_active_faction(BLOODCULT)
+	var/datum/faction/cult = find_active_faction_by_member(mind.GetRole(LEGACY_CULT))
+	if(!cult)
+		return
 	if(setting == 1)
-		if(mind in cult.members && universal_cult_chat == 1)
+		if(universal_cult_chat == 1)
 			return 1
 	if(setting == 2)
-		if(mind in cult.members)
-			return 1
+		return 1
 
 /mob/living/say_quote()
 	if (stuttering)

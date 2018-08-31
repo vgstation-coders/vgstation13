@@ -324,7 +324,7 @@
 	if(!message)
 		return
 
-	var/datum/faction/bloodcult = find_active_faction(BLOODCULT)
+	var/datum/faction/bloodcult = find_active_faction_by_member(activator.mind.GetRole(BLOODCULT))
 	for(var/datum/role/cultist/C in bloodcult.members)
 		var/datum/mind/M = C.antag
 		to_chat(M.current, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[message]</span></B></span>")
@@ -371,15 +371,17 @@
 /obj/effect/cult_ritual/cult_communication/Hear(var/datum/speech/speech, var/rendered_message="")
 	if(speech.speaker && speech.speaker.loc == loc)
 		var/speaker_name = speech.speaker.name
+		var/mob/living/L
 		if (isliving(speech.speaker))
-			var/mob/living/L = speech.speaker
+			L = speech.speaker
 			if (!iscultist(L))//geez we don't want that now do we
 				return
 		if (ishuman(speech.speaker))
 			var/mob/living/carbon/human/H = speech.speaker
 			speaker_name = H.real_name
+			L = speech.speaker
 		rendered_message = speech.render_message()
-		var/datum/faction/bloodcult = find_active_faction(BLOODCULT)
+		var/datum/faction/bloodcult = find_active_faction_by_member(L.mind.GetRole(BLOODCULT))
 		for(var/datum/role/cultist/C in bloodcult.members)
 			var/datum/mind/M = C.antag
 			if (M.current == speech.speaker)//echoes are annoying
@@ -886,7 +888,7 @@
 /datum/rune_spell/conversion/proc/convert(var/mob/M)
 	var/datum/role/cultist/newCultist = new
 	newCultist.AssignToRole(M.mind,1)
-	var/datum/faction/bloodcult/cult = find_active_faction(BLOODCULT)
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (!cult)
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 	cult.HandleRecruitedRole(newCultist)
@@ -1674,7 +1676,7 @@ var/list/blind_victims = list()
 	rejoin = alert(activator, "Will you pull them toward you, or pull yourself toward them?","Blood Magnetism","Summon Cultist","Rejoin Cultist") == "Rejoin Cultist"
 
 	var/list/possible_targets = list()
-	var/datum/faction/bloodcult = find_active_faction(BLOODCULT)
+	var/datum/faction/bloodcult = find_active_faction_by_member(activator.mind.GetRole(BLOODCULT))
 	for(var/datum/role/cultist/C in bloodcult.members)
 		var/datum/mind/M = C.antag
 		possible_targets.Add(M.current)

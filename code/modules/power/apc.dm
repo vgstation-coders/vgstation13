@@ -935,10 +935,9 @@
 /obj/machinery/power/apc/proc/toggle_breaker()
 	operating = !operating
 	if(malfai)
-		var/datum/faction/malf/F = find_active_faction(MALF)
-		if (F)
-			if (STATION_Z == z)
-				operating ? F.apcs++ : F.apcs--
+		var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
+		if(M && STATION_Z == z)
+			operating ? M.apcs++ : M.apcs--
 
 	src.update()
 	update_icon()
@@ -983,15 +982,13 @@
 		src.occupant.mind.transfer_to(src.occupant.parent)
 		src.occupant.parent.adjustOxyLoss(src.occupant.getOxyLoss())
 		src.occupant.parent.cancel_camera()
-		qdel(src.occupant)
-		src.occupant = null
-		var/datum/faction/malf = find_active_faction(MALF)
 		if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 			for(var/obj/item/weapon/pinpointer/point in world)
-				for(var/datum/mind/AI_mind in malf.members)
-					var/mob/living/silicon/ai/A = AI_mind.current // the current mob the mind owns
-					if(A.stat != DEAD)
-						point.target = A //The pinpointer tracks the AI back into its core.
+				var/mob/living/silicon/ai/A = occupant.parent // the current mob the mind owns
+				if(A.stat != DEAD)
+					point.target = A //The pinpointer tracks the AI back into its core.
+		qdel(src.occupant)
+		src.occupant = null
 	else
 		to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
 		if(forced)
@@ -1268,7 +1265,7 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 
 /obj/machinery/power/apc/proc/set_broken()
 	if(malfai && operating)
-		var/datum/faction/malf/M = find_active_faction(MALF)
+		var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
 		if(M && STATION_Z == z)
 			M.apcs--
 	stat |= BROKEN
@@ -1297,7 +1294,7 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	if(this_area.areaapc == src)
 		this_area.remove_apc(src)
 		if(malfai && operating)
-			var/datum/faction/malf/M = find_active_faction(MALF)
+			var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
 			if (M && STATION_Z == z)
 				M.apcs--
 		this_area.power_light = 0

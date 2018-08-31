@@ -372,16 +372,15 @@
 // this function shows information about the malf_ai gameplay type in the status screen
 /mob/living/silicon/robot/show_malf_ai()
 	..()
-	var/datum/faction/malf/malf = find_active_faction(MALF)
-	if(!malf)
-		return FALSE
-	for (var/datum/mind/malfai in malf.members)
-		if(connected_ai)
-			if(connected_ai.mind == malfai)
-				if(malf.apcs >= 3)
-					stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
-		else if(malf.malf_mode_declared)
-			stat(null, "Time left: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)]")
+	if(connected_ai && connected_ai.mind)
+		var/datum/faction/malf/malf = find_active_faction_by_member(connected_ai.mind.GetRole(MALF))
+		if(!malf)
+			malf = find_active_faction_by_type(/datum/faction/malf) //Let's see if there is anything to print at least
+			var/malf_stat = malf.get_statpanel_addition()
+			if(malf_stat && malf_stat != null)
+				stat(null, malf_stat)
+		if(malf.apcs >= 3)
+			stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
 	return FALSE
 
 // this function displays jetpack pressure in the stat panel

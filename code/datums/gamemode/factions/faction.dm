@@ -108,9 +108,17 @@ var/list/factions_with_hud_icons = list()
 		leader = null
 	update_hud_removed(R)
 
-/datum/faction/proc/AppendObjective(var/datum/objective/O)
-	ASSERT(O)
-	objective_holder.AddObjective(O)
+/datum/faction/proc/AppendObjective(var/objective_type,var/duplicates=0)
+	if(!duplicates && locate(objective_type) in objective_holder.GetObjectives())
+		return FALSE
+	var/datum/objective/O
+	if(istype(objective_type, /datum/objective)) //Passed an actual objective
+		O = objective_type
+	else
+		O = new objective_type
+	if(objective_holder.AddObjective(O, null, src))
+		return TRUE
+	return FALSE
 
 /datum/faction/proc/GetObjectives()
 	return objective_holder.GetObjectives()
@@ -226,7 +234,7 @@ var/list/factions_with_hud_icons = list()
 	if (O in objective_holder.objectives)
 		WARNING("Trying to add an objective ([O]) to faction ([src]) when it already has it.")
 		return FALSE
-	
+
 	var/setup = TRUE
 	if (istype(O,/datum/objective/target))
 		var/datum/objective/target/new_O = O
@@ -239,7 +247,7 @@ var/list/factions_with_hud_icons = list()
 		return
 	AppendObjective(O)
 	return TRUE
-	
+
 /datum/faction/proc/handleRemovedObjective(var/datum/objective/O)
 	ASSERT(O)
 	if (!(O in objective_holder.objectives))
@@ -266,6 +274,14 @@ var/list/factions_with_hud_icons = list()
 		dat += i
 
 	return dat
+
+/**
+	Should the faction make any changes to everybodies statpanel (EVERYBODIES, NOT JUST THE MEMBERS), put it here
+
+	Format it as just information you would want to print to the stat panel, such as return "Time left: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)]"
+*/
+/datum/faction/proc/get_statpanel_addition()
+	return null
 
 
 /////////////////////////////THESE FACTIONS SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
@@ -401,3 +417,10 @@ var/list/factions_with_hud_icons = list()
 	name = "Syndicate Deep-Strike squad"
 	ID = SYNDIESQUAD
 	logo_state = "elite-logo"
+
+/datum/faction/strike_team/custom
+	name = "Custom Strike Team"
+
+/datum/faction/strike_team/custom/New()
+	..()
+	ID = rand(1,999)
