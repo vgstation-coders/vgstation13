@@ -672,3 +672,11 @@ a {
 
 /obj/proc/check_uplink_validity()
 	return TRUE
+
+//Why is this here?
+//BYOND is a shit and contents is a snowflake list where some list procs don't work, including Swap().
+//This is the Lummox-approved workaround: http://www.byond.com/forum/?post=271125
+/obj/proc/contentsSwap(Index1, Index2)
+	var/list/temp_contents = contents.Copy()
+	temp_contents.Swap(Index1, Index2)
+	contents = temp_contents
