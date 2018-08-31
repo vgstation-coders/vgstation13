@@ -364,7 +364,7 @@
 		RC.controls["Enabled:"] = "<a href='?src=\ref[M];remove_role=[id]'>Yes</a>"
 	return RC
 
-// DO NOT OVERRIDE, does formatting.
+// DO NOT OVERRIDE, does formatting.d
 /datum/role/proc/GetEditMemoryMenu(var/datum/mind/M)
 	var/datum/role_controls/RC = EditMemory(M)
 	return {"

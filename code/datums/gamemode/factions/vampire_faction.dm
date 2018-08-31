@@ -6,13 +6,13 @@
 	initial_role = VAMPIRE
 	late_role = VAMPIRE // Vampires do not change their role.
 	roletype = /datum/role/vampire
+	initroletype = /datum/role/vampire
 	logo_state = "vampire-logo"
 	hud_icons = list("vampire-logo", "thrall-logo")
 
 /datum/faction/vampire/proc/addMaster(var/datum/role/vampire/V)
 	if (!leader)
 		leader = V
-		members += V
 		V.faction = src
 
 /datum/faction/vampire/can_setup()
