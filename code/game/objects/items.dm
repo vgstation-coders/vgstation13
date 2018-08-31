@@ -1249,7 +1249,13 @@ var/global/list/image/blood_overlays = list()
 		if(loc == over_object.loc) //Swapping to another object in the same storage item
 			var/obj/item/weapon/storage/storageobj = loc
 			if(usr in storageobj.is_seeing)
-				storageobj.contentsSwap(storageobj.contents.Find(src), storageobj.contents.Find(over_object))
+				//Almost none of BYOND's list procs work with contents because contents is a snowflake list and BYOND hates you, so enter the kludge.
+				var/temp_index = storageobj.contents.Find(over_object)
+				var/list/temp_contents = storageobj.contents.Copy()
+				temp_contents -= src
+				temp_contents.Insert(temp_index, src)
+				storageobj.contents = temp_contents
+
 				storageobj.orient2hud(usr)
 				return
 		else if(istype(over_object, /obj/abstract/screen/storage)) //Drag and dropped to an empty slot inside the storage item
@@ -1260,6 +1266,7 @@ var/global/list/image/blood_overlays = list()
 				//If anybody knows a better way to move ourselves to the end of a list, that actually works with BYOND's finickity handling of the contents list, then you are a greater man than I
 				storageobj.contents -= src
 				storageobj.contents += src
+				
 				storageobj.orient2hud(usr)
 				return
 	if(!istype(over_object, /obj/abstract/screen/inventory))
