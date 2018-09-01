@@ -16,7 +16,7 @@
 	health = 200
 
 	has_lock_type = null
-	has_lockless_type = /obj/structure/closet/
+	has_lockless_type = /obj/structure/closet/basic
 
 /obj/structure/closet/secure_closet/can_open()
 	if(!..())

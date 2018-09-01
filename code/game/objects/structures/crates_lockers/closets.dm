@@ -22,12 +22,15 @@
 	var/breakout_time = 2 //2 minutes by default
 	var/sound_file = 'sound/machines/click.ogg'
 
-	var/has_lock_type = /obj/structure/closet/secure_closet //The type this closet should be converted to if made ID secured
+	var/has_lock_type = null //The type this closet should be converted to if made ID secured
 	var/has_lockless_type = null //The type this closet should be converted to if made no longer ID secured
 
 	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 	w_type = RECYK_METAL
 	ignoreinvert = 1
+
+/obj/structure/closet/basic
+	has_lock_type = /obj/structure/closet/secure_closet
 
 /obj/structure/closet/proc/canweld()
 	return 1
