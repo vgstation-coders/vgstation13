@@ -2151,6 +2151,12 @@ var/list/bloodcult_exitportals = list()
 	activator.resting = 1
 	activator.ajourn = spell_holder
 
+	var/list/antag_icons = list()
+	if (activator.client)
+		for (var/image/I in activator.client.images)
+			if (I.plane == ANTAG_HUD_PLANE)
+				antag_icons += image(I,I.loc)
+
 	to_chat(activator, "<span class='notice'>As you recite the invocation, your body falls over the rune, but your consciousness still stands up above it.</span>")
 	astral = activator.ghostize(1,1)
 
@@ -2176,6 +2182,10 @@ var/list/bloodcult_exitportals = list()
 
 	step(astral,NORTH)
 	astral.dir = SOUTH
+
+	if (astral.client)
+		for (var/image/I in antag_icons)
+			astral.client.images += I
 
 	spawn()
 		handle_astral()
