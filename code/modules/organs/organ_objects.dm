@@ -266,6 +266,7 @@
 	icon_state = "stomach"
 	organ_tag = "stomach"
 
+
 /obj/item/organ/internal/stomach/update()
 	.=..()
 	if(istype(organ_data, /datum/organ/internal/stomach))
@@ -276,9 +277,7 @@
 /obj/item/organ/internal/stomach/replaced(var/mob/living/target)
 	if(ishuman(target))
 		var/mob/living/carbon/human/H = target
-		var/datum/organ/internal/stomach/S = H.get_stomach()
-		if(S)
-			reagents.trans_to(S.get_reagents(), reagents.maximum_volume)
+		reagents.trans_to(H.reagents, reagents.maximum_volume)
 
 /obj/item/organ/internal/proc/removed(var/mob/living/target,var/mob/living/user)
 	if(!target || !user)
