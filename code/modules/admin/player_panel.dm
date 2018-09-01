@@ -286,7 +286,7 @@
 			var/color = "#e6e6e6"
 			if(i%2 == 0)
 				color = "#f2f2f2"
-			//var/is_antagonist = is_special_character(M)
+			var/is_antagonist = is_special_character(M)
 
 			var/M_job = M.player_panel_job()
 
@@ -315,7 +315,7 @@
 					<td align='center' bgcolor='[color]'>
 						<span id='notice_span[i]'></span>
 						<a id='link[i]'
-						onmouseover='expand("item[i]","[M_job]","[M_name]","[M_rname]","--unused--","[M_key]","[M.lastKnownIP]","\ref[M]")'
+						onmouseover='expand("item[i]","[M_job]","[M_name]","[M_rname]","--unused--","[M_key]","[M.lastKnownIP]",[is_antagonist],"\ref[M]")'
 						>
 						<b id='search[i]'>[M_name] - [M_rname] - [M_key] ([M_job])</b>
 						</a>
@@ -392,14 +392,14 @@
 		<td align=center><A HREF='?src=\ref[src];adminplayeropts=\ref[M]'>X</A></td>
 		<td align=center><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
 		"}
-		/*switch(is_special_character(M))
+		switch(is_special_character(M))
 			if(0)
 				dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'>Traitor?</A></td>"}
 			if(1)
 				dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'><font color=red>Traitor?</font></A></td>"}
 			if(2)
 				dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'><font color=red><b>Traitor?</b></font></A></td>"}
-		*/
+
 	dat += "</table></body></html>"
 
 	usr << browse(dat, "window=players;size=640x480")
