@@ -190,20 +190,10 @@
 	if(reagentreference)	//Handle ingestion of any reagents (Note : Foods always have reagents)
 		playsound(eater, 'sound/items/eatfood.ogg', rand(10,50), 1)
 		if(reagentreference.total_volume)
-			reagentreference.reaction(eater, INGEST)
 			spawn() //WHY IS THIS SPAWN() HERE
 				if(gcDestroyed)
 					return
-				if(reagentreference.total_volume > bitesize)
-					/*
-					 * I totally cannot understand what this code supposed to do.
-					 * Right now every snack consumes in 2 bites, my popcorn does not work right, so I simplify it. -- rastaf0
-					var/temp_bitesize =  max(reagents.total_volume /2, bitesize)
-					reagents.trans_to(target, temp_bitesize)
-					*/
-					reagentreference.trans_to(eater, bitesize)
-				else
-					reagentreference.trans_to(eater, reagentreference.total_volume)
+				reagentreference.ingest(eater, min(bitesize, reagentreference.total_volume))
 				bitecount++
 				after_consume(eater, reagentreference)
 		return 1

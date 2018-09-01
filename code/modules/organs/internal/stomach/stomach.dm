@@ -38,7 +38,7 @@
 
 	// process contents of stomach, slowly moving reagents to bloodstream
 	for(var/datum/reagent/R in reagents_holder.reagents.reagent_list)
-		R.digest(owner)
+		R.digest(owner, src)
 
 	damage = Clamp(damage - 0.02, 0, INFINITY) // natural healing - ensures that damage is non-negative
 

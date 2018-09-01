@@ -377,9 +377,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			if(M.reagents.has_reagent(LEXORIN) || M_NO_BREATH in M.mutations || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
 				reagents.remove_any(REAGENTS_METABOLISM)
 			else
-				if(prob(25)) //So it's not an instarape in case of acid
-					reagents.reaction(M, INGEST)
-				reagents.trans_to(M, 1)
+				reagents.inhale(M, 1, prob(25)) //So it's not an instarape in case of acid
 		else //Else just remove some of the reagents
 			reagents.remove_any(REAGENTS_METABOLISM)
 	return

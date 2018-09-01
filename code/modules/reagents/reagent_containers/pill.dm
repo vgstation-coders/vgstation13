@@ -68,15 +68,10 @@
 		to_chat(user, "<span class='notice'>\The [target] is full!</span>")
 
 //OOP, HO!
-/obj/item/weapon/reagent_containers/pill/proc/ingest(mob/M as mob)
-	if(!reagents)
-		return
-	if(!M)
-		return
-	if (!src.is_empty())
-		reagents.reaction(M, INGEST)
-		reagents.trans_to(M, reagents.total_volume)
-	qdel(src)
+/obj/item/weapon/reagent_containers/pill/ingest(mob/M as mob)
+	if(..(M))
+		qdel(src)
+	
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Pills. END
@@ -275,11 +270,17 @@
 	if(!M)
 		return
 	var/timer = round(reagents.get_reagent_amount(SUGAR),1)
-	forceMove(M)
+	var/datum/organ/internal/stomach/S = M.get_stomach()
+	if(S)
+		forceMove(S) // God damn 4D chess your way to eating a death pill, removing your stomach, **and putting it into someone else to kill them**.
+	else
+		forceMove(M)
 	spawn(timer*30)
 		reagents.del_reagent(SUGAR)
-		reagents.reaction(M, INGEST)
-		reagents.trans_to(M, reagents.total_volume)
+		if(S)
+			reagents.trans_to(S.get_reagents(), reagents.total_volume)
+		else
+			..(M)
 		qdel(src)
 
 /obj/item/weapon/storage/pill_bottle/random

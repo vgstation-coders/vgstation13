@@ -349,15 +349,14 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		if(can_drink(user))
 			reagents.reaction(user, INGEST)
 			spawn(5)
-				if(reagents)
-					if(user.get_stomach())
-						var/datum/organ/internal/stomach/S = user.get_stomach()
-						reagents.trans_to(S.get_reagents(), amount_per_imbibe) // transfer to stomach
-					else if(istype(user, /mob/living/carbon/human))
-						reagents.trans_to(user, amount_per_imbibe / 4) // greatly reduced reagent absorption without a stomach
-					else
-						reagents.trans_to(user, amount_per_imbibe)
+				ingest(user, amount_per_imbibe)
 	return 1
+
+/obj/item/weapon/reagent_containers/proc/ingest(mob/target as mob, var/amount, var/react = 1, var/multiplier=1, var/preserve_data=1, var/log_transfer, var/whodunnit)
+	if(!reagents)
+		return FALSE
+	else
+		return reagents.ingest(target = target, amount = amount, multiplier = multiplier, preserve_data = preserve_data, log_transfer = log_transfer, whodunnit = whodunnit)
 
 /obj/item/weapon/reagent_containers/proc/can_drink(mob/user)
 	if (ishuman(user))
