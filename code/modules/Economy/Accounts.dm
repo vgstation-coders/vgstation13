@@ -64,8 +64,7 @@ var/global/datum/money_account/trader_account
 //the current ingame time (hh:mm) can be obtained by calling:
 //worldtime2text()
 
-/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db, var/wage_payout = 0)
-
+/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db, var/wage_payout = 0, var/security_pref = 1)
 
 	//create a new account
 	var/datum/money_account/M = new()
@@ -73,6 +72,7 @@ var/global/datum/money_account/trader_account
 	M.remote_access_pin = rand(1111, 9999)
 	M.money = starting_funds
 	M.wage_gain = wage_payout
+	M.security_level = security_pref
 
 	//create an entry in the account transaction log for when it was created
 	var/datum/transaction/T = new()

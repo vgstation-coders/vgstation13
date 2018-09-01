@@ -1421,6 +1421,8 @@
 #include "code\modules\migrations\SS13_Prefs\009-add-attackanim.dm"
 #include "code\modules\migrations\SS13_Prefs\010-add-random-body.dm"
 #include "code\modules\migrations\SS13_Prefs\011-add-flavor.dm"
+#include "code\modules\migrations\SS13_Prefs\012-add-pull-pref.dm"
+#include "code\modules\migrations\SS13_Prefs\013-add-bank-pref.dm"
 #include "code\modules\migrations\SS13_Prefs\_base.dm"
 #include "code\modules\mining\abandonedcrates.dm"
 #include "code\modules\mining\debug_shit.dm"

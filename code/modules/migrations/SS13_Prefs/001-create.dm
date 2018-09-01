@@ -23,6 +23,7 @@
 	`be_special`			TEXT,
 	`disabilities`			INTEGER,
 	`nanotrasen_relation`	TEXT,
+	`bank_security`			TEXT,
 	UNIQUE(player_ckey, player_slot)
 );"}
 	if(!hasTable("players"))
