@@ -351,9 +351,12 @@ Works together with spawning an observer, noted above.
 					U.client.images += image(tempHud,silicon_target,"hudmalai")
 	return 1
 
-/mob/proc/ghostize(var/flags = GHOST_CAN_REENTER)
+/mob/proc/ghostize(var/flags = GHOST_CAN_REENTER,var/deafmute = 0)
 	if(key && !(copytext(key,1,2)=="@"))
-		var/mob/dead/observer/ghost = new(src, flags)	//Transfer safety to observer spawning proc.
+		var/ghostype = /mob/dead/observer
+		if (deafmute)
+			ghostype = /mob/dead/observer/deafmute
+		var/mob/dead/observer/ghost = new ghostype(src, flags)	//Transfer safety to observer spawning proc.
 		ghost.timeofdeath = src.timeofdeath //BS12 EDIT
 		ghost.key = key
 		if(ghost.client && !ghost.client.holder && !config.antag_hud_allowed)		// For new ghosts we remove the verb from even showing up if it's not allowed.
@@ -463,7 +466,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(mind.current.key && copytext(mind.current.key,1,2)!="@")	//makes sure we don't accidentally kick any clients
 		to_chat(usr, "<span class='warning'>Another consciousness is in your body...It is resisting you.</span>")
 		return
-	if(mind.current.ajourn && mind.current.stat != DEAD) 	//check if the corpse is astral-journeying (it's client ghosted using a cultist rune).
+	if(mind.current.ajourn && istype(mind.current.ajourn,/obj/effect/rune_legacy) && mind.current.stat != DEAD) 	//check if the corpse is astral-journeying (it's client ghosted using a cultist rune).
 		var/obj/effect/rune_legacy/R = mind.current.ajourn	//whilst corpse is alive, we can only reenter the body if it's on the rune
 		var/datum/faction/cult/narsie/blood_cult = find_active_faction_by_member(mind.GetRole(LEGACY_CULTIST))
 		var/list/cultwords

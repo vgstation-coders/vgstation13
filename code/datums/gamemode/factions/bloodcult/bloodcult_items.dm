@@ -236,6 +236,7 @@ var/list/arcane_tomes = list()
 		else
 			to_chat(user, "<span class='warning'>This tome cannot contain any more talismans. Use or remove some first.</span>")
 
+
 #undef PAGE_FOREWORD
 #undef PAGE_LORE1
 
@@ -432,6 +433,12 @@ var/list/arcane_tomes = list()
 	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
 	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
 	overlays += I2
+
+/obj/item/weapon/talisman/attackby(var/obj/item/weapon/P, var/mob/user)
+	..()
+	if(P.is_hot())
+		ashify_item(user)
+		return 1
 
 ///////////////////////////////////////CULT BLADE////////////////////////////////////////////////
 
