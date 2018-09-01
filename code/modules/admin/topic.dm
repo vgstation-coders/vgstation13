@@ -446,18 +446,18 @@
 
 		if (href_list["move_escape_pod"] == "all")
 			for (var/pod in emergency_shuttle.escape_pods)
-				if (emergency_shuttle.escape_pods[pod] == href_list["move_destination"])
-					continue
 				emergency_shuttle.move_pod(pod,href_list["move_destination"])
 			log_admin("[key_name(usr)] moved all escape pods to [href_list["move_destination"]]")
 			message_admins("<span class='notice'>[key_name_admin(usr)] moved all escape pods to [href_list["move_destination"]]</span>", 1)
 		else
-			var/old_loc = emergency_shuttle.escape_pods[href_list["move_escape_pod"]]
-			emergency_shuttle.move_pod(href_list["move_escape_pod"],href_list["move_destination"])
-			var/area/pod_area = locate(text2path("/area/shuttle/escape_pod[href_list["move_escape_pod"]]/[emergency_shuttle.escape_pods[href_list["move_escape_pod"]]]"))
-			var/turf/T = pick(pod_area.area_turfs)
-			log_admin("[key_name(usr)] moved [pod_area.name] from [old_loc] to [href_list["move_destination"]]")
-			message_admins("<span class='notice'>[key_name_admin(usr)] moved <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[pod_area.name]</a> from [old_loc] to [href_list["move_destination"]]</span>", 1)
+			var/datum/shuttle/escape/S = locate(href_list["move_escape_pod"])
+			if(!emergency_shuttle.escape_pods.Find(S))
+				return
+			var/obj/docking_port/destination/D = S.current_port
+			emergency_shuttle.move_pod(S,href_list["move_destination"])
+			var/turf/T = get_turf(D)
+			log_admin("[key_name(usr)] moved [S.name] from [D.areaname] to [href_list["move_destination"]]")
+			message_admins("<span class='notice'>[key_name_admin(usr)] moved <a href='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[S.name]</a> from [D.areaname] to [href_list["move_destination"]]</span>", 1)
 		href_list["secretsadmin"] = "emergency_shuttle_panel"
 
 	else if(href_list["delay_round_end"])
@@ -3591,6 +3591,9 @@
 					"gremlins" = VERM_GREMLINS,
 					"bees" = VERM_BEES,
 					"hornets" = VERM_HORNETS,
+					"syphoners" = VERM_SYPHONER,
+					"greytide gremlins" = VERM_GREMTIDE,
+					"crabs" = VERM_CRABS,
 					)
 				var/ov = vermins[input("What vermin should infest the station?", "Vermin Infestation") in vermins]
 				var/ol = locations[input("Where should they spawn?", "Vermin Infestation") in locations]
@@ -3601,10 +3604,42 @@
 				infestation_event.override_location = ol
 				infestation_event.override_vermin = ov
 			if("hostile_infestation")
+				var/list/locations = list(
+					"RANDOM" = null,
+					"kitchen" = LOC_KITCHEN,
+					"atmospherics" = LOC_ATMOS,
+					"incinerator" = LOC_INCIN,
+					"chapel" = LOC_CHAPEL,
+					"library" = LOC_LIBRARY,
+					"hydroponics" = LOC_HYDRO,
+					"vault" = LOC_VAULT,
+					"technical storage" = LOC_TECH,
+					)
+				var/list/hostiles = list(
+					"RANDOM" = null,
+					"space bears" = MONSTER_BEAR,
+					"creatures" = MONSTER_CREATURE,
+					"xenos" = MONSTER_XENO,
+					"hivebots" = MONSTER_HIVEBOT,
+					"zombies" = MONSTER_ZOMBIE,
+					"skrites" = MONSTER_SKRITE,
+					"xeno empress" = MONSTER_SQUEEN,
+					"frogs" = MONSTER_FROG,
+					"goliaths" = MONSTER_GOLIATH,
+					"davids" = MONSTER_DAVID,
+					"megamadcrabs" = MONSTER_MADCRAB,
+					"spaghetti monster" = MONSTER_MEATBALLER,
+					"mutated cockroaches" = MONSTER_BIG_ROACH,
+					"cockroach queen" = MONSTER_ROACH_QUEEN,
+					)
+				var/om = hostiles[input("What hostile mob should infest the station?", "Hostile Infestation") in hostiles]
+				var/ol = locations[input("Where should they spawn?", "Hostile Infestation") in locations]
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","HI")
 				message_admins("[key_name_admin(usr)] has triggered an infestation of hostile creatures.", 1)
-				new /datum/event/hostile_infestation
+				var/datum/event/hostile_infestation/hostile_infestation_event = new()
+				hostile_infestation_event.override_location = ol
+				hostile_infestation_event.override_monster = om
 			if("mass_hallucination")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","MH")

@@ -49,6 +49,8 @@
 	var/flags = 0
 	var/density = 1 //(g/cm^3) Everything is water unless specified otherwise. round to 2dp
 	var/specheatcap = 1 //how much energy in joules it takes to heat this thing up by 1 degree (J/g). round to 2dp
+	var/digestion_rate = 1 // multiplier that affects reagents transfer from stomach to body. Higher means faster, lower means slower, 0 means the reagent stays in the stomach
+	var/overdose_includes_stomach = FALSE // if true, the volume of reagent in the stomach will count for overdose quantity
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
@@ -130,6 +132,23 @@
 			return
 	holder.remove_reagent(src.id, custom_metabolism) // If we aren't human, we don't have a liver, so just metabolize it the old fashioned way.
 
+// process the chemicals within the stomach, called by /datum/organ/internal/stomach in process() on all stomach contents
+// takes the mob as a mandatory argument
+// reagent damage to the stomach and threshold for stomach damage are optional arguments
+// if volume >= amount_for_damage then the stomach will take the specified amount of damage every time process() is called on the stomach (about once a second)
+// damage < 0 will heal the stomach
+/datum/reagent/proc/digest(var/mob/living/carbon/human/M, var/damage = 0, var/amount_for_damage = 0)
+	var/datum/organ/internal/stomach/S = M.get_stomach()
+	if(!S)
+		return // can't digest without a stomach
+
+	// deal damage - damage < 0 means it will heal the stomach
+	if(volume >= amount_for_damage)
+		S.damage += damage
+
+	// move part of the stomach contents to the body
+	S.get_reagents().trans_id_to(M, id, (volume / S.current_volume) * digestion_rate * S.base_intake_rate)
+
 /datum/reagent/proc/on_mob_life(var/mob/living/M, var/alien)
 	set waitfor = 0
 
@@ -144,7 +163,12 @@
 			// TODO: HONORABLE_* checks.
 			return 1
 
-	if((overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)) //Too much chems, or been in your system too long
+	var/datum/organ/internal/stomach/S = M.get_stomach()
+	var/volume_in_stomach = 0 // volume in stomach counts for overdose amounts
+	if(S && overdose_includes_stomach)
+		volume_in_stomach = S.get_reagents().get_reagent_amount(id)
+
+	if((overdose_am && (volume + volume_in_stomach) >= overdose_am) || (overdose_tick && tick >= overdose_tick)) //Too much chems, or been in your system too long
 		on_overdose(M)
 
 /datum/reagent/proc/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
@@ -578,6 +602,9 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.49033
 	specheatcap = 0.55536
+
+/datum/reagent/anti_toxin/digest(var/mob/living/carbon/human/M)
+	..(M, damage = 0.1, amount_for_damage = 15)
 
 /datum/reagent/anti_toxin/on_mob_life(var/mob/living/M)
 
@@ -2045,6 +2072,9 @@
 					H.update_inv_shoes(0)
 		M.clean_blood()
 
+/datum/reagent/space_cleaner/digest(var/mob/living/carbon/human/M)
+	..(M, damage = 1)
+
 /datum/reagent/space_cleaner/bleach
 	name = "Bleach"
 	id = BLEACH
@@ -2631,6 +2661,9 @@
 	density = 1.92
 	specheatcap = 5.45
 
+/datum/reagent/imidazoline/digest(var/mob/living/carbon/human/M)
+	..(M, damage = -0.5)
+
 /datum/reagent/imidazoline/on_mob_life(var/mob/living/M)
 
 	if(..())
@@ -3175,10 +3208,12 @@
 
 	if(..())
 		return 1
+	if(M.losebreath>10)
+		M.losebreath = max(10, M.losebreath - 5)
 	if(!iscarbon(M))
-		return //We can't do anything for you
+		return //We can't do anything else for you
 	var/mob/living/carbon/C = M
-	if(C.isInCrit())
+	if(C.health < config.health_threshold_crit + 10)
 		C.adjustToxLoss(-2 * REM)
 		C.heal_organ_damage(0, 2 * REM)
 
@@ -3232,6 +3267,7 @@
 	color = "#3E3959" //rgb: 62, 57, 89
 	density = 236.6
 	specheatcap = 199.99
+	digestion_rate = 100
 
 //Great healing powers. Metabolizes extremely slowly, but gets used up when it heals damage.
 //Dangerous in amounts over 5 units, healing that occurs while over 5 units adds to a counter. That counter affects gib chance. Guaranteed gib over 20 units.
@@ -3247,6 +3283,7 @@
 	var/percent_machine = 0
 	density = 96.64
 	specheatcap = 199.99
+	digestion_rate = 100
 
 /datum/reagent/mednanobots/on_mob_life(var/mob/living/M)
 
@@ -3341,6 +3378,7 @@
 	data = 1 //Used as a tally
 	density = 134.21
 	specheatcap = 5143.18
+	digestion_rate = 100
 
 /datum/reagent/comnanobots/reagent_deleted()
 
@@ -3522,10 +3560,7 @@
 			M.confused += 2
 			M.drowsyness += 2
 		if(2 to 80)
-			M.confused++
-			M.drowsyness++
-			if(volume >= 10)
-				M.sleeping++
+			M.sleeping++
 		if(81 to INFINITY)
 			M.sleeping++
 			M.toxloss += (data - 50)
@@ -5209,6 +5244,215 @@
 					L.take_damage(100, 0)
 	data++
 
+/datum/reagent/ethanol/karmotrine
+	name = "Karmotrine"
+	id = KARMOTRINE
+	description = "Served exclusively by waifu bartenders."
+	color = "#66ffff" //rgb(102, 255, 255)
+	blur_start = 40 //Blur very early
+
+/datum/reagent/ethanol/smokyroom
+	name = "Smoky Room"
+	id = SMOKYROOM
+	description = "It was the kind of cool, black night that clung to you like something real... a black, tangible fabric of smoke, deceit, and murder. I had finished working my way through the fat cigars for the day - or at least told myself that to feel the sense of accomplishment for another night wasted on little more than chasing cheating dames and abusive husbands. It was enough to drive a man to drink... and it did. I sauntered into the cantina and wordlessly nodded to the barman. He knew my poison. I was a regular, after all. By the time the night was over, there would be another empty bottle and a case no closer to being cracked. Then I saw her, like a mirage across a desert, or a striken starlet on stage across a smoky room."
+	color = "#664300"
+
+/datum/reagent/ethanol/smokyroom/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(prob(4)) //Small chance per tick to some noir stuff and gain NOIRBLOCK if we don't have it.
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(!(M_NOIR in H.mutations))
+				H.mutations += M_NOIR
+				H.dna.SetSEState(NOIRBLOCK,1)
+				genemutcheck(H, NOIRBLOCK, null, MUTCHK_FORCED)
+
+		M.say(pick("The streets were heartless and cold, like the fickle 'love' of some hysterical dame.",
+			"The lights, the smoke, the grime... the city itself seemed alive that day. Was it the pulse that made me think so? Or just all the blood?",
+			"I caressed my .44 magnum. Ever since Jimmy bit it against the Two Bit Gang, the gun and its six rounds were the only partner I could trust.",
+			"The whole reason I took the case to begin with was trouble, in the shape of a pinup blonde with shanks that’d make you dizzy. Wouldn’t give her name, said she was related to the captain",
+			"Judging by the boys at the lab, the perp took a sander to the tooth profiles, but did a sloppy job. Lab report came in early this morning. Guess my vacation is on pause.",
+			"The blacktop was baking that day, and the broads working 19th and Main were wearing even less than usual.",
+			"The young dame was pride and joy of the station. Little did she know that looks can breed envy... or worse.",
+			"The new case reeked of the same bad blood as that now half-forgotten case of the turncoat chef. A recipe for murder.",
+			"I dragged myself out of my drink-addled torpor and called to the shadowy figure at my door - come in - because if I didn't take a new case I'd be through my bottle by noon.",
+			"Nursing my scotch, I turned my gaze upward and spotted trouble in the form of a bruiser with brass knuckles across the smoke-filled nightclub's cabaret.",
+			"I didn't even know who she was. Just stumbled across a girl and four toughs. Took her home and the mayor named me a hero.",
+			"She was a flapper and a swinger, but she was also in some hot water. Told me she'd make it worth my while if I could get her out of it. I told her that I wanted payment in cold hard simoleons.",
+			"What he did just didn't compare. He killed an innocent person. What drives a man to kill in cold blood? I didn't want to hang around and find out.",
+			"I breathed in the smoke of the underground speakeasy like a fish breathes water. The brass at the precinct couldn't understand: I was in my element.",
+			"I put enough holes in the man to drop a goliath, but he kept coming. Some kind of blood-fueled hatred. The adrenaline of a dying man can snap bones in one last moment of spite. I can still see the anger in those dying eyes."))
+
+/datum/reagent/ethanol/rags_to_riches
+	name = "Rags to Riches"
+	id = RAGSTORICHES
+	description = "The Spaceman Dream, incarnated as a cocktail."
+	color = "#664300"
+	dupeable = FALSE
+
+/datum/reagent/ethanol/rags_to_riches/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(!M.loc || prob(70))
+		return
+	playsound(get_turf(M), pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
+	dispense_cash(rand(5,15),get_turf(M))
+
+/datum/reagent/ethanol/bad_touch
+	name = "Bad Touch"
+	id = BAD_TOUCH
+	description = "Somewhere on the scale of bad touches between 'fondled by clown' and 'brushed by supermatter shard'."
+	color = "#664300"
+
+/datum/reagent/ethanol/bad_touch/on_mob_life(var/mob/living/M) //Hallucinate and take hallucination damage.
+	if(..())
+		return 1
+	M.hallucination = max(M.hallucination, 10)
+	M.halloss += 5
+
+/datum/reagent/ethanol/electric_sheep
+	name = "Electric Sheep"
+	id = ELECTRIC_SHEEP
+	description = "This is what robots dream about."
+	color = "#664300"
+	custom_metabolism = 1
+
+/datum/reagent/ethanol/electric_sheep/on_mob_life(var/mob/living/M) //If it's human, shoot sparks every tick! If MoMMI, cause alcohol effects.
+	if(..())
+		return 1
+	if(ishuman(M))
+		spark(M, 5, FALSE)
+
+/datum/reagent/ethanol/electric_sheep/reaction_mob(var/mob/living/M)
+	if(isrobot(M))
+		M.Jitter(20)
+		M.Dizzy(20)
+		M.druggy = max(M.druggy, 60)
+
+/datum/reagent/ethanol/suicide
+	name = "Suicide"
+	id = SUICIDE
+	description = "It's only tolerable because of the added alcohol."
+	color = "#664300"
+	custom_metabolism = 2
+
+/datum/reagent/ethanol/suicide/on_mob_life(var/mob/living/M)  //Instant vomit. Every tick.
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.vomit(0,1)
+
+/datum/reagent/ethanol/metabuddy
+	name = "Metabuddy"
+	id = METABUDDY
+	description = "Ban when?"
+	color = "#664300"
+	var/global/list/datum/mind/metaclub = list()
+
+/datum/reagent/ethanol/metabuddy/on_mob_life(var/mob/living/L)
+	if(..())
+		return 1
+	var/datum/mind/LM = L.mind
+	if(!metaclub.Find(LM) && LM)
+		metaclub += LM
+		var/datum/mind/new_buddy = LM
+		for(var/datum/mind/M in metaclub) //Update metaclub icons
+			if(M.current.client && new_buddy.current && new_buddy.current.client)
+				var/imageloc = new_buddy.current
+				var/imagelocB = M.current
+				if(istype(M.current.loc,/obj/mecha))
+					imageloc = M.current.loc
+					imagelocB = M.current.loc
+				var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "metaclub")
+				I.plane = REV_ANTAG_HUD_PLANE
+				M.current.client.images += I
+				var/image/J = image('icons/mob/mob.dmi', loc = imagelocB, icon_state = "metaclub")
+				J.plane = REV_ANTAG_HUD_PLANE
+				new_buddy.current.client.images += J
+
+/datum/reagent/ethanol/waifu
+	name = "Waifu"
+	id = WAIFU
+	description = "Don't drink more than one waifu if you value your laifu."
+	color = "#664300"
+
+/datum/reagent/ethanol/waifu/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(M.gender == MALE)
+		M.setGender(FEMALE)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!M.is_wearing_item(/obj/item/clothing/under/schoolgirl))
+			var/turf/T = get_turf(H)
+			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = MOB_PLANE)
+			H.visible_message("<span class='warning'>[H] dons her magical girl outfit in a burst of light!</span>")
+			var/obj/item/clothing/under/schoolgirl/S = new /obj/item/clothing/under/schoolgirl(get_turf(H))
+			if(H.w_uniform)
+				H.u_equip(H.w_uniform, 1)
+			H.equip_to_slot(S, slot_w_uniform)
+			holder.remove_reagent(WAIFU,4) //Generating clothes costs extra reagent
+	M.regenerate_icons()
+
+/datum/reagent/ethanol/scientists_serendipity
+	name = "Scientist's Serendipity"
+	id = SCIENTISTS_SERENDIPITY
+	description = "Go ahead and blow the research budget on drinking this." //Can deconstruct a glass with this for loadsoftech
+	color = "#664300"
+	custom_metabolism = 0.01
+	dupeable = FALSE
+
+/datum/reagent/ethanol/beepskyclassic
+	name = "Beepsky Classic"
+	id = BEEPSKY_CLASSIC
+	description = "Some believe that the more modern Beepsky Smash was introduced to make this drink more popular."
+	color = "#664300" //rgb: 102, 67, 0
+	custom_metabolism = 2 //Ten times the normal rate.
+
+/datum/reagent/ethanol/beepskyclassic/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
+			playsound(get_turf(H), 'sound/voice/halt.ogg', 100, 1, 0)
+		else
+			H.Knockdown(10)
+			playsound(get_turf(H), 'sound/weapons/Egloves.ogg', 100, 1, -1)
+
+/datum/reagent/ethanol/spiders
+	name = "Spiders"
+	id = SPIDERS
+	description = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA."
+	color = "#666666" //rgb(102, 102, 102)
+	custom_metabolism = 0.01 //Spiders really 'hang around'
+
+/datum/reagent/ethanol/spiders/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.take_organ_damage(REM, 0) //Drinking a glass of live spiders is bad for you.
+	if(holder.get_reagent_amount(SPIDERS)>=4) //The main reason we need to have a minimum cost rather than just high custom metabolism is so that someone can't give themselves an IV of spiders for "fun"
+		new /mob/living/simple_animal/hostile/giant_spider/spiderling(get_turf(M))
+		holder.remove_reagent(SPIDERS,4)
+		M.emote("scream", , , 1)
+		M.visible_message("<span class='warning'>[M] recoils as a spider emerges from \his mouth!</span>")
+
+/datum/reagent/ethanol/weedeater
+	name = "Weed Eater"
+	id = WEED_EATER
+	description = "The vegetarian equivalant of a snake eater."
+	color = "#009933" //rgb(0, 153, 51)
+
+/datum/reagent/ethanol/weedeater/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	var/spell = /spell/targeted/genetic/eat_weed
+	if(!(locate(spell) in M.spell_list))
+		to_chat(M, "<span class='notice'>You feel hungry like the diona.</span>")
+		M.add_spell(spell)
+
 /datum/reagent/ethanol/deadrum
 	name = "Deadrum"
 	id = RUM
@@ -6148,6 +6392,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	sport = 5
 	color = "#CCFF66" //rgb: 204, 255, 51
 	custom_metabolism =  0.01
+	custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER/5
 
 /datum/reagent/antidepressant/citalopram
 	name = "Citalopram"
@@ -6259,6 +6504,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	reagent_state = LIQUID
 	custom_metabolism = 0
 	color = "#B0B0B0"
+	digestion_rate = 2
 
 /datum/reagent/blockizine/on_mob_life(var/mob/living/carbon/human/H)
 	if(..())
@@ -6280,6 +6526,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Just looking at this liquid makes you feel tranquil and peaceful. You aren't sure if you want to drink any however."
 	reagent_state = LIQUID
 	color = "#12A7C9"
+
+/datum/reagent/fishbleach/digest(var/mob/living/carbon/human/M)
+	..(M, damage = 1)
 
 /datum/reagent/fishbleach/on_mob_life(var/mob/living/carbon/human/H)
 	if(..())
@@ -6435,6 +6684,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Petritricin is a venom produced by cockatrices. The extraction process causes a major potency loss, but a right dose of this can still petrify somebody."
 	color = "#002000" //rgb: 0, 32, 0
 	dupeable = FALSE
+	digestion_rate = 2
 
 	var/minimal_dosage = 1 //At least 1 unit is needed for petriication
 

@@ -188,28 +188,27 @@ Auto Patrol: []"},
 			src.declare_arrests = !src.declare_arrests
 			src.updateUsrDialog()
 
-/obj/machinery/bot/secbot/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/bot/secbot/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
-		if(src.allowed(user) && !open && !emagged)
-			src.locked = !src.locked
-			to_chat(user, "Controls are now [src.locked ? "locked." : "unlocked."]")
+		if(allowed(user) && !open && !emagged)
+			locked = !locked
+			to_chat(user, "Controls are now [locked ? "locked." : "unlocked."]")
+			updateUsrDialog()
 		else
 			if(emagged)
 				to_chat(user, "<span class='warning'>ERROR</span>")
-			if(open)
+			else if(open)
 				to_chat(user, "<span class='warning'>Please close the access panel before locking it.</span>")
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 	else
-		..()
-	if(iswelder(W) && user.a_intent != "harm") // Any intent but harm will heal, so we shouldn't get angry.
-		return
-	if(!isscrewdriver(W) && (W.force) && (!target) ) // Added check for welding tool to fix #2432. Welding tool behavior is handled in superclass.
-		threatlevel = user.assess_threat(src)
-		threatlevel += PERP_LEVEL_ARREST_MORE
-		if(threatlevel > 0)
-			target = user
-			mode = SECBOT_HUNT
+		. = ..()
+		if(. && !target)
+			threatlevel = user.assess_threat(src)
+			threatlevel += PERP_LEVEL_ARREST_MORE
+			if(threatlevel > 0)
+				target = user
+				mode = SECBOT_HUNT
 
 /obj/machinery/bot/secbot/kick_act(mob/living/H)
 	..()

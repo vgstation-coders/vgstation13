@@ -179,6 +179,7 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 	desc = "Large sheets made out of brass."
 	singular_name = "brass sheet"
 	icon_state = "sheet-brass"
+	sheettype = "clockwork"
 	flags = FPRINT
 	origin_tech = Tc_ANOMALY + "=1"
 	starting_materials = list(MAT_BRASS = CC_PER_SHEET_METAL)

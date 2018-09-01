@@ -1657,6 +1657,23 @@
 	reagents.add_reagent(PSILOCYBIN, 3)
 	bitesize = 3
 
+/obj/item/weapon/reagent_containers/food/snacks/jectie
+	name = "jectie"
+	desc = "<font color='red'><B>The jectie has failed!</B></font color>"
+	icon_state = "jectie_red"
+/obj/item/weapon/reagent_containers/food/snacks/jectie/New()
+	..()
+	if(prob(40)) //approximate solo antag winrate
+		icon_state = "jectie_green"
+		desc = "<font color='green'><B>The jectie was successful!</B></font color>"
+		reagents.add_reagent(GREENTEA, 18)
+		reagents.add_reagent(NUTRIMENT, 6)
+		bitesize = 4
+	else
+		reagents.add_reagent(REDTEA, 9)
+		reagents.add_reagent(NUTRIMENT, 3)
+		bitesize = 4
+
 /obj/item/weapon/reagent_containers/food/snacks/poppypretzel
 	name = "Poppy pretzel"
 	desc = "It's all twisted up!"

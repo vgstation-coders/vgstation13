@@ -757,7 +757,7 @@
 	src.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 	..()
 
-/obj/item/projectile/bullet/liquid_blob/to_bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/bullet/liquid_blob/on_hit(atom/A as mob|obj|turf|area)
 	if(!A)
 		return
 	..()
