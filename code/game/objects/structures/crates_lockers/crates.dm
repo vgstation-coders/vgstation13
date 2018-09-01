@@ -15,6 +15,7 @@
 	var/rigged = 0
 	var/sound_effect_open = 'sound/machines/click.ogg'
 	var/sound_effect_close = 'sound/machines/click.ogg'
+	has_lock_type = /obj/structure/closet/crate/secure
 
 /obj/structure/closet/pcrate
 	name = "plastic crate"
@@ -266,6 +267,8 @@
 	broken = 0
 	locked = 1
 	health = 1000
+	has_lock_type = null
+	has_lockless_type = /obj/structure/closet/crate/
 
 /obj/structure/closet/crate/secure/anti_tamper
 	name = "Extra-secure crate"
@@ -514,6 +517,10 @@
 		src.broken = 1
 		to_chat(user, "<span class='notice'>You unlock \the [src].</span>")
 		return
+	else if(istype(W, /obj/item/weapon/crowbar) && !opened && !locked && src.has_lockless_type)
+		remove_lock()
+		to_chat(user, "<span class='notice'>You remove \the [src]'s lock.</span>")
+		return
 	return ..()
 
 /obj/structure/closet/crate/attack_paw(mob/user as mob)
@@ -522,6 +529,10 @@
 /obj/structure/closet/crate/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(opened)
 		return ..()
+	else if(istype(W, /obj/item/weapon/screwdriver) && src.has_lock_type)//testing with crowbars for now, will use circuits later
+		add_lock()
+		to_chat(user, "<span class='notice'>You add a lock to \the [src].</span>")
+		return
 	else if(istype(W, /obj/item/stack/package_wrap))
 		return
 	else if(istype(W, /obj/item/stack/cable_coil))

@@ -22,6 +22,9 @@
 	var/breakout_time = 2 //2 minutes by default
 	var/sound_file = 'sound/machines/click.ogg'
 
+	var/has_lock_type = /obj/structure/closet/secure_closet //The type this closet should be converted to if made ID secured
+	var/has_lockless_type = null //The type this closet should be converted to if made no longer ID secured
+
 	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 	w_type = RECYK_METAL
 	ignoreinvert = 1
@@ -183,6 +186,33 @@
 		return src.close()
 	return src.open()
 
+/obj/structure/closet/proc/add_lock()
+	if(has_lock_type)
+		var/obj/structure/closet/new_closet
+		new_closet = change_type(has_lock_type)
+		//if(new_closet)//Ensure it's not null
+		//code for getting access from a circuitboard goes here. must investigate
+
+/obj/structure/closet/proc/remove_lock()
+	if(has_lockless_type)
+		var/obj/structure/closet/new_closet
+		new_closet = change_type(has_lockless_type)
+		//if(new_closet)//Ensure it's not null
+		//code to get a circuitboard with the correct access (or the board itself) goes here
+
+// Might come handy for painting crates and lockers some day.
+// Using it to change from secure to non secure lockers for now
+/obj/structure/closet/proc/change_type(var/new_type)
+	if(new_type)//Ensure it's not null
+		var/obj/structure/closet/new_closet = new new_type
+		new_closet.contents = src.contents
+		new_closet.loc = src.loc
+		new_closet.welded = src.welded
+		new_closet.fingerprints = src.fingerprints
+		new_closet.fingerprintshidden = src.fingerprintshidden
+		qdel(src)
+		return new_closet
+
 // this should probably use dump_contents()
 /obj/structure/closet/ex_act(severity)
 	switch(severity)
@@ -308,6 +338,10 @@
 		src.update_icon()
 		for(var/mob/M in viewers(src))
 			M.show_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
+	else if(istype(W, /obj/item/weapon/crowbar) && src.has_lock_type) //testing with crowbars for now, will use circuits later
+		add_lock()
+		to_chat(user, "<span class='notice'>You add a lock to \the [src].</span>")
+		return
 	else if(!place(user, W))
 		src.attack_hand(user)
 	return
