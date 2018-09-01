@@ -365,10 +365,16 @@ var/const/POS_HEADER = {"<html>
 	return "<center><b>Waiting for Credit</b><br /><a href=\"?src=\ref[src];act=Reset\">Cancel</a></center>"
 
 /obj/machinery/pos/proc/SettingsScreen()
+	if(!linked_account)
+		// Should not happen, but it happens.
+		linked_account = station_account
 	var/dat={"<form action="?src=\ref[src]" method="get">
 		<input type="hidden" name="src" value="\ref[src]" />
 		<fieldset>
 			<legend>Account Settings</legend>
+			<div>
+				<b>Name of Account:</b> [linked_account.owner_name]
+			</div>
 			<div>
 				<b>Payable Account:</b> <input type="textbox" name="payableto" value="[linked_account.account_number]" />
 			</div>
@@ -438,7 +444,7 @@ var/const/POS_HEADER = {"<html>
 	onclose(user, "pos")
 	return
 
-/obj/machinery/pos/scan_card(var/obj/item/weapon/card/id/C)
+/obj/machinery/pos/scan_card(var/obj/item/weapon/card/C)
 	var/remaining_credits_needed = credits_needed - credits_held
 	var/area/this_area = get_area(src)
 	var/pos_name = "[this_area.name] POS#[id]"
@@ -459,6 +465,8 @@ var/const/POS_HEADER = {"<html>
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"NOT ENOUGH FUNDS\" on the screen.</span>","You hear a buzz.")
 		if(CARD_CAPTURE_ACCOUNT_DISABLED)
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"ACCOUNT DISABLED\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_ACCOUNT_DISABLED_MERCHANT)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"MERCHANT ACCOUNT DISABLED\" on the screen.</span>","You hear a buzz.")
 		if(CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO)
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"BAD ACCOUNT/PIN COMBO\" on the screen.</span>","You hear a buzz.")
 		if(CARD_CAPTURE_FAILURE_SECURITY_LEVEL)
@@ -572,9 +580,9 @@ var/const/POS_HEADER = {"<html>
 	src.attack_hand(usr)
 
 /obj/machinery/pos/attackby(var/atom/movable/A, var/mob/user)
-	if(istype(A,/obj/item/weapon/card/id))
-		var/obj/item/weapon/card/id/I = A
-		if(!logged_in)
+	if(istype(A,/obj/item/weapon/card))
+		var/obj/item/weapon/card/id/C = A
+		if(istype(C,/obj/item/weapon/card/id) && !logged_in)
 			// /atom/mob/visible_message(all_message, self_message, blind_message,...)
 			user.visible_message("<span class='notice'>The machine beeps, and logs [user] in.</span>", "<span class='notice'>The machine beeps, and logs you in.</span>", "You hear a beep.")
 			logged_in = user
@@ -587,7 +595,7 @@ var/const/POS_HEADER = {"<html>
 				visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
 				flick(src,"pos-error")
 				return
-			connect_account(user, I)
+			connect_account(user, C)
 	else if(istype(A,/obj/item/weapon/spacecash))
 		if(!linked_account)
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")

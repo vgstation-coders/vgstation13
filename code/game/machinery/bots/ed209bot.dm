@@ -219,28 +219,28 @@ Auto Patrol: []"},
 			src.declare_arrests = !src.declare_arrests
 			src.updateUsrDialog()
 
-/obj/machinery/bot/ed209/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/bot/ed209/attackby(obj/item/weapon/W, mob/user)
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
-		if (src.allowed(user) && !open && !emagged)
-			src.locked = !src.locked
+		if (allowed(user) && !open && !emagged)
+			locked = !locked
 			to_chat(user, "<span class='notice'>Controls are now [src.locked ? "locked" : "unlocked"].</span>")
+			updateUsrDialog()
 		else
 			if(emagged)
 				to_chat(user, "<span class='warning'>ERROR</span>")
-			if(open)
+			else if(open)
 				to_chat(user, "<span class='warning'>Please close the access panel before locking it.</span>")
 			else
 				to_chat(user, "<span class='notice'>Access denied.</span>")
 	else
-		..()
-		if (!isscrewdriver(W) && (!src.target))
-			if(hasvar(W,"force") && W.force)//If force is defined and non-zero
-				threatlevel = user.assess_threat(src)
-				threatlevel += PERP_LEVEL_ARREST_MORE
-				if(threatlevel > 0)
-					src.target = user
-					src.shootAt(user)
-					src.mode = SECBOT_HUNT
+		. = ..()
+		if (. && !target)
+			threatlevel = user.assess_threat(src)
+			threatlevel += PERP_LEVEL_ARREST_MORE
+			if(threatlevel > 0)
+				target = user
+				shootAt(user)
+				mode = SECBOT_HUNT
 
 /obj/machinery/bot/ed209/kick_act(mob/living/H)
 	..()

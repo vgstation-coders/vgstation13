@@ -151,18 +151,19 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 			to_chat(usr, "<span class='notice'>You press the weird button.</span>")
 			src.updateUsrDialog()
 
-/obj/machinery/bot/cleanbot/attackby(obj/item/weapon/W, mob/user as mob)
+/obj/machinery/bot/cleanbot/attackby(obj/item/weapon/W, mob/user)
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
-		if(src.allowed(usr) && !open && !emagged)
-			src.locked = !src.locked
-			to_chat(user, "<span class='notice'>You [ src.locked ? "lock" : "unlock"] the [src] behaviour controls.</span>")
+		if(allowed(usr) && !open && !emagged)
+			locked = !locked
+			to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] [src]'s behaviour controls.</span>")
+			updateUsrDialog()
 		else
 			if(emagged)
 				to_chat(user, "<span class='warning'>ERROR</span>")
-			if(open)
+			else if(open)
 				to_chat(user, "<span class='warning'>Please close the access panel before locking it.</span>")
 			else
-				to_chat(user, "<span class='notice'>This [src] doesn't seem to respect your authority.</span>")
+				to_chat(user, "<span class='notice'>[src] doesn't seem to respect your authority.</span>")
 	else
 		return ..()
 
@@ -354,19 +355,20 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	var/armed = 0
 
 /obj/machinery/bot/cleanbot/roomba/attackby(var/obj/item/W, mob/user)
-	..()
-	if(istype(W,/obj/item/weapon/kitchen/utensil/fork) && !armed)
+	if(istype(W,/obj/item/weapon/kitchen/utensil/fork) && !armed && user.a_intent != I_HURT)
 		if(user.drop_item(W))
 			qdel(W)
 			to_chat(user, "<span class='notice'>You attach \the [W] to \the [src]. It looks increasingly concerned about its current situation.</span>")
 			armed++
-	else if(istype(W, /obj/item/weapon/lighter) && armed == 1)
+	else if(istype(W, /obj/item/weapon/lighter) && armed == 1 && user.a_intent != I_HURT)
 		if(user.drop_item(W))
 			qdel(W)
 			to_chat(user, "<span class='notice'>You attach \the [W] to \the [src]. It appears to roll its sensor in disappointment before carrying on with its work.</span>")
 			armed++
 			icon_state = "roombot_battle[on]"
 			icon_initial = "roombot_battle"
+	else
+		. = ..()
 
 /obj/machinery/bot/cleanbot/roomba/Crossed(atom/A)
 	if(isliving(A))

@@ -560,6 +560,9 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/goliath/david/dave
 	name = "Dave"
 	desc = "As the engineering crew decided where in the asteroid to build the station, they followed a small crevice where he was eventually found. Nobody knows how this little guy got separated from his family or why he became so attached to the crew that found him."
+	response_help  = "pets"
+	response_disarm = "pokes"
+	response_harm   = "kicks"
 	gender = MALE
 	faction = "neutral"
 	maxHealth = 100
@@ -572,6 +575,27 @@ obj/item/asteroid/basilisk_hide/New()
 	can_butcher = FALSE
 	ranged = TRUE
 	retreat_distance = 1 //Unlike normal davids, dave will kite its foes, or at least try to. REMEMBER THE BASICS OF CQC
+
+//Stolen from corgi code
+/mob/living/simple_animal/hostile/asteroid/goliath/david/dave/attack_hand(mob/living/carbon/human/M)
+	. = ..()
+	react_to_touch(M)
+
+/mob/living/simple_animal/hostile/asteroid/goliath/david/dave/proc/react_to_touch(mob/M)
+	var/list/responses_good = list("bleats happily.", "rumbles affectionately.", "emits a content crackle.")
+	var/list/responses_bad = list("whimpers.", "lets out an upset gurgle.")
+
+	if(M && !isUnconscious())
+		switch(M.a_intent)
+			if(I_HELP)
+				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+				heart.plane = ABOVE_HUMAN_PLANE
+				flick_overlay(heart, list(M.client), 2 SECONDS)
+				emote("me", EMOTE_AUDIBLE, pick(responses_good))
+				//calm down when petted.
+				LoseAggro()
+			if(I_HURT)
+				emote("me", EMOTE_AUDIBLE, pick(responses_bad))
 
 /mob/living/simple_animal/hostile/asteroid/magmaw
 	name = "magmaw"
@@ -779,37 +803,49 @@ obj/item/asteroid/basilisk_hide/New()
 	new /obj/structure/boulder(src.loc)
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/boss/MoveToTarget()
-	if(!charging)
-		..()
-
-/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/OpenFire(target)
 	if(charging)
 		return
-	var/turf/T = get_turf(target)
+	..()
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/Goto(var/target, var/delay, var/minimum_distance)
+	if(charging && !isturf(target))
+		return
+	..()
+
+/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/OpenFire(target)
+	set waitfor = FALSE
+	if(charging)
+		return
+	walk(src, 0)
+	var/distance = get_dist(src, target)+rand(1,4)
+	var/turf/T = get_ranged_target_turf(target, get_dir(src, target), distance)
 	var/frustration = 0
 	ranged_cooldown = ranged_cooldown_cap
 	visible_message("<span class = 'warning'>\The [src] charges at \the [target]!</span>")
 	charging = TRUE
-	move_to_delay = 5
-	while(get_turf(src) != T || frustration < 5)
-		step_towards(src, T)
+	move_to_delay = 3
+	set_glide_size(DELAY2GLIDESIZE(move_to_delay))
+	while(get_turf(src) != T && frustration < distance)
+		for(var/mob/living/M in view(src))
+			if(!M.client)
+				continue
+			var/int_distance = get_dist(M, src)
+			shake_camera(M, 5, 2/int_distance)
+		step_towards(src, T, 3)
 		frustration++
 		sleep(move_to_delay)
 
 	charging = FALSE
 	move_to_delay = initial(move_to_delay)
+	set_glide_size(DELAY2GLIDESIZE(move_to_delay))
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/boss/to_bump(atom/A)
 	..()
 	if(charging && istype(A, /mob/living))
 		var/mob/living/M = A
-		var/turf/T = get_turf(src)
 		UnarmedAttack(M)
 		visible_message("<span class = 'warning'>\The [src] swats [M] aside!</span>")
-
-		var/turf/target_turf
+		var/turf/T = get_ranged_target_turf(M, get_dir(src,M), size)
 		if(istype(T, /turf/space)) // if ended in space, then range is unlimited
-			target_turf = get_edge_target_turf(T, dir)
-		else
-			target_turf = get_ranged_target_turf(T, dir, size)
-		M.throw_at(target_turf,100,move_to_delay)
+			T = get_edge_target_turf(M, dir)
+		M.throw_at(T,100,move_to_delay)

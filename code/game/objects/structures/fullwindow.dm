@@ -154,6 +154,23 @@
 	health = 30
 	sheet_type = /obj/item/stack/sheet/glass/rglass //Ditto above
 
+/obj/structure/window/full/reinforced/clockwork
+	name = "brass window"
+	desc = "A paper-thin pane of translucent yet reinforced brass."
+	icon_state = "clockworkwindow0"
+	base_state = "clockworkwindow"
+	shardtype = null
+	sheet_type = /obj/item/stack/sheet/brass
+	reinforcetype = /obj/item/stack/sheet/ralloy
+	sheetamount = 4
+	health = 80
+
+/obj/structure/window/full/reinforced/clockwork/update_icon()
+	return
+
+/obj/structure/window/full/reinforced/clockwork/cultify()
+	return
+
 #undef WINDOWLOOSE
 #undef WINDOWLOOSEFRAME
 #undef WINDOWUNSECUREFRAME

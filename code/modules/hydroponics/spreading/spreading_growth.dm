@@ -58,6 +58,9 @@
 	if(prob(80))
 		age++
 
+	if(harvest && (seed.harvest_repeat == 2))
+		autoharvest()
+
 	if(!harvest && prob(3) && age > mature_time + seed.production)
 		harvest = 1
 

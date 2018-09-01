@@ -212,14 +212,14 @@
 
 			var/move_to_z = src.z
 
-			// Prevent MoMMIs from leaving the derelict.
-			for(var/mob/living/silicon/robot/mommi in contents_brought)
-				if(mommi.locked_to_z != 0)
-					if(src.z == mommi.locked_to_z)
+			// Prevent MoMMIs from leaving the derelict and to ensure Exile Implants work properly.
+			for(var/mob/living/L in contents_brought)
+				if(L.locked_to_z != 0)
+					if(src.z == L.locked_to_z)
 						locked_to_current_z = map.zMainStation
 					else
-						to_chat(mommi, "<span class='warning'>You find your way back.</span>")
-						move_to_z = mommi.locked_to_z
+						to_chat(L, "<span class='warning'>You find your way back.</span>")
+						move_to_z = L.locked_to_z
 
 			var/safety = 1
 

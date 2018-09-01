@@ -116,7 +116,7 @@
 		if(!stat)
 			user.visible_message("<span class='notice'>[user] baps [name] on the nose with the rolled up [O]</span>")
 			spawn(0)
-				emote("whines")
+				emote("me", 1, "whines")
 				for(var/i in list(1,2,4,8,4,2,1,2))
 					dir = i
 					sleep(1)
@@ -132,7 +132,7 @@
 				for (var/mob/M in viewers(src, null))
 					M.show_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
 			if(health>0 && prob(15))
-				emote("looks at [user] with [pick("an amused","an annoyed","a confused","a resentful", "a happy", "an excited")] expression")
+				emote("me", 1, "looks at [user] with [pick("an amused","an annoyed","a confused","a resentful", "a happy", "an excited")] expression")
 			return
 	else
 		var/obj/item/clothing/mask/facehugger/F = O
@@ -423,7 +423,7 @@
     if(!stat && !resting && !locked_to)
         if(prob(1))
             if (ckey == null)
-                emote(pick(emotes))
+                emote("me", 1, pick(emotes))
                 spawn(0)
                     for(var/i in list(1,2,4,8,4,2,1,2,4,8,4,2,1,2,4,8,4,2))
                         dir = i
@@ -531,7 +531,7 @@
 							movement_target.attack_animal(src)
 						else if(ishuman(movement_target.loc) )
 							if(prob(20))
-								emote("stares at [movement_target.loc]'s [movement_target] with a sad puppy-face")
+								emote("me", 1, "stares at [movement_target.loc]'s [movement_target] with a sad puppy-face")
 //PC stuff-Sieve
 
 /mob/living/simple_animal/corgi/regenerate_icons()
@@ -596,7 +596,7 @@
 	response_harm   = "kicks"
 	var/turns_since_scan = 0
 	var/puppies = 0
-	spin_emotes = list("dances around","chases her of a tail")
+	spin_emotes = list("dances around","chases her tail")
 
 //Lisa already has a cute bow!
 /mob/living/simple_animal/corgi/Lisa/Topic(href, href_list)
@@ -607,23 +607,18 @@
 
 /mob/living/simple_animal/corgi/attack_hand(mob/living/carbon/human/M)
 	. = ..()
-	switch(M.a_intent)
-		if(I_HELP)
-			wuv(1,M)
-		if(I_HURT)
-			wuv(-1,M)
+	react_to_touch(M)
 
-/mob/living/simple_animal/corgi/proc/wuv(change, mob/M)
-	if(change)
-		if(change > 0)
-			if(M && !isUnconscious()) // Added check to see if this mob (the corgi) is dead to fix issue 2454
+/mob/living/simple_animal/corgi/proc/react_to_touch(mob/M)
+	if(M && !isUnconscious())
+		switch(M.a_intent)
+			if(I_HELP)
 				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 				heart.plane = ABOVE_HUMAN_PLANE
 				flick_overlay(heart, list(M.client), 20)
-				emote("yaps happily")
-		else
-			if(M && !isUnconscious()) // Same check here, even though emote checks it as well (poor form to check it only in the help case)
-				emote("growls")
+				emote("me", EMOTE_AUDIBLE, "yaps happily.")
+			if(I_HURT)
+				emote("me", EMOTE_AUDIBLE, "growls.")
 
 
 //Sasha isn't even a corgi you dummy!

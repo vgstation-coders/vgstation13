@@ -126,7 +126,7 @@
 				playsound(get_turf(src), 'sound/effects/superfart.ogg', 50, 1)
 				if(wearing_suit)
 					if(!wearing_mask)
-						to_chat(src, "<span class = 'warning'>You gas yourself!</span>")
+						to_chat(user, "<span class = 'warning'>You gas yourself!</span>")
 						H.reagents.add_reagent(SPACE_DRUGS, rand(10,50))
 				else
 					// Was /turf/, now /mob/
@@ -182,7 +182,7 @@
 					var/obj/item/clothing/head/fedora/F = H.head
 					F.tip_fedora()
 				else
-					to_chat(src, "<span class='danger'>You feel incredibly guilty for farting on [B]!</span>")
+					to_chat(user, "<span class='danger'>You feel incredibly guilty for farting on [B]!</span>")
 				if(prob(80)) //20% chance to escape God's justice
 					spawn(rand(10,30))
 						if(H && B)

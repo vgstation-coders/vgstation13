@@ -1046,7 +1046,11 @@ var/list/slot_equipment_priority = list( \
 
 //this and stop_pulling really ought to be /mob/living procs
 /mob/proc/start_pulling(var/atom/movable/AM)
-	if ( !AM || !src || src==AM || !isturf(AM.loc) || !AM.can_be_pulled(src))	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
+	if ( !AM || !src || !isturf(AM.loc) || !AM.can_be_pulled(src))	//if there's no person pulling OR the object being pulled is inside something: abort!
+		return
+
+	if(AM == src) //trying to pull yourself is a convenient shortcut for "stop pulling"
+		stop_pulling()
 		return
 
 	if(!has_hand_check())
@@ -1055,21 +1059,26 @@ var/list/slot_equipment_priority = list( \
 
 	var/atom/movable/P = AM
 
-	if (ismob(AM))
+	if(ismob(AM))
 		var/mob/M = AM
-		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
+		if(M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
 			P = M.locked_to
 
-	if (!P.anchored)
+	if(!P.anchored)
 		P.add_fingerprint(src)
 
 		// If we're pulling something then drop what we're currently pulling and pull this instead.
 		if(pulling)
-			// Are we trying to pull something we are already pulling? Then just stop here, no need to continue
-			var/temp_P = pulling
-			stop_pulling()
-			if(P == temp_P)
-				return
+			// Are we trying to pull something we are already pulling?
+			// Then we want to either toggle pulling (stop pulling and quit), or keep pulling (just quit) if client preferences want otherwise.
+			if(pulling == P)
+				if(client && !client.prefs.pulltoggle)
+					return
+				else
+					stop_pulling()
+					return
+			else
+				stop_pulling()
 
 		src.pulling = P
 		P.pulledby = src
@@ -1081,13 +1090,6 @@ var/list/slot_equipment_priority = list( \
 				M.LAssailant = null
 			else
 				M.LAssailant = usr
-				/*if(ishuman(AM))
-					var/mob/living/carbon/human/HM = AM
-					if (HM.drag_damage())
-						if (HM.isincrit())
-							to_chat(usr,"<span class='warning'>Pulling \the [HM] in their current condition would probably be a bad idea.</span>")
-							add_logs(src, HM, "started dragging critically wounded", admin = (HM.ckey))*/
-// Commented out till I can figure out how to fix people still pulling when they're pulled --snx
 
 /mob/verb/stop_pulling()
 	set name = "Stop Pulling"
@@ -1486,7 +1488,7 @@ var/list/slot_equipment_priority = list( \
 			else if(statpanel(listed_turf.name))
 				statpanel(listed_turf.name, null, listed_turf)
 				for(var/atom/A in listed_turf)
-					if(!A.mouse_opacity)
+					if(!A.mouse_opacity && !A.name)
 						continue
 					if(A.invisibility > see_invisible)
 						continue
@@ -2144,6 +2146,9 @@ mob/proc/on_foot()
 			return 1
 
 	return 0
+
+/mob/proc/handle_regular_hud_updates()
+	return
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING
