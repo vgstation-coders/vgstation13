@@ -6,20 +6,8 @@
 /datum/objective/target/brig
 	var/already_completed = FALSE
 
-/datum/objective/target/brig/find_target()
-	..()
-	if(target && target.current)
-		explanation_text = "Have [target.current.real_name], the [target.assigned_role] brigged for 5 minutes."
-		return TRUE
-	return FALSE
-
-
-/datum/objective/target/brig/find_target_by_role(role, role_type=0)
-	..(role, role_type)
-	if(target && target.current)
-		explanation_text = "Have [target.current.real_name], the [!role_type ? target.assigned_role : target.special_role] brigged for 10 minutes."
-		return TRUE
-	return FALSE
+/datum/objective/target/brig/format_explanation()
+	return "Have [target.current.real_name], the [target.assigned_role == "MODE" ? target.special_role : target.assigned_role] brigged for 10 minutes."
 
 /datum/objective/target/brig/IsFulfilled()
 	if (..())

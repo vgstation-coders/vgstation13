@@ -5,20 +5,9 @@
 /datum/objective/target/anti_revolution/brig
 	var/already_completed = FALSE
 
-/datum/objective/target/anti_revolutiontarget/brig/find_target()
-	..()
-	if(target && target.current)
-		explanation_text = "Brig [target.current.real_name], the [target.assigned_role] for 20 minutes to set an example."
-		return TRUE
-	return FALSE
 
-
-/datum/objective/target/anti_revolution/brig/find_target_by_role(role, role_type=FALSE)
-	..(role, role_type)
-	if(target && target.current)
-		explanation_text = "Brig [target.current.real_name], the [!role_type ? target.assigned_role : target.special_role] for 20 minutes to set an example."
-		return TRUE
-	return FALSE
+/datum/objective/target/anti_revolutiontarget/brig/format_explanation()
+	return "Brig [target.current.real_name], the [target.assigned_role] for 20 minutes to set an example."
 
 /datum/objective/target/anti_revolution/brig/IsFulfilled()
 	if (..())

@@ -116,7 +116,7 @@
 	if(!plural_name)
 		plural_name="[name]s"
 
-	objectives.owner = src
+	objectives.owner = M
 
 	return 1
 
@@ -131,6 +131,7 @@
 	antag = M
 	M.antag_roles.Add(id)
 	M.antag_roles[id] = src
+	objectives.owner = M
 
 	if (!OnPreSetup())
 		return FALSE

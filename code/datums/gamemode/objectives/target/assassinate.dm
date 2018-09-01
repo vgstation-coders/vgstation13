@@ -5,7 +5,7 @@
 /datum/objective/target/assassinate/find_target()
 	..()
 	if(target && target.current)
-		explanation_text = "Assassinate [target.current.real_name], the [target.assigned_role=="MODE" ? (target.special_role) : (target.assigned_role)]."
+		explanation_text = format_explanation()
 		return TRUE
 	return FALSE
 
@@ -13,9 +13,30 @@
 /datum/objective/target/assassinate/find_target_by_role(role, role_type=0)
 	..(role, role_type)
 	if(target && target.current)
-		explanation_text = "Assassinate [target.current.real_name], the [!role_type ? target.assigned_role : target.special_role]."
+		explanation_text = format_explanation()
 		return TRUE
 	return FALSE
+
+/datum/objective/target/assassinate/select_target()
+	var/list/possible_targets = get_targets()
+
+	var/new_target = input("Select target:", "Objective target", null) as null|anything in possible_targets
+	if(new_target)
+		target = new_target
+		explanation_text = format_explanation()
+		return TRUE
+	return FALSE
+
+/datum/objective/target/assassinate/format_explanation()
+	return "Assassinate [target.current.real_name], the [target.assigned_role=="MODE" ? (target.special_role) : (target.assigned_role)]."
+
+/datum/objective/target/assassinate/get_targets()
+	var/list/possible_targets = list()
+	for(var/datum/mind/possible_target in ticker.minds)
+		if(possible_target != owner && ishuman(possible_target.current) && (possible_target.current.z != map.zCentcomm) && (possible_target.current.stat != DEAD) && !(possible_target.assigned_role in bad_assassinate_targets))
+			possible_targets += possible_target
+	return possible_targets
+
 
 
 /datum/objective/target/assassinate/IsFulfilled()

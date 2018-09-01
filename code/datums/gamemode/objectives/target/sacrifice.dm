@@ -21,7 +21,7 @@
 		return TRUE
 	return FALSE
 
-/datum/objective/target/assassinate/sacrifice/proc/get_targets()
+/datum/objective/target/assassinate/sacrifice/get_targets()
 	var/list/possible_targets = list()
 	for(var/mob/living/carbon/human/player in player_list)
 		if(player.z == map.zCentcomm) //We can't sacrifice people that are on the centcom z-level
@@ -38,10 +38,23 @@
 				possible_targets += player.mind
 
 	if(!possible_targets.len)
-		message_admins("Didn't find a suitable sacrifice target...what the hell? Shout at Deity.")
+		message_admins("Could not find a suitable sacrifice target.")
 		return FALSE
 
 	return possible_targets
+
+/datum/objective/target/assassinate/sacrifice/select_target()
+	auto_target = FALSE
+	var/list/possible_targets = get_targets()
+	if(possible_targets)
+		var/new_target = input("Select target:", "Objective target", null) as null|anything in possible_targets
+		if(!new_target)
+			return FALSE
+		else
+			target = new_target
+			explanation_text = "We need to sacrifice [target.name], the [target.assigned_role=="MODE" ? (target.special_role) : (target.assigned_role)], for his blood is the key that will lead our master to this realm. You will need 3 cultists around a Sacrifice rune (Hell Blood Join) to perform the ritual."
+			return TRUE
+	return FALSE
 
 /datum/objective/target/assassinate/sacrifice/feedbackText()
 	if(target && target.current)

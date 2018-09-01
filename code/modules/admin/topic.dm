@@ -7,7 +7,7 @@
 		return
 
 	var/client/CLIENT = usr.client
-	/*if(href_list["makeAntag"])
+	if(href_list["makeAntag"])
 		switch(href_list["makeAntag"])
 			if("1")
 				log_admin("[key_name(usr)] has spawned a traitor.")
@@ -53,7 +53,7 @@
 				log_admin("[key_name(usr)] has spawned vox raiders.")
 				if(!src.makeVoxRaiders())
 					to_chat(usr, "<span class='warning'>Unfortunately, there weren't enough candidates available.</span>")
-	*/
+
 	if("announce_laws" in href_list)
 		var/mob/living/silicon/S = locate(href_list["mob"])
 
