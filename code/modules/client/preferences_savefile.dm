@@ -310,7 +310,7 @@ SELECT
     players.player_alt_titles,
     players.disabilities,
     players.nanotrasen_relation,
-	players.bank_security,
+    players.bank_security,
     jobs.player_ckey,
     jobs.player_slot,
     jobs.alternate_option,
