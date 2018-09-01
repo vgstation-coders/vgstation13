@@ -55,7 +55,8 @@
 /datum/role/changeling/proc/changelingRegen()
 	chem_charges = Clamp(chem_charges + chem_recharge_rate, 0, chem_storage)
 	geneticdamage = max(0, geneticdamage-1)
-	antag.current.updateChangelingHUD()
+	if(antag)
+		antag.current.updateChangelingHUD()
 
 /datum/role/changeling/proc/GetDNA(var/dna_owner)
 	var/datum/dna/chosen_dna

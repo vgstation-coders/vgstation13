@@ -353,25 +353,26 @@
 	if(T.mind)
 		var/datum/role/changeling/Tchangeling = T.mind.GetRole(CHANGELING)
 
-		if(Tchangeling && Tchangeling.absorbed_dna)
-			for(var/dna_data in Tchangeling.absorbed_dna)	//steal all their loot
-				if(dna_data in changeling.absorbed_dna)
-					continue
-				changeling.absorbed_dna += dna_data
-				changeling.absorbedcount++
-			Tchangeling.absorbed_dna.len = 1
+		if(Tchangeling)
+			if(Tchangeling.absorbed_dna)
+				for(var/dna_data in Tchangeling.absorbed_dna)	//steal all their loot
+					if(dna_data in changeling.absorbed_dna)
+						continue
+					changeling.absorbed_dna += dna_data
+					changeling.absorbedcount++
+				Tchangeling.absorbed_dna.len = 1
 
-		if(Tchangeling.purchasedpowers)
-			for(var/datum/power/changeling/Tp in Tchangeling.purchasedpowers)
-				if(Tp in changeling.purchasedpowers)
-					continue
-				else
-					changeling.purchasedpowers += Tp
-
-					if(!Tp.isVerb)
-						call(Tp.verbpath)()
+			if(Tchangeling.purchasedpowers)
+				for(var/datum/power/changeling/Tp in Tchangeling.purchasedpowers)
+					if(Tp in changeling.purchasedpowers)
+						continue
 					else
-						src.make_changeling()
+						changeling.purchasedpowers += Tp
+
+						if(!Tp.isVerb)
+							call(Tp.verbpath)()
+						else
+							src.make_changeling()
 
 		changeling.chem_charges += Tchangeling.chem_charges
 		changeling.geneticpoints += Tchangeling.geneticpoints
