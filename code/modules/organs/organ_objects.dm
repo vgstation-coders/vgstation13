@@ -261,24 +261,6 @@
 /obj/item/organ/internal/appendix
 	name = "appendix"
 
-/obj/item/organ/internal/stomach
-	name = "stomach"
-	icon_state = "stomach"
-	organ_tag = "stomach"
-
-
-/obj/item/organ/internal/stomach/update()
-	.=..()
-	if(istype(organ_data, /datum/organ/internal/stomach))
-		var/datum/organ/internal/stomach/S = organ_data
-		if(!reagents || reagents.maximum_volume != S.reagent_size)
-			create_reagents(S.reagent_size)
-
-/obj/item/organ/internal/stomach/replaced(var/mob/living/target)
-	if(ishuman(target))
-		var/mob/living/carbon/human/H = target
-		reagents.trans_to(H.reagents, reagents.maximum_volume)
-
 /obj/item/organ/internal/proc/removed(var/mob/living/target,var/mob/living/user)
 	if(!target || !user)
 		return
