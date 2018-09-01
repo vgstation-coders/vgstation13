@@ -492,6 +492,9 @@ var/global/num_vending_terminals = 1
 			if(card_swiped.associated_account_number != linked_account.account_number)
 				to_chat(user, "[bicon(src)]<span class='warning'> Access denied. Your ID doesn't match the vending machine's connected account.</span>")
 				return 0
+			else if (!edit_mode && charge_flow_verify_security(linked_db, card_swiped, user, null, TRUE) != CARD_CAPTURE_SUCCESS)
+				to_chat(user, "[bicon(src)]<span class='warning'> Access denied. Security Violation.</span>")
+				return 0
 			edit_mode = !edit_mode
 			src.updateUsrDialog()
 			return

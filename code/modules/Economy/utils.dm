@@ -116,7 +116,7 @@ var/global/no_pin_for_debit = TRUE
 	CARD_CAPTURE_FAILURE_SECURITY_LEVEL
 	CARD_CAPTURE_FAILURE_USER_CANCELED
 */
-/*
+
 /obj/proc/charge_flow_verify_security(var/obj/machinery/account_database/linked_db, var/obj/item/weapon/card/card, var/mob/user, var/datum/money_account/account, var/debit_requires_pin)
 	if(!account)
 		if(linked_db)
@@ -140,9 +140,9 @@ var/global/no_pin_for_debit = TRUE
 		to_chat(user, "[bicon(src)] <span class='warning'>Account disabled.</span>")
 		return CARD_CAPTURE_ACCOUNT_DISABLED
 	switch(account.security_level)
-		if(0)
+		if (0, 1)
 			return CARD_CAPTURE_SUCCESS
-		if(1 to 2)
+		if(2) // Only checking it at max level, this is too annoying otherwise...
 			var/user_loc = user.loc
 			if(account.security_level >= 2 && !card)
 				// Security level is 2 and the card is not present, fail.
@@ -171,7 +171,7 @@ var/global/no_pin_for_debit = TRUE
 			return CARD_CAPTURE_SUCCESS
 		else
 			return CARD_CAPTURE_FAILURE_SECURITY_LEVEL
-*/
+
 /*
 	Do-it-all proc to standardize card swipe processing.
 	obj/proc/charge_flow(
@@ -305,6 +305,9 @@ var/global/no_pin_for_debit = TRUE
 			// Otherwise show.
 			to_chat(user, "[bicon(src)] <span class='notice'>Using account [primary_money_account.account_number] to charge $[num2septext(transaction_amount_primary)]...</span>")
 
+		var/security_check = charge_flow_verify_security(null, card, user, primary_money_account)
+		if(security_check != CARD_CAPTURE_SUCCESS)
+			return security_check
 
 	if( !PRIMARY_SAME_AS_DEST && SECONDARY_NO_FUNDS || secondary_money_account && !SECONDARY_SAME_AS_DEST && PRIMARY_NO_FUNDS )
 		// Verify that all applicable payment methods still have the required amount of money in case a race condition happened while getting information, otherwise fail.

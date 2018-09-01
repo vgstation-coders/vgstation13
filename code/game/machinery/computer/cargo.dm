@@ -336,6 +336,10 @@ For vending packs, see vending_packs.dm*/
 		if(!istype(P))
 			return
 
+		if(current_acct["check"] && charge_flow_verify_security(linked_db, current_acct["card"], usr, account) != CARD_CAPTURE_SUCCESS)
+			to_chat(usr, "<span class='warning'>Security violation when attempting to authenticate with bank account.</span>")
+			return
+
 		var/crates = 1
 		if(multi)
 			var/tempcount = input(usr, "Amount:", "How many crates?", "") as num
@@ -554,6 +558,10 @@ For vending packs, see vending_packs.dm*/
 			return
 		var/datum/supply_packs/P = SSsupply_shuttle.supply_packs[pack_name]
 		if(!istype(P))
+			return
+
+		if(current_acct["check"] && charge_flow_verify_security(linked_db, current_acct["card"], usr, account) != CARD_CAPTURE_SUCCESS)
+			to_chat(usr, "<span class='warning'>Security violation when attempting to authenticate with bank account.</span>")
 			return
 
 		var/crates = 1
