@@ -1245,11 +1245,12 @@ var/global/list/image/blood_overlays = list()
 	return
 
 /obj/item/MouseDropFrom(var/obj/over_object)
-	if(istype(loc, /obj/item/weapon/storage)) //This is the code for swapping items inside a storage item via mouse drag and drop.
+	if(istype(loc, /obj/item/weapon/storage) && !usr.incapacitated()) //This is the code for re-ordering items inside a storage item via mouse drag and drop.
 		if(loc == over_object.loc) //Swapping to another object in the same storage item
 			var/obj/item/weapon/storage/storageobj = loc
 			if(usr in storageobj.is_seeing)
 				//Almost none of BYOND's list procs work with contents because contents is a snowflake list and BYOND hates you, so enter the kludge.
+				//And yes, this is Lummox-sanctioned kludge: http://www.byond.com/forum/?post=271125
 				var/temp_index = storageobj.contents.Find(over_object)
 				var/list/temp_contents = storageobj.contents.Copy()
 				temp_contents -= src
@@ -1266,7 +1267,7 @@ var/global/list/image/blood_overlays = list()
 				//If anybody knows a better way to move ourselves to the end of a list, that actually works with BYOND's finickity handling of the contents list, then you are a greater man than I
 				storageobj.contents -= src
 				storageobj.contents += src
-				
+
 				storageobj.orient2hud(usr)
 				return
 	if(!istype(over_object, /obj/abstract/screen/inventory))
