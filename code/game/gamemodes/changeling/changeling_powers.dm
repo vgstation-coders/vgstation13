@@ -374,11 +374,11 @@
 						else
 							src.make_changeling()
 
-		changeling.chem_charges += Tchangeling.chem_charges
-		changeling.geneticpoints += Tchangeling.geneticpoints
-		Tchangeling.chem_charges = 0
-		Tchangeling.geneticpoints = 0
-		Tchangeling.absorbedcount = 0
+			changeling.chem_charges += Tchangeling.chem_charges
+			changeling.geneticpoints += Tchangeling.geneticpoints
+			Tchangeling.chem_charges = 0
+			Tchangeling.geneticpoints = 0
+			Tchangeling.absorbedcount = 0
 
 	changeling.absorbedcount++
 	changeling.isabsorbing = 0
