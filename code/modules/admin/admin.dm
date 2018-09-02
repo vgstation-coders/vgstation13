@@ -1213,53 +1213,41 @@ var/global/floorIsLava = 0
 	feedback_add_details("admin_verb","UP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 ////////////////////////////////////////////////////////////////////////////////////////////////ADMIN HELPER PROCS
-/*
-/proc/is_special_character(mob/M as mob) // returns 1 for specail characters and 2 for heroes of gamemode
+
+/proc/is_special_character(mob/M as mob) // returns 1 for special characters
 	if(!ticker || !ticker.mode)
 		return 0
 	if (!istype(M))
 		return 0
 	if(isrev(M) || isrevhead(M))
-		if (ticker.mode.config_tag == "revolution")
-			return 2
 		return 1
-	if(iscult(M))
-		if (ticker.mode.config_tag == "cult")
-			return 2
+	if(isanycultist(M))
 		return 1
 	if(ismalf(M))
-		if (ticker.mode.config_tag == "malfunction")
-			return 2
 		return 1
 	if(isnukeop(M))
-		if (ticker.mode.config_tag == "nuclear")
-			return 2
 		return 1
 	if(iswizard(M) || isapprentice(M))
-		if (ticker.mode.config_tag == "wizard")
-			return 2
 		return 1
 	if(ischangeling(M))
-		if (ticker.mode.config_tag == "changeling")
-			return 2
 		return 1
 	/*if(isborer(M)) //They ain't antags anymore
 		if (ticker.mode.config_tag == "borer")
 			return 2
 		return 1*/
 	if(isbadmonkey(M))
-		if (ticker.mode.config_tag == "monkey")
-			return 2
 		return 1
 	if(isrobot(M))
 		var/mob/living/silicon/robot/R = M
 		if(R.emagged)
 			return 1
+	if(isdeathsquad(M))
+		return 1
 	if(M.mind&&M.mind.special_role)//If they have a mind and special role, they are some type of traitor or antagonist.
 		return 1
 
 	return 0
-*/
+
 /*
 /datum/admins/proc/get_sab_desc(var/target)
 	switch(target)
