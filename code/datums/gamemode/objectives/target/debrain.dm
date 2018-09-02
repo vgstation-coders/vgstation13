@@ -1,19 +1,9 @@
 /datum/objective/target/debrain
 	name = "Steal the brain of <target>"
 
-/datum/objective/target/debrain/find_target() //I want braaaainssss
-	..()
-	if(target && target.current)
-		explanation_text = "Steal the brain of [target.current.real_name]."
-		return TRUE
-	return FALSE
+/datum/objective/target/debrain/format_explanation()
+	return "Steal the brain of [target.current.real_name] the [target.assigned_role == "MODE" ? target.special_role : target.assigned_role]."
 
-/datum/objective/target/debrain/find_target_by_role(role, role_type=FALSE)
-	..(role, role_type)
-	if(target && target.current)
-		explanation_text = "Steal the brain of [target.current.real_name] the [!role_type ? target.assigned_role : target.special_role]."
-		return TRUE
-	return FALSE
 
 /datum/objective/target/debrain/IsFulfilled()
 	if (..())

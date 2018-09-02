@@ -34,10 +34,11 @@ var/list/potential_theft_objectives=list(
 		return TRUE
 	return FALSE
 
-/datum/objective/target/steal/proc/format_explanation()
+/datum/objective/target/steal/format_explanation()
 	return "Steal [steal_target.name]."
 
 /datum/objective/target/steal/select_target()
+	auto_target = FALSE
 	var/list/possible_items_all = potential_theft_objectives[target_category]+"custom"
 	var/new_target = input("Select target:", "Objective target", null) as null|anything in possible_items_all
 	if (!new_target)

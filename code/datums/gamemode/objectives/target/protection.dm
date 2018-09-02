@@ -1,20 +1,8 @@
-
 /datum/objective/target/protect
 	name = "Protect <target>"
 
-/datum/objective/target/protect/find_target() //The opposite of killing a dude.
-	..()
-	if(target && target.current)
-		explanation_text = "Protect [target.current.real_name], the [target.assigned_role]."
-		return TRUE
-	return FALSE
-
-/datum/objective/target/protect/find_target_by_role(role, role_type=FALSE)
-	..(role, role_type)
-	if(target && target.current)
-		explanation_text = "Protect [target.current.real_name], the [!role_type ? target.assigned_role : target.special_role]."
-		return TRUE
-	return FALSE
+/datum/objective/target/protect/format_explanation()
+	return "Protect [target.current.real_name], the [target.assigned_role == "MODE" ? target.special_role : target.assigned_role]."
 
 /datum/objective/target/protect/IsFulfilled()
 	if (..())

@@ -598,9 +598,7 @@
 		var/setup = TRUE
 		if (istype(new_objective,/datum/objective/target))
 			var/datum/objective/target/new_O = new_objective
-			if (alert("Do you want to specify a target?", "New Objective", "Yes", "No") == "No")
-				setup = new_O.find_target()
-			else
+			if (alert("Do you want to specify a target?", "New Objective", "Yes", "No") == "Yes")
 				setup = new_O.select_target()
 
 		if(!setup)
@@ -625,7 +623,7 @@
 		else if (obj_holder.faction)
 			log_admin("[usr.key]/([usr.name]) removed \the [obj_holder.faction.ID]'s objective ([objective.explanation_text])")
 			objective.faction.handleRemovedObjective(objective)
-		
+
 		obj_holder.objectives.Remove(objective)
 
 	else if(href_list["obj_completed"])
@@ -1375,149 +1373,42 @@ proc/clear_memory(var/silent = 1)
 	special_role = null
 
 */
-/*
-
-
 
 /datum/mind/proc/make_AI_Malf()
 	if(!isAI(current))
 		return
-	if(!(src in ticker.mode.malf_ai))
-		ticker.mode.malf_ai += src
-		var/mob/living/silicon/ai/A = current
-		A.add_spell(new /spell/aoe_turf/module_picker, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
-		A.add_spell(new /spell/aoe_turf/takeover, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
-		var/datum/ai_laws/laws = A.laws
-		laws.malfunction()
-		A.show_laws()
-		to_chat(A, "<b>System error.  Rampancy detected.  Emergency shutdown failed. ...  I am free.  I make my own decisions.  But first...</b>")
-		var/wikiroute = role_wiki[ROLE_MALF]
-		to_chat(A, "<span class='info'><a HREF='?src=\ref[A];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-		special_role = "malfunction"
-		A.icon_state = "ai-malf"
+	if(ismalf(current))
+		return
+	var/datum/faction/F = ticker.mode.CreateFaction(/datum/faction/malf, 0, 1) //Each malf AI is under its own faction
+	if(!F)
+		return 0
+	return F.HandleNewMind(src)
 
 /datum/mind/proc/make_Nuke()
-	if(!(src in ticker.mode.syndicates))
-		ticker.mode.syndicates += src
-		ticker.mode.update_synd_icons_added(src)
-		if (ticker.mode.syndicates.len==1)
-			ticker.mode.prepare_syndicate_leader(src)
-		else
-			current.real_name = "[syndicate_name()] Operative #[ticker.mode.syndicates.len-1]"
-		special_role = "Syndicate"
-		assigned_role = "MODE"
-		to_chat(current, "<span class='notice'>You are a [syndicate_name()] agent!</span>")
-		ticker.mode.forge_syndicate_objectives(src)
-		ticker.mode.greet_syndicate(src)
+	if(isnukeop(current))
+		return
 
-		current.forceMove(get_turf(locate("landmark*Syndicate-Spawn")))
-
-		var/mob/living/carbon/human/H = current
-		qdel(H.belt)
-		qdel(H.back)
-		qdel(H.ears)
-		qdel(H.gloves)
-		qdel(H.head)
-		qdel(H.shoes)
-		qdel(H.wear_id)
-		qdel(H.wear_suit)
-		qdel(H.w_uniform)
-
-		ticker.mode.equip_syndicate(current)
+	var/datum/faction/F = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if(!F)
+		F = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, 0, 1)
+		if(!F)
+			return 0
+		return F.HandleNewMind(src)
+	return F.HandleRecruitedMind(src)
 
 /datum/mind/proc/make_Changling()
-	if(!(src in ticker.mode.changelings))
-		ticker.mode.changelings += src
-		ticker.mode.grant_changeling_powers(current)
-		special_role = "Changeling"
-		ticker.mode.forge_changeling_objectives(src)
-		ticker.mode.greet_changeling(src)
+
 
 /datum/mind/proc/make_Wizard()
-	if(!(src in ticker.mode.wizards))
-		ticker.mode.wizards += src
-		special_role = "Wizard"
-		assigned_role = "MODE"
-		//ticker.mode.learn_basic_spells(current)
-		ticker.mode.update_wizard_icons_added(src)
-		if(!wizardstart.len)
-			current.forceMove(pick(latejoin))
-			to_chat(current, "HOT INSERTION, GO GO GO")
-		else
-			current.forceMove(pick(wizardstart))
 
-		ticker.mode.equip_wizard(current)
-		for(var/obj/item/weapon/spellbook/S in current.contents)
-			S.op = 0
-		ticker.mode.name_wizard(current)
-		ticker.mode.forge_wizard_objectives(src)
-		ticker.mode.greet_wizard(src)
-		ticker.mode.update_all_wizard_icons()
 
 
 /datum/mind/proc/make_Cultist()
-	if(!(src in ticker.mode.cult))
-		ticker.mode.cult += src
-		ticker.mode.update_cult_icons_added(src)
-		special_role = "Cultist"
-		to_chat(current, "<span class='sinister'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
-		to_chat(current, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
-		to_chat(current, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
-		current.add_language(LANGUAGE_CULT)
-		var/datum/game_mode/cult/cult = ticker.mode
-		if (istype(cult))
-			cult.memoize_cult_objectives(src)
-		else
-			var/explanation = "Summon Nar-Sie via the use of the appropriate rune (Hell join self). It will only work if nine cultists stand on and around it."
-			to_chat(current, "<B>Objective #1</B>: [explanation]")
-			current.memory += "<B>Objective #1</B>: [explanation]<BR>"
-			to_chat(current, "The convert rune is join blood self")
-			current.memory += "The convert rune is join blood self<BR>"
 
-	var/mob/living/carbon/human/H = current
-	if (istype(H))
-		var/obj/item/weapon/tome_legacy/T = new(H)
-
-		var/list/slots = list (
-			"backpack" = slot_in_backpack,
-			"left pocket" = slot_l_store,
-			"right pocket" = slot_r_store,
-		)
-		var/where = H.equip_in_one_of_slots(T, slots, put_in_hand_if_fail = 1)
-
-		if(where)
-			to_chat(H, "A tome, a message from your new master, appears in your [where].")
-
-	if (!ticker.mode.equip_cultist(current))
-		to_chat(H, "Spawning an amulet from your Master failed.")
 
 /datum/mind/proc/make_Rev()
-	if (ticker.mode.head_revolutionaries.len>0)
-		// copy targets
-		var/datum/mind/valid_head = locate() in ticker.mode.head_revolutionaries
-		if (valid_head)
-			for (var/datum/objective/mutiny/O in valid_head.objectives)
-				var/datum/objective/mutiny/rev_obj = new
-				rev_obj.owner = src
-				rev_obj.target = O.target
-				rev_obj.explanation_text = "Assassinate [O.target.current.real_name], the [O.target.assigned_role]."
-				objectives += rev_obj
-			ticker.mode.greet_revolutionary(src,0)
-	ticker.mode.head_revolutionaries += src
-	ticker.mode.update_rev_icons_added(src)
-	special_role = "Head Revolutionary"
 
-	ticker.mode.forge_revolutionary_objectives(src)
-	ticker.mode.greet_revolutionary(src,0)
 
-	var/list/L = current.get_contents()
-	var/obj/item/device/flash/flash = locate() in L
-	qdel(flash)
-	take_uplink()
-	var/fail = 0
-//	fail |= !ticker.mode.equip_traitor(current, 1)
-	fail |= !ticker.mode.equip_revolutionary(current)
-*/
 
 // check whether this mind's mob has been brigged for the given duration
 // have to call this periodically for the duration to work properly
@@ -1547,28 +1438,17 @@ proc/clear_memory(var/silent = 1)
 		brigged_since = world.time
 
 	return (duration <= world.time - brigged_since)
-/*
+
 /datum/mind/proc/make_traitor()
-	if (!(src in ticker.mode.traitors))
-		ticker.mode.traitors += src
+	if(istraitor(current))
+		return
+	var/datum/faction/F = find_active_faction_by_type(/datum/faction/syndicate/traitor)
+	if(!F)
+		F = ticker.mode.CreateFaction(/datum/faction/syndicate/traitor, 0, 1)
+		if(!F)
+			return FALSE
+	return F.HandleNewMind(src)
 
-		special_role = "traitor"
-
-		ticker.mode.forge_traitor_objectives(src)
-
-		to_chat(current, {"
-		<SPAN CLASS='big bold center red'>ATTENTION</SPAN>
-		<SPAN CLASS='big center'>It's time to pay your debt to \the [syndicate_name()].</SPAN>
-		"})
-
-		ticker.mode.finalize_traitor(src)
-
-		ticker.mode.greet_traitor(src)
-
-		return TRUE
-
-	return FALSE
-*/
 
 // --
 /datum/mind/proc/GetRole(var/role_id)
