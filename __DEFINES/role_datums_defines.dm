@@ -93,6 +93,7 @@
 #define RITUALABORT_FULL	"no room"
 #define RITUALABORT_CONCEAL	"conceal"
 #define RITUALABORT_NEAR	"near"
+#define RITUALABORT_MISSING	"missing"
 
 #define	TOME_CLOSED	1
 #define	TOME_OPEN	2

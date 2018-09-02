@@ -3,35 +3,41 @@
 #define RUNE_STAND	1
 
 /datum/rune_spell
-	var/name = "default name"
-	var/desc = "default description"
-	var/desc_talisman = "default talisman description"
-	var/Act_restriction = CULT_PROLOGUE
-	var/obj/spell_holder = null//the rune or talisman
-	var/mob/activator = null//the original mob that proc'd the spell
-	var/datum/cultword/word1 = null
+	//essential
+	var/name = "default name"		//appears in the arcane tome, or to cultists that examine a rune
+	var/desc = "default description"//appears to cultists that examine a rune
+	var/desc_talisman = "default talisman description"//appears to cultists that examine a talisman
+	var/Act_restriction = CULT_PROLOGUE		//locks the rune to the cult's progression
+	var/obj/spell_holder = null				//the rune or talisman calling the spell. If using a talisman calling an attuned rune, the holder is the rune.
+	var/mob/activator = null				//the original mob that cast the spell
+	var/datum/cultword/word1 = null			//a spell needs all 3 words (see bloodcult_words.dm). The order is important. By convention, do not use the same word twice.
 	var/datum/cultword/word2 = null
 	var/datum/cultword/word3 = null
-	var/invocation = "Lo'Rem Ip'Sum"
-	var/cost_invoke = 0//blood cost upon cast
-	var/cost_upkeep = 0//blood cost upon upkeep proc
-	var/rune_flags = null //RUNE_STAND
-	var/list/contributors = list()//multiple cultists can join a single summoning
-	var/image/progbar = null//progress bar
-	var/remaining_cost = 0
-	var/accumulated_blood = 0
-	var/destroying_self = 0
-	var/can_conceal = 0//if set to 1, concealing the rune will not abort the spell.
-	var/cancelling = 3
-	var/touch_cast = 0//if set to 1, will proc cast_touch() when touching someone with an imbued talisman
-	var/talisman_absorb = RUNE_CAN_IMBUE
-	var/talisman_uses = 1//Allows certain spells to be used many times from a single talisman. The talisman disappears upon the last use.
+	var/invocation = "Lo'Rem Ip'Sum"		//spoken (or whispered if using a talisman) by the cultist when the spell is cast
 	var/page = "Lorem ipsum dolor sit amet, consectetur adipiscing elit,\
 			 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\
 			  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut\
 			   aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in\
 			    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint\
-			     occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+			     occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."//the arcane tome's page about the spell
+	var/talisman_absorb = RUNE_CAN_IMBUE //whether the rune is absorbed into the talisman (and thus deleted), or linked to the talisman (RUNE_CAN_ATTUNE)
+	var/talisman_uses = 1//How many times can a spell be cast from a single talisman. The talisman disappears upon the last use.
+	var/touch_cast = 0//if set to 1, will proc cast_touch() when touching someone with an imbued talisman (example: Stun)
+	var/can_conceal = 0//if set to 1, concealing the rune will not abort the spell. (example: Path Exit)
+	var/rune_flags = null //if set to RUNE_STAND (or 1), the user will need to stand right above the rune to use cast the spell
+	var/destroying_self = 0//some sanity var to prevent abort loops, ignore
+
+	//optional (those var aren't used by default rune code, but many runes make use of them, so set them up as you need, the comments below are suggestions)
+	var/cost_invoke = 0//blood cost upon cast
+	var/cost_upkeep = 0//blood cost upon upkeep proc
+	var/list/contributors = list()//list of cultists currently participating in the ritual
+	var/image/progbar = null//progress bar
+	var/remaining_cost = 0//how much blood to gather for the ritual to succeed
+	var/accumulated_blood = 0//how much blood has been gathered so far
+	var/cancelling = 3//check to abort the ritual due to blood flow being interrupted
+	var/list/ingredients = list()//items that should be on the rune for it to work
+	var/list/ingredients_found = list()//items that should be on the rune for it to work
+
 
 /datum/rune_spell/New(var/mob/user, var/obj/holder, var/use = "ritual", var/mob/target)
 	spell_holder = holder
@@ -133,6 +139,8 @@
 			if (activator)
 				to_chat(activator, "<span class='warning'>You cannot perform this ritual that close from another similar structure.</span>")
 
+
+
 	for(var/mob/living/L in contributors)
 		if (L.client)
 			L.client.images -= progbar
@@ -148,6 +156,33 @@
 		qdel(spell_holder)
 	else
 		qdel(src)
+
+/datum/rune_spell/proc/missing_ingredients_count()
+	var/list/missing_ingredients = ingredients.Copy()
+	var/turf/T = get_turf(spell_holder)
+	for (var/path in missing_ingredients)
+		var/atom/A = locate(path) in T
+		if (A)
+			missing_ingredients -= path
+			ingredients_found += A
+
+	if (missing_ingredients.len > 0)
+		var/missing = "You need "
+		var/i = 1
+		for (var/I in missing_ingredients)
+			i++
+			var/atom/A = I
+			missing += "\a [initial(A.name)]"
+			if (i <= missing_ingredients.len)
+				missing += ", "
+				if (i == missing_ingredients.len)
+					missing += "and "
+			else
+				missing += "."
+		to_chat(activator, "<span class='warning'>The necessary ingredients for this ritual are missing. [missing]</span>")
+		abort(RITUALABORT_MISSING)
+		return 1
+	return 0
 
 /datum/rune_spell/proc/update_progbar()
 	if (!progbar)
@@ -1883,6 +1918,7 @@ var/list/blind_victims = list()
 	word3 = /datum/cultword/other
 	talisman_absorb = RUNE_CAN_ATTUNE
 	can_conceal = 1
+	page = ""
 	var/network = ""
 
 /datum/rune_spell/portalentrance/cast()
@@ -1972,6 +2008,7 @@ var/list/bloodcult_exitportals = list()
 	word3 = /datum/cultword/self
 	talisman_absorb = RUNE_CAN_IMBUE
 	can_conceal = 1
+	page = ""
 	var/network = ""
 
 /datum/rune_spell/portalexit/New()
@@ -2080,7 +2117,7 @@ var/list/bloodcult_exitportals = list()
 	word1 = /datum/cultword/destroy
 	word2 = /datum/cultword/see
 	word3 = /datum/cultword/technology
-	var/network = ""
+	page = ""
 
 /datum/rune_spell/pulse/cast()
 	var/turf/T = get_turf(spell_holder)
@@ -2098,6 +2135,88 @@ var/list/bloodcult_exitportals = list()
 	word1 = /datum/cultword/hell
 	word2 = /datum/cultword/travel
 	word3 = /datum/cultword/self
+	page = ""
+	rune_flags = RUNE_STAND
+	var/mob/dead/observer/deafmute/astral = null
+	var/cultist_key = ""
+	var/list/restricted_verbs = list()
+
+/datum/rune_spell/astraljourney/cast()
+	var/obj/effect/rune/R = spell_holder
+	R.one_pulse()
+
+	cultist_key = activator.key
+	activator.sleeping = max(activator.sleeping,2)
+	activator.stat = UNCONSCIOUS
+	activator.resting = 1
+	activator.ajourn = spell_holder
+
+	var/list/antag_icons = list()
+	if (activator.client)
+		for (var/image/I in activator.client.images)
+			if (I.plane == ANTAG_HUD_PLANE)
+				antag_icons += image(I,I.loc)
+
+	to_chat(activator, "<span class='notice'>As you recite the invocation, your body falls over the rune, but your consciousness still stands up above it.</span>")
+	astral = activator.ghostize(1,1)
+
+	astral.icon = 'icons/mob/mob.dmi'
+	astral.icon_state = "ghost-narsie"
+	astral.overlays.len = 0
+	if (istype(activator, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = activator
+		astral.overlays += H.obj_overlays[ID_LAYER]
+		astral.overlays += H.obj_overlays[EARS_LAYER]
+		astral.overlays += H.obj_overlays[SUIT_LAYER]
+		astral.overlays += H.obj_overlays[GLASSES_LAYER]
+		astral.overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
+		astral.overlays += H.obj_overlays[BELT_LAYER]
+		astral.overlays += H.obj_overlays[BACK_LAYER]
+		astral.overlays += H.obj_overlays[HEAD_LAYER]
+		astral.overlays += H.obj_overlays[HANDCUFF_LAYER]
+
+	for (var/V in astral.verbs)//restricting the verbs! all they can do is re-enter their body.
+		if ((copytext("[V]",1,10) == "/mob/dead") && ("[V]" != "/mob/dead/observer/verb/reenter_corpse"))
+			restricted_verbs += V
+			astral.verbs -= V
+
+	step(astral,NORTH)
+	astral.dir = SOUTH
+
+	if (astral.client)
+		for (var/image/I in antag_icons)
+			astral.client.images += I
+
+	spawn()
+		handle_astral()
+
+/datum/rune_spell/astraljourney/cast_talisman()//we spawn an invisible rune under our feet that works like the regular one
+	var/obj/effect/rune/R = new(get_turf(activator))
+	R.icon_state = "temp"
+	R.active_spell = new type(activator,R)
+	qdel(src)
+
+
+/datum/rune_spell/astraljourney/abort(var/cause)
+	if (activator && activator.loc && cultist_key)
+		activator.key = cultist_key
+		to_chat(activator, "<span class='notice'>You reconnect with your body.</span>")
+	else
+		if (astral)
+			to_chat(astral, "<span class='notice'>The ritual somehow lost track of your body. You are now fully disconnected from it, and a fully fledged ghost.</span>")
+			for (var/V in restricted_verbs)//since they're a real ghost now, let's give them back the rest of their verbs.
+				astral.verbs += V
+	..()
+
+/datum/rune_spell/astraljourney/proc/handle_astral()
+	while(!destroying_self && activator && astral && astral.loc && activator.stat == UNCONSCIOUS && activator.loc == spell_holder.loc)
+		activator.sleeping = max(activator.sleeping,2)
+		sleep(10)
+	abort()
+
+/datum/rune_spell/astraljourney/Removed(var/mob/M)
+	if (M == activator)
+		abort(RITUALABORT_GONE)
 
 //RUNE XX
 /datum/rune_spell/resurrect
@@ -2108,12 +2227,154 @@ var/list/bloodcult_exitportals = list()
 	word1 = /datum/cultword/blood
 	word2 = /datum/cultword/join
 	word3 = /datum/cultword/hell
+	page = ""
+	ingredients = list(
+		/obj/item/weapon/skull,
+		/obj/effect/decal/cleanable/ash,
+		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		)
+	cost_upkeep = 5
+	remaining_cost = 300
+	var/obj/effect/cult_ritual/resurrect/husk = null
+	var/mob/dead/ghost = null
+
+/datum/rune_spell/resurrect/cast()
+	var/obj/effect/rune/R = spell_holder
+	R.one_pulse()
+
+	if (missing_ingredients_count())
+		return
+
+	ghost = locate(/mob/dead) in R.loc
+	if (!ghost)
+		to_chat(activator, "<span class='warning'>You have the ingredients, now there needs to be a ghost made visible standing above the rune.</span>")
+		qdel(src)
+		return
+	if (ghost.invisibility != 0)
+		to_chat(activator, "<span class='warning'>You have the ingredients, but the ghost needs to be drawn onto our plane first. You already have the tools to do so.</span>")
+		qdel(src)
+		return
+
+	//ingredients found? check. ghost in place and visible? check, let's go!
+	for (var/atom/A in ingredients_found)
+		qdel(A)
+
+	husk = new (R.loc)
+	ghost.incorporeal_move = 0
+	ghost.forceMove(husk)
+
+	contributors.Add(activator)
+	update_progbar()
+	if (activator.client)
+		activator.client.images |= progbar
+	spell_holder.overlays += image('icons/obj/cult.dmi',"runetrigger-build")
+	to_chat(activator, "<span class='rose'>This ritual has a very high blood cost per second, but it can be completed faster by having multiple cultists partake in it.</span>")
+	spawn()
+		payment()
+
+/datum/rune_spell/resurrect/cast_talisman()//we spawn an invisible rune under our feet that works like the regular one
+	var/obj/effect/rune/R = new(get_turf(activator))
+	R.icon_state = "temp"
+	R.active_spell = new type(activator,R)
+	qdel(src)
+
+/datum/rune_spell/resurrect/midcast(var/mob/add_cultist)
+	if (add_cultist in contributors)
+		return
+	add_cultist.say(invocation,"C")
+	contributors.Add(add_cultist)
+	if (add_cultist.client)
+		add_cultist.client.images |= progbar
+
+/datum/rune_spell/resurrect/abort(var/cause)
+	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
+	if (ghost)
+		ghost.incorporeal_move = 1
+		if (husk && husk.loc)
+			ghost.loc = husk.loc
+	if (husk)
+		qdel(husk)
+	if (spell_holder.loc && (!cause || cause != RITUALABORT_MISSING))
+		new /obj/effect/gibspawner/human(spell_holder.loc)
+	..()
+
+/datum/rune_spell/resurrect/proc/payment()
+	var/failsafe = 0
+	while(failsafe < 1000)
+		failsafe++
+		//are our payers still here and about?
+		for(var/mob/living/L in contributors)
+			if (!iscultist(L) || !(L in range(spell_holder,1)) || (L.stat != CONSCIOUS))
+				if (L.client)
+					L.client.images -= progbar
+				contributors.Remove(L)
+		//alright then, time to pay in blood
+		var/amount_paid = 0
+		for(var/mob/living/L in contributors)
+			var/data = use_available_blood(L, cost_upkeep,contributors[L])
+			if (data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)//out of blood are we?
+				contributors.Remove(L)
+			else
+				amount_paid += data[BLOODCOST_TOTAL]
+				contributors[L] = data[BLOODCOST_RESULT]
+				make_tracker_effects(L.loc,spell_holder, 1, "soul", 3, /obj/effect/tracker/drain, 1)//visual feedback
+
+		accumulated_blood += amount_paid
+
+		//if there's no blood for over 3 seconds, the channeling fails
+		if (amount_paid)
+			cancelling = 3
+		else
+			cancelling--
+			if (cancelling <= 0)
+				abort(RITUALABORT_BLOOD)
+				return
+
+		if (accumulated_blood >= remaining_cost)
+			success()
+			return
+
+		update_progbar()
+
+		sleep(10)
+	message_admins("A rune ritual has iterated for over 1000 blood payment procs. Something's wrong there.")
+
+/datum/rune_spell/resurrect/proc/success()
+	spell_holder.overlays -= image('icons/obj/cult.dmi',"runetrigger-build")
+	if (ghost && husk)
+		var/mob/living/carbon/human/manifested/vessel = new (spell_holder.loc)
+		vessel.name = ghost.name
+		vessel.real_name = ghost.real_name
+		vessel.ckey = ghost.ckey
+		qdel(husk)
+	else
+		for(var/mob/living/L in contributors)
+			to_chat(activator, "<span class='warning'>Something went wrong with the ritual, the soul of the ghost appears to have vanished.</span>")
 
 
+	for(var/mob/living/L in contributors)
+		if (L.client)
+			L.client.images -= progbar
+		contributors.Remove(L)
 
+	if (activator && activator.client)
+		activator.client.images -= progbar
 
+	if (progbar)
+		progbar.loc = null
 
+	if (spell_holder.icon_state == "temp")
+		qdel(spell_holder)
+	else
+		qdel(src)
 
+/obj/effect/cult_ritual/resurrect
+	anchored = 1
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "rune_resurrect"
+	layer = SHADOW_LAYER
+	plane = ABOVE_HUMAN_PLANE
+	mouse_opacity = 0
 
 
 /*
