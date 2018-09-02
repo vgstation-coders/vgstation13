@@ -517,9 +517,8 @@
 		src.broken = 1
 		to_chat(user, "<span class='notice'>You unlock \the [src].</span>")
 		return
-	else if(istype(W, /obj/item/weapon/crowbar) && !opened && !locked && src.has_lockless_type)
-		remove_lock()
-		to_chat(user, "<span class='notice'>You remove \the [src]'s lock.</span>")
+	else if(istype(W, /obj/item/weapon/screwdriver) && !opened && !locked && src.has_lockless_type)
+		remove_lock(user)
 		return
 	return ..()
 
@@ -529,9 +528,8 @@
 /obj/structure/closet/crate/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(opened)
 		return ..()
-	else if(istype(W, /obj/item/weapon/screwdriver) && src.has_lock_type)//testing with crowbars for now, will use circuits later
-		add_lock()
-		to_chat(user, "<span class='notice'>You add a lock to \the [src].</span>")
+	else if(istype(W, /obj/item/weapon/circuitboard/airlock) && src.has_lock_type)//testing with crowbars for now, will use circuits later
+		add_lock(W, user)
 		return
 	else if(istype(W, /obj/item/stack/package_wrap))
 		return

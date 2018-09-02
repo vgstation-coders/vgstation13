@@ -24,6 +24,7 @@
 
 	var/has_lock_type = null //The type this closet should be converted to if made ID secured
 	var/has_lockless_type = null //The type this closet should be converted to if made no longer ID secured
+	var/obj/item/weapon/circuitboard/airlock/electronics
 
 	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 	w_type = RECYK_METAL
@@ -85,7 +86,8 @@
 		AD.forceMove(src.loc)
 
 	for(var/obj/O in src)
-		O.forceMove(src.loc)
+		if(O != src.electronics) //Don't dump your electronics
+			O.forceMove(src.loc)
 
 	for(var/mob/M in src)
 		M.forceMove(src.loc)
@@ -189,30 +191,93 @@
 		return src.close()
 	return src.open()
 
-/obj/structure/closet/proc/add_lock()
-	if(has_lock_type)
-		var/obj/structure/closet/new_closet
-		new_closet = change_type(has_lock_type)
-		//if(new_closet)//Ensure it's not null
-		//code for getting access from a circuitboard goes here. must investigate
+/obj/structure/closet/proc/add_lock(var/obj/item/weapon/circuitboard/airlock/E, var/mob/user)
+	if(has_lock_type && !electronics && E && E.icon_state != "door_electronics_smoked")
+		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		user.visible_message("[user] is installing electronics on \the [src].", "You start to install electronics into \the [src].")
+		if(do_after(user, src, 40))
+			var/obj/structure/closet/new_closet
+			new_closet = change_type(has_lock_type)
 
-/obj/structure/closet/proc/remove_lock()
+			if(new_closet)
+				to_chat(user, "<span class='notice'>You installed the electronics!</span>")
+				user.drop_item(E, new_closet, force_drop = 1)
+				new_closet.electronics = E
+				E.installed = 1
+
+				if(E.one_access)
+					new_closet.req_access = null
+					new_closet.req_one_access = E.conf_access
+				else
+					new_closet.req_access = E.conf_access
+
+				new_closet.locked = 1
+				new_closet.update_icon()
+			else
+				//Should not happen
+				to_chat(user, "<span class='notice'>Wierd, the electronics won't fit.</span>")
+	else if(!has_lock_type)
+		to_chat(user, "<span class='notice'>There's no slot for the electronics</span>")
+
+
+/obj/structure/closet/proc/remove_lock(var/mob/user)
 	if(has_lockless_type)
-		var/obj/structure/closet/new_closet
-		new_closet = change_type(has_lockless_type)
-		//if(new_closet)//Ensure it's not null
-		//code to get a circuitboard with the correct access (or the board itself) goes here
+		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		user.visible_message("[user] is removing \the [src]'s electronics.", "You start removing \the [src]'s electronics.")
+		if(do_after(user, src, 40))
+			var/obj/structure/closet/new_closet
+			new_closet = change_type(has_lockless_type)
+
+			if(new_closet)
+				var/obj/item/weapon/circuitboard/airlock/E
+				if (!new_closet.electronics)
+					E = new/obj/item/weapon/circuitboard/airlock(new_closet.loc)
+					if(new_closet.req_access && new_closet.req_access.len)
+						E.conf_access = new_closet.req_access
+					else if(new_closet.req_one_access && new_closet.req_one_access.len)
+						E.conf_access = new_closet.req_one_access
+						E.one_access = 1
+				else
+					E = new_closet.electronics
+					new_closet.electronics = null
+					E.forceMove(new_closet.loc)
+					E.installed = 0
+				new_closet.req_access = null
+				new_closet.req_one_access = null
+
+				if (new_closet.broken == 1)
+					E.icon_state = "door_electronics_smoked"
+					new_closet.broken = 0
+
+				new_closet.locked = 0
+				new_closet.update_icon()
+			else
+				//Should not happen
+				to_chat(user, "<span class='notice'>Wierd, you can't get the electronics out.</span>")
+	else
+		to_chat(user, "<span class='notice'>You can't get the electronics out</span>")
 
 // Might come handy for painting crates and lockers some day.
 // Using it to change from secure to non secure lockers for now
 /obj/structure/closet/proc/change_type(var/new_type)
 	if(new_type)//Ensure it's not null
-		var/obj/structure/closet/new_closet = new new_type
+		var/obj/structure/closet/new_closet = new new_type(loc)
+
 		new_closet.contents = src.contents
-		new_closet.loc = src.loc
+
+		new_closet.broken = src.broken
 		new_closet.welded = src.welded
+		new_closet.locked = src.locked
+
 		new_closet.fingerprints = src.fingerprints
 		new_closet.fingerprintshidden = src.fingerprintshidden
+
+		new_closet.electronics = src.electronics
+		new_closet.req_access = src.req_access
+		new_closet.req_one_access = src.req_one_access
+
+		new_closet.update_icon()
+
 		qdel(src)
 		return new_closet
 
@@ -341,9 +406,8 @@
 		src.update_icon()
 		for(var/mob/M in viewers(src))
 			M.show_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
-	else if(istype(W, /obj/item/weapon/crowbar) && src.has_lock_type) //testing with crowbars for now, will use circuits later
-		add_lock()
-		to_chat(user, "<span class='notice'>You add a lock to \the [src].</span>")
+	else if(istype(W, /obj/item/weapon/circuitboard/airlock) && src.has_lock_type) //testing with crowbars for now, will use circuits later
+		add_lock(W, user)
 		return
 	else if(!place(user, W))
 		src.attack_hand(user)

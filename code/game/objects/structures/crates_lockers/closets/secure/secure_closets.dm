@@ -96,8 +96,7 @@
 			for(var/mob/M in viewers(src))
 				M.show_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
 		if(istype(W, /obj/item/weapon/screwdriver) && !src.locked && src.has_lockless_type)
-			remove_lock()
-			to_chat(user, "<span class='notice'>You remove \the [src]'s lock.</span>")
+			remove_lock(user)
 			return
 		else
 			togglelock(user)
