@@ -3,8 +3,9 @@
 /datum/dynamic_ruleset
 	var/name = ""
 	var/persistent = 0//if set to 1, the rule won't be discarded after being executed, and the game mode will call update() once in a while
-	var/repeatable = 0//if set to 1, dynamic mode will be able to draft this ruleset again later on
-	var/list/candidates = list()
+	var/repeatable = 0//if set to 1, dynamic mode will be able to draft this ruleset again later on. (doesn't apply for roundstart rules)
+	var/list/candidates = list()//list of players that are being drafted for this rule
+	var/list/assigned = list()//list of players that were selected for this rule
 	var/role_category = ROLE_TRAITOR//rule will only accept candidates with "Yes" or "Always" in the preferences for this role
 	var/list/restricted_from_jobs = list()//if set, rule will deny candidates from those jobs
 	var/list/exclusive_to_jobs = list()//if set, rule will only accept candidates from those jobs
@@ -56,8 +57,8 @@
 			candidates.Remove(P)
 			continue
 
-/datum/dynamic_ruleset/roundstart/proc/ready()
-	if (required_candidates > candidates.len)
+/datum/dynamic_ruleset/roundstart/proc/ready()	//Here you can perform any additional checks you want. (such as checking the map, the amount of certain jobs, etc)
+	if (required_candidates > candidates.len)	//IMPORTANT: If ready() returns 1, that means execute() should never fail!
 		return 0
 	return 1
 

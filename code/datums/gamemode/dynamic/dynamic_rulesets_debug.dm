@@ -11,6 +11,7 @@
 
 /datum/dynamic_ruleset/roundstart/test_traitor/execute()
 	var/mob/M = pick(candidates)
+	assigned += M
 	var/datum/role/traitor/newTraitor = new
 	newTraitor.AssignToRole(M.mind,1)
 	newTraitor.OnPostSetup(FALSE)
@@ -29,6 +30,7 @@
 
 /datum/dynamic_ruleset/roundstart/test_cultist/execute()
 	var/mob/M = pick(candidates)
+	assigned += M
 	var/datum/role/cultist/newCultist = new
 	newCultist.AssignToRole(M.mind,1)
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
@@ -51,6 +53,7 @@
 
 /datum/dynamic_ruleset/roundstart/test_vampire/execute()
 	var/mob/M = pick(candidates)
+	assigned += M
 	var/datum/role/traitor/newVampire = new
 	newVampire.AssignToRole(M.mind,1)
 	newVampire.OnPostSetup(FALSE)
