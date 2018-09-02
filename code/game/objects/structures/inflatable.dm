@@ -291,7 +291,7 @@
 
 /obj/structure/inflatable/shelter
 	name = "inflatable shelter"
-	desc = "A shelter designed to protect from extreme heat and pressure, but vulnerable to popping by other forms of trauma. Filled with soporific gasses that promote health."
+	desc = "A shelter designed to protect from extreme heat and pressure, but vulnerable to popping by other forms of trauma. The entrance is fitted with a medical autoinjector."
 	icon_state = "shelter_base"
 	anchored = 0
 	undeploy_path = /obj/item/inflatable/shelter
@@ -311,7 +311,7 @@
 /obj/structure/inflatable/shelter/examine(mob/user)
 	..()
 	if(!(user.loc == src))
-		to_chat(user, "<span class='notice'>Click to enter. Use grab on shelter to force target inside.</span>")
+		to_chat(user, "<span class='notice'>Click to enter. Use grab on shelter to force target inside. Click-drag onto firealarm or right click to deflate.</span>")
 	else
 		to_chat(user, "<span class='notice'>Click to package contaminated clothes. Resist to exit/cancel exit.</span>")
 	var/list/living_contents = list()
@@ -356,7 +356,7 @@
 		var/obj/item/weapon/grab/G = W
 		var/mob/living/target = G.affecting
 		visible_message(user,"<span class='danger'>[user] begins to drag [target] into the shelter!</span>")
-		if(do_after(target,src,20)) //Twice the normal time
+		if(do_after_many(user,list(target,src),20)) //Twice the normal time
 			enter_shelter(target)
 	else
 		..()
