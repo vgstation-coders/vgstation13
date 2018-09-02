@@ -351,12 +351,14 @@ var/list/department_radio_keys = list(
 
 /mob/living/proc/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
 	switch(message_mode)
-		/*
 		if(MODE_CHANGELING)
 			if(lingcheck())
 				var/turf/T = get_turf(src)
-				log_say("[mind.changeling.changelingID]/[key_name(src)] (@[T.x],[T.y],[T.z]) Changeling Hivemind: [html_encode(speech.message)]")
-				var/themessage = text("<i><font color=#800080><b>[]:</b> []</font></i>",mind.changeling.changelingID,html_encode(speech.message))
+				var/datum/role/changeling/C = mind.GetRole(CHANGELING)
+				if(!C)
+					return 0
+				log_say("[C.changelingID]/[key_name(src)] (@[T.x],[T.y],[T.z]) Changeling Hivemind: [html_encode(speech.message)]")
+				var/themessage = text("<i><font color=#800080><b>[]:</b> []</font></i>",C.changelingID,html_encode(speech.message))
 				for(var/mob/M in player_list)
 					if(M.lingcheck() || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
 						handle_render(M,themessage,src)
@@ -370,7 +372,6 @@ var/list/department_radio_keys = list(
 					if(M.construct_chat_check(2) /*receiving check*/ || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
 						handle_render(M,themessage,src)
 				return 1
-		*/
 		if(MODE_ANCIENT)
 			if(isMoMMI(src))
 				return 0 //Noice try, I really do appreciate the effort
@@ -452,10 +453,11 @@ var/list/department_radio_keys = list(
 			whisper(speech.message, speech.language)
 			return NOPASS
 	return 0
-/*
+
 /mob/living/lingcheck()
-	if(mind && mind.changeling && !issilicon(src))
-		return 1*/
+	if(ischangeling(src) && !issilicon(src))
+		return 1
+	return 0
 
 /mob/living/construct_chat_check(var/setting = 0) //setting: 0 is to speak over general into cultchat, 1 is to speak over channel into cultchat, 2 is to hear cultchat
 	if(!mind)
