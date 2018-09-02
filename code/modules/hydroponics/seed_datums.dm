@@ -626,6 +626,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 										H.vessel.remove_reagent(BLOOD, drawing)
 										tray.reagents.add_reagent(BLOOD, drawing)
 	if(ligneous && success)
+		success = 0
 		if(istype(user, /mob/living/carbon))
 			var/mob/living/carbon/M = user
 			for(var/obj/item/I in M.held_items)
