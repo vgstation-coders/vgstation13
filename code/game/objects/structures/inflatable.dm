@@ -439,14 +439,12 @@
 			update_icon()
 			to_chat(user,"<span class='notice'>You climb free of the shelter.</span>")
 
-/obj/structure/inflatable/shelter/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob) //copy pasted from cryo code
-	if(!ismob(O))
-		return
+/obj/structure/inflatable/shelter/MouseDropTo(atom/movable/O, mob/user) //copy pasted from cryo code
 	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) //no you can't pull things out of your ass
 		return
 	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
 		return
-	if(!Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob too far away from you, or are you too far away from the source
+	if(!Adjacent(user) || !user.Adjacent(src)) // is the mob too far away from you, or are you too far away from the source
 		return
 	if(O.locked_to)
 		return
@@ -457,7 +455,7 @@
 	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
 		return
 	if(isrobot(user))
-		var/mob/living/silicon/robot/robit = usr
+		var/mob/living/silicon/robot/robit = user
 		if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
 			to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
 			return
