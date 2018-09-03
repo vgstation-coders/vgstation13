@@ -22,6 +22,7 @@
 	var/breakout_time = 2 //2 minutes by default
 	var/sound_file = 'sound/machines/click.ogg'
 
+	var/has_electronics = 0
 	var/has_lock_type = null //The type this closet should be converted to if made ID secured
 	var/has_lockless_type = null //The type this closet should be converted to if made no longer ID secured
 	var/obj/item/weapon/circuitboard/airlock/electronics
@@ -229,26 +230,8 @@
 			new_closet = change_type(has_lockless_type)
 
 			if(new_closet)
-				var/obj/item/weapon/circuitboard/airlock/E
-				if (!new_closet.electronics)
-					E = new/obj/item/weapon/circuitboard/airlock(new_closet.loc)
-					if(new_closet.req_access && new_closet.req_access.len)
-						E.conf_access = new_closet.req_access
-					else if(new_closet.req_one_access && new_closet.req_one_access.len)
-						E.conf_access = new_closet.req_one_access
-						E.one_access = 1
-				else
-					E = new_closet.electronics
-					new_closet.electronics = null
-					E.forceMove(new_closet.loc)
-					E.installed = 0
-				new_closet.req_access = null
-				new_closet.req_one_access = null
-
-				if (new_closet.broken == 1)
-					E.icon_state = "door_electronics_smoked"
-					new_closet.broken = 0
-
+				new_closet.dump_electronics()
+				new_closet.broken = 0
 				new_closet.locked = 0
 				new_closet.update_icon()
 			else
@@ -256,6 +239,31 @@
 				to_chat(user, "<span class='notice'>Wierd, you can't get the electronics out.</span>")
 	else
 		to_chat(user, "<span class='notice'>You can't get the electronics out</span>")
+
+/obj/structure/closet/proc/dump_electronics()
+	var/obj/item/weapon/circuitboard/airlock/E
+	if (!electronics)
+		E = new/obj/item/weapon/circuitboard/airlock(loc)
+		if(req_access && req_access.len)
+			E.conf_access = req_access
+		else if(req_one_access && req_one_access.len)
+			E.conf_access = req_one_access
+			E.one_access = 1
+	else
+		E = electronics
+		electronics = null
+		E.forceMove(loc)
+		E.installed = 0
+
+	if (broken == 1)
+		E.icon_state = "door_electronics_smoked"
+
+	req_access = null
+	req_one_access = null
+
+	return E
+
+
 
 // Might come handy for painting crates and lockers some day.
 // Using it to change from secure to non secure lockers for now
@@ -283,20 +291,33 @@
 
 // this should probably use dump_contents()
 /obj/structure/closet/ex_act(severity)
+	var/obj/item/weapon/circuitboard/airlock/E
 	switch(severity)
 		if(1)
-			for(var/atom/movable/A as mob|obj in src)//pulls everything out of the locker and hits it with an explosion
+			broken = 1
+			if(has_electronics)//If it's got electronics, generate them/pull them out
+				E = dump_electronics()
+				E.forceMove(src)
+			for(var/atom/movable/A as mob|obj in src)//pulls everything else out of the locker and hits it with an explosion
 				A.forceMove(src.loc)
 				A.ex_act(severity++)
 			qdel(src)
 		if(2)
 			if(prob(50))
+				broken = 1
+				if(has_electronics)
+					E = dump_electronics()
+					E.forceMove(src)
 				for (var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
 					A.ex_act(severity++)
 				qdel(src)
 		if(3)
 			if(prob(5))
+				broken = 1
+				if(has_electronics)
+					E = dump_electronics()
+					E.forceMove(src)
 				for(var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
 					A.ex_act(severity++)
@@ -313,6 +334,9 @@
 	health -= Proj.damage
 	..()
 	if(health <= 0)
+		broken = 1
+		if(has_electronics)
+			dump_electronics()
 		for(var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.loc)
 		qdel(src)
@@ -337,6 +361,9 @@
 		health -= B.get_damage()
 
 	if(health <= 0)
+		broken = 1
+		if(has_electronics)
+			dump_electronics()
 		dump_contents()
 		qdel(src)
 
@@ -359,6 +386,9 @@
 	if(user.environment_smash_flags & SMASH_CONTAINERS)
 //		user.do_attack_animation(src, user) //This will look stupid
 		visible_message("<span class='warning'>[user] destroys the [src]. </span>")
+		broken = 1
+		if(has_electronics)
+			dump_electronics()
 		for(var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.loc)
 		qdel(src)
@@ -367,6 +397,9 @@
 /obj/structure/closet/blob_act()
 	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
 	if(prob(75))
+		broken = 1
+		if(has_electronics)
+			dump_electronics()
 		for(var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.loc)
 		qdel(src)
@@ -390,6 +423,8 @@
 			materials.makeSheets(src)
 			for(var/mob/M in viewers(src))
 				M.show_message("<span class='notice'>\The [src] has been cut apart by [user] with \the [WT].</span>", 1, "You hear welding.", 2)
+			if(has_electronics)
+				dump_electronics()
 			qdel(src)
 			return
 

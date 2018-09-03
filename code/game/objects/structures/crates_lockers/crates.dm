@@ -238,6 +238,7 @@
 	icon_closed = "largemetal"
 	redlight = "largemetalr"
 	greenlight = "largemetalg"
+	has_lockless_type = /obj/structure/closet/crate/large
 
 /obj/structure/closet/crate/secure/large/close()
 	//we can hold up to one large item
@@ -275,6 +276,7 @@
 	var/emag = "securecrateemag"
 	broken = 0
 	locked = 1
+	has_electronics = 1
 	health = 1000
 
 /obj/structure/closet/crate/secure/basic
@@ -303,6 +305,7 @@
 	icon_state = "largemetal"
 	icon_opened = "largemetalopen"
 	icon_closed = "largemetal"
+	has_lock_type = /obj/structure/closet/crate/secure/large
 
 /obj/structure/closet/crate/large/close()
 	//we can hold up to one large item
@@ -651,6 +654,12 @@
 			qdel(src)
 			return
 		if(2.0)
+			broken = 1
+			if(has_electronics)
+				if (prob(50))
+					dump_electronics()
+				else
+					qdel(electronics)
 			for(var/obj/O in src.contents)
 				if(prob(50))
 					qdel(O)
@@ -658,6 +667,9 @@
 			return
 		if(3.0)
 			if (prob(50))
+				broken = 1
+				if(has_electronics)
+					dump_electronics()
 				qdel(src)
 			return
 		else
