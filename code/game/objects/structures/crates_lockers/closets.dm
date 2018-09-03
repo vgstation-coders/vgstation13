@@ -31,7 +31,7 @@
 	ignoreinvert = 1
 
 /obj/structure/closet/basic
-	has_lock_type = /obj/structure/closet/secure_closet
+	has_lock_type = /obj/structure/closet/secure_closet/basic
 
 /obj/structure/closet/proc/canweld()
 	return 1
