@@ -538,6 +538,14 @@
 		return
 	return ..()
 
+// Turns out /obj/structure/closet/update_icon messes with crates' overlays, nullifying that for now for a quick fix
+// TODO: move any code that handles crate overlays into here.
+/obj/structure/closet/crate/secure/update_icon()
+	if(!opened)
+		icon_state = icon_closed
+	else
+		icon_state = icon_opened
+
 /obj/structure/closet/crate/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
