@@ -15,7 +15,9 @@
 	var/rigged = 0
 	var/sound_effect_open = 'sound/machines/click.ogg'
 	var/sound_effect_close = 'sound/machines/click.ogg'
-	has_lock_type = /obj/structure/closet/crate/secure
+
+/obj/structure/closet/crate/basic
+	has_lock_type = /obj/structure/closet/crate/secure/basic
 
 /obj/structure/closet/pcrate
 	name = "plastic crate"
@@ -97,6 +99,7 @@
 	density = 1
 	icon_opened = "medicalcrateopen"
 	icon_closed = "medicalcrate"
+	has_lock_type = /obj/structure/closet/crate/secure/medsec
 
 /obj/structure/closet/crate/rcd
 	desc = "A crate for the storage of the RCD."
@@ -106,6 +109,7 @@
 	density = 1
 	icon_opened = "crateopen"
 	icon_closed = "crate"
+	has_lock_type = /obj/structure/closet/crate/secure/basic
 
 /obj/structure/closet/crate/freezer
 	desc = "A freezer."
@@ -149,6 +153,8 @@
 	density = 1
 	icon_opened = "largebinopen"
 	icon_closed = "largebin"
+	has_lock_type = /obj/structure/closet/crate/secure/bin
+
 /obj/structure/closet/crate/bin/attackby(var/obj/item/weapon/W, var/mob/user)
     if(iswrench(W) && wrenchable())
         return wrenchAnchor(user)
@@ -201,6 +207,7 @@
 	density = 1
 	icon_opened = "hydrosecurecrateopen"
 	icon_closed = "hydrosecurecrate"
+	has_lockless_type = /obj/structure/closet/crate/hydroponics
 
 /obj/structure/closet/crate/secure/bin
 	desc = "A secure bin."
@@ -212,6 +219,8 @@
 	greenlight = "largebing"
 	sparks = "largebinsparks"
 	emag = "largebinemag"
+	has_lock_type = /obj/structure/closet/crate/bin
+
 /obj/structure/closet/crate/secure/bin/attackby(var/obj/item/weapon/W, var/mob/user)
     if(iswrench(W) && wrenchable())
         return wrenchAnchor(user)
@@ -267,8 +276,9 @@
 	broken = 0
 	locked = 1
 	health = 1000
-	has_lock_type = null
-	has_lockless_type = /obj/structure/closet/crate/
+
+/obj/structure/closet/crate/secure/basic
+	has_lockless_type = /obj/structure/closet/crate/basic
 
 /obj/structure/closet/crate/secure/anti_tamper
 	name = "Extra-secure crate"
@@ -319,6 +329,7 @@
 	icon_opened = "hydrocrateopen"
 	icon_closed = "hydrocrate"
 	density = 1
+	has_lock_type = /obj/structure/closet/crate/secure/hydrosec
 
 /obj/structure/closet/crate/sci
 	desc = "A science crate."
@@ -328,6 +339,7 @@
 	density = 1
 	icon_opened = "scicrateopen"
 	icon_closed = "scicrate"
+	has_lock_type = /obj/structure/closet/crate/secure/scisec
 
 /obj/structure/closet/crate/secure/scisec
 	desc = "A secure science crate."
@@ -337,6 +349,7 @@
 	density = 1
 	icon_opened = "scisecurecrateopen"
 	icon_closed = "scisecurecrate"
+	has_lockless_type = /obj/structure/closet/crate/sci
 
 /obj/structure/closet/crate/engi
 	desc = "An engineering crate."
@@ -346,6 +359,7 @@
 	density = 1
 	icon_opened = "engicrateopen"
 	icon_closed = "engicrate"
+	has_lock_type = /obj/structure/closet/crate/secure/engisec
 
 /obj/structure/closet/crate/secure/engisec
 	desc = "A secure engineering crate."
@@ -355,6 +369,17 @@
 	density = 1
 	icon_opened = "engisecurecrateopen"
 	icon_closed = "engisecurecrate"
+	has_lockless_type = /obj/structure/closet/crate/engi
+
+/obj/structure/closet/crate/secure/medsec
+	desc = "A secure medical crate."
+	name = "secure medical crate"
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "medicalsecurecrate"
+	density = 1
+	icon_opened = "medicalsecurecrateopen"
+	icon_closed = "medicalsecurecrate"
+	has_lockless_type = /obj/structure/closet/crate/medical
 
 /obj/structure/closet/crate/secure/medsec
 	desc = "A secure medical crate."
