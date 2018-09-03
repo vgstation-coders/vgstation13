@@ -406,13 +406,24 @@ var/station_does_not_tip = FALSE
 #define CARD_CAPTURE_FAILURE_NO_CONNECTION 9 // Account database not available.
 
 #define BANK_SECURITY_EXPLAINATION {"Choose your bank account security level.
-Assuming funds are not present in your Virtual Wallet,
-At level Zero, venders can deduct from your bank account with only your account number.
-At level One, venders require a account number and PIN.
-At level Two, venders require that the card is present and PIN.
+Assuming funds are not present in your Virtual Wallet at a vender,
+At level Zero, only account number.
+At level One, account number and PIN.
+At level Two, card is present and PIN.
 You can change this mid-game at an ATM."}
 
-var/list/bank_security_associative = list(
+proc/bank_security_num2text(var/num as num)
+	switch(num)
+		if(0)
+			return "Zero"
+		if(1)
+			return "One"
+		if(2)
+			return "Two"
+		else
+			return "OUT OF RANGE"
+
+var/list/bank_security_text2num_associative = list(
 	"Zero" = 0,
 	"One" = 1,
 	"Two" = 2

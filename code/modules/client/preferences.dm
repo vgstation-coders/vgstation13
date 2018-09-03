@@ -264,7 +264,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<b>Flavor Text:</b><a href='byond://?src=\ref[user];preference=flavor_text;task=input'>Set</a><br>
 	<b>Character records:</b>
 	[jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=\ref[user];preference=records;record=1\">Set</a>"]<br>
-	<b>Bank account security preference:</b><a href ='?_src_=prefs;preference=bank_security;task=input'>[bank_security_associative.Find(bank_security)]</a> <br>
+	<b>Bank account security preference:</b><a href ='?_src_=prefs;preference=bank_security;task=input'>[bank_security_num2text(bank_security)]</a> <br>
 	</td><td valign='top' width='21%'>
 	<h3>Hair Style</h3>
 	<a href='?_src_=prefs;preference=h_style;task=input'>[h_style]</a><BR>
@@ -1256,9 +1256,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						nanotrasen_relation = new_relation
 
 				if("bank_security")
-					var/new_bank_security = input(user, BANK_SECURITY_EXPLAINATION, "Character Preference")  as null|anything in bank_security_associative
+					var/new_bank_security = input(user, BANK_SECURITY_EXPLAINATION, "Character Preference")  as null|anything in bank_security_text2num_associative
 					if(!isnull(new_bank_security))
-						bank_security = bank_security_associative[new_bank_security]
+						bank_security = bank_security_text2num_associative[new_bank_security]
 						
 				if("flavor_text")
 					flavor_text = input(user,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message

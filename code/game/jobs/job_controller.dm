@@ -397,7 +397,7 @@ var/global/datum/controller/occupations/job_master
 		var/balance_bank = rand(100,250)
 		balance_wallet = rand(100,250)
 		var/bank_pref_number = H.client.prefs.bank_security
-		var/bank_pref = bank_security_associative.Find(bank_pref_number)
+		var/bank_pref = bank_security_num2text(bank_pref_number)
 		if(centcomm_account_db)
 			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = PLAYER_START_WAGE, security_pref = bank_pref_number)
 			if(H.mind)
