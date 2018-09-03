@@ -890,6 +890,9 @@
 			src.overload_lighting()
 
 	else if (href_list["malfhack"])
+		if(STATION_Z != z)
+			to_chat(usr, "<span class = 'warning'>This APC is not on the station Z level.</span>")
+			return
 		var/mob/living/silicon/ai/malfai = usr
 		var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
 		if(get_malf_status(malfai)==1)
