@@ -645,8 +645,9 @@
 
 	C.emote("deathgasp")
 	C.tod = worldtime2text()
-
-	spawn(rand(800,1200))
+	var/time_to_take = rand(800, 1200)
+	to_chat(C, "<span class='notice'>This will take [round((time_to_take/10))] seconds.</span>")
+	spawn(time_to_take)
 		to_chat(src, "<span class='warning'>We are now ready to regenerate.</span>")
 		add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_returntolife)
 
