@@ -1256,7 +1256,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						nanotrasen_relation = new_relation
 
 				if("bank_security")
-					var/new_bank_security = input(user, BANK_SECURITY_EXPLAINATION, "Character Preference")  as null|anything in bank_security_text2num_associative
+					var/new_bank_security = input(user, BANK_SECURITY_EXPLANATION, "Character Preference")  as null|anything in bank_security_text2num_associative
 					if(!isnull(new_bank_security))
 						bank_security = bank_security_text2num_associative[new_bank_security]
 						

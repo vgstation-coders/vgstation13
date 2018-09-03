@@ -405,14 +405,14 @@ var/station_does_not_tip = FALSE
 #define CARD_CAPTURE_FAILURE_NO_DESTINATION 8 // There was no linked account to send funds to.
 #define CARD_CAPTURE_FAILURE_NO_CONNECTION 9 // Account database not available.
 
-#define BANK_SECURITY_EXPLAINATION {"Choose your bank account security level.
+#define BANK_SECURITY_EXPLANATION {"Choose your bank account security level.
 Assuming funds are not present in your Virtual Wallet at a vender,
 At level Zero, only account number.
 At level One, account number and PIN.
 At level Two, card is present and PIN.
 You can change this mid-game at an ATM."}
 
-proc/bank_security_num2text(var/num as num)
+proc/bank_security_num2text(var/num)
 	switch(num)
 		if(0)
 			return "Zero"
@@ -428,4 +428,4 @@ var/list/bank_security_text2num_associative = list(
 	"One" = 1,
 	"Two" = 2
 ) // Can't use a zero. Throws a fit about out of bounds indices if you do.
-// Also if you add more security levels, please also update the above BANK_SECURITY_EXPLAINATION
+// Also if you add more security levels, please also update the above BANK_SECURITY_EXPLANATION
