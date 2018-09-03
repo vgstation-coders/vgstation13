@@ -19,6 +19,7 @@ CREATE TABLE players (
     be_special          TEXT,
     disabilities        INTEGER,
     nanotrasen_relation TEXT,
+    bank_security 		TEXT,
     UNIQUE ( player_ckey, player_slot )
 );
 

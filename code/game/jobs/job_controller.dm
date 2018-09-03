@@ -396,8 +396,16 @@ var/global/datum/controller/occupations/job_master
 		// Total between $200 and $500
 		var/balance_bank = rand(100,250)
 		balance_wallet = rand(100,250)
+		var/bank_pref = H.client.prefs.bank_security
+		switch(bank_pref)
+			if("Zero")
+				bank_pref = 0
+			if("One")
+				bank_pref = 1
+			if("Two")
+				bank_pref = 2
 		if(centcomm_account_db)
-			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = PLAYER_START_WAGE)
+			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = PLAYER_START_WAGE, security_pref = bank_pref)
 			if(H.mind)
 				var/remembered_info = ""
 				remembered_info += "<b>Your account number is:</b> #[M.account_number]<br>"
@@ -427,6 +435,7 @@ var/global/datum/controller/occupations/job_master
 			spawn()
 				to_chat(H, "<span class='danger'>Your bank account number is: <span style='color: black;'>[M.account_number]</span>, your bank account pin is: <span style='color: black;'>[M.remote_access_pin]</span></span>")
 				to_chat(H, "<span class='danger'>Your virtual wallet funds are: <span style='color: black;'>$[balance_wallet]</span>, your bank account funds are: <span style='color: black;'>$[balance_bank]</span></span>")
+				to_chat(H, "<span class='danger'>Your account security level is set to: <span style='color: black;'>[H.client.prefs.bank_security]</span></span>") 
 
 	var/alt_title = null
 	if(H.mind)
