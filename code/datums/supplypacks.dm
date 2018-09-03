@@ -1560,7 +1560,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/virusdish/random,
 					/obj/item/weapon/virusdish/random)
 	cost = 25
-	containertype = "/obj/structure/closet/crate/secure"
+	containertype = "/obj/structure/closet/crate/secure/medsec"
 	containername = "virus crate"
 	access = list(access_cmo)
 	group = "Medical"
@@ -1579,7 +1579,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/bonesetter,
 					/obj/item/weapon/circular_saw)
 	cost = 25
-	containertype = "/obj/structure/closet/crate/secure"
+	containertype = "/obj/structure/closet/crate/secure/medsec"
 	containername = "surgery crate"
 	access = list(access_medical)
 	group = "Medical"
@@ -1592,7 +1592,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/storage/box/gloves,
 					/obj/item/weapon/storage/box/bodybags)
 	cost = 15
-	containertype = "/obj/structure/closet/crate"
+	containertype = "/obj/structure/closet/crate/medical"
 	containername = "sterile equipment crate"
 	group = "Medical"
 
@@ -1606,7 +1606,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/blood/OMinus,
 					/obj/item/weapon/reagent_containers/blood/empty)
 	cost = 10
-	containertype = /obj/structure/closet/crate/secure
+	containertype = /obj/structure/closet/crate/secure/medsec
 	containername = "bloodbag crate"
 	access = list(access_medical)
 	group = "Medical"
@@ -1635,7 +1635,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Motorized wheelchair"
 	contains = list(/obj/structure/bed/chair/vehicle/wheelchair/motorized)
 	cost = 200
-	containertype = "/obj/structure/closet/crate/secure"
+	containertype = "/obj/structure/closet/crate/secure/medsec"
 	containername = "motorized wheelchair crate"
 	access = list(access_medical)
 	group = "Medical"

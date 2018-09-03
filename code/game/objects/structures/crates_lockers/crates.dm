@@ -353,6 +353,15 @@
 	icon_opened = "engisecurecrateopen"
 	icon_closed = "engisecurecrate"
 
+/obj/structure/closet/crate/secure/medsec
+	desc = "A secure medical crate."
+	name = "secure medical crate"
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "medicalsecurecrate"
+	density = 1
+	icon_opened = "medicalsecurecrateopen"
+	icon_closed = "medicalsecurecrate"
+
 /obj/structure/closet/crate/secure/plasma/prefilled
 	var/count=10
 /obj/structure/closet/crate/secure/plasma/prefilled/New()
