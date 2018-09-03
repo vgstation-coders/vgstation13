@@ -167,7 +167,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/disabilities = 0 // NOW A BITFIELD, SEE ABOVE
 
 	var/nanotrasen_relation = "Neutral"
-	var/bank_security = "One"			//for bank accounts, 0-2, no-pin,pin,pin&card
+	var/bank_security = 1			//for bank accounts, 0-2, no-pin,pin,pin&card
 	
 
 	// 0 = character settings, 1 = game preferences
@@ -264,7 +264,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<b>Flavor Text:</b><a href='byond://?src=\ref[user];preference=flavor_text;task=input'>Set</a><br>
 	<b>Character records:</b>
 	[jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=\ref[user];preference=records;record=1\">Set</a>"]<br>
-	<b>Bank account security preference:</b><a href ='?_src_=prefs;preference=bank_security;task=input'>[bank_security]</a> <br>
+	<b>Bank account security preference:</b><a href ='?_src_=prefs;preference=bank_security;task=input'>[bank_security_num2text(bank_security)]</a> <br>
 	</td><td valign='top' width='21%'>
 	<h3>Hair Style</h3>
 	<a href='?_src_=prefs;preference=h_style;task=input'>[h_style]</a><BR>
@@ -1256,9 +1256,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						nanotrasen_relation = new_relation
 
 				if("bank_security")
-					var/new_bank_security = input(user, "Choose your bank account security level.\nAt level zero, vendors can deduct money straight from your account. On One and Two, they can only access your virtual wallet.\n You can change this mid-game at an ATM.", "Character Preference")  as null|anything in list("Zero", "One", "Two")
-					if(new_bank_security)
-						bank_security = new_bank_security
+					var/new_bank_security = input(user, BANK_SECURITY_EXPLANATION, "Character Preference")  as null|anything in bank_security_text2num_associative
+					if(!isnull(new_bank_security))
+						bank_security = bank_security_text2num_associative[new_bank_security]
 						
 				if("flavor_text")
 					flavor_text = input(user,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message

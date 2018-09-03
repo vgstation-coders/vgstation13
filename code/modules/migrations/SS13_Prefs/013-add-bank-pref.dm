@@ -4,7 +4,7 @@
 
 /datum/migration/sqlite/ss13_prefs/_013/up()
 	if(!hasColumn("players","bank_security"))
-		return execute("ALTER TABLE `players` ADD COLUMN bank_security TEXT DEFAULT 'One'")
+		return execute("ALTER TABLE `players` ADD COLUMN bank_security INTEGER DEFAULT 1")
 	return TRUE
 
 /datum/migration/sqlite/ss13_prefs/_013/down()
