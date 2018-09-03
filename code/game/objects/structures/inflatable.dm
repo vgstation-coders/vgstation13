@@ -378,7 +378,7 @@
 	user.forceMove(src)
 	update_icon()
 	user.reset_view()
-	if(!user.reagents.has_reagent(PRESLOMITE))
+	if(user.reagents && !user.reagents.has_reagent(PRESLOMITE))
 		user.reagents.add_reagent(PRESLOMITE,3)
 		user.reagents.add_reagent(LEPORAZINE,1)
 		to_chat(user,"<span class='warning'>You feel a prick upon entering \the [src].</span>")
