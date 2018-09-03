@@ -511,17 +511,28 @@
 			overlays += greenlight
 			return
 		else
-			to_chat(user, "<span class='notice'>[src] is locked.</span>")
+			to_chat(user, "<span class='notice'>Access Denied.</span>")
 			return
 	else
 		..()
 
+/obj/structure/closet/crate/secure/proc/togglelock(mob/user as mob)
+	if(src.allowed(user))
+		src.locked = !src.locked
+		if (src.locked)
+			to_chat(user, "<span class='notice'>You lock \the [src].</span>")
+			overlays.len = 0
+			overlays += redlight
+		else
+			to_chat(user, "<span class='notice'>You unlock [src].</span>")
+			overlays.len = 0
+			overlays += greenlight
+	else
+		to_chat(user, "<span class='notice'>Access Denied.</span>")
+
 /obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/card) && src.allowed(user) && !locked && !opened && !broken)
-		to_chat(user, "<span class='notice'>You lock \the [src].</span>")
-		src.locked = 1
-		overlays.len = 0
-		overlays += redlight
+	if(istype(W, /obj/item/weapon/card) && !opened && !broken)
+		togglelock(user)
 		return
 	else if ( istype(W, /obj/item/weapon/card/emag) && locked &&!broken)
 		overlays.len = 0
@@ -535,6 +546,32 @@
 		return
 	else if(istype(W, /obj/item/weapon/screwdriver) && !opened && !locked && src.has_lockless_type)
 		remove_lock(user)
+		return
+	return ..()
+
+/obj/structure/closet/crate/secure/verb/verb_togglelock()
+	set src in oview(1) // One square distance
+	set category = "Object"
+	set name = "Toggle Lock"
+
+	if(usr.incapacitated()) // Don't use it if you're not able to! Checks for stuns, ghost and restrain
+		return
+
+	if(!Adjacent(usr) || usr.loc == src)
+		return
+
+	if(src.broken)
+		return
+
+	if (ishuman(usr))
+		if (!opened)
+			togglelock(usr)
+			return 1
+	else
+		to_chat(usr, "<span class='warning'>This mob type can't use this verb.</span>")
+
+/obj/structure/closet/crate/secure/AltClick()
+	if(verb_togglelock())
 		return
 	return ..()
 
