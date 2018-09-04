@@ -1,7 +1,7 @@
 /datum/gamemode/vampire
 	minimum_player_count = 10
 	name = "Vampire"
-	roles_allowed = list(/datum/role/vampire = 1)
+	factions_allowed = list(/datum/faction/vampire = 4) // Up to 4 vampires.
 
 // -- Vampire powers
 

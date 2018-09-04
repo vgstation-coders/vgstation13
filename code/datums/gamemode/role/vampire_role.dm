@@ -78,16 +78,30 @@
 			antag.current.client.screen -= list(antag.current.hud_used.vampire_blood_display)
 	..()
 
-/* we're gonna have procedural faction generation to handle thralls and apprentices
-/datum/role/vampire/AdminPanelEntry()
+/datum/role/vampire/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
+	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	var/mob/M = antag.current
+	var/text = {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
+[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
+ - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
+ - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a> - <a href='?src=\ref[src]&mind=\ref[antag]&giveblood=1'>Give blood</a>"}
+	return text
+
+/datum/role/vampire/RoleTopic(href, href_list)
 	. = ..()
-	if (thralls.len)
-		. += "<b>Thralls slaved to [antag.current]:</b> <br/>"
-		. += "<ul>"
-		for (var/datum/role/thrall/T in thralls)
-			. += T.AdminPanelEntry()
-		. += "</ul>"
-*/
+	if (!usr.client.holder)
+		return FALSE
+	if (href_list["giveblood"])
+		var/amount = input("How much would you like to give?", "Giving blood") as null|num
+		if (!amount)
+			return FALSE
+		give_blood(amount)
+
+/datum/role/vampire/proc/give_blood(var/amount)
+	blood_total += amount
+	blood_usable += amount
+	check_vampire_upgrade()
+	update_vamp_hud()
 
 // -- Not sure if this is meant to work like that.
 // I just put what I expect to see in the "The vampires were..."

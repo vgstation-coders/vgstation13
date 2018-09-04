@@ -111,7 +111,7 @@
 
 /datum/gamemode/proc/CreateNumOfRoles(var/datum/role/R, var/list/candidates)
 	if(!candidates || !candidates.len)
-		warning("ran out of available players to fill role [R]!")
+		WARNING("ran out of available players to fill role [R]!")
 		return
 	for(var/mob/M in candidates)
 		CreateRole(R, M)
@@ -121,7 +121,7 @@
 	var/list/available_players = FilterAvailablePlayers(R)
 	for(var/i = 0 to num)
 		if(!available_players.len)
-			warning("ran out of available players to fill role [R]!")
+			WARNING("ran out of available players to fill role [R]!")
 			break
 		shuffle(available_players)
 		var/mob/new_player/P = pick(available_players)

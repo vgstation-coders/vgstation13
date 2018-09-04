@@ -79,6 +79,7 @@
 /proc/makeLateVampire(var/mob/living/carbon/human/H, var/blood_to_give)
 	var/datum/faction/vampire/Fac_vamp = new
 	var/datum/role/vampire/vamp =  new(H.mind, Fac_vamp, override = TRUE)
+	Fac_vamp.members += vamp
 	if (!vamp || !Fac_vamp)
 		return FALSE
 	ticker.mode.factions += Fac_vamp
