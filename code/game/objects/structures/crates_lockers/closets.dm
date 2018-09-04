@@ -212,7 +212,7 @@
 				else
 					new_closet.req_access = E.conf_access
 
-				new_closet.locked = 1
+				new_closet.locked = 0
 				new_closet.update_icon()
 			else
 				//Should not happen

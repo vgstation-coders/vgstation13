@@ -401,12 +401,7 @@
 
 /obj/structure/closet/crate/secure/New()
 	..()
-	if(locked)
-		overlays.len = 0
-		overlays += redlight
-	else
-		overlays.len = 0
-		overlays += greenlight
+	update_icon()
 
 /obj/structure/closet/crate/rcd/New()
 	..()
@@ -510,8 +505,7 @@
 		if (allowed(user))
 			to_chat(user, "<span class='notice'>You unlock [src].</span>")
 			src.locked = 0
-			overlays.len = 0
-			overlays += greenlight
+			update_icon()
 			return
 		else
 			to_chat(user, "<span class='notice'>Access Denied.</span>")
@@ -524,20 +518,15 @@
 		src.locked = !src.locked
 		if (src.locked)
 			to_chat(user, "<span class='notice'>You lock \the [src].</span>")
-			overlays.len = 0
-			overlays += redlight
+			update_icon()
 		else
 			to_chat(user, "<span class='notice'>You unlock [src].</span>")
-			overlays.len = 0
-			overlays += greenlight
+			update_icon()
 	else
 		to_chat(user, "<span class='notice'>Access Denied.</span>")
 
 /obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/card) && !opened && !broken)
-		togglelock(user)
-		return
-	else if ( istype(W, /obj/item/weapon/card/emag) && locked &&!broken)
+	if ( istype(W, /obj/item/weapon/card/emag) && locked &&!broken)
 		overlays.len = 0
 		overlays += emag
 		overlays += sparks
@@ -546,6 +535,9 @@
 		src.locked = 0
 		src.broken = 1
 		to_chat(user, "<span class='notice'>You unlock \the [src].</span>")
+		return
+	else if(istype(W, /obj/item/weapon/card) && !opened && !broken)
+		togglelock(user)
 		return
 	else if(istype(W, /obj/item/weapon/screwdriver) && !opened && !locked && src.has_lockless_type)
 		remove_lock(user)
@@ -579,12 +571,17 @@
 	return ..()
 
 // Turns out /obj/structure/closet/update_icon messes with crates' overlays, nullifying that for now for a quick fix
-// TODO: move any code that handles crate overlays into here.
 /obj/structure/closet/crate/secure/update_icon()
-	if(!opened)
-		icon_state = icon_closed
-	else
+	if(opened)
 		icon_state = icon_opened
+	else
+		icon_state = icon_closed
+		if (!broken)
+			overlays.len = 0
+			if(locked)
+				overlays += redlight
+			else
+				overlays += greenlight
 
 /obj/structure/closet/crate/attack_paw(mob/user as mob)
 	return attack_hand(user)
@@ -628,8 +625,7 @@
 	if(!broken && !opened  && prob(50/severity))
 		if(!locked)
 			src.locked = 1
-			overlays.len = 0
-			overlays += redlight
+			update_icon()
 		else
 			overlays.len = 0
 			overlays += emag
