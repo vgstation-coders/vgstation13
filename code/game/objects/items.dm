@@ -281,6 +281,7 @@
 	for(var/X in actions)
 		var/datum/action/A = X
 		A.Remove(user)
+
 ///called when an item is stripped off by another person, called BEFORE it is dropped. return 1 to prevent it from actually being stripped.
 /obj/item/proc/before_stripped(mob/wearer as mob, mob/stripper as mob, slot)
 	if(slot in list(slot_l_store, slot_r_store)) //is in pockets
@@ -307,7 +308,7 @@
 	return
 
 // called when "found" in pockets and storage items. Returns 1 if the search should end.
-/obj/item/proc/on_found(mob/finder as mob)
+/obj/item/proc/on_found(mob/wearer, mob/finder)
 	return
 
 // called after an item is placed in an equipment slot
