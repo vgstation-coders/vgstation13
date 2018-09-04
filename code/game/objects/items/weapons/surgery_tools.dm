@@ -187,8 +187,6 @@
 	var/cauterymode = 0 //1 = cautery enabled
 	var/obj/item/weapon/cautery/laser/held
 	var/can_be_held = /obj/item/weapon/cautery/laser
-	var/scalpel_type_on = "scalpel_laser1_on"
-	var/scalpel_type_off = "scalpel_laser1_off"
 
 /obj/item/weapon/scalpel/laser/New()
 	..()
@@ -202,13 +200,14 @@
 		heat_production = 1600
 		sharpness = 0
 		sharpness_flags = 0
-		icon_state = scalpel_type_on
+		icon_state = initial(icon_state) + ((cauterymode)?"_off":"_on")
+
 	else if(!held)
 		to_chat(user, "\The [src] lacks a cautery attachment.")
 		return
 	else
 		to_chat(user, "You return the scalpel to cutting mode.")
-		icon_state = scalpel_type_off
+		icon_state = initial(icon_state) + ((cauterymode)?"_off":"_on")
 		heat_production = 0
 		sharpness = initial(sharpness)
 		sharpness_flags = initial(sharpness_flags)
@@ -226,7 +225,6 @@
 		if(held)
 			to_chat(user, "<span class='notice'>You detach \the [held] and \the [src] switches to cutting mode.</span>")
 			playsound(src, "sound/items/screwdriver.ogg", 10, 1)
-			icon_state = scalpel_type_off
 			held.add_fingerprint(user)
 			held.forceMove(get_turf(src))
 			held = null
@@ -234,6 +232,7 @@
 			sharpness = initial(sharpness)
 			sharpness_flags = initial(sharpness_flags)
 			cauterymode = 0
+			icon_state = initial(icon_state) + "_off"
 	else if(used_item.type == can_be_held)
 		if(held)
 			to_chat(user, "<span class='notice'>There's already a cautery attached to \the [src].</span>")
@@ -265,8 +264,6 @@
 	item_state = "laserscalpel2"
 	force = 15.0
 	surgery_speed = 0.4
-	scalpel_type_on = "scalpel_laser2_on"
-	scalpel_type_off = "scalpel_laser2_off"
 	can_be_held = /obj/item/weapon/cautery/laser/tier2
 	held = /obj/item/weapon/cautery/laser/tier2
 
