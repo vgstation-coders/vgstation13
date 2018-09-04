@@ -152,7 +152,7 @@
 	duration = 50 //in deciseconds
 
 	override_base = "vamp"
-	hud_state = "vampire_jaunt"
+	hud_state = "vamp_mistform"
 
 	enteranim = "batify"
 	exitanim = "debatify"

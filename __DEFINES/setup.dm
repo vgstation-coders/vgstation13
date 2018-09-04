@@ -990,6 +990,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VAMP_SHADOW   15
 #define VAMP_CHARISMA 16
 #define VAMP_UNDYING  17
+#define VAMP_CAPE	  18
 
 #define STARTING_BLOOD 10
 
