@@ -326,6 +326,7 @@
 
 /obj/structure/closet/secure_closet/brig/Destroy()
 	brig_lockers.Remove(src)
+	..()
 
 
 
