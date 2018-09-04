@@ -1257,7 +1257,7 @@ var/global/list/image/blood_overlays = list()
 	var/obj/abstract/screen/inventory/OI = over_object
 	on_mousedrop_to_inventory_slot()
 
-	if(OI.hand_index && usr.put_in_hand_check(src, OI.hand_index))
+	if(OI.hand_index && usr.put_in_hand_check(src, OI.hand_index) && !src.prepickup(usr))
 		usr.u_equip(src, TRUE)
 		usr.put_in_hand(OI.hand_index, src)
 		add_fingerprint(usr)
