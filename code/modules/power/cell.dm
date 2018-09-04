@@ -59,7 +59,7 @@
 		to_chat(user, "<span class='info'>The charge meter reads [crit_fail ? "NAN" : round(percent())]%.</span>")
 	else
 		to_chat(user, "Based on the starchiness, it's probably has a maximum potential of [maxcharge].")
-		to_chat(user, "<span class='info'>The impromptu power gauge is [crit_fail ? "is charred" : "[round(percent())]%"].</span>")
+		to_chat(user, "<span class='info'>The impromptu power gauge is [crit_fail ? "charred" : "at [round(percent())]%"].</span>")
 
 /obj/item/weapon/cell/attack_self(mob/user as mob)
 	src.add_fingerprint(user)
