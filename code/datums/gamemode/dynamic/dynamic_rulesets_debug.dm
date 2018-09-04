@@ -59,3 +59,29 @@
 	newVampire.OnPostSetup(FALSE)
 	newVampire.Greet(GREET_ROUNDSTART)
 	return 1
+
+
+
+////////////////////////////
+
+
+
+
+/datum/dynamic_ruleset/latejoin/test_traitor
+	name = "Test Latejoin Traitor"
+	persistent = 0//if set to 1, the rule won't be discarded after being executed, and the game mode will call update() once in a while
+	repeatable = 0//if set to 1, dynamic mode will be able to draft this ruleset again later on
+	role_category = ROLE_TRAITOR//rule will only accept candidates with "Yes" or "Always" in the preferences for this role
+	required_candidates = 1//the rule needs this many candidates (post-trimming) to be executed (example: Cult need 4 players at round start)
+	weight = 5//1 -> 9, probability for this rule to be picked against other rules
+	cost = 0//threat cost for this rule.
+	requirements = list(0,0,0,0,0,0,0,0,0,0)
+
+/datum/dynamic_ruleset/latejoin/test_traitor/execute()
+	var/mob/M = pick(candidates)
+	assigned += M
+	var/datum/role/traitor/newTraitor = new
+	newTraitor.AssignToRole(M.mind,1)
+	newTraitor.OnPostSetup(FALSE)
+	newTraitor.Greet(GREET_ROUNDSTART)
+	return 1

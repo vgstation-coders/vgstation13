@@ -3,12 +3,23 @@
 	var/threat_level = 0//rolled at the beginning of the round.
 	var/threat = 0//set at the beginning of the round. Spent by the mode to "purchase" rules.
 	var/list/roundstart_rules = list()
-	var/list/second_rule_req = list(100,100,100,80,60,40,20,0,0,0)//requirements for extra round start rules
+	var/list/latejoin_rules = list()
+	var/list/midround_rules = list()
+	var/list/second_rule_req = list(0,0,0,80,60,40,20,0,0,0)//requirements for extra round start rules
+	//var/list/second_rule_req = list(100,100,100,80,60,40,20,0,0,0)//requirements for extra round start rules
 	var/list/third_rule_req = list(100,100,100,100,100,70,50,30,10,0)
 	var/roundstart_pop_ready = 0
 	var/list/candidates = list()
 	var/list/current_rules = list()
 	var/list/executed_rules = list()
+
+	var/living_players = 0
+	var/living_antags = 0
+	var/dead_players = 0
+	var/observers = 0
+
+	var/latejoin_injection_cooldown = 0
+	var/midround_injection_cooldown = 0
 
 /datum/gamemode/dynamic/can_start()
 	threat_level = rand(1,100)*0.6 + rand(1,100)*0.4//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
@@ -19,6 +30,10 @@
 /datum/gamemode/dynamic/Setup()
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart))
 		roundstart_rules += new rule()
+	for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
+		latejoin_rules += new rule()
+	for (var/rule in subtypesof(/datum/dynamic_ruleset/midround))
+		midround_rules += new rule()
 	for(var/mob/new_player/player in player_list)
 		if(player.ready && player.mind)
 			roundstart_pop_ready++
@@ -62,20 +77,20 @@
 	return 1
 
 /datum/gamemode/dynamic/proc/picking_roundstart_rule(var/list/drafted_rules = list())
-	var/datum/dynamic_ruleset/roundstart/extra_rule = pickweight(drafted_rules)
+	var/datum/dynamic_ruleset/roundstart/starting_rule = pickweight(drafted_rules)
 
-	if (extra_rule)
-		message_admins("Picking a ruleset...<font size='3'>[extra_rule.name]</font>!")
+	if (starting_rule)
+		message_admins("Picking a ruleset...<font size='3'>[starting_rule.name]</font>!")
 
-		if (extra_rule.persistent)
-			current_rules += extra_rule
-		roundstart_rules -= extra_rule
-		drafted_rules -= extra_rule
+		roundstart_rules -= starting_rule
+		drafted_rules -= starting_rule
 
-		threat -= extra_rule.cost
-		if (extra_rule.execute())//this should never fail since ready() returned 1
-			executed_rules += extra_rule
-			for(var/mob/M in extra_rule.assigned)
+		threat -= starting_rule.cost
+		if (starting_rule.execute())//this should never fail since ready() returned 1
+			executed_rules += starting_rule
+			if (starting_rule.persistent)
+				current_rules += starting_rule
+			for(var/mob/M in starting_rule.assigned)
 				candidates -= M
 				for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
 					rule.candidates -= M//removing the assigned players from the candidates for the other rules
@@ -85,3 +100,94 @@
 		else
 			message_admins("....except not because whoever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
 	return 0
+
+/datum/gamemode/dynamic/proc/picking_latejoin_rule(var/list/drafted_rules = list())
+	var/datum/dynamic_ruleset/latejoin/latejoin_rule = pickweight(drafted_rules)
+	if (latejoin_rule)
+		if (!latejoin_rule.repeatable)
+			latejoin_rules -= latejoin_rule
+		threat -= latejoin_rule.cost
+		if (latejoin_rule.execute())//this should never fail since ready() returned 1
+			var/mob/M = pick(latejoin_rule.assigned)
+			message_admins("[key_name(M)] joined the station, and was selected by the <font size='3'>[latejoin_rule.name]</font> ruleset.")
+			executed_rules += latejoin_rule
+			if (latejoin_rule.persistent)
+				current_rules += latejoin_rule
+			return 1
+	return 0
+
+/datum/gamemode/dynamic/process()
+	if (latejoin_injection_cooldown)
+		latejoin_injection_cooldown--
+
+	for (var/datum/dynamic_ruleset/rule in current_rules)
+		rule.process()
+
+	if (midround_injection_cooldown)
+		midround_injection_cooldown--
+	//else TODO: midround rulesets drafting
+
+/datum/gamemode/dynamic/proc/update_playercounts()
+	living_players = 0
+	living_antags = 0
+	dead_players = 0
+	observers = 0
+	for (var/mob/M in player_list)
+		if (!M.client)
+			continue
+		if (M.stat != DEAD)
+			living_players++
+			if (M.mind && (M.mind.antag_roles.len > 0))
+				living_antags++
+		else
+			if (istype(M,/mob/dead/observer))
+				var/mob/dead/observer/O = M
+				if (O.started_as_observer)//Observers
+					observers++
+					continue
+				if (O.mind && O.mind.current && O.mind.current.ajourn)//Cultists
+					living_players++
+					continue
+			dead_players++//Players who actually died (and admins who ghosted)
+
+/datum/gamemode/dynamic/proc/injection_attempt()//will need to gather stats to refine those values later
+	if (latejoin_injection_cooldown)
+		return
+	var/chance = 0
+	var/max_pop_per_antag = max(5,15 - round(threat_level/10) - round(living_players/5))//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=2053826290
+	if (!living_antags)
+		chance += 50//no antags at all? let's boost those odds!
+	else
+		var/current_pop_per_antag = living_players / living_antags
+		if (current_pop_per_antag > max_pop_per_antag)
+			chance += min(50, 25+10*(current_pop_per_antag-max_pop_per_antag))
+		else
+			chance += 25-10*(max_pop_per_antag-current_pop_per_antag)
+	if (dead_players > living_players)
+		chance -= 30//more than half the crew died? ew, let's calm down on antags
+	if (threat > 70)
+		chance += 20
+	if (threat < 30)
+		chance -= 20
+	chance = round(max(0,chance))
+	//return (prob(chance))
+	return 1
+
+/datum/gamemode/dynamic/latespawn(var/mob/living/newPlayer)
+	if(emergency_shuttle.departed)//no more rules after the shuttle has left
+		return
+
+	update_playercounts()
+
+	if (injection_attempt())
+
+		var/list/drafted_rules = list()
+		for (var/datum/dynamic_ruleset/latejoin/rule in latejoin_rules)
+			if (rule.acceptable(living_players,threat_level) && threat >= rule.cost)
+				rule.candidates = list(newPlayer)
+				rule.trim_candidates()
+				if (rule.ready())
+					drafted_rules[rule] = rule.weight
+
+		if (drafted_rules.len > 0 && picking_latejoin_rule(drafted_rules))
+			latejoin_injection_cooldown = rand(6600,10200)//11 to 17 minutes inbetween antag latejoiner rolls
