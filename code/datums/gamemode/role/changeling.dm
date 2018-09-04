@@ -53,9 +53,18 @@
 		AppendObjective(/datum/objective/hijack)
 
 /datum/role/changeling/proc/changelingRegen()
+	if(antag && antag.current && antag.current.stat == DEAD)
+		return
+	var/changes = FALSE
+	var/changeby = chem_charges
 	chem_charges = Clamp(chem_charges + chem_recharge_rate, 0, chem_storage)
+	if(chem_charges != changeby)
+		changes = TRUE
+	changeby = geneticdamage
 	geneticdamage = max(0, geneticdamage-1)
-	if(antag)
+	if(geneticdamage != changeby)
+		changes = TRUE
+	if(antag && changes)
 		antag.current.updateChangelingHUD()
 
 /datum/role/changeling/proc/GetDNA(var/dna_owner)

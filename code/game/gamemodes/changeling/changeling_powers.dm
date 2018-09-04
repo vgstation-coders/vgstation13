@@ -285,7 +285,7 @@
 		to_chat(src, "<span class='warning'>This creature's DNA is useless to us!</span>")
 		return
 
-	if(!G.state == GRAB_KILL)
+	if(!(G.state == GRAB_KILL))
 		to_chat(src, "<span class='warning'>We must have a tighter grip to absorb this creature.</span>")
 		return
 
@@ -645,8 +645,9 @@
 
 	C.emote("deathgasp")
 	C.tod = worldtime2text()
-
-	spawn(rand(800,1200))
+	var/time_to_take = rand(800, 1200)
+	to_chat(C, "<span class='notice'>This will take [round((time_to_take/10))] seconds.</span>")
+	spawn(time_to_take)
 		to_chat(src, "<span class='warning'>We are now ready to regenerate.</span>")
 		add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_returntolife)
 
@@ -951,7 +952,7 @@ var/list/datum/dna/hivemind_bank = list()
 	for(var/mob/living/carbon/C in oview(changeling.sting_range))
 		victims += C
 	var/mob/living/carbon/T
-	if (victims)
+	if (victims.len)
 		T = victims[1]
 		if (victims.len > 1)
 			T = input(src, "Who will we sting?") as null|anything in victims
@@ -1064,9 +1065,9 @@ var/list/datum/dna/hivemind_bank = list()
 		return
 
 	to_chat(target, "<span class='notice'>The world around you suddenly becomes quiet.</span>")
-	target.disabilities |= DEAF
+	target.sdisabilities |= DEAF
 	spawn(300)
-		target.disabilities &= ~DEAF
+		target.sdisabilities &= ~DEAF
 
 	feedback_add_details("changeling_powers", "DS")
 	return 1
