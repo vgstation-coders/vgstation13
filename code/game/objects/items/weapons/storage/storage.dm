@@ -643,10 +643,6 @@
 	for(var/obj/item/I in contents)
 		I.OnMobDeath(wearer)
 
-/obj/item/weapon/storage/on_found(mob/wearer, mob/stripper)
-	for (var/obj/item/I in contents)
-		I.on_found(wearer, stripper)
-
 /obj/item/weapon/storage/stripped(mob/wearer as mob, mob/stripper as mob)
 	for(var/obj/item/I in contents)
 		I.stripped(wearer, stripper)
