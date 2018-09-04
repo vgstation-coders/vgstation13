@@ -17,6 +17,20 @@
 	abstract = 1
 	var/obj/item/wielding = null
 
+/obj/item/offhand/New()
+	..()
+	processing_objects.Add(src)
+
+/obj/item/offhand/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+/obj/item/offhand/process()
+	if(!loc)
+		return returnToPool(src)
+	else if(istype(loc,/turf) || !(contents.len))
+		return returnToPool(src)
+
 /obj/item/offhand/dropped(user)
 	if(!wielding)
 		returnToPool(src)
