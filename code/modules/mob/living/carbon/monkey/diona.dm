@@ -145,7 +145,7 @@
 	set desc = "Take a blood sample from a suitable donor to help understand those around you and evolve."
 
 	var/list/choices = list()
-	for(var/mob/living/carbon/C in view(1,src))
+	for(var/mob/living/carbon/human/C in view(1,src))
 		if(C.real_name != real_name)
 			choices += C
 
