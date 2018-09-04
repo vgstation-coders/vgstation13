@@ -38,6 +38,8 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	var/list/cult_words = list()
 	var/cult_state = CULT_PRELUDE
 
+	var/datum/rune_controller/rune_controller 
+
 	initroletype = /datum/role/legacy_cultist
 	roletype = /datum/role/legacy_cultist
 	required_pref = ROLE_LEGACY_CULTIST
@@ -48,6 +50,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	return header
 
 /datum/faction/cult/narsie/OnPostSetup()
+	rune_controller = new()
 	forgeObjectives()
 	for(var/datum/role/R in members)
 		R.OnPostSetup(equip = TRUE)

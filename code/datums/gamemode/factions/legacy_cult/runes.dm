@@ -225,7 +225,7 @@
 				qdel(M)
 				if(my_cult)
 					my_cult.grant_runeword(usr) //Chance to get a rune word for sacrificing a live player is 100%, so.
-				ticker.rune_controller.revive_counter ++
+				my_cult.rune_controller.revive_counter ++
 				to_chat(usr, "<span class='danger'>The ritual didn't work! Looks like this person just isn't suited to be part of our cult.</span>")
 				to_chat(usr, "<span class='notice'>Instead, the ritual has taken the lifeforce of this heretic, to be used for our benefit later.</span>")
 			else if(M.knockdown)
@@ -490,8 +490,8 @@
 					M.ghostize(1)	//kick them out of their body
 				break
 	if(!corpse_to_raise)
-		if (ticker.rune_controller.revive_counter)
-			to_chat(usr, "<span class='notice'>Enough lifeforce haunts this place to return [ticker.rune_controller.revive_counter] of ours to the mortal plane.</span>")
+		if (my_cult.rune_controller.revive_counter)
+			to_chat(usr, "<span class='notice'>Enough lifeforce haunts this place to return [my_cult.rune_controller.revive_counter] of ours to the mortal plane.</span>")
 		if(is_sacrifice_target)
 			to_chat(usr, "<span class='warning'>The Geometer of blood wants this mortal for himself.</span>")
 		return fizzle()
@@ -515,7 +515,7 @@
 								body_to_sacrifice = N
 								break find_sacrifice
 
-	if(!body_to_sacrifice && !ticker.rune_controller.revive_counter)
+	if(!body_to_sacrifice && !my_cult.rune_controller.revive_counter)
 		if (is_sacrifice_target)
 			to_chat(usr, "<span class='warning'>The Geometer of blood wants that corpse for himself.</span>")
 		else
@@ -555,7 +555,7 @@
 			corpse_to_raise.visible_message("<span class='warning'>A dark mass begins to form above [corpse_to_raise], Gaining mass steadily before penetrating deep into \his heart. [corpse_to_raise]'s eyes glow with a faint red as he stands up, slowly starting to breathe again.</span>", \
 			"<span class='warning'>Life? I'm alive? I live, again!</span>", \
 			"<span class='warning'>You hear a faint, slightly familiar whisper.</span>")
-			ticker.rune_controller --
+			my_cult.rune_controller --
 
 //	if(my_cult)
 //		my_cult.add_cultist(corpse_to_raise.mind)
@@ -849,6 +849,8 @@
 
 /////////////////////////////////////////FIFTEENTH RUNE
 
+#define CULTISTS_NUM_SAC 3
+
 /obj/effect/rune_legacy/proc/sacrifice()
 	var/list/mob/living/cultsinrange = list()
 	var/ritualresponse = ""
@@ -868,7 +870,7 @@
 		to_chat(usr, "<span class='warning'>The presence of a null rod is perturbing the ritual.</span>")
 		return
 
-	var/datum/rune_controller/R = ticker.rune_controller
+	var/datum/rune_controller/R = my_cult.rune_controller
 	for(var/atom/A in loc)
 		if(ismob(A))
 			var/mob/M = A
@@ -878,23 +880,23 @@
 //Humans and Animals
 		if(istype(A,/mob/living/carbon) || istype(A,/mob/living/simple_animal))//carbon mobs and simple animals
 			var/mob/living/M = A
-			if (my_cult)
-				if(cultsinrange.len >= 3)
+			if (my_cult && my_cult.is_sacrifice_target(M.mind))
+				if(cultsinrange.len >= CULTISTS_NUM_SAC)
 					R.sacrificed += M.mind
 					M.gib()
 					sacrificedone = 1
 					invocation("rune_sac")
+					spawn(1 SECONDS)
+						my_cult.getNewObjective()
 				else
 					ritualresponse += "You need more cultists to perform the ritual and complete your objective."
 			else
 				if(M.stat != DEAD)
-					if(cultsinrange.len >= 3)
+					if(cultsinrange.len >= CULTISTS_NUM_SAC)
 						if(M.mind)				//living players
 							ritualresponse += "The Geometer of Blood gladly accepts this sacrifice."
 							satisfaction = 100
 							R.revive_counter ++
-							if (my_cult.is_sacrifice_target(M.mind))
-								my_cult.getNewObjective()
 						else					//living NPCs
 							ritualresponse += "The Geometer of Blood accepts this being in sacrifice. Somehow you get the feeling that beings with souls would make a better offering."
 							satisfaction = 50
@@ -921,8 +923,8 @@
 			var/mob/living/silicon/robot/B = A
 			var/obj/item/device/mmi/O = locate() in B
 			if(O)
-				if(my_cult)
-					if(cultsinrange.len >= 3)
+				if(my_cult && my_cult.is_sacrifice_target(B.mind))
+					if(cultsinrange.len >= CULTISTS_NUM_SAC)
 						R.sacrificed += O.brainmob.mind
 						sacrificedone = 1
 						invocation("rune_sac")
@@ -931,7 +933,7 @@
 						ritualresponse += "You need more cultists to perform the ritual and complete your objective."
 				else
 					if(B.stat != DEAD)
-						if(cultsinrange.len >= 3)
+						if(cultsinrange.len >= CULTISTS_NUM_SAC)
 							ritualresponse += "The Geometer of Blood accepts to destroy that pile of machinery."
 							sacrificedone = 1
 							invocation("rune_sac")
@@ -948,7 +950,7 @@
 			var/obj/item/device/mmi/I = A
 			var/mob/living/carbon/brain/N = I.brainmob
 			if(N)//the MMI has a player's brain in it
-				if(my_cult)
+				if(my_cult && my_cult.is_sacrifice_target(N.mind))
 					ritualresponse += "You need to place that brain back inside a body before you can complete your objective."
 				else
 					ritualresponse += "The Geometer of Blood accepts to destroy that pile of machinery."
@@ -961,7 +963,7 @@
 			var/obj/item/organ/internal/brain/B = A
 			var/mob/living/carbon/brain/N = B.brainmob
 			if(N)//the brain is a player's
-				if(my_cult)
+				if(my_cult && my_cult.is_sacrifice_target(N.mind))
 					ritualresponse += "You need to place that brain back inside a body before you can complete your objective."
 				else
 					ritualresponse += "The Geometer of Blood accepts to destroy that brain."
