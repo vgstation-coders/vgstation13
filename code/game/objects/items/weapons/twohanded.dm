@@ -26,10 +26,8 @@
 	..()
 
 /obj/item/offhand/process()
-	if(!loc)
-		return returnToPool(src)
-	else if(istype(loc,/turf) || !(contents.len))
-		return returnToPool(src)
+	if(!loc || istype(loc,/turf))
+		unwield()
 
 /obj/item/offhand/dropped(user)
 	if(!wielding)

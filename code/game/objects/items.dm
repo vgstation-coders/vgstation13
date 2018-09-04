@@ -72,6 +72,8 @@
 		new path(src)
 
 /obj/item/Destroy()
+	if(wielded)
+		unwield()
 	if(istype(loc, /mob))
 		var/mob/H = loc
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
@@ -883,15 +885,17 @@
 		return
 
 /obj/item/proc/unwield(mob/user)
-	if(flags & MUSTTWOHAND && src in user)
+	if(flags & MUSTTWOHAND && user && src in user)
 		user.drop_from_inventory(src)
 	if(istype(wielded))
 		wielded.wielding = null
-		user.u_equip(wielded,1)
+		if(user)
+			user.u_equip(wielded,1)
 		if(wielded)
 			returnToPool(wielded)
 			wielded = null
-	update_wield(user)
+	if(user)
+		update_wield(user)
 
 /obj/item/proc/update_wield(mob/user)
 
