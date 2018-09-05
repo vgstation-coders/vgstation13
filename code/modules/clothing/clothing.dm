@@ -209,7 +209,7 @@
 		for(var/slotID in list(slot_wear_id, slot_belt, slot_l_store, slot_r_store))
 			var/obj/item/I = wearer.get_item_by_slot(slotID)
 			if(I)
-				I.on_found(wearer, stripper)
+				I.stripped(wearer, stripper)
 
 /obj/item/clothing/become_defective()
 	if(!defective)
