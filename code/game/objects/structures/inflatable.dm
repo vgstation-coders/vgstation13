@@ -355,7 +355,7 @@
 	if(istype(W,/obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
 		var/mob/living/target = G.affecting
-		visible_message(user,"<span class='danger'>[user] begins to drag [target] into the shelter!</span>")
+		user.visible_message("<span class='danger'>[user] begins to drag [target] into the shelter!</span>")
 		if(do_after_many(user,list(target,src),20)) //Twice the normal time
 			enter_shelter(target)
 	else
@@ -439,3 +439,39 @@
 			update_icon()
 			to_chat(user,"<span class='notice'>You climb free of the shelter.</span>")
 
+/obj/structure/inflatable/shelter/MouseDropTo(atom/movable/O, mob/user) //copy pasted from cryo code
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O)) //no you can't pull things out of your ass
+		return
+	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
+		return
+	if(!Adjacent(user) || !user.Adjacent(src)) // is the mob too far away from you, or are you too far away from the source
+		return
+	if(O.locked_to)
+		return
+	else if(O.anchored)
+		return
+	if(issilicon(O)) //robutts dont fit
+		return
+	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
+		return
+	if(isrobot(user))
+		var/mob/living/silicon/robot/robit = user
+		if(!HAS_MODULE_QUIRK(robit, MODULE_CAN_HANDLE_MEDICAL))
+			to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
+			return
+	var/mob/living/target = O
+	if(!istype(target))
+		return
+	for(var/mob/living/carbon/slime/M in range(1,target))
+		if(M.Victim == target)
+			to_chat(usr, "[target.name] will not fit into the [src] because they have a slime latched onto their head.")
+			return
+
+	if(target == user)
+		to_chat(user,"<span class='notice'>You begin to climb into the shelter.</span>")
+		if(do_after(target,src,10))
+			enter_shelter(target)
+	else
+		user.visible_message("<span class='danger'>[user] begins to drag [target] into the shelter!</span>")
+		if(do_after_many(user,list(target,src),20)) //Twice the normal time
+			enter_shelter(target)
