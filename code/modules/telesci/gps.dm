@@ -194,7 +194,7 @@ var/list/SPS_list = list()
 		S.announce(wearer, src, "has detected the death of their wearer", sps_index, DEATHSOUND_CHANNEL + channel_index, dead = TRUE)
 		channel_index++
 
-/obj/item/device/gps/secure/stripped(mob/wearer)
+/obj/item/device/gps/secure/stripped(mob/wearer, mob/stripper)
 	if(!transmitting)
 		return
 	. = ..()

@@ -31,6 +31,10 @@
 	/datum/map_element/dungeon/holodeck
 	)
 
+/datum/map/active/New()
+	. = ..()
+	security_shuttle.req_access = list(access_sec_doors)
+
 // Metaclub areas
 /area/science/xenobiology/specimen_7
 	name = "\improper Xenobiology Specimen Cage 7"

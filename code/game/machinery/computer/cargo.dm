@@ -24,7 +24,7 @@ For vending packs, see vending_packs.dm*/
 		if(ACCOUNT_DB_OFFLINE)
 			MENTION_DB_OFFLINE
 			return
-		
+
 		var/datum/money_account/bank_account
 		if(REQUISITION)
 			bank_account = department_accounts["Cargo"]
@@ -79,7 +79,7 @@ For vending packs, see vending_packs.dm*/
 			USE_CARGO_ACCOUNT
 		else
 			USE_ACCOUNT_ON_ID
-	
+
 	return acc_info
 
 #undef ACCOUNT_DB_OFFLINE
@@ -94,7 +94,7 @@ For vending packs, see vending_packs.dm*/
 		REQUESTED BY: [account_information["idname"]]<br>"}
 	if(account_information["authorized_name"] != "")
 		info += "USING DEBIT AS: [account_information["authorized_name"]]<br>"
-	
+
 	info+= {"RANK: [account_information["idrank"]]<br>
 		REASON: [reason]<br>
 		SUPPLY CRATE TYPE: [pack.name]<br>
@@ -174,7 +174,7 @@ For vending packs, see vending_packs.dm*/
 
 	if(..())
 		return
-	
+
 	current_acct = get_account_info(user, linked_db)
 
 	user.set_machine(src)
@@ -335,11 +335,11 @@ For vending packs, see vending_packs.dm*/
 		var/datum/supply_packs/P = SSsupply_shuttle.supply_packs[pack_name]
 		if(!istype(P))
 			return
-		
+
 		if(current_acct["check"] && charge_flow_verify_security(linked_db, current_acct["card"], usr, account) != CARD_CAPTURE_SUCCESS)
 			to_chat(usr, "<span class='warning'>Security violation when attempting to authenticate with bank account.</span>")
 			return
-		
+
 		var/crates = 1
 		if(multi)
 			var/tempcount = input(usr, "Amount:", "How many crates?", "") as num
@@ -559,11 +559,11 @@ For vending packs, see vending_packs.dm*/
 		var/datum/supply_packs/P = SSsupply_shuttle.supply_packs[pack_name]
 		if(!istype(P))
 			return
-		
+
 		if(current_acct["check"] && charge_flow_verify_security(linked_db, current_acct["card"], usr, account) != CARD_CAPTURE_SUCCESS)
 			to_chat(usr, "<span class='warning'>Security violation when attempting to authenticate with bank account.</span>")
 			return
-		
+
 		var/crates = 1
 		if(multi)
 			var/num_input = input(usr, "Amount:", "How many crates?", "") as num

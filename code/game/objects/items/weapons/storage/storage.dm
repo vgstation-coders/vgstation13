@@ -80,7 +80,7 @@
 	if(!user.incapacitated())
 		if(user.s_active != src)
 			for(var/obj/item/I in src)
-				if(I.on_found(user))
+				if(I.on_found(null, user))
 					return
 	if(user.s_active)
 		user.s_active.hide_from(user)
@@ -645,7 +645,7 @@
 
 /obj/item/weapon/storage/stripped(mob/wearer as mob, mob/stripper as mob)
 	for(var/obj/item/I in contents)
-		I.stripped(wearer,stripper)
+		I.stripped(wearer, stripper)
 
 /obj/item/weapon/storage/proc/mass_remove(var/atom/A)
 	for(var/obj/item/O in contents)
