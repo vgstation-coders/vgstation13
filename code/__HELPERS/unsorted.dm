@@ -253,7 +253,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	spawn(0)
 		var/oldname = real_name
 
-		var/time_passed = world.time
 		var/newname
 
 		for(var/i=1,i<=3,i++)	//we get 3 attempts to pick a suitable name.
