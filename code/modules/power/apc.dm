@@ -890,9 +890,6 @@
 			src.overload_lighting()
 
 	else if (href_list["malfhack"])
-		if(STATION_Z != z)
-			to_chat(usr, "<span class = 'warning'>This APC is not on the station Z level.</span>")
-			return
 		var/mob/living/silicon/ai/malfai = usr
 		var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
 		if(get_malf_status(malfai)==1)
@@ -908,13 +905,13 @@
 					malfai.malfhack = null
 					malfai.malfhacking = 0
 					locked = 1
-					if(M)
+					if(M && STATION_Z == z)
 						M.apcs++
 					if(usr:parent)
 						src.malfai = usr:parent
 					else
 						src.malfai = usr
-					to_chat(malfai, "Hack complete. The APC is now under your exclusive control.")
+					to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [STATION_Z == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
 					update_icon()
 
 	else if (href_list["occupyapc"])
