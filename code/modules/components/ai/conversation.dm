@@ -21,7 +21,8 @@
 
 /datum/component/ai/conversation/auto/RecieveSignal(var/message_type, var/list/args)
 	if(message_type == COMSIG_COMPONENT_ADDED && args["component"] == src) //We were just initialized
-		GetComponent(/datum/component/ai/target_finder)
+		to_chat(world, "we're being initialized")
+		finder = GetComponent(/datum/component/ai/target_finder)
 	if(message_type == COMSIG_LIFE && finder && prob(speech_prob) && last_speech < world.time+speech_delay)
 		var/listener
 		for(var/mob/living/M in finder.GetTargets())

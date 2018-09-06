@@ -469,13 +469,14 @@
 
 /atom/movable/proc/forceEnter(atom/destination)
 	if(destination)
+		var/old_loc = loc
 		if(loc)
 			loc.Exited(src)
 		loc = destination
-		loc.Entered(src)
+		loc.Entered(src, old_loc)
 		if(isturf(destination))
 			var/area/A = get_area(destination)
-			A.Entered(src)
+			A.Entered(src, old_loc)
 
 		for(var/atom/movable/AM in locked_atoms)
 			AM.forceMove(loc)

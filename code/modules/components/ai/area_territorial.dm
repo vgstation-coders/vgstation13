@@ -14,6 +14,9 @@
  */
 
 /datum/component/ai/area_territorial/proc/area_enter(var/list/args)
+	var/mob/M = args["enterer"]
+	if(!isliving(M)) //Piss off, ghost!
+		return
 	var/signal = on_enter["signal"]
 	var/list/signal_args = on_enter["args"].Copy()
 	signal_args.Add(args)

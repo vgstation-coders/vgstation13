@@ -152,7 +152,7 @@
 	return 1 //Nothing found to block so return success!
 
 
-/turf/Entered(atom/movable/A as mob|obj)
+/turf/Entered(atom/movable/A as mob|obj, oldloc)
 	if(movement_disabled)
 		to_chat(usr, "<span class='warning'>Movement is admin-disabled.</span>")//This is to identify lag problems
 		return
@@ -261,7 +261,7 @@
 					MOB.pulling = was_pulling
 					was_pulling.pulledby = MOB
 				if ((A && A.loc))
-					A.loc.Entered(A)
+					A.loc.Entered(A, oldloc)
 
 /turf/proc/is_plating()
 	return 0
