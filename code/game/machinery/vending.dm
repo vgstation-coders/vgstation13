@@ -53,6 +53,7 @@ var/global/num_vending_terminals = 1
 	var/shut_up = 0				//Stop spouting those godawful pitches!
 	var/extended_inventory = 0	//can we access the hidden inventory?
 	var/scan_id = 1
+	var/unhackable = 0
 	var/obj/item/weapon/coin
 	var/datum/wires/vending/wires = null
 	var/list/overlays_vending[2]//1 is the panel layer, 2 is the dangermode layer
@@ -2936,7 +2937,8 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/trader	// Boxes are defined in trader.dm
 	name = "\improper Trader Supply"
-	desc = "Its coin groove has been modified."
+	desc = "Its wiring has been modified to prevent hacking."
+	unhackable = 1
 	product_slogans = list(
 		"Profits."
 	)
@@ -2952,36 +2954,40 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/capsule = 60,
 		/obj/item/weapon/implantcase/peace = 5,
 		/obj/item/vaporizer = 1,
+		/obj/item/weapon/storage/trader_chemistry = 1,
+		/obj/structure/closet/secure_closet/wonderful = 1,
+		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard = 1,
+		/obj/item/weapon/reagent_containers/glass/beaker/bluespace = 1,
+		/obj/item/weapon/storage/bluespace_crystal = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/borer_egg = 1,
+		/obj/item/clothing/shoes/clown_shoes/advanced = 1,
+		/obj/item/fish_eggs/seadevil = 1,
+		/obj/machinery/power/antiquesynth = 1,
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
 		/obj/item/device/pda/trader = 100,
 		/obj/item/weapon/capsule = 10,
 		/obj/item/weapon/implantcase/peace = 100,
-		/obj/item/vaporizer = 100
+		/obj/item/vaporizer = 100,
+		/obj/item/weapon/storage/trader_chemistry = 200,
+		/obj/structure/closet/secure_closet/wonderful = 350,
+		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard = 100,
+		/obj/item/weapon/reagent_containers/glass/beaker/bluespace = 100,
+		/obj/item/weapon/storage/bluespace_crystal = 150,
+		/obj/item/weapon/reagent_containers/food/snacks/borer_egg = 100,
+		/obj/item/clothing/shoes/clown_shoes/advanced = 50,
+		/obj/item/fish_eggs/seadevil = 50,
+		/obj/machinery/power/antiquesynth = 350,
 		)
 
 	accepted_coins = list(/obj/item/weapon/coin/trader)
 
-	premium = list(
-		/obj/item/weapon/storage/trader_chemistry,
-		/obj/structure/closet/secure_closet/wonderful,
-		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard,
-		/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
-		/obj/item/weapon/storage/bluespace_crystal,
-		/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
-		/obj/item/clothing/shoes/clown_shoes/advanced,
-		/obj/item/fish_eggs/seadevil,
-		/obj/machinery/power/antiquesynth,
-		)
-
 /obj/machinery/vending/trader/New()
-
-	for(var/random_items = 1 to premium.len - 5)
-		premium.Remove(pick(premium))
-	if(premium.Find(/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard))
-		load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
-	premium.Add(pick(existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper)) //A random borg upgrade minus the magnetic gripper. Time to jew the silicons!
+	load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
+	var/list/upgrades = existing_typesof(/obj/item/borg/upgrade) - /obj/item/borg/upgrade/magnetic_gripper
+	for(var/i = 1 to 3)
+		premium.Add(pick_n_take(upgrades))
 
 	..()
 

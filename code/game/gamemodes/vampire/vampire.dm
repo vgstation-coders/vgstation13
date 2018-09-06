@@ -65,6 +65,9 @@
 			if(player.assigned_role == job)
 				possible_vampires -= player
 
+		if(player.role_alt_title == "Merchant")
+			possible_vampires -= player
+
 	vampire_amount = min(recommended_enemies, max(required_enemies,round(num_players() / 10))) //1 + round(num_players() / 10)
 
 	if(possible_vampires.len>0)
