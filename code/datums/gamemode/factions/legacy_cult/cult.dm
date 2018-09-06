@@ -38,7 +38,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	var/list/cult_words = list()
 	var/cult_state = CULT_PRELUDE
 
-	var/datum/rune_controller/rune_controller 
+	var/datum/rune_controller/rune_controller
 
 	initroletype = /datum/role/legacy_cultist
 	roletype = /datum/role/legacy_cultist
@@ -238,7 +238,8 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 
 		if (CULT_SUMMON)
 			cult_state = CULT_FINALE
-			next_objective = pick(new /datum/objective/massacre, new /datum/objective/hijack/cult, new /datum/objective/harvest)
+			var/obj_type = pick(/datum/objective/massacre, /datum/objective/hijack/cult, /datum/objective/harvest)
+			next_objective = new obj_type
 
 	current_objective = next_objective
 	next_objective.faction = src
@@ -322,7 +323,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 		message_admins("Sacrifice target is in deep space, or dead : rerolling.")
 		reroll_sac(S)
 		return
-	
+
 
 /datum/faction/cult/narsie/proc/reroll_sac(var/datum/objective/target/assassinate/sacrifice/S)
 	var/list/possible_targets = S.get_targets()

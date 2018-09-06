@@ -42,12 +42,6 @@ In short:
 // Apply changes when entering state
 /datum/universal_state/hell/OnEnter()
 	set background = 1
-	/*
-	if(emergency_shuttle.direction==2)
-		captain_announce("The emergency shuttle has returned due to bluespace distortion.")
-
-	emergency_shuttle.force_shutdown()
-	*/
 
 	escape_list = get_area_turfs(locate(/area/hallway/secondary/exit))
 	CHECK_TICK
