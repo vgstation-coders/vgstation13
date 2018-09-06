@@ -15,7 +15,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	name       = "Supply Shuttle"
 	init_order = SS_INIT_SUPPLY_SHUTTLE
 	flags      = SS_NO_TICK_CHECK
-	wait       = 30 SECONDS
+	wait       = 1 SECONDS
 	//supply points have been replaced with MONEY MONEY MONEY - N3X
 	var/credits_per_slip = 2
 	var/credits_per_crate = 5
