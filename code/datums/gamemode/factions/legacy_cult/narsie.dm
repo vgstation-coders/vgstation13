@@ -65,8 +65,8 @@ var/global/list/narsie_list = list()
 			if(emergency_shuttle.endtime > world.timeofday + 1800 && emergency_shuttle.location != 1 && !emergency_shuttle.departed)
 				emergency_shuttle.settimeleft(180)
 
-		//if(narnar)
-			//SetUniversalState(/datum/universal_state/hell)
+		if(narnar)
+			SetUniversalState(/datum/universal_state/hell)
 		narsie_cometh = 1
 
 	/* //For animating narsie manually, doesn't work well
