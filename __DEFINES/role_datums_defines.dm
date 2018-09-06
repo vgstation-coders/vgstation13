@@ -49,8 +49,11 @@
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
+#define GREET_LATEJOIN		"latejoin"
 #define GREET_ADMINTOGGLE	"admintoggle"
 #define GREET_CUSTOM		"custom"
+
+#define GREET_AUTOTATOR		"autotator"
 
 #define GREET_CONVERTED		"converted"
 #define GREET_PAMPHLET		"pamphlet"

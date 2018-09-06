@@ -85,3 +85,4 @@
 	newTraitor.OnPostSetup(FALSE)
 	newTraitor.Greet(GREET_ROUNDSTART)
 	return 1
+

@@ -198,6 +198,8 @@
 	for (var/mob/M in player_list)
 		if (!M.client)
 			continue
+		if (istype(M,/mob/new_player))
+			continue
 		if (M.stat != DEAD)
 			living_players.Add(M)
 			if (M.mind && (M.mind.antag_roles.len > 0))

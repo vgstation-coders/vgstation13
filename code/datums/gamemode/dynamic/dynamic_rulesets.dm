@@ -20,11 +20,25 @@
 	//so with the above default values, The rule will never get drafted below 10 threat level (aka: "peaceful extended"), and it requires a higher threat level at lower pops.
 	//for reminder: the threat level is rolled at roundstart and tends to hover around 50 https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
 
+	var/datum/gamemode/dynamic/mode = null
+
+/datum/dynamic_ruleset/New()
+	..()
+	if (istype(ticker.mode, /datum/gamemode/dynamic))
+		mode = ticker.mode
+	else
+		message_admins("A dynamic ruleset was created but server isn't on Dynamic Mode!")
+		qdel(src)
+
 /datum/dynamic_ruleset/roundstart//One or more of those drafted at roundstart
 
 /datum/dynamic_ruleset/latejoin//Can be drafted when a player joins the server
 
 /datum/dynamic_ruleset/midround//Can be drafted once in a while during a round
+	var/list/living_players = list()
+	var/list/living_antags = list()
+	var/list/dead_players = list()
+	var/list/observers = list()
 
 /datum/dynamic_ruleset/proc/acceptable(var/population=0,var/threat=0)
 	//by default, a rule is acceptable if it satisfies the threat level/population requirements.
@@ -106,31 +120,28 @@
 	//candidates = list(CURRENT_LIVING_PLAYERS, CURRENT_LIVING_ANTAGS, CURRENT_DEAD_PLAYERS, CURRENT_OBSERVERS)
 	//so for example you can get the list of all current dead players with var/list/dead_players = candidates[CURRENT_DEAD_PLAYERS]
 	//make sure to properly typecheck the mobs in those lists, as the dead_players list could contain ghosts, or dead players still in their bodies.
-	var/list/living_players = candidates[CURRENT_LIVING_PLAYERS]
-	var/list/living_antags = candidates[CURRENT_LIVING_ANTAGS]
-	var/list/dead_players = candidates[CURRENT_DEAD_PLAYERS]
-	var/list/observers = candidates[CURRENT_OBSERVERS]
 	//we're still gonna trim the obvious (mobs without clients, jobbanned players, etc)
-	candidates[CURRENT_LIVING_PLAYERS] = trim_list(living_players)
-	candidates[CURRENT_LIVING_ANTAGS] = trim_list(living_antags)
-	candidates[CURRENT_DEAD_PLAYERS] = trim_list(dead_players)
-	candidates[CURRENT_OBSERVERS] = trim_list(observers)
+	living_players = trim_list(candidates[CURRENT_LIVING_PLAYERS])
+	living_antags = trim_list(candidates[CURRENT_LIVING_ANTAGS])
+	dead_players = trim_list(candidates[CURRENT_DEAD_PLAYERS])
+	observers = trim_list(candidates[CURRENT_OBSERVERS])
 
 /datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list())
-	for(var/mob/M in L)
+	var/list/trimmed_list = L.Copy()
+	for(var/mob/M in trimmed_list)
 		if (!M.client)//are they connected?
-			L.Remove(M)
+			trimmed_list.Remove(M)
 			continue
 		if (!M.client.desires_role(role_category) || jobban_isbanned(M, role_category))//are they willing and not antag-banned?
-			L.Remove(M)
+			trimmed_list.Remove(M)
 			continue
 		if (M.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
-			L.Remove(M)
+			trimmed_list.Remove(M)
 			continue
 		if ((exclusive_to_jobs.len > 0) && !(M.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
-			L.Remove(M)
+			trimmed_list.Remove(M)
 			continue
-	return L
+	return trimmed_list
 
 //You can then for example prompt dead players in execute() to join as strike teams or whatever
 //Or autotator someone
