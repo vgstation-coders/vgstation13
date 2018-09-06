@@ -204,9 +204,7 @@
 // Return 1 on success, 0 on failure.
 /datum/role/proc/OnPostSetup(var/auto_antag = TRUE)
 	if (auto_antag)
-		ForgeObjectives()
 		Greet(1)
-		MemorizeObjectives()
 	return 1
 
 /datum/role/proc/process()
@@ -327,7 +325,7 @@
 	text += "<br>"
 	if (objectives.objectives.len)
 		text += "<b>personnal objectives</b><br>"
-	text += objectives.GetObjectiveString(0,admin_edit,M)
+	text += objectives.GetObjectiveString(0,admin_edit,M, src)
 	text += "<br>"
 	if (faction && faction.objective_holder)
 		if (faction.objective_holder.objectives.len)
