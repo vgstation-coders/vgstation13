@@ -1,3 +1,5 @@
+#define SLOT_WEAR_SUIT_STR "11"
+
 /spell/targeted/equip_item/cape
 	name = "Spawn Cape"
 	desc = "Acquire a fabulous, yet fearsome cape."
@@ -16,9 +18,10 @@
 	duration = 0
 
 	override_base = "vamp"
-	hud_state = "vampire_enthrall"
 
 	compatible_mobs = list(/mob/living/carbon/human)
-	equipped_summons = list(slot_wear_suit = /obj/item/clothing/suit/storage/draculacoat)
+	equipped_summons = list(SLOT_WEAR_SUIT_STR = /obj/item/clothing/suit/storage/draculacoat)
 
 	hud_state = "vamp_coat"
+
+#undef SLOT_WEAR_SUIT_STR

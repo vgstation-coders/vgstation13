@@ -198,6 +198,20 @@
 			if (!(VP.id in powers))
 				VP.Give(src)
 
+	var/mob/living/carbon/human/H = antag.current
+	if (!istype(H))
+		return
+
+	// Vision-related changes.
+	if (VAMP_MATURE in powers)
+		H.change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
+		H.see_in_dark = 8
+		H.see_invisible = SEE_INVISIBLE_MINIMUM
+
+	else if (VAMP_VISION in powers)
+		H.change_sight(adding = SEE_MOBS)
+	
+
 /datum/role/vampire/proc/handle_enthrall(var/datum/mind/M)
 	if (!istype(M))
 		return FALSE
@@ -231,17 +245,6 @@
 				I.status &= ~ORGAN_SPLINTED
 				I.status &= ~ORGAN_BLEEDING
 	nullified = max(0, nullified - 1)
-
-	if (!H.druggy)
-		H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-
-	if (VAMP_MATURE in powers)
-		H.change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
-		H.see_in_dark = 8
-		H.see_invisible = SEE_INVISIBLE_MINIMUM
-
-	else if (VAMP_VISION in powers)
-		antag.current.change_sight(adding = SEE_MOBS)
 
 /datum/role/vampire/proc/handle_cloak(var/mob/living/carbon/human/H)
 	var/turf/T = get_turf(H)
