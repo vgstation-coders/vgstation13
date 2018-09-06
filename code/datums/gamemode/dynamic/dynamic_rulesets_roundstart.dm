@@ -28,7 +28,7 @@
 		newTraitor.Greet(GREET_ROUNDSTART)
 	return 1
 
-/datum/dynamic_ruleset/roundstart/traitor/update()
+/datum/dynamic_ruleset/roundstart/traitor/process()
 	if (autotraitor_cooldown)
 		autotraitor_cooldown--
 	else
