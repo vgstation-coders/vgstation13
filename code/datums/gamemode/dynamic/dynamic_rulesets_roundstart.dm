@@ -33,4 +33,5 @@
 		autotraitor_cooldown--
 	else
 		autotraitor_cooldown = 900//15 minutes
+		message_admins("Dynamic Mode: Checking if we can turn someone into a traitor...")
 		mode.picking_specific_rule(/datum/dynamic_ruleset/midround/autotraitor)
