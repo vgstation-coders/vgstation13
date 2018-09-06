@@ -14,7 +14,7 @@
 	weight = 5
 	cost = 10
 	requirements = list(40,30,20,10,10,10,10,10,10,10)
-	var/autotraitor_cooldown = 9000
+	var/autotraitor_cooldown = 900//15 minutes
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
 	var/num_traitors = max(round(mode.candidates.len / 10) + 1, candidates.len)
@@ -32,5 +32,5 @@
 	if (autotraitor_cooldown)
 		autotraitor_cooldown--
 	else
-		autotraitor_cooldown = 9000
+		autotraitor_cooldown = 900//15 minutes
 		mode.picking_specific_rule(/datum/dynamic_ruleset/midround/autotraitor)
