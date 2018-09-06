@@ -95,9 +95,9 @@
 			healths.icon_state = "health7" //DEAD healthmeter
 		return
 	else
-		// Moiving this "see invisble" thing here so that it can be overriden by xrays, vampires...
-
 		// Vampire bandaid. I'm sorry.
+		// Rewrite idea : divide life() into organs (Eyes...) and have flags in the roles if they overwrite the functions of those organs.
+		// Basically, the problem here is that abstract things (HUD icons) are handled as the same time as "organs" things (seeing in the dark.)
 		var/datum/role/vampire/V = isvampire(src)
 		if (!V || (!(VAMP_VISION in V.powers) && !(VAMP_MATURE in V.powers))) // Not a vampire, or a vampire but neither of the spells.
 			change_sight(removing = SEE_MOBS)
@@ -112,6 +112,7 @@
 
 			see_invisible = see_in_dark > 2 ? SEE_INVISIBLE_LEVEL_ONE : SEE_INVISIBLE_LIVING
 
+		// Moiving this "see invisble" thing here so that it can be overriden by xrays, vampires...
 		if(glasses)
 			handle_glasses_vision_updates(glasses)
 		else if (!V)
