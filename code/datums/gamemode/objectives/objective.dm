@@ -56,7 +56,7 @@
 /datum/objective_holder/proc/FindObjective(var/datum/objective/O)
 	return locate(O) in objectives
 
-/datum/objective_holder/proc/GetObjectiveString(var/check_success = 0,var/admin_edit = 0,var/datum/mind/M)
+/datum/objective_holder/proc/GetObjectiveString(var/check_success = 0,var/admin_edit = 0,var/datum/mind/M, var/datum/role/R)
 	var/dat = ""
 	if(objectives.len)
 		var/obj_count = 1
@@ -72,4 +72,5 @@
 			dat += "<a href='?src=\ref[M];obj_add=1;obj_holder=\ref[src]'>(add personal objective)</a>"
 		else if (faction)
 			dat += "<a href='?src=\ref[M];obj_add=1;obj_holder=\ref[src]'>(add faction objective)</a>"
+		dat += "<br><a href='?src=\ref[M];obj_gen=1;obj_holder=\ref[src];[faction?"obj_owner=\ref[faction]":"obj_owner=\ref[R]"]'>(generate objectives)</a>"
 	return dat

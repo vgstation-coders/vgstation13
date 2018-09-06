@@ -52,7 +52,6 @@ var/list/factions_with_hud_icons = list()
 		update_hud_icons()
 
 /datum/faction/proc/OnPostSetup()
-	forgeObjectives()
 	for(var/datum/role/R in members)
 		R.OnPostSetup()
 

@@ -637,6 +637,14 @@
 		objective.force_success = !objective.force_success
 		log_admin("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
 
+	else if(href_list["obj_gen"])
+		var/owner = locate(href_list["obj_owner"])
+		if(istype(owner, /datum/role))
+			var/datum/role/R = owner
+			R.ForgeObjectives()
+		else if(istype(owner, /datum/faction))
+			var/datum/faction/F = owner
+			F.forgeObjectives()
 
 	else if(href_list["role"]) //Something role specific
 		var/datum/role/R = locate(href_list["role"])

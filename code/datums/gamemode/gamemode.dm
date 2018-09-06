@@ -189,8 +189,11 @@
 	feedback_set_details("server_ip","[world.internet_address]:[world.port]")
 
 	for(var/datum/faction/F in factions)
+		F.forgeObjectives()
 		F.OnPostSetup()
 	for(var/datum/role/R in orphaned_roles)
+		R.ForgeObjectives()
+		R.MemorizeObjectives()
 		R.OnPostSetup()
 	return 1
 
