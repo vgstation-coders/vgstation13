@@ -181,6 +181,18 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 							if(!ventcrawl_carry())
 								return
 
+							if(stat)
+								to_chat(src, "<span class='danger'>You must be conscious to do this!</span>")
+								return
+
+							if(locked_to)
+								to_chat(src, "<span class='warning'>You can't vent crawl while you're restrained!</span>")
+								return
+
+							if(lying)
+								to_chat(src, "<span class='warning'>You can't vent crawl while you're stunned!</span>")
+								return
+
 							visible_message("<B>[src] scrambles into the ventilation ducts!</B>", "You climb into the ventilation system.")
 
 							forceMove(vent_found)
