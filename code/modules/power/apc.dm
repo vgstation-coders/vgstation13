@@ -905,13 +905,13 @@
 					malfai.malfhack = null
 					malfai.malfhacking = 0
 					locked = 1
-					if(M)
+					if(M && STATION_Z == z)
 						M.apcs++
 					if(usr:parent)
 						src.malfai = usr:parent
 					else
 						src.malfai = usr
-					to_chat(malfai, "Hack complete. The APC is now under your exclusive control.")
+					to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [STATION_Z == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
 					update_icon()
 
 	else if (href_list["occupyapc"])
