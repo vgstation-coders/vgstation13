@@ -14,7 +14,7 @@
 	cooldown_min = 45 SECONDS
 
 	override_base = "vamp"
-	hud_state = "vampire_undeath"
+	hud_state = "vamp_cheatdeath"
 
 	var/blood_cost = 0
 
@@ -54,7 +54,8 @@
 /datum/action/undeath
 	name = "Return to unlife"
 	desc = "Allows you to walk among the living once more."
-	// Need spiters
+	icon_icon = 'icons/mob/screen_spells.dmi'
+	button_icon_state = "vamp_cheatdeath2"
 
 /datum/action/undeath/Trigger()
 	var/mob/living/M = owner

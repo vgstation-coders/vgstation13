@@ -14,7 +14,7 @@
 	cooldown_min = 1 SECONDS
 
 	override_base = "vamp"
-	hud_state = "vampire_cloack"
+	hud_state = "vamp_menace"
 
 	var/blood_cost = 0
 

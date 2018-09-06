@@ -43,7 +43,7 @@
 	user_type = USER_TYPE_VAMPIRE
 
 	override_base = "vamp"
-	hud_state = "vampire_blink"
+	hud_state = "vamp_blink"
 
 	charge_max = 20 SECONDS
 	cooldown_min = 20 SECONDS
