@@ -76,7 +76,7 @@
 
 	to_chat(M, "<B>You are a [job_title].</B>")
 
-	to_chat(M, "<b>You should do your best to sell what you can to fund new product sales. Ultimately, the mark of a good trader is profit -- but public relations are an important component of thatend goal.</b>")
+	to_chat(M, "<b>You should do your best to sell what you can to fund new product sales. Ultimately, the mark of a good trader is profit -- but public relations are an important component of that end goal.</b>")
 
 	if(M.mind.role_alt_title == "Merchant")
 		to_chat(M, "<B><span class='info'>Your merchant's license paperwork has just cleared with Nanotrasen HQ. You have a loyalty implant and the staff has been notified that you are active in this sector.</span></B>")
@@ -96,15 +96,19 @@
 	world << browse_rsc(preview_side, "previewicon2.png")
 	var/full_text = {"<html><style>
 					body {color: #000000; background: #ccffff;}
-					pbg {background: #000000}
 					h1 {color: #000000; font-size:30px;}
+					fieldset {width:140px;}
 					</style>
 					<body>
-					<img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1>
-					Nanotrasen\'s commercial arm has noted the presence of a registered merchant who holds a license for corporate commerce and a Nanotrasen loyalty implant in your sector. The registered trade partner\'s image is enclosed. Please continue to monitor trade on an ongoing basis such that Nanotrasen can maintain highest standard small business enterprise (SBE) partners.<BR>Photo ID:<BR><BR>
-					</body><pbg><img src="previewicon.png"><img src="previewicon2.png"></pbg><BR>
-					<body>[merchant.name]<BR>
+					<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center>
+					Nanotrasen\'s commercial arm has noted the presence of a registered merchant who holds a license for corporate commerce and a Nanotrasen loyalty implant in your sector. The registered trade partner\'s image is enclosed. Please continue to monitor trade on an ongoing basis such that Nanotrasen can maintain highest standard small business enterprise (SBE) partners.<BR>
+					</body>
+					<fieldset>
+  					<legend>Picture</legend>
+					<center><img src="previewicon.png" width="64" height="64"><img src="previewicon2.png" width="64" height="64"></center>
+					</fieldset><BR>
+					<body>Name: [merchant.client.prefs.real_name]<BR>
 					Blood Type: [merchant.dna.b_type]<BR>
-					Fingerprint: [md5(merchant.dna.uni_identity)]</body>"}
+					Fingerprint: [md5(merchant.dna.uni_identity)]</body></html>"}
 
-	SendFax(full_text, "Licensed Merchant Report - [merchant]", centcomm = 1)
+	SendFax(full_text, "Licensed Merchant Report - [merchant.client.prefs.real_name]", centcomm = 1) //Wow this is really cumbersome but [name] hasn't been assigned yet
