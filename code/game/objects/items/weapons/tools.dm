@@ -306,21 +306,29 @@
 	switch(welding)
 		//If off
 		if(0)
-			if(src.icon_state != "welder") //Check that the sprite is correct, if it isnt, it means toggle() was not called
-				src.force = 3
-				src.damtype = "brute"
+			if(icon_state != "welder") //Check that the sprite is correct, if it isnt, it means toggle() was not called
+				force = 3
+				sharpness = 0
+				sharpness_flags = 0
+				damtype = "brute"
+				heat_production = 0
+				source_temperature = 0
 				update_icon()
-				src.hitsound = "sound/weapons/toolhit.ogg"
-				src.welding = 0
+				hitsound = "sound/weapons/toolhit.ogg"
+				welding = 0
 			processing_objects.Remove(src)
 			return
 		//Welders left on now use up fuel, but lets not have them run out quite that fast
 		if(1)
-			if(src.icon_state != "welder1") //Check that the sprite is correct, if it isnt, it means toggle() was not called
-				src.force = 15
-				src.damtype = "fire"
+			if(icon_state != "welder1") //Check that the sprite is correct, if it isnt, it means toggle() was not called
+				force = 15
+				sharpness = 0.8
+				sharpness_flags = INSULATED_EDGE | HOT_EDGE
+				damtype = "fire"
+				heat_production = 3800
+				source_temperature = TEMPERATURE_WELDER
 				update_icon()
-				src.hitsound = "sound/weapons/welderattack.ogg"
+				hitsound = "sound/weapons/welderattack.ogg"
 			if(prob(5))
 				remove_fuel(1)
 
