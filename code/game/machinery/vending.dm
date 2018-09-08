@@ -3073,6 +3073,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/toy/foamblade = 2,
 		/obj/item/weapon/capsule = 20,
 		/obj/item/toy/cards = 2,
+		/obj/item/toy/cards/une = 2
 	)
 	contraband = list(
 		/obj/item/toy/gun = 2,
@@ -3100,7 +3101,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/toy/foamblade = 50,
 		/obj/item/toy/syndicateballoon/ntballoon = 100,
 		/obj/item/weapon/capsule = 10,
-		/obj/item/toy/cards = 35
+		/obj/item/toy/cards = 35,
+		/obj/item/toy/cards/une = 35
 	)
 	pack = /obj/structure/vendomatpack/circus
 

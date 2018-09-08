@@ -24,27 +24,24 @@
 	for(var/i = 0; i <= 3; i++)//Black is just a placeholder and not actually used in the coloring.
 		cards += new/obj/item/toy/singlecard/une(src, src, "Wild", "wild", BLACKCARD)
 		cards += new/obj/item/toy/singlecard/une(src, src, "Draw 4", "draw4", BLACKCARD)
-	for(var/i = 0; i <= 3; i++)
+	for(var/i = 1; i <= 7; i++)
 		var/cardcolor = "Red"
 		var/hexcolor = REDCARD
 		switch(i)
-			if(0)
+			if(1,2)
 				cardcolor = "Red"
 				hexcolor = REDCARD
-			if(1)
+			if(3,4)
 				cardcolor = "Yellow"
 				hexcolor = YELLOWCARD
-			if(2)
+			if(5,6)
 				cardcolor = "Green"
 				hexcolor = GREENCARD
-			if(3)
+			if(7,8)
 				cardcolor = "Blue"
 				hexcolor = BLUECARD
 		cards += new/obj/item/toy/singlecard/une(src, src, "[cardcolor] Skip", "skip", hexcolor)
-		cards += new/obj/item/toy/singlecard/une(src, src, "[cardcolor] Skip", "skip", hexcolor)
 		cards += new/obj/item/toy/singlecard/une(src, src, "[cardcolor] Reverse", "reverse",  hexcolor)
-		cards += new/obj/item/toy/singlecard/une(src, src, "[cardcolor] Reverse", "reverse",  hexcolor)
-		cards += new/obj/item/toy/singlecard/une(src, src, "[cardcolor] Draw 2", "draw2", hexcolor)
 		cards += new/obj/item/toy/singlecard/une(src, src, "[cardcolor] Draw 2", "draw2", hexcolor)
 
 
