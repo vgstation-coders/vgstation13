@@ -38,7 +38,7 @@
 	var/list/living_players = list()
 	var/list/living_antags = list()
 	var/list/dead_players = list()
-	var/list/observers = list()
+	var/list/list_observers = list()
 
 /datum/dynamic_ruleset/proc/acceptable(var/population=0,var/threat=0)
 	//by default, a rule is acceptable if it satisfies the threat level/population requirements.

@@ -17,7 +17,7 @@
 	var/autotraitor_cooldown = 900//15 minutes
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
-	var/num_traitors = max(round(mode.candidates.len / 10) + 1, candidates.len)
+	var/num_traitors = min(round(mode.candidates.len / 10) + 1, candidates.len)
 	for (var/i = 1 to num_traitors)
 		var/mob/M = pick(candidates)
 		assigned += M

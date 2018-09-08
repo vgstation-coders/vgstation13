@@ -1447,6 +1447,98 @@
 		dat += {"Now: [secret_force_mode]"}
 		usr << browse(dat, "window=f_secret")
 
+	else if(href_list["f_dynamic_roundstart"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+		var/roundstart_rules = list()
+		for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart))
+			var/datum/dynamic_ruleset/roundstart/newrule = new rule()
+			roundstart_rules[newrule.name] = newrule
+		var/added_rule = input(usr,"What ruleset do you want to force? This will bypass threat level and population restrictions.", "Rigging Roundstart", null) as null|anything in roundstart_rules
+		if (added_rule)
+			forced_roundstart_ruleset += roundstart_rules[added_rule]
+			log_admin("[key_name(usr)] set [added_rule] to be a forced roundstart ruleset.")
+			message_admins("[key_name(usr)] set [added_rule] to be a forced roundstart ruleset.", 1)
+			Game()
+
+	else if(href_list["f_dynamic_roundstart_clear"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		forced_roundstart_ruleset = list()
+		Game()
+		log_admin("[key_name(usr)] cleared the rigged roundstart rulesets. The mode will pick them as normal.")
+		message_admins("[key_name(usr)] cleared the rigged roundstart rulesets. The mode will pick them as normal.", 1)
+
+
+	else if(href_list["f_dynamic_roundstart_remove"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/dynamic_ruleset/roundstart/rule = locate(href_list["f_dynamic_roundstart_remove"])
+		forced_roundstart_ruleset -= rule
+		Game()
+		log_admin("[key_name(usr)] removed [rule] from the forced roundstart rulesets.")
+		message_admins("[key_name(usr)] removed [rule] from the forced roundstart rulesets.", 1)
+
+
+	else if(href_list["f_dynamic_latejoin"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(!ticker || !ticker.mode)
+			return alert(usr, "The game must start first.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+		var/latejoin_rules = list()
+		for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
+			var/datum/dynamic_ruleset/latejoin/newrule = new rule()
+			latejoin_rules[newrule.name] = newrule
+		var/added_rule = input(usr,"What ruleset do you want to force upon the next latejoiner? This will bypass threat level and population restrictions.", "Rigging Latejoin", null) as null|anything in latejoin_rules
+		if (added_rule)
+			var/datum/gamemode/dynamic/mode = ticker.mode
+			mode.forced_latejoin_rule = latejoin_rules[added_rule]
+			log_admin("[key_name(usr)] set [added_rule] to proc on the next latejoin.")
+			message_admins("[key_name(usr)] set [added_rule] to proc on the next latejoin.", 1)
+			Game()
+
+	else if(href_list["f_dynamic_latejoin_clear"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if (ticker && ticker.mode && istype(ticker.mode,/datum/gamemode/dynamic))
+			var/datum/gamemode/dynamic/mode = ticker.mode
+			mode.forced_latejoin_rule = null
+			Game()
+			log_admin("[key_name(usr)] cleared the forced latejoin ruleset.")
+			message_admins("[key_name(usr)] cleared the forced latejoin ruleset.", 1)
+
+	else if(href_list["f_dynamic_midround"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(!ticker || !ticker.mode)
+			return alert(usr, "The game must start first.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+		var/midround_rules = list()
+		for (var/rule in subtypesof(/datum/dynamic_ruleset/midround))
+			var/datum/dynamic_ruleset/midround/newrule = new rule()
+			midround_rules[newrule.name] = rule
+		var/added_rule = input(usr,"What ruleset do you want to force right now? This will bypass threat level and population restrictions.", "Execute Ruleset", null) as null|anything in midround_rules
+		if (added_rule)
+			var/datum/gamemode/dynamic/mode = ticker.mode
+			log_admin("[key_name(usr)] executed the [added_rule] ruleset.")
+			message_admins("[key_name(usr)] executed the [added_rule] ruleset.", 1)
+			mode.picking_specific_rule(midround_rules[added_rule],1)
+
+
+
 	else if(href_list["c_mode2"])
 		if(!check_rights(R_ADMIN|R_SERVER))
 			return

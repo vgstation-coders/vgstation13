@@ -1,3 +1,5 @@
+var/list/forced_roundstart_ruleset = list()
+
 /datum/gamemode/dynamic
 	name = "Dynamic Mode"
 	var/threat_level = 0//rolled at the beginning of the round.
@@ -16,10 +18,12 @@
 	var/list/living_players = list()
 	var/list/living_antags = list()
 	var/list/dead_players = list()
-	var/list/observers = list()
+	var/list/list_observers = list()
 
 	var/latejoin_injection_cooldown = 0
 	var/midround_injection_cooldown = 0
+
+	var/datum/dynamic_ruleset/latejoin/forced_latejoin_rule = null
 
 /datum/gamemode/dynamic/can_start()
 	threat_level = rand(1,100)*0.6 + rand(1,100)*0.4//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
@@ -45,8 +49,20 @@
 	if (roundstart_rules.len <= 0)
 		message_admins("There are no roundstart rules within the code, what the fuck? The round will begin without any roles assigned.")
 		return 1
-	roundstart()
+	if (forced_roundstart_ruleset.len > 0)
+		rigged_roundstart()
+	else
+		roundstart()
 	return 1
+
+/datum/gamemode/dynamic/proc/rigged_roundstart()
+	message_admins("[forced_roundstart_ruleset.len] rulesets being forced. Will now attempt to draft players for them.")
+	for (var/datum/dynamic_ruleset/roundstart/rule in forced_roundstart_ruleset)
+		rule.mode = src
+		rule.candidates = candidates.Copy()
+		rule.trim_candidates()
+		if (rule.ready())
+			picking_roundstart_rule(list(rule))
 
 /datum/gamemode/dynamic/proc/roundstart()
 	var/list/drafted_rules = list()
@@ -86,7 +102,7 @@
 		roundstart_rules -= starting_rule
 		drafted_rules -= starting_rule
 
-		threat -= starting_rule.cost
+		threat = max(0,threat-starting_rule.cost)
 		if (starting_rule.execute())//this should never fail since ready() returned 1
 			executed_rules += starting_rule
 			if (starting_rule.persistent)
@@ -107,7 +123,7 @@
 	if (latejoin_rule)
 		if (!latejoin_rule.repeatable)
 			latejoin_rules -= latejoin_rule
-		threat -= latejoin_rule.cost
+		threat = max(0,threat-latejoin_rule.cost)
 		if (latejoin_rule.execute())//this should never fail since ready() returned 1
 			var/mob/M = pick(latejoin_rule.assigned)
 			message_admins("[key_name(M)] joined the station, and was selected by the <font size='3'>[latejoin_rule.name]</font> ruleset.")
@@ -123,7 +139,7 @@
 	if (midround_rule)
 		if (!midround_rule.repeatable)
 			midround_rules -= midround_rule
-		threat -= midround_rule.cost
+		threat = max(0,threat-midround_rule.cost)
 		if (midround_rule.execute())//this should never fail since ready() returned 1
 			message_admins("Injecting some threats...<font size='3'>[midround_rule.name]</font>!")
 			log_admin("Injecting some threats...[midround_rule.name]!")
@@ -133,15 +149,15 @@
 			return 1
 	return 0
 
-/datum/gamemode/dynamic/proc/picking_specific_rule(var/ruletype)//an experimental proc to allow admins to call rules on the fly or have rules call other rules
+/datum/gamemode/dynamic/proc/picking_specific_rule(var/ruletype,var/forced=0)//an experimental proc to allow admins to call rules on the fly or have rules call other rules
 	var/datum/dynamic_ruleset/midround/new_rule = new ruletype()//you should only use it to call midround rules though.
 	update_playercounts()
 	var/list/current_players = list(CURRENT_LIVING_PLAYERS, CURRENT_LIVING_ANTAGS, CURRENT_DEAD_PLAYERS, CURRENT_OBSERVERS)
 	current_players[CURRENT_LIVING_PLAYERS] = living_players.Copy()
 	current_players[CURRENT_LIVING_ANTAGS] = living_antags.Copy()
 	current_players[CURRENT_DEAD_PLAYERS] = dead_players.Copy()
-	current_players[CURRENT_OBSERVERS] = observers.Copy()
-	if (new_rule && new_rule.acceptable(living_players,threat_level) && new_rule.cost <= threat)
+	current_players[CURRENT_OBSERVERS] = list_observers.Copy()
+	if (new_rule && (forced || (new_rule.acceptable(living_players.len,threat_level) && new_rule.cost <= threat)))
 		new_rule.candidates = current_players.Copy()
 		new_rule.trim_candidates()
 		if (new_rule.ready())
@@ -178,9 +194,9 @@
 			current_players[CURRENT_LIVING_PLAYERS] = living_players.Copy()
 			current_players[CURRENT_LIVING_ANTAGS] = living_antags.Copy()
 			current_players[CURRENT_DEAD_PLAYERS] = dead_players.Copy()
-			current_players[CURRENT_OBSERVERS] = observers.Copy()
+			current_players[CURRENT_OBSERVERS] = list_observers.Copy()
 			for (var/datum/dynamic_ruleset/latejoin/rule in midround_rules)
-				if (rule.acceptable(living_players,threat_level) && threat >= rule.cost)
+				if (rule.acceptable(living_players.len,threat_level) && threat >= rule.cost)
 					rule.candidates = current_players.Copy()
 					rule.trim_candidates()
 					if (rule.ready())
@@ -191,10 +207,10 @@
 
 
 /datum/gamemode/dynamic/proc/update_playercounts()
-	living_players = 0
-	living_antags = 0
-	dead_players = 0
-	observers = 0
+	living_players = list()
+	living_antags = list()
+	dead_players = list()
+	list_observers = list()
 	for (var/mob/M in player_list)
 		if (!M.client)
 			continue
@@ -208,7 +224,7 @@
 			if (istype(M,/mob/dead/observer))
 				var/mob/dead/observer/O = M
 				if (O.started_as_observer)//Observers
-					observers.Add(M)
+					list_observers.Add(M)
 					continue
 				if (O.mind && O.mind.current && O.mind.current.ajourn)//Cultists
 					living_players.Add(M)//yes we're adding a ghost to "living_players", so make sure to properly check for type when testing midround rules
@@ -243,11 +259,17 @@
 
 	update_playercounts()
 
-	if (injection_attempt())
+	if (forced_latejoin_rule)
+		forced_latejoin_rule.candidates = list(newPlayer)
+		forced_latejoin_rule.trim_candidates()
+		if (forced_latejoin_rule.ready())
+			picking_latejoin_rule(list(forced_latejoin_rule))
+		forced_latejoin_rule = null
 
+	else if (injection_attempt())
 		var/list/drafted_rules = list()
 		for (var/datum/dynamic_ruleset/latejoin/rule in latejoin_rules)
-			if (rule.acceptable(living_players,threat_level) && threat >= rule.cost)
+			if (rule.acceptable(living_players.len,threat_level) && threat >= rule.cost)
 				rule.candidates = list(newPlayer)
 				rule.trim_candidates()
 				if (rule.ready())
