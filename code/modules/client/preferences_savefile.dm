@@ -723,7 +723,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	if(check.Execute(db))
 		if(!check.NextRow())
 			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name, random_name,    gender, age, species, language, flavor_text, med_record, sec_record, gen_record, player_alt_titles, disabilities, nanotrasen_relation, bank_security, random_body)\
-			                    VALUES (?,          ?,          ?,        ?,         ?,              ?,      ?,   ?,       ?,        ?,           ?,          ?,          ?,          ?,                 ?,            ?,                   ?)",
+			                    VALUES (?,          ?,          ?,        ?,         ?,              ?,      ?,   ?,       ?,        ?,           ?,          ?,          ?,          ?,                 ?,            ?,                   ?,             ?)",
 			                            ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles,         disabilities, nanotrasen_relation, bank_security, be_random_body)
 			if(!q.Execute(db))
 				message_admins("InsertPlayer: Error #:[q.Error()] - [q.ErrorMsg()]")
