@@ -68,6 +68,23 @@
 		M.take_uplink()
 		to_chat(M.current, "<span class='warning'>You have been stripped of your uplink.</span>")
 
+/datum/role/traitor/Greet(var/greeting,var/custom)
+	if(!greeting)
+		return
+
+	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	switch(greeting)
+		if (GREET_ROUNDSTART)
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Syndicate agent, a Traitor.</span>")
+		if (GREET_AUTOTATOR)
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>Your memory clears up as you remember your identity as a sleeper agent of the Syndicate. It's time to pay your debt to them. You are now a Traitor.</span>")
+		if (GREET_LATEJOIN)
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>As a Syndicate agent, you are to infiltrate the crew and accomplish your objectives at all cost. You are a Traitor.</span>")
+		else
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Traitor.</span>")
+
+	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+
 
 //________________________________________________
 

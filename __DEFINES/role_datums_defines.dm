@@ -1,3 +1,9 @@
+// Dynamic Mode
+#define CURRENT_LIVING_PLAYERS	"living"
+#define CURRENT_LIVING_ANTAGS	"antags"
+#define CURRENT_DEAD_PLAYERS	"dead"
+#define CURRENT_OBSERVERS	"observers"
+
 // Faction IDs
 #define BLOODCULT "cult of Nar-Sie"
 #define REVOLUTION "revolution"
@@ -43,8 +49,11 @@
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
+#define GREET_LATEJOIN		"latejoin"
 #define GREET_ADMINTOGGLE	"admintoggle"
 #define GREET_CUSTOM		"custom"
+
+#define GREET_AUTOTATOR		"autotator"
 
 #define GREET_CONVERTED		"converted"
 #define GREET_PAMPHLET		"pamphlet"
