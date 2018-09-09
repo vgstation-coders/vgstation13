@@ -121,3 +121,7 @@
 #define BE_TRAITOR "Be_Traitor"
 #define BE_PAI "Be_PAI"
 #define BE_NINJA "Be_Ninja"
+
+
+#define FROM_GHOSTS 1
+#define FROM_PLAYERS 2

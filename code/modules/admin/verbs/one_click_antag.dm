@@ -50,21 +50,107 @@ client/proc/one_click_antag()
 
 	return malf_made
 
+/datum/admins/proc/makeAntag(var/datum/role/R, var/datum/faction/F, var/count = 1, var/recruitment_source = FROM_PLAYERS)
+	to_chat(world, "makeAntag called. R = [R], F = [F], count = [count], recruitment_source [recruitment_source]")
+	var/role_req
+	var/role_name
+	if(F)
+		role_req = initial(F.required_pref)
+		role_name = initial(F.name)
+	else if(R)
+		role_req = initial(R.required_pref)
+		role_name = initial(R.name)
+	var/list/candidates = get_candidates(role_req, recruitment_source, role_name)
+	var/recruit_count = 0
+	if(!candidates.len)
+		to_chat(world, "No candidates")
+		return 0
 
-/datum/admins/proc/makeTraitors()
+	candidates = shuffle(candidates)
+
+	if(F)
+		var/datum/faction/FF = find_active_faction_by_type(F)
+		if(!FF)
+			FF = ticker.mode.CreateFaction(F, 0, 1)
+			if(!FF)
+				return 0
+			var/mob/H = pick(candidates)
+			candidates.Remove(H)
+			if(isobserver(H))
+				H = makeBody(H)
+			var/datum/mind/M = H.mind
+			if(FF.HandleNewMind(M))
+				log_admin("[key_name(H)] has been recruited as leader of [F.name] via create antagonist verb.")
+				recruit_count++
+				count--
+
+		while(count > 0 && candidates.len)
+			count--
+			var/mob/living/carbon/human/H = pick(candidates)
+			candidates.Remove(H)
+			if(isobserver(H))
+				H = makeBody(H)
+			var/datum/mind/M = H.mind
+
+			if(FF.HandleRecruitedMind(M))
+				log_admin("[key_name(H)] has been recruited as recruit of [F.name] via create antagonist verb.")
+				recruit_count++
+
+		FF.OnPostSetup()
+
+		return recruit_count
+
+	else if(R)
+		to_chat(world, "Checking R")
+		while(count > 0 && candidates.len)
+			count--
+			var/mob/H = pick(candidates)
+			candidates.Remove(H)
+			if(isobserver(H))
+				H = makeBody(H)
+			to_chat(world, "[H] is chosen.")
+			var/datum/mind/M = H.mind
+
+			var/datum/role/newRole = new R
+
+			if(!newRole)
+				to_chat(world, "newRole dropped.")
+				continue
+
+			if(!newRole.AssignToRole(M))
+				to_chat(world, "M failed newRole assign.")
+				newRole.Drop()
+				continue
+			newRole.OnPostSetup()
+			newRole.ForgeObjectives()
+			log_admin("[key_name(H)] has been made into a [newRole.name] via create antagonist verb.")
+			recruit_count++
+
+	return recruit_count
 
 
-/datum/admins/proc/makeChanglings()
-
-
-/datum/admins/proc/makeRevs()
-
-
-/datum/admins/proc/makeWizard()
-
-
-/datum/admins/proc/makeCult()
-
+/datum/admins/proc/get_candidates(var/role, var/source, var/role_name)
+	to_chat(world, "getting candidates. [role], [source], [role_name]")
+	var/list/candidates = list()
+	switch(source)
+		if(FROM_GHOSTS)
+			for(var/mob/dead/observer/G in get_active_candidates(role, poll="Do you wish to be considered for [role_name]?"))
+				candidates.Add(G)
+		if(FROM_PLAYERS)
+			for(var/mob/living/carbon/human/H in player_list)
+				to_chat(world, "Evaluating H [H]")
+				if(!H.client || !H.mind)
+					to_chat(world, "No client or no mind [H.client]. [H.mind]")
+					continue
+				candidates.Add(H)
+	for(var/mob/M in candidates)
+		if(jobban_isbanned(M, "Syndicate"))
+			to_chat(world, "M is syndicate banned")
+			candidates.Remove(M)
+		if(!M.client.desires_role(role) || jobban_isbanned(M, role))
+			to_chat(world, "M does not desire role [M.client.desires_role(role)] or is jobbanned [jobban_isbanned(M, role)]")
+			candidates.Remove(M)
+	return candidates
 
 /datum/admins/proc/makeNukeTeam()
 
@@ -271,5 +357,3 @@ client/proc/one_click_antag()
 	new_vox.equip_vox_raider()
 
 	return new_vox
-
-/datum/admins/proc/makeVampires()
