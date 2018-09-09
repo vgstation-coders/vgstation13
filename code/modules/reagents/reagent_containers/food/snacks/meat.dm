@@ -301,7 +301,3 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	. = ..()
 	if(ishuman(eater))
 		eater.contract_disease(new /datum/disease/wendigo_transformation)
-<<<<<<< HEAD
-
-=======
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec

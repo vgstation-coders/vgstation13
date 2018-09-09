@@ -398,12 +398,7 @@
 			return
 
 	if (iswrench(W) && can_disassemble())
-<<<<<<< HEAD
-		//if(!params_list.len || text2num(params_list["icon-y"]) < 8) //8 above the bottom of the icon
-		to_chat(user, "<span class='notice'>Now disassembling table</span>")
-=======
 		to_chat(user, "<span class='notice'>Now disassembling table...</span>")
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src,50))
 			destroy()
@@ -582,11 +577,7 @@
 		return ..()
 
 /obj/structure/table/reinforced/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
-<<<<<<< HEAD
-	if(istype(W,/obj/item/weapon/stock_parts/scanning_module))
-=======
 	if(istype(W,/obj/item/weapon/stock_parts/scanning_module) && can_optable)
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 40))
 			if(user.drop_item(W))
@@ -607,23 +598,6 @@
 		to_chat(user, "<span class='notice'>Now [status == 2?"weakening":"strenghening"] the reinforced table.</span>")
 		if(WT.do_weld(user, src, 50, 0))
 			if(src.status == 2)
-<<<<<<< HEAD
-				to_chat(user, "<span class='notice'>Now weakening the reinforced table.</span>")
-				playsound(src, 'sound/items/Welder.ogg', 50, 1)
-				if (do_after(user, src, 50))
-					if(!src || !WT.isOn())
-						return
-					to_chat(user, "<span class='notice'>Table weakened.</span>")
-					src.status = 1
-			else
-				to_chat(user, "<span class='notice'>Now strengthening the reinforced table.</span>")
-				playsound(src, 'sound/items/Welder.ogg', 50, 1)
-				if (do_after(user, src, 50))
-					if(!src || !WT.isOn())
-						return
-					to_chat(user, "<span class='notice'>Table strengthened.</span>")
-					src.status = 2
-=======
 				if(gcDestroyed)
 					return
 				to_chat(user, "<span class='notice'>Table weakened.</span>")
@@ -633,7 +607,6 @@
 					return
 				to_chat(user, "<span class='notice'>Table strengthened.</span>")
 				src.status = 2
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 			return
 	return ..()
 

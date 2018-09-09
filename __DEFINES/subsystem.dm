@@ -46,24 +46,15 @@
 #define SS_PRIORITY_SUN            3
 #define SS_PRIORITY_GARBAGE        2
 #define SS_PRIORITY_INACTIVITY     1
-
-<<<<<<< HEAD
-#define SS_WAIT_FAST_MACHINERY 0.7 SECONDS //TODO move the rest of these to defines
-#define SS_WAIT_FAST_OBJECTS	0.5 SECONDS
-=======
 #define SS_WAIT_MACHINERY           2 SECONDS //TODO move the rest of these to defines
 #define SS_WAIT_FAST_MACHINERY      0.7 SECONDS
 #define SS_WAIT_FAST_OBJECTS        0.5 SECONDS
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 
 #define SS_DISPLAY_GARBAGE        -100
 #define SS_DISPLAY_AIR            -90
 #define SS_DISPLAY_LIGHTING       -80
 #define SS_DISPLAY_MOB            -70
-<<<<<<< HEAD
-=======
 #define SS_DISPLAY_COMPONENT      -69
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 #define SS_DISPLAY_FAST_OBJECTS   -65
 #define SS_DISPLAY_OBJECTS        -60
 #define SS_DISPLAY_MACHINERY      -50

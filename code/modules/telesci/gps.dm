@@ -136,10 +136,6 @@ var/list/SPS_list = list()
 	if(href_list["toggle_refresh"])
 		autorefreshing = !autorefreshing
 		return TRUE
-<<<<<<< HEAD
-
-=======
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 	if(..())
 		return FALSE
 

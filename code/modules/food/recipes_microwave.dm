@@ -2569,22 +2569,12 @@
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/ambrosia_brownies
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 /datum/recipe/butterfingers_r
 	items = list(/obj/item/organ/external/r_hand,
 	/obj/item/weapon/reagent_containers/food/snacks/butter,
 	)
 
  result = /obj/item/weapon/reagent_containers/food/snacks/butterfingers_r/
-<<<<<<< HEAD
- 
-=======
-
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 /datum/recipe/butterfingers_l
 	items = list(/obj/item/organ/external/l_hand,
 	/obj/item/weapon/reagent_containers/food/snacks/butter,

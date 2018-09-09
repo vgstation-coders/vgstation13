@@ -208,126 +208,6 @@ var/list/ai_list = list()
 	set name = "Set AI Core Display"
 	if(stat || aiRestorePowerRoutine)
 		return
-<<<<<<< HEAD
-	var/icontype = input("Select an icon!", "AI", null, null) as null|anything in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static", "Wasp", "Robert House", "Red October", "Fabulous", "Girl", "Girl Malf", "Boy", "Boy Malf", "Four-Leaf", "Yes Man", "Hourglass", "Patriot", "Pirate", "Royal", "Heartline", "Hades", "Helios", "Syndicat", "Alien", "Too Deep", "Goon", "Database", "Glitchman", "Nanotrasen", "Angel", "Gentoo", "Murica", "President", "Fort", "Mothman", "Dancing Hotdog", "Diagnosis", "Drink It!", "Metaclub", "Jack Frost")
-	switch(icontype)
-		if("Clown")
-			icon_state = "ai-clown2"
-		if("Monochrome")
-			icon_state = "ai-mono"
-		if("Inverted")
-			icon_state = "ai-u"
-		if("Firewall")
-			icon_state = "ai-magma"
-		if("Green")
-			icon_state = "ai-wierd"
-		if("Red")
-			icon_state = "ai-malf"
-		if("Broken Output")
-			icon_state = "ai-static"
-		if("Text")
-			icon_state = "ai-text"
-		if("Smiley")
-			icon_state = "ai-smiley"
-		if("Matrix")
-			icon_state = "ai-matrix"
-		if("Angry")
-			icon_state = "ai-angryface"
-		if("Dorf")
-			icon_state = "ai-dorf"
-		if("Bliss")
-			icon_state = "ai-bliss"
-		if("Triumvirate")
-			icon_state = "ai-triumvirate"
-		if("Triumvirate Static")
-			icon_state = "ai-triumvirate-malf"
-		if("Searif")
-			icon_state = "ai-searif"
-		if("Ravensdale")
-			icon_state = "ai-ravensdale"
-		if("Serithi")
-			icon_state = "ai-serithi"
-		if("Static")
-			icon_state = "ai-fuzz"
-		if("Wasp")
-			icon_state = "ai-wasp"
-		if("Robert House")
-			icon_state = "ai-president"
-		if("Red October")
-			icon_state = "ai-soviet"
-		if("Girl")
-			icon_state = "ai-girl"
-		if("Girl Malf")
-			icon_state = "ai-girl-malf"
-		if("Boy")
-			icon_state = "ai-boy"
-		if("Boy Malf")
-			icon_state = "ai-boy-malf"
-		if("Fabulous")
-			icon_state = "ai-fabulous"
-		if("Four-Leaf")
-			icon_state = "ai-4chan"
-		if("Yes Man")
-			icon_state = "yes-man"
-		if("Hourglass")
-			icon_state = "ai-hourglass"
-		if("Patriot")
-			icon_state = "ai-patriot"
-		if("Pirate")
-			icon_state = "ai-pirate"
-		if("Royal")
-			icon_state = "ai-royal"
-		if("Heartline")
-			icon_state = "ai-heartline"
-		if("Hades")
-			icon_state = "ai-hades"
-		if("Helios")
-			icon_state = "ai-helios"
-		if("Syndicat")
-			icon_state = "ai-syndicatmeow"
-		if("Too Deep")
-			icon_state = "ai-toodeep"
-		if("Goon")
-			icon_state = "ai-goon"
-		if("Database")
-			icon_state = "ai-database"
-		if("Glitchman")
-			icon_state = "ai-glitchman"
-		if("Alien")
-			icon_state = "ai-alien"
-		if("Nanotrasen")
-			icon_state = "ai-nanotrasen"
-		if("Angel")
-			icon_state = "ai-angel"
-		if("Gentoo")
-			icon_state = "ai-gentoo"
-		if("Murica")
-			icon_state = "ai-murica"
-		if("President")
-			icon_state = "ai-pres"
-		if("Fort")
-			icon_state = "ai-boxfort"
-		if("Mothman")
-			icon_state = "ai-mothman"
-		if("Dancing Hotdog")
-			icon_state = "ai-hotdog"
-		if("Diagnosis")
-			icon_state = "ai-atlantiscze"
-		if("Drink It!")
-			icon_state = "ai-silveryferret"
-		if("Metaclub")
-			icon_state = "ai-terminal"
-		if("Jack Frost")
-			icon_state = "ai-jack"
-		else icon_state = "ai"
-
-// displays the malf_ai information if the AI is the malf
-/mob/living/silicon/ai/show_malf_ai()
-	var/datum/faction/malf/malf = find_active_faction_by_member(src.mind.GetRole(MALF))
-	if(malf && malf.apcs >= 3)
-		stat(null, "Amount of APCS hacked: [malf.apcs]")
-		stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
-=======
 	var/static/list/possible_icon_states = list(
 		"Blue" = "ai",
 		"Clown" = "ai-clown2",
@@ -392,16 +272,14 @@ var/list/ai_list = list()
 	ASSERT(chosen_state)
 	chosen_core_icon_state = chosen_state
 	update_icon()
-
+	
 // displays the malf_ai information if the AI is the malf
 /mob/living/silicon/ai/show_malf_ai()
-	if(ticker.mode.name == "AI malfunction")
-		var/datum/game_mode/malfunction/malf = ticker.mode
-		for (var/datum/mind/malfai in malf.malf_ai)
-			if(mind == malfai) // are we the evil one?
-				if(malf.apcs >= 3)
-					stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
+	var/datum/faction/malf/malf = find_active_faction_by_member(src.mind.GetRole(MALF))
+	if(malf && malf.apcs >= 3)
+		stat(null, "Amount of APCS hacked: [malf.apcs]")
+		stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
+	
 
 /mob/proc/remove_malf_spells()
 	for(var/spell/S in spell_list)
@@ -984,8 +862,6 @@ var/list/ai_list = list()
 
 /mob/living/silicon/ai/isTeleViewing(var/client_eye)
 	return TRUE
-<<<<<<< HEAD
-=======
 
 /mob/living/silicon/ai/update_icon()
 	if(stat == DEAD)
@@ -995,4 +871,3 @@ var/list/ai_list = list()
 			icon_state = "ai-crash"
 		return
 	icon_state = chosen_core_icon_state
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec

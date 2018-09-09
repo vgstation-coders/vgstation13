@@ -22,10 +22,7 @@ var/list/one_way_windows
 	var/ini_dir = null //This really shouldn't exist, but it does and I don't want to risk deleting it because it's likely mapping-related
 	var/d_state = WINDOWLOOSEFRAME //Normal windows have one step (unanchor), reinforced windows have three
 	var/shardtype = /obj/item/weapon/shard
-<<<<<<< HEAD
-=======
 	var/reinforcetype = /obj/item/stack/rods
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 	sheet_type = /obj/item/stack/sheet/glass/glass //Used for deconstruction
 	var/sheetamount = 1 //Number of sheets needed to build this window (determines how much shit is spawned via Destroy())
 	var/reinforced = 0 //Used for deconstruction steps
@@ -466,15 +463,6 @@ var/list/one_way_windows
 					var/obj/item/weapon/weldingtool/WT = W
 					user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 						"<span class='notice'>You start disassembling \the [src].</span>")
-<<<<<<< HEAD
-						if(do_after(user, src, 40) && d_state == WINDOWLOOSE) //Extra condition needed to avoid cheesing
-							playsound(src, 'sound/items/Welder.ogg', 100, 1)
-							user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
-							"<span class='notice'>You disassemble \the [src].</span>")
-							drop_stack(sheet_type, get_turf(src), sheetamount, user)
-							qdel(src)
-							return
-=======
 					if(WT.do_weld(user, src, 40, 0) && d_state == WINDOWLOOSE) //Extra condition needed to avoid cheesing
 						playsound(src, 'sound/items/Welder.ogg', 100, 1)
 						user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
@@ -482,7 +470,6 @@ var/list/one_way_windows
 						drop_stack(sheet_type, get_turf(src), sheetamount, user)
 						qdel(src)
 						return
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 					else
 						to_chat(user, "<span class='warning'>You need more welding fuel to complete this task.</span>")
 						return
@@ -504,23 +491,11 @@ var/list/one_way_windows
 			var/obj/item/weapon/weldingtool/WT = W
 			user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 				"<span class='notice'>You start disassembling \the [src].</span>")
-<<<<<<< HEAD
-				if(do_after(user, src, 40) && d_state == WINDOWLOOSE) //Ditto above
-					playsound(src, 'sound/items/Welder.ogg', 100, 1)
-					user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
-					"<span class='notice'>You disassemble \the [src].</span>")
-					drop_stack(sheet_type, get_turf(src), sheetamount, user)
-					Destroy()
-					return
-			else
-				to_chat(user, "<span class='warning'>You need more welding fuel to complete this task.</span>")
-=======
 			if(WT.do_weld(user, src, 40, 0) && d_state == WINDOWLOOSE) //Ditto above
 				user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
 				"<span class='notice'>You disassemble \the [src].</span>")
 				drop_stack(sheet_type, get_turf(src), sheetamount, user)
 				Destroy()
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 				return
 
 	user.do_attack_animation(src, W)
@@ -714,8 +689,6 @@ var/list/one_way_windows
 	icon_state = "fwindow"
 	health = 30
 	sheet_type = /obj/item/stack/sheet/glass/rglass //Ditto above
-<<<<<<< HEAD
-=======
 
 /obj/structure/window/reinforced/clockwork
 	name = "brass window"
@@ -729,7 +702,6 @@ var/list/one_way_windows
 
 /obj/structure/window/reinforced/clockwork/cultify()
 	return
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 
 /obj/structure/window/send_to_past(var/duration)
 	..()

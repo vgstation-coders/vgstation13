@@ -19,8 +19,4 @@
 			O.mode = 1
 			O.emotion = "Neutral"
 	view_core()
-<<<<<<< HEAD
 	client.CAN_MOVE_DIAGONALLY = TRUE
-=======
-	client.CAN_MOVE_DIAGONALLY = TRUE
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec

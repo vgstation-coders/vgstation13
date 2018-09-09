@@ -297,3 +297,4 @@
 					else
 						new /obj/item/weapon/switchtool/swiss_army_knife(get_turf(H))
 			playsound(H,'sound/items/zippo_open.ogg', 50, 1)
+*/

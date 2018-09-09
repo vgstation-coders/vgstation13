@@ -499,7 +499,6 @@ var/global/num_vending_terminals = 1
 		credits_held = 0
 	if(amount > 0)
 		dispense_cash(amount,src.loc)
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 
 /**
  *  Receive payment with cashmoney.
@@ -507,6 +506,7 @@ var/global/num_vending_terminals = 1
  *  usr is the mob who gets the change.
  */
 /obj/machinery/vending/proc/pay_with_cash(var/obj/item/weapon/spacecash/cashmoney, mob/user)
+	if(!currently_vending)
 		return
 	visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>", "You hear a whirr.")
 	credits_held += cashmoney.get_total()

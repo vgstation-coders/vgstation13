@@ -131,11 +131,7 @@
 	w_class = W_CLASS_SMALL
 	var/bullets = 10
 	var/max_bullets = 10
-<<<<<<< HEAD
-	var/caliber = PULSE	//base icon name
-=======
 	var/base_icon_state = "osipr"
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 	var/bullet_type = /obj/item/projectile/bullet/osipr
 
 /obj/item/energy_magazine/New()
@@ -161,11 +157,7 @@
 	w_class = W_CLASS_SMALL
 	bullets = 30
 	max_bullets = 30
-<<<<<<< HEAD
-	caliber = PULSE
-=======
 	base_icon_state = "osipr"
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 	bullet_type = /obj/item/projectile/bullet/osipr
 
 #undef OSIPR_PRIMARY_FIRE

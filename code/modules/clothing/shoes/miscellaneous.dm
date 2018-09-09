@@ -462,9 +462,6 @@
 	if(istype(victim) && toggle)
 		var/datum/organ/external/affecting = victim.get_organ(ran_zone(user.zone_sel.selecting))
 		//Sharpness 1.5, force 10, edge = SHARP_TIP | SHARP_BLADE
-<<<<<<< HEAD
-		victim.apply_damage(victim.run_armor_absorb(affecting, "melee", 10), BRUTE, affecting, victim.run_armor_check(affecting, "melee"), sharp = 1.5, edge = SHARP_TIP | SHARP_BLADE, used_weapon = src)
-=======
 		victim.apply_damage(victim.run_armor_absorb(affecting, "melee", 10), BRUTE, affecting, victim.run_armor_check(affecting, "melee"), sharp = 1.5, edge = SHARP_TIP | SHARP_BLADE, used_weapon = src)
 
 /obj/item/clothing/shoes/lich_king
@@ -473,4 +470,3 @@
 	icon_state = "lichking_boots"
 	item_state = "lichking_boots"
 	wizard_garb = 1
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec

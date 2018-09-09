@@ -3090,8 +3090,6 @@
 	required_temp = T0C + 450
 	result_amount = 1
 
-<<<<<<< HEAD
-=======
 /datum/chemical_reaction/caramel
 	name = "Heated Sugar"
 	id = CARAMEL
@@ -3117,7 +3115,6 @@
 	S.take_damage(created_volume/10)
 	S.get_reagents().remove_reagents(created_volume*25)
 
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 /datum/chemical_reaction/albuterol
 	name = "Albuterol"
 	id = ALBUTEROL
@@ -3254,8 +3251,6 @@
 	id = COLORFUL_REAGENT
 	result = COLORFUL_REAGENT
 	required_reagents = list(MESCALINE = 1, PSILOCYBIN = 1, AMATOXIN = 1)
-<<<<<<< HEAD
-=======
 
 //Karmotrine Drinks
 
@@ -3341,7 +3336,6 @@
 	id = LEMON_LIME
 	result = LEMON_LIME
 	required_reagents = list(LIMEJUICE = 1, LEMONJUICE = 1, SODAWATER = 1)
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 	result_amount = 3
 
 #undef ALERT_AMOUNT_ONLY

@@ -907,11 +907,8 @@
 						ritualresponse += "The Geometer of Blood accepts this sacrifice."
 						satisfaction = 50
 						if(cult_round)
-<<<<<<< HEAD
-							cult_round.revivecounter += 1
-=======
 							cult_round.revivecounter ++
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
+
 					else						//dead NPCs
 						ritualresponse += "The Geometer of Blood accepts your meager sacrifice."
 						satisfaction = 10

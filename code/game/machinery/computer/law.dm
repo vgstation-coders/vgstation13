@@ -146,19 +146,11 @@
 	var/mob/living/silicon/robot/current = null
 	light_color = "#555555"
 
-<<<<<<< HEAD
-	proc/announce_law_changes()
-		to_chat(current, "These are your laws now:")
-		current.show_laws()
-		current << sound('sound/machines/lawsync.ogg')
-		to_chat(usr, "<span class='notice'>Upload complete. The robot's laws have been modified.</span>")
-=======
 /obj/machinery/computer/borgupload/proc/announce_law_changes()
 	to_chat(current, "These are your laws now:")
 	current.show_laws()
 	current << sound('sound/machines/lawsync.ogg')
 	to_chat(usr, "<span class='notice'>Upload complete. The robot's laws have been modified.</span>")
->>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 
 /obj/machinery/computer/borgupload/proc/install_module(var/obj/item/weapon/aiModule/M,var/mob/user)
 	if(stat & NOPOWER)
