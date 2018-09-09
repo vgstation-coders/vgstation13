@@ -212,6 +212,9 @@ var/datum/controller/gameticker/ticker
 					qdel(obj)
 
 		to_chat(world, "<FONT color='blue'><B>Enjoy the game!</B></FONT>")
+		
+		send2maindiscord("**The game has started**")
+		
 //		world << sound('sound/AI/welcome.ogg')// Skie //Out with the old, in with the new. - N3X15
 
 		if(!config.shut_up_automatic_diagnostic_and_announcement_system)

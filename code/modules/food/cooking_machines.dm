@@ -68,7 +68,6 @@ var/global/ingredientLimit = 10
 	icon_state = "oven_off"
 	var/icon_state_on = "oven_on"
 	var/recursive_ingredients = 0 //allow /food/snacks/customizable as a valid ingredient
-	layer = BELOW_OBJ_LAYER
 	density = 1
 	anchored = 1
 	use_power = 1

@@ -115,6 +115,7 @@ Class Procs:
 	var/icon_state_open = ""
 
 	w_type = NOT_RECYCLABLE
+	layer = MACHINERY_LAYER
 
 	penetration_dampening = 5
 
@@ -523,26 +524,24 @@ Class Procs:
 		state = 0 //since this might be wrong, we go sanity
 		to_chat(user, "You need to secure \the [src] before it can be welded.")
 		return -1
-	if (WT.remove_fuel(0,user))
-		playsound(src, 'sound/items/Welder2.ogg', 50, 1)
-		user.visible_message("[user.name] starts to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
-				"You start to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
-				"You hear welding.")
-		if (do_after(user, src,20))
-			if(!src || !WT.isOn())
+	user.visible_message("[user.name] starts to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
+		"You start to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
+		"You hear welding.")
+	if (WT.do_weld(user, src,20, 0))
+		if(gcDestroyed)
+			return -1
+		switch(state)
+			if(0)
+				to_chat(user, "You have to keep \the [src] secure before it can be welded down.")
 				return -1
-			switch(state)
-				if(0)
-					to_chat(user, "You have to keep \the [src] secure before it can be welded down.")
-					return -1
-				if(1)
-					state = 2
-				if(2)
-					state = 1
-			user.visible_message(	"[user.name] [state - 1 ? "weld" : "unweld"]s \the [src] [state - 1 ? "to" : "from"] the floor.",
-									"[bicon(src)] You [state - 1 ? "weld" : "unweld"] \the [src] [state - 1 ? "to" : "from"] the floor."
-								)
-			return 1
+			if(1)
+				state = 2
+			if(2)
+				state = 1
+		user.visible_message(	"[user.name] [state - 1 ? "weld" : "unweld"]s \the [src] [state - 1 ? "to" : "from"] the floor.",
+								"[bicon(src)] You [state - 1 ? "weld" : "unweld"] \the [src] [state - 1 ? "to" : "from"] the floor."
+							)
+		return 1
 	else
 		to_chat(user, "<span class='rose'>You need more welding fuel to complete this task.</span>")
 		return -1
@@ -688,7 +687,6 @@ Class Procs:
 			var/P
 			for(var/obj/item/A in component_parts)
 				for(var/D in CB.req_components)
-					D = text2path(D) //For some stupid reason these are strings by default.
 					if(ispath(A.type, D))
 						P = D
 						break

@@ -1,5 +1,5 @@
 "aa" = (/turf/space,/area)
-"ab" = (/turf/simulated/wall,/area)
+"ab" = (/turf/simulated/wall,/area/vault/supermarket)
 "ac" = (/obj/structure/girder/reinforced,/turf/simulated/wall/r_wall,/area/vault/supermarket/entrance)
 "ad" = (/turf/simulated/wall/invulnerable,/area/vault/supermarket/entrance)
 "ae" = (/obj/structure/window/reinforced/plasma,/turf/simulated/wall/invulnerable,/area/vault/supermarket/entrance)

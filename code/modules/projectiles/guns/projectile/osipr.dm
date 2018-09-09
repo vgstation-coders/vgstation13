@@ -131,7 +131,11 @@
 	w_class = W_CLASS_SMALL
 	var/bullets = 10
 	var/max_bullets = 10
+<<<<<<< HEAD
 	var/caliber = PULSE	//base icon name
+=======
+	var/base_icon_state = "osipr"
+>>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 	var/bullet_type = /obj/item/projectile/bullet/osipr
 
 /obj/item/energy_magazine/New()
@@ -146,9 +150,9 @@
 
 /obj/item/energy_magazine/update_icon()
 	if(bullets == max_bullets)
-		icon_state = "[caliber]-magfull"
+		icon_state = "[base_icon_state]-magfull"
 	else
-		icon_state = "[caliber]-mag"
+		icon_state = "[base_icon_state]-mag"
 
 /obj/item/energy_magazine/osipr
 	name = "pulse magazine"
@@ -157,7 +161,11 @@
 	w_class = W_CLASS_SMALL
 	bullets = 30
 	max_bullets = 30
+<<<<<<< HEAD
 	caliber = PULSE
+=======
+	base_icon_state = "osipr"
+>>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec
 	bullet_type = /obj/item/projectile/bullet/osipr
 
 #undef OSIPR_PRIMARY_FIRE

@@ -84,9 +84,12 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/cast_delay = 1
 	var/cast_sound = ""
+	var/use_progress_bar = FALSE
 
 	var/hud_state = "" //name of the icon used in generating the spell hud object
+	var/override_icon = ""
 	var/override_base = ""
+	var/icon_direction = SOUTH //Needs override_icon to be not null
 
 	var/obj/abstract/screen/spell/connected_button
 	var/currently_channeled = 0
@@ -519,37 +522,21 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/delayfraction = round(delay/numticks)
 	var/originalstat = user.stat
 
-	var/Location = user.loc
-	var/image/progbar
-	if(user && user.client && user.client.prefs.progress_bars)
-		if(!progbar)
-			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "prog_bar_0")
-			progbar.pixel_z = WORLD_ICON_SIZE
-			progbar.plane = HUD_PLANE
-			progbar.layer = HUD_ABOVE_ITEM_LAYER
-			progbar.appearance_flags = RESET_COLOR
+	var/image/progress_bar
+	if(use_progress_bar)
+		if(user.client && user.client.prefs.progress_bars)
+			progress_bar = create_progress_bar_on(user)
+			user.client.images += progress_bar
 
-	for (var/i = 1 to numticks)
-		if(user && user.client && user.client.prefs.progress_bars)
-			if(!progbar)
-				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "prog_bar_0")
-				progbar.pixel_z = WORLD_ICON_SIZE
-				progbar.plane = HUD_PLANE
-				progbar.layer = HUD_ABOVE_ITEM_LAYER
-				progbar.appearance_flags = RESET_COLOR
-			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
-			user.client.images |= progbar
-
+	for(var/i = 0, i<numticks, i++)
+		if(use_progress_bar)
+			if(user && user.client && user.client.prefs.progress_bars)
+				progress_bar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 		sleep(delayfraction)
 
 		if(!user || (!(spell_flags & (STATALLOWED|GHOSTCAST)) && user.stat != originalstat)  || !(user.loc == Location))
-			if(progbar)
-				progbar.icon_state = "prog_bar_stopped"
-				spawn(2)
-					if(user && user.client)
-						user.client.images -= progbar
-					if(progbar)
-						progbar.loc = null
+			if(use_progress_bar)
+				stop_progress_bar(user, progress_bar)
 			return 0
 
 	if(user && user.client)

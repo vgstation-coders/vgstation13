@@ -114,7 +114,8 @@
 	name = "mining hardsuit helmet"
 	desc = "A special helmet designed for work in a hazardous, low pressure environment. Has reinforced plating."
 	icon_state = "rig0-mining"
-	item_state = "mining_helm"
+	item_state = "rig0-mining"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/mining_suit.dmi', "right_hand" = 'icons/mob/in-hand/right/mining_suit.dmi')
 	_color = "mining"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
@@ -125,7 +126,8 @@
 	icon_state = "rig-mining"
 	name = "mining hardsuit"
 	desc = "A special suit that protects against hazardous, low pressure environments. Has reinforced plating."
-	item_state = "mining_hardsuit"
+	item_state = "rig-mining"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/mining_suit.dmi', "right_hand" = 'icons/mob/in-hand/right/mining_suit.dmi')
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	goliath_reinforce = TRUE
@@ -243,6 +245,22 @@
 /obj/item/clothing/suit/space/rig/wizard/acidable()
 	return 0
 
+/obj/item/clothing/head/helmet/space/rig/wizard/lich_king
+	name = "helm of domination"
+	desc = "Worn by a lich with too much summoning time on their hands."
+	icon_state = "rig0-domination"
+	item_state = "lich_helm"
+	_color = "domination"
+	species_restricted = list(UNDEAD_SHAPED)
+
+/obj/item/clothing/suit/space/rig/wizard/lich_king
+	name = "plate of the damned"
+	desc = "Previous incarnations were rumoured to make the user invulnerable. This itteration is famous for having its own in-built cloak."
+	icon_state = "lichking_armour"
+	item_state = "lichking_armour"
+	species_restricted = list(UNDEAD_SHAPED)
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|HANDS
+
 //Medical Rig
 /obj/item/clothing/head/helmet/space/rig/medical
 	name = "medical hardsuit helmet"
@@ -296,7 +314,9 @@
 		/obj/item/ammo_casing,
 		/obj/item/weapon/handcuffs,
 		/obj/item/weapon/bikehorn/baton,
-		/obj/item/weapon/blunderbuss)
+		/obj/item/weapon/blunderbuss,
+		/obj/item/weapon/legcuffs/bolas,
+	)
 	siemens_coefficient = 0.7
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
@@ -451,6 +471,7 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	_color = "knight"
 	clothing_flags = PLASMAGUARD
+	goliath_reinforce = TRUE
 
 /obj/item/clothing/suit/space/rig/knight
 	name = "Space-Knight armour"
@@ -464,6 +485,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	clothing_flags = PLASMAGUARD
+	goliath_reinforce = TRUE
 
 /obj/item/clothing/head/helmet/space/rig/knight/black
 	name = "Black Knight's helm"
@@ -542,3 +564,22 @@
 	heat_conductivity = 0 //thanks, blanket
 	gas_transfer_coefficient = 0.60
 	permeability_coefficient = 0.30
+
+/obj/item/clothing/suit/space/rig/ror
+	name = "survivor's hardsuit"
+	desc = "...and so he left the asteroid, with everything but his humanity."
+	icon_state = "rorsuit"
+	item_state = "rorsuit"
+	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
+	goliath_reinforce = TRUE
+
+/obj/item/clothing/head/helmet/space/rig/ror
+	name = "survivor's hardsuit helmet"
+	desc = "...and so he left the asteroid, with everything but his humanity."
+	icon_state = "rorhelm"
+	item_state = "rorhelm"
+	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
+	goliath_reinforce = TRUE
+
+/obj/item/clothing/head/helmet/space/rig/ror/update_icon()
+	return

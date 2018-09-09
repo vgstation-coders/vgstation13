@@ -138,6 +138,9 @@
 		src.druggy--
 		src.druggy = max(0, src.druggy)
 
+	handle_dizziness()
+	handle_jitteriness()
+
 	return 1
 
 /mob/living/silicon/robot/mommi/handle_regular_hud_updates()

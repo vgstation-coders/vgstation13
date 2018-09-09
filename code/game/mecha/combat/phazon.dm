@@ -27,6 +27,7 @@
 	ME.attach(src)
 	ME = new /obj/item/mecha_parts/mecha_equipment/gravcatapult
 	ME.attach(src)
+	intrinsic_spells = list(new /spell/mech/phazon/phasing(src))
 	return
 
 /obj/mecha/combat/phazon/to_bump(var/atom/obstacle)
@@ -43,28 +44,22 @@
 		. = ..()
 	return
 
+/spell/mech/phazon/phasing
+	name = "Phasing"
+	desc = "Phase through walls."
+	charge_max = 10
+	charge_counter = 10
+	hud_state = "phazon-phase"
+	override_icon = 'icons/mecha/mecha.dmi'
+
+/spell/mech/phazon/phasing/cast(list/targets, mob/user)
+	var/obj/mecha/combat/phazon/Phazon = linked_mech
+	Phazon.phasing = !Phazon.phasing
+	Phazon.occupant_message("<font color=\"[Phazon.phasing?"#00f\">En":"#f00\">Dis"]abled phasing.</font>")
+
 /obj/mecha/combat/phazon/click_action(atom/target,mob/user)
 	if(phasing)
 		src.occupant_message("Unable to interact with objects while phasing")
 		return
 	else
 		return ..()
-
-/obj/mecha/combat/phazon/get_commands()
-	var/output = {"<div class='wr'>
-						<div class='header'>Special</div>
-						<div class='links'>
-						<a href='?src=\ref[src];phasing=1'><span id="phasing_command">[phasing?"Dis":"En"]able phasing</span></a>
-						</div>
-						</div>
-						"}
-	output += ..()
-	return output
-
-/obj/mecha/combat/phazon/Topic(href, href_list)
-	..()
-	if (href_list["phasing"])
-		phasing = !phasing
-		send_byjax(src.occupant,"exosuit.browser","phasing_command","[phasing?"Dis":"En"]able phasing")
-		src.occupant_message("<font color=\"[phasing?"#00f\">En":"#f00\">Dis"]abled phasing.</font>")
-	return

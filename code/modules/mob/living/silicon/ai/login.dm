@@ -7,6 +7,8 @@
 	to_chat(src, "To use something, simply click on it.")
 	to_chat(src, {"Use say ":b to speak to your cyborgs through binary."})
 	show_laws()
+	if(ismalf(src))
+		to_chat(src, "<b>These laws may be changed by other players, or by you being the traitor.</b>")
 
 	for(var/obj/effect/rune/rune in rune_list) //HOLY FUCK WHO THOUGHT LOOPING THROUGH THE WORLD WAS A GOOD IDEA
 		client.images += rune.blood_image
@@ -17,4 +19,8 @@
 			O.mode = 1
 			O.emotion = "Neutral"
 	view_core()
+<<<<<<< HEAD
 	client.CAN_MOVE_DIAGONALLY = TRUE
+=======
+	client.CAN_MOVE_DIAGONALLY = TRUE
+>>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec

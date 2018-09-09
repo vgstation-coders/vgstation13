@@ -139,6 +139,8 @@
 			burn -= absorb_burn
 			to_chat(src, "<span class='warning'>Your shield absorbs some of the impact!</span>")
 
+	. = brute + burn
+
 	var/datum/robot_component/armour/A = get_armour()
 	if(A)
 		A.take_damage(brute,burn,sharp)

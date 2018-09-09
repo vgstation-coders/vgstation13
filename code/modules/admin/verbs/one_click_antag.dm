@@ -56,6 +56,7 @@ client/proc/one_click_antag()
 
 /datum/admins/proc/makeChanglings()
 
+
 /datum/admins/proc/makeRevs()
 
 
@@ -272,3 +273,37 @@ client/proc/one_click_antag()
 	return new_vox
 
 /datum/admins/proc/makeVampires()
+<<<<<<< HEAD
+=======
+
+
+	var/datum/game_mode/vampire/temp = new
+	if(config.protect_roles_from_antagonist)
+		temp.restricted_jobs += temp.protected_jobs
+
+	var/list/mob/living/carbon/human/candidates = list()
+	var/mob/living/carbon/human/H = null
+
+	for(var/mob/living/carbon/human/applicant in player_list)
+		if(applicant.client.desires_role(ROLE_VAMPIRE))
+			if(!applicant.stat)
+				if(applicant.mind)
+					if (!applicant.mind.special_role)
+						if(!jobban_isbanned(applicant, ROLE_VAMPIRE) && !jobban_isbanned(applicant, "Syndicate"))
+							if(!(applicant.job in temp.restricted_jobs))
+								candidates += applicant
+
+	if(candidates.len)
+		var/numVamps = min(candidates.len, input("Create how many vampires?", "Make Vampires", 3) as num|null)
+
+		for(var/i = 0, i<numVamps, i++)
+			H = pick(candidates)
+			H.mind.make_new_vampire()
+			log_admin("[key_name(owner)] has made [key_name(H)] a vampire via create antagonist verb.")
+			temp.greet_vampire(H.mind)
+			candidates.Remove(H)
+
+		return 1
+
+	return 0
+>>>>>>> 62c2da231743709d56deff02086f1c47f79c1dec

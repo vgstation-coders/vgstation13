@@ -24,13 +24,13 @@
 	var/dat = "<html><head><title>[src.name]</title><style>h3 {margin: 0px; padding: 0px;}</style></head><body>"
 	if(screen == 0)
 		dat += "<h3>Tracking beacons data</h3>"
-		for(var/obj/item/mecha_parts/mecha_tracking/TR in world)
+		for(var/obj/item/mecha_parts/mecha_tracking/TR in mech_tracking_beacons)
 			var/answer = TR.get_mecha_info()
 			if(answer)
 				dat += {"<hr>[answer]<br/>
 						  <a href='?src=\ref[src];send_message=\ref[TR]'>Send message</a><br/>
 						  <a href='?src=\ref[src];get_log=\ref[TR]'>Show exosuit log</a> |
-						  <a style='color: #A66300;' href='?src=\ref[src];lockdown=\ref[TR]'>(Lockdown)</a> |
+						  <a style='color: #A66300;' href='?src=\ref[src];lockdown=\ref[TR]'>(Toggle Lockdown)</a> |
 						  <a style='color: #f00;' href='?src=\ref[src];shock=\ref[TR]'>(Detonate Beacon)</a><br>"}
 
 	if(screen==1)
@@ -60,13 +60,11 @@
 	if(href_list["lockdown"])
 		var/obj/item/mecha_parts/mecha_tracking/MT = topic_filter.getObj("lockdown")
 		var/obj/mecha/M = MT.in_mecha()
-		if(M.state)
-			to_chat(usr, "That exosuit is already under lockdown!")
-			return
-		switch(alert("Are you sure? The exosuit will enter maintenance mode.","Transmit Beacon Lockdown Code","Yes","No"))
+		switch(alert("Are you sure? The exosuit will [M.state?"exit":"enter"] maintenance mode.","Transmit Beacon Lockdown Code","Yes","No"))
 			if ("Yes")
-				MT.lockdown()
-				log_game("[key_name_admin(usr)] locked down [M] via exosuit control console.")
+				var/lockdown = MT.lockdown()
+				to_chat(usr, "<span class = 'notice'>You [lockdown?"lock down":"remove the lockdown"] on \the [M]</span>")
+				log_game("[key_name_admin(usr)] [lockdown?"locked down":"unlocked"] [M] via exosuit control console.")
 			if ("No")
 				to_chat(usr, "You have second thoughts.")
 	if(href_list["shock"])
@@ -98,6 +96,14 @@
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MAGNETS + "=2"
 	var/lockdown = 0
 
+/obj/item/mecha_parts/mecha_tracking/New()
+	..()
+	mech_tracking_beacons.Add(src)
+
+/obj/item/mecha_parts/mecha_tracking/Destroy()
+	mech_tracking_beacons.Remove(src)
+	..()
+
 /obj/item/mecha_parts/mecha_tracking/proc/get_mecha_info()
 	if(!in_mecha())
 		return 0
@@ -109,10 +115,11 @@
 						<b>Airtank:</b> [M.return_pressure()]kPa<br>
 						<b>Pilot:</b> [M.occupant||"None"]<br>
 						<b>Location:</b> [get_area(M)||"Unknown"]<br>
-						<b>Active equipment:</b> [M.selected||"None"]"}
+						<b>Active equipment:</b> [M.selected||"None"]<br>
+						<b>Current status: [M.state?"locked down for maintenance":"functional"]</b>"}
 	if(istype(M, /obj/mecha/working))
 		var/obj/mecha/working/WM = M
-		answer += "<b> Used cargo space:</b> [WM.cargo.len/WM.cargo_capacity*100]%<br>"
+		answer += "<br><b> Used cargo space:</b> [WM.cargo.len/WM.cargo_capacity*100]%<br>"
 
 	return answer
 
@@ -148,13 +155,13 @@
 /obj/item/mecha_parts/mecha_tracking/proc/lockdown()
 	var/obj/mecha/M = in_mecha()
 	if(M)
-		if(M.state) //It's already in lockdown!
-			return
-		M.log_message("Emergency maintenance protocols activated.",1)
+		M.state = !M.state
+		M.log_message("Emergency maintenance protocols [M.state?"activated":"deactivated"].",1)
 		if(M.occupant)
-			M.occupant_message("<font color='red'>Exosuit emergency maintenance protocols activated.</font>")
+			M.occupant_message("<font color='red'>Exosuit emergency maintenance protocols [M.state?"activated":"deactivated"].</font>")
 			M.occupant << sound('sound/mecha/mechlockdown.ogg',wait=0)
-		M.state = 1
+
+		return M.state
 
 /obj/item/mecha_parts/mecha_tracking/proc/get_mecha_log()
 	if(!src.in_mecha())

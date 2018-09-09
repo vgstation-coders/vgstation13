@@ -60,9 +60,6 @@
 		qdel(vessel)
 		vessel = null
 
-	if(NPC_brain)
-		qdel(NPC_brain)
-		NPC_brain = null
 
 	..()
 
@@ -76,7 +73,6 @@
 		return
 	if(healths)
 		healths.icon_state = "health7"
-	stat = DEAD
 	dizziness = 0
 	remove_jitter()
 
@@ -105,7 +101,7 @@
 		emote("deathgasp") //Let the world KNOW WE ARE DEAD
 
 		update_canmove()
-
+	stat = DEAD
 	tod = worldtime2text() //Weasellos time of death patch
 	if(mind)
 		mind.store_memory("Time of death: [tod]", 0)

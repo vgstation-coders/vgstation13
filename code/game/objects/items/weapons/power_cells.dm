@@ -20,6 +20,7 @@
 	var/minor_fault = 0 //If not 100% reliable, it will build up faults.
 	var/brute_damage = 0 //Used by cyborgs
 	var/electronics_damage = 0 //Used by cyborgs
+	var/starch_cell = 0
 
 /obj/item/weapon/cell/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -111,6 +112,12 @@
 	starting_materials = null
 	w_type = RECYK_BIOLOGICAL
 	minor_fault = 1
+	starch_cell = 1
+
+/obj/item/weapon/cell/potato/soviet
+	charge = 15000
+	maxcharge = 15000
+	minor_fault = 0
 
 /obj/item/weapon/cell/potato/soviet
 	charge = 15000
@@ -126,6 +133,12 @@
 	charge = 12000
 	w_type = RECYK_BIOLOGICAL
 	minor_fault = 1
+	starch_cell = 1
+
+/obj/item/weapon/cell/crepe/mommi
+	maxcharge = 10000
+	charge = 10000
+	minor_fault = 0
 
 /obj/item/weapon/cell/crepe/mommi
 	maxcharge = 10000

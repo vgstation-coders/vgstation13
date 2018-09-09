@@ -22,15 +22,6 @@
 		gene.OnMobLife(src)
 
 	if(radiation)
-		rad_tick++
-		//Whoever wrote those next two blocks of code obviously never heard of mathematical helpers
-		//Whoever wrote this next block needs shoved into supermatter
-		/*if(radiation > 100)
-			radiation = 100
-			Knockdown(10)
-			to_chat(src, "<span class='warning'>You feel weak.</span>")
-			emote("collapse")*/
-
 		if(radiation < 0)
 			radiation = 0
 
@@ -84,13 +75,11 @@
 					rad_tick += 3
 					adjustToxLoss(3)
 					damage = 1
-					/*
-					if(prob(1))
+					/*if(prob(1))
 						to_chat(src, "<span class='warning'>You mutate!</span>")
 						randmutb(src)
 						domutcheck(src,null)
-						emote("gasp")
-					*/
+						emote("gasp")*/
 					updatehealth()
 
 			if(damage && organs.len)
@@ -98,7 +87,7 @@
 				if(istype(O))
 					O.add_autopsy_data("Radiation Poisoning", damage)
 	else
-		rad_tick = max(rad_tick-1,0)
+		rad_tick = max(rad_tick-3,0)
 
 	if(rad_tick)
 		/*
@@ -300,6 +289,7 @@
 					if(set_species("Ghoul"))
 						to_chat(src, "<span class = 'notice'>You feel strangely at peace.</span>")
 						spawn(1 SECONDS)
+							setCloneLoss(0)
 							Knockdown(3)
 							regenerate_icons()
 							visible_message("<span class='danger'>\The [src]'s form loses bulk as they collapse to the ground.</span>")

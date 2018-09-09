@@ -18,7 +18,7 @@
 	universal_understand = 1
 	universal_speak = 1
 	//languages = ALL
-	plane = LIGHTING_PLANE
+	plane = GHOST_PLANE // Not to be confused with an actual ghost plane full of angry spirits.
 	layer = GHOST_LAYER
 	// For Aghosts dicking with telecoms equipment.
 	var/obj/item/device/multitool/ghostMulti = null
@@ -762,7 +762,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set category = "Ghost"
 
 	if(!config.respawn_as_mouse)
-		to_chat(src, "<span class='warning'>Respawning as mouse is disabled..</span>")
+		to_chat(src, "<span class='warning'>Respawning as mouse is disabled.</span>")
 		return
 
 	var/timedifference = world.time - client.time_died_as_mouse
@@ -897,6 +897,23 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		alpha = 127
 		mouse_opacity = 1
 		to_chat(src, "<span class='info'>Sprite shown.</span>")
+
+/mob/dead/observer/verb/hide_ghosts()
+	set name = "Hide Ghosts"
+	set category = "Ghost"
+
+	if(!client.ghost_planemaster)
+		to_chat(src, "<span class='warning'>You have no ghost planemaster. Make a bug report!</span>")
+		return
+
+	if(client.ghost_planemaster.alpha == 255)
+		client.ghost_planemaster.alpha = 0
+		client.ghost_planemaster.mouse_opacity = 0
+		to_chat(src, "<span class='info'>Ghosts hidden.</span>")
+	else
+		client.ghost_planemaster.alpha = 255
+		client.ghost_planemaster.mouse_opacity = 1
+		to_chat(src, "<span class='info'>Ghosts shown.</span>")
 
 /mob/dead/observer/verb/toggle_station_map()
 	set name = "Toggle Station Holomap"

@@ -212,5 +212,5 @@
 		H.sleeping = min(H.sleeping+2, 10)
 	if(pp > min_giggle_pp)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
 		if(prob(20))
-			H.emote(pick("giggle", "laugh"))
+			H.emote(pick("giggle", "laugh"), ignore_status = TRUE)
 	set_moles(0)
