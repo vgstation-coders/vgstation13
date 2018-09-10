@@ -140,12 +140,6 @@
 			user.drop_from_inventory(F)
 			F.Attach(src)
 			return
-	else
-		var/obj/item/clothing/mask/facehugger/F = O
-		if(istype(F))
-			user.drop_from_inventory(F)
-			F.Attach(src)
-			return
 	..()
 
 /mob/living/simple_animal/corgi/Topic(href, href_list)

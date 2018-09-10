@@ -1368,7 +1368,7 @@
 			else
 				user.equip_to_slot_or_del(new /obj/item/clothing/head/legacy_culthood/alt(user), slot_head)
 				user.equip_to_slot_or_del(new /obj/item/clothing/suit/legacy_cultrobes/alt(user), slot_wear_suit)
-			user.equip_to_slot_or_del(new /obj/item/clothing/shoes/legacy_cult(user), slot_shoes)
+			user.equip_to_slot_or_del(new /obj/item/clothing/shoes/cult_legacy(user), slot_shoes)
 			user.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/cultpack(user), slot_back)
 			//the above update their overlay icons cache but do not call update_icons()
 			//the below calls update_icons() at the end, which will update overlay icons by using the (now updated) cache

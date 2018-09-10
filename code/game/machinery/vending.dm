@@ -469,6 +469,7 @@ var/global/num_vending_terminals = 1
 	else if(istype(W, /obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/C = W
 		pay_with_cash(C, user)
+
 	else if(istype(W, /obj/item/weapon/card/emag))
 		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")
 		to_chat(user, "<span class='notice'>You swipe \the [W] through [src]</span>")
@@ -482,6 +483,59 @@ var/global/num_vending_terminals = 1
 			connect_account(user, W)
 			src.updateUsrDialog()
 			return
+
+		if(account_first_linked && linked_account) // Account check
+			if(!user.Adjacent(src))
+				return 0
+			var/obj/item/weapon/card/card_swiped = W
+			visible_message("<span class='info'>[user] swipes a card through [src].</span>")
+			if(card_swiped.associated_account_number != linked_account.account_number)
+				to_chat(user, "[bicon(src)]<span class='warning'> Access denied. Your ID doesn't match the vending machine's connected account.</span>")
+				return 0
+			else if (!edit_mode && charge_flow_verify_security(linked_db, card_swiped, user, null, TRUE) != CARD_CAPTURE_SUCCESS)
+				to_chat(user, "[bicon(src)]<span class='warning'> Access denied. Security Violation.</span>")
+				return 0
+			edit_mode = !edit_mode
+			src.updateUsrDialog()
+			return
+		if(!user.Adjacent(src))
+			return 0
+
+		connect_to_user_account(user)
+
+	else if(istype(W, /obj/item/) && edit_mode)
+		if(istype(W, /obj/item/weapon/disk/nuclear))
+			to_chat(user, "<span class='notice'>Suddenly your hand stops responding. You can't do it.</span>")
+			return
+		if(user.drop_item(W, src))
+			loadCustomItem(W)
+			src.updateUsrDialog()
+
+/obj/machinery/vending/proc/loadCustomItem(var/obj/item/item)
+	for(var/datum/data/vending_product/VP in product_records)
+		if(VP.custom && VP.product_name == item.product_name())
+			VP.amount += 1
+			custom_stock += item
+			if(item.loc != src)
+				item.forceMove(src)
+			return
+	//If this code block is reached, no existing vending_product exists, so we must create one
+	var/datum/data/vending_product/R = new()
+	R.custom = TRUE
+	R.product_name = item.product_name()
+	R.mini_icon = costly_bicon(item)
+	R.display_color = pick("red", "blue", "green")
+	R.amount = 1
+	if(item.loc != src)
+		item.forceMove(src)
+	product_records += R
+	custom_stock += item
+
+/obj/machinery/vending/proc/connect_to_user_account(mob/user)
+	var/new_account = input(user,"Please enter the account to connect to.","New account link") as num
+	if(!user.Adjacent(src) || !new_account)
+		return FALSE
+	for(var/datum/money_account/D in all_money_accounts)
 		if(D.account_number == new_account)
 			linked_account = D
 			if(!account_first_linked)
@@ -552,6 +606,7 @@ var/global/num_vending_terminals = 1
 	return attack_hand(user)
 
 /obj/machinery/vending/proc/GetProductLine(var/datum/data/vending_product/P)
+	var/micon = !isnull(P.mini_icon) ? "<td class='fridgeIcon cropped'>[P.mini_icon]</td>" : ""
 	var/dat = {"[micon]<FONT color = '[P.display_color]'><B>[P.product_name]</B>:
 		<b>[P.amount]</b> </font>"}
 	if(P.price)

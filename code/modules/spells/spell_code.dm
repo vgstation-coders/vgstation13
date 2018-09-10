@@ -149,17 +149,15 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(!targets && (spell_flags & WAIT_FOR_CLICK))
 		channel_spell(user, skipcharge)
 		return
-	if(gradual_casting)
-		if(cast_check(1, user))
+	if(cast_check(1, user))
+		if(gradual_casting)
 			gradual_casting = FALSE
 			stop_casting(targets, user)
 			return
 	if(!cast_check(skipcharge, user))
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
-		block = 0
 		return
-	block = 0
 	if(before_target(user))
 		return
 
@@ -522,28 +520,44 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/delayfraction = round(delay/numticks)
 	var/originalstat = user.stat
 
-	var/image/progress_bar
-	if(use_progress_bar)
-		if(user.client && user.client.prefs.progress_bars)
-			progress_bar = create_progress_bar_on(user)
-			user.client.images += progress_bar
+	var/Location = user.loc
+	var/image/progbar
+	if(user && user.client && user.client.prefs.progress_bars)
+		if(!progbar)
+			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "prog_bar_0")
+			progbar.pixel_z = WORLD_ICON_SIZE
+			progbar.plane = HUD_PLANE
+			progbar.layer = HUD_ABOVE_ITEM_LAYER
+			progbar.appearance_flags = RESET_COLOR
 
-	for(var/i = 0, i<numticks, i++)
-		if(use_progress_bar)
-			if(user && user.client && user.client.prefs.progress_bars)
-				progress_bar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
+	for (var/i = 1 to numticks)
+		if(user && user.client && user.client.prefs.progress_bars)
+			if(!progbar)
+				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "prog_bar_0")
+				progbar.pixel_z = WORLD_ICON_SIZE
+				progbar.plane = HUD_PLANE
+				progbar.layer = HUD_ABOVE_ITEM_LAYER
+				progbar.appearance_flags = RESET_COLOR
+			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
+			user.client.images |= progbar
+
 		sleep(delayfraction)
 
 		if(!user || (!(spell_flags & (STATALLOWED|GHOSTCAST)) && user.stat != originalstat)  || !(user.loc == Location))
-			if(use_progress_bar)
-				stop_progress_bar(user, progress_bar)
+			if(progbar)
+				progbar.icon_state = "prog_bar_stopped"
+				spawn(2)
+					if(user && user.client)
+						user.client.images -= progbar
+					if(progbar)
+						progbar.loc = null
 			return 0
 
 	if(user && user.client)
 		user.client.images -= progbar
 	if(progbar)
 		progbar.loc = null
-	return 1
+return 1
 
 //UPGRADES
 /spell/proc/apply_upgrade(upgrade_type)
@@ -577,7 +591,6 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell/proc/on_holder_death(mob/user)
 	return
-
 
 //To batch-remove wizard spells. Linked to mind.dm.
 /mob/proc/spellremove(var/mob/M as mob)

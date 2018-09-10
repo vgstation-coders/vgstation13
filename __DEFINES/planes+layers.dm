@@ -148,7 +148,7 @@ What is the naming convention for planes or layers?
 
 #define VAMP_ANTAG_HUD_PLANE	10
 
-//#define THIS_SPACE_FOR_RENT!	11
+#define METABUDDY_HUD_PLANE	11
 
 #define ANTAG_HUD_PLANE		 	12
 
