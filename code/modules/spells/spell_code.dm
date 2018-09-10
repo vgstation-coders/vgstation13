@@ -557,7 +557,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		user.client.images -= progbar
 	if(progbar)
 		progbar.loc = null
-return 1
+	return 1
 
 //UPGRADES
 /spell/proc/apply_upgrade(upgrade_type)
