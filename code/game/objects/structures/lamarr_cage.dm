@@ -93,7 +93,7 @@
 	name = "Lamarr"
 	desc = "The worst she might do is attempt to... couple with your head."//hope we don't get sued over a harmless reference, rite?
 	sterile = 1
-	setGender(FEMALE)
+	gender = FEMALE
 
 /obj/item/clothing/mask/facehugger/lamarr/New()
 	..()
