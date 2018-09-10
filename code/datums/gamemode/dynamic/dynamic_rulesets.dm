@@ -9,7 +9,8 @@
 	var/role_category = ROLE_TRAITOR//rule will only accept candidates with "Yes" or "Always" in the preferences for this role
 	var/list/restricted_from_jobs = list()//if set, rule will deny candidates from those jobs
 	var/list/exclusive_to_jobs = list()//if set, rule will only accept candidates from those jobs
-	var/list/jobs_must_exist = list()//if set, there needs to be a certain amount of players doing those jobs (among the players who won't be drafted) for the rule to be drafted
+	var/list/enemy_jobs = list()//if set, there needs to be a certain amount of players doing those jobs (among the players who won't be drafted) for the rule to be drafted
+	var/required_enemies = list(1,1,0,0,0,0,0,0,0,0)//if enemy_jobs was set, this is the amount of enemy job workers needed per threat_level range (0-10,10-20,etc)
 	var/required_candidates = 0//the rule needs this many candidates (post-trimming) to be executed (example: Cult need 4 players at round start)
 	var/weight = 5//1 -> 9, probability for this rule to be picked against other rules
 	var/cost = 0//threat cost for this rule.
@@ -54,7 +55,7 @@
 	//write here your rule execution code, everything about faction/role spawning/populating.
 	return 1
 
-/datum/dynamic_ruleset/proc/ready()	//Here you can perform any additional checks you want. (such as checking the map, the amount of certain jobs, etc)
+/datum/dynamic_ruleset/proc/ready(var/forced = 0)	//Here you can perform any additional checks you want. (such as checking the map, the amount of certain jobs, etc)
 	if (required_candidates > candidates.len)	//IMPORTANT: If ready() returns 1, that means execute() should never fail!
 		return 0
 	return 1
@@ -83,6 +84,19 @@
 			candidates.Remove(P)
 			continue
 
+/datum/dynamic_ruleset/roundstart/ready(var/forced = 0)
+	if (!forced)
+		var/job_check = 0
+		if (enemy_jobs.len > 0)
+			for (var/mob/M in mode.candidates)
+				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
+					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
+
+		var/threat = round(mode.threat_level/10)
+		if (job_check < required_enemies[threat])
+			return 0
+	return ..()
+
 //////////////////////////////////////////////
 //                                          //
 //            LATEJOIN RULESETS             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,6 +117,21 @@
 		if ((exclusive_to_jobs.len > 0) && !(P.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
 			candidates.Remove(P)
 			continue
+
+/datum/dynamic_ruleset/latejoin/ready(var/forced = 0)
+	if (!forced)
+		var/job_check = 0
+		if (enemy_jobs.len > 0)
+			for (var/mob/M in mode.living_players)
+				if (M.stat == DEAD)
+					continue//dead players cannot count as opponents
+				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
+					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
+
+		var/threat = round(mode.threat_level/10)
+		if (job_check < required_enemies[threat])
+			return 0
+	return ..()
 
 //////////////////////////////////////////////
 //                                          //
@@ -145,3 +174,18 @@
 
 //You can then for example prompt dead players in execute() to join as strike teams or whatever
 //Or autotator someone
+
+/datum/dynamic_ruleset/midround/ready(var/forced = 0)
+	if (!forced)
+		var/job_check = 0
+		if (enemy_jobs.len > 0)
+			for (var/mob/M in living_players)
+				if (M.stat == DEAD)
+					continue//dead players cannot count as opponents
+				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
+					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
+
+		var/threat = round(mode.threat_level/10)
+		if (job_check < required_enemies[threat])
+			return 0
+	return ..()

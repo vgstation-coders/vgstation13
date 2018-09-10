@@ -335,9 +335,7 @@ var/list/factions_with_hud_icons = list()
 		return 0 //Critical failure.
 
 	for(var/datum/role/wwizard in members)
-		wwizard.antag.current.forceMove(pick(wizardstart))
-		equip_wizard(wwizard.antag.current)
-		name_wizard(wwizard.antag.current)
+		wwizard.OnPostSetup()
 
 
 /datum/faction/wizard/ragin

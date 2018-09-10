@@ -61,7 +61,7 @@ var/list/forced_roundstart_ruleset = list()
 		rule.mode = src
 		rule.candidates = candidates.Copy()
 		rule.trim_candidates()
-		if (rule.ready())
+		if (rule.ready(1))//ignoring enemy job requirements
 			picking_roundstart_rule(list(rule))
 
 /datum/gamemode/dynamic/proc/roundstart()
@@ -112,7 +112,7 @@ var/list/forced_roundstart_ruleset = list()
 				for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
 					rule.candidates -= M//removing the assigned players from the candidates for the other rules
 					if (!rule.ready())
-						drafted_rules -= rule//and removing rules from those that are no longer elligible
+						drafted_rules -= rule//and removing rules that are no longer elligible
 			return 1
 		else
 			message_admins("....except not because whoever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
@@ -160,7 +160,7 @@ var/list/forced_roundstart_ruleset = list()
 	if (new_rule && (forced || (new_rule.acceptable(living_players.len,threat_level) && new_rule.cost <= threat)))
 		new_rule.candidates = current_players.Copy()
 		new_rule.trim_candidates()
-		if (new_rule.ready())
+		if (new_rule.ready(forced))
 			threat -= new_rule.cost
 			if (new_rule.execute())//this should never fail since ready() returned 1
 				message_admins("Making a call to a specific ruleset...<font size='3'>[new_rule.name]</font>!")
@@ -169,6 +169,9 @@ var/list/forced_roundstart_ruleset = list()
 				if (new_rule.persistent)
 					current_rules += new_rule
 				return 1
+		else if (forced)
+			message_admins("The ruleset couldn't be executed due to lack of elligible players.")
+			log_admin("The ruleset couldn't be executed due to lack of elligible players.")
 	return 0
 
 /datum/gamemode/dynamic/process()

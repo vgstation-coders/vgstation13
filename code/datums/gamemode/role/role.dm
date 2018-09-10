@@ -507,6 +507,28 @@
 			AppendObjective(/datum/objective/hijack)
 	return
 
+/datum/role/wizard/OnPostSetup()
+	. = ..()
+	if(!.)
+		return
+	antag.current.forceMove(pick(wizardstart))
+	equip_wizard(antag.current)
+	name_wizard(antag.current)
+
+/datum/role/wizard/Greet(var/greeting,var/custom)
+	if(!greeting)
+		return
+
+	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	switch(greeting)
+		if (GREET_CUSTOM)
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [custom]")
+		else
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Wizard!!</br></span>")
+			to_chat(antag.current, "<span class='danger'>The Space Wizards Federation has given you some tasks.</br></span>")//todo: randomize funnier plots such as "you were bored so you decided to go mess with the crew"
+
+	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+
 //________________________________________________
 
 /datum/role/wish_granter_avatar
