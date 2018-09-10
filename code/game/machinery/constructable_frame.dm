@@ -1220,16 +1220,6 @@ obj/item/weapon/circuitboard/rdserver
 						/obj/item/weapon/stock_parts/scanning_module = 1,
 						/obj/item/weapon/stock_parts/capacitor = 2)
 
-/obj/item/weapon/circuitboard/recharger
-	name = "Circuit Board (Recharger)"
-	desc = "A circuit board used to run a machine that replenishes energy weapon charge"
-	board_type = MACHINE
-	build_path = "/obj/machinery/recharger"
-	origin_tech = Tc_POWERSTORAGE + "=2;" + Tc_COMBAT + "=2"
-	req_components = list(
-						"/obj/item/weapon/stock_parts/scanning_module" = 1,
-						"/obj/item/weapon/stock_parts/capacitor" = 2)
-
 /obj/item/weapon/circuitboard/washing_machine
 	name = "Circuit Board (Washing Machine)"
 	desc = "A circuit board used to run a machine that cleans clothing and kills pets."
