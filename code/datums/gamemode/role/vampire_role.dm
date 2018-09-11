@@ -306,12 +306,11 @@
 	var/smitetemp = 0
 	var/vampcoat = istype(H.wear_suit, /obj/item/clothing/suit/storage/draculacoat) //coat reduces smiting
 	if(check_holy(H)) //if you're on a holy tile get ready for pain
-		to_chat(world, "Ouch, it's holy")
 		smitetemp += (vampcoat ? 1 : 5)
 		if(prob(35))
 			to_chat(H, "<span class='danger'>This ground is blessed. Get away, or splatter it with blood to make it safe for you.</span>")
 
-	if(!(VAMP_MATURE in powers) && (istype(get_area(H), /area/chapel)) //stay out of the chapel unless you want to turn into a pile of ashes
+	if(!(VAMP_MATURE in powers) && (istype(get_area(H), /area/chapel))) //stay out of the chapel unless you want to turn into a pile of ashes
 		nullified = max(5, nullified + 2)
 		if(prob(35))
 			to_chat(H, "<span class='sinister'>You feel yourself growing weaker.</span>")
