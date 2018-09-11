@@ -228,8 +228,9 @@
 				to_chat(user, "<span class='notice'>[H]'s [affecting.display_name] is cut wide open, even a regenerative membrane won't do!</span>")
 
 /obj/item/stack/medical/splint
-	name = "medical splints"
-	singular_name = "medical splint"
+	name = "advanced medical splints"
+	desc = "Used to secure a fracture in any bodypart."
+	singular_name = "advanced medical splint"
 	icon_state = "splint"
 	amount = 5
 	max_amount = 5
@@ -242,9 +243,6 @@
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/external/affecting = H.get_organ(user.zone_sel.selecting)
 		var/limb = affecting.display_name
-		if(!((affecting.name == LIMB_LEFT_ARM) || (affecting.name == LIMB_RIGHT_ARM) || (affecting.name == LIMB_LEFT_LEG) || (affecting.name == LIMB_RIGHT_LEG)))
-			to_chat(user, "<span class='warning'>You can only apply splints on limbs!</span>")
-			return
 		if(affecting.status & ORGAN_SPLINTED)
 			to_chat(user, "<span class='warning'>[M]'s [limb] is already splinted!</span>")
 			return
@@ -253,12 +251,6 @@
 								"<span class='warning'>You start to apply \the [src] to [M]'s [limb].</span>", \
 								"<span class='warning'>You hear something being wrapped.</span>")
 		else
-			var/datum/organ/external/OE = user.get_active_hand_organ()
-
-			if(affecting.grasp_id == OE.grasp_id)
-				to_chat(user, "<span class='warning'>You can't apply a splint to the arm you're using!</span>")
-				return
-
 			user.visible_message("<span class='warning'>[user] starts to apply \the [src] to their [limb].</span>", \
 								"<span class='warning'>You start to apply \the [src] to your [limb].</span>", \
 								"<span class='warning'>You hear something being wrapped.</span>")
@@ -268,7 +260,7 @@
 									"<span class='warning'>You finish applying \the [src] to [M]'s [limb].</span>", \
 									"<span class='warning'>You hear something being wrapped.</span>")
 			else
-				if(prob(25))
+				if(prob(75))
 					user.visible_message("<span class='warning'>[user] successfully applies \the [src] to their [limb].</span>", \
 										"<span class='warning'>You successfully apply \the [src] to your [limb].</span>", \
 										"<span class='warning'>You hear something being wrapped.</span>")

@@ -41,12 +41,6 @@ datum/emergency_shuttle
 	// if not called before, set the endtime to T+600 seconds
 	// otherwise if outgoing, switch to incoming
 
-datum/emergency_shuttle/proc/init()
-	var/list/pods_to_test = list ("1","2","3","5")//ADD NEW PODS HERE
-	for (var/i in pods_to_test)
-		var/area/pod_test = locate(text2path("/area/shuttle/escape_pod[i]/station"))
-		if (is_area_in_map(pod_test))
-			escape_pods[i] = "station"
 datum/emergency_shuttle/proc/incall(coeff = 1)
 	if(shutdown)
 		return
@@ -126,37 +120,26 @@ datum/emergency_shuttle/proc/setdirection(var/dirn)
 	return
 
 datum/emergency_shuttle/proc/move_pod(var/pod,var/destination)
-	if (!pod || !destination)
+	if (!pod || !destination || !(istype(pod, /datum/shuttle/escape)) || !escape_pods.Find(pod))
 		return
-	var/area/start_location=locate(text2path("/area/shuttle/escape_pod[pod]/[escape_pods[pod]]"))
-	var/area/end_location=locate(text2path("/area/shuttle/escape_pod[pod]/[destination]"))
 
-	for(var/obj/structure/shuttle/engine/propulsion/P in start_location)
-		spawn()
-			P.shoot_exhaust()
-
-	start_location.move_contents_to(end_location, null, NORTH)
-
-	escape_pods[pod] = destination
-
-	for(var/obj/machinery/door/D in all_doors)
-		if (get_area(D) == end_location)
-			spawn(0)
-				if(destination == "transit")
-					D.close()
-				else
-					D.open()
-
-	for(var/mob/M in end_location)
-		if (M.client)
-			spawn()
-				if (M.locked_to)
-					shake_camera(M, 4, 1) // locked_to, not a lot of shaking
-				else
-					shake_camera(M, 10, 2) // unlocked_to, HOLY SHIT SHAKE THE ROOM
-		if (istype(M, /mob/living/carbon))
-			if (!M.locked_to)
-				M.Knockdown(5)
+	var/datum/shuttle/escape/S = pod
+	switch(destination)
+		if("station")
+			if(!S.move_to_dock(S.dock_station, 0))
+				message_admins("Warning: [S] failed to move to station.")
+		if("centcom")
+			if(!S.move_to_dock(S.dock_centcom, 0))
+				message_admins("Warning: [S] failed to move to centcom.")
+		if("transit")
+			if(!S.move_to_dock(S.transit_port, 0))
+				message_admins("Warning: [S] failed to move to transit.")
+	spawn()
+		for(var/obj/machinery/door/D in S.linked_area)
+			if(destination == "transit")
+				D.close()
+			else
+				D.open()
 
 datum/emergency_shuttle/proc/force_shutdown()
 	online=0
@@ -397,7 +380,7 @@ datum/emergency_shuttle/proc/process()
 /proc/shuttle_autocall()
 	if (emergency_shuttle.departed)
 		return
-	
+
 	if (emergency_shuttle.location == SHUTTLE_ON_STATION)
 		return
 

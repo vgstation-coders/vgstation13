@@ -45,6 +45,7 @@
 	var/lastaudiowarning = 0
 
 	var/power = 0
+	var/power_loss_modifier = 2500 // Higher == less power lost every process(). Was 500. With three emitters and no O2, power should tend towards 13935.5 J.
 	var/max_power = 2000 // Used for lighting scaling.
 
 	var/list/last_data = list("temperature" = 293, "oxygen" = 0.2)
@@ -82,6 +83,7 @@
 	explosion_point = 900
 
 	gasefficency = 0.125
+	power_loss_modifier = 500 // With three emitters and no O2, power should tend towards 2643.1 J
 
 	explosion_power = 8 // WAS 3 - N3X
 
@@ -292,7 +294,7 @@
 		var/rads = (power / 50) * sqrt(1/(max(get_dist(l, src), 1)))
 		l.apply_radiation(rads, RAD_EXTERNAL)
 
-	power -= (power/500)**3
+	power -= (power/power_loss_modifier)**3
 
 	var/light_value = Clamp(round(Clamp(power / max_power, 0, 1) * max_luminosity), 0, max_luminosity)
 

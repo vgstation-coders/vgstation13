@@ -165,11 +165,15 @@ var/const/POS_HEADER = {"<html>
 	else
 		linked_account = station_account
 
-/obj/machinery/pos/proc/dispense_change(var/amount)
-	var/obj/item/weapon/storage/box/B = new(loc)
-	dispense_cash(amount,B)
-	B.name="change"
-	B.desc="A box of change."
+/obj/machinery/pos/proc/dispense_change(var/amount = 0)
+	if(!amount)
+		amount = credits_held
+		credits_held = 0
+	if(amount > 0)
+		var/obj/item/weapon/storage/box/B = new(loc)
+		dispense_cash(amount,B)
+		B.name="change"
+		B.desc="A box of change."
 
 /obj/machinery/pos/proc/AddToOrder(var/name, var/units)
 	if(!(name in products))
@@ -361,10 +365,16 @@ var/const/POS_HEADER = {"<html>
 	return "<center><b>Waiting for Credit</b><br /><a href=\"?src=\ref[src];act=Reset\">Cancel</a></center>"
 
 /obj/machinery/pos/proc/SettingsScreen()
+	if(!linked_account)
+		// Should not happen, but it happens.
+		linked_account = station_account
 	var/dat={"<form action="?src=\ref[src]" method="get">
 		<input type="hidden" name="src" value="\ref[src]" />
 		<fieldset>
 			<legend>Account Settings</legend>
+			<div>
+				<b>Name of Account:</b> [linked_account.owner_name]
+			</div>
 			<div>
 				<b>Payable Account:</b> <input type="textbox" name="payableto" value="[linked_account.account_number]" />
 			</div>
@@ -434,6 +444,44 @@ var/const/POS_HEADER = {"<html>
 	onclose(user, "pos")
 	return
 
+/obj/machinery/pos/scan_card(var/obj/item/weapon/card/C)
+	var/remaining_credits_needed = credits_needed - credits_held
+	var/area/this_area = get_area(src)
+	var/pos_name = "[this_area.name] POS#[id]"
+	var/charge_response = charge_flow(linked_db, C, usr, remaining_credits_needed, linked_account, "POS Purchase", pos_name, id)
+	switch(charge_response)
+		if(CARD_CAPTURE_SUCCESS)
+			visible_message("<span class='notice'>The machine beeps, and begins printing a receipt</span>","You hear a beep and the sound of paper being shredded.")
+			PrintReceipt()
+			NewOrder()
+			if(credits_held)
+				linked_account.charge(-credits_held, null, "Cash Deposit", pos_name, id, linked_account.owner_name)
+				credits_held=0
+			credits_needed=0
+			screen=POS_SCREEN_ORDER
+			updateUsrDialog()
+			return
+		if(CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"NOT ENOUGH FUNDS\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_ACCOUNT_DISABLED)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"ACCOUNT DISABLED\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_ACCOUNT_DISABLED_MERCHANT)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"MERCHANT ACCOUNT DISABLED\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"BAD ACCOUNT/PIN COMBO\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_FAILURE_SECURITY_LEVEL)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"SECURITY EXCEPTION\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_FAILURE_USER_CANCELED)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"ORDER CANCELED\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_FAILURE_NO_DESTINATION)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
+		if(CARD_CAPTURE_FAILURE_NO_CONNECTION)
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"DATABASE UNAVAILABLE\" on the screen.</span>","You hear a buzz.")
+		else
+			visible_message("<span class='warning'>The machine buzzes, and flashes \"CARD CAPTURE ERROR\" on the screen.</span>","You hear a buzz.")
+	flick(src,"pos-error")
+	
+
 /obj/machinery/pos/Topic(var/href, var/list/href_list)
 	if(..(href,href_list))
 		return
@@ -454,8 +502,7 @@ var/const/POS_HEADER = {"<html>
 			if("Reset")
 				if(credits_held > 0){
 					visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
-					dispense_change(credits_held)
-					credits_held=0
+					dispense_change()
 				}
 				NewOrder()
 				screen=POS_SCREEN_ORDER
@@ -533,9 +580,9 @@ var/const/POS_HEADER = {"<html>
 	src.attack_hand(usr)
 
 /obj/machinery/pos/attackby(var/atom/movable/A, var/mob/user)
-	if(istype(A,/obj/item/weapon/card/id))
-		var/obj/item/weapon/card/id/I = A
-		if(!logged_in)
+	if(istype(A,/obj/item/weapon/card))
+		var/obj/item/weapon/card/id/C = A
+		if(istype(C,/obj/item/weapon/card/id) && !logged_in)
 			// /atom/mob/visible_message(all_message, self_message, blind_message,...)
 			user.visible_message("<span class='notice'>The machine beeps, and logs [user] in.</span>", "<span class='notice'>The machine beeps, and logs you in.</span>", "You hear a beep.")
 			logged_in = user
@@ -544,29 +591,11 @@ var/const/POS_HEADER = {"<html>
 			src.attack_hand(user) //why'd you use usr nexis, why
 			return
 		else
-			if(!linked_account)
-				visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
-				flick(src,"pos-error")
-				return
 			if(screen!=POS_SCREEN_FINALIZE)
 				visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
 				flick(src,"pos-error")
 				return
-			var/datum/money_account/acct = get_card_account(I)
-			if(!acct)
-				visible_message("<span class='warning'>The machine buzzes, and flashes \"NO ACCOUNT\" on the screen.</span>","You hear a buzz.")
-				flick(src,"pos-error")
-				return
-			if(credits_needed > acct.money)
-				visible_message("<span class='warning'>The machine buzzes, and flashes \"NOT ENOUGH FUNDS\" on the screen.</span>","You hear a buzz.")
-				flick(src,"pos-error")
-				return
-			visible_message("<span class='notice'>The machine beeps, and begins printing a receipt</span>","You hear a beep.")
-			PrintReceipt()
-			NewOrder()
-			acct.charge(credits_needed,linked_account,"Purchase at POS #[id].")
-			credits_needed=0
-			screen=POS_SCREEN_ORDER
+			connect_account(user, C)
 	else if(istype(A,/obj/item/weapon/spacecash))
 		if(!linked_account)
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
@@ -587,9 +616,9 @@ var/const/POS_HEADER = {"<html>
 			credits_held -= credits_needed
 			credits_needed=0
 			screen=POS_SCREEN_ORDER
-			if(credits_held>0)
-				dispense_change(credits_held)
-			credits_held=0
+			dispense_change()
+		else
+			say("Your total is now $[num2septext(credits_needed-credits_held)].  Please insert more credit chips or swipe your ID.")
 	..()
 
 #undef to_valid_product_price

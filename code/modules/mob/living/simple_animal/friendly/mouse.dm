@@ -67,7 +67,7 @@
 			wander = 1
 			speak_chance = initial(speak_chance)
 		else if(prob(5))
-			emote("snuffles")
+			emote("me", EMOTE_AUDIBLE, "snuffles")
 
 	if(nutrition >= MOUSETFAT)
 		visible_message("<span class = 'warning'>\The [src] explodes!</span>")

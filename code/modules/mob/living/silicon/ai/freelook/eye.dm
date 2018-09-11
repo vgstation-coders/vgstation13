@@ -36,6 +36,9 @@
 			var/obj/machinery/hologram/holopad/H = ai.current
 			H.move_hologram()
 
+		if(ai.camera_light_on)
+			ai.light_cameras()
+
 /mob/camera/aiEye/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
 
@@ -110,8 +113,6 @@
 
 	//user.unset_machine() //Uncomment this if it causes problems.
 	//user.lightNearbyCamera()
-	if (user.camera_light_on)
-		user.light_cameras()
 
 /mob/living/silicon/ai/proc/view_core()
 
