@@ -144,8 +144,6 @@
 	dat += "<BR><A href = '?src=\ref[src];sync=1'>Reset Connections</A><BR>"
 	if(synced.len)
 		dat += "<BR><A href = '?src=\ref[src];massfire=1'><B>Fire All Connected Drivers</B></A><BR>"
-	if(istype(src,/obj/machinery/computer/pod/deathsquad))
-		dat += "<BR><A href = '?src=\ref[src];teleporter=1'><B>Set Teleporter Destination Z-Level</B></A><BR>"
 	for(var/ident_tag in id_tags)
 		if(!(ident_tag in door_only_tags))
 			dat += "<BR><BR><B>[ident_tag]</B> <A href='?src=\ref[src];remove=1;driver=[ident_tag]'>remove</A>"
@@ -232,12 +230,6 @@
 			powers -= ident_tag
 			loopings -= ident_tag
 			id_tags -= ident_tag
-		if(href_list["teleporter"])
-			var/choices = list(0)
-			choices += accessable_z_levels
-			var/obj/machinery/computer/pod/deathsquad/D = src
-			D.teleporter_dest = input("Enter the destination Z-Level. The mechs will arrive from the East. Leave 0 if you don't want to set a specific ZLevel", "Mass Driver Controls", "ZLevel") in choices
-
 		if(href_list["massfire"])
 			for(var/ident_tag in synced)
 				spawn()
@@ -310,90 +302,6 @@
 	desc = "An arcane artifact that holds much magic. Running E-Knock 2.2: Sorceror's Edition"
 	circuit = /obj/item/weapon/circuitboard/swfdoor
 
-
-/obj/machinery/computer/pod/deathsquad
-	id_tags = list("ASSAULT0","ASSAULT1","ASSAULT2","ASSAULT3")
-	var/teleporter_dest = 0
-	circuit = /obj/item/weapon/circuitboard/pod/deathsquad
-
-/obj/machinery/computer/pod/deathsquad/launch_sequence(var/ident_tag)
-	if(stat & (NOPOWER|BROKEN))
-		return
-	var/anydriver = 0
-	for(var/obj/machinery/mass_driver/M in mass_drivers)
-		if(M.z != src.z)
-			continue
-		if(M.id_tag == ident_tag)
-			anydriver = 1
-	if(!anydriver)
-		visible_message("Cannot locate any mass driver of that ID. Cancelling firing sequence!")
-		return
-
-	if(icon_state != "old")
-		flick("mass_drivers_timing", src)
-
-	if(teleporter_dest)
-		for(var/obj/structure/deathsquad_tele/D in world)
-			if(D.z != src.z)
-				continue
-			if(D.id_tag == ident_tag)
-				D.icon_state = "tele1"
-				D.ztarget = teleporter_dest
-				D.setDensity(TRUE)
-
-	for(var/obj/machinery/door/poddoor/M in poddoors)
-		if(M.z != src.z)
-			continue
-		if(M.id_tag == ident_tag)
-			spawn()
-				M.open()
-	sleep(20)
-
-	for(var/obj/machinery/mass_driver/M in mass_drivers)
-		if(M.z != src.z)
-			continue
-		if(M.id_tag == ident_tag)
-			M.drive()
-
-	sleep(50)
-	for(var/obj/machinery/door/poddoor/M in poddoors)
-		if(M.z != src.z)
-			continue
-		if(M.id_tag == ident_tag)
-			spawn()
-				M.close()
-
-	for(var/obj/structure/deathsquad_tele/D in world)
-		if(D.z != src.z)
-			continue
-		if(D.id_tag == ident_tag)
-			D.icon_state = "tele0"
-			D.setDensity(FALSE)
-
-	return
-
-/obj/structure/deathsquad_tele
-	name = "Mech Teleporter"
-	density = 0
-	anchored = 1
-	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "tele0"
-	var/ztarget = 0
-	var/id_tag = ""
-
-
-/obj/structure/deathsquad_tele/Bumped(var/atom/movable/AM)
-	if(!ztarget)
-		return ..()
-	var/y = AM.y
-	spawn()
-		AM.z = ztarget
-		AM.y = y
-		AM.x = world.maxx - TRANSITIONEDGE - 2
-		AM.dir = 8
-		var/atom/target = get_edge_target_turf(AM, AM.dir)
-		AM.throw_at(target, 50, AM.throw_speed)
-	return
 
 //The automatic mass driver control in taxi's delivery office, controls the disposals network.
 /obj/machinery/computer/pod/disposal

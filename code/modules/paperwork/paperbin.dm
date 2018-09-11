@@ -24,7 +24,7 @@
 /obj/item/weapon/paper_bin/getFireFuel()
 	return amount
 
-/obj/item/weapon/paper_bin/MouseDrop(over_object)
+/obj/item/weapon/paper_bin/MouseDropFrom(over_object)
 	if(!usr.incapacitated() && (usr.contents.Find(src) || Adjacent(usr)))
 		if(!istype(usr, /mob/living/carbon/slime) && !istype(usr, /mob/living/simple_animal))
 			if(istype(over_object,/obj/abstract/screen/inventory)) //We're being dragged into the user's UI...
@@ -40,7 +40,7 @@
 					if( !usr.get_active_hand() )		//if active hand is empty
 						usr.put_in_hands(src)
 						usr.visible_message("<span class='notice'>[usr] picks up the [src].</span>", "<span class='notice'>You pick up \the [src].</span>")
-	return
+	return ..()
 
 
 /obj/item/weapon/paper_bin/attack_paw(mob/user as mob)

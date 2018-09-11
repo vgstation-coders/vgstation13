@@ -270,14 +270,14 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 					_using.Remove(M)
 					continue
 
-				if(!(M in nearby)) // NOT NEARBY
-					// AIs/Robots can do shit from afar.
-					if (isAI(M) || isrobot(M))
-						is_in_use = 1
-						src.attack_ai(M)
+				// AIs/Robots can do shit from afar.
+				if (isAI(M) || isrobot(M))
+					is_in_use = 1
+					src.attack_ai(M)
 
+				else if(!(M in nearby)) // NOT NEARBY
 					// check for TK users
-					else if(M.mutations && M.mutations.len)
+					if(M.mutations && M.mutations.len)
 						if(M_TK in M.mutations)
 							is_in_use = 1
 							src.attack_hand(M, TRUE) // The second param is to make sure brain damage on the user doesn't cause the UI to not update but the action to still happen.
@@ -669,3 +669,6 @@ a {
 		additional_description += "It is accented in hues of [pick("red","orange","yellow","green","blue","indigo","violet","white","black","cinnamon")]. "
 	if(additional_description)
 		desc = "[initial(desc)] \n [additional_description]"
+
+/obj/proc/check_uplink_validity()
+	return TRUE

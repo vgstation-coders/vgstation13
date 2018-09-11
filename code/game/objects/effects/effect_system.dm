@@ -340,7 +340,7 @@ steam.start() -- spawns the effect
 	R.burn_skin(0.75)
 	if (R.coughedtime != 1)
 		R.coughedtime = 1
-		R.emote("gasp")
+		R.emote("gasp", null, null, TRUE)
 		spawn (20)
 			R.coughedtime = 0
 	R.updatehealth()

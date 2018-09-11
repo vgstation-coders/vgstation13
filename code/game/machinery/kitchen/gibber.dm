@@ -126,7 +126,7 @@ obj/machinery/gibber/New()
 		returnToPool(G)
 		update_icon()
 
-/obj/machinery/gibber/MouseDrop_T(mob/target, mob/user)
+/obj/machinery/gibber/MouseDropTo(mob/target, mob/user)
 	if(target != user || !istype(user, /mob/living/carbon/human) || user.incapacitated() || get_dist(user, src) > 1)
 		return
 	if(!anchored)

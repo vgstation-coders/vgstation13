@@ -58,8 +58,8 @@
 /datum/surgery_step/internal/fix_organ
 	allowed_tools = list(
 		/obj/item/stack/medical/advanced/bruise_pack= 100,
-		/obj/item/stack/medical/bruise_pack = 50,
-		/obj/item/stack/medical/bruise_pack/tajaran = 75,
+		/obj/item/stack/medical/bruise_pack = 75,
+		/obj/item/stack/medical/bruise_pack/tajaran = 100,
 		)
 
 	min_duration = 70
@@ -469,6 +469,9 @@
 		else
 			to_chat(user, "<span class='warning'>\The [O.organ_tag] [o_do] normally go in \the [affected.display_name].</span>")
 			return 0
+
+		if(!O.organ_data.CanInsert(target, user))
+			return 0
 	else
 		to_chat(user, "<span class='warning'>\A [target.species.name] doesn't normally have [o_a][O.organ_tag].</span>")
 		return 0
@@ -509,6 +512,7 @@
 		affected.internal_organs |= O.organ_data
 		target.internal_organs_by_name[O.organ_tag] = O.organ_data
 		O.organ_data.status |= ORGAN_CUT_AWAY
+		O.organ_data.Insert(target, user)
 		O.replaced(target)
 	var/datum/organ/internal/I = target.internal_organs_by_name[O.organ_tag]
 	I.removed_type = O

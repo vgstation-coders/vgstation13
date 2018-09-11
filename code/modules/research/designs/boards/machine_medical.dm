@@ -98,6 +98,16 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/bioprinter
 
+/datum/design/dialysis
+	name = "Circuit Design (Dialysis)"
+	desc = "Allows for the construction of a Dialysis machine."
+	id = "dialysis"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_BIOTECH = 3, Tc_MAGNETS = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/dialysis
+
 //CHEM HEATING/COOLING
 
 /datum/design/chemheater

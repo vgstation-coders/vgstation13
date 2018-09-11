@@ -32,12 +32,15 @@
 			overlay_layer = FLOAT_LAYER
 		if(!emagged)
 			eyes.plane = overlay_plane
+			eyes.layer = overlay_layer
 		else
 			eyes.plane = LIGHTING_PLANE //Emagged MoMMIs don't hide their eyes.
 		overlays += eyes
 
 		if(anchored) //anchored, really?
-			overlays += image(icon,"[base_icon]-park",overlay_layer)
+			var/image/parking_lights = image(icon,"[base_icon]-park",overlay_layer)
+			parking_lights.plane = overlay_plane
+			overlays += parking_lights
 
 	if(opened)
 		if(wiresexposed)

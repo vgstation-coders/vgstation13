@@ -196,7 +196,8 @@
 	return attack_hand(user)
 
 /obj/item/delivery/large/attack_hand(mob/user as mob)
-	qdel(src)
+	if(!is_holder_of(src, user))
+		qdel(src)
 
 /obj/item/delivery/large/attack_robot(mob/user)
 	if(!Adjacent(user))

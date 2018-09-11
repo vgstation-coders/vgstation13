@@ -130,15 +130,11 @@
 			qdel(W)
 		return
 
-	else if (istype(W, /obj/item/weapon/weldingtool) && opened && !has_electronics)
+	else if (iswelder(W) && opened && !has_electronics)
 		var/obj/item/weapon/weldingtool/WT = W
-		if (WT.get_fuel() < 3)
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
-			return
 		to_chat(user, "You start welding the compressor frame...")
-		playsound(src, 'sound/items/Welder.ogg', 50, 1)
-		if(do_after(user, src, 50))
-			if(!src || !WT.remove_fuel(3, user))
+		if (WT.do_weld(user, src, 50, 3))
+			if(gcDestroyed)
 				return
 			new /obj/item/mounted/frame/rust_fuel_assembly_port(loc)
 			user.visible_message(\

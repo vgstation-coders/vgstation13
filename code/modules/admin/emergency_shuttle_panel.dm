@@ -56,9 +56,9 @@
 
 	dat += "<h2>Escape Pods Control</h2>"
 	for (var/pod in emergency_shuttle.escape_pods)
-		var/area/pod_area = locate(text2path("/area/shuttle/escape_pod[pod]/[emergency_shuttle.escape_pods[pod]]"))
-		var/turf/T = pick(pod_area.area_turfs)
-		dat += "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[pod_area.name]</a> : [(emergency_shuttle.escape_pods[pod] == "station") ? "<b>station</b>" : "<a href='?src=\ref[src];move_escape_pod=[pod];move_destination=station'>station</a>"] - [(emergency_shuttle.escape_pods[pod] == "transit") ? "<b>transit</b>" : "<a href='?src=\ref[src];move_escape_pod=[pod];move_destination=transit'>transit</a>"] - [(emergency_shuttle.escape_pods[pod] == "centcom") ? "<b>centcom</b>" : "<a href='?src=\ref[src];move_escape_pod=[pod];move_destination=centcom'>centcom</a>"]<br>"
+		var/datum/shuttle/escape/S = pod
+		var/turf/T = pick(S.linked_area.area_turfs)
+		dat += "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[S.linked_area.name]</a> : [(emergency_shuttle.escape_pods[pod] == "station") ? "<b>station</b>" : "<a href='?src=\ref[src];move_escape_pod=\ref[pod];move_destination=station'>station</a>"] - [(emergency_shuttle.escape_pods[pod] == "transit") ? "<b>transit</b>" : "<a href='?src=\ref[src];move_escape_pod=\ref[pod];move_destination=transit'>transit</a>"] - [(emergency_shuttle.escape_pods[pod] == "centcom") ? "<b>centcom</b>" : "<a href='?src=\ref[src];move_escape_pod=\ref[pod];move_destination=centcom'>centcom</a>"]<br>"
 
 	if (emergency_shuttle.escape_pods.len > 1)
 		dat += "Move All Pods : <a href='?src=\ref[src];move_escape_pod=all;move_destination=station'>station</a> - <a href='?src=\ref[src];move_escape_pod=all;move_destination=transit'>transit</a> - <a href='?src=\ref[src];move_escape_pod=all;move_destination=centcom'>centcom</a><br>"

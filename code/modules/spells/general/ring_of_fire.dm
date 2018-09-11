@@ -27,6 +27,9 @@
 
 /spell/aoe_turf/ring_of_fire/cast(list/targets, mob/user)
 
+	if (user.is_pacified())
+		return
+
 	var/obj/effect/ring = new /obj/effect/ring_of_fire(get_turf(user), targets, duration)
 
 	if(move_with_user)

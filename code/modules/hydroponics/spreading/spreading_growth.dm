@@ -40,7 +40,7 @@
 
 	// Handle life.
 	var/turf/simulated/T = get_turf(src)
-	if(T && istype(T))
+	if(istype(T))
 		var/datum/gas_mixture/environment = T.return_air()
 		if(environment)
 			if(environment.return_pressure() > seed.highkpa_tolerance) //Kudzu can live at 0KPA, otherwise you could just vent the room to kill it.
@@ -58,6 +58,9 @@
 	if(prob(80))
 		age++
 
+	if(harvest && (seed.harvest_repeat == 2))
+		autoharvest()
+
 	if(!harvest && prob(3) && age > mature_time + seed.production)
 		harvest = 1
 
@@ -66,9 +69,13 @@
 	if(is_mature() && special_cooldown())
 		if(is_locking_type(/mob, /datum/locking_category/plantsegment))
 			var/mob/V = locate(/mob) in get_locked(/datum/locking_category/plantsegment)
-			if(istype(V, /mob/living/carbon/human))
-				do_chem_inject(V)
-				do_carnivorous_bite(V, seed.potency)
+			if (V.loc != loc)
+				unlock_atom(V)
+				to_chat(V, "<span class='danger'>You broke free from \the [src]!</span>")
+			else
+				if(istype(V, /mob/living/carbon/human))
+					do_chem_inject(V)
+					do_carnivorous_bite(V, seed.potency)
 		else
 			if(seed.carnivorous == 2)
 				var/mob/living/victim = locate() in range(src,1)
@@ -111,8 +118,8 @@
 	// We shouldn't have spawned if the controller doesn't exist.
 	check_health()
 	// Keep processing us until we've done all there is for us to do in life.
-	if(neighbors.len || health != max_health || !harvest || is_locking(/datum/locking_category/plantsegment))
-		plant_controller.add_plant(src)
+	if(!neighbors.len && (health == max_health || health <= 0) && harvest && !is_locking(/datum/locking_category))
+		SSplant.remove_plant(src)
 
 /obj/effect/plantsegment/proc/die_off()
 	if(seed && harvest)
@@ -124,9 +131,7 @@
 			continue
 		for(var/obj/effect/plantsegment/neighbor in check_turf.contents)
 			neighbor.neighbors |= check_turf
-			plant_controller.add_plant(neighbor)
-	spawn(1)
-		if(src)
-			qdel(src)
+			SSplant.add_plant(neighbor)
+	qdel(src)
 
 #undef NEIGHBOR_REFRESH_TIME

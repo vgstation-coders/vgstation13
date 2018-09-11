@@ -29,6 +29,20 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		welcome = "THANKS FOR MAPPING IN THIS THING AND NOT CHECKING FOR RUNTIMES BUDDY"
 		uses = 90 // Because this is only happening on centcomm's snowflake uplink
 
+/obj/item/device/uplink/proc/refund(mob/user)
+	if(!user)
+		return
+	var/obj/item/I = user.get_active_hand()
+	if(I) // Make sure there's actually something in the hand before even bothering to check
+		for(var/item in typesof(/datum/uplink_item))
+			var/datum/uplink_item/UI = item
+			var/cost = UI.refund_amount ? UI.refund_amount : UI.cost
+			var/refundable = initial(UI.refundable)
+			if(refundable && I.check_uplink_validity())
+				uses += cost
+				to_chat(user, "<span class='notice'>[I] refunded.</span>")
+				qdel(I)
+
 //Let's build a menu!
 /obj/item/device/uplink/proc/generate_menu(mob/user as mob)
 	if(!job)

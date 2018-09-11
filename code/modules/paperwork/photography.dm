@@ -207,7 +207,10 @@
 		usr.simple_message("<span class='info'>You zoom the camera out.</span>", "<span class='danger'>You take a bite of the mysterious mushroom. Everything feels so tiny!</span>") //Second message is shown when hallucinating
 
 /obj/item/device/camera/AltClick()
-	set_zoom()
+	if(is_holder_of(usr, src))
+		set_zoom()
+	else
+		return ..()
 
 /obj/item/device/camera/silicon
 	name = "silicon photo camera"

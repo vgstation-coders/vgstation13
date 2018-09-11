@@ -197,7 +197,9 @@ emp_act
 		return
 
 	var/target_zone = null
-	if(originator)
+	if(def_zone)
+		target_zone = def_zone
+	else if(originator)
 		if(ismob(originator))
 			var/mob/M = originator
 			target_zone = get_zone_with_miss_chance(M.zone_sel.selecting, src)
@@ -243,7 +245,7 @@ emp_act
 				knock_teeth = 1
 		else if(user.zone_sel.selecting == "mouth" && target_zone == LIMB_HEAD)
 			knock_teeth = 1
-	else if(user.zone_sel.selecting == "mouth" && target_zone == LIMB_HEAD)
+	else if(user.zone_sel && user.zone_sel.selecting == "mouth" && target_zone == LIMB_HEAD)
 		knock_teeth = 1
 
 	var/armor = run_armor_check(affecting, "melee", quiet = 1)

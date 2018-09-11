@@ -1619,6 +1619,10 @@
 	items = list(/obj/item/stack/teeth)
 	result = /obj/item/weapon/reagent_containers/food/snacks/gelatin
 
+/datum/recipe/jectie
+	reagents = list(CHERRYJELLY = 5, SUGAR = 10)
+	result = /obj/item/weapon/reagent_containers/food/snacks/jectie
+
 /datum/recipe/ramen
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/stack/sheet/cardboard)
@@ -2565,14 +2569,12 @@
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/ambrosia_brownies
-	
 /datum/recipe/butterfingers_r
 	items = list(/obj/item/organ/external/r_hand,
 	/obj/item/weapon/reagent_containers/food/snacks/butter,
 	)
 
  result = /obj/item/weapon/reagent_containers/food/snacks/butterfingers_r/
- 
 /datum/recipe/butterfingers_l
 	items = list(/obj/item/organ/external/l_hand,
 	/obj/item/weapon/reagent_containers/food/snacks/butter,
