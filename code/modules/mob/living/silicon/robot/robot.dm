@@ -1318,3 +1318,6 @@
 
 /mob/living/silicon/robot/hasFullAccess()
 	return FALSE
+
+/mob/living/silicon/robot/get_cell()
+	return cell

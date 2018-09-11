@@ -126,6 +126,9 @@
 	var/icontype = "beacon"
 	var/obj/structure/cable/attached = null
 
+/obj/machinery/singularity_beacon/get_cell()
+	return cell
+
 /obj/machinery/singularity_beacon/New()
 
 	..()

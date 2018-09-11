@@ -16,6 +16,9 @@
 	var/obj/item/weapon/cell/bcell = null
 	var/hitcost = 100 // 10 hits on crap cell
 
+/obj/item/weapon/melee/baton/get_cell()
+	return bcell
+
 /obj/item/weapon/melee/baton/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is putting the live [src.name] in \his mouth! It looks like \he's trying to commit suicide.</span>")
 	return (FIRELOSS)

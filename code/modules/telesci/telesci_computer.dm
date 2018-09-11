@@ -36,6 +36,9 @@
 
 	light_color = LIGHT_COLOR_BLUE
 
+/obj/machinery/computer/telescience/get_cell()
+	return cell
+
 /obj/machinery/computer/telescience/New()
 	..()
 	teles_left = rand(12,14)
