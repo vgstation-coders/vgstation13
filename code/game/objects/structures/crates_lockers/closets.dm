@@ -31,6 +31,13 @@
 	w_type = RECYK_METAL
 	ignoreinvert = 1
 
+/obj/structure/closet/New()
+	..()
+	if (has_lock_type)
+		desc += " It has a slot for locking circuitry."
+	else if (has_lockless_type)
+		desc += " The locking circuitry could be unmounted if unlocked."
+
 /obj/structure/closet/basic
 	has_lock_type = /obj/structure/closet/secure_closet/basic
 
@@ -236,7 +243,7 @@
 				new_closet.update_icon()
 			else
 				//Should not happen
-				to_chat(user, "<span class='notice'>Wierd, you can't get the electronics out.</span>")
+				to_chat(user, "<span class='notice'>Weird, you can't get the electronics out.</span>")
 	else
 		to_chat(user, "<span class='notice'>You can't get the electronics out</span>")
 
