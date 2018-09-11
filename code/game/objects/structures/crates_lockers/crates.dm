@@ -153,7 +153,6 @@
 	density = 1
 	icon_opened = "largebinopen"
 	icon_closed = "largebin"
-	has_lock_type = /obj/structure/closet/crate/secure/bin
 
 /obj/structure/closet/crate/bin/attackby(var/obj/item/weapon/W, var/mob/user)
     if(iswrench(W) && wrenchable())
@@ -219,7 +218,6 @@
 	greenlight = "largebing"
 	sparks = "largebinsparks"
 	emag = "largebinemag"
-	has_lock_type = /obj/structure/closet/crate/bin
 
 /obj/structure/closet/crate/secure/bin/attackby(var/obj/item/weapon/W, var/mob/user)
     if(iswrench(W) && wrenchable())
