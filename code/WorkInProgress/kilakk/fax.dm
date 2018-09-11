@@ -129,7 +129,7 @@ var/list/alldepartments = list("Central Command")
 							new /obj/item/mounted/poster(src.loc,-1)
 
 			else
-				SendFax(tofax.info, tofax.name, usr, dpt)
+				SendFax(tofax.info, tofax.name, usr, dpt, 0, tofax.display_x, tofax.display_y)
 			log_game("([usr]/([usr.ckey]) sent a fax titled [tofax] to [dpt] - contents: [tofax.info]")
 			to_chat(usr, "Message transmitted successfully.")
 			faxtime = world.timeofday + cooldown_time
@@ -212,7 +212,7 @@ var/list/alldepartments = list("Central Command")
 			to_chat(C, msg)
 		C << 'sound/effects/fax.ogg'
 
-proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm)
+proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm, var/xdim, var/ydim)
 
 	var/faxed = null
 	for(var/obj/machinery/faxmachine/F in allfaxes)
@@ -229,6 +229,10 @@ proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm)
 				else//probably a
 					P.name = "[sentname]"
 				P.info = "[sent]"
+				if(xdim)
+					P.display_x = xdim
+				if(ydim)
+					P.display_y = ydim
 				P.update_icon()
 
 				playsound(F.loc, "sound/effects/fax.ogg", 50, 1)
