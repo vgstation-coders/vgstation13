@@ -24,7 +24,7 @@ LINEN BINS
 //cutting the bedsheet into rags
 /obj/item/weapon/bedsheet/attackby(var/obj/item/I, mob/user as mob)
 	var/cut_time=0
-	if(I.sharpness > 0)
+	if(I.is_sharp())
 		cut_time = 60 / I.sharpness
 	if(cut_time)
 		to_chat(user, "<span  class='notice'>You begin cutting the [src].</span>")
