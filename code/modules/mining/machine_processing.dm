@@ -8,6 +8,7 @@
 	anchored = 1
 	circuit = "/obj/item/weapon/circuitboard/smeltcomp"
 	light_color = LIGHT_COLOR_GREEN
+	req_access = list(access_mining)
 
 	var/frequency = FREQ_DISPOSAL //Same as conveyors.
 	var/smelter_tag = null
@@ -83,7 +84,7 @@
 
 	else if(id)	//I don't care but the ID got in there in some way, allow them to eject it atleast.
 		dat += "<br><A href='?src=\ref[src];eject=1'>Eject ID.</A>"
-	
+
 	dat += {"</div>
 	<div style="float:left;" class="block">
 	<table>
@@ -182,6 +183,10 @@
 
 		if(id)
 			to_chat(usr, "<span class='notify'>There is already an ID in the console!</span>")
+			return 1
+
+		if(!allowed(usr))
+			to_chat(usr, "<span class='warning'>The machine rejects your access credentials.</span>")
 			return 1
 
 		var/obj/item/weapon/card/id/I = usr.get_active_hand()

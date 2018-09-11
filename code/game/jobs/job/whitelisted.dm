@@ -28,7 +28,7 @@
 	no_headset = 1
 
 	//Both Restricted: Revolution, Revsquad
-	//Merchant Restricted: Traitor, Double Agent, Changeling, Vampire, Cult
+	//Merchant Restricted: Double Agent, Vampire, Cult
 
 /datum/job/trader/equip(var/mob/living/carbon/human/H)
 	if(!H)
@@ -48,13 +48,13 @@
 
 	H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 	H.equip_or_collect(new /obj/item/weapon/storage/wallet/trader(H.back), slot_in_backpack)
-
+	H.equip_or_collect(new /obj/item/device/radio(H), slot_belt)
 	switch(H.mind.role_alt_title)
 		if("Trader") //Traders get snacks and a coin
 			H.equip_or_collect(new /obj/item/weapon/storage/box/donkpockets/random_amount(H.back), slot_in_backpack)
 			H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/thermos/full(H.back), slot_in_backpack)
 			H.equip_or_collect(new /obj/item/weapon/coin/trader(H.back), slot_in_backpack)
-			H.equip_or_collect(new /obj/item/device/radio(H), slot_belt)
+
 		if("Merchant") //Merchants get an implant
 			var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 			L.imp_in = H
@@ -101,7 +101,7 @@
 					</style>
 					<body>
 					<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center>
-					Nanotrasen\'s commercial arm has noted the presence of a registered merchant who holds a license for corporate commerce and a Nanotrasen loyalty implant in your sector. The registered trade partner\'s image is enclosed. Please continue to monitor trade on an ongoing basis such that Nanotrasen can maintain highest standard small business enterprise (SBE) partners.<BR>
+					Nanotrasen\'s commercial arm has noted the presence of a registered merchant who holds a license for corporate commerce, a process which includes a background check and Nanotrasen loyalty implant. The associate\'s image is enclosed. Please continue to monitor trade on an ongoing basis such that Nanotrasen can maintain highest standard small business enterprise (SBE) partners.<BR>
 					</body>
 					<fieldset>
   					<legend>Picture</legend>

@@ -52,8 +52,8 @@
 			if(player.assigned_role == job)
 				possible_traitors -= player
 
-		if(player.role_alt_title == "Merchant")
-			possible_traitors -= player
+		/*if(player.role_alt_title == "Merchant")
+			possible_traitors -= player*/
 
 	if(possible_traitors.len < required_enemies) //fixes double agent starting with 1 traitor
 		return 0
