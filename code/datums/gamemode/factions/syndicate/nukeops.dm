@@ -1,5 +1,5 @@
 /datum/faction/syndicate/nuke_op
-	name = "Syndicate nuclear operatives"
+	name = "Syndicate Nuclear Operatives"
 	ID = SYNDIOPS
 	required_pref = ROLE_OPERATIVE
 	initial_role = NUKE_OP

@@ -14,7 +14,6 @@
 	assigned += M
 	var/datum/role/traitor/newTraitor = new
 	newTraitor.AssignToRole(M.mind,1)
-	newTraitor.OnPostSetup(FALSE)
 	newTraitor.Greet(GREET_ROUNDSTART)
 	return 1
 
@@ -37,7 +36,6 @@
 	if (!cult)
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 	cult.HandleRecruitedRole(newCultist)
-	newCultist.OnPostSetup(FALSE)
 	newCultist.Greet(GREET_ROUNDSTART)
 	return 1
 
@@ -56,7 +54,6 @@
 	assigned += M
 	var/datum/role/traitor/newVampire = new
 	newVampire.AssignToRole(M.mind,1)
-	newVampire.OnPostSetup(FALSE)
 	newVampire.Greet(GREET_ROUNDSTART)
 	return 1
 
@@ -82,7 +79,7 @@
 	assigned += M
 	var/datum/role/traitor/newTraitor = new
 	newTraitor.AssignToRole(M.mind,1)
-	newTraitor.OnPostSetup(FALSE)
+	newTraitor.OnPostSetup()
 	newTraitor.Greet(GREET_ROUNDSTART)
 	return 1
 

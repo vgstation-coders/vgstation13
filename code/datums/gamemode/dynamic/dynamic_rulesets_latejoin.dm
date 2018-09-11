@@ -29,6 +29,6 @@
 	candidates -= M
 	var/datum/role/traitor/newTraitor = new
 	newTraitor.AssignToRole(M.mind,1)
-	newTraitor.OnPostSetup(FALSE)
+	newTraitor.OnPostSetup()
 	newTraitor.Greet(GREET_LATEJOIN)
 	return 1

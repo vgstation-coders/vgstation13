@@ -32,12 +32,66 @@
 		if(player.mind && (player.mind.antag_roles.len > 0))
 			living_players -= player//we don't autotator people with roles already
 
+/datum/dynamic_ruleset/midround/autotraitor/ready(var/forced = 0)
+	if (required_candidates > living_players.len)
+		return 0
+	return ..()
+
 /datum/dynamic_ruleset/midround/autotraitor/execute()
 	var/mob/M = pick(living_players)
 	assigned += M
-	candidates -= M
+	living_players -= M
 	var/datum/role/traitor/newTraitor = new
 	newTraitor.AssignToRole(M.mind,1)
-	newTraitor.OnPostSetup(FALSE)
+	newTraitor.OnPostSetup()
 	newTraitor.Greet(GREET_AUTOTATOR)
 	return 1
+
+//////////////////////////////////////////////
+//                                          //
+//              RAGIN' MAGES                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/raginmages
+	name = "Ragin' Mages"
+	role_category = ROLE_WIZARD
+	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
+	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_candidates = 1
+	weight = 5
+	cost = 10
+	requirements = list(90,90,70,40,30,20,10,10,10,10)
+
+/datum/dynamic_ruleset/midround/raginmages/acceptable(var/population=0,var/threat=0)
+	if(wizardstart.len == 0)
+		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
+		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
+		return 0
+	if (locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
+		weight = initial(weight) + 3
+
+	return ..()
+
+/datum/dynamic_ruleset/midround/raginmages/ready(var/forced = 0)
+	if (required_candidates > (dead_players.len + list_observers.len))
+		return 0
+	return ..()
+
+/datum/dynamic_ruleset/midround/raginmages/execute()
+/*TODO
+	var/list/possible_candidates = list()
+	possible_candidates.Add(dead_players)
+	possible_candidates.Add(list_observers)
+	var/mob/M = pick(possible_candidates)
+	if (M)
+		assigned += M
+		var/datum/role/wizard/newWizard = new
+		newWizard.AssignToRole(M.mind,1)
+		var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
+		if (!federation)
+			federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
+		federation.HandleRecruitedRole(newWizard)//this will give the wizard their icon
+		newWizard.Greet(GREET_ROUNDSTART)
+		return 1
+*/

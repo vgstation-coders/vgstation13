@@ -25,7 +25,6 @@
 		candidates -= M
 		var/datum/role/traitor/newTraitor = new
 		newTraitor.AssignToRole(M.mind,1)
-		newTraitor.OnPostSetup(FALSE)
 		newTraitor.Greet(GREET_ROUNDSTART)
 	return 1
 
@@ -62,7 +61,6 @@
 		candidates -= M
 		var/datum/role/changeling/newChangeling = new
 		newChangeling.AssignToRole(M.mind,1)
-		newChangeling.OnPostSetup(FALSE)
 		newChangeling.Greet(GREET_ROUNDSTART)
 	return 1
 
@@ -74,7 +72,7 @@
 //////////////////////////////////////////////
 
 /datum/dynamic_ruleset/roundstart/vampire
-	name = "Vampire"
+	name = "Vampires"
 	role_category = ROLE_VAMPIRE
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI","Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain")
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
@@ -92,7 +90,6 @@
 		candidates -= M
 		var/datum/role/vampire/newVampire = new
 		newVampire.AssignToRole(M.mind,1)
-		newVampire.OnPostSetup(FALSE)
 		newVampire.Greet(GREET_ROUNDSTART)
 	return 1
 
@@ -108,7 +105,7 @@
 	role_category = ROLE_WIZARD
 	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
-	required_enemies = list(2,2,1,1,1,1,1,1,0,0)
+	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 5
 	cost = 20
@@ -132,6 +129,108 @@
 		if (!federation)
 			federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
 		federation.HandleRecruitedRole(newWizard)//this will give the wizard their icon
-		newWizard.OnPostSetup(FALSE)//this will move the wizard to their lair
 		newWizard.Greet(GREET_ROUNDSTART)
 		return 1
+
+
+//////////////////////////////////////////////
+//                                          //
+//               CULT (LEGACY)              ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/cult_legacy
+	name = "Cult (Legacy)"
+	role_category = ROLE_LEGACY_CULTIST
+	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain")
+	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_candidates = 4
+	weight = 5
+	cost = 25
+	requirements = list(90,90,70,40,30,20,10,10,10,10)
+
+/datum/dynamic_ruleset/roundstart/cult_legacy/execute()
+	//if ready() did its job, candidates should have 4 or more members in it
+	var/datum/faction/cult/narsie/legacy = find_active_faction_by_type(/datum/faction/cult/narsie)
+	if (!legacy)
+		legacy = ticker.mode.CreateFaction(/datum/faction/cult/narsie, null, 1)
+
+	for(var/cultists_number = 1 to required_candidates)
+		if(candidates.len <= 0)
+			break
+		var/mob/M = pick(candidates)
+		assigned += M
+		candidates -= M
+		var/datum/role/legacy_cultist/newCultist = new
+		newCultist.AssignToRole(M.mind,1)
+		legacy.HandleRecruitedRole(newCultist)
+		newCultist.Greet(GREET_ROUNDSTART)
+	return 1
+
+
+//////////////////////////////////////////////
+//                                          //
+//          NUCLEAR OPERATIVES              ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/nuclear
+	name = "Nuclear Emergency"
+	role_category = ROLE_OPERATIVE
+	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_candidates = 6
+	weight = 5
+	cost = 30
+	requirements = list(90,90,90,80,60,40,30,20,10,10)
+
+/datum/dynamic_ruleset/roundstart/nuclear/execute()
+	//if ready() did its job, candidates should have 4 or more members in it
+	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if (!nuclear)
+		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)
+
+	for(var/operatives_number = 1 to required_candidates)
+		if(candidates.len <= 0)
+			break
+		var/mob/M = pick(candidates)
+		assigned += M
+		candidates -= M
+		var/datum/role/legacy_cultist/newCop = new
+		newCop.AssignToRole(M.mind,1)
+		nuclear.HandleRecruitedRole(newCop)
+		newCop.Greet(GREET_ROUNDSTART)
+	return 1
+
+
+//////////////////////////////////////////////
+//                                          //
+//            AI MALFUNCTION                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/malf
+	name = "Malfunctioning AI"
+	role_category = ROLE_MALF
+	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
+	exclusive_to_jobs = list("AI")
+	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
+	required_candidates = 1
+	weight = 5
+	cost = 35
+	requirements = list(90,90,90,90,80,70,50,30,20,10)
+
+/datum/dynamic_ruleset/roundstart/malf/execute()
+	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
+	if (!unction)
+		unction = ticker.mode.CreateFaction(/datum/faction/malf, null, 1)
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
+	var/datum/role/malfAI/AI = new
+	AI.AssignToRole(M.mind,1)
+	unction.HandleRecruitedRole(AI)
+	AI.Greet(GREET_ROUNDSTART)
+	return 1

@@ -28,6 +28,8 @@ var/list/forced_roundstart_ruleset = list()
 /datum/gamemode/dynamic/can_start()
 	threat_level = rand(1,100)*0.6 + rand(1,100)*0.4//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
 	threat = threat_level
+	latejoin_injection_cooldown = rand(6600,10200)
+	midround_injection_cooldown = rand(12000,21000)
 	message_admins("Dynamic Mode initialized with a Threat Level of... <font size='8'>[threat_level]</font>!")
 	return 1
 
@@ -184,6 +186,8 @@ var/list/forced_roundstart_ruleset = list()
 	if (midround_injection_cooldown)
 		midround_injection_cooldown--
 	else
+		message_admins("DYNAMIC MODE: Checking state of the round.")
+		log_admin("DYNAMIC MODE: Checking state of the round.")
 		//time to inject some threat into the round
 		if(emergency_shuttle.departed)//unless the shuttle is gone
 			return
@@ -191,6 +195,8 @@ var/list/forced_roundstart_ruleset = list()
 		update_playercounts()
 
 		if (injection_attempt())
+			message_admins("DYNAMIC MODE: Attempting to inject some antags.")
+			log_admin("DYNAMIC MODE: Attempting to inject some antags.")
 			midround_injection_cooldown = rand(12000,21000)//20 to 35 minutes inbetween midround threat injections attempts
 			var/list/drafted_rules = list()
 			var/list/current_players = list(CURRENT_LIVING_PLAYERS, CURRENT_LIVING_ANTAGS, CURRENT_DEAD_PLAYERS, CURRENT_OBSERVERS)
@@ -207,6 +213,8 @@ var/list/forced_roundstart_ruleset = list()
 
 			if (drafted_rules.len > 0)
 				picking_latejoin_rule(drafted_rules)
+		else
+			midround_injection_cooldown = rand(6600,10200)
 
 
 /datum/gamemode/dynamic/proc/update_playercounts()

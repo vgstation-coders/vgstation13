@@ -202,9 +202,7 @@
 	return 1
 
 // Return 1 on success, 0 on failure.
-/datum/role/proc/OnPostSetup(var/auto_antag = TRUE)
-	if (auto_antag)
-		Greet(1)
+/datum/role/proc/OnPostSetup()
 	return 1
 
 /datum/role/proc/process()

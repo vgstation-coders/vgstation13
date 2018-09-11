@@ -67,7 +67,7 @@
 //                                          //
 //           ROUNDSTART RULESETS            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
-//////////////////////////////////////////////
+//////////////////////////////////////////////Remember that roundstart objectives are automatically forged by /datum/gamemode/proc/PostSetup()
 
 /datum/dynamic_ruleset/roundstart/trim_candidates()
 	for(var/mob/new_player/P in candidates)
@@ -153,7 +153,7 @@
 	living_players = trim_list(candidates[CURRENT_LIVING_PLAYERS])
 	living_antags = trim_list(candidates[CURRENT_LIVING_ANTAGS])
 	dead_players = trim_list(candidates[CURRENT_DEAD_PLAYERS])
-	observers = trim_list(candidates[CURRENT_OBSERVERS])
+	list_observers = trim_list(candidates[CURRENT_OBSERVERS])
 
 /datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list())
 	var/list/trimmed_list = L.Copy()
@@ -175,6 +175,8 @@
 //You can then for example prompt dead players in execute() to join as strike teams or whatever
 //Or autotator someone
 
+//IMPORTANT, since /datum/dynamic_ruleset/midround may accept candidates from both living, dead, and even antag players, you need to manually check whether there are enough candidates
+// (see /datum/dynamic_ruleset/midround/autotraitor/ready(var/forced = 0) for example)
 /datum/dynamic_ruleset/midround/ready(var/forced = 0)
 	if (!forced)
 		var/job_check = 0
@@ -188,4 +190,4 @@
 		var/threat = round(mode.threat_level/10)
 		if (job_check < required_enemies[threat])
 			return 0
-	return ..()
+	return 1
