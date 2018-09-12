@@ -423,6 +423,7 @@ var/global/ports_open = TRUE
 		list("id"=SEC_LEVEL_BLUE,  "name"="Blue"),
 		//SEC_LEVEL_RED = list("name"="Red"),
 	)
+	data["portopen"] = ports_open
 	data["ert_sent"] = sentStrikeTeams(TEAM_ERT)
 
 	var/msg_data[0]
@@ -691,5 +692,5 @@ var/global/ports_open = TRUE
 		return ..()
 
 	shuttle_autocall()
-	
+
 	..()
