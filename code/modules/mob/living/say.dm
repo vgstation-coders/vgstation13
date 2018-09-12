@@ -289,7 +289,7 @@ var/list/department_radio_keys = list(
 	return 1
 
 /mob/living/proc/check_emote(message)
-	if(copytext(message, 1, 2) == "*")
+	if(copytext(message, 1, 2) == "*" && is_letter(copytext(message, 2, 3))) // If it's a letter.
 		emote(copytext(message, 2))
 		return 1
 
