@@ -63,7 +63,7 @@ client/proc/one_click_antag()
 	var/list/candidates = get_candidates(role_req, recruitment_source, role_name)
 	var/recruit_count = 0
 	if(!candidates.len)
-		to_chat(world, "No candidates")
+		to_chat(usr, "No candidates")
 		return 0
 
 	candidates = shuffle(candidates)
@@ -79,7 +79,12 @@ client/proc/one_click_antag()
 			if(isobserver(H))
 				H = makeBody(H)
 			var/datum/mind/M = H.mind
+			to_chat(world, "Making [M] the leader of [FF]")
 			if(FF.HandleNewMind(M))
+				var/datum/role/RR = FF.get_member_by_mind(M)
+				to_chat(world, "RR created [RR], owner is [RR.antag]")
+				RR.ForgeObjectives()
+				RR.MemorizeObjectives()
 				log_admin("[key_name(H)] has been recruited as leader of [F.name] via create antagonist verb.")
 				recruit_count++
 				count--
@@ -91,8 +96,12 @@ client/proc/one_click_antag()
 			if(isobserver(H))
 				H = makeBody(H)
 			var/datum/mind/M = H.mind
-
+			to_chat(world, "Making [M] a recruit of [FF]")
 			if(FF.HandleRecruitedMind(M))
+				var/datum/role/RR = FF.get_member_by_mind(M)
+				to_chat(world, "RR created [RR], owner is [RR.antag]")
+				RR.ForgeObjectives()
+				RR.MemorizeObjectives()
 				log_admin("[key_name(H)] has been recruited as recruit of [F.name] via create antagonist verb.")
 				recruit_count++
 
@@ -123,6 +132,7 @@ client/proc/one_click_antag()
 				continue
 			newRole.OnPostSetup()
 			newRole.ForgeObjectives()
+			newRole.MemorizeObjectives()
 			log_admin("[key_name(H)] has been made into a [newRole.name] via create antagonist verb.")
 			recruit_count++
 
@@ -148,7 +158,7 @@ client/proc/one_click_antag()
 			to_chat(world, "M is syndicate banned")
 			candidates.Remove(M)
 		if(!M.client.desires_role(role) || jobban_isbanned(M, role))
-			to_chat(world, "M does not desire role [M.client.desires_role(role)] or is jobbanned [jobban_isbanned(M, role)]")
+			to_chat(world, "M does not desire role [!M.client.desires_role(role)] or is jobbanned [jobban_isbanned(M, role)]")
 			candidates.Remove(M)
 	return candidates
 

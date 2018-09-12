@@ -8,6 +8,9 @@
 
 	var/client/CLIENT = usr.client
 	if(href_list["makeAntag"])
+		if(!ticker.mode)
+			to_chat(usr, "The round has not started yet,")
+			return
 		var/count = input("How many antags would you like to create?","Create Antagonists") as num|null
 		if(!count)
 			return
