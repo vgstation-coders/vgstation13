@@ -112,8 +112,9 @@ var/list/sent_strike_teams = list()
 				break
 
 			var/mob/applicant = null
+			var/selected_key = pick(applicants)
 			for(var/mob/M in player_list)
-				if(M.key == pick(applicants))
+				if(M.key == selected_key)
 					applicant = M
 
 			if(!applicant || !applicant.key)

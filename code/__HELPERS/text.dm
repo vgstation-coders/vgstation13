@@ -520,3 +520,10 @@ var/quote = ascii2text(34)
 
 ///mob/verb/test_num2words(var/number as num)
 //	to_chat(usr, "\"[jointext(num2words(number), " ")]\"")
+
+// Sanitize inputs to avoid SQL injection attacks
+proc/sql_sanitize_text(var/text)
+	text = replacetext(text, "'", "''")
+	text = replacetext(text, ";", "")
+	text = replacetext(text, "&", "")
+	return text

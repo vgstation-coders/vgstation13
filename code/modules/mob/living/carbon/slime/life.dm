@@ -271,7 +271,7 @@
 		// if(src.health <= 20 && prob(1)) spawn(0) emote("gasp")
 
 		//if(!src.rejuv) src.oxyloss++
-		if(!src.reagents.has_reagent(INAPROVALINE))
+		if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
 			src.adjustOxyLoss(10)
 
 		if(src.stat != DEAD)
@@ -390,6 +390,8 @@
 
 		else
 			if(!client)
+				if(adulttype == null)
+					return
 				var/mob/living/carbon/slime/adult/A = new adulttype(src.loc)
 				A.nutrition = nutrition
 //				A.nutrition += 100

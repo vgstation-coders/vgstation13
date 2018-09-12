@@ -46,11 +46,6 @@
 	var/list/datum/disease2/disease/virus2 = list() //For disease carrying
 	var/antibodies = 0
 
-/mob/living/simple_animal/mouse/New()
-	..()
-	create_reagents(100)
-
-
 /mob/living/simple_animal/mouse/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -72,7 +67,7 @@
 			wander = 1
 			speak_chance = initial(speak_chance)
 		else if(prob(5))
-			emote("snuffles")
+			emote("me", EMOTE_AUDIBLE, "snuffles")
 
 	if(nutrition >= MOUSETFAT)
 		visible_message("<span class = 'warning'>\The [src] explodes!</span>")

@@ -42,7 +42,10 @@
 
 		qdel(src)
 		return
-	if((istype(W, /obj/item/weapon/weldingtool) && W:welding))
+	if(iswelder(W))
+		var/obj/item/weapon/weldingtool/WT = W
+		if(!WT.welding)
+			return
 		if(!status)
 			status = 1
 			bombers += "[key_name(user)] welded a single tank bomb. Temp: [bombtank.air_contents.temperature-T0C]"
@@ -78,9 +81,9 @@
 	if(bombassembly)
 		bombassembly.Crossed(AM)
 
-/obj/item/device/onetankbomb/on_found(mob/finder as mob)
+/obj/item/device/onetankbomb/on_found(mob/wearer, mob/finder as mob)
 	if(bombassembly)
-		bombassembly.on_found(finder)
+		bombassembly.on_found(wearer, finder)
 
 // ---------- Procs below are for tanks that are used exclusively in 1-tank bombs ----------
 

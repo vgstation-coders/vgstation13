@@ -320,7 +320,7 @@
 				if( health <= 20 && prob(1) )
 					spawn(0)
 						emote("gasp")
-				if(!reagents.has_reagent(INAPROVALINE))
+				if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
 					adjustOxyLoss(1)
 				Paralyse(3)
 
@@ -383,7 +383,7 @@
 		return 1
 
 
-	proc/handle_regular_hud_updates()
+	handle_regular_hud_updates()
 
 
 		if (stat == 2 || (M_XRAY in mutations))

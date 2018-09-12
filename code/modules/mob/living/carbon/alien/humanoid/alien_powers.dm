@@ -146,7 +146,7 @@ Doesn't work on other aliens/AI.*/
 	proj_type = /obj/item/projectile/energy/neurotoxin
 	cast_sound = 'sound/weapons/pierce.ogg'
 	duration = 20
-	proj_step_delay = 0.2
+	projectile_speed = 1
 
 /spell/targeted/projectile/alienneurotoxin/is_valid_target(var/target, mob/user)
 	if(!(spell_flags & INCLUDEUSER) && target == user)
@@ -310,6 +310,7 @@ Doesn't work on other aliens/AI.*/
 
 	cast_sound = 'sound/effects/evolve.ogg'
 	cast_delay = 50
+	use_progress_bar = TRUE
 
 /spell/aoe_turf/evolve/drone
 	desc = "Produce an interal egg sac capable of spawning children. Only one queen can exist at a time."

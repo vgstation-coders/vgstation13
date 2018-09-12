@@ -518,6 +518,15 @@
 		if(.)
 			break
 
+/mob/proc/get_card()
+	// Try to find a debit card first.
+	var/list/all_slots = held_items + src.get_all_slots()
+	var/obj/item/weapon/card/debit/debit_card = locate(/obj/item/weapon/card/debit/) in all_slots
+	if(debit_card)
+		return debit_card
+	else
+		return get_id_card()
+
 /mob/proc/slotID2slotname(slot_id)
 	switch (slot_id)
 		if (slot_back)

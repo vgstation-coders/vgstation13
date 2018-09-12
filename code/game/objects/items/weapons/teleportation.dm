@@ -79,7 +79,7 @@ Frequency:
 							src.temp += "[W.code]-[dir2text(get_dir(sr, tr))]-[direct]<BR>"
 
 				src.temp += "<B>Extranneous Signals:</B><BR>"
-				for (var/obj/item/weapon/implant/tracking/W in world)
+				for (var/obj/item/weapon/implant/tracking/W in tracking_implants)
 					if (!W.implanted || !(istype(W.loc,/datum/organ/external) || ismob(W.loc)))
 						continue
 					else
@@ -165,6 +165,10 @@ Frequency:
 	var/recharging = 0
 	var/destination_id
 	var/destination_name
+
+/obj/item/weapon/hand_tele/examine(var/mob/user)
+	..()
+	to_chat(user, "<span class='notice'>Alt-Click the hand tele to set portal destination. Defaults to your last choice.</span>")
 
 /obj/item/weapon/hand_tele/attack_self(mob/user as mob)
 	var/turf/current_location = get_turf(user)//What turf is the user on?

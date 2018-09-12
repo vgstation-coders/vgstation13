@@ -50,7 +50,7 @@
 		to_chat(preacher, "<span class='warning'>You are a heathen to this God. You feel [B.my_rel.deity_name]'s wrath strike you for this blasphemy.</span>")
 		preacher.fire_stacks += 5
 		preacher.IgniteMob()
-		preacher.emote("scream",,, 1)
+		preacher.audible_scream()
 		return FALSE
 	if (preacher != religiousLeader.current)
 		to_chat(preacher, "<span class='warning'>You fail to muster enough mental strength to begin the conversion. Only the Spiritual Guide of [name] can perfom this.</span>")

@@ -343,14 +343,20 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 	if(isrobot(user))
 		reagents.remove_any(amount_per_imbibe)
+		reagents.reaction(user, TOUCH)
 		return 1
 	if(reagents.total_volume)
 		if(can_drink(user))
 			reagents.reaction(user, INGEST)
 			spawn(5)
 				if(reagents)
-					reagents.trans_to(user, amount_per_imbibe)
-
+					if(user.get_stomach())
+						var/datum/organ/internal/stomach/S = user.get_stomach()
+						reagents.trans_to(S.get_reagents(), amount_per_imbibe) // transfer to stomach
+					else if(istype(user, /mob/living/carbon/human))
+						reagents.trans_to(user, amount_per_imbibe / 4) // greatly reduced reagent absorption without a stomach
+					else
+						reagents.trans_to(user, amount_per_imbibe)
 	return 1
 
 /obj/item/weapon/reagent_containers/proc/can_drink(mob/user)

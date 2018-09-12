@@ -1,29 +1,13 @@
 //Hostile Infestation: A variant of the infestation event that spawns small numbers of hostile mobs.
 //Currently only fires if there are 2 or more security officers
 
-#define LOC_KITCHEN 0
-#define LOC_ATMOS 1
-#define LOC_INCIN 2
-#define LOC_CHAPEL 3
-#define LOC_LIBRARY 4
-#define LOC_HYDRO 5
-#define LOC_VAULT 6
-#define LOC_TECH 7
-
-#define MONSTER_BEAR    0
-#define MONSTER_CREATURE 1
-#define MONSTER_XENO 2
-#define MONSTER_HIVEBOT  3
-#define MONSTER_ZOMBIE    4
-#define MONSTER_SKRITE  5
-#define MONSTER_SQUEEN  6
-#define MONSTER_FROG 7
-
 /datum/event/hostile_infestation
 	announceWhen = 2  //Should notify crew much quicker than normal infestation event because of the danger posed by these mobs
 	endWhen = 10
 	var/localestring
 	var/monsterstring
+	var/override_location = null
+	var/override_monster = null
 
 /datum/event/hostile_infestation/start()
 	var/z_level = 1
@@ -34,6 +18,8 @@
 				M << 'sound/effects/bumpinthenight.ogg'
 
 	var/location = pick(LOC_KITCHEN, LOC_ATMOS, LOC_INCIN, LOC_CHAPEL, LOC_LIBRARY, LOC_HYDRO, LOC_VAULT, LOC_TECH)
+	if (override_location)
+		location = override_location
 	var/spawn_area_type
 
 	switch(location)
@@ -64,7 +50,10 @@
 
 	var/spawn_monster_type
 	var/max_number
-	var/monster = pick(MONSTER_BEAR, MONSTER_CREATURE, MONSTER_XENO, MONSTER_HIVEBOT, MONSTER_ZOMBIE, MONSTER_SKRITE, MONSTER_SQUEEN, MONSTER_FROG)
+	var/monster = pick(MONSTER_BEAR, MONSTER_CREATURE, MONSTER_XENO, MONSTER_HIVEBOT, MONSTER_ZOMBIE, MONSTER_SKRITE, MONSTER_SQUEEN, MONSTER_FROG, MONSTER_GOLIATH, MONSTER_DAVID,
+	MONSTER_MADCRAB, MONSTER_MEATBALLER, MONSTER_BIG_ROACH, MONSTER_ROACH_QUEEN)
+	if (override_monster)
+		monster = override_monster
 	switch(monster)
 		if(MONSTER_BEAR)
 			spawn_monster_type = pick(/mob/living/simple_animal/hostile/bear, /mob/living/simple_animal/hostile/bear/panda, /mob/living/simple_animal/hostile/bear/polarbear)
@@ -98,6 +87,30 @@
 			spawn_monster_type = /mob/living/simple_animal/hostile/frog
 			monsterstring = "slimey skin"
 			max_number = 8
+		if(MONSTER_GOLIATH)
+			spawn_monster_type = /mob/living/simple_animal/hostile/asteroid/goliath
+			monsterstring = "long tentacles"
+			max_number = 2
+		if(MONSTER_DAVID)
+			spawn_monster_type = /mob/living/simple_animal/hostile/asteroid/goliath/david
+			monsterstring = "short tentacles"
+			max_number = 4
+		if(MONSTER_MADCRAB)
+			spawn_monster_type = /mob/living/simple_animal/hostile/crab
+			monsterstring = "anger management issues"
+			max_number = 3
+		if(MONSTER_MEATBALLER)
+			spawn_monster_type = /mob/living/simple_animal/hostile/humanoid/kitchen/meatballer
+			monsterstring = "spaghetti dropping everywhere"
+			max_number = 2
+		if(MONSTER_BIG_ROACH)
+			spawn_monster_type = /mob/living/simple_animal/hostile/bigroach
+			monsterstring = "heavy mutation"
+			max_number = 6
+		if(MONSTER_ROACH_QUEEN)
+			spawn_monster_type = /mob/living/simple_animal/hostile/bigroach/queen
+			monsterstring = "extreme mutation"
+			max_number = 2
 
 	var/number = rand(1, max_number)
 
@@ -116,21 +129,3 @@
 
 /datum/event/hostile_infestation/announce()
 	command_alert(new /datum/command_alert/hostile_creatures(localestring, monsterstring))
-
-
-#undef LOC_KITCHEN
-#undef LOC_ATMOS
-#undef LOC_INCIN
-#undef LOC_CHAPEL
-#undef LOC_LIBRARY
-#undef LOC_HYDRO
-#undef LOC_VAULT
-#undef LOC_TECH
-
-#undef MONSTER_BEAR
-#undef MONSTER_CREATURE
-#undef MONSTER_XENO
-#undef MONSTER_HIVEBOT
-#undef MONSTER_ZOMBIE
-#undef MONSTER_SKRITE
-#undef MONSTER_FROG

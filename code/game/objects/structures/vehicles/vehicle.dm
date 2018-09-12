@@ -7,9 +7,9 @@
 	var/obj/structure/bed/chair/vehicle/paired_to = null
 	var/vin = null
 
-/obj/item/key/New()
+/obj/item/key/initialize()
 	if(vin)
-		for(var/obj/structure/bed/chair/vehicle/V in world)
+		for(var/obj/structure/bed/chair/vehicle/V in vehicle_list)
 			if(V.vin == vin)
 				paired_to = V
 				V.mykey = src
@@ -68,10 +68,14 @@
 /obj/structure/bed/chair/vehicle/New()
 	..()
 	processing_objects |= src
-
+	vehicle_list.Add(src)
 	if(!nick)
 		nick=name
 	set_keys()
+
+/obj/structure/bed/chair/vehicle/Destroy()
+	vehicle_list.Remove(src)
+	..()
 
 /obj/structure/bed/chair/vehicle/proc/set_keys()
 	if(keytype && !vin)
@@ -85,7 +89,7 @@
 		empstun = 0
 
 /obj/structure/bed/chair/vehicle/attackby(obj/item/W, mob/living/user)
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))
 			add_fingerprint(user)
@@ -233,10 +237,10 @@
 		plane = OBJ_PLANE
 		layer = ABOVE_OBJ_LAYER
 
-/obj/structure/bed/chair/vehicle/MouseDrop_T(var/atom/movable/C, mob/user)
+/obj/structure/bed/chair/vehicle/MouseDropTo(var/atom/movable/C, mob/user)
 	..()
 
-	if (user.incapacitated() || !in_range(user, src) || !can_have_carts)
+	if (user.incapacitated() || !in_range(user, src) || !in_range(src, C) || !can_have_carts)
 		return
 
 	if (istype(C, /obj/machinery/cart))

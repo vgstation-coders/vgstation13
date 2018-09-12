@@ -235,6 +235,7 @@
 	desc = "A large unprocessed telecrystal, a gemstone with space-warping properties."
 	icon_state = "telecrystal"
 	material="telecrystal"
+
 /obj/item/weapon/gibtonite
 	name = "Gibtonite ore"
 	desc = "Extremely explosive if struck with mining equipment, Gibtonite is often used by miners to speed up their work by using it as a mining charge. This material is illegal to possess by unauthorized personnel under space law."
@@ -243,11 +244,13 @@
 	item_state = "Gibtonite ore"
 	w_class = W_CLASS_LARGE
 	throw_range = 0
-	anchored = 1 //Forces people to carry it by hand, no pulling!
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND
 	var/primed = 0
 	var/det_time = 100
 	var/det_quality = 1 //How pure this gibtonite is, determines the explosion produced by it and is derived from the det_time of the rock wall it was taken from, higher shipping_value = better
+
+/obj/item/weapon/gibtonite/can_be_pulled()
+	return FALSE
 
 /obj/item/weapon/gibtonite/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/weapon/pickaxe) || istype(I, /obj/item/weapon/resonator))
@@ -299,6 +302,8 @@
 					if(3)
 						explosion(src.loc,2,4,9,adminlog = notify_admins)
 				qdel(src)
+
+
 
 /obj/item/weapon/ore/New()
 	. = ..()

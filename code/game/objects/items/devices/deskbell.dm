@@ -91,7 +91,7 @@
 		return 1
 	return 0
 
-/obj/item/device/deskbell/MouseDrop(mob/user as mob)
+/obj/item/device/deskbell/MouseDropFrom(mob/user as mob)
 	if(user == usr && !usr.incapacitated() && (usr.contents.Find(src) || in_range(src, usr)))
 		if(istype(user, /mob/living/carbon/human) || istype(user, /mob/living/carbon/monkey))
 			if(anchored)

@@ -189,7 +189,7 @@
 /obj/item/tape/allowed(mob/user)
 	if(isrobot(user) && !isMoMMI(user))
 		var/mob/living/silicon/robot/R = user
-		return R.module && (R.module.quirk_flags & robot_compatibility)
+		return HAS_MODULE_QUIRK(R, robot_compatibility)
 
 	return ..()
 
@@ -372,7 +372,7 @@
 				L.get_active_hand_organ().droplimb(1)
 			else
 				to_chat(L, "<span class='danger'>You cut yourself on the tape!")
-			L.emote("scream", , , 1)
+			L.audible_scream()
 			L.adjustBruteLoss(10)
 		return FALSE
 	if (!W.is_sharp() || !(W.force >= 10))

@@ -210,7 +210,7 @@
 	return 1
 
 
-/mob/living/carbon/brain/proc/handle_regular_hud_updates()
+/mob/living/carbon/brain/handle_regular_hud_updates()
 
 
 	if (stat == 2 || (M_XRAY in src.mutations))

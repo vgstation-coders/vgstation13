@@ -22,6 +22,8 @@
 
 #define isskellington(A) (ishuman(A) && istype(A:species, /datum/species/skellington))
 
+#define isskelevox(A) (ishuman(A) && istype(A:species, /datum/species/skellington/skelevox))
+
 #define iscatbeast(A) (ishuman(A) && istype(A:species, /datum/species/tajaran))
 
 #define isunathi(A) (ishuman(A) && istype(A:species, /datum/species/unathi))
@@ -39,6 +41,12 @@
 #define isgrue(A) (ishuman(A) && istype(A:species, /datum/species/grue))
 
 #define ismushroom(A) ((ishuman(A) && istype(A:species, /datum/species/mushroom)) || (istype(A, /mob/living/carbon/monkey/mushroom)))
+
+#define islich(A)  (ishuman(A) && istype(A:species, /datum/species/lich))
+
+#define istruelich(A) ((islich(A) && (iswizard(A) || iswearinglichcrown(A))
+
+#define iswearinglichcrown(A) (ishuman(A) && (istype(A:head, /obj/item/clothing/head/wizard/skelelich)) //|| istype(A:head, /obj/item/clothing
 
 #define ishologram(A) (istype(A, /mob/living/simple_animal/hologram/advanced))
 
@@ -190,7 +198,7 @@
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor))
 
-#define issilent(A) (A.silent || (ishuman(A) && (A:miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
+#define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 //Macros for antags
 
 #define isfaction(A) (istype(A, /datum/faction))
@@ -247,6 +255,24 @@ proc/get_space_area()
 
 	return global.space_area
 
+/**
+	checks if the given atom is on a shuttle (non-specific)
+	args: atom
+	returns: shuttle type (or null if not on shuttle)
+**/
+
+/proc/is_on_shuttle(var/atom/A)
+	var/area/AA = get_area(A)
+
+	if(!AA) //How doth
+		return 0
+
+	for(var/datum/shuttle/S in shuttles)
+		if(S.linked_area == AA)
+			return S
+
+	return 0
+
 //1 line helper procs compressed into defines.
 #define Clamp(x, y, z) 	(x <= y ? y : (x >= z ? z : x))
 //x is the number you want to clamp
@@ -272,6 +298,9 @@ proc/get_space_area()
 //Yes, this is the fastest known way to do it.
 #define get_turf(A) (get_step(A, 0))
 
+//Helper to check if two things are in the same z-level
+#define	atoms_share_level(A, B) (A && B && A.z == B.z)
+
 //HARDCORE MODE STUFF (mainly hunger)
 
 #define hardcore_mode_on (hardcore_mode)//((ticker) && (ticker.hardcore_mode))
@@ -291,3 +320,13 @@ proc/get_space_area()
 #define SNOW_THEME (map.snow_theme || Holiday == XMAS || Holiday == XMAS_EVE)
 
 #define get_conductivity(A) (A ? A.siemens_coefficient : 1)
+
+//Swaps the contents of the variables A and B. The if(TRUE) is there simply to restrict the scope of _.
+//Yes, _ is a shitty variable name. Hopefully so shitty it won't ever be used anywhere it could conflict with this.
+#define swap_vars(A, B) if(TRUE){var/_ = A; A = B; B = _}
+
+// To prevent situations of trying to take funds that are factions of our lowest denomination
+#define LOWEST_DENOMINATION 1
+#define round_to_lowest_denomination(A) (round(A, LOWEST_DENOMINATION))
+
+#define create_trader_account create_account("Trader Shoal", 0, null, 0) //Starts 0 credits, not sourced from any database, earns 0 credits

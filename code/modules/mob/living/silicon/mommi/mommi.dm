@@ -45,35 +45,8 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	var/obj/item/tool_state = null
 	var/obj/item/head_state = null
 
-
-/mob/living/silicon/robot/mommi/pick_module(var/forced_module = null)
-	if(module)
-		return
-
-	if(forced_module)
-		modtype = forced_module
-	else
-		if(mommi_modules.len)
-			modtype = input("Please, select a module!", "Nanotrasen", null, null) as null|anything in mommi_modules
-		else
-			modtype=modules[0]
-
-	if(module)
-		return
-	if(!(modtype in mommi_modules))
-		return
-
-	var/module_type = mommi_modules[modtype]
-	module = new module_type(src)
-
-	feedback_inc("cyborg_[lowertext(modtype)]",1)
-	updatename()
-
-	set_module_sprites(module.sprites)
-
-	choose_icon()
-
-	SetEmagged(emagged) // Update emag status and give/take emag modules away
+/mob/living/silicon/robot/mommi/getModules()
+	return mommi_modules //Default non-subtype mommis aren't supposed to spawn outside of bus anyways
 
 //REMOVE STATIC
 /mob/living/silicon/robot/mommi/Destroy()
@@ -339,8 +312,3 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 /mob/living/silicon/robot/mommi/radio_menu()
 	radio.interact(src)//Just use the radio's Topic() instead of bullshit special-snowflake code
-
-//Nanotrasen MoMMI subtype because we don't give mommis a choice of choosing their module.
-/mob/living/silicon/robot/mommi/nt/New()
-	pick_module("Nanotrasen")
-	..()
