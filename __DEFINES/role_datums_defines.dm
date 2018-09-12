@@ -52,6 +52,7 @@
 #define GREET_LATEJOIN		"latejoin"
 #define GREET_ADMINTOGGLE	"admintoggle"
 #define GREET_CUSTOM		"custom"
+#define GREET_MIDROUND		"midround"
 
 #define GREET_AUTOTATOR		"autotator"
 

@@ -10,7 +10,7 @@
 	role_category = ROLE_TRAITOR
 	restricted_from_jobs = list("Cyborg","Mobile MMI","Security Officer", "Warden", "Detective", "Head of Security", "Captain")
 	required_candidates = 1
-	weight = 5
+	weight = 7
 	cost = 5
 	requirements = list(40,30,20,10,10,10,10,10,10,10)
 
@@ -59,9 +59,10 @@
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
-	weight = 5
+	weight = 3
 	cost = 10
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	logo = "raginmages-logo"
 
 /datum/dynamic_ruleset/midround/raginmages/acceptable(var/population=0,var/threat=0)
 	if(wizardstart.len == 0)
@@ -69,7 +70,7 @@
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		return 0
 	if (locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
-		weight = initial(weight) + 3
+		weight = initial(weight) * 5
 
 	return ..()
 
@@ -79,19 +80,39 @@
 	return ..()
 
 /datum/dynamic_ruleset/midround/raginmages/execute()
-/*TODO
 	var/list/possible_candidates = list()
 	possible_candidates.Add(dead_players)
 	possible_candidates.Add(list_observers)
-	var/mob/M = pick(possible_candidates)
-	if (M)
-		assigned += M
+	send_applications(possible_candidates)
+	return 1
+
+/datum/dynamic_ruleset/midround/raginmages/review_applications()
+	var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
+	if (!federation)
+		federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
+	for (var/i = required_candidates, i > 0, i--)
+		if(applicants.len <= 0)
+			break
+		var/mob/applicant = null
+		var/selected_key = pick(applicants)
+		for(var/mob/M in player_list)
+			if(M.key == selected_key)
+				applicant = M
+		if(!applicant || !applicant.key)
+			i++
+			continue
+		applicants -= applicant.key
+		if(!isobserver(applicant))
+			//Making sure we don't recruit people who got back into the game since they applied
+			i++
+			continue
+
+		var/mob/living/carbon/human/new_character= makeBody(applicant)
+		new_character.dna.ResetSE()
+
+		assigned += new_character
 		var/datum/role/wizard/newWizard = new
-		newWizard.AssignToRole(M.mind,1)
-		var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
-		if (!federation)
-			federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)
-		federation.HandleRecruitedRole(newWizard)//this will give the wizard their icon
-		newWizard.Greet(GREET_ROUNDSTART)
-		return 1
-*/
+		newWizard.AssignToRole(new_character.mind,1)
+		federation.HandleRecruitedRole(newWizard)
+		newWizard.OnPostSetup()
+		newWizard.Greet(GREET_MIDROUND)

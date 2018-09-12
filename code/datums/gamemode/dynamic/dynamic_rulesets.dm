@@ -14,6 +14,11 @@
 	var/required_candidates = 0//the rule needs this many candidates (post-trimming) to be executed (example: Cult need 4 players at round start)
 	var/weight = 5//1 -> 9, probability for this rule to be picked against other rules
 	var/cost = 0//threat cost for this rule.
+	var/logo = ""//any state from /icons/logos.dmi
+
+	//for midround polling
+	var/list/applicants = list()
+	var/searching = 0
 
 	var/list/requirements = list(40,30,20,10,10,10,10,10,10,10)
 	//requirements are the threat level requirements per pop range. The ranges are as follow:
@@ -56,12 +61,67 @@
 	return 1
 
 /datum/dynamic_ruleset/proc/ready(var/forced = 0)	//Here you can perform any additional checks you want. (such as checking the map, the amount of certain jobs, etc)
-	if (required_candidates > candidates.len)	//IMPORTANT: If ready() returns 1, that means execute() should never fail!
+	if (required_candidates > candidates.len)		//IMPORTANT: If ready() returns 1, that means execute() should never fail!
 		return 0
 	return 1
 
 /datum/dynamic_ruleset/proc/trim_candidates()
 	return
+
+
+/datum/dynamic_ruleset/proc/send_applications(var/list/possible_volunteers = list())
+	if (possible_volunteers.len <= 0)//this shouldn't happen, as ready() should return 0 if there is not a single valid candidate
+		return
+	message_admins("DYNAMIC MODE: Polling [possible_volunteers.len] players to apply for the [name] ruleset.")
+	log_admin("DYNAMIC MODE: Polling [possible_volunteers.len] players to apply for the [name] ruleset.")
+
+	searching = 1
+	var/icon/logo_icon = icon('icons/logos.dmi', logo)
+	for(var/mob/M in possible_volunteers)
+		if(!M.client || jobban_isbanned(M, role_category) || M.client.is_afk())
+			continue
+
+		to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>The mode is looking for volunteers to become [role_category]. (<a href='?src=\ref[src];signup=\ref[M]'>Apply now!</a>)</span>[logo ? "[bicon(logo_icon)]" : ""]")
+
+	spawn(1 MINUTES)
+		searching = 0
+		for(var/mob/M in possible_volunteers)
+			if(!M.client || jobban_isbanned(M, role_category) || M.client.is_afk())
+				continue
+			to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>Applications for [role_category] are now closed.</span>[logo ? "[bicon(logo_icon)]" : ""]")
+		if(!applicants || applicants.len <= 0)
+			log_admin("DYNAMIC MODE: [name] received no applications.")
+			message_admins("DYNAMIC MODE: [name] received no applications.")
+			return
+
+		log_admin("DYNAMIC MODE: [applicants.len] players volunteered for [name].")
+		message_admins("DYNAMIC MODE: [applicants.len] players volunteered for [name].")
+		review_applications()
+
+/datum/dynamic_ruleset/proc/review_applications()
+
+/datum/dynamic_ruleset/Topic(var/href, var/list/href_list)
+	if(href_list["signup"])
+		var/mob/M = usr
+		if(!M)
+			return
+		volunteer(M)
+
+/datum/dynamic_ruleset/proc/volunteer(var/mob/M)
+	if (!searching)
+		return
+	if(jobban_isbanned(M, role_category))
+		to_chat(M, "<span class='danger'>Banned from [role_category].</span>")
+		to_chat(M, "<span class='warning'>Your application has been discarded due to past conduct..</span>")
+		return
+	if(M.key in applicants)
+		to_chat(M, "<span class='notice'>Removed from the [role_category] registration list.</span>")
+		applicants -= M.key
+		return
+	else
+		to_chat(M, "<span class='notice'>Added to the [role_category] registration list.</span>")
+		applicants |= M.key
+		return
 
 //////////////////////////////////////////////
 //                                          //
@@ -164,12 +224,13 @@
 		if (!M.client.desires_role(role_category) || jobban_isbanned(M, role_category))//are they willing and not antag-banned?
 			trimmed_list.Remove(M)
 			continue
-		if (M.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
-			trimmed_list.Remove(M)
-			continue
-		if ((exclusive_to_jobs.len > 0) && !(M.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
-			trimmed_list.Remove(M)
-			continue
+		if (M.mind)
+			if (M.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
+				trimmed_list.Remove(M)
+				continue
+			if ((exclusive_to_jobs.len > 0) && !(M.mind.assigned_role in exclusive_to_jobs))//is the rule exclusive to their job?
+				trimmed_list.Remove(M)
+				continue
 	return trimmed_list
 
 //You can then for example prompt dead players in execute() to join as strike teams or whatever

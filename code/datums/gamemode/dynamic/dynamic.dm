@@ -273,7 +273,7 @@ var/list/forced_roundstart_ruleset = list()
 	if (forced_latejoin_rule)
 		forced_latejoin_rule.candidates = list(newPlayer)
 		forced_latejoin_rule.trim_candidates()
-		if (forced_latejoin_rule.ready())
+		if (forced_latejoin_rule.ready(1))
 			picking_latejoin_rule(list(forced_latejoin_rule))
 		forced_latejoin_rule = null
 

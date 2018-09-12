@@ -67,7 +67,7 @@ var/list/sent_strike_teams = list()
 
 	searching = TRUE
 
-	var/icon/team_logo = icon('icons/mob/mob.dmi', logo)
+	var/icon/team_logo = icon('icons/logos.dmi', logo)
 	for(var/mob/dead/observer/O in dead_mob_list)
 		if(!O.client || jobban_isbanned(O, ROLE_STRIKE) || O.client.is_afk())
 			continue

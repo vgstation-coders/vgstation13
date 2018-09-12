@@ -324,14 +324,27 @@
 
 	job_master.AssignRole(src, rank, 1)
 
+	ticker.mode.latespawn(src)//can we make them a latejoin antag?
+
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
 
+	var/turf/T = character.loc
+	for(var/role in character.mind.antag_roles)
+		var/datum/role/R = character.mind.antag_roles[role]
+		R.OnPostSetup()
+
+	var/datum/job/J = job_master.GetJob(rank)
+	if (character.loc != T)//uh oh, we're spawning as an off-station antag, better not be announced, show up on the manifest, or take up a job slot
+		J.current_positions--
+		character.store_position()
+		qdel(src)
+		return
+
 	job_master.EquipRank(character, rank, 1)					//equips the human
 	EquipCustomItems(character)
 
-	var/datum/job/J = job_master.GetJob(rank)
 	if(J.spawns_from_edge)
 		character.Meteortype_Latejoin(rank)
 	else
@@ -342,7 +355,7 @@
 	character.store_position()
 
 	// WHY THE FUCK IS THIS HERE
-	// FOR GOD'S SAKE USE EVENTS
+	// FOR GOD'S SAKE USE EVENTS	TODO: use latejoin dynamic rulesets to deal with that
 	if(bomberman_mode)
 		character.client << sound('sound/bomberman/start.ogg')
 		if(character.wear_suit)
@@ -362,7 +375,6 @@
 		to_chat(character, "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>")
 		to_chat(character, "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>")
 
-	ticker.mode.latespawn(character)
 	if(character.mind.assigned_role != "MODE")
 		if(character.mind.assigned_role != "Cyborg")
 			data_core.manifest_inject(character)

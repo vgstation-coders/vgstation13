@@ -235,10 +235,17 @@
 /datum/role/proc/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	var/mob/M = antag.current
-	return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
-[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
- - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
- - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a><br>"}
+	if (M)
+		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
+	[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
+	 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
+	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a><br>"}
+	else
+		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
+	[name] [antag.name]/[antag.key]<b><font color=red> - (DESTROYED)</font></b>
+	 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
+	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a><br>"}
+
 
 /datum/role/proc/Greet(var/greeting,var/custom)
 	if(!greeting)

@@ -11,7 +11,7 @@
 	role_category = ROLE_TRAITOR
 	restricted_from_jobs = list("Cyborg","Mobile MMI","Security Officer", "Warden", "Detective", "Head of Security", "Captain")
 	required_candidates = 1
-	weight = 5
+	weight = 7
 	cost = 10
 	requirements = list(40,30,20,10,10,10,10,10,10,10)
 	var/autotraitor_cooldown = 900//15 minutes
@@ -49,7 +49,7 @@
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
 	required_candidates = 1
-	weight = 5
+	weight = 3
 	cost = 15
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
 
@@ -78,7 +78,7 @@
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
 	required_candidates = 1
-	weight = 5
+	weight = 3
 	cost = 18
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
 
@@ -107,7 +107,7 @@
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
-	weight = 5
+	weight = 3
 	cost = 20
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 
@@ -146,7 +146,7 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 4
-	weight = 5
+	weight = 3
 	cost = 25
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 
@@ -218,7 +218,7 @@
 	exclusive_to_jobs = list("AI")
 	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
 	required_candidates = 1
-	weight = 5
+	weight = 3
 	cost = 35
 	requirements = list(90,90,90,90,80,70,50,30,20,10)
 
