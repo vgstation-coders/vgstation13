@@ -1,3 +1,5 @@
+
+
 var/global/list/juice_items = list (
 	/obj/item/weapon/reagent_containers/food/snacks/grown/tomato = list(TOMATOJUICE = 0),
 	/obj/item/weapon/reagent_containers/food/snacks/grown/carrot = list(CARROTJUICE = 0),
@@ -17,6 +19,8 @@ var/global/list/juice_items = list (
 	name = "All-In-One Grinder"
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "juicer1"
+	layer = BELOW_OBJ_LAYER
+	density = 1
 	anchored = 1
 	use_power = 1
 	idle_power_usage = 5
@@ -25,7 +29,7 @@ var/global/list/juice_items = list (
 	pass_flags = PASSTABLE
 	var/inuse = 0
 	var/obj/item/weapon/reagent_containers/beaker = null
-	var/max_combined_w_class = 20
+	var/limit = 10
 	var/speed_multiplier = 1
 	var/list/blend_items = list (
 
@@ -89,7 +93,7 @@ var/global/list/juice_items = list (
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
 		T += M.rating-1
-	max_combined_w_class = initial(max_combined_w_class)+(T * 5)
+	limit = initial(limit)+(T * 5)
 
 	T = 0
 	for(var/obj/item/weapon/stock_parts/micro_laser/M in component_parts)
@@ -140,28 +144,22 @@ var/global/list/juice_items = list (
 			src.updateUsrDialog()
 			return 1
 
-	var/sum_w_class = 0
-	for(var/obj/item/I in holdingitems)
-		sum_w_class += I.w_class
+	if(holdingitems && holdingitems.len >= limit)
+		to_chat(usr, "The machine cannot hold any more items.")
+		return 1
 
 	//Fill machine with bags
 	if(istype(O, /obj/item/weapon/storage/bag/plants)||istype(O, /obj/item/weapon/storage/bag/chem))
 		var/obj/item/weapon/storage/bag/B = O
-		var/items_transferred = 0
-		for(var/obj/item/G in O.contents)
-			if(sum_w_class + G.w_class > max_combined_w_class)
-				if(items_transferred > 0)
-					to_chat(user, "You fill \the [src] to the brim.")
-				else
-					to_chat(user, "\The [src] is too full for \the [G].")
-				break
+		for (var/obj/item/G in O.contents)
 			B.remove_from_storage(G,src)
 			holdingitems += G
-			sum_w_class += G.w_class
-			items_transferred++
+			if(holdingitems && holdingitems.len >= limit) //Sanity checking so the blender doesn't overfill
+				to_chat(user, "You fill the All-In-One grinder to the brim.")
+				break
 
 		if(!O.contents.len)
-			to_chat(user, "You empty \the [O] into \the [src].")
+			to_chat(user, "You empty the [O] into the All-In-One grinder.")
 
 		src.updateUsrDialog()
 		return 0
@@ -170,12 +168,8 @@ var/global/list/juice_items = list (
 		to_chat(user, "Cannot refine into a reagent.")
 		return 1
 
-	if(sum_w_class + O.w_class >= max_combined_w_class)
-		to_chat(usr, "\The [src] is too full for \the [O].")
-		return 1
-
 	if(!user.drop_item(O, src))
-		to_chat(user, "<span class='notice'>\The [O] is stuck to your hands!</span>")
+		user << "<span class='notice'>\The [O] is stuck to your hands!</span>"
 		return 1
 
 	holdingitems += O

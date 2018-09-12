@@ -231,7 +231,7 @@
 	..()
 	if(user.is_in_modules(src))
 		return
-	if(iswelder(W))
+	if(istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			to_chat(user, "You slice the handle off of \the [src].")
@@ -557,7 +557,13 @@
 	if(user.drop_item(W, user.loc))
 		W.forceMove(src)
 		carrying.Add(W)
-		W.setPixelOffsetsFromParams(params, user)
+		var/list/params_list = params2list(params)
+		if(params_list.len)
+			var/icon/clicked = new/icon(icon, icon_state, dir)
+			var/clamp_x = clicked.Width() / 2
+			var/clamp_y = clicked.Height() / 2
+			W.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
+			W.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
 		var/image/image = image(icon = null)
 		image.appearance = W.appearance
 		image.layer = W.layer + 30

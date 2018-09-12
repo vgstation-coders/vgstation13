@@ -25,7 +25,7 @@
 	spawn(10) //Wait for it
 		user.fire_stacks += 5
 		user.IgniteMob()
-		user.audible_scream()
+		user.emote("scream",,, 1)
 		return FIRELOSS //Set ablaze and burned to crisps
 
 //"Special" Bible with a little gift on introduction
@@ -63,13 +63,13 @@
 			to_chat(user, "<span class='danger'>[my_rel.deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
 			user.fire_stacks += 5
 			user.IgniteMob()
-			user.audible_scream()
+			user.emote("scream",,, 1)
 			V.smitecounter += 50 //Once we are extinguished, we will be quite vulnerable regardless
 		else if(isanycultist(user)) //Cultist trying to use it
 			to_chat(user, "<span class='danger'>[my_rel.deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
 			user.fire_stacks += 5
 			user.IgniteMob()
-			user.audible_scream()
+			user.emote("scream",,, 1)
 		else //Literally anyone else than a Cultist using it, at this point it's just a big book
 			..() //WHACK
 		return 1 //Non-chaplains can't use the holy book, at least not properly

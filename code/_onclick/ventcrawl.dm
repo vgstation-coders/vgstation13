@@ -5,24 +5,14 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 
 /mob/living/proc/ventcrawl_carry()
 	for(var/atom/A in src.contents)
-		if(!(is_type_in_list(A, canEnterVentWith())))
+		if(!(isInTypes(A, canEnterVentWith)))
 			to_chat(src, "<span class='warning'>You can't be carrying items or have items equipped when vent crawling!</span>")
 			return FALSE
 	return TRUE
 
 // Vent crawling whitelisted items, whoo
-/mob/living/proc/canEnterVentWith()
-	var/static/list/allowed_items = list(
-		/obj/item/weapon/implant,
-		/obj/item/clothing/mask/facehugger,
-		/obj/item/device/radio/borg,
-		/obj/machinery/camera,
-		/mob/living/simple_animal/borer,
-		/obj/transmog_body_container,
-		/obj/item/verbs,
-		/obj/item/weapon/gun/hookshot/flesh,
-	)
-	return allowed_items
+/mob/living
+	var/canEnterVentWith = "/obj/item/weapon/implant=0&/obj/item/clothing/mask/facehugger=0&/obj/item/device/radio/borg=0&/obj/machinery/camera=0&/mob/living/simple_animal/borer=0&/obj/transmog_body_container=0&/obj/item/verbs=0&/obj/item/weapon/gun/hookshot/flesh=0"
 
 /mob/living/AltClickOn(var/atom/A)
 	if(is_type_in_list(A,ventcrawl_machinery))

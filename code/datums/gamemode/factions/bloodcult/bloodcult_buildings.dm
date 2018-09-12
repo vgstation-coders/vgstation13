@@ -92,7 +92,7 @@
 	if (istype(W, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
 		if(iscarbon(G.affecting))
-			MouseDropTo(G.affecting,user)
+			MouseDrop_T(G.affecting,user)
 			returnToPool(W)
 	else if (istype(W, /obj/item/weapon))
 		if(user.a_intent == I_HURT)
@@ -102,7 +102,7 @@
 			takeDamage(W.force)
 			..()
 		else
-			MouseDropTo(W,user)
+			MouseDrop_T(W,user)
 
 
 /obj/structure/cult/attack_paw(var/mob/user)
@@ -197,7 +197,7 @@
 	else
 		return 0
 
-/obj/structure/cult/altar/MouseDropTo(var/atom/movable/O, var/mob/user)
+/obj/structure/cult/altar/MouseDrop_T(var/atom/movable/O, var/mob/user)
 	if (!O.anchored && (istype(O, /obj/item) || user.get_active_hand() == O))
 		if(!user.drop_item(O))
 			return

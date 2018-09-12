@@ -113,7 +113,6 @@
 
 /mob/living/proc/apply_radiation(var/rads, var/application = RAD_EXTERNAL)
 	if(application == RAD_EXTERNAL) //Supermatter, PA particles, jukebox, transmitter
-		return apply_effect(rads, IRRADIATE)
+		apply_effect(rads, IRRADIATE)
 	if(application == RAD_INTERNAL) //
 		radiation += rads
-		return rads

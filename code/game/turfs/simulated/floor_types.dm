@@ -362,8 +362,6 @@
 	name = "Iron Sand"
 	icon_state = "ironsand[rand(1,15)]"
 
-//snow moved to seperate file pending testing
-/*
 /turf/simulated/floor/plating/snow
 	name = "snow"
 	icon = 'icons/turf/snow.dmi'
@@ -383,7 +381,7 @@
 /turf/simulated/floor/plating/snow/ice
 	name = "ice"
 	icon_state = "ice"
-*/
+
 /turf/simulated/floor/plating/airless/damaged
 	icon_state = "platingdmg1"
 

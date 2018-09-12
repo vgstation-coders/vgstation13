@@ -14,12 +14,6 @@
 	var/ue=null
 	var/image/occupant_overlay=null
 	var/obj/item/weapon/circuitboard/airlock/circuit
-	var/pickup = 0//for mapping purposes
-
-/obj/structure/displaycase/New()
-	..()
-	setContent()
-	update_icon()
 
 /obj/structure/displaycase/Destroy()
 	..()
@@ -28,29 +22,23 @@
 		circuit = null
 	dump()
 
-/obj/structure/displaycase/proc/setContent()
-	if (pickup)
-		var/obj/item/I = locate() in get_turf(src)
-		if (I)
-			occupant = I
-			I.forceMove(src)
-			locked=1
-			update_icon()
-
-/obj/structure/displaycase/captains_laser/setContent()
+/obj/structure/displaycase/captains_laser/New()
+	..()
 	occupant=new /obj/item/weapon/gun/energy/laser/captain(src)
 	locked=1
 	req_access=list(access_captain)
 	update_icon()
 
-/obj/structure/displaycase/gooncode/setContent()
+/obj/structure/displaycase/gooncode/New()
+	..()
 	occupant=new /obj/item/toy/gooncode(src)
 	desc = "The glass is cracked and there are traces of something leaking out."
 	locked=1
 	req_access=list(access_captain)
 	update_icon()
 
-/obj/structure/displaycase/lamarr/setContent()
+/obj/structure/displaycase/lamarr/New()
+	..()
 	if(Holiday == APRIL_FOOLS_DAY && prob(50))
 		occupant=new /obj/item/clothing/shoes/magboots/funk(src)
 	else
@@ -58,10 +46,6 @@
 	locked=1
 	req_access=list(access_rd)
 	update_icon()
-
-/obj/structure/displaycase/specops/setContent()
-	..()
-	req_access=list(access_cent_specops)
 
 /obj/structure/displaycase/examine(mob/user)
 	..()

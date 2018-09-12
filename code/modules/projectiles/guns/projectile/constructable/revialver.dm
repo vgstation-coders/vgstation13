@@ -129,7 +129,7 @@
 		return
 
 	var/obj/item/weapon/cylinder/C = cylinder
-	if(!(istype(C) && C.chambers[C.current_chamber]))
+	if(!(C.chambers[C.current_chamber]))
 		click_empty(user)
 		return
 

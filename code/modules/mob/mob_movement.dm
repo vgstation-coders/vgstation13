@@ -503,31 +503,31 @@
 	return(prob_slip)
 
 
-/mob/proc/Move_Pulled(var/atom/dest, var/atom/movable/target = pulling)
-	if(!canmove || restrained() || !has_hand_check())
+/mob/proc/Move_Pulled(var/atom/A)
+	if(!canmove || restrained() || !pulling)
 		return
-	if(!istype(target) || target.anchored || !target.can_be_pulled(src))
+	if(pulling.anchored)
 		return
-	if(src.locked_to == target || target == src)
+	if(src.locked_to == pulling)
 		return
-	if(!target.Adjacent(src))
+	if(!pulling.Adjacent(src))
 		return
-	if(!isturf(target.loc))
+	if(!isturf(pulling.loc))
 		return
-	if(dest == loc && target.density)
+	if(A == loc && pulling.density)
 		return
 	if(!Process_Spacemove(,1))
 		return
-	if(ismob(target))
-		var/mob/mobpulled = target
+	if(ismob(pulling))
+		var/mob/mobpulled = pulling
 		var/atom/movable/secondarypull = mobpulled.pulling
 		mobpulled.stop_pulling()
-		step(mobpulled, get_dir(mobpulled.loc, dest))
+		step(mobpulled, get_dir(mobpulled.loc, A))
 		if(mobpulled && secondarypull)
 			mobpulled.start_pulling(secondarypull)
 	else
-		step(target, get_dir(target.loc, dest))
-	target.add_fingerprint(src)
+		step(pulling, get_dir(pulling.loc, A))
+	return
 
 /mob/proc/movement_delay()
 	return (base_movement_tally() * movement_tally_multiplier())

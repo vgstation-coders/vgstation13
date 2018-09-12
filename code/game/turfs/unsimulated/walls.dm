@@ -6,33 +6,28 @@
 	density = 1
 	explosion_block = 2
 	blocks_air = 1
+	canSmoothWith = "/turf/unsimulated/wall=0"
 
 	var/walltype = "riveted"
-/turf/unsimulated/wall/canSmoothWith()
-	var/static/list/smoothables = list(/turf/unsimulated/wall)
-	return smoothables
 
 /turf/unsimulated/wall/fakeglass
 	name = "window"
 	icon_state = "fakewindows"
 	opacity = 0
-/turf/unsimulated/wall/fakeglass/canSmoothWith()
-	return null
+	canSmoothWith = null
 
 /turf/unsimulated/wall/blastdoor
 	name = "Shuttle Bay Blast Door"
 	desc = "Why it no open!"
 	icon = 'icons/obj/doors/rapid_pdoor.dmi'
 	icon_state = "pdoor1"
-/turf/unsimulated/wall/blastdoor/canSmoothWith()
-	return null
+	canSmoothWith = null
 
 /turf/unsimulated/wall/rock
 	name = "unnaturally hard rock wall"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "rock"
-/turf/unsimulated/wall/rock/canSmoothWith()
-	return null
+	canSmoothWith = null
 
 /turf/unsimulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
@@ -48,13 +43,12 @@
 		bullet_marks = 0
 		icon = initial(icon)
 
-/turf/unsimulated/wall/splashscreen
+turf/unsimulated/wall/splashscreen
 	name = "Space Station 13"
 	icon = null
 	icon_state = null
 	plane = EFFECTS_PLANE
-/turf/unsimulated/wall/splashscreen/canSmoothWith()
-	return null
+	canSmoothWith = null
 
 /turf/unsimulated/wall/splashscreen/New()
 	if(SNOW_THEME)
@@ -69,8 +63,7 @@
 
 /turf/unsimulated/wall/other
 	icon_state = "r_wall"
-/turf/unsimulated/wall/other/canSmoothWith()
-	return null
+	canSmoothWith = null
 
 /turf/unsimulated/wall/cult
 	name = "wall"
@@ -78,8 +71,7 @@
 	icon_state = "cult0"
 	opacity = 1
 	density = 1
-/turf/unsimulated/wall/cult/canSmoothWith()
-	return null
+	canSmoothWith = null
 
 /turf/unsimulated/wall/cultify()
 	ChangeTurf(/turf/unsimulated/wall/cult)
@@ -95,8 +87,7 @@
 	icon_state = "evilwall_1"
 	opacity = 1
 	density = 1
-/turf/unsimulated/wall/evil/canSmoothWith()
-	return null
+	canSmoothWith = null
 
 /turf/unsimulated/wall/evil/New()
 	..()

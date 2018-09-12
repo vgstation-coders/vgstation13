@@ -19,7 +19,6 @@ CREATE TABLE players (
     be_special          TEXT,
     disabilities        INTEGER,
     nanotrasen_relation TEXT,
-    bank_security 		INTEGER,
     UNIQUE ( player_ckey, player_slot )
 );
 
@@ -112,8 +111,7 @@ CREATE TABLE client (
     space_dust     INTEGER,
     parallax_speed INTEGER,
     stumble        INTEGER,
-    attack_animation INTEGER,
-    pulltoggle     INTEGER
+    attack_animation INTEGER
 );
 
 

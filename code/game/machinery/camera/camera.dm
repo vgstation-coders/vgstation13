@@ -77,16 +77,12 @@ var/list/camera_names=list()
 		ASSERT(src.network)
 		ASSERT(src.network.len > 0)
 
-	//allow mappers to use the name field for the camera instead of c_tag
-	//this helps organize the camera object list in DreamMaker
-	if(name != initial(name) && !c_tag)
-		c_tag = name
-		name = initial(name)
 	if(!c_tag)
 		name_camera()
 	..()
 	if(adv_camera && adv_camera.initialized && !(src in adv_camera.camerasbyzlevel["[z]"]))
 		adv_camera.update(z, TRUE, list(src))
+
 	update_hear()
 
 /obj/machinery/camera/proc/name_camera()
@@ -192,7 +188,7 @@ var/list/camera_messages = list()
 	else if(panel_open && iswiretool(W))
 		wires.Interact(user)
 
-	else if(iswelder(W) && wires.CanDeconstruct())
+	else if(istype(W, /obj/item/weapon/weldingtool) && wires.CanDeconstruct())
 		if(weld(W, user))
 			if(assembly)
 				assembly.state = 1
@@ -399,12 +395,18 @@ var/list/camera_messages = list()
 
 	if(busy)
 		return 0
+	if(!WT.isOn())
+		return 0
 
 	// Do after stuff here
 	to_chat(user, "<span class='notice'>You start to weld the [src].</span>")
+	playsound(src, 'sound/items/Welder.ogg', 50, 1)
+	WT.eyecheck(user)
 	busy = 1
-	if(WT.do_weld(user, src, 100, 0))
+	if(do_after(user, src, 100))
 		busy = 0
+		if(!WT.isOn())
+			return 0
 		return 1
 	busy = 0
 	return 0

@@ -16,14 +16,9 @@
 	var/active = FALSE
 	var/watches_nuke = TRUE
 
-/obj/item/weapon/pinpointer/New()
-	..()
-	pinpointer_list.Add(src)
-
 /obj/item/weapon/pinpointer/Destroy()
-	fast_objects -= src
-	pinpointer_list.Remove(src)
 	..()
+	fast_objects -= src
 
 /obj/item/weapon/pinpointer/acidable()
 	return FALSE
@@ -275,7 +270,7 @@
 	var/list/L = list()
 	L["Cancel"] = "Cancel"
 	var/length = 1
-	for (var/obj/item/device/pda/P in PDAs)
+	for (var/obj/item/device/pda/P in world)
 		if(P.name != "\improper PDA")
 			L[text("([length]) [P.name]")] = P
 			length++

@@ -1,10 +1,11 @@
 /mob/living/silicon/ai/death(gibbed)
 	if(stat == DEAD)
 		return
-	if(!gibbed)
-		emote("deathgasp")
 	stat = DEAD
-	update_icon()
+	if("[icon_state]-crash" in icon_states(src.icon,1))
+		icon_state = "[icon_state]-crash"
+	else
+		icon_state = "ai-crash"
 
 	update_canmove()
 	if(src.eyeobj)
@@ -22,7 +23,7 @@
 			break
 		callshuttle++
 
-	for(var/obj/item/weapon/circuitboard/communications/commboard in communications_circuitboards)
+	for(var/obj/item/weapon/circuitboard/communications/commboard in world)
 		if(commboard.z == map.zCentcomm)
 			continue
 		if(istype(commboard.loc,/turf) || istype(commboard.loc,/obj/item/weapon/storage))
@@ -40,7 +41,11 @@
 		callshuttle = 0
 
 	if(callshuttle == 3) //if all three conditions are met
-		shuttle_autocall()
+		emergency_shuttle.incall(2)
+		log_game("All the AIs, comm consoles and boards are destroyed. Shuttle called.")
+		message_admins("All the AIs, comm consoles and boards are destroyed. Shuttle called.", 1)
+		captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
+		world << sound('sound/AI/shuttlecalled.ogg')
 
 	if(explosive)
 		spawn(10)

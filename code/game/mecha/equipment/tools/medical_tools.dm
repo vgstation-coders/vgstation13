@@ -114,12 +114,6 @@
 		return "[output] [temp]"
 	return
 
-/obj/item/mecha_parts/mecha_equipment/tool/sleeper/alt_action()
-	if(!occupant)
-		return
-	chassis.occupant << browse(get_occupant_stats(),"window=msleeper")
-	onclose(chassis.occupant, "msleeper")
-
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/Topic(href,href_list)
 	if(..())
 		return TRUE
@@ -249,7 +243,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer //why the fuck is this under medical_tools?
 	name = "\improper Cable Layer"
 	icon_state = "mecha_wire"
-	var/chassis_on_moved_key
+	var/datum/event/event
 	var/turf/old_turf
 	var/obj/structure/cable/last_piece
 	var/obj/item/stack/cable_coil/cable
@@ -268,14 +262,15 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/attach()
 	..()
-	chassis_on_moved_key = chassis.on_moved.Add(src, "layCable")
+	event = chassis.events.addEvent("onMove",src,"layCable")
+	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/detach()
-	chassis.on_moved.Remove(chassis_on_moved_key)
+	chassis.events.clearEvent("onMove",event)
 	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/destroy()
-	chassis.on_moved.Remove(chassis_on_moved_key)
+	chassis.events.clearEvent("onMove",event)
 	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/action(var/obj/item/stack/cable_coil/target)
@@ -360,8 +355,7 @@
 			T.make_plating()
 	return !new_turf.intact
 
-/obj/item/mecha_parts/mecha_equipment/tool/cable_layer/proc/layCable(var/list/args)
-	var/turf/new_turf = args["loc"]
+/obj/item/mecha_parts/mecha_equipment/tool/cable_layer/proc/layCable(var/turf/new_turf)
 	if(equip_ready || !istype(new_turf) || !dismantleFloor(new_turf))
 		return reset()
 	var/fdirn = turn(chassis.dir,180)
@@ -392,12 +386,6 @@
 	//NC.mergeConnectedNetworksOnTurf()
 	last_piece = NC
 	return 1
-
-
-/obj/item/mecha_parts/mecha_equipment/tool/cable_layer/alt_action()
-	set_ready_state(!equip_ready)
-	occupant_message("[src] [equip_ready?"dea":"a"]ctivated.")
-	log_message("[equip_ready?"Dea":"A"]ctivated.")
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun
 	name = "\improper Exosuit-Mounted Syringe Gun"
@@ -450,11 +438,6 @@
 	if(output)
 		return "[output] \[<a href=\"?src=\ref[src];toggle_mode=1\">[mode? "Analyze" : "Launch"]</a>\]<br />\[Syringes: [syringes.len]/[max_syringes] | Reagents: [reagents.total_volume]/[reagents.maximum_volume]\]<br /><a href='?src=\ref[src];show_reagents=1'>Reagents list</a>"
 	return
-
-/obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/alt_action()
-	mode = !mode
-	occupant_message("[mode?"Analyze":"Fire"] mode enabled.")
-	update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/action(atom/movable/target)
 	if(!action_checks(target))

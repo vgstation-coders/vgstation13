@@ -691,10 +691,17 @@ Status: []<BR>"},
 				build_step = 3
 				return
 
-			else if(iswelder(W))
+			else if(istype(W, /obj/item/weapon/weldingtool))
 				var/obj/item/weapon/weldingtool/WT = W
-				if (WT.do_weld(user, src, 20, 5))
-					if(gcDestroyed)
+				if(!WT.isOn())
+					return
+				if (WT.get_fuel() < 5) // uses up 5 fuel.
+					to_chat(user, "<span class='warning'>You need more fuel to complete this task.</span>")
+					return
+
+				playsound(src, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
+				if(do_after(user, src, 20))
+					if(!src || !WT.remove_fuel(5, user))
 						return
 					build_step = 1
 					to_chat(user, "You remove the turret's interior metal armor.")
@@ -762,7 +769,15 @@ Status: []<BR>"},
 		if(7)
 			if(iswelder(W))
 				var/obj/item/weapon/weldingtool/WT = W
-				if(WT.do_weld(user, src, 30,5))
+				if(!WT.isOn())
+					return
+				if (WT.get_fuel() < 5)
+					to_chat(user, "<span class='warning'>You need more fuel to complete this task.</span>")
+
+				playsound(src, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
+				if(do_after(user, src, 30))
+					if(!src || !WT.remove_fuel(5, user))
+						return
 					build_step = 8
 					to_chat(user, "<span class='notice'>You weld the turret's armor down.</span>")
 

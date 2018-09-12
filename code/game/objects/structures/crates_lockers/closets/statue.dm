@@ -185,7 +185,7 @@
 /obj/structure/closet/statue/place()
 	return
 
-/obj/structure/closet/statue/MouseDropTo()
+/obj/structure/closet/statue/MouseDrop_T()
 	return
 
 /obj/structure/closet/statue/relaymove()

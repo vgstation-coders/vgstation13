@@ -30,9 +30,7 @@
 	if(!I || !user)
 		return FALSE
 	var/target_zone = null
-	if(def_zone)
-		target_zone = get_zone_with_miss_chance(def_zone, src)
-	else if(originator)
+	if(originator)
 		if(ismob(originator))
 			var/mob/M = originator
 			target_zone = get_zone_with_miss_chance(M.zone_sel.selecting, src)

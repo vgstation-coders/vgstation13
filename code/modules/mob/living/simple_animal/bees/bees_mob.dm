@@ -7,7 +7,8 @@
 
 #define BOREDOM_TO_RETURN	30//once reached, the bee will head back to its hive
 
-#define EXHAUSTION_TO_DIE	300//once reached, the bee will begin to die
+#define EXHAUSTION_TO_DIE	600//once reached, the bee will begin to die
+
 #define MAX_BEES_PER_SWARM	20//explicit
 
 /*
@@ -179,31 +180,6 @@
 			adjustBruteLoss(100)
 		if (3)
 			adjustBruteLoss(20)
-
-/mob/living/simple_animal/bee/nuke_act()
-	//first of all, we don't want more bees to come out of a hive that got nuked (for now at least)
-	if (home && home.z == z)
-		home.queen_bees_inside = 0
-		home.worker_bees_inside = 0
-
-	//this may or may not kill them all, but it'll at least spawn a good amount of bee corpses
-	adjustBruteLoss(100)
-
-	//cleanup
-	if (src)
-		qdel(src)
-
-/mob/living/simple_animal/bee/reagent_act(id, method, volume)
-	if(isDead())
-		return
-
-	.=..()
-
-	switch(id)
-		if(TOXIN)
-			visible_message("<span class='danger'>The bees stop moving...</span>")
-			adjustBruteLoss(rand(40,110)) //Kills 4-11 bees. Maximum bees per swarm 20.
-			panic_attack() //Bees don't know who is responsible, but they'll get mad at everyone!
 
 /mob/living/simple_animal/bee/unarmed_attacked(mob/living/attacker, damage, damage_type, zone)
 	..()
@@ -490,7 +466,7 @@
 					qdel(B_mob)
 					updateDamage()
 
-			else if((state == BEE_BUILDING) || (prob(30) && state != BEE_OUT_FOR_ENEMIES && pollinating <= 0  && B_mob.pollinating <= 0 && state == B_mob.state))
+			else if(prob(30) && state != BEE_OUT_FOR_ENEMIES && pollinating <= 0  && B_mob.pollinating <= 0 && state == B_mob.state)
 				for (var/datum/bee/B in B_mob.bees)
 					addBee(B)
 				B_mob.bees = list()
@@ -540,8 +516,6 @@
 						continue
 					if(istype(G, /mob/living/silicon/robot/mommi)) //Do not bully the crab
 						continue
-					if(istype(G, /mob/living/simple_animal/hostile/lizard) && bee_species.aggressiveness < 50) //natural predator, need to be pretty aggressive to fight them
-						continue
 					if (G.stat != DEAD)
 						nearbyMobs += G
 				if (nearbyMobs.len > 0)
@@ -565,7 +539,7 @@
 				if (bee_species.slow)
 					step_to(src, target_turf)//1 step per Life()
 				else
-					start_walk_to(target, 0, 2)
+					walk_to(src, target, 0, 2)
 
 				if(src.loc == target_turf)
 					wander = 1
@@ -641,19 +615,16 @@
 			home = null
 			//if there's a queen among us, let's gather a following
 			var/datum/bee/queen_bee/queen = null
-			var/list/queen_list = list()
 			for (var/D in bees)
 				if (istype(D,/datum/bee/queen_bee))
-					queen_list.Add(D)
 					queen = D
 			if (queen)
-				if (bees.len < MAX_BEES_PER_SWARM)
+				if (bees.len < 11)
 					var/turf/T = get_turf(loc)
 					for(var/mob/living/simple_animal/bee/B in range(src,3))
 						if (bee_species == B.bee_species && B.state == BEE_ROAMING && B.loc != T)
 							step_to(B, T)//come closer, the GROUPING segment above should take care of the merging after a moment.
-
-				if (bees.len >= 11)
+				else
 				//once there's enough of us, let's find a new home
 					for(var/obj/machinery/apiary/A in range(src,3))
 						if (exile_swarm(A))
@@ -663,20 +634,15 @@
 							update_icon()
 							return
 
-
-					for (var/datum/bee/queen_bee/QB in queen_list)
-						QB.searching++
-						if (QB.searching>20)
-							//and if there isn't any decent home nearby (after searching for a while)...let's build one!
-							var/list/available_turfs = list()
-							for (var/turf/simulated/floor/T in range(src,2))
-								if(!T.has_dense_content() && !(locate(/obj/structure/wild_apiary) in T))
-									available_turfs.Add(T)
-							if (available_turfs.len>0)
-								building = pick(available_turfs)
-								if (building)
-									mood_change(BEE_BUILDING)
-							break
+					//and if there isn't any decent home nearby...let's build one!
+					var/list/available_turfs = list()
+					for (var/turf/simulated/floor/T in range(src,2))
+						if(!T.has_dense_content() && !(locate(/obj/structure/wild_apiary) in T))
+							available_turfs.Add(T)
+					if (available_turfs.len>0)
+						building = pick(available_turfs)
+						if (building)
+							mood_change(BEE_BUILDING)
 
 
 			else
@@ -697,7 +663,7 @@
 				if (istype(D,/datum/bee/queen_bee))
 					queen = D
 			if(queen && building)
-				if (bees.len < MAX_BEES_PER_SWARM)//Gathering some more volunteers.
+				if (bees.len < 20)//Gathering some more volunteers.
 					var/turf/T = get_turf(loc)
 					for(var/mob/living/simple_animal/bee/B in range(src,3))
 						if (bee_species == B.bee_species && B.state == BEE_ROAMING && B.loc != T)

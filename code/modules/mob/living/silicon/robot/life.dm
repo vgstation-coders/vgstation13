@@ -109,6 +109,8 @@
 
 	if(ear_deaf)
 		ear_deaf--
+	if(say_mute)
+		say_mute--
 	if(ear_damage < 25)
 		ear_damage -= 0.05
 		ear_damage = max(ear_damage, 0)
@@ -127,9 +129,6 @@
 	if(druggy)
 		druggy--
 		druggy = max(0, druggy)
-
-	handle_dizziness()
-	handle_jitteriness()
 
 	if(!is_component_functioning("radio"))
 		radio.on = FALSE
@@ -177,7 +176,7 @@
 			see_invisible = SEE_INVISIBLE_MINIMUM
 
 
-/mob/living/silicon/robot/handle_regular_hud_updates()
+/mob/living/silicon/robot/proc/handle_regular_hud_updates()
 	handle_sensor_modes()
 
 	regular_hud_updates() //Handles MED/SEC HUDs for borgs.

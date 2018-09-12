@@ -154,10 +154,6 @@
 			subdue(cell)
 	return
 
-/obj/item/mecha_parts/mecha_equipment/tool/jail/alt_action()
-	for(var/i = i; i <= cells.len; i++)
-		subdue(i)
-
 /datum/global_iterator/mech_jail/process(var/obj/item/mecha_parts/mecha_equipment/tool/jail/J)
 	if(!J.chassis)
 		J.set_ready_state(1)

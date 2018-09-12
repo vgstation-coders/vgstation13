@@ -87,9 +87,6 @@
 /obj/item/device/blinder/proc/flash(var/turf/T , var/mob/living/M)
 	playsound(src, 'sound/weapons/flash.ogg', 100, 1)
 
-	if(M.blinded)
-		return
-
 	M.flash_eyes(visual = 1)
 
 	if(issilicon(M))

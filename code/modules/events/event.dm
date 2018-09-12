@@ -79,4 +79,6 @@
 /datum/event/New()
 	setup()
 	events.Add(src)
+	/*if(oneShot)
+		potentialRandomEvents.Remove(type)*/
 	..()

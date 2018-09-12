@@ -19,8 +19,9 @@
 	density = 1
 	anchored = 1.0
 	layer = TABLE_LAYER
-	throwpass = 1	//You can throw objects over this, despite its density.
+	throwpass = 1	//You can throw objects over this, despite it's density.")
 	var/parts = /obj/item/weapon/table_parts
+	var/icon/clicked //Because BYOND can't give us runtime icon access, this is basically just a click catcher
 	var/flipped = 0
 	var/health = 100
 
@@ -231,6 +232,8 @@
 		else
 			dir = 2
 
+	clicked = new/icon(src.icon, src.icon_state, src.dir) //giving you runtime icon access is too byond Byond
+
 /obj/structure/table/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -355,7 +358,7 @@
 			return !density
 	return 1
 
-/obj/structure/table/MouseDropTo(atom/movable/O,mob/user,src_location,over_location,src_control,over_control,params)
+/obj/structure/table/MouseDrop_T(atom/movable/O as obj, mob/user as mob)
 	if(O == user)
 		if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
 			return
@@ -369,11 +372,20 @@
 			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)
 		M.visible_message("<span class='danger'>[user] bangs \his head on \the [src].</span>", "<span class='danger'>You bang your head on \the [src].</span>", "You hear a bang.")
 		return
-	return ..()
+
+	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
+		return
+	if(user.drop_item())
+		if (O.loc != src.loc)
+			step(O, get_dir(O, src))
+	return
+
 
 /obj/structure/table/attackby(obj/item/W as obj, mob/user as mob, params)
 	if (!W)
 		return
+
+	var/list/params_list = params2list(params)
 
 	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
 		var/obj/item/weapon/grab/G = W
@@ -398,15 +410,19 @@
 			return
 
 	if (iswrench(W) && can_disassemble())
-		to_chat(user, "<span class='notice'>Now disassembling table...</span>")
+		//if(!params_list.len || text2num(params_list["icon-y"]) < 8) //8 above the bottom of the icon
+		to_chat(user, "<span class='notice'>Now disassembling table</span>")
 		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src,50))
 			destroy()
 		return
 
 	if(user.drop_item(W, src.loc))
-		if(W.loc == src.loc && params)
-			W.setPixelOffsetsFromParams(params, user)
+		if(W.loc == src.loc && params_list.len)
+			var/clamp_x = clicked.Width() / 2
+			var/clamp_y = clicked.Height() / 2
+			W.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
+			W.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
 			return 1
 
 /obj/structure/table/proc/straight_table_check(var/direction)
@@ -564,8 +580,7 @@
 	desc = "A version of the four legged table. It is stronger."
 	icon_state = "reinftable"
 	parts = /obj/item/weapon/table_parts/reinforced
-	var/status = 2 //DARE YOU ENTER MY MAGICAL NUMBER REALM?
-	var/can_optable = TRUE
+	var/status = 2
 
 /obj/structure/table/reinforced/can_disassemble()
 	return status != 2
@@ -577,7 +592,7 @@
 		return ..()
 
 /obj/structure/table/reinforced/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
-	if(istype(W,/obj/item/weapon/stock_parts/scanning_module) && can_optable)
+	if(istype(W,/obj/item/weapon/stock_parts/scanning_module))
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 40))
 			if(user.drop_item(W))
@@ -593,21 +608,29 @@
 				user << "<span class='warning'>\The [W] is stuck to your hands!</span>"
 				return
 
-	else if (iswelder(W))
+	else if (istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
-		to_chat(user, "<span class='notice'>Now [status == 2?"weakening":"strenghening"] the reinforced table.</span>")
-		if(WT.do_weld(user, src, 50, 0))
+		if(!(WT.welding)/* || (params_list.len && text2num(params_list["icon-y"]) > 8)*/) //8 above the bottom of the icon
+			return ..()
+		if(WT.remove_fuel(0, user))
 			if(src.status == 2)
-				if(gcDestroyed)
-					return
-				to_chat(user, "<span class='notice'>Table weakened.</span>")
-				src.status = 1
+				to_chat(user, "<span class='notice'>Now weakening the reinforced table.</span>")
+				playsound(src, 'sound/items/Welder.ogg', 50, 1)
+				if (do_after(user, src, 50))
+					if(!src || !WT.isOn())
+						return
+					to_chat(user, "<span class='notice'>Table weakened.</span>")
+					src.status = 1
 			else
-				if(gcDestroyed)
-					return
-				to_chat(user, "<span class='notice'>Table strengthened.</span>")
-				src.status = 2
+				to_chat(user, "<span class='notice'>Now strengthening the reinforced table.</span>")
+				playsound(src, 'sound/items/Welder.ogg', 50, 1)
+				if (do_after(user, src, 50))
+					if(!src || !WT.isOn())
+						return
+					to_chat(user, "<span class='notice'>Table strengthened.</span>")
+					src.status = 2
 			return
+		return
 	return ..()
 
 /*
@@ -660,19 +683,9 @@
 		..()
 
 
-/*
- * Brass
- */
 
-/obj/structure/table/reinforced/clockwork
-	name = "brass table"
-	desc = "A solid, slightly beveled brass table."
-	icon_state = "clock_table"
-	parts = /obj/item/weapon/table_parts/clockwork
-	can_optable = FALSE
 
-/obj/structure/table/reinforced/clockwork/cultify()
-	return
+
 
 /*
  * Racks
@@ -686,7 +699,6 @@
 	flags = FPRINT
 	anchored = 1.0
 	throwpass = 1	//You can throw objects over this, despite its density.
-	layer = TABLE_LAYER //So items are always layered over it
 	var/parts = /obj/item/weapon/rack_parts
 	var/offset_step = 0
 	var/health = 20
@@ -748,6 +760,14 @@
 
 /obj/structure/rack/bumped_by_firebird(obj/structure/stool/bed/chair/vehicle/wizmobile/W)
 	destroy()
+
+/obj/structure/rack/MouseDrop_T(obj/O as obj, mob/user as mob)
+	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
+		return
+	if(user.drop_item(O))
+		if (O.loc != src.loc)
+			step(O, get_dir(O, src))
+	return
 
 /obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iswrench(W) && can_disassemble())

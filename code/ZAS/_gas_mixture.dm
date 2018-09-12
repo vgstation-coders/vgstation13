@@ -633,11 +633,10 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 	return compare(other)
 
 /datum/gas_mixture/proc/share_space(datum/gas_mixture/unsim_air, connecting_tiles)
-	var/datum/gas_mixture/sharer = new() //Make a new gas_mixture to copy unsim_air into so it doesn't get changed.
-	sharer.volume = unsim_air.volume + volume + 3 * CELL_VOLUME //Then increase the copy's volume so larger rooms don't drain slowly as fuck.
+	unsim_air = new(unsim_air) //First, copy unsim_air so it doesn't get changed.
+	unsim_air.volume += volume + 3 * CELL_VOLUME //Then increase the copy's volume so larger rooms don't drain slowly as fuck.
 		//Why add the 3 * CELL_VOLUME, you ask? To mirror the old behavior. Why did the old behavior add three tiles to the total? I have no idea.
-	sharer.copy_from(unsim_air) //Finally, perform the actual copy
-	return share_tiles(sharer, connecting_tiles)
+	return share_tiles(unsim_air, connecting_tiles)
 
 /datum/gas_mixture/proc/english_contents_list()
 	var/all_contents = list()
@@ -662,113 +661,3 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 	if(locate(/datum/gas/sleeping_agent) in trace_gases)
 		naughty_stuff += "<b><font color='red'>N<sub>2</sub>O</font>"
 	return english_list(naughty_stuff, nothing_text = "")
-
-
-
-//Unsimulated gas_mixture
-//Acts like a gas_mixture, except none of the procs actually change it.
-
-/datum/gas_mixture/unsimulated/adjust(o2 = 0, co2 = 0, n2 = 0, tx = 0, list/datum/gas/traces)
-	return
-
-
-/datum/gas_mixture/unsimulated/adjust_gas(gasid, moles, update = TRUE)
-	return
-
-
-/datum/gas_mixture/unsimulated/adjust_gas_temp(gasid, moles, temp, update = TRUE)
-	return
-
-
-/datum/gas_mixture/unsimulated/adjust_multi()
-	ASSERT(!(args.len % 2))
-
-
-/datum/gas_mixture/unsimulated/adjust_multi_temp()
-	ASSERT(!(args.len % 3))
-
-
-/datum/gas_mixture/unsimulated/merge(datum/gas_mixture/giver)
-	return !isnull(giver)
-
-
-/datum/gas_mixture/unsimulated/equalize(datum/gas_mixture/sharer)
-	return sharer.equalize(src) //Won't actually equalize the two mixtures, but will affect sharer the same way it would have if src weren't unsimulated.
-
-
-/datum/gas_mixture/unsimulated/add_thermal_energy(var/thermal_energy)
-	return 0
-
-
-/datum/gas_mixture/unsimulated/get_thermal_energy_change(var/new_temperature)
-	return 0 //Real answer would be infinity, but that would be virtually guaranteed to cause problems.
-
-
-/datum/gas_mixture/unsimulated/remove(amount)
-	var/sum = total_moles()
-	amount = min(amount, sum) //Can not take more air than tile has!
-	if(amount <= 0)
-		return null
-
-	var/datum/gas_mixture/removed = new
-
-	removed.oxygen = QUANTIZE((oxygen / sum) * amount)
-	removed.nitrogen = QUANTIZE((nitrogen / sum) * amount)
-	removed.carbon_dioxide = QUANTIZE((carbon_dioxide / sum) * amount)
-	removed.toxins = QUANTIZE((toxins / sum) * amount)
-
-	if(trace_gases.len)
-		for(var/datum/gas/trace_gas in trace_gases)
-			var/datum/gas/corresponding = new trace_gas.type()
-			removed.trace_gases += corresponding
-			corresponding.moles = (trace_gas.moles / sum) * amount
-
-	removed.temperature = temperature
-	removed.update_values()
-
-	return removed
-
-
-/datum/gas_mixture/unsimulated/remove_ratio(ratio)
-	if(ratio <= 0 || total_moles <= 0)
-		return null
-
-	ratio = min(ratio, 1)
-
-	var/datum/gas_mixture/removed = new
-
-	removed.oxygen = QUANTIZE(oxygen * ratio)
-	removed.nitrogen = QUANTIZE(nitrogen * ratio)
-	removed.carbon_dioxide = QUANTIZE(carbon_dioxide * ratio)
-	removed.toxins = QUANTIZE(toxins * ratio)
-
-	if(trace_gases.len)
-		for(var/datum/gas/trace_gas in trace_gases)
-			var/datum/gas/corresponding = new trace_gas.type()
-			removed.trace_gases += corresponding
-			corresponding.moles = trace_gas.moles * ratio
-
-	removed.temperature = temperature
-	removed.update_values()
-
-	return removed
-
-
-/datum/gas_mixture/unsimulated/copy_from(datum/gas_mixture/sample)
-	return FALSE
-
-
-/datum/gas_mixture/unsimulated/add(datum/gas_mixture/right_side)
-	return FALSE
-
-
-/datum/gas_mixture/unsimulated/subtract(datum/gas_mixture/right_side)
-	return FALSE
-
-
-/datum/gas_mixture/unsimulated/multiply(factor)
-	return FALSE
-
-
-/datum/gas_mixture/unsimulated/divide(factor)
-	return FALSE

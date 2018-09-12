@@ -56,7 +56,6 @@ client/proc/one_click_antag()
 
 /datum/admins/proc/makeChanglings()
 
-
 /datum/admins/proc/makeRevs()
 
 

@@ -121,7 +121,8 @@
 	if(isturf(loc) && amount_grown > 0)
 		amount_grown += rand(0,2)
 		if(amount_grown >= 100)
-			species_type = pick(spider_types)
+			if(!species_type)
+				species_type = pick(spider_types)
 			grow_up()
 			return
 
@@ -150,7 +151,4 @@
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "jonas"
 	icon_living = "jonas"
-
-/mob/living/simple_animal/hostile/giant_spider/spiderling/salk/New()
-	..()
-	amount_grown = 0
+	amount_grown = -INFINITY

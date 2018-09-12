@@ -1,6 +1,6 @@
 //Refer to life.dm for caller
 
-/mob/living/carbon/human/handle_regular_hud_updates()
+/mob/living/carbon/human/proc/handle_regular_hud_updates()
 	if(!client)
 		return 0
 

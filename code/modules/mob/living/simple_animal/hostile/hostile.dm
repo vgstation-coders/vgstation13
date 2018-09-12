@@ -211,7 +211,7 @@
 	LostTarget()
 
 /mob/living/simple_animal/hostile/proc/Goto(var/target, var/delay, var/minimum_distance)
-	start_walk_to(target, minimum_distance, delay)
+	walk_to(src, target, minimum_distance, delay)
 
 /mob/living/simple_animal/hostile/adjustBruteLoss(var/damage)
 	..(damage)
@@ -268,8 +268,8 @@
 
 /mob/living/simple_animal/hostile/death(var/gibbed = FALSE)
 	LoseAggro()
-	walk(src, 0)
 	..(gibbed)
+	walk(src, 0)
 
 /mob/living/simple_animal/hostile/inherit_mind(mob/living/simple_animal/from)
 	..()
@@ -389,9 +389,7 @@
 	if(!isturf(src.loc) && src.loc != null)//Did someone put us in something?
 		var/atom/A = src.loc
 		UnarmedAttack(A) //Bang on it till we get out
-	if(environment_smash_flags & SMASH_ASTEROID)
-		for(var/turf/unsimulated/mineral/M in range(src, 1))
-			UnarmedAttack(M, Adjacent(M))
+	return
 
 /mob/living/simple_animal/hostile/proc/FindHidden(var/atom/hidden_target)
 	if(istype(target.loc, /obj/structure/closet) || istype(target.loc, /obj/machinery/disposal) || istype(target.loc, /obj/machinery/sleeper))

@@ -89,12 +89,12 @@
 			sleep(5)
 			qdel(animation)
 
-	var/flashfail = (harm_labeled >= min_harm_label) || M.blinded //Flashfail is always true if the device has been successfully harm-labeled.
+	var/flashfail = (harm_labeled >= min_harm_label) //Flashfail is always true if the device has been successfully harm-labeled.
 
 	if(iscarbon(M))
 		var/mob/living/carbon/Subject = M
 
-		if(Subject.eyecheck() > 0 || flashfail)
+		if(Subject.eyecheck() > 0)
 			user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 		else
 			if(Subject.eyecheck() <= 0)
@@ -169,8 +169,6 @@
 								"<span class='warning'>You see a bright flash of light and are suddenly fully visible again.</span>")
 				spawn(50)
 					M.alpha = oldalpha
-		if(M.blinded)
-			continue
 		var/safety = M:eyecheck()
 		if(!safety)
 			M.flash_eyes(affect_silicon = 1)
@@ -192,7 +190,7 @@
 			if(istype(loc, /mob/living/carbon) && harm_labeled < min_harm_label)
 				var/mob/living/carbon/M = loc
 				var/safety = M.eyecheck()
-				if(safety <= 0 && !M.blinded)
+				if(safety <= 0)
 					M.Knockdown(10)
 					M.flash_eyes(visual = 1)
 					for(var/mob/O in viewers(M, null))

@@ -171,6 +171,8 @@
 	desc = "A pair of kitty ears. Meow!"
 	icon_state = "kitty"
 	flags = FPRINT
+	var/icon/mob
+	var/icon/mob2
 	var/haircolored = 1
 	siemens_coefficient = 1.5
 
@@ -184,11 +186,16 @@
 /obj/item/clothing/head/kitty/update_icon(var/mob/living/carbon/human/user)
 	if(!istype(user) || !haircolored)
 		return
-	wear_override = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty")
-	wear_override.Blend(rgb(user.r_hair, user.g_hair, user.b_hair), ICON_ADD)
+	mob = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty")
+	mob2 = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty2")
+	mob.Blend(rgb(user.r_hair, user.g_hair, user.b_hair), ICON_ADD)
+	mob2.Blend(rgb(user.r_hair, user.g_hair, user.b_hair), ICON_ADD)
 
 	var/icon/earbit = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner")
-	wear_override.Blend(earbit, ICON_OVERLAY)
+	var/icon/earbit2 = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner2")
+	mob.Blend(earbit, ICON_OVERLAY)
+	mob2.Blend(earbit2, ICON_OVERLAY)
+
 
 /obj/item/clothing/head/butt
 	name = "butt"

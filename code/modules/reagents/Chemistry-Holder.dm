@@ -539,8 +539,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20)
 	if(!my_atom)
 		return 0
-	if(!amount)
-		return 0
 	if(!isnum(amount))
 		return 1
 	update_total()
@@ -609,7 +607,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		return 1
 
 	for(var/id in reagent_list)
-		if(has_reagent(id))
+		if(has_reagent(id, amount))
 			remove_reagent(id, amount, safety)
 	return 1
 

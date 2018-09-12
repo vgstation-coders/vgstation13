@@ -53,9 +53,6 @@
 	if(!allowed(user))
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return FALSE
-	if(!user.dexterity_check())
-		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
-		return FALSE
 	on = !on
 	investigation_log(I_ATMOS, "was turned [on ? "on" : "off"] by [key_name(user)].")
 	update_icon()

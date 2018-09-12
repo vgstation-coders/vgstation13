@@ -16,6 +16,7 @@ var/datum/subsystem/emergency_shuttle/SSemergency_shuttle
 /datum/subsystem/emergency_shuttle/Initialize(timeofday)
 	if (!emergency_shuttle)
 		emergency_shuttle = new
+		emergency_shuttle.init()
 	..()
 
 

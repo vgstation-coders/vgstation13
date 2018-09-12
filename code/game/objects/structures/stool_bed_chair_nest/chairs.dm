@@ -104,13 +104,13 @@
 	change_dir(direction)
 	return 1
 
-/obj/structure/bed/chair/MouseDropTo(mob/M as mob, mob/user as mob)
+/obj/structure/bed/chair/MouseDrop_T(mob/M as mob, mob/user as mob)
 	if(!istype(M))
-		return ..()
+		return
 	var/mob/living/carbon/human/target = null
 	if(ishuman(M))
 		target = M
-	if(target && target.op_stage.butt == 4 && Adjacent(target) && user.Adjacent(src) && !user.incapacitated()) //Butt surgery is at stage 4
+	if((target) && (target.op_stage.butt == 4)) //Butt surgery is at stage 4
 		if(!M.knockdown)	//Spam prevention
 			if(M == usr)
 				M.visible_message(\
@@ -527,7 +527,7 @@
 	user.drop_item(src, force_drop = 1)
 	forceMove(unfolded)
 
-/obj/structure/bed/chair/folding/MouseDropFrom(over_object, src_location, over_location)
+/obj/structure/bed/chair/folding/MouseDrop(over_object, src_location, over_location)
 	..()
 	if(over_object == usr && Adjacent(usr))
 		if(!ishigherbeing(usr) || usr.incapacitated() || usr.lying)

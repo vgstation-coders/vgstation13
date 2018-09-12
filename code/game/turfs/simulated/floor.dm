@@ -624,6 +624,8 @@ turf/simulated/floor/update_icon()
 				new to_spawn(src)
 				to_chat(user, "<span class='notice'>Something falls out of the grass!</span>")
 			make_plating()
+		else
+			to_chat(user, "<span class='warning'>You cannot shovel this.</span>")
 	else if(iswelder(C))
 		var/obj/item/weapon/weldingtool/welder = C
 		if(welder.isOn() && (is_plating()))

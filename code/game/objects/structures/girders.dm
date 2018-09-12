@@ -461,16 +461,3 @@
 	new /obj/effect/decal/remains/human(loc)
 	qdel(src)
 	return
-
-/obj/structure/girder/clockwork
-	name = "clockwork girder"
-	icon_state = "cog"
-	material = /obj/item/stack/sheet/brass
-	construction_length = 80
-
-/obj/structure/girder/clockwork/cultify()
-	return
-
-/obj/structure/girder/clockwork/update_icon()
-	name = anchored? initial(name) : "displaced [initial(name)]"
-	icon_state = anchored ? initial(icon_state) : "displaced_[initial(icon_state)]"

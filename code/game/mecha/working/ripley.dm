@@ -21,8 +21,7 @@
 	initial_icon = "firefighter"
 	max_temperature = 65000
 	health = 250
-	light_range_on = 10
-	light_brightness_on = 3
+	lights_power = 8
 	damage_absorption = list("fire"=0.5,"bullet"=0.8,"bomb"=0.5)
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley/firefighter
 
@@ -33,8 +32,7 @@
 	initial_icon = "deathripley"
 	step_in = 2
 	opacity = 0
-	light_range_on = 12
-	light_brightness_on = 3
+	lights_power = 60
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley/deathripley
 	step_energy_drain = 0
 

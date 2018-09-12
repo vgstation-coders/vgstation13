@@ -642,11 +642,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 /obj/item/device/pda/get_owner_name_from_ID()
 	return owner
 
-/obj/item/device/pda/MouseDropFrom(obj/over_object as obj, src_location, over_location)
+/obj/item/device/pda/MouseDrop(obj/over_object as obj, src_location, over_location)
 	var/mob/M = usr
 	if((!istype(over_object, /obj/abstract/screen)) && can_use(M))
 		return attack_self(M)
-	return ..()
+	return
 
 //NOTE: graphic resources are loaded on client login
 /obj/item/device/pda/attack_self(mob/user as mob)
@@ -2140,8 +2140,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		P.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[reply]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
 		for(var/mob/dead/observer/M in player_list)
 			if(!multicast_message && M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
-				M.show_message("<a href='?src=\ref[M];follow=\ref[U]'>(Follow)</a> <span class='game say'>PDA Message - <span class='name'>\
-					[U.real_name][U.real_name == owner ? "" : " (as [owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
+				M.show_message("<span class='game say'>PDA Message - <span class='name'>[U][U.real_name == owner ? "" : " (as [owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
 
 
 		if (prob(15)&&!multicast_message) //Give the AI a chance of intercepting the message
@@ -2445,6 +2444,8 @@ obj/item/device/pda/AltClick()
 	for(var/A in applications)
 		qdel(A)
 
+	for(var/obj/A in src) //Clear out any items that may still be left inside ie pens
+		qdel(A)
 	..()
 
 /obj/item/device/pda/Del()

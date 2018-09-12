@@ -132,4 +132,4 @@
 	C.requested = product
 	C.worth = value
 	C.acct_by_string = department
-	SSsupply_shuttle.add_centcomm_order(C)
+	supply_shuttle.add_centcomm_order(C)

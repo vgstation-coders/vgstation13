@@ -84,12 +84,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/cast_delay = 1
 	var/cast_sound = ""
-	var/use_progress_bar = FALSE
 
 	var/hud_state = "" //name of the icon used in generating the spell hud object
-	var/override_icon = ""
 	var/override_base = ""
-	var/icon_direction = SOUTH //Needs override_icon to be not null
 
 	var/obj/abstract/screen/spell/connected_button
 	var/currently_channeled = 0
@@ -149,15 +146,17 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(!targets && (spell_flags & WAIT_FOR_CLICK))
 		channel_spell(user, skipcharge)
 		return
-	if(cast_check(1, user))
-		if(gradual_casting)
+	if(gradual_casting)
+		if(cast_check(1, user))
 			gradual_casting = FALSE
 			stop_casting(targets, user)
 			return
 	if(!cast_check(skipcharge, user))
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
+		block = 0
 		return
+	block = 0
 	if(before_target(user))
 		return
 
@@ -591,6 +590,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell/proc/on_holder_death(mob/user)
 	return
+
 
 //To batch-remove wizard spells. Linked to mind.dm.
 /mob/proc/spellremove(var/mob/M as mob)

@@ -5,7 +5,7 @@ var/list/machines = list()
 
 /datum/subsystem/machinery
 	name          = "Machinery"
-	wait          = SS_WAIT_MACHINERY
+	wait          = 2 SECONDS
 	flags         = SS_NO_INIT | SS_KEEP_TIMING
 	priority      = SS_PRIORITY_MACHINERY
 	display_order = SS_DISPLAY_MACHINERY

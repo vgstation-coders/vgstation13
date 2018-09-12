@@ -36,11 +36,10 @@
 /mob/living/silicon/robot/death(gibbed)
 	if(stat == DEAD)
 		return
-	if(!gibbed)
-		emote("deathgasp")
 	stat = DEAD
 	update_canmove()
 	if(!gibbed)
+		emote("deathgasp")
 		updateicon() //Don't call updateicon if you're already null.
 		locked = FALSE //Cover unlocks.
 	if(camera)

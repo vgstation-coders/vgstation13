@@ -108,7 +108,6 @@
 	item_state = "beaker"
 	starting_materials = list(MAT_GLASS = 500)
 	origin_tech = Tc_MATERIALS + "=1"
-	layer = ABOVE_OBJ_LAYER //So it always gets layered above pills and bottles
 
 /obj/item/weapon/reagent_containers/glass/beaker/attackby(obj/item/weapon/W, mob/user)
 	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/weapon/surgicaldrill)) //regular beakers only

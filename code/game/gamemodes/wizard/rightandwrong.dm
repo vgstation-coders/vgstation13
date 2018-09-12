@@ -28,8 +28,8 @@
 			var/obj_count = 1
 			for(var/datum/objective/OBJ in H.mind.objectives)
 				to_chat(H, "<B>Objective #[obj_count]</B>: [OBJ.explanation_text]")
-				obj_count++
-		var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol")
+				obj_count++*/
+		var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol")
 		var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","disorient","staffchange","armor","scrying", "clowncurse", "mimecurse", "shoesnatch", "robesummon")
 		var/randomizeswords = pick("unlucky", "misc", "glass", "throw", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "spear", "katana", "axe", "venom", "boot", "saw", "scalpel", "bottle", "switchtool")
 		var/randomizeknightcolor = pick("green", "yellow", "blue", "red", "templar")
@@ -53,7 +53,7 @@
 					new /obj/item/weapon/gun/projectile(get_turf(H))
 				if("detective")
 					new /obj/item/weapon/gun/projectile/detective(get_turf(H))
-				if("c20r")
+				if("smg")
 					new /obj/item/weapon/gun/projectile/automatic/c20r(get_turf(H))
 				if("nuclear")
 					new /obj/item/weapon/gun/energy/gun/nuclear(get_turf(H))
@@ -79,9 +79,7 @@
 				if("smg")
 					new /obj/item/weapon/gun/projectile/automatic(get_turf(H))
 				if("uzi")
-					new /obj/item/weapon/gun/projectile/automatic/uzi(get_turf(H))
-				if("microuzi")
-					new /obj/item/weapon/gun/projectile/automatic/uzi/micro(get_turf(H))
+					new /obj/item/weapon/gun/projectile/automatic/mini_uzi(get_turf(H))
 				if("crossbow")
 					new /obj/item/weapon/gun/energy/crossbow(get_turf(H))
 				if("saw")
@@ -297,4 +295,3 @@
 					else
 						new /obj/item/weapon/switchtool/swiss_army_knife(get_turf(H))
 			playsound(H,'sound/items/zippo_open.ogg', 50, 1)
-*/

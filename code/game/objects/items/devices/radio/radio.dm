@@ -78,8 +78,6 @@
 /obj/item/device/radio/AltClick()
 	if(!usr.incapacitated() && is_holder_of(usr, src))
 		attack_self(usr)
-	else
-		return ..()
 
 /obj/item/device/radio/attack_self(mob/user as mob)
 	user.set_machine(src)
@@ -133,10 +131,10 @@
 			return 1
 
 /obj/item/device/radio/Topic(href, href_list)
-	if (!isAdminGhost(usr) && (usr.stat || !on))
+	if (usr.stat || !on)
 		return
 
-	if(!in_range(src,usr) && !isAdminGhost(usr) && !issilicon(usr)) //Not adjacent/have telekinesis/a silicon/an aghost? Close it.
+	if (!(issilicon(usr) || (usr.contents.Find(src) || ( in_range(src, usr) && istype(loc, /turf) ))))
 		usr << browse(null, "window=radio")
 		return
 	usr.set_machine(src)

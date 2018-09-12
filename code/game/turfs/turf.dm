@@ -214,14 +214,14 @@
 
 			var/move_to_z = src.z
 
-			// Prevent MoMMIs from leaving the derelict and to ensure Exile Implants work properly.
-			for(var/mob/living/L in contents_brought)
-				if(L.locked_to_z != 0)
-					if(src.z == L.locked_to_z)
+			// Prevent MoMMIs from leaving the derelict.
+			for(var/mob/living/silicon/robot/mommi in contents_brought)
+				if(mommi.locked_to_z != 0)
+					if(src.z == mommi.locked_to_z)
 						locked_to_current_z = map.zMainStation
 					else
-						to_chat(L, "<span class='warning'>You find your way back.</span>")
-						move_to_z = L.locked_to_z
+						to_chat(mommi, "<span class='warning'>You find your way back.</span>")
+						move_to_z = mommi.locked_to_z
 
 			var/safety = 1
 
@@ -236,9 +236,6 @@
 			if(!move_to_z)
 				return
 
-			INVOKE_EVENT(A.on_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
-			for(var/atom/AA in contents_brought)
-				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
 			A.z = move_to_z
 
 			if(src.x <= TRANSITIONEDGE)
@@ -772,6 +769,3 @@
 	spawn(duration)
 		being_sent_to_past = FALSE
 		ChangeTurf(current_type)
-
-/turf/attack_hand(mob/user as mob)
-	user.Move_Pulled(src)

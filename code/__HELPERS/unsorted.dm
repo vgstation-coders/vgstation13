@@ -253,10 +253,13 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	spawn(0)
 		var/oldname = real_name
 
+		var/time_passed = world.time
 		var/newname
 
 		for(var/i=1,i<=3,i++)	//we get 3 attempts to pick a suitable name.
 			newname = input(src,"You are a [role]. Would you like to change your name to something else?", "Name change",oldname) as text
+			if((world.time-time_passed)>300)
+				return	//took too long
 			newname = reject_bad_name(newname,allow_numbers)	//returns null if the name doesn't meet some basic requirements. Tidies up a few other things like bad-characters.
 
 			for(var/mob/living/M in player_list)
@@ -1717,20 +1720,18 @@ Game Mode config tags:
 	if(istype(O, /obj/item/weapon/grown))
 		var/obj/item/weapon/grown/F = O
 		if(F.plantname)
-			new_seed_type = SSplant.seeds[F.plantname]
+			new_seed_type = plant_controller.seeds[F.plantname]
 	else
 		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
 			var/obj/item/weapon/reagent_containers/food/snacks/grown/F = O
 			if(F.plantname)
-				new_seed_type = SSplant.seeds[F.plantname]
+				new_seed_type = plant_controller.seeds[F.plantname]
 		else
 			var/obj/item/F = O
 			if(F.nonplant_seed_type)
 				while(min_seeds <= produce)
 					new F.nonplant_seed_type(seedloc)
 					min_seeds++
-				if(user)
-					user.drop_item(F, force_drop = TRUE)
 				qdel(F)
 				return TRUE
 
@@ -1743,8 +1744,6 @@ Game Mode config tags:
 	else
 		return FALSE
 
-	if(user)
-		user.drop_item(O, force_drop = TRUE)
 	qdel(O)
 	return TRUE
 

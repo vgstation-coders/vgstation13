@@ -20,17 +20,11 @@
 	var/dismantle_type = /turf/simulated/floor/plating
 	var/girder_type = /obj/structure/girder
 
+	canSmoothWith = "/turf/simulated/wall=0&/obj/structure/falsewall=0&/obj/structure/falserwall=0"
+
 	soot_type = null
 
 	explosion_block = 1
-
-/turf/simulated/wall/canSmoothWith()
-	var/static/list/smoothables = list(
-		/turf/simulated/wall,
-		/obj/structure/falsewall,
-		/obj/structure/falserwall,
-	)
-	return smoothables
 
 /turf/simulated/wall/examine(mob/user)
 	..()
@@ -54,8 +48,7 @@
 	if(devastated)
 		getFromPool(/obj/item/stack/sheet/metal, src)
 	else
-		if(girder_type)
-			new girder_type(src)
+		new girder_type(src)
 
 	for(var/obj/O in src.contents) //Eject contents!
 		if(istype(O,/obj/structure/sign/poster))
@@ -207,7 +200,7 @@
 				return
 
 	//Deconstruction
-	if(iswelder(W))
+	if(istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			if(engraving)

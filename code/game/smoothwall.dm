@@ -2,7 +2,8 @@
 // FUCK YOU MYSTERY CODERS
 // FOR THIS SHIT I'M GOING TO MAKE ALL MY COMMENTS IN CAPS
 
-/atom/proc/canSmoothWith() // TYPE PATHS I CAN SMOOTH WITH~~~~~
+/atom
+	var/canSmoothWith // TYPE PATHS I CAN SMOOTH WITH~~~~~
 
 // MOVED INTO UTILITY FUNCTION FOR LESS DUPLICATED CODE.
 /atom/proc/findSmoothingNeighbors()
@@ -24,12 +25,12 @@
 /atom/proc/isSmoothableNeighbor(atom/A)
 	if(!A)
 		return 0
-	return is_type_in_list(A, canSmoothWith())
+	return isInTypes(A, canSmoothWith)
 
 /turf/simulated/wall/isSmoothableNeighbor(atom/A)
 	if(!A)
 		return 0
-	if(is_type_in_list(A, canSmoothWith()))
+	if(isInTypes(A, canSmoothWith))
 		// COLON OPERATORS ARE TERRIBLE BUT I HAVE NO CHOICE
 		if(src.mineral == A:mineral)
 			return 1
@@ -65,10 +66,10 @@
 	if(!at)
 		at = get_turf(src)
 	// OPTIMIZE BY NOT CHECKING FOR NEIGHBORS IF WE DON'T FUCKING SMOOTH
-	if(canSmoothWith())
+	if(canSmoothWith)
 		for(var/cdir in cardinal)
 			var/turf/T = get_step(src,cdir)
-			if(isSmoothableNeighbor(T) && T.canSmoothWith())
+			if(isSmoothableNeighbor(T) && T.canSmoothWith)
 				T.relativewall()
 			for(var/atom/A in T)
 				if(isSmoothableNeighbor(A))

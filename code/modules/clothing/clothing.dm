@@ -12,7 +12,6 @@
 
 	var/list/obj/item/clothing/accessory/accessories = list()
 	var/goliath_reinforce = FALSE
-	var/hidecount = 0
 	var/extinguishingProb = 15
 	var/can_extinguish = FALSE
 
@@ -209,7 +208,15 @@
 		for(var/slotID in list(slot_wear_id, slot_belt, slot_l_store, slot_r_store))
 			var/obj/item/I = wearer.get_item_by_slot(slotID)
 			if(I)
-				I.stripped(wearer, stripper)
+				I.on_found(stripper)
+
+/obj/item/clothing/stripped(mob/wearer as mob, mob/stripper as mob, slot)
+	..()
+	if(slot == slot_w_uniform) //this will cause us to drop our belt, ID, and pockets!
+		for(var/slotID in list(slot_wear_id, slot_belt, slot_l_store, slot_r_store))
+			var/obj/item/I = wearer.get_item_by_slot(slotID)
+			if(I)
+				I.stripped(stripper)
 
 /obj/item/clothing/become_defective()
 	if(!defective)
@@ -277,6 +284,38 @@
 	icon_state = "earmuffs"
 	item_state = "earmuffs"
 	slot_flags = SLOT_EARS
+
+//Glasses
+/obj/item/clothing/glasses
+	name = "glasses"
+	icon = 'icons/obj/clothing/glasses.dmi'
+	w_class = W_CLASS_SMALL
+	body_parts_covered = EYES
+	slot_flags = SLOT_EYES
+	var/vision_flags = 0
+	var/darkness_view = 0//Base human is 2
+	var/invisa_view = 0
+	var/cover_hair = 0
+	var/see_invisible = 0
+	var/see_in_dark = 0
+	var/prescription = 0
+	min_harm_label = 12
+	harm_label_examine = list("<span class='info'>A label is covering one lens, but doesn't reach the other.</span>","<span class='warning'>A label covers the lenses!</span>")
+	species_restricted = list("exclude","Muton")
+/*
+SEE_SELF  // can see self, no matter what
+SEE_MOBS  // can see all mobs, no matter what
+SEE_OBJS  // can see all objs, no matter what
+SEE_TURFS // can see all turfs (and areas), no matter what
+SEE_PIXELS// if an object is located on an unlit area, but some of its pixels are
+          // in a lit area (via pixel_x,y or smooth movement), can see those pixels
+BLIND     // can't see anything
+*/
+/obj/item/clothing/glasses/harm_label_update()
+	if(harm_labeled >= min_harm_label)
+		vision_flags |= BLIND
+	else
+		vision_flags &= ~BLIND
 
 //Gloves
 /obj/item/clothing/gloves
@@ -590,8 +629,6 @@
 /obj/item/clothing/under/AltClick()
 	if(is_holder_of(usr, src))
 		set_sensors(usr)
-	else
-		return ..()
 
 /datum/action/item_action/toggle_minimap
 	name = "Toggle Minimap"

@@ -28,7 +28,8 @@
 	if(istype(O))
 		if(istype(O, /obj/item/weapon/disk/nuclear))
 			to_chat(user, "<span class='notice'>Suddenly your hand stops responding. You can't do it.</span>")
-		user.drop_item(O, src)
+		else if(user.drop_item(O, src))
+			stock.Add(O)
 
 /obj/structure/vendomatpack/custom/attack_hand(mob/user)
 	var/selected_item = input("Select an item to remove", "[src]") as null|anything in contents
@@ -36,7 +37,10 @@
 	if(I != null && loc)
 		if(!Adjacent(user))
 			return
+		
 		I.forceMove(get_turf(src))
+		stock.Remove(I)
+
 
 /obj/structure/vendomatpack/undefined
 	//a placeholder for vending machines that don't have their own recharge packs

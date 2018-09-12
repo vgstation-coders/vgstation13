@@ -248,10 +248,7 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 		brute = brute*species.brute_mod
 
 	if(status_flags & GODMODE)
-		return 0	//godmode
-
-	. = brute + burn
-
+		return	//godmode
 	var/list/datum/organ/external/parts = get_damageable_organs()
 	var/update = 0
 	while(parts.len && (brute>0 || burn>0) )
@@ -269,6 +266,7 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 	hud_updateflag |= 1 << HEALTH_HUD
 	if(update)
 		UpdateDamageIcon()
+
 
 ////////////////////////////////////////////
 
@@ -488,4 +486,4 @@ This function restores all organs.
 	if(reagents)
 		if(reagents.has_reagent(LITHOTORCRAZINE))
 			rads = rads/2
-	return ..()
+	..()

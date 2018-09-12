@@ -207,7 +207,7 @@
 
 /turf/return_air()
 	//Create gas mixture to hold data for passing
-	var/datum/gas_mixture/unsimulated/GM = new
+	var/datum/gas_mixture/GM = new
 
 	GM.oxygen = oxygen
 	GM.carbon_dioxide = carbon_dioxide
@@ -258,10 +258,14 @@
 /turf/proc/make_air()
 	air = new/datum/gas_mixture
 	air.temperature = temperature
-	air.volume = CELL_VOLUME
 	air.adjust(oxygen, carbon_dioxide, nitrogen, toxins)
+	air.volume = CELL_VOLUME
 
 /turf/simulated/proc/c_copy_air()
 	if(!air)
 		air = new/datum/gas_mixture
 	air.copy_from(zone.air)
+
+
+/turf/attack_hand(mob/user as mob)
+	user.Move_Pulled(src)

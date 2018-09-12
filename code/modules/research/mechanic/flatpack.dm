@@ -125,9 +125,10 @@
 
 		return 1
 
-/obj/structure/closet/crate/flatpack/MouseDropFrom(over_object,src_location,over_location,src_control,over_control,params)
+/obj/structure/closet/crate/flatpack/MouseDrop(over_object,src_location,over_location,src_control,over_control,params)
 	if(istype(over_object, /obj/structure/closet/crate/flatpack))
-		return //MouseDropTo() will handle this
+		var/obj/structure/closet/crate/flatpack/flatpack = over_object
+		return flatpack.MouseDrop_T(src,usr)
 	var/mob/user = usr
 	if(user.incapacitated() || user.lying)
 		return //Validate mob status
@@ -137,7 +138,7 @@
 		return //Validate mob type
 	unstack(user, params, over_location)
 
-/obj/structure/closet/crate/flatpack/MouseDropTo(atom/dropping, mob/user)
+/obj/structure/closet/crate/flatpack/MouseDrop_T(atom/dropping, mob/user)
 	if(istype(dropping, /obj/structure/closet/crate/flatpack) && dropping != src)
 		var/obj/structure/closet/crate/flatpack/stacking = dropping
 /*		if(assembling || stacking.assembling)
@@ -150,7 +151,7 @@
 			return
 		if(!ishigherbeing(user) && !isrobot(user)) //check mob type
 			return
-		if(!user.Adjacent(src) || !user.Adjacent(dropping))
+		if(!user.can_MouseDrop(src, user)) //make sure it's adjacent and whatnot
 			return
 		user.visible_message("[user] adds [stacking.stacked.len + 1] flatpack\s to the stack.",
 								"You add [stacking.stacked.len + 1] flatpack\s to the stack.")

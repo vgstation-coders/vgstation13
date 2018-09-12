@@ -9,6 +9,3 @@
 
 # force changelog merging to use union
 html/changelog.html merge=union
-
-# keep .bat file line endings LF
-*.bat text eol=crlf

@@ -893,7 +893,7 @@
 							ritualresponse += "The Geometer of Blood gladly accepts this sacrifice."
 							satisfaction = 100
 							if(cult_round)
-								cult_round.revivecounter ++
+								cult_round.revivecounter += 1
 						else					//living NPCs
 							ritualresponse += "The Geometer of Blood accepts this being in sacrifice. Somehow you get the feeling that beings with souls would make a better offering."
 							satisfaction = 50
@@ -907,8 +907,7 @@
 						ritualresponse += "The Geometer of Blood accepts this sacrifice."
 						satisfaction = 50
 						if(cult_round)
-							cult_round.revivecounter ++
-
+							cult_round.revivecounter += 1
 					else						//dead NPCs
 						ritualresponse += "The Geometer of Blood accepts your meager sacrifice."
 						satisfaction = 10
@@ -1380,7 +1379,7 @@
 			else
 				user.equip_to_slot_or_del(new /obj/item/clothing/head/culthood/alt(user), slot_head)
 				user.equip_to_slot_or_del(new /obj/item/clothing/suit/cultrobes/alt(user), slot_wear_suit)
-			user.equip_to_slot_or_del(new /obj/item/clothing/shoes/legacy_cult(user), slot_shoes)
+			user.equip_to_slot_or_del(new /obj/item/clothing/shoes/cult(user), slot_shoes)
 			user.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/cultpack(user), slot_back)
 			//the above update their overlay icons cache but do not call update_icons()
 			//the below calls update_icons() at the end, which will update overlay icons by using the (now updated) cache

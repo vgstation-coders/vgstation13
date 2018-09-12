@@ -472,42 +472,42 @@ Pressure: [env.return_pressure()]"}
 	var/list/areas_with_camera = list()
 
 	for(var/area/A in areas)
-		if(A && !(A.type in areas_all))
+		if(!(A.type in areas_all))
 			areas_all.Add(A.type)
 
 	for(var/obj/machinery/power/apc/APC in power_machines)
 		var/area/A = get_area(APC)
-		if(A && !(A.type in areas_with_APC))
+		if(!(A.type in areas_with_APC))
 			areas_with_APC.Add(A.type)
 
 	for(var/obj/machinery/alarm/alarm in machines)
 		var/area/A = get_area(alarm)
-		if(A && !(A.type in areas_with_air_alarm))
+		if(!(A.type in areas_with_air_alarm))
 			areas_with_air_alarm.Add(A.type)
 
 	for(var/obj/machinery/requests_console/RC in allConsoles)
 		var/area/A = get_area(RC)
-		if(A && !(A.type in areas_with_RC))
+		if(!(A.type in areas_with_RC))
 			areas_with_RC.Add(A.type)
 
 	for(var/obj/machinery/light/L in alllights)
 		var/area/A = get_area(L)
-		if(A && !(A.type in areas_with_light))
+		if(!(A.type in areas_with_light))
 			areas_with_light.Add(A.type)
 
 	for(var/obj/machinery/light_switch/LS in world)
 		var/area/A = get_area(LS)
-		if(A && !(A.type in areas_with_LS))
+		if(!(A.type in areas_with_LS))
 			areas_with_LS.Add(A.type)
 
 	for(var/obj/item/device/radio/intercom/I in world)
 		var/area/A = get_area(I)
-		if(A && !(A.type in areas_with_intercom))
+		if(!(A.type in areas_with_intercom))
 			areas_with_intercom.Add(A.type)
 
 	for(var/obj/machinery/camera/C in cameranet.cameras)
 		var/area/A = get_area(C)
-		if(A && !(A.type in areas_with_camera))
+		if(!(A.type in areas_with_camera))
 			areas_with_camera.Add(A.type)
 
 	var/list/areas_without_APC = areas_all - areas_with_APC

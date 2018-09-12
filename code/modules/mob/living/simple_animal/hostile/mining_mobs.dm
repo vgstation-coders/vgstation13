@@ -36,7 +36,7 @@
 		Aggro()
 	if(P.damage < 30)
 		P.damage = (P.damage / 2)
-		visible_message("<span class='danger'>\The [P] has a reduced effect on \the [src]!</span>")
+		visible_message("<span class='danger'>The [P] has a reduced effect on [src]!</span>")
 	..()
 
 /mob/living/simple_animal/hostile/asteroid/hitby(atom/movable/AM, speed)//No floor tiling them to death, wiseguy
@@ -48,8 +48,9 @@
 		if(!stat)
 			Aggro()
 		if(T.throwforce <= 15 && speed < 10)
-			visible_message("<span class='notice'>\The [T] [src.throw_message] \the [src]!</span>")
+			visible_message("<span class='notice'>The [T.name] [src.throw_message] [src.name]!</span>")
 			return
+	..()
 
 /mob/living/simple_animal/hostile/asteroid/basilisk
 	name = "basilisk"
@@ -99,7 +100,8 @@
 			var/mob/living/L = target
 			L.bodytemperature = max(L.bodytemperature-1,T0C+25)
 			L.apply_damage(5, BURN, null, used_weapon = "Excessive Cold")
-			visible_message("<span class='danger'>\The [src]'s stare chills \the [L] to the bone!</span>")
+			visible_message("<span class='danger'>The [src.name]'s stare chills [L.name] to the bone!</span>")
+	return
 
 /mob/living/simple_animal/hostile/asteroid/basilisk/ex_act(severity)
 	if(flags & INVULNERABLE)
@@ -155,7 +157,6 @@ obj/item/asteroid/basilisk_hide/New()
 	wanted_objects = list(/obj/item/weapon/ore/diamond, /obj/item/weapon/ore/gold, /obj/item/weapon/ore/silver,
 						  /obj/item/weapon/ore/uranium)
 
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | SMASH_ASTEROID
 	var/list/ore_types_eaten = list()
 	var/alerted = 0
 	var/ore_eaten = 1
@@ -165,16 +166,18 @@ obj/item/asteroid/basilisk_hide/New()
 	target = new_target
 	if(target != null)
 		if(istype(target, /obj/item/weapon/ore))
-			visible_message("<span class='notice'>\The [src] looks at \the [target] with hungry eyes.</span>")
+			visible_message("<span class='notice'>The [src.name] looks at [target.name] with hungry eyes.</span>")
 			stance = HOSTILE_STANCE_ATTACK
 			return
 		if(isliving(target))
 			Aggro()
 			stance = HOSTILE_STANCE_ATTACK
-			visible_message("<span class='danger'>\The [src] tries to flee from \the [target]!</span>")
+			visible_message("<span class='danger'>The [src.name] tries to flee from [target.name]!</span>")
 			retreat_distance = 10
 			minimum_distance = 10
 			Burrow()
+			return
+	return
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/AttackingTarget()
 	if(istype(target, /obj/item/weapon/ore))
@@ -191,38 +194,20 @@ obj/item/asteroid/basilisk_hide/New()
 		O = null
 	if(ore_eaten > 5)//Limit the scope of the reward you can get, or else things might get silly
 		ore_eaten = 5
-	visible_message("<span class='notice'>\The [targeted_ore] was swallowed whole!</span>")
+	visible_message("<span class='notice'>The ore was swallowed whole!</span>")
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/Burrow()//Begin the chase to kill the goldgrub in time
 	if(!alerted)
 		alerted = 1
 		spawn(chase_time)
-			if(alerted)
-				visible_message("<span class='danger'>\The [src] burrows into the ground, vanishing from sight!</span>")
-				var/turf/T = get_turf(src)
-				forceMove(null)
-				T.ex_act(2)
-				spawn(rand(30 SECONDS,90 SECONDS))
-					var/turf/new_turf
-					for(var/turf/TT in orange(T, 12)-orange(T,4))
-						if(prob(70))
-							continue
-						if(isspace(TT))
-							continue
-						new_turf = TT
-						break
-					new_turf.visible_message("<span class = 'warning'>A rumbling noise eminates from \the [new_turf].</span>")
-					spawn(5 SECONDS)
-						explosion(new_turf,-1,1,3)
-						spawn(1 SECONDS)
-							forceMove(new_turf)
-							LoseAggro()
-							alerted = FALSE
+		if(alerted)
+			visible_message("<span class='danger'>The [src.name] buries into the ground, vanishing from sight!</span>")
+			qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/Reward()
 	if(!ore_eaten || ore_types_eaten.len == 0)
 		return
-	visible_message("<span class='danger'>\The [src] spits up the contents of its stomach before dying!</span>")
+	visible_message("<span class='danger'>[src] spits up the contents of its stomach before dying!</span>")
 	var/counter
 	for(var/R in ore_types_eaten)
 		for(counter=0, counter < ore_eaten, counter++)
@@ -232,7 +217,7 @@ obj/item/asteroid/basilisk_hide/New()
 
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/bullet_act(var/obj/item/projectile/P)
-	visible_message("<span class='danger'>\The [P] was repelled by \the [src]'s girth!</span>")
+	visible_message("<span class='danger'>The [P.name] was repelled by [src.name]'s girth!</span>")
 	return
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/death(var/gibbed = FALSE)
@@ -359,31 +344,31 @@ obj/item/asteroid/basilisk_hide/New()
 
 /obj/item/asteroid/hivelord_core/proc/consume(var/mob/living/user, var/mob/living/carbon/target)
 	if (inert)
-		to_chat(user, "<span class='notice'>\The [src] have become inert, its healing properties are no more.</span>")
+		to_chat(user, "<span class='notice'>[src] have become inert, its healing properties are no more.</span>")
 		return TRUE
 
 	if (target.stat == DEAD)
-		to_chat(user, "<span class='notice'>\The [src] are useless on the dead.</span>")
+		to_chat(user, "<span class='notice'>[src] are useless on the dead.</span>")
 		return
 
 	// revive() requires a check for suiciding
 	if (target.suiciding)
-		to_chat(user, "<span class='notice'>\The [target] refuses \the [src].</span>")
+		to_chat(user, "<span class='notice'>It's dead, Jim.</span>")
 		return
 
 	if (!target.hasmouth)
 		if (target != user)
-			to_chat(user, "<span class='warning'>You attempt to feed \the [src] to \the [target], but you realize they don't have a mouth. How dumb!</span>")
+			to_chat(user, "<span class='warning'>You attempt to feed \the [src] to [target], but you realize they don't have a mouth. How dumb!</span>")
 		else
 			to_chat(user, "<span class='warning'>You don't have a mouth to eat \the [src] with.</span>")
 		return
 
 	// Delay feeding to others, just like in regular food
 	if (target != user)
-		user.visible_message("<span class='danger'>\The [user] attempts to feed \the [target] \the [src].</span>", "<span class='danger'>You attempt to feed \the [target] \the [src].</span>")
+		user.visible_message("<span class='danger'>[user] attempts to feed [target] \the [src].</span>", "<span class='danger'>You attempt to feed [target] \the [src].</span>")
 		if (!do_mob(user, target))
 			return
-		user.visible_message("<span class='notice'>\The [user] feeds \the [target] \the [src]... They look better!</span>")
+		user.visible_message("<span class='notice'>[user] feeds [target] the [src]... They look better!</span>")
 	else
 		to_chat(user, "<span class='notice'>You chomp into \the [src], barely managing to hold it down, but feel amazingly refreshed in mere moments.</span>")
 
@@ -498,7 +483,8 @@ obj/item/asteroid/basilisk_hide/New()
 /obj/effect/goliath_tentacle/proc/Trip()
 	for(var/mob/living/M in src.loc)
 		M.Knockdown(5)
-		visible_message("<span class='warning'>\The [src] knocks \the [M] down!</span>")
+		visible_message("<span class='warning'>The [src.name] knocks [M.name] down!</span>")
+
 	qdel(src)
 
 /obj/effect/goliath_tentacle/Crossed(atom/movable/O)
@@ -518,84 +504,14 @@ obj/item/asteroid/basilisk_hide/New()
 	if(proximity_flag && istype(target, /obj/item/clothing))
 		var/obj/item/clothing/C = target
 		var/current_armor = C.armor
-		if(!isturf(C.loc))
-			to_chat(user, "<span class='warning'>\The [C] must be safely placed on the ground for modification.</span>")
-			return
 		if(C.goliath_reinforce)
-			C.hidecount ++
 			if(current_armor.["melee"] < 90)
 				current_armor.["melee"] = min(current_armor.["melee"] + 10, 90)
 				to_chat(user, "<span class='info'>You strengthen [target], improving its resistance against melee attacks.</span>")
 				qdel(src)
 			else
 				to_chat(user, "<span class='info'>You can't improve [C] any further.</span>")
-		if(has_icon(C.icon, "[initial(C.item_state)]_goliath[C.hidecount]"))
-			C.name = "reinforced [initial(C.name)]"
-			C.item_state = "[initial(C.item_state)]_goliath[C.hidecount]"
-			C.icon_state = "[initial(C.icon_state)]_goliath[C.hidecount]"
-			C._color = "mining_goliath[C.hidecount]"
-
-/mob/living/simple_animal/hostile/asteroid/goliath/david
-	name = "david"
-	desc = "I don't think this one can use a slingshot very well."
-	icon = 'icons/mob/animal.dmi'
-	icon_state = "david"
-	icon_living = "david"
-	icon_aggro = "david_alert"
-	icon_dead = "david_dead"
-	attack_sound = 'sound/weapons/heavysmash.ogg'
-	move_to_delay = 20
-	speed = 3
-	maxHealth = 120
-	health = 120
-	harm_intent_damage = 5
-	melee_damage_lower = 10
-	melee_damage_upper = 15
-	ranged = FALSE
-	attacktext = "smashes"
-	throw_message = "does little to the sturdy hide of the"
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
-	size = SIZE_NORMAL
-
-/mob/living/simple_animal/hostile/asteroid/goliath/david/dave
-	name = "Dave"
-	desc = "As the engineering crew decided where in the asteroid to build the station, they followed a small crevice where he was eventually found. Nobody knows how this little guy got separated from his family or why he became so attached to the crew that found him."
-	response_help  = "pets"
-	response_disarm = "pokes"
-	response_harm   = "kicks"
-	gender = MALE
-	faction = "neutral"
-	maxHealth = 100
-	health = 100
-	melee_damage_lower = 5
-	melee_damage_upper = 7
-	environment_smash_flags = null
-	stop_automated_movement_when_pulled = TRUE
-	move_to_delay = 10
-	can_butcher = FALSE
-	ranged = TRUE
-	retreat_distance = 1 //Unlike normal davids, dave will kite its foes, or at least try to. REMEMBER THE BASICS OF CQC
-
-//Stolen from corgi code
-/mob/living/simple_animal/hostile/asteroid/goliath/david/dave/attack_hand(mob/living/carbon/human/M)
-	. = ..()
-	react_to_touch(M)
-
-/mob/living/simple_animal/hostile/asteroid/goliath/david/dave/proc/react_to_touch(mob/M)
-	var/list/responses_good = list("bleats happily.", "rumbles affectionately.", "emits a content crackle.")
-	var/list/responses_bad = list("whimpers.", "lets out an upset gurgle.")
-
-	if(M && !isUnconscious())
-		switch(M.a_intent)
-			if(I_HELP)
-				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
-				heart.plane = ABOVE_HUMAN_PLANE
-				flick_overlay(heart, list(M.client), 2 SECONDS)
-				emote("me", EMOTE_AUDIBLE, pick(responses_good))
-				//calm down when petted.
-				LoseAggro()
-			if(I_HURT)
-				emote("me", EMOTE_AUDIBLE, pick(responses_bad))
+	return
 
 /mob/living/simple_animal/hostile/asteroid/magmaw
 	name = "magmaw"
@@ -618,7 +534,6 @@ obj/item/asteroid/basilisk_hide/New()
 	vision_range = 4
 	faction = "neutral"
 	maxbodytemp = ARBITRARILY_PLANCK_NUMBER
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | SMASH_ASTEROID
 	var/fire_time
 	var/fire_extremity
 
@@ -679,9 +594,12 @@ obj/item/asteroid/basilisk_hide/New()
 	return 0
 
 /mob/living/simple_animal/hostile/asteroid/magmaw/EscapeConfinement()
+	..()
 	if(world.time < fire_time) //Not hungry enough to go smashing up asteroids yet
 		return
-	..()
+	for(var/turf/unsimulated/mineral/M in range(src, 1))
+		if(prob(15))
+			UnarmedAttack(M, Adjacent(M))
 
 /mob/living/simple_animal/hostile/asteroid/magmaw/UnarmedAttack(var/atom/A, var/proximity, var/params)
 	if(proximity == 0)
@@ -696,156 +614,9 @@ obj/item/asteroid/basilisk_hide/New()
 		else if(is_sheet)
 			fire_time = world.time + 90 SECONDS
 			fire_extremity = 2
-		if(is_sheet)
-			var/obj/item/stack/sheet/S = A
-			S.use(1)
-		else
-			qdel(A)
+		qdel(A)
 		return
+	if(istype(A,/turf/unsimulated/mineral))
+		var/turf/unsimulated/mineral/M = A
+		M.GetDrilled(0)
 	return ..()
-
-/mob/living/simple_animal/hostile/asteroid/rockernaut
-	name = "rockernaut"
-	desc = "While a rolling stone may gather no moss, a spinning asteroid may gather semi-sentient moss in the form of a Rockernaut infestation."
-	icon_state = "rocknormal"
-	icon_living = "rocknormal"
-	icon_aggro = "rockcrikey"
-	icon_attack = "rocknormal_to_crikey"
-	icon_attack_time = 5
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
-	attack_sound = 'sound/weapons/heavysmash.ogg'
-	move_to_delay = 20
-	melee_damage_lower = 30
-	melee_damage_upper = 30
-	maxHealth = 350
-	health = 350
-	vision_range = 7
-	speed = 4
-	var/possessed_ore
-
-/mob/living/simple_animal/hostile/asteroid/rockernaut/Life()
-	.=..()
-	if(!.)
-		return 0
-
-	if(stance == HOSTILE_STANCE_IDLE && !client)
-		var/list/can_see = view(get_turf(src), vision_range/2)
-
-		for(var/turf/unsimulated/mineral/M in can_see)
-			if(!M.mineral)
-				continue
-			if(M.rockernaut)
-				continue
-			if(Adjacent(M))
-				//Climb in
-				visible_message("<span class = 'warning'>\The [src] burrows itself into \the [M]!</span>")
-				M.rockernaut = istype(src, /mob/living/simple_animal/hostile/asteroid/rockernaut/boss) ? TURF_CONTAINS_BOSS_ROCKERNAUT : TURF_CONTAINS_REGULAR_ROCKERNAUT
-				qdel(src)
-				return
-			else
-				if(prob(30))
-					step_towards(src, M)//Step towards it
-					if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
-						EscapeConfinement()
-				break
-
-
-/mob/living/simple_animal/hostile/asteroid/rockernaut/death()
-	..()
-	visible_message("<span class = 'warning'>\The [src] collapses into a mound of loose rock[possessed_ore?", revealing glittering ore within!":"."]</span>")
-	drop_loot()
-	qdel(src)
-
-/mob/living/simple_animal/hostile/asteroid/rockernaut/proc/drop_loot()
-	if(possessed_ore)
-		for(var/i = 0 to rand(3,9))
-			new possessed_ore(src.loc)
-
-	if(prob(1))
-		new /obj/item/weapon/vinyl/rock(src.loc) //It is a rock monster after all
-
-	for(var/i = 0 to rand(0,3))
-		new /obj/item/weapon/strangerock(src.loc, new /datum/find(get_random_digsite_type(), 0))
-	new /obj/structure/boulder(src.loc)
-
-/mob/living/simple_animal/hostile/asteroid/rockernaut/attack_icon()
-	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "rockernaut")
-
-/mob/living/simple_animal/hostile/asteroid/rockernaut/boss
-	name = "Angie"
-	size = SIZE_HUGE
-	maxHealth = 900
-	move_to_delay = 60
-	health = 900
-	pixel_y = 16 * PIXEL_MULTIPLIER
-	melee_damage_lower = 35
-	melee_damage_upper = 50
-	ranged = 1
-	var/charging = 0
-
-/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/New()
-	..()
-	appearance_flags |= PIXEL_SCALE
-	var/matrix/M = matrix()
-	M.Scale(2,2)
-	transform = M
-
-/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/drop_loot()
-	if(possessed_ore)
-		for(var/i = 0 to rand(24,46))
-			new possessed_ore(src.loc)
-
-	new /obj/item/weapon/vinyl/rock(src.loc) //It is a rock monster after all
-
-	for(var/i = 0 to rand(5,13))
-		new /obj/item/weapon/strangerock(src.loc, new /datum/find(get_random_digsite_type(), 0))
-	new /obj/item/clothing/gloves/mining(src.loc)
-	new /obj/structure/boulder(src.loc)
-
-/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/MoveToTarget()
-	if(charging)
-		return
-	..()
-
-/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/Goto(var/target, var/delay, var/minimum_distance)
-	if(charging && !isturf(target))
-		return
-	..()
-
-/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/OpenFire(target)
-	set waitfor = FALSE
-	if(charging)
-		return
-	walk(src, 0)
-	var/distance = get_dist(src, target)+rand(1,4)
-	var/turf/T = get_ranged_target_turf(target, get_dir(src, target), distance)
-	var/frustration = 0
-	ranged_cooldown = ranged_cooldown_cap
-	visible_message("<span class = 'warning'>\The [src] charges at \the [target]!</span>")
-	charging = TRUE
-	move_to_delay = 3
-	set_glide_size(DELAY2GLIDESIZE(move_to_delay))
-	while(get_turf(src) != T && frustration < distance)
-		for(var/mob/living/M in view(src))
-			if(!M.client)
-				continue
-			var/int_distance = get_dist(M, src)
-			shake_camera(M, 5, 2/int_distance)
-		step_towards(src, T, 3)
-		frustration++
-		sleep(move_to_delay)
-
-	charging = FALSE
-	move_to_delay = initial(move_to_delay)
-	set_glide_size(DELAY2GLIDESIZE(move_to_delay))
-
-/mob/living/simple_animal/hostile/asteroid/rockernaut/boss/to_bump(atom/A)
-	..()
-	if(charging && istype(A, /mob/living))
-		var/mob/living/M = A
-		UnarmedAttack(M)
-		visible_message("<span class = 'warning'>\The [src] swats [M] aside!</span>")
-		var/turf/T = get_ranged_target_turf(M, get_dir(src,M), size)
-		if(istype(T, /turf/space)) // if ended in space, then range is unlimited
-			T = get_edge_target_turf(M, dir)
-		M.throw_at(T,100,move_to_delay)

@@ -162,7 +162,7 @@
 	hardness = 4
 
 /obj/machinery/door/mineral/transparent/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswelder(W))
+	if(istype(W,/obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			TemperatureAct(100)

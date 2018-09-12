@@ -42,12 +42,8 @@
 	return ..()
 /obj/structure/toilet/attack_hand(mob/living/user as mob)
 	if(swirlie)
-		swirlie.visible_message("<span class='danger'>[user] slams the toilet seat onto [swirlie.name]'s head!</span>", "<span class='userdanger'>[user] slams the toilet seat onto your head!</span>", "You hear reverberating porcelain.")
-		swirlie.apply_damage(8, BRUTE, LIMB_HEAD, used_weapon = name)
-		playsound(src, 'sound/weapons/tablehit1.ogg', 50, TRUE)
-		add_attacklogs(user, swirlie, "slammed the toilet seat")
-		add_fingerprint(user)
-		add_fingerprint(swirlie)
+		usr.visible_message("<span class='danger'>[user] slams the toilet seat onto [swirlie.name]'s head!</span>", "<span class='notice'>You slam the toilet seat onto [swirlie.name]'s head!</span>", "You hear reverberating porcelain.")
+		swirlie.adjustBruteLoss(8)
 		return
 
 	if(cistern && !open)
@@ -107,34 +103,22 @@
 			var/mob/living/GM = G.affecting
 
 			if(G.state>1)
-				if(GM.loc != get_turf(src))
-					to_chat(user, "<span class='warning'>[GM.name] needs to be on the toilet.</span>")
+				if(!GM.loc == get_turf(src))
+					to_chat(user, "<span class='notice'>[GM.name] needs to be on the toilet.</span>")
 					return
 				if(open && !swirlie)
-					GM.visible_message("<span class='danger'>[user] starts to place [GM.name]'s head inside \the [src].</span>", "<span class='userdanger'>[user] is placing your head inside \the [src]!</span>")
+					user.visible_message("<span class='danger'>[user] starts to give [GM.name] a swirlie!</span>", "<span class='notice'>You start to give [GM.name] a swirlie!</span>")
 					swirlie = GM
-					if(do_after(user, src, 3 SECONDS, needhand = FALSE))
-						playsound(src, 'sound/misc/toilet_flush.ogg', 50, TRUE)
-						GM.visible_message("<span class='danger'>[user] gives [GM.name] a swirlie!</span>", "<span class='userdanger'>[user] gives you a swirlie!</span>", "You hear a toilet flushing.")
-						add_fingerprint(user)
-						add_fingerprint(GM)
-						if(!GM.internal && GM.losebreath <= 30)
-							GM.losebreath += 5
-							add_attacklogs(user, GM, "gave a swirlie to")
-						else
-							add_attacklogs(user, GM, "gave a swirle with no effect to")
+					if(do_after(user, 30, 5, 0))
+						user.visible_message("<span class='danger'>[user] gives [GM.name] a swirlie!</span>", "<span class='notice'>You give [GM.name] a swirlie!</span>", "You hear a toilet flushing.")
+						if(!GM.internal)
+							GM.adjustOxyLoss(5)
 					swirlie = null
 				else
-					GM.visible_message("<span class='danger'>[user] slams [GM.name] into \the [src]!</span>", "<span class='userdanger'>[user] slams you into \the [src]!</span>")
+					user.visible_message("<span class='danger'>[user] slams [GM.name] into the [src]!</span>", "<span class='notice'>You slam [GM.name] into the [src]!</span>")
 					GM.adjustBruteLoss(8)
-					playsound(src, 'sound/weapons/tablehit1.ogg', 50, TRUE)
-					add_attacklogs(user, GM, "slammed into the toilet")
-					add_fingerprint(user)
-					add_fingerprint(GM)
-					return
 			else
-				to_chat(user, "<span class='warning'>You need a tighter grip.</span>")
-		return
+				to_chat(user, "<span class='notice'>You need a tighter grip.</span>")
 
 	if(cistern)
 		if(I.w_class > W_CLASS_MEDIUM)

@@ -2,7 +2,6 @@
 	name = "akimbo weapons"
 	var/obj/item/weapon/gun/left
 	var/obj/item/weapon/gun/right
-	var/broken = FALSE
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND
 
 /obj/item/weapon/gun/akimbo/New(loc, var/obj/item/weapon/gun/in_left, var/obj/item/weapon/gun/in_right)
@@ -12,9 +11,8 @@
 	..()
 
 /obj/item/weapon/gun/akimbo/dropped(mob/user)
+	Break()
 	..()
-	if(!broken)
-		Break(user)
 
 /obj/item/weapon/gun/akinbo/pickup(mob/user)
 	update_icon(user)
@@ -31,17 +29,14 @@
 	else
 		to_chat(user, "<span class='warning'>You must dual-wield \the [src] before you can fire it!</span>")
 
-/obj/item/weapon/gun/akimbo/attack_self(mob/user)
-	Break(user)
-
 /obj/item/weapon/gun/akimbo/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(!(left.Fire(target,user,params,reflex,struggle,use_shooter_turf)) || !(right.Fire(target,user,params,reflex,struggle,use_shooter_turf)))
-		Break(user)
+		Break()
 		return
 	update_icon(user)
 
-/obj/item/weapon/gun/akimbo/proc/Break(mob/living/user)
-	broken = TRUE
+/obj/item/weapon/gun/akimbo/proc/Break()
+	var/mob/living/user = isliving(loc)? loc : null
 	if(left && right)
 		left.forceMove(get_turf(src))
 		right.forceMove(get_turf(src))
@@ -52,17 +47,20 @@
 		left = null
 		right = null
 	qdel(src)
+
 /obj/item/weapon/gun/akimbo/update_icon(mob/user)
 	//right over left
 	icon = left.icon
 	icon_state = left.icon_state
 	item_state = left.item_state
-	inhand_states = left.inhand_states
+	if(inhand_states != left.inhand_states)
+		inhand_states = left.inhand_states
+	overlays += image("icon" = right.icon, "icon_state" = right.icon_state, "pixel_x" = 6, "pixel_y" = -5)
 	if(wielded)
 		wielded.icon = right.icon
 		wielded.icon_state = right.icon_state
 		wielded.item_state = right.item_state
-		wielded.inhand_states = right.inhand_states
-	overlays += image("icon" = right.icon, "icon_state" = right.icon_state, "pixel_x" = 6, "pixel_y" = -5)
+		if(wielded.inhand_states != right.inhand_states)
+			wielded.inhand_states = right.inhand_states
 	if(user)
 		user.update_inv_hands()

@@ -70,7 +70,6 @@
 	var/nospells = 0 //Can't cast spells.
 	var/hasbeensacrificed = FALSE
 
-	var/miming = null //Toggle for the mime's abilities.
 
 /datum/mind/New(var/key)
 	src.key = key

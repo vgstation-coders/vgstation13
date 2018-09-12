@@ -32,9 +32,6 @@
 			qdel(B)
 			B = null
 
-	if(BrainContainer)
-		qdel(BrainContainer)
-		BrainContainer = null
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -95,10 +92,7 @@
 	//handles "call on life", allowing external life-related things to be processed
 	for(var/toCall in src.callOnLife)
 		if(locate(toCall) && callOnLife[toCall])
-			try
-				call(locate(toCall),callOnLife[toCall])()
-			catch(var/exception/e)
-				stack_trace(e)
+			call(locate(toCall),callOnLife[toCall])()
 		else
 			callOnLife -= toCall
 
@@ -256,7 +250,11 @@
 	return temperature
 
 
-/mob/living/proc/getBruteLoss(var/ignore_inorganic)
+// ++++ROCKDTBEN++++ MOB PROCS -- Ask me before touching.
+// Stop! ... Hammertime! ~Carn
+// I touched them without asking... I'm soooo edgy ~Erro (added nodamage checks)
+
+/mob/living/proc/getBruteLoss()
 	return bruteloss
 
 /mob/living/proc/adjustBruteLoss(var/amount)
@@ -308,7 +306,7 @@
 		return 0	//godmode
 	toxloss = amount
 
-/mob/living/proc/getFireLoss(var/ignore_inorganic)
+/mob/living/proc/getFireLoss()
 	return fireloss
 
 /mob/living/proc/adjustFireLoss(var/amount)
@@ -505,9 +503,6 @@
 	adjustBruteLoss(brute)
 	adjustFireLoss(burn)
 	src.updatehealth()
-
-	return brute + burn
-
 
 /mob/living/proc/restore_all_organs()
 	return
@@ -722,6 +717,46 @@ Thanks.
 							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
+
+							/* Drag damage is here!*/
+							var/mob/living/carbon/human/HM = M
+							var/list/damaged_organs = HM.get_broken_organs()
+							var/list/bleeding_organs = HM.get_bleeding_organs()
+							if (T.has_gravity() && HM.lying)
+
+								if (damaged_organs.len)
+									if(!HM.isincrit())
+										if(prob(HM.getBruteLoss() / 5)) //Chance for damage based on current damage
+											for(var/datum/organ/external/damagedorgan in damaged_organs)
+												if((damagedorgan.brute_dam) < damagedorgan.max_damage) //To prevent organs from accruing thousands of damage
+													HM.apply_damage(2, BRUTE, damagedorgan)
+													HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen from being dragged!</span>")
+													HM.UpdateDamageIcon()
+									else
+										if(prob(15))
+											for(var/datum/organ/external/damagedorgan in damaged_organs)
+												if((damagedorgan.brute_dam) < damagedorgan.max_damage)
+													HM.apply_damage(4, BRUTE, damagedorgan)
+													HM.visible_message("<span class='warning'>The wounds on \the [HM]'s [damagedorgan.display_name] worsen terribly from being dragged!</span>")
+													add_logs(src, HM, "caused drag damage to", admin = (M.ckey))
+													HM.UpdateDamageIcon()
+
+								if (bleeding_organs.len && !(HM.species.anatomy_flags & NO_BLOOD))
+									var/blood_volume = round(HM:vessel.get_reagent_amount("blood"))
+									/*Sometimes species with NO_BLOOD get blood, hence weird check*/
+									if(blood_volume > 0)
+										if(isturf(HM.loc))
+											if(!HM.isincrit())
+												if(prob(blood_volume / 89.6)) //Chance to bleed based on blood remaining
+													blood_splatter(HM.loc,HM)
+													HM.vessel.remove_reagent("blood",4)
+													HM.visible_message("<span class='warning'>\The [HM] loses some blood from being dragged!</span>")
+											else
+												if(prob(blood_volume / 44.8)) //Crit mode means double chance of blood loss
+													blood_splatter(HM.loc,HM,1)
+													HM.vessel.remove_reagent("blood",8)
+													HM.visible_message("<span class='danger'>\The [HM] loses a lot of blood from being dragged!</span>")
+													add_logs(src, HM, "caused drag damage bloodloss to", admin = (HM.ckey))
 					else
 						if (pulling)
 							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
@@ -838,7 +873,7 @@ Thanks.
 	else if(istype(src.loc, /obj/item/delivery/large)) //Syndie item
 		var/obj/item/delivery/large/package = src.loc
 		to_chat(L, "<span class='warning'>You attempt to unwrap yourself, this package is tight and will take some time.</span>")
-		if(do_after(src, src, 2 MINUTES))
+		if(do_after(src, src, 100))
 			L.visible_message("<span class='danger'>[L] successfully breaks out of [package]!</span>",\
 							  "<span class='notice'>You successfully break out!</span>")
 			forceMove(get_turf(src))
@@ -1043,11 +1078,6 @@ Thanks.
 						BD.attack_hand(usr)
 					C.open()
 
-	// Breaking out of a cage
-	if (src.locked_to && istype(src.locked_to, /obj/structure/cage))
-		locked_to.attack_hand(src)
-		return
-
 	if(src.loc && istype(src.loc, /obj/item/mecha_parts/mecha_equipment/tool/jail))
 		var/breakout_time = 30 SECONDS
 		var/obj/item/mecha_parts/mecha_equipment/tool/jail/jailcell = src.loc
@@ -1061,10 +1091,6 @@ Thanks.
 				//Well then break it!
 				jailcell.break_out(L)
 		return
-
-	if(L.loc && istype(L.loc, /obj/structure/inflatable/shelter))
-		var/obj/O = L.loc
-		O.container_resist(L)
 
 
 	else if(iscarbon(L))
@@ -1333,7 +1359,6 @@ Thanks.
 						for(var/obj/structure/window/win in get_step(AM,t))
 							now_pushing = 0
 							return
-					AM.set_glide_size(src.glide_size)
 					step(AM, t)
 				now_pushing = 0
 			return
@@ -1617,7 +1642,7 @@ Thanks.
 
 /mob/living/throw_item(var/atom/target,var/atom/movable/what=null)
 	src.throw_mode_off()
-	if(src.stat || !target)
+	if(usr.stat || !target)
 		return FAILED_THROW
 
 	if(!istype(loc,/turf))
@@ -1719,69 +1744,8 @@ Thanks.
 
 	reset_vars_after_duration(resettable_vars, duration)
 
-/mob/living/proc/handle_dizziness()
-	//Dizziness
-	if(dizziness || undergoing_hypothermia() == MODERATE_HYPOTHERMIA)
-		var/wasdizzy = 1
-		if(undergoing_hypothermia() == MODERATE_HYPOTHERMIA && !dizziness && prob(50))
-			dizziness = 120
-			wasdizzy = 0
-		var/client/C = client
-		var/pixel_x_diff = 0
-		var/pixel_y_diff = 0
-		var/temp
-		var/saved_dizz = dizziness
-		dizziness = max(dizziness - 1, 0)
-		if(C)
-			var/oldsrc = src
-			var/amplitude = dizziness * (sin(dizziness * 0.044 * world.time) + 1) / 70 //This shit is annoying at high strength
-			src = null
-			spawn(0)
-				if(C)
-					temp = amplitude * sin(0.008 * saved_dizz * world.time)
-					pixel_x_diff += temp
-					C.pixel_x += temp * PIXEL_MULTIPLIER
-					temp = amplitude * cos(0.008 * saved_dizz * world.time)
-					pixel_y_diff += temp
-					C.pixel_y += temp * PIXEL_MULTIPLIER
-					sleep(3)
-					if(C)
-						temp = amplitude * sin(0.008 * saved_dizz * world.time)
-						pixel_x_diff += temp
-						C.pixel_x += temp * PIXEL_MULTIPLIER
-						temp = amplitude * cos(0.008 * saved_dizz * world.time)
-						pixel_y_diff += temp
-						C.pixel_y += temp * PIXEL_MULTIPLIER
-					sleep(3)
-					if(C)
-						C.pixel_x -= pixel_x_diff * PIXEL_MULTIPLIER
-						C.pixel_y -= pixel_y_diff * PIXEL_MULTIPLIER
-			src = oldsrc
-		if(!wasdizzy)
-			dizziness = 0
-
-
-/mob/living/proc/handle_jitteriness()
-	if(jitteriness)
-		var/amplitude = min(8, (jitteriness/70) + 1)
-		var/pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
-		var/pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
-		spawn()
-			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
-			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
-
-			pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
-			pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
-			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
-			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
-
-			pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
-			pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
-			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
-			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
-
 /mob/living/proc/Silent(amount)
-	silent = max(max(silent,amount),0)
+	SetSilent(max(silent,amount))
 
 /mob/living/proc/SetSilent(amount)
 	silent = max(amount,0)

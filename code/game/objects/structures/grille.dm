@@ -12,7 +12,6 @@
 	explosion_resistance = 5
 	var/health = 20 //Relatively "strong" since it's hard to dismantle via brute force
 	var/broken = 0
-	var/grille_material = /obj/item/stack/rods
 
 /obj/structure/grille/examine(mob/user)
 
@@ -25,6 +24,7 @@
 /obj/structure/grille/cultify()
 	new /obj/structure/grille/cult(get_turf(src))
 	returnToPool(src)
+	..()
 
 /obj/structure/grille/proc/healthcheck(var/hitsound = 0) //Note : Doubles as the destruction proc()
 	if(hitsound)
@@ -33,13 +33,13 @@
 		broken = 1
 		icon_state = "[initial(icon_state)]-b"
 		setDensity(FALSE) //Not blocking anything anymore
-		new grille_material(get_turf(src)) //One rod set
+		new /obj/item/stack/rods(get_turf(src)) //One rod set
 	else if(health >= (0.25*initial(health)) && broken) //Repair the damage to this bitch
 		broken = 0
 		icon_state = initial(icon_state)
 		setDensity(TRUE)
 	if(health <= 0) //Dead
-		new grille_material(get_turf(src)) //Drop the second set of rods
+		new /obj/item/stack/rods(get_turf(src)) //Drop the second set of rods
 		qdel(src)
 
 /obj/structure/grille/ex_act(severity)
@@ -146,7 +146,7 @@
 	if(iswirecutter(W))
 		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
 			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
-			drop_stack(grille_material, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not !
+			drop_stack(/obj/item/stack/rods, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not !
 			qdel(src)
 			return
 		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards !
@@ -302,14 +302,4 @@
 	return
 
 /obj/structure/grille/invulnerable/attackby()
-	return
-
-/obj/structure/grille/replicant
-	name = "replicant grille"
-	desc = "A strangely-shaped grille."
-	icon_state = "replicantgrille"
-	health = 30
-	grille_material = /obj/item/stack/sheet/ralloy
-
-/obj/structure/grille/replicant/cultify()
 	return

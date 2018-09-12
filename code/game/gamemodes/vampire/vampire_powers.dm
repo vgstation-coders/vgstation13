@@ -176,17 +176,9 @@
 	if(!C)
 		return
 
-	if (M.current.is_pacified(VIOLENCE_DEFAULT,C))
-		return
-
 	if(!C in view(1))
 		to_chat(M, "<span class='warning'>You're not close enough to [C.name] to stare into \his eyes.</span>")
 		return
-
-	if(C.blinded)
-		to_chat(M, "<span class='warning'>[C.name]'s eyes are unresponsive! Hypnosis won't work if your victim can't see!</span>")
-		return
-
 	M.current.visible_message("<span class='warning'>[M.current.name]'s eyes flash briefly as he stares into [C.name]'s eyes</span>")
 	M.current.verbs -= /client/proc/vampire_hypnotise
 	spawn(1800)
@@ -219,10 +211,6 @@
 	var/mob/living/carbon/C = M.current.vampire_active(50, 0, 1)
 	if(!C)
 		return
-
-	if (M.current.is_pacified(VIOLENCE_DEFAULT,C))
-		return
-
 	if(!M.current.vampire_can_reach(C, 1))
 		to_chat(M.current, "<span class='danger'>You cannot touch [C.name] from where you are standing!</span>")
 		return
@@ -260,10 +248,6 @@
 	var/datum/mind/M = usr.mind
 	if(!M)
 		return
-
-	if (M.current.is_pacified())
-		return
-
 	if(M.current.vampire_power(0, 1))
 		if(istype(M.current:glasses, /obj/item/clothing/glasses/sunglasses/blindfold))
 			to_chat(M.current, "<span class='warning'>You're blindfolded!</span>")
@@ -280,13 +264,13 @@
 		var/list/close_mobs = list()
 		var/list/dist_mobs = list()
 		for(var/mob/living/carbon/C in view(1))
-			if(!C.vampire_affected(M) || C.blinded)
+			if(!C.vampire_affected(M))
 				continue
 			//if(!M.current.vampire_can_reach(C, 1)) continue
 			if(istype(C))
 				close_mobs |= C // using |= prevents adding 'large bounded' mobs twice with how the loop works
 		for(var/mob/living/carbon/C in view(3))
-			if(!C.vampire_affected(M) || C.blinded)
+			if(!C.vampire_affected(M))
 				continue
 			if(istype(C))
 				dist_mobs |= C
@@ -295,14 +279,18 @@
 			C.Stun(8)
 			C.Knockdown(8)
 			C.stuttering += 20
-			C.flash_eyes(intensity = 4, visual = 1)
+			if(!C.blinded)
+				C.blinded = 1
+			C.blinded += 5
 		for(var/mob/living/carbon/C in dist_mobs)
 			var/distance_value = max(0, abs((get_dist(C, M.current)-3)) + 1)
 			C.Stun(distance_value)
 			if(distance_value > 1)
 				C.Knockdown(distance_value)
 			C.stuttering += 5+distance_value * ((VAMP_CHARISMA in M.vampire.powers) ? 2 : 1) //double stutter time with Charisma
-			C.flash_eyes(intensity = 4, visual = 1)
+			if(!C.blinded)
+				C.blinded = 1
+			C.blinded += max(1, distance_value)
 		to_chat((dist_mobs + close_mobs), "<span class='warning'>You are blinded by [M.current.name]'s glare</span>")
 
 
@@ -330,11 +318,6 @@
 	var/datum/mind/M = usr.mind
 	if(!M)
 		return
-
-
-	if (M.current.is_pacified())
-		return
-
 	if(M.current.vampire_power(30, 0))
 		M.current.visible_message("<span class='warning'>[M.current.name] lets out an ear piercing shriek!</span>", "<span class='warning'>You let out a loud shriek.</span>", "<span class='warning'>You hear a loud painful shriek!</span>")
 		for(var/mob/living/carbon/C in hearers(4, M.current))
@@ -344,7 +327,7 @@
 				var/mob/living/carbon/human/H = C
 				if(H.earprot())
 					continue
-			if(!C.vampire_affected(M) || C.is_deaf())
+			if(!C.vampire_affected(M))
 				continue
 			to_chat(C, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
 			C.Knockdown(8)
@@ -370,8 +353,6 @@
 		return
 	var/mob/living/carbon/C = M.current.vampire_active(150, 0, 1)
 	if(!C)
-		return
-	if (M.current.is_pacified(VIOLENCE_DEFAULT,C))
 		return
 	if(!ishuman(C))
 		to_chat(M.current, "<span class='warning'>You can only enthrall humanoids.</span>")
@@ -510,8 +491,6 @@
 	var/datum/mind/M = usr.mind
 	if(!M)
 		return
-	if (M.current.is_pacified())
-		return
 	if(M.current.vampire_power(50, 0))
 		var/list/turf/locs = new
 		var/number = 0
@@ -644,7 +623,7 @@
 	for(var/mob/living/carbon/C in oview(6))
 		if(prob(35))
 			continue //to prevent fearspam
-		if(!C.vampire_affected(mind.current) || C.is_blind())
+		if(!C.vampire_affected(mind.current))
 			continue
 		C.stuttering += 20
 		C.Jitter(20)

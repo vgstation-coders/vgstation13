@@ -21,16 +21,14 @@
 	if(W.material_type)
 		W.material_type.on_use(W, src, user)
 
-/mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null, var/def_zone = null)
+/mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null)
 	if(!no_delay)
 		user.delayNextAttack(10)
 	if(istype(I) && ismob(user))
 		if(originator)
-			I.attack(src, user, def_zone, originator)
+			I.attack(src, user, null, originator)
 		else
-			I.attack(src, user, def_zone)
-	if(BrainContainer)
-		BrainContainer.SendSignal(COMSIG_ATTACKEDBY, list("assailant"=user,"damage"=I.force))
+			I.attack(src, user)
 
 
 

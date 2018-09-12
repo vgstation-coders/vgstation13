@@ -35,9 +35,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/proc/post_creation(var/atom/movable/container)
 	return
 
-/datum/supply_packs/proc/OnConfirmed(var/mob/user)
-	return // Blank proc
-
 //////SUPPLIES//////
 
 /datum/supply_packs/toner
@@ -909,12 +906,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 
 /datum/supply_packs/expenergy
-	name = "High-Tech energy weapons"
-	contains = list(/obj/item/weapon/gun/energy/gun,
+	name = "Experimental energy gear"
+	contains = list(/obj/item/clothing/suit/armor/laserproof,
+					/obj/item/clothing/suit/armor/laserproof,
+					/obj/item/weapon/gun/energy/gun,
 					/obj/item/weapon/gun/energy/gun)
-	cost = 30
+	cost = 50
 	containertype = /obj/structure/closet/crate/secure
-	containername = "\improper High-Tech energy weapons crate"
+	containername = "experimental energy gear crate"
 	access = list(access_armory)
 	group = "Security"
 
@@ -1456,22 +1455,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "supermatter shard crate"
 	group = "Engineering"
 	access = list(access_engine_equip)
-	var/static/list/shard_counts_by_user = list()
-
-
-/datum/supply_packs/supermatter_shard/OnConfirmed(var/mob/user)
-	shard_counts_by_user[user.ckey]++
-	var/i = shard_counts_by_user[user.ckey]
-	var/span = ""
-	switch (i)
-		if (1)
-			span = "notice"
-		if (2 to 5)
-			span = "warning"
-		else
-			span = "danger"
-	message_admins("<span class='[span]'>[key_name(user)] has ordered a supermatter shard supplypack, this is his #[i] order. @[formatJumpTo(user)]</span>")
-	log_admin("[key_name(user)] has ordered a supermatter shard supplypack, this is his #[i] order. @([user.x], [user.y], [user.z])")
 
 /datum/supply_packs/portable_smes
 	contains = list(/obj/machinery/power/battery/portable,
@@ -1561,7 +1544,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/virusdish/random,
 					/obj/item/weapon/virusdish/random)
 	cost = 25
-	containertype = "/obj/structure/closet/crate/secure/medsec"
+	containertype = "/obj/structure/closet/crate/secure"
 	containername = "virus crate"
 	access = list(access_cmo)
 	group = "Medical"
@@ -1580,7 +1563,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/bonesetter,
 					/obj/item/weapon/circular_saw)
 	cost = 25
-	containertype = "/obj/structure/closet/crate/secure/medsec"
+	containertype = "/obj/structure/closet/crate/secure"
 	containername = "surgery crate"
 	access = list(access_medical)
 	group = "Medical"
@@ -1593,7 +1576,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/storage/box/gloves,
 					/obj/item/weapon/storage/box/bodybags)
 	cost = 15
-	containertype = "/obj/structure/closet/crate/medical"
+	containertype = "/obj/structure/closet/crate"
 	containername = "sterile equipment crate"
 	group = "Medical"
 
@@ -1607,7 +1590,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/blood/OMinus,
 					/obj/item/weapon/reagent_containers/blood/empty)
 	cost = 10
-	containertype = /obj/structure/closet/crate/secure/medsec
+	containertype = /obj/structure/closet/crate/secure
 	containername = "bloodbag crate"
 	access = list(access_medical)
 	group = "Medical"
@@ -1636,7 +1619,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Motorized wheelchair"
 	contains = list(/obj/structure/bed/chair/vehicle/wheelchair/motorized)
 	cost = 200
-	containertype = "/obj/structure/closet/crate/secure/medsec"
+	containertype = "/obj/structure/closet/crate/secure"
 	containername = "motorized wheelchair crate"
 	access = list(access_medical)
 	group = "Medical"
@@ -1951,19 +1934,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 20
 	containertype = /obj/structure/closet/crate/secure/hydrosec
 	containername = "weed control crate"
-	access = list(access_hydroponics)
-	group = "Hydroponics"
-
-/datum/supply_packs/insectcontrol
-	name = "Insect control equipment"
-	contains = list(/obj/item/weapon/reagent_containers/glass/bottle/toxin,
-					/obj/item/weapon/reagent_containers/glass/bottle/toxin,
-					/obj/item/weapon/reagent_containers/glass/bottle/toxin,
-					/obj/item/weapon/reagent_containers/spray/bugzapper,
-					/obj/item/weapon/reagent_containers/spray/bugzapper)
-	cost = 40
-	containertype = /obj/structure/largecrate/hissing
-	containername = "hissing crate"
 	access = list(access_hydroponics)
 	group = "Hydroponics"
 

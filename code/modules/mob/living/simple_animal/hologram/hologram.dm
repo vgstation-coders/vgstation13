@@ -5,7 +5,6 @@
 	icon_state = "holo2"
 	icon_living = "holo2"
 	icon_dead = null
-	mob_property_flags = MOB_HOLOGRAPHIC
 	var/atom/atom_to_mimic
 
 

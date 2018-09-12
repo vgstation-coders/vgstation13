@@ -121,6 +121,8 @@
 
 //Harvests the product of a plant.
 /obj/machinery/portable_atmospherics/hydroponics/proc/harvest(var/mob/user)
+
+
 	//Harvest the product of the plant,
 	if(!seed || !harvest || !user)
 		return
@@ -133,17 +135,6 @@
 		return
 
 	seed.harvest(user,yield_mod)
-	after_harvest()
-	return
-
-/obj/machinery/portable_atmospherics/hydroponics/proc/autoharvest()
-	if(!seed || !harvest)
-		return
-
-	seed.autoharvest(get_turf(src))
-	after_harvest()
-
-/obj/machinery/portable_atmospherics/hydroponics/proc/after_harvest()
 
 	// Reset values.
 	harvest = 0
@@ -179,7 +170,7 @@
 	//Remove the seed if something is already planted.
 	if(seed)
 		remove_plant()
-	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds"))]
+	seed = plant_controller.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds"))]
 	if(!seed)
 		return //Weed does not exist, someone fucked up.
 

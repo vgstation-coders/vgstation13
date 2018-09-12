@@ -28,18 +28,23 @@
 
 /obj/item/weapon/cylinder_assembly/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(iswelder(W))
+	if(istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
-		to_chat(user, "You begin welding \the [src] together.")
-		if(WT.do_weld(user, src, 30))
-			to_chat(user, "You weld \the [src] together.")
-			if(src.loc == user)
-				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/gun_barrel/I = new (get_turf(user))
-				user.put_in_hands(I)
-			else
-				new /obj/item/weapon/gun_barrel(get_turf(src.loc))
-			qdel(src)
+		if(WT.remove_fuel(0, user))
+			to_chat(user, "You begin welding \the [src] together.")
+			playsound(user, 'sound/items/Welder.ogg', 50, 1)
+			if(do_after(user, src, 30))
+				to_chat(user, "You weld \the [src] together.")
+				if(src.loc == user)
+					user.drop_item(src, force_drop = 1)
+					var/obj/item/weapon/gun_barrel/I = new (get_turf(user))
+					user.put_in_hands(I)
+				else
+					new /obj/item/weapon/gun_barrel(get_turf(src.loc))
+				qdel(src)
+		else
+			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			return
 
 /obj/item/weapon/cylinder_assembly/attack_self(mob/user as mob)
 	..()
@@ -155,15 +160,20 @@
 				new /obj/item/weapon/sword(get_turf(src.loc))
 			C.use(5)
 			qdel(src)
-	if(iswelder(W))
+	if(istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
-		to_chat(user, "You begin welding the metal blades together.")
-		if(WT.do_weld(user, src, 30))
-			to_chat(user, "You weld the metal blades together.")
-			desc = "A large blade made of sturdy metal."
-			icon_state = "large_metal_blade"
-			w_class = W_CLASS_MEDIUM
-			complete = 1
+		if(WT.remove_fuel(0, user))
+			to_chat(user, "You begin welding the metal blades together.")
+			playsound(user, 'sound/items/Welder.ogg', 50, 1)
+			if(do_after(user, src, 30))
+				to_chat(user, "You weld the metal blades together.")
+				desc = "A large blade made of sturdy metal."
+				icon_state = "large_metal_blade"
+				w_class = W_CLASS_MEDIUM
+				complete = 1
+		else
+			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			return
 
 /obj/item/weapon/rail_assembly
 	name = "rail assembly"
@@ -425,14 +435,18 @@
 
 //BLUNDERBUSS BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		if("stock_reservoir_barrel_assembly")
-			if(iswelder(W))
+			if(istype(W, /obj/item/weapon/weldingtool))
 				var/obj/item/weapon/weldingtool/WT = W
-				to_chat(user, "You begin welding the barrel to \the [src].")
-				if(WT.do_weld(user, src, 30, 0))
-					to_chat(user, "You weld the barrel to \the [src].")
-					state = "stock_reservoir_barrel"
-					update_assembly()
-
+				if(WT.remove_fuel(0, user))
+					to_chat(user, "You begin welding the barrel to \the [src].")
+					playsound(user, 'sound/items/Welder.ogg', 50, 1)
+					if(do_after(user, src, 30))
+						to_chat(user, "You weld the barrel to \the [src].")
+						state = "stock_reservoir_barrel"
+						update_assembly()
+				else
+					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+					return
 		if("stock_reservoir_barrel")
 			if(istype(W, /obj/item/device/assembly/igniter))
 				to_chat(user, "You attach \the [W] to \the [src].")
@@ -478,13 +492,18 @@
 				state = "stock_capacitorbank_assembly"
 				update_assembly()
 		if("stock_capacitorbank_barrel_assembly")
-			if(iswelder(W))
+			if(istype(W, /obj/item/weapon/weldingtool))
 				var/obj/item/weapon/weldingtool/WT = W
-				to_chat(user, "You begin welding the barrel to \the [src].")
-				if(WT.do_weld(user, src, 30, 0))
-					to_chat(user, "You weld the barrel to \the [src].")
-					state = "stock_capacitorbank_barrel"
-					update_assembly()
+				if(WT.remove_fuel(0, user))
+					to_chat(user, "You begin welding the barrel to \the [src].")
+					playsound(user, 'sound/items/Welder.ogg', 50, 1)
+					if(do_after(user, src, 30))
+						to_chat(user, "You weld the barrel to \the [src].")
+						state = "stock_capacitorbank_barrel"
+						update_assembly()
+				else
+					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+					return
 		if("stock_capacitorbank_barrel")
 			if(istype(W, /obj/item/mounted/frame/light_switch) || istype(W, /obj/item/mounted/frame/access_button) || istype(W, /obj/item/mounted/frame/driver_button))
 				to_chat(user, "You attach \the [W] to \the [src].")
@@ -532,29 +551,39 @@
 
 //BLAST CANNON BEGIN///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		if("stock_pipe_assembly")
-			if(iswelder(W))
+			if(istype(W, /obj/item/weapon/weldingtool))
 				var/obj/item/weapon/weldingtool/WT = W
-				to_chat(user, "You begin welding the bent pipe to \the [src].")
-				if(WT.do_weld(user, src, 30))
-					to_chat(user, "You weld the bent pipe to \the [src].")
-					if(src.loc == user)
-						user.drop_item(src, force_drop = 1)
-						var/obj/item/weapon/gun/projectile/blastcannon/I = new (get_turf(user))
-						user.put_in_hands(I)
-					else
-						new /obj/item/weapon/gun/projectile/blastcannon(get_turf(src.loc))
-					qdel(src)
+				if(WT.remove_fuel(0, user))
+					to_chat(user, "You begin welding the bent pipe to \the [src].")
+					playsound(user, 'sound/items/Welder.ogg', 50, 1)
+					if(do_after(user, src, 30))
+						to_chat(user, "You weld the bent pipe to \the [src].")
+						if(src.loc == user)
+							user.drop_item(src, force_drop = 1)
+							var/obj/item/weapon/gun/projectile/blastcannon/I = new (get_turf(user))
+							user.put_in_hands(I)
+						else
+							new /obj/item/weapon/gun/projectile/blastcannon(get_turf(src.loc))
+						qdel(src)
+				else
+					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+					return
 //BLAST CANNON END/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //SUBSPACE TUNNELER BEGIN//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		if("stock_ansible_assembly")
-			if(iswelder(W))
+			if(istype(W, /obj/item/weapon/weldingtool))
 				var/obj/item/weapon/weldingtool/WT = W
-				to_chat(user, "You begin welding the subspace ansible onto \the [src].")
-				if(WT.do_weld(user, src, 30, 0))
-					to_chat(user, "You weld the subspace ansible onto \the [src].")
-					state = "stock_ansible"
-					update_assembly()
+				if(WT.remove_fuel(0, user))
+					to_chat(user, "You begin welding the subspace ansible onto \the [src].")
+					playsound(user, 'sound/items/Welder.ogg', 50, 1)
+					if(do_after(user, src, 30))
+						to_chat(user, "You weld the subspace ansible onto \the [src].")
+						state = "stock_ansible"
+						update_assembly()
+				else
+					to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+					return
 		if("stock_ansible")
 			if(istype(W, /obj/item/weapon/stock_parts/subspace/amplifier))
 				to_chat(user, "You attach \the [W] to \the [src].")
@@ -646,18 +675,23 @@
 /obj/item/weapon/wrench_wired/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(metal_assembly)
-		if(iswelder(W))
+		if(istype(W, /obj/item/weapon/weldingtool))
 			var/obj/item/weapon/weldingtool/WT = W
-			to_chat(user, "You begin welding the blade to \the [src].")
-			if(WT.do_weld(user, src, 30, 0))
-				to_chat(user, "You weld the blade to \the [src].")
-				if(src.loc == user)
-					user.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/hatchet/tomahawk/metal/I = new (get_turf(user))
-					user.put_in_hands(I)
-				else
-					new /obj/item/weapon/hatchet/tomahawk/metal(get_turf(src.loc))
-				qdel(src)
+			if(WT.remove_fuel(0, user))
+				to_chat(user, "You begin welding the blade to \the [src].")
+				playsound(user, 'sound/items/Welder.ogg', 50, 1)
+				if(do_after(user, src, 30))
+					to_chat(user, "You weld the blade to \the [src].")
+					if(src.loc == user)
+						user.drop_item(src, force_drop = 1)
+						var/obj/item/weapon/hatchet/tomahawk/metal/I = new (get_turf(user))
+						user.put_in_hands(I)
+					else
+						new /obj/item/weapon/hatchet/tomahawk/metal(get_turf(src.loc))
+					qdel(src)
+			else
+				to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+				return
 	else if(istype(W, /obj/item/weapon/shard))
 		to_chat(user, "You fasten \the [W] to \the [src].")
 		if(src.loc == user)
@@ -714,13 +748,18 @@
 			I.dir = dir
 			qdel(src)
 			qdel(W)
-	else if(iswelder(W))
+	else if(istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
-		to_chat(user, "You begin welding the barrel onto \the [src].")
-		if(WT.do_weld(user, src, 80, 0))
-			to_chat(user, "You weld the barrel onto \the [src].")
-			cannon_assembly = 1
-			update_wheelchair_assembly()
+		if(WT.remove_fuel(0, user))
+			to_chat(user, "You begin welding the barrel onto \the [src].")
+			playsound(user, 'sound/items/Welder.ogg', 50, 1)
+			if(do_after(user, src, 80))
+				to_chat(user, "You weld the barrel onto \the [src].")
+				cannon_assembly = 1
+				update_wheelchair_assembly()
+		else
+			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			return
 //CANNON END///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /obj/machinery/power/secured_capacitor

@@ -122,7 +122,7 @@
 	// We need to make sure we're not modifying one of the global seed datums.
 	// If it's not in the global list, then no products of the line have been
 	// harvested yet and it's safe to assume it's restricted to this tray.
-	if(!isnull(SSplant.seeds[seed.name]))
+	if(!isnull(plant_controller.seeds[seed.name]))
 		seed = seed.diverge(modified)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_ratio(var/severity, var/list/softcaps, var/list/hardcaps, var/input)
@@ -534,9 +534,11 @@
 	var/previous_plant = seed.display_name
 	var/newseed = seed.get_mutant_variant()
 
-	seed = SSplant.seeds[newseed]
-	if(!seed)
+	if(!plant_controller.seeds.Find(newseed))
 		return
+
+	seed = plant_controller.seeds[newseed]
+
 	dead = 0
 	age = 1
 	health = seed.endurance

@@ -46,7 +46,8 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 	if(!istype(L, /mob/living/silicon))
 		if(A.isElectrified())
 			var/obj/I = L.get_active_hand()
-			A.shock(L, 100, get_conductivity(I))
+			if(A.shock(L, 100, get_conductivity(I)))
+				return 0
 	if(A.panel_open)
 		return 1
 	return 0

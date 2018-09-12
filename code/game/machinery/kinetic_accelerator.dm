@@ -8,11 +8,11 @@
 	icon = 'icons/obj/kinetic_accel.dmi'
 	icon_state = "linacc1"
 
-	var/power = 0.25
-	var/maxspeed = 5
+	var/power = 0.5
+	var/maxspeed = 2
 
 /obj/machinery/kinetic_accelerator/Crossed(var/atom/movable/A)
 	if(!istype(A))
 		return
 	if(A.throwing)
-		A.kinetic_acceleration = min(maxspeed,A.kinetic_acceleration + power)
+		A.throw_speed=min(maxspeed,A.throw_speed+power)

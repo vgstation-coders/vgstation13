@@ -101,7 +101,7 @@
 	damage = 10
 	stun = 0
 	weaken = 0
-	projectile_speed = 0.66
+	superspeed = 1
 
 /obj/item/projectile/bullet/midbullet/assault
 	damage = 20
@@ -342,8 +342,8 @@
 	weaken = 5
 	stutter = 5
 	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS|PROJREACT_BLOB
-	penetration = 20 //can hit 3 mobs at once, or go through a wall and hit 2 more mobs, or go through an rwall/blast door and hit 1 mob
-	projectile_speed = 0.66
+	penetration = 20//can hit 3 mobs at once, or go through a wall and hit 2 more mobs, or go through an rwall/blast door and hit 1 mob
+	superspeed = 1
 	fire_sound = 'sound/weapons/hecate_fire.ogg'
 
 /obj/item/projectile/bullet/hecate/OnFired()
@@ -434,7 +434,8 @@
 /obj/item/projectile/bullet/APS/OnFired()
 	..()
 	if(damage >= 100)
-		projectile_speed = 0.66
+		superspeed = 1
+		super_speed = 1
 		for (var/mob/M in player_list)
 			if(M && M.client)
 				var/turf/M_turf = get_turf(M)
@@ -718,7 +719,7 @@
 	bounces = 1
 	fire_sound = 'sound/weapons/gunshot_1.ogg'
 	bounce_sound = null
-	projectile_speed = 1.33
+	projectile_slowdown = 0.5
 	kill_count = 100
 	embed = 0
 	rotate = 0
@@ -757,7 +758,7 @@
 	src.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 	..()
 
-/obj/item/projectile/bullet/liquid_blob/on_hit(atom/A as mob|obj|turf|area)
+/obj/item/projectile/bullet/liquid_blob/to_bump(atom/A as mob|obj|turf|area)
 	if(!A)
 		return
 	..()
@@ -800,10 +801,19 @@
 
 /obj/item/projectile/bullet/buckshot/OnFired()
 	if(!is_child)
+		var/x = 0
+		var/y = 0
+		var/z = 0
+		var/angle = 0
+		var/launch_at_range = 7 // Increasing this should make the bullet spread smoother or something
 		for(var/I = 1; I <=total_amount_to_fire-1; I++)
 			var/obj/item/projectile/bullet/buckshot/B = new type_to_fire(src.loc, 1)
-			B.damage = src.damage
-			B.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
+			angle = rand(-variance_angle/2, variance_angle/2) + get_angle(starting, original)
+			x = src.x + (launch_at_range * sin(angle))
+			y = src.y + (launch_at_range * cos(angle))
+			z = src.z
+			B.forceMove(get_turf(src))
+			B.launch_at(locate(x, y, z), from = shot_from)
 	..()
 
 /obj/item/projectile/bullet/invisible
