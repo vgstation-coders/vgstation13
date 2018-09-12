@@ -171,7 +171,26 @@
 	icon = 'icons/obj/weaponsmithing.dmi'
 	icon_state = "rail_assembly"
 	var/durability = 100 //After a certain number of shots, the rails will degrade and will need to be replaced.
+	var/stage = 0
 
+/obj/item/weapon/rail_assembly/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/weapon/newspaper))
+		to_chat(user, "You add \the [W] to \the [src] as padding.")
+		stage = 1
+		desc = "A set of metal rails with some newspaper stuck on it. With some extra cables, this could work as a splint."
+		icon = 'icons/obj/items.dmi'
+		icon_state = "ghettosplint"
+		qdel(W)
+	if(istype(W,/obj/item/weapon/handcuffs/cable) && stage == 1)	
+		to_chat(user,"<span class='notice'>You tie up \the [src] with \the [W], creating a ghetto splint!</span>")
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/stack/medical/splint/ghetto/I = new (get_turf(user))
+			user.put_in_hands(I)
+		else
+			new /obj/item/stack/medical/splint/ghetto(get_turf(src.loc))
+		qdel(src)	
+	
 /obj/item/weapon/cylinder
 	name = "beaker"
 	desc = "A beaker. There appear to be six holes drilled through the bottom."

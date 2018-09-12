@@ -3533,7 +3533,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/deepfryholder/New()
 	..()
-	reagents.add_reagent(NUTRIMENT,deepFriedNutriment)
+	if(deepFriedNutriment)
+		reagents.add_reagent(NUTRIMENT,deepFriedNutriment)
 
 ///////////////////////////////////////////
 // new old food stuff from bs12

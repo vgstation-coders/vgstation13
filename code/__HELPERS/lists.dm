@@ -158,6 +158,21 @@
 		. = L[L.len]
 		L.len--
 
+//Puts an item on the end of a list
+/proc/push(list/L, thing)
+	L += thing
+
+//Shift/Unshift works on a FIFO system unlike pop/push working on FILO
+//Returns the bottom(first) element from the list and removes it from the list
+/proc/shift(list/L)
+	if(L.len)
+		. = L[1]
+		L.Cut(1,2)
+
+//Puts an item at the beginning of the list
+/proc/unshift(list/L, thing)
+	L.Insert(1,thing)
+
 /proc/sorted_insert(list/L, thing, comparator)
 	var/pos = L.len
 	while(pos > 0 && call(comparator)(thing, L[pos]) > 0)

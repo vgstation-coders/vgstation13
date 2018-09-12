@@ -81,9 +81,9 @@
 	if(bombassembly)
 		bombassembly.Crossed(AM)
 
-/obj/item/device/onetankbomb/on_found(mob/finder as mob)
+/obj/item/device/onetankbomb/on_found(mob/wearer, mob/finder as mob)
 	if(bombassembly)
-		bombassembly.on_found(finder)
+		bombassembly.on_found(wearer, finder)
 
 // ---------- Procs below are for tanks that are used exclusively in 1-tank bombs ----------
 
