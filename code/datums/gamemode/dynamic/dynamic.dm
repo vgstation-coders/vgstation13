@@ -28,6 +28,8 @@ var/list/forced_roundstart_ruleset = list()
 /datum/gamemode/dynamic/can_start()
 	threat_level = rand(1,100)*0.6 + rand(1,100)*0.4//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
 	threat = threat_level
+	latejoin_injection_cooldown = rand(6600,10200)
+	midround_injection_cooldown = rand(12000,21000)
 	message_admins("Dynamic Mode initialized with a Threat Level of... <font size='8'>[threat_level]</font>!")
 	return 1
 
@@ -61,7 +63,7 @@ var/list/forced_roundstart_ruleset = list()
 		rule.mode = src
 		rule.candidates = candidates.Copy()
 		rule.trim_candidates()
-		if (rule.ready())
+		if (rule.ready(1))//ignoring enemy job requirements
 			picking_roundstart_rule(list(rule))
 
 /datum/gamemode/dynamic/proc/roundstart()
@@ -112,7 +114,7 @@ var/list/forced_roundstart_ruleset = list()
 				for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
 					rule.candidates -= M//removing the assigned players from the candidates for the other rules
 					if (!rule.ready())
-						drafted_rules -= rule//and removing rules from those that are no longer elligible
+						drafted_rules -= rule//and removing rules that are no longer elligible
 			return 1
 		else
 			message_admins("....except not because whoever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
@@ -160,7 +162,7 @@ var/list/forced_roundstart_ruleset = list()
 	if (new_rule && (forced || (new_rule.acceptable(living_players.len,threat_level) && new_rule.cost <= threat)))
 		new_rule.candidates = current_players.Copy()
 		new_rule.trim_candidates()
-		if (new_rule.ready())
+		if (new_rule.ready(forced))
 			threat -= new_rule.cost
 			if (new_rule.execute())//this should never fail since ready() returned 1
 				message_admins("Making a call to a specific ruleset...<font size='3'>[new_rule.name]</font>!")
@@ -169,6 +171,9 @@ var/list/forced_roundstart_ruleset = list()
 				if (new_rule.persistent)
 					current_rules += new_rule
 				return 1
+		else if (forced)
+			message_admins("The ruleset couldn't be executed due to lack of elligible players.")
+			log_admin("The ruleset couldn't be executed due to lack of elligible players.")
 	return 0
 
 /datum/gamemode/dynamic/process()
@@ -181,6 +186,8 @@ var/list/forced_roundstart_ruleset = list()
 	if (midround_injection_cooldown)
 		midround_injection_cooldown--
 	else
+		message_admins("DYNAMIC MODE: Checking state of the round.")
+		log_admin("DYNAMIC MODE: Checking state of the round.")
 		//time to inject some threat into the round
 		if(emergency_shuttle.departed)//unless the shuttle is gone
 			return
@@ -188,6 +195,8 @@ var/list/forced_roundstart_ruleset = list()
 		update_playercounts()
 
 		if (injection_attempt())
+			message_admins("DYNAMIC MODE: Attempting to inject some antags.")
+			log_admin("DYNAMIC MODE: Attempting to inject some antags.")
 			midround_injection_cooldown = rand(12000,21000)//20 to 35 minutes inbetween midround threat injections attempts
 			var/list/drafted_rules = list()
 			var/list/current_players = list(CURRENT_LIVING_PLAYERS, CURRENT_LIVING_ANTAGS, CURRENT_DEAD_PLAYERS, CURRENT_OBSERVERS)
@@ -204,6 +213,8 @@ var/list/forced_roundstart_ruleset = list()
 
 			if (drafted_rules.len > 0)
 				picking_latejoin_rule(drafted_rules)
+		else
+			midround_injection_cooldown = rand(6600,10200)
 
 
 /datum/gamemode/dynamic/proc/update_playercounts()
@@ -262,7 +273,7 @@ var/list/forced_roundstart_ruleset = list()
 	if (forced_latejoin_rule)
 		forced_latejoin_rule.candidates = list(newPlayer)
 		forced_latejoin_rule.trim_candidates()
-		if (forced_latejoin_rule.ready())
+		if (forced_latejoin_rule.ready(1))
 			picking_latejoin_rule(list(forced_latejoin_rule))
 		forced_latejoin_rule = null
 

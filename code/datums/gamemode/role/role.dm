@@ -202,9 +202,7 @@
 	return 1
 
 // Return 1 on success, 0 on failure.
-/datum/role/proc/OnPostSetup(var/auto_antag = TRUE)
-	if (auto_antag)
-		Greet(1)
+/datum/role/proc/OnPostSetup()
 	return 1
 
 /datum/role/proc/process()
@@ -237,10 +235,17 @@
 /datum/role/proc/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	var/mob/M = antag.current
-	return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
-[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
- - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
- - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a><br>"}
+	if (M)
+		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
+	[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
+	 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
+	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a><br>"}
+	else
+		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
+	[name] [antag.name]/[antag.key]<b><font color=red> - (DESTROYED)</font></b>
+	 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
+	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a><br>"}
+
 
 /datum/role/proc/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -506,6 +511,28 @@
 		else
 			AppendObjective(/datum/objective/hijack)
 	return
+
+/datum/role/wizard/OnPostSetup()
+	. = ..()
+	if(!.)
+		return
+	antag.current.forceMove(pick(wizardstart))
+	equip_wizard(antag.current)
+	name_wizard(antag.current)
+
+/datum/role/wizard/Greet(var/greeting,var/custom)
+	if(!greeting)
+		return
+
+	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	switch(greeting)
+		if (GREET_CUSTOM)
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [custom]")
+		else
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Wizard!!</br></span>")
+			to_chat(antag.current, "<span class='danger'>The Space Wizards Federation has given you some tasks.</br></span>")//todo: randomize funnier plots such as "you were bored so you decided to go mess with the crew"
+
+	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
 //________________________________________________
 

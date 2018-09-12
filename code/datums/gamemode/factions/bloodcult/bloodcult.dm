@@ -34,8 +34,6 @@ var/veil_thickness = CULT_PROLOGUE
 	M.special_role = "Cultist"
 
 /datum/faction/bloodcult/OnPostSetup()
-	for(var/datum/role/R in members)
-		R.OnPostSetup(FALSE)
 	initialize_cultwords()
 
 //to recode later on

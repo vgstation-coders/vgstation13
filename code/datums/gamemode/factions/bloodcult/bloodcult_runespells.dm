@@ -927,7 +927,7 @@
 	if (!cult)
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 	cult.HandleRecruitedRole(newCultist)
-	newCultist.OnPostSetup(FALSE)
+	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_CONVERTED)
 
 /datum/rune_spell/conversion/Removed(var/mob/M)
