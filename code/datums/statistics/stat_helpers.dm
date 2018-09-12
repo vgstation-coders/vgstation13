@@ -55,8 +55,9 @@
 	if(M.mind)
 		if(M.mind.assigned_role && M.mind.assigned_role != "")
 			d.assigned_role = M.mind.assigned_role
-		// if(M.mind.special_role && M.mind.special_role != "")
-		// 	d.special_role = M.mind.special_role
+		if(M.mind.antag_roles)
+			var/datum/role/R = M.mind.antag_roles[1]
+		 	d.special_role = R.name
 		if(M.mind.key)
 			d.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name)
@@ -90,8 +91,9 @@
 			s.assigned_role = M.mind.assigned_role
 			if(M.mind.assigned_role in command_positions)
 				heads_at_roundend++
-		if(M.mind.special_role && M.mind.special_role != "")
-			s.special_role = M.mind.special_role
+		if(M.mind.antag_roles)
+			var/datum/role/R = M.mind.antag_roles[1]
+		 	s.special_role = R.name
 		if(M.mind.key)
 			s.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name)
@@ -127,20 +129,20 @@
 		uplink_purchases.Add(UP)
 
 /datum/stat_collector/proc/add_objectives(var/datum/mind/M)
-	// if(M.objectives.len)
-	// 	for(var/datum/objective/O in M.objectives)
-	// 		var/datum/stat/antag_objective/AO = new
-	// 		AO.key = ckey(M.key)
-	// 		AO.realname = STRIP_NEWLINE(M.name)
-	// 		AO.special_role = M.special_role
-	// 		AO.objective_type = O.type
-	// 		AO.objective_desc = O.explanation_text
-	// 		AO.objective_succeeded = O.check_completion()
-	// 		if(O.target)
-	// 			AO.target_name = STRIP_NEWLINE(O.target.name)
-	// 			AO.target_role = O.target.assigned_role
-    //
-	// 		antag_objectives.Add(AO)
+	for(var/datum/role/R in M.antag_roles)
+		for(var/datum/objective/O in R.objectives.GetObjectives())
+			var/datum/stat/antag_objective/AO = new
+			AO.key = ckey(M.key)
+			AO.realname = STRIP_NEWLINE(M.name)
+			AO.special_role = R.name
+			AO.objective_type = O.type
+			AO.objective_desc = O.explanation_text
+			AO.objective_succeeded = O.IsFulfilled()
+			if(istype(O,/datum/objective/target))
+				var/datum/objective/target/T = O
+				AO.target_name = STRIP_NEWLINE(T.target.name)
+				AO.target_role = T.target.assigned_role
+			antag_objectives.Add(AO)
 
 
 /datum/stat/population_stat/New(pop as num)
@@ -167,7 +169,7 @@
 		add_objectives(M)
 		if(istype(M.current, /mob/living) && !M.current.isDead())
 			add_survivor_stat(M.current)
-			if(M.special_role == "Cultist")
+			if(isanycultist(M.current))
 				cult_surviving_cultists++
 
 /proc/stats_server_alert_new_file()
