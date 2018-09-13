@@ -65,9 +65,6 @@
 	stat_collection.cult_deconverted++
 	. = ..()
 
-/datum/role/legacy_cultist/MemorizeObjectives()
-	AnnounceObjectives()
-
 /datum/role/legacy_cultist/AnnounceObjectives()
 	if (!istype(faction, /datum/faction/cult/narsie))
 		WARNING("Wrong faction type for [src.antag.current], faction is [faction.type]")
@@ -76,5 +73,4 @@
 	to_chat(antag.current, "<span class = 'warning'>Our new objective is:</span>")
 	to_chat(antag.current, "Objective #[faction.objective_holder.objectives.len]: <span class='danger'>[our_cult.current_objective.name]</span>")
 	to_chat(antag.current, "<span class='warning'>[our_cult.current_objective.explanation_text]</span><br/>")
-	antag.memory += "Objective #[faction.objective_holder.objectives.len]: <span class='danger'>[our_cult.current_objective.name]</span>"
-	antag.memory += "<span class='warning'>[our_cult.current_objective.explanation_text]</span><br/>"
+

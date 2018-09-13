@@ -198,7 +198,7 @@
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
-		var/datum/role/legacy_cultist/newCop = new
+		var/datum/role/nuclear_operative/newCop = new
 		newCop.AssignToRole(M.mind,1)
 		nuclear.HandleRecruitedRole(newCop)
 		newCop.Greet(GREET_ROUNDSTART)

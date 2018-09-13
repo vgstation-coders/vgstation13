@@ -93,7 +93,8 @@
 		new_character.key = key		//now transfer the key to link the client to our new body
 
 /datum/mind/proc/store_memory(new_text)
-	memory += "[new_text]<BR>"
+	if(new_text)
+		memory += "[new_text]<BR>"
 
 
 /datum/mind/proc/hasFactionsWithHUDIcons()

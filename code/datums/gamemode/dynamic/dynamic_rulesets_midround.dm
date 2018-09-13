@@ -45,6 +45,8 @@
 	newTraitor.AssignToRole(M.mind,1)
 	newTraitor.OnPostSetup()
 	newTraitor.Greet(GREET_AUTOTATOR)
+	newTraitor.ForgeObjectives()
+	newTraitor.AnnounceObjectives()
 	return 1
 
 //////////////////////////////////////////////
@@ -116,3 +118,73 @@
 		federation.HandleRecruitedRole(newWizard)
 		newWizard.OnPostSetup()
 		newWizard.Greet(GREET_MIDROUND)
+		newWizard.ForgeObjectives()
+		newWizard.AnnounceObjectives()
+
+
+//////////////////////////////////////////////
+//                                          //
+//          NUCLEAR OPERATIVES (MIDROUND)   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/nuclear
+	name = "Nuclear Assault"
+	role_category = ROLE_OPERATIVE
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_candidates = 6
+	weight = 5
+	cost = 35
+	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	logo = "nuke-logo"
+
+/datum/dynamic_ruleset/midround/nuclear/acceptable(var/population=0,var/threat=0)
+	if (locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
+		return 0//unavailable if nuke ops were already sent at roundstart
+	return ..()
+
+/datum/dynamic_ruleset/midround/nuclear/ready(var/forced = 0)
+	if (required_candidates > (dead_players.len + list_observers.len))
+		return 0
+	return ..()
+
+/datum/dynamic_ruleset/midround/nuclear/execute()
+	var/list/possible_candidates = list()
+	possible_candidates.Add(dead_players)
+	possible_candidates.Add(list_observers)
+	send_applications(possible_candidates)
+	return 1
+
+/datum/dynamic_ruleset/midround/nuclear/review_applications()
+	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if (!nuclear)
+		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)
+	for (var/i = required_candidates, i > 0, i--)
+		if(applicants.len <= 0)
+			break
+		var/mob/applicant = null
+		var/selected_key = pick(applicants)
+		for(var/mob/M in player_list)
+			if(M.key == selected_key)
+				applicant = M
+		if(!applicant || !applicant.key)
+			i++
+			continue
+		applicants -= applicant.key
+		if(!isobserver(applicant))
+			//Making sure we don't recruit people who got back into the game since they applied
+			i++
+			continue
+
+		var/mob/living/carbon/human/new_character= makeBody(applicant)
+		new_character.dna.ResetSE()
+
+		assigned += new_character
+		var/datum/role/nuclear_operative/newCop = new
+		newCop.AssignToRole(new_character.mind,1)
+		nuclear.HandleRecruitedRole(newCop)
+		newCop.OnPostSetup()
+		newCop.Greet(GREET_MIDROUND)
+		newCop.ForgeObjectives()
+		newCop.AnnounceObjectives()

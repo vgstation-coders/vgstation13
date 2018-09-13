@@ -55,7 +55,7 @@
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		return 0
 	if (locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
-		weight = initial(weight) * 2//double chance to happen when there was a roundstart wizard
+		weight = initial(weight) * 5
 
 	return ..()
 

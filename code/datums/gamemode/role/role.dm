@@ -258,9 +258,6 @@
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <B>You are \a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
 
-/datum/role/proc/AnnounceObjectives()
-	to_chat(antag.current, "[ReturnObjectivesString(check_name = FALSE)]")
-
 /datum/role/proc/PreMindTransfer(var/datum/mind/M)
 	return
 
@@ -329,14 +326,19 @@
 			text += "<a href='?src=\ref[M];role_edit=\ref[src];add_to_faction=1'>(add)</a>"
 	text += "<br>"
 	if (objectives.objectives.len)
-		text += "<b>personnal objectives</b><br>"
+		text += "<b>personnal objectives</b><ul>"
 	text += objectives.GetObjectiveString(0,admin_edit,M, src)
-	text += "<br>"
+	if (objectives.objectives.len)
+		text += "</ul>"
 	if (faction && faction.objective_holder)
 		if (faction.objective_holder.objectives.len)
-			text += "<b>faction objectives</b><br>"
+			if (objectives.objectives.len)
+				text += "<br>"
+			text += "<b>faction objectives</b><ul>"
 		text += faction.objective_holder.GetObjectiveString(0,admin_edit,M)
-	text += "<br><br>"
+		if (faction.objective_holder.objectives.len)
+			text += "</ul>"
+	text += "<br>"
 	return text
 /*
 /datum/role_controls
@@ -406,14 +408,24 @@
 		return
 
 
-/datum/role/proc/MemorizeObjectives()
-	var/text="<b>[name] objectives:</b><ul>"
-	var/list/current_objectives = objectives.GetObjectives()
-	for(var/obj_count = 1 to current_objectives.len)
-		var/datum/objective/O = current_objectives[obj_count]
-		text +=  "<B>Objective #[obj_count]</B>: [O.explanation_text] <br/>"
+/datum/role/proc/AnnounceObjectives()
+	var/text = ""
+	if (objectives.objectives.len)
+		text += "<b>[name] objectives:</b><ul>"
+		var/obj_count = 1
+		for(var/datum/objective/O in objectives.objectives)
+			text += "<b>Objective #[obj_count++]</b>: [O.explanation_text]<br>"
+		text += "</ul>"
+	if (faction && faction.objective_holder)
+		if (faction.objective_holder.objectives.len)
+			if (objectives.objectives.len)
+				text += "<br>"
+			text += "<b>faction objectives:</b><ul>"
+			var/obj_count = 1
+			for(var/datum/objective/O in objectives.objectives)
+				text += "<b>Objective #[obj_count++]</b>: [O.explanation_text]<br>"
+			text += "</ul>"
 	to_chat(antag.current, text)
-	antag.memory += "[text]<BR>"
 
 /datum/role/proc/GetMemoryHeader()
 	return name

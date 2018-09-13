@@ -334,6 +334,11 @@ var/list/factions_with_hud_icons = list()
 		return 0 //Critical failure.
 	..()
 
+/datum/faction/wizard/forgeObjectives()
+	for(var/datum/role/R in members)
+		R.ForgeObjectives()
+		R.AnnounceObjectives()
+
 /datum/faction/wizard/ragin
 	accept_latejoiners = TRUE
 	var/max_wizards
