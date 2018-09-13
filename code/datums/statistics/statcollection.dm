@@ -75,7 +75,8 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/list/survivors = list()
 	var/list/uplink_purchases = list()
 	var/list/badass_bundles = list()
-	var/list/antag_objectives = list()
+	var/list/factions = list()
+	var/list/orphaned_roles = list()
 	var/list/population_polls = list()
 	// Blood spilled in c.liters
 	var/blood_spilled = 0
@@ -170,9 +171,6 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 		"BRAIN" = 0)
 
 /datum/stat/antag_objective
-	var/realname = null
-	var/key = null
-	var/special_role = null
 	var/objective_type = null
 	var/objective_desc = null
 	var/objective_succeeded = FALSE
@@ -199,6 +197,17 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 	var/devastation_range = 0
 	var/heavy_impact_range = 0
 	var/light_impact_range = 0
+
+/datum/stat/role
+	var/name = null //string: Name of role type
+	var/owner = null //string: Name of owner
+	var/list/objectives = list() //List: /datum/stat/objective
+
+/datum/stat/faction
+	var/name = null //string
+	var/survivors = null //int
+	var/list/members = list() //List: NAME = /datum/stat/role
+	var/list/objectives = list() //List: /datum/stat/objective
 
 /datum/stat_collector/proc/get_valid_file(var/extension = "json")
 	var/filename_date = time2text(round_start_time, "YYYY-MM-DD")
