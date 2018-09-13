@@ -334,6 +334,8 @@
 	for(var/role in character.mind.antag_roles)
 		var/datum/role/R = character.mind.antag_roles[role]
 		R.OnPostSetup()
+		R.ForgeObjectives()
+		R.AnnounceObjectives()
 
 	var/datum/job/J = job_master.GetJob(rank)
 	if (character.loc != T)//uh oh, we're spawning as an off-station antag, better not be announced, show up on the manifest, or take up a job slot
