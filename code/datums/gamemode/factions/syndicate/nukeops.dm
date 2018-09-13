@@ -13,6 +13,8 @@
 
 /datum/faction/syndicate/nuke_op/forgeObjectives()
 	AppendObjective(/datum/objective/nuclear)
+	for(var/datum/role/nuclear_operative/N in members)
+		N.AnnounceObjectives()
 
 /datum/faction/syndicate/nuke_op/AdminPanelEntry()
 	var/list/dat = ..()

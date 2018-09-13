@@ -184,7 +184,5 @@
 		var/datum/role/nuclear_operative/newCop = new
 		newCop.AssignToRole(new_character.mind,1)
 		nuclear.HandleRecruitedRole(newCop)
-		newCop.OnPostSetup()
 		newCop.Greet(GREET_MIDROUND)
-		newCop.ForgeObjectives()
-		newCop.AnnounceObjectives()
+	nuclear.OnPostSetup()
