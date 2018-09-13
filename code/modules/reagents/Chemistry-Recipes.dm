@@ -3222,7 +3222,7 @@
 	name = "Beepsky Classic"
 	id = BEEPSKY_CLASSIC
 	result = BEEPSKY_CLASSIC
-	required_reagents = list(BEEPSKY_SMASH = 2, KARMOTRINE = 3)
+	required_reagents = list(BEEPSKYSMASH = 2, KARMOTRINE = 3)
 	result_amount = 5
 
 /datum/chemical_reaction/spider
