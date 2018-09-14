@@ -117,7 +117,7 @@ var/list/forced_roundstart_ruleset = list()
 						drafted_rules -= rule//and removing rules that are no longer elligible
 			return 1
 		else
-			message_admins("....except not because whoever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
+			message_admins("....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
 	return 0
 
 /datum/gamemode/dynamic/proc/picking_latejoin_rule(var/list/drafted_rules = list())
@@ -177,6 +177,7 @@ var/list/forced_roundstart_ruleset = list()
 	return 0
 
 /datum/gamemode/dynamic/process()
+	. = ..() // Making the factions & roles process.
 	if (latejoin_injection_cooldown)
 		latejoin_injection_cooldown--
 
