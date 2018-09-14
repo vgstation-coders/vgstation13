@@ -184,7 +184,7 @@
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
-#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune))
+#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy))
 
 #define ismatrix(A) (istype(A, /matrix))
 
@@ -201,32 +201,43 @@
 #define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 //Macros for antags
 
-#define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind && H.mind.vampire)
+#define isfaction(A) (istype(A, /datum/faction))
 
-#define iscult(H) (H.mind in ticker.mode.cult)
+#define isvampire(H) (H.mind ? H.mind.GetRole(VAMPIRE) : FALSE)
 
-#define isculthead(H) (iscult(H)&&(H.mind in ticker.mode.modePlayer))
+#define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define ischangeling(H) (H.mind in ticker.mode.changelings)
+#define hasFactionIcons(H) (H.mind && H.mind.hasFactionsWithHUDIcons())
 
-#define isrev(H) (H.mind in ticker.mode.revolutionaries)
+#define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
 
-#define isrevhead(H) (H.mind in ticker.mode.head_revolutionaries)
+#define islegacycultist(H) (H.mind && H.mind.GetRole(LEGACY_CULTIST))
 
-#define istraitor(H) (H.mind in ticker.mode.traitors)
+#define isanycultist(H) (H.mind && (H.mind.GetRole(LEGACY_CULTIST) || H.mind.GetRole(CULTIST)))
 
-#define ismalf(H) (H.mind in ticker.mode.malf_ai)
+#define ischangeling(H) (H.mind && H.mind.GetRole(CHANGELING))
 
-#define isnukeop(H) (H.mind in ticker.mode.syndicates)
-#define isnukeopleader(H) (H.mind == ticker.mode.nukeop_leader)
+#define isrev(H) (isrevnothead(H) || isrevhead(H))
 
-#define iswizard(H) (H.mind in ticker.mode.wizards)
+#define isrevnothead(H) (H.mind && H.mind.GetRole(REV))
 
-#define isapprentice(H) (H.mind in ticker.mode.apprentices)
+#define isrevhead(H) (H.mind && H.mind.GetRole(HEADREV))
 
-#define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || H.mind in ticker.mode.infected_monkeys)
+#define istraitor(H) (H.mind && H.mind.GetRole(TRAITOR))
 
-#define isdeathsquad(H) (H.mind in ticker.mode.deathsquads)
+#define ismalf(H) (H.mind && H.mind.GetRole(MALF))
+
+#define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
+
+#define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
+
+#define isapprentice(H) (H.mind && H.mind.GetRole(WIZAPP))
+
+#define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || (H.mind && H.mind.GetRole(MADMONKEY)))
+
+#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUAD))
+
+
 
 
 //Macro for AREAS!

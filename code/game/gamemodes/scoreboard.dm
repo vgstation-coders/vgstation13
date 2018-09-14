@@ -1,38 +1,22 @@
 /datum/controller/gameticker/proc/scoreboard(var/completions)
 
+	for(var/datum/faction/F in ticker.mode.factions)
+		completions += F.GetObjectivesMenuHeader()
+		completions += F.GetScoreboard()
 
-	completions += mode.completion_text
-
-	//Calls auto_declare_completion_* for all modes
-	for(var/handler in typesof(/datum/game_mode/proc))
+	/*//Calls auto_declare_completion_* for all modes
+	for(var/handler in typesof(/datum/gamemode/proc))
 		if(findtext("[handler]","auto_declare_completion_"))
-			completions += "[call(mode, handler)()]"
+			completions += "[call(mode, handler)()]"*/
 
-	completions += "<br>[ert_declare_completion()]"
-	completions += "<br>[deathsquad_declare_completion()]"
+	//completions += "<br>[ert_declare_completion()]"
+	//completions += "<br>[deathsquad_declare_completion()]"
 
 	if(bomberman_mode)
 		completions += "<br>[bomberman_declare_completion()]"
 
 	if(achievements.len)
 		completions += "<br>[achievement_declare_completion()]"
-
-	//Print a list of antagonists to the server log
-	var/list/total_antagonists = list()
-	//Look into all mobs in world, dead or alive
-	for(var/datum/mind/Mind in minds)
-		var/temprole = Mind.special_role
-		if(temprole)							//If they are an antagonist of some sort.
-			if(temprole in total_antagonists)	//If the role exists already, add the name to it
-				total_antagonists[temprole] += ", [Mind.name]([Mind.key])"
-			else
-				total_antagonists.Add(temprole) //If the role doesnt exist in the list, create it and add the mob
-				total_antagonists[temprole] += ": [Mind.name]([Mind.key])"
-
-	//Now print them all into the log!
-	log_game("Antagonists at round end were...")
-	for(var/i in total_antagonists)
-		log_game("[i]s[total_antagonists[i]].")
 
 	//Score Calculation and Display
 
@@ -87,6 +71,8 @@
 					score["dmgestname"] = player.real_name
 					score["dmgestjob"] = player.job
 					score["dmgestkey"] = player.key
+
+	completions += "<br>[mode.declare_completion()]"
 
 	/*
 
@@ -214,7 +200,7 @@
 		//atmos = score["airloss"] * 20 //Air issues are bad, but since it's space, don't stress it too much
 	var/plaguepoints = score["disease"] * 50 //A diseased crewman is half-dead, as they say, and a double diseased is double half-dead
 
-	//Mode Specific
+	/*//Mode Specific
 	if(ticker.mode.config_tag == "nuclear")
 		if(score["disc"])
 			score["crewscore"] += 500
@@ -233,7 +219,7 @@
 			score["crewscore"] -= 10000
 		score["crewscore"] += arrestpoints
 		score["crewscore"] += killpoints
-		score["crewscore"] -= comdeadpts
+		score["crewscore"] -= comdeadpts*/
 
 	//Good Things
 	//score["crewscore"] += shipping
@@ -440,7 +426,7 @@
 	<B>Times a Clown was Abused:</B> [score["clownabuse"]]<BR>
 	<B>Number of Explosions This Shift:</B> [score["explosions"]]<BR>
 	<B>Number of Arena Rounds:</B> [score["arenafights"]]<BR>
-	<B>Total money trasferred:</B> [score["totaltransfer"]]<BR>"}
+	<B>Total money transferred:</B> [score["totaltransfer"]]<BR>"}
 
 	//Vault and away mission specific scoreboard elements
 	//The process_scoreboard() proc returns a list of strings associated with their score value (the number that's added to the total score)

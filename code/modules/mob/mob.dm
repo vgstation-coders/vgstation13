@@ -1658,6 +1658,15 @@ var/list/slot_equipment_priority = list( \
 		stunned = max(stunned + amount,0)
 	return
 
+/mob/proc/Deafen(amount)
+	ear_deaf = max(max(ear_deaf,amount),0)
+
+/mob/proc/Mute(amount)
+	say_mute = max(max(say_mute,amount),0)
+
+/mob/proc/AdjustMute(amount)
+	say_mute = max(say_mute + amount,0)
+
 /mob/proc/Knockdown(amount)
 	if(status_flags & CANKNOCKDOWN)
 		knockdown = max(max(knockdown,amount),0)
@@ -1837,6 +1846,11 @@ mob/proc/on_foot()
 
 /mob/proc/is_blind()
 	if(sdisabilities & BLIND || blinded || paralysis)
+		return 1
+	return 0
+
+/mob/proc/is_mute()
+	if(sdisabilities & MUTE || say_mute)
 		return 1
 	return 0
 

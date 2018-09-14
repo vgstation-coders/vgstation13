@@ -290,8 +290,17 @@
 	density = 1.05
 	specheatcap = 3.49
 
-	data = new/list("donor"= null, "viruses" = null, "blood_DNA" = null, "blood_type" = null, \
-	"blood_colour" = DEFAULT_BLOOD, "resistances" = null, "trace_chem" = null, "antibodies" = null)
+	data = list(
+		"donor"= null,
+		"viruses" = null,
+		"blood_DNA" = null,
+		"blood_type" = null,
+		"blood_colour" = DEFAULT_BLOOD,
+		"resistances" = null,
+		"trace_chem" = null,
+		"virus2" = null,
+		"antibodies" = null,
+		)
 
 /datum/reagent/blood/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -951,37 +960,55 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(iscult(H))
-			if(prob(10)) //1/10 chance of removing cultist status, so 50 units on average to uncult (half a holy water bottle)
-				ticker.mode.remove_cultist(H.mind)
-				H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, his eyes clear up.</span>",
-				"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
-			else //Warn the Cultist that it is fucking him up
+		if (iscultist(H))
+			H.Dizzy(6)
+			H.Jitter(12)
+			if (prob(20))
+				H.Knockdown(1)
+			else if (prob(30))
+				H.confused = 2
+			H.eye_blurry = max(H.eye_blurry, 3)
+		if (islegacycultist(H))
+			if (prob(10))
+				var/datum/role/legacy_cultist/LC = H.mind.GetRole(LEGACY_CULTIST)
+				LC.Drop()
+			else
 				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your arcane knowledge is becoming obscure again.</span>")
 		//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
-		if(isvampire(H))
-			if(!(VAMP_MATURE in H.mind.vampire.powers))
+		var/datum/role/vampire/V = isvampire(H)
+		if(V)
+			if(!(VAMP_MATURE in V.powers))
 				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric powers fade and your insides burn.</span>")
 				H.take_organ_damage(0, 5) //FIRE, MAGIC FIRE THAT BURNS ROBOTIC LIMBS TOO!
-				H.mind.vampire.smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
+				V.smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
 			else
 				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. Your vampiric powers counter most of the damage.</span>")
-				H.mind.vampire.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
-		if(H.mind && H.mind.special_role == "VampThrall")
-			ticker.mode.remove_thrall(H.mind)
-			H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
-			"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
+				V.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
+		var/datum/role/thrall/T = isthrall(H)
+		if(T)
+			if (prob(35)) // 35% chance of dethralling
+				T.Drop()
 
 /datum/reagent/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
 
 	if(..())
 		return 1
 
-	//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(isvampire(H))
-			if(!(VAMP_UNDYING in H.mind.vampire.powers))
+		if (iscultist(H))
+			H.Dizzy(12)
+			H.Jitter(24)
+			H.Knockdown(3)
+			H.confused = 3
+			H.eye_blurry = max(H.eye_blurry, 6)
+
+
+	/*
+	//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
+		var/datum/role/vampire/V = isvampire(H)
+		if(V)
+			if(!(VAMP_UNDYING in V.powers))
 				if(method == TOUCH)
 
 					if(H.wear_mask)
@@ -996,29 +1023,30 @@
 						if(prob(15) && volume >= 30)
 							var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 							if(head_organ)
-								if(!(VAMP_MATURE in H.mind.vampire.powers))
+								if(!(VAMP_MATURE in V.powers))
 									to_chat(H, "<span class='danger'>A freezing liquid covers your face. Its melting!</span>")
-									H.mind.vampire.smitecounter += 60 //Equivalent from metabolizing all this holy water normally
+									V.smitecounter += 60 //Equivalent from metabolizing all this holy water normally
 									if(head_organ.take_damage(30, 0))
 										H.UpdateDamageIcon(1)
 									head_organ.disfigure("burn")
 									H.audible_scream()
 								else
 									to_chat(H, "<span class='warning'>A freezing liquid covers your face. Your vampiric powers protect you!</span>")
-									H.mind.vampire.smitecounter += 12 //Ditto above
+									V.smitecounter += 12 //Ditto above
 
 						else
-							if(!(VAMP_MATURE in H.mind.vampire.powers))
+							if(!(VAMP_MATURE in V.powers))
 								to_chat(H, "<span class='danger'>You are doused with a freezing liquid. You're melting!</span>")
 								H.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
-								H.mind.vampire.smitecounter += volume * 2
+								V.smitecounter += volume * 2
 							else
 								to_chat(H, "<span class='warning'>You are doused with a freezing liquid. Your vampiric powers protect you!</span>")
-								H.mind.vampire.smitecounter += volume * 0.4
+								V.smitecounter += volume * 0.4
 				else
 					if(H.acidable())
 						H.take_organ_damage(min(15, volume * 2))
 						H.mind.vampire.smitecounter += 5
+	*/
 
 /datum/reagent/holywater/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -5271,7 +5299,7 @@
 		M.say(pick("The streets were heartless and cold, like the fickle 'love' of some hysterical dame.",
 			"The lights, the smoke, the grime... the city itself seemed alive that day. Was it the pulse that made me think so? Or just all the blood?",
 			"I caressed my .44 magnum. Ever since Jimmy bit it against the Two Bit Gang, the gun and its six rounds were the only partner I could trust.",
-			"The whole reason I took the case to begin with was trouble, in the shape of a pinup blonde with shanks that’d make you dizzy. Wouldn’t give her name, said she was related to the captain",
+			"The whole reason I took the case to begin with was trouble, in the shape of a pinup blonde with shanks thatï¿½d make you dizzy. Wouldnï¿½t give her name, said she was related to the captain",
 			"Judging by the boys at the lab, the perp took a sander to the tooth profiles, but did a sloppy job. Lab report came in early this morning. Guess my vacation is on pause.",
 			"The blacktop was baking that day, and the broads working 19th and Main were wearing even less than usual.",
 			"The young dame was pride and joy of the station. Little did she know that looks can breed envy... or worse.",
@@ -5365,11 +5393,11 @@
 				if(istype(M.current.loc,/obj/mecha))
 					imageloc = M.current.loc
 					imagelocB = M.current.loc
-				var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "metaclub")
-				I.plane = REV_ANTAG_HUD_PLANE
+				var/image/I = image('icons/logos.dmi', loc = imageloc, icon_state = "metaclub")
+				I.plane = METABUDDY_HUD_PLANE
 				M.current.client.images += I
-				var/image/J = image('icons/mob/mob.dmi', loc = imagelocB, icon_state = "metaclub")
-				J.plane = REV_ANTAG_HUD_PLANE
+				var/image/J = image('icons/logos.dmi', loc = imagelocB, icon_state = "metaclub")
+				J.plane = METABUDDY_HUD_PLANE
 				new_buddy.current.client.images += J
 
 /datum/reagent/ethanol/waifu

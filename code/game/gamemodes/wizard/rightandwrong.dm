@@ -9,6 +9,7 @@
 			continue
 		if(summon_type && iswizard(H))
 			continue
+		/* TODO - READD THIS
 		if(prob(35) && !is_special_character(H))
 			ticker.mode.traitors += H.mind
 			H.mind.special_role = "traitor"
@@ -296,3 +297,4 @@
 					else
 						new /obj/item/weapon/switchtool/swiss_army_knife(get_turf(H))
 			playsound(H,'sound/items/zippo_open.ogg', 50, 1)
+*/

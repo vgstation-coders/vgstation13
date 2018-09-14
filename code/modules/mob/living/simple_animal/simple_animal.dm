@@ -204,6 +204,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	confused = max(0, confused - 1)
 
+	if(say_mute)
+		say_mute = max(say_mute-1, 0)
+
 	if(purge)
 		purge -= 1
 

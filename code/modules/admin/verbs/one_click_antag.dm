@@ -39,180 +39,31 @@ client/proc/one_click_antag()
 		if(ai.client)
 			AIs += ai
 
-	if(AIs.len)
+	var/malf_made = FALSE
+	while(!malf_made && AIs.len)
 		malfAI = pick(AIs)
+		AIs.Remove(malfAI)
+		if(malfAI)
+			themind = malfAI.mind
+			malf_made = themind.make_AI_Malf()
 
-	if(malfAI)
-		themind = malfAI.mind
-		themind.make_AI_Malf()
-		return 1
 
-	return 0
+	return malf_made
 
 
 /datum/admins/proc/makeTraitors()
-	var/datum/game_mode/traitor/temp = new
-
-	if(config.protect_roles_from_antagonist)
-		temp.restricted_jobs += temp.protected_jobs
-
-	var/list/mob/living/carbon/human/candidates = list()
-
-	for(var/mob/living/carbon/human/applicant in player_list)
-		if(applicant.client.desires_role(ROLE_TRAITOR))
-			if(!applicant.stat)
-				if(applicant.mind)
-					if (!applicant.mind.special_role)
-						if(!jobban_isbanned(applicant, "traitor") && !jobban_isbanned(applicant, "Syndicate"))
-							if(!(applicant.job in temp.restricted_jobs))
-								candidates += applicant
-
-	if (candidates.len)
-		candidates = shuffle(candidates)
-
-		var/mob/living/carbon/human/candidate
-
-		var/antag_number = input("How many antags would you like to create?","Create Antagonists") as num|null
-
-		if (!antag_number)
-			to_chat(usr, "<span class='warning'>0 traitors selected. Aborting.</span>")
-			return
-
-		for (var/i = 1 to min(candidates.len, antag_number))
-			candidate = pick_n_take(candidates)
-
-			if (candidate)
-				var/datum/mind/candidate_mind = candidate.mind
-
-				if (candidate_mind)
-					if (candidate_mind.make_traitor())
-						log_admin("[key_name(owner)] has traitor'ed [key_name(candidate)] via create antagonist verb.")
-
-		return 1
-
-	return 0
 
 
 /datum/admins/proc/makeChanglings()
 
 
-	var/datum/game_mode/changeling/temp = new
-	if(config.protect_roles_from_antagonist)
-		temp.restricted_jobs += temp.protected_jobs
-
-	var/list/mob/living/carbon/human/candidates = list()
-	var/mob/living/carbon/human/H = null
-
-	for(var/mob/living/carbon/human/applicant in player_list)
-		if(applicant.client.desires_role(ROLE_CHANGELING))
-			if(!applicant.stat)
-				if(applicant.mind)
-					if (!applicant.mind.special_role)
-						if(!jobban_isbanned(applicant, "changeling") && !jobban_isbanned(applicant, "Syndicate"))
-							if(!(applicant.job in temp.restricted_jobs))
-								candidates += applicant
-
-	if(candidates.len)
-		var/numChanglings = min(candidates.len, input("Create how many changelings?", "Make Changelings", 3) as num|null)
-
-		for(var/i = 0, i<numChanglings, i++)
-			H = pick(candidates)
-			H.mind.make_Changling()
-			candidates.Remove(H)
-			log_admin("[key_name(owner)] has changeling'ed [key_name(H)] via create antagonist verb.")
-
-		return 1
-
-	return 0
-
 /datum/admins/proc/makeRevs()
 
 
-	var/datum/game_mode/revolution/temp = new
-	if(config.protect_roles_from_antagonist)
-		temp.restricted_jobs += temp.protected_jobs
-
-	var/list/mob/living/carbon/human/candidates = list()
-	var/mob/living/carbon/human/H = null
-
-	for(var/mob/living/carbon/human/applicant in player_list)
-		if(!applicant.client)
-			continue
-		if(applicant.client.desires_role(ROLE_REV))
-			if(applicant.stat == CONSCIOUS)
-				if(applicant.mind)
-					if(!applicant.mind.special_role)
-						if(!jobban_isbanned(applicant, "revolutionary") && !jobban_isbanned(applicant, "Syndicate"))
-							if(!(applicant.job in temp.restricted_jobs))
-								candidates += applicant
-
-	if(candidates.len)
-		var/numRevs = min(candidates.len, 3)
-
-		for(var/i = 0, i<numRevs, i++)
-			H = pick(candidates)
-			H.mind.make_Rev()
-			candidates.Remove(H)
-		return 1
-
-	return 0
-
 /datum/admins/proc/makeWizard()
-	var/list/mob/dead/observer/candidates = list()
-	var/mob/dead/observer/theghost = null
-
-	for(var/mob/dead/observer/G in get_active_candidates(ROLE_WIZARD,poll="Do you wish to be considered for the Space Wizard Federation \"Ambassador\"?"))
-		if(!jobban_isbanned(G, "wizard") && !jobban_isbanned(G, "Syndicate"))
-			candidates += G
-
-	if(candidates.len)
-		shuffle(candidates)
-		for(var/mob/i in candidates)
-			if(!i || !i.client)
-				continue //Dont bother removing them from the list since we only grab one wizard
-
-			theghost = i
-			break
-
-	if(theghost)
-		var/mob/living/carbon/human/new_character=makeBody(theghost)
-		new_character.mind.make_Wizard()
-		return 1
-
-	return 0
 
 
 /datum/admins/proc/makeCult()
-
-
-	var/datum/game_mode/cult/temp = new
-	if(config.protect_roles_from_antagonist)
-		temp.restricted_jobs += temp.protected_jobs
-
-	var/list/mob/living/carbon/human/candidates = list()
-	var/mob/living/carbon/human/H = null
-
-	for(var/mob/living/carbon/human/applicant in get_active_candidates(ROLE_CULTIST))
-		if(applicant.stat == CONSCIOUS)
-			if(applicant.mind)
-				if(!applicant.mind.special_role)
-					if(!jobban_isbanned(applicant, "cultist") && !jobban_isbanned(applicant, "Syndicate"))
-						if(!(applicant.job in temp.restricted_jobs))
-							candidates += applicant
-
-	if(candidates.len)
-		var/numCultists = min(candidates.len, 4)
-
-		for(var/i = 0, i<numCultists, i++)
-			H = pick(candidates)
-			H.mind.make_Cultist()
-			candidates.Remove(H)
-			temp.grant_runeword(H)
-
-		return 1
-
-	return 0
-
 
 
 /datum/admins/proc/makeNukeTeam()
@@ -279,22 +130,6 @@ client/proc/one_click_antag()
 				new /obj/effect/spawner/newbomb/timer/syndicate(A.loc)
 				del(A)
 				continue
-
-		for(var/datum/mind/synd_mind in ticker.mode.syndicates)
-			if(synd_mind.current)
-				if(synd_mind.current.client)
-					for(var/image/I in synd_mind.current.client.images)
-						if(I.icon_state == "synd")
-							//del(I)
-							synd_mind.current.client.images -= I
-
-		for(var/datum/mind/synd_mind in ticker.mode.syndicates)
-			if(synd_mind.current)
-				if(synd_mind.current.client)
-					for(var/datum/mind/synd_mind_1 in ticker.mode.syndicates)
-						if(synd_mind_1.current)
-							var/I = image('icons/mob/mob.dmi', loc = synd_mind_1.current, icon_state = "synd")
-							synd_mind.current.client.images += I
 
 		for (var/obj/machinery/nuclearbomb/bomb in machines)
 			bomb.r_code = nuke_code						// All the nukes are set to this code.
@@ -405,58 +240,12 @@ client/proc/one_click_antag()
 	new_syndicate_commando.mind.assigned_role = "MODE"
 	new_syndicate_commando.mind.special_role = "Syndicate Commando"
 
-	//Adds them to current traitor list. Which is really the extra antagonist list.
-	ticker.mode.traitors += new_syndicate_commando.mind
 	new_syndicate_commando.equip_syndicate_commando(syndicate_leader_selected)
 
 	return new_syndicate_commando
 
 /datum/admins/proc/makeVoxRaiders()
 
-
-	var/list/mob/dead/observer/candidates = list()
-	var/mob/dead/observer/theghost = null
-	var/input = "Disregard shinies, acquire hardware."
-
-	var/leader_chosen = 0 //when the leader is chosen. The last person spawned.
-
-	//Generates a list of candidates from active ghosts.
-	for(var/mob/dead/observer/G in get_active_candidates(ROLE_VOXRAIDER, poll="Do you wish to be considered for a vox raiding party arriving on the station?"))
-		candidates += G
-
-	for(var/mob/dead/observer/G in candidates)
-		if(!G.key)
-			candidates.Remove(G)
-
-	if(candidates.len)
-		var/max_raiders = 1
-		var/raiders = max_raiders
-		//Spawns vox raiders and equips them.
-		for (var/obj/effect/landmark/L in landmarks_list)
-			if(L.name == "voxstart")
-				if(raiders<=0)
-					break
-
-				var/mob/living/carbon/human/new_vox = create_vox_raider(L, leader_chosen)
-
-				while((!theghost || !theghost.client) && candidates.len)
-					theghost = pick(candidates)
-					candidates.Remove(theghost)
-
-				if(!theghost)
-					qdel(new_vox)
-					break
-
-				new_vox.key = theghost.key
-				to_chat(new_vox, "<span class='notice'>You are a Vox Primalis, fresh out of the Shoal. Your ship has arrived at the Tau Ceti system hosting the NSV Exodus... or was it the Luna? NSS? Utopia? Nobody is really sure, but everyong is raring to start pillaging! Your current goal is: <span class='danger'> [input]</span></span>")
-				to_chat(new_vox, "<span class='warning'>Don't forget to turn on your nitrogen internals!</span>")
-
-				raiders--
-			if(raiders > max_raiders)
-				return 0
-	else
-		return 0
-	return 1
 
 /datum/admins/proc/create_vox_raider(obj/spawn_location, leader_chosen = 0)
 
@@ -479,40 +268,8 @@ client/proc/one_click_antag()
 	new_vox.mind.special_role = "Vox Raider"
 	new_vox.mutations |= M_NOCLONE //Stops the station crew from messing around with their DNA.
 
-	ticker.mode.traitors += new_vox.mind
 	new_vox.equip_vox_raider()
 
 	return new_vox
 
 /datum/admins/proc/makeVampires()
-
-
-	var/datum/game_mode/vampire/temp = new
-	if(config.protect_roles_from_antagonist)
-		temp.restricted_jobs += temp.protected_jobs
-
-	var/list/mob/living/carbon/human/candidates = list()
-	var/mob/living/carbon/human/H = null
-
-	for(var/mob/living/carbon/human/applicant in player_list)
-		if(applicant.client.desires_role(ROLE_VAMPIRE))
-			if(!applicant.stat)
-				if(applicant.mind)
-					if (!applicant.mind.special_role)
-						if(!jobban_isbanned(applicant, ROLE_VAMPIRE) && !jobban_isbanned(applicant, "Syndicate"))
-							if(!(applicant.job in temp.restricted_jobs))
-								candidates += applicant
-
-	if(candidates.len)
-		var/numVamps = min(candidates.len, input("Create how many vampires?", "Make Vampires", 3) as num|null)
-
-		for(var/i = 0, i<numVamps, i++)
-			H = pick(candidates)
-			H.mind.make_new_vampire()
-			log_admin("[key_name(owner)] has made [key_name(H)] a vampire via create antagonist verb.")
-			temp.greet_vampire(H.mind)
-			candidates.Remove(H)
-
-		return 1
-
-	return 0

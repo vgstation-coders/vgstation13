@@ -7,10 +7,6 @@
 // If the rev icons start going wrong for some reason, ticker.mode:update_all_rev_icons() can be called to correct them.
 // If the game somtimes isn't registering a win properly, then ticker.mode.check_win() isn't being called somewhere.
 
-#define ADD_REVOLUTIONARY_FAIL_IS_COMMAND -1
-#define ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED -2
-#define ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED -3
-#define ADD_REVOLUTIONARY_FAIL_IS_REV -4
 
 
 /datum/game_mode

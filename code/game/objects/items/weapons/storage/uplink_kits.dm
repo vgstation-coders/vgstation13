@@ -130,8 +130,8 @@
 				new /obj/item/clothing/accessory/storage/bandolier(src)
 
 			if("anarchist")//14+14+6=34, plus molotovs
-				new /obj/item/weapon/implanter/traitor(src)
-				new /obj/item/weapon/implanter/traitor(src)
+				// new /obj/item/weapon/implanter/traitor(src)
+				// new /obj/item/weapon/implanter/traitor(src)
 				new /obj/item/clothing/mask/bandana/red(src)
 				new /obj/item/clothing/mask/bandana/red(src)
 				new /obj/item/clothing/mask/bandana/red(src)
@@ -222,8 +222,8 @@
 
 	New()
 		..()
-		new /obj/item/weapon/implanter/traitor(src)
-		new /obj/item/weapon/implanter/traitor(src)
+		//new /obj/item/weapon/implanter/traitor(src)
+		//new /obj/item/weapon/implanter/traitor(src)
 		new /obj/item/clothing/glasses/sunglasses/sechud/syndishades(src)
 
 /obj/item/weapon/storage/box/syndie_kit/boolets

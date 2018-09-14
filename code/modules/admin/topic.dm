@@ -54,7 +54,7 @@
 				if(!src.makeVoxRaiders())
 					to_chat(usr, "<span class='warning'>Unfortunately, there weren't enough candidates available.</span>")
 
-	else if("announce_laws" in href_list)
+	if("announce_laws" in href_list)
 		var/mob/living/silicon/S = locate(href_list["mob"])
 
 		log_admin("[key_name(usr)] has notified [key_name(S)] of a change to their laws.")
@@ -1017,7 +1017,7 @@
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=wizard;jobban4=\ref[M]'>[replacetext("Wizard", " ", "&nbsp")]</a></td>"
 
 		//Strike Team
-		if(jobban_isbanned(M, "Strike Team") || isbanned_dept)
+		if(jobban_isbanned(M, ROLE_STRIKE) || isbanned_dept)
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Strike Team;jobban4=\ref[M]'><font color=red>Strike Team</font></a></td>"
 		else
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Strike Team;jobban4=\ref[M]'>Strike Team</a></td>"
@@ -1424,9 +1424,6 @@
 	else if(href_list["c_mode"])
 		if(!check_rights(R_ADMIN))
 			return
-
-		if(ticker && ticker.mode)
-			return alert(usr, "The game has already started.", null, null, null, null)
 		var/dat = {"<B>What mode do you wish to play?</B><HR>"}
 		for(var/mode in config.modes)
 			dat += {"<A href='?src=\ref[src];c_mode2=[mode]'>[config.mode_names[mode]]</A><br>"}
@@ -1450,6 +1447,98 @@
 		dat += {"Now: [secret_force_mode]"}
 		usr << browse(dat, "window=f_secret")
 
+	else if(href_list["f_dynamic_roundstart"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(ticker && ticker.mode)
+			return alert(usr, "The game has already started.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+		var/roundstart_rules = list()
+		for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart))
+			var/datum/dynamic_ruleset/roundstart/newrule = new rule()
+			roundstart_rules[newrule.name] = newrule
+		var/added_rule = input(usr,"What ruleset do you want to force? This will bypass threat level and population restrictions.", "Rigging Roundstart", null) as null|anything in roundstart_rules
+		if (added_rule)
+			forced_roundstart_ruleset += roundstart_rules[added_rule]
+			log_admin("[key_name(usr)] set [added_rule] to be a forced roundstart ruleset.")
+			message_admins("[key_name(usr)] set [added_rule] to be a forced roundstart ruleset.", 1)
+			Game()
+
+	else if(href_list["f_dynamic_roundstart_clear"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		forced_roundstart_ruleset = list()
+		Game()
+		log_admin("[key_name(usr)] cleared the rigged roundstart rulesets. The mode will pick them as normal.")
+		message_admins("[key_name(usr)] cleared the rigged roundstart rulesets. The mode will pick them as normal.", 1)
+
+
+	else if(href_list["f_dynamic_roundstart_remove"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/datum/dynamic_ruleset/roundstart/rule = locate(href_list["f_dynamic_roundstart_remove"])
+		forced_roundstart_ruleset -= rule
+		Game()
+		log_admin("[key_name(usr)] removed [rule] from the forced roundstart rulesets.")
+		message_admins("[key_name(usr)] removed [rule] from the forced roundstart rulesets.", 1)
+
+
+	else if(href_list["f_dynamic_latejoin"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(!ticker || !ticker.mode)
+			return alert(usr, "The game must start first.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+		var/latejoin_rules = list()
+		for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
+			var/datum/dynamic_ruleset/latejoin/newrule = new rule()
+			latejoin_rules[newrule.name] = newrule
+		var/added_rule = input(usr,"What ruleset do you want to force upon the next latejoiner? This will bypass threat level and population restrictions.", "Rigging Latejoin", null) as null|anything in latejoin_rules
+		if (added_rule)
+			var/datum/gamemode/dynamic/mode = ticker.mode
+			mode.forced_latejoin_rule = latejoin_rules[added_rule]
+			log_admin("[key_name(usr)] set [added_rule] to proc on the next latejoin.")
+			message_admins("[key_name(usr)] set [added_rule] to proc on the next latejoin.", 1)
+			Game()
+
+	else if(href_list["f_dynamic_latejoin_clear"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if (ticker && ticker.mode && istype(ticker.mode,/datum/gamemode/dynamic))
+			var/datum/gamemode/dynamic/mode = ticker.mode
+			mode.forced_latejoin_rule = null
+			Game()
+			log_admin("[key_name(usr)] cleared the forced latejoin ruleset.")
+			message_admins("[key_name(usr)] cleared the forced latejoin ruleset.", 1)
+
+	else if(href_list["f_dynamic_midround"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		if(!ticker || !ticker.mode)
+			return alert(usr, "The game must start first.", null, null, null, null)
+		if(master_mode != "Dynamic Mode")
+			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+		var/midround_rules = list()
+		for (var/rule in subtypesof(/datum/dynamic_ruleset/midround))
+			var/datum/dynamic_ruleset/midround/newrule = new rule()
+			midround_rules[newrule.name] = rule
+		var/added_rule = input(usr,"What ruleset do you want to force right now? This will bypass threat level and population restrictions.", "Execute Ruleset", null) as null|anything in midround_rules
+		if (added_rule)
+			var/datum/gamemode/dynamic/mode = ticker.mode
+			log_admin("[key_name(usr)] executed the [added_rule] ruleset.")
+			message_admins("[key_name(usr)] executed the [added_rule] ruleset.", 1)
+			mode.picking_specific_rule(midround_rules[added_rule],1)
+
+
+
 	else if(href_list["c_mode2"])
 		if(!check_rights(R_ADMIN|R_SERVER))
 			return
@@ -1467,7 +1556,7 @@
 			.(href, list("c_mode"=1))
 		else
 			var/list/possible = list()
-			possible += mixed_allowed
+			possible += mixed_factions_allowed
 			possible += "DONE"
 			possible += "CANCEL"
 			if(possible.len < 3)
@@ -1513,7 +1602,7 @@
 			.(href, list("f_secret"=1))
 		else
 			var/list/possible = list()
-			possible += mixed_allowed
+			possible += mixed_factions_allowed
 			possible += "DONE"
 			possible += "CANCEL"
 			if(possible.len < 3)
@@ -2095,6 +2184,7 @@
 	else if(href_list["check_antagonist"])
 		check_antagonists()
 
+	/*
 	else if(href_list["cult_nextobj"])
 		if(alert(usr, "Validate the current Cult objective and unlock the next one?", "Cult Cheat Code", "Yes", "No") != "Yes")
 			return
@@ -2139,7 +2229,7 @@
 			to_chat(O, "<span class='game say'><span class='danger'>Nar-Sie</span> whispers to [M.real_name], <span class='sinister'>[input]</span></span>")
 
 		message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
-
+	*/
 	else if(href_list["adminplayerobservecoodjump"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -2205,12 +2295,12 @@
 			else
 				location_description = "([M.loc == T ? "at coordinates " : "in [M.loc] at coordinates "] [T.x], [T.y], [T.z])"
 
-		//Job + antagonist
+		/*Job + antagonist
 		if(M.mind)
 			special_role_description = "Role: <b>[M.mind.assigned_role]</b>; Antagonist: <font color='red'><b>[M.mind.special_role]</b></font>; Has been rev: [(M.mind.has_been_rev)?"Yes":"No"]"
 		else
 			special_role_description = "Role: <i>Mind datum missing</i> Antagonist: <i>Mind datum missing</i>; Has been rev: <i>Mind datum missing</i>;"
-
+		*/
 		//Health
 		if(isliving(M))
 			var/mob/living/L = M
@@ -2521,7 +2611,7 @@
 		if(!ismob(M))
 			to_chat(usr, "This can only be used on instances of type /mob.")
 			return
-		show_traitor_panel(M)
+		show_role_panel(M)
 
 	// /vg/
 	else if(href_list["set_base_laws"])
@@ -2826,7 +2916,7 @@
 				log_admin("[key_name(usr)] created a link with central command", 1)
 				message_admins("<span class='notice'>[key_name_admin(usr)] created a link with central command</span>", 1)
 				link_to_centcomm()
-			if("traitor_all")
+			/*if("traitor_all")
 				if(!ticker)
 					alert("The game hasn't started yet!")
 					return
@@ -2860,7 +2950,7 @@
 					ticker.mode.greet_traitor(A.mind)
 					ticker.mode.finalize_traitor(A.mind)
 				message_admins("<span class='notice'>[key_name_admin(usr)] used everyone is a traitor secret. Objective is [objective]</span>", 1)
-				log_admin("[key_name(usr)] used everyone is a traitor secret. Objective is [objective]")
+				log_admin("[key_name(usr)] used everyone is a traitor secret. Objective is [objective]")*/
 			if("moveadminshuttle")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ShA")
@@ -3743,8 +3833,8 @@
 						dat += text("<tr><td>[]</td><td>[]</td></tr>", H.name, H.get_assignment())
 				dat += "</table>"
 				usr << browse(dat, "window=manifest;size=440x410")
-			if("check_antagonist")
-				check_antagonists()
+			// if("check_antagonist")
+			// 	check_antagonists()
 			if("emergency_shuttle_panel")
 				emergency_shuttle_panel()
 			if("DNA")
@@ -4623,6 +4713,74 @@
 
 
 	//------------------------------------------------------------------Shuttle stuff end---------------------------------
+
+
+	if (href_list["obj_add"])
+		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
+
+		var/list/available_objectives = list()
+
+		for(var/objective_type in subtypesof(/datum/objective))
+			var/datum/objective/O = objective_type
+			available_objectives.Add(initial(O.name))
+			available_objectives[initial(O.name)] = O
+
+		var/new_obj = input("Select a new objective", "New Objective", null) as null|anything in available_objectives
+		var/obj_type = available_objectives[new_obj]
+
+		var/datum/objective/new_objective = new obj_type(null,FALSE)
+
+		if (new_objective.flags & FACTION_OBJECTIVE)
+			var/datum/faction/fac = input("To which faction shall we give this?", "Faction-wide objective", null) as null|anything in ticker.mode.factions
+			fac.handleNewObjective(new_objective)
+			return TRUE // It's a faction objective, let's not move any further.
+
+		if (obj_holder.owner)//so objectives won't target their owners.
+			new_objective.owner = obj_holder.owner
+
+		var/setup = TRUE
+		if (istype(new_objective,/datum/objective/target))
+			var/datum/objective/target/new_O = new_objective
+			if (alert("Do you want to specify a target?", "New Objective", "Yes", "No") == "Yes")
+				setup = new_O.select_target()
+				new_O.auto_target = FALSE
+			else
+				setup = TRUE //Let it sort itself out
+
+		if(!setup)
+			alert("Couldn't set-up a proper target.", "New Objective")
+			return
+
+		if (obj_holder.faction)
+			obj_holder.faction.AppendObjective(new_objective)
+			check_antagonists()
+			log_admin("[usr.key]/([usr.name]) gave \the [obj_holder.faction.ID] the objective: [new_objective.explanation_text]")
+
+	if (href_list["obj_delete"])
+		var/datum/objective/objective = locate(href_list["obj_delete"])
+		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
+
+		ASSERT(istype(objective) && istype(obj_holder))
+
+		check_antagonists()
+		if (obj_holder.faction)
+			log_admin("[usr.key]/([usr.name]) removed \the [obj_holder.faction.ID]'s objective ([objective.explanation_text])")
+			objective.faction.handleRemovedObjective(objective)
+
+		obj_holder.objectives.Remove(objective)
+
+	if(href_list["obj_completed"])
+		var/datum/objective/objective = locate(href_list["obj_completed"])
+		var/datum/objective_holder/obj_holder = locate(href_list["obj_holder"])
+
+		ASSERT(istype(objective))
+
+		if (objective.faction)
+			objective.faction.handleForcedCompletedObjective(objective)
+
+		objective.force_success = !objective.force_success
+		check_antagonists()
+		log_admin("[usr.key]/([usr.name]) toggled [obj_holder.faction.ID] [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
 
 	if(href_list["wages_enabled"])
 		if(check_rights(R_ADMIN))

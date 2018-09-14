@@ -530,7 +530,7 @@ var/global/list/bad_changing_colour_ckeys = list()
 #define INV_SLOT_SIGHT "sight_slot"
 #define INV_SLOT_TOOL "tool_slot"
 
-#define IS_MODE_COMPILED(MODE) (ispath(text2path("/datum/game_mode/"+(MODE))))
+//#define IS_MODE_COMPILED(MODE) (ispath(text2path("/datum/gamemode/"+(MODE))))
 
 
 var/list/global_mutations = list() // list of hidden mutation things
@@ -659,6 +659,9 @@ var/list/liftable_structures = list(\
 #define SEE_INVISIBLE_LEVEL_TWO 45	//Used by mobs under certain conditions.
 #define INVISIBILITY_LEVEL_TWO 45	//Used by turrets inside their covers.
 
+#define INVISIBILITY_CULTJAUNT 50	//Used by cult
+#define SEE_INVISIBLE_CULTJAUNT 50	//Used by cult
+
 #define INVISIBILITY_OBSERVER 60	//Used by Ghosts.
 #define SEE_INVISIBLE_OBSERVER 60	//Used by Ghosts.
 
@@ -702,7 +705,6 @@ SEE_PIXELS	256
 #define BEE_HEADING_HOME 3
 #define BEE_SWARM 4
 #define BEE_BUILDING 5
-
 
 //for infestation events
 #define LOC_KITCHEN 0
@@ -851,23 +853,25 @@ SEE_PIXELS	256
 #define ROLEPREF_VALMASK  3 // 0b00000011 - Used to get ROLEPREF flags without the ROLEPREF_POLLED and ROLEPREF_SAVE bits
 
 // Should correspond to jobbans, too.
-#define ROLE_ALIEN      "alien"
-#define ROLE_BLOB       "blob"      // New!
-#define ROLE_BORER      "borer"     // New!
-#define ROLE_CHANGELING "changeling"
-#define ROLE_COMMANDO   "commando"  // New!
-#define ROLE_CULTIST    "cultist"
-#define ROLE_MALF       "malf AI"
-#define ROLE_NINJA      "ninja"
-#define ROLE_OPERATIVE  "operative" // New!
-#define ROLE_PAI        "pAI"
-#define ROLE_PLANT      "Dionaea"
-#define ROLE_POSIBRAIN  "posibrain"
-#define ROLE_REV        "revolutionary"
-#define ROLE_TRAITOR    "traitor"
-#define ROLE_VAMPIRE    "vampire"
-#define ROLE_VOXRAIDER  "vox raider"
-#define ROLE_WIZARD     "wizard"
+#define ROLE_ALIEN      	"alien"
+#define ROLE_BLOB       	"blob"      // New!
+#define ROLE_BORER      	"borer"     // New!
+#define ROLE_CHANGELING 	"changeling"
+#define ROLE_COMMANDO   	"commando"  // New!
+#define ROLE_CULTIST    	"cultist"
+#define ROLE_LEGACY_CULTIST "legacy_cultist"
+#define ROLE_MALF       	"malf AI"
+#define ROLE_NINJA      	"ninja"
+#define ROLE_OPERATIVE  	"operative" // New!
+#define ROLE_PAI        	"pAI"
+#define ROLE_PLANT      	"Dionaea"
+#define ROLE_POSIBRAIN  	"posibrain"
+#define ROLE_REV        	"revolutionary"
+#define ROLE_STRIKE     	"Strike Team"
+#define ROLE_TRAITOR    	"traitor"
+#define ROLE_VAMPIRE    	"vampire"
+#define ROLE_VOXRAIDER  	"vox raider"
+#define ROLE_WIZARD     	"wizard"
 
 
 #define AGE_MIN 17			//youngest a character can be
@@ -1013,6 +1017,9 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VAMP_SHADOW   15
 #define VAMP_CHARISMA 16
 #define VAMP_UNDYING  17
+#define VAMP_CAPE	  18
+
+#define STARTING_BLOOD 10
 
 #define STARTING_BLOOD 10
 

@@ -1192,7 +1192,6 @@ var/list/has_died_as_golem = list()
 					However, you lack a mouth with which to talk. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
 
-
 /datum/species/lich
 	name = "Undead"
 	icobase = 'icons/mob/human_races/r_lich.dmi'

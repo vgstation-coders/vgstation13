@@ -102,7 +102,7 @@
 		else
 			callOnLife -= toCall
 
-	if(mind)
+	/*if(mind)
 		if(mind in ticker.mode.implanted)
 			if(implanting)
 				return 0
@@ -112,7 +112,7 @@
 			if(!(locate(/obj/item/weapon/implant/traitor) in src.contents))
 //				to_chat(world, "doesn't have an implant")
 				ticker.mode.remove_traitor_mind(mind, head)
-				/*
+
 				if((head in ticker.mode.implanters))
 					ticker.mode.implanter[head] -= src.mind
 				ticker.mode.implanted -= src.mind
@@ -141,12 +141,15 @@
 		apply_beam_damage(B)
 
 /mob/living/cultify()
-	if(iscultist(src) && client)
+	if(islegacycultist(src) && client)
 		var/mob/living/simple_animal/construct/harvester/C = new /mob/living/simple_animal/construct/harvester(get_turf(src))
 		mind.transfer_to(C)
 		to_chat(C, "<span class='sinister'>The Geometer of Blood is overjoyed to be reunited with its followers, and accepts your body in sacrifice. As reward, you have been gifted with the shell of an Harvester.<br>Your tendrils can use and draw runes without need for a tome, your eyes can see beings through walls, and your mind can open any door. Use these assets to serve Nar-Sie and bring him any remaining living human in the world.<br>You can teleport yourself back to Nar-Sie along with any being under yourself at any time using your \"Harvest\" spell.</span>")
 		dust()
 	else if(client)
+		var/datum/faction/cult/narsie/cult_fact = find_active_faction_by_type(/datum/faction/cult/narsie)
+		if (cult_fact)
+			cult_fact.harvested++
 		var/mob/dead/G = (ghostize())
 		G.icon = 'icons/mob/mob.dmi'
 		G.icon_state = "ghost-narsie"
@@ -164,10 +167,6 @@
 			G.overlays += H.obj_overlays[HANDCUFF_LAYER]
 		G.invisibility = 0
 		to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
-
-		if(ticker.mode.name == "cult")
-			var/datum/game_mode/cult/mode_ticker = ticker.mode
-			mode_ticker.harvested++
 
 	else
 		dust()
@@ -567,6 +566,7 @@ Thanks.
 	eye_blurry = 0
 	ear_deaf = 0
 	ear_damage = 0
+	say_mute = 0
 	if(!reagents)
 		create_reagents(1000)
 	else
@@ -1221,7 +1221,7 @@ Thanks.
 /mob/living/proc/generate_static_overlay()
 	if(!istype(static_overlays,/list))
 		static_overlays = list()
-	static_overlays.Add(list("static", "blank", "letter"))
+	static_overlays.Add(list("static", "blank", "letter", "cult"))
 	var/image/static_overlay = image(getStaticIcon(new/icon(src.icon, src.icon_state)), loc = src)
 	static_overlay.override = 1
 	static_overlays["static"] = static_overlay
@@ -1233,6 +1233,10 @@ Thanks.
 	static_overlay = getLetterImage(src)
 	static_overlay.override = 1
 	static_overlays["letter"] = static_overlay
+
+	static_overlay = image(icon = 'icons/mob/animal.dmi', loc = src, icon_state = pick("faithless","forgotten","otherthing",))
+	static_overlay.override = 1
+	static_overlays["cult"] = static_overlay
 
 /mob/living/to_bump(atom/movable/AM as mob|obj)
 	spawn(0)
@@ -1556,6 +1560,8 @@ Thanks.
 		eye_blurry = rand(0,100)
 	if(prob(5))
 		ear_deaf = rand(0,100)
+	if(prob(5))
+		say_mute = rand(0,100)
 	brute_damage_modifier += rand(-5,5)/10
 	burn_damage_modifier += rand(-5,5)/10
 	tox_damage_modifier += rand(-5,5)/10
@@ -1773,3 +1779,9 @@ Thanks.
 			pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
+
+/mob/living/proc/Silent(amount)
+	silent = max(max(silent,amount),0)
+
+/mob/living/proc/SetSilent(amount)
+	silent = max(amount,0)

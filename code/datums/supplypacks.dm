@@ -36,6 +36,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	return
 
 /datum/supply_packs/proc/OnConfirmed(var/mob/user)
+	return // Blank proc
 
 //////SUPPLIES//////
 

@@ -99,7 +99,7 @@
 	normalspeed = 0 //So they close fast, not letting the air to depressurize in a fucking second
 
 /obj/machinery/door/airlock/external/cultify()
-	new /obj/machinery/door/mineral/wood(loc)
+	new /obj/machinery/door/mineral/cult(loc)
 	..()
 
 /obj/machinery/door/airlock/glass

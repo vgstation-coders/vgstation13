@@ -298,6 +298,9 @@ var/list/camera_messages = list()
 	wirejack(user)
 
 /obj/machinery/camera/proc/deactivate(user as mob, var/choice = 1)
+	vision_flags = SEE_SELF
+	update_upgrades()
+	cameranet.addCamera(src)
 	if(choice==1)
 		status = !( src.status )
 		update_icon()

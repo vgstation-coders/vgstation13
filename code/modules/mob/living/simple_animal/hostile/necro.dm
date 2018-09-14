@@ -17,6 +17,7 @@
 		creator = Owner
 		if(client)
 			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner]. Do his bidding so long as he lives, for when he falls so do you.</span></big>")
+		/*
 		var/ref = "\ref[Owner.mind]"
 		var/list/necromancers
 		if(!(Owner.mind in ticker.mode.necromancer))
@@ -28,7 +29,7 @@
 		ticker.mode.update_necro_icons_added(Victim.mind)
 		ticker.mode.update_all_necro_icons()
 		ticker.mode.risen.Add(Victim.mind)
-
+		*/
 	if(name == initial(name) && !unique_name)
 		name += " ([rand(1,1000)])"
 
