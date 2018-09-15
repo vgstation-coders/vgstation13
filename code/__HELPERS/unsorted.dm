@@ -1776,4 +1776,3 @@ Game Mode config tags:
 		return M.mind.key
 	else
 		return null
-
