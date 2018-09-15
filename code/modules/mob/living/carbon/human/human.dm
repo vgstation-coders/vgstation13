@@ -1633,9 +1633,6 @@ mob/living/carbon/human/isincrit()
 /mob/living/carbon/human/get_appendix()
 	return internal_organs_by_name["appendix"]
 
-/mob/living/carbon/human/get_stomach()
-	return internal_organs_by_name["stomach"]
-
 //Moved from internal organ surgery
 //Removes organ from src, places organ object under user
 //example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
