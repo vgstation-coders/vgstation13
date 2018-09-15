@@ -211,6 +211,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/cultify()
 	qdel(src)
 
+/obj/proc/clockworkify()
+	return
+
 /obj/proc/wrenchable()
 	return 0
 
