@@ -174,6 +174,9 @@
 /obj/structure/window/full/reinforced/clockwork/cultify()
 	return
 
+/obj/structure/window/full/reinforced/clockwork/clockworkify()
+	return
+
 #undef WINDOWLOOSE
 #undef WINDOWLOOSEFRAME
 #undef WINDOWUNSECUREFRAME

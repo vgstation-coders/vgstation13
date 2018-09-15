@@ -706,6 +706,9 @@ var/list/one_way_windows
 /obj/structure/window/reinforced/clockwork/cultify()
 	return
 
+/obj/structure/window/reinforced/clockwork/clockworkify()
+	return
+
 /obj/structure/window/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
