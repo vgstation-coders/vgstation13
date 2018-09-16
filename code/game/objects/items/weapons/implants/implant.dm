@@ -347,13 +347,21 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	H.implanting = 1
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards [user.name].</span>")
 
-	var/datum/role/R =  new(H.mind, user.mind.GetFactionFromRole(TRAITOR), IMPLANTSLAVE, TRUE)
+	var/datum/faction/F = find_active_faction_by_typeandmember(/datum/faction/syndicate/greytide, null, user.mind)
+	if(!F)
+		F = ticker.mode.CreateFaction(/datum/faction/syndicate/greytide, 0, 1)
+		F.HandleNewMind(user.mind)
 
+	var/success = F.HandleRecruitedMind(H.mind)
+	if(!success)
+		visible_message("<span class = 'warning'>The head of \the [H] begins to glow a deep red. It is going to explode!</span>")
+		spawn(3 SECONDS)
+			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+			head_organ.explode()
+		return 0
 	to_chat(H, "<B><span class = 'big warning'>You've been shown the Greytide by [user.name]!</B> You now must lay down your life to protect them and assist in their goals at any cost.</span>")
-	var/datum/objective/target/protect/P = new(auto_target = FALSE)
-	P.set_target(user)
-	R.AppendObjective(P)
-
+	F.forgeObjectives()
+	update_faction_icons()
 	log_admin("[ckey(user.key)] has mind-slaved [ckey(H.key)].")
 	return 1
 

@@ -1465,6 +1465,11 @@ proc/clear_memory(var/silent = 1)
 		return antag_roles[role_id]
 	return FALSE
 
+/datum/mind/proc/GetRoleByType(var/type)
+	for(var/datum/role/R in antag_roles)
+		if(istype(R, type))
+			return R
+
 /datum/mind/proc/GetFactionFromRole(var/role_id)
 	var/datum/role/R = GetRole(role_id)
 	if(R)

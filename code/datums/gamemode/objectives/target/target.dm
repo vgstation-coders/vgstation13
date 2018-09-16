@@ -35,6 +35,7 @@
 /datum/objective/target/proc/set_target(var/datum/mind/possible_target)
 	if(possible_target != owner && ishuman(possible_target.current) && (possible_target.current.z != map.zCentcomm) && (possible_target.current.stat != DEAD) && !(possible_target.assigned_role in bad_assassinate_targets))
 		target = possible_target
+		explanation_text = format_explanation()
 		return TRUE
 	return FALSE
 

@@ -1607,18 +1607,36 @@ Game Mode config tags:
 		return null
 	return locate(faction_type) in ticker.mode.factions
 
-/proc/find_active_faction_by_member(var/datum/role/R)
+/proc/find_active_faction_by_member(var/datum/role/R, var/datum/mind/M)
 	if(!R)
 		return null
 	var/found_faction = null
 	if(R.GetFaction())
 		return R.GetFaction()
 	if(ticker && ticker.mode && ticker.mode.factions.len)
+		var/success = FALSE
 		for(var/datum/faction/F in ticker.mode.factions)
-			if(R in F.members)
-				found_faction = F
+			for(var/datum/role/RR in F.members)
+				if(RR == R || RR.antag == M)
+					found_faction = F
+					success = TRUE
+					break
+			if(success)
 				break
 	return found_faction
+
+/proc/find_active_factions_by_member(var/datum/role/R, var/datum/mind/M)
+	var/list/found_factions = list()
+	for(var/datum/faction/F in ticker.mode.factions)
+		for(var/datum/role/RR in F.members)
+			if(RR == R || RR.antag == M)
+				found_factions.Add(F)
+				break
+	return found_factions
+
+/proc/find_active_faction_by_typeandmember(var/fac_type, var/datum/role/R, var/datum/mind/M)
+	var/list/found_factions = find_active_factions_by_member(R, M)
+	return locate(fac_type) in found_factions
 
 /proc/clients_in_moblist(var/list/mob/mobs)
 	. = list()
