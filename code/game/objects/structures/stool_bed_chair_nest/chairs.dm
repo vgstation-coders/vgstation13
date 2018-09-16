@@ -602,10 +602,16 @@
 		to_chat(user,"<span class='warning'>You cannot find any bolts to unwrench on \the [src].</span>")
 		return
 	if (iswelder(W))
+		if (locked_atoms && locked_atoms.len > 0)
+			to_chat(user,"<span class='warning'>You cannot downgrade a seat with someone buckled on it.</span>")
+			return
 		var/obj/item/weapon/weldingtool/WT = W
 		to_chat(user, "You start welding the plasteel off \the [src]")
 		if (WT.do_weld(user, src, 50, 3))
 			if(gcDestroyed)
+				return
+			if (locked_atoms && locked_atoms.len > 0)
+				to_chat(user,"<span class='warning'>You cannot downgrade a seat with someone buckled on it.</span>")
 				return
 			var/obj/structure/bed/chair/C = new (loc)
 			C.dir = dir
