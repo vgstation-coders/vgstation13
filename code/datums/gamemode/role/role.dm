@@ -604,3 +604,14 @@ The process takes one minute per APC and can only be performed one at a time to 
 Remember : Only APCs on station can help you to take over the station.<br>
 When you feel you have enough APCs under your control, you may begin the takeover attempt.<br>
 Once done, you will be able to interface with all systems, notably the onboard nuclear fission device..."})
+
+
+/datum/role/greytide
+	name = IMPLANTSLAVE
+	id = IMPLANTSLAVE
+	logo_state = "greytide-logo"
+
+/datum/role/greytide_leader
+	name = IMPLANTLEADER
+	id = IMPLANTLEADER
+	logo_state = "greytide_leader-logo"

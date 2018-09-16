@@ -23,3 +23,24 @@
 /datum/faction/syndicate/traitor/dagent
 	roletype = /datum/role/traitor/rogue
 	initroletype = /datum/role/traitor/rogue
+
+
+/datum/faction/syndicate/greytide
+	name = "Greytide link"
+	ID = GREYTIDE_FAC
+	initroletype = /datum/role/greytide_leader
+	roletype = /datum/role/greytide
+	logo_state = "greytide-logo"
+	hud_icons = list("greytide_leader-logo", "greytide-logo")
+
+/datum/faction/syndicate/greytide/HandleNewMind()
+	if(..())
+		var/datum/role/R = locate(/datum/role/greytide_leader) in members
+		if(R)
+			leader = R
+
+
+/datum/faction/syndicate/greytide/forgeObjectives()
+	var/datum/objective/target/protect/P = new(auto_target = FALSE)
+	P.set_target(leader.antag)
+	AppendObjective(P)
