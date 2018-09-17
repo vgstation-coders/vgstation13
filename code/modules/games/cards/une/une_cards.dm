@@ -11,20 +11,20 @@
 	icon_state = "deck_full"
 
 /obj/item/toy/cards/une/generate_cards()
-	for(var/i = 0; i <= 9; i++)
+	for(var/i = 0 to 9)
 		cards += new/obj/item/toy/singlecard/une(src, src, "Red [i]", "[i]", REDCARD)
 		cards += new/obj/item/toy/singlecard/une(src, src, "Yellow [i]", "[i]", YELLOWCARD)
 		cards += new/obj/item/toy/singlecard/une(src, src, "Green [i]", "[i]", GREENCARD)
 		cards += new/obj/item/toy/singlecard/une(src, src, "Blue [i]", "[i]", BLUECARD)
-	for(var/i = 1; i <= 9; i++)//Second full set without a 0 card this time.
+	for(var/i = 1 to 9)//Second full set without a 0 card this time.
 		cards += new/obj/item/toy/singlecard/une(src, src, "Red [i]", "[i]", REDCARD)
 		cards += new/obj/item/toy/singlecard/une(src, src, "Yellow [i]", "[i]", YELLOWCARD)
 		cards += new/obj/item/toy/singlecard/une(src, src, "Green [i]", "[i]", GREENCARD)
 		cards += new/obj/item/toy/singlecard/une(src, src, "Blue [i]", "[i]", BLUECARD)
-	for(var/i = 0; i <= 3; i++)//Black is just a placeholder and not actually used in the coloring.
+	for(var/i = 0 to 3)//Black is just a placeholder and not actually used in the coloring.
 		cards += new/obj/item/toy/singlecard/une(src, src, "Wild", "wild", BLACKCARD)
 		cards += new/obj/item/toy/singlecard/une(src, src, "Draw 4", "draw4", BLACKCARD)
-	for(var/i = 1; i <= 7; i++)
+	for(var/i = 1 to 8)
 		var/cardcolor = "Red"
 		var/hexcolor = REDCARD
 		switch(i)
