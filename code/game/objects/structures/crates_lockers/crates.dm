@@ -568,7 +568,6 @@
 		return
 	return ..()
 
-// Turns out /obj/structure/closet/update_icon messes with crates' overlays, nullifying that for now for a quick fix
 /obj/structure/closet/crate/secure/update_icon()
 	if(opened)
 		icon_state = icon_opened
