@@ -550,5 +550,8 @@
 
 		stat_collection.crewscore = score["crewscore"]
 
-	src << browse(dat, "window=roundstats;size=1000x600")
+	var/datum/browser/popup = new(src, "roundstats", "Round End Summary", 1000, 600)
+	popup.set_content(dat)
+	popup.open()
+
 	return

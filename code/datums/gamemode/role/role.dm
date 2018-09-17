@@ -272,18 +272,23 @@
 	var/text = ""
 	var/mob/M = antag.current
 	if (!M)
-		var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
-		text += "<img src='data:image/png;base64,[icon2base64(sprotch)]' style='position: relative; top: 10;'/>"
+		var/icon/sprotch = icon('icons/effects/blood.dmi', "sprotch")
+		text += "<img src='data:image/png;base64,[icon2base64(sprotch)]' style='position:relative; top:10px;'/>"
 	else
 		var/icon/flat = getFlatIcon(M, SOUTH, 0, 1)
-		if(!istype(M, /mob/living/carbon/brain) && M.stat == DEAD)
-			flat.Turn(90)
-		end_icons += flat
+		if(M.stat == DEAD)
+			if (!istype(M, /mob/living/carbon/brain))
+				flat.Turn(90)
+			var/icon/ded = icon('icons/effects/blood.dmi', "floor1-old")
+			ded.Blend(flat,ICON_OVERLAY)
+			end_icons += ded
+		else
+			end_icons += flat
 		var/tempstate = end_icons.len
-		text += "<img src='logo_[tempstate].png' style='position: relative; top: 10;'/>"
+		text += "<img src='logo_[tempstate].png' style='position:relative; top:10px;'/>"
 
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
-	text += "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/><b>[antag.key]</b> was <b>[antag.name]</b> ("
+	text += "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative;top:10px;'/><b>[antag.key]</b> was <b>[antag.name]</b> ("
 	if(M)
 		if(M.stat == DEAD)
 			text += "died"

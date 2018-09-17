@@ -165,7 +165,7 @@ var/list/factions_with_hud_icons = list()
 
 /datum/faction/proc/GetObjectivesMenuHeader() //Returns what will show when the factions objective completion is summarized
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'><br>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'><br>"}
 	return header
 
 /datum/faction/proc/AdminPanelEntry(var/datum/admins/A)
@@ -330,7 +330,7 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/changeling/GetObjectivesMenuHeader()
 	var/icon/logo_left = icon('icons/logos.dmi', "change-logoa")
 	var/icon/logo_right = icon('icons/logos.dmi', "change-logob")
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo_left)]' style='position: relative; top: 10;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo_right)]' style='position: relative; top: 10;'><br>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo_left)]' style='position:relative; top:10px;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo_right)]' style='position:relative; top:10px;'><br>"}
 	return header
 
 //________________________________________________

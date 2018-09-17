@@ -509,9 +509,7 @@ var/datum/controller/gameticker/ticker
 	minesweeper_best_players["expert"] = "none"
 
 /datum/controller/gameticker/proc/declare_completion()
-	var/completions = "<h1>Round End Information</h1><HR>"
-
-	scoreboard(completions)
+	scoreboard()
 	return 1
 
 /*
