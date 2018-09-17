@@ -237,7 +237,11 @@
 
 #define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUAD))
 
+#define isbomberman(H) (H.mind && H.mind.GetRole(BOMBERMAN))
 
+#define ishighlander(H) (H.mind && H.mind.GetRole(HIGHLANDER))
+
+#define isninja(H) (H.mind && H.mind.GetRole(NINJA))
 
 
 //Macro for AREAS!

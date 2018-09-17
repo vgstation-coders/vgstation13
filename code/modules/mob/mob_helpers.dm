@@ -548,9 +548,11 @@ proc/is_blind(A)
 /proc/is_honorable(var/mob/living/user, var/honorable = HONORABLE_ALL)
 	if(istype(user))
 		if(user.mind)
-			if(user.mind.special_role == BOMBERMAN && (honorable & HONORABLE_BOMBERMAN))
+			if(isbomberman(user) && (honorable & HONORABLE_BOMBERMAN))
 				return TRUE
-			if(user.mind.special_role == HIGHLANDER && (honorable & HONORABLE_HIGHLANDER))
+			if(ishighlander(user) && (honorable & HONORABLE_HIGHLANDER))
+				return TRUE
+			if(isninja(user) && (honorable & HONORABLE_NINJA))
 				return TRUE
 	return FALSE
 

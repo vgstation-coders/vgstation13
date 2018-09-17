@@ -275,7 +275,7 @@
 	return 0
 
 
-/mob/proc/drop_from_inventory(var/obj/item/W) //I'm fairly sure the entirety of this proc is redundant and can be replaced by just u_equip(W,1)
+/mob/proc/drop_from_inventory(var/obj/item/W, var/delete = FALSE) //I'm fairly sure the entirety of this proc is redundant and can be replaced by just u_equip(W,1)
 	if(W)
 		if(client)
 			client.screen -= W
@@ -283,16 +283,20 @@
 		if(!W)
 			return 1 // self destroying objects (tk, grabs)
 		W.reset_plane_and_layer()
-		W.forceMove(loc)
+		if(delete)
+
+			qdel(W)
+		else
+			W.forceMove(loc)
 
 		//W.dropped(src)
 		//update_icons() // Redundant as u_equip will handle updating the specific overlay
 		return 1
 
 // Drops all and only equipped items, including items in hand
-/mob/proc/drop_all()
+/mob/proc/drop_all(var/delete = FALSE)
 	for (var/obj/item/I in get_all_slots())
-		drop_from_inventory(I)
+		drop_from_inventory(I, delete)
 	drop_hands()
 
 //Drops the item in our hand - you can specify an item and a location to drop to
