@@ -78,12 +78,20 @@
 			"red" = /obj/structure/bed/chair/shuttle/red,
 			"blue" = /obj/structure/bed/chair/shuttle/blue,
 			"yellow" = /obj/structure/bed/chair/shuttle/yellow,
+			"white" = /obj/structure/bed/chair/shuttle/white,
+			"custom" = /obj/structure/bed/chair/shuttle/white/custom,
 			)
 
+		var/seat_color = null
 		var/seat_type = input(user,"What colour for the seat's cushions?","Upgrading chair to seat") as null|anything in ok_types
+
 
 		if (!seat_type)
 			return
+
+		if (seat_type == "custom")
+			seat_color = input(user, "Please select cushion color.", "Seat color") as color
+
 		var/new_type = ok_types[seat_type]
 
 		user.visible_message("<span class='notice'>\The [user] starts upgrading \the [src] using some plasteel.</span>", \
@@ -93,8 +101,9 @@
 				if (locked_atoms && locked_atoms.len > 0)
 					to_chat(user, "<span class='warning'>You cannot upgrade a chair with someone buckled on it.</span>")
 					return
-				var/obj/structure/bed/chair/shuttle/S = new new_type(loc)
+				var/obj/structure/bed/chair/shuttle/S = new new_type(loc,seat_color)
 				S.dir = dir
+				playsound(S, 'sound/items/Deconstruct.ogg', 50, 1)
 				user.visible_message("<span class='notice'>\The [user] upgrades \the [src] into \a [S].</span>", \
 				"<span class='notice'>You finishing upgrading \the [src] into \a [S].</span>")
 				qdel(src)
@@ -640,6 +649,24 @@
 
 /obj/structure/bed/chair/shuttle/yellow
 	icon_state = "shuttleseat_yellow"
+
+/obj/structure/bed/chair/shuttle/white
+	icon_state = "shuttleseat_white"
+
+/obj/structure/bed/chair/shuttle/white/custom
+
+/obj/structure/bed/chair/shuttle/white/custom/New(var/turf/loc, var/seat_color = null)
+	..()
+	if (seat_color)
+		var/image/I1 = image("icons/obj/stools-chairs-beds.dmi", "shuttleseat_color", layer)
+		I1.plane = plane
+		I1.color = seat_color
+		overlays += I1
+
+		var/image/I2 = image("icons/obj/stools-chairs-beds.dmi", "shuttleseat_color_buckle", CHAIR_ARMREST_LAYER)
+		I2.color = seat_color
+		secondary_buckle_overlay = I2
+		secondary_buckle_overlay.plane = ABOVE_HUMAN_PLANE
 
 /obj/structure/bed/chair/shuttle/gamer
 	desc = "Ain't got nothing to compensate."
