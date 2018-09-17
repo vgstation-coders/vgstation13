@@ -59,7 +59,13 @@
 
 /obj/item/device/holomap/proc/get_images(var/turf/T, var/view)
 	. = list()
-	for (var/turf/TT in trange(view, T))
+	var/list/lView = view_to_array(view)
+	var/widescreen = lView[3]
+	if(widescreen)
+		lView[1] = ((lView[1] - 1) / 2)
+		lView[2] = ((lView[2] - 1) / 2)
+
+	for (var/turf/TT in wtrange(lView[1],lView[2], T))
 		if (TT.holomap_data)
 			. += TT.holomap_data
 
