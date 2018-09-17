@@ -586,7 +586,7 @@
 /obj/structure/closet/crate/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(opened)
 		return ..()
-	else if(istype(W, /obj/item/weapon/circuitboard/airlock) && src.has_lock_type)//testing with crowbars for now, will use circuits later
+	else if(istype(W, /obj/item/weapon/circuitboard/airlock) && src.has_lock_type)
 		add_lock(W, user)
 		return
 	else if(istype(W, /obj/item/stack/package_wrap))
