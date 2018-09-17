@@ -30,8 +30,8 @@
 	ID = GREYTIDE_FAC
 	initroletype = /datum/role/greytide_leader
 	roletype = /datum/role/greytide
-	logo_state = "greytide-logo"
-	hud_icons = list("greytide_leader-logo", "greytide-logo")
+	logo_state = "greytidelink-logo"
+	hud_icons = list("greytide-logo", "greytide_leader-logo")
 
 /datum/faction/syndicate/greytide/HandleNewMind()
 	if(..())
