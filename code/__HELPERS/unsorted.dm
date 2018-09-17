@@ -1786,20 +1786,20 @@ Game Mode config tags:
 /proc/view_to_array(view)
 	//Helper to convert view to an array to use from now on
 	var/list/view_array = splittext("[view]","x")
-	
+
 	var/widescreen = FALSE
-	
+
 	if(view_array.len == 1)
 		view_array.len++
 		view_array[2] = view_array[1]
 	else
 		widescreen = TRUE
-	
+
 	for(var/i = 1; i <= 2; i++)
 		view_array[i] = text2num(view_array[i])
-		if(widescreen)
+		//if(widescreen)
 			//Normalize array contents to what old code expects (ie 7 instead of 15 for 7 tiles to the left and right of the source minus one tile they're standing on
-			view_array[i] = (view_array[i] - 1) / 2
+			//view_array[i] = (view_array[i] - 1) / 2
 	view_array.len++
 	view_array[3] = widescreen
 	return view_array

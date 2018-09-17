@@ -460,8 +460,13 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 			mob.hud_used.update_parallax_values()
 
 	if(!istype(mob, /mob/dead/observer))	//If they are neither an observer nor someone with X-ray vision
+		var/list/viewlist = view_to_array(view)
+		var/widescreen = viewlist[3]
+		if(widescreen)
+			viewlist[1] = ((viewlist[1] - 1) / 2)
+			viewlist[2] = ((viewlist[2] - 1) / 2)
 		for(var/obj/structure/window/W in one_way_windows)
-			if(((W.x >= (mob.x - view)) && (W.x <= (mob.x + view))) && ((W.y >= (mob.y - view)) && (W.y <= (mob.y + view))))
+			if(((W.x >= (mob.x - viewlist[1])) && (W.x <= (mob.x + viewlist[1]))) && ((W.y >= (mob.y - viewlist[2])) && (W.y <= (mob.y + viewlist[2]))))
 				update_one_way_windows(view(view,mob))	//Updating the one-way window overlay if the client has one in the range of its view.
 				break
 
