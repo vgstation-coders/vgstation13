@@ -449,13 +449,19 @@ Turf and target are seperate in case you want to teleport some distance from a t
 // Finds ALL mobs in range, including those within something's contents (e.g. inside a locker or such)
 /proc/get_all_mobs_in_range(var/turf/T, var/range = world.view, var/list/ignore_types = list())
 	. = list()
+	var/list/view = view_to_array(world.view)
+	var/widescreen = view[3]
+	if(widescreen)
+		view[1] = (view[1] - 1) / 2
+		view[2] = (view[2] - 1) / 2
 	for(var/mob/M in mob_list)
 		if(is_type_in_list(M, ignore_types))
 			continue
 		var/turf/mob_turf = get_turf(M)
 		if(!mob_turf || mob_turf.z != T.z) //because get_dist doesn't account for z levels
 			continue
-		if(get_dist(T, mob_turf) <= range) //here we are checking the distance on the mob's turf and not the mob itself, since mobs in a locker or such will have XYZ = 0,0,0
+		//if(get_dist(T, mob_turf) <= range) //here we are checking the distance on the mob's turf and not the mob itself, since mobs in a locker or such will have XYZ = 0,0,0
+		if( (abs(T.x - mob_turf.x) <= view[1]) && (abs(T.y - mob_turf.y) <= view[2]))
 			. += M
 
 //E = MC^2
@@ -1776,3 +1782,24 @@ Game Mode config tags:
 		return M.mind.key
 	else
 		return null
+
+/proc/view_to_array(view)
+	//Helper to convert view to an array to use from now on
+	var/list/view_array = splittext("[view]","x")
+	
+	var/widescreen = FALSE
+	
+	if(view_array.len == 1)
+		view_array.len++
+		view_array[2] = view_array[1]
+	else
+		widescreen = TRUE
+	
+	for(var/i = 1; i <= 2; i++)
+		view_array[i] = text2num(view_array[i])
+		if(widescreen)
+			//Normalize array contents to what old code expects (ie 7 instead of 15 for 7 tiles to the left and right of the source minus one tile they're standing on
+			view_array[i] = (view_array[i] - 1) / 2
+	view_array.len++
+	view_array[3] = widescreen
+	return view_array

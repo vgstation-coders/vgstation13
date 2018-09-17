@@ -48,7 +48,7 @@ var/list/machete_throw_hit_sound = list('sound/weapons/hfmachete_throw_hit01.ogg
 		extrarange = 0
 	if(!vol) //don't do that
 		return
-
+	var/list/view = view_to_array(world.view)
 	if(gas_modified && turf_source && !turf_source.c_airblock(turf_source)) //if the sound is modified by air, and we are on an airflowing tile
 		var/atmosphere = 0
 		var/datum/gas_mixture/current_air = turf_source.return_air()
@@ -59,13 +59,15 @@ var/list/machete_throw_hit_sound = list('sound/weapons/hfmachete_throw_hit01.ogg
 
 		//message_admins("We're starting off with [atmosphere], [extrarange], and [vol]")
 		var/atmos_modifier = round(atmosphere/ONE_ATMOSPHERE, 0.1)
-		var/total_range = world.view + extrarange //this must be positive.
+		/*var/total_range = world.view + extrarange */
+
+		var/total_range = max(view[1] + extrarange, view[2] + extrarange)//this must be positive.
 		total_range = min ( round( (total_range) * sqrt(atmos_modifier), 1 ), (total_range * 2)  ) //upper range of twice the original range. Range technically falls off with the root of pressure (see Newtonian sound)
-		extrarange = total_range - world.view
+		extrarange = total_range - max(view[1], view[2])
 		vol = min( round( (vol) * atmos_modifier, 1 ), vol * 2) //upper range of twice the volume. Trust me, otherwise you get 10000 volume in a plasmafire
 		//message_admins("We've adjusted the sound of [source] at [turf_source.loc] to have a range of [7 + extrarange] and a volume of [vol]")
 
-	var/Dist = world.view + extrarange
+	var/Dist = max(view[1] + extrarange, view[2] + extrarange)
 
 	// Looping through the player list has the added bonus of working for mobs inside containers
 	for (var/mob/player in player_list)

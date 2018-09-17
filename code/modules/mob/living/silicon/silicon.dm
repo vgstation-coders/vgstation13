@@ -317,8 +317,14 @@
 /mob/living/silicon/html_mob_check(var/typepath)
 	for(var/atom/movable/AM in html_machines)
 		if(typepath == AM.type)
-			if(max(abs(AM.x-src.x),abs(AM.y-src.y)) <= client.view)
-				return 1
+			var/list/client_view_array = view_to_array(client.view)
+			var/widescreen = client_view_array[3]
+			if(widescreen)
+				if(abs(AM.x-src.x) <= ((client_view_array[1] - 1) / 2) && abs(AM.y-src.y) <= ((client_view_array[2] - 1) / 2))
+					return 1
+			else
+				if(max(abs(AM.x-src.x),abs(AM.y-src.y)) <= client.view)
+					return 1
 	return 0
 
 /mob/living/silicon/spook(mob/dead/observer/ghost)

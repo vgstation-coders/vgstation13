@@ -115,7 +115,14 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	var/client/C = mymob.client
 	if(!parallax_initialized)
 		return
-	var/list/everything_in_sight = trange(C.view,get_turf(C.eye))
+	var/list/everything_in_sight
+	var/list/view_array = view_to_array(C.view)
+	var/widescreen = view_array[3]
+	if(widescreen)
+		everything_in_sight = wtrange(((view_array[1] - 1 ) / 2), ((view_array[2] - 1 ) / 2), get_turf(C.eye))
+	else
+		everything_in_sight = trange(C.view,get_turf(C.eye))
+	
 	if(!(locate(/turf/space) in everything_in_sight) && !(locate(/turf/simulated/floor/glass) in everything_in_sight))
 		return
 

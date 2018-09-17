@@ -65,53 +65,69 @@
 		. = world.view
 
 /obj/abstract/screen/movable/proc/encode_screen_X(X)
-	var/view = get_view_size()
-	if(X > view+1)
-		. = "EAST-[view*2 + 1-X]"
-	else if(X < view+1)
+	var/list/view = view_to_array(get_view_size())
+	var/widescreen = view[3]
+	if(widescreen)
+		view[1] = (view[1] - 1) / 2
+		view[2] = (view[2] - 1) / 2
+	if(X > view[1]+1)
+		. = "EAST-[view[1]*2 + 1-X]"
+	else if(X < view[1]+1)
 		. = "WEST+[X-1]"
 	else
 		. = "CENTER"
 
 /obj/abstract/screen/movable/proc/decode_screen_X(X)
 	//Find EAST/WEST implementations
-	var/view = get_view_size()
+	var/list/view = view_to_array(get_view_size())
+	var/widescreen = view[3]
+	if(widescreen)
+		view[1] = (view[1] - 1) / 2
+		view[2] = (view[2] - 1) / 2
 	if(findtext(X,"EAST-"))
 		var/num = text2num(copytext(X,6)) //Trim EAST-
 		if(!num)
 			num = 0
-		. = view*2 + 1 - num
+		. = view[1]*2 + 1 - num
 	else if(findtext(X,"WEST+"))
 		var/num = text2num(copytext(X,6)) //Trim WEST+
 		if(!num)
 			num = 0
 		. = num+1
 	else if(findtext(X,"CENTER"))
-		. = view+1
+		. = view[1]+1
 
 /obj/abstract/screen/movable/proc/encode_screen_Y(Y)
-	var/view = get_view_size()
-	if(Y > view+1)
-		. = "NORTH-[view*2 + 1-Y]"
-	else if(Y < view+1)
+	var/list/view = view_to_array(get_view_size())
+	var/widescreen = view[3]
+	if(widescreen)
+		view[1] = (view[1] - 1) / 2
+		view[2] = (view[2] - 1) / 2
+	if(Y > view[2]+1)
+		. = "NORTH-[view[2]*2 + 1-Y]"
+	else if(Y < view[2]+1)
 		. = "SOUTH+[Y-1]"
 	else
 		. = "CENTER"
 
 /obj/abstract/screen/movable/proc/decode_screen_Y(Y)
-	var/view = get_view_size()
+	var/list/view = view_to_array(get_view_size())
+	var/widescreen = view[3]
+	if(widescreen)
+		view[1] = (view[1] - 1) / 2
+		view[2] = (view[2] - 1) / 2
 	if(findtext(Y,"NORTH-"))
 		var/num = text2num(copytext(Y,7)) //Trim NORTH-
 		if(!num)
 			num = 0
-		. = view*2 + 1 - num
+		. = view[2]*2 + 1 - num
 	else if(findtext(Y,"SOUTH+"))
 		var/num = text2num(copytext(Y,7)) //Time SOUTH+
 		if(!num)
 			num = 0
 		. = num+1
 	else if(findtext(Y,"CENTER"))
-		. = view+1
+		. = view[2]+1
 
 //Debug procs
 /client/proc/test_movable_UI()

@@ -81,20 +81,22 @@
 
 /proc/generateHoloMinimap(var/zLevel=1)
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
+	var/list/view = view_to_array(world.view)
+	var/widescreen = view[3]
 
 	if(zLevel != map.zCentcomm)
-		for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
-			for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+		for(var/i = 1 to ((2 * (widescreen ? (view[1] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE))
+			for(var/r = 1 to ((2 * (widescreen ? (view[2] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE))
 				var/turf/tile = locate(i, r, zLevel)
 				if(tile && tile.loc.holomapAlwaysDraw())
 					if((!istype(tile, /turf/space) && istype(tile.loc, /area/mine/unexplored)) || istype(tile.loc, /area/asteroid/artifactroom) || istype(tile, /turf/simulated/wall) || istype(tile, /turf/unsimulated/mineral) || istype(tile, /turf/unsimulated/wall) || (locate(/obj/structure/grille) in tile) || (locate(/obj/structure/window/full) in tile))
 						if(map.holomap_offset_x.len >= zLevel)
-							canvas.DrawBox(HOLOMAP_OBSTACLE, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+							canvas.DrawBox(HOLOMAP_OBSTACLE, min(i+map.holomap_offset_x[zLevel],((2 * (widescreen ? (view[1] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * (widescreen ? (view[2] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE)))
 						else
 							canvas.DrawBox(HOLOMAP_OBSTACLE, i, r)
 					else if (istype(tile, /turf/simulated/floor) || istype(tile, /turf/unsimulated/floor) || (locate(/obj/structure/catwalk) in tile))
 						if(map.holomap_offset_x.len >= zLevel)
-							canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+							canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * (widescreen ? (view[1] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * (widescreen ? (view[2] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE)))
 						else
 							canvas.DrawBox(HOLOMAP_PATH, i, r)
 
@@ -136,19 +138,21 @@
 			allowed_areas = list(
 				/area/syndicate_mothership,
 				)
+	var/list/view = view_to_array(world.view)
+	var/widescreen = view[3]
 
-	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
-		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+	for(var/i = 1 to ((2 * (widescreen ? (view[1] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE))
+		for(var/r = 1 to ((2 * (widescreen ? (view[2] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE))
 			var/turf/tile = locate(i, r, map.zCentcomm)
 			if(tile && (is_type_in_list(tile.loc, allowed_areas) && !is_type_in_list(tile.loc, restricted_areas)))
 				if((!istype(tile, /turf/space) && istype(tile.loc, /area/mine/unexplored)) || istype(tile, /turf/simulated/wall) || istype(tile, /turf/unsimulated/mineral) || istype(tile, /turf/unsimulated/wall) || (locate(/obj/structure/grille) in tile) || (locate(/obj/structure/window/full) in tile) || istype(tile, /turf/simulated/shuttle/wall))
 					if(map.holomap_offset_x.len >= map.zCentcomm)
-						canvas.DrawBox(HOLOMAP_OBSTACLE, min(i+map.holomap_offset_x[map.zCentcomm],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[map.zCentcomm],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+						canvas.DrawBox(HOLOMAP_OBSTACLE, min(i+map.holomap_offset_x[map.zCentcomm],((2 * (widescreen ? (view[1] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[map.zCentcomm],((2 * (widescreen ? (view[2] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE)))
 					else
 						canvas.DrawBox(HOLOMAP_OBSTACLE, i, r)
 				else if (istype(tile, /turf/simulated/floor) || istype(tile, /turf/unsimulated/floor) || (locate(/obj/structure/catwalk) in tile) || istype(tile, /turf/simulated/shuttle/floor))
 					if(map.holomap_offset_x.len >= map.zCentcomm)
-						canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[map.zCentcomm],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[map.zCentcomm],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+						canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[map.zCentcomm],((2 * (widescreen ? (view[1] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[map.zCentcomm],((2 * (widescreen ? (view[2] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE)))
 					else
 						canvas.DrawBox(HOLOMAP_PATH, i, r)
 
@@ -156,15 +160,16 @@
 
 /proc/generateStationMinimap(var/StationZLevel)
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
-
-	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
-		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+	var/list/view = view_to_array(world.view)
+	var/widescreen = view[3]
+	for(var/i = 1 to ((2 * (widescreen ? (view[1] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE))
+		for(var/r = 1 to ((2 * (widescreen ? (view[2] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE))
 			var/turf/tile = locate(i, r, StationZLevel)
 			if(tile && tile.loc)
 				var/area/areaToPaint = tile.loc
 				if(areaToPaint.holomap_color)
 					if(map.holomap_offset_x.len >= StationZLevel)
-						canvas.DrawBox(areaToPaint.holomap_color, min(i+map.holomap_offset_x[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+						canvas.DrawBox(areaToPaint.holomap_color, min(i+map.holomap_offset_x[StationZLevel],((2 * (widescreen ? (view[1] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[StationZLevel],((2 * (widescreen ? (view[2] - 1) / 2 : world.view) + 1)*WORLD_ICON_SIZE)))
 					else
 						canvas.DrawBox(areaToPaint.holomap_color, i, r)
 

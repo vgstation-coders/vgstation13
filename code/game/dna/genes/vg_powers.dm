@@ -104,13 +104,29 @@ Obviously, requires DNA2.
 /datum/dna/gene/basic/farsight/activate(var/mob/M)
 	..()
 	if(M.client)
-		M.client.changeView(max(M.client.view, world.view+1))
+		var/list/client_view_array = view_to_array(M.client.view)
+		var/list/world_view_array = view_to_array(world.view)
+		var/widescreen = world_view_array[3]
+		if(!widescreen)
+			M.client.changeView(max(M.client.view, world.view+1))
+		else
+			/*if we are widescreen then to add on one tile of view on each side of us we must add 2 to the x and y view values*/
+			M.client.changeView("[max(client_view_array[1],world_view_array[1]+2)]x[max(client_view_array[2],world_view_array[2]+2)]")
 
 /datum/dna/gene/basic/farsight/deactivate(var/mob/M,var/connected,var/flags)
 	if(..())
-		if(M.client && M.client.view == world.view + 1)
-			M.client.changeView()
-
+		if(M.client)
+			var/list/client_view_array = view_to_array(M.client.view)
+			var/list/world_view_array = view_to_array(world.view)
+			var/widescreen = world_view_array[3]
+			
+			if(!widescreen)
+				if(M.client.view == world.view + 1)
+					M.client.changeView()
+			else
+				if(client_view_array[1] == world_view_array[1] + 2 && client_view_array[2] == world_view_array[2] + 2)
+					M.client.changeView()
+		
 /datum/dna/gene/basic/farsight/can_activate(var/mob/M,var/flags)
 	// Can't be big AND small.
 	if((M.sdisabilities & BLIND) || (M.disabilities & NEARSIGHTED))
@@ -142,3 +158,4 @@ Obviously, requires DNA2.
 		M.update_colour()
 		if(M.client)
 			M.client.screen -= noir_master
+

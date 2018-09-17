@@ -28,13 +28,15 @@ proc/empulse(turf/epicenter, heavy_range, light_range, log=0)
 		log_game("EMP with size ([heavy_range], [light_range]) in area [epicenter.loc.name].")
 
 	spawn()
+		var/list/view = view_to_array(world.view)
+		var/vDist = (view[1] - 1) / 2
 		for (var/mob/M in player_list)
 			//Double check for client
 			if(M && M.client)
 				var/turf/M_turf = get_turf(M)
 				if(M_turf && M_turf.z == epicenter.z)
 					var/dist = cheap_pythag(M_turf.x - x0, M_turf.y - y0)
-					if(dist <= round(heavy_range + world.view - 2, 1))
+					if(dist <= round(heavy_range + vDist - 2, 1))
 						M << 'sound/effects/EMPulse.ogg'
 
 		for(var/turf/T in spiral_block(epicenter,max_range))

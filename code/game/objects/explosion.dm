@@ -13,6 +13,19 @@
 	var/turf/x2y2 = locate(((Center.x + Dist) > world.maxx ? world.maxx : Center.x + Dist), ((Center.y + Dist) > world.maxy ? world.maxy : Center.y + Dist), Center.z)
 	return block(x1y1, x2y2)
 
+/proc/wtrange(var/xDist = 0, var/yDist = 0, var/turf/Center = null)//alternative to trange takes an x and y value to allow for widescreen range checks
+	if (isnull(Center))
+		return
+
+	//var/x1 = ((Center.x-Dist) < 1 ? 1 : Center.x - Dist)
+	//var/y1 = ((Center.y-Dist) < 1 ? 1 : Center.y - Dist)
+	//var/x2 = ((Center.x+Dist) > world.maxx ? world.maxx : Center.x + Dist)
+	//var/y2 = ((Center.y+Dist) > world.maxy ? world.maxy : Center.y + Dist)
+
+	var/turf/x1y1 = locate(((Center.x - xDist) < 1 ? 1 : Center.x - xDist), ((Center.y - yDist) < 1 ? 1 : Center.y - yDist), Center.z)
+	var/turf/x2y2 = locate(((Center.x + xDist) > world.maxx ? world.maxx : Center.x + xDist), ((Center.y + yDist) > world.maxy ? world.maxy : Center.y + yDist), Center.z)
+	return block(x1y1, x2y2)
+
 /**
  * Make boom
  *
@@ -57,7 +70,9 @@ var/explosion_shake_message_cooldown = 0
 		var/far_dist = (devastation_range * 20) + (heavy_impact_range * 5)
 		var/frequency = get_rand_frequency()
 		var/skip_shake = 0 //Will not display shaking-related messages
-
+		var/list/view = view_to_array(world.view)
+		var/xvDist = (view[1] - 1) / 2
+		var/yvDist = (view[2] - 1) / 2
 		for (var/mob/M in player_list)
 			//Double check for client
 			if(M && M.client)
@@ -65,7 +80,7 @@ var/explosion_shake_message_cooldown = 0
 				if(M_turf && M_turf.z == epicenter.z)
 					var/dist = get_dist(M_turf, epicenter)
 					//If inside the blast radius + world.view - 2
-					if(dist <= round(max_range + world.view - 2, 1))
+					if(dist <= round(max_range + xvDist - 2, 1))
 						if(devastation_range > 0)
 							M.playsound_local(epicenter, get_sfx("explosion"), 100, 1, frequency, falloff = 5) // get_sfx() is so that everyone gets the same sound
 							shake_camera(M, Clamp(devastation_range, 3, 10), 2)
@@ -91,7 +106,7 @@ var/explosion_shake_message_cooldown = 0
 						spawn(50)
 							explosion_shake_message_cooldown = 0
 
-		var/close = trange(world.view+round(devastation_range,1), epicenter)
+		var/close = wtrange(xvDist+round(devastation_range,1), yvDist+round(devastation_range,1), epicenter)
 		//To all distanced mobs play a different sound
 		for(var/mob/M in mob_list) if(M.z == epicenter.z) if(!(M in close))
 			//Check if the mob can hear

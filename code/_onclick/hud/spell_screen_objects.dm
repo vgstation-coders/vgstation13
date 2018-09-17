@@ -81,10 +81,15 @@
 	var/y_position = decode_screen_Y(screen_loc_Y[1])
 	var/y_pix = screen_loc_Y[2]
 
+	var/list/view = view_to_array(world.view)
+	var/widescreen = view[3]
+	if(widescreen)
+		view[1] = (view[1] - 1) / 2
+		view[2] = (view[2] - 1) / 2
 	for(var/i = 1; i <= spell_objects.len; i++)
 		var/obj/abstract/screen/spell/S = spell_objects[i]
-		var/xpos = x_position + (x_position < (world.view+1) ? 1 : -1)*(i%length)
-		var/ypos = y_position + (y_position < (world.view+1) ? round(i/length) : -round(i/length))
+		var/xpos = x_position + (x_position < (view[1]+1) ? 1 : -1)*(i%length)
+		var/ypos = y_position + (y_position < (view[2]+1) ? round(i/length) : -round(i/length))
 		S.screen_loc = "[encode_screen_X(xpos)]:[x_pix],[encode_screen_Y(ypos)]:[y_pix]"
 		if(spell_holder && spell_holder.client)
 			spell_holder.client.screen += S

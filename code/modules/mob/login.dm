@@ -94,7 +94,14 @@
 			client.verbs += /client/proc/readmin
 
 		if(M_FARSIGHT in mutations)
-			client.changeView(max(client.view, world.view+1))
+			var/list/client_view_array = view_to_array(client.view)
+			var/list/world_view_array = view_to_array(world.view)
+			var/widescreen = world_view_array[3]
+			if(!widescreen)
+				client.changeView(max(client.view, world.view+1))
+			else
+				/*if we are widescreen then to add on one tile of view on each side of us we must add 2 to the x and y view values*/
+				client.changeView("[max(client_view_array[1],world_view_array[1]+2)]x[max(client_view_array[2],world_view_array[2]+2)]")
 	CallHook("Login", list("client" = src.client, "mob" = src))
 
 	if(spell_masters)

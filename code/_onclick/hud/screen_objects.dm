@@ -288,11 +288,12 @@
 	var/list/screeny = splittext(screenxy[2], ":")
 	var/X = screenx[1]
 	var/Y = screeny[1]
-	var/view = world.view
+	var/list/view = view_to_array(world.view)
+	var/widescreen = view[3]
 	if(user && user.client)
-		view = user.client.view
-	X = Clamp((origin.x + text2num(X) - (view + 1)), 1, world.maxx)
-	Y = Clamp((origin.y + text2num(Y) - (view + 1)), 1, world.maxy)
+		view = view_to_array(user.client.view)
+	X = Clamp((origin.x + text2num(X) - (widescreen ? (((view[1] - 1) / 2) + 1) : view[1] + 1)), 1, world.maxx)
+	Y = Clamp((origin.y + text2num(Y) - (widescreen ? (((view[2] - 1) / 2) + 1) : view[2] + 1)), 1, world.maxy)
 	return locate(X, Y, origin.z)
 
 /obj/abstract/screen/Click(location, control, params)

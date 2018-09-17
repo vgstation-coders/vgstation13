@@ -33,7 +33,10 @@
 
 	say_testing(src, "/mob/dead/observer/Hear(): source=[source], frequency=[speech.frequency], source_turf=[formatJumpTo(source_turf)]")
 
-	if (get_dist(source_turf, src) <= get_view_range())
+	var/list/view_range = view_to_array(get_view_range())
+	var/widescreen = view_range[3]
+	var/distance = get_dist(source_turf, src)
+	if (distance <= max(widescreen ? ((view_range[1] - 1) / 2) : view_range[1] , widescreen ? ((view_range[2] - 1) / 2) : view_range[2]) )
 		rendered_speech = "<B>[rendered_speech]</B>"
 	else
 		if(client && client.prefs)
