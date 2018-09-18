@@ -1,5 +1,8 @@
 #define AIRLOCK_CONTROL_RANGE 8
-
+#define RADIO_FILTER_EXPLANATION {"Set the radio filter.
+3 is for signalers
+4 is for airlocks (default)
+6 is for machinery (emitters, etc)"}
 
 
 // This code allows for airlocks to be controlled externally by setting an id_tag and comm frequency (disables ID access)
@@ -390,12 +393,10 @@ obj/machinery/access_button/Topic(href,href_list)
 	var/obj/item/device/multitool/P = get_multitool(usr)
 	if(P)
 		if("set_filter" in href_list)
-			var/explanation = {"Set the radio filter.
-3 is for signalers
-4 is for airlocks (default)
-6 is for machinery (emitters, etc)"}
-			var/newfilter = input(usr, explanation, "Radio Filter", customfilter) as null|anything in radiofilters
+			var/newfilter = input(usr, RADIO_FILTER_EXPLANATION, "Radio Filter", customfilter) as null|anything in radiofilters
 			if (newfilter)
+				if(usr.incapacitated() || (!issilicon(usr) && !Adjacent(usr)))
+					return	
 				customfilter = newfilter
 			
 		if("set_freq" in href_list)
@@ -412,3 +413,5 @@ obj/machinery/access_button/Topic(href,href_list)
 					initialize()
 
 		update_multitool_menu(usr)
+		
+#undef RADIO_FILTER_EXPLANATION
