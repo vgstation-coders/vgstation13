@@ -205,6 +205,8 @@
 /obj/item/weapon/storage/proc/can_be_inserted(obj/item/W as obj, stop_messages = 0,mob/M, slot)
 	if(!istype(W))
 		return //Not an item
+	if(!W.can_be_stored(src)) //Snowflake item-side whether this item can be stored within our item.
+		return 0
 	if(isliving(loc))
 		var/mob/living/L = loc
 		for (var/i in no_storage_slot)

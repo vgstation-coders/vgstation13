@@ -52,3 +52,7 @@
 		head.dust()
 	return 0
 
+/obj/item/supermatter_splinter/can_be_stored(var/obj/item/weapon/storage/storagee)
+	if(istype(storagee, /obj/item/weapon/storage/backpack/holding))
+		return TRUE
+	return FALSE
