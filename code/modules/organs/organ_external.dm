@@ -120,6 +120,15 @@
 	owner.visible_message("<span class='danger'>[msg]</span>")
 	droplimb(1, spawn_limb = 0, display_message = FALSE)
 
+/datum/organ/external/proc/dust()
+	if(is_peg())
+		return droplimb(1)
+	var/obj/O = generate_dropped_organ()
+	var/obj/I = O.ashtype()
+	qdel(O)
+	new I(owner.loc)
+	droplimb(1, spawn_limb = 0, display_message = FALSE)
+
 /datum/organ/external/proc/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
 	if((brute <= 0) && (burn <= 0))
 		return 0
