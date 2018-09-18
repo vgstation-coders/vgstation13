@@ -1245,7 +1245,7 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/on_mousedrop_to_inventory_slot()
 	return
 
-/obj/item/proc/can_be_stored(var/obj/item/weapon/storage/storagee)
+/obj/item/proc/can_be_stored(var/obj/item/weapon/storage/S)
 	return TRUE
 
 /obj/item/MouseDropFrom(var/obj/over_object)
