@@ -390,7 +390,11 @@ obj/machinery/access_button/Topic(href,href_list)
 	var/obj/item/device/multitool/P = get_multitool(usr)
 	if(P)
 		if("set_filter" in href_list)
-			var/newfilter = input(usr, "Select radio filter.", "Radio Filter", customfilter) as null|anything in radiofilters
+			var/explanation = {"Set the radio filter.
+3 is for signalers
+4 is for airlocks (default)
+6 is for machinery (emitters, etc)"}
+			var/newfilter = input(usr, explanation, "Radio Filter", customfilter) as null|anything in radiofilters
 			if (newfilter)
 				customfilter = newfilter
 			
