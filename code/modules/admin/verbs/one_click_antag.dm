@@ -79,10 +79,8 @@ client/proc/one_click_antag()
 			if(isobserver(H))
 				H = makeBody(H)
 			var/datum/mind/M = H.mind
-			to_chat(world, "Making [M] the leader of [FF]")
 			if(FF.HandleNewMind(M))
 				var/datum/role/RR = FF.get_member_by_mind(M)
-				to_chat(world, "RR created [RR], owner is [RR.antag]")
 				RR.ForgeObjectives()
 				RR.MemorizeObjectives()
 				log_admin("[key_name(H)] has been recruited as leader of [F.name] via create antagonist verb.")
@@ -96,10 +94,8 @@ client/proc/one_click_antag()
 			if(isobserver(H))
 				H = makeBody(H)
 			var/datum/mind/M = H.mind
-			to_chat(world, "Making [M] a recruit of [FF]")
 			if(FF.HandleRecruitedMind(M))
 				var/datum/role/RR = FF.get_member_by_mind(M)
-				to_chat(world, "RR created [RR], owner is [RR.antag]")
 				RR.ForgeObjectives()
 				RR.MemorizeObjectives()
 				log_admin("[key_name(H)] has been recruited as recruit of [F.name] via create antagonist verb.")
@@ -110,24 +106,20 @@ client/proc/one_click_antag()
 		return recruit_count
 
 	else if(R)
-		to_chat(world, "Checking R")
 		while(count > 0 && candidates.len)
 			count--
 			var/mob/H = pick(candidates)
 			candidates.Remove(H)
 			if(isobserver(H))
 				H = makeBody(H)
-			to_chat(world, "[H] is chosen.")
 			var/datum/mind/M = H.mind
 
 			var/datum/role/newRole = new R
 
 			if(!newRole)
-				to_chat(world, "newRole dropped.")
 				continue
 
 			if(!newRole.AssignToRole(M))
-				to_chat(world, "M failed newRole assign.")
 				newRole.Drop()
 				continue
 			newRole.OnPostSetup()
@@ -140,7 +132,6 @@ client/proc/one_click_antag()
 
 
 /datum/admins/proc/get_candidates(var/role, var/source, var/role_name)
-	to_chat(world, "getting candidates. [role], [source], [role_name]")
 	var/list/candidates = list()
 	switch(source)
 		if(FROM_GHOSTS)
@@ -148,17 +139,13 @@ client/proc/one_click_antag()
 				candidates.Add(G)
 		if(FROM_PLAYERS)
 			for(var/mob/living/carbon/human/H in player_list)
-				to_chat(world, "Evaluating H [H]")
 				if(!H.client || !H.mind)
-					to_chat(world, "No client or no mind [H.client]. [H.mind]")
 					continue
 				candidates.Add(H)
 	for(var/mob/M in candidates)
 		if(jobban_isbanned(M, "Syndicate"))
-			to_chat(world, "M is syndicate banned")
 			candidates.Remove(M)
 		if(!M.client.desires_role(role) || jobban_isbanned(M, role))
-			to_chat(world, "M does not desire role [!M.client.desires_role(role)] or is jobbanned [jobban_isbanned(M, role)]")
 			candidates.Remove(M)
 	return candidates
 
