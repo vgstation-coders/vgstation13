@@ -51,7 +51,6 @@ client/proc/one_click_antag()
 	return malf_made
 
 /datum/admins/proc/makeAntag(var/datum/role/R, var/datum/faction/F, var/count = 1, var/recruitment_source = FROM_PLAYERS)
-	to_chat(world, "makeAntag called. R = [R], F = [F], count = [count], recruitment_source [recruitment_source]")
 	var/role_req
 	var/role_name
 	if(F)
@@ -82,7 +81,6 @@ client/proc/one_click_antag()
 			if(FF.HandleNewMind(M))
 				var/datum/role/RR = FF.get_member_by_mind(M)
 				RR.ForgeObjectives()
-				RR.MemorizeObjectives()
 				log_admin("[key_name(H)] has been recruited as leader of [F.name] via create antagonist verb.")
 				recruit_count++
 				count--
@@ -97,7 +95,6 @@ client/proc/one_click_antag()
 			if(FF.HandleRecruitedMind(M))
 				var/datum/role/RR = FF.get_member_by_mind(M)
 				RR.ForgeObjectives()
-				RR.MemorizeObjectives()
 				log_admin("[key_name(H)] has been recruited as recruit of [F.name] via create antagonist verb.")
 				recruit_count++
 
@@ -124,7 +121,6 @@ client/proc/one_click_antag()
 				continue
 			newRole.OnPostSetup()
 			newRole.ForgeObjectives()
-			newRole.MemorizeObjectives()
 			log_admin("[key_name(H)] has been made into a [newRole.name] via create antagonist verb.")
 			recruit_count++
 
