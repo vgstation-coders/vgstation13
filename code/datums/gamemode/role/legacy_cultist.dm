@@ -77,5 +77,5 @@
 /datum/role/legacy_cultist/AdminPanelEntry()
 	var/list/dat = ..()
 	var/datum/faction/cult/narsie/C = faction
-	dat += "<a href='?src=\ref[faction];cult_mindspeak=\ref[src]'>Voice of [eldergod]</a><br/>"
+	dat += "<a href='?src=\ref[faction];cult_mindspeak=\ref[src]'>Voice of [C.eldergod]</a><br/>"
 	return dat
