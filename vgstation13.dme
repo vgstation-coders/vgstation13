@@ -1337,6 +1337,7 @@
 #include "code\modules\food\recipes_microwave.dm"
 #include "code\modules\games\cards\playing_cards.dm"
 #include "code\modules\games\cards\wizard_cards.dm"
+#include "code\modules\games\cards\une\une_cards.dm"
 #include "code\modules\genetics\side_effects.dm"
 #include "code\modules\html_interface\html_interface.dm"
 #include "code\modules\html_interface\html_interface_client.dm"
