@@ -2880,9 +2880,9 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "Enjoy a Nuka break!"
 	icon_state = "nuka"
-	products = list(/obj/item/weapon/reagent_containers/food/drinks/openable/nuka = 15)
-	prices = list(/obj/item/weapon/reagent_containers/food/drinks/openable/nuka = 20, /obj/item/weapon/reagent_containers/food/drinks/openable/quantum = 50)
-	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/openable/quantum = 5)
+	products = list(/obj/item/weapon/reagent_containers/food/drinks/openable/bottle/nuka = 15)
+	prices = list(/obj/item/weapon/reagent_containers/food/drinks/openable/bottle/nuka = 20, /obj/item/weapon/reagent_containers/food/drinks/openable/bottle/quantum = 50)
+	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/openable/bottle/quantum = 5)
 
 	pack = /obj/structure/vendomatpack/nuka
 

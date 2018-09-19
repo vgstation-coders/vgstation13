@@ -604,9 +604,12 @@
 	//because playsound(user, 'sound/effects/can_open[rand(1,3)].ogg', 50, 1) just wouldn't work. also so badmins can varedit these
 	var/list/open_sounds = list('sound/effects/can_open1.ogg', 'sound/effects/can_open2.ogg', 'sound/effects/can_open3.ogg')
 
+/obj/item/weapon/reagent_containers/food/drinks/openable/proc/on_open_message(user)
+	to_chat(user, "You pull back the tab of \the [src] with a satisfying pop.")
+
 /obj/item/weapon/reagent_containers/food/drinks/openable/attack_self(mob/user as mob)
 	if(!is_open_container())
-		to_chat(user, "You pull back the tab of \the [src] with a satisfying pop.")
+		on_open_message(user)
 		flags |= OPENCONTAINER
 		src.verbs |= /obj/item/weapon/reagent_containers/verb/empty_contents
 		playsound(user, pick(open_sounds), 50, 1)
@@ -718,21 +721,24 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
-/obj/item/weapon/reagent_containers/food/drinks/openable/nuka
+/obj/item/weapon/reagent_containers/food/drinks/openable/bottle/on_open_message(var/mob/user)
+	to_chat(user, "You uncap \the [src] and it releases a satisfying fizz.")
+
+/obj/item/weapon/reagent_containers/food/drinks/openable/bottle/nuka
 	name = "Nuka Cola"
 	desc = "Cool, refreshing, Nuka Cola."
 	icon_state = "nuka"
-/obj/item/weapon/reagent_containers/food/drinks/openable/nuka/New()
+/obj/item/weapon/reagent_containers/food/drinks/openable/bottle/nuka/New()
 	..()
 	reagents.add_reagent(NUKA_COLA, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
-/obj/item/weapon/reagent_containers/food/drinks/openable/quantum
+/obj/item/weapon/reagent_containers/food/drinks/openable/bottle/quantum
 	name = "Nuka Cola Quantum"
 	desc = "Take the leap... enjoy a Quantum!"
 	icon_state = "quantum"
-/obj/item/weapon/reagent_containers/food/drinks/openable/quantum/New()
+/obj/item/weapon/reagent_containers/food/drinks/openable/bottle/quantum/New()
 	..()
 	reagents.add_reagent(QUANTUM, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
