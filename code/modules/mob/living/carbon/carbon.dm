@@ -502,6 +502,7 @@
 	stop_pulling()
 	Stun(stun_amount)
 	Knockdown(weaken_amount)
+	score["slips"]++
 	return 1
 
 /mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
