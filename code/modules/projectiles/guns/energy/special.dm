@@ -76,8 +76,7 @@
 	origin_tech = null
 	clumsy_check = 0
 	var/charge_tick = 0
-	var/changetype=null
-	var/next_changetype=0
+
 
 /obj/item/weapon/gun/energy/staff/New()
 	..()
@@ -102,7 +101,11 @@
 /obj/item/weapon/gun/energy/staff/update_icon()
 	return
 
-/obj/item/weapon/gun/energy/staff/process_chambered()
+/obj/item/weapon/gun/energy/staff/change
+	var/changetype=null
+	var/next_changetype=0
+
+/obj/item/weapon/gun/energy/staff/change/process_chambered()
 	if(!..())
 		return 0
 	var/obj/item/projectile/change/P=in_chamber
@@ -110,7 +113,7 @@
 		P.changetype=changetype
 	return 1
 
-/obj/item/weapon/gun/energy/staff/attack_self(var/mob/living/user)
+/obj/item/weapon/gun/energy/staff/change/attack_self(var/mob/living/user)
 	if(world.time < next_changetype)
 		to_chat(user, "<span class='warning'>[src] is still recharging.</span>")
 		return
@@ -325,6 +328,26 @@
 			qdel(target)
 	else
 		to_chat(user, "<span class='warning'>[src] is not ready to fire again!</span>")
+
+/obj/item/weapon/gun/energy/staff/swapper
+	name = "staff of swip-swap"
+	desc = "The head and handle of this strange device keep switching places."
+	icon = 'icons/obj/wizard.dmi'
+	inhand_states = list(
+	"left_hand" = 'icons/mob/in-hand/left/guns.dmi',
+	"right_hand" = 'icons/mob/in-hand/right/guns.dmi')
+	item_state = "staffswap"
+	icon_state = "staff_swap"
+	projectile_type = "/obj/item/projectile/swap"
+	flags = FPRINT | TWOHANDABLE
+
+/obj/item/weapon/gun/energy/staff/swapper/update_wield(mob/user)
+	..()
+	to_chat(user, "<span class = 'notice'>[wielded?"Holding \the [src] in both hands grants it more power!":"As you hold \the [src] in one hand, it sighs."]</span>")
+	if(wielded)
+		projectile_type = "/obj/item/projectile/swap/advanced"
+	else
+		projectile_type = initial(projectile_type)
 
 /obj/item/weapon/gun/energy/floragun
 	name = "floral somatoray"
