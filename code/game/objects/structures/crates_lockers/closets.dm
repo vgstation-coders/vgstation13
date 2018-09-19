@@ -208,8 +208,10 @@
 			new_closet = change_type(has_lock_type)
 
 			if(new_closet)
+				if(!(user.drop_item(E, new_closet)))
+					return //Abort if we can't drop the electronics for some reason (eg. Superglue)
+
 				to_chat(user, "<span class='notice'>You installed the electronics!</span>")
-				user.drop_item(E, new_closet, force_drop = 1)
 				new_closet.electronics = E
 				E.installed = 1
 
@@ -275,26 +277,27 @@
 // Might come handy for painting crates and lockers some day.
 // Using it to change from secure to non secure lockers for now
 /obj/structure/closet/proc/change_type(var/new_type)
-	if(new_type)//Ensure it's not null
-		var/obj/structure/closet/new_closet = new new_type(loc)
+	ASSERT(new_type)//Ensure it's not null
 
-		new_closet.contents = src.contents
+	var/obj/structure/closet/new_closet = new new_type(loc)
 
-		new_closet.broken = src.broken
-		new_closet.welded = src.welded
-		new_closet.locked = src.locked
+	new_closet.contents = src.contents
 
-		new_closet.fingerprints = src.fingerprints
-		new_closet.fingerprintshidden = src.fingerprintshidden
+	new_closet.broken = src.broken
+	new_closet.welded = src.welded
+	new_closet.locked = src.locked
 
-		new_closet.electronics = src.electronics
-		new_closet.req_access = src.req_access
-		new_closet.req_one_access = src.req_one_access
+	new_closet.fingerprints = src.fingerprints
+	new_closet.fingerprintshidden = src.fingerprintshidden
 
-		new_closet.update_icon()
+	new_closet.electronics = src.electronics
+	new_closet.req_access = src.req_access
+	new_closet.req_one_access = src.req_one_access
 
-		qdel(src)
-		return new_closet
+	new_closet.update_icon()
+
+	qdel(src)
+	return new_closet
 
 // this should probably use dump_contents()
 /obj/structure/closet/ex_act(severity)
@@ -305,7 +308,7 @@
 			if(has_electronics)//If it's got electronics, generate them/pull them out
 				E = dump_electronics()
 				E.forceMove(src)
-			for(var/atom/movable/A as mob|obj in src)//pulls everything else out of the locker and hits it with an explosion
+			for(var/atom/movable/A in src)//pulls everything else out of the locker and hits it with an explosion
 				A.forceMove(src.loc)
 				A.ex_act(severity++)
 			qdel(src)

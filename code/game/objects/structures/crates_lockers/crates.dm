@@ -511,7 +511,7 @@
 	else
 		..()
 
-/obj/structure/closet/crate/secure/proc/togglelock(mob/user as mob)
+/obj/structure/closet/crate/secure/proc/togglelock(mob/user)
 	if(src.allowed(user))
 		src.locked = !src.locked
 		if (src.locked)
