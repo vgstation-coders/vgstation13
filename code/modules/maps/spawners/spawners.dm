@@ -549,10 +549,10 @@
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/vermouth,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/wine,
 		/obj/item/weapon/reagent_containers/food/drinks/coffee,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/thirteenloko,
+		/obj/item/weapon/reagent_containers/food/drinks/openable/cola,
+		/obj/item/weapon/reagent_containers/food/drinks/openable/dr_gibb,
+		/obj/item/weapon/reagent_containers/food/drinks/openable/starkist,
+		/obj/item/weapon/reagent_containers/food/drinks/openable/thirteenloko,
 		/obj/item/weapon/reagent_containers/food/snacks/pie/amanita_pie,
 		/obj/item/weapon/reagent_containers/food/snacks/amanitajelly,
 		/obj/item/weapon/reagent_containers/food/snacks/applecakeslice,
@@ -809,7 +809,7 @@
 		/obj/item/weapon/reagent_containers/food/drinks/beer,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/absinthe,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/rum,
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/grifeo,
+		/obj/item/weapon/reagent_containers/food/drinks/openable/grifeo,
 		/obj/item/weapon/reagent_containers/food/drinks/groansbanned,
 		)
 

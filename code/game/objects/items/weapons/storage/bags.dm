@@ -234,14 +234,14 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	..()
 	new/obj/item/weapon/reagent_containers/food/snacks/monkeyburger(src)//6 nutriments
 	new/obj/item/weapon/reagent_containers/food/snacks/fries(src)//4 nutriments
-	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola(src)//-3 drowsy
+	new/obj/item/weapon/reagent_containers/food/drinks/openable/cola(src)//-3 drowsy
 	update_icon()
 
 /obj/item/weapon/storage/bag/food/menu2/New()
 	..()
 	new/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger(src)//14 nutriments
 	new/obj/item/weapon/reagent_containers/food/snacks/cheesyfries(src)//6 nutriments
-	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind(src)//-7 drowsy, -1 sleepy
+	new/obj/item/weapon/reagent_containers/food/drinks/openable/space_mountain_wind(src)//-7 drowsy, -1 sleepy
 	update_icon()
 
 // -----------------------------
