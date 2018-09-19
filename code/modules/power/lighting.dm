@@ -144,7 +144,7 @@ var/global/list/obj/machinery/light/alllights = list()
 // the smaller bulb light fixture
 
 /obj/machinery/light/cultify()
-	new /obj/structure/cult/pylon(loc)
+	new /obj/structure/cult_legacy/pylon(loc)
 	qdel(src)
 
 /obj/machinery/light/bullet_act(var/obj/item/projectile/Proj)

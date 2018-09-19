@@ -3,6 +3,16 @@
 
 var/veil_thickness = CULT_PROLOGUE
 
+/client/proc/set_veil_thickness()
+	set category = "Special Verbs"
+	set name = "Set Veil Thickness"
+	set desc = "Debug verb for Cult 3.0 shenanigans"
+
+	if(!check_rights(R_ADMIN))
+		return
+
+	veil_thickness = input(usr, "Enter a value (default = [CULT_PROLOGUE])", "Debug Veil Thickness", veil_thickness) as num
+
 //CULT_PROLOGUE		Default thickness, only communication and raise structure runes enabled
 //CULT_ACT_I		Altar raised. cultists can now convert.
 //CULT_ACT_II		Cultist amount reached. cultists are now looking for the sacrifice

@@ -89,7 +89,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	if (iscultist(user))
 		to_chat(user, "<span class='info'>It reads: <i>[word1 ? "[word1.rune]" : ""] [word2 ? "[word2.rune]" : ""] [word3 ? "[word3.rune]" : ""]</i>.[rune_name ? " That's a <b>[initial(rune_name.name)]</b> rune." : "It doesn't match any rune spells."]</span>")
 	if (rune_name)
-		if (initial(rune_name.Act_restriction) <= 1000)//TODO: SET TO CURRENT CULT FACTION ACT
+		if (initial(rune_name.Act_restriction) <= veil_thickness)
 			to_chat(user, initial(rune_name.desc))
 		else
 			to_chat(user, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
@@ -140,7 +140,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 /obj/effect/rune/update_icon()
 	var/datum/rune_spell/spell = get_rune_spell(null, null, "examine", word1, word2, word3)
 
-	if(spell && initial(spell.Act_restriction) <= 1000)//TODO: SET TO CURRENT CULT FACTION ACT
+	if(spell && initial(spell.Act_restriction) <= veil_thickness)
 		animated = 1
 	else
 		animated = 0
@@ -273,6 +273,8 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		qdel(src)
 		return
 	if(istype(I, /obj/item/weapon/tome))
+		trigger(user)
+	if(istype(I, /obj/item/weapon/melee/cultblade))
 		trigger(user)
 	if(istype(I, /obj/item/weapon/talisman))
 		var/obj/item/weapon/talisman/T = I

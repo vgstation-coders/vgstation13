@@ -15,7 +15,7 @@
 	light_range_on = 3
 
 /obj/machinery/computer/cultify()
-	new /obj/structure/cult/tome(loc)
+	new /obj/structure/cult_legacy/tome(loc)
 	..()
 
 /obj/machinery/computer/New()

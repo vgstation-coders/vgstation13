@@ -1,17 +1,15 @@
 
-
-/obj/structure/cult/talisman
+/obj/structure/cult_legacy/talisman
 	name = "Altar"
 	desc = "A bloodstained altar dedicated to Nar-Sie."
 	icon_state = "talismanaltar"
 
-
-/obj/structure/cult/forge
+/obj/structure/cult_legacy/forge
 	name = "Daemon forge"
 	desc = "A forge used in crafting the unholy weapons used by the armies of Nar-Sie."
 	icon_state = "forge"
 
-/obj/structure/cult/pylon
+/obj/structure/cult_legacy/pylon
 	name = "Pylon"
 	desc = "A floating crystal that hums with an unearthly energy."
 	icon_state = "pylon"
@@ -20,16 +18,16 @@
 	light_color = LIGHT_COLOR_RED
 	var/last_check = 0
 
-/obj/structure/cult/pylon/New()
+/obj/structure/cult_legacy/pylon/New()
 	..()
 	processing_objects.Add(src)
 
-/obj/structure/cult/pylon/Destroy()
+/obj/structure/cult_legacy/pylon/Destroy()
 	processing_objects.Remove(src)
 	..()
 
 
-/obj/structure/cult/pylon/process()
+/obj/structure/cult_legacy/pylon/process()
 	if(!isbroken && world.time > last_check + 3 SECONDS)
 		last_check = world.time
 		for(var/mob/living/simple_animal/construct/C in view(src, 3))
@@ -40,10 +38,10 @@
 				C.health = min(C.maxHealth, C.health + 3) //Not quite as good as artificers
 
 
-/obj/structure/cult/pylon/attack_hand(mob/M as mob)
+/obj/structure/cult_legacy/pylon/attack_hand(mob/M as mob)
 	attackpylon(M, 5)
 
-/obj/structure/cult/pylon/attack_animal(mob/living/simple_animal/user as mob)
+/obj/structure/cult_legacy/pylon/attack_animal(mob/living/simple_animal/user as mob)
 	if(istype(user, /mob/living/simple_animal/construct/builder))
 		if(isbroken)
 			if(prob(20))
@@ -53,10 +51,10 @@
 				to_chat(user, "You fail to repair the pylon")
 	attackpylon(user, user.melee_damage_upper)
 
-/obj/structure/cult/pylon/attackby(obj/item/W as obj, mob/user as mob)
+/obj/structure/cult_legacy/pylon/attackby(obj/item/W as obj, mob/user as mob)
 	attackpylon(user, W.force)
 
-/obj/structure/cult/pylon/proc/attackpylon(mob/user as mob, var/damage)
+/obj/structure/cult_legacy/pylon/proc/attackpylon(mob/user as mob, var/damage)
 	if(!isbroken)
 		if(prob(1+ damage * 5))
 			to_chat(user, "You hit the pylon, and its crystal breaks apart!")
@@ -82,7 +80,7 @@
 
 
 
-/obj/structure/cult/pylon/proc/repair(mob/user as mob)
+/obj/structure/cult_legacy/pylon/proc/repair(mob/user as mob)
 	if(isbroken)
 		to_chat(user, "You repair the pylon.")
 		isbroken = 0
@@ -90,21 +88,21 @@
 		icon_state = "pylon"
 		set_light(5)
 
-/obj/structure/cult/tome
+/obj/structure/cult_legacy/tome
 	name = "Desk"
 	desc = "A desk covered in arcane manuscripts and tomes in unknown languages. Looking at the text makes your skin crawl."
 	icon_state = "tomealtar"
 	light_range = 2
 	light_color = LIGHT_COLOR_RED
 
-/obj/structure/cult/tome/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/cult_legacy/tome/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.drop_item(W, src.loc)
 	return 1
 
 //sprites for this no longer exist	-Pete
 //(they were stolen from another game anyway)
 /*
-/obj/structure/cult/pillar
+/obj/structure/cult_legacy/pillar
 	name = "Pillar"
 	desc = "This should not exist"
 	icon_state = "pillar"

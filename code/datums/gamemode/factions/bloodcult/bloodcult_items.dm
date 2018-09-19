@@ -56,7 +56,7 @@ var/list/arcane_tomes = list()
 	var i = 1
 	for(var/subtype in subtypesof(/datum/rune_spell))
 		var/datum/rune_spell/instance = subtype
-		if (initial(instance.Act_restriction) <= 1000)//TODO: SET TO CURRENT CULT FACTION ACT
+		if (initial(instance.Act_restriction) <= veil_thickness)
 			dat += "<a href='byond://?src=\ref[src];page=[i]'><label> \Roman[i] </label> <li>  [initial(instance.name)] </li></a>"
 			if (i == current_page)
 				var/datum/cultword/word1 = initial(instance.word1)
@@ -375,7 +375,7 @@ var/list/arcane_tomes = list()
 			to_chat(user, "<span class='warning'>There is no power in those runes. The talisman isn't reacting to it.</span>")
 			return
 
-		if (initial(spell.Act_restriction) > 1000)//TODO: SET TO CURRENT CULT FACTION ACT
+		if (initial(spell.Act_restriction) > veil_thickness)
 			to_chat(user, "<span class='danger'>The veil is still too thick for a talisman to draw power from this rune.</span>")
 			return
 
@@ -444,8 +444,9 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/melee/cultblade
 	name = "cult blade"
-	desc = "An arcane weapon wielded by the followers of Nar-Sie."
+	desc = "An arcane weapon wielded by the followers of Nar-Sie. It features a nice round socket at the base of its obsidian blade."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	icon = 'icons/obj/cult.dmi'
 	icon_state = "cultblade"
 	item_state = "cultblade"
 	flags = FPRINT
@@ -455,18 +456,22 @@ var/list/arcane_tomes = list()
 	sharpness = 1.35
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	hitsound = "sound/weapons/bladeslice.ogg"
 	var/checkcult = 1
 
 /obj/item/weapon/melee/cultblade/nocult
+	name = "broken cult blade"
+	desc = "What remains of an arcane weapon wielded by the followers of Nar-Sie. In this state, it can be held mostly without risks."
+	icon_state = "cultblade-broken"
+	item_state = "cultblade-broken"
 	checkcult = 0
 	force = 15
 
 /obj/item/weapon/melee/cultblade/cultify()
 	return
 
-/obj/item/weapon/melee/cultblade/attack(mob/living/target as mob, mob/living/carbon/human/user as mob)
+/obj/item/weapon/melee/cultblade/attack(var/mob/living/target, var/mob/living/carbon/human/user)
 	if(!checkcult || iscultist(user))
-		playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 		return ..()
 	else
 		user.Paralyse(5)
@@ -475,12 +480,121 @@ var/list/arcane_tomes = list()
 		if(affecting && affecting.take_damage(rand(force/2, force))) //random amount of damage between half of the blade's force and the full force of the blade.
 			user.UpdateDamageIcon()
 
-
-/obj/item/weapon/melee/cultblade/pickup(mob/living/user as mob)
+/obj/item/weapon/melee/cultblade/pickup(var/mob/living/user)
 	if(checkcult && !iscultist(user))
 		to_chat(user, "<span class='warning'>An overwhelming feeling of dread comes over you as you pick up the cultist's sword. It would be wise to rid yourself of this blade quickly.</span>")
 		user.Dizzy(120)
 
+/obj/item/weapon/melee/cultblade/attackby(var/obj/item/I, var/mob/user)
+	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper))
+		I.ashify_item(user)
+		return 1
+	if(istype(I,/obj/item/device/soulstone/gem))
+		if (user.get_inactive_hand() != src)
+			to_chat(user,"<span class='warning'>You must hold the blade in your hand to properly place the gem in its socket.</span>")
+			return 1
+		var/turf/T = get_turf(user)
+		playsound(T, 'sound/items/Deconstruct.ogg', 50, 1)
+		user.drop_item(T, src)
+		var/obj/item/weapon/melee/soulblade/SB = new (T)
+		spawn(1)
+			user.put_in_active_hand(SB)
+		for(var/mob/living/simple_animal/shade/A in I)
+			A.forceMove(SB)
+			SB.shade = A
+			break
+		SB.update_icon()
+		user.swap_hand()
+		qdel(I)
+		qdel(src)
+		return 1
+	if(istype(I,/obj/item/device/soulstone))
+		to_chat(user,"<span class='warning'>This soul stone's shape doesn't fit the blade's socket.</span>")
+		return 1
+	..()
+
+///////////////////////////////////////SOUL BLADE////////////////////////////////////////////////
+
+/obj/item/weapon/melee/soulblade
+	name = "soul blade"
+	desc = "An obsidian blade fitted with a soul gem, giving it soul catching properties, and allowing the user to shoot boiling blood slashes."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	icon = 'icons/obj/cult.dmi'
+	icon_state = "soulblade"
+	item_state = "soulblade"
+	flags = FPRINT
+	w_class = W_CLASS_LARGE
+	force = 30
+	throwforce = 10
+	sharpness = 1.35
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	hitsound = "sound/weapons/bladeslice.ogg"
+	var/mob/living/simple_animal/shade/shade = null
+
+/obj/item/weapon/melee/soulblade/cultify()
+	return
+
+/obj/item/weapon/melee/soulblade/attack(var/mob/living/target, var/mob/living/carbon/human/user)
+	if(!iscultist(user))
+		user.Paralyse(5)
+		to_chat(user, "<span class='warning'>An unexplicable force powerfully repels the sword from [target]!</span>")
+		var/datum/organ/external/affecting = user.get_active_hand_organ()
+		if(affecting && affecting.take_damage(rand(force/2, force))) //random amount of damage between half of the blade's force and the full force of the blade.
+			user.UpdateDamageIcon()
+
+	..()
+	if (istype(target, /mob/living/carbon))
+		transfer_soul("VICTIM", target, user,1)
+		update_icon()
+
+/obj/item/weapon/melee/soulblade/pickup(var/mob/living/user)
+	if(!iscultist(user))
+		to_chat(user, "<span class='warning'>An overwhelming feeling of dread comes over you as you pick up the cultist's sword. It would be wise to rid yourself of this blade quickly.</span>")
+		user.Dizzy(120)
+
+/obj/item/weapon/melee/soulblade/attackby(var/obj/item/I, var/mob/user)
+	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper))
+		I.ashify_item(user)
+		return 1
+
+/obj/item/weapon/melee/soulblade/update_icon()
+	overlays.len = 0
+	shade = locate() in src
+	if (shade)
+		var/image/I = image('icons/obj/cult_64x64.dmi',"soulblade")
+		I.plane = HUD_PLANE//but I must
+		I.layer = ABOVE_HUD_LAYER
+		I.pixel_x = -16 * PIXEL_MULTIPLIER
+		I.pixel_y = -16 * PIXEL_MULTIPLIER
+		overlays += I
+		item_state = "soulblade-full"
+	else
+		item_state = "soulblade"
+
+	if (istype(loc,/mob/living/carbon))
+		var/mob/living/carbon/C = loc
+		C.update_inv_hands()
+
+
+///////////////////////////////////////SOULSTONE////////////////////////////////////////////////
+/obj/item/device/soulstone/gem
+	name = "Soul Gem"
+	desc = "A freshly cut stone which appears to hold the same soul catching properties as shards of the Soul Stone. This one however...has a nice round shape."
+	icon = 'icons/obj/cult.dmi'
+	icon_state = "soulstone"
+	item_state = "shard-soulstone"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shards.dmi', "right_hand" = 'icons/mob/in-hand/right/shards.dmi')
+
+/obj/item/device/soulstone/gem/throw_impact(var/atom/hit_atom, var/speed, var/mob/user)
+	..()
+	var/obj/item/device/soulstone/S = new(loc)
+	for(var/mob/living/simple_animal/shade/A in src)
+		A.forceMove(S)
+		S.icon_state = "soulstone2"
+		S.item_state = "shard-soulstone2"
+	playsound(S, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+	qdel(src)
 
 ///////////////////////////////////////CULT HOOD////////////////////////////////////////////////
 
