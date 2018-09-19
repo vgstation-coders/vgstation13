@@ -100,6 +100,9 @@
 
 	machine_flags = WIREJACK
 
+/obj/machinery/power/apc/get_cell()
+	return cell
+
 /obj/machinery/power/apc/supports_holomap()
 	return TRUE
 

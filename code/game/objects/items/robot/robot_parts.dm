@@ -58,6 +58,9 @@
 	var/obj/item/weapon/cell/cell = null
 	var/extension = null //For making borgs start with pre-installed better components. Make the var the end of the path including the "/".
 
+/obj/item/robot_parts/chest/get_cell()
+	return cell
+
 /obj/item/robot_parts/chest/reinforced
 	name = "reinforced robot torso"
 	desc = "A heavily reinforced case containing cyborg logic boards, space for a standard power cell, and several pre-installed reinforced robot components."

@@ -42,6 +42,10 @@
 		/datum/action/spacepod/fire_weapons,\
 		/datum/action/spacepod/passenger/assume_control) //Actions to create when a passenger boards, deleted upon leaving
 	var/list/actions = list()
+
+/obj/spacepod/get_cell()
+	return battery
+
 /obj/spacepod/New()
 	. = ..()
 	if(!pod_overlays)
