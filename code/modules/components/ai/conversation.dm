@@ -15,22 +15,23 @@
 
 /datum/component/ai/conversation/auto
 	var/speech_prob = 30
-	var/last_speech
+	var/next_speech
 	var/speech_delay
 	var/datum/component/ai/target_finder/finder = null
 
 /datum/component/ai/conversation/auto/RecieveSignal(var/message_type, var/list/args)
 	if(message_type == COMSIG_COMPONENT_ADDED && args["component"] == src) //We were just initialized
-		to_chat(world, "we're being initialized")
 		finder = GetComponent(/datum/component/ai/target_finder)
-	if(message_type == COMSIG_LIFE && finder && prob(speech_prob) && last_speech < world.time+speech_delay)
+	if(finder && next_speech < world.time && prob(speech_prob) && message_type == COMSIG_LIFE)
 		var/listener
 		for(var/mob/living/M in finder.GetTargets())
+			if(M == src)
+				continue
 			if(M.isDead()) //No speaking to the dead
 				continue
 			listener = TRUE
 			break
 		if(listener)
-			last_speech = world.time
+			next_speech = world.time+speech_delay
 			SendSignal(COMSIG_SAY)
 	..()

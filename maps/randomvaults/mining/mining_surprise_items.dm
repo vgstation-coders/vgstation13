@@ -12,7 +12,7 @@
 /mob/living/silicon/robot/NPC/proc/initialize_NPC_components()
 	BrainContainer = new (src)
 	BrainContainer.register_for_updates()
-	BrainContainer.AddComponent(/datum/component/debugger) //REMOVE THIS
+	//BrainContainer.AddComponent(/datum/component/debugger) //REMOVE THIS
 	BrainContainer.AddComponent(/datum/component/controller/mob)
 	BrainContainer.AddComponent(/datum/component/ai/hand_control)
 	BrainContainer.AddComponent(/datum/component/controller/movement)
