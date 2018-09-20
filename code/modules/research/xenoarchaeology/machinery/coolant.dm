@@ -3,7 +3,7 @@ datum/reagent/coolant
 	name = "Coolant"
 	id = "coolant"
 	description = "Industrial cooling substance."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" // rgb: 200, 165, 220
 
 datum/chemical_reaction/coolant
