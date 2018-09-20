@@ -12,6 +12,8 @@ var/global/datum/controller/occupations/job_master
 		//Debug info
 	var/list/job_debug = list()
 
+	var/list/crystal_ball = list() //This should be an assoc. list. Job = # of players ready. Configured by predict_manifest() in obj.dm
+
 
 /datum/controller/occupations/proc/SetupOccupations(var/faction = "Station")
 	occupations = list()
@@ -500,7 +502,7 @@ var/global/datum/controller/occupations/job_master
 			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/device/inhaler(H))
 		else
 			H.equip_or_collect(new /obj/item/device/inhaler(H), slot_in_backpack)
-		
+
 	return 1
 
 
