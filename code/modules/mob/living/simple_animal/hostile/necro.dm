@@ -716,10 +716,10 @@
 			spawn(3 SECONDS)
 				set_light(1, 2, "#5dca31")
 
-#undef EVOLVING
-#undef MOVING_TO_TARGET
-#undef EATING
-#undef OPENING_DOOR
+//#undef EVOLVING
+//#undef MOVING_TO_TARGET
+//#undef EATING
+//#undef OPENING_DOOR
 #undef CAN
 #undef CANT
 #undef CANPLUS
