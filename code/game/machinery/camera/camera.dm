@@ -179,6 +179,7 @@ var/list/camera_names=list()
 	add_hiddenprint(user)
 	deactivate(user,0)
 
+#define MAX_CAMERA_MESSAGES 15
 var/list/camera_messages = list()
 
 /obj/machinery/camera/attackby(obj/W as obj, mob/living/user as mob)
@@ -267,6 +268,8 @@ var/list/camera_messages = list()
 			info = P.notehtml
 
 		var/key = "\ref[W]"
+		if(camera_messages.len > MAX_CAMERA_MESSAGES)
+			camera_messages.Cut(1, 2) // Removes the oldest element
 		camera_messages[key] = list("text" = info, "title" = W.name)
 
 		for(var/mob/living/silicon/ai/O in living_mob_list)
