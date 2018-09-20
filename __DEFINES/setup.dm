@@ -418,9 +418,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 //#define SHOCKWAVE		21 	// (Not implemented) attack a nearby tile and cause a massive shockwave, knocking most people on their asses (25%)
 //#define ELECTRICITY	22 	// (Not implemented) ability to shoot electric attacks (15%)
 
-	//2spooky
-#define SKELETON 29
-#define PLANT 30
+//2spooky
+#define M_SKELETON 29
 
 // Other Mutations:
 #define M_NO_BREATH		100 	// no need to breathe
