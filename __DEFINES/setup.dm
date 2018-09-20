@@ -1259,7 +1259,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
-	#warning SOME ASSHOLE FORGOT TO COMMENT SAY_DEBUG BEFORE COMMITTING
+	#warn SOME ASSHOLE FORGOT TO COMMENT SAY_DEBUG BEFORE COMMITTING
 	#define say_testing(a,x) to_chat(a, ("([__FILE__]:[__LINE__] say_testing) [x]"))
 #else
 	#define say_testing(a,x)
@@ -1269,7 +1269,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 //#define JUSTFUCKMYSHITUP 1
 #ifdef JUSTFUCKMYSHITUP
 #define writepanic(a) if(ticker && ticker.current_state >= 3 && world.cpu > 100) write_panic(a)
-#warning IMA FUCK YOUR SHIT UP
+#warn IMA FUCK YOUR SHIT UP
 var/proccalls = 1
 //keep a list of last 10 proccalls maybe?
 /proc/write_panic(a)

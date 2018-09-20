@@ -1,6 +1,6 @@
 //#define DEBUG_SLOT_MACHINES
 #ifdef DEBUG_SLOT_MACHINES
-	#warning Slot machines are being debugged! Turn this off in code/game/machinery/computer/slot_machine.dm
+	#warn Slot machines are being debugged! Turn this off in code/game/machinery/computer/slot_machine.dm
 #endif
 
 #define SEVEN		1
