@@ -34,7 +34,7 @@ datum/reagent/antibodies
 	data = list("antibodies"=0)
 	name = "Antibodies"
 	id = "antibodies"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#0050F0"
 
 	reaction_mob(var/mob/M, var/method=TOUCH, var/volume)
