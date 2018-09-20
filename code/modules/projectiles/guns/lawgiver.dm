@@ -178,14 +178,14 @@
 				projectile_type = "/obj/item/projectile/energy/electrode"
 				fire_delay = 0
 				sleep(3)
-				say("LAWGIVER_STUN.")
+				say("STUN.")
 			else if((findtext(speech.message, "laser")) || (findtext(speech.message, "lethal")) || (findtext(speech.message, "beam")))
 				firing_mode = LAWGIVER_LASER
 				fire_sound = 'sound/weapons/Laser.ogg'
 				projectile_type = "/obj/item/projectile/beam"
 				fire_delay = 5
 				sleep(3)
-				say("LAWGIVER_LASER.")
+				say("LASER.")
 			else if((findtext(speech.message, "rapid")) || (findtext(speech.message, "automatic")))
 				firing_mode = LAWGIVER_RAPID
 				fire_sound = 'sound/weapons/Gunshot_c20.ogg'
@@ -193,7 +193,7 @@
 				fire_delay = 0
 				recoil = 1
 				sleep(3)
-				say("LAWGIVER_RAPID FIRE.")
+				say("RAPID FIRE.")
 			else if((findtext(speech.message, "flare")) || (findtext(speech.message, "incendiary")))
 				firing_mode = LAWGIVER_FLARE
 				fire_sound = 'sound/weapons/shotgun.ogg'
@@ -201,7 +201,7 @@
 				fire_delay = 5
 				recoil = 1
 				sleep(3)
-				say("LAWGIVER_FLARE.")
+				say("FLARE.")
 			else if((findtext(speech.message, "ricochet")) || (findtext(speech.message, "bounce")))
 				firing_mode = LAWGIVER_RICOCHET
 				fire_sound = 'sound/weapons/gatling_fire.ogg'
@@ -209,7 +209,7 @@
 				fire_delay = 5
 				recoil = 1
 				sleep(3)
-				say("LAWGIVER_RICOCHET.")
+				say("RICOCHET.")
 			update_icon()
 
 /obj/item/weapon/gun/lawgiver/process_chambered()
@@ -551,14 +551,14 @@
 				projectile_type = "/obj/item/projectile/energy/electrode"
 				fire_delay = 0
 				sleep(3)
-				say("LAWGIVER_STUN.")
+				say("STUN.")
 			else if((findtext(speech.message, "laser")) || (findtext(speech.message, "lethal")) || (findtext(speech.message, "beam")))
 				firing_mode = LAWGIVER_LASER
 				fire_sound = 'sound/weapons/lasercannonfire.ogg'
 				projectile_type = "/obj/item/projectile/beam/heavylaser"
 				fire_delay = 5
 				sleep(3)
-				say("LAWGIVER_LASER.")
+				say("LASER.")
 			else if((findtext(speech.message, "rapid")) || (findtext(speech.message, "automatic")))
 				firing_mode = LAWGIVER_RAPID
 				fire_sound = 'sound/weapons/Gunshot_c20.ogg'
@@ -566,7 +566,7 @@
 				fire_delay = 0
 				recoil = 1
 				sleep(3)
-				say("LAWGIVER_RAPID FIRE.")
+				say("RAPID FIRE.")
 			else if((findtext(speech.message, "hi ex")) || (findtext(speech.message, "hi-ex")) || (findtext(speech.message, "explosive")) || (findtext(speech.message, "rocket")))
 				firing_mode = LAWGIVER_FLARE
 				fire_sound = 'sound/weapons/elecfire.ogg'
@@ -582,7 +582,7 @@
 				fire_delay = 5
 				recoil = 1
 				sleep(3)
-				say("LAWGIVER_RICOCHET.")
+				say("RICOCHET.")
 			update_icon()
 
 /obj/item/weapon/gun/lawgiver/demolition/check_mag_type(obj/item/I, mob/user)
