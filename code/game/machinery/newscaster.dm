@@ -81,7 +81,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	ghost_write = 1 // Allow ghosts to send Topic()s.
 	custom_aghost_alerts = 1 // We handle our own logging.
 
-	var/screen = 0                  
+	var/screen = 0
 		//Or maybe I'll make it into a list within a list afterwards... whichever I prefer, go fuck yourselves :3
 		// 0 = welcome screen - main menu
 		// 1 = view feed channels
@@ -1214,7 +1214,17 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 			update_icon()
 		playsound(src, 'sound/machines/twobeep.ogg', 75, 1)
 	else
-		for(var/mob/O in hearers(world.view-1, T))
+		var/list/view_array = view_to_array(world.view)
+		var/widescreen = view_array[3]
+		if(widescreen)
+			view_array[1] = view_array[1] - 2
+			view_array[2] = view_array[2] - 2
+		else
+			view_array[1] = (view_array[1] * 2) - 1
+			view_array[2] = (view_array[2] * 2) - 1
+		var/viewstring = "[view_array[1]]x[view_array[2]]"
+
+		for(var/mob/O in hearers(viewstring, T))
 		say("Attention! Wanted issue distributed!")
 		playsound(src, 'sound/machines/warning-buzzer.ogg', 75, 1)
 	return

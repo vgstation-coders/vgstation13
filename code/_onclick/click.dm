@@ -144,15 +144,33 @@
 		//If the player's view is not centered on the mob, check how far the clicked object is from the mob
 		//This is to prevent abuse with remote view / camera consoles
 		if(client && client.eye && client.eye != client.mob)
-			var/view_range = get_view_range() + 2 //Extend clickable zone by 2 tiles to allow clicking on the edge of the screen while the camera is moving
+			var/list/view_range = view_to_array(get_view_range())
+			//Extend clickable zone by 2 tiles to allow clicking on the edge of the screen while the camera is moving
+			view_range[1] = (((view_range[1] - 1) / 2) + 2)
+			view_range[2] = (((view_range[2] - 1) / 2) + 2)
+			var/widescreen = view_range[3]
 			var/atom_distance = get_dist(A, src)  //Distance from the player's mob to the clicked atom
 
-			if(atom_distance <= view_range)
-				//Clicked on a non-adjacent atom in view
-				RangedClickOn(A, params, held_item)
+			if(widescreen)
+				var/turf/aTurf = get_turf(A)
+				var/turf/sTurf = get_turf(src)
+				
+				var/xDist = abs(aTurf.x - sTurf.x)
+				var/yDist = abs(aTurf.y - sTurf.y)
+				
+				if(xDist <= view_range[1] && yDist <= view_range[2])
+					//Clicked on a non-adjacent atom in view
+					RangedClickOn(A, params, held_item)
+				else
+					//Clicked on a non-adjacent atom that is not in view
+					RemoteClickOn(A, params, held_item, client.eye)
 			else
-				//Clicked on a non-adjacent atom that is not in view
-				RemoteClickOn(A, params, held_item, client.eye)
+				if(atom_distance <= get_view_range())
+					//Clicked on a non-adjacent atom in view
+					RangedClickOn(A, params, held_item)
+				else
+					//Clicked on a non-adjacent atom that is not in view
+					RemoteClickOn(A, params, held_item, client.eye)
 		else
 			RangedClickOn(A, params, held_item)
 

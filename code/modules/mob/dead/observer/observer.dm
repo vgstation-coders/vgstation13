@@ -1009,11 +1009,16 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 
 	var/source = speech.speaker.GetSource()
-	var/source_turf = get_turf(source)
+	var/turf/source_turf = get_turf(source)
 
 	say_testing(src, "/mob/dead/observer/Hear(): source=[source], frequency=[speech.frequency], source_turf=[formatJumpTo(source_turf)]")
 
-	if (get_dist(source_turf, src) <= world.view) // If this isn't true, we can't be in view, so no need for costlier proc.
+	var/turf/oTurf = get_turf(src)
+	var/list/view = view_to_array(world.view)
+	var/xvDist = (view[1] - 1) / 2
+	var/yvDist = (view[2] - 1) / 2
+	//if (get_dist(source_turf, src) <= world.view) // If this isn't true, we can't be in view, so no need for costlier proc.
+	if( (abs(oTurf.x - source_turf.x) <= xvDist) && (abs(oTurf.y - source_turf.y) <= yvDist))
 		if (source_turf in view(src))
 			rendered_speech = "<B>[rendered_speech]</B>"
 			to_chat(src, "<a href='?src=\ref[src];follow=\ref[source]'>(Follow)</a> [rendered_speech]")

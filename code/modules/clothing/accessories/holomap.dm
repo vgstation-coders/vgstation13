@@ -196,10 +196,12 @@ var/list/holomap_cache = list()
 	bgmap.overlays.len = 0
 
 	//Prevents the map background from sliding across the screen when the map is enabled for the first time.
+	var/list/client_view_array = view_to_array(activator.client.view)
+	var/widescreen = client_view_array[3]
 	if(!bgmap.pixel_x)
-		bgmap.pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32)
+		bgmap.pixel_x = -1*T.x + (widescreen ? ((client_view_array[1] - 1) / 2) /*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32)
 	if(!bgmap.pixel_y)
-		bgmap.pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32)
+		bgmap.pixel_y = -1*T.y + (widescreen ? (client_view_array[1] - 1) / 2/*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32)
 
 
 	for(var/marker in holomap_markers)
@@ -218,9 +220,9 @@ var/list/holomap_cache = list()
 			bgmap.overlays += markerImage
 
 	if(map.holomap_offset_x.len >= T.z)
-		animate(bgmap,pixel_x = -1*T.x - map.holomap_offset_x[T.z] + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y - map.holomap_offset_y[T.z] + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
+		animate(bgmap,pixel_x = -1*T.x - map.holomap_offset_x[T.z] + (widescreen ? ((client_view_array[1] - 1) / 2) /*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y - map.holomap_offset_y[T.z] + (widescreen ? ((client_view_array[2] - 1) / 2) /*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
 	else
-		animate(bgmap,pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
+		animate(bgmap,pixel_x = -1*T.x + (widescreen ? ((client_view_array[1] - 1) / 2) /*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y + (widescreen ? ((client_view_array[2] - 1) / 2) /*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
 	holomap_images += bgmap
 
 	for(var/obj/item/clothing/accessory/holomap_chip/HC in holomap_chips)
@@ -332,6 +334,8 @@ var/list/holomap_cache = list()
 			holomap_images += I
 
 /obj/item/clothing/accessory/holomap_chip/ert/extra_update()
+	var/list/client_view_array = view_to_array(activator.client.view)
+	var/widescreen = client_view_array[3]
 	var/turf/T = get_turf(src)
 	if(T.z == map.zMainStation)
 		var/image/bgmap
@@ -347,9 +351,9 @@ var/list/holomap_cache = list()
 		bgmap.overlays.len = 0
 
 		if(!bgmap.pixel_x)
-			bgmap.pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32)
+			bgmap.pixel_x = -1*T.x + (widescreen ? ((client_view_array[1] - 1) / 2) /*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32)
 		if(!bgmap.pixel_y)
-			bgmap.pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32)
+			bgmap.pixel_y = -1*T.y + (widescreen ? ((client_view_array[2] - 1) / 2) /*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32)
 
 		for(var/marker in holomap_markers)
 			var/datum/holomap_marker/holomarker = holomap_markers[marker]
@@ -367,9 +371,9 @@ var/list/holomap_cache = list()
 				bgmap.overlays += markerImage
 
 		if(map.holomap_offset_x.len >= T.z)
-			animate(bgmap,pixel_x = -1*T.x - map.holomap_offset_x[T.z] + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y - map.holomap_offset_y[T.z] + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
+			animate(bgmap,pixel_x = -1*T.x - map.holomap_offset_x[T.z] + (widescreen ? ((client_view_array[1] - 1) / 2) /*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y - map.holomap_offset_y[T.z] + (widescreen ? ((client_view_array[2] - 1) / 2) /*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
 		else
-			animate(bgmap,pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
+			animate(bgmap,pixel_x = -1*T.x + (widescreen ? ((client_view_array[1] - 1) / 2) /*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y + (widescreen ? ((client_view_array[2] - 1) / 2) /*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
 
 		holomap_images += bgmap
 
@@ -390,10 +394,12 @@ var/list/holomap_cache = list()
 
 /obj/item/clothing/accessory/holomap_chip/proc/handle_marker(var/image/I,var/turf/T,var/turf/TU)
 	//if a new marker is created, we immediately set its offset instead of letting animate() take care of it, so it doesn't slide accross the screen.
+	var/list/client_view_array = view_to_array(activator.client.view)
+	var/widescreen = client_view_array[3]
 	if(!I.pixel_x || !I.pixel_y)
-		I.pixel_x = TU.x - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32)
-		I.pixel_y = TU.y - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32)
-	animate(I,alpha = 255, pixel_x = TU.x - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32), pixel_y = TU.y - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32), time = 5, loop = -1, easing = LINEAR_EASING)
+		I.pixel_x = TU.x - T.x + (widescreen ? ((client_view_array[1] - 1) / 2) /*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32)
+		I.pixel_y = TU.y - T.y + (widescreen ? ((client_view_array[2] - 1) / 2) /*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32)
+	animate(I,alpha = 255, pixel_x = TU.x - T.x + (widescreen ? ((client_view_array[1] - 1) / 2) /*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32), pixel_y = TU.y - T.y + (widescreen ? ((client_view_array[2] - 1) / 2) /*normalize view range diameter into expected radius*/ : activator.client.view)*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32), time = 5, loop = -1, easing = LINEAR_EASING)
 	animate(alpha = 255, time = 8, loop = -1, easing = SINE_EASING)
 	animate(alpha = 0, time = 5, easing = SINE_EASING)
 	animate(alpha = 255, time = 2, easing = SINE_EASING)

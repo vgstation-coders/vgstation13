@@ -110,7 +110,7 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 	if(istype(P, /obj/item/projectile/beam/lightning/spell) || istype(P, /obj/item/projectile/energy/electrode))
 		if(!unstable)
 			visible_message("<span class = 'warning'>\The [src]'s light grows greater in intensity, and begins to shake uncontrollably.</span>")
-			set_light(world.view,3,"#ff2014")
+			set_light(9,3,"#ff2014")
 			detonate()
 		return
 

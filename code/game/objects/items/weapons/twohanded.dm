@@ -322,7 +322,12 @@
 		if(user && user.client)
 			user.regenerate_icons()
 			var/client/C = user.client
-			C.changeView(C.view + 7)
+			var/list/view = view_to_array(C.view)
+			var/widescreen = view[3]
+			if(!widescreen)
+				view[1] = ((view[1] * 2) + 1)
+				view[2] = ((view[2] * 2) + 1)
+			C.changeView("[view[1]+14]x[view[2]+14]")
 	else
 		user.on_moved.Remove(event_key)
 		user.visible_message("\The [user] lowers \the [src].","You lower \the [src].")
@@ -331,7 +336,12 @@
 		if(user && user.client)
 			user.regenerate_icons()
 			var/client/C = user.client
-			C.changeView(C.view - 7)
+			var/list/view = view_to_array(C.view)
+			var/widescreen = view[3]
+			if(!widescreen)
+				view[1] = ((view[1] * 2) + 1)
+				view[2] = ((view[2] * 2) + 1)
+			C.changeView("[view[1]-14]x[view[2]-14]")
 
 /obj/item/weapon/bloodlust
 	icon_state = "bloodlust0"

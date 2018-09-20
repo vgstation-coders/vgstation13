@@ -199,10 +199,10 @@ obj/effect/bmode/buildholder/New()
 				var/partial_type = input(usr, "Enter type, or leave blank to see all types", "Typepath", "/obj/structure/closet") as text|null
 				if(isnull(partial_type))
 					return
-				
+
 				var/list/matches = get_matching_types(partial_type, /atom)
 				objholder = input("Select type", "Typepath") as null|anything in matches
-				
+
 				if(!ispath(objholder))
 					objholder = /obj/structure/closet
 					alert("That path is not allowed.")
@@ -223,11 +223,19 @@ obj/effect/bmode/buildholder/New()
 
 /client/MouseWheel(object,delta_x,delta_y,location,control,params)
 	if(istype(mob,/mob/dead/observer) || buildmode) //DEAD FAGS CAN ZOOM OUT THIS WILL END POORLY
+		var/list/lView = view_to_array(view)
+		var/list/wView = view_to_array(world.view)
+		var/widescreen = lView[3]
+		if(!widescreen)
+			lView[1] = (lView[1] * 2) + 1
+			lView[2] = (lView[2] * 2) + 1
+			wView[1] = (wView[1] * 2) + 1
+			wView[2] = (wView[2] * 2) + 1
 		if(delta_y > 0)
-			changeView(view - 1)
+			changeView("[max(lView[1]-2,wView[1])]x[max(lView[2]-2,wView[2])]")
 		else
-			changeView(view + 1)
-		changeView(max(view,1))
+			changeView("[lView[1]+2]x[lView[2]+2]")
+		//changeView(max(view,1))
 		haszoomed = 1
 	..()
 

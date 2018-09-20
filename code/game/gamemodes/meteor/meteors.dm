@@ -371,7 +371,8 @@
 			var/turf/M_turf = get_turf(M)
 			if(M_turf && (M_turf.z == loc.z))
 				var/dist = get_dist(M_turf, loc)
-				if(dist <= round(world.view + 10, 1))
+				var/list/view = view_to_array(world.view)
+				if(dist <= round(view[1] + 10, 1))
 					shake_camera(M, 3, 2)
 				M.playsound_local(loc, 'sound/effects/explosionfar.ogg')
 

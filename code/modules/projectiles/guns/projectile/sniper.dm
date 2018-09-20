@@ -39,7 +39,12 @@
 			user.regenerate_icons()
 			var/client/C = user.client
 			backup_view = C.view
-			C.changeView(C.view * 2)
+			var/list/view = view_to_array(C.view)
+			var/widescreen = view[3]
+			if(!widescreen)
+				view[1] = ((view[1] * 2) + 1)
+				view[2] = ((view[2] * 2) + 1)
+			C.changeView("[view[1] * 2]x[view[2] * 2]")
 	else
 		inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 		if(user && user.client)

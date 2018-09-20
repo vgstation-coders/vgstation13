@@ -237,6 +237,13 @@
 
 /obj/item/clothing/glasses/scanner/material/proc/get_images(var/turf/T, var/view)
 	. = list()
-	for (var/turf/TT in trange(view, T))
-		if (TT.holomap_data)
-			. += TT.holomap_data
+	var/list/view_array = view_to_array(view)
+	var/widescreen = view_array[3]
+	if(widescreen)
+		for (var/turf/TT in wtrange(((view_array[1] - 1 ) / 2), ((view_array[2] - 1 ) / 2), T))
+			if (TT.holomap_data)
+				. += TT.holomap_data		
+	else
+		for (var/turf/TT in trange(view, T))
+			if (TT.holomap_data)
+				. += TT.holomap_data
