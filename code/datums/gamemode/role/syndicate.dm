@@ -61,10 +61,9 @@
 	return dat
 
 /datum/role/traitor/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
-	.=..()
-	if(href_list["giveuplink"] && admin_auth)
+	if(href_list["giveuplink"])
 		equip_traitor(antag.current, 20)
-	if(href_list["removeuplink"] && admin_auth)
+	if(href_list["removeuplink"])
 		M.take_uplink()
 		to_chat(M.current, "<span class='warning'>You have been stripped of your uplink.</span>")
 
