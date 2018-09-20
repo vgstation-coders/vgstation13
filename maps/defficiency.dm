@@ -1,4 +1,4 @@
-
+#ifndef MAP_OVERRIDE
 //**************************************************************
 // Map Datum -- Defficiency
 //**************************************************************
@@ -94,4 +94,4 @@
 #include "defficiency/jobs.dm"
 
 #include "defficiency.dmm"
-
+#endif

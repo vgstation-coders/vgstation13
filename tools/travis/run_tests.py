@@ -10,11 +10,7 @@ def main():
         print("DM_UNIT_TESTS is not set, not running tests.")
         return
 
-    dmb = os.environ.get("PROJECT_NAME") # The DMB file to run.
-    if not dmb:
-        print("No project name specified.")
-        exit(1)
-    dmb += ".dmb"
+    dmb = "vgstation13.dmb"
 
     executable = "DreamDaemon"
     dreamdaemon = distutils.spawn.find_executable(executable)

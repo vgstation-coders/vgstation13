@@ -193,6 +193,9 @@ var/list/admin_verbs_debug = list(
 	/client/proc/view_runtimes,
 	/client/proc/cmd_mass_modify_object_variables,
 	/client/proc/emergency_shuttle_panel,
+#if UNIT_TESTS_ENABLED
+	/client/proc/unit_test_panel,
+#endif
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,

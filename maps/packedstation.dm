@@ -1,4 +1,4 @@
-
+#ifndef MAP_OVERRIDE
 //**************************************************************
 // Map Datum -- Packedstation
 //**************************************************************
@@ -53,3 +53,5 @@
 
 #elif !defined(MAP_OVERRIDE)
 	#warn a map has already been included, ignoring packedstation. */
+#endif
+#endif

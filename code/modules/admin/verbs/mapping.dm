@@ -172,6 +172,9 @@ var/intercom_range_display_status = 0
 	src.verbs += /client/proc/start_line_profiling
 	src.verbs += /client/proc/stop_line_profiling
 	src.verbs += /client/proc/show_line_profiling
+	#if UNIT_TESTS_ENABLED
+	src.verbs += /client/proc/unit_test_panel
+	#endif
 	feedback_add_details("admin_verb","mDV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/count_objects_on_z_level()
