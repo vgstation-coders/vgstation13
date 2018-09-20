@@ -133,6 +133,7 @@
 #include "code\ATMOSPHERICS\datum_pipe_network.dm"
 #include "code\ATMOSPHERICS\datum_pipeline.dm"
 #include "code\ATMOSPHERICS\he_pipes.dm"
+#include "code\ATMOSPHERICS\pipe_defines_for_mapping.dm"
 #include "code\ATMOSPHERICS\pipes.dm"
 #include "code\ATMOSPHERICS\utils.dm"
 #include "code\ATMOSPHERICS\components\binary_devices\binary_atmos_base.dm"
@@ -2348,7 +2349,6 @@
 #include "maps\_map.dm"
 #include "maps\tgstation.dm"
 #include "maps\defficiency\areas.dm"
-#include "maps\defficiency\pipes.dm"
 #include "maps\packedstation\telecomms.dm"
 #include "maps\randomvaults\dance_revolution.dm"
 #include "maps\randomvaults\objects.dm"
@@ -2359,5 +2359,4 @@
 #include "maps\RandomZLevels\stationCollision.dm"
 #include "maps\RandomZLevels\tomb.dm"
 #include "maps\RandomZLevels\wildwest.dm"
-#include "maps\tgstation\pipes.dm"
 // END_INCLUDE
