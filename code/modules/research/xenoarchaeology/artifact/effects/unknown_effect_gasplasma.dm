@@ -1,7 +1,7 @@
 
 /datum/artifact_effect/gasplasma
 	effecttype = "gasplasma"
-	effect = list(EFFECT_TOUCH, EFFECT_AURA)
+	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA)
 	var/max_pressure
 	var/target_percentage
 	copy_for_battery = list("max_pressure")
