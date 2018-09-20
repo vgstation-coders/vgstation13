@@ -146,6 +146,7 @@
 	sound_damaged = 'sound/effects/stone_hit.ogg'
 	sound_destroyed = 'sound/effects/stone_crumble.ogg'
 	layer = TABLE_LAYER
+	var/obj/item/weapon/melee/soulblade/blade = null
 
 
 /obj/structure/cult/altar/New()
@@ -163,6 +164,13 @@
 	..()
 
 /obj/structure/cult/altar/update_icon()
+	if (blade)
+		if (blade.shade)
+			icon_state = "altar-soulblade-full"
+		else
+			icon_state = "altar-soulblade"
+	else
+		icon_state = "altar"
 	overlays.len = 0
 	var/image/I = image(icon, "altar_overlay")
 	I.plane = ABOVE_HUMAN_PLANE

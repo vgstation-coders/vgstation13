@@ -60,7 +60,7 @@
 
 /mob/living/simple_animal/shade/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
 	user.delayNextAttack(8)
-	if(istype(O, /obj/item/device/soulstone))
+	if(istype(O, /obj/item/device/soulstone) || istype(O, /obj/item/weapon/melee/soulblade))
 		O.transfer_soul("SHADE", src, user)
 	else
 		if(O.force)
@@ -134,6 +134,8 @@
 	transmogrify()
 	if(!gcDestroyed)
 		qdel(src)
+
+///////////////////////////////CHAOS SWORD STUFF///////////////////////////////////////////////////
 
 /mob/living/simple_animal/shade/sword/attempt_suicide(forced = FALSE, suicide_set = TRUE)
 	if(!forced)
