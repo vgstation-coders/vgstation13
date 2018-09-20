@@ -18,6 +18,7 @@
 #include "__DEFINES\atmos_automation.dm"
 #include "__DEFINES\atom_locking_and_control.dm"
 #include "__DEFINES\atoms.dm"
+#include "__DEFINES\bots.dm"
 #include "__DEFINES\cameranet.dm"
 #include "__DEFINES\component_desires.dm"
 #include "__DEFINES\component_signals.dm"
