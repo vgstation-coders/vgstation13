@@ -118,7 +118,7 @@
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()
-	if(SKELETON in src.mutations)
+	if(M_SKELETON in src.mutations)
 		return
 
 	if(f_style)
@@ -127,7 +127,7 @@
 		h_style = "Bald"
 	update_hair(0)
 
-	mutations.Add(SKELETON)
+	mutations.Add(M_SKELETON)
 	var/datum/organ/external/head/head_organ = get_organ(LIMB_HEAD)
 	head_organ.disfigure("burn")
 	update_body(0)
