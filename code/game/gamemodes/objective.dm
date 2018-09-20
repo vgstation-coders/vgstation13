@@ -729,3 +729,10 @@ var/list/potential_theft_objectives=list(
 	if(owner.kills.len>5)
 		return 0
 	return 1
+	
+// The only good objective.
+/datum/objective/freeform
+	explanation_text = "Do as you like."
+
+/datum/objective/freeform/check_completion()
+	return 1

@@ -87,6 +87,11 @@
 
 
 /datum/game_mode/proc/forge_wizard_objectives(var/datum/mind/wizard)
+	if(!SOLO_ANTAG_OBJECTIVES)
+		var/datum/objective/freeform/f = new
+		f.owner = wizard
+		wizard.objectives += f
+		return
 	switch(rand(1,100))
 		if(1 to 30)
 

@@ -235,6 +235,11 @@
 	return text
 
 /datum/game_mode/proc/forge_vampire_objectives(var/datum/mind/vampire)
+	if(!SOLO_ANTAG_OBJECTIVES)
+		var/datum/objective/freeform/f = new
+		f.owner = vampire
+		vampire.objectives += f
+		return
 	//Objectives are traitor objectives plus blood objectives
 
 	var/datum/objective/blood/blood_objective = new

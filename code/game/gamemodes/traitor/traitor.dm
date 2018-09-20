@@ -89,6 +89,11 @@
 
 
 /datum/game_mode/proc/forge_traitor_objectives(var/datum/mind/traitor)
+	if(!SOLO_ANTAG_OBJECTIVES)
+		var/datum/objective/freeform/f = new
+		f.owner = traitor
+		traitor.objectives += f
+		return
 	if(istype(traitor.current, /mob/living/silicon))
 		var/datum/objective/assassinate/kill_objective = new
 		kill_objective.owner = traitor

@@ -109,6 +109,11 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 
 /datum/game_mode/proc/forge_changeling_objectives(var/datum/mind/changeling)
+	if(!SOLO_ANTAG_OBJECTIVES)
+		var/datum/objective/freeform/f = new
+		f.owner = changeling
+		changeling.objectives += f
+		return
 	//OBJECTIVES - Always absorb 5 genomes, plus random traitor objectives.
 	//If they have two objectives as well as absorb, they must survive rather than escape
 	//No escape alone because changelings aren't suited for it and it'd probably just lead to rampant robusting
