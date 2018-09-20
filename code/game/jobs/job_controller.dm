@@ -1,9 +1,5 @@
 var/global/datum/controller/occupations/job_master
 
-#define GET_RANDOM_JOB 0
-#define BE_ASSISTANT 1
-#define RETURN_TO_LOBBY 2
-
 /datum/controller/occupations
 		//List of all jobs
 	var/list/occupations = list()
@@ -431,7 +427,7 @@ var/global/datum/controller/occupations/job_master
 			spawn()
 				to_chat(H, "<span class='danger'>Your bank account number is: <span style='color: black;'>[M.account_number]</span>, your bank account pin is: <span style='color: black;'>[M.remote_access_pin]</span></span>")
 				to_chat(H, "<span class='danger'>Your virtual wallet funds are: <span style='color: black;'>$[balance_wallet]</span>, your bank account funds are: <span style='color: black;'>$[balance_bank]</span></span>")
-				to_chat(H, "<span class='danger'>Your bank account security level is set to: <span style='color: black;'>[bank_pref]</span></span>") 
+				to_chat(H, "<span class='danger'>Your bank account security level is set to: <span style='color: black;'>[bank_pref]</span></span>")
 
 	var/alt_title = null
 	if(H.mind)
