@@ -256,7 +256,7 @@ var/list/camera_messages = list()
 	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
 		user.delayNextAttack(5)
 		var/mob/living/U = user
-		to_chat(U, "You hold \a [W] up to the camera ...")
+		to_chat(U, "You hold [W] up to the camera ...")
 
 		var/info = ""
 		if(istype(W, /obj/item/weapon/paper))
@@ -281,7 +281,7 @@ var/list/camera_messages = list()
 			if (istype(O.machine, /obj/machinery/computer/security))
 				var/obj/machinery/computer/security/S = O.machine
 				if (S.current == src)
-					to_chat(O, "[U] holds a <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
+					to_chat(O, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
 	else
 		..()
 	return
