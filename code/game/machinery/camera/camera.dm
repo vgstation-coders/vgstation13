@@ -266,21 +266,22 @@ var/list/camera_messages = list()
 			var/obj/item/device/pda/P = W
 			info = P.notehtml
 
-		camera_messages["[html_encode(W.name)]"] = info
+		var/key = "\ref[W]"
+		camera_messages[key] = list("text" = info, "title" = W.name)
 
 		for(var/mob/living/silicon/ai/O in living_mob_list)
 			if(!O.client)
 				continue
 			if(U.name == "Unknown")
-				to_chat( O, "<span class='name'>[U]</span> holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
+				to_chat(O, "<span class='name'>[U]</span> holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of your cameras ...")
 			else
-				to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
+				to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of your cameras ...")
 
 		for(var/mob/O in player_list)
 			if (istype(O.machine, /obj/machinery/computer/security))
 				var/obj/machinery/computer/security/S = O.machine
 				if (S.current == src)
-					to_chat(O, "[U] holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of the cameras ...")
+					to_chat(O, "[U] holds a <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
 	else
 		..()
 	return
@@ -289,10 +290,10 @@ var/list/camera_messages = list()
 	if(..())
 		return 1
 
-	if(href_list["picturename"])
-		var/picturename = href_list["picturename"]
-		var/pictureinfo = camera_messages[picturename]
-		usr << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", picturename, pictureinfo), text("window=[]", picturename))
+	if(href_list["message_id"])
+		var/message_id = href_list["message_id"]
+		var/list/pictureinfo = camera_messages[message_id]
+		usr << browse("<HTML><HEAD><TITLE>[pictureinfo["title"]]</TITLE></HEAD><BODY><TT>[pictureinfo["text"]]</TT></BODY></HTML>", "window=[message_id]")
 
 /obj/machinery/camera/attack_pai(mob/user as mob)
 	wirejack(user)
