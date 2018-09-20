@@ -1481,8 +1481,6 @@ var/proccalls = 1
 
 #define BLOB_CORE_PROPORTION 20
 
-#define DEFAULT FONT SIZE 4
-
 //Holomap filters
 #define HOLOMAP_FILTER_DEATHSQUAD				1
 #define HOLOMAP_FILTER_ERT						2
