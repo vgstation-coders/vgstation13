@@ -382,13 +382,14 @@ var/global/list/PDA_Manifest = list()
 	var/moving = null
 	var/list/parts = list(  )
 
-/obj/structure/showcase
+/obj/machinery/showcase
 	name = "Showcase"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "showcase_1"
 	desc = "A stand with the empty body of a cyborg bolted to it."
 	density = 1
 	anchored = 1
+	machine_flags = WRENCHMOVE
 
 /obj/item/mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 
