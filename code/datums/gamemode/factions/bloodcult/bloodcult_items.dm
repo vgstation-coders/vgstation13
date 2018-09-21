@@ -614,6 +614,10 @@ var/list/arcane_tomes = list()
 		to_chat(user, "<span class='warning'>An overwhelming feeling of dread comes over you as you pick up the cultist's sword. It would be wise to rid yourself of this blade quickly.</span>")
 		user.Dizzy(120)
 
+/obj/item/weapon/melee/soulblade/dropped(var/mob/user)
+	..()
+	update_icon()
+
 /obj/item/weapon/melee/soulblade/update_icon()
 	overlays.len = 0
 	animate(src, pixel_y = -16 * PIXEL_MULTIPLIER, time = 3, easing = SINE_EASING)
