@@ -66,7 +66,16 @@
 
 	if (istype(loc,/obj/item/weapon/melee/soulblade))
 		var/obj/item/weapon/melee/soulblade/SB = loc
-		if (SB.blood < SB.maxblood)
+		if (istype(SB.loc,/obj/structure/cult/altar))
+			if (SB.blood < SB.maxblood)
+				SB.blood = min(SB.maxblood,SB.blood+5)//faster blood regen when planted on an altar
+			if (SB.health < SB.maxHealth)
+				SB.health = min(SB.maxHealth,SB.health+5)//and health regen on top
+		else if (istype(SB.loc,/mob/living))
+			var/mob/living/L = SB.loc
+			if (iscultist(L) && SB.blood < SB.maxblood)
+				SB.blood++//no cap on blood regen when held by a cultist, no blood regen when held by a non-cultist (but there's a spell to take care of that)
+		else if (SB.blood < SB.maxregenblood)
 			SB.blood++
 
 
@@ -118,6 +127,14 @@
 
 	if(istype(loc, /obj/item/weapon/melee/soulblade) && hud_used)
 		var/obj/item/weapon/melee/soulblade/SB = loc
+		if(fire)
+			switch(SB.health)
+				if (-INFINITY to 18)
+					fire.icon_state = "blade_reallynotok"
+				if (18 to 36)
+					fire.icon_state = "blade_notok"
+				if (36 to INFINITY)
+					fire.icon_state = "blade_ok"
 		var/matrix/M = matrix()
 		M.Scale(1,SB.blood/SB.maxblood)
 		var/total_offset = (60 + (100*(SB.blood/SB.maxblood))) * PIXEL_MULTIPLIER

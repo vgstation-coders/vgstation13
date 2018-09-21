@@ -15,6 +15,7 @@ var/list/arcane_tomes = list()
 	throw_range = 5
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
+	slot_flags = SLOT_BELT
 	var/state = TOME_CLOSED
 	var/can_flick = 1
 	var/list/talismans = list()
@@ -525,7 +526,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/melee/soulblade
 	name = "soul blade"
-	desc = "An obsidian blade fitted with a soul gem, giving it soul catching properties, and allowing the user to shoot boiling blood slashes."
+	desc = "An obsidian blade fitted with a soul gem, giving it soul catching propertiess."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon = 'icons/obj/cult_64x64.dmi'
 	pixel_x = -16 * PIXEL_MULTIPLIER
@@ -534,16 +535,19 @@ var/list/arcane_tomes = list()
 	item_state = "soulblade"
 	flags = FPRINT
 	w_class = W_CLASS_LARGE
-	force = 30
-	throwforce = 10
+	force = 30//30 brute, plus 5 burn
+	throwforce = 20
 	sharpness = 1.35
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	hitsound = "sound/weapons/bladeslice.ogg"
 	var/mob/living/simple_animal/shade/shade = null
 	var/blood = 0
+	var/maxregenblood = 8//the maximum amount of blood you can regen by waiting around.
 	var/maxblood = 100
 	var/movespeed = 2//smaller = faster
+	var/health = 50
+	var/maxHealth = 50
 
 /obj/item/weapon/melee/soulblade/Destroy()
 	var/turf/T = get_turf(src)
@@ -558,7 +562,7 @@ var/list/arcane_tomes = list()
 		else
 			qdel(shade)
 		var/obj/item/weapon/melee/cultblade/nocult/B = new (T)
-		step(B,get_step_rand(B))
+		Move(get_step_rand(T))
 		new /obj/item/device/soulstone(T)
 	shade = null
 	..()
@@ -579,15 +583,34 @@ var/list/arcane_tomes = list()
 		transfer_soul("VICTIM", target, user,1)
 		update_icon()
 
+/obj/item/weapon/melee/soulblade/on_attack(var/atom/attacked, var/mob/user)
+	..()
+	if (ismob(attacked))
+		var/mob/M = attacked
+		M.take_organ_damage(0,5)
+		playsound(loc, 'sound/items/Welder.ogg', 50, 1)
+		if (M.stat != DEAD)
+			if (M.take_blood(null,10))
+				blood = min(100,blood+10)
+				to_chat(user, "<span class='warning'>You steal some of their blood!</span>")
+		else
+			if (M.take_blood(null,5))//same cost as spin, basically negates the cost, but doesn't let you farm corpses. It lets you make a mess out of them however.
+				blood = min(100,blood+5)
+				to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
+
+		if (shade)
+			var/matrix/M = matrix()
+			M.Scale(1,blood/maxblood)
+			var/total_offset = (60 + (100*(blood/maxblood))) * PIXEL_MULTIPLIER
+			shade.hud_used.mymob.gui_icons.soulblade_bloodbar.transform = M
+			shade.hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
+			shade.hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[blood]"
+
+
 /obj/item/weapon/melee/soulblade/pickup(var/mob/living/user)
 	if(!iscultist(user))
 		to_chat(user, "<span class='warning'>An overwhelming feeling of dread comes over you as you pick up the cultist's sword. It would be wise to rid yourself of this blade quickly.</span>")
 		user.Dizzy(120)
-
-/obj/item/weapon/melee/soulblade/attackby(var/obj/item/I, var/mob/user)
-	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper))
-		I.ashify_item(user)
-		return 1
 
 /obj/item/weapon/melee/soulblade/update_icon()
 	overlays.len = 0
@@ -628,6 +651,58 @@ var/list/arcane_tomes = list()
 	src.forceMove(SB)
 	SB.OnFired()
 	SB.process()
+
+/obj/item/weapon/melee/soulblade/ex_act(var/severity)
+	switch(severity)
+		if (1)
+			takeDamage(100)
+		if (2)
+			takeDamage(40)
+		if (3)
+			takeDamage(20)
+
+/obj/item/weapon/melee/soulblade/proc/takeDamage(var/damage)
+	if (!damage)
+		return
+	health -= damage
+	if (shade && shade.hud_used)
+		shade.regular_hud_updates()
+	if (health <= 0)
+		playsound(loc, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+		qdel(src)
+	else
+		playsound(loc, 'sound/items/trayhit1.ogg', 70, 1)
+
+/obj/item/weapon/melee/soulblade/Cross(var/atom/movable/mover, var/turf/target, var/height=1.5, var/air_group = 0)
+	if(istype(mover, /obj/item/projectile))
+		if (prob(60))
+			return 0
+	return ..()
+
+/obj/item/weapon/melee/soulblade/attackby(var/obj/item/I, var/mob/user)
+	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper))
+		I.ashify_item(user)
+		return 1
+	user.delayNextAttack(8)
+	if (user.is_pacified(VIOLENCE_DEFAULT,src))
+		return
+	if(I.force)
+		var/damage = I.force
+		if (I.damtype == HALLOSS)
+			damage = 0
+		takeDamage(damage)
+		user.visible_message("<span class='danger'>[src] has been attacked with [O] by [user]. </span>")
+
+/obj/item/weapon/melee/soulblade/hitby(var/atom/moveable/AM)
+	. = ..()
+	if(.)
+		return
+	visible_message("<span class='warning'>\The [src] was hit by \the [AM].</span>", 1)
+	takeDamage(AM.throwforce)
+
+/obj/item/weapon/melee/soulblade/bullet_act(var/obj/item/projectile/P)
+	..()
+	takeDamage(P.damage)
 
 ///////////////////////////////////////SOULSTONE////////////////////////////////////////////////
 /obj/item/device/soulstone/gem

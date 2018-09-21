@@ -276,7 +276,7 @@
 		if(ARCHAEO_CULTBLADE)
 			//cultblade
 			apply_prefix = FALSE
-			new_item = new /obj/item/weapon/melee/legacy_cultblade/nocult(src.loc)
+			new_item = new /obj/item/weapon/melee/cultblade/nocult(src.loc)
 			apply_material_decorations = FALSE
 			apply_image_decorations = FALSE
 			anomaly_factor = 2
@@ -323,7 +323,7 @@
 					/obj/item/clothing/head/culthood/old,
 					/obj/item/clothing/head/magus,
 					/obj/item/clothing/head/helmet/space/cult)
-			
+
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
 		if(ARCHAEO_SOULSTONE)

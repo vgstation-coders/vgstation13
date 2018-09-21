@@ -123,11 +123,17 @@
 	mymob.gui_icons.soulblade_bloodbar.icon_state = "blood"
 	mymob.gui_icons.soulblade_bloodbar.name = "Blood"
 	mymob.gui_icons.soulblade_bloodbar.screen_loc = ui_blob_powerbar
+
+	mymob.fire = getFromPool(/obj/abstract/screen)
+	mymob.fire.icon = 'icons/mob/screen1_shade.dmi'
+	mymob.fire.icon_state = "blade_ok"
+	mymob.fire.name = "blade integrity"
+	mymob.fire.screen_loc = ui_construct_fire
 	///////////////////////////////////////
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged)
+	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged, mymob.fire)
 
 /datum/hud/proc/borer_hud()
 

@@ -88,8 +88,17 @@
 	blade = new_controlled
 
 /datum/control/soulblade/is_valid(var/direction)
-	if (blade.blood <= 0 || move_delay || !isturf(blade.loc) || blade.throwing)
+	if (blade.blood <= 0 || move_delay || blade.throwing)
 		return 0
+	if (!isturf(blade.loc))
+		if (istype(blade.loc,/obj/structure/cult/altar))
+			var/obj/structure/cult/altar/A = blade.loc
+			blade.forceMove(A.loc)
+			A.blade = null
+			playsound(A.loc, 'sound/weapons/blade1.ogg', 50, 1)
+			A.update_icon()
+		else
+			return 0
 	return ..()
 
 /datum/control/soulblade/Move_object(var/direction)

@@ -15,6 +15,8 @@
 	add_spell(new /spell/soulblade/blade_kinesis, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	add_spell(new /spell/soulblade/blade_spin, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	add_spell(new /spell/soulblade/blade_perforate, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+	add_spell(new /spell/soulblade/blade_mend, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+	add_spell(new /spell/soulblade/blade_drain, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 
 
@@ -89,7 +91,15 @@
 /spell/soulblade/blade_spin/choose_targets(var/mob/user = usr)
 	var/obj/item/weapon/melee/soulblade/SB = user.loc
 	if (!isturf(SB.loc) && !istype(SB.loc,/obj/item/projectile))
-		return null
+		if (ismob(SB.loc))
+			var/mob/M = SB.loc
+			if (!iscultist(M))
+				M.drop_item(SB)
+				to_chat(M,"<span class='danger'>\The [SB] suddenly spins out of your grab.</span>")
+			else
+				return null
+		else
+			return null
 	var/turf/T = get_turf(SB)
 	var/dir = SB.dir
 	if (istype(T,/obj/item/projectile))
@@ -166,6 +176,9 @@
 /spell/soulblade/blade_perforate/cast(var/list/targets, var/mob/user)
 	..()
 	var/obj/item/weapon/melee/soulblade/blade = user.loc
+	if (istype(blade.loc,/obj/item/projectile))
+		var/obj/item/projectile/P = blade.loc
+		qdel(P)
 	var/turf/starting = get_turf(blade)
 	var/turf/target = targets[1]
 	var/turf/second_target = target
@@ -203,7 +216,7 @@
 	icon_state = "soulbullet"
 	pixel_x = -16 * PIXEL_MULTIPLIER
 	pixel_y = -10 * PIXEL_MULTIPLIER
-	damage = 1//so we may trigger stuff that reacts to bullet damage, like welding fuel tanks
+	damage = 30//Only affects obj/turf. Mobs take a regular hit from the sword.
 	phase_type = PROJREACT_MOBS
 	penetration = -1
 	fire_sound = null
@@ -296,6 +309,11 @@
 			var/mob/M = A
 			if (!iscultist(M))
 				A.attackby(blade,shade)
+			else if (!M.get_active_hand())//cultists can catch the blade on the fly
+				blade.forceMove(loc)
+				blade.attack_hand(M)
+				blade = null
+				qdel(src)
 		else
 			A.attackby(blade,shade)
 	else
@@ -314,10 +332,6 @@
 /obj/item/projectile/soulbullet/bump_original_check()
 	if (loc == target && !redirected)
 		redirect()
-
-/obj/item/projectile/soulbullet/attackby(var/obj/item/I, var/mob/user)
-	if (blade)
-		return blade.attackby(I,user)
 
 /obj/item/projectile/soulbullet/reset()
 	..()
@@ -352,3 +366,106 @@
 
 /obj/item/projectile/soulbullet/cultify()
 	return
+
+
+/obj/item/projectile/soulbullet/Cross(var/atom/movable/mover, var/turf/target, var/height=1.5, var/air_group = 0)
+	if(istype(mover, /obj/item/projectile))
+		if (prob(30))//less likely to be hit when perforating
+			return 0
+	return ..()
+
+/obj/item/projectile/soulbullet/attackby(var/obj/item/I, var/mob/user)
+	if (blade)
+		return blade.attackby(I,user)
+
+/obj/item/projectile/soulbullet/hitby(var/atom/moveable/AM)
+	if (blade)
+		return blade.hitby(AM)
+
+/obj/item/projectile/soulbullet/bullet_act(var/obj/item/projectile/P)
+	if (blade)
+		return blade.bullet_act(P)
+
+
+/spell/soulblade/blade_mend
+	name = "Mend"
+	desc = "(10 BLOOD) Heal some of your wielder's brute damage using your blood."
+	hud_state = "soulblade_mend"
+
+	invocation_type = SpI_NONE
+	charge_type = Sp_RECHARGE
+	charge_max = 20
+	range = 0
+	spell_flags = null
+	insufficient_holder_msg = ""
+	still_recharging_msg = ""
+
+	cast_delay = 0
+
+	blood_cost = 10
+
+/spell/soulblade/blade_mend/choose_targets(var/mob/user = usr)
+	var/obj/item/weapon/melee/soulblade/SB = user.loc
+	if (!ismob(SB.loc))
+		return null
+	return list(SB.loc)
+
+/spell/soulblade/blade_mend/before_cast(var/list/targets, var/user)
+	return targets
+
+/spell/soulblade/blade_mend/cast(var/list/targets, var/mob/user)
+	..()
+	var/mob/living/wielder = pick(targets)
+	if(istype(wielder,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = wielder
+		for(var/datum/organ/external/temp in H.organs)
+			if(temp.status & ORGAN_BLEEDING)
+				temp.clamp()
+
+	if (wielder.getBruteLoss())
+		wielder.heal_organ_damage(10, 0)
+		to_chat(user,"You heal some of your wielder's wounds.")
+		to_chat(wielder,"\The [user] heals some of your wounds.")
+	else
+		to_chat(user,"<span class='notice'>Your wielder's wounds are already all closed up.<//span>")
+
+
+/spell/soulblade/blade_boil
+	name = "Blood Boil"
+	desc = "(FREE) Punish your wielder by using a taboo ritual that drains their blood and burns their flesh."//a much lesser version of the original ritual
+	hud_state = "soulblade_boil"
+
+	invocation_type = SpI_NONE
+	charge_type = Sp_RECHARGE
+	charge_max = 20
+	range = 0
+	spell_flags = null
+	insufficient_holder_msg = ""
+	still_recharging_msg = ""
+
+	cast_delay = 0
+
+	blood_cost = 10
+
+/spell/soulblade/blade_boil/choose_targets(var/mob/user = usr)
+	var/obj/item/weapon/melee/soulblade/SB = user.loc
+	if (!ismob(SB.loc))
+		to_chat(user,"<span class='notice'>You need someone to hold you first.<//span>")
+		return null
+	var/mob/M = SB.loc
+	if (iscultist(M))
+		to_chat(user,"<span class='notice'>The cultists of Nar-Sie are immune to this ritual.<//span>")
+		return null
+	return list(M)
+
+/spell/soulblade/blade_boil/before_cast(var/list/targets, var/user)
+	return targets
+
+/spell/soulblade/blade_boil/cast(var/list/targets, var/mob/user)
+	..()
+	var/mob/living/wielder = pick(targets)
+	wielder.take_overall_damage(25,25)
+	to_chat(wielder, "<span class='danger'>Your blood boils!</span>"))
+	user.say("Dedo ol'btoh! Yu'gular faras desdae. Havas mithum javara. Umathar uf'kal thenar!")//both blood boil and blood drain's old invocations
+	if (M.take_blood(null,50))
+		to_chat(user, "<span class='warning'>You steal a good amount of their blood, that'll show them.</span>")
