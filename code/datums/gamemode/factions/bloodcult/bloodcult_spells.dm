@@ -84,7 +84,7 @@
 			var/i = 1
 			for(var/subtype in subtypesof(/datum/rune_spell))
 				var/datum/rune_spell/instance = subtype
-				if (initial(instance.Act_restriction) <= 1000)//TODO: SET TO CURRENT CULT FACTION ACT
+				if (initial(instance.Act_restriction) <= veil_thickness)
 					available_runes.Add("\Roman[i]-[initial(instance.name)]")
 					available_runes["\Roman[i]-[initial(instance.name)]"] = instance
 				i++

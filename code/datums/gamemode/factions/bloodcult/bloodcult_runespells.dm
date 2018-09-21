@@ -230,6 +230,7 @@
 	 inside a Construct Shell, or a Cult Blade. Lastly, raising an Arcaneum will let you permanently imbue your skin with a gift from Nar Sie. Follow your purpose \
 	 and you may see even more gifts come your way."
 	var/turf/loc_memory = null
+	var/spawntype = /obj/structure/cult/altar
 
 /datum/rune_spell/raisestructure/cast()
 	var/obj/effect/rune/R = spell_holder
@@ -239,14 +240,22 @@
 		abort(RITUALABORT_BLOCKED)
 		return
 
-	loc_memory = spell_holder.loc
 	var/mob/living/user = activator
+	if (veil_thickness >= CULT_ACT_II)
+		var/spawnchoice = alert(user,"As the veil is getting thinner, new possibilities arise.","[name]","Altar","Forge","Spire")
+		switch (spawnchoice)
+			if ("Forge")
+				spawntype = /obj/structure/cult/forge
+			if ("Spire")
+				spawntype = /obj/structure/cult/spire
+
+	loc_memory = spell_holder.loc
 	contributors.Add(user)
 	update_progbar()
 	if (user.client)
 		user.client.images |= progbar
 	spell_holder.overlays += image('icons/obj/cult.dmi',"runetrigger-build")
-	to_chat(activator, "<span class='rose'>This ritual's blood toll can be substantially reduced by having multiple cultists partake in it.</span>")
+	to_chat(activator, "<span class='rose'>This ritual's blood toll can be substantially reduced by having multiple cultists partake in it, or wearing cult attire.</span>")
 	spawn()
 		payment()
 
@@ -277,7 +286,8 @@
 		for(var/mob/living/L in contributors)
 			if (iscultist(L) && (L in range(spell_holder,1)) && (L.stat == CONSCIOUS))
 				summoners++
-			else
+				summoners += round(L.get_cult_power()/30)//for every 30 cult power, you count as one additional cultist. So with Robes and Shoes, you already count as 3 cultists.
+			else										//This makes using the rune alone hard at roundstart, but fairly easy later on.
 				if (L.client)
 					L.client.images -= progbar
 				contributors.Remove(L)
@@ -328,7 +338,7 @@
 	message_admins("A rune ritual has iterated for over 1000 blood payment procs. Something's wrong there.")
 
 /datum/rune_spell/raisestructure/proc/success()
-	new /obj/structure/cult/altar(spell_holder.loc)
+	new spawntype(spell_holder.loc)
 	qdel(spell_holder)//this will cause this datum to del as well
 
 //RUNE II

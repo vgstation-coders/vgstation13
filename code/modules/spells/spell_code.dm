@@ -157,7 +157,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(!cast_check(skipcharge, user))
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
+		block = 0
 		return
+	block = 0
 	if(before_target(user))
 		return
 
