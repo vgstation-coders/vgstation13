@@ -9,7 +9,7 @@
 	selection_color = "#dddddd"
 	access = list(access_trade)
 	minimal_access = list(access_trade)
-	alt_titles = list("Merchant")
+	alt_titles = list("Merchant","Salvage Broker")
 
 	species_whitelist = list("Vox")
 	must_be_map_enabled = 1
@@ -63,6 +63,9 @@
 			affected.implants += L
 			L.part = affected
 
+		if("Salvage Broker")
+			H.equip_or_collect(new /obj/item/device/telepad_beacon(H.back), slot_in_backpack)
+			H.equip_or_collect(new /obj/item/weapon/rcs/salvage(H.back), slot_in_backpack)
 
 	return 1
 
