@@ -480,6 +480,9 @@ var/global/num_vending_terminals = 1
 			to_chat(user, "<span class='info'>Nothing happens.</span>")
 
 	else if(istype(W, /obj/item/weapon/card))
+		if(!linked_db)
+			reconnect_database()
+
 		if(currently_vending) //We're trying to pay, not set the account
 			connect_account(user, W)
 			src.updateUsrDialog()
@@ -3132,7 +3135,8 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/toggleSecuredPanelOpen(var/obj/toggleitem, var/mob/user)
 	if(!is_custom_machine)
 		return ..()
-	if(!account_first_linked || (user.get_visible_id() && user.get_visible_id().get_owner_name_from_ID() == linked_account.owner_name))
+	var/obj/item/weapon/card/C = user.get_card() //Looks for a debit card first
+	if(!account_first_linked || (C && C.associated_account_number == linked_account.account_number))
 		togglePanelOpen(toggleitem, user)
 		return 1
 	to_chat(user, "<span class='warning'>The machine requires an ID to unlock it.</span>")
