@@ -23,6 +23,7 @@
 	var/probability = 50
 	var/votable = TRUE
 	var/list/orphaned_roles = list()
+	var/dat = ""
 
 	//'Oh dear we accidentally destroyed the station/universe' variables
 	var/station_was_nuked
@@ -201,12 +202,21 @@
 	// This is where the game mode is shut down and cleaned up.
 
 /datum/gamemode/proc/GetScoreboard()
-	var/dat =""
+	dat += "<h2>Factions & Roles</h2>"
+	var/exist = 0
 	for(var/datum/faction/F in factions)
-		dat += F.GetScoreboard()
-		dat += "\n\n"
+		if (F.members.len > 0)
+			exist = 1
+			dat += F.GetObjectivesMenuHeader()
+			dat += F.GetScoreboard()
+			dat += "<HR>"
+	if (orphaned_roles.len > 0)
+		dat += "<FONT size = 2><B>Independents:</B></FONT><br>"
 	for(var/datum/role/R in orphaned_roles)
+		exist = 1
 		dat += R.GetScoreboard()
+	if (!exist)
+		dat += "(none)"
 	return dat
 
 /datum/gamemode/proc/get_player_count()

@@ -46,7 +46,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 
 /datum/faction/cult/narsie/GetObjectivesMenuHeader()
 	var/icon/logo = icon('icons/logos.dmi', "cult-logo")
-	var/header = {"<BR><img src='data:image/png;base64,[icon2base64(logo)]'> <FONT size = 2><B>Cult of Nar-Sie</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]'>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'> <FONT size = 2><B>Cult of Nar-Sie</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top:10px;'><BR>"}
 	return header
 
 /datum/faction/cult/narsie/OnPostSetup()
