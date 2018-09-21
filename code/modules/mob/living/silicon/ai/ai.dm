@@ -144,6 +144,7 @@ var/list/ai_list = list()
 
 			job = "AI"
 	ai_list += src
+	playsound(src, 'sound/machines/WXP_startup.ogg', 75, FALSE)
 	..()
 	return
 
@@ -263,7 +264,7 @@ var/list/ai_list = list()
 		"Diagnosis" = "ai-atlantiscze",
 		"Drink It!" = "ai-silveryferret",
 		"Metaclub" = "ai-terminal",
-		"Jack Frost" = "ai-jack",	
+		"Jack Frost" = "ai-jack",
 	)
 	var/selected = input("Select an icon!", "AI", null, null) as null|anything in possible_icon_states
 	if(!selected)
