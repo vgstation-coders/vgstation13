@@ -546,7 +546,7 @@ var/list/arcane_tomes = list()
 	var/maxregenblood = 8//the maximum amount of blood you can regen by waiting around.
 	var/maxblood = 100
 	var/movespeed = 2//smaller = faster
-	var/health = 50
+	health = 50
 	var/maxHealth = 50
 
 /obj/item/weapon/melee/soulblade/Destroy()
@@ -562,7 +562,7 @@ var/list/arcane_tomes = list()
 		else
 			qdel(shade)
 		var/obj/item/weapon/melee/cultblade/nocult/B = new (T)
-		Move(get_step_rand(T))
+		B.Move(get_step_rand(T))
 		new /obj/item/device/soulstone(T)
 	shade = null
 	..()
@@ -586,25 +586,27 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/melee/soulblade/on_attack(var/atom/attacked, var/mob/user)
 	..()
 	if (ismob(attacked))
-		var/mob/M = attacked
+		var/mob/living/M = attacked
 		M.take_organ_damage(0,5)
 		playsound(loc, 'sound/items/Welder.ogg', 50, 1)
-		if (M.stat != DEAD)
-			if (M.take_blood(null,10))
-				blood = min(100,blood+10)
-				to_chat(user, "<span class='warning'>You steal some of their blood!</span>")
-		else
-			if (M.take_blood(null,5))//same cost as spin, basically negates the cost, but doesn't let you farm corpses. It lets you make a mess out of them however.
-				blood = min(100,blood+5)
-				to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
+		if (iscarbon(M))
+			var/mob/living/carbon/C = M
+			if (C.stat != DEAD)
+				if (C.take_blood(null,10))
+					blood = min(100,blood+10)
+					to_chat(user, "<span class='warning'>You steal some of their blood!</span>")
+			else
+				if (C.take_blood(null,5))//same cost as spin, basically negates the cost, but doesn't let you farm corpses. It lets you make a mess out of them however.
+					blood = min(100,blood+5)
+					to_chat(user, "<span class='warning'>You steal a bit of their blood, but not much.</span>")
 
-		if (shade)
-			var/matrix/M = matrix()
-			M.Scale(1,blood/maxblood)
-			var/total_offset = (60 + (100*(blood/maxblood))) * PIXEL_MULTIPLIER
-			shade.hud_used.mymob.gui_icons.soulblade_bloodbar.transform = M
-			shade.hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
-			shade.hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[blood]"
+			if (shade)
+				var/matrix/MAT = matrix()
+				MAT.Scale(1,blood/maxblood)
+				var/total_offset = (60 + (100*(blood/maxblood))) * PIXEL_MULTIPLIER
+				shade.hud_used.mymob.gui_icons.soulblade_bloodbar.transform = MAT
+				shade.hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
+				shade.hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[blood]"
 
 
 /obj/item/weapon/melee/soulblade/pickup(var/mob/living/user)
@@ -691,14 +693,17 @@ var/list/arcane_tomes = list()
 		if (I.damtype == HALLOSS)
 			damage = 0
 		takeDamage(damage)
-		user.visible_message("<span class='danger'>[src] has been attacked with [O] by [user]. </span>")
+		user.visible_message("<span class='danger'>[src] has been attacked with [I] by [user]. </span>")
 
-/obj/item/weapon/melee/soulblade/hitby(var/atom/moveable/AM)
+/obj/item/weapon/melee/soulblade/hitby(var/atom/movable/AM)
 	. = ..()
 	if(.)
 		return
+
 	visible_message("<span class='warning'>\The [src] was hit by \the [AM].</span>", 1)
-	takeDamage(AM.throwforce)
+	if (isobj(AM))
+		var/obj/O = AM
+		takeDamage(O.throwforce)
 
 /obj/item/weapon/melee/soulblade/bullet_act(var/obj/item/projectile/P)
 	..()

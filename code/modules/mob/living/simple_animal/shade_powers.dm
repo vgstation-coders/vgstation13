@@ -16,7 +16,7 @@
 	add_spell(new /spell/soulblade/blade_spin, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	add_spell(new /spell/soulblade/blade_perforate, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	add_spell(new /spell/soulblade/blade_mend, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-	add_spell(new /spell/soulblade/blade_drain, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+	add_spell(new /spell/soulblade/blade_boil, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 
 
@@ -378,7 +378,7 @@
 	if (blade)
 		return blade.attackby(I,user)
 
-/obj/item/projectile/soulbullet/hitby(var/atom/moveable/AM)
+/obj/item/projectile/soulbullet/hitby(var/atom/movable/AM)
 	if (blade)
 		return blade.hitby(AM)
 
@@ -465,7 +465,9 @@
 	..()
 	var/mob/living/wielder = pick(targets)
 	wielder.take_overall_damage(25,25)
-	to_chat(wielder, "<span class='danger'>Your blood boils!</span>"))
+	to_chat(wielder, "<span class='danger'>Your blood boils!</span>")
 	user.say("Dedo ol'btoh! Yu'gular faras desdae. Havas mithum javara. Umathar uf'kal thenar!")//both blood boil and blood drain's old invocations
-	if (M.take_blood(null,50))
+	if (iscarbon(wielder))
+		var/mob/living/carbon/C = wielder
+		C.take_blood(null,50)
 		to_chat(user, "<span class='warning'>You steal a good amount of their blood, that'll show them.</span>")

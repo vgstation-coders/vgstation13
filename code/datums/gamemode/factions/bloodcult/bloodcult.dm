@@ -1,7 +1,7 @@
 //CULT 3.0 BY DEITY LINK (2018)
 //BASED ON THE ORIGINAL GAME MODE BY URIST MCDORF
 
-var/veil_thickness = CULT_PROLOGUE
+var/veil_thickness = CULT_EPILOGUE//REMEMBER TO SET IT BACK TO CULT_PROLOGUE WHEN DONE TESTING
 
 /client/proc/set_veil_thickness()
 	set category = "Special Verbs"
