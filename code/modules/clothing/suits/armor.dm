@@ -36,6 +36,8 @@
 	if(istype(I,/obj/item/weapon/grenade))
 		for(var/obj/item/clothing/accessory/bangerboy/B in accessories)
 			B.attackby(I,user)
+	else
+		..()
 
 /obj/item/clothing/suit/armor/vest/security
 	name = "security armor"

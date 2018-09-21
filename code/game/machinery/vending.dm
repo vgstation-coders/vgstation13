@@ -2958,6 +2958,8 @@ var/global/num_vending_terminals = 1
 	name = "\improper Trader Supply"
 	desc = "Its wiring has been modified to prevent hacking."
 	unhackable = 1
+	desc = "Make much coin."
+	req_access = list(access_trade)
 	product_slogans = list(
 		"Profits."
 	)

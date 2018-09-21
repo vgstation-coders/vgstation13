@@ -211,13 +211,22 @@
 	origin_tech = Tc_COMBAT + "=2"
 	var/obj/item/weapon/screwdriver/S
 
+/obj/item/clothing/accessory/bangerboy/New()
+	..()
+	S = new(src)
+
+/obj/item/clothing/accessory/bangerboy/Destroy()
+	qdel(S)
+	S = null
+	..()
+
 /obj/item/clothing/accessory/bangerboy/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/weapon/grenade))
 		W.attackby(S,user)
 	else
 		..()
 
-/obj/item/clothing/accessory/can_attach_to(obj/item/clothing/C)
+/obj/item/clothing/accessory/bangerboy/can_attach_to(obj/item/clothing/C)
 	return istype(C, /obj/item/clothing/suit/armor/vest)
 
 /obj/item/clothing/head/helmet/donutgiver
@@ -227,6 +236,7 @@
 	item_state = "helmet"
 	flags = HEAR | FPRINT
 	var/dna_profile = null
+	var/last_donut = 0
 
 /obj/item/clothing/head/helmet/donutgiver/GetVoice()
 	var/the_name = "The [name]"
@@ -235,12 +245,13 @@
 /obj/item/clothing/head/helmet/donutgiver/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 	if(!..())
 		return CANNOT_EQUIP
-	if(!isjusthuman(H))
+	if(!isjusthuman(M))
 		to_chat(usr, "<span class='warning'>Your nonhuman DNA is rejected by \the [src].</span>")
 		return CANNOT_EQUIP
 	if(!dna_profile)
 		to_chat(usr, "<span class='warning'>There is no stored DNA profile.</span>")
 		return CANNOT_EQUIP
+	var/mob/living/carbon/human/H = M
 	if(!(dna_profile == H.dna.unique_enzymes))
 		to_chat(usr, "<span class='warning'>Your DNA does not match the stored DNA sample.</span>")
 		return CANNOT_EQUIP
@@ -301,33 +312,33 @@
 	qdel(src)
 
 /obj/item/clothing/head/helmet/donutgiver/Hear(var/datum/speech/speech, var/rendered_speech="")
-	if(world.timeofday < last_donut+60)
+	set waitfor = FALSE // speak AFTER the user
+	if(world.timeofday < last_donut+300)
 		return
 	var/dispense_path
-	set waitfor = FALSE // The lawgiver should speak AFTER the user
 	if(speech.speaker == loc && !speech.frequency && dna_profile)
 		var/mob/living/carbon/human/H = loc
 		if(dna_profile == H.dna.unique_enzymes)
-			if((findtext(speech.message, "standard")) || (findtext(speech.message, "sprinkle" || (findtext(speech.message, "traditional")))
+			if(findtext(speech.message, "standard") || findtext(speech.message, "sprinkle") || findtext(speech.message, "traditional"))
 				dispense_path = /obj/item/weapon/reagent_containers/food/snacks/donut/normal
 				sleep(3)
 				say("SPRINKLE.")
-			else if((findtext(speech.message, "jelly")) || (findtext(speech.message, "berry")) || (findtext(speech.message, "juicy")))
+			else if(findtext(speech.message, "jelly") || findtext(speech.message, "berry") || findtext(speech.message, "juicy"))
 				dispense_path = /obj/item/weapon/reagent_containers/food/snacks/donut/jelly
 				sleep(3)
 				say("JELLY.")
-			else if((findtext(speech.message, "chaos")) || (findtext(speech.message, "gump")) || (findtext(speech.message, "two-face")))
+			else if(findtext(speech.message, "chaos") || findtext(speech.message, "gump") || findtext(speech.message, "two-face"))
 				dispense_path = /obj/item/weapon/reagent_containers/food/snacks/donut/chaos
 				sleep(3)
 				say("CHAOS.")
-			else if((findtext(speech.message, "favorite") || (findtext(speech.message, "4Kids") || (findtext(speech.message, "rice"))
+			else if(findtext(speech.message, "favorite") || findtext(speech.message, "4Kids") || findtext(speech.message, "rice"))
 				dispense_path = /obj/item/weapon/reagent_containers/food/snacks/riceball
 				sleep(3)
 				say("FAVORITE.")
 		if(dispense_path)
 			var/obj/item/I = new dispense_path(get_turf(src))
-			I.put_in_hands(H)
-			last_donut = timeofday
+			H.put_in_hands(I)
+			last_donut = world.timeofday
 
 //Security Skirt spritework is coutesy of TG, AGPL license
 /obj/item/clothing/under/securityskirt/elite
@@ -353,43 +364,66 @@
 /obj/item/clothing/under/securityskirt/elite/process()
 	if(prob(1))
 		if(ishuman(loc))
-			visible_message("<span class='warning'>[loc]'s [src] swishes threateningly.</span>")
+			var/mob/living/carbon/human/H = loc
+			if(!(H.wear_suit && H.wear_suit.body_parts_covered & LEGS)) //It doesn't make sense to swish about if it's covered under something
+				H.visible_message("<span class='warning'>[H]'s [src] swishes threateningly.</span>",
+				"Your [src] fills you with confidence.",
+				"Something cracks like a whip.")
+				H.reagents.add_reagent(PARACETAMOL,1)
 
 /obj/item/weapon/ram_kit
 	name = "battering ram drop-leaf kit"
 	desc = "A device so ingenius there is no way the Vox invented it. Exploits volt-induced superposition to allow battering ram to fold into itself."
-	icon = 'icons/obj/weapons.dmi'
-	icon_state = "kit"
+	icon = 'icons/obj/device.dmi'
+	icon_state = "modkit"
 	flags = FPRINT
 	siemens_coefficient = 0
 	w_class = W_CLASS_SMALL
 	origin_tech = Tc_COMBAT + "=5"
 
-/obj/structure/largecrate/wolf
-	name = "security wolf crate"
+/obj/structure/largecrate/secure
+	name = "security livestock crate"
 	desc = "An access-locked crate containing a security wolf. Handlers are responsible for obedience: wolves require regular meat or they will lash out at small animals and, if desperate, humans."
-	req_access = (access_brig)
+	req_access = list(access_brig)
 	icon = 'icons/obj/cage.dmi'
 	icon_state = "cage_secure"
+	var/mob_path = /mob/living/simple_animal/hostile/wolf
+	var/bonus_path = /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh
 
-/obj/structure/largecrate/wolf/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/largecrate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(!allowed(user))
-		to_chat("<span class='warning'>\The [src]'s secure bolting system flashes hostily.</span>")
+		to_chat(user,"<span class='warning'>\The [src]'s secure bolting system flashes hostily.</span>")
 		//Not using elseif here because we want it to continue to attack_hand
 	if(iscrowbar(W) && allowed(user))
 		new /obj/item/stack/sheet/metal(src)
 		var/turf/T = get_turf(src)
-		for(var/i = 1 to 4)
-			new /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh(T)
-		new /mob/living/simple_animal/hostile/wolf(T)
+		if(bonus_path)
+			for(var/i = 1 to 4)
+				new bonus_path(T)
+		if(mob_path)
+			new mob_path(T)
 		user.visible_message("<span class='notice'>[user] pries \the [src] open.</span>", \
 							 "<span class='notice'>You pry open \the [src].</span>", \
 							 "<span class='notice'>You hear creaking metal.</span>")
 		qdel(src)
 	else
-		return attack_hand(user)
+		attack_hand(user)
 
-/obj/item/device/law_planner
+/obj/structure/largecrate/secure/magmaw
+	name = "engineering livestock crate"
+	desc = "An access-locked crate containing a magmaw. Handlers are advised to stand back when administering plasma to the animal."
+	req_access = list(access_engine)
+	mob_path = /mob/living/simple_animal/hostile/asteroid/magmaw
+	bonus_path = null //originally was /obj/item/stack/sheet/mineral/plasma resulting in immediate FIRE
+
+/obj/structure/largecrate/secure/frankenstein
+	name = "medical livestock crate"
+	desc = "An access-locked crate containing medical horrors. Handlers are advised to scream 'It's alive!' repeatedly."
+	req_access = list(access_surgery)
+	mob_path = null
+	bonus_path = /mob/living/carbon/human/frankenstein
+
+/*/obj/item/device/law_planner                                                      Scapped, but maybe in the future
 	name = "law planning frame"
 	desc = "A large data pad with buttons for crimes. Used for planning a brig sentence."
 	w_class = W_CLASS_SMALL
@@ -400,30 +434,30 @@
 	req_access = list(access_brig)
 	var/announce = 1 //0 = Off, 1 = On select, 2 = On upload
 	var/start_timer = FALSE //If true, automatically start the timer on upload
-	var/upload_crimes = null //If has DNA, will look for an associated datacore file and upload crimes
+	var/datum/data/record/upload_crimes = null //If has DNA, will look for an associated datacore file and upload crimes
 	var/list/rapsheet = list()
 	var/total_time = 0
 
 	var/list/minor_crimes = list(
-							"RESISTING ARREST"=2
-							"PETTY CRIME"=3
-							"DRUGGING"=4
-							"POSSESSION"=5
-							"MANHUNT"=5
-							"ESCAPE"=5
-							"FRAMING"=5
-							"WORKPLACE HAZARD"=5
-							"ASSAULT"=6
-							"POSS. WEAPON"=7
+							"RESISTING ARREST"=2,
+							"PETTY CRIME"=3,
+							"DRUGGING"=4,
+							"POSSESSION"=5,
+							"MANHUNT"=5,
+							"ESCAPE"=5,
+							"FRAMING"=5,
+							"WORKPLACE HAZARD"=5,
+							"ASSAULT"=6,
+							"POSS. WEAPON"=7,
 							"POSS. EXPLOSIVE"=8)
 	var/list/major_crimes = list(
-							"B&E RESTRICTED"=10
-							"INTERFERENCE"=10
-							"UNLAWFUL UPLOAD"=10
-							"ABUSE OF POWER"=10
-							"ASSAULT ON SEC"=10
-							"MAJOR TRESPASS"=10
-							"MAJOR B&E"=15
+							"B&E RESTRICTED"=10,
+							"INTERFERENCE"=10,
+							"UNLAWFUL UPLOAD"=10,
+							"ABUSE OF POWER"=10,
+							"ASSAULT ON SEC"=10,
+							"MAJOR TRESPASS"=10,
+							"MAJOR B&E"=15,
 							"GRAND THEFT"=15)
 
 /obj/item/device/law_planner/proc/announce()
@@ -464,7 +498,7 @@
 		rapsheet = null
 		total_time = null
 	else
-		..()
+		..()*/
 
 
 /obj/item/weapon/boxofsnow
@@ -478,25 +512,23 @@
 	var/turf/center = get_turf(loc)
 	for(var/i = 1 to rand(8,24))
 		new /obj/item/stack/sheet/snow(center)
-	for(var/turf/simulated/T in view(3))
+	for(var/turf/simulated/T in circleview(5))
 		if(istype(T,/turf/simulated/floor))
 			new /obj/structure/snow(T) //Floors get snow
 		if(istype(T,/turf/simulated/wall))
 			new /obj/machinery/xmas_light(T) //Walls get lights
-	if(prob(50)) //Snowman or St. Corgi
-		/mob/living/simple_animal/hostile/retaliate/snowman(center)
+	if(prob(66)) //Snowman or St. Corgi
+		new /mob/living/simple_animal/hostile/retaliate/snowman(center)
 	else
-		/mob/living/simple_animal/corgi/saint(center)
+		new /mob/living/simple_animal/corgi/saint(center)
 	qdel(src)
-<<<<<<< 2fe3ffac9e2182b35df6f17383ae1fd3a5d4df92
-=======
 
 /obj/item/key/security/spare
 	name = "warden's spare secway key"
 	desc = "It has a tag that reads:"
 	var/home_map
 
-/New()
+/obj/item/key/security/spare/New()
 	..()
 	var/list/map_names = list("Defficiency","Bagelstation","Meta Club","Packed Station","Asteroid Station","Box Station")
 	map_names -= map.nameLong
@@ -504,17 +536,153 @@
 
 /obj/item/key/security/spare/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>If found, please return to [home_map]."
+	to_chat(user, "<span class='info'>If found, please return to [home_map].")
 
 /obj/item/weapon/depocket_wand
 	name = "depocket wand"
 	desc = "Depocketers were invented by thieves to read pocket contents and identify marks, then force them to drop those items for muggings. This one has been permanently peace-bonded so that it can only check pocket contents."
+	item_state = "telebaton_1"
 
 /obj/item/weapon/depocket_wand/attack(mob/living/M as mob, mob/living/user as mob)
 	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		to_chat(user,"<span class='info'>Pocket Scan Results:<BR>Left: [M.l_store]<BR>Right: [M.r_store]</span>")
+		to_chat(user,"<span class='info'>Pocket Scan Results:<BR>Left: [H.l_store ? H.l_store : "empty"]<BR>Right: [H.r_store ? H.r_store : "empty"]</span>")
 	else
 		..()
->>>>>>> added chest
+
+//It's like a ghetto scanner
+/obj/item/device/vampirehead
+	name = "shrunken vampire head"
+	desc = "The head of an immortal lord of the night. If only he had the right straight man partner, he'd make a good half of a crime fighting duo."
+	w_class = W_CLASS_TINY
+	icon_state = "vamphead0"
+	flags = HEAR | FPRINT
+	var/obj/effect/decal/cleanable/blood/located_blood
+	var/last_used = 0
+
+/obj/item/device/vampirehead/New()
+	..()
+	processing_objects += src
+
+/obj/item/device/vampirehead/Destroy()
+	processing_objects -= src
+	..()
+
+/obj/item/device/vampirehead/process()
+	if(located_blood && get_dist(located_blood,src)<5)
+		return //Don't process further, we still smell our old blood
+	if(ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		if(genecheck(H,prob(97))) //Annoy unqualified bearers with messages about 3% of the time
+			find_blood()
+	located_blood = null
+	update_icon()
+
+/obj/item/device/vampirehead/dropped()
+	..()
+	located_blood = null
+
+/obj/item/device/vampirehead/update_icon()
+	icon_state = "vamphead[located_blood ? "1" : "0"]"
+
+/obj/item/device/vampirehead/proc/find_blood()
+
+
+	update_icon()
+
+/obj/item/device/vampirehead/on_enter_storage(obj/item/weapon/storage/S)
+	..()
+	var/mob/living/carbon/human/H = get_holder_of_type(src, /mob/living/carbon/human)
+	if(H && genecheck(H,TRUE)) //If we've been stashed by a valid user. Don't send normal reject messages.
+		var/list/reject_phrases = list("Don't put me in there, I can't see!",
+								"Miserable cur! Un[S] me at once!",
+								"I hope you realize the view inside here is terribly boring.",
+								"What do you want of me? To curate the inside of this [S]?",
+								"Miserable. Sealed inside a [S].",
+								"Can't make it! Can't make it! [capitalize(S)] stuck! Please, I beg you!",
+								"This is really no substitute from a coffin.",
+								"What, pray tell, am I supposed to be doing inside here?")
+		to_chat(H,"<B>[src]</B> [pick("murmurs","shrieks","hisses","groans","complains")], \"<span class='sinister'>[pick(reject_phrases)]</span>\"")
+
+/obj/item/device/vampirehead/proc/genecheck(mob/user,silent=FALSE)
+	if(!ishuman(user))
+
+		return FALSE
+	if(M_SOBER in user.mutations)
+		return TRUE
+	else
+		if(!silent)
+			var/list/reject_phrases = list("Blah! I'd never work with someone who can't hold their drink.",
+										"You are not meant for this line of work, featherweight.",
+										"Try again when you can relate to the intoxicating taste of blood.",
+										"What is a man? A miserable little pile of soft drinks.",
+										"You mortals all look underage to me. Pray tell, can you even manage a bottle?",
+										"Bah. You mock Le Confrérie des Chevaliers du Tastevin with your plebian visage.",
+										"I will not associate with any less than an iron liver.",
+										"You dare ask my service when you cannot even hold your liquor?")
+			to_chat(user,"<B>[src]</B> [pick("murmurs","insults","mocks","groans","complains")], \"<span class='sinister'>[pick(reject_phrases)]</span>\"")
+		return FALSE
+
+/obj/item/device/vampirehead/attack(mob/living/M as mob, mob/user as mob)
+	if(!user || !M) //sanity
+		return
+
+	if(!genecheck(user))
+		return
+
+	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been flashed (attempt) with [name] by [key_name(user)]</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to flash [key_name(M)]</font>")
+
+	log_attack("<font color='red'>[key_name(user)] Used the [name] to flash [key_name(M)]</font>")
+
+	if(!iscarbon(user))
+		M.LAssailant = null
+	else
+		M.LAssailant = user
+
+	if(!iscarbon(M))
+		return
+	var/mob/living/carbon/Subject = M
+
+	if(Subject.eyecheck() > 0)
+		return
+	Subject.Knockdown(Subject.eyecheck() * 5 * -1 +10)
+
+	visible_message("<span class='danger'>\The eyes of [user]'s [name] emit a blinding flash toward [M]!</span>")
+	last_used = world.timeofday
+
+//Autocuffer is like a cyborg handcuff dispenser for carbons
+/obj/item/weapon/autocuffer
+	name = "autocuffer"
+	desc = "An experimental prototype handcuff dispenser that mysteriously went missing from a research facility on Alcatraz VI."
+	icon = 'icons/obj/bureaucracy.dmi'
+	icon_state = "labeler0"
+	siemens_coefficient = 0
+	slot_flags = SLOT_BELT
+	w_class = W_CLASS_SMALL
+	origin_tech = Tc_COMBAT + "=4"
+	restraint_resist_time = TRUE //This doesn't actually matter as long as it is nonzero
+	req_access = list(access_brig) //Brig timers
+	var/obj/item/weapon/handcuffs/cyborg/stored
+
+/obj/item/weapon/autocuffer/Destroy()
+	if(stored)
+		qdel(stored)
+		stored = null
+	..()
+
+/obj/item/weapon/autocuffer/restraint_apply_intent_check(mob/user)
+	return TRUE
+
+/obj/item/weapon/autocuffer/attempt_apply_restraints(mob/M, mob/user)
+	if(!allowed(user))
+		to_chat(user, "<span class='warning'>The access light on \the [src] blinks red.</span>")
+		return FALSE
+	if(!stored) //No cuffs primed. Let's generate new ones.
+		stored = new(src)
+	if(stored.attempt_apply_restraints(M,user))
+		stored = null //We applied these, so next time make new ones.
+		return TRUE
+	else
+		return FALSE

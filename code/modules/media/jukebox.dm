@@ -943,8 +943,10 @@ var/global/list/loopModeNames=list(
 
 /obj/item/weapon/vinyl/New(loc,U,F)
 	..(loc)
-	unformatted = U
-	formatted = F
+	if(U)
+		unformatted = U
+	if(F)
+		formatted = F
 	name = "nanovinyl - [formatted]"
 
 //Premades
