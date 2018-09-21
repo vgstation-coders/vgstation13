@@ -7,7 +7,7 @@
 
 /datum/faction/cult/AdminPanelEntry()
 	var/list/dat = ..()
-	dat += "<br/><a href='?src=\ref[src];cult_mindspeak=\ref[src]'>Voice of [deity_name]</a>"
+	dat += "<br/><a href='?src=\ref[src];cult_mindspeak_global=\ref[src]'>Voice of [eldergod]</a>"
 	return dat
 
 /datum/faction/cult/proc/grant_runeword(mob/living/carbon/human/cult_mob, var/word)
@@ -292,7 +292,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 
 // -- Topic/hrefs --
 /datum/faction/cult/narsie/Topic(href, href_list)
-	if (href_list["cult_mindspeak"])
+	if (href_list["cult_mindspeak_global"])
 		if (!usr.client.holder)
 			return FALSE
 		var/message = input("What message shall we send?",
@@ -300,7 +300,18 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
                     "")
 		for (var/datum/role/R in members)
 			var/mob/M = R.antag.current
-			to_chat(M, "<span class='danger'>You hear [deity_name]'s voice whisper to you...</span> <span class='sinister'>[message]</span>")
+			to_chat(M, "<span class='danger'>[deity_name]</span> murmurs... <span class='sinister'>[message]</span>")
+
+	if (href_list["cult_mindspeak"])
+		if (!usr.client.holder)
+			return FALSE
+		var/message = input("What message shall we send?",
+                    "Voice of [deity_name]",
+                    "")
+		var/datum/role/R = locate(href_list["cult_mindspeak"])
+		var/mob/M = R.antag.current
+		to_chat(M, "<span class='danger'>[deity_name]</span> murmurs... <span class='sinister'>[message]</span>")
+
 	if (href_list["check_words"])
 		if (!usr.client.holder)
 			return FALSE
