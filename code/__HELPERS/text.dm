@@ -528,6 +528,5 @@ proc/sql_sanitize_text(var/text)
 	text = replacetext(text, "&", "")
 	return text
 
-/proc/is_letter(var/thing)
-    thing = text2ascii(thing)
+/proc/is_letter(var/thing) // Thing is an ascii number
     return (thing >= 65 && thing <= 122)
