@@ -142,6 +142,7 @@
 	return 0
 
 /obj/structure/grille/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
 	user.delayNextAttack(8)
 	if(iswirecutter(W))
 		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
