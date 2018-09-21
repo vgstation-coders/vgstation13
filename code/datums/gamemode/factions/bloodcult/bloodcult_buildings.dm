@@ -160,7 +160,28 @@
 
 
 /obj/structure/cult/altar/Destroy()
+	if (blade)
+		if (loc)
+			blade.forceMove(loc)
+		else
+			qdel(blade)
+	blade = null
 	flick("[icon_state]-break", src)
+	..()
+
+/obj/structure/cult/altar/attackby(var/obj/item/I, var/mob/user)
+	if(istype(I,/obj/item/weapon/melee/soulblade))
+		if (blade)
+			to_chat(user,"<span class='warning'>You must remove the blade planted on \the [src] first.</span>")
+			return 1
+		var/turf/T = get_turf(user)
+		playsound(T, 'sound/weapons/bloodyslice.ogg', 50, 1)
+		user.drop_item(I, T, 1)
+		I.forceMove(src)
+		blade = I
+		update_icon()
+		to_chat(user, "You plant \the [blade] on top of \the [src]</span>")
+		return 1
 	..()
 
 /obj/structure/cult/altar/update_icon()
@@ -252,6 +273,14 @@
 /obj/structure/cult/altar/cultist_act(var/mob/user,var/menu="default")
 	.=..()
 	if (!.)
+		return
+	if (blade)
+		blade.forceMove(loc)
+		blade.attack_hand(user)
+		to_chat(user, "You remove \the [blade] from \the [src]</span>")
+		blade = null
+		playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
+		update_icon()
 		return
 	var/dat = ""
 	switch (menu)

@@ -459,14 +459,6 @@ var/list/arcane_tomes = list()
 	hitsound = "sound/weapons/bladeslice.ogg"
 	var/checkcult = 1
 
-/obj/item/weapon/melee/cultblade/nocult
-	name = "broken cult blade"
-	desc = "What remains of an arcane weapon wielded by the followers of Nar-Sie. In this state, it can be held mostly without risks."
-	icon_state = "cultblade-broken"
-	item_state = "cultblade-broken"
-	checkcult = 0
-	force = 15
-
 /obj/item/weapon/melee/cultblade/cultify()
 	return
 
@@ -513,13 +505,31 @@ var/list/arcane_tomes = list()
 		return 1
 	..()
 
+/obj/item/weapon/melee/cultblade/nocult
+	name = "broken cult blade"
+	desc = "What remains of an arcane weapon wielded by the followers of Nar-Sie. In this state, it can be held mostly without risks."
+	icon_state = "cultblade-broken"
+	item_state = "cultblade-broken"
+	checkcult = 0
+	force = 15
+
+/obj/item/weapon/melee/cultblade/nocult/attackby(var/obj/item/I, var/mob/user)
+	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper))
+		return 1
+	if(istype(I,/obj/item/device/soulstone/gem))
+		to_chat(user,"<span class='warning'>The blade's damage doesn't allow it to hold \a [I] any longer.</span>")
+		return 1
+	..()
+
 ///////////////////////////////////////SOUL BLADE////////////////////////////////////////////////
 
 /obj/item/weapon/melee/soulblade
 	name = "soul blade"
 	desc = "An obsidian blade fitted with a soul gem, giving it soul catching properties, and allowing the user to shoot boiling blood slashes."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	icon = 'icons/obj/cult.dmi'
+	icon = 'icons/obj/cult_64x64.dmi'
+	pixel_x = -16 * PIXEL_MULTIPLIER
+	pixel_y = -16 * PIXEL_MULTIPLIER
 	icon_state = "soulblade"
 	item_state = "soulblade"
 	flags = FPRINT
@@ -531,6 +541,27 @@ var/list/arcane_tomes = list()
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	hitsound = "sound/weapons/bladeslice.ogg"
 	var/mob/living/simple_animal/shade/shade = null
+	var/blood = 0
+	var/maxblood = 100
+	var/movespeed = 2//smaller = faster
+
+/obj/item/weapon/melee/soulblade/Destroy()
+	var/turf/T = get_turf(src)
+	if (istype(loc, /obj/item/projectile))
+		qdel(loc)
+	if (T)
+		if (shade)
+			shade.forceMove(T)
+			shade.status_flags &= ~GODMODE
+			shade.canmove = 1
+			shade.cancel_camera()
+		else
+			qdel(shade)
+		var/obj/item/weapon/melee/cultblade/nocult/B = new (T)
+		step(B,get_step_rand(B))
+		new /obj/item/device/soulstone(T)
+	shade = null
+	..()
 
 /obj/item/weapon/melee/soulblade/cultify()
 	return
@@ -560,22 +591,43 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/melee/soulblade/update_icon()
 	overlays.len = 0
+	animate(src, pixel_y = -16 * PIXEL_MULTIPLIER, time = 3, easing = SINE_EASING)
 	shade = locate() in src
 	if (shade)
-		var/image/I = image('icons/obj/cult_64x64.dmi',"soulblade")
-		I.plane = HUD_PLANE//but I must
-		I.layer = ABOVE_HUD_LAYER
-		I.pixel_x = -16 * PIXEL_MULTIPLIER
-		I.pixel_y = -16 * PIXEL_MULTIPLIER
-		overlays += I
+		plane = HUD_PLANE//let's keep going and see where this takes us
+		layer = ABOVE_HUD_LAYER
 		item_state = "soulblade-full"
+		icon_state = "soulblade-full"
+		animate(src, pixel_y = -8 * PIXEL_MULTIPLIER , time = 7, loop = -1, easing = SINE_EASING)
+		animate(pixel_y = -12 * PIXEL_MULTIPLIER, time = 7, loop = -1, easing = SINE_EASING)
 	else
+		plane = initial(plane)
+		layer = initial(layer)
 		item_state = "soulblade"
+		icon_state = "soulblade"
 
 	if (istype(loc,/mob/living/carbon))
 		var/mob/living/carbon/C = loc
 		C.update_inv_hands()
 
+
+/obj/item/weapon/melee/soulblade/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
+	var/turf/starting = get_turf(src)
+	var/turf/target = get_turf(targ)
+	var/turf/second_target = target
+	var/obj/item/projectile/soulbullet/SB = new (starting)
+	SB.original = target
+	SB.target = target
+	SB.current = starting
+	SB.starting = starting
+	SB.secondary_target = second_target
+	SB.yo = target.y - starting.y
+	SB.xo = target.x - starting.x
+	SB.shade = shade
+	SB.blade = src
+	src.forceMove(SB)
+	SB.OnFired()
+	SB.process()
 
 ///////////////////////////////////////SOULSTONE////////////////////////////////////////////////
 /obj/item/device/soulstone/gem

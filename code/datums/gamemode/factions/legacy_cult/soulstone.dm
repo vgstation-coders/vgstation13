@@ -300,10 +300,12 @@
 	if (istype(src, /obj/item/device/soulstone))
 		icon_state = "soulstone2"
 		item_state = "shard-soulstone2"
+		name = "Soul Stone: [true_name]"
 	else
+		shadeMob.give_blade_powers()
+		dir = NORTH
 		update_icon()
 	user.update_inv_hands()
-	name = "Soul Stone: [true_name]"
 	to_chat(shadeMob, "Your soul has been captured! You are now bound to [user.name]'s will, help them suceed in their goals at all costs.")
 	to_chat(user, "<span class='notice'>[true_name]'s soul has been ripped from their body and stored within the soul stone.</span>")
 

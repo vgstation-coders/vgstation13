@@ -100,6 +100,31 @@
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
 
+
+	////////SOUL BLADE HUD ELEMENTS////////
+	mymob.gui_icons.soulblade_bgLEFT = getFromPool(/obj/abstract/screen)
+	mymob.gui_icons.soulblade_bgLEFT.icon = 'icons/mob/screen1_shade_fullscreen.dmi'
+	mymob.gui_icons.soulblade_bgLEFT.icon_state = "backgroundLEFT"
+	mymob.gui_icons.soulblade_bgLEFT.name = "Blood"
+	mymob.gui_icons.soulblade_bgLEFT.layer = HUD_BASE_LAYER
+	mymob.gui_icons.soulblade_bgLEFT.screen_loc = ui_blob_bgLEFT
+
+	mymob.gui_icons.soulblade_coverLEFT = getFromPool(/obj/abstract/screen)
+	mymob.gui_icons.soulblade_coverLEFT.icon = 'icons/mob/screen1_shade_fullscreen.dmi'
+	mymob.gui_icons.soulblade_coverLEFT.icon_state = "coverLEFT"
+	mymob.gui_icons.soulblade_coverLEFT.name = "Blood"
+	mymob.gui_icons.soulblade_coverLEFT.layer = HUD_ABOVE_ITEM_LAYER
+	mymob.gui_icons.soulblade_coverLEFT.screen_loc = ui_blob_bgLEFT
+	mymob.gui_icons.soulblade_coverLEFT.maptext_x = 1
+	mymob.gui_icons.soulblade_coverLEFT.maptext_y = 126*PIXEL_MULTIPLIER
+
+	mymob.gui_icons.soulblade_bloodbar = getFromPool(/obj/abstract/screen)
+	mymob.gui_icons.soulblade_bloodbar.icon = 'icons/mob/screen1_shade_bars.dmi'
+	mymob.gui_icons.soulblade_bloodbar.icon_state = "blood"
+	mymob.gui_icons.soulblade_bloodbar.name = "Blood"
+	mymob.gui_icons.soulblade_bloodbar.screen_loc = ui_blob_powerbar
+	///////////////////////////////////////
+
 	mymob.client.reset_screen()
 
 	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged)

@@ -31,6 +31,13 @@
 	meat_type = /obj/item/weapon/ectoplasm
 	mob_property_flags = MOB_SUPERNATURAL
 
+/mob/living/simple_animal/shade/Login()
+	..()
+	hud_used.shade_hud()
+
+/mob/living/simple_animal/shade/say(var/message)
+	. = ..(message, "C")
+
 /mob/living/simple_animal/shade/gib()
 	death(TRUE)
 	monkeyizing = TRUE
@@ -56,6 +63,11 @@
 		ghostize()
 		qdel (src)
 		return
+
+	if (istype(loc,/obj/item/weapon/melee/soulblade))
+		var/obj/item/weapon/melee/soulblade/SB = loc
+		if (SB.blood < SB.maxblood)
+			SB.blood++
 
 
 /mob/living/simple_animal/shade/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
@@ -103,6 +115,15 @@
 
 /mob/living/simple_animal/shade/regular_hud_updates()
 	update_pull_icon() //why is this here?
+
+	if(istype(loc, /obj/item/weapon/melee/soulblade) && hud_used)
+		var/obj/item/weapon/melee/soulblade/SB = loc
+		var/matrix/M = matrix()
+		M.Scale(1,SB.blood/SB.maxblood)
+		var/total_offset = (60 + (100*(SB.blood/SB.maxblood))) * PIXEL_MULTIPLIER
+		hud_used.mymob.gui_icons.soulblade_bloodbar.transform = M
+		hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
+		hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[SB.blood]"
 
 	if(purged)
 		if(purge > 0)
@@ -162,3 +183,14 @@
 		C.possessed = FALSE
 		C.icon_state = "talking_sword"
 	..(gibbed)
+
+////////////////////////////////SOUL BLADE STUFF//////////////////////////////////////////////////////
+/mob/living/simple_animal/shade/ClickOn(var/atom/A, var/params)
+	if (istype(loc, /obj/item/weapon/melee/soulblade))
+		var/obj/item/weapon/melee/soulblade/SB = loc
+		SB.dir = get_dir(get_turf(SB), A)
+		var/spell/soulblade/blade_spin/BS = locate() in spell_list
+		if (BS)
+			BS.perform(src)
+			return
+	..()
