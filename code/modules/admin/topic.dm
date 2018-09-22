@@ -4786,7 +4786,7 @@
 					return FALSE
 
 				if (!preacher)
-					to_chat(world, "<span class='warning'>No mob selected.</span>")
+					to_chat(usr, "<span class='warning'>No mob selected.</span>")
 					return FALSE
 
 				if (!preacher.mind)
