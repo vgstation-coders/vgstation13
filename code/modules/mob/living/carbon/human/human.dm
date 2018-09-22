@@ -1829,3 +1829,12 @@ mob/living/carbon/human/isincrit()
 				return S.full_access
 			return is_type_in_list(glasses, list(/obj/item/clothing/glasses/hud/security, /obj/item/clothing/glasses/sunglasses/sechud))
 	return FALSE
+
+/mob/living/carbon/human/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	ASSERT(species)
+	if(species.chem_flags & NO_INJECT)
+		user.visible_message(
+			"<span class='warning'>\The [user] tries to pierce [src] with \the [tool] but it won't go in!</span>",
+			"<span class='warning'>You try to pierce [src] with \the [tool] but it won't go in!</span>")
+		return INJECTION_RESULT_FAIL
+	return ..()

@@ -1,12 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// Syringes.
 ////////////////////////////////////////////////////////////////////////////////
-#define SYRINGE_DRAW 0
-#define SYRINGE_INJECT 1
-#define SYRINGE_BROKEN 2
-
-#define INJECTION_BODY 0
-#define INJECTION_SUIT_PORT 1
 
 /obj/item/weapon/reagent_containers/syringe
 	name = "syringe"
@@ -37,7 +31,8 @@
 	                            /obj/item/weapon/reagent_containers/pill/time_release,
 	                            /obj/item/clothing/mask/facehugger/lamarr,
 	                            /obj/item/asteroid/hivelord_core,
-										 /obj/item/weapon/reagent_containers/blood)
+								/obj/item/weapon/reagent_containers/blood,
+								/obj/item/weapon/light)
 
 /obj/item/weapon/reagent_containers/syringe/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] appears to be injecting an air bubble using a [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -78,7 +73,7 @@
 	if(proximity_flag == 0) // not adjacent
 		return
 
-	if(!target.reagents)
+	if(!target.reagents && !is_type_in_list(target, injectable_types))
 		return
 
 	if(mode == SYRINGE_BROKEN)
@@ -203,77 +198,26 @@
 		update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/proc/handle_inject(var/atom/target, var/mob/user)
-	if (src.is_empty())
+	if(is_empty())
 		to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
 		return
 
-	if(ishuman(target))
-		var/mob/living/carbon/human/H = target
-		if(H.species && (H.species.chem_flags & NO_INJECT))
-			user.visible_message("<span class='warning'>\The [user] attempts to poke \the [H] with \the [src] but it won't go in!</span>", "<span class='notice'>You fail to pierce \the [H] with \the [src].</span>")
-			return
-
-	if (istype(target, /obj/item/clothing/mask/facehugger/lamarr))
-		var/obj/item/clothing/mask/facehugger/lamarr/L = target
-		if(!user.is_holding_item(target))
-			if(L.stat != DEAD)
-				to_chat(user, "<span class='warning'>\The [target] is squirming around too much. She needs to be held still.</span>")
-				return
-
 	// TODO Remove snowflake
-	if (!ismob(target) && !target.is_open_container() && !is_type_in_list(target, injectable_types))
+	if(!ismob(target) && !target.is_open_container() && !is_type_in_list(target, injectable_types))
 		to_chat(user, "<span class='warning'>You cannot directly fill this object.</span>")
 		return
 
-	if(istype(target, /obj/item/gum))
-		var/obj/item/gum/G = target
-		if(G.replacement_chem_volume <= 0)
-			to_chat(user, "<span class='warning'>\The [target] is full.</span>")
-			return
-	else if (target.reagents.total_volume >= target.reagents.maximum_volume)
-		to_chat(user, "<span class='warning'>\The [target] is full.</span>")
+	var/injection_result = target.on_syringe_injection(user, src)
+	if(injection_result == INJECTION_RESULT_FAIL)
 		return
 
-	if (istype(target, /obj/item/weapon/reagent_containers/blood))
-		var/obj/item/weapon/reagent_containers/blood/L = target
-		if (L.mode == BLOODPACK_CUT)
-			to_chat(user, "<span class='warning'>With so many cuts in it... not a good idea.</span>")
-			return
-
-	// Attempting to inject someone else takes time
-	if (ismob(target) && target != user)
-		if (get_injection_action(target) == INJECTION_SUIT_PORT)
-			user.visible_message("<span class='warning'>[user] begins hunting for an injection port \the [src] on [target]'s suit!</span>",
-								 "<span class='warning'>You begin hunting for an injection port for \the [src] on [target]'s suit!</span>")
-		else
-			user.visible_message("<span class='warning'>[user] is trying to inject [target] with \the [src]!</span>",
-								 "<span class='warning'>You try to inject [target] with \the [src]!</span>")
-
-		if (!do_mob(user, target, get_injection_time(target)))
-			return
-
-		user.visible_message("<span class='warning'>[user] injects [target] with the \the [src]!</span>",
-							 "<span class='warning'>You inject [target] with \the [src]!</span>")
-
-		if (istype(target, /mob/living))
-			var/reagent_names = english_list(get_reagent_names())
-			add_attacklogs(user, target, "injected", object = src, addition = "Reagents: [reagent_names]", admin_warn = TRUE)
-
-	// Handle transfers and mob reactions
-	var/tx_amount = min(amount_per_transfer_from_this, reagents.total_volume)
-	if (ismob(target))
-		// TODO Every reagent reacts with the full volume instead of being scaled accordingly
-		// TODO which is pretty irrelevant now but should be fixed
-		reagents.reaction(target, INGEST)
-
-	if(istype(target, /obj/item/gum))
-		var/obj/item/gum/G = target
-		tx_amount = G.transfer_some_reagents(src, tx_amount, TRUE, user)
-	else
+	// The assumption is that on_syringe_injection did it
+	if(injection_result != INJECTION_RESULT_SUCCESS_BUT_SKIP_REAGENT_TRANSFER)
+		var/tx_amount = min(amount_per_transfer_from_this, reagents.total_volume)
 		tx_amount = reagents.trans_to(target, tx_amount, log_transfer = TRUE, whodunnit = user)
-	to_chat(user, "<span class='notice'>You inject [tx_amount] units of the solution. The syringe now contains [reagents.total_volume] units.</span>")
+		to_chat(user, "<span class='notice'>You inject [tx_amount] units of the solution. The syringe now contains [reagents.total_volume] units.</span>")
 
-	if (src.is_empty())
+	if(is_empty())
 		mode = SYRINGE_DRAW
 		update_icon()
 
