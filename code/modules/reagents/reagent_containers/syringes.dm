@@ -196,66 +196,6 @@
 		mode = SYRINGE_INJECT
 		update_icon()
 
-/atom/proc/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
-	if(!reagents)
-		return INJECTION_RESULT_FAIL
-	if(reagents.is_full())
-		to_chat(user, "<span class='warning'>\The [src] is full.</span>")
-		return INJECTION_RESULT_FAIL
-	return INJECTION_RESULT_SUCCESS
-
-/mob/living/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
-	if(src == user)
-		return ..()
-	// Attempting to inject someone else takes time
-	if(tool.get_injection_action(src) == INJECTION_SUIT_PORT)
-		user.visible_message("<span class='warning'>[user] begins hunting for an injection port for \the [tool] on [src]'s suit!</span>",
-							 "<span class='warning'>You begin hunting for an injection port for \the [tool] on [src]'s suit!</span>")
-	else
-		user.visible_message("<span class='warning'>[user] is trying to inject [src] with \the [tool]!</span>",
-							 "<span class='warning'>You try to inject [src] with \the [tool]!</span>")
-	if(!do_mob(user, src, tool.get_injection_time(src)))
-		return INJECTION_RESULT_FAIL
-	user.visible_message("<span class='warning'>[user] injects [src] with the \the [tool]!</span>",
-						 "<span class='warning'>You inject [src] with \the [tool]!</span>")
-	var/reagent_names = english_list(tool.get_reagent_names())
-	add_attacklogs(user, src, "injected", object = src, addition = "Reagents: [reagent_names]", admin_warn = TRUE)
-
-	// TODO Every reagent reacts with the full volume instead of being scaled accordingly
-	// TODO which is pretty irrelevant now but should be fixed
-	tool.reagents.reaction(src, INGEST)
-	return ..()
-
-/mob/living/carbon/human/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
-	ASSERT(species)
-	if(species.chem_flags & NO_INJECT)
-		user.visible_message(
-			"<span class='warning'>\The [user] tries to pierce [src] with \the [tool] but it won't go in!</span>",
-			"<span class='warning'>You try to pierce [src] with \the [tool] but it won't go in!</span>")
-		return INJECTION_RESULT_FAIL
-	return ..()
-
-/obj/item/clothing/mask/facehugger/lamarr/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
-	if(!user.is_holding_item(src) && stat != DEAD)
-		to_chat(user, "<span class='warning'>[src] is squirming around too much. She needs to be held still.</span>")
-		return INJECTION_RESULT_FAIL
-	return ..()
-
-/obj/item/gum/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
-	if(replacement_chem_volume <= 0)
-		to_chat(user, "<span class='warning'>\The [src] is full.</span>")
-		return INJECTION_RESULT_FAIL
-	var/tx_amount = min(tool.amount_per_transfer_from_this, tool.reagents.total_volume)
-	tx_amount = transfer_some_reagents(tool, tx_amount, TRUE, user)
-	to_chat(user, "<span class='notice'>You inject [tx_amount] units of the solution. \The [tool] now contains [tool.reagents.total_volume] units.</span>")
-	return INJECTION_RESULT_SUCCESS_BUT_SKIP_REAGENT_TRANSFER
-
-/obj/item/weapon/reagent_containers/blood/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
-	if(mode == BLOODPACK_CUT)
-		to_chat(user, "<span class='warning'>With so many cuts in it... not a good idea.</span>")
-		return INJECTION_RESULT_FAIL
-	return ..()
-
 /obj/item/weapon/reagent_containers/syringe/proc/handle_inject(var/atom/target, var/mob/user)
 	if(is_empty())
 		to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
