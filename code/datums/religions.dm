@@ -77,7 +77,7 @@
 	if (B.reagents.get_master_reagent_name() != "Holy Water")
 		to_chat(preacher, "<span class='warning'>You need to hold Holy Water to begin the conversion.</span>")
 		return FALSE
-	subject.visible_message("<span class='notice'>\The [preacher] attemps to convert \the [subject] to [name].</span>")
+	subject.visible_message("<span class='notice'>\The [preacher] attempts to convert \the [subject] to [name].</span>")
 	if(!convertCheck(subject))
 		subject.visible_message("<span class='warning'>\The [subject] refuses conversion.</span>")
 		return FALSE
@@ -828,11 +828,11 @@
 /datum/religion/cult/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
 	var/obj/effect/decal/cleanable/crayon/rune = locate(/obj/effect/decal/cleanable/crayon/, subject.loc)
 	if (!rune)
-		to_chat(preacher, "<span class='warning'>The subject needs to stand a crayon-drawn rune.</span>")
+		to_chat(preacher, "<span class='warning'>The subject needs to stand on a crayon-drawn rune.</span>")
 		return FALSE
 	var/held_paper = preacher.find_held_item_by_type(/obj/item/weapon/paper)
 	if (!held_paper)
-		to_chat(preacher, "<span class='warning'>You need to hold a paper to begin to convert.</span>")
+		to_chat(preacher, "<span class='warning'>You need to hold a sheet of paper to begin to convert.</span>")
 		return FALSE
 
 	subject.visible_message("<span class='notice'>\The [preacher] attemps to convert \the [subject] to [name].</span>")
