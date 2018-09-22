@@ -100,6 +100,7 @@
 	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance_mask, /datum/action/item_action/toggle_voicechanger)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	var/list/clothing_choices = list()
+	var/obj/item/clothing/mask_to_mimic
 //someone who isn't me should really refactor this so it isnt instantiating all the masks in the game on startup
 /obj/item/clothing/mask/gas/voice/New()
 	..()
@@ -139,6 +140,8 @@
 	desc = null
 	permeability_coefficient = 0.90
 
+	mask_to_mimic = A
+
 	desc = A.desc
 	name = A.name
 	flags = A.flags
@@ -148,6 +151,11 @@
 	can_flip = A.can_flip
 	body_parts_covered = A.body_parts_covered
 	usr.update_inv_wear_mask(1)	//so our overlays update.
+
+/obj/item/clothing/mask/gas/voice/is_hidden_identity()
+	if(!mask_to_mimic)
+		return ..()
+	return mask_to_mimic.is_hidden_identity()
 
 /obj/item/clothing/mask/gas/voice/attack_self(mob/user)
 	vchange = !vchange
