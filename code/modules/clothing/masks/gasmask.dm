@@ -124,6 +124,11 @@
 	var/choice = input(usr, "Select Form to change it to", "BOOYEA") as null|anything in clothing_choices
 	if(!choice || !usr.Adjacent(src) || usr.incapacitated())
 		return
+
+	// `clothing_choices` is an associative list of (name => type path)
+	// so `chosen_type` is the type path of the chosen mask.
+	// we abuse `initial()` to read vars from that type path,
+	// avoiding the creation of a dummy object
 	var/obj/item/clothing/mask/chosen_type = clothing_choices[choice]
 
 	// Don't change this to set `appearance`, it will mess with the plane/layer if this thing is equipped
