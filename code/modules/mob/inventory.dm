@@ -72,14 +72,20 @@
 /mob/proc/get_active_hand()
 	return get_held_item_by_index(active_hand)
 
-/mob/proc/get_held_item_ui_location(index)
+/mob/proc/get_held_item_ui_location(index,var/obj/item/W=null)
 	if(!is_valid_hand_index(index))
 		return
 
 	var/x_offset = -(index % 2) //Index is 1 -> one unit to the left
 	var/y_offset = round((index-1) / 2) //Two slots per row, then go higher. Rounded down
 
-	return "CENTER[x_offset ? x_offset : ""]:[WORLD_ICON_SIZE/2],SOUTH[y_offset ? "+[y_offset]" : ""]:[5*PIXEL_MULTIPLIER]"
+	var/x_pixel_offset = 0
+	var/y_pixel_offset = 0
+	if (W)
+		x_pixel_offset = initial(W.pixel_x)
+		y_pixel_offset = initial(W.pixel_y)
+
+	return "CENTER[x_offset ? x_offset : ""]:[WORLD_ICON_SIZE/2+x_pixel_offset],SOUTH[y_offset ? "+[y_offset]" : ""]:[5*PIXEL_MULTIPLIER+y_pixel_offset]"
 
 	/*
 	switch(index)

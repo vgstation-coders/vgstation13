@@ -74,3 +74,8 @@
 	to_chat(antag.current, "Objective #[faction.objective_holder.objectives.len]: <span class='danger'>[our_cult.current_objective.name]</span>")
 	to_chat(antag.current, "<span class='warning'>[our_cult.current_objective.explanation_text]</span><br/>")
 
+/datum/role/legacy_cultist/AdminPanelEntry()
+	var/list/dat = ..()
+	var/datum/faction/cult/narsie/C = faction
+	dat += "<a href='?src=\ref[faction];cult_mindspeak=\ref[src]'>Voice of [C.eldergod]</a><br/>"
+	return dat

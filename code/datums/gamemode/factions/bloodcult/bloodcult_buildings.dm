@@ -13,10 +13,12 @@
 
 /obj/structure/cult/proc/conceal()
 	var/obj/structure/cult/concealed/C = new(loc)
+	C.pixel_x = pixel_x
+	C.pixel_y = pixel_y
 	forceMove(C)
 	C.held = src
+	C.icon = icon
 	C.icon_state = icon_state
-	anim(location = C.loc,target = C.loc,a_icon = 'icons/obj/cult.dmi', flick_anim = "[icon_state]-conceal")
 
 /obj/structure/cult/proc/reveal()
 	conceal_cooldown = 1
@@ -34,7 +36,6 @@
 /obj/structure/cult/concealed/reveal()
 	if (held)
 		held.forceMove(loc)
-		flick("[held.icon_state]-spawn", held)
 		held.reveal()
 		held = null
 	qdel(src)
@@ -54,14 +55,6 @@
 		qdel(src)
 	else
 		update_icon()
-
-/obj/structure/cult/New()
-	..()
-	flick("[icon_state]-spawn", src)
-
-/obj/structure/cult/Destroy()
-	flick("[icon_state]-break", src)
-	..()
 
 //duh
 /obj/structure/cult/cultify()
@@ -153,17 +146,52 @@
 	sound_damaged = 'sound/effects/stone_hit.ogg'
 	sound_destroyed = 'sound/effects/stone_crumble.ogg'
 	layer = TABLE_LAYER
+	var/obj/item/weapon/melee/soulblade/blade = null
 
 
 /obj/structure/cult/altar/New()
 	..()
+	flick("[icon_state]-spawn", src)
 	var/image/I = image(icon, "altar_overlay")
 	I.plane = ABOVE_HUMAN_PLANE
 	overlays.Add(I)
 	for (var/mob/living/carbon/C in loc)
 		Crossed(C)
 
+
+/obj/structure/cult/altar/Destroy()
+	if (blade)
+		if (loc)
+			blade.forceMove(loc)
+		else
+			qdel(blade)
+	blade = null
+	flick("[icon_state]-break", src)
+	..()
+
+/obj/structure/cult/altar/attackby(var/obj/item/I, var/mob/user)
+	if(istype(I,/obj/item/weapon/melee/soulblade))
+		if (blade)
+			to_chat(user,"<span class='warning'>You must remove the blade planted on \the [src] first.</span>")
+			return 1
+		var/turf/T = get_turf(user)
+		playsound(T, 'sound/weapons/bloodyslice.ogg', 50, 1)
+		user.drop_item(I, T, 1)
+		I.forceMove(src)
+		blade = I
+		update_icon()
+		to_chat(user, "You plant \the [blade] on top of \the [src]</span>")
+		return 1
+	..()
+
 /obj/structure/cult/altar/update_icon()
+	if (blade)
+		if (blade.shade)
+			icon_state = "altar-soulblade-full"
+		else
+			icon_state = "altar-soulblade"
+	else
+		icon_state = "altar"
 	overlays.len = 0
 	var/image/I = image(icon, "altar_overlay")
 	I.plane = ABOVE_HUMAN_PLANE
@@ -231,11 +259,13 @@
 	to_chat(user, "<span class='warning'>You move \the [O] on top of \the [src]</span>")
 
 /obj/structure/cult/altar/conceal()
+	anim(location = loc,target = loc,a_icon = icon, flick_anim = "[icon_state]-conceal")
 	for (var/mob/living/carbon/C in loc)
 		Uncrossed(C)
 	..()
 
 /obj/structure/cult/altar/reveal()
+	flick("[icon_state]-spawn", src)
 	..()
 	for (var/mob/living/carbon/C in loc)
 		Crossed(C)
@@ -243,6 +273,14 @@
 /obj/structure/cult/altar/cultist_act(var/mob/user,var/menu="default")
 	.=..()
 	if (!.)
+		return
+	if (blade)
+		blade.forceMove(loc)
+		blade.attack_hand(user)
+		to_chat(user, "You remove \the [blade] from \the [src]</span>")
+		blade = null
+		playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
+		update_icon()
 		return
 	var/dat = ""
 	switch (menu)
@@ -289,3 +327,318 @@
 			to_chat(usr,"TODO: SACRIFICE")
 		if ("soulblade")
 			to_chat(usr,"TODO: IMBUE SOULBLADE")
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                       //Spawned from the Raise Structure rune. Available from Act II, upgrades at each subsequent Act
+//      CULT SPIRE       //Can be used by cultists to acquire arcane tattoos. One of each tier.
+//                       //
+///////////////////////////
+
+
+/obj/structure/cult/spire
+	name = "spire"
+	desc = "A blood-red needle surrounded by dangerous looking...teeth?."
+	icon = 'icons/obj/cult_64x64.dmi'
+	icon_state = ""
+	health = 100
+	maxHealth = 100
+	pixel_x = -16 * PIXEL_MULTIPLIER
+	pixel_y = -4 * PIXEL_MULTIPLIER
+	sound_damaged = 'sound/effects/stone_hit.ogg'
+	sound_destroyed = 'sound/effects/stone_crumble.ogg'
+	plane = EFFECTS_PLANE
+	layer = BELOW_PROJECTILE_LAYER
+	light_color = "#FF0000"
+	var/stage = 1
+
+/obj/structure/cult/spire/New()
+	..()
+	set_light(1)
+	stage = min(3,max(1,veil_thickness-1))
+	flick("spire[stage]-spawn",src)
+	spawn(10)
+		update_stage()
+
+/obj/structure/cult/spire/proc/upgrade()
+	update_stage()
+	flick("[icon_state]-morph", src)
+
+/obj/structure/cult/spire/proc/update_stage()
+	animate(src, alpha = 128, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)
+	animate(alpha = 144, color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)
+	animate(alpha = 160, color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 2)
+	animate(alpha = 176, color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1.5)
+	animate(alpha = 192, color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1.5)
+	animate(alpha = 208, color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(alpha = 224, color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(alpha = 240, color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(alpha = 255, color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5)
+	animate(alpha = 240, color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(alpha = 224, color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(alpha = 208, color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(alpha = 192, color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(alpha = 176, color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(alpha = 160, color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(alpha = 144, color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)
+	overlays.len = 0
+	var/image/I_base = image('icons/obj/cult_64x64.dmi',"spire[stage]")
+	I_base.plane = EFFECTS_PLANE
+	I_base.layer = BELOW_PROJECTILE_LAYER
+	I_base.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
+	var/image/I_spire = image('icons/obj/cult_64x64.dmi',"spire[stage]-light")
+	I_spire.plane = LIGHTING_PLANE
+	I_spire.layer = NARSIE_GLOW
+	overlays += I_base
+	overlays += I_spire
+
+
+/obj/structure/cult/spire/conceal()
+	overlays.len = 0
+	set_light(0)
+	anim(location = loc,target = loc,a_icon = 'icons/obj/cult_64x64.dmi', flick_anim = "spire[stage]-conceal", lay = BELOW_PROJECTILE_LAYER, offX = pixel_x, offY = pixel_y, plane = EFFECTS_PLANE)
+	..()
+	var/obj/structure/cult/concealed/C = loc
+	if (istype(C))
+		C.icon_state = "spire[stage]"
+
+/obj/structure/cult/spire/reveal()
+	..()
+	set_light(1)
+	flick("spire[stage]-spawn", src)
+	animate(src)
+	alpha = 255
+	color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0)
+	spawn(10)
+		update_stage()
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                       //Spawned from the Raise Structure rune. Available from Act II
+//      CULT FORGE       //Also a source of heat
+//                       //
+///////////////////////////
+
+
+/obj/structure/cult/forge
+	name = "forge"
+	desc = "A ."
+	icon = 'icons/obj/cult_64x64.dmi'
+	icon_state = ""
+	health = 100
+	maxHealth = 100
+	pixel_x = -16 * PIXEL_MULTIPLIER
+	pixel_y = -16 * PIXEL_MULTIPLIER
+	sound_damaged = 'sound/effects/stone_hit.ogg'
+	sound_destroyed = 'sound/effects/stone_crumble.ogg'
+	plane = EFFECTS_PLANE
+	layer = BELOW_PROJECTILE_LAYER
+	light_color = LIGHT_COLOR_ORANGE
+	var/heating_power = 40000
+	var/set_temperature = 50
+	var/mob/forger = null
+	var/template = null
+	var/timeleft = 0
+	var/timetotal = 0
+	var/obj/effect/cult_ritual/forge/forging = null
+
+
+/obj/structure/cult/forge/New()
+	..()
+	processing_objects.Add(src)
+	set_light(2)
+	flick("forge-spawn",src)
+	spawn(10)
+		setup_overlays()
+
+/obj/structure/cult/forge/Destroy()
+	if (forging)
+		qdel(forging)
+	forging = null
+	forger = null
+	processing_objects.Remove(src)
+	..()
+
+/obj/structure/cult/forge/proc/setup_overlays()
+	animate(src, alpha = 255, time = 10, loop = -1)
+	animate(alpha = 240, time = 2)
+	animate(alpha = 224, time = 2)
+	animate(alpha = 208, time = 1.5)
+	animate(alpha = 192, time = 1.5)
+	animate(alpha = 176, time = 1)
+	animate(alpha = 160, time = 1)
+	animate(alpha = 144, time = 1)
+	animate(alpha = 128, time = 3)
+	animate(alpha = 144, time = 1)
+	animate(alpha = 160, time = 1)
+	animate(alpha = 176, time = 1)
+	animate(alpha = 192, time = 1.5)
+	animate(alpha = 208, time = 1.5)
+	animate(alpha = 224, time = 2)
+	animate(alpha = 240, time = 2)
+	overlays.len = 0
+	var/image/I_base = image('icons/obj/cult_64x64.dmi',"forge")
+	I_base.plane = EFFECTS_PLANE
+	I_base.layer = BELOW_PROJECTILE_LAYER
+	I_base.appearance_flags |= RESET_ALPHA //we don't want the stone to pulse
+	var/image/I_lave = image('icons/obj/cult_64x64.dmi',"forge-lightmask")
+	I_lave.plane = LIGHTING_PLANE
+	I_lave.layer = NARSIE_GLOW
+	I_lave.blend_mode = BLEND_ADD
+	overlays += I_base
+	overlays += I_lave
+
+/obj/structure/cult/forge/process()
+	if (isturf(loc))
+		var/turf/simulated/L = loc
+		if(istype(L))
+			L.hotspot_expose(TEMPERATURE_FLAME, 125, surfaces = 1)//we start fires in plasma atmos
+			var/datum/gas_mixture/env = L.return_air()
+			if(env.temperature != set_temperature + T0C)
+				var/datum/gas_mixture/removed = env.remove_volume(0.5 * CELL_VOLUME)
+				if(removed)
+					var/heat_capacity = removed.heat_capacity()
+					if(heat_capacity)
+						if(removed.temperature < set_temperature + T0C)
+							removed.temperature = min(removed.temperature + heating_power/heat_capacity, 1000)
+				env.merge(removed)
+		if(!istype(loc,/turf/space))
+			for (var/mob/living/carbon/M in view(src,3))
+				M.bodytemperature += (6-round(M.get_cult_power()/30))/((get_dist(src,M)+1))//cult gear reduces the heat buildup
+		if (forging)
+			if (forger)
+				if (!Adjacent(forger))
+					forger = null
+					return
+				else
+					timeleft--
+					if (timeleft<=0)
+						playsound(loc, 'sound/effects/forge_over.ogg', 50, 0, -3)
+						qdel(forging)
+						forging = null
+						forger = null
+						var/obj/item/I = new template(loc)
+						if (istype(I))
+							I.plane = EFFECTS_PLANE
+							I.layer = PROJECTILE_LAYER
+							I.pixel_y = 12
+						template = null
+					else
+						playsound(loc, 'sound/effects/forge.ogg', 50, 0, -4)
+						forging.overlays.len = 0
+						var/image/I = image('icons/obj/cult_64x64.dmi',"[forging.icon_state]-mask")
+						I.plane = LIGHTING_PLANE
+						I.layer = NARSIE_GLOW
+						I.blend_mode = BLEND_ADD
+						I.alpha = (timeleft/timetotal)*255
+						forging.overlays += I
+
+
+
+/obj/structure/cult/forge/conceal()
+	overlays.len = 0
+	set_light(0)
+	anim(location = loc,target = loc,a_icon = 'icons/obj/cult_64x64.dmi', flick_anim = "forge-conceal", lay = BELOW_PROJECTILE_LAYER, offX = pixel_x, offY = pixel_y, plane = EFFECTS_PLANE)
+	..()
+	var/obj/structure/cult/concealed/C = loc
+	if (istype(C))
+		C.icon_state = "forge"
+
+/obj/structure/cult/forge/reveal()
+	..()
+	animate(src)
+	alpha = 255
+	set_light(2)
+	flick("forge-spawn", src)
+	spawn(10)
+		animate(src, alpha = 255, time = 10, loop = -1)
+		animate(alpha = 240, time = 2)
+		animate(alpha = 224, time = 2)
+		animate(alpha = 208, time = 1.5)
+		animate(alpha = 192, time = 1.5)
+		animate(alpha = 176, time = 1)
+		animate(alpha = 160, time = 1)
+		animate(alpha = 144, time = 1)
+		animate(alpha = 128, time = 3)
+		animate(alpha = 144, time = 1)
+		animate(alpha = 160, time = 1)
+		animate(alpha = 176, time = 1)
+		animate(alpha = 192, time = 1.5)
+		animate(alpha = 208, time = 1.5)
+		animate(alpha = 224, time = 2)
+		animate(alpha = 240, time = 2)
+		var/image/I_base = image('icons/obj/cult_64x64.dmi',"forge")
+		I_base.plane = EFFECTS_PLANE
+		I_base.layer = BELOW_PROJECTILE_LAYER
+		I_base.appearance_flags |= RESET_ALPHA //we don't want the stone to pulse
+		var/image/I_lave = image('icons/obj/cult_64x64.dmi',"forge-lightmask")
+		I_lave.plane = LIGHTING_PLANE
+		I_lave.layer = NARSIE_GLOW
+		I_lave.blend_mode = BLEND_ADD
+		overlays += I_base
+		overlays += I_lave
+
+/obj/structure/cult/forge/attackby(var/obj/item/I, var/mob/user)
+	if(istype(I,/obj/item/clothing/mask/cigarette))
+		var/obj/item/clothing/mask/cigarette/fag = I
+		fag.light("<span class='notice'>\The [user] lights \the [fag] by bringing its tip close to \the [src]'s molten flow.</span>")
+		return 1
+	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper))
+		I.ashify_item(user)
+		return 1
+	..()
+
+/obj/structure/cult/forge/cultist_act(var/mob/user,var/menu="default")
+	.=..()
+	if (!.)
+		return
+
+	if (template)
+		if (forger)
+			to_chat(user, "\The [forger] is currently working at this forge already.")
+		else
+			to_chat(user, "You resume working at the forge.")
+			forger = user
+		return
+
+	var/optionlist = list("blade","shell","helmet","armour")
+	for(var/option in optionlist)
+		optionlist[option] = image(icon = 'icons/obj/cult_radial.dmi', icon_state = "radial_[option]")
+
+	var/task = show_radial_menu(user,loc,optionlist,'icons/obj/cult_radial.dmi')//spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
+	if (template || !Adjacent(user) || !task )
+		return
+	var/forge_icon = ""
+	switch (task)
+		if ("blade")
+			template = /obj/item/weapon/melee/cultblade
+			timeleft = 20
+			forge_icon = "forge_blade"
+		if ("armour")
+			template = /obj/item/clothing/suit/space/cult
+			timeleft = 45
+		if ("helmet")
+			template = /obj/item/clothing/head/helmet/space/cult
+			timeleft = 15
+		if ("shell")
+			template = /obj/structure/constructshell/cult
+			timeleft = 50
+	timetotal = timeleft
+	forger = user
+	forging = new (loc,forge_icon)
+
+/obj/effect/cult_ritual/forge
+	icon = 'icons/obj/cult_64x64.dmi'
+	icon_state = ""
+	pixel_x = -16 * PIXEL_MULTIPLIER
+	pixel_y = -16 * PIXEL_MULTIPLIER
+	plane = EFFECTS_PLANE
+	layer = PROJECTILE_LAYER
+
+/obj/effect/cult_ritual/forge/New(var/turf/loc, var/i_forge="")
+	..()
+	icon_state = i_forge
+	var/image/I = image('icons/obj/cult_64x64.dmi',"[i_forge]-mask")
+	I.plane = LIGHTING_PLANE
+	I.layer = NARSIE_GLOW
+	I.blend_mode = BLEND_ADD
+	overlays += I

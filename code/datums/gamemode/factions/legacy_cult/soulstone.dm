@@ -13,6 +13,12 @@
 /obj/item/device/soulstone/Destroy()
 	eject_shade()
 	..()
+
+/obj/item/device/soulstone/examine(mob/user)
+	..()
+	for(var/mob/living/simple_animal/shade/A in src)
+		if(!A.client)
+			to_chat(user, "<span class='warning'>The spirit within seems to be dormant.</span>")
 //////////////////////////////Capturing////////////////////////////////////////////////////////
 
 /obj/item/device/soulstone/attack(var/mob/living/M, mob/user as mob)
@@ -112,7 +118,7 @@
 		L.canmove = 1
 		L.cancel_camera()
 
-/obj/item/proc/capture_soul(var/target, var/mob/user as mob)
+/obj/item/proc/capture_soul(var/target, var/mob/user as mob, var/silent=0)
 	if(istype(target, /mob/living/carbon))//humans, monkeys, aliens
 		var/mob/living/carbon/carbonMob = target
 		//first of all, let's check that our target has a soul, somewhere
@@ -129,7 +135,8 @@
 				//our target either is a monkey or alien, or is a human with their head. Did they have a soul in the first place? if so, where is it right now
 				if(!carbonMob.mind)
 					//if a mob doesn't have a mind, that means it never had a player controlling him
-					to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like this target doesn't have much of a soul.</span>")
+					if (!silent)
+						to_chat(user, "<span class='warning'>\The [src] isn't reacting, looks like this target doesn't have much of a soul.</span>")
 					return
 				else
 					//otherwise, that means the player either disconnected or ghosted. we can track their key from their mind,
@@ -139,28 +146,33 @@
 						if(M.key == carbonMob.mind.key)
 							new_target = M
 					if(!new_target)
-						to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like this target's soul went far, far away.</span>")
+						if (!silent)
+							to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like this target's soul went far, far away.</span>")
 						return
 					else if(!istype(new_target,/mob/dead/observer))
-						to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like this target's soul already reincarnated.</span>")
+						if (!silent)
+							to_chat(user, "<span class='warning'>\The [src] isn't reacting, looks like this target's soul already reincarnated.</span>")
 						return
 					else
 						//if the player ghosted, you don't need to put his body into crit to successfully soulstone them.
-						to_chat(new_target, "<span class='danger'>You feel your soul getting sucked into the soul stone.</span>")
-						to_chat(user, "<span class='rose'>The soul stone reacts to the corpse and starts glowing.</span>")
+						to_chat(new_target, "<span class='danger'>You feel your soul getting sucked into \the [src].</span>")
+						to_chat(user, "<span class='rose'>\The [src] reacts to the corpse and starts glowing.</span>")
 						capture_soul_process(user,new_target.client,carbonMob)
 			else if(humanTarget)
 				//aw shit, our target is a brain/headless human, let's try and locate the head.
 				if(!humanTarget.decapitated || (humanTarget.decapitated.loc == null))
-					to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like their brain has been removed or head has been destroyed.</span>")
+					if (!silent)
+						to_chat(user, "<span class='warning'>\The [src] isn't reacting, looks like their brain has been removed or head has been destroyed.</span>")
 					return
 				else if(istype(humanTarget.decapitated.loc,/mob/living/carbon/human))
-					to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like their head has been grafted on another body.</span>")
+					if (!silent)
+						to_chat(user, "<span class='warning'>\The [src] isn't reacting, looks like their head has been grafted on another body.</span>")
 					return
 				else
 					var/obj/item/organ/external/head/humanHead = humanTarget.decapitated
 					if((humanHead.z != humanTarget.z) || (get_dist(humanTarget,humanHead) > 5))//F I V E   T I L E S
-						to_chat(user, "<span class='warning'>The soul stone isn't reacting, the head needs to be closer from the body.</span>")
+						if (!silent)
+							to_chat(user, "<span class='warning'>\The [src] isn't reacting, the head needs to be closer from the body.</span>")
 						return
 					else
 						capture_soul_head(humanHead, user)
@@ -169,15 +181,18 @@
 		else
 			//if the body still has a client, then all we have to make sure of is that he's dead or in crit
 			if (carbonMob.stat == CONSCIOUS)
-				to_chat(user, "<span class='warning'>Kill or maim the victim first!</span>")
+				if (!silent)
+					to_chat(user, "<span class='warning'>Kill or maim the victim first!</span>")
 			else if(!carbonMob.isInCrit() && carbonMob.stat != DEAD)
-				to_chat(user, "<span class='warning'>The victim is holding on, weaken them further!</span>")
+				if (!silent)
+					to_chat(user, "<span class='warning'>The victim is holding on, weaken them further!</span>")
 			else
-				to_chat(carbonMob, "<span class='danger'>You feel your soul getting sucked into the soul stone.</span>")
-				to_chat(user, "<span class='rose'>The soul stone reacts to the corpse and starts glowing.</span>")
+				to_chat(carbonMob, "<span class='danger'>You feel your soul getting sucked into \the [src].</span>")
+				to_chat(user, "<span class='rose'>\The [src] reacts to the corpse and starts glowing.</span>")
 				capture_soul_process(user,carbonMob.client,carbonMob)
 	else
-		to_chat(user, "<span class='warning'>The soul stone doesn't seem compatible with that creature's soul.</span>")
+		if (!silent)
+			to_chat(user, "<span class='warning'>\The [src] doesn't seem compatible with that creature's soul.</span>")
 		//TODO: add a few snowflake checks to specific simple_animals that could be soulstoned.
 
 /obj/item/proc/capture_soul_head(var/target, var/mob/user as mob)//called either when using a soulstone on a head, or on a decapitated body
@@ -282,10 +297,15 @@
 	shadeMob.cancel_camera()
 
 	//Changing the soulstone's icon and description
-	icon_state = "soulstone2"
-	item_state = "shard-soulstone2"
+	if (istype(src, /obj/item/device/soulstone))
+		icon_state = "soulstone2"
+		item_state = "shard-soulstone2"
+		name = "Soul Stone: [true_name]"
+	else
+		shadeMob.give_blade_powers()
+		dir = NORTH
+		update_icon()
 	user.update_inv_hands()
-	name = "Soul Stone: [true_name]"
 	to_chat(shadeMob, "Your soul has been captured! You are now bound to [user.name]'s will, help them suceed in their goals at all costs.")
 	to_chat(user, "<span class='notice'>[true_name]'s soul has been ripped from their body and stored within the soul stone.</span>")
 
@@ -306,20 +326,22 @@
 		qdel(add_target)
 
 
-/obj/item/proc/transfer_soul(var/choice as text, var/target, var/mob/living/carbon/U)
+/obj/item/proc/transfer_soul(var/choice as text, var/target, var/mob/living/carbon/U,var/silent=0)
 	var/deleteafter = 0
 	switch(choice)
 		if("VICTIM")
 			if(src.contents.len)
-				to_chat(U, "<span class='warning'>The soul stone is full! Use or free an existing soul to make room.</span>")
+				if (!silent)
+					to_chat(U, "<span class='warning'>\The [src] is full! Use or free an existing soul to make room.</span>")
 				return
 
 			var/mob/living/T = target
 			for(var/datum/faction/cult/narsie/C in ticker.mode.factions)
 				if(C.is_sacrifice_target(T.mind))
-					to_chat(U, "<span class='warning'>The soul stone is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
+					if (!silent)
+						to_chat(U, "<span class='warning'>\The [src] is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
 					return
-			capture_soul(T,U)
+			capture_soul(T,U,silent)
 
 		if("SHADE")
 			var/mob/living/simple_animal/shade/T = target

@@ -264,6 +264,9 @@
 					was_pulling.pulledby = MOB
 				if ((A && A.loc))
 					A.loc.Entered(A)
+				if (istype(A,/obj/item/projectile))
+					var/obj/item/projectile/P = A
+					P.reset()//fixing linear projectile movement
 
 /turf/proc/is_plating()
 	return 0

@@ -103,7 +103,7 @@ var/global/num_vending_terminals = 1
 */
 
 /obj/machinery/vending/cultify()
-	new /obj/structure/cult/forge(loc)
+	new /obj/structure/cult_legacy/forge(loc)
 	..()
 
 /obj/machinery/vending/New()

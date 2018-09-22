@@ -269,36 +269,59 @@
 
 /datum/role/proc/Declare()
 	var/win = 1
+	var/text = ""
+	var/mob/M = antag.current
+	if (!M)
+		var/icon/sprotch = icon('icons/effects/blood.dmi', "sprotch")
+		text += "<img src='data:image/png;base64,[icon2base64(sprotch)]' style='position:relative; top:10px;'/>"
+	else
+		var/icon/flat = getFlatIcon(M, SOUTH, 0, 1)
+		if(M.stat == DEAD)
+			if (!istype(M, /mob/living/carbon/brain))
+				flat.Turn(90)
+			var/icon/ded = icon('icons/effects/blood.dmi', "floor1-old")
+			ded.Blend(flat,ICON_OVERLAY)
+			end_icons += ded
+		else
+			end_icons += flat
+		var/tempstate = end_icons.len
+		text += "<img src='logo_[tempstate].png' style='position:relative; top:10px;'/>"
 
-	var/text = "<br><br>[antag.key] was [antag.name] ("
-	if(antag.current)
-		if(antag.current.stat == DEAD)
+	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	text += "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative;top:10px;'/><b>[antag.key]</b> was <b>[antag.name]</b> ("
+	if(M)
+		if(M.stat == DEAD)
 			text += "died"
 		else
 			text += "survived"
 		if(antag.current.real_name != antag.name)
-			text += " as [antag.current.real_name]"
+			text += " as <b>[antag.current.real_name]</b>"
 	else
 		text += "body destroyed"
 		win = 0
 	text += ")"
 
-	if(objectives.GetObjectives())
+	if(objectives.objectives.len > 0)
 		var/count = 1
+		text += "<ul>"
 		for(var/datum/objective/objective in objectives.GetObjectives())
 			var/successful = objective.IsFulfilled()
-			text += "<br><B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"]"
+			text += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"]"
 			feedback_add_details("[id]_objective","[objective.type]|[successful ? "SUCCESS" : "FAIL"]")
 			if(!successful) //If one objective fails, then you did not win.
 				win = 0
+			if (count < objectives.objectives.len)
+				text += "<br>"
 			count++
-
-	if(win)
-		text += "<br/><font color='green'><B>\The [name] was successful!</B></font>"
-		feedback_add_details("[id]_success","SUCCESS")
-	else
-		text += "<br/><font color='red'><B>\The [name] has failed.</B></font>"
-		feedback_add_details("[id]_success","FAIL")
+		if (!faction)
+			if(win)
+				text += "<br><font color='green'><B>The [name] was successful!</B></font>"
+				feedback_add_details("[id]_success","SUCCESS")
+			else
+				text += "<br><font color='red'><B>The [name] has failed.</B></font>"
+				feedback_add_details("[id]_success","FAIL")
+	if(objectives.objectives.len > 0)
+		text += "</ul>"
 
 	return text
 
@@ -662,3 +685,14 @@ The process takes one minute per APC and can only be performed one at a time to 
 Remember : Only APCs on station can help you to take over the station.<br>
 When you feel you have enough APCs under your control, you may begin the takeover attempt.<br>
 Once done, you will be able to interface with all systems, notably the onboard nuclear fission device..."})
+
+
+/datum/role/greytide
+	name = IMPLANTSLAVE
+	id = IMPLANTSLAVE
+	logo_state = "greytide-logo"
+
+/datum/role/greytide_leader
+	name = IMPLANTLEADER
+	id = IMPLANTLEADER
+	logo_state = "greytide_leader-logo"

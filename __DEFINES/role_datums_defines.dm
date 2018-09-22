@@ -22,7 +22,7 @@
 #define VAMPIRELORDS "vampire lords"
 #define CULT "generic cult"
 #define LEGACY_CULT "Ancient Cult of Nar-Sie"
-
+#define GREYTIDE_FAC "Greytide mindlink"
 // Role IDs
 #define TRAITOR "traitor"
 #define ROGUE "rogue agent"//double agents
@@ -49,6 +49,7 @@
 #define SURVIVOR "Survivor"
 #define CRUSADER "Crusader"
 #define MAGICIAN "Magician"
+#define IMPLANTLEADER "Grey Leader"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"

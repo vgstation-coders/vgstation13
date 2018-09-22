@@ -126,17 +126,46 @@ var/list/factions_with_hud_icons = list()
 	return objective_holder.GetObjectiveString(check_success = TRUE)
 
 /datum/faction/proc/GetScoreboard()
+	var/win = 1
+	var/count = 1
 	var/score_results = ""
+	if(objective_holder.objectives.len > 0)
+		score_results += "<ul>"
+		for (var/datum/objective/objective in objective_holder.GetObjectives())
+			var/successful = objective.IsFulfilled()
+			score_results += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"]"
+			feedback_add_details("[ID]_objective","[objective.type]|[successful ? "SUCCESS" : "FAIL"]")
+			if(!successful) //If one objective fails, then you did not win.
+				win = 0
+			count++
+			if (count < objective_holder.objectives.len)
+				score_results += "<br>"
+	if (count>1)
+		if (win)
+			score_results += "<br><font color='green'><B>\The [name] was successful!</B></font>"
+			feedback_add_details("[ID]_success","SUCCESS")
+		else
+			score_results += "<br><font color='red'><B>\The [name] has failed.</B></font>"
+			feedback_add_details("[ID]_success","FAIL")
+
+	if(objective_holder.objectives.len > 0)
+		score_results += "</ul>"
+
+	score_results += "<FONT size = 2><B>members:</B></FONT><br>"
+	var/i = 1
 	for(var/datum/role/R in members)
 		var/results = R.GetScoreboard()
 		if(results)
 			score_results += results
-
+		if(R.objectives.objectives.len <= 0)
+			if (i < members.len)
+				score_results += "<br>"
+		i++
 	return score_results
 
 /datum/faction/proc/GetObjectivesMenuHeader() //Returns what will show when the factions objective completion is summarized
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo)]' style='position:relative; top:10px;'><br>"}
 	return header
 
 /datum/faction/proc/AdminPanelEntry(var/datum/admins/A)
@@ -301,7 +330,7 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/changeling/GetObjectivesMenuHeader()
 	var/icon/logo_left = icon('icons/logos.dmi', "change-logoa")
 	var/icon/logo_right = icon('icons/logos.dmi', "change-logob")
-	var/header = {"<img src='data:image/png;base64,[icon2base64(logo_left)]' style='position: relative; top: 10;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo_right)]' style='position: relative; top: 10;'>"}
+	var/header = {"<img src='data:image/png;base64,[icon2base64(logo_left)]' style='position:relative; top:10px;'> <FONT size = 2><B>[name]</B></FONT> <img src='data:image/png;base64,[icon2base64(logo_right)]' style='position:relative; top:10px;'><br>"}
 	return header
 
 //________________________________________________

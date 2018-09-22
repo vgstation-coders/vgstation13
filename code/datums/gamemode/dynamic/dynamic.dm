@@ -25,6 +25,23 @@ var/list/forced_roundstart_ruleset = list()
 
 	var/datum/dynamic_ruleset/latejoin/forced_latejoin_rule = null
 
+/datum/gamemode/dynamic/GetScoreboard()
+	dat += "<h2>Dynamic Mode v1.0 - Threat Level = <font color='red'>[threat_level]%</font></h2>"
+	if (executed_rules.len > 0)
+		for (var/datum/dynamic_ruleset/DR in executed_rules)
+			var/ruletype = ""
+			if (istype (DR, /datum/dynamic_ruleset/roundstart))
+				ruletype = "roundstart"
+			if (istype (DR, /datum/dynamic_ruleset/latejoin))
+				ruletype = "latejoin"
+			if (istype (DR, /datum/dynamic_ruleset/midround))
+				ruletype = "midround"
+			dat += "([ruletype]) - <b>[DR.name]</b><br>"
+	else
+		dat += "(extended)"
+	dat += "<HR>"
+	..()
+
 /datum/gamemode/dynamic/can_start()
 	threat_level = rand(1,100)*0.6 + rand(1,100)*0.4//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
 	threat = threat_level
@@ -117,7 +134,7 @@ var/list/forced_roundstart_ruleset = list()
 						drafted_rules -= rule//and removing rules that are no longer elligible
 			return 1
 		else
-			message_admins("....except not because whoever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
+			message_admins("....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
 	return 0
 
 /datum/gamemode/dynamic/proc/picking_latejoin_rule(var/list/drafted_rules = list())
@@ -177,6 +194,7 @@ var/list/forced_roundstart_ruleset = list()
 	return 0
 
 /datum/gamemode/dynamic/process()
+	. = ..() // Making the factions & roles process.
 	if (latejoin_injection_cooldown)
 		latejoin_injection_cooldown--
 
