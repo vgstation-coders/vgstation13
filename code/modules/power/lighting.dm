@@ -702,27 +702,22 @@ var/global/list/obj/machinery/light/alllights = list()
 			brightness_range = rand(4,6)
 	update()
 
-
-// attack bulb/tube with object
-// if a syringe, can inject plasma to make it explode
-/obj/item/weapon/light/attackby(var/obj/item/I, var/mob/user)
-	..()
-	if(istype(I, /obj/item/weapon/reagent_containers/syringe))
-		var/obj/item/weapon/reagent_containers/syringe/S = I
-
-		to_chat(user, "You inject the solution into the [src].")
-
-		if(S.reagents.has_reagent(PLASMA, 5))
-
-			log_admin("LOG: [user.name] ([user.ckey]) injected a light with plasma, rigging it to explode.")
-			message_admins("LOG: [user.name] ([user.ckey]) injected a light with plasma, rigging it to explode.")
-
-			rigged = 1
-
-		S.reagents.clear_reagents()
-	else
-		..()
-	return
+// A syringe can inject plasma to make the light explode when it turns on.
+/obj/item/weapon/light/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	var/datum/reagents/syringe_reagents = tool.reagents
+	if(rigged)
+		to_chat(user, "<span class='warning'>\The [src] is already full!</span>")
+		return INJECTION_RESULT_FAIL
+	if(!(syringe_reagents.reagent_list.len == 1 && syringe_reagents.has_reagent(PLASMA, 5)))
+		to_chat(user, "<span class='warning'>Injecting this solution wouldn't have any effect on \the [src].</span>")
+		return INJECTION_RESULT_FAIL
+	if(syringe_reagents.remove_reagent(PLASMA, 5))
+		stack_trace("Couldn't remove plasma from the syringe?")
+		return INJECTION_RESULT_FAIL
+	log_admin("LOG: [user.name] ([user.ckey]) injected a light with plasma, rigging it to explode.")
+	message_admins("LOG: [user.name] ([user.ckey]) injected a light with plasma, rigging it to explode.")
+	rigged = 1
+	return INJECTION_RESULT_SUCCESS_BUT_SKIP_REAGENT_TRANSFER
 
 // called after an attack with a light item
 // shatter light, unless it was an attempt to put it in a light socket

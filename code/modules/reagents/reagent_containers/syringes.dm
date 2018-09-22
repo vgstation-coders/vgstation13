@@ -31,7 +31,8 @@
 	                            /obj/item/weapon/reagent_containers/pill/time_release,
 	                            /obj/item/clothing/mask/facehugger/lamarr,
 	                            /obj/item/asteroid/hivelord_core,
-										 /obj/item/weapon/reagent_containers/blood)
+								/obj/item/weapon/reagent_containers/blood,
+								/obj/item/weapon/light)
 
 /obj/item/weapon/reagent_containers/syringe/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] appears to be injecting an air bubble using a [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -72,7 +73,7 @@
 	if(proximity_flag == 0) // not adjacent
 		return
 
-	if(!target.reagents)
+	if(!target.reagents && !is_type_in_list(target, injectable_types))
 		return
 
 	if(mode == SYRINGE_BROKEN)
