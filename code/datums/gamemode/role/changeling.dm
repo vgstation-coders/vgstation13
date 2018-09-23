@@ -388,7 +388,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 					if(!ownsthis)
 					{
-						body += "<a href='?src=\ref[src];P="+power+";mind=\ref[R.antag];'>Evolve</a>"
+						body += "<a href='?src=\ref[src];P="+power+"'>Evolve</a>"
 					}
 
 
@@ -585,19 +585,11 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 /datum/power_holder/Topic(href, href_list)
 	if(href_list["P"])
-		var/datum/mind/M = locate(href_list["mind"])
-		if(!M.GetRole(CHANGELING))
-			return
-		if(!istype(M))
-			return
-		purchasePower(M, href_list["P"])
+		purchasePower(href_list["P"])
 		EvolutionMenu()
 
-/datum/power_holder/proc/purchasePower(var/datum/mind/M, var/Pname, var/remake_verbs = 1)
-	if(!M || !M.GetRole(CHANGELING))
-		to_chat(M.current, "Either you have no mind, or you're not a changeling!")
-		return
-
+/datum/power_holder/proc/purchasePower(var/Pname, var/remake_verbs = 1)
+	var/datum/mind/M = R.antag
 	var/datum/power/changeling/Thepower = Pname
 	var/datum/role/changeling/C = M.GetRole(CHANGELING)
 
