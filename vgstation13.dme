@@ -2401,6 +2401,7 @@
 #include "code\ZAS\NewSettings.dm"
 #include "code\ZAS\Plasma.dm"
 #include "code\ZAS\Turf.dm"
+#include "code\ZAS\XGM.dm"
 #include "code\ZAS\Zone.dm"
 #include "goon\code\datums\browserOutput.dm"
 #include "goon\code\obj\machinery\bot\chefbot.dm"
