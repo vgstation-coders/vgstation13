@@ -153,7 +153,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 /datum/power/changeling/horror_form
 	name = "Horror Form"
-	desc = "This costly evolution allows us to transform into an all-consuming abomination. We are extremely strong, to the point that we can force airlocks open, and immune to stuns."
+	desc = "This costly evolution allows us to transform into an all-consuming abomination. We are incredibly strong, to the point that we can force open airlocks, and are immune to conventional stuns."
 	genomecost = 15
 	verbpath = /obj/item/verbs/changeling/proc/changeling_horror_form
 
