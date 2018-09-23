@@ -33,9 +33,10 @@
 
 	var/mob/living/carbon/human/H = src
 	dna.flavor_text = H.flavor_text
-	C.absorbed_dna |= dna
-	if(istype(H))
-		C.absorbed_species |= H.species.name
+	if(!(M_HUSK in H.mutations))
+		C.absorbed_dna |= dna
+		if(istype(H))
+			C.absorbed_species |= H.species.name
 	for(var/language in languages)
 		C.absorbed_languages |= language
 	updateChangelingHUD()
@@ -360,7 +361,7 @@
 						continue
 					changeling.absorbed_dna += dna_data
 					changeling.absorbedcount++
-				Tchangeling.absorbed_dna.len = 1
+					Tchangeling.absorbed_dna.Remove(dna_data)
 
 			if(Tchangeling.purchasedpowers)
 				for(var/datum/power/changeling/Tp in Tchangeling.purchasedpowers)
@@ -461,6 +462,10 @@
 
 	if(!istype(C) || !C.species.primitive)
 		to_chat(src, "<span class='warning'>We cannot perform this ability in this form!</span>")
+		return
+
+	if(M_HUSK in C.mutations)
+		to_chat(C, "<span class = 'warning'>This hosts genetic code is too scrambled. We can not change form until we have removed this burden.</span>")
 		return
 
 	changeling.chem_charges--
@@ -590,7 +595,6 @@
 	var/datum/role/changeling/changeling = changeling_power(20,1,100,DEAD)
 	if(!changeling)
 		return
-
 	var/mob/living/carbon/C = src
 	if(changeling_power(20,1,100,DEAD))
 		changeling.chem_charges -= 20
@@ -604,6 +608,10 @@
 		C.status_flags &= ~(FAKEDEATH)
 		C.update_canmove()
 		C.make_changeling()
+		if(M_HUSK in mutations) //Yes you can regenerate from being husked if you played dead beforehand, but unless you find a new body, you can not regenerate again.
+			to_chat(C, "<span class='notice'>This host body has become corrupted, either through a mishap, or betrayal by a member of the hivemind. We must find a new form, lest we lose ourselves to the void and become dust.</span>")
+			if(dna in changeling.absorbed_dna)
+				changeling.absorbed_dna.Remove(dna)
 	regenerate_icons()
 	remove_changeling_verb(/obj/item/verbs/changeling/proc/changeling_returntolife)
 	feedback_add_details("changeling_powers","RJ")
@@ -633,6 +641,10 @@
 	var/mob/living/carbon/C = src
 	if(C.suiciding)
 		to_chat(C, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?")
+		return
+
+	if(M_HUSK in C.mutations)
+		to_chat(C, "<span class='warning'>We can not regenerate from this. There is not enough left to regenerate.</span>")
 		return
 
 	if(!C.stat && alert("Are we sure we wish to fake our death?",,"Yes","No") == "No")//Confirmation for living changelings if they want to fake their death
@@ -755,9 +767,11 @@
 	C.digitalcamo = !C.digitalcamo
 
 	spawn(0)
-		while(C && C.digitalcamo && C.mind && changeling)
-			changeling.chem_charges = max(changeling.chem_charges - 1, 0)
+		while(C && C.digitalcamo && C.mind && changeling && changeling.chem_charges > 5)
+			changeling.chem_charges = max(changeling.chem_charges - 5, 0)
 			sleep(40)
+		C.digitalcamo = !C.digitalcamo
+		to_chat(C, "<span class='notice'>We return to normal.</span>")
 
 	remove_changeling_verb(/obj/item/verbs/changeling/proc/changeling_digitalcamo)
 	spawn(5)
@@ -919,10 +933,11 @@ var/list/datum/dna/hivemind_bank = list()
 	feedback_add_details("changeling_powers","MV")
 
 	spawn(0)
-		while(src && src.mind && changeling && changeling.mimicing)
-			changeling.chem_charges = max(changeling.chem_charges - 1, 0)
+		while(src && src.mind && changeling && changeling.mimicing && changeling.chem_charges > 4)
+			changeling.chem_charges = max(changeling.chem_charges - 4, 0)
 			sleep(40)
 		if(src && src.mind && changeling)
+			to_chat(src, "<span class='notice'>Our vocal glands return to their original position.</span>")
 			changeling.mimicing = ""
 	//////////
 	//STINGS//	//They get a pretty header because there's just so fucking many of them ;_;
