@@ -147,6 +147,7 @@
 	if(faction && (src in faction.members))
 		faction.update_hud_removed(src)
 		faction.members.Remove(src)
+		update_faction_icons()
 
 	if(!faction)
 		ticker.mode.orphaned_roles.Remove(src)
