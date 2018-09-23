@@ -46,6 +46,9 @@
 #define BLOBOVERMIND "blob overmind"
 #define HIGHLANDER "highlander"
 #define IMPLANTSLAVE "Greytider"
+#define SURVIVOR "Survivor"
+#define CRUSADER "Crusader"
+#define MAGICIAN "Magician"
 #define IMPLANTLEADER "Grey Leader"
 
 #define GREET_DEFAULT		"default"
