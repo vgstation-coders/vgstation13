@@ -20,6 +20,7 @@
 #include "__DEFINES\atoms.dm"
 #include "__DEFINES\bots.dm"
 #include "__DEFINES\cameranet.dm"
+#include "__DEFINES\clothing.dm"
 #include "__DEFINES\component_desires.dm"
 #include "__DEFINES\component_signals.dm"
 #include "__DEFINES\dates.dm"
