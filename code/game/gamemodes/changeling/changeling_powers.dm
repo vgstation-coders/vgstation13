@@ -141,7 +141,7 @@
 /obj/item/verbs/changeling/proc/changeling_horror_form()
 	set category = "Changeling"
 	set name = "Horror Form (30)"
-	set desc = "This costly evolution allows us to transform into an all-consuming abomination. We are extremely strong, to the point that we can force airlocks open and devour humans whole, and are immune to stuns."
+	set desc = "This costly evolution allows us to transform into an all-consuming abomination. We are extremely strong, to the point that we can force airlocks open, and are immune to stuns."
 
 	var/mob/M = loc
 	if(!istype(M))
