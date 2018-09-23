@@ -100,12 +100,13 @@ var/list/factions_with_hud_icons = list()
 	update_faction_icons()
 
 /datum/faction/proc/HandleRemovedRole(var/datum/role/R)
+	update_hud_removed(R)
 	R.faction.members.Remove(R)
 	R.faction = null
 	ticker.mode.orphaned_roles.Add(R)
 	if(leader == R)
 		leader = null
-	update_hud_removed(R)
+	update_faction_icons()
 
 /datum/faction/proc/AppendObjective(var/objective_type,var/duplicates=0)
 	if(!duplicates && locate(objective_type) in objective_holder.GetObjectives())
@@ -242,12 +243,6 @@ var/list/factions_with_hud_icons = list()
 #undef HUDICON_BLINKDURATION
 
 /datum/faction/proc/update_hud_removed(var/datum/role/Removed_R)
-	for(var/datum/role/R in members)
-		if(R.antag && R.antag.current && R.antag.current.client)
-			for(var/image/I in R.antag.current.client.images)
-				if(I.icon_state in hud_icons && ((I.loc == Removed_R.antag.current) || (I.loc == Removed_R.antag.current.loc)))
-					R.antag.current.client.images -= I
-
 	if(Removed_R.antag && Removed_R.antag.current && Removed_R.antag.current.client)
 		for(var/image/I in Removed_R.antag.current.client.images)
 			if(I.icon_state in hud_icons)
