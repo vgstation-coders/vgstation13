@@ -256,10 +256,10 @@
 				icon_state = "[basestate]-nocover"
 		else if(update_state & UPSTATE_BROKE)
 			icon_state = "apc-b"
-		else if(update_state & UPSTATE_WIREEXP)
-			icon_state = "apcewires"
 		else if(update_state & UPSTATE_BLUESCREEN)
 			icon_state = "apcemag"
+		else if(update_state & UPSTATE_WIREEXP)
+			icon_state = "apcewires"
 
 
 
