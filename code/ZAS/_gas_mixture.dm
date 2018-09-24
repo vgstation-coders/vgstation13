@@ -119,7 +119,7 @@
 	temperature = (temperature * self_heat_capacity + giver.temperature * giver_heat_capacity) / (self_heat_capacity + giver_heat_capacity)
 
 	for(var/g in giver.gas)
-		adjust_gas(g, giver[g], FALSE)
+		adjust_gas(g, giver.gas[g], FALSE)
 
 	if(update)
 		update_values()
@@ -149,7 +149,7 @@
 
 
 /datum/gas_mixture/proc/molar_density(g) //Per liter. You should probably be using pressure instead, but considering this had to be made, you wouldn't be the first not to.
-	return (g ? src[g] : total_moles) / volume //Should verify g is actually a valid gas, but this shouldn't be in use for long anyway.
+	return (g ? src[g] : total_moles) / volume
 
 ///////////////////////////////
 //PV=nRT - related procedures//
@@ -159,7 +159,7 @@
 	var/heat_capacity = 0
 
 	for(var/g in gas)
-		heat_capacity += XGM.specific_heat[g] * src[g]
+		heat_capacity += XGM.specific_heat[g] * gas[g]
 
 	return max(MINIMUM_HEAT_CAPACITY, heat_capacity)
 
@@ -197,7 +197,7 @@
 //
 //	. = 0
 //	for(var/g in gas)
-//		. += src[g] * specific_entropy_gas(g)
+//		. += gas[g] * specific_entropy_gas(g)
 //	. /= total_moles
 //
 //
@@ -210,7 +210,7 @@
 //	which is bit more realistic (natural log), and returns a fairly accurate entropy around room temperatures and pressures.
 //*/
 ///datum/gas_mixture/proc/specific_entropy_gas(var/gasid)
-//	if (!(gasid in gas) || src[gasid] == 0)
+//	if (src[gasid] == 0)
 //		return SPECIFIC_ENTROPY_VACUUM	//that gas isn't here
 //
 //	//V/(m*T) = R/(partial pressure)
@@ -223,12 +223,16 @@
 //	//return R_IDEAL_GAS_EQUATION * ( log (1 + IDEAL_GAS_ENTROPY_CONSTANT/partial_pressure) + 20 )
 
 
-//Updates the calculated vars (total_moles, pressure, etc.) (Actually currently only those two)
+//Updates the calculated vars (total_moles, pressure, etc.) (actually currently only those two), and culls empty gases from the mix.
 //Called by default by all methods that alter a gas_mixture, and should be called if you manually alter it.
 /datum/gas_mixture/proc/update_values()
 	total_moles = 0
 	for(var/g in gas)
-		total_moles += src[g]
+		var/moles = gas[g]
+		if(moles)
+			total_moles += gas[g]
+		else
+			gas -= g
 
 	if(volume > 0)
 		pressure = total_moles * R_IDEAL_GAS_EQUATION * temperature / volume
@@ -263,8 +267,8 @@
 	var/datum/gas_mixture/removed = new()
 
 	for(var/g in gas)
-		var/moles = src[g] * ratio
-		src[g] -= moles
+		var/moles = gas[g] * ratio
+		gas[g] -= moles
 		removed[g] += moles
 
 	removed.temperature = temperature
@@ -337,7 +341,7 @@
 /datum/gas_mixture/proc/copy_from(datum/gas_mixture/sample)
 	gas.len = 0
 	for(var/g in sample.gas)
-		src[g] = sample[g]
+		src[g] = sample.gas[g]
 
 	temperature = sample.temperature
 
@@ -378,7 +382,7 @@
 		return FALSE
 
 	for(var/g in right_side.gas)
-		src[g] += right_side[g]
+		src[g] += right_side.gas[g]
 
 	update_values()
 	return TRUE
@@ -389,7 +393,7 @@
 		return FALSE
 
 	for(var/g in right_side.gas)
-		src[g] -= right_side[g]
+		src[g] -= right_side.gas[g]
 
 	update_values()
 	return TRUE
@@ -397,7 +401,7 @@
 
 /datum/gas_mixture/proc/multiply(factor)
 	for(var/g in gas)
-		src[g] *= factor
+		gas[g] *= factor
 
 	update_values()
 	return TRUE
@@ -405,7 +409,7 @@
 
 /datum/gas_mixture/proc/divide(factor)
 	for(var/g in gas)
-		src[g] /= factor
+		gas[g] /= factor
 
 	update_values()
 	return TRUE
@@ -504,7 +508,7 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 	var/datum/gas_mixture/removed = new()
 
 	for(var/g in gas)
-		removed[g] += src[g] * ratio
+		removed[g] += gas[g] * ratio
 
 	removed.temperature = temperature
 
