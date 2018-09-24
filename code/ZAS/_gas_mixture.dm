@@ -32,7 +32,7 @@
 
 /datum/gas_mixture
 	//Associative list of gas moles.
-	//Gases with 0 moles are not tracked and are pruned by update_values() //TODO: Make sure this isn't true
+	//Gases with 0 moles are not tracked and are pruned by update_values()
 	var/list/gas = list()
 
 	var/total_moles = 0	//Updated when a reaction occurs.
@@ -45,8 +45,6 @@
 
 	var/pressure = 0
 
-	var/list/datum/gas/trace_gases = list() //Seemed to be a good idea that was abandoned
-
 	var/tmp/fuel_burnt = 0
 
 /datum/gas_mixture/New(datum/gas_mixture/to_copy)
@@ -56,12 +54,21 @@
 		copy_from(to_copy)
 
 
+//Since gases not present in the mix are culled from the list, we use this to make sure a number is returned for any valid gas.
+/datum/gas_mixture/proc/operator[](idx)
+	return gas[idx] || !isnull(XGM.gases[idx])
+
+//This just allows the [] operator to be used for writes as well as reads. The above proc means this WILL work with +=, etc., for any valid gas.
+/datum/gas_mixture/proc/operator[]=(idx, val)
+	gas[idx] = val
+
+
 //Takes a gas string, and the number of moles to adjust by. Calls update_values() if update isn't 0.
 /datum/gas_mixture/proc/adjust_gas(gasid, moles, update = TRUE)
 	if(!moles)
 		return
 
-	gas[gasid] += moles
+	src[gasid] += moles
 
 	if(update)
 		update_values()
@@ -112,7 +119,7 @@
 	temperature = (temperature * self_heat_capacity + giver.temperature * giver_heat_capacity) / (self_heat_capacity + giver_heat_capacity)
 
 	for(var/g in giver.gas)
-		adjust_gas(g, giver.gas[g], FALSE)
+		adjust_gas(g, giver[g], FALSE)
 
 	if(update)
 		update_values()
@@ -142,7 +149,7 @@
 
 
 /datum/gas_mixture/proc/molar_density(g) //Per liter. You should probably be using pressure instead, but considering this had to be made, you wouldn't be the first not to.
-	return (g ? gas[g] : total_moles) / volume //Should verify g is actually a valid gas, but this shouldn't be in use for long anyway.
+	return (g ? src[g] : total_moles) / volume //Should verify g is actually a valid gas, but this shouldn't be in use for long anyway.
 
 ///////////////////////////////
 //PV=nRT - related procedures//
@@ -152,7 +159,7 @@
 	var/heat_capacity = 0
 
 	for(var/g in gas)
-		heat_capacity += XGM.specific_heat[g] * gas[g]
+		heat_capacity += XGM.specific_heat[g] * src[g]
 
 	return max(MINIMUM_HEAT_CAPACITY, heat_capacity)
 
@@ -190,7 +197,7 @@
 //
 //	. = 0
 //	for(var/g in gas)
-//		. += gas[g] * specific_entropy_gas(g)
+//		. += src[g] * specific_entropy_gas(g)
 //	. /= total_moles
 //
 //
@@ -203,16 +210,16 @@
 //	which is bit more realistic (natural log), and returns a fairly accurate entropy around room temperatures and pressures.
 //*/
 ///datum/gas_mixture/proc/specific_entropy_gas(var/gasid)
-//	if (!(gasid in gas) || gas[gasid] == 0)
+//	if (!(gasid in gas) || src[gasid] == 0)
 //		return SPECIFIC_ENTROPY_VACUUM	//that gas isn't here
 //
 //	//V/(m*T) = R/(partial pressure)
 //	var/molar_mass = XGM.molar_mass[gasid]
 //	var/specific_heat = XGM.specific_heat[gasid]
-//	return R_IDEAL_GAS_EQUATION * ( log( (IDEAL_GAS_ENTROPY_CONSTANT*volume/(gas[gasid] * temperature)) * (molar_mass*specific_heat*temperature)**(2/3) + 1 ) +  15 )
+//	return R_IDEAL_GAS_EQUATION * ( log( (IDEAL_GAS_ENTROPY_CONSTANT*volume/(src[gasid] * temperature)) * (molar_mass*specific_heat*temperature)**(2/3) + 1 ) +  15 )
 //
 //	//alternative, simpler equation
-//	//var/partial_pressure = gas[gasid] * R_IDEAL_GAS_EQUATION * temperature / volume
+//	//var/partial_pressure = src[gasid] * R_IDEAL_GAS_EQUATION * temperature / volume
 //	//return R_IDEAL_GAS_EQUATION * ( log (1 + IDEAL_GAS_ENTROPY_CONSTANT/partial_pressure) + 20 )
 
 
@@ -221,7 +228,7 @@
 /datum/gas_mixture/proc/update_values()
 	total_moles = 0
 	for(var/g in gas)
-		total_moles += gas[g]
+		total_moles += src[g]
 
 	if(volume > 0)
 		pressure = total_moles * R_IDEAL_GAS_EQUATION * temperature / volume
@@ -256,9 +263,9 @@
 	var/datum/gas_mixture/removed = new()
 
 	for(var/g in gas)
-		var/moles = gas[g] * ratio
-		gas[g] -= moles
-		removed.gas[g] += moles
+		var/moles = src[g] * ratio
+		src[g] -= moles
+		removed[g] += moles
 
 	removed.temperature = temperature
 
@@ -330,7 +337,7 @@
 /datum/gas_mixture/proc/copy_from(datum/gas_mixture/sample)
 	gas.len = 0
 	for(var/g in sample.gas)
-		gas[g] = sample.gas[g]
+		src[g] = sample[g]
 
 	temperature = sample.temperature
 
@@ -371,7 +378,7 @@
 		return FALSE
 
 	for(var/g in right_side.gas)
-		gas[g] += right_side.gas[g]
+		src[g] += right_side[g]
 
 	update_values()
 	return TRUE
@@ -382,7 +389,7 @@
 		return FALSE
 
 	for(var/g in right_side.gas)
-		gas[g] -= right_side.gas[g]
+		src[g] -= right_side[g]
 
 	update_values()
 	return TRUE
@@ -390,7 +397,7 @@
 
 /datum/gas_mixture/proc/multiply(factor)
 	for(var/g in gas)
-		gas[g] *= factor
+		src[g] *= factor
 
 	update_values()
 	return TRUE
@@ -398,7 +405,7 @@
 
 /datum/gas_mixture/proc/divide(factor)
 	for(var/g in gas)
-		gas[g] /= factor
+		src[g] /= factor
 
 	update_values()
 	return TRUE
@@ -497,7 +504,7 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 	var/datum/gas_mixture/removed = new()
 
 	for(var/g in gas)
-		removed[g] += gas[g] * ratio
+		removed[g] += src[g] * ratio
 
 	removed.temperature = temperature
 
