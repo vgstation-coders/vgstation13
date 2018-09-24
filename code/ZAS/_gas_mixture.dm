@@ -151,6 +151,10 @@
 /datum/gas_mixture/proc/molar_density(g) //Per liter. You should probably be using pressure instead, but considering this had to be made, you wouldn't be the first not to.
 	return (g ? src[g] : total_moles) / volume
 
+
+/datum/gas_mixture/proc/partial_pressure(g)
+	return src[g] / total_moles * pressure
+
 ///////////////////////////////
 //PV=nRT - related procedures//
 ///////////////////////////////
