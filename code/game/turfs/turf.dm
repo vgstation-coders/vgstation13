@@ -773,3 +773,6 @@
 
 /turf/attack_hand(mob/user as mob)
 	user.Move_Pulled(src)
+
+/turf/proc/remove_rot()
+	return

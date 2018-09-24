@@ -2170,10 +2170,7 @@
 	if(istype(T, /turf/simulated/wall))
 		var/turf/simulated/wall/W = T
 		if(W.rotting)
-			W.rotting = 0
-			for(var/obj/effect/E in W)
-				if(E.name == "Wallrot")
-					qdel(E)
+			W.remove_rot()
 			W.visible_message("<span class='notice'>The fungi are burned away by the solution!</span>")
 
 /datum/reagent/toxin/plantbgone/reaction_obj(var/obj/O, var/volume)
