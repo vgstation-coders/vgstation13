@@ -103,7 +103,7 @@
 
 //Merges all the gas from another mixture into this one. Adjusts temperature correctly.
 //Does not modify giver in any way.
-/datum/gas_mixture/proc/merge(datum/gas_mixture/giver)
+/datum/gas_mixture/proc/merge(datum/gas_mixture/giver, update = TRUE)
 	if(!giver)
 		return 0
 
@@ -114,7 +114,8 @@
 	for(var/g in giver.gas)
 		adjust_gas(g, giver.gas[g], FALSE)
 
-	update_values()
+	if(update)
+		update_values()
 
 	return 1
 
