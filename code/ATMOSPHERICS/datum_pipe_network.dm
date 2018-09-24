@@ -98,9 +98,9 @@
 /datum/pipe_network/proc/reconcile_air()
 	//Perfectly equalize all gases members instantly
 
-	air_transient.volume = 0
-
 	air_transient.multiply(0)
+
+	air_transient.volume = 0
 
 	for(var/datum/gas_mixture/gas in gases)
 		air_transient.volume += gas.volume
@@ -121,14 +121,15 @@
 	//Perfectly equalize all gases members instantly
 
 	var/datum/gas_mixture/main = gases[gases.len--]
+	var/total_volume = main.volume
 
 	for(var/datum/gas_mixture/gas in gases)
 		main.merge(gas) //Combine all gas_mixtures into one
-		gas.multiply(0)
+		total_volume += gas.volume
+
+	main.multiply(main.volume / total_volume) //
 
 	for(var/datum/gas_mixture/gas in gases)
-		gas.merge(main.remove_volume(gas.volume, FALSE, FALSE)) //Then distribute the gas back out.
-
-	main.update_values()
+		gas.copy_from(main)
 
 	return 1
