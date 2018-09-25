@@ -1189,7 +1189,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 		H.adjustToxLoss(15*multiplier)
 
 /datum/disease2/effect/organs/vampire
-	stage = 3 //For use with vampires?
+	stage = 1 //For use with vampires?
 
 /datum/disease2/effect/organs/deactivate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))

@@ -23,7 +23,7 @@
 
 /mob/living/carbon/human/treat_speech(var/datum/speech/speech, var/genesay=0)
 	if(wear_mask && istype(wear_mask))
-		if(!(copytext(speech.message, 1, 2) == "*" || (mind && mind.changeling && department_radio_keys[copytext(speech.message, 1, 3)] != "changeling")))
+		if(!(copytext(speech.message, 1, 2) == "*"/* || (mind && mind.changeling && department_radio_keys[copytext(speech.message, 1, 3)] != "changeling")*/))
 			wear_mask.treat_mask_speech(speech)
 
 	if ((M_HULK in mutations) && health >= 25 && length(speech.message))
@@ -46,6 +46,10 @@
 					temp_message[H] = "HONK"
 					pick_list -= H //Make sure that you dont HONK the same word twice
 				speech.message = jointext(temp_message, " ")
+	if(isanycultist(src))
+		var/obj/effect/cult_ritual/cult_communication/comms = locate() in loc
+		if (comms && comms.caster == src)
+			speech.language = all_languages[LANGUAGE_CULT]
 	if(virus2.len)
 		for(var/ID in virus2)
 			var/datum/disease2/disease/V = virus2[ID]
@@ -68,8 +72,9 @@
 				return "Unknown"
 		else
 			return real_name
-	if(mind && mind.changeling && mind.changeling.mimicing)
-		return mind.changeling.mimicing
+	var/datum/role/changeling/changeling = mind.GetRole(CHANGELING)
+	if(changeling && changeling.mimicing)
+		return changeling.mimicing
 	if(GetSpecialVoice())
 		return GetSpecialVoice()
 	return real_name

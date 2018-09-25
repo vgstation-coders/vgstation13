@@ -83,6 +83,7 @@
 	var/eye_blind = null	//Carbon
 	var/eye_blurry = null	//Carbon
 	var/ear_deaf = null		//Carbon
+	var/say_mute = null
 	var/ear_damage = null	//Carbon
 	var/stuttering = null	//Carbon
 	var/slurring = null		//Carbon
@@ -160,7 +161,7 @@
 	var/obj/item/weapon/back = null
 	var/obj/item/clothing/mask/wear_mask = null
 
-	var/seer = 0 //for cult//Carbon, probably Human
+	var/seer = 0 // Legacy Cult
 
 	var/datum/hud/hud_used = null
 	var/datum/ui_icons/gui_icons = null

@@ -541,6 +541,14 @@ var/list/impact_master = list()
 /obj/item/projectile/bullet_act(/obj/item/projectile/bullet)
 	return -1
 
+/obj/item/projectile/proc/reset()
+	starting = get_turf(src)
+	override_starting_X = starting.x
+	override_starting_Y = starting.y
+	override_target_X = override_starting_X+dist_x
+	override_target_Y = override_starting_Y+dist_y
+	target = locate(override_target_X,override_target_Y,z)
+
 /obj/item/projectile/proc/rebound(var/atom/A)//Projectiles bouncing off walls and obstacles
 	var/turf/T = get_turf(src)
 	var/turf/W = get_turf(A)
@@ -579,6 +587,9 @@ var/list/impact_master = list()
 	override_target_X = W.x + newdiffX
 	override_target_Y = W.y + newdiffY
 
+	if(!rotate)
+		return
+
 	var/disty
 	var/distx
 	var/newangle
@@ -595,9 +606,6 @@ var/list/impact_master = list()
 			newangle += 180
 		else if(distx < 0)
 			newangle += 360
-
-	if(!rotate)
-		return
 
 	target_angle = round(newangle)
 

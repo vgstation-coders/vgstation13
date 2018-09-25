@@ -51,7 +51,7 @@
 		/obj/effect/gateway=1,
 		/obj/item/mounted/frame/painting/narsie=1,
 		/obj/effect/gibspawner=1,
-		/obj/structure/cult/talisman=1,
+		/obj/structure/cult_legacy/talisman=1,
 		/obj/item/toy/crayon/red=2,
 		/obj/effect/decal/cleanable/blood=4,
 		/obj/structure/table/woodentable=2,

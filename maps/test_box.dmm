@@ -2880,7 +2880,7 @@
 "bdv" = (/obj/machinery/light/small{dir = 4},/turf/simulated/floor/wood,/area/library)
 "bdw" = (/obj/structure/closet{desc = "Everything a reporter needs to look the part."; icon_closed = "blue"; icon_state = "blue"; name = "Reporter's Threads"},/obj/item/clothing/suit/storage/lawyer/bluejacket,/obj/item/clothing/under/suit_jacket/really_black,/obj/item/clothing/under/suit_jacket/female,/obj/item/clothing/shoes/brown,/obj/item/clothing/shoes/brown,/obj/item/clothing/accessory/tie/blue,/obj/item/clothing/accessory/tie/red,/obj/item/clothing/head/det_hat{name = "Reporter's Cap"},/obj/item/clothing/head/flatcap,/turf/simulated/floor{icon_state = "cult"},/area/library)
 "bdx" = (/obj/effect/landmark{name = "blobstart"},/obj/structure/bed/chair/comfy/brown{dir = 1},/turf/simulated/floor{icon_state = "cult"},/area/library)
-"bdy" = (/obj/structure/cult/tome,/obj/item/clothing/under/suit_jacket/red,/turf/simulated/floor{icon_state = "cult"},/area/library)
+"bdy" = (/obj/structure/cult_legacy/tome,/obj/item/clothing/under/suit_jacket/red,/turf/simulated/floor{icon_state = "cult"},/area/library)
 "bdz" = (/obj/machinery/alarm{dir = 4; pixel_x = -22},/turf/simulated/floor{icon_state = "dark"},/area/chapel/main)
 "bdA" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor{dir = 8; icon_state = "chapel"},/area/chapel/main)
 "bdB" = (/turf/simulated/floor{icon_state = "chapel"},/area/chapel/main)
