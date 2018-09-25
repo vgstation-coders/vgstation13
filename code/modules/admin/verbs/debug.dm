@@ -160,11 +160,11 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 	var/t = ""
 
-	t += {"Nitrogen : [env.nitrogen]
-Oxygen : [env.oxygen]
-Plasma : [env.toxins]
-CO2: [env.carbon_dioxide]
-Pressure: [env.return_pressure()]"}
+	t += {"Nitrogen : [env[GAS_NITROGEN]]
+Oxygen : [env[GAS_OXYGEN]]
+Plasma : [env[GAS_PLASMA]]
+CO2: [env[GAS_CARBON]]
+Pressure: [env.pressure]"}
 	usr.show_message(t, 1)
 	feedback_add_details("admin_verb","ASL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
