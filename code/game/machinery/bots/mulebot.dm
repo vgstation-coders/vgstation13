@@ -454,7 +454,7 @@ var/global/mulebot_count = 0
 		return
 	if(!isturf(C.loc)) //To prevent the loading from stuff from someone's inventory, which wouldn't get handled properly.
 		return
-	if(C.locked_to)
+	if(C.locked_to || C.is_locking())
 		return
 	if(get_dist(C, src) > 1 || is_locking(MULEBOT_LOCK_CAT) || !on)
 		return
