@@ -79,8 +79,9 @@
 /obj/machinery/atmospherics/unary/tank/air/New()
 	..()
 
-	air_contents.adjust_gas(GAS_OXYGEN, (25*ONE_ATMOSPHERE*O2STANDARD)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
-	air_contents.adjust_gas(GAS_NITROGEN, (25*ONE_ATMOSPHERE*N2STANDARD)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
+	air_contents.adjust_multi(
+		GAS_OXYGEN, (25*ONE_ATMOSPHERE*O2STANDARD)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature),
+		GAS_NITROGEN, (25*ONE_ATMOSPHERE*N2STANDARD)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
 /obj/machinery/atmospherics/unary/tank/update_icon()
 	..()

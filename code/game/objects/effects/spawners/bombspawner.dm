@@ -137,8 +137,9 @@
 	OT.master = V
 
 	PT.air_contents.temperature = PLASMA_FLASHPOINT
-	PT.air_contents.adjust_gas(GAS_PLASMA, 15, FALSE)
-	PT.air_contents.adjust_gas(GAS_CARBON, 33)
+	PT.air_contents.adjust_multi(
+		GAS_PLASMA, 15,
+		GAS_CARBON, 33)
 
 	OT.air_contents.temperature = PLASMA_FLASHPOINT
 	OT.air_contents.adjust_gas(GAS_OXYGEN, 48)

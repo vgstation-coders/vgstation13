@@ -170,5 +170,6 @@
 	on = 0
 
 /obj/machinery/atmospherics/miner/air/AddAir()
-	air_contents.adjust_gas(GAS_OXYGEN, O2STANDARD * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature), FALSE)
-	air_contents.adjust_gas(GAS_NITROGEN, N2STANDARD * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	air_contents.adjust_multi(
+		GAS_OXYGEN, O2STANDARD * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature),
+		GAS_NITROGEN, N2STANDARD * internal_pressure * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))

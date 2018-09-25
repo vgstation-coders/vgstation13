@@ -43,8 +43,9 @@
 
 /obj/item/weapon/tank/anesthetic/New()
 	. = ..()
-	air_contents.adjust_gas(GAS_SLEEPING, (3 * ONE_ATMOSPHERE) * 70 / (R_IDEAL_GAS_EQUATION * T20C) * N2STANDARD, FALSE)
-	air_contents.adjust_gas(GAS_OXYGEN, (3 * ONE_ATMOSPHERE) * 70 / (R_IDEAL_GAS_EQUATION * T20C) * O2STANDARD)
+	air_contents.adjust_multi(
+		GAS_SLEEPING, (3 * ONE_ATMOSPHERE) * 70 / (R_IDEAL_GAS_EQUATION * T20C) * N2STANDARD,
+		GAS_OXYGEN, (3 * ONE_ATMOSPHERE) * 70 / (R_IDEAL_GAS_EQUATION * T20C) * O2STANDARD)
 
 /*
  * Air
@@ -56,8 +57,9 @@
 
 /obj/item/weapon/tank/air/New()
 	. = ..()
-	air_contents.adjust_gas(GAS_OXYGEN, (6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C) * O2STANDARD, FALSE)
-	air_contents.adjust_gas(GAS_NITROGEN, (6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C) * N2STANDARD)
+	air_contents.adjust_multi(
+		GAS_OXYGEN, (6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C) * O2STANDARD,
+		GAS_NITROGEN, (6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C) * N2STANDARD)
 
 /*
  * Plasma
