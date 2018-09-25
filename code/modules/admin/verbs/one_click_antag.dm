@@ -16,12 +16,10 @@ client/proc/one_click_antag()
 		<a href='?src=\ref[src];makeAntag=3'>Make Revs</a><br>
 		<a href='?src=\ref[src];makeAntag=4'>Make Cult</a><br>
 		<a href='?src=\ref[src];makeAntag=5'>Make Malf AI</a><br>
-		<a href='?src=\ref[src];makeAntag=8'>Make Vampires</a><br>
 		<a href='?src=\ref[src];makeAntag=6'>Make Wizard (Requires Ghosts)</a><br>
-		<a href='?src=\ref[src];makeAntag=11'>Make Vox Raiders (Requires Ghosts)</a><br>
 		<a href='?src=\ref[src];makeAntag=7'>Make Nuke Team (Requires Ghosts)</a><br>
+		<a href='?src=\ref[src];makeAntag=8'>Make Vampires</a><br>
 		<a href='?src=\ref[src];makeAntag=9'>Make Aliens (Requires Ghosts)</a><br>
-		<a href='?src=\ref[src];makeAntag=10'>Make Deathsquad (Syndicate) (Requires Ghosts)</a><br>
 		"}
 
 	usr << browse(dat, "window=oneclickantag;size=400x400")
@@ -145,76 +143,6 @@ client/proc/one_click_antag()
 			candidates.Remove(M)
 	return candidates
 
-/datum/admins/proc/makeNukeTeam()
-
-
-	var/list/mob/dead/observer/candidates = list()
-	var/mob/dead/observer/theghost = null
-	var/list/mob/dead/observer/picked = list()
-
-	for(var/mob/dead/observer/G in get_active_candidates(ROLE_OPERATIVE,poll="Do you wish to be considered for a nuke team being sent in?"))
-		if(!jobban_isbanned(G, "operative") && !jobban_isbanned(G, "Syndicate"))
-			candidates += G
-
-	if(candidates.len)
-		var/numagents = 5
-		var/agentcount = 0
-
-		for(var/i = 0, i<numagents,i++)
-			shuffle(candidates) //More shuffles means more randoms
-			for(var/mob/j in candidates)
-				if(!j || !j.client)
-					candidates.Remove(j)
-					continue
-
-				theghost = j
-				candidates.Remove(theghost)
-/* Seeing if we have enough agents before we make the nuke team
-				var/mob/living/carbon/human/new_character=makeBody(theghost)
-				new_character.mind.make_Nuke()
-*/
-				picked += theghost
-				agentcount++
-				break
-//This is so we don't get a nuke team with only 1 or 2 people
-		if(agentcount < 3)
-			return 0
-		else
-			for(var/mob/j in picked)
-				theghost = j
-				var/mob/living/carbon/human/new_character=makeBody(theghost)
-				new_character.mind.make_Nuke()
-
-		var/obj/effect/landmark/nuke_spawn = locate("landmark*Nuclear-Bomb")
-		var/obj/effect/landmark/closet_spawn = locate("landmark*Syndicate-Uplink")
-
-		var/nuke_code = "[rand(10000, 99999)]"
-
-		if(nuke_spawn)
-			var/obj/item/weapon/paper/P = new
-			P.info = "Sadly, the Syndicate could not get you a nuclear bomb.  We have, however, acquired the arming code for the station's onboard nuke.  The nuclear authorization code is: <b>[nuke_code]</b>"
-			P.name = "nuclear bomb code and instructions"
-			P.forceMove(nuke_spawn.loc)
-
-		if(closet_spawn)
-			new /obj/structure/closet/syndicate/nuclear(closet_spawn.loc)
-
-		for (var/obj/effect/landmark/A in /area/syndicate_station/start)//Because that's the only place it can BE -Sieve
-			if (A.name == "Syndicate-Gear-Closet")
-				new /obj/structure/closet/syndicate/personal(A.loc)
-				del(A)
-				continue
-
-			if (A.name == "Syndicate-Bomb")
-				new /obj/effect/spawner/newbomb/timer/syndicate(A.loc)
-				del(A)
-				continue
-
-		for (var/obj/machinery/nuclearbomb/bomb in machines)
-			bomb.r_code = nuke_code						// All the nukes are set to this code.
-	return 1
-
-
 
 /datum/admins/proc/makeAliens()
 	return alien_infestation(3)
@@ -326,9 +254,8 @@ client/proc/one_click_antag()
 /datum/admins/proc/makeVoxRaiders()
 
 
+
 /datum/admins/proc/create_vox_raider(obj/spawn_location, leader_chosen = 0)
-
-
 	var/mob/living/carbon/human/new_vox = new(spawn_location.loc)
 
 	new_vox.setGender(pick(MALE, FEMALE))
