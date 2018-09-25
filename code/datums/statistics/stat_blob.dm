@@ -18,8 +18,10 @@
 
 /datum/stat_blob/cult/doPostRoundChecks()
 	for(var/datum/mind/M in ticker.minds)
-		if(M.active && istype(M.current, /mob/living/carbon) && M.special_role == "Cultist")
-			surviving_cultists++
+		if(M.active && istype(M.current, /mob/living/carbon))
+			var/mob/living/carbon/C = M.current
+			if(islegacycultist(C))
+				surviving_cultists++
 
 /datum/stat_blob/cult/writeStats(file)
 	file << "CULTSTATS|[runes_written]|[runes_fumbled]|[runes_nulled]|[converted]|[tomes_created]|[narsie_summoned]|[narsie_corpses_fed]|[surviving_cultists]|[deconverted]"

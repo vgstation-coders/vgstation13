@@ -55,8 +55,6 @@
 	if(M.mind)
 		if(M.mind.assigned_role && M.mind.assigned_role != "")
 			d.assigned_role = M.mind.assigned_role
-		// if(M.mind.special_role && M.mind.special_role != "")
-		// 	d.special_role = M.mind.special_role
 		if(M.mind.key)
 			d.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name)
@@ -90,8 +88,6 @@
 			s.assigned_role = M.mind.assigned_role
 			if(M.mind.assigned_role in command_positions)
 				heads_at_roundend++
-		if(M.mind.special_role && M.mind.special_role != "")
-			s.special_role = M.mind.special_role
 		if(M.mind.key)
 			s.key = ckey(M.mind.key) // To prevent newlines in keys
 		if(M.mind.name)
@@ -126,22 +122,21 @@
 		UP.purchaser_is_traitor = was_traitor
 		uplink_purchases.Add(UP)
 
-/datum/stat_collector/proc/add_objectives(var/datum/mind/M)
-	// if(M.objectives.len)
-	// 	for(var/datum/objective/O in M.objectives)
-	// 		var/datum/stat/antag_objective/AO = new
-	// 		AO.key = ckey(M.key)
-	// 		AO.realname = STRIP_NEWLINE(M.name)
-	// 		AO.special_role = M.special_role
-	// 		AO.objective_type = O.type
-	// 		AO.objective_desc = O.explanation_text
-	// 		AO.objective_succeeded = O.check_completion()
-	// 		if(O.target)
-	// 			AO.target_name = STRIP_NEWLINE(O.target.name)
-	// 			AO.target_role = O.target.assigned_role
-    //
-	// 		antag_objectives.Add(AO)
-
+/datum/stat_collector/proc/add_objective(var/datum/objective/O)
+	var/datum/stat/antag_objective/AO = new
+	AO.objective_type = O.type
+	AO.objective_desc = O.explanation_text
+	AO.objective_succeeded = O.IsFulfilled()
+	if(istype(O,/datum/objective/target))
+		var/datum/objective/target/T = O
+		if(istype(T, /datum/objective/target/steal))
+			var/datum/objective/target/steal/S = T
+			AO.target_name = S.steal_target.name
+			AO.target_role = "object"
+		else
+			AO.target_name = STRIP_NEWLINE(T.target.name)
+			AO.target_role = T.target.assigned_role
+	return AO
 
 /datum/stat/population_stat/New(pop as num)
 	if(ticker.current_state != GAME_STATE_PLAYING) return
@@ -164,11 +159,38 @@
 	// 		mixed_gamemodes.Add(GM.name)
 
 	for(var/datum/mind/M in ticker.minds)
-		add_objectives(M)
 		if(istype(M.current, /mob/living) && !M.current.isDead())
 			add_survivor_stat(M.current)
-			if(M.special_role == "Cultist")
-				cult_surviving_cultists++
+
+	for(var/datum/faction/F in ticker.mode.factions)
+		factions.Add(add_faction(F))
+
+	for(var/datum/role/R in ticker.mode.orphaned_roles)
+		orphaned_roles.Add(add_role(R))
+
+/datum/stat_collector/proc/add_faction(var/datum/faction/F)
+	var/datum/stat/faction/FF = new
+	FF.name = F.name
+	for(var/datum/role/R in F.members)
+		if(!R.antag.current.isDead())
+			FF.survivors++
+		FF.members.Add(add_role(R))
+
+	for(var/datum/objective/O in F.objective_holder.GetObjectives())
+		FF.objectives.Add(add_objective(O))
+
+	return FF
+
+
+/datum/stat_collector/proc/add_role(var/datum/role/R)
+	var/datum/stat/role/RR = new
+	RR.name = R.name
+	RR.owner = R.antag.name
+	if(R.objectives.GetObjectives())
+		for(var/datum/objective/O in R.objectives.GetObjectives())
+			RR.objectives.Add(add_objective(O))
+
+	return RR
 
 /proc/stats_server_alert_new_file()
 	world.Export("http://stats.ss13.moe/alert_new_file")
