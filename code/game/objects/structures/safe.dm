@@ -29,6 +29,9 @@ FLOOR SAFES
 	tumbler_2_pos = rand(0, 71)
 	tumbler_2_open = rand(0, 71)
 
+	spawn(10 SECONDS) //Debug diary doesn't exist yet during mapgen
+		log_debug("[get_area(src).name] safe has starting tumbler positions [tumbler_1_pos]-[tumbler_2_pos] and opening positions [tumbler_1_open]-[tumbler_2_open].")
+
 
 /obj/structure/safe/initialize()
 	for(var/obj/item/I in loc)
