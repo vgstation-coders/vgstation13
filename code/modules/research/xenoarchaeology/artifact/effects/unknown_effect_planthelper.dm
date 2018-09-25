@@ -1,6 +1,6 @@
 /datum/artifact_effect/planthelper
 	effecttype = "planthelper"
-	effect = list(EFFECT_AURA, EFFECT_PULSE)
+	effect = list(ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_type = 5
 
 /datum/artifact_effect/planthelper/DoEffectAura()

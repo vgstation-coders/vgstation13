@@ -418,9 +418,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 //#define SHOCKWAVE		21 	// (Not implemented) attack a nearby tile and cause a massive shockwave, knocking most people on their asses (25%)
 //#define ELECTRICITY	22 	// (Not implemented) ability to shoot electric attacks (15%)
 
-	//2spooky
-#define SKELETON 29
-#define PLANT 30
+//2spooky
+#define M_SKELETON 29
 
 // Other Mutations:
 #define M_NO_BREATH		100 	// no need to breathe
@@ -1266,7 +1265,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
-	#warning SOME ASSHOLE FORGOT TO COMMENT SAY_DEBUG BEFORE COMMITTING
+	#warn SOME ASSHOLE FORGOT TO COMMENT SAY_DEBUG BEFORE COMMITTING
 	#define say_testing(a,x) to_chat(a, ("([__FILE__]:[__LINE__] say_testing) [x]"))
 #else
 	#define say_testing(a,x)
@@ -1276,7 +1275,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 //#define JUSTFUCKMYSHITUP 1
 #ifdef JUSTFUCKMYSHITUP
 #define writepanic(a) if(ticker && ticker.current_state >= 3 && world.cpu > 100) write_panic(a)
-#warning IMA FUCK YOUR SHIT UP
+#warn IMA FUCK YOUR SHIT UP
 var/proccalls = 1
 //keep a list of last 10 proccalls maybe?
 /proc/write_panic(a)
@@ -1488,8 +1487,6 @@ var/proccalls = 1
 
 #define BLOB_CORE_PROPORTION 20
 
-#define DEFAULT FONT SIZE 4
-
 //Holomap filters
 #define HOLOMAP_FILTER_DEATHSQUAD				1
 #define HOLOMAP_FILTER_ERT						2
@@ -1574,3 +1571,8 @@ var/proccalls = 1
 #define COMPUTER "computer"
 #define EMBEDDED_CONTROLLER "embedded controller"
 #define OTHER "other"
+
+//used in /datum/preferences/var/alternate_option
+#define GET_RANDOM_JOB 0
+#define BE_ASSISTANT 1
+#define RETURN_TO_LOBBY 2

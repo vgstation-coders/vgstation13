@@ -1,8 +1,8 @@
-#define RICOCHET "ricochet"
-#define RAPID "rapid"
-#define FLARE "flare"
-#define STUN "stun"
-#define LASER "laser"
+#define LAWGIVER_RICOCHET "ricochet"
+#define LAWGIVER_RAPID "rapid"
+#define LAWGIVER_FLARE "flare"
+#define LAWGIVER_STUN "stun"
+#define LAWGIVER_LASER "laser"
 
 /obj/item/weapon/gun/lawgiver
 	desc = "The Lawgiver II. A twenty-five round sidearm with mission-variable voice-programmed ammunition."
@@ -17,7 +17,7 @@
 	recoil = 0
 	flags = HEAR | FPRINT
 	var/obj/item/ammo_storage/magazine/stored_magazine = null
-	var/firing_mode = STUN
+	var/firing_mode = LAWGIVER_STUN
 	fire_delay = 0
 	var/projectile_type = "/obj/item/projectile/energy/electrode"
 	fire_sound = 'sound/weapons/Taser.ogg'
@@ -62,15 +62,15 @@
 		var/obj/item/ammo_storage/magazine/lawgiver/L = magazine
 		var/image/magazine_overlay = image('icons/obj/gun.dmi', src, "[initial(icon_state)]Mag")
 		var/image/ammo_overlay = null
-		if(firing_mode == STUN && L.stuncharge)
+		if(firing_mode == LAWGIVER_STUN && L.stuncharge)
 			ammo_overlay = image('icons/obj/gun.dmi', src, "[initial(icon_state)][L.stuncharge/20]")
-		if(firing_mode == LASER && L.lasercharge)
+		if(firing_mode == LAWGIVER_LASER && L.lasercharge)
 			ammo_overlay = image('icons/obj/gun.dmi', src, "[initial(icon_state)][L.lasercharge/20]")
-		if(firing_mode == RAPID && L.rapid_ammo_count)
+		if(firing_mode == LAWGIVER_RAPID && L.rapid_ammo_count)
 			ammo_overlay = image('icons/obj/gun.dmi', src, "[initial(icon_state)][L.rapid_ammo_count]")
-		if(firing_mode == FLARE && L.flare_ammo_count)
+		if(firing_mode == LAWGIVER_FLARE && L.flare_ammo_count)
 			ammo_overlay = image('icons/obj/gun.dmi', src, "[initial(icon_state)][L.flare_ammo_count]")
-		if(firing_mode == RICOCHET && L.ricochet_ammo_count)
+		if(firing_mode == LAWGIVER_RICOCHET && L.ricochet_ammo_count)
 			ammo_overlay = image('icons/obj/gun.dmi', src, "[initial(icon_state)][L.ricochet_ammo_count]")
 		overlays += magazine_overlay
 		overlays += ammo_overlay
@@ -173,21 +173,21 @@
 		if(dna_profile == H.dna.unique_enzymes)
 			recoil = 0
 			if((findtext(speech.message, "stun")) || (findtext(speech.message, "taser")))
-				firing_mode = STUN
+				firing_mode = LAWGIVER_STUN
 				fire_sound = 'sound/weapons/Taser.ogg'
 				projectile_type = "/obj/item/projectile/energy/electrode"
 				fire_delay = 0
 				sleep(3)
 				say("STUN.")
 			else if((findtext(speech.message, "laser")) || (findtext(speech.message, "lethal")) || (findtext(speech.message, "beam")))
-				firing_mode = LASER
+				firing_mode = LAWGIVER_LASER
 				fire_sound = 'sound/weapons/Laser.ogg'
 				projectile_type = "/obj/item/projectile/beam"
 				fire_delay = 5
 				sleep(3)
 				say("LASER.")
 			else if((findtext(speech.message, "rapid")) || (findtext(speech.message, "automatic")))
-				firing_mode = RAPID
+				firing_mode = LAWGIVER_RAPID
 				fire_sound = 'sound/weapons/Gunshot_c20.ogg'
 				projectile_type = "/obj/item/projectile/bullet/midbullet/lawgiver"
 				fire_delay = 0
@@ -195,7 +195,7 @@
 				sleep(3)
 				say("RAPID FIRE.")
 			else if((findtext(speech.message, "flare")) || (findtext(speech.message, "incendiary")))
-				firing_mode = FLARE
+				firing_mode = LAWGIVER_FLARE
 				fire_sound = 'sound/weapons/shotgun.ogg'
 				projectile_type = "/obj/item/projectile/flare"
 				fire_delay = 5
@@ -203,7 +203,7 @@
 				sleep(3)
 				say("FLARE.")
 			else if((findtext(speech.message, "ricochet")) || (findtext(speech.message, "bounce")))
-				firing_mode = RICOCHET
+				firing_mode = LAWGIVER_RICOCHET
 				fire_sound = 'sound/weapons/gatling_fire.ogg'
 				projectile_type = "/obj/item/projectile/bullet/midbullet/bouncebullet/lawgiver"
 				fire_delay = 5
@@ -233,15 +233,15 @@
 /obj/item/weapon/gun/lawgiver/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0) //Overriding this due to introducing the DNA check, and the fact that the round is to be chambered only just before it is fired
 	..()
 
-	if(firing_mode == RAPID)
+	if(firing_mode == LAWGIVER_RAPID)
 		var/obj/item/ammo_casing/a12mm/A = new /obj/item/ammo_casing/a12mm(user.loc)
 		A.BB = null
 		A.update_icon()
-	if(firing_mode == RICOCHET)
+	if(firing_mode == LAWGIVER_RICOCHET)
 		var/obj/item/ammo_casing/a12mm/bounce/A = new /obj/item/ammo_casing/a12mm/bounce(user.loc)
 		A.BB = null
 		A.update_icon()
-	if(istype(src, /obj/item/weapon/gun/lawgiver/demolition) && firing_mode == FLARE)
+	if(istype(src, /obj/item/weapon/gun/lawgiver/demolition) && firing_mode == LAWGIVER_FLARE)
 		var/obj/item/ammo_casing/a75/A = new /obj/item/ammo_casing/a75(user.loc)
 		A.BB = null
 		A.update_icon()
@@ -320,7 +320,7 @@
 	else
 		var/obj/item/ammo_storage/magazine/lawgiver/L = magazine
 		switch(firing_mode)
-			if(STUN)
+			if(LAWGIVER_STUN)
 				if(L.stuncharge >= 20)
 					if(in_chamber)
 						return 1
@@ -331,7 +331,7 @@
 					return 1
 				else
 					return 0
-			if(LASER)
+			if(LAWGIVER_LASER)
 				if(L.lasercharge >= 20)
 					if(in_chamber)
 						return 1
@@ -342,7 +342,7 @@
 					return 1
 				else
 					return 0
-			if(RAPID)
+			if(LAWGIVER_RAPID)
 				if(L.rapid_ammo_count >= 1)
 					if(in_chamber)
 						return 1
@@ -353,7 +353,7 @@
 					return 1
 				else
 					return 0
-			if(FLARE)
+			if(LAWGIVER_FLARE)
 				if(L.flare_ammo_count >= 1)
 					if(in_chamber)
 						return 1
@@ -364,7 +364,7 @@
 					return 1
 				else
 					return 0
-			if(RICOCHET)
+			if(LAWGIVER_RICOCHET)
 				if(L.ricochet_ammo_count >= 1)
 					if(in_chamber)
 						return 1
@@ -383,7 +383,7 @@
 	else
 		var/obj/item/ammo_storage/magazine/lawgiver/L = magazine
 		switch(firing_mode)
-			if(STUN)
+			if(LAWGIVER_STUN)
 				if(L.stuncharge >= 20)
 					if(in_chamber)
 						return 1
@@ -392,7 +392,7 @@
 					return 1
 				else
 					return 0
-			if(LASER)
+			if(LAWGIVER_LASER)
 				if(L.lasercharge >= 20)
 					if(in_chamber)
 						return 1
@@ -401,7 +401,7 @@
 					return 1
 				else
 					return 0
-			if(RAPID)
+			if(LAWGIVER_RAPID)
 				if(L.rapid_ammo_count >= 1)
 					if(in_chamber)
 						return 1
@@ -410,7 +410,7 @@
 					return 1
 				else
 					return 0
-			if(FLARE)
+			if(LAWGIVER_FLARE)
 				if(L.flare_ammo_count >= 1)
 					if(in_chamber)
 						return 1
@@ -419,7 +419,7 @@
 					return 1
 				else
 					return 0
-			if(RICOCHET)
+			if(LAWGIVER_RICOCHET)
 				if(L.ricochet_ammo_count >= 1)
 					if(in_chamber)
 						return 1
@@ -491,11 +491,11 @@
 
 	in_chamber.damage *= damage_multiplier
 
-	if(firing_mode == RAPID && !rapidFirecheck)
+	if(firing_mode == LAWGIVER_RAPID && !rapidFirecheck)
 		rapidFire(A, user, params, struggle)
 		return
 
-	else if(firing_mode == RAPID && rapidFirecheck)
+	else if(firing_mode == LAWGIVER_RAPID && rapidFirecheck)
 		return
 
 	if(user && user.client && user.client.gun_mode && !(A in target))
@@ -546,21 +546,21 @@
 		if(dna_profile == H.dna.unique_enzymes)
 			recoil = 0
 			if((findtext(speech.message, "stun")) || (findtext(speech.message, "taser")))
-				firing_mode = STUN
+				firing_mode = LAWGIVER_STUN
 				fire_sound = 'sound/weapons/Taser.ogg'
 				projectile_type = "/obj/item/projectile/energy/electrode"
 				fire_delay = 0
 				sleep(3)
 				say("STUN.")
 			else if((findtext(speech.message, "laser")) || (findtext(speech.message, "lethal")) || (findtext(speech.message, "beam")))
-				firing_mode = LASER
+				firing_mode = LAWGIVER_LASER
 				fire_sound = 'sound/weapons/lasercannonfire.ogg'
 				projectile_type = "/obj/item/projectile/beam/heavylaser"
 				fire_delay = 5
 				sleep(3)
 				say("LASER.")
 			else if((findtext(speech.message, "rapid")) || (findtext(speech.message, "automatic")))
-				firing_mode = RAPID
+				firing_mode = LAWGIVER_RAPID
 				fire_sound = 'sound/weapons/Gunshot_c20.ogg'
 				projectile_type = "/obj/item/projectile/bullet/midbullet/lawgiver"
 				fire_delay = 0
@@ -568,7 +568,7 @@
 				sleep(3)
 				say("RAPID FIRE.")
 			else if((findtext(speech.message, "hi ex")) || (findtext(speech.message, "hi-ex")) || (findtext(speech.message, "explosive")) || (findtext(speech.message, "rocket")))
-				firing_mode = FLARE
+				firing_mode = LAWGIVER_FLARE
 				fire_sound = 'sound/weapons/elecfire.ogg'
 				projectile_type = "/obj/item/projectile/bullet/gyro"
 				fire_delay = 5
@@ -576,7 +576,7 @@
 				sleep(3)
 				say("HIGH EXPLOSIVE.")
 			else if((findtext(speech.message, "ricochet")) || (findtext(speech.message, "bounce")))
-				firing_mode = RICOCHET
+				firing_mode = LAWGIVER_RICOCHET
 				fire_sound = 'sound/weapons/gatling_fire.ogg'
 				projectile_type = "/obj/item/projectile/bullet/midbullet/bouncebullet/lawgiver"
 				fire_delay = 5
@@ -591,8 +591,8 @@
 		return 0
 	return 1
 
-#undef RICOCHET
-#undef RAPID
-#undef FLARE
-#undef STUN
-#undef LASER
+#undef LAWGIVER_RICOCHET
+#undef LAWGIVER_RAPID
+#undef LAWGIVER_FLARE
+#undef LAWGIVER_STUN
+#undef LAWGIVER_LASER

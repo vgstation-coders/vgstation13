@@ -19,7 +19,7 @@
 	name = "Staff of Change"
 	desc = "An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself."
 	abbreviation = "ST"
-	spawned_items = list(/obj/item/weapon/gun/energy/staff)
+	spawned_items = list(/obj/item/weapon/gun/energy/staff/change)
 
 /datum/spellbook_artifact/mental_focus
 	name = "Mental Focus"

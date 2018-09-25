@@ -630,13 +630,6 @@ Target Machine: "}
 /mob/living/silicon/pai/proc/hackloop(var/obj/machinery/M)
 	if(M)
 		hacktarget = M
-	var/turf/T = get_turf(loc)
-	if(prob(10))
-		for(var/mob/living/silicon/ai/AI in player_list)
-			if(T.loc)
-				to_chat(AI, "<font color = red><b>Network Alert: Brute-force encryption crack in progress in [T.loc].</b></font>")
-			else
-				to_chat(AI, "<font color = red><b>Network Alert: Brute-force encryption crack in progress. Unable to pinpoint location.</b></font>")
 	while(hackprogress < 100)
 		if(hacktarget && get_dist(src, hacktarget) <= 1)
 			hackprogress += rand(10, 20)

@@ -44,9 +44,6 @@ mob/proc/get_heart()
 /mob/proc/get_appendix()
 	return null
 
-/mob/proc/get_stomach()
-	return null
-
 mob/proc/remove_internal_organ()
 	return null
 

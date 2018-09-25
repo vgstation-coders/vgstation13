@@ -3098,23 +3098,6 @@
 	required_temp = T0C + 170
 	result_amount = 1
 
-/datum/chemical_reaction/vomit_all
-	name = "Vomit induction"
-	id = CHARCOAL
-	result = null
-	required_reagents = list(FLUORINE = 5, CARBON = 5, CHARCOAL = 5)
-	required_container = /mob/living/carbon/human
-	result_amount = 5
-
-/datum/chemical_reaction/vomit_all/on_reaction(var/datum/reagents/holder, var/created_volume)
-	var/mob/living/carbon/human/H = holder.my_atom
-	var/datum/organ/internal/stomach/S = H.get_stomach()
-	if(!S)
-		return
-	H.vomit()
-	S.take_damage(created_volume/10)
-	S.get_reagents().remove_reagents(created_volume*25)
-
 /datum/chemical_reaction/albuterol
 	name = "Albuterol"
 	id = ALBUTEROL
@@ -3222,7 +3205,7 @@
 	name = "Beepsky Classic"
 	id = BEEPSKY_CLASSIC
 	result = BEEPSKY_CLASSIC
-	required_reagents = list(BEEPSKY_SMASH = 2, KARMOTRINE = 3)
+	required_reagents = list(BEEPSKYSMASH = 2, KARMOTRINE = 3)
 	result_amount = 5
 
 /datum/chemical_reaction/spider

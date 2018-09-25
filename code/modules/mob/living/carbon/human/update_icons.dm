@@ -192,7 +192,7 @@ var/global/list/damage_icon_parts = list()
 	var/husk = (M_HUSK in src.mutations)  //100% unnecessary -Agouri	//nope, do you really want to iterate through src.mutations repeatedly? -Pete
 	var/fat = (M_FAT in src.mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
 	var/hulk = (M_HULK in src.mutations) && !ishorrorform(src) && !isgrue(src) && mind.special_role != HIGHLANDER // Part of the species.
-	var/skeleton = (SKELETON in src.mutations)
+	var/skeleton = (M_SKELETON in src.mutations)
 
 	var/g = "m"
 	if(gender == FEMALE)
@@ -425,7 +425,7 @@ var/global/list/damage_icon_parts = list()
 //	var/g = "m"
 //	if (gender == FEMALE)	g = "f"
 //BS12 EDIT
-	var/skeleton = (SKELETON in src.mutations)
+	var/skeleton = (M_SKELETON in src.mutations)
 	if(skeleton)
 		race_icon = 'icons/mob/human_races/r_skeleton.dmi'
 	else

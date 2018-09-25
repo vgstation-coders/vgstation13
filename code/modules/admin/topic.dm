@@ -4231,7 +4231,7 @@
 			options += name
 			options[name] = D
 
-		var/obj/docking_port/destination/choice = options[(input(usr,"Select a docking port to add to [S.name]","Admin abuse") in options)]
+		var/obj/docking_port/destination/choice = options[(input(usr,"Select a docking port to add to [S.name]","Admin abuse") as null|anything in options)]
 		if(!istype(choice))
 			return
 

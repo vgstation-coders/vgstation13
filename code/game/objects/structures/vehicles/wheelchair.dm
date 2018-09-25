@@ -200,6 +200,8 @@
 	var/const/default_cell_path = /obj/item/weapon/cell/high
 	var/obj/item/weapon/cell/internal_battery = null
 
+/obj/structure/bed/chair/vehicle/wheelchair/motorized/get_cell()
+	return internal_battery
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/New()
 	..()

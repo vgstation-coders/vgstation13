@@ -61,6 +61,9 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 			if(player.assigned_role == job)
 				possible_changelings -= player
 
+		/*if(player.role_alt_title == "Merchant")
+			possible_changelings -= player*/
+
 	changeling_amount = 1 + round(num_players() / 10)
 
 // mixed mode scaling

@@ -12,6 +12,9 @@
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE
 
+/obj/machinery/floodlight/get_cell()
+	return cell
+
 /obj/machinery/floodlight/New()
 	cell = new cell(src)
 	..()

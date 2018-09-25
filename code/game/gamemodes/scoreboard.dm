@@ -468,6 +468,7 @@
 		dat += "<B>Station Deficit:</B> [num2text(profit,50)]<BR>"}*/
 	dat += {"<B>Food Eaten:</b> [score["foodeaten"]]<BR>
 	<B>Times a Clown was Abused:</B> [score["clownabuse"]]<BR>
+	<B>Number of Times Someone was Slipped: </B> [score["slips"]]<BR>
 	<B>Number of Explosions This Shift:</B> [score["explosions"]]<BR>
 	<B>Number of Arena Rounds:</B> [score["arenafights"]]<BR>
 	<B>Total money transferred:</B> [score["totaltransfer"]]<BR>"}

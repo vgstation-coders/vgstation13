@@ -1634,9 +1634,6 @@ mob/living/carbon/human/isincrit()
 /mob/living/carbon/human/get_appendix()
 	return internal_organs_by_name["appendix"]
 
-/mob/living/carbon/human/get_stomach()
-	return internal_organs_by_name["stomach"]
-
 //Moved from internal organ surgery
 //Removes organ from src, places organ object under user
 //example: H.remove_internal_organ(H,H.internal_organs_by_name["heart"],H.get_organ(LIMB_CHEST))
@@ -1833,3 +1830,12 @@ mob/living/carbon/human/isincrit()
 				return S.full_access
 			return is_type_in_list(glasses, list(/obj/item/clothing/glasses/hud/security, /obj/item/clothing/glasses/sunglasses/sechud))
 	return FALSE
+
+/mob/living/carbon/human/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	ASSERT(species)
+	if(species.chem_flags & NO_INJECT)
+		user.visible_message(
+			"<span class='warning'>\The [user] tries to pierce [src] with \the [tool] but it won't go in!</span>",
+			"<span class='warning'>You try to pierce [src] with \the [tool] but it won't go in!</span>")
+		return INJECTION_RESULT_FAIL
+	return ..()

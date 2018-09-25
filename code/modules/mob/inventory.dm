@@ -30,8 +30,6 @@
  * show_inv() -> Topic() -> handle_strip_slot()
  */
 
-#define is_valid_hand_index(index) ((index > 0) && (index <= held_items.len))
-
 //These procs handle putting stuff in your hand. It's probably best to use these rather than setting l_hand = ...etc
 //as they handle all relevant stuff like adding it to the player's screen and updating their overlays.
 

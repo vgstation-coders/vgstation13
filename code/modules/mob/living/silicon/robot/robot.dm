@@ -185,20 +185,6 @@
 				C.wrapped = I
 				C.vulnerability = I.vulnerability
 
-//If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
-//Improved /N
-/mob/living/silicon/robot/Destroy()
-	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
-		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
-		if(T)
-			mmi.forceMove(T)
-		if(mind)
-			mind.transfer_to(mmi.brainmob)
-		if(mmi.brainmob)
-			mmi.brainmob.locked_to_z = locked_to_z
-		mmi = null
-	..()
-
 /mob/living/silicon/robot/remove_screen_objs()
 	..()
 	if(cells)
@@ -1318,3 +1304,6 @@
 
 /mob/living/silicon/robot/hasFullAccess()
 	return FALSE
+
+/mob/living/silicon/robot/get_cell()
+	return cell

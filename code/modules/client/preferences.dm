@@ -72,10 +72,6 @@ var/list/role_wiki=list(
 
 var/const/MAX_SAVE_SLOTS = 8
 
-//used for alternate_option
-#define GET_RANDOM_JOB 0
-#define BE_ASSISTANT 1
-#define RETURN_TO_LOBBY 2
 #define POLLED_LIMIT	300
 
 /datum/preferences
@@ -171,7 +167,7 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	var/nanotrasen_relation = "Neutral"
 	var/bank_security = 1			//for bank accounts, 0-2, no-pin,pin,pin&card
-	
+
 
 	// 0 = character settings, 1 = game preferences
 	var/current_tab = 0
@@ -1262,7 +1258,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					var/new_bank_security = input(user, BANK_SECURITY_EXPLANATION, "Character Preference")  as null|anything in bank_security_text2num_associative
 					if(!isnull(new_bank_security))
 						bank_security = bank_security_text2num_associative[new_bank_security]
-						
+
 				if("flavor_text")
 					flavor_text = input(user,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message
 

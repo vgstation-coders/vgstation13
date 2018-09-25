@@ -26,6 +26,8 @@
 	var/list/stamped
 	var/rigged = 0
 	var/spam_flag = 0
+	var/display_x = 400
+	var/display_y = 400
 
 	var/log=""
 	var/obj/item/weapon/photo/img
@@ -54,7 +56,7 @@
 	if(img)
 		user << browse_rsc(img.img, "tmp_photo.png")
 		info_image = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
-	user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_image][info_text][stamps]</BODY></HTML>", "window=[name]")
+	user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_image][info_text][stamps]</BODY></HTML>", "window=[name];size=[display_x]x[display_y]")
 	onclose(user, "[name]")
 
 /obj/item/weapon/paper/update_icon()

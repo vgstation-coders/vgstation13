@@ -21,6 +21,9 @@
 	flags = FPRINT
 	machine_flags = SCREWTOGGLE
 
+/obj/machinery/space_heater/get_cell()
+	return cell
+
 /obj/machinery/space_heater/campfire
 	name = "campfire"
 	icon_state = "campfire0"

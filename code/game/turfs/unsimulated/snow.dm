@@ -1,11 +1,3 @@
-//Arctic atmospheric defines
-
-#define ARCTIC_ATMOSPHERE 90.13
-#define T_ARCTIC 223.65 //- 49.5 Celcius, taken from South Pole averages
-#define MOLES_ARCTICSTANDARD (ARCTIC_ATMOSPHERE*CELL_VOLUME/(T_ARCTIC*R_IDEAL_GAS_EQUATION)) //Note : Open air tiles obviously aren't 2.5 meters in height, but abstracted for now with infinite atmos
-#define MOLES_O2STANDARD_ARCTIC MOLES_ARCTICSTANDARD*O2STANDARD	//O2 standard value (21%)
-#define MOLES_N2STANDARD_ARCTIC MOLES_ARCTICSTANDARD*N2STANDARD	//N2 standard value (79%)
-
 /turf/unsimulated/floor/snow
 	name = "snow"
 	desc = "A layer of frozen water particles, kept solid by temperatures way below freezing. On the plus side, can easily be weaponized."

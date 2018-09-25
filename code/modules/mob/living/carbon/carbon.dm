@@ -195,7 +195,7 @@
 				if(status == "")
 					status = "OK"
 				src.show_message(text("\t []My [] is [].",status=="OK"?"<span class='notice'></span>":"<span class='danger'></span>",org.display_name,status),1)
-			if((SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
+			if((M_SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
 				H.play_xylophone()
 		else if(lying) // /vg/: For hugs. This is how update_icon figgers it out, anyway.  - N3X15
 			var/t_him = "it"
@@ -502,6 +502,7 @@
 	stop_pulling()
 	Stun(stun_amount)
 	Knockdown(weaken_amount)
+	score["slips"]++
 	return 1
 
 /mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0)

@@ -1041,7 +1041,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			//testing("Client of [G] inexistent")
 			continue
 
-		//#warning Uncomment me.
+		//#warn Uncomment me.
 		/*if(G.client.holder)
 			//testing("Client of [G] is admin.")
 			continue*/

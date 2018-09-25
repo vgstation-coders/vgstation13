@@ -170,7 +170,7 @@ var/global/list/blood_list = list()
 /obj/effect/decal/cleanable/mucus
 	name = "mucus"
 	desc = "Disgusting mucus."
-	setGender(PLURAL)
+	gender = PLURAL
 	density = 0
 	anchored = 1
 	icon = 'icons/effects/blood.dmi'

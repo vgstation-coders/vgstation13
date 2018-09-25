@@ -8,7 +8,7 @@
 	flags = IS_WHITELISTED | PLASMA_IMMUNE
 	anatomy_flags = NO_BLOOD
 
-	//default_mutations=list(SKELETON) // This screws things up
+	//default_mutations=list(M_SKELETON) // This screws things up
 	primitive = /mob/living/carbon/monkey/skellington/plasma
 
 	breath_type = "toxins"

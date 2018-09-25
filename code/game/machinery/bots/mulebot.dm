@@ -78,6 +78,9 @@ var/global/mulebot_count = 0
 	var/run_over_cooldown = 3 SECONDS	//how often a pAI-controlled MULEbot can damage a mob by running over them
 	var/coolingdown = FALSE
 
+/obj/machinery/bot/mulebot/get_cell()
+	return cell
+
 /obj/machinery/bot/mulebot/New()
 	..()
 	wires = new(src)

@@ -199,10 +199,10 @@ obj/effect/bmode/buildholder/New()
 				var/partial_type = input(usr, "Enter type, or leave blank to see all types", "Typepath", "/obj/structure/closet") as text|null
 				if(isnull(partial_type))
 					return
-				
+
 				var/list/matches = get_matching_types(partial_type, /atom)
 				objholder = input("Select type", "Typepath") as null|anything in matches
-				
+
 				if(!ispath(objholder))
 					objholder = /obj/structure/closet
 					alert("That path is not allowed.")
@@ -735,8 +735,6 @@ obj/effect/bmode/buildholder/New()
 
 		variable_set(usr, A, varname, value_override = init_value, logging = log)
 
-#undef BOTTOM_LEFT
-#undef TOP_RIGHT
 #undef MASS_FILL
 #undef MASS_DELETE
 #undef SELECTIVE_DELETE

@@ -115,16 +115,16 @@
 		BAD.purchaser_is_traitor = was_traitor
 		badass_bundles.Add(BAD)
 	else
-		var/datum/stat/uplink_purchase_stat/UP = new
+		var/datum/stat/uplink_purchase_stat/PUR = new
 		if(istype(bundle, /datum/uplink_item/badass/random))
-			UP.itemtype = resulting_item.type
+			PUR.itemtype = resulting_item.type
 		else
-			UP.itemtype = bundle.item
-		UP.bundle = bundle.type
-		UP.purchaser_key = ckey(user.mind.key)
-		UP.purchaser_name = STRIP_NEWLINE(user.mind.name)
-		UP.purchaser_is_traitor = was_traitor
-		uplink_purchases.Add(UP)
+			PUR.itemtype = bundle.item
+		PUR.bundle = bundle.type
+		PUR.purchaser_key = ckey(user.mind.key)
+		PUR.purchaser_name = STRIP_NEWLINE(user.mind.name)
+		PUR.purchaser_is_traitor = was_traitor
+		uplink_purchases.Add(PUR)
 
 /datum/stat_collector/proc/add_objectives(var/datum/mind/M)
 	// if(M.objectives.len)
