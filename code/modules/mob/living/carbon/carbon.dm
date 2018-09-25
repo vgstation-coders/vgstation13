@@ -172,29 +172,29 @@
 						brutedamage += halloss
 					if(prob(30))
 						burndamage += halloss
-
 				if(brutedamage > 0)
 					status = "bruised"
 				if(brutedamage > 20)
-					status = "<span class='warning'>bleeding</span>"
+					status = "<span class='warning'>badly wounded</span>"
 				if(brutedamage > 40)
 					status = "<span class='danger'>mangled</span>"
 				if(brutedamage > 0 && burndamage > 0)
 					status += " and "
 				if(burndamage > 40)
 					status += "<span class='orange bold'>peeling away</span>"
-
 				else if(burndamage > 10)
 					status += "<span class='orange italics'>blistered</span>"
 				else if(burndamage > 0)
 					status += "numb"
+				if(org.status & ORGAN_BLEEDING)
+					status = "<span class='danger'>bleeding</span>"
 				if(org.status & ORGAN_DESTROYED)
-					status = "MISSING!"
+					status = "MISSING"
 				if(org.status & ORGAN_MUTATED)
-					status = "weirdly shapen."
-				if(status == "")
-					status = "OK"
-				src.show_message(text("\t []My [] is [].",status=="OK"?"<span class='notice'></span>":"<span class='danger'></span>",org.display_name,status),1)
+					status = "weirdly shapen"
+				if(status != "")
+					src.show_message(text("\t []My [] is [].","<span class='danger'></span>",org.display_name,status),1)
+					
 			if((M_SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
 				H.play_xylophone()
 		else if(lying) // /vg/: For hugs. This is how update_icon figgers it out, anyway.  - N3X15
