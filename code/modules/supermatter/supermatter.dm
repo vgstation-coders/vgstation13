@@ -245,7 +245,7 @@
 	damage = max( damage + ( (removed.temperature - 800) / 150 ) , 0 )
 	//Ok, 100% oxygen atmosphere = best reaction
 	//Maxes out at 100% oxygen pressure
-	oxygen = Clamp((removed.oxygen - removed.nitrogen*NITROGEN_RETARDATION_FACTOR) / MOLES_CELLSTANDARD, 0, 1) //0 unless O2>80%. At 99%, ~0.6
+	oxygen = Clamp((removed[GAS_OXYGEN] - removed[GAS_NITROGEN] * NITROGEN_RETARDATION_FACTOR) / MOLES_CELLSTANDARD, 0, 1) //0 unless O2>80%. At 99%, ~0.6
 
 	var/temp_factor = 100
 
@@ -278,11 +278,9 @@
 	removed.temperature = max(0, min(removed.temperature, 2500))
 
 	//Calculate how much gas to release
-	removed.toxins += max(device_energy / PLASMA_RELEASE_MODIFIER, 0)
-
-	removed.oxygen += max((device_energy + removed.temperature - T0C) / OXYGEN_RELEASE_MODIFIER, 0)
-
-	removed.update_values()
+	removed.adjust_multi(
+		GAS_PLASMA, max(device_energy / PLASMA_RELEASE_MODIFIER, 0),
+		GAS_OXYGEN, max((device_energy + removed.temperature - T0C) / OXYGEN_RELEASE_MODIFIER, 0))
 
 	env.merge(removed)
 

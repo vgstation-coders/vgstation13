@@ -111,7 +111,7 @@
 	var/pressure = tank_gas.return_pressure()
 	var/total_moles = tank_gas.total_moles()
 	if(total_moles)
-		var/o2_concentration = tank_gas.oxygen/total_moles
+		var/o2_concentration = tank_gas[GAS_OXYGEN]/total_moles
 		if(o2_concentration > 0.01)
 			B.has_O2_in_mix = 1
 	else

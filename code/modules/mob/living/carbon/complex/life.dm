@@ -119,11 +119,11 @@
 	breath.update_values()
 
 	//Partial pressure of the O2 in our breath
-	var/O2_pp = (breath.oxygen / breath.total_moles()) * breath.pressure
+	var/O2_pp = breath.partial_pressure(GAS_OXYGEN)
 	// Same, but for the toxins
-	var/Toxins_pp = (breath.toxins / breath.total_moles()) * breath.pressure
+	var/Toxins_pp = breath.partial_pressure(GAS_PLASMA)
 	// And CO2, lets say a PP of more than 10 will be bad (It's a little less really, but eh, being passed out all round aint no fun)
-	var/CO2_pp = (breath.carbon_dioxide / breath.total_moles()) * breath.pressure
+	var/CO2_pp = breath.partial_pressure(GAS_CARBON)
 
 	if(O2_pp < safe_oxygen_min) 			// Too little oxygen
 		if(prob(20))
@@ -132,21 +132,22 @@
 			O2_pp = 0.01
 		var/ratio = safe_oxygen_min/O2_pp
 		adjustOxyLoss(min(5*ratio, 7)) // Don't fuck them up too fast (space only does 7 after all!)
-		oxygen_used = breath.oxygen*ratio/6
+		oxygen_used = breath[GAS_OXYGEN]*ratio/6
 		oxygen_alert = max(oxygen_alert, 1)
 	/*else if (O2_pp > safe_oxygen_max) 		// Too much oxygen (commented this out for now, I'll deal with pressure damage elsewhere I suppose)
 		spawn(0) emote("cough")
 		var/ratio = O2_pp/safe_oxygen_max
 		oxyloss += 5*ratio
-		oxygen_used = breath.oxygen*ratio/6
+		oxygen_used = breath[GAS_OXYGEN]*ratio/6
 		oxygen_alert = max(oxygen_alert, 1)*/
 	else 									// We're in safe limits
 		adjustOxyLoss(-5)
-		oxygen_used = breath.oxygen/6
+		oxygen_used = breath[GAS_OXYGEN]/6
 		oxygen_alert = 0
 
-	breath.oxygen -= oxygen_used
-	breath.carbon_dioxide += oxygen_used
+	breath.adjust_multi(
+		GAS_OXYGEN, -oxygen_used,
+		GAS_CARBON, oxygen_used)
 
 	if(CO2_pp > safe_co2_max)
 		if(!co2overloadtime) // If it's the first breath with too much CO2 in it, lets start a counter, then have them pass out after 12s or so.

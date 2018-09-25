@@ -173,8 +173,9 @@
 		toxins_alert = 0
 
 	//Breathe in toxins and out oxygen
-	breath.toxins -= toxins_used
-	breath.oxygen += toxins_used
+	breath.adjust_multi(
+		GAS_PLASMA, -toxins_used,
+		GAS_OXYGEN, toxins_used)
 
 	if(breath.temperature > (T0C+66) && !(M_RESIST_HEAT in mutations)) // Hot air hurts :(
 		if(prob(20))
