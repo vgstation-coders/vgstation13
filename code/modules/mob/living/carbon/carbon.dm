@@ -163,6 +163,7 @@
 				"<span class='notice'>You check yourself for injuries.</span>" \
 				)
 
+			var/num_injuries = 0
 			for(var/datum/organ/external/org in H.organs)
 				var/status = ""
 				var/brutedamage = org.brute_dam
@@ -172,6 +173,7 @@
 						brutedamage += halloss
 					if(prob(30))
 						burndamage += halloss
+
 				if(brutedamage > 0)
 					status = "bruised"
 				if(brutedamage > 20)
@@ -192,8 +194,13 @@
 					status = "MISSING"
 				if(org.status & ORGAN_MUTATED)
 					status = "weirdly shapen"
+
 				if(status != "")
-					src.show_message(text("\t []My [] is [].","<span class='danger'></span>",org.display_name,status),1)
+					to_chat(src, "My [org.display_name] is [status].")
+					num_injuries++
+
+			if(num_injuries == 0)
+				to_chat(src, "My legs are OK.")
 					
 			if((M_SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
 				H.play_xylophone()
