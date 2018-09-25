@@ -16,11 +16,12 @@
 	var/geneticdamage = 0
 	var/isabsorbing = 0
 	var/geneticpoints = 5
-	var/purchasedpowers = list()
+	var/datum/power_holder/power_holder
 	var/mimicing = ""
 
 /datum/role/changeling/OnPostSetup()
 	. = ..()
+	power_holder = new(src)
 	antag.current.make_changeling()
 	var/honorific
 	if(antag.current.gender == FEMALE)
@@ -294,19 +295,22 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	genomecost = 5
 	verbpath = /obj/item/verbs/changeling/proc/changeling_armblade
 
+/datum/power_holder
+	var/datum/role/R
+	var/list/purchasedpowers = list()
 
-/datum/role/changeling/proc/EvolutionMenu()
-	set category = "Changeling"
-	set desc = "Level up!"
+/datum/power_holder/New(var/datum/role/newRole)
+	R = newRole
 
-	if(!usr || !usr.mind)
-		return
-
-	src = usr.mind.GetRole(CHANGELING)
-
+/datum/power_holder/proc/EvolutionMenu()
 	if(!powerinstances.len)
 		for(var/P in powers)
 			powerinstances += new P()
+
+	var/geneticpoints
+	if(istype(R, /datum/role/changeling))
+		var/datum/role/changeling/C = R
+		geneticpoints = C.geneticpoints
 
 	var/dat = "<html><head><title>Changling Evolution Menu</title></head>"
 
@@ -384,7 +388,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 					if(!ownsthis)
 					{
-						body += "<a href='?src=\ref[src];P="+power+";mind=\ref[antag];'>Evolve</a>"
+						body += "<a href='?src=\ref[src];P="+power+"'>Evolve</a>"
 					}
 
 
@@ -568,25 +572,26 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	usr << browse(dat, "window=powers;size=900x480")
 
 
-/datum/role/changeling/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
-	..()
-	if(href_list["P"])
-		if(!istype(M))
-			return
-		purchasePower(M, href_list["P"])
-		call(/datum/role/changeling/proc/EvolutionMenu)()
+/datum/role/changeling/proc/EvolutionMenu()
+	set category = "Changeling"
+	set desc = "Level up!"
 
-
-
-
-
-/datum/role/changeling/proc/purchasePower(var/datum/mind/M, var/Pname, var/remake_verbs = 1)
-	if(!M || !M.GetRole(CHANGELING))
-		to_chat(M.current, "Either you have no mind, or you're not a changeling!")
+	if(!usr || !usr.mind)
 		return
 
-	var/datum/power/changeling/Thepower = Pname
+	src = usr.mind.GetRole(CHANGELING)
 
+	power_holder.EvolutionMenu()
+
+/datum/power_holder/Topic(href, href_list)
+	if(href_list["P"])
+		purchasePower(href_list["P"])
+		EvolutionMenu()
+
+/datum/power_holder/proc/purchasePower(var/Pname, var/remake_verbs = 1)
+	var/datum/mind/M = R.antag
+	var/datum/power/changeling/Thepower = Pname
+	var/datum/role/changeling/C = M.GetRole(CHANGELING)
 
 	for (var/datum/power/changeling/P in powerinstances)
 //		to_chat(world, "[P] - [Pname] = [P.name == Pname ? "True" : "False"]")
@@ -604,11 +609,11 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 		return
 
 
-	if(geneticpoints < Thepower.genomecost)
+	if(C.geneticpoints < Thepower.genomecost)
 		to_chat(M.current, "We cannot evolve this... yet.  We must acquire more DNA.")
 		return
 
-	geneticpoints -= Thepower.genomecost
+	C.geneticpoints -= Thepower.genomecost
 
 	purchasedpowers += Thepower
 

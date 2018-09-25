@@ -21,10 +21,10 @@
 	// Code to auto-purchase free powers.
 	for(var/datum/power/changeling/P in powerinstances)
 		if(!P.genomecost) // Is it free?
-			if(!(P in C.purchasedpowers)) // Do we not have it already?
-				C.purchasePower(mind, P.name, 0)// Purchase it. Don't remake our verbs, we're doing it after this.
+			if(!(P in C.power_holder.purchasedpowers)) // Do we not have it already?
+				C.power_holder.purchasePower(P.name, 0)// Purchase it. Don't remake our verbs, we're doing it after this.
 
-	for(var/datum/power/changeling/P in C.purchasedpowers)
+	for(var/datum/power/changeling/P in C.power_holder.purchasedpowers)
 		if(P.isVerb)
 			if(lesser_form && !P.allowduringlesserform)
 				continue
@@ -204,7 +204,7 @@
 	if(!verb_holder)
 		return
 
-	for(var/datum/power/changeling/P in changeling.purchasedpowers)
+	for(var/datum/power/changeling/P in changeling.power_holder.purchasedpowers)
 		if(P.isVerb)
 			verb_holder.verbs -= P.verbpath
 
@@ -363,12 +363,12 @@
 					changeling.absorbedcount++
 					Tchangeling.absorbed_dna.Remove(dna_data)
 
-			if(Tchangeling.purchasedpowers)
-				for(var/datum/power/changeling/Tp in Tchangeling.purchasedpowers)
-					if(Tp in changeling.purchasedpowers)
+			if(Tchangeling.power_holder.purchasedpowers.len)
+				for(var/datum/power/changeling/Tp in Tchangeling.power_holder.purchasedpowers)
+					if(Tp in changeling.power_holder.purchasedpowers)
 						continue
 					else
-						changeling.purchasedpowers += Tp
+						changeling.power_holder.purchasedpowers += Tp
 
 						if(!Tp.isVerb)
 							call(Tp.verbpath)()

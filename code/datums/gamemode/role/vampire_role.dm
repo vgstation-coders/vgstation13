@@ -87,8 +87,7 @@
  - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a> - <a href='?src=\ref[src]&mind=\ref[antag]&giveblood=1'>Give blood</a>"}
 	return text
 
-/datum/role/vampire/RoleTopic(href, href_list)
-	. = ..()
+/datum/role/vampire/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
 	if (!usr.client.holder)
 		return FALSE
 	if (href_list["giveblood"])
@@ -224,7 +223,7 @@
 
 	else if (VAMP_VISION in powers)
 		H.change_sight(adding = SEE_MOBS)
-	
+
 
 /datum/role/vampire/proc/handle_enthrall(var/datum/mind/M)
 	if (!istype(M))

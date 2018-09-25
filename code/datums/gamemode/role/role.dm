@@ -409,6 +409,8 @@
 
 // DO NOT OVERRIDE
 /datum/role/Topic(href, href_list)
+	if(!check_rights(R_ADMIN))
+		return 0
 
 	if(!href_list["mind"])
 		to_chat(usr, "<span class='warning'>BUG: mind variable not specified in Topic([href])!</span>")
@@ -421,15 +423,6 @@
 
 // USE THIS INSTEAD (global)
 /datum/role/proc/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
-	if(admin_auth && !check_rights(R_ADMIN))
-		message_admins("<span class='warning'>Something fucky is going on. [usr] has admin_auth 1 on their RoleTopic, but failed actual check_rights(R_ADMIN)!</span>")
-		return 1
-
-	else if(href_list["auto_objectives"])//what's that even for actually? Might want to get rid of it later
-		var/datum/role/R = M.GetRole(href_list["auto_objectives"])
-		R.ForgeObjectives()
-		to_chat(usr, "<span class='info'>The objectives for [M.key] have been generated. You can edit them. Remember to announce their objectives.</span>")
-		return
 
 
 /datum/role/proc/AnnounceObjectives()
