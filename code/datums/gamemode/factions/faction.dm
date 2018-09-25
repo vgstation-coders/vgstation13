@@ -306,6 +306,10 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/get_statpanel_addition()
 	return null
 
+/datum/faction/proc/get_member_by_mind(var/datum/mind/M)
+	for(var/datum/role/R in members)
+		if(R.antag == M)
+			return R
 
 /////////////////////////////THESE FACTIONS SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 

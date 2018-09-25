@@ -96,7 +96,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/drop_bomb,
 	/client/proc/drop_emp,
 	/client/proc/cinematic,
-	//client/proc/one_click_antag,
+	/client/proc/one_click_antag,
 	//client/proc/antag_madness,
 	/datum/admins/proc/toggle_aliens,
 	// FUUUUCKED /client/proc/zombie_event, // ZOMBB-B-BIES
