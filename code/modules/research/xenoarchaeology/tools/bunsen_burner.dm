@@ -128,7 +128,9 @@
 				reagents.remove_reagent(possible_fuel, consumption_rate)
 				if(held_container)
 					held_container.reagents.heating(thermal_energy_transfer, max_temperature)
-				G.adjust(o2 = -o2_consumption, co2 = -co2_consumption)
+				G.adjust_multi(
+					GAS_OXYGEN, -o2_consumption,
+					GAS_CARBON, -co2_consumption)
 				if(prob(unsafety) && T)
 					T.hotspot_expose(max_temperature, 5)
 				break

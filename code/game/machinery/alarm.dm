@@ -297,7 +297,7 @@
 	var/plasma_dangerlevel = get_danger_level(environment.partial_pressure(GAS_PLASMA), TLV["plasma"])
 	var/temperature_dangerlevel = get_danger_level(environment.temperature, TLV["temperature"])
 	var/n2o_dangerlevel = get_danger_level(environment.partial_pressure(GAS_SLEEPING), TLV["n2o"])
-	var/other_dangerlevel = get_danger_level(other_moles / total * environment.pressure, TLV["other"])
+	var/other_dangerlevel = get_danger_level(other_moles / environment.total_moles * environment.pressure, TLV["other"])
 
 	return max(
 		pressure_dangerlevel,

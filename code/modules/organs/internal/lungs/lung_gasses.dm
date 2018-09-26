@@ -12,13 +12,7 @@
 	src.id = gas_id
 
 /datum/lung_gas/proc/get_pp()
-	var/breath_pressure = (breath.total_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/lungs.inhale_volume
-	if(!is_trace)
-		return (breath.vars[id]/breath.total_moles())*breath_pressure
-	else
-		if(gas)
-			return (gas.moles/breath.total_moles())*breath_pressure
-		return 0
+	return breath.partial_pressure(id)
 
 /datum/lung_gas/proc/get_moles()
 	return breath[id]
@@ -53,8 +47,8 @@
 	var/min_pp=0
 	var/max_pp=999
 
-/datum/lung_gas/metabolizable/New(var/gas_id, var/trace_gas=0, var/min_pp=0, var/max_pp=999)
-	..(gas_id,trace_gas)
+/datum/lung_gas/metabolizable/New(var/gas_id, var/min_pp=0, var/max_pp=999)
+	..(gas_id)
 	src.min_pp = min_pp
 	src.max_pp = max_pp
 
@@ -90,8 +84,8 @@
 	var/max_pp=0 // Maximum atmospheric partial pressure before you start getting paralyzed
 	             // NOTE: If set to 0, will not give poisoning effects.
 
-/datum/lung_gas/waste/New(var/gas_id, var/trace_gas=0, var/max_pp=0)
-	..(gas_id,trace_gas)
+/datum/lung_gas/waste/New(var/gas_id, var/max_pp=0)
+	..(gas_id)
 	src.max_pp = max_pp
 
 /datum/lung_gas/waste/handle_inhale()
@@ -133,8 +127,8 @@
 	var/reagent_id = PLASMA // What reagent to add
 	var/reagent_mult = 10
 
-/datum/lung_gas/toxic/New(var/gas_id, var/trace_gas=0, var/max_pp=0, var/max_pp_mask=0, var/reagent_id=PLASMA, var/reagent_mult=10)
-	..(gas_id,trace_gas)
+/datum/lung_gas/toxic/New(var/gas_id, var/max_pp=0, var/max_pp_mask=0, var/reagent_id=PLASMA, var/reagent_mult=10)
+	..(gas_id)
 	src.max_pp = max_pp
 	src.max_pp_mask = max_pp_mask
 	src.reagent_id = reagent_id
@@ -174,8 +168,8 @@
 	var/min_para_pp = 1      // Paralysis
 	var/min_sleep_pp = 5     // Sleep
 
-/datum/lung_gas/sleep_agent/New(var/gas_id, var/trace_gas=0, var/min_giggle_pp=0, var/min_sleep_pp=0, var/min_para_pp=0)
-	..(gas_id,trace_gas)
+/datum/lung_gas/sleep_agent/New(var/gas_id, var/min_giggle_pp=0, var/min_sleep_pp=0, var/min_para_pp=0)
+	..(gas_id)
 	src.min_para_pp=min_para_pp
 	src.min_giggle_pp=min_giggle_pp
 	src.min_para_pp=min_para_pp

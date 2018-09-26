@@ -2271,28 +2271,6 @@
 		holder.remove_reagent("inaprovaline", 2 * REM)
 	M.adjustToxLoss(3 * REM)
 
-/*
-/datum/reagent/plasma/reaction_obj(var/obj/O, var/volume)
-
-	if(..())
-		return 1
-
-	var/turf/T = get_turf(O)
-	self.reaction_turf(T, volume)
-
-/datum/reagent/plasma/reaction_turf(var/turf/simulated/T, var/volume)
-
-	if(..())
-		return 1
-
-	var/datum/gas_mixture/napalm = new
-	var/datum/gas/volatile_fuel/fuel = new
-	fuel.moles = 5
-	napalm.trace_gases += fuel
-	T.assume_air(napalm)
-
-*/
-
 /datum/reagent/leporazine
 	name = "Leporazine"
 	id = LEPORAZINE

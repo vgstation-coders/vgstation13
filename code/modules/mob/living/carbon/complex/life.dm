@@ -173,16 +173,14 @@
 	else
 		toxins_alert = 0
 
-	if(breath.trace_gases.len)	// If there's some other shit in the air lets deal with it here.
-		for(var/datum/gas/sleeping_agent/SA in breath.trace_gases)
-			var/SA_pp = (SA.moles / breath.total_moles()) * breath.pressure
-			if(SA_pp > SA_para_min) // Enough to make us paralysed for a bit
-				Paralyse(3) // 3 gives them one second to wake up and run away a bit!
-				if(SA_pp > SA_sleep_min) // Enough to make us sleep as well
-					sleeping = max(sleeping+2, 10)
-			else if(SA_pp > 0.01)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
-				if(prob(20))
-					spawn(0) emote(pick("giggle", "laugh"))
+	var/SA_pp = breath.partial_pressure(GAS_SLEEPING)
+	if(SA_pp > SA_para_min) // Enough to make us paralysed for a bit
+		Paralyse(3) // 3 gives them one second to wake up and run away a bit!
+		if(SA_pp > SA_sleep_min) // Enough to make us sleep as well
+			sleeping = max(sleeping+2, 10)
+	else if(SA_pp > 0.01)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
+		if(prob(20))
+			spawn(0) emote(pick("giggle", "laugh"))
 
 
 	if(breath.temperature > (T0C+66)) // Hot air hurts :(

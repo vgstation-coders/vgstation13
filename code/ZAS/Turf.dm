@@ -259,7 +259,11 @@
 	air = new/datum/gas_mixture
 	air.temperature = temperature
 	air.volume = CELL_VOLUME
-	air.adjust(oxygen, carbon_dioxide, nitrogen, toxins)
+	air.adjust_multi(
+		GAS_OXYGEN, oxygen,
+		GAS_CARBON, carbon_dioxide,
+		GAS_NITROGEN, nitrogen,
+		GAS_PLASMA, toxins)
 
 /turf/simulated/proc/c_copy_air()
 	if(!air)

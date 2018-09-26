@@ -674,7 +674,7 @@
 	required_reagents = list(VAPORSALT = 1, OXYGEN = 1)
 
 /datum/chemical_reaction/vaporize/oxygen/disperse(turf/T,datum/gas_mixture/G,var/vol)
-	G.adjust(vol,0,0,0)
+	G.adjust_gas(GAS_OXYGEN, vol)
 	..()
 
 /datum/chemical_reaction/vaporize/nitrogen
@@ -683,7 +683,7 @@
 	required_reagents = list(VAPORSALT = 1, NITROGEN = 1)
 
 /datum/chemical_reaction/vaporize/nitrogen/disperse(turf/T,datum/gas_mixture/G,var/vol)
-	G.adjust(0,0,vol,0)
+	G.adjust_gas(GAS_NITROGEN, vol)
 	..()
 
 /datum/chemical_reaction/vaporize/plasma
@@ -693,7 +693,7 @@
 	required_reagents = list(VAPORSALT = 1, PLASMA = 1)
 
 /datum/chemical_reaction/vaporize/plasma/disperse(turf/T,datum/gas_mixture/G,var/vol)
-	G.adjust(0,0,0,vol)
+	G.adjust_gas(GAS_PLASMA, vol)
 	..()
 
 /datum/chemical_reaction/solidification
