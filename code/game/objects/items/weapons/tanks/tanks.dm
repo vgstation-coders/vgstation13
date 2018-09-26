@@ -215,16 +215,7 @@
 	return 1
 
 /obj/item/weapon/tank/proc/remove_air_volume(volume_to_return)
-	if(!air_contents)
-		return null
-
-	var/tank_pressure = air_contents.return_pressure()
-	if(tank_pressure < distribute_pressure)
-		distribute_pressure = tank_pressure
-
-	var/moles_needed = distribute_pressure*volume_to_return/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-
-	return remove_air(moles_needed)
+	return air_contents?.remove_volume(volume_to_return)
 
 /obj/item/weapon/tank/process()
 	//Allow for reactions
