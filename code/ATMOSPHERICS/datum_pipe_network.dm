@@ -120,16 +120,14 @@
 /proc/equalize_gases(datum/gas_mixture/list/gases)
 	//Perfectly equalize all gases members instantly
 
-	var/datum/gas_mixture/main = gases[gases.len--]
-	var/total_volume = main.volume
+	var/datum/gas_mixture/temp = new()
+	temp.volume = 0
 
 	for(var/datum/gas_mixture/gas in gases)
-		main.merge(gas) //Combine all gas_mixtures into one
-		total_volume += gas.volume
-
-	main.multiply(main.volume / total_volume) //
+		temp.volume += gas.volume
+		temp.merge(gas)
 
 	for(var/datum/gas_mixture/gas in gases)
-		gas.copy_from(main)
+		gas.copy_from(temp)
 
 	return 1
