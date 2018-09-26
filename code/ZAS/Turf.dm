@@ -1,36 +1,14 @@
 /turf/simulated/var/zone/zone
 /turf/simulated/var/open_directions
-/turf/simulated/var/list/gasGraphics
 
 /turf/var/needs_air_update = 0
 /turf/var/datum/gas_mixture/air
 
-/turf/simulated/proc/set_graphic(const/newGraphics)
-	if (!isnum(newGraphics))
-		return
-
-	if (!newGraphics) // Clear overlay, or simply 0.
-		if (gasGraphics)
-			overlays -= gasGraphics
-			gasGraphics = null
-
-		return
-
-	var/list/overlayGraphics = list()
-
-	if (GRAPHICS_PLASMA & newGraphics)
-		overlayGraphics += plmaster
-
-	if (GRAPHICS_N2O & newGraphics)
-		overlayGraphics += slmaster
-
-	if (overlayGraphics.len)
-		if (gasGraphics)
-			overlays -= gasGraphics
-			gasGraphics = null
-
-		overlays += overlayGraphics
-		gasGraphics = overlayGraphics.Copy()
+/turf/simulated/proc/update_graphic(list/graphic_add = null, list/graphic_remove = null)
+	if(graphic_add?.len)
+		overlays += graphic_add
+	if(graphic_remove?.len)
+		overlays -= graphic_remove
 
 /turf/proc/update_air_properties()
 	var/block = c_airblock(src)

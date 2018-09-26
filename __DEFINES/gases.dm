@@ -69,7 +69,7 @@
 	molar_mass = 0.405	// kg/mol
 
 	tile_overlay = "plasma"
-	overlay_limit = MOLES_PLASMA_VISIBLE
+	overlay_limit = MOLES_PLASMA_VISIBLE / CELL_VOLUME
 	flags = XGM_GAS_FUEL | XGM_GAS_CONTAMINANT | XGM_GAS_LOGGED
 
 /datum/gas/plasma/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
@@ -83,7 +83,7 @@
 	molar_mass = 0.044	// kg/mol. N₂O
 
 	tile_overlay = "sleeping_agent"
-	overlay_limit = 1
+	overlay_limit = 1 / CELL_VOLUME
 	flags = XGM_GAS_OXIDIZER | XGM_GAS_LOGGED // N₂O is a powerful oxidizer
 
 /datum/gas/sleeping_agent/is_human_safe(var/moles, var/datum/gas_mixture/mixture)

@@ -4,28 +4,7 @@
 // /vg/ SHIT
 #define TEMPERATURE_ICE_FORMATION 273.15 // 273 kelvin is the freezing point of water.
 #define MIN_PRESSURE_ICE_FORMATION 10    // 10kPa should be okay
-
-#define GRAPHICS_PLASMA   1
-#define GRAPHICS_N2O      2
-#define GRAPHICS_REAGENTS 4 //Not used. Yet.
-#define GRAPHICS_COLD     8
 // END /vg/SHIT
-
-/hook/startup/proc/createGasOverlays()
-	plmaster = new /obj/effect/overlay()
-	plmaster.icon = 'icons/effects/tile_effects.dmi'
-	plmaster.icon_state = "plasma"
-	plmaster.layer = FLY_LAYER
-	plmaster.plane = EFFECTS_PLANE
-	plmaster.mouse_opacity = 0
-
-	slmaster = new /obj/effect/overlay()
-	slmaster.icon = 'icons/effects/tile_effects.dmi'
-	slmaster.icon_state = "sleeping_agent"
-	slmaster.layer = FLY_LAYER
-	slmaster.plane = EFFECTS_PLANE
-	slmaster.mouse_opacity = 0
-	return 1
 
 /datum/gas_mixture
 	//Associative list of gas moles.
@@ -38,7 +17,8 @@
 
 	var/temperature = 0 //in Kelvin
 
-	var/graphics = 0
+	//List of active tile overlays for this gas_mixture.  Updated by check_tile_graphic()
+	var/list/graphic = list()
 
 	var/pressure = 0
 
@@ -296,31 +276,31 @@
 //Procedures used for very specific events//
 ////////////////////////////////////////////
 
-/datum/gas_mixture/proc/check_tile_graphic()
-	//Purpose: Calculating the graphic for a tile
-	//Called by: Turfs updating
-	//Inputs: None
-	//Outputs: 1 if graphic changed, 0 if unchanged
+//Rechecks the gas_mixture and adjusts the graphic list if needed.
+//Two lists can be passed by reference if you need know specifically which graphics were added and removed.
+/datum/gas_mixture/proc/check_tile_graphic(list/graphic_add = null, list/graphic_remove = null)
+	for(var/g in XGM.overlay_limit)
+		if(graphic.Find(XGM.tile_overlay[g]))
+			//Overlay is already applied for this gas, check if it's still valid.
+			if(molar_density(g) <= XGM.overlay_limit[g])
+				if(!graphic_remove)
+					graphic_remove = list()
+				graphic_remove += XGM.tile_overlay[g]
+		else
+			//Overlay isn't applied for this gas, check if it's valid and needs to be added.
+			if(molar_density(g) > XGM.overlay_limit[g])
+				if(!graphic_add)
+					graphic_add = list()
+				graphic_add += XGM.tile_overlay[g]
 
-	var/old_graphics = graphics
-
-	graphics = 0
-
-	// If configured and cold, maek ice
-	if(zas_settings.Get(/datum/ZAS_Setting/ice_formation))
-		if(temperature <= TEMPERATURE_ICE_FORMATION && return_pressure() > MIN_PRESSURE_ICE_FORMATION)
-			// If we're just forming, do a probability check. Otherwise, KEEP IT ON~
-			// This ordering will hopefully keep it from sampling random noise every damn tick.
-			//if(was_icy || (!was_icy && prob(25)))
-			graphics |= GRAPHICS_COLD
-
-	if((molar_density(GAS_PLASMA) * CELL_VOLUME) > MOLES_PLASMA_VISIBLE)
-		graphics |= GRAPHICS_PLASMA
-
-	if((molar_density(GAS_SLEEPING) * CELL_VOLUME) > 1)
-		graphics |= GRAPHICS_N2O
-
-	return graphics != old_graphics
+	. = 0
+	//Apply changes
+	if(graphic_add?.len)
+		graphic += graphic_add
+		. = 1
+	if(graphic_remove?.len)
+		graphic -= graphic_remove
+		. = 1
 
 /datum/gas_mixture/proc/react(atom/dump_location)
 	//Purpose: Calculating if it is possible for a fire to occur in the airmix
