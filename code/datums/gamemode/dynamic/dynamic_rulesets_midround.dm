@@ -133,7 +133,7 @@
 	role_category = ROLE_OPERATIVE
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
-	required_candidates = 6
+	required_candidates = 5
 	weight = 5
 	cost = 35
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
@@ -181,8 +181,14 @@
 		new_character.dna.ResetSE()
 
 		assigned += new_character
-		var/datum/role/nuclear_operative/newCop = new
-		newCop.AssignToRole(new_character.mind,1)
-		nuclear.HandleRecruitedRole(newCop)
-		newCop.Greet(GREET_MIDROUND)
+		if (i == required_candidates)
+			var/datum/role/nuclear_operative/leader/newCop = new
+			newCop.AssignToRole(new_character.mind,1)
+			nuclear.HandleRecruitedRole(newCop)
+			newCop.Greet(GREET_MIDROUND)
+		else
+			var/datum/role/nuclear_operative/newCop = new
+			newCop.AssignToRole(new_character.mind,1)
+			nuclear.HandleRecruitedRole(newCop)
+			newCop.Greet(GREET_MIDROUND)
 	nuclear.OnPostSetup()
