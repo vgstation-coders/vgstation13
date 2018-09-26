@@ -38,9 +38,7 @@
 /obj/effect/mine/plasma/trigger(AM)
 	for(var/turf/simulated/floor/target in range(1,src))
 		if(!target.blocks_air)
-			var/datum/gas_mixture/payload = new
-			payload.toxins = 30
-			target.zone.air.merge(payload)
+			target.zone.air.adjust_gas(GAS_PLASMA, 30)
 			target.hotspot_expose(1000, CELL_VOLUME)
 	qdel(src)
 

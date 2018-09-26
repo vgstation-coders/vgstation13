@@ -160,14 +160,14 @@
 	breath.update_values()
 
 	//Partial pressure of the toxins in our breath
-	var/Toxins_pp = (breath.toxins / breath.total_moles()) * breath.pressure
+	var/Toxins_pp = breath.partial_pressure(GAS_PLASMA)
 
 	if(Toxins_pp) // Detect toxins in air
 
-		AdjustPlasma(breath.toxins * 250)
+		AdjustPlasma(breath[GAS_PLASMA] * 250)
 		toxins_alert = max(toxins_alert, 1)
 
-		toxins_used = breath.toxins
+		toxins_used = breath[GAS_PLASMA]
 
 	else
 		toxins_alert = 0

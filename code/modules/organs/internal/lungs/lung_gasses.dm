@@ -6,13 +6,10 @@
 /datum/lung_gas
 	var/datum/organ/internal/lungs/lungs = null
 	var/id=""
-	var/is_trace = 0
-	var/datum/gas/gas = null
 	var/datum/gas_mixture/breath = null
 
-/datum/lung_gas/New(var/gas_id, var/trace_gas=0)
+/datum/lung_gas/New(var/gas_id) //If you came here looking for what the second arg is, it was removed and no longer matters
 	src.id = gas_id
-	src.is_trace = trace_gas
 
 /datum/lung_gas/proc/get_pp()
 	var/breath_pressure = (breath.total_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/lungs.inhale_volume
@@ -24,40 +21,20 @@
 		return 0
 
 /datum/lung_gas/proc/get_moles()
-	if(!is_trace)
-		return breath.vars[id]
-	else
-		if(gas)
-			return gas.moles
-		return 0
+	return breath[id]
 
 /datum/lung_gas/proc/add_exhaled(var/moles)
 	lungs.exhale_moles += moles
 
 /datum/lung_gas/proc/set_moles(var/moles)
-	if(!is_trace)
-		breath.vars[id]=moles
-	else
-		if(gas)
-			gas.moles = moles
+	breath[id] = moles
 
 /datum/lung_gas/proc/add_moles(var/moles)
-	if(!is_trace)
-		breath.vars[id]+=moles
-	else
-		if(gas)
-			gas.moles += moles
+	breath[id] += moles
 
 /datum/lung_gas/proc/set_context(var/datum/organ/internal/lungs/L, var/datum/gas_mixture/breath, var/mob/living/carbon/human/H)
-	src.lungs=L
-	src.breath=breath
-	if(is_trace)
-		// Find the trace gas we need to mess with
-		if(breath.trace_gases.len)	// If there's some other shit in the air lets deal with it here.
-			for(var/datum/gas/G in breath.trace_gases)
-				if("[G.type]" != id)
-					continue
-				gas = G
+	src.lungs = L
+	src.breath = breath
 
 /datum/lung_gas/proc/handle_inhale()
 	return

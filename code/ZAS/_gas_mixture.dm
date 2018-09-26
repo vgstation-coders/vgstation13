@@ -317,10 +317,10 @@
 			//if(was_icy || (!was_icy && prob(25)))
 			graphics |= GRAPHICS_COLD
 
-	if((molar_density[GAS_PLASMA] * CELL_VOLUME) > MOLES_PLASMA_VISIBLE)
+	if((molar_density(GAS_PLASMA) * CELL_VOLUME) > MOLES_PLASMA_VISIBLE)
 		graphics |= GRAPHICS_PLASMA
 
-	if((molar_density[GAS_SLEEPING] * CELL_VOLUME) > 1)
+	if((molar_density(GAS_SLEEPING) * CELL_VOLUME) > 1)
 		graphics |= GRAPHICS_N2O
 
 	return graphics != old_graphics

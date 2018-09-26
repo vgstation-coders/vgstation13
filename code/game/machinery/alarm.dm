@@ -1063,7 +1063,7 @@ FIRE ALARM
 	var/turf/simulated/location = loc
 	if(shelter && istype(location)) //If simulated turf and we have a shelter to drop
 		var/datum/gas_mixture/environment = location.return_air()
-		if(environment.toxins*(R_IDEAL_GAS_EQUATION*environment.temperature/environment.volume)>0.5) //Partial Pressure of 0.5%
+		if(environment.partial_pressure(GAS_PLASMA) > 0.5) //Partial Pressure of 0.5kPa
 			var/obj/item/inflatable/shelter/S = new /obj/item/inflatable/shelter(loc)
 			S.inflate()
 			shelter = FALSE

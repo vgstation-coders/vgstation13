@@ -138,9 +138,9 @@ Class Procs:
 
 /zone/proc/dbg_data(mob/M)
 	to_chat(M, name)
-	to_chat(M, "O2: [air.oxygen] N2: [air.nitrogen] CO2: [air.carbon_dioxide] P: [air.toxins]")
-	to_chat(M, "P: [air.return_pressure()] kPa V: [air.volume]L T: [air.temperature]�K ([air.temperature - T0C]�C)")
-	to_chat(M, "O2 per N2: [(air.nitrogen ? air.oxygen/air.nitrogen : "N/A")] Moles: [air.total_moles]")
+	to_chat(M, "O2: [air[GAS_OXYGEN]] N2: [air[GAS_NITROGEN]] CO2: [air[GAS_CARBON]] P: [air[GAS_PLASMA]]")
+	to_chat(M, "P: [air.pressure] kPa V: [air.volume]L T: [air.temperature]�K ([air.temperature - T0C]�C)")
+	to_chat(M, "O2 per N2: [(air[GAS_NITROGEN] ? air[GAS_OXYGEN]/air[GAS_NITROGEN] : "N/A")] Moles: [air.total_moles]")
 	to_chat(M, "Simulated: [contents.len] ([air.volume / CELL_VOLUME])")
 //	to_chat(M, "Unsimulated: [unsimulated_contents.len]")
 //	to_chat(M, "Edges: [edges.len]")

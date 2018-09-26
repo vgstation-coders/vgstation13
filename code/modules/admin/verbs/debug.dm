@@ -573,11 +573,11 @@ Pressure: [env.pressure]"}
 		if(Rad.anchored)
 			if(!Rad.P)
 				var/obj/item/weapon/tank/plasma/Plasma = new/obj/item/weapon/tank/plasma(Rad)
-				Plasma.air_contents.toxins = 100 //Don't need to explain, space magic
+				Plasma.air_contents[GAS_PLASMA] = 100 //Don't need to explain, space magic
 				Plasma.air_contents.temperature = 73.15 //Perfect freezer cooling
+				Plasma.air_contents.update_values()
 				Rad.drain_ratio = 0
 				Rad.P = Plasma
-				Plasma.forceMove(Rad)
 
 			if(!Rad.active)
 				Rad.toggle_power()

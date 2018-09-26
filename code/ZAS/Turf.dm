@@ -209,10 +209,10 @@
 	//Create gas mixture to hold data for passing
 	var/datum/gas_mixture/unsimulated/GM = new
 
-	GM.oxygen = oxygen
-	GM.carbon_dioxide = carbon_dioxide
-	GM.nitrogen = nitrogen
-	GM.toxins = toxins
+	GM[GAS_OXYGEN] = oxygen
+	GM[GAS_CARBON] = carbon_dioxide
+	GM[GAS_NITROGEN] = nitrogen
+	GM[GAS_PLASMA] = toxins
 
 	GM.temperature = temperature
 	GM.update_values()
@@ -224,10 +224,10 @@
 
 	var/sum = oxygen + carbon_dioxide + nitrogen + toxins
 	if(sum>0)
-		GM.oxygen = (oxygen/sum)*amount
-		GM.carbon_dioxide = (carbon_dioxide/sum)*amount
-		GM.nitrogen = (nitrogen/sum)*amount
-		GM.toxins = (toxins/sum)*amount
+		GM[GAS_OXYGEN] = (oxygen/sum)*amount
+		GM[GAS_CARBON] = (carbon_dioxide/sum)*amount
+		GM[GAS_NITROGEN] = (nitrogen/sum)*amount
+		GM[GAS_PLASMA] = (toxins/sum)*amount
 
 	GM.temperature = temperature
 	GM.update_values()

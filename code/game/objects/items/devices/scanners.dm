@@ -367,9 +367,9 @@ Subject's pulse: ??? BPM"})
 		if(o2_concentration > 0.01)
 			message += "<br>[human_standard && abs(o2_concentration - O2STANDARD) > 2 ? "<span class='bad'>" : "<span class='notice'>"] Oxygen: [round(scanned[GAS_OXYGEN], 0.1)] mol, [round(o2_concentration*100)]%</span>"
 		if(co2_concentration > 0.01)
-			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] CO2: [round(scanned.carbon_dioxide, 0.1)] mol, [round(co2_concentration*100)]%</span>"
+			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] CO2: [round(scanned[GAS_CARBON], 0.1)] mol, [round(co2_concentration*100)]%</span>"
 		if(plasma_concentration > 0.01)
-			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] Plasma: [round(scanned.toxins, 0.1)] mol, [round(plasma_concentration*100)]%</span>"
+			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] Plasma: [round(scanned[GAS_PLASMA], 0.1)] mol, [round(plasma_concentration*100)]%</span>"
 		if(unknown_concentration > 0.01)
 			message += "<br><span class='notice'>Unknown: [round(unknown_concentration*100)]%</span>"
 

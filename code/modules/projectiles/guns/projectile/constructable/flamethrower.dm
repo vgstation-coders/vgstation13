@@ -253,7 +253,6 @@
 	..()
 	ptank = new /obj/item/weapon/tank/plasma(src)
 	var/datum/gas_mixture/gas_tank = ptank.air_contents
-	gas_tank.toxins = 29.1
-	gas_tank.update_values()
+	gas_tank.adjust_gas(GAS_PLASMA, 29.1)
 	update_icon()
 	return

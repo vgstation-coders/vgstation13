@@ -639,7 +639,7 @@
 	if(!gas_jet)
 		return
 
-	var/jet_total_moles = total_moles
+	var/jet_total_moles = gas_jet.total_moles
 	if(jet_total_moles)
 		var/toxin_concentration = gas_jet[GAS_PLASMA] / jet_total_moles
 		if(!(toxin_concentration > 0.01))
