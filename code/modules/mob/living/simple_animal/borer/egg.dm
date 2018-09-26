@@ -90,7 +90,7 @@
 	if(!location)
 		return
 	var/datum/gas_mixture/environment = location.return_air()
-	//testing("[type]/PROCESS() - plasma: [environment.toxins]")
+	//testing("[type]/PROCESS() - plasma: [environment[GAS_PLASMA]]")
 	var/meets_conditions=1
 	for(var/gas_id in required_mols)
 		if(environment.molar_density(gas_id) < required_mols[gas_id])

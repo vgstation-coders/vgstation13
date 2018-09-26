@@ -377,12 +377,12 @@
 		co2overloadtime = 0
 
 	if(Toxins_pp > safe_toxins_max) // Too much toxins
-		var/ratio = (breath.toxins/safe_toxins_max) * 10
+		var/ratio = (breath[GAS_PLASMA]/safe_toxins_max) * 10
 		//adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))	//Limit amount of damage toxin exposure can do per second
 		if(wear_mask)
 			if(wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
-				if(breath.toxins > safe_toxins_mask)
-					ratio = (breath.toxins/safe_toxins_mask) * 10
+				if(breath[GAS_PLASMA] > safe_toxins_mask)
+					ratio = (breath[GAS_PLASMA]/safe_toxins_mask) * 10
 				else
 					ratio = 0
 		if(ratio)

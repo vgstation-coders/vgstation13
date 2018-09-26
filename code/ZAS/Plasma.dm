@@ -125,18 +125,3 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		shoes.contaminate()
 	if(gloves)
 		gloves.contaminate()
-
-/*
-/turf/Entered(atom/movable/Obj, atom/OldLoc)
-	..(Obj, OldLoc)
-
-	var/obj/item/I = Obj
-
-	// items that are in plasma, but not on a mob, can still be contaminated.
-	if(istype(I) && zas_settings.Get(/datum/ZAS_Setting/CLOTH_CONTAMINATION))
-		var/datum/gas_mixture/environment = return_air()
-
-		if(environment.toxins > MOLES_PLASMA_VISIBLE + 1)
-			if(I.can_contaminate())
-				I.contaminate()
-*/
