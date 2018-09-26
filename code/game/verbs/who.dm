@@ -60,7 +60,8 @@
 			else
 				living++
 		if (C.mob.mind && C.mob.mind.antag_roles.len > 0)
-			for(var/datum/role/R in C.mob.mind.antag_roles)
+			for(var/role in C.mob.mind.antag_roles)
+				var/datum/role/R = C.mob.mind.antag_roles[role]
 				entry += " - <b><span class='red'>[uppertext(R.name)]</span></b>"
 			if(!(C.mob.isDead()))
 				living_antags++
