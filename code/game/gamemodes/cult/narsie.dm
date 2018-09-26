@@ -477,6 +477,7 @@ var/global/mr_clean_targets = list(
 	else if (isturf(A))
 		var/turf/T = A
 		T.clean_blood()
+		T.remove_rot()
 		var/dist = get_dist(T, src)
 
 		for (var/atom/movable/AM in T.contents)
