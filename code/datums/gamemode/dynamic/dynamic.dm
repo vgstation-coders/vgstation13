@@ -213,8 +213,6 @@ var/list/forced_roundstart_ruleset = list()
 		update_playercounts()
 
 		if (injection_attempt())
-			message_admins("DYNAMIC MODE: Attempting to inject some antags.")
-			log_admin("DYNAMIC MODE: Attempting to inject some antags.")
 			midround_injection_cooldown = rand(600,1050)//20 to 35 minutes inbetween midround threat injections attempts
 			var/list/drafted_rules = list()
 			var/list/current_players = list(CURRENT_LIVING_PLAYERS, CURRENT_LIVING_ANTAGS, CURRENT_DEAD_PLAYERS, CURRENT_OBSERVERS)
@@ -280,7 +278,15 @@ var/list/forced_roundstart_ruleset = list()
 	if (threat < 30)
 		chance -= 20
 	chance = round(max(0,chance))
-	return (prob(chance))
+	message_admins("DYNAMIC MODE: Chance of injection with the current player numbers and threat level is...[chance]%.")
+	log_admin("DYNAMIC MODE: Chance of injection with the current player numbers and threat level is...[chance]%.")
+	if (prob(chance))
+		message_admins("DYNAMIC MODE: Check passed! Looking for a valid ruleset to execute.")
+		log_admin("DYNAMIC MODE: Check passed! Looking for a valid ruleset to execute.")
+		return 1
+	message_admins("DYNAMIC MODE: Check failed!")
+	log_admin("DYNAMIC MODE: Check failed!")
+	return 0
 
 /datum/gamemode/dynamic/latespawn(var/mob/living/newPlayer)
 	if(emergency_shuttle.departed)//no more rules after the shuttle has left

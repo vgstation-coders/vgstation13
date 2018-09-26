@@ -33,7 +33,7 @@
 	if (istype(ticker.mode, /datum/gamemode/dynamic))
 		mode = ticker.mode
 	else
-		message_admins("A dynamic ruleset was created but server isn't on Dynamic Mode!")
+		//message_admins("A dynamic ruleset was created but server isn't on Dynamic Mode!")
 		qdel(src)
 
 /datum/dynamic_ruleset/roundstart//One or more of those drafted at roundstart
