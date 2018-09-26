@@ -1,4 +1,4 @@
-/var/datum/xgm_data/XGM = new
+/var/datum/xgm_data/XGM = new()
 
 /datum/xgm_data
 	// List of ID = gas datum.
@@ -18,24 +18,23 @@
 	// Flags.
 	var/list/flags = list()
 
-/hook_handler/xgm/proc/OnStartup(var/list/args)
-	XGM = new
-	for (var/p in subtypesof(/datum/gas))
-		var/datum/gas/gas = new p
+/datum/xgm_data/New()
+	for(var/p in subtypesof(/datum/gas))
+		var/datum/gas/gas = new p()
 
-		if (gas.id in XGM.gases)
+		if(gas.id in gases)
 			stack_trace("Duplicate gas id '[gas.id]' in from typepath '[p]'")
 			continue
 
-		XGM.gases[gas.id] = gas
-		XGM.name[gas.id] = gas.name
-		XGM.short_name[gas.id] = gas.short_name || gas.name
-		XGM.specific_heat[gas.id] = gas.specific_heat
-		XGM.molar_mass[gas.id] = gas.molar_mass
-		XGM.flags[gas.id] = gas.flags
-		if (gas.tile_overlay)
-			XGM.tile_overlay[gas.id] = image('icons/effects/tile_effects.dmi', gas.tile_overlay, FLY_LAYER)
-		if (gas.overlay_limit)
-			XGM.overlay_limit[gas.id] = gas.overlay_limit
+		gases[gas.id] = gas
+		name[gas.id] = gas.name
+		short_name[gas.id] = gas.short_name || gas.name
+		specific_heat[gas.id] = gas.specific_heat
+		molar_mass[gas.id] = gas.molar_mass
+		flags[gas.id] = gas.flags
+		if(gas.tile_overlay)
+			tile_overlay[gas.id] = image('icons/effects/tile_effects.dmi', gas.tile_overlay, FLY_LAYER)
+		if(gas.overlay_limit)
+			overlay_limit[gas.id] = gas.overlay_limit
 
 	return 1
