@@ -228,7 +228,7 @@ var/list/forced_roundstart_ruleset = list()
 						drafted_rules[rule] = rule.weight
 
 			if (drafted_rules.len > 0)
-				picking_latejoin_rule(drafted_rules)
+				picking_midround_rule(drafted_rules)
 		else
 			midround_injection_cooldown = rand(600,1050)
 
