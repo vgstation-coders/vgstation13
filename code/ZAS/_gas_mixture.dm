@@ -295,10 +295,10 @@
 
 	. = 0
 	//Apply changes
-	if(graphic_add?.len)
+	if(graphic_add && graphic_add.len)
 		graphic += graphic_add
 		. = 1
-	if(graphic_remove?.len)
+	if(graphic_remove && graphic_remove.len)
 		graphic -= graphic_remove
 		. = 1
 
