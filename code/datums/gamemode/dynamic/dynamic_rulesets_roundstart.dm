@@ -181,7 +181,7 @@
 	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
-	required_candidates = 6
+	required_candidates = 5
 	weight = 5
 	cost = 30
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
@@ -192,16 +192,24 @@
 	if (!nuclear)
 		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)
 
+	var/leader = 1
 	for(var/operatives_number = 1 to required_candidates)
 		if(candidates.len <= 0)
 			break
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
-		var/datum/role/nuclear_operative/newCop = new
-		newCop.AssignToRole(M.mind,1)
-		nuclear.HandleRecruitedRole(newCop)
-		newCop.Greet(GREET_ROUNDSTART)
+		if (leader)
+			leader = 0
+			var/datum/role/nuclear_operative/leader/newCop = new
+			newCop.AssignToRole(M.mind,1)
+			nuclear.HandleRecruitedRole(newCop)
+			newCop.Greet(GREET_ROUNDSTART)
+		else
+			var/datum/role/nuclear_operative/newCop = new
+			newCop.AssignToRole(M.mind,1)
+			nuclear.HandleRecruitedRole(newCop)
+			newCop.Greet(GREET_ROUNDSTART)
 	return 1
 
 

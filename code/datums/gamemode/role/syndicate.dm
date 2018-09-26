@@ -384,3 +384,6 @@
 	id = NUKE_OP
 	disallow_job = TRUE
 	logo_state = "nuke-logo"
+
+/datum/role/nuclear_operative/leader
+	logo_state = "nuke-logo-leader"
