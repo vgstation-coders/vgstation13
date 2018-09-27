@@ -55,7 +55,7 @@ var/list/SPS_list = list()
 /obj/item/device/gps/attack_self(mob/user)
 	if(emped)
 		return
-	if(transmitting)
+	if(transmitting || isobserver(user))
 		ui_interact(user)
 		return
 	var/choice = alert(user,"Would you like to turn on the GPS?",,"Yes","No")
