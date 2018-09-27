@@ -53,6 +53,10 @@
 	name		= "Deck of cards"
 	spawn_type	= /obj/item/toy/cards
 
+/datum/rcd_schematic/rsf/unecards
+	name		= "Deck of Une cards"
+	spawn_type	= /obj/item/toy/cards/une
+
 /datum/rcd_schematic/rsf/mug
 	name		= "Mug"
 	spawn_type	= /obj/item/weapon/reagent_containers/food/drinks/mug

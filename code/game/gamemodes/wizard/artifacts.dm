@@ -19,7 +19,7 @@
 	name = "Staff of Change"
 	desc = "An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself."
 	abbreviation = "ST"
-	spawned_items = list(/obj/item/weapon/gun/energy/staff)
+	spawned_items = list(/obj/item/weapon/gun/energy/staff/change)
 
 /datum/spellbook_artifact/mental_focus
 	name = "Mental Focus"
@@ -61,7 +61,7 @@
 	desc = "An arcane staff capable of summoning undying minions from the corpses of your enemies. This magic doesn't affect machines."
 	abbreviation = "SN"
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/necro)
-
+/*
 #define APPRENTICE_PRICE Sp_BASE_PRICE
 /datum/spellbook_artifact/apprentice
 	name = "Contract of Apprenticeship"
@@ -69,6 +69,7 @@
 	abbreviation = "CT"
 	spawned_items = list(/obj/item/weapon/antag_spawner/contract)
 	price = APPRENTICE_PRICE
+*/
 
 /datum/spellbook_artifact/bundle
 	name = "Spellbook Bundle"
@@ -105,9 +106,10 @@
 	desc = "Nothing could possibly go wrong with arming a crew of lunatics just itching for an excuse to kill eachother. Just be careful not to get hit in the crossfire!"
 	abbreviation = "SG"
 
+/* WIZARDS, NO SENSE OF RIGHT OR WRONG
 /datum/spellbook_artifact/summon_guns/can_buy()
 	//Can't summon guns during ragin' mages
-	return !ticker.mode.rage
+	return !ticker.mode.rage*/
 
 /datum/spellbook_artifact/summon_guns/purchased(mob/living/carbon/human/H)
 	..()
@@ -121,9 +123,10 @@
 	desc = "Share the power of magic with the crew and turn them against each other. Or just empower them against you."
 	abbreviation = "SM"
 
+/* WIZARDS, NO SENSE OF RIGHT OR WRONG
 /datum/spellbook_artifact/summon_magic/can_buy()
 	//Can't summon magic during ragin' mages
-	return !ticker.mode.rage
+	return !ticker.mode.rage*/
 
 /datum/spellbook_artifact/summon_magic/purchased(mob/living/carbon/human/H)
 	..()
@@ -138,8 +141,7 @@
 	abbreviation = "SS"
 
 /datum/spellbook_artifact/summon_magic/can_buy()
-	//Can't summon swords during ragin' mages
-	return !ticker.mode.rage
+	return TRUE
 
 /datum/spellbook_artifact/summon_swords/purchased(mob/living/carbon/human/H)
 	..()

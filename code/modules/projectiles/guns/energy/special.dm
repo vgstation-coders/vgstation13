@@ -76,8 +76,7 @@
 	origin_tech = null
 	clumsy_check = 0
 	var/charge_tick = 0
-	var/changetype=null
-	var/next_changetype=0
+
 
 /obj/item/weapon/gun/energy/staff/New()
 	..()
@@ -102,7 +101,11 @@
 /obj/item/weapon/gun/energy/staff/update_icon()
 	return
 
-/obj/item/weapon/gun/energy/staff/process_chambered()
+/obj/item/weapon/gun/energy/staff/change
+	var/changetype=null
+	var/next_changetype=0
+
+/obj/item/weapon/gun/energy/staff/change/process_chambered()
 	if(!..())
 		return 0
 	var/obj/item/projectile/change/P=in_chamber
@@ -110,7 +113,7 @@
 		P.changetype=changetype
 	return 1
 
-/obj/item/weapon/gun/energy/staff/attack_self(var/mob/living/user)
+/obj/item/weapon/gun/energy/staff/change/attack_self(var/mob/living/user)
 	if(world.time < next_changetype)
 		to_chat(user, "<span class='warning'>[src] is still recharging.</span>")
 		return
@@ -140,9 +143,9 @@
 	projectile_type = "/obj/item/projectile/animate"
 	charge_cost = 100
 
-#define ZOMBIE 0
-#define SKELETON 1
-//#define FAITHLESS 2
+#define RAISE_TYPE_ZOMBIE 0
+#define RAISE_TYPE_SKELETON 1
+//#define RAISE_TYPE_FAITHLESS 2
 /obj/item/weapon/gun/energy/staff/necro
 	name = "staff of necromancy"
 	desc = "A wicked looking staff that pulses with evil energy."
@@ -175,10 +178,10 @@
 	if(next_change > world.timeofday)
 		to_chat(user, "<span class='warning'>You must wait longer to decide on a minion type.</span>")
 		return
-	/*if(raisetype < FAITHLESS)
+	/*if(raisetype < RAISE_TYPE_FAITHLESS)
 		raisetype = !raisetype
 	else
-		raisetype = ZOMBIE*/
+		raisetype = RAISE_TYPE_ZOMBIE*/
 	raisetype = !raisetype
 
 	to_chat(user, "<span class='notice'>You will now raise [raisetype < 2 ? (raisetype ? "skeletal" : "zombified") : "unknown"] minions from corpses.</span>")
@@ -208,13 +211,13 @@
 	playsound(src, get_sfx("soulstone"), 50,1)
 
 	switch(raisetype)
-		if(ZOMBIE)
+		if(RAISE_TYPE_ZOMBIE)
 			var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(target), user, H)
 			T.get_clothes(H, T)
 			T.name = H.real_name
 			T.host = H
 			H.loc = null
-		if(SKELETON)
+		if(RAISE_TYPE_SKELETON)
 			new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(target), user, H)
 			H.gib()
 	charges--
@@ -224,8 +227,8 @@
 /obj/item/weapon/gun/energy/staff/necro/attack(mob/living/target as mob, mob/living/user as mob)
 	afterattack(target,user,1)
 
-#undef ZOMBIE
-#undef SKELETON
+#undef RAISE_TYPE_ZOMBIE
+#undef RAISE_TYPE_SKELETON
 
 /obj/item/weapon/gun/energy/staff/destruction_wand
 	name = "wand of destruction"
@@ -325,6 +328,26 @@
 			qdel(target)
 	else
 		to_chat(user, "<span class='warning'>[src] is not ready to fire again!</span>")
+
+/obj/item/weapon/gun/energy/staff/swapper
+	name = "staff of swip-swap"
+	desc = "The head and handle of this strange device keep switching places."
+	icon = 'icons/obj/wizard.dmi'
+	inhand_states = list(
+	"left_hand" = 'icons/mob/in-hand/left/guns.dmi',
+	"right_hand" = 'icons/mob/in-hand/right/guns.dmi')
+	item_state = "staffswap"
+	icon_state = "staff_swap"
+	projectile_type = "/obj/item/projectile/swap"
+	flags = FPRINT | TWOHANDABLE
+
+/obj/item/weapon/gun/energy/staff/swapper/update_wield(mob/user)
+	..()
+	to_chat(user, "<span class = 'notice'>[wielded?"Holding \the [src] in both hands grants it more power!":"As you hold \the [src] in one hand, it sighs."]</span>")
+	if(wielded)
+		projectile_type = "/obj/item/projectile/swap/advanced"
+	else
+		projectile_type = initial(projectile_type)
 
 /obj/item/weapon/gun/energy/floragun
 	name = "floral somatoray"

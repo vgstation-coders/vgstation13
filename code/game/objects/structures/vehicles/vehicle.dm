@@ -101,7 +101,10 @@
 			return
 	else if(istype(W, /obj/item/key))
 		if(!heldkey)
-			if(keytype && mykey == W)
+			if(keytype)
+				if(mykey && mykey != W)
+					to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
+					return
 				if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
 					to_chat(user, "<span class='warning'>You try to insert \the [W] to \the [src]'s ignition but you miss the slot!</span>")
 					return
@@ -140,11 +143,9 @@
 /obj/structure/bed/chair/vehicle/proc/check_key(var/mob/user)
 	if(!keytype)
 		return 1
-	if(mykey)
-		if(heldkey)
-			return 1
-		else
-			return user.is_holding_item(mykey)
+	if(mykey && heldkey)
+		return 1
+	return user.is_holding_item(mykey)
 
 /obj/structure/bed/chair/vehicle/relaymove(var/mob/living/user, direction)
 	if(user.incapacitated())
@@ -246,6 +247,10 @@
 	if (istype(C, /obj/machinery/cart))
 
 		if (!next_cart)
+			var/obj/machinery/cart/connecting = C
+			if(connecting.previous_cart)
+				to_chat(user, "\The [connecting] already has a cart connected to it!", "red")
+				return
 			next_cart = C
 			next_cart.previous_cart = src
 			user.visible_message("[user] connects [C] to [src].", "You connect [C] to [src]")
@@ -389,5 +394,8 @@
 		return
 	if(next_cart)
 		next_cart.Move(oldloc)
+
+/obj/structure/bed/chair/vehicle/proc/disconnected() //proc that carts call, we have no use for it
+	return
 
 /datum/locking_category/buckle/chair/vehicle

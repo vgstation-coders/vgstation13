@@ -41,7 +41,7 @@
 
 
 		//Updates the number of stored chemicals for powers
-		handle_changeling()
+		//handle_changeling()
 
 		//Mutations and radiation
 		handle_mutations_and_radiation()
@@ -635,6 +635,9 @@
 		if(stuttering)
 			stuttering = max(stuttering-1, 0)
 
+		if(say_mute)
+			say_mute = max(say_mute-1, 0)
+
 		if(silent)
 			silent = max(silent-1, 0)
 
@@ -754,10 +757,10 @@
 			return
 
 
-/mob/living/carbon/monkey/proc/handle_changeling()
+/*/mob/living/carbon/monkey/proc/handle_changeling()
 	if(mind && mind.changeling)
 		mind.changeling.regenerate()
-
+*/
 ///FIRE CODE
 /mob/living/carbon/monkey/handle_fire()
 	if(..())

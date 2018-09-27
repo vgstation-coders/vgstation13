@@ -93,6 +93,9 @@
 	var/lock_controls = 0
 	var/list/intrinsic_spells = null
 
+/obj/mecha/get_cell()
+	return cell
+
 /obj/mecha/New()
 	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
 	hud_list[DIAG_CELL_HUD] = image('icons/mob/hud.dmi', src, "hudbattmax")
@@ -1227,8 +1230,7 @@
 		//change the cursor
 		if(H.client && cursor_enabled)
 			H.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
-
-		// -- Mode/mind specific stuff goes here
+		/* -- Mode/mind specific stuff goes here
 		if(H.mind)
 			if(isrev(H) || isrevhead(H))
 				ticker.mode.update_all_rev_icons()
@@ -1239,6 +1241,7 @@
 			if(iswizard(H) || isapprentice(H))
 				ticker.mode.update_all_wizard_icons()
 		// -- End mode specific stuff
+		*/
 
 		return 1
 	else
@@ -1436,7 +1439,7 @@
 		if(src.occupant && src.occupant.client)
 			src.occupant.client.mouse_pointer_icon = initial(src.occupant.client.mouse_pointer_icon)
 
-		// -- Mode/mind specific stuff goes here
+		/* -- Mode/mind specific stuff goes here
 		if(src.occupant.mind)
 			if(isrev(src.occupant) || isrevhead(src.occupant))
 				ticker.mode.update_all_rev_icons()
@@ -1447,6 +1450,7 @@
 			if(iswizard(src.occupant) || isapprentice(src.occupant))
 				ticker.mode.update_all_wizard_icons()
 		// -- End mode specific stuff
+		*/
 
 		src.occupant = null
 		src.icon_state = src.reset_icon()+"-open"

@@ -372,6 +372,9 @@
 			if(stuttering)
 				stuttering = max(stuttering-1, 0)
 
+			if(say_mute)
+				say_mute = max(say_mute-1, 0)
+
 			if(silent)
 				silent = max(silent-1, 0)
 

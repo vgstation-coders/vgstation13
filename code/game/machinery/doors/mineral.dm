@@ -209,9 +209,6 @@
 	qdel(src)
 	return
 
-/obj/machinery/door/mineral/wood/cultify()
-	return
-
 /obj/machinery/door/mineral/resin
 	prefix = "resin"
 	icon_state = "resindoor_closed"
@@ -284,3 +281,66 @@
 	..()
 	icon_state = "[prefix]door_closed"
 	name = "icicle door"
+
+/obj/machinery/door/mineral/cult
+	name = "cult door"
+	icon = 'icons/obj/doors/doorcult.dmi'
+	icon_state = "cultdoor_closed0"
+
+	explosion_block = 1
+	prefix = "cult"
+	animation_delay = 0
+	var/health = 100
+	var/maxHealth = 100
+
+/obj/machinery/door/mineral/cult/New()
+	..()
+	update_icon()
+	playsound(src, soundeffect, 100, 1)
+	flick("cultdoor_spawn", src)
+
+/obj/machinery/door/mineral/cult/Destroy()
+	if (loc)
+		playsound(loc, 'sound/effects/stone_crumble.ogg', 100, 1)
+	anim(location = loc,target = loc.loc,a_icon = 'icons/obj/doors/doorcult.dmi', flick_anim = "cultdoor_breakdown")
+	..()
+
+/obj/machinery/door/mineral/cult/Uncrossed(var/atom/movable/mover)
+	if (!density && !operating && !(locate(/mob/living) in loc))
+		close()
+
+/obj/machinery/door/mineral/cult/TryToSwitchState(atom/user)
+	if (ismob(user))
+		var/mob/M = user
+		if(iscultist(M) && !operating)
+			add_fingerprint(M)
+			SwitchState()
+
+/obj/machinery/door/mineral/cult/cultify()
+	return
+
+/obj/machinery/door/mineral/cult/update_icon()
+	..()
+	if(density)
+		icon_state += "[min(3,round((maxHealth-health)/25))]"
+
+/obj/machinery/door/mineral/cult/bullet_act(var/obj/item/projectile/Proj)
+	if(Proj.damage_type == BRUTE || Proj.damage_type == BURN)
+		health -= Proj.damage
+		CheckHardness()
+
+/obj/machinery/door/mineral/cult/attackby(var/obj/item/weapon/W, var/mob/user)
+	if(istype(W, /obj/item/weapon/card))
+		to_chat(user, "You swipe your card at \the [src], petulantly expecting a result.")
+	else
+		health -= W.force
+		to_chat(user, "You hit \the [src] with your [W.name]!")
+		if(W.hitsound)
+			playsound(src, W.hitsound, 50, 1, -1)
+		user.delayNextAttack(10)
+		CheckHardness()
+
+/obj/machinery/door/mineral/cult/CheckHardness()
+	update_icon()
+	if(health <= 0)
+		qdel(src)

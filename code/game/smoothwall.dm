@@ -8,18 +8,18 @@
 /atom/proc/findSmoothingNeighbors()
 	// THIS IS A BITMAP BECAUSE NORTH/SOUTH/ETC ARE ALL BITFLAGS BECAUSE BYOND IS DUMB AND
 	// DOESN'T FUCKING MAKE SENSE, BUT IT WORKS TO OUR ADVANTAGE
-	var/junction = 0
+	var/J = 0
 	for(var/cdir in cardinal)
 		var/turf/T = get_step(src,cdir)
 		if(isSmoothableNeighbor(T))
-			junction |= cdir
+			J |= cdir
 			continue // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 		for(var/atom/A in T)
 			if(isSmoothableNeighbor(A))
-				junction |= cdir
+				J |= cdir
 				break // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 
-	return junction
+	return J
 
 /atom/proc/isSmoothableNeighbor(atom/A)
 	if(!A)
@@ -57,7 +57,7 @@
  * WE COULD STANDARDIZE THIS BUT EVERYONE'S A FUCKING SNOWFLAKE
  */
 /turf/simulated/wall/relativewall()
-	var/junction=findSmoothingNeighbors()
+	junction = findSmoothingNeighbors()
 	icon_state = "[walltype][junction]" // WHY ISN'T THIS IN UPDATE_ICON OR SIMILAR
 
 // AND NOW WE HAVE TO YELL AT THE NEIGHBORS FOR BEING LOUD AND NOT PAINTING WITH HOA-APPROVED COLORS
@@ -127,5 +127,5 @@ var/list/smoothable_unsims = list(
 		relativewall_neighbours()
 
 /turf/unsimulated/wall/relativewall()
-	var/junction=findSmoothingNeighbors()
+	junction = findSmoothingNeighbors()
 	icon_state = "[walltype][junction]"

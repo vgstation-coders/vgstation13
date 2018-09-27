@@ -66,6 +66,8 @@
 
 	var/image/viewblock
 
+	var/junction = 0
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -262,6 +264,9 @@
 					was_pulling.pulledby = MOB
 				if ((A && A.loc))
 					A.loc.Entered(A)
+				if (istype(A,/obj/item/projectile))
+					var/obj/item/projectile/P = A
+					P.reset()//fixing linear projectile movement
 
 /turf/proc/is_plating()
 	return 0
@@ -773,3 +778,6 @@
 
 /turf/attack_hand(mob/user as mob)
 	user.Move_Pulled(src)
+
+/turf/proc/remove_rot()
+	return

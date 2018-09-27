@@ -1,7 +1,7 @@
 
 /datum/artifact_effect/gasoxy
 	effecttype = "gasoxy"
-	effect = list(EFFECT_TOUCH, EFFECT_AURA)
+	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA)
 	var/max_pressure
 	copy_for_battery = list("max_pressure")
 

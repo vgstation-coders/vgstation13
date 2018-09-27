@@ -418,9 +418,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 //#define SHOCKWAVE		21 	// (Not implemented) attack a nearby tile and cause a massive shockwave, knocking most people on their asses (25%)
 //#define ELECTRICITY	22 	// (Not implemented) ability to shoot electric attacks (15%)
 
-	//2spooky
-#define SKELETON 29
-#define PLANT 30
+//2spooky
+#define M_SKELETON 29
 
 // Other Mutations:
 #define M_NO_BREATH		100 	// no need to breathe
@@ -530,7 +529,7 @@ var/global/list/bad_changing_colour_ckeys = list()
 #define INV_SLOT_SIGHT "sight_slot"
 #define INV_SLOT_TOOL "tool_slot"
 
-#define IS_MODE_COMPILED(MODE) (ispath(text2path("/datum/game_mode/"+(MODE))))
+//#define IS_MODE_COMPILED(MODE) (ispath(text2path("/datum/gamemode/"+(MODE))))
 
 
 var/list/global_mutations = list() // list of hidden mutation things
@@ -659,6 +658,9 @@ var/list/liftable_structures = list(\
 #define SEE_INVISIBLE_LEVEL_TWO 45	//Used by mobs under certain conditions.
 #define INVISIBILITY_LEVEL_TWO 45	//Used by turrets inside their covers.
 
+#define INVISIBILITY_CULTJAUNT 50	//Used by cult
+#define SEE_INVISIBLE_CULTJAUNT 50	//Used by cult
+
 #define INVISIBILITY_OBSERVER 60	//Used by Ghosts.
 #define SEE_INVISIBLE_OBSERVER 60	//Used by Ghosts.
 
@@ -702,7 +704,6 @@ SEE_PIXELS	256
 #define BEE_HEADING_HOME 3
 #define BEE_SWARM 4
 #define BEE_BUILDING 5
-
 
 //for infestation events
 #define LOC_KITCHEN 0
@@ -851,23 +852,25 @@ SEE_PIXELS	256
 #define ROLEPREF_VALMASK  3 // 0b00000011 - Used to get ROLEPREF flags without the ROLEPREF_POLLED and ROLEPREF_SAVE bits
 
 // Should correspond to jobbans, too.
-#define ROLE_ALIEN      "alien"
-#define ROLE_BLOB       "blob"      // New!
-#define ROLE_BORER      "borer"     // New!
-#define ROLE_CHANGELING "changeling"
-#define ROLE_COMMANDO   "commando"  // New!
-#define ROLE_CULTIST    "cultist"
-#define ROLE_MALF       "malf AI"
-#define ROLE_NINJA      "ninja"
-#define ROLE_OPERATIVE  "operative" // New!
-#define ROLE_PAI        "pAI"
-#define ROLE_PLANT      "Dionaea"
-#define ROLE_POSIBRAIN  "posibrain"
-#define ROLE_REV        "revolutionary"
-#define ROLE_TRAITOR    "traitor"
-#define ROLE_VAMPIRE    "vampire"
-#define ROLE_VOXRAIDER  "vox raider"
-#define ROLE_WIZARD     "wizard"
+#define ROLE_ALIEN      	"alien"
+#define ROLE_BLOB       	"blob"      // New!
+#define ROLE_BORER      	"borer"     // New!
+#define ROLE_CHANGELING 	"changeling"
+#define ROLE_COMMANDO   	"commando"  // New!
+#define ROLE_CULTIST    	"cultist"
+#define ROLE_LEGACY_CULTIST "legacy_cultist"
+#define ROLE_MALF       	"malf AI"
+#define ROLE_NINJA      	"ninja"
+#define ROLE_OPERATIVE  	"operative" // New!
+#define ROLE_PAI        	"pAI"
+#define ROLE_PLANT      	"Dionaea"
+#define ROLE_POSIBRAIN  	"posibrain"
+#define ROLE_REV        	"revolutionary"
+#define ROLE_STRIKE     	"Strike Team"
+#define ROLE_TRAITOR    	"traitor"
+#define ROLE_VAMPIRE    	"vampire"
+#define ROLE_VOXRAIDER  	"vox raider"
+#define ROLE_WIZARD     	"wizard"
 
 
 #define AGE_MIN 17			//youngest a character can be
@@ -1013,7 +1016,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VAMP_SHADOW   15
 #define VAMP_CHARISMA 16
 #define VAMP_UNDYING  17
-
+#define VAMP_CAPE	  18
 #define STARTING_BLOOD 10
 
 // Moved from machine_interactions.dm
@@ -1259,7 +1262,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
-	#warning SOME ASSHOLE FORGOT TO COMMENT SAY_DEBUG BEFORE COMMITTING
+	#warn SOME ASSHOLE FORGOT TO COMMENT SAY_DEBUG BEFORE COMMITTING
 	#define say_testing(a,x) to_chat(a, ("([__FILE__]:[__LINE__] say_testing) [x]"))
 #else
 	#define say_testing(a,x)
@@ -1269,7 +1272,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 //#define JUSTFUCKMYSHITUP 1
 #ifdef JUSTFUCKMYSHITUP
 #define writepanic(a) if(ticker && ticker.current_state >= 3 && world.cpu > 100) write_panic(a)
-#warning IMA FUCK YOUR SHIT UP
+#warn IMA FUCK YOUR SHIT UP
 var/proccalls = 1
 //keep a list of last 10 proccalls maybe?
 /proc/write_panic(a)
@@ -1481,8 +1484,6 @@ var/proccalls = 1
 
 #define BLOB_CORE_PROPORTION 20
 
-#define DEFAULT FONT SIZE 4
-
 //Holomap filters
 #define HOLOMAP_FILTER_DEATHSQUAD				1
 #define HOLOMAP_FILTER_ERT						2
@@ -1567,3 +1568,8 @@ var/proccalls = 1
 #define COMPUTER "computer"
 #define EMBEDDED_CONTROLLER "embedded controller"
 #define OTHER "other"
+
+//used in /datum/preferences/var/alternate_option
+#define GET_RANDOM_JOB 0
+#define BE_ASSISTANT 1
+#define RETURN_TO_LOBBY 2

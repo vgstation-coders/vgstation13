@@ -2,7 +2,7 @@
 //inverse of /datum/artifact_effect/heat, the two effects split up for neatness' sake
 /datum/artifact_effect/cold
 	effecttype = "cold"
-	effect = list(EFFECT_TOUCH, EFFECT_AURA)
+	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA)
 	var/target_temp
 	copy_for_battery = list("target_temp")
 

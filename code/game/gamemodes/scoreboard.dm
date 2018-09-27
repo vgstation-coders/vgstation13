@@ -1,15 +1,15 @@
 /datum/controller/gameticker/proc/scoreboard(var/completions)
 
+	mode.declare_completion()
+	completions += "[mode.dat]<HR>"
 
-	completions += mode.completion_text
-
-	//Calls auto_declare_completion_* for all modes
-	for(var/handler in typesof(/datum/game_mode/proc))
+	/*//Calls auto_declare_completion_* for all modes
+	for(var/handler in typesof(/datum/gamemode/proc))
 		if(findtext("[handler]","auto_declare_completion_"))
-			completions += "[call(mode, handler)()]"
+			completions += "[call(mode, handler)()]"*/
 
-	completions += "<br>[ert_declare_completion()]"
-	completions += "<br>[deathsquad_declare_completion()]"
+	//completions += "<br>[ert_declare_completion()]"
+	//completions += "<br>[deathsquad_declare_completion()]"
 
 	if(bomberman_mode)
 		completions += "<br>[bomberman_declare_completion()]"
@@ -17,22 +17,51 @@
 	if(achievements.len)
 		completions += "<br>[achievement_declare_completion()]"
 
-	//Print a list of antagonists to the server log
-	var/list/total_antagonists = list()
-	//Look into all mobs in world, dead or alive
-	for(var/datum/mind/Mind in minds)
-		var/temprole = Mind.special_role
-		if(temprole)							//If they are an antagonist of some sort.
-			if(temprole in total_antagonists)	//If the role exists already, add the name to it
-				total_antagonists[temprole] += ", [Mind.name]([Mind.key])"
-			else
-				total_antagonists.Add(temprole) //If the role doesnt exist in the list, create it and add the mob
-				total_antagonists[temprole] += ": [Mind.name]([Mind.key])"
+	var/ai_completions = ""
+	for(var/mob/living/silicon/ai/ai in mob_list)
+		var/icon/flat = getFlatIcon(ai)
+		end_icons += flat
+		var/tempstate = end_icons.len
+		if(ai.stat != 2)
+			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [ai.name] (Played by: [get_key(ai)])'s laws at the end of the game were:</b>"}
+		else
+			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [ai.name] (Played by: [get_key(ai)])'s laws when it was deactivated were:</b>"}
+		ai_completions += "<br>[ai.write_laws()]"
 
-	//Now print them all into the log!
-	log_game("Antagonists at round end were...")
-	for(var/i in total_antagonists)
-		log_game("[i]s[total_antagonists[i]].")
+		if (ai.connected_robots.len)
+			var/robolist = "<br><b>The AI's loyal minions were:</b> "
+			for(var/mob/living/silicon/robot/robo in ai.connected_robots)
+				if (!robo.connected_ai || !isMoMMI(robo)) // Don't report MoMMIs or unslaved robutts
+					continue
+				robolist += "[robo.name][robo.stat?" (Deactivated) (Played by: [get_key(robo)]), ":" (Played by: [get_key(robo)]), "]"
+			ai_completions += "[robolist]"
+
+	for (var/mob/living/silicon/robot/robo in mob_list)
+		if(!robo)
+			continue
+		var/icon/flat = getFlatIcon(robo)
+		end_icons += flat
+		var/tempstate = end_icons.len
+		if (!robo.connected_ai)
+			if (robo.stat != 2)
+				ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [get_key(robo)]) survived as an AI-less [isMoMMI(robo)?"MoMMI":"borg"]! Its laws were:</b>"}
+			else
+				ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [get_key(robo)]) was unable to survive the rigors of being a [isMoMMI(robo)?"MoMMI":"cyborg"] without an AI. Its laws were:</b>"}
+		else
+			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [get_key(robo)]) [robo.stat!=2?"survived":"perished"] as a [isMoMMI(robo)?"MoMMI":"cyborg"] slaved to [robo.connected_ai]! Its laws were:</b>"}
+		ai_completions += "<br>[robo.write_laws()]"
+
+	for(var/mob/living/silicon/pai/pAI in mob_list)
+		var/icon/flat
+		flat = getFlatIcon(pAI)
+		end_icons += flat
+		var/tempstate = end_icons.len
+		ai_completions += {"<br><b><img src="logo_[tempstate].png"> [pAI.name] (Played by: [get_key(pAI)]) [pAI.stat!=2?"survived":"perished"] as a pAI whose master was [pAI.master]! Its directives were:</b><br>[pAI.write_directives()]"}
+
+	if (ai_completions)
+		completions += "<h2>Silicons Laws</h2>"
+		completions += ai_completions
+		completions += "<HR>"
 
 	//Score Calculation and Display
 
@@ -87,6 +116,7 @@
 					score["dmgestname"] = player.real_name
 					score["dmgestjob"] = player.job
 					score["dmgestkey"] = player.key
+
 
 	/*
 
@@ -214,7 +244,7 @@
 		//atmos = score["airloss"] * 20 //Air issues are bad, but since it's space, don't stress it too much
 	var/plaguepoints = score["disease"] * 50 //A diseased crewman is half-dead, as they say, and a double diseased is double half-dead
 
-	//Mode Specific
+	/*//Mode Specific
 	if(ticker.mode.config_tag == "nuclear")
 		if(score["disc"])
 			score["crewscore"] += 500
@@ -233,7 +263,7 @@
 			score["crewscore"] -= 10000
 		score["crewscore"] += arrestpoints
 		score["crewscore"] += killpoints
-		score["crewscore"] -= comdeadpts
+		score["crewscore"] -= comdeadpts*/
 
 	//Good Things
 	//score["crewscore"] += shipping
@@ -438,9 +468,10 @@
 		dat += "<B>Station Deficit:</B> [num2text(profit,50)]<BR>"}*/
 	dat += {"<B>Food Eaten:</b> [score["foodeaten"]]<BR>
 	<B>Times a Clown was Abused:</B> [score["clownabuse"]]<BR>
+	<B>Number of Times Someone was Slipped: </B> [score["slips"]]<BR>
 	<B>Number of Explosions This Shift:</B> [score["explosions"]]<BR>
 	<B>Number of Arena Rounds:</B> [score["arenafights"]]<BR>
-	<B>Total money trasferred:</B> [score["totaltransfer"]]<BR>"}
+	<B>Total money transferred:</B> [score["totaltransfer"]]<BR>"}
 
 	//Vault and away mission specific scoreboard elements
 	//The process_scoreboard() proc returns a list of strings associated with their score value (the number that's added to the total score)
@@ -520,5 +551,8 @@
 
 		stat_collection.crewscore = score["crewscore"]
 
-	src << browse(dat, "window=roundstats;size=1000x600")
+	var/datum/browser/popup = new(src, "roundstats", "Round End Summary", 1000, 600)
+	popup.set_content(dat)
+	popup.open()
+
 	return

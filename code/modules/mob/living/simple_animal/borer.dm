@@ -145,10 +145,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	extend_o_arm = new /obj/item/weapon/gun/hookshot/flesh(src, src)
 
+/*
 /mob/living/simple_animal/borer/Login()
 	..()
 	if(mind)
-		RemoveAllFactionIcons(mind)
+		RemoveAllFactionIcons(mind)*/
 
 /mob/living/simple_animal/borer/Life()
 	if(timestopped)
@@ -1040,7 +1041,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			//testing("Client of [G] inexistent")
 			continue
 
-		//#warning Uncomment me.
+		//#warn Uncomment me.
 		/*if(G.client.holder)
 			//testing("Client of [G] is admin.")
 			continue*/
@@ -1073,9 +1074,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(src.mind)
 		src.mind.assigned_role = "Borer"
 
-		// Assign objectives
-		//forge_objectives()
-
 		// tl;dr
 		to_chat(src, "<span class='danger'>You are a Borer!</span>")
 		to_chat(src, "<span class='info'>You are a small slug-like symbiote that attaches to your host's body.  Your only goals are to survive and procreate. However, there are those who would like to destroy you, and hosts don't take kindly to jerks.  Being as helpful to your host as possible is the best option for survival.</span>")
@@ -1083,23 +1081,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		to_chat(src, "<span class='info'><b>New:</b> To get new abilities for you and your host, use <em>Evolve</em> to unlock things.  Borers are now symbiotic biological pAIs.</span>")
 		if(config.borer_takeover_immediately)
 			to_chat(src, "<span class='info'><b>Important:</b> While you receive full control at the start, <em>it is asked that you release control at some point so your host has a chance to play.</em>  If they misbehave, you are permitted to kill them.</span>")
-
-		//var/obj_count = 1
-		//for(var/datum/objective/objective in mind.objectives)
-//			to_chat(src, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
-		//	obj_count++
-
-/mob/living/simple_animal/borer/proc/forge_objectives()
-	var/datum/objective/survive/survive_objective = new
-	survive_objective.owner = mind
-	mind.objectives += survive_objective
-
-	/*
-	var/datum/objective/multiply/multiply_objective = new
-	multiply_objective.owner = mind
-	mind.objectives += multiply_objective
-	*/
-
 
 
 /mob/living/simple_animal/borer/proc/analyze_host()

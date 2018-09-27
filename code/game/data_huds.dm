@@ -165,7 +165,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 		holder = borg.hud_list[DIAG_CELL_HUD]
 		if(holder)
 			C.images += holder
-			var/obj/item/weapon/cell/borg_cell = borg.cell
+			var/obj/item/weapon/cell/borg_cell = borg.get_cell()
 			if(!borg_cell)
 				holder.icon_state = "hudnobatt"
 			else
@@ -185,7 +185,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 		holder = exosuit.hud_list[DIAG_CELL_HUD]
 		if(holder)
 			C.images += holder
-			var/obj/item/weapon/cell/exosuit_cell = exosuit.cell
+			var/obj/item/weapon/cell/exosuit_cell = exosuit.get_cell()
 			if(!exosuit_cell)
 				holder.icon_state = "hudnobatt"
 			else

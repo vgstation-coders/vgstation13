@@ -302,6 +302,9 @@
 
 	var/attack_verb_override = "punches"
 
+/obj/item/clothing/gloves/get_cell()
+	return cell
+
 /obj/item/clothing/gloves/emp_act(severity)
 	if(cell)
 		cell.charge -= 1000 / severity

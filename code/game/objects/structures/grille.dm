@@ -142,6 +142,7 @@
 	return 0
 
 /obj/structure/grille/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
 	user.delayNextAttack(8)
 	if(iswirecutter(W))
 		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
@@ -269,6 +270,7 @@
 	density = 0 //Not blocking anything anymore
 
 /obj/structure/grille/broken/New()
+	..()
 	health -= rand(initial(health)*0.8, initial(health)*0.9) //Largely under broken threshold, this is used to adjust the health, NOT to break it
 	healthcheck() //Send this to healthcheck just in case we want to do something else with it
 

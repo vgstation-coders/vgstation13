@@ -43,9 +43,10 @@
 	qdel(src)
 
 /mob/living/carbon/human/Destroy()
-	if(mind && species && (species.name == "Manifested") && (mind in ticker.mode.cult))//manifested ghosts are removed from the cult once their bodies are destroyed
-		ticker.mode.update_cult_icons_removed(mind)
-		ticker.mode.cult -= mind
+	if(mind && species && (species.name == "Manifested"))
+		var/datum/role/cultist = mind.GetRole(CULTIST)
+		if(cultist)//manifested ghosts are removed from the cult once their bodies are destroyed
+			cultist.RemoveFromRole(mind)
 
 	if(species)
 		qdel(species)
@@ -83,14 +84,14 @@
 		do_release_control(0)
 
 	//Check for heist mode kill count.
-	if(ticker.mode && ( istype( ticker.mode,/datum/game_mode/heist) ) )
+	//if(ticker.mode && ( istype( ticker.mode,/datum/game_mode/heist) ) )
 		//Check for last assailant's mutantrace.
 		/*if( LAssailant && ( istype( LAssailant,/mob/living/carbon/human ) ) )
 			var/mob/living/carbon/human/V = LAssailant
 			if (V.dna && (V.dna.mutantrace == "vox"))
 				*/ //Not currently feasible due to terrible LAssailant tracking.
 //		to_chat(world, "Vox kills: [vox_kills]")
-		vox_kills++ //Bad vox. Shouldn't be killing humans.
+		//vox_kills++ //Bad vox. Shouldn't be killing humans.
 	if(ishuman(LAssailant))
 		var/mob/living/carbon/human/H=LAssailant
 		if(H.mind)
@@ -109,7 +110,7 @@
 	if(ticker && ticker.mode)
 //		world.log << "k"
 		sql_report_death(src)
-		ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
+		//ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
 	species.handle_death(src)
 	if(become_zombie_after_death && isjusthuman(src)) //2 if they retain their mind, 1 if they don't
 		spawn(30 SECONDS)
@@ -118,7 +119,7 @@
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()
-	if(SKELETON in src.mutations)
+	if(M_SKELETON in src.mutations)
 		return
 
 	if(f_style)
@@ -127,7 +128,7 @@
 		h_style = "Bald"
 	update_hair(0)
 
-	mutations.Add(SKELETON)
+	mutations.Add(M_SKELETON)
 	var/datum/organ/external/head/head_organ = get_organ(LIMB_HEAD)
 	head_organ.disfigure("burn")
 	update_body(0)

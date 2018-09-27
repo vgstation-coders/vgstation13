@@ -124,7 +124,6 @@ var/global/list/whitelisted_species = list("Human")
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
 		"liver" =    /datum/organ/internal/liver,
-		"stomach" = /datum/organ/internal/stomach,
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
@@ -305,7 +304,6 @@ var/global/list/whitelisted_species = list("Human")
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
 		"liver" =    /datum/organ/internal/liver,
-		"stomach" = /datum/organ/internal/stomach,
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain/ash,
 		"appendix" = /datum/organ/internal/appendix,
@@ -357,7 +355,7 @@ var/global/list/whitelisted_species = list("Human")
 	meat_type = /obj/item/stack/sheet/bone
 	chem_flags = NO_EAT | NO_INJECT
 
-	default_mutations=list(SKELETON)
+	default_mutations=list(M_SKELETON)
 	brute_mod = 2.0
 
 	has_organ = list(
@@ -465,7 +463,6 @@ var/global/list/whitelisted_species = list("Human")
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
 		"liver" =    /datum/organ/internal/liver,
-		"stomach" = /datum/organ/internal/stomach,
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
@@ -547,7 +544,6 @@ var/global/list/whitelisted_species = list("Human")
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
 		"liver" =    /datum/organ/internal/liver,
-		"stomach" = /datum/organ/internal/stomach,
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
@@ -582,7 +578,6 @@ var/global/list/whitelisted_species = list("Human")
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
 		"liver" =    /datum/organ/internal/liver,
-		"stomach" = /datum/organ/internal/stomach,
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
@@ -655,7 +650,6 @@ var/global/list/whitelisted_species = list("Human")
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs/vox,
 		"liver" =    /datum/organ/internal/liver,
-		"stomach" = /datum/organ/internal/stomach,
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
@@ -995,7 +989,6 @@ var/list/has_died_as_golem = list()
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
 		"liver" =    /datum/organ/internal/liver,
-		"stomach" = /datum/organ/internal/stomach,
 		"kidneys" =  /datum/organ/internal/kidney,
 		"brain" =    /datum/organ/internal/brain,
 		"appendix" = /datum/organ/internal/appendix,
@@ -1191,7 +1184,6 @@ var/list/has_died_as_golem = list()
 					You have a resistance to burn and toxin, but a weakness to brute damage. You are adept at seeing in the dark, moreso with your light inversion ability.<br>\
 					However, you lack a mouth with which to talk. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
-
 
 /datum/species/lich
 	name = "Undead"
