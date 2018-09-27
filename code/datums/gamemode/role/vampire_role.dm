@@ -60,7 +60,7 @@
 	. = ..()
 
 	update_vamp_hud()
-
+	ForgeObjectives()
 	for(var/type_VP in roundstart_powers)
 		var/datum/power/vampire/VP = new type_VP
 		VP.Give(src)

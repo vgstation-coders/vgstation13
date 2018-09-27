@@ -79,11 +79,12 @@
 /proc/makeLateVampire(var/mob/living/carbon/human/H, var/blood_to_give)
 	var/datum/faction/vampire/Fac_vamp = new
 	var/datum/role/vampire/vamp =  new(H.mind, Fac_vamp, override = TRUE)
-	Fac_vamp.members += vamp
 	if (!vamp || !Fac_vamp)
 		return FALSE
 	ticker.mode.factions += Fac_vamp
 	vamp.OnPostSetup()
+	vamp.Greet(GREET_ROUNDSTART)
+	vamp.AnnounceObjectives()
 	update_faction_icons()
 	spawn(10)	//Unlocking their abilities produces a lot of text, I want to give them a chance to see that they have objectives
 		vamp.blood_total = blood_to_give

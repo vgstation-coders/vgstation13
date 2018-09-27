@@ -91,6 +91,7 @@
 		var/datum/faction/vampire/fac = ticker.mode.CreateFaction(/datum/faction/vampire, null, 1)
 		var/datum/role/vampire/newVampire = new(M.mind, fac, override = TRUE)
 		newVampire.Greet(GREET_ROUNDSTART)
+		newVampire.AnnounceObjectives()
 	update_faction_icons()
 	return 1
 
