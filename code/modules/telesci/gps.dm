@@ -21,7 +21,7 @@ var/list/SPS_list = list()
 /obj/item/device/gps/proc/gen_id()
 	return GPS_list.len
 
-/obj/item/device/gps/proc/get_list()
+/obj/item/device/gps/proc/get_gps_list()
 	return GPS_list
 
 /obj/item/device/gps/proc/update_name()
