@@ -53,18 +53,18 @@ var/list/SPS_list = list()
 		update_icon()
 
 /obj/item/device/gps/attack_self(mob/user)
-	if (emped)
+	if(emped)
 		return
-	else if (!transmitting)
-		switch(alert(user,"Would you like to turn on the GPS?",,"Yes","No"))
-			if ("Yes")
-				if(!emped && !transmitting && Adjacent(user) && !user.incapacitated())
-					transmitting = TRUE
-					to_chat(user, "<span class = 'notice'>You activate \the [src].</span>")
-					update_icon()
-					ui_interact(user)
-	else
+	if(transmitting)
 		ui_interact(user)
+		return
+	var/choice = alert(user,"Would you like to turn on the GPS?",,"Yes","No")
+	if(choice != "Yes" || emped || transmitting || !Adjacent(user) || user.incapacitated())
+		return
+	transmitting = TRUE
+	to_chat(user, "<span class = 'notice'>You activate \the [src].</span>")
+	update_icon()
+	ui_interact(user)
 
 /obj/item/device/gps/examine(mob/user)
 	if(Adjacent(user) || isobserver(user))
