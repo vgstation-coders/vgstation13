@@ -103,7 +103,7 @@
 	if(heating == BUNSEN_ON)
 		var/turf/T = get_turf(src)
 		var/datum/gas_mixture/G = T.return_air()
-		if(!G || G.molar_density("oxygen") < 0.1 / CELL_VOLUME)
+		if(!G || G.molar_density(GAS_OXYGEN) < 0.1 / CELL_VOLUME)
 			visible_message("<span class = 'warning'>\The [src] splutters out from lack of oxygen.</span>","<span class = 'warning'>You hear something cough.</span>")
 			toggle()
 			return

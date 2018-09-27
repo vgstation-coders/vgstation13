@@ -1674,7 +1674,7 @@ mob/living/carbon/human/isincrit()
 		species.punch_damage = rand(1,5)
 	species.max_hurt_damage = rand(1,10)
 	if(prob(10))
-		species.breath_type = pick("oxygen","toxins","nitrogen","carbon_dioxide")
+		species.breath_type = pick(GAS_OXYGEN, GAS_PLASMA, GAS_NITROGEN, GAS_CARBON)
 
 	species.heat_level_3 = rand(800, 1200)
 	species.heat_level_2 = round(species.heat_level_3 / 2.5)
