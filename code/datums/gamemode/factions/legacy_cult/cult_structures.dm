@@ -1,3 +1,8 @@
+/obj/structure/cult_legacy
+	icon = 'icons/obj/cult.dmi'
+	density = TRUE
+	anchored = TRUE
+
 
 /obj/structure/cult_legacy/talisman
 	name = "Altar"
