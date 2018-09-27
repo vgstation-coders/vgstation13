@@ -421,7 +421,7 @@ var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
  * Old unit formatter, the TEG used to use this
  */
 /proc/format_watts(var/number)
-	return "[unit_suffixes(number)]W"
+	return "[format_units(number)]W"
 
 
 //Returns 1 if [text] ends with [suffix]
