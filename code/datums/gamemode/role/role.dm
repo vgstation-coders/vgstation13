@@ -105,6 +105,8 @@
 	faction=fac
 	if(!faction)
 		ticker.mode.orphaned_roles += src
+	else
+		faction.members += src
 
 	if(new_id)
 		id = new_id

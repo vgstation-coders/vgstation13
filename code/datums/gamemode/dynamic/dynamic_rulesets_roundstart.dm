@@ -92,7 +92,6 @@
 		var/datum/role/vampire/newVampire = new(M.mind, fac, override = TRUE)
 		ticker.mode.factions += fac
 		newVampire.Greet(GREET_ROUNDSTART)
-		newVampire.OnPostSetup()
 	update_faction_icons()
 	return 1
 

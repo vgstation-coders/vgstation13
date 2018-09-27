@@ -12,9 +12,6 @@
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ADMINTOGGLE)
 	required_pref = ROLE_VAMPIRE
 
-	// -- Vampire mechanics --
-	var/list/datum/role/thrall/thralls = list()
-
 	var/list/powers = list()
 	var/ismenacing = FALSE
 	var/iscloaking = FALSE
@@ -50,11 +47,11 @@
 		if (GREET_ADMINTOGGLE)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>Your powers are awoken. Your lust for blood grows... You are a Vampire!</span></B>")
 		else
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Vampire!</br></span>")
-			to_chat(antag.current, "To drink blood from somebody, just bite their head (switch to harm intent, enable biting and attack the victim in the head with an empty hand).\
-				 Drink blood to gain new powers and use coffins to regenerate your body if injured.\
-				 You are weak to holy things and starlight.\
-				 Don't go into space and avoid the Chaplain, the chapel, and especially Holy Water.")
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Vampire!<br/></span>")
+			to_chat(antag.current, "To drink blood from somebody, just bite their head (switch to harm intent, enable biting and attack the victim in the head with an empty hand).")
+			to_chat(antag.current, "Drink blood to gain new powers and use coffins to regenerate your body if injured.")
+			to_chat(antag.current, "You are weak to holy things and starlight.")
+			to_chat(antag.current, "Don't go into space and avoid the Chaplain, the chapel, and especially Holy Water.")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	antag.current << sound('sound/effects/vampire_intro.ogg')
@@ -107,7 +104,7 @@
 /datum/role/vampire/GetScoreboard()
 	. = ..() // Who he was, his objectives...
 	. += "Total blood collected: <b>[blood_total]</b><br/>"
-	for (var/datum/role/thrall/T in thralls)
+	for (var/datum/role/thrall/T in faction.members)
 		. += T.GetScoreboard()
 		. += "<br/>"
 
@@ -229,8 +226,7 @@
 /datum/role/vampire/proc/handle_enthrall(var/datum/mind/M)
 	if (!istype(M))
 		return FALSE
-	var/datum/role/thrall/T = new(thrall = M, master = src) // Creating a new thrall
-	thralls += T
+	return new/datum/role/thrall(thrall = M, master = src) // Creating a new thrall
 /*
 -- Life() related procs --
 */
@@ -453,7 +449,6 @@
 	src.master = master
 	master.faction.members += src
 	faction = master.faction
-	antag.faction = master.faction
 	antag = thrall
 	update_faction_icons()
 	OnPostSetup()
@@ -474,7 +469,6 @@
 
 
 /datum/role/thrall/Drop(var/deconverted = FALSE)
-	master.thralls -= src
 	var/mob/M = antag.current
 	M.visible_message("<span class='big danger'>[M] suddenly becomes calm and collected again, \his eyes clear up.</span>",
 	"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
