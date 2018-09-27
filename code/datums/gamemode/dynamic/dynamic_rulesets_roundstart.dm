@@ -9,7 +9,7 @@
 	name = "Syndicate Traitors"
 	persistent = 1
 	role_category = ROLE_TRAITOR
-	restricted_from_jobs = list("Cyborg","Mobile MMI","Security Officer", "Warden", "Detective", "Head of Security", "Captain")
+	restricted_from_jobs = list("AI","Mobile MMI","Security Officer", "Warden", "Detective", "Head of Security", "Captain")
 	required_candidates = 1
 	weight = 7
 	cost = 10
