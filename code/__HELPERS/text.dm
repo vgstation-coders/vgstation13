@@ -416,27 +416,6 @@ var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
 
 	return "[format_num(number)] [unit_suffixes[i]]"
 
-/**
- * Old unit formatter, the TEG used to use this
- */
-/*
-var/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW")
-/proc/format_watts(var/number)
-	if (number<0)
-		return "-[format_watts(abs(number))]"
-	if (number==0)
-		return "0 W"
-
-	var/max_watt_suffix = watt_suffixes.len
-	var/i=1
-	while (round(number/1000) >= 1)
-		number/=1000
-		i++
-		if (i == max_watt_suffix)
-			break
-
-	return "[format_num(number)] [watt_suffixes[i]]"
-*/
 
 //Returns 1 if [text] ends with [suffix]
 //Example: text_ends_with("Woody got wood", "dy got wood") returns 1
