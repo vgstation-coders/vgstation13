@@ -17,9 +17,7 @@ var/list/SPS_list = list()
 	var/autorefreshing = FALSE
 	var/builtin = FALSE
 	var/transmitting = FALSE
-
-/obj/item/device/gps/proc/gen_id()
-	return GPS_list.len
+	var/gps_list
 
 /obj/item/device/gps/proc/get_gps_list()
 	return GPS_list
@@ -29,18 +27,13 @@ var/list/SPS_list = list()
 
 /obj/item/device/gps/New()
 	..()
-	gpstag = "[base_tag][gen_id()]"
+	gps_list = get_gps_list()
+	gpstag = "[base_tag][gps_list.len]"
+	gps_list += src
 	update_name()
-	handle_list()
-
-/obj/item/device/gps/proc/handle_list()
-	GPS_list.Add(src)
 
 /obj/item/device/gps/Destroy()
-	if(istype(src,/obj/item/device/gps/secure))
-		SPS_list.Remove(src)
-	else
-		GPS_list.Remove(src)
+	gps_list -= src
 	..()
 
 /obj/item/device/gps/emp_act(severity)
@@ -94,7 +87,7 @@ var/list/SPS_list = list()
 		data["autorefresh"] = autorefreshing
 		data["location_text"] = get_location_name()
 		var/list/devices = list()
-		for(var/D in get_list())
+		for(var/D in gps_list)
 			var/obj/item/device/gps/G = D
 			if(G.transmitting && src != G)
 				var/device_data[0]
@@ -174,13 +167,7 @@ var/list/SPS_list = list()
 	icon_state = "sps"
 	base_tag = "SEC"
 
-/obj/item/device/gps/secure/handle_list()
-	SPS_list.Add(src)
-
-/obj/item/device/gps/secure/gen_id()
-	return SPS_list.len
-
-/obj/item/device/gps/secure/get_list()
+/obj/item/device/gps/secure/get_gps_list()
 	return SPS_list
 
 /obj/item/device/gps/secure/OnMobDeath(mob/wearer)
@@ -188,8 +175,8 @@ var/list/SPS_list = list()
 		return
 
 	var/channel_index = 0
-	var/sps_index = SPS_list.Find(src)
-	for(var/E in SPS_list)
+	var/sps_index = gps_list.Find(src)
+	for(var/E in gps_list)
 		var/obj/item/device/gps/secure/S = E //No idea why casting it like this makes it work better instead of just defining it in the for each
 		S.announce(wearer, src, "has detected the death of their wearer", sps_index, DEATHSOUND_CHANNEL + channel_index, dead = TRUE)
 		channel_index++
@@ -198,9 +185,9 @@ var/list/SPS_list = list()
 	if(!transmitting)
 		return
 	. = ..()
-	var/sps_index = SPS_list.Find(src)
+	var/sps_index = gps_list.Find(src)
 	var/channel_index = 0
-	for(var/E in SPS_list)
+	for(var/E in gps_list)
 		var/obj/item/device/gps/secure/S = E
 		S.announce(wearer, src, "has been stripped from their wearer", sps_index, DEATHSOUND_CHANNEL + channel_index)
 		channel_index++
@@ -242,7 +229,7 @@ var/const/DEATHSOUND_CHANNEL = 300
 		else if(prob(50)) 	// 25% chance if dead, 50% chance if stripped
 			playsound(src, 'sound/items/lostbiosignalforunit.wav',100, 0,channel = sound_channel,wait = TRUE)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(SPS_list.Find(src),sound_channel,src)
+			playnum(gps_list.Find(src),sound_channel,src)
 			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
 		else	// 25% chance if dead, 50% chance if stripped
 			playsound(src, 'sound/items/allteamsrespondcode3.wav',100, 0,channel = sound_channel,wait = TRUE)
