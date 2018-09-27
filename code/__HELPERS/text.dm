@@ -419,7 +419,7 @@ var/list/unit_suffixes = list("K", "M", "G", "T", "P", "E", "Z", "Y")
 /**
  * Old unit formatter, the TEG used to use this
  */
-
+/*
 var/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW")
 /proc/format_watts(var/number)
 	if (number<0)
@@ -436,7 +436,7 @@ var/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW
 			break
 
 	return "[format_num(number)] [watt_suffixes[i]]"
-
+*/
 
 //Returns 1 if [text] ends with [suffix]
 //Example: text_ends_with("Woody got wood", "dy got wood") returns 1
