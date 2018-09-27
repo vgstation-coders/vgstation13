@@ -145,6 +145,7 @@
 		new /obj/item/weapon/storage/belt/medical(src)
 		new /obj/item/device/flash(src)
 		new /obj/item/weapon/reagent_containers/hypospray(src)
+		new /obj/item/weapon/card/debit/preferred/department(src, "Medical")
 		return
 
 
@@ -194,7 +195,7 @@
 	icon_broken = "medical_wall_spark"
 	icon_off = "medical_wall_off"
 	anchored = 1
-	setDensity(FALSE)
+	density = FALSE
 	wall_mounted = 1
 	req_access = list(access_medical)
 

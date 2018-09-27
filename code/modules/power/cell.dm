@@ -2,13 +2,12 @@
 // charge from 0 to 100%
 // fits in APC to provide backup power
 
+/obj/item/weapon/cell/get_cell()
+	return src //No John, you're the cell.
+
 /obj/item/weapon/cell/New()
 	..()
 	charge = maxcharge
-	if(maxcharge <= 2500)
-		desc = "The manufacturer's label states this cell has a power rating of [maxcharge], and that you should not swallow it."
-	else
-		desc = "This power cell has an exciting chrome finish, as it is an uber-capacity cell type! It has a power rating of [maxcharge]!"
 	spawn(5)
 		updateicon()
 
@@ -58,10 +57,12 @@
 
 /obj/item/weapon/cell/examine(mob/user)
 	..()
-	if(crit_fail)
-		to_chat(user, "<span class='warning'>This power cell seems to be faulty.</span>")
+	if(!starch_cell)
+		to_chat(user, "The manufacturer's label states this cell has a power rating of [maxcharge], and that you should not swallow it.")
+		to_chat(user, "<span class='info'>The charge meter reads [crit_fail ? "NAN" : round(percent())]%.</span>")
 	else
-		to_chat(user, "<span class='info'>The charge meter reads [round(src.percent() )]%.</span>")
+		to_chat(user, "Based on its starchiness, it probably has a maximum potential of [maxcharge].")
+		to_chat(user, "<span class='info'>The impromptu power gauge is [crit_fail ? "charred" : "at [round(percent())]%"].</span>")
 
 /obj/item/weapon/cell/attack_self(mob/user as mob)
 	src.add_fingerprint(user)

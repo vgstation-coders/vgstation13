@@ -5,6 +5,7 @@
  * USER_TYPE_GENETIC
  * USER_TYPE_XENOMORPH
  * USER_TYPE_MALFAI
+ * USER_TYPE_VAMPIRE
  * USER_TYPE_SPELLBOOK 	: found in spellbooks
  * USER_TYPE_ARTIFACT  	: used by artifacts
  * USER_TYPE_NOUSER    	: generic/abstract spells
@@ -30,6 +31,8 @@
 	return getAllSpellsByType(USER_TYPE_MALFAI)
 /proc/getAllXenoSpells()
 	return getAllSpellsByType(USER_TYPE_XENOMORPH)
+/proc/getAllVampSpells()
+	return getAllSpellsByType(USER_TYPE_VAMPIRE)
 
 /mob/proc/has_spell_with_flag(var/spell_flag)
 	for(var/spell/S in spell_list)

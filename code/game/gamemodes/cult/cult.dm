@@ -111,6 +111,9 @@
 			if(player.assigned_role == job)
 				cultists_possible -= player
 
+		if(player.role_alt_title == "Merchant")
+			cultists_possible -= player
+
 	for(var/cultists_number = 1 to max_cultists_to_start)
 		if(!cultists_possible.len)
 			break

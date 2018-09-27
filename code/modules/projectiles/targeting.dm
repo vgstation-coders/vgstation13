@@ -13,10 +13,13 @@
 	if(target)
 		stop_aim()
 		usr.visible_message("<span class='notice'>\The [usr] lowers \the [src]...</span>")
+		return 1
+	return 0
 
 //Clicking gun will still lower aim for guns that don't overwrite this
 /obj/item/weapon/gun/attack_self()
-	lower_aim()
+	if(!lower_aim())
+		return ..()
 
 //Removing the lock and the buttons.
 /obj/item/weapon/gun/dropped(mob/user as mob)

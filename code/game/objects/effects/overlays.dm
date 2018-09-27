@@ -104,13 +104,17 @@
 			if(2) //Lube
 				step(M, M.dir)
 				spawn(1)
-					step(M, M.dir)
+					if(!M.locked_to)
+						step(M, M.dir)
 				spawn(2)
-					step(M, M.dir)
+					if(!M.locked_to)
+						step(M, M.dir)
 				spawn(3)
-					step(M, M.dir)
+					if(!M.locked_to)
+						step(M, M.dir)
 				spawn(4)
-					step(M, M.dir)
+					if(!M.locked_to)
+						step(M, M.dir)
 				M.take_organ_damage(2) // Was 5 -- TLE
 				M.visible_message("<span class='warning'>[M] slips on the floor!</span>", \
 				"<span class='warning'>You slip on the floor!</span>")
@@ -129,3 +133,16 @@
 			//Don't step forward as a robot, we're not slipping just glitching.
 			R.visible_message("<span class='warning'>[R] short circuits on the water!</span>", \
 					"<span class='warning'>You short circuit on the water!</span>")
+
+/obj/effect/overlay/wallrot
+	name = "Wallrot"
+	desc = "Ick..."
+	icon = 'icons/effects/wallrot.dmi'
+	anchored = TRUE
+	density = TRUE
+	mouse_opacity = 0
+
+/obj/effect/overlay/wallrot/New()
+	..()
+	pixel_x += rand(-10, 10) * PIXEL_MULTIPLIER
+	pixel_y += rand(-10, 10) * PIXEL_MULTIPLIER

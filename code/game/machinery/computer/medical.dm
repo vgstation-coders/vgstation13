@@ -135,7 +135,7 @@
 		src.active1 = null
 	if (!( data_core.medical.Find(src.active2) ))
 		src.active2 = null
-	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
+	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || isAdminGhost(usr) || (istype(usr, /mob/living/silicon)))
 		usr.set_machine(src)
 		if (href_list["temp"])
 			src.temp = null
@@ -166,6 +166,12 @@
 			src.active2 = null
 
 		else if (href_list["login"])
+			if(isAdminGhost(usr))
+				active1 = null
+				active2 = null
+				authenticated = "Commander Green"
+				rank = "Central Commander"
+				screen = 1
 
 			if (istype(usr, /mob/living/silicon/ai))
 				src.active1 = null

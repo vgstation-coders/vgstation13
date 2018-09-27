@@ -9,7 +9,6 @@ var/datum/subsystem/more_init/SSmore_init
 	NEW_SS_GLOBAL(SSmore_init)
 
 /datum/subsystem/more_init/Initialize(timeofday)
-	setupfactions()
 	setup_economy()
 	var/watch=start_watch()
 	log_startup_progress("Caching damage icons...")

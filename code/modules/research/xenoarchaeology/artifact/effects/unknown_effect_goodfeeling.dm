@@ -1,7 +1,7 @@
 
 /datum/artifact_effect/goodfeeling
 	effecttype = "goodfeeling"
-	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
+	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_type = 2
 	var/list/messages = list("You feel good.",\
 		"Everything seems to be going alright",\

@@ -7,7 +7,7 @@
 	var/mobname = "Unknown"  //Unused now but it'd fuck up maps to remove it now
 
 	var/generate_random_mob_name = 0
-	var/generate_random_appearance = 0
+	var/generate_random_appearance = 1
 
 	var/corpsegender = G_MALE
 	var/list/possible_names
@@ -248,7 +248,44 @@
 
 
 
-///////////Civilians//////////////////////
+/////////////////Crew//////////////////////
+
+/obj/effect/landmark/corpse/assistant
+	name = "Assistant"
+	corpseuniform = /obj/item/clothing/under/color/grey
+	corpseshoes = /obj/item/clothing/shoes/black
+	corpsebelt = /obj/item/weapon/storage/bag/plasticbag
+	corpseback = /obj/item/weapon/storage/backpack
+	corpseradio = /obj/item/device/radio/headset
+	corpseid = 1
+	corpseidjob = "Assistant"
+	corpseidaccess = "Assistant"
+
+/obj/effect/landmark/corpse/assistant/robust
+	corpseuniform = list(/obj/item/clothing/under/syndicate, /obj/item/clothing/under/rank/captain, /obj/item/clothing/under/rank/head_of_personnel, /obj/item/clothing/under/rank/head_of_security, /obj/item/clothing/under/rank/chief_medical_officer, /obj/item/clothing/under/rank/chief_engineer)
+	corpsesuit = list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/rig/ror, /obj/item/clothing/suit/space/rig/syndi, /obj/item/clothing/suit/space/rig/atmos/, /obj/item/clothing/suit/armor/captain, /obj/item/clothing/suit/armor/vest, /obj/item/clothing/suit/armor/riot, /obj/item/clothing/suit/armor/laserproof, /obj/item/clothing/suit/armor/hos, /obj/item/clothing/suit/fire/firefighter, /obj/item/clothing/suit/space/rig/security, /obj/item/clothing/suit/space/rig/mining)
+	corpseshoes = list(/obj/item/clothing/shoes/magboots, /obj/item/clothing/shoes/magboots/atmos, /obj/item/clothing/shoes/magboots/captain, /obj/item/clothing/shoes/jackboots/knifeholster, /obj/item/clothing/shoes/galoshes)
+	corpsegloves = list(/obj/item/clothing/gloves/yellow, /obj/item/clothing/gloves/yellow, /obj/item/clothing/gloves/yellow, /obj/item/clothing/gloves/yellow, /obj/item/clothing/gloves/black, /obj/item/clothing/gloves/captain)
+	corpseradio = list(/obj/item/device/radio/headset/headset_sec, /obj/item/device/radio/headset/heads/captain, /obj/item/device/radio/headset/heads/hos, /obj/item/device/radio/headset/heads/hop)
+	corpseglasses = list(/obj/item/clothing/glasses/hud/health, /obj/item/clothing/glasses/sunglasses, /obj/item/clothing/glasses/sunglasses/sechud, /obj/item/clothing/glasses/welding)
+	corpsemask = list(/obj/item/clothing/mask/cigarette/cigar, /obj/item/clothing/mask/gas, /obj/item/clothing/mask/gas, /obj/item/clothing/mask/gas, /obj/item/clothing/mask/gas/swat, /obj/item/clothing/mask/balaclava)
+	corpsehelmet = list(/obj/item/clothing/head/helmet/space/ancient, /obj/item/clothing/head/helmet/space/rig/ror, /obj/item/clothing/head/helmet/space/rig/syndi, /obj/item/clothing/head/helmet/space/rig/atmos, /obj/item/clothing/head/helmet/cap, /obj/item/clothing/head/helmet/tactical, /obj/item/clothing/head/helmet/tactical/HoS/dermal, /obj/item/clothing/head/helmet/siren, /obj/item/clothing/head/collectable/petehat, /obj/item/clothing/head/hardhat/red, /obj/item/clothing/head/welding, /obj/item/clothing/head/collectable/welding, /obj/item/clothing/head/helmet/space/rig/security, /obj/item/clothing/head/helmet/space/rig/mining)
+	corpsebelt = list(/obj/item/weapon/gun/energy/laser/retro/ancient, /obj/item/weapon/storage/belt/utility/full, /obj/item/weapon/storage/belt/utility/chief/full, /obj/item/weapon/storage/belt/slim, /obj/item/weapon/storage/belt/security, /obj/item/weapon/gun/energy/gun, /obj/item/weapon/sword, /obj/item/weapon/pickaxe, /obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton/loaded, /obj/item/weapon/melee/telebaton)
+	corpsepocket1 = list(/obj/item/device/radio/off, /obj/item/weapon/crowbar, /obj/item/weapon/reagent_containers/hypospray/autoinjector, /obj/item/weapon/reagent_containers/food/snacks/magbites, /obj/item/weapon/reagent_containers/food/snacks/donkpocket, /obj/item/device/flash, /obj/item/weapon/grenade/flashbang, /obj/item/device/flashlight, /obj/item/weapon/handcuffs, /obj/item/weapon/handcuffs/cable/red, /obj/item/weapon/legcuffs/bolas)
+	corpsepocket2 = list(/obj/item/device/radio/off, /obj/item/weapon/crowbar, /obj/item/weapon/reagent_containers/hypospray/autoinjector, /obj/item/weapon/reagent_containers/food/snacks/magbites, /obj/item/weapon/reagent_containers/food/snacks/donkpocket, /obj/item/device/flash, /obj/item/weapon/grenade/flashbang, /obj/item/device/flashlight, /obj/item/weapon/handcuffs, /obj/item/weapon/handcuffs/cable/red, /obj/item/weapon/legcuffs/bolas)
+	corpseback = list(/obj/item/weapon/fireaxe, /obj/item/weapon/storage/backpack/clown, /obj/item/weapon/storage/backpack/security, /obj/item/weapon/storage/backpack/captain, /obj/item/weapon/storage/backpack/holding, /obj/item/weapon/storage/backpack)
+	corpseidaccess = "Captain"
+
+/obj/effect/landmark/corpse/bartender
+	name = "Bartender"
+	corpseuniform = /obj/item/clothing/under/rank/bartender
+	corpsesuit = /obj/item/clothing/suit/armor/vest
+	corpseshoes = /obj/item/clothing/shoes/black
+	corpseback = /obj/item/weapon/gun/projectile/shotgun/doublebarrel
+	corpseradio = /obj/item/device/radio/headset
+	corpseid = 1
+	corpseidjob = "Bartender"
+	corpseidaccess = "Bartender"
 
 /obj/effect/landmark/corpse/chef
 	name = "Chef"
@@ -262,36 +299,45 @@
 	corpseidjob = "Chef"
 	corpseidaccess = "Chef"
 
+/obj/effect/landmark/corpse/botanist
+	name = "Botanist"
+	corpseuniform = /obj/item/clothing/under/rank/hydroponics
+	corpsesuit = /obj/item/clothing/suit/apron
+	corpseshoes = /obj/item/clothing/shoes/black
+	corpsegloves = /obj/item/clothing/gloves/botanic_leather
+	corpsehelmet = /obj/item/clothing/head/greenbandana
+	corpseback = /obj/item/weapon/storage/backpack
+	corpseradio = /obj/item/device/radio/headset
+	corpseid = 1
+	corpseidjob = "Botanist"
+	corpseidaccess = "Botanist"
 
-/obj/effect/landmark/corpse/doctor
-	name = "Doctor"
-	corpseradio = /obj/item/device/radio/headset/headset_med
-	corpseuniform = /obj/item/clothing/under/rank/medical
-	corpsesuit = /obj/item/clothing/suit/storage/labcoat
-	corpseback = /obj/item/weapon/storage/backpack/medic
-	corpsepocket1 = /obj/item/device/flashlight/pen
+/obj/effect/landmark/corpse/cargotechnician
+	name = "Cargo Technician"
+	corpseuniform = /obj/item/clothing/under/rank/cargotech
+	corpseshoes = /obj/item/clothing/shoes/black
+	corpsehelmet = /obj/item/clothing/head/soft
+	corpseback = /obj/item/weapon/storage/backpack
+	corpseradio = /obj/item/device/radio/headset
+	corpseid = 1
+	corpseidjob = "Cargo Technician"
+	corpseidaccess = "Cargo Technician"
+
+/obj/effect/landmark/corpse/miner
+	name = "Shaft Miner"
+	corpseradio = /obj/item/device/radio/headset/headset_mining
+	corpseuniform = /obj/item/clothing/under/rank/miner
+	corpsegloves = /obj/item/clothing/gloves/black
+	corpseback = /obj/item/weapon/storage/backpack/industrial
 	corpseshoes = /obj/item/clothing/shoes/black
 	corpseid = 1
-	corpseidjob = "Medical Doctor"
-	corpseidaccess = "Medical Doctor"
+	corpseidjob = "Shaft Miner"
+	corpseidaccess = "Shaft Miner"
 
-/obj/effect/landmark/corpse/engineer
-	name = "Engineer"
-	corpseradio = /obj/item/device/radio/headset/headset_eng
-	corpseuniform = /obj/item/clothing/under/rank/engineer
-	corpseback = /obj/item/weapon/storage/backpack/industrial
-	corpseshoes = /obj/item/clothing/shoes/orange
-	corpsebelt = /obj/item/weapon/storage/belt/utility/full
-	corpsegloves = /obj/item/clothing/gloves/yellow
-	corpsehelmet = /obj/item/clothing/head/hardhat
-	corpseid = 1
-	corpseidjob = "Station Engineer"
-	corpseidaccess = "Station Engineer"
-
-/obj/effect/landmark/corpse/engineer/rig
-	corpsesuit = /obj/item/clothing/suit/space/rig
+/obj/effect/landmark/corpse/miner/rig
+	corpsesuit = /obj/item/clothing/suit/space/rig/mining
 	corpsemask = /obj/item/clothing/mask/breath
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig
+	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/mining
 
 /obj/effect/landmark/corpse/clown
 	name = "Clown"
@@ -317,58 +363,6 @@
 	corpseidjob = "Mime"
 	corpseidaccess = "Mime"
 
-/obj/effect/landmark/corpse/scientist
-	name = "Scientist"
-	corpseradio = /obj/item/device/radio/headset/headset_sci
-	corpseuniform = /obj/item/clothing/under/rank/scientist
-	corpsesuit = /obj/item/clothing/suit/storage/labcoat/science
-	corpseback = /obj/item/weapon/storage/backpack
-	corpseshoes = /obj/item/clothing/shoes/white
-	corpseid = 1
-	corpseidjob = "Scientist"
-	corpseidaccess = "Scientist"
-
-/obj/effect/landmark/corpse/scientist/voxresearch
-	name = "Research Geneticist"
-	corpseradio = /obj/item/device/radio/headset/headset_sci
-	corpseuniform = /obj/item/clothing/under/rank/scientist
-	corpsesuit = /obj/item/clothing/suit/storage/labcoat/science
-	corpseback = /obj/item/weapon/storage/backpack
-	corpseshoes = /obj/item/clothing/shoes/white
-	corpseid = 0
-
-/obj/effect/landmark/corpse/roboticist
-	name = "Roboticist"
-	corpseradio = /obj/item/device/radio/headset/headset_rob
-	corpseuniform = /obj/item/clothing/under/rank/roboticist
-	corpsesuit = /obj/item/clothing/suit/storage/labcoat/science
-	corpseshoes = /obj/item/clothing/shoes/white
-	corpseid = 1
-	corpseidjob = "Roboticist"
-	corpseidaccess = "Roboticist"
-
-/obj/effect/landmark/corpse/roboticist/spessmart
-	corpseidjob = "Spessmart Roboticist"
-	generate_random_mob_name = 1
-	generate_random_appearance = 1
-	brute_dmg = 100
-	toxin_dmg = 6
-
-/obj/effect/landmark/corpse/miner
-	corpseradio = /obj/item/device/radio/headset/headset_mining
-	corpseuniform = /obj/item/clothing/under/rank/miner
-	corpsegloves = /obj/item/clothing/gloves/black
-	corpseback = /obj/item/weapon/storage/backpack/industrial
-	corpseshoes = /obj/item/clothing/shoes/black
-	corpseid = 1
-	corpseidjob = "Shaft Miner"
-	corpseidaccess = "Shaft Miner"
-
-/obj/effect/landmark/corpse/miner/rig
-	corpsesuit = /obj/item/clothing/suit/space/rig/mining
-	corpsemask = /obj/item/clothing/mask/breath
-	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/mining
-
 /obj/effect/landmark/corpse/janitor
 	name = "Janitor"
 	corpseradio = /obj/item/device/radio/headset/headset_cargo
@@ -386,17 +380,413 @@
 	corpseback = /obj/item/weapon/reagent_containers/chempack
 	corpseglasses = /obj/item/clothing/glasses/sunglasses
 
-/obj/effect/landmark/corpse/pilot
-	name = "pilot"
-	corpseradio = /obj/item/device/radio/headset/headset_sec
-	corpseuniform = /obj/item/clothing/under/aviatoruniform
-	corpseshoes = /obj/item/clothing/shoes/jackboots
-	corpsegloves = /obj/item/clothing/gloves/botanic_leather
-	corpseglasses = /obj/item/clothing/glasses/sunglasses
-	corpsemask = /obj/item/clothing/mask/scarf/red
-	corpsepocket1 = /obj/item/ammo_storage/speedloader/a357
-	corpsepocket2 = /obj/item/clothing/mask/cigarette/cigar
+/obj/effect/landmark/corpse/librarian
+	name = "Librarian"
+	corpseuniform = /obj/item/clothing/under/suit_jacket/red
+	corpseshoes = /obj/item/clothing/shoes/black
+	corpseback = /obj/item/weapon/storage/backpack
+	corpseradio = /obj/item/device/radio/headset
+	corpseid = 1
+	corpseidjob = "Librarian"
+	corpseidaccess = "Librarian"
 
+/obj/effect/landmark/corpse/internalaffairsagent
+	name = "Internal Affairs Agent"
+	corpseuniform = /obj/item/clothing/under/rank/internalaffairs
+	corpsesuit = /obj/item/clothing/suit/storage/internalaffairs
+	corpseshoes = /obj/item/clothing/shoes/centcom
+	corpseback = /obj/item/weapon/storage/backpack
+	corpseradio = /obj/item/device/radio/headset
+	corpseglasses = /obj/item/clothing/glasses/sunglasses
+	corpseid = 1
+	corpseidjob = "Internal Affairs Agent"
+	corpseidaccess = "Internal Affairs Agent"
+
+/obj/effect/landmark/corpse/internalaffairsagent/lawyer
+	name = "Lawyer"
+	corpseuniform = /obj/item/clothing/under/lawyer/bluesuit
+	corpsesuit = /obj/item/clothing/suit/storage/lawyer/bluejacket
+	corpseshoes = /obj/item/clothing/shoes/leather
+	corpseidjob = "Lawyer"
+
+/obj/effect/landmark/corpse/internalaffairsagent/bridgeofficer
+	name = "Bridge Officer"
+	corpseuniform = /obj/item/clothing/under/bridgeofficer
+	corpsesuit = /obj/item/clothing/suit/storage/lawyer/bridgeofficer
+	corpsegloves = /obj/item/clothing/gloves/white
+	corpsehelmet = /obj/item/clothing/head/soft/bridgeofficer
+	corpseidjob = "Bridge Officer"
+
+/obj/effect/landmark/corpse/chaplain
+	name = "Chaplain"
+	corpseuniform = /obj/item/clothing/under/rank/chaplain
+	corpseback = /obj/item/weapon/storage/backpack
+	corpseradio = /obj/item/device/radio/headset
+	corpseshoes = /obj/item/clothing/shoes/laceup
+	corpseid = 1
+	corpseidjob = "Chaplain"
+	corpseidaccess = "Chaplain"
+
+/obj/effect/landmark/corpse/quartermaster
+	name = "Quartermaster"
+	corpseuniform = /obj/item/clothing/under/rank/cargo
+	corpseshoes = /obj/item/clothing/shoes/black
+	corpsegloves = /obj/item/clothing/gloves/black
+	corpsehelmet = /obj/item/clothing/head/soft
+	corpseback = /obj/item/weapon/storage/backpack
+	corpseradio = /obj/item/device/radio/headset
+	corpseglasses = /obj/item/clothing/glasses/sunglasses
+	corpseid = 1
+	corpseidjob = "Quartermaster"
+	corpseidaccess = "Quartermaster"
+
+/obj/effect/landmark/corpse/doctor
+	name = "Doctor"
+	corpseradio = /obj/item/device/radio/headset/headset_med
+	corpseuniform = /obj/item/clothing/under/rank/medical
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat
+	corpseback = /obj/item/weapon/storage/backpack/medic
+	corpsepocket1 = /obj/item/device/flashlight/pen
+	corpseshoes = /obj/item/clothing/shoes/white
+	corpseid = 1
+	corpseidjob = "Medical Doctor"
+	corpseidaccess = "Medical Doctor"
+
+/obj/effect/landmark/corpse/surgeon
+	name = "Surgeon"
+	corpseradio = /obj/item/device/radio/headset/headset_med
+	corpsehelmet = /obj/item/clothing/head/surgery/green
+	corpseuniform = /obj/item/clothing/under/rank/medical/green
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat
+	corpsepocket1 = /obj/item/weapon/scalpel
+	corpseshoes = /obj/item/clothing/shoes/leather
+	corpseid = 1
+	corpseidjob = "Surgeon"
+	corpseidaccess = "Medical Doctor"
+
+/obj/effect/landmark/corpse/chemist
+	name = "Chemist"
+	corpseradio = /obj/item/device/radio/headset/headset_med
+	corpseuniform = /obj/item/clothing/under/rank/chemist
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/chemist
+	corpseback = /obj/item/weapon/storage/backpack/medic
+	corpseshoes = /obj/item/clothing/shoes/white
+	corpseid = 1
+	corpseidjob = "Chemist"
+	corpseidaccess = "Chemist"
+
+/obj/effect/landmark/corpse/geneticist
+	name = "Geneticist"
+	corpseradio = /obj/item/device/radio/headset/headset_med
+	corpseuniform = /obj/item/clothing/under/rank/geneticist
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/genetics
+	corpseback = /obj/item/weapon/storage/backpack/medic
+	corpsepocket1 = /obj/item/device/flashlight/pen
+	corpseshoes = /obj/item/clothing/shoes/white
+	corpseid = 1
+	corpseidjob = "Geneticist"
+	corpseidaccess = "Geneticist"
+
+/obj/effect/landmark/corpse/virologist
+	name = "Virologist"
+	corpseradio = /obj/item/device/radio/headset/headset_med
+	corpseuniform = /obj/item/clothing/under/rank/virologist
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/virologist
+	corpsemask = /obj/item/clothing/mask/surgical
+	corpseback = /obj/item/weapon/storage/backpack/medic
+	corpsepocket1 = /obj/item/device/flashlight/pen
+	corpseshoes = /obj/item/clothing/shoes/white
+	corpseid = 1
+	corpseidjob = "Geneticist"
+	corpseidaccess = "Geneticist"
+
+/obj/effect/landmark/corpse/paramedic
+	name = "Paramedic"
+	corpseradio = /obj/item/device/radio/headset/headset_med
+	corpseuniform = /obj/item/clothing/under/rank/medical/paramedic
+	corpsemask = /obj/item/clothing/mask/cigarette
+	corpseback = /obj/item/weapon/storage/backpack/medic
+	corpsepocket1 = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector
+	corpseshoes = /obj/item/clothing/shoes/black
+	corpsehelmet = /obj/item/clothing/head/soft/paramedic
+	corpseid = 1
+	corpseidjob = "Paramedic"
+	corpseidaccess = "Paramedic"
+
+/obj/effect/landmark/corpse/paramedic/rig
+	corpsesuit = /obj/item/clothing/suit/space/rig/medical
+	corpseback = /obj/item/weapon/tank/oxygen
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/medical
+
+/obj/effect/landmark/corpse/cmo
+	name = "Chief Medical Officer"
+	corpseradio = /obj/item/device/radio/headset/heads/cmo
+	corpseuniform = /obj/item/clothing/under/rank/chief_medical_officer
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/cmo
+	corpseback = /obj/item/weapon/storage/backpack/medic
+	corpsepocket1 = /obj/item/device/flashlight/pen
+	corpseshoes = /obj/item/clothing/shoes/brown
+	corpseid = 1
+	corpseidjob = "Chief Medical Officer"
+	corpseidaccess = "Chief Medical Officer"
+
+/obj/effect/landmark/corpse/engineer
+	name = "Engineer"
+	corpseradio = /obj/item/device/radio/headset/headset_eng
+	corpseuniform = /obj/item/clothing/under/rank/engineer
+	corpseback = /obj/item/weapon/storage/backpack/industrial
+	corpseshoes = /obj/item/clothing/shoes/workboots
+	corpsebelt = /obj/item/weapon/storage/belt/utility/full
+	corpsegloves = /obj/item/clothing/gloves/yellow
+	corpsehelmet = /obj/item/clothing/head/hardhat
+	corpseid = 1
+	corpseidjob = "Station Engineer"
+	corpseidaccess = "Station Engineer"
+
+/obj/effect/landmark/corpse/engineer/rig
+	corpsesuit = /obj/item/clothing/suit/space/rig
+	corpseback = /obj/item/weapon/tank/oxygen
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsehelmet = /obj/item/clothing/head/helmet/space/rig
+
+/obj/effect/landmark/corpse/atmostech
+	name = "Atmospheric Technician"
+	corpseradio = /obj/item/device/radio/headset/headset_eng
+	corpseuniform = /obj/item/clothing/under/rank/atmospheric_technician
+	corpseback = /obj/item/weapon/storage/backpack/industrial
+	corpseshoes = /obj/item/clothing/shoes/workboots
+	corpsebelt = /obj/item/weapon/storage/belt/utility/atmostech
+	corpsegloves = /obj/item/clothing/gloves/yellow
+	corpseid = 1
+	corpseidjob = "Atmospheric Technician"
+	corpseidaccess = "Atmospheric Technician"
+
+/obj/effect/landmark/corpse/atmostech/rig
+	corpsesuit = /obj/item/clothing/suit/space/rig/atmos
+	corpseback = /obj/item/weapon/tank/oxygen
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/atmos
+
+/obj/effect/landmark/corpse/mechanic
+	name = "Mechanic"
+	corpseradio = /obj/item/device/radio/headset/headset_engsci
+	corpseuniform = /obj/item/clothing/under/rank/mechanic
+	corpseback = /obj/item/weapon/storage/backpack/industrial
+	corpseshoes = /obj/item/clothing/shoes/workboots
+	corpsebelt = /obj/item/weapon/storage/belt/utility/full
+	corpsehelmet = /obj/item/clothing/head/welding
+	corpseid = 1
+	corpseidjob = "Mechanic"
+	corpseidaccess = "Mechanic"
+
+/obj/effect/landmark/corpse/chiefengineer
+	name = "Chief Engineer"
+	corpseradio = /obj/item/device/radio/headset/heads/ce
+	corpseuniform = /obj/item/clothing/under/rank/chief_engineer
+	corpseback = /obj/item/weapon/storage/backpack/industrial
+	corpseshoes = /obj/item/clothing/shoes/workboots
+	corpsebelt = /obj/item/weapon/storage/belt/utility/complete
+	corpsegloves = /obj/item/clothing/gloves/yellow
+	corpsehelmet = /obj/item/clothing/head/hardhat/white
+	corpseid = 1
+	corpseidjob = "Chief Engineer"
+	corpseidaccess = "Chief Engineer"
+
+/obj/effect/landmark/corpse/chiefengineer/rig
+	corpsesuit = /obj/item/clothing/suit/space/rig/elite
+	corpseback = /obj/item/weapon/tank/oxygen
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/elite
+
+/obj/effect/landmark/corpse/scientist
+	name = "Scientist"
+	corpseradio = /obj/item/device/radio/headset/headset_sci
+	corpseuniform = /obj/item/clothing/under/rank/scientist
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/science
+	corpseback = /obj/item/weapon/storage/backpack
+	corpseshoes = /obj/item/clothing/shoes/white
+	corpseid = 1
+	corpseidjob = "Scientist"
+	corpseidaccess = "Scientist"
+
+/obj/effect/landmark/corpse/xenoarchaeologist
+	name = "Xenoarchaeologist"
+	corpseradio = /obj/item/device/radio/headset/headset_sci
+	corpseuniform = /obj/item/clothing/under/rank/xenoarch
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/science
+	corpseback = /obj/item/weapon/storage/backpack
+	corpseshoes = /obj/item/clothing/shoes/white
+	corpseid = 1
+	corpseidjob = "Xenoarchaeologist"
+	corpseidaccess = "Scientist"
+
+/obj/effect/landmark/corpse/xenoarchaeologist/space
+	corpsesuit = /obj/item/clothing/suit/space/anomaly
+	corpseback = /obj/item/weapon/tank/oxygen
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsehelmet = /obj/item/clothing/head/helmet/space/anomaly
+
+/obj/effect/landmark/corpse/scientist/voxresearch
+	name = "Research Geneticist"
+	corpseradio = /obj/item/device/radio/headset/headset_sci
+	corpseuniform = /obj/item/clothing/under/rank/scientist
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/science
+	corpseback = /obj/item/weapon/storage/backpack
+	corpseshoes = /obj/item/clothing/shoes/white
+	corpseid = 0
+
+/obj/effect/landmark/corpse/roboticist
+	name = "Roboticist"
+	corpseradio = /obj/item/device/radio/headset/headset_rob
+	corpseuniform = /obj/item/clothing/under/rank/roboticist
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/science
+	corpseback = /obj/item/weapon/storage/backpack
+	corpseshoes = /obj/item/clothing/shoes/white
+	corpseid = 1
+	corpseidjob = "Roboticist"
+	corpseidaccess = "Roboticist"
+
+/obj/effect/landmark/corpse/researchdirector
+	name = "Research Director"
+	corpseradio = /obj/item/device/radio/headset/heads/rd
+	corpseuniform = /obj/item/clothing/under/rank/research_director
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/rd
+	corpseback = /obj/item/weapon/storage/backpack
+	corpseshoes = /obj/item/clothing/shoes/brown
+	corpseid = 1
+	corpseidjob = "Research Director"
+	corpseidaccess = "Research Director"
+
+/obj/effect/landmark/corpse/securityofficer
+	name = "Security Officer"
+	corpseuniform = /obj/item/clothing/under/rank/security
+	corpsesuit = /obj/item/clothing/suit/armor/vest/security
+	corpseback = /obj/item/weapon/storage/backpack/security
+	corpseradio = /obj/item/device/radio/headset/headset_sec
+	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
+	corpsebelt = /obj/item/weapon/storage/belt/security
+	corpsegloves = /obj/item/clothing/gloves/black
+	corpseshoes = /obj/item/clothing/shoes/jackboots
+	corpsepocket1 = /obj/item/weapon/handcuffs
+	corpsepocket2 = /obj/item/device/flash
+	corpseid = 1
+	corpseidjob = "Security Officer"
+	corpseidaccess = "Security Officer"
+
+/obj/effect/landmark/corpse/securityofficer/rig
+	corpsesuit = /obj/item/clothing/suit/space/rig/security
+	corpseback = /obj/item/weapon/tank/oxygen
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/security
+
+/obj/effect/landmark/corpse/detective
+	name = "Detective"
+	corpseuniform = /obj/item/clothing/under/det
+	corpsesuit = /obj/item/clothing/suit/storage/det_suit
+	corpseback = /obj/item/weapon/storage/backpack
+	corpseradio = /obj/item/device/radio/headset/headset_sec
+	corpsegloves = /obj/item/clothing/gloves/black
+	corpseshoes = /obj/item/clothing/shoes/brown
+	corpsepocket1 = /obj/item/weapon/lighter/zippo
+	corpsepocket2 = /obj/item/weapon/reagent_containers/food/drinks/mug/joe
+	corpseid = 1
+	corpseidjob = "Detective"
+	corpseidaccess = "Detective"
+
+/obj/effect/landmark/corpse/headofsecurity
+	name = "Head of Security"
+	corpseuniform = /obj/item/clothing/under/rank/security
+	corpsesuit = /obj/item/clothing/suit/armor/hos/jensen
+	corpseback = /obj/item/weapon/storage/backpack/security
+	corpseradio = /obj/item/device/radio/headset/heads/hos
+	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
+	corpsebelt = /obj/item/weapon/gun/energy/gun
+	corpsegloves = /obj/item/clothing/gloves/black
+	corpseshoes = /obj/item/clothing/shoes/jackboots/knifeholster
+	corpsepocket1 = /obj/item/weapon/handcuffs
+	corpsepocket2 = /obj/item/weapon/implanter/loyalty
+	corpseid = 1
+	corpseidjob = "Head of Security"
+	corpseidaccess = "Head of Security"
+
+/obj/effect/landmark/corpse/headofsecurity/rig
+	corpsesuit = /obj/item/clothing/suit/space/rig/security
+	corpseback = /obj/item/weapon/tank/oxygen
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/security
+
+/obj/effect/landmark/corpse/headofpersonnel
+	name = "Head of Personnel"
+	corpseuniform = /obj/item/clothing/under/rank/head_of_personnel
+	corpsesuit = /obj/item/clothing/suit/armor/vest
+	corpseback = /obj/item/weapon/storage/backpack
+	corpseradio = /obj/item/device/radio/headset/heads/hop
+	corpseglasses = /obj/item/clothing/glasses/sunglasses
+	corpsebelt = /obj/item/weapon/gun/energy/gun
+	corpseshoes = /obj/item/clothing/shoes/brown
+	corpseid = 1
+	corpseidjob = "Head of Personnel"
+	corpseidaccess = "Head of Personnel"
+
+/obj/effect/landmark/corpse/captain
+	name = "Captain"
+	corpseuniform = /obj/item/clothing/under/rank/captain
+	corpsesuit = /obj/item/clothing/suit/armor/captain
+	corpseback = /obj/item/weapon/storage/backpack/captain
+	corpseradio = /obj/item/device/radio/headset/heads/captain
+	corpseglasses = /obj/item/clothing/glasses/sunglasses
+	corpsebelt = /obj/item/weapon/gun/energy/gun
+	corpsemask = /obj/item/clothing/mask/cigarette/cigar
+	corpsehelmet = /obj/item/clothing/head/caphat
+	corpsegloves = /obj/item/clothing/gloves/captain
+	corpseshoes = /obj/item/clothing/shoes/brown
+	corpseid = 1
+	corpseidjob = "Captain"
+	corpseidaccess = "Captain"
+
+/obj/effect/landmark/corpse/captain/rig
+	corpseback = /obj/item/weapon/tank/oxygen
+	corpsemask = /obj/item/clothing/mask/breath
+	corpsehelmet = /obj/item/clothing/head/helmet/space/capspace
+
+/////////////////Non-Crew (but still playable at roundstart)//////////////////////
+
+/obj/effect/landmark/corpse/trader
+	name = "Trader"
+	mutantrace = "Vox"
+	corpseuniform = /obj/item/clothing/under/vox/vox_robes
+	corpseshoes = /obj/item/clothing/shoes/magboots/vox
+	corpseback = /obj/item/weapon/tank/nitrogen
+	corpsemask = /obj/item/clothing/mask/breath/vox
+	corpsepocket1 = /obj/item/weapon/coin/trader
+	corpsepocket2 = /obj/item/weapon/storage/wallet/random
+	corpseid = 1
+	corpseidjob = "Trader"
+	corpseidaccess = "Trader"
+
+/obj/effect/landmark/corpse/trader/powergaming
+	corpsehelmet = /obj/item/clothing/head/helmet/siren
+	corpsesuit = /obj/item/clothing/suit/storage/trader
+	corpseglasses = /obj/item/clothing/glasses/sunglasses
+	corpsepocket1 = /obj/item/weapon/handcuffs
+	corpsepocket2 = /obj/item/device/flash
+
+/obj/effect/landmark/corpse/trader/pressure
+	corpsehelmet = /obj/item/clothing/head/helmet/space/vox/civ/trader
+	corpsesuit = /obj/item/clothing/suit/space/vox/civ/trader
+
+/obj/effect/landmark/corpse/trader/carapace
+	corpsehelmet = /obj/item/clothing/head/helmet/space/vox/civ/trader/carapace
+	corpsesuit = /obj/item/clothing/suit/space/vox/civ/trader/carapace
+
+/obj/effect/landmark/corpse/trader/medic
+	corpsehelmet = /obj/item/clothing/head/helmet/space/vox/civ/trader/medic
+	corpsesuit = /obj/item/clothing/suit/space/vox/civ/trader/medic
+
+/obj/effect/landmark/corpse/trader/stealth
+	corpsehelmet = /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth
+	corpsesuit = /obj/item/clothing/suit/space/vox/civ/trader/stealth
 
 /////////////////Officers//////////////////////
 
@@ -560,6 +950,24 @@
 
 
 //////////////////Misc Corpses///////////////////////////
+
+/obj/effect/landmark/corpse/roboticist/spessmart
+	corpseidjob = "Spessmart Roboticist"
+	generate_random_mob_name = 1
+	generate_random_appearance = 1
+	brute_dmg = 100
+	toxin_dmg = 6
+
+/obj/effect/landmark/corpse/pilot
+	name = "pilot"
+	corpseradio = /obj/item/device/radio/headset/headset_sec
+	corpseuniform = /obj/item/clothing/under/aviatoruniform
+	corpseshoes = /obj/item/clothing/shoes/jackboots
+	corpsegloves = /obj/item/clothing/gloves/botanic_leather
+	corpseglasses = /obj/item/clothing/glasses/sunglasses
+	corpsemask = /obj/item/clothing/mask/scarf/red
+	corpsepocket1 = /obj/item/ammo_storage/speedloader/a357
+	corpsepocket2 = /obj/item/clothing/mask/cigarette/cigar
 
 /obj/effect/landmark/corpse/civilian //Random corpse!
 	name = "Civilian"

@@ -21,6 +21,9 @@
 	flags = FPRINT
 	machine_flags = SCREWTOGGLE
 
+/obj/machinery/space_heater/get_cell()
+	return cell
+
 /obj/machinery/space_heater/campfire
 	name = "campfire"
 	icon_state = "campfire0"
@@ -132,7 +135,7 @@
 		return
 	if(!on && cell.charge > 0)
 	//Items with special messages go first - yes, this is all stolen from cigarette code. sue me.
-		if(istype(I, /obj/item/weapon/weldingtool))
+		if(iswelder(I))
 			var/obj/item/weapon/weldingtool/WT = I
 			if(WT.is_hot()) //Badasses dont get blinded while lighting their !!campfire!! with a welding tool
 				light("<span class='notice'>[user] casually lights \the [name] with \his [I], what a badass.</span>")

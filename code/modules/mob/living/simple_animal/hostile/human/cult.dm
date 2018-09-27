@@ -22,7 +22,7 @@
 	attack_sound = 'sound/weapons/bloodyslice.ogg'
 
 	corpse = /obj/effect/landmark/corpse/cult/champion
-	items_to_drop = list(/obj/item/weapon/melee/cultblade)
+	items_to_drop = list(/obj/item/weapon/melee/legacy_cultblade)
 
 	min_oxy = 0
 	max_oxy = 0
@@ -69,7 +69,7 @@
 		if(0) //damage
 			var/dmg = rand(10,20)
 			to_chat(L, "<span class='userdanger'>Pain surges through your body and horrible visions flash through your mind!</span>")
-			L.emote("scream", , , 1)
+			L.emote("scream")
 			L.adjustBruteLoss(dmg)
 		if(1) //deaf
 			var/mob/living/carbon/human/H = L
@@ -88,7 +88,7 @@
 /obj/effect/landmark/corpse/cult
 	name = "cultist"
 	corpseshoes = /obj/item/clothing/shoes/cult
-	corpsesuit = /obj/item/clothing/suit/cultrobes
+	corpsesuit = /obj/item/clothing/suit/legacy_cultrobes
 	corpsemask = /obj/item/clothing/mask/gas/death_commando
 	corpseback = /obj/item/weapon/storage/backpack/cultpack
 
@@ -100,10 +100,10 @@
 /obj/effect/landmark/corpse/cult/champion
 	name = "champion of Nar-Sie"
 
-	corpsesuit = /obj/item/clothing/suit/space/cult
-	corpsehelmet = /obj/item/clothing/head/helmet/space/cult
+	corpsesuit = /obj/item/clothing/suit/space/legacy_cult
+	corpsehelmet = /obj/item/clothing/head/helmet/space/legacy_cult
 
 /obj/effect/landmark/corpse/cult/priest
 	name = "priest of Nar-Sie"
 
-	corpsehelmet = /obj/item/clothing/head/culthood
+	corpsehelmet = /obj/item/clothing/head/legacy_culthood

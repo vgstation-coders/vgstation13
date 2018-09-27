@@ -50,7 +50,7 @@
 		to_chat(preacher, "<span class='warning'>You are a heathen to this God. You feel [B.my_rel.deity_name]'s wrath strike you for this blasphemy.</span>")
 		preacher.fire_stacks += 5
 		preacher.IgniteMob()
-		preacher.emote("scream",,, 1)
+		preacher.audible_scream()
 		return FALSE
 	if (preacher != religiousLeader.current)
 		to_chat(preacher, "<span class='warning'>You fail to muster enough mental strength to begin the conversion. Only the Spiritual Guide of [name] can perfom this.</span>")
@@ -732,12 +732,12 @@
 	H.equip_or_collect(new /obj/item/clothing/head/syndicatefake(H), slot_head)
 
 /datum/religion/cult
-	name = "The Cult of Nar'Sie"
-	deity_name = "Nar'Sie"
+	name = "The Cult of Nar-Sie"
+	deity_name = "Nar-Sie"
 	bible_name = "The Arcane Tome"
 	male_adept = "Cultist"
 	female_adept = "Cultist"
-	keys = list("cult", "narsie", "nar'sie", "narnar")
+	keys = list("cult", "narsie", "nar'sie", "narnar", "nar-sie")
 
 /datum/religion/changeling
 	name = "The Religion" // A la "The Thing"

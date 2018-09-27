@@ -12,8 +12,7 @@
 	var/list/holographic_items = list()
 	var/damaged = 0
 	var/last_change = 0
-
-	var/holopeople_enabled = FALSE //Set this to true to allow observers become holodudes
+	var/holopeople_enabled = TRUE //Set this to true to allow observers become holodudes
 	var/list/connected_holopeople = list()
 	var/maximum_holopeople = 4
 

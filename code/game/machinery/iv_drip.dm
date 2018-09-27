@@ -43,21 +43,23 @@
 			filling.icon += mix_color_from_reagents(reagents.reagent_list)
 			overlays += filling
 
-/obj/machinery/iv_drip/MouseDrop(over_object, src_location, over_location)
-	..()
+/obj/machinery/iv_drip/MouseDropFrom(over_object, src_location, over_location)
 	if(isobserver(usr))
-		return
+		return ..()
 	if(usr.incapacitated()) // Stop interacting with shit while dead pls
-		return
+		return ..()
 	if(isanimal(usr))
-		return
+		return ..()
+	if(!usr.Adjacent(src))
+		return ..()
+
 	if(attached)
 		visible_message("[src.attached] is detached from \the [src]")
 		src.attached = null
 		src.update_icon()
 		return
 
-	if(in_range(src, usr) && ishuman(over_object) && get_dist(over_object, src) <= 1)
+	if(ishuman(over_object) && get_dist(over_object, src) <= 1)
 		var/mob/living/carbon/human/H = over_object
 		if(H.species && (H.species.chem_flags & NO_INJECT))
 			H.visible_message("<span class='warning'>[usr] struggles to place the IV into [H] but fails.</span>","<span class='notice'>[usr] tries to place the IV into your arm but is unable to.</span>")

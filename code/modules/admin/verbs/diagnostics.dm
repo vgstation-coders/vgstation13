@@ -52,8 +52,6 @@
 	feedback_add_details("admin_verb","UFE") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
 
-#undef GATHER_DELAYER_LOCKUPS
-
 /client/proc/radio_report()
 	set category = "Debug"
 	set name = "Radio report"

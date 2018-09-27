@@ -60,6 +60,60 @@
 	var/hand_index
 
 /obj/abstract/screen/holomap
+	icon = 'icons/480x480.dmi'
+	icon_state = "blank"
+
+/obj/abstract/screen/holomap/Click(location,control,params)
+	var/obj/structure/deathsquad_gravpult/G = locate() in get_turf(usr)
+	if (!G) return
+	var/list/params_list = params2list(params)
+	if (params_list.len)
+		var/new_aim = Clamp(text2num(params_list["icon-y"]), 0, 480)
+		if (new_aim>6)
+			G.aim = new_aim
+			G.update_aim()
+
+
+
+///////////////////////////////////////INTERFACE SCREEN OBJECT/////////////////////////////
+//Alright, here's some documentation,
+//Unlike most (all?) other screen objects, this one ISN'T added to client screens along with their HUD.
+//Instead, it is stored by objects (such as computers, or other machines), and sent to users on demand
+//This allows things such as useable buttons on holomaps, or other contextual prompts.
+//Basically alternatives to pop-up windows. Good for immersions, etc.
+//
+//So here's how it works:
+//1- a user opened your machine's interface, make and store a new /obj/abstract/screen/interface (check New() bellow to understand the different parameters)
+//2- you can give your object a name so it wears it upon mouse_over
+//3- add the object to your user's screen like so: user.client.screen += your_button
+//4- once the user click on the button, interface_act() gets called. If your machine has multiple buttons, set different "action" vars to differentiate them.
+//5- once the user has finished using your interface, DON'T forget to remove the object from their screen, and qdel() it.
+
+/obj/abstract/screen/interface
+	name = "Button"
+	mouse_opacity = 1
+	layer = HUD_ABOVE_ITEM_LAYER
+	var/mob/user = null
+	var/obj/machine = null
+	var/action = ""
+
+/obj/abstract/screen/interface/New(turf/loc,u,m,a,i,i_s="",l="CENTER,CENTER",px=0,py=0)
+	user = u			//the user whose screen the button is gonna appear on, so we can relay the info to the machine
+	machine = m			//the machine we're the interface of (ex: gravpult)
+	action = a			//your action, use any string (ex:"Launch").
+	icon = i			//your icon
+	icon_state = i_s	//your icon_state
+	screen_loc = l		//where your button will appear on the user's screen, check DM documentation for nomenclature.
+	pixel_x = px		//pixel_x should you need it
+	pixel_y = py		//pixel_y should you need it
+
+/obj/abstract/screen/interface/Click(location,control,params)
+	machine.interface_act(user,action)
+
+/obj/proc/interface_act(var/user)//if your machine has multiple buttons, you may want to use a switch(). Think of this proc as some sort of Topic().
+	return
+
+///////////////////////////////////////
 
 /obj/abstract/screen/close
 	name = "close"
@@ -606,10 +660,10 @@
 			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
 				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
 				A.Send_Home(usr)
-		if("Antag Madness!")
+		/*if("Antag Madness!")
 			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
 				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Make_Antag(usr)
+				A.Make_Antag(usr)*/
 		if("Give Infinite Laser Guns to the Passengers")
 			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
 				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to

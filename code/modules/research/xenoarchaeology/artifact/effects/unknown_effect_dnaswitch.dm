@@ -2,14 +2,14 @@
 //todo
 /datum/artifact_effect/dnaswitch
 	effecttype = "dnaswitch"
-	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
+	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_type = 5
 	var/severity
 	copy_for_battery = list("severity")
 
 /datum/artifact_effect/dnaswitch/New()
 	..()
-	if(effect == EFFECT_AURA)
+	if(effect == ARTIFACT_EFFECT_AURA)
 		severity = rand(5,30)
 	else
 		severity = rand(25,95)

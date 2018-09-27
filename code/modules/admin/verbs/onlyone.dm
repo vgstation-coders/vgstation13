@@ -92,72 +92,19 @@
 /datum/only_one/highlander/check_eligibility(var/mob/M)
 	if(!..())
 		return 0
-	if(is_special_character(M))
-		return 0
+	//if(is_special_character(M))
+	//	return 0
 	return 1
 
 /datum/only_one/highlander/convert_mob(var/mob/M)
-	var/mob/living/carbon/human/H = ..(M)
+	var/mob/living/carbon/human/H = ..()
 
-	ticker.mode.traitors += H.mind
-	H.mind.special_role = HIGHLANDER // NEEDED FOR CHEAT CHECKS!
-
-	H.mutations.Add(M_HULK) //all highlanders are permahulks
-	H.set_species("Human", force_organs=TRUE) // No Dionae
-	H.a_intent = I_HURT
-
-	H.update_mutations()
-	H.update_body()
-
-	/* This never worked.
-	var/datum/objective/steal/steal_objective = new
-	steal_objective.owner = H.mind
-	steal_objective.set_target("nuclear authentication disk")
-	H.mind.objectives += steal_objective
-	*/
-
-	var/datum/objective/hijack/hijack_objective = new
-	hijack_objective.owner = H.mind
-	H.mind.objectives += hijack_objective
-
-	to_chat(H, "<B>You are a highlander!</B>")
-	var/obj_count = 1
-	for(var/datum/objective/OBJ in H.mind.objectives)
-		to_chat(H, "<B>Objective #[obj_count++]</B>: [OBJ.explanation_text]")
-
-	for (var/obj/item/I in H)
-		if (istype(I, /obj/item/weapon/implant))
-			continue
-		if(isplasmaman(H)) //Plasmamen don't lose their plasma gear since they need it to live.
-			if(!(istype(I, /obj/item/clothing/suit/space/plasmaman) || istype(I, /obj/item/clothing/head/helmet/space/plasmaman) || istype(I, /obj/item/weapon/tank/plasma/plasmaman) || istype(I, /obj/item/clothing/mask/breath)))
-				qdel(I)
-		else if(isvox(H)) //Vox don't lose their N2 gear since they need it to live.
-			if(!(istype(I, /obj/item/weapon/tank/nitrogen) || istype(I, /obj/item/clothing/mask/breath/vox)))
-				qdel(I)
-		else
-			qdel(I)
-
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/kilt(H), slot_w_uniform)
-	H.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(H), slot_ears)
-	if(!isplasmaman(H)) //Plasmamen don't get a beret since they need their helmet to not burn to death.
-		H.equip_to_slot_or_del(new /obj/item/clothing/head/beret(H), slot_head)
-	H.put_in_hands(new /obj/item/weapon/claymore(H))
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/combat(H), slot_shoes)
-	H.equip_to_slot_or_del(new /obj/item/weapon/pinpointer(H.loc), slot_l_store)
-
-	var/obj/item/weapon/card/id/W = new(H)
-	W.name = "[H.real_name]'s ID Card"
-	W.icon_state = "centcom"
-	W.access = get_all_accesses()
-	W.access += get_all_centcom_access()
-	W.assignment = "Highlander"
-	W.registered_name = H.real_name
-	H.equip_to_slot_or_del(W, slot_wear_id)
-
+	var/datum/role/highlander/new_role = new(H.mind, null, HIGHLANDER)
+	new_role.OnPostSetup()
 	return H
 
 
-//MAGIC MISSILE
+/*MAGIC MISSILE
 /datum/only_one/wizardwars
 	name = "Wizard Wars"
 
@@ -224,3 +171,4 @@
 		if(M.mind)
 			M.mind.nospells = 0
 		to_chat(M, "<span class='warning'>Invincibility period over. Let the battle begin!</span>")
+*/

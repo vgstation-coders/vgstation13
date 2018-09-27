@@ -189,3 +189,15 @@
 		if(shocked)
 			shock()
 */
+
+/turf/simulated/wall/mineral/clockwork
+	name = "clockwork wall"
+	desc = "A huge chunk of warm metal. The clanging of machinery emanates from within."
+	icon_state = "clock"
+	walltype = "clock"
+	mineral = "brass"
+//	dismantle_type = /turf/simulated/floor/engine/clockwork // SOON
+	girder_type = /obj/structure/girder/clockwork
+
+/turf/simulated/wall/clockwork/cultify()
+	return

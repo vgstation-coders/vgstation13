@@ -7,9 +7,9 @@
 	var/obj/structure/bed/chair/vehicle/paired_to = null
 	var/vin = null
 
-/obj/item/key/New()
+/obj/item/key/initialize()
 	if(vin)
-		for(var/obj/structure/bed/chair/vehicle/V in world)
+		for(var/obj/structure/bed/chair/vehicle/V in vehicle_list)
 			if(V.vin == vin)
 				paired_to = V
 				V.mykey = src
@@ -68,10 +68,14 @@
 /obj/structure/bed/chair/vehicle/New()
 	..()
 	processing_objects |= src
-
+	vehicle_list.Add(src)
 	if(!nick)
 		nick=name
 	set_keys()
+
+/obj/structure/bed/chair/vehicle/Destroy()
+	vehicle_list.Remove(src)
+	..()
 
 /obj/structure/bed/chair/vehicle/proc/set_keys()
 	if(keytype && !vin)
@@ -85,7 +89,7 @@
 		empstun = 0
 
 /obj/structure/bed/chair/vehicle/attackby(obj/item/W, mob/living/user)
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))
 			add_fingerprint(user)
@@ -97,7 +101,10 @@
 			return
 	else if(istype(W, /obj/item/key))
 		if(!heldkey)
-			if(keytype && mykey == W)
+			if(keytype)
+				if(mykey && mykey != W)
+					to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
+					return
 				if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
 					to_chat(user, "<span class='warning'>You try to insert \the [W] to \the [src]'s ignition but you miss the slot!</span>")
 					return
@@ -136,11 +143,9 @@
 /obj/structure/bed/chair/vehicle/proc/check_key(var/mob/user)
 	if(!keytype)
 		return 1
-	if(mykey)
-		if(heldkey)
-			return 1
-		else
-			return user.is_holding_item(mykey)
+	if(mykey && heldkey)
+		return 1
+	return user.is_holding_item(mykey)
 
 /obj/structure/bed/chair/vehicle/relaymove(var/mob/living/user, direction)
 	if(user.incapacitated())
@@ -233,15 +238,19 @@
 		plane = OBJ_PLANE
 		layer = ABOVE_OBJ_LAYER
 
-/obj/structure/bed/chair/vehicle/MouseDrop_T(var/atom/movable/C, mob/user)
+/obj/structure/bed/chair/vehicle/MouseDropTo(var/atom/movable/C, mob/user)
 	..()
 
-	if (user.incapacitated() || !in_range(user, src) || !can_have_carts)
+	if (user.incapacitated() || !in_range(user, src) || !in_range(src, C) || !can_have_carts)
 		return
 
 	if (istype(C, /obj/machinery/cart))
 
 		if (!next_cart)
+			var/obj/machinery/cart/connecting = C
+			if(connecting.previous_cart)
+				to_chat(user, "\The [connecting] already has a cart connected to it!", "red")
+				return
 			next_cart = C
 			next_cart.previous_cart = src
 			user.visible_message("[user] connects [C] to [src].", "You connect [C] to [src]")
@@ -385,5 +394,8 @@
 		return
 	if(next_cart)
 		next_cart.Move(oldloc)
+
+/obj/structure/bed/chair/vehicle/proc/disconnected() //proc that carts call, we have no use for it
+	return
 
 /datum/locking_category/buckle/chair/vehicle

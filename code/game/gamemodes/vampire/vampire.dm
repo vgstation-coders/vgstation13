@@ -65,6 +65,9 @@
 			if(player.assigned_role == job)
 				possible_vampires -= player
 
+		if(player.role_alt_title == "Merchant")
+			possible_vampires -= player
+
 	vampire_amount = min(recommended_enemies, max(required_enemies,round(num_players() / 10))) //1 + round(num_players() / 10)
 
 	if(possible_vampires.len>0)
@@ -357,6 +360,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			if(VAMP_UNDYING)
 				verbs += /client/proc/vampire_undeath
 				verbs += /client/proc/vampire_spawncape
+				
 /mob/proc/remove_vampire_powers()
 	for(var/handler in typesof(/client/proc))
 		if(findtext("[handler]","vampire_"))
@@ -662,7 +666,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 					to_chat(src, "<span class='danger'>You continue to burn!</span>")
 				fire_stacks += 5
 				IgniteMob()
-		emote("scream",,, 1)
+		audible_scream()
 	else
 		switch(health)
 			if((-INFINITY) to 60)

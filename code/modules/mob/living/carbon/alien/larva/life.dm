@@ -244,7 +244,7 @@
 			//if( health <= 20 && prob(1) )
 			//	spawn(0)
 			//		emote("gasp")
-			if(!reagents.has_reagent(INAPROVALINE))
+			if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
 				adjustOxyLoss(1)
 			Paralyse(3)
 
@@ -291,6 +291,9 @@
 		if(knockdown)
 			knockdown = max(knockdown-1,0)	//before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
 
+		if(say_mute)
+			say_mute = max(say_mute-1, 0)
+
 		if(stuttering)
 			stuttering = max(stuttering-1, 0)
 
@@ -302,7 +305,7 @@
 	return 1
 
 
-/mob/living/carbon/alien/larva/proc/handle_regular_hud_updates()
+/mob/living/carbon/alien/larva/handle_regular_hud_updates()
 
 
 	if (stat == 2 || (M_XRAY in mutations))

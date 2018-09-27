@@ -10,9 +10,21 @@ Used In File(s): \code\game\supplyshuttle.dm
 		float:left;
 	}
 </style>
-<div class="item" style="float: left; width:66%; margin-bottom: 3px;">
+<div class="item" style="float: left; width:100%; margin-bottom: 0px;">
 	<div class="itemLabel">
-		Account:
+		Account Name:
+	</div>
+	<div class="itemContent">
+		{{if data.authorized_name != ""}}
+			{{:data.name_of_source_account}} as {{:data.authorized_name}}
+		{{else}}
+			{{:data.name_of_source_account}}
+		{{/if}}
+	</div>
+</div>
+<div class="item" style="width:100%; margin-bottom: 3px;">
+	<div class="itemLabel">
+		Account Funds:
 	</div>
 	<div class="itemContent">
 		{{:data.money}}

@@ -6,7 +6,7 @@
 	if(prob(80/(disarm_chance_modifier == 0 ? 1 : disarm_chance_modifier)))
 		do_attack_animation(target, src)
 		playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
-		target.apply_effect(4, WEAKEN, run_armor_check(affecting, "melee"))
+		target.apply_effect(4, WEAKEN, target.run_armor_check(affecting, "melee"))
 		visible_message("<span class='danger'>[src] has tackled down [target]!</span>")
 
 	else if (prob(80/(disarm_chance_modifier == 0 ? 1 : disarm_chance_modifier)))
@@ -35,7 +35,7 @@
 
 	return "slashes at"
 
-/mob/living/carbon/alien/humanoid/get_unarmed_damage(mob/living/target)
+/mob/living/carbon/alien/humanoid/get_unarmed_damage(var/atom/target)
 	if(isalien(target))
 		return rand(1,3)
 

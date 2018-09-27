@@ -29,7 +29,7 @@
 	var/list/pod_overlays
 	var/health = 400
 	var/maxHealth = 400
-	appearance_flags = 0
+	appearance_flags = LONG_GLIDE
 
 	var/datum/delay_controller/move_delayer = new(0.1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
 	var/passenger_fire = 0 //Whether or not a passenger can fire weapons attached to this pod
@@ -42,6 +42,10 @@
 		/datum/action/spacepod/fire_weapons,\
 		/datum/action/spacepod/passenger/assume_control) //Actions to create when a passenger boards, deleted upon leaving
 	var/list/actions = list()
+
+/obj/spacepod/get_cell()
+	return battery
+
 /obj/spacepod/New()
 	. = ..()
 	if(!pod_overlays)
@@ -167,15 +171,7 @@
 		return
 	if(health < maxHealth && iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(!WT.isOn())
-			return
-		if (WT.get_fuel() < 5)
-			to_chat(user, "<span class='warning'>You need more fuel to complete this task.</span>")
-
-		playsound(src, pick('sound/items/Welder.ogg', 'sound/items/Welder2.ogg'), 50, 1)
-		if(do_after(user, src, 30))
-			if(!src || !WT.remove_fuel(5, user))
-				return
+		if(WT.do_weld(user, src, 30, 5))
 			to_chat(user, "<span class='notice'>You patch up \the [src].</span>")
 			adjust_health(-rand(15,30))
 			return
@@ -351,13 +347,17 @@
 			. = t_air.return_temperature()
 	return
 
-/obj/spacepod/MouseDrop_T(mob/M as mob, mob/user as mob)
+/obj/spacepod/MouseDropTo(mob/M, mob/user)
 	if(M != user)
+		return
+	if(!Adjacent(M) || !Adjacent(user))
 		return
 	move_inside(M, user)
 
-/obj/spacepod/MouseDrop(atom/over)
+/obj/spacepod/MouseDropFrom(atom/over)
 	if(!usr || !over)
+		return
+	if(!Adjacent(usr) || !Adjacent(over))
 		return
 	if(occupant != usr && !passengers.Find(usr))
 		return ..() //Handle mousedrop T

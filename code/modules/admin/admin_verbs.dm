@@ -16,12 +16,46 @@ var/list/admin_verbs_admin = list(
 	/datum/admins/proc/delay,
 	/client/proc/player_panel_new,		/*shows an interface for all players, with links to various panels*/
 	/client/proc/invisimin,				/*allows our mob to go invisible/visible*/
-//	/datum/admins/proc/show_traitor_panel,	/*interface which shows a mob's mind*/ -Removed due to rare practical use. Moved to debug verbs ~Errorage
+	/datum/admins/proc/show_role_panel,	/*interface which shows a mob's mind*/
+	/datum/admins/proc/toggleenter,		/*toggles whether people can join the current game*/
+	/datum/admins/proc/toggleguests,	/*toggles whether guests can join the current game*/
+	/datum/admins/proc/announce,		/*priority announce something to all clients.*/
+	/client/proc/colorooc,				/*allows us to set a custom colour for everythign we say in ooc*/
 	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
 	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
 	/client/proc/cmd_admin_subtle_message,	/*send an message to somebody as a 'voice in their head'*/
 	/client/proc/cmd_admin_delete,		/*delete an instance/object/mob/etc*/
 	/client/proc/cmd_admin_check_contents,	/*displays the contents of an instance*/
+	/datum/admins/proc/access_news_network,	/*allows access of newscasters*/
+	/client/proc/giveruntimelog,		/*allows us to give access to runtime logs to somebody*/
+	/client/proc/getruntimelog,			/*allows us to access runtime logs to somebody*/
+	/client/proc/getserverlog,			/*allows us to fetch server logs (diary) for other days*/
+	/client/proc/jumptocoord,			/*we ghost and jump to a coordinate*/
+	/client/proc/Getmob,				/*teleports a mob to our location*/
+	/client/proc/Getkey,				/*teleports a mob with a certain ckey to our location*/
+//	/client/proc/sendmob,				/*sends a mob somewhere*/ -Removed due to it needing two sorting procs to work, which were executed every time an admin right-clicked. ~Errorage
+	/client/proc/Jump,
+	/client/proc/jumptokey,				/*allows us to jump to the location of a mob with a certain ckey*/
+	/client/proc/jumptomob,				/*allows us to jump to a specific mob*/
+	/client/proc/jumptoturf,			/*allows us to jump to a specific turf*/
+	/client/proc/jumptomapelement,			/*allows us to jump to a specific vault*/
+	/client/proc/admin_call_shuttle,	/*allows us to call the emergency shuttle*/
+	/client/proc/admin_cancel_shuttle,	/*allows us to cancel the emergency shuttle, sending it back to centcomm*/
+	/client/proc/cmd_admin_direct_narrate,	/*send text directly to a player with no padding. Useful for narratives and fluff-text*/
+	/client/proc/cmd_admin_local_narrate,	/*send text locally to all players in view, similar to direct narrate*/
+	/client/proc/cmd_admin_world_narrate,	/*sends text to all players with no padding*/
+	/client/proc/cmd_admin_create_centcom_report,
+	/client/proc/check_ai_laws,			/*shows AI and borg laws*/
+	/client/proc/admin_memo,			/*admin memo system. show/delete/write. +SERVER needed to delete admin memos of others*/
+	/client/proc/dsay,					/*talk in deadchat using our ckey/fakekey*/
+	/client/proc/investigate_show,		/*various admintools for investigation. Such as a singulo grief-log*/
+	/client/proc/secrets,
+	/client/proc/shuttle_magic,
+	/datum/admins/proc/toggleooc,		/*toggles ooc on/off for everyone*/
+	/datum/admins/proc/togglelooc, /*toggles looc on/off for everyone*/
+	/datum/admins/proc/toggleoocdead,	/*toggles ooc on/off for everyone who is dead*/
+	/client/proc/game_panel,			/*game panel, allows to change game-mode etc*/
+	/client/proc/cmd_admin_say,			/*admin-only ooc chat*/
 	/datum/admins/proc/PlayerNotes,
 	/client/proc/cmd_admin_direct_narrate,	/*send text directly to a player with no padding. Useful for narratives and fluff-text*/
 	/client/proc/cmd_mod_say,
@@ -50,7 +84,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/cmd_admin_gib_self,
 	/client/proc/cinematic,
 	/client/proc/one_click_antag,
-	/client/proc/antag_madness,
+	//client/proc/antag_madness,
 	/datum/admins/proc/toggle_aliens,
 	// FUUUUCKED /client/proc/zombie_event, // ZOMBB-B-BIES
 	/client/proc/make_sound,
@@ -104,7 +138,6 @@ var/list/admin_verbs_rejuv = list(
 var/list/admin_verbs_polling = list(
 	/client/proc/create_poll
 	)
-
 var/list/admin_verbs_mod = list(
 	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
 	/client/proc/cmd_admin_pm_panel,	/*admin-pm list*/

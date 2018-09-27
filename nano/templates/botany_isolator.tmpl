@@ -23,13 +23,13 @@ Used In File(s): \code\modules\hydroponics\seed_machines.dm
 			</div>
 		</div>
 		{{if data.disk}}
-			{{for data.geneMasks}}
+			{{for data.geneTags}}
 				<div class="item">
 					<div class="itemLabel">
 						{{:value.tag}}
 					</div>
 					<div class="itemContent">
-						{{:helper.link('Extract', 'circle-arrow-s', {'get_gene' : value.tag}, null)}}
+						{{:helper.link('Extract', 'circle-arrow-s', {'get_gene' : value.tag})}}
 					</div>
 				</div>
 			{{empty}}

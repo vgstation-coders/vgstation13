@@ -30,7 +30,7 @@
 /datum/organ/internal/lungs/filter/CanInsert(var/mob/living/carbon/human/H, var/mob/surgeon=null, var/quiet=0)
 	if(!(H.species.breath_type in intake_settings))
 		if(surgeon)
-			surgeon << "<span class='warning'>You read the compatibility list on the back of the lung and find that it won't work on this species.</span>"
+			to_chat(surgeon, "<span class='warning'>You read the compatibility list on the back of the lung and find that it won't work on this species.</span>")
 		return 0
 	return 1
 

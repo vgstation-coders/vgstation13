@@ -33,12 +33,6 @@
 //
 // The explosion cannot insta-kill anyone with 30% or more health.
 
-#define LIGHT_OK 0
-#define LIGHT_EMPTY 1
-#define LIGHT_BROKEN 2
-#define LIGHT_BURNED 3
-
-
 /obj/item/device/lightreplacer
 
 	name = "light replacer"
@@ -604,8 +598,3 @@
 
 /obj/item/device/lightreplacer/borg/restock()
 	Charge()
-
-#undef LIGHT_OK
-#undef LIGHT_EMPTY
-#undef LIGHT_BROKEN
-#undef LIGHT_BURNED

@@ -464,5 +464,5 @@
 	if(istype(user))
 		user.heard(src)
 
-#undef Jitter_Medium
-#undef Jitter_High
+#undef JITTER_MEDIUM
+#undef JITTER_HIGH
