@@ -29,7 +29,6 @@ FLOOR SAFES
 	tumbler_2_pos = rand(0, 71)
 	tumbler_2_open = rand(0, 71)
 
-
 /obj/structure/safe/initialize()
 	for(var/obj/item/I in loc)
 		if(space >= maxspace)
@@ -37,6 +36,9 @@ FLOOR SAFES
 		if(I.w_class + space <= maxspace)
 			space += I.w_class
 			I.forceMove(src)
+
+	//Trying to track down issue #18719		
+	log_debug("[get_area(src).name] safe has starting tumbler positions [tumbler_1_pos]-[tumbler_2_pos] and opening positions [tumbler_1_open]-[tumbler_2_open].")
 
 
 /obj/structure/safe/proc/check_unlocked(mob/user as mob, canhear)

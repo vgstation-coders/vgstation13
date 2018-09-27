@@ -64,7 +64,7 @@
 	return(BRUTELOSS)
 
 /obj/item/weapon/claymore/cultify()
-	new /obj/item/weapon/melee/cultblade(loc)
+	new /obj/item/weapon/melee/legacy_cultblade(loc)
 	..()
 
 /obj/item/weapon/katana

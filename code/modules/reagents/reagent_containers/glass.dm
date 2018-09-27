@@ -14,6 +14,7 @@
 	possible_transfer_amounts = list(5,10,15,25,30,50)
 	volume = 50
 	flags = FPRINT  | OPENCONTAINER
+	layer = ABOVE_OBJ_LAYER
 
 	//This is absolutely terrible
 	// TODO To remove this, return 1 on every attackby() that handles reagent_containers.

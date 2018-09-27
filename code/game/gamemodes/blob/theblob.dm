@@ -35,6 +35,13 @@ var/list/blob_looks
 /obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
 /obj/effect/blob/normal/update_icon(var/spawnend = 0)
 */
+//Few global vars to track the blob
+var/list/blobs = list()
+var/list/blob_cores = list()
+var/list/blob_nodes = list()
+var/list/blob_resources = list()
+var/list/blob_overminds = list()
+
 
 /obj/effect/blob
 	name = "blob"
@@ -81,11 +88,6 @@ var/list/blob_looks
 	looks = newlook
 	update_looks()
 	blobs += src
-	if(istype(ticker.mode,/datum/game_mode/blob))
-		var/datum/game_mode/blob/blobmode = ticker.mode
-		if((blobs.len >= blobmode.blobnukeposs) && prob(3) && !blobmode.nuclear)
-			blobmode.stage(2)
-			blobmode.nuclear = 1
 	src.dir = pick(cardinal)
 	time_since_last_pulse = world.time
 

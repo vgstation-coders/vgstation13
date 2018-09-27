@@ -174,7 +174,7 @@
 			var/obj/item/weapon/storage/bible/B = locate(/obj/item/weapon/storage/bible) in H.loc
 			if (!B)
 				return
-			if(iscult(H))
+			if(isanycultist(H))
 				to_chat(H, "<span class='sinister'>Nar-Sie shields you from [B.my_rel.deity_name]'s wrath!</span>")
 			else
 				if(istype(H.head, /obj/item/clothing/head/fedora))

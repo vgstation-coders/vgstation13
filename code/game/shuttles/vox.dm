@@ -43,6 +43,7 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 
 	set_transit_dock(/obj/docking_port/destination/vox/transit)
 
+/* USED IN HEIST
 /datum/shuttle/vox/travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
 	if(D == dock_home)
 		if(world.time < 6000)
@@ -58,6 +59,7 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 					if("No")
 						return
 	.=..()
+*/
 
 /datum/shuttle/vox/after_flight()
 	.=..()

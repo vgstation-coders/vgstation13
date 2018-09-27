@@ -52,7 +52,7 @@
 		target.stop_pulling()
 		return TRUE
 
-/mob/living/proc/get_unarmed_damage(mob/living/victim)
+/mob/living/proc/get_unarmed_damage(var/atom/victim)
 	return rand(0,10)
 
 /mob/living/proc/get_unarmed_sharpness(mob/living/victim)

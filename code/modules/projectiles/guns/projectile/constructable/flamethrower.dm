@@ -111,7 +111,7 @@
 	var/pressure = tank_gas.return_pressure()
 	var/total_moles = tank_gas.total_moles()
 	if(total_moles)
-		var/o2_concentration = tank_gas.oxygen/total_moles
+		var/o2_concentration = tank_gas[GAS_OXYGEN]/total_moles
 		if(o2_concentration > 0.01)
 			B.has_O2_in_mix = 1
 	else
@@ -253,7 +253,6 @@
 	..()
 	ptank = new /obj/item/weapon/tank/plasma(src)
 	var/datum/gas_mixture/gas_tank = ptank.air_contents
-	gas_tank.toxins = 29.1
-	gas_tank.update_values()
+	gas_tank.adjust_gas(GAS_PLASMA, 29.1)
 	update_icon()
 	return

@@ -7,7 +7,7 @@
 /mob/living/carbon/slime/get_unarmed_verb()
 	return "glomps on"
 
-/mob/living/carbon/slime/get_unarmed_damage(mob/living/target)
+/mob/living/carbon/slime/get_unarmed_damage(var/atom/target)
 	if(isslime(target))
 		return rand(1,3)
 
