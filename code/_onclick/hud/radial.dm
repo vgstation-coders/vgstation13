@@ -1,4 +1,5 @@
 #define NEXT_PAGE_ID "__next__"
+#define DEFAULT_CHECK_DELAY 2 SECONDS
 
 /obj/screen/radial
 	icon = 'icons/mob/radial.dmi'
@@ -48,6 +49,10 @@
 	var/atom/anchor
 	var/image/menu_holder
 	var/finished = FALSE
+
+	var/event/custom_check
+	var/next_check = 0
+	var/check_delay = DEFAULT_CHECK_DELAY
 
 	var/radius = 32
 	var/starting_angle = 0
@@ -246,22 +251,41 @@
 		current_user.images -= menu_holder
 
 /datum/radial_menu/proc/wait()
-	while (current_user && !finished && !selected_choice)
+	while(current_user && !finished && !selected_choice)
+		if(istype(custom_check) && next_check < world.time)
+			if(!INVOKE_EVENT(custom_check, list()))
+				return
+			else
+				next_check = world.time + check_delay
 		stoplag(1)
 
 /datum/radial_menu/Destroy()
 	Reset()
 	hide()
+	if(istype(custom_check))
+		custom_check.holder = null
+		custom_check = null
 	. = ..()
 /*
 	Presents radial menu to user anchored to anchor (or user if the anchor is currently in users screen)
 	Choices should be a list where list keys are movables or text used for element names and return value
 	and list values are movables/icons/images used for element icons
 */
-/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file = 'icons/mob/radial.dmi')
-	var/datum/radial_menu/menu = new (icon_file)
-	if(!user)
-		user = usr
+/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file = 'icons/mob/radial.dmi',var/event/custom_check,var/uniqueid,var/radius)
+	if(!user || !anchor || !length(choices))
+		return
+
+	if(!uniqueid)
+		uniqueid = "defmenu_["\ref[user]"]_["\ref[anchor]"]"
+	if(radial_menus[uniqueid])
+		return
+
+	var/datum/radial_menu/menu = new(icon_file)
+	radial_menus[uniqueid] = menu
+	if(radius)
+		menu.radius = radius
+	if(istype(custom_check))
+		menu.custom_check = custom_check
 	menu.anchor = anchor
 	menu.check_screen_border(user) //Do what's needed to make it look good near borders or on hud
 	menu.set_choices(choices,icon_file)
@@ -269,4 +293,5 @@
 	menu.wait()
 	var/answer = menu.selected_choice
 	qdel(menu)
+	radial_menus -= uniqueid
 	return answer

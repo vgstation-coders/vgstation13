@@ -432,3 +432,6 @@ var/list/bank_security_text2num_associative = list(
 	"Two" = 2
 ) // Can't use a zero. Throws a fit about out of bounds indices if you do.
 // Also if you add more security levels, please also update the above BANK_SECURITY_EXPLANATION
+
+//Radial menus currently existing in the world.
+var/global/list/radial_menus = list()
