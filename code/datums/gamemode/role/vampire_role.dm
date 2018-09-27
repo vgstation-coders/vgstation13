@@ -23,8 +23,8 @@
 	var/smitecounter = 0
 
 	var/draining = FALSE
-	var/blood_usable = 0
-	var/blood_total = 0
+	var/blood_usable = STARTING_BLOOD
+	var/blood_total = STARTING_BLOOD
 
 	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
 
@@ -84,7 +84,7 @@
 	var/text = {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
 [name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
  - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
- - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a> - <a href='?src=\ref[src]&mind=\ref[antag]&giveblood=1'>Give blood</a>"}
+ - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a> - <a href='?src=\ref[src]&mind=\ref[antag]&giveblood=1'>Give blood</a> <br/>"}
 	return text
 
 /datum/role/vampire/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
@@ -106,9 +106,10 @@
 // I just put what I expect to see in the "The vampires were..."
 /datum/role/vampire/GetScoreboard()
 	. = ..() // Who he was, his objectives...
-	. += "Total blood collected: <b>[blood_total]</b>"
+	. += "Total blood collected: <b>[blood_total]</b><br/>"
 	for (var/datum/role/thrall/T in thralls)
 		. += T.GetScoreboard()
+		. += "<br/>"
 
 /datum/role/vampire/ForgeObjectives()
 

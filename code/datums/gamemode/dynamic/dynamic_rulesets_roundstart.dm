@@ -88,9 +88,12 @@
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
-		var/datum/role/vampire/newVampire = new
-		newVampire.AssignToRole(M.mind,1)
+		var/datum/faction/vampire/fac = new
+		var/datum/role/vampire/newVampire = new(M.mind, fac, override = TRUE)
+		ticker.mode.factions += fac
 		newVampire.Greet(GREET_ROUNDSTART)
+		newVampire.OnPostSetup()
+	update_faction_icons()
 	return 1
 
 
