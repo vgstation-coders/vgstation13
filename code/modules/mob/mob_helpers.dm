@@ -1,11 +1,11 @@
 /mob/proc/isUnconscious() //Returns 1 if unconscious, dead or faking death
-	return stat || (status_flags & FAKEDEATH)
+	return stat == UNCONSCIOUS || isDead()
 
 /mob/proc/isDead() //Returns 1 if dead or faking death
 	return stat == DEAD || (status_flags & FAKEDEATH)
 
 /mob/proc/isStunned() //Because we have around four slighly different stunned variables for some reason.
-	return isUnconscious() || paralysis || stunned || knockdown
+	return isUnconscious() || paralysis > 0 || stunned > 0 || knockdown > 0
 
 /mob/proc/incapacitated()
 	return isStunned() || restrained()
