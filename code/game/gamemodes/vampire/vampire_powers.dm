@@ -439,7 +439,7 @@
 	if(ishuman(src))
 		var/mob/living/carbon/human/M = src
 		if(M.check_body_part_coverage(MOUTH))
-			if(M.species.breath_type == "oxygen")
+			if(M.species.breath_type == GAS_OXYGEN)
 				to_chat(src, "<span class='warning'>Remove your mask!</span>")
 				return 0
 			else
