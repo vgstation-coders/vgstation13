@@ -398,7 +398,7 @@ proc/checkhtml(var/t)
  * Formats unites with their suffixes
  * Should be good for J, W, and stuff
  */
-var/list/unit_suffixes = list("K", "M", "G", "T", "P", "E", "Z", "Y")
+var/list/unit_suffixes = list("", "K", "M", "G", "T", "P", "E", "Z", "Y")
 
 /proc/format_units(var/number)
 	if (number<0)
