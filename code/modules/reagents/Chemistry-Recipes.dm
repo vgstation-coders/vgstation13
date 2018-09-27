@@ -478,7 +478,7 @@
 	name = "Nitroglycerin Explosion"
 	id = NITROGLYCERIN
 	result = NITROGLYCERIN
-	required_reagents = list(GLYCEROL = 1, PACID = 1, SACID = 1)
+	required_reagents = list(GLYCEROL = 1, PHENOL = 1, FORMIC_ACID = 1)
 	result_amount = 2
 	alert_admins = ALERT_AMOUNT_ONLY
 
