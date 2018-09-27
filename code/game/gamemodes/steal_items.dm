@@ -252,8 +252,8 @@
 	max=28
 	protected_jobs = list("Research Director", "Scientist")
 
-/datum/theft_objective/number/traitor/plasma_gas/getAmountStolen(var/obj/item/I)
-	return I:air_contents:toxins
+/datum/theft_objective/number/traitor/plasma_gas/getAmountStolen(var/obj/item/weapon/tank/I)
+	return I.air_contents[GAS_PLASMA]
 
 /datum/theft_objective/number/traitor/coins
 	name = "credits of coins (in bag)"

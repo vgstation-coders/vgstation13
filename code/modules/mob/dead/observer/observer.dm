@@ -718,29 +718,29 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	else
 		to_chat(src, "<span class='warning'>Pressure: [round(pressure, 0.1)] kPa</span>")
 	if(total_moles)
-		var/o2_concentration = environment.oxygen / total_moles
-		var/n2_concentration = environment.nitrogen / total_moles
-		var/co2_concentration = environment.carbon_dioxide / total_moles
-		var/plasma_concentration = environment.toxins / total_moles
+		var/o2_concentration = environment[GAS_OXYGEN] / total_moles
+		var/n2_concentration = environment[GAS_NITROGEN] / total_moles
+		var/co2_concentration = environment[GAS_CARBON] / total_moles
+		var/plasma_concentration = environment[GAS_PLASMA] / total_moles
 
 		var/unknown_concentration =  1 - (o2_concentration + n2_concentration + co2_concentration + plasma_concentration)
 		if(abs(n2_concentration - N2STANDARD) < 20)
-			to_chat(src, "<span class='notice'>Nitrogen: [round(n2_concentration * 100)]% ([round(environment.nitrogen / tiles, 0.01)] moles)</span>")
+			to_chat(src, "<span class='notice'>Nitrogen: [round(n2_concentration * 100)]% ([round(environment.molar_density(GAS_NITROGEN) * CELL_VOLUME, 0.01)] moles)</span>")
 		else
-			to_chat(src, "<span class='warning'>Nitrogen: [round(n2_concentration * 100)]% ([round(environment.nitrogen / tiles, 0.01)] moles)</span>")
+			to_chat(src, "<span class='warning'>Nitrogen: [round(n2_concentration * 100)]% ([round(environment.molar_density(GAS_NITROGEN) * CELL_VOLUME, 0.01)] moles)</span>")
 
 		if(abs(o2_concentration - O2STANDARD) < 2)
-			to_chat(src, "<span class='notice'>Oxygen: [round(o2_concentration * 100)]% ([round(environment.oxygen / tiles, 0.01)] moles)</span>")
+			to_chat(src, "<span class='notice'>Oxygen: [round(o2_concentration * 100)]% ([round(environment.molar_density(GAS_OXYGEN) * CELL_VOLUME, 0.01)] moles)</span>")
 		else
-			to_chat(src, "<span class='warning'>Oxygen: [round(o2_concentration * 100)]% ([round(environment.oxygen / tiles, 0.01)] moles)</span>")
+			to_chat(src, "<span class='warning'>Oxygen: [round(o2_concentration * 100)]% ([round(environment.molar_density(GAS_OXYGEN) * CELL_VOLUME, 0.01)] moles)</span>")
 
 		if(co2_concentration > 0.01)
-			to_chat(src, "<span class='warning'>CO2: [round(co2_concentration * 100)]% ([round(environment.carbon_dioxide / tiles, 0.01)] moles)</span>")
+			to_chat(src, "<span class='warning'>CO2: [round(co2_concentration * 100)]% ([round(environment.molar_density(GAS_CARBON) * CELL_VOLUME, 0.01)] moles)</span>")
 		else
-			to_chat(src, "<span class='notice'>CO2: [round(co2_concentration * 100)]% ([round(environment.carbon_dioxide / tiles, 0.01)] moles)</span>")
+			to_chat(src, "<span class='notice'>CO2: [round(co2_concentration * 100)]% ([round(environment.molar_density(GAS_CARBON) * CELL_VOLUME, 0.01)] moles)</span>")
 
 		if(plasma_concentration > 0.01)
-			to_chat(src, "<span class='warning'>Plasma: [round(plasma_concentration * 100)]% ([round(environment.toxins / tiles, 0.01)] moles)</span>")
+			to_chat(src, "<span class='warning'>Plasma: [round(plasma_concentration * 100)]% ([round(environment.molar_density(GAS_PLASMA) * CELL_VOLUME, 0.01)] moles)</span>")
 
 		if(unknown_concentration > 0.01)
 			to_chat(src, "<span class='warning'>Unknown: [round(unknown_concentration * 100)]% ([round(unknown_concentration * total_moles / tiles, 0.01)] moles)</span>")
