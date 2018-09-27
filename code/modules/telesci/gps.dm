@@ -36,14 +36,21 @@ var/list/SPS_list = list()
 	gps_list -= src
 	..()
 
+/obj/item/device/gps/update_icon()
+	overlays.Cut()
+	if(emped)
+		overlays += image(icon, "emp")
+		return
+	if(transmitting)
+		overlays += image(icon, "working")
+
 /obj/item/device/gps/emp_act(severity)
 	emped = TRUE
 	transmitting = FALSE
-	overlays -= image(icon = icon, icon_state = "working")
-	overlays += image(icon = icon, icon_state = "emp")
+	update_icon()
 	spawn(30 SECONDS)
-		overlays -= image(icon = icon, icon_state = "emp")
 		emped = FALSE
+		update_icon()
 
 /obj/item/device/gps/attack_self(mob/user)
 	if (emped)
@@ -54,7 +61,7 @@ var/list/SPS_list = list()
 				if(!emped && !transmitting && Adjacent(user) && !user.incapacitated())
 					transmitting = TRUE
 					to_chat(user, "<span class = 'notice'>You activate \the [src].</span>")
-					overlays += image(icon = icon, icon_state = "working")
+					update_icon()
 					ui_interact(user)
 	else
 		ui_interact(user)
