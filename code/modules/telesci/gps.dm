@@ -17,7 +17,7 @@ var/list/SPS_list = list()
 	var/autorefreshing = FALSE
 	var/builtin = FALSE
 	var/transmitting = FALSE
-	var/gps_list
+	var/list/gps_list // Set in New to be either global.GPS_list or global.SPS_list
 
 /obj/item/device/gps/proc/get_gps_list()
 	return GPS_list
@@ -31,6 +31,7 @@ var/list/SPS_list = list()
 	gpstag = "[base_tag][gps_list.len]"
 	gps_list += src
 	update_name()
+	update_icon()
 
 /obj/item/device/gps/Destroy()
 	gps_list -= src
@@ -53,17 +54,6 @@ var/list/SPS_list = list()
 		update_icon()
 
 /obj/item/device/gps/attack_self(mob/user)
-	if(emped)
-		return
-	if(transmitting || isobserver(user))
-		ui_interact(user)
-		return
-	var/choice = alert(user,"Would you like to turn on the GPS?",,"Yes","No")
-	if(choice != "Yes" || emped || transmitting || !Adjacent(user) || user.incapacitated())
-		return
-	transmitting = TRUE
-	to_chat(user, "<span class = 'notice'>You activate \the [src].</span>")
-	update_icon()
 	ui_interact(user)
 
 /obj/item/device/gps/examine(mob/user)
@@ -89,19 +79,19 @@ var/list/SPS_list = list()
 	var/data[0]
 	if(emped)
 		data["emped"] = TRUE
-	else if (transmitting)
-		data["gpstag"] = gpstag
-		data["autorefresh"] = autorefreshing
-		data["location_text"] = get_location_name()
-		var/list/devices = list()
-		for(var/D in gps_list)
-			var/obj/item/device/gps/G = D
-			if(G.transmitting && src != G)
-				var/device_data[0]
-				device_data["tag"] = G.gpstag
-				device_data["location_text"] = G.get_location_name()
-				devices += list(device_data)
-		data["devices"] = devices
+	data["transmitting"] = transmitting
+	data["gpstag"] = gpstag
+	data["autorefresh"] = autorefreshing
+	data["location_text"] = get_location_name()
+	var/list/devices = list()
+	for(var/D in gps_list)
+		var/obj/item/device/gps/G = D
+		if(G.transmitting && src != G)
+			var/device_data[0]
+			device_data["tag"] = G.gpstag
+			device_data["location_text"] = G.get_location_name()
+			devices += list(device_data)
+	data["devices"] = devices
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
@@ -111,6 +101,12 @@ var/list/SPS_list = list()
 	ui.set_auto_update(autorefreshing)
 
 /obj/item/device/gps/Topic(href, href_list)
+	if(href_list["turn_on"])
+		if(emped || transmitting || !Adjacent(usr) || usr.incapacitated())
+			return FALSE
+		transmitting = TRUE
+		update_icon()
+		return TRUE
 	if(href_list["tag"])
 		if(isobserver(usr))
 			to_chat(usr, "No way.")
@@ -161,12 +157,14 @@ var/list/SPS_list = list()
 	icon_state = "gps-b"
 	base_tag = "BORG"
 	builtin = TRUE
+	transmitting = TRUE
 
 /obj/item/device/gps/pai
 	base_name = "pAI positioning system"
 	icon_state = "gps-b"
 	base_tag = "PAI"
 	builtin = TRUE
+	transmitting = TRUE
 
 /obj/item/device/gps/secure
 	base_name = "secure positioning system"
