@@ -1,18 +1,14 @@
 /mob/proc/isUnconscious() //Returns 1 if unconscious, dead or faking death
-	if(stat || (status_flags & FAKEDEATH))
-		return 1
+	return stat || (status_flags & FAKEDEATH)
 
 /mob/proc/isDead() //Returns 1 if dead or faking death
-	if(stat == DEAD || (status_flags & FAKEDEATH))
-		return 1
+	return stat == DEAD || (status_flags & FAKEDEATH)
 
 /mob/proc/isStunned() //Because we have around four slighly different stunned variables for some reason.
-	if(isUnconscious() || paralysis || stunned || knockdown)
-		return 1
+	return isUnconscious() || paralysis || stunned || knockdown
 
 /mob/proc/incapacitated()
-	if(isStunned() || restrained())
-		return 1
+	return isStunned() || restrained()
 
 /mob/proc/get_screen_colour()
 	if(!client)
