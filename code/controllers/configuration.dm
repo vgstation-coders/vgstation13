@@ -725,13 +725,9 @@
 				diary << "Unknown setting in configuration: '[name]'"
 
 /datum/configuration/proc/pick_mode(mode_name)
-	// I wish I didn't have to instance the game modes in order to look up
-	// their information, but it is the only way (at least that I know of).
-	for (var/T in subtypesof(/datum/gamemode)-/datum/gamemode/cult)
-		var/datum/gamemode/M = new T()
-		if (M.name && M.name == mode_name)
-			return M
-		del(M)
+	for (var/datum/gamemode/T in subtypesof(/datum/gamemode)-/datum/gamemode/cult)
+		if (initial(T.name) && initial(T.name) == mode_name)
+			return T
 	return new /datum/gamemode/extended()
 
 /datum/configuration/proc/get_runnable_modes()
