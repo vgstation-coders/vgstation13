@@ -14,17 +14,12 @@
 /datum/artifact_effect/gassleeping/DoEffectTouch(var/mob/user)
 	if(holder)
 		var/datum/gas_mixture/env = holder.loc.return_air()
-		if(env)
-			var/datum/gas/sleeping_agent/trace_gas = new
-			trace_gas.moles = rand(2,15)
-			env.adjust(traces = list(trace_gas))
+		env?.adjust_gas(GAS_SLEEPING, rand(2, 15))
 
 
 /datum/artifact_effect/gassleeping/DoEffectAura()
 	if(holder)
 		var/datum/gas_mixture/env = holder.loc.return_air()
 		if(env && env.pressure < max_pressure)
-			var/datum/gas/sleeping_agent/trace_gas = new
-			trace_gas.moles = pick(0, 0, 0.1, rand())
-			env.adjust(traces = list(trace_gas))
+			env.adjust_gas(GAS_SLEEPING, pick(0, 0, 0.1, rand()))
 

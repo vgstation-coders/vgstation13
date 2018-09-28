@@ -16,10 +16,10 @@
 
 	// DEFAULTS FOR HUMAN LUNGS:
 	var/list/datum/lung_gas/gasses = list(
-		new /datum/lung_gas/metabolizable("oxygen",            min_pp=16, max_pp=140),
-		new /datum/lung_gas/waste("carbon_dioxide",            max_pp=10),
-		new /datum/lung_gas/toxic("toxins",                    max_pp=0.5, max_pp_mask=5, reagent_id=PLASMA, reagent_mult=0.1),
-		new /datum/lung_gas/sleep_agent("/datum/gas/sleeping_agent", trace_gas=1, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
+		new /datum/lung_gas/metabolizable(GAS_OXYGEN,            min_pp=16, max_pp=140),
+		new /datum/lung_gas/waste(GAS_CARBON,            max_pp=10),
+		new /datum/lung_gas/toxic(GAS_PLASMA,                    max_pp=0.5, max_pp_mask=5, reagent_id=PLASMA, reagent_mult=0.1),
+		new /datum/lung_gas/sleep_agent(GAS_SLEEPING, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
 	)
 
 	var/inhale_volume = BREATH_VOLUME
@@ -32,6 +32,10 @@
 
 	// NOW WITH MODULAR GAS HANDLING RATHER THAN A CLUSTERFUCK OF IF-TREES FOR EVERY SNOWFLAKE RACE
 	//testing("Ticking lungs...")
+
+	//Do this to make sure the pressure is correct.
+	breath.volume = inhale_volume
+	breath.update_values()
 
 	// First, we consume air.
 	for(var/datum/lung_gas/G in gasses)
@@ -113,10 +117,10 @@
 	removed_type = /obj/item/organ/internal/lungs/vox
 
 	gasses = list(
-		new /datum/lung_gas/metabolizable("nitrogen",          min_pp=16, max_pp=140),
-		new /datum/lung_gas/waste("carbon_dioxide",            max_pp=10), // I guess? Ideally it'd be some sort of nitrogen compound.  Maybe N2O?
+		new /datum/lung_gas/metabolizable(GAS_NITROGEN,          min_pp=16, max_pp=140),
+		new /datum/lung_gas/waste(GAS_CARBON,            max_pp=10), // I guess? Ideally it'd be some sort of nitrogen compound.  Maybe N2O?
 		new /datum/lung_gas/toxic(OXYGEN,                    max_pp=0.5, max_pp_mask=0, reagent_id=OXYGEN, reagent_mult=0.1),
-		new /datum/lung_gas/sleep_agent("/datum/gas/sleeping_agent", trace_gas=1, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
+		new /datum/lung_gas/sleep_agent(GAS_SLEEPING, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
 	)
 
 
@@ -125,7 +129,7 @@
 	removed_type = /obj/item/organ/internal/lungs/plasmaman
 
 	gasses = list(
-		new /datum/lung_gas/metabolizable("toxins", min_pp=16, max_pp=140),
-		new /datum/lung_gas/waste("carbon_dioxide",         max_pp=10),
-		new /datum/lung_gas/sleep_agent("/datum/gas/sleeping_agent", trace_gas=1, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
+		new /datum/lung_gas/metabolizable(GAS_PLASMA, min_pp=16, max_pp=140),
+		new /datum/lung_gas/waste(GAS_CARBON,         max_pp=10),
+		new /datum/lung_gas/sleep_agent(GAS_SLEEPING, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
 	)

@@ -103,7 +103,7 @@
 	if(heating == BUNSEN_ON)
 		var/turf/T = get_turf(src)
 		var/datum/gas_mixture/G = T.return_air()
-		if(!G || G.molar_density("oxygen") < 0.1 / CELL_VOLUME)
+		if(!G || G.molar_density(GAS_OXYGEN) < 0.1 / CELL_VOLUME)
 			visible_message("<span class = 'warning'>\The [src] splutters out from lack of oxygen.</span>","<span class = 'warning'>You hear something cough.</span>")
 			toggle()
 			return
@@ -128,7 +128,9 @@
 				reagents.remove_reagent(possible_fuel, consumption_rate)
 				if(held_container)
 					held_container.reagents.heating(thermal_energy_transfer, max_temperature)
-				G.adjust(o2 = -o2_consumption, co2 = -co2_consumption)
+				G.adjust_multi(
+					GAS_OXYGEN, -o2_consumption,
+					GAS_CARBON, -co2_consumption)
 				if(prob(unsafety) && T)
 					T.hotspot_expose(max_temperature, 5)
 				break

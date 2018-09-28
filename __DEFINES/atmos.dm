@@ -61,6 +61,12 @@
 #define PLASMA_MINIMUM_OXYGEN_PLASMA_RATIO	20
 #define PLASMA_OXYGEN_FULLBURN				10
 
+// XGM gas flags.
+#define XGM_GAS_FUEL        1
+#define XGM_GAS_OXIDIZER    2
+#define XGM_GAS_CONTAMINANT 4
+#define XGM_GAS_LOGGED      8
+
 #define TANK_LEAK_PRESSURE		(30.*ONE_ATMOSPHERE)	// Tank starts leaking
 #define TANK_RUPTURE_PRESSURE	(40.*ONE_ATMOSPHERE) // Tank spills all contents into atmosphere
 #define TANK_FRAGMENT_PRESSURE	(50.*ONE_ATMOSPHERE) // Boom 3x3 base explosion
