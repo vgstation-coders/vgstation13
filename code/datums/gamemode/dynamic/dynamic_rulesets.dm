@@ -141,7 +141,7 @@
 			candidates.Remove(P)
 			continue
 		if (P.mind.assigned_role in protected_from_jobs)
-			if (prob(66)) // Only 1/3 chance to be in the candiates
+			if (prob(PROTECTED_TRAITOR_PROB)) // Only 1/3 chance to be in the candiates
 				candidates.Remove(P)
 			continue
 		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
@@ -179,7 +179,7 @@
 			candidates.Remove(P)
 			continue
 		if (P.mind.assigned_role in protected_from_jobs)
-			if (prob(66)) // Only 1/3 chance to be in the candiates
+			if (prob(PROTECTED_TRAITOR_PROB)) // Only 1/3 chance to be in the candiates
 				candidates.Remove(P)
 			continue
 		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
