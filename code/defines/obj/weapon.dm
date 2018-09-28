@@ -85,6 +85,26 @@
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
+	var/probed = 0
+
+/obj/item/weapon/soap/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W,/obj/item/weapon/card/emag) && !istype(src, /obj/item/weapon/soap/syndie))
+		if(probed)
+			to_chat(user, "You force the cryptographic sequencer's intrusion probes deep into the soap and activate the device.")
+			sleep(20)
+			to_chat(user, "<span class='warning'>The soap bubbles and boils as it turns an ominous shade of red!</span>")
+			var/I = new /obj/item/weapon/soap/syndie(get_turf(src), user)
+			qdel(src)
+			if(ishuman(user))
+				var/mob/living/carbon/human/A = user
+				A.put_in_any_hand_if_possible(I)
+		else
+			to_chat(user, "You poke the soap with the cryptographic sequencer. Nothing happens.")
+			probed = 1
+			spawn(100)
+				probed = 0
+	else
+		. = ..()
 
 /obj/item/weapon/soap/nanotrasen
 	desc = "A Nanotrasen brand bar of soap. Smells of plasma."
