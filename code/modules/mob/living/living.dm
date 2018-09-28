@@ -92,15 +92,7 @@
 			to_chat(src, "<span class='notice'>You feel like a pleb.</span>")
 	handle_beams()
 
-	//handles "call on life", allowing external life-related things to be processed
-	for(var/toCall in src.callOnLife)
-		if(locate(toCall) && callOnLife[toCall])
-			try
-				call(locate(toCall),callOnLife[toCall])()
-			catch(var/exception/e)
-				stack_trace(e)
-		else
-			callOnLife -= toCall
+	INVOKE_EVENT(on_life, list())
 
 	/*if(mind)
 		if(mind in ticker.mode.implanted)
@@ -779,16 +771,19 @@ Thanks.
 				hook.override_target_X--
 
 /mob/living
-    var/event/on_resist
+	var/event/on_resist
 
 /mob/living/New()
-    . = ..()
-    on_resist = new(owner = src)
+	. = ..()
+	on_resist = new(owner = src)
+	on_life = new(owner = src)
 
 /mob/living/Destroy()
-    . = ..()
-    qdel(on_resist)
-    on_resist = null
+	. = ..()
+	qdel(on_resist)
+	on_resist = null
+	qdel(on_life)
+	on_life = null
 
 /mob/living/verb/resist()
 	set name = "Resist"
