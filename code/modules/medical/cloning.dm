@@ -258,12 +258,6 @@
 
 	H.ckey = R.ckey
 	to_chat(H, "<span class='notice'><b>Consciousness slowly creeps over you as your body regenerates.</b><br><i>So this is what cloning feels like?</i></span>")
-
-	var/datum/role/vampire/V = isvampire(H)
-	if (V)
-		V.powers.Cut()
-		V.check_vampire_upgrade()
-
 	// -- Mode/mind specific stuff goes here
 	/*
 	if(isrev(H) || isrevhead(H))
