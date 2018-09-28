@@ -67,7 +67,6 @@
 #include "code\hub.dm"
 #include "code\names.dm"
 #include "code\world.dm"
-#include "code\__DEFINES\role_defines.dm"
 #include "code\__HELPERS\angles_dirs.dm"
 #include "code\__HELPERS\cmp.dm"
 #include "code\__HELPERS\constants.dm"
