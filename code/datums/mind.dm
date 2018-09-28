@@ -92,11 +92,9 @@
 	if(active)
 		new_character.key = key		//now transfer the key to link the client to our new body
 
-	var/datum/role/vampire/V = isvampire(current)
-	if (V && !issilicon(new_character) && !isbrain(new_character)) // No, borgs shouldn't be able to spawn bats
-		V.powers.Cut()
-		V.check_vampire_upgrade()
-
+	for (var/role in antag_roles)
+		var/datum/role/R = antag_roles[role]
+		R.handle_mind_transfer(new_character)
 
 /datum/mind/proc/store_memory(new_text)
 	if(new_text)

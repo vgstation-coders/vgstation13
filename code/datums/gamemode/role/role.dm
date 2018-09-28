@@ -420,7 +420,6 @@
 	var/datum/mind/M = locate(href_list["mind"])
 	if(!M)
 		return
-
 	RoleTopic(href, href_list, M, check_rights(R_ADMIN))
 
 // USE THIS INSTEAD (global)
@@ -449,6 +448,8 @@
 /datum/role/proc/GetMemoryHeader()
 	return name
 
+/datum/role/proc/handle_mind_transfer(var/mob/living/new_character)
+	return TRUE
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 

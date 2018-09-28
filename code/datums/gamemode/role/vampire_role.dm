@@ -375,6 +375,16 @@
 	blood_usable = max(0, blood_usable - amount)
 	update_vamp_hud()
 
+/datum/role/vampire/handle_mind_transfer(var/mob/living/new_character)
+	. = ..()
+	powers.Cut()
+	if (issilicon(new_character) || isbrain(new_character)) // No, borgs shouldn't be able to spawn bats
+		logo_state = "" // Borgos don't get the vampire icon.
+	else
+		logo_state = initial(logo_state)
+		check_vampire_upgrade()
+
+
 /*
 -- Helpers --
 */
