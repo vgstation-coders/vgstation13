@@ -33,6 +33,10 @@
 	// NOW WITH MODULAR GAS HANDLING RATHER THAN A CLUSTERFUCK OF IF-TREES FOR EVERY SNOWFLAKE RACE
 	//testing("Ticking lungs...")
 
+	//Do this to make sure the pressure is correct.
+	breath.volume = inhale_volume
+	breath.update_values()
+
 	// First, we consume air.
 	for(var/datum/lung_gas/G in gasses)
 		G.set_context(src,breath,H)
