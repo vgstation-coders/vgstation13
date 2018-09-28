@@ -218,7 +218,7 @@
 				else
 					continue
 			message = "<b>[H]</b> dabs."
-			emote_type = EMOTE_AUDIBLE
+			emote_type = EMOTE_VISIBLE //Change to EMOTE_AUDIBLE
 			H.visible_message(message)
 			H.lastDab=world.time
 		else
@@ -229,7 +229,6 @@
 				playsound(H, 'sound/weapons/punch1.ogg', 50, 1)
 			else
 				message = "<span class = 'warning'>throws their arms to the side too fast and a sharp snap sound comes from them!</span>"
-				//A.createwound(BRUISE, 30)
 				H.apply_damage(30, BRUTE, A)
 				A.fracture()
 			emote_type = EMOTE_VISIBLE
