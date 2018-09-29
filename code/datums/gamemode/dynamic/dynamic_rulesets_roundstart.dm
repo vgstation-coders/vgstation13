@@ -252,7 +252,7 @@
 /datum/dynamic_ruleset/roundstart/extended
 	name = "Extended"
 	role_category = null
-	restricted_from_jobs = list()//just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
+	restricted_from_jobs = list()
 	enemy_jobs = list()
 	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 0
