@@ -43,6 +43,8 @@ var/list/forced_roundstart_ruleset = list()
 		dat += "(extended)"
 	dat += "<HR>"
 	. = ..()
+	send2mainirc("A round of [src.name] has ended - [living_players.len] survivors, [dead_players.len] ghosts.")
+	send2maindiscord("A round of **[name]** has ended - **[living_players.len]** survivors, **[dead_players.len]** ghosts.")
 	send2mainirc("Dynamic mode threat: [threat_level], rulesets: [jointext(rules, ", ")].")
 	send2maindiscord("Dynamic mode threat: **[threat_level]**, rulesets: [jointext(rules, ", ")]")
 

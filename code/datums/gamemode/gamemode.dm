@@ -252,16 +252,4 @@
 
 
 /datum/gamemode/proc/declare_completion()
-	var/ghosts = 0
-	var/surviving_total = 0
-
-	for(var/mob/M in player_list)
-		if(M.client)
-			if(isobserver(M))
-				ghosts++
-			if (!M.stat)
-				surviving_total++
-
-	send2mainirc("A round of [src.name] has ended - [surviving_total] survivors, [ghosts] ghosts.")
-	send2maindiscord("A round of **[name]** has ended - **[surviving_total]** survivors, **[ghosts]** ghosts.")
 	return GetScoreboard()
