@@ -223,7 +223,6 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 
 	var/jsonout = datum2json(src)
 	statfile << jsonout
-	//to_chat(world,jsonout)
 	world.log << "Statistics written to file in [(start_time - world.realtime)/10] seconds." // I think that's right?
 	stats_server_alert_new_file()
 	spawn(10 SECONDS)
