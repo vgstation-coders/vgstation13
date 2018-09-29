@@ -728,7 +728,6 @@
 	for (var/t in subtypesof(/datum/gamemode)-/datum/gamemode/cult)
 		var/datum/gamemode/T = t
 		if (initial(T.name) && initial(T.name) == mode_name)
-			world.log << "Returning [initial(T.name)]"
 			return new T
 	return new /datum/gamemode/extended()
 
