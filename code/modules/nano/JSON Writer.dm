@@ -15,7 +15,11 @@ json_writer
 
 		write(val)
 			if(isnum(val))
-				return num2text(val, 100)
+				var/n = num2text(val, 100)
+				if(abs(val) == INFINITY || val != val) //JSON doesn't support the infinities or NaN, so save those as strings instead of numbers. (NaN != NaN, by the way.)
+					return write_string(n)
+				else
+					return n
 			else if(isnull(val))
 				return "null"
 			else if(istype(val, /list))

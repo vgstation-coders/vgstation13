@@ -548,10 +548,8 @@
 		var/turf/location = get_turf(holder.my_atom.loc)
 
 		for(var/turf/simulated/floor/target_tile in range(0,location))
-			var/datum/gas_mixture/napalm = new
-			var/datum/gas/volatile_fuel/fuel = new
-			fuel.moles = created_volume
-			napalm.trace_gases += fuel
+			var/datum/gas_mixture/napalm = new()
+			napalm.adjust_gas(GAS_VOLATILE, created_volume, FALSE)
 			napalm.temperature = 400+T0C
 			napalm.update_values()
 			target_tile.assume_air(napalm)
@@ -676,7 +674,7 @@
 	required_reagents = list(VAPORSALT = 1, OXYGEN = 1)
 
 /datum/chemical_reaction/vaporize/oxygen/disperse(turf/T,datum/gas_mixture/G,var/vol)
-	G.adjust(vol,0,0,0)
+	G.adjust_gas(GAS_OXYGEN, vol)
 	..()
 
 /datum/chemical_reaction/vaporize/nitrogen
@@ -685,7 +683,7 @@
 	required_reagents = list(VAPORSALT = 1, NITROGEN = 1)
 
 /datum/chemical_reaction/vaporize/nitrogen/disperse(turf/T,datum/gas_mixture/G,var/vol)
-	G.adjust(0,0,vol,0)
+	G.adjust_gas(GAS_NITROGEN, vol)
 	..()
 
 /datum/chemical_reaction/vaporize/plasma
@@ -695,7 +693,7 @@
 	required_reagents = list(VAPORSALT = 1, PLASMA = 1)
 
 /datum/chemical_reaction/vaporize/plasma/disperse(turf/T,datum/gas_mixture/G,var/vol)
-	G.adjust(0,0,0,vol)
+	G.adjust_gas(GAS_PLASMA, vol)
 	..()
 
 /datum/chemical_reaction/solidification
@@ -1585,8 +1583,8 @@
 	for(var/turf/simulated/floor/target_tile in range(0, location))
 
 		var/datum/gas_mixture/napalm = new
-		napalm.toxins = 25
 		napalm.temperature = 1400
+		napalm.adjust_gas(GAS_PLASMA, 25)
 		target_tile.assume_air(napalm)
 		spawn(0)
 			target_tile.hotspot_expose(700, 400,surfaces = 1)
@@ -3097,23 +3095,6 @@
 	required_reagents = list(SUGAR = 1)
 	required_temp = T0C + 170
 	result_amount = 1
-
-/datum/chemical_reaction/vomit_all
-	name = "Vomit induction"
-	id = CHARCOAL
-	result = null
-	required_reagents = list(FLUORINE = 5, CARBON = 5, CHARCOAL = 5)
-	required_container = /mob/living/carbon/human
-	result_amount = 5
-
-/datum/chemical_reaction/vomit_all/on_reaction(var/datum/reagents/holder, var/created_volume)
-	var/mob/living/carbon/human/H = holder.my_atom
-	var/datum/organ/internal/stomach/S = H.get_stomach()
-	if(!S)
-		return
-	H.vomit()
-	S.take_damage(created_volume/10)
-	S.get_reagents().remove_reagents(created_volume*25)
 
 /datum/chemical_reaction/albuterol
 	name = "Albuterol"

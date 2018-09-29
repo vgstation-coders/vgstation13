@@ -40,6 +40,8 @@
 	desc = "A deck of space-grade playing cards."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "deck_full"
+	w_class = W_CLASS_SMALL
+	var/decktype = null //For the icons of different card game decks
 
 	var/list/cards  //list of the singlecard items we carry
 	var/strict_deck = 1 //if we only accept cards that came from us
@@ -204,6 +206,7 @@
 	desc = "A number of cards not in a deck, customarily held in ones hand."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "handbase"
+	w_class = W_CLASS_SMALL
 	var/list/currenthand = list()
 	var/obj/item/toy/cards/parentdeck = null
 	var/max_hand_size = 5
@@ -300,9 +303,10 @@
 	desc = "\a card"
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "singlecard_down"
+	w_class = W_CLASS_TINY
 	var/cardname = null
 	var/obj/item/toy/cards/parentdeck = null
-	var/flipped = 1 //Cards start flipped so that dealers can deal without having to see the card.
+	var/flipped = TRUE //Cards start flipped so that dealers can deal without having to see the card.
 	pixel_x = -5
 
 /obj/item/toy/singlecard/New(NewLoc, cardsource, newcardname)

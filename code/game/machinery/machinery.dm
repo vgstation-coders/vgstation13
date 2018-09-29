@@ -156,9 +156,9 @@ Class Procs:
 
 /obj/machinery/cultify()
 	var/list/random_structure = list(
-		/obj/structure/cult/talisman,
-		/obj/structure/cult/forge,
-		/obj/structure/cult/tome
+		/obj/structure/cult_legacy/talisman,
+		/obj/structure/cult_legacy/forge,
+		/obj/structure/cult_legacy/tome
 		)
 	var/I = pick(random_structure)
 	new I(loc)

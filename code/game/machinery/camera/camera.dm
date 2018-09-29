@@ -179,6 +179,7 @@ var/list/camera_names=list()
 	add_hiddenprint(user)
 	deactivate(user,0)
 
+#define MAX_CAMERA_MESSAGES 15
 var/list/camera_messages = list()
 
 /obj/machinery/camera/attackby(obj/W as obj, mob/living/user as mob)
@@ -256,7 +257,7 @@ var/list/camera_messages = list()
 	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
 		user.delayNextAttack(5)
 		var/mob/living/U = user
-		to_chat(U, "You hold \a [W] up to the camera ...")
+		to_chat(U, "You hold [W] up to the camera ...")
 
 		var/info = ""
 		if(istype(W, /obj/item/weapon/paper))
@@ -266,21 +267,24 @@ var/list/camera_messages = list()
 			var/obj/item/device/pda/P = W
 			info = P.notehtml
 
-		camera_messages["[html_encode(W.name)]"] = info
+		var/key = "\ref[W]"
+		if(camera_messages.len > MAX_CAMERA_MESSAGES)
+			camera_messages.Cut(1, 2) // Removes the oldest element
+		camera_messages[key] = list("text" = info, "title" = W.name)
 
 		for(var/mob/living/silicon/ai/O in living_mob_list)
 			if(!O.client)
 				continue
 			if(U.name == "Unknown")
-				to_chat( O, "<span class='name'>[U]</span> holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
+				to_chat(O, "<span class='name'>[U]</span> holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of your cameras ...")
 			else
-				to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
+				to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of your cameras ...")
 
 		for(var/mob/O in player_list)
 			if (istype(O.machine, /obj/machinery/computer/security))
 				var/obj/machinery/computer/security/S = O.machine
 				if (S.current == src)
-					to_chat(O, "[U] holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of the cameras ...")
+					to_chat(O, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
 	else
 		..()
 	return
@@ -289,15 +293,18 @@ var/list/camera_messages = list()
 	if(..())
 		return 1
 
-	if(href_list["picturename"])
-		var/picturename = href_list["picturename"]
-		var/pictureinfo = camera_messages[picturename]
-		usr << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", picturename, pictureinfo), text("window=[]", picturename))
+	if(href_list["message_id"])
+		var/message_id = href_list["message_id"]
+		var/list/pictureinfo = camera_messages[message_id]
+		usr << browse("<HTML><HEAD><TITLE>[pictureinfo["title"]]</TITLE></HEAD><BODY><TT>[pictureinfo["text"]]</TT></BODY></HTML>", "window=[message_id]")
 
 /obj/machinery/camera/attack_pai(mob/user as mob)
 	wirejack(user)
 
 /obj/machinery/camera/proc/deactivate(user as mob, var/choice = 1)
+	vision_flags = SEE_SELF
+	update_upgrades()
+	cameranet.addCamera(src)
 	if(choice==1)
 		status = !( src.status )
 		update_icon()

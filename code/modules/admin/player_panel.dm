@@ -3,19 +3,19 @@
 
 /mob/living/player_panel_job()
 	return "Living"
-	
+
 /mob/living/carbon/player_panel_job()
 	return "Carbon-Based"
-	
+
 /mob/living/carbon/human/player_panel_job()
 	return job
 
 /mob/living/carbon/slime/player_panel_job()
 	return "Slime"
-	
+
 /mob/living/carbon/monkey/player_panel_job()
 	return "Monkey"
-	
+
 /mob/living/carbon/monkey/diona/player_panel_job()
 	return "Diona Nymph"
 
@@ -24,40 +24,40 @@
 
 /mob/living/carbon/alien/larva/player_panel_job()
 	return "Alien Larva"
-	
+
 /mob/living/simple_animal/player_panel_job()
 	return "Animal"
-	
+
 /mob/living/simple_animal/borer/player_panel_job()
 	return "Borer"
-	
+
 /mob/living/simple_animal/corgi/player_panel_job()
 	return "Corgi"
-	
+
 /mob/living/simple_animal/construct/player_panel_job()
 	return "Construct"
-	
+
 /mob/living/silicon/player_panel_job()
 	return "Silicon"
-	
+
 /mob/living/silicon/robot/player_panel_job()
 	return "Cyborg"
-	
+
 /mob/living/silicon/robot/mommi/player_panel_job()
 	return "Mobile-MMI"
-	
+
 /mob/living/silicon/ai/player_panel_job()
 	return "AI"
-	
+
 /mob/living/silicon/pai/player_panel_job()
 	return "pAI"
-	
+
 /mob/dead/observer/player_panel_job()
 	return "Ghost"
-	
+
 /mob/new_player/player_panel_job()
 	return "New Player"
-	
+
 /datum/admins/proc/player_panel_new()//The new one
 	if (!usr.client.holder)
 		return

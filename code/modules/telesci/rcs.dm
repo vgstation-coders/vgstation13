@@ -81,6 +81,9 @@
 	var/tmp/teleporting = FALSE
 	starting_materials	= list(MAT_IRON = 50000)
 
+/obj/item/weapon/rcs/get_cell()
+	return cell
+
 /obj/item/weapon/rcs/New()
 	..()
 	cell = new (src)

@@ -138,3 +138,38 @@
 	enteranim = "phase_shift"
 	exitanim = "phase_shift2"
 	mist = 0
+
+/spell/targeted/ethereal_jaunt/vamp
+	name = "Mist Form"
+	desc = "This spell allows you to pass through walls and other dense objects."
+	user_type = USER_TYPE_VAMPIRE
+
+	spell_flags = Z2NOCAST | INCLUDEUSER
+
+	charge_max = 5 MINUTES
+	invocation_type = SpI_NONE
+	range = SELFCAST
+	duration = 50 //in deciseconds
+
+	override_base = "vamp"
+	hud_state = "vamp_mistform"
+
+	enteranim = "batify"
+	exitanim = "debatify"
+	mist = TRUE
+
+	var/blood_cost = 20
+
+/spell/targeted/ethereal_jaunt/vamp/cast_check(var/skipcharge = 0, var/mob/user = usr)
+	. = ..()
+	if (!.) // No need to go further.
+		return FALSE
+	if (!user.vampire_power(blood_cost, CONSCIOUS))
+		return FALSE
+
+/spell/targeted/ethereal_jaunt/vamp/cast(list/targets, var/mob/user)
+	..()
+	var/datum/role/vampire/V = isvampire(user)
+	if (!V)
+		return FALSE
+	V.remove_blood(blood_cost)

@@ -8,10 +8,10 @@
 	flags = IS_WHITELISTED | PLASMA_IMMUNE
 	anatomy_flags = NO_BLOOD
 
-	//default_mutations=list(SKELETON) // This screws things up
+	//default_mutations=list(M_SKELETON) // This screws things up
 	primitive = /mob/living/carbon/monkey/skellington/plasma
 
-	breath_type = "toxins"
+	breath_type = GAS_PLASMA
 
 	heat_level_1 = 350  // Heat damage level 1 above this point.
 	heat_level_2 = 400  // Heat damage level 2 above this point.

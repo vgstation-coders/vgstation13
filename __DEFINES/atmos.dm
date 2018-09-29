@@ -61,6 +61,12 @@
 #define PLASMA_MINIMUM_OXYGEN_PLASMA_RATIO	20
 #define PLASMA_OXYGEN_FULLBURN				10
 
+// XGM gas flags.
+#define XGM_GAS_FUEL        1
+#define XGM_GAS_OXIDIZER    2
+#define XGM_GAS_CONTAMINANT 4
+#define XGM_GAS_LOGGED      8
+
 #define TANK_LEAK_PRESSURE		(30.*ONE_ATMOSPHERE)	// Tank starts leaking
 #define TANK_RUPTURE_PRESSURE	(40.*ONE_ATMOSPHERE) // Tank spills all contents into atmosphere
 #define TANK_FRAGMENT_PRESSURE	(50.*ONE_ATMOSPHERE) // Boom 3x3 base explosion
@@ -71,3 +77,10 @@
 #define FLOWFRAC 0.99				// fraction of gas transfered per process
 
 #define BASE_ZAS_FUEL_REQ	0.1
+
+//Snowmap when?
+#define ARCTIC_ATMOSPHERE 90.13
+#define T_ARCTIC 223.65 //- 49.5 Celcius, taken from South Pole averages
+#define MOLES_ARCTICSTANDARD (ARCTIC_ATMOSPHERE*CELL_VOLUME/(T_ARCTIC*R_IDEAL_GAS_EQUATION)) //Note : Open air tiles obviously aren't 2.5 meters in height, but abstracted for now with infinite atmos
+#define MOLES_O2STANDARD_ARCTIC MOLES_ARCTICSTANDARD*O2STANDARD	//O2 standard value (21%)
+#define MOLES_N2STANDARD_ARCTIC MOLES_ARCTICSTANDARD*N2STANDARD	//N2 standard value (79%)

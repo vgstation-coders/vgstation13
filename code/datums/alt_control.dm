@@ -72,5 +72,52 @@
 		controller.canmove = 0
 	controlled.dir = direction
 
+/////////////////////////////LOCK MOVE//////////////////////////////
+
 /datum/control/lock_move
 	control_flags = LOCK_MOVEMENT_OF_CONTROLLER | LOCK_EYE_TO_CONTROLLED
+
+///////////////////////////////SOULBLADE CONTROLLER///////////////////////////////
+
+/datum/control/soulblade
+	var/obj/item/weapon/melee/soulblade/blade = null
+	var/move_delay = 0
+
+/datum/control/soulblade/New(var/mob/new_controller, var/atom/new_controlled)
+	..()
+	blade = new_controlled
+
+/datum/control/soulblade/is_valid(var/direction)
+	if (blade.blood <= 0 || move_delay || blade.throwing)
+		return 0
+	if (!isturf(blade.loc))
+		if (istype(blade.loc,/obj/structure/cult/altar))
+			var/obj/structure/cult/altar/A = blade.loc
+			blade.forceMove(A.loc)
+			A.blade = null
+			playsound(A.loc, 'sound/weapons/blade1.ogg', 50, 1)
+			A.update_icon()
+		else
+			return 0
+	return ..()
+
+/datum/control/soulblade/Move_object(var/direction)
+	if(!controlled)
+		return
+	var/atom/start = blade.loc
+	if(!is_valid())
+		return
+	step(controlled,direction)
+	controlled.dir = direction
+	if (blade.loc != start)
+		blade.blood = max(blade.blood-1,0)
+		move_delay = 1
+		spawn(blade.movespeed)
+			move_delay = 0
+
+	var/matrix/M = matrix()
+	M.Scale(1,blade.blood/blade.maxblood)
+	var/total_offset = (60 + (100*(blade.blood/blade.maxblood))) * PIXEL_MULTIPLIER
+	controller.hud_used.mymob.gui_icons.soulblade_bloodbar.transform = M
+	controller.hud_used.mymob.gui_icons.soulblade_bloodbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
+	controller.hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = "[blade.blood]"

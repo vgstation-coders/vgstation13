@@ -125,7 +125,7 @@
 		return HALLOSS
 	return ..()
 
-/mob/living/carbon/human/get_unarmed_damage(mob/victim)
+/mob/living/carbon/human/get_unarmed_damage(var/atom/victim)
 	var/datum/species/S = get_organ_species(get_active_hand_organ())
 
 	var/damage = rand(0, S.max_hurt_damage)

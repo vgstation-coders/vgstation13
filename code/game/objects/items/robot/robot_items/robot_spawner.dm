@@ -90,6 +90,7 @@
 	if(faction)
 		R.faction = faction
 
+/* TODO : role_datums fix...
 //Syndicate robot spawner
 /obj/item/weapon/robot_spawner/syndicate
 	name = "syndicate robot teleporter"
@@ -107,6 +108,7 @@
 	ticker.mode.syndicates += R.mind
 	ticker.mode.update_synd_icons_added(R.mind)
 	R.mind.special_role = "syndicate"
+*/
 
 //Strange spawner, a xenoarchaeology find.
 /obj/item/weapon/robot_spawner/strange

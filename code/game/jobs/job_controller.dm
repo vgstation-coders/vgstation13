@@ -1,9 +1,5 @@
 var/global/datum/controller/occupations/job_master
 
-#define GET_RANDOM_JOB 0
-#define BE_ASSISTANT 1
-#define RETURN_TO_LOBBY 2
-
 /datum/controller/occupations
 		//List of all jobs
 	var/list/occupations = list()
@@ -11,6 +7,8 @@ var/global/datum/controller/occupations/job_master
 	var/list/unassigned = list()
 		//Debug info
 	var/list/job_debug = list()
+
+	var/list/crystal_ball = list() //This should be an assoc. list. Job = # of players ready. Configured by predict_manifest() in obj.dm
 
 
 /datum/controller/occupations/proc/SetupOccupations(var/faction = "Station")
@@ -429,7 +427,7 @@ var/global/datum/controller/occupations/job_master
 			spawn()
 				to_chat(H, "<span class='danger'>Your bank account number is: <span style='color: black;'>[M.account_number]</span>, your bank account pin is: <span style='color: black;'>[M.remote_access_pin]</span></span>")
 				to_chat(H, "<span class='danger'>Your virtual wallet funds are: <span style='color: black;'>$[balance_wallet]</span>, your bank account funds are: <span style='color: black;'>$[balance_bank]</span></span>")
-				to_chat(H, "<span class='danger'>Your bank account security level is set to: <span style='color: black;'>[bank_pref]</span></span>") 
+				to_chat(H, "<span class='danger'>Your bank account security level is set to: <span style='color: black;'>[bank_pref]</span></span>")
 
 	var/alt_title = null
 	if(H.mind)
@@ -500,7 +498,7 @@ var/global/datum/controller/occupations/job_master
 			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/device/inhaler(H))
 		else
 			H.equip_or_collect(new /obj/item/device/inhaler(H), slot_in_backpack)
-		
+
 	return 1
 
 

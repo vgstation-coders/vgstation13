@@ -1,6 +1,6 @@
 /datum/artifact_effect/darkrevive
 	effecttype = "darkrevive"
-	effect = EFFECT_TOUCH
+	effect = ARTIFACT_EFFECT_TOUCH
 
 /datum/artifact_effect/darkrevive/New()
 	..()

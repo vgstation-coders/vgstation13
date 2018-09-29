@@ -4,17 +4,6 @@
  * By N3X15
  *******************************/
 
-#define JUKEMODE_SHUFFLE     1 // Default
-#define JUKEMODE_REPEAT_SONG 2
-#define JUKEMODE_PLAY_ONCE   3 // Play, then stop.
-#define JUKEMODE_COUNT       3
-
-#define JUKEBOX_SCREEN_MAIN     1 // Default
-#define JUKEBOX_SCREEN_PAYMENT  2
-#define JUKEBOX_SCREEN_SETTINGS 3
-
-#define JUKEBOX_RELOAD_COOLDOWN 600 // 60s
-
 var/global/global_playlists = list()
 /proc/load_juke_playlists()
 	if(!config.media_base_url)
@@ -473,7 +462,7 @@ var/global/list/loopModeNames=list(
 		else
 			say("Your total is now $[num2septext(credits_needed-credits_held)].  Please insert more credit chips or swipe your ID.")
 		attack_hand(user)
-		
+
 
 /obj/machinery/media/jukebox/emag(mob/user)
 	if(!emagged)

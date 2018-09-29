@@ -1,11 +1,3 @@
-//Arctic atmospheric defines
-
-#define ARCTIC_ATMOSPHERE 90.13
-#define T_ARCTIC 223.65 //- 49.5 Celcius, taken from South Pole averages
-#define MOLES_ARCTICSTANDARD (ARCTIC_ATMOSPHERE*CELL_VOLUME/(T_ARCTIC*R_IDEAL_GAS_EQUATION)) //Note : Open air tiles obviously aren't 2.5 meters in height, but abstracted for now with infinite atmos
-#define MOLES_O2STANDARD_ARCTIC MOLES_ARCTICSTANDARD*O2STANDARD	//O2 standard value (21%)
-#define MOLES_N2STANDARD_ARCTIC MOLES_ARCTICSTANDARD*N2STANDARD	//N2 standard value (79%)
-
 /turf/simulated/floor/plating/snow
 	name = "snow"
 	desc = "A layer of frozen water particles, kept solid by temperatures way below freezing. On the plus side, can easily be weaponized."
@@ -20,10 +12,10 @@
 	luminosity = 1
 	var/snowballs = 0
 	var/global/list/icon_state_to_appearance = list()
-	
+
 /turf/simulated/floor/plating/snow/make_wood_floor()
 	return
-	
+
 /turf/simulated/floor/plating/snow/make_carpet_floor()
 	return
 
@@ -46,11 +38,11 @@
 /turf/simulated/floor/plating/snow/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 	..()
-	
+
 	if(!snowballs)
 		to_chat(user, "<span class='notice'>There's not enough snow left to dig up.</span>")
 		return
-		
+
 	if(istype(W, /obj/item/weapon/pickaxe/shovel))
 		user.visible_message("<span class='notice'>[user] starts digging out some snow with \the [W].</span>", \
 		"<span class='notice'>You start digging out some snow with \the [W].</span>")
@@ -66,7 +58,7 @@
 	if(!snowballs)
 		to_chat(user, "<span class='notice'>There's not enough snow left to make a snowball.</span>")
 		return
-	
+
 	user.visible_message("<span class='notice'>[user] reaches down and starts forming a snowball.</span>", \
 	"<span class='notice'>You reach down and start forming a snowball.</span>")
 	user.delayNextAttack(10)
@@ -127,14 +119,14 @@
 
 /turf/simulated/floor/plating/snow/cold
 	temperature = T_ARCTIC
-		
+
 /turf/simulated/floor/plating/snow/permafrost
 	icon_state = "permafrost_full"
 
 /turf/simulated/floor/plating/snow/ice
 	name = "ice"
 	icon_state = "ice"
-	
+
 /turf/simulated/floor/plating/snow/concrete
 	name = "concrete"
 	icon = 'icons/turf/floors.dmi'

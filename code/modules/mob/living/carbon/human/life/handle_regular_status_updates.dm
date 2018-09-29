@@ -132,6 +132,9 @@
 		if(knockdown)
 			knockdown = max(knockdown - 1,0) //Before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
 
+		if(say_mute)
+			say_mute = max(say_mute-1, 0)
+
 		if(stuttering)
 			stuttering = max(stuttering - 1, 0)
 		if(slurring)

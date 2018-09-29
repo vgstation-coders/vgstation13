@@ -45,6 +45,9 @@ Class Procs:
 	var/list/edges = list()
 	var/datum/gas_mixture/air = new
 
+	var/list/graphic_add = list()
+	var/list/graphic_remove = list()
+
 /zone/New()
 	SSair.add_zone(src)
 	air.temperature = TCMB
@@ -62,7 +65,7 @@ Class Procs:
 	air.merge(turf_air)
 	T.zone = src
 	contents.Add(T)
-	T.set_graphic(air.graphics)
+	T.update_graphic(air.graphic)
 
 /zone/proc/remove(turf/simulated/T)
 #ifdef ZASDBG
@@ -77,7 +80,7 @@ Class Procs:
 	air.multiply(1 - turf_air.volume / air.volume)
 	air.volume -= turf_air.volume
 	contents.Remove(T)
-	T.set_graphic(0)
+	T.update_graphic(graphic_remove = air.graphic)
 	if(!contents.len)
 		c_invalidate()
 
@@ -90,6 +93,7 @@ Class Procs:
 #endif
 	c_invalidate()
 	for(var/turf/simulated/T in contents)
+		T.update_graphic(graphic_remove = air.graphic)
 		into.add(T)
 		#ifdef ZASDBG
 		T.dbg(merged)
@@ -108,6 +112,7 @@ Class Procs:
 		return //Short circuit for explosions where rebuild is called many times over.
 	c_invalidate()
 	for(var/turf/simulated/T in contents)
+		T.update_graphic(graphic_remove = air.graphic) //we need to remove the overlays so they're not doubled when the zone is rebuilt
 		//T.dbg(invalid_zone)
 		T.needs_air_update = 0 //Reset the marker so that it will be added to the list.
 		SSair.mark_for_update(T)
@@ -128,9 +133,11 @@ Class Procs:
 				Z.get_equalized_zone_air(found)
 
 /zone/proc/tick()
-	if(air.check_tile_graphic())
+	if(air.check_tile_graphic(graphic_add, graphic_remove))
 		for(var/turf/simulated/T in contents)
-			T.set_graphic(air.graphics)
+			T.update_graphic(graphic_add, graphic_remove)
+		graphic_add.len = 0
+		graphic_remove.len = 0
 
 	for(var/connection_edge/E in edges)
 		if(E.sleeping)
@@ -138,9 +145,9 @@ Class Procs:
 
 /zone/proc/dbg_data(mob/M)
 	to_chat(M, name)
-	to_chat(M, "O2: [air.oxygen] N2: [air.nitrogen] CO2: [air.carbon_dioxide] P: [air.toxins]")
-	to_chat(M, "P: [air.return_pressure()] kPa V: [air.volume]L T: [air.temperature]�K ([air.temperature - T0C]�C)")
-	to_chat(M, "O2 per N2: [(air.nitrogen ? air.oxygen/air.nitrogen : "N/A")] Moles: [air.total_moles]")
+	to_chat(M, "O2: [air[GAS_OXYGEN]] N2: [air[GAS_NITROGEN]] CO2: [air[GAS_CARBON]] P: [air[GAS_PLASMA]]")
+	to_chat(M, "P: [air.pressure] kPa V: [air.volume]L T: [air.temperature]�K ([air.temperature - T0C]�C)")
+	to_chat(M, "O2 per N2: [(air[GAS_NITROGEN] ? air[GAS_OXYGEN]/air[GAS_NITROGEN] : "N/A")] Moles: [air.total_moles]")
 	to_chat(M, "Simulated: [contents.len] ([air.volume / CELL_VOLUME])")
 //	to_chat(M, "Unsimulated: [unsimulated_contents.len]")
 //	to_chat(M, "Edges: [edges.len]")

@@ -25,7 +25,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	desc = "A strange collection of symbols drawn in blood."
 	anchored = 1
 	icon = 'icons/obj/rune.dmi'
-	icon_state = "1"
+	icon_state = "run1"
 	var/visibility = 0
 	layer = RUNE_LAYER
 	plane = ABOVE_TURF_PLANE
@@ -45,35 +45,6 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	var/summoning = 0
 	var/list/summonturfs = list()
 
-// Places these combos are mentioned: this file - twice in the rune code, once in imbued tome, once in tome's HTML runes.dm - in the imbue rune code. If you change a combination - dont forget to change it everywhere.
-
-// travel self [word] - Teleport to random [rune with word destination matching]
-// travel other [word] - Portal to rune with word destination matching - kinda doesnt work. At least the icon. No idea why.
-// see blood Hell - Create a new tome
-// join blood self - Incorporate person over the rune into the group
-// Hell join self - Summon TERROR
-// destroy see technology - EMP rune
-// travel blood self - Drain blood
-// see Hell join - See invisible
-// blood join Hell - Raise dead
-
-// hide see blood - Hide nearby runes
-// blood see hide - Reveal nearby runes  - The point of this rune is that its reversed obscure rune. So you always know the words to reveal the rune once oyu have obscured it.
-
-// Hell travel self - Leave your body and ghost around
-// blood see travel - Manifest a ghost into a mortal body
-// Hell tech join - Imbue a rune into a talisman
-// Hell blood join - Sacrifice rune
-// destroy travel self - Wall rune
-// join other self - Summon cultist rune
-// travel technology other - Freeing rune    //    other blood travel was freedom join other
-
-// hide other see - Deafening rune     //     was destroy see hear
-// destroy see other - Blinding rune
-// destroy see blood - BLOOD BOIL
-
-// self other technology - Communication rune  //was other hear blood
-// join hide technology - stun rune. Rune color: bright pink.
 /obj/effect/rune/New()
 	..()
 	blood_image = image(loc = src)
@@ -103,8 +74,8 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		to_chat(user, "A spell circle drawn in blood. It reads: <i>[word1] [word2] [word3]</i>.[rune_name ? " From [pick("your intuition, you are pretty sure that","deep memories, you determine that","the rune's energies, you deduct that","Nar-Sie's murmurs, you know that")] this is \a <b>[rune_name]</b> rune." : ""]")
 
 
-/obj/effect/rune/attackby(I as obj, user as mob)
-	if(istype(I, /obj/item/weapon/tome) && iscultist(user))
+/obj/effect/rune/attackby(obj/I, mob/user)
+	if(istype(I, /obj/item/weapon/tome_legacy) && iscultist(user))
 		to_chat(user, "You retrace your steps, carefully undoing the lines of the rune.")
 		qdel(src)
 		return
@@ -198,7 +169,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 /obj/effect/rune/proc/check_icon(var/mob/M = null)
 	get_uristrune_cult(word1, word2, word3, M)
 
-/obj/item/weapon/tome
+/obj/item/weapon/tome_legacy
 	name = "arcane tome"
 	desc = "An old, dusty tome with frayed edges and a sinister looking cover."
 	icon = 'icons/obj/cult.dmi'
@@ -305,7 +276,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				"}
 
 
-/obj/item/weapon/tome/Topic(href,href_list[])
+/obj/item/weapon/tome_legacy/Topic(href,href_list[])
 	if (src.loc == usr)
 		var/number = text2num(href_list["number"])
 		if (usr.stat || usr.restrained())
@@ -332,13 +303,13 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 					[words[10]] is <a href='byond://?src=\ref[src];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=\ref[src];number=10;action=clear'>Clear</A><BR>
 					"}
 		usr << browse("[notedat]", "window=notes")
-//		call(/obj/item/weapon/tome/proc/edit_notes)()
+//		call(/obj/item/weapon/tome_legacy/proc/edit_notes)()
 	else
 		usr << browse(null, "window=notes")
 		return
 
 /*
-/obj/item/weapon/tome/proc/edit_notes()     FUCK IT. Cant get it to work properly. - K0000
+/obj/item/weapon/tome_legacy/proc/edit_notes()     FUCK IT. Cant get it to work properly. - K0000
 	to_chat(world, "its been called! [usr]")
 	notedat = {"
 	<br><b>Word translation notes</b> <br>
@@ -357,7 +328,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	usr << browse(null, "window=tank")
 */
 
-/obj/item/weapon/tome/attack(mob/living/M as mob, mob/living/user as mob)
+/obj/item/weapon/tome_legacy/attack(mob/living/M as mob, mob/living/user as mob)
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had the [name] used on him by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used [name] on [M.name] ([M.ckey])</font>")
 	msg_admin_attack("[user.name] ([user.ckey]) used [name] on [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
@@ -385,7 +356,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	to_chat(M, "<span class='warning'>You feel searing heat inside!</span>")
 
 
-/obj/item/weapon/tome/attack_self(mob/living/user as mob)
+/obj/item/weapon/tome_legacy/attack_self(mob/living/user as mob)
 	usr = user
 	if(!usr.canmove || usr.stat || usr.restrained())
 		return
@@ -396,11 +367,12 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		if (!istype(user.loc,/turf))
 			to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
 			return
-
-
-
-
-		if (rune_list.len >= 26+runedec+4*ticker.mode.cult.len) //including the useless rune at the secret room, shouldn't count against the limit of 25 runes - Urist
+		var/datum/role/r = user.mind.GetRole(CULT_NARSIE)
+		var/datum/faction/cult = find_active_faction_by_member(r)
+		var/cultists = 1
+		if(cult)
+			cultists = cult.members.len
+		if (rune_list.len >= 26+runedec+4*cultists) //including the useless rune at the secret room, shouldn't count against the limit of 25 runes - Urist
 			alert("The cloth of reality can't take that much of a strain. Remove some runes first!")
 			return
 		else
@@ -428,7 +400,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				[words[9]] is <a href='byond://?src=\ref[src];number=9;action=change'>[words[words[9]]]</A> <A href='byond://?src=\ref[src];number=9;action=clear'>Clear</A><BR>
 				[words[10]] is <a href='byond://?src=\ref[src];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=\ref[src];number=10;action=clear'>Clear</A><BR>
 				"}
-//						call(/obj/item/weapon/tome/proc/edit_notes)()
+//						call(/obj/item/weapon/tome_legacy/proc/edit_notes)()
 					user << browse("[notedat]", "window=notes")
 					return
 		if(usr.get_active_hand() != src)
@@ -479,13 +451,14 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 			R.check_icon(H)
 			R.blood_DNA = list()
 			R.blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
+			R.blood_color = H.species.blood_color
 		return
 	else
 		to_chat(user, "The book seems full of illegible scribbles. Is this a joke?")
 		return
 
-/obj/item/weapon/tome/attackby(obj/item/weapon/tome/T as obj, mob/living/user as mob)
-	if(istype(T, /obj/item/weapon/tome) && iscultist(user)) // sanity check to prevent a runtime error
+/obj/item/weapon/tome_legacy/attackby(obj/item/weapon/tome/T as obj, mob/living/user as mob)
+	if(istype(T, /obj/item/weapon/tome_legacy) && iscultist(user)) // sanity check to prevent a runtime error
 		switch(alert("Copy the runes from your tome?",,"Copy", "Cancel"))
 			if("Cancel")
 				return
@@ -495,15 +468,15 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 		flick("tome-copied",src)
 
 
-/obj/item/weapon/tome/examine(mob/user)
+/obj/item/weapon/tome_legacy/examine(mob/user)
 	..()
 	if(iscultist(user))
 		to_chat(user, "The scriptures of Nar-Sie, The One Who Sees, The Geometer of Blood. Contains the details of every ritual his followers could think of. Most of these are useless, though.")
 
-/obj/item/weapon/tome/cultify()
+/obj/item/weapon/tome_legacy/cultify()
 	return
 
-/obj/item/weapon/tome/imbued //admin tome, spawns working runes without waiting
+/obj/item/weapon/tome_legacy/imbued //admin tome, spawns working runes without waiting
 	w_class = W_CLASS_SMALL
 	var/cultistsonly = 1
 	attack_self(mob/user as mob)
@@ -522,6 +495,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				var/mob/living/carbon/human/H = user
 				R.blood_DNA = list()
 				R.blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
+				R.blood_color = H.species.blood_color
 			switch(r)
 				if("teleport")
 					var/list/words = list("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "balaq", "mgar", "karazet", "geeri")

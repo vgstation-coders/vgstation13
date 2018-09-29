@@ -71,20 +71,20 @@
 /datum/religion/proc/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
 	var/held_beaker = preacher.find_held_item_by_type(/obj/item/weapon/reagent_containers)
 	if (!held_beaker)
-		to_chat(preacher, "You need to hold Holy Water to begin to conversion.")
+		to_chat(preacher, "<span class='warning'>You need to hold Holy Water to begin the conversion.</span>")
 		return FALSE
 	var/obj/item/weapon/reagent_containers/B = preacher.held_items[held_beaker]
 	if (B.reagents.get_master_reagent_name() != "Holy Water")
-		to_chat(preacher, "You need to hold Holy Water to begin to conversion.")
+		to_chat(preacher, "<span class='warning'>You need to hold Holy Water to begin the conversion.</span>")
 		return FALSE
-	subject.visible_message("\The [preacher] attemps to convert \the [subject] to [name].")
+	subject.visible_message("<span class='notice'>\The [preacher] attempts to convert \the [subject] to [name].</span>")
 	if(!convertCheck(subject))
-		subject.visible_message("\The [subject] refuses conversion.")
+		subject.visible_message("<span class='warning'>\The [subject] refuses conversion.</span>")
 		return FALSE
 
 	// Everything is ok : begin the conversion
 	splash_sub(B.reagents, subject, 5, preacher)
-	subject.visible_message("\The [subject] is blessed by \the [preacher] and embraces [name]. Praise [deity_name]!")
+	subject.visible_message("<span class='notice'>\The [subject] is blessed by \the [preacher] and embraces [name]. Praise [deity_name]!</span>")
 	convert(subject, preacher)
 	return TRUE
 
@@ -471,9 +471,51 @@
 	male_adept = "Retard"
 	female_adept = "Retard"
 	keys = list("lol", "wtf", "ass", "poo", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag", "brian damag")
+	convert_method = "standing both next to a table."
 
 /datum/religion/retard/equip_chaplain(var/mob/living/carbon/human/H)
 	H.setBrainLoss(100) //Starts off retarded as fuck, that'll teach him
+
+/datum/religion/retard/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
+	var/obj/structure/table/T = locate(/obj/structure/table/, oview(1, preacher)) // is there a table near us !
+	if (!T)
+		to_chat(preacher, "<span class='warning'>You need to stand next to a table!</span>")
+		return FALSE
+	if (!(T in oview(1, subject)))
+		to_chat(preacher, "<span class='warning'>Your subject need to stand next to the same table as you.</span>")
+		return FALSE
+
+	T.MouseDropTo(O = preacher, user = preacher)
+	var/message = pick(
+		"\The [preacher] performs an ancient ritual to channel the essence of Brian Damag.",
+		"\The [preacher] swiftly bangs their head against the table.",
+		"\The [preacher] seems to be practising the art of table climbing. He looks very skilled at it.",
+	)
+	preacher.visible_message("<span class='notice'>[message]</span>")
+
+	sleep(0.3 SECONDS) // Pause for laughter
+
+	if (!convertCheck(subject))
+		if (get_dist(subject, preacher) <= 2) // Let's not display that if the subject is too far away.
+			subject.visible_message("<span class='notice'>Apparently unimpressed, \the [subject] refuses conversion.</span>")
+		return FALSE
+
+	// Conversion successful
+	if (T in oview(1, subject))
+		subject.visible_message("<span class='notice'>\The [subject] heartily follows \the [preacher]. [deity_name] gains a new adept today.</span>")
+		T.MouseDropTo(O = subject, user = subject)
+	else
+		to_chat(subject, "<span class='warning'>You really wish to climb on that table, but you can't seem to remember where it was.</span>")
+		to_chat(preacher, "<span class='warning'>The subject accepted, but he moved away from the table!</span>")
+		return FALSE
+
+	convert(subject, preacher)
+	return TRUE
+
+/datum/religion/retard/convert(var/mob/living/preacher, var/mob/living/subject)
+	. = ..()
+	if (subject)
+		subject.adjustBrainLoss(100) // Welcome to the club
 
 /datum/religion/science
 	name = "Science"
@@ -715,9 +757,52 @@
 	male_adept = "Nanotrasen Officer"
 	female_adept = "Nanotrasen Officer"
 	keys = list("security", "space law", "law", "nanotrasen", "centcomm")
+	convert_method = "performing a ritual with a flashbang and a screwdriver. You need to hold the flashbang, with its timer set to 5 seconds, your convert needs to hold the screwdriver and have a free empty hand."
+
 
 /datum/religion/security/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/head/centhat(H), slot_head)
+
+/datum/religion/security/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
+	var/held_banger = preacher.find_held_item_by_type(/obj/item/weapon/grenade/flashbang)
+	if (!held_banger)
+		to_chat(preacher, "<span class='warning'>You need to hold a flashbang to begin the conversion.</span>")
+		return FALSE
+	var/held_screwdriver = subject.find_held_item_by_type(/obj/item/weapon/screwdriver)
+	if (!held_screwdriver)
+		to_chat(preacher, "<span class='warning'>The subject needs to hold a screwdriver to begin the conversion.</span>")
+		return FALSE
+
+	var/obj/item/weapon/grenade/flashbang/F = preacher.held_items[held_banger]
+	var/obj/item/weapon/screwdriver/S = subject.held_items[held_screwdriver]
+
+	if (F.det_time != 50) // The timer isn't properly set
+		to_chat(preacher, "<span class='warning'>The timer in the flashbang isn't properly set up. Set it to 5 seconds.</span>")
+		return FALSE
+
+	subject.visible_message("<span class='notice'>\The [preacher] attemps to convert \the [subject] to [name].</span>")
+
+	if(!convertCheck(subject))
+		subject.visible_message("<span class='warning'>\The [subject] refuses conversion.</span>")
+		return FALSE
+
+	preacher.u_equip(F)
+
+	// Everything is ok : begin the conversion
+	if (!subject.put_in_hands(F))
+		subject.visible_message("<span class='warning'>\The [subject] accepted conversion, but didn't manage to pick up the flashbang. How embarassing.</span>")
+		return FALSE
+
+	// BANGERBOIS WW@
+	sleep(0.1 SECONDS)
+	F.attackby(S, subject)
+	sleep(0.1 SECONDS)
+	F.attackby(S, subject)
+
+	subject.visible_message("<span class='notice'>\The [subject] masterfully completed the delicate ritual. He's now a full-fledged follower of [deity_name].</span>")
+
+	convert(subject, preacher)
+	return TRUE
 
 /datum/religion/syndicate
 	name = "Syndicalism" //Technically not true, but hey
@@ -732,12 +817,38 @@
 	H.equip_or_collect(new /obj/item/clothing/head/syndicatefake(H), slot_head)
 
 /datum/religion/cult
-	name = "The Cult of Nar'Sie"
-	deity_name = "Nar'Sie"
+	name = "The Cult of Nar-Sie"
+	deity_name = "Nar-Sie"
 	bible_name = "The Arcane Tome"
 	male_adept = "Cultist"
 	female_adept = "Cultist"
-	keys = list("cult", "narsie", "nar'sie", "narnar")
+	keys = list("cult", "narsie", "nar'sie", "narnar", "nar-sie")
+	convert_method = "performing a ritual with a paper. The subject will need to stand a crayon-drawn rune."
+
+/datum/religion/cult/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
+	var/obj/effect/decal/cleanable/crayon/rune = locate(/obj/effect/decal/cleanable/crayon/, subject.loc)
+	if (!rune)
+		to_chat(preacher, "<span class='warning'>The subject needs to stand on a crayon-drawn rune.</span>")
+		return FALSE
+	var/held_paper = preacher.find_held_item_by_type(/obj/item/weapon/paper)
+	if (!held_paper)
+		to_chat(preacher, "<span class='warning'>You need to hold a sheet of paper to begin to convert.</span>")
+		return FALSE
+
+	subject.visible_message("<span class='notice'>\The [preacher] attemps to convert \the [subject] to [name].</span>")
+
+	if(!convertCheck(subject))
+		subject.visible_message("<span class='warning'>\The [subject] refuses conversion.</span>")
+		return FALSE
+
+	if (prob(10))
+		preacher.say("DREAM SIGN: EVIL SEALING TALISMAN!")
+		subject.Knockdown(1)
+
+	sleep(0.2 SECONDS)
+
+	subject.visible_message("<span class='notice'>\The [subject] accepted the ritual and is now a follower of [deity_name].</span>")
+	convert(subject, preacher)
 
 /datum/religion/changeling
 	name = "The Religion" // A la "The Thing"
