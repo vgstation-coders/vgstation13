@@ -347,7 +347,7 @@
 	interface.updateContent("circ1", "Primary circulator ([vertical ? "top"		: "right"])")
 	interface.updateContent("circ2", "Primary circulator ([vertical ? "bottom"	: "left"])")
 
-	interface.updateContent("total_out", "[format_units(last_gen)]W")
+	interface.updateContent("total_out", format_watts(last_gen))
 
 	if(!circ1 || !circ2)	//From this point on it's circulator data.
 		return
