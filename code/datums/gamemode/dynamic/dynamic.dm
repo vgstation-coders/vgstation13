@@ -27,6 +27,7 @@ var/list/forced_roundstart_ruleset = list()
 
 /datum/gamemode/dynamic/GetScoreboard()
 	dat += "<h2>Dynamic Mode v1.0 - Threat Level = <font color='red'>[threat_level]%</font></h2>"
+	var/rules = list()
 	if (executed_rules.len > 0)
 		for (var/datum/dynamic_ruleset/DR in executed_rules)
 			var/ruletype = ""
@@ -37,10 +38,15 @@ var/list/forced_roundstart_ruleset = list()
 			if (istype (DR, /datum/dynamic_ruleset/midround))
 				ruletype = "midround"
 			dat += "([ruletype]) - <b>[DR.name]</b><br>"
+			rules += "[ruletype] - **[DR.name]**]"
 	else
 		dat += "(extended)"
 	dat += "<HR>"
-	..()
+	. = ..()
+	send2mainirc("A round of [src.name] has ended - [living_players.len] survivors, [dead_players.len] ghosts.")
+	send2maindiscord("A round of **[name]** has ended - **[living_players.len]** survivors, **[dead_players.len]** ghosts.")
+	send2mainirc("Dynamic mode threat: [threat_level], rulesets: [jointext(rules, ", ")].")
+	send2maindiscord("Dynamic mode threat: **[threat_level]**, rulesets: [jointext(rules, ", ")]")
 
 /datum/gamemode/dynamic/can_start()
 	threat_level = rand(1,100)*0.6 + rand(1,100)*0.4//https://docs.google.com/spreadsheets/d/1QLN_OBHqeL4cm9zTLEtxlnaJHHUu0IUPzPbsI-DFFmc/edit#gid=499381388
