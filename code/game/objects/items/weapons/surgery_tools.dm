@@ -186,7 +186,6 @@
 	surgery_speed = 0.6
 	var/cauterymode = 0 //1 = cautery enabled
 	var/obj/item/weapon/cautery/laser/held
-	var/can_be_held = /obj/item/weapon/cautery/laser
 
 /obj/item/weapon/scalpel/laser/New()
 	..()
@@ -200,14 +199,11 @@
 		heat_production = 1600
 		sharpness = 0
 		sharpness_flags = 0
-		icon_state = initial(icon_state) + ((cauterymode)?"_off":"_on")
-
 	else if(!held)
 		to_chat(user, "\The [src] lacks a cautery attachment.")
 		return
 	else
 		to_chat(user, "You return the scalpel to cutting mode.")
-		icon_state = initial(icon_state) + ((cauterymode)?"_off":"_on")
 		heat_production = 0
 		sharpness = initial(sharpness)
 		sharpness_flags = initial(sharpness_flags)
@@ -232,8 +228,7 @@
 			sharpness = initial(sharpness)
 			sharpness_flags = initial(sharpness_flags)
 			cauterymode = 0
-			icon_state = initial(icon_state) + "_off"
-	else if(used_item.type == can_be_held)
+	else if(istype(used_item, /obj/item/weapon/cautery/laser))
 		if(held)
 			to_chat(user, "<span class='notice'>There's already a cautery attached to \the [src].</span>")
 		else if(!held && user.drop_item(used_item, src))
@@ -264,8 +259,6 @@
 	item_state = "laserscalpel2"
 	force = 15.0
 	surgery_speed = 0.4
-	can_be_held = /obj/item/weapon/cautery/laser/tier2
-	held = /obj/item/weapon/cautery/laser/tier2
 
 /obj/item/weapon/scalpel/laser/tier2/New()
 	..()
