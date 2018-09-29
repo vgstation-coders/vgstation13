@@ -7,7 +7,7 @@
 	w_class = W_CLASS_SMALL
 	force = 2.0
 	var/list/beakers = new/list()
-	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/)
+	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food/drinks/openable/)
 
 /obj/item/weapon/electrolyzer/New()
 	. = ..()

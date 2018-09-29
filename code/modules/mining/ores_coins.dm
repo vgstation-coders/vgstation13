@@ -411,6 +411,16 @@
 	name = "Mythril coin"
 	icon_state = "coin_mythril"
 
+/obj/item/weapon/coin/nuka_cola_cap
+	material = null
+	name = "\improper Nuka Cola bottle cap"
+	desc = "Twenty-one crimps and ridges, yet this thing seems seriously sturdy."
+	icon_state = "nuka_cola_cap"
+
+/obj/item/weapon/coin/nuka_cola_cap/quantum
+	name = "\improper Nuka Cola Quantum bottle cap"
+	icon_state = "nuka_cola_quantum_cap"
+
 /obj/item/weapon/coin/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/stack/cable_coil) )
 		var/obj/item/stack/cable_coil/CC = W

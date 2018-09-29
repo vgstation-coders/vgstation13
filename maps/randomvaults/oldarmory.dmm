@@ -42,7 +42,7 @@
 "aP" = (/obj/machinery/vending/coffee,/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
 "aQ" = (/obj/structure/bed/chair{dir = 4},/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
 "aR" = (/obj/structure/table,/obj/item/trash/plate,/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
-"aS" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum,/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
+"aS" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/drinks/openable/bottle/quantum,/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
 "aT" = (/obj/structure/bed/chair{dir = 8},/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
 "aU" = (/obj/structure/table/woodentable/poker,/obj/item/toy/cards/wizard/full,/obj/item/toy/cards/wizard/full,/turf/simulated/shuttle/floor4,/area/vault/oldarmory)
 "aV" = (/obj/machinery/door/airlock{name = "Canteen"},/turf/simulated/shuttle/floor4,/area/vault/oldarmory)

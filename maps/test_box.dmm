@@ -2652,7 +2652,7 @@
 "aZb" = (/obj/machinery/door/airlock/external{name = "Arrival Airlock"},/obj/docking_port/destination/arrival/station,/turf/simulated/floor/plating,/area/hallway/secondary/entry)
 "aZc" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/hallway/secondary/entry)
 "aZd" = (/obj/structure/table/woodentable,/turf/simulated/floor{icon_state = "grimy"},/area/hallway/secondary/entry)
-"aZe" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/snacks/chips,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,/turf/simulated/floor/carpet,/area/hallway/secondary/entry)
+"aZe" = (/obj/structure/table/woodentable,/obj/item/weapon/reagent_containers/food/snacks/chips,/obj/item/weapon/reagent_containers/food/drinks/openable/cola,/turf/simulated/floor/carpet,/area/hallway/secondary/entry)
 "aZf" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/floor/carpet,/area/hallway/secondary/entry)
 "aZg" = (/turf/simulated/floor/carpet,/area/hallway/secondary/entry)
 "aZh" = (/obj/structure/bed/chair/comfy/beige{dir = 8},/obj/machinery/computer/security/telescreen/entertainment{pixel_x = 32},/turf/simulated/floor{icon_state = "grimy"},/area/hallway/secondary/entry)
