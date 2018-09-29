@@ -116,7 +116,7 @@
 	invocation_type = SpI_NONE
 	range = 0
 
-	summon_type = list(/obj/structure/cult/pylon)
+	summon_type = list(/obj/structure/cult_legacy/pylon)
 
 	cast_sound = 'sound/items/welder.ogg'
 	hud_state = "const_pylon"
@@ -124,7 +124,7 @@
 /spell/aoe_turf/conjure/pylon/cast(list/targets)
 	..()
 	var/turf/spawn_place = pick(targets)
-	for(var/obj/structure/cult/pylon/P in spawn_place.contents)
+	for(var/obj/structure/cult_legacy/pylon/P in spawn_place.contents)
 		if(P.isbroken)
 			P.repair(usr)
 		continue

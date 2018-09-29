@@ -39,7 +39,20 @@ var/const/HOLOPAD_MODE = 0
 	flags = HEAR
 	plane = ABOVE_TURF_PLANE
 	layer = ABOVE_TILE_LAYER
+	machine_flags = SCREWTOGGLE | CROWDESTROY
 
+/obj/machinery/hologram/holopad/New()
+	..()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/holopad,
+		/obj/item/weapon/stock_parts/console_screen,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser
+	)
+
+/obj/machinery/hologram/holopad/GhostsAlwaysHear()
+	return TRUE
 
 /obj/machinery/hologram/holopad/attack_hand(var/mob/living/carbon/human/user) //Carn: Hologram requests.
 	if(!istype(user))

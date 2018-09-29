@@ -12,9 +12,6 @@
 
 var/savefile/panicfile
 /world/New()
-	//populate_seed_list()
-	plant_controller = new()
-
 	// Honk honk, fuck you science
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
@@ -99,6 +96,8 @@ var/savefile/panicfile
 	src.update_status()
 
 	paperwork_setup()
+
+	initialize_cultwords()
 
 	for(var/x in typesof(/datum/bee_species))
 		var/datum/bee_species/species = new x

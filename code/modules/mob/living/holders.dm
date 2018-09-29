@@ -106,7 +106,7 @@
 
 		throw_range = 6 - w_class
 
-		if(w_class > W_CLASS_TINY)
+		if(w_class > W_CLASS_SMALL)
 			flags |= (TWOHANDABLE | MUSTTWOHAND)
 
 //MICE

@@ -462,7 +462,7 @@ datum/reagent/zed
 	name = "Zombie Elixer"
 	id = "zed"
 	description = "For treating the Z-Virus."
-	//reagent_state = LIQUID
+	//reagent_state = REAGENT_STATE_LIQUID
 
 datum/reagent/zed/on_mob_life(var/mob/M)//no more mr. panacea
 	holder.remove_reagent(src.id, 0.2)

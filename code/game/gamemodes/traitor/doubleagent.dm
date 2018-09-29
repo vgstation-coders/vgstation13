@@ -50,6 +50,9 @@
 			if(player.assigned_role == job)
 				possible_traitors -= player
 
+		if(player.role_alt_title == "Merchant")
+			possible_traitors -= player
+
 	if(possible_traitors.len < required_enemies) //fixes double agent starting with 1 traitor
 		log_admin("Failed to set-up a round of double agents. Couldn't find enough volunteers to be traitors.")
 		message_admins("Failed to set-up a round of double agents. Couldn't find enough volunteers to be traitors.")
@@ -85,7 +88,7 @@
 		kill_objective.target = target_list[traitor]
 		if(kill_objective.target && kill_objective.target != traitor)
 			kill_objective.explanation_text = "Assassinate [kill_objective.target.current.real_name], the [kill_objective.target.special_role]."
-		else //Something went wrong, so give them a random assasinate objective
+		else //Something went wrong, so give them a random assassinate objective
 			kill_objective.find_target()
 		traitor.objectives += kill_objective
 

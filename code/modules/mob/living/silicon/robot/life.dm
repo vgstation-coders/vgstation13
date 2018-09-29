@@ -128,6 +128,9 @@
 		druggy--
 		druggy = max(0, druggy)
 
+	handle_dizziness()
+	handle_jitteriness()
+
 	if(!is_component_functioning("radio"))
 		radio.on = FALSE
 	else
@@ -174,7 +177,7 @@
 			see_invisible = SEE_INVISIBLE_MINIMUM
 
 
-/mob/living/silicon/robot/proc/handle_regular_hud_updates()
+/mob/living/silicon/robot/handle_regular_hud_updates()
 	handle_sensor_modes()
 
 	regular_hud_updates() //Handles MED/SEC HUDs for borgs.
@@ -204,19 +207,20 @@
 		else
 			healths.icon_state = "health7"
 
-	if(syndicate && client)
+	/*if(syndicate && client)
 		if(ticker.mode.name == "traitor")
 			for(var/datum/mind/tra in ticker.mode.traitors)
 				if(tra.current)
 					var/I = image('icons/mob/mob.dmi', loc = tra.current, icon_state = "traitor")
-					client.images += I
-		if(connected_ai)
-			connected_ai.connected_robots -= src
-			connected_ai = null
-		if(mind)
-			if(!mind.special_role)
-				mind.special_role = "traitor"
-				ticker.mode.traitors += mind
+					src.client.images += I
+		if(src.connected_ai)
+			src.connected_ai.connected_robots -= src
+			src.connected_ai = null
+		if(src.mind)
+			if(!src.mind.special_role)
+				src.mind.special_role = "traitor"
+				ticker.mode.traitors += src.mind
+	*/
 
 	if(cells)
 		if(cell)

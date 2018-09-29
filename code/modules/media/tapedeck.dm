@@ -4,11 +4,6 @@
  * By N3X15
  *******************************/
 
-#define JUKEMODE_SHUFFLE     1 // Default
-#define JUKEMODE_REPEAT_SONG 2
-#define JUKEMODE_PLAY_ONCE   3 // Play, then stop.
-
-
 /obj/machinery/media/tapedeck
 	name = "Tape Deck"
 	desc = "What the fuck is \"tape\", anyway?"

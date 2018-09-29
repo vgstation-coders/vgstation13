@@ -2,12 +2,14 @@
 // can have multiple per area
 // can also operate on non-loc area through "otherarea" var
 /obj/machinery/light_switch
+	name = "light switch"
 	desc = "It turns lights on and off. What are you, simple?"
 	icon = 'icons/obj/power.dmi'
 	icon_state = "light1"
 	anchored = 1.0
 	var/buildstage = 2
 	var/on = 0
+	var/image/overlay
 
 /obj/machinery/light_switch/supports_holomap()
 	return TRUE
@@ -29,10 +31,22 @@
 	updateicon()
 
 /obj/machinery/light_switch/proc/updateicon()
-	if ((stat & NOPOWER) || buildstage != 2)
+	if(!overlay)
+		overlay = image(icon, "light1-overlay")
+		overlay.plane = LIGHTING_PLANE
+		overlay.layer = ABOVE_LIGHTING_LAYER
+
+	overlays.Cut()
+	if((stat & NOPOWER) || buildstage != 2)
 		icon_state = "light-p"
 	else
 		icon_state = on ? "light1" : "light0"
+		overlay.icon_state = "[icon_state]-overlay"
+		overlays += overlay
+		//If the lightswitch itself is in total darkness, even the overlay won't render, so we gotta light up the lightswitch just a tiny bit.
+		//...which, sadly, thanks to goonlights means "oops we have to softlight up the entire 3x3 around the lightswitch because we can't handle one-tile lights anymore"
+		//Maybe vis-contents will bring a more elegant solution when we support them?
+		set_light(1, 0.5, on ? "#82ff4c" : "#f86060")
 
 /obj/machinery/light_switch/examine(mob/user)
 	..()

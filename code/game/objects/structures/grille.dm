@@ -12,6 +12,7 @@
 	explosion_resistance = 5
 	var/health = 20 //Relatively "strong" since it's hard to dismantle via brute force
 	var/broken = 0
+	var/grille_material = /obj/item/stack/rods
 
 /obj/structure/grille/examine(mob/user)
 
@@ -24,7 +25,6 @@
 /obj/structure/grille/cultify()
 	new /obj/structure/grille/cult(get_turf(src))
 	returnToPool(src)
-	..()
 
 /obj/structure/grille/proc/healthcheck(var/hitsound = 0) //Note : Doubles as the destruction proc()
 	if(hitsound)
@@ -33,13 +33,13 @@
 		broken = 1
 		icon_state = "[initial(icon_state)]-b"
 		setDensity(FALSE) //Not blocking anything anymore
-		new /obj/item/stack/rods(get_turf(src)) //One rod set
+		new grille_material(get_turf(src)) //One rod set
 	else if(health >= (0.25*initial(health)) && broken) //Repair the damage to this bitch
 		broken = 0
 		icon_state = initial(icon_state)
 		setDensity(TRUE)
 	if(health <= 0) //Dead
-		new /obj/item/stack/rods(get_turf(src)) //Drop the second set of rods
+		new grille_material(get_turf(src)) //Drop the second set of rods
 		qdel(src)
 
 /obj/structure/grille/ex_act(severity)
@@ -142,11 +142,12 @@
 	return 0
 
 /obj/structure/grille/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
 	user.delayNextAttack(8)
 	if(iswirecutter(W))
 		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
 			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
-			drop_stack(/obj/item/stack/rods, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not !
+			drop_stack(grille_material, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not !
 			qdel(src)
 			return
 		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards !
@@ -269,6 +270,7 @@
 	density = 0 //Not blocking anything anymore
 
 /obj/structure/grille/broken/New()
+	..()
 	health -= rand(initial(health)*0.8, initial(health)*0.9) //Largely under broken threshold, this is used to adjust the health, NOT to break it
 	healthcheck() //Send this to healthcheck just in case we want to do something else with it
 
@@ -302,4 +304,14 @@
 	return
 
 /obj/structure/grille/invulnerable/attackby()
+	return
+
+/obj/structure/grille/replicant
+	name = "replicant grille"
+	desc = "A strangely-shaped grille."
+	icon_state = "replicantgrille"
+	health = 30
+	grille_material = /obj/item/stack/sheet/ralloy
+
+/obj/structure/grille/replicant/cultify()
 	return

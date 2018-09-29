@@ -50,7 +50,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/mutantrace											// Safeguard due to old code.
 	var/myhuman												// mob reference
 
-	var/breath_type = "oxygen"   // Non-oxygen gas breathed, if any.
+	var/breath_type = GAS_OXYGEN   // Non-oxygen gas breathed, if any.
 	var/survival_gear = /obj/item/weapon/storage/box/survival // For spawnin'.
 
 	var/cold_level_1 = 220  // Cold damage level 1 below this point.
@@ -355,7 +355,7 @@ var/global/list/whitelisted_species = list("Human")
 	meat_type = /obj/item/stack/sheet/bone
 	chem_flags = NO_EAT | NO_INJECT
 
-	default_mutations=list(SKELETON)
+	default_mutations=list(M_SKELETON)
 	brute_mod = 2.0
 
 	has_organ = list(
@@ -623,7 +623,7 @@ var/global/list/whitelisted_species = list("Human")
 	cold_level_3 = 0
 
 	eyes = "vox_eyes_s"
-	breath_type = "nitrogen"
+	breath_type = GAS_NITROGEN
 
 	default_mutations = list(M_BEAK, M_TALONS)
 	flags = IS_WHITELISTED | NO_SCAN
@@ -1184,3 +1184,28 @@ var/list/has_died_as_golem = list()
 					You have a resistance to burn and toxin, but a weakness to brute damage. You are adept at seeing in the dark, moreso with your light inversion ability.<br>\
 					However, you lack a mouth with which to talk. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
+
+/datum/species/lich
+	name = "Undead"
+	icobase = 'icons/mob/human_races/r_lich.dmi'
+	deform = 'icons/mob/human_races/r_lich.dmi'
+	known_languages = list(LANGUAGE_CLATTER)
+	flags = IS_WHITELISTED | NO_BREATHE
+	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD
+	meat_type = /obj/item/stack/sheet/bone
+	chem_flags = NO_EAT | NO_INJECT
+
+	brute_mod = 1.2
+
+	has_organ = list(
+		"brain" =    /datum/organ/internal/brain,
+		)
+
+	move_speed_multiplier = 1
+
+	primitive = /mob/living/carbon/monkey/skellington
+
+	species_intro = "You are a Lich<br>\
+					A more refined version of the skellington, you're not as brittle, but not quite as fast.<br>\
+					You have no skin, no blood, and only a brain to guide you.<br>\
+					You can not eat normally, as your necrotic state permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe."

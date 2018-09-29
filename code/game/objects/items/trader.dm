@@ -58,14 +58,33 @@
 	icon_opened = "cabinetdetective_open"
 	icon_broken = "cabinetdetective_broken"
 	icon_off = "cabinetdetective_broken"
-
+	var/wonder_whitelist = list(
+	/obj/item/clothing/mask/morphing/corgi,
+	/obj/item/clothing/under/rank/vice,
+	/obj/item/clothing/shoes/clown_shoes/advanced,
+	list(/obj/item/clothing/suit/space/clown, /obj/item/clothing/head/helmet/space/clown),
+	/obj/item/clothing/shoes/magboots/magnificent,
+	list(/obj/item/clothing/suit/space/plasmaman/bee, /obj/item/clothing/head/helmet/space/plasmaman/bee),
+	list(/obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich, /obj/item/clothing/suit/wizrobe/skelelich),
+	list(/obj/item/clothing/suit/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/cultist),
+	list(/obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain),
+	/obj/item/clothing/under/skelevoxsuit,
+	list(/obj/item/clothing/suit/wintercoat/ce, /obj/item/clothing/suit/wintercoat/cmo, /obj/item/clothing/suit/wintercoat/security/hos, /obj/item/clothing/suit/wintercoat/hop, /obj/item/clothing/suit/wintercoat/captain, /obj/item/clothing/suit/wintercoat/clown, /obj/item/clothing/suit/wintercoat/slimecoat),
+	list(/obj/item/clothing/head/helmet/space/rig/wizard, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple, /obj/item/clothing/shoes/sandal),
+	list(/obj/item/clothing/head/helmet/space/rig/knight, /obj/item/clothing/head/helmet/space/rig/knight),
+	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/ancient),
+	list(/obj/item/clothing/shoes/clockwork_boots, /obj/item/clothing/head/clockwork_hood, /obj/item/clothing/suit/clockwork_robes),
+	/obj/item/clothing/mask/necklace/xeno_claw
+	)
 /obj/structure/closet/secure_closet/wonderful/New()
 	..()
-	var/random_clothes = clothing.Copy()
-	random_clothes = random_clothes - typesof(/obj/item/clothing/mask/stone) - typesof(/obj/item/clothing/mask/morphing) - typesof(/obj/item/clothing/accessory/holomap_chip) - typesof(/obj/item/clothing/suit/space/time) - typesof(/obj/item/clothing/head/helmet/space/time) - typesof(/obj/item/clothing/gloves/warping_claws)
-	for(var/amount = 1 to 20)
-		var/path = pick_n_take(random_clothes)
-		new path(src)
+	for(var/amount = 1 to 10)
+		var/wonder_clothing = pick_n_take(wonder_whitelist)
+		if(islist(wonder_clothing))
+			for(var/i in wonder_clothing)
+				new i(src)
+		else
+			new wonder_clothing(src)
 
 /*/obj/structure/cage/with_random_slime
 	..()

@@ -10,24 +10,12 @@
 	var/board_path = "/obj/item/weapon/circuitboard/pacman2"
 	var/emagged = 0
 	var/heat = 0
-/*
-/obj/machinery/power/port_gen/pacman2/process()
-	if(P)
-		if(P.air_contents.toxins <= 0)
-			P.air_contents.toxins = 0
-			eject()
-		else
-			P.air_contents.toxins -= 0.001
-	return
-*/
 
 /obj/machinery/power/port_gen/pacman2/HasFuel()
-	if(P.air_contents.toxins >= 0.1)
-		return 1
-	return 0
+	return (P.air_contents[GAS_PLASMA] >= 0.1)
 
 /obj/machinery/power/port_gen/pacman2/UseFuel()
-	P.air_contents.toxins -= 0.01
+	P.air_contents.adjust_gas(GAS_PLASMA, -0.01)
 	return
 
 /obj/machinery/power/port_gen/pacman2/New()
@@ -59,7 +47,7 @@
 	if(crit_fail)
 		to_chat(user, "<span class='warning'>The generator seems to have broken down.</span>")
 	else
-		to_chat(user, "<span class='info'>The generator has [P.air_contents.toxins] units of fuel left, producing [power_gen] per cycle.</span>")
+		to_chat(user, "<span class='info'>The generator has [P.air_contents[GAS_PLASMA]] units of fuel left, producing [power_gen] per cycle.</span>")
 
 /obj/machinery/power/port_gen/pacman2/handleInactive()
 	heat -= 2
@@ -145,7 +133,7 @@
 	else
 		dat += text("Generator: <A href='?src=\ref[src];action=enable'>Off</A><br>")
 	if(P)
-		dat += text("Currently loaded plasma tank: [P.air_contents.toxins]<br>")
+		dat += text("Currently loaded plasma tank: [P.air_contents[GAS_PLASMA]]<br>")
 	else
 		dat += text("No plasma tank currently loaded.<br>")
 	dat += text("Power output: <A href='?src=\ref[src];action=lower_power'>-</A> [power_gen * power_output] <A href='?src=\ref[src];action=higher_power'>+</A><br>")

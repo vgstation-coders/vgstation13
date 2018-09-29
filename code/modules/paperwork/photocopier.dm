@@ -72,6 +72,8 @@
 					c.info += "</font>"
 					c.name = copy.name
 					c.fields = copy.fields
+					c.display_x = copy.display_x
+					c.display_y = copy.display_y
 					c.updateinfolinks()
 					toner--
 					sleep(15)
@@ -167,7 +169,9 @@
 			dat += "Printing: [copies] copies."
 			dat += "<a href='byond://?src=\ref[src];min=1'>-</a> "
 			dat += "<a href='byond://?src=\ref[src];add=1'>+</a><BR><BR>"
-			if(photocopy)
+			if(copy)
+				dat += "<a href='byond://?src=\ref[src];windowsize=1'>Format Paper</a><BR>"
+			else if(photocopy)
 				dat += "Printing in <a href='byond://?src=\ref[src];colortoggle=1'>[greytoggle]</a><BR><BR>"
 	else if(toner)
 		dat += "Please insert paper to copy.<BR><BR>"
@@ -269,6 +273,21 @@
 			greytoggle = "Color"
 		else
 			greytoggle = "Greyscale"
+		updateUsrDialog()
+	else if(href_list["windowsize"])
+		if(!copy)
+			return
+		var/xdim = input(usr, "Default paper width", "Formatting", 400) as num|null
+		if(!xdim)
+			return
+		xdim = Clamp(xdim,100,800)
+		var/ydim = input(usr, "Default paper height", "Formatting", 400) as num|null
+		if(!ydim)
+			return
+		ydim = Clamp(ydim,100,900)
+		copy.display_x = xdim
+		copy.display_y = ydim
+		to_chat(usr, "<span class='notice'>The machine hums a moment as it configures your document.</span>")
 		updateUsrDialog()
 
 /obj/machinery/photocopier/attackby(obj/item/O, mob/user)
@@ -383,7 +402,7 @@
 			toner = 0
 	return
 
-/obj/machinery/photocopier/MouseDrop_T(mob/target, mob/user)
+/obj/machinery/photocopier/MouseDropTo(mob/target, mob/user)
 	check_ass() //Just to make sure that you can re-drag somebody onto it after they moved off.
 	if (!istype(target) || target.locked_to || !Adjacent(user) || !user.Adjacent(target) || user.stat || istype(user, /mob/living/silicon/ai) || target == ass || copier_blocked(user))
 		return
@@ -410,7 +429,7 @@
 
 /obj/machinery/photocopier/npc_tamper_act(mob/living/L)
 	//Make a photocopy of the gremlin's ass
-	MouseDrop_T(L, L)
+	MouseDropTo(L, L)
 	copies = rand(1, MAX_COPIES)
 	make_copy(L)
 

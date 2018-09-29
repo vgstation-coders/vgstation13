@@ -12,6 +12,9 @@
 	var/charge_states = 1 //if the gun changes icon states depending on charge, this is 1. Uses a var so it can be changed easily
 	var/icon_charge_multiple = 25 //Spacing of the charge level sprites
 
+/obj/item/weapon/gun/energy/get_cell()
+	return power_supply
+
 /obj/item/weapon/gun/energy/emp_act(severity)
 	power_supply.use(round(power_supply.maxcharge / (severity*2)))
 	..() //parent emps the battery removing charge

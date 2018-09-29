@@ -77,8 +77,14 @@ var/list/freqtoname = list(
 	if(isnull(range))
 		range = 7
 	var/rendered = render_speech(speech)
-	for(var/atom/movable/AM in get_hearers_in_view(range, src))
+	var/list/listeners = get_hearers_in_view(range, src)
+	if(speech.speaker.GhostsAlwaysHear())
+		listeners |= observers
+	for(var/atom/movable/AM in listeners)
 		AM.Hear(speech, rendered)
+
+/atom/movable/proc/GhostsAlwaysHear()
+	return FALSE
 
 /atom/movable/proc/create_speech(var/message, var/frequency=0, var/atom/movable/transmitter=null)
 	if(!transmitter)

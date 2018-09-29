@@ -138,8 +138,10 @@
 	if(istype(D,/atom))
 		body += "<option value='?_src_=vars;teleport_to=\ref[D]'>Teleport To</option>"
 
-	if (hasvar(D, "transform"))
+	if(hasvar(D, "transform"))
 		body += "<option value='?_src_=vars;edit_transform=\ref[D]'>Edit Transform Matrix</option>"
+	if(hasvar(D, "appearance_flags"))
+		body += "<option value='?_src_=vars;toggle_aliasing=\ref[D]'>Toggle Transform Aliasing</option>"
 
 	body += "<option value='?_src_=vars;proc_call=\ref[D]'>Proc call</option>"
 
@@ -1102,6 +1104,25 @@ function loadPage(list) {
 			return
 
 		DAT.vars["transform"] = modify_matrix_menu(M)
+
+	else if(href_list["toggle_aliasing"])
+		if(!check_rights(R_DEBUG))
+			return
+
+		var/datum/DAT = locate(href_list["toggle_aliasing"])
+		if(!hasvar(DAT, "appearance_flags"))
+			to_chat(src, "This object does not support appearance flags!")
+			return
+
+		var/aflags = DAT.vars["appearance_flags"]
+		if(aflags & PIXEL_SCALE)
+			to_chat(src, "Enabling aliasing for that astigmatism aesthetic...")
+			aflags &= ~PIXEL_SCALE
+		else
+			to_chat(src, "Disabling aliasing for x-tra crispiness...")
+			aflags |= PIXEL_SCALE
+
+		DAT.vars["appearance_flags"] = aflags
 
 	else if (href_list["delValueFromList"])
 		if (!check_rights(R_DEBUG))

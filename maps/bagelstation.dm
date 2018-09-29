@@ -41,8 +41,5 @@
 	.=..()
 	wires = new /datum/wires/airlock/secure(src)
 
-////////////////////////////////////////////////////////////////
-#include "defficiency/pipes.dm" // Atmos layered pipes.
-
 #include "bagelstation.dmm"
 

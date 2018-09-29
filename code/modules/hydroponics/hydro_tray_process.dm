@@ -120,33 +120,14 @@
 			return
 
 	// Handle gas consumption.
-	if(seed.consume_gasses && seed.consume_gasses.len)
+	if(seed.consume_gasses && seed.consume_gasses.len && environment)
 		missing_gas = 0
 		for(var/gas in seed.consume_gasses)
-			if(environment)
-				switch(gas)
-					if("oxygen")
-						if(environment.oxygen < seed.consume_gasses[gas])
-							missing_gas++
-							continue
-						environment.adjust_gas(gas,-min(seed.consume_gasses[gas], environment.oxygen),1)
-					if("plasma")
-						if(environment.toxins < seed.consume_gasses[gas])
-							missing_gas++
-							continue
-						environment.adjust_gas(gas,-min(seed.consume_gasses[gas], environment.toxins),1)
-					if("nitrogen")
-						if(environment.nitrogen < seed.consume_gasses[gas])
-							missing_gas++
-							continue
-						environment.adjust_gas(gas,-min(seed.consume_gasses[gas], environment.nitrogen),1)
-					if("carbon_dioxide")
-						if(environment.carbon_dioxide < seed.consume_gasses[gas])
-							missing_gas++
-							continue
-						environment.adjust_gas(gas,-min(seed.consume_gasses[gas], environment.carbon_dioxide),1)
-			else
+			if(environment[gas] < seed.consume_gasses[gas])
 				missing_gas++
+				continue
+			environment.adjust_gas(gas, -(seed.consume_gasses[gas]), FALSE)
+		environment.update_values()
 
 		if(missing_gas > 0)
 			health -= missing_gas * HYDRO_SPEED_MULTIPLIER
@@ -248,6 +229,9 @@
 
 	check_health()
 
+	if(harvest && seed.harvest_repeat == 2)
+		autoharvest()
+
 	// If enough time (in cycles, not ticks) has passed since the plant was harvested, we're ready to harvest again.
 	if(!dead && seed.products && seed.products.len)
 		if (age > seed.production)
@@ -330,7 +314,7 @@
 		overlays += image(icon = icon, icon_state = "hydrocover")
 
 	//Updated the various alert icons.
-	if(draw_warnings)
+	if(draw_warnings&& !reagents.has_reagent(SPORTDRINK))
 		if(waterlevel <= 10)
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
 		if(nutrilevel <= 2)

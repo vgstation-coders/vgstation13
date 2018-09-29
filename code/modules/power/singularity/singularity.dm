@@ -37,10 +37,10 @@
 	var/consume_range = 0 //How many tiles out do we eat.
 	var/event_chance = 15 //Prob for event each tick.
 	var/target = null //Its target. Moves towards the target if it has one.
-	var:last_movement_dir = 0 //Log the singularity's last movement to produce biased movement (singularity prefers constant movement due to inertia)
+	var/last_movement_dir = 0 //Log the singularity's last movement to produce biased movement (singularity prefers constant movement due to inertia)
 	var/last_failed_movement = 0 //Will not move in the same dir if it couldnt before, will help with the getting stuck on fields thing.
 	var/last_warning
-	appearance_flags = 0
+	appearance_flags = LONG_GLIDE
 	var/chained = 0 //Adminbus chain-grab
 
 /obj/machinery/singularity/New(loc, var/starting_energy = 50, var/temp = 0)
@@ -103,7 +103,7 @@
 				if(prob(50)) //50/50 of becoming unrecoverable
 					user.visible_message("<span class = 'danger'>\The [user] screams as they are consumed from within!</span>")
 					if(prob(50))
-						user.emote("scream",auto=1)
+						user.audible_scream()
 						var/matrix/M = matrix()
 						M.Scale(0)
 						animate(user, alpha = 0, transform = M, time = 3 SECONDS, easing = SINE_EASING)
@@ -409,14 +409,16 @@
 	last_movement_dir = movement_dir //We have chosen our direction, log it
 
 	if(current_size >= 9) //The superlarge one does not care about things in its way
+		set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY/2), min = 0)
 		spawn(0)
 			step(src, movement_dir)
-		spawn(1)
+		spawn(SS_WAIT_MACHINERY/2)
 			step(src, movement_dir)
 		return 1
 	else if(check_turfs_in(movement_dir))
 		last_failed_movement = 0 //Reset this because we moved
 		spawn(0)
+			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY), min = 0)
 			step(src, movement_dir)
 		return 1
 	else
@@ -533,16 +535,11 @@
 /obj/machinery/singularity/proc/toxmob()
 	var/toxrange = 10
 	var/toxdamage = 4
-	var/radiation = 15
-	var/radiationmin = 3
 	if(src.energy > 200)
 		toxdamage = round(((src.energy-150)/50)*4,1)
-		radiation = round(((src.energy-150)/50)*5,1)
-		radiationmin = round((radiation/5),1)
 	for(var/mob/living/M in view(toxrange, src.loc))
 		if(M.flags & INVULNERABLE)
 			continue
-		M.apply_radiation(rand(radiationmin,radiation), RAD_EXTERNAL)
 		toxdamage = (toxdamage - (toxdamage*M.getarmor(null, "rad")))
 		M.apply_effect(toxdamage, TOX)
 	return

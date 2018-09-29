@@ -31,9 +31,9 @@
 		attached_device.Crossed(AM)
 	..()
 
-/obj/item/device/transfer_valve/on_found(AM as mob|obj)
+/obj/item/device/transfer_valve/on_found(wearer, AM as mob|obj)
 	if(attached_device)
-		attached_device.on_found(AM)
+		attached_device.on_found(wearer, AM)
 	..()
 
 /obj/item/device/transfer_valve/attackby(obj/item/item, mob/user)

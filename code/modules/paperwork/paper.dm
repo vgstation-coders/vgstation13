@@ -26,6 +26,8 @@
 	var/list/stamped
 	var/rigged = 0
 	var/spam_flag = 0
+	var/display_x = 400
+	var/display_y = 400
 
 	var/log=""
 	var/obj/item/weapon/photo/img
@@ -54,7 +56,7 @@
 	if(img)
 		user << browse_rsc(img.img, "tmp_photo.png")
 		info_image = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
-	user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_image][info_text][stamps]</BODY></HTML>", "window=[name]")
+	user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_image][info_text][stamps]</BODY></HTML>", "window=[name];size=[display_x]x[display_y]")
 	onclose(user, "[name]")
 
 /obj/item/weapon/paper/update_icon()
@@ -329,7 +331,7 @@
 				clown = TRUE
 			if(isrobot(user))
 				var/mob/living/silicon/robot/R = user
-				if(R.module && R.module.quirk_flags & MODULE_IS_A_CLOWN)
+				if(HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN))
 					clown = TRUE
 			if(!clown)
 				to_chat(user, "<span class='notice'>You are totally unable to use the stamp. HONK!</span>")
@@ -398,9 +400,9 @@
 	return
 
 var/global/list/paper_folding_results = list ( \
+	"ball of paper" = /obj/item/weapon/p_folded/ball,
 	"paper plane" = /obj/item/weapon/p_folded/plane,
 	"paper hat" = /obj/item/weapon/p_folded/hat,
-	"ball of paper" = /obj/item/weapon/p_folded/ball,
 	"folded note" = /obj/item/weapon/p_folded/note_small,
 	"origami crane" = /obj/item/weapon/p_folded/crane,
 	"origami boat" = /obj/item/weapon/p_folded/boat,
@@ -450,6 +452,12 @@ var/global/list/paper_folding_results = list ( \
 		to_chat(user, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
 		return 0
 	return 1
+
+/obj/item/weapon/paper/AltClick()
+	if(is_holder_of(usr, src) && canfold(usr))
+		fold()
+	else
+		return ..()
 
 /*
  * Premade paper

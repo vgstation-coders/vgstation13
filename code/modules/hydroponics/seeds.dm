@@ -12,17 +12,19 @@
 	var/hydroflags = 0 // HYDRO_*, used for no-fruit exclusion lists, at the moment.
 
 /obj/item/seeds/New()
-	while(!plant_controller)
-		sleep(30)
-	update_seed()
 	..()
 	pixel_x = rand(-3,3) * PIXEL_MULTIPLIER
 	pixel_y = rand(-3,3) * PIXEL_MULTIPLIER
+	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
+		initialize()
+
+/obj/item/seeds/initialize()
+	update_seed()
 
 //Grabs the appropriate seed datum from the global list.
 /obj/item/seeds/proc/update_seed()
-	if(!seed && seed_type && !isnull(plant_controller.seeds) && plant_controller.seeds[seed_type])
-		seed = plant_controller.seeds[seed_type]
+	if(!seed && seed_type && !isnull(SSplant.seeds) && SSplant.seeds[seed_type])
+		seed = SSplant.seeds[seed_type]
 	update_appearance()
 
 //Updates strings and icon appropriately based on seed datum.
@@ -53,9 +55,9 @@
 	seed_type = null
 
 /obj/item/seeds/random/New()
-	seed = plant_controller.create_random_seed()
+	seed = SSplant.create_random_seed()
 	seed_type = seed.name
-	update_seed()
+	..()
 
 //the vegetable/fruit categories are made from a culinary standpoint. many of the "vegetables" in there are technically fruits. (tomatoes, pumpkins...)
 
@@ -1679,7 +1681,7 @@
 	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "chickenshroom"
 	chems = list(NUTRIMENT = list(2,10))
-	consume_gasses = list("nitrogen"=20) //Really likes its nitrogen. Planting on main station may mess with room air mix.
+	consume_gasses = list(GAS_NITROGEN = 20) //Really likes its nitrogen. Planting on main station may mess with room air mix.
 
 	lifespan = 30
 	growth_stages = 3

@@ -198,6 +198,67 @@
 	dat = replacetext(dat, "\t", "")
 	return dat
 
+/* Predicting the manifest is much less intense than building a real one.
+We don't care about names, DNA, accounts, activity, any of that. We're just gonna loop through high job prefs.*/
+
+/datum/controller/occupations/proc/display_prediction()
+	predict_manifest()
+	if(!crystal_ball.len)
+		return "No prediction has been made!" //This only gets shown the first time ever. If everyone unreadies it's blank.
+	var/dat = {"
+	<head><style>
+	{border-collapse:collapse;}
+	td, th {border:1px solid "#DEF; background-color:white; color:black"; padding:.25em}
+	th {height: 2em; "background-color: #48C; color:white";}
+	tr.head th {"background-color: #488";}
+	tr.alt td {"background-color: #DEF"]}
+	</style></head>
+	<table class="manifest" width='350px'>
+	<tr class='head'><th>Rank</th><th>Quantity</th></tr>
+	"}
+
+	var/color = 0
+	for(var/job in crystal_ball)
+		if(!crystal_ball[job])
+			continue //If 0, skip
+		dat += "<tr[color ? " class='alt'" : ""]><td>[job]</td><td>[crystal_ball[job]]</td></tr>"
+		color = !color
+
+	return dat
+
+/datum/controller/occupations/proc/predict_manifest()
+	crystal_ball = list("AI" = 0, "Cyborg" = 0, "Captain" = 0, "Head of Personnel" = 0, "Head of Security" = 0, "Chief Engineer" = 0, "Chief Medical Officer" = 0, "Research Director" = 0)
+	//We always want to list these first, the rest can be random for all we care.
+	for(var/mob/new_player/player in player_list)
+		if(!player.ready)
+			continue
+		//Prefs are only stored as a bitflag, so we have to look up the job name.
+		//Only one of these should have a value
+
+		var/J = null
+		if(player.client.prefs.job_engsec_high)
+			J = flags_to_job(player.client.prefs.job_engsec_high,ENGSEC)
+		else if(player.client.prefs.job_medsci_high)
+			J = flags_to_job(player.client.prefs.job_medsci_high,MEDSCI)
+		else if(player.client.prefs.job_civilian_high)
+			J = flags_to_job(player.client.prefs.job_civilian_high,CIVILIAN)
+		else
+			continue //They don't have a high pref!
+
+		if(!J)
+			continue //sanity
+		crystal_ball[J] += 1
+
+/datum/controller/occupations/proc/flags_to_job(var/flags, var/department)
+	var/list/searchable_jobs = typesof(/datum/job) - /datum/job
+	for(var/path in searchable_jobs)
+		var/datum/job/J = path
+		if(initial(J.department_flag) != department)
+			continue
+		if(initial(J.flag) != flags)
+			continue
+		return initial(J.title)
+	return null //Still nothing? Null it is
 
 /*
 We can't just insert in HTML into the nanoUI so we need the raw data to play with.
@@ -321,13 +382,14 @@ var/global/list/PDA_Manifest = list()
 	var/moving = null
 	var/list/parts = list(  )
 
-/obj/structure/showcase
+/obj/machinery/showcase
 	name = "Showcase"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "showcase_1"
 	desc = "A stand with the empty body of a cyborg bolted to it."
 	density = 1
 	anchored = 1
+	machine_flags = WRENCHMOVE
 
 /obj/item/mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 

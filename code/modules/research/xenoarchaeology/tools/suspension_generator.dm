@@ -15,6 +15,9 @@
 	var/obj/effect/suspension_field/suspension_field
 	var/list/secured_mobs = list()
 
+/obj/machinery/suspension_gen/get_cell()
+	return cell
+
 /obj/machinery/suspension_gen/power_change()
 	return
 

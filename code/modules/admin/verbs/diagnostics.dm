@@ -45,22 +45,6 @@
 	set category = "Debug"
 	set name = "Display Air Status"
 
-	/*(!isturf(target))
-		return
-
-	var/datum/gas_mixture/GM = target.return_air()
-	var/burning = 0
-	if(istype(target, /turf/simulated))
-		var/turf/simulated/T = target
-		if(T.active_hotspot)
-			burning = 1
-
-	to_chat(usr, "<span class='notice'>@[target.x],[target.y] ([GM.group_multiplier]): O:[GM.oxygen] T:[GM.toxins] N:[GM.nitrogen] C:[GM.carbon_dioxide] w [GM.temperature] Kelvin, [GM.return_pressure()] kPa [(burning)?("<span class='warning'>BURNING</span>"):(null)]</span>")
-	for(var/datum/gas/trace_gas in GM.trace_gases)
-		to_chat(usr, "[trace_gas.type]: [trace_gas.moles]")
-	feedback_add_details("admin_verb","DAST") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	*/
-
 /client/proc/_fix_delayers(var/dtype)
 	var/largest_delay = 0
 	var/mob/most_delayed_mob = null
@@ -94,8 +78,6 @@
 	message_admins("world.time = [world.time]", 1)
 	feedback_add_details("admin_verb","UFE") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
-
-#undef GATHER_DELAYER_LOCKUPS
 
 /client/proc/radio_report()
 	set category = "Debug"

@@ -7,10 +7,6 @@
 // If the rev icons start going wrong for some reason, ticker.mode:update_all_rev_icons() can be called to correct them.
 // If the game somtimes isn't registering a win properly, then ticker.mode.check_win() isn't being called somewhere.
 
-#define ADD_REVOLUTIONARY_FAIL_IS_COMMAND -1
-#define ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED -2
-#define ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED -3
-#define ADD_REVOLUTIONARY_FAIL_IS_REV -4
 
 
 /datum/game_mode
@@ -20,7 +16,7 @@
 /datum/game_mode/revolution
 	name = "revolution"
 	config_tag = "revolution"
-	restricted_jobs = list("Security Officer", "Warden", "Detective", "AI", "Cyborg","Mobile MMI","Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer", "Internal Affairs Agent")
+	restricted_jobs = list("Security Officer", "Warden", "Detective", "AI", "Cyborg","Mobile MMI","Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer", "Internal Affairs Agent", "Trader")
 	required_players = 4
 	required_players_secret = 25
 	required_enemies = 3

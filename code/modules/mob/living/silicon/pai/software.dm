@@ -596,10 +596,10 @@
 			dat += "Air Pressure: [round(pressure,0.1)] kPa<br>"
 
 			if (total_moles)
-				var/o2_level = environment.oxygen/total_moles
-				var/n2_level = environment.nitrogen/total_moles
-				var/co2_level = environment.carbon_dioxide/total_moles
-				var/plasma_level = environment.toxins/total_moles
+				var/o2_level = environment[GAS_OXYGEN]/total_moles
+				var/n2_level = environment[GAS_NITROGEN]/total_moles
+				var/co2_level = environment[GAS_CARBON]/total_moles
+				var/plasma_level = environment[GAS_PLASMA]/total_moles
 				var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
 
 				dat += {"Nitrogen: [round(n2_level*100)]%<br>
@@ -630,13 +630,6 @@ Target Machine: "}
 /mob/living/silicon/pai/proc/hackloop(var/obj/machinery/M)
 	if(M)
 		hacktarget = M
-	var/turf/T = get_turf(loc)
-	if(prob(10))
-		for(var/mob/living/silicon/ai/AI in player_list)
-			if(T.loc)
-				to_chat(AI, "<font color = red><b>Network Alert: Brute-force encryption crack in progress in [T.loc].</b></font>")
-			else
-				to_chat(AI, "<font color = red><b>Network Alert: Brute-force encryption crack in progress. Unable to pinpoint location.</b></font>")
 	while(hackprogress < 100)
 		if(hacktarget && get_dist(src, hacktarget) <= 1)
 			hackprogress += rand(10, 20)

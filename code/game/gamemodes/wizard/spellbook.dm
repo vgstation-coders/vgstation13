@@ -75,7 +75,7 @@
 
 /obj/item/weapon/spellbook/proc/get_available_potions()
 	return available_potions
-
+/*
 /obj/item/weapon/spellbook/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/antag_spawner/contract))
 		var/obj/item/weapon/antag_spawner/contract/contract = O
@@ -86,8 +86,7 @@
 			src.uses += APPRENTICE_PRICE
 			qdel (O)
 			O = null
-
-
+*/
 #define buy_href_link(obj, price, txt) ((price > uses) ? "Price: [price] point\s" : "<a href='?src=\ref[src];spell=[obj];buy=1'>[txt]</a>")
 #define book_background_color "#F1F1D4"
 #define book_window_size "550x600"
@@ -832,6 +831,21 @@
 			break
 	if(!success)
 		user.forceMove(pick(L))
+
+/obj/item/weapon/spellbook/oneuse/pie
+	spell = /spell/targeted/projectile/pie
+	spellname = "Summon Pastry"
+	icon_state = "cooked_bookold"
+	desc = "This book smells lightly of lemon meringue."
+
+/obj/item/weapon/spellbook/oneuse/pie/recoil(mob/living/carbon/user)
+	..()
+	var/pie_to_spawn = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/pie))
+	var/turf/T = get_turf(pick(oview(1, user)))
+	var/obj/pie = new pie_to_spawn(T)
+	spawn()
+		pie.throw_at(user, get_dist(pie,user),rand(40,90))
+
 
 ///// ANCIENT SPELLBOOK /////
 
