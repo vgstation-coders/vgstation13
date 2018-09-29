@@ -725,9 +725,11 @@
 				diary << "Unknown setting in configuration: '[name]'"
 
 /datum/configuration/proc/pick_mode(mode_name)
-	for (var/datum/gamemode/T in subtypesof(/datum/gamemode)-/datum/gamemode/cult)
+	for (var/t in subtypesof(/datum/gamemode)-/datum/gamemode/cult)
+		var/datum/gamemode/T = t
 		if (initial(T.name) && initial(T.name) == mode_name)
-			return T
+			world.log << "Returning [initial(T.name)]"
+			return new T
 	return new /datum/gamemode/extended()
 
 /datum/configuration/proc/get_runnable_modes()

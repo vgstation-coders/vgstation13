@@ -142,6 +142,7 @@ var/datum/controller/gameticker/ticker
 			var/mtype = src.mode.type
 			src.mode = new mtype
 	else if (master_mode=="secret")
+		world.log << "Picking dynamic mode"
 		mode = config.pick_mode("Dynamic Mode") //Huzzah
 	else
 		src.mode = config.pick_mode(master_mode)
