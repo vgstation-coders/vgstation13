@@ -155,7 +155,7 @@
 	mapname = map.nameLong
 	mastermode = master_mode // this is stored as a string in game
 	tickermode = ticker.mode.name
-	nuked = ticker.mode.station_was_nuked
+	nuked = ticker.station_was_nuked
 	tech_total = get_research_score()
 	stationname = station_name()
 	// if(istype(ticker.mode, /datum/game_mode/mixed))

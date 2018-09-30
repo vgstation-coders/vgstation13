@@ -25,11 +25,6 @@
 	var/list/orphaned_roles = list()
 	var/dat = ""
 
-	//'Oh dear we accidentally destroyed the station/universe' variables
-	var/station_was_nuked
-	var/explosion_in_progress
-
-
 /datum/gamemode/proc/can_start()
 	if(minimum_player_count && minimum_player_count < get_player_count())
 		return 0
@@ -246,7 +241,7 @@
 	for(var/datum/faction/F in factions)
 		if(F.check_win())
 			return 1
-	if(emergency_shuttle.location==2 || station_was_nuked)
+	if(emergency_shuttle.location==2 || ticker.station_was_nuked)
 		return 1
 	return 0
 

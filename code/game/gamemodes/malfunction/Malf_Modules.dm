@@ -497,7 +497,7 @@ rcd light flash thingy on matter drain
 		to_chat(usr, "<span class='warning'>You are unable to access the self-destruct system as you don't control the station yet.</span>")
 		return 1
 
-	if(ticker.mode.explosion_in_progress || ticker.mode.station_was_nuked)
+	if(ticker.explosion_in_progress || ticker.station_was_nuked)
 		to_chat(usr, "<span class='notice'>The self-destruct countdown was already triggered!</span>")
 		return 1
 
@@ -517,7 +517,7 @@ rcd light flash thingy on matter drain
 		for(var/spell/S in AI.antag.current.spell_list)
 			if(istype(S,/spell/aoe_turf/ai_win))
 				AI.antag.current.remove_spell(S)
-	ticker.mode.explosion_in_progress = 1
+	ticker.explosion_in_progress = 1
 	for(var/mob/MM in player_list)
 		if(MM.client)
 			MM << 'sound/machines/Alarm.ogg'
@@ -529,8 +529,7 @@ rcd light flash thingy on matter drain
 	enter_allowed = 0
 	if(ticker)
 		ticker.station_explosion_cinematic(0,null)
-		if(ticker.mode)
-			ticker.mode.station_was_nuked = 1
-			ticker.mode.explosion_in_progress = 0
+		ticker.station_was_nuked = 1
+		ticker.explosion_in_progress = 0
 	return
 
