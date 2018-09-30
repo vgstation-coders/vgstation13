@@ -603,7 +603,7 @@
 	if(holder.has_any_reagents(list(SACID, FORMIC_ACID)))
 		holder.remove_reagents(list(SACID, FORMIC_ACID), REM)
 	if(holder.has_reagent(POTASSIUM_HYDROXIDE))
-		holder.remove_reagents(POTASSIUM_HYDROXIDE, 2 * REM)
+		holder.remove_reagent(POTASSIUM_HYDROXIDE, 2 * REM)
 	if(holder.has_reagent(CYANIDE))
 		holder.remove_reagent(CYANIDE, REM)
 	if(holder.has_reagent(AMATOXIN))
