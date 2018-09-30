@@ -87,7 +87,7 @@
 				//If the user cancels the talisman this var will be set to 0
 				var/obj/effect/rune_legacy/R = new
 				R.my_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
-				delete = R.communicate()
+				delete = R.communicate(TRUE)
 			if("deafen")
 				deafen()
 				qdel(src)

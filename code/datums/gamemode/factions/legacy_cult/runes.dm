@@ -815,7 +815,7 @@
 /////////////////////////////////////////FOURTEETH RUNE
 
 // returns 0 if the rune is not used. returns 1 if the rune is used.
-/obj/effect/rune_legacy/proc/communicate()
+/obj/effect/rune_legacy/proc/communicate(var/whisper = FALSE)
 	. = 1 // Default output is 1. If the rune is deleted it will return 1
 	var/mob/user = usr
 	var/input = stripped_input(user, "Please choose a message to tell to the other acolytes.", "Voice of Blood", "")
@@ -825,12 +825,12 @@
 			return 0
 		else
 			return 0
-	if(istype(src,/obj/effect/rune_legacy))
+	if(!whisper)
 		user.say("O bidai nabora se[pick("'","`")]sma!")
 	else
 		user.whisper("O bidai nabora se[pick("'","`")]sma!")
 
-	if(istype(src,/obj/effect/rune_legacy))
+	if(!whisper)
 		user.say("[input]")
 	else
 		user.whisper("[input]")
