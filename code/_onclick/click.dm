@@ -3,6 +3,13 @@
 	~Sayu
 */
 
+//A workaround for a BYOND bug (or at least weird behavior). It's classified.
+/client/Click(object, location, control, params)
+	var/list/p = params2list(params)
+	if(p["drag"])
+		return
+	..()
+
 /*
 	Before anything else, defer these calls to a per-mobtype handler.  This allows us to
 	remove istype() spaghetti code, but requires the addition of other handler procs to simplify it.
