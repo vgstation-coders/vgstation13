@@ -35,6 +35,13 @@ var/list/blob_looks
 /obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
 /obj/effect/blob/normal/update_icon(var/spawnend = 0)
 */
+//Few global vars to track the blob
+var/list/blobs = list()
+var/list/blob_cores = list()
+var/list/blob_nodes = list()
+var/list/blob_resources = list()
+var/list/blob_overminds = list()
+
 
 /obj/effect/blob
 	name = "blob"
@@ -81,11 +88,6 @@ var/list/blob_looks
 	looks = newlook
 	update_looks()
 	blobs += src
-	if(istype(ticker.mode,/datum/game_mode/blob))
-		var/datum/game_mode/blob/blobmode = ticker.mode
-		if((blobs.len >= blobmode.blobnukeposs) && prob(3) && !blobmode.nuclear)
-			blobmode.stage(2)
-			blobmode.nuclear = 1
 	src.dir = pick(cardinal)
 	time_since_last_pulse = world.time
 
@@ -216,14 +218,14 @@ var/list/blob_looks
 /obj/effect/blob/attackby(var/obj/item/weapon/W, var/mob/living/user)
 	user.do_attack_animation(src, W)
 	user.delayNextAttack(10)
-	playsound(get_turf(src), 'sound/effects/attackblob.ogg', 50, 1)
+	playsound(src, 'sound/effects/attackblob.ogg', 50, 1)
 	src.visible_message("<span class='warning'><B>The [src.name] has been attacked with \the [W][(user ? " by [user]." : ".")]</span>")
 	var/damage = 0
 	switch(W.damtype)
 		if("fire")
 			damage = (W.force / max(src.fire_resist,1))
-			if(istype(W, /obj/item/weapon/weldingtool) || istype(W, /obj/item/weapon/pickaxe/plasmacutter))
-				playsound(get_turf(src), 'sound/effects/blobweld.ogg', 100, 1)
+			if(iswelder(W) || istype(W, /obj/item/weapon/pickaxe/plasmacutter))
+				playsound(src, 'sound/effects/blobweld.ogg', 100, 1)
 		if("brute")
 			damage = (W.force / max(src.brute_resist,1))
 
@@ -375,7 +377,7 @@ var/list/blob_looks_player = list(//Options available to players
 	if(!T)
 		return 0
 	var/obj/effect/blob/normal/B = new(src.loc, newlook = looks)
-	B.density = 1
+	B.setDensity(TRUE)
 
 	if(icon_size == 64)
 		if(istype(src,/obj/effect/blob/normal))
@@ -384,7 +386,7 @@ var/list/blob_looks_player = list(//Options available to players
 			B.layer = layer - num
 
 	if(T.Enter(B,src))//Attempt to move into the tile
-		B.density = initial(B.density)
+		B.setDensity(initial(B.density))
 		if(icon_size == 64)
 			spawn(1)
 				B.dir = get_dir(loc,T)

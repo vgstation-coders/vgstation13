@@ -65,6 +65,7 @@
 	maxHealth = 200
 	health = 200
 	gender = NEUTER
+	size = SIZE_BIG
 
 	update_icon = 0
 	nutrition = 800 // 1200 = max
@@ -76,6 +77,8 @@
 	Victim = null
 	Target = null
 
+/mob/living/carbon/slime/advanced_mutate()
+	return
 
 /mob/living/carbon/slime/New()
 	var/datum/reagents/R = new/datum/reagents(100)
@@ -507,11 +510,11 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 			if(step_to(D, Step_1))
 				check_1 = 1
 				for(var/obj/border_obstacle in Step_1)
-					if(border_obstacle.flags & ON_BORDER)
+					if(border_obstacle.flow_flags & ON_BORDER)
 						if(!border_obstacle.Uncross(D, A))
 							check_1 = 0
 				for(var/obj/border_obstacle in get_turf(A))
-					if((border_obstacle.flags & ON_BORDER) && (src != border_obstacle))
+					if((border_obstacle.flow_flags & ON_BORDER) && (src != border_obstacle))
 						if(!border_obstacle.Cross(D, D.loc, 1, 0))
 							check_1 = 0
 
@@ -520,11 +523,11 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 				check_2 = 1
 
 				for(var/obj/border_obstacle in Step_2)
-					if(border_obstacle.flags & ON_BORDER)
+					if(border_obstacle.flow_flags & ON_BORDER)
 						if(!border_obstacle.Uncross(D, A))
 							check_2 = 0
 				for(var/obj/border_obstacle in get_turf(A))
-					if((border_obstacle.flags & ON_BORDER) && (src != border_obstacle))
+					if((border_obstacle.flow_flags & ON_BORDER) && (src != border_obstacle))
 						if(!border_obstacle.Cross(D, D.loc, 1, 0))
 							check_2 = 0
 			if(check_1 || check_2)
@@ -537,13 +540,13 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 			//Now, check objects to block exit that are on the border
 			for(var/obj/border_obstacle in src.loc)
-				if(border_obstacle.flags & ON_BORDER)
+				if(border_obstacle.flow_flags & ON_BORDER)
 					if(!border_obstacle.Uncross(D, A))
 						ok = 0
 
 			//Next, check objects to block entry that are on the border
 			for(var/obj/border_obstacle in get_turf(A))
-				if((border_obstacle.flags & ON_BORDER) && (A != border_obstacle))
+				if((border_obstacle.flow_flags & ON_BORDER) && (A != border_obstacle))
 					if(!border_obstacle.Cross(D, D.loc, 1, 0))
 						ok = 0
 
@@ -717,6 +720,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	desc = "A potent chemical mix that will nullify a slime's powers, causing it to become docile and tame."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle19"
+	w_class = W_CLASS_TINY
 
 	attack(mob/living/carbon/slime/M as mob, mob/user as mob)
 		if(!istype(M, /mob/living/carbon/slime))//If target is not a slime.
@@ -755,6 +759,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	desc = "A potent chemical mix that will nullify a slime's powers, causing it to become docile and tame. This one is meant for adult slimes"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle19"
+	w_class = W_CLASS_TINY
 
 	attack(mob/living/carbon/slime/adult/M as mob, mob/user as mob)
 		if(!istype(M, /mob/living/carbon/slime/adult))//If target is not a slime.
@@ -790,6 +795,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	desc = "A potent chemical mix that will cause a slime to generate more extract."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle16"
+	w_class = W_CLASS_TINY
 
 	attack(mob/living/carbon/slime/M as mob, mob/user as mob)
 		if(!istype(M, /mob/living/carbon/slime))//If target is not a slime.
@@ -815,6 +821,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	desc = "A potent chemical mix that is a great nutrient for slimes."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle12"
+	w_class = W_CLASS_TINY
 	var/Uses = 2
 
 /obj/item/weapon/slimenutrient/attack(mob/living/carbon/slime/M as mob, mob/user as mob)
@@ -841,6 +848,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	desc = "A potent chemical mix that will give a slime extract three uses."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle17"
+	w_class = W_CLASS_TINY
 
 	/*afterattack(obj/target, mob/user , flag)
 		if(istype(target, /obj/item/slime_extract))
@@ -860,6 +868,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	desc = "A potent chemical mix that will force a child slime to split in two!"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle15"
+	w_class = W_CLASS_TINY
 
 /obj/item/weapon/slimedupe/attack(mob/living/carbon/slime/M as mob, mob/user as mob)
 	if(!istype(M, /mob/living/carbon/slime))//target is not a slime
@@ -884,6 +893,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	desc = "A potent chemical mix that when used on a slime extact, will bring it to life!"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle14"
+	w_class = W_CLASS_TINY
 
 ////////Adamantine Golem stuff I dunno where else to put it
 /*
@@ -1032,8 +1042,12 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		to_chat(O, "<span class='warning'>You are no longer signed up to be a golem.</span>")
 	else
 		if(!check_observer(O))
-			to_chat(O, "<span class='warning'>You are not eligable.</span>")
+			to_chat(O, "<span class='warning'>You are not eligible.</span>")
 			return
+		if(O.key in has_died_as_golem)
+			if(world.time < has_died_as_golem[O.key] + GOLEM_RESPAWN_TIME)
+				to_chat(O, "<span class='warning'>You have died as a golem too recently. You must wait longer before you can become a golem again.</span>")
+				return
 		ghosts.Add(O)
 		to_chat(O, "<span class='notice'>You are signed up to be a golem.</span>")
 
@@ -1148,7 +1162,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /obj/item/weapon/reagent_containers/food/snacks/egg/slime/process()
 	var/turf/location = get_turf(src)
 	var/datum/gas_mixture/environment = location.return_air()
-	if (environment.toxins > MOLES_PLASMA_VISIBLE)//plasma exposure causes the egg to hatch
+	if (environment.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)//plasma exposure causes the egg to hatch
 		src.Hatch()
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/slime/attackby(obj/item/weapon/W as obj, mob/user as mob)

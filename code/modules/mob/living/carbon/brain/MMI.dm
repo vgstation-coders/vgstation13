@@ -1,7 +1,7 @@
 
 
 /obj/item/device/mmi
-	name = "Man-Machine Interface"
+	name = "\improper Man-Machine Interface"
 	desc = "The Warrior's bland acronym, MMI, obscures the true horror of this monstrosity."
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "mmi_empty"
@@ -56,21 +56,22 @@ obj/item/device/mmi/Destroy()
 		if(brainmob.stat == DEAD)
 			to_chat(user, "<span class='warning'>Yeah, good idea. Give something deader than the pizza in your fridge legs.  Mom would be so proud.</span>")
 			return TRUE
-		if(brainmob.mind in ticker.mode.head_revolutionaries)
+		/*if(brainmob.mind in ticker.mode.head_revolutionaries)
 			to_chat(user, "<span class='warning'>The [src]'s firmware lets out a shrill sound, and flashes 'Abnormal Memory Engram'. It refuses to accept the brain.</span>")
 			return TRUE
+		*/
 		if(jobban_isbanned(brainmob, "Mobile MMI"))
 			to_chat(user, "<span class='warning'>This brain does not seem to fit.</span>")
 			return TRUE
 		//canmove = 0
 		icon = null
 		invisibility = 101
-		var/mob/living/silicon/robot/mommi/M = new /mob/living/silicon/robot/mommi(get_turf(loc))
+		var/mob/living/silicon/robot/mommi/M = new /mob/living/silicon/robot/mommi/nt(get_turf(loc))
 		if(!M)
 			return
 		M.invisibility = 0
 		//M.custom_name = created_name
-		
+
 		brainmob.mind.transfer_to(M)
 		M.Namepick()
 		M.updatename()
@@ -107,26 +108,28 @@ obj/item/device/mmi/Destroy()
 /obj/item/device/mmi/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(try_handling_mommi_construction(O,user))
 		return
-	if(istype(O,/obj/item/organ/brain) && !brainmob) //Time to stick a brain in it --NEO
+	if(istype(O,/obj/item/organ/internal/brain) && !brainmob) //Time to stick a brain in it --NEO
 		// MaMIs inherit from brain, but they shouldn't be insertable into a MMI
-		if (istype(O, /obj/item/organ/brain/mami))
+		if (istype(O, /obj/item/organ/internal/brain/mami))
 			to_chat(user, "<span class='warning'>You are only able to fit organic brains on a MMI. [src] won't work.</span>")
 			return TRUE
 
-		var/obj/item/organ/brain/BO = O
+		var/obj/item/organ/internal/brain/BO = O
 		if(!BO.brainmob)
 			to_chat(user, "<span class='warning'>You aren't sure where this brain came from, but you're pretty sure it's a useless brain.</span>")
 			return TRUE
 		// Checking to see if the ghost has been moused/borer'd/etc since death.
 		var/mob/living/carbon/brain/BM = BO.brainmob
 		if(!BM.client)
-			var/mob/dead/observer/ghost = get_ghost_from_mind(BM.mind)
-			if(ghost && ghost.client && ghost.can_reenter_corpse)
-				to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] seems slow to respond. Try again in a few seconds.</span>")
-				ghost << 'sound/effects/adminhelp.ogg'
-				to_chat(ghost, "<span class='interface big'><span class='bold'>Someone is trying to put your brain in a MMI. Return to your body if you want to be resurrected!</span> \
-					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
-				return TRUE
+			var/mob/dead/observer/ghost = mind_can_reenter(BM.mind)
+			if(ghost)
+				var/mob/ghostmob = ghost.get_top_transmogrification()
+				if(ghostmob)
+					to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] seems slow to respond. Try again in a few seconds.</span>")
+					ghostmob << 'sound/effects/adminhelp.ogg'
+					to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is trying to put your brain in a MMI. Return to your body if you want to be resurrected!</span> \
+						(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+					return TRUE
 			to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] is completely unresponsive; there's no point.</span>")
 			return TRUE
 		if(!user.drop_item(O))
@@ -175,7 +178,7 @@ obj/item/device/mmi/Destroy()
 		to_chat(user, "<span class='warning'>You upend \the [src], but the brain is clamped into place.")
 	else
 		to_chat(user, "<span class='notice'>You upend \the [src], spilling the brain onto the floor.</span>")
-		var/obj/item/organ/brain/brain = new(user.loc)
+		var/obj/item/organ/internal/brain/brain = new(user.loc)
 		brain.transfer_identity(brainmob)
 		qdel(brainmob)
 		brainmob = null//Set mmi brainmob var to null
@@ -275,7 +278,7 @@ obj/item/device/mmi/Destroy()
 			else if(!src.brainmob.key)
 				to_chat(user, "<span class='warning'>It seems to be in a deep dream-state</span>")//ghosted
 
-		to_chat(user, "<span class='info'>It's interface is [locked ? "locked" : "unlocked"] </span>")
+		to_chat(user, "<span class='info'>Its interface is [locked ? "locked" : "unlocked"] </span>")
 	to_chat(user, "<span class='info'>*---------*</span>")
 
 /obj/item/device/mmi/OnMobDeath(var/mob/living/carbon/brain/B)

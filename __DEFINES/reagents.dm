@@ -8,6 +8,7 @@
 #define VACCINE 			"vaccine"
 #define WATER 			"water"
 #define LUBE 			"lube"
+#define SODIUM_POLYACRYLATE			"sodium_polyacrylate"
 #define PHALANXIMINE 			"phalanximine"
 #define TOXIN 			"toxin"
 #define PLASTICIDE 			"plasticide"
@@ -36,6 +37,7 @@
 #define PHOSPHORUS 			"phosphorus"
 #define LITHIUM 			"lithium"
 #define SUGAR 			"sugar"
+#define CARAMEL 			"caramel"
 #define SACID 			"sacid"
 #define PACID 			"pacid"
 #define GLYCEROL 			"glycerol"
@@ -80,10 +82,12 @@
 #define HYRONALIN 			"hyronalin"
 #define ARITHRAZINE 			"arithrazine"
 #define ALKYSINE 			"alkysine"
+#define ALKYCOSINE 			"alkycosine"
 #define IMIDAZOLINE 			"imidazoline"
 #define INACUSIATE 			"inacusiate"
 #define PERIDAXON 			"peridaxon"
 #define BICARIDINE 			"bicaridine"
+#define SYNTHOCARISOL 			"synthocarisol"
 #define HYPERZINE 			"hyperzine"
 #define HYPOZINE 			"hypozine"
 #define CRYOXADONE 			"cryoxadone"
@@ -93,10 +97,12 @@
 #define CARPOTOXIN 			"carpotoxin"
 #define ZOMBIEPOWDER 			"zombiepowder"
 #define MINDBREAKER 			"mindbreaker"
+#define HEARTBREAKER 			"heartbreaker"
 #define SPIRITBREAKER 			"spiritbreaker"
 #define METHYLIN 			"methylin"
 #define BICARODYNE 			"bicarodyne"
 #define STABILIZINE 			"stabilizine"
+#define PRESLOMITE			"preslomite"
 #define NANITES 			"nanites"
 #define AUTISTNANITES 			"autistnanites"
 #define XENOMICROBES 			"xenomicrobes"
@@ -106,6 +112,7 @@
 #define FLUOROSURFACTANT 			"fluorosurfactant"
 #define NICOTINE 			"nicotine"
 #define AMMONIA 			"ammonia"
+#define SALINE				"saline"
 #define GLUE 			"glue"
 #define DIETHYLAMINE 			"diethylamine"
 #define ETHYLREDOXRAZINE 			"ethylredoxrazine"
@@ -136,6 +143,7 @@
 #define CHERRYJELLY 			"cherryjelly"
 #define HONEY			"honey"
 #define ROYALJELLY			"royaljelly"
+#define CHILLWAX			"chillwax"
 #define DIPPING_SAUCE	"dippingsauce"
 #define DISCOUNT 			"discount"
 #define IRRADIATEDBEANS 			"irradiatedbeans"
@@ -190,7 +198,6 @@
 #define SPECIALWHISKEY 			"specialwhiskey"
 #define GIN 			"gin"
 #define ABSINTHE 			"absinthe"
-#define RUM 			"rum"
 #define PWINE 			"pwine"
 #define RUM 			"rum"
 #define VODKA 			"vodka"
@@ -252,7 +259,6 @@
 #define NEUROTOXIN 			"neurotoxin"
 #define BANANAHONK 			"bananahonk"
 #define SILENCER 			"silencer"
-#define CHANGELINGSTING 			"changelingsting"
 #define ERIKASURPRISE 			"erikasurprise"
 #define IRISHCARBOMB 			"irishcarbomb"
 #define SYNDICATEBOMB 			"syndicatebomb"
@@ -325,6 +331,28 @@
 #define LITHOTORCRAZINE "lithotorcrazine"
 #define HEMOSCYANINE	"hemoscyanine"
 #define ANTHRACENE		"anthracene"
+#define PINTPOINTER		"pintpointer"
+#define MUCUS			"mucus"
+#define ALBUTEROL		"albuterol"
+#define LIQUIDBUTTER	"liquidbutter"
+#define SALTWATER		"saltwater"
+#define CALCIUMOXIDE		"calciumoxide"
+#define CALCIUMHYDROXIDE	"calciumhydroxide"
+#define MUSTARD			"mustard"
+#define RELISH			"relish"
+#define UNTABLE_MUTAGEN		"untable"
+#define ELECTRIC_SHEEP		"electric_sheep"
+#define SCIENTISTS_SERENDIPITY		"scientists_serendipity"
+#define METABUDDY		"metabuddy"
+#define SPIDERS			"spiders"
+#define WEED_EATER		"weed_eater"
+#define RAGSTORICHES	"ragstoriches"
+#define WAIFU			"waifu"
+#define BEEPSKY_CLASSIC	"beepsky_classic"
+#define SMOKYROOM		"smokyroom"
+#define BAD_TOUCH		"bad_touch"
+#define SUICIDE			"suicide"
+#define KARMOTRINE		"karmotrine"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -351,12 +379,24 @@
 #define HYOSCYAMINE		"hyoscyamine"
 #define CORIAMYRTIN		"coriamyrtin"
 #define THYMOL			"thymol"
-
+#define POTASSIUMCARBONATE "potassium_carbonate"
+#define TOBACCO			"tobacco"
+#define DANBACCO		"danbacco"
 #define PETRITRICIN		"petritricin"
 #define APETRINE		"apetrine"
+#define SODIUMSILICATE	"sodiumsilicate"
+#define COLORFUL_REAGENT "colorful_reagent"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
+
+//Temperatures of things (Kelvin)
+#define TEMPERATURE_HOTMETAL 300
+#define TEMPERATURE_LASER ARBITRARILY_PLANCK_NUMBER //Lasers technically have no upper limit
+#define TEMPERATURE_FLAME 700
+#define TEMPERATURE_WELDER 3480
+#define TEMPERATURE_PLASMA 4500
+#define HEAT_TRANSFER_MULTIPLIER 7 //Multiplies the numbers above when heating a reagent container. A truly magical number.
 
 // By defining the effect multiplier this way, it'll exactly adjust
 // all effects according to how they originally were with the 0.4 metabolism

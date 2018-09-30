@@ -48,10 +48,9 @@
 	return !config.silent_ai
 
 /mob/living/silicon/ai/get_message_mode(message)
-	if(department_radio_keys[copytext(message, 1, 3)] == MODE_DEPARTMENT)
+	. = ..()
+	if(!. && istype(current, /obj/machinery/hologram/holopad))
 		return MODE_HOLOPAD
-	else
-		return ..()
 
 /mob/living/silicon/ai/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
 	say_testing(src, "[type]/handle_inherent_channels([message_mode])")
@@ -75,7 +74,7 @@
 		return
 
 	var/obj/machinery/hologram/holopad/T = current
-	if(istype(T) && T.hologram && T.master == src)//If there is a hologram and its master is the user.
+	if(istype(T) && T.holo && T.master == src)//If there is a hologram and its master is the user.
 		T.send_speech(speech, 7, "R")
 		to_chat(src, "<i><span class='[speech.render_wrapper_classes()]'>Holopad transmitted, <span class='name'>[real_name]</span> [speech.render_message()]</span></i>")//The AI can "hear" its own message.
 

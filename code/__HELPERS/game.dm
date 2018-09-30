@@ -14,12 +14,6 @@
 	if(T)
 		return T.loc
 
-/proc/get_area_master(const/O)
-	var/area/A = get_area(O)
-
-	if(isarea(A))
-		return A
-
 /proc/get_area_name(N) //get area by its name
 	for(var/area/A in areas)
 		if(A.name == N)
@@ -49,13 +43,13 @@
 
 
 /proc/alone_in_area(var/area/the_area, var/mob/must_be_alone, var/check_type = /mob/living/carbon)
-	var/area/our_area = get_area_master(the_area)
+	var/area/our_area = get_area(the_area)
 	for(var/C in living_mob_list)
 		if(!istype(C, check_type))
 			continue
 		if(C == must_be_alone)
 			continue
-		if(our_area == get_area_master(C))
+		if(our_area == get_area(C))
 			return 0
 	return 1
 
@@ -263,7 +257,7 @@ var/list/DummyCache = list()
 
 	//Now, check objects to block exit that are on the border
 	for(var/obj/border_obstacle in srcturf)
-		if(border_obstacle.flags & ON_BORDER)
+		if(border_obstacle.flow_flags & ON_BORDER)
 			if(!border_obstacle.Uncross(D, targetturf))
 				D.forceMove(null)
 				DummyCache.Add(D)
@@ -271,7 +265,7 @@ var/list/DummyCache = list()
 
 	//Next, check objects to block entry that are on the border
 	for(var/obj/border_obstacle in targetturf)
-		if((border_obstacle.flags & ON_BORDER) && (target != border_obstacle))
+		if((border_obstacle.flow_flags & ON_BORDER) && (target != border_obstacle))
 			if(!border_obstacle.Cross(D, srcturf, 1, 0))
 				D.forceMove(null)
 				DummyCache.Add(D)
@@ -285,8 +279,8 @@ var/list/DummyCache = list()
 //#define DEBUG_ROLESELECT
 
 #ifdef DEBUG_ROLESELECT
-# define roleselect_debug(x) testing(x)
-# warning DEBUG_ROLESELECT is defined!
+#define roleselect_debug(x) testing(x)
+#warn DEBUG_ROLESELECT is defined!
 #else
 # define roleselect_debug(x)
 #endif
@@ -408,11 +402,11 @@ var/list/DummyCache = list()
 
 /proc/mobs_in_area(var/area/the_area, var/client_needed=0, var/moblist=mob_list)
 	var/list/mobs_found[0]
-	var/area/our_area = get_area_master(the_area)
+	var/area/our_area = get_area(the_area)
 	for(var/mob/M in moblist)
 		if(client_needed && !M.client)
 			continue
-		if(our_area != get_area_master(M))
+		if(our_area != get_area(M))
 			continue
 		mobs_found += M
 	return mobs_found

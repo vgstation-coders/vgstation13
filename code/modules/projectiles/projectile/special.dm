@@ -290,7 +290,7 @@ obj/item/projectile/kinetic/New()
 	bumped = 1
 
 	if(A)
-		density = 0
+		setDensity(FALSE)
 		invisibility = 101
 		kill_count = 0
 		if(isliving(A))
@@ -363,6 +363,9 @@ obj/item/projectile/kinetic/New()
 	var/temperature = T0C + 175
 	var/fire_duration
 
+/obj/item/projectile/fire_breath/straight
+	fire_blast_type = /obj/effect/fire_blast/no_spread
+
 /obj/item/projectile/fire_breath/New(turf/T, var/direction, var/F_Dam, var/P, var/T, var/F_Dur)
 	..(T,direction)
 	if(F_Dam)
@@ -426,7 +429,7 @@ obj/item/projectile/kinetic/New()
 	flag = "bio"
 	fire_sound = 'sound/weapons/rocket.ogg'
 
-	projectile_slowdown = 0.5
+	projectile_speed = 1.33
 
 	var/fire_damage = 5
 	var/pressure = ONE_ATMOSPHERE * 4.5
@@ -435,3 +438,19 @@ obj/item/projectile/kinetic/New()
 
 /obj/item/projectile/napalm_bomb/on_hit(var/atom/target, var/blocked = 0)
 	new /obj/effect/fire_blast/blue(get_turf(target), fire_damage, 0, 1, pressure, temperature, fire_duration)
+
+
+/obj/item/projectile/swap
+	name = "bolt of swapping"
+	icon_state = "sparkblue"
+	damage = 0
+	nodamage = 1
+	fire_sound = 'sound/weapons/osipr_altfire.ogg'
+
+/obj/item/projectile/swap/on_hit(var/atom/target, var/blocked = 0)
+	var/turf/T = get_turf(target)
+	do_teleport(target, firer.loc)
+	do_teleport(firer, T)
+
+/obj/item/projectile/swap/advanced
+	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE

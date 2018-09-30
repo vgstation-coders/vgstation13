@@ -15,13 +15,12 @@
 
 //  Generic non-item
 /obj/item/weapon/storage/bag
-	allow_quick_gather = 1
-	allow_quick_empty = 1
-	display_contents_with_number = 0 // UNStABLE AS FuCK, turn on when it stops crashing clients
-	use_to_pickup = 1
+	allow_quick_gather = TRUE
+	allow_quick_empty = TRUE
+	display_contents_with_number = FALSE // UNStABLE AS FuCK, turn on when it stops crashing clients
+	use_to_pickup = TRUE
 	slot_flags = SLOT_BELT
 	flags = FPRINT
-
 
 // -----------------------------
 //          Trash bag
@@ -37,7 +36,9 @@
 	fits_max_w_class = W_CLASS_SMALL
 	storage_slots = 21
 	can_only_hold = list() // any
-	cant_hold = list("/obj/item/weapon/disk/nuclear")
+	cant_hold = list("/obj/item/weapon/disk/nuclear", "/obj/item/weapon/pinpointer") //No janiborg, stop stealing the pinpointer with your bag.
+	slot_flags = SLOT_BELT | SLOT_OCLOTHING
+	no_storage_slot = list(slot_wear_suit) //when worn on the suit slot it will function purely as a suit and will not store items
 
 /obj/item/weapon/storage/bag/trash/update_icon()
 	if(contents.len == 0)
@@ -68,6 +69,8 @@
 	body_parts_covered = FULL_HEAD|BEARD
 	slot_flags = SLOT_BELT | SLOT_HEAD
 	clothing_flags = BLOCK_BREATHING | BLOCK_GAS_SMOKE_EFFECT
+	no_storage_slot = list(slot_head)
+	foldable = /obj/item/folded_bag
 
 obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
 	return can_be_inserted(I,1)
@@ -75,26 +78,10 @@ obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
 obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	return handle_item_insertion(I,0)
 
-/obj/item/weapon/storage/bag/plasticbag/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
-	//Forbid wearing bags with something inside!
-	.=..()
-	if(contents.len && (slot == slot_head))
-		return CANNOT_EQUIP
-
-/obj/item/weapon/storage/bag/plasticbag/can_be_inserted()
-	if(ishuman(loc))
-		var/mob/living/carbon/human/H = loc
-		if(H.head == src) //If worn
-			return 0
-	else if(isMoMMI(loc))
-		var/mob/living/silicon/robot/mommi/MoM = loc
-		if(MoM.head_state == src) //If worn
-			return 0
-	return ..()
-
 /obj/item/weapon/storage/bag/plasticbag/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] puts the [src.name] over \his head and tightens the handles around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(OXYLOSS)
+
 
 // -----------------------------
 //        Mining Satchel
@@ -112,6 +99,70 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * ore.w_class
 	can_only_hold = list("/obj/item/weapon/ore")
 
+/obj/item/weapon/storage/bag/ore/auto
+	name = "automatic ore loader"
+	desc = "A mining satchel with a built-in inserter used to automatically move ore over short distances."
+	icon_state = "tech_satchel"
+	actions_types = list(/datum/action/item_action/toggle_auto_handling)
+	var/handling = FALSE
+	var/event_key = null
+
+/datum/action/item_action/toggle_auto_handling
+	name = "Toggle Ore Loader"
+
+/datum/action/item_action/toggle_auto_handling/Trigger()
+	var/obj/item/weapon/storage/bag/ore/auto/T = target
+	var/mob/user = usr
+
+	if(!usr)
+		if(!ismob(T.loc))
+			return
+		user = T.loc
+	if(!istype(T))
+		return
+
+	T.handling = !T.handling
+
+	to_chat(user, "You turn \the [T.name] [T.handling? "on":"off"].")
+
+	if(T.handling == TRUE)
+		T.event_key = user.on_moved.Add(T, "mob_moved")
+	else
+		user.on_moved.Remove(T, "mob_moved")
+		T.event_key = null
+
+/obj/item/weapon/storage/bag/ore/auto/proc/auto_collect()
+	var/atom/collect_loc = get_turf(loc)
+	for(var/obj/item/weapon/ore/ore in collect_loc.contents)
+		preattack(collect_loc, src, TRUE)
+		break
+
+/obj/item/weapon/storage/bag/ore/auto/proc/auto_fill(var/mob/holder)
+	var/obj/structure/ore_box/box = null
+	if(istype(holder.pulling, /obj/structure/ore_box))
+		box = holder.pulling
+	if(box)
+		for(var/obj/item/weapon/ore/ore in contents)
+			if(ore.material)
+				remove_from_storage(ore)
+				box.materials.addAmount(ore.material, 1)
+				qdel(ore)
+
+/obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(var/list/event_args, var/mob/holder)
+	if(isrobot(holder))
+		var/mob/living/silicon/robot/S = holder
+		if(locate(src) in S.get_all_slots())
+			auto_collect()
+			auto_fill(holder)
+	else
+		if(holder.is_holding_item(src))
+			auto_collect()
+			auto_fill(holder)
+
+/obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
+	if(event_key)
+		user.on_moved.Remove(src, "mob_moved")
+		event_key = null
 
 // -----------------------------
 //          Plant bag
@@ -126,6 +177,38 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg", "/obj/item/weapon/reagent_containers/food/snacks/honeycomb")
+
+/obj/item/weapon/storage/bag/plants/portactor
+	name = "portable seed extractor"
+	desc = "A heavy-duty, yet portable seed extractor. Less efficient than the stationary machine, this version can extract at most two seeds per sample."
+	icon_state = "portaseeder"
+	actions_types = list(/datum/action/item_action/dissolve_contents)
+
+/datum/action/item_action/dissolve_contents
+	name = "Dissolve Contents"
+	desc = "Activate to convert the harvested contents into plantable seeds."
+
+/datum/action/item_action/dissolve_contents/Trigger()
+	var/obj/item/weapon/storage/bag/plants/portactor/P = target
+	var/mob/user = usr
+
+	if(!usr)
+		if(!ismob(P.loc))
+			return
+		user = P.loc
+
+	if(!istype(P) || !user)
+		return
+
+	if(P.contents)
+		var/played = FALSE
+		for(var/obj/item/I in P.contents)
+			if(seedify(I) && !played)
+				playsound(P, 'sound/machines/juicerfast.ogg', 50, 1)
+				played = TRUE
+		P.orient2hud(user)
+		if(user.s_active)
+			user.s_active.show_to(user)
 
 // -----------------------------
 //          Food bag
@@ -206,29 +289,29 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		//verbs -= /obj/item/weapon/storage/verb/quick_empty
 		//verbs += /obj/item/weapon/storage/bag/sheetsnatcher/quick_empty
 
-	can_be_inserted(obj/item/W as obj, stop_messages = 0)
+	can_be_inserted(obj/item/W as obj, stop_messages = FALSE)
 		if(!istype(W,/obj/item/stack/sheet) || istype(W,/obj/item/stack/sheet/mineral/sandstone) || istype(W,/obj/item/stack/sheet/wood))
 			if(!stop_messages)
 				to_chat(usr, "The snatcher does not accept [W].")
-			return 0 //I don't care, but the existing code rejects them for not being "sheets" *shrug* -Sayu
+			return FALSE //I don't care, but the existing code rejects them for not being "sheets" *shrug* -Sayu
 		var/current = 0
 		for(var/obj/item/stack/sheet/S in contents)
 			current += S.amount
 		if(capacity == current)//If it's full, you're done
 			if(!stop_messages)
 				to_chat(usr, "<span class='warning'>The snatcher is full.</span>")
-			return 0
-		return 1
+			return FALSE
+		return TRUE
 
 
 // Modified handle_item_insertion.  Would prefer not to, but...
-	handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
+	handle_item_insertion(obj/item/W as obj, prevent_warning = FALSE)
 		var/obj/item/stack/sheet/S = W
 		if(!istype(S))
-			return 0
+			return FALSE
 
 		var/amount
-		var/inserted = 0
+		var/inserted = FALSE
 		var/current = 0
 		for(var/obj/item/stack/sheet/S2 in contents)
 			current += S2.amount
@@ -241,7 +324,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 			if(S.type == sheet.type) // we are violating the amount limitation because these are not sane objects
 				sheet.amount += amount	// they should only be removed through procs in this file, which split them up.
 				S.amount -= amount
-				inserted = 1
+				inserted = TRUE
 				break
 
 		if(!inserted || !S.amount)
@@ -260,7 +343,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		if(usr.s_active)
 			usr.s_active.show_to(usr)
 		update_icon()
-		return 1
+		return TRUE
 
 
 // Sets up numbered display to show the stack size of each stored mineral
@@ -308,7 +391,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	remove_from_storage(obj/item/W as obj, atom/new_location)
 		var/obj/item/stack/sheet/S = W
 		if(!istype(S))
-			return 0
+			return FALSE
 
 		//I would prefer to drop a new stack, but the item/attack_hand code
 		// that calls this can't recieve a different object than you clicked on.
@@ -375,6 +458,15 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	storage_slots = 300
 	fits_max_w_class = 300 //There is no way this could go wrong, right?
 	max_combined_w_class = 300
-	display_contents_with_number = 1 //With lods of emone, you're gonna need some compression
+	display_contents_with_number = TRUE //With lods of emone, you're gonna need some compression
 	can_only_hold = list("/obj/item/weapon/coin", "/obj/item/weapon/ore", "/obj/item/weapon/spacecash")
 	cant_hold = list()
+
+/obj/item/weapon/storage/bag/money/treasure
+	name = "bag of treasure"
+	desc = "Some pirate must have spent a long time collecting this."
+
+/obj/item/weapon/storage/bag/money/treasure/New()
+	..()
+	for(var/i = 1 to storage_slots)
+		new /obj/item/weapon/coin/gold(src)

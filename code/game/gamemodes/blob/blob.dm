@@ -1,13 +1,5 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
-//Few global vars to track the blob
-var/list/blobs = list()
-var/list/blob_cores = list()
-var/list/blob_nodes = list()
-var/list/blob_resources = list()
-var/list/blob_overminds = list()
-
-
 /datum/game_mode/blob
 	name = "Blob"
 	config_tag = "Blob"
@@ -43,7 +35,8 @@ var/list/blob_overminds = list()
 		message_admins("Failed to set-up a round of blob. Couldn't find any volunteers to be blob.")
 		return 0
 
-	cores_to_spawn = max(round(num_players()/players_per_core, 1), 1)
+    // Playtesting revealed that more than one blob at roundstart is too much to handle, even with summerpop.
+	cores_to_spawn = 1 //max(round(num_players()/players_per_core, 1), 1)
 
 	blobwincount = initial(blobwincount) * cores_to_spawn
 

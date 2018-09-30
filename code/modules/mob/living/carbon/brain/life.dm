@@ -74,7 +74,7 @@
 /mob/living/carbon/brain/proc/handle_environment(datum/gas_mixture/environment)
 	if(!environment || (flags & INVULNERABLE))
 		return
-	var/environment_heat_capacity = environment.heat_capacity()
+	var/environment_heat_capacity = environment.heat_capacity() / environment.volume * CELL_VOLUME
 	if(istype(get_turf(src), /turf/space))
 		var/turf/heat_turf = get_turf(src)
 		environment_heat_capacity = heat_turf.heat_capacity
@@ -210,7 +210,7 @@
 	return 1
 
 
-/mob/living/carbon/brain/proc/handle_regular_hud_updates()
+/mob/living/carbon/brain/handle_regular_hud_updates()
 
 
 	if (stat == 2 || (M_XRAY in src.mutations))
@@ -244,16 +244,23 @@
 
 	update_pull_icon()
 	if (client)
-//			clear_fullscreens()
 
 		if(src.eye_blind || blinded)
 			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
+		else
+			clear_fullscreen("blind")
 		if (src.disabilities & NEARSIGHTED)
 			overlay_fullscreen("impaired", /obj/abstract/screen/fullscreen/impaired)
+		else
+			clear_fullscreen("impaired")
 		if (src.eye_blurry)
 			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
+		else
+			clear_fullscreen("blurry")
 		if (src.druggy)
 			overlay_fullscreen("high", /obj/abstract/screen/fullscreen/high)
+		else
+			clear_fullscreen("high")
 
 	if (stat != 2)
 		if (machine)

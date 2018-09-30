@@ -28,12 +28,14 @@
 		"heart",
 		"kidneys",
 		"liver",
-		"lungs"
+		"lungs",
+		"appendix"
 	)
 	var/target_type="eyes"
 
-/obj/item/weapon/organ_remover/examine(var/mob/user)
-	// Only vox know what these are.
+/obj/item/weapon/organ_remover/examine(var/mob/user, var/override = FALSE)
+	if(override)
+		return ..(user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H
 		if(isvox(H))
@@ -68,14 +70,14 @@
 		return
 	in_use = TRUE
 	user.visible_message("<span class='danger'>[user] activates \the [src]!</span>", "You level the extractor at [H] and hold down the trigger.")
-	playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+	playsound(src, 'sound/machines/click.ogg', 50, 1)
 	if(do_after(user, src, delay, needhand=TRUE))
 		if(O && istype(O) && O.CanRemove(H, user, quiet=TRUE))
 			O.Remove(H, user)
 			O.status |= ORGAN_CUT_AWAY
 			user.attack_log += "\[[time_stamp()]\] <font color='red'>extracted [H.name]'s [O] with \a [src]</font>"
 			H.attack_log += "\[[time_stamp()]\] <font color='red'>had their [O] removed by [user.name]'s [src]</font>"
-			var/obj/item/organ/OO = O.remove(user)
+			var/obj/item/organ/internal/OO = O.remove(user)
 			if(OO && istype(OO))
 
 				// Stop the organ from continuing to reject.
@@ -93,13 +95,13 @@
 				// ???? affected.internal_organs -= OO.organ_data
 				OO.removed(H,user)
 				OO.forceMove(get_turf(H))
-			playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1)
+			playsound(src, 'sound/machines/juicer.ogg', 50, 1)
 	in_use = FALSE
 
 /obj/item/weapon/organ_remover/proc/can_use(var/mob/user)
 	// Something something vox bioelectric fields something nanites.
 	// I'd rather not have shitters picking these up and removing the clown's lungs for giggles.
-	if(!ishuman(user))
+	if(!ishigherbeing(user))
 		return FALSE
 
 	if(!vox_only)
@@ -115,4 +117,19 @@
 	to_chat(user, "<span class='info'>[target_type] selected.</span>")
 
 /obj/item/weapon/organ_remover/adminbus_edition
-	vox_only=FALSE
+	vox_only = FALSE
+
+/obj/item/weapon/organ_remover/traitor
+	desc = "A knock-off of the vox-only organ extractor, this one has been modified to be able to be used by anyone, and works twice as fast as the real deal. However, it can no longer extract hearts."
+	vox_only = FALSE
+	delay=7.5 SECONDS
+	valid_targets=list(
+		"eyes",
+		"kidneys",
+		"liver",
+		"lungs",
+		"appendix"
+	)
+
+/obj/item/weapon/organ_remover/traitor/examine(var/mob/user)
+    ..(user, TRUE)

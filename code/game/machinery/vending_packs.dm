@@ -26,8 +26,9 @@
 
 /obj/structure/vendomatpack/custom/attackby(obj/item/O, mob/user)
 	if(istype(O))
-		if(user.drop_item(O, src))
-			stock.Add(O)
+		if(istype(O, /obj/item/weapon/disk/nuclear))
+			to_chat(user, "<span class='notice'>Suddenly your hand stops responding. You can't do it.</span>")
+		user.drop_item(O, src)
 
 /obj/structure/vendomatpack/custom/attack_hand(mob/user)
 	var/selected_item = input("Select an item to remove", "[src]") as null|anything in contents
@@ -35,11 +36,7 @@
 	if(I != null && loc)
 		if(!Adjacent(user))
 			return
-		if(istype(I, /obj/item/weapon/disk/nuclear))
-			to_chat(user, "<span class='notice'>Suddenly your hand stops responding. You can't do it.</span>")
-			return
 		I.forceMove(get_turf(src))
-
 
 /obj/structure/vendomatpack/undefined
 	//a placeholder for vending machines that don't have their own recharge packs
@@ -117,6 +114,11 @@
 	name = "Engi-Vend recharge pack"
 	targetvendomat = /obj/machinery/vending/engivend
 	icon_state = "engivend"
+
+/obj/structure/vendomatpack/building
+	name = "Habitat Depot recharge pack"
+	targetvendomat = /obj/machinery/vending/building
+	icon_state = "building"
 
 /obj/structure/vendomatpack/autodrobe
 	name = "AutoDrobe recharge pack"
@@ -197,6 +199,21 @@
 	name = "Shuo-Cai Cosmetics recharge pack"
 	targetvendomat = /obj/machinery/vending/makeup
 	icon_state = "makeup"
+
+/obj/structure/vendomatpack/offlicence
+	name = "Offworld Off-Licence recharge pack"
+	targetvendomat = /obj/machinery/vending/offlicence
+	icon_state = "offlicence"
+
+/obj/structure/vendomatpack/circus
+	name = "Circus of Values recharge pack"
+	targetvendomat = /obj/machinery/vending/circus
+	icon_state = "circus"
+
+/obj/structure/vendomatpack/mining
+	name = "Dwarven Mining Equipment recharge pack"
+	targetvendomat = /obj/machinery/vending/mining
+	icon_state = "mining"
 
 //////EMPTY PACKS//////
 

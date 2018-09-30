@@ -40,6 +40,9 @@
 		return
 	..()
 
+/obj/item/device/radio/electropack/prepickup(mob/user)
+	return src == user.back //Prevents picking the item up if it's the user's back slot item. e.g.: if they are quickswapping
+
 /obj/item/device/radio/electropack/Destroy()
 	if(istype(src.loc, /obj/item/assembly/shock_kit))
 		var/obj/item/assembly/shock_kit/S = src.loc
@@ -135,9 +138,7 @@
 					if(M)
 						M.moved_recently = 0
 		to_chat(M, "<span class='danger'>You feel a sharp shock!</span>")
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(3, 1, M)
-		s.start()
+		spark(M)
 
 		M.Knockdown(10)
 

@@ -42,6 +42,18 @@
 	var/eject_disk = 0
 	var/failed_task = 0
 	var/disk_needs_genes = 0
+	var/time_coeff = 1
+	var/degradation_coeff = 1
+
+/obj/machinery/botany/RefreshParts()
+	var/T = 0
+	for(var/obj/item/weapon/stock_parts/micro_laser/ML in component_parts)
+		T += ML.rating
+	degradation_coeff = round(T/2)
+	T = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/MA in component_parts)
+		T += MA.rating
+	time_coeff = T
 
 /obj/machinery/botany/process()
 
@@ -49,7 +61,7 @@
 	if(!active)
 		return
 
-	if(world.time > last_action + action_time)
+	if(world.time > last_action + action_time/time_coeff)
 		finished_task()
 
 /obj/machinery/botany/attack_paw(mob/user as mob)
@@ -88,6 +100,8 @@
 			to_chat(user, "That seed is not compatible with our genetics technology.")
 		else
 			user.drop_item(S, src, force_drop = 1)
+			if(S.loc != src) //How did you do that? Gimme that fucking seed pack.
+				S.forceMove(src)
 			loaded_seed = W
 			to_chat(user, "You load [W] into [src].")
 			nanomanager.update_uis(src)
@@ -141,18 +155,25 @@
 		/obj/item/weapon/stock_parts/matter_bin,
 	)
 
-/obj/machinery/botany/extractor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+	RefreshParts()
+
+/obj/machinery/botany/extractor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 
 	if(!user)
 		return
 
 	var/list/data = list()
-
-	var/list/geneMasks[0]
-	for(var/gene_tag in plant_controller.gene_tag_list)
-		geneMasks[list("tag" = gene_tag)] = null // For some reason the JSON writer sees it as assoc if it's a list of strings.
-
-	data["geneMasks"] = geneMasks
+	var/static/list/gene_tag_list = list(
+		list("tag" = GENE_PHYTOCHEMISTRY),
+		list("tag" = GENE_MORPHOLOGY),
+		list("tag" = GENE_BIOLUMINESCENCE),
+		list("tag" = GENE_ECOLOGY),
+		list("tag" = GENE_ECOPHYSIOLOGY),
+		list("tag" = GENE_METABOLISM),
+		list("tag" = GENE_NUTRITION),
+		list("tag" = GENE_DEVELOPMENT)
+	)
+	data["geneTags"] = gene_tag_list
 
 	data["activity"] = active
 	data["degradation"] = degradation
@@ -196,10 +217,10 @@
 			return
 		loaded_seed.forceMove(get_turf(src))
 
-		if(loaded_seed.seed.name == "new line" || isnull(plant_controller.seeds[loaded_seed.seed.name]))
-			loaded_seed.seed.uid = plant_controller.seeds.len + 1
+		if(loaded_seed.seed.name == "new line" || isnull(SSplant.seeds[loaded_seed.seed.name]))
+			loaded_seed.seed.uid = SSplant.seeds.len + 1
 			loaded_seed.seed.name = "[loaded_seed.seed.uid]"
-			plant_controller.seeds[loaded_seed.seed.name] = loaded_seed.seed
+			SSplant.seeds[loaded_seed.seed.name] = loaded_seed.seed
 
 		loaded_seed.update_seed()
 		visible_message("[bicon(src)] [src] beeps and spits out [loaded_seed].")
@@ -261,7 +282,7 @@
 		loaded_disk.desc += " The label reads 'gene [href_list["get_gene"]], sampled from [genetics.display_name]'."
 		eject_disk = 1
 
-		degradation += rand(20,60)
+		degradation += round(rand(20,60)/degradation_coeff)
 		if(degradation >= 100)
 			failed_task = 1
 			genetics = null
@@ -294,7 +315,10 @@
 		/obj/item/weapon/stock_parts/console_screen,
 	)
 
-/obj/machinery/botany/editor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+	RefreshParts()
+
+
+/obj/machinery/botany/editor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 
 	if(!user)
 		return
@@ -350,7 +374,7 @@
 		last_action = world.time
 		active = 1
 
-		if(!isnull(plant_controller.seeds[loaded_seed.seed.name]))
+		if(!isnull(SSplant.seeds[loaded_seed.seed.name]))
 			loaded_seed.seed = loaded_seed.seed.diverge(1)
 			loaded_seed.seed_type = loaded_seed.seed.name
 			loaded_seed.update_seed()
@@ -361,7 +385,7 @@
 
 		for(var/datum/plantgene/gene in loaded_disk.genes)
 			loaded_seed.seed.apply_gene(gene, mode)
-			loaded_seed.modified += rand(5,10)
+			loaded_seed.modified += round(rand(5,10)/degradation_coeff)
 
 	else if(href_list["toggle_mode"])
 		switch(mode)

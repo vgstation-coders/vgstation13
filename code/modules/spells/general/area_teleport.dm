@@ -2,6 +2,7 @@
 	name = "Teleport"
 	desc = "This spell teleports you to a type of area of your selection."
 	abbreviation = "TP"
+	user_type = USER_TYPE_WIZARD
 
 	school = "abjuration"
 	charge_max = 600
@@ -69,6 +70,8 @@
 
 	if(!success)
 		user.forceMove(pick(L))
+
+	log_game("[key_name(user)] teleported to [thearea.name] using the teleportation spell.")
 
 /spell/area_teleport/after_cast()
 	return

@@ -19,7 +19,7 @@
 	name = "Staff of Change"
 	desc = "An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself."
 	abbreviation = "ST"
-	spawned_items = list(/obj/item/weapon/gun/energy/staff)
+	spawned_items = list(/obj/item/weapon/gun/energy/staff/change)
 
 /datum/spellbook_artifact/mental_focus
 	name = "Mental Focus"
@@ -61,7 +61,7 @@
 	desc = "An arcane staff capable of summoning undying minions from the corpses of your enemies. This magic doesn't affect machines."
 	abbreviation = "SN"
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/necro)
-
+/*
 #define APPRENTICE_PRICE Sp_BASE_PRICE
 /datum/spellbook_artifact/apprentice
 	name = "Contract of Apprenticeship"
@@ -69,6 +69,7 @@
 	abbreviation = "CT"
 	spawned_items = list(/obj/item/weapon/antag_spawner/contract)
 	price = APPRENTICE_PRICE
+*/
 
 /datum/spellbook_artifact/bundle
 	name = "Spellbook Bundle"
@@ -105,14 +106,15 @@
 	desc = "Nothing could possibly go wrong with arming a crew of lunatics just itching for an excuse to kill eachother. Just be careful not to get hit in the crossfire!"
 	abbreviation = "SG"
 
+/* WIZARDS, NO SENSE OF RIGHT OR WRONG
 /datum/spellbook_artifact/summon_guns/can_buy()
 	//Can't summon guns during ragin' mages
-	return !ticker.mode.rage
+	return !ticker.mode.rage*/
 
 /datum/spellbook_artifact/summon_guns/purchased(mob/living/carbon/human/H)
 	..()
 
-	H.rightandwrong(0)
+	H.rightandwrong("guns")
 	to_chat(H, "<span class='userdanger'>You have summoned guns.</span>")
 
 //SUMMON MAGIC
@@ -121,15 +123,31 @@
 	desc = "Share the power of magic with the crew and turn them against each other. Or just empower them against you."
 	abbreviation = "SM"
 
+/* WIZARDS, NO SENSE OF RIGHT OR WRONG
 /datum/spellbook_artifact/summon_magic/can_buy()
 	//Can't summon magic during ragin' mages
-	return !ticker.mode.rage
+	return !ticker.mode.rage*/
 
 /datum/spellbook_artifact/summon_magic/purchased(mob/living/carbon/human/H)
 	..()
 
-	H.rightandwrong(1)
+	H.rightandwrong("magic")
 	to_chat(H, "<span class='userdanger'>You have shared the gift of magic with everyone.</span>")
+
+//SUMMON SWORDS
+/datum/spellbook_artifact/summon_swords
+	name = "Summon Swords"
+	desc = "Launch a crusade or just spark a blood bath. Either way there will be limbs flying and blood spraying."
+	abbreviation = "SS"
+
+/datum/spellbook_artifact/summon_magic/can_buy()
+	return TRUE
+
+/datum/spellbook_artifact/summon_swords/purchased(mob/living/carbon/human/H)
+	..()
+
+	H.rightandwrong("swords")
+	to_chat(H, "<span class='userdanger'>DEUS VULT!</span>")
 
 /datum/spellbook_artifact/glow_orbs
 	name = "Bundle of glow orbs"
@@ -139,6 +157,12 @@
 						/obj/item/weapon/glow_orb,\
 						/obj/item/weapon/glow_orb,\
 						)
+
+/datum/spellbook_artifact/butterflyknife
+	name = "Crystal Butterfly Knife"
+	desc = "A butterfly knife made of colored crystals. It's infused with summoning magic so when it's flipped it will summon a crystal butterfly that attacks anything but it's summoner."
+	abbreviation = "BK"
+	spawned_items = list(/obj/item/weapon/butterflyknife/viscerator/magic)
 
 //SANTA BUNDLE
 
@@ -180,4 +204,10 @@
 	SetUniversalState(/datum/universal_state/christmas)
 
 /datum/spellbook_artifact/santa_bundle/can_buy()
-	return (Holiday == "Christmas" && !istype(universe, /datum/universal_state/christmas))
+	return (Holiday == XMAS && !istype(universe, /datum/universal_state/christmas))
+
+/datum/spellbook_artifact/phylactery
+	name = "phylactery"
+	desc = "Creates a soulbinding artifact that, upon the death of the user, resurrects them as best it can. You must bind yourself to this through making an incision on your palm, holding the phylactery in that hand, and squeezing it."
+	price = 2 * Sp_BASE_PRICE
+	spawned_items = list(/obj/item/phylactery)

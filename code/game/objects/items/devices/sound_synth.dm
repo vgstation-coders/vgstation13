@@ -35,7 +35,10 @@
     "Welding Noises" = "selected_sound=sound/items/Welder.ogg&shiftpitch=1&volume=55",
 	"Quack" = "selected_sound=sound/items/quack.ogg&shiftpitch=1&volume=50",
 	"Short Slide Whistle" = "selected_sound=sound/effects/slide_whistle_short.ogg&shiftpitch=1&volume=50",
-	"Long Slide Whistle" = "selected_sound=sound/effects/slide_whistle_long.ogg&shiftpitch=1&volume=50"
+	"Long Slide Whistle" = "selected_sound=sound/effects/slide_whistle_long.ogg&shiftpitch=1&volume=50",
+	"YEET" = "selected_sound=sound/effects/yeet.ogg&shiftpitch=1&volume=50",
+	"Time Stop" = "selected_sound=sound/effects/theworld3.ogg&shiftpitch=0&volume=80",
+	"Click" = "selected_sound=sound/effects/kirakrik.ogg&shiftpitch=0&volume=80"
 	)
 
 /obj/item/device/soundsynth/verb/pick_sound()
@@ -52,7 +55,7 @@
 
 /obj/item/device/soundsynth/attack_self(mob/user as mob)
 	if(spam_flag + 2 SECONDS < world.timeofday)
-		playsound(get_turf(src), selected_sound, volume, shiftpitch)
+		playsound(src, selected_sound, volume, shiftpitch)
 		spam_flag = world.timeofday
 
 /obj/item/device/soundsynth/attack(mob/living/M as mob, mob/living/user as mob, def_zone)

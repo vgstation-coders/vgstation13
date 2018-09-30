@@ -1,8 +1,3 @@
-#define MEGAWATT 1000000
-#define TEN_MEGAWATTS 10000000
-#define HUNDRED_MEGAWATTS 100000000
-#define GIGAWATT 1000000000
-
 /obj/item/weapon/gun/projectile/railgun
 	name = "railgun"
 	desc = "A weapon that uses the Lorentz force to propel an armature carrying a projectile to incredible velocities."
@@ -165,10 +160,10 @@
 		if(rails)
 			if(rails_secure)
 				to_chat(user, "You loosen the rail assembly within \the [src].")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			else
 				to_chat(user, "You tighten the rail assembly inside \the [src].")
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			rails_secure = !rails_secure
 
 	else if(istype(W, /obj/item/stack/rods))
@@ -302,7 +297,7 @@
 			B.penetration = (20 + (strength - 100))
 			if(strength == 101)
 				B.penetration -= 1
-			B.superspeed = 1
+			B.projectile_speed = 0.66
 		else if(strength == 90)
 			B.penetration = 10
 		in_chamber = B

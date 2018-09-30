@@ -31,7 +31,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 
 /obj/machinery/mirror/proc/get_deflections(var/in_dir)
 	if(dir in list(EAST, WEST))
-		//testing("[src]: Detected orientation: \\, in_dir=[in_dir], dir=[dir]")
+		//testing("[src]: Detected orientation: \\, in_dir=[dir2text(in_dir)], dir=[dir2text(dir)]")
 		switch(in_dir) // \\ orientation
 			if(NORTH)
 				return list(EAST)
@@ -42,7 +42,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 			if(WEST)
 				return list(SOUTH)
 	else
-		//testing("[src]: Detected orientation: /, in_dir=[in_dir], dir=[dir]")
+		//testing("[src]: Detected orientation: /, in_dir=[dir2text(in_dir)], dir=[dir2text(dir)]")
 		switch(in_dir) // / orientation
 			if(NORTH)
 				return list(WEST)
@@ -91,11 +91,12 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 
 /obj/machinery/mirror/wrenchAnchor(var/mob/user)
 	. = ..()
-	if(. == 1)
-		if(beams && beams.len)
-			kill_all_beams()
-		update_beams()
-	return .
+	if(!.)
+		return
+
+	if(beams && beams.len)
+		kill_all_beams()
+	update_beams()
 
 /obj/machinery/mirror/beam_connect(var/obj/effect/beam/emitter/B)
 	if(istype(B))
@@ -251,3 +252,26 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 			// but the spam would just piss everyone off.
 			//testing("BUG: Beam \ref[B] is still around after getting deleted!")
 			qdel(B)
+
+/obj/machinery/mirror/bullet_act(var/obj/item/projectile/P, var/def_zone)
+	if(!istype(P, /obj/item/projectile/beam))
+		return
+	if(P.damage < initial(P.damage)/4)  //Can only be reflected 5 times, let's say
+		return
+	var/list/deflections = get_deflections(get_dir(src,P))
+	var/turf/T = get_turf(src)
+	for(var/i=1 to nsplits)
+		var/splitdir = deflections[i]
+		var/turf/target = get_edge_target_turf(src, splitdir)
+		var/obj/item/projectile/beam/B = new P.type
+		B.original = target
+		B.starting = T
+		B.current = T
+		B.forceMove(T)
+		B.shot_from = P.shot_from
+		B.yo = target.y - T.y
+		B.xo = target.y - T.x
+		B.OnFired()
+		B.damage = P.damage/2
+		spawn()
+			B.process()

@@ -46,7 +46,8 @@
 		if(emergency_shuttle.online && emergency_shuttle.location < 2)
 			var/timeleft = emergency_shuttle.timeleft()
 			if (timeleft)
-				stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
+				var/acronym = emergency_shuttle.location == 1 ? "ETD" : "ETA"
+				stat(null, "[acronym]-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
 
 		stat(null, text("Charge Left: [src.energy]/[src.energy_max]"))
 
@@ -421,7 +422,7 @@ Frequency:
 	return
 
 
-/mob/living/silicon/hivebot/Move(a, b, flag)
+/mob/living/silicon/hivebot/Move()
 
 	if (src.buckled)
 		return

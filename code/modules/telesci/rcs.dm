@@ -34,7 +34,7 @@
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "<span class = 'caution'>You screw in the telepad's tracking beacon.</span>")
 			stage = 0
-	if(istype(W, /obj/item/weapon/weldingtool) && stage == 1)
+	if(iswelder(W) && stage == 1)
 		playsound(src, 'sound/items/Welder.ogg', 50, 1)
 		to_chat(user, "<span class = 'caution'>You disassemble the telepad.</span>")
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
@@ -81,6 +81,9 @@
 	var/tmp/teleporting = FALSE
 	starting_materials	= list(MAT_IRON = 50000)
 
+/obj/item/weapon/rcs/get_cell()
+	return cell
+
 /obj/item/weapon/rcs/New()
 	..()
 	cell = new (src)
@@ -98,7 +101,7 @@
 /obj/item/weapon/rcs/attack_self(mob/user)
 	if(emagged)
 		mode = !mode
-		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
+		playsound(src, 'sound/effects/pop.ogg', 50, 0)
 		if(mode == MODE_NORMAL)
 			to_chat(user, "<span class = 'caution'>You calibrate the telepad locator.</span>")
 		else
@@ -108,9 +111,7 @@
 /obj/item/weapon/rcs/attackby(var/obj/item/W, var/mob/user)
 	if(isEmag(W) && !emagged)
 		emagged = 1
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(5, 1, src)
-		s.start()
+		spark(src, 5)
 		to_chat(user, "<span class = 'caution'>You emag the RCS. Click on it to toggle between modes.</span>")
 
 /obj/item/weapon/rcs/preattack(var/obj/structure/closet/crate/target, var/mob/user, var/proximity_flag, var/click_parameters)
@@ -152,7 +153,7 @@
 	else if (mode == MODE_RANDOM)
 		teleport_target = locate(rand(50, 450), rand(50, 450), 6)
 
-	playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+	playsound(src, 'sound/machines/click.ogg', 50, 1)
 	to_chat(user, "<span class='notic'>Teleporting \the [target]...</span>")
 	teleporting = TRUE
 	if (!do_after(user, target, 50))
@@ -161,9 +162,7 @@
 
 	teleporting = FALSE
 	do_teleport(target, teleport_target)
-	/*var/datum/effect/system/spark_spread/s = new /datum/effect/system/spark_spread
-	s.set_up(5, 1, get_turf(src))
-	s.start()*/
+	/*spark(src, 5)*/
 	cell.use(send_cost)
 	to_chat(user, "<span class='notice'>Teleport successful. [round(cell.charge / send_cost)] charge\s left.</span>")
 	return 1

@@ -10,6 +10,17 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/recharge_station
 
+/datum/design/recharger
+	name = "Circuit Design (Recharger)"
+	desc = "Allows for the construction of circuit boards used to build Weapon Rechargers"
+	id="recharger"
+	req_tech = list(Tc_POWERSTORAGE = 2, Tc_COMBAT = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 3)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/recharger
+
+
 /datum/design/photocopier
 	name = "Circuit Design (Photocopier)"
 	desc = "Allows for the construction of circuit boards to build photocopiers."
@@ -76,13 +87,23 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/stacking_unit
 
+/datum/design/coin_press
+	name = "Circuit Design (Coin Press)"
+	desc = "Allows for the construction of circuit boards used to build a coin press."
+	id = "coin_press"
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_MATERIALS = 3, Tc_ENGINEERING = 3)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/coin_press
+
 /datum/design/vendomat
 	name = "Circuit Design (Vending Machine)"
 	desc = "Allows for the construction of circuit boards used to build a vending machines."
 	id = "vendomat"
 	req_tech = list(Tc_MATERIALS = 1, Tc_ENGINEERING = 1, Tc_POWERSTORAGE = 1)
 	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
+	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Misc"
 	build_path = /obj/item/weapon/circuitboard/vendomat
 
@@ -109,3 +130,13 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	build_path = /obj/item/weapon/circuitboard/washing_machine
+
+/datum/design/holopad
+	name = "Circuit Design (Holopad)"
+	desc = "Allows for the construction of circuit boards used to build holopads."
+	id = "holopad"
+	req_tech = list(Tc_MAGNETS = 2, Tc_PROGRAMMING = 2, Tc_BLUESPACE = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/holopad

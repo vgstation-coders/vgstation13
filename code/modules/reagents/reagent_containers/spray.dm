@@ -8,6 +8,8 @@
 	slot_flags = SLOT_BELT
 	throwforce = 3
 	w_class = W_CLASS_SMALL
+	starting_materials = list(MAT_GLASS = 3500)
+	w_type = RECYK_GLASS
 	throw_speed = 2
 	throw_range = 10
 	amount_per_transfer_from_this = 10
@@ -107,7 +109,7 @@
 
 		returnToPool(D)
 
-	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
+	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
 //space cleaner
 /obj/item/weapon/reagent_containers/spray/cleaner
@@ -147,6 +149,17 @@
 	..()
 	reagents.add_reagent(PLANTBGONE, 100)
 
+/obj/item/weapon/reagent_containers/spray/bugzapper
+	name = "Bug Zapper"
+	desc = "Kills those pesky bugs!"
+	icon = 'icons/obj/hydroponics2.dmi'
+	icon_state = "plantbgone"
+	item_state = "plantbgone"
+	volume = 100
+
+/obj/item/weapon/reagent_containers/spray/bugzapper/New()
+	..()
+	reagents.add_reagent(TOXIN, 100)
 
 //chemsprayer
 /obj/item/weapon/reagent_containers/spray/chemsprayer
@@ -199,4 +212,38 @@
 
 			returnToPool(D)
 
-	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
+	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
+
+/obj/item/weapon/reagent_containers/spray/noreact
+	name = "stasis spray"
+	icon_state = "cleaner_noreact"
+	desc = "The label says 'Finally, a use for that pesky experimental bluespace technology for the whole house to enjoy!'\n\
+	A disclaimer towards the bottom states <span class = 'warning'>Warning: Do not use around the house, or in proximity of dogs|children|clowns</span>"
+	flags = OPENCONTAINER|FPRINT|NOREACT
+	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=5"
+	amount_per_transfer_from_this = 25
+
+
+/obj/item/weapon/reagent_containers/spray/noreact/make_puff(var/atom/target, var/mob/user)
+	// Create the chemical puff
+	var/transfer_amount = amount_per_transfer_from_this
+	if (!can_transfer_an_APTFT() && !is_empty()) //If it doesn't contain enough reagents to fulfill its amount_per_transfer_from_this, but also isn't empty, it'll spray whatever it has left.
+		transfer_amount = reagents.total_volume
+	var/mix_color = mix_color_from_reagents(reagents.reagent_list)
+	var/obj/effect/decal/chemical_puff/D = getFromPool(/obj/effect/decal/chemical_puff, get_turf(src), mix_color, amount_per_transfer_from_this)
+	D.flags |= NOREACT
+	reagents.trans_to(D, transfer_amount, 1/3)
+
+
+	// Move the puff toward the target
+	spawn(0)
+		for (var/i = 0, i < 6, i++)
+			step_towards(D, target)
+			if(i > 1)
+				D.flags &= ~NOREACT
+			D.react()
+			sleep(3)
+
+		returnToPool(D)
+
+	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)

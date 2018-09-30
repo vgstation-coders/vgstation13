@@ -40,6 +40,8 @@
 	desc = "A deck of space-grade playing cards."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "deck_full"
+	w_class = W_CLASS_SMALL
+	var/decktype = null //For the icons of different card game decks
 
 	var/list/cards  //list of the singlecard items we carry
 	var/strict_deck = 1 //if we only accept cards that came from us
@@ -92,11 +94,14 @@
 
 	update_icon()
 
-/obj/item/toy/cards/attack_self(mob/user as mob)
+/obj/item/toy/cards/attack_self(var/mob/user)
+	if(user.attack_delayer.blocked())
+		return
 	cards = shuffle(cards)
 	playsound(user, 'sound/items/cardshuffle.ogg', 50, 1)
 	user.visible_message("<span class = 'notice'>[user] shuffles the deck.</span>",
 						 "<span class = 'notice'>You shuffle the deck.</span>")
+	user.delayNextAttack(1 SECONDS)
 
 /obj/item/toy/cards/attackby(obj/item/I, mob/living/user)
 	..()
@@ -171,9 +176,9 @@
 							"<span class = 'notice'>You draw the [N] from the deck.")
 		update_icon()
 
-/obj/item/toy/cards/MouseDrop(atom/over_object)
+/obj/item/toy/cards/MouseDropFrom(atom/over_object)
 	var/mob/M = usr
-	if(!ishuman(usr) || usr.incapacitated())
+	if(!ishigherbeing(usr) || usr.incapacitated())
 		return
 	if(Adjacent(usr))
 		if(over_object == M)
@@ -201,6 +206,7 @@
 	desc = "A number of cards not in a deck, customarily held in ones hand."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "handbase"
+	w_class = W_CLASS_SMALL
 	var/list/currenthand = list()
 	var/obj/item/toy/cards/parentdeck = null
 	var/max_hand_size = 5
@@ -297,9 +303,10 @@
 	desc = "\a card"
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "singlecard_down"
+	w_class = W_CLASS_TINY
 	var/cardname = null
 	var/obj/item/toy/cards/parentdeck = null
-	var/flipped = 1 //Cards start flipped so that dealers can deal without having to see the card.
+	var/flipped = TRUE //Cards start flipped so that dealers can deal without having to see the card.
 	pixel_x = -5
 
 /obj/item/toy/singlecard/New(NewLoc, cardsource, newcardname)

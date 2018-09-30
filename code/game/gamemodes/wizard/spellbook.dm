@@ -10,43 +10,36 @@
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 
-	var/list/available_spells = list(
-	/spell/targeted/projectile/magic_missile,
-	/spell/targeted/projectile/dumbfire/fireball,
-	/spell/targeted/projectile/dumbfire/fireball/firebreath,
-	/spell/lightning,
-	/spell/aoe_turf/ring_of_fire,
-	/spell/aoe_turf/disable_tech,
-	/spell/aoe_turf/smoke,
-	/spell/targeted/genetic/blind,
-	/spell/targeted/disorient,
-	/spell/targeted/mind_transfer,
-	/spell/aoe_turf/conjure/forcewall,
-	/spell/aoe_turf/blink,
-	/spell/area_teleport,
-	/spell/targeted/genetic/mutate,
-	/spell/targeted/ethereal_jaunt,
-	/spell/aoe_turf/fall,
-	/spell/mirror_of_pain,
-	/spell/aoe_turf/knock,
-	/spell/targeted/equip_item/horsemask,
-	/spell/targeted/equip_item/clowncurse,
-	/spell/targeted/equip_item/frenchcurse,
-	/spell/targeted/shoesnatch,
-	/spell/targeted/equip_item/robesummon,
-	/spell/targeted/flesh_to_stone,
-	/spell/targeted/buttbots_revenge,
-	/spell/aoe_turf/conjure/pontiac,
-	/spell/aoe_turf/conjure/arcane_golem,
-	/spell/targeted/bound_object,
-	/spell/aoe_turf/conjure/snakes,
-	/spell/targeted/push,
-	/spell/targeted/feint,
-	/spell/noclothes
-	)
+	var/list/available_spells = list()
 
 	//Unlike the list above, the available_artifacts list builds itself from all subtypes of /datum/spellbook_artifact
-	var/list/available_artifacts = list()
+	var/static/list/available_artifacts = list()
+
+	var/static/list/available_potions = list(
+		/obj/item/potion/healing = Sp_BASE_PRICE,
+		/obj/item/potion/transform = Sp_BASE_PRICE*0.75,
+		/obj/item/potion/toxin = Sp_BASE_PRICE*0.75,
+		/obj/item/potion/mana = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/invisibility/major = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/stoneskin = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/speed/major = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/zombie = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/mutation/truesight/major = Sp_BASE_PRICE*0.5,
+		/obj/item/potion/mutation/strength/major = Sp_BASE_PRICE*0.25,
+		/obj/item/potion/speed = Sp_BASE_PRICE*0.25,
+		/obj/item/potion/random = Sp_BASE_PRICE*0.2,
+		/obj/item/potion/sword = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/deception = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/levitation = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/fireball = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/invisibility = Sp_BASE_PRICE*0.1,
+		/obj/item/potion/light = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/fullness = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/transparency = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/paralysis = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/mutation/strength = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/mutation/truesight = Sp_BASE_PRICE*0.05,
+		/obj/item/potion/teleport = Sp_BASE_PRICE*0.05)
 
 	var/uses = STARTING_USES
 	var/max_uses = STARTING_USES
@@ -62,6 +55,13 @@
 
 	available_artifacts = typesof(/datum/spellbook_artifact) - /datum/spellbook_artifact
 
+	for(var/type_S in getAllWizSpells())
+		var/spell/S = new type_S // Because initial doesn't work with lists
+		if (!S.holiday_required.len)
+			available_spells += type_S // We're giving types
+		else if (Holiday in S.holiday_required) // Either no holiday or a very special spell for a very special day
+			available_spells += type_S // We're giving types
+
 	for(var/T in available_artifacts)
 		available_artifacts.Add(new T) //Create a new object with the path T
 		available_artifacts.Remove(T) //Remove the path from the list
@@ -73,6 +73,9 @@
 /obj/item/weapon/spellbook/proc/get_available_artifacts()
 	return available_artifacts
 
+/obj/item/weapon/spellbook/proc/get_available_potions()
+	return available_potions
+/*
 /obj/item/weapon/spellbook/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/antag_spawner/contract))
 		var/obj/item/weapon/antag_spawner/contract/contract = O
@@ -83,7 +86,7 @@
 			src.uses += APPRENTICE_PRICE
 			qdel (O)
 			O = null
-
+*/
 #define buy_href_link(obj, price, txt) ((price > uses) ? "Price: [price] point\s" : "<a href='?src=\ref[src];spell=[obj];buy=1'>[txt]</a>")
 #define book_background_color "#F1F1D4"
 #define book_window_size "550x600"
@@ -193,6 +196,17 @@
 		dat += "<strong>[artifact_name]</strong> ([buy_href_link("\ref[A]", artifact_price, "buy for [artifact_price] point\s")])<br>"
 		dat += "<em>[artifact_desc]</em><br><br>"
 
+	dat += "<hr><strong>POTIONS<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
+
+	for(var/P in get_available_potions())
+		var/obj/item/potion/potion = P
+		var/potion_name = initial(potion.name)
+		var/potion_desc = initial(potion.desc)
+		var/potion_price = available_potions[P]
+
+		dat += "<strong>[potion_name]</strong> ([buy_href_link(P, potion_price, "buy for [potion_price] point\s")])<br>"
+		dat += "<em>[potion_desc]</em><br><br>"
+
 	dat += "</body>"
 
 	user << browse(dat, "window=spellbook;size=[book_window_size]")
@@ -288,6 +302,12 @@
 					add_spell(added, L)
 					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
 					feedback_add_details("wizard_spell_learned", added.abbreviation)
+
+		else if(ispath(buy_type, /obj/item/potion))
+			if(buy_type in get_available_potions())
+				if(use(available_potions[buy_type]))
+					new buy_type(get_turf(usr))
+					feedback_add_details("wizard_spell_learned", "PT")
 
 		else //Passed an artifact reference
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
@@ -672,7 +692,7 @@
 			B.transfer_buttdentity(C)
 			C.op_stage.butt = 4
 			to_chat(user, "<span class='warning'>Your ass just blew up!</span>")
-		playsound(get_turf(src), 'sound/effects/superfart.ogg', 50, 1)
+		playsound(src, 'sound/effects/superfart.ogg', 50, 1)
 		C.apply_damage(40, BRUTE, LIMB_GROIN)
 		C.apply_damage(10, BURN, LIMB_GROIN)
 		qdel(src)
@@ -811,3 +831,49 @@
 			break
 	if(!success)
 		user.forceMove(pick(L))
+
+/obj/item/weapon/spellbook/oneuse/pie
+	spell = /spell/targeted/projectile/pie
+	spellname = "Summon Pastry"
+	icon_state = "cooked_bookold"
+	desc = "This book smells lightly of lemon meringue."
+
+/obj/item/weapon/spellbook/oneuse/pie/recoil(mob/living/carbon/user)
+	..()
+	var/pie_to_spawn = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/pie))
+	var/turf/T = get_turf(pick(oview(1, user)))
+	var/obj/pie = new pie_to_spawn(T)
+	spawn()
+		pie.throw_at(user, get_dist(pie,user),rand(40,90))
+
+
+///// ANCIENT SPELLBOOK /////
+
+/obj/item/weapon/spellbook/oneuse/ancient //the ancient spellbook contains weird and dangerous spells that aren't otherwise avaliable to purchase, only avaliable via the spellbook bundle
+	var/list/possible_spells = list(/spell/targeted/disintegrate, /spell/targeted/parrotmorph, /spell/aoe_turf/conjure/spares, /spell/targeted/balefulmutate)
+	spell = null
+	icon_state = "book"
+	desc = "A book of lost and forgotten knowledge"
+	spellname = "forgotten knowledge"
+
+/obj/item/weapon/spellbook/oneuse/ancient/New()
+	..()
+	spell = pick(possible_spells)
+
+/obj/item/weapon/spellbook/oneuse/ancient/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal ancient knowledge!</span>")
+	user.gib()
+	qdel(src)
+
+///// WINTER SPELLBOOK /////
+
+/obj/item/weapon/spellbook/oneuse/ancient/winter //the winter spellbook contains spells that would otherwise only be avaliable at christmas
+	possible_spells = list(/spell/targeted/wrapping_paper, /spell/targeted/equip_item/clowncurse/christmas, /spell/aoe_turf/conjure/snowmobile, /spell/targeted/equip_item/horsemask/christmas)
+	icon_state = "winter"
+	desc = "A book of festive knowledge"
+	spellname = "winter"
+
+/obj/item/weapon/spellbook/oneuse/ancient/recoil(mob/living/carbon/user)
+	to_chat(user, "<span class = 'sinister'>You shouldn't attempt to steal from santa!</span>")
+	user.gib()
+	qdel(src)

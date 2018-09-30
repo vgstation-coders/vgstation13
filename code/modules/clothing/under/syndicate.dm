@@ -36,3 +36,10 @@
 	_color = "tactifool"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	siemens_coefficient = 1
+
+/obj/item/clothing/under/syndicate/executive
+	name = "syndicate executive suit"
+	desc = "A snappy black suit worn by syndicate executives. The shirt is either a tacky red or soaked in blood. Or possibly both."
+	icon_state = "exec"
+	_color = "exec"
+	species_fit = list(GREY_SHAPED)

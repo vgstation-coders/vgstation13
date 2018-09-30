@@ -1,10 +1,4 @@
-/obj/structure/cult
-	density = 1
-	anchored = 1
-	icon = 'icons/obj/cult.dmi'
 
-/obj/structure/cult/cultify()
-	return
 
 /obj/structure/cult/talisman
 	name = "Altar"
@@ -70,16 +64,16 @@
 				if(M == user)
 					continue
 				M.show_message("[user.name] smashed the pylon!", 1, "You hear a tinkle of crystal shards.", 2)
-			playsound(get_turf(src), 'sound/effects/Glassbr3.ogg', 75, 1)
+			playsound(src, 'sound/effects/Glassbr3.ogg', 75, 1)
 			isbroken = 1
-			density = 0
+			setDensity(FALSE)
 			icon_state = "pylon-broken"
 			set_light(0)
 		else
 			to_chat(user, "You hit the pylon!")
-			playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+			playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 	else
-		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 		if(prob(damage * 2))
 			to_chat(user, "You pulverize what was left of the pylon!")
 			qdel(src)
@@ -92,7 +86,7 @@
 	if(isbroken)
 		to_chat(user, "You repair the pylon.")
 		isbroken = 0
-		density = 1
+		setDensity(TRUE)
 		icon_state = "pylon"
 		set_light(5)
 

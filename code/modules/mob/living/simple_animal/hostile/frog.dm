@@ -73,12 +73,12 @@
 
 	.=..()
 
-/mob/living/simple_animal/hostile/frog/Die()
+/mob/living/simple_animal/hostile/frog/death(var/gibbed = FALSE)
 	for(var/obj/item/I in contents)
 		I.forceMove(get_turf(src))
 
 	update_spear()
-	..()
+	..(gibbed)
 
 /mob/living/simple_animal/hostile/frog/Cross(obj/item/weapon/spear/S)
 	.=..()
@@ -88,7 +88,7 @@
 		S.forceMove(src)
 		update_spear()
 
-/mob/living/simple_animal/hostile/frog/Move()
+/mob/living/simple_animal/hostile/frog/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 
 	if(!isDead() && isturf(loc) && !locked_to && !throwing)

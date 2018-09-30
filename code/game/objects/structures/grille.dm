@@ -12,6 +12,7 @@
 	explosion_resistance = 5
 	var/health = 20 //Relatively "strong" since it's hard to dismantle via brute force
 	var/broken = 0
+	var/grille_material = /obj/item/stack/rods
 
 /obj/structure/grille/examine(mob/user)
 
@@ -24,7 +25,6 @@
 /obj/structure/grille/cultify()
 	new /obj/structure/grille/cult(get_turf(src))
 	returnToPool(src)
-	..()
 
 /obj/structure/grille/proc/healthcheck(var/hitsound = 0) //Note : Doubles as the destruction proc()
 	if(hitsound)
@@ -32,15 +32,15 @@
 	if(health <= (0.25*initial(health)) && !broken) //Modular, 1/4th of original health. Do make sure the grille isn't broken !
 		broken = 1
 		icon_state = "[initial(icon_state)]-b"
-		density = 0 //Not blocking anything anymore
-		getFromPool(/obj/item/stack/rods, get_turf(src)) //One rod set
+		setDensity(FALSE) //Not blocking anything anymore
+		new grille_material(get_turf(src)) //One rod set
 	else if(health >= (0.25*initial(health)) && broken) //Repair the damage to this bitch
 		broken = 0
 		icon_state = initial(icon_state)
-		density = 1
+		setDensity(TRUE)
 	if(health <= 0) //Dead
-		getFromPool(/obj/item/stack/rods, get_turf(src)) //Drop the second set of rods
-		returnToPool(src)
+		new grille_material(get_turf(src)) //Drop the second set of rods
+		qdel(src)
 
 /obj/structure/grille/ex_act(severity)
 	switch(severity)
@@ -142,16 +142,17 @@
 	return 0
 
 /obj/structure/grille/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
 	user.delayNextAttack(8)
 	if(iswirecutter(W))
-		if(!shock(user, 100)) //Prevent user from doing it if he gets shocked
+		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
 			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
-			getFromPool(/obj/item/stack/rods, get_turf(src), broken ? 1 : 2) //Drop the rods, taking account on whenever the grille is broken or not !
-			returnToPool(src)
+			drop_stack(grille_material, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not !
+			qdel(src)
 			return
 		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards !
 	else if((isscrewdriver(W)) && (istype(loc, /turf/simulated) || anchored))
-		if(!shock(user, 90))
+		if(!shock(user, 90, W.siemens_coefficient))
 			playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
 			anchored = !anchored
 			user.visible_message("<span class='notice'>[user] [anchored ? "fastens" : "unfastens"] the grille [anchored ? "to" : "from"] the floor.</span>", \
@@ -215,7 +216,7 @@
 				dam = W.force * 0.5 //Rod matrices have an innate resistance to brute damage
 
 	if(!(W.sharpness_flags & INSULATED_EDGE))
-		shock(user, 100 * W.siemens_coefficient) //Chance of getting shocked is proportional to conductivity
+		shock(user, 100 * W.siemens_coefficient, W.siemens_coefficient) //Chance of getting shocked is proportional to conductivity
 
 	if(dam)
 		user.do_attack_animation(src, W)
@@ -227,7 +228,7 @@
 //Shock user with probability prb (if all connections & power are working)
 //Returns 1 if shocked, 0 otherwise
 
-/obj/structure/grille/proc/shock(mob/user as mob, prb)
+/obj/structure/grille/proc/shock(mob/user as mob, prb, siemens_coeff)
 	if(!anchored || broken)	//De-anchored and destroyed grilles are never connected to the powernet !
 		return 0
 	if(!prob(prb)) //If the probability roll failed, don't go further
@@ -238,10 +239,8 @@
 	var/turf/T = get_turf(src)
 	var/obj/structure/cable/C = T.get_cable_node()
 	if(C)
-		if(electrocute_mob(user, C, src))
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(3, 1, src)
-			s.start()
+		if(electrocute_mob(user, C, src, siemens_coeff))
+			spark(src)
 			return 1
 		else
 			return 0
@@ -271,6 +270,7 @@
 	density = 0 //Not blocking anything anymore
 
 /obj/structure/grille/broken/New()
+	..()
 	health -= rand(initial(health)*0.8, initial(health)*0.9) //Largely under broken threshold, this is used to adjust the health, NOT to break it
 	healthcheck() //Send this to healthcheck just in case we want to do something else with it
 
@@ -304,4 +304,14 @@
 	return
 
 /obj/structure/grille/invulnerable/attackby()
+	return
+
+/obj/structure/grille/replicant
+	name = "replicant grille"
+	desc = "A strangely-shaped grille."
+	icon_state = "replicantgrille"
+	health = 30
+	grille_material = /obj/item/stack/sheet/ralloy
+
+/obj/structure/grille/replicant/cultify()
 	return

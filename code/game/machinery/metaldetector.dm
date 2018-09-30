@@ -236,7 +236,7 @@
 
 
 	flick("[base_state]_flash", src)
-	playsound(get_turf(src), sndstr, 100, 1)
+	playsound(src, sndstr, 100, 1)
 
 
 /obj/machinery/detector/proc/check_for_weapons(var/obj/item/slot_item) //Unused anywhere, copypasted in secbot.dm
@@ -263,8 +263,10 @@
 		if ((src.anchored))
 			src.flash()
 
-/obj/machinery/detector/wrenchAnchor(mob/user)
-	if(..() == 1)
-		overlays.len = 0
-		if(anchored)
-			src.overlays += image(icon = icon, icon_state = "[base_state]-s")
+/obj/machinery/detector/wrenchAnchor(var/mob/user)
+	. = ..()
+	if(!.)
+		return
+	overlays.len = 0
+	if(anchored)
+		src.overlays += image(icon = icon, icon_state = "[base_state]-s")

@@ -223,7 +223,7 @@
 	updateUsrDialog()
 	return
 
-/obj/machinery/bot/medbot/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/bot/medbot/attackby(obj/item/weapon/W, mob/user)
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if (allowed(user) && !open && !emagged)
 			locked = !locked
@@ -232,7 +232,7 @@
 		else
 			if(emagged)
 				to_chat(user, "<span class='warning'>ERROR</span>")
-			if(open)
+			else if(open)
 				to_chat(user, "<span class='warning'>Please close the access panel before locking it.</span>")
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
@@ -256,9 +256,9 @@
 			return
 
 	else
-		..()
-		if (health < maxhealth && !isscrewdriver(W) && W.force)
-			step_to(src, (get_step_away(src,user)))
+		. = ..()
+		if (.)
+			step_away(src,user)
 
 /obj/machinery/bot/medbot/Emag(mob/user as mob)
 	..()
@@ -317,7 +317,7 @@
 			speak(message)
 
 		for (var/mob/living/carbon/C in view(7,src)) //Time to find a patient!
-			if ((C.stat == 2) || !istype(C, /mob/living/carbon/human))
+			if ((C.isDead()) || !istype(C, /mob/living/carbon/human))
 				continue
 
 			if ((C == oldpatient) && (world.time < last_found + 100))
@@ -382,7 +382,7 @@
 
 /obj/machinery/bot/medbot/proc/assess_patient(mob/living/carbon/C as mob)
 	//Time to see if they need medical help!
-	if(C.stat == 2)
+	if(C.isDead())
 		return 0 //welp too late for them!
 
 	if(C.suiciding)
@@ -434,7 +434,7 @@
 		last_found = world.time
 		return
 
-	if(C.stat == 2)
+	if(C.isDead())
 		playsound(src.loc, 'sound/medbot/Flatline_custom.ogg', 35, channel = CHANNEL_MEDBOTS)
 		visible_message("<b>[src]</b> points at [C.name]!")
 		oldpatient = patient
@@ -577,9 +577,7 @@
 	if (prob(50))
 		new /obj/item/robot_parts/l_arm(Tsec)
 
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(3, 1, src)
-	s.start()
+	spark(src)
 	eject_integratedpai_if_present()
 	qdel(src)
 	return
@@ -761,5 +759,3 @@
 		to_chat(P.pai, "<span class='info'>- Click on somebody: Depending on your mode, you inject or analyze a person.</span>")
 		to_chat(P.pai, "<span class='info'>What you inject depends on the medbot's configuration. You can't modify it</span>")
 		to_chat(P.pai, "<span class='info'>If you want to exit the medbot, somebody has to right-click you and press 'Remove pAI'.</span>")
-
-#undefine

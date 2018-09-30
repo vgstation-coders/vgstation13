@@ -135,7 +135,7 @@ var/global/list/organ_damage_overlays = list(
 	//No need to update all of these procs if the guy is dead.
 	if(stat != DEAD && !in_stasis)
 
-		if(air_master.current_cycle % 4 == 2 || failed_last_breath) //First, resolve location and get a breath
+		if(SSair.current_cycle % 4 == 2 || failed_last_breath) //First, resolve location and get a breath
 			breathe() //Only try to take a breath every 4 ticks, unless suffocating
 			last_processed = "Breathe"
 
@@ -145,12 +145,12 @@ var/global/list/organ_damage_overlays = list(
 				location_as_object.handle_internal_lifeform(src, 0)
 				last_processed = "Interacted with our container"
 		if(check_mutations)
-			testing("Updating [src.real_name]'s mutations: "+english_list(mutations))
+//			testing("Updating [src.real_name]'s mutations: "+english_list(mutations))
 			domutcheck(src,null,MUTCHK_FORCED)
 			update_mutations()
 			check_mutations = 0
 		//Updates the number of stored chemicals for powers
-		handle_changeling()
+		//handle_changeling()
 		//Mutations and radiation
 		handle_mutations_and_radiation()
 		//Chemicals in the body
@@ -181,14 +181,10 @@ var/global/list/organ_damage_overlays = list(
 	pulse = handle_pulse()
 	for(var/obj/item/weapon/grab/G in src)
 		G.process()
-	if(mind && mind.vampire)
-		handle_vampire()
 	handle_alpha()
 	if(update_overlays)
 		update_overlays = 0
 		UpdateDamageIcon()
-	if(NPC_brain)
-		NPC_brain.SendSignal(COMSIG_LIFE,list())
 	cycle++
 	..()
 

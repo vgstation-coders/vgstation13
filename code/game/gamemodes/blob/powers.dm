@@ -313,7 +313,7 @@
 /mob/camera/blob/verb/telepathy_power()
 	set category = "Blob"
 	set name = "Psionic Message"
-	set desc = "Give a psionic message to all creatures on and around the station."
+	set desc = "Give a psionic message to all creatures on and around your 'local' vicinity."
 	telepathy()
 
 /mob/camera/blob/proc/telepathy(message as text)
@@ -321,9 +321,9 @@
 	if(!can_buy(BLOBTAUNTCOST))
 		return
 
-
-	to_chat(world, "<span class='warning'>Your vision becomes cloudy, and your mind becomes clear.</span>")
+	var/current_zlevel = get_z_level(src)
+	to_chat(current_zlevel, "<span class='warning'>Your vision becomes cloudy, and your mind becomes clear.</span>")
 	spawn(5)
-	to_chat(world, "<span class='blob'>[message]</span>")
+	to_chat(current_zlevel, "<span class='blob'>[message]</span>") //Only sends messages to things on its own z level
 	add_gamelogs(src, "used blob telepathy to convey \"[message]\"", tp_link = TRUE)
 	log_blobtelepathy("[key_name(usr)]: [message]")

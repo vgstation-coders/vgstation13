@@ -30,6 +30,9 @@
 	qdel(user)
 
 /obj/item/weapon/storage/backpack/holding/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	. = ..()
+	if(!.)
+		return
 	if(W == src)
 		return // HOLY FUCKING SHIT WHY STORAGE CODE, WHY - pomf
 	var/obj/item/weapon/storage/backpack/holding/H = locate(/obj/item/weapon/storage/backpack/holding) in W
@@ -38,8 +41,7 @@
 		return
 	if(istype(W, /obj/item/weapon/storage/backpack/holding))
 		singulocreate(W, user)
-		return
-	. = ..()
+
 
 //BoH+BoH=Singularity, WAS commented out
 /obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/obj/item/weapon/storage/backpack/holding/H, var/mob/user)

@@ -29,18 +29,27 @@
 
 /obj/machinery/power/initialize()
 	..()
+
 	if(starting_terminal)
-		for(var/d in cardinal)
-			var/turf/T = get_step(src, d)
-			for(var/obj/machinery/power/terminal/term in T)
-				if(term && term.dir == turn(d, 180))
-					terminal = term
-					break
-			if(terminal)
+		find_terminal()
+
+/obj/machinery/power/spawned_by_map_element()
+	..()
+
+	find_terminal()
+
+/obj/machinery/power/proc/find_terminal()
+	for(var/d in cardinal)
+		var/turf/T = get_step(src, d)
+		for(var/obj/machinery/power/terminal/term in T)
+			if(term && term.dir == turn(d, 180))
+				terminal = term
 				break
 		if(terminal)
-			terminal.master = src
-			update_icon()
+			break
+	if(terminal)
+		terminal.master = src
+		update_icon()
 
 /obj/machinery/power/Destroy()
 	disconnect_from_network()
@@ -82,7 +91,7 @@
 		return powernet.load
 	else
 		return 0
-		
+
 /obj/machinery/power/proc/get_powernet()
 	check_rebuild()
 	return powernet
@@ -110,25 +119,26 @@
 
 	if(!use_power)
 		return 1
-
-	if(isnull(src.areaMaster) || !src.areaMaster)
+	var/area/this_area = get_area(src)
+	if(!this_area)
 		return 0						// if not, then not powered.
 
 	if((machine_flags & FIXED2WORK) && !anchored)
 		return 0
 
-	return areaMaster.powered(chan)		// return power status of the area.
+	return this_area.powered(chan)		// return power status of the area.
 
 // increment the power usage stats for an area
 // defaults to power_channel
 /obj/machinery/proc/use_power(amount, chan = power_channel)
-	if(isnull(src.areaMaster) || !src.areaMaster)
+	var/area/this_area = get_area(src)
+	if(!this_area)
 		return 0						// if not, then not powered.
 
 	if(!powered(chan)) //no point in trying if we don't have power
 		return 0
 
-	src.areaMaster.use_power(amount, chan)
+	this_area.use_power(amount, chan)
 
 // called whenever the power settings of the containing area change
 // by default, check equipment channel & set flag
@@ -232,8 +242,9 @@
 			return C
 
 /obj/machinery/proc/addStaticPower(value, powerchannel)
-	if(!areaMaster)
+	var/area/this_area = get_area(src)
+	if(!this_area)
 		return
-	areaMaster.addStaticPower(value, powerchannel)
+	this_area.addStaticPower(value, powerchannel)
 /obj/machinery/proc/removeStaticPower(value, powerchannel)
 	addStaticPower(-value, powerchannel)

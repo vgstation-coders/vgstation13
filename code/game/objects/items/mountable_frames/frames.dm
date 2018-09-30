@@ -14,6 +14,7 @@
 		var/obj/item/stack/sheet/S = getFromPool(frame_material, get_turf(src))
 		S.amount = sheets_refunded
 		qdel(src)
+		return TRUE
 
 /obj/item/mounted/frame/try_build(turf/on_wall, mob/user)
 	if(..()) //if we pass the parent tests
@@ -22,7 +23,8 @@
 		if (src.mount_reqs.Find("simfloor") && !istype(turf_loc, /turf/simulated/floor))
 			to_chat(user, "<span class='rose'>[src] cannot be placed on this spot.</span>")
 			return
-		if (src.mount_reqs.Find("nospace") && (areaMaster.requires_power == 0 || isspace(areaMaster)))
+		var/area/this_area = get_area(src)
+		if (src.mount_reqs.Find("nospace") && (this_area.requires_power == 0 || isspace(this_area)))
 			to_chat(user, "<span class='rose'>[src] cannot be placed in this area.</span>")
 			return
 		return 1

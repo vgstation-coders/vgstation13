@@ -207,11 +207,11 @@
 			anchored = 0
 			if(ispipe)
 				level = 2
-				density = 0
+				setDensity(FALSE)
 			else
-				density = 1
+				setDensity(TRUE)
 			to_chat(user, "You detach the [nicetype] from the underfloor.")
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 			update()
 			return
 		else
@@ -227,11 +227,11 @@
 			anchored = 1
 			if(ispipe)
 				level = 1 // We don't want disposal bins to disappear under the floors
-				density = 0
+				setDensity(FALSE)
 			else
-				density = 1 // We don't want disposal bins or outlets to go density 0
+				setDensity(TRUE) // We don't want disposal bins or outlets to go density 0
 			to_chat(user, "You attach the [nicetype] to the underfloor.")
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 			update()
 
 	else if(iswelder(I))
@@ -249,54 +249,48 @@
 				to_chat(user, "There is already a [nicetype] at that location.")
 				return
 			var/obj/item/weapon/weldingtool/W = I
-			if(W.remove_fuel(0,user))
-				playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
-				to_chat(user, "Welding the [nicetype] in place.")
-				if(do_after(user, src, 20))
-					if(gcDestroyed || !W.isOn())
-						return
-					to_chat(user, "The [nicetype] has been welded in place!")
-					update() // TODO: Make this neat
-					if(ispipe) // Pipe
-
-						var/pipetype = dpipetype()
-						var/obj/structure/disposalpipe/P = new pipetype(src.loc)
-						src.transfer_fingerprints_to(P)
-						P.base_icon_state = base_state
-						P.dir = dir
-						P.dpdir = dpdir
-						P.updateicon()
-
-						//Needs some special treatment ;)
-						switch(ptype)
-							if(9, 10)
-								var/obj/structure/disposalpipe/sortjunction/SortP = P
-								SortP.updatedir()
-							if(11, 12)
-								var/obj/structure/disposalpipe/wrapsortjunction/sort_P = P
-								sort_P.update_dir()
-
-					else if(ptype==6) // Disposal bin
-						var/obj/machinery/disposal/P = new /obj/machinery/disposal(src.loc)
-						src.transfer_fingerprints_to(P)
-						P.mode = 0 // start with pump off
-
-					else if(ptype==7) // Disposal outlet
-
-						var/obj/structure/disposaloutlet/P = new /obj/structure/disposaloutlet(src.loc)
-						src.transfer_fingerprints_to(P)
-						P.dir = dir
-						var/obj/structure/disposalpipe/trunk/Trunk = locate() in loc
-						Trunk.linked = P
-
-					else if(ptype==8) // Disposal outlet
-
-						var/obj/machinery/disposal/deliveryChute/P = new /obj/machinery/disposal/deliveryChute(src.loc)
-						src.transfer_fingerprints_to(P)
-						P.dir = dir
-
-					qdel(src)
+			to_chat(user, "Welding the [nicetype] in place.")
+			if(W.do_weld(user,src,20,0))
+				if(gcDestroyed || !W.isOn())
 					return
-			else
-				to_chat(user, "You need more welding fuel to complete this task.")
-				return
+				to_chat(user, "The [nicetype] has been welded in place!")
+				update() // TODO: Make this neat
+				if(ispipe) // Pipe
+
+					var/pipetype = dpipetype()
+					var/obj/structure/disposalpipe/P = new pipetype(src.loc)
+					src.transfer_fingerprints_to(P)
+					P.base_icon_state = base_state
+					P.dir = dir
+					P.dpdir = dpdir
+					P.updateicon()
+
+					//Needs some special treatment ;)
+					switch(ptype)
+						if(9, 10)
+							var/obj/structure/disposalpipe/sortjunction/SortP = P
+							SortP.updatedir()
+						if(11, 12)
+							var/obj/structure/disposalpipe/wrapsortjunction/sort_P = P
+							sort_P.update_dir()
+
+				else if(ptype==6) // Disposal bin
+					var/obj/machinery/disposal/P = new /obj/machinery/disposal(src.loc)
+					src.transfer_fingerprints_to(P)
+					P.mode = 0 // start with pump off
+
+				else if(ptype==7) // Disposal outlet
+
+					var/obj/structure/disposaloutlet/P = new /obj/structure/disposaloutlet(src.loc)
+					src.transfer_fingerprints_to(P)
+					P.dir = dir
+					var/obj/structure/disposalpipe/trunk/Trunk = locate() in loc
+					Trunk.linked = P
+
+				else if(ptype==8) // Disposal outlet
+
+					var/obj/machinery/disposal/deliveryChute/P = new /obj/machinery/disposal/deliveryChute(src.loc)
+					src.transfer_fingerprints_to(P)
+					P.dir = dir
+
+				qdel(src)

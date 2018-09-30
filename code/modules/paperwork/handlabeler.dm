@@ -4,6 +4,8 @@
 	icon_state = "labeler0"
 	item_state = "labeler0"
 	origin_tech = Tc_MATERIALS + "=1"
+	starting_materials = list(MAT_IRON = 200, MAT_GLASS = 175)
+	w_type = RECYK_MISC
 	var/label = null
 	var/chars_left = 250 //Like in an actual label maker, uses an amount per character rather than per label.
 	var/mode = 0	//off or on.
@@ -114,6 +116,7 @@
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "label_cart" //Placeholder image; recolored police tape
 	w_class = W_CLASS_TINY
+	restraint_resist_time = 5 SECONDS
 	var/left = 250
 
 /obj/item/device/label_roll/New(var/loc, var/amount=null)

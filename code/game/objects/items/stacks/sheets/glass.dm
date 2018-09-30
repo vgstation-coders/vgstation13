@@ -4,6 +4,7 @@
  *		Reinforced glass sheets
  *		Plasma Glass Sheets
  *		Reinforced Plasma Glass Sheets (AKA Holy fuck strong windows)
+ *		Smart Glass Sheets
  */
 
 /obj/item/stack/sheet/glass
@@ -19,7 +20,7 @@
 	var/shealth = 5 //Health of a solar made from this
 	var/sname = "glass"
 	var/shard_type = /obj/item/weapon/shard
-
+	mat_type = MAT_GLASS
 	siemens_coefficient = 0 //does not conduct
 
 /obj/item/stack/sheet/glass/attack_self(mob/user as mob)

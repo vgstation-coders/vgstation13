@@ -7,7 +7,7 @@
 /mob/living/carbon/slime/get_unarmed_verb()
 	return "glomps on"
 
-/mob/living/carbon/slime/get_unarmed_damage(mob/living/target)
+/mob/living/carbon/slime/get_unarmed_damage(var/atom/target)
 	if(isslime(target))
 		return rand(1,3)
 
@@ -54,7 +54,7 @@
 
 
 	if(powerlevel > 0)
-		if(isalien(target) || ishuman(target) || ismonkey(target))
+		if(isalien(target) || ismonkey(target) || ishigherbeing(target))
 			var/stunprob = get_stun_chance()
 			var/power = powerlevel + rand(0,3)
 
@@ -63,9 +63,7 @@
 
 				stun_mob(target, power)
 
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(5, 1, target)
-				s.start()
+				spark(src, 5)
 
 				if (prob(stunprob) && powerlevel >= 8)
 					target.adjustFireLoss(powerlevel * rand(6,10))

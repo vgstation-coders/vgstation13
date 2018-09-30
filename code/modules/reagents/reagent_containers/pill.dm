@@ -12,6 +12,7 @@
 	starting_materials = null
 //	starting_materials = list(MAT_IRON = 5) //What?
 	w_type = RECYK_METAL
+	attack_delay = 0
 
 /obj/item/weapon/reagent_containers/pill/New()
 	..()
@@ -44,7 +45,7 @@
 			src.forceMove(get_turf(H))
 			H.visible_message("<span class='warning'>\The [src] falls through and onto the ground.</span>", "<span class='notice'>You hear \the [src] plinking around for a second before it hits the ground below you.</span>")
 			return 0
-	injest(M)
+	ingest(M)
 	return 1
 
 // Handles pill dissolving in containers
@@ -67,7 +68,7 @@
 		to_chat(user, "<span class='notice'>\The [target] is full!</span>")
 
 //OOP, HO!
-/obj/item/weapon/reagent_containers/pill/proc/injest(mob/M as mob)
+/obj/item/weapon/reagent_containers/pill/proc/ingest(mob/M as mob)
 	if(!reagents)
 		return
 	if(!M)
@@ -90,7 +91,7 @@
 /obj/item/weapon/reagent_containers/pill/creatine/New()
 	..()
 	reagents.add_reagent(CREATINE, 50)
-	
+
 /obj/item/weapon/reagent_containers/pill/laststand
 	name = "Creatine \"Last Stand\" suicide pill"
 	desc = "For when you really want to spend your last moments punching things to death."
@@ -268,7 +269,7 @@
 	icon_state = "pill7" //grey oblong
 	flags = FPRINT | NOREACT
 
-/obj/item/weapon/reagent_containers/pill/time_release/injest(mob/M as mob)
+/obj/item/weapon/reagent_containers/pill/time_release/ingest(mob/M as mob)
 	if(!reagents)
 		return
 	if(!M)

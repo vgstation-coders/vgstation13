@@ -8,10 +8,10 @@
 	flags = IS_WHITELISTED | PLASMA_IMMUNE
 	anatomy_flags = NO_BLOOD
 
-	//default_mutations=list(SKELETON) // This screws things up
+	//default_mutations=list(M_SKELETON) // This screws things up
 	primitive = /mob/living/carbon/monkey/skellington/plasma
 
-	breath_type = "toxins"
+	breath_type = GAS_PLASMA
 
 	heat_level_1 = 350  // Heat damage level 1 above this point.
 	heat_level_2 = 400  // Heat damage level 2 above this point.
@@ -64,9 +64,12 @@
 		if("Atmospheric Technician")
 			suit=/obj/item/clothing/suit/space/plasmaman/atmostech
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/atmostech
-		if("Warden","Detective","Security Officer")
+		if("Warden","Security Officer")
 			suit=/obj/item/clothing/suit/space/plasmaman/security/
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/
+		if("Detective")
+			suit=/obj/item/clothing/suit/space/plasmaman/security/detective
+			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/detective
 		if("Head of Security")
 			suit=/obj/item/clothing/suit/space/plasmaman/security/hos
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/hos

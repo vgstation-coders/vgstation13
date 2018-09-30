@@ -8,7 +8,7 @@
 	nameLong = "Box Station"
 	map_dir = "boxstation"
 	tDomeX = 128
-	tDomeY = 69
+	tDomeY = 58
 	tDomeZ = 2
 	zLevels = list(
 		/datum/zLevel/station,
@@ -34,5 +34,4 @@
 	holomap_offset_y = list(0,0,0,94,10,0,0,)
 
 ////////////////////////////////////////////////////////////////
-#include "defficiency/pipes.dm" // Atmos layered pipes.
 #include "tgstation.dmm"

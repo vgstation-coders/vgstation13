@@ -9,7 +9,6 @@ var/datum/subsystem/more_init/SSmore_init
 	NEW_SS_GLOBAL(SSmore_init)
 
 /datum/subsystem/more_init/Initialize(timeofday)
-	setupfactions()
 	setup_economy()
 	var/watch=start_watch()
 	log_startup_progress("Caching damage icons...")
@@ -66,7 +65,7 @@ var/datum/subsystem/more_init/SSmore_init
 	var/species_blood
 	for(var/datum/species/S in slist)
 		species_blood = (S.blood_color == DEFAULT_BLOOD ? "" : S.blood_color)
-		testing("Generating [S], Blood([species_blood])")
+//		testing("Generating [S], Blood([species_blood])")
 		for(var/datum/organ/external/O in H.organs)
 			//testing("[O] part")
 			for(var/brute = 1 to 3)

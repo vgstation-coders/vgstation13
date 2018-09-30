@@ -8,6 +8,10 @@
 	kill_count = 15
 	grillepasschance = 0
 	var/obj/effect/overlay/hookchain/last_link = null
+	var/failure_message = "With a CLANG noise, the chain mysteriously snaps and rewinds back into the hookshot."
+	var/icon_name = "hookshot"
+	var/chain_datum_path = /datum/chain
+	var/chain_overlay_path = /obj/effect/overlay/chain
 
 /obj/item/projectile/hookshot/process_step()
 	var/sleeptime = 1
@@ -21,7 +25,7 @@
 			spawn()
 				hookshot.rewind_chain()
 			bullet_die()
-
+		drop_item()
 		if(dist_x > dist_y)
 			sleeptime = bresenham_step(dist_x,dist_y,dx,dy)
 		else
@@ -37,7 +41,7 @@
 			var/obj/item/weapon/gun/hookshot/hookshot = shot_from
 			var/obj/effect/overlay/hookchain/HC = hookshot.links["[length]"]
 			if(!HC)//failsafe to prevent a game-crashing bug tied to missing links.
-				visible_message("With a CLANG noise, the chain mysteriously snaps and rewinds back into the hookshot.")
+				visible_message(failure_message)
 				hookshot.cancel_chain()
 				bullet_die()
 				return
@@ -45,30 +49,33 @@
 			HC.pixel_x = pixel_x
 			HC.pixel_y = pixel_y
 			if(last_link)
-				last_link.icon = bullet_master["hookshot_chain_angle[target_angle]"]
+				last_link.icon = bullet_master["[icon_name]_chain_angle[target_angle]"]
 			last_link = HC
 			length++
 
 			if(length < hookshot.maxlength)
-				if(!("hookshot_chain_angle[target_angle]" in bullet_master))
-					var/icon/I = new('icons/obj/projectiles_experimental.dmi',"hookshot_chain")
+				if(!("[icon_name]_chain_angle[target_angle]" in bullet_master))
+					var/icon/I = new('icons/obj/projectiles_experimental.dmi',"[icon_name]_chain")
 					I.Turn(target_angle+45)
-					bullet_master["hookshot_chain_angle[target_angle]"] = I
-					var/icon/J = new('icons/obj/projectiles_experimental.dmi',"hookshot_pixel")
+					bullet_master["[icon_name]_chain_angle[target_angle]"] = I
+					var/icon/J = new('icons/obj/projectiles_experimental.dmi',"[icon_name]_pixel")
 					J.Turn(target_angle+45)
-					bullet_master["hookshot_head_angle[target_angle]"] = J
-				HC.icon = bullet_master["hookshot_head_angle[target_angle]"]
+					bullet_master["[icon_name]_head_angle[target_angle]"] = J
+				HC.icon = bullet_master["[icon_name]_head_angle[target_angle]"]
 			else
-				if(!("hookshot_head_angle[target_angle]" in bullet_master))
-					var/icon/I = new('icons/obj/projectiles_experimental.dmi',"hookshot_pixel")
+				if(!("[icon_name]_head_angle[target_angle]" in bullet_master))
+					var/icon/I = new('icons/obj/projectiles_experimental.dmi',"[icon_name]_pixel")
 					I.Turn(target_angle+45)
-					bullet_master["hookshot_head_angle[target_angle]"] = I
-				HC.icon = bullet_master["hookshot_head_angle[target_angle]"]
+					bullet_master["[icon_name]_head_angle[target_angle]"] = I
+				HC.icon = bullet_master["[icon_name]_head_angle[target_angle]"]
 				spawn()
 					hookshot.rewind_chain()
 				bullet_die()
 
 		sleep(sleeptime)
+
+/obj/item/projectile/hookshot/proc/drop_item()	//fleshshot only
+	return
 
 /obj/item/projectile/hookshot/bullet_die()
 	if(shot_from)
@@ -93,6 +100,8 @@
 
 	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
 	spawn()
+		if(held_item_check(A))
+			return
 		if(isturf(A))					//if we hit a wall or an anchored atom, we pull ourselves to it
 			hookshot.clockwerk_chain(length)
 		else if(istype(A,/atom/movable))
@@ -107,7 +116,7 @@
 					bullet_die()
 					return
 
-				var/datum/chain/chain_datum = new()
+				var/datum/chain/chain_datum = new chain_datum_path()
 				hookshot.chain_datum = chain_datum
 				chain_datum.hookshot = hookshot
 				chain_datum.extremity_A = firer
@@ -118,7 +127,7 @@
 					if(!HC.loc || (HC.loc == hookshot))
 						max_chains = i
 						break
-					var/obj/effect/overlay/chain/C = new(HC.loc)
+					var/obj/effect/overlay/chain/C = new chain_overlay_path(HC.loc)
 					C.chain_datum = chain_datum
 					chain_datum.links["[i]"] = C
 				for(var/i = 1; i < max_chains; i++)		//then we link them together
@@ -152,6 +161,9 @@
 		else
 			hookshot.rewind_chain()					//hit something that we can neither pull ourselves to nor drag to us? Just retract the chain.
 	bullet_die()
+
+/obj/item/projectile/hookshot/proc/held_item_check(var/atom/A)	//fleshshot only
+	return
 
 
 /obj/item/projectile/hookshot/cultify()

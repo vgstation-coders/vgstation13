@@ -106,12 +106,12 @@
 					if(!istype(L))
 						return
 					qdel(L)
-					playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
+					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 					build(T)
 					use(1)
 					return
 				if(BUILD_IGNORE)
-					playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
+					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 					build(T)
 					use(1)
 				if(BUILD_FAILURE)

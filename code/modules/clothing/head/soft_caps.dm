@@ -89,7 +89,7 @@
 
 /obj/item/clothing/head/soft/sec
 	name = "security cap"
-	desc = "It's baseball hat in a tasteful red color."
+	desc = "It's a baseball hat in a tasteful red color."
 	icon_state = "secsoft"
 	_color = "sec"
 
@@ -98,3 +98,15 @@
 	desc = "It's a baseball hat in a tasteful blue color."
 	icon_state = "paramedicsoft"
 	_color = "paramedic"
+
+/obj/item/clothing/head/soft/bridgeofficer
+	name = "bridge officer cap"
+	desc = "It's a baseball hat in a tasteful blue color."
+	icon_state = "bridgeofficersoft"
+	_color = "bridgeofficer"
+
+/obj/item/clothing/head/soft/black
+	name = "black cap"
+	desc = "It's a baseball hat in a tasteful black color."
+	icon_state = "blacksoft"
+	_color = "black"

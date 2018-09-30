@@ -585,12 +585,12 @@ var/list/beam_master = list()
 	fire_sound = 'sound/weapons/laser3.ogg'
 
 /obj/item/projectile/beam/xray/to_bump(atom/A)
+	if((istype(A, /turf/simulated/wall/r_wall) || (istype(A, /obj/machinery/door/poddoor) && !istype(A, /obj/machinery/door/poddoor/shutters))) || damage <=0)	//if we hit an rwall or blast doors, but not shutters, the beam dies
+		bullet_die()
+		return 0
 	if(..())
 		damage -= 3
-		if(istype(A, /turf/simulated/wall/r_wall) || (istype(A, /obj/machinery/door/poddoor) && !istype(A, /obj/machinery/door/poddoor/shutters)))	//if we hit an rwall or blast doors, but not shutters, the beam dies
-			bullet_die()
-		if(damage <= 0)
-			bullet_die()
+
 
 /obj/item/projectile/beam/pulse
 	name = "pulse"
@@ -620,12 +620,12 @@ var/list/beam_master = list()
 	damage_type = BURN
 	flag = "laser"
 	icon_state = "bluelaser"
-	var/list/enemy_vest_types = list(/obj/item/clothing/suit/redtag)
+	var/list/enemy_vest_types = list(/obj/item/clothing/suit/tag/redtag)
 
 /obj/item/projectile/beam/lasertag/on_hit(var/atom/target, var/blocked = 0)
-	if(istype(target, /mob/living/carbon/human))
-		var/mob/living/carbon/human/M = target
-		if(is_type_in_list(M.wear_suit, enemy_vest_types))
+	if(ismob(target))
+		var/mob/M = target
+		if(is_type_in_list(get_tag_armor(M), enemy_vest_types))
 			if(!M.lying) //Kick a man while he's down, will ya
 				var/obj/item/weapon/gun/energy/tag/taggun = shot_from
 				if(istype(taggun))
@@ -635,15 +635,15 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/lasertag/blue
 	icon_state = "bluelaser"
-	enemy_vest_types = list(/obj/item/clothing/suit/redtag)
+	enemy_vest_types = list(/obj/item/clothing/suit/tag/redtag)
 
 /obj/item/projectile/beam/lasertag/red
 	icon_state = "laser"
-	enemy_vest_types = list(/obj/item/clothing/suit/bluetag)
+	enemy_vest_types = list(/obj/item/clothing/suit/tag/bluetag)
 
 /obj/item/projectile/beam/lasertag/omni //A laser tag ray that stuns EVERYONE
 	icon_state = "omnilaser"
-	enemy_vest_types = list(/obj/item/clothing/suit/redtag, /obj/item/clothing/suit/bluetag)
+	enemy_vest_types = list(/obj/item/clothing/suit/tag/redtag, /obj/item/clothing/suit/tag/bluetag)
 
 
 
@@ -907,16 +907,6 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/white
 	icon_state = "whitelaser"
 
-/obj/item/projectile/beam/rainbow/braindamage
-	damage = 5
-	icon_state = "whitelaser"
-
-/obj/item/projectile/beam/rainbow/braindamage/on_hit(var/atom/target, var/blocked = 0)
-	if(ishuman(target))
-		var/mob/living/carbon/human/victim = target
-		if(!(victim.mind && victim.mind.assigned_role == "Clown"))
-			victim.adjustBrainLoss(20)
-			victim.hallucination += 20
 
 /obj/item/projectile/beam/bullwhip
 	name = "bullwhip"
@@ -945,7 +935,7 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/bullwhip/OnDeath()
 	if(!has_played_sound && get_turf(src))
-		playsound(get_turf(src), bounce_sound, 30, 1)
+		playsound(src, bounce_sound, 30, 1)
 		user.delayNextAttack(2)
 
 /obj/item/projectile/beam/liquid_stream

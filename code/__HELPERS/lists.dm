@@ -58,7 +58,7 @@
 
 //Checks for specific types in a list
 /proc/is_type_in_list(datum/A, list/L)
-	if(!L.len || !A)
+	if(!L || !L.len || !A)
 		return 0
 
 	if(L[L[1]] != MAX_VALUE) //Is this already a generated typecache
@@ -157,6 +157,21 @@
 	if(L.len)
 		. = L[L.len]
 		L.len--
+
+//Puts an item on the end of a list
+/proc/push(list/L, thing)
+	L += thing
+
+//Shift/Unshift works on a FIFO system unlike pop/push working on FILO
+//Returns the bottom(first) element from the list and removes it from the list
+/proc/shift(list/L)
+	if(L.len)
+		. = L[1]
+		L.Cut(1,2)
+
+//Puts an item at the beginning of the list
+/proc/unshift(list/L, thing)
+	L.Insert(1,thing)
 
 /proc/sorted_insert(list/L, thing, comparator)
 	var/pos = L.len
@@ -264,6 +279,15 @@
 			return key
 		i++
 	return null
+
+// Returns the first key to match the specified element. This is intended for lists which are injective functions.
+// Which is to say, two keys will not map to the same element.
+/proc/get_key_by_element(var/list/L, var/element)
+	for(var/key in L)
+		if(L[key] == element)
+			return key
+	return null
+
 
 /proc/count_by_type(var/list/L, type)
 	var/i = 0

@@ -28,7 +28,7 @@
 	req_tech = list(Tc_PROGRAMMING = 2, Tc_BIOTECH = 4)
 	build_type = PROTOLATHE | MECHFAB
 	materials = list(MAT_IRON = 2000, MAT_GLASS = 500)
-	build_path = /obj/item/organ/lungs/filter
+	build_path = /obj/item/organ/internal/lungs/filter
 	category = "Robotics"
 
 /datum/design/adv_eyes
@@ -38,7 +38,7 @@
 	req_tech = list(Tc_PROGRAMMING = 2, Tc_BIOTECH = 4)
 	build_type = PROTOLATHE | MECHFAB
 	materials = list(MAT_IRON = 500, MAT_GLASS = 2000)
-	build_path = /obj/item/organ/eyes/adv_1
+	build_path = /obj/item/organ/internal/eyes/adv_1
 	category = "Robotics"
 
 /datum/design/adv_kidneys
@@ -48,7 +48,7 @@
 	req_tech = list(Tc_PROGRAMMING = 2, Tc_BIOTECH = 4)
 	build_type = PROTOLATHE | MECHFAB
 	materials = list(MAT_IRON = 2000, MAT_GLASS = 500)
-	build_path = /obj/item/organ/kidneys/filter
+	build_path = /obj/item/organ/internal/kidneys/filter
 	category = "Robotics"
 
 /datum/design/mmi_radio
@@ -92,3 +92,13 @@
 	materials = list(MAT_IRON = 8000, MAT_GLASS = 2000)
 	category = "Robotics"
 	build_path = /obj/item/device/robotanalyzer
+
+/datum/design/diagnostic_hud
+	name = "diagnostic HUD"
+	desc = "A heads-up display that displays diagnostic information for compatible cyborgs and exosuits."
+	id = "diagnostic_hud"
+	req_tech = list(Tc_BIOTECH = 2, Tc_MAGNETS = 3)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 100, MAT_GLASS = 100)
+	category = "Robotics"
+	build_path = /obj/item/clothing/glasses/hud/diagnostic

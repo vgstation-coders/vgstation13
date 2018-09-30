@@ -21,6 +21,8 @@
 	melee_damage_lower = 1
 	melee_damage_upper = 2
 	size = SIZE_BIG
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES
+	speak_override = TRUE
 
 	var/datum/reagents/udder = null
 
@@ -65,7 +67,7 @@
 		..()
 		src.visible_message("<span class='warning'>[src] gets an evil-looking gleam in \his eye.</span>")
 
-/mob/living/simple_animal/hostile/retaliate/goat/Move()
+/mob/living/simple_animal/hostile/retaliate/goat/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(!stat)
 		if(locate(/obj/effect/plantsegment) in loc)
@@ -105,6 +107,7 @@
 	response_harm   = "kicks"
 	attacktext = "kicks"
 	health = 50
+	speak_override = TRUE
 
 	size = SIZE_BIG
 	holder_type = /obj/item/weapon/holder/animal/cow
@@ -175,6 +178,7 @@
 	var/amount_grown = 0
 	pass_flags = PASSTABLE | PASSGRILLE
 	size = SIZE_TINY
+	speak_override = TRUE
 
 /mob/living/simple_animal/chick/New()
 	..()
@@ -190,8 +194,7 @@
 	if(!stat && !ckey)
 		amount_grown += rand(1,2)
 		if(amount_grown >= 100)
-			new /mob/living/simple_animal/chicken(src.loc)
-			qdel(src)
+			grow_up()
 
 /mob/living/simple_animal/chicken
 	name = "chicken"
@@ -215,6 +218,7 @@
 	var/body_color
 	pass_flags = PASSTABLE
 	size = SIZE_SMALL
+	speak_override = TRUE
 
 /mob/living/simple_animal/chicken/New()
 	if(prob(5))
@@ -268,9 +272,9 @@
 /mob/living/simple_animal/hostile/retaliate/box
 	name = "box"
 	desc = "A distant descendent of the common domesticated Earth pig, corrupted by generations of splicing and genetic decay."
-	icon_state = "box_2"
-	icon_living = "box_2"
-	icon_dead = "box_2_dead"
+	icon_state = "box"
+	icon_living = "box"
+	icon_dead = "box"
 	speak = list("SQUEEEEE!","Oink...","Oink, oink", "Oink, oink, oink", "Oink!", "Oiiink.")
 	emote_hear = list("squeals hauntingly")
 	emote_see = list("roots about","squeals hauntingly")
@@ -291,6 +295,13 @@
 	max_n2 = 0
 	treadmill_speed = 1.5
 	var/fat = 0
+	speak_override = TRUE
+
+/mob/living/simple_animal/hostile/retaliate/box/New()
+	..()
+	icon_state = "[initial(icon_state)]_2"
+	icon_living = "[initial(icon_living)]_2"
+	icon_dead = "[initial(icon_dead)]_2_dead"
 
 /mob/living/simple_animal/hostile/retaliate/box/proc/updatefat()
 	if(size<SIZE_BIG)
@@ -300,27 +311,32 @@
 	update_icon()
 
 /mob/living/simple_animal/hostile/retaliate/box/update_icon()
-	icon_state = "box_[size]"
-	icon_living = "box_[size]"
-	icon_dead = "box_[size]_dead"
+	icon_state = "[initial(icon_state)]_[size]"
+	icon_living = "[initial(icon_living)]_[size]"
+	icon_dead = "[initial(icon_dead)]_[size]_dead"
 
 /mob/living/simple_animal/hostile/retaliate/box/examine(mob/user)
 	..()
 	switch(size)
 		if(SIZE_SMALL)
-			to_chat(user, "<span class='info'>It's a box baby.</span>")
+			to_chat(user, "<span class='info'>It's a [name] baby.</span>")
 		if(SIZE_NORMAL)
 			to_chat(user, "<span class='info'>It's a respectable size.</span>")
 		if(SIZE_BIG)
 			to_chat(user, "<span class='info'>It's huge - a prize winning porker!</span>")
 
 /mob/living/simple_animal/hostile/retaliate/box/CanAttack(atom/A)
+	if(!target_check(A))
+		return FALSE
+	else
+		..()
+
+/mob/living/simple_animal/hostile/retaliate/box/proc/target_check(atom/A)
 	if(ishuman(A))
 		var/mob/living/carbon/human/H = A
 		if(isvox(H))
-			return 0 //Won't attack Vox
-	else
-		..()
+			return FALSE //Won't attack Vox
+	return TRUE
 
 /mob/living/simple_animal/hostile/retaliate/box/Life()
 	if(!..())
@@ -330,8 +346,8 @@
 	if(fat>BOX_GROWTH_BAR)
 		updatefat()
 
-/mob/living/simple_animal/hostile/retaliate/box/Die()
-	..()
+/mob/living/simple_animal/hostile/retaliate/box/death(var/gibbed = FALSE)
+	..(gibbed)
 	playsound(src, 'sound/effects/box_scream.ogg', 100, 1)
 
 /mob/living/simple_animal/hostile/retaliate/box/attackby(var/obj/item/O as obj, var/mob/user as mob)
@@ -346,3 +362,17 @@
 			fat += rand(15,25)
 	else
 		..()
+
+/mob/living/simple_animal/hostile/retaliate/box/pig
+	name = "pig"
+	desc = "A common pig, not useful for much besides meat."
+	icon_state = "pig"
+	icon_living = "pig"
+	icon_dead = "pig"
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/box/pig
+	min_oxy = 5
+	max_oxy = 0
+	min_n2 = 0
+
+/mob/living/simple_animal/hostile/retaliate/box/pig/target_check(atom/A)
+	return TRUE	//Will attack anyone.

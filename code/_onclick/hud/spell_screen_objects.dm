@@ -1,6 +1,7 @@
 /obj/abstract/screen/movable/spell_master
 	name = "Spells"
 	icon = 'icons/mob/screen_spells.dmi'
+	var/icon/override_icon
 	icon_state = "wiz_spell_ready"
 	var/list/obj/abstract/screen/spell/spell_objects = list()
 	var/showing = 0
@@ -55,13 +56,17 @@
 			O.handle_icon_updates = 0
 		showing = 0
 		overlays.len = 0
-		overlays.Add(closed_state)
 	else if(forced_state != 1)
 		open_spellmaster()
 		update_spells(1)
 		showing = 1
 		overlays.len = 0
-		overlays.Add(open_state)
+	var/spellmaster_icon = null
+	if(override_icon && (override_icon != icon))
+		spellmaster_icon = image(icon = override_icon, icon_state = (showing ? open_state : closed_state))
+	else
+		spellmaster_icon = showing ? open_state : closed_state
+	overlays.Add(spellmaster_icon)
 
 /obj/abstract/screen/movable/spell_master/proc/open_spellmaster()
 	var/list/screen_loc_xy = splittext(screen_loc,",")
@@ -103,6 +108,8 @@
 	var/obj/abstract/screen/spell/newscreen = getFromPool(/obj/abstract/screen/spell)
 	newscreen.spellmaster = src
 	newscreen.spell = spell
+	newscreen.icon = src.icon
+	newscreen.icon_state = src.icon_state
 
 	spell.connected_button = newscreen
 
@@ -117,6 +124,14 @@
 	newscreen.update_charge(1)
 	spell_objects.Add(newscreen)
 	toggle_open(2) //forces the icons to refresh on screen
+
+/obj/abstract/screen/movable/spell_master/mech/add_spell(var/spell/mech/MS)
+	..()
+	var/mechaIcon = MS.linked_mech.initial_icon
+	open_state = "[mechaIcon]-open"
+	closed_state = "[mechaIcon]"
+	//Force it to be open
+	toggle_open(2)
 
 /obj/abstract/screen/movable/spell_master/proc/remove_spell(var/spell/spell)
 	returnToPool(spell.connected_button)
@@ -191,6 +206,22 @@
 
 	screen_loc = ui_alien_master
 
+/obj/abstract/screen/movable/spell_master/bloodcult
+	name = "Blood Magic"
+	icon_state = "cult_spell_ready"
+
+	open_state = "cult_open"
+	closed_state = "cult_closed"
+
+/obj/abstract/screen/movable/spell_master/mech
+	name = "Mech Modules"
+	icon_state = "mech_spell_ready"
+	icon = 'icons/mecha/mecha_equipment.dmi'
+
+	//open and close states are defined later
+	override_icon = 'icons/mecha/mecha.dmi'
+	screen_loc = ui_alien_master
+
 //////////////ACTUAL SPELLS//////////////
 //This is what you click to cast things//
 /////////////////////////////////////////
@@ -226,6 +257,8 @@
 			dat += "<br>Range: Global"
 		if(SELFCAST)
 			dat += "<br>Range: Self"
+	if(spell.desc)
+		dat += "<br>Desc: [spell.desc]"
 	openToolTip(usr,src,params,title = name,content = dat)
 
 /obj/abstract/screen/spell/MouseExited()
@@ -252,7 +285,12 @@
 	if((last_charge == spell.charge_counter || !handle_icon_updates) && !forced_update)
 		return //nothing to see here
 
-	overlays -= spell.hud_state
+	var/spell_icon = null
+	if(spell.override_icon && (spell.override_icon != icon))
+		spell_icon = image(icon = spell.override_icon, icon_state = spell.hud_state, dir = spell.icon_direction)
+	else
+		spell_icon = spell.hud_state
+	overlays -= spell_icon
 
 	if((spell.charge_type & Sp_RECHARGE) || (spell.charge_type & Sp_CHARGES) || (spell.charge_type & Sp_GRADUAL))
 		if(spell.charge_counter < spell.charge_max)
@@ -273,8 +311,7 @@
 				overlays -= last_charged_icon
 	else
 		icon_state = "[spell_base]_spell_ready"
-
-	overlays += spell.hud_state
+	overlays += spell_icon
 
 	last_charge = spell.charge_counter
 

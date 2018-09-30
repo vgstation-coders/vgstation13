@@ -48,7 +48,7 @@
 /obj/machinery/door_control/emag(mob/user)
 	req_access = list()
 	req_one_access = list()
-	playsound(get_turf(src), "sparks", 100, 1)
+	playsound(src, "sparks", 100, 1)
 
 /obj/machinery/door_control/attackby(obj/item/weapon/W, mob/user as mob)
 	..()
@@ -147,7 +147,7 @@
 		return
 
 	if(iswrench(W))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src, 30))
 			to_chat(user, "<span class='notice'>You detach \the [src] from the wall.</span>")
 			new/obj/item/mounted/frame/driver_button(get_turf(src))
@@ -203,3 +203,18 @@
 
 	icon_state = "launcherbtt"
 	active = 0
+
+/obj/machinery/door_control/mapped/interogation_room
+	name = "smartglass control"
+	desc = "Toogle smartglass"
+	id_tag = "InterogationRoomIDTag"
+
+
+/obj/machinery/door_control/mapped/interogation_room/attack_hand(var/mob/user)
+	..() // Sanity
+	for (var/obj/structure/window/reinforced/plasma/interogation_room/W in range(range))
+		if (W.smartwindow && src.id_tag == W.smartwindow.id_tag)
+			W.smartwindow.toggle_smart_transparency()
+	for (var/obj/machinery/door/window/plasma/secure/interogation_room/W in range(range))
+		if (W.smartwindow && src.id_tag == W.smartwindow.id_tag)
+			W.smartwindow.toggle_smart_transparency()

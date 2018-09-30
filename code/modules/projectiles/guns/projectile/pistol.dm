@@ -6,7 +6,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	w_class = W_CLASS_MEDIUM
 	max_shells = 10
-	caliber = list(".45"  = 1)
+	caliber = list(POINT45  = 1)
 	silenced = 1
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=8"
 	ammo_type = "/obj/item/ammo_casing/c45"
@@ -22,7 +22,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	force = 14.0
 	max_shells = 7
-	caliber = list(".50" = 1)
+	caliber = list(POINT50 = 1)
 	ammo_type ="/obj/item/ammo_casing/a50"
 	mag_type = "/obj/item/ammo_storage/magazine/a50"
 	load_method = 2
@@ -49,7 +49,7 @@
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 8
-	caliber = list("75" = 1)
+	caliber = list(POINT75 = 1)
 	fire_sound = 'sound/weapons/elecfire.ogg'
 	origin_tech = Tc_COMBAT + "=3"
 	ammo_type = "/obj/item/ammo_casing/a75"
@@ -72,7 +72,7 @@
 	icon_state = "pistol"
 	w_class = W_CLASS_SMALL
 	max_shells = 8
-	caliber = list("9mm" = 1)
+	caliber = list(MM9 = 1)
 	silenced = 0
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=2"
 	ammo_type = "/obj/item/ammo_casing/c9mm"
@@ -118,7 +118,7 @@
 	ammo_type = "/obj/item/ammo_casing/c45"
 	mag_type = "/obj/item/ammo_storage/magazine/c45"
 	max_shells = 8
-	caliber = list(".45"  = 1)
+	caliber = list(POINT45  = 1)
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
@@ -127,7 +127,7 @@
 /obj/item/weapon/gun/projectile/NTUSP/update_icon()
 	..()
 	icon_state = "secguncomp[silenced ? "-s" : ""][chambered ? "" : "-e"]"
-	
+
 /obj/item/weapon/gun/projectile/NTUSP/fancy
 	desc = "The NT USP is a relatively rare sidearm, produced by a NanoTrasen subsidiary. Uses .45 rounds.<br><span class='notice'>This one has a sweet pearl finish!</span>"
 	name = "\improper NT USP Custom"
@@ -136,9 +136,9 @@
 /obj/item/weapon/gun/projectile/NTUSP/fancy/update_icon()
 	..()
 	icon_state = "secguncompfancy[silenced ? "-s" : ""][chambered ? "" : "-e"]"
-	
 
-			
+
+
 /obj/item/weapon/gun/projectile/sec
 	name = "\improper NT Glock"
 	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. "
@@ -147,7 +147,7 @@
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	mag_type = "/obj/item/ammo_storage/magazine/m380auto"
 	max_shells = 8
-	caliber = list(".45"  = 1)
+	caliber = list(POINT380  = 1)
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
@@ -156,7 +156,7 @@
 /obj/item/weapon/gun/projectile/sec/update_icon()
 	..()
 	icon_state = "secglock[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
-	
+
 /obj/item/weapon/gun/projectile/sec/fancy
 	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds.<br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maint crawling!</span>"
 	name = "\improper NT Glock Custom"
@@ -165,3 +165,40 @@
 /obj/item/weapon/gun/projectile/sec/fancy/update_icon()
 	..()
 	icon_state = "secglockfancy[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
+
+/obj/item/weapon/gun/projectile/luger
+	name = "\improper Luger P08"
+	desc = "The wrath of the SS"
+	icon_state = "p08"
+	max_shells = 8
+	origin_tech = "combat=2;materials=2"
+	caliber = list(MM9 = 1)
+	silenced = 0
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
+	ammo_type = "/obj/item/ammo_casing/c9mm"
+	mag_type = "/obj/item/ammo_storage/magazine/mc9mm"
+	load_method = 2
+
+	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+
+/obj/item/weapon/gun/projectile/luger/update_icon()
+	..()
+	icon_state = "[initial(icon_state)][stored_magazine ? "" : "empty"]"
+
+/obj/item/weapon/gun/projectile/beretta
+	name = "\improper Beretta 92FS"
+	desc = "The classic wonder nine and favorite of the undercover cop. Kong whiskey not included."
+	icon = 'icons/obj/beretta.dmi'
+	icon_state = "beretta"
+	max_shells = 15
+	caliber = list(MM9 = 1)
+	silenced = 0
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=2"
+	ammo_type = "/obj/item/ammo_casing/c9mm"
+	mag_type = "/obj/item/ammo_storage/magazine/beretta"
+	load_method = 2
+	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+
+/obj/item/weapon/gun/projectile/beretta/update_icon()
+	..()
+	icon_state = "beretta[chambered ? "" : "-e"]"

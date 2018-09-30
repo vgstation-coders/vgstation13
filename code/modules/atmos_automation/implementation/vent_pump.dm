@@ -19,10 +19,6 @@
 	mode = json["mode"]
 	vent_type = text2num(json["vent_type"])
 
-/datum/automation/set_vent_pump_mode/New(var/obj/machinery/computer/general_air_control/atmos_automation/aa)
-	..(aa)
-	children = list(null)
-
 /datum/automation/set_vent_pump_mode/process()
 	if(vent_pump)
 		parent.send_signal(list ("tag" = vent_pump, mode), filter = (vent_type ? RADIO_ATMOSIA : RADIO_FROM_AIRALARM))

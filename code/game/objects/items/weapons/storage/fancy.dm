@@ -162,7 +162,7 @@
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
 	w_class = W_CLASS_SMALL
-	storage_slots = 6
+	storage_slots = 7
 	icon_type = "crayon"
 	can_only_hold = list(
 		"/obj/item/toy/crayon"
@@ -181,6 +181,7 @@
 	new /obj/item/toy/crayon/green(src)
 	new /obj/item/toy/crayon/blue(src)
 	new /obj/item/toy/crayon/purple(src)
+	new /obj/item/toy/crayon/black(src)
 	update_icon()
 
 /obj/item/weapon/storage/fancy/crayons/update_icon()
@@ -305,9 +306,9 @@
 /obj/item/weapon/storage/fancy/cigarettes/remove_from_storage(obj/item/W as obj, atom/new_location)
 	var/obj/item/clothing/mask/cigarette/C = W
 	if(!istype(C))
-		return // what
+		return ..() // what
 	reagents.trans_to(C, (reagents.total_volume/contents.len))
-	..()
+	. = ..()
 
 /obj/item/weapon/storage/fancy/cigarettes/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M, /mob))
@@ -434,6 +435,7 @@
 	desc = "Now we're doing it!"
 	icon_state = "kfc_drumsticks"
 	item_state = "kfc_bucket"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
 	icon_type = "drumstick"
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick")
 	starting_materials = list(MAT_CARDBOARD = 3750)
@@ -446,7 +448,7 @@
 	return
 
 /obj/item/weapon/storage/fancy/food_box/chicken_bucket/remove_from_storage(obj/item/W as obj, atom/new_location)
-	..()
+	. = ..()
 	if(!contents.len)
 		new/obj/item/trash/chicken_bucket(get_turf(src.loc))
 		if(istype(src.loc,/mob/living/carbon))
@@ -567,4 +569,4 @@
 	if(istype(G))
 		if(reagents.total_volume)
 			G.transfer_some_reagents(src, reagents.total_volume/contents.len)
-	..()
+	. = ..()

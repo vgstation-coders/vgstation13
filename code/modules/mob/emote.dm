@@ -1,56 +1,82 @@
-// All mobs should have custom emote, really..
-/mob/proc/custom_emote(var/m_type=1,var/message = null)
+//The code execution of the emote datum is located at code/datums/emotes.dm
+/mob/proc/emote(act, m_type = null, message = null, ignore_status = FALSE)
+	act = lowertext(act)
+	var/param = message
+	var/custom_param = findtext(act, " ") // Someone was given as a parameter
+	if(custom_param)
+		param = copytext(act, custom_param + 1, length(act) + 1)
+		act = copytext(act, 1, custom_param)
 
+	var/datum/emote/E
+	E = E.emote_list[act]
+	if(!E)
+		to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
+		return
+	E.run_emote(src, param, m_type, ignore_status)
 
-	if(stat || !use_me && usr == src)
-		to_chat(usr, "You are unable to emote.")
+/datum/emote/flip
+	key = "flip"
+	key_third_person = "flips"
+	restraint_check = TRUE
+	mob_type_allowed_typelist = list(/mob/living, /mob/dead/observer)
+	mob_type_blacklist_typelist = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/carbon/brain)
+	mob_type_ignore_stat_typelist = list(/mob/dead/observer)
+
+/datum/emote/flip/run_emote(mob/user, params)
+	. = ..()
+	if(.)
+		var/prev_dir = user.dir
+		for(var/i in list(1, 4, 2, 8, 1, 4, 2, 8, 1, 4, 2, 8, 1, 4, 2, 8))
+			user.dir = i
+			sleep(1)
+		user.dir = prev_dir
+
+/datum/emote/spin
+	key = "spin"
+	key_third_person = "spins"
+	restraint_check = TRUE
+	mob_type_allowed_typelist = list(/mob/living, /mob/dead/observer)
+	mob_type_blacklist_typelist = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/carbon/brain)
+	mob_type_ignore_stat_typelist = list(/mob/dead/observer)
+
+/datum/emote/spin/run_emote(mob/user)
+	. = ..()
+	if(.)
+		var/prev_dir = user.dir
+		for(var/i in list(1, 4, 2, 8, 1, 4, 2, 8, 1, 4, 2, 8, 1, 4, 2, 8))
+			user.dir = i
+			sleep(1)
+		user.dir = prev_dir
+
+/datum/emote/me
+	key = "me"
+	restraint_check = FALSE
+
+/datum/emote/me/run_emote(mob/user, params, m_type)
+
+	if (user.stat)
 		return
 
-	var/muzzled = istype(src.wear_mask, /obj/item/clothing/mask/muzzle)
-	if(m_type == 2 && muzzled)
-		return
+	var/msg = "<b>[user]</b> " + params
 
-	var/input
-	if(!message)
-		input = copytext(sanitize(input(src,"Choose an emote to display.") as text|null),1,MAX_MESSAGE_LEN)
+	var/turf/T = get_turf(user) // for pAIs
+	
+	for(var/mob/M in dead_mob_list)
+		if (!M.client)
+			continue //skip leavers
+		if(M.client.prefs && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(src,null)))
+			M.show_message(message)
+
+	if (emote_type == EMOTE_VISIBLE)
+		user.visible_message(msg)
 	else
-		input = message
-	if(input)
-		message = "<B>[src]</B> [input]"
-	else
-		return
+		for(var/mob/O in get_hearers_in_view(world.view, user))
+			O.show_message(msg)
 
-
-	if (message)
-		log_emote("[name]/[key] (@[x],[y],[z]): [message]")
-
- //Hearing gasp and such every five seconds is not good emotes were not global for a reason.
- // Maybe some people are okay with that.
-
-		for(var/mob/M in player_list)
-			if (!M.client)
-				continue //skip monkeys and leavers
-			if (istype(M, /mob/new_player))
-				continue
-			if(findtext(message," snores.")) //Because we have so many sleeping people.
-				break
-			if(M.stat == DEAD && M.client && M.client.prefs && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(src,null)))
-				M.show_message(message)
-
-
-		// Type 1 (Visual) emotes are sent to anyone in view of the item
-		if (m_type & 1)
-			visible_message(message)
-
-		// Type 2 (Audible) emotes are sent to anyone in hear range
-		// of the *LOCATION* -- this is important for pAIs to be heard
-		else if (m_type & 2)
-			for(var/mob/living/M in get_hearers_in_view(get_turf(src), null))
-				M.show_message(message, m_type)
+	var/location = T ? "[T.x],[T.y],[T.z]" : "nullspace"
+	log_emote("[user.name]/[user.key] (@[location]): [message]")
 
 /mob/proc/emote_dead(var/message)
-
-
 	if(client.prefs.muted & MUTE_DEADCHAT)
 		to_chat(src, "<span class='warning'>You cannot send deadchat emotes (muted).</span>")
 		return
@@ -81,9 +107,3 @@
 
 			else if(M.stat == DEAD && (M.client.prefs.toggles & CHAT_DEAD)) // Show the emote to regular ghosts with deadchat toggled on
 				M.show_message(message, 2)
-
-/mob/proc/audible_cough()
-	return emote("cough", auto = 1)
-
-/mob/proc/audible_scream()
-	return emote("scream", auto = 1)

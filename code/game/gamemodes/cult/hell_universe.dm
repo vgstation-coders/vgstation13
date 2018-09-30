@@ -124,7 +124,8 @@ In short:
 
 /datum/universal_state/hell/proc/APCSet()
 	for (var/obj/machinery/power/apc/APC in power_machines)
-		if (!(APC.stat & BROKEN) && !istype(APC.areaMaster,/area/turret_protected/ai))
+		var/area/APC_area = get_area(APC)
+		if (!(APC.stat & BROKEN) && !istype(APC_area, /area/turret_protected/ai))
 			APC.chargemode = 0
 			if(APC.cell)
 				APC.cell.charge = 0
@@ -135,7 +136,7 @@ In short:
 /datum/universal_state/hell/proc/KillMobs()
 	for(var/mob/living/simple_animal/M in mob_list)
 		if(M && !M.client)
-			M.Die()
+			M.death()
 		CHECK_TICK
 
 /datum/universal_state/hell/proc/convert_all_parallax()

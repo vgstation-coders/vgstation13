@@ -30,6 +30,10 @@
 	max_equip = 4
 	step_energy_drain = 5
 
+/obj/mecha/combat/gygax/New()
+	..()
+	intrinsic_spells = list(new /spell/mech/gygax/overload(src))
+
 /obj/mecha/combat/gygax/dark/New()
 	..()
 	var/obj/item/mecha_parts/mecha_equipment/ME = new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot
@@ -51,31 +55,33 @@
 	cell.charge = 30000
 	cell.maxcharge = 30000
 
+/spell/mech/gygax/overload
+	name = "Overload"
+	desc = "Greatly enhance the mech's speed at the cost of integrity per step."
+	charge_max = 10
+	charge_counter = 10
+	hud_state = "gygax-gofast"
+	override_icon = 'icons/mecha/mecha.dmi'
 
-/obj/mecha/combat/gygax/verb/overload()
-	set category = "Exosuit Interface"
-	set name = "Toggle leg actuators overload"
-	set src = usr.loc
-	set popup_menu = 0
-	if(usr!=src.occupant)
-		return
-	if(overload)
-		overload = 0
-		step_in = initial(step_in)
-		step_energy_drain = initial(step_energy_drain)
-		src.occupant_message("<font color='blue'>You disable leg actuators overload.</font>")
-		if(!istype(src,/obj/mecha/combat/gygax/dark))
-			flick("gygax-gofast-aoff",src)
-			reset_icon()
+/spell/mech/gygax/overload/cast(list/targets, mob/user)
+	var/obj/mecha/combat/gygax/Gygax = linked_mech
+	if(Gygax.overload)
+		Gygax.overload = 0
+		Gygax.step_in = initial(Gygax.step_in)
+		Gygax.step_energy_drain = initial(Gygax.step_energy_drain)
+		Gygax.occupant_message("<font color='blue'>You disable leg actuators overload.</font>")
+		if(!istype(Gygax,/obj/mecha/combat/gygax/dark))
+			flick("gygax-gofast-aoff",Gygax)
+			Gygax.reset_icon()
 	else
-		overload = 1
-		step_in = min(1, round(step_in/2))
-		step_energy_drain = step_energy_drain*overload_coeff
-		src.occupant_message("<font color='red'>You enable leg actuators overload.</font>")
-		if(!istype(src,/obj/mecha/combat/gygax/dark))
-			flick("gygax-gofast-aon",src)
-			icon_state = "gygax-gofast"
-	src.log_message("Toggled leg actuators overload.")
+		Gygax.overload = 1
+		Gygax.step_in = min(1, round(Gygax.step_in/2))
+		Gygax.step_energy_drain = Gygax.step_energy_drain*Gygax.overload_coeff
+		Gygax.occupant_message("<font color='red'>You enable leg actuators overload.</font>")
+		if(!istype(Gygax,/obj/mecha/combat/gygax/dark))
+			flick("gygax-gofast-aon",Gygax)
+			Gygax.icon_state = "gygax-gofast"
+	Gygax.log_message("Toggled leg actuators overload.")
 	return
 
 /*
@@ -91,6 +97,9 @@
 		icon_state = initial_icon + "-gofast"
 	else
 		icon_state = initial_icon
+
+/obj/mecha/combat/gygax/dark/stopMechWalking()
+	icon_state = initial_icon
 
 /obj/mecha/combat/gygax/dyndomove(direction)
 	if(!..())
@@ -109,20 +118,3 @@
 	var/output = ..()
 	output += "<b>Leg actuators overload: [overload?"on":"off"]</b>"
 	return output
-
-/obj/mecha/combat/gygax/get_commands()
-	var/output = {"<div class='wr'>
-						<div class='header'>Special</div>
-						<div class='links'>
-						<a href='?src=\ref[src];toggle_leg_overload=1'>Toggle leg actuators overload</a>
-						</div>
-						</div>
-						"}
-	output += ..()
-	return output
-
-/obj/mecha/combat/gygax/Topic(href, href_list)
-	..()
-	if (href_list["toggle_leg_overload"])
-		src.overload()
-	return

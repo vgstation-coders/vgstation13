@@ -133,15 +133,15 @@
 
 	var/obj/structure/hive/spikes/summoned_spikes
 
-/mob/living/simple_animal/hostile/hive_alien/constructor/Die()
-	..()
+/mob/living/simple_animal/hostile/hive_alien/constructor/death(var/gibbed = FALSE)
+	..(gibbed)
 
 	flick("hive_artificer_dying", src)
 	if(summoned_spikes)
 		qdel(summoned_spikes)
 		summoned_spikes = null
 
-/mob/living/simple_animal/hostile/hive_alien/constructor/Move()
+/mob/living/simple_animal/hostile/hive_alien/constructor/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	.=..()
 
 	if(istype(loc, /turf/unsimulated/floor/evil))
@@ -243,7 +243,7 @@
 
 	var/mob/living/simple_animal/hostile/hive_alien/constructor/owner
 
-/obj/structure/hive/spikes/Die()
+/obj/structure/hive/spikes/death()
 	..()
 
 	if(owner)

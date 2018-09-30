@@ -40,7 +40,7 @@
 	var/eye_safety = 0
 	var/ear_safety = 0
 
-	if(!ignore_protection)
+	if(!ignore_protection && loc != M.loc)
 		eye_safety = M.eyecheck()
 		ear_safety = M.earprot() //some arbitrary measurement of ear protection, I guess? doesn't even matter if it goes above 1
 
@@ -54,42 +54,65 @@
 			ear_safety += 1
 
 //Flashing everyone
-	if(eye_safety < 1)
+	if(eye_safety < 1 && !M.blinded)
 		M.flash_eyes(visual = 1, affect_silicon = 1)
-		M.Stun(10)
-		M.Knockdown(10)
+		if (get_dist(M, T) <= 3)
+			M.Stun(8)
+			M.Knockdown(8)
+		else
+			if (issilicon(M))
+				M.Stun(4)
+				M.Knockdown(4)
+			else if (get_dist(M, T) <= 5)
+				M.Knockdown(2)
+			else
+				M.Knockdown(1)
 
 //Now applying sound
-	if(!ear_safety)
-		to_chat(M, "<span class='userdanger'>BANG</span>")
-		playsound(get_turf(src), 'sound/effects/bang.ogg', 60, 1)
-	else
-		to_chat(M, "<span class='danger'>BANG</span>")
-		playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
+	if(!M.is_deaf())
+		if(!ear_safety)
+			to_chat(M, "<span class='userdanger'>BANG</span>")
+			playsound(src, 'sound/effects/bang.ogg', 60, 1)
+		else
+			to_chat(M, "<span class='danger'>BANG</span>")
+			playsound(src, 'sound/effects/bang.ogg', 25, 1)
 
 	if((get_dist(M, T) <= 2 || src.loc == M.loc || src.loc == M))
 		if(ear_safety > 0)
-			M.Stun(2)
-			M.Knockdown(2)
+			if(!M.is_deaf())
+				M.Stun(2)
+				M.Knockdown(2)
 		else
-			M.Stun(10)
-			M.Knockdown(10)
+			if(!M.is_deaf())
+				M.Stun(8)
+				M.Knockdown(8)
 			if ((prob(14) || (M == src.loc && prob(70))))
 				M.ear_damage += rand(1, 10)
 			else
 				M.ear_damage += rand(0, 5)
 				M.ear_deaf = max(M.ear_deaf,15)
 
+	else if(get_dist(M, T) <= 3)
+		if(!ear_safety)
+			if(!M.is_deaf())
+				M.Stun(6)
+				M.Knockdown(6)
+			M.ear_damage += rand(0, 3)
+			M.ear_deaf = max(M.ear_deaf,10)
+
 	else if(get_dist(M, T) <= 5)
 		if(!ear_safety)
-			M.Stun(8)
-			M.Knockdown(8)
+			if(!M.is_deaf())
+				M.Stun(4)
+				M.Knockdown(4)
 			M.ear_damage += rand(0, 3)
 			M.ear_deaf = max(M.ear_deaf,10)
 
 	else if(!ear_safety)
-		M.Stun(4)
-		M.Knockdown(4)
+		if(!M.is_deaf())
+			if (issilicon(M))
+				M.Stun(4)
+			M.Knockdown(1)
 		M.ear_damage += rand(0, 1)
 		M.ear_deaf = max(M.ear_deaf,5)
 
@@ -140,12 +163,12 @@
 	for(,numspawned > 0, numspawned--)
 		spawn(0)
 			new /obj/item/weapon/grenade/flashbang/cluster(src.loc)//Launches flashbangs
-			playsound(get_turf(src), 'sound/weapons/armbomb.ogg', 75, 1, -3)
+			playsound(src, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 
 	for(,again > 0, again--)
 		spawn(0)
 			new /obj/item/weapon/grenade/flashbang/clusterbang/segment(src.loc)//Creates a 'segment' that launches a few more flashbangs
-			playsound(get_turf(src), 'sound/weapons/armbomb.ogg', 75, 1, -3)
+			playsound(src, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 	spawn(0)
 		qdel(src)
 		return
@@ -177,7 +200,7 @@
 	for(,numspawned > 0, numspawned--)
 		spawn(0)
 			new /obj/item/weapon/grenade/flashbang/cluster(src.loc)
-			playsound(get_turf(src), 'sound/weapons/armbomb.ogg', 75, 1, -3)
+			playsound(src, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 	spawn(0)
 		qdel(src)
 		return

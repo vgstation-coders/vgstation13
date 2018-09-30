@@ -124,46 +124,20 @@ var/list/all_doors = list()
 		var/mob/living/carbon/human/H = user
 
 		if (H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
-			// TODO: analyze the called proc
-			playsound(get_turf(src), 'sound/effects/bang.ogg', 25, 1)
-
+			playsound(src, 'sound/effects/bang.ogg', 25, 1)
+			H.visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
 			if (!istype(H.head, /obj/item/clothing/head/helmet))
-				visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
 				H.Stun(8)
 				H.Knockdown(5)
 				var/datum/organ/external/O = H.get_organ(LIMB_HEAD)
-
-				// TODO: analyze the called proc
-				if(O.take_damage(10, 0))
-					H.UpdateDamageIcon()
-					O = null
-			else
-				// TODO: fix sentence
-				visible_message("<span class='warning'>[user] headbutts the airlock. Good thing they're wearing a helmet.</span>")
-
-			H = null
+				O.take_damage(10, 0)
 			return
 
-		H = null
-
-	add_fingerprint(user)
-	attackby(null, user)
-
-
-/obj/machinery/door/attackby(obj/item/I as obj, mob/user as mob)
-	if(..())
-		return 1
-
-	if (istype(I, /obj/item/device/detective_scanner))
-		return
 
 	if(isobserver(user) && !isAdminGhost(user))
 		return
 
-	// borgs can't attack doors open
-	// because it conflicts with their AI-like interaction with them
-	if (isrobot(user))
-		return
+	add_fingerprint(user)
 
 	if (!requiresID())
 		user = null
@@ -173,6 +147,25 @@ var/list/all_doors = list()
 			return close()
 		else
 			return open()
+
+	if(horror_force(user))
+		return
+
+	denied()
+
+/obj/machinery/door/attackby(obj/item/I, mob/user)
+	if(..())
+		return
+
+	if(istype(I, /obj/item/device/detective_scanner))
+		return //It does its own thing on attack
+
+	if (allowed(user))
+		if (!density)
+			return close()
+		else
+			return open()
+
 
 	if(horror_force(user))
 		return
@@ -228,7 +221,7 @@ var/list/all_doors = list()
 		operating = 1
 
 	if(makes_noise)
-		playsound(get_turf(src), soundeffect, soundpitch, 1)
+		playsound(src, soundeffect, soundpitch, 1)
 
 	set_opacity(0)
 	door_animate("opening")
@@ -260,9 +253,9 @@ var/list/all_doors = list()
 	layer = closed_layer
 
 	if (makes_noise)
-		playsound(get_turf(src), soundeffect, soundpitch, 1)
+		playsound(src, soundeffect, soundpitch, 1)
 
-	density = 1
+	setDensity(TRUE)
 	door_animate("closing")
 	sleep(animation_delay)
 	update_icon()
@@ -309,7 +302,7 @@ var/list/all_doors = list()
 /obj/machinery/door/cultify()
 	if(invisibility != INVISIBILITY_MAXIMUM)
 		invisibility = INVISIBILITY_MAXIMUM
-		density = 0
+		setDensity(FALSE)
 		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "breakdoor", sleeptime = 10)
 		qdel(src)
 
@@ -357,16 +350,14 @@ var/list/all_doors = list()
 				qdel(src)
 		if(3.0)
 			if(prob(80))
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(2, 1, src)
-				s.start()
+				spark(src, 2)
 	return
 
 /obj/machinery/door/proc/requiresID()
 	return 1
 
 /obj/machinery/door/proc/update_nearby_tiles(var/turf/T)
-	if(!air_master)
+	if(!SS_READY(SSair))
 		return 0
 
 	if(!T)
@@ -375,12 +366,12 @@ var/list/all_doors = list()
 		return 0
 
 	update_heat_protection(T)
-	air_master.mark_for_update(T)
+	SSair.mark_for_update(T)
 
 	update_freelok_sight()
 	return 1
 
-/obj/machinery/door/forceMove(var/atom/A)
+/obj/machinery/door/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	var/turf/T = loc
 	..()
 	update_nearby_tiles(T)
@@ -393,7 +384,7 @@ var/list/all_doors = list()
 		else
 			source.thermal_conductivity = initial(source.thermal_conductivity)
 
-/obj/machinery/door/Move(new_loc, new_dir)
+/obj/machinery/door/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	update_nearby_tiles()
 	. = ..()
 	if(width > 1)

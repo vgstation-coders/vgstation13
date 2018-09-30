@@ -7,6 +7,8 @@
 				. = src.unwield(user)
 			else
 				. = src.wield(user)
+	if(material_type)
+		material_type.on_use(src, user, user)
 
 // No comment
 /atom/proc/attackby(obj/item/W, mob/user)
@@ -16,15 +18,20 @@
 	if(W && !(W.flags&NO_ATTACK_MSG))
 		user.do_attack_animation(src, W)
 		visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
+	if(W.material_type)
+		W.material_type.on_use(W, src, user)
 
-/mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null)
+/mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null, var/def_zone = null)
 	if(!no_delay)
 		user.delayNextAttack(10)
 	if(istype(I) && ismob(user))
 		if(originator)
-			I.attack(src, user, null, originator)
+			I.attack(src, user, def_zone, originator)
 		else
-			I.attack(src, user)
+			I.attack(src, user, def_zone)
+	if(BrainContainer)
+		BrainContainer.SendSignal(COMSIG_ATTACKEDBY, list("assailant"=user,"damage"=I.force))
+
 
 
 // Proximity_flag is 1 if this afterattack was called on something adjacent, in your square, or on your person.
@@ -62,10 +69,12 @@ obj/item/proc/get_clamped_volume()
 	if (can_operate(M, user))        //Checks if mob is lying down on table for surgery
 		if (do_surgery(M,user,I))
 			return 1
+
+	if (user.is_pacified(VIOLENCE_DEFAULT,M))
+		return 0
+
 	//if (istype(M,/mob/living/carbon/brain))
 	//	messagesource = M:container
-	if (hitsound)
-		playsound(get_turf(M.loc), I.hitsound, 50, 1, -1)
 	/////////////////////////
 	if(originator)
 		if(ismob(originator))
@@ -199,12 +208,12 @@ obj/item/proc/get_clamped_volume()
 					to_chat(user, "<span class='warning'>You attack [M] with [I]!</span>")
 
 
-	if(istype(M, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = M
+	if(istype(M, /mob/living/carbon))
+		var/mob/living/carbon/C = M
 		if(originator)
-			. = H.attacked_by(I, user, def_zone, originator)
+			. = C.attacked_by(I, user, def_zone, originator)
 		else
-			. = H.attacked_by(I, user, def_zone)
+			. = C.attacked_by(I, user, def_zone)
 	else
 		switch(I.damtype)
 			if("brute")
@@ -227,6 +236,16 @@ obj/item/proc/get_clamped_volume()
 						power = K.defense(power,def_zone)
 					M.take_organ_damage(0, power)
 					to_chat(M, "Aargh it burns!")
+		. = TRUE //The attack always lands
 		M.updatehealth()
 	I.add_fingerprint(user)
-	return .
+	I.on_attack(M,user)
+
+
+/obj/item/proc/on_attack(var/atom/attacked, var/mob/user)
+	user.do_attack_animation(attacked, src)
+	user.delayNextAttack(attack_delay)
+	if(hitsound)
+		playsound(attacked.loc, hitsound, 50, 1, -1)
+	if(material_type)
+		material_type.on_use(src,attacked, user)

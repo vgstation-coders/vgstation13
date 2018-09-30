@@ -152,7 +152,7 @@ Code:
 			last_transmission = world.time
 			spawn( 0 )
 				var/time = time2text(world.realtime,"hh:mm:ss")
-				lastsignalers.Add("[time] <B>:</B> [usr.key] used [src.master] @ location ([src.master.loc.x],[src.master.loc.y],[src.master.loc.z]) <B>:</B> [format_frequency(send_freq)]/[send_code]")
+				master.investigation_log(I_WIRES, "used as signaler by [key_name(usr)] - [format_frequency(frequency)]/[code]")
 
 				var/datum/signal/signal = new
 				signal.source = src

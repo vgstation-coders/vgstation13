@@ -38,7 +38,7 @@
 	update_nearby_tiles()
 
 obj/structure/windoor_assembly/Destroy()
-	density = 0
+	setDensity(FALSE)
 	update_nearby_tiles()
 	..()
 
@@ -58,7 +58,7 @@ obj/structure/windoor_assembly/Destroy()
 /obj/structure/windoor_assembly/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(flags & ON_BORDER)
+	if(flow_flags & ON_BORDER)
 		if(target) //Are we doing a manual check to see
 			if(get_dir(loc, target) == dir)
 				return !density
@@ -75,28 +75,25 @@ obj/structure/windoor_assembly/Destroy()
 		if("01")
 			if(iswelder(W) && !anchored )
 				var/obj/item/weapon/weldingtool/WT = W
-				if (WT.remove_fuel(0,user))
-					user.visible_message("[user] dissassembles the windoor assembly.", "You start to dissassemble the windoor assembly.")
-					playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
-
-					if(do_after(user, src, 40))
-						if(!src || !WT.isOn())
-							return
-						to_chat(user, "<span class='notice'>You dissasembled the windoor assembly!</span>")
-						if(plasma)
-							getFromPool(/obj/item/stack/sheet/glass/plasmarglass, get_turf(src), 5)
-						else
-							getFromPool(/obj/item/stack/sheet/glass/rglass, get_turf(src), 5)
-						if(secure)
-							getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src), 2)
-						qdel(src)
+				user.visible_message("[user] dissassembles the windoor assembly.", "You start to dissassemble the windoor assembly.")
+				if(WT.do_weld(user, src, 40, 0))
+					if(gcDestroyed)
+						return
+					to_chat(user, "<span class='notice'>You dissasembled the windoor assembly!</span>")
+					if(plasma)
+						getFromPool(/obj/item/stack/sheet/glass/plasmarglass, get_turf(src), 5)
+					else
+						getFromPool(/obj/item/stack/sheet/glass/rglass, get_turf(src), 5)
+					if(secure)
+						getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src), 2)
+					qdel(src)
 				else
 					to_chat(user, "<span class='rose'>You need more welding fuel to dissassemble the windoor assembly.</span>")
 					return
 
 			//Wrenching an unsecure assembly anchors it in place. Step 4 complete
 			if(iswrench(W) && !anchored)
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 				user.visible_message("[user] secures the windoor assembly to the floor.", "You start to secure the windoor assembly to the floor.")
 
 				if(do_after(user, src, 40))
@@ -111,7 +108,7 @@ obj/structure/windoor_assembly/Destroy()
 
 			//Unwrenching an unsecure assembly un-anchors it. Step 4 undone
 			else if(iswrench(W) && anchored)
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
 				user.visible_message("[user] unsecures the windoor assembly to the floor.", "You start to unsecure the windoor assembly to the floor.")
 
 				if(do_after(user, src, 40))
@@ -146,13 +143,16 @@ obj/structure/windoor_assembly/Destroy()
 
 			//Adding cable to the assembly. Step 5 complete.
 			else if(istype(W, /obj/item/stack/cable_coil) && anchored)
+				var/obj/item/stack/cable_coil/CC = W
+				if(CC.amount < 2)
+					to_chat(user, "<span class='rose'>You need more cable for this!</span>")
+					return
 				user.visible_message("[user] wires the windoor assembly.", "You start to wire the windoor assembly.")
 
 				if(do_after(user, src, 40))
 					if(!src)
 						return
-					var/obj/item/stack/cable_coil/CC = W
-					CC.use(1)
+					CC.use(2)
 					to_chat(user, "<span class='notice'>You wire the windoor!</span>")
 					src.state = "02"
 					if(src.secure)
@@ -166,7 +166,7 @@ obj/structure/windoor_assembly/Destroy()
 
 			//Removing wire from the assembly. Step 5 undone.
 			if(iswirecutter(W))
-				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
+				playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
 				user.visible_message("[user] cuts the wires from the airlock assembly.", "You start to cut the wires from airlock assembly.")
 
 				if(do_after(user, src, 40))
@@ -183,7 +183,7 @@ obj/structure/windoor_assembly/Destroy()
 			//Adding airlock electronics for access. Step 6 complete.
 			else if(istype(W, /obj/item/weapon/circuitboard/airlock) && W:icon_state != "door_electronics_smoked")
 				if(user.drop_item(W, src)) // To prevent you using the airlock electronics on 2 windoors at once.
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+					playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 					user.visible_message("[user] installs the electronics into the airlock assembly.", "You start to install electronics into the airlock assembly.")
 
 					if(do_after(user, src, 40))
@@ -199,7 +199,7 @@ obj/structure/windoor_assembly/Destroy()
 
 			//Screwdriver to remove airlock electronics. Step 6 undone.
 			else if(isscrewdriver(W) && electronics)
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
+				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
 				user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to uninstall electronics from the airlock assembly.")
 
 				if(do_after(user, src, 40))
@@ -220,7 +220,7 @@ obj/structure/windoor_assembly/Destroy()
 					to_chat(usr, "<span class='rose'>The assembly is missing electronics.</span>")
 					return
 				usr << browse(null, "window=windoor_access")
-				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 100, 1)
+				playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 				user.visible_message("[user] pries the windoor into the frame.", "You start prying the windoor into the frame.")
 
 				if(do_after(user, src, 40))
@@ -228,7 +228,7 @@ obj/structure/windoor_assembly/Destroy()
 					if(!src)
 						return
 					var/obj/machinery/door/window/windoor = Create()
-					density = 1 //Shouldn't matter but just incase
+					setDensity(TRUE) //Shouldn't matter but just incase
 					to_chat(user, "<span class='notice'>You finish the windoor!</span>")
 					if(secure == "secure_")
 						secure = "secure"
@@ -239,10 +239,15 @@ obj/structure/windoor_assembly/Destroy()
 						windoor.icon_state = "right[secure]open"
 						windoor.base_state = "right[secure]"
 					windoor.dir = src.dir
-					windoor.density = 0
-
-					windoor.req_access = src.electronics.conf_access
-					windoor.electronics = src.electronics
+					windoor.setDensity(FALSE)
+					windoor.fingerprints += src.fingerprints
+					windoor.fingerprintshidden += src.fingerprintshidden
+					windoor.fingerprintslast = user.ckey
+					if(src.electronics.one_access)
+						windoor.req_access = null
+						windoor.req_one_access = src.electronics.conf_access
+					else
+						windoor.req_access = src.electronics.conf_access
 					src.electronics.forceMove(windoor)
 					qdel(src)
 
@@ -302,12 +307,12 @@ obj/structure/windoor_assembly/Destroy()
 	return
 
 /obj/structure/windoor_assembly/proc/update_nearby_tiles()
-	if (isnull(air_master))
+	if (!SS_READY(SSair))
 		return 0
 
 	var/T = loc
 
 	if (isturf(T))
-		air_master.mark_for_update(T)
+		SSair.mark_for_update(T)
 
 	return 1

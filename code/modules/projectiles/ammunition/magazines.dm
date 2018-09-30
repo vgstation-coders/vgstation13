@@ -17,6 +17,22 @@
 /obj/item/ammo_storage/magazine/mc9mm/empty
 	starting_ammo = 0
 
+/obj/item/ammo_storage/magazine/beretta
+	name = "Beretta 92FS magazine (9mm)"
+	desc = "A magazine designed for the Beretta 92FS. Holds 15 rounds."
+	icon = 'icons/obj/beretta.dmi'
+	icon_state = "beretta_mag"
+	origin_tech = Tc_COMBAT + "=2"
+	caliber = MM9
+	ammo_type = "/obj/item/ammo_casing/c9mm"
+	exact = 0
+	max_ammo = 15
+	multiple_sprites = 1
+	sprite_modulo = 15
+
+/obj/item/ammo_storage/magazine/beretta/empty
+	starting_ammo = 0
+
 /obj/item/ammo_storage/magazine/a12mm
 	name = "magazine (12mm)"
 	icon_state = "12mm"
@@ -94,7 +110,7 @@
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/c45"
 	exact = 0
-	caliber = ".45"
+	caliber = POINT45
 	max_ammo = 8
 	multiple_sprites = 1
 	sprite_modulo = 1
@@ -128,7 +144,7 @@
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	exact = 0
-	caliber = ".380AUTO"
+	caliber = POINT380
 	max_ammo = 10
 	multiple_sprites = 1
 	sprite_modulo = 2
@@ -153,7 +169,7 @@
 
 /obj/item/ammo_storage/magazine/m380auto/practice/empty
 	starting_ammo = 0
-	
+
 /obj/item/ammo_storage/magazine/uzi45 //Uzi mag
 	name = "magazine (.45)"
 	icon_state = "uzi45"
@@ -161,10 +177,17 @@
 	ammo_type = "/obj/item/ammo_casing/c45"
 	max_ammo = 16
 	multiple_sprites = 1
-	sprite_modulo = 2
+	sprite_modulo = 16
 
 /obj/item/ammo_storage/magazine/uzi45/empty
 	starting_ammo = 0
+
+/obj/item/ammo_storage/magazine/uzi45/extended
+	name = "extended magazine (.45)"
+	icon_state = "uzi45_ext"
+	max_ammo = 24
+	multiple_sprites = 1
+	sprite_modulo = 4
 
 /obj/item/ammo_storage/magazine/lawgiver
 	name = "lawgiver magazine"

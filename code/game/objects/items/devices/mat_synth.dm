@@ -24,24 +24,33 @@
 									  "glass" = /obj/item/stack/sheet/glass/glass,
 									  "reinforced glass" = /obj/item/stack/sheet/glass/rglass,
 									  "plasteel" = /obj/item/stack/sheet/plasteel)
-	var/list/can_scan = list(/obj/item/stack/sheet)
+
+	var/list/can_scan = list(/obj/item/stack/sheet/metal,
+							/obj/item/stack/sheet/glass/,
+							/obj/item/stack/sheet/wood,
+							/obj/item/stack/sheet/plasteel,
+							/obj/item/stack/sheet/mineral)
+	var/list/cant_scan = list()
 	var/matter = 0
 
-/obj/item/device/material_synth/robot //Cyborg version, has less materials but can make rods n shit as well as scan.
+/obj/item/device/material_synth/robot/engiborg //Cyborg version, has less materials but can make rods n shit as well as scan.
 	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
 							 "glass" = /obj/item/stack/sheet/glass/glass,
 							 "reinforced glass" = /obj/item/stack/sheet/glass/rglass,
 							 "floor tiles" = /obj/item/stack/tile/plasteel,
 							 "metal rods" = /obj/item/stack/rods)
 
-/obj/item/device/material_synth/robot/mommi //MoMMI version, more materials but has very restricted scanning.
-	materials_scanned = list("plasma glass" = /obj/item/stack/sheet/glass/plasmaglass,
-							 "reinforced plasma glass" = /obj/item/stack/sheet/glass/plasmarglass,
-							 "metal" = /obj/item/stack/sheet/metal,
+/obj/item/device/material_synth/robot/engiborg/New() //We have to do this during New() because BYOND can't pull a typesof() during compile time.
+	. = ..()
+	cant_scan = list(/obj/item/stack/sheet/mineral/clown, /obj/item/stack/sheet/mineral/phazon)
+
+/obj/item/device/material_synth/robot/mommi //MoMMI version, a few more materials to start with.
+	materials_scanned = list("metal" = /obj/item/stack/sheet/metal,
 							 "glass" = /obj/item/stack/sheet/glass/glass,
 							 "reinforced glass" = /obj/item/stack/sheet/glass/rglass,
-							 "plasteel" = /obj/item/stack/sheet/plasteel)
-	can_scan = list(/obj/item/stack/tile/carpet, /obj/item/stack/tile/arcade, /obj/item/stack/sheet/wood, /obj/item/stack/sheet/mineral/plastic)
+							 "plasteel" = /obj/item/stack/sheet/plasteel,
+							 "plasma glass" = /obj/item/stack/sheet/glass/plasmaglass,
+							 "reinforced plasma glass" = /obj/item/stack/sheet/glass/plasmarglass)
 
 /obj/item/device/material_synth/update_icon()
 	icon_state = "mat_synth[mode ? "on" : "off"]"
@@ -143,7 +152,7 @@
 /obj/item/device/material_synth/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
 		return 0 // not adjacent
-	if(is_type_in_list(target, can_scan)) //Can_scan, can you?
+	if(is_type_in_list(target, can_scan) && !is_type_in_list(target, cant_scan))
 		for(var/matID in materials_scanned)
 			if(materials_scanned[matID] == target.type)
 				to_chat(user, "<span class='warning'>You have already scanned \the [target].</span>")
@@ -151,7 +160,7 @@
 		materials_scanned["[initial(target.name)]"] = target.type
 		to_chat(user, "<span class='notice'>You successfully scan \the [target] into \the [src]'s material banks.</span>")
 		return 1
-	else if(istype(target, /obj/item/stack/sheet)) //We can't scan it, but, only display an error when trying to scan a sheet. Currently only happens with MoMMI matsynths.
+	else if(istype(target, /obj/item/stack/sheet)) //We can't scan it, but, only display an error when trying to scan a sheet.
 		to_chat(user, "<span class='warning'>Your [src.name] does not contain this functionality to scan this type of material.</span>")
 	return ..()
 
@@ -170,7 +179,7 @@
 			return
 		else
 			matter += 10
-			playsound(get_turf(src), 'sound/machines/click.ogg', 20, 1)
+			playsound(src, 'sound/machines/click.ogg', 20, 1)
 			qdel(RA)
 			to_chat(user, "<span class='notice'>The material synthetizer now holds [matter]/[MAX_MATSYNTH_MATTER] matter-units.</span>")
 	if(istype(O, /obj/item/weapon/card/emag))

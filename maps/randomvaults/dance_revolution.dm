@@ -64,7 +64,7 @@
 		winner = "[dancer]"
 
 	stop_game()
-	playsound(get_turf(src), 'sound/machines/ding2.ogg', 50)
+	playsound(src, 'sound/machines/ding2.ogg', 50)
 
 	wins++
 
@@ -85,7 +85,7 @@
 		dancer.adjustBruteLoss(rand(1,5))
 
 	stop_game()
-	playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50)
+	playsound(src, 'sound/machines/buzz-sigh.ogg', 50)
 
 /obj/structure/dance_dance_revolution/proc/update_effects()
 	for(var/obj/effect/E in direction_effects)
@@ -165,16 +165,16 @@
 
 	spawn(10)
 		visible_message("<span class='danger'>3...</span>")
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50)
+		playsound(src, 'sound/machines/click.ogg', 50)
 		sleep(10)
 		visible_message("<span class='danger'>2...</span>")
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50)
+		playsound(src, 'sound/machines/click.ogg', 50)
 		sleep(10)
 		visible_message("<span class='danger'>1...</span>")
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50)
+		playsound(src, 'sound/machines/click.ogg', 50)
 		sleep(10)
 		visible_message("<span class='userdanger'>Go!</span>")
-		playsound(get_turf(src), 'sound/machines/chime.ogg', 50)
+		playsound(src, 'sound/machines/chime.ogg', 50)
 		start_game()
 
 /obj/effect/ddr_direction //Direction in which you should be facing

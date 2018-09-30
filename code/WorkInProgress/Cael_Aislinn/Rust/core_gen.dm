@@ -65,11 +65,20 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	idle_power_usage = 50
 	active_power_usage = 500	//multiplied by field strength
 	anchored = 0
-
-	machine_flags = WRENCHMOVE | FIXED2WORK | WELD_FIXED | EMAGGABLE | MULTITOOL_MENU
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | WELD_FIXED | MULTITOOL_MENU
 
 /obj/machinery/power/rust_core/New()
 	. = ..()
+
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/rust_core,
+		/obj/item/weapon/stock_parts/manipulator/nano/pico,
+		/obj/item/weapon/stock_parts/manipulator/nano/pico,
+		/obj/item/weapon/stock_parts/micro_laser/high/ultra,
+		/obj/item/weapon/stock_parts/subspace/crystal,
+		/obj/item/weapon/stock_parts/console_screen
+	)
+
 	if(ticker)
 		initialize()
 
@@ -84,7 +93,7 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 
 /obj/machinery/power/rust_core/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
 	if(owned_field)
-		to_chat(user, user << "<span class='warning'>Turn \the [src] off first!</span>")
+		to_chat(user, "<span class='warning'>Turn \the [src] off first!</span>")
 		return -1
 
 	if(..() == 1)

@@ -45,8 +45,8 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 	var/obj/machinery/door/airlock/A = holder
 	if(!istype(L, /mob/living/silicon))
 		if(A.isElectrified())
-			if(A.shock(L, 100))
-				return 0
+			var/obj/I = L.get_active_hand()
+			A.shock(L, 100, get_conductivity(I))
 	if(A.panel_open)
 		return 1
 	return 0
@@ -65,28 +65,29 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 /datum/wires/airlock/UpdateCut(var/index, var/mended, mob/user)
 
 	var/obj/machinery/door/airlock/A = holder
+	var/obj/I = user.get_active_hand()
 	switch(index)
 		if(AIRLOCK_WIRE_MAIN_POWER1, AIRLOCK_WIRE_MAIN_POWER2)
 
 			if(!mended)
 				//Cutting either one disables the main door power, but unless backup power is also cut, the backup power re-powers the door in 10 seconds. While unpowered, the door may be crowbarred open, but bolts-raising will not work. Cutting these wires may electocute the user.
 				A.loseMainPower()
-				A.shock(user, 50)
+				A.shock(user, 50, get_conductivity(I))
 			else
 				if((!IsIndexCut(AIRLOCK_WIRE_MAIN_POWER1)) && (!IsIndexCut(AIRLOCK_WIRE_MAIN_POWER2)))
 					A.regainMainPower()
-					A.shock(user, 50)
+					A.shock(user, 50, get_conductivity(I))
 
 		if(AIRLOCK_WIRE_BACKUP_POWER1, AIRLOCK_WIRE_BACKUP_POWER2)
 
 			if(!mended)
 				//Cutting either one disables the backup door power (allowing it to be crowbarred open, but disabling bolts-raising), but may electocute the user.
 				A.loseBackupPower()
-				A.shock(user, 50)
+				A.shock(user, 50, get_conductivity(I))
 			else
 				if((!IsIndexCut(AIRLOCK_WIRE_BACKUP_POWER1)) && (!IsIndexCut(AIRLOCK_WIRE_BACKUP_POWER2)))
 					A.regainBackupPower()
-					A.shock(user, 50)
+					A.shock(user, 50, get_conductivity(I))
 
 		if(AIRLOCK_WIRE_DOOR_BOLTS)
 

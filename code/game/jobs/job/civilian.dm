@@ -134,6 +134,7 @@
 				H.equip_or_collect(new /obj/item/clothing/under/rank/botany(H), slot_w_uniform)
 			if("Beekeeper")
 				H.equip_or_collect(new /obj/item/clothing/under/rank/beekeeper(H), slot_w_uniform)
+				H.equip_or_collect(new /obj/item/queen_bee(H), slot_l_store)
 			if("Gardener")
 				H.equip_or_collect(new /obj/item/clothing/under/rank/gardener(H), slot_w_uniform)
 
@@ -186,7 +187,7 @@
 		//H.equip_or_collect(new /obj/item/device/pda/quartermaster(H), slot_belt)
 //		H.equip_or_collect(new /obj/item/clothing/gloves/black(H), slot_gloves)
 		H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
-		H.put_in_hands(new /obj/item/weapon/clipboard(H))
+		H.put_in_hands(new /obj/item/weapon/storage/bag/clipboard(H))
 		if(H.backbag == 1)
 			H.put_in_hands(new H.species.survival_gear(H))
 		else
@@ -372,7 +373,7 @@
 			H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing(H), slot_in_backpack)
 		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 		H.add_spell(new /spell/targeted/oathbreak/)
-		H.miming = 1
+		H.mind.miming = MIMING_OUT_OF_CHOICE
 		H.rename_self("mime")
 		return 1
 
@@ -396,12 +397,12 @@
 		var/response = alert(M, "Are you -sure- you want to break your oath of silence?\n(This removes your ability to create invisible walls and cannot be undone!)","Are you sure you want to break your oath?","Yes","No")
 		if(response != "Yes")
 			return
-		M.miming=0
+		M.mind.miming=0
 		for(var/spell/aoe_turf/conjure/forcewall/mime/spell in M.spell_list)
 			M.remove_spell(spell)
 		for(var/spell/targeted/oathbreak/spell in M.spell_list)
 			M.remove_spell(spell)
-		message_admins("[M.name] ([M.ckey]) has broken their oath of silence. (<A HREF='?_src_=holder;adminplayerobservejump=\ref[src]'>JMP</a>)")
+		message_admins("[M.name] ([M.ckey]) has broken their oath of silence. (<A HREF='?_src_=holder;adminplayerobservejump=\ref[M]'>JMP</a>)")
 		to_chat(M, "<span class = 'notice'>An unsettling feeling surrounds you...</span>")
 		return
 
@@ -508,9 +509,9 @@
 	spawn_positions = 2
 	supervisors = "Nanotrasen Law, CentComm Officals, and the station's captain."
 	selection_color = "#dddddd"
-	access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_maint_tunnels, access_cargo, access_medical,  access_bar, access_kitchen, access_hydroponics)
+	access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo, access_medical, access_bar, access_kitchen, access_hydroponics)
 	minimal_access = list(access_lawyer, access_court, access_heads, access_RC_announce, access_sec_doors, access_cargo,  access_bar, access_kitchen)
-	alt_titles = list("Lawyer")
+	alt_titles = list("Lawyer", "Bridge Officer")
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/lawyer
@@ -533,6 +534,13 @@
 					H.equip_or_collect(new /obj/item/clothing/under/lawyer/bluesuit(H), slot_w_uniform)
 					H.equip_or_collect(new /obj/item/clothing/suit/storage/lawyer/bluejacket(H), slot_wear_suit)
 					H.equip_or_collect(new /obj/item/clothing/shoes/leather(H), slot_shoes)
+				if("Bridge Officer")
+					H.equip_or_collect (new /obj/item/clothing/shoes/centcom(H), slot_shoes)
+					H.equip_or_collect(new /obj/item/clothing/suit/storage/lawyer/bridgeofficer(H), slot_wear_suit)
+					H.equip_or_collect(new /obj/item/clothing/under/bridgeofficer, slot_w_uniform)
+					H.equip_or_collect(new /obj/item/device/radio/headset/headset_com, slot_ears)
+					H.equip_or_collect(new /obj/item/clothing/head/soft/bridgeofficer(H), slot_head)
+					H.equip_or_collect(new /obj/item/clothing/gloves/white(H), slot_gloves)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/internalaffairs(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/suit/storage/internalaffairs(H), slot_wear_suit)
 		H.equip_or_collect(new /obj/item/clothing/shoes/centcom(H), slot_shoes)

@@ -21,7 +21,6 @@ Thus, the two variables affect pump operation are set in New():
 	name = "Volumetric gas pump"
 	desc = "A volumetric pump"
 
-	var/on = 0
 	var/transfer_rate = MAX_TRANSFER_RATE
 
 	var/frequency = 0
@@ -203,5 +202,13 @@ Thus, the two variables affect pump operation are set in New():
 
 	src.update_icon()
 	src.updateUsrDialog()
+
+/obj/machinery/atmospherics/binary/volume_pump/canClone(var/obj/O)
+	return istype(O, /obj/machinery/atmospherics/binary/volume_pump)
+
+/obj/machinery/atmospherics/binary/volume_pump/clone(var/obj/machinery/atmospherics/binary/volume_pump/O)
+	id_tag = O.id_tag
+	set_frequency(O.frequency)
+	return 1
 
 #undef MAX_TRANSFER_RATE

@@ -1,18 +1,14 @@
 /mob/proc/isUnconscious() //Returns 1 if unconscious, dead or faking death
-	if(stat || (status_flags & FAKEDEATH))
-		return 1
+	return stat == UNCONSCIOUS || isDead()
 
 /mob/proc/isDead() //Returns 1 if dead or faking death
-	if(stat == DEAD || (status_flags & FAKEDEATH))
-		return 1
+	return stat == DEAD || (status_flags & FAKEDEATH)
 
 /mob/proc/isStunned() //Because we have around four slighly different stunned variables for some reason.
-	if(isUnconscious() || paralysis || stunned || knockdown)
-		return 1
+	return isUnconscious() || paralysis > 0 || stunned > 0 || knockdown > 0
 
 /mob/proc/incapacitated()
-	if(isStunned() || restrained())
-		return 1
+	return isStunned() || restrained()
 
 /mob/proc/get_screen_colour()
 	if(!client)
@@ -28,18 +24,34 @@
 
 mob/proc/isincrit()
 	return 0
-	
+
 mob/proc/get_heart()
 	return null
-	
+
+/mob/proc/get_lungs()
+	return null
+
+/mob/proc/get_liver()
+	return null
+
+/mob/proc/get_kidneys()
+	return null
+
+/mob/proc/get_appendix()
+	return null
+
 mob/proc/remove_internal_organ()
 	return null
 
 /mob/proc/get_broken_organs()
 	return list()
-	
+
 /mob/proc/get_bleeding_organs()
 	return list()
+
+//Helper proc for do_after. Checks if the user is holding 'held_item' in his active arm. Return 0 to stop the do_after
+/mob/proc/do_after_hand_check(held_item)
+	return (get_active_hand() == held_item)
 
 /mob/dead/observer/get_screen_colour()
 	return default_colour_matrix
@@ -57,18 +69,26 @@ mob/proc/remove_internal_organ()
 		return .
 	else if(has_reagent_in_blood(DETCOFFEE))
 		return NOIRMATRIX
+	var/obj/item/clothing/glasses/scanner/S = is_wearing_item(/obj/item/clothing/glasses/scanner, slot_glasses)
+	if(S && S.on && S.color_matrix)
+		return S.color_matrix
 	var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
 	if(eyes && eyes.colourmatrix.len && !(eyes.robotic))
 		return eyes.colourmatrix
 	else
 		return default_colour_matrix
 
-/mob/proc/update_colour(var/time = 50,var/forceupdate = 0)
+/mob/proc/update_colour(var/time = 50,var/forceupdate = 0, var/list/colour_to_apply)
 	if(!client || (client.updating_colour && !forceupdate))
 		return
-	var/list/colour_to_apply = get_screen_colour()
-	var/list/difference = difflist(client.color,colour_to_apply)
-	if(difference || !(client.color) || !istype(difference) || !difference.len)
+	if(!colour_to_apply)
+		colour_to_apply = get_screen_colour()
+	var/list/difference = list()
+	if(client.color)
+		difference = difflist(client.color,colour_to_apply)
+	if(!difference) // otherwise !difference.len throws a runtime since null.len isn't a thing
+		return
+	else if(!difference.len)
 		client.updating_colour = 1
 		var/cached_ckey = client.ckey
 		if(forceupdate)
@@ -85,10 +105,10 @@ mob/proc/remove_internal_organ()
 				client.updating_colour = 0
 				difference = difflist(client.color,get_screen_colour())
 				if((difference || !(client.color) || !istype(difference) || !difference.len) && !forceupdate) // panic panic panic
-					src.update_colour(forceupdate = 1)
+					src.update_colour(0,1,colour_to_apply)
 			else
 				bad_changing_colour_ckeys["[cached_ckey]"] = 1
-
+/*
 /proc/RemoveAllFactionIcons(var/datum/mind/M)
 	ticker.mode.update_cult_icons_removed(M)
 	ticker.mode.update_rev_icons_removed(M)
@@ -96,14 +116,13 @@ mob/proc/remove_internal_organ()
 
 /proc/ClearRoles(var/datum/mind/M)
 	ticker.mode.remove_revolutionary(M)
-
+*/
 /proc/isAdminGhost(A)
 	if(isobserver(A))
 		var/mob/dead/observer/O = A
 		if(O.check_rights(R_ADMIN|R_FUN))
 			return 1
 	return 0
-
 
 /proc/canGhostRead(var/mob/A, var/obj/target, var/flags=PERMIT_ALL)
 	if(isAdminGhost(A))
@@ -391,8 +410,12 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 
 		return 1
 
-	if(full_body && (src.back || src.wear_mask))
-		return 1
+	if(full_body)
+		for(var/obj/item/I in get_equipped_items())
+			if(I.abstract)
+				continue
+
+			return 1
 
 	return 0
 
@@ -509,3 +532,26 @@ proc/is_blind(A)
 
 /mob/proc/get_survive_objective()
 	return new /datum/objective/survive
+
+/**
+* Honor check
+* Returns TRUE if user is BOMBERMAN, HIGHLANDER...
+* Respects honorable.
+*/
+/proc/is_honorable(var/mob/living/user, var/honorable = HONORABLE_ALL)
+	if(istype(user))
+		if(user.mind)
+			if(user.mind.special_role == BOMBERMAN && (honorable & HONORABLE_BOMBERMAN))
+				return TRUE
+			if(user.mind.special_role == HIGHLANDER && (honorable & HONORABLE_HIGHLANDER))
+				return TRUE
+	return FALSE
+
+// Called by /mob/living/carbon/human/examine() and /mob/living/carbon/human/Topic()
+// Returns whether the mob can see the specified HUD
+/mob/proc/hasHUD(var/hud_kind)
+	return FALSE
+
+// Returns a string that provides identification data for this mob
+/mob/proc/identification_string()
+	return name

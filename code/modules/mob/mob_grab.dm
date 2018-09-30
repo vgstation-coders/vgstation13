@@ -241,10 +241,6 @@
 			can_eat = TRUE
 		else if(isalien(user) && iscarbon(affecting))
 			can_eat = TRUE
-		else if(ishuman(user))
-			var/mob/living/carbon/human/H = user
-			if(ishorrorform(H) && iscarbon(affecting))
-				can_eat = TRUE
 		if(can_eat)
 			var/mob/living/carbon/attacker = user
 			if(locate(/mob) in attacker.stomach_contents)
@@ -278,7 +274,7 @@
 		assailant = null
 	if(hud)
 		returnToPool(hud)
-	hud = null
+		hud = null
 	..()
 
 /mob/proc/grab_check(mob/victim)

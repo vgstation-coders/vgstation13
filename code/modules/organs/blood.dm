@@ -11,15 +11,26 @@ var/const/BLOOD_VOLUME_OKAY = 336
 var/const/BLOOD_VOLUME_BAD = 224
 var/const/BLOOD_VOLUME_SURVIVE = 122
 
-/mob/living/carbon/human/var/datum/reagents/vessel	//Container for blood and BLOOD ONLY. Do not transfer other chems here.
+/mob/living/carbon/human/var/datum/reagents/vessel/vessel	//Container for blood and BLOOD ONLY. Do not transfer other chems here.
 /mob/living/carbon/human/var/var/pale = 0			//Should affect how mob sprite is drawn, but currently doesn't.
+
+/datum/reagents/vessel/update_total() //Version of this that doesn't call del_reagent
+	total_volume = 0
+	amount_cache.len = 0
+	for(var/datum/reagent/R in reagent_list)
+		if(R.volume < 0.1)
+			R.volume = 0
+		else
+			total_volume += R.volume
+			amount_cache += list(R.id = R.volume)
+	return 0
 
 //Initializes blood vessels
 /mob/living/carbon/human/proc/make_blood()
 	if(vessel)
 		return
 
-	vessel = new/datum/reagents(600)
+	vessel = new/datum/reagents/vessel(600)
 	vessel.my_atom = src
 
 	if(species && species.anatomy_flags & NO_BLOOD) //We want the var for safety but we can do without the actual blood.
@@ -33,8 +44,17 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 /mob/living/carbon/human/proc/fixblood()
 	for(var/datum/reagent/blood/B in vessel.reagent_list)
 		if(B.id == BLOOD)
-			B.data = list(	"donor"=src,"viruses"=null,"blood_DNA"=dna.unique_enzymes,"blood_colour"= species.blood_color,"blood_type"=dna.b_type,	\
-							"resistances"=null,"trace_chem"=null, "virus2" = null, "antibodies" = null)
+			B.data = list(
+				"donor"=src,
+				"viruses"=null,
+				"blood_DNA"=dna.unique_enzymes,
+				"blood_colour"= species.blood_color,
+				"blood_type"=dna.b_type,
+				"resistances"=null,
+				"trace_chem"=null,
+				"virus2" = null,
+				"antibodies" = null,
+				)
 			B.color = B.data["blood_colour"]
 
 // Takes care blood loss and regeneration
@@ -286,7 +306,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	..()
 
 //Gets human's own blood.
-/mob/living/carbon/proc/get_blood(datum/reagents/container)
+proc/get_blood(datum/reagents/container)
 	var/datum/reagent/blood/res = locate() in container.reagent_list //Grab some blood
 	if(res) // Make sure there's some blood at all
 		if(res.data["donor"] != src) //If it's not theirs, then we look for theirs
@@ -326,7 +346,7 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 
 	if(istype(source,/mob/living/carbon/human))
 		var/mob/living/carbon/human/M = source
-		var/datum/reagent/blood/is_there_blood = M.get_blood(M.vessel)
+		var/datum/reagent/blood/is_there_blood = get_blood(M.vessel)
 		if(!is_there_blood)
 			return //If there is no blood in the mob's blood vessel, there's no reason to make any sort of splatter.
 

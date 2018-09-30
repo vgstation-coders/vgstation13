@@ -68,7 +68,6 @@ var/global/ingredientLimit = 10
 	icon_state = "oven_off"
 	var/icon_state_on = "oven_on"
 	var/recursive_ingredients = 0 //allow /food/snacks/customizable as a valid ingredient
-	layer = BELOW_OBJ_LAYER
 	density = 1
 	anchored = 1
 	use_power = 1
@@ -87,7 +86,7 @@ var/global/ingredientLimit = 10
 	var/cks_max_volume = 50
 
 /obj/machinery/cooking/cultify()
-	new /obj/structure/cult/talisman(loc)
+	new /obj/structure/cult_legacy/talisman(loc)
 	..()
 
 /obj/machinery/cooking/New()
@@ -113,7 +112,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/is_open_container()
 	if(cooks_in_reagents)
-		return 1
+		return TRUE
 
 // Interactions ////////////////////////////////////////////////
 
@@ -127,7 +126,7 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/attack_hand(mob/user)
 	if(isobserver(user))
 		to_chat(user, "Your ghostly hand goes straight through.")
-	else if(issilicon(user))
+	else if(isMoMMI(user))// *buzz
 		to_chat(user, "This is old analog equipment. You can't interface with it.")
 
 	else if(src.active)
@@ -154,11 +153,11 @@ var/global/ingredientLimit = 10
 		to_chat(user, "<span class='warning'>[src.name] is currently busy.</span>")
 		return
 	else if(..())
-		return 1
+		return TRUE
 	else if(stat & (NOPOWER | BROKEN))
 		to_chat(user, "<span class='warning'> The power's off, it's no good. </span>")
 		return
-	else if(istype(user,/mob/living/silicon))
+	else if(isMoMMI(user))// *buzz
 		to_chat(user, "<span class='warning'>That's a terrible idea.</span>")
 		return
 	else
@@ -169,6 +168,9 @@ var/global/ingredientLimit = 10
 	set name = "Remove ingredients"
 	set category = "Object"
 	set src in oview(1)
+
+	if(isjustobserver(usr) || ismouse(usr))
+		return
 
 	if(cooks_in_reagents)
 		if(do_after(usr, src, src.reagents.total_volume / 10))
@@ -190,8 +192,8 @@ var/global/ingredientLimit = 10
 		. = "valid"
 	else if(istype(I,/obj/item/weapon/reagent_containers))
 		. = "transto"
-	else if(istype(I,/obj/item/organ))
-		var/obj/item/organ/organ = I
+	else if(istype(I,/obj/item/organ/internal))
+		var/obj/item/organ/internal/organ = I
 		if(organ.robotic)
 			. = "That's a prosthetic. It wouldn't taste very good."
 		else
@@ -207,17 +209,17 @@ var/global/ingredientLimit = 10
 	if(. == "valid")
 		if(src.foodChoices)
 			. = src.foodChoices[(input("Select production.") in src.foodChoices)]
-		if (!Adjacent(user) || user.stat || ((user.get_active_hand() != I) && !force_cook))
-			return 0
+		if (!Adjacent(user) || user.stat || ((user.get_active_hand() != (I) && !isgripper(user.get_active_hand())) && !force_cook))
+			return FALSE
 
 		if(user.drop_item(I, src))
 			src.ingredient = I
 			spawn() src.cook(.)
 			to_chat(user, "<span class='notice'>You add \the [I.name] to \the [src.name].</span>")
-			return 1
+			return TRUE
 	else
 		to_chat(user, "<span class='warning'>You can't put that in \the [src.name]. \n[.]</span>")
-	return 0
+	return FALSE
 
 /obj/machinery/cooking/proc/transfer_reagents_to_food(var/obj/item/I)
 	var/obj/item/target_food
@@ -239,15 +241,15 @@ var/global/ingredientLimit = 10
 	for (var/i = 1 to numticks)
 		sleep(delayfraction)
 		if (!src.ingredient || !active || get_turf(src.ingredient)!=get_turf(src))
-			return 0
-	return 1
+			return FALSE
+	return TRUE
 
 /obj/machinery/cooking/proc/cook(var/foodType)
 	src.active = 1
 	src.icon_state = src.icon_state_on
 	if (cook_after(src.cookTime, 25))
 		src.makeFood(foodType)
-		playsound(get_turf(src),src.cookSound,100,1)
+		playsound(src,src.cookSound,100,1)
 	src.active = 0
 	src.icon_state = initial(src.icon_state)
 	return
@@ -397,7 +399,7 @@ var/global/ingredientLimit = 10
 	reagents.update_total() //make the values refresh
 	if(ingredient)
 		icon_state = "fryer_on"
-		playsound(get_turf(src),'sound/machines/deep_fryer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
+		playsound(src,'sound/machines/deep_fryer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
 	else if(reagents.total_volume < DEEPFRY_MINOIL)
 		icon_state = "fryer_empty"
 	else
@@ -466,7 +468,7 @@ var/global/ingredientLimit = 10
 	//Deepfry a random nearby item
 	var/list/pickable_items = list()
 
-	for(var/obj/item/I in range(1, L))
+	for(var/obj/item/I in adjacent_atoms(L))
 		pickable_items.Add(I)
 
 	if(!pickable_items.len)
@@ -528,7 +530,7 @@ var/global/ingredientLimit = 10
 	reagents.update_total() //make the values refresh
 	if(ingredient)
 		icon_state = "confectionator_on"
-		playsound(get_turf(src),'sound/machines/juicer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
+		playsound(src,'sound/machines/juicer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
 	else if(reagents.total_volume < CONFECTIONATOR_MINSUGAR)
 		icon_state = "confectionator_empty"
 	else
@@ -603,7 +605,7 @@ var/global/ingredientLimit = 10
 			if (cook_after(src.cookTime/3, 14))
 				src.makeFood()
 				if(use_power)
-					playsound(get_turf(src),src.cookSound,100,1)
+					playsound(src,src.cookSound,100,1)
 				else
 					src.visible_message("<span class='notice'>\the [foodname] looks ready to eat!</span>")
 	src.icon_state = initial(src.icon_state)

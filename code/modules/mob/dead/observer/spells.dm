@@ -34,7 +34,8 @@ var/global/list/boo_phrases_silicon=list(
 	"Your circuits feel very strange.",
 	"You feel a tingling in your capacitors.",
 	"Your motherboard feels possessed...",
-	"Unauthorized access attempted by: unknown."
+	"Unauthorized access attempted by: unknown.",
+	"Bad datum"
 )
 
 /spell/aoe_turf/boo
@@ -55,5 +56,25 @@ var/global/list/boo_phrases_silicon=list(
 /spell/aoe_turf/boo/cast(list/targets)
 	for(var/turf/T in targets)
 		for(var/atom/A in T.contents)
-			if(A.can_spook())
+			if(A.can_spook(0))
 				A.spook(holder)
+
+/* FIXME
+/spell/ghost_show_map
+	name = "Show Map"
+	desc = "Display the station map."
+
+	spell_flags = STATALLOWED | GHOSTCAST
+
+	school = "transmutation"
+	charge_type = 0 // Apparently bypasses charge checks.
+	invocation = ""
+	invocation_type = SpI_NONE
+
+	override_base = "grey"
+	hud_state = "stationmap"
+
+/spell/ghost_show_map/cast(list/targets)
+	var/mob/dead/observer/O = holder
+	O.station_holomap.toggleHolomap(O, FALSE) // Don't need client.eye.
+*/

@@ -13,6 +13,11 @@
 /obj/structure/mopbucket/New()
 	..()
 	create_reagents(100)
+	mopbucket_list.Add(src)
+
+/obj/structure/mopbucket/Destroy()
+	mopbucket_list.Remove(src)
+	..()
 
 /obj/structure/mopbucket/attack_hand(mob/user as mob)
 	..()
@@ -37,7 +42,7 @@
 			else
 				src.reagents.trans_to(M, 3)
 				to_chat(user, "<span class='notice'>You wet [M]</span>")
-				playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
+				playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 		else
 			to_chat(user, "<span class='notice'>Nothing left to wet [M] with!</span>")
 	return 1

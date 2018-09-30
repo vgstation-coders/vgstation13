@@ -34,37 +34,37 @@
 
 	var/global/gid = 1
 	var/id = 0
-	New()
-		..()
-		id = gid
-		gid++
+/obj/machinery/portable_atmospherics/scrubber/huge/New()
+	..()
+	id = gid
+	gid++
 
-		name = "[name] (ID [id])"
+	name = "[name] (ID [id])"
 
-	attack_hand(var/mob/user as mob)
-		to_chat(usr, "<span class='notice'>You can't directly interact with this machine. Use the area atmos computer.</span>")
+/obj/machinery/portable_atmospherics/scrubber/huge/attack_hand(var/mob/user as mob)
+	to_chat(usr, "<span class='notice'>You can't directly interact with this machine. Use the area atmos computer.</span>")
 
-	update_icon()
-		src.overlays = 0
+/obj/machinery/portable_atmospherics/scrubber/huge/update_icon()
+	src.overlays = 0
 
+	if(on)
+		icon_state = "scrubber:1"
+	else
+		icon_state = "scrubber:0"
+
+/obj/machinery/portable_atmospherics/scrubber/huge/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
+	if(iswrench(W))
 		if(on)
-			icon_state = "scrubber:1"
-		else
-			icon_state = "scrubber:0"
-
-	attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-		if(iswrench(W))
-			if(on)
-				to_chat(user, "<span class='notice'>Turn it off first!</span>")
-				return
-
-			anchored = !anchored
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-			to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
-
+			to_chat(user, "<span class='notice'>Turn it off first!</span>")
 			return
 
-		..()
+		anchored = !anchored
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
+
+		return
+
+	..()
 
 /obj/machinery/portable_atmospherics/scrubber/huge/stationary
 	name = "Stationary Air Scrubber"
@@ -93,23 +93,33 @@
 
 	return
 
+/obj/machinery/portable_atmospherics/scrubber/proc/get_environment()
+	if(holding)
+		return holding.air_contents
+	else
+		return loc.return_air()
+
+/obj/machinery/portable_atmospherics/scrubber/proc/remove_sample(var/datum/gas_mixture/environment, var/transfer_moles)
+	if(holding)
+		return environment.remove(transfer_moles)
+	else
+		return loc.remove_air(transfer_moles)
+
+/obj/machinery/portable_atmospherics/scrubber/proc/return_sample(var/datum/gas_mixture/environment, var/datum/gas_mixture/removed)
+	if(holding)
+		environment.merge(removed)
+	else
+		loc.assume_air(removed)
+
 /obj/machinery/portable_atmospherics/scrubber/process()
 	..()
 
 	if(on)
-		var/datum/gas_mixture/environment
-		if(holding)
-			environment = holding.air_contents
-		else
-			environment = loc.return_air()
-		var/transfer_moles = min(1, volume_rate/environment.volume)*environment.total_moles()
+		var/datum/gas_mixture/environment = get_environment()
+		var/transfer_moles = min(1, volume_rate / environment.volume) * environment.total_moles()
 
 		//Take a gas sample
-		var/datum/gas_mixture/removed
-		if(holding)
-			removed = environment.remove(transfer_moles)
-		else
-			removed = loc.remove_air(transfer_moles)
+		var/datum/gas_mixture/removed = remove_sample(environment, transfer_moles)
 
 		//Filter it
 		if (removed)
@@ -118,31 +128,17 @@
 			filtered_out.temperature = removed.temperature
 
 
-			filtered_out.toxins = removed.toxins
-			removed.toxins = 0
-
-			filtered_out.carbon_dioxide = removed.carbon_dioxide
-			removed.carbon_dioxide = 0
-
-			if(removed.trace_gases.len>0)
-				for(var/datum/gas/trace_gas in removed.trace_gases)
-					if(istype(trace_gas, /datum/gas/sleeping_agent))
-						removed.trace_gases -= trace_gas
-						filtered_out.trace_gases += trace_gas
-
-			if(removed.trace_gases.len>0)
-				for(var/datum/gas/trace_gas in removed.trace_gases)
-					if(istype(trace_gas, /datum/gas/oxygen_agent_b))
-						removed.trace_gases -= trace_gas
-						filtered_out.trace_gases += trace_gas
+			filtered_out.adjust_multi(
+				GAS_PLASMA, removed[GAS_PLASMA],
+				GAS_CARBON, removed[GAS_CARBON],
+				GAS_SLEEPING, removed[GAS_SLEEPING],
+				GAS_OXAGENT, removed[GAS_OXAGENT])
+			removed.subtract(filtered_out)
 
 		//Remix the resulting gases
 			air_contents.merge(filtered_out)
 
-			if(holding)
-				environment.merge(removed)
-			else
-				loc.assume_air(removed)
+			return_sample(environment, removed)
 		//src.update_icon()
 		nanomanager.update_uis(src)
 	//src.updateDialog()
@@ -162,7 +158,7 @@
 	ui_interact(user)
 	return
 
-/obj/machinery/portable_atmospherics/scrubber/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+/obj/machinery/portable_atmospherics/scrubber/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/list/data[0]
 	data["portConnected"] = connected_port ? 1 : 0
 	data["tankPressure"] = round(air_contents.return_pressure() > 0 ? air_contents.return_pressure() : 0)
@@ -176,7 +172,7 @@
 		data["holdingTank"] = list("name" = holding.name, "tankPressure" = round(holding.air_contents.return_pressure() > 0 ? holding.air_contents.return_pressure() : 0))
 
 	// update the ui if it exists, returns null if no ui is passed/found
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		// the ui does not exist, so we'll create a new() one
         // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
@@ -213,3 +209,19 @@
 		eject_holding()
 		return
 	return ..()
+
+/obj/machinery/portable_atmospherics/scrubber/mech
+	volume = 50000
+	volume_rate = 20000
+
+/obj/machinery/portable_atmospherics/scrubber/mech/get_environment()
+	var/turf/T = get_turf(src)
+	return T.return_air()
+
+/obj/machinery/portable_atmospherics/scrubber/mech/remove_sample(var/environment, var/transfer_moles)
+	var/turf/T = get_turf(src)
+	return T.remove_air(transfer_moles)
+
+/obj/machinery/portable_atmospherics/scrubber/mech/return_sample(var/environment, var/removed)
+	var/turf/T = get_turf(src)
+	T.assume_air(removed)

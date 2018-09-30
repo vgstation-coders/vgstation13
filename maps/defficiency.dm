@@ -7,8 +7,8 @@
 	nameShort = "deff"
 	nameLong = "Defficiency"
 	map_dir = "defficiency"
-	tDomeX = 127
-	tDomeY = 67
+	tDomeX = 128
+	tDomeY = 58
 	tDomeZ = 2
 	zLevels = list(
 		/datum/zLevel/station,
@@ -88,7 +88,6 @@
 	wires = new /datum/wires/airlock/secure(src)
 
 ////////////////////////////////////////////////////////////////
-#include "defficiency/pipes.dm" // Atmos layered pipes.
 
 #include "defficiency/areas.dm" // Areas
 

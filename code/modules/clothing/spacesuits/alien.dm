@@ -129,7 +129,12 @@
 	icon_state = "boots-vox"
 	species_restricted = list(VOX_SHAPED)
 
-	stomp_attack_power = 0
+	mag_slow = MAGBOOTS_SLOWDOWN_MED
+
+	stomp_attack_power = 30
+	stomp_delay = 2 SECONDS
+	stomp_boot = "clawed boot"
+	stomp_hit = "gouges"
 
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //They're like those five-toed shoes except for vox and with only three toes
 
@@ -140,11 +145,13 @@
 	if(src.magpulse)
 		src.clothing_flags &= ~NOSLIP
 		src.magpulse = 0
-		to_chat(usr, "You relax your deathgrip on the flooring.")
+		src.slowdown = NO_SLOWDOWN
+		to_chat(usr, "You retract the razor-sharp talons of your boots.")
 	else
 		src.clothing_flags |= NOSLIP
 		src.magpulse = 1
-		to_chat(usr, "You dig your claws deeply into the flooring, bracing yourself.")
+		src.slowdown = mag_slow
+		to_chat(usr, "You extend the razor-sharp talons of your boots.")
 
 
 // Vox Trader -- Same stats as civ gear, but looks like raiders. ///////////////////////////////
@@ -301,6 +308,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	icon_state = "vox-civ-engineer"
 	item_state = "vox-pressure-engineer"
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 50)
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 
@@ -380,6 +388,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "vox roboticist pressure helmet"
 	icon_state = "vox-civ-roboticist"
 	desc = "A very alien-looking helmet for vox crewmembers. This one is for roboticists."
+	actions_types = list(/datum/action/item_action/toggle_helmet_mask)
 
 
 //Med/Sci
@@ -433,6 +442,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "vox paramedic pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for paramedics."
 	icon_state = "vox-civ-paramedic"
+	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
 	name = "vox paramedic pressure helmet"
@@ -443,6 +453,7 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "vox cmo pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for the CMO."
 	icon_state = "vox-civ-cmo"
+	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
 	name = "vox cmo pressure helmet"
@@ -558,3 +569,46 @@ obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	desc = "A strange suit comprised of a series of tubes. Despite looking like a decent wind could tear it apart, it is surprisingly durable. Too thin for anything but a Grey to wear it."
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 50)
 	species_restricted = list("Grey")
+
+
+//Martian Fishbowl
+
+/obj/item/clothing/head/helmet/space/martian
+	name = "alien pressure helmet"
+	icon_state = "bubblehelm"
+	icon = 'icons/obj/clothing/martian.dmi'
+	item_state = "bubblehelm"
+	desc = "A very spacious container, with a slot on the back for pressurized tanks to sustain an internal atmosphere."
+	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	body_parts_covered = FULL_HEAD|IGNORE_INV
+	species_restricted = list("Martian")
+	var/obj/item/weapon/tank/tank
+
+/obj/item/clothing/head/helmet/space/martian/attackby(obj/item/W,mob/user)
+	if(istype(W, /obj/item/weapon/tank) && !tank)
+		to_chat(user, "<span class = 'notice'>You start attaching \the [W] to \the [src].</span>")
+		if(do_after(user,src, 50))
+			if(user.drop_item(W, src))
+				playsound(src,'sound/effects/refill.ogg',50,1)
+				to_chat(user, "<span class = 'notice'>You attach \the [W] to \the [src]!</span>")
+				tank = W
+				item_state = "[initial(item_state)]_mask"
+				return
+	..()
+
+/obj/item/clothing/head/helmet/space/martian/attack_self(mob/user)
+	if(tank)
+		to_chat(user, "<span class = 'notice'>You start detaching \the [tank] from \the [src].</span>")
+		if(do_after(user,src, 50))
+			playsound(src,'sound/effects/refill.ogg',50,1)
+			to_chat(user, "<span class = 'notice'>You detach \the [tank] from \the [src]!</span>")
+			user.put_in_hands(tank)
+			item_state = initial(item_state)
+			tank = null
+	..()
+
+/obj/item/clothing/head/helmet/space/martian/examine(mob/user)
+	..()
+	if(tank)
+		to_chat(user, "<span class = 'notice'>It has a [bicon(tank)][tank] attached to the back.</span>")

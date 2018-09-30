@@ -19,14 +19,19 @@
 	var/next_extinguish=0
 	var/extinguish_cooldown=10 SECONDS
 
-/obj/item/clothing/suit/space/plasmaman/proc/Extinguish(var/mob/user)
-	var/mob/living/carbon/human/H=user
+/obj/item/clothing/suit/space/plasmaman/proc/Extinguish(var/mob/living/carbon/human/H)
 	if(next_extinguish > world.time)
 		return
 
 	next_extinguish = world.time + extinguish_cooldown
 	to_chat(H, "<span class='warning'>Your suit automatically extinguishes the fire.</span>")
 	H.ExtinguishMob()
+
+/obj/item/clothing/suit/space/plasmaman/proc/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
+	if(H.bodytemperature < T0C+37)
+		H.bodytemperature = min(H.bodytemperature+5,T0C+37)
+	else
+		H.bodytemperature = max(H.bodytemperature-5,T0C+37)
 
 /obj/item/clothing/head/helmet/space/plasmaman
 	name = "plasmaman helmet"
@@ -43,7 +48,7 @@
 	var/on = 0
 	var/no_light=0 // Disable the light on the atmos suit
 	actions_types = list(/datum/action/item_action/toggle_light)
-	
+
 /obj/item/clothing/head/helmet/space/plasmaman/attack_self(mob/user)
 	if(no_light)
 		return
@@ -69,6 +74,7 @@
 	name = "plasmaman atmospheric suit"
 	icon_state = "plasmamanAtmos_suit"
 	armor = list(melee = 20, bullet = 0, laser = 0,energy = 0, bomb = 25, bio = 100, rad = 0)
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 
@@ -83,6 +89,7 @@
 	name = "plasmaman engineer suit"
 	icon_state = "plasmamanEngineer_suit"
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 
@@ -220,6 +227,7 @@
 /obj/item/clothing/suit/space/plasmaman/medical/paramedic
 	name = "plasmaman paramedic suit"
 	icon_state = "plasmaman_Paramedic"
+	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/plasmaman/medical/paramedic
 	name = "plasmaman paramedic helmet"
@@ -238,6 +246,7 @@
 /obj/item/clothing/suit/space/plasmaman/medical/cmo
 	name = "plasmaman chief medical officer suit"
 	icon_state = "plasmaman_CMO"
+	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/plasmaman/medical/cmo
 	name = "plasmaman chief medical officer helmet"
@@ -252,6 +261,10 @@
 	name = "plasmaman scientist helmet"
 	icon_state = "plasmamanScience_helmet0"
 	base_state = "plasmamanScience_helmet"
+
+/obj/item/clothing/head/helmet/space/plasmaman/science/New()
+	actions_types += /datum/action/item_action/toggle_helmet_mask
+	..()
 
 /obj/item/clothing/suit/space/plasmaman/science/rd
 	name = "plasmaman research director suit"
@@ -276,6 +289,15 @@
 	base_state = "plasmamanSecurity_helmet"
 	armor = list(melee = 40, bullet = 15, laser = 35,energy = 5, bomb = 35, bio = 100, rad = 20)
 	eyeprot = 1
+
+/obj/item/clothing/suit/space/plasmaman/security/detective
+	name = "plasmaman detective suit"
+	icon_state = "plasmamanDetective_suit"
+
+/obj/item/clothing/head/helmet/space/plasmaman/security/detective
+	name = "plasmaman detective helmet"
+	icon_state = "plasmamanDetective_helmet0"
+	base_state = "plasmamanDetective_helmet"
 
 /obj/item/clothing/suit/space/plasmaman/security/hos
 	name = "plasmaman head of security suit"
@@ -354,7 +376,7 @@
 		..(user)
 	else
 		camera = new /obj/machinery/camera(src)
-		camera.network = list("NUKE")
+		camera.network = list(CAMERANET_NUKE)
 		cameranet.removeCamera(camera)
 		camera.c_tag = user.name
 		to_chat(user, "<span class='notice'>User scanned as [camera.c_tag]. Camera activated.</span>")

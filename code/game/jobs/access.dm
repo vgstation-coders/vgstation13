@@ -73,7 +73,7 @@
 /var/const/Mostly for admin fun times.*/
 /var/const/access_cent_general = 101//General facilities.
 /var/const/access_cent_thunder = 102//Thunderdome.
-/var/const/access_cent_specops = 103//Death Commando.
+/var/const/access_cent_specops = 103//Deathsquad.
 /var/const/access_cent_medical = 104//Medical/Research
 /var/const/access_cent_living = 105//Living quarters.
 /var/const/access_cent_storage = 106//Generic storage areas.
@@ -105,7 +105,7 @@
 	set_up_access()
 	if(!M || !istype(M))
 		return 0 // I guess?  This seems to happen when AIs use something.
-	if(M.hasFullAccess()) // AI, robots, adminghosts, etc.
+	if(M.hasFullAccess()) // AI, adminghosts, etc.
 		return 1
 	var/list/ACL = M.GetAccess()
 	return can_access(ACL,req_access,req_one_access)
@@ -238,7 +238,7 @@
 	            access_keycard_auth, access_tcomsat, access_gateway, /*vg paramedic*/, access_paramedic, access_mechanic, access_taxi)
 
 /proc/get_absolutely_all_accesses()
-	return ((get_all_accesses() | get_all_centcom_access() | get_all_syndicate_access()) + access_salvage_captain)
+	return ((get_all_accesses() | get_all_centcom_access() | get_all_syndicate_access()) + access_salvage_captain + access_trade)
 
 /proc/get_all_centcom_access()
 	return list(access_cent_general, access_cent_thunder, access_cent_specops, access_cent_medical, access_cent_living, access_cent_storage, access_cent_teleporter, access_cent_creed, access_cent_captain)
@@ -512,4 +512,4 @@ proc/FindNameFromID(var/mob/living/carbon/human/H)
 			return ID.registered_name
 
 proc/get_all_job_icons() //For all existing HUD icons
-	return get_all_jobs() + list("Prisoner")
+	return get_all_jobs() + list("Prisoner", "visitor")

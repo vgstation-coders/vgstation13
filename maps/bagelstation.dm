@@ -7,8 +7,8 @@
 	nameShort = "bagel"
 	nameLong = "Bagelstation"
 	map_dir = "bagelstation"
-	tDomeX = 108
-	tDomeY = 70
+	tDomeX = 128
+	tDomeY = 58
 	tDomeZ = 2
 	zLevels = list(
 		/datum/zLevel/station,
@@ -40,9 +40,6 @@
 /obj/machinery/door/airlock/security/New()
 	.=..()
 	wires = new /datum/wires/airlock/secure(src)
-
-////////////////////////////////////////////////////////////////
-#include "defficiency/pipes.dm" // Atmos layered pipes.
 
 #include "bagelstation.dmm"
 

@@ -1,4 +1,3 @@
-
 /obj/structure/crystal
 	name = "large crystal"
 	icon = 'icons/obj/xenoarchaeology.dmi'

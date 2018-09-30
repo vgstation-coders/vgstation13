@@ -37,7 +37,7 @@
 			temp = PULSE_NONE
 
 		if(R.id in cheartstopper)  //Conditional heart-stoppage
-			if(R.volume >= R.overdose)
+			if(R.volume >= R.overdose_am)
 				temp = PULSE_NONE
 
 	return temp

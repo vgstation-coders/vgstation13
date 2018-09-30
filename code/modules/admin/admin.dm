@@ -59,7 +59,7 @@ var/global/floorIsLava = 0
 	body += {"
 		<br><br>\[
 		<a href='?_src_=vars;Vars=\ref[M]'>VV</a> -
-		<a href='?src=\ref[src];traitor=\ref[M]'>TP</a> -
+		<a href='?src=\ref[src];traitor=\ref[M]'>RP</a> -
 		<a href='?src=\ref[src];rapsheet=1;rsckey=[M.ckey]'>Bans</a> -
 		<a href='?src=\ref[usr];priv_msg=\ref[M]'>PM</a> -
 		<a href='?src=\ref[src];subtlemessage=\ref[M]'>SM</a> -
@@ -92,7 +92,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];getmob=\ref[M]'>Get</A> |
 		<A href='?src=\ref[src];sendmob=\ref[M]'>Send To</A>
 		<br><br>
-		<A href='?src=\ref[src];traitor=\ref[M]'>Traitor panel</A> |
+		<A href='?src=\ref[src];traitor=\ref[M]'>Role panel</A> |
 		<A href='?src=\ref[src];narrateto=\ref[M]'>Narrate to</A> |
 		<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A>
 	"}
@@ -107,6 +107,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];makecatbeast=\ref[M]'>Make Catbeast</A> |
 			<A href='?src=\ref[src];makecluwne=\ref[M]'>Make Cluwne</A> |
 			<A href='?src=\ref[src];Assplode=\ref[M]'>Assplode</A> |
+			<A href='?src=\ref[src];DealBrainDam=\ref[M]'>Deal brain damage</A> |
 		"}
 
 	// Mob-specific controls.
@@ -152,7 +153,7 @@ var/global/floorIsLava = 0
 				body += "<A href='?src=\ref[src];changehands=\ref[M]'>Change amount of hands (current: [M.held_items.len])</A> | "
 
 			// DNA2 - Admin Hax
-			if(iscarbon(M) && !isbrain(M) && !isalien(M))
+			if(ishuman(M) || ismonkey(M))
 				body += "<br><br>"
 				body += "<b>DNA Blocks:</b><br><table border='0'><tr><th>&nbsp;</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>"
 				var/bname
@@ -678,6 +679,21 @@ var/global/floorIsLava = 0
 		"}
 	if(master_mode == "secret")
 		dat += "<A href='?src=\ref[src];f_secret=1'>(Force Secret Mode)</A><br>"
+	if(master_mode == "Dynamic Mode")
+		if(ticker.current_state == GAME_STATE_PREGAME)
+			dat += "<A href='?src=\ref[src];f_dynamic_roundstart=1'>(Force Roundstart Rulesets)</A><br>"
+			if (forced_roundstart_ruleset.len > 0)
+				for(var/datum/dynamic_ruleset/roundstart/rule in forced_roundstart_ruleset)
+					dat += {"<A href='?src=\ref[src];f_dynamic_roundstart_remove=\ref[rule]'>-> [rule.name] <-</A><br>"}
+				dat += "<A href='?src=\ref[src];f_dynamic_roundstart_clear=1'>(Clear Rulesets)</A><br>"
+		else
+			dat += "<A href='?src=\ref[src];f_dynamic_latejoin=1'>(Force Next Latejoin Ruleset)</A><br>"
+			if (ticker && ticker.mode && istype(ticker.mode,/datum/gamemode/dynamic))
+				var/datum/gamemode/dynamic/mode = ticker.mode
+				if (mode.forced_latejoin_rule)
+					dat += {"<A href='?src=\ref[src];f_dynamic_latejoin_clear=1'>-> [mode.forced_latejoin_rule.name] <-</A><br>"}
+			dat += "<A href='?src=\ref[src];f_dynamic_midround=1'>(Execute Midround Ruleset!)</A><br>"
+
 
 	dat += {"
 		<hr />
@@ -686,7 +702,7 @@ var/global/floorIsLava = 0
 				<a href="?src=\ref[src];set_base_laws=ai"><b>Default Cyborg/AI Laws:</b>[base_law_type]</a>
 			</li>
 			<li>
-				<a href="?src=\ref[src];set_base_laws=mommi"><b>Default MoMMI Laws:</b>[mommi_base_law_type]</a>
+				<a href="?src=\ref[src];set_base_laws=mommi"><b>Default MoMMI Laws:</b>[mommi_laws["Default"]]</a>
 			</li>
 		</ul>
 		<hr />
@@ -704,6 +720,7 @@ var/global/floorIsLava = 0
 	else
 		dat += "<A href='?src=\ref[src];wages_enabled=enable'>Enable wages</A><br>"
 	dat += "<A href ='?src=\ref[src];econ_panel=open'>Manage accounts database</A><br>"
+	dat += "<A href ='?src=\ref[src];religions=1&display=1'>Manage religions</A><br>"
 
 	usr << browse(dat, "window=admin2;size=280x370")
 	return
@@ -743,7 +760,6 @@ var/global/floorIsLava = 0
 			<BR>
 			<A href='?src=\ref[src];secretsadmin=clear_bombs'>Remove all bombs currently in existence</A><BR>
 			<A href='?src=\ref[src];secretsadmin=list_bombers'>Bombing List</A><BR>
-			<A href='?src=\ref[src];secretsadmin=list_signalers'>Show last [length(lastsignalers)] signalers</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsadmin=showailaws'>Show AI Laws</A><BR>
 			<A href='?src=\ref[src];secretsadmin=list_lawchanges'>Show last [length(lawchanges)] law changes</A><BR>
@@ -778,6 +794,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=immovablebig'>Spawn an Immovable Pillar</A><BR>
 			<A href='?src=\ref[src];secretsfun=immovablehyper'>Spawn an Immovable Monolith (highly destructive!)</A><BR>
 			<A href='?src=\ref[src];secretsfun=meaty_gores'>Trigger an Organic Debris Field</A><BR>
+			<A href='?src=\ref[src];secretsfun=fireworks'>Send some fireworks at the station</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=blobwave'>Spawn a blob cluster</A><BR>
 			<A href='?src=\ref[src];secretsfun=blobstorm'>Spawn a blob conglomerate</A><BR>
@@ -799,7 +816,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
 			<A href='?src=\ref[src];secretsfun=pda_spam'>Trigger a wave of PDA spams</A><BR>
-
+			<a href='?src=\ref[src];secretsfun=pick_event'>Pick a random event from all possible random events (WARNING, NOT ALL ARE GUARANTEED TO WORK).</A><BR>
 			<BR>
 			<B>Fun Secrets</B><BR>
 			<BR>
@@ -849,6 +866,8 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=hellonearth'>Summon Nar-Sie</A><BR>
 			<A href='?src=\ref[src];secretsfun=supermattercascade'>Start a Supermatter Cascade</A><BR>
 			<A href='?src=\ref[src];secretsfun=meteorstorm'>Trigger an undending Meteor Storm</A><BR>
+			<A href='?src=\ref[src];secretsfun=halloween'>Trigger the blood moon</A><BR>
+			<A href='?src=\ref[src];secretsfun=christmas_vic'>Make the station christmasy</A><BR>
 			"}
 
 	if(check_rights(R_SERVER,0))
@@ -1112,6 +1131,9 @@ var/global/floorIsLava = 0
 	if(!check_rights(R_ADMIN))
 		return
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
+		var/response = alert("Toggle round end delay? It is currently [ticker.delay_end?"delayed":"not delayed"]","Toggle round end delay","Yes","No")
+		if(response != "Yes")
+			return
 		if(ticker.delay_end == 2)
 			to_chat(world, "<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
 			log_admin("<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
@@ -1207,47 +1229,35 @@ var/global/floorIsLava = 0
 
 ////////////////////////////////////////////////////////////////////////////////////////////////ADMIN HELPER PROCS
 
-/proc/is_special_character(mob/M as mob) // returns 1 for specail characters and 2 for heroes of gamemode
+/proc/is_special_character(mob/M as mob) // returns 1 for special characters
 	if(!ticker || !ticker.mode)
 		return 0
 	if (!istype(M))
 		return 0
 	if(isrev(M) || isrevhead(M))
-		if (ticker.mode.config_tag == "revolution")
-			return 2
 		return 1
-	if(iscult(M))
-		if (ticker.mode.config_tag == "cult")
-			return 2
+	if(isanycultist(M))
 		return 1
 	if(ismalf(M))
-		if (ticker.mode.config_tag == "malfunction")
-			return 2
 		return 1
 	if(isnukeop(M))
-		if (ticker.mode.config_tag == "nuclear")
-			return 2
 		return 1
 	if(iswizard(M) || isapprentice(M))
-		if (ticker.mode.config_tag == "wizard")
-			return 2
 		return 1
 	if(ischangeling(M))
-		if (ticker.mode.config_tag == "changeling")
-			return 2
 		return 1
 	/*if(isborer(M)) //They ain't antags anymore
 		if (ticker.mode.config_tag == "borer")
 			return 2
 		return 1*/
 	if(isbadmonkey(M))
-		if (ticker.mode.config_tag == "monkey")
-			return 2
 		return 1
 	if(isrobot(M))
 		var/mob/living/silicon/robot/R = M
 		if(R.emagged)
 			return 1
+	if(isdeathsquad(M))
+		return 1
 	if(M.mind&&M.mind.special_role)//If they have a mind and special role, they are some type of traitor or antagonist.
 		return 1
 
@@ -1273,25 +1283,23 @@ var/global/floorIsLava = 0
 */
 /datum/admins/proc/spawn_atom(var/object as text)
 	set category = "Debug"
-	set desc = "(atom path) Spawn an atom. Finish path with a period to hide subtypes"
+	set desc = "(atom path) Spawn an atom. Finish path with a period to hide subtypes, include any variable changes at the end like so: {name=\"Test\";amount=50}"
 	set name = "Spawn"
 
 	if(!check_rights(R_SPAWN))
 		return
 
-	var/list/matches = new()
+	//Parse and strip any changed variables (added in curly brackets at the end of the input string)
+	var/variables_start = findtext(object,"{")
 
-	if(text_ends_with(object, ".")) //Path ends with a dot - DO NOT include subtypes
-		object = copytext(object, 1, length(object)) //Remove the dot
+	var/list/varchanges = list()
+	if(variables_start)
+		var/parameters = copytext(object,variables_start+1,length(object))//removing the last '}'
+		varchanges = readlist(parameters, ";")
 
-		for(var/path in typesof(/atom))
-			if(text_ends_with("[path]", object))
-				matches += path
-	else //Include subtypes
-		for(var/path in typesof(/atom))
-			if(findtext("[path]", object))
-				matches += path
+		object = copytext(object, 1, variables_start)
 
+	var/list/matches = get_matching_types(object, /atom)
 
 	if(matches.len==0)
 		return
@@ -1304,19 +1312,27 @@ var/global/floorIsLava = 0
 		if(!chosen)
 			return
 
+	//preloader is hooked to atom/New(), and is automatically deleted once it 'loads' an object
+	_preloader = new(varchanges, chosen)
+
 	if(ispath(chosen,/turf))
 		var/turf/T = get_turf(usr.loc)
 		T.ChangeTurf(chosen)
+	else if(ispath(chosen, /area))
+		var/area/A = locate(chosen)
+		var/turf/T = get_turf(usr.loc)
+
+		T.set_area(A)
 	else
 		new chosen(usr.loc)
 
 	log_admin("[key_name(usr)] spawned [chosen] at ([usr.x],[usr.y],[usr.z])")
 	feedback_add_details("admin_verb","SA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/datum/admins/proc/show_traitor_panel(var/mob/M in mob_list)
+/datum/admins/proc/show_role_panel(var/mob/M in mob_list)
 	set category = "Admin"
-	set desc = "Edit mobs's memory and role"
-	set name = "Show Traitor Panel"
+	set desc = "Edit mobs's Job, Roles, and Factions"
+	set name = "Show Role Panel"
 
 	if(!istype(M))
 		to_chat(usr, "This can only be used on instances of type /mob")
@@ -1325,7 +1341,7 @@ var/global/floorIsLava = 0
 		to_chat(usr, "This mob has no mind!")
 		return
 
-	M.mind.edit_memory()
+	M.mind.role_panel()
 	feedback_add_details("admin_verb","STP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 

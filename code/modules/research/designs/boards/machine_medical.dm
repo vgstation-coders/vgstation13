@@ -98,6 +98,28 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/bioprinter
 
+//CHEM HEATING/COOLING
+
+/datum/design/chemheater
+	name = "Circuit Design (Directed Laser Heater)"
+	desc = "Allows for the construction of circuit boards used to build a directed laser heater."
+	id = "chemheater"
+	req_tech = list(Tc_BIOTECH = 3, Tc_ENGINEERING = 3, Tc_PROGRAMMING = 3)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/chemheater
+
+/datum/design/chemcooler
+	name = "Circuit Design (Cryonic Wave Projector)"
+	desc = "Allows for the construction of circuit boards used to build a cryonic wave projector."
+	id = "chemcooler"
+	req_tech = list(Tc_BIOTECH = 3, Tc_ENGINEERING = 3, Tc_PROGRAMMING = 3)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/chemcooler
+
 //VIROLOGY
 
 /datum/design/incubator

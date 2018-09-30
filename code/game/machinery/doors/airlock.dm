@@ -99,7 +99,7 @@
 	normalspeed = 0 //So they close fast, not letting the air to depressurize in a fucking second
 
 /obj/machinery/door/airlock/external/cultify()
-	new /obj/machinery/door/mineral/wood(loc)
+	new /obj/machinery/door/mineral/cult(loc)
 	..()
 
 /obj/machinery/door/airlock/glass
@@ -285,8 +285,8 @@
 //			target_tile.parent.suspend_group_processing()
 		var/datum/gas_mixture/napalm = new
 		var/toxinsToDeduce = 35
-		napalm.toxins = toxinsToDeduce
 		napalm.temperature = 400+T0C
+		napalm.adjust_gas(GAS_PLASMA, toxinsToDeduce)
 		target_tile.assume_air(napalm)
 		spawn (0)
 			target_tile.hotspot_expose(temperature, 400, surfaces=1)
@@ -363,14 +363,10 @@ About the new airlock wires panel:
 					user.delayNextMove(10)
 					spawn (10)
 						src.justzap = 0
-					return
-			else /*if(src.justzap)*/
-				return
 		else if(user.hallucination > 50 && prob(10) && src.operating == 0)
 			to_chat(user, "<span class='danger'>You feel a powerful shock course through your body!</span>")
 			user.halloss += 10
 			user.stunned += 10
-			return
 	..(user)
 
 /obj/machinery/door/Bumped(atom/AM)
@@ -455,17 +451,15 @@ About the new airlock wires panel:
 // shock user with probability prb (if all connections & power are working)
 // returns 1 if shocked, 0 otherwise
 // The preceding comment was borrowed from the grille's shock script
-/obj/machinery/door/airlock/shock(mob/user, prb)
+/obj/machinery/door/airlock/shock(mob/user, prb, var/siemenspassed = 1)
 	if((stat & (NOPOWER)) || !src.arePowerSystemsOn())		// unpowered, no shock
 		return 0
 	if(hasShocked)
 		return 0	//Already shocked someone recently?
 	if(!prob(prb))
 		return 0 //you lucked out, no shock for you
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(5, 1, src)
-	s.start() //sparks always.
-	if(electrocute_mob(user, get_area(src), src))
+	spark(src, 5)
+	if(electrocute_mob(user, get_area(src), src, siemenspassed))
 		hasShocked = 1
 		spawn(10)
 			hasShocked = 0
@@ -520,6 +514,8 @@ About the new airlock wires panel:
 	return
 
 /obj/machinery/door/airlock/attack_ai(mob/user as mob)
+	if(!allowed(user) && !isobserver(user))
+		return //So i heard you tried to interface with doors you have no access to
 	src.add_hiddenprint(user)
 	if(isAI(user))
 		if(!src.canAIControl())
@@ -684,9 +680,7 @@ About the new airlock wires panel:
 		if (istype(mover, /obj/item))
 			var/obj/item/I = mover
 			if (I.siemens_coefficient > 0)
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(5, 1, src)
-				s.start()
+				spark(src, 5)
 	return ..()
 
 /obj/machinery/door/airlock/Topic(href, href_list, var/nowindow = 0)
@@ -707,36 +701,6 @@ About the new airlock wires panel:
 		if(usr.machine==src)
 			usr.unset_machine()
 			return
-
-	var/am_in_range=in_range(src, usr)
-	var/turf_ok = istype(src.loc, /turf)
-	//testing("in range: [am_in_range], turf ok: [turf_ok]")
-	if(am_in_range && turf_ok)
-		usr.set_machine(src)
-		if(!panel_open)
-			var/obj/item/device/multitool/P = get_multitool(usr)
-			if(P && istype(P))
-				if("set_id" in href_list)
-					var/newid = copytext(reject_bad_text(input(usr, "Specify the new ID tag for this machine", src, id_tag) as null|text),1,MAX_MESSAGE_LEN)
-					if(newid)
-						id_tag = newid
-						initialize()
-				if("set_freq" in href_list)
-					var/newfreq=frequency
-					if(href_list["set_freq"]!="-1")
-						newfreq=text2num(href_list["set_freq"])
-					else
-						newfreq = input(usr, "Specify a new frequency (GHz). Decimals assigned automatically.", src, frequency) as null|num
-					if(newfreq)
-						if(findtext(num2text(newfreq), "."))
-							newfreq *= 10 // shift the decimal one place
-						if(newfreq < 10000)
-							frequency = newfreq
-							initialize()
-
-				usr.set_machine(src)
-				update_multitool_menu(usr)
-
 
 	if(isAdminGhost(usr) || (istype(usr, /mob/living/silicon) && src.canAIControl() && operating != -1))
 		//AI
@@ -818,6 +782,7 @@ About the new airlock wires panel:
 							return 0
 						safe = 0
 						investigation_log(I_WIRES, "|| safeties removed via robot interface by [key_name(usr)]")
+						add_attacklogs(usr, null, " disabled door-crush safeties on [src] at [x] [y] [z]", admin_warn = FALSE)
 					else
 						to_chat(usr, text("Firmware reports safeties already overriden."))
 
@@ -848,6 +813,8 @@ About the new airlock wires panel:
 							return 0
 						close()
 						investigation_log(I_WIRES, "|| closed via robot interface by [key_name(usr)]")
+						if(!safe)
+							add_attacklogs(usr, null, " forced close [src] at [x] [y] [z] with safeties disabled.", admin_warn = FALSE)
 					else
 						if(isobserver(usr) && !canGhostWrite(usr,src,"opened"))
 							to_chat(usr, "<span class='warning'>Nope.</span>")
@@ -936,7 +903,7 @@ About the new airlock wires panel:
 						to_chat(usr, text("The door is already electrified. You can't re-electrify it while it's already electrified.<br>\n"))
 					else
 						shockedby += text("\[[time_stamp()]\][usr](ckey:[usr.ckey])")
-						usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Electrified the [name] at [x] [y] [z]</font>")
+						add_attacklogs(usr, null, "Electrified the [name] at [x] [y] [z]", admin_warn = FALSE)
 						investigation_log(I_WIRES, "|| electrified via robot interface by [key_name(usr)]")
 						to_chat(usr, "The door is now electrified indefinitely.")
 						if(isobserver(usr) && !canGhostWrite(usr,src,"electrified (permanent)"))
@@ -954,6 +921,7 @@ About the new airlock wires panel:
 							return 0
 						safe = 1
 						investigation_log(I_WIRES, "|| safeties re-enabled via robot interface by [key_name(usr)]")
+						add_attacklogs(usr, null, " enabled safeties on [src] at [x] [y] [z]", admin_warn = FALSE)
 						src.updateUsrDialog()
 					else
 						to_chat(usr, text("Firmware reports safeties already in place."))
@@ -990,6 +958,8 @@ About the new airlock wires panel:
 							return 0
 						close()
 						investigation_log(I_WIRES, "|| closed via robot interface by [key_name(usr)]")
+						if(!safe)
+							add_attacklogs(usr, null, " forced close [src] at [x] [y] [z] with safeties disabled.", admin_warn = FALSE)
 
 				if(10)
 					// Bolt lights
@@ -1033,7 +1003,6 @@ About the new airlock wires panel:
 			// TODO: analyze the called proc
 			if (shock(user, 100))
 				user.delayNextAttack(10)
-				return
 	//Basically no open panel, not opening already, door has power, area has power, door isn't bolted
 	if (!panel_open && !operating && arePowerSystemsOn() && !(stat & (NOPOWER|BROKEN)) && !locked)
 		..(user)
@@ -1070,6 +1039,7 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(!operating)
 		panel_open = !panel_open
+		playsound(src, 'sound/items/Screwdriver.ogg', 25, 1, -6)
 		update_icon()
 		return 1
 	return
@@ -1081,9 +1051,8 @@ About the new airlock wires panel:
 	if (!istype(user, /mob/living/silicon))
 		if (isElectrified())
 			// TODO: analyze the called proc
-			if (shock(user, 75))
+			if (shock(user, 75, I.siemens_coefficient))
 				user.delayNextAttack(10)
-				return
 
 	if(istype(I, /obj/item/weapon/batteringram))
 		user.delayNextAttack(30)
@@ -1091,15 +1060,15 @@ About the new airlock wires panel:
 		if(welded)
 			breaktime += 30 //Welding buys you a little time
 		src.visible_message("<span class='warning'>[user] is battering down [src]!</span>", "<span class='warning'>You begin to batter [src].</span>")
-		playsound(get_turf(src), 'sound/effects/shieldbash.ogg', 50, 1)
+		playsound(src, 'sound/effects/shieldbash.ogg', 50, 1)
 		if(do_after(user,src, breaktime))
 			//Calculate bolts separtely, in case they dropped in the last 6-9 seconds.
 			if(src.locked == 1)
-				playsound(get_turf(src), 'sound/effects/shieldbash.ogg', 50, 1)
+				playsound(src, 'sound/effects/shieldbash.ogg', 50, 1)
 				src.visible_message("<span class='warning'>[user] is battering the bolts!</span>", "<span class='warning'>You begin to smash the bolts...</span>")
 				if(!do_after(user, src,190)) //Same amount as drilling an R-wall, longer if it was welded
 					return //If they moved, cancel us out
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			src.visible_message("<span class='warning'>[user] broke down the door!</span>", "<span class='warning'>You broke the door!</span>")
 			bashed_in(user)
 		return
@@ -1107,8 +1076,6 @@ About the new airlock wires panel:
 	if (iswelder(I))
 		if (density && !operating)
 			var/obj/item/weapon/weldingtool/WT = I
-
-			// TODO: analyze the called proc
 			if (WT.remove_fuel(0, user))
 				if (!welded)
 					welded = 1
@@ -1182,7 +1149,7 @@ About the new airlock wires panel:
 	return
 
 /obj/machinery/door/airlock/proc/bashed_in(var/mob/user)
-	playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	operating = -1
 	var/obj/structure/door_assembly/DA = revert(user,user.dir)
 	DA.anchored = 0
@@ -1242,7 +1209,7 @@ About the new airlock wires panel:
 		if( !arePowerSystemsOn() || (stat & NOPOWER) || isWireCut(AIRLOCK_WIRE_OPEN_DOOR) )
 			return 0
 	use_power(50)
-	playsound(get_turf(src), soundeffect, pitch, 1)
+	playsound(src, soundeffect, pitch, 1)
 	if(src.closeOther != null && istype(src.closeOther, /obj/machinery/door/airlock/) && !src.closeOther.density)
 		src.closeOther.close()
 	// This worries me - N3X
@@ -1272,7 +1239,7 @@ About the new airlock wires panel:
 				return
 
 			if (locate(/mob/living) in T)
-				playsound(get_turf(src), 'sound/machines/buzz-two.ogg', 50, 0)
+				playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 				if(autoclose  && normalspeed)
 					spawn(150)
 						autoclose()
@@ -1299,12 +1266,12 @@ About the new airlock wires panel:
 					qdel(S)
 					S = null
 
-				L.emote("scream",,, 1)
+				L.audible_scream()
 
 				if (istype(loc, /turf/simulated))
 					T.add_blood(L)
 
-	playsound(get_turf(src),soundeffect, 30, 1)
+	playsound(src,soundeffect, 30, 1)
 
 	for(var/turf/T in loc)
 		var/obj/structure/window/W = locate(/obj/structure/window) in T
@@ -1332,8 +1299,7 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/wirejack(var/mob/living/silicon/pai/P)
 	if(..())
-		//attack_ai(P)
-		open(1)
+		density ? open(TRUE) : close(TRUE)
 		return 1
 	return 0
 

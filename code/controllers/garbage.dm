@@ -84,8 +84,8 @@ world/loop_checks = 0
 				found += LookForRefs(R, D)
 			for(var/datum/R)
 				found += LookForRefs(R, D)
-			for(var/A in _all_globals)
-				found += LookForListRefs(readglobal(A), D, null, A)
+			for(var/A in global.vars)
+				found += LookForListRefs(global.vars[A], D, null, A)
 			to_chat(world, "we found [found]")
 			#endif
 
@@ -144,7 +144,7 @@ world/loop_checks = 0
 		garbageCollector.dels_count++
 		return
 
-	//We are object pooling this.
+	//This is broken. The correct index to use is D.type, not "[D.type]"
 	if(("[D.type]" in masterdatumPool) && !ignore_pooling)
 		returnToPool(D)
 		return
@@ -163,7 +163,7 @@ world/loop_checks = 0
 /atom/movable/being_sent_to_past()
 	if(..())
 		invisibility = 101
-		density = 0
+		setDensity(FALSE)
 		anchored = 1
 		timestopped = 1
 		flags |= INVULNERABLE | TIMELESS

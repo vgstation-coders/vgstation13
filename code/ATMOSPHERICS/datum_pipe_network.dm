@@ -98,141 +98,36 @@
 /datum/pipe_network/proc/reconcile_air()
 	//Perfectly equalize all gases members instantly
 
-	//Calculate totals from individual components
-	var/total_thermal_energy = 0
-	var/total_heat_capacity = 0
+	air_transient.multiply(0)
 
-	//air_transient.volume = 0
-	var/air_transient_volume = 0
-
-	air_transient.oxygen = 0
-	air_transient.nitrogen = 0
-	air_transient.toxins = 0
-	air_transient.carbon_dioxide = 0
-
-
-	air_transient.trace_gases = list()
+	air_transient.volume = 0
 
 	for(var/datum/gas_mixture/gas in gases)
-		air_transient_volume += gas.volume
-		var/temp_heatcap = gas.heat_capacity()
-		total_thermal_energy += gas.temperature*temp_heatcap
-		total_heat_capacity += temp_heatcap
+		air_transient.volume += gas.volume
+		air_transient.merge(gas, FALSE)
 
-		air_transient.oxygen += gas.oxygen
-		air_transient.nitrogen += gas.nitrogen
-		air_transient.toxins += gas.toxins
-		air_transient.carbon_dioxide += gas.carbon_dioxide
+	if(air_transient.volume > 0)
+		//Allow air mixture to react
+		if(air_transient.react())
+			update = 1
 
-		if(gas.trace_gases.len)
-			for(var/datum/gas/trace_gas in gas.trace_gases)
-				var/datum/gas/corresponding = locate(trace_gas.type) in air_transient.trace_gases
-				if(!corresponding)
-					corresponding = new trace_gas.type()
-					air_transient.trace_gases += corresponding
-
-				corresponding.moles += trace_gas.moles
-
-	air_transient.volume = air_transient_volume
-
-	if(air_transient_volume > 0)
-
-		if(total_heat_capacity > 0)
-			air_transient.temperature = total_thermal_energy/total_heat_capacity
-
-			//Allow air mixture to react
-			if(air_transient.react())
-				update = 1
-
-		else
-			air_transient.temperature = 0
-
-		//Update individual gas_mixtures by volume ratio
+		air_transient.update_values()
 		for(var/datum/gas_mixture/gas in gases)
-			var/volume_ratio = gas.volume / air_transient.volume
+			gas.copy_from(air_transient)
 
-			gas.oxygen = air_transient.oxygen * volume_ratio
-			gas.nitrogen = air_transient.nitrogen * volume_ratio
-			gas.toxins = air_transient.toxins * volume_ratio
-			gas.carbon_dioxide = air_transient.carbon_dioxide * volume_ratio
-
-			gas.temperature = air_transient.temperature
-
-			if(air_transient.trace_gases.len)
-				for(var/datum/gas/trace_gas in air_transient.trace_gases)
-					var/datum/gas/corresponding = locate(trace_gas.type) in gas.trace_gases
-
-					if(!corresponding)
-						corresponding = new trace_gas.type()
-						gas.trace_gases += corresponding
-
-					corresponding.moles = trace_gas.moles * volume_ratio
-
-			gas.update_values()
-
-	air_transient.update_values()
 	return 1
 
-proc/equalize_gases(datum/gas_mixture/list/gases)
+/proc/equalize_gases(datum/gas_mixture/list/gases)
 	//Perfectly equalize all gases members instantly
 
-	//Calculate totals from individual components
-	var/total_volume = 0
-	var/total_thermal_energy = 0
-	var/total_heat_capacity = 0
-
-	var/total_oxygen = 0
-	var/total_nitrogen = 0
-	var/total_toxins = 0
-	var/total_carbon_dioxide = 0
-
-	var/list/total_trace_gases = list()
+	var/datum/gas_mixture/temp = new()
+	temp.volume = 0
 
 	for(var/datum/gas_mixture/gas in gases)
-		total_volume += gas.volume
-		var/temp_heatcap = gas.heat_capacity()
-		total_thermal_energy += gas.temperature*temp_heatcap
-		total_heat_capacity += temp_heatcap
+		temp.volume += gas.volume
+		temp.merge(gas)
 
-		total_oxygen += gas.oxygen
-		total_nitrogen += gas.nitrogen
-		total_toxins += gas.toxins
-		total_carbon_dioxide += gas.carbon_dioxide
-
-		if(gas.trace_gases.len)
-			for(var/datum/gas/trace_gas in gas.trace_gases)
-				var/datum/gas/corresponding = locate(trace_gas.type) in total_trace_gases
-				if(!corresponding)
-					corresponding = new trace_gas.type()
-					total_trace_gases += corresponding
-
-				corresponding.moles += trace_gas.moles
-
-	if(total_volume > 0)
-
-		//Calculate temperature
-		var/temperature = 0
-
-		if(total_heat_capacity > 0)
-			temperature = total_thermal_energy/total_heat_capacity
-
-		//Update individual gas_mixtures by volume ratio
-		for(var/datum/gas_mixture/gas in gases)
-			gas.oxygen = total_oxygen*gas.volume/total_volume
-			gas.nitrogen = total_nitrogen*gas.volume/total_volume
-			gas.toxins = total_toxins*gas.volume/total_volume
-			gas.carbon_dioxide = total_carbon_dioxide*gas.volume/total_volume
-
-			gas.temperature = temperature
-
-			if(total_trace_gases.len)
-				for(var/datum/gas/trace_gas in total_trace_gases)
-					var/datum/gas/corresponding = locate(trace_gas.type) in gas.trace_gases
-					if(!corresponding)
-						corresponding = new trace_gas.type()
-						gas.trace_gases += corresponding
-
-					corresponding.moles = trace_gas.moles*gas.volume/total_volume
-			gas.update_values()
+	for(var/datum/gas_mixture/gas in gases)
+		gas.copy_from(temp)
 
 	return 1

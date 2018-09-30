@@ -32,7 +32,7 @@
 	item_state = "time_suit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	w_class = W_CLASS_LARGE
-	slowdown = 0
+	slowdown = NO_SLOWDOWN
 	armor = list(melee = 30, bullet = 25, laser = 15, energy = 15, bomb = 15, bio = 100, rad = 30)
 	clothing_flags = PLASMAGUARD
 	pressure_resistance = 200 * ONE_ATMOSPHERE

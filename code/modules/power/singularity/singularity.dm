@@ -37,10 +37,10 @@
 	var/consume_range = 0 //How many tiles out do we eat.
 	var/event_chance = 15 //Prob for event each tick.
 	var/target = null //Its target. Moves towards the target if it has one.
-	var:last_movement_dir = 0 //Log the singularity's last movement to produce biased movement (singularity prefers constant movement due to inertia)
+	var/last_movement_dir = 0 //Log the singularity's last movement to produce biased movement (singularity prefers constant movement due to inertia)
 	var/last_failed_movement = 0 //Will not move in the same dir if it couldnt before, will help with the getting stuck on fields thing.
 	var/last_warning
-	appearance_flags = 0
+	appearance_flags = LONG_GLIDE
 	var/chained = 0 //Adminbus chain-grab
 
 /obj/machinery/singularity/New(loc, var/starting_energy = 50, var/temp = 0)
@@ -93,6 +93,38 @@
 
 /obj/machinery/singularity/Crossed(atom/movable/A)
 	consume(A)
+
+/obj/machinery/singularity/attack_tk(mob/user)
+	to_chat(user, "<span class = 'notice'>You attempt to comprehend \the [src]...</span>")
+	spawn(rand(50,110))
+		if(!user.gcDestroyed)
+			if(prob(95))
+				to_chat(user, "<span class = 'danger'>...and fail to do so.</span>")
+				if(prob(50)) //50/50 of becoming unrecoverable
+					user.visible_message("<span class = 'danger'>\The [user] screams as they are consumed from within!</span>")
+					if(prob(50))
+						user.audible_scream()
+						var/matrix/M = matrix()
+						M.Scale(0)
+						animate(user, alpha = 0, transform = M, time = 3 SECONDS, easing = SINE_EASING)
+						spawn(3 SECONDS)
+							new /obj/effect/gibspawner/generic(get_turf(user))
+							qdel(user)
+					else
+						playsound(user, get_sfx("soulstone"), 50,1)
+						make_tracker_effects(get_turf(user), get_turf(src))
+						user.dust()
+				else
+					user.visible_message("<span class = 'danger'>\The [user] explodes!</span>")
+					..()
+			else
+				to_chat(user, "<span class = 'notice'>...and manage to grab onto something from the depths of \the [src]!</span>")
+				if(do_after(user, src, 30))
+					to_chat(user, "<span class = notice'>You manage to pull something from beyond to within normal space!</span>")
+					var/obj/structure/losetta_stone/L = new
+					L.alpha = 0
+					L.forceMove(get_turf(user))
+					animate(L, alpha = 255, time = 3 SECONDS)
 
 /obj/machinery/singularity/process()
 	dissipate()
@@ -327,6 +359,10 @@
 		catch(var/exception/e)
 			error("Singularity eat() caught exception:")
 			error(e)
+
+			spawn(0) //So the following line doesn't stop execution
+				throw e //So ALL debug information is sent to the runtime log
+
 			continue
 
 	//for(var/turf/T in trange(grav_pull, src)) // TODO: Create a similar trange for orange to prevent snowflake of self check.
@@ -373,14 +409,16 @@
 	last_movement_dir = movement_dir //We have chosen our direction, log it
 
 	if(current_size >= 9) //The superlarge one does not care about things in its way
+		set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY/2), min = 0)
 		spawn(0)
 			step(src, movement_dir)
-		spawn(1)
+		spawn(SS_WAIT_MACHINERY/2)
 			step(src, movement_dir)
 		return 1
 	else if(check_turfs_in(movement_dir))
 		last_failed_movement = 0 //Reset this because we moved
 		spawn(0)
+			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY), min = 0)
 			step(src, movement_dir)
 		return 1
 	else
@@ -409,10 +447,10 @@
 	var/dir2 = 0
 	var/dir3 = 0
 	switch(direction)
-		if(NORTH || SOUTH)
+		if(NORTH, SOUTH)
 			dir2 = 4
 			dir3 = 8
-		if(EAST || WEST)
+		if(EAST, WEST)
 			dir2 = 1
 			dir3 = 2
 	var/turf/T2 = T
@@ -497,16 +535,11 @@
 /obj/machinery/singularity/proc/toxmob()
 	var/toxrange = 10
 	var/toxdamage = 4
-	var/radiation = 15
-	var/radiationmin = 3
 	if(src.energy > 200)
 		toxdamage = round(((src.energy-150)/50)*4,1)
-		radiation = round(((src.energy-150)/50)*5,1)
-		radiationmin = round((radiation/5),1)
 	for(var/mob/living/M in view(toxrange, src.loc))
 		if(M.flags & INVULNERABLE)
 			continue
-		M.apply_radiation(rand(radiationmin,radiation), RAD_EXTERNAL)
 		toxdamage = (toxdamage - (toxdamage*M.getarmor(null, "rad")))
 		M.apply_effect(toxdamage, TOX)
 	return
@@ -549,9 +582,7 @@
 	return
 
 /obj/machinery/singularity/proc/pulse()
-	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
-		if(get_dist(R, src) <= 15) //Better than using orange() every process.
-			R.receive_pulse(energy)
+	emitted_harvestable_radiation(get_turf(src), energy, range = 15)
 
 /obj/machinery/singularity/proc/on_capture()
 	chained = 1
@@ -610,7 +641,7 @@
 /obj/machinery/singularity/acidable()
 	return 0
 
-/obj/machinery/singularity/Move(newLoc, movedir)
+/obj/machinery/singularity/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	if(timestopped)
 		return 0
-	return forceMove(get_step(src,movedir))
+	return forceMove(get_step(src,Dir))

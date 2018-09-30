@@ -33,7 +33,7 @@
 		to_chat(user, "<span class='warning'>The [src] slips out of your hand and hits your head.</span>")
 		user.take_organ_damage(10)
 		user.Paralyse(2)
-		playsound(get_turf(src), "swing_hit", 50, 1, -1)
+		playsound(src, "swing_hit", 50, 1, -1)
 		return
 	..()
 

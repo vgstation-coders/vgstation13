@@ -15,6 +15,7 @@
 /obj/item/device/paicard/New()
 	..()
 	overlays += image(icon=icon, icon_state = "pai-off")
+	paicard_list.Add(src)
 
 #ifdef DEBUG_ROLESELECT
 /obj/item/device/paicard/test/New()
@@ -23,6 +24,7 @@
 #endif
 
 /obj/item/device/paicard/Destroy()
+	paicard_list.Remove(src)
 	//Will stop people throwing friend pAIs into the singularity so they can respawn
 	if(!isnull(pai))
 		pai.death(0)
@@ -78,7 +80,7 @@
 
 /obj/item/device/paicard/Topic(href, href_list)
 
-	if(!usr || usr.stat)
+	if(!usr || usr.stat || !in_range(src, usr))
 		return
 
 	if(href_list["setdna"])
@@ -124,6 +126,7 @@
 
 /obj/item/device/paicard/proc/setPersonality(mob/living/silicon/pai/personality)
 	src.pai = personality
+	src.overlays.len = 0
 	src.overlays += image(icon=icon, icon_state = "pai-happy")
 
 /obj/item/device/paicard/proc/removePersonality()
@@ -181,8 +184,16 @@
 	for (var/mob/M in viewers(T))
 		M.show_message("<span class='notice'>[src] flashes a message across its screen, \"Additional personalities available for download.\"</span>", 1, "<span class='notice'>[src] bleeps electronically.</span>", 2)
 		playsound(loc, 'sound/machines/paistartup.ogg', 50, 1)
+		src.overlays += image(icon=icon, icon_state = "pai-off-notify")
+
+/obj/item/device/paicard/proc/removeNotification()
+	src.overlays.len = 0
 
 /obj/item/device/paicard/emp_act(severity)
 	for(var/mob/M in src)
 		M.emp_act(severity)
 	..()
+
+/obj/item/device/paicard/dropped(mob/user)
+	if(pai && pai.holomap_device)
+		pai.holomap_device.stopWatching()

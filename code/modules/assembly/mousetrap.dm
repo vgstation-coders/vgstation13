@@ -92,7 +92,7 @@
 	..()
 
 
-/obj/item/device/assembly/mousetrap/on_found(mob/finder as mob)
+/obj/item/device/assembly/mousetrap/on_found(mob/wearer, mob/finder as mob)
 	if(armed)
 		finder.visible_message("<span class='warning'>[finder] accidentally sets off [src], breaking their fingers.</span>", \
 							   "<span class='warning'>You accidentally trigger [src]!</span>")
@@ -104,8 +104,11 @@
 
 
 /obj/item/device/assembly/mousetrap/hitby(A as mob|obj)
+	. = ..()
+	if(.)
+		return
 	if(!armed)
-		return ..()
+		return
 	visible_message("<span class='warning'>[src] is triggered by [A].</span>")
 	triggered(null)
 

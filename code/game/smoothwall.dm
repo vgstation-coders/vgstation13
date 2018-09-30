@@ -2,37 +2,34 @@
 // FUCK YOU MYSTERY CODERS
 // FOR THIS SHIT I'M GOING TO MAKE ALL MY COMMENTS IN CAPS
 
-/atom
-	var/canSmoothWith // TYPE PATHS I CAN SMOOTH WITH~~~~~
+/atom/proc/canSmoothWith() // TYPE PATHS I CAN SMOOTH WITH~~~~~
 
 // MOVED INTO UTILITY FUNCTION FOR LESS DUPLICATED CODE.
 /atom/proc/findSmoothingNeighbors()
 	// THIS IS A BITMAP BECAUSE NORTH/SOUTH/ETC ARE ALL BITFLAGS BECAUSE BYOND IS DUMB AND
 	// DOESN'T FUCKING MAKE SENSE, BUT IT WORKS TO OUR ADVANTAGE
-	var/junction = 0
+	var/J = 0
 	for(var/cdir in cardinal)
 		var/turf/T = get_step(src,cdir)
 		if(isSmoothableNeighbor(T))
-			junction |= cdir
+			J |= cdir
 			continue // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 		for(var/atom/A in T)
 			if(isSmoothableNeighbor(A))
-				junction |= cdir
+				J |= cdir
 				break // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 
-	return junction
+	return J
 
 /atom/proc/isSmoothableNeighbor(atom/A)
 	if(!A)
-		WARNING("[__FILE__]L[__LINE__]: atom/isSmoothableNeighbor given bad atom")
 		return 0
-	return isInTypes(A, canSmoothWith)
+	return is_type_in_list(A, canSmoothWith())
 
 /turf/simulated/wall/isSmoothableNeighbor(atom/A)
 	if(!A)
-		WARNING("[__FILE__]L[__LINE__]: turf/isSmoothableNeighbor given bad atom")
 		return 0
-	if(isInTypes(A, canSmoothWith))
+	if(is_type_in_list(A, canSmoothWith()))
 		// COLON OPERATORS ARE TERRIBLE BUT I HAVE NO CHOICE
 		if(src.mineral == A:mineral)
 			return 1
@@ -60,7 +57,7 @@
  * WE COULD STANDARDIZE THIS BUT EVERYONE'S A FUCKING SNOWFLAKE
  */
 /turf/simulated/wall/relativewall()
-	var/junction=findSmoothingNeighbors()
+	junction = findSmoothingNeighbors()
 	icon_state = "[walltype][junction]" // WHY ISN'T THIS IN UPDATE_ICON OR SIMILAR
 
 // AND NOW WE HAVE TO YELL AT THE NEIGHBORS FOR BEING LOUD AND NOT PAINTING WITH HOA-APPROVED COLORS
@@ -68,14 +65,25 @@
 	if(!at)
 		at = get_turf(src)
 	// OPTIMIZE BY NOT CHECKING FOR NEIGHBORS IF WE DON'T FUCKING SMOOTH
-	if(canSmoothWith)
+	if(canSmoothWith())
 		for(var/cdir in cardinal)
 			var/turf/T = get_step(src,cdir)
-			if(isSmoothableNeighbor(T))
+			if(isSmoothableNeighbor(T) && T.canSmoothWith())
 				T.relativewall()
 			for(var/atom/A in T)
 				if(isSmoothableNeighbor(A))
 					A.relativewall()
+
+/atom/proc/update_near_walls(var/at)
+	if(!at)
+		at = get_turf(src)
+
+	for(var/cdir in cardinal)
+		var/turf/T = get_step(src,cdir)
+		if(istype(T, /turf))
+			T.relativewall()
+			for(var/atom/A in T)
+				A.relativewall()
 
 /turf/simulated/wall/New()
 	..()
@@ -87,7 +95,6 @@
 	relativewall_neighbours()
 
 /turf/simulated/wall/Destroy()
-
 	var/temploc = src.loc
 
 	if(!del_suppress_resmoothing)
@@ -120,5 +127,5 @@ var/list/smoothable_unsims = list(
 		relativewall_neighbours()
 
 /turf/unsimulated/wall/relativewall()
-	var/junction=findSmoothingNeighbors()
+	junction = findSmoothingNeighbors()
 	icon_state = "[walltype][junction]"

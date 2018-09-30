@@ -4,7 +4,9 @@
 
 	icon = 'icons/obj/items.dmi'
 	icon_state = "chisel"
-
+	attack_verb = list("stabs", "chisels", "sands")
+	hitsound = 'sound/effects/woodhit.ogg'
+	force = 1
 	w_class = W_CLASS_SMALL
 	starting_materials = list(MAT_IRON = 120)
 
@@ -21,15 +23,16 @@
 		to_chat(user, "You will no longer sign your work.")
 
 /obj/item/weapon/chisel/attack(mob/M as mob, mob/user as mob)
-	if(istype(M, /mob/living/simple_animal/sculpture))
-		var/engraving = sanitize(input(usr, "What do you want to write on the [M.real_name]?") as text)
+	..()
+	if(istype(M, /mob/living/simple_animal/scp_173))
+		var/engraving = sanitize(input(usr, "What do you want to write on \the [M.real_name]?") as text)
 		var/turf/ST = user.loc
 
 		sleep( 10 + length(engraving) * 10)
 
 		if( !(user.loc == ST && user.get_active_hand() == src) )
 			return
-		if( !istype(M, /mob/living/simple_animal/sculpture) || !user || !src || !M )
+		if( !istype(M, /mob/living/simple_animal/scp_173) || !user || !src || !M )
 			return
 
 		M.desc += engraving

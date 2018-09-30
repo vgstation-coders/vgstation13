@@ -37,7 +37,7 @@
 	desc = "You could build a fort with this."
 	icon_state = "largebox"
 	item_state = "largebox"
-	w_class = W_CLASS_GIANT // Big, bulky.
+	w_class = W_CLASS_LARGE // Big, bulky.
 	foldable = /obj/item/stack/sheet/cardboard
 	foldable_amount = 4 // Takes 4 to make. - N3X
 	starting_materials = list(MAT_CARDBOARD = 15000)
@@ -194,7 +194,7 @@
 
 /obj/item/weapon/storage/box/flashbangs
 	name = "box of flashbangs (WARNING)"
-	desc = "<span class='userdanger'>WARNING: These devices are extremely dangerous and can cause blindness or deafness in repeated use.</span>"
+	desc = "<FONT color=red><B>WARNING: Do not use without reading these preautions!</B></FONT>\n<B>These devices are extremely dangerous and can cause blindness or deafness if used incorrectly.</B>\nThe chemicals contained in these devices have been tuned for maximal effectiveness and due to\nextreme safety precuaiotn shave been incased in a tamper-proof pack. DO NOT ATTEMPT TO OPEN\nFLASH WARNING: Do not use continually. Excercise extreme care when detonating in closed spaces.\n\tMake attemtps not to detonate withing range of 2 meters of the intended target. It is imperative\n\tthat the targets visit a medical professional after usage. Damage to eyes increases extremely per\n\tuse and according to range. Glasses with flash resistant filters DO NOT always work on high powered\n\tflash devices such as this. <B>EXERCISE CAUTION REGARDLESS OF CIRCUMSTANCES</B>\nSOUND WARNING: Do not use continually. Visit a medical professional if hearing is lost.\n\tThere is a slight chance per use of complete deafness. Exercise caution and restraint.\nSTUN WARNING: If the intended or unintended target is too close to detonation the resulting sound\n\tand flash have been known to cause extreme sensory overload resulting in temporary\n\tincapacitation.\n<B>DO NOT USE CONTINUALLY</B>\nOperating Directions:\n\t1. Pull detonnation pin. <B>ONCE THE PIN IS PULLED THE GRENADE CAN NOT BE DISARMED!</B>\n\t2. Throw grenade. <B>NEVER HOLD A LIVE FLASHBANG</B>\n\t3. The grenade will detonste 10 seconds hafter being primed. <B>EXCERCISE CAUTION</B>\n\t-<B>Never prime another grenade until after the first is detonated</B>\nNote: Usage of this pyrotechnic device without authorization is an extreme offense and can\nresult in severe punishment upwards of <B>10 years in prison per use</B>.\n\nDefault 3 second wait till from prime to detonation. This can be switched with a screwdriver\nto 10 seconds.\n\nCopyright of Nanotrasen Industries- Military Armnaments Division\nThis device was created by Nanotrasen Labs a member of the Expert Advisor Corporation"
 	icon_state = "flashbang"
 
 /obj/item/weapon/storage/box/flashbangs/New()
@@ -458,46 +458,51 @@
 /obj/item/weapon/storage/box/lethalshells
 	name = "lethal shells"
 	icon_state = "lethal shells"
+	storage_slots = 16
 
 /obj/item/weapon/storage/box/lethalshells/New()
 	..()
-	for(var/i=0,i<15,i++)
+	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun(src)
 
 /obj/item/weapon/storage/box/beanbagshells
 	name = "bean bag shells"
 	icon_state = "bean bag shells"
+	storage_slots = 16
 
 /obj/item/weapon/storage/box/beanbagshells/New()
 	..()
-	for(var/i=0,i<15,i++)
+	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/beanbag(src)
 
 /obj/item/weapon/storage/box/stunshells
 	name = "stun shells"
 	icon_state = "stun shells"
+	storage_slots = 16
 
 /obj/item/weapon/storage/box/stunshells/New()
 	..()
-	for(var/i=0,i<15,i++)
+	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/stunshell(src)
 
 /obj/item/weapon/storage/box/dartshells
 	name = "shotgun darts"
 	icon_state = "dart shells"
+	storage_slots = 16
 
 /obj/item/weapon/storage/box/dartshells/New()
 	..()
-	for(var/i=0,i<15,i++)
+	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/dart(src)
 
 /obj/item/weapon/storage/box/buckshotshells
 	name = "buckshot shells"
 	icon_state = "lethal shells"
+	storage_slots = 16
 
 /obj/item/weapon/storage/box/buckshotshells/New()
 	..()
-	for(var/i=0,i<15,i++)
+	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/buckshot(src)
 
 /obj/item/weapon/storage/box/labels
@@ -552,6 +557,15 @@
 	..()
 	for(var/i=1; i <= storage_slots; i++)
 		new /obj/item/toy/snappop(src)
+
+/obj/item/weapon/storage/box/syndicatefake/space
+	name = "Space Suit and Helmet Replica"
+	icon_state = "box_of_doom"
+
+/obj/item/weapon/storage/box/syndicatefake/space/New()
+	..()
+	new /obj/item/clothing/suit/syndicatefake(src)
+	new /obj/item/clothing/head/syndicatefake(src)
 
 /obj/item/weapon/storage/box/autoinjectors
 	name = "box of injectors"

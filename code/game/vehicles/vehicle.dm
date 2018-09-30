@@ -25,7 +25,6 @@
 	var/maint_access = 1
 	//var/dna	//dna-locking the mech
 	var/list/proc_res = list() //stores proc owners, like proc_res["functionname"] = owner reference
-	var/datum/effect/effect/system/spark_spread/spark_system = new
 	var/lights = 0
 	var/lights_power = 6
 
@@ -70,8 +69,6 @@
 	add_radio()
 	//add_cabin() //No cabin for non-airtights
 
-	spark_system.set_up(2, 0, src)
-	spark_system.attach(src)
 	add_cell()
 	add_iterators()
 	removeVerb(/obj/mecha/verb/disconnect_from_port)
@@ -104,14 +101,6 @@
 	cell = new(src)
 	cell.charge = 15000
 	cell.maxcharge = 15000
-
-/*/obj/vehicle/proc/add_cabin()   //In airtight.dm -Agouri
-	cabin_air = new
-	cabin_air.temperature = T20C
-	cabin_air.volume = 200
-	cabin_air.oxygen = O2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature)
-	cabin_air.nitrogen = N2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature)
-	return cabin_air*/
 
 /obj/vehicle/proc/add_radio()
 	radio = new(src)
@@ -188,7 +177,7 @@
 					leaked_gas = null
 		if(mecha.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
 			if(mecha.get_charge())
-				mecha.spark_system.start()
+				spark(src, 2, FALSE)
 				mecha.cell.charge -= min(20,mecha.cell.charge)
 				mecha.cell.maxcharge -= min(20,mecha.cell.maxcharge)
 		return

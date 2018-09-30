@@ -1,5 +1,5 @@
-/var/const/OPEN = 1
-/var/const/CLOSED = 2
+/var/const/FD_OPEN = 1
+/var/const/FD_CLOSED = 2
 
 var/global/list/alert_overlays_global = list()
 
@@ -25,7 +25,7 @@ var/global/list/alert_overlays_global = list()
 
 		var/turf/simulated/T=get_turf(get_step(loc,dir))
 
-		if(dir == turn(source.dir, 180) && source.flags & ON_BORDER) //[   ][  |][   ] imagine the | is the source (with dir EAST -> facing right), and the brackets are floors. When we try to get the turf to the left's air info, use the middle's turf instead
+		if(dir == turn(source.dir, 180) && source.flow_flags & ON_BORDER) //[   ][  |][   ] imagine the | is the source (with dir EAST -> facing right), and the brackets are floors. When we try to get the turf to the left's air info, use the middle's turf instead
 			if(!(locate(/obj/machinery/door/airlock) in get_turf(source))) //If we're on a door, however, DON'T DO THIS -> doors are airtight, so the result will be innacurate! This is a bad snowflake, but as long as it makes the feature freeze go away...
 				T = get_turf(source)
 
@@ -111,7 +111,7 @@ var/global/list/alert_overlays_global = list()
 
 	for(var/obj/machinery/door/firedoor/F in loc)
 		if(F != src)
-			if(F.flags & ON_BORDER && src.flags & ON_BORDER && F.dir != src.dir) //two border doors on the same tile don't collide
+			if(F.flow_flags & ON_BORDER && src.flow_flags & ON_BORDER && F.dir != src.dir) //two border doors on the same tile don't collide
 				continue
 			spawn(1)
 				new /obj/item/firedoor_frame(get_turf(src))
@@ -200,21 +200,28 @@ var/global/list/alert_overlays_global = list()
 		stat |= NOPOWER
 	return
 
-/obj/machinery/door/firedoor/attack_ai(mob/user)
-	if(isobserver(user) || user.stat)
+/obj/machinery/door/firedoor/attack_ai(mob/user,var/override=FALSE)
+	if(!isAdminGhost(user) && (isobserver(user) || user.stat))
 		return
 	spawn()
-		var/area/A = get_area_master(src)
+		var/area/A = get_area(src)
 		ASSERT(istype(A)) // This worries me.
 		var/alarmed = A.doors_down || A.fire
 		var/old_density = src.density
-		if(old_density && alert("Override the [alarmed ? "alarming " : ""]firelock's safeties and open \the [src]?" ,,"Yes", "No") == "Yes")
-			open()
+		if(old_density)
+			if(override || alert("Override the [alarmed ? "alarming " : ""]firelock's safeties and open \the [src]?" ,,"Yes", "No") == "Yes")
+				open()
 		else if(!old_density)
 			close()
 		else
 			return
 		investigation_log(I_ATMOS, "[density ? "closed" : "opened"] [alarmed ? "while alarming" : ""] by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
+
+/obj/machinery/door/firedoor/CtrlClick(mob/user)
+	if(isAdminGhost(user))
+		attack_ai(user,TRUE)
+	else
+		..()
 
 /obj/machinery/door/firedoor/attack_hand(mob/user as mob)
 	return attackby(null, user)
@@ -226,7 +233,7 @@ var/global/list/alert_overlays_global = list()
 	add_fingerprint(user)
 	if(operating)
 		return//Already doing something.
-	if(istype(C, /obj/item/weapon/weldingtool))
+	if(iswelder(C))
 		var/obj/item/weapon/weldingtool/W = C
 		if(W.remove_fuel(0, user))
 			blocked = !blocked
@@ -240,11 +247,10 @@ var/global/list/alert_overlays_global = list()
 		force_open(user, C)
 		return
 
-	if(istype(C, /obj/item/weapon/wrench/socket))
+	if(istype(C, /obj/item/weapon/wrench))
 		if(blocked)
 			user.visible_message("<span class='attack'>\The [user] starts to deconstruct \the [src] with \a [C].</span>",\
-			"You begin to deconstruct \the [src] with \the [C].",\
-			"You hear a racket from a ratchet.")
+			"You begin to deconstruct \the [src] with \the [C].")
 			if(do_after(user, src, 5 SECONDS))
 				new/obj/item/firedoor_frame(get_turf(src))
 				qdel(src)
@@ -270,7 +276,7 @@ var/global/list/alert_overlays_global = list()
 		to_chat(user, "<span class='warning'>\The [src] is welded solid!</span>")
 		return
 
-	var/area/A = get_area_master(src)
+	var/area/A = get_area(src)
 	ASSERT(istype(A)) // This worries me.
 	var/alarmed = A.doors_down || A.fire
 
@@ -336,7 +342,7 @@ var/global/list/alert_overlays_global = list()
 	..()
 	latetoggle()
 	layer = open_layer
-	var/area/A = get_area_master(src)
+	var/area/A = get_area(src)
 	ASSERT(istype(A)) // This worries me.
 	var/alarmed = A.doors_down || A.fire
 	if(alarmed)
@@ -344,7 +350,7 @@ var/global/list/alert_overlays_global = list()
 			close()
 
 /obj/machinery/door/firedoor/proc/force_open(mob/user, var/obj/C) //used in mecha/equipment/tools/tools.dm
-	var/area/A = get_area_master(src)
+	var/area/A = get_area(src)
 	ASSERT(istype(A)) // This worries me.
 	var/alarmed = A.doors_down || A.fire
 
@@ -396,7 +402,7 @@ var/global/list/alert_overlays_global = list()
 					if(dir_alerts[d] & (1<<(i-1)))// Check to see if dir_alerts[d] has the i-1th bit set.
 
 						var/list/state_list = alert_overlays_local["alert_[ALERT_STATES[i]]"]
-						if(flags & ON_BORDER)
+						if(flow_flags & ON_BORDER)
 							overlays += turn(state_list["[turn(cdir, dir2angle(src.dir))]"], dir2angle(src.dir))
 						else
 							overlays += state_list["[cdir]"]
@@ -415,7 +421,7 @@ var/global/list/alert_overlays_global = list()
 		lockdown=0
 
 		// Pressure alerts
-		if(flags & ON_BORDER) //For border firelocks, we only need to check front and back, don't check the sides
+		if(flow_flags & ON_BORDER) //For border firelocks, we only need to check front and back, don't check the sides
 			var/turf/T1 = get_step(loc,dir)
 			var/turf/T2
 			if(locate(/obj/machinery/door/airlock) in get_turf(src)) //If this firelock is in the same tile as an airlock, we want to check the OTHER SIDE of the airlock, not the airlock turf itself.
@@ -468,10 +474,10 @@ var/global/list/alert_overlays_global = list()
 		return
 
 	switch(nextstate)
-		if(OPEN)
+		if(FD_OPEN)
 			nextstate = null
 			open()
-		if(CLOSED)
+		if(FD_CLOSED)
 			nextstate = null
 			close()
 
@@ -484,7 +490,7 @@ var/global/list/alert_overlays_global = list()
 			  //This is needed due to BYOND limitations in controlling visibility
 	heat_proof = 1
 	air_properties_vary_with_direction = 1
-	flags = ON_BORDER
+	flow_flags = ON_BORDER
 
 /obj/machinery/door/firedoor/border_only/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
@@ -506,7 +512,7 @@ var/global/list/alert_overlays_global = list()
 /obj/machinery/door/firedoor/border_only/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
-	if(flags & ON_BORDER)
+	if(flow_flags & ON_BORDER)
 		if(target) //Are we doing a manual check to see
 			if(get_dir(loc, target) == dir)
 				return !density
@@ -540,13 +546,32 @@ var/global/list/alert_overlays_global = list()
 	if(!user.IsAdvancedToolUser())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 0
+
+	if(!user.is_holding_item(src))
+		return 1
+	var/current_turf = get_turf(src)
+	var/turf_face = get_step(current_turf,user.dir)
+	if(SSair.air_blocked(current_turf, turf_face))
+		to_chat(user, "<span class = 'warning'>That way is blocked already.</span>")
+		return 1
+	var/obj/machinery/door/firedoor/border_only/F = locate(/obj/machinery/door/firedoor) in get_turf(user)
+	if(F && F.dir == user.dir)
+		to_chat(user, "<span class = 'warning'>There is already a firedoor facing that direction.</span>")
+		return 1
+	if(do_after(user, src, 5 SECONDS))
+		var/obj/machinery/door/firedoor/border_only/B = new(get_turf(src))
+		B.change_dir(user.dir)
+		qdel(src)
+
+//Removed pending a fix for atmos issues caused by full tile firelocks.
+/*
 	switch(alert("firedoor construction", "Would you like to construct a full tile firedoor or one direction?", "One Direction", "Full Firedoor", "Cancel", null))
 		if("One Direction")
 			if(!user.is_holding_item(src))
 				return 1
 			var/current_turf = get_turf(src)
 			var/turf_face = get_step(current_turf,user.dir)
-			if(air_master.air_blocked(current_turf, turf_face))
+			if(SSair.air_blocked(current_turf, turf_face))
 				to_chat(user, "<span class = 'warning'>That way is blocked already.</span>")
 				return 1
 			var/obj/machinery/door/firedoor/border_only/F = locate(/obj/machinery/door/firedoor) in get_turf(user)
@@ -566,3 +591,4 @@ var/global/list/alert_overlays_global = list()
 			if(do_after(user, src, 5 SECONDS))
 				new /obj/machinery/door/firedoor(get_turf(src))
 				qdel(src)
+*/

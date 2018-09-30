@@ -39,6 +39,8 @@
 	var/list/datum/mind/deathsquad = list()
 	var/list/datum/mind/ert = list()
 	var/ert_reason
+	var/list/datum/mind/elite_syndie = list()
+	var/list/datum/mind/custom_team = list()
 	var/rage = 0
 	var/can_be_mixed = FALSE
 
@@ -184,27 +186,27 @@
 	for(var/mob/living/carbon/human/man in player_list) if(man.client && man.mind)
 		// NT relation option
 		var/special_role = man.mind.special_role
-		var/became_a_suspect = FALSE
+		//var/became_a_suspect = FALSE
 		if (special_role == "Wizard" || special_role == "Ninja" || special_role == "Syndicate")
 			continue	//NT intelligence ruled out possiblity that those are too classy to pretend to be a crew.
 		if(man.client.prefs.nanotrasen_relation == "Opposed" && prob(50) || \
 		   man.client.prefs.nanotrasen_relation == "Skeptical" && prob(20))
 			suspects += man
-			became_a_suspect = TRUE
+			//became_a_suspect = TRUE
 		// Antags
 		else if(special_role == "traitor" && prob(40) || \
 		   special_role == "Changeling" && prob(50) || \
 		   special_role == "Cultist" && prob(30) || \
 		   special_role == "Head Revolutionary" && prob(30))
 			suspects += man
-			became_a_suspect = TRUE
+			//became_a_suspect = TRUE
 		// Some poor people who were just in the wrong place at the wrong time..
 		else if(prob(10))
 			suspects += man
-			became_a_suspect = TRUE
+			//became_a_suspect = TRUE
 
 
-		if(became_a_suspect)
+		/*if(became_a_suspect)
 			var/obj/item/device/uplink/hidden/suplink = man.mind.find_syndicate_uplink()
 			if(suplink) // If they're a traitor or likewise, give them extra TC in exchange.
 				var/extra = 8
@@ -215,7 +217,7 @@
 			else if(special_role) // If they're an antag without an uplink
 				// Give them a warning!
 				to_chat(man, "<span class='warning'>They are on to you!</span>")
-
+		*/
 	for(var/mob/M in suspects)
 		if(M.mind.assigned_role == "MODE")
 			//intercepttext += "Someone with the job of <b>[pick("Assistant","Station Engineer", "Medical Doctor")]</b> <br>" //Lets just make them not appear at all
@@ -252,7 +254,7 @@
 	// Ultimate randomizing code right here
 	for(var/mob/new_player/player in player_list)
 		if(player.client && player.ready)
-			players += player
+			players |= player
 
 	// Shuffling, the players list is now ping-independent!!!
 	// Goodbye antag dante
@@ -274,16 +276,17 @@
 	if(candidates.len < recommended_enemies)
 		for(var/mob/new_player/player in players)
 			if(player.client && player.ready)
-				if(!player.mind in drafted || !player.mind in candidates) // Players were getting placed in candidates AND drafted lists.
+				if(!(player.mind in drafted) || !(player.mind in candidates)) // Players were getting placed in candidates AND drafted lists.
 					if(player.client.desires_role(role, display_to_user=poll)) // We don't have enough people who want to be antagonist, make a seperate list of people who don't want to be one
 						if(!jobban_isbanned(player, "Syndicate") && !jobban_isbanned(player, role)) //Nodrak/Carn: Antag Job-bans
-							drafted += player.mind
-
-	if(restricted_jobs)
-		for(var/datum/mind/player in drafted)				// Remove people who can't be an antagonist
-			for(var/job in restricted_jobs)
-				if(player.assigned_role == job)
-					drafted -= player
+							if (restricted_jobs) // Can't draft something that's restricted.
+								var/datum/mind/M = player.mind
+								if (!(M.assigned_job in restricted_jobs))
+									drafted += M
+								else
+									continue
+							else
+								drafted += player.mind
 
 	drafted = shuffle(drafted) // Will hopefully increase randomness, Donkie
 
@@ -348,8 +351,9 @@
 ///////////////////////////////////
 /datum/game_mode/proc/get_living_heads()
 	var/list/heads = list()
-	for(var/mob/living/carbon/human/player in mob_list)
-		if(player.stat!=2 && player.mind && (player.mind.assigned_role in command_positions))
+	for(var/client/C in clients)
+		var/mob/living/carbon/human/player = C.mob
+		if(istype(player) && player.stat!=2 && player.mind && (player.mind.assigned_role in command_positions))
 			heads += player.mind
 	return heads
 
@@ -359,15 +363,17 @@
 ////////////////////////////
 /datum/game_mode/proc/get_all_heads()
 	var/list/heads = list()
-	for(var/mob/player in mob_list)
-		if(player.mind && (player.mind.assigned_role in command_positions))
+	for(var/client/C in clients)
+		var/mob/living/carbon/human/player = C.mob
+		if(istype(player) && player.mind && (player.mind.assigned_role in command_positions))
 			heads += player.mind
 	return heads
 
 /datum/game_mode/proc/get_assigned_head_roles()
 	var/list/roles = list()
-	for(var/mob/player in mob_list)
-		if(player.mind && (player.mind.assigned_role in command_positions))
+	for(var/client/C in clients)
+		var/mob/living/carbon/human/player = C.mob
+		if(istype(player) && player.mind && (player.mind.assigned_role in command_positions))
 			roles += player.mind.assigned_role
 	return roles
 

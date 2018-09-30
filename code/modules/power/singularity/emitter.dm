@@ -233,12 +233,10 @@
 
 		//beam = getFromPool(/obj/item/projectile/beam/emitter, loc)
 		//beam.dir = dir
-		//playsound(get_turf(src), 'sound/weapons/emitter.ogg', 25, 1)
+		//playsound(src, 'sound/weapons/emitter.ogg', 25, 1)
 
 		if(prob(35))
-			var/datum/effect/effect/system/spark_spread/Sparks = new
-			Sparks.set_up(5, 1, src)
-			Sparks.start()
+			spark(src, 5)
 
 		//A.dumbfire()
 
@@ -247,15 +245,15 @@
 	if(!emagged)
 		locked = 0
 		emagged = 1
-		user.visible_message("<span class='danger'>[user] shorts out \the [src]'s lock.</span>", "<span class='warning'>You short out \the [src]'s lock.</span>")
+		if(user)
+			user.visible_message("<span class='danger'>[user] shorts out \the [src]'s lock.</span>", "<span class='warning'>You short out \the [src]'s lock.</span>")
 		return
 
-/obj/machinery/power/emitter/wrenchAnchor(mob/user)
-
+/obj/machinery/power/emitter/wrenchAnchor(var/mob/user)
 	if(active)
 		to_chat(user, "<span class='warning'>Turn off \the [src] first.</span>")
-		return
-	return ..()
+		return FALSE
+	. = ..()
 
 /obj/machinery/power/emitter/weldToFloor()
 
@@ -343,7 +341,8 @@
 
 /obj/machinery/power/emitter/clone(var/obj/machinery/power/emitter/O)
 	id_tag = O.id_tag
-	set_frequency(O.id_tag)
+	set_frequency(O.frequency)
+	return 1
 
 /obj/machinery/power/emitter/npc_tamper_act(mob/living/L)
 	attack_hand(L)

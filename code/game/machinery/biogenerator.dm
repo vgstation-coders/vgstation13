@@ -170,7 +170,7 @@
 	cost=75
 	id="clipboard"
 	name="Clipboard"
-	result=/obj/item/weapon/clipboard
+	result=/obj/item/weapon/storage/bag/clipboard
 
 /datum/biogen_recipe/paper/cardboard
 	cost=25
@@ -183,14 +183,14 @@
 	cost=25
 	id="giftwrap"
 	name="Gift Wrap"
-	other_amounts=list(5,10)
+	amount_per_unit = 24
 	result=/obj/item/stack/package_wrap/gift
 
 /datum/biogen_recipe/paper/packagewrap
 	cost=30
 	id="packagewrap"
 	name="Package Wrap"
-	other_amounts=list(5,10)
+	amount_per_unit = 24
 	result=/obj/item/stack/package_wrap
 
 /datum/biogen_recipe/paper/paperbin
@@ -234,6 +234,12 @@
 	id="crayons"
 	name="Box of Crayons"
 	result=/obj/item/weapon/storage/fancy/crayons
+
+/datum/biogen_recipe/misc/rice_hat
+	name = "Rice Hat"
+	id = "rice_hat"
+	cost = 300
+	result = /obj/item/clothing/head/rice_hat
 
 /datum/biogen_recipe/flooring
 	category="Flooring"
@@ -477,7 +483,7 @@
 		processing = 1
 		update_icon()
 		updateUsrDialog()
-		playsound(get_turf(src), 'sound/machines/blender.ogg', 50, 1)
+		playsound(src, 'sound/machines/blender.ogg', 50, 1)
 		use_power(S*30)
 		sleep(speed_coefficient*(S+15))
 		processing = 0

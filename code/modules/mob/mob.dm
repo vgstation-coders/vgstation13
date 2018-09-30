@@ -4,6 +4,17 @@
 /mob
 	plane = MOB_PLANE
 
+/mob/variable_edited(var_name, old_value, new_value)
+	.=..()
+
+	switch(var_name)
+		if("stat")
+			if((old_value == 2) && (new_value < 2))//Bringing the dead back to life
+				resurrect()
+			else if((old_value < 2) && (new_value == 2))//Kill he
+				living_mob_list.Remove(src)
+				dead_mob_list.Add(src)
+
 /mob/recycle(var/datum/materials)
 	return RECYK_BIOLOGICAL
 
@@ -22,6 +33,8 @@
 		on_damaged.holder = null
 	if(on_irradiate)
 		on_irradiate.holder = null
+	if(on_death)
+		on_death.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -66,12 +79,14 @@
 	qdel(on_damaged)
 	qdel(on_clickon)
 	qdel(on_irradiate)
+	qdel(on_death)
 
 	on_spellcast = null
 	on_uattack = null
 	on_damaged = null
 	on_clickon = null
 	on_irradiate = null
+	on_death = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -79,6 +94,14 @@
 	if(transmogged_to)
 		qdel(transmogged_to)
 		transmogged_to = null
+	if(control_object.len)
+		for(var/A in control_object)
+			qdel(A)
+		control_object = null
+	if(orient_object.len)
+		for(var/A in orient_object)
+			qdel(A)
+		orient_object = null
 
 	..()
 
@@ -246,6 +269,7 @@
 	on_damaged = new(owner = src)
 	on_clickon = new(owner = src)
 	on_irradiate = new(owner = src)
+	on_death = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -294,13 +318,9 @@
 
 	var/t = "<span class='notice'> Coordinates: [x],[y] \n</span>"
 
-	t += {"<span class='warning'> Temperature: [environment.temperature] \n</span>
-<span class='notice'> Nitrogen: [environment.nitrogen] \n</span>
-<span class='notice'> Oxygen: [environment.oxygen] \n</span>
-<span class='notice'> Plasma : [environment.toxins] \n</span>
-<span class='notice'> Carbon Dioxide: [environment.carbon_dioxide] \n</span>"}
-	for(var/datum/gas/trace_gas in environment.trace_gases)
-		to_chat(usr, "<span class='notice'> [trace_gas.type]: [trace_gas.moles] \n</span>")
+	t += "<span class='warning'> Temperature: [environment.temperature] \n</span>"
+	for(var/g in environment.gas)
+		to_chat(usr, "<span class='notice'> [XGM.name[g]]: [environment.gas[g]] \n</span>")
 
 	usr.show_message(t, 1)
 
@@ -365,7 +385,7 @@
 // blind_drugged_message (optional) is shown to blind hallucinating people
 // ignore_self (optional) won't show the message to the mob sending the message
 
-/mob/visible_message(var/message, var/self_message, var/blind_message, var/drugged_message, var/self_drugged_message, var/blind_drugged_message, var/ignore_self = 0)
+/mob/visible_message(var/message, var/self_message, var/blind_message, var/drugged_message, var/self_drugged_message, var/blind_drugged_message, var/ignore_self = 0, var/range = 7)
 	var/hallucination = hallucinating()
 	var/msg = message
 	var/msg2 = blind_message
@@ -381,7 +401,7 @@
 	if(!ignore_self)
 		show_message( msg, 1, msg2, 2)
 
-	..(message, blind_message, drugged_message, blind_drugged_message)
+	..(message, blind_message, drugged_message, blind_drugged_message, range)
 
 /mob/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
 	if(see_invisible < A.invisibility || src == A)
@@ -401,11 +421,11 @@
 // message is output to anyone who can see, e.g. "The [src] does something!"
 // blind_message (optional) is what blind people will hear e.g. "You hear something!"
 
-/atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message)
+/atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, var/range = 7)
 	if(world.time>resethearers)
 		sethearing()
 	var/location = get_holder_at_turf_level(src) || get_turf(src)
-	for(var/mob/virtualhearer/hearer in viewers(location))
+	for(var/mob/virtualhearer/hearer in viewers(range, location))
 		var/mob/M
 		if(istype(hearer.attached, /obj/machinery/hologram/holopad))
 			var/obj/machinery/hologram/holopad/holo = hearer.attached
@@ -639,15 +659,17 @@ var/list/slot_equipment_priority = list( \
 
 //puts the item "W" into an appropriate slot in a human's inventory
 //returns 0 if it cannot, 1 if successful
-/mob/proc/equip_to_appropriate_slot(obj/item/W)
+/mob/proc/equip_to_appropriate_slot(obj/item/W, var/override = FALSE)
 	if(!istype(W))
 		return 0
 
 	for(var/slot in slot_equipment_priority)
+		if(!is_holding_item(W) && !override)
+			return 0
 		var/obj/item/S = get_item_by_slot(slot)
 		if(S && S.can_quick_store(W))
 			return S.quick_store(W)
-		if(equip_to_slot_if_possible(W, slot, 0, 1, 1, 1)) //act_on_fail = 0; disable_warning = 0; redraw_mob = 1
+		if(equip_to_slot_if_possible(W, slot, 0, 1, 1, 0)) //act_on_fail = 0; disable_warning = 0; redraw_mob = 1
 			return 1
 
 	return 0
@@ -682,7 +704,7 @@ var/list/slot_equipment_priority = list( \
 	while(has_succeeded_once)
 		has_succeeded_once = FALSE
 		for(var/obj/item/I in L)
-			if(equip_to_appropriate_slot(I))
+			if(equip_to_appropriate_slot(I, TRUE)) // The proc wants the item to be in our hands, like in the case of a quick-equip
 				has_succeeded_once = TRUE
 				L.Remove(I)
 	if(L.len)
@@ -978,7 +1000,17 @@ var/list/slot_equipment_priority = list( \
 	set name = "Point To"
 	set category = "Object"
 
-	if(!src || usr.isUnconscious() || !isturf(src.loc) || !(A in view(src.loc)))
+	if((usr.isUnconscious() && !isobserver(src)) || !isturf(src.loc) || attack_delayer.blocked())
+		return 0
+
+	delayNextAttack(SHOW_HELD_ITEM_AND_POINTING_DELAY)
+
+	if(isitem(A) && is_holding_item(A))
+		var/obj/item/I = A
+		I.showoff(src)
+		return 0
+
+	if(!(A in view(src.loc) + get_all_slots()))
 		return 0
 
 	if(istype(A, /obj/effect/decal/point))
@@ -997,6 +1029,8 @@ var/list/slot_equipment_priority = list( \
 	point.invisibility = invisibility
 	point.pointer = src
 	point.target = A
+	point.pixel_x = A.pixel_x
+	point.pixel_y = A.pixel_y
 	spawn(20)
 		if(point)
 			qdel(point)
@@ -1008,7 +1042,11 @@ var/list/slot_equipment_priority = list( \
 
 //this and stop_pulling really ought to be /mob/living procs
 /mob/proc/start_pulling(var/atom/movable/AM)
-	if ( !AM || !src || src==AM || !isturf(AM.loc) )	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
+	if ( !AM || !src || !isturf(AM.loc) || !AM.can_be_pulled(src))	//if there's no person pulling OR the object being pulled is inside something: abort!
+		return
+
+	if(AM == src) //trying to pull yourself is a convenient shortcut for "stop pulling"
+		stop_pulling()
 		return
 
 	if(!has_hand_check())
@@ -1017,25 +1055,30 @@ var/list/slot_equipment_priority = list( \
 
 	var/atom/movable/P = AM
 
-	if (ismob(AM))
+	if(ismob(AM))
 		var/mob/M = AM
-		if (M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
+		if(M.locked_to) //If the mob is locked_to on something, let's just try to pull the thing they're locked_to to for convenience's sake.
 			P = M.locked_to
 
-	if (!P.anchored)
+	if(!P.anchored)
 		P.add_fingerprint(src)
 
 		// If we're pulling something then drop what we're currently pulling and pull this instead.
 		if(pulling)
-			// Are we trying to pull something we are already pulling? Then just stop here, no need to continue
-			var/temp_P = pulling
-			stop_pulling()
-			if(P == temp_P)
-				return
+			// Are we trying to pull something we are already pulling?
+			// Then we want to either toggle pulling (stop pulling and quit), or keep pulling (just quit) if client preferences want otherwise.
+			if(pulling == P)
+				if(client && !client.prefs.pulltoggle)
+					return
+				else
+					stop_pulling()
+					return
+			else
+				stop_pulling()
 
 		src.pulling = P
 		P.pulledby = src
-		P.on_pull_start(AM)
+		AM.on_pull_start(src)
 		update_pull_icon()
 		if(ismob(P))
 			var/mob/M = P
@@ -1043,13 +1086,6 @@ var/list/slot_equipment_priority = list( \
 				M.LAssailant = null
 			else
 				M.LAssailant = usr
-				/*if(ishuman(AM))
-					var/mob/living/carbon/human/HM = AM
-					if (HM.drag_damage())
-						if (HM.isincrit())
-							to_chat(usr,"<span class='warning'>Pulling \the [HM] in their current condition would probably be a bad idea.</span>")
-							add_logs(src, HM, "started dragging critically wounded", admin = (HM.ckey))*/
-// Commented out till I can figure out how to fix people still pulling when they're pulled --snx
 
 /mob/verb/stop_pulling()
 	set name = "Stop Pulling"
@@ -1156,6 +1192,23 @@ var/list/slot_equipment_priority = list( \
 	face_atom(I)
 	I.verb_pickup(src)
 
+// See carbon/human
+/mob/proc/can_show_flavor_text()
+	return FALSE
+
+/mob/proc/print_flavor_text()
+	if(!flavor_text)
+		return
+	if(!can_show_flavor_text())
+		return
+	var/msg = strip_html(flavor_text)
+	if(findtext(msg, "http:") || findtext(msg, "https:") || findtext(msg, "www."))
+		return "<font color='#ffa000'><b><a href='?src=\ref[src];show_flavor_text=1'>Show flavor text</a></b></font>"
+	if(length(msg) <= 32)
+		return "<font color='#ffa000'><b>[msg]</b></font>"
+	else
+		return "<font color='#ffa000'><b>[copytext(msg, 1, 32)]...<a href='?src=\ref[src];show_flavor_text=1'>More</a></b></font>"
+
 /mob/verb/abandon_mob()
 	set name = "Respawn"
 	set category = "OOC"
@@ -1220,7 +1273,7 @@ var/list/slot_equipment_priority = list( \
 	set category = "OOC"
 	var/dat = {"	<title>/vg/station Github Ingame Reporting</title>
 					Revision: [return_revision()]
-					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]' style='border:none' width='480' height='480' scroll=no></iframe>"}
+					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
 	src << browse(dat, "window=github;size=480x480")
 
 /client/verb/changes()
@@ -1366,21 +1419,22 @@ var/list/slot_equipment_priority = list( \
 		var/t1 = text("window=[href_list["mach_close"]]")
 		unset_machine()
 		src << browse(null, t1)
+	else
+		return ..()
 	//if (href_list["joinresponseteam"])
 	//	if(usr.client)
 	//		var/client/C = usr.client
 	//		C.JoinResponseTeam()
 
-/mob/MouseDrop(mob/M as mob)
-	..()
+/mob/MouseDropFrom(mob/M as mob)
 	if(M != usr)
-		return
+		return ..()
 	if(usr == src)
-		return
+		return ..()
 	if(!Adjacent(usr))
-		return
+		return ..()
 	if(istype(M,/mob/living/silicon/ai))
-		return
+		return ..()
 	show_inv(usr)
 
 
@@ -1430,6 +1484,8 @@ var/list/slot_equipment_priority = list( \
 			else if(statpanel(listed_turf.name))
 				statpanel(listed_turf.name, null, listed_turf)
 				for(var/atom/A in listed_turf)
+					if(!A.mouse_opacity && !A.name)
+						continue
 					if(A.invisibility > see_invisible)
 						continue
 					statpanel(listed_turf.name, null, A)
@@ -1492,10 +1548,10 @@ var/list/slot_equipment_priority = list( \
 
 	reset_layer() //Handles layer setting in hiding
 	if(lying)
-		density = 0
+		setDensity(FALSE)
 		drop_hands()
 	else
-		density = 1
+		setDensity(TRUE)
 
 	//Temporarily moved here from the various life() procs
 	//I'm fixing stuff incrementally so this will likely find a better home.
@@ -1513,6 +1569,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/eastface()
 	set hidden = 1
+	if(loc && loc.relayface(src, EAST))
+		return 1
+	if(locked_to && locked_to.relayface(src, EAST))
+		return 1
 	if(!canface())
 		return 0
 	dir = EAST
@@ -1523,6 +1583,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/westface()
 	set hidden = 1
+	if(loc && loc.relayface(src, WEST))
+		return 1
+	if(locked_to && locked_to.relayface(src, WEST))
+		return 1
 	if(!canface())
 		return 0
 	dir = WEST
@@ -1533,6 +1597,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/northface()
 	set hidden = 1
+	if(loc && loc.relayface(src, NORTH))
+		return 1
+	if(locked_to && locked_to.relayface(src, NORTH))
+		return 1
 	if(!canface())
 		return 0
 	dir = NORTH
@@ -1543,6 +1611,10 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/southface()
 	set hidden = 1
+	if(loc && loc.relayface(src, SOUTH))
+		return 1
+	if(locked_to && locked_to.relayface(src, SOUTH))
+		return 1
 	if(!canface())
 		return 0
 	dir = SOUTH
@@ -1552,13 +1624,13 @@ var/list/slot_equipment_priority = list( \
 
 
 /mob/proc/Facing()
-    var/datum/listener
-    for(. in src.callOnFace)
-        listener = locate(.)
-        if(listener)
-            call(listener,src.callOnFace[.])(src)
-        else
-            src.callOnFace -= .
+	var/datum/listener
+	for(. in src.callOnFace)
+		listener = locate(.)
+		if(listener)
+			call(listener,src.callOnFace[.])(src)
+		else
+			src.callOnFace -= .
 
 
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
@@ -1581,6 +1653,15 @@ var/list/slot_equipment_priority = list( \
 	if(status_flags & CANSTUN)
 		stunned = max(stunned + amount,0)
 	return
+
+/mob/proc/Deafen(amount)
+	ear_deaf = max(max(ear_deaf,amount),0)
+
+/mob/proc/Mute(amount)
+	say_mute = max(max(say_mute,amount),0)
+
+/mob/proc/AdjustMute(amount)
+	say_mute = max(say_mute + amount,0)
 
 /mob/proc/Knockdown(amount)
 	if(status_flags & CANKNOCKDOWN)
@@ -1606,6 +1687,8 @@ var/list/slot_equipment_priority = list( \
 /mob/proc/Dizzy(amount)
 	dizziness = max(dizziness,amount,0)
 
+/mob/proc/AdjustDizzy(amount)
+	dizziness = max(dizziness+amount, 0)
 
 /mob/proc/Paralyse(amount)
 	if(status_flags & CANPARALYSE)
@@ -1761,6 +1844,11 @@ mob/proc/on_foot()
 		return 1
 	return 0
 
+/mob/proc/is_mute()
+	if(sdisabilities & MUTE || say_mute)
+		return 1
+	return 0
+
 /mob/proc/is_deaf()
 	if(sdisabilities & DEAF || ear_deaf)
 		return 1
@@ -1848,6 +1936,11 @@ mob/proc/on_foot()
 
 /mob/acidable()
 	return 1
+
+/mob/proc/get_view_range()
+	if(client)
+		return client.view
+	return world.view
 
 /mob/proc/apply_vision_overrides()
 	if(see_in_dark_override)
@@ -1962,10 +2055,33 @@ mob/proc/on_foot()
 	if(key)
 		M.key = key
 	if(offer_revert_spell)
-		var/spell/change_back = new /spell/aoe_turf/revert_form
+		var/spell/change_back
+		if(ispath(offer_revert_spell)) //I don't like this but I'm not rewriting the whole system for a hotfix
+			change_back = new offer_revert_spell
+		else
+			change_back = new /spell/aoe_turf/revert_form
 		M.add_spell(change_back)
 	C.set_contained_mob(src)
 	timestopped = 1
+	return M
+
+/mob/proc/completely_untransmogrify()	//Reverts a mob through all layers of transmogrification, back down to the base mob. Returns this mob.
+	var/mob/top_level = get_top_transmogrification()
+	while(top_level)
+		top_level = top_level.transmogrify()
+		if(top_level)
+			. = top_level
+
+/mob/proc/get_top_transmogrification()	//Returns the mob at the highest level of transmogrification, the one which contains the player.
+	var/mob/M = src
+	while(M.transmogged_to)
+		M = M.transmogged_to
+	return M
+
+/mob/proc/get_bottom_transmogrification()	//Returns the mob at the lowest level of transmogrification, the original mob.
+	var/mob/M = src
+	while(M.transmogged_from)
+		M = M.transmogged_from.contained_mob
 	return M
 
 /spell/aoe_turf/revert_form
@@ -1982,6 +2098,9 @@ mob/proc/on_foot()
 /spell/aoe_turf/revert_form/cast(var/list/targets, mob/user)
 	user.transmogrify()
 	user.remove_spell(src)
+
+/spell/aoe_turf/revert_form/no_z2 //Used if you don't want it reverting on Z2. So far only important for ghosts.
+	spell_flags = GHOSTCAST | Z2NOCAST
 
 /obj/transmog_body_container
 	name = "transmog body container"
@@ -2008,6 +2127,37 @@ mob/proc/on_foot()
 
 /mob/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "default")
+
+/mob/make_invisible(var/source_define, var/time, var/include_clothing)
+	if(..() || !source_define)
+		return
+	alpha = 1	//to cloak immediately instead of on the next Life() tick
+	alphas[source_define] = 1
+	if(time > 0)
+		spawn(time)
+			if(src)
+				alpha = initial(alpha)
+				alphas.Remove(source_define)
+
+/mob/proc/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	if (reagents && reagents.has_reagent(CHILLWAX))
+		switch (message)
+			if (VIOLENCE_DEFAULT)//unarmed, melee weapon, spell
+				to_chat(src, "<span class='notice'>[pick("Like...violence...what is it even good for?","Nah, you don't feel like doing that.","What did \the [target] even do to you? Chill out.")]</span>")
+			if (VIOLENCE_GUN)//gun, projectile weapon
+				to_chat(src, "<span class='notice'>[pick("Hey that's dangerous...wouldn't want hurting people.","You don't feel like firing \the [weapon] at \the [target].","Peace, my [gender == FEMALE ? "girl" : "man"]...")]</span>")
+		return 1
+
+	for (var/obj/item/weapon/implant/peace/target_implant in src.contents)
+		if (!target_implant.malfunction && target_implant.imp_alive && target_implant.imp_in == src)
+			if (message != VIOLENCE_SILENT)
+				to_chat(src, "<span class='warning'>\The [target_implant] inside you prevents this!</span>")
+			return 1
+
+	return 0
+
+/mob/proc/handle_regular_hud_updates()
+	return
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

@@ -42,6 +42,28 @@
 	category = "Mecha Boards"
 	build_path = /obj/item/weapon/circuitboard/mecha/odysseus/peripherals
 
+//CLARKE
+
+/datum/design/clarke_main
+	name = "Circuit Design (\"Clarke\" Central Control module)"
+	desc = "Allows for the construction of a \"Clarke\" Central Control module."
+	id = "clarke_main"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_ENGINEERING = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Mecha Boards"
+	build_path = /obj/item/weapon/circuitboard/mecha/clarke/main
+
+/datum/design/clarke_peri
+	name = "Circuit Design (\"Clarke\" Peripherals Control module)"
+	desc = "Allows for the construction of a \"Clarke\" Peripheral Control module."
+	id = "clarke_peri"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_ENGINEERING = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Mecha Boards"
+	build_path = /obj/item/weapon/circuitboard/mecha/clarke/peripherals
+
 //PHAZON
 
 /datum/design/phazon_main

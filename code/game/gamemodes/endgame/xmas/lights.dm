@@ -33,9 +33,10 @@
 	)
 
 
-/obj/machinery/xmas_light/New(loc)
+/obj/machinery/xmas_light/New(loc, var/newdir)
 	..()
-
+	if(newdir)
+		dir = newdir
 	lights = image(icon, icon_state = "overlay_big", dir = dir)
 	var/list/cl = list(0, 0, 0, 0)
 	for (var/x = 1 to 4)

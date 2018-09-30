@@ -156,7 +156,7 @@
 			var/tag = uppertext(O.destinations[O.currTag])
 			to_chat(user, "<span class='notice'>*[tag]*</span>")
 			sortTag = tag
-			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 100, 1)
+			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)
 			overlays = 0
 			overlays += image(icon = icon, icon_state = "deliverytag")
 			src.desc = "A small wrapped package. It has a label reading [tag]"
@@ -196,7 +196,8 @@
 	return attack_hand(user)
 
 /obj/item/delivery/large/attack_hand(mob/user as mob)
-	qdel(src)
+	if(!is_holder_of(src, user))
+		qdel(src)
 
 /obj/item/delivery/large/attack_robot(mob/user)
 	if(!Adjacent(user))

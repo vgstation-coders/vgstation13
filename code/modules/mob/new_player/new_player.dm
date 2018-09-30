@@ -26,11 +26,11 @@
 
 	output += {"<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"}
 	if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
+		output += "<a href='byond://?src=\ref[src];predict=1'>Manifest Prediction (Unreliable)</A><br>"
 		if(!ready)
 			output += "<p><a href='byond://?src=\ref[src];ready=1'>Declare Ready</A></p>"
 		else
 			output += "<p><b>You are ready</b> (<a href='byond://?src=\ref[src];ready=2'>Cancel</A>)</p>"
-
 	else
 		ready = 0 // prevent setup character issues
 		output += {"<a href='byond://?src=\ref[src];manifest=1'>View the Crew Manifest</A><br>
@@ -181,7 +181,13 @@
 				return 0
 
 		LateChoices()
+	if(href_list["predict"])
+		var/dat = {"<html><body>
+		<h4>High Job Preferences</h4>"}
+		dat += job_master.display_prediction()
 
+		src << browse(dat, "window=manifest;size=400x420;can_close=1")
+		return 1
 	if(href_list["manifest"])
 		ViewManifest()
 
@@ -309,7 +315,6 @@
 		if(prob(10)) // 10% of those have a good mut.
 			H.dna.GiveRandomSE(notflags = GENE_UNNATURAL,genetype = GENETYPE_GOOD)
 
-
 /mob/new_player/proc/AttemptLateSpawn(rank)
 	if (src != usr)
 		return 0
@@ -325,20 +330,40 @@
 
 	job_master.AssignRole(src, rank, 1)
 
+	ticker.mode.latespawn(src)//can we make them a latejoin antag?
+
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
 
-	// TODO:  Job-specific latejoin overrides.
-	character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
+	var/turf/T = character.loc
+	for(var/role in character.mind.antag_roles)
+		var/datum/role/R = character.mind.antag_roles[role]
+		R.OnPostSetup()
+		R.ForgeObjectives()
+		R.AnnounceObjectives()
+
+	var/datum/job/J = job_master.GetJob(rank)
+	if (character.loc != T)//uh oh, we're spawning as an off-station antag, better not be announced, show up on the manifest, or take up a job slot
+		J.current_positions--
+		character.store_position()
+		qdel(src)
+		return
 
 	job_master.EquipRank(character, rank, 1)					//equips the human
 	EquipCustomItems(character)
 
+	if(J.spawns_from_edge)
+		character.Meteortype_Latejoin(rank)
+	else
+		// TODO:  Job-specific latejoin overrides.
+		character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
+
+
 	character.store_position()
 
 	// WHY THE FUCK IS THIS HERE
-	// FOR GOD'S SAKE USE EVENTS
+	// FOR GOD'S SAKE USE EVENTS	TODO: use latejoin dynamic rulesets to deal with that
 	if(bomberman_mode)
 		character.client << sound('sound/bomberman/start.ogg')
 		if(character.wear_suit)
@@ -358,16 +383,56 @@
 		to_chat(character, "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>")
 		to_chat(character, "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>")
 
-	ticker.mode.latespawn(character)
+	if(character.mind.assigned_role != "MODE")
+		if(character.mind.assigned_role != "Cyborg")
+			data_core.manifest_inject(character)
+			ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
+			if(character.mind.assigned_role == "Trader")
+				//If we're a trader, instead send a message to PDAs with the trader cartridge
+				for (var/obj/item/device/pda/P in PDAs)
+					if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
+						var/mob/living/L = get_holder_of_type(P,/mob/living)
+						if(L)
+							L.show_message("[bicon(P)] <b>Message from U���8�E1��Ћ (T�u1B��), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
+				for(var/mob/dead/observer/M in player_list)
+					if(M.stat == DEAD && M.client)
+						handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character] has arrived in the sector from space.</span></span>",character) //This should generate a Follow link
 
 	if(character.mind.assigned_role != "Cyborg")
 		data_core.manifest_inject(character)
 		ticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
-		AnnounceArrival(character, rank)
+		if(character.mind.assigned_role == "Trader")
+			//If we're a trader, instead send a message to PDAs with the trader cartridge
+			for (var/obj/item/device/pda/P in PDAs)
+				if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
+					var/mob/living/L = get_holder_of_type(P,/mob/living)
+					if(L)
+						L.show_message("[bicon(P)] <b>Message from U¦É8¥E1ÀÓÐ (T¥u1B¤Õ), </b>\"Caw. Cousin [character] detected in sector.\".", 2)
+			for(var/mob/dead/observer/M in player_list)
+				if(M.stat == DEAD && M.client)
+					handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character] has arrived in the sector from space.</span></span>",character) //This should generate a Follow link
+
+		else
+			AnnounceArrival(character, rank)
 		FuckUpGenes(character)
 	else
 		character.Robotize()
 	qdel(src)
+
+/mob/living/carbon/human/proc/Meteortype_Latejoin(rank)
+	var/obj/effect/landmark/start/endpoint = null
+	for(var/obj/effect/landmark/start/S in landmarks_list)
+		if(S.name == rank)
+			endpoint = S
+			break
+	if(!endpoint)
+		message_admins("ERROR - NO VALID TRADER SPAWN. Here's what I've got: [json_encode(landmarks_list)]")
+		//Error! We have no targetable spawn!
+		return
+	var/turf/start_point = locate(TRANSITIONEDGE + 2, rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2)), endpoint.z)
+	forceMove(start_point)
+	throw_at(endpoint)
+
 
 /proc/AnnounceArrival(var/mob/living/carbon/human/character, var/rank)
 	if (ticker.current_state == GAME_STATE_PLAYING)
@@ -438,6 +503,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		new_character.setGender(pick(MALE, FEMALE))
 		client.prefs.real_name = random_name(new_character.gender, new_character.species.name)
 		client.prefs.randomize_appearance_for(new_character)
+		client.prefs.flavor_text = ""
 	else
 		client.prefs.copy_to(new_character)
 
@@ -459,6 +525,12 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		new_character.dna.SetSEState(GLASSESBLOCK,1,1)
 		new_character.disabilities |= NEARSIGHTED
 
+	if(client.prefs.disabilities & DISABILITY_FLAG_VEGAN)
+		new_character.dna.SetSEState(VEGANBLOCK, 1, 1)
+
+	if(client.prefs.disabilities & DISABILITY_FLAG_ASTHMA)
+		new_character.dna.SetSEState(ASTHMABLOCK, 1, 1)
+
 	chosen_species = all_species[client.prefs.species]
 	if( (client.prefs.disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
 		new_character.mutations += M_FAT
@@ -478,6 +550,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		new_character.sdisabilities |= MUTE
 
 	new_character.dna.UpdateSE()
+	domutcheck(new_character, null, MUTCHK_FORCED)
 
 	new_character.key = key		//Manually transfer the key to log them in
 
@@ -492,7 +565,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	src << browse(dat, "window=manifest;size=370x420;can_close=1")
 
-/mob/new_player/Move(NewLoc,Dir=0,step_x=0,step_y=0)
+/mob/new_player/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
 
 

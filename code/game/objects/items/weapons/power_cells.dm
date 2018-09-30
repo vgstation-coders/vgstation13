@@ -20,10 +20,15 @@
 	var/minor_fault = 0 //If not 100% reliable, it will build up faults.
 	var/brute_damage = 0 //Used by cyborgs
 	var/electronics_damage = 0 //Used by cyborgs
+	var/starch_cell = 0
 
 /obj/item/weapon/cell/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return (FIRELOSS)
+
+/obj/item/weapon/cell/empty/New()
+	..()
+	charge = 0
 
 /obj/item/weapon/cell/crap
 	name = "\improper Nanotrasen brand rechargeable AA battery"
@@ -66,6 +71,10 @@
 	maxcharge = 10000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 60)
 
+/obj/item/weapon/cell/high/cyborg
+	name = "cyborg rechargeable power cell"
+	maxcharge = 7500
+
 /obj/item/weapon/cell/high/empty/New()
 	..()
 	charge = 0
@@ -76,6 +85,7 @@
 	icon_state = "scell"
 	maxcharge = 20000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 70)
+
 /obj/item/weapon/cell/super/empty/New()
 	..()
 	charge = 0
@@ -91,15 +101,6 @@
 	..()
 	charge = 0
 
-/obj/item/weapon/cell/infinite
-	name = "infinite-capacity power cell!"
-	icon_state = "icell"
-	origin_tech =  null
-	maxcharge = 30000
-	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
-	use()
-		return 1
-
 /obj/item/weapon/cell/potato
 	name = "potato battery"
 	desc = "A rechargeable starch based power cell."
@@ -111,6 +112,17 @@
 	starting_materials = null
 	w_type = RECYK_BIOLOGICAL
 	minor_fault = 1
+	starch_cell = 1
+
+/obj/item/weapon/cell/potato/soviet
+	charge = 15000
+	maxcharge = 15000
+	minor_fault = 0
+
+/obj/item/weapon/cell/potato/soviet
+	charge = 15000
+	maxcharge = 15000
+	minor_fault = 0
 
 /obj/item/weapon/cell/crepe
 	name = "power crêpe"
@@ -121,6 +133,17 @@
 	charge = 12000
 	w_type = RECYK_BIOLOGICAL
 	minor_fault = 1
+	starch_cell = 1
+
+/obj/item/weapon/cell/crepe/mommi
+	maxcharge = 10000
+	charge = 10000
+	minor_fault = 0
+
+/obj/item/weapon/cell/crepe/mommi
+	maxcharge = 10000
+	charge = 10000
+	minor_fault = 0
 
 /obj/item/weapon/cell/crepe/attack_self(var/mob/living/user)
 	if(charge)
@@ -166,3 +189,19 @@
 
 	reset_vars_after_duration(resettable_vars, duration)
 
+
+/obj/item/weapon/cell/infinite
+	name = "infinite-capacity power cell!"
+	icon_state = "icell"
+	origin_tech = null
+	maxcharge = 35000
+	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
+
+/obj/item/weapon/cell/infinite/New()
+	..()
+	desc = "This cell is the latest in NT technology, having the capability to perpetually recharge itself. It has a power rating of Infinity!"
+
+/obj/item/weapon/cell/infinite/use()
+	..()
+	charge = maxcharge
+	return 1

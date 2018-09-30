@@ -282,10 +282,7 @@
 			com.one_time_use = 0
 			com.locked = null
 	else
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(5, 1, src)
-		s.start()
-
+		spark(src, 5)
 
 
 /obj/machinery/teleport/station
@@ -414,7 +411,7 @@ obj/machinery/teleport/station/New()
 	src.range--
 	return
 
-/obj/effect/laser/Move()
+/obj/effect/laser/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	src.range--
 	return
 

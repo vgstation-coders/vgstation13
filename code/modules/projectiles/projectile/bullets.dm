@@ -24,6 +24,14 @@
 	damage_type = TOX
 	weaken = 5
 
+/obj/item/projectile/bullet/blank
+	name = "hot gas discharge"
+	icon_state = null
+	damage = 10
+	damage_type = BURN
+	kill_count = 1 //Limits the range to one tile
+	embed = 0
+
 /obj/item/projectile/bullet/shrapnel
 
 	name = "shrapnel"
@@ -93,7 +101,7 @@
 	damage = 10
 	stun = 0
 	weaken = 0
-	superspeed = 1
+	projectile_speed = 0.66
 
 /obj/item/projectile/bullet/midbullet/assault
 	damage = 20
@@ -328,13 +336,14 @@
 	icon = 'icons/obj/projectiles_experimental.dmi'
 	icon_state = "hecate"
 	damage = 101//you're going to crit, lad
+	armor_penetration = 75
 	kill_count = 255//oh boy, we're crossing through the entire Z level!
 	stun = 5
 	weaken = 5
 	stutter = 5
 	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS|PROJREACT_BLOB
-	penetration = 20//can hit 3 mobs at once, or go through a wall and hit 2 more mobs, or go through an rwall/blast door and hit 1 mob
-	superspeed = 1
+	penetration = 20 //can hit 3 mobs at once, or go through a wall and hit 2 more mobs, or go through an rwall/blast door and hit 1 mob
+	projectile_speed = 0.66
 	fire_sound = 'sound/weapons/hecate_fire.ogg'
 
 /obj/item/projectile/bullet/hecate/OnFired()
@@ -367,6 +376,17 @@
 	damage = 5
 	damage_type = TOX
 	flag = "bio"
+	var/bug_species = BEESPECIES_NORMAL
+	var/tox = 50
+	var/dam = 2
+
+/obj/item/projectile/bullet/beegun/hornet
+	name = "hornet"
+	icon_state = "hornetgun"
+	damage = 7
+	bug_species = BEESPECIES_HORNET
+	tox = 25
+	dam = 4
 
 /obj/item/projectile/bullet/beegun/OnFired()
 	..()
@@ -383,7 +403,7 @@
 	bumped = 1
 
 	var/turf/T = get_turf(src)
-	var/mob/living/simple_animal/bee/angry/BEE = new(T)
+	var/mob/living/simple_animal/bee/angry/BEE = new (T,null,bug_species,tox,dam)
 	if(istype(A,/mob/living))
 		var/mob/living/M = A
 		visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
@@ -414,8 +434,7 @@
 /obj/item/projectile/bullet/APS/OnFired()
 	..()
 	if(damage >= 100)
-		superspeed = 1
-		super_speed = 1
+		projectile_speed = 0.66
 		for (var/mob/M in player_list)
 			if(M && M.client)
 				var/turf/M_turf = get_turf(M)
@@ -497,7 +516,7 @@
 /obj/item/projectile/bullet/vial/OnDeath()
 	if(!hit_mob)
 		src.visible_message("<span class='warning'>The vial shatters!</span>")
-	playsound(get_turf(src), "shatter", 20, 1)
+	playsound(src, "shatter", 20, 1)
 
 /obj/item/projectile/bullet/blastwave
 	name = "blast wave"
@@ -542,7 +561,7 @@
 		if(medium_damage_range)
 			if(heavy_damage_range)
 				for(var/atom/movable/A in T.contents)
-					if(!istype(A, /obj/item/weapon/organ/head))
+					if(!istype(A, /obj/item/organ/external/head))
 						A.ex_act(1)
 				T.ex_act(1)
 				heavy_damage_range -= 1
@@ -591,20 +610,15 @@
 
 /obj/item/projectile/bullet/fire_plume/proc/create_puff()
 	if(gas_jet)
-		if(gas_jet.total_moles())
-			var/total_moles = gas_jet.total_moles()
-			var/o2_concentration = gas_jet.oxygen/total_moles
-			var/n2_concentration = gas_jet.nitrogen/total_moles
-			var/co2_concentration = gas_jet.carbon_dioxide/total_moles
-			var/plasma_concentration = gas_jet.toxins/total_moles
-			var/n2o_concentration = null
+		var/total_moles = gas_jet.total_moles
+		if(total_moles)
+			var/o2_concentration = gas_jet[GAS_OXYGEN] / total_moles
+			var/n2_concentration = gas_jet[GAS_NITROGEN] / total_moles
+			var/co2_concentration = gas_jet[GAS_CARBON] / total_moles
+			var/plasma_concentration = gas_jet[GAS_PLASMA] / total_moles
+			var/n2o_concentration = gas_jet[GAS_SLEEPING] / total_moles
 
 			var/datum/gas_mixture/gas_dispersal = gas_jet.remove(original_total_moles/10)
-
-			if(gas_jet.trace_gases.len)
-				for(var/datum/gas/G in gas_jet.trace_gases)
-					if(istype(G, /datum/gas/sleeping_agent))
-						n2o_concentration = G.moles/total_moles
 
 			var/gas_type = null
 
@@ -625,9 +639,9 @@
 	if(!gas_jet)
 		return
 
-	if(gas_jet.total_moles())
-		var/jet_total_moles = gas_jet.total_moles()
-		var/toxin_concentration = gas_jet.toxins/jet_total_moles
+	var/jet_total_moles = gas_jet.total_moles
+	if(jet_total_moles)
+		var/toxin_concentration = gas_jet[GAS_PLASMA] / jet_total_moles
 		if(!(toxin_concentration > 0.01))
 			create_puff()
 			return
@@ -637,9 +651,9 @@
 	if(!has_O2_in_mix && T)
 		var/turf/location = get_turf(src)
 		var/datum/gas_mixture/turf_gases = location.return_air()
-		var/turf_total_moles = turf_gases.total_moles()
+		var/turf_total_moles = turf_gases.total_moles
 		if(turf_total_moles)
-			var/o2_concentration = turf_gases.oxygen/turf_total_moles
+			var/o2_concentration = turf_gases[GAS_OXYGEN] / turf_total_moles
 			if(!(o2_concentration > 0.01))
 				create_puff()
 				return
@@ -699,7 +713,7 @@
 	bounces = 1
 	fire_sound = 'sound/weapons/gunshot_1.ogg'
 	bounce_sound = null
-	projectile_slowdown = 0.5
+	projectile_speed = 1.33
 	kill_count = 100
 	embed = 0
 	rotate = 0
@@ -738,7 +752,7 @@
 	src.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 	..()
 
-/obj/item/projectile/bullet/liquid_blob/to_bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/bullet/liquid_blob/on_hit(atom/A as mob|obj|turf|area)
 	if(!A)
 		return
 	..()
@@ -762,7 +776,7 @@
 
 /obj/item/projectile/bullet/liquid_blob/OnDeath()
 	if(get_turf(src))
-		playsound(get_turf(src), 'sound/effects/slosh.ogg', 20, 1)
+		playsound(src, 'sound/effects/slosh.ogg', 20, 1)
 
 /obj/item/projectile/bullet/buckshot
 	name = "buckshot pellet"
@@ -770,6 +784,7 @@
 	damage = 10
 	penetration = 0
 	rotate = 0
+	var/variance_angle = 20
 	var/total_amount_to_fire = 9
 	var/type_to_fire = /obj/item/projectile/bullet/buckshot
 	var/is_child = 0
@@ -778,19 +793,12 @@
 	..(T)
 	is_child = C
 
-/obj/item/projectile/bullet/buckshot/proc/get_radius_turfs(turf/T)
-	return orange(T,1)
-
 /obj/item/projectile/bullet/buckshot/OnFired()
 	if(!is_child)
-		var/list/turf/possible_turfs = list()
-		for(var/turf/T in get_radius_turfs(original))
-			possible_turfs += T
 		for(var/I = 1; I <=total_amount_to_fire-1; I++)
 			var/obj/item/projectile/bullet/buckshot/B = new type_to_fire(src.loc, 1)
-			var/turf/targloc = pick(possible_turfs)
-			B.forceMove(get_turf(src))
-			B.launch_at(targloc,from = shot_from)
+			B.damage = src.damage
+			B.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
 	..()
 
 /obj/item/projectile/bullet/invisible
@@ -835,6 +843,10 @@
 	type_to_fire = /obj/item/projectile/bullet/buckshot/bullet_storm
 	custom_impact = 1
 	embed_message = FALSE
+	variance_angle = 50
 
-/obj/item/projectile/bullet/buckshot/bullet_storm/get_radius_turfs(turf/T)
-	return circlerangeturfs(original,5)
+/obj/item/projectile/bullet/faggot
+	name = "high-speed faggot"
+	icon = 'icons/obj/food.dmi'
+	icon_state = "faggot"
+	damage = 10

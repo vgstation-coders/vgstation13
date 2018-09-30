@@ -9,27 +9,67 @@
  * Lasertag
  */
 
-/obj/item/clothing/suit/bluetag
+/obj/item/clothing/suit/tag
+	blood_overlay_type = "armor"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
+	body_parts_covered = FULL_TORSO
+	siemens_coefficient = 3.0
+
+/obj/item/clothing/suit/tag/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(!proximity_flag)
+		return 0
+	if(istype(target, /obj/item/clothing/under) || istype(target, /obj/item/clothing/monkeyclothes))
+		var/obj/item/clothing/C = target
+		var/obj/item/clothing/accessory/lasertag/L = new()
+		if(C.check_accessory_overlap(L))
+			to_chat(user, "<span class='notice'>You cannot attach more accessories of this type to \the [C].</span>")
+			return
+		if(user.drop_item(src))
+			to_chat(user, "<span class='notice'>You attach \the [src] to \the [C].</span>")
+			C.attach_accessory(L)
+			transfer_fingerprints(src,L)
+			forceMove(L)
+			L.source_vest = src
+			L.update_icon()
+		return 1
+	return ..()
+
+/proc/get_tag_armor(mob/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(istype(H.wear_suit, /obj/item/clothing/suit/tag))
+			return H.wear_suit
+		if(isclothing(H.w_uniform))
+			var/obj/item/clothing/C = H.w_uniform
+			for(var/obj/item/clothing/accessory/lasertag/L in C.accessories)
+				return L.source_vest
+	if(ismonkey(M))
+		var/mob/living/carbon/monkey/MO = M
+		if(isclothing(MO.uniform))
+			for(var/obj/item/clothing/accessory/lasertag/L in MO.uniform.accessories)
+				return L.source_vest
+	if(ishologram(M))
+		var/mob/living/simple_animal/hologram/advanced/AH = M
+		if(istype(AH.wear_suit, /obj/item/clothing/suit/tag))
+			return AH.wear_suit
+		if(isclothing(AH.w_uniform))
+			var/obj/item/clothing/C = AH.w_uniform
+			for(var/obj/item/clothing/accessory/lasertag/L in C.accessories)
+				return L.source_vest
+
+/obj/item/clothing/suit/tag/bluetag
 	name = "blue laser tag armour"
 	desc = "Blue Pride, Station Wide."
 	icon_state = "bluetag"
 	item_state = "bluetag"
-	blood_overlay_type = "armor"
-	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
-	body_parts_covered = FULL_TORSO
 	allowed = list (/obj/item/weapon/gun/energy/tag/blue)
-	siemens_coefficient = 3.0
 
-/obj/item/clothing/suit/redtag
+/obj/item/clothing/suit/tag/redtag
 	name = "red laser tag armour"
 	desc = "Pew pew pew."
 	icon_state = "redtag"
 	item_state = "redtag"
-	blood_overlay_type = "armor"
-	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
-	body_parts_covered = FULL_TORSO
 	allowed = list (/obj/item/weapon/gun/energy/tag/red)
-	siemens_coefficient = 3.0
 
 /*
  * Costume
@@ -474,6 +514,8 @@
 	heat_conductivity = 0 // Good luck losing heat in this!
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	var/bearpelt = 0
+	extinguishingProb = 70
+
 
 /obj/item/clothing/suit/spaceblanket/attackby(obj/item/W,mob/user)
 	..()
@@ -517,3 +559,32 @@
 	if(!istype(M) || M.incapacitated())
 		return
 	M.visible_message("<span class='notice'>\The [M] opens \his [src.name], allowing you to see inside. <a HREF='?src=\ref[M];listitems=\ref[hold]'>Take a closer look.</a></span>","<span class='notice'>You flash the contents of your [src.name].</span>")
+
+/obj/item/clothing/suit/kimono
+	name = "kimono"
+	desc = "A traditional Japanese kimono."
+	icon_state = "fancy_kimono"
+	item_state = "fancy_kimono"
+	flags = FPRINT
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+
+/obj/item/clothing/suit/kimono/ronin
+	name = "black kimono"
+	desc = "A black and plain looking kimono."
+	icon_state = "ronin_kimono"
+	item_state = "ronin_kimono"
+
+/obj/item/clothing/suit/kimono/sakura
+	name = "sakura kimono"
+	desc = "A pale-pink, nearly white, kimono with a red and gold obi. There is a embroidered design of cherry blossom flowers covering the kimono."
+	icon_state = "sakura_kimono"
+	item_state = "sakura_kimono"
+
+/obj/item/clothing/suit/clockwork_robes
+	name = "clockwork robes"
+	desc = "A set of armored robes worn by the followers of Ratvar"
+	icon_state = "clockwork"
+	item_state = "clockwork"
+	flags = FPRINT
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	allowed = list(/obj/item/weapon/storage/bible, /obj/item/weapon/nullrod/spear)

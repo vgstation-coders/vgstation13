@@ -190,6 +190,20 @@
 
 	return D
 
+//The reverse
+/datum/shuttle/proc/remove_dock(var/D)
+	if(ispath(D))
+		for(var/obj/docking_port/destination/dock in all_docking_ports)
+			if(istype(dock,D))
+				dock.unlink_from_shuttle(src)
+				return dock
+	else if(istype(D,/obj/docking_port/destination))
+		var/obj/docking_port/destination/dock = D
+		dock.unlink_from_shuttle(src)
+		return dock
+
+	return D
+
 //Adds a docking port as a transit area, accepts path or the port itself
 /datum/shuttle/proc/set_transit_dock(var/D)
 	if(ispath(D))
@@ -251,6 +265,17 @@
 			to_chat(user, "The shuttle can't move ([D.areaname] is used by another shuttle)")
 		return 0
 
+	if(D.require_admin_permission && !isAdminGhost(user))
+		if(broadcast)
+			broadcast.announce( "Currently requesting permission to reach [D.areaname]..." )
+		else if(user)
+			to_chat(user, "Waiting for permission...")
+		var/reason = input(user, "State your reasons for wanting to dock at [D.areaname].", "Docking Request", "")
+		message_admins("[key_name(user)] is requesting permission to fly their [name] to [D.areaname]. [reason ? "Reason:[reason]" : "They didn't give a reason"]. (<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=1'>ACCEPT</a>/<a href='?_src_=holder;shuttlepermission=1;shuttle=\ref[src];docking_port=\ref[D];broadcast=\ref[broadcast];user=\ref[user];answer=0'>DENY</a>)")
+	else
+		actually_travel_to(D, broadcast, user)
+
+/datum/shuttle/proc/actually_travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
 	//Handle the message
 	var/time = "as soon as possible"
 	switch(pre_flight_delay)
@@ -304,6 +329,8 @@
 				moving = 0
 				destination_port = null
 				return 0
+			for(var/atom/AA in linked_area)
+				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
 
 		if(transit_port && get_transit_delay())
 			if(broadcast)
@@ -499,6 +526,17 @@
 	var/obj/docking_port/destination/target = pick(possible_locations)
 
 	travel_to(target,,user)
+
+/datum/shuttle/proc/get_occupants(var/find_stowaways)
+	var/list/occupants = list()
+	if(!find_stowaways)
+		for(var/mob/living/L in linked_area) //Yeah they could be hiding in lockers, but that's a stowaway not an occupant
+			occupants.Add(L)
+	else
+		for(var/mob/living/L in mob_list)
+			if(get_area(src) == linked_area)
+				occupants.Add(L)
+	return occupants
 
 //The proc that does most of the work
 //RETURNS: 1 if everything is good, 0 if everything is bad

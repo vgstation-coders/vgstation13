@@ -171,10 +171,13 @@
 	if(user == victim)
 		return
 	if(iswrench(W))
-		if(victim)
-			to_chat(user, "<span class='warning'>You can't unsecure \the [src] from the floor while someone's inside it!</span>")
-			return
 		wrenchAnchor(user)
+
+/obj/structure/bed/guillotine/wrenchAnchor(var/mob/user)
+	if(victim)
+		to_chat(user, "<span class='warning'>You can't unsecure \the [src] from the floor while someone's inside it!</span>")
+		return FALSE
+	. = ..()
 
 /obj/structure/bed/guillotine/AltClick(var/mob/user)
 	if(!Adjacent(user) || user.incapacitated() || istype(user, /mob/living/silicon/pai) || user == victim)	//same restrictions as putting someone into it
@@ -204,7 +207,7 @@
 					var/datum/organ/external/head/H = victim.get_organ(LIMB_HEAD)
 					if(istype(H) && ~H.status & ORGAN_DESTROYED)
 						H.droplimb(1)
-						playsound(get_turf(src), 'sound/weapons/bloodyslice.ogg', 100, 1)
+						playsound(src, 'sound/weapons/bloodyslice.ogg', 100, 1)
 						blood_splatter(get_turf(src),victim,1)
 			bladedown = TRUE
 			update_icon()

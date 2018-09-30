@@ -37,11 +37,14 @@
 	M.dna.SetSEState(block, 1)
 
 // Random Appearance Mutation
+/mob/living/var/tmp/last_appearance_mutation = 0
+
 /proc/randmuti(var/mob/living/M)
 	if(!M)
 		return
 	M.dna.check_integrity()
 	M.dna.SetUIValue(rand(1,DNA_UI_LENGTH),rand(1,4095))
+	M.last_appearance_mutation = world.time
 
 // Scramble UI or SE.
 /proc/scramble(var/UI, var/mob/M, var/prob)

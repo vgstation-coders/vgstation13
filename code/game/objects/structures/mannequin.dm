@@ -91,7 +91,7 @@
 	return 0
 
 
-/obj/structure/mannequin/MouseDrop(var/atom/over_object)
+/obj/structure/mannequin/MouseDropFrom(var/atom/over_object)
 	..()
 	var/mob/user = usr
 	if(user != over_object)
@@ -138,15 +138,15 @@
 /obj/structure/mannequin/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-/obj/structure/mannequin/wrenchAnchor(var/mob/user, var/time_to_wrench=30)
+/obj/structure/mannequin/wrenchAnchor(var/mob/user)
 	if(trapped_strip)
 		Awaken()
-		return
-	..()
+		return FALSE
+	. = ..()
 
 /obj/structure/mannequin/attackby(var/obj/item/weapon/W,var/mob/user)
 	if(iswrench(W))
-		return wrenchAnchor(user, 50)
+		return wrenchAnchor(user, 5 SECONDS)
 	else if(user.a_intent == I_HURT)
 		user.delayNextAttack(8)
 		getDamage(W.force)
@@ -771,7 +771,7 @@
 
 /obj/structure/block/attackby(var/obj/item/weapon/W,var/mob/user)
 	if(iswrench(W))
-		return wrenchAnchor(user, 50)
+		return wrenchAnchor(user, 5 SECONDS)
 	else if(istype(W, /obj/item/weapon/chisel))
 
 		var/chosen_sculpture = input("Choose a sculpture type.", "[name]") as null|anything in available_sculptures
@@ -871,7 +871,7 @@
 			else
 				destroyed = 1
 				getFromPool(/obj/item/weapon/shard, loc)
-				playsound(get_turf(src), "shatter", 100, 1)
+				playsound(src, "shatter", 100, 1)
 				shield = 0
 				update_icon()
 		if (2)
@@ -906,10 +906,10 @@
 			destroyed = 1
 			locked = 0
 			getFromPool(/obj/item/weapon/shard, loc)
-			playsound(get_turf(src), "shatter", 100, 1)
+			playsound(src, "shatter", 100, 1)
 			update_icon()
 		else
-			playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+			playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 
 	if(health <= 0)
 		visible_message("\The [src] collapses.")
@@ -957,7 +957,7 @@
 			new_frame.construct = new /datum/construction/mannequin(new_frame)
 			qdel(src)
 
-	else if(istype(W, /obj/item/weapon/weldingtool) && user.a_intent == I_HELP)
+	else if(iswelder(W) && user.a_intent == I_HELP)
 		if(locked)
 			to_chat(user, "<span class='warning'>You need to open the shield before you can fix the mannequin.</span>")
 		else
@@ -973,7 +973,7 @@
 				to_chat(user, "<span class='warning'>Need more welding fuel!</span>")
 				return
 
-	else if(istype(W, /obj/item/weapon/weldingtool) && user.a_intent == I_HELP)
+	else if(iswelder(W) && user.a_intent == I_HELP)
 		if(locked)
 			to_chat(user, "<span class='warning'>You need to open the shield before you can fix the mannequin.</span>")
 		else
@@ -1038,7 +1038,7 @@
 
 /obj/structure/mannequin/cyber/kick_act(mob/living/carbon/human/H)
 	if(locked)
-		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
+		playsound(src, 'sound/effects/glassknock.ogg', 100, 1)
 	..()
 
 
@@ -1156,7 +1156,7 @@
 
 /datum/construction/mannequin/spawn_result(mob/user as mob)
 	if(result)
-		testing("[user] finished a [result]!")
+//		testing("[user] finished a [result]!")
 
 		var/obj/structure/mannequin_frame/const_holder = holder
 		var/obj/structure/mannequin/cyber/C = new result(get_turf(holder))

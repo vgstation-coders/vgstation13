@@ -368,6 +368,51 @@
 	construction_time = 200
 	materials = list(MAT_IRON=15000)*/
 
+///////// Clarke
+
+
+/obj/item/mecha_parts/chassis/clarke
+	name = "Clarke Chassis"
+
+/obj/item/mecha_parts/chassis/clarke/New()
+	..()
+	construct = new /datum/construction/mecha_chassis/clarke(src)
+
+/obj/item/mecha_parts/part/clarke_head
+	name="Clarke Head"
+	icon_state = "clarke_head"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=2"
+
+/obj/item/mecha_parts/part/clarke_torso
+	name="Clarke Torso"
+	desc="A torso part of Clarke. Contains power unit, processing core and life support systems."
+	icon_state = "clarke_torso"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_BIOTECH + "=2;" + Tc_ENGINEERING + "=2"
+
+/obj/item/mecha_parts/part/clarke_left_arm
+	name="Clarke Left Arm"
+	desc="A Clarke left arm. Data and power sockets are compatible with most exosuit tools."
+	icon_state = "clarke_l_arm"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
+
+/obj/item/mecha_parts/part/clarke_right_arm
+	name="Clarke Right Arm"
+	desc="A Clarke right arm. Data and power sockets are compatible with most exosuit tools."
+	icon_state = "clarke_r_arm"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
+
+/obj/item/mecha_parts/part/clarke_left_tread
+	name="Clarke Left Tread"
+	desc="A Clarke left tread. Contains a powerful engine."
+	icon_state = "clarke_l_tread"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
+
+/obj/item/mecha_parts/part/clarke_right_tread
+	name="Clarke Right Tread"
+	desc="A Clarke right tread. Contains a powerful engine."
+	icon_state = "clarke_r_tread"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
+
 
 ///////// Circuitboards
 
@@ -479,6 +524,17 @@
 
 /obj/item/weapon/circuitboard/mecha/phazon/main
 	name = "Circuit board (Phazon Central Control module)"
+	icon_state = "mainboard"
+
+/obj/item/weapon/circuitboard/mecha/clarke
+	origin_tech = Tc_PROGRAMMING + "=3"
+
+/obj/item/weapon/circuitboard/mecha/clarke/peripherals
+	name = "Circuit board (Clarke Peripherals Control module)"
+	icon_state = "mcontroller"
+
+/obj/item/weapon/circuitboard/mecha/clarke/main
+	name = "Circuit board (Clarke Central Control module)"
 	icon_state = "mainboard"
 
 /obj/item/weapon/circuitboard/mecha/pod

@@ -242,7 +242,7 @@
 	src.visible_message("<span class='warning'>\The [src] groans from the pressure!</span>");
 
 	// Need SFX for groaning metal.
-	//playsound(get_turf(src), 'sound/effects/groan.ogg', 25, 1)
+	//playsound(src, 'sound/effects/groan.ogg', 25, 1)
 
 
 /obj/machinery/atmospherics/pipe/simple/proc/burst()
@@ -251,7 +251,7 @@
 	var/turf/T=get_turf(src)
 
 	message_admins("Pipe burst in area [formatJumpTo(T)]")
-	var/area/A=get_area_master(src)
+	var/area/A=get_area(src)
 	log_game("Pipe burst in area [A.name] ")
 
 	// Disconnect first.
@@ -349,7 +349,7 @@
 	if(!suppress_icon_check)
 		update_icon()
 
-	T.soft_add_holomap(src)
+	add_self_to_holomap()
 
 /obj/machinery/atmospherics/pipe/simple/disconnect(obj/machinery/atmospherics/reference)
 	if(reference == node1)
@@ -594,7 +594,7 @@
 	if(!skip_icon_update)
 		update_icon()
 
-	T.soft_add_holomap(src)
+	add_self_to_holomap()
 
 /obj/machinery/atmospherics/pipe/manifold/scrubbers
 	name = "\improper Scrubbers pipe"
@@ -815,7 +815,7 @@
 	if(!skip_update_icon)
 		update_icon()
 
-	T.soft_add_holomap(src)
+	add_self_to_holomap()
 
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers
 	name = "\improper Scrubbers pipe"
@@ -1063,7 +1063,7 @@
 	if(!skip_update_icon)
 		update_icon()
 
-	T.soft_add_holomap(src)
+	add_self_to_holomap()
 
 /obj/machinery/atmospherics/pipe/layer_manifold/findAllConnections(var/connect_dirs)
 	for(var/direction in cardinal)
@@ -1246,7 +1246,7 @@
 	if(!skip_update_icon)
 		update_icon()
 
-	T.soft_add_holomap(src)
+	add_self_to_holomap()
 
 /obj/machinery/atmospherics/pipe/layer_adapter/findAllConnections(var/connect_dirs)
 	for(var/direction in cardinal)

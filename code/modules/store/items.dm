@@ -82,6 +82,17 @@
 	typepath = /obj/item/weapon/beach_ball
 	cost = 50
 
+/datum/storeitem/dorkcube
+	name = "Loot Box"
+	desc = "A single month subscription to Loot Box!"
+	typepath = /obj/item/weapon/winter_gift/dorkcube
+	cost = 30
+
+/datum/storeitem/unecards
+	name = "Deck of Une Cards"
+	desc = "A deck of une playing cards."
+	typepath = /obj/item/toy/cards/une
+	cost = 35
 /////////////////////////////
 // Clothing
 /////////////////////////////

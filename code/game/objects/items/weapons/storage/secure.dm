@@ -73,7 +73,7 @@
 	. = ..()
 
 
-/obj/item/weapon/storage/secure/MouseDrop(over_object, src_location, over_location)
+/obj/item/weapon/storage/secure/MouseDropFrom(over_object, src_location, over_location)
 	if (locked)
 		if(Adjacent(usr))
 			src.add_fingerprint(usr)
@@ -156,7 +156,7 @@
 	if ((src.loc == user) && (src.locked == 1))
 		to_chat(usr, "<span class='warning'>[src] is locked and cannot be opened!</span>")
 	else if ((src.loc == user) && (!src.locked))
-		playsound(get_turf(src), "rustle", 50, 1, -5)
+		playsound(src, "rustle", 50, 1, -5)
 		if (user.s_active)
 			user.s_active.close(user) //Close and re-open
 		src.show_to(user)

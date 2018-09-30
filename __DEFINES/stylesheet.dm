@@ -24,6 +24,7 @@ em						{font-style: normal;	font-weight: bold;}
 .comradio				{color: #193A7A;}
 .syndradio				{color: #6d3f40;}
 .dsquadradio			{color: #686868;}
+.raiderradio			{color: #6d3f40;}
 .resteamradio			{color: #18BC46;}
 .aiprivradio			{color: #ff00ff;}
 .centradio				{color: #5C5C8A;}
@@ -79,7 +80,7 @@ h1.alert, h2.alert		{color: #000000;}
 .skeleton				{color: #585858; font-weight: bold; font-style: italic;}
 .gutter					{color: #61380B; font-style: italic;}
 .golem					{color: #B4DBCB; font-weight: bold;}
-.slime					{color: #96FFC5;}
+.slime					{color: #34A7Af;}
 .orange					{color: #ffa500;}
 .maroon					{color: #800000;}
 /* If you're adding a new class here, add it to browserOutput.css too! */
@@ -88,6 +89,7 @@ h1.alert, h2.alert		{color: #000000;}
 .good					{color: green;}
 .average				{color: #FF8000;}
 .bad					{color: #FF0000;}
+.mushroom				{color: #4B0082;}
 /* /vg/ Saycode Rewrite */
 .italics, .talkinto		{font-style:italic;}
 .whisper				{font-style:italic;color:#333333;}

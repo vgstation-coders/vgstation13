@@ -35,7 +35,7 @@ var/list/special_fruits = list()
 	spawn(1)
 		//Fill the object up with the appropriate reagents.
 		if(!isnull(plantname))
-			seed = plant_controller.seeds[plantname]
+			seed = SSplant.seeds[plantname]
 			if(!seed || !seed.chems)
 				return
 
@@ -58,7 +58,7 @@ var/list/special_fruits = list()
 					var/rtotal = reagent_data[1]
 					if(reagent_data.len > 1 && potency > 0)
 						rtotal += round(potency/reagent_data[2])
-					reagents.add_reagent(rid, max(1, round(rtotal*coeff, 0.1)))
+					reagents.add_reagent(rid, max(0.1, round(rtotal*coeff, 0.1)))
 
 			if(seed.teleporting)
 				name = "blue-space [name]"
@@ -233,52 +233,24 @@ var/list/special_fruits = list()
 	var/datum/zLevel/L = get_z_level(src)
 	if(!L || L.teleJammed)
 		return 0
-
-	var/outer_teleport_radius = potency/10 //Plant potency determines radius of teleport.
-	var/inner_teleport_radius = potency/15 //At base potency, nothing will happen, since the radius is 0.
-	if(inner_teleport_radius < 1)
-		return 0
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-
-	var/list/turfs = new/list()
-	//This could likely use some standardization but I have no idea how to not break it.
-	for(var/turf/T in trange(outer_teleport_radius, get_turf(hit_atom)))
-		if(get_dist(T, hit_atom) <= inner_teleport_radius)
-			continue
-		if(is_blocked_turf(T) || istype(T, /turf/space))
-			continue
-		if(T.x > world.maxx-outer_teleport_radius || T.x < outer_teleport_radius)
-			continue
-		if(T.y > world.maxy-outer_teleport_radius || T.y < outer_teleport_radius)
-			continue
-		turfs += T
-	if(!turfs.len)
-		var/list/turfs_to_pick_from = list()
-		for(var/turf/T in trange(outer_teleport_radius, get_turf(hit_atom)))
-			if(get_dist(T, hit_atom) > inner_teleport_radius)
-				turfs_to_pick_from += T
-		turfs += pick(/turf in turfs_to_pick_from)
-	var/turf/picked = pick(turfs)
+	var/picked = pick_rand_tele_turf(hit_atom, potency/15, potency/10) // Does nothing at base potency since inner_radius == 0
 	if(!isturf(picked))
 		return 0
-	switch(rand(1, 2)) //50-50 % chance to teleport the thrower or the target.
-		if(1) //Teleports the person who threw the fruit
-			s.set_up(3, 1, M)
-			s.start()
-			new/obj/effect/decal/cleanable/molten_item(M.loc) //Leaves a pile of goo behind for dramatic effect.
-			M.forceMove(picked) //Send then to that location we picked previously
+	var/turf/hit_turf = get_turf(hit_atom)
+	var/turf_has_mobs = locate(/mob) in hit_turf
+	if((!istype(M) || prob(50)) && turf_has_mobs) //50% chance to teleport the person who was hit by the fruit
+		spark(hit_atom)
+		new/obj/effect/decal/cleanable/molten_item(hit_turf) //Leave a pile of goo behind for dramatic effect...
+		for(var/mob/A in hit_turf) //For the mobs in the tile that was hit...
+			A.forceMove(picked) //And teleport them to the chosen location.
 			spawn()
-				s.set_up(3, 1, M)
-				s.start() //Two set of sparks, one before the teleport and one after. //Sure then ?
-		if(2) //Teleports the target instead.
-			s.set_up(3, 1, hit_atom)
-			s.start()
-			new/obj/effect/decal/cleanable/molten_item(get_turf(hit_atom)) //Leave a pile of goo behind for dramatic effect...
-			for(var/mob/A in get_turf(hit_atom)) //For the mobs in the tile that was hit...
-				A.forceMove(picked) //And teleport them to the chosen location.
-				spawn()
-					s.set_up(3, 1, A)
-					s.start()
+				spark(A)
+	else //Teleports the thrower instead.
+		spark(M)
+		new/obj/effect/decal/cleanable/molten_item(M.loc) //Leaves a pile of goo behind for dramatic effect.
+		M.forceMove(picked) //Send then to that location we picked previously
+		spawn()
+			spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
 	return 1
 
 
@@ -334,7 +306,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato
 	name = "potato"
-	desc = "Boil 'em! Mash 'em! Stick 'em in a stew!"
+	desc = "The space Irish starved to death after their potato crops died. Sadly they were unable to fish for space carp due to it being the queen's space. Bringing this up to any space IRA member will drive them insane with anger."
 	icon_state = "potato"
 	potency = 25
 	filling_color = "#E6E8DA"
@@ -518,6 +490,7 @@ var/list/special_fruits = list()
 	filling_color = "#FA2863"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/watermelonslice
 	slices_num = 5
+	storage_slots = 3
 	plantname = "watermelon"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin
@@ -577,6 +550,21 @@ var/list/special_fruits = list()
 	filling_color = "#FCF695"
 	trash = /obj/item/weapon/bananapeel
 	plantname = "banana"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana
+	name = "bluespace banana"
+	desc = "It's an excellent prop for a comedy."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "bluespacebanana"
+	item_state = "bluespacebanana"
+	filling_color = "#FCF695"
+	plantname = "bluespacebanana"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana/after_consume(var/mob/user, var/datum/reagents/reagentreference)
+	var/obj/item/weapon/bananapeel/bluespace/peel = new
+	peel.potency = potency
+	trash = peel
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/chili
 	name = "chili"
@@ -698,7 +686,7 @@ var/list/special_fruits = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper/spook()
 	visible_message("<span class='warning'>A specter takes a bite of \the [src] from beyond the grave!</span>")
-	playsound(get_turf(src),'sound/items/eatfood.ogg', rand(10,50), 1)
+	playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
 	bitecount++
 	reagents.remove_any(bitesize)
 	if(!reagents.total_volume)
@@ -824,6 +812,7 @@ var/list/special_fruits = list()
 	desc = "A hard-shelled fruit with precious juice inside. Even the shell may find use, if properly sliced."
 	slice_path = /obj/item/stack/sheet/wood
 	slices_num = 1
+	storage_slots = 1 //seems less intended and more like an artifact of old code where if something was sliceable, it should also hold items inside, but keeping consistency
 	icon_state = "woodapple"
 	filling_color = "857663"
 	plantname = "woodapple"
@@ -875,7 +864,7 @@ var/list/special_fruits = list()
 		if(C.CheckSlip() < 1)
 			continue
 		C.Knockdown(5)
-	playsound(get_turf(src), 'sound/effects/bang.ogg', 10, 1)
+	playsound(src, 'sound/effects/bang.ogg', 10, 1)
 	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit
@@ -900,37 +889,23 @@ var/list/special_fruits = list()
 	set category = "Object"
 	set src in range(1)
 
-	if(usr.isUnconscious())
-		to_chat(usr, "You can't do that while unconscious.")
+	var/mob/user = usr
+	if(!user.Adjacent(src))
+		return
+	if(user.isUnconscious())
+		to_chat(user, "You can't do that while unconscious.")
 		return
 
-	verbs -= /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf
+	if(!switching)
+		randomize()
+	else
+		getnofruit(user, user.get_active_hand())
 
-	randomize()
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/AltClick(mob/user)
+	pick_leaf()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/attackby(obj/item/weapon/W, mob/user)
-	if(switching)
-		if(!current_path)
-			return
-		switching = 0
-		var/N = rand(1,3)
-		if(get_turf(user))
-			switch(N)
-				if(1)
-					playsound(get_turf(user), 'sound/weapons/genhit1.ogg', 50, 1)
-				if(2)
-					playsound(get_turf(user), 'sound/weapons/genhit2.ogg', 50, 1)
-				if(3)
-					playsound(get_turf(user), 'sound/weapons/genhit3.ogg', 50, 1)
-		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/I = new current_path(get_turf(user))
-			user.put_in_hands(I)
-		else
-			new current_path(get_turf(src))
-		qdel(src)
-
+	pick_leaf()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/proc/randomize()
 	switching = 1
@@ -945,6 +920,32 @@ var/list/special_fruits = list()
 				counter = 0
 				available_fruits = shuffle(available_fruits)
 			counter++
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/proc/getnofruit(mob/user, obj/item/weapon/W)
+	if(!switching || !current_path)
+		return
+	verbs -= /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf
+	switching = 0
+	var/N = rand(1,3)
+	if(get_turf(user))
+		switch(N)
+			if(1)
+				playsound(user, 'sound/weapons/genhit1.ogg', 50, 1)
+			if(2)
+				playsound(user, 'sound/weapons/genhit2.ogg', 50, 1)
+			if(3)
+				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
+	if(W)
+		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
+	else
+		user.visible_message("[user] smacks \the [src].","You smack \the [src].")
+	if(src.loc == user)
+		user.drop_item(src, force_drop = 1)
+		var/I = new current_path(get_turf(user))
+		user.put_in_hands(I)
+	else
+		new current_path(get_turf(src))
+	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/avocado
 	name = "avocado"

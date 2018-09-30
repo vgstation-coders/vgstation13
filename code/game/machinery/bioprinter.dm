@@ -21,20 +21,22 @@
 	var/stored_matter = 200
 	var/loaded_dna //Blood sample for DNA hashing.
 	var/list/products = list(
-		"heart"            = list(/obj/item/organ/heart,  50),
-		"human lungs"      = list(/obj/item/organ/lungs,  30),
-		"vox lungs"        = list(/obj/item/organ/lungs/vox,  30),
-		"plasmaman lungs"  = list(/obj/item/organ/lungs/plasmaman,  30),
-		"kidneys"          = list(/obj/item/organ/kidneys,20),
-		"human eyes"       = list(/obj/item/organ/eyes,   30),
-		"grey eyes"        = list(/obj/item/organ/eyes/grey,   30),
-		"vox eyes"         = list(/obj/item/organ/eyes/vox,   30),
-		"liver"            = list(/obj/item/organ/liver,  50),
+		"heart"            = list(/obj/item/organ/internal/heart,  50),
+		"human lungs"      = list(/obj/item/organ/internal/lungs,  30),
+		"vox lungs"        = list(/obj/item/organ/internal/lungs/vox,  30),
+		"plasmaman lungs"  = list(/obj/item/organ/internal/lungs/plasmaman,  30),
+		"kidneys"          = list(/obj/item/organ/internal/kidneys,20),
+		"human eyes"       = list(/obj/item/organ/internal/eyes,   30),
+		"grey eyes"        = list(/obj/item/organ/internal/eyes/grey,   30),
+		"vox eyes"         = list(/obj/item/organ/internal/eyes/vox,   30),
+		"liver"            = list(/obj/item/organ/internal/liver,  50),
 		"tooth"	           = list(/obj/item/stack/teeth, 10)
 	)
 
 /obj/machinery/bioprinter/New()
-	. = ..()
+	..()
+	if(map.nameShort == "deff")
+		icon = 'maps/defficiency/medbay.dmi'
 
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/bioprinter,\
@@ -58,7 +60,7 @@
 	prints_prosthetics = 1
 
 /obj/machinery/bioprinter/attack_hand(mob/user)
-	if(!ishuman(user))
+	if(!ishigherbeing(user) && !issilicon(user))
 		return
 
 	var/choice = input("What would you like to print?") as null|anything in products
@@ -70,8 +72,8 @@
 		stored_matter -= products[choice][2]
 		var/new_organ = products[choice][1]
 		var/printed_organ = new new_organ(get_turf(src))
-		if(istype(printed_organ, /obj/item/organ))
-			var/obj/item/organ/O = printed_organ
+		if(istype(printed_organ, /obj/item/organ/internal))
+			var/obj/item/organ/internal/O = printed_organ
 			O.is_printed = TRUE // Heist stuff.
 
 			if(prints_prosthetics)
@@ -108,7 +110,7 @@
 			return
 	else if(iswrench(W))
 		user.visible_message("<span class='notice'>[user] begins to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You begin to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user, src, 30))
 			user.visible_message("<span class='notice'>[user] begins to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
 			if(anchored)

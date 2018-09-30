@@ -17,8 +17,6 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 	priority      = SS_PRIORITY_LIGHTING
 	flags         = SS_TICKER
 
-	var/initialized = FALSE
-
 	var/list/currentrun_lights
 	var/list/currentrun_corners
 	var/list/currentrun_overlays
@@ -36,7 +34,6 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 
 /datum/subsystem/lighting/Initialize(timeofday)
 	create_all_lighting_overlays()
-	initialized = TRUE
 
 	..()
 
@@ -68,8 +65,9 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 			return
 
 	if (resuming_stage == STAGE_SOURCES || !resumed)
-		if (currentrun_corners && currentrun_corners.len)
-			to_chat(world, "we still have corners to do, but we're gonna override them?")
+		// PJB left this in, was causing crashes.
+		//if (currentrun_corners && currentrun_corners.len)
+		//	to_chat(world, "we still have corners to do, but we're gonna override them?")
 
 		currentrun_corners  = lighting_update_corners
 		lighting_update_corners  = list()

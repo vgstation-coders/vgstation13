@@ -53,6 +53,7 @@
 
 /obj/item/device/multitool/ai_detect
 	var/detected = 0 //bitflags
+	var/cooldown = FALSE
 
 /obj/item/device/multitool/ai_detect/New()
 	spawn() src.ticker()
@@ -145,6 +146,35 @@ obj/item/device/multitool/ai_detect/examine(mob/user)
 			to_chat(user, "<span class='info'>Voice analyzer detected</span>")
 	else
 		to_chat(user, "<span class='info'>The screen is not displaying anything.</span>")
+
+	if (cooldown == TRUE)
+		to_chat(user, "<span class='info'>\The [src] seems to be charging. Is it wireless?</span>")
+
+/obj/item/device/multitool/ai_detect/attack_self()
+	var/EPI_RANGE = 7 //range to turn off cameras nearby
+	var/PROB_DC_CAMS = 25 //probability to turn off cameras far away
+	var/turf/T = get_turf(src)
+
+	if (cooldown == TRUE)
+		to_chat(usr, "<span class='info'>It's not ready yet!</span>")
+		return
+
+	if (cooldown == FALSE)
+		for(var/obj/machinery/camera/C in view(EPI_RANGE)) //guaranteed to turnoff nearby cameras
+			if (C.status) //check it's actually working
+				C.emp_act(1)
+				playsound(C,"sound/effects/electricity_short_disruption.ogg",50,1)
+
+		for(var/obj/machinery/camera/H in cameranet.cameras) //global camera list
+			if (prob(PROB_DC_CAMS) && T.z == H.z && H.status) //same Zlvl & working
+				H.emp_act(1)
+				playsound(H,"sound/effects/electricity_short_disruption.ogg",50,1)
+
+		cooldown = TRUE
+		to_chat(usr, "<span class='info'>You can feel the AI's circuits grinding.</span>")
+		spawn(3000) //5minutes
+			cooldown = FALSE
+			to_chat(usr, "<span class='info'>\The [src] is now fully charged.</span>")
 
 ////////////////////////////////////////////////////////////////////////
 #undef DETECT_TICKER_PERIOD

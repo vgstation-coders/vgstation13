@@ -190,7 +190,7 @@
 ///////ATTACH PLANK///////
 /datum/surgery_step/limb/attach_plank
 	allowed_tools = list(
-		/obj/item/stack/sheet/wood=100,
+		/obj/item/weapon/peglimb=100,
 		)
 
 	can_infect = 0
@@ -228,7 +228,7 @@
 ///////ATTACH FLESH///////
 /datum/surgery_step/limb/attach_flesh
 	allowed_tools = list(
-		/obj/item/weapon/organ = 100,
+		/obj/item/organ/external = 100,
 		)
 
 	can_infect = 0
@@ -238,7 +238,7 @@
 
 /datum/surgery_step/limb/attach_flesh/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
-	var/obj/item/weapon/organ/o = tool
+	var/obj/item/organ/external/o = tool
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	if(!(affected.status & ORGAN_ATTACHABLE) || !istype(o))
 		return 0

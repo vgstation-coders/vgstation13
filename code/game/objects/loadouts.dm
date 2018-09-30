@@ -321,7 +321,7 @@
 						/obj/item/device/radio/headset/heads/hop,
 						/obj/item/device/pda/heads/nt_rep,
 						/obj/item/clothing/glasses/sunglasses,
-						/obj/item/weapon/clipboard,
+						/obj/item/weapon/storage/bag/clipboard,
 						/obj/item/weapon/card/id/nt_rep)
 
 /obj/abstract/loadout/nanotrasen_representative/alter_items(var/list/items, var/mob/M)
@@ -515,3 +515,4 @@
 	var/list/randomhexes = list("7","8","9","a","b","c","d","e","f",)
 	M.color = "#[pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)][pick(randomhexes)]"
 	M.name = "Bomberman #[rand(1,999)]"
+	M.mind.special_role = BOMBERMAN // NEEDED FOR CHEAT CHECKS!

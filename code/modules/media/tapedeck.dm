@@ -4,11 +4,6 @@
  * By N3X15
  *******************************/
 
-#define JUKEMODE_SHUFFLE     1 // Default
-#define JUKEMODE_REPEAT_SONG 2
-#define JUKEMODE_PLAY_ONCE   3 // Play, then stop.
-
-
 /obj/machinery/media/tapedeck
 	name = "Tape Deck"
 	desc = "What the fuck is \"tape\", anyway?"
@@ -210,7 +205,7 @@
 		var/un = !anchored ? "" : "un"
 		user.visible_message("<span class='notice'>[user.name] begins [un]locking \the [src.name]'s casters.</span>","<span class='notice'>You begin [un]locking \the [src.name]'s casters.</span>")
 		if(do_after(user, src,30))
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 			anchored = !anchored
 			user.visible_message("<span class='notice'>[user.name] [un]locks \the [src.name]'s casters.</span>","<span class='warning'>You [un]lock \the [src.name]'s casters.</span>")
 			playing = emagged
@@ -284,7 +279,7 @@
 /obj/machinery/media/jukebox/process()
 	if(!playlist && config.media_base_url)
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
-		testing("[src] - Updating playlist from [url]...")
+		//testing("[src] - Updating playlist from [url]...")
 		var/response = world.Export(url)
 		playlist=list()
 		if(response)
@@ -310,7 +305,7 @@
 				playing=1
 				autoplay=0
 		else
-			testing("[src] failed to update playlist: Response null.")
+			warning("[src] failed to update playlist: Response null.")
 			stat &= BROKEN
 			update_icon()
 			return

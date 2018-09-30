@@ -374,7 +374,7 @@ obj/structure/bomberflame/Destroy()
 			var/obj/structure/grille/grille = obstacle
 			grille.broken = 1
 			grille.icon_state = "[initial(grille.icon_state)]-b"
-			grille.density = 0
+			grille.setDensity(FALSE)
 			if(prob(35))
 				var/turf/T = grille.loc
 				T.spawn_powerup()
@@ -536,10 +536,10 @@ obj/structure/bomberflame/Destroy()
 
 /obj/structure/powerup/Bumped(M as mob|obj)	//kick bomb
 	if (istype(M, /mob/living) || istype(M, /obj/mecha) || istype(M, /obj/structure/bed/chair/) || istype(M, /obj/structure/bomberflame))
-		density = 0
+		setDensity(FALSE)
 		step(M, get_dir(M,src))
 		spawn(1)	//to prevent an infinite loop when a player with no BBD is trying to walk over a tile with at least two power-ups.
-			density = 1
+			setDensity(TRUE)
 	var/obj/item/weapon/bomberman/dispenser = locate() in M
 	if (dispenser)
 		apply_power(dispenser)
@@ -551,7 +551,7 @@ obj/structure/bomberflame/Destroy()
 	..()
 
 /obj/structure/powerup/proc/apply_power(var/obj/item/weapon/bomberman/dispenser)
-	playsound(get_turf(src), 'sound/bomberman/powerup.ogg', 50, 1)
+	playsound(src, 'sound/bomberman/powerup.ogg', 50, 1)
 	qdel(src)
 	return
 
@@ -594,7 +594,7 @@ obj/structure/bomberflame/Destroy()
 	return
 
 /obj/structure/powerup/skull/apply_power(var/obj/item/weapon/bomberman/dispenser)
-	playsound(get_turf(src), 'sound/bomberman/disease.ogg', 50, 1)
+	playsound(src, 'sound/bomberman/disease.ogg', 50, 1)
 	var/list/diseases = list(
 		"Low Power Disease",
 		"Constipation ",
@@ -800,8 +800,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		C.name = name
 		C.c_tag = name
 		C.network = list(
-			"thunder",	//entertainment monitors
-			"SS13",		//security monitors
+			CAMERANET_THUNDER,	//entertainment monitors
+			CAMERANET_SS13,		//security monitors
 			)
 
 		var/obj/structure/planner/pencil = new(center, src)
@@ -955,11 +955,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 		spawn(0)
 			A.contents.Add(turfs)
-			for(var/turf/F in turfs)
-				for(var/atom/movable/AM in F)
-					AM.areaMaster = get_area_master(F)
-
-
 
 		message_admins("[key_name_admin(user.client)] created a \"[size]\" Bomberman arena at [center.loc.name] ([center.x],[center.y],[center.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[center.x];Y=[center.y];Z=[center.z]'>JMP</A>)")
 		log_game("[key_name_admin(user.client)] created a \"[size]\" Bomberman arena at [center.loc.name] ([center.x],[center.y],[center.z]) ")
@@ -1008,6 +1003,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	B.destroy_environnement = 0
 	M.equip_to_slot_or_del(B, slot_s_store)
 	bombsuit.slowdown = HARDSUIT_SLOWDOWN_LOW
+	M.mind.special_role = BOMBERMAN
 	for(var/obj/item/clothing/C in M)
 		C.canremove = 0
 		if(violence)
@@ -1042,9 +1038,9 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 			continue
 
 		var/mob/living/carbon/human/M = spawn_player(S.spawnpoint)
+		M.ckey = C.ckey
 		dress_player(M)
 		M.stunned = 3
-		M.ckey = C.ckey
 		gladiators += M
 
 		if(S.player_mob)
@@ -1143,7 +1139,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	for(var/obj/item/clothing/C in arena)
 		qdel(C)
 
-	for(var/obj/item/weapon/organ/O in arena)//gibs
+	for(var/obj/item/organ/external/O in arena)//gibs
 		qdel(O)
 
 	for(var/mob/living/M in gladiators)
@@ -1235,7 +1231,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 			qdel(M)	//qdel doesn't work nicely with mobs
 	gladiators = list()
 
-	for(var/obj/item/weapon/organ/O in arena)//gibs
+	for(var/obj/item/organ/external/O in arena)//gibs
 		qdel(O)
 
 	for(var/obj/effect/decal/cleanable/C in arena)
@@ -1250,8 +1246,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 
 	under.contents.Add(turfs)
 	for(var/turf/T in turfs)
-		for(var/atom/movable/AM in T)
-			AM.areaMaster = get_area_master(T)
 		if(open_space && (under.name == "Space"))
 			T.ChangeTurf(T.get_underlying_turf())
 		else

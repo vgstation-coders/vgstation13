@@ -11,7 +11,7 @@
 	pass_flags = PASSBLOB
 	faction = "blob"
 
-	plane = BASE_PLANE
+	plane = ABOVE_LIGHTING_PLANE
 
 	var/obj/effect/blob/core/blob_core = null // The blob overmind's core
 	var/blob_points = 0
@@ -111,7 +111,7 @@
 /mob/camera/blob/proc/add_points(var/points)
 	if(points != 0)
 		blob_points = Clamp(blob_points + points, 0, max_blob_points)
-		stat_collection.blobblob.res_generated += points
+		stat_collection.blob_res_generated += points
 	var/number_of_cores = blob_cores.len
 	//Updating the HUD
 	if(hud_used)
@@ -220,7 +220,7 @@
 		stat(null, "Total Overminds: [blob_cores.len]")
 	return
 
-/mob/camera/blob/Move(var/NewLoc, var/Dir = 0)
+/mob/camera/blob/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	var/obj/effect/blob/B = locate() in range("3x3", NewLoc)
 	if(B)
 		forceEnter(B.loc)

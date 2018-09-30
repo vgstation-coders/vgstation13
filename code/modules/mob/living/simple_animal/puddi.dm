@@ -15,6 +15,7 @@
 	response_help  = "pats"
 	response_disarm = "squishes"
 	response_harm   = "slaps"
+	speak_override = TRUE
 
 	meat_type = null
 

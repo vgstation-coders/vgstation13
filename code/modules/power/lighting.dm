@@ -34,7 +34,7 @@
 	src.add_fingerprint(user)
 	if (iswrench(W))
 		if (src.stage == 1)
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
 			to_chat(usr, "You begin deconstructing [src].")
 			if (!do_after(usr, src, 30))
 				return
@@ -42,7 +42,7 @@
 			M.amount = sheets_refunded
 			user.visible_message("[user.name] deconstructs [src].", \
 				"You deconstruct [src].", "You hear a noise.")
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 75, 1)
+			playsound(src, 'sound/items/Deconstruct.ogg', 75, 1)
 			qdel(src)
 			return
 		if (src.stage == 2)
@@ -134,8 +134,8 @@ var/global/list/obj/machinery/light/alllights = list()
 
 	var/idle = 0 // For process().
 
-	holomap = TRUE
-	auto_holomap = TRUE
+/obj/machinery/light/supports_holomap()
+	return TRUE
 
 /obj/machinery/light/spook(mob/dead/observer/ghost)
 	if(..(ghost, TRUE))
@@ -144,7 +144,7 @@ var/global/list/obj/machinery/light/alllights = list()
 // the smaller bulb light fixture
 
 /obj/machinery/light/cultify()
-	new /obj/structure/cult/pylon(loc)
+	new /obj/structure/cult_legacy/pylon(loc)
 	qdel(src)
 
 /obj/machinery/light/bullet_act(var/obj/item/projectile/Proj)
@@ -188,6 +188,10 @@ var/global/list/obj/machinery/light/alllights = list()
 	status = LIGHT_EMPTY
 	update(0)
 	..()
+
+/obj/machinery/light/initialize()
+	..()
+	add_self_to_holomap()
 
 // create a new lighting fixture
 /obj/machinery/light/New()
@@ -365,7 +369,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	// attempt to deconstruct / stick weapon into light socket
 	else if(status == LIGHT_EMPTY)
 		if(iswirecutter(W)) //If it's a wirecutter take out the wires
-			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 75, 1)
+			playsound(src, 'sound/items/Wirecutter.ogg', 75, 1)
 			user.visible_message("[user.name] removes \the [src]'s wires.", \
 				"You remove \the [src]'s wires.", "You hear a noise.")
 			var/obj/machinery/light_construct/newlight = null
@@ -389,19 +393,18 @@ var/global/list/obj/machinery/light/alllights = list()
 		to_chat(user, "You stick \the [W] into the light socket!")//If not stick it in the socket.
 
 		if(has_power() && (W.is_conductor()))
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(3, 1, src)
-			s.start()
+			spark(src)
 			//if(!user.mutations & M_RESIST_COLD)
 			if (prob(75))
-				electrocute_mob(user, get_area(src), src, rand(0.7,1.0))
+				electrocute_mob(user, get_area(src), src, rand(7,10)/10)
 
 /*
  * Returns whether this light has power
  * TRUE if area has power and lightswitch is on otherwise FALSE.
  */
 /obj/machinery/light/proc/has_power()
-	return areaMaster.lightswitch && areaMaster.power_light
+	var/area/this_area = get_area(src)
+	return this_area.lightswitch && this_area.power_light
 
 /obj/machinery/light/proc/flicker(var/amount = rand(10, 20))
 	if(flickering)
@@ -422,7 +425,7 @@ var/global/list/obj/machinery/light/alllights = list()
 		update(0)
 
 /obj/machinery/light/attack_ghost(mob/user)
-	if(blessed)
+	if(!can_spook())
 		return
 	src.add_hiddenprint(user)
 	src.flicker(1)
@@ -532,11 +535,9 @@ var/global/list/obj/machinery/light/alllights = list()
 
 	if(!skip_sound_and_sparks)
 		if(status == LIGHT_OK || status == LIGHT_BURNED)
-			playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+			playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 		if(on)
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(3, 1, src)
-			s.start()
+			spark(src)
 	status = LIGHT_BROKEN
 	update()
 
@@ -573,7 +574,8 @@ var/global/list/obj/machinery/light/alllights = list()
  */
 /obj/machinery/light/power_change()
 	spawn(10)
-		seton(areaMaster.lightswitch && areaMaster.power_light)
+		var/area/this_area = get_area(src)
+		seton(this_area.lightswitch && this_area.power_light)
 
 // called when on fire
 
@@ -700,27 +702,22 @@ var/global/list/obj/machinery/light/alllights = list()
 			brightness_range = rand(4,6)
 	update()
 
-
-// attack bulb/tube with object
-// if a syringe, can inject plasma to make it explode
-/obj/item/weapon/light/attackby(var/obj/item/I, var/mob/user)
-	..()
-	if(istype(I, /obj/item/weapon/reagent_containers/syringe))
-		var/obj/item/weapon/reagent_containers/syringe/S = I
-
-		to_chat(user, "You inject the solution into the [src].")
-
-		if(S.reagents.has_reagent(PLASMA, 5))
-
-			log_admin("LOG: [user.name] ([user.ckey]) injected a light with plasma, rigging it to explode.")
-			message_admins("LOG: [user.name] ([user.ckey]) injected a light with plasma, rigging it to explode.")
-
-			rigged = 1
-
-		S.reagents.clear_reagents()
-	else
-		..()
-	return
+// A syringe can inject plasma to make the light explode when it turns on.
+/obj/item/weapon/light/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	var/datum/reagents/syringe_reagents = tool.reagents
+	if(rigged)
+		to_chat(user, "<span class='warning'>\The [src] is already full!</span>")
+		return INJECTION_RESULT_FAIL
+	if(!(syringe_reagents.reagent_list.len == 1 && syringe_reagents.has_reagent(PLASMA, 5)))
+		to_chat(user, "<span class='warning'>Injecting this solution wouldn't have any effect on \the [src].</span>")
+		return INJECTION_RESULT_FAIL
+	if(syringe_reagents.remove_reagent(PLASMA, 5))
+		stack_trace("Couldn't remove plasma from the syringe?")
+		return INJECTION_RESULT_FAIL
+	log_admin("LOG: [user.name] ([user.ckey]) injected a light with plasma, rigging it to explode.")
+	message_admins("LOG: [user.name] ([user.ckey]) injected a light with plasma, rigging it to explode.")
+	rigged = 1
+	return INJECTION_RESULT_SUCCESS_BUT_SKIP_REAGENT_TRANSFER
 
 // called after an attack with a light item
 // shatter light, unless it was an attempt to put it in a light socket
@@ -734,10 +731,11 @@ var/global/list/obj/machinery/light/alllights = list()
 
 	shatter()
 
-/obj/item/weapon/light/proc/shatter()
+/obj/item/weapon/light/proc/shatter(verbose = TRUE)
 	if(status == LIGHT_OK || status == LIGHT_BURNED)
-		src.visible_message("<span class='warning'>[name] shatters.</span>","<span class='warning'>You hear a small glass object shatter.</span>")
+		if(verbose)
+			src.visible_message("<span class='warning'>[name] shatters.</span>","<span class='warning'>You hear a small glass object shatter.</span>")
 		status = LIGHT_BROKEN
 		force = 5
-		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 		update()

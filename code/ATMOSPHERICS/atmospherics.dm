@@ -45,10 +45,12 @@ Pipelines + Other Objects -> Pipe network
 	var/piping_layer = PIPING_LAYER_DEFAULT //used in multi-pipe-on-tile - pipes only connect if they're on the same pipe layer
 
 	internal_gravity = 1 // Ventcrawlers can move in pipes without gravity since they have traction.
-	holomap = TRUE
 
 	// If a pipe node isn't connected, should it be pixel shifted to fit the object?
 	var/ex_node_offset = 0
+
+/obj/machinery/atmospherics/supports_holomap()
+	return TRUE
 
 /obj/machinery/atmospherics/New()
 	..()
@@ -237,7 +239,7 @@ Pipelines + Other Objects -> Pipe network
 				continue
 			var/node_var="node[node_id]"
 			if(!(node_var in vars))
-				testing("[node_var] not in vars.")
+				//testing("[node_var] not in vars.")
 				return
 			if(!vars[node_var])
 				vars[node_var] = found
@@ -313,16 +315,16 @@ Pipelines + Other Objects -> Pipe network
 			to_chat(user, "<span class='warning'>You begin to open the pressure release valve on the pipe...</span>")
 			if(!do_after(user, src, 50) || !loc)
 				return
-			playsound(get_turf(src), 'sound/machines/hiss.ogg', 50, 1)
+			playsound(src, 'sound/machines/hiss.ogg', 50, 1)
 			user.visible_message("[user] vents \the [src].",
 								"You have vented \the [src].",
 								"You hear a ratchet.")
-			var/datum/gas_mixture/internal_removed = int_air.remove(int_air.total_moles()*starting_volume/int_air.volume)
+			var/datum/gas_mixture/internal_removed = int_air.remove_volume(starting_volume)
 			env_air.merge(internal_removed)
 		else
 			to_chat(user, "<span class='warning'>You cannot unwrench this [src], it's too exerted due to internal pressure.</span>")
 			return 1
-	playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+	playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 	to_chat(user, "<span class='notice'>You begin to unfasten \the [src]...</span>")
 	if (do_after(user, src, 40))
 		user.visible_message( \
@@ -349,12 +351,16 @@ Pipelines + Other Objects -> Pipe network
 	var/obj/machinery/atmospherics/target_move = findConnecting(direction, user.ventcrawl_layer)
 	if(target_move)
 		if(is_type_in_list(target_move, ventcrawl_machinery) && target_move.can_crawl_through())
+			if(user.special_delayer.blocked())
+				return
+			user.delayNextSpecial(10)
 			user.visible_message("Something is squeezing through the ducts...", "You start crawling out the ventilation system.")
 			target_move.shake(2, 3)
-			if(do_after(user, target_move, 10))
-				user.remove_ventcrawl()
-				user.forceMove(target_move.loc) //handles entering and so on
-				user.visible_message("You hear something squeeze through the ducts.", "You climb out the ventilation system.")
+			spawn(0)
+				if(do_after(user, target_move, 10))
+					user.remove_ventcrawl()
+					user.forceMove(target_move.loc) //handles entering and so on
+					user.visible_message("You hear something squeeze through the ducts.", "You climb out the ventilation system.")
 		else if(target_move.can_crawl_through())
 			if(target_move.return_network(target_move) != return_network(src))
 				user.remove_ventcrawl()
@@ -370,7 +376,7 @@ Pipelines + Other Objects -> Pipe network
 	else
 		if((direction & initialize_directions) || is_type_in_list(src, ventcrawl_machinery) && src.can_crawl_through()) //if we move in a way the pipe can connect, but doesn't - or we're in a vent
 			user.remove_ventcrawl()
-			user.forceMove(src.loc)
+			user.forceMove(src.loc, glide_size_override = DELAY2GLIDESIZE(1))
 			user.visible_message("You hear something squeezing through the pipes.", "You climb out the ventilation system.")
 	user.canmove = 0
 	spawn(1)

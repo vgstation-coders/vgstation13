@@ -12,7 +12,24 @@ mob/proc/regular_hud_updates() //Used in the life.dm of mobs that can use HUDs.
 		med_hud_users -= src
 	if(src in sec_hud_users)
 		sec_hud_users -= src
+	diagnostic_hud_users -= src
 
+proc/check_HUD_visibility(var/atom/target, var/mob/user)
+	if(user.see_invisible < target.invisibility)
+		return FALSE
+	if(target.alpha <= 1)
+		return FALSE
+	if(ismob(target))
+		var/mob/M = target
+		for(var/i in M.alphas)
+			if(M.alphas[i] <= 1)
+				return FALSE
+	if(iscarbon(target))
+		var/mob/living/carbon/C = target
+		for(var/i in C.body_alphas)
+			if(C.body_alphas[i] <= 1)
+				return FALSE
+	return TRUE
 
 //Medical HUD outputs. Called by the Life() proc of the mob using it, usually.
 proc/process_med_hud(var/mob/M, var/mob/eye)
@@ -32,18 +49,14 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 	for(var/mob/living/carbon/human/patient in range(T))
 		if(patient.head && istype(patient.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
 			continue
-		if(M.see_invisible < patient.invisibility)
+		if(!check_HUD_visibility(patient, M))
 			continue
-		var/foundVirus = 0
-		for(var/datum/disease/D in patient.viruses)
-			if(!D.hidden[SCANNER])
-				foundVirus++
 		if(!C)
 			continue
 
 		holder = patient.hud_list[HEALTH_HUD]
 		if(holder)
-			if(patient.stat == 2)
+			if(patient.isDead())
 				holder.icon_state = "hudhealth-100"
 			else
 				holder.icon_state = "hud[RoundHealth(patient.health)]"
@@ -51,11 +64,11 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 
 		holder = patient.hud_list[STATUS_HUD]
 		if(holder)
-			if(patient.stat == 2)
+			if(patient.isDead())
 				holder.icon_state = "huddead"
 			else if(patient.status_flags & XENO_HOST)
 				holder.icon_state = "hudxeno"
-			else if(foundVirus)
+			else if(has_any_recorded_disease(patient))
 				holder.icon_state = "hudill"
 			else
 				holder.icon_state = "hudhealthy"
@@ -78,7 +91,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 	else
 		T = get_turf(M)
 	for(var/mob/living/carbon/human/perp in range(T))
-		if(M.see_invisible < perp.invisibility)
+		if(!check_HUD_visibility(perp, M))
 			continue
 		holder = perp.hud_list[ID_HUD]
 		if(!holder)
@@ -107,7 +120,6 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 					else
 						continue
 					C.images += holder
-					break
 
 		var/perpname = perp.get_face_name()
 		if(lowertext(perpname) == "unknown" || !perpname)
@@ -120,7 +132,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 					if("*Arrest*")
 						holder.icon_state = "hudwanted"
 					if("Incarcerated")
-						holder.icon_state = "hudprisoner"
+						holder.icon_state = "hudincarcerated"
 					if("Parolled")
 						holder.icon_state = "hudparolled"
 					if("Released")
@@ -128,6 +140,58 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 					else
 						continue
 				C.images += holder
+
+/proc/process_diagnostic_hud(var/mob/M, var/mob/eye)
+	if(!M || !M.client)
+		return
+	diagnostic_hud_users |= M
+
+	var/client/C = M.client
+	var/image/holder
+	var/turf/T = eye ? get_turf(eye) : get_turf(M)
+
+	for(var/mob/living/silicon/robot/borg in range(T))
+		if(!check_HUD_visibility(borg, M))
+			continue
+
+		holder = borg.hud_list[DIAG_HEALTH_HUD]
+		if(holder)
+			C.images += holder
+			if(borg.isDead())
+				holder.icon_state = "huddiagdead"
+			else
+				holder.icon_state = cyborg_health_to_icon_state(borg.health / borg.maxHealth)
+
+		holder = borg.hud_list[DIAG_CELL_HUD]
+		if(holder)
+			C.images += holder
+			var/obj/item/weapon/cell/borg_cell = borg.get_cell()
+			if(!borg_cell)
+				holder.icon_state = "hudnobatt"
+			else
+				var/charge_ratio = borg_cell.charge / borg_cell.maxcharge
+				holder.icon_state = power_cell_charge_to_icon_state(charge_ratio)
+
+	for(var/obj/mecha/exosuit in range(T))
+		if(!check_HUD_visibility(exosuit, M))
+			continue
+
+		holder = exosuit.hud_list[DIAG_HEALTH_HUD]
+		if(holder)
+			C.images += holder
+			var/integrity_ratio = exosuit.health / initial(exosuit.health)
+			holder.icon_state = mech_integrity_to_icon_state(integrity_ratio)
+
+		holder = exosuit.hud_list[DIAG_CELL_HUD]
+		if(holder)
+			C.images += holder
+			var/obj/item/weapon/cell/exosuit_cell = exosuit.get_cell()
+			if(!exosuit_cell)
+				holder.icon_state = "hudnobatt"
+			else
+				var/charge_ratio = exosuit_cell.charge / exosuit_cell.maxcharge
+				holder.icon_state = power_cell_charge_to_icon_state(charge_ratio)
+
 
 //Unsure of where to put this, but since most of it is HUDs it seemed fitting to go here.
 /mob/proc/handle_glasses_vision_updates(var/obj/item/clothing/glasses/G)

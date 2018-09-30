@@ -87,6 +87,7 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 		vox.set_species("Vox")
 		vox.fully_replace_character_name(vox.real_name, vox.generate_name())
 		//vox.languages = HUMAN // Removing language from chargen.
+		vox.flavor_text = ""
 		vox.add_language(LANGUAGE_VOX)
 		vox.remove_language(LANGUAGE_GALACTIC_COMMON)
 		vox.h_style = "Short Vox Quills"

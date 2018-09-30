@@ -15,43 +15,46 @@
 
 // Update the MoMMI's visual icon
 // This is called whenever a major change to the MoMMI's visual appearance is made
-// i.e when they change their subtype, open their cover, get emagged, toggle their parking break, or put on a hat
-/mob/living/silicon/robot/mommi/updateicon()
-	// Clear all overlays.
-	overlays.len = 0
+// i.e when they change their icon_state, open their cover, get emagged, toggle their parking break, or put on a hat
+/mob/living/silicon/robot/mommi/updateicon(overlay_layer = ABOVE_LIGHTING_LAYER, overlay_plane = LIGHTING_PLANE)
+	overlays.Cut()
 
-	// Set the MoMMI's icon to its subtype
-	icon_state=subtype
-
-	// Add a panel image if the MoMMI is open
-	if(opened) // TODO:  Open the front "head" panel
-		if(wiresexposed)
-			overlays += image(icon = icon, icon_state = "ov-openpanel +w")
-		else if(cell)
-			overlays += image(icon = icon, icon_state = "ov-openpanel +c")
+	if(base_icon)
+		if(emagged && has_icon(icon, "[base_icon]-emagged"))
+			icon_state = "[base_icon]-emagged"
 		else
-			overlays += image(icon = icon, icon_state = "ov-openpanel -c")
+			icon_state = "[base_icon]"
 
-	// Add the MoMMI eyes
-	// Put our eyes just on top of the lighting, so it looks emissive in maint tunnels.
-	var/overlay_layer = ABOVE_LIGHTING_LAYER
-	var/overlay_plane = LIGHTING_PLANE
-	if(plane == HIDING_MOB_PLANE)	// ie it's hiding
-		overlay_plane = FLOAT_PLANE
-		overlay_layer = FLOAT_LAYER
+	if(!stat && cell != null)
+		eyes = image(icon,"eyes-[base_icon][emagged?"-emagged":""]", ABOVE_LIGHTING_LAYER)
+		if(plane == HIDING_MOB_PLANE) // Hiding MoMMIs
+			overlay_plane = FLOAT_PLANE
+			overlay_layer = FLOAT_LAYER
+		if(!emagged)
+			eyes.plane = overlay_plane
+			eyes.layer = overlay_layer
+		else
+			eyes.plane = LIGHTING_PLANE //Emagged MoMMIs don't hide their eyes.
+		overlays += eyes
 
-	var/image/eyes = image(icon,"eyes-[subtype][emagged?"-emagged":""]",overlay_layer)
-	eyes.plane = overlay_plane
-	overlays += eyes
+		if(anchored) //anchored, really?
+			var/image/parking_lights = image(icon,"[base_icon]-park",overlay_layer)
+			parking_lights.plane = overlay_plane
+			overlays += parking_lights
 
-	if(anchored)
-		overlays += image(icon,"[subtype]-park",overlay_layer)
+	if(opened)
+		if(wiresexposed)
+			overlays += image(icon = icon, icon_state = "[has_icon(icon, "[base_icon]-ov-openpanel +w")? "[icon_state]-ov-openpanel +w" : "ov-openpanel +w"]")
+		else if(cell)
+			overlays += image(icon = icon, icon_state = "[has_icon(icon, "[base_icon]-ov-openpanel +c")? "[icon_state]-ov-openpanel +c" : "ov-openpanel +c"]")
+		else
+			overlays += image(icon = icon, icon_state = "[has_icon(icon, "[base_icon]-ov-openpanel -c")? "[icon_state]-ov-openpanel -c" : "ov-openpanel -c"]")
 
 	// Add any hats to the icon. Bloodspatter can also be in overlays_hats
 	for(var/image/I in overlays_hats)
 		// Adjust the position of the hat based on what subtype we are
 		// These numbers can be tweaked to move where the hats appear on the MoMMIs' bodies
-		switch(subtype)
+		switch(icon_state)
 			// Sad note: only the hat's overall position can be modified, and we cannot change the hat's position per each direction separately
 			// The hats are currently centered on the MoMMIs
 			if("mommi")
@@ -62,17 +65,21 @@
 				I.pixel_y = -7 * PIXEL_MULTIPLIER
 			if("repairbot")
 				I.pixel_y = -14 * PIXEL_MULTIPLIER
+			if("ruskiebot")
+				I.pixel_y = -14 * PIXEL_MULTIPLIER
 			if("replicator")
 				I.pixel_y = -10 * PIXEL_MULTIPLIER
 			if("mommiprime")
 				I.pixel_y = -7 * PIXEL_MULTIPLIER
+			if("mommiprime-alt")
+				I.pixel_y = -12 * PIXEL_MULTIPLIER
 			if("scout")
 				I.pixel_y = -15 * PIXEL_MULTIPLIER
 		// Add the adjusted hat to our overlays
 		overlays += I
 
 // Update the MoMMI's hat inventory icons by adding all icons to overlays_hats
-/mob/living/silicon/robot/mommi/update_inv_head(var/update_icons=1)
+/mob/living/silicon/robot/mommi/update_inv_head(var/update_icons = TRUE)
 	// If the MoMMI is wearing a hat
 	if(head_state)
 		var/obj/item/clothing/head = head_state

@@ -31,7 +31,7 @@
 	attack_sound = 'sound/weapons/bite.ogg'
 	move_to_delay = 3
 
-	environment_smash = 0
+	environment_smash_flags = 0
 
 	species_type = /mob/living/simple_animal/hostile/retaliate/cockatrice
 	childtype = /mob/living/simple_animal/hostile/retaliate/cockatrice/chick
@@ -187,7 +187,7 @@
 
 	return ..()
 
-/mob/living/simple_animal/hostile/retaliate/cockatrice/Move()
+/mob/living/simple_animal/hostile/retaliate/cockatrice/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	.=..()
 
 	for(var/mob/living/L in loc)

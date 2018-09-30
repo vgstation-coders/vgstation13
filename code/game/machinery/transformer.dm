@@ -65,15 +65,15 @@
 		return
 
 	if(!transform_dead && H.stat == DEAD)
-		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
+		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return
 
 	if(jobban_isbanned(H, "Cyborg"))
 		src.visible_message("<span class='danger'>\The [src.name] throws an exception. Lifeform not compatible with factory.</span>")
 		return
 
-	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-	H.emote("scream",,, 1) // It is painful
+	playsound(src, 'sound/items/Welder.ogg', 50, 1)
+	H.audible_scream() // It is painful
 	H.adjustBruteLoss(max(0, 80 - H.getBruteLoss())) // Hurt the human, don't try to kill them though.
 	H.handle_regular_hud_updates() // Make sure they see the pain.
 
@@ -113,7 +113,7 @@
 		R.updatename()
 
 	spawn(50)
-		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 0)
+		playsound(src, 'sound/machines/ding.ogg', 50, 0)
 		if(R)
 			R.SetKnockdown(0)
 
@@ -129,7 +129,7 @@
 	if(cooldown_state!=old_cooldown_state)
 		update_icon()
 		if(!cooldown_state)
-			playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 0)
+			playsound(src, 'sound/machines/ping.ogg', 50, 0)
 
 /obj/machinery/transformer/conveyor/New()
 	..()

@@ -34,7 +34,7 @@
 	return(BRUTELOSS)
 
 /obj/item/weapon/sord/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	playsound(get_turf(src), 'sound/weapons/bladeslice.ogg', 50, 1, -1)
+	playsound(src, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 	user.adjustBruteLoss(0.5)
 	return ..()
 
@@ -44,7 +44,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "claymore"
 	item_state = null
-	hitsound = "sound/weapons/bloodyslice.ogg"
+	hitsound = 'sound/weapons/bloodyslice.ogg'
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
@@ -64,12 +64,8 @@
 	return(BRUTELOSS)
 
 /obj/item/weapon/claymore/cultify()
-	new /obj/item/weapon/melee/cultblade(loc)
+	new /obj/item/weapon/melee/legacy_cultblade(loc)
 	..()
-
-/obj/item/weapon/claymore/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	playsound(loc, 'sound/weapons/bloodyslice.ogg', 50, 1, -1)
-	return ..()
 
 /obj/item/weapon/katana
 	name = "katana"
@@ -77,7 +73,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "katana"
 	item_state = null
-	hitsound = "sound/weapons/bloodyslice.ogg"
+	hitsound = 'sound/weapons/bloodyslice.ogg'
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT | SLOT_BACK
@@ -94,10 +90,6 @@
 
 /obj/item/weapon/katana/IsShield()
 		return 1
-
-/obj/item/weapon/katana/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	playsound(loc, 'sound/weapons/bloodyslice.ogg', 50, 1, -1)
-	return ..()
 
 /obj/item/weapon/katana/magic
 	name = "enchanted sword"
@@ -120,7 +112,7 @@
 	desc = "Tharr she blows!"
 	icon_state = "harpoon"
 	item_state = "harpoon"
-	hitsound = "sound/weapons/bladeslice.ogg"
+	hitsound = 'sound/weapons/bladeslice.ogg'
 	force = 20
 	throwforce = 15
 	w_class = W_CLASS_MEDIUM
@@ -236,7 +228,7 @@ obj/item/weapon/banhammer/admin
 	desc = "A large growth that appears to be made of solid bone. It looks heavy."
 	icon_state = "bone_hammer"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	hitsound = "sound/weapons/heavysmash.ogg"
+	hitsound = 'sound/weapons/heavysmash.ogg'
 	flags = FPRINT
 	siemens_coefficient = 0
 	slot_flags = null
@@ -354,8 +346,10 @@ obj/item/weapon/banhammer/admin
 /obj/item/weapon/macuahuitl/Destroy()
 	if(blades.len)
 		for(var/i in blades)
+			var/blade = blades[i]
 			blades.Remove(i)
-			qdel(i)
+			qdel(blade)
+			blade = null
 	..()
 
 /obj/item/weapon/macuahuitl/proc/get_current_blade_count()
@@ -466,6 +460,7 @@ obj/item/weapon/banhammer/admin
 			to_add.pixel_x -= 12 * PIXEL_MULTIPLIER
 	to_add.plane = FLOAT_PLANE
 	underlays += to_add.appearance
+
 //	if(!base_overlay)
 //		base_overlay = new
 //		base_overlay.appearance = appearance

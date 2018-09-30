@@ -74,8 +74,8 @@
 //Tcomms
 
 /datum/design/comm_monitor
-	name = "Circuit Design (Telecommunications Monitoring Console)"
-	desc = "Allows for the construction of circuit boards used to build a telecommunications monitor."
+	name = "Circuit Design (telecommunications network monitoring console)"
+	desc = "Allows for the construction of circuit boards used to build a telecommunications network monitor."
 	id = "comm_monitor"
 	req_tech = list(Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER
@@ -84,8 +84,8 @@
 	build_path = /obj/item/weapon/circuitboard/comm_monitor
 
 /datum/design/comm_server
-	name = "Circuit Design (Telecommunications Server Monitoring Console)"
-	desc = "Allows for the construction of circuit boards used to build a telecommunication server browser and monitor."
+	name = "Circuit Design (telecommunications server monitoring console)"
+	desc = "Allows for the construction of circuit boards used to build a telecommunications server browser and monitor."
 	id = "comm_server"
 	req_tech = list(Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER
@@ -94,7 +94,7 @@
 	build_path = /obj/item/weapon/circuitboard/comm_server
 
 /datum/design/traffic_control
-	name = "Circuit Design (Telecommunications Traffic Control Console)"
+	name = "Circuit Design (telecommunications traffic control console)"
 	desc = "Allows for the construction of circuit boards used to build a telecommunications traffic control console."
 	id = "traffic_control"
 	req_tech = list(Tc_PROGRAMMING = 5)
@@ -123,7 +123,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
-	build_path = "/obj/item/weapon/circuitboard/rust_gyrotron_control"
+	build_path = /obj/item/weapon/circuitboard/rust_gyrotron_control
 
 /datum/design/rust_fuel_control
 	name = "Circuit Design (R-UST Mk. 7 fuel controller)"
@@ -133,7 +133,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
-	build_path = "/obj/item/weapon/circuitboard/rust_fuel_control"
+	build_path = /obj/item/weapon/circuitboard/rust_fuel_control
 
 /datum/design/rust_core_monitor
 	name = "Circuit Design (R-UST Mk. 7 core monitor)"
@@ -143,7 +143,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
-	build_path = "/obj/item/weapon/circuitboard/rust_core_monitor"
+	build_path = /obj/item/weapon/circuitboard/rust_core_monitor
 
 /datum/design/rust_core_control
 	name = "Circuit Design (R-UST Mk. 7 core controller)"
@@ -153,4 +153,14 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
-	build_path = "/obj/item/weapon/circuitboard/rust_core_control"
+	build_path = /obj/item/weapon/circuitboard/rust_core_control
+
+/datum/design/supermattermonitor
+	name = "Circuit Design (Supermatter Monitor)"
+	desc = "Allows for the construction of circuit boards used to build a supermatter monitoring computer"
+	id = "supermattermonitor"
+	req_tech = list(Tc_ENGINEERING = 5)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Misc"
+	build_path = /obj/item/weapon/circuitboard/supermatter

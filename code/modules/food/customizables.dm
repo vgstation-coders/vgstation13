@@ -82,6 +82,13 @@
 		to_chat(user, "<span class='notice'>You fashion a crude mortar out of the wooden bowl and a metal sheet.</span>")
 		qdel(src)
 		user.put_in_hands(mortimer)
+	if(istype(I,/obj/item/stack/sheet/leather))
+		var/obj/item/stack/sheet/leather/L = I
+		L.use(1)
+		var/obj/item/device/instrument/drum/drum_makeshift/drumbowl = new(get_turf(src))
+		to_chat(user, "<span class='notice'>You fashion a crude drum out of the wooden bowl and a leather sheet.</span>")
+		qdel(src)
+		user.put_in_hands(drumbowl)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
 		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
@@ -269,6 +276,7 @@
 	icon_state = "breadcustom"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/slices/breadslice
 	slices_num = 5
+	storage_slots = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/slices/breadslice
 	name = "slice"
@@ -288,6 +296,7 @@
 	icon_state = "cakecustom"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/customizable/slices/cakeslicecustom
 	slices_num = 5
+	storage_slots = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/slices/cakeslicecustom
 	name = "slice"
