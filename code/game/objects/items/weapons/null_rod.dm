@@ -80,7 +80,7 @@
 /obj/item/weapon/nullrod/pickup(mob/living/user as mob)
 	if(user.mind)
 		if(user.mind.assigned_role == "Chaplain")
-			to_chat(user, "<span class='notice'>The [src] is teeming with divine power. You feel like you could [fluff_pickup] a horde of undead with this.</span>")
+			to_chat(user, "<span class='notice'>\The [src] is teeming with divine power. You feel like you could [fluff_pickup] a horde of undead with this.</span>")
 		if(ishuman(user)) //Typecasting, only humans can be vampires
 			var/datum/role/vampire/V = isvampire(user)
 			if(V && !(VAMP_UNDYING in V.powers))
