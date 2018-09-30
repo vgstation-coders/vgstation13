@@ -22,19 +22,32 @@
 	for(var/p in subtypesof(/datum/gas))
 		var/datum/gas/gas = new p()
 
-		if(gas.id in gases)
+		if(!add(gas))
 			stack_trace("Duplicate gas id '[gas.id]' in from typepath '[p]'")
-			continue
 
-		gases[gas.id] = gas
-		name[gas.id] = gas.name
-		short_name[gas.id] = gas.short_name || gas.name
-		specific_heat[gas.id] = gas.specific_heat
-		molar_mass[gas.id] = gas.molar_mass
-		flags[gas.id] = gas.flags
-		if(gas.tile_overlay)
-			tile_overlay[gas.id] = image('icons/effects/tile_effects.dmi', gas.tile_overlay, FLY_LAYER)
-		if(gas.overlay_limit)
-			overlay_limit[gas.id] = gas.overlay_limit
+/datum/xgm_data/proc/add(var/datum/gas/gas)
+	if(gases[gas.id])
+		return FALSE
+	return update(gas)
 
-	return 1
+/datum/xgm_data/proc/update(var/datum/gas/gas)
+	gases[gas.id] = gas
+	name[gas.id] = gas.name
+	short_name[gas.id] = gas.short_name || gas.name
+	specific_heat[gas.id] = gas.specific_heat
+	molar_mass[gas.id] = gas.molar_mass
+	flags[gas.id] = gas.flags
+	if(gas.tile_overlay)
+		tile_overlay[gas.id] = image('icons/effects/tile_effects.dmi', gas.tile_overlay, FLY_LAYER)
+	if(gas.overlay_limit)
+		overlay_limit[gas.id] = gas.overlay_limit
+	return TRUE
+
+/datum/xgm_data/proc/update_id(var/id)
+	if(gases[id])
+		return update(gases[id])
+	return FALSE
+
+/datum/xgm_data/proc/update_all()
+	for(var/id in gases)
+		update_id(id)
