@@ -9,7 +9,7 @@
 	name = "Syndicate Traitors"
 	persistent = 1
 	role_category = ROLE_TRAITOR
-	protected_from_jobs = list("Security Officer", "Warden", "Head of Personnel", "AI", "Detective", "Head of Security", "Captain")
+	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "AI", "Detective", "Head of Security", "Captain")
 	restricted_from_jobs = list("Cyborg","Mobile MMI")
 	required_candidates = 1
 	weight = 7
@@ -46,7 +46,7 @@
 /datum/dynamic_ruleset/roundstart/changeling
 	name = "Changelings"
 	role_category = ROLE_CHANGELING
-	protected_from_jobs = list("Security Officer", "Warden", "Head of Personnel", "Detective", "Head of Security", "Captain")
+	protected_from_jobs = list("Security Officer", "Warden", "Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
@@ -76,7 +76,7 @@
 /datum/dynamic_ruleset/roundstart/vampire
 	name = "Vampires"
 	role_category = ROLE_VAMPIRE
-	protected_from_jobs = list("Security Officer", "Warden", "Head of Personnel", "Detective", "Head of Security", "Captain")
+	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
@@ -145,6 +145,7 @@
 /datum/dynamic_ruleset/roundstart/cult_legacy
 	name = "Cult (Legacy)"
 	role_category = ROLE_LEGACY_CULTIST
+	protected_from_jobs = list("Merchant")
 	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)

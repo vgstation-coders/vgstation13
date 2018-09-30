@@ -8,7 +8,7 @@
 /datum/dynamic_ruleset/latejoin/infiltrator
 	name = "Syndicate Infiltrator"
 	role_category = ROLE_TRAITOR
-	protected_from_jobs = list("Security Officer", "Warden", "Head of Personnel", "Detective", "Head of Security", "Captain")
+	protected_from_jobs = list("Security Officer", "Warden", "Head of Personnel", "Detective", "Head of Security", "Captain", "Merchant")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 1
 	weight = 7

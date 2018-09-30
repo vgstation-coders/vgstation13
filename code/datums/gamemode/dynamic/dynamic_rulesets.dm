@@ -1,5 +1,3 @@
-
-
 /datum/dynamic_ruleset
 	var/name = ""//For admin logging, and round end scoreboard
 	var/persistent = 0//if set to 1, the rule won't be discarded after being executed, and /gamemode/dynamic will call process() every MC tick
