@@ -85,7 +85,9 @@
 					T1.turf_animation('icons/effects/effects.dmi',"rune_teleport")
 			if("communicate")
 				//If the user cancels the talisman this var will be set to 0
-				delete = call(/obj/effect/rune_legacy/proc/communicate)()
+				var/obj/effect/rune_legacy/R = new
+				R.my_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
+				delete = R.communicate()
 			if("deafen")
 				deafen()
 				qdel(src)
