@@ -13,6 +13,7 @@
 #define TOXIN 			"toxin"
 #define PLASTICIDE 			"plasticide"
 #define CYANIDE "cyanide"
+#define POTASSIUM_HYDROXIDE 			"potassium_hydroxide"
 #define CHEFSPECIAL 			"chefspecial"
 #define MINTTOXIN 			"minttoxin"
 #define MUTATIONTOXIN 			"mutationtoxin"
