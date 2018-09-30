@@ -452,7 +452,7 @@
 
 	var/datum/role/vampire/master
 
-/datum/role/thrall/New(var/datum/mind/thrall, var/datum/role/vampire/master)
+/datum/role/thrall/New(var/datum/mind/thrall, var/datum/faction/fac=null, var/new_id, var/override = FALSE, var/datum/role/vampire/master)
 	. = ..()
 	if(!istype(master))
 		return FALSE
@@ -461,6 +461,9 @@
 	faction = master.faction
 	antag = thrall
 	update_faction_icons()
+	Greet(TRUE)
+	ForgeObjectives()
+	AnnounceObjectives()
 	OnPostSetup()
 
 /datum/role/thrall/Greet(var/you_are = TRUE)
