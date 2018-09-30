@@ -307,7 +307,7 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 		var/total_reactants = total_fuel + total_oxygen
 
 		//determine the amount of reactants actually reacting
-		var/used_reactants_ratio = Clamp(total_reactants * firelevel / zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier), 0, total_reactants) / total_reactants
+		var/used_reactants_ratio = Clamp(firelevel / zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier), 0, 1)
 
 		//remove and add gasses as calculated
 		adjust_multi(
