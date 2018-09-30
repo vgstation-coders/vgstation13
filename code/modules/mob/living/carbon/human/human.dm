@@ -1507,7 +1507,7 @@
 
 	//Need at least two teeth or a beak to bite
 
-	if(check_body_part_coverage(MOUTH))
+	if(check_body_part_coverage(MOUTH) && !isvampire(src))
 		return 0
 
 	if(M_BEAK in mutations)
