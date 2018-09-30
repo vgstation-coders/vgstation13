@@ -23,7 +23,7 @@
 		else if (total > 50)
 			message_admins("There are [total] players, too many for the mass convert objective!")
 			return FALSE
-		return total
+		return round(total / 2)
 
 /datum/objective/convert_people/PostAppend()
 	cultists_target = get_number()
