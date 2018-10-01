@@ -55,6 +55,7 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 			continue
 
 		holder = patient.hud_list[HEALTH_HUD]
+
 		if(holder)
 			if(patient.isDead())
 				holder.icon_state = "hudhealth-100"
@@ -72,6 +73,26 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 				holder.icon_state = "hudill"
 			else
 				holder.icon_state = "hudhealthy"
+			C.images += holder
+
+		holder = patient.hud_list[RECORD_HUD]
+		if(holder)
+			var/targetname = patient.get_identification_name(patient.get_face_name())
+			var/medical = null
+			var/datum/data/record/gen_record = data_core.find_general_record_by_name(targetname)
+			if(gen_record)
+				medical = gen_record.fields["p_stat"]
+			switch(medical)
+				if("*SSD*")
+					holder.icon_state = "hudssd"
+				if("*Deceased*")
+					holder.icon_state = "huddeceased"
+				if("Physically Unfit")
+					holder.icon_state = "hudunfit"
+				if("Active")
+					holder.icon_state = "hudactive"
+				if("Disabled")
+					holder.icon_state = "huddisabled"
 			C.images += holder
 
 
