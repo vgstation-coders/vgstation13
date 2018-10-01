@@ -31,6 +31,13 @@
 		apply_spell_damage(M)
 	return
 
+/spell/targeted/projectile/magic_missile/spare_stunned/choose_prox_targets(mob/user = usr, var/atom/movable/spell_holder) //This version of magic missile doesn't hit stunned mobs.
+	var/list/targets = ..()
+	for(var/mob/living/M in targets)
+		if(M.stunned)
+			targets.Remove(M)
+	return targets
+
 //PROJECTILE
 
 /obj/item/projectile/spell_projectile/seeking/magic_missile
