@@ -307,14 +307,14 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 		var/total_reactants = total_fuel + total_oxygen
 
 		//determine the amount of reactants actually reacting
-		var/used_reactants_ratio = Clamp(total_reactants * firelevel / zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier), 0.2, total_reactants) / total_reactants
+		var/used_reactants_ratio = Clamp(firelevel / zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier), Clamp(0.2 / total_reactants, 0, 1), 1)
 
 		//remove and add gasses as calculated
 		adjust_multi(
 			GAS_OXYGEN, -min(src[GAS_OXYGEN], total_oxygen * used_reactants_ratio),
 			GAS_PLASMA, -min(src[GAS_PLASMA], (src[GAS_PLASMA] * used_fuel_ratio * used_reactants_ratio) * 3),
 			GAS_CARBON, max(2 * total_fuel, 0),
-			GAS_VOLATILE, (src[GAS_VOLATILE] * used_fuel_ratio * used_reactants_ratio) * 5) //Fuel burns 5 times as quick
+			GAS_VOLATILE, -(src[GAS_VOLATILE] * used_fuel_ratio * used_reactants_ratio) * 5) //Fuel burns 5 times as quick
 
 		if(can_use_turf)
 			if(T.getFireFuel()>0)
