@@ -195,7 +195,7 @@ var/global/Holiday = null
 			if(prob(eventchance))
 				ChristmasEvent()
 
-/proc/Computus()
+/proc/Computus()	//This proc calculates the date that Easter falls on for a given year.
 	var/current_year = text2num(time2text(world.timeofday, "YYYY"))
 	var/M
 	var/N
