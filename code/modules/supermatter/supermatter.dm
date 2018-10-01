@@ -12,7 +12,7 @@
 #define AUDIO_WARNING_DELAY 30
 
 /obj/machinery/power/supermatter
-	name = "Supermatter Crystal"
+	name = "\improper Supermatter Crystal"
 	desc = "A strangely translucent and iridescent crystal. <span class='warning'>You get headaches just from looking at it.</span>"
 	icon = 'icons/obj/engine.dmi'
 	icon_state = "darkmatter"
@@ -71,7 +71,7 @@
 	machine_flags = MULTITOOL_MENU
 
 /obj/machinery/power/supermatter/shard //Small subtype, less efficient and more sensitive, but less boom.
-	name = "Supermatter Shard"
+	name = "\improper Supermatter Shard"
 	short_name = "Shard"
 	desc = "A strangely translucent and iridescent crystal that looks like it used to be part of a larger structure. <span class='warning'>You get headaches just from looking at it.</span>"
 	icon_state = "darkmatter_shard"
@@ -394,7 +394,7 @@
 		explode()
 		return
 	if(istype(AM, /mob/living))
-		AM.visible_message("<span class=\"warning\">\The [AM] slams into \the [src] inducing a resonance... \his body starts to glow and catch flame before flashing into ash.</span>",\
+		AM.visible_message("<span class=\"warning\">\The [src] is slammed into by \the [AM], inducing a resonance... \his body begins to glow and catch aflame before flashing into ash.</span>",\
 		"<span class=\"danger\">You slam into \the [src] as your ears are filled with unearthly ringing. Your last thought is \"Oh, fuck.\"</span>",\
 		"<span class=\"warning\">You hear an unearthly noise as a wave of heat washes over you.</span>")
 	else if(!is_type_in_list(AM, message_exclusions))
