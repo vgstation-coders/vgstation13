@@ -1773,3 +1773,25 @@ Thanks.
 			pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
+
+/mob/living/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	if(src == user)
+		return ..()
+	// Attempting to inject someone else takes time
+	if(tool.get_injection_action(src) == INJECTION_SUIT_PORT)
+		user.visible_message("<span class='warning'>[user] begins hunting for an injection port for \the [tool] on [src]'s suit!</span>",
+							 "<span class='warning'>You begin hunting for an injection port for \the [tool] on [src]'s suit!</span>")
+	else
+		user.visible_message("<span class='warning'>[user] is trying to inject [src] with \the [tool]!</span>",
+							 "<span class='warning'>You try to inject [src] with \the [tool]!</span>")
+	if(!do_mob(user, src, tool.get_injection_time(src)))
+		return INJECTION_RESULT_FAIL
+	user.visible_message("<span class='warning'>[user] injects [src] with the \the [tool]!</span>",
+						 "<span class='warning'>You inject [src] with \the [tool]!</span>")
+	var/reagent_names = english_list(tool.get_reagent_names())
+	add_attacklogs(user, src, "injected", object = src, addition = "Reagents: [reagent_names]", admin_warn = TRUE)
+
+	// TODO Every reagent reacts with the full volume instead of being scaled accordingly
+	// TODO which is pretty irrelevant now but should be fixed
+	tool.reagents.reaction(src, INGEST)
+	return ..()
