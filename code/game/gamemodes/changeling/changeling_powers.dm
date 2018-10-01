@@ -1039,7 +1039,7 @@ var/list/datum/dna/hivemind_bank = list()
 
 /obj/item/verbs/changeling/proc/changeling_plasma_sting()
 	set category = "Changeling"
-	set name = "Plasma Sting (20)"
+	set name = "Plasma Sting (30)"
 	set desc = "Destroys mechanical lifeforms after a short time."
 
 	var/mob/M = loc
