@@ -14,6 +14,9 @@
 		/area/medical/coldstorage,
 		/area/mine,
 		/area/prison,
+		/area/medical/patients_rooms,
+		/area/medical/patient_room1,
+		/area/medical/patient_room2
 	)
 
 
