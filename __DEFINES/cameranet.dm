@@ -13,3 +13,5 @@
 #define CAMERANET_FIREALARMS "Fire Alarms"
 #define CAMERANET_ATMOSALARMS "Atmospheric Alarms"
 #define CAMERANET_POWERALARMS "Power Alarms"
+#define CAMERANET_SINGULARITY "Singularity"
+#define CAMERANET_RD "RD"

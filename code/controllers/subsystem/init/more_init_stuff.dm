@@ -34,6 +34,11 @@ var/datum/subsystem/more_init/SSmore_init
 		log_startup_progress("  Finished caching jukebox playlists in [stop_watch(watch)]s.")
 	..()
 
+	camera_sort(cameranet.cameras)
+
+	for (var/obj/machinery/computer/security/S in tv_monitors)
+		S.init_cams()
+
 
 /datum/subsystem/more_init/proc/buildcamlist()
 	adv_camera.camerasbyzlevel = list()
