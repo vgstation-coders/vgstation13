@@ -49,15 +49,12 @@ var/list/one_way_windows
 	update_icon()
 	oneway_overlay = image('icons/obj/structures.dmi', src, "one_way_overlay")
 	if(one_way)
-		if(!one_way_windows)
-			one_way_windows = list()
-		one_way_windows.Add(src)
-		update_oneway_nearby_clients()
-		overlays += oneway_overlay
+		one_way = !one_way
+		toggle_one_way()
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)
-		if(!istype(C.mob, /mob/dead/observer))
+		if(!istype(C.mob, /mob/dead/observer) && !(M_XRAY in C.mob.mutations))
 			if(((x >= (C.mob.x - C.view)) && (x <= (C.mob.x + C.view))) && ((y >= (C.mob.y - C.view)) && (y <= (C.mob.y + C.view))))
 				C.update_one_way_windows(view(C.view,C.mob))
 
@@ -279,6 +276,20 @@ var/list/one_way_windows
 		return
 	attack_generic(user, rand(10, 15))
 
+/obj/structure/window/proc/toggle_one_way() //Toggle whether a window is a one-way window or not.
+	if(!one_way)
+		one_way = 1
+		if(!one_way_windows)
+			one_way_windows = list()
+		one_way_windows.Add(src)
+		update_oneway_nearby_clients()
+		overlays += oneway_overlay
+	else
+		one_way = 0
+		one_way_windows.Remove(src)
+		update_oneway_nearby_clients()
+		overlays -= oneway_overlay
+
 /obj/structure/window/proc/smart_toggle() //For "smart" windows
 	if(opacity)
 		animate(src, color="#FFFFFF", time=5)
@@ -325,11 +336,8 @@ var/list/one_way_windows
 			to_chat(user, "<span class='warning'>You can't pry the sheet of plastic off from this side of \the [src]!</span>")
 		else
 			to_chat(user, "<span class='notice'>You pry the sheet of plastic off \the [src].</span>")
-			one_way = 0
-			one_way_windows.Remove(src)
-			update_oneway_nearby_clients()
+			toggle_one_way()
 			drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1, user)
-			overlays -= oneway_overlay
 			return
     /* One-way windows have serious performance issues - N3X
 	if(istype(W, /obj/item/stack/sheet/mineral/plastic))
@@ -347,14 +355,9 @@ var/list/one_way_windows
 			update_nearby_tiles()
 			ini_dir = dir
 		var/obj/item/stack/sheet/mineral/plastic/P = W
-		one_way = 1
-		if(!one_way_windows)
-			one_way_windows = list()
-		one_way_windows.Add(src)
-		update_oneway_nearby_clients()
+		toggle_one_way()
 		P.use(1)
 		to_chat(user, "<span class='notice'>You place a sheet of plastic over the window.</span>")
-		overlays += oneway_overlay
 		return
 	*/
 
