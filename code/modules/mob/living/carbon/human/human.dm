@@ -1707,7 +1707,7 @@ mob/living/carbon/human/isincrit()
 		species.chem_flags = rand(0,65535)
 
 	if(!can_be_fat)
-		species.anatomy_flags ^= CAN_BE_FAT
+		species.anatomy_flags &= ~CAN_BE_FAT
 
 /mob/living/carbon/human/send_to_past(var/duration)
 	..()
