@@ -7,7 +7,7 @@ sudo: false
 env:
   global:
   - BYOND_MAJOR="512"
-  - BYOND_MINOR="1445"
+  - BYOND_MINOR="1448"
   - ALL_MAPS="tgstation metaclub defficiency packedstation roidstation test_box test_tiny"
   - PROJECT_NAME="vgstation13"
   - RUST_BACKTRACE="1"

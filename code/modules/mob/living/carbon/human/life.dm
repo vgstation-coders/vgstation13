@@ -150,7 +150,7 @@ var/global/list/organ_damage_overlays = list(
 			update_mutations()
 			check_mutations = 0
 		//Updates the number of stored chemicals for powers
-		handle_changeling()
+		//handle_changeling()
 		//Mutations and radiation
 		handle_mutations_and_radiation()
 		//Chemicals in the body
@@ -181,8 +181,6 @@ var/global/list/organ_damage_overlays = list(
 	pulse = handle_pulse()
 	for(var/obj/item/weapon/grab/G in src)
 		G.process()
-	if(mind && mind.vampire)
-		handle_vampire()
 	handle_alpha()
 	if(update_overlays)
 		update_overlays = 0

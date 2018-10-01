@@ -119,6 +119,11 @@
 	maxcharge = 15000
 	minor_fault = 0
 
+/obj/item/weapon/cell/potato/soviet
+	charge = 15000
+	maxcharge = 15000
+	minor_fault = 0
+
 /obj/item/weapon/cell/crepe
 	name = "power crêpe"
 	desc = "Warning: May contain dairy products, 12,000kJ of searing death, gluten."
@@ -129,6 +134,11 @@
 	w_type = RECYK_BIOLOGICAL
 	minor_fault = 1
 	starch_cell = 1
+
+/obj/item/weapon/cell/crepe/mommi
+	maxcharge = 10000
+	charge = 10000
+	minor_fault = 0
 
 /obj/item/weapon/cell/crepe/mommi
 	maxcharge = 10000

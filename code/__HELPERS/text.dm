@@ -393,22 +393,36 @@ proc/checkhtml(var/t)
 	if(parts.len==2)
 		. += ".[parts[2]]"
 
-var/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW")
-/proc/format_watts(var/number)
-	if (number<0)
-		return "-[format_watts(abs(number))]"
-	if (number==0)
-		return "0 W"
 
-	var/max_watt_suffix = watt_suffixes.len
+/**
+ * Formats unites with their suffixes
+ * Should be good for J, W, and stuff
+ */
+var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
+
+/proc/format_units(var/number)
+	if (number<0)
+		return "-[format_units(abs(number))]"
+	if (number==0)
+		return "0 "
+
+	var/max_unit_suffix = unit_suffixes.len
 	var/i=1
 	while (round(number/1000) >= 1)
 		number/=1000
 		i++
-		if (i == max_watt_suffix)
+		if (i == max_unit_suffix)
 			break
 
-	return "[format_num(number)] [watt_suffixes[i]]"
+	return "[format_num(number)] [unit_suffixes[i]]"
+
+
+/**
+ * Old unit formatter, the TEG used to use this
+ */
+/proc/format_watts(var/number)
+	return "[format_units(number)]W"
+
 
 //Returns 1 if [text] ends with [suffix]
 //Example: text_ends_with("Woody got wood", "dy got wood") returns 1
@@ -527,3 +541,6 @@ proc/sql_sanitize_text(var/text)
 	text = replacetext(text, ";", "")
 	text = replacetext(text, "&", "")
 	return text
+
+/proc/is_letter(var/thing) // Thing is an ascii number
+    return (thing >= 65 && thing <= 122)

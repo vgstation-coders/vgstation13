@@ -294,11 +294,12 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	if(!iscarbon(M))
 		return 0
 	var/mob/living/carbon/H = M
-	if(H.mind in ticker.mode.head_revolutionaries)
+	if(isrevhead(H))
 		H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel the corporate tendrils of Nanotrasen try to invade your mind!</span>")
 		return 0
-	else if(H.mind in ticker.mode:revolutionaries)
-		ticker.mode:remove_revolutionary(H.mind)
+	else if(isrevnothead(H))
+		var/datum/role/R = H.mind.GetRole(REV)
+		R.Drop()
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards Nanotrasen.</span>")
 	return 1
 
@@ -323,8 +324,6 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		return dat
 
 /obj/item/weapon/implant/traitor/implanted(mob/M, mob/user)
-	var/list/implanters
-	var/ref = "\ref[user.mind]"
 	if(!iscarbon(M))
 		to_chat(user, "<span class='danger'>The implant doesn't seem to be compatible with [M]!</span>")
 		return 0
@@ -342,33 +341,30 @@ the implant may become unstable and either pre-maturely inject the subject or si
 			if(I.imp_in == H)
 				H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel a strange sensation in your head that quickly dissipates.</span>")
 				return 0
-	if(H.mind in ticker.mode.traitors)
+	if(istraitor(H))
 		H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel a familiar sensation in your head that quickly dissipates.</span>")
 		return 0
 	H.implanting = 1
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards [user.name].</span>")
-	if(!(user.mind in ticker.mode:implanter))
-		ticker.mode:implanter[ref] = list()
-	implanters = ticker.mode:implanter[ref]
-	implanters.Add(H.mind)
-	ticker.mode.implanted.Add(H.mind)
-	ticker.mode.implanted[H.mind] = user.mind
-	//ticker.mode:implanter[user.mind] += H.mind
-	ticker.mode:implanter[ref] = implanters
-	ticker.mode.traitors += H.mind
-	H.mind.special_role = "traitor"
+
+	var/datum/faction/F = find_active_faction_by_typeandmember(/datum/faction/syndicate/greytide, null, user.mind)
+	if(!F)
+		F = ticker.mode.CreateFaction(/datum/faction/syndicate/greytide, 0, 1)
+		F.HandleNewMind(user.mind)
+
+	var/success = F.HandleRecruitedMind(H.mind)
+	if(!success)
+		visible_message("<span class = 'warning'>The head of \the [H] begins to glow a deep red. It is going to explode!</span>")
+		spawn(3 SECONDS)
+			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+			head_organ.explode()
+		return 0
 	to_chat(H, "<B><span class = 'big warning'>You've been shown the Greytide by [user.name]!</B> You now must lay down your life to protect them and assist in their goals at any cost.</span>")
-	var/datum/objective/protect/p = new
-	p.owner = H.mind
-	p.target = user:mind
-	p.explanation_text = "Protect [user:real_name], the [user:mind:assigned_role=="MODE" ? (user:mind:special_role) : (user:mind:assigned_role)]."
-	H.mind.objectives += p
-	for(var/datum/objective/objective in H.mind.objectives)
-		to_chat(H, "<B>Objective #1</B>: [objective.explanation_text]")
-	ticker.mode.update_traitor_icons_added(H.mind)
-	ticker.mode.update_traitor_icons_added(user.mind)
+	F.forgeObjectives()
+	update_faction_icons()
 	log_admin("[ckey(user.key)] has mind-slaved [ckey(H.key)].")
 	return 1
+
 /obj/item/weapon/implant/adrenalin
 	name = "adrenalin"
 	desc = "Removes all stuns and knockdowns."

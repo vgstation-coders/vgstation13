@@ -37,8 +37,8 @@ var/datum/subsystem/plant/SSplant
 
 	if(survive_on_station)
 		if(seed.consume_gasses)
-			seed.consume_gasses["plasma"] = null //PHORON DOES NOT EXIST
-			seed.consume_gasses["carbon_dioxide"] = null
+			seed.consume_gasses[GAS_PLASMA] = null //PHORON DOES NOT EXIST
+			seed.consume_gasses[GAS_CARBON] = null
 		if(seed.chems)
 			seed.chems.Remove(PHENOL) // Eating through the hull will make these plants completely inviable, albeit very dangerous.
 		seed.ideal_heat = initial(seed.ideal_heat)

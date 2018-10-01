@@ -103,7 +103,7 @@
 	if(heating == BUNSEN_ON)
 		var/turf/T = get_turf(src)
 		var/datum/gas_mixture/G = T.return_air()
-		if(!G || G.molar_density("oxygen") < 0.1 / CELL_VOLUME)
+		if(!G || G.molar_density(GAS_OXYGEN) < 0.1 / CELL_VOLUME)
 			visible_message("<span class = 'warning'>\The [src] splutters out from lack of oxygen.</span>","<span class = 'warning'>You hear something cough.</span>")
 			toggle()
 			return
@@ -128,7 +128,9 @@
 				reagents.remove_reagent(possible_fuel, consumption_rate)
 				if(held_container)
 					held_container.reagents.heating(thermal_energy_transfer, max_temperature)
-				G.adjust(o2 = -o2_consumption, co2 = -co2_consumption)
+				G.adjust_multi(
+					GAS_OXYGEN, -o2_consumption,
+					GAS_CARBON, -co2_consumption)
 				if(prob(unsafety) && T)
 					T.hotspot_expose(max_temperature, 5)
 				break
@@ -181,7 +183,36 @@
 
 
 /obj/machinery/bunsen_burner/AltClick()
-	verb_toggle()
+	if((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
+		return
+
+	var/list/choices = list(
+		"Turn On/Off" = 		image(icon = 'icons/mob/radial.dmi', icon_state = (heating == BUNSEN_ON ? "radial_off" : "radial_on")),
+		"Toggle Fuelport" = 	image(icon = 'icons/mob/radial.dmi', icon_state = (heating == BUNSEN_OPEN ? "radial_lock" : "radial_unlock")),
+		"Examine" =		image(icon = 'icons/mob/radial.dmi', icon_state = "radial_examine"),
+	)
+	var/event/menu_event = new(owner = usr)
+	menu_event.Add(src, "radial_check_handler")
+
+	var/task = show_radial_menu(usr,loc,choices,custom_check = menu_event)
+	switch(task)
+		if("Turn On/Off")
+			verb_toggle()
+		if("Toggle Fuelport")
+			verb_toggle_fuelport()
+		if("Examine")
+			usr.examination(src)
+
+/obj/machinery/bunsen_burner/proc/radial_check_handler(list/arguments)
+	var/event/E = arguments["event"]
+	return radial_check(E.holder)
+
+/obj/machinery/bunsen_burner/proc/radial_check(mob/living/user)
+	if(!istype(user))
+		return FALSE
+	if(user.incapacitated() || !user.Adjacent(src))
+		return FALSE
+	return TRUE
 
 /obj/machinery/bunsen_burner/verb/verb_toggle_fuelport()
 	set src in view(1)

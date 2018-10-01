@@ -35,12 +35,11 @@
 		D.holder = null
 
 	if(counts_as_blood)
-		var/datum/game_mode/cult/cult_round = find_active_mode("cult")
-		if(cult_round)
+		var/datum/faction/cult/narsie/blood_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
+		if(blood_cult)
 			var/turf/T = get_turf(src)
 			if(T && (T.z == map.zMainStation))
-				cult_round.bloody_floors -= T
-				cult_round.blood_check()
+				blood_cult.bloody_floors -= T
 	..()
 
 /obj/effect/decal/cleanable/proc/dry()
@@ -93,14 +92,15 @@
 	update_icon()
 
 	if(counts_as_blood)
-		var/datum/game_mode/cult/cult_round = find_active_mode("cult")
-		if(cult_round)
+		var/datum/faction/cult/narsie/blood_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
+		if(blood_cult)
 			var/turf/T = get_turf(src)
 			if(T && (T.z == map.zMainStation))//F I V E   T I L E S
-				if(!(locate("\ref[T]") in cult_round.bloody_floors))
-					cult_round.bloody_floors += T
-					cult_round.bloody_floors[T] = T
-					cult_round.blood_check()
+				if(!(locate("\ref[T]") in blood_cult.bloody_floors))
+					blood_cult.bloody_floors += T
+					blood_cult.bloody_floors[T] = T
+					if (blood_cult.has_enough_bloody_floors())
+						blood_cult.getNewObjective()
 		if(src.loc && isturf(src.loc))
 			for(var/obj/effect/decal/cleanable/C in src.loc)
 				if(C.type in absorbs_types && C != src)

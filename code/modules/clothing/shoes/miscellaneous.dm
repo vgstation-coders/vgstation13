@@ -296,7 +296,7 @@
 	item_state = "nr_boots"
 	heat_conductivity = INS_ARMOUR_HEAT_CONDUCTIVITY
 
-/obj/item/clothing/shoes/cult
+/obj/item/clothing/shoes/cult_legacy
 	name = "boots"
 	desc = "A pair of boots worn by the followers of Nar-Sie."
 	icon_state = "cult"
@@ -306,7 +306,7 @@
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
 
-/obj/item/clothing/shoes/cult/cultify()
+/obj/item/clothing/shoes/cult_legacy/cultify()
 	return
 
 /obj/item/clothing/shoes/cyborg

@@ -610,20 +610,15 @@
 
 /obj/item/projectile/bullet/fire_plume/proc/create_puff()
 	if(gas_jet)
-		if(gas_jet.total_moles())
-			var/total_moles = gas_jet.total_moles()
-			var/o2_concentration = gas_jet.oxygen/total_moles
-			var/n2_concentration = gas_jet.nitrogen/total_moles
-			var/co2_concentration = gas_jet.carbon_dioxide/total_moles
-			var/plasma_concentration = gas_jet.toxins/total_moles
-			var/n2o_concentration = null
+		var/total_moles = gas_jet.total_moles
+		if(total_moles)
+			var/o2_concentration = gas_jet[GAS_OXYGEN] / total_moles
+			var/n2_concentration = gas_jet[GAS_NITROGEN] / total_moles
+			var/co2_concentration = gas_jet[GAS_CARBON] / total_moles
+			var/plasma_concentration = gas_jet[GAS_PLASMA] / total_moles
+			var/n2o_concentration = gas_jet[GAS_SLEEPING] / total_moles
 
 			var/datum/gas_mixture/gas_dispersal = gas_jet.remove(original_total_moles/10)
-
-			if(gas_jet.trace_gases.len)
-				for(var/datum/gas/G in gas_jet.trace_gases)
-					if(istype(G, /datum/gas/sleeping_agent))
-						n2o_concentration = G.moles/total_moles
 
 			var/gas_type = null
 
@@ -644,9 +639,9 @@
 	if(!gas_jet)
 		return
 
-	if(gas_jet.total_moles())
-		var/jet_total_moles = gas_jet.total_moles()
-		var/toxin_concentration = gas_jet.toxins/jet_total_moles
+	var/jet_total_moles = gas_jet.total_moles
+	if(jet_total_moles)
+		var/toxin_concentration = gas_jet[GAS_PLASMA] / jet_total_moles
 		if(!(toxin_concentration > 0.01))
 			create_puff()
 			return
@@ -656,9 +651,9 @@
 	if(!has_O2_in_mix && T)
 		var/turf/location = get_turf(src)
 		var/datum/gas_mixture/turf_gases = location.return_air()
-		var/turf_total_moles = turf_gases.total_moles()
+		var/turf_total_moles = turf_gases.total_moles
 		if(turf_total_moles)
-			var/o2_concentration = turf_gases.oxygen/turf_total_moles
+			var/o2_concentration = turf_gases[GAS_OXYGEN] / turf_total_moles
 			if(!(o2_concentration > 0.01))
 				create_puff()
 				return

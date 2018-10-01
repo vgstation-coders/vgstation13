@@ -6,7 +6,7 @@ var/datum/controller/gameticker/ticker
 	var/current_state = GAME_STATE_PREGAME
 
 	var/hide_mode = 0
-	var/datum/game_mode/mode = null
+	var/datum/gamemode/mode = null
 	var/event_time = null
 	var/event = 0
 
@@ -25,16 +25,17 @@ var/datum/controller/gameticker/ticker
 
 	var/hardcore_mode = 0	//If set to nonzero, hardcore mode is enabled (current hardcore mode features: damage from hunger)
 							//Use the hardcore_mode_on macro - if(hardcore_mode_on) to_chat(user,"You're hardcore!")
-
-	var/list/syndicate_coalition = list() // list of traitor-compatible factions
-	var/list/factions = list()			  // list of all factions
-	var/list/availablefactions = list()	  // list of factions with openings
+	var/datum/rune_controller/rune_controller
 
 	var/pregame_timeleft = 0
 
 	var/delay_end = 0	//if set to nonzero, the round will not restart on it's own
 
 	var/triai = 0//Global holder for Triumvirate
+	var/explosion_in_progress
+	var/station_was_nuked
+
+	var/list/datum/role/antag_types = list() // Associative list of all the antag types in the round (List[id] = roleNumber1)
 
 	// Hack
 	var/obj/machinery/media/jukebox/superjuke/thematic/theme = null
@@ -123,15 +124,15 @@ var/datum/controller/gameticker/ticker
 	//Create and announce mode
 	if(master_mode=="secret")
 		src.hide_mode = 1
-	var/list/datum/game_mode/runnable_modes
-	if((master_mode=="random") || (master_mode=="secret"))
+	var/list/datum/gamemode/runnable_modes
+	if((master_mode=="random"))
 		runnable_modes = config.get_runnable_modes()
 		if (runnable_modes.len==0)
 			current_state = GAME_STATE_PREGAME
 			to_chat(world, "<B>Unable to choose playable game mode.</B> Reverting to pre-game lobby.")
 			return 0
 		if(secret_force_mode != "secret")
-			var/datum/game_mode/M = config.pick_mode(secret_force_mode)
+			var/datum/gamemode/M = config.pick_mode(secret_force_mode)
 			if(M.can_start())
 				src.mode = config.pick_mode(secret_force_mode)
 		job_master.ResetOccupations()
@@ -140,10 +141,15 @@ var/datum/controller/gameticker/ticker
 		if(src.mode)
 			var/mtype = src.mode.type
 			src.mode = new mtype
+	else if (master_mode=="secret")
+		mode = config.pick_mode("Dynamic Mode") //Huzzah
 	else
 		src.mode = config.pick_mode(master_mode)
+
+	//log_startup_progress("gameticker.mode is [src.mode.name].")
+	src.mode = new mode.type
 	if (!src.mode.can_start())
-		to_chat(world, "<B>Unable to start [mode.name].</B> Not enough players, [mode.required_players] players needed. Reverting to pre-game lobby.")
+		to_chat(world, "<B>Unable to start [mode.name].</B> Not enough players, [mode.minimum_player_count] players needed. Reverting to pre-game lobby.")
 		del(mode)
 		current_state = GAME_STATE_PREGAME
 		job_master.ResetOccupations()
@@ -151,7 +157,7 @@ var/datum/controller/gameticker/ticker
 
 	//Configure mode and assign player to special mode stuff
 	job_master.DivideOccupations() //Distribute jobs
-	var/can_continue = src.mode.pre_setup()//Setup special modes
+	var/can_continue = src.mode.Setup()//Setup special modes
 	if(!can_continue)
 		current_state = GAME_STATE_PREGAME
 		to_chat(world, "<B>Error setting up [master_mode].</B> Reverting to pre-game lobby.")
@@ -163,7 +169,7 @@ var/datum/controller/gameticker/ticker
 
 	if(hide_mode)
 		var/list/modes = new
-		for (var/datum/game_mode/M in runnable_modes)
+		for (var/datum/gamemode/M in runnable_modes)
 			modes+=M.name
 		modes = sortList(modes)
 		if(Holiday == APRIL_FOOLS_DAY)
@@ -171,8 +177,6 @@ var/datum/controller/gameticker/ticker
 		else
 			to_chat(world, "<B>The current game mode is - Secret!</B>")
 			to_chat(world, "<B>Possibilities:</B> [english_list(modes)]")
-	else
-		src.mode.announce()
 
 	init_PDAgames_leaderboard()
 	create_characters() //Create player characters and transfer them
@@ -193,7 +197,7 @@ var/datum/controller/gameticker/ticker
 #endif
 
 	spawn(0)//Forking here so we dont have to wait for this to finish
-		mode.post_setup()
+		mode.PostSetup()
 		//Cleanup some stuff
 		for(var/obj/effect/landmark/start/S in landmarks_list)
 			//Deleting Startpoints but we need the ai point to AI-ize people later and the Trader point to throw new ones
@@ -211,9 +215,9 @@ var/datum/controller/gameticker/ticker
 					qdel(obj)
 
 		to_chat(world, "<FONT color='blue'><B>Enjoy the game!</B></FONT>")
-		
+
 		send2maindiscord("**The game has started**")
-		
+
 //		world << sound('sound/AI/welcome.ogg')// Skie //Out with the old, in with the new. - N3X15
 
 		if(!config.shut_up_automatic_diagnostic_and_announcement_system)
@@ -238,7 +242,7 @@ var/datum/controller/gameticker/ticker
 				play_vox_sound(sound,STATION_Z,null)
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
-		mode.Clean_Antags()
+		//mode.Clean_Antags()
 
 	//start_events() //handles random events and space dust.
 	//new random event system is handled from the MC.
@@ -416,7 +420,7 @@ var/datum/controller/gameticker/ticker
 		force_round_end=1
 
 	var/mode_finished = mode.check_finished() || (emergency_shuttle.location == 2 && emergency_shuttle.alert == 1) || force_round_end
-	if(!mode.explosion_in_progress && mode_finished)
+	if(!explosion_in_progress && mode_finished)
 		current_state = GAME_STATE_FINISHED
 
 		spawn
@@ -440,7 +444,7 @@ var/datum/controller/gameticker/ticker
 
 
 		spawn(50)
-			if (mode.station_was_nuked)
+			if (station_was_nuked)
 				feedback_set_details("end_proper","nuke")
 				if(!delay_end && !watchdog.waiting)
 					to_chat(world, "<span class='notice'><B>Rebooting due to destruction of station in [restart_timeout/10] seconds</B></span>")
@@ -481,12 +485,6 @@ var/datum/controller/gameticker/ticker
 
 	return 1
 
-/datum/controller/gameticker/proc/getfactionbyname(var/name)
-	for(var/datum/faction/F in factions)
-		if(F.name == name)
-			return F
-
-
 /datum/controller/gameticker/proc/init_PDAgames_leaderboard()
 	init_snake_leaderboard()
 	init_minesweeper_leaderboard()
@@ -514,62 +512,14 @@ var/datum/controller/gameticker/ticker
 	minesweeper_best_players["expert"] = "none"
 
 /datum/controller/gameticker/proc/declare_completion()
-	var/ai_completions = "<h1>Round End Information</h1><HR>"
-
-	ai_completions += "<h3>Silicons Laws</h3>"
-	for(var/mob/living/silicon/ai/ai in mob_list)
-		var/icon/flat = getFlatIcon(ai)
-		end_icons += flat
-		var/tempstate = end_icons.len
-		if(ai.stat != 2)
-			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [ai.name] (Played by: [get_key(ai)])'s laws at the end of the game were:</b>"}
-		else
-			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [ai.name] (Played by: [get_key(ai)])'s laws when it was deactivated were:</b>"}
-		ai_completions += "<br>[ai.write_laws()]"
-
-		if (ai.connected_robots.len)
-			var/robolist = "<br><b>The AI's loyal minions were:</b> "
-			for(var/mob/living/silicon/robot/robo in ai.connected_robots)
-				if (!robo.connected_ai || !isMoMMI(robo)) // Don't report MoMMIs or unslaved robutts
-					continue
-				robolist += "[robo.name][robo.stat?" (Deactivated) (Played by: [get_key(robo)]), ":" (Played by: [get_key(robo)]), "]"
-			ai_completions += "[robolist]"
-
-	for (var/mob/living/silicon/robot/robo in mob_list)
-		if(!robo)
-			continue
-		var/icon/flat = getFlatIcon(robo)
-		end_icons += flat
-		var/tempstate = end_icons.len
-		if (!robo.connected_ai)
-			if (robo.stat != 2)
-				ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [get_key(robo)]) survived as an AI-less [isMoMMI(robo)?"MoMMI":"borg"]! Its laws were:</b>"}
-			else
-				ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [get_key(robo)]) was unable to survive the rigors of being a [isMoMMI(robo)?"MoMMI":"cyborg"] without an AI. Its laws were:</b>"}
-		else
-			ai_completions += {"<br><b><img src="logo_[tempstate].png"> [robo.name] (Played by: [get_key(robo)]) [robo.stat!=2?"survived":"perished"] as a [isMoMMI(robo)?"MoMMI":"cyborg"] slaved to [robo.connected_ai]! Its laws were:</b>"}
-		ai_completions += "<br>[robo.write_laws()]"
-
-	for(var/mob/living/silicon/pai/pAI in mob_list)
-		var/icon/flat
-		flat = getFlatIcon(pAI)
-		end_icons += flat
-		var/tempstate = end_icons.len
-		ai_completions += {"<br><b><img src="logo_[tempstate].png"> [pAI.name] (Played by: [get_key(pAI)]) [pAI.stat!=2?"survived":"perished"] as a pAI whose master was [pAI.master]! Its directives were:</b><br>[pAI.write_directives()]"}
-
-	mode.declare_completion()//To declare normal completion.
-
-	ai_completions += "<HR><BR><h2>Mode Result</h2>"
-	//ai_completions += "<br>[mode.completion_text]"
-
-	scoreboard(ai_completions)
-
+	scoreboard()
 	return 1
 
+/*
 /datum/controller/gameticker/proc/ert_declare_completion()
 	var/text = ""
 	if( ticker.mode.ert.len )
-		var/icon/logo = icon('icons/mob/mob.dmi', "ert-logo")
+		var/icon/logo = icon('icons/logos.dmi', "ert-logo")
 		end_icons += logo
 		var/tempstate = end_icons.len
 		text += {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The emergency responders were:</B></FONT> <img src="logo_[tempstate].png">"}
@@ -601,7 +551,7 @@ var/datum/controller/gameticker/ticker
 /datum/controller/gameticker/proc/deathsquad_declare_completion()
 	var/text = ""
 	if( ticker.mode.deathsquad.len )
-		var/icon/logo = icon('icons/mob/mob.dmi', "death-logo")
+		var/icon/logo = icon('icons/logos.dmi', "death-logo")
 		end_icons += logo
 		var/tempstate = end_icons.len
 		text += {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The death commando were:</B></FONT> <img src="logo_[tempstate].png">"}
@@ -629,7 +579,7 @@ var/datum/controller/gameticker/ticker
 		text += "<BR><HR>"
 
 	return text
-
+*/
 /datum/controller/gameticker/proc/bomberman_declare_completion()
 	var/icon/bomberhead = icon('icons/obj/clothing/hats.dmi', "bomberman")
 	end_icons += bomberhead
@@ -726,6 +676,20 @@ var/datum/controller/gameticker/ticker
 		text += {"<br><img src="logo_[tempstate].png"> [winner]"}
 
 	return text
+
+/datum/controller/gameticker/proc/get_all_heads()
+	var/list/heads = list()
+	for(var/mob/player in mob_list)
+		if(player.mind && (player.mind.assigned_role in command_positions))
+			heads += player.mind
+	return heads
+
+/datum/controller/gameticker/proc/get_assigned_head_roles()
+	var/list/roles = list()
+	for(var/mob/player in mob_list)
+		if(player.mind && (player.mind.assigned_role in command_positions))
+			roles += player.mind.assigned_role
+	return roles
 
 
 /world/proc/has_round_started()

@@ -79,18 +79,12 @@
 			user.visible_message("<span class='notice'>[user] burns the fungi away with \the [W].</span>", \
 			"<span class='notice'>You burn the fungi away with \the [W].</span>")
 			playsound(src, 'sound/items/Welder.ogg', 10, 1)
-			for(var/obj/effect/E in src) //WHYYYY
-				if(E.name == "Wallrot") //WHYYYYYYYYY
-					qdel(E)
-			rotting = 0
+			remove_rot()
 			return
 		if(istype(W,/obj/item/weapon/soap))
 			user.visible_message("<span class='notice'>[user] forcefully scrubs the fungi away with \the [W].</span>", \
 			"<span class='notice'>You forcefully scrub the fungi away with \the [W].</span>")
-			for(var/obj/effect/E in src)
-				if(E.name == "Wallrot")
-					qdel(E)
-			rotting = 0
+			remove_rot()
 			return
 		else if(!W.is_sharp() && W.force >= 10 || W.force >= 20)
 			user.visible_message("<span class='warning'>With one strong swing, [user] destroys the rotting [src] with \the [W].</span>", \

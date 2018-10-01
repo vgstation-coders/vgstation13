@@ -660,10 +660,10 @@
 			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
 				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
 				A.Send_Home(usr)
-		if("Antag Madness!")
+		/*if("Antag Madness!")
 			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
 				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to
-				A.Make_Antag(usr)
+				A.Make_Antag(usr)*/
 		if("Give Infinite Laser Guns to the Passengers")
 			if(usr.locked_to && istype(usr.locked_to, /obj/structure/bed/chair/vehicle/adminbus))
 				var/obj/structure/bed/chair/vehicle/adminbus/A = usr.locked_to

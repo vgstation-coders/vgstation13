@@ -1,4 +1,5 @@
 #define NEXT_PAGE_ID "__next__"
+#define DEFAULT_CHECK_DELAY 2 SECONDS
 
 /obj/screen/radial
 	icon = 'icons/mob/radial.dmi'
@@ -49,6 +50,10 @@
 	var/image/menu_holder
 	var/finished = FALSE
 
+	var/event/custom_check
+	var/next_check = 0
+	var/check_delay = DEFAULT_CHECK_DELAY
+
 	var/radius = 32
 	var/starting_angle = 0
 	var/ending_angle = 360
@@ -91,7 +96,7 @@
 			starting_angle = 180
 			ending_angle = 45
 
-/datum/radial_menu/proc/setup_menu()
+/datum/radial_menu/proc/setup_menu(var/icon_file = 'icons/mob/radial.dmi')
 	if(ending_angle > starting_angle)
 		zone = ending_angle - starting_angle
 	else
@@ -103,6 +108,7 @@
 		var/elements_to_add = max_elements - elements.len
 		for(var/i in 1 to elements_to_add) //Create all elements
 			var/obj/screen/radial/new_element = new /obj/screen/radial/slice
+			new_element.icon = icon_file
 			new_element.parent = src
 			elements += new_element
 
@@ -184,9 +190,10 @@
 		if(choices_icons[choice_id])
 			push(E.overlays,choices_icons[choice_id])
 
-/datum/radial_menu/New()
+/datum/radial_menu/New(var/icon_file = 'icons/mob/radial.dmi')
 	close_button = new
 	close_button.parent = src
+	close_button.icon = icon_file
 
 /datum/radial_menu/proc/Reset()
 	choices.Cut()
@@ -200,7 +207,7 @@
 /datum/radial_menu/proc/get_next_id()
 	return "c_[choices.len]"
 
-/datum/radial_menu/proc/set_choices(list/new_choices)
+/datum/radial_menu/proc/set_choices(var/list/new_choices,var/icon_file = 'icons/mob/radial.dmi')
 	if(choices.len)
 		Reset()
 	for(var/E in new_choices)
@@ -211,7 +218,7 @@
 			var/I = extract_image(new_choices[E])
 			if(I)
 				choices_icons[id] = I
-	setup_menu()
+	setup_menu(icon_file)
 
 
 /datum/radial_menu/proc/extract_image(E)
@@ -244,27 +251,47 @@
 		current_user.images -= menu_holder
 
 /datum/radial_menu/proc/wait()
-	while (current_user && !finished && !selected_choice)
+	while(current_user && !finished && !selected_choice)
+		if(istype(custom_check) && next_check < world.time)
+			if(!INVOKE_EVENT(custom_check, list()))
+				return
+			else
+				next_check = world.time + check_delay
 		stoplag(1)
 
 /datum/radial_menu/Destroy()
 	Reset()
 	hide()
+	if(istype(custom_check))
+		custom_check.holder = null
+		custom_check = null
 	. = ..()
 /*
 	Presents radial menu to user anchored to anchor (or user if the anchor is currently in users screen)
 	Choices should be a list where list keys are movables or text used for element names and return value
 	and list values are movables/icons/images used for element icons
 */
-/proc/show_radial_menu(mob/user,atom/anchor,list/choices)
-	var/datum/radial_menu/menu = new
-	if(!user)
-		user = usr
+/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file = 'icons/mob/radial.dmi',var/event/custom_check,var/uniqueid,var/radius)
+	if(!user || !anchor || !length(choices))
+		return
+
+	if(!uniqueid)
+		uniqueid = "defmenu_["\ref[user]"]_["\ref[anchor]"]"
+	if(radial_menus[uniqueid])
+		return
+
+	var/datum/radial_menu/menu = new(icon_file)
+	radial_menus[uniqueid] = menu
+	if(radius)
+		menu.radius = radius
+	if(istype(custom_check))
+		menu.custom_check = custom_check
 	menu.anchor = anchor
 	menu.check_screen_border(user) //Do what's needed to make it look good near borders or on hud
-	menu.set_choices(choices)
+	menu.set_choices(choices,icon_file)
 	menu.show_to(user)
 	menu.wait()
 	var/answer = menu.selected_choice
 	qdel(menu)
+	radial_menus -= uniqueid
 	return answer

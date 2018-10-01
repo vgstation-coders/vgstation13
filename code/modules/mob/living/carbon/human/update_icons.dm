@@ -1154,7 +1154,7 @@ var/global/list/damage_icon_parts = list()
 		if(I.dynamic_overlay && I.dynamic_overlay["[HAND_LAYER]-[index]"])
 			var/image/dyn_overlay = I.dynamic_overlay["[HAND_LAYER]-[index]"]
 			O.overlays.Add(dyn_overlay)
-		I.screen_loc = get_held_item_ui_location(index)
+		I.screen_loc = get_held_item_ui_location(index,I)
 
 		if(handcuffed) //why is this here AUGH
 			drop_item(I)

@@ -53,10 +53,11 @@ var/global/list/narsie_list = list()
 		if(narnar)
 			narsie_spawn_animation()
 	if(!narsie_cometh)//so we don't initiate Hell more than one time.
+		/* Checks if the gamemode was cult
 		if(istype(ticker.mode, /datum/game_mode/cult))
 			var/datum/game_mode/cult/mode_ticker = ticker.mode
 			if (mode_ticker.objectives[mode_ticker.current_objective] == "eldergod")
-				mode_ticker.third_phase()
+				mode_ticker.third_phase()*/
 
 		if (emergency_shuttle)
 			emergency_shuttle.incall()
@@ -64,8 +65,8 @@ var/global/list/narsie_list = list()
 			if(emergency_shuttle.endtime > world.timeofday + 1800 && emergency_shuttle.location != 1 && !emergency_shuttle.departed)
 				emergency_shuttle.settimeleft(180)
 
-		if(narnar)
-			SetUniversalState(/datum/universal_state/hell)
+		//if(narnar)
+			//SetUniversalState(/datum/universal_state/hell)
 		narsie_cometh = 1
 
 	/* //For animating narsie manually, doesn't work well
@@ -312,7 +313,8 @@ var/global/list/narsie_list = list()
 
 /obj/machinery/singularity/narsie/proc/pickcultist() //Narsie rewards his cultists with being devoured first, then picks a ghost to follow. --NEO
 	var/list/cultists = list()
-	for(var/datum/mind/cult_nh_mind in ticker.mode.cult)
+	var/datum/faction/cult = find_active_faction(BLOODCULT)
+	for(var/datum/mind/cult_nh_mind in cult.members)
 		if(!cult_nh_mind.current)
 			continue
 		if(cult_nh_mind.current.stat)
@@ -475,6 +477,7 @@ var/global/mr_clean_targets = list(
 	else if (isturf(A))
 		var/turf/T = A
 		T.clean_blood()
+		T.remove_rot()
 		var/dist = get_dist(T, src)
 
 		for (var/atom/movable/AM in T.contents)

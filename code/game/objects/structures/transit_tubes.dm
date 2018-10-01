@@ -78,8 +78,8 @@ obj/structure/transit_tube_pod/ex_act(severity)
 /obj/structure/transit_tube_pod/New()
 	. = ..()
 	air_contents.adjust_multi_temp(
-		"oxygen", MOLES_O2STANDARD, T20C,
-		"nitrogen", MOLES_N2STANDARD, T20C)
+		GAS_OXYGEN, MOLES_O2STANDARD, T20C,
+		GAS_NITROGEN, MOLES_N2STANDARD, T20C)
 
 	// Give auto tubes time to align before trying to start moving
 	spawn (5)

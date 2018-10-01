@@ -164,18 +164,16 @@ Attach to transfer valve and open. BOOM.
 
 	var/datum/gas_mixture/air_contents = S.return_air()
 
-	//and the volatile stuff from the air
-	var/datum/gas/volatile_fuel/fuel = locate() in air_contents.trace_gases
-
 	//since the air is processed in fractions, we need to make sure not to have any minuscle residue or
 	//the amount of moles might get to low for some functions to catch them and thus result in wonky behaviour
-	if(air_contents.molar_density("oxygen") < 0.1 / CELL_VOLUME)
-		air_contents.oxygen = 0
-	if(air_contents.molar_density("toxins") < 0.1 / CELL_VOLUME)
-		air_contents.toxins = 0
-	if(fuel)
-		if(fuel.moles < 0.1)
-			air_contents.trace_gases.Remove(fuel)
+	if(air_contents.molar_density(GAS_OXYGEN) < 0.1 / CELL_VOLUME)
+		air_contents[GAS_OXYGEN] = 0
+	if(air_contents.molar_density(GAS_PLASMA) < 0.1 / CELL_VOLUME)
+		air_contents[GAS_PLASMA] = 0
+	if(air_contents.molar_density(GAS_VOLATILE) < 0.1 / CELL_VOLUME)
+		air_contents[GAS_VOLATILE] = 0
+
+	air_contents.update_values()
 
 	// Check if there is something to combust.
 	if (!air_contents.check_recombustability(S))
@@ -277,13 +275,9 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 
 	if((temperature > PLASMA_MINIMUM_BURN_TEMPERATURE || force_burn) && check_recombustability(T))
 		var/total_fuel = 0
-		var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
 
-		total_fuel += toxins
-
-		if(fuel)
-		//Volatile Fuel
-			total_fuel += fuel.moles
+		total_fuel += src[GAS_PLASMA]
+		total_fuel += src[GAS_VOLATILE]
 
 		var/can_use_turf=(T && istype(T))
 		if(can_use_turf)
@@ -304,31 +298,23 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 		var/starting_energy = temperature * heat_capacity()
 
 		//determine the amount of oxygen used
-		var/total_oxygen = min(oxygen, 2 * total_fuel)
+		var/total_oxygen = min(src[GAS_OXYGEN], 2 * total_fuel)
 
 		//determine the amount of fuel actually used
-		var/used_fuel_ratio = min(oxygen / 2 , total_fuel) / total_fuel
+		var/used_fuel_ratio = min(src[GAS_OXYGEN] / 2 , total_fuel) / total_fuel
 		total_fuel = total_fuel * used_fuel_ratio
 
 		var/total_reactants = total_fuel + total_oxygen
 
 		//determine the amount of reactants actually reacting
-		var/used_reactants_ratio = Clamp(total_reactants * firelevel / zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier), 0.2, total_reactants) / total_reactants
+		var/used_reactants_ratio = Clamp(firelevel / zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier), Clamp(0.2 / total_reactants, 0, 1), 1)
 
 		//remove and add gasses as calculated
-		oxygen -= min(oxygen, total_oxygen * used_reactants_ratio )
-
-		toxins -= min(toxins, (toxins * used_fuel_ratio * used_reactants_ratio ) * 3)
-		if(toxins < 0)
-			toxins = 0
-
-		carbon_dioxide += max(2 * total_fuel, 0)
-
-		if(fuel)
-			fuel.moles -= (fuel.moles * used_fuel_ratio * used_reactants_ratio) * 5 //Fuel burns 5 times as quick
-			if(fuel.moles <= 0)
-				qdel (fuel)
-				fuel = null
+		adjust_multi(
+			GAS_OXYGEN, -min(src[GAS_OXYGEN], total_oxygen * used_reactants_ratio),
+			GAS_PLASMA, -min(src[GAS_PLASMA], (src[GAS_PLASMA] * used_fuel_ratio * used_reactants_ratio) * 3),
+			GAS_CARBON, max(2 * total_fuel, 0),
+			GAS_VOLATILE, -(src[GAS_VOLATILE] * used_fuel_ratio * used_reactants_ratio) * 5) //Fuel burns 5 times as quick
 
 		if(can_use_turf)
 			if(T.getFireFuel()>0)
@@ -347,12 +333,10 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 /datum/gas_mixture/proc/check_recombustability(var/turf/T)
 	//this is a copy proc to continue a fire after its been started.
 
-	var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
-
-	if(oxygen && (toxins || fuel))
-		if(QUANTIZE(molar_density("toxins") * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
+	if(gas[GAS_OXYGEN] && (gas[GAS_PLASMA] || gas[GAS_VOLATILE]))
+		if(QUANTIZE(molar_density(GAS_PLASMA) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
 			return 1
-		if(fuel && QUANTIZE((fuel.moles / volume) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ / CELL_VOLUME) //Not bothering to make molar_density() support trace_gases since I'm removing those soon anyway
+		if(QUANTIZE(molar_density(GAS_VOLATILE) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ / CELL_VOLUME)
 			return 1
 
 	// Check if we're actually in a turf or not before trying to check object fires.
@@ -369,7 +353,7 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	for(var/atom/A in T)
 		if(!A)
 			continue
-		if(!oxygen/* || A.autoignition_temperature > temperature*/)
+		if(!gas[GAS_OXYGEN]/* || A.autoignition_temperature > temperature*/)
 			A.extinguish()
 			continue
 //		if(!A.autoignition_temperature)
@@ -391,17 +375,15 @@ datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
 		return 0
 	*/
 
-	var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
-
-	if(oxygen && (toxins || fuel))
-		if(QUANTIZE(molar_density("toxins") * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
+	if(gas[GAS_OXYGEN] && (gas[GAS_PLASMA] || gas[GAS_VOLATILE]))
+		if(QUANTIZE(molar_density(GAS_PLASMA) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
 			return 1
-		if(fuel && QUANTIZE((fuel.moles / volume) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ / CELL_VOLUME)
+		if(QUANTIZE(molar_density(GAS_VOLATILE) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ / CELL_VOLUME)
 			return 1
 
 	if(objects && istype(T))
 		for(var/atom/A in T)
-			if(!A || !oxygen || A.autoignition_temperature > temperature)
+			if(!A || !gas[GAS_OXYGEN] || A.autoignition_temperature > temperature)
 				continue
 			if(QUANTIZE(A.getFireFuel() * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= A.volatility)
 				return 1
@@ -411,13 +393,12 @@ datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
 datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 	//Calculates the firelevel based on one equation instead of having to do this multiple times in different areas.
 
-	var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
 	var/total_fuel = 0
 	var/firelevel = 0
 
 	if(check_recombustability(T))
 
-		total_fuel += toxins
+		total_fuel += src[GAS_PLASMA]
 
 		if(T && istype(T))
 			total_fuel += T.getFireFuel()
@@ -426,21 +407,20 @@ datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 				if(A)
 					total_fuel += A.getFireFuel()
 
-		if(fuel)
-			total_fuel += fuel.moles
+		total_fuel += src[GAS_VOLATILE]
 
-		var/total_combustables = (total_fuel + oxygen)
+		var/total_combustables = (total_fuel + src[GAS_OXYGEN])
 
-		if(total_fuel > 0 && oxygen > 0)
+		if(total_fuel > 0 && src[GAS_OXYGEN] > 0)
 
 			//slows down the burning when the concentration of the reactants is low
-			var/dampening_multiplier = total_combustables / (total_combustables + nitrogen + carbon_dioxide)
+			var/dampening_multiplier = total_combustables / (total_combustables + src[GAS_NITROGEN] + src[GAS_CARBON])
 			//calculates how close the mixture of the reactants is to the optimum
-			var/mix_multiplier = 1 / (1 + (5 * ((oxygen / total_combustables) ** 2))) // Thanks, Mloc
+			var/mix_multiplier = 1 / (1 + (5 * ((src[GAS_OXYGEN] / total_combustables) ** 2))) // Thanks, Mloc
 			//toss everything together
 			firelevel = zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier) * mix_multiplier * dampening_multiplier
 
-	return max( 0, firelevel)
+	return max(0, firelevel)
 
 
 /mob/living/proc/FireBurn(var/firelevel, var/last_temperature, var/pressure)
