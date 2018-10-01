@@ -44,7 +44,7 @@ var/global/list/alien_whitelist = list()
 /proc/is_alien_whitelisted(mob/M, var/species)
 	if(!config.usealienwhitelist)
 		return 1
-
+	var/datum/species/current_species = all_species[species]
 	species=lowertext(species)
 
 	if(species == "human")
@@ -61,14 +61,27 @@ var/global/list/alien_whitelist = list()
 		return 1
 
 	// CKey is in whitelist
-	if(M.ckey in alien_whitelist[species] || M.ckey in alien_whitelist["all"])
+	if((M.ckey in alien_whitelist[species] || M.ckey in alien_whitelist["all"]) || check_species_conditional_whitelist(current_species))
 		return 1
 
 	// Occupation is in whitelist (for lizard janitors :V)
 	if("job=[lowertext(M.mind.assigned_role)]" in alien_whitelist[species]\
 	|| "job=[lowertext(M.mind.assigned_role)]" in alien_whitelist["all"])
 		return 1
+	return 0
 
+/proc/check_species_conditional_whitelist(var/datum/species/current_species)
+	if(current_species.conditional_whitelist[POPULATIONGREATER])
+		if(player_list.len >= current_species.conditional_whitelist[POPULATIONGREATER])
+			return 1
+	if(current_species.conditional_whitelist[POPULATIONLESSER])
+		if(player_list.len <= current_species.conditional_whitelist[POPULATIONLESSER])
+			return 1
+	if(current_species.conditional_whitelist[MONTH])
+		var/MM = text2num(time2text(world.timeofday, "MM"))
+		var/required_month = current_species.conditional_whitelist[MONTH]
+		if(MM == required_month)
+			return 1
 	return 0
 
 /proc/has_whitelist_entries(var/species)
