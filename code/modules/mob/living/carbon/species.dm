@@ -143,12 +143,6 @@ var/global/list/whitelisted_species = list("Human")
 	var/list/inventory_offsets
 
 	var/species_intro //What intro you're given when you become this species.
-	/** Should this species be locked behind a certain condition?
-		Example:
-		conditional_whitelist = list("populationGreater" = 35) would lock this species behind the server population being greater than or equal to 35 players
-		conditional_whitelist = list("month" = 10) would lock this species behind the month of october
-	**/
-	var/list/conditional_whitelist = list()
 
 
 /datum/species/New()
@@ -293,6 +287,9 @@ var/global/list/whitelisted_species = list("Human")
 		)
 	return offsets
 
+/datum/species/proc/conditional_whitelist()
+	return 0
+
 /datum/species/human
 	name = "Human"
 	known_languages = list(LANGUAGE_HUMAN)
@@ -348,11 +345,10 @@ var/global/list/whitelisted_species = list("Human")
 	flesh_color = "#34AF10"
 
 
-	conditional_whitelist = list(POPULATIONGREATER = ARBITRARILY_PLANCK_NUMBER) //Good luck, liznerds
-
 /datum/species/unathi/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.
 	speech.message = replacetext(speech.message, "s-ss-s", "ss-ss") //asshole shows up as ass-sshole
+
 
 /datum/species/skellington // /vg/
 	name = "Skellington"
@@ -380,7 +376,10 @@ var/global/list/whitelisted_species = list("Human")
 					You can not eat normally, as your necrotic state only permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe.<br>\
 					You are also incredibly weak to brute damage and are rather slow, but you don't need to breathe, so that's going for you."
 
-	conditional_whitelist = list(MONTH = 10)
+/datum/species/skellington/conditional_whitelist()
+	var/MM = text2num(time2text(world.timeofday, "MM"))
+	return MM == 10 //October
+
 
 /datum/species/skellington/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if (prob(25))

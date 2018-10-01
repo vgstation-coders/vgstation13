@@ -20,9 +20,3 @@
 #define COLD_GAS_DAMAGE_LEVEL_3 3 //Amount of damage applied when the current breath's temperature passes the 120K point
 
 #define BASE_CARBON_PAIN_RESIST 80 //Amount of arbitrary "pain" that a mob can take before they start going into shock (see: update_pain_level())
-
-//For conditional species whitelists
-
-#define POPULATIONGREATER "population greater than"
-#define POPULATIONLESSER "population less than"
-#define MONTH "month"
