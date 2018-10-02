@@ -142,6 +142,11 @@
 	desc = "Can hold various medical equipment."
 	icon_state = "medicalbelt"
 	item_state = "medical"
+	storage_slots = 21
+	max_combined_w_class = 21
+	allow_quick_gather = TRUE
+	allow_quick_empty = TRUE
+	use_to_pickup = TRUE
 	can_only_hold = list(
 		"/obj/item/device/healthanalyzer",
 		"/obj/item/weapon/dnainjector",
@@ -162,7 +167,9 @@
 		"/obj/item/device/mass_spectrometer",
 		"/obj/item/device/gps/paramedic",
 		"/obj/item/device/antibody_scanner",
-		"/obj/item/weapon/switchtool/surgery"
+		"/obj/item/weapon/switchtool/surgery",
+		"/obj/item/weapon/grenade/chem_grenade",
+		"/obj/item/weapon/electrolyzer"
 	)
 
 /obj/item/weapon/storage/belt/slim
