@@ -156,22 +156,20 @@
 
 /////////////////////////////////////////SECOND RUNE
 
-/obj/effect/rune_legacy/proc/tomesummon()
-	if(istype(src,/obj/effect/rune_legacy))
-		usr.say("N[pick("'","`")]ath reth sh'yro eth d'raggathnor!")
-	else
-		usr.whisper("N[pick("'","`")]ath reth sh'yro eth d'raggathnor!")
-	usr.visible_message("<span class='warning'>Rune disappears with a flash of red light, and in its place now a book lies.</span>", \
-	"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that now instead of the rune there's a book.</span>", \
-	"<span class='warning'>You hear a pop and smell ozone.</span>")
-	if(istype(src,/obj/effect/rune_legacy))
+/obj/effect/rune_legacy/proc/tomesummon(var/mob/user, var/whisper = FALSE)
+	if(!whisper)
+		user.say("N[pick("'","`")]ath reth sh'yro eth d'raggathnor!")
 		new /obj/item/weapon/tome_legacy(src.loc)
 		src.invocation("tome_spawn")
 	else
-		new /obj/item/weapon/tome_legacy(usr.loc)
+		user.whisper("N[pick("'","`")]ath reth sh'yro eth d'raggathnor!")
+		new /obj/item/weapon/tome_legacy(user.loc)
+
+	usr.visible_message("<span class='warning'>Rune disappears with a flash of red light, and in its place now a book lies.</span>", \
+	"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that now instead of the rune there's a book.</span>", \
+	"<span class='warning'>You hear a pop and smell ozone.</span>")
 	qdel(src)
 	stat_collection.cult_tomes_created++
-	return
 
 /////////////////////////////////////////THIRD RUNE
 
@@ -1351,8 +1349,7 @@
 
 /////////////////////////////////////////TWENTY-FIFTH RUNE
 
-/obj/effect/rune_legacy/proc/armor()
-	var/mob/living/user = usr
+/obj/effect/rune_legacy/proc/armor(var/mob/living/user = usr)
 	if(!istype(src,/obj/effect/rune_legacy))
 		usr.whisper("Sa tatha najin")
 		if(ishuman(user))
@@ -1372,7 +1369,7 @@
 			user.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/cultpack(user), slot_back)
 			//the above update their overlay icons cache but do not call update_icons()
 			//the below calls update_icons() at the end, which will update overlay icons by using the (now updated) cache
-			user.put_in_hands(new /obj/item/weapon/melee/cultblade(user))	//put in hands or on floor
+			user.put_in_hands(new /obj/item/weapon/melee/legacy_cultblade(user))	//put in hands or on floor
 		else if(ismonkey(user))
 			var/mob/living/carbon/monkey/K = user
 			K.visible_message("<span class='warning'> The rune disappears with a flash of red light, [K] now looks like the cutest of all followers of Nar-Sie...</span>", \
@@ -1380,7 +1377,7 @@
 			K.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes, slot_w_uniform)
 			K.equip_to_slot_or_drop(new /obj/item/clothing/head/legacy_culthood/alt, slot_head)
 			K.equip_to_slot_or_drop(new /obj/item/weapon/storage/backpack/cultpack, slot_back)
-			K.put_in_hands(new /obj/item/weapon/melee/cultblade(K))
+			K.put_in_hands(new /obj/item/weapon/melee/legacy_cultblade(K))
 		return
 	else
 		usr.say("Sa tatha najin")
@@ -1391,17 +1388,17 @@
 					M.visible_message("<span class='warning'> In flash of red light, and a set of armor appears on [M]...</span>", \
 					"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor.</span>")
 					if(isplasmaman(P))
-						P.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(P), slot_head)
-						P.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/cultist(P), slot_wear_suit)
+						P.equip_to_slot_or_drop(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(P), slot_head)
+						P.equip_to_slot_or_drop(new /obj/item/clothing/suit/space/plasmaman/cultist(P), slot_wear_suit)
 					else if((istype(my_cult) && my_cult.cult_state > CULT_SUMMON) || (universe.name == "Hell Rising"))
-						M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/cult(M), slot_head)
-						M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/cult(M), slot_wear_suit)
+						M.equip_to_slot_or_drop(new /obj/item/clothing/head/helmet/space/cult(M), slot_head)
+						M.equip_to_slot_or_drop(new /obj/item/clothing/suit/space/cult(M), slot_wear_suit)
 					else
-						M.equip_to_slot_or_del(new /obj/item/clothing/head/legacy_culthood/alt(M), slot_head)
-						M.equip_to_slot_or_del(new /obj/item/clothing/suit/legacy_cultrobes/alt(M), slot_wear_suit)
-					M.equip_to_slot_or_del(new /obj/item/clothing/shoes/cult_legacy(M), slot_shoes)
-					M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/cultpack(M), slot_back)
-					M.put_in_hands(new /obj/item/weapon/melee/cultblade(M))
+						M.equip_to_slot_or_drop(new /obj/item/clothing/head/legacy_culthood/alt(M), slot_head)
+						M.equip_to_slot_or_drop(new /obj/item/clothing/suit/legacy_cultrobes/alt(M), slot_wear_suit)
+					M.equip_to_slot_or_drop(new /obj/item/clothing/shoes/cult_legacy(M), slot_shoes)
+					M.equip_to_slot_or_drop(new /obj/item/weapon/storage/backpack/cultpack(M), slot_back)
+					M.put_in_hands(new /obj/item/weapon/melee/legacy_cultblade(M))
 				else if(ismonkey(M))
 					var/mob/living/carbon/monkey/K = M
 					K.visible_message("<span class='warning'> The rune disappears with a flash of red light, [K] now looks like the cutest of all followers of Nar-Sie...</span>", \
@@ -1409,7 +1406,7 @@
 					K.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes, slot_w_uniform)
 					K.equip_to_slot_or_drop(new /obj/item/clothing/head/legacy_culthood/alt, slot_head)
 					K.equip_to_slot_or_drop(new /obj/item/weapon/storage/backpack/cultpack, slot_back)
-					K.put_in_hands(new /obj/item/weapon/melee/cultblade(K))
+					K.put_in_hands(new /obj/item/weapon/melee/legacy_cultblade(K))
 				else if(isconstruct(M))
 					var/construct_class
 					if(universe.name == "Hell Rising")
@@ -1481,7 +1478,6 @@
 				to_chat(usr, "<span class='warning'>Only the followers of Nar-Sie may be given their armor.</span>")
 				to_chat(M, "<span class='warning'>Only the followers of Nar-Sie may be given their armor.</span>")
 	to_chat(user, "<span class='note'>You have to be standing on top of the rune.</span>")
-	return
 
 // Animating.
 var/list/word_to_uristrune_table = null
