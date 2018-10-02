@@ -823,7 +823,10 @@ var/list/arcane_tomes = list()
 	var/turf/T = get_turf(src)
 	playsound(T, 'sound/effects/forge_over.ogg', 100, 1)
 	if (!absorbed && !locate(/obj/effect/decal/cleanable/blood/splatter) in T)
-		new /obj/effect/decal/cleanable/blood/splatter(T)//splash
+		var/obj/effect/decal/cleanable/blood/splatter/S = new (T)//splash
+		if (color)
+			S.basecolor = color
+			S.update_icon()
 	..()
 
 /obj/item/weapon/melee/blood_dagger/dropped(var/mob/user)
@@ -855,8 +858,10 @@ var/list/arcane_tomes = list()
 		playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 1)
 		qdel(src)
 
-/obj/item/weapon/melee/blood_dagger/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
+/obj/item/weapon/melee/blood_dagger/pre_throw()
 	absorbed = 1
+
+/obj/item/weapon/melee/blood_dagger/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
 	var/turf/starting = get_turf(src)
 	var/turf/target = get_turf(targ)
 	var/obj/item/projectile/blooddagger/BD = new (starting)
@@ -868,6 +873,8 @@ var/list/arcane_tomes = list()
 	BD.xo = target.x - starting.x
 	BD.stacks = stacks
 	BD.damage = 5 + stacks * 5
+	BD.icon_state = icon_state
+	BD.color = color
 	BD.OnFired()
 	BD.process()
 	qdel(src)
@@ -878,12 +885,13 @@ var/list/arcane_tomes = list()
 		var/mob/living/M = attacked
 		if (iscarbon(M))
 			var/mob/living/carbon/C = M
-			if (C.take_blood(null,5))
+			var/datum/reagent/B = C.take_blood(null,5)
+			if (B)
 				if (stacks < 5)
 					stacks++
 					to_chat(user, "<span class='warning'>The dagger steals a bit of their blood.</span>")
 				else if (!locate(/obj/effect/decal/cleanable/blood/splatter) in get_turf(C))
-					new /obj/effect/decal/cleanable/blood/splatter(get_turf(C))
+					blood_splatter(C,B,1)//no room in the dagger? let's splatter their stolen blood on the floor.
 
 ///////////////////////////////////////SOULSTONE////////////////////////////////////////////////
 /obj/item/device/soulstone/gem

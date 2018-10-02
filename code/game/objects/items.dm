@@ -1291,3 +1291,6 @@ var/global/list/image/blood_overlays = list()
 		usr.u_equip(src, TRUE)
 		usr.put_in_hand(OI.hand_index, src)
 		add_fingerprint(usr)
+
+/obj/item/proc/pre_throw()
+	return

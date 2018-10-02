@@ -237,7 +237,7 @@
 /obj/item/projectile/blooddagger
 	name = "blood dagger"
 	icon = 'icons/obj/projectiles_experimental.dmi'
-	icon_state = "blooddagger"
+	icon_state = "blood_dagger"
 	damage = 5
 	flag = "energy"
 	custom_impact = 1
@@ -249,7 +249,10 @@
 	var/turf/T = get_turf(src)
 	playsound(T, 'sound/effects/forge_over.ogg', 100, 1)
 	if (!absorbed && !locate(/obj/effect/decal/cleanable/blood/splatter) in T)
-		new /obj/effect/decal/cleanable/blood/splatter(T)//splash
+		var/obj/effect/decal/cleanable/blood/splatter/S = new (T)//splash
+		if (color)
+			S.basecolor = color
+			S.update_icon()
 	..()
 
 /obj/item/projectile/blooddagger/to_bump(var/atom/A)

@@ -1663,6 +1663,8 @@ Thanks.
 		to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
 		return FAILED_THROW
 
+	I.pre_throw()
+
 	remove_from_mob(item)
 
 	//actually throw it!

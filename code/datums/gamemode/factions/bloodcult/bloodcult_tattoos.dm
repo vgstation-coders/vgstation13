@@ -10,6 +10,15 @@
 /datum/cult_tattoo/proc/getTattoo(var/mob/M)
 	bearer = M
 
+/mob/proc/checkTattoo(var/)
+	var/power = 0
+	for (var/slot in valid_cultpower_slots)
+		var/obj/item/I = get_item_by_slot(slot)
+		if (istype(I))
+			power += I.get_cult_power()
+
+	return power
+
 ///////////////////////////
 //                       //
 //        TIER 1         //
@@ -39,7 +48,6 @@ var/list/blood_communion = list()
 	desc = "Materialize a sharp dagger in your hand for a small cost in blood. Use to retrieve."
 	icon_state = "dagger"
 	tier = 1
-	blood_cost = 5
 
 /datum/cult_tattoo/dagger/getTattoo(var/mob/M)
 	..()

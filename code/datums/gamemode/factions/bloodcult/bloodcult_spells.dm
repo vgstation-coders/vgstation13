@@ -205,12 +205,12 @@
 //SPELL III
 /spell/cult/blood_dagger
 	name = "Blood Dagger"
-	desc = "Solidify some blood into a sharp weapon. Slash at your enemies to steal their blood. Use the dagger to re-absorb the stolen blood."
+	desc = "(5 BLOOD) Solidify some blood into a sharp weapon. Slash at your enemies to steal their blood. Use the dagger to re-absorb the stolen blood."
 	hud_state = "cult_blooddagger"
 
 	invocation_type = SpI_NONE
 	charge_type = Sp_RECHARGE
-	charge_max = 0
+	charge_max = 10//don't want people going full dio over knocked down bleeding players, stealing and absorbing their blood.
 	range = 0
 	spell_flags = null
 	insufficient_holder_msg = ""
@@ -224,9 +224,13 @@
 /spell/cult/blood_dagger/cast(var/list/targets, var/mob/living/carbon/user)
 	..()
 	var/mob/living/carbon/human/H = user
-	var/data = use_available_blood(user, 5)
+	var/list/data = use_available_blood(user, 5)
 	if (data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)
 		return 0
+	var/dagger_color = DEFAULT_BLOOD
+	var/datum/reagent/blood/source = data["blood"]
+	if (source.data["blood_colour"])
+		dagger_color = source.data["blood_colour"]
 	var/good_hand
 	if(H.can_use_hand(H.active_hand))
 		good_hand = H.active_hand
@@ -237,6 +241,10 @@
 	if(good_hand)
 		H.drop_item(H.held_items[good_hand], force_drop = 1)
 		var/obj/item/weapon/melee/blood_dagger/BD = new (H)
+		if (dagger_color != DEFAULT_BLOOD)
+			BD.icon_state += "-color"
+			BD.item_state += "-color"
+			BD.color = dagger_color
 		H.put_in_hand(good_hand, BD)
 		H.visible_message("<span class='warning'>\The [user] squeezes the blood in their hand, and it takes the shape of a dagger!</span>",
 			"<span class='warning'>You squeeze the blood in your hand, and it takes the shape of a dagger.</span>")
