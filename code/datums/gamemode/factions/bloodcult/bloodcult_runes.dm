@@ -272,9 +272,7 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		to_chat(user, "<span class='notice'>You disrupt the vile magic with the deadening field of \the [I]!</span>")
 		qdel(src)
 		return
-	if(istype(I, /obj/item/weapon/tome))
-		trigger(user)
-	if(istype(I, /obj/item/weapon/melee/cultblade))
+	if(istype(I, /obj/item/weapon/tome) || istype(I, /obj/item/weapon/melee/cultblade) || istype(I, /obj/item/weapon/melee/soulblade))
 		trigger(user)
 	if(istype(I, /obj/item/weapon/talisman))
 		var/obj/item/weapon/talisman/T = I

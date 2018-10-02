@@ -440,6 +440,7 @@
 	var/timeleft = 0
 	var/timetotal = 0
 	var/obj/effect/cult_ritual/forge/forging = null
+	var/image/progbar = null//progress bar
 
 
 /obj/structure/cult/forge/New()
@@ -507,23 +508,30 @@
 		if (forging)
 			if (forger)
 				if (!Adjacent(forger))
+					if (forger.client)
+						forger.client.images -= progbar
 					forger = null
 					return
 				else
 					timeleft--
+					update_progbar()
 					if (timeleft<=0)
-						playsound(loc, 'sound/effects/forge_over.ogg', 50, 0, -3)
+						playsound(L, 'sound/effects/forge_over.ogg', 50, 0, -3)
+						if (forger.client)
+							forger.client.images -= progbar
 						qdel(forging)
 						forging = null
-						forger = null
-						var/obj/item/I = new template(loc)
+						var/obj/item/I = new template(L)
 						if (istype(I))
 							I.plane = EFFECTS_PLANE
 							I.layer = PROJECTILE_LAYER
 							I.pixel_y = 12
+						else
+							I.forceMove(get_turf(forger))
+						forger = null
 						template = null
 					else
-						playsound(loc, 'sound/effects/forge.ogg', 50, 0, -4)
+						playsound(L, 'sound/effects/forge.ogg', 50, 0, -4)
 						forging.overlays.len = 0
 						var/image/I = image('icons/obj/cult_64x64.dmi',"[forging.icon_state]-mask")
 						I.plane = LIGHTING_PLANE
@@ -587,6 +595,19 @@
 		return 1
 	..()
 
+/obj/structure/cult/forge/proc/update_progbar()
+	if (!progbar)
+		progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = src, "icon_state" = "prog_bar_0")
+		progbar.pixel_z = WORLD_ICON_SIZE
+		progbar.plane = HUD_PLANE
+		progbar.pixel_x = 16 * PIXEL_MULTIPLIER
+		progbar.pixel_y = 16 * PIXEL_MULTIPLIER
+		progbar.appearance_flags |= RESET_ALPHA
+		progbar.layer = HUD_ABOVE_ITEM_LAYER
+		progbar.appearance_flags = RESET_COLOR
+	progbar.icon_state = "prog_bar_[round((100 - min(1, timeleft / timetotal) * 100), 10)]"
+	return
+
 /obj/structure/cult/forge/cultist_act(var/mob/user,var/menu="default")
 	.=..()
 	if (!.)
@@ -594,13 +615,23 @@
 
 	if (template)
 		if (forger)
-			to_chat(user, "\The [forger] is currently working at this forge already.")
+			if (forger == user)
+				to_chat(user, "You are already working at this forge.")
+			else
+				to_chat(user, "\The [forger] is currently working at this forge already.")
 		else
 			to_chat(user, "You resume working at the forge.")
 			forger = user
+			if (forger.client)
+				forger.client.images |= progbar
 		return
 
-	var/optionlist = list("blade","shell","helmet","armour")
+	var/optionlist = list(
+		"Forge Blade",
+		"Forge Construct Shell",
+		"Forge Helmet",
+		"Forge Armor"
+		)
 	for(var/option in optionlist)
 		optionlist[option] = image(icon = 'icons/obj/cult_radial.dmi', icon_state = "radial_[option]")
 
@@ -609,21 +640,27 @@
 		return
 	var/forge_icon = ""
 	switch (task)
-		if ("blade")
+		if ("Forge Blade")
 			template = /obj/item/weapon/melee/cultblade
-			timeleft = 20
+			timeleft = 10
 			forge_icon = "forge_blade"
-		if ("armour")
+		if ("Forge Armor")
 			template = /obj/item/clothing/suit/space/cult
-			timeleft = 45
-		if ("helmet")
+			timeleft = 23
+			forge_icon = "forge_armor"
+		if ("Forge Helmet")
 			template = /obj/item/clothing/head/helmet/space/cult
-			timeleft = 15
-		if ("shell")
+			timeleft = 8
+			forge_icon = "forge_helmet"
+		if ("Forge Construct Shell")
 			template = /obj/structure/constructshell/cult
-			timeleft = 50
+			timeleft = 25
+			forge_icon = "forge_shell"
 	timetotal = timeleft
 	forger = user
+	update_progbar()
+	if (forger.client)
+		forger.client.images |= progbar
 	forging = new (loc,forge_icon)
 
 /obj/effect/cult_ritual/forge

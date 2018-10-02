@@ -389,6 +389,10 @@ var/list/impact_master = list()
 	target_angle = round(Get_Angle(starting,target))
 
 	if(linear_movement)
+		var/matrix/projectile_matrix = turn(matrix(),target_angle+45)
+		transform = projectile_matrix
+		icon_state = "[initial(icon_state)]_pixel"
+		/*
 		//If the icon has not been added yet
 		if( !("[icon_state]_angle[target_angle]" in bullet_master) )
 			var/icon/I = new(icon,"[icon_state]_pixel") //Generate it.
@@ -396,7 +400,7 @@ var/list/impact_master = list()
 				I.Turn(target_angle+45)
 			bullet_master["[icon_state]_angle[target_angle]"] = I //And cache it!
 		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
-
+		*/
 	return 1
 
 
@@ -610,12 +614,16 @@ var/list/impact_master = list()
 	target_angle = round(newangle)
 
 	if(linear_movement)
+		var/matrix/projectile_matrix = turn(matrix(),target_angle+45)
+		transform = projectile_matrix
+		/*
 		if( !("[icon_state][target_angle]" in bullet_master) )
 			var/icon/I = new(initial(icon),"[icon_state]_pixel")
 			if(!lock_angle)
 				I.Turn(target_angle+45)
 			bullet_master["[icon_state]_angle[target_angle]"] = I
 		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
+		*/
 
 /obj/item/projectile/test //Used to see if you can hit them.
 	invisibility = 101 //Nope!  Can't see me!

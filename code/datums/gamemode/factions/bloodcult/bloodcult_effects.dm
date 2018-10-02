@@ -155,7 +155,6 @@
 		else
 			target_y = TRANSITIONEDGE + rand(16,20)
 
-	to_chat(world,"target at ([target.x],[target.y],[target.z]), (dx/dy)=([dx]/[dy]) so we're tp'ing at ([target_x],[target_y],[target.z])")
 	var/turf/T = locate(target_x,target_y,target.z)
 	starting = T
 	forceMove(T)

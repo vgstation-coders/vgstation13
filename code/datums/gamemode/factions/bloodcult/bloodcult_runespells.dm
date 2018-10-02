@@ -382,10 +382,9 @@
 	qdel(src)
 
 /datum/rune_spell/communication/Destroy()
-	if (destroying_self)
-		return
 	destroying_self = 1
-	qdel(comms)
+	if (comms)
+		qdel(comms)
 	comms = null
 	..()
 
@@ -1459,10 +1458,9 @@ var/list/blind_victims = list()
 	var/talisman_duration = 80 //tenths of a second
 
 /datum/rune_spell/seer/Destroy()
-	if (destroying_self)
-		return
 	destroying_self = 1
-	qdel(seer_ritual)
+	if (seer_ritual)
+		qdel(seer_ritual)
 	seer_ritual = null
 	..()
 
@@ -1520,13 +1518,13 @@ var/list/blind_victims = list()
 		caster.apply_vision_overrides()
 		to_chat(caster, "<span class='notice'>You can no longer discern through the veil.</span>")
 	caster = null
+	if (source)
+		source.abort()
 	source = null
 	..()
 
 /obj/effect/cult_ritual/seer/HasProximity(var/atom/movable/AM)
 	if (!caster || caster.loc != loc)
-		if (source)
-			source.abort(RITUALABORT_GONE)
 		qdel(src)
 
 
@@ -2087,9 +2085,10 @@ var/list/bloodcult_exitportals = list()
 	to_chat(add_cultist, "<span class='notice'>You may teleport to this rune by using a Path Entrance, or a talisman attuned to it.</span>")
 
 /datum/rune_spell/portalexit/midcast_talisman(var/mob/add_cultist)
+	var/turf/T = get_turf(add_cultist)
 	add_cultist.whisper(invocation)
-	anim(target = get_turf(add_cultist), a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_teleport")
-	new /obj/effect/bloodcult_jaunt (get_turf(add_cultist), add_cultist, get_turf(spell_holder))
+	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_teleport")
+	new /obj/effect/bloodcult_jaunt (T, add_cultist, get_turf(spell_holder))
 
 /datum/rune_spell/portalexit/cast_talisman()
 	var/obj/item/weapon/talisman/T = spell_holder
@@ -2260,6 +2259,10 @@ var/list/bloodcult_exitportals = list()
 		to_chat(activator, "<span class='warning'>You have the ingredients, now there needs to be a ghost made visible standing above the rune.</span>")
 		qdel(src)
 		return
+	if (ghost.mind && ghost.mind.current && ghost.mind.current.ajourn && (ghost.mind.current.stat != DEAD))
+		to_chat(activator, "<span class='warning'>This ghost still has a breathing body where to return to.</span>")
+		qdel(src)
+		return
 	if (ghost.invisibility != 0)
 		to_chat(activator, "<span class='warning'>You have the ingredients, but the ghost needs to be drawn onto our plane first. You already have the tools to do so.</span>")
 		qdel(src)
@@ -2357,6 +2360,16 @@ var/list/bloodcult_exitportals = list()
 		vessel.real_name = ghost.real_name
 		vessel.ckey = ghost.ckey
 		qdel(husk)
+
+		//Let's not forget to make them cultists as well
+		var/datum/role/cultist/newCultist = new
+		newCultist.AssignToRole(vessel.mind,1)
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (!cult)
+			cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+		cult.HandleRecruitedRole(newCultist)
+		newCultist.OnPostSetup()
+		newCultist.Greet(GREET_RESURRECT)
 	else
 		for(var/mob/living/L in contributors)
 			to_chat(activator, "<span class='warning'>Something went wrong with the ritual, the soul of the ghost appears to have vanished.</span>")

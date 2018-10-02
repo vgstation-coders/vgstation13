@@ -147,7 +147,7 @@
 							new_target = M
 					if(!new_target)
 						if (!silent)
-							to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like this target's soul went far, far away.</span>")
+							to_chat(user, "<span class='warning'>\The [src] isn't reacting, looks like this target's soul went far, far away.</span>")
 						return
 					else if(!istype(new_target,/mob/dead/observer))
 						if (!silent)
@@ -199,12 +199,12 @@
 	if(istype(target, /obj/item/organ/external/head))
 		var/obj/item/organ/external/head/humanHead = target
 		if(!humanHead.organ_data)
-			to_chat(user, "<span class='rose'>The soul stone isn't reacting, looks like their brain was separated from their head.</span>")
+			to_chat(user, "<span class='rose'>\The [src] isn't reacting, looks like their brain was separated from their head.</span>")
 			return
 		var/mob/living/carbon/brain/humanBrainMob = humanHead.brainmob
 		if(!humanBrainMob.client)
 			if(!humanBrainMob.mind)
-				to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like this target doesn't have much of a soul.</span>")
+				to_chat(user, "<span class='warning'>\The [src] isn't reacting, looks like this target doesn't have much of a soul.</span>")
 				return
 			else
 				var/mob/new_target = null
@@ -212,18 +212,18 @@
 					if(M.key == humanBrainMob.mind.key)
 						new_target = M
 				if(!new_target)
-					to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like this target's soul went far, far away.</span>")
+					to_chat(user, "<span class='warning'>\The [src] isn't reacting, looks like this target's soul went far, far away.</span>")
 					return
 				else if(!istype(new_target,/mob/dead/observer))
-					to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like this target's soul already reincarnated.</span>")
+					to_chat(user, "<span class='warning'>\The [src] isn't reacting, looks like this target's soul already reincarnated.</span>")
 					return
 				else
-					to_chat(new_target, "<span class='danger'>You feel your soul getting sucked into the soulstone.</span>")
-					to_chat(user, "<span class='rose'>The soul stone reacts to the corpse and starts glowing.</span>")
+					to_chat(new_target, "<span class='danger'>You feel your soul getting sucked into \the [src].</span>")
+					to_chat(user, "<span class='rose'>\The [src] reacts to the corpse and starts glowing.</span>")
 					capture_soul_process(user,new_target.client,humanHead,humanHead.origin_body)
 		else
-			to_chat(humanBrainMob, "<span class='danger'>You feel your soul getting sucked into the soul stone.</span>")
-			to_chat(user, "<span class='rose'>The soul stone reacts to the corpse and starts glowing.</span>")
+			to_chat(humanBrainMob, "<span class='danger'>You feel your soul getting sucked into \the [src].</span>")
+			to_chat(user, "<span class='rose'>\The [src] reacts to the corpse and starts glowing.</span>")
 			capture_soul_process(user,humanBrainMob.client,humanHead,humanHead.origin_body)
 
 
@@ -243,7 +243,7 @@
 	else if(istype(add_target,/mob/living/carbon/human))
 		body = add_target
 
-	var/true_name = "Unknown"
+	var/true_name = "a nobody"
 
 	if(body)
 		true_name = body.real_name
@@ -287,12 +287,23 @@
 	//Scary sound
 	playsound(get_turf(src), get_sfx("soulstone"), 50,1)
 
+	//Are we capturing a cult-banned player as a cultist? Sucks for them!
+	if (iscultist(user) && jobban_isbanned(body, ROLE_CULTIST))
+		to_chat(body, "<span class='danger'>A cultist tried to capture your soul, but due to past behaviour you have been banned from the role. Your body will instead dust away.</span>")
+		to_chat(user, "<span class='notice'>Their soul wasn't fit for our cult, and wasn't accepted by \the [src].</span>")
+
+		//Cleaning up the corpse
+		qdel(target)
+		if(add_target)
+			qdel(add_target)
+		return
+
 	//Creating a shade inside the stone and putting the victim in control
 	var/mob/living/simple_animal/shade/shadeMob = new(src)//put shade in stone
 	shadeMob.status_flags |= GODMODE //So they won't die inside the stone somehow
 	shadeMob.canmove = 0//Can't move out of the soul stone
 	shadeMob.name = "Shade of [true_name]"
-	shadeMob.real_name = "Shade of [true_name]"
+	shadeMob.real_name = "[true_name]"
 	shadeMob.ckey = targetClient.ckey
 	shadeMob.cancel_camera()
 
@@ -301,13 +312,24 @@
 		icon_state = "soulstone2"
 		item_state = "shard-soulstone2"
 		name = "Soul Stone: [true_name]"
-	else
+	else if (istype(src, /obj/item/weapon/melee/soulblade))
 		shadeMob.give_blade_powers()
 		dir = NORTH
 		update_icon()
 	user.update_inv_hands()
 	to_chat(shadeMob, "Your soul has been captured! You are now bound to [user.name]'s will, help them suceed in their goals at all costs.")
 	to_chat(user, "<span class='notice'>[true_name]'s soul has been ripped from their body and stored within the soul stone.</span>")
+
+	//Is our user a cultist? Then you're a cultist too now!
+	if (iscultist(user))
+		var/datum/role/cultist/newCultist = new
+		newCultist.AssignToRole(user.mind,1)
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (!cult)
+			cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+		cult.HandleRecruitedRole(newCultist)
+		newCultist.OnPostSetup()
+		newCultist.Greet(GREET_SOULSTONE)
 
 	//Pretty particles
 	var/turf/T1 = get_turf(target)
@@ -345,23 +367,37 @@
 
 		if("SHADE")
 			var/mob/living/simple_animal/shade/T = target
-			var/obj/item/device/soulstone/C = src
 			if (T.stat == DEAD)
 				to_chat(U, "<span class='danger'>Capture failed!: </span>The shade has already been banished!")
 			else
-				if(C.contents.len)
-					to_chat(U, "<span class='danger'>Capture failed!: </span>The soul stone is full! Use or free an existing soul to make room.")
+				if(src.contents.len)
+					to_chat(U, "<span class='danger'>Capture failed!: </span>\The [src] is full! Use or free an existing soul to make room.")
 				else
-					T.forceMove(C) //put shade in stone
+					T.forceMove(src) //put shade in stone
 					T.status_flags |= GODMODE
 					T.canmove = 0
 					T.health = T.maxHealth
-					C.icon_state = "soulstone2"
-					C.item_state = "shard-soulstone2"
+					if (istype(src, /obj/item/device/soulstone))
+						icon_state = "soulstone2"
+						item_state = "shard-soulstone2"
+						name = "Soul Stone: [T.real_name]"
+					else if (istype(src, /obj/item/weapon/melee/soulblade))
+						T.give_blade_powers()
+						dir = NORTH
+						update_icon()
 					U.update_inv_hands()
-					C.name = "Soul Stone: [T.real_name]"
 					to_chat(T, "Your soul has been recaptured by the soul stone, its arcane energies are reknitting your ethereal form")
 					to_chat(U, "<span class='notice'><b>Capture successful!</b>: </span>[T.name]'s has been recaptured and stored within the soul stone.")
+
+					if (iscultist(U) && !iscultist(T))
+						var/datum/role/cultist/newCultist = new
+						newCultist.AssignToRole(U.mind,1)
+						var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+						if (!cult)
+							cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+						cult.HandleRecruitedRole(newCultist)
+						newCultist.OnPostSetup()
+						newCultist.Greet(GREET_SOULSTONE)
 		if("CONSTRUCT")
 			var/obj/structure/constructshell/T = target
 			var/obj/item/device/soulstone/C = src

@@ -62,6 +62,9 @@
 
 #define GREET_CONVERTED		"converted"
 #define GREET_PAMPHLET		"pamphlet"
+#define GREET_SOULSTONE		"soulstone"
+#define GREET_RESURRECT		"resurrect"
+
 
 //////////////////////////////////CULT STUFF////////////////////////////////////
 #define CULT_MENDED		-1

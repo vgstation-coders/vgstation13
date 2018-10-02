@@ -133,7 +133,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged, mymob.fire)
+	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged)
 
 /datum/hud/proc/borer_hud()
 
