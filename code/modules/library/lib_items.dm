@@ -254,7 +254,7 @@
 		..()
 
 /obj/item/weapon/book/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(!carved && W.is_sharp())
+	if(!carved && W.is_sharp() && W.sharpness_flags & SHARP_BLADE)
 		to_chat(user, "<span class='notice'>You begin to carve out [title].</span>")
 		if(do_after(user, src, 30 / W.sharpness))
 			to_chat(user, "<span class='notice'>You carve out the pages from [title]! You didn't want to read it anyway.</span>")
