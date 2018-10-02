@@ -66,27 +66,27 @@
 /obj/item/weapon/paper/talisman/attack_self(mob/living/user as mob)
 	if(islegacycultist(user))
 		var/delete = 1
+		var/obj/effect/rune_legacy/R = new
+		R.my_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
 		switch(imbue)
 			if("newtome")
-				call(/obj/effect/rune_legacy/proc/tomesummon)()
+				R.tomesummon(user, TRUE) // We whisper this one
 			if("armor") //Fuck off with your shit /tg/. This isn't Edgy Rev+
-				call(/obj/effect/rune_legacy/proc/armor)()
+				R.armor(user)
 			if("emp")
-				call(/obj/effect/rune_legacy/proc/emp)(usr.loc,3)
+				R.emp(user.loc, 3)
 			if("conceal")
-				call(/obj/effect/rune_legacy/proc/obscure)(2)
+				R.obscure(2)
 			if("revealrunes")
-				call(/obj/effect/rune_legacy/proc/revealrunes)(src)
+				R.revealrunes(src)
 			if("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "balaq", "mgar", "karazet", "geeri")
 				var/turf/T1 = get_turf(user)
-				call(/obj/effect/rune_legacy/proc/teleport)(imbue)
+				R.teleport(imbue)
 				var/turf/T2 = get_turf(user)
 				if(T1!=T2)
 					T1.turf_animation('icons/effects/effects.dmi',"rune_teleport")
 			if("communicate")
 				//If the user cancels the talisman this var will be set to 0
-				var/obj/effect/rune_legacy/R = new
-				R.my_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
 				delete = R.communicate(TRUE)
 			if("deafen")
 				deafen()
