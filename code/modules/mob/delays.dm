@@ -47,9 +47,13 @@
 		client.move_delayer.delayNext(delay,additive)
 
 /mob/proc/delayNextAttack(var/delay, var/additive=0)
+	if (!attack_delayer)
+		return
 	attack_delayer.delayNext(delay,additive)
 
 /mob/proc/delayNextSpecial(var/delay, var/additive=0)
+	if (!special_delayer)
+		return
 	special_delayer.delayNext(delay,additive)
 
 /mob/proc/delayNext(var/types, var/delay, var/additive=0)
