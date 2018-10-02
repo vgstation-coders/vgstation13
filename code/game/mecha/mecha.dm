@@ -1354,6 +1354,8 @@
 /obj/mecha/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(usr != src.occupant || usr.incapacitated())
 		return
+	if(istype(occupant, /mob/living/carbon/brain))
+		return
 	if(!istype(over_location) || over_location.density)
 		return
 	if(!Adjacent(over_location))
