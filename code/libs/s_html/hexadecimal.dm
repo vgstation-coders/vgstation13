@@ -53,45 +53,32 @@ proc/hex2num(hex)
 
 	return(num)
 
-
-proc/num2hex(num, placeholder=2)
-	//Converts a numeral (eg. 255) into a hexadecimal string (eg. "FF")
-	//The 'placeholder' argument inserts zeroes in front of the string
-	// until the string is that length -- eg. 15 in hexadecimal is "F",
-	// but the placeholder of 2 would make it "0F".
-
+//Returns the hex value of a decimal number
+//len == length of returned string
+//if len < 0 then the returned string will be as long as it needs to be to contain the data
+//Only supports positive numbers
+//if an invalid number is provided, it assumes num==0
+/proc/num2hex(var/num, var/len = 2)
 	if(!isnum(num))
-		CRASH("num2hex not given a numeric argument (user error)")
-		return
-
-	if(!num)
-		return("0") //no computation necessary
-
-	var/hex = ""
-
-	var/i = 0
-	while(16**i < num) i++
-
-	for(var/power = i-1, power >= 0, power--)
-		var/val = round( num / (16 ** power) )
-		num -= val * (16 ** power)
-		switch(val)
-			if(0,1,2,3,4,5,6,7,8,9)
-				hex += "[val]"
-
-			if(10)
-				hex += "A"
-			if(11)
-				hex += "B"
-			if(12)
-				hex += "C"
-			if(13)
-				hex += "D"
-			if(14)
-				hex += "E"
-			if(15)
-				hex += "F"
-
-	while(lentext(hex) < placeholder) hex = "0[hex]"
-
-	return(hex)
+		num = 0
+	num = round(abs(num))
+	. = ""
+	var/i=0
+	while(1)
+		if(len<=0)
+			if(!num)
+				break
+		else
+			if(i>=len)
+				break
+		var/remainder = num/16
+		num = round(remainder)
+		remainder = (remainder - num) * 16
+		switch(remainder)
+			if(1 to 9)
+				. = "[remainder]" + .
+			if(10 to 15)
+				. = ascii2text(remainder+55) + .
+			else
+				. = "0" + .
+		i++
