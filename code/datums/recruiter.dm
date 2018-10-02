@@ -68,6 +68,7 @@
 		if(!check_observer(O))
 			INVOKE_EVENT(recruited, list("player"=null))
 		else
+			paiController.was_recruited(O)
 			INVOKE_EVENT(recruited, list("player"=O))
 
 /datum/recruiter/Topic(var/href, var/list/href_list)
