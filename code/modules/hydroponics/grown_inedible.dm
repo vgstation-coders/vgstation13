@@ -255,7 +255,7 @@
 
 /obj/item/weapon/corncob/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if(W.is_sharp())
+	if(W.is_sharp() && W.sharpness_flags & SHARP_BLADE)
 		to_chat(user, "<span class='notice'>You use [W] to fashion a pipe out of the corn cob!</span>")
 		new /obj/item/clothing/mask/cigarette/pipe/cobpipe (user.loc)
 		user.drop_item(src, force_drop = 1)
