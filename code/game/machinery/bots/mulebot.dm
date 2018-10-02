@@ -464,12 +464,6 @@ var/global/mulebot_count = 0
 	C.plane = plane
 	overlays += C
 
-	if(ismob(C))
-		var/mob/M = C
-		if(M.client)
-			M.client.perspective = EYE_PERSPECTIVE
-			M.client.eye = src
-
 	mode = 0
 	send_status()
 
@@ -488,11 +482,6 @@ var/global/mulebot_count = 0
 	load.forceMove(src.loc)
 	load.pixel_y -= 9 * PIXEL_MULTIPLIER
 	load.reset_plane_and_layer()
-	if(ismob(load))
-		var/mob/M = load
-		if(M.client)
-			M.client.perspective = MOB_PERSPECTIVE
-			M.client.eye = src
 
 
 	if(dirn)
@@ -506,7 +495,7 @@ var/global/mulebot_count = 0
 	load = null
 
 	// in case non-load items end up in contents, dump every else too
-	// this seems to happen sometimes due to race conditions
+	// this seems to happen sometimes due to race conditions //There are no race conditions in BYOND. It's single-threaded.
 	// with items dropping as mobs are loaded
 
 	for(var/atom/movable/AM in src)
@@ -516,11 +505,6 @@ var/global/mulebot_count = 0
 		AM.forceMove(src.loc)
 		AM.reset_plane_and_layer()
 		AM.pixel_y = initial(AM.pixel_y)
-		if(ismob(AM))
-			var/mob/M = AM
-			if(M.client)
-				M.client.perspective = MOB_PERSPECTIVE
-				M.client.eye = src
 	mode = 0
 
 
