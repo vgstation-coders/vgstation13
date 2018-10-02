@@ -299,7 +299,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	name = "Plasma Sting"
 	desc = "We overload the power system of a mechanical lifefrom via an plasma injection."
 	helptext = "Destroys the targeted silicon after a short time."
-	genomecost = 6
+	genomecost = 8
 	verbpath = /obj/item/verbs/changeling/proc/changeling_plasma_sting
 
 /datum/power_holder
