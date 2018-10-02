@@ -2,7 +2,7 @@
 #define MAX_FIELD_RADIUS 100
 
 #define MIN_STRENGTHEN_RATE 0
-#define MAX_STRENGTHEN_RATE 1
+#define MAX_STRENGTHEN_RATE 3
 
 #define MIN_FIELD_STRENGTH_CAP 0
 #define MAX_FIELD_STRENGTH_CAP 1000
@@ -253,21 +253,19 @@
 //grab the border tiles in a circle around this machine
 /obj/machinery/shield_gen/proc/get_shielded_turfs()
 	var/list/out = list()
-	/*
-	var/shieldx = 
-	var/shieldy = 
-	var/shieldbottomleft = (clamp(src.x - field_radius, 1),clamp(src.y - field_radius, 1),src.z)
-	var/shieldtopright = (clamp(src.x + field_radius, 1),clamp(src.y + field_radius, 1),src.z)
-	for(locate(shieldbottomleft), field_radius*2+1)
-		//take coordinate 1 (36,36,1)
-		//get every coordinate till the end (36+1+36)
-		//get the turf for every coordinate in between
-		*/
 	for(var/turf/T in trange(field_radius, src))
 		if(get_dist(src,T) == field_radius)
 			out.Add(T)
 	return out
 
+/obj/machinery/shield_gen/kick_act()
+	..()
+	if(stat & (NOPOWER|BROKEN))
+		active = FALSE
+		return
+	if(prob(50))
+		active = !active
+	
 /obj/machinery/shield_gen/npc_tamper_act(var/mob/living/L)
 	field_radius = rand(MIN_FIELD_RADIUS, MAX_FIELD_RADIUS)
 	strengthen_rate = rand(MIN_STRENGTHEN_RATE, MAX_STRENGTHEN_RATE)
