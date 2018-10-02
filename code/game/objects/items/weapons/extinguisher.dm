@@ -303,5 +303,14 @@
 	else
 		return ..()
 	return
+/obj/item/weapon/extinguisher/mini/cyborg
 
+/obj/item/weapon/extinguisher/mini/cyborg/AltClick()
+	if(is_holder_of(usr, src))
+		if(!is_open_container())
+			to_chat(usr, "You open the [src]'s fill cap")
+			flags |= OPENCONTAINER
+		else
+			to_chat(usr, "You close the [src]'s fill cap")
+			flags &= ~OPENCONTAINER
 #undef REAGENT_USE

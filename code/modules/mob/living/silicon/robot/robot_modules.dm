@@ -200,7 +200,7 @@
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
-	modules += new /obj/item/weapon/extinguisher/mini(src)
+	modules += new /obj/item/weapon/extinguisher/mini/cyborg(src)
 	modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
 	modules += new /obj/item/weapon/wrench(src)
 	modules += new /obj/item/device/healthanalyzer(src)
@@ -252,7 +252,7 @@
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
-	modules += new /obj/item/weapon/extinguisher/mini(src)
+	modules += new /obj/item/weapon/extinguisher/mini/cyborg(src)
 	modules += new /obj/item/device/healthanalyzer(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo(src)
 	modules += new /obj/item/weapon/gripper/chemistry(src)
@@ -403,7 +403,7 @@
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
-	modules += new /obj/item/weapon/extinguisher/mini(src)
+	modules += new /obj/item/weapon/extinguisher/mini/cyborg(src)
 	modules += new /obj/item/weapon/soap/nanotrasen(src)
 	modules += new /obj/item/weapon/storage/bag/trash(src)
 	modules += new /obj/item/weapon/mop(src)
@@ -450,7 +450,7 @@
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
-	modules += new /obj/item/weapon/extinguisher/mini(src)
+	modules += new /obj/item/weapon/extinguisher/mini/cyborg(src)
 	modules += new /obj/item/weapon/gripper/service(src)
 	modules += new /obj/item/weapon/pen/robopen(src)
 	modules += new /obj/item/weapon/dice/borg(src)
@@ -491,7 +491,7 @@
 	..()
 
 	modules += new /obj/item/weapon/crowbar(src)
-	modules += new /obj/item/weapon/extinguisher/mini(src)
+	modules += new /obj/item/weapon/extinguisher/mini/cyborg(src)
 	modules += new /obj/item/weapon/storage/bag/ore/auto(src)
 	modules += new /obj/item/weapon/pickaxe/drill/borg(src)
 	modules += new /obj/item/weapon/storage/bag/sheetsnatcher/borg(src)
@@ -618,7 +618,7 @@
 /obj/item/weapon/robot_module/tg17355/New()
 	..()
 
-	modules += new /obj/item/weapon/extinguisher/mini(src)
+	modules += new /obj/item/weapon/extinguisher/mini/cyborg(src)
 	modules += new /obj/item/weapon/cookiesynth(src)
 	modules += new /obj/item/device/harmalarm(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/peace(src)
