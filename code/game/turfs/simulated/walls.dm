@@ -379,3 +379,7 @@
 
 /turf/simulated/wall/acidable()
 	return !(flags & INVULNERABLE)
+
+/turf/simulated/wall/clockworkify()
+	ChangeTurf(/turf/simulated/wall/mineral/clockwork)
+	turf_animation('icons/effects/effects.dmi',CLOCKWORK_GENERIC_GLOW, 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
