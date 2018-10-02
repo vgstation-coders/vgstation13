@@ -58,6 +58,8 @@
 			new girder_type(src)
 
 	for(var/obj/O in src.contents) //Eject contents!
+		if(istype(O,/obj/effect/cult_shortcut))
+			qdel(O)
 		if(istype(O,/obj/structure/sign/poster))
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)
@@ -129,6 +131,19 @@
 
 	if(rotting)
 		return src.attack_rotting(user) //Stop there, we aren't slamming our hands on a dirty rotten wall
+
+	if (iscultist(user) && !(locate(/obj/effect/cult_shortcut) in src))
+		var/datum/role/cultist/cult = user.mind.GetRole(CULTIST)
+		for (var/T in cult.tattoos)
+			var/datum/cult_tattoo/tattoo = cult.tattoos[T]
+			if (tattoo && istype(tattoo, /datum/cult_tattoo/shortcut))
+				var/data = use_available_blood(user, tattoo.blood_cost)
+				if (data[BLOODCOST_RESULT] != BLOODCOST_FAILURE)
+					if(do_after(user, src, 30))
+						new /obj/effect/cult_shortcut(src)
+						user.visible_message("<span class='warning'>[user] has painted a strange sigil on \the [src].</span>", \
+							"<span class='notice'>You finish drawing the sigil.</span>")
+				return
 
 	user.visible_message("<span class='notice'>[user] pushes \the [src].</span>", \
 	"<span class='notice'>You push \the [src] but nothing happens!</span>")
@@ -339,6 +354,9 @@
 
 /turf/simulated/wall/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	remove_rot()
+	for(var/obj/effect/E in src)
+		if(E.name == "sigil")
+			qdel(E)
 	..()
 
 /turf/simulated/wall/cultify()

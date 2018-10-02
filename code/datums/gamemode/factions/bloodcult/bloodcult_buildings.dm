@@ -334,7 +334,7 @@
 //      CULT SPIRE       //Can be used by cultists to acquire arcane tattoos. One of each tier.
 //                       //
 ///////////////////////////
-
+var/list/cult_spires = list()
 
 /obj/structure/cult/spire
 	name = "spire"
@@ -354,15 +354,27 @@
 
 /obj/structure/cult/spire/New()
 	..()
+	cult_spires.Add(src)
 	set_light(1)
 	stage = min(3,max(1,veil_thickness-1))
 	flick("spire[stage]-spawn",src)
 	spawn(10)
 		update_stage()
 
+/obj/structure/cult/spire/Destroy()
+	cult_spires.Remove(src)
+	..()
+
 /obj/structure/cult/spire/proc/upgrade()
-	update_stage()
-	flick("[icon_state]-morph", src)
+	var/new_stage = min(3,max(1,veil_thickness-1))
+	if (new_stage>stage)
+		stage = new_stage
+		alpha = 255
+		overlays.len = 0
+		color = null
+		flick("spire[new_stage]-morph", src)
+		spawn(3)
+			update_stage()
 
 /obj/structure/cult/spire/proc/update_stage()
 	animate(src, alpha = 128, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)
@@ -411,6 +423,81 @@
 	color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0)
 	spawn(10)
 		update_stage()
+
+
+/obj/structure/cult/spire/cultist_act(var/mob/user,var/menu="default")
+	.=..()
+	if (!.)
+		return
+
+	if (!ishuman(user))
+		to_chat(user,"<span class='warning'>Only humans can bear the arcane markings granted by this [src]</span>")
+		return
+
+	var/mob/living/carbon/human/H = user
+	var/datum/role/cultist/C = H.mind.GetRole(CULTIST)
+
+	var/cultist_stage = 0
+	if (C.tattoos["tier3"])
+		to_chat(user,"<span class='warning'>You cannot bear any additional mark.</span>")
+		return
+	else if (C.tattoos["tier2"])
+		cultist_stage = 2
+	else if (C.tattoos["tier1"])
+		cultist_stage = 1
+
+	var/list/optionlist = list()
+	if (stage > cultist_stage)
+		for (var/subtype in subtypesof(/datum/cult_tattoo))
+			var/datum/cult_tattoo/T = new subtype
+			if (T.tier == cultist_stage + 1)
+				optionlist.Add(T.name)
+				to_chat(H, "<span class='danger'>[T.name]</span>: [T.desc]")
+	else
+		to_chat(user,"<span class='warning'>Come back to acquire another mark once your cult is a step closer to its goal.</span>")
+		return
+
+	for(var/option in optionlist)
+		optionlist[option] = image(icon = 'icons/obj/cult_radial2.dmi', icon_state = "[option]")
+
+	var/tattoo = show_radial_menu(user,loc,optionlist,'icons/obj/cult_radial2.dmi')//spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
+
+	var/new_cultist_stage = 0
+	if (C.tattoos["tier3"])
+		return
+	else if (C.tattoos["tier2"])
+		new_cultist_stage = 2
+	else if (C.tattoos["tier1"])
+		new_cultist_stage = 1
+	if ((new_cultist_stage > cultist_stage) || !Adjacent(user))
+		return
+
+	for (var/subtype in subtypesof(/datum/cult_tattoo))
+		var/datum/cult_tattoo/T = new subtype
+		if (T.name == tattoo)
+			var/datum/cult_tattoo/new_tattoo = T
+			switch (cultist_stage+1)
+				if (1)
+					C.tattoos["tier1"] = new_tattoo
+				if (2)
+					C.tattoos["tier2"] = new_tattoo
+				if (3)
+					C.tattoos["tier3"] = new_tattoo
+
+			C.update_cult_hud()
+
+			anim(target = loc, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_send", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+			spawn (3)
+				new_tattoo.getTattoo(H)
+				anim(target = H, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_receive", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+				sleep(1)
+				H.update_mutations()
+				var/atom/movable/overlay/tattoo_markings = anim(target = H, a_icon = 'icons/mob/cult_tattoos.dmi', flick_anim = "[new_tattoo.icon_state]_mark", sleeptime = 30, lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
+				animate(tattoo_markings, alpha = 0, time = 30)
+
+			if (cultist_stage + 1 < stage)
+				cultist_act(user)
+			break
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                       //Spawned from the Raise Structure rune. Available from Act II

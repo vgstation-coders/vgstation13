@@ -405,6 +405,17 @@ var/global/list/damage_icon_parts = list()
 		O.underlays	-= "fire[fat]_s"
 		O.underlays	+= "coldfire[fat]_s"
 
+	//Cultist tattoos
+	if (mind && mind.GetRole(CULTIST))
+		var/datum/role/cultist/C = mind.GetRole(CULTIST)
+		add_image = 1
+		for (var/T in C.tattoos)
+			var/datum/cult_tattoo/tattoo = C.tattoos[T]
+			if (tattoo)
+				var/image/I = image(icon = 'icons/mob/cult_tattoos.dmi', icon_state = tattoo.icon_state)
+				I.blend_mode = BLEND_MULTIPLY
+				O.overlays += I
+
 	if(add_image)
 		O.icon = standing
 		O.icon_state = standing.icon_state

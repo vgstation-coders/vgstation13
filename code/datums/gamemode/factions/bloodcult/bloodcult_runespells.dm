@@ -63,6 +63,19 @@
 	activator = null
 	..()
 
+/datum/rune_spell/proc/invoke(var/mob/user, var/text="", var/whisper=0)
+	if (user.mind && user.mind.GetRole(CULTIST))
+		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+		for (var/T in C.tattoos)
+			var/datum/cult_tattoo/tattoo = C.tattoos[T]
+			if (tattoo && istype(tattoo, /datum/cult_tattoo/silent))
+				return
+
+	if (!whisper)
+		user.say(text,"C")
+	else
+		user.whisper(text)
+
 /datum/rune_spell/proc/pre_cast()
 	var/mob/living/user = activator
 	//checking whether we're casting from a rune or a talisman.
@@ -70,10 +83,10 @@
 		if ((rune_flags & RUNE_STAND) && (user.loc != spell_holder.loc))
 			abort(RITUALABORT_STAND)
 		else
-			user.say(invocation,"C")
+			invoke(user,invocation)
 			cast()
 	else if (istype (spell_holder,/obj/item/weapon/talisman))
-		user.whisper(invocation)//talisman incantations are whispered
+		invoke(user,invocation,1)//talisman incantations are whispered
 		cast_talisman()
 
 /datum/rune_spell/proc/midcast(var/mob/add_cultist)
@@ -369,7 +382,7 @@
 	if(!message)
 		return
 
-	var/datum/faction/bloodcult = find_active_faction_by_member(activator.mind.GetRole(BLOODCULT))
+	var/datum/faction/bloodcult = find_active_faction_by_member(activator.mind.GetRole(CULTIST))
 	for(var/datum/role/cultist/C in bloodcult.members)
 		var/datum/mind/M = C.antag
 		to_chat(M.current, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[message]</span></B></span>")
@@ -425,7 +438,7 @@
 			speaker_name = H.real_name
 			L = speech.speaker
 		rendered_message = speech.render_message()
-		var/datum/faction/bloodcult = find_active_faction_by_member(L.mind.GetRole(BLOODCULT))
+		var/datum/faction/bloodcult = find_active_faction_by_member(L.mind.GetRole(CULTIST))
 		for(var/datum/role/cultist/C in bloodcult.members)
 			var/datum/mind/M = C.antag
 			if (M.current == speech.speaker)//echoes are annoying
@@ -987,10 +1000,10 @@
 	var/mob/living/user = activator
 
 	if (istype (spell_holder,/obj/effect/rune))
-		user.say(invocation,"C")
+		invoke(user,invocation)
 		cast()
 	else if (istype (spell_holder,/obj/item/weapon/talisman))
-		user.whisper(invocation)
+		invoke(user,invocation,1)
 		cast_talisman()
 
 /datum/rune_spell/stun/cast()
@@ -1010,10 +1023,10 @@
 	anim(target = M, a_icon = 'icons/effects/64x64.dmi', flick_anim = "touch_stun", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
 
 	playsound(spell_holder, 'sound/effects/stun_talisman.ogg', 25, 0, -5)
-	if (prob(5))//for old times' sake
-		activator.whisper("Dream sign ''Evil sealing talisman'[pick("'","`")]!")
+	if (prob(15))//for old times' sake
+		invoke(activator,"Dream sign ''Evil sealing talisman'[pick("'","`")]!",1)
 	else
-		activator.whisper(invocation)
+		invoke(activator,invocation,1)
 
 	if(issilicon(M))
 		to_chat(M, "<span class='danger'>WARNING: Short-circuits detected, Rebooting...</span>")
@@ -1719,7 +1732,7 @@ var/list/blind_victims = list()
 	rejoin = alert(activator, "Will you pull them toward you, or pull yourself toward them?","Blood Magnetism","Summon Cultist","Rejoin Cultist") == "Rejoin Cultist"
 
 	var/list/possible_targets = list()
-	var/datum/faction/bloodcult = find_active_faction_by_member(activator.mind.GetRole(BLOODCULT))
+	var/datum/faction/bloodcult = find_active_faction_by_member(activator.mind.GetRole(CULTIST))
 	for(var/datum/role/cultist/C in bloodcult.members)
 		var/datum/mind/M = C.antag
 		possible_targets.Add(M.current)
@@ -1977,9 +1990,9 @@ var/list/blind_victims = list()
 
 /datum/rune_spell/portalentrance/midcast(var/mob/add_cultist)
 	if (istype(spell_holder, /obj/item/weapon/talisman))
-		add_cultist.whisper(invocation)
+		invoke(add_cultist,invocation,1)
 	else
-		add_cultist.say(invocation,"C")
+		invoke(add_cultist,invocation)
 
 	var/turf/destination = null
 	for (var/datum/rune_spell/portalexit/P in bloodcult_exitportals)
@@ -2086,7 +2099,7 @@ var/list/bloodcult_exitportals = list()
 
 /datum/rune_spell/portalexit/midcast_talisman(var/mob/add_cultist)
 	var/turf/T = get_turf(add_cultist)
-	add_cultist.whisper(invocation)
+	invoke(add_cultist,invocation,1)
 	anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_teleport")
 	new /obj/effect/bloodcult_jaunt (T, add_cultist, get_turf(spell_holder))
 
@@ -2107,7 +2120,7 @@ var/list/bloodcult_exitportals = list()
 		qdel(src)
 		return
 
-	activator.whisper("[cultwords_rune[cultwords_english.Find(network)]]!")
+	invoke(activator,"[cultwords_rune[cultwords_english.Find(network)]]!",1)
 
 	to_chat(activator, "<span class='notice'>This talisman will now serve as a key to the \"[network]\" Path.</span>")
 
@@ -2361,6 +2374,17 @@ var/list/bloodcult_exitportals = list()
 		vessel.ckey = ghost.ckey
 		qdel(husk)
 
+		vessel.r_hair = 90
+		vessel.g_hair = 90
+		vessel.b_hair = 90
+		vessel.r_facial = 90
+		vessel.g_facial = 90
+		vessel.b_facial = 90
+		vessel.r_eyes = 255
+		vessel.g_eyes = 0
+		vessel.b_eyes = 0
+		vessel.status_flags &= ~GODMODE
+		vessel.regenerate_icons()
 		//Let's not forget to make them cultists as well
 		var/datum/role/cultist/newCultist = new
 		newCultist.AssignToRole(vessel.mind,1)

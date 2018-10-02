@@ -490,7 +490,8 @@ var/list/arcane_tomes = list()
 		playsound(T, 'sound/items/Deconstruct.ogg', 50, 1)
 		user.drop_item(src,T)
 		var/obj/item/weapon/melee/soulblade/SB = new (T)
-		SB.fingerprints = fingerprints.Copy()
+		if (fingerprints)
+			SB.fingerprints = fingerprints.Copy()
 		spawn(1)
 			user.put_in_active_hand(SB)
 		for(var/mob/living/simple_animal/shade/A in I)
@@ -569,7 +570,8 @@ var/list/arcane_tomes = list()
 	if (T)
 		var/obj/item/weapon/melee/cultblade/nocult/B = new (T)
 		B.Move(get_step_rand(T))
-		B.fingerprints = fingerprints.Copy()
+		if (fingerprints)
+			B.fingerprints = fingerprints.Copy()
 		new /obj/item/device/soulstone(T)
 	shade = null
 	..()
@@ -613,7 +615,8 @@ var/list/arcane_tomes = list()
 			user.drop_item(src,T)
 			var/obj/item/weapon/melee/cultblade/CB = new (T)
 			var/obj/item/device/soulstone/gem/SG = new (T)
-			CB.fingerprints = fingerprints.Copy()
+			if (fingerprints)
+				CB.fingerprints = fingerprints.Copy()
 			user.put_in_active_hand(CB)
 			user.put_in_inactive_hand(SG)
 			if (shade)
@@ -634,7 +637,7 @@ var/list/arcane_tomes = list()
 		var/datum/organ/external/affecting = user.get_active_hand_organ()
 		if(affecting && affecting.take_damage(rand(force/2, force))) //random amount of damage between half of the blade's force and the full force of the blade.
 			user.UpdateDamageIcon()
-
+		return
 	..()
 	if (!shade && istype(target, /mob/living/carbon))
 		transfer_soul("VICTIM", target, user,1)
@@ -796,6 +799,91 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/melee/soulblade/bullet_act(var/obj/item/projectile/P)
 	..()
 	takeDamage(P.damage)
+
+///////////////////////////////////////BLOOD DAGGER////////////////////////////////////////////////
+
+/obj/item/weapon/melee/blood_dagger
+	name = "blood dagger"
+	icon = 'icons/obj/cult.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	icon_state = "blood_dagger"
+	item_state = "blood_dagger"
+	desc = "A knife-shaped hunk of solidified blood."
+	siemens_coefficient = 0.2
+	sharpness = 1.5
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	force = 15.0
+	w_class = W_CLASS_GIANT//don't want it stored anywhere
+	attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	hitsound = 'sound/weapons/bladeslice.ogg'
+	var/stacks = 0
+	var/absorbed = 0
+
+/obj/item/weapon/melee/blood_dagger/Destroy()
+	var/turf/T = get_turf(src)
+	playsound(T, 'sound/effects/forge_over.ogg', 100, 1)
+	if (!absorbed && !locate(/obj/effect/decal/cleanable/blood/splatter) in T)
+		new /obj/effect/decal/cleanable/blood/splatter(T)//splash
+	..()
+
+/obj/item/weapon/melee/blood_dagger/dropped(var/mob/user)
+	..()
+	qdel(src)
+
+/obj/item/weapon/melee/blood_dagger/attack(var/mob/living/target, var/mob/living/carbon/human/user)
+	if(target == user)
+		if (stacks < 5 && user.take_blood(null,5))
+			stacks++
+			playsound(user, 'sound/weapons/bladeslice.ogg', 30, 1)
+			to_chat(user, "<span class='warning'>The dagger takes a bit of your blood.</span>")
+		return
+	..()
+/obj/item/weapon/melee/blood_dagger/attack_hand(var/mob/living/user)
+	if(!ismob(loc))
+		qdel(src)
+		return
+	..()
+
+/obj/item/weapon/melee/blood_dagger/attack_self(var/mob/user)
+	if (ishuman(user) && iscultist(user))
+		var/mob/living/carbon/human/H = user
+		var/datum/reagent/blood/B = get_blood(H.vessel)
+		if (B)
+			H.vessel.add_reagent(BLOOD, 5 + stacks * 5)
+			H.vessel.update_total()
+		absorbed = 1
+		playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 1)
+		qdel(src)
+
+/obj/item/weapon/melee/blood_dagger/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
+	absorbed = 1
+	var/turf/starting = get_turf(src)
+	var/turf/target = get_turf(targ)
+	var/obj/item/projectile/blooddagger/BD = new (starting)
+	BD.original = target
+	BD.target = target
+	BD.current = starting
+	BD.starting = starting
+	BD.yo = target.y - starting.y
+	BD.xo = target.x - starting.x
+	BD.stacks = stacks
+	BD.damage = 5 + stacks * 5
+	BD.OnFired()
+	BD.process()
+	qdel(src)
+
+/obj/item/weapon/melee/blood_dagger/on_attack(var/atom/attacked, var/mob/user)
+	..()
+	if (ismob(attacked))
+		var/mob/living/M = attacked
+		if (iscarbon(M))
+			var/mob/living/carbon/C = M
+			if (C.take_blood(null,5))
+				if (stacks < 5)
+					stacks++
+					to_chat(user, "<span class='warning'>The dagger steals a bit of their blood.</span>")
+				else if (!locate(/obj/effect/decal/cleanable/blood/splatter) in get_turf(C))
+					new /obj/effect/decal/cleanable/blood/splatter(get_turf(C))
 
 ///////////////////////////////////////SOULSTONE////////////////////////////////////////////////
 /obj/item/device/soulstone/gem

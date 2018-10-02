@@ -40,6 +40,8 @@
 			gui_icons.soulblade_bloodbar,
 			fire,
 			)
+	if (hud_used && gui_icons && gui_icons.soulblade_coverLEFT)
+		hud_used.mymob.gui_icons.soulblade_coverLEFT.maptext = ""
 	for(var/spell/soulblade/spell_to_remove in spell_list)
 		remove_spell(spell_to_remove)
 

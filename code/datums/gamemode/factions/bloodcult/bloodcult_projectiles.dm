@@ -212,7 +212,7 @@
 			..()
 	qdel(src)
 
-/obj/item/projectile/bloodslash/on_hit(var/atom/target, var/blocked = 0)//These two could likely check temp protection on the mob
+/obj/item/projectile/bloodslash/on_hit(var/atom/target, var/blocked = 0)
 	if (isliving(target))
 		var/mob/living/M = target
 		if(M.flags & INVULNERABLE)
@@ -225,4 +225,60 @@
 	return 1
 
 /obj/item/projectile/bloodslash/cultify()
+	return
+
+
+//////////////////////////////
+//                          //
+//       BLOOD DAGGER       ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                          //Used when a cultist throws a blood dagger
+//////////////////////////////
+
+/obj/item/projectile/blooddagger
+	name = "blood dagger"
+	icon = 'icons/obj/projectiles_experimental.dmi'
+	icon_state = "blooddagger"
+	damage = 5
+	flag = "energy"
+	custom_impact = 1
+	projectile_speed = 0.66
+	var/absorbed = 0
+	var/stacks = 0
+
+/obj/item/projectile/blooddagger/Destroy()
+	var/turf/T = get_turf(src)
+	playsound(T, 'sound/effects/forge_over.ogg', 100, 1)
+	if (!absorbed && !locate(/obj/effect/decal/cleanable/blood/splatter) in T)
+		new /obj/effect/decal/cleanable/blood/splatter(T)//splash
+	..()
+
+/obj/item/projectile/blooddagger/to_bump(var/atom/A)
+	if (isliving(A))
+		forceMove(A.loc)
+		var/mob/living/M = A
+		if (!iscultist(M))
+			..()
+		else if (ishuman(M))
+			var/mob/living/carbon/human/H = M
+			var/datum/reagent/blood/B = get_blood(H.vessel)
+			if (B)
+				H.vessel.add_reagent(BLOOD, 5 + stacks * 5)
+				H.vessel.update_total()
+			absorbed = 1
+			playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 1)
+
+	qdel(src)
+
+/obj/item/projectile/blooddagger/on_hit(var/atom/target, var/blocked = 0)
+	if (isliving(target))
+		var/mob/living/M = target
+		if(M.flags & INVULNERABLE)
+			return 0
+		if (iscultist(M))
+			return 0
+		if (M.stat == DEAD)
+			return 0
+	return 1
+
+/obj/item/projectile/blooddagger/cultify()
 	return

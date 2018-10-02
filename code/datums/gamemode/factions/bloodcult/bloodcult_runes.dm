@@ -409,13 +409,23 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 			to_chat(user, "<span class='danger'>You find yourself unable to focus your mind on the arcane words of the rune.</span>")
 			return
 
-	if(user.is_wearing_item(/obj/item/clothing/mask/muzzle, slot_wear_mask))
-		to_chat(user, "<span class='danger'>You are unable to speak the words of the rune because of \the [user.wear_mask].</span>")//TODO; SILENT CASTING ALLOWS MUZZLED CAST
-		return
+	var/silent_casting = 0
+	if (user.mind && user.mind.GetRole(CULTIST))
+		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+		for (var/T in C.tattoos)
+			var/datum/cult_tattoo/tattoo = C.tattoos[T]
+			if (tattoo && istype(tattoo, /datum/cult_tattoo/silent))
+				silent_casting = 1
+				break
 
-	if(user.is_mute())
-		to_chat(user, "<span class='danger'>You don't have the ability to perform rituals without voicing the incantations, there has to be some way...</span>")
-		return
+	if (!silent_casting)
+		if(user.is_wearing_item(/obj/item/clothing/mask/muzzle, slot_wear_mask))
+			to_chat(user, "<span class='danger'>You are unable to speak the words of the rune because of \the [user.wear_mask].</span>")
+			return
+
+		if(user.is_mute())
+			to_chat(user, "<span class='danger'>You don't have the ability to perform rituals without voicing the incantations, there has to be some way...</span>")
+			return
 
 	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss()))
 		return fizzle(user)
@@ -437,7 +447,15 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 		active_spell = null
 
 /obj/effect/rune/proc/fizzle(var/mob/living/user)
-	user.say(pick("B'ADMINES SP'WNIN SH'T","IC'IN O'OC","RO'SHA'M I'SA GRI'FF'N ME'AI","TOX'IN'S O'NM FI'RAH","IA BL'AME TOX'IN'S","FIR'A NON'AN RE'SONA","A'OI I'RS ROUA'GE","LE'OAN JU'STA SP'A'C Z'EE SH'EF","IA PT'WOBEA'RD, IA A'DMI'NEH'LP"))
+	var/silent = 0
+	if (user.mind && user.mind.GetRole(CULTIST))
+		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+		for (var/T in C.tattoos)
+			var/datum/cult_tattoo/tattoo = C.tattoos[T]
+			if (tattoo && istype(tattoo, /datum/cult_tattoo/silent))
+				silent = 1
+	if (!silent)
+		user.say(pick("B'ADMINES SP'WNIN SH'T","IC'IN O'OC","RO'SHA'M I'SA GRI'FF'N ME'AI","TOX'IN'S O'NM FI'RAH","IA BL'AME TOX'IN'S","FIR'A NON'AN RE'SONA","A'OI I'RS ROUA'GE","LE'OAN JU'STA SP'A'C Z'EE SH'EF","IA PT'WOBEA'RD, IA A'DMI'NEH'LP"))
 	one_pulse()
 	visible_message("<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\
 	"<span class='warning'>The markings pulse with a small burst of light, then fall dark.</span>",\

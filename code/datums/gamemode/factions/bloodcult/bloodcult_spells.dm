@@ -37,6 +37,13 @@
 	else
 		spell = null//so we're not stuck trying to write the same spell over and over again
 
+	if (user.mind && user.mind.GetRole(CULTIST))
+		var/datum/role/cultist/cult = user.mind.GetRole(CULTIST)
+		for (var/T in cult.tattoos)
+			var/datum/cult_tattoo/tattoo = cult.tattoos[T]
+			if (tattoo && istype(tattoo, /datum/cult_tattoo/fast))
+				cast_delay = 6
+
 	var/mob/living/carbon/C = user
 	var/muted = C.muted()
 	if (muted)
@@ -57,10 +64,21 @@
 
 	var/obj/item/weapon/tome/A = null
 	A = user.get_active_hand()
-	tome = (istype(A) && A.state == TOME_OPEN)
+
+
+	if (user.mind && user.mind.GetRole(CULTIST))
+		var/datum/role/cultist/cult = user.mind.GetRole(CULTIST)
+		for (var/T in cult.tattoos)
+			var/datum/cult_tattoo/tattoo = cult.tattoos[T]
+			if (tattoo && istype(tattoo, /datum/cult_tattoo/memorize))
+				tome = "Knowledge"
 	if (!tome)
-		A = user.get_inactive_hand()
 		tome = (istype(A) && A.state == TOME_OPEN)
+		if (!tome)
+			A = user.get_inactive_hand()
+			tome = (istype(A) && A.state == TOME_OPEN)
+		if (tome)
+			tome = "Tome"
 
 	var/turf/T = get_turf(user)
 	rune = locate() in T
@@ -88,7 +106,7 @@
 					available_runes.Add("\Roman[i]-[initial(instance.name)]")
 					available_runes["\Roman[i]-[initial(instance.name)]"] = instance
 				i++
-			var/spell_name = input(user,"Draw a rune with the help of the Arcane Tome.", "Trace Complete Rune", null) as null|anything in available_runes
+			var/spell_name = input(user,"Draw a rune with the help of the Arcane [tome].", "Trace Complete Rune", null) as null|anything in available_runes
 			spell = available_runes[spell_name]
 
 		var/datum/cultword/instance
@@ -130,8 +148,15 @@
 				"<span class='warning'>You hear some chanting.</span>")
 
 	var/datum/cultword/r_word = cultwords[word]
-	user.whisper("...[r_word.rune]...")
 
+	if (user.mind && user.mind.GetRole(CULTIST))
+		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+		for (var/Tat in C.tattoos)
+			var/datum/cult_tattoo/tattoo = C.tattoos[Tat]
+			if (tattoo && istype(tattoo, /datum/cult_tattoo/silent))
+				return ..()
+
+	user.whisper("...[r_word.rune]...")
 	return ..()
 
 /spell/cult/trace_rune/cast(var/list/targets, var/mob/living/carbon/user)
@@ -175,3 +200,44 @@
 		to_chat(user, "<span class='notice'>You retrace your steps, carefully undoing the lines of the [removed_word] rune.</span>")
 	else
 		to_chat(user, "<span class='warning'>There aren't any rune words left to erase.</span>")
+
+
+//SPELL III
+/spell/cult/blood_dagger
+	name = "Blood Dagger"
+	desc = "Solidify some blood into a sharp weapon. Slash at your enemies to steal their blood. Use the dagger to re-absorb the stolen blood."
+	hud_state = "cult_blooddagger"
+
+	invocation_type = SpI_NONE
+	charge_type = Sp_RECHARGE
+	charge_max = 0
+	range = 0
+	spell_flags = null
+	insufficient_holder_msg = ""
+	still_recharging_msg = ""
+
+	cast_delay = 0
+
+/spell/cult/blood_dagger/choose_targets(var/mob/user = usr)
+	return list(user)
+
+/spell/cult/blood_dagger/cast(var/list/targets, var/mob/living/carbon/user)
+	..()
+	var/mob/living/carbon/human/H = user
+	var/data = use_available_blood(user, 5)
+	if (data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)
+		return 0
+	var/good_hand
+	if(H.can_use_hand(H.active_hand))
+		good_hand = H.active_hand
+	else
+		for(var/i = 1 to H.held_items.len)
+			if(H.can_use_hand(i))
+				good_hand = i
+	if(good_hand)
+		H.drop_item(H.held_items[good_hand], force_drop = 1)
+		var/obj/item/weapon/melee/blood_dagger/BD = new (H)
+		H.put_in_hand(good_hand, BD)
+		H.visible_message("<span class='warning'>\The [user] squeezes the blood in their hand, and it takes the shape of a dagger!</span>",
+			"<span class='warning'>You squeeze the blood in your hand, and it takes the shape of a dagger.</span>")
+		playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 1)

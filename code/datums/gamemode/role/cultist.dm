@@ -4,6 +4,8 @@
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
 	logo_state = "cult-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_ADMINTOGGLE)
+	var/list/tattoos = list("tier1","tier2","tier3")
+	var/holywarning_cooldown = 0
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
@@ -14,6 +16,7 @@
 	if(!.)
 		return
 
+	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
 
 	if(ishuman(antag.current) && !(locate(/spell/cult) in antag.current.spell_list))
@@ -24,7 +27,13 @@
 	antag.current.remove_language(LANGUAGE_CULT)
 	for(var/spell/cult/spell_to_remove in antag.current.spell_list)
 		antag.current.remove_spell(spell_to_remove)
+	if (src in blood_communion)
+		blood_communion.Remove(src)
 	..()
+
+/datum/role/cultist/process()
+	if (holywarning_cooldown > 0)
+		holywarning_cooldown--
 
 /datum/role/cultist/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -65,9 +74,61 @@
 	to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
 
 
+/datum/role/cultist/proc/update_cult_hud()
+	var/mob/M = antag.current
+	if(M.hud_used)
+		if(!M.hud_used.cult_Act_display)
+			M.hud_used.cult_hud()
+		M.hud_used.cult_Act_display.overlays.len = 0
+		M.hud_used.cult_tattoo_display.overlays.len = 0
+		var/current_act = max(-1,min(5,veil_thickness))
+		var/image/I_act = image('icons/mob/screen1_cult.dmi',"act")
+		I_act.appearance_flags |= RESET_COLOR
+		M.hud_used.cult_Act_display.overlays += I_act
+		var/image/I_tattoos = image('icons/mob/screen1_cult.dmi',"tattoos")
+		I_tattoos.appearance_flags |= RESET_COLOR
+		M.hud_used.cult_tattoo_display.overlays += I_tattoos
 
+		var/image/I_act_indicator = image('icons/mob/screen1_cult.dmi',"[current_act]")
+		if (current_act == CULT_MENDED)
+			I_act_indicator.appearance_flags |= RESET_COLOR
+		M.hud_used.cult_Act_display.overlays += I_act_indicator
+
+		var/image/I_arrow = image('icons/mob/screen1_cult.dmi',"[current_act]a")
+		I_arrow.appearance_flags |= RESET_COLOR
+		M.hud_used.cult_Act_display.overlays += I_arrow
+		switch (current_act)
+			if (CULT_MENDED)
+				M.hud_used.cult_Act_display.name = "..."
+			if (CULT_PROLOGUE)
+				M.hud_used.cult_Act_display.name = "Prologue: The Reunion"
+			if (CULT_ACT_I)
+				M.hud_used.cult_Act_display.name = "Act I: The Followers"
+			if (CULT_ACT_II)
+				M.hud_used.cult_Act_display.name = "Act II: The Sacrifice"
+			if (CULT_ACT_III)
+				M.hud_used.cult_Act_display.name = "Act III: The Blood Bath"
+			if (CULT_ACT_IV)
+				M.hud_used.cult_Act_display.name = "Act IV: The Tear in Reality"
+			if (CULT_EPILOGUE)
+				M.hud_used.cult_Act_display.name = "Epilogue: The Feast"
+		var/tattoos_names = "none"
+		var/i = 0
+		for (var/T in tattoos)
+			var/datum/cult_tattoo/tattoo = tattoos[T]
+			if (tattoo)
+				M.hud_used.cult_tattoo_display.overlays += image('icons/mob/screen1_cult.dmi',"t_[tattoo.icon_state]")
+				tattoos_names = "[i ? ", " : ""][tattoo.name]"
+				i++
+		M.hud_used.cult_tattoo_display.name = "Arcane Tattoos: [tattoos_names]"
 
 /mob/living/carbon/proc/muted()
+	if (iscultist(src))
+		var/datum/role/cultist/cult = mind.GetRole(CULTIST)
+		for (var/T in cult.tattoos)
+			var/datum/cult_tattoo/tattoo = cult.tattoos[T]
+			if (tattoo && istype(tattoo, /datum/cult_tattoo/holy))
+				return 0
 	return (iscultist(src) && reagents && reagents.has_reagent(HOLYWATER))
 
 /datum/role/cultist/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
