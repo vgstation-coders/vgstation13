@@ -137,13 +137,13 @@
 			L[item] = 1
 		total += L[item]
 
-	total = rand(1, total)
+	total = rand()*total
 	for (item in L)
 		total -=L [item]
 		if (total <= 0)
 			return item
 
-	return null
+	return (L && L.len > 0) ? L[L.len] : null
 
 //Pick a random element from the list and remove it from the list.
 /proc/pick_n_take(list/L)
