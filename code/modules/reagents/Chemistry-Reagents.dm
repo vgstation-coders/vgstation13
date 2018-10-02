@@ -202,6 +202,58 @@
 		holder.reagent_list -= src
 		holder = null
 
+/datum/reagent/piccolyn
+	name = "Piccolyn"
+	id = PICCOLYN
+	description = "Prescribed daily."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#00FF000"
+	custom_metabolism = 0.01
+
+/datum/reagent/piccolyn/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(M.stat || M.health < 90 || M.getBrainLoss() >= 10)
+		return 1
+
+	var/list/doctors = list()
+	for(var/mob/living/carbon/human/H in view(M))
+		if(H == M)
+			continue
+		if(H.is_wearing_item(/obj/item/clothing/glasses/hud/health))
+			doctors += get_first_word(H.name)
+	if(!doctors.len)
+		return 1
+	var/D = pick(doctors)
+	var/list/thanks = list("Thanks, doc.",
+							"You're alright, doc.",
+							"'Preciate it, doc.",
+							"Cheers, doctor.",
+							"Thank you, doctor.",
+							"Much appreciated, doctor.",
+							"Thanks, mate!",
+							"Thanks, doc!",
+							"'Preciate it, [D].",
+							"Zank you, Herr Doktor!",
+							"Danke, Herr Doktor!",
+							"Thank you doctor!",
+							"You are great doctor!",
+							"I love this doctor!",
+							"Aye, thanks doc!",
+							"Thank ye, doctor!",
+							"Thanks, doc!",
+							"You deserve a medal, doc.",
+							"Thanks for the aid.",
+							"Thanks, doc.",
+							"All right, [D], I feel good!",
+							"Yeah, thanks doc!"
+							)
+
+	if(prob(doctors.len/10))
+		M.say(pick(thanks))
+		holder.del_reagent(PICCOLYN)
+
 /datum/reagent/muhhardcores
 	name = "Hardcores"
 	id = BUSTANUT
