@@ -565,12 +565,11 @@ var/global/list/paper_folding_results = list ( \
 						<body>
 						<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center>
 						Nanotrasen\'s commercial arm has noted the presence of a registered merchant who holds a license for corporate commerce, a process which includes a background check and Nanotrasen loyalty implant. The associate\'s image is enclosed. Please continue to monitor trade on an ongoing basis such that Nanotrasen can maintain highest standard small business enterprise (SBE) partners.<BR>
-						</body>
 						<fieldset>
 	  					<legend>Picture</legend>
 						<center><img src="previewicon.png" width="64" height="64"><img src="previewicon2.png" width="64" height="64"></center>
 						</fieldset><BR>
-						<body>Name: [identity]<BR>
+						Name: [identity]<BR>
 						Blood Type: [merchant.dna.b_type]<BR>
 						Fingerprint: [md5(merchant.dna.uni_identity)]</body></html>"}
 		display_y = 700
