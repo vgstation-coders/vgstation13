@@ -30,9 +30,6 @@
 			R.OnPostSetup()
 			R.ForgeObjectives()
 			R.AnnounceObjectives()
-		else
-			R = H.mind.GetRole(R.id)
-			R.OnPostSetup()
 
 
 
