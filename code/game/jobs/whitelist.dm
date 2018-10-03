@@ -44,7 +44,7 @@ var/global/list/alien_whitelist = list()
 /proc/is_alien_whitelisted(mob/M, var/species)
 	if(!config.usealienwhitelist)
 		return 1
-
+	var/datum/species/current_species = all_species[species]
 	species=lowertext(species)
 
 	if(species == "human")
@@ -61,15 +61,15 @@ var/global/list/alien_whitelist = list()
 		return 1
 
 	// CKey is in whitelist
-	if(M.ckey in alien_whitelist[species] || M.ckey in alien_whitelist["all"])
+	if((M.ckey in alien_whitelist[species] || M.ckey in alien_whitelist["all"]) || current_species.conditional_whitelist())
 		return 1
 
 	// Occupation is in whitelist (for lizard janitors :V)
 	if("job=[lowertext(M.mind.assigned_role)]" in alien_whitelist[species]\
 	|| "job=[lowertext(M.mind.assigned_role)]" in alien_whitelist["all"])
 		return 1
-
 	return 0
+
 
 /proc/has_whitelist_entries(var/species)
 	if(!config.usealienwhitelist)
