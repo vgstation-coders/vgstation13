@@ -436,6 +436,19 @@ var/runedec = 0 // Rune cap ?
 			V.show_message("<span class='warning'>[user] slices open a finger and begins to chant and paint symbols on the floor.</span>", 1, "<span class='warning'>You hear chanting.</span>", 2)
 		to_chat(user, "<span class='warning'>You slice open one of your fingers and begin drawing a rune on the floor whilst chanting the ritual that binds your life essence with the dark arcane energies flowing through the surrounding world.</span>")
 		user.take_overall_damage((rand(9)+1)/10) // 0.1 to 1.0 damage
+		if(do_after(user, user.loc, 50))
+			if(user.get_active_hand() != src)
+				return
+			var/mob/living/carbon/human/H = user
+			var/obj/effect/rune_legacy/R = new /obj/effect/rune_legacy(get_turf(user))
+			to_chat(user, "<span class='warning'>You finish drawing the arcane markings of the Geometer.</span>")
+			R.word1 = w1
+			R.word2 = w2
+			R.word3 = w3
+			R.check_icon(H)
+			R.blood_DNA = list()
+			R.blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
+			R.blood_color = H.species.blood_color
 	else
 		to_chat(user, "The book seems full of illegible scribbles. Is this a joke?")
 		return

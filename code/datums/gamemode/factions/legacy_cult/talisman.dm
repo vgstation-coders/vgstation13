@@ -86,7 +86,6 @@
 				if(T1!=T2)
 					T1.turf_animation('icons/effects/effects.dmi',"rune_teleport")
 			if("communicate")
-				//If the user cancels the talisman this var will be set to 0
 				delete = R.communicate(TRUE)
 			if("deafen")
 				deafen()
@@ -164,7 +163,7 @@
 				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				T.imbue = "emp"
 			if("conceal")
-				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
+				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman/communicate(get_turf(usr))
 				T.imbue = "conceal"
 			if("communicate")
 				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
@@ -188,6 +187,9 @@
 	imbue = "supply"
 	uses = 5
 
+/obj/item/weapon/paper/talisman/communicate
+	imbue = "communicate"
+	uses = 5
 
 //imbued talismans invocation for a few runes, since calling the proc causes a runtime error due to src = null
 /obj/item/weapon/paper/talisman/proc/runestun(var/mob/living/T as mob)//When invoked as talisman, stun and mute the target mob.
