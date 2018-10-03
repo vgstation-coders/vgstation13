@@ -1281,6 +1281,7 @@ var/list/datum/dna/hivemind_bank = list()
 		for(var/i = 1 to held_items.len)
 			if(H.can_use_hand(i))
 				good_hand = i
+				break
 	if(good_hand)
 		drop_item(held_items[good_hand], force_drop = 1)
 		var/obj/item/weapon/armblade/A = new (src)

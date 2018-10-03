@@ -934,13 +934,9 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if (iscultist(H))
-			var/unholy = 0
+			var/unholy = H.checkTattoo(TATTOO_HOLY)
 			var/current_act = max(-1,min(5,veil_thickness))
 			var/datum/role/cultist/cult = H.mind.GetRole(CULTIST)
-			for (var/T in cult.tattoos)
-				var/datum/cult_tattoo/tattoo = cult.tattoos[T]
-				if (tattoo && istype(tattoo, /datum/cult_tattoo/fast))
-					unholy = 1
 			if (cult.holywarning_cooldown <= 0)
 				cult.holywarning_cooldown = 5
 				if (unholy)

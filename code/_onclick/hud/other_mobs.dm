@@ -219,7 +219,6 @@
 
 /datum/hud/proc/cult_hud(ui_style = 'icons/mob/screen1_cult.dmi')
 
-
 	cult_Act_display = getFromPool(/obj/abstract/screen)
 	cult_Act_display.icon = ui_style
 	cult_Act_display.name = "Prologue: The Reunion"
@@ -234,7 +233,8 @@
 	cult_tattoo_display.screen_loc = ui_cult_tattoos
 	//pulse_atom(cult_tattoo_display)
 
-	mymob.client.screen += list(cult_Act_display,cult_tattoo_display)
+	if (mymob.client)
+		mymob.client.screen += list(cult_Act_display,cult_tattoo_display)
 
 /datum/hud/proc/pulse_atom(var/obj/abstract/screen/A)
 	animate(A, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)

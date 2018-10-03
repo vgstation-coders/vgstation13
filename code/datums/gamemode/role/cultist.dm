@@ -4,7 +4,7 @@
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
 	logo_state = "cult-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_ADMINTOGGLE)
-	var/list/tattoos = list("tier1","tier2","tier3")
+	var/list/tattoos = list()
 	var/holywarning_cooldown = 0
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
@@ -73,12 +73,16 @@
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
 
+/datum/role/cultist/update_antag_hud()
+	update_cult_hud()
 
 /datum/role/cultist/proc/update_cult_hud()
 	var/mob/M = antag.current
-	if(M.hud_used)
+	if(M && M.client && M.hud_used)
 		if(!M.hud_used.cult_Act_display)
 			M.hud_used.cult_hud()
+		if (!(M.hud_used.cult_Act_display in M.client.screen))
+			M.client.screen += list(M.hud_used.cult_Act_display,M.hud_used.cult_tattoo_display)
 		M.hud_used.cult_Act_display.overlays.len = 0
 		M.hud_used.cult_tattoo_display.overlays.len = 0
 		var/current_act = max(-1,min(5,veil_thickness))
@@ -112,23 +116,29 @@
 				M.hud_used.cult_Act_display.name = "Act IV: The Tear in Reality"
 			if (CULT_EPILOGUE)
 				M.hud_used.cult_Act_display.name = "Epilogue: The Feast"
-		var/tattoos_names = "none"
+		var/tattoos_names = ""
 		var/i = 0
 		for (var/T in tattoos)
 			var/datum/cult_tattoo/tattoo = tattoos[T]
 			if (tattoo)
 				M.hud_used.cult_tattoo_display.overlays += image('icons/mob/screen1_cult.dmi',"t_[tattoo.icon_state]")
-				tattoos_names = "[i ? ", " : ""][tattoo.name]"
+				tattoos_names += "[i ? ", " : ""][tattoo.name]"
 				i++
+		if (!tattoos_names)
+			tattoos_names = "none"
 		M.hud_used.cult_tattoo_display.name = "Arcane Tattoos: [tattoos_names]"
 
+		if (isshade(M) && M.gui_icons && istype(M.loc,/obj/item/weapon/melee/soulblade))
+			M.client.screen += list(
+				M.gui_icons.soulblade_bgLEFT,
+				M.gui_icons.soulblade_coverLEFT,
+				M.gui_icons.soulblade_bloodbar,
+				M.fire,
+				)
+
 /mob/living/carbon/proc/muted()
-	if (iscultist(src))
-		var/datum/role/cultist/cult = mind.GetRole(CULTIST)
-		for (var/T in cult.tattoos)
-			var/datum/cult_tattoo/tattoo = cult.tattoos[T]
-			if (tattoo && istype(tattoo, /datum/cult_tattoo/holy))
-				return 0
+	if (checkTattoo(TATTOO_HOLY))
+		return 0
 	return (iscultist(src) && reagents && reagents.has_reagent(HOLYWATER))
 
 /datum/role/cultist/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)

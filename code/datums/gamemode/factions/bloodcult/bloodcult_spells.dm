@@ -7,7 +7,7 @@
 //SPELL I
 /spell/cult/trace_rune
 	name = "Trace Rune"
-	desc = "Use available blood to write down words. Three words form a rune."
+	desc = "(1 BLOOD) Use available blood to write down words. Three words form a rune."
 	hud_state = "cult_word"
 
 	invocation_type = SpI_NONE
@@ -37,12 +37,8 @@
 	else
 		spell = null//so we're not stuck trying to write the same spell over and over again
 
-	if (user.mind && user.mind.GetRole(CULTIST))
-		var/datum/role/cultist/cult = user.mind.GetRole(CULTIST)
-		for (var/T in cult.tattoos)
-			var/datum/cult_tattoo/tattoo = cult.tattoos[T]
-			if (tattoo && istype(tattoo, /datum/cult_tattoo/fast))
-				cast_delay = 6
+	if (user.checkTattoo(TATTOO_FAST))
+		cast_delay = 6
 
 	var/mob/living/carbon/C = user
 	var/muted = C.muted()
@@ -56,7 +52,7 @@
 		return 0
 
 	block = 1
-	var/tome = 0
+	var/tome = ""
 
 	if(!istype(user.loc, /turf))
 		to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
@@ -66,12 +62,8 @@
 	A = user.get_active_hand()
 
 
-	if (user.mind && user.mind.GetRole(CULTIST))
-		var/datum/role/cultist/cult = user.mind.GetRole(CULTIST)
-		for (var/T in cult.tattoos)
-			var/datum/cult_tattoo/tattoo = cult.tattoos[T]
-			if (tattoo && istype(tattoo, /datum/cult_tattoo/memorize))
-				tome = "Knowledge"
+	if (user.checkTattoo(TATTOO_MEMORIZE))
+		tome = "Knowledge"
 	if (!tome)
 		tome = (istype(A) && A.state == TOME_OPEN)
 		if (!tome)
@@ -149,12 +141,8 @@
 
 	var/datum/cultword/r_word = cultwords[word]
 
-	if (user.mind && user.mind.GetRole(CULTIST))
-		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
-		for (var/Tat in C.tattoos)
-			var/datum/cult_tattoo/tattoo = C.tattoos[Tat]
-			if (tattoo && istype(tattoo, /datum/cult_tattoo/silent))
-				return ..()
+	if (user.checkTattoo(TATTOO_SILENT))
+		return ..()
 
 	user.whisper("...[r_word.rune]...")
 	return ..()
@@ -238,9 +226,11 @@
 		for(var/i = 1 to H.held_items.len)
 			if(H.can_use_hand(i))
 				good_hand = i
+				break
 	if(good_hand)
 		H.drop_item(H.held_items[good_hand], force_drop = 1)
 		var/obj/item/weapon/melee/blood_dagger/BD = new (H)
+		BD.originator = user
 		if (dagger_color != DEFAULT_BLOOD)
 			BD.icon_state += "-color"
 			BD.item_state += "-color"
@@ -248,4 +238,4 @@
 		H.put_in_hand(good_hand, BD)
 		H.visible_message("<span class='warning'>\The [user] squeezes the blood in their hand, and it takes the shape of a dagger!</span>",
 			"<span class='warning'>You squeeze the blood in your hand, and it takes the shape of a dagger.</span>")
-		playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 1)
+		playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 0,-2)

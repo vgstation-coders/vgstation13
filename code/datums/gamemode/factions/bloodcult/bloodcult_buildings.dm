@@ -437,20 +437,30 @@ var/list/cult_spires = list()
 	var/mob/living/carbon/human/H = user
 	var/datum/role/cultist/C = H.mind.GetRole(CULTIST)
 
-	var/cultist_stage = 0
-	if (C.tattoos["tier3"])
+	var/list/available_tattoos = list("tier1","tier2","tier3")
+	for (var/tattoo in C.tattoos)
+		var/datum/cult_tattoo/CT = C.tattoos[tattoo]
+		available_tattoos -= "tier[CT.tier]"
+
+	var/tattoo_tier = 0
+	if (available_tattoos.len <= 0)
 		to_chat(user,"<span class='warning'>You cannot bear any additional mark.</span>")
 		return
-	else if (C.tattoos["tier2"])
-		cultist_stage = 2
-	else if (C.tattoos["tier1"])
-		cultist_stage = 1
+	if ("tier1" in available_tattoos)
+		tattoo_tier = 1
+	else if ("tier2" in available_tattoos)
+		tattoo_tier = 2
+	else if ("tier3" in available_tattoos)
+		tattoo_tier = 3
+
+	if (!tattoo_tier)
+		return
 
 	var/list/optionlist = list()
-	if (stage > cultist_stage)
+	if (stage >= tattoo_tier)
 		for (var/subtype in subtypesof(/datum/cult_tattoo))
 			var/datum/cult_tattoo/T = new subtype
-			if (T.tier == cultist_stage + 1)
+			if (T.tier == tattoo_tier)
 				optionlist.Add(T.name)
 				to_chat(H, "<span class='danger'>[T.name]</span>: [T.desc]")
 	else
@@ -462,32 +472,23 @@ var/list/cult_spires = list()
 
 	var/tattoo = show_radial_menu(user,loc,optionlist,'icons/obj/cult_radial2.dmi')//spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
 
-	var/new_cultist_stage = 0
-	if (C.tattoos["tier3"])
-		return
-	else if (C.tattoos["tier2"])
-		new_cultist_stage = 2
-	else if (C.tattoos["tier1"])
-		new_cultist_stage = 1
-	if ((new_cultist_stage > cultist_stage) || !Adjacent(user))
+	for (var/tat in C.tattoos)
+		var/datum/cult_tattoo/CT = C.tattoos[tat]
+		if (CT.tier == tattoo_tier)//the spire won't let cultists get multiple tattoos of the same tier.
+			return
+
+	if (!Adjacent(user))//stay here you bloke!
 		return
 
 	for (var/subtype in subtypesof(/datum/cult_tattoo))
 		var/datum/cult_tattoo/T = new subtype
 		if (T.name == tattoo)
 			var/datum/cult_tattoo/new_tattoo = T
-			switch (cultist_stage+1)
-				if (1)
-					C.tattoos["tier1"] = new_tattoo
-				if (2)
-					C.tattoos["tier2"] = new_tattoo
-				if (3)
-					C.tattoos["tier3"] = new_tattoo
-
-			C.update_cult_hud()
+			C.tattoos[new_tattoo.name] = new_tattoo
 
 			anim(target = loc, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_send", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
 			spawn (3)
+				C.update_cult_hud()
 				new_tattoo.getTattoo(H)
 				anim(target = H, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_receive", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
 				sleep(1)
@@ -495,7 +496,8 @@ var/list/cult_spires = list()
 				var/atom/movable/overlay/tattoo_markings = anim(target = H, a_icon = 'icons/mob/cult_tattoos.dmi', flick_anim = "[new_tattoo.icon_state]_mark", sleeptime = 30, lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
 				animate(tattoo_markings, alpha = 0, time = 30)
 
-			if (cultist_stage + 1 < stage)
+			available_tattoos -= "tier[new_tattoo.tier]"
+			if (available_tattoos.len > 0)
 				cultist_act(user)
 			break
 
@@ -692,7 +694,6 @@ var/list/cult_spires = list()
 		progbar.appearance_flags = RESET_ALPHA|RESET_COLOR
 		progbar.layer = HUD_ABOVE_ITEM_LAYER
 	progbar.icon_state = "prog_bar_[round((100 - min(1, timeleft / timetotal) * 100), 10)]"
-	return
 
 /obj/structure/cult/forge/cultist_act(var/mob/user,var/menu="default")
 	.=..()

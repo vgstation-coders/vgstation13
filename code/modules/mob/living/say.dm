@@ -416,13 +416,10 @@ var/list/department_radio_keys = list(
 	if(setting == 0) //overridden for constructs
 		return
 
-	if (mind && mind.GetRole(CULTIST))
+	if (iscultist(src))
 		if(setting == 1)
-			var/datum/role/cultist/C = mind.GetRole(CULTIST)
-			for (var/Tat in C.tattoos)
-				var/datum/cult_tattoo/tattoo = C.tattoos[Tat]
-				if (tattoo && istype(tattoo, /datum/cult_tattoo/chat))
-					return 1
+			if (checkTattoo(TATTOO_CHAT))
+				return 1
 		if(setting == 2)
 			return 1
 

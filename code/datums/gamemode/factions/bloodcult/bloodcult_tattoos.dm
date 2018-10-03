@@ -10,14 +10,17 @@
 /datum/cult_tattoo/proc/getTattoo(var/mob/M)
 	bearer = M
 
-/mob/proc/checkTattoo(var/)
-	var/power = 0
-	for (var/slot in valid_cultpower_slots)
-		var/obj/item/I = get_item_by_slot(slot)
-		if (istype(I))
-			power += I.get_cult_power()
-
-	return power
+/mob/proc/checkTattoo(var/tattoo_name)
+	if (!tattoo_name)
+		return
+	if (!iscultist(src))
+		return
+	var/datum/role/cultist/C = mind.GetRole(CULTIST)
+	for (var/tattoo in C.tattoos)
+		var/datum/cult_tattoo/CT = C.tattoos[tattoo]
+		if (CT.name == tattoo_name)
+			return CT
+	return null
 
 ///////////////////////////
 //                       //
@@ -27,24 +30,24 @@
 var/list/blood_communion = list()
 
 /datum/cult_tattoo/bloodpool
-	name = "Blood Communion"
+	name = TATTOO_POOL
 	desc = "All blood costs reduced by 20%. Tributes are split with other bearers of this mark."
 	icon_state = "bloodpool"
 	tier = 1
 
 /datum/cult_tattoo/bloodpool/getTattoo(var/mob/M)
 	..()
-	if (M.mind && M.mind.GetRole(CULTIST))
+	if (iscultist(M))
 		blood_communion.Add(M.mind.GetRole(CULTIST))
 
 /datum/cult_tattoo/silent
-	name = "Silent Casting"
+	name = TATTOO_SILENT
 	desc = "Cast runes and talismans without having to mouth the invocation."
 	icon_state = "silent"
 	tier = 1
 
 /datum/cult_tattoo/dagger
-	name = "Blood Dagger"
+	name = TATTOO_DAGGER
 	desc = "Materialize a sharp dagger in your hand for a small cost in blood. Use to retrieve."
 	icon_state = "dagger"
 	tier = 1
@@ -62,19 +65,19 @@ var/list/blood_communion = list()
 ///////////////////////////
 
 /datum/cult_tattoo/holy
-	name = "Unholy Protection"
+	name = TATTOO_HOLY
 	desc = "Holy water will now only slow you down a bit, and no longer prevent you from casting."
 	icon_state = "holy"
 	tier = 2
 
 /datum/cult_tattoo/fast
-	name = "Rapid Tracing"
+	name = TATTOO_FAST
 	desc = "Trace runes 60% faster."
 	icon_state = "fast"
 	tier = 2
 
 /datum/cult_tattoo/chat
-	name = "Dark Communication"
+	name = TATTOO_CHAT
 	desc = "Chat with the cult using :x."
 	icon_state = "chat"
 	tier = 2
@@ -86,7 +89,7 @@ var/list/blood_communion = list()
 ///////////////////////////
 
 /datum/cult_tattoo/manifest
-	name = "Pale Body"
+	name = TATTOO_MANIFEST
 	desc = "Acquire a new, fully healed body that cannot feel pain."
 	icon_state = "manifest"
 	tier = 3
@@ -111,13 +114,13 @@ var/list/blood_communion = list()
 	H.regenerate_icons()
 
 /datum/cult_tattoo/memorize
-	name = "Arcane Knowledge"
+	name = TATTOO_MEMORIZE
 	desc = "Trace complete runes without having to hold an open tome."
 	icon_state = "memorize"
 	tier = 3
 
 /datum/cult_tattoo/shortcut
-	name = "Shortcut Tracer"
+	name = TATTOO_SHORTCUT
 	desc = "Place sigils on walls that allows cultists to jump right through."
 	icon_state = "shortcut"
 	tier = 3

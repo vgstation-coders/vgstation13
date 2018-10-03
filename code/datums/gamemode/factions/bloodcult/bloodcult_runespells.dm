@@ -64,13 +64,8 @@
 	..()
 
 /datum/rune_spell/proc/invoke(var/mob/user, var/text="", var/whisper=0)
-	if (user.mind && user.mind.GetRole(CULTIST))
-		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
-		for (var/T in C.tattoos)
-			var/datum/cult_tattoo/tattoo = C.tattoos[T]
-			if (tattoo && istype(tattoo, /datum/cult_tattoo/silent))
-				return
-
+	if (user.checkTattoo(TATTOO_SILENT))
+		return
 	if (!whisper)
 		user.say(text,"C")
 	else

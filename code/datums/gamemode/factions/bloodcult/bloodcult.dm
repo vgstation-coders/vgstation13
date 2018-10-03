@@ -248,7 +248,7 @@ var/veil_thickness = CULT_EPILOGUE//REMEMBER TO SET IT BACK TO CULT_PROLOGUE WHE
 	var/communion = 0
 	var/total_accumulated = 0
 	var/total_needed = amount_needed
-	if (!tribute && user.mind && user.mind.GetRole(CULTIST))
+	if (!tribute && iscultist(user))
 		var/datum/role/cultist/mycultist = user.mind.GetRole(CULTIST)
 		if (mycultist in blood_communion)
 			communion = 1

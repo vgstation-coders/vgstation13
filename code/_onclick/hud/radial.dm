@@ -279,7 +279,7 @@
 	var/client/current_user = user.client
 	if (anchor in current_user.radial_menus)
 		return
-	current_user.radial_menus |= anchor
+	current_user.radial_menus += anchor
 
 	var/datum/radial_menu/menu = new (icon_file)
 	if(!user)

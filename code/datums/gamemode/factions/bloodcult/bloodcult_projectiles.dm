@@ -267,6 +267,9 @@
 			if (B)
 				H.vessel.add_reagent(BLOOD, 5 + stacks * 5)
 				H.vessel.update_total()
+				to_chat(H, "<span class='notice'>[firer ? "\The [firer]'s" : "The"] [src] enters your body painlessly, irrigating your vessels with some fresh blood.</span>")
+			else
+				to_chat(H, "<span class='notice'>[firer ? "\The [firer]'s" : "The"] [src] enters your body, but you have no vessels to irrigate.</span>")
 			absorbed = 1
 			playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 1)
 

@@ -151,7 +151,7 @@
 		else
 			purged.icon_state = "purge0"
 
-	if(client && hud_used)
+	if(client && hud_used && healths)
 		switch(health)
 			if(50 to INFINITY)
 				healths.icon_state = "shade_health0"

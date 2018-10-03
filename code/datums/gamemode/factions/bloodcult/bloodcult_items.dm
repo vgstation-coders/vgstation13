@@ -611,7 +611,7 @@ var/list/arcane_tomes = list()
 				health = min(maxHealth,health+10)
 		if ("Remove Gem")
 			var/turf/T = get_turf(user)
-			playsound(T, 'sound/items/Deconstruct.ogg', 50, 1)
+			playsound(T, 'sound/items/Deconstruct.ogg', 50, 0, -3)
 			user.drop_item(src,T)
 			var/obj/item/weapon/melee/cultblade/CB = new (T)
 			var/obj/item/device/soulstone/gem/SG = new (T)
@@ -654,6 +654,7 @@ var/list/arcane_tomes = list()
 		var/turf/starting = get_turf(user)
 		var/turf/target = get_turf(A)
 		var/obj/item/projectile/bloodslash/BS = new (starting)
+		BS.firer = user
 		BS.original = target
 		BS.target = target
 		BS.current = starting
@@ -816,12 +817,13 @@ var/list/arcane_tomes = list()
 	w_class = W_CLASS_GIANT//don't want it stored anywhere
 	attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	hitsound = 'sound/weapons/bladeslice.ogg'
+	var/mob/originator = null
 	var/stacks = 0
 	var/absorbed = 0
 
 /obj/item/weapon/melee/blood_dagger/Destroy()
 	var/turf/T = get_turf(src)
-	playsound(T, 'sound/effects/forge_over.ogg', 100, 1)
+	playsound(T, 'sound/effects/forge_over.ogg', 100, 0, -2)
 	if (!absorbed && !locate(/obj/effect/decal/cleanable/blood/splatter) in T)
 		var/obj/effect/decal/cleanable/blood/splatter/S = new (T)//splash
 		if (color)
@@ -837,7 +839,7 @@ var/list/arcane_tomes = list()
 	if(target == user)
 		if (stacks < 5 && user.take_blood(null,5))
 			stacks++
-			playsound(user, 'sound/weapons/bladeslice.ogg', 30, 1)
+			playsound(user, 'sound/weapons/bladeslice.ogg', 30, 0, -2)
 			to_chat(user, "<span class='warning'>The dagger takes a bit of your blood.</span>")
 		return
 	..()
@@ -852,10 +854,13 @@ var/list/arcane_tomes = list()
 		var/mob/living/carbon/human/H = user
 		var/datum/reagent/blood/B = get_blood(H.vessel)
 		if (B)
+			to_chat(user, "<span class='notice'>You sheath the dagger back inside your body[stacks ? ", along with the stolen blood" : ""].</span>")
 			H.vessel.add_reagent(BLOOD, 5 + stacks * 5)
 			H.vessel.update_total()
+		else
+			to_chat(user, "<span class='notice'>You sheath the dagger inside your body, but the blood fails to find vessels to occupy.</span>")
 		absorbed = 1
-		playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 1)
+		playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 0, -2)
 		qdel(src)
 
 /obj/item/weapon/melee/blood_dagger/pre_throw()
@@ -875,6 +880,7 @@ var/list/arcane_tomes = list()
 	BD.damage = 5 + stacks * 5
 	BD.icon_state = icon_state
 	BD.color = color
+	BD.firer = originator
 	BD.OnFired()
 	BD.process()
 	qdel(src)

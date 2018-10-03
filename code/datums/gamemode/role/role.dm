@@ -208,6 +208,9 @@
 /datum/role/proc/OnPostSetup()
 	return 1
 
+/datum/role/proc/update_antag_hud()
+	return
+
 /datum/role/proc/process()
 	return
 
