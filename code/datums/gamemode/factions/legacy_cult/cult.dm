@@ -7,7 +7,7 @@
 
 /datum/faction/cult/AdminPanelEntry()
 	var/list/dat = ..()
-	dat += "<br/><a href='?src=\ref[src];cult_mindspeak_global=\ref[src]'>Voice of [eldergod]</a>"
+	dat += "<br/><a href='?src=\ref[src];cult_mindspeak_global=\ref[src]'>Voice of [deity_name]</a>"
 	return dat
 
 /datum/faction/cult/proc/grant_runeword(mob/living/carbon/human/cult_mob, var/word)
@@ -25,7 +25,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	desc = "A group of shady blood-obsessed individuals whose souls are devoted to Nar-Sie, the Geometer of Blood.\
 	From his teachings, they were granted the ability to perform blood magic rituals allowing them to fight and grow their ranks, and given the goal of pushing his agenda.\
 	Nar-Sie's ultimate goal is to tear open a breach through reality so he can pull the station into his realm and feast on the crew's blood and souls."
-	deity_name = "Geometer of Blood"
+	deity_name = "Nar-Sie"
 	var/list/allwords = list("travel","self","see","hell","blood","join","tech","destroy", "other", "hide")
 	var/list/startwords = list("blood","join","self","hell")
 	var/list/bloody_floors = list()

@@ -334,7 +334,7 @@
 			to_chat(user, "<span class='notice'>You carve out the pages from [title]! You didn't want to read it anyway.</span>")
 			carved = 1
 			return
-/*
+
 	else if(istype(W, /obj/item/weapon/paper/talisman))// TODO rolefix
 		var/obj/item/weapon/paper/talisman/talisman = W
 		if(runestun)
@@ -344,7 +344,6 @@
 			to_chat(user, "<span class='notice'>You slide the talisman between the pages.</span>")
 			qdel(talisman)
 			runestun = 1
-*/
 
 
 
