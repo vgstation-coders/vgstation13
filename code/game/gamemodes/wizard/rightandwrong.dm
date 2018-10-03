@@ -17,7 +17,7 @@
 
 	for(var/mob/living/carbon/human/H in player_list)
 		H.equip_survivor(summon_type)
-		if (prob(100) || iswizard(H))
+		if (prob(65) || iswizard(H))
 			continue
 		if(H.stat == DEAD || !(H.client))
 			continue
