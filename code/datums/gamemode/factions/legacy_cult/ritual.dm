@@ -355,6 +355,9 @@ var/runedec = 0 // Rune cap ?
 	if(!usr.canmove || usr.stat || usr.restrained())
 		return
 
+	if (!my_cult) // Has been spawned without a cult ; likely an emagged library console
+		return
+
 	if(!cultwords["travel"])
 		my_cult.randomiseWords()
 	if(islegacycultist(user))

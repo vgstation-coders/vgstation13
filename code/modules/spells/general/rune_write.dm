@@ -20,7 +20,7 @@
 /spell/rune_write/cast(null, mob/user = usr)
 	var/list/runes = list("Teleport", "Teleport Other", "Spawn a Tome", "Change Construct Type", "Convert", "EMP", "Drain Blood", "See Invisible", "Resurrect", "Hide Runes", "Reveal Runes", "Astral Journey", "Manifest a Ghost", "Imbue Talisman", "Sacrifice", "Wall", "Free Cultist", "Summon Cultist", "Deafen", "Blind", "BloodBoil", "Communicate", "Stun")
 	var/r = input(user, "Choose a rune to scribe", "Rune Scribing") in runes //not cancellable.
-	var/obj/effect/rune/R = new /obj/effect/rune(user.loc)
+	var/obj/effect/rune_legacy/R = new /obj/effect/rune_legacy(user.loc)
 	if(istype(user.loc,/turf))
 		switch(r)
 			if("Teleport")
