@@ -335,7 +335,7 @@
 			carved = 1
 			return
 
-	else if(istype(W, /obj/item/weapon/paper/talisman))// TODO rolefix
+	else if(istype(W, /obj/item/weapon/paper/talisman))
 		var/obj/item/weapon/paper/talisman/talisman = W
 		if(runestun)
 			to_chat(user, "<span class='notice'>There is already a talisman between the pages.</span>")
