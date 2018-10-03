@@ -243,8 +243,9 @@ obj/item/proc/get_clamped_volume()
 
 
 /obj/item/proc/on_attack(var/atom/attacked, var/mob/user)
-	user.do_attack_animation(attacked, src)
-	user.delayNextAttack(attack_delay)
+	if (!user.gcDestroyed)
+		user.do_attack_animation(attacked, src)
+		user.delayNextAttack(attack_delay)
 	if(hitsound)
 		playsound(attacked.loc, hitsound, 50, 1, -1)
 	if(material_type)
