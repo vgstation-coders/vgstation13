@@ -86,6 +86,8 @@
 		if(istype(S, /obj/item/stack/sheet/))
 			var/obj/item/stack/sheet/SS = S
 			mat = materials_list.getMaterial(SS.mat_type)
+		else if(S.material_type)
+			mat = S.material_type
 		if(mat)
 			var/icon/original = icon(R.icon, R.icon_state)
 			if(mat.color)
@@ -103,17 +105,20 @@
 			R.alpha = mat.alpha
 			R.material_type = mat
 			R.sheet_type = mat.sheettype
-			//if(gen_quality)
-			R.gen_quality()
-			if(R.quality > SUPERIOR)
-				R.gen_description()
+			if(gen_quality)
+				R.gen_quality()
+				if(R.quality > SUPERIOR)
+					R.gen_description()
 		if(!findtext(lowertext(R.name), lowertext(mat.name)))
 			R.name = "[R.quality == NORMAL ? "": "[lowertext(qualityByString[R.quality])] "][lowertext(mat.name)] [R.name]"
 
 var/list/datum/stack_recipe/metal_recipes = list (
-	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/plasteel, 1, 4, 60),
-	new/datum/stack_recipe("metal rod",  /obj/item/stack/rods,          1, 2, 60),
-	new/datum/stack_recipe("conveyor belt", /obj/item/stack/conveyor_assembly, 2, 1, 20),
+	new/datum/stack_recipe_list("building components", list(
+		new/datum/stack_recipe("floor tile", /obj/item/stack/tile/plasteel, 1, 4, 60),
+		new/datum/stack_recipe("metal rod",  /obj/item/stack/rods,          1, 2, 60),
+		new/datum/stack_recipe("conveyor belt", /obj/item/stack/conveyor_assembly, 2, 1, 20),
+		new/datum/stack_recipe/dorf("chain", /obj/item/stack/chains, 2, 1, 20, 5, inherit_material = TRUE)
+	)),
 	null,
 	new/datum/stack_recipe("computer frame", /obj/structure/computerframe,                      5, time = 25, one_per_turf = 1			    ),
 	new/datum/stack_recipe("wall girders",   /obj/structure/girder,                             2, time = 50, one_per_turf = 1, on_floor = 1),
@@ -135,7 +140,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe/chair("chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("folding chair",      /obj/structure/bed/chair/folding,         one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe("bed",                      /obj/structure/bed,                    2, one_per_turf = 1, on_floor = 1),
-		new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
+		new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
 		)),
 	new/datum/stack_recipe_list("couch parts", list(
 		new/datum/stack_recipe/chair("beige couch left end",      /obj/structure/bed/chair/comfy/couch/left/beige,         2, one_per_turf = 1, on_floor = 1),
@@ -227,7 +232,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	null,
 	new/datum/stack_recipe("iron door", /obj/machinery/door/mineral/iron, 					20, 			one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("stove", /obj/machinery/space_heater/campfire/stove, 			5, time = 25, 	one_per_turf = 1, on_floor = 1),
-	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
 	)
 
 /* ========================================================================
@@ -243,7 +248,7 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 	new/datum/stack_recipe("Fireaxe cabinet",				/obj/item/mounted/frame/fireaxe_cabinet_frame,		2,	time = 50									),
 	null,
 	new/datum/stack_recipe("Vault Door assembly",			/obj/structure/door_assembly/door_assembly_vault,	8,	time = 50,	one_per_turf = 1,	on_floor = 1),
-	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
+	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
 	)
 
 /* ====================================================================
@@ -257,7 +262,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	null,
 	new/datum/stack_recipe("table parts",		/obj/item/weapon/table_parts/wood,		2													),
 	new/datum/stack_recipe("wooden chair",		/obj/structure/bed/chair/wood/normal,	1,		time = 10,	one_per_turf = 1,	on_floor = 1),
-	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE),
+	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
 	new/datum/stack_recipe("throne",			/obj/structure/bed/chair/wood/throne,	40,		time = 100,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("bookcase",			/obj/structure/bookcase,				5,		time = 50,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("coffin",			/obj/structure/closet/coffin,			5,		time = 15,	one_per_turf = 1,	on_floor = 1),
@@ -281,7 +286,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("boomerang",			/obj/item/weapon/boomerang,				6,		time = 50									),
 	new/datum/stack_recipe("buckler",			/obj/item/weapon/shield/riot/buckler,	5,		time = 50									),
 	new/datum/stack_recipe("wooden paddle",		/obj/item/weapon/macuahuitl,			1,		time = 50									),
-	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE)
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	4, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE)
 	)
 
 /* =========================================================================
@@ -337,8 +342,8 @@ var/list/datum/stack_recipe/brass_recipes = list (
 	new/datum/stack_recipe("brass full window", /obj/structure/window/full/reinforced/clockwork, 4, time = 20, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 1)),
 	new/datum/stack_recipe("brass table parts", /obj/item/weapon/table_parts/clockwork, 4),
 	new/datum/stack_recipe("clockwork girders", /obj/structure/girder/clockwork, 3, time = 70, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 3)),
-	new/datum/stack_recipe/dorf("dorf chair", /obj/structure/bed/chair, one_per_turf = TRUE, on_floor = TRUE, inherit_material = TRUE),
-	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword, 4, time = 12,	on_floor = TRUE, inherit_material = TRUE),
+	new/datum/stack_recipe/dorf("dorf chair", /obj/structure/bed/chair, one_per_turf = TRUE, on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword, 4, time = 12,	on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
 	)
 
 /* ========================================================================
@@ -347,6 +352,6 @@ var/list/datum/stack_recipe/brass_recipes = list (
 
 var/list/datum/stack_recipe/ralloy_recipes = list (
 	new/datum/stack_recipe("replicant grille", /obj/structure/grille/replicant, 2, time = 10, one_per_turf = TRUE, on_floor = TRUE),
-	new/datum/stack_recipe/dorf("dorf chair", /obj/structure/bed/chair, one_per_turf = TRUE, on_floor = TRUE, inherit_material = TRUE),
-	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword, 4, time = 12,	on_floor = TRUE, inherit_material = TRUE),
+	new/datum/stack_recipe/dorf("dorf chair", /obj/structure/bed/chair, one_per_turf = TRUE, on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword, 4, time = 12,	on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
 	)
