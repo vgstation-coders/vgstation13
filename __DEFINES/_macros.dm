@@ -239,6 +239,12 @@
 
 #define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUAD))
 
+#define isbomberman(H) (H.mind && H.mind.GetRole(BOMBERMAN))
+
+#define ishighlander(H) (H.mind && H.mind.GetRole(HIGHLANDER))
+
+#define isweeaboo(H) (H.mind && H.mind.GetRole(WEEABOO))
+
 
 
 

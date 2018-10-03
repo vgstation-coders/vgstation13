@@ -270,3 +270,31 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 	to_chat(killer, "New law: 0. [law]")
 
 
+/proc/equip_weeaboo(var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return 0
+	H.drop_all(TRUE)
+	H.put_in_hands(new /obj/item/weapon/katana)
+	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
+	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
+	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/skull, slot_belt)
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
+	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
+
+
+/proc/name_weeaboo(var/mob/living/carbon/human/H)
+	//Allows the weeb to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.
+	if(!isjusthuman(H))
+		H.set_species("Human", 1)
+	var/weeaboo_title = pick(ninja_titles)
+	var/weeaboo_name = pick(ninja_names)
+	var/randomname = "[weeaboo_title] [weeaboo_name]"
+	spawn(0)
+		var/newname = copytext(sanitize(input(H, "You are a Space Weeaboo. Would you like to change your name to something else?", "Name change", randomname) as null|text),1,MAX_NAME_LEN)
+
+		if (!newname)
+			newname = randomname
+
+		H.fully_replace_character_name(H.real_name, newname)

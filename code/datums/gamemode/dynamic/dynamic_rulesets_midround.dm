@@ -192,3 +192,69 @@
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_MIDROUND)
 	nuclear.OnPostSetup()
+
+	
+//////////////////////////////////////////////
+//                                          //
+//         SPACE WEEABOO (MIDROUND)                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/weeaboo
+	name = "Crazed Weeaboo"
+	role_category = ROLE_TRAITOR
+	required_candidates = 1
+	weight = 1
+	cost = 10
+	requirements = list(90,85,80,80,80,80,80,80,80,80)
+	logo = "weeaboo-logo"
+
+/datum/dynamic_ruleset/midround/weeaboo/acceptable(var/population=0,var/threat=0)
+	var/player_count = mode.living_players.len
+	var/antag_count = mode.living_antags.len
+	var/max_traitors = round(player_count / 10) + 1
+	if ((antag_count < max_traitors) && prob(mode.threat_level))
+		return ..()
+	else
+		return 0
+
+/datum/dynamic_ruleset/midround/weeaboo/ready(var/forced = 0)
+	if (required_candidates > (dead_players.len + list_observers.len))
+		return 0
+	return ..()
+
+/datum/dynamic_ruleset/midround/weeaboo/execute()
+	var/list/possible_candidates = list()
+	possible_candidates.Add(dead_players)
+	possible_candidates.Add(list_observers)
+	send_applications(possible_candidates)
+	return 1
+
+/datum/dynamic_ruleset/midround/weeaboo/review_applications()
+	for (var/i = required_candidates, i > 0, i--)
+		if(applicants.len <= 0)
+			break
+		var/mob/applicant = null
+		var/selected_key = pick(applicants)
+		for(var/mob/M in player_list)
+			if(M.key == selected_key)
+				applicant = M
+		if(!applicant || !applicant.key)
+			i++
+			continue
+		applicants -= applicant.key
+		if(!isobserver(applicant))
+			//Making sure we don't recruit people who got back into the game since they applied
+			i++
+			continue
+
+		var/mob/living/carbon/human/new_character= makeBody(applicant)
+		new_character.dna.ResetSE()
+
+		assigned += new_character
+		var/datum/role/weeaboo/newWeeaboo = new
+		newWeeaboo.AssignToRole(new_character.mind,1)
+		newWeeaboo.OnPostSetup()
+		newWeeaboo.Greet(GREET_DEFAULT)
+		newWeeaboo.ForgeObjectives()
+		newWeeaboo.AnnounceObjectives()
