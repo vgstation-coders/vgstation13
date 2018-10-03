@@ -57,7 +57,8 @@
 				returnToPool(loc)
 			else
 				return 0
-
+		if(is_pacified())
+			return 0
 		switch(stance)
 			if(HOSTILE_STANCE_IDLE)
 				if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
