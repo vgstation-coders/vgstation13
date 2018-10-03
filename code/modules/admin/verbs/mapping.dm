@@ -123,57 +123,6 @@ var/intercom_range_display_status = 0
 
 	feedback_add_details("admin_verb","mIRD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/proc/enable_debug_verbs()
-	set category = "Debug"
-	set name = "Debug verbs"
-
-	if(!check_rights(R_DEBUG))
-		return
-
-	src.verbs += /client/proc/do_not_use_these 			//-errorage
-	src.verbs += /client/proc/camera_view 				//-errorage
-	src.verbs += /client/proc/sec_camera_report 		//-errorage
-	src.verbs += /client/proc/intercom_view 			//-errorage
-	src.verbs += /client/proc/air_status //Air things
-	src.verbs += /client/proc/Cell //More air things
-	src.verbs += /client/proc/pdiff //Antigriff testing - N3X
-	src.verbs += /client/proc/atmosscan //check plumbing
-	src.verbs += /client/proc/powerdebug //check power
-	src.verbs += /client/proc/count_objects_on_z_level
-	src.verbs += /client/proc/count_objects_all
-	src.verbs += /client/proc/cmd_assume_direct_control	//-errorage
-	src.verbs += /client/proc/jump_to_dead_group
-	src.verbs += /client/proc/startSinglo
-	src.verbs += /client/proc/cheat_power // Because the above doesn't work off-station.  Or at all, occasionally - N3X
-	src.verbs += /client/proc/setup_atmos // Laziness during atmos testing - N3X
-	src.verbs += /client/proc/ticklag	//allows you to set the ticklag.
-	src.verbs += /client/proc/cmd_admin_grantfullaccess
-	src.verbs += /client/proc/kaboom
-	src.verbs += /client/proc/splash
-	src.verbs += /client/proc/cmd_admin_areatest
-	src.verbs += /client/proc/cmd_admin_rejuvenate
-	src.verbs += /datum/admins/proc/show_role_panel
-	src.verbs += /client/proc/print_jobban_old
-	src.verbs += /client/proc/print_jobban_old_filter
-	src.verbs += /client/proc/forceEvent
-	//src.verbs += /client/proc/break_all_air_groups
-	//src.verbs += /client/proc/regroup_all_air_groups
-	//src.verbs += /client/proc/kill_pipe_processing
-	//src.verbs += /client/proc/kill_air_processing
-	//src.verbs += /client/proc/disable_communication
-	//src.verbs += /client/proc/disable_movement
-	src.verbs += /client/proc/Zone_Info
-	src.verbs += /client/proc/Test_ZAS_Connection
-	src.verbs += /client/proc/SDQL2_query
-	src.verbs += /client/proc/check_sim_unsim
-	src.verbs += /proc/generateMiniMaps
-	src.verbs += /client/proc/maprender
-	//src.verbs += /client/proc/cmd_admin_rejuvenate
-	src.verbs += /client/proc/start_line_profiling
-	src.verbs += /client/proc/stop_line_profiling
-	src.verbs += /client/proc/show_line_profiling
-	feedback_add_details("admin_verb","mDV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
 /client/proc/count_objects_on_z_level()
 	set category = "Mapping"
 	set name = "Count Objects On Level"

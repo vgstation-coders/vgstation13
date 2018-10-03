@@ -4985,6 +4985,13 @@
 				var/msg = "[key_name(usr)] removed [key_name(M)] from his religion."
 				message_admins(msg)
 				updateRelWindow()
+	if (href_list["verb"])
+		var/verb_type = href_list["verb"]
+		var/datum/admin_verbs/V = new verb_type
+		if (!istype(V))
+			to_chat(usr, "<span class='warning'>Could not locate the verb.</span>")
+			return FALSE
+		V.execute(src)
 
 /datum/admins/proc/updateRelWindow()
 	var/text = list()
