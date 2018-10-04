@@ -461,7 +461,7 @@ var/list/cult_spires = list()
 		for (var/subtype in subtypesof(/datum/cult_tattoo))
 			var/datum/cult_tattoo/T = new subtype
 			if (T.tier == tattoo_tier)
-				choices.Add(list(T.name, "radial_[T.icon_state]", T.desc))
+				choices += list(list(T.name, "radial_[T.icon_state]", T.desc)) //According to BYOND docs, when adding to a list, "If an argument is itself a list, each item in the list will be added." My solution to that, because I am a genius, is to add a list within a list.
 				to_chat(H, "<span class='danger'>[T.name]</span>: [T.desc]")
 	else
 		to_chat(user,"<span class='warning'>Come back to acquire another mark once your cult is a step closer to its goal.</span>")
