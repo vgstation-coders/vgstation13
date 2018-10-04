@@ -35,8 +35,6 @@
 
 // EFFECTS
 
-var/list/effects_list = list()
-
 /obj/effect/Destroy()
 	if(ticker)
 		cameranet.updateVisibility(src)
