@@ -35,13 +35,17 @@
 
 // EFFECTS
 
+var/list/effects_list = list()
+
 /obj/effect/Destroy()
 	if(ticker)
 		cameranet.updateVisibility(src)
+	effects_list -= src
 	..()
 
 /obj/effect/New()
 	..()
+	effect_list += src
 	if(ticker)
 		cameranet.updateVisibility(src)
 
