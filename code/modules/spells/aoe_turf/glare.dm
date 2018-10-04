@@ -18,7 +18,7 @@
 
 	inner_radius = 3
 
-	var/blood_cost = 1
+	var/blood_cost = 0
 
 /spell/aoe_turf/glare/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
