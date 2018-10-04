@@ -100,7 +100,7 @@
 	if(istype(the_target,/obj/machinery/light))
 		var/obj/machinery/light/L = the_target
 		// Not empty or broken
-		return L.status != LIGHT_EMPTY && L.status != LIGHT_BROKEN
+		return L.current_bulb && L.current_bulb.status != LIGHT_BROKEN
 	return ..(the_target)
 
 /mob/living/simple_animal/hostile/giant_spider/proc/CanOpenDoor(var/obj/machinery/door/D)
