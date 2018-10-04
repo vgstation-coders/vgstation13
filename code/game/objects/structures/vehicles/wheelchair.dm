@@ -153,10 +153,13 @@
 /obj/structure/bed/chair/vehicle/wheelchair/emp_act(severity)
 	return
 
-/obj/structure/bed/chair/vehicle/wheelchair/update_mob()
-	if(occupant)
-		occupant.pixel_x = 0
-		occupant.pixel_y = 3 * PIXEL_MULTIPLIER
+/obj/structure/bed/chair/vehicle/wheelchair/make_offsets()
+	offsets = list(
+		"[SOUTH]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER),
+		"[WEST]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER),
+		"[NORTH]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER),
+		"[EAST]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER)
+		)
 
 /obj/structure/bed/chair/vehicle/wheelchair/die()
 	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 4)
