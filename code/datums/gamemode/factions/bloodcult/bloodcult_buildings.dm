@@ -736,7 +736,7 @@ var/list/cult_spires = list()
 			timeleft = 8
 			forge_icon = "forge_helmet"
 		if ("Forge Construct Shell")
-			template = /obj/structure/constructshell/cult
+			template = /obj/structure/constructshell/cult/alt
 			timeleft = 25
 			forge_icon = "forge_shell"
 	timetotal = timeleft

@@ -102,6 +102,10 @@
 	icon_state = "construct-cult"
 	desc = "This eerie contraption looks like it would come alive if supplied with a missing ingredient."
 
+/obj/structure/constructshell/cult/alt
+	icon = 'icons/obj/cult.dmi'
+	icon_state = "shell"
+
 /obj/structure/constructshell/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/device/soulstone))
 		O.transfer_soul("CONSTRUCT",src,user)
