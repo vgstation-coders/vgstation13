@@ -415,6 +415,7 @@
 // DO NOT OVERRIDE
 /datum/role/Topic(href, href_list)
 	if(!check_rights(R_ADMIN))
+		to_chat(usr, "You are not an admin.")
 		return 0
 
 	if(!href_list["mind"])
