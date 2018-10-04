@@ -84,7 +84,7 @@ var/list/forced_roundstart_ruleset = list()
 	for (var/datum/dynamic_ruleset/roundstart/DR in executed_rules)
 		starting_rulesets += "[DR.name], "
 	dynamic_stats.roundstart_rulesets = starting_rulesets
-	dynamic_stats.threat[time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")] = threat
+	dynamic_stats.measure_threat(threat)
 	return 1
 
 /datum/gamemode/dynamic/proc/rigged_roundstart()
@@ -156,13 +156,13 @@ var/list/forced_roundstart_ruleset = list()
 		if (!latejoin_rule.repeatable)
 			latejoin_rules -= latejoin_rule
 		threat = max(0,threat-latejoin_rule.cost)
-		dynamic_stats.threat[time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")] = threat
+		dynamic_stats.measure_threat(threat)
 		if (latejoin_rule.execute())//this should never fail since ready() returned 1
 			var/mob/M = pick(latejoin_rule.assigned)
 			message_admins("[key_name(M)] joined the station, and was selected by the <font size='3'>[latejoin_rule.name]</font> ruleset.")
 			log_admin("[key_name(M)] joined the station, and was selected by the [latejoin_rule.name] ruleset.")
 			executed_rules += latejoin_rule
-			dynamic_stats.successful_injections[time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")] = latejoin_rule.name
+			dynamic_stats.successful_injection(latejoin_rule.name)
 			if (latejoin_rule.persistent)
 				current_rules += latejoin_rule
 			return 1
@@ -174,11 +174,11 @@ var/list/forced_roundstart_ruleset = list()
 		if (!midround_rule.repeatable)
 			midround_rules -= midround_rule
 		threat = max(0,threat-midround_rule.cost)
-		dynamic_stats.threat[time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")] = threat
+		dynamic_stats.measure_threat(threat)
 		if (midround_rule.execute())//this should never fail since ready() returned 1
 			message_admins("Injecting some threats...<font size='3'>[midround_rule.name]</font>!")
 			log_admin("Injecting some threats...[midround_rule.name]!")
-			dynamic_stats.successful_injections[time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")] = midround_rule.name
+			dynamic_stats.successful_injections(midround_rule)
 			executed_rules += midround_rule
 			if (midround_rule.persistent)
 				current_rules += midround_rule
@@ -198,12 +198,12 @@ var/list/forced_roundstart_ruleset = list()
 		new_rule.trim_candidates()
 		if (new_rule.ready(forced))
 			threat = max(0,threat-new_rule.cost)
-			dynamic_stats.threat[time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")] = threat
+			dynamic_stats.measure_threat(threat)
 			if (new_rule.execute())//this should never fail since ready() returned 1
 				message_admins("Making a call to a specific ruleset...<font size='3'>[new_rule.name]</font>!")
 				log_admin("Making a call to a specific ruleset...[new_rule.name]!")
 				executed_rules += new_rule
-				dynamic_stats.successful_injections[time2text(world.realtime, "YYYY-MM-DD hh:mm:ss")] = new_rule.name
+				dynamic_stats.successful_injection(new_rule)
 				if (new_rule.persistent)
 					current_rules += new_rule
 				return 1
