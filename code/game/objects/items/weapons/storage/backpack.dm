@@ -201,5 +201,5 @@
 
 /obj/item/weapon/storage/backpack/messenger/black
 	name = "black messenger bag"
-	desc = "for the freerunning pizza delivery hacker on the go."
+	desc = "For the freerunning pizza delivery hacker on the go."
 	icon_state = "courierbagblack"
