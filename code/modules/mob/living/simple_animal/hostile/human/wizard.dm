@@ -38,6 +38,11 @@
 	src.say("SCYAR NILA [pick("AI UPLOAD", "SECURE ARMORY", "BAR", "PRIMARY TOOL STORAGE", "INCINERATOR", "CHAPEL", "FORE STARBOARD MAINTENANCE", "WIZARD FEDERATION")]")
 	var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(get_turf(src))
 	S.time_to_live = 20 //2 seconds instead of full 10
+	alpha = 0
+	density = 0
+	timestopped = TRUE
+	sleep(10)	//Wizards were somehow dying before executing their say() despite the position of the procs, so let's give them a little extra time.
+	timestopped = FALSE
 
 	..(TRUE)
 	qdel(src)
