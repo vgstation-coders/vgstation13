@@ -1341,7 +1341,7 @@ var/list/slot_equipment_priority = list( \
 		creatures[name] = S
 
 	for (var/obj/machinery/bot/B in bots_list)
-		var/name = "BOT: [O.name]"
+		var/name = "BOT: [B.name]"
 		if (names.Find(name))
 			namecounts[name]++
 			name = "[name] ([namecounts[name]])"
