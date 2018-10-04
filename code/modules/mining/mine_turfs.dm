@@ -404,6 +404,8 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		return
 
 	var/obj/item/weapon/ore/O = new mineral.ore (src)
+	O.pixel_x = rand(-16,16) * PIXEL_MULTIPLIER
+	O.pixel_y = rand(-16,16) * PIXEL_MULTIPLIER
 	if(istype(O))
 		if(!geologic_data)
 			geologic_data = new/datum/geosample(src)
@@ -454,7 +456,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(mineral)
 		var/mineral_name = mineral.display_name
 		if(rockernaut)
-			return "embed_[mineral_name]"
+			return "[has_icon('icons/turf/mine_overlays.dmi',"embed_[mineral_name]")?"embed_[mineral_name]":"embed_Iron"]"
 		return mineral_name
 	return null
 
@@ -730,6 +732,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	var/mineralSpawnChanceList = list(
 		"Iron"      = 50,
 		"Plasma"    = 25,
+		"Ice"		= 10,
 		"Uranium"   = 5,
 		"Gold"      = 5,
 		"Silver"    = 5,

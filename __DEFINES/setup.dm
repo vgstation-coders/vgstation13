@@ -785,6 +785,7 @@ SEE_PIXELS	256
 #define MAT_WOOD		"$wood"
 #define MAT_BRASS   	"$brass"
 #define MAT_RALLOY   	"$ralloy"
+#define MAT_ICE			"$ice"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first

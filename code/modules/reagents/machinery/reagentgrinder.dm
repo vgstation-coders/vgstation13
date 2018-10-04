@@ -59,7 +59,8 @@ var/global/list/juice_items = list (
 
 		//All types that you can put into the grinder to transfer the reagents to the beaker. !Put all recipes above this.!
 		/obj/item/weapon/reagent_containers/pill = list(),
-		/obj/item/weapon/reagent_containers/food = list()
+		/obj/item/weapon/reagent_containers/food = list(),
+		/obj/item/ice_crystal                = list(ICE, 10),
 	)
 
 
