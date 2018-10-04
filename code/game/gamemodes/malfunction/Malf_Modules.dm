@@ -11,9 +11,6 @@ cable stun
 rcd light flash thingy on matter drain
 */
 
-var/list/rcd_list = list()
-var/list/red_tool_list = list()
-
 #define MALFUNCTION "Malfunction"
 /datum/AI_Module
 	var/uses = 0
