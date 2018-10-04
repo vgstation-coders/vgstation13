@@ -178,7 +178,7 @@ var/list/forced_roundstart_ruleset = list()
 		if (midround_rule.execute())//this should never fail since ready() returned 1
 			message_admins("Injecting some threats...<font size='3'>[midround_rule.name]</font>!")
 			log_admin("Injecting some threats...[midround_rule.name]!")
-			dynamic_stats.successful_injections(midround_rule)
+			dynamic_stats.successful_injection(midround_rule)
 			executed_rules += midround_rule
 			if (midround_rule.persistent)
 				current_rules += midround_rule
