@@ -1348,7 +1348,7 @@ var/list/slot_equipment_priority = list( \
 		else
 			names.Add(name)
 			namecounts[name] = 1
-		creatures[name] = O
+		creatures[name] = B
 
 
 	for(var/mob/M in sortNames(mob_list))
