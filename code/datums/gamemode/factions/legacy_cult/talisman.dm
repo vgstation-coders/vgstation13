@@ -1,7 +1,7 @@
 /obj/item/weapon/paper/talisman
 	icon_state = "paper_talisman"
 	var/imbue = null
-	var/uses = 0
+	var/uses = 1
 	var/nullblock = 0
 
 /obj/item/weapon/paper/talisman/update_icon()
@@ -65,7 +65,7 @@
 
 /obj/item/weapon/paper/talisman/attack_self(mob/living/user as mob)
 	if(islegacycultist(user))
-		var/delete = 1
+		var/use_charge = 1
 		var/obj/effect/rune_legacy/R = new
 		R.my_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
 		switch(imbue)
@@ -86,8 +86,7 @@
 				if(T1!=T2)
 					T1.turf_animation('icons/effects/effects.dmi',"rune_teleport")
 			if("communicate")
-				//If the user cancels the talisman this var will be set to 0
-				delete = R.communicate(TRUE)
+				use_charge = R.communicate(TRUE)
 			if("deafen")
 				deafen()
 				qdel(src)
@@ -100,9 +99,10 @@
 			if("supply")
 				supply()
 		user.take_organ_damage(5, 0)
-		if(src && src.imbue!="supply" && src.imbue!="runestun")
-			if(delete)
-				qdel(src)
+		if(use_charge)
+			uses--
+		if(!src.uses)
+			qdel(src)
 		return
 	else
 		to_chat(user, "You see strange symbols on the paper. Are they supposed to mean something?")
@@ -167,7 +167,7 @@
 				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				T.imbue = "conceal"
 			if("communicate")
-				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
+				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman/communicate(get_turf(usr))
 				T.imbue = "communicate"
 			if("runestun")
 				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
@@ -188,6 +188,9 @@
 	imbue = "supply"
 	uses = 5
 
+/obj/item/weapon/paper/talisman/communicate
+	imbue = "communicate"
+	uses = 5
 
 //imbued talismans invocation for a few runes, since calling the proc causes a runtime error due to src = null
 /obj/item/weapon/paper/talisman/proc/runestun(var/mob/living/T as mob)//When invoked as talisman, stun and mute the target mob.
@@ -252,3 +255,12 @@
 		for (var/mob/V in orange(1,src))
 			if(!(islegacycultist(V)))
 				V.show_message("<span class='warning'>Dust flows from [usr]'s hands for a moment, and the world suddenly becomes quiet..</span>")
+
+/proc/talisman_charges(var/imbue)
+	switch(imbue)
+		if("communicate")
+			return 5
+		if("supply")
+			return 5
+		else // Tele talisman's imbue is the final word.
+			return 1
