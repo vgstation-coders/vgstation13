@@ -18,7 +18,7 @@
 		return
 	var/mob/living/carbon/human/H = M
 
-	var/datum/role/emergency_responder/R = mind.GetRole(RESPONDER)
+	var/datum/role/emergency_responder/R = M.mind.GetRole(RESPONDER)
 	R.logo_state = "[id_suffix]-logo"
 
 	if(H.get_item_by_slot(slot_head) == src)
