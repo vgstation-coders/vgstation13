@@ -97,10 +97,8 @@
 	head = null
 	w_uniform = null
 	wear_suit = null
-	for (var/i = 1 to held_items.len)
-		var/obj/item/O = held_items[i]
-		if (O)
-			O.dropped(src)
+	for (var/obj/item/O in held_items)
+		O.dropped(src)
 	if(connected_holoconsole)
 		connected_holoconsole.connected_holopeople.Remove(src)
 		connected_holoconsole = null
