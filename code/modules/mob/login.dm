@@ -64,6 +64,8 @@
 
 	regular_hud_updates()
 
+	update_antag_huds()
+
 	update_action_buttons(TRUE)
 
 	if(round_end_info == "")

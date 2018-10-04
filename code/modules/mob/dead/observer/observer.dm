@@ -127,19 +127,9 @@
 	return isAdminGhost(src) ? get_all_accesses() : list()
 
 /mob/dead/attackby(obj/item/W, mob/user)
-// Legacy Cult stuff
+	// Legacy Cult stuff
 	if(istype(W,/obj/item/weapon/tome_legacy))
-		var/mob/dead/M = src
-		if(src.invisibility != 0)
-			M.invisibility = 0
-	if(istype(W,/obj/item/weapon/tome))
-		if(invisibility != 0 || icon_state != "ghost-narsie")
-			cultify()
-			user.visible_message(
-				"<span class='warning'>[user] drags a ghost to our plane of reality!</span>",
-				"<span class='warning'>You drag a ghost to our plane of reality!</span>"
-			)
-		return
+		cultify()//takes care of making ghosts visible
     // Big boy modern Cult 3.0 stuff
 	if (iscultist(user))
 		if(istype(W,/obj/item/weapon/tome))

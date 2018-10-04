@@ -488,8 +488,10 @@ var/list/arcane_tomes = list()
 			return 1
 		var/turf/T = get_turf(user)
 		playsound(T, 'sound/items/Deconstruct.ogg', 50, 1)
-		user.drop_item(T, src)
+		user.drop_item(src,T)
 		var/obj/item/weapon/melee/soulblade/SB = new (T)
+		if (fingerprints)
+			SB.fingerprints = fingerprints.Copy()
 		spawn(1)
 			user.put_in_active_hand(SB)
 		for(var/mob/living/simple_animal/shade/A in I)
@@ -497,7 +499,6 @@ var/list/arcane_tomes = list()
 			SB.shade = A
 			break
 		SB.update_icon()
-		user.swap_hand()
 		qdel(I)
 		qdel(src)
 		return 1
@@ -553,22 +554,81 @@ var/list/arcane_tomes = list()
 	var/turf/T = get_turf(src)
 	if (istype(loc, /obj/item/projectile))
 		qdel(loc)
-	if (T)
-		if (shade)
+	if (shade)
+		shade.remove_blade_powers()
+		if (T)
 			shade.forceMove(T)
 			shade.status_flags &= ~GODMODE
 			shade.canmove = 1
 			shade.cancel_camera()
+			var/datum/control/C = shade.control_object[src]
+			if(C)
+				C.break_control()
+				qdel(C)
 		else
 			qdel(shade)
+	if (T)
 		var/obj/item/weapon/melee/cultblade/nocult/B = new (T)
 		B.Move(get_step_rand(T))
+		if (fingerprints)
+			B.fingerprints = fingerprints.Copy()
 		new /obj/item/device/soulstone(T)
 	shade = null
 	..()
 
+/obj/item/weapon/melee/soulblade/examine(var/mob/user)
+	..()
+	if (iscultist(user))
+		to_chat(user, "<span class='info'>blade blood: [blood]%</span>")
+		to_chat(user, "<span class='info'>blade health: [round((health/maxHealth)*100)]%</span>")
+
+
 /obj/item/weapon/melee/soulblade/cultify()
 	return
+
+
+/obj/item/weapon/melee/soulblade/attack_self(var/mob/user)
+	if (!iscultist(user))
+		to_chat(user,"<span class='warning'>There is a crimson gem encrusted into the blade, but you're not exactly sure how you could remove it.</span>")
+		return
+
+	var/optionlist = list(
+		"Give Blood",
+		"Remove Gem"
+		)
+	for(var/option in optionlist)
+		optionlist[option] = image(icon = 'icons/obj/cult_radial.dmi', icon_state = "radial_[option]")
+
+	var/task = show_radial_menu(user,user,optionlist,'icons/obj/cult_radial.dmi')//spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
+	if (user.get_active_hand() != src)
+		to_chat(user,"<span class='warning'>You must hold the blade in your active hand.</span>")
+		return
+	switch (task)
+		if ("Give Blood")
+			var/data = use_available_blood(user, 10)
+			if (data[BLOODCOST_RESULT] != BLOODCOST_FAILURE)
+				blood = min(maxblood,blood+20)//reminder that the blade cannot give blood back to their wielder, so this should prevent some exploits
+				health = min(maxHealth,health+10)
+		if ("Remove Gem")
+			var/turf/T = get_turf(user)
+			playsound(T, 'sound/items/Deconstruct.ogg', 50, 0, -3)
+			user.drop_item(src,T)
+			var/obj/item/weapon/melee/cultblade/CB = new (T)
+			var/obj/item/device/soulstone/gem/SG = new (T)
+			if (fingerprints)
+				CB.fingerprints = fingerprints.Copy()
+			user.put_in_active_hand(CB)
+			user.put_in_inactive_hand(SG)
+			if (shade)
+				shade.forceMove(SG)
+				shade.remove_blade_powers()
+				SG.icon_state = "soulstone2"
+				SG.item_state = "shard-soulstone2"
+				SG.name = "Soul Stone: [shade.real_name]"
+				shade = null
+			loc = null//so we won't drop a broken blade and shard
+			qdel(src)
+
 
 /obj/item/weapon/melee/soulblade/attack(var/mob/living/target, var/mob/living/carbon/human/user)
 	if(!iscultist(user))
@@ -577,18 +637,45 @@ var/list/arcane_tomes = list()
 		var/datum/organ/external/affecting = user.get_active_hand_organ()
 		if(affecting && affecting.take_damage(rand(force/2, force))) //random amount of damage between half of the blade's force and the full force of the blade.
 			user.UpdateDamageIcon()
-
+		return
 	..()
-	if (istype(target, /mob/living/carbon))
+	if (!shade && istype(target, /mob/living/carbon))
 		transfer_soul("VICTIM", target, user,1)
 		update_icon()
+
+/obj/item/weapon/melee/soulblade/afterattack(var/atom/A, var/mob/living/user, var/proximity_flag, var/click_parameters)
+	if(proximity_flag)
+		return
+	if (user.is_pacified(VIOLENCE_SILENT,A,src))
+		return
+
+	if (blood >= 5)
+		blood = max(0,blood-5)
+		var/turf/starting = get_turf(user)
+		var/turf/target = get_turf(A)
+		var/obj/item/projectile/bloodslash/BS = new (starting)
+		BS.firer = user
+		BS.original = target
+		BS.target = target
+		BS.current = starting
+		BS.starting = starting
+		BS.yo = target.y - starting.y
+		BS.xo = target.x - starting.x
+		user.delayNextAttack(4)
+		if(user.zone_sel)
+			BS.def_zone = user.zone_sel.selecting
+		else
+			BS.def_zone = LIMB_CHEST
+		BS.OnFired()
+		playsound(starting, 'sound/effects/forge.ogg', 100, 1)
+		BS.process()
 
 /obj/item/weapon/melee/soulblade/on_attack(var/atom/attacked, var/mob/user)
 	..()
 	if (ismob(attacked))
 		var/mob/living/M = attacked
 		M.take_organ_damage(0,5)
-		playsound(loc, 'sound/items/Welder.ogg', 50, 1)
+		playsound(loc, 'sound/weapons/welderattack.ogg', 50, 1)
 		if (iscarbon(M))
 			var/mob/living/carbon/C = M
 			if (C.stat != DEAD)
@@ -630,8 +717,9 @@ var/list/arcane_tomes = list()
 		animate(src, pixel_y = -8 * PIXEL_MULTIPLIER , time = 7, loop = -1, easing = SINE_EASING)
 		animate(pixel_y = -12 * PIXEL_MULTIPLIER, time = 7, loop = -1, easing = SINE_EASING)
 	else
-		plane = initial(plane)
-		layer = initial(layer)
+		if (!ismob(loc))
+			plane = initial(plane)
+			layer = initial(layer)
 		item_state = "soulblade"
 		icon_state = "soulblade"
 
@@ -713,6 +801,104 @@ var/list/arcane_tomes = list()
 	..()
 	takeDamage(P.damage)
 
+///////////////////////////////////////BLOOD DAGGER////////////////////////////////////////////////
+
+/obj/item/weapon/melee/blood_dagger
+	name = "blood dagger"
+	icon = 'icons/obj/cult.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	icon_state = "blood_dagger"
+	item_state = "blood_dagger"
+	desc = "A knife-shaped hunk of solidified blood."
+	siemens_coefficient = 0.2
+	sharpness = 1.5
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	force = 15.0
+	w_class = W_CLASS_GIANT//don't want it stored anywhere
+	attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	hitsound = 'sound/weapons/bladeslice.ogg'
+	var/mob/originator = null
+	var/stacks = 0
+	var/absorbed = 0
+
+/obj/item/weapon/melee/blood_dagger/Destroy()
+	var/turf/T = get_turf(src)
+	playsound(T, 'sound/effects/forge_over.ogg', 100, 0, -2)
+	if (!absorbed && !locate(/obj/effect/decal/cleanable/blood/splatter) in T)
+		var/obj/effect/decal/cleanable/blood/splatter/S = new (T)//splash
+		if (color)
+			S.basecolor = color
+			S.update_icon()
+	..()
+
+/obj/item/weapon/melee/blood_dagger/dropped(var/mob/user)
+	..()
+	qdel(src)
+
+/obj/item/weapon/melee/blood_dagger/attack(var/mob/living/target, var/mob/living/carbon/human/user)
+	if(target == user)
+		if (stacks < 5 && user.take_blood(null,5))
+			stacks++
+			playsound(user, 'sound/weapons/bladeslice.ogg', 30, 0, -2)
+			to_chat(user, "<span class='warning'>The dagger takes a bit of your blood.</span>")
+		return
+	..()
+/obj/item/weapon/melee/blood_dagger/attack_hand(var/mob/living/user)
+	if(!ismob(loc))
+		qdel(src)
+		return
+	..()
+
+/obj/item/weapon/melee/blood_dagger/attack_self(var/mob/user)
+	if (ishuman(user) && iscultist(user))
+		var/mob/living/carbon/human/H = user
+		var/datum/reagent/blood/B = get_blood(H.vessel)
+		if (B)
+			to_chat(user, "<span class='notice'>You sheath the dagger back inside your body[stacks ? ", along with the stolen blood" : ""].</span>")
+			H.vessel.add_reagent(BLOOD, 5 + stacks * 5)
+			H.vessel.update_total()
+		else
+			to_chat(user, "<span class='notice'>You sheath the dagger inside your body, but the blood fails to find vessels to occupy.</span>")
+		absorbed = 1
+		playsound(H, 'sound/weapons/bloodyslice.ogg', 30, 0, -2)
+		qdel(src)
+
+/obj/item/weapon/melee/blood_dagger/pre_throw()
+	absorbed = 1
+
+/obj/item/weapon/melee/blood_dagger/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
+	var/turf/starting = get_turf(src)
+	var/turf/target = get_turf(targ)
+	var/obj/item/projectile/blooddagger/BD = new (starting)
+	BD.original = target
+	BD.target = target
+	BD.current = starting
+	BD.starting = starting
+	BD.yo = target.y - starting.y
+	BD.xo = target.x - starting.x
+	BD.stacks = stacks
+	BD.damage = 5 + stacks * 5
+	BD.icon_state = icon_state
+	BD.color = color
+	BD.firer = originator
+	BD.OnFired()
+	BD.process()
+	qdel(src)
+
+/obj/item/weapon/melee/blood_dagger/on_attack(var/atom/attacked, var/mob/user)
+	..()
+	if (ismob(attacked))
+		var/mob/living/M = attacked
+		if (iscarbon(M))
+			var/mob/living/carbon/C = M
+			var/datum/reagent/B = C.take_blood(null,5)
+			if (B)
+				if (stacks < 5)
+					stacks++
+					to_chat(user, "<span class='warning'>The dagger steals a bit of their blood.</span>")
+				else if (!locate(/obj/effect/decal/cleanable/blood/splatter) in get_turf(C))
+					blood_splatter(C,B,1)//no room in the dagger? let's splatter their stolen blood on the floor.
+
 ///////////////////////////////////////SOULSTONE////////////////////////////////////////////////
 /obj/item/device/soulstone/gem
 	name = "Soul Gem"
@@ -740,7 +926,7 @@ var/list/arcane_tomes = list()
 	icon_state = "culthood"
 	desc = "A hood worn by the followers of Nar-Sie."
 	flags = FPRINT
-	armor = list(melee = 30, bullet = 10, laser = 5,energy = 5, bomb = 0, bio = 0, rad = 0)
+	armor = list(melee = 30, bullet = 10, laser = 10,energy = 5, bomb = 10, bio = 25, rad = 0)
 	body_parts_covered = EARS|HEAD
 	siemens_coefficient = 0
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
@@ -779,8 +965,8 @@ var/list/arcane_tomes = list()
 	icon_state = "cultrobes"
 	item_state = "cultrobes"
 	flags = FPRINT
-	allowed = list(/obj/item/weapon/tome,/obj/item/weapon/melee/cultblade)
-	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
+	allowed = list(/obj/item/weapon/melee/cultblade,/obj/item/weapon/melee/soulblade,/obj/item/weapon/tome,/obj/item/weapon/talisman,/obj/item/weapon/blood_tesseract)
+	armor = list(melee = 50, bullet = 30, laser = 30,energy = 20, bomb = 25, bio = 25, rad = 0)
 	siemens_coefficient = 0
 
 /obj/item/clothing/suit/cultrobes/get_cult_power()
@@ -834,9 +1020,10 @@ var/list/arcane_tomes = list()
 /obj/item/clothing/head/helmet/space/cult
 	name = "cult helmet"
 	desc = "A space worthy helmet used by the followers of Nar-Sie"
-	icon_state = "cult_helmet"
-	item_state = "cult_helmet"
-	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
+	icon_state = "culthelmet"
+	item_state = "culthelmet"
+	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
 
 /obj/item/clothing/head/helmet/space/cult/get_cult_power()
@@ -849,13 +1036,14 @@ var/list/arcane_tomes = list()
 
 /obj/item/clothing/suit/space/cult
 	name = "cult armor"
-	icon_state = "cult_armour"
-	item_state = "cult_armour"
 	desc = "A bulky suit of armor bristling with spikes. It looks space proof."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
+	icon_state = "cultarmor"
+	item_state = "cultarmor"
 	w_class = W_CLASS_MEDIUM
-	allowed = list(/obj/item/weapon/tome,/obj/item/weapon/melee/cultblade,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
-	slowdown = NO_SLOWDOWN
-	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
+	allowed = list(/obj/item/weapon/tome,/obj/item/weapon/melee/cultblade,/obj/item/weapon/melee/soulblade,/obj/item/weapon/tank,/obj/item/weapon/tome,/obj/item/weapon/talisman,/obj/item/weapon/blood_tesseract)
+	slowdown = HARDSUIT_SLOWDOWN_MED
+	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
 
 /obj/item/clothing/suit/space/cult/get_cult_power()
@@ -925,7 +1113,7 @@ var/list/arcane_tomes = list()
 	if (!cult)
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 	cult.HandleRecruitedRole(newCultist)
-	newCultist.OnPostSetup(FALSE)
+	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_PAMPHLET)
 
 //Jaunter: creates a pylon on spawn, lets you teleport to it on use

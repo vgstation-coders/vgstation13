@@ -203,10 +203,11 @@ var/global/floorIsLava = 0
 				<A href='?src=\ref[src];simplemake=larva;mob=\ref[M]'>Larva</A> \]
 				<br>\[ Slime: <A href='?src=\ref[src];simplemake=slime;mob=\ref[M]'>Baby</A>,
 				<A href='?src=\ref[src];simplemake=adultslime;mob=\ref[M]'>Adult</A> \]
-				<br>\[ Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Armoured</A>,
-				<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Builder</A>,
+				<br>\[ Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Juggernaut</A>,
+				<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Artificer</A>,
 				<A href='?src=\ref[src];simplemake=constructwraith;mob=\ref[M]'>Wraith</A>,
-				<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A> \]
+				<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A>,
+				<A href='?src=\ref[src];simplemake=soulblade;mob=\ref[M]'>Soul Blade</A> \]
 				<br>
 			"}
 

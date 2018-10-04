@@ -310,6 +310,7 @@
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_items.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_mobs_and_constructs.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_narsie.dm"
+#include "code\datums\gamemode\factions\bloodcult\bloodcult_projectiles.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_runes.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_runespells.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_spells.dm"

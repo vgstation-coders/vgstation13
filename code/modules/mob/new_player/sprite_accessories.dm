@@ -29,7 +29,7 @@
 	var/gender = NEUTER
 
 	// Restrict some styles to specific species
-	var/list/species_allowed = list("Human")
+	var/list/species_allowed = list("Human","Manifested")
 
 	// Whether or not the accessory can be affected by colouration
 	var/do_colouration = 1
@@ -56,7 +56,7 @@
 		name = "Bald"
 		icon_state = "bald"
 		gender = MALE
-		species_allowed = list("Human","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom")
+		species_allowed = list("Human","Manifested","Unathi","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom")
 
 	short
 		name = "Short Hair"	  // try to capatilize the names please~
@@ -151,7 +151,7 @@
 		name = "Pompadour"
 		icon_state = "hair_pompadour"
 		gender = MALE
-		species_allowed = list("Human","Unathi")
+		species_allowed = list("Human","Manifested","Unathi")
 
 	quiff
 		name = "Quiff"
@@ -174,19 +174,19 @@
 		name = "Beehive"
 		icon_state = "hair_beehive"
 		gender = FEMALE
-		species_allowed = list("Human","Unathi")
+		species_allowed = list("Human","Manifested","Unathi")
 
 	bobcurl
 		name = "Bobcurl"
 		icon_state = "hair_bobcurl"
 		gender = FEMALE
-		species_allowed = list("Human","Unathi")
+		species_allowed = list("Human","Manifested","Unathi")
 
 	bob
 		name = "Bob"
 		icon_state = "hair_bobcut"
 		gender = FEMALE
-		species_allowed = list("Human","Unathi")
+		species_allowed = list("Human","Manifested","Unathi")
 
 	bowl
 		name = "Bowl"
@@ -197,7 +197,7 @@
 		name = "Buzzcut"
 		icon_state = "hair_buzzcut"
 		gender = MALE
-		species_allowed = list("Human","Unathi")
+		species_allowed = list("Human","Manifested","Unathi")
 
 	crew
 		name = "Crewcut"
@@ -269,7 +269,7 @@
 	spiky
 		name = "Spiky"
 		icon_state = "hair_spikey"
-		species_allowed = list("Human","Unathi")
+		species_allowed = list("Human","Manifested","Unathi")
 	kusangi
 		name = "Kusanagi Hair"
 		icon_state = "hair_kusanagi"
@@ -516,7 +516,7 @@
 		name = "Shaved"
 		icon_state = "bald"
 		gender = NEUTER
-		species_allowed = list("Human","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom")
+		species_allowed = list("Human","Manifested","Unathi","Tajaran","Skrell","Vox","Grey","Plasmaman","Skellington","Diona","Muton","Golem","Skeletal Vox","Horror","Ghoul","Slime","Mushroom")
 
 	watson
 		name = "Watson Mustache"
@@ -557,7 +557,7 @@
 	elvis
 		name = "Elvis Sideburns"
 		icon_state = "facial_elvis"
-		species_allowed = list("Human","Unathi")
+		species_allowed = list("Human","Manifested","Unathi")
 
 	abe
 		name = "Abraham Lincoln Beard"

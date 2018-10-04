@@ -250,6 +250,36 @@
 			client.screen -= zone_sel
 		zone_sel = null
 
+	if(iscultist(src) && hud_used)
+		if(hud_used.cult_Act_display)
+			returnToPool(hud_used.cult_Act_display)
+			if(client)
+				client.screen -= hud_used.cult_Act_display
+			hud_used.cult_Act_display = null
+		if(hud_used.cult_tattoo_display)
+			returnToPool(hud_used.cult_tattoo_display)
+			if(client)
+				client.screen -= hud_used.cult_tattoo_display
+			hud_used.cult_tattoo_display = null
+		if (isshade(src) && gui_icons)
+			if(gui_icons.soulblade_bgLEFT)
+				returnToPool(gui_icons.soulblade_bgLEFT)
+				if(client)
+					client.screen -= gui_icons.soulblade_bgLEFT
+				gui_icons.soulblade_bgLEFT = null
+			if(gui_icons.soulblade_bloodbar)
+				returnToPool(gui_icons.soulblade_bloodbar)
+				if(client)
+					client.screen -= gui_icons.soulblade_bloodbar
+				gui_icons.soulblade_bloodbar = null
+			if(gui_icons.soulblade_coverLEFT)
+				returnToPool(gui_icons.soulblade_coverLEFT)
+				if(client)
+					client.screen -= gui_icons.soulblade_coverLEFT
+				gui_icons.soulblade_coverLEFT = null
+
+
+
 /mob/proc/cultify()
 	return
 
@@ -2161,6 +2191,12 @@ mob/proc/on_foot()
 
 /mob/proc/handle_regular_hud_updates()
 	return
+
+/mob/proc/update_antag_huds()
+	if (mind)
+		for (var/role in mind.antag_roles)
+			var/datum/role/R = mind.antag_roles[role]
+			R.update_antag_hud()
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

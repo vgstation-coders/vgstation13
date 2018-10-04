@@ -45,7 +45,9 @@
 /mob/living/simple_animal/construct/construct_chat_check(setting)
 	if(!mind)
 		return
-	if(find_active_faction_by_member(mind.GetRole(BLOODCULT)))
+	if(find_active_faction_by_member(mind.GetRole(CULTIST)))
+		return 1
+	if(find_active_faction_by_member(mind.GetRole(LEGACY_CULTIST)))
 		return 1
 
 /mob/living/simple_animal/construct/handle_inherent_channels(var/datum/speech/speech, var/message_mode)

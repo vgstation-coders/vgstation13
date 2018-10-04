@@ -62,6 +62,9 @@
 
 #define GREET_CONVERTED		"converted"
 #define GREET_PAMPHLET		"pamphlet"
+#define GREET_SOULSTONE		"soulstone"
+#define GREET_RESURRECT		"resurrect"
+
 
 //////////////////////////////////CULT STUFF////////////////////////////////////
 #define CULT_MENDED		-1
@@ -108,6 +111,16 @@
 #define RITUALABORT_CONCEAL	"conceal"
 #define RITUALABORT_NEAR	"near"
 #define RITUALABORT_MISSING	"missing"
+
+#define TATTOO_POOL		"Blood Communion"
+#define TATTOO_SILENT	"Silent Casting"
+#define TATTOO_DAGGER	"Blood Dagger"
+#define TATTOO_HOLY		"Unholy Protection"
+#define TATTOO_FAST		"Rapid Tracing"
+#define TATTOO_CHAT		"Dark Communication"
+#define TATTOO_MANIFEST	"Pale Body"
+#define TATTOO_MEMORIZE	"Arcane Knowledge"
+#define TATTOO_SHORTCUT	"Shortcut Tracer"
 
 #define	TOME_CLOSED	1
 #define	TOME_OPEN	2

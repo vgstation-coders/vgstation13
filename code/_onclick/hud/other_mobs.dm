@@ -133,7 +133,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged, mymob.fire)
+	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged)
 
 /datum/hud/proc/borer_hud()
 
@@ -215,3 +215,41 @@
 	vampire_blood_display.screen_loc = "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+2:[15*PIXEL_MULTIPLIER]"
 
 	mymob.client.screen += list(vampire_blood_display)
+
+
+/datum/hud/proc/cult_hud(ui_style = 'icons/mob/screen1_cult.dmi')
+
+	cult_Act_display = getFromPool(/obj/abstract/screen)
+	cult_Act_display.icon = ui_style
+	cult_Act_display.name = "Prologue: The Reunion"
+	cult_Act_display.icon_state = ""
+	cult_Act_display.screen_loc = ui_cult_Act
+	pulse_atom(cult_Act_display)
+
+	cult_tattoo_display = getFromPool(/obj/abstract/screen)
+	cult_tattoo_display.icon = ui_style
+	cult_tattoo_display.name = "Arcane Tattoos: none"
+	cult_tattoo_display.icon_state = ""
+	cult_tattoo_display.screen_loc = ui_cult_tattoos
+	//pulse_atom(cult_tattoo_display)
+
+	if (mymob.client)
+		mymob.client.screen += list(cult_Act_display,cult_tattoo_display)
+
+/datum/hud/proc/pulse_atom(var/obj/abstract/screen/A)
+	animate(A, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)
+	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)
+	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 2)
+	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1.5)
+	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1.5)
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5)
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)

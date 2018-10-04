@@ -97,14 +97,14 @@
 /obj/item/clothing/head/helmet/space/legacy_cult
 	name = "cult helmet"
 	desc = "A space worthy helmet used by the followers of Nar-Sie"
-	icon_state = "cult_helmet"
+	icon_state = "culthelmet_old"
 	item_state = "cult_helmet"
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0
 
 /obj/item/clothing/suit/space/legacy_cult
 	name = "cult armor"
-	icon_state = "cult_armour"
+	icon_state = "cultarmor_old"
 	item_state = "cult_armour"
 	desc = "A bulky suit of armor bristling with spikes. It looks space proof."
 	w_class = W_CLASS_MEDIUM

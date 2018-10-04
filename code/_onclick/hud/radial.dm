@@ -251,7 +251,7 @@
 		current_user.images -= menu_holder
 
 /datum/radial_menu/proc/wait()
-	while(current_user && !finished && !selected_choice)
+	while (!gcDestroyed && current_user && !finished && !selected_choice)
 		if(istype(custom_check) && next_check < world.time)
 			if(!INVOKE_EVENT(custom_check, list()))
 				return
@@ -260,6 +260,7 @@
 		stoplag(1)
 
 /datum/radial_menu/Destroy()
+	current_user.radial_menus -= anchor
 	Reset()
 	hide()
 	if(istype(custom_check))
@@ -275,13 +276,14 @@
 	if(!user || !anchor || !length(choices))
 		return
 
-	if(!uniqueid)
-		uniqueid = "defmenu_["\ref[user]"]_["\ref[anchor]"]"
-	if(radial_menus[uniqueid])
+	var/client/current_user = user.client
+	if (anchor in current_user.radial_menus)
 		return
+	current_user.radial_menus += anchor
 
-	var/datum/radial_menu/menu = new(icon_file)
-	radial_menus[uniqueid] = menu
+	var/datum/radial_menu/menu = new (icon_file)
+	if(!user)
+		user = usr
 	if(radius)
 		menu.radius = radius
 	if(istype(custom_check))
@@ -291,7 +293,7 @@
 	menu.set_choices(choices,icon_file)
 	menu.show_to(user)
 	menu.wait()
-	var/answer = menu.selected_choice
-	qdel(menu)
-	radial_menus -= uniqueid
-	return answer
+	if (!menu.gcDestroyed)
+		var/answer = menu.selected_choice
+		qdel(menu)
+		return answer

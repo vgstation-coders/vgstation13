@@ -23,6 +23,87 @@
 /obj/effect/cult_ritual/singularity_act()
 	return
 
+///////////////////////////////////////SHORTCUT////////////////////////////////////////////////
+/obj/effect/cult_shortcut
+	name = "sigil"
+	icon = 'icons/obj/cult.dmi'
+	icon_state = "sigil"
+	anchored = 1
+	mouse_opacity = 1
+	layer = NARSIE_GLOW
+	plane = LIGHTING_PLANE
+	var/persist = 0//so mappers can make permanent sigils
+
+/obj/effect/cult_shortcut/New(var/turf/loc, var/atom/model)
+	..()
+	if (!persist)
+		spawn (60 SECONDS)
+			qdel(src)
+
+/obj/effect/cult_shortcut/attack_hand(var/mob/living/user)
+	if (!iscultist(user))
+		to_chat(user, "<span class='warning'>Strange markings on this wall. You don't feel comfortable staring at them.</span>")
+		return
+	var/turf/T = get_turf(user)
+	if (T == loc)
+		return
+	var/jump_dir = get_dir(T,loc)
+	shadow(loc,T,"sigil_jaunt")
+	spawn(1)
+		new /obj/effect/red_afterimage(T,user)
+		user.forceMove(loc)
+		sleep(1)
+		new /obj/effect/red_afterimage(loc,user)
+		user.forceMove(get_step(loc,jump_dir))
+
+/obj/effect/cult_shortcut/cultify()
+	return
+
+/obj/effect/cult_shortcut/ex_act()
+	return
+
+/obj/effect/cult_shortcut/emp_act()
+	return
+
+/obj/effect/cult_shortcut/blob_act()
+	return
+
+/obj/effect/cult_shortcut/singularity_act()
+	return
+
+
+/obj/effect/red_afterimage
+	icon = null
+	icon_state = null
+	anchored = 1
+	mouse_opacity = 0
+
+/obj/effect/red_afterimage/New(var/turf/loc, var/atom/model)
+	..()
+	if(model)
+		src.appearance = model.appearance
+		dir = model.dir
+		color = "red"
+		layer = NARSIE_GLOW
+		plane = LIGHTING_PLANE
+	animate(src,alpha = 0, time = 5)
+	spawn(5)
+		qdel(src)
+
+/obj/effect/red_afterimage/cultify()
+	return
+
+/obj/effect/red_afterimage/ex_act()
+	return
+
+/obj/effect/red_afterimage/emp_act()
+	return
+
+/obj/effect/red_afterimage/blob_act()
+	return
+
+/obj/effect/red_afterimage/singularity_act()
+	return
 
 ///////////////////////////////////////JAUNT////////////////////////////////////////////////
 //Cultists ride in those when teleporting
@@ -155,7 +236,6 @@
 		else
 			target_y = TRANSITIONEDGE + rand(16,20)
 
-	to_chat(world,"target at ([target.x],[target.y],[target.z]), (dx/dy)=([dx]/[dy]) so we're tp'ing at ([target_x],[target_y],[target.z])")
 	var/turf/T = locate(target_x,target_y,target.z)
 	starting = T
 	forceMove(T)

@@ -10,6 +10,9 @@
 		remove_ventcrawl()
 		add_ventcrawl(loc)
 
+	if(iscultist(src) && hud_used && !hud_used.cult_Act_display)
+		hud_used.cult_hud()
+
 	//Round specific stuff like hud updates
 	if(ticker && ticker.mode)
 		switch(ticker.mode.name)
