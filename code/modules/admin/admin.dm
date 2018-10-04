@@ -1260,6 +1260,13 @@ var/global/floorIsLava = 0
 		return 1
 	if(M.mind&&M.mind.special_role)//If they have a mind and special role, they are some type of traitor or antagonist.
 		return 1
+	if (M.mind && M.mind.GetRole(CRUSADER))
+		return 1
+	if (M.mind && M.mind.GetRole(SURVIVOR))
+		return 1
+	if (M.mind && M.mind.GetRole(MAGICIAN))
+		return 1
+
 
 	return 0
 
