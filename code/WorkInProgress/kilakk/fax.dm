@@ -238,13 +238,7 @@ proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm, var/
 				playsound(F.loc, "sound/effects/fax.ogg", 50, 1)
 
 				if(centcomm)
-					var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
-					stampoverlay.icon_state = "paper_stamp-cent"
-					if(!P.stamped)
-						P.stamped = new
-					P.stamped += /obj/item/weapon/stamp
-					P.overlays += stampoverlay
-					P.stamps += "<HR><i>This paper has been stamped by the Central Command Quantum Relay.</i>"
+					CentcommStamp(P)
 
 				// give the sprite some time to flick
 				spawn(20)
@@ -252,3 +246,23 @@ proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm, var/
 
 				faxed = P //doesn't return here in case there's multiple faxes in the department
 	return faxed
+
+/proc/CentcommStamp(var/obj/item/weapon/paper/P)
+	var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
+	stampoverlay.icon_state = "paper_stamp-cent"
+	if(!P.stamped)
+		P.stamped = new
+	P.stamped += /obj/item/weapon/stamp
+	P.overlays += stampoverlay
+	P.stamps += "<HR><i>This paper has been stamped by the Central Command Quantum Relay.</i>"
+
+/proc/SendMerchantFax(mob/living/carbon/human/merchant)
+	var/obj/item/weapon/paper/merchantreport/P
+	for(var/obj/machinery/faxmachine/F in allfaxes)
+		if(F.department == "Internal Affairs" && !F.stat)
+			flick("faxreceive", F)
+			playsound(F.loc, "sound/effects/fax.ogg", 50, 1)
+			P = new /obj/item/weapon/paper/merchantreport(F,merchant)
+			spawn(2 SECONDS)
+				P.forceMove(F.loc)
+	return P

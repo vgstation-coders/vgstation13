@@ -545,3 +545,40 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/manifest
 	name = "Supply Manifest"
+
+/obj/item/weapon/paper/merchantreport
+	var/identity
+	var/list/mugshots = list()
+
+/obj/item/weapon/paper/merchantreport/New(loc,mob/living/carbon/human/merchant)
+	if(merchant)
+		identity = merchant.client.prefs.real_name
+		name = "Licensed Merchant Report - [identity]"
+		merchant.client.prefs.update_preview_icon(0) //This is necessary because if they don't check their character sheet it never generates!
+		mugshots += fcopy_rsc(merchant.client.prefs.preview_icon_front)
+		mugshots += fcopy_rsc(merchant.client.prefs.preview_icon_side)
+		info = {"<html><style>
+						body {color: #000000; background: #ccffff;}
+						h1 {color: #000000; font-size:30px;}
+						fieldset {width:140px;}
+						</style>
+						<body>
+						<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center>
+						Nanotrasen\'s commercial arm has noted the presence of a registered merchant who holds a license for corporate commerce, a process which includes a background check and Nanotrasen loyalty implant. The associate\'s image is enclosed. Please continue to monitor trade on an ongoing basis such that Nanotrasen can maintain highest standard small business enterprise (SBE) partners.<BR>
+						<fieldset>
+	  					<legend>Picture</legend>
+						<center><img src="previewicon.png" width="64" height="64"><img src="previewicon2.png" width="64" height="64"></center>
+						</fieldset><BR>
+						Name: [identity]<BR>
+						Blood Type: [merchant.dna.b_type]<BR>
+						Fingerprint: [md5(merchant.dna.uni_identity)]</body></html>"}
+		display_y = 700
+		CentcommStamp(src)
+	..()
+
+/obj/item/weapon/paper/merchantreport/show_text(var/mob/user, var/links = FALSE, var/starred = FALSE)
+	var/index = 1
+	for(var/image in mugshots)
+		user << browse_rsc(image, "previewicon-[identity][index].png")
+		index++
+	..()
