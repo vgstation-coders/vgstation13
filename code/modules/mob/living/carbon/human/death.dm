@@ -43,10 +43,17 @@
 	qdel(src)
 
 /mob/living/carbon/human/Destroy()
-	if(mind && species && (species.name == "Manifested"))
-		var/datum/role/cultist = mind.GetRole(CULTIST)
-		if(cultist)//manifested ghosts are removed from the cult once their bodies are destroyed
-			cultist.RemoveFromRole(mind)
+	if(client && iscultist(src) && veil_thickness > CULT_PROLOGUE)
+		var/turf/T = get_turf(src)
+		if (T)
+			var/mob/living/simple_animal/shade/shade = new (T)
+			var/true_name = "a nobody"
+			if (real_name && real_name != "unknown")
+				true_name = real_name
+			shade.name = "Shade of [true_name]"
+			shade.real_name = "Shade of [true_name]"
+			mind.transfer_to(shade)
+			to_chat(shade, "<span class='sinister'>Dark energies rip your dying body appart, anchoring your soul inside the form of a Shade. You retain your memories, and devotion to the cult.</span>")
 
 	if(species)
 		qdel(species)

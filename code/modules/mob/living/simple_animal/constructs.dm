@@ -92,7 +92,19 @@
 	for(var/mob/M in viewers(src, null))
 		if((M.client && !( M.blinded )))
 			M.show_message("<span class='warning'>[src] collapses in a shattered heap. </span>")
-	ghostize()
+	if(client && iscultist(src))
+		var/turf/T = get_turf(src)
+		if (T)
+			var/mob/living/simple_animal/shade/shade = new (T)
+			var/true_name = "a nobody"
+			if (real_name && real_name != "unknown")
+				true_name = real_name
+			shade.name = "Shade of [true_name]"
+			shade.real_name = "Shade of [true_name]"
+			mind.transfer_to(shade)
+			to_chat(shade, "<span class='sinister'>Dark energies rip your dying body appart, anchoring your soul inside the form of a Shade. You retain your memories, and devotion to the cult.</span>")
+	else
+		ghostize()
 	qdel (src)
 
 /mob/living/simple_animal/construct/examine(mob/user)
