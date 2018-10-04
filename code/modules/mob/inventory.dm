@@ -288,7 +288,6 @@
 			return 1 // self destroying objects (tk, grabs)
 		W.reset_plane_and_layer()
 		if(delete)
-
 			qdel(W)
 		else
 			W.forceMove(loc)
@@ -299,9 +298,9 @@
 
 
 // Drops all and only equipped items, including items in hand
-/mob/proc/drop_all()
+/mob/proc/drop_all(var/delete = FALSE)
 	for (var/obj/item/I in get_all_slots())
-		drop_from_inventory(I)
+		drop_from_inventory(I,delete)
 	drop_hands()
 
 //Drops the item in our hand - you can specify an item and a location to drop to
