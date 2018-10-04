@@ -45,7 +45,7 @@ var/list/effects_list = list()
 
 /obj/effect/New()
 	..()
-	effect_list += src
+	effects_list += src
 	if(ticker)
 		cameranet.updateVisibility(src)
 
