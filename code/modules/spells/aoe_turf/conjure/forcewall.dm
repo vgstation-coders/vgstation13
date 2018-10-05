@@ -40,6 +40,8 @@
 	density = 1
 	invisibility = 100
 
+	var/explosion_block = 20 //making this spell marginally more useful
+
 /obj/effect/forcefield/bullet_act(var/obj/item/projectile/Proj, var/def_zone)
 	var/turf/T = get_turf(src.loc)
 	if(T)

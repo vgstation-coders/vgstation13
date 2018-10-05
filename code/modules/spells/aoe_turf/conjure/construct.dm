@@ -155,5 +155,100 @@
 	luminosity = 2
 	invisibility = 0
 
+/obj/effect/forcefield/cult/New()
+	..()
+	set_light(2)
+
 /obj/effect/forcefield/cult/cultify()
 	return
+
+
+/spell/aoe_turf/conjure/forcewall/greater
+	name = "Juggerwall"
+	desc = "Raise a temporary line of indestructible walls to block your enemies' path and protect your allies."
+	user_type = USER_TYPE_CULT
+
+	charge_max = 300
+	spell_flags = 0
+	invocation = "none"
+	invocation_type = SpI_NONE
+	range = 0
+	summon_type = list(/obj/effect/forcefield/cult/large)
+	duration = 200
+
+	hud_state = "const_juggwall2
+	override_base = "cult""
+
+/spell/aoe_turf/conjure/forcewall/greater/on_creation(var/obj/effect/forcefield/cult/large/AM, var/mob/user)
+	AM.layer++
+	var/turf/turf_left = null
+	var/turf/turf_right = null
+	switch	(user.dir)
+		if (SOUTH)
+			turf_left = get_step(AM, EAST)
+			turf_right = get_step(AM, WEST)
+		if (NORTH)
+			turf_left = get_step(AM, WEST)
+			turf_right = get_step(AM, EAST)
+		if (EAST)
+			turf_left = get_step(AM, NORTH)
+			turf_right = get_step(AM, SOUTH)
+		if (WEST)
+			turf_left = get_step(AM, SOUTH)
+			turf_right = get_step(AM, NORTH)
+	if (!turf_left.density && !turf_left.has_dense_content())
+		AM.side1 = new (AM.loc)
+		AM.side1.icon_state += "_side"
+		AM.side1.dir = get_dir(AM, turf_left)
+		spawn (1)
+			AM.side1.forceMove(turf_left)
+	if (!turf_right.density && !turf_right.has_dense_content())
+		AM.side2 = new (AM.loc)
+		AM.side2.icon_state += "_side"
+		AM.side2.dir = get_dir(AM, turf_right)
+		spawn (1)
+			AM.side2.forceMove(turf_right)
+	if (!AM.side1 && AM.side2)
+		var/turf/extra = get_step(turf_right,AM.side2.dir)
+		if (!extra.density && !extra.has_dense_content())
+			spawn (2)
+				AM.side2.forceMove(extra)
+				AM.side1 = new (AM.loc)
+				AM.side1.icon_state += "_mid"
+				AM.side1.dir = get_dir(AM, turf_right)
+				AM.side1.forceMove(turf_right)
+	if (AM.side1 && !AM.side2)
+		var/turf/extra = get_step(turf_left,AM.side1.dir)
+		if (!extra.density && !extra.has_dense_content())
+			spawn (2)
+				AM.side1.forceMove(get_step(turf_left,AM.side1.dir))
+				AM.side2 = new (AM.loc)
+				AM.side2.icon_state += "_mid"
+				AM.side2.dir = get_dir(AM, turf_left)
+				AM.side2.forceMove(turf_left)
+
+
+//Code for the Juggernaut construct's forcefield, that seemed like a good place to put it.
+/obj/effect/forcefield/cult/large
+	desc = "That eerie looking obstacle seems to have been pulled from another dimension through sheer force"
+	name = "Juggerwall"
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "juggerwall"
+	light_color = LIGHT_COLOR_RED
+	luminosity = 2
+	invisibility = 0
+	explosion_block = 200
+	var/obj/effect/forcefield/cult/large/side1 = null
+	var/obj/effect/forcefield/cult/large/side2 = null
+
+/obj/effect/forcefield/cult/large/Destroy()
+	if (loc)
+		new /obj/effect/red_afterimage(loc,src)
+	if (side1)
+		qdel(side1)
+	if (side2)
+		qdel(side2)
+	side1 = null
+	side2 = null
+	..()
+	..()

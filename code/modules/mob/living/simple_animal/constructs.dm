@@ -82,7 +82,7 @@
 	add_language(LANGUAGE_CULT)
 	default_language = all_languages[LANGUAGE_CULT]
 	for(var/spell in construct_spells)
-		src.add_spell(new spell, "const_spell_ready")
+		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	updateicon()
 
 /mob/living/simple_animal/construct/death(var/gibbed = FALSE)
