@@ -386,14 +386,14 @@
 /obj/machinery/power/apc/attackby(obj/item/W, mob/living/user)
 
 	src.add_fingerprint(user)
-	
+
 	if (iswiretool(W) && wiresexposed)
 		wires.Interact(user)
 		return
-		
+
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
 		return src.attack_hand(user)
-		
+
 	if (iscrowbar(W) && opened)
 		if (has_electronics==1)
 			if (terminal)
@@ -687,7 +687,7 @@
 	if(in_use)
 		var/list/nearby = viewers(1, src)
 		var/is_in_use = 0
-		for(var/mob/M in _using) 
+		for(var/mob/M in _using)
 			if (!M || !M.client || M.machine != src)
 				_using.Remove(M)
 				continue
@@ -700,19 +700,19 @@
 			else
 				interact(M)
 		in_use = is_in_use
-	
+
 /obj/machinery/power/apc/interact(mob/user)
 	if (!user)
 		return
-	
+
 	if (stat & (BROKEN | MAINT | EMPED))
 		return
-		
+
 	ui_interact(user)
 
-/obj/machinery/power/apc/proc/get_malf_status(mob/user)
-	if (istype(user, /mob/living/silicon/ai))
-		if (src.malfai == (user:parent ? user:parent : user))
+/obj/machinery/power/apc/proc/get_malf_status(var/mob/living/silicon/ai/user)
+	if (istype(user) && find_active_faction_by_member(user.mind.GetRole(MALF)))
+		if (src.malfai == (user.parent ? user.parent : user))
 			if (src.occupant == user)
 				return 3 // 3 = User is shunted in this APC
 			else if (istype(user.loc, /obj/machinery/power/apc))
@@ -848,11 +848,11 @@
 				to_chat(user, "<span class='warning'>\The [src] have AI control disabled!</span>")
 				nanomanager.close_user_uis(user, src)
 			return 0
-	
+
 	else
 		if ((!in_range(src, user) || !istype(src.loc, /turf)))
 			nanomanager.close_user_uis(user, src)
-			
+
 		if (wiresexposed)
 			to_chat(user, "<span class='warning'>Unexpose the wires first!</span>")
 			nanomanager.close_user_uis(user, src)
@@ -960,7 +960,7 @@
 			else
 				locked = !locked
 				update_icon()
-				
+
 	else if (href_list["malflock"])
 		if(get_malf_status(usr))
 			malflocked = !malflocked
