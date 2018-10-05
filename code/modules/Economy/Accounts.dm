@@ -300,7 +300,7 @@ var/global/datum/money_account/trader_account
 
 				if(access_cent_captain in idcard.access)
 					access_level = 2
-				else if(access_hop in idcard.access || access_captain in idcard.access)
+				else if((access_hop in idcard.access) || (access_captain in idcard.access))
 					access_level = 1
 
 /obj/machinery/account_database/emag(mob/user)
@@ -311,7 +311,7 @@ var/global/datum/money_account/trader_account
 			var/obj/item/weapon/card/id/C = held_card
 			if(access_cent_captain in C.access)
 				access_level = 2
-			else if(access_hop in C.access || access_captain in C.access)
+			else if((access_hop in C.access) || (access_captain in C.access))
 				access_level = 1
 		attack_hand(user)
 		to_chat(user, "<span class='notice'>You re-enable the security checks of [src].</span>")
@@ -368,7 +368,7 @@ var/global/datum/money_account/trader_account
 							if(access_level < 3)
 								if(access_cent_captain in C.access)
 									access_level = 2
-								else if(access_hop in C.access || access_captain in C.access)
+								else if((access_hop in C.access) || (access_captain in C.access))
 									access_level = 1
 			if("view_account_detail")
 				var/index = text2num(href_list["account_index"])
