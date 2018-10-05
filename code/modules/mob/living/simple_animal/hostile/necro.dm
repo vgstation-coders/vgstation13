@@ -169,7 +169,7 @@
 			return 0
 	if(istype(the_target,/obj/machinery/light))
 		var/obj/machinery/light/L = the_target
-		return L.status != LIGHT_EMPTY && L.status != LIGHT_BROKEN
+		return L.current_bulb && L.current_bulb.status != LIGHT_BROKEN
 
 	return ..(the_target)
 

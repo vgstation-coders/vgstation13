@@ -313,7 +313,7 @@
 	else if(!best_light)
 		to_chat(user, "<span class='warning'>\The [src] has no compatible light!</span>")
 		return
-	if(!is_light_better(best_light, target))
+	if(target.current_bulb && !is_light_better(best_light, target.current_bulb))
 		to_chat(user, "<span class='notice'>\The [src] has no light better than the one already in \the [target].</span>")
 		return
 
@@ -323,19 +323,11 @@
 
 	supply.remove_from_storage(best_light)
 
-	if(target.status != LIGHT_EMPTY)
-		var/obj/item/weapon/light/L1 = new target.light_type(target.loc)
-		L1.status = target.status
-		L1.rigged = target.rigged
-		L1.brightness_range = target.brightness_range
-		L1.brightness_power = target.brightness_power
-		L1.brightness_color = target.brightness_color
-		L1.cost = target.cost
-		L1.base_state = target.base_state
-		L1.switchcount = target.switchcount
-		target.switchcount = 0
+	if(target.current_bulb)
+		var/obj/item/weapon/light/L1 = target.current_bulb
+		L1.forceMove(target.loc)
 		L1.update()
-		target.status = LIGHT_EMPTY
+		target.current_bulb = null
 		target.update()
 		if(!insert_if_possible(L1))
 			if(istype(waste))
@@ -343,20 +335,12 @@
 			else
 				to_chat(user, "<span class='warning'>\The [src] has no waste container and it drops the removed light on the floor!</span>")
 
-	target.status = best_light.status
-	target.switchcount = best_light.switchcount
-	target.rigged = emagged || best_light.rigged
-	target.brightness_range = best_light.brightness_range
-	target.brightness_power = best_light.brightness_power
-	target.brightness_color = best_light.brightness_color
-	target.cost = best_light.cost
-	target.base_state = best_light.base_state
-	target.light_type = best_light.type
+	best_light.forceMove(target)
+	target.current_bulb = best_light
+	best_light = null
 	target.on = target.has_power()
 	target.update()
-	qdel(best_light)
-	best_light = null
-	if(target.on && target.rigged)
+	if(target.on && target.current_bulb.rigged)
 		target.explode()
 
 
@@ -419,18 +403,16 @@
 //Again, standard replacer just checks as follows:
 //HE light < standard light < no light < broken light = burned-out light
 //In normal operation, tested should never be no light and very rarely be a broken light.
-/obj/item/device/lightreplacer/proc/is_light_better(var/obj/tested, var/obj/comparison)
-	if(!(istype(tested, /obj/item/weapon/light) || istype(tested, /obj/machinery/light)) || !(istype(comparison, /obj/item/weapon/light) || istype(comparison, /obj/machinery/light)))
-		return
-	if(tested:status >= LIGHT_BROKEN) //Is tested broken or burnt out? If so, it cannot win.
+/obj/item/device/lightreplacer/proc/is_light_better(var/obj/item/weapon/light/tested, var/obj/item/weapon/light/comparison)
+	if(tested.status >= LIGHT_BROKEN) //Is tested broken or burnt out? If so, it cannot win.
 		return 0
-	if(tested:status < comparison:status) //Is tested closer to functional than comparison? If so, it wins.
+	if(tested.status < comparison.status) //Is tested closer to functional than comparison? If so, it wins.
 		return 1
-	if(tested:status) //Is tested empty? If so, either it must be a tie or comparison wins, so tested cannot win.
+	if(tested.status) //Is tested empty? If so, either it must be a tie or comparison wins, so tested cannot win.
 		return 0
 
 	//Now we know both work, so all that is left is to test if tested wins by being HE.
-	if(findtextEx(tested:base_state, "he", 1, 3) && !findtextEx(comparison:base_state, "he", 1, 3))
+	if(findtextEx(tested.base_state, "he", 1, 3) && !findtextEx(comparison.base_state, "he", 1, 3))
 		return 1
 	else
 		return 0
