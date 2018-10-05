@@ -289,7 +289,9 @@ Pipelines + Other Objects -> Pipe network
 	return FALSE
 
 /obj/machinery/atmospherics/cultify()
-	if(src.invisibility != INVISIBILITY_MAXIMUM)
+	if(density)
+		..()
+	else
 		src.invisibility = INVISIBILITY_MAXIMUM
 
 
