@@ -164,6 +164,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	desc = "A small lighting fixture."
 	spawn_with_bulb = /obj/item/weapon/light/bulb
 
+/obj/machinery/light/small/broken
+	spawn_with_bulb = /obj/item/weapon/light/bulb/broken
 
 /obj/machinery/light/spot
 	name = "spotlight"
@@ -628,6 +630,9 @@ var/global/list/obj/machinery/light/alllights = list()
 	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 30)
 	cost = 5
 	w_type = RECYK_GLASS
+
+/obj/item/weapon/light/bulb/broken
+	status = LIGHT_BROKEN
 
 /obj/item/weapon/light/bulb/he
 	name = "high efficiency light bulb"
