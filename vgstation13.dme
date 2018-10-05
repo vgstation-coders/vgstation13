@@ -2381,6 +2381,7 @@
 #include "code\WorkInProgress\Cib\MedicalSideEffects.dm"
 #include "code\WorkInProgress\Cutelilduck\human_resources.dm"
 #include "code\WorkInProgress\kilakk\fax.dm"
+#include "code\WorkInProgress\MadmanMartian\blacksmithing\blacksmithing.dm"
 #include "code\WorkInProgress\Mini\ATM.dm"
 #include "code\WorkInProgress\Mini\atmos_control.dm"
 #include "code\WorkInProgress\pomf\spacepods\actions.dm"

@@ -152,6 +152,6 @@
 	max_amount = 20
 
 /obj/item/stack/chains/can_stack_with(var/obj/item/other_stack)
-	if(other_stack.material_type == material_type)
+	if(!ispath(other_stack) && other_stack.material_type == material_type)
 		return ..()
 	return 0

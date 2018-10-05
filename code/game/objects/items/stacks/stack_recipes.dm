@@ -112,6 +112,11 @@
 		if(!findtext(lowertext(R.name), lowertext(mat.name)))
 			R.name = "[R.quality == NORMAL ? "": "[lowertext(qualityByString[R.quality])] "][lowertext(mat.name)] [R.name]"
 
+/datum/stack_recipe/blacksmithing/finish_building(mob/usr, var/obj/item/stack/S, var/obj/R)
+	//Yeah nah let's put you in a blacksmith_placeholder
+	new /obj/item/smithing_placeholder(usr.loc,R, S)
+
+
 var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe_list("building components", list(
 		new/datum/stack_recipe("floor tile", /obj/item/stack/tile/plasteel, 1, 4, 60),

@@ -132,6 +132,8 @@
 
 #define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
 
+#define ishammer(A) is_type_in_list(A, list(/obj/item/weapon/hammer, /obj/item/weapon/storage/toolbox))
+
 #define iscablecoil(A) istype(A, /obj/item/stack/cable_coil)
 
 #define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin))

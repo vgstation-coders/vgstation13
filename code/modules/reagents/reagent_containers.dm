@@ -374,7 +374,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	..()
 	attempt_heating(I, user)
 
-/obj/item/weapon/reagent_containers/proc/attempt_heating(obj/item/I, mob/user)
+/obj/item/weapon/reagent_containers/attempt_heating(obj/item/I, mob/user)
 	var/temperature = I.is_hot()
 	var/thermal_energy = I.thermal_energy_transfer()
 	if(temperature && reagents)

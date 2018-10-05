@@ -1297,3 +1297,6 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/pre_throw()
 	return
+
+/obj/item/proc/attempt_heating(obj/item/I, mob/user)
+	return
