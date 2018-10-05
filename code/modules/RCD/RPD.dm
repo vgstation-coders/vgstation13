@@ -49,12 +49,6 @@
 		/datum/rcd_schematic/pipe/he_manifold,
 		/datum/rcd_schematic/pipe/he_manifold4w,
 
-		/* Insulated Pipes */
-		/datum/rcd_schematic/pipe/insulated,
-		/datum/rcd_schematic/pipe/insulated_bent,
-		/datum/rcd_schematic/pipe/insulated_manifold,
-		/datum/rcd_schematic/pipe/insulated_4w_manifold,
-
 		/* Disposal Pipes */
 		/datum/rcd_schematic/pipe/disposal,
 		/datum/rcd_schematic/pipe/disposal/bent,
