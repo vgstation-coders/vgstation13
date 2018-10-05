@@ -252,11 +252,12 @@
 		/obj/structure/falsewall,
 		/obj/structure/falserwall,
 	)
+	return smoothables
 
 /obj/structure/falserwall/New()
+	..()
 	relativewall()
 	relativewall_neighbours()
-	..()
 
 
 /obj/structure/falserwall/attack_ai(mob/user as mob)
