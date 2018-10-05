@@ -614,6 +614,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter
 	name = "cheap lighter"
+	var/initial_name	//a lighter that gets renamed for flavor needs to keep its name
 	desc = "A budget lighter. More likely lit more fingers than it did light smokes."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "lighter"
@@ -666,13 +667,16 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/lighter/update_icon()
 	switch(lit)
 		if(1)
-			name = "lit [initial(name)]"
+			initial_name = name
+			name = "lit [initial_name]"
 			item_state = "[initial(item_state)][color_suffix]on"
 			icon_state = "[initial(icon_state)][color_suffix]-on"
 			damtype = BURN
 			attack_verb = lit_attack_verb
 		if(0)
-			name = "[initial(name)]"
+			if(!initial_name)
+				initial_name = name
+			name = "[initial_name]"
 			item_state = "[initial(item_state)][color_suffix]off"
 			icon_state = "[initial(icon_state)][color_suffix]"
 			damtype = BRUTE
