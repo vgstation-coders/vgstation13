@@ -57,15 +57,19 @@
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
 /datum/role/legacy_cultist/Drop()
+	stat_collection.cult_deconverted++
+	. = ..()
+	if (!antag)
+		return .
 	antag.current.remove_language(LANGUAGE_CULT)
 	to_chat(antag.current, "<span class='danger'><FONT size = 3>An unfamiliar white light flashes through your mind, cleansing the taint of the dark-one and removing all of the memories of your time as his servant, except the one who converted you, with it.</FONT></span>")
 	to_chat(antag.current, "<span class='danger'>You find yourself unable to mouth the words of the forgotten...</span>")
 	antag.current.visible_message("<span class='big danger'>It looks like [antag.current] just reverted to their old faith!</span>")
 	log_admin("[key_name(antag.current)] has been deconverted from the cult.")
-	stat_collection.cult_deconverted++
-	. = ..()
 
 /datum/role/legacy_cultist/AnnounceObjectives()
+	if (!antag)
+		return
 	if (!istype(faction, /datum/faction/cult/narsie))
 		WARNING("Wrong faction type for [src.antag.current], faction is [faction.type]")
 		return FALSE
@@ -77,5 +81,5 @@
 /datum/role/legacy_cultist/AdminPanelEntry()
 	var/list/dat = ..()
 	var/datum/faction/cult/narsie/C = faction
-	dat += "<a href='?src=\ref[faction];cult_mindspeak=\ref[src]'>Voice of [C.eldergod]</a><br/>"
+	dat += "<a href='?src=\ref[faction];cult_mindspeak=\ref[src]'>Voice of [C.deity_name]</a><br/>"
 	return dat
