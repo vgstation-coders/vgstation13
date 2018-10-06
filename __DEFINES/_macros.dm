@@ -243,6 +243,7 @@
 
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 
+#define hasanvil(H) (isturf(H) && (locate(/obj/item/anvil) in H))
 
 
 

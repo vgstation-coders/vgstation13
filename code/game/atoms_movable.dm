@@ -1020,3 +1020,6 @@
 	if(Lag > 0)
 		set_glide_size(DELAY2GLIDESIZE(Lag))
 	walk_to(src,Trg,Min,Lag,Speed)
+
+/atom/movable/proc/can_be_pushed(mob/user)
+	return 1

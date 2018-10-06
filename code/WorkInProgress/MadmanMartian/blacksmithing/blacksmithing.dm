@@ -14,6 +14,10 @@
 	var/strikes_required
 	var/strikes
 
+/obj/item/smithing_placeholder/Destroy()
+	result = null
+	..()
+
 /obj/item/smithing_placeholder/New(loc, var/obj/item/stack/S, var/obj/R, var/required_strikes)
 	..()
 	if(istype(S, /obj/item/stack/sheet/))
@@ -37,7 +41,6 @@
 /obj/item/smithing_placeholder/afterattack(atom/A, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
 		return
-	to_chat(world, "Attacked [A]")
 	if(isobj(A))
 		var/obj/O = A
 		if(O.is_hot())
@@ -59,7 +62,6 @@
 		heat(temperature, M, user)
 
 /obj/item/smithing_placeholder/attackby(obj/item/I, mob/user)
-	to_chat(world, "Attacked by [I]")
 	if(ishammer(I))
 		strike(I, user)
 		user.delayNextAttack(1 SECONDS)
@@ -82,6 +84,9 @@
 	if(!malleable)
 		to_chat(user, "<span class = 'warning'>\The [src] has gone cool. It can not be manipulated in this state.</span>")
 		return
+	if(!hasanvil(loc))
+		to_chat(user, "<span class = 'warning'>There is no anvil to shape \the [src] over.</span>")
+		return
 	playsound(loc, 'sound/items/hammer_strike.ogg', 50, 1)
 	switch(A.type)
 		if(/obj/item/weapon/hammer)
@@ -95,6 +100,7 @@
 			to_chat(user, "<span class = 'warning'>\The [src] becomes brittle and unmalleable.</span>")
 			var/obj/item/weapon/ore/slag/S = new /obj/item/weapon/ore/slag(get_turf(src))
 			recycle(S.materials)
+			qdel(result)
 			qdel(src)
 
 
