@@ -14,64 +14,97 @@
 	var/strikes_required
 	var/strikes
 
-/obj/item/smithing_placeholder/New(loc, var/obj/item/stack/S, var/obj/result)
+/obj/item/smithing_placeholder/New(loc, var/obj/item/stack/S, var/obj/R, var/required_strikes)
 	..()
 	if(istype(S, /obj/item/stack/sheet/))
 		var/obj/item/stack/sheet/SS = S
-		mat = materials_list.getMaterial(SS.mat_type)
+		var/datum/materials/materials_list = new
+		material_type = materials_list.getMaterial(SS.mat_type)
+		qdel(materials_list)
 	else if(S.material_type)
-		mat = S.material_type
-	result = result
-	appearance = result.appearance
+		material_type = S.material_type
+	result = R
+	R.forceMove(null)
+	var/obj/item/stack/sheet/mineral/M = material_type.sheettype
+	appearance = initial(M.appearance)
+	strikes_required = required_strikes
 
-/obj/item/smithing_placeholder/afterattack(atom/A, mob/living/user, flags, params, struggle = 0)
+/obj/item/smithing_placeholder/examine(mob/user)
+	to_chat(user, "This is an unforged <span class = 'notice'>[result]</span>")
+	to_chat(user, "<span class = 'notice'>[strikes?"It looks like it has been struck [strikes] times.":"It has not been struck yet."]<br>It is [malleable?"malleable":"not malleable"].[strikes_required<strikes?"<br>It looks to be finished, and just needs quenching.":""]")
+
+
+/obj/item/smithing_placeholder/afterattack(atom/A, mob/user, proximity_flag, click_parameters)
+	if(!proximity_flag)
+		return
+	to_chat(world, "Attacked [A]")
 	if(isobj(A))
 		var/obj/O = A
-		if(!malleable && O.is_hot() >= ((material_type.melt_temperature/10)*9)) //90% of the melting temperature
-			malleable = TRUE
-			spawn(O.thermal_energy_transfer()/10)
-				to_chat(user, "<span class = 'notice'>\The [src] cools down.</span>")
-				malleable = FALSE
+		if(O.is_hot())
+			heat(O.is_hot(), O, user)
 		if(O.is_open_container() && O.reagents.has_reagent(WATER, 60))
 			quench(O, user)
+	if(istype(A, /mob/living/simple_animal/hostile/asteroid/magmaw)) //Until we have flameslimes, lavalizards, crimson pyromancers, or flaming skeletons, this will be hardcoded
+		var/mob/living/simple_animal/hostile/asteroid/magmaw/M = A
+		if(M.isDead())
+			return
+		var/temperature
+		switch(M.fire_extremity)
+			if(0)
+				temperature = MELTPOINT_GOLD
+			if(1)
+				temperature = MELTPOINT_STEEL
+			if(2)
+				temperature = MELTPOINT_MITHRIL
+		heat(temperature, M, user)
 
 /obj/item/smithing_placeholder/attackby(obj/item/I, mob/user)
+	to_chat(world, "Attacked by [I]")
 	if(ishammer(I))
 		strike(I, user)
-	else if (!malleable && I.is_hot() && I.is_hot() >= ((material_type.melt_temperature/10)*9))
-		malleable = TRUE
-		spawn(I.thermal_energy_transfer()/10)
-			to_chat(user, "<span class = 'notice'>\The [src] cools down.</span>")
-			malleable = FALSE
+		user.delayNextAttack(1 SECONDS)
+	else if (I.is_hot())
+		heat(I.is_hot(), I, user)
+
+/obj/item/smithing_placeholder/proc/heat(var/temperature, var/atom/A, mob/user)
+	if(malleable)
+		return
+	if(temperature < ((material_type.melt_temperature/10)*9))
+		to_chat(user, "<span class = 'warning'>\The [A] is not hot enough.</span>")
+		return
+	if(!do_after(user, A, 4 SECONDS))
+		return
+	to_chat(user, "<span class = 'notice'>You heat \the [src].</span>")
+	malleable = TRUE
+
 
 /obj/item/smithing_placeholder/proc/strike(atom/A, mob/user)
-	if(malleable)
-		playsound(loc, 'sound/items/hammer_strike.ogg', 50, 1)
-		switch(A.type)
-			if(/obj/item/weapon/hammer)
-				strikes++
-			if(/obj/item/weapon/storage/toolbox)
-				strikes+=0.25
-		if(strikes == strikes_required)
-			to_chat(user, "<span class = 'notice'>\The [src] seems to have taken shape nicely.</span>")
-		if(strikes > strikes_required)
-			if(prob(5*(strikes/strikes_required)))
-				to_chat(user, "<span class = 'warning'>\The [src] becomes brittle and unmalleable.</span>")
-				var/obj/item/weapon/ore/slag/S = new /obj/item/weapon/ore/slag(loc)
-				recycle(S.materials)
-				qdel(src)
-				return
-	else
+	if(!malleable)
 		to_chat(user, "<span class = 'warning'>\The [src] has gone cool. It can not be manipulated in this state.</span>")
 		return
+	playsound(loc, 'sound/items/hammer_strike.ogg', 50, 1)
+	switch(A.type)
+		if(/obj/item/weapon/hammer)
+			strikes++
+		if(/obj/item/weapon/storage/toolbox)
+			strikes+=0.25
+	if(strikes == strikes_required)
+		to_chat(user, "<span class = 'notice'>\The [src] seems to have taken shape nicely.</span>")
+	if(strikes > strikes_required)
+		if(prob(5*(strikes/strikes_required)))
+			to_chat(user, "<span class = 'warning'>\The [src] becomes brittle and unmalleable.</span>")
+			var/obj/item/weapon/ore/slag/S = new /obj/item/weapon/ore/slag(get_turf(src))
+			recycle(S.materials)
+			qdel(src)
+
 
 /obj/item/smithing_placeholder/proc/quench(obj/O, mob/user)
 	if(strikes < strikes_required)
 		to_chat(user, "<span class = 'warning'>\The [src] is not finished yet!</span>")
 		return 0
 	playsound(loc, 'sound/machines/hiss.ogg', 50, 1)
-	O.reagents.remove_reagents(WATER, 20)
-	result.forceMove(loc)
+	O.reagents.remove_reagent(WATER, 20)
+	result.forceMove(get_turf(src))
 	result.gen_quality(strikes/strikes_required)
 	if(result.quality > SUPERIOR)
 		result.gen_description()

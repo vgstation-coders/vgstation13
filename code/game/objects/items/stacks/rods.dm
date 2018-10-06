@@ -152,6 +152,14 @@
 	max_amount = 20
 
 /obj/item/stack/chains/can_stack_with(var/obj/item/other_stack)
-	if(!ispath(other_stack) && other_stack.material_type == material_type)
+	if(!ispath(other_stack) && istype(other_stack) && other_stack.material_type == material_type)
 		return ..()
 	return 0
+
+/obj/item/stack/chains/New(var/loc, var/amount=null)
+	recipes = chain_recipes
+	..()
+
+var/list/datum/stack_recipe/chain_recipes = list (
+	new/datum/stack_recipe/blacksmithing("Chainmail",		/obj/item/clothing/suit/armor/vest/chainmail,					10,	time = 100,required_strikes = 15),
+	)

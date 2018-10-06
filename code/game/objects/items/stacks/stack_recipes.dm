@@ -35,7 +35,7 @@
 	return 1
 
 /datum/stack_recipe/proc/finish_building(var/mob/usr, var/obj/item/stack/S, var/R) //This will be called after the recipe is done building, useful for doing something to the result if you want.
-	return
+	return 1
 
 //Recipe list datum
 /datum/stack_recipe_list
@@ -111,10 +111,20 @@
 					R.gen_description()
 		if(!findtext(lowertext(R.name), lowertext(mat.name)))
 			R.name = "[R.quality == NORMAL ? "": "[lowertext(qualityByString[R.quality])] "][lowertext(mat.name)] [R.name]"
+	return 1
+
+
+/datum/stack_recipe/blacksmithing
+	var/req_strikes = 15
+
+/datum/stack_recipe/blacksmithing/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list(), inherit_material = FALSE, gen_quality = FALSE, required_strikes = 0)
+	..()
+	src.req_strikes = required_strikes
 
 /datum/stack_recipe/blacksmithing/finish_building(mob/usr, var/obj/item/stack/S, var/obj/R)
 	//Yeah nah let's put you in a blacksmith_placeholder
-	new /obj/item/smithing_placeholder(usr.loc,R, S)
+	new /obj/item/smithing_placeholder(usr.loc,S, R, req_strikes)
+	return 0
 
 
 var/list/datum/stack_recipe/metal_recipes = list (
@@ -326,6 +336,7 @@ var/list/datum/stack_recipe/cardboard_recipes = list (
 			R.name = "[L.source_string ? "[L.source_string]" : ""] [R.name]"
 		else
 			R.name = "[L.source_string ? "[L.source_string] leather " : ""] [R.name]"
+	return 1
 
 var/list/datum/stack_recipe/leather_recipes = list (
 	new/datum/stack_recipe/leather("Bullwhip",		/obj/item/weapon/bullwhip,					10,	time = 100,),

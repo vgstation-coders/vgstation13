@@ -50,6 +50,10 @@
 	icon_state = "nr_vest"
 	item_state = "nr_vest"
 
+/obj/item/clothing/suit/armor/vest/chainmail
+	name = "chainmail"
+	desc = "A series of chains linked together in a way to look like a suit."
+
 /obj/item/clothing/suit/armor/riot
 	name = "Riot Suit"
 	desc = "A suit of armor with heavy padding to protect against melee attacks. Looks like it might impair movement."
