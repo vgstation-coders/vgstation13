@@ -1312,7 +1312,7 @@
 						to_chat(M, "<span class='warning'>The rune suddenly ignites, burning you!</span>")
 					var/turf/T = get_turf(R)
 					T.hotspot_expose(700,125,surfaces=1)
-		for(var/obj/effect/decal/cleanable/blood/B in world)
+		for(var/obj/effect/decal/cleanable/blood/B in effects_list)
 			if(B.blood_DNA == src.blood_DNA)
 				for(var/mob/living/M in orange(1,B))
 					M.take_overall_damage(0,5)
