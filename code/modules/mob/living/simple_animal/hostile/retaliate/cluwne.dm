@@ -251,6 +251,10 @@
 	return ..()
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	var/currenthealth = health
+	..()
+	playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
+	health = currenthealth
 	//only knowledge can kill a cluwne
 	if(istype(O,/obj/item/weapon/book))
 		gib()
