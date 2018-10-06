@@ -73,6 +73,7 @@ var/list/diagnostic_hud_users = list() // list of all entities using a diagnosti
 */
 
 var/global/list/escape_list = list()
+var/list/bots_list = list()
 
 
 var/list/rcd_list = list()
