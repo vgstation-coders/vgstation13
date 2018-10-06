@@ -287,6 +287,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 		message_admins("Trying to force completion of objective [O] to [src], but the faction has no current objective.")
 		return FALSE
 	if (!(O in objective_holder.objectives) || current_objective != O) // Same as previous
+		message_admins("Trying to force completion of objective [O] to [src], but this isn't the faction's current objective.")
 		return FALSE
 	getNewObjective()
 

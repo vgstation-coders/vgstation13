@@ -8,11 +8,13 @@
 	flags =  FACTION_OBJECTIVE
 
 /datum/objective/spray_blood/PostAppend()
-	floor_limit = round(rand(1,5))*50
+	floor_limit = round(rand(1,5))*1
 	explanation_text = "We must prepare this place for the Geometer of Blood's coming. Spread blood and gibs over [floor_limit] of the Station's floor tiles."
 	return TRUE
 
 /datum/objective/spray_blood/IsFulfilled()
+	if (..())
+		return TRUE
 	var/datum/faction/cult/narsie/cult_fac = faction
 	return (cult_fac.bloody_floors.len >= floor_limit)
 
