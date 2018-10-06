@@ -74,6 +74,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		if(signal.data["type"] == 0)
 			var/datum/speech/speech = getFromPool(/datum/speech)
 			speech.from_signal(signal)
+			speech.speaker = signal.data["mob"]
 			/* ###### Broadcast a message using signal.data ###### */
 			Broadcast_Message(speech, signal.data["vmask"], 0, signal.data["compression"], signal.data["level"])
 
@@ -90,6 +91,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 			*/
 			var/datum/speech/speech = getFromPool(/datum/speech)
 			speech.from_signal(signal)
+			speech.speaker = signal.data["mob"]
 			/* ###### Broadcast a message using signal.data ###### */
 			Broadcast_Message(speech, signal.data["vmask"], null, signal.data["compression"], signal.data["level"])
 
@@ -104,6 +106,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 				// Parameter "data" as 4: AI can't track this person/mob
 			var/datum/speech/speech = getFromPool(/datum/speech)
 			speech.from_signal(signal)
+			speech.speaker = signal.data["mob"]
 			/* ###### Broadcast a message using signal.data ###### */
 			Broadcast_Message(speech, signal.data["vmask"], 4, signal.data["compression"], signal.data["level"])
 
