@@ -597,6 +597,6 @@
 	item_state = "coat-church"
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
-	allowed =  = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
+	allowed = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
 	armor = list(melee = 40, bullet = 25, laser = 5, energy = 0, bomb = 0, bio = 0, rad = 0)
 	wizard_garb = TRUE
