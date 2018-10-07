@@ -426,20 +426,28 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/strike_team/ert
 	name = "Emergency Response Team"
 	ID = ERT
+	initroletype = /datum/role/emergency_responder
+	roletype = /datum/role/emergency_responder
 	logo_state = "ert-logo"
+	hud_icons = list("ert-logo")
 
 //________________________________________________
 
 /datum/faction/strike_team/deathsquad
 	name = "Nanotrasen Deathsquad"
 	ID = DEATHSQUAD
+	initroletype = /datum/role/death_commando
+	roletype = /datum/role/death_commando
 	logo_state = "death-logo"
+	hud_icons = list("death-logo","creed-logo")
 
 //________________________________________________
 
 /datum/faction/strike_team/syndiesquad
 	name = "Syndicate Deep-Strike squad"
 	ID = SYNDIESQUAD
+	initroletype = /datum/role/syndicate_elite_commando
+	roletype = /datum/role/syndicate_elite_commando
 	logo_state = "elite-logo"
 
 /datum/faction/strike_team/custom
