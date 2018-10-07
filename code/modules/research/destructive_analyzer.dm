@@ -123,7 +123,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 
 /obj/machinery/r_n_d/destructive_analyzer/kick_act(mob/living/carbon/human/H)
 	..()
-	if(prob(50) && linked_console)
+	if(linked_console)
 		linked_console.deconstruct_item(H)
 
 //For testing purposes only.

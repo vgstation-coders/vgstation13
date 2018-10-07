@@ -372,9 +372,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	else if(href_list["deconstruct"]) //Deconstruct the item in the destructive analyzer and update the research holder.
 		if(linked_destroy)
-			if(!src.allowed(usr))
-				to_chat(usr, "Unauthorized Access.")
-				return
 			if(linked_destroy.busy)
 				to_chat(usr, "<span class='warning'>The destructive analyzer is busy at the moment.</span>")
 			else
