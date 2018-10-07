@@ -88,18 +88,18 @@
 		to_chat(user, "<span class = 'warning'>There is no anvil to shape \the [src] over.</span>")
 		return
 	playsound(loc, 'sound/items/hammer_strike.ogg', 50, 1)
-	switch(A.type)
-		if(/obj/item/weapon/hammer)
-			strikes++
-		if(/obj/item/weapon/storage/toolbox)
-			strikes+=0.25
+	if(istype(A,/obj/item/weapon/hammer))
+		strikes++
+	else if(istype(A,/obj/item/weapon/storage/toolbox))
+		strikes+=0.25
 	if(strikes == strikes_required)
 		to_chat(user, "<span class = 'notice'>\The [src] seems to have taken shape nicely.</span>")
 	if(strikes > strikes_required)
 		if(prob(5*(strikes/strikes_required)))
 			to_chat(user, "<span class = 'warning'>\The [src] becomes brittle and unmalleable.</span>")
 			var/obj/item/weapon/ore/slag/S = new /obj/item/weapon/ore/slag(get_turf(src))
-			recycle(S.materials)
+			recycle(S.mats)
+			result.recycle(S.mats)
 			qdel(result)
 			qdel(src)
 
