@@ -13,7 +13,7 @@
 	required_candidates = 1
 	weight = 7
 	cost = 5
-	requirements = list(40,30,20,10,10,10,10,10,10,10)
+	requirements = list(50,40,30,20,10,10,10,10,10,10)
 
 /datum/dynamic_ruleset/midround/autotraitor/acceptable(var/population=0,var/threat=0)
 	var/player_count = mode.living_players.len
@@ -63,7 +63,7 @@
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 3
-	cost = 10
+	cost = 30
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	logo = "raginmages-logo"
 

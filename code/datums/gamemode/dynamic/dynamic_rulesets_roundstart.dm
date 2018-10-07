@@ -52,7 +52,7 @@
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = 3
-	cost = 15
+	cost = 30
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
 
 /datum/dynamic_ruleset/roundstart/changeling/execute()
@@ -113,7 +113,7 @@
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 3
-	cost = 20
+	cost = 30
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 
 /datum/dynamic_ruleset/roundstart/wizard/acceptable(var/population=0,var/threat=0)
@@ -248,3 +248,25 @@
 	unction.HandleRecruitedRole(AI)
 	AI.Greet(GREET_ROUNDSTART)
 	return 1
+
+//////////////////////////////////////////////
+//                                          //
+//               EXTENDED                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/extended
+	name = "Extended"
+	role_category = null
+	restricted_from_jobs = list()
+	enemy_jobs = list()
+	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
+	required_candidates = 0
+	weight = 3
+	cost = 0
+	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
+
+/datum/dynamic_ruleset/roundstart/extended/execute()
+	message_admins("Starting a round of extended.")
+	log_admin("Starting a round of extended.")
+	return TRUE
