@@ -803,17 +803,8 @@
 	desc = "This book seems like it moves away as you get closer to it."
 
 /obj/item/weapon/spellbook/oneuse/push/recoil(mob/living/carbon/user)
-	user.drop_item(src, force_drop = 1)	//no taking the transportation device with you
 	to_chat(user, "<span class = 'warning'>You are pushed away by \the [src]!</span>")
-	var/area/thearea
-	var/area/prospective = pick(areas)
-	while(!thearea)
-		if(prospective.type != /area)
-			var/turf/T = pick(get_area_turfs(prospective.type))
-			if(T.z != 2)
-				thearea = prospective
-				break
-		prospective = pick(areas)
+	var/area/thearea = pick(areas)
 	var/list/L = list()
 	for(var/turf/T in get_area_turfs(thearea.type))
 		if(!T.density)
