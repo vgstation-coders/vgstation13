@@ -458,10 +458,27 @@
 /mob/living/silicon/robot/bullet_act(var/obj/item/projectile/Proj)
 	..(Proj)
 	updatehealth()
+	if (movement_speed_modifier > 0.8)
+		movement_speed_modifier -= 0.8
+		if (Proj.damage == 0)
+			if(can_diagnose())
+				to_chat(src, "<span class='alert' style=\"font-family:Courier\">Warning: actuators overloaded.</span>")
+			spawn(18 SECONDS)
+				movement_speed_modifier += 0.8
+		else
+			spawn(3 SECONDS)
+				movement_speed_modifier += 0.8
 	if(prob(75) && Proj.damage > 0)
 		spark(src, 5, FALSE)
 	return 2
 
+	
+/mob/living/silicon/robot/emp_act(severity)
+	..()
+	if(prob(100/severity))
+		weaponlock_time = rand(30,120)
+		weapon_lock = 1
+	
 
 /mob/living/silicon/robot/triggerAlarm(var/class, area/A, var/O, var/alarmsource)
 	if(isDead())
@@ -985,10 +1002,6 @@
 		overlays += target_locked
 
 /mob/living/silicon/robot/proc/installed_modules()
-	if(weapon_lock)
-		to_chat(src, "<span class='attack'>Weapon lock active, unable to use modules! Count:[weaponlock_time]</span>")
-		return
-
 	if(!module)
 		pick_module()
 		return
