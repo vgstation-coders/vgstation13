@@ -459,13 +459,14 @@
 	..(Proj)
 	updatehealth()
 	if (movement_speed_modifier > 0.8)
-		movement_speed_modifier -= 0.8
-		if (Proj.damage == 0)
+		if (istype(Proj, /obj/item/projectile/energy/electrode))
+			movement_speed_modifier -= 0.8
 			if(can_diagnose())
-				to_chat(src, "<span class='alert' style=\"font-family:Courier\">Warning: actuators overloaded.</span>")
+				to_chat(src, "<span class='alert' style=\"font-family:Courier\">Warning: Actuators overloaded.</span>")
 			spawn(18 SECONDS)
 				movement_speed_modifier += 0.8
-		else
+		if (Proj.damage >= 30)
+			movement_speed_modifier -= 0.8
 			spawn(3 SECONDS)
 				movement_speed_modifier += 0.8
 	if(prob(75) && Proj.damage > 0)
