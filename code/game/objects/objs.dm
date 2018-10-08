@@ -223,10 +223,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/is_sharp()
 	return sharpness
 
-/obj/proc/is_hot() //This returns the temperature of the object if possible
+/obj/is_hot() //This returns the temperature of the object if possible
 	return source_temperature
 
-/obj/proc/thermal_energy_transfer()
+/obj/thermal_energy_transfer()
 	if(is_hot())
 		return heat_production
 	return 0

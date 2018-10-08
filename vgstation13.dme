@@ -2382,6 +2382,7 @@
 #include "code\WorkInProgress\kilakk\fax.dm"
 #include "code\WorkInProgress\MadmanMartian\blacksmithing\anvil.dm"
 #include "code\WorkInProgress\MadmanMartian\blacksmithing\blacksmithing.dm"
+#include "code\WorkInProgress\MadmanMartian\blacksmithing\forge.dm"
 #include "code\WorkInProgress\MadmanMartian\blacksmithing\misc_components.dm"
 #include "code\WorkInProgress\Mini\ATM.dm"
 #include "code\WorkInProgress\Mini\atmos_control.dm"
