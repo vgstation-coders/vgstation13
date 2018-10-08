@@ -573,7 +573,7 @@
 
 /datum/role/wizard/handle_mind_transfer(var/mob/living/new_character, var/mob/living/old_character)
 	. = ..()
-	for (var/spell/S in old_characters.spells)
+	for (var/spell/S in old_character.spell_list)
 		if (S.user_type == USER_TYPE_WIZARD)
 			new_character.add_spell(S)
 
