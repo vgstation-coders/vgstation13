@@ -1051,6 +1051,7 @@ var/list/datum/dna/hivemind_bank = list()
 		return
 
 	feedback_add_details("changeling_powers", "PS")
+	to_chat(target, "<span class='userdanger'>Critical power overload detected, shuting down primary systems in 3...2.. ERROR.</span>")
 	sleep(rand(20,50))
 	target.gib()
 
