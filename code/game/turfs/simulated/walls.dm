@@ -99,12 +99,14 @@
 	if(M.environment_smash_flags & SMASH_WALLS)
 		if(istype(src, /turf/simulated/wall/r_wall))
 			if(M.environment_smash_flags & SMASH_RWALLS)
+				playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
 				dismantle_wall(1)
 				M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
 				"<span class='attack'>You smash through \the [src].</span>")
 			else
 				to_chat(M, "<span class='info'>This [src] is far too strong for you to destroy.</span>")
 		else
+			playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
 			dismantle_wall(1)
 			M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
 			"<span class='attack'>You smash through \the [src].</span>")

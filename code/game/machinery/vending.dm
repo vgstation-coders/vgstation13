@@ -675,15 +675,15 @@ var/global/num_vending_terminals = 1
 	else
 		src.icon_state = "[initial(icon_state)]"
 
-/obj/machinery/vending/proc/damaged()
-	src.health -= 4
+/obj/machinery/vending/proc/damaged(var/coef=1)
+	src.health -= 4*coef
 	if(src.health <= 0)
 		stat |= BROKEN
 		src.update_vicon()
 		return
-	if(prob(2)) //Jackpot!
+	if(prob(2*coef)) //Jackpot!
 		malfunction()
-	if(prob(2))
+	if(prob(2*coef))
 		src.TurnOff(600) //A whole minute
 	/*if(prob(1))
 		to_chat(usr, "<span class='warning'>You fall down and break your leg!</span>")
@@ -694,6 +694,16 @@ var/global/num_vending_terminals = 1
 	..()
 
 	damaged()
+
+/obj/machinery/vending/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		shake(1, 3)
+		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+		damaged(4)
+		return 1
+	return 0
 
 /obj/machinery/vending/attack_hand(mob/living/user as mob)
 	if(stat & (BROKEN))

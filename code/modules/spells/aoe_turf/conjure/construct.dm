@@ -162,13 +162,14 @@
 /obj/effect/forcefield/cult/cultify()
 	return
 
+////////////////////////////////////////////////////NEW CULT 3.0 STUFF////////////////////////////////////////////////
 
 /spell/aoe_turf/conjure/forcewall/greater
-	name = "Juggerwall"
+	name = "Jugger-Wall"
 	desc = "Raise a temporary line of indestructible walls to block your enemies' path and protect your allies."
 	user_type = USER_TYPE_CULT
 
-	charge_max = 300
+	charge_max = 250
 	spell_flags = 0
 	invocation = "none"
 	invocation_type = SpI_NONE
@@ -176,10 +177,12 @@
 	summon_type = list(/obj/effect/forcefield/cult/large)
 	duration = 200
 
-	hud_state = "const_juggwall2
-	override_base = "cult""
+	hud_state = "const_juggwall2"
+	override_base = "cult"
 
 /spell/aoe_turf/conjure/forcewall/greater/on_creation(var/obj/effect/forcefield/cult/large/AM, var/mob/user)
+	playsound(user, 'sound/effects/stonedoor_openclose.ogg', 100, 1)
+	user.throwing = 0
 	AM.layer++
 	var/turf/turf_left = null
 	var/turf/turf_right = null
@@ -228,9 +231,8 @@
 				AM.side2.forceMove(turf_left)
 
 
-//Code for the Juggernaut construct's forcefield, that seemed like a good place to put it.
 /obj/effect/forcefield/cult/large
-	desc = "That eerie looking obstacle seems to have been pulled from another dimension through sheer force"
+	desc = "That eerie looking obstacle seems to have been pulled from another dimension through sheer force."
 	name = "Juggerwall"
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "juggerwall"
@@ -252,3 +254,30 @@
 	side2 = null
 	..()
 	..()
+
+/spell/juggerdash
+	name = "Jugger-Dash"
+	desc = "Charge in a line and knock down anything in your way, even some walls."
+	user_type = USER_TYPE_CULT
+	hud_state = "const_juggdash"
+	override_base = "cult"
+	charge_max = 150
+	spell_flags = 0
+	var/dash_range = 20
+
+/spell/juggerdash/choose_targets(var/mob/user = usr)
+	return list(user)
+
+/spell/juggerdash/cast_check(var/skipcharge = FALSE, var/mob/user = usr)
+	if(user.throwing)
+		return FALSE
+	else
+		return ..()
+
+/spell/juggerdash/cast(var/list/targets, var/mob/user)
+	playsound(user, 'sound/effects/juggerdash.ogg', 100, 1)
+	var/mob/living/simple_animal/construct/armoured/perfect/jugg = user
+	jugg.crashing = null
+	var/landing = get_distant_turf(get_turf(user), jugg.dir, dash_range)
+	jugg.throw_at(landing, dash_range , 2)
+

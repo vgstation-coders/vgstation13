@@ -533,6 +533,13 @@
 		M.dash_dir = dir
 		src.throwing = 2// mechas will crash through windows, grilles, tables, people, you name it
 
+	var/afterimage = 0
+	if(istype(src,/mob/living/simple_animal/construct/armoured/perfect))
+		var/mob/living/simple_animal/construct/armoured/perfect/M = src
+		M.dash_dir = dir
+		src.throwing = 2
+		afterimage = 1
+
 	var/dist_x = abs(target.x - src.x)
 	var/dist_y = abs(target.y - src.y)
 
@@ -571,6 +578,8 @@
 			if(kinetic_acceleration>kinetic_sum)
 				fly_speed += kinetic_acceleration-kinetic_sum
 				kinetic_sum = kinetic_acceleration
+			if(afterimage)
+				new /obj/effect/red_afterimage(loc,src)
 			if(error < 0)
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -610,6 +619,8 @@
 			if(kinetic_acceleration>0)
 				fly_speed += kinetic_acceleration
 				kinetic_acceleration = 0
+			if(afterimage)
+				new /obj/effect/red_afterimage(loc,src)
 			if(error < 0)
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge

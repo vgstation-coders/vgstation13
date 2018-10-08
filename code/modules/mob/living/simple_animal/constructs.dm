@@ -83,7 +83,7 @@
 	default_language = all_languages[LANGUAGE_CULT]
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-	updateicon()
+	setupglow()
 
 /mob/living/simple_animal/construct/death(var/gibbed = FALSE)
 	..(TRUE) //If they qdel, they gib regardless
@@ -314,7 +314,7 @@
 	change_sight(adding = SEE_MOBS)
 
 ////////////////Glow//////////////////
-/mob/living/simple_animal/construct/proc/updateicon()
+/mob/living/simple_animal/construct/proc/setupglow()
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
 	var/overlay_plane = LIGHTING_PLANE
@@ -325,6 +325,12 @@
 	var/image/glow = image(icon,"glow-[icon_state]",overlay_layer)
 	glow.plane = overlay_plane
 	overlays += glow
+
+
+////////////////Float//////////////////
+/mob/living/simple_animal/construct/proc/setupfloat()
+	animate(src, pixel_y = 8 * PIXEL_MULTIPLIER , time = 7, loop = -1, easing = SINE_EASING)
+	animate(pixel_y = 4 * PIXEL_MULTIPLIER, time = 7, loop = -1, easing = SINE_EASING)
 
 ////////////////Powers//////////////////
 
