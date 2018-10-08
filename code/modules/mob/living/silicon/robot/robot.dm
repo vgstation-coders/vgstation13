@@ -472,13 +472,6 @@
 		spark(src, 5, FALSE)
 	return 2
 
-	
-/mob/living/silicon/robot/emp_act(severity)
-	..()
-	if(prob(100/severity))
-		weaponlock_time = rand(30,120)
-		weapon_lock = 1
-	
 
 /mob/living/silicon/robot/triggerAlarm(var/class, area/A, var/O, var/alarmsource)
 	if(isDead())
@@ -1002,6 +995,10 @@
 		overlays += target_locked
 
 /mob/living/silicon/robot/proc/installed_modules()
+	if(weapon_lock)
+		to_chat(src, "<span class='attack'>Weapon lock active, unable to use modules! Count:[weaponlock_time]</span>")
+		return
+
 	if(!module)
 		pick_module()
 		return

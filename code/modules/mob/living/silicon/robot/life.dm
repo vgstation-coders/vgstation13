@@ -303,12 +303,11 @@
 
 /mob/living/silicon/robot/proc/process_locks()
 	if(weapon_lock)
-		if(uneq_all())
-			to_chat(src, "<span class='alert' style=\"font-family:Courier\">Warning: Weapon lock active.</span>")
+		uneq_all()
 		weaponlock_time --
 		if(weaponlock_time <= 0)
 			if(client)
-				to_chat(src, "<span class='info' style=\"font-family:Courier\"><B>Weapon lock timed out!</span>")
+				to_chat(src, "<span class='warning'><B>Weapon Lock Timed Out!</span>")
 			weapon_lock = 0
 			weaponlock_time = 120
 
