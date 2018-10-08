@@ -375,7 +375,7 @@
 	blood_usable = max(0, blood_usable - amount)
 	update_vamp_hud()
 
-/datum/role/vampire/handle_mind_transfer(var/mob/living/new_character)
+/datum/role/vampire/handle_mind_transfer(var/mob/living/new_character,var/mob/living/old_character)
 	. = ..()
 	powers.Cut()
 	if (issilicon(new_character) || isbrain(new_character)) // No, borgs shouldn't be able to spawn bats
