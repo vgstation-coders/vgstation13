@@ -216,14 +216,6 @@ var/MAX_EXPLOSION_RANGE = 14
 #define INSULATED_EDGE 	16 // One of the edges of this thing is insulated, even though the rest of it isn't.
 #define HOT_EDGE 		32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
 
-//clothing flags
-#define MASKINTERNALS		1 // mask allows internals
-#define NOSLIP				2 //prevents from slipping on wet floors, in space etc
-#define BLOCK_GAS_SMOKE_EFFECT 4 //blocks the effect that chemical clouds would have on a mob
-#define ONESIZEFITSALL		8
-#define PLASMAGUARD 		16 //Does not get contaminated by plasma.
-#define BLOCK_BREATHING 	32 //When worn, prevents breathing!
-
 //flags for pass_flags
 #define PASSTABLE	1
 #define PASSGLASS	2

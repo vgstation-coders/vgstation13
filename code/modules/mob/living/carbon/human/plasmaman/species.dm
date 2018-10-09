@@ -131,3 +131,24 @@
 
 /datum/species/plasmaman/can_artifact_revive()
 	return 0
+
+/datum/species/plasmaman/handle_environment(var/datum/gas_mixture/environment, var/mob/living/carbon/human/host)
+	//For now we just assume suit and head are capable of containing the plasmaman
+	var/flags_found = FALSE
+	if(host.wear_suit && (host.wear_suit.clothing_flags & CONTAINPLASMAMAN) && host.head && (host.head.clothing_flags & CONTAINPLASMAMAN))
+		flags_found = TRUE
+
+	if(!flags_found)
+		if(environment)
+			if(environment.total_moles && ((environment[GAS_OXYGEN] / environment.total_moles) >= OXYCONCEN_PLASMEN_IGNITION)) //How's the concentration doing?
+				if(!host.on_fire)
+					to_chat(host, "<span class='warning'>Your body reacts with the atmosphere and bursts into flame!</span>")
+				host.adjust_fire_stacks(0.5)
+				host.IgniteMob()
+	else
+		var/obj/item/clothing/suit/space/plasmaman/PS=host.wear_suit
+		if(istype(PS))
+			if(host.fire_stacks > 0)
+				PS.Extinguish(host)
+			else
+				PS.regulate_temp_of_wearer(host)
