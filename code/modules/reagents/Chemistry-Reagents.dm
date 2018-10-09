@@ -6949,8 +6949,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "A highly radical chemical derived from calcium that aggressively attempts to regenerate osseus tissues it comes in contact with. In the presence of micro-fractures caused by extensive brute damage it rapidly heals the surrounding tissues, but in healthy limbs the new tissue quickly causes the osseal structure to lose shape and shatter rather graphically."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#ccffb3" //rgb: 204, 255, 179
-	density = 13.9
-	specheatcap = 296.86
+	density = 3.9
+	specheatcap = 128.12
 	custom_metabolism = 0.1
 
 /datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
