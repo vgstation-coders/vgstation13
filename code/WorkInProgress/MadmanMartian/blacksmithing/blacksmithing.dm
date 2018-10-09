@@ -68,15 +68,22 @@
 	else if (I.is_hot())
 		heat(I.is_hot(), I, user)
 
+/obj/item/smithing_placeholder/attempt_heating(var/atom/A, mob/user)
+	if(user)
+		to_chat(user, "<span class = 'notice'>You attempt to heat \the [src] with \the [A].</span>")
+	heat(A.is_hot(), A, user)
+
 /obj/item/smithing_placeholder/proc/heat(var/temperature, var/atom/A, mob/user)
 	if(malleable)
 		return
 	if(temperature < ((material_type.melt_temperature/10)*9))
-		to_chat(user, "<span class = 'warning'>\The [A] is not hot enough.</span>")
+		if(user)
+			to_chat(user, "<span class = 'warning'>\The [A] is not hot enough.</span>")
 		return
 	if(!do_after(user, A, 4 SECONDS))
 		return
-	to_chat(user, "<span class = 'notice'>You heat \the [src].</span>")
+	if(user)
+		to_chat(user, "<span class = 'notice'>You heat \the [src].</span>")
 	malleable = TRUE
 
 
