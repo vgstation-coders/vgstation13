@@ -51,3 +51,52 @@
 /datum/xgm_data/proc/update_all()
 	for(var/id in gases)
 		update_id(id)
+
+
+/datum/xgm_data/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
+	var/list/data = list()
+	var/list/data_gases = list()
+	for(var/g in gases)
+		var/list/L = list()
+		L["id"] = g
+		L["name"] = name[g]
+		data_gases[++data_gases.len] = L //We have to use this syntax because += will concatenate the lists instead.
+	data["gases"] = data_gases
+
+	//Everything below this point is taken directly from an example implementation, other than the args to create the new UI.
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+
+	if (!ui)
+		// The ui does not exist, so we'll create a new one.
+		ui = new(user, src, ui_key, "XGM_data.tmpl", "XGM Panel", 550, 410, ignore_distance = TRUE)
+		// When the UI is first opened this is the data it will use.
+		ui.set_initial_data(data)
+		// Open the new ui window.
+		ui.open()
+		// Auto update every Master Controller tick.
+		ui.set_auto_update(1)
+
+/datum/xgm_data/Topic(href, href_list)
+	if(..())
+		return TRUE
+	if(!check_rights(R_VAREDIT)) //Can't do anything useful with this without +VAREDIT anyway
+		return FALSE
+
+	if(href_list["edit"])
+		usr.client.debug_variables(gases[href_list["edit"]])
+		return TRUE
+
+	if(href_list["update"])
+		update_id(href_list["update"])
+		return TRUE
+
+	if(href_list["create"])
+		var/id = input("Enter new gasid") as text|null
+		if(!isnull(id))
+			if(gases[id])
+				alert("That gasid is already used.", "Duplicate gasid")
+			else
+				var/datum/gas/G = new()
+				G.id = id
+				add(G)
+		return TRUE
