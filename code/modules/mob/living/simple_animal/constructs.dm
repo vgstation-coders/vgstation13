@@ -329,8 +329,8 @@
 
 ////////////////Float//////////////////
 /mob/living/simple_animal/construct/proc/setupfloat()
-	animate(src, pixel_y = 8 * PIXEL_MULTIPLIER , time = 7, loop = -1, easing = SINE_EASING)
-	animate(pixel_y = 4 * PIXEL_MULTIPLIER, time = 7, loop = -1, easing = SINE_EASING)
+	animate(src, pixel_y = 6 * PIXEL_MULTIPLIER , time = 7, loop = -1, easing = SINE_EASING)
+	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 7, loop = -1, easing = SINE_EASING)
 
 ////////////////Powers//////////////////
 

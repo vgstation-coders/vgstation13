@@ -8,7 +8,7 @@
 		/spell/aoe_turf/conjure/forcewall/greater,
 		/spell/juggerdash,
 		)
-	see_in_dark = 9
+	see_in_dark = 7
 	var/dash_dir = null
 	var/turf/crashing = null
 
@@ -68,14 +68,13 @@
 				if(L.locked_to)
 					L.locked_to.unlock_atom(L)
 			else
-				var/hit_sound = list('sound/weapons/genhit1.ogg','sound/weapons/genhit2.ogg','sound/weapons/genhit3.ogg')
 				L.take_overall_damage(5,0)
 				if(L.locked_to)
 					L.locked_to.unlock_atom(L)
 				L.Stun(5)
 				L.Knockdown(5)
 				L.apply_effect(STUTTER, 5)
-				playsound(src, pick(hit_sound), 50, 0, 0)
+				playsound(src, 'sound/weapons/heavysmash.ogg', 50, 0, 0)
 				breakthrough = 1
 		else
 			src.throwing = 0
@@ -111,23 +110,142 @@
 
 
 /mob/living/simple_animal/construct/wraith/perfect
-	name = "\improper Wraith"
-	real_name = "\improper Wraith"
-	desc = "A wicked bladed shell contraption piloted by a bound spirit"
-	icon = 'icons/mob/mob.dmi'
-	icon_state = "floating"
-	icon_living = "floating"
-	maxHealth = 75
-	health = 75
-	melee_damage_lower = 25
-	melee_damage_upper = 25
-	attacktext = "slashes"
-	speed = 1
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
+	icon_state = "wraith2"
+	icon_living = "wraith2"
+	icon_dead = "wraith2"
 	see_in_dark = 7
-	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/targeted/ethereal_jaunt/shift)
+	var/ranged_cooldown = 0
+	var/ammo = 3
+	var/ammo_recharge = 0
 
 /mob/living/simple_animal/construct/wraith/perfect/New()
 	..()
 	setupfloat()
+
+/mob/living/simple_animal/construct/wraith/perfect/Life()
+	if(timestopped)
+		return 0
+	. = ..()
+	ranged_cooldown = max(0,ranged_cooldown-1)
+	if (ammo < 3)
+		ammo_recharge++
+		if (ammo_recharge >= 5)
+			ammo_recharge = 0
+			ammo++
+
+/mob/living/simple_animal/construct/wraith/perfect/RangedAttack(var/atom/A, var/params)
+	if(ranged_cooldown <= 0 && ammo)
+		ammo--
+		var/obj/item/projectile/wraithnail/nail = new (loc)
+
+		if(!nail || !A)
+			return 0
+
+		playsound(loc, 'sound/weapons/hivehand.ogg', 75, 1)
+
+		var/turf/T = get_turf(src)
+		var/turf/U = get_turf(A)
+		nail.original = U
+		nail.target = U
+		nail.current = T
+		nail.starting = T
+		nail.yo = U.y - T.y
+		nail.xo = U.x - T.x
+		spawn()
+			nail.OnFired()
+			nail.process()
+
+	return ..()
+
+/obj/item/projectile/wraithnail
+	icon = 'icons/obj/projectiles_experimental.dmi'
+	icon_state = "wraithnail"
+	damage = 5
+
+
+/obj/item/projectile/wraithnail/to_bump(var/atom/A)
+	if(bumped)
+		return 0
+	bumped = 1
+
+	if(A)
+		setDensity(FALSE)
+		invisibility = 101
+		kill_count = 0
+		var/obj/effect/overlay/wraithnail/nail = new (A.loc)
+		nail.transform = transform
+		if(isliving(A))
+			nail.stick_to(A)
+			var/mob/living/L = A
+			L.take_overall_damage(damage,0)
+		else if(loc)
+			var/turf/T = get_turf(src)
+			nail.stick_to(T,get_dir(src,A))
+		bullet_die()
+
+/obj/item/projectile/wraithnail/bump_original_check()
+	if(!bumped)
+		if(loc == get_turf(original))
+			if(!(original in permutated))
+				to_bump(original)
+
+/obj/effect/overlay/wraithnail
+	name = "red bolt"
+	desc = "A pointy red nail, lodged into the ground."
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "wraithnail"
+	anchored = 1
+	density = 0
+	plane = ABOVE_HUMAN_PLANE
+	layer = CLOSED_CURTAIN_LAYER
+	var/atom/stuck_to = null
+	var/duration = 100
+
+/obj/effect/overlay/wraithnail/New()
+	..()
+	pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
+	pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
+
+/obj/effect/overlay/wraithnail/Destroy()
+	if(stuck_to)
+		unlock_atom(stuck_to)
+	stuck_to = null
+	..()
+
+/obj/effect/overlay/wraithnail/proc/stick_to(var/atom/A, var/side = null)
+	pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
+	pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
+	playsound(A, 'sound/items/metal_impact.ogg', 30, 1)
+	var/turf/T = get_turf(A)
+	loc = T
+	playsound(T, 'sound/weapons/hivehand_empty.ogg', 75, 1)
+
+	if(isturf(A))
+		switch(side)
+			if(NORTH)
+				pixel_y = WORLD_ICON_SIZE/2
+			if(SOUTH)
+				pixel_y = -WORLD_ICON_SIZE/2
+			if(EAST)
+				pixel_x = WORLD_ICON_SIZE/2
+			if(WEST)
+				pixel_x = -WORLD_ICON_SIZE/2
+
+	else if(isliving(A) && !isspace(T))
+		stuck_to = A
+		visible_message("<span class='warning'>\the [src] nails \the [A] to \the [T].</span>")
+		lock_atom(A, /datum/locking_category/buckle)
+
+	spawn(duration)
+		qdel(src)
+
+
+/obj/effect/overlay/wraithnail/attack_hand(var/mob/user)
+	if (do_after(user,src,15))
+		unstick()
+
+/obj/effect/overlay/wraithnail/proc/unstick()
+	if(stuck_to)
+		unlock_atom(stuck_to)
+	qdel(src)

@@ -19,6 +19,9 @@
 	burn_mod = 0.5
 	brute_mod = 1.5
 
+	head_icons      = 'icons/mob/species/plasmaman/head.dmi'
+	wear_suit_icons = 'icons/mob/species/plasmaman/suit.dmi'
+
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs/plasmaman,
