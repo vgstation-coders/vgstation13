@@ -25,6 +25,9 @@ var/list/forced_roundstart_ruleset = list()
 
 	var/datum/dynamic_ruleset/latejoin/forced_latejoin_rule = null
 
+	var/datum/stat/dynamic_mode/dynamic_stats = null
+	var/pop_last_updated = 0
+
 /datum/gamemode/dynamic/GetScoreboard()
 	dat += "<h2>Dynamic Mode v1.0 - Threat Level = <font color='red'>[threat_level]%</font></h2>"
 	var/rules = list()
@@ -54,6 +57,9 @@ var/list/forced_roundstart_ruleset = list()
 	latejoin_injection_cooldown = rand(330,510)
 	midround_injection_cooldown = rand(600,1050)
 	message_admins("Dynamic Mode initialized with a Threat Level of... <font size='8'>[threat_level]</font>!")
+	log_admin("Dynamic Mode initialized with a Threat Level of... [threat_level]!")
+	dynamic_stats = new
+	dynamic_stats.starting_threat_level = threat_level
 	return 1
 
 /datum/gamemode/dynamic/Setup()
@@ -68,6 +74,7 @@ var/list/forced_roundstart_ruleset = list()
 			roundstart_pop_ready++
 			candidates.Add(player)
 	message_admins("Listing [roundstart_rules.len] round start rulesets, and [candidates.len] players ready.")
+	dynamic_stats.roundstart_pop = candidates.len
 	if (candidates.len <= 0)
 		message_admins("Not a single player readied-up. The round will begin without any roles assigned.")
 		return 1
@@ -78,6 +85,12 @@ var/list/forced_roundstart_ruleset = list()
 		rigged_roundstart()
 	else
 		roundstart()
+
+	var/starting_rulesets = ""
+	for (var/datum/dynamic_ruleset/roundstart/DR in executed_rules)
+		starting_rulesets += "[DR.name], "
+	dynamic_stats.roundstart_rulesets = starting_rulesets
+	dynamic_stats.measure_threat(threat)
 	return 1
 
 /datum/gamemode/dynamic/proc/rigged_roundstart()
@@ -149,11 +162,13 @@ var/list/forced_roundstart_ruleset = list()
 		if (!latejoin_rule.repeatable)
 			latejoin_rules -= latejoin_rule
 		threat = max(0,threat-latejoin_rule.cost)
+		dynamic_stats.measure_threat(threat)
 		if (latejoin_rule.execute())//this should never fail since ready() returned 1
 			var/mob/M = pick(latejoin_rule.assigned)
 			message_admins("[key_name(M)] joined the station, and was selected by the <font size='3'>[latejoin_rule.name]</font> ruleset.")
 			log_admin("[key_name(M)] joined the station, and was selected by the [latejoin_rule.name] ruleset.")
 			executed_rules += latejoin_rule
+			dynamic_stats.successful_injection(latejoin_rule.name)
 			if (latejoin_rule.persistent)
 				current_rules += latejoin_rule
 			return 1
@@ -165,9 +180,11 @@ var/list/forced_roundstart_ruleset = list()
 		if (!midround_rule.repeatable)
 			midround_rules -= midround_rule
 		threat = max(0,threat-midround_rule.cost)
+		dynamic_stats.measure_threat(threat)
 		if (midround_rule.execute())//this should never fail since ready() returned 1
 			message_admins("Injecting some threats...<font size='3'>[midround_rule.name]</font>!")
 			log_admin("Injecting some threats...[midround_rule.name]!")
+			dynamic_stats.successful_injection(midround_rule)
 			executed_rules += midround_rule
 			if (midround_rule.persistent)
 				current_rules += midround_rule
@@ -186,11 +203,13 @@ var/list/forced_roundstart_ruleset = list()
 		new_rule.candidates = current_players.Copy()
 		new_rule.trim_candidates()
 		if (new_rule.ready(forced))
-			threat -= new_rule.cost
+			threat = max(0,threat-new_rule.cost)
+			dynamic_stats.measure_threat(threat)
 			if (new_rule.execute())//this should never fail since ready() returned 1
 				message_admins("Making a call to a specific ruleset...<font size='3'>[new_rule.name]</font>!")
 				log_admin("Making a call to a specific ruleset...[new_rule.name]!")
 				executed_rules += new_rule
+				dynamic_stats.successful_injection(new_rule)
 				if (new_rule.persistent)
 					current_rules += new_rule
 				return 1
@@ -201,6 +220,12 @@ var/list/forced_roundstart_ruleset = list()
 
 /datum/gamemode/dynamic/process()
 	. = ..() // Making the factions & roles process.
+
+	if (pop_last_updated < world.time - (60 SECONDS))
+		pop_last_updated = world.time
+		update_playercounts()
+		dynamic_stats.update_population(src)
+
 	if (latejoin_injection_cooldown)
 		latejoin_injection_cooldown--
 
@@ -226,7 +251,7 @@ var/list/forced_roundstart_ruleset = list()
 			current_players[CURRENT_LIVING_ANTAGS] = living_antags.Copy()
 			current_players[CURRENT_DEAD_PLAYERS] = dead_players.Copy()
 			current_players[CURRENT_OBSERVERS] = list_observers.Copy()
-			for (var/datum/dynamic_ruleset/latejoin/rule in midround_rules)
+			for (var/datum/dynamic_ruleset/midround/rule in midround_rules)
 				if (rule.acceptable(living_players.len,threat_level) && threat >= rule.cost)
 					rule.candidates = current_players.Copy()
 					rule.trim_candidates()
@@ -234,7 +259,12 @@ var/list/forced_roundstart_ruleset = list()
 						drafted_rules[rule] = rule.weight
 
 			if (drafted_rules.len > 0)
+				message_admins("DYNAMIC MODE: [drafted_rules.len] elligible rulesets.")
+				log_admin("DYNAMIC MODE: [drafted_rules.len] elligible rulesets.")
 				picking_midround_rule(drafted_rules)
+			else
+				message_admins("DYNAMIC MODE: Couldn't ready-up a single ruleset. Lack of elligible candidates, population, or threat.")
+				log_admin("DYNAMIC MODE: Couldn't ready-up a single ruleset. Lack of elligible candidates, population, or threat.")
 		else
 			midround_injection_cooldown = rand(600,1050)
 

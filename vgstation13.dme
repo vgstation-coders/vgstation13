@@ -299,6 +299,7 @@
 #include "code\datums\gamemode\dynamic\dynamic_rulesets_latejoin.dm"
 #include "code\datums\gamemode\dynamic\dynamic_rulesets_midround.dm"
 #include "code\datums\gamemode\dynamic\dynamic_rulesets_roundstart.dm"
+#include "code\datums\gamemode\dynamic\dynamic_stats.dm"
 #include "code\datums\gamemode\factions\faction.dm"
 #include "code\datums\gamemode\factions\malf.dm"
 #include "code\datums\gamemode\factions\vampire_faction.dm"
