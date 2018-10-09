@@ -749,6 +749,7 @@
 	icon_state = "secured_capacitor"
 	density = 0
 	state = 1
+	ghost_read = FALSE
 	var/charge = 0
 	var/charging = 0
 	var/list/power_states = list()
@@ -770,7 +771,7 @@
 	maxcharge = 1000000000
 
 /obj/machinery/power/secured_capacitor/attack_hand(mob/user as mob)
-	if(user.lying || istype(user,/mob/dead/observer))
+	if(user.lying)
 		return
 	if(!charging)
 		attempt_connect(user)
