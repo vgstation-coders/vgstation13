@@ -34,8 +34,6 @@ Pipelines + Other Objects -> Pipe network
 	var/image/centre_overlay = null
 	// Investigation logs
 	var/log
-	var/global/list/node_con = list()
-	var/global/list/node_ex = list()
 	var/pipe_flags = 0
 	var/obj/machinery/atmospherics/mirror //not actually an object reference, but a type. The reflection of the current pipe
 	var/default_colour = null
@@ -81,7 +79,7 @@ Pipelines + Other Objects -> Pipe network
 	return
 
 /obj/machinery/atmospherics/proc/icon_node_con(var/dir)
-	var/static/list/node_con = list(
+	var/static/list/node_con = list( //Since static vars are shared with subtypes too, make sure you use a different var name in any children.
 		"[NORTH]" = image('icons/obj/pipes.dmi', "pipe_intact", dir = NORTH),
 		"[SOUTH]" = image('icons/obj/pipes.dmi', "pipe_intact", dir = SOUTH),
 		"[EAST]"  = image('icons/obj/pipes.dmi', "pipe_intact", dir = EAST),
@@ -91,7 +89,7 @@ Pipelines + Other Objects -> Pipe network
 	return node_con["[dir]"]
 
 /obj/machinery/atmospherics/proc/icon_node_ex(var/dir)
-	var/static/list/node_ex = list(
+	var/static/list/node_ex = list( //Since static vars are shared with subtypes too, make sure you use a different var name in any children.
 		"[NORTH]" = image('icons/obj/pipes.dmi', "pipe_exposed", dir = NORTH),
 		"[SOUTH]" = image('icons/obj/pipes.dmi', "pipe_exposed", dir = SOUTH),
 		"[EAST]"  = image('icons/obj/pipes.dmi', "pipe_exposed", dir = EAST),
