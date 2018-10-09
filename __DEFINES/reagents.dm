@@ -353,6 +353,7 @@
 #define BAD_TOUCH		"bad_touch"
 #define SUICIDE			"suicide"
 #define KARMOTRINE		"karmotrine"
+#define DEGENERATECALCIUM "degeneratecalcium"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
