@@ -6975,6 +6975,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 				if(E.min_broken_damage >= E.max_damage)
 					E.min_broken_damage = E.max_damage
 					to_chat(H, "Your [E.display_name] feels [pick("sturdy", "hardy")] as it can be!") //todo unfunny skeleton jokes (someone will probably comment them in the PR)
-		else if(prob(100 - H.getBruteLoss() * 100 / 30)) //100% at 0 damage, 50% at 15 damage, 3.3% at 29 damage etc
+		else if(prob((100 - H.getBruteLoss() * 100 / 30)/3)) //33% at 0 damage, 16.6% at 15 damage, 1.1% at 29 damage etc
 			var/datum/organ/external/E = pick(H.organs) //"organs" list only contains external organs aka limbs
 			E.fracture()
