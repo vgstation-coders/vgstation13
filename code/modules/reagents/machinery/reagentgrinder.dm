@@ -270,10 +270,46 @@ var/global/list/juice_items = list (
 	update_icon()
 
 /obj/machinery/reagentgrinder/AltClick(mob/user)
-	if(!user.incapacitated() && Adjacent(user) && beaker && !(stat & (NOPOWER|BROKEN) && user.dexterity_check()) && !inuse)
-		detach()
+	if(stat & (NOPOWER|BROKEN))
+		return ..()
+	if(!anchored)
+		return ..()
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check())
+		var/list/choices = list(
+			list("Grind", "radial_grind"),
+			list("Juice", "radial_juice"),
+			list("Eject Ingredients", "radial_eject"),
+			list("Detach Beaker", "radial_detachbeaker")
+		)
+		var/event/menu_event = new(owner = usr)
+		menu_event.Add(src, "radial_check_handler")
+
+		var/task = show_radial_menu(usr,loc,choices,custom_check = menu_event)
+		if(!radial_check(usr))
+			return
+
+		switch(task)
+			if("Grind")
+				grind()
+			if("Juice")
+				juice()
+			if("Eject Ingredients")
+				eject()
+			if("Detach Beaker")
+				detach()
 		return
 	return ..()
+
+/obj/machinery/reagentgrinder/proc/radial_check_handler(list/arguments)
+	var/event/E = arguments["event"]
+	return radial_check(E.holder)
+
+/obj/machinery/reagentgrinder/proc/radial_check(mob/living/user)
+	if(!istype(user))
+		return FALSE
+	if(user.incapacitated() || !user.Adjacent(src))
+		return FALSE
+	return TRUE
 
 /obj/machinery/reagentgrinder/CtrlClick(mob/user)
 	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && !inuse && holdingitems.len && anchored)
@@ -285,6 +321,8 @@ var/global/list/juice_items = list (
 	if (usr.stat != 0)
 		return
 	if (holdingitems && holdingitems.len == 0)
+		return
+	if (inuse)
 		return
 
 	for(var/obj/item/O in holdingitems)
@@ -338,6 +376,8 @@ var/global/list/juice_items = list (
 	power_change()
 	if(stat & (NOPOWER|BROKEN))
 		return
+	if(inuse)
+		return
 	if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
 		return
 	playsound(src, speed_multiplier < 2 ? 'sound/machines/juicer.ogg' : 'sound/machines/juicerfast.ogg', 30, 1)
@@ -367,10 +407,10 @@ var/global/list/juice_items = list (
 		remove_object(O)
 
 /obj/machinery/reagentgrinder/proc/grind()
-
-
 	power_change()
 	if(stat & (NOPOWER|BROKEN))
+		return
+	if(inuse)
 		return
 	if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
 		return

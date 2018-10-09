@@ -11,14 +11,18 @@
 	icon_state = "radial_slice"
 	var/choice
 	var/next_page = FALSE
+	var/tooltip_desc
 
 /obj/screen/radial/slice/MouseEntered(location, control, params)
 	. = ..()
 	icon_state = "radial_slice_focus"
+	if(tooltip_desc)
+		openToolTip(usr,src,params,title = src.name,content = tooltip_desc,theme = parent.tooltip_theme)
 
 /obj/screen/radial/slice/MouseExited(location, control, params)
 	. = ..()
 	icon_state = "radial_slice"
+	closeToolTip(usr)
 
 /obj/screen/radial/slice/Click(location, control, params)
 	if(usr.client == parent.current_user)
@@ -39,8 +43,11 @@
 	var/list/choices = list() //List of choice id's
 	var/list/choices_icons = list() //choice_id -> icon
 	var/list/choices_values = list() //choice_id -> choice
+	var/list/choices_tooltips = list() //choice_id -> tooltip
 	var/list/page_data = list() //list of choices per page
 
+	var/icon_file = 'icons/mob/radial.dmi'
+	var/tooltip_theme = "radial-default"
 
 	var/selected_choice
 	var/list/obj/screen/elements = list()
@@ -96,7 +103,7 @@
 			starting_angle = 180
 			ending_angle = 45
 
-/datum/radial_menu/proc/setup_menu(var/icon_file = 'icons/mob/radial.dmi')
+/datum/radial_menu/proc/setup_menu()
 	if(ending_angle > starting_angle)
 		zone = ending_angle - starting_angle
 	else
@@ -189,16 +196,26 @@
 		E.next_page = FALSE
 		if(choices_icons[choice_id])
 			push(E.overlays,choices_icons[choice_id])
+		if(choices_tooltips[choice_id])
+			E.tooltip_desc = choices_tooltips[choice_id]
 
-/datum/radial_menu/New(var/icon_file = 'icons/mob/radial.dmi')
+/datum/radial_menu/New(var/icon_file, var/tooltip_theme, var/radius)
+	if(icon_file)
+		src.icon_file = icon_file
+	if(tooltip_theme)
+		src.tooltip_theme = tooltip_theme
+	if(radius)
+		src.radius = radius
+
 	close_button = new
 	close_button.parent = src
-	close_button.icon = icon_file
+	close_button.icon = src.icon_file
 
 /datum/radial_menu/proc/Reset()
 	choices.Cut()
 	choices_icons.Cut()
 	choices_values.Cut()
+	choices_tooltips.Cut()
 	current_page = 1
 
 /datum/radial_menu/proc/element_chosen(choice_id,mob/user)
@@ -207,18 +224,26 @@
 /datum/radial_menu/proc/get_next_id()
 	return "c_[choices.len]"
 
-/datum/radial_menu/proc/set_choices(var/list/new_choices,var/icon_file = 'icons/mob/radial.dmi')
+/datum/radial_menu/proc/set_choices(var/list/new_choices)
 	if(choices.len)
 		Reset()
-	for(var/E in new_choices)
+	for(var/list/E in new_choices)
 		var/id = get_next_id()
 		choices += id
-		choices_values[id] = E
-		if(new_choices[E])
-			var/I = extract_image(new_choices[E])
+		var/choice_name = E[1]
+		choices_values[id] = choice_name
+
+		if(E.len > 1)
+			var/choice_iconstate = E[2]
+			var/I = extract_image(image(icon = icon_file, icon_state = choice_iconstate))
 			if(I)
 				choices_icons[id] = I
-	setup_menu(icon_file)
+
+		if(E.len > 2)
+			var/choice_tooltip = E[3]
+			choices_tooltips[id] = choice_tooltip
+
+	setup_menu()
 
 
 /datum/radial_menu/proc/extract_image(E)
@@ -272,28 +297,25 @@
 	Choices should be a list where list keys are movables or text used for element names and return value
 	and list values are movables/icons/images used for element icons
 */
-/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file = 'icons/mob/radial.dmi',var/event/custom_check,var/uniqueid,var/radius)
+/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/event/custom_check,var/uniqueid,var/radius)
 	if(!user || !anchor || !length(choices))
 		return
 
 	var/client/current_user = user.client
-	if (anchor in current_user.radial_menus)
+	if(anchor in current_user.radial_menus)
 		return
-	current_user.radial_menus += anchor
+	current_user.radial_menus += anchor //This should probably be done in the menu's New()
 
-	var/datum/radial_menu/menu = new (icon_file)
-	if(!user)
-		user = usr
-	if(radius)
-		menu.radius = radius
+	var/datum/radial_menu/menu = new(icon_file, tooltip_theme, radius)
+
 	if(istype(custom_check))
 		menu.custom_check = custom_check
 	menu.anchor = anchor
 	menu.check_screen_border(user) //Do what's needed to make it look good near borders or on hud
-	menu.set_choices(choices,icon_file)
+	menu.set_choices(choices)
 	menu.show_to(user)
 	menu.wait()
-	if (!menu.gcDestroyed)
+	if(!menu.gcDestroyed)
 		var/answer = menu.selected_choice
 		qdel(menu)
 		return answer

@@ -592,14 +592,12 @@ var/list/arcane_tomes = list()
 		to_chat(user,"<span class='warning'>There is a crimson gem encrusted into the blade, but you're not exactly sure how you could remove it.</span>")
 		return
 
-	var/optionlist = list(
-		"Give Blood",
-		"Remove Gem"
+	var/choices = list(
+		list("Give Blood", "radial_giveblood", "Deity please add details"),
+		list("Remove Gem", "radial_removegem", "Deity please add details"),
 		)
-	for(var/option in optionlist)
-		optionlist[option] = image(icon = 'icons/obj/cult_radial.dmi', icon_state = "radial_[option]")
 
-	var/task = show_radial_menu(user,user,optionlist,'icons/obj/cult_radial.dmi')//spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
+	var/task = show_radial_menu(user,user,choices,'icons/obj/cult_radial.dmi',"radial-cult")//spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
 	if (user.get_active_hand() != src)
 		to_chat(user,"<span class='warning'>You must hold the blade in your active hand.</span>")
 		return
@@ -1265,4 +1263,3 @@ var/list/arcane_tomes = list()
 					user.equip_to_slot_or_drop(stored_slot,nslot)
 			stored_gear.Remove(slot)
 		qdel(src)
-
