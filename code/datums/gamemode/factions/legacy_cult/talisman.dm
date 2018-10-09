@@ -97,6 +97,7 @@
 				to_chat(user, "<span class='warning'>To use this talisman, attack your target directly.</span>")
 				return
 			if("supply")
+				use_charge = 0
 				supply()
 		qdel(R)
 		user.take_organ_damage(5, 0)
