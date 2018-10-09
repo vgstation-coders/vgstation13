@@ -229,10 +229,12 @@
 		user.delayNextAttack(50)
 		if(do_after(user,src,50))
 			var/mob/living/M = user
-			if (clumsy_check(M) && (prob(50)))
+			if(clumsy_check(M) && (prob(50)))
 				user.visible_message("<span class='danger'>[user] slides \his hands straight into \the [src]!</span>", "<span class='danger'>You accidentally slide your hands into \the [src]!</span>")
 
 				M.apply_damage(10,BURN,pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND))
+			else if(issilicon(M))
+				to_chat(user, "<span class='notice'>Beep Boop. Your circuitry is delightfully warmed.</span>")
 			else
 				user.visible_message("<span class='notice'>[user] warms \his hands around \the [src].</span>", "<span class='notice'>You warm your hands around \the [src].</span>")
 			M.bodytemperature += 2
