@@ -29,7 +29,7 @@
 	active_power_usage = 100
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	var/active = FALSE
-	var/field_radius = 36
+	var/field_radius = 3
 	var/list/field = list()
 	var/locked = FALSE
 	var/average_field_strength = 0
