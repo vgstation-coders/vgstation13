@@ -4,7 +4,6 @@
 #define LAYING_EGGS 2
 #define MOVING_TO_TARGET 3
 #define SPINNING_COCOON 4
-#define OPEN_DOOR 5
 
 //basic spider mob, these generally guard nests
 /mob/living/simple_animal/hostile/giant_spider
@@ -51,6 +50,7 @@
 	var/poison_per_bite = 5
 	var/poison_type = TOXIN
 	var/delimbable_icon = TRUE
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG
 
 	//Spider aren't affected by atmos.
 	min_oxy = 0

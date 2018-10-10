@@ -205,27 +205,6 @@ var/list/nest_locations = list()
 			last_loc = loc
 			Goto(dest,move_to_delay,0)
 
-
-/mob/living/simple_animal/hostile/alien/proc/CanOpenDoor(var/obj/machinery/door/D)
-	if(istype(D,/obj/machinery/door/poddoor))
-		return 0
-
-	// Don't fuck with doors that are doing something
-	if(D.operating>0)
-		return 0
-
-	// Don't open opened doors.
-	if(!D.density)
-		return 0
-
-	// Can't open bolted/welded doors
-	if(istype(D,/obj/machinery/door/airlock))
-		var/obj/machinery/door/airlock/A=D
-		if(A.locked || A.welded || A.jammed)
-			return 0
-
-	return 1
-
 /mob/living/simple_animal/hostile/alien/drone
 	name = "alien drone"
 	icon_state = "aliend_running"
