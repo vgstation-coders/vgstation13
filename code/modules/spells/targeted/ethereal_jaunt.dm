@@ -37,7 +37,7 @@
 		return
 	target.unlock_from()
 	//Begin jaunting with an animation
-	anim(location = mobloc, target = target, a_icon = 'icons/mob/mob.dmi', flick_anim = enteranim, direction = target.dir, name = "water")
+	anim(location = mobloc, a_icon = 'icons/mob/mob.dmi', flick_anim = enteranim, direction = target.dir, name = target.name,lay = target.layer+1,plane = target.plane)
 	if(mist)
 		target.ExtinguishMob()
 		var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
@@ -69,7 +69,7 @@
 	target.delayNextMove(25)
 	target.dir = SOUTH
 	sleep(20)
-	anim(location = mobloc, target = target, a_icon = 'icons/mob/mob.dmi', flick_anim = exitanim, direction = target.dir, name = "water")
+	anim(location = mobloc, a_icon = 'icons/mob/mob.dmi', flick_anim = exitanim, direction = target.dir, name = target.name,lay = target.layer+1,plane = target.plane)
 	sleep(5)
 
 	//Forcemove him onto the tile and make him visible and vulnerable
@@ -138,6 +138,14 @@
 	enteranim = "phase_shift"
 	exitanim = "phase_shift2"
 	mist = 0
+
+/spell/targeted/ethereal_jaunt/shift/alt
+	desc = "Vibrate through the veil for about 5 seconds, letting you move around freely through any obstacle."
+	charge_max = 170
+	hud_state = "const_phase"
+	enteranim = "wraith2_phaseenter"
+	exitanim = "wraith2_phaseexit"
+	override_base = "cult"
 
 /spell/targeted/ethereal_jaunt/vamp
 	name = "Mist Form"

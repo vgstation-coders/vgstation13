@@ -114,7 +114,7 @@
 	icon_living = "wraith2"
 	icon_dead = "wraith2"
 	see_in_dark = 7
-	construct_spells = list(/spell/targeted/ethereal_jaunt/shift)
+	construct_spells = list(/spell/targeted/ethereal_jaunt/shift/alt)
 	var/ranged_cooldown = 0
 	var/ammo = 3
 	var/ammo_recharge = 0
@@ -130,7 +130,7 @@
 	ranged_cooldown = max(0,ranged_cooldown-1)
 	if (ammo < 3)
 		ammo_recharge++
-		if (ammo_recharge >= 5)
+		if (ammo_recharge >= 3)
 			ammo_recharge = 0
 			ammo++
 
