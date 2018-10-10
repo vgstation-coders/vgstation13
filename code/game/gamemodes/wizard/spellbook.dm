@@ -91,7 +91,7 @@
 #define book_background_color "#F1F1D4"
 #define book_window_size "550x600"
 
-/obj/item/weapon/spellbook/attack_self(mob/user = usr)
+/obj/item/weapon/spellbook/attack_self(var/mob/user)
 	if(!user)
 		return
 
@@ -182,7 +182,7 @@
 	dat += "<hr><strong>ARTIFACTS AND BUNDLES<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
 
 	for(var/datum/spellbook_artifact/A in available_artifacts)
-		if(!A.can_buy())
+		if(!A.can_buy(user))
 			continue
 
 		var/artifact_name = A.name
@@ -313,7 +313,7 @@
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
 
 			if(istype(SA) && (SA in get_available_artifacts()))
-				if(SA.can_buy() && use(SA.price))
+				if(SA.can_buy(usr) && use(SA.price))
 					SA.purchased(usr)
 					feedback_add_details("wizard_spell_learned", SA.abbreviation)
 
