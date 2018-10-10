@@ -19,6 +19,7 @@
 	name = "Staff of Change"
 	desc = "An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself."
 	abbreviation = "ST"
+	price = 3 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/change)
 
 /datum/spellbook_artifact/mental_focus
@@ -104,6 +105,7 @@
 /datum/spellbook_artifact/summon_guns
 	name = "Summon Guns"
 	desc = "Nothing could possibly go wrong with arming a crew of lunatics just itching for an excuse to kill eachother. Just be careful not to get hit in the crossfire!"
+	price = 2 * Sp_BASE_PRICE
 	abbreviation = "SG"
 
 /* WIZARDS, NO SENSE OF RIGHT OR WRONG
@@ -121,6 +123,7 @@
 /datum/spellbook_artifact/summon_magic
 	name = "Summon Magic"
 	desc = "Share the power of magic with the crew and turn them against each other. Or just empower them against you."
+	price = 3 * Sp_BASE_PRICE
 	abbreviation = "SM"
 
 /* WIZARDS, NO SENSE OF RIGHT OR WRONG
@@ -138,6 +141,7 @@
 /datum/spellbook_artifact/summon_swords
 	name = "Summon Swords"
 	desc = "Launch a crusade or just spark a blood bath. Either way there will be limbs flying and blood spraying."
+	price = 2 * Sp_BASE_PRICE
 	abbreviation = "SS"
 
 /datum/spellbook_artifact/summon_magic/can_buy()
