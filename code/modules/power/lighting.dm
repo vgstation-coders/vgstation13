@@ -351,7 +351,7 @@ var/global/list/obj/machinery/light/alllights = list()
 		else
 			to_chat(user, "You hit the light!")
 	// attempt to deconstruct / stick weapon into light socket
-	else if(current_bulb)
+	else if(!current_bulb)
 		if(iswirecutter(W)) //If it's a wirecutter take out the wires
 			playsound(src, 'sound/items/Wirecutter.ogg', 75, 1)
 			user.visible_message("[user.name] removes \the [src]'s wires.", \
