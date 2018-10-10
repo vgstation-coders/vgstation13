@@ -11,10 +11,8 @@
 	var/cold_speed_protection = 300 //that cloth allows its wearer to keep walking at normal speed at lower temperatures
 
 	var/list/obj/item/clothing/accessory/accessories = list()
-	var/goliath_reinforce = FALSE
 	var/hidecount = 0
 	var/extinguishingProb = 15
-	var/can_extinguish = FALSE
 
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -218,10 +216,7 @@
 			armor[A] -= rand(armor[A]/3, armor[A])
 
 /obj/item/clothing/attack(var/mob/living/M, var/mob/living/user, def_zone, var/originator = null)
-	if (!(iscarbon(user)  \
-	&& user.a_intent == I_HELP \
-	&& can_extinguish \
-	&& ishuman(M) && M.on_fire))
+	if (!(iscarbon(user) && user.a_intent == I_HELP && (clothing_flags & CANEXTINGUISH) && ishuman(M) && M.on_fire))
 		..()
 	else
 		var/mob/living/carbon/human/target = M
@@ -460,7 +455,7 @@
 	var/blood_overlay_type = "suit"
 	species_restricted = list("exclude","Muton")
 	siemens_coefficient = 0.9
-	can_extinguish = TRUE
+	clothing_flags = CANEXTINGUISH
 
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.
@@ -498,7 +493,7 @@
 	siemens_coefficient = 0.9
 	species_restricted = list("exclude","Diona","Muton")
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-	can_extinguish = FALSE
+	clothing_flags = CANEXTINGUISH
 
 //Under clothing
 /obj/item/clothing/under
@@ -519,7 +514,7 @@
 		3 = Report location
 		*/
 	var/displays_id = 1
-	can_extinguish = TRUE
+	clothing_flags = CANEXTINGUISH
 
 /obj/item/clothing/under/Destroy()
 	for(var/obj/machinery/computer/crew/C in machines)
