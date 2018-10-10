@@ -78,7 +78,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	if(!isAI(user))
 		user.set_machine(src)
 
-	if (!current)
+	if (!current || !(current.can_use())) // No suitable active camera
 		init_cams()
 	if (current) // Did we find a camera
 		for (var/datum/action/camera/action in our_actions)
