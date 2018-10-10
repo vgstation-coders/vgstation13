@@ -102,7 +102,6 @@ var/global/list/obj/machinery/light/alllights = list()
 /obj/machinery/light
 	name = "light fixture"
 	icon = 'icons/obj/lighting.dmi'
-	//var/base_state = "tube"		// base description and icon_state
 	icon_state = "ltube1"
 	desc = "A lighting fixture."
 	anchored = 1
