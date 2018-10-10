@@ -123,7 +123,7 @@
 /datum/spellbook_artifact/summon_magic
 	name = "Summon Magic"
 	desc = "Share the power of magic with the crew and turn them against each other. Or just empower them against you."
-	price = 3 * Sp_BASE_PRICE
+	price = 2 * Sp_BASE_PRICE
 	abbreviation = "SM"
 
 /* WIZARDS, NO SENSE OF RIGHT OR WRONG
