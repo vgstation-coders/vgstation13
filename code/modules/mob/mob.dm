@@ -1414,7 +1414,7 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/cancel_camera()
 	set name = "Cancel Camera View"
-	set category = "OOC" //Why the fuck?
+	set category = "IC"
 	unset_machine()
 	reset_view(null)
 	if(istype(src, /mob/living))
@@ -1424,6 +1424,9 @@ var/list/slot_equipment_priority = list( \
 		if(istype(src, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
 			H.handle_regular_hud_updates()
+
+	for (var/datum/action/camera/action_cam in actions)
+		action_cam.Remove(src)
 
 // http://www.byond.com/forum/?post=2219001#comment22205313
 // TODO: Clean up and identify the args, document
