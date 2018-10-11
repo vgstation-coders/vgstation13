@@ -121,6 +121,11 @@ Note: Must be placed within 3 tiles of the R&D Console
 		attackby(I, L)
 
 
+/obj/machinery/r_n_d/destructive_analyzer/kick_act(mob/living/carbon/human/H)
+	..()
+	if(linked_console)
+		linked_console.deconstruct_item(H)
+
 //For testing purposes only.
 /*/obj/item/weapon/deconstruction_test
 	name = "Test Item"
