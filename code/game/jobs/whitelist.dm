@@ -61,7 +61,7 @@ var/global/list/alien_whitelist = list()
 		return 1
 
 	// CKey is in whitelist
-	if((M.ckey in alien_whitelist[species] || M.ckey in alien_whitelist["all"]) || current_species.conditional_whitelist())
+	if((M.ckey in alien_whitelist[species] || M.ckey in alien_whitelist["all"]) || (current_species && current_species.conditional_whitelist()))
 		return 1
 
 	// Occupation is in whitelist (for lizard janitors :V)

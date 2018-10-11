@@ -168,7 +168,7 @@ var/list/forced_roundstart_ruleset = list()
 			message_admins("[key_name(M)] joined the station, and was selected by the <font size='3'>[latejoin_rule.name]</font> ruleset.")
 			log_admin("[key_name(M)] joined the station, and was selected by the [latejoin_rule.name] ruleset.")
 			executed_rules += latejoin_rule
-			dynamic_stats.successful_injection(latejoin_rule.name)
+			dynamic_stats.successful_injection(latejoin_rule)
 			if (latejoin_rule.persistent)
 				current_rules += latejoin_rule
 			return 1
