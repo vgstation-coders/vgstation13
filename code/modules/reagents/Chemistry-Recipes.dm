@@ -1358,7 +1358,14 @@
 		else if(ismob(location)) //Copy the mob! Owwwwwwwwwww this is going to be fun
 			var/mob/M = location
 
-			var/mob/mimic = new /mob/living/simple_animal/hostile/mimic/crate(get_turf(location), location)
+			var/mimictype = /obj/item/stack/sheet/wood/bigstack
+			if(ishuman(M))
+				mimictype = /obj/structure/mannequin/wood
+				if(isvox(M))
+					mimictype = /obj/structure/mannequin/wood/vox
+			else if(ismonkey(M))
+				mimictype = /obj/structure/mannequin/wood/monkey
+			var/mob/mimic = new /mob/living/simple_animal/hostile/mimic/crate(get_turf(location), mimictype)
 			mimic.appearance = M.appearance //Because mimics copy appearances from paths, not actual existing objects.
 			to_chat(M, "<span class='sinister'>You feel something thoroughly analyzing you from inside...</span>")
 
