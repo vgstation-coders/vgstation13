@@ -19,6 +19,7 @@
 	var/nullified = 0
 	var/smitecounter = 0
 
+	var/reviving = FALSE
 	var/draining = FALSE
 	var/blood_usable = STARTING_BLOOD
 	var/blood_total = STARTING_BLOOD
