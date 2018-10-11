@@ -53,6 +53,12 @@
 					return R
 	return null
 
+/obj/effect/datacore/proc/find_record_by_dna(var/target_dna, var/list/which)
+	for (var/datum/data/record/E in which)
+		if (E.fields["b_dna"] == target_dna)
+			return E
+	return null
+
 /obj/effect/datacore/proc/find_general_record_by_name(var/target_name)
 	for(var/datum/data/record/E in general)
 		if(E.fields["name"] == target_name)
@@ -61,6 +67,9 @@
 
 /obj/effect/datacore/proc/find_medical_record_by_name(var/target_name)
 	return find_record_by_name(target_name, medical)
+
+/obj/effect/datacore/proc/find_medical_record_by_dna(var/target_dna)
+	return find_record_by_dna(target_dna, medical)
 
 /obj/effect/datacore/proc/find_security_record_by_name(var/target_name)
 	return find_record_by_name(target_name, security)
