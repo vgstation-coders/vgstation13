@@ -228,7 +228,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		to_chat(user, "<span class='notice'>You disable the security protocols</span>")
 
 /obj/machinery/computer/rdconsole/proc/deconstruct_item(mob/user)
-	if(!linked_destroy || linked_destroy.busy || !linked_destroy.loaded_item || isLocked())
+	if(!linked_destroy || linked_destroy.busy || !linked_destroy.loaded_item)
+		return
+	if(isLocked() || (linked_destroy.stat & (NOPOWER|BROKEN)) || (stat & (NOPOWER|BROKEN)))
 		return
 	linked_destroy.busy = 1
 	screen = 0.1
