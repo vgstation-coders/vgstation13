@@ -144,8 +144,6 @@ var/global/list/whitelisted_species = list("Human")
 
 	var/species_intro //What intro you're given when you become this species.
 
-	var/feels_pain = 1
-
 /datum/species/New()
 	..()
 	if(all_species[name])
@@ -306,7 +304,6 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_def_manifested.dmi'
 	known_languages = list(LANGUAGE_HUMAN)
 	primitive = /mob/living/carbon/monkey
-	feels_pain = 0
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
@@ -317,6 +314,7 @@ var/global/list/whitelisted_species = list("Human")
 		"eyes" =     /datum/organ/internal/eyes
 		)
 
+	flags = NO_PAIN
 	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | NO_BLOOD
 
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
