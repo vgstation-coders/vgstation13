@@ -246,10 +246,7 @@
 					*/
 		if("axe")
 			if(prob(50))
-				if(prob(5))
-					new /obj/item/weapon/melee/energy/axe(get_turf(src))
-				else
-					new /obj/item/weapon/melee/energy/axe/rusty(get_turf(src))
+				new /obj/item/weapon/melee/energy/axe/rusty(get_turf(src))
 			else
 				new /obj/item/weapon/fireaxe(get_turf(src))
 		if("boot")
