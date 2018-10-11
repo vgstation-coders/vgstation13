@@ -574,6 +574,7 @@
 /datum/role/wizard/summon_magic
 	disallow_job = FALSE
 	id = MAGICIAN
+	logo_state = "magik-logo"
 
 /datum/role/wizard/summon_magic/ForgeObjectives()
 	var/datum/objective/survive/S = new

@@ -93,12 +93,14 @@
 /datum/role/traitor/survivor
 	id = SURVIVOR
 	name = SURVIVOR
+	logo_state = "gun-logo"
 	var/survivor_type = "survivor"
 
 /datum/role/traitor/survivor/crusader
 	id = CRUSADER
 	name = CRUSADER
 	survivor_type = "crusader"
+	logo_state = "sword-logo"
 
 /datum/role/traitor/survivor/Greet()
 	to_chat(antag.current, "<B>You are a [survivor_type]! Your own safety matters above all else, trust no one and kill anyone who gets in your way. However, armed as you are, now would be the perfect time to settle that score or grab that pair of yellow gloves you've been eyeing...</B>")
