@@ -483,7 +483,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	item_state = "pbag"
 	body_parts_covered = FULL_HEAD|BEARD
 	slot_flags = SLOT_BELT | SLOT_HEAD
-	storage_slots = 50;
+	storage_slots = 50
 	fits_max_w_class = 3
 	max_combined_w_class = 200
 	w_class = W_CLASS_TINY
