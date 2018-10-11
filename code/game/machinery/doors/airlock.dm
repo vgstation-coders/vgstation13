@@ -1035,6 +1035,30 @@ About the new airlock wires panel:
 		visible_message("<span class='warning'>\The [user] forces \the [src] [density ? "open" : "closed"]!</span>")
 		density ? open(1) : close(1)
 
+/obj/machinery/door/airlock/attack_animal(var/mob/living/simple_animal/M)
+	if(isElectrified())
+		shock(M, 100)
+
+	if(operating)
+		return
+	var/level_of_door_opening = M.environment_smash_flags & OPEN_DOOR_WEAK
+	if(M.environment_smash_flags & OPEN_DOOR_STRONG)
+		level_of_door_opening = 2
+	if(!level_of_door_opening)
+		return
+	if((locked || welded || jammed) && level_of_door_opening < 2)
+		return //Not strong enough
+	else
+		shake(1,8)
+		playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
+		if(arePowerSystemsOn() && !(stat & NOPOWER))
+			if(level_of_door_opening < 2)
+				return
+			if(do_after(M, src, 100))
+				density ? open(1):close(1)
+		else
+			density ? open(1):close(1)
+
 //You can ALWAYS screwdriver a door. Period. Well, at least you can even if it's open
 /obj/machinery/door/airlock/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(!operating)
