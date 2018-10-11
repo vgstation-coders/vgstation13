@@ -43,7 +43,7 @@
 			return equip_guns()
 
 /mob/living/carbon/human/proc/equip_guns()
-	var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol")
+	var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ion", "bulletstorm", "cannon", "laserpistol", "siren", "lawgiver")
 	switch (randomizeguns)
 		if("taser")
 			new /obj/item/weapon/gun/energy/taser(get_turf(src))
@@ -59,6 +59,8 @@
 			new /obj/item/weapon/gun/energy/laser/LaserAK(get_turf(src))
 		if("plasmapistol")
 			new /obj/item/weapon/gun/energy/plasma/pistol(get_turf(src))
+		if("plasmarifle")
+			new /obj/item/weapon/gun/energy/plasma/light(get_turf(src))
 		if("revolver")
 			new /obj/item/weapon/gun/projectile(get_turf(src))
 		if("detective")
@@ -127,27 +129,54 @@
 			new /obj/item/weapon/gun/projectile/luger(get_turf(src))
 		if("colt")
 			new /obj/item/weapon/gun/projectile/colt(get_turf(src))
+		if("lawgiver")
+			new /obj/item/weapon/gun/lawgiver(get_turf(src))
+		if("ion")
+			new /obj/item/weapon/gun/energy/ionrifle/ionpistol(get_turf(src))
+		if("cannon")
+			new /obj/item/weapon/gun/energy/laser/captain/combustion(get_turf(src))
+		if("laserpistol")
+			new /obj/item/weapon/gun/energy/laser/pistol(get_turf(src))
+		if("siren")
+			new /obj/item/weapon/gun/siren(get_turf(src))
+		if("bulletstorm")
+			new /obj/item/weapon/gun/bulletstorm(get_turf(src))
 	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
 
 /mob/living/carbon/human/proc/equip_swords()
 	var/randomizeswords = pick("unlucky", "misc", "throw", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "medieval", "katana", "axe", "boot", "saw", "scalpel", "switchtool", "shitcurity")
-	var/randomizeknightcolor = pick("green", "yellow", "blue", "red", "templar")
+	var/randomizeknightcolor = pick("green", "yellow", "blue", "red", "templar", "roman")
 	switch (randomizeknightcolor) //everyone gets some armor as well
 		if("green")
 			new /obj/item/clothing/suit/armor/knight(get_turf(src))
 			new /obj/item/clothing/head/helmet/knight(get_turf(src))
+			if(prob(50)) //chance for a shield
+				new /obj/item/weapon/shield/riot/buckler(get_turf(src))
 		if("yellow")
 			new /obj/item/clothing/suit/armor/knight/yellow(get_turf(src))
 			new /obj/item/clothing/head/helmet/knight/yellow(get_turf(src))
+			if(prob(50))
+				new /obj/item/weapon/shield/riot/buckler(get_turf(src))
 		if("blue")
 			new /obj/item/clothing/suit/armor/knight/blue(get_turf(src))
 			new /obj/item/clothing/head/helmet/knight/blue(get_turf(src))
+			if(prob(50))
+				new /obj/item/weapon/shield/riot/buckler(get_turf(src))
 		if("red")
 			new /obj/item/clothing/suit/armor/knight/red(get_turf(src))
 			new /obj/item/clothing/head/helmet/knight/red(get_turf(src))
+			if(prob(50))
+				new /obj/item/weapon/shield/riot/buckler(get_turf(src))
 		if("templar")
 			new /obj/item/clothing/suit/armor/knight/templar(get_turf(src))
 			new /obj/item/clothing/head/helmet/knight/templar(get_turf(src))
+			if(prob(50))
+				new /obj/item/weapon/shield/riot/buckler(get_turf(src))
+		if("roman")
+			new /obj/item/clothing/under/roman(get_turf(src))
+			new /obj/item/clothing/head/helmet/roman(get_turf(src))
+			new /obj/item/clothing/shoes/roman(get_turf(src))
+			new /obj/item/weapon/shield/riot/roman(get_turf(src)) //guaranteed shield to make up for the lack of armor. Also fits the theme better.
 
 	switch (randomizeswords)
 		if("unlucky") //so the chance to get an unlucky item does't clutter the main pool of swords
@@ -205,10 +234,16 @@
 			else
 				new /obj/item/weapon/melee/morningstar(get_turf(src))
 		if("katana")
-			if(prob(5))
-				new /obj/item/weapon/katana/hfrequency(get_turf(src))
-			else
-				new /obj/item/weapon/katana(get_turf(src))
+			new /obj/item/weapon/katana(get_turf(src))
+			if(prob(25))
+				new /obj/item/clothing/head/kitty(get_turf(src))
+					//No fun allowed, maybe nerf later and readd
+					/*
+					if(prob(5))
+						new /obj/item/weapon/katana/hfrequency(get_turf(src))
+					else
+						new /obj/item/weapon/katana(get_turf(src))
+					*/
 		if("axe")
 			if(prob(50))
 				if(prob(5))
@@ -249,7 +284,7 @@
 	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
 
 /mob/living/carbon/human/proc/equip_magician()
-	var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","disorient","clowncurse", "mimecurse", "shoesnatch","emp", "magicmissile", "mutate", "teleport", "jaunt", "buttbot", "lightning", "timestop", "ringoffire", "painmirror", "bound_object", "firebreath", "snakes", "push", "pie", "ancient")
+	var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","disorient","clowncurse", "mimecurse", "shoesnatch","emp", "magicmissile", "mutate", "teleport", "jaunt", "buttbot", "lightning", "timestop", "ringoffire", "painmirror", "bound_object", "firebreath", "snakes", "push", "pie")
 	var/randomizemagecolor = pick("magician", "magusred", "magusblue", "blue", "red", "necromancer", "clown", "purple", "lich", "skelelich", "marisa", "fake")
 	switch (randomizemagecolor) //everyone can put on their robes and their wizard hat
 		if("magician")
@@ -357,5 +392,3 @@
 			new /obj/item/weapon/spellbook/oneuse/push(get_turf(src))
 		if("pie")
 			new /obj/item/weapon/spellbook/oneuse/pie(get_turf(src))
-		if("ancient") //might as well give everyone a chance at the old day of EI NATH or Summon Spares
-			new /obj/item/weapon/spellbook/oneuse/ancient(get_turf(src))
