@@ -486,5 +486,5 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	storage_slots = 50
 	fits_max_w_class = 3
 	max_combined_w_class = 200
-	w_class = W_CLASS_TINY
+	w_class = W_CLASS_SMALL
 	can_only_hold = list("/obj/item/potion")
