@@ -43,7 +43,7 @@
 			return equip_guns()
 
 /mob/living/carbon/human/proc/equip_guns()
-	var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ion", "bulletstorm", "cannon", "laserpistol", "siren", "lawgiver")
+	var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ion", "bulletstorm", "combustioncannon", "laserpistol", "siren", "lawgiver")
 	switch (randomizeguns)
 		if("taser")
 			new /obj/item/weapon/gun/energy/taser(get_turf(src))
@@ -133,7 +133,7 @@
 			new /obj/item/weapon/gun/lawgiver(get_turf(src))
 		if("ion")
 			new /obj/item/weapon/gun/energy/ionrifle/ionpistol(get_turf(src))
-		if("cannon")
+		if("combustioncannon")
 			new /obj/item/weapon/gun/energy/laser/captain/combustion(get_turf(src))
 		if("laserpistol")
 			new /obj/item/weapon/gun/energy/laser/pistol(get_turf(src))
