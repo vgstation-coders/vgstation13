@@ -1054,8 +1054,8 @@ About the new airlock wires panel:
 		if(arePowerSystemsOn() && !(stat & NOPOWER))
 			if(level_of_door_opening < 2)
 				return
-			if(do_after(M, src, 100))
-				density ? open(1):close(1)
+			visible_message("<span class = 'warning'>\The [M] forces \the [src] [density?"open":"closed"]!</span>")
+			density ? open(1):close(1)
 		else
 			density ? open(1):close(1)
 
