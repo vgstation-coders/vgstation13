@@ -1658,13 +1658,13 @@ Thanks.
 				returnToPool(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null
+	if(isitem(item))
+		var/obj/item/I = item
+		if(I.cant_drop > 0)
+			to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
+			return FAILED_THROW
 
-	var/obj/item/I = item
-	if(istype(I) && I.cant_drop > 0)
-		to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
-		return FAILED_THROW
-
-	I.pre_throw()
+		I.pre_throw()
 
 	remove_from_mob(item)
 
