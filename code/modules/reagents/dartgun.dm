@@ -156,7 +156,7 @@
 			if(!S.reagents)
 				to_chat(loc, "<span class='warning'>There are no reagents available!</span>")
 				return
-			in_chamber = new /obj/item/projectile/bullet/syringe(src, S)
+			in_chamber = new /obj/item/projectile/bullet/syringe/dart(src, S)
 			in_chamber.flags |= NOREACT
 			qdel(S)
 			cartridge.darts--
