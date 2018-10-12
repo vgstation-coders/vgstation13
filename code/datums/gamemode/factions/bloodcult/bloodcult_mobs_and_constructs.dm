@@ -249,3 +249,16 @@
 	if(stuck_to)
 		unlock_atom(stuck_to)
 	qdel(src)
+
+
+////////////////////Artificer/////////////////////////
+
+/mob/living/simple_animal/construct/builder/perfect
+	icon_state = "artificer2"
+	icon_living = "artificer2"
+	icon_dead = "artificer2"
+	see_in_dark = 7
+
+/mob/living/simple_animal/construct/builder/perfect/New()
+	..()
+	setupfloat()

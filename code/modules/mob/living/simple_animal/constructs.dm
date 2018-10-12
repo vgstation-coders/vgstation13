@@ -39,6 +39,8 @@
 
 	var/list/construct_spells = list()
 
+	var/list/hud_list = list()
+
 /mob/living/simple_animal/construct/say(var/message)
 	. = ..(message, "C")
 
@@ -77,6 +79,7 @@
 
 /mob/living/simple_animal/construct/New()
 	..()
+	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
 	name = text("[initial(name)] ([rand(1, 1000)])")
 	real_name = name
 	add_language(LANGUAGE_CULT)
@@ -223,6 +226,8 @@
 	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/targeted/ethereal_jaunt/shift)
 
+/mob/living/simple_animal/construct/wraith/get_unarmed_sharpness(mob/living/victim)
+	return 1.5
 
 
 /////////////////////////////Artificer/////////////////////////
@@ -436,6 +441,9 @@
 
 /mob/living/simple_animal/construct/builder/regular_hud_updates()
 	..()
+
+	process_construct_hud(src)
+
 	if(healths)
 		switch(health)
 			if(50 to INFINITY)
