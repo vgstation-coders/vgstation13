@@ -692,6 +692,14 @@ var/list/cult_spires = list()
 		progbar.layer = HUD_ABOVE_ITEM_LAYER
 	progbar.icon_state = "prog_bar_[round((100 - min(1, timeleft / timetotal) * 100), 10)]"
 
+/obj/structure/cult/forge/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/builder))
+		cultist_act(user)
+		return 1
+	return 0
+
 /obj/structure/cult/forge/cultist_act(var/mob/user,var/menu="default")
 	.=..()
 	if (!.)
