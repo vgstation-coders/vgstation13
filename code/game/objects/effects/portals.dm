@@ -147,7 +147,7 @@ var/list/portal_cache = list()
 /obj/effect/portal/proc/teleport(atom/movable/M as mob|obj)
 	if(istype(M, /obj/effect)) //sparks don't teleport
 		return
-	if (M.anchored && !istype(M, /obj/mecha))
+	if (M.anchored && !istype(M, /obj/mecha) && !istype(M, /obj/item/projectile))
 		return
 	if (!target)
 		visible_message("<span class='warning'>The portal fails to find a destination and dissipates into thin air.</span>")
