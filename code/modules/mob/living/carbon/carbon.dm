@@ -201,7 +201,7 @@
 
 			if(num_injuries == 0)
 				to_chat(src, "My legs are OK.")
-					
+
 			if((M_SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
 				H.play_xylophone()
 		else if(lying) // /vg/: For hugs. This is how update_icon figgers it out, anyway.  - N3X15
@@ -643,10 +643,8 @@
 			if(I.flags & SLOWDOWN_WHEN_CARRIED)
 				. *= I.slowdown
 
-		if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
-			. *= 0.4
-			if(. < 1)//we don't want to move faster than the base speed
-				. = 1
+		if(. > 1 && reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+			. = max(1, .*0.4)//we don't hyperzine to make us move faster than the base speed, unless we were already faster.
 
 /mob/living/carbon/base_movement_tally()
 	. = ..()
