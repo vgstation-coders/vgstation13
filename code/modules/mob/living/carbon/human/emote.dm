@@ -201,3 +201,36 @@
 	else
 		return FALSE // Can't fart without an arse (dummy)
 //Ayy lmao
+
+
+/datum/emote/living/carbon/human/dab
+	key = "dab"
+	key_third_person = "*dab"
+
+/datum/emote/living/carbon/human/dab/can_run_emote(mob/user)
+	var/mob/living/carbon/human/H = user
+	if(H.has_organ(LIMB_LEFT_ARM) && H.has_organ(LIMB_RIGHT_ARM))
+		return TRUE
+
+/datum/emote/living/carbon/human/dab/run_emote(mob/user)
+	var/mob/living/carbon/human/H = user
+	if(world.time-H.lastDab >= 10 SECONDS)
+		for(var/mob/living/M in view(0))
+			if(M != H && M.loc == H.loc)
+				H.visible_message("<span class = 'warning'><b>[H]</b> dabs on <b>[M]</b>!</span>")
+		message = "<b>[H]</b> dabs."
+		emote_type = EMOTE_VISIBLE
+		H.visible_message(message)
+		H.lastDab=world.time
+	else
+		var/armtobreak = pick(LIMB_LEFT_ARM, LIMB_RIGHT_ARM)
+		var/datum/organ/external/A = H.get_organ(armtobreak)
+		if(H.species.anatomy_flags & NO_BONES)
+			message = "<span class = 'warning'>smacks their head as they flail their arms to the side.</span>"
+			playsound(H, 'sound/weapons/punch1.ogg', 50, 1)
+		else
+			message = "<span class = 'warning'>throws their arms to the side too fast and a sharp snap sound comes from them!</span>"
+			H.apply_damage(30, BRUTE, A)
+			A.fracture()
+		emote_type = EMOTE_VISIBLE
+		. = ..()

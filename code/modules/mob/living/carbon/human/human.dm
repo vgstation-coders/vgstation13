@@ -1749,6 +1749,7 @@ mob/living/carbon/human/isincrit()
 		"meatleft",
 		"check_mutations",
 		"lastFart",
+		"lastDab",
 		"last_shush",
 		"last_emote_sound",
 		"decapitated",
