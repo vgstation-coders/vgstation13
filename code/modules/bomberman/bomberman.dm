@@ -704,7 +704,7 @@ obj/structure/bomberflame/Destroy()
 
 /obj/item/clothing/head/helmet/space/bomberman/unequipped(mob/living/carbon/human/user, var/from_slot = null)
 	if(from_slot == slot_head && istype(user))
-		H.mutations.Remove(M_NO_BREATH)
+		user.mutations.Remove(M_NO_BREATH)
 
 /obj/item/clothing/head/helmet/space/bomberman/New()
 	..()
