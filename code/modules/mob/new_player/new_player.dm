@@ -86,11 +86,16 @@
 			stat("Time To Start:", "LOADING...")
 
 		if(SSticker.initialized && ticker.current_state == GAME_STATE_PREGAME)
-			stat("Players: [totalPlayers]", "Players Ready: [totalPlayersReady]")
+			stat("Players: [totalPlayers]")
+			if (check_rights(R_ADMIN))
+				stat("Players Ready: [totalPlayersReady]")
 			totalPlayers = 0
 			totalPlayersReady = 0
 			for(var/mob/new_player/player in player_list)
-				stat("[player.key]", (player.ready)?("(Playing)"):(null))
+				if (check_rights(R_ADMIN))
+					stat("[player.key]", (player.ready)?("(Playing)"):(null))
+				else
+					stat("[player.key]")
 				totalPlayers++
 				if(player.ready)
 					totalPlayersReady++
