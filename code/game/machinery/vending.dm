@@ -2076,6 +2076,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/staff/broom = 5,
 		/obj/item/clothing/glasses/monocle = 5,
 		/obj/item/weapon/storage/bag/wiz_cards/full = 1,
+		/obj/item/weapon/storage/bag/potion = 5
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/glass/bottle/wizarditis = 1,

@@ -470,3 +470,21 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	..()
 	for(var/i = 1 to storage_slots)
 		new /obj/item/weapon/coin/gold(src)
+
+// -----------------------------
+//          Potion Bag
+// -----------------------------
+
+/obj/item/weapon/storage/bag/potion
+	name = "\improper Bag of potions"
+	desc = "Not too dissimilar to the fabled bag of alcohol. The wizard federation is not responsible for possible rainbow puking."
+	icon = 'icons/obj/pbag.dmi'
+	icon_state = "pbag"
+	item_state = "pbag"
+	body_parts_covered = FULL_HEAD|BEARD
+	slot_flags = SLOT_BELT | SLOT_HEAD
+	storage_slots = 50
+	fits_max_w_class = 3
+	max_combined_w_class = 200
+	w_class = W_CLASS_SMALL
+	can_only_hold = list("/obj/item/potion")
