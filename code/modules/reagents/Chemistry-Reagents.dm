@@ -2555,6 +2555,11 @@
 		D.stage--
 		if(D.stage < 1)
 			D.cure()
+	for(var/A in M.virus2)
+		var/datum/disease2/disease/D2 = M.virus2[A]
+		D2.stage--
+		if(D2.stage < 1)
+			D2.cure(M)
 
 /datum/reagent/synaptizine
 	name = "Synaptizine"
@@ -3354,6 +3359,13 @@
 				D.stage--
 				if(D.stage < 1)
 					D.cure()
+			if(iscarbon(M))
+				var/mob/living/carbon/C = M
+				for(var/A in C.virus2)
+					var/datum/disease2/disease/D2 = C.virus2[A]
+					D2.stage--
+					if(D2.stage < 1)
+						D2.cure(M)
 		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
@@ -3379,6 +3391,13 @@
 				D.stage--
 				if(D.stage < 1)
 					D.cure()
+			if(iscarbon(M))
+				var/mob/living/carbon/C = M
+				for(var/A in C.virus2)
+					var/datum/disease2/disease/D2 = C.virus2[A]
+					D2.stage--
+					if(D2.stage < 1)
+						D2.cure(M)
 			if(prob(percent_machine))
 				holder.add_reagent("mednanobots", 20)
 				to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
