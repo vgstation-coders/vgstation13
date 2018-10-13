@@ -39,6 +39,9 @@
 	SSplant.remove_plant(src)
 	for(var/obj/effect/plantsegment/neighbor in range(1,src)) //i ded, tell my neighbors to wake up so they can take up my space
 		SSplant.add_plant(neighbor)
+	if(is_locking_type(/mob, /datum/locking_category/plantsegment))
+		var/mob/V = locate(/mob) in get_locked(/datum/locking_category/plantsegment)
+		unlock_atom(V)
 	..()
 
 /obj/effect/plantsegment/New(var/newloc, var/datum/seed/newseed, var/turf/newepicenter, var/start_fully_mature = 0)
