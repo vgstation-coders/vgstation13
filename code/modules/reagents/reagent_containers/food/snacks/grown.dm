@@ -242,6 +242,7 @@ var/list/special_fruits = list()
 		spark(hit_atom)
 		new/obj/effect/decal/cleanable/molten_item(hit_turf) //Leave a pile of goo behind for dramatic effect...
 		for(var/mob/A in hit_turf) //For the mobs in the tile that was hit...
+			A.unlock_from()
 			A.forceMove(picked) //And teleport them to the chosen location.
 			spawn()
 				spark(A)
@@ -612,6 +613,9 @@ var/list/special_fruits = list()
 	origin_tech = Tc_BLUESPACE + "=3"
 	filling_color = "#91F8FF"
 	plantname = "bluespacetomato"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato/testing
+	potency = 100
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/killertomato
 	name = "killer-tomato"

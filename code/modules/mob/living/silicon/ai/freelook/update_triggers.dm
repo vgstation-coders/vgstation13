@@ -92,14 +92,4 @@
 		src.set_light(0)
 		cameranet.removeCamera(src)
 
-/obj/machinery/camera/New()
-	..()
-	cameranet.cameras += src
-	cameranet.addCamera(src)
-
-/obj/machinery/camera/Destroy()
-	cameranet.cameras -= src
-	cameranet.removeCamera(src)
-	..()
-
 #undef BORG_CAMERA_BUFFER

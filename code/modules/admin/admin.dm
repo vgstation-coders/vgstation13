@@ -714,6 +714,8 @@ var/global/floorIsLava = 0
 		<hr />
 		<A href='?src=\ref[src];vsc=airflow'>Edit ZAS Settings</A><br>
 		<A href='?src=\ref[src];vsc=default'>Choose a default ZAS setting</A><br>
+		<A href='?src=\ref[src];xgm_panel=1'>XGM Panel</A><br>
+		<hr />
 		"}
 
 	if(wages_enabled)

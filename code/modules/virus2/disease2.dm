@@ -62,12 +62,14 @@ var/global/list/disease2_list = list()
 		return // return if isn't proper mob type
 	var/datum/disease2/disease/D = new /datum/disease2/disease("custom_disease") //set base name
 	for(var/i = 1; i <= D.max_stage; i++)  // run through this loop until everything is set
-		var/datum/disease2/effect/symptom = input(C, "Choose a symptom to add ([5-i] remaining)", "Choose a Symptom") in (typesof(/datum/disease2/effect))
+		var/datum/disease2/effect/symptom = input(C, "Choose a symptom to add ([5-i] remaining)", "Choose a Symptom") as null | anything in (typesof(/datum/disease2/effect))
+		if (!symptom)
+			return 0
 			// choose a symptom from the list of them
 		var/datum/disease2/effect/e = new symptom(D)
-		e.chance = input(C, "Choose chance", "Chance") as num
+		e.chance = input(C, "Choose chance", "Chance") as null | num
 			// set the chance of the symptom that can occur
-		if(e.chance > 100 || e.chance < 0)
+		if(!e.chance || e.chance > 100 || e.chance < 0)
 			return 0
 		D.log += "Added [e.name] at [e.chance]% chance<br>"
 		D.effects += e
@@ -75,15 +77,17 @@ var/global/list/disease2_list = list()
 	disease2_list -= D.uniqueID
 	D.uniqueID = rand(0, 10000)
 	disease2_list["[D.uniqueID]"] = D
-	D.infectionchance = input(C, "Choose an infection rate percent", "Infection Rate") as num
-	if(D.infectionchance > 100 || D.infectionchance < 0)
+	D.infectionchance = input(C, "Choose an infection rate percent", "Infection Rate") as null | num
+	if(!D.infectionchance || D.infectionchance > 100 || D.infectionchance < 0)
 		return 0
 	//pick random antigens for the disease to have
 	D.antigen |= text2num(pick(ANTIGENS))
 	D.antigen |= text2num(pick(ANTIGENS))
 	D.patient_zero = TRUE
 
-	D.spreadtype = input(C, "Select spread type", "Spread Type") in list("Airborne", "Contact", "Blood") // select how the disease is spread
+	D.spreadtype = input(C, "Select spread type", "Spread Type") as null | anything in list("Airborne", "Contact", "Blood") // select how the disease is spread
+	if (!D.spreadtype)
+		return 0
 	infectedMob.virus2["[D.uniqueID]"] = D // assign the disease datum to the infectedMob/ selected user.
 	log_admin("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID] by [C.ckey]")
 	message_admins("[infectedMob] was infected with a virus with uniqueID : [D.uniqueID] by [C.ckey]")

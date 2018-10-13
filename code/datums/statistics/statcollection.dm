@@ -89,6 +89,8 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 
 
 	// GAMEMODE-SPECIFIC STATS START HERE
+	var/datum/stat/dynamic_mode/dynamic_stats = null
+
 	// cult stuff
 	var/cult_runes_written = 0
 	var/cult_runes_nulled = 0
@@ -210,6 +212,9 @@ proc/datum2json(var/datum/D, var/list/do_not_copy=datum_donotcopy)
 
 // new shiny JSON export
 /datum/stat_collector/proc/Process()
+	if (istype(ticker.mode, /datum/gamemode/dynamic))
+		var/datum/gamemode/dynamic/mode = ticker.mode
+		dynamic_stats = mode.dynamic_stats
 	var/statfile = get_valid_file("json")
 	doPostRoundChecks()
 

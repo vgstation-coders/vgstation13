@@ -36,8 +36,15 @@
 	return list(user) // Self-cast
 
 /spell/undeath/cast(var/list/targets, var/mob/user)
+
+	var/datum/role/vampire/V = isvampire(user)
+	if (V.reviving)
+		to_chat(user, "<span class='warning'>You are already rising from your grave.</span>")
+		return FALSE
+
 	var/mob/living/carbon/human/H = user
 	to_chat(H, "You attempt to recover. This may take between 30 and 45 seconds.")
+	V.reviving = TRUE
 	var/delay = rand(30 SECONDS, 45 SECONDS)
 
 	spawn()
@@ -48,6 +55,10 @@
 			to_chat(H, "<span class = 'notice'>Click the action button to revive.</span>")
 			var/datum/action/undeath/undeath_action = new()
 			undeath_action.Grant(H)
+		else
+			to_chat(H, "<span class = 'warning'>It seems you couldn't complete the spell.</span>")
+			V.reviving = FALSE
+			return FALSE
 
 // Action button for actual revival
 
@@ -63,5 +74,6 @@
 	M.revive(FALSE)
 	V.remove_blood(V.blood_usable)
 	V.check_vampire_upgrade()
+	V.reviving = FALSE
 	to_chat(M, "<span class='sinister'>You awaken, ready to strike fear into the hearts of mortals once again.</span>")
 	Remove(owner)

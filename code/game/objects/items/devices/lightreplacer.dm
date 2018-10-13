@@ -109,10 +109,6 @@
 
 
 /obj/item/device/lightreplacer/attackby(obj/item/W, mob/user)
-	if(istype(W,  /obj/item/weapon/card/emag) && emagged == 0)
-		Emag()
-		return
-
 	if(istype(W, /obj/item/stack/sheet/glass/glass))
 		if(!add_glass(CC_PER_SHEET_GLASS, force_fill = 1))
 			to_chat(user, "<span class='warning'>\The [src] can't hold any more glass!</span>")
@@ -334,7 +330,11 @@
 				to_chat(user, "<span class='warning'>\The [src]'s waste container is full and it drops the removed light on the floor!</span>")
 			else
 				to_chat(user, "<span class='warning'>\The [src] has no waste container and it drops the removed light on the floor!</span>")
-
+	if(emagged && !best_light.rigged)
+		to_chat(user, "<span class='warning'>\The [src] injects a small amount of plasma into \the [best_light].</span>")
+		best_light.rigged = TRUE
+		log_admin("LOG: [user.name] ([user.ckey]) injected a light with plasma, rigging it to explode.")
+		message_admins("LOG: [user.name] ([user.ckey]) injected a light with plasma, rigging it to explode. [formatJumpTo(get_turf(target))]")
 	best_light.forceMove(target)
 	target.current_bulb = best_light
 	best_light = null
@@ -344,10 +344,11 @@
 		target.explode()
 
 
-/obj/item/device/lightreplacer/proc/Emag()
+/obj/item/device/lightreplacer/emag_act(mob/user)
 	emagged = !emagged
 	playsound(src, "sparks", 100, 1)
 	if(emagged)
+		to_chat(user, "<span class = 'warning'>As you emag \the [src], you unlock its true potential as the greatest hand-portable source of plasma imaginable. A shame the only use for this is injecting the plasma into the lights it deploys.</span>")
 		name = "Shortcircuited [initial(name)]"
 	else
 		name = initial(name)

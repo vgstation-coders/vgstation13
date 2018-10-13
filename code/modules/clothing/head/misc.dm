@@ -467,3 +467,11 @@
 	desc = "Welcome to the rice fields, motherfucker."
 	icon_state = "rice_hat"
 	item_state = "rice_hat"
+
+/obj/item/clothing/head/inquisitor
+	name = "cappello romano"
+	desc = "A round wide-brimmed hat worn by more traditional Roman Catholic clergy."
+	icon_state = "brim-hat"
+	item_state = "brim-hat"
+	wizard_garb = TRUE
+	armor = list(melee = 0, bullet = 0, laser = 15, energy = 15, bomb = 0, bio = 0, rad = 0)

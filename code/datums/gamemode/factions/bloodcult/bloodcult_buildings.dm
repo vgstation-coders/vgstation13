@@ -456,21 +456,18 @@ var/list/cult_spires = list()
 	if (!tattoo_tier)
 		return
 
-	var/list/optionlist = list()
+	var/list/choices = list()
 	if (stage >= tattoo_tier)
 		for (var/subtype in subtypesof(/datum/cult_tattoo))
 			var/datum/cult_tattoo/T = new subtype
 			if (T.tier == tattoo_tier)
-				optionlist.Add(T.name)
+				choices += list(list(T.name, "radial_[T.icon_state]", T.desc)) //According to BYOND docs, when adding to a list, "If an argument is itself a list, each item in the list will be added." My solution to that, because I am a genius, is to add a list within a list.
 				to_chat(H, "<span class='danger'>[T.name]</span>: [T.desc]")
 	else
 		to_chat(user,"<span class='warning'>Come back to acquire another mark once your cult is a step closer to its goal.</span>")
 		return
 
-	for(var/option in optionlist)
-		optionlist[option] = image(icon = 'icons/obj/cult_radial2.dmi', icon_state = "[option]")
-
-	var/tattoo = show_radial_menu(user,loc,optionlist,'icons/obj/cult_radial2.dmi')//spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
+	var/tattoo = show_radial_menu(user,loc,choices,'icons/obj/cult_radial2.dmi',"radial-cult")//spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
 
 	for (var/tat in C.tattoos)
 		var/datum/cult_tattoo/CT = C.tattoos[tat]
@@ -713,16 +710,15 @@ var/list/cult_spires = list()
 				forger.client.images |= progbar
 		return
 
-	var/optionlist = list(
-		"Forge Blade",
-		"Forge Construct Shell",
-		"Forge Helmet",
-		"Forge Armor"
-		)
-	for(var/option in optionlist)
-		optionlist[option] = image(icon = 'icons/obj/cult_radial.dmi', icon_state = "radial_[option]")
 
-	var/task = show_radial_menu(user,loc,optionlist,'icons/obj/cult_radial.dmi')//spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
+	var/list/choices = list(
+		list("Forge Blade", "radial_blade", "Deity please add details"),
+		list("Forge Construct Shell", "radial_constructshell", "Deity please add details"),
+		list("Forge Helmet", "radial_helmet", "Deity please add details"),
+		list("Forge Armor", "radial_armor", "The quote originates from the Spider-Man 2 video game released in June 2004. Near the beginning of the game, Peter Parker as Spider-Man is given free roam through New York City. The first mission is to make it to Doctor Connors' class on time, which is emphasized in a quote spoken by Parker before having to get to class.")
+	)
+
+	var/task = show_radial_menu(user,loc,choices,'icons/obj/cult_radial.dmi',"radial-cult") //deity please customize "radial-cult" in tooltip.html //spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
 	if (template || !Adjacent(user) || !task )
 		return
 	var/forge_icon = ""

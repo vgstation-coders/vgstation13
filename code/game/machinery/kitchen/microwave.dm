@@ -398,6 +398,8 @@
 	src.updateUsrDialog()
 
 /obj/machinery/microwave/proc/dispose()
+	if(operating)
+		return
 	for (var/obj/O in contents)
 		O.forceMove(src.loc)
 	if (src.reagents.total_volume)
@@ -457,15 +459,49 @@
 	return ..()
 
 /obj/machinery/microwave/AltClick(mob/user)
-	if(operating)
-		to_chat(user, "<span class='warning'>Too late, the microwave is already turned on!</span>")
-		return
+	if(stat & (NOPOWER|BROKEN))
+		return ..()
+	if(!anchored)
+		return ..()
 	if(isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check()))
 		if(issilicon(user) && !attack_ai(user))
 			return ..()
-		dispose()
+		var/list/choices = list(
+			list("Cook", "radial_cook"),
+			list("Eject Ingredients", "radial_eject"),
+			list("Toggle Reagent Disposal", (reagent_disposal ? "radial_chem_notrash" : "radial_chem_trash")),
+			list("Examine", "radial_examine")
+		)
+		var/event/menu_event = new(owner = usr)
+		menu_event.Add(src, "radial_check_handler")
+
+		var/task = show_radial_menu(usr,loc,choices,custom_check = menu_event)
+		if(!radial_check(usr))
+			return
+
+		switch(task)
+			if("Cook")
+				cook()
+			if("Eject Ingredients")
+				dispose()
+			if("Toggle Reagent Disposal")
+				reagent_disposal = !reagent_disposal
+				updateUsrDialog()
+			if("Examine")
+				usr.examination(src)
 		return
 	return ..()
+
+/obj/machinery/microwave/proc/radial_check_handler(list/arguments)
+	var/event/E = arguments["event"]
+	return radial_check(E.holder)
+
+/obj/machinery/microwave/proc/radial_check(mob/living/user)
+	if(!istype(user))
+		return FALSE
+	if(user.incapacitated() || !user.Adjacent(src))
+		return FALSE
+	return TRUE
 
 /obj/machinery/microwave/Topic(href, href_list)
 	if(..())

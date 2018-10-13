@@ -228,6 +228,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		to_chat(user, "<span class='notice'>You disable the security protocols</span>")
 
 /obj/machinery/computer/rdconsole/proc/deconstruct_item(mob/user)
+	if(!linked_destroy || linked_destroy.busy || !linked_destroy.loaded_item)
+		return
+	if(isLocked() || (linked_destroy.stat & (NOPOWER|BROKEN)) || (stat & (NOPOWER|BROKEN)))
+		return
 	linked_destroy.busy = 1
 	screen = 0.1
 	updateUsrDialog()
@@ -281,7 +285,12 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	add_fingerprint(usr)
 
+	if(isLocked() && !allowed(usr))
+		to_chat(usr, "Unauthorized Access.")
+		return
+
 	usr.set_machine(src)
+
 	if(href_list["menu"]) //Switches menu screens. Converts a sent text string into a number. Saves a LOT of code.
 		var/temp_screen = text2num(href_list["menu"])
 		if(temp_screen <= 1.1 || (2 <= temp_screen && 4.9 >= temp_screen) || src.allowed(usr) || emagged) //Unless you are making something, you need access.
@@ -365,9 +374,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	else if(href_list["deconstruct"]) //Deconstruct the item in the destructive analyzer and update the research holder.
 		if(linked_destroy)
-			if(!src.allowed(usr))
-				to_chat(usr, "Unauthorized Access.")
-				return
 			if(linked_destroy.busy)
 				to_chat(usr, "<span class='warning'>The destructive analyzer is busy at the moment.</span>")
 			else
@@ -1026,10 +1032,12 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	user << browse("<TITLE>Research and Development Console</TITLE><HR>[dat]", "window=rdconsole;size=575x400")
 	onclose(user, "rdconsole")
 
+/obj/machinery/computer/rdconsole/proc/isLocked() //magic numbers ahoy!
+	return screen == 0.2
+
 /obj/machinery/computer/rdconsole/npc_tamper_act(mob/living/L) //Turn on the destructive analyzer
 	//Item making happens when the gremlin tampers with the circuit imprinter / protolathe. They don't need this console for that
-	if(linked_destroy && linked_destroy.loaded_item)
-		deconstruct_item(L)
+	deconstruct_item(L)
 
 /obj/machinery/computer/rdconsole/mommi
 	name = "MoMMI R&D Console"
