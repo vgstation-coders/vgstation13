@@ -713,7 +713,7 @@
 
 /atom/movable/proc/Process_Spacemove(check_drift)
 	var/dense_object = 0
-	for(var/turf/turf in oview(1,src))
+	for(var/turf/turf in orange(1,src))
 		if(!turf.has_gravity(src))
 			continue
 
