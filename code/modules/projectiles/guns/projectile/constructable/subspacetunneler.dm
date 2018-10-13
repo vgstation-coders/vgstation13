@@ -71,8 +71,10 @@
 		qdel(loaded_matter_bin)
 		loaded_matter_bin = null
 	if(stored_items.len)
-		spawn(0)
-			src.visible_message("<span class='warning'>\The [src]'s stored [stored_items.len > 1 ? "items are" : "item is"] forcibly ejected as \the [src] is destroyed!</span>")
+		for(var/atom/movable/AM in stored_items)
+			AM.forceMove(null)
+		src.visible_message("<span class='warning'>\The [src]'s stored [stored_items.len > 1 ? "items are" : "item is"] forcibly ejected as \the [src] is destroyed!</span>")
+		spawn()
 			for(var/I in stored_items)
 				var/offset_x = rand(-3,3)
 				var/offset_y = rand(-3,3)
