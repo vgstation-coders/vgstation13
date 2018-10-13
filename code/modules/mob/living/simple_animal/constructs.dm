@@ -221,7 +221,7 @@
 	melee_damage_upper = 25
 	attacktext = "slashes"
 	speed = 1
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/targeted/ethereal_jaunt/shift)
