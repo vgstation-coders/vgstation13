@@ -1216,7 +1216,7 @@ var/global/list/image/blood_overlays = list()
 			return
 		feedback_add_details("handcuffs", "[name]")
 
-		if(clumsy_check(user) && prob(50))
+		if(clumsy_check(user) && prob(50) && !user.mind.special_role)
 			to_chat(user, "<span class='warning'>Uh... how is this done?!</span>")
 			C = user
 
