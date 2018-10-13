@@ -486,9 +486,9 @@
 
 	var/datum/dna2/record/R = new /datum/dna2/record()
 	if(!isnull(Brain.owner_dna) && Brain.owner_dna != subject.dna)
-		R.dna = Brain.owner_dna
+		R.dna = Brain.owner_dna.Clone()
 	else
-		R.dna=subject.dna
+		R.dna=subject.dna.Clone()
 	R.ckey = subject.ckey
 	R.id= copytext(md5(R.dna.real_name), 2, 6)
 	R.name=R.dna.real_name
