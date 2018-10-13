@@ -119,7 +119,7 @@
 		to_chat(candidate.mob, "[bicon(logo_icon)]<span class='recruit'>A blob core is looking for someone to become its overmind. (<a href='?src=\ref[src];blob_recruit=\ref[candidate.mob]'>Apply now!</a>)</span>[bicon(logo_icon)]")
 
 /obj/effect/blob/core/Topic(href, href_list)
-	if(usr.mind && usr.mind.current && usr.mind.current.stat != DEAD)
+	if(usr.stat != DEAD)
 		return
 
 	if(href_list["blob_recruit"])//We don't have time to wait for the recruiter, just grab whoever applied first!
