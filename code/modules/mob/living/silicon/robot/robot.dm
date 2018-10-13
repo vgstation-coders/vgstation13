@@ -78,8 +78,8 @@
 
 	var/killswitch = FALSE
 	var/killswitch_time = 60
-	var/weapon_lock = FALSE
-	var/weaponlock_time = 120
+	var/modulelock = FALSE
+	var/modulelock_time = 120
 	var/lawupdate = TRUE //Cyborgs will sync their laws with their AI by default
 	var/lockcharge //Used when locking down a borg to preserve cell charge
 	var/scrambledcodes = FALSE // Used to determine if a borg shows up on the robotics console.  Setting to one hides them.
@@ -463,6 +463,13 @@
 		spark(src, 5, FALSE)
 	return 2
 
+	
+/mob/living/silicon/robot/emp_act(severity)
+	..()
+	if(prob(50/severity))
+		modulelock_time = rand(10,60)
+		modulelock = TRUE
+	
 
 /mob/living/silicon/robot/triggerAlarm(var/class, area/A, var/O, var/alarmsource)
 	if(isDead())
@@ -986,10 +993,6 @@
 		overlays += target_locked
 
 /mob/living/silicon/robot/proc/installed_modules()
-	if(weapon_lock)
-		to_chat(src, "<span class='attack'>Weapon lock active, unable to use modules! Count:[weaponlock_time]</span>")
-		return
-
 	if(!module)
 		pick_module()
 		return
@@ -1308,3 +1311,7 @@
 
 /mob/living/silicon/robot/get_cell()
 	return cell
+	
+/mob/living/silicon/robot/proc/toggle_modulelock()
+	modulelock = !modulelock
+	return modulelock
