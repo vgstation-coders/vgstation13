@@ -111,7 +111,15 @@
 	if(H.loc == src || !H.loc)
 		qdel(H)
 	H = null
+	for(var/obj/M in modules)
+		qdel(M)
+	modules.Cut()
 	..()
+
+/obj/item/clothing/suit/space/rig/examine(mob/user)
+	..()
+	for(var/obj/item/rig_module/M in modules)
+		M.examine_addition(user)
 
 /obj/item/clothing/suit/space/rig/unequipped(mob/living/carbon/human/user, var/from_slot = null)
 	..()
@@ -652,6 +660,7 @@
 	item_state = "rorsuit"
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
 	clothing_flags = GOLIATHREINFORCE
+	head_type = /obj/item/clothing/head/helmet/space/rig/ror
 
 /obj/item/clothing/head/helmet/space/rig/ror
 	name = "survivor's hardsuit helmet"

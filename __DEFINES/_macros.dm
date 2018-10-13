@@ -216,6 +216,8 @@
 
 #define ishoe(O) (is_type_in_list(O, list(/obj/item/weapon/minihoe, /obj/item/weapon/kitchen/utensil/fork)))
 
+#define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
+
 //Macros for roles/antags
 #define isfaction(A) (istype(A, /datum/faction))
 
