@@ -191,7 +191,6 @@
 #include "code\controllers\mc\subsystem.dm"
 #include "code\controllers\subsystem\air.dm"
 #include "code\controllers\subsystem\atoms.dm"
-#include "code\controllers\subsystem\component.dm"
 #include "code\controllers\subsystem\disease.dm"
 #include "code\controllers\subsystem\emergency_shuttle.dm"
 #include "code\controllers\subsystem\event.dm"

@@ -96,7 +96,7 @@
 	radio = new (src)
 
 /obj/machinery/power/supermatter/initialize()
-	..()
+	. = ..()
 	set_frequency(frequency) //also broadcasts
 
 /obj/machinery/power/supermatter/Destroy()
@@ -485,7 +485,7 @@
 	var/list/cached_smlist = list()
 
 /obj/machinery/computer/supermatter/initialize()
-	..()
+	. = ..()
 	set_frequency(frequency)
 
 /obj/machinery/computer/supermatter/process()
