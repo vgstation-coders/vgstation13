@@ -351,6 +351,9 @@
 		var/chosen = pick(critters)
 		critters -= chosen
 		var/mob/living/simple_animal/hostile/NM = new chosen(MC)
+		if(istype(NM, /mob/living/simple_animal/hostile/humanoid))
+			var/mob/living/simple_animal/hostile/humanoid/H = NM
+			H.items_to_drop = list()
 		NM.faction = "lazarus \ref[user]"
 		NM.friends += user
 		MC.contained_mob = NM
