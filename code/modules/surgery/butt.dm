@@ -38,7 +38,7 @@
 /datum/surgery_step/butt/slice_cheek/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("<span class='notice'>[user] has sliced through [target]'s ass cheek with \the [tool].</span>",		\
 	"<span class='notice'>You have sliced through [target]'s ass cheek with \the [tool].</span>")
-	target.op_stage.butt = SURGEY_BUTT_CUT
+	target.op_stage.butt = SURGERY_BUTT_CUT
 
 
 
@@ -66,7 +66,7 @@
 	max_duration = 100
 
 /datum/surgery_step/butt/seperate_anus/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	return ..() && target.op_stage.butt == SURGEY_BUTT_CUT
+	return ..() && target.op_stage.butt == SURGERY_BUTT_CUT
 
 
 /datum/surgery_step/butt/seperate_anus/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
