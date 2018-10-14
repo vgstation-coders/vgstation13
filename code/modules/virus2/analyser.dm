@@ -128,7 +128,15 @@
 	var/dat = list()
 	dat += "Currently stored samples: [src.contents.len]<br><hr>"
 	if (src.contents.len > 0)
-		dat += "<table cellpadding='1' style='width: 100%;text-align:center;'><td>Name</td><td>Symptoms</td><td>Antibodies</td><td>Transmission</td><td>Options</td>"
+		dat += {"
+<table cellpadding='1' style='width: 100%;text-align:center; white-space: nowrap;'>
+	<td>Name</td>
+	<td>Details</td>
+	<td>Symptoms</td>
+	<td>Antibodies</td>
+	<td>Transmission</td>
+	<td>Options</td>
+"}
 		for(var/obj/item/weapon/virusdish/B in src.contents)
 			var/ID = B.virus2.uniqueID
 			if("[ID]" in virusDB) //If it's in the DB they might have given it a name
@@ -136,12 +144,13 @@
 				dat += "<tr><td>[v.fields["name"]]</td>"
 			else //Use ID instead
 				dat += "<tr><td>[B.virus2.name()]</td>"
+			dat += "<td>Infection rate: [B.virus2.infectionchance]<br>Progress speed: [B.virus2.stageprob]</td>"
 			dat+="<td>"
 			if(!B.analysed)
 				dat += "Awaiting analysis.</td><td></td><td></td>"
 			else
 				for(var/datum/disease2/effect/e in B.virus2.effects)
-					dat += "<br>[e.name]"
+					dat += "<br>[e.name] (Strength: [e.multiplier] | Verosity: [e.chance])"
 				dat +="</td>"
 				dat += "<td>[antigens2string(B.virus2.antigen)]</td>"
 				dat += "<td>[(B.virus2.spreadtype)]</td>"
@@ -153,6 +162,6 @@
 			dat += "</tr>"
 		dat += "</table>"
 	dat = jointext(dat,"")
-	var/datum/browser/popup = new(user, "\ref[src]", "Viral Storage & Analysis Unit", 600, 350, src)
+	var/datum/browser/popup = new(user, "\ref[src]", "Viral Storage & Analysis Unit", 800, 350, src)
 	popup.set_content(dat)
 	popup.open()
