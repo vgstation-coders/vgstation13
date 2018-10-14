@@ -77,7 +77,7 @@
 	name = "Vampires"
 	role_category = ROLE_VAMPIRE
 	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
-	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
+	restricted_from_jobs = list("AI","Cyborg","Mobile MMI", "Chaplain")
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
 	required_candidates = 1
