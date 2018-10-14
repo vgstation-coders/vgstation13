@@ -223,14 +223,13 @@ var/list/all_doors = list()
 	if(makes_noise)
 		playsound(src, soundeffect, soundpitch, 1)
 
-	set_opacity(0)
 	door_animate("opening")
-	sleep(animation_delay)
-	layer = open_layer
 	density = 0
 	explosion_resistance = 0
-	update_icon()
 	set_opacity(0)
+	sleep(animation_delay)
+	layer = open_layer
+	update_icon()
 	update_nearby_tiles()
 	//update_freelook_sight()
 
