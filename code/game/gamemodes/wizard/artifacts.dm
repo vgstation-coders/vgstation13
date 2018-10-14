@@ -85,7 +85,7 @@
 	price = 5 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/weapon/storage/bag/potion/bundle)
 	
-	/datum/spellbook_artifact/lesser_potion_bundle
+/datum/spellbook_artifact/lesser_potion_bundle
 	name = "Lesser potion bundle"
 	desc = "Contains 10 unknown potions. For wizards that are unwilling to go all-in."
 	abbreviation = "LPB"
