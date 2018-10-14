@@ -70,11 +70,11 @@
 // Effin /vg/ fart Fetishists
 /datum/emote/living/carbon/human/fart
 	key = "fart"
-	key_third_person = "*fart"
+	key_third_person = "farts"
 
 /datum/emote/living/carbon/human/fart/run_emote(mob/user, params, type_override)
 	var/mob/living/carbon/human/H = user
-	if(H.op_stage.butt == 4)
+	if(H.op_stage.butt == SURGERY_NO_BUTT)
 		return FALSE // Can't fart without an arse (dummy)
 
 	if(world.time - H.lastFart <= 400)
@@ -92,6 +92,8 @@
 			continue
 
 	var/has_farted = FALSE
+
+	H.lastFart = world.time
 
 	emote_type = EMOTE_AUDIBLE
 	var/turf/location = get_turf(H)
