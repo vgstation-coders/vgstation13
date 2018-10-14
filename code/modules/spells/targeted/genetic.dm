@@ -56,23 +56,44 @@ code\game\\dna\genes\goon_powers.dm
 
 /spell/targeted/genetic/mutate
 	name = "Mutate"
-	desc = "This spell causes you to turn into a hulk and gain laser vision for a short while."
+	desc = "This spell causes you to turn into a hulk for a short while."
 	abbreviation = "MU"
 
 	school = "transmutation"
 	charge_max = 400
-	spell_flags = NEEDSCLOTHES | INCLUDEUSER
+	spell_flags = INCLUDEUSER
 	invocation = "BIRUZ BENNAR"
 	invocation_type = SpI_SHOUT
-	message = "<span class='notice'>You feel strong! You feel a pressure building behind your eyes!</span>"
+	message = "<span class='notice'>You feel strong! You feel like you're too swole to control!</span>"
 	range = 0
 	max_targets = 1
 
-	mutations = list(M_LASER, M_HULK)
+	mutations = list(M_HULK)
 	duration = 300
 	cooldown_min = 300 //25 deciseconds reduction per rank
 
 	hud_state = "wiz_hulk"
+	user_type = USER_TYPE_WIZARD
+
+/spell/targeted/genetic/laser_eyes
+	name = "Heat Vision"
+	desc = "This spell mutates yourself. Allowing you to fire heat rays from your eyes!"
+	abbreviation = "HV"
+
+	school = "transmutation"
+	charge_max = 250
+	spell_flags = NEEDSCLOTHES | INCLUDEUSER
+	invocation = "SHOOP DE WHOOP"
+	invocation_type = SpI_SHOUT
+	message = "<span class='notice''>You feel a pressure building behind your eyes!</span>"
+	range = 0
+	max_targets = 1
+
+	mutations = list(M_LASER)
+	duration = 100
+	cooldown_min = 100
+
+	hud_state = "wiz_eyes"
 	user_type = USER_TYPE_WIZARD
 
 /spell/targeted/genetic/eat_weed
