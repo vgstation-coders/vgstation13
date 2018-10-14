@@ -41,6 +41,14 @@
 
 	var/list/hud_list = list()
 
+	var/list/healers = list()
+
+/mob/living/simple_animal/construct/Move()
+	..()
+	if (healers.len > 0)
+		for (var/mob/living/simple_animal/construct/builder/perfect/P in healers)
+			P.move_ray()
+
 /mob/living/simple_animal/construct/say(var/message)
 	. = ..(message, "C")
 
@@ -125,11 +133,22 @@
 
 	to_chat(user, msg)
 
+/mob/living/simple_animal/construct/attack_construct(var/mob/user)
+	if(istype(user,/mob/living/simple_animal/construct/builder/perfect) && get_dist(user,src)<=2)
+		attack_animal(user)
+		return 1
+	return 0
 
 /mob/living/simple_animal/construct/attack_animal(mob/living/simple_animal/M)
-	if(istype(M, /mob/living/simple_animal/construct/builder))
+	if(istype(M, /mob/living/simple_animal/construct/builder/perfect))
 		if(src.health >= src.maxHealth)
-			to_chat(M, "<span class='notice'>[src] has nothing to mend.</span>")
+			to_chat(M, "<span class='notice'>\The [src] has nothing to mend.</span>")
+			return
+		var/mob/living/simple_animal/construct/builder/perfect/P = M
+		P.start_ray(src)
+	else if(istype(M, /mob/living/simple_animal/construct/builder))
+		if(src.health >= src.maxHealth)
+			to_chat(M, "<span class='notice'>\The [src] has nothing to mend.</span>")
 			return
 		health = min(maxHealth, health + 5) // Constraining health to maxHealth
 		M.visible_message("[M] mends some of \the <EM>[src]'s</EM> wounds.","You mend some of \the <em>[src]'s</em> wounds.")

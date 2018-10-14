@@ -258,7 +258,102 @@
 	icon_living = "artificer2"
 	icon_dead = "artificer2"
 	see_in_dark = 7
+	var/mob/living/simple_animal/construct/heal_target = null
+	var/obj/effect/overlay/artificerray/ray = null
+	var/heal_range = 2
 
 /mob/living/simple_animal/construct/builder/perfect/New()
 	..()
 	setupfloat()
+
+/mob/living/simple_animal/construct/builder/perfect/Life()
+	if(timestopped)
+		return 0
+	. = ..()
+	if(. && heal_target)
+		heal_target.health = min(heal_target.maxHealth, heal_target.health + round(heal_target.maxHealth/10))
+		move_ray()
+		process_construct_hud(src)
+
+/mob/living/simple_animal/construct/builder/perfect/Move()
+	..()
+	if (ray)
+		move_ray()
+
+
+/mob/living/simple_animal/construct/builder/perfect/proc/start_ray(var/mob/living/simple_animal/construct/target)
+	if (!istype(target))
+		return
+	if (locate(src) in target.healers)
+		to_chat(src, "<span class='warning'>You are already healing \the [target].</span>")
+		return
+	if (ray)
+		end_ray()
+	target.healers.Add(src)
+	heal_target = target
+	ray = new (loc)
+	to_chat(src, "<span class='notice'>You are now healing \the [target].</span>")
+	move_ray()
+
+/mob/living/simple_animal/construct/builder/perfect/proc/move_ray()
+	if(heal_target && ray && heal_target.health < heal_target.maxHealth && get_dist(heal_target, src) <= heal_range && isturf(loc) && isturf(heal_target.loc))
+		ray.forceMove(loc)
+		var/disty = heal_target.y - src.y
+		var/distx = heal_target.x - src.x
+		var/newangle
+		if(!disty)
+			if(distx >= 0)
+				newangle = 90
+			else
+				newangle = 270
+		else
+			newangle = arctan(distx/disty)
+			if(disty < 0)
+				newangle += 180
+			else if(distx < 0)
+				newangle += 360
+		var/matrix/M = matrix()
+		if (ray.oldloc_source && ray.oldloc_target && get_dist(src,ray.oldloc_source) <= 1 && get_dist(heal_target,ray.oldloc_target) <= 1)
+			animate(ray, transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle),time = 1)
+		else
+			ray.transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
+		ray.oldloc_source = src.loc
+		ray.oldloc_target = heal_target.loc
+	else
+		end_ray()
+
+/mob/living/simple_animal/construct/builder/perfect/proc/end_ray()
+	if (heal_target)
+		heal_target.healers.Remove(src)
+		heal_target = null
+	if (ray)
+		qdel(ray)
+		ray = null
+
+/obj/effect/overlay/artificerray
+	name = "ray"
+	icon = 'icons/effects/96x96.dmi'
+	icon_state = "artificer_ray"
+	layer = FLY_LAYER
+	plane = LYING_MOB_PLANE
+	anchored = 1
+	mouse_opacity = 0
+	pixel_x = -32
+	pixel_y = -29
+	var/turf/oldloc_source = null
+	var/turf/oldloc_target = null
+
+/obj/effect/overlay/artificerray/cultify()
+	return
+
+/obj/effect/overlay/artificerray/ex_act()
+	return
+
+/obj/effect/overlay/artificerray/emp_act()
+	return
+
+/obj/effect/overlay/artificerray/blob_act()
+	return
+
+/obj/effect/overlay/artificerray/singularity_act()
+	return

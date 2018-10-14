@@ -473,7 +473,7 @@ var/list/cult_spires = list()
 		to_chat(user,"<span class='warning'>Come back to acquire another mark once your cult is a step closer to its goal.</span>")
 		return
 
-	var/tattoo = show_radial_menu(user,loc,choices,'icons/obj/cult_radial2.dmi',"radial-cult")//spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
+	var/tattoo = show_radial_menu(user,loc,choices,'icons/obj/cult_radial2.dmi',"radial-cult2")//spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
 
 	for (var/tat in C.tattoos)
 		var/datum/cult_tattoo/CT = C.tattoos[tat]
@@ -718,13 +718,13 @@ var/list/cult_spires = list()
 
 
 	var/list/choices = list(
-		list("Forge Blade", "radial_blade", "Deity please add details"),
-		list("Forge Construct Shell", "radial_constructshell", "Deity please add details"),
-		list("Forge Helmet", "radial_helmet", "Deity please add details"),
-		list("Forge Armor", "radial_armor", "The quote originates from the Spider-Man 2 video game released in June 2004. Near the beginning of the game, Peter Parker as Spider-Man is given free roam through New York City. The first mission is to make it to Doctor Connors' class on time, which is emphasized in a quote spoken by Parker before having to get to class.")
+		list("Forge Blade", "radial_blade", "A powerful ritual blade, the signature weapon of the bloodthirsty cultists. Features a notch in which a Soul Gem can fit."),
+		list("Forge Construct Shell", "radial_constructshell", "A polymorphic sculpture that can be shaped into a powerful ally by inserting a full Soul Gem or Shard."),
+		list("Forge Helmet", "radial_helmet", "This protective helmet offers the same enhancing powers that a Cult Hood provides, on top of being space proof."),
+		list("Forge Armor", "radial_armor", "This protective armor offers the same enhancing powers that Cult Robes provide, on top of being space proof."),
 	)
 
-	var/task = show_radial_menu(user,loc,choices,'icons/obj/cult_radial.dmi',"radial-cult") //deity please customize "radial-cult" in tooltip.html //spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
+	var/task = show_radial_menu(user,loc,choices,'icons/obj/cult_radial.dmi',"radial-cult")//spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
 	if (template || !Adjacent(user) || !task )
 		return
 	var/forge_icon = ""

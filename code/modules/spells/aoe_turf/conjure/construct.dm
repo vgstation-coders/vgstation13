@@ -45,6 +45,7 @@
 /spell/aoe_turf/conjure/floor/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
 	animation.icon_state = "cultfloor"
 	flick("cultfloor",animation)
+	shadow(target,holder.loc,"artificer_convert")
 	spawn(10)
 		qdel(animation)
 		animation = null
@@ -70,6 +71,7 @@
 /spell/aoe_turf/conjure/wall/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
 	animation.icon_state = "cultwall"
 	flick("cultwall",animation)
+	shadow(target,holder.loc,"artificer_convert")
 	spawn(10)
 		qdel(animation)
 		animation = null
