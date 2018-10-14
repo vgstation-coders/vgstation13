@@ -387,6 +387,10 @@
 					 /obj/item/toy/balloon/inflated/decoy,
 					 /obj/machinery/door/airlock)
 				if(is_type_in_list(A, destructible_objects) && Adjacent(A))
+					if(istype(A, /obj/machinery/door/airlock))
+						var/obj/machinery/door/airlock/AIR = A
+						if(AIR.density)
+							continue
 					UnarmedAttack(A)
 	return
 
