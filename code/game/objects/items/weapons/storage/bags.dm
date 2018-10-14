@@ -497,3 +497,12 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	..()
 	for(var/i=1 to 50)
 		new /obj/item/potion/random(src)
+
+/obj/item/weapon/storage/bag/potion/lesser_bundle
+	name = "Lesser potion bundle"
+	desc = "What could potionly go slightly less wrong?"
+
+/obj/item/weapon/storage/bag/potion/lesser_bundle/New()
+	..()
+	for(var/i=1 to 10)
+		new /obj/item/potion/random(src)
