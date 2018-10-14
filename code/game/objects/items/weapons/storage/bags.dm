@@ -488,3 +488,12 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	max_combined_w_class = 200
 	w_class = W_CLASS_SMALL
 	can_only_hold = list("/obj/item/potion")
+
+/obj/item/weapon/storage/bag/potion/bundle
+	name = "Potion bundle"
+	desc = "What could potionly go wrong?"
+
+/obj/item/weapon/storage/bag/potion/bundle/New()
+	..()
+	for(var/i=1 to 50)
+		new /obj/item/potion/random(src)
