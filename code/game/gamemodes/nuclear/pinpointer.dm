@@ -112,7 +112,6 @@ var/list/pinpointerpinpointer_list = list()
 		fast_objects += src
 		process()
 		to_chat(usr,"<span class='notice'>You activate the pinpointer</span>")
-		playsound(src, 'sound/items/healthanalyzer.ogg', 30, 1)
 	else
 		fast_objects -= src
 		active = FALSE
@@ -264,7 +263,6 @@ var/list/pinpointerpinpointer_list = list()
 		process()
 		fast_objects += src
 		to_chat(usr,"<span class='notice'>You activate the pinpointer</span>")
-		playsound(src, 'sound/items/healthanalyzer.ogg', 30, 1)
 	else
 		active = FALSE
 		fast_objects -= src
