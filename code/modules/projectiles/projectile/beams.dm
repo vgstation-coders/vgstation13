@@ -715,6 +715,8 @@ var/list/beam_master = list()
 				error -= dist_y
 
 			if(isnull(loc))
+				if(isnull(lastposition))
+					return
 				draw_ray(lastposition)
 				return
 			if(lastposition == loc)
@@ -751,6 +753,8 @@ var/list/beam_master = list()
 				error -= dist_x
 
 			if(isnull(loc))
+				if(isnull(lastposition))
+					return
 				draw_ray(lastposition)
 				return
 			if(lastposition == loc)
