@@ -90,7 +90,7 @@
 
 /obj/item/weapon/stock_parts/matter_bin
 	name = "matter bin"
-	desc = "A container for holding compressed matter awaiting re-construction."
+	desc = "A container for hold compressed matter awaiting re-construction."
 	icon_state = "matter_bin"
 	origin_tech = Tc_MATERIALS + "=1"
 	starting_materials = list(MAT_IRON = 80)
@@ -133,7 +133,7 @@
 
 /obj/item/weapon/stock_parts/matter_bin/adv
 	name = "advanced matter bin"
-	desc = "A container for holding compressed matter awaiting re-construction."
+	desc = "A container for hold compressed matter awaiting re-construction."
 	icon_state = "advanced_matter_bin"
 	origin_tech = Tc_MATERIALS + "=3"
 	rating = 2
@@ -156,7 +156,7 @@
 	icon_state = "super_scan_module"
 	origin_tech = Tc_MAGNETS + "=5"
 	rating = 3
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 20, MAT_SILVER = 10)
+	starting_materials = list(MAT_PLASTIC = 300)
 
 /obj/item/weapon/stock_parts/manipulator/nano/pico
 	name = "pico-manipulator"
@@ -164,7 +164,7 @@
 	icon_state = "pico_mani"
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_PROGRAMMING + "=2"
 	rating = 3
-	starting_materials = list(MAT_IRON = 40, MAT_PLASMA = 40)
+	starting_materials = list(MAT_PLASTIC = 300)
 
 /obj/item/weapon/stock_parts/micro_laser/high/ultra
 	name = "ultra-high-power micro-laser"
@@ -172,15 +172,15 @@
 	desc = "A tiny laser used in certain devices."
 	origin_tech = Tc_MAGNETS + "=5"
 	rating = 3
-	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 20, MAT_URANIUM = 10)
+	starting_materials = list(MAT_PLASTIC = 300)
 
 /obj/item/weapon/stock_parts/matter_bin/adv/super
 	name = "super matter bin"
-	desc = "A container for holding compressed matter awaiting re-construction."
+	desc = "A container for hold compressed matter awaiting re-construction."
 	icon_state = "super_matter_bin"
 	origin_tech = Tc_MATERIALS + "=5"
 	rating = 3
-	starting_materials = list(MAT_IRON = 80)
+	starting_materials = list(MAT_PLASTIC = 300)
 
 /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace
 	name = "bluespace matter bin"
