@@ -131,6 +131,9 @@ var/explosion_shake_message_cooldown = 0
 						if(D.density && D.explosion_block)
 							dist += D.explosion_block
 
+					for (var/obj/effect/forcefield/F in Trajectory.contents)
+						dist += F.explosion_block
+
 			if(dist < devastation_range)
 				dist = 1
 			else if(dist < heavy_impact_range)

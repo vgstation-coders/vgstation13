@@ -229,6 +229,18 @@ var/global/list/alert_overlays_global = list()
 /obj/machinery/door/firedoor/attack_alien(mob/living/carbon/alien/humanoid/user)
 	force_open(user)
 
+/obj/machinery/door/firedoor/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		shake(1, 3)
+		playsound(user, 'sound/weapons/heavysmash.ogg', 75, 1)
+		to_chat(user, "<span class = 'warning'>You smash with all your strength but \the [src] doesn't budge. If only your arms were sharp enough to pry the door open.</span>")
+	if(istype(user,/mob/living/simple_animal/construct/wraith))
+		force_open(user)
+		return 1
+	return 0
+
 /obj/machinery/door/firedoor/attackby(obj/item/weapon/C as obj, mob/user as mob)
 	add_fingerprint(user)
 	if(operating)

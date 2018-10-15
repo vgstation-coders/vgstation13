@@ -928,6 +928,7 @@ var/list/arcane_tomes = list()
 	body_parts_covered = EARS|HEAD
 	siemens_coefficient = 0
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/culthood/get_cult_power()
 	return 20
@@ -947,6 +948,7 @@ var/list/arcane_tomes = list()
 	siemens_coefficient = 0.7
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/head/culthood/get_cult_power()
 	return 10
@@ -966,6 +968,8 @@ var/list/arcane_tomes = list()
 	allowed = list(/obj/item/weapon/melee/cultblade,/obj/item/weapon/melee/soulblade,/obj/item/weapon/tome,/obj/item/weapon/talisman,/obj/item/weapon/blood_tesseract)
 	armor = list(melee = 50, bullet = 30, laser = 30,energy = 20, bomb = 25, bio = 25, rad = 0)
 	siemens_coefficient = 0
+	species_fit = list(VOX_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/cultrobes/get_cult_power()
 	return 50
@@ -1023,6 +1027,10 @@ var/list/arcane_tomes = list()
 	item_state = "culthelmet"
 	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
+	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED)
+	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
+	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+
 
 /obj/item/clothing/head/helmet/space/cult/get_cult_power()
 	return 30
@@ -1043,6 +1051,9 @@ var/list/arcane_tomes = list()
 	slowdown = HARDSUIT_SLOWDOWN_MED
 	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
+	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED)
+	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
+	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/suit/space/cult/get_cult_power()
 	return 60
@@ -1057,10 +1068,12 @@ var/list/arcane_tomes = list()
 /obj/item/clothing/head/culthood/old
 	icon_state = "culthood_old"
 	item_state = "culthood_old"
+	species_fit = list()
 
 /obj/item/clothing/suit/cultrobes/old
 	icon_state = "cultrobes_old"
 	item_state = "cultrobes_old"
+	species_fit = list()
 
 /obj/item/clothing/head/magus
 	name = "magus helm"

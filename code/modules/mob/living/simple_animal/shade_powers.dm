@@ -1,8 +1,15 @@
 
+//They're basically slightly tangible ghosts, they can't move through airtight stuff but they should be able to fit in vents
+/mob/living/simple_animal/shade/verb/ventcrawl()
+	set name = "Dive into Vent"
+	set desc = "Enter an air vent and move through the pipe system."
+	set category = "Object"
+	var/pipe = start_ventcrawl()
+	if(pipe)
+		handle_ventcrawl(pipe)
 
 
 //  SPELLS THAT SHADES GET IN SOUL BLADES   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 //Giving the spells
 /mob/living/simple_animal/shade/proc/give_blade_powers()

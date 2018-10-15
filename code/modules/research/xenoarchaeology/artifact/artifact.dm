@@ -114,6 +114,16 @@
 			busy = 0
 		return
 
+/obj/structure/boulder/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		playsound(loc, 'sound/weapons/heavysmash.ogg', 75, 1)
+		if(do_after(user, src, 20))
+			returnToPool(src)
+		return 1
+	return 0
+
 /obj/structure/boulder/Bumped(AM)
 	. = ..()
 	if(istype(AM,/mob/living/carbon/human))
@@ -132,3 +142,6 @@
 		var/obj/mecha/M = AM
 		if(istype(M.selected,/obj/item/mecha_parts/mecha_equipment/tool/drill))
 			M.selected.action(src)
+
+	else if(istype(AM,/mob/living/simple_animal/construct/armoured))
+		attack_construct(AM)
