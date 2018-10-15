@@ -55,24 +55,24 @@
 	return 1
 
 /obj/machinery/atmospherics/unary/heat_exchanger/icon_node_con(var/dir)
-	var/static/list/node_con_exchanger = list(
+	var/static/list/node_con = list(
 		"[NORTH]" = image('icons/obj/atmospherics/heat_exchanger.dmi', "intact", dir = NORTH),
 		"[SOUTH]" = image('icons/obj/atmospherics/heat_exchanger.dmi', "intact", dir = SOUTH),
 		"[EAST]"  = image('icons/obj/atmospherics/heat_exchanger.dmi', "intact", dir = EAST),
 		"[WEST]"  = image('icons/obj/atmospherics/heat_exchanger.dmi', "intact", dir = WEST)
 	)
 
-	return node_con_exchanger["[dir]"]
+	return node_con["[dir]"]
 
 /obj/machinery/atmospherics/unary/heat_exchanger/icon_node_ex(var/dir)
-	var/static/list/node_ex_exchanger = list(
+	var/static/list/node_ex = list(
 		"[NORTH]" = image('icons/obj/atmospherics/heat_exchanger.dmi', "exposed", dir = NORTH),
 		"[SOUTH]" = image('icons/obj/atmospherics/heat_exchanger.dmi', "exposed", dir = SOUTH),
 		"[EAST]"  = image('icons/obj/atmospherics/heat_exchanger.dmi', "exposed", dir = EAST),
 		"[WEST]"  = image('icons/obj/atmospherics/heat_exchanger.dmi', "exposed", dir = WEST)
 	)
 
-	return node_ex_exchanger["[dir]"]
+	return node_ex["[dir]"]
 
 /obj/machinery/atmospherics/unary/heat_exchanger/hide(var/i)
 	update_icon()
