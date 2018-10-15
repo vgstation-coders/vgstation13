@@ -417,7 +417,7 @@
 					list("Juggernaut", "radial_juggernaut", "Sturdy, powerful, at the cost of a snail's pace. However, its fists can break walls apart, along with some machinery. Can conjure a temporary forcefield."),
 				)
 				var/construct_class = show_radial_menu(U,T,choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
-				if (!T.Adjacent(U) || (C != U.get_active_hand()) || !construct_class )
+				if (!T.Adjacent(U) || (C != U.get_active_hand()) || !construct_class || A.loc != C)
 					return
 				switch(construct_class)
 					if("Juggernaut")
@@ -467,7 +467,7 @@
 					list("Juggernaut", "radial_juggernaut2", "Sturdy, powerful, at the cost of a snail's pace. However, its fists can break walls apart, along with some machinery. Can conjure a temporary forcefield. <b>Can dash forward over a large distance, knocking down anyone in front of them.</b>"),
 				)
 				var/construct_class = show_radial_menu(U,T,choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
-				if (!T.Adjacent(U) || (C != U.get_active_hand()) || !construct_class )
+				if (!T.Adjacent(U) || (C != U.get_active_hand()) || !construct_class || A.loc != C)
 					return
 				switch(construct_class)
 					if("Juggernaut")
