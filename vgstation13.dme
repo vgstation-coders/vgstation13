@@ -2414,7 +2414,7 @@
 #include "interface\web\interface.dms"
 #include "maprendering\maprendering.dm"
 #include "maps\_map.dm"
-#include "maps\test_tiny.dm"
+#include "maps\tgstation.dm"
 #include "maps\defficiency\areas.dm"
 #include "maps\packedstation\telecomms.dm"
 #include "maps\randomvaults\dance_revolution.dm"
