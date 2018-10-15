@@ -108,6 +108,8 @@ code\game\\dna\genes\goon_powers.dm
 	.=..()
 	if(spell_levels[Sp_POWER] == 1)
 		for(var/mob/living/carbon/human/target in targets)
+			target.f_style = "Hulk Hogan Mustache"
+			target.update_hair()
 			target.dna.SetSEState(JUMPBLOCK, 1, 1)
 			genemutcheck(target, JUMPBLOCK, null, MUTCHK_FORCED)
 			target.dna.SetSEValue(STRONGBLOCK, 1)
@@ -134,7 +136,7 @@ code\game\\dna\genes\goon_powers.dm
 
 	mutations = list(M_LASER)
 	duration = 100
-	cooldown_min = 100
+	cooldown_min = 150
 
 	hud_state = "wiz_eyes"
 	user_type = USER_TYPE_WIZARD
