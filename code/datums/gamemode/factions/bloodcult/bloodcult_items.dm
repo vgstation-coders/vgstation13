@@ -969,6 +969,7 @@ var/list/arcane_tomes = list()
 	armor = list(melee = 50, bullet = 30, laser = 30,energy = 20, bomb = 25, bio = 25, rad = 0)
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/cultrobes/get_cult_power()
 	return 50
@@ -1051,7 +1052,7 @@ var/list/arcane_tomes = list()
 	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED)
-	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
+	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/suit/space/cult/get_cult_power()

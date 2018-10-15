@@ -258,9 +258,17 @@
 	icon_living = "artificer2"
 	icon_dead = "artificer2"
 	see_in_dark = 7
+	construct_spells = list(
+		/spell/aoe_turf/conjure/struct,
+		/spell/aoe_turf/conjure/wall,
+		/spell/aoe_turf/conjure/floor,
+		/spell/aoe_turf/conjure/pylon,
+		/spell/aoe_turf/conjure/hex,
+		)
 	var/mob/living/simple_animal/construct/heal_target = null
 	var/obj/effect/overlay/artificerray/ray = null
 	var/heal_range = 2
+	var/list/minions = list()
 
 /mob/living/simple_animal/construct/builder/perfect/New()
 	..()
@@ -272,6 +280,7 @@
 	. = ..()
 	if(. && heal_target)
 		heal_target.health = min(heal_target.maxHealth, heal_target.health + round(heal_target.maxHealth/10))
+		anim(target = heal_target, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
 		move_ray()
 		process_construct_hud(src)
 
@@ -356,4 +365,99 @@
 	return
 
 /obj/effect/overlay/artificerray/singularity_act()
+	return
+
+
+/mob/living/simple_animal/hostile/hex
+	name = "\improper Hex"
+	desc = "A lesser construct, crafted by an Artificer."
+	stop_automated_movement_when_pulled = 1
+	ranged_cooldown_cap = 1
+	icon = 'icons/mob/mob.dmi'
+	icon_state = "hex"
+	icon_living = "hex"
+	icon_dead = "hex"
+	speak_chance = 0
+	turns_per_move = 8
+	response_help = "gently taps"
+	response_disarm = "shoves"
+	response_harm = "hits"
+	speed = 0.2
+	maxHealth = 50
+	health = 50
+	can_butcher = 0
+	ranged = 1
+	retreat_distance = 4
+	minimum_distance = 4
+	projectilesound = 'sound/effects/forge.ogg'
+	projectiletype = /obj/item/projectile/bloodslash
+	move_to_delay = 1
+	mob_property_flags = MOB_SUPERNATURAL
+	harm_intent_damage = 10
+	melee_damage_lower = 15
+	melee_damage_upper = 15
+	attacktext = "grips"
+	attack_sound = 'sound/weapons/rapidslice.ogg'
+	min_oxy = 0
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 0
+	min_co2 = 0
+	max_co2 = 0
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 0
+	speed = 5
+	supernatural = 1
+	faction = "cult"
+	flying = 1
+	environment_smash_flags = 0
+	var/mob/living/simple_animal/construct/builder/perfect/master = null
+
+
+/mob/living/simple_animal/hostile/hex/New()
+	..()
+	overlays = 0
+	var/overlay_layer = ABOVE_LIGHTING_LAYER
+	var/overlay_plane = LIGHTING_PLANE
+	var/image/glow = image(icon,"glow-[icon_state]",overlay_layer)
+	glow.plane = overlay_plane
+	overlays += glow
+	animate(src, pixel_y = 4 * PIXEL_MULTIPLIER , time = 10, loop = -1, easing = SINE_EASING)
+	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 10, loop = -1, easing = SINE_EASING)
+
+/mob/living/simple_animal/hostile/hex/Destroy()
+	if (master)
+		master.minions.Remove(src)
+	master = null
+	..()
+
+/mob/living/simple_animal/hostile/hex/Cross(var/atom/movable/mover, var/turf/target, var/height=1.5, var/air_group = 0)
+	if(istype(mover, /obj/item/projectile/bloodslash))//stop hitting yourself ffs!
+		return 1
+	return ..()
+
+/mob/living/simple_animal/hostile/hex/death(var/gibbed = FALSE)
+	..(TRUE) //If they qdel, they gib regardless
+	for(var/i=0;i<3;i++)
+		new /obj/item/weapon/ectoplasm (src.loc)
+	visible_message("<span class='warning'>\The [src] collapses in a shattered heap. </span>")
+	qdel (src)
+
+/mob/living/simple_animal/hostile/hex/Found(var/atom/the_target)
+	if(ismob(the_target))
+		var/mob/M = the_target
+		if(isanycultist(M))
+			return 0
+	return ..(the_target)
+
+
+/mob/living/simple_animal/hostile/hex/CanAttack(var/atom/the_target)
+	if(ismob(the_target))
+		var/mob/M = the_target
+		if(isanycultist(M))
+			return 0
+	return ..(the_target)
+
+/mob/living/simple_animal/hostile/hex/cultify()
 	return

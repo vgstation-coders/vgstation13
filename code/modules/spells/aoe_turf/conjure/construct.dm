@@ -22,7 +22,7 @@
 	charge_max = 1800
 	summon_type = list(/obj/structure/constructshell/cult)
 	hud_state = "const_shell"
-	override_base = "const"
+	override_base = "cult"
 
 /spell/aoe_turf/conjure/floor
 	name = "Floor Construction"
@@ -36,6 +36,7 @@
 	range = 3
 	summon_type = list(/turf/simulated/floor/engine/cult)
 
+	override_base = "cult"
 	hud_state = "const_floor"
 	cast_sound = 'sound/items/welder.ogg'
 
@@ -62,6 +63,7 @@
 	range = 3
 	summon_type = list(/turf/simulated/wall/cult)
 
+	override_base = "cult"
 	hud_state = "const_wall"
 	cast_sound = 'sound/items/welder.ogg'
 
@@ -105,7 +107,7 @@
 	summon_type = list(/obj/item/device/soulstone)
 
 	hud_state = "const_stone"
-	override_base = "const"
+	override_base = "cult"
 
 /spell/aoe_turf/conjure/pylon
 	name = "Red Pylon"
@@ -122,6 +124,7 @@
 
 	cast_sound = 'sound/items/welder.ogg'
 	hud_state = "const_pylon"
+	override_base = "cult"
 
 /spell/aoe_turf/conjure/pylon/cast(list/targets)
 	..()
@@ -145,6 +148,7 @@
 	summon_type = list(/obj/effect/forcefield/cult)
 	duration = 200
 
+	override_base = "cult"
 	hud_state = "const_juggwall"
 
 //Code for the Juggernaut construct's forcefield, that seemed like a good place to put it.
@@ -283,3 +287,75 @@
 	var/landing = get_distant_turf(get_turf(user), jugg.dir, dash_range)
 	jugg.throw_at(landing, dash_range , 2)
 
+/spell/aoe_turf/conjure/hex
+	name = "Conjure Hex"
+	desc = "Build a lesser construct to defend an area."
+	user_type = USER_TYPE_CULT
+
+	charge_max = 600
+	spell_flags = 0
+	invocation = "none"
+	invocation_type = SpI_NONE
+	range = 0
+	summon_type = list(/mob/living/simple_animal/hostile/hex)
+
+	override_base = "cult"
+	hud_state = "const_hex"
+	cast_sound = 'sound/items/welder.ogg'
+
+/spell/aoe_turf/conjure/hex/choose_targets(mob/user = usr)
+	return list(get_turf(user))
+
+/spell/aoe_turf/conjure/hex/before_channel(var/mob/user)
+	var/mob/living/simple_animal/construct/builder/perfect/artificer = user
+	if (artificer.minions.len >= 3)
+		to_chat(user,"<span class='warning'>You cannot sustain more than 3 lesser constructs alive.</span>")
+		return 1
+	return 0
+
+/spell/aoe_turf/conjure/hex/on_creation(var/mob/living/simple_animal/hostile/hex/AM, var/mob/user)
+	AM.master = user
+	AM.master.minions.Add(AM)
+
+/spell/aoe_turf/conjure/struct
+	name = "Conjure Structure"
+	desc = "Raise a cult structure that you may then operate."
+	user_type = USER_TYPE_CULT
+
+	charge_max = 200
+	spell_flags = 0
+	invocation = "none"
+	invocation_type = SpI_NONE
+	range = 0
+	summon_type = list(/obj/structure/cult/altar)
+
+	override_base = "cult"
+	hud_state = "const_struct"
+	cast_sound = 'sound/items/welder.ogg'
+
+/spell/aoe_turf/conjure/struct/choose_targets(mob/user = usr)
+	return list(get_turf(user))
+
+/spell/aoe_turf/conjure/struct/before_channel(var/mob/user)
+	if (locate(/obj/structure/cult) in range(user,1))
+		to_chat(user, "<span class='warning'>You cannot perform this ritual that close from another similar structure.</span>")
+		return 1
+	var/turf/T = user.loc
+	if (!istype(T))
+		return 1
+	var/list/choices = list(
+		list("Altar", "radial_altar", "Allows for crafting soul gems, and performing various other cult rituals."),
+		list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos."),
+		list("Forge", "radial_forge", "Enables the forging of cult blades and armor, as well as new construct shells. Raise the temperature of nearby creatures."),
+	)
+	var/structure = show_radial_menu(user,T,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
+	if (!T.Adjacent(user) || !structure )
+		return 1
+	switch(structure)
+		if("Altar")
+			summon_type = list(/obj/structure/cult/altar)
+		if("Spire")
+			summon_type = list(/obj/structure/cult/spire)
+		if("Forge")
+			summon_type = list(/obj/structure/cult/forge)
+	return 0

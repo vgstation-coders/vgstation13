@@ -88,8 +88,6 @@
 /mob/living/simple_animal/construct/New()
 	..()
 	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
-	name = text("[initial(name)] ([rand(1, 1000)])")
-	real_name = name
 	add_language(LANGUAGE_CULT)
 	default_language = all_languages[LANGUAGE_CULT]
 	for(var/spell in construct_spells)
@@ -151,6 +149,7 @@
 			to_chat(M, "<span class='notice'>\The [src] has nothing to mend.</span>")
 			return
 		health = min(maxHealth, health + 5) // Constraining health to maxHealth
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
 		M.visible_message("[M] mends some of \the <EM>[src]'s</EM> wounds.","You mend some of \the <em>[src]'s</em> wounds.")
 	else
 		M.unarmed_attack_mob(src)
