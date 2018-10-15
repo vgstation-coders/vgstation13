@@ -336,6 +336,9 @@
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
 
+	if(character.mind.assigned_role != "MODE")
+		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
+
 	var/turf/T = character.loc
 	for(var/role in character.mind.antag_roles)
 		var/datum/role/R = character.mind.antag_roles[role]
@@ -350,7 +353,7 @@
 		qdel(src)
 		return
 
-	job_master.EquipRank(character, rank, 1)					//equips the human
+
 	EquipCustomItems(character)
 
 	if(J.spawns_from_edge)
