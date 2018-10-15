@@ -61,6 +61,16 @@ Used In File(s): \code\game\machinery\cryo.dm
 			<span class="{{:data.cellTemperatureStatus}}">{{:data.cellTemperature}} K</span>
 		</div>
 	</div>
+	<div class="line">
+		<div class="statusLabel">Cell Pressure:</div><div class="statusValue">
+			<span class="{{:data.cellPressureStatus}}">{{:data.cellPressure}} kPa</span>
+		</div>
+	</div>
+	<div class="line">
+		<div class="statusLabel">Habitability:</div><div class="statusValue">
+		<span class="{{:data.cellHabitabilityStatus}}">{{:data.cellHabitability}}</span>
+		</div>
+	</div>
 	{{if data.hasOccupant}}
 		<div class="line">
 			<div class="statusLabel" style="width: 200px">Occupant Body Temperature:</div><div class="statusValue">
@@ -103,6 +113,17 @@ Used In File(s): \code\game\machinery\cryo.dm
 		{{:helper.link('Eject Beaker', 'eject', {'ejectBeaker' : 1}, data.isBeakerLoaded ? null : 'disabled')}}
 	</div>
 </div>
+{{if data.siliconUser}}
+	<h3>System Overrides</h3>
+	<div class="item">
+		{{if data.emagged}}
+			<div class='notice'>Habitability Settings: Modified</div>
+		{{else}}
+			<div class='notice'>Habitability Settings: Default</div>
+		{{/if}}
+		{{:helper.link('Modify Habitability Settings', 'alert', {'emag' : 1})}}
+	</div>
+{{/if}}
 {{if data.ejecting}}
 	<div class="mask">
 		<div class="maskContent" style="margin: 160px 0">
