@@ -698,6 +698,14 @@ obj/structure/bomberflame/Destroy()
 	clothing_flags = CONTAINPLASMAMAN
 	var/never_removed = 1
 
+/obj/item/clothing/head/helmet/space/bomberman/equipped(mob/living/carbon/human/H, head)
+	if(istype(H) && H.get_item_by_slot(head) == src)
+		H.mutations.Add(M_NO_BREATH)
+
+/obj/item/clothing/head/helmet/space/bomberman/unequipped(mob/living/carbon/human/user, var/from_slot = null)
+	if(from_slot == slot_head && istype(user))
+		user.mutations.Remove(M_NO_BREATH)
+
 /obj/item/clothing/head/helmet/space/bomberman/New()
 	..()
 	bombermangear += src
