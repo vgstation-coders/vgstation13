@@ -18,6 +18,7 @@
 #define NO_BUTTON		1024	//spell won't show up in the HUD with this
 #define WAIT_FOR_CLICK	2048//spells wait for you to click on a target to cast
 #define TALKED_BEFORE	4096//spells require you to have heard the person you are casting it upon
+#define CAN_CHANNEL_RESTRAINED 8192 //channeled spells that you can cast despite having handcuffs on
 
 //invocation
 #define SpI_SHOUT	"shout"
