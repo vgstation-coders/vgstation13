@@ -31,6 +31,8 @@
 	return TRUE
 
 /datum/objective/convert_people/IsFulfilled()
+	if (..())
+		return TRUE
 	return (faction.members.len >= cultists_target)
 
 /datum/objective/summon_narsie/feedbackText()

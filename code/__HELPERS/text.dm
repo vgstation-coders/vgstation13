@@ -503,6 +503,8 @@ var/quote = ascii2text(34)
 		if(hundreds)
 			out += num2words(hundreds, zero, minus, hundred, digits, tens, units, recursion+1) + list(hundred)
 			number %= 100
+			if(number == 0)
+				return out
 
 	if(number < 100)
 		// Teens

@@ -413,17 +413,23 @@ var/list/department_radio_keys = list(
 /mob/living/construct_chat_check(var/setting = 0) //setting: 0 is to speak over general into cultchat, 1 is to speak over channel into cultchat, 2 is to hear cultchat
 	if(!mind)
 		return
-
 	if(setting == 0) //overridden for constructs
 		return
-	var/datum/faction/cult = find_active_faction_by_member(mind.GetRole(LEGACY_CULT))
-	if(!cult)
-		return
-	if(setting == 1)
-		if(universal_cult_chat == 1)
+
+	if (iscultist(src))
+		if(setting == 1)
+			if (checkTattoo(TATTOO_CHAT))
+				return 1
+		if(setting == 2)
 			return 1
-	if(setting == 2)
-		return 1
+
+	var/datum/faction/cult = find_active_faction_by_member(mind.GetRole(LEGACY_CULT))
+	if(cult)
+		if(setting == 1)
+			if(universal_cult_chat == 1)
+				return 1
+		if(setting == 2)
+			return 1
 
 /mob/living/say_quote()
 	if (stuttering)

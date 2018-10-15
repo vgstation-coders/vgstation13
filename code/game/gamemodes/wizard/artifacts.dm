@@ -12,7 +12,7 @@
 	for(var/T in spawned_items)
 		new T(get_turf(user))
 
-/datum/spellbook_artifact/proc/can_buy()
+/datum/spellbook_artifact/proc/can_buy(var/mob/user)
 	return TRUE
 
 /datum/spellbook_artifact/staff_of_change
@@ -100,16 +100,33 @@
 	abbreviation = "CC"
 	spawned_items = list(/obj/item/weapon/cloakingcloak)
 
+//WIZARDS, NO SENSE OF RIGHT OR WRONG
+/datum/spellbook_artifact/proc/is_roundstart_wizard(var/mob/user)
+	if (!ticker || !ticker.mode || !istype(ticker.mode,/datum/gamemode/dynamic))//if mode isn't Dynamic Mode, who cares
+		return TRUE
+
+	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+
+	var/datum/dynamic_ruleset/roundstart/wizard/wiz_rule = locate() in dynamic_mode.executed_rules
+
+	if (!wiz_rule)
+		return FALSE
+
+	if (locate(user) in wiz_rule.assigned)
+		return TRUE
+
+	return FALSE
+
 //SUMMON GUNS
 /datum/spellbook_artifact/summon_guns
 	name = "Summon Guns"
 	desc = "Nothing could possibly go wrong with arming a crew of lunatics just itching for an excuse to kill eachother. Just be careful not to get hit in the crossfire!"
 	abbreviation = "SG"
 
-/* WIZARDS, NO SENSE OF RIGHT OR WRONG
-/datum/spellbook_artifact/summon_guns/can_buy()
-	//Can't summon guns during ragin' mages
-	return !ticker.mode.rage*/
+/datum/spellbook_artifact/summon_guns/can_buy(var/mob/user)
+	//Only roundstart wizards may summon guns, magic, or blades
+	return is_roundstart_wizard(user)
+
 
 /datum/spellbook_artifact/summon_guns/purchased(mob/living/carbon/human/H)
 	..()
@@ -123,10 +140,9 @@
 	desc = "Share the power of magic with the crew and turn them against each other. Or just empower them against you."
 	abbreviation = "SM"
 
-/* WIZARDS, NO SENSE OF RIGHT OR WRONG
-/datum/spellbook_artifact/summon_magic/can_buy()
-	//Can't summon magic during ragin' mages
-	return !ticker.mode.rage*/
+/datum/spellbook_artifact/summon_magic/can_buy(var/mob/user)
+	//Only roundstart wizards may summon guns, magic, or blades
+	return is_roundstart_wizard(user)
 
 /datum/spellbook_artifact/summon_magic/purchased(mob/living/carbon/human/H)
 	..()
@@ -140,8 +156,9 @@
 	desc = "Launch a crusade or just spark a blood bath. Either way there will be limbs flying and blood spraying."
 	abbreviation = "SS"
 
-/datum/spellbook_artifact/summon_magic/can_buy()
-	return TRUE
+/datum/spellbook_artifact/summon_swords/can_buy(var/mob/user)
+	//Only roundstart wizards may summon guns, magic, or blades
+	return is_roundstart_wizard(user)
 
 /datum/spellbook_artifact/summon_swords/purchased(mob/living/carbon/human/H)
 	..()
@@ -203,7 +220,7 @@
 	to_chat(world,'sound/misc/santa.ogg')
 	SetUniversalState(/datum/universal_state/christmas)
 
-/datum/spellbook_artifact/santa_bundle/can_buy()
+/datum/spellbook_artifact/santa_bundle/can_buy(var/mob/user)
 	return (Holiday == XMAS && !istype(universe, /datum/universal_state/christmas))
 
 /datum/spellbook_artifact/phylactery

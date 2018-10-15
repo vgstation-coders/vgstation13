@@ -158,17 +158,12 @@
 	nuked = ticker.station_was_nuked
 	tech_total = get_research_score()
 	stationname = station_name()
-	// if(istype(ticker.mode, /datum/game_mode/mixed))
-	// 	var/datum/game_mode/mixed/mixy = ticker.mode
-	// 	for(var/datum/game_mode/GM in mixy.modes)
-	// 		mixed_gamemodes.Add(GM.name)
 
 	for(var/datum/mind/M in ticker.minds)
 		add_objectives(M)
 		if(istype(M.current, /mob/living) && !M.current.isDead())
 			add_survivor_stat(M.current)
-			if(M.special_role == "Cultist")
-				cult_surviving_cultists++
+
 
 /proc/stats_server_alert_new_file()
 	world.Export("http://stats.ss13.moe/alert_new_file")

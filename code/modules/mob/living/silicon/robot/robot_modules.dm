@@ -108,13 +108,14 @@
 	if(R.camera)
 		for(var/network in networks)
 			if(!(network in R.camera.network))
-				R.camera.network.Add(network)
-				added_networks.Add(network)
+				R.camera.network += network
+				added_networks += network
 
 /obj/item/weapon/robot_module/proc/RemoveCameraNetworks(var/mob/living/silicon/robot/R)
 	if(R.camera)
-		R.camera.network.Cut(added_networks)
-		added_networks.Cut()
+		for(var/removed_network in added_networks)
+			R.camera.network -= removed_network
+	added_networks = null
 
 /obj/item/weapon/robot_module/proc/AddEncryptionKey(var/mob/living/silicon/robot/R)
 	if(!R.radio)

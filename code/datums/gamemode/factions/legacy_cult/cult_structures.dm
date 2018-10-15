@@ -121,6 +121,7 @@
 	icon_state = "hole"
 	density = 1
 	anchored = 1.0
+	plane = ABOVE_TURF_PLANE
 	var/spawnable = null
 
 /obj/effect/gateway/Bumped(mob/M as mob|obj)

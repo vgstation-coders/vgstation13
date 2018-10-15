@@ -135,7 +135,7 @@
 					resolved = M.attackby(held_item,src,def_zone = def_zone, params)
 				else
 					resolved = A.attackby(held_item, src, params)
-				if(ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab))
+				if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
 					delayNextAttack(item_attack_delay)
 				if(!resolved && A && !A.gcDestroyed && held_item)
 					held_item.afterattack(A,src,1,params) // 1 indicates adjacency

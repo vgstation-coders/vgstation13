@@ -69,6 +69,9 @@
 	hud_used.update_robot_modules_display()
 
 /mob/living/silicon/robot/proc/activate_module(var/obj/item/I)
+	if(modulelock)
+		to_chat(src, "<span class='alert' style=\"font-family:Courier\">Module lock active! Time remaining: [modulelock_time] seconds.</span>")
+		return
 	if(!(locate(I) in module.modules))
 		return
 	if(activated(I))
@@ -98,27 +101,32 @@
 
 /mob/living/silicon/robot/proc/uneq_all()
 	module_active = null
+	var/modulesdisabled = 0
 
 	if(module_state_1)
 		uneq_module(module_state_1)
 		module_state_1 = null
 		if(inv1)
 			inv1.icon_state = "inv1"
+		modulesdisabled += 1
 
 	if(module_state_2)
 		uneq_module(module_state_2)
 		module_state_2 = null
 		if(inv2)
 			inv2.icon_state = "inv2"
+		modulesdisabled += 1
 
 	if(module_state_3)
 		uneq_module(module_state_3)
 		module_state_3 = null
 		if(inv3)
 			inv3.icon_state = "inv3"
+		modulesdisabled += 1
 
 	unequip_sight()
 	updateicon()
+	return modulesdisabled
 
 /mob/living/silicon/robot/proc/activated(obj/item/O)
 	if(module_state_1 == O)

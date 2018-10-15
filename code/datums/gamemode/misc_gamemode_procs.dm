@@ -205,9 +205,10 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 
 	// find a radio! toolbox(es), backpack, belt, headset
 	var/loc = ""
-	var/obj/item/R = locate(/obj/item/device/pda) in traitor_mob.contents //Hide the uplink in a PDA if available, otherwise radio
+	var/list/contents = recursive_type_check(traitor_mob, /obj/item/device)
+	var/obj/item/R = locate(/obj/item/device/pda) in contents //Hide the uplink in a PDA if available, otherwise radio
 	if(!R)
-		R = locate(/obj/item/device/radio) in traitor_mob.contents
+		R = locate(/obj/item/device/radio) in contents
 
 	if (!R)
 		to_chat(traitor_mob, "Unfortunately, the Syndicate wasn't able to get you a radio.")

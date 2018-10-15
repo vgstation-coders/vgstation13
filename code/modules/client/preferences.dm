@@ -1381,8 +1381,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						gender = FEMALE
 					else
 						gender = MALE
-					f_style = random_facial_hair_style(gender)
-					h_style = random_hair_style(gender)
+					f_style = random_facial_hair_style(gender, species)
+					h_style = random_hair_style(gender, species)
 
 				if("hear_adminhelps")
 					toggles ^= SOUND_ADMINHELP

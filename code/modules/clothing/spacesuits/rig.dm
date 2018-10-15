@@ -120,7 +120,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE
 
 /obj/item/clothing/suit/space/rig/mining
 	icon_state = "rig-mining"
@@ -130,7 +130,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/mining_suit.dmi', "right_hand" = 'icons/mob/in-hand/right/mining_suit.dmi')
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE
 
 //Syndicate rig
 /obj/item/clothing/head/helmet/space/rig/syndi
@@ -470,8 +470,8 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	_color = "knight"
-	clothing_flags = PLASMAGUARD
-	goliath_reinforce = TRUE
+	clothing_flags = PLASMAGUARD|GOLIATHREINFORCE
+
 
 /obj/item/clothing/suit/space/rig/knight
 	name = "Space-Knight armour"
@@ -484,8 +484,7 @@
 	siemens_coefficient = 0.5
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	clothing_flags = PLASMAGUARD
-	goliath_reinforce = TRUE
+	clothing_flags = PLASMAGUARD|GOLIATHREINFORCE
 
 /obj/item/clothing/head/helmet/space/rig/knight/black
 	name = "Black Knight's helm"
@@ -571,7 +570,7 @@
 	icon_state = "rorsuit"
 	item_state = "rorsuit"
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE
 
 /obj/item/clothing/head/helmet/space/rig/ror
 	name = "survivor's hardsuit helmet"
@@ -579,7 +578,7 @@
 	icon_state = "rorhelm"
 	item_state = "rorhelm"
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE
 
 /obj/item/clothing/head/helmet/space/rig/ror/update_icon()
 	return

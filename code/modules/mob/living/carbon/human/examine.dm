@@ -410,8 +410,6 @@
 
 	for(var/implant in get_visible_implants(1))
 		msg += "<span class='warning'><b>[src] has \a [implant] sticking out of [t_his] flesh!</span>\n"
-	if(digitalcamo)
-		msg += "[t_He] [t_is] repulsively uncanny!\n"
 
 	if(!is_destroyed["head"])
 		if(getBrainLoss() >= 60)

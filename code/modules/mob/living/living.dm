@@ -559,6 +559,7 @@ Thanks.
 	ear_deaf = 0
 	ear_damage = 0
 	say_mute = 0
+	mutations &= ~M_HUSK
 	if(!reagents)
 		create_reagents(1000)
 	else
@@ -1065,7 +1066,7 @@ Thanks.
 	else if(iscarbon(L))
 		var/mob/living/carbon/CM = L
 	//putting out a fire
-		if(CM.on_fire && CM.canmove)
+		if(CM.on_fire && CM.canmove && ((!locate(/obj/effect/fire) in loc) || !CM.handcuffed))	//No point in putting ourselves out if we'd just get set on fire again. Unless there's nothing more pressing to resist out of, in which case go nuts.
 			CM.fire_stacks -= 5
 			CM.SetKnockdown(3)
 			playsound(CM.loc, 'sound/effects/bodyfall.ogg', 50, 1)
@@ -1657,11 +1658,13 @@ Thanks.
 				returnToPool(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null
+	if(isitem(item))
+		var/obj/item/I = item
+		if(I.cant_drop > 0)
+			to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
+			return FAILED_THROW
 
-	var/obj/item/I = item
-	if(istype(I) && I.cant_drop > 0)
-		to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
-		return FAILED_THROW
+		I.pre_throw()
 
 	remove_from_mob(item)
 
@@ -1686,7 +1689,7 @@ Thanks.
 		if(istype(src,/mob/living/carbon/human))
 			var/mob/living/carbon/human/H=src
 			throw_mult = H.species.throw_mult
-			if(M_HULK in H.mutations || M_STRONG in H.mutations)
+			if((M_HULK in H.mutations) || (M_STRONG in H.mutations))
 				throw_mult+=0.5
 		item.throw_at(target, item.throw_range*throw_mult, item.throw_speed*throw_mult)
 		return THREW_SOMETHING

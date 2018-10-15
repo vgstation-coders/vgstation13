@@ -145,6 +145,7 @@
 
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
+	hud_list[RECORD_HUD]      = image('icons/mob/hud.dmi', src, "hudactive")
 	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
 	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
@@ -1697,12 +1698,17 @@ mob/living/carbon/human/isincrit()
 	species.burn_mod *= rand(5,20)/10
 	species.tox_mod *= rand(5,20)/10
 
+	var/can_be_fat = species.anatomy_flags & CAN_BE_FAT	//removing this flag causes gamebreaking things like invisible fat aliens to happen
+
 	if(prob(5))
 		species.flags = rand(0,65535)
 	if(prob(5))
 		species.anatomy_flags = rand(0,65535)
 	if(prob(5))
 		species.chem_flags = rand(0,65535)
+
+	if(!can_be_fat)
+		species.anatomy_flags &= ~CAN_BE_FAT
 
 /mob/living/carbon/human/send_to_past(var/duration)
 	..()

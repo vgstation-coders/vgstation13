@@ -171,6 +171,14 @@ mineral/gibtonite
 		else
 			..()
 
+
+mineral/ice
+	display_name = "Ice"
+	name = "Ice"
+	result_amount = 3
+	spread = 3
+	ore = /obj/item/ice_crystal
+
 mineral/cave
 	display_name = "Cave"
 	name = "Cave"

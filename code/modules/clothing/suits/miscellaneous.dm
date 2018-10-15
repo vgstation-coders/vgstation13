@@ -588,3 +588,15 @@
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	allowed = list(/obj/item/weapon/storage/bible, /obj/item/weapon/nullrod/spear)
+
+
+/obj/item/clothing/suit/inquisitor
+	name = "inquisitor's coat"
+	desc = "This inquisitor attire was made for new recruits, and has excellent straightforward defense. But not nearly enough to allow an ordinary man to stand any real chance against the the wicked."
+	icon_state = "coat-church"
+	item_state = "coat-church"
+	flags = FPRINT
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	allowed = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
+	armor = list(melee = 40, bullet = 25, laser = 5, energy = 0, bomb = 0, bio = 0, rad = 0)
+	wizard_garb = TRUE

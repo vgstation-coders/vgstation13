@@ -315,7 +315,7 @@
 				else
 					var/turf/simulated/wall/W = target
 					W.dismantle_wall(1,1)
-			else if(istype(target, /turf/simulated/floor))
+			else if(istype(target, /turf/simulated/floor) || istype(target, /turf/simulated/shuttle))
 				to_chat(user, "<span class='notice'>[src] fizzles quietly.</span>")
 				return
 			else

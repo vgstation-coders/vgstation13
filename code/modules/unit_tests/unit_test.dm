@@ -70,3 +70,5 @@ var/failed_any_test = FALSE
 		CHECK_TICK
 
 	del(world)
+
+#define assert_eq(a, b) (a == b || (fail("[__FILE__]:[__LINE__]: assert_eq failed. Expected [b], got [a].")))

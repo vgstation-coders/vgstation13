@@ -19,6 +19,7 @@
 	var/nullified = 0
 	var/smitecounter = 0
 
+	var/reviving = FALSE
 	var/draining = FALSE
 	var/blood_usable = STARTING_BLOOD
 	var/blood_total = STARTING_BLOOD
@@ -389,9 +390,12 @@
 -- Helpers --
 */
 
+/datum/role/vampire/update_antag_hud()
+	update_vamp_hud()
+
 /datum/role/vampire/proc/update_vamp_hud()
 	var/mob/M = antag.current
-	if(M.hud_used)
+	if(M && M.client && M.hud_used)
 		if(!M.hud_used.vampire_blood_display)
 			M.hud_used.vampire_hud()
 			//hud_used.human_hud(hud_used.ui_style)

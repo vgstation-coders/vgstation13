@@ -35,19 +35,13 @@
 		plane = ABOVE_HUMAN_PLANE
 		layer = VEHICLE_LAYER
 
-/obj/structure/bed/chair/vehicle/gigadrill/update_mob()
-	if(occupant && dir == SOUTH)
-		occupant.pixel_x = 0
-		occupant.pixel_y = 18 * PIXEL_MULTIPLIER
-	else if(occupant && dir == NORTH)
-		occupant.pixel_x = 0
-		occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-	else if(occupant && dir == WEST)
-		occupant.pixel_x = 18 * PIXEL_MULTIPLIER
-		occupant.pixel_y = 9 * PIXEL_MULTIPLIER
-	else if(occupant && dir == EAST)
-		occupant.pixel_x = -18 * PIXEL_MULTIPLIER
-		occupant.pixel_y = 9 * PIXEL_MULTIPLIER
+/obj/structure/bed/chair/vehicle/gigadrill/make_offsets()
+	offsets = list(
+		"[SOUTH]" = list("x" = 0, "y" = 18 * PIXEL_MULTIPLIER),
+		"[WEST]" = list("x" = 18 * PIXEL_MULTIPLIER, "y" = 9 * PIXEL_MULTIPLIER),
+		"[NORTH]" = list("x" = 0, "y" = 7 * PIXEL_MULTIPLIER),
+		"[EAST]" = list("x" = -18 * PIXEL_MULTIPLIER, "y" = 9 * PIXEL_MULTIPLIER)
+		)
 
 /obj/structure/bed/chair/vehicle/gigadrill/update_icon()
   if(occupant)

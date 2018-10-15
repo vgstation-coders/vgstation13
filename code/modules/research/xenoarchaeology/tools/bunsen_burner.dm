@@ -184,17 +184,20 @@
 
 /obj/machinery/bunsen_burner/AltClick()
 	if((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
-		return
+		return ..()
 
 	var/list/choices = list(
-		"Turn On/Off" = 		image(icon = 'icons/mob/radial.dmi', icon_state = (heating == BUNSEN_ON ? "radial_off" : "radial_on")),
-		"Toggle Fuelport" = 	image(icon = 'icons/mob/radial.dmi', icon_state = (heating == BUNSEN_OPEN ? "radial_lock" : "radial_unlock")),
-		"Examine" =		image(icon = 'icons/mob/radial.dmi', icon_state = "radial_examine"),
+		list("Turn On/Off", (heating == BUNSEN_ON ? "radial_off" : "radial_on")),
+		list("Toggle Fuelport", (heating == BUNSEN_OPEN ? "radial_lock" : "radial_unlock")),
+		list("Examine", "radial_examine")
 	)
 	var/event/menu_event = new(owner = usr)
 	menu_event.Add(src, "radial_check_handler")
 
 	var/task = show_radial_menu(usr,loc,choices,custom_check = menu_event)
+	if(!radial_check(usr))
+		return
+
 	switch(task)
 		if("Turn On/Off")
 			verb_toggle()

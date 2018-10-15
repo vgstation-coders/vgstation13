@@ -13,6 +13,14 @@ var/veil_thickness = CULT_EPILOGUE//REMEMBER TO SET IT BACK TO CULT_PROLOGUE WHE
 
 	veil_thickness = input(usr, "Enter a value (default = [CULT_PROLOGUE])", "Debug Veil Thickness", veil_thickness) as num
 
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult)
+		for (var/datum/role/cultist/C in cult.members)
+			C.update_cult_hud()
+
+	for (var/obj/structure/cult/spire/S in cult_spires)
+		S.upgrade()
+
 //CULT_PROLOGUE		Default thickness, only communication and raise structure runes enabled
 //CULT_ACT_I		Altar raised. cultists can now convert.
 //CULT_ACT_II		Cultist amount reached. cultists are now looking for the sacrifice
@@ -235,9 +243,35 @@ var/veil_thickness = CULT_EPILOGUE//REMEMBER TO SET IT BACK TO CULT_PROLOGUE WHE
 	return data
 
 
-/proc/use_available_blood(var/mob/user, var/amount_needed = 0,var/previous_result = "")
+/proc/use_available_blood(var/mob/user, var/amount_needed = 0,var/previous_result = "", var/tribute = 0)
+	//Blood Communion
+	var/communion = 0
+	var/total_accumulated = 0
+	var/total_needed = amount_needed
+	if (!tribute && iscultist(user))
+		var/datum/role/cultist/mycultist = user.mind.GetRole(CULTIST)
+		if (mycultist in blood_communion)
+			communion = 1
+			amount_needed = max(1,round(amount_needed * 4 / 5))//saving 20% blood
+			var/list/tributers = list()
+			for (var/datum/role/cultist/cultist in blood_communion)
+				if (cultist.antag && cultist.antag.current)
+					var/mob/living/L = cultist.antag.current
+					if (istype(L) && L != user)
+						tributers.Add(L)
+			var/total_per_tribute = max(1,round(amount_needed/max(1,tributers.len+1)))
+			var/tributer_size = tributers.len
+			for (var/i = 1 to tributer_size)
+				var/mob/living/L = pick(tributers)//so it's not always the first one that pays the first blood unit.
+				tributers.Remove(L)
+				var/data = use_available_blood(L, total_per_tribute, "", 1)
+				if (data[BLOODCOST_RESULT] != BLOODCOST_FAILURE)
+					total_accumulated += data[BLOODCOST_TOTAL]
+				if (total_accumulated >= amount_needed - total_per_tribute)//could happen if the cost is less than 1 per tribute
+					break
+
 	//Getting nearby blood sources
-	var/list/data = get_available_blood(user, amount_needed)
+	var/list/data = get_available_blood(user, amount_needed-total_accumulated)
 
 	var/datum/reagent/blood/blood
 
@@ -248,7 +282,7 @@ var/veil_thickness = CULT_EPILOGUE//REMEMBER TO SET IT BACK TO CULT_PROLOGUE WHE
 			blood = new()
 			blood.data["blood_colour"] = H.hand_blood_color
 			blood.data["blood_DNA"] = H.blood_DNA
-			if (previous_result != BLOODCOST_TARGET_HANDS)
+			if (!tribute && previous_result != BLOODCOST_TARGET_HANDS)
 				user.visible_message("<span class='warning'>The blood on \the [user]'s hands drips onto the floor!</span>",
 									"<span class='rose'>You let the blood smeared on your hands join the pool of your summoning.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
@@ -258,56 +292,57 @@ var/veil_thickness = CULT_EPILOGUE//REMEMBER TO SET IT BACK TO CULT_PROLOGUE WHE
 			blood.data["blood_colour"] = B.basecolor
 			blood.data["blood_DNA"] = B.blood_DNA
 			blood.data["virus2"] = B.virus2
-			if (previous_result != BLOODCOST_TARGET_SPLATTER)
+			if (!tribute && previous_result != BLOODCOST_TARGET_SPLATTER)
 				user.visible_message("<span class='warning'>The blood on the floor bellow \the [user] starts moving!</span>",
 									"<span class='rose'>You redirect the flow of blood inside the splatters on the floor toward the pool of your summoning.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_GRAB)
 			var/mob/living/carbon/human/H = data[BLOODCOST_TARGET_GRAB]
 			blood = get_blood(H.vessel)
-			if (previous_result != BLOODCOST_TARGET_GRAB)
+			if (!tribute && previous_result != BLOODCOST_TARGET_GRAB)
 				user.visible_message("<span class='warning'>\The [user] stabs their nails inside \the [data[BLOODCOST_TARGET_GRAB]], drawing blood from them!</span>",
 									"<span class='rose'>You stab your nails inside \the [data[BLOODCOST_TARGET_GRAB]] to draw some blood from them.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_BLEEDER)
 			var/mob/living/carbon/human/H = data[BLOODCOST_TARGET_BLEEDER]
 			blood = get_blood(H.vessel)
-			if (previous_result != BLOODCOST_TARGET_BLEEDER)
+			if (!tribute && previous_result != BLOODCOST_TARGET_BLEEDER)
 				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data[BLOODCOST_TARGET_BLEEDER]]'s wounds!</span>",
 									"<span class='rose'>You dip your fingers inside \the [data[BLOODCOST_TARGET_BLEEDER]]'s wounds to draw some blood from them.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_HELD)
 			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_HELD]
 			blood = locate() in G.reagents.reagent_list
-			if (previous_result != BLOODCOST_TARGET_HELD)
+			if (!tribute && previous_result != BLOODCOST_TARGET_HELD)
 				user.visible_message("<span class='warning'>\The [user] tips \the [data[BLOODCOST_TARGET_HELD]], pouring blood!</span>",
 									"<span class='rose'>You tip \the [data[BLOODCOST_TARGET_HELD]] to pour the blood contained inside.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_BLOODPACK)
 			var/obj/item/weapon/reagent_containers/blood/B = data[BLOODCOST_TARGET_BLOODPACK]
 			blood = locate() in B.reagents.reagent_list
-			if (previous_result != BLOODCOST_TARGET_BLOODPACK)
+			if (!tribute && previous_result != BLOODCOST_TARGET_BLOODPACK)
 				user.visible_message("<span class='warning'>\The [user] squeezes \the [data[BLOODCOST_TARGET_BLOODPACK]], pouring blood!</span>",
 									"<span class='rose'>You squeeze \the [data[BLOODCOST_TARGET_BLOODPACK]] to pour the blood contained inside.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_CONTAINER)
 			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_CONTAINER]
 			blood = locate() in G.reagents.reagent_list
-			if (previous_result != BLOODCOST_TARGET_CONTAINER)
+			if (!tribute && previous_result != BLOODCOST_TARGET_CONTAINER)
 				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data[BLOODCOST_TARGET_CONTAINER]], covering them in blood!</span>",
 									"<span class='rose'>You dip your fingers inside \the [data[BLOODCOST_TARGET_CONTAINER]], covering them in blood.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_USER)
-			if (data[BLOODCOST_HOLES_BLOODPACK])
-				to_chat(user, "<span class='warning'>You must puncture \the [data[BLOODCOST_TARGET_BLOODPACK]] before you can squeeze blood from it!</span>")
-			else if (data[BLOODCOST_LID_HELD])
-				to_chat(user, "<span class='warning'>Remove \the [data[BLOODCOST_TARGET_HELD]]'s lid first!</span>")
-			else if (data[BLOODCOST_LID_CONTAINER])
-				to_chat(user, "<span class='warning'>Remove \the [data[BLOODCOST_TARGET_CONTAINER]]'s lid first!</span>")
+			if (!tribute)
+				if (data[BLOODCOST_HOLES_BLOODPACK])
+					to_chat(user, "<span class='warning'>You must puncture \the [data[BLOODCOST_TARGET_BLOODPACK]] before you can squeeze blood from it!</span>")
+				else if (data[BLOODCOST_LID_HELD])
+					to_chat(user, "<span class='warning'>Remove \the [data[BLOODCOST_TARGET_HELD]]'s lid first!</span>")
+				else if (data[BLOODCOST_LID_CONTAINER])
+					to_chat(user, "<span class='warning'>Remove \the [data[BLOODCOST_TARGET_CONTAINER]]'s lid first!</span>")
 			var/mob/living/carbon/human/H = user
 			blood = get_blood(H.vessel)
 			if (previous_result != BLOODCOST_TARGET_USER)
-				if(istype(H))
+				if(!tribute && istype(H))
 					var/obj/item/weapon/W = H.get_active_hand()
 					if (W && W.sharpness_flags & SHARP_BLADE)
 						to_chat(user, "<span class='rose'>You slice open your finger with \the [W] to let a bit of blood flow.</span>")
@@ -318,14 +353,15 @@ var/veil_thickness = CULT_EPILOGUE//REMEMBER TO SET IT BACK TO CULT_PROLOGUE WHE
 						else
 							to_chat(user, "<span class='rose'>You bite your finger and let the blood pearl up.</span>")
 		if (BLOODCOST_FAILURE)
-			if (data[BLOODCOST_HOLES_BLOODPACK])
-				to_chat(user, "<span class='danger'>You must puncture \the [data[BLOODCOST_TARGET_BLOODPACK]] before you can squeeze blood from it!</span>")
-			else if (data[BLOODCOST_LID_HELD])
-				to_chat(user, "<span class='danger'>Remove \the [data[BLOODCOST_TARGET_HELD]]'s lid first!</span>")
-			else if (data[BLOODCOST_LID_CONTAINER])
-				to_chat(user, "<span class='danger'>Remove \the [data[BLOODCOST_TARGET_HELD]]'s lid first!</span>")
-			else
-				to_chat(user, "<span class='danger'>There is no blood available. Not even in your own body!</span>")
+			if (!tribute)
+				if (data[BLOODCOST_HOLES_BLOODPACK])
+					to_chat(user, "<span class='danger'>You must puncture \the [data[BLOODCOST_TARGET_BLOODPACK]] before you can squeeze blood from it!</span>")
+				else if (data[BLOODCOST_LID_HELD])
+					to_chat(user, "<span class='danger'>Remove \the [data[BLOODCOST_TARGET_HELD]]'s lid first!</span>")
+				else if (data[BLOODCOST_LID_CONTAINER])
+					to_chat(user, "<span class='danger'>Remove \the [data[BLOODCOST_TARGET_HELD]]'s lid first!</span>")
+				else
+					to_chat(user, "<span class='danger'>There is no blood available. Not even in your own body!</span>")
 
 	//Blood is only consumed if there is enough of it
 	if (!data[BLOODCOST_FAILURE])
@@ -376,6 +412,8 @@ var/veil_thickness = CULT_EPILOGUE//REMEMBER TO SET IT BACK TO CULT_PROLOGUE WHE
 				to_chat(user, "<span class='sinister'>It will be all over soon.</span>")
 			H.take_overall_damage(data[BLOODCOST_AMOUNT_USER] ? 0.1 : 0)
 
+	if (communion && data[BLOODCOST_TOTAL] + total_accumulated >= amount_needed)
+		data[BLOODCOST_TOTAL] = max(data[BLOODCOST_TOTAL], total_needed)
 	data["blood"] = blood
 	return data
 

@@ -543,6 +543,17 @@
 				new_mob = M.change_mob_type( /mob/living/simple_animal/construct/wraith , null, null, delmob )
 			if("shade")
 				new_mob = M.change_mob_type( /mob/living/simple_animal/shade , null, null, delmob )
+			if("soulblade")
+				var/mob/living/simple_animal/shade/new_shade = M.change_mob_type( /mob/living/simple_animal/shade , null, null, delmob )
+				var/obj/item/weapon/melee/soulblade/blade = new(get_turf(M))
+				blade.blood = blade.maxblood
+				new_shade.forceMove(blade)
+				blade.update_icon()
+				new_shade.status_flags |= GODMODE
+				new_shade.canmove = 0
+				new_shade.name = "Shade of [M.real_name]"
+				new_shade.real_name = "Shade of [M.real_name]"
+				new_shade.give_blade_powers()
 			if("blob")
 				var/obj/effect/blob/core/core = new(loc = get_turf(M), new_overmind = M.client)
 				new_mob = core.overmind
@@ -4098,6 +4109,9 @@
 				zas_settings.ChangeSettingsDialog(usr,zas_settings.settings)
 			if(href_list["vsc"] == "default")
 				zas_settings.SetDefault(usr)
+
+	else if(href_list["xgm_panel"])
+		XGM.ui_interact(usr)
 
 	else if(href_list["toglang"])
 		if(check_rights(R_SPAWN))

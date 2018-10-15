@@ -80,35 +80,9 @@
 
 	if(M.mind.role_alt_title == "Merchant")
 		to_chat(M, "<B><span class='info'>Your merchant's license paperwork has just cleared with Nanotrasen HQ. You have a loyalty implant and the staff has been notified that you are active in this sector.</span></B>")
-		notify_crew(M)
+		SendMerchantFax(M)
 
 	to_chat(M, "<b>Despite not being a member of the crew, by default you are <u>not</u> an antagonist. Cooperating with antagonists is allowed - within reason. Ask admins via adminhelp if you're not sure.</b>")
 
 	if(req_admin_notify)
 		to_chat(M, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
-
-
-/datum/job/trader/proc/notify_crew(mob/living/carbon/human/merchant)
-	merchant.client.prefs.update_preview_icon(0) //This is necessary because if they don't check their character sheet it never generates!
-	var/preview_front = fcopy_rsc(merchant.client.prefs.preview_icon_front)
-	var/preview_side = fcopy_rsc(merchant.client.prefs.preview_icon_side)
-	world << browse_rsc(preview_front, "previewicon.png")
-	world << browse_rsc(preview_side, "previewicon2.png")
-	var/full_text = {"<html><style>
-					body {color: #000000; background: #ccffff;}
-					h1 {color: #000000; font-size:30px;}
-					fieldset {width:140px;}
-					</style>
-					<body>
-					<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center>
-					Nanotrasen\'s commercial arm has noted the presence of a registered merchant who holds a license for corporate commerce, a process which includes a background check and Nanotrasen loyalty implant. The associate\'s image is enclosed. Please continue to monitor trade on an ongoing basis such that Nanotrasen can maintain highest standard small business enterprise (SBE) partners.<BR>
-					</body>
-					<fieldset>
-  					<legend>Picture</legend>
-					<center><img src="previewicon.png" width="64" height="64"><img src="previewicon2.png" width="64" height="64"></center>
-					</fieldset><BR>
-					<body>Name: [merchant.client.prefs.real_name]<BR>
-					Blood Type: [merchant.dna.b_type]<BR>
-					Fingerprint: [md5(merchant.dna.uni_identity)]</body></html>"}
-
-	SendFax(full_text, "Licensed Merchant Report - [merchant.client.prefs.real_name]", centcomm = 1) //Wow this is really cumbersome but [name] hasn't been assigned yet

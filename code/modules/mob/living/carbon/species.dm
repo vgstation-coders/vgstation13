@@ -144,6 +144,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	var/species_intro //What intro you're given when you become this species.
 
+	var/feels_pain = 1
 
 /datum/species/New()
 	..()
@@ -253,6 +254,8 @@ var/global/list/whitelisted_species = list("Human")
 		H.oxygen_alert = 1
 		return moles*ratio/GAS_CONSUME_TO_WASTE_DENOMINATOR
 
+/datum/species/proc/handle_environment(var/datum/gas_mixture/environment, var/mob/living/carbon/human/host)
+
 // Used for species-specific names (Vox, etc)
 /datum/species/proc/makeName(var/gender,var/mob/living/carbon/C=null)
 	if(gender==FEMALE)
@@ -287,6 +290,9 @@ var/global/list/whitelisted_species = list("Human")
 		)
 	return offsets
 
+/datum/species/proc/conditional_whitelist()
+	return 0
+
 /datum/species/human
 	name = "Human"
 	known_languages = list(LANGUAGE_HUMAN)
@@ -300,6 +306,7 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_def_manifested.dmi'
 	known_languages = list(LANGUAGE_HUMAN)
 	primitive = /mob/living/carbon/monkey
+	feels_pain = 0
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
 		"lungs" =    /datum/organ/internal/lungs,
@@ -309,6 +316,7 @@ var/global/list/whitelisted_species = list("Human")
 		"appendix" = /datum/organ/internal/appendix,
 		"eyes" =     /datum/organ/internal/eyes
 		)
+
 	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | NO_BLOOD
 
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
@@ -341,9 +349,11 @@ var/global/list/whitelisted_species = list("Human")
 
 	flesh_color = "#34AF10"
 
+
 /datum/species/unathi/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.
 	speech.message = replacetext(speech.message, "s-ss-s", "ss-ss") //asshole shows up as ass-sshole
+
 
 /datum/species/skellington // /vg/
 	name = "Skellington"
@@ -370,6 +380,11 @@ var/global/list/whitelisted_species = list("Human")
 					You have no skin, no blood, no lips, and only just enough brain to function.<br>\
 					You can not eat normally, as your necrotic state only permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe.<br>\
 					You are also incredibly weak to brute damage and are rather slow, but you don't need to breathe, so that's going for you."
+
+/datum/species/skellington/conditional_whitelist()
+	var/MM = text2num(time2text(world.timeofday, "MM"))
+	return MM == 10 //October
+
 
 /datum/species/skellington/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if (prob(25))

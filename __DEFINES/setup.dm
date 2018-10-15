@@ -216,14 +216,6 @@ var/MAX_EXPLOSION_RANGE = 14
 #define INSULATED_EDGE 	16 // One of the edges of this thing is insulated, even though the rest of it isn't.
 #define HOT_EDGE 		32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
 
-//clothing flags
-#define MASKINTERNALS		1 // mask allows internals
-#define NOSLIP				2 //prevents from slipping on wet floors, in space etc
-#define BLOCK_GAS_SMOKE_EFFECT 4 //blocks the effect that chemical clouds would have on a mob
-#define ONESIZEFITSALL		8
-#define PLASMAGUARD 		16 //Does not get contaminated by plasma.
-#define BLOCK_BREATHING 	32 //When worn, prevents breathing!
-
 //flags for pass_flags
 #define PASSTABLE	1
 #define PASSGLASS	2
@@ -785,6 +777,7 @@ SEE_PIXELS	256
 #define MAT_WOOD		"$wood"
 #define MAT_BRASS   	"$brass"
 #define MAT_RALLOY   	"$ralloy"
+#define MAT_ICE			"$ice"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -893,6 +886,7 @@ SEE_PIXELS	256
 // for secHUDs and medHUDs and variants. The number is the location of the image on the list hud_list of humans.
 #define HEALTH_HUD          "health" // a simple line rounding the mob's number health
 #define STATUS_HUD          "status" // alive, dead, diseased, etc.
+#define RECORD_HUD			"record" // what medbay has set your records to
 #define ID_HUD              "id" // the job asigned to your ID
 #define WANTED_HUD          "wanted" // wanted, released, parroled, security status
 #define IMPLOYAL_HUD		"imployal" // loyality implant
@@ -902,6 +896,7 @@ SEE_PIXELS	256
 #define STATUS_HUD_OOC		"status_ooc" // STATUS_HUD without virus db check for someone being ill.
 #define DIAG_HEALTH_HUD		"diag_health" // Diagnostic HUD - health bar
 #define DIAG_CELL_HUD		"diag_cell" // Diagnostic HUD - power cell status for cyborgs, mechs
+#define CONSTRUCT_HUD		"const_health" // Artificer HUD
 
 // Hypothermia - using the swiss staging system. - called by the proc undergoing_hypothermia() in handle_hypothermia.dm
 #define NO_HYPOTHERMIA			0	// >35C   - Fine

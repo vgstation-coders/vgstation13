@@ -37,6 +37,9 @@
 		deathsquad = ticker.mode.CreateFaction(/datum/faction/strike_team/deathsquad)
 		if(deathsquad)
 			deathsquad.HandleNewMind(new_commando.mind) //First come, first served
+	if (leader_selected)
+		var/datum/role/death_commando/D = new_commando.mind.GetRole(DEATHSQUADIE)
+		D.logo_state = "creed-logo"
 	new_commando.equip_death_commando(leader_selected)
 
 	return new_commando

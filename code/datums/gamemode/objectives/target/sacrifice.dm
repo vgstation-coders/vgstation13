@@ -2,6 +2,7 @@
 
 /datum/objective/target/assassinate/sacrifice
 	name = "Sacrifice <target>"
+	bad_assassinate_targets = list("Trader", "Merchant") // Bird creep !
 	flags = FACTION_OBJECTIVE
 
 /datum/objective/target/assassinate/sacrifice/PostAppend()

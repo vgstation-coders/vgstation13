@@ -69,6 +69,17 @@
 		set_broken()
 	..()
 
+/obj/machinery/computer/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		if(!(stat & BROKEN))
+			shake(1, 3)
+			playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+			set_broken()
+		return 1
+	return 0
+
 /obj/machinery/computer/blob_act()
 	if (prob(75))
 		for(var/x in verbs)

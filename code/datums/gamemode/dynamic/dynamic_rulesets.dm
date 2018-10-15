@@ -1,5 +1,3 @@
-
-
 /datum/dynamic_ruleset
 	var/name = ""//For admin logging, and round end scoreboard
 	var/persistent = 0//if set to 1, the rule won't be discarded after being executed, and /gamemode/dynamic will call process() every MC tick
@@ -7,6 +5,7 @@
 	var/list/candidates = list()//list of players that are being drafted for this rule
 	var/list/assigned = list()//list of players that were selected for this rule
 	var/role_category = ROLE_TRAITOR//rule will only accept candidates with "Yes" or "Always" in the preferences for this role
+	var/list/protected_from_jobs = list() // if set, and config.protect_roles_from_antagonist = 0, then the rule will have a much lower chance than usual to pick those roles.
 	var/list/restricted_from_jobs = list()//if set, rule will deny candidates from those jobs
 	var/list/exclusive_to_jobs = list()//if set, rule will only accept candidates from those jobs
 	var/list/enemy_jobs = list()//if set, there needs to be a certain amount of players doing those jobs (among the players who won't be drafted) for the rule to be drafted
@@ -30,6 +29,8 @@
 
 /datum/dynamic_ruleset/New()
 	..()
+	if (config.protect_roles_from_antagonist)
+		restricted_from_jobs += protected_from_jobs
 	if (istype(ticker.mode, /datum/gamemode/dynamic))
 		mode = ticker.mode
 	else
@@ -137,6 +138,10 @@
 		if (!P.client.desires_role(role_category) || jobban_isbanned(P, role_category))//are they willing and not antag-banned?
 			candidates.Remove(P)
 			continue
+		if (P.mind.assigned_role in protected_from_jobs)
+			if (prob(PROTECTED_TRAITOR_PROB)) // Only 1/3 chance to be in the candiates
+				candidates.Remove(P)
+			continue
 		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
 			candidates.Remove(P)
 			continue
@@ -170,6 +175,10 @@
 			continue
 		if (!P.client.desires_role(role_category) || jobban_isbanned(P, role_category))//are they willing and not antag-banned?
 			candidates.Remove(P)
+			continue
+		if (P.mind.assigned_role in protected_from_jobs)
+			if (prob(PROTECTED_TRAITOR_PROB)) // Only 1/3 chance to be in the candiates
+				candidates.Remove(P)
 			continue
 		if (P.mind.assigned_role in restricted_from_jobs)//does their job allow for it?
 			candidates.Remove(P)

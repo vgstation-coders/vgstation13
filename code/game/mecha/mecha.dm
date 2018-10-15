@@ -575,8 +575,11 @@
 		src.destroy()
 	return
 
-/obj/mecha/attack_hand(mob/living/user as mob)
-	src.log_message("Attack by hand/paw. Attacker - [user].",1)
+/obj/mecha/attack_hand(mob/living/user as mob, monkey = FALSE)
+	if(monkey)
+		src.log_message("Attack by paw. Attacker - [user].",1)
+	else
+		src.log_message("Attack by hand. Attacker - [user].",1)
 	user.do_attack_animation(src, user)
 	if ((M_HULK in user.mutations) && !prob(src.deflect_chance))
 		src.take_damage(15)
@@ -589,7 +592,7 @@
 	user.delayNextAttack(10)
 
 /obj/mecha/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return src.attack_hand(user, TRUE)
 
 
 /obj/mecha/attack_alien(mob/living/user as mob)
@@ -1353,6 +1356,8 @@
 
 /obj/mecha/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(usr != src.occupant || usr.incapacitated())
+		return
+	if(istype(occupant, /mob/living/carbon/brain))
 		return
 	if(!istype(over_location) || over_location.density)
 		return

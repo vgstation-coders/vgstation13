@@ -73,7 +73,11 @@ var/list/diagnostic_hud_users = list() // list of all entities using a diagnosti
 */
 
 var/global/list/escape_list = list()
+var/list/bots_list = list()
 
+
+var/list/rcd_list = list()
+var/list/red_tool_list = list()
 var/list/brig_lockers = list()
 var/list/communications_circuitboards = list()
 var/list/pinpointer_list = list()
@@ -86,3 +90,4 @@ var/list/mopbucket_list = list()
 var/list/cleanbot_list = list()
 var/list/vehicle_list = list()
 var/list/paicard_list = list()
+var/list/effects_list = list()

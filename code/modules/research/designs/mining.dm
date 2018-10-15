@@ -50,6 +50,17 @@
 	category = "Mining"
 	build_path = /obj/item/weapon/pickaxe/drill/diamond
 
+/datum/design/auto_ore
+	name = "Automatic Ore Loader"
+	desc = "Used to automatically pick up ore"
+	id = "auto_ore"
+	req_tech = list(Tc_MATERIALS = 6, Tc_POWERSTORAGE = 4, Tc_ENGINEERING = 4)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 1500, MAT_GLASS = 1000, MAT_SILVER = 200, MAT_GOLD = 200)
+	reliability_base = 79
+	category = "Mining"
+	build_path = /obj/item/weapon/storage/bag/ore/auto
+
 /datum/design/mesons
 	name = "Optical Meson Scanners"
 	desc = "Used for seeing walls, floors, and stuff through anything."
