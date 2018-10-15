@@ -15,7 +15,7 @@ code\game\\dna\genes\goon_powers.dm
 
 
 /spell/targeted/genetic/cast(list/targets)
-	..()
+	.=..()
 	for(var/mob/living/target in targets)
 		for(var/x in mutations)
 			target.mutations.Add(x)
@@ -26,7 +26,6 @@ code\game\\dna\genes\goon_powers.dm
 				target.mutations.Remove(x)
 			target.disabilities &= ~disabilities
 			target.update_mutations()
-	return
 
 /spell/targeted/genetic/blind
 	name = "Blind"
@@ -54,6 +53,13 @@ code\game\\dna\genes\goon_powers.dm
 	price = 0.5 * Sp_BASE_PRICE //Half of the normal spell price
 	user_type = USER_TYPE_WIZARD
 
+/** Hulk Hogan spell
+ - Gives you hulkout
+ - Gives you the jump ability
+ - Gives you strong
+ - Turns your beard into the brothers stache
+**/
+
 /spell/targeted/genetic/mutate
 	name = "Mutate"
 	desc = "This spell causes you to turn into a hulk for a short while."
@@ -62,11 +68,13 @@ code\game\\dna\genes\goon_powers.dm
 	school = "transmutation"
 	charge_max = 400
 	spell_flags = INCLUDEUSER
-	invocation = "BIRUZ BENNAR"
+	invocation = "TU SWOUL TU COUNTROUL"
 	invocation_type = SpI_SHOUT
 	message = "<span class='notice'>You feel strong! You feel like you're too swole to control!</span>"
 	range = 0
 	max_targets = 1
+
+	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
 
 	mutations = list(M_HULK)
 	duration = 300
@@ -74,6 +82,41 @@ code\game\\dna\genes\goon_powers.dm
 
 	hud_state = "wiz_hulk"
 	user_type = USER_TYPE_WIZARD
+
+/spell/targeted/genetic/mutate/get_upgrade_info(upgrade_type, level)
+	if(upgrade_type == Sp_POWER)
+		return "Gives you jump and strong."
+	return ..()
+
+/spell/targeted/genetic/mutate/empower_spell()
+	spell_levels[Sp_POWER]++
+
+	var/explosion_description = ""
+	switch(spell_levels[Sp_POWER])
+		if(0)
+			name = "Mutate"
+			explosion_description = "You can hulk out for a short amount of time."
+		if(1)
+			name = "Advanced Mutate"
+			explosion_description = "You now hulk out, get stronger, AND can jump!"
+		else
+			return
+
+	return "You have improved Mutate into [name]. [explosion_description]"
+
+/spell/targeted/genetic/mutate/cast(list/targets)
+	.=..()
+	if(spell_levels[Sp_POWER] == 1)
+		for(var/mob/living/carbon/human/target in targets)
+			target.dna.SetSEState(JUMPBLOCK, 1, 1)
+			genemutcheck(target, JUMPBLOCK, null, MUTCHK_FORCED)
+			target.dna.SetSEValue(STRONGBLOCK, 1)
+			genemutcheck(target, STRONGBLOCK, null, MUTCHK_FORCED)
+			spawn(duration)
+				target.dna.SetSEValue(JUMPBLOCK,0,1)
+				genemutcheck(target, JUMPBLOCK, null, MUTCHK_FORCED)
+				target.dna.SetSEValue(STRONGBLOCK,0)
+				genemutcheck(target, STRONGBLOCK, null, MUTCHK_FORCED)
 
 /spell/targeted/genetic/laser_eyes
 	name = "Heat Vision"
@@ -95,6 +138,14 @@ code\game\\dna\genes\goon_powers.dm
 
 	hud_state = "wiz_eyes"
 	user_type = USER_TYPE_WIZARD
+
+/spell/targeted/genetic/laser_eyes/cast(list/targets)
+	.=..()
+	for(var/mob/living/carbon/human/target in targets)
+		var/datum/organ/internal/eyes/E = target.internal_organs_by_name["eyes"]
+		E.eyeprot = 2
+		spawn(duration)
+			E.eyeprot = initial(E.eyeprot)
 
 /spell/targeted/genetic/eat_weed
 	name = "Eat Weeds"
