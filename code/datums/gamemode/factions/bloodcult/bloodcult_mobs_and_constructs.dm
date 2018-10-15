@@ -132,25 +132,7 @@
 /mob/living/simple_animal/construct/wraith/perfect/RangedAttack(var/atom/A, var/params)
 	if(ranged_cooldown <= 0 && ammo)
 		ammo--
-		var/obj/item/projectile/wraithnail/nail = new (loc)
-
-		if(!nail || !A)
-			return 0
-
-		playsound(loc, 'sound/weapons/hivehand.ogg', 75, 1)
-
-		var/turf/T = get_turf(src)
-		var/turf/U = get_turf(A)
-		nail.original = U
-		nail.target = U
-		nail.current = T
-		nail.starting = T
-		nail.yo = U.y - T.y
-		nail.xo = U.x - T.x
-		spawn()
-			nail.OnFired()
-			nail.process()
-
+		generic_projectile_fire(A, src, /obj/item/projectile/wraithnail, 'sound/weapons/hivehand.ogg')
 	return ..()
 
 /obj/item/projectile/wraithnail

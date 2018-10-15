@@ -1654,13 +1654,13 @@ Game Mode config tags:
 		else
 			to_chat(C, msg)
 
-/proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound)
+/proc/generic_projectile_fire(var/atom/target, var/atom/source, var/projectile_type, var/shot_sound)
 	var/turf/T = get_turf(source)
 	var/turf/U = get_turf(target)
 	if (!T || !U)
 		return
 	var/obj/item/projectile/A
-	A = new projectile(T)
+	A = new projectile_type(T)
 	var/fire_sound
 	if(shot_sound)
 		fire_sound = shot_sound
@@ -1676,9 +1676,9 @@ Game Mode config tags:
 	A.starting = T
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
-	playsound(T, fire_sound, 50, 1)
-	A.OnFired()
+	playsound(T, fire_sound, 75, 1)
 	spawn()
+		A.OnFired()
 		A.process()
 
 
