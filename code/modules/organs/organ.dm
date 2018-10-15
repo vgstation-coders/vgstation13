@@ -57,14 +57,6 @@
 		germ_level -= 6	//At germ_level == 500, this should cure the infection in a minute
 	else
 		germ_level -= 2 //At germ_level == 1000, this will cure the infection in 5 minutes
-
-//Handles chem traces
-/mob/living/carbon/human/proc/handle_trace_chems()
-	//New are added for reagents to random organs.
-	for(var/datum/reagent/A in reagents.reagent_list)
-		var/datum/organ/O = pick(organs)
-		O.trace_chemicals[A.name] = 100
-
 //Adds autopsy data for used_weapon.
 /datum/organ/proc/add_autopsy_data(var/used_weapon, var/damage)
 	var/datum/autopsy_data/W = autopsy_data[used_weapon]

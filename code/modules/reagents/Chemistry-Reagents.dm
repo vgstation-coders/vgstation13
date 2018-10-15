@@ -41,6 +41,7 @@
 	var/custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER
 	var/overdose_am = 0
 	var/overdose_tick = 0
+	var/addiction_tick = 0
 	var/tick
 	//var/list/viruses = list()
 	var/color = "#000000" //rgb: 0, 0, 0 (does not support alpha channels - yet!)
@@ -147,6 +148,10 @@
 	if((overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)) //Too much chems, or been in your system too long
 		on_overdose(M)
 
+	if(addiction_tick && tick >= addiction_tick)
+		if(prob(10*(addiction_tick/tick)))
+			on_addiction(M)
+
 /datum/reagent/proc/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
 		return
@@ -176,6 +181,12 @@
 
 /datum/reagent/proc/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
+
+/datum/reagent/proc/on_addiction(var/mob/living/M) //Feel free to override with your own custom addictions
+	if(M.addictions[src.id])
+		return
+	var/datum/addiction/A = new(M, src.id)
+	A.add_random_effects()
 
 
 /datum/reagent/send_to_past(var/duration)

@@ -1694,6 +1694,15 @@ Thanks.
 		item.throw_at(target, item.throw_range*throw_mult, item.throw_speed*throw_mult)
 		return THREW_SOMETHING
 
+/mob/living/proc/handle_addictions()
+	for(var/A in trace_chems)
+		var/datum/reagent/R = A
+		if(!addictions.Find(A) && initial(R.addiction_tick) < trace_chems[A])
+			R.on_addiction(src)
+
+	for(var/datum/addiction/A in addictions)
+		A.handle_addiction()
+
 /mob/living/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(

@@ -56,6 +56,10 @@
 				if(owner.reagents.has_reagent(toxin))
 					owner.adjustToxLoss(0.3 * process_accuracy)
 
+		for(var/A in owner.trace_chems)
+			if(!is_type_in_list(A, owner.reagents.reagent_list) && --owner.trace_chems[A] <= 0)
+				owner.trace_chems.Remove(A)
+
 /datum/organ/internal/liver/proc/metabolize_reagent(var/reagent_id, var/metabolism)
 	var/mob/living/carbon/human/H=owner
 	var/reagent_efficiency = 1
