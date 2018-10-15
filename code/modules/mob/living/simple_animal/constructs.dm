@@ -43,8 +43,8 @@
 
 	var/list/healers = list()
 
-/mob/living/simple_animal/construct/Move()
-	..()
+/mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
+	. = ..()
 	if (healers.len > 0)
 		for (var/mob/living/simple_animal/construct/builder/perfect/P in healers)
 			P.move_ray()

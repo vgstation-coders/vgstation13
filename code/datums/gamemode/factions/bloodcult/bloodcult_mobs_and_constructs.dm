@@ -91,12 +91,7 @@
 
 	if(istype(obstacle, /obj))
 		var/obj/O = obstacle
-		if(istype(O, /obj/effect/portal))
-			src.anchored = 0
-			O.Crossed(src)
-			spawn(0)
-				src.anchored = 1
-		else if(!O.anchored)
+		if(!O.anchored)
 			step(obstacle,src.dir)
 		else
 			obstacle.Bumped(src)
@@ -284,11 +279,10 @@
 		move_ray()
 		process_construct_hud(src)
 
-/mob/living/simple_animal/construct/builder/perfect/Move()
-	..()
+/mob/living/simple_animal/construct/builder/perfect/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
+	. = ..()
 	if (ray)
 		move_ray()
-
 
 /mob/living/simple_animal/construct/builder/perfect/proc/start_ray(var/mob/living/simple_animal/construct/target)
 	if (!istype(target))

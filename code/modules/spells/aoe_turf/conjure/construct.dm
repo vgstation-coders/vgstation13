@@ -259,7 +259,6 @@
 	side1 = null
 	side2 = null
 	..()
-	..()
 
 /spell/juggerdash
 	name = "Jugger-Dash"
