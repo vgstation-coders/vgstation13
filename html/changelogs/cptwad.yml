@@ -1,3 +1,5 @@
 author: CptWad
-changes: []
-delete-after: false
+delete-after: True
+changes: 
+- experiment: "The following applies to bagelstation"
+- experiment: "Altered the powernet around engineering again, yellow wires take power from power sources to the SMES. SMES takes power to the station through red wires. This should make using the portable SMES easier to use. There are already ports for porta-SMES for each major department."
