@@ -21,19 +21,19 @@
 		if(!user)
 			return
 		if (contents.len >= max_butts)
-			to_chat(user, "This ashtray is full.")
+			to_chat(user, "<span class='warning'>This ashtray is full.</span>")
 			return
 		user.drop_item(W, src, force_drop = 1)
 		var/obj/item/clothing/mask/cigarette/cig = W
 		if(istype(cig, /obj/item/weapon/cigbutt))
-			to_chat(user, "You drop the [cig] into [src].")
+			to_chat(user, "<span class='notice'>You drop the [cig] into [src].</span>")
 		if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match))
 			if (cig.lit == 1)
-				visible_message("[user] crushes [cig] in [src], putting it out.")
+				visible_message("<span class='notice'>[user] crushes [cig] in [src], putting it out.</span>")
 			else if (cig.lit == 0)
-				to_chat(user, "You place [cig] in [src] without even lighting it. Why would you do that?")
+				to_chat(user, "<span class='notice'>You place [cig] in [src] without even lighting it. Why would you do that?</span>")
 			else if (cig.lit == -1)
-				visible_message("[user] places [cig] in [src].")
+				visible_message("<span class='notice'>[user] places [cig] in [src].</span>")
 		add_fingerprint(user)
 		if (contents.len == max_butts)
 			icon_state = icon_full
@@ -43,7 +43,7 @@
 			desc = empty_desc + " It's half-filled."
 		return
 	health = max(0,health - W.force)
-	to_chat(user, "You hit [src] with [W].")
+	to_chat(user, "<span class='danger'>You hit [src] with [W].</span>")
 	if (health < 1)
 		die()
 
