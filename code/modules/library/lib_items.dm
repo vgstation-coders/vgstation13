@@ -254,6 +254,12 @@
 		..()
 
 /obj/item/weapon/book/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(!carved && W.is_sharp() && W.sharpness_flags & SHARP_BLADE)
+		to_chat(user, "<span class='notice'>You begin to carve out [title].</span>")
+		if(do_after(user, src, 30 / W.sharpness))
+			to_chat(user, "<span class='notice'>You carve out the pages from [title]! You didn't want to read it anyway.</span>")
+			carved = 1
+			return
 	if(carved)
 		if(!store)
 			if(W.w_class < W_CLASS_MEDIUM)
@@ -326,14 +332,6 @@
 							return
 					scanner.computer.inventory.Add(src)
 					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Title added to general inventory.'")
-	else if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large) || iswirecutter(W))
-		if(carved)
-			return
-		to_chat(user, "<span class='notice'>You begin to carve out [title].</span>")
-		if(do_after(user, src, 30))
-			to_chat(user, "<span class='notice'>You carve out the pages from [title]! You didn't want to read it anyway.</span>")
-			carved = 1
-			return
 
 	else if(istype(W, /obj/item/weapon/paper/talisman))
 		var/obj/item/weapon/paper/talisman/talisman = W
