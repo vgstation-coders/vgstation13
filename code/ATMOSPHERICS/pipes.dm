@@ -1149,8 +1149,6 @@
 
 	volume = 260 //6 averaged pipe segments
 
-	pipe_flags = ALL_LAYER
-
 	var/obj/machinery/atmospherics/layer_node = null
 	var/obj/machinery/atmospherics/mid_node = null
 
@@ -1279,11 +1277,6 @@
 					continue
 				layer_node = found
 
-/obj/machinery/atmospherics/pipe/layer_adapter/isConnectable(var/obj/machinery/atmospherics/target, var/direction, var/given_layer)
-	if(direction == dir)
-		return (given_layer == PIPING_LAYER_DEFAULT)
-	return ..()
-
 /obj/machinery/atmospherics/pipe/layer_adapter/getNodeType()
 	return PIPE_TYPE_STANDARD
 
@@ -1297,3 +1290,9 @@
 		user.ventcrawl_layer = (direction == dir) ? PIPING_LAYER_DEFAULT : piping_layer
 		to_chat(user, "You are redirected into the [user.ventcrawl_layer]\th piping layer.")
 		return ..()
+
+/obj/machinery/atmospherics/pipe/layer_adapter/get_layer_of_dir(var/direction)
+	if (direction == dir)
+		return PIPING_LAYER_DEFAULT // requested direction is our mid_node
+	else if (turn(direction, 180) == dir)
+		return piping_layer // requested direction is our layer_node

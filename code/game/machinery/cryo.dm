@@ -52,16 +52,16 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	initialize_directions = dir
 	initialize()
 	build_network()
-	if (node)
-		node.initialize()
-		node.build_network()
+	if (node1)
+		node1.initialize()
+		node1.build_network()
 
 /obj/machinery/atmospherics/unary/cryo_cell/initialize()
-	if(node)
+	if(node1)
 		return
 	for(var/cdir in cardinal)
-		node = findConnecting(cdir)
-		if(node)
+		node1 = findConnecting(cdir)
+		if(node1)
 			break
 	update_icon()
 
@@ -152,7 +152,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(stat & NOPOWER)
 		on = 0
 
-	if(!node)
+	if(!node1)
 		return
 	if(!on)
 		updateUsrDialog()
@@ -585,7 +585,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		return*/
 	if(M.locked_to)
 		M.unlock_from()
-	if(!node)
+	if(!node1)
 		to_chat(usr, "<span class='warning'>The cell is not correctly connected to its pipe network!</span>")
 		return
 	if(usr.pulling == M)

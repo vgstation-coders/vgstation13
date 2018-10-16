@@ -213,7 +213,7 @@ Pipelines + Other Objects -> Pipe network
 //Called when checking connectability in findConnecting()
 //This is checked for both pipes in establishing a connection - the base behaviour will work fine nearly every time
 /obj/machinery/atmospherics/proc/isConnectable(var/obj/machinery/atmospherics/target, var/direction, var/given_layer)
-	return (target.piping_layer == given_layer || target.pipe_flags & ALL_LAYER)
+	return (target.get_layer_of_dir(turn(direction, 180)) == given_layer || target.pipe_flags & ALL_LAYER)
 
 /obj/machinery/atmospherics/proc/getNodeType(var/node_id)
 	return PIPE_TYPE_STANDARD
@@ -398,3 +398,8 @@ Pipelines + Other Objects -> Pipe network
 
 	var/turf/T = loc
 	return !T.intact
+
+// Returns the layer of a pipe connection in the specified direction
+// Only needs to be overridden if a pipe can connect on different layers
+/obj/machinery/atmospherics/proc/get_layer_of_dir(var/direction)
+	return piping_layer
