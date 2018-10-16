@@ -241,7 +241,7 @@
 			else //a string representing an icon_state from our icon_file
 				extracted_image = extract_image(image(icon = icon_file, icon_state = choice_icon))
 			if(extracted_image)
-				choices_icons[id] = I
+				choices_icons[id] = extracted_image
 
 		if(E.len > 2)
 			var/choice_tooltip = E[3]
