@@ -13,7 +13,6 @@
 	..()
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 	src.pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
-	return
 
 /obj/item/ashtray/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (health < 1)
@@ -46,7 +45,6 @@
 		to_chat(user, "You hit [src] with [W].")
 		if (health < 1)
 			die()
-	return
 
 /obj/item/ashtray/throw_impact(atom/hit_atom)
 	if (health > 0)
@@ -85,7 +83,6 @@
 		..()
 		name = "pieces of plastic"
 		desc = "Pieces of plastic with ash on them."
-		return
 
 
 /obj/item/ashtray/bronze
@@ -107,7 +104,6 @@
 		..()
 		name = "pieces of bronze"
 		desc = "Pieces of bronze with ash on them."
-		return
 
 
 /obj/item/ashtray/glass
@@ -129,4 +125,3 @@
 		name = "shards of glass"
 		desc = "Shards of glass with ash on them."
 		playsound(src, "shatter", 30, 1)
-		return
