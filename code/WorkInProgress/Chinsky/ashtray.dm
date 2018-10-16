@@ -79,11 +79,11 @@
 	w_type = RECYK_MISC
 	empty_desc = "Cheap plastic ashtray."
 	throwforce = 3.0
-	die()
-		..()
-		name = "pieces of plastic"
-		desc = "Pieces of plastic with ash on them."
 
+/obj/item/ashtray/plastic/die()
+	..()
+	name = "pieces of plastic"
+	desc = "Pieces of plastic with ash on them."
 
 /obj/item/ashtray/bronze
 	name = "bronze ashtray"
@@ -100,10 +100,10 @@
 	empty_desc = "A large ashtray made of bronze."
 	throwforce = 10.0
 
-	die()
-		..()
-		name = "pieces of bronze"
-		desc = "Pieces of bronze with ash on them."
+/obj/item/ashtray/bronze/die()
+	..()
+	name = "pieces of bronze"
+	desc = "Pieces of bronze with ash on them."
 
 
 /obj/item/ashtray/glass
@@ -120,8 +120,8 @@
 	empty_desc = "Glass ashtray. Looks fragile."
 	throwforce = 6.0
 
-	die()
-		..()
-		name = "shards of glass"
-		desc = "Shards of glass with ash on them."
-		playsound(src, "shatter", 30, 1)
+/obj/item/ashtray/glass/die()
+	..()
+	name = "shards of glass"
+	desc = "Shards of glass with ash on them."
+	playsound(src, "shatter", 30, 1)
