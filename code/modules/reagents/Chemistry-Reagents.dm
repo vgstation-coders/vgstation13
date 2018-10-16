@@ -202,6 +202,81 @@
 		holder.reagent_list -= src
 		holder = null
 
+/datum/reagent/piccolyn
+	name = "Piccolyn"
+	id = PICCOLYN
+	description = "Prescribed daily."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#00FF00"
+	custom_metabolism = 0.01
+
+/datum/reagent/piccolyn/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(M.stat || M.health < 90 || M.getBrainLoss() >= 10)
+		return 1
+
+	var/list/nearest_doctor = null
+	for(var/mob/living/L in view(M))
+		if(L == M)
+			continue
+		if(L.stat)
+			continue
+		if(nearest_doctor && get_dist(L,M)>=get_dist(nearest_doctor,M))
+			continue //We already have a closer living target
+		if(ishuman(L))
+			var/mob/living/carbon/human/H = L
+			var/list/medical_uniforms_list = list(/obj/item/clothing/under/rank/chief_medical_officer,
+													/obj/item/clothing/under/rank/medical,
+													/obj/item/clothing/under/rank/nursesuit,
+													/obj/item/clothing/under/rank/nurse,
+													/obj/item/clothing/under/rank/chemist,
+													/obj/item/clothing/under/rank/pharma,
+													/obj/item/clothing/under/rank/geneticist,
+													/obj/item/clothing/under/rank/virologist)
+			if(H.is_wearing_any(medical_uniforms_list,slot_w_uniform))
+				//Check to see if it's wearing the right stuff
+				nearest_doctor = H
+		else if(isrobot(L))
+			var/mob/living/silicon/robot/R = L
+			if(HAS_MODULE_QUIRK(R, MODULE_CAN_HANDLE_MEDICAL))
+				nearest_doctor = R
+	if(!nearest_doctor)
+		return 1
+	var/D = "doctor"
+	if(ishuman(nearest_doctor))
+		var/mob/living/carbon/human/H = nearest_doctor
+		D = get_first_word(H.name)
+	else
+		D = pick("bot","borg","borgo","autodoc","roboticist","cyborg","robot")
+	var/list/thanks = list("Thanks, doc.",
+							"You're alright, doc.",
+							"'Preciate it, doc.",
+							"Cheers, doctor.",
+							"Thank you, doctor.",
+							"Much appreciated, doctor.",
+							"Thanks, mate!",
+							"Thanks, doc!",
+							"Zank you, Herr Doktor!",
+							"Danke, Herr Doktor!",
+							"Thank you doctor!",
+							"You are great doctor!",
+							"I love this doctor!",
+							"Aye, thanks doc!",
+							"Thank ye, doctor!",
+							"You deserve a medal, doc.",
+							"Thanks for the aid.",
+							"Yeah, thanks doc!",
+							"All right, [D], I feel good!",
+							"Thanks, [D].",
+							"Thank you, [D].",
+							"'Preciate it, [D].",
+							"Thanks for the aid, [D]."
+							)
+	M.say(pick(thanks))
+	holder.del_reagent(PICCOLYN)
+
 /datum/reagent/muhhardcores
 	name = "Hardcores"
 	id = BUSTANUT

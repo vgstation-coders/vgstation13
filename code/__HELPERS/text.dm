@@ -313,6 +313,13 @@ proc/checkhtml(var/t)
 /proc/trim(text)
 	return trim_left(trim_right(text))
 
+//Returns the first word in a string.
+/proc/get_first_word(text)
+	for(var/i = 1 to length(text))
+		if(text2ascii(text, i) == 32)
+			return copytext(text, 1, i)
+	return text
+
 //Returns a string with the first element of the string capitalized.
 /proc/capitalize(var/t as text)
 	return uppertext(copytext(t, 1, 2)) + copytext(t, 2)
