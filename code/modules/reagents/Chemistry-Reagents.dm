@@ -5420,10 +5420,10 @@
 				if(istype(M.current.loc,/obj/mecha))
 					imageloc = M.current.loc
 					imagelocB = M.current.loc
-				var/image/I = image('icons/logos.dmi', loc = imageloc, icon_state = "metaclub")
+				var/image/I = image('icons/mob/HUD.dmi', loc = imageloc, icon_state = "metaclub")
 				I.plane = METABUDDY_HUD_PLANE
 				M.current.client.images += I
-				var/image/J = image('icons/logos.dmi', loc = imagelocB, icon_state = "metaclub")
+				var/image/J = image('icons/mob/HUD.dmi', loc = imagelocB, icon_state = "metaclub")
 				J.plane = METABUDDY_HUD_PLANE
 				new_buddy.current.client.images += J
 
