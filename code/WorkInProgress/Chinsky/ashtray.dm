@@ -14,7 +14,7 @@
 	pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 	pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
 
-/obj/item/ashtray/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/ashtray/attackby(obj/item/weapon/W, mob/user)
 	if (health < 1)
 		return
 	if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match) || istype(W,  /obj/item/weapon/cigbutt))
