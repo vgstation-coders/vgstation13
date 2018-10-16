@@ -3338,6 +3338,10 @@
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona")
 					return
+				for(var/datum/organ/external/E in H.organs)
+					for(var/datum/wound/internal_bleeding/W in E.wounds)
+						W.heal_damage(0.8, TRUE)
+						holder.remove_reagent(MEDNANOBOTS, 10/40)
 			if(M.getOxyLoss()>0 || M.getBruteLoss(ignore_inorganic = TRUE)>0 || M.getToxLoss()>0 || M.getFireLoss(ignore_inorganic = TRUE)>0 || M.getCloneLoss()>0)
 				if(holder.has_reagent("mednanobots"))
 					M.adjustOxyLoss(-5)
