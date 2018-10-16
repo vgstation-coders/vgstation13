@@ -18,33 +18,34 @@
 	if (health < 1)
 		return
 	if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match) || istype(W,  /obj/item/weapon/cigbutt))
-		if(user)
-			if (contents.len >= max_butts)
-				to_chat(user, "This ashtray is full.")
-				return
-			user.drop_item(W, src, force_drop = 1)
-			var/obj/item/clothing/mask/cigarette/cig = W
-			if(istype(cig, /obj/item/weapon/cigbutt))
-				to_chat(user, "You drop the [cig] into [src].")
-			if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match))
-				if (cig.lit == 1)
-					visible_message("[user] crushes [cig] in [src], putting it out.")
-				else if (cig.lit == 0)
-					to_chat(user, "You place [cig] in [src] without even lighting it. Why would you do that?")
-				else if (cig.lit == -1)
-					visible_message("[user] places [cig] in [src].")
-			add_fingerprint(user)
-			if (contents.len == max_butts)
-				icon_state = icon_full
-				desc = empty_desc + " It's stuffed full."
-			else if (contents.len > max_butts/2)
-				icon_state = icon_half
-				desc = empty_desc + " It's half-filled."
-	else
-		health = max(0,health - W.force)
-		to_chat(user, "You hit [src] with [W].")
-		if (health < 1)
-			die()
+		if(!user)
+			return
+		if (contents.len >= max_butts)
+			to_chat(user, "This ashtray is full.")
+			return
+		user.drop_item(W, src, force_drop = 1)
+		var/obj/item/clothing/mask/cigarette/cig = W
+		if(istype(cig, /obj/item/weapon/cigbutt))
+			to_chat(user, "You drop the [cig] into [src].")
+		if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match))
+			if (cig.lit == 1)
+				visible_message("[user] crushes [cig] in [src], putting it out.")
+			else if (cig.lit == 0)
+				to_chat(user, "You place [cig] in [src] without even lighting it. Why would you do that?")
+			else if (cig.lit == -1)
+				visible_message("[user] places [cig] in [src].")
+		add_fingerprint(user)
+		if (contents.len == max_butts)
+			icon_state = icon_full
+			desc = empty_desc + " It's stuffed full."
+		else if (contents.len > max_butts/2)
+			icon_state = icon_half
+			desc = empty_desc + " It's half-filled."
+		return
+	health = max(0,health - W.force)
+	to_chat(user, "You hit [src] with [W].")
+	if (health < 1)
+		die()
 
 /obj/item/ashtray/throw_impact(atom/hit_atom)
 	if (health > 0)
