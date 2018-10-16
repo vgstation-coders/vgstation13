@@ -432,6 +432,21 @@
 			return (locate(I) in get_equipped_items())
 		return (I in get_equipped_items())
 
+//Same as above, but checks for any item type in the list. Try to use a slot with large lists or it could end up fairly costly.
+/mob/proc/is_wearing_any(list/item_types, slot = null)
+	if(slot)
+		for(var/element in item_types)
+			if(ispath(element))
+				var/obj/item/item = get_item_by_slot(slot)
+				if(istype(item, element))
+					return item
+	else
+		for(var/element in item_types)
+			if(ispath(element))
+				var/obj/item/I = locate(element) in get_equipped_items()
+				if(I)
+					return I
+
 /mob/living/carbon/human/proc/equip_if_possible(obj/item/W, slot, act_on_fail = EQUIP_FAILACTION_DELETE) // since byond doesn't seem to have pointers, this seems like the best way to do this :/
 	//warning: icky code
 	var/equipped = 0
