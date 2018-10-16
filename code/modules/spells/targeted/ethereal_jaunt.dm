@@ -154,7 +154,7 @@
 
 	spell_flags = Z2NOCAST | INCLUDEUSER
 
-	charge_max = 5 MINUTES
+	charge_max = 1 MINUTES
 	invocation_type = SpI_NONE
 	range = SELFCAST
 	duration = 50 //in deciseconds
