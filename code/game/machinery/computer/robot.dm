@@ -11,6 +11,7 @@
 
 	var/id = 0.0
 	var/temp = null
+	var/mob/living/silicon/robot/focus
 	var/status = 0
 	var/timeleft = 60
 	var/stop = 0.0
@@ -24,9 +25,7 @@
 	return src.attack_hand(user)
 
 /obj/machinery/computer/robotics/attack_paw(var/mob/user as mob)
-
 	return src.attack_hand(user)
-	return
 
 /obj/machinery/computer/robotics/attack_hand(var/mob/user as mob)
 	if(..())
@@ -45,44 +44,75 @@
 				<A href='?src=\ref[src];screen=1'>1. Cyborg Status</A><BR>
 				<A href='?src=\ref[src];screen=2'>2. Emergency Full Destruct</A><BR>"}
 		if(screen == 1)
-			for(var/mob/living/silicon/robot/R in mob_list)
-				if(istype(user, /mob/living/silicon/ai))
-					if (R.connected_ai != user)
-						continue
-				if(istype(user, /mob/living/silicon/robot))
-					if (R != user)
-						continue
-				if(R.scrambledcodes)
-					continue
+			if(focus && isrobot(focus))
+				var/mob/living/silicon/robot/R = focus
+				dat += "[focus.name] |"
+				if(R.gcDestroyed)
+					dat += " Destroyed."
+					focus = null
+				else
+					if(R.stat)
+						dat += " Not Responding |"
+					else if (!R.canmove)
+						dat += " Locked Down |"
+					else
+						dat += " Operating Normally |"
+					if (!R.canmove)
+					else if(R.cell)
+						dat += " Battery Installed ([R.cell.charge]/[R.cell.maxcharge]) |"
+					else
+						dat += " No Cell Installed |"
+					if(R.module)
+						dat += " Module Installed ([R.module.name]) |"
+					else
+						dat += " No Module Installed |"
+					if(R.connected_ai)
+						dat += " Slaved to [R.connected_ai.name] |"
+					else
+						dat += " Independent from AI |"
+					if(R.module && locate(/obj/item/device/gps/cyborg) in R.module.modules)
+						dat += "<BR>Co-ordinates:[R.x-WORLD_X_OFFSET[R.z]],[R.y-WORLD_X_OFFSET[R.z]],[R.z]<BR>"
+					if (istype(user, /mob/living/silicon))
+						if((user.mind.special_role && user.mind.original == user) && !R.emagged)
+							dat += "<A href='?src=\ref[src];magbot=1'>(<font color=blue><i>Hack</i></font>)</A> "
 
-				dat += "[R.name] |"
-				if(R.stat)
-					dat += " Not Responding |"
-				else if (!R.canmove)
-					dat += " Locked Down |"
-				else
-					dat += " Operating Normally |"
-				if (!R.canmove)
-				else if(R.cell)
-					dat += " Battery Installed ([R.cell.charge]/[R.cell.maxcharge]) |"
-				else
-					dat += " No Cell Installed |"
-				if(R.module)
-					dat += " Module Installed ([R.module.name]) |"
-				else
-					dat += " No Module Installed |"
-				if(R.connected_ai)
-					dat += " Slaved to [R.connected_ai.name] |"
-				else
-					dat += " Independent from AI |"
-				if (istype(user, /mob/living/silicon))
-					if((user.mind.special_role && user.mind.original == user) && !R.emagged)
-						dat += "<A href='?src=\ref[src];magbot=\ref[R]'>(<font color=blue><i>Hack</i></font>)</A> "
-
-				dat += {"<A href='?src=\ref[src];stopbot=\ref[R]'>(<font color=green><i>[R.canmove ? "Lockdown" : "Release"]</i></font>)</A>
-					<A href='?src=\ref[src];lockbot=\ref[R]'>(<font color=orange><i>[R.modulelock ? "Module-unlock" : "Module-lock"]</i></font>)</A>
-					<A href='?src=\ref[src];killbot=\ref[R]'>(<font color=red><i>Destroy</i></font>)</A>
+					dat += {"<A href='?src=\ref[src];stopbot=1'>(<font color=green><i>[R.canmove ? "Lockdown" : "Release"]</i></font>)</A>
+						<A href='?src=\ref[src];lockbot=1'>(<font color=orange><i>[R.modulelock ? "Module-unlock" : "Module-lock"]</i></font>)</A>
+						<A href='?src=\ref[src];killbot=1'>(<font color=red><i>Destroy</i></font>)</A>
+						<A href='?src=\ref[src];unfocus=1'>(<font color=blue><i>Unfocus</i></font>)</A>
 					<BR>"}
+			else
+				for(var/mob/living/silicon/robot/R in mob_list)
+					if(istype(user, /mob/living/silicon/ai))
+						if (R.connected_ai != user)
+							continue
+					if(istype(user, /mob/living/silicon/robot))
+						if (R != user)
+							continue
+					if(R.scrambledcodes)
+						continue
+
+					dat += "[R.name] |"
+					if(R.stat)
+						dat += " Not Responding |"
+					else if (!R.canmove)
+						dat += " Locked Down |"
+					else
+						dat += " Operating Normally |"
+					if (!R.canmove)
+					else if(R.cell)
+						dat += " Battery Installed ([R.cell.charge]/[R.cell.maxcharge]) |"
+					else
+						dat += " No Cell Installed |"
+					if(R.module)
+						dat += " Module Installed ([R.module.name]) |"
+					else
+						dat += " No Module Installed |"
+					if(R.connected_ai)
+						dat += " Slaved to [R.connected_ai.name] |"
+					else
+						dat += " Independent from AI |"
+				dat += "<BR><A href='?src=\ref[src];focusBot=1'> Focus on one robot.</A><BR>"
 			dat += "<A href='?src=\ref[src];screen=0'>(Return to Main Menu)</A><BR>"
 		if(screen == 2)
 			if(!src.status)
@@ -150,6 +180,22 @@
 
 		else if (href_list["temp"])
 			src.temp = null
+		else if (href_list["focusBot"])
+			if(allowed(usr))
+				var/list/robo_choices = list()
+				for(var/mob/living/silicon/robot/R in mob_list)
+					if(istype(usr, /mob/living/silicon/ai))
+						if (R.connected_ai != usr)
+							continue
+					if(istype(usr, /mob/living/silicon/robot))
+						if (R != usr)
+							continue
+					if(R.scrambledcodes)
+						continue
+					robo_choices.Add(R)
+				focus = input("Which robot would you like to set as the focus?") in robo_choices
+		else if (href_list["unfocus"])
+			focus = null
 		else if (href_list["screen"])
 			switch(href_list["screen"])
 				if("0")
@@ -160,8 +206,8 @@
 					screen = 2
 		else if (href_list["killbot"])
 			if(src.allowed(usr))
-				var/mob/living/silicon/robot/R = locate(href_list["killbot"])
-				if(R)
+				var/mob/living/silicon/robot/R = focus
+				if(R && istype(R))
 					var/choice = input("Are you certain you wish to detonate [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R && istype(R))
@@ -172,7 +218,7 @@
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 		else if (href_list["lockbot"])
 			if(src.allowed(usr))
-				var/mob/living/silicon/robot/R = locate(href_list["lockbot"])
+				var/mob/living/silicon/robot/R = focus
 				if(R && istype(R))
 					var/choice = input("Are you certain you wish to [R.modulelock ? "module-unlock" : "module-lock"] [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
@@ -189,7 +235,7 @@
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 		else if (href_list["stopbot"])
 			if(src.allowed(usr))
-				var/mob/living/silicon/robot/R = locate(href_list["stopbot"])
+				var/mob/living/silicon/robot/R = focus
 				if(R && istype(R)) // Extra sancheck because of input var references
 					var/choice = input("Are you certain you wish to [R.canmove ? "lock down" : "release"] [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
@@ -211,10 +257,9 @@
 
 		else if (href_list["magbot"])
 			if(src.allowed(usr))
-				var/mob/living/silicon/robot/R = locate(href_list["magbot"])
-
+				var/mob/living/silicon/robot/R = focus
 				// whatever weirdness this is supposed to be, but that is how the href gets added, so here it is again
-				if(istype(R) && istype(usr, /mob/living/silicon) && usr.mind.special_role && (usr.mind.original == usr) && R.emagged != 1)
+				if(istype(R) && istype(usr, /mob/living/silicon) && (usr.mind.original == usr) && R.emagged != 1)
 					var/choice = input("Are you certain you wish to hack [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R && istype(R))
