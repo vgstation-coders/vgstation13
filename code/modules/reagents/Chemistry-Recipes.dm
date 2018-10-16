@@ -94,7 +94,7 @@
 	name = "Soap"
 	id = "soap"
 	result = null
-	required_reagents = list(POTASSIUM_HYDROXIDE = 20, CORNOIL = 5)
+	required_reagents = list(POTASSIUM_HYDROXIDE = 20, NUTRIMENT = 5)
 	required_temp = T0C + 50
 	result_amount = 1
 
