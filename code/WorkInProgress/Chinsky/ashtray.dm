@@ -23,7 +23,9 @@
 		if (contents.len >= max_butts)
 			to_chat(user, "<span class='warning'>This ashtray is full.</span>")
 			return
-		user.drop_item(W, src, force_drop = 1)
+		if(user.drop_item(W, src))
+			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+			return
 		var/obj/item/clothing/mask/cigarette/cig = W
 		if(istype(cig, /obj/item/weapon/cigbutt))
 			to_chat(user, "<span class='notice'>You drop the [cig] into [src].</span>")
