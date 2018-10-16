@@ -127,7 +127,6 @@ var/global/list/rnd_machines = list()
 	if(..() == 1)
 		if (materials)
 			for(var/matID in materials.storage)
-				to_chat(world, "[matID] : [materials.storage[matID]]")
 				if (materials.storage[matID] == 0) // No materials of this type
 					continue
 				var/datum/material/M = materials.getMaterial(matID)
