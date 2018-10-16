@@ -299,6 +299,7 @@
 		insert_item(O)
 		user.visible_message(	"<span class='notice'>[user] has added \the [O] to \the [src].", \
 								"<span class='notice'>You add \the [O] to \the [src].")
+		updateUsrDialog()
 		return TRUE
 	else
 		return dump_bag(O, user)
@@ -310,7 +311,7 @@
 		thisPile.addAmount(1)
 	else
 		piles[formatted_name] = new/datum/fridge_pile(formatted_name, src, 1, costly_bicon(O))
-	updateUsrDialog()
+
 
 /obj/machinery/smartfridge/proc/dump_bag(var/obj/item/weapon/storage/bag/B, var/mob/user)
 	if(!istype(B))
@@ -328,6 +329,7 @@
 							"<span class='notice'>You load \the [src] with \the [B].</span>")
 		if(B.contents.len > 0)
 			to_chat(user, "<span class='notice'>Some items are refused.</span>")
+	updateUsrDialog()
 	return TRUE
 
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
