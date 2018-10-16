@@ -156,6 +156,11 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/avocadoburger
 
+/datum/recipe/caramelburger
+	reagents = list(FLOUR = 5, CARAMEL = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/caramelburger
+
 // Burger sliders //////////////////////////////////////////////
 
 /datum/recipe/sliders
@@ -342,6 +347,11 @@
 	reagents = list(FLOUR = 5, SUGAR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sugarcookie
+
+/datum/recipe/caramelcookie
+	reagents = list(FLOUR = 5, caramel = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
+	result = /obj/item/weapon/reagent_containers/food/snacks/caramelcookie
 
 /datum/recipe/gingerbread_man
 	reagents = list(FLOUR = 5, SUGAR = 5, WATER = 5)
@@ -766,6 +776,15 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/chocolatecake
 
+/datum/recipe/caramelcake
+	reagents = list(MILK = 5, FLOUR = 15, CARAMEL = 15)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
+
 /datum/recipe/buchedenoel
 	reagents = list(MILK = 5, FLOUR = 15, CREAM = 10)
 	items = list(
@@ -892,6 +911,11 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/mincepie
+
+/datum/recipe/caramelpie
+	reagents = list(FLOUR = 10, CARAMEL = 10)
+	items = list()
+	result = /obj/item/weapon/reagent_containers/food/snacks/pie/caramelpie
 
 // Kebabs //////////////////////////////////////////////////////
 
@@ -1556,6 +1580,11 @@
 
 
 // Misc ////////////////////////////////////////////////////////
+
+/datum/recipe/caramel
+	reagents = list(SUGAR = 50)
+	items = list()
+	result = /obj/item/weapon/reagent_containers/food/condiment/caramel
 
 /datum/recipe/chiliconcarne
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
@@ -2581,7 +2610,7 @@
 	)
 
  result = /obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/
- 
+
 /datum/recipe/butteredtoast
 	reagents = list(LIQUIDBUTTER = 2)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/breadslice,

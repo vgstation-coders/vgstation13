@@ -1048,6 +1048,18 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/caramelburger
+	name = "caramel burger"
+	desc = "Too sweet to be any good."
+	icon_state = "caramelburger"
+	food_flags = FOOD_MEAT | FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/caramelburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(CARAMEL, 4)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
 	desc = "That's all you can say!"
@@ -1111,6 +1123,19 @@
 /obj/item/weapon/reagent_containers/food/snacks/pie/empty/New()
 	..()
 	reagents.clear_reagents()
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/caramelpie
+	name = "caramel pie"
+	desc = "Sweet pie made with caramel"
+	icon_state = "pie"
+	trash = /obj/item/trash/pietin
+	food_flags = FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/caramelpie/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(CARAMEL, 3)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/berryclafoutis
 	name = "berry clafoutis"
@@ -2797,6 +2822,29 @@
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
+	name = "caramel cake"
+	desc = "A cake with added caramel"
+	icon_state = "caramelcake"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/chocolatecakeslice
+	slices_num = 5
+	storage_slots = 3
+	w_class = W_CLASS_MEDIUM
+	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 15)
+	reagents.add_reagent(CARAMEL, 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/chocolatecakeslice
+	name = "caramel cake slice"
+	desc = "Just a slice of cake, it is enough for everyone."
+	icon_state = "caramelcake_slice"
+	trash = /obj/item/trash/plate
+	bitesize = 2
+	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
 	name = "cheese wheel"
 	desc = "A big wheel of delicious Cheddar."
@@ -3390,6 +3438,18 @@
 	reagents.add_reagent(SUGAR, 5)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/caramelcookie
+	name = "caramel cookie"
+	desc = "Just like your little sister used to make."
+	icon_state = "caramelcookie"
+	food_flags = FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/caramelcookie/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
+	reagents.add_reagent(CARAMEL, 5)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/boiledspiderleg
 	name = "boiled spider leg"
 	desc = "A giant spider's leg that's still twitching after being cooked. Gross!"
@@ -3852,6 +3912,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/gigapuddi/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(CARAMEL, 5)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/gigapuddi/happy
@@ -3867,11 +3928,12 @@
 	desc = "A small crème caramel"
 	icon_state = "flan"
 	trash = /obj/item/trash/plate
-	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+	food_flags = FOOD_ANIMAL | FOOD_LACTOSE | FOOD_SWEET
 
 /obj/item/weapon/reagent_containers/food/snacks/flan/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent(CARAMEL, 4)
 	bitesize = 2
 
 
@@ -3887,6 +3949,7 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	reagents.add_reagent(CINNAMON, 5)
 	reagents.add_reagent(HONEY, 6)
+	reagents.add_reagent(CARAMEL, 3)
 	bitesize = 3
 
 
