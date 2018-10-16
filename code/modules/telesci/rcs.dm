@@ -119,7 +119,7 @@
 	if (!istype(target) || target.opened || !proximity_flag || !cell || teleporting)
 		return
 
-	if (send_note && z == STATION_Z)
+	if (send_note && user.z == STATION_Z)
 		to_chat(user, "<span class='warning'>The safety prevents the sending of crates from the viscinity of Nanotrasen Station.</span>")
 		return
 
