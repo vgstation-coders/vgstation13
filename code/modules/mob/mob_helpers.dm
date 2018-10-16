@@ -78,36 +78,18 @@ mob/proc/remove_internal_organ()
 	else
 		return default_colour_matrix
 
-/mob/proc/update_colour(var/time = 50,var/forceupdate = 0, var/list/colour_to_apply)
-	if(!client || (client.updating_colour && !forceupdate))
+/mob/proc/update_colour(var/time = 50, var/list/colour_to_apply)
+	if(!client)
 		return
 	if(!colour_to_apply)
 		colour_to_apply = get_screen_colour()
+	// We can't compare client.color directly because Byond will force set client.color to null
+	// when assigning the default_colour_matrix to it
+	var/list/colour_initial = (client.color ? client.color : default_colour_matrix)
 	var/list/difference = list()
-	if(client.color)
-		difference = difflist(client.color,colour_to_apply)
-	if(!difference) // otherwise !difference.len throws a runtime since null.len isn't a thing
-		return
-	else if(!difference.len)
-		client.updating_colour = 1
-		var/cached_ckey = client.ckey
-		if(forceupdate)
-			time = 0
-		else if(colour_to_apply == NOIRMATRIX)
-			time = 170
-			src << sound('sound/misc/noirdarkcoffee.ogg')
+	difference = difflist(colour_initial, colour_to_apply)
+	if(difference && difference.len)
 		client.colour_transition(colour_to_apply,time = time)
-		spawn(time)
-			if(client && client.mob != src)
-				return
-			if(client)
-				client.color = colour_to_apply
-				client.updating_colour = 0
-				difference = difflist(client.color,get_screen_colour())
-				if((difference || !(client.color) || !istype(difference) || !difference.len) && !forceupdate) // panic panic panic
-					src.update_colour(0,1,colour_to_apply)
-			else
-				bad_changing_colour_ckeys["[cached_ckey]"] = 1
 /*
 /proc/RemoveAllFactionIcons(var/datum/mind/M)
 	ticker.mode.update_cult_icons_removed(M)
