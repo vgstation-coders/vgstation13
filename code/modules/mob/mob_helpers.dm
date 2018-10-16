@@ -86,9 +86,7 @@ mob/proc/remove_internal_organ()
 	// We can't compare client.color directly because Byond will force set client.color to null
 	// when assigning the default_colour_matrix to it
 	var/list/colour_initial = (client.color ? client.color : default_colour_matrix)
-	var/list/difference = list()
-	difference = difflist(colour_initial, colour_to_apply)
-	if(difference && difference.len)
+	if(colour_initial ~! colour_to_apply)
 		client.colour_transition(colour_to_apply,time = time)
 /*
 /proc/RemoveAllFactionIcons(var/datum/mind/M)
