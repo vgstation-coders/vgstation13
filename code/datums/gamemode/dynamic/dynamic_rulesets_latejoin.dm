@@ -9,7 +9,7 @@
 	name = "Syndicate Infiltrator"
 	role_category = ROLE_TRAITOR
 	protected_from_jobs = list("Security Officer", "Warden", "Head of Personnel", "Detective", "Head of Security", "Captain", "Merchant")
-	restricted_from_jobs = list("AI", "Cyborg","Mobile MMI")
+	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 1
 	weight = 7
 	cost = 5
