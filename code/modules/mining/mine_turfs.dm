@@ -183,6 +183,9 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		var/obj/structure/bed/chair/vehicle/gigadrill/G = AM
 		G.drill(src)
 
+	else if(istype(AM,/mob/living/simple_animal/construct/armoured))
+		attack_construct(AM)
+
 /turf/unsimulated/mineral/proc/MineralSpread()
 	if(mineral && mineral.spread)
 		for(var/trydir in cardinal)
@@ -398,6 +401,16 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	M.delayNextAttack(8)
 	if(M.environment_smash_flags & SMASH_ASTEROID && prob(30))
 		GetDrilled(0)
+
+/turf/unsimulated/mineral/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+		if(do_after(user, src, 40))
+			GetDrilled(0)
+		return 1
+	return 0
 
 /turf/unsimulated/mineral/proc/DropMineral()
 	if(!mineral)

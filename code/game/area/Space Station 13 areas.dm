@@ -1828,6 +1828,10 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Pod Bay"
 	icon_state = "pod"
 
+/area/science/breakroom
+	name = "\improper Research Break Room"
+	icon_state = "toxmisc"
+
 /area/science/server
 	name = "\improper Server Room"
 	icon_state = "server"

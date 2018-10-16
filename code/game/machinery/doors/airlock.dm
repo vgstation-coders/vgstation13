@@ -1059,6 +1059,7 @@ About the new airlock wires panel:
 		else
 			density ? open(1):close(1)
 
+
 //You can ALWAYS screwdriver a door. Period. Well, at least you can even if it's open
 /obj/machinery/door/airlock/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(!operating)

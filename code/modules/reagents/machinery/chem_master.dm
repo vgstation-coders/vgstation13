@@ -133,9 +133,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 	else if(istype(B, /obj/item/weapon/reagent_containers/pill))
 		B.icon_state = "pill"+pillsprite
-		var/name = reject_bad_text(input(user,"Name:","Name your pill!","[B.reagents.get_master_reagent_name()] ([B.reagents.total_volume] units)") as null|text)
+		var/name = stripped_input(user,"Name:","Name your pill!","[B.reagents.get_master_reagent_name()] ([B.reagents.total_volume] units)")
 		if(name)
 			B.name = "[name] pill"
+		else
+			to_chat(user, "<span class='warning'>[bicon(src)] Invalid name!</span>")
 		return 1
 
 /obj/machinery/chem_master/Topic(href, href_list)
@@ -300,8 +302,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(href_list["createempty"])
 				amount_per_pill = 0 //If "createempty" is 1, pills are empty and no reagents are used.
 
-			var/name = reject_bad_text(input(usr,"Name:","Name your pill!","[reagents.get_master_reagent_name()] ([amount_per_pill] units)") as null|text)
+			var/name = stripped_input(usr,"Name:","Name your pill!","[reagents.get_master_reagent_name()] ([amount_per_pill] units)")
 			if(!name)
+				to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
 				return
 
 			var/logged_message = " - [key_name(usr)] has made [count] pill[count > 1 ? "s, each" : ""] named '[name]' and containing "
@@ -345,8 +348,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				if(href_list["createempty"])
 					amount_per_bottle = 0 //If "createempty" is 1, bottles are empty and no reagents are used.
 
-				var/name = reject_bad_text(input(usr,"Name:", "Name your bottle!","[reagents.get_master_reagent_name()] ([amount_per_bottle] units)") as null|text)
+				var/name = stripped_input(usr,"Name:", "Name your bottle!","[reagents.get_master_reagent_name()] ([amount_per_bottle] units)")
 				if(!name)
+					to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
 					return
 
 				while(count--)

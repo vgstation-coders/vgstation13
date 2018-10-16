@@ -745,6 +745,20 @@ var/global/list/loopModeNames=list(
 	update_music()
 	update_icon()
 
+/obj/machinery/media/jukebox/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+		shake(1, 3)
+		if(stat & NOPOWER || any_power_cut())
+			return
+		playing=!playing
+		update_music()
+		update_icon()
+		return 1
+	return 0
+
 /obj/machinery/media/jukebox/bar
 	department = "Civilian"
 	req_access = list(access_bar)

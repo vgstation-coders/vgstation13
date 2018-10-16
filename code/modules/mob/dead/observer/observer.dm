@@ -345,6 +345,15 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Ghost"
 	set desc = "Relinquish your life and enter the land of the dead."
 
+	if(iscultist(src) && (ishuman(src)||isconstruct(src)) && veil_thickness > CULT_PROLOGUE)
+		var/response = alert(src, "It doesn't have to end here, the veil is thin and the dark energies in you soul cling to this plane. You may forsake this body and materialize as a Shade.","Sacrifice Body","Shade","Ghost","Stay in body")
+		switch (response)
+			if ("Shade")
+				dust()
+				return
+			if ("Stay in body")
+				return
+
 	if(src.health < 0 && stat != DEAD) //crit people
 		succumb()
 		ghostize(1)

@@ -285,7 +285,8 @@
 		stoplag(1)
 
 /datum/radial_menu/Destroy()
-	current_user.radial_menus -= anchor
+	if(current_user)
+		current_user.radial_menus -= anchor
 	Reset()
 	hide()
 	if(istype(custom_check))
