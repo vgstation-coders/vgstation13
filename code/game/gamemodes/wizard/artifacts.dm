@@ -3,7 +3,7 @@
 	var/name = "artifact"
 	var/desc = ""
 	var/abbreviation //For feedback
-
+	var/one_use = FALSE
 	var/list/spawned_items = list()
 	var/price = Sp_BASE_PRICE
 
@@ -228,3 +228,17 @@
 	desc = "Creates a soulbinding artifact that, upon the death of the user, resurrects them as best it can. You must bind yourself to this through making an incision on your palm, holding the phylactery in that hand, and squeezing it."
 	price = 2 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/phylactery)
+
+/datum/spellbook_artifact/darkness
+	name = "Tone setter - darkness"
+	abbreviation = "TS-D"
+	desc = "Exploits the magic of futurescience, tapping into the unfortunate target station's APCs, allowing you to destroy the stations lighting en-masse."
+	one_use = TRUE
+	price = 0.25*Sp_BASE_PRICE
+	spawned_items = list(/obj/item/clothing/head/pumpkinhead)
+
+/datum/spellbook_artifact/darkness/purchased(mob/living/carbon/human/H)
+	..()
+	for(var/obj/machinery/power/apc/apc in power_machines)
+		if(apc.z == STATION_Z)
+			apc.overload_lighting()
