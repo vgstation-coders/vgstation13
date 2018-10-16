@@ -4414,8 +4414,6 @@
 						locations += list("Vox home (MOVING TO IT WILL END THE ROUND)" = "dock_home")
 					if(/datum/shuttle/escape)
 						locations += list("Escape shuttle home" = "dock_station","Escape shuttle centcom" = "dock_centcom")
-					if(/datum/shuttle/taxi)
-						locations += list("Taxi medbay silicon" = "dock_medical_silicon","Taxi engineering cargo" = "dock_engineering_cargo","Taxi security science" = "dock_security_science","Taxi abandoned station" = "dock_abandoned")
 					if(/datum/shuttle/supply)
 						locations += list("Centcom loading bay" = "dock_centcom", "Station cargo bay" = "dock_station")
 

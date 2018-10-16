@@ -66,7 +66,7 @@
 /var/const/access_psychiatrist = 64 // Psychiatrist's office
 /var/const/access_salvage_captain = 65 // Salvage ship captain's quarters
 /var/const/access_weapons = 66 //Weapon authorization for secbots
-/var/const/access_taxi = 67 // Taxi drivers
+
 /var/const/access_shop = 68
 	//BEGIN CENTCOM ACCESS
 	/*Should leave plenty of room if we need to add more access levels.
@@ -235,7 +235,7 @@
 	            access_hydroponics, access_library, access_lawyer, access_virology, access_psychiatrist, access_cmo, access_qm, access_clown, access_mime, access_surgery,
 	            access_theatre, access_science, access_mining, access_mailsorting,access_weapons,
 	            access_heads_vault, access_mining_station, access_xenobiology, access_ce, access_hop, access_hos, access_RC_announce,
-	            access_keycard_auth, access_tcomsat, access_gateway, /*vg paramedic*/, access_paramedic, access_mechanic, access_taxi)
+	            access_keycard_auth, access_tcomsat, access_gateway, /*vg paramedic*/, access_paramedic, access_mechanic)
 
 /proc/get_absolutely_all_accesses()
 	return ((get_all_accesses() | get_all_centcom_access() | get_all_syndicate_access()) + access_salvage_captain + access_trade)
@@ -274,7 +274,7 @@
 		if(6) //station general
 			return list(access_shop, access_kitchen,access_bar, access_hydroponics, access_janitor, access_chapel_office, access_crematorium, access_library, access_theatre, access_lawyer, access_clown, access_mime)
 		if(7) //supply
-			return list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm, access_taxi)
+			return list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm)
 
 /proc/get_region_accesses_name(var/code)
 	switch(code)
@@ -433,8 +433,6 @@
 			return "Paramedic Station"
 		if(access_weapons)
 			return "Weapon Permit"
-		if(access_taxi)
-			return "Taxi Shuttle"
 		if(access_mechanic)
 			return "Mechanics Workshop"
 
