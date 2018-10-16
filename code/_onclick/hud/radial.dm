@@ -234,9 +234,13 @@
 		choices_values[id] = choice_name
 
 		if(E.len > 1)
-			var/choice_iconstate = E[2]
-			var/I = extract_image(image(icon = icon_file, icon_state = choice_iconstate))
-			if(I)
+			var/extracted_image
+			var/choice_icon = E[2]
+			if(isimage(choice_icon)) //prefab image
+				extracted_image = extract_image(choice_icon)
+			else //a string representing an icon_state from our icon_file
+				extracted_image = extract_image(image(icon = icon_file, icon_state = choice_icon))
+			if(extracted_image)
 				choices_icons[id] = I
 
 		if(E.len > 2)
