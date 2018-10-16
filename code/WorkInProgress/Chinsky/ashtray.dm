@@ -11,8 +11,8 @@
 
 /obj/item/ashtray/New()
 	..()
-	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
-	src.pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
+	pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
+	pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
 
 /obj/item/ashtray/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (health < 1)
@@ -28,11 +28,11 @@
 				to_chat(user, "You drop the [cig] into [src].")
 			if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match))
 				if (cig.lit == 1)
-					src.visible_message("[user] crushes [cig] in [src], putting it out.")
+					visible_message("[user] crushes [cig] in [src], putting it out.")
 				else if (cig.lit == 0)
 					to_chat(user, "You place [cig] in [src] without even lighting it. Why would you do that?")
 				else if (cig.lit == -1)
-					src.visible_message("[user] places [cig] in [src].")
+					visible_message("[user] places [cig] in [src].")
 			add_fingerprint(user)
 			if (contents.len == max_butts)
 				icon_state = icon_full
@@ -53,16 +53,16 @@
 			die()
 			return
 		if (contents.len)
-			src.visible_message("<span class='warning'>[src] slams into [hit_atom] spilling its contents!</span>")
+			visible_message("<span class='warning'>[src] slams into [hit_atom] spilling its contents!</span>")
 		for (var/obj/item/O in contents)
-			O.forceMove(src.loc)
+			O.forceMove(loc)
 		icon_state = icon_empty
 	return ..()
 
 /obj/item/ashtray/proc/die()
-	src.visible_message("<span class='warning'>[src] shatters spilling its contents!</span>")
+	visible_message("<span class='warning'>[src] shatters spilling its contents!</span>")
 	for (var/obj/item/O in contents)
-		O.forceMove(src.loc)
+		O.forceMove(loc)
 	icon_state = icon_broken
 
 /obj/item/ashtray/plastic
