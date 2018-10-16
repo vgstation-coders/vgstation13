@@ -17,7 +17,7 @@
 /obj/item/ashtray/attackby(obj/item/weapon/W, mob/user)
 	if (health < 1)
 		return
-	if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match) || istype(W,  /obj/item/weapon/cigbutt))
+	if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match) || istype(W, /obj/item/weapon/cigbutt))
 		if(!user)
 			return
 		if (contents.len >= max_butts)
