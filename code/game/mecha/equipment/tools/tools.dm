@@ -530,6 +530,7 @@
 	RPD = new(src)
 	RCD = new(src)
 	sock = new(src)
+	red_tool_list += src
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/Destroy()
 	qdel(RPD)
@@ -538,6 +539,7 @@
 	RCD = null
 	qdel(sock)
 	sock = null
+	red_tool_list -= src
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/action(atom/target)

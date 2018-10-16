@@ -610,6 +610,7 @@
 		flags |= OPENCONTAINER
 		src.verbs |= /obj/item/weapon/reagent_containers/verb/empty_contents
 		playsound(user, pick(open_sounds), 50, 1)
+		overlays += image(icon = icon, icon_state = "soda_open")
 		return
 	return ..()
 

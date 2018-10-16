@@ -17,8 +17,8 @@
 	var/ping_cooldown = 50
 
 	var/list/required_mols=list(
-		"toxins" = MOLES_PLASMA_VISIBLE / CELL_VOLUME,
-		"oxygen" = 5 / CELL_VOLUME
+		GAS_PLASMA = MOLES_PLASMA_VISIBLE / CELL_VOLUME,
+		GAS_OXYGEN = 5 / CELL_VOLUME
 	)
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/New()

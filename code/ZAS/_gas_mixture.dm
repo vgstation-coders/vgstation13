@@ -130,7 +130,7 @@
 
 
 /datum/gas_mixture/proc/partial_pressure(g)
-	return src[g] / total_moles * pressure
+	return total_moles && (src[g] / total_moles * pressure) //&& short circuits if total_moles is 0, and returns the second expression if it is not.
 
 ///////////////////////////////
 //PV=nRT - related procedures//

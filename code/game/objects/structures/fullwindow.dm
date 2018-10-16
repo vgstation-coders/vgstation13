@@ -98,6 +98,9 @@
 	var/turf/T = get_turf(src)
 	T.AltClick(user)
 
+/obj/structure/window/full/clockworkify()
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/window/full/reinforced/clockwork, BRASS_FULL_WINDOW_GLOW)
+
 /obj/structure/window/full/reinforced
 	name = "reinforced window"
 	desc = "A window with a rod matrice. It looks more solid than the average window."
@@ -169,6 +172,9 @@
 	return
 
 /obj/structure/window/full/reinforced/clockwork/cultify()
+	return
+
+/obj/structure/window/full/reinforced/clockwork/clockworkify()
 	return
 
 #undef WINDOWLOOSE

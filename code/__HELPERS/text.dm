@@ -140,7 +140,7 @@ forLineInText(text)
 // Used to get a sanitized input.
 /proc/stripped_input(var/mob/user, var/message = "", var/title = "", var/default = "", var/max_length=MAX_MESSAGE_LEN)
 	var/name = input(user, message, title, default) as null|text
-	return strip_html_simple(name, max_length)
+	return utf8_sanitize(name, user, max_length)
 
 //Filters out undesirable characters from names
 /proc/reject_bad_name(var/t_in, var/allow_numbers=0, var/max_length=MAX_NAME_LEN)
@@ -393,22 +393,36 @@ proc/checkhtml(var/t)
 	if(parts.len==2)
 		. += ".[parts[2]]"
 
-var/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW")
-/proc/format_watts(var/number)
-	if (number<0)
-		return "-[format_watts(abs(number))]"
-	if (number==0)
-		return "0 W"
 
-	var/max_watt_suffix = watt_suffixes.len
+/**
+ * Formats unites with their suffixes
+ * Should be good for J, W, and stuff
+ */
+var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
+
+/proc/format_units(var/number)
+	if (number<0)
+		return "-[format_units(abs(number))]"
+	if (number==0)
+		return "0 "
+
+	var/max_unit_suffix = unit_suffixes.len
 	var/i=1
 	while (round(number/1000) >= 1)
 		number/=1000
 		i++
-		if (i == max_watt_suffix)
+		if (i == max_unit_suffix)
 			break
 
-	return "[format_num(number)] [watt_suffixes[i]]"
+	return "[format_num(number)] [unit_suffixes[i]]"
+
+
+/**
+ * Old unit formatter, the TEG used to use this
+ */
+/proc/format_watts(var/number)
+	return "[format_units(number)]W"
+
 
 //Returns 1 if [text] ends with [suffix]
 //Example: text_ends_with("Woody got wood", "dy got wood") returns 1
@@ -489,6 +503,8 @@ var/quote = ascii2text(34)
 		if(hundreds)
 			out += num2words(hundreds, zero, minus, hundred, digits, tens, units, recursion+1) + list(hundred)
 			number %= 100
+			if(number == 0)
+				return out
 
 	if(number < 100)
 		// Teens

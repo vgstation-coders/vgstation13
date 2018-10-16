@@ -12,9 +12,6 @@
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ADMINTOGGLE)
 	required_pref = ROLE_VAMPIRE
 
-	// -- Vampire mechanics --
-	var/list/datum/role/thrall/thralls = list()
-
 	var/list/powers = list()
 	var/ismenacing = FALSE
 	var/iscloaking = FALSE
@@ -22,9 +19,10 @@
 	var/nullified = 0
 	var/smitecounter = 0
 
+	var/reviving = FALSE
 	var/draining = FALSE
-	var/blood_usable = 0
-	var/blood_total = 0
+	var/blood_usable = STARTING_BLOOD
+	var/blood_total = STARTING_BLOOD
 
 	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate)
 
@@ -50,11 +48,11 @@
 		if (GREET_ADMINTOGGLE)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>Your powers are awoken. Your lust for blood grows... You are a Vampire!</span></B>")
 		else
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Vampire!</br></span>")
-			to_chat(antag.current, "To drink blood from somebody, just bite their head (switch to harm intent, enable biting and attack the victim in the head with an empty hand).\
-				 Drink blood to gain new powers and use coffins to regenerate your body if injured.\
-				 You are weak to holy things and starlight.\
-				 Don't go into space and avoid the Chaplain, the chapel, and especially Holy Water.")
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Vampire!<br/></span>")
+			to_chat(antag.current, "To drink blood from somebody, just bite their head (switch to harm intent, enable biting and attack the victim in the head with an empty hand).")
+			to_chat(antag.current, "Drink blood to gain new powers and use coffins to regenerate your body if injured.")
+			to_chat(antag.current, "You are weak to holy things and starlight.")
+			to_chat(antag.current, "Don't go into space and avoid the Chaplain, the chapel, and especially Holy Water.")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	antag.current << sound('sound/effects/vampire_intro.ogg')
@@ -63,7 +61,7 @@
 	. = ..()
 
 	update_vamp_hud()
-
+	ForgeObjectives()
 	for(var/type_VP in roundstart_powers)
 		var/datum/power/vampire/VP = new type_VP
 		VP.Give(src)
@@ -84,7 +82,7 @@
 	var/text = {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
 [name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
  - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(priv msg)</a>
- - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a> - <a href='?src=\ref[src]&mind=\ref[antag]&giveblood=1'>Give blood</a>"}
+ - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a> - <a href='?src=\ref[src]&mind=\ref[antag]&giveblood=1'>Give blood</a> <br/>"}
 	return text
 
 /datum/role/vampire/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
@@ -106,9 +104,10 @@
 // I just put what I expect to see in the "The vampires were..."
 /datum/role/vampire/GetScoreboard()
 	. = ..() // Who he was, his objectives...
-	. += "Total blood collected: <b>[blood_total]</b>"
-	for (var/datum/role/thrall/T in thralls)
+	. += "Total blood collected: <b>[blood_total]</b><br/>"
+	for (var/datum/role/thrall/T in faction.members)
 		. += T.GetScoreboard()
+		. += "<br/>"
 
 /datum/role/vampire/ForgeObjectives()
 
@@ -142,7 +141,7 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/vamp_H = M
 		if(H.check_body_part_coverage(MOUTH))
-			if(vamp_H.species.breath_type == "oxygen")
+			if(vamp_H.species.breath_type == GAS_OXYGEN)
 				to_chat(H, "<span class='warning'>Remove your mask!</span>")
 				return FALSE
 			else
@@ -228,8 +227,7 @@
 /datum/role/vampire/proc/handle_enthrall(var/datum/mind/M)
 	if (!istype(M))
 		return FALSE
-	var/datum/role/thrall/T = new(thrall = M, master = src) // Creating a new thrall
-	thralls += T
+	return new/datum/role/thrall(thrall = M, master = src) // Creating a new thrall
 /*
 -- Life() related procs --
 */
@@ -378,13 +376,26 @@
 	blood_usable = max(0, blood_usable - amount)
 	update_vamp_hud()
 
+/datum/role/vampire/handle_mind_transfer(var/mob/living/new_character)
+	. = ..()
+	powers.Cut()
+	if (issilicon(new_character) || isbrain(new_character)) // No, borgs shouldn't be able to spawn bats
+		logo_state = "" // Borgos don't get the vampire icon.
+	else
+		logo_state = initial(logo_state)
+		check_vampire_upgrade()
+
+
 /*
 -- Helpers --
 */
 
+/datum/role/vampire/update_antag_hud()
+	update_vamp_hud()
+
 /datum/role/vampire/proc/update_vamp_hud()
 	var/mob/M = antag.current
-	if(M.hud_used)
+	if(M && M.client && M.hud_used)
 		if(!M.hud_used.vampire_blood_display)
 			M.hud_used.vampire_hud()
 			//hud_used.human_hud(hud_used.ui_style)
@@ -445,16 +456,18 @@
 
 	var/datum/role/vampire/master
 
-/datum/role/thrall/New(var/datum/mind/thrall, var/datum/role/vampire/master)
+/datum/role/thrall/New(var/datum/mind/thrall, var/datum/faction/fac=null, var/new_id, var/override = FALSE, var/datum/role/vampire/master)
 	. = ..()
 	if(!istype(master))
 		return FALSE
 	src.master = master
 	master.faction.members += src
 	faction = master.faction
-	antag.faction = master.faction
 	antag = thrall
 	update_faction_icons()
+	Greet(TRUE)
+	ForgeObjectives()
+	AnnounceObjectives()
 	OnPostSetup()
 
 /datum/role/thrall/Greet(var/you_are = TRUE)
@@ -473,7 +486,6 @@
 
 
 /datum/role/thrall/Drop(var/deconverted = FALSE)
-	master.thralls -= src
 	var/mob/M = antag.current
 	M.visible_message("<span class='big danger'>[M] suddenly becomes calm and collected again, \his eyes clear up.</span>",
 	"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")

@@ -15,10 +15,10 @@
 	if(holder)
 		var/datum/gas_mixture/env = holder.loc.return_air()
 		if(env)
-			env.adjust_gas("oxygen", rand(2,15))
+			env.adjust_gas(GAS_OXYGEN, rand(2,15))
 
 /datum/artifact_effect/gasoxy/DoEffectAura()
 	if(holder)
 		var/datum/gas_mixture/env = holder.loc.return_air()
 		if(env && env.pressure < max_pressure)
-			env.adjust_gas("oxygen", pick(0, 0, 0.1, rand()))
+			env.adjust_gas(GAS_OXYGEN, pick(0, 0, 0.1, rand()))

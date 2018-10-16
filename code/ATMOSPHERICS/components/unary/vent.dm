@@ -24,7 +24,7 @@
 	. = ..()
 
 	CHECK_DISABLED(vents)
-	if (!node)
+	if (!node1)
 		return// Turning off the vent is a PITA. - N3X
 
 	// New GC does this sometimes

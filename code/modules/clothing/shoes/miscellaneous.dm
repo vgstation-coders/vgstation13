@@ -470,3 +470,10 @@
 	icon_state = "lichking_boots"
 	item_state = "lichking_boots"
 	wizard_garb = 1
+
+/obj/item/clothing/shoes/jackboots/inquisitor
+	name = "noble boots"
+	desc = "A pair of high quality black leather boots."
+	icon_state = "noble-boots"
+	item_state = "noble-boots"
+	wizard_garb = TRUE

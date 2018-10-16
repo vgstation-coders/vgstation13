@@ -281,7 +281,7 @@ font-weight:bold;
 		var/sensor = input(user, "Select a sensor:", "Sensor Data") as null|anything in sensor_list
 		if(!sensor)
 			return MT_ERROR
-		var/label = strip_html(input(user, "Choose a sensor label:", "Sensor Label") as text|null)
+		var/label = stripped_input(user, "Choose a sensor label:", "Sensor Label")
 		if(!label)
 			return MT_ERROR
 
@@ -706,5 +706,3 @@ font-weight:bold;
 		)
 
 		radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
-
-

@@ -9,7 +9,8 @@
 	name = "Syndicate Traitors"
 	persistent = 1
 	role_category = ROLE_TRAITOR
-	restricted_from_jobs = list("AI","Mobile MMI","Security Officer", "Warden", "Detective", "Head of Security", "Captain")
+	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective", "Head of Security", "Captain")
+	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = 7
 	cost = 10
@@ -45,12 +46,13 @@
 /datum/dynamic_ruleset/roundstart/changeling
 	name = "Changelings"
 	role_category = ROLE_CHANGELING
-	restricted_from_jobs = list("AI","Cyborg","Mobile MMI","Security Officer", "Warden", "Detective", "Head of Security", "Captain")
+	protected_from_jobs = list("Security Officer", "Warden", "Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
+	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = 3
-	cost = 15
+	cost = 30
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
 
 /datum/dynamic_ruleset/roundstart/changeling/execute()
@@ -74,7 +76,8 @@
 /datum/dynamic_ruleset/roundstart/vampire
 	name = "Vampires"
 	role_category = ROLE_VAMPIRE
-	restricted_from_jobs = list("AI","Cyborg","Mobile MMI","Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain")
+	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
+	restricted_from_jobs = list("AI","Cyborg","Mobile MMI", "Chaplain")
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
 	required_candidates = 1
@@ -88,9 +91,11 @@
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
-		var/datum/role/vampire/newVampire = new
-		newVampire.AssignToRole(M.mind,1)
+		var/datum/faction/vampire/fac = ticker.mode.CreateFaction(/datum/faction/vampire, null, 1)
+		var/datum/role/vampire/newVampire = new(M.mind, fac, override = TRUE)
 		newVampire.Greet(GREET_ROUNDSTART)
+		newVampire.AnnounceObjectives()
+	update_faction_icons()
 	return 1
 
 
@@ -108,7 +113,7 @@
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 3
-	cost = 20
+	cost = 30
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 
 /datum/dynamic_ruleset/roundstart/wizard/acceptable(var/population=0,var/threat=0)
@@ -142,8 +147,9 @@
 /datum/dynamic_ruleset/roundstart/cult_legacy
 	name = "Cult (Legacy)"
 	role_category = ROLE_LEGACY_CULTIST
-	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
-	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain")
+	protected_from_jobs = list("Merchant")
+	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Chaplain")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Chaplain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 4
 	weight = 3
@@ -178,7 +184,7 @@
 /datum/dynamic_ruleset/roundstart/nuclear
 	name = "Nuclear Emergency"
 	role_category = ROLE_OPERATIVE
-	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
+	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a nukie getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
 	required_candidates = 5
@@ -242,3 +248,25 @@
 	unction.HandleRecruitedRole(AI)
 	AI.Greet(GREET_ROUNDSTART)
 	return 1
+
+//////////////////////////////////////////////
+//                                          //
+//               EXTENDED                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/extended
+	name = "Extended"
+	role_category = null
+	restricted_from_jobs = list()
+	enemy_jobs = list()
+	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
+	required_candidates = 0
+	weight = 3
+	cost = 0
+	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
+
+/datum/dynamic_ruleset/roundstart/extended/execute()
+	message_admins("Starting a round of extended.")
+	log_admin("Starting a round of extended.")
+	return TRUE

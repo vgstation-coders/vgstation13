@@ -405,6 +405,17 @@ var/global/list/damage_icon_parts = list()
 		O.underlays	-= "fire[fat]_s"
 		O.underlays	+= "coldfire[fat]_s"
 
+	//Cultist tattoos
+	if (mind && mind.GetRole(CULTIST))
+		var/datum/role/cultist/C = mind.GetRole(CULTIST)
+		add_image = 1
+		for (var/T in C.tattoos)
+			var/datum/cult_tattoo/tattoo = C.tattoos[T]
+			if (tattoo)
+				var/image/I = image(icon = 'icons/mob/cult_tattoos.dmi', icon_state = tattoo.icon_state)
+				I.blend_mode = BLEND_MULTIPLY
+				O.overlays += I
+
 	if(add_image)
 		O.icon = standing
 		O.icon_state = standing.icon_state
@@ -828,8 +839,8 @@ var/global/list/damage_icon_parts = list()
 			if(s_store.dynamic_overlay["[SUIT_STORE_LAYER]"])
 				var/image/dyn_overlay = s_store.dynamic_overlay["[SUIT_STORE_LAYER]"]
 				O.overlays += dyn_overlay
-		O.pixel_x = species.inventory_offsets["[slot_s_store]"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["[slot_s_store]"]["pixel_y"] * PIXEL_MULTIPLIER
+		O.pixel_x = (species.inventory_offsets["[slot_s_store]"]["pixel_x"] - initial(s_store.pixel_x)) * PIXEL_MULTIPLIER
+		O.pixel_y = (species.inventory_offsets["[slot_s_store]"]["pixel_y"] - initial(s_store.pixel_y)) * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,SUIT_STORE_LAYER)
 		//overlays_standing[SUIT_STORE_LAYER]	= image("icon" = 'icons/mob/belt_mirror.dmi', "icon_state" = "[t_state]")
 		s_store.screen_loc = ui_sstore1		//TODO

@@ -1,5 +1,8 @@
 //Refer to life.dm for caller
 
+/mob/living/carbon/human/feels_pain()
+	return species.feels_pain
+
 /mob/living/carbon/human/handle_shock()
 	..()
 	if(status_flags & GODMODE || !feels_pain())

@@ -252,6 +252,10 @@
 		healthcheck() //Note : This healthcheck is silent, and it's going to stay that way
 	..()
 
+/obj/structure/grille/clockworkify()
+	var/our_glow = broken ? BROKEN_REPLICANT_GRILLE_GLOW : REPLICANT_GRILLE_GLOW
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/grille/replicant, our_glow)
+
 /obj/structure/grille/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
@@ -314,4 +318,7 @@
 	grille_material = /obj/item/stack/sheet/ralloy
 
 /obj/structure/grille/replicant/cultify()
+	return
+
+/obj/structure/grille/replicant/clockworkify()
 	return

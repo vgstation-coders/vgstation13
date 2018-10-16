@@ -503,7 +503,7 @@ var/global/mr_clean_targets = list(
  */
 /obj/machinery/singularity/narsie/large/clean/proc/pickuptrash()
 	var/list/targets = list()
-	for(var/obj/effect/E in world)
+	for(var/obj/effect/E in effects_list)
 		if(is_type_in_list(E, mr_clean_targets) && E.z == src.z)
 			targets += E
 	if(targets.len)

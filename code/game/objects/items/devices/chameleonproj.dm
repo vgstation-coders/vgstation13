@@ -51,7 +51,7 @@
 			saved_item = target.type
 			saved_icon = target.icon
 			saved_icon_state = target.icon_state
-			saved_overlays = target.overlays
+			saved_overlays = target.overlays.Copy()
 			return 1
 
 /obj/item/device/chameleon/proc/toggle()

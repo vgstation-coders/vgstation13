@@ -145,6 +145,7 @@
 
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
+	hud_list[RECORD_HUD]      = image('icons/mob/hud.dmi', src, "hudactive")
 	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
 	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
@@ -597,7 +598,7 @@
 	else if (href_list["show_flavor_text"])
 		if(can_show_flavor_text())
 			var/datum/browser/popup = new(usr, "\ref[src]", name, 500, 200)
-			popup.set_content(strip_html(flavor_text))
+			popup.set_content(utf8_sanitize(flavor_text))
 			popup.open()
 	/*else if (href_list["lookmob"])
 		var/mob/M = locate(href_list["lookmob"])
@@ -1507,7 +1508,7 @@
 
 	//Need at least two teeth or a beak to bite
 
-	if(check_body_part_coverage(MOUTH))
+	if(check_body_part_coverage(MOUTH) && !isvampire(src))
 		return 0
 
 	if(M_BEAK in mutations)
@@ -1674,7 +1675,7 @@ mob/living/carbon/human/isincrit()
 		species.punch_damage = rand(1,5)
 	species.max_hurt_damage = rand(1,10)
 	if(prob(10))
-		species.breath_type = pick("oxygen","toxins","nitrogen","carbon_dioxide")
+		species.breath_type = pick(GAS_OXYGEN, GAS_PLASMA, GAS_NITROGEN, GAS_CARBON)
 
 	species.heat_level_3 = rand(800, 1200)
 	species.heat_level_2 = round(species.heat_level_3 / 2.5)
@@ -1697,12 +1698,17 @@ mob/living/carbon/human/isincrit()
 	species.burn_mod *= rand(5,20)/10
 	species.tox_mod *= rand(5,20)/10
 
+	var/can_be_fat = species.anatomy_flags & CAN_BE_FAT	//removing this flag causes gamebreaking things like invisible fat aliens to happen
+
 	if(prob(5))
 		species.flags = rand(0,65535)
 	if(prob(5))
 		species.anatomy_flags = rand(0,65535)
 	if(prob(5))
 		species.chem_flags = rand(0,65535)
+
+	if(!can_be_fat)
+		species.anatomy_flags &= ~CAN_BE_FAT
 
 /mob/living/carbon/human/send_to_past(var/duration)
 	..()

@@ -521,7 +521,7 @@ obj/item/asteroid/basilisk_hide/New()
 		if(!isturf(C.loc))
 			to_chat(user, "<span class='warning'>\The [C] must be safely placed on the ground for modification.</span>")
 			return
-		if(C.goliath_reinforce)
+		if(C.clothing_flags & GOLIATHREINFORCE)
 			C.hidecount ++
 			if(current_armor.["melee"] < 90)
 				current_armor.["melee"] = min(current_armor.["melee"] + 10, 90)

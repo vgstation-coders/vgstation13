@@ -125,7 +125,7 @@ var/datum/controller/gameticker/ticker
 	if(master_mode=="secret")
 		src.hide_mode = 1
 	var/list/datum/gamemode/runnable_modes
-	if((master_mode=="random") || (master_mode=="secret"))
+	if((master_mode=="random"))
 		runnable_modes = config.get_runnable_modes()
 		if (runnable_modes.len==0)
 			current_state = GAME_STATE_PREGAME
@@ -141,8 +141,11 @@ var/datum/controller/gameticker/ticker
 		if(src.mode)
 			var/mtype = src.mode.type
 			src.mode = new mtype
+	else if (master_mode=="secret")
+		mode = config.pick_mode("Dynamic Mode") //Huzzah
 	else
 		src.mode = config.pick_mode(master_mode)
+
 	//log_startup_progress("gameticker.mode is [src.mode.name].")
 	src.mode = new mode.type
 	if (!src.mode.can_start())

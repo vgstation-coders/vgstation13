@@ -2,5 +2,6 @@
 #include "unit_test.dm"
 #include "circuitboards.dm"
 #include "dna_and_disabilities.dm"
+#include "hexadecimal.dm"
 #include "reagent_recipe_collisions.dm"
 #endif

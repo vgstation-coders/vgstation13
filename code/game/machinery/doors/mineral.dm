@@ -312,7 +312,7 @@
 /obj/machinery/door/mineral/cult/TryToSwitchState(atom/user)
 	if (ismob(user))
 		var/mob/M = user
-		if(iscultist(M) && !operating)
+		if(isanycultist(M) && !operating)
 			add_fingerprint(M)
 			SwitchState()
 

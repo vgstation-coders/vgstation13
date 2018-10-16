@@ -3,6 +3,13 @@
 	~Sayu
 */
 
+//A workaround for a BYOND bug (or at least weird behavior). It's classified.
+/client/Click(object, location, control, params)
+	var/list/p = params2list(params)
+	if(p["drag"])
+		return
+	..()
+
 /*
 	Before anything else, defer these calls to a per-mobtype handler.  This allows us to
 	remove istype() spaghetti code, but requires the addition of other handler procs to simplify it.
@@ -128,7 +135,7 @@
 					resolved = M.attackby(held_item,src,def_zone = def_zone, params)
 				else
 					resolved = A.attackby(held_item, src, params)
-				if(ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab))
+				if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
 					delayNextAttack(item_attack_delay)
 				if(!resolved && A && !A.gcDestroyed && held_item)
 					held_item.afterattack(A,src,1,params) // 1 indicates adjacency

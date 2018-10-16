@@ -105,6 +105,8 @@
 	faction=fac
 	if(!faction)
 		ticker.mode.orphaned_roles += src
+	else
+		faction.members += src
 
 	if(new_id)
 		id = new_id
@@ -205,6 +207,9 @@
 // Return 1 on success, 0 on failure.
 /datum/role/proc/OnPostSetup()
 	return 1
+
+/datum/role/proc/update_antag_hud()
+	return
 
 /datum/role/proc/process()
 	return
@@ -410,6 +415,7 @@
 // DO NOT OVERRIDE
 /datum/role/Topic(href, href_list)
 	if(!check_rights(R_ADMIN))
+		to_chat(usr, "You are not an admin.")
 		return 0
 
 	if(!href_list["mind"])
@@ -418,7 +424,6 @@
 	var/datum/mind/M = locate(href_list["mind"])
 	if(!M)
 		return
-
 	RoleTopic(href, href_list, M, check_rights(R_ADMIN))
 
 // USE THIS INSTEAD (global)
@@ -447,6 +452,8 @@
 /datum/role/proc/GetMemoryHeader()
 	return name
 
+/datum/role/proc/handle_mind_transfer(var/mob/living/new_character)
+	return TRUE
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
@@ -499,7 +506,7 @@
 	name = RESPONDER
 	id = RESPONDER
 	special_role = RESPONDER
-	logo_state = "ert-logo"
+	logo_state = "ERT_empty-logo"
 
 //________________________________________________
 
@@ -567,6 +574,7 @@
 /datum/role/wizard/summon_magic
 	disallow_job = FALSE
 	id = MAGICIAN
+	logo_state = "magik-logo"
 
 /datum/role/wizard/summon_magic/ForgeObjectives()
 	var/datum/objective/survive/S = new
@@ -576,51 +584,7 @@
 	to_chat(antag.current, "<B>You are a Magician! Your own safety matters above all else, trust no one and kill anyone who gets in your way. However, armed as you are, now would be the perfect time to settle that score or grab that pair of yellow gloves you've been eyeing...</B>")
 
 /datum/role/wizard/summon_magic/OnPostSetup()
-	var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","disorient","staffchange","armor","scrying", "clowncurse", "mimecurse", "shoesnatch", "robesummon")
-	var/mob/living/carbon/human/H = antag.current
-	switch (randomizemagic)
-		if("fireball")
-			new /obj/item/weapon/spellbook/oneuse/fireball(get_turf(H))
-		if("smoke")
-			new /obj/item/weapon/spellbook/oneuse/smoke(get_turf(H))
-		if("blind")
-			new /obj/item/weapon/spellbook/oneuse/blind(get_turf(H))
-		if("mindswap")
-			new /obj/item/weapon/spellbook/oneuse/mindswap(get_turf(H))
-		if("forcewall")
-			new /obj/item/weapon/spellbook/oneuse/forcewall(get_turf(H))
-		if("knock")
-			new /obj/item/weapon/spellbook/oneuse/knock(get_turf(H))
-		if("horsemask")
-			new /obj/item/weapon/spellbook/oneuse/horsemask(get_turf(H))
-		if("blink")
-			new /obj/item/weapon/spellbook/oneuse/teleport/blink(get_turf(H))
-		if("disorient")
-			new /obj/item/weapon/spellbook/oneuse/disorient(get_turf(H))
-		if("clowncurse")
-			new /obj/item/weapon/spellbook/oneuse/clown(get_turf(H))
-		if("mimecurse")
-			new /obj/item/weapon/spellbook/oneuse/mime(get_turf(H))
-		if("shoesnatch")
-			new /obj/item/weapon/spellbook/oneuse/shoesnatch(get_turf(H))
-		if("robesummon")
-			new /obj/item/weapon/spellbook/oneuse/robesummon(get_turf(H))
-		if("staffchange")
-			new /obj/item/weapon/gun/energy/staff(get_turf(H))
-		if("armor")
-			new /obj/item/clothing/suit/space/rig/wizard(get_turf(H))
-			new /obj/item/clothing/head/helmet/space/rig/wizard(get_turf(H))
-		if("scrying")
-			if (!istype(H))
-				return
-			new /obj/item/weapon/scrying(get_turf(H))
-			if (!(M_XRAY in H.mutations))
-				H.mutations.Add(M_XRAY)
-				H.change_sight(adding = SEE_MOBS|SEE_OBJS|SEE_TURFS)
-				H.see_in_dark = 8
-				H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-				to_chat(H, "<span class='notice'>The walls suddenly disappear.</span>")
-
+	return TRUE
 //________________________________________________
 
 /datum/role/wish_granter_avatar
