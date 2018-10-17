@@ -630,7 +630,7 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/proc/attempt_hack(mob/user)
 	if (!isAI(user))
 		return FALSE
-	if (user.mind && !user.mind.special_role)
+	if (user.mind && !(user.mind.GetRole(TRAITOR) || user.mind.GetRole(MALF)))
 		to_chat(user, "Airlock AI control has been blocked. Dispatch a cyborg, or a carbon engineer, for maintenance.")
 		return FALSE
 	if (aiHacking)
