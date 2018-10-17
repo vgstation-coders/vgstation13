@@ -3423,7 +3423,7 @@
 					M.heal_organ_damage(5, 5)
 					M.adjustToxLoss(-5)
 					M.adjustCloneLoss(-5)
-					holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
+					holder.remove_reagent("mednanobots", 10/40)  //This line of code will remove 10/40 of 1u whenever the nanobots heal any of the 5 different damage types along with internal bleeding. In short whenever you are healed it will remove 0.25u making each unit capable of healing a maximum of 20 per damage type.
 			if(percent_machine>5)
 				if(holder.has_reagent("mednanobots"))
 					percent_machine-=1
