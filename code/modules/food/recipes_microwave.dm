@@ -668,6 +668,11 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple)
 	result = /obj/item/weapon/reagent_containers/food/snacks/candiedapple
 
+/datum/recipe/caramelapple
+	reagents = list(WATER = 5, CARAMEL = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/apple)
+	result = /obj/item/weapon/reagent_containers/food/snacks/caramelapple
+
 // Cakes ///////////////////////////////////////////////////////
 
 /datum/recipe/carrotcake

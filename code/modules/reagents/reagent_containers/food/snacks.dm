@@ -2311,6 +2311,18 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 3
 
+/obj/item/weapon/reagent_containers/food/snacks/caramelapple
+	name = "Caramel Apple"
+	desc = "An apple coated in caramel goodness."
+	icon_state = "caramelapple"
+	food_flags = FOOD_SWEET
+
+/obj/item/weapon/reagent_containers/food/snacks/caramelapple/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(CARAMEL, 2)
+	bitesize = 3
+
 /obj/item/weapon/reagent_containers/food/snacks/pie/applepie
 	name = "Apple Pie"
 	desc = "A pie containing sweet sweet love...or apple."
