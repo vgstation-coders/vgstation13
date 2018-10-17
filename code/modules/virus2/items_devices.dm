@@ -1,7 +1,7 @@
 ///////////////ANTIBODY SCANNER///////////////
 
 /obj/item/device/antibody_scanner
-	name = "Antibody Scanner"
+	name = "antibody scanner"
 	desc = "Used to scan living beings for antibodies in their blood."
 	icon_state = "antibody"
 	w_class = W_CLASS_SMALL
@@ -24,7 +24,7 @@
 ///////////////VIRUS DISH///////////////
 
 /obj/item/weapon/virusdish
-	name = "Virus containment/growth dish"
+	name = "virus containment/growth dish"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "implantcase-b"
 	var/datum/disease2/disease/virus2 = null
@@ -33,7 +33,7 @@
 	var/analysed = 0
 
 /obj/item/weapon/virusdish/random
-	name = "Virus Sample"
+	name = "virus sample"
 
 /obj/item/weapon/virusdish/random/New(loc)
 	..(loc)
@@ -72,12 +72,12 @@
 ///////////////GNA DISK///////////////
 
 /obj/item/weapon/diseasedisk
-	name = "Blank GNA disk"
+	name = "blank GNA disk"
 	icon = 'icons/obj/cloning.dmi'
 	icon_state = "datadisk0"
 	var/datum/disease2/effect/effect = null
 	var/stage = 1
 
 /obj/item/weapon/diseasedisk/premade/New()
-	name = "Blank GNA disk (stage: [stage])"
+	name = "blank GNA disk (stage: [stage])"
 	effect = new /datum/disease2/effect
