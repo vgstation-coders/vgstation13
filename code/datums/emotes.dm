@@ -15,7 +15,7 @@
 	var/message_monkey = "" //Message displayed if the user is a monkey
 	var/message_simple = "" //Message to display if the user is a simple_animal
 	var/message_param = "" //Message to display if a param was given
-	var/message_mommi = ""
+	var/message_mommi = "" //Message to display if the user is a mommi. Defaults to message_robot if none specified
 	var/emote_type = EMOTE_VISIBLE //Whether the emote is visible or audible
 	var/restraint_check = FALSE //Checks if the mob is restrained before performing the emote
 	var/muzzle_ignore = FALSE //Will only work if the emote is EMOTE_AUDIBLE
@@ -28,10 +28,12 @@
 /datum/emote/New()
 	if(key_third_person)
 		emote_list[key_third_person] = src
+	if(!message_mommi)
+		message_mommi = message_robot
 
-/datum/emote/proc/run_emote(mob/user, params, type_override)
+/datum/emote/proc/run_emote(mob/user, params, type_override, ignore_status = FALSE)
 	. = TRUE
-	if(!can_run_emote(user))
+	if(!can_run_emote(user, !ignore_status)) // ignore_status == TRUE means that status_check should be FALSE and vise-versa
 		return FALSE
 	var/msg = select_message_type(user)
 	if(params && message_param)
@@ -46,7 +48,7 @@
 
 	if(!msg)
 		return
-	
+
 	msg = "<b>[user]</b> " + msg
 
 	for(var/mob/M in dead_mob_list)
@@ -57,16 +59,18 @@
 			M.show_message(msg)
 
 	if (emote_type == EMOTE_VISIBLE)
-		for(var/mob/O in viewers(user))
-			O.show_message(msg, emote_type)
+		user.visible_message(msg)
 	else
-		for(var/mob/O in hearers(user))
-			O.show_message(msg, emote_type)
-	
-	log_emote("[user.name]/[user.key] (@[user.x],[user.y],[user.z]): [message]")
+		for(var/mob/O in get_hearers_in_view(world.view, user))
+			O.show_message(msg)
+
+	var/turf/T = get_turf(user)
+	var/location = T ? "[T.x],[T.y],[T.z]" : "nullspace"
+	log_emote("[user.name]/[user.key] (@[location]): [message]")
+
 
 // TODO : gender & all
-/datum/emote/proc/replace_pronoun(mob/user, message)	
+/datum/emote/proc/replace_pronoun(mob/user, message)
 	var/mob/living/carbon/human/H = user
 	if (istype(H))
 		var/skipface = FALSE
@@ -103,7 +107,7 @@
 	. = message
 	if(!muzzle_ignore && user.is_muzzled() && emote_type == EMOTE_AUDIBLE)
 		return "makes a [pick("strong ", "weak ", "")]noise."
-	if(user.mind && ishuman(user) && user:miming && message_mime)
+	if(user.mind && ishuman(user) && user.mind.miming && message_mime)
 		. = message_mime
 	if(isalienadult(user) && message_alien)
 		. = message_alien
@@ -111,14 +115,14 @@
 		. = message_larva
 	else if(isAI(user) && message_AI)
 		. = message_AI
+	else if(isMoMMI(user) && message_mommi)
+		. = message_mommi
 	else if(issilicon(user) && message_robot)
 		. = message_robot
 	else if(ismonkey(user) && message_monkey)
 		. = message_monkey
 	else if(isanimal(user) && message_simple)
 		. = message_simple
-	else if(isMoMMI(user) && message_mommi)
-		. = message_robot
 
 /datum/emote/proc/select_param(mob/user, params)
 	return replacetext(message_param, "%t", params)
@@ -141,7 +145,7 @@
 		if(L.silent)
 			to_chat(user, "<span class='warning'>You cannot do that while silenced.</span>")
 			return FALSE
-	
+
 	return TRUE
 
 /datum/emote/sound
@@ -149,13 +153,13 @@
 	var/vary = FALSE	//used for the honk borg emote
 	mob_type_allowed_typelist = list(/mob/living/carbon/brain, /mob/living/silicon)
 
-/datum/emote/sound/run_emote(mob/user, params)
+/datum/emote/sound/run_emote(mob/user, params, ignore_status = FALSE)
 	. = ..()
 	if(.)
 		playsound(user.loc, sound, 50, vary)
 
 /mob/proc/audible_cough()
-	emote("coughs")
+	emote("coughs", message = TRUE, ignore_status = TRUE)
 
 /mob/proc/audible_scream()
-	emote("screams")
+	emote("screams", message = TRUE, ignore_status = TRUE) // So it's forced

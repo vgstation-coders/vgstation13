@@ -28,7 +28,7 @@
 	idle_vision_range = 6
 	search_objects = 1
 
-	var/static/list/edibles = list(/mob/living/simple_animal/cockroach, /obj/item/weapon/reagent_containers/food/snacks/roach_eggs) //Add bugs to this as they get added in
+	var/static/list/edibles = list(/mob/living/simple_animal/cockroach, /obj/item/weapon/reagent_containers/food/snacks/roach_eggs, /mob/living/simple_animal/bee) //Add bugs to this as they get added in
 
 /mob/living/simple_animal/hostile/lizard/UnarmedAttack(var/atom/A)
 	if(is_type_in_list(A, edibles))
@@ -37,9 +37,17 @@
 	else return ..()
 
 /mob/living/simple_animal/hostile/lizard/proc/gulp(var/atom/eat_this)
-	visible_message("\The [name] consumes [eat_this] in a single gulp.", "<span class='notice'>You consume [eat_this] in a single gulp.</span>")
+	if(istype(eat_this,/mob/living/simple_animal/bee)) //Bees are complicated. They don't work like normal mobs.
+		var/mob/living/simple_animal/bee/B = eat_this
+		visible_message("\The [name] lashes \the [B] with its sticky tongue.", "<span class='notice'>You eat a [B.bee_species].</span>")
+		var/datum/bee/victim = pick_n_take(B.bees)
+		qdel(victim)
+		B.update_icon()
+		//The reason we're doing it this way instead of just AdjustBruteLoss is because it doesn't make sense to leave corpses.
+	else
+		visible_message("\The [name] consumes [eat_this] in a single gulp.", "<span class='notice'>You consume [eat_this] in a single gulp.</span>")
+		qdel(eat_this)
 	playsound(src,'sound/items/egg_squash.ogg', rand(30,70), 1)
-	qdel(eat_this)
 	adjustBruteLoss(-2)
 
 /mob/living/simple_animal/hostile/lizard/LoseAggro()

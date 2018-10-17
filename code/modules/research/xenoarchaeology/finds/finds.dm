@@ -52,25 +52,14 @@
 		src.visible_message("The [src] crumbles away, leaving some dust and gravel behind.")*/
 
 /obj/item/weapon/strangerock/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/weldingtool/))
-		var/obj/item/weapon/weldingtool/w = W
-		if(w.isOn())
-			if(w.get_fuel() >= 4 && !src.method)
-				if(inside)
-					inside.forceMove(get_turf(src))
-					inside = null
-					for(var/mob/M in viewers(world.view, user))
-						M.show_message("<span class='info'>[src] burns away revealing [inside].</span>",1)
-				else
-					for(var/mob/M in viewers(world.view, user))
-						M.show_message("<span class='info'>[src] burns away into nothing.</span>",1)
-				qdel(src)
-				w.remove_fuel(4)
-			else
-				for(var/mob/M in viewers(world.view, user))
-					M.show_message("<span class='info'>A few sparks fly off [src], but nothing else happens.</span>",1)
-				w.remove_fuel(1)
-			return
+	if(istype(W,/obj/item/weapon/pickaxe/brush))
+		if(inside)
+			inside.forceMove(get_turf(src))
+			visible_message("\The [src] is brushed away revealing \the [inside].")
+			inside = null
+		else
+			visible_message("<span class='info'>\The [src] reveals nothing!</span>")
+		qdel(src)
 
 	else if(istype(W,/obj/item/device/core_sampler/))
 		var/obj/item/device/core_sampler/S = W
@@ -79,7 +68,7 @@
 
 	..()
 	if(prob(33))
-		src.visible_message("<span class='warning'>[src] crumbles away, leaving some dust and gravel behind.</span>")
+		src.visible_message("<span class='warning'>\The [src] crumbles away, leaving some dust and gravel behind.</span>")
 		qdel(src)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,6 +97,9 @@
 	var/apply_image_decorations = FALSE
 	var/material_descriptor = ""
 	var/apply_prefix = TRUE
+
+	var/static/cultwords = ""
+
 	if(prob(40))
 		material_descriptor = pick("rusted ","dusty ","archaic ","fragile ")
 	source_material = pick("cordite","quadrinium","steel","titanium","aluminium","ferritic-alloy","plasteel","duranium")
@@ -319,10 +311,18 @@
 			//arcane clothing
 			apply_prefix = FALSE
 			anomaly_factor = 2
-			var/list/possible_spawns = list(/obj/item/clothing/head/culthood,
-			/obj/item/clothing/head/magus,
-			/obj/item/clothing/head/culthood/alt,
-			/obj/item/clothing/head/helmet/space/cult)
+			var/list/possible_spawns = list()
+			if (prob(1))
+				possible_spawns = list(/obj/item/clothing/head/legacy_culthood,
+									/obj/item/clothing/head/legacy_magus,
+									/obj/item/clothing/head/legacy_culthood/alt,
+									/obj/item/clothing/head/helmet/space/legacy_cult)
+			else
+				possible_spawns = list(
+					/obj/item/clothing/head/culthood,
+					/obj/item/clothing/head/culthood/old,
+					/obj/item/clothing/head/magus,
+					/obj/item/clothing/head/helmet/space/cult)
 
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
@@ -580,13 +580,14 @@
 			new_item = new new_type(src.loc)
 		if(ARCHAEO_ROBOT)
 			//ancient robots?
+			item_type = "machine"
 			anomaly_factor = 2
 			apply_prefix = FALSE
 			apply_material_decorations = FALSE
 			apply_image_decorations = FALSE
 			var/list/possible_spawns=list()
-			possible_spawns += /obj/item/device/mmi/posibrain/strangeball
-			possible_spawns += /obj/item/device/mmi/posibrain/strangeball/strangeegg
+			possible_spawns += /obj/item/weapon/robot_spawner/strange/ball
+			possible_spawns += /obj/item/weapon/robot_spawner/strange/egg
 			var/new_type = pick(possible_spawns)
 			new_item = new new_type(src.loc)
 		if(ARCHAEO_SASH)

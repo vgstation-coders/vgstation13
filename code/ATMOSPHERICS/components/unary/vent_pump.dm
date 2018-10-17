@@ -91,7 +91,7 @@
 /obj/machinery/atmospherics/unary/vent_pump/process()
 	. = ..()
 	CHECK_DISABLED(vents)
-	if (!node)
+	if (!node1)
 		return // Turning off the vent is a PITA. - N3X
 	if(stat & (NOPOWER|BROKEN))
 		return
@@ -302,29 +302,22 @@
 	return !welded
 
 /obj/machinery/atmospherics/unary/vent_pump/attackby(var/obj/item/W as obj, var/mob/user as mob)
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if (WT.remove_fuel(0,user))
-			to_chat(user, "<span class='notice'>Now welding the vent.</span>")
-			if(do_after(user, src, 20))
-				if(!src || !WT.isOn())
-					return
-				playsound(src, 'sound/items/Welder2.ogg', 50, 1)
-				if(!welded)
-					user.visible_message("[user] welds the vent shut.", "You weld the vent shut.", "You hear welding.")
-					investigation_log(I_ATMOS, "has been welded shut by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
-					welded = 1
-					update_icon()
-				else
-					user.visible_message("[user] unwelds the vent.", "You unweld the vent.", "You hear welding.")
-					investigation_log(I_ATMOS, "has been unwelded by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
-					welded = 0
-					update_icon()
+		to_chat(user, "<span class='notice'>Now welding the vent.</span>")
+		if (WT.do_weld(user, src, 20, 1))
+			if(gcDestroyed)
+				return
+			if(!welded)
+				user.visible_message("[user] welds the vent shut.", "You weld the vent shut.", "You hear welding.")
+				investigation_log(I_ATMOS, "has been welded shut by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
+				welded = 1
+				update_icon()
 			else
-				to_chat(user, "<span class='notice'>The welding tool needs to be on to start this task.</span>")
-		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
-			return 1
+				user.visible_message("[user] unwelds the vent.", "You unweld the vent.", "You hear welding.")
+				investigation_log(I_ATMOS, "has been unwelded by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
+				welded = 0
+				update_icon()
 	if (!iswrench(W))
 		return ..()
 	if (!(stat & NOPOWER) && on)

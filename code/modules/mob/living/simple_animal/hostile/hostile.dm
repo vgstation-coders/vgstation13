@@ -166,6 +166,11 @@
 			if(M.occupant)//Just so we don't attack empty mechs
 				if(CanAttack(M.occupant))
 					return 1
+		if((environment_smash_flags & OPEN_DOOR_STRONG) && istype(the_target, /obj/machinery/door/airlock))
+			var/obj/machinery/door/airlock/A = the_target
+			if(!A.density)
+				return 0
+			return 1
 	return 0
 
 /mob/living/simple_animal/hostile/proc/GiveTarget(var/new_target)//Step 4, give us our selected target
@@ -211,7 +216,7 @@
 	LostTarget()
 
 /mob/living/simple_animal/hostile/proc/Goto(var/target, var/delay, var/minimum_distance)
-	walk_to(src, target, minimum_distance, delay)
+	start_walk_to(target, minimum_distance, delay)
 
 /mob/living/simple_animal/hostile/adjustBruteLoss(var/damage)
 	..(damage)
@@ -372,14 +377,20 @@
 			if(istype(T, /turf/simulated/wall) && Adjacent(T))
 				UnarmedAttack(T)
 			for(var/atom/A in T)
-				if((istype(A, /obj/structure/window)\
-				 || istype(A, /obj/structure/closet)\
-				 || istype(A, /obj/structure/table)\
-				 || istype(A, /obj/structure/grille)\
-				 || istype(A, /obj/structure/rack)\
-				 || istype(A, /obj/machinery/door/window)\
-				 || istype(A, /obj/item/tape)\
-				 || istype(A, /obj/item/toy/balloon/inflated/decoy)) && Adjacent(A))
+				var/static/list/destructible_objects = list(/obj/structure/window,
+					 /obj/structure/closet,
+					 /obj/structure/table,
+					 /obj/structure/grille,
+					 /obj/structure/rack,
+					 /obj/machinery/door/window,
+					 /obj/item/tape,
+					 /obj/item/toy/balloon/inflated/decoy,
+					 /obj/machinery/door/airlock)
+				if(is_type_in_list(A, destructible_objects) && Adjacent(A))
+					if(istype(A, /obj/machinery/door/airlock))
+						var/obj/machinery/door/airlock/AIR = A
+						if(AIR.density)
+							continue
 					UnarmedAttack(A)
 	return
 

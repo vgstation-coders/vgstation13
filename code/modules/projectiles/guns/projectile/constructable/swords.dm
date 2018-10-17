@@ -262,27 +262,22 @@
 	qdel(src)
 
 /obj/item/weapon/sword/executioner/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/weldingtool) && !complete)
+	if(iswelder(W) && !complete)
 		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(0, user))
-			to_chat(user, "You begin welding the metal blade onto \the [src].")
-			playsound(user, 'sound/items/Welder.ogg', 50, 1)
-			if(do_after(user, src, 30))
-				to_chat(user, "You weld the metal blade onto \the [src].")
-				desc = "A huge sword. It looks almost too heavy to lift."
-				icon_state = "executioners_sword"
-				hitsound = "sound/weapons/bloodyslice.ogg"
-				w_class = W_CLASS_LARGE
-				force = 25
-				sharpness = 2.0
-				sharpness_flags = SHARP_TIP | SHARP_BLADE
-				slot_flags = SLOT_BACK
-				attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cleaves")
-				complete = 1
-				if (istype(loc,/mob/living/carbon/human))
-					var/mob/living/carbon/human/H = loc
-					H.update_inv_hands()
-					H.update_inv_back()
-		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
-			return
+		to_chat(user, "You begin welding the metal blade onto \the [src].")
+		if(WT.do_weld(user, src, 30))
+			to_chat(user, "You weld the metal blade onto \the [src].")
+			desc = "A huge sword. It looks almost too heavy to lift."
+			icon_state = "executioners_sword"
+			hitsound = "sound/weapons/bloodyslice.ogg"
+			w_class = W_CLASS_LARGE
+			force = 25
+			sharpness = 2.0
+			sharpness_flags = SHARP_TIP | SHARP_BLADE
+			slot_flags = SLOT_BACK
+			attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cleaves")
+			complete = 1
+			if (istype(loc,/mob/living/carbon/human))
+				var/mob/living/carbon/human/H = loc
+				H.update_inv_hands()
+				H.update_inv_back()

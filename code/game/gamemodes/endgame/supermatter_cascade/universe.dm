@@ -64,12 +64,12 @@
 	OverlayAndAmbientSet()
 
 	// Disable Nar-Sie.
-	ticker.mode.eldergod=0
+	//ticker.mode.eldergod=0
 	// TODO: If Nar-Sie is present, have it say "Well fuck this" and leave, for shits and giggles.
 
 	ticker.StartThematic("endgame")
 
-	PlayerSet()
+	//PlayerSet()
 	CHECK_TICK
 	if(!endgame_exits.len)
 		message_admins("<span class='warning'><font size=7>SOMEBODY DIDNT PUT ENDGAME EXITS FOR THIS FUCKING MAP: [map.nameLong]</span></font>")
@@ -188,6 +188,7 @@
 			APC.queue_icon_update()
 		CHECK_TICK
 
+/*
 /datum/universal_state/supermatter_cascade/proc/PlayerSet()
 	for(var/datum/mind/M in player_list)
 		if(!istype(M.current,/mob/living))
@@ -304,3 +305,4 @@
 
 			to_chat(A, "<span class='danger'><FONT size = 3>The massive blast of energy has fried the systems that were malfunctioning.  You are no longer malfunctioning.</FONT></span>")
 		CHECK_TICK
+*/

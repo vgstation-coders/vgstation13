@@ -2,9 +2,11 @@
 /mob/proc/make_changeling()
 	if(!mind)
 		return
-	if(!mind.changeling)
-		mind.changeling = new /datum/changeling(gender)
-	verbs += /datum/changeling/proc/EvolutionMenu
+	var/datum/role/changeling/C = mind.GetRole(CHANGELING)
+	if(!C)
+		return
+
+	verbs += /datum/role/changeling/proc/EvolutionMenu
 
 	var/obj/item/verbs/changeling/verb_holder = locate() in src
 	if(!verb_holder)
@@ -19,10 +21,10 @@
 	// Code to auto-purchase free powers.
 	for(var/datum/power/changeling/P in powerinstances)
 		if(!P.genomecost) // Is it free?
-			if(!(P in mind.changeling.purchasedpowers)) // Do we not have it already?
-				mind.changeling.purchasePower(mind, P.name, 0)// Purchase it. Don't remake our verbs, we're doing it after this.
+			if(!(P in C.power_holder.purchasedpowers)) // Do we not have it already?
+				C.power_holder.purchasePower(P.name, 0)// Purchase it. Don't remake our verbs, we're doing it after this.
 
-	for(var/datum/power/changeling/P in mind.changeling.purchasedpowers)
+	for(var/datum/power/changeling/P in C.power_holder.purchasedpowers)
 		if(P.isVerb)
 			if(lesser_form && !P.allowduringlesserform)
 				continue
@@ -31,11 +33,12 @@
 
 	var/mob/living/carbon/human/H = src
 	dna.flavor_text = H.flavor_text
-	mind.changeling.absorbed_dna |= dna
-	if(istype(H))
-		mind.changeling.absorbed_species |= H.species.name
+	if(!(M_HUSK in H.mutations))
+		C.absorbed_dna |= dna
+		if(istype(H))
+			C.absorbed_species |= H.species.name
 	for(var/language in languages)
-		mind.changeling.absorbed_languages |= language
+		C.absorbed_languages |= language
 	updateChangelingHUD()
 	return 1
 
@@ -59,15 +62,20 @@
 
 /mob/proc/updateChangelingHUD()
 	if(hud_used)
-		if(!mind.changeling)
+		var/datum/role/changeling/changeling = mind.GetRole(CHANGELING)
+		if(!changeling)
 			return
 		if(!hud_used.vampire_blood_display)
 			hud_used.changeling_hud()
 			//hud_used.human_hud(hud_used.ui_style)
 		hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE*2
 		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
-		var/C = round(mind.changeling.chem_charges)
-		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'>C:<font color='#EAB67B'>[C]</font><br> G:<font color='#FF2828'>[mind.changeling.absorbedcount]</font></div>"
+		var/C = round(changeling.chem_charges)
+		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'>\
+				C:<font color='#EAB67B'>[C]</font><br>\
+				G:<font color='#FF2828'>[changeling.absorbedcount]</font><br>\
+				[changeling.geneticdamage ? "GD: <font color='#8b0000'>[changeling.geneticdamage]</font>" : ""]\
+				</div>"
 	return
 
 //Used to dump the languages from the changeling datum into the actual mob.
@@ -100,7 +108,7 @@
 		to_chat(src, "<span class='warning'>We may only use this power while in humanoid form.</span>")
 		return
 
-	var/datum/changeling/changeling = changeling_power(5,1,0)
+	var/datum/role/changeling/changeling = changeling_power(5,1,0)
 	if(!changeling)
 		return
 
@@ -134,7 +142,7 @@
 /obj/item/verbs/changeling/proc/changeling_horror_form()
 	set category = "Changeling"
 	set name = "Horror Form (30)"
-	set desc = "This costly evolution allows us to transform into an all-consuming abomination. We are extremely strong, to the point that we can force airlocks open and devour humans whole, and are immune to stuns."
+	set desc = "This costly evolution allows us to transform into an all-consuming abomination. We are incredibly strong, to the point that we can force open airlocks, and are immune to conventional stuns."
 
 	var/mob/M = loc
 	if(!istype(M))
@@ -147,7 +155,7 @@
 		to_chat(usr, "<span class='warning'>We must be in human form before activating Horror Form.</span>")
 		return
 
-	var/datum/changeling/changeling = changeling_power(30, 0, 100, deny_horror = TRUE)
+	var/datum/role/changeling/changeling = changeling_power(30, 0, 100, deny_horror = TRUE)
 	if(!changeling)
 		return
 
@@ -187,14 +195,16 @@
 
 //removes our changeling verbs
 /mob/proc/remove_changeling_powers()
-	if(!mind || !mind.changeling)
+	if(!mind)
 		return
-
+	var/datum/role/changeling/changeling = mind.GetRole(CHANGELING)
+	if(!changeling)
+		return
 	var/obj/item/verbs/changeling/verb_holder = locate() in src
 	if(!verb_holder)
 		return
 
-	for(var/datum/power/changeling/P in mind.changeling.purchasedpowers)
+	for(var/datum/power/changeling/P in changeling.power_holder.purchasedpowers)
 		if(P.isVerb)
 			verb_holder.verbs -= P.verbpath
 
@@ -213,7 +223,7 @@
 	if(!iscarbon(src))
 		return
 
-	var/datum/changeling/changeling = src.mind.changeling
+	var/datum/role/changeling/changeling = src.mind.GetRole(CHANGELING)
 	if(!changeling)
 		world.log << "[src] has the changeling_transform() verb but is not a changeling."
 		return
@@ -254,7 +264,7 @@
 //Absorbs the victim's DNA making them uncloneable. Requires a strong grip on the victim.
 //Doesn't cost anything as it's the most basic ability.
 /mob/proc/changeling_absorb_dna()
-	var/datum/changeling/changeling = changeling_power(0,0,100)
+	var/datum/role/changeling/changeling = changeling_power(0,0,100)
 	if(!changeling)
 		return
 
@@ -276,7 +286,7 @@
 		to_chat(src, "<span class='warning'>This creature's DNA is useless to us!</span>")
 		return
 
-	if(!G.state == GRAB_KILL)
+	if(!(G.state == GRAB_KILL))
 		to_chat(src, "<span class='warning'>We must have a tighter grip to absorb this creature.</span>")
 		return
 
@@ -341,32 +351,35 @@
 	if(T.species && !(T.species.name in changeling.absorbed_species))
 		changeling.absorbed_species += T.species.name
 
-	if(T.mind && T.mind.changeling)
-		if(T.mind.changeling.absorbed_dna)
-			for(var/dna_data in T.mind.changeling.absorbed_dna)	//steal all their loot
-				if(dna_data in changeling.absorbed_dna)
-					continue
-				changeling.absorbed_dna += dna_data
-				changeling.absorbedcount++
-			T.mind.changeling.absorbed_dna.len = 1
+	if(T.mind)
+		var/datum/role/changeling/Tchangeling = T.mind.GetRole(CHANGELING)
 
-		if(T.mind.changeling.purchasedpowers)
-			for(var/datum/power/changeling/Tp in T.mind.changeling.purchasedpowers)
-				if(Tp in changeling.purchasedpowers)
-					continue
-				else
-					changeling.purchasedpowers += Tp
+		if(Tchangeling)
+			if(Tchangeling.absorbed_dna)
+				for(var/dna_data in Tchangeling.absorbed_dna)	//steal all their loot
+					if(dna_data in changeling.absorbed_dna)
+						continue
+					changeling.absorbed_dna += dna_data
+					changeling.absorbedcount++
+					Tchangeling.absorbed_dna.Remove(dna_data)
 
-					if(!Tp.isVerb)
-						call(Tp.verbpath)()
+			if(Tchangeling.power_holder.purchasedpowers.len)
+				for(var/datum/power/changeling/Tp in Tchangeling.power_holder.purchasedpowers)
+					if(Tp in changeling.power_holder.purchasedpowers)
+						continue
 					else
-						src.make_changeling()
+						changeling.power_holder.purchasedpowers += Tp
 
-		changeling.chem_charges += T.mind.changeling.chem_charges
-		changeling.geneticpoints += T.mind.changeling.geneticpoints
-		T.mind.changeling.chem_charges = 0
-		T.mind.changeling.geneticpoints = 0
-		T.mind.changeling.absorbedcount = 0
+						if(!Tp.isVerb)
+							call(Tp.verbpath)()
+						else
+							src.make_changeling()
+
+			changeling.chem_charges += Tchangeling.chem_charges
+			changeling.geneticpoints += Tchangeling.geneticpoints
+			Tchangeling.chem_charges = 0
+			Tchangeling.geneticpoints = 0
+			Tchangeling.absorbedcount = 0
 
 	changeling.absorbedcount++
 	changeling.isabsorbing = 0
@@ -388,7 +401,7 @@
 
 //Change our DNA to that of somebody we've absorbed.
 /mob/proc/changeling_transform()
-	var/datum/changeling/changeling = changeling_power(5,1,0, deny_horror=1)
+	var/datum/role/changeling/changeling = changeling_power(5,1,0, deny_horror=1)
 	if(!changeling)
 		return
 
@@ -441,7 +454,7 @@
 
 //Transform into a monkey. 	//TODO replace with monkeyize proc
 /mob/proc/changeling_lesser_form()
-	var/datum/changeling/changeling = changeling_power(1,0,0, deny_horror=1)
+	var/datum/role/changeling/changeling = changeling_power(1,0,0, deny_horror=1)
 	if(!changeling)
 		return
 
@@ -449,6 +462,10 @@
 
 	if(!istype(C) || !C.species.primitive)
 		to_chat(src, "<span class='warning'>We cannot perform this ability in this form!</span>")
+		return
+
+	if(M_HUSK in C.mutations)
+		to_chat(C, "<span class = 'warning'>This hosts genetic code is too scrambled. We can not change form until we have removed this burden.</span>")
 		return
 
 	changeling.chem_charges--
@@ -459,14 +476,15 @@
 	C.remove_changeling_verb() //remove the verb holder
 	var/mob/living/carbon/monkey/O = C.monkeyize(ignore_primitive = 1) // stops us from becoming the monkey version of whoever we were pretending to be
 	O.make_changeling(1)
-	O.changeling_update_languages(O.mind.changeling.absorbed_languages)
+	var/datum/role/changeling/Ochangeling = O.mind.GetRole(CHANGELING)
+	O.changeling_update_languages(Ochangeling.absorbed_languages)
 	feedback_add_details("changeling_powers","LF")
 	C = null
 	return 1
 
 //Transform into a human
 /mob/proc/changeling_lesser_transform()
-	var/datum/changeling/changeling = changeling_power(1,1,0, deny_horror=1)
+	var/datum/role/changeling/changeling = changeling_power(1,1,0, deny_horror=1)
 	if(!changeling)
 		return
 
@@ -574,10 +592,9 @@
 	M.changeling_returntolife()
 
 /mob/proc/changeling_returntolife()
-	var/datum/changeling/changeling = changeling_power(20,1,100,DEAD)
+	var/datum/role/changeling/changeling = changeling_power(20,1,100,DEAD)
 	if(!changeling)
 		return
-
 	var/mob/living/carbon/C = src
 	if(changeling_power(20,1,100,DEAD))
 		changeling.chem_charges -= 20
@@ -591,6 +608,10 @@
 		C.status_flags &= ~(FAKEDEATH)
 		C.update_canmove()
 		C.make_changeling()
+		if(M_HUSK in mutations) //Yes you can regenerate from being husked if you played dead beforehand, but unless you find a new body, you can not regenerate again.
+			to_chat(C, "<span class='notice'>This host body has become corrupted, either through a mishap, or betrayal by a member of the hivemind. We must find a new form, lest we lose ourselves to the void and become dust.</span>")
+			if(dna in changeling.absorbed_dna)
+				changeling.absorbed_dna.Remove(dna)
 	regenerate_icons()
 	remove_changeling_verb(/obj/item/verbs/changeling/proc/changeling_returntolife)
 	feedback_add_details("changeling_powers","RJ")
@@ -613,13 +634,17 @@
 		return
 	*/ //Fixed with the introduction of the changeling verb holder
 
-	var/datum/changeling/changeling = changeling_power(20,1,100,DEAD)
+	var/datum/role/changeling/changeling = changeling_power(20,1,100,DEAD)
 	if(!changeling)
 		return
 
 	var/mob/living/carbon/C = src
 	if(C.suiciding)
 		to_chat(C, "<span class='warning'>Why would we wish to regenerate if we have already committed suicide?")
+		return
+
+	if(M_HUSK in C.mutations)
+		to_chat(C, "<span class='warning'>We can not regenerate from this. There is not enough left to regenerate.</span>")
 		return
 
 	if(!C.stat && alert("Are we sure we wish to fake our death?",,"Yes","No") == "No")//Confirmation for living changelings if they want to fake their death
@@ -632,8 +657,9 @@
 
 	C.emote("deathgasp")
 	C.tod = worldtime2text()
-
-	spawn(rand(800,1200))
+	var/time_to_take = rand(800, 1200)
+	to_chat(C, "<span class='notice'>This will take [round((time_to_take/10))] seconds.</span>")
+	spawn(time_to_take)
 		to_chat(src, "<span class='warning'>We are now ready to regenerate.</span>")
 		add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_returntolife)
 
@@ -653,7 +679,7 @@
 
 //Boosts the range of your next sting attack by 1
 /mob/proc/changeling_boost_range()
-	var/datum/changeling/changeling = changeling_power(10,0,100)
+	var/datum/role/changeling/changeling = changeling_power(10,0,100)
 	if(!changeling)
 		return 0
 	changeling.chem_charges -= 10
@@ -680,7 +706,7 @@
 
 //Recover from stuns.
 /mob/proc/changeling_unstun()
-	var/datum/changeling/changeling = changeling_power(45,0,100,UNCONSCIOUS)
+	var/datum/role/changeling/changeling = changeling_power(45,0,100,UNCONSCIOUS)
 	if(!changeling)
 		return 0
 	changeling.chem_charges -= 45
@@ -706,12 +732,14 @@
 
 //Speeds up chemical regeneration
 /mob/proc/changeling_fastchemical()
-	src.mind.changeling.chem_recharge_rate *= 2
+	var/datum/role/changeling/changeling = mind.GetRole(CHANGELING)
+	changeling.chem_recharge_rate *= 2
 	return 1
 
 //Increases macimum chemical storage
 /mob/proc/changeling_engorgedglands()
-	src.mind.changeling.chem_storage += 25
+	var/datum/role/changeling/changeling = mind.GetRole(CHANGELING)
+	changeling.chem_storage += 25
 	return 1
 
 /obj/item/verbs/changeling/proc/changeling_digitalcamo()
@@ -727,7 +755,7 @@
 
 //Prevents AIs tracking you but makes you easily detectable to the human-eye.
 /mob/proc/changeling_digitalcamo()
-	var/datum/changeling/changeling = changeling_power()
+	var/datum/role/changeling/changeling = changeling_power()
 	if(!changeling)
 		return 0
 
@@ -739,9 +767,11 @@
 	C.digitalcamo = !C.digitalcamo
 
 	spawn(0)
-		while(C && C.digitalcamo && C.mind && C.mind.changeling)
-			C.mind.changeling.chem_charges = max(C.mind.changeling.chem_charges - 1, 0)
+		while(C && C.digitalcamo && C.mind && changeling && changeling.chem_charges > 5)
+			changeling.chem_charges = max(changeling.chem_charges - 5, 0)
 			sleep(40)
+		C.digitalcamo = !C.digitalcamo
+		to_chat(C, "<span class='notice'>We return to normal.</span>")
 
 	remove_changeling_verb(/obj/item/verbs/changeling/proc/changeling_digitalcamo)
 	spawn(5)
@@ -763,10 +793,10 @@
 
 //Starts healing you every second for 10 seconds. Can be used whilst unconscious.
 /mob/proc/changeling_rapidregen()
-	var/datum/changeling/changeling = changeling_power(30,0,100,UNCONSCIOUS)
+	var/datum/role/changeling/changeling = changeling_power(30,0,100,UNCONSCIOUS)
 	if(!changeling)
 		return 0
-	src.mind.changeling.chem_charges -= 30
+	changeling.chem_charges -= 30
 
 	var/mob/living/carbon/human/C = src
 	spawn(0)
@@ -800,7 +830,7 @@ var/list/datum/dna/hivemind_bank = list()
 	M.changeling_hiveupload()
 
 /mob/proc/changeling_hiveupload()
-	var/datum/changeling/changeling = changeling_power(10,1)
+	var/datum/role/changeling/changeling = changeling_power(10,1)
 	if(!changeling)
 		return
 
@@ -839,7 +869,7 @@ var/list/datum/dna/hivemind_bank = list()
 	M.changeling_hivedownload()
 
 /mob/proc/changeling_hivedownload()
-	var/datum/changeling/changeling = changeling_power(20,1)
+	var/datum/role/changeling/changeling = changeling_power(20,1)
 	if(!changeling)
 		return
 
@@ -882,7 +912,7 @@ var/list/datum/dna/hivemind_bank = list()
 	if(!usr)
 		return
 	var/mob/user = usr
-	var/datum/changeling/changeling = changeling_power()
+	var/datum/role/changeling/changeling = changeling_power()
 	if(!changeling)
 		return
 
@@ -903,11 +933,12 @@ var/list/datum/dna/hivemind_bank = list()
 	feedback_add_details("changeling_powers","MV")
 
 	spawn(0)
-		while(src && src.mind && src.mind.changeling && src.mind.changeling.mimicing)
-			src.mind.changeling.chem_charges = max(src.mind.changeling.chem_charges - 1, 0)
+		while(src && src.mind && changeling && changeling.mimicing && changeling.chem_charges > 4)
+			changeling.chem_charges = max(changeling.chem_charges - 4, 0)
 			sleep(40)
-		if(src && src.mind && src.mind.changeling)
-			src.mind.changeling.mimicing = ""
+		if(src && src.mind && changeling)
+			to_chat(src, "<span class='notice'>Our vocal glands return to their original position.</span>")
+			changeling.mimicing = ""
 	//////////
 	//STINGS//	//They get a pretty header because there's just so fucking many of them ;_;
 	//////////
@@ -926,7 +957,7 @@ var/list/datum/dna/hivemind_bank = list()
 //Handles the general sting code to reduce on copypasta (seeming as somebody decided to make SO MANY dumb abilities)
 // allow_self=TRUE lets you sting yourself.
 /mob/proc/changeling_sting(var/required_chems=0, var/verb_path, var/allow_self=FALSE)
-	var/datum/changeling/changeling = changeling_power(required_chems)
+	var/datum/role/changeling/changeling = changeling_power(required_chems)
 	if(!changeling)
 		return
 
@@ -936,7 +967,7 @@ var/list/datum/dna/hivemind_bank = list()
 	for(var/mob/living/carbon/C in oview(changeling.sting_range))
 		victims += C
 	var/mob/living/carbon/T
-	if (victims)
+	if (victims.len)
 		T = victims[1]
 		if (is_pacified(VIOLENCE_DEFAULT,T))
 			return
@@ -960,7 +991,7 @@ var/list/datum/dna/hivemind_bank = list()
 		add_changeling_verb(verb_path)
 
 	to_chat(src, "<span class='notice'>We stealthily sting [T].</span>")
-	if(!T.mind || !T.mind.changeling || (allow_self && T == src))
+	if(!T.mind || !T.mind.GetRole(CHANGELING) || (allow_self && T == src))
 		return T	//T will be affected by the sting
 	to_chat(T, "<span class='warning'>You feel a tiny prick.</span>")
 	return
@@ -1051,9 +1082,9 @@ var/list/datum/dna/hivemind_bank = list()
 		return
 
 	to_chat(target, "<span class='notice'>The world around you suddenly becomes quiet.</span>")
-	target.disabilities |= DEAF
+	target.sdisabilities |= DEAF
 	spawn(300)
-		target.disabilities &= ~DEAF
+		target.sdisabilities &= ~DEAF
 
 	feedback_add_details("changeling_powers", "DS")
 	return 1
@@ -1085,7 +1116,7 @@ var/list/datum/dna/hivemind_bank = list()
 	if(!istype(M))
 		return
 
-	var/datum/changeling/changeling = M.changeling_power(40)
+	var/datum/role/changeling/changeling = M.changeling_power(40)
 	if(!changeling)
 		return 0
 
@@ -1193,12 +1224,10 @@ var/list/datum/dna/hivemind_bank = list()
 	set desc = "We stealthily sting a target and extract their DNA."
 
 	var/mob/M = loc
-	if(!istype(M))
+	if(!istype(M) || !M.mind)
 		return
 
-	var/datum/changeling/changeling = null
-	if(M.mind && M.mind.changeling)
-		changeling = M.mind.changeling
+	var/datum/role/changeling/changeling = M.mind.GetRole(CHANGELING)
 	if(!changeling)
 		return 0
 
@@ -1230,9 +1259,9 @@ var/list/datum/dna/hivemind_bank = list()
 	if(!istype(src, /mob/living/carbon/human))
 		return
 	var/mob/living/carbon/human/H = src
-	var/datum/changeling/changeling = null
-	if(src.mind && src.mind.changeling)
-		changeling = src.mind.changeling
+	if(!src.mind)
+		return
+	var/datum/role/changeling/changeling = mind.GetRole(CHANGELING)
 	if(!changeling)
 		return 0
 	for(var/obj/item/weapon/armblade/W in src)
@@ -1242,7 +1271,7 @@ var/list/datum/dna/hivemind_bank = list()
 		playsound(src, 'sound/weapons/bloodyslice.ogg', 30, 1)
 		qdel(W)
 		return 1
-	var/datum/changeling/check_chems = changeling_power(20,1)
+	var/check_chems = changeling_power(20,1)
 	if(!check_chems)
 		return
 	var/good_hand
@@ -1252,6 +1281,7 @@ var/list/datum/dna/hivemind_bank = list()
 		for(var/i = 1 to held_items.len)
 			if(H.can_use_hand(i))
 				good_hand = i
+				break
 	if(good_hand)
 		drop_item(held_items[good_hand], force_drop = 1)
 		var/obj/item/weapon/armblade/A = new (src)

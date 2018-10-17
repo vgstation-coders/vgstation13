@@ -47,7 +47,6 @@
 	if(target.disarmed_by(src))
 		return
 
-	var/datum/organ/external/affecting = get_organ(ran_zone(zone_sel.selecting))
 	if(prob(40)) //40% miss chance
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='danger'>[src] has attempted to disarm [target]!</span>")
@@ -56,7 +55,7 @@
 	do_attack_animation(target, src)
 
 	if(prob(40)) //True chance of something happening per click is hit_chance*event_chance, so in this case the stun chance is actually 0.6*0.4=24%
-		target.apply_effect(4, WEAKEN, target.run_armor_check(affecting, "melee"))
+		target.apply_effect(4, WEAKEN)
 		playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 		visible_message("<span class='danger'>[src] has pushed [target]!</span>")
 		add_logs(src, target, "pushed", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
@@ -126,7 +125,7 @@
 		return HALLOSS
 	return ..()
 
-/mob/living/carbon/human/get_unarmed_damage(mob/victim)
+/mob/living/carbon/human/get_unarmed_damage(var/atom/victim)
 	var/datum/species/S = get_organ_species(get_active_hand_organ())
 
 	var/damage = rand(0, S.max_hurt_damage)

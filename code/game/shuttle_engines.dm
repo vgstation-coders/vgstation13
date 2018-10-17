@@ -29,7 +29,7 @@
 	icon_state = "heater"
 
 /obj/structure/shuttle/engine/heater/cultify()
-	new /obj/structure/cult/pylon(loc)
+	new /obj/structure/cult_legacy/pylon(loc)
 	..()
 
 /obj/structure/shuttle/engine/platform

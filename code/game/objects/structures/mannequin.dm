@@ -91,7 +91,7 @@
 	return 0
 
 
-/obj/structure/mannequin/MouseDrop(var/atom/over_object)
+/obj/structure/mannequin/MouseDropFrom(var/atom/over_object)
 	..()
 	var/mob/user = usr
 	if(user != over_object)
@@ -957,7 +957,7 @@
 			new_frame.construct = new /datum/construction/mannequin(new_frame)
 			qdel(src)
 
-	else if(istype(W, /obj/item/weapon/weldingtool) && user.a_intent == I_HELP)
+	else if(iswelder(W) && user.a_intent == I_HELP)
 		if(locked)
 			to_chat(user, "<span class='warning'>You need to open the shield before you can fix the mannequin.</span>")
 		else
@@ -973,7 +973,7 @@
 				to_chat(user, "<span class='warning'>Need more welding fuel!</span>")
 				return
 
-	else if(istype(W, /obj/item/weapon/weldingtool) && user.a_intent == I_HELP)
+	else if(iswelder(W) && user.a_intent == I_HELP)
 		if(locked)
 			to_chat(user, "<span class='warning'>You need to open the shield before you can fix the mannequin.</span>")
 		else

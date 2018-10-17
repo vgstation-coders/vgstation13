@@ -17,7 +17,7 @@
 	spell_flags = 0
 	spell_aspect_flags = SPELL_FIRE
 	duration = 20
-	proj_step_delay = 0
+	projectile_speed = 1
 
 	amt_dam_brute = 20
 	amt_dam_fire = 25

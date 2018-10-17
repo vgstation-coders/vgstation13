@@ -193,7 +193,7 @@ Nah
 */
 
 //Allow you to drag-drop disposal pipes into it
-/obj/machinery/pipedispenser/disposal/MouseDrop_T(var/obj/structure/disposalconstruct/pipe, mob/usr)
+/obj/machinery/pipedispenser/disposal/MouseDropTo(var/obj/structure/disposalconstruct/pipe, mob/usr)
 	if(!usr.canmove || usr.stat || usr.restrained())
 		return
 
@@ -264,4 +264,3 @@ Nah
 			spawn(15)
 				wait = 0
 	return
-

@@ -106,6 +106,9 @@ Please contact me on #coderbus IRC. ~Carn x
 	update_hud()		//TODO: remove the need for this
 	update_overlays_standing()
 	update_transform()
+	if(istype(loc,/obj/structure/inflatable/shelter))
+		var/obj/O = loc
+		O.update_icon() //Shelters use an overlay of the human inside, so if we change state we want the appearance to reflect that.
 
 /mob/living/carbon/human/proc/update_overlays_standing()
 	if(species && species.override_icon)
@@ -189,7 +192,7 @@ var/global/list/damage_icon_parts = list()
 	var/husk = (M_HUSK in src.mutations)  //100% unnecessary -Agouri	//nope, do you really want to iterate through src.mutations repeatedly? -Pete
 	var/fat = (M_FAT in src.mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
 	var/hulk = (M_HULK in src.mutations) && !ishorrorform(src) && !isgrue(src) && mind.special_role != HIGHLANDER // Part of the species.
-	var/skeleton = (SKELETON in src.mutations)
+	var/skeleton = (M_SKELETON in src.mutations)
 
 	var/g = "m"
 	if(gender == FEMALE)
@@ -402,6 +405,17 @@ var/global/list/damage_icon_parts = list()
 		O.underlays	-= "fire[fat]_s"
 		O.underlays	+= "coldfire[fat]_s"
 
+	//Cultist tattoos
+	if (mind && mind.GetRole(CULTIST))
+		var/datum/role/cultist/C = mind.GetRole(CULTIST)
+		add_image = 1
+		for (var/T in C.tattoos)
+			var/datum/cult_tattoo/tattoo = C.tattoos[T]
+			if (tattoo)
+				var/image/I = image(icon = 'icons/mob/cult_tattoos.dmi', icon_state = tattoo.icon_state)
+				I.blend_mode = BLEND_MULTIPLY
+				O.overlays += I
+
 	if(add_image)
 		O.icon = standing
 		O.icon_state = standing.icon_state
@@ -422,7 +436,7 @@ var/global/list/damage_icon_parts = list()
 //	var/g = "m"
 //	if (gender == FEMALE)	g = "f"
 //BS12 EDIT
-	var/skeleton = (SKELETON in src.mutations)
+	var/skeleton = (M_SKELETON in src.mutations)
 	if(skeleton)
 		race_icon = 'icons/mob/human_races/r_skeleton.dmi'
 	else
@@ -518,24 +532,39 @@ var/global/list/damage_icon_parts = list()
 /mob/living/carbon/human/update_inv_w_uniform(var/update_icons=1)
 
 	overlays -= obj_overlays[UNIFORM_LAYER]
-	if(w_uniform && istype(w_uniform, /obj/item/clothing/under) && !check_hidden_body_flags(HIDEJUMPSUIT) && w_uniform.is_visible())
+	if(!w_uniform)
+		// Automatically drop anything in store / id / belt if you're not wearing a uniform.	//CHECK IF NECESARRY
+		for( var/obj/item/thing in list(r_store, l_store, wear_id, belt) )						//
+			if(thing)																			//
+				u_equip(thing,1)																//
+				if (client)																		//
+					client.screen -= thing														//
+																								//
+				if (thing)																		//
+					thing.forceMove(loc)																//
+					//thing.dropped(src)														//
+					thing.reset_plane_and_layer()
+
+	else if(w_uniform && !check_hidden_body_flags(HIDEJUMPSUIT) && w_uniform.is_visible())
 		w_uniform.screen_loc = ui_iclothing
 		var/obj/abstract/Overlays/O = obj_overlays[UNIFORM_LAYER]
 		O.overlays.len = 0
+		var/image/standing
 		var/t_color = w_uniform._color
-		if(!t_color)
-			t_color = icon_state
-		var/image/standing	= image("icon_state" = "[t_color]_s")
+		var/is_fat = ((M_FAT in mutations) && (species.anatomy_flags & CAN_BE_FAT)) || species.anatomy_flags & IS_BULKY
+		if(t_color)
+			standing = image("icon_state" = "[t_color]_s", "icon" = 'icons/mob/uniform.dmi')
 
-		if(((M_FAT in mutations) && (species.anatomy_flags & CAN_BE_FAT)) || species.anatomy_flags & IS_BULKY)
+		if(is_fat)
 			if(w_uniform.clothing_flags&ONESIZEFITSALL)
-				standing.icon	= 'icons/mob/uniform_fat.dmi'
+				standing.icon = 'icons/mob/uniform_fat.dmi'
 			else
 				to_chat(src, "<span class='warning'>You burst out of \the [w_uniform]!</span>")
 				drop_from_inventory(w_uniform)
 				return
-		else
-			standing.icon	= 'icons/mob/uniform.dmi'
+
+		if(w_uniform.wear_override)
+			standing = image("icon" = w_uniform.wear_override)
 
 		var/obj/item/clothing/under/under_uniform = w_uniform
 
@@ -565,19 +594,7 @@ var/global/list/damage_icon_parts = list()
 		O.pixel_y = species.inventory_offsets["[slot_w_uniform]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,UNIFORM_LAYER)
 		//overlays_standing[UNIFORM_LAYER]	= standing
-	else if (!check_hidden_body_flags(HIDEJUMPSUIT))
 		//overlays_standing[UNIFORM_LAYER]	= null
-		// Automatically drop anything in store / id / belt if you're not wearing a uniform.	//CHECK IF NECESARRY
-		for( var/obj/item/thing in list(r_store, l_store, wear_id, belt) )						//
-			if(thing)																			//
-				u_equip(thing,1)																//
-				if (client)																		//
-					client.screen -= thing														//
-																								//
-				if (thing)																		//
-					thing.forceMove(loc)																//
-					//thing.dropped(src)														//
-					thing.reset_plane_and_layer()
 	if(update_icons)
 		update_icons()
 
@@ -621,9 +638,11 @@ var/global/list/damage_icon_parts = list()
 		var/t_state = gloves.item_state
 		if(!t_state)
 			t_state = gloves.icon_state
-		var/image/standing	= image("icon" = ((gloves.icon_override) ? gloves.icon_override : 'icons/mob/hands.dmi'), "icon_state" = "[t_state]")
-
-		var/obj/item/I = gloves
+		var/image/standing
+		if(gloves.wear_override)
+			standing = image("icon" = gloves.wear_override)
+		else
+			standing = image("icon" = ((gloves.icon_override) ? gloves.icon_override : 'icons/mob/hands.dmi'), "icon_state" = "[t_state]")
 
 		var/datum/species/S = species
 		for(var/datum/organ/external/OE in get_organs_by_slot(slot_gloves, src)) //Display species-exclusive species correctly on attached limbs
@@ -631,7 +650,7 @@ var/global/list/damage_icon_parts = list()
 				S = OE.species
 				break
 
-		if(S.name in I.species_fit) //Allows clothes to display differently for multiple species
+		if(S.name in gloves.species_fit) //Allows clothes to display differently for multiple species
 			if(S.gloves_icons)
 				standing.icon = S.gloves_icons
 
@@ -675,9 +694,11 @@ var/global/list/damage_icon_parts = list()
 	overlays -= obj_overlays[GLASSES_LAYER]
 	overlays -= obj_overlays[GLASSES_OVER_HAIR_LAYER]
 	if(glasses && !check_hidden_head_flags(HIDEEYES) && glasses.is_visible())
-		var/image/standing = image("icon" = ((glasses.icon_override) ? glasses.icon_override : 'icons/mob/eyes.dmi'), "icon_state" = "[glasses.icon_state]")
-
-		var/obj/item/I = glasses
+		var/image/standing
+		if(glasses.wear_override)
+			standing = image("icon" = glasses.wear_override)
+		else
+			standing = image("icon" = ((glasses.icon_override) ? glasses.icon_override : 'icons/mob/eyes.dmi'), "icon_state" = "[glasses.icon_state]")
 
 		var/datum/species/S = species
 		for(var/datum/organ/external/OE in get_organs_by_slot(slot_head, src)) //Display species-exclusive species correctly on attached limbs
@@ -685,7 +706,7 @@ var/global/list/damage_icon_parts = list()
 				S = OE.species
 				break
 
-		if(S.name in I.species_fit) //Allows clothes to display differently for multiple species
+		if(S.name in glasses.species_fit) //Allows clothes to display differently for multiple species
 			if(S.glasses_icons)
 				standing.icon = S.glasses_icons
 
@@ -725,7 +746,11 @@ var/global/list/damage_icon_parts = list()
 
 	overlays -= obj_overlays[EARS_LAYER]
 	if(ears && !check_hidden_head_flags(HIDEEARS) && ears.is_visible())
-		var/image/standing = image("icon" = ((ears.icon_override) ? ears.icon_override : 'icons/mob/ears.dmi'), "icon_state" = "[ears.icon_state]")
+		var/image/standing
+		if(ears.wear_override)
+			standing = image("icon" = ears.wear_override)
+		else
+			standing = image("icon" = ((ears.icon_override) ? ears.icon_override : 'icons/mob/ears.dmi'), "icon_state" = "[ears.icon_state]")
 
 		var/obj/item/I = ears
 
@@ -761,11 +786,12 @@ var/global/list/damage_icon_parts = list()
 	overlays -= obj_overlays[SHOES_LAYER]
 	if(shoes && !check_hidden_body_flags(HIDESHOES) && shoes.is_visible())
 		var/obj/abstract/Overlays/O = obj_overlays[SHOES_LAYER]
-		O.icon = ((shoes.icon_override) ? shoes.icon_override : 'icons/mob/feet.dmi')
-		O.icon_state = shoes.icon_state
+		if(shoes.wear_override)
+			O.icon = icon("icon" = shoes.wear_override)
+		else
+			O.icon = ((shoes.icon_override) ? shoes.icon_override : 'icons/mob/feet.dmi')
+			O.icon_state = shoes.icon_state
 		//var/image/standing	= image("icon" = ((shoes.icon_override) ? shoes.icon_override : 'icons/mob/feet.dmi'), "icon_state" = "[shoes.icon_state]")
-
-		var/obj/item/I = shoes
 
 		var/datum/species/S = species
 		for(var/datum/organ/external/OE in get_organs_by_slot(slot_shoes, src)) //Display species-exclusive species correctly on attached limbs
@@ -773,7 +799,7 @@ var/global/list/damage_icon_parts = list()
 				S = OE.species
 				break
 
-		if(S.name in I.species_fit) //Allows clothes to display differently for multiple species
+		if(S.name in shoes.species_fit) //Allows clothes to display differently for multiple species
 			if(S.shoes_icons)
 				O.icon = S.shoes_icons
 
@@ -813,8 +839,8 @@ var/global/list/damage_icon_parts = list()
 			if(s_store.dynamic_overlay["[SUIT_STORE_LAYER]"])
 				var/image/dyn_overlay = s_store.dynamic_overlay["[SUIT_STORE_LAYER]"]
 				O.overlays += dyn_overlay
-		O.pixel_x = species.inventory_offsets["[slot_s_store]"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["[slot_s_store]"]["pixel_y"] * PIXEL_MULTIPLIER
+		O.pixel_x = (species.inventory_offsets["[slot_s_store]"]["pixel_x"] - initial(s_store.pixel_x)) * PIXEL_MULTIPLIER
+		O.pixel_y = (species.inventory_offsets["[slot_s_store]"]["pixel_y"] - initial(s_store.pixel_y)) * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,SUIT_STORE_LAYER)
 		//overlays_standing[SUIT_STORE_LAYER]	= image("icon" = 'icons/mob/belt_mirror.dmi', "icon_state" = "[t_state]")
 		s_store.screen_loc = ui_sstore1		//TODO
@@ -830,10 +856,10 @@ var/global/list/damage_icon_parts = list()
 		O.overlays.len = 0
 		head.screen_loc = ui_head		//TODO
 		var/image/standing
-		if(istype(head,/obj/item/clothing/head/kitty)) //AAAAUUUGH
-			standing	= image("icon" = head:mob)
+		if(head.wear_override)
+			standing = image("icon" = head.wear_override)
 		else
-			standing	= image("icon" = ((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[head.icon_state]")
+			standing = image("icon" = ((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[head.icon_state]")
 
 		var/obj/item/I = head
 
@@ -1139,7 +1165,7 @@ var/global/list/damage_icon_parts = list()
 		if(I.dynamic_overlay && I.dynamic_overlay["[HAND_LAYER]-[index]"])
 			var/image/dyn_overlay = I.dynamic_overlay["[HAND_LAYER]-[index]"]
 			O.overlays.Add(dyn_overlay)
-		I.screen_loc = get_held_item_ui_location(index)
+		I.screen_loc = get_held_item_ui_location(index,I)
 
 		if(handcuffed) //why is this here AUGH
 			drop_item(I)

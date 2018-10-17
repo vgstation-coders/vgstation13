@@ -1,10 +1,10 @@
 /mob/living/silicon/robot/Process_Spaceslipping(var/prob_slip = 5)
-	if(module && (module.quirk_flags & MODULE_HAS_MAGPULSE)) //	The magic of magnets.
+	if(HAS_MODULE_QUIRK(src, MODULE_HAS_MAGPULSE)) //	The magic of magnets.
 		return FALSE
 	..()
 
 /mob/living/silicon/robot/CheckSlip()
-	return ((module && (module.quirk_flags & MODULE_HAS_MAGPULSE))? -1 : 0)
+	return ((HAS_MODULE_QUIRK(src, MODULE_HAS_MAGPULSE))? -1 : 0)
 
 /mob/living/silicon/robot/Process_Spacemove(var/check_drift = FALSE)
 	if(module)

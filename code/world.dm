@@ -97,6 +97,8 @@ var/savefile/panicfile
 
 	paperwork_setup()
 
+	initialize_cultwords()
+
 	for(var/x in typesof(/datum/bee_species))
 		var/datum/bee_species/species = new x
 		bees_species[species.common_name] = species

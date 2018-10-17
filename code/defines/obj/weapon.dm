@@ -723,12 +723,14 @@
 	name = "power control module"
 	icon_state = "power_mod"
 	desc = "Heavy-duty switching circuits for power control."
+	board_type = OTHER
 
 /obj/item/weapon/circuitboard/station_map
 	icon = 'icons/obj/module.dmi'
 	name = "holomap module"
 	icon_state = "card_mod"
 	desc = "Holographic circuits for station holomaps."
+	board_type = OTHER
 
 /obj/item/weapon/module/id_auth
 	name = "\improper ID authentication module"

@@ -96,7 +96,7 @@
 		user.put_in_hands(pick(contents)) //Pick out a chip at random
 		update_icon()
 	else
-		MouseDrop(user)
+		MouseDropFrom(user)
 
 /obj/item/weapon/chipbasket/attackby(obj/item/weapon/reagent_containers/food/snacks/tortillachip/T, mob/user)
 	if(..()) return
@@ -107,7 +107,7 @@
 		user.drop_item(T, src) //This chip could be spiked or have a bite missing - we want to store it for later.
 		update_icon()
 
-/obj/item/weapon/chipbasket/MouseDrop(over_object)
+/obj/item/weapon/chipbasket/MouseDropFrom(over_object)
 	if(!usr.incapacitated() && (usr.contents.Find(src) || Adjacent(usr)) && usr.empty_hand_indexes_amount() && usr == over_object)
 		usr.put_in_hands(src)
 		usr.visible_message("<span class='notice'>[usr] picks up the [src].</span>", "<span class='notice'>You pick up \the [src].</span>")
@@ -144,7 +144,7 @@
 			return
 	..()
 
-/obj/structure/poutineocean/MouseDrop(over_object)
+/obj/structure/poutineocean/MouseDropFrom(over_object)
 	return
 
 /obj/structure/poutineocean/poutinecitadel
@@ -155,4 +155,3 @@
 	pixel_x = -16 * PIXEL_MULTIPLIER
 	pixel_y = -8 * PIXEL_MULTIPLIER
 	type_to_dispense = /obj/item/weapon/reagent_containers/food/snacks/poutinesyrup
-

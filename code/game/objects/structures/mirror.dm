@@ -15,8 +15,9 @@
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
+		var/datum/role/vampire/V = isvampire(H)
 		if(isvampire(H))
-			if(!(VAMP_MATURE in H.mind.vampire.powers))
+			if(!(VAMP_MATURE in V.powers))
 				to_chat(H, "<span class='notice'>You don't see anything.</span>")
 				return
 		if(user.hallucinating())
@@ -27,7 +28,7 @@
 					return
 				if(21 to 40)
 					to_chat(H, "<span class='sinister'>There's [pick("somebody","a monster","a little girl","a zombie","a ghost","a catbeast","a demon")] standing behind you!</span>")
-					H.emote("scream",,, 1)
+					H.emote("scream")
 					H.dir = turn(H.dir, 180)
 					return
 				if(41 to 50)

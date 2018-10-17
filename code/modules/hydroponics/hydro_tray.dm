@@ -121,8 +121,6 @@
 
 //Harvests the product of a plant.
 /obj/machinery/portable_atmospherics/hydroponics/proc/harvest(var/mob/user)
-
-
 	//Harvest the product of the plant,
 	if(!seed || !harvest || !user)
 		return
@@ -135,6 +133,17 @@
 		return
 
 	seed.harvest(user,yield_mod)
+	after_harvest()
+	return
+
+/obj/machinery/portable_atmospherics/hydroponics/proc/autoharvest()
+	if(!seed || !harvest)
+		return
+
+	seed.autoharvest(get_turf(src))
+	after_harvest()
+
+/obj/machinery/portable_atmospherics/hydroponics/proc/after_harvest()
 
 	// Reset values.
 	harvest = 0
@@ -307,6 +316,7 @@
 
 		// Bookkeeping.
 		check_level_sanity()
+		skip_aging++ //We're about to force a cycle, so one age hasn't passed. Add a single skip counter.
 		force_update = 1
 		process()
 

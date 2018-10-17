@@ -91,12 +91,15 @@
 /obj/effect/tracker/singularity_pull()
 	return
 
-/proc/make_tracker_effects(tr_source, tr_destination, var/tr_number = 10, var/custom_icon_state = "soul", var/number_of_icons = 3, var/tr_type = /obj/effect/tracker/soul)
+/proc/make_tracker_effects(tr_source, tr_destination, var/tr_number = 10, var/custom_icon_state = "soul", var/number_of_icons = 3, var/tr_type = /obj/effect/tracker/soul, var/force_size)
 	spawn()
 		var/list/possible_icons = list()
 		if(custom_icon_state)
 			for(var/i = 1;i <= number_of_icons;i++)
-				possible_icons.Add("[custom_icon_state][i]")
+				if (force_size)
+					possible_icons.Add("[custom_icon_state][force_size]")
+				else
+					possible_icons.Add("[custom_icon_state][i]")
 		for(var/i = 0;i < tr_number;i++)
 			var/obj/effect/tracker/Tr = getFromPool(tr_type, tr_source)
 			Tr.target = tr_destination

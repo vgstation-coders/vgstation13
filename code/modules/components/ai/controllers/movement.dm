@@ -6,8 +6,9 @@
 		var/mob/living/M=container.holder
 		if(COMSIG_MOVE)
 			if("loc" in args)
-				walk_to(M, args["loc"], 1, walk_delay)
+				M.start_walk_to(args["loc"], 1, walk_delay)
 			if("dir" in args)
+				M.set_glide_size(DELAY2GLIDESIZE(walk_delay))
 				walk(M, args["dir"], walk_delay)
 
 /datum/component/controller/movement/astar
@@ -24,10 +25,10 @@
 				target = args["loc"]
 				movement_nodes = AStar(M, target, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance, 0, 30, id=M.get_visible_id())
 			if("dir" in args)
-				movement_nodes.Cut()
+				movement_nodes = list()
 				walk(M, args["dir"], walk_delay)
 		if(message_type == COMSIG_LIFE)
-			if(movement_nodes.len && target && (target != null))
+			if(movement_nodes && movement_nodes.len && target && (target != null))
 				if(movement_nodes.len > 0)
 					step_to(M, movement_nodes[1])
 					movement_nodes -= movement_nodes[1]

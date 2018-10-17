@@ -14,7 +14,7 @@
 	spell_aspect_flags = SPELL_FIRE
 	spell_flags = WAIT_FOR_CLICK
 	duration = 20
-	proj_step_delay = 0
+	projectile_speed = 1
 
 	level_max = list(Sp_TOTAL = 5, Sp_POWER = 5)
 

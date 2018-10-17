@@ -340,7 +340,7 @@ steam.start() -- spawns the effect
 	R.burn_skin(0.75)
 	if (R.coughedtime != 1)
 		R.coughedtime = 1
-		R.emote("gasp")
+		R.emote("gasp", null, null, TRUE)
 		spawn (20)
 			R.coughedtime = 0
 	R.updatehealth()
@@ -749,7 +749,7 @@ steam.start() -- spawns the effect
 		savedtemp = old_air.temperature
 		if(istype(T) && savedtemp > lowest_temperature)
 			var/datum/gas_mixture/lowertemp = old_air.remove_volume(CELL_VOLUME)
-			lowertemp.temperature = max(min(lowertemp.temperature - 500, lowertemp.temperature / 2), 0)
+			lowertemp.temperature = max(min(lowertemp.temperature - 500, lowertemp.temperature / 2), 1) //Reaching exactly 0K causes problems
 			lowertemp.react()
 			T.assume_air(lowertemp)
 	spawn(3)

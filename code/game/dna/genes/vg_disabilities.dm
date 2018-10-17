@@ -62,11 +62,11 @@
 	activation_message = "You feel an off sensation in your voicebox.."
 	deactivation_message = "The off sensation passes.."
 
-/datum/dna/gene/disability/speech/sans/New()
+/datum/dna/gene/disability/sans/New()
 	..()
 	block = SANSBLOCK
 
-/datum/dna/gene/disability/speech/sans/OnSay(var/mob/M, var/datum/speech/speech)
+/datum/dna/gene/disability/sans/OnSay(var/mob/M, var/datum/speech/speech)
 	speech.message_classes.Add("sans") // SPEECH 2.0!!!1
 
 /datum/dna/gene/disability/veganism

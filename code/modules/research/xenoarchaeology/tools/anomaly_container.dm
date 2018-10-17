@@ -31,8 +31,8 @@
 	underlays.Cut()
 	desc = initial(desc)
 
-/obj/machinery/artifact/MouseDrop(var/obj/structure/anomaly_container/over_object)
-	if(istype(over_object) && Adjacent(over_object) && can_MouseDrop(over_object, usr))
+/obj/machinery/artifact/MouseDropFrom(var/obj/structure/anomaly_container/over_object)
+	if(istype(over_object) && Adjacent(over_object) && Adjacent(usr))
 		Bumped(usr)
 		over_object.contain(src)
 		src.investigation_log(I_ARTIFACT, "|| stored inside [over_object] by [key_name(usr)].")

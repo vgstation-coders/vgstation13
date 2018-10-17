@@ -35,6 +35,7 @@ var/list/camera_names=list()
 
 	var/vision_flags = SEE_SELF //Only applies when viewing the camera through a console.
 
+
 /obj/machinery/camera/update_icon()
 	var/EMPd = stat & EMPED
 	var/deactivated = !status
@@ -77,13 +78,19 @@ var/list/camera_names=list()
 		ASSERT(src.network)
 		ASSERT(src.network.len > 0)
 
+	//allow mappers to use the name field for the camera instead of c_tag
+	//this helps organize the camera object list in DreamMaker
+	if(name != initial(name) && !c_tag)
+		c_tag = name
+		name = initial(name)
 	if(!c_tag)
 		name_camera()
 	..()
 	if(adv_camera && adv_camera.initialized && !(src in adv_camera.camerasbyzlevel["[z]"]))
 		adv_camera.update(z, TRUE, list(src))
-
 	update_hear()
+	cameranet.cameras += src // This is different from addCamera. addCamera() cares about visibility.
+	cameranet.addCamera(src)
 
 /obj/machinery/camera/proc/name_camera()
 	var/area/A=get_area(src)
@@ -112,6 +119,7 @@ var/list/camera_names=list()
 		qdel(assembly)
 		assembly = null
 	wires = null
+	cameranet.cameras -= src
 	cameranet.removeCamera(src) //Will handle removal from the camera network and the chunks, so we don't need to worry about that
 	if(adv_camera)
 		for(var/key in adv_camera.camerasbyzlevel)
@@ -175,6 +183,7 @@ var/list/camera_names=list()
 	add_hiddenprint(user)
 	deactivate(user,0)
 
+#define MAX_CAMERA_MESSAGES 15
 var/list/camera_messages = list()
 
 /obj/machinery/camera/attackby(obj/W as obj, mob/living/user as mob)
@@ -188,7 +197,7 @@ var/list/camera_messages = list()
 	else if(panel_open && iswiretool(W))
 		wires.Interact(user)
 
-	else if(istype(W, /obj/item/weapon/weldingtool) && wires.CanDeconstruct())
+	else if(iswelder(W) && wires.CanDeconstruct())
 		if(weld(W, user))
 			if(assembly)
 				assembly.state = 1
@@ -252,7 +261,7 @@ var/list/camera_messages = list()
 	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
 		user.delayNextAttack(5)
 		var/mob/living/U = user
-		to_chat(U, "You hold \a [W] up to the camera ...")
+		to_chat(U, "You hold [W] up to the camera ...")
 
 		var/info = ""
 		if(istype(W, /obj/item/weapon/paper))
@@ -262,21 +271,24 @@ var/list/camera_messages = list()
 			var/obj/item/device/pda/P = W
 			info = P.notehtml
 
-		camera_messages["[html_encode(W.name)]"] = info
+		var/key = "\ref[W]"
+		if(camera_messages.len > MAX_CAMERA_MESSAGES)
+			camera_messages.Cut(1, 2) // Removes the oldest element
+		camera_messages[key] = list("text" = info, "title" = W.name)
 
 		for(var/mob/living/silicon/ai/O in living_mob_list)
 			if(!O.client)
 				continue
 			if(U.name == "Unknown")
-				to_chat( O, "<span class='name'>[U]</span> holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
+				to_chat(O, "<span class='name'>[U]</span> holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of your cameras ...")
 			else
-				to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
+				to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of your cameras ...")
 
 		for(var/mob/O in player_list)
 			if (istype(O.machine, /obj/machinery/computer/security))
 				var/obj/machinery/computer/security/S = O.machine
 				if (S.current == src)
-					to_chat(O, "[U] holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of the cameras ...")
+					to_chat(O, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
 	else
 		..()
 	return
@@ -285,15 +297,18 @@ var/list/camera_messages = list()
 	if(..())
 		return 1
 
-	if(href_list["picturename"])
-		var/picturename = href_list["picturename"]
-		var/pictureinfo = camera_messages[picturename]
-		usr << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", picturename, pictureinfo), text("window=[]", picturename))
+	if(href_list["message_id"])
+		var/message_id = href_list["message_id"]
+		var/list/pictureinfo = camera_messages[message_id]
+		usr << browse("<HTML><HEAD><TITLE>[pictureinfo["title"]]</TITLE></HEAD><BODY><TT>[pictureinfo["text"]]</TT></BODY></HTML>", "window=[message_id]")
 
 /obj/machinery/camera/attack_pai(mob/user as mob)
 	wirejack(user)
 
 /obj/machinery/camera/proc/deactivate(user as mob, var/choice = 1)
+	vision_flags = SEE_SELF
+	update_upgrades()
+	cameranet.addCamera(src)
 	if(choice==1)
 		status = !( src.status )
 		update_icon()
@@ -392,18 +407,12 @@ var/list/camera_messages = list()
 
 	if(busy)
 		return 0
-	if(!WT.isOn())
-		return 0
 
 	// Do after stuff here
 	to_chat(user, "<span class='notice'>You start to weld the [src].</span>")
-	playsound(src, 'sound/items/Welder.ogg', 50, 1)
-	WT.eyecheck(user)
 	busy = 1
-	if(do_after(user, src, 100))
+	if(WT.do_weld(user, src, 100, 0))
 		busy = 0
-		if(!WT.isOn())
-			return 0
 		return 1
 	busy = 0
 	return 0
@@ -423,7 +432,6 @@ var/list/camera_messages = list()
 	/*
 	var/namepart =  "[speaker.GetVoice()][speaker.get_alt_name()] "
 	var/messagepart = "<span class='message'>[hearer.lang_treat(speaker, speaking, raw_message)]</span>"
-
 	return "<span class='game say'><span class='name'>[namepart]</span>[messagepart]</span>"
 	*/
 

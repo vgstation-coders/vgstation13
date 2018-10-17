@@ -98,6 +98,9 @@
 	var/turf/T = get_turf(src)
 	T.AltClick(user)
 
+/obj/structure/window/full/clockworkify()
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/window/full/reinforced/clockwork, BRASS_FULL_WINDOW_GLOW)
+
 /obj/structure/window/full/reinforced
 	name = "reinforced window"
 	desc = "A window with a rod matrice. It looks more solid than the average window."
@@ -153,6 +156,26 @@
 	base_state = "fwindow"
 	health = 30
 	sheet_type = /obj/item/stack/sheet/glass/rglass //Ditto above
+
+/obj/structure/window/full/reinforced/clockwork
+	name = "brass window"
+	desc = "A paper-thin pane of translucent yet reinforced brass."
+	icon_state = "clockworkwindow0"
+	base_state = "clockworkwindow"
+	shardtype = null
+	sheet_type = /obj/item/stack/sheet/brass
+	reinforcetype = /obj/item/stack/sheet/ralloy
+	sheetamount = 4
+	health = 80
+
+/obj/structure/window/full/reinforced/clockwork/update_icon()
+	return
+
+/obj/structure/window/full/reinforced/clockwork/cultify()
+	return
+
+/obj/structure/window/full/reinforced/clockwork/clockworkify()
+	return
 
 #undef WINDOWLOOSE
 #undef WINDOWLOOSEFRAME

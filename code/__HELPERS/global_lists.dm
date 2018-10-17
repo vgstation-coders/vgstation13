@@ -13,6 +13,7 @@ var/global/list/living_mob_list = list()			//List of all alive mobs, including c
 var/global/list/dead_mob_list = list()				//List of all dead mobs, including clientless. Excludes /mob/new_player
 var/list/observers = new/list()
 var/global/list/areas = list()
+var/global/list/active_component_containers = list() 	//List of all component containers that have registered for updating
 
 var/global/list/chemical_reactions_list				//list of all /datum/chemical_reaction datums. Used during chemical reactions
 var/global/list/chemical_reagents_list				//list of all /datum/reagent datums indexed by reagent id. Used by chemistry stuff
@@ -72,7 +73,11 @@ var/list/diagnostic_hud_users = list() // list of all entities using a diagnosti
 */
 
 var/global/list/escape_list = list()
+var/list/bots_list = list()
 
+
+var/list/rcd_list = list()
+var/list/red_tool_list = list()
 var/list/brig_lockers = list()
 var/list/communications_circuitboards = list()
 var/list/pinpointer_list = list()
@@ -85,3 +90,4 @@ var/list/mopbucket_list = list()
 var/list/cleanbot_list = list()
 var/list/vehicle_list = list()
 var/list/paicard_list = list()
+var/list/effects_list = list()

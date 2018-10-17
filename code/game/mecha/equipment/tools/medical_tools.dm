@@ -114,6 +114,12 @@
 		return "[output] [temp]"
 	return
 
+/obj/item/mecha_parts/mecha_equipment/tool/sleeper/alt_action()
+	if(!occupant)
+		return
+	chassis.occupant << browse(get_occupant_stats(),"window=msleeper")
+	onclose(chassis.occupant, "msleeper")
+
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/Topic(href,href_list)
 	if(..())
 		return TRUE
@@ -387,6 +393,12 @@
 	last_piece = NC
 	return 1
 
+
+/obj/item/mecha_parts/mecha_equipment/tool/cable_layer/alt_action()
+	set_ready_state(!equip_ready)
+	occupant_message("[src] [equip_ready?"dea":"a"]ctivated.")
+	log_message("[equip_ready?"Dea":"A"]ctivated.")
+
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun
 	name = "\improper Exosuit-Mounted Syringe Gun"
 	desc = "Exosuit-mounted chem synthesizer with syringe gun. Reagents inside are held in stasis, so no reactions will occur. (Can be attached to: Medical Exosuits)"
@@ -438,6 +450,11 @@
 	if(output)
 		return "[output] \[<a href=\"?src=\ref[src];toggle_mode=1\">[mode? "Analyze" : "Launch"]</a>\]<br />\[Syringes: [syringes.len]/[max_syringes] | Reagents: [reagents.total_volume]/[reagents.maximum_volume]\]<br /><a href='?src=\ref[src];show_reagents=1'>Reagents list</a>"
 	return
+
+/obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/alt_action()
+	mode = !mode
+	occupant_message("[mode?"Analyze":"Fire"] mode enabled.")
+	update_equip_info()
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/action(atom/movable/target)
 	if(!action_checks(target))

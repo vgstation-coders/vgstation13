@@ -100,6 +100,37 @@
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
 
+
+	////////SOUL BLADE HUD ELEMENTS////////
+	mymob.gui_icons.soulblade_bgLEFT = getFromPool(/obj/abstract/screen)
+	mymob.gui_icons.soulblade_bgLEFT.icon = 'icons/mob/screen1_shade_fullscreen.dmi'
+	mymob.gui_icons.soulblade_bgLEFT.icon_state = "backgroundLEFT"
+	mymob.gui_icons.soulblade_bgLEFT.name = "Blood"
+	mymob.gui_icons.soulblade_bgLEFT.layer = HUD_BASE_LAYER
+	mymob.gui_icons.soulblade_bgLEFT.screen_loc = ui_blob_bgLEFT
+
+	mymob.gui_icons.soulblade_coverLEFT = getFromPool(/obj/abstract/screen)
+	mymob.gui_icons.soulblade_coverLEFT.icon = 'icons/mob/screen1_shade_fullscreen.dmi'
+	mymob.gui_icons.soulblade_coverLEFT.icon_state = "coverLEFT"
+	mymob.gui_icons.soulblade_coverLEFT.name = "Blood"
+	mymob.gui_icons.soulblade_coverLEFT.layer = HUD_ABOVE_ITEM_LAYER
+	mymob.gui_icons.soulblade_coverLEFT.screen_loc = ui_blob_bgLEFT
+	mymob.gui_icons.soulblade_coverLEFT.maptext_x = 1
+	mymob.gui_icons.soulblade_coverLEFT.maptext_y = 126*PIXEL_MULTIPLIER
+
+	mymob.gui_icons.soulblade_bloodbar = getFromPool(/obj/abstract/screen)
+	mymob.gui_icons.soulblade_bloodbar.icon = 'icons/mob/screen1_shade_bars.dmi'
+	mymob.gui_icons.soulblade_bloodbar.icon_state = "blood"
+	mymob.gui_icons.soulblade_bloodbar.name = "Blood"
+	mymob.gui_icons.soulblade_bloodbar.screen_loc = ui_blob_powerbar
+
+	mymob.fire = getFromPool(/obj/abstract/screen)
+	mymob.fire.icon = 'icons/mob/screen1_shade.dmi'
+	mymob.fire.icon_state = "blade_ok"
+	mymob.fire.name = "blade integrity"
+	mymob.fire.screen_loc = ui_construct_fire
+	///////////////////////////////////////
+
 	mymob.client.reset_screen()
 
 	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged)
@@ -184,3 +215,41 @@
 	vampire_blood_display.screen_loc = "EAST-1:[28*PIXEL_MULTIPLIER],CENTER+2:[15*PIXEL_MULTIPLIER]"
 
 	mymob.client.screen += list(vampire_blood_display)
+
+
+/datum/hud/proc/cult_hud(ui_style = 'icons/mob/screen1_cult.dmi')
+
+	cult_Act_display = getFromPool(/obj/abstract/screen)
+	cult_Act_display.icon = ui_style
+	cult_Act_display.name = "Prologue: The Reunion"
+	cult_Act_display.icon_state = ""
+	cult_Act_display.screen_loc = ui_cult_Act
+	pulse_atom(cult_Act_display)
+
+	cult_tattoo_display = getFromPool(/obj/abstract/screen)
+	cult_tattoo_display.icon = ui_style
+	cult_tattoo_display.name = "Arcane Tattoos: none"
+	cult_tattoo_display.icon_state = ""
+	cult_tattoo_display.screen_loc = ui_cult_tattoos
+	//pulse_atom(cult_tattoo_display)
+
+	if (mymob.client)
+		mymob.client.screen += list(cult_Act_display,cult_tattoo_display)
+
+/datum/hud/proc/pulse_atom(var/obj/abstract/screen/A)
+	animate(A, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)
+	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)
+	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 2)
+	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1.5)
+	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1.5)
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5)
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)

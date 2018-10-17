@@ -297,7 +297,7 @@
 			B.penetration = (20 + (strength - 100))
 			if(strength == 101)
 				B.penetration -= 1
-			B.superspeed = 1
+			B.projectile_speed = 0.66
 		else if(strength == 90)
 			B.penetration = 10
 		in_chamber = B

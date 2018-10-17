@@ -166,6 +166,10 @@ Frequency:
 	var/destination_id
 	var/destination_name
 
+/obj/item/weapon/hand_tele/examine(var/mob/user)
+	..()
+	to_chat(user, "<span class='notice'>Alt-Click the hand tele to set portal destination. Defaults to your last choice.</span>")
+
 /obj/item/weapon/hand_tele/attack_self(mob/user as mob)
 	var/turf/current_location = get_turf(user)//What turf is the user on?
 	if(!current_location||current_location.z==2||current_location.z>=7)//If turf was not found or they're on z level 2 or >7 which does not currently exist.

@@ -89,7 +89,8 @@ var/list/obj/machinery/flasher/flashers = list()
 			continue
 		if (get_dist(src, O) > src.range)
 			continue
-
+		if(O.blinded)
+			continue
 		if (istype(O, /mob/living/carbon/alien))//So aliens don't get flashed (they have no external eyes)/N
 			continue
 		if(istype(O, /mob/living))

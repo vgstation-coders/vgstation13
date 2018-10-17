@@ -22,6 +22,8 @@
 
 #define isskellington(A) (ishuman(A) && istype(A:species, /datum/species/skellington))
 
+#define isskelevox(A) (ishuman(A) && istype(A:species, /datum/species/skellington/skelevox))
+
 #define iscatbeast(A) (ishuman(A) && istype(A:species, /datum/species/tajaran))
 
 #define isunathi(A) (ishuman(A) && istype(A:species, /datum/species/unathi))
@@ -39,6 +41,12 @@
 #define isgrue(A) (ishuman(A) && istype(A:species, /datum/species/grue))
 
 #define ismushroom(A) ((ishuman(A) && istype(A:species, /datum/species/mushroom)) || (istype(A, /mob/living/carbon/monkey/mushroom)))
+
+#define islich(A)  (ishuman(A) && istype(A:species, /datum/species/lich))
+
+#define istruelich(A) ((islich(A) && (iswizard(A) || iswearinglichcrown(A))
+
+#define iswearinglichcrown(A) (ishuman(A) && (istype(A:head, /obj/item/clothing/head/wizard/skelelich)) //|| istype(A:head, /obj/item/clothing
 
 #define ishologram(A) (istype(A, /mob/living/simple_animal/hologram/advanced))
 
@@ -176,7 +184,7 @@
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
-#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune))
+#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy))
 
 #define ismatrix(A) (istype(A, /matrix))
 
@@ -190,35 +198,51 @@
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor))
 
-#define issilent(A) (A.silent || (ishuman(A) && (A:miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
+#define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 //Macros for antags
 
-#define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind && H.mind.vampire)
+#define isrole(type, H) (H.mind && H.mind.GetRole(type))
 
-#define iscult(H) (H.mind in ticker.mode.cult)
+#define isfaction(A) (istype(A, /datum/faction))
 
-#define isculthead(H) (iscult(H)&&(H.mind in ticker.mode.modePlayer))
+#define isvampire(H) (H.mind ? H.mind.GetRole(VAMPIRE) : FALSE)
 
-#define ischangeling(H) (H.mind in ticker.mode.changelings)
+#define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define isrev(H) (H.mind in ticker.mode.revolutionaries)
+#define hasFactionIcons(H) (H.mind && H.mind.hasFactionsWithHUDIcons())
 
-#define isrevhead(H) (H.mind in ticker.mode.head_revolutionaries)
+#define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
 
-#define istraitor(H) (H.mind in ticker.mode.traitors)
+#define islegacycultist(H) (H.mind && H.mind.GetRole(LEGACY_CULTIST))
 
-#define ismalf(H) (H.mind in ticker.mode.malf_ai)
+#define isanycultist(H) (H.mind && (H.mind.GetRole(LEGACY_CULTIST) || H.mind.GetRole(CULTIST)))
 
-#define isnukeop(H) (H.mind in ticker.mode.syndicates)
-#define isnukeopleader(H) (H.mind == ticker.mode.nukeop_leader)
+#define ischangeling(H) (H.mind && H.mind.GetRole(CHANGELING))
 
-#define iswizard(H) (H.mind in ticker.mode.wizards)
+#define isrev(H) (isrevnothead(H) || isrevhead(H))
 
-#define isapprentice(H) (H.mind in ticker.mode.apprentices)
+#define isrevnothead(H) (H.mind && H.mind.GetRole(REV))
 
-#define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || H.mind in ticker.mode.infected_monkeys)
+#define isrevhead(H) (H.mind && H.mind.GetRole(HEADREV))
 
-#define isdeathsquad(H) (H.mind in ticker.mode.deathsquads)
+#define istraitor(H) (H.mind && H.mind.GetRole(TRAITOR))
+
+#define ismalf(H) (H.mind && H.mind.GetRole(MALF))
+
+#define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
+
+#define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
+
+#define isapprentice(H) (H.mind && H.mind.GetRole(WIZAPP))
+
+#define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || (H.mind && H.mind.GetRole(MADMONKEY)))
+
+#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUAD))
+
+#define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
+
+
+
 
 
 //Macro for AREAS!
@@ -235,6 +259,24 @@ proc/get_space_area()
 		global.space_area = new_space_area
 
 	return global.space_area
+
+/**
+	checks if the given atom is on a shuttle (non-specific)
+	args: atom
+	returns: shuttle type (or null if not on shuttle)
+**/
+
+/proc/is_on_shuttle(var/atom/A)
+	var/area/AA = get_area(A)
+
+	if(!AA) //How doth
+		return 0
+
+	for(var/datum/shuttle/S in shuttles)
+		if(S.linked_area == AA)
+			return S
+
+	return 0
 
 //1 line helper procs compressed into defines.
 #define Clamp(x, y, z) 	(x <= y ? y : (x >= z ? z : x))
@@ -287,3 +329,9 @@ proc/get_space_area()
 //Swaps the contents of the variables A and B. The if(TRUE) is there simply to restrict the scope of _.
 //Yes, _ is a shitty variable name. Hopefully so shitty it won't ever be used anywhere it could conflict with this.
 #define swap_vars(A, B) if(TRUE){var/_ = A; A = B; B = _}
+
+// To prevent situations of trying to take funds that are factions of our lowest denomination
+#define LOWEST_DENOMINATION 1
+#define round_to_lowest_denomination(A) (round(A, LOWEST_DENOMINATION))
+
+#define create_trader_account create_account("Trader Shoal", 0, null, 0) //Starts 0 credits, not sourced from any database, earns 0 credits

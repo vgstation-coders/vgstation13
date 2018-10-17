@@ -88,6 +88,14 @@
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
 
+/obj/machinery/suit_storage_unit/excavation
+	name = "Survivor's Suit Storage Unit"
+	department = "sci"
+	suit_type = /obj/item/clothing/suit/space/rig/ror
+	helmet_type = /obj/item/clothing/head/helmet/space/rig/ror
+	mask_type = /obj/item/clothing/mask/breath
+	boot_type = /obj/item/clothing/shoes/magboots
+
 /obj/machinery/suit_storage_unit/security
 	name = "Security Suit Storage Unit"
 	department = "sec"
@@ -95,6 +103,14 @@
 	helmet_type = /obj/item/clothing/head/helmet/space/rig/security
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
+
+/obj/machinery/suit_storage_unit/captain
+	name = "Command Suit Storage Unit"
+	department = "sec"
+	suit_type = /obj/item/clothing/suit/armor/captain
+	helmet_type = /obj/item/clothing/head/helmet/space/capspace
+	mask_type = /obj/item/clothing/mask/gas
+	boot_type = /obj/item/clothing/shoes/magboots/captain
 
 /obj/machinery/suit_storage_unit/medical
 	name = "Medical Suit Storage Unit"
@@ -441,11 +457,11 @@
 			if(src.issuperUV)
 				var/burndamage = rand(28,35)
 				occupant.take_organ_damage(0,burndamage)
-				occupant.emote("scream",,, 1)
+				occupant.audible_scream()
 			else
 				var/burndamage = rand(6,10)
 				occupant.take_organ_damage(0,burndamage)
-				occupant.emote("scream",,, 1)
+				occupant.audible_scream()
 		if(i==3) //End of the cycle
 			if(!src.issuperUV)
 				if(helmet)

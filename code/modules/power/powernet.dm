@@ -336,7 +336,7 @@ var/global/powernets_broke = 0
 		cell = power_source
 	else if(istype(power_source, /obj/machinery/power/apc))
 		var/obj/machinery/power/apc/apc = power_source
-		cell = apc.cell
+		cell = apc.get_cell()
 
 		if(apc.terminal)
 			PN = apc.terminal.powernet

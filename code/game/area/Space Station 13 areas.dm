@@ -187,6 +187,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod1
 	name = "\improper Escape Pod One"
+	icon_state = "shuttle2"
 	music = "music/escape.ogg"
 	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
 
@@ -201,6 +202,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod2
 	name = "\improper Escape Pod Two"
+	icon_state = "shuttle2"
 	music = "music/escape.ogg"
 	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
 
@@ -215,6 +217,7 @@ proc/process_adminbus_teleport_locs()
 
 /area/shuttle/escape_pod3
 	name = "\improper Escape Pod Three"
+	icon_state = "shuttle2"
 	music = "music/escape.ogg"
 	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
 
@@ -227,8 +230,15 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/escape_pod3/transit
 	icon_state = "shuttle"
 
+/area/shuttle/escape_pod4
+	name = "\improper Escape Pod Four"
+	icon_state = "shuttle2"
+	music = "music/escape.ogg"
+	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
+
 /area/shuttle/escape_pod5 //Pod 4 was lost to meteors
 	name = "\improper Escape Pod Five"
+	icon_state = "shuttle2"
 	music = "music/escape.ogg"
 	holomap_color = HOLOMAP_AREACOLOR_ESCAPE
 
@@ -1484,6 +1494,11 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Morgue"
 	icon_state = "morgue"
 
+/area/medical/coldstorage
+	name = "Morgue"
+	icon_state = "morgue"
+//for Roidstation - this area is radshielded.
+
 /area/medical/chemistry
 	name = "Chemistry"
 	icon_state = "chem"
@@ -1812,6 +1827,10 @@ proc/process_adminbus_teleport_locs()
 /area/science/podbay
 	name = "\improper Pod Bay"
 	icon_state = "pod"
+
+/area/science/breakroom
+	name = "\improper Research Break Room"
+	icon_state = "toxmisc"
 
 /area/science/server
 	name = "\improper Server Room"
@@ -2435,7 +2454,15 @@ proc/process_adminbus_teleport_locs()
 /area/awaymission/snowplanet
 	name = "snowplanet"
 	icon_state = "mining_production"
-
+	
+/area/awaymission/articwasteland
+	name = "artic wasteland"
+	icon_state = "away"
+	
+/area/awaymission/articwasteland/gateway
+	name = "artic wasteland gateway shelter"
+	icon_state = "away2"
+	
 /////////////////////////////////////////////////////////////////////
 /*
  Lists of areas to be used with is_type_in_list.

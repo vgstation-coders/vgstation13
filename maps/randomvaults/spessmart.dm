@@ -667,6 +667,10 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 	overlays.Add(image('icons/mob/robots.dmi', icon_state = "eyes-securitron"))
 
+/mob/living/simple_animal/hostile/spessmart_guardian/Life()
+	EscapeConfinement()
+	..()
+
 /mob/living/simple_animal/hostile/spessmart_guardian/death(var/gibbed = FALSE)
 	..(TRUE)
 	robogibs(get_turf(src))

@@ -42,4 +42,5 @@
 		new /obj/item/clothing/mask/gas(src)
 		new /obj/item/clothing/glasses/scanner/meson(src)
 		new /obj/item/clothing/head/soft(src)
+		new /obj/item/weapon/card/debit/preferred/department(src, "Cargo")
 		return

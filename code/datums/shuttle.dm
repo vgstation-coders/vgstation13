@@ -329,6 +329,8 @@
 				moving = 0
 				destination_port = null
 				return 0
+			for(var/atom/AA in linked_area)
+				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
 
 		if(transit_port && get_transit_delay())
 			if(broadcast)
@@ -524,6 +526,17 @@
 	var/obj/docking_port/destination/target = pick(possible_locations)
 
 	travel_to(target,,user)
+
+/datum/shuttle/proc/get_occupants(var/find_stowaways)
+	var/list/occupants = list()
+	if(!find_stowaways)
+		for(var/mob/living/L in linked_area) //Yeah they could be hiding in lockers, but that's a stowaway not an occupant
+			occupants.Add(L)
+	else
+		for(var/mob/living/L in mob_list)
+			if(get_area(src) == linked_area)
+				occupants.Add(L)
+	return occupants
 
 //The proc that does most of the work
 //RETURNS: 1 if everything is good, 0 if everything is bad

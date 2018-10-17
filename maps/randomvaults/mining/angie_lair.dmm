@@ -1,0 +1,35 @@
+"a" = (/turf/unsimulated/wall/rock,/area/mine/explored)
+"b" = (/turf/unsimulated/mineral/random/high_chance,/area/mine/explored)
+"c" = (/turf/unsimulated/mineral/telecrystal,/area/mine/explored)
+"d" = (/turf/unsimulated/floor/asteroid,/area/mine/explored)
+"e" = (/turf/unsimulated/mineral/random,/area/mine/explored)
+"f" = (/turf/unsimulated/mineral/gibtonite,/area/mine/explored)
+"g" = (/turf/unsimulated/mineral/random/high_chance_clown{rockernaut = 2},/area/mine/explored)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaaaaaaa
+abbbbbbbbbbbbbbbbbbbbbbba
+aabbbbbbbbbbbbbbbccbbbbaa
+aabbbbddbbbbbbbbbddcbbbaa
+aabbbbddddbbbbbddddbbbbaa
+abbbbddddddbbbddddddbbbba
+abbbbdddddddbdddddddbbbba
+abbbbdddddddddddddddbbbba
+aabbbdddddddddddddddbbbaa
+aaaaaadddddddddddddaaaaaa
+aeeeeaaaadddddddaaaaeeeea
+aeefeeeeaadddddaaeeeeeeea
+aefffdddeaadddaaedddeeeea
+aefddddddeeagaeeddddddeea
+aeedddddddadddadddddddeea
+aeeedddddddddddddddddeeea
+aeeeedddddddddddddddeeeea
+aeeeeedddddddddddddeeeeea
+aeeeeedddddddddddddeeeeea
+aeeeedddddddddddddddeeeea
+aeedddddddddddddddddddeea
+aeedddddddddddddddddddeea
+aeeedddddddddddddddddeeea
+aaeeeeedddddddddddeeeeeaa
+aaaaeeeeeeeeeeeeeeeeeaaaa
+"}

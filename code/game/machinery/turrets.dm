@@ -383,14 +383,14 @@
 
 /obj/machinery/turretid/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
-	if(!ailock)
+	if(!ailock || isAdminGhost(user))
 		return attack_hand(user)
 	else
 		to_chat(user, "<span class='notice'>There seems to be a firewall preventing you from accessing this device.</span>")
 
 /obj/machinery/turretid/attack_hand(mob/user as mob)
 	if ( get_dist(src, user) > 0 )
-		if ( !issilicon(user) )
+		if ( !issilicon(user) && !isAdminGhost(user))
 			to_chat(user, "<span class='notice'>You are too far away.</span>")
 			user.unset_machine()
 			user << browse(null, "window=turretid")
@@ -406,7 +406,7 @@
 	var/area/area = loc
 	var/t = "<TT><B>Turret Control Panel</B> ([area.name])<HR>"
 
-	if(src.locked && (!istype(user, /mob/living/silicon)))
+	if(!isAdminGhost(user) && src.locked && (!istype(user, /mob/living/silicon)))
 		t += "<I>(Swipe ID card to unlock control panel.)</I><BR>"
 	else
 		t += text("Turrets [] - <A href='?src=\ref[];toggleOn=1'>[]?</a><br>\n", src.enabled?"activated":"deactivated", src, src.enabled?"Disable":"Enable")
@@ -451,10 +451,10 @@
 	if(..())
 		return 1
 	if (src.locked)
-		if (!istype(usr, /mob/living/silicon))
+		if (!istype(usr, /mob/living/silicon) && !isAdminGhost(usr))
 			to_chat(usr, "Control panel is locked!")
 			return
-	if ( get_dist(src, usr) == 0 || issilicon(usr))
+	if ( get_dist(src, usr) == 0 || issilicon(usr) || isAdminGhost(usr))
 		if (href_list["toggleOn"])
 			src.enabled = !src.enabled
 			src.updateTurrets()

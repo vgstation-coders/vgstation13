@@ -144,7 +144,7 @@ world/loop_checks = 0
 		garbageCollector.dels_count++
 		return
 
-	//We are object pooling this.
+	//This is broken. The correct index to use is D.type, not "[D.type]"
 	if(("[D.type]" in masterdatumPool) && !ignore_pooling)
 		returnToPool(D)
 		return

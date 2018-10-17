@@ -14,8 +14,9 @@
 	var/base_icon
 	var/image/eyes = null
 
-	//New() stuff
+	//Sound
 	var/startup_sound = 'sound/voice/liveagain.ogg'
+	var/startup_vary = TRUE //Does the startup sounds vary?
 
 	// Alerts
 	var/pressure_alert = FALSE
@@ -66,7 +67,6 @@
 	var/illegal_weapons = FALSE
 	var/wiresexposed = FALSE
 	var/locked = TRUE
-	var/list/req_access = list(access_robotics)
 	var/ident = FALSE
 	var/hasbutt = TRUE //Needed for bootyborgs... and buckling too.
 	var/alarms = list("Motion"=list(), "Fire"=list(), "Atmosphere"=list(), "Power"=list(), "Camera"=list())
@@ -78,8 +78,8 @@
 
 	var/killswitch = FALSE
 	var/killswitch_time = 60
-	var/weapon_lock = FALSE
-	var/weaponlock_time = 120
+	var/modulelock = FALSE
+	var/modulelock_time = 120
 	var/lawupdate = TRUE //Cyborgs will sync their laws with their AI by default
 	var/lockcharge //Used when locking down a borg to preserve cell charge
 	var/scrambledcodes = FALSE // Used to determine if a borg shows up on the robotics console.  Setting to one hides them.
@@ -95,12 +95,16 @@
 	var/toner = CYBORG_STARTING_TONER
 	var/tonermax = CYBORG_MAX_TONER
 
+//Access
+	var/list/req_access = list(access_robotics) //Access needed to open cover
+	var/list/robot_access = list(access_ai_upload, access_robotics, access_maint_tunnels, access_external_airlocks) //Our current access
+
 /mob/living/silicon/robot/New(loc, var/unfinished = FALSE)
 	ident = rand(1, 999)
-	updatename("Default")
-	updateicon()
+	updatename(modtype)
 
 	laws = getLawset(src)
+	robot_access = GetRobotAccess()
 	wires = new wiring_type(src)
 	station_holomap = new(src)
 	radio = new /obj/item/device/radio/borg(src)
@@ -121,6 +125,7 @@
 		camera.c_tag = real_name
 		if(!scrambledcodes)
 			camera.network = list(CAMERANET_SS13,CAMERANET_ROBOTS)
+			cyborg_cams[CAMERANET_ROBOTS] += camera
 		if(wires.IsCameraCut()) // 5 = BORG CAMERA
 			camera.status = 0
 
@@ -134,6 +139,8 @@
 	if(!cell)
 		cell = new cell_type(src)
 
+	updateicon()
+
 	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
 	hud_list[DIAG_CELL_HUD] = image('icons/mob/hud.dmi', src, "hudbattmax")
 
@@ -144,7 +151,7 @@
 		cell_component.wrapped = cell
 		cell_component.installed = COMPONENT_INSTALLED
 
-	playsound(get_turf(src), startup_sound, 75, 1)
+	playsound(src, startup_sound, 75, startup_vary)
 
 	//Borgs speak all common languages by default.
 	add_language(LANGUAGE_GALACTIC_COMMON)
@@ -179,20 +186,6 @@
 				C.wrapped = I
 				C.vulnerability = I.vulnerability
 
-//If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
-//Improved /N
-/mob/living/silicon/robot/Destroy()
-	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
-		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
-		if(T)
-			mmi.forceMove(T)
-		if(mind)
-			mind.transfer_to(mmi.brainmob)
-		if(mmi.brainmob)
-			mmi.brainmob.locked_to_z = locked_to_z
-		mmi = null
-	..()
-
 /mob/living/silicon/robot/remove_screen_objs()
 	..()
 	if(cells)
@@ -226,17 +219,14 @@
 			client.screen -= sensor
 		sensor = null
 
-/proc/getAvailableRobotModules()
-	var/list/modules = list("Standard", "Engineering", "Medical", "Supply", "Janitor", "Service", "Security")
-	if (security_level == SEC_LEVEL_RED)
-		modules+="Combat"
-	return modules
+/mob/living/silicon/robot/proc/getModules()
+	return getAvailableRobotModules()
 
 // /vg/: Enable forcing module type
 /mob/living/silicon/robot/proc/pick_module(var/forced_module=null)
 	if(module)
 		return
-	var/list/modules = getAvailableRobotModules()
+	var/list/modules = getModules()
 	if(forced_module)
 		modtype = forced_module
 	else
@@ -245,16 +235,16 @@
 
 	if(module)
 		return
-	if(!(modtype in robot_modules))
+	if(!(modtype in all_robot_modules))
 		return
 
-	var/module_type = robot_modules[modtype]
+	var/module_type = all_robot_modules[modtype]
 	module = new module_type(src)
 
 	feedback_inc("cyborg_[lowertext(modtype)]",1)
 	updatename()
 
-	if(modtype == ("Security" || "Combat" || "Syndicate"))
+	if(modtype == (SECURITY_MODULE || COMBAT_MODULE))
 		to_chat(src, "<span class='big warning'><b>Regardless of your module, your wishes, or the needs of the beings around you, absolutely nothing takes higher priority than following your silicon lawset.</b></span>")
 
 	set_module_sprites(module.sprites)
@@ -372,15 +362,15 @@
 // this function shows information about the malf_ai gameplay type in the status screen
 /mob/living/silicon/robot/show_malf_ai()
 	..()
-	if(ticker.mode.name == "AI malfunction")
-		var/datum/game_mode/malfunction/malf = ticker.mode
-		for (var/datum/mind/malfai in malf.malf_ai)
-			if(connected_ai)
-				if(connected_ai.mind == malfai)
-					if(malf.apcs >= 3)
-						stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
-			else if(ticker.mode:malf_mode_declared)
-				stat(null, "Time left: [max(ticker.mode:AI_win_timeleft/(ticker.mode:apcs/3), 0)]")
+	if(connected_ai && connected_ai.mind)
+		var/datum/faction/malf/malf = find_active_faction_by_member(connected_ai.mind.GetRole(MALF))
+		if(!malf)
+			malf = find_active_faction_by_type(/datum/faction/malf) //Let's see if there is anything to print at least
+			var/malf_stat = malf.get_statpanel_addition()
+			if(malf_stat && malf_stat != null)
+				stat(null, malf_stat)
+		if(malf.apcs >= 3)
+			stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
 	return FALSE
 
 // this function displays jetpack pressure in the stat panel
@@ -473,6 +463,13 @@
 		spark(src, 5, FALSE)
 	return 2
 
+	
+/mob/living/silicon/robot/emp_act(severity)
+	..()
+	if(prob(50/severity))
+		modulelock_time = rand(10,60)
+		modulelock = TRUE
+	
 
 /mob/living/silicon/robot/triggerAlarm(var/class, area/A, var/O, var/alarmsource)
 	if(isDead())
@@ -598,7 +595,7 @@
 
 				return
 
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if(iswelder(W))
 		if(!getBruteLoss())
 			to_chat(user, "Nothing to fix here!")
 			return
@@ -893,7 +890,7 @@
 			cell.updateicon()
 			cell.add_fingerprint(user)
 			user.put_in_hands(cell)
-			visible_message("<span class='warning'>[user] removes [src]'s [cell.name].</span>", \
+			user.visible_message("<span class='warning'>[user] removes [src]'s [cell.name].</span>", \
 			"<span class='notice'>You remove [src]'s [cell.name].</span>")
 			if(can_diagnose())
 				to_chat(src, "<span class='info' style=\"font-family:Courier\">Cell removed.</span>")
@@ -966,7 +963,8 @@
 	overlays.Cut()
 	update_fire()
 	if(!stat && cell != null)
-		eyes = image(icon,"eyes-[icon_state]", ABOVE_LIGHTING_LAYER)
+		eyes = image(icon,"eyes-[icon_state]", overlay_layer)
+		eyes.plane = overlay_plane
 		overlays += eyes
 
 	if(opened)
@@ -995,10 +993,6 @@
 		overlays += target_locked
 
 /mob/living/silicon/robot/proc/installed_modules()
-	if(weapon_lock)
-		to_chat(src, "<span class='attack'>Weapon lock active, unable to use modules! Count:[weaponlock_time]</span>")
-		return
-
 	if(!module)
 		pick_module()
 		return
@@ -1126,7 +1120,7 @@
 	. = ..()
 
 	if(module)
-		if(module.quirk_flags & MODULE_CLEAN_ON_MOVE)
+		if(HAS_MODULE_QUIRK(src, MODULE_CLEAN_ON_MOVE))
 			var/turf/tile = loc
 			if(isturf(tile))
 				tile.clean_blood()
@@ -1304,58 +1298,20 @@
 	new_upgrade.attempt_action(src, user, TRUE)
 	qdel(new_upgrade)
 
-//Combat module debug subtype.
-/mob/living/silicon/robot/debug_droideka
-	cell_type = /obj/item/weapon/cell/hyper
+/mob/living/silicon/robot/GetAccess()
+	if(isDead()) //Dead cyborgs need no access.
+		return
+	return robot_access
 
-/mob/living/silicon/robot/debug_droideka/New()
-	..()
+/mob/living/silicon/robot/proc/GetRobotAccess()
+	return get_all_accesses()
 
-	UnlinkSelf()
-	laws = new /datum/ai_laws/ntmov()
-	pick_module("Combat")
-	set_module_sprites(list("Droid" = "droid-combat"))
-	install_upgrade(src, /obj/item/borg/upgrade/vtec)
+/mob/living/silicon/robot/hasFullAccess()
+	return FALSE
 
-//Syndicate subtype because putting this on new() is fucking retarded.
-/mob/living/silicon/robot/syndie
-	cell_type = /obj/item/weapon/cell/hyper
-
-/mob/living/silicon/robot/syndie/New()
-	..()
-
-	UnlinkSelf()
-	laws = new /datum/ai_laws/syndicate_override()
-	pick_module("Syndicate")
-	install_upgrade(src, /obj/item/borg/upgrade/vtec)
-
-//Moving hugborgs to an easy-to-spawn subtype because they were as retarded as the syndie one.
-/mob/living/silicon/robot/hugborg
-	cell_type = /obj/item/weapon/cell/super
-
-/mob/living/silicon/robot/hugborg/New()
-	..()
-
-	UnlinkSelf()
-	laws = new /datum/ai_laws/asimov()
-
-	pick_module("TG17355")
-	set_module_sprites(list("Peacekeeper" = "peaceborg"))
-
-/mob/living/silicon/robot/hugborg/clown/New()
-	..()
-	install_upgrade(src, /obj/item/borg/upgrade/honk)
-
-/mob/living/silicon/robot/hugborg/noir/New()
-	..()
-	laws = new /datum/ai_laws/noir()
-	install_upgrade(src, /obj/item/borg/upgrade/noir)
-
-/mob/living/silicon/robot/hugborg/warden/New()
-	..()
-	laws = new /datum/ai_laws/robocop() //I. AM. THE. LAW.
-	install_upgrade(src, /obj/item/borg/upgrade/warden)
-
-/mob/living/silicon/robot/hugborg/ball/New()
-	..()
-	set_module_sprites(list("Omoikane" = "omoikane"))
+/mob/living/silicon/robot/get_cell()
+	return cell
+	
+/mob/living/silicon/robot/proc/toggle_modulelock()
+	modulelock = !modulelock
+	return modulelock

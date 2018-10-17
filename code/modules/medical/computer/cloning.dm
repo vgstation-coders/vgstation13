@@ -35,7 +35,10 @@
 		scanner.connected = null
 		scanner = null
 	if(diskette)
-		qdel(diskette)
+		if(loc)
+			diskette.forceMove(loc)
+		else
+			qdel(diskette)
 		diskette = null
 	records.Cut()
 	active_record = null
@@ -321,7 +324,7 @@
 			return
 
 		// DNA2 makes things a little simpler.
-		src.diskette.buf=src.active_record
+		src.diskette.buf=src.active_record.Clone() //Copy the record, not just the reference to it
 		src.diskette.buf.types=0
 		switch(href_list["save_disk"]) //Save as Ui/Ui+Ue/Se
 			if("ui")

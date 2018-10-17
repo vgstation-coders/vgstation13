@@ -20,7 +20,7 @@
 	header = "station arrivals"
 
 /obj/item/weapon/disk/shuttle_coords/vault
-	allowed_shuttles = list(/datum/shuttle/mining, /datum/shuttle/research)
+	allowed_shuttles = list(/datum/shuttle/mining, /datum/shuttle/research, /datum/shuttle/security)
 
 ///obj/item/weapon/disk/shuttle_coords/vault/random -> leads to a random vault with a docking port!
 /obj/item/weapon/disk/shuttle_coords/vault/random/initialize()
@@ -94,7 +94,7 @@
 /obj/item/weapon/card/shuttle_pass/Destroy()
 	destination = null
 
-/obj/item/weapon/card/shuttle_pass/ERT
+/obj/item/weapon/card/shuttle_pass/ert
 	name = "\improper ERT shuttle pass"
 	destination = /obj/docking_port/destination/transport/station
 	allowed_shuttle = /datum/shuttle/transport

@@ -78,6 +78,9 @@ var/global/mulebot_count = 0
 	var/run_over_cooldown = 3 SECONDS	//how often a pAI-controlled MULEbot can damage a mob by running over them
 	var/coolingdown = FALSE
 
+/obj/machinery/bot/mulebot/get_cell()
+	return cell
+
 /obj/machinery/bot/mulebot/New()
 	..()
 	wires = new(src)
@@ -122,24 +125,25 @@ var/global/mulebot_count = 0
 // screwdriver: open/close hatch
 // cell: insert it
 // other: chance to knock rider off bot
-/obj/machinery/bot/mulebot/attackby(var/obj/item/I, var/mob/user)
+/obj/machinery/bot/mulebot/attackby(obj/item/I, mob/user)
+	user.delayNextAttack(I.attack_delay)
 	if(istype(I,/obj/item/weapon/card/emag))
-		locked = !locked
-		to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] the mulebot's controls!</span>")
+		toggle_lock(user, TRUE)
+		to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] [src]'s controls!</span>")
 		flick("[icon_initial]-emagged", src)
 		playsound(src, 'sound/effects/sparks1.ogg', 100, 0)
 	else if(istype(I, /obj/item/weapon/card/id))
 		if(toggle_lock(user))
 			to_chat(user, "<span class='notice'>Controls [(locked ? "locked" : "unlocked")].</span>")
 
-	else if(istype(I,/obj/item/weapon/cell) && open && !cell)
+	else if(istype(I,/obj/item/weapon/cell) && open && !cell && user.a_intent != I_HURT)
 		var/obj/item/weapon/cell/C = I
 		if(user.drop_item(C, src))
 			cell = C
 			updateDialog()
-	else if(istype(I,/obj/item/weapon/wirecutters)||istype(I,/obj/item/device/multitool))
+	else if((istype(I,/obj/item/weapon/wirecutters)||istype(I,/obj/item/device/multitool)) && user.a_intent != I_HURT)
 		attack_hand(user)
-	else if(istype(I,/obj/item/weapon/screwdriver))
+	else if(istype(I,/obj/item/weapon/screwdriver) && user.a_intent != I_HURT)
 		if(locked)
 			to_chat(user, "<span class='notice'>The maintenance hatch cannot be opened or closed while the controls are locked.</span>")
 			return
@@ -154,7 +158,7 @@ var/global/mulebot_count = 0
 			icon_state = "[icon_initial]0"
 
 		updateDialog()
-	else if (iswrench(I))
+	else if (iswrench(I) && user.a_intent != I_HURT)
 		if (src.health < maxhealth)
 			src.health = min(maxhealth, src.health+25)
 			user.visible_message(
@@ -166,12 +170,13 @@ var/global/mulebot_count = 0
 	else if(load && ismob(load))  // chance to knock off rider
 		if(prob(1+I.force * 2))
 			unload(0)
+			var/mob/living/rider = load
+			rider.Knockdown(2)
+			playsound(rider, "sound/effects/bodyfall.ogg", 50, 1)
 			user.visible_message("<span class='warning'>[user] knocks [load] off [src] with \the [I]!</span>", "<span class='warning'>You knock [load] off [src] with \the [I]!</span>")
-		else
-			to_chat(user, "You hit [src] with \the [I] but to no effect.")
+		. = ..()
 	else
-		..()
-	return
+		. = ..()
 
 
 /obj/machinery/bot/mulebot/ex_act(var/severity)
@@ -394,8 +399,8 @@ var/global/mulebot_count = 0
 /obj/machinery/bot/mulebot/proc/has_power()
 	return !open && cell && cell.charge > 0 && wires.HasPower()
 
-/obj/machinery/bot/mulebot/proc/toggle_lock(var/mob/user)
-	if(src.allowed(user))
+/obj/machinery/bot/mulebot/proc/toggle_lock(mob/user, ignore_access = FALSE)
+	if(allowed(user) || ignore_access)
 		locked = !locked
 		updateDialog()
 		return 1
@@ -406,7 +411,7 @@ var/global/mulebot_count = 0
 // mousedrop a crate to load the bot
 // can load anything if emagged
 
-/obj/machinery/bot/mulebot/MouseDrop_T(var/atom/movable/C, mob/user)
+/obj/machinery/bot/mulebot/MouseDropTo(var/atom/movable/C, mob/user)
 
 	if(user.stat)
 		return
@@ -459,12 +464,6 @@ var/global/mulebot_count = 0
 	C.plane = plane
 	overlays += C
 
-	if(ismob(C))
-		var/mob/M = C
-		if(M.client)
-			M.client.perspective = EYE_PERSPECTIVE
-			M.client.eye = src
-
 	mode = 0
 	send_status()
 
@@ -483,11 +482,6 @@ var/global/mulebot_count = 0
 	load.forceMove(src.loc)
 	load.pixel_y -= 9 * PIXEL_MULTIPLIER
 	load.reset_plane_and_layer()
-	if(ismob(load))
-		var/mob/M = load
-		if(M.client)
-			M.client.perspective = MOB_PERSPECTIVE
-			M.client.eye = src
 
 
 	if(dirn)
@@ -501,7 +495,7 @@ var/global/mulebot_count = 0
 	load = null
 
 	// in case non-load items end up in contents, dump every else too
-	// this seems to happen sometimes due to race conditions
+	// this seems to happen sometimes due to race conditions //There are no race conditions in BYOND. It's single-threaded.
 	// with items dropping as mobs are loaded
 
 	for(var/atom/movable/AM in src)
@@ -511,11 +505,6 @@ var/global/mulebot_count = 0
 		AM.forceMove(src.loc)
 		AM.reset_plane_and_layer()
 		AM.pixel_y = initial(AM.pixel_y)
-		if(ismob(AM))
-			var/mob/M = AM
-			if(M.client)
-				M.client.perspective = MOB_PERSPECTIVE
-				M.client.eye = src
 	mode = 0
 
 
@@ -590,6 +579,7 @@ var/global/mulebot_count = 0
 							T.AddTracks(/obj/effect/decal/cleanable/blood/tracks/wheels,list(),0,goingdir,currentBloodColor)
 						bloodiness--
 
+					set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
 					var/moved = step_towards(src, next)	// attempt to move
 					if(cell)
 						cell.use(1)

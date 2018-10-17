@@ -126,6 +126,7 @@
 
 /obj/item/device/paicard/proc/setPersonality(mob/living/silicon/pai/personality)
 	src.pai = personality
+	src.overlays.len = 0
 	src.overlays += image(icon=icon, icon_state = "pai-happy")
 
 /obj/item/device/paicard/proc/removePersonality()
@@ -183,6 +184,10 @@
 	for (var/mob/M in viewers(T))
 		M.show_message("<span class='notice'>[src] flashes a message across its screen, \"Additional personalities available for download.\"</span>", 1, "<span class='notice'>[src] bleeps electronically.</span>", 2)
 		playsound(loc, 'sound/machines/paistartup.ogg', 50, 1)
+		src.overlays += image(icon=icon, icon_state = "pai-off-notify")
+
+/obj/item/device/paicard/proc/removeNotification()
+	src.overlays.len = 0
 
 /obj/item/device/paicard/emp_act(severity)
 	for(var/mob/M in src)

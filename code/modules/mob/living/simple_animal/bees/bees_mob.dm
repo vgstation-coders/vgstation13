@@ -8,7 +8,6 @@
 #define BOREDOM_TO_RETURN	30//once reached, the bee will head back to its hive
 
 #define EXHAUSTION_TO_DIE	300//once reached, the bee will begin to die
-
 #define MAX_BEES_PER_SWARM	20//explicit
 
 /*
@@ -193,6 +192,18 @@
 	//cleanup
 	if (src)
 		qdel(src)
+
+/mob/living/simple_animal/bee/reagent_act(id, method, volume)
+	if(isDead())
+		return
+
+	.=..()
+
+	switch(id)
+		if(TOXIN)
+			visible_message("<span class='danger'>The bees stop moving...</span>")
+			adjustBruteLoss(rand(40,110)) //Kills 4-11 bees. Maximum bees per swarm 20.
+			panic_attack() //Bees don't know who is responsible, but they'll get mad at everyone!
 
 /mob/living/simple_animal/bee/unarmed_attacked(mob/living/attacker, damage, damage_type, zone)
 	..()
@@ -529,6 +540,8 @@
 						continue
 					if(istype(G, /mob/living/silicon/robot/mommi)) //Do not bully the crab
 						continue
+					if(istype(G, /mob/living/simple_animal/hostile/lizard) && bee_species.aggressiveness < 50) //natural predator, need to be pretty aggressive to fight them
+						continue
 					if (G.stat != DEAD)
 						nearbyMobs += G
 				if (nearbyMobs.len > 0)
@@ -552,7 +565,7 @@
 				if (bee_species.slow)
 					step_to(src, target_turf)//1 step per Life()
 				else
-					walk_to(src, target, 0, 2)
+					start_walk_to(target, 0, 2)
 
 				if(src.loc == target_turf)
 					wander = 1

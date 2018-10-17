@@ -16,6 +16,11 @@
 	if(!broken)
 		Break(user)
 
+/obj/item/weapon/gun/akimbo/stripped(mob/wearer, mob/stripper)
+	if(!broken)
+		Break()
+	..()
+
 /obj/item/weapon/gun/akinbo/pickup(mob/user)
 	update_icon(user)
 
@@ -43,8 +48,9 @@
 /obj/item/weapon/gun/akimbo/proc/Break(mob/living/user)
 	broken = TRUE
 	if(left && right)
-		left.forceMove(get_turf(src))
-		right.forceMove(get_turf(src))
+		var/turf/T = get_turf(src)
+		left.forceMove(T)
+		right.forceMove(T)
 		if(user)
 			user.drop_item(src, force_drop = TRUE)
 			user.put_in_hands(left)
@@ -52,6 +58,7 @@
 		left = null
 		right = null
 	qdel(src)
+
 /obj/item/weapon/gun/akimbo/update_icon(mob/user)
 	//right over left
 	icon = left.icon

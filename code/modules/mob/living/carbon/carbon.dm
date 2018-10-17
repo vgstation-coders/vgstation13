@@ -163,6 +163,7 @@
 				"<span class='notice'>You check yourself for injuries.</span>" \
 				)
 
+			var/num_injuries = 0
 			for(var/datum/organ/external/org in H.organs)
 				var/status = ""
 				var/brutedamage = org.brute_dam
@@ -176,26 +177,32 @@
 				if(brutedamage > 0)
 					status = "bruised"
 				if(brutedamage > 20)
-					status = "<span class='warning'>bleeding</span>"
+					status = "<span class='warning'>badly wounded</span>"
 				if(brutedamage > 40)
 					status = "<span class='danger'>mangled</span>"
 				if(brutedamage > 0 && burndamage > 0)
 					status += " and "
 				if(burndamage > 40)
 					status += "<span class='orange bold'>peeling away</span>"
-
 				else if(burndamage > 10)
 					status += "<span class='orange italics'>blistered</span>"
 				else if(burndamage > 0)
 					status += "numb"
+				if(org.status & ORGAN_BLEEDING)
+					status = "<span class='danger'>bleeding</span>"
 				if(org.status & ORGAN_DESTROYED)
-					status = "MISSING!"
+					status = "MISSING"
 				if(org.status & ORGAN_MUTATED)
-					status = "weirdly shapen."
-				if(status == "")
-					status = "OK"
-				src.show_message(text("\t []My [] is [].",status=="OK"?"<span class='notice'></span>":"<span class='danger'></span>",org.display_name,status),1)
-			if((SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
+					status = "weirdly shapen"
+
+				if(status != "")
+					to_chat(src, "My [org.display_name] is [status].")
+					num_injuries++
+
+			if(num_injuries == 0)
+				to_chat(src, "My legs are OK.")
+
+			if((M_SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
 				H.play_xylophone()
 		else if(lying) // /vg/: For hugs. This is how update_icon figgers it out, anyway.  - N3X15
 			var/t_him = "it"
@@ -388,23 +395,21 @@
 		if(PULSE_NONE)
 			return "0"
 		if(PULSE_2SLOW)
-			temp = rand(20, 40)
-			return num2text(method ? temp : temp + rand(-10, 10))
+			temp = 30 + sin(life_tick / 2) * 10
 		if(PULSE_SLOW)
-			temp = rand(40, 60)
-			return num2text(method ? temp : temp + rand(-10, 10))
+			temp = 50 + sin(life_tick / 2) * 10
 		if(PULSE_NORM)
-			temp = rand(60, 90)
-			return num2text(method ? temp : temp + rand(-10, 10))
+			temp = 75 + sin(life_tick / 2) * 15
 		if(PULSE_FAST)
-			temp = rand(90, 120)
-			return num2text(method ? temp : temp + rand(-10, 10))
+			temp = 105 + sin(life_tick / 2) * 15
 		if(PULSE_2FAST)
-			temp = rand(120, 160)
-			return num2text(method ? temp : temp + rand(-10, 10))
+			temp = 140 + sin(life_tick / 2) * 20
 		if(PULSE_THREADY)
 			return method ? ">250" : "extremely weak and fast, patient's artery feels like a thread"
 //			output for machines^	^^^^^^^output for people^^^^^^^^^
+	if(method == GETPULSE_HAND)
+		temp += rand(-10, 10)
+	return num2text(round(temp))
 
 /mob/living/carbon/verb/mob_sleep()
 	set name = "Sleep"
@@ -504,6 +509,7 @@
 	stop_pulling()
 	Stun(stun_amount)
 	Knockdown(weaken_amount)
+	score["slips"]++
 	return 1
 
 /mob/living/carbon/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
@@ -637,10 +643,8 @@
 			if(I.flags & SLOWDOWN_WHEN_CARRIED)
 				. *= I.slowdown
 
-		if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
-			. *= 0.4
-			if(. < 1)//we don't want to move faster than the base speed
-				. = 1
+		if(. > 1 && reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
+			. = max(1, .*0.4)//we don't hyperzine to make us move faster than the base speed, unless we were already faster.
 
 /mob/living/carbon/base_movement_tally()
 	. = ..()
@@ -670,23 +674,23 @@
 	if((temp_turf.z != our_turf.z) || M.stat!=CONSCIOUS) //Not on the same zlevel as us or they're dead.
 //		to_chat(world, "[(temp_turf.z != our_turf.z) ? "not on the same zlevel as [M]" : "[M] is not concious"]")
 		if(temp_turf.z != map.zCentcomm)
-			to_chat(src, "The mind of [M] is too faint...")//Prevent "The mind of Admin is too faint..."
+			to_chat(src, "The target mind is too faint...")//Prevent "The mind of Admin is too faint..."
 
 		return 0
 	if(M_PSY_RESIST in M.mutations)
 //		to_chat(world, "[M] has psy resist")
-		to_chat(src, "The mind of [M] is resisting!")
+		to_chat(src, "The target mind is resisting!")
 		return 0
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
-			to_chat(src, "Interference is disrupting the connection with the mind of [M].")
+			to_chat(src, "Interference is disrupting the connection with the target mind.")
 			return 0
 	if(ismartian(M))
 		var/mob/living/carbon/complex/martian/MR = M
 		if(MR.head)
 			if(istype(MR.head, /obj/item/clothing/head/helmet/space/martian) || istype(MR.head,/obj/item/clothing/head/tinfoil))
-				to_chat(src, "Interference is disrupting the connection with the mind of [M].")
+				to_chat(src, "Interference is disrupting the connection with the target mind.")
 				return 0
 	return 1
 

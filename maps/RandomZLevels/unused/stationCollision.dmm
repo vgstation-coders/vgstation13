@@ -196,7 +196,7 @@
 "dN" = (/obj/structure/bed/chair/office/light{dir = 1},/turf/simulated/floor/airless{icon_state = "damaged3"},/area/awaymission/northblock)
 "dO" = (/obj/structure/bed/chair/office/light{dir = 1},/turf/simulated/floor,/area/awaymission/northblock)
 "dP" = (/turf/simulated/floor{icon_state = "blue"; dir = 8},/area/awaymission/northblock)
-"dQ" = (/obj/structure/showcase{icon_state = "showcase_2"},/turf/simulated/floor,/area/awaymission/northblock)
+"dQ" = (/obj/machinery/showcase{icon_state = "showcase_2"},/turf/simulated/floor,/area/awaymission/northblock)
 "dR" = (/obj/structure/sign/goldenplaque{pixel_y = 31},/turf/simulated/floor/airless{icon_state = "damaged2"},/area/awaymission/northblock)
 "dS" = (/obj/machinery/light/small{dir = 1},/turf/simulated/floor/airless{icon_state = "floorscorched1"},/area/awaymission/northblock)
 "dT" = (/obj/structure/sign/atmosplaque{pixel_y = 31},/turf/simulated/floor/airless{icon_state = "damaged2"},/area/awaymission/northblock)

@@ -21,6 +21,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/last_bottle_amt = 3
 	//var/bottlesprite = "1" //yes, strings
 	var/pillsprite = "1"
+	var/tmp/last_sound_time = 0
 
 	var/global/list/pill_icon_cache
 
@@ -43,7 +44,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 /obj/machinery/chem_master/New()
 	. = ..()
 
-	create_reagents(100)
+	create_reagents(300)
 
 	component_parts = newlist(
 		/obj/item/weapon/stock_parts/manipulator,
@@ -64,28 +65,16 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		generate_pill_icon_cache()
 
 /obj/machinery/chem_master/RefreshParts()
-	var/scancount = 0
 	var/lasercount = 0
 	var/manipcount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
 			manipcount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
-			scancount += SP.rating-1
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
 	max_bottle_size = initial(max_bottle_size) + lasercount*5
 	max_pill_count = initial(max_pill_count) + manipcount*5
-	handle_new_reservoir(scancount*25+100)
-	max_pill_size = initial(max_pill_size)+manipcount*25 // i suck at math
-
-
-/obj/machinery/chem_master/proc/handle_new_reservoir(var/newvol)
-	if(reagents.maximum_volume == newvol)
-		return //Volume did not change
-	if(reagents.maximum_volume>newvol)
-		reagents.remove_any(reagents.maximum_volume-newvol) //If we have more than our new max, remove equally until we reach new max
-	reagents.maximum_volume = newvol
+	max_pill_size = initial(max_pill_size) + manipcount*25
 
 /obj/machinery/chem_master/ex_act(severity)
 	switch(severity)
@@ -144,9 +133,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 	else if(istype(B, /obj/item/weapon/reagent_containers/pill))
 		B.icon_state = "pill"+pillsprite
-		var/name = reject_bad_text(input(user,"Name:","Name your pill!","[B.reagents.get_master_reagent_name()] ([B.reagents.total_volume] units)") as null|text)
+		var/name = stripped_input(user,"Name:","Name your pill!","[B.reagents.get_master_reagent_name()] ([B.reagents.total_volume] units)")
 		if(name)
 			B.name = "[name] pill"
+		else
+			to_chat(user, "<span class='warning'>[bicon(src)] Invalid name!</span>")
 		return 1
 
 /obj/machinery/chem_master/Topic(href, href_list)
@@ -292,6 +283,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		else if(href_list["createpill"] || href_list["createpill_multiple"])
 			if(!href_list["createempty"] && reagents.total_volume == 0)
 				to_chat(usr, "<span class='warning'>[bicon(src)] Buffer is empty!</span>")
+				if(last_sound_time + 1 SECONDS < world.time)
+					playsound(src, 'sound/machines/chime.ogg', 50)
+					last_sound_time = world.time
 				return
 
 			var/count = 1
@@ -308,8 +302,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(href_list["createempty"])
 				amount_per_pill = 0 //If "createempty" is 1, pills are empty and no reagents are used.
 
-			var/name = reject_bad_text(input(usr,"Name:","Name your pill!","[reagents.get_master_reagent_name()] ([amount_per_pill] units)") as null|text)
+			var/name = stripped_input(usr,"Name:","Name your pill!","[reagents.get_master_reagent_name()] ([amount_per_pill] units)")
 			if(!name)
+				to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
 				return
 
 			var/logged_message = " - [key_name(usr)] has made [count] pill[count > 1 ? "s, each" : ""] named '[name]' and containing "
@@ -353,8 +348,9 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				if(href_list["createempty"])
 					amount_per_bottle = 0 //If "createempty" is 1, bottles are empty and no reagents are used.
 
-				var/name = reject_bad_text(input(usr,"Name:", "Name your bottle!","[reagents.get_master_reagent_name()] ([amount_per_bottle] units)") as null|text)
+				var/name = stripped_input(usr,"Name:", "Name your bottle!","[reagents.get_master_reagent_name()] ([amount_per_bottle] units)")
 				if(!name)
+					to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")
 					return
 
 				while(count--)

@@ -149,6 +149,17 @@
 	..()
 	reagents.add_reagent(PLANTBGONE, 100)
 
+/obj/item/weapon/reagent_containers/spray/bugzapper
+	name = "Bug Zapper"
+	desc = "Kills those pesky bugs!"
+	icon = 'icons/obj/hydroponics2.dmi'
+	icon_state = "plantbgone"
+	item_state = "plantbgone"
+	volume = 100
+
+/obj/item/weapon/reagent_containers/spray/bugzapper/New()
+	..()
+	reagents.add_reagent(TOXIN, 100)
 
 //chemsprayer
 /obj/item/weapon/reagent_containers/spray/chemsprayer

@@ -1,6 +1,6 @@
 //Refer to life.dm for caller
 
-/mob/living/carbon/human/proc/handle_regular_hud_updates()
+/mob/living/carbon/human/handle_regular_hud_updates()
 	if(!client)
 		return 0
 
@@ -95,16 +95,29 @@
 			healths.icon_state = "health7" //DEAD healthmeter
 		return
 	else
-		change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
-
-		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
-		if(E)
-			see_in_dark = E.see_in_dark //species.darksight
-		else
-			see_in_dark = species.darksight
+		// Vampire bandaid. I'm sorry.
+		// Rewrite idea : divide life() into organs (Eyes...) and have flags in the roles if they overwrite the functions of those organs.
+		// Basically, the problem here is that abstract things (HUD icons) are handled as the same time as "organs" things (seeing in the dark.)
+		var/datum/role/vampire/V = isvampire(src)
+		if (!V || (!(VAMP_VISION in V.powers) && !(VAMP_MATURE in V.powers))) // Not a vampire, or a vampire but neither of the spells.
+			change_sight(removing = SEE_MOBS)
+		if (!V || !(VAMP_MATURE in V.powers))
+			change_sight(removing = SEE_TURFS|SEE_OBJS)
+			var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
+			if(E)
+				see_in_dark = E.see_in_dark //species.darksight
+			else
+				see_in_dark = species.darksight
 			// You should really be blind but w/e.
 
-		see_invisible = see_in_dark > 2 ? SEE_INVISIBLE_LEVEL_ONE : SEE_INVISIBLE_LIVING
+			see_invisible = see_in_dark > 2 ? SEE_INVISIBLE_LEVEL_ONE : SEE_INVISIBLE_LIVING
+
+		// Moiving this "see invisble" thing here so that it can be overriden by xrays, vampires...
+		if(glasses)
+			handle_glasses_vision_updates(glasses)
+		else if (!V)
+			see_invisible = SEE_INVISIBLE_LIVING
+
 		if(dna)
 			switch(dna.mutantrace)
 				if("slime")
@@ -118,21 +131,20 @@
 			see_in_dark = 8
 			if(!druggy)
 				see_invisible = SEE_INVISIBLE_LEVEL_TWO
-
+    // Legacy Cult
 		if(seer == 1)
-			var/obj/effect/rune/R = locate() in loc
-			if(R && R.word1 == cultwords["see"] && R.word2 == cultwords["hell"] && R.word3 == cultwords["join"])
+			var/obj/effect/rune_legacy/R = locate() in loc
+			var/datum/faction/cult/narsie/blood_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
+			var/cultwords
+			if (blood_cult)
+				cultwords = blood_cult.cult_words
+			else
+				cultwords = null
+			if(cultwords && R && R.word1 == cultwords["see"] && R.word2 == cultwords["hell"] && R.word3 == cultwords["join"])
 				see_invisible = SEE_INVISIBLE_OBSERVER
 			else
 				see_invisible = SEE_INVISIBLE_LIVING
 				seer = 0
-
-
-		if(glasses)
-			handle_glasses_vision_updates(glasses)
-
-		else if(!seer)
-			see_invisible = SEE_INVISIBLE_LIVING
 
 		apply_vision_overrides()
 

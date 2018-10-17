@@ -1,9 +1,5 @@
 var/global/datum/controller/occupations/job_master
 
-#define GET_RANDOM_JOB 0
-#define BE_ASSISTANT 1
-#define RETURN_TO_LOBBY 2
-
 /datum/controller/occupations
 		//List of all jobs
 	var/list/occupations = list()
@@ -11,6 +7,8 @@ var/global/datum/controller/occupations/job_master
 	var/list/unassigned = list()
 		//Debug info
 	var/list/job_debug = list()
+
+	var/list/crystal_ball = list() //This should be an assoc. list. Job = # of players ready. Configured by predict_manifest() in obj.dm
 
 
 /datum/controller/occupations/proc/SetupOccupations(var/faction = "Station")
@@ -396,8 +394,10 @@ var/global/datum/controller/occupations/job_master
 		// Total between $200 and $500
 		var/balance_bank = rand(100,250)
 		balance_wallet = rand(100,250)
+		var/bank_pref_number = H.client.prefs.bank_security
+		var/bank_pref = bank_security_num2text(bank_pref_number)
 		if(centcomm_account_db)
-			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = PLAYER_START_WAGE)
+			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = PLAYER_START_WAGE, security_pref = bank_pref_number)
 			if(H.mind)
 				var/remembered_info = ""
 				remembered_info += "<b>Your account number is:</b> #[M.account_number]<br>"
@@ -427,6 +427,7 @@ var/global/datum/controller/occupations/job_master
 			spawn()
 				to_chat(H, "<span class='danger'>Your bank account number is: <span style='color: black;'>[M.account_number]</span>, your bank account pin is: <span style='color: black;'>[M.remote_access_pin]</span></span>")
 				to_chat(H, "<span class='danger'>Your virtual wallet funds are: <span style='color: black;'>$[balance_wallet]</span>, your bank account funds are: <span style='color: black;'>$[balance_bank]</span></span>")
+				to_chat(H, "<span class='danger'>Your bank account security level is set to: <span style='color: black;'>[bank_pref]</span></span>")
 
 	var/alt_title = null
 	if(H.mind)
@@ -497,7 +498,7 @@ var/global/datum/controller/occupations/job_master
 			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/device/inhaler(H))
 		else
 			H.equip_or_collect(new /obj/item/device/inhaler(H), slot_in_backpack)
-		
+
 	return 1
 
 

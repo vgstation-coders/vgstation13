@@ -111,14 +111,21 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 
 /datum/wires/Topic(href, href_list)
 	..()
-	if(in_range(holder, usr) && isliving(usr))
-
+	if((in_range(holder, usr) || (istype(usr.loc,/obj/mecha) && in_range(holder,usr.loc))) && isliving(usr))
 		var/mob/living/L = usr
 		if(!CanUse(L))
 			to_chat(usr, "<span class='notice'>You are incapable of this right now.</span>")
 			return
 		if(href_list["action"])
-			var/obj/item/I = L.get_active_hand()
+			var/obj/item/I
+			if(istype(L.loc,/obj/mecha))
+				var/obj/mecha/M = L.loc
+				if(istype(M.selected,/obj/item/mecha_parts/mecha_equipment/tool/switchtool))
+					var/obj/item/mecha_parts/mecha_equipment/tool/switchtool/S = M.selected
+					var/obj/item/weapon/switchtool/SW = S.switchtool
+					I = SW.deployed
+			else
+				I = L.get_active_hand()
 			holder.add_hiddenprint(L)
 			if(href_list["cut"]) // Toggles the cut/mend status
 				if(iswirecutter(I) || isswitchtool(I))

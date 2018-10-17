@@ -341,6 +341,31 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	cc_per_sheet = CC_PER_SHEET_METAL
 	color = "#663300" //rgb: 102, 51, 0
 
+/datum/material/brass
+	name = "Brass"
+	id = MAT_BRASS
+	value = 0
+	oretype = null
+	sheettype = /obj/item/stack/sheet/brass
+	cointype = null
+	cc_per_sheet = CC_PER_SHEET_METAL
+	color = "#A97F1B"
+
+/datum/material/ralloy
+	name = "Replicant Alloy"
+	id = MAT_RALLOY
+	value = 0
+	oretype = null
+	sheettype = /obj/item/stack/sheet/ralloy
+	cointype = null
+	cc_per_sheet = CC_PER_SHEET_METAL
+	color = "#363636"
+
+/datum/material/ice
+	name = "Ice"
+	id = MAT_ICE
+	value = 0
+	oretype = /obj/item/ice_crystal
 
 /* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium

@@ -22,6 +22,7 @@
 	var/area			= null
 	var/time_died_as_mouse = null //when the client last died as a mouse
 	var/datum/tooltip/tooltips //datum that controls the displaying and hiding of tooltips
+	var/list/radial_menus = list() //keeping track of open menus so we're not gonna have several on top of each other.
 
 		///////////////
 		//SOUND STUFF//
@@ -74,6 +75,8 @@
 	var/obj/abstract/screen/plane_master/parallax_master/parallax_master = null
 	var/obj/abstract/screen/plane_master/parallax_dustmaster/parallax_dustmaster = null
 	var/obj/abstract/screen/plane_master/parallax_spacemaster/parallax_spacemaster = null
+	var/obj/abstract/screen/plane_master/ghost_planemaster/ghost_planemaster = null
+	var/obj/abstract/screen/plane_master/ghost_planemaster_dummy/ghost_planemaster_dummy = null
 
 	// This gets set by goonchat.
 	var/encoding = "1252"

@@ -76,6 +76,7 @@
 	powernet = 0		// set so that APCs aren't found as powernet nodes //Hackish, Horrible, was like this before I changed it :(
 	var/malfhack = 0 //New var for my changes to AI malf. --NeoFite
 	var/mob/living/silicon/ai/malfai = null //See above --NeoFite
+	var/malflocked = 0 //used for malfs locking down APCs
 //	luminosity = 1
 	var/has_electronics = 0 // 0 - none, 1 - plugged in, 2 - secured by screwdriver
 	var/overload = 1 //used for the Blackout malf module
@@ -98,6 +99,9 @@
 	var/make_alerts = TRUE // Should this APC make power alerts to the area?
 
 	machine_flags = WIREJACK
+
+/obj/machinery/power/apc/get_cell()
+	return cell
 
 /obj/machinery/power/apc/supports_holomap()
 	return TRUE
@@ -380,9 +384,16 @@
 
 //attack with an item - open/close cover, insert cell, or (un)lock interface
 /obj/machinery/power/apc/attackby(obj/item/W, mob/living/user)
+
+	src.add_fingerprint(user)
+
+	if (iswiretool(W) && wiresexposed)
+		wires.Interact(user)
+		return
+
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
 		return src.attack_hand(user)
-	src.add_fingerprint(user)
+
 	if (iscrowbar(W) && opened)
 		if (has_electronics==1)
 			if (terminal)
@@ -539,16 +550,10 @@
 	else if (istype(W, /obj/item/weapon/circuitboard/power_control) && opened && has_electronics==0 && ((stat & BROKEN) || malfhack))
 		to_chat(user, "<span class='warning'>You cannot put the board inside, the frame is damaged.</span>")
 		return
-	else if (istype(W, /obj/item/weapon/weldingtool) && opened && has_electronics==0 && !terminal)
+	else if (iswelder(W) && opened && has_electronics==0 && !terminal)
 		var/obj/item/weapon/weldingtool/WT = W
-		if (WT.get_fuel() < 3)
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
-			return
 		to_chat(user, "You start welding the APC frame...")
-		playsound(src, 'sound/items/Welder.ogg', 50, 1)
-		if (do_after(user, src, 50))
-			if(!src || !WT.remove_fuel(3, user))
-				return
+		if (WT.do_weld(user, src, 50, 3))
 			if (emagged || malfhack || (stat & BROKEN) || opened==2)
 				getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 1)
 				user.visible_message(\
@@ -625,6 +630,9 @@
 //		return
 	if(!user)
 		return
+	if(wiresexposed && !issilicon(user))
+		to_chat(user, "Unexpose the wires first!")
+		return
 	if(!isobserver(user))
 		src.add_fingerprint(user)
 		if(usr == user && opened)
@@ -675,12 +683,26 @@
 	return
 
 
+/obj/machinery/power/apc/updateDialog()
+	if(in_use)
+		var/list/nearby = viewers(1, src)
+		var/is_in_use = 0
+		for(var/mob/M in _using)
+			if (!M || !M.client || M.machine != src)
+				_using.Remove(M)
+				continue
+			if(!isAI(M) && !isrobot(M) && !(M in nearby))
+				_using.Remove(M)
+				continue
+			is_in_use = 1
+			if (wiresexposed)
+				wires.Interact(M)
+			else
+				interact(M)
+		in_use = is_in_use
+
 /obj/machinery/power/apc/interact(mob/user)
 	if (!user)
-		return
-
-	if (wiresexposed)
-		wires.Interact(user)
 		return
 
 	if (stat & (BROKEN | MAINT | EMPED))
@@ -688,9 +710,9 @@
 
 	ui_interact(user)
 
-/obj/machinery/power/apc/proc/get_malf_status(mob/user)
-	if (ticker && ticker.mode && (user.mind in ticker.mode.malf_ai) && istype(user, /mob/living/silicon/ai))
-		if (src.malfai == (user:parent ? user:parent : user))
+/obj/machinery/power/apc/proc/get_malf_status(var/mob/living/silicon/ai/user)
+	if (istype(user) && find_active_faction_by_member(user.mind.GetRole(MALF)))
+		if (src.malfai == (user.parent ? user.parent : user))
 			if (src.occupant == user)
 				return 3 // 3 = User is shunted in this APC
 			else if (istype(user.loc, /obj/machinery/power/apc))
@@ -716,6 +738,7 @@
 		"totalLoad" = lastused_equip + lastused_light + lastused_environ,
 		"coverLocked" = coverlocked,
 		"siliconUser" = istype(user, /mob/living/silicon) || isAdminGhost(user), // Allow aghosts to fuck with APCs
+		"malfLocked"= malflocked,
 		"malfStatus" = get_malf_status(user),
 
 		"powerChannels" = list(
@@ -825,8 +848,13 @@
 				to_chat(user, "<span class='warning'>\The [src] have AI control disabled!</span>")
 				nanomanager.close_user_uis(user, src)
 			return 0
+
 	else
 		if ((!in_range(src, user) || !istype(src.loc, /turf)))
+			nanomanager.close_user_uis(user, src)
+
+		if (wiresexposed)
+			to_chat(user, "<span class='warning'>Unexpose the wires first!</span>")
 			nanomanager.close_user_uis(user, src)
 
 			return 0
@@ -849,6 +877,9 @@
 		if(usr.machine == src)
 			usr.unset_machine()
 		return 1
+	if((!aidisabled) && malflocked && usr != malfai) //exclusive control enabled
+		to_chat(usr, "Access refused.")
+		return 0
 	if(!can_use(usr, 1))
 		return 0
 	if(!(istype(usr, /mob/living/silicon) || isAdminGhost(usr)) && locked)
@@ -891,6 +922,7 @@
 
 	else if (href_list["malfhack"])
 		var/mob/living/silicon/ai/malfai = usr
+		var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
 		if(get_malf_status(malfai)==1)
 			if (malfai.malfhacking)
 				to_chat(malfai, "You are already hacking an APC.")
@@ -904,14 +936,13 @@
 					malfai.malfhack = null
 					malfai.malfhacking = 0
 					locked = 1
-					if (ticker.mode.config_tag == "malfunction")
-						if (STATION_Z == z)
-							ticker.mode:apcs++
+					if(M && STATION_Z == z)
+						M.apcs++
 					if(usr:parent)
 						src.malfai = usr:parent
 					else
 						src.malfai = usr
-					to_chat(malfai, "Hack complete. The APC is now under your exclusive control.")
+					to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [STATION_Z == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
 					update_icon()
 
 	else if (href_list["occupyapc"])
@@ -930,15 +961,18 @@
 				locked = !locked
 				update_icon()
 
+	else if (href_list["malflock"])
+		if(get_malf_status(usr))
+			malflocked = !malflocked
+
 	return 1
 
 /obj/machinery/power/apc/proc/toggle_breaker()
 	operating = !operating
-
 	if(malfai)
-		if (ticker.mode.config_tag == "malfunction")
-			if (STATION_Z == z)
-				operating ? ticker.mode:apcs++ : ticker.mode:apcs--
+		var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
+		if(M && STATION_Z == z)
+			operating ? M.apcs++ : M.apcs--
 
 	src.update()
 	update_icon()
@@ -983,14 +1017,13 @@
 		src.occupant.mind.transfer_to(src.occupant.parent)
 		src.occupant.parent.adjustOxyLoss(src.occupant.getOxyLoss())
 		src.occupant.parent.cancel_camera()
-		qdel(src.occupant)
-		src.occupant = null
 		if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 			for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
-				for(var/datum/mind/AI_mind in ticker.mode.malf_ai)
-					var/mob/living/silicon/ai/A = AI_mind.current // the current mob the mind owns
-					if(A.stat != DEAD)
-						point.target = A //The pinpointer tracks the AI back into its core.
+				var/mob/living/silicon/ai/A = occupant.parent // the current mob the mind owns
+				if(A.stat != DEAD)
+					point.target = A //The pinpointer tracks the AI back into its core.
+		qdel(src.occupant)
+		src.occupant = null
 	else
 		to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
 		if(forced)
@@ -1267,9 +1300,9 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 
 /obj/machinery/power/apc/proc/set_broken()
 	if(malfai && operating)
-		if (ticker.mode.config_tag == "malfunction")
-			if (STATION_Z == z)
-				ticker.mode:apcs--
+		var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
+		if(M && STATION_Z == z)
+			M.apcs--
 	stat |= BROKEN
 	operating = 0
 	if(occupant)
@@ -1296,10 +1329,9 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	if(this_area.areaapc == src)
 		this_area.remove_apc(src)
 		if(malfai && operating)
-			if (ticker.mode.config_tag == "malfunction")
-				if (STATION_Z == z)
-					var/datum/game_mode/malfunction/M = ticker.mode
-					M.apcs--
+			var/datum/faction/malf/M = find_active_faction_by_member(malfai.mind.GetRole(MALF))
+			if (M && STATION_Z == z)
+				M.apcs--
 		this_area.power_light = 0
 		this_area.power_equip = 0
 		this_area.power_environ = 0

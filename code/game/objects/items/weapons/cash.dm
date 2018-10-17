@@ -1,3 +1,5 @@
+// Remember to update the LOWEST_DENOMINATION define if you add a smaller denomination
+// WARNING: Update cash.dm's dispense_cash proc to permit denominations below $1, else it'll runtime. - CW
 var/global/list/moneytypes = list(
 	/obj/item/weapon/spacecash/c1000 = 1000,
 	/obj/item/weapon/spacecash/c100  = 100,
@@ -151,6 +153,7 @@ var/global/list/moneytypes = list(
 		new typepath(src)
 	..()
 
+// TODO: Allow denominations below $1
 /proc/dispense_cash(var/amount, var/loc)
 	for(var/cashtype in moneytypes)
 		var/slice = moneytypes[cashtype]

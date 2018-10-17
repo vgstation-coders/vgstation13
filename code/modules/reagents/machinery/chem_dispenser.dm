@@ -87,7 +87,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	nanomanager.update_uis(src) // update all UIs attached to src
 
 /obj/machinery/chem_dispenser/proc/can_use(var/mob/living/silicon/robot/R)
-	if(!(R.module && (R.module.quirk_flags & MODULE_CAN_HANDLE_CHEMS)))
+	if(!HAS_MODULE_QUIRK(R, MODULE_CAN_HANDLE_CHEMS))
 		return FALSE
 	else
 		return TRUE
@@ -313,7 +313,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	energy = 100
 
 /obj/machinery/chem_dispenser/brewer/can_use(var/mob/living/silicon/robot/R)
-	if(R.module && (R.module.quirk_flags & MODULE_CAN_HANDLE_FOOD))
+	if(HAS_MODULE_QUIRK(R, MODULE_CAN_HANDLE_FOOD))
 		return TRUE
 	else
 		return FALSE
@@ -344,7 +344,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	energy = 100
 
 /obj/machinery/chem_dispenser/soda_dispenser/can_use(var/mob/living/silicon/robot/R)
-	if(R.module && (R.module.quirk_flags & MODULE_CAN_HANDLE_FOOD))
+	if(HAS_MODULE_QUIRK(R, MODULE_CAN_HANDLE_FOOD))
 		return TRUE
 	else
 		return FALSE
@@ -373,7 +373,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	energy = 100
 
 /obj/machinery/chem_dispenser/booze_dispenser/can_use(var/mob/living/silicon/robot/R)
-	if(R.module && (R.module.quirk_flags & MODULE_CAN_HANDLE_FOOD))
+	if(HAS_MODULE_QUIRK(R, MODULE_CAN_HANDLE_FOOD))
 		return TRUE
 	else
 		return FALSE

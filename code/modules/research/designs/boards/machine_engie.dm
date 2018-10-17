@@ -201,7 +201,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_URANIUM = 3000)
 	category = "Misc"
-	build_path = "/obj/item/weapon/module/rust_fuel_port"
+	build_path = /obj/item/weapon/module/rust_fuel_port
 
 /datum/design/rust_fuel_compressor
 	name = "Circuit Design (R-UST Mk. 7 fuel compressor)"
@@ -211,7 +211,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 3000, MAT_DIAMOND = 1000)
 	category = "Misc"
-	build_path = "/obj/item/weapon/module/rust_fuel_compressor"
+	build_path = /obj/item/weapon/module/rust_fuel_compressor
 
 /datum/design/rust_core
 	name = "Internal circuitry (R-UST Mk. 7 tokamak core)"
@@ -222,7 +222,7 @@
 	reliability_base = 79
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 3000, MAT_DIAMOND = 2000)
 	category = "Misc"
-	build_path = "/obj/item/weapon/circuitboard/rust_core"
+	build_path = /obj/item/weapon/circuitboard/rust_core
 
 /datum/design/rust_injector
 	name = "Internal circuitry (R-UST Mk. 7 fuel injector)"
@@ -233,7 +233,7 @@
 	reliability_base = 79
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 3000, MAT_URANIUM = 2000)
 	category = "Misc"
-	build_path = "/obj/item/weapon/circuitboard/rust_injector"
+	build_path = /obj/item/weapon/circuitboard/rust_injector
 
 //Cael shield gen designs.
 
@@ -244,7 +244,7 @@
 	req_tech = list(Tc_BLUESPACE = 4, Tc_PLASMATECH = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 2000, MAT_GOLD = 2000)
-	build_path = "/obj/item/weapon/circuitboard/shield_gen_ex"
+	build_path = /obj/item/weapon/circuitboard/shield_gen_ex
 
 /datum/design/shield_gen
 	name = "Circuit Design (Starscreen shield generator)"
@@ -253,7 +253,7 @@
 	req_tech = list(Tc_BLUESPACE = 4, Tc_PLASMATECH = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 2000, MAT_GOLD = 2000)
-	build_path = "/obj/machinery/shield_gen"
+	build_path = /obj/machinery/shield_gen
 
 /datum/design/shield_cap
 	name = "Circuit Design (Starscreen shield capacitor)"
@@ -262,4 +262,4 @@
 	req_tech = list(Tc_MAGNETS = 3, Tc_POWERSTORAGE = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 2000)
-	build_path = "/obj/item/weapon/circuitboard/shield_cap"
+	build_path = /obj/item/weapon/circuitboard/shield_cap

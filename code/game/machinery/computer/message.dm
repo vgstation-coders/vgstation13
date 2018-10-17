@@ -82,7 +82,7 @@
 /obj/machinery/computer/message_monitor/attack_hand(var/mob/living/user as mob)
 	if(stat & (NOPOWER|BROKEN))
 		return
-	if(!istype(user))
+	if(!istype(user) && !isAdminGhost(user))
 		return
 	//If the computer is being hacked or is emagged, display the reboot message.
 	if(hacking || emagged)

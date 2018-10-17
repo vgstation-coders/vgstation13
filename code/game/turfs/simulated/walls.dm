@@ -20,11 +20,17 @@
 	var/dismantle_type = /turf/simulated/floor/plating
 	var/girder_type = /obj/structure/girder
 
-	canSmoothWith = "/turf/simulated/wall=0&/obj/structure/falsewall=0&/obj/structure/falserwall=0"
-
 	soot_type = null
 
 	explosion_block = 1
+
+/turf/simulated/wall/canSmoothWith()
+	var/static/list/smoothables = list(
+		/turf/simulated/wall,
+		/obj/structure/falsewall,
+		/obj/structure/falserwall,
+	)
+	return smoothables
 
 /turf/simulated/wall/examine(mob/user)
 	..()
@@ -48,9 +54,12 @@
 	if(devastated)
 		getFromPool(/obj/item/stack/sheet/metal, src)
 	else
-		new girder_type(src)
+		if(girder_type)
+			new girder_type(src)
 
 	for(var/obj/O in src.contents) //Eject contents!
+		if(istype(O,/obj/effect/cult_shortcut))
+			qdel(O)
 		if(istype(O,/obj/structure/sign/poster))
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)
@@ -90,12 +99,14 @@
 	if(M.environment_smash_flags & SMASH_WALLS)
 		if(istype(src, /turf/simulated/wall/r_wall))
 			if(M.environment_smash_flags & SMASH_RWALLS)
+				playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
 				dismantle_wall(1)
 				M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
 				"<span class='attack'>You smash through \the [src].</span>")
 			else
 				to_chat(M, "<span class='info'>This [src] is far too strong for you to destroy.</span>")
 		else
+			playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
 			dismantle_wall(1)
 			M.visible_message("<span class='danger'>[M] smashes through \the [src].</span>", \
 			"<span class='attack'>You smash through \the [src].</span>")
@@ -122,6 +133,17 @@
 
 	if(rotting)
 		return src.attack_rotting(user) //Stop there, we aren't slamming our hands on a dirty rotten wall
+
+	if (iscultist(user) && !(locate(/obj/effect/cult_shortcut) in src))
+		var/datum/cult_tattoo/CT = user.checkTattoo(TATTOO_SHORTCUT)
+		if (CT)
+			var/data = use_available_blood(user, CT.blood_cost)
+			if (data[BLOODCOST_RESULT] != BLOODCOST_FAILURE)
+				if(do_after(user, src, 30))
+					new /obj/effect/cult_shortcut(src)
+					user.visible_message("<span class='warning'>[user] has painted a strange sigil on \the [src].</span>", \
+						"<span class='notice'>You finish drawing the sigil.</span>")
+			return
 
 	user.visible_message("<span class='notice'>[user] pushes \the [src].</span>", \
 	"<span class='notice'>You push \the [src] but nothing happens!</span>")
@@ -164,18 +186,12 @@
 		if(W.is_hot())
 			user.visible_message("<span class='notice'>[user] burns the fungi away with \the [W].</span>", \
 			"<span class='notice'>You burn the fungi away with \the [W].</span>")
-			for(var/obj/effect/E in src)
-				if(E.name == "Wallrot")
-					qdel(E)
-			rotting = 0
+			remove_rot()
 			return
 		if(istype(W,/obj/item/weapon/soap))
 			user.visible_message("<span class='notice'>[user] forcefully scrubs the fungi away with \the [W].</span>", \
 			"<span class='notice'>You forcefully scrub the fungi away with \the [W].</span>")
-			for(var/obj/effect/E in src)
-				if(E.name == "Wallrot")
-					qdel(E)
-			rotting = 0
+			remove_rot()
 			return
 		else if(!W.is_sharp() && W.force >= 10 || W.force >= 20)
 			user.visible_message("<span class='warning'>With one strong swing, [user] destroys the rotting [src] with \the [W].</span>", \
@@ -200,7 +216,7 @@
 				return
 
 	//Deconstruction
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			if(engraving)
@@ -268,16 +284,12 @@
 		rotting = 1
 		var/number_rots = rand(2,3)
 		for(var/i=0, i < number_rots, i++)
-			var/obj/effect/overlay/O = new/obj/effect/overlay(src)
-			O.name = "Wallrot"
-			O.desc = "Ick..."
-			O.icon = 'icons/effects/wallrot.dmi'
-			O.pixel_x += rand(-10, 10) * PIXEL_MULTIPLIER
-			O.pixel_y += rand(-10, 10) * PIXEL_MULTIPLIER
-			O.anchored = 1
-			O.setDensity(TRUE)
-			O.plane = ABOVE_HUMAN_PLANE
-			O.mouse_opacity = 0
+			new /obj/effect/overlay/wallrot(src)
+
+/turf/simulated/wall/remove_rot()
+	for(var/obj/effect/overlay/wallrot/overlay in src)
+		qdel(overlay)
+	rotting = 0
 
 /turf/simulated/wall/proc/thermitemelt(var/mob/user)
 	if(mineral == "diamond")
@@ -337,14 +349,13 @@
 	return
 
 /turf/simulated/wall/Destroy()
-	for(var/obj/effect/E in src)
-		if(E.name == "Wallrot")
-			qdel(E)
+	remove_rot()
 	..()
 
 /turf/simulated/wall/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+	remove_rot()
 	for(var/obj/effect/E in src)
-		if(E.name == "Wallrot")
+		if(E.name == "sigil")
 			qdel(E)
 	..()
 
@@ -386,3 +397,7 @@
 
 /turf/simulated/wall/acidable()
 	return !(flags & INVULNERABLE)
+
+/turf/simulated/wall/clockworkify()
+	ChangeTurf(/turf/simulated/wall/mineral/clockwork)
+	turf_animation('icons/effects/effects.dmi',CLOCKWORK_GENERIC_GLOW, 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)

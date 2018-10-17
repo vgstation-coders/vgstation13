@@ -463,7 +463,7 @@
 			//Search for item to steal
 			parrot_interest = search_for_item()
 			if(parrot_interest)
-				emote("looks in [parrot_interest]'s direction and takes flight")
+				emote("me",,"looks in [parrot_interest]'s direction and takes flight.")
 				parrot_state = PARROT_SWOOP | PARROT_STEAL
 				icon_state = "parrot_fly"
 			return
@@ -485,7 +485,7 @@
 			if(AM)
 				if(istype(AM, /obj/item) || isliving(AM))	//If stealable item
 					parrot_interest = AM
-					emote("turns and flies towards [parrot_interest]")
+					emote("me",,"turns and flies towards [parrot_interest].")
 					parrot_state = PARROT_SWOOP | PARROT_STEAL
 					return
 				else	//Else it's a perch
@@ -533,7 +533,7 @@
 			parrot_state = PARROT_SWOOP | PARROT_RETURN
 			return
 
-		walk_to(src, parrot_interest, 1, parrot_speed)
+		start_walk_to(parrot_interest, 1, parrot_speed)
 		if(isStuck())
 			return
 
@@ -554,7 +554,7 @@
 			icon_state = "parrot_sit"
 			return
 
-		walk_to(src, parrot_perch, 1, parrot_speed)
+		start_walk_to(parrot_perch, 1, parrot_speed)
 		if(isStuck())
 			return
 
@@ -608,7 +608,7 @@
 			L.attack_animal(src)//Time for the hurt to begin!
 		//Otherwise, fly towards the mob!
 		else
-			walk_to(src, parrot_interest, 1, parrot_speed)
+			start_walk_to(parrot_interest, 1, parrot_speed)
 			if(isStuck())
 				return
 
@@ -796,7 +796,7 @@
 		held_item = null
 		if(health < maxHealth)
 			adjustBruteLoss(-10)
-		emote("[src] eagerly downs the cracker")
+		emote("me",,"eagerly downs the cracker.")
 		playsound(src.loc,'sound/items/eatfood.ogg', rand(10,50), 1)
 		return 1
 

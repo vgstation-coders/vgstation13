@@ -108,6 +108,8 @@ var/list/all_doors = list()
 		user = null
 
 	if(allowed(user))
+		if (isshade(user))
+			user.forceMove(loc)//They're basically slightly tangible ghosts, they can fit through doors as soon as they begin openning.
 		open()
 	else if(!operating)
 		denied()
@@ -371,7 +373,7 @@ var/list/all_doors = list()
 	update_freelok_sight()
 	return 1
 
-/obj/machinery/door/forceMove(var/atom/A)
+/obj/machinery/door/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	var/turf/T = loc
 	..()
 	update_nearby_tiles(T)

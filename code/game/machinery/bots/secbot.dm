@@ -28,13 +28,6 @@
 	var/next_harm_time = 0
 
 	var/mode = 0
-#define SECBOT_IDLE 		0		// idle
-#define SECBOT_HUNT 		1		// found target, hunting
-#define SECBOT_PREP_ARREST 	2		// at target, preparing to arrest
-#define SECBOT_ARREST		3		// arresting target
-#define SECBOT_START_PATROL	4		// start patrol
-#define SECBOT_PATROL		5		// patrolling
-#define SECBOT_SUMMON		6		// summoned by PDA
 
 	var/auto_patrol = 0		// set to make bot automatically patrol
 
@@ -63,6 +56,11 @@
 		/obj/item/weapon/melee/defibrillator
 		)
 
+	var/list/cannot_open = list(
+		/obj/machinery/door/firedoor,
+		/obj/machinery/door/mineral/resin,
+		/obj/machinery/door/mineral/cult,
+		)
 	light_color = LIGHT_COLOR_RED
 	power_change()
 		..()
@@ -111,7 +109,7 @@
 	src.oldtarget_name = null
 	src.anchored = 0
 	src.mode = SECBOT_IDLE
-	walk_to(src,0)
+	start_walk_to(0)
 	src.icon_state = "[src.icon_initial][src.on]"
 	src.updateUsrDialog()
 
@@ -188,28 +186,27 @@ Auto Patrol: []"},
 			src.declare_arrests = !src.declare_arrests
 			src.updateUsrDialog()
 
-/obj/machinery/bot/secbot/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/bot/secbot/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
-		if(src.allowed(user) && !open && !emagged)
-			src.locked = !src.locked
-			to_chat(user, "Controls are now [src.locked ? "locked." : "unlocked."]")
+		if(allowed(user) && !open && !emagged)
+			locked = !locked
+			to_chat(user, "Controls are now [locked ? "locked." : "unlocked."]")
+			updateUsrDialog()
 		else
 			if(emagged)
 				to_chat(user, "<span class='warning'>ERROR</span>")
-			if(open)
+			else if(open)
 				to_chat(user, "<span class='warning'>Please close the access panel before locking it.</span>")
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 	else
-		..()
-	if(istype(W, /obj/item/weapon/weldingtool) && user.a_intent != "harm") // Any intent but harm will heal, so we shouldn't get angry.
-		return
-	if(!isscrewdriver(W) && (W.force) && (!target) ) // Added check for welding tool to fix #2432. Welding tool behavior is handled in superclass.
-		threatlevel = user.assess_threat(src)
-		threatlevel += PERP_LEVEL_ARREST_MORE
-		if(threatlevel > 0)
-			target = user
-			mode = SECBOT_HUNT
+		. = ..()
+		if(. && !target)
+			threatlevel = user.assess_threat(src)
+			threatlevel += PERP_LEVEL_ARREST_MORE
+			if(threatlevel > 0)
+				target = user
+				mode = SECBOT_HUNT
 
 /obj/machinery/bot/secbot/kick_act(mob/living/H)
 	..()
@@ -249,7 +246,7 @@ Auto Patrol: []"},
 
 		if(SECBOT_IDLE)		// idle
 
-			walk_to(src,0)
+			start_walk_to(0)
 			look_for_perp()	// see if any criminals are in range
 			if(!mode && auto_patrol)	// still idle, and set to patrol
 				mode = SECBOT_START_PATROL	// switch to patrol mode
@@ -264,7 +261,7 @@ Auto Patrol: []"},
 				src.last_found = world.time
 				src.frustration = 0
 				src.mode = SECBOT_IDLE
-				walk_to(src,0)
+				start_walk_to(0)
 
 			if(target)		// make sure target exists
 				if(!istype(target.loc, /turf))
@@ -326,7 +323,7 @@ Auto Patrol: []"},
 
 				else								// not next to perp
 					var/turf/olddist = get_dist(src, src.target)
-					walk_to(src, src.target,1,4)
+					start_walk_to(src.target,1,4)
 					if((get_dist(src, src.target)) >= (olddist))
 						src.frustration++
 					else
@@ -413,17 +410,19 @@ Auto Patrol: []"},
 
 
 		if(SECBOT_PATROL)		// patrol mode
+			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY/2))
 			patrol_step()
-			spawn(5)
+			spawn(SS_WAIT_MACHINERY/2)
 				if(mode == SECBOT_PATROL)
 					patrol_step()
 
 		if(SECBOT_SUMMON)		// summoned to PDA
+			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY/3))
 			patrol_step()
-			spawn(4)
+			spawn(SS_WAIT_MACHINERY/3)
 				if(mode == SECBOT_SUMMON)
 					patrol_step()
-					sleep(4)
+					spawn(SS_WAIT_MACHINERY/3)
 					patrol_step()
 
 	return
@@ -757,7 +756,7 @@ Auto Patrol: []"},
 /obj/machinery/bot/secbot/to_bump(M as mob|obj) //Leave no door unopened!
 	if((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
 		var/obj/machinery/door/D = M
-		if(!istype(D, /obj/machinery/door/firedoor) && D.check_access(src.botcard))
+		if(!is_type_in_list(D, cannot_open) && D.check_access(src.botcard))
 			D.open()
 			src.frustration = 0
 	else if((istype(M, /mob/living/)) && (!src.anchored))
@@ -781,7 +780,7 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/secbot/explode()
 
-	walk_to(src,0)
+	start_walk_to(0)
 	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
@@ -831,7 +830,7 @@ Auto Patrol: []"},
 
 /obj/item/weapon/secbot_assembly/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if((istype(W, /obj/item/weapon/weldingtool)) && (!src.build_step))
+	if((iswelder(W)) && (!src.build_step))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0,user))
 			src.build_step++
@@ -923,7 +922,7 @@ Auto Patrol: []"},
 		if(SECBOT_IDLE)		// idle
 
 			frustration = 0
-			walk_to(src,0)
+			start_walk_to(0)
 			look_for_perp()	// see if any criminals are in range
 			if(!mode && auto_patrol)	// still idle, and set to patrol
 				mode = SECBOT_START_PATROL	// switch to patrol mode
@@ -936,7 +935,7 @@ Auto Patrol: []"},
 				src.last_found = world.time
 				src.frustration = 0
 				src.mode = SECBOT_IDLE
-				walk_to(src,0)
+				start_walk_to(0)
 
 			if(target)		// make sure target exists
 				if(!istype(target.loc, /turf))
@@ -965,7 +964,7 @@ Auto Patrol: []"},
 							"Nobody breaks the law on my watch!")
 						speak(chase_message)
 					var/turf/olddist = get_dist(src, src.target)
-					walk_to(src, src.target,1,4)
+					start_walk_to(src.target,1,4)
 					if((get_dist(src, src.target)) >= (olddist))
 						src.frustration++
 					else
@@ -1024,23 +1023,25 @@ Auto Patrol: []"},
 
 
 		if(SECBOT_PATROL)		// patrol mode
+			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY/2))
 			patrol_step()
-			spawn(5)
+			spawn(SS_WAIT_MACHINERY/2)
 				if(mode == SECBOT_PATROL)
 					patrol_step()
 
 		if(SECBOT_SUMMON)		// summoned to PDA
+			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY/3))
 			patrol_step()
-			spawn(4)
+			spawn(SS_WAIT_MACHINERY/3)
 				if(mode == SECBOT_SUMMON)
 					patrol_step()
-					sleep(4)
+					spawn(SS_WAIT_MACHINERY/3)
 					patrol_step()
 
 	return
 
 /obj/machinery/bot/secbot/beepsky/cheapsky/explode()
-	walk_to(src,0)
+	start_walk_to(0)
 	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 

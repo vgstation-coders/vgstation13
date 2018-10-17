@@ -162,7 +162,7 @@
 	//We risk falling because stuff is broken bad
 	if(stand_broken && !paralysis && !(lying || resting) && prob(5))
 		if(feels_pain())
-			emote("scream", , , 1)
+			audible_scream()
 		emote("collapse")
 		Paralyse(10)
 

@@ -24,25 +24,13 @@
 /obj/structure/bed/chair/vehicle/gokart/update_icon()
 	icon_state="gokart[!occupant]"
 
-/obj/structure/bed/chair/vehicle/gokart/update_mob()
-	if(!occupant)
-		return
-
-	switch(dir)
-		if(SOUTH)
-			occupant.pixel_x = 0
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-		if(WEST)
-			occupant.pixel_x = 4 * PIXEL_MULTIPLIER
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-		if(NORTH)
-			occupant.pixel_x = 0
-			occupant.pixel_y = 4 * PIXEL_MULTIPLIER
-		if(EAST)
-			occupant.pixel_x = -4 * PIXEL_MULTIPLIER
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-
-
+/obj/structure/bed/chair/vehicle/gokart/make_offsets()
+	offsets = list(
+		"[SOUTH]" = list("x" = 0, "y" = 7 * PIXEL_MULTIPLIER),
+		"[WEST]" = list("x" = 4 * PIXEL_MULTIPLIER, "y" = 7 * PIXEL_MULTIPLIER),
+		"[NORTH]" = list("x" = 0, "y" = 4 * PIXEL_MULTIPLIER),
+		"[EAST]" = list("x" = -4 * PIXEL_MULTIPLIER, "y" = 7 * PIXEL_MULTIPLIER)
+		)
 
 /obj/effect/decal/mecha_wreckage/vehicle/gokart
 	// TODO: SPRITE PLS

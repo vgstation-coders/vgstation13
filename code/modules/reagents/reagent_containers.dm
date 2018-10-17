@@ -252,7 +252,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	// Transfer to container
 	else if (can_send /*&& target.reagents**/)
 		var/obj/container = target
-		if (!container.is_open_container() && istype(container,/obj/item/weapon/reagent_containers))
+		if (!container.is_open_container() && istype(container,/obj/item/weapon/reagent_containers) && !istype(container,/obj/item/weapon/reagent_containers/food/snacks))
 			return -1
 
 		if(target.is_open_container())
@@ -343,6 +343,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 	if(isrobot(user))
 		reagents.remove_any(amount_per_imbibe)
+		reagents.reaction(user, TOUCH)
 		return 1
 	if(reagents.total_volume)
 		if(can_drink(user))

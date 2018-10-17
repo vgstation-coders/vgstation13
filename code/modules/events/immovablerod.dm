@@ -61,11 +61,11 @@
 	anchored = 1
 	grillepasschance = 0
 	mouse_opacity = 1
+	projectile_speed = 1.33
 	var/clongSound = 'sound/effects/bang.ogg'
 
 /obj/item/projectile/immovablerod/New(atom/start, atom/end)
 	..()
-	step_delay = round(0.5, world.tick_lag)
 	if(end)
 		throw_at(end)
 
@@ -110,8 +110,6 @@
 	qdel(src)
 
 /obj/item/projectile/immovablerod/bresenham_step(var/distA, var/distB, var/dA, var/dB)
-	if(step_delay)
-		sleep(step_delay)
 	if(error < 0)
 		var/atom/newloc = get_step(src, dB)
 		if(!newloc)
@@ -171,7 +169,7 @@
 		if(prob(50))
 			clong()
 
-/obj/item/projectile/immovablerod/forceMove(atom/destination,var/no_tp=0)
+/obj/item/projectile/immovablerod/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	..()
 	if(z != starting.z)
 		qdel(src)

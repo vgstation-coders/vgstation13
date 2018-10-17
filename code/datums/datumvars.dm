@@ -46,13 +46,12 @@
 			body += debug_variable("icon", new/icon(A.icon, A.icon_state, A.dir), 0)
 		#endif
 
-	var/icon/sprite
+	var/sprite
 
 	if(istype(D,/atom))
 		var/atom/AT = D
 		if(AT.icon && AT.icon_state)
-			sprite = new /icon(AT.icon, AT.icon_state)
-			usr << browse_rsc(sprite, "view_vars_sprite.png")
+			sprite = 1
 
 	title = "[D] (\ref[D]) = [D.type]"
 
@@ -60,7 +59,7 @@
 		<div align='center'><table width='100%'><tr><td width='50%'>
 		<table align='center' width='100%'><tr><td>"}
 	if(sprite)
-		body += "<img src='view_vars_sprite.png'></td><td>"
+		body += "[bicon(D)]</td><td>"
 
 	body += "<div align='center'>"
 
@@ -138,8 +137,10 @@
 	if(istype(D,/atom))
 		body += "<option value='?_src_=vars;teleport_to=\ref[D]'>Teleport To</option>"
 
-	if (hasvar(D, "transform"))
+	if(hasvar(D, "transform"))
 		body += "<option value='?_src_=vars;edit_transform=\ref[D]'>Edit Transform Matrix</option>"
+	if(hasvar(D, "appearance_flags"))
+		body += "<option value='?_src_=vars;toggle_aliasing=\ref[D]'>Toggle Transform Aliasing</option>"
 
 	body += "<option value='?_src_=vars;proc_call=\ref[D]'>Proc call</option>"
 
@@ -383,26 +384,18 @@ function loadPage(list) {
 
 	else if (isicon(value))
 		#ifdef VARSICON
-		var/icon/I = new/icon(value)
-		var/rnd = rand(1,10000)
-		var/rname = "tmp\ref[I][rnd].png"
-		usr << browse_rsc(I, rname)
-		html += "[name] = (<span class='value'>[value]</span>) <img class=icon src=\"[rname]\">"
+		html += "[name] = /icon (<span class='value'>[value]</span>) [bicon(value)]"
 		#else
 		html += "[name] = /icon (<span class='value'>[value]</span>)"
 		#endif
 
-/*		else if (istype(value, /image))
+	else if(istype(value, /image))
 		#ifdef VARSICON
-		var/rnd = rand(1, 10000)
-		var/image/I = value
-
-		src << browse_rsc(I.icon, "tmp\ref[value][rnd].png")
-		html += "[name] = <img src=\"tmp\ref[value][rnd].png\">"
+		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = /image (<span class='value'>[value]</span>) [bicon(value)]"
 		#else
-		html += "[name] = /image (<span class='value'>[value]</span>)"
+		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = /image (<span class='value'>[value]</span>)"
 		#endif
-*/
+
 	else if (isfile(value))
 		html += "[name] = <span class='value'>'[value]'</span>"
 
@@ -1102,6 +1095,25 @@ function loadPage(list) {
 			return
 
 		DAT.vars["transform"] = modify_matrix_menu(M)
+
+	else if(href_list["toggle_aliasing"])
+		if(!check_rights(R_DEBUG))
+			return
+
+		var/datum/DAT = locate(href_list["toggle_aliasing"])
+		if(!hasvar(DAT, "appearance_flags"))
+			to_chat(src, "This object does not support appearance flags!")
+			return
+
+		var/aflags = DAT.vars["appearance_flags"]
+		if(aflags & PIXEL_SCALE)
+			to_chat(src, "Enabling aliasing for that astigmatism aesthetic...")
+			aflags &= ~PIXEL_SCALE
+		else
+			to_chat(src, "Disabling aliasing for x-tra crispiness...")
+			aflags |= PIXEL_SCALE
+
+		DAT.vars["appearance_flags"] = aflags
 
 	else if (href_list["delValueFromList"])
 		if (!check_rights(R_DEBUG))

@@ -1,6 +1,6 @@
-#define SOLID 1
-#define LIQUID 2
-#define GAS 3
+#define REAGENT_STATE_SOLID 1
+#define REAGENT_STATE_LIQUID 2
+#define REAGENT_STATE_GAS 3
 #define FOOD_METABOLISM 0.4
 #define REAGENTS_OVERDOSE 30
 #define REM REAGENTS_EFFECT_MULTIPLIER
@@ -31,7 +31,7 @@
 	var/id = REAGENT
 	var/description = ""
 	var/datum/reagents/holder = null
-	var/reagent_state = SOLID
+	var/reagent_state = REAGENT_STATE_SOLID
 	var/list/data = null
 	var/volume = 0
 	var/nutriment_factor = 0
@@ -202,11 +202,86 @@
 		holder.reagent_list -= src
 		holder = null
 
+/datum/reagent/piccolyn
+	name = "Piccolyn"
+	id = PICCOLYN
+	description = "Prescribed daily."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#00FF00"
+	custom_metabolism = 0.01
+
+/datum/reagent/piccolyn/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(M.stat || M.health < 90 || M.getBrainLoss() >= 10)
+		return 1
+
+	var/list/nearest_doctor = null
+	for(var/mob/living/L in view(M))
+		if(L == M)
+			continue
+		if(L.stat)
+			continue
+		if(nearest_doctor && get_dist(L,M)>=get_dist(nearest_doctor,M))
+			continue //We already have a closer living target
+		if(ishuman(L))
+			var/mob/living/carbon/human/H = L
+			var/list/medical_uniforms_list = list(/obj/item/clothing/under/rank/chief_medical_officer,
+													/obj/item/clothing/under/rank/medical,
+													/obj/item/clothing/under/rank/nursesuit,
+													/obj/item/clothing/under/rank/nurse,
+													/obj/item/clothing/under/rank/chemist,
+													/obj/item/clothing/under/rank/pharma,
+													/obj/item/clothing/under/rank/geneticist,
+													/obj/item/clothing/under/rank/virologist)
+			if(H.is_wearing_any(medical_uniforms_list,slot_w_uniform))
+				//Check to see if it's wearing the right stuff
+				nearest_doctor = H
+		else if(isrobot(L))
+			var/mob/living/silicon/robot/R = L
+			if(HAS_MODULE_QUIRK(R, MODULE_CAN_HANDLE_MEDICAL))
+				nearest_doctor = R
+	if(!nearest_doctor)
+		return 1
+	var/D = "doctor"
+	if(ishuman(nearest_doctor))
+		var/mob/living/carbon/human/H = nearest_doctor
+		D = get_first_word(H.name)
+	else
+		D = pick("bot","borg","borgo","autodoc","roboticist","cyborg","robot")
+	var/list/thanks = list("Thanks, doc.",
+							"You're alright, doc.",
+							"'Preciate it, doc.",
+							"Cheers, doctor.",
+							"Thank you, doctor.",
+							"Much appreciated, doctor.",
+							"Thanks, mate!",
+							"Thanks, doc!",
+							"Zank you, Herr Doktor!",
+							"Danke, Herr Doktor!",
+							"Thank you doctor!",
+							"You are great doctor!",
+							"I love this doctor!",
+							"Aye, thanks doc!",
+							"Thank ye, doctor!",
+							"You deserve a medal, doc.",
+							"Thanks for the aid.",
+							"Yeah, thanks doc!",
+							"All right, [D], I feel good!",
+							"Thanks, [D].",
+							"Thank you, [D].",
+							"'Preciate it, [D].",
+							"Thanks for the aid, [D]."
+							)
+	M.say(pick(thanks))
+	holder.del_reagent(PICCOLYN)
+
 /datum/reagent/muhhardcores
 	name = "Hardcores"
 	id = BUSTANUT
 	description = "Concentrated hardcore beliefs."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FFF000"
 	custom_metabolism = 0.01
 
@@ -224,7 +299,7 @@
 	name = "Rogan"
 	id = ROGAN
 	description = "Smells older than your grandpa."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#0000FF"
 	custom_metabolism = 0.01
 
@@ -242,7 +317,7 @@
 	name = "Slime Jelly"
 	id = SLIMEJELLY
 	description = "A gooey semi-liquid produced from one of the deadliest lifeforms in existence. SO REAL."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#801E28" //rgb: 128, 30, 40
 	density = 0.8
 	specheatcap = 1.24
@@ -261,13 +336,22 @@
 /datum/reagent/blood
 	name = "Blood"
 	id = BLOOD
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = DEFAULT_BLOOD //rgb: 161, 8, 8
 	density = 1.05
 	specheatcap = 3.49
 
-	data = new/list("donor"= null, "viruses" = null, "blood_DNA" = null, "blood_type" = null, \
-	"blood_colour" = DEFAULT_BLOOD, "resistances" = null, "trace_chem" = null, "antibodies" = null)
+	data = list(
+		"donor"= null,
+		"viruses" = null,
+		"blood_DNA" = null,
+		"blood_type" = null,
+		"blood_colour" = DEFAULT_BLOOD,
+		"resistances" = null,
+		"trace_chem" = null,
+		"virus2" = null,
+		"antibodies" = null,
+		)
 
 /datum/reagent/blood/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -377,7 +461,7 @@
 /datum/reagent/vaccine
 	name = "Vaccine"
 	id = VACCINE
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C81040" //rgb: 200, 16, 64
 	density = 1.05
 	specheatcap = 3.49
@@ -404,7 +488,7 @@
 	name = "Water"
 	id = WATER
 	description = "A ubiquitous chemical substance that is composed of hydrogen and oxygen."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#DEF7F5" //rgb: 192, 227, 233
 	alpha = 128
 	specheatcap = 4.184
@@ -465,7 +549,7 @@
 							if(head_organ.take_damage(25, 0))
 								H.UpdateDamageIcon(1)
 							head_organ.disfigure("burn")
-							H.emote("scream", , , 1)
+							H.audible_scream()
 					else
 						M.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 			else
@@ -536,7 +620,7 @@
 	name = "Space Lube"
 	id = LUBE
 	description = "Lubricant is a substance introduced between two moving surfaces to reduce the friction and wear between them. giggity."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#009CA8" //rgb: 0, 156, 168
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.11775
@@ -554,7 +638,7 @@
 	name = "Sodium Polyacrylate"
 	id = SODIUM_POLYACRYLATE
 	description = "A super absorbent polymer that can absorb water based substances."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFFFFF"
 	density = 1.22
 	specheatcap = 4.14
@@ -574,7 +658,7 @@
 	name = "Anti-Toxin (Dylovene)"
 	id = ANTI_TOXIN
 	description = "Dylovene is a broad-spectrum antitoxin."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.49033
 	specheatcap = 0.55536
@@ -613,7 +697,7 @@
 	name = "Phalanximine"
 	id = PHALANXIMINE
 	description = "Phalanximine is a powerful chemotherapy agent."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#1A1A1A" //rgb: 26, 26, 26
 	density = 2.46
 	specheatcap = 12439.3 //Good fucking luck
@@ -630,7 +714,7 @@
 	name = "Toxin"
 	id = TOXIN
 	description = "A Toxic chemical."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
 	density = 1.4 //Let's just assume it's alpha-solanine
@@ -647,7 +731,7 @@
 	name = "Plasticide"
 	id = PLASTICIDE
 	description = "Liquid plastic, do not eat."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
 	density = 0.4
@@ -666,7 +750,7 @@
 	name = "Cyanide"
 	id = CYANIDE
 	description = "A highly toxic chemical."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.4
 	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
@@ -687,7 +771,7 @@
 	name = "Chef's Special"
 	id = CHEFSPECIAL
 	description = "An extremely toxic chemical that will surely end in death."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	custom_metabolism = 0.01
 	overdose_tick = 165
@@ -702,7 +786,7 @@
 	name = "Mint Toxin"
 	id = MINTTOXIN
 	description = "Useful for dealing with undesirable customers."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CF3600" //rgb: 207, 54, 0
 	density = 0.898
 	specheatcap = 3.58
@@ -719,7 +803,7 @@
 	name = "Mutation Toxin"
 	id = MUTATIONTOXIN
 	description = "A corruptive toxin produced by slimes."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#13BC5E" //rgb: 19, 188, 94
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.245
@@ -740,12 +824,13 @@
 			to_chat(M, "<span class='warning'>Your flesh rapidly mutates!</span>")
 			human.set_species("Evolved Slime")
 			human.regenerate_icons()
+			M.setCloneLoss(0)
 
 /datum/reagent/aslimetoxin
 	name = "Advanced Mutation Toxin"
 	id = AMUTATIONTOXIN
 	description = "An advanced corruptive toxin produced by slimes."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#13BC5E" //rgb: 19, 188, 94
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.35
@@ -793,7 +878,7 @@
 	name = "Sleep Toxin"
 	id = STOXIN
 	description = "An effective hypnotic used to treat insomnia."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#E895CC" //rgb: 232, 149, 204
 	custom_metabolism = 0.1
 	data = 1 //Used as a tally
@@ -819,7 +904,7 @@
 	name = "Soporific Rejuvenant"
 	id = STOXIN2
 	description = "Put people to sleep, and heals them."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE
 	custom_metabolism = 0.2
@@ -856,7 +941,7 @@
 	name = "Inaprovaline"
 	id = INAPROVALINE
 	description = "Inaprovaline is a synaptic stimulant and cardiostimulant. Commonly used to stabilize patients."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.2
 	pain_resistance = 25
@@ -878,7 +963,7 @@
 	name = "Space drugs"
 	id = SPACE_DRUGS
 	description = "An illegal chemical compound used as drug."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#60A584" //rgb: 96, 165, 132
 	custom_metabolism = 0.5
 	overdose_am = REAGENTS_OVERDOSE
@@ -897,15 +982,15 @@
 				step(M, pick(cardinal))
 
 	if(prob(7))
-		M.emote(pick("twitch", "drool", "moan", "giggle"))
+		M.emote(pick("twitch", "drool", "moan", "giggle"), null, null, TRUE)
 
 /datum/reagent/holywater
 	name = "Holy Water"
 	id = HOLYWATER
 	description = "An ashen-obsidian-water mix, this solution will alter certain sections of the brain's rationality."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#0064C8" //rgb: 0, 100, 200
-	custom_metabolism = 5 //High metabolism to prevent extended uncult rolls. Approx 5 units per roll
+	custom_metabolism = 2 //High metabolism to prevent extended uncult rolls. Approx 5 units per roll
 	specheatcap = 4.183
 
 /datum/reagent/holywater/reaction_obj(var/obj/O, var/volume)
@@ -923,37 +1008,124 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(iscult(H))
-			if(prob(10)) //1/10 chance of removing cultist status, so 50 units on average to uncult (half a holy water bottle)
-				ticker.mode.remove_cultist(H.mind)
-				H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, his eyes clear up.</span>",
-				"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
-			else //Warn the Cultist that it is fucking him up
+		if (iscultist(H))
+			var/unholy = H.checkTattoo(TATTOO_HOLY)
+			var/current_act = max(-1,min(5,veil_thickness))
+			var/datum/role/cultist/cult = H.mind.GetRole(CULTIST)
+			if (cult.holywarning_cooldown <= 0)
+				cult.holywarning_cooldown = 5
+				if (unholy)
+					to_chat(H, "<span class='warning'>You feel the unpleasant touch of holy water, but the mark on your back negates its most debilitating effects.</span>")
+				else
+					switch (current_act)
+						if (CULT_MENDED)
+							to_chat(H, "<span class='danger'>The holy water permeates your skin and consumes your cursed blood like mercury digests gold.</span>")
+						if (CULT_PROLOGUE)
+							to_chat(H, "<span class='warning'>You feel the cold touch of holy water, but the veil is still too thick for it to be a real threat.</span>")
+						if (CULT_ACT_I)
+							to_chat(H, "<span class='warning'>The touch of holy water troubles your thoughts, you won't be able to cast spells under its effects.</span>")
+						if (CULT_ACT_II)
+							to_chat(H, "<span class='danger'>The holy water makes your head spin, you're having trouble walking straight.</span>")
+						if (CULT_ACT_III)
+							to_chat(H, "<span class='danger'>The holy water freezes your muscles, you find yourself short of breath.</span>")
+						if (CULT_ACT_IV)
+							to_chat(H, "<span class='danger'>The holy water makes you sick to your stomach.</span>")
+						if (CULT_EPILOGUE)
+							to_chat(H, "<span class='danger'>Even in these times, holy water proves itself capable of hindering your progression.</span>")
+
+			if (unholy)
+				H.eye_blurry = max(H.eye_blurry, 3)
+				return
+			else
+				switch (current_act)
+					if (CULT_MENDED)
+						H.dust()
+						return
+					if (CULT_PROLOGUE)
+						H.eye_blurry = max(H.eye_blurry, 3)
+						H.Dizzy(3)
+					if (CULT_ACT_I)
+						H.eye_blurry = max(H.eye_blurry, 6)
+						H.Dizzy(6)
+						H.stuttering = max(H.stuttering, 6)
+					if (CULT_ACT_II)
+						H.eye_blurry = max(H.eye_blurry, 12)
+						H.Dizzy(12)
+						H.stuttering = max(H.stuttering, 12)
+						H.Jitter(12)
+					if (CULT_ACT_III)
+						H.eye_blurry = max(H.eye_blurry, 16)
+						H.Dizzy(16)
+						H.stuttering = max(H.stuttering, 16)
+						H.Jitter(16)
+						if (prob(50))
+							H.Knockdown(1)
+						else if (prob(50))
+							H.confused = 2
+						H.adjustOxyLoss(5)
+					if (CULT_ACT_IV)
+						H.eye_blurry = max(H.eye_blurry, 20)
+						H.Dizzy(20)
+						H.stuttering = max(H.stuttering, 20)
+						H.Jitter(20)
+						if (prob(60))
+							H.Knockdown(2)
+						else if (prob(60))
+							H.confused = 4
+						H.adjustOxyLoss(10)
+						M.adjustToxLoss(5)
+					if (CULT_EPILOGUE)
+						H.eye_blurry = max(H.eye_blurry, 30)
+						H.Dizzy(30)
+						H.stuttering = max(H.stuttering, 30)
+						H.Jitter(30)
+						if (prob(70))
+							H.Knockdown(4)
+						else if (prob(70))
+							H.confused = 6
+						H.adjustOxyLoss(20)
+						M.adjustToxLoss(10)
+
+		if (islegacycultist(H))
+			if (prob(10))
+				var/datum/role/legacy_cultist/LC = H.mind.GetRole(LEGACY_CULTIST)
+				LC.Drop()
+			else
 				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your arcane knowledge is becoming obscure again.</span>")
 		//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
-		if(isvampire(H))
-			if(!(VAMP_MATURE in H.mind.vampire.powers))
+		var/datum/role/vampire/V = isvampire(H)
+		if(V)
+			if(!(VAMP_MATURE in V.powers))
 				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric powers fade and your insides burn.</span>")
 				H.take_organ_damage(0, 5) //FIRE, MAGIC FIRE THAT BURNS ROBOTIC LIMBS TOO!
-				H.mind.vampire.smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
+				V.smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
 			else
 				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. Your vampiric powers counter most of the damage.</span>")
-				H.mind.vampire.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
-		if(H.mind && H.mind.special_role == "VampThrall")
-			ticker.mode.remove_thrall(H.mind)
-			H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
-			"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
+				V.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
+		var/datum/role/thrall/T = isthrall(H)
+		if(T)
+			if (prob(35)) // 35% chance of dethralling
+				T.Drop()
 
 /datum/reagent/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
 
 	if(..())
 		return 1
 
-	//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(isvampire(H))
-			if(!(VAMP_UNDYING in H.mind.vampire.powers))
+		if (iscultist(H))
+			H.Dizzy(12)
+			H.Jitter(24)
+			H.Knockdown(3)
+			H.confused = 3
+			H.eye_blurry = max(H.eye_blurry, 6)
+
+	/*
+	//Vampires react to this like acid, and it massively spikes their smitecounter. And they are guaranteed to have adverse effects.
+		var/datum/role/vampire/V = isvampire(H)
+		if(V)
+			if(!(VAMP_UNDYING in V.powers))
 				if(method == TOUCH)
 
 					if(H.wear_mask)
@@ -968,29 +1140,30 @@
 						if(prob(15) && volume >= 30)
 							var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 							if(head_organ)
-								if(!(VAMP_MATURE in H.mind.vampire.powers))
+								if(!(VAMP_MATURE in V.powers))
 									to_chat(H, "<span class='danger'>A freezing liquid covers your face. Its melting!</span>")
-									H.mind.vampire.smitecounter += 60 //Equivalent from metabolizing all this holy water normally
+									V.smitecounter += 60 //Equivalent from metabolizing all this holy water normally
 									if(head_organ.take_damage(30, 0))
 										H.UpdateDamageIcon(1)
 									head_organ.disfigure("burn")
-									H.emote("scream",,, 1)
+									H.audible_scream()
 								else
 									to_chat(H, "<span class='warning'>A freezing liquid covers your face. Your vampiric powers protect you!</span>")
-									H.mind.vampire.smitecounter += 12 //Ditto above
+									V.smitecounter += 12 //Ditto above
 
 						else
-							if(!(VAMP_MATURE in H.mind.vampire.powers))
+							if(!(VAMP_MATURE in V.powers))
 								to_chat(H, "<span class='danger'>You are doused with a freezing liquid. You're melting!</span>")
 								H.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
-								H.mind.vampire.smitecounter += volume * 2
+								V.smitecounter += volume * 2
 							else
 								to_chat(H, "<span class='warning'>You are doused with a freezing liquid. Your vampiric powers protect you!</span>")
-								H.mind.vampire.smitecounter += volume * 0.4
+								V.smitecounter += volume * 0.4
 				else
 					if(H.acidable())
 						H.take_organ_damage(min(15, volume * 2))
 						H.mind.vampire.smitecounter += 5
+	*/
 
 /datum/reagent/holywater/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -1003,7 +1176,7 @@
 	name = "Serotrotium"
 	id = SEROTROTIUM
 	description = "A chemical compound that promotes concentrated production of the serotonin neurotransmitter in humans."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#202040" //rgb: 20, 20, 40
 	custom_metabolism = 0.25
 	overdose_am = REAGENTS_OVERDOSE
@@ -1016,7 +1189,7 @@
 		return 1
 
 	if(prob(7))
-		M.emote(pick("twitch", "drool", "moan", "gasp"))
+		M.emote(pick("twitch", "drool", "moan", "gasp"), null, null, TRUE)
 
 	M.druggy = max(M.druggy, 50)
 
@@ -1024,7 +1197,7 @@
 	name = "Silicate"
 	id = SILICATE
 	description = "A compound that can be used to repair and reinforce glass."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C7FFFF" //rgb: 199, 255, 255
 	overdose_am = 0
 	density = 0.69
@@ -1034,7 +1207,7 @@
 	name = "Oxygen"
 	id = OXYGEN
 	description = "A colorless, odorless gas."
-	reagent_state = GAS
+	reagent_state = REAGENT_STATE_GAS
 	color = "#808080" //rgb: 128, 128, 128
 	density = 1.141
 	specheatcap = 0.911
@@ -1059,7 +1232,7 @@
 	name = "Nitrogen"
 	id = NITROGEN
 	description = "A colorless, odorless, tasteless gas."
-	reagent_state = GAS
+	reagent_state = REAGENT_STATE_GAS
 	color = "#808080" //rgb: 128, 128, 128
 	density = 1.251
 	specheatcap = 1.040
@@ -1077,7 +1250,7 @@
 	name = "Hydrogen"
 	id = HYDROGEN
 	description = "A colorless, odorless, nonmetallic, tasteless, highly combustible diatomic gas."
-	reagent_state = GAS
+	reagent_state = REAGENT_STATE_GAS
 	color = "#808080" //rgb: 128, 128, 128
 	density = 0.08988
 	specheatcap = 13.83
@@ -1086,7 +1259,7 @@
 	name = "Potassium"
 	id = POTASSIUM
 	description = "A soft, low-melting solid that can easily be cut with a knife. Reacts violently with water."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#A0A0A0" //rgb: 160, 160, 160
 	specheatcap = 0.75
 	density = 0.89
@@ -1095,7 +1268,7 @@
 	name = "Potassium Carbonate"
 	id = POTASSIUMCARBONATE
 	description = "A primary component of potash, usually acquired by reducing potassium-rich organics."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#A0A0A0"
 	density = 2.43
 	specheatcap = 0.96
@@ -1104,7 +1277,7 @@
 	name = "Mercury"
 	id = MERCURY
 	description = "A chemical element."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#484848" //rgb: 72, 72, 72
 	overdose_am = REAGENTS_OVERDOSE
 	specheatcap = 0.14
@@ -1119,7 +1292,7 @@
 		step(M, pick(cardinal))
 
 	if(prob(5))
-		M.emote(pick("twitch","drool","moan"))
+		M.emote(pick("twitch","drool","moan"), null, null, TRUE)
 
 	M.adjustBrainLoss(2)
 
@@ -1127,7 +1300,7 @@
 	name = "Sulfur"
 	id = SULFUR
 	description = "A chemical element with a pungent smell."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#BF8C00" //rgb: 191, 140, 0
 	specheatcap = 0.73
 	density = 1.96
@@ -1136,7 +1309,7 @@
 	name = "Carbon"
 	id = CARBON
 	description = "A chemical element, the builing block of life."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#1C1300" //rgb: 30, 20, 0
 	specheatcap = 0.71
 	density = 2.26
@@ -1154,7 +1327,7 @@
 	name = "Chlorine"
 	id = CHLORINE
 	description = "A chemical element with a characteristic odour."
-	reagent_state = GAS
+	reagent_state = REAGENT_STATE_GAS
 	color = "#808080" //rgb: 128, 128, 128
 	overdose_am = REAGENTS_OVERDOSE
 	density = 3.214
@@ -1171,7 +1344,7 @@
 	name = "Fluorine"
 	id = FLUORINE
 	description = "A highly-reactive chemical element."
-	reagent_state = GAS
+	reagent_state = REAGENT_STATE_GAS
 	color = "#808080" //rgb: 128, 128, 128
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.696
@@ -1188,7 +1361,7 @@
 	name = "Chloramine"
 	id = CHLORAMINE
 	description = "A chemical compound consisting of chlorine and ammonia. Very dangerous when inhaled."
-	reagent_state = GAS
+	reagent_state = REAGENT_STATE_GAS
 	color = "#808080" //rgb: 128, 128, 128
 	overdose_am = REAGENTS_OVERDOSE
 	density = 3.68
@@ -1216,7 +1389,7 @@
 	name = "Sodium"
 	id = SODIUM
 	description = "A chemical element, readily reacts with water."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#808080" //rgb: 128, 128, 128
 	specheatcap = 1.23
 	density = 0.968
@@ -1225,7 +1398,7 @@
 	name = "Phosphorus"
 	id = PHOSPHORUS
 	description = "A chemical element, the backbone of biological energy carriers."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#832828" //rgb: 131, 40, 40
 	density = 1.823
 	specheatcap = 0.769
@@ -1234,7 +1407,7 @@
 	name = "Lithium"
 	id = LITHIUM
 	description = "A chemical element, used as antidepressant."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#808080" //rgb: 128, 128, 128
 	overdose_am = REAGENTS_OVERDOSE
 	specheatcap = 3.56
@@ -1247,13 +1420,13 @@
 	if(M.canmove && !M.restrained() && istype(M.loc, /turf/space))
 		step(M, pick(cardinal))
 	if(prob(5))
-		M.emote(pick("twitch","drool","moan"))
+		M.emote(pick("twitch","drool","moan"), null, null, TRUE)
 
 /datum/reagent/sugar
 	name = "Sugar"
 	id = SUGAR
 	description = "The organic compound commonly known as table sugar and sometimes called saccharose. This white, odorless, crystalline powder has a pleasing, sweet taste."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFFFFF" //rgb: 255, 255, 255
 	sport = 1.2
 	density = 1.59
@@ -1265,6 +1438,22 @@
 		return 1
 
 	M.nutrition += REM
+
+/datum/reagent/caramel
+	name = "Caramel"
+	id = CARAMEL
+	description = "Created from the removal of water from sugar."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#844b06" //rgb: 132, 75, 6
+	specheatcap = 1.244
+	density = 1.59
+
+/datum/reagent/caramel/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.nutrition += (2 * REM)
 
 /datum/reagent/honey
 	name = "Honey"
@@ -1329,8 +1518,9 @@
 	name = "Sulphuric acid"
 	id = SACID
 	description = "A strong mineral acid with the molecular formula H2SO4."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#DB5008" //rgb: 219, 80, 8
+	custom_metabolism = 1
 	density = 1.84
 	specheatcap = 1.38
 
@@ -1344,7 +1534,7 @@
 		if(H.species.name == "Grey")
 			return //Greys lurve dem some sacid
 
-	M.adjustToxLoss(REM)
+	M.adjustFireLoss(REM)
 	M.take_organ_damage(0, REM)
 
 /datum/reagent/sacid/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -1398,7 +1588,7 @@
 					if(head_organ.take_damage(25, 0))
 						H.UpdateDamageIcon(1)
 					head_organ.disfigure("burn")
-					H.emote("scream", , , 1)
+					H.audible_scream()
 			else
 				M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 	else
@@ -1430,8 +1620,9 @@
 	name = "Polytrinic acid"
 	id = PACID
 	description = "Polytrinic acid is a an extremely corrosive chemical substance."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#8E18A9" //rgb: 142, 24, 169
+	custom_metabolism = 1
 	density = 1.98
 	specheatcap = 1.39
 
@@ -1440,7 +1631,7 @@
 	if(..())
 		return 1
 
-	M.adjustToxLoss(REM)
+	M.adjustFireLoss(3 * REM)
 
 /datum/reagent/pacid/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -1475,7 +1666,7 @@
 				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 				if(head_organ.take_damage(15, 0))
 					H.UpdateDamageIcon(1)
-				H.emote("scream", , , 1)
+				H.audible_scream()
 
 		else if(ismonkey(M))
 			var/mob/living/carbon/monkey/MK = M
@@ -1498,7 +1689,7 @@
 				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 				if(head_organ.take_damage(15, 0))
 					H.UpdateDamageIcon(1)
-				H.emote("scream", , , 1)
+				H.audible_scream()
 				head_organ.disfigure("burn")
 			else
 				M.take_organ_damage(min(15, volume * 4))
@@ -1529,7 +1720,7 @@
 	name = "Glycerol"
 	id = GLYCEROL
 	description = "Glycerol is a simple polyol compound. Glycerol is sweet-tasting and of low toxicity."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#808080" //rgb: 128, 128, 128
 	density = 4.84
 	specheatcap = 1.38
@@ -1538,7 +1729,7 @@
 	name = "Nitroglycerin"
 	id = NITROGLYCERIN
 	description = "Nitroglycerin is a heavy, colorless, oily, explosive liquid obtained by nitrating glycerol."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#808080" //rgb: 128, 128, 128
 	density = 4.33
 	specheatcap = 2.64
@@ -1547,7 +1738,7 @@
 	name = "Radium"
 	id = RADIUM
 	description = "Radium is an alkaline earth metal. It is extremely radioactive."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#669966" //rgb: 102, 153, 102
 	density = 5
 	specheatcap = 94
@@ -1583,7 +1774,7 @@
 	name = "Ryetalyn"
 	id = RYETALYN
 	description = "Ryetalyn can cure all genetic abnomalities."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.97
@@ -1631,7 +1822,7 @@
 	name = "Smoke"
 	id = PAISMOKE
 	description = "A chemical smoke synthesized by personal AIs."
-	reagent_state = GAS
+	reagent_state = REAGENT_STATE_GAS
 	color = "#FFFFFF" //rgb: 255, 255, 255
 
 //When inside a person, instantly decomposes into the ingredients for smoke
@@ -1645,7 +1836,7 @@
 	name = "Thermite"
 	id = THERMITE
 	description = "Thermite produces an aluminothermic reaction known as a thermite reaction. Can be used to melt walls."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#673910" //rgb: 103, 57, 16
 	density = 3.91
 	specheatcap = 0.37
@@ -1665,13 +1856,13 @@
 	if(..())
 		return 1
 
-	M.adjustFireLoss(REM)
+	M.adjustFireLoss(2 * REM)
 
 /datum/reagent/paracetamol
 	name = "Paracetamol"
 	id = PARACETAMOL
 	description = "Most commonly know this as Tylenol, but this chemical is a mild, simple painkiller."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C855DC"
 	pain_resistance = 60
 	density = 1.26
@@ -1680,7 +1871,7 @@
 	name = "Unstable mutagen"
 	id = MUTAGEN
 	description = "Might cause unpredictable mutations. Keep away from children."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#13BC5E" //rgb: 19, 188, 94
 	density = 3.35
 	specheatcap = 96.86
@@ -1715,7 +1906,7 @@
 	name = "Tramadol"
 	id = TRAMADOL
 	description = "A simple, yet effective painkiller."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC"
 	pain_resistance = 80
 	custom_metabolism = 0.1
@@ -1736,7 +1927,7 @@
 	name = "Oxycodone"
 	id = OXYCODONE
 	description = "An effective and very addictive painkiller."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C805DC"
 	custom_metabolism = 0.05
 	density = 1.26
@@ -1765,7 +1956,7 @@
 	name = "Virus Food"
 	id = VIRUSFOOD
 	description = "A mixture of water, milk, and oxygen. Virus cells can use this mixture to reproduce."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 2 * REAGENTS_METABOLISM
 	color = "#899613" //rgb: 137, 150, 19
 	density = 0.67
@@ -1782,7 +1973,7 @@
 	name = "Sterilizine"
 	id = STERILIZINE
 	description = "Sterilizes wounds in preparation for surgery."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.83
 	specheatcap = 1.83
@@ -1791,7 +1982,7 @@
 	name = "Vapor Salts"
 	id = VAPORSALT
 	description = "A strange mineral found in alien plantlife that has been observed to vaporize some liquids."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#BDE5F2"
 	specheatcap = 1.02 //SHC of air
 	density = 1.225
@@ -1812,7 +2003,7 @@
 	name = "Iron powder"
 	id = IRON
 	description = "Pure iron is a metal."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#666666" //rgb: 102, 102, 102
 	specheatcap = 0.45
 	density = 7.874
@@ -1821,7 +2012,7 @@
 	name = "Gold powder"
 	id = GOLD
 	description = "Gold is a dense, soft, shiny metal and the most malleable and ductile metal known."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#F7C430" //rgb: 247, 196, 48
 	specheatcap = 0.129
 	density = 19.3
@@ -1830,7 +2021,7 @@
 	name = "Silver powder"
 	id = SILVER
 	description = "A soft, white, lustrous transition metal, it has the highest electrical conductivity of any element and the highest thermal conductivity of any metal."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#D0D0D0" //rgb: 208, 208, 208
 	specheatcap = 0.24
 	density = 10.49
@@ -1839,7 +2030,7 @@
 	name ="Uranium salt"
 	id = URANIUM
 	description = "A silvery-white metallic chemical element in the actinide series, weakly radioactive."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#B8B8C0" //rgb: 184, 184, 192
 	density = 19.05
 	specheatcap = 124
@@ -1864,7 +2055,7 @@
 	name = "Phazon salt"
 	id = PHAZON
 	description = "The properties of this rare metal are not well-known."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#5E02F8" //rgb: 94, 2, 248
 	dupeable = FALSE
 
@@ -1888,7 +2079,7 @@
 	name = "Aluminum"
 	id = ALUMINUM
 	description = "A silvery white and ductile member of the boron group of chemical elements."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#A8A8A8" //rgb: 168, 168, 168
 	specheatcap = 0.902
 	density = 2.7
@@ -1897,7 +2088,7 @@
 	name = "Silicon"
 	id = SILICON
 	description = "A tetravalent metalloid, silicon is less reactive than its chemical analog carbon."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#A8A8A8" //rgb: 168, 168, 168
 	density = 2.33
 	specheatcap = 0.712
@@ -1906,7 +2097,7 @@
 	name = "Welding fuel"
 	id = FUEL
 	description = "Required for welders. Flamable."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#660000" //rgb: 102, 0, 0
 	density = 1.1
 	specheatcap = 0.68
@@ -1940,7 +2131,7 @@
 	name = "Vomit"
 	id = VOMIT
 	description = "Stomach acid mixed with partially digested chunks of food."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#EACF9D" //rgb: 234, 207, 157. Pale yellow
 	density = 1.35
 	specheatcap = 5.2
@@ -1963,7 +2154,7 @@
 	name = "Space Cleaner"
 	id = CLEANER
 	description = "A compound used to clean things. Now with 50% more sodium hypochlorite!"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#A5F0EE" //rgb: 165, 240, 238
 	density = 0.76
 	specheatcap = 60.17
@@ -2030,7 +2221,7 @@
 	name = "Bleach"
 	id = BLEACH
 	description = "A strong cleaning compound. Corrosive and toxic when applied to soft tissue. Do not swallow."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FBFCFF" //rgb: 251, 252, 255
 	density = 6.84
 	specheatcap = 90.35
@@ -2088,7 +2279,7 @@
 				to_chat(H,"<span class='warning'>Your [eyes_covered] protects your eyes from the bleach!</span>")
 				return
 			else //This stuff is a little more corrosive but less irritative than pepperspray
-				H.emote("scream", , , 1)
+				H.audible_scream()
 				to_chat(H,"<span class='danger'>You are sprayed directly in the eyes with bleach!</span>")
 				H.eye_blurry = max(M.eye_blurry, 15)
 				H.eye_blind = max(M.eye_blind, 5)
@@ -2105,7 +2296,7 @@
 	name = "fertilizer"
 	id = FERTILIZER
 	description = "A chemical mix good for growing plants with."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664330" // rgb: 102, 67, 48
 	density = 5.4
 	specheatcap = 15
@@ -2137,7 +2328,7 @@
 	name = "Plant-B-Gone"
 	id = PLANTBGONE
 	description = "A harmful toxic mixture to kill plantlife. Do not ingest!"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#49002E" //rgb: 73, 0, 46
 	density = 1.08
 	specheatcap = 4.18
@@ -2151,10 +2342,7 @@
 	if(istype(T, /turf/simulated/wall))
 		var/turf/simulated/wall/W = T
 		if(W.rotting)
-			W.rotting = 0
-			for(var/obj/effect/E in W)
-				if(E.name == "Wallrot")
-					qdel(E)
+			W.remove_rot()
 			W.visible_message("<span class='notice'>The fungi are burned away by the solution!</span>")
 
 /datum/reagent/toxin/plantbgone/reaction_obj(var/obj/O, var/volume)
@@ -2207,7 +2395,7 @@
 	name = "Plasma"
 	id = PLASMA
 	description = "Plasma in its liquid form."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#500064" //rgb: 80, 0, 100
 
 /datum/reagent/plasma/New()
@@ -2224,33 +2412,11 @@
 		holder.remove_reagent("inaprovaline", 2 * REM)
 	M.adjustToxLoss(3 * REM)
 
-/*
-/datum/reagent/plasma/reaction_obj(var/obj/O, var/volume)
-
-	if(..())
-		return 1
-
-	var/turf/T = get_turf(O)
-	self.reaction_turf(T, volume)
-
-/datum/reagent/plasma/reaction_turf(var/turf/simulated/T, var/volume)
-
-	if(..())
-		return 1
-
-	var/datum/gas_mixture/napalm = new
-	var/datum/gas/volatile_fuel/fuel = new
-	fuel.moles = 5
-	napalm.trace_gases += fuel
-	T.assume_air(napalm)
-
-*/
-
 /datum/reagent/leporazine
 	name = "Leporazine"
 	id = LEPORAZINE
 	description = "Leporazine can be use to stabilize an individuals body temperature."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 5.65
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Good luck heating something with leporazine in it
@@ -2269,7 +2435,7 @@
 	name = "Cryptobiolin"
 	id = CRYPTOBIOLIN
 	description = "Cryptobiolin causes confusion and dizzyness."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.2
 	density = 1.21
@@ -2287,7 +2453,7 @@
 	name = "Lexorin"
 	id = LEXORIN
 	description = "Lexorin temporarily stops respiration. Causes tissue damage."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 0.655293
 	specheatcap = 7.549
@@ -2301,13 +2467,13 @@
 		M.take_organ_damage(REM, 0, ignore_inorganics = TRUE)
 	M.adjustOxyLoss(3)
 	if(prob(20))
-		M.emote("gasp")
+		M.emote("gasp", null, null, TRUE)
 
 /datum/reagent/kelotane
 	name = "Kelotane"
 	id = KELOTANE
 	description = "Kelotane is a drug used to treat burns."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 2.3
 	specheatcap = 0.51
@@ -2323,7 +2489,7 @@
 	name = "Dermaline"
 	id = DERMALINE
 	description = "Dermaline is the next step in burn medication. Works twice as good as kelotane and enables the body to restore even the direst heat-damaged tissue."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.75
 	specheatcap = 0.36
@@ -2339,7 +2505,7 @@
 	name = "Dexalin"
 	id = DEXALIN
 	description = "Dexalin is used in the treatment of oxygen deprivation."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 2.28
 	specheatcap = 0.91
@@ -2358,7 +2524,7 @@
 	name = "Dexalin Plus"
 	id = DEXALINP
 	description = "Dexalin Plus is used in the treatment of oxygen deprivation. Its highly effective."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 4.14
 	specheatcap = 0.29
@@ -2377,7 +2543,7 @@
 	name = "Tricordrazine"
 	id = TRICORDRAZINE
 	description = "Tricordrazine is a highly potent stimulant, originally derived from cordrazine. Can be used to treat a wide range of injuries."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.58
 	specheatcap = 0.44
@@ -2401,7 +2567,7 @@
 	name = "Adminordrazine"
 	id = ADMINORDRAZINE
 	description = "It's magic. We don't have to explain it."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = ARBITRARILY_LARGE_NUMBER
 	specheatcap = ARBITRARILY_LARGE_NUMBER
@@ -2464,12 +2630,17 @@
 		D.stage--
 		if(D.stage < 1)
 			D.cure()
+	for(var/A in M.virus2)
+		var/datum/disease2/disease/D2 = M.virus2[A]
+		D2.stage--
+		if(D2.stage < 1)
+			D2.cure(M)
 
 /datum/reagent/synaptizine
 	name = "Synaptizine"
 	id = SYNAPTIZINE
 	description = "Synaptizine is used to treat various diseases."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.01
 	overdose_am = REAGENTS_OVERDOSE
@@ -2497,7 +2668,7 @@
 	name = "Impedrezene"
 	id = IMPEDREZENE
 	description = "Impedrezene is a narcotic that impedes one's ability by slowing down the higher brain cell functions."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE
 	density = 8.15
@@ -2514,13 +2685,13 @@
 	if(prob(50))
 		M.drowsyness = max(M.drowsyness, 3)
 	if(prob(10))
-		M.emote("drool")
+		M.emote("drool", null, null, TRUE)
 
 /datum/reagent/hyronalin
 	name = "Hyronalin"
 	id = HYRONALIN
 	description = "Hyronalin is a medicinal drug used to counter the effect of radiation poisoning."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.05
 	overdose_am = REAGENTS_OVERDOSE
@@ -2538,7 +2709,7 @@
 	name = "Arithrazine"
 	id = ARITHRAZINE
 	description = "Arithrazine is an unstable medication used for the most extreme cases of radiation poisoning."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.05
 	overdose_am = REAGENTS_OVERDOSE
@@ -2559,7 +2730,7 @@
 	name = "Lithotorcrazine"
 	id = LITHOTORCRAZINE
 	description = "A derivative of Arithrazine. Rather than reducing radiation in a host, actively impedes the host from being irradiated instead."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#C0C0C0"
 	custom_metabolism = 0.2
 	density = 4.92
@@ -2569,7 +2740,7 @@
 	name = "Alkysine"
 	id = ALKYSINE
 	description = "Alkysine is a drug used to lessen the damage to neurological tissue after a catastrophic injury. Can heal brain tissue."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.05
 	overdose_am = REAGENTS_OVERDOSE
@@ -2584,11 +2755,30 @@
 
 	M.adjustBrainLoss(-3 * REM)
 
+/datum/reagent/alkycosine
+	name = "Alkycosine"
+	id = ALKYCOSINE
+	description = "A mind stablizing brain bleach."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#EDEDED" //rgb: 237, 237, 237
+	custom_metabolism = 0.05
+	overdose_am = REAGENTS_OVERDOSE
+	pain_resistance = 15
+	density = 5.98
+	specheatcap = 1.75
+
+/datum/reagent/alkycosine/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.adjustBrainLoss(-4 * REM)
+
 /datum/reagent/imidazoline
 	name = "Imidazoline"
 	id = IMIDAZOLINE
 	description = "Heals eye damage"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.92
 	specheatcap = 5.45
@@ -2611,7 +2801,7 @@
 	name = "Inacusiate"
 	id = INACUSIATE
 	description = "Rapidly heals ear damage"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6600FF" //rgb: 100, 165, 255
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.58
@@ -2629,7 +2819,7 @@
 	name = "Peridaxon"
 	id = PERIDAXON
 	description = "Used to encourage recovery of internal organs and nervous systems. Medicate cautiously."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = 10
 
@@ -2667,7 +2857,7 @@
 	name = "Bicaridine"
 	id = BICARIDINE
 	description = "Bicaridine is an analgesic medication and can be used to treat blunt trauma."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.96
@@ -2692,11 +2882,28 @@
 			for(var/datum/wound/W in E.wounds)
 				W.heal_damage(0.2, TRUE)
 
+/datum/reagent/synthocarisol
+	name = "Synthocarisol"
+	id = SYNTHOCARISOL
+	description = "Synthocarisol is a synthetic version of Carisol, a powerful analgesic that used to be found in traditional medicines made from the horn of the now-extinct Space African Rhino. Tragically, the horns also contained an equal amount of Anticarisol, which led to the medical community dismissing the remedies as nothing more than placebo and overlooking this reagent for several centuries."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#580082" //rgb: 88, 0, 130
+	overdose_am = REAGENTS_OVERDOSE
+	density = 4.67
+	specheatcap = 0.57
+
+/datum/reagent/synthocarisol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.heal_organ_damage(2 * REM)
+
 /datum/reagent/hyperzine
 	name = "Hyperzine"
 	id = HYPERZINE
 	description = "Hyperzine is a highly effective, long lasting, muscle stimulant."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.03
 	overdose_am = REAGENTS_OVERDOSE/2
@@ -2708,14 +2915,14 @@
 	if(..())
 		return 1
 
-	if(prob(5))
+	if(prob(5) && M.stat == CONSCIOUS)
 		M.emote(pick("twitch","blink_r","shiver"))
 
 /datum/reagent/hypozine //syndie hyperzine
 	name = "Hypozine"
 	id = HYPOZINE
 	description = "Hypozine is an extremely effective, short lasting, muscle stimulant."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	var/has_been_hypozined = 0
 	var/has_had_heart_explode = 0 //We've applied permanent damage.
@@ -2849,7 +3056,7 @@
 	name = "Cryoxadone"
 	id = CRYOXADONE
 	description = "A chemical mixture with almost magical healing powers. Its main limitation is that the targets body temperature must be under 170K for it to metabolise correctly."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.47
 	specheatcap = 3.47
@@ -2869,7 +3076,7 @@
 	name = "Clonexadone"
 	id = CLONEXADONE
 	description = "A liquid compound similar to that used in the cloning process. Can be used to 'finish' the cloning process when used in conjunction with a cryo tube."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
 	specheatcap = 4.27
@@ -2889,7 +3096,7 @@
 	name = "Rezadone"
 	id = REZADONE
 	description = "A powder derived from fish toxin, this substance can effectively treat genetic damage in humanoids, though excessive consumption has side effects."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#669900" //rgb: 102, 153, 0
 	overdose_am = REAGENTS_OVERDOSE
 	overdose_tick = 35
@@ -2930,7 +3137,7 @@
 	name = "Spaceacillin"
 	id = SPACEACILLIN
 	description = "An all-purpose antiviral agent."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.01
 	overdose_am = REAGENTS_OVERDOSE
@@ -2941,7 +3148,7 @@
 	name = "Carpotoxin"
 	id = CARPOTOXIN
 	description = "A deadly neurotoxin produced by the dreaded spess carp."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#003333" //rgb: 0, 51, 51
 	density = 319.27 //Assuming it's Tetrodotoxin
 	specheatcap = 41.53
@@ -2997,7 +3204,7 @@
 	name = "Mindbreaker Toxin"
 	id = MINDBREAKER
 	description = "A powerful hallucinogen. Not a thing to be messed with."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#B31008" //rgb: 139, 166, 233
 	custom_metabolism = 0.05
 	density = 0.78
@@ -3010,11 +3217,28 @@
 
 	M.hallucination += 10
 
+/datum/reagent/heartbreaker
+	name = "Heartbreaker Toxin"
+	id = HEARTBREAKER
+	description = "A powerful hallucinogen and suffocant. Not a thing to be messed with."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#ff91b7" //rgb: 255, 145, 183
+	density = 0.78
+	specheatcap = 5.47
+
+/datum/reagent/heartbreaker/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.hallucination += 5
+	M.adjustOxyLoss(4 * REM)
+
 /datum/reagent/spiritbreaker
 	name = "Spiritbreaker Toxin"
 	id = SPIRITBREAKER
 	description = "An extremely dangerous hallucinogen often used for torture. Extracted from the leaves of the rare Ambrosia Cruciatus plant."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#3B0805" //rgb: 59, 8, 5
 	custom_metabolism = 0.05
 
@@ -3034,7 +3258,7 @@
 	name = "Methylin"
 	id = METHYLIN
 	description = "An intelligence enhancer, also used in the treatment of attention deficit hyperactivity disorder. Also known as Ritalin."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#CC1122"
 	custom_metabolism = 0.03
 	overdose_am = REAGENTS_OVERDOSE/2
@@ -3057,7 +3281,7 @@
 	name = "Bicarodyne"
 	id = BICARODYNE
 	description = "Not to be confused with Bicaridine, Bicarodyne is a volatile chemical that reacts violently in the presence of most human endorphins."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE * 2 //No need for anyone to get suspicious.
 	custom_metabolism = 0.01
@@ -3066,7 +3290,7 @@
 	name = "Stabilizine"
 	id = STABILIZINE
 	description = "A stabilizing chemical produced by alien nests to keep their occupants barely alive."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#833484" //rgb: 131, 52, 132
 	custom_metabolism = 0.1
 
@@ -3091,6 +3315,28 @@
 	else if(M.bodytemperature < 311)
 		M.bodytemperature = min(310, M.bodytemperature + (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
+/datum/reagent/preslomite
+	name = "Preslomite"
+	id = PRESLOMITE
+	description = "A stabilizing chemical used in industrial relief efforts."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFFFFF" //rgb: 255, 255, 255
+	custom_metabolism = 0.05
+
+/datum/reagent/preslomite/on_mob_life(var/mob/living/M, var/alien)
+
+	if(..())
+		return 1
+	if(M.losebreath>10)
+		M.losebreath = max(10, M.losebreath - 5)
+	if(!iscarbon(M))
+		return //We can't do anything else for you
+	var/mob/living/carbon/C = M
+	if(C.health < config.health_threshold_crit + 10)
+		C.adjustToxLoss(-2 * REM)
+		C.heal_organ_damage(0, 2 * REM)
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -3099,7 +3345,7 @@
 	name = "Nanites"
 	id = NANITES
 	description = "Microscopic construction robots."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#535E66" //rgb: 83, 94, 102
 	var/diseasetype = /datum/disease/robotic_transformation
@@ -3120,7 +3366,7 @@
 	name = "Xenomicrobes"
 	id = XENOMICROBES
 	description = "Microbes with an entirely alien cellular structure."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#535E66" //rgb: 83, 94, 102
 
 /datum/reagent/xenomicrobes/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -3135,7 +3381,7 @@
 	name = "Nanobots"
 	id = NANOBOTS
 	description = "Microscopic robots intended for use in humans. Must be loaded with further chemicals to be useful."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#3E3959" //rgb: 62, 57, 89
 	density = 236.6
@@ -3147,7 +3393,7 @@
 	name = "Medical Nanobots"
 	id = MEDNANOBOTS
 	description = "Microscopic robots intended for use in humans. Configured for rapid healing upon infiltration into the body."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#593948" //rgb: 89, 57, 72
 	custom_metabolism = 0.005
@@ -3165,8 +3411,12 @@
 		if(0.1 to 5)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
-				if(H.species.name != "Diona")
+				if(H.species.name == "Diona")
 					return
+				for(var/datum/organ/external/E in H.organs)
+					for(var/datum/wound/internal_bleeding/W in E.wounds)
+						W.heal_damage(0.8, TRUE)
+						holder.remove_reagent(MEDNANOBOTS, 10/40)
 			if(M.getOxyLoss()>0 || M.getBruteLoss(ignore_inorganic = TRUE)>0 || M.getToxLoss()>0 || M.getFireLoss(ignore_inorganic = TRUE)>0 || M.getCloneLoss()>0)
 				if(holder.has_reagent("mednanobots"))
 					M.adjustOxyLoss(-5)
@@ -3188,10 +3438,17 @@
 				D.stage--
 				if(D.stage < 1)
 					D.cure()
+			if(iscarbon(M))
+				var/mob/living/carbon/C = M
+				for(var/A in C.virus2)
+					var/datum/disease2/disease/D2 = C.virus2[A]
+					D2.stage--
+					if(D2.stage < 1)
+						D2.cure(M)
 		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
-				if(H.species.name != "Diona")
+				if(H.species.name == "Diona")
 					return
 			if(M.getOxyLoss()>0 || M.getBruteLoss()>0 || M.getToxLoss()>0 || M.getFireLoss()>0 || M.getCloneLoss()>0)
 				if(holder.has_reagent("mednanobots"))
@@ -3213,6 +3470,13 @@
 				D.stage--
 				if(D.stage < 1)
 					D.cure()
+			if(iscarbon(M))
+				var/mob/living/carbon/C = M
+				for(var/A in C.virus2)
+					var/datum/disease2/disease/D2 = C.virus2[A]
+					D2.stage--
+					if(D2.stage < 1)
+						D2.cure(M)
 			if(prob(percent_machine))
 				holder.add_reagent("mednanobots", 20)
 				to_chat(M, pick("<b><span class='warning'>Your body lurches!</b></span>"))
@@ -3240,7 +3504,7 @@
 	name = "Combat Nanobots"
 	id = COMNANOBOTS
 	description = "Microscopic robots intended for use in humans. Configured to grant great resistance to damage."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#343F42" //rgb: 52, 63, 66
 	custom_metabolism = 0.01
@@ -3317,7 +3581,7 @@
 	name = "Fluorosurfactant"
 	id = FLUOROSURFACTANT
 	description = "A perfluoronated sulfonic acid that forms a foam when mixed with water."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#9E6B38" //rgb: 158, 107, 56
 	density = 1.95
 	specheatcap = 0.81
@@ -3328,7 +3592,7 @@
 	name = "Foaming agent"
 	id = FOAMING_AGENT
 	description = "A agent that yields metallic foam when mixed with light metal and a strong acid."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#664B63" //rgb: 102, 75, 99
 	density = 0.62
 	specheatcap = 49.23
@@ -3337,7 +3601,7 @@
 	name = "Nicotine"
 	id = NICOTINE
 	description = "A highly addictive stimulant extracted from the tobacco plant."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#181818" //rgb: 24, 24, 24
 	density = 1.01
 
@@ -3346,7 +3610,7 @@
 	name = "Tobacco"
 	id = TOBACCO
 	description = "The cured and ground leaves of a tobacco plant."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#4c1e00" //rgb: 76, 30, 0
 	density = 1.01
 
@@ -3354,7 +3618,7 @@
 	name = "Tobacco"
 	id = DANBACCO //This product may or may not cause cancer.
 	description = "The cured and ground leaves of a tobacco plant with additional Discount Dan flavors."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#4c1e00" //rgb: 76, 30, 0
 	density = 1.01
 
@@ -3371,7 +3635,7 @@
 	name = "Ammonia"
 	id = AMMONIA
 	description = "A caustic substance commonly used in fertilizer or household cleaners."
-	reagent_state = GAS
+	reagent_state = REAGENT_STATE_GAS
 	color = "#404030" //rgb: 64, 64, 48
 	density = 0.51
 	specheatcap = 14.38
@@ -3386,7 +3650,7 @@
 	name = "Diethylamine"
 	id = DIETHYLAMINE
 	description = "A secondary amine, mildly corrosive."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#604030" //rgb: 96, 64, 48
 	density = 0.65
 	specheatcap = 35.37
@@ -3395,7 +3659,7 @@
 	name = "Ethylredoxrazine"
 	id = ETHYLREDOXRAZINE
 	description = "A powerful oxidizer that reacts with ethanol."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#605048" //rgb: 96, 80, 72
 	density = 1.63
 	specheatcap = 0.36
@@ -3415,7 +3679,7 @@
 	name = "Chloral Hydrate"
 	id = CHLORALHYDRATE
 	description = "A powerful sedative."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#000067" //rgb: 0, 0, 103
 	data = 1 //Used as a tally
 	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
@@ -3430,10 +3694,7 @@
 			M.confused += 2
 			M.drowsyness += 2
 		if(2 to 80)
-			M.confused++
-			M.drowsyness++
-			if(volume >= 10)
-				M.sleeping++
+			M.sleeping++
 		if(81 to INFINITY)
 			M.sleeping++
 			M.toxloss += (data - 50)
@@ -3444,7 +3705,7 @@
 	name = "Beer"
 	id = BEER2
 	description = "An alcoholic beverage made from malted grains, hops, yeast, and water."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /////////////////////////Food Reagents////////////////////////////
@@ -3455,7 +3716,7 @@
 	name = "Nutriment"
 	id = NUTRIMENT
 	description = "All the vitamins, minerals, and carbohydrates the body needs in pure form."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 	color = "#664330" //rgb: 102, 67, 48
 	density = 6.54
@@ -3476,7 +3737,7 @@
 	name = "Lipozine"
 	id = LIPOZINE
 	description = "A chemical compound that causes a powerful fat-burning reaction."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 10 * REAGENTS_METABOLISM
 	color = "#BBEDA4" //rgb: 187, 237, 164
 	density = 2.63
@@ -3496,7 +3757,7 @@
 	name = "Soysauce"
 	id = SOYSAUCE
 	description = "A salty sauce made from the soy plant."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 2 * REAGENTS_METABOLISM
 	color = "#792300" //rgb: 121, 35, 0
 	density = 1.17
@@ -3506,7 +3767,7 @@
 	name = "Ketchup"
 	id = KETCHUP
 	description = "Ketchup, catsup, whatever. It's tomato paste."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
 
@@ -3514,7 +3775,7 @@
 	name = "Mustard"
 	id = MUSTARD
 	description = "A spicy yellow paste."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#cccc33" //rgb: 204, 204, 51
 
@@ -3522,7 +3783,7 @@
 	name = "Relish"
 	id = RELISH
 	description = "A pickled cucumber jam. Tasty!"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 	color = "#336600" //rgb: 51, 102, 0
 
@@ -3530,7 +3791,7 @@
 	name = "Dipping Sauce"
 	id = DIPPING_SAUCE
 	description = "Adds extra, delicious texture to a snack."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#33cc33" //rgb: 51, 204, 51
 
@@ -3538,7 +3799,7 @@
 	name = "Capsaicin Oil"
 	id = CAPSAICIN
 	description = "This is what makes chilis hot."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#B31008" //rgb: 179, 16, 8
 	data = 1 //Used as a tally
 	custom_metabolism = FOOD_METABOLISM
@@ -3580,7 +3841,7 @@
 	name = "Condensed Capsaicin"
 	id = CONDENSEDCAPSAICIN
 	description = "This shit goes in pepperspray."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#B31008" //rgb: 179, 16, 8
 	density = 0.9
 	specheatcap = 8.59
@@ -3607,11 +3868,11 @@
 				return
 			else if(eyes_covered) //Eye cover is better than mouth cover
 				H << "<span class='warning'>Your [eyes_covered] protects your eyes from the pepperspray!</span>"
-				H.emote("scream", , , 1)
+				H.audible_scream()
 				H.eye_blurry = max(M.eye_blurry, 5)
 				return
 			else //Oh dear
-				H.emote("scream", , , 1)
+				H.audible_scream()
 				H << "<span class='danger'>You are sprayed directly in the eyes with pepperspray!</span>"
 				H.eye_blurry = max(M.eye_blurry, 25)
 				H.eye_blind = max(M.eye_blind, 10)
@@ -3630,14 +3891,14 @@
 	name = "Black Food Coloring"
 	id = BLACKCOLOR
 	description = "A black coloring used to dye food and drinks."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#000000" //rgb: 0, 0, 0
 
 /datum/reagent/frostoil
 	name = "Frost Oil"
 	id = FROSTOIL
 	description = "A special oil that noticably chills the body. Extraced from Icepeppers."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#B31008" //rgb: 139, 166, 233
 	data = 1 //Used as a tally
 	custom_metabolism = FOOD_METABOLISM
@@ -3690,7 +3951,7 @@
 	name = "Table Salt"
 	id = SODIUMCHLORIDE
 	description = "A salt made of sodium chloride. Commonly used to season food."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFFFFF" //rgb: 255, 255, 255
 	density = 2.09
 	specheatcap = 1.65
@@ -3710,7 +3971,7 @@
 	name = "Creatine"
 	id = CREATINE
 	description = "Highly toxic substance that grants the user enormous strength, before their muscles seize and tear their own body to shreds."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255, 255, 255
 	var/has_been_hulk = 0
 	var/has_ripped_and_torn = 0 //We've applied permanent damage.
@@ -3799,7 +4060,7 @@
 	name = "carp pheromones"
 	id = CARPPHEROMONES
 	description = "A disgusting liquid with a horrible smell, which is used by space carps to mark their territory and food."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6AAA96" //rgb: 106, 170, 150
 	custom_metabolism = 0.1
 	data = 1 //Used as a tally
@@ -3830,14 +4091,14 @@
 	name = "Black Pepper"
 	id = BLACKPEPPER
 	description = "A powder ground from peppercorns. *AAAACHOOO*"
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	//rgb: 0, 0, 0
 
 /datum/reagent/cinnamon
 	name = "Cinnamon Powder"
 	id = CINNAMON
 	description = "A spice, obtained from the bark of cinnamomum trees."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#D2691E" //rgb: 210, 105, 30
 
@@ -3845,7 +4106,7 @@
 	name = "Coco Powder"
 	id = COCO
 	description = "A fatty, bitter paste made from coco beans."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 
@@ -3860,7 +4121,7 @@
 	name = "Hot Chocolate"
 	id = HOT_COCO
 	description = "Made with love! And coco beans."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 2 * REAGENTS_METABOLISM
 	color = "#403010" //rgb: 64, 48, 16
 
@@ -4024,7 +4285,7 @@
 	name = "Corn Oil"
 	id = CORNOIL
 	description = "An oil derived from various types of corn."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 
@@ -4054,7 +4315,7 @@
 	name = "Universal Enzyme"
 	id = ENZYME
 	description = "A universal enzyme used in the preperation of certain chemicals and foods."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#365E30" //rgb: 54, 94, 48
 	density = 9.68
 	specheatcap = 101.01
@@ -4063,7 +4324,7 @@
 	name = "Dry Ramen"
 	id = DRY_RAMEN
 	description = "Space age food, since August 25, 1958. Contains dried noodles and vegetables, best cooked in boiling water."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	nutriment_factor = REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 
@@ -4078,7 +4339,7 @@
 	name = "Hot Ramen"
 	id = HOT_RAMEN
 	description = "The noodles are boiled, the flavors are artificial, just like being back in school."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 	density = 1.33
@@ -4097,7 +4358,7 @@
 	name = "Hell Ramen"
 	id = HELL_RAMEN
 	description = "The noodles are boiled, the flavors are artificial, just like being back in school."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
 	density = 1.42
@@ -4115,7 +4376,7 @@
 	name = "flour"
 	id = FLOUR
 	description = "This is what you rub all over yourself to pretend to be a ghost."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	nutriment_factor = REAGENTS_METABOLISM
 	color = "#FFFFFF" //rgb: 0, 0, 0
 
@@ -4137,7 +4398,7 @@
 	name = "Rice"
 	id = RICE
 	description = "Enjoy the great taste of nothing."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	nutriment_factor = 1 * REAGENTS_METABOLISM
 	color = "#FFFFFF" //rgb: 0, 0, 0
 
@@ -4152,7 +4413,7 @@
 	name = "Cherry Jelly"
 	id = CHERRYJELLY
 	description = "Totally the best. Only to be spread on foods with excellent lateral symmetry."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 1 * REAGENTS_METABOLISM
 	color = "#801E28" //rgb: 128, 30, 40
 
@@ -4167,7 +4428,7 @@
 	name = "Discount Dan's Special Sauce"
 	id = DISCOUNT
 	description = "You can almost feel your liver failing, just by looking at it."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 111, 136, 79
 	data = 1 //Used as a tally
 
@@ -4210,14 +4471,14 @@
 	name = "Irradiated Beans"
 	id = IRRADIATEDBEANS
 	description = "You can almost taste the lead sheet behind it!"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
 /datum/reagent/toxicwaste
 	name = "Toxic Waste"
 	id = TOXICWASTE
-	description = "A type of sludge created by heating space lubricant to extreme temperatures."
-	reagent_state = LIQUID
+	description = "A type of sludge."
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	density = 5.59
 	specheatcap = 2.71
@@ -4226,77 +4487,77 @@
 	name = "Re-Fried Beans"
 	id = REFRIEDBEANS
 	description = "Mmm.."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
 /datum/reagent/mutatedbeans
 	name = "Mutated Beans"
 	id = MUTATEDBEANS
 	description = "Mutated flavor."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
 /datum/reagent/beff
 	name = "Beff"
 	id = BEFF
 	description = "What's beff? Find out!"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
 /datum/reagent/horsemeat
 	name = "Horse Meat"
 	id = HORSEMEAT
 	description = "Tastes excellent in lasagna."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
 /datum/reagent/moonrocks
 	name = "Moon Rocks"
 	id = MOONROCKS
 	description = "We don't know much about it, but we damn well know that it hates the human skeleton."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
 /datum/reagent/offcolorcheese
 	name = "Off-Color Cheese"
 	id = OFFCOLORCHEESE
 	description = "American Cheese."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
 /datum/reagent/bonemarrow
 	name = "Bone Marrow"
 	id = BONEMARROW
 	description = "Looks like a skeleton got stuck in the production line."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
 /datum/reagent/greenramen
 	name = "Greenish Ramen Noodles"
 	id = GREENRAMEN
 	description = "That green isn't organic."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
 /datum/reagent/glowingramen
 	name = "Glowing Ramen Noodles"
 	id = GLOWINGRAMEN
 	description = "That glow 'aint healthy."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
 /datum/reagent/deepfriedramen
 	name = "Deep Fried Ramen Noodles"
 	id = DEEPFRIEDRAMEN
 	description = "Ramen, deep fried."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 
 /datum/reagent/peptobismol
 	name = "Peptobismol"
 	id = PEPTOBISMOL
 	description = "Jesus juice." //You're welcome, guy in the thread that rolled a 69.
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 22.25
 	specheatcap = 10.55
@@ -4317,7 +4578,7 @@
 	name = "Clotting Agent"
 	id = CLOTTING_AGENT
 	description = "Concentrated blood platelets, capable of stemming bleeding."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#a00000" //rgb: 160, 0, 0
 	custom_metabolism = 0.1
 
@@ -4325,7 +4586,7 @@
 	name = "Biofoam"
 	id = BIOFOAM
 	description = "A fast-hardening, biocompatible foam used to stem internal bleeding for a short time."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#D9C0E7" //rgb: 217, 192, 231
 	custom_metabolism = 0.1
 
@@ -4337,7 +4598,7 @@
 	name = "Drink"
 	id = DRINK
 	description = "Uh, some kind of drink."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = REAGENTS_METABOLISM
 	color = "#E78108" //rgb: 231, 129, 8
 	custom_metabolism = FOOD_METABOLISM
@@ -4683,7 +4944,7 @@
 	name = "Ice"
 	id = ICE
 	description = "Frozen water, your dentist wouldn't like you chewing this."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#619494" //rgb: 97, 148, 148
 	density = 0.91
 	specheatcap = 4.18
@@ -4692,7 +4953,7 @@
 	name = "Cola"
 	id = COLA
 	description = "A refreshing beverage."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#100800" //rgb: 16, 8, 0
 	adj_drowsy 	= 	-3
 
@@ -4822,7 +5083,7 @@
 	name = "Hippie's Delight"
 	id = HIPPIESDELIGHT
 	description = "You just don't get it maaaan."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 	data = 1 //Used as a tally
 
@@ -4862,7 +5123,7 @@
 	name = "Ethanol" //Parent class for all alcoholic reagents.
 	id = ETHANOL
 	description = "A well-known alcohol with a variety of applications."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 0 //So alcohol can fill you up! If they want to.
 	color = "#404030" //RGB: 64, 64, 48
 	custom_metabolism = FOOD_METABOLISM
@@ -5117,6 +5378,215 @@
 					L.take_damage(100, 0)
 	data++
 
+/datum/reagent/ethanol/karmotrine
+	name = "Karmotrine"
+	id = KARMOTRINE
+	description = "Served exclusively by waifu bartenders."
+	color = "#66ffff" //rgb(102, 255, 255)
+	blur_start = 40 //Blur very early
+
+/datum/reagent/ethanol/smokyroom
+	name = "Smoky Room"
+	id = SMOKYROOM
+	description = "It was the kind of cool, black night that clung to you like something real... a black, tangible fabric of smoke, deceit, and murder. I had finished working my way through the fat cigars for the day - or at least told myself that to feel the sense of accomplishment for another night wasted on little more than chasing cheating dames and abusive husbands. It was enough to drive a man to drink... and it did. I sauntered into the cantina and wordlessly nodded to the barman. He knew my poison. I was a regular, after all. By the time the night was over, there would be another empty bottle and a case no closer to being cracked. Then I saw her, like a mirage across a desert, or a striken starlet on stage across a smoky room."
+	color = "#664300"
+
+/datum/reagent/ethanol/smokyroom/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(prob(4)) //Small chance per tick to some noir stuff and gain NOIRBLOCK if we don't have it.
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(!(M_NOIR in H.mutations))
+				H.mutations += M_NOIR
+				H.dna.SetSEState(NOIRBLOCK,1)
+				genemutcheck(H, NOIRBLOCK, null, MUTCHK_FORCED)
+
+		M.say(pick("The streets were heartless and cold, like the fickle 'love' of some hysterical dame.",
+			"The lights, the smoke, the grime... the city itself seemed alive that day. Was it the pulse that made me think so? Or just all the blood?",
+			"I caressed my .44 magnum. Ever since Jimmy bit it against the Two Bit Gang, the gun and its six rounds were the only partner I could trust.",
+			"The whole reason I took the case to begin with was trouble, in the shape of a pinup blonde with shanks that�d make you dizzy. Wouldn�t give her name, said she was related to the captain",
+			"Judging by the boys at the lab, the perp took a sander to the tooth profiles, but did a sloppy job. Lab report came in early this morning. Guess my vacation is on pause.",
+			"The blacktop was baking that day, and the broads working 19th and Main were wearing even less than usual.",
+			"The young dame was pride and joy of the station. Little did she know that looks can breed envy... or worse.",
+			"The new case reeked of the same bad blood as that now half-forgotten case of the turncoat chef. A recipe for murder.",
+			"I dragged myself out of my drink-addled torpor and called to the shadowy figure at my door - come in - because if I didn't take a new case I'd be through my bottle by noon.",
+			"Nursing my scotch, I turned my gaze upward and spotted trouble in the form of a bruiser with brass knuckles across the smoke-filled nightclub's cabaret.",
+			"I didn't even know who she was. Just stumbled across a girl and four toughs. Took her home and the mayor named me a hero.",
+			"She was a flapper and a swinger, but she was also in some hot water. Told me she'd make it worth my while if I could get her out of it. I told her that I wanted payment in cold hard simoleons.",
+			"What he did just didn't compare. He killed an innocent person. What drives a man to kill in cold blood? I didn't want to hang around and find out.",
+			"I breathed in the smoke of the underground speakeasy like a fish breathes water. The brass at the precinct couldn't understand: I was in my element.",
+			"I put enough holes in the man to drop a goliath, but he kept coming. Some kind of blood-fueled hatred. The adrenaline of a dying man can snap bones in one last moment of spite. I can still see the anger in those dying eyes."))
+
+/datum/reagent/ethanol/rags_to_riches
+	name = "Rags to Riches"
+	id = RAGSTORICHES
+	description = "The Spaceman Dream, incarnated as a cocktail."
+	color = "#664300"
+	dupeable = FALSE
+
+/datum/reagent/ethanol/rags_to_riches/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(!M.loc || prob(70))
+		return
+	playsound(get_turf(M), pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
+	dispense_cash(rand(5,15),get_turf(M))
+
+/datum/reagent/ethanol/bad_touch
+	name = "Bad Touch"
+	id = BAD_TOUCH
+	description = "Somewhere on the scale of bad touches between 'fondled by clown' and 'brushed by supermatter shard'."
+	color = "#664300"
+
+/datum/reagent/ethanol/bad_touch/on_mob_life(var/mob/living/M) //Hallucinate and take hallucination damage.
+	if(..())
+		return 1
+	M.hallucination = max(M.hallucination, 10)
+	M.halloss += 5
+
+/datum/reagent/ethanol/electric_sheep
+	name = "Electric Sheep"
+	id = ELECTRIC_SHEEP
+	description = "This is what robots dream about."
+	color = "#664300"
+	custom_metabolism = 1
+
+/datum/reagent/ethanol/electric_sheep/on_mob_life(var/mob/living/M) //If it's human, shoot sparks every tick! If MoMMI, cause alcohol effects.
+	if(..())
+		return 1
+	if(ishuman(M))
+		spark(M, 5, FALSE)
+
+/datum/reagent/ethanol/electric_sheep/reaction_mob(var/mob/living/M)
+	if(isrobot(M))
+		M.Jitter(20)
+		M.Dizzy(20)
+		M.druggy = max(M.druggy, 60)
+
+/datum/reagent/ethanol/suicide
+	name = "Suicide"
+	id = SUICIDE
+	description = "It's only tolerable because of the added alcohol."
+	color = "#664300"
+	custom_metabolism = 2
+
+/datum/reagent/ethanol/suicide/on_mob_life(var/mob/living/M)  //Instant vomit. Every tick.
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.vomit(0,1)
+
+/datum/reagent/ethanol/metabuddy
+	name = "Metabuddy"
+	id = METABUDDY
+	description = "Ban when?"
+	color = "#664300"
+	var/global/list/datum/mind/metaclub = list()
+
+/datum/reagent/ethanol/metabuddy/on_mob_life(var/mob/living/L)
+	if(..())
+		return 1
+	var/datum/mind/LM = L.mind
+	if(!metaclub.Find(LM) && LM)
+		metaclub += LM
+		var/datum/mind/new_buddy = LM
+		for(var/datum/mind/M in metaclub) //Update metaclub icons
+			if(M.current.client && new_buddy.current && new_buddy.current.client)
+				var/imageloc = new_buddy.current
+				var/imagelocB = M.current
+				if(istype(M.current.loc,/obj/mecha))
+					imageloc = M.current.loc
+					imagelocB = M.current.loc
+				var/image/I = image('icons/mob/HUD.dmi', loc = imageloc, icon_state = "metaclub")
+				I.plane = METABUDDY_HUD_PLANE
+				M.current.client.images += I
+				var/image/J = image('icons/mob/HUD.dmi', loc = imagelocB, icon_state = "metaclub")
+				J.plane = METABUDDY_HUD_PLANE
+				new_buddy.current.client.images += J
+
+/datum/reagent/ethanol/waifu
+	name = "Waifu"
+	id = WAIFU
+	description = "Don't drink more than one waifu if you value your laifu."
+	color = "#664300"
+
+/datum/reagent/ethanol/waifu/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(M.gender == MALE)
+		M.setGender(FEMALE)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!M.is_wearing_item(/obj/item/clothing/under/schoolgirl))
+			var/turf/T = get_turf(H)
+			T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = MOB_PLANE)
+			H.visible_message("<span class='warning'>[H] dons her magical girl outfit in a burst of light!</span>")
+			var/obj/item/clothing/under/schoolgirl/S = new /obj/item/clothing/under/schoolgirl(get_turf(H))
+			if(H.w_uniform)
+				H.u_equip(H.w_uniform, 1)
+			H.equip_to_slot(S, slot_w_uniform)
+			holder.remove_reagent(WAIFU,4) //Generating clothes costs extra reagent
+	M.regenerate_icons()
+
+/datum/reagent/ethanol/scientists_serendipity
+	name = "Scientist's Serendipity"
+	id = SCIENTISTS_SERENDIPITY
+	description = "Go ahead and blow the research budget on drinking this." //Can deconstruct a glass with this for loadsoftech
+	color = "#664300"
+	custom_metabolism = 0.01
+	dupeable = FALSE
+
+/datum/reagent/ethanol/beepskyclassic
+	name = "Beepsky Classic"
+	id = BEEPSKY_CLASSIC
+	description = "Some believe that the more modern Beepsky Smash was introduced to make this drink more popular."
+	color = "#664300" //rgb: 102, 67, 0
+	custom_metabolism = 2 //Ten times the normal rate.
+
+/datum/reagent/ethanol/beepskyclassic/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
+			playsound(get_turf(H), 'sound/voice/halt.ogg', 100, 1, 0)
+		else
+			H.Knockdown(10)
+			playsound(get_turf(H), 'sound/weapons/Egloves.ogg', 100, 1, -1)
+
+/datum/reagent/ethanol/spiders
+	name = "Spiders"
+	id = SPIDERS
+	description = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA."
+	color = "#666666" //rgb(102, 102, 102)
+	custom_metabolism = 0.01 //Spiders really 'hang around'
+
+/datum/reagent/ethanol/spiders/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.take_organ_damage(REM, 0) //Drinking a glass of live spiders is bad for you.
+	if(holder.get_reagent_amount(SPIDERS)>=4) //The main reason we need to have a minimum cost rather than just high custom metabolism is so that someone can't give themselves an IV of spiders for "fun"
+		new /mob/living/simple_animal/hostile/giant_spider/spiderling(get_turf(M))
+		holder.remove_reagent(SPIDERS,4)
+		M.emote("scream", , , 1)
+		M.visible_message("<span class='warning'>[M] recoils as a spider emerges from \his mouth!</span>")
+
+/datum/reagent/ethanol/weedeater
+	name = "Weed Eater"
+	id = WEED_EATER
+	description = "The vegetarian equivalant of a snake eater."
+	color = "#009933" //rgb(0, 153, 51)
+
+/datum/reagent/ethanol/weedeater/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	var/spell = /spell/targeted/genetic/eat_weed
+	if(!(locate(spell) in M.spell_list))
+		to_chat(M, "<span class='notice'>You feel hungry like the diona.</span>")
+		M.add_spell(spell)
+
 /datum/reagent/ethanol/deadrum
 	name = "Deadrum"
 	id = RUM
@@ -5193,7 +5663,7 @@
 	name = "Thirteen Loko"
 	id = THIRTEENLOKO
 	description = "A potent mixture of caffeine and alcohol."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#102000" //rgb: 16, 32, 0
 
 /datum/reagent/ethanol/deadrum/thirteenloko/on_mob_life(var/mob/living/M)
@@ -5211,7 +5681,7 @@
 	name = "Bilk"
 	id = BILK
 	description = "This appears to be beer mixed with milk. Disgusting."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#895C4C" //rgb: 137, 92, 76
 	density = 0.89
 	specheatcap = 2.46
@@ -5220,21 +5690,21 @@
 	name = "Atomic Bomb"
 	id = ATOMICBOMB
 	description = "Nuclear proliferation never tasted so good."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#666300" //rgb: 102, 99, 0
 
 /datum/reagent/ethanol/deadrumm/threemileisland
 	name = "Three Mile Island Iced Tea"
 	id = THREEMILEISLAND
 	description = "Made for a woman, strong enough for a man."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#666340" //rgb: 102, 99, 64
 
 /datum/reagent/ethanol/deadrum/goldschlager
 	name = "Goldschlager"
 	id = GOLDSCHLAGER
 	description = "100 proof cinnamon schnapps, made for alcoholic teen girls on spring break."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 	density = 2.72
 	specheatcap = 0.32
@@ -5243,7 +5713,7 @@
 	name = "Patron"
 	id = PATRON
 	description = "Tequila with silver in it, a favorite of alcoholic women in the club scene."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#585840" //rgb: 88, 88, 64
 	density = 1.84
 	specheatcap = 0.59
@@ -5252,105 +5722,105 @@
 	name = "Gin and Tonic"
 	id = GINTONIC
 	description = "An all time classic, mild cocktail."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/cuba_libre
 	name = "Cuba Libre"
 	id = CUBALIBRE
 	description = "Rum, mixed with cola. Viva la revolution."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#3E1B00" //rgb: 62, 27, 0
 
 /datum/reagent/ethanol/deadrum/whiskey_cola
 	name = "Whiskey Cola"
 	id = WHISKEYCOLA
 	description = "Whiskey, mixed with cola. Surprisingly refreshing."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#3E1B00" //rgb: 62, 27, 0
 
 /datum/reagent/ethanol/deadrum/martini
 	name = "Classic Martini"
 	id = MARTINI
 	description = "Vermouth with Gin. Not quite how 007 enjoyed it, but still delicious."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/vodkamartini
 	name = "Vodka Martini"
 	id = VODKAMARTINI
 	description = "Vodka with Gin. Not quite how 007 enjoyed it, but still delicious."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/white_russian
 	name = "White Russian"
 	id = WHITERUSSIAN
 	description = "That's just, like, your opinion, man..."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#A68340" //rgb: 166, 131, 64
 
 /datum/reagent/ethanol/deadrum/screwdrivercocktail
 	name = "Screwdriver"
 	id = SCREWDRIVERCOCKTAIL
 	description = "Vodka, mixed with plain ol' orange juice. The result is surprisingly delicious."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#A68310" //rgb: 166, 131, 16
 
 /datum/reagent/ethanol/deadrum/booger
 	name = "Booger"
 	id = BOOGER
 	description = "Ewww..."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#A68310" //rgb: 166, 131, 16
 
 /datum/reagent/ethanol/deadrum/bloody_mary
 	name = "Bloody Mary"
 	id = BLOODYMARY
 	description = "A strange yet pleasurable mixture made of vodka, tomato and lime juice. Or at least you THINK the red stuff is tomato juice."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/gargle_blaster
 	name = "Pan-Galactic Gargle Blaster"
 	id = GARGLEBLASTER
 	description = "Whoah, this stuff looks volatile!"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/brave_bull
 	name = "Brave Bull"
 	id = BRAVEBULL
 	description = "A strange yet pleasurable mixture made of vodka, tomato and lime juice. Or at least you THINK the red stuff is tomato juice."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/tequila_sunrise
 	name = "Tequila Sunrise"
 	id = TEQUILASUNRISE
 	description = "Tequila and orange juice. Much like a Screwdriver, only Mexican~"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/toxins_special
 	name = "Toxins Special"
 	id = TOXINSSPECIAL
 	description = "This thing is FLAMING!. CALL THE DAMN SHUTTLE!"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/beepsky_smash
 	name = "Beepsky Smash"
 	id = BEEPSKYSMASH
 	description = "Deny drinking this and prepare for THE LAW."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/drink/doctor_delight
 	name = "The Doctor's Delight"
 	id = DOCTORSDELIGHT
 	description = "A gulp a day keeps the MediBot away. That's probably for the best."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = FOOD_METABOLISM
 	color = "#BA7DBA" //rgb: 73, 49, 73
 
@@ -5377,112 +5847,112 @@
 	name = "Changeling Sting"
 	id = CHANGELINGSTING
 	description = "You take a tiny sip and feel a burning sensation..."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#2E6671" //rgb: 46, 102, 113
 
 /datum/reagent/ethanol/deadrum/irish_cream
 	name = "Irish Cream"
 	id = IRISHCREAM
 	description = "Whiskey-imbued cream, what else would you expect from the Irish."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/manly_dorf
 	name = "The Manly Dorf"
 	id = MANLYDORF
 	description = "Beer and Ale, brought together in a delicious mix. Intended for true men only."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/longislandicedtea
 	name = "Long Island Iced Tea"
 	id = LONGISLANDICEDTEA
 	description = "The liquor cabinet, brought together in a delicious mix. Intended for middle-aged alcoholic women only."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/moonshine
 	name = "Moonshine"
 	id = MOONSHINE
 	description = "You've really hit rock bottom now... your liver packed its bags and left last night."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/b52
 	name = "B-52"
 	id = B52
 	description = "Coffee, Irish Cream, and congac. You will get bombed."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/irishcoffee
 	name = "Irish Coffee"
 	id = IRISHCOFFEE
 	description = "Coffee, and alcohol. More fun than a Mimosa to drink in the morning."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/margarita
 	name = "Margarita"
 	id = MARGARITA
 	description = "On the rocks with salt on the rim. Arriba~!"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/black_russian
 	name = "Black Russian"
 	id = BLACKRUSSIAN
 	description = "For the lactose-intolerant. Still as classy as a White Russian."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#360000" //rgb: 54, 0, 0
 
 /datum/reagent/ethanol/deadrum/manhattan
 	name = "Manhattan"
 	id = MANHATTAN
 	description = "The Detective's undercover drink of choice. He never could stomach gin..."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/manhattan_proj
 	name = "Manhattan Project"
 	id = MANHATTAN_PROJ
 	description = "A scienitst's drink of choice, for pondering ways to blow up the station."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/whiskeysoda
 	name = "Whiskey Soda"
 	id = WHISKEYSODA
 	description = "Ultimate refreshment."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/antifreeze
 	name = "Anti-freeze"
 	id = ANTIFREEZE
 	description = "Ultimate refreshment."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/barefoot
 	name = "Barefoot"
 	id = BAREFOOT
 	description = "Barefoot and pregnant"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/snowwhite
 	name = "Snow White"
 	id = SNOWWHITE
 	description = "A cold refreshment"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/demonsblood
 	name = "Demons Blood"
 	id = DEMONSBLOOD
 	description = "AHHHH!!!!"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 	dizzy_adj = 10
 	slurr_adj = 10
@@ -5491,7 +5961,7 @@
 	name = "Vodka and Tonic"
 	id = VODKATONIC
 	description = "For when a gin and tonic isn't russian enough."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 	dizzy_adj = 4
 	slurr_adj = 3
@@ -5500,7 +5970,7 @@
 	name = "Gin Fizz"
 	id = GINFIZZ
 	description = "Refreshingly lemony, deliciously dry."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 	dizzy_adj = 4
 	slurr_adj = 3
@@ -5509,21 +5979,21 @@
 	name = "Bahama mama"
 	id = BAHAMA_MAMA
 	description = "Tropic cocktail."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/pinacolada
 	name = "Pina Colada"
 	id = PINACOLADA
 	description = "Sans pineapple."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "F2F5BF" //rgb: 242, 245, 191
 
 /datum/reagent/ethanol/deadrum/singulo
 	name = "Singulo"
 	id = SINGULO
 	description = "A blue-space beverage!"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#2E6671" //rgb: 46, 102, 113
 	dizzy_adj = 15
 	slurr_adj = 15
@@ -5532,7 +6002,7 @@
 	name = "Sangria"
 	id = SANGRIA
 	description = "So tasty you won't believe it's alcohol!"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#53181A" //rgb: 83, 24, 26
 	dizzy_adj = 2
 	slur_start = 65
@@ -5542,7 +6012,7 @@
 	name = "Sbiten"
 	id = SBITEN
 	description = "A spicy Vodka! Might be a little hot for the little guys!"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/sbiten/on_mob_life(var/mob/living/M)
@@ -5557,28 +6027,28 @@
 	name = "Devils Kiss"
 	id = DEVILSKISS
 	description = "Creepy time!"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#A68310" //rgb: 166, 131, 16
 
 /datum/reagent/ethanol/deadrum/red_mead
 	name = "Red Mead"
 	id = RED_MEAD
 	description = "The true Viking drink! Even though it has a strange red color."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/mead
 	name = "Mead"
 	id = MEAD
 	description = "A Vikings drink, though a cheap one."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/iced_beer
 	name = "Iced Beer"
 	id = ICED_BEER
 	description = "A beer which is so cold the air around it freezes."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/iced_beer/on_mob_life(var/mob/living/M)
@@ -5593,42 +6063,42 @@
 	name = "Grog"
 	id = GROG
 	description = "Watered down rum, Nanotrasen approves!"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/aloe
 	name = "Aloe"
 	id = ALOE
 	description = "So very, very, very good."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/andalusia
 	name = "Andalusia"
 	id = ANDALUSIA
 	description = "A nice, strange named drink."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/alliescocktail
 	name = "Allies Cocktail"
 	id = ALLIESCOCKTAIL
 	description = "A drink made from your allies."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/acid_spit
 	name = "Acid Spit"
 	id = ACIDSPIT
 	description = "A drink by Nanotrasen. Made from live aliens."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#365000" //rgb: 54, 80, 0
 
 /datum/reagent/ethanol/deadrum/amasec
 	name = "Amasec"
 	id = AMASEC
 	description = "Official drink of the Imperium."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/deadrum/amasec/on_mob_life(var/mob/living/M)
@@ -5642,7 +6112,7 @@
 	name = "Neurotoxin"
 	id = NEUROTOXIN
 	description = "A strong neurotoxin that puts the subject into a death-like state."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#2E2E61" //rgb: 46, 46, 97
 
 /datum/reagent/ethanol/deadrum/neurotoxin/on_mob_life(var/mob/living/M)
@@ -5678,7 +6148,7 @@
 	name = "Changeling Sting"
 	id = CHANGELINGSTING
 	description = "A stingy drink."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#2E6671" //rgb: 46, 102, 113
 
 /datum/reagent/ethanol/deadrum/changelingsting/on_mob_life(var/mob/living/M)
@@ -5692,14 +6162,14 @@
 	name = "Erika Surprise"
 	id = ERIKASURPRISE
 	description = "The surprise is, it's green!"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#2E6671" //rgb: 46, 102, 113
 
 /datum/reagent/ethanol/deadrum/irishcarbomb
 	name = "Irish Car Bomb"
 	id = IRISHCARBOMB
 	description = "Mmm, tastes like chocolate cake..."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#2E6671" //rgb: 46, 102, 113
 
 /datum/reagent/ethanol/deadrum/irishcarbomb/on_mob_life(var/mob/living/M)
@@ -5713,7 +6183,7 @@
 	name = "Syndicate Bomb"
 	id = SYNDICATEBOMB
 	description = "A Syndicate bomb"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#2E6671" //rgb: 46, 102, 113
 
 /datum/reagent/ethanol/deadrum/driestmartini
@@ -5740,7 +6210,7 @@
 	name = "Discount Dan's 'Malt' Whiskey"
 	id = DANS_WHISKEY
 	description = "A terrible combination of two things you should never ingest."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 181, 199, 158
 
 /datum/reagent/ethanol/deadrum/danswhiskey/on_mob_life(var/mob/living/M)
@@ -5779,7 +6249,7 @@
 	name = "Pintpointer"
 	id = PINTPOINTER
 	description = "A little help finding the bartender."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
 
@@ -5787,7 +6257,7 @@
 /datum/reagent/vinegar
 	name = "Vinegar"
 	id = VINEGAR
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#3F1900" //rgb: 63, 25, 0
 	density = 0.79
 	specheatcap = 2.46
@@ -5796,7 +6266,7 @@
 	name = "Honk Serum"
 	id = HONKSERUM
 	description = "Concentrated honking"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#F2C900" //rgb: 242, 201, 0
 	custom_metabolism = 0.01
 
@@ -5812,7 +6282,7 @@
 	name = "Ham Serum"
 	id = HAMSERUM
 	description = "Concentrated legal discussions"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#00FF21" //rgb: 0, 255, 33
 
 /datum/reagent/hamserum/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
@@ -6056,12 +6526,13 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	sport = 5
 	color = "#CCFF66" //rgb: 204, 255, 51
 	custom_metabolism =  0.01
+	custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER/5
 
 /datum/reagent/antidepressant/citalopram
 	name = "Citalopram"
 	id = CITALOPRAM
 	description = "Stabilizes the mind a little."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC"
 	custom_metabolism = 0.01
 	data = 0
@@ -6084,7 +6555,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Paroxetine"
 	id = PAROXETINE
 	description = "Stabilizes the mind greatly, but has a chance of adverse effects."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC"
 	custom_metabolism = 0.01
 	data = 0
@@ -6111,7 +6582,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Gravy"
 	id = GRAVY
 	description = "Aww, come on Double D, I don't say 'gravy' all the time."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 10 * REAGENTS_METABOLISM
 	color = "#EDEDE1"
 
@@ -6127,7 +6598,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Cheesy Gloop"
 	id = CHEESYGLOOP
 	description = "This fatty, viscous substance is found only within the cheesiest of cheeses. Has the potential to cause heart stoppage."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFFF00" //rgb: 255, 255, 0
 	overdose_am = 5
 	custom_metabolism = 0 //does not leave your body, clogs your arteries! puke or otherwise clear your system ASAP
@@ -6164,7 +6635,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Blockizine"
 	id = BLOCKIZINE
 	description = "Some type of material that preferentially binds to all possible chemical receptors in the body, but without any direct negative effects."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	custom_metabolism = 0
 	color = "#B0B0B0"
 
@@ -6186,7 +6657,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Fish Bleach"
 	id = FISHBLEACH
 	description = "Just looking at this liquid makes you feel tranquil and peaceful. You aren't sure if you want to drink any however."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#12A7C9"
 
 /datum/reagent/fishbleach/on_mob_life(var/mob/living/carbon/human/H)
@@ -6199,14 +6670,14 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Cockroach chitin"
 	id = ROACHSHELL
 	description = "Looks like somebody's been shelling peanuts."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#8B4513"
 
 /datum/reagent/ethanol/deadrum/greyvodka
 	name = "Greyshirt vodka"
 	id = GREYVODKA
 	description = "Made presumably from whatever scrapings you can get out of maintenance. Don't think, just drink."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#DEF7F5"
 	alpha = 64
 
@@ -6220,7 +6691,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "medium-salted cores"
 	id = MEDCORES
 	description = "A derivative of the chemical known as 'Hardcores', easier to mass produce, but at a cost of quality."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#FFA500"
 	custom_metabolism = 0.1
 
@@ -6230,7 +6701,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Tannic acid"
 	id = TANNIC_ACID
 	description = "Tannic acid is a natural burn remedy."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#150A03" //rgb: 21, 10, 3
 
 /datum/reagent/dermaline/kathalai
@@ -6388,7 +6859,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Hemoscyanine"
 	id = HEMOSCYANINE
 	description = "Hemoscyanine is a toxin which can destroy blood cells."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#600000" //rgb: 96, 0, 0
 	density = 11.53
 	specheatcap = 0.22
@@ -6406,7 +6877,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Anthracene"
 	id = ANTHRACENE
 	description = "Anthracene is a fluorophore which emits a weak green glow."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#00ff00" //rgb: 0, 255, 0
 	data = 0
 	var/light_intensity = 4
@@ -6472,7 +6943,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Mucus"
 	id = MUCUS
 	description = "A slippery aqueous secretion produced by, and covering, mucous membranes.  Problematic for Asthmatics."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#13BC5E"
 	custom_metabolism = 0.01
 
@@ -6486,13 +6957,13 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		if(M_ASTHMA in H.mutations)
 			H.adjustOxyLoss(2)
 			if(prob(30))
-				H.emote("gasp")
+				H.emote("gasp", null, null, TRUE)
 
 /datum/reagent/albuterol
 	name = "Albuterol"
 	id = ALBUTEROL
 	description = "A bronchodilator that relaxes muscles in the airways and increases air flow to the lungs."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC"
 	overdose_am = REAGENTS_OVERDOSE
 
@@ -6526,7 +6997,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Salt Water"
 	id = SALTWATER
 	description = "It's water mixed with salt. It's probably not healthy to drink."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FFFFFF" //rgb: 255, 255, 255
 	density = 1.122
 	specheatcap = 6.9036
@@ -6545,7 +7016,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Saline"
 	id = SALINE
 	description = "A solution composed of salt, water, and ammonia. Used in pickling and preservation"
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#DEF7F5" //rgb: 192, 227, 233
 	alpha = 64
 	density = 0.622
@@ -6583,7 +7054,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Sodium Silicate"
 	id = SODIUMSILICATE
 	description = "A white powder, commonly used in cements."
-	reagent_state = SOLID
+	reagent_state = REAGENT_STATE_SOLID
 	color = "#E5E5E5"
 	density = 2.61
 	specheatcap = 111.8
@@ -6592,7 +7063,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Untable Mutagen"
 	id = UNTABLE_MUTAGEN
 	description = "Untable Mutagen is a substance that is inert to most materials and objects, but highly corrosive to tables."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#84121D" //rgb: 132, 18, 29
 	overdose_am = REAGENTS_OVERDOSE
 
@@ -6614,7 +7085,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Colorful Reagent"
 	id = COLORFUL_REAGENT
 	description = "Thoroughly sample the rainbow."
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC"
 	var/list/random_color_list = list("#00aedb","#a200ff","#f47835","#d41243","#d11141","#00b159","#00aedb","#f37735","#ffc425","#008744","#0057e7","#d62d20","#ffa700")
 
@@ -6638,3 +7109,39 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(T)
 		T.color = pick(random_color_list)
 	..()
+
+/datum/reagent/degeneratecalcium
+	name = "Degenerate calcium"
+	id = DEGENERATECALCIUM
+	description = "A highly radical chemical derived from calcium that aggressively attempts to regenerate osseus tissues it comes in contact with. In the presence of micro-fractures caused by extensive brute damage it rapidly heals the surrounding tissues, but in healthy limbs the new tissue quickly causes the osseal structure to lose shape and shatter rather graphically."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#ccffb3" //rgb: 204, 255, 179
+	density = 3.9
+	specheatcap = 128.12
+	custom_metabolism = 0.1
+
+/datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.anatomy_flags & NO_BONES)
+			return
+
+		//if you have 30 or more brute damage: rapidly heals, makes your bones stronk
+		//if you have less than 30 brute damage: rapidly heals, breaks all your bones one by one
+		//(the rapid healing is likely to land you in that "less than 30" club real quick if you're not careful...)
+		H.heal_organ_damage(3 * REM, 0)
+
+		if(H.getBruteLoss() >= 30)
+			for(var/datum/organ/external/E in H.organs) //"organs" list only contains external organs aka limbs
+				if((E.status & ORGAN_BROKEN) || (E.min_broken_damage >= E.max_damage))
+					continue
+				E.min_broken_damage += rand(4,8) * REM
+				if(E.min_broken_damage >= E.max_damage)
+					E.min_broken_damage = E.max_damage
+					to_chat(H, "Your [E.display_name] feels [pick("sturdy", "hardy")] as it can be!") //todo unfunny skeleton jokes (someone will probably comment them in the PR)
+		else if(prob((100 - H.getBruteLoss() * 100 / 30)/3)) //33% at 0 damage, 16.6% at 15 damage, 1.1% at 29 damage etc
+			var/datum/organ/external/E = pick(H.organs) //"organs" list only contains external organs aka limbs
+			E.fracture()

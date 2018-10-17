@@ -53,6 +53,9 @@
 	if(!allowed(user))
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return FALSE
+	if(!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return FALSE
 	on = !on
 	investigation_log(I_ATMOS, "was turned [on ? "on" : "off"] by [key_name(user)].")
 	update_icon()
@@ -117,6 +120,9 @@
 	if(node1 && node2)
 		return
 
+	// While other pipes/atmos machinery can use whatever node for any other pipe,
+	// most binary pumps must specifically have the succ end on node1, and the blow
+	// end on node2.
 	node1 = findConnecting(turn(dir, 180))
 	node2 = findConnecting(dir)
 

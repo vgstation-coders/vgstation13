@@ -63,7 +63,7 @@
 /mob/living/simple_animal/hostile/balloon/FindTarget()
 	. = ..()
 	if(.)
-		emote("squeaks at [.]")
+		emote("me",,"squeaks at [.].")
 
 /mob/living/simple_animal/hostile/balloon/AttackingTarget()
 	if(!target)

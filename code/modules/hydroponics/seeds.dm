@@ -1681,7 +1681,7 @@
 	plant_dmi = 'icons/obj/hydroponics2.dmi'
 	plant_icon = "chickenshroom"
 	chems = list(NUTRIMENT = list(2,10))
-	consume_gasses = list("nitrogen"=20) //Really likes its nitrogen. Planting on main station may mess with room air mix.
+	consume_gasses = list(GAS_NITROGEN = 20) //Really likes its nitrogen. Planting on main station may mess with room air mix.
 
 	lifespan = 30
 	growth_stages = 3

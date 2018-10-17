@@ -75,21 +75,18 @@ obj/structure/windoor_assembly/Destroy()
 		if("01")
 			if(iswelder(W) && !anchored )
 				var/obj/item/weapon/weldingtool/WT = W
-				if (WT.remove_fuel(0,user))
-					user.visible_message("[user] dissassembles the windoor assembly.", "You start to dissassemble the windoor assembly.")
-					playsound(src, 'sound/items/Welder2.ogg', 50, 1)
-
-					if(do_after(user, src, 40))
-						if(!src || !WT.isOn())
-							return
-						to_chat(user, "<span class='notice'>You dissasembled the windoor assembly!</span>")
-						if(plasma)
-							getFromPool(/obj/item/stack/sheet/glass/plasmarglass, get_turf(src), 5)
-						else
-							getFromPool(/obj/item/stack/sheet/glass/rglass, get_turf(src), 5)
-						if(secure)
-							getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src), 2)
-						qdel(src)
+				user.visible_message("[user] dissassembles the windoor assembly.", "You start to dissassemble the windoor assembly.")
+				if(WT.do_weld(user, src, 40, 0))
+					if(gcDestroyed)
+						return
+					to_chat(user, "<span class='notice'>You dissasembled the windoor assembly!</span>")
+					if(plasma)
+						getFromPool(/obj/item/stack/sheet/glass/plasmarglass, get_turf(src), 5)
+					else
+						getFromPool(/obj/item/stack/sheet/glass/rglass, get_turf(src), 5)
+					if(secure)
+						getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src), 2)
+					qdel(src)
 				else
 					to_chat(user, "<span class='rose'>You need more welding fuel to dissassemble the windoor assembly.</span>")
 					return

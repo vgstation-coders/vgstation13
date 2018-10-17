@@ -32,7 +32,7 @@ var/list/nest_locations = list()
 	max_n2 = 0
 	unsuitable_atoms_damage = 15
 	faction = "alien"
-	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | SMASH_WALLS | OPEN_DOOR_WEAK
 	status_flags = CANPUSH
 	minbodytemp = 0
 	heat_damage_per_tick = 20
@@ -78,29 +78,14 @@ var/list/nest_locations = list()
 				stop_pulling()
 
 /mob/living/simple_animal/hostile/alien/DestroySurroundings()
-	if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
-		EscapeConfinement()
-		for(var/dir in cardinal)
-			var/turf/T = get_step(src, dir)
-			if(istype(T, /turf/simulated/wall))
-				if(!locate(/obj/effect/alien/acid) in T)
-					if(acid >= 200)
-						new /obj/effect/alien/acid/hyper(T, T)
-						acid = 0
-			for(var/atom/A in T)
-				if(istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack))
-					A.attack_animal(src)
-				else if(istype(A,/obj/machinery/door))
-					var/obj/machinery/door/D = A
-					if(D.density && !D.operating)
-						D.attack_hand(src)
-						if(D.density && !D.operating)
-							var/obj/item/weapon/crowbar/CB = new(src)//kek, but it works. Allows aliens to force open doors in unpowered environement thanks to their super strength claws.
-							CB.name = "claws"
-							CB.force = melee_damage_upper//if it's a windoor, we'll eventually break it down
-							D.attackby(CB,src)
-							qdel(CB)
-	return
+	for(var/dir in cardinal)
+		var/turf/T = get_step(src, dir)
+		if(istype(T, /turf/simulated/wall))
+			if(!locate(/obj/effect/alien/acid) in T)
+				if(acid >= 200)
+					new /obj/effect/alien/acid/hyper(T, T)
+					acid = max(0, acid-200)
+	..()
 
 
 
@@ -109,17 +94,6 @@ var/list/nest_locations = list()
 	for(var/obj/machinery/light/L in range(src,1))
 		if(L.light_range > 0)
 			L.attack_animal(src)
-
-	for(var/obj/machinery/door/D in range(src,1))
-		spawn()
-			if(D.density && !D.operating)
-				D.attack_hand(src)
-				if(D.density && !D.operating)
-					var/obj/item/weapon/crowbar/CB = new(src)//kek, but it works. Allows aliens to force open doors in unpowered environement thanks to their super strength claws.
-					CB.name = "claws"
-					CB.force = melee_damage_upper//if it's a windoor, we'll eventually break it down
-					D.attackby(CB,src)
-					qdel(CB)
 
 /mob/living/simple_animal/hostile/alien/CanAttack(var/atom/the_target)
 	if(isalien(the_target))
@@ -230,27 +204,6 @@ var/list/nest_locations = list()
 				DestroySurroundings()
 			last_loc = loc
 			Goto(dest,move_to_delay,0)
-
-
-/mob/living/simple_animal/hostile/alien/proc/CanOpenDoor(var/obj/machinery/door/D)
-	if(istype(D,/obj/machinery/door/poddoor))
-		return 0
-
-	// Don't fuck with doors that are doing something
-	if(D.operating>0)
-		return 0
-
-	// Don't open opened doors.
-	if(!D.density)
-		return 0
-
-	// Can't open bolted/welded doors
-	if(istype(D,/obj/machinery/door/airlock))
-		var/obj/machinery/door/airlock/A=D
-		if(A.locked || A.welded || A.jammed)
-			return 0
-
-	return 1
 
 /mob/living/simple_animal/hostile/alien/drone
 	name = "alien drone"

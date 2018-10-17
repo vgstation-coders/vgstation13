@@ -67,6 +67,9 @@
 	..()
 	defib = new /obj/item/weapon/melee/defibrillator(src)
 
+/obj/structure/closet/walllocker/defiblocker/take_contents() //we don't want these to hoover up items below them
+	return
+
 /obj/structure/closet/walllocker/defiblocker/attack_hand(mob/user as mob)
 	if(istype(user, /mob/living/silicon/ai))
 		return

@@ -121,7 +121,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	attached = null
 	..()								// then go ahead and delete the cable
 
-/obj/structure/cable/forceMove()
+/obj/structure/cable/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0)
 	.=..()
 
 	if(powernet)

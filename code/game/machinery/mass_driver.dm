@@ -9,6 +9,7 @@ var/list/mass_drivers = list()
 	idle_power_usage = 2
 	active_power_usage = 50
 	machine_flags = EMAGGABLE | MULTITOOL_MENU
+	layer = BELOW_TABLE_LAYER
 
 	var/power = 1.0
 	var/code = 1.0
@@ -135,14 +136,10 @@ var/list/mass_drivers = list()
 /obj/machinery/mass_driver_frame/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	switch(build)
 		if(0) // Loose frame
-			if(istype(W, /obj/item/weapon/weldingtool))
+			if(iswelder(W))
 				var/obj/item/weapon/weldingtool/WT = W
-				if(!WT.remove_fuel(0, user))
-					to_chat(user, "The welding tool must be on to complete this task.")
-					return 1
-				playsound(src, 'sound/items/Welder.ogg', 50, 1)
 				to_chat(user, "You begin to cut the frame apart...")
-				if(do_after(user, src, 30) && (build == 0))
+				if(WT.do_weld(user, src, 30) && (build == 0))
 					to_chat(user, "<span class='notice'>You detach the plasteel sheets from each others.</span>")
 					new /obj/item/stack/sheet/plasteel(get_turf(src),3)
 					qdel(src)
@@ -169,27 +166,19 @@ var/list/mass_drivers = list()
 					anchored = 0
 					to_chat(user, "<span class='notice'>You de-anchored \the [src]!</span>")
 				return 1
-			if(istype(W, /obj/item/weapon/weldingtool))
+			if(iswelder(W))
 				var/obj/item/weapon/weldingtool/WT = W
-				if(!WT.remove_fuel(0, user))
-					to_chat(user, "The welding tool must be on to complete this task.")
-					return 1
-				playsound(src, 'sound/items/Welder.ogg', 50, 1)
 				to_chat(user, "You begin to weld \the [src] to the floor...")
-				if(do_after(user, src, 40) && (build == 1))
+				if(WT.do_weld(user, src, 40) && (build == 1))
 					to_chat(user, "<span class='notice'>You welded \the [src] to the floor.</span>")
 					build++
 					update_icon()
 				return 1
 		if(2) // Welded to the floor
-			if(istype(W, /obj/item/weapon/weldingtool))
+			if(iswelder(W))
 				var/obj/item/weapon/weldingtool/WT = W
-				if(!WT.remove_fuel(0, user))
-					to_chat(user, "The welding tool must be on to complete this task.")
-					return 1
-				playsound(src, 'sound/items/Welder.ogg', 50, 1)
 				to_chat(user, "You begin to unweld \the [src] to the floor...")
-				if(do_after(user, src, 40) && (build == 2))
+				if(WT.do_weld(user, src, 40) && (build == 2))
 					to_chat(user, "<span class='notice'>You unwelded \the [src] to the floor.</span>")
 					build--
 					update_icon()

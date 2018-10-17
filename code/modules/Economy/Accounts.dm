@@ -64,8 +64,7 @@ var/global/datum/money_account/trader_account
 //the current ingame time (hh:mm) can be obtained by calling:
 //worldtime2text()
 
-/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db, var/wage_payout = 0)
-
+/proc/create_account(var/new_owner_name = "Default user", var/starting_funds = 0, var/obj/machinery/account_database/source_db, var/wage_payout = 0, var/security_pref = 1)
 
 	//create a new account
 	var/datum/money_account/M = new()
@@ -73,6 +72,7 @@ var/global/datum/money_account/trader_account
 	M.remote_access_pin = rand(1111, 9999)
 	M.money = starting_funds
 	M.wage_gain = wage_payout
+	M.security_level = security_pref
 
 	//create an entry in the account transaction log for when it was created
 	var/datum/transaction/T = new()
@@ -135,6 +135,10 @@ var/global/datum/money_account/trader_account
 							//2 - require card and manual login
 	var/virtual = 0
 	var/wage_gain = 0 // How much an account gains per 'wage' tick.
+	var/disabled = 0
+	// 0 Unlocked
+	// 1 User locked
+	// 2 Admin locked
 
 /datum/transaction
 	var/target_name = ""
@@ -161,8 +165,6 @@ var/global/datum/money_account/trader_account
 	var/activated = 1
 
 	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
-	ghost_read=0
-	ghost_write=0
 
 /obj/machinery/account_database/New(loc)
 	..(loc)
@@ -204,12 +206,12 @@ var/global/datum/money_account/trader_account
 	. = ..()
 	if(.)
 		return
-	if(ishuman(user) && !user.stat && get_dist(src,user) <= 1)
+	if(isAdminGhost(user) || (ishuman(user) && !user.stat && get_dist(src,user) <= 1))
 		var/dat = "<b>Accounts Database</b><br>"
 
 		dat += {"<i>[machine_id]</i><br>
 			Confirm identity: <a href='?src=\ref[src];choice=insert_card'>[held_card ? held_card : "-----"]</a><br>"}
-		if(access_level > 0)
+		if(access_level > 0 || isAdminGhost(user))
 
 			dat += {"<a href='?src=\ref[src];toggle_activated=1'>[activated ? "Disable" : "Enable"] remote access</a><br>
 				You may not edit accounts at this terminal, only create and view them.<br>"}
@@ -235,6 +237,18 @@ var/global/datum/money_account/trader_account
 						<b>Account holder:</b> [detailed_account_view.owner_name]<br>
 						<b>Account balance:</b> $[detailed_account_view.money]<br>
 						<b>Assigned wage payout:</b> $[detailed_account_view.wage_gain]<br>
+						<b>Account status:</b> "}
+					switch(detailed_account_view.disabled)
+						if(0)
+							dat += "Enabled"
+						if(1)
+							dat += "User Disabled"
+						if(2)
+							dat += "Administratively Disabled"
+						else
+							dat += "???ERROR???"
+					dat += {"<br>
+						<a href='?src=\ref[src];choice=toggle_account;'>Administratively [detailed_account_view.disabled ? "enable" : "disable"] account</a><br>
 						<table border=1 style='width:100%'>
 						<tr>
 						<td><b>Date</b></td>
@@ -286,7 +300,7 @@ var/global/datum/money_account/trader_account
 
 				if(access_cent_captain in idcard.access)
 					access_level = 2
-				else if(access_hop in idcard.access || access_captain in idcard.access)
+				else if((access_hop in idcard.access) || (access_captain in idcard.access))
 					access_level = 1
 
 /obj/machinery/account_database/emag(mob/user)
@@ -297,7 +311,7 @@ var/global/datum/money_account/trader_account
 			var/obj/item/weapon/card/id/C = held_card
 			if(access_cent_captain in C.access)
 				access_level = 2
-			else if(access_hop in C.access || access_captain in C.access)
+			else if((access_hop in C.access) || (access_captain in C.access))
 				access_level = 1
 		attack_hand(user)
 		to_chat(user, "<span class='notice'>You re-enable the security checks of [src].</span>")
@@ -354,7 +368,7 @@ var/global/datum/money_account/trader_account
 							if(access_level < 3)
 								if(access_cent_captain in C.access)
 									access_level = 2
-								else if(access_hop in C.access || access_captain in C.access)
+								else if((access_hop in C.access) || (access_captain in C.access))
 									access_level = 1
 			if("view_account_detail")
 				var/index = text2num(href_list["account_index"])
@@ -363,11 +377,14 @@ var/global/datum/money_account/trader_account
 			if("view_accounts_list")
 				detailed_account_view = null
 				creating_new_account = 0
+			if("toggle_account")
+				if(detailed_account_view)
+					detailed_account_view.disabled = detailed_account_view.disabled ? 0 : 2
 
 	src.attack_hand(usr)
 
 /obj/machinery/account_database/proc/charge_to_account(var/attempt_account_number, var/source_name, var/purpose, var/terminal_id, var/amount)
-	if(!activated)
+	if(!activated || !attempt_account_number)
 		return 0
 	for(var/datum/money_account/D in all_money_accounts)
 		if(D.account_number == attempt_account_number)
@@ -392,7 +409,7 @@ var/global/datum/money_account/trader_account
 
 //this returns the first account datum that matches the supplied accnum/pin combination, it returns null if the combination did not match any account
 /obj/machinery/account_database/proc/attempt_account_access(var/attempt_account_number, var/attempt_pin_number, var/security_level_passed = 0,var/pin_needed=1)
-	if(!activated)
+	if(!activated || !attempt_account_number)
 		return 0
 	for(var/datum/money_account/D in all_money_accounts)
 		if(D.account_number == attempt_account_number)
@@ -400,6 +417,9 @@ var/global/datum/money_account/trader_account
 				return D
 
 /obj/machinery/account_database/proc/get_account(var/account_number)
+	if(!account_number)
+		// Don't bother searching if there's no account number.
+		return null
 	for(var/datum/money_account/D in all_money_accounts)
 		if(D.account_number == account_number)
 			return D

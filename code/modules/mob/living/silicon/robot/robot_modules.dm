@@ -23,7 +23,7 @@
 
 	//Languages
 	var/list/languages = list()
-	var/list/added_languages //Bookkeeping
+	var/list/added_languages = list() //Bookkeeping
 
 	//Radio
 	var/radio_key = null
@@ -79,7 +79,6 @@
 
 /obj/item/weapon/robot_module/New(var/mob/living/silicon/robot/R)
 	..()
-	added_languages = list()
 	add_languages(R)
 	AddToProfiler()
 	if(default_modules)
@@ -109,13 +108,14 @@
 	if(R.camera)
 		for(var/network in networks)
 			if(!(network in R.camera.network))
-				R.camera.network.Add(network)
-				added_networks.Add(network)
+				R.camera.network += network
+				added_networks += network
 
 /obj/item/weapon/robot_module/proc/RemoveCameraNetworks(var/mob/living/silicon/robot/R)
 	if(R.camera)
-		R.camera.network.Cut(added_networks)
-		added_networks.Cut()
+		for(var/removed_network in added_networks)
+			R.camera.network -= removed_network
+	added_networks = null
 
 /obj/item/weapon/robot_module/proc/AddEncryptionKey(var/mob/living/silicon/robot/R)
 	if(!R.radio)
@@ -191,7 +191,7 @@
 		"Noble" = "Noble-STD",
 		"R34 - STR4a 'Durin'" = "durin"
 		)
-	respawnables = list (
+	respawnables = list(
 		/obj/item/stack/medical/bruise_pack,
 		/obj/item/stack/medical/ointment,
 		)
@@ -242,7 +242,7 @@
 		"R34 - MED6a 'Gibbs'" = "gibbs"
 		)
 	speed_modifier = CYBORG_MEDICAL_SPEED_MODIFIER
-	respawnables = list (
+	respawnables = list(
 		/obj/item/stack/medical/advanced/bruise_pack,
 		/obj/item/stack/medical/advanced/ointment,
 		/obj/item/stack/medical/splint
@@ -271,7 +271,7 @@
 	modules += new /obj/item/weapon/surgicaldrill(src)
 	modules += new /obj/item/weapon/revivalprod(src)
 	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
-	modules += new /obj/item/roller_holder(src)
+	modules += new /obj/item/robot_rack/bed(src)
 	var/obj/item/stack/medical/advanced/bruise_pack/B = new /obj/item/stack/medical/advanced/bruise_pack(src)
 	B.max_amount = MEDICAL_MAX_KIT
 	B.amount = MEDICAL_MAX_KIT
@@ -312,7 +312,7 @@
 		"R34 - ENG7a 'Conagher'" = "conagher"
 		)
 	speed_modifier = CYBORG_ENGINEERING_SPEED_MODIFIER
-	respawnables = list (/obj/item/stack/cable_coil)
+	respawnables = list(/obj/item/stack/cable_coil)
 	respawnables_max_amount = ENGINEERING_MAX_COIL
 
 /obj/item/weapon/robot_module/engineering/New()
@@ -485,7 +485,7 @@
 		"R34 - MIN2a 'Ishimura'" = "ishimura"
 		)
 	speed_modifier = CYBORG_SUPPLY_SPEED_MODIFIER
-	respawnables = list (/obj/item/stack/package_wrap)
+	respawnables = list(/obj/item/stack/package_wrap)
 	respawnables_max_amount = SUPPLY_MAX_WRAP
 
 /obj/item/weapon/robot_module/miner/New()
@@ -512,25 +512,63 @@
 	fix_modules()
 
 /obj/item/weapon/robot_module/syndicate
-	name = "syndicate robot module"
+	name = "syndicate-modded combat robot module"
 	module_holder = "malf"
-	quirk_flags = null
+	quirk_flags = MODULE_IS_DEFINITIVE
 	networks = list(CAMERANET_NUKE)
 	radio_key = /obj/item/device/encryptionkey/syndicate
-	sprites = list(
-		"Droid - 'Rottweiler'" = "rottweiler-combat"
-		)
 	speed_modifier = CYBORG_SYNDICATE_SPEED_MODIFIER
 
 /obj/item/weapon/robot_module/syndicate/New()
 	..()
 
-	modules += new /obj/item/weapon/crowbar(src)
-	modules += new /obj/item/weapon/melee/energy/sword(src)
-	modules += new /obj/item/weapon/gun/energy/pulse_rifle/destroyer(src)
 	modules += new /obj/item/weapon/card/emag(src)
+	modules += new /obj/item/weapon/crowbar(src)
+	fix_modules()
 
-	sensor_augs = list("Security", "Medical", "Mesons", "Thermal", "Light Amplification", "Disable")
+/obj/item/weapon/robot_module/syndicate/blitzkrieg
+	name = "syndicate blitzkrieg robot module"
+	sprites = list(
+		"Motile" = "motile-syndie"
+		)
+
+/obj/item/weapon/robot_module/syndicate/blitzkrieg/New()
+	..()
+
+	modules += new /obj/item/weapon/wrench(src) //This thing supposed to be a hacked and modded combat cyborg, is it really going to be stopped by a chair or table?
+	modules += new /obj/item/weapon/pinpointer/nukeop(src)
+	modules += new /obj/item/weapon/gun/projectile/automatic/c20r(src)
+	modules += new /obj/item/robot_rack/ammo/a12mm(src)
+	modules += new /obj/item/weapon/pickaxe/plasmacutter/heat_axe(src)
+
+	sensor_augs = list("Thermal", "Light Amplification", "Disable")
+
+	fix_modules()
+
+/obj/item/weapon/robot_module/syndicate/crisis
+	name = "syndicate crisis robot module"
+	sprites = list(
+		"Droid" = "droid-crisis"
+		)
+
+/obj/item/weapon/robot_module/syndicate/crisis/New()
+	..()
+
+	quirk_flags |= MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS
+
+	modules += new /obj/item/weapon/extinguisher/mini(src)
+	modules += new /obj/item/weapon/inflatable_dispenser(src)
+	modules += new /obj/item/device/chameleon(src)
+	modules += new /obj/item/weapon/gripper/chemistry(src)
+	modules += new /obj/item/device/healthanalyzer(src)
+	modules += new /obj/item/device/mass_spectrometer/adv(src)
+	modules += new /obj/item/weapon/reagent_containers/borghypo/crisis(src)
+	modules += new /obj/item/weapon/reagent_containers/borghypo/biofoam(src)
+	modules += new /obj/item/weapon/revivalprod(src)
+	modules += new /obj/item/weapon/switchtool/surgery(src)
+	modules += new /obj/item/robot_rack/bed/syndie(src)
+
+	sensor_augs = list("Thermal", "Medical", "Disable")
 
 	fix_modules()
 
@@ -571,6 +609,7 @@
 /obj/item/weapon/robot_module/tg17355
 	name = "tg17355 robot module"
 	module_holder = "brobot"
+	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_IS_DEFINITIVE
 	sprites = list(
 		"Peacekeeper" = "peaceborg",
 		"Omoikane" = "omoikane"

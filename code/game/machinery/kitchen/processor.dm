@@ -242,13 +242,18 @@
 		P.process(src.loc, O)
 		src.processing = 0
 	src.visible_message("<span class='notice'>[src] is done.</span>", \
-		"You hear [src] stop")
+		"You hear [src] stop.")
 
 /obj/machinery/processor/attack_ghost(mob/user as mob)
 	user.examination(src)
 
-/obj/machinery/processor/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if(user.incapacitated())
+/obj/machinery/processor/MouseDropTo(atom/movable/O, mob/user)
+	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc) || !user.Adjacent(O))
 		return
-
+	if(user.incapacitated() || user.lying)
+		return
+	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src))
+		return
+	if(!ishigherbeing(user) && !isrobot(user))
+		return
 	attackby(O,user)

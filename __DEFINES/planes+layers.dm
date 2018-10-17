@@ -123,6 +123,7 @@ What is the naming convention for planes or layers?
 	#define TABLE_LAYER				0.5
 	#define OPEN_DOOR_LAYER			1
 	#define BELOW_OBJ_LAYER			2
+	#define MACHINERY_LAYER			2.5
 	// OBJ_LAYER 	 				3
 	#define ABOVE_OBJ_LAYER			4
 	#define SIDE_WINDOW_LAYER		5
@@ -145,19 +146,15 @@ What is the naming convention for planes or layers?
 
 #define HUMAN_PLANE 			9			// For Humans that are standing up.
 
-// TODO: STOP HUD PLANES BEING CLIENT IMAGES, INSTEAD MAKING THEM CONTROLLED BY PLANESMASTERS
-
 #define VAMP_ANTAG_HUD_PLANE	10
 
-#define CULT_ANTAG_HUD_PLANE	11
+#define METABUDDY_HUD_PLANE	11
 
-#define SYNDIE_ANTAG_HUD_PLANE 	12
+#define ANTAG_HUD_PLANE		 	12
 
-#define REV_ANTAG_HUD_PLANE		13
+//#define THIS_SPACE_FOR_RENT!	13
 
-#define WIZ_ANTAG_HUD_PLANE 	14
-
-// SERIOUSLY THAT'D BE KINDA COOL - I THINK THAT THE UPDATE PROCS FOR THESE ARE PRETTY HAZARDLY CODED AND THIS'D BE SUPER SIMPLE, CLIENTSIDED AND EFFICIENT.
+//#define THIS_SPACE_FOR_RENT! 	14
 
 #define MOB_PLANE 				15			// For Mobs.
 
@@ -196,23 +193,29 @@ What is the naming convention for planes or layers?
 	#define GRAVITYGRID_LAYER 		8
 	#define SNOW_OVERLAY_LAYER		9
 
-#define LIGHTING_PLANE 			19
+#define GHOST_PLANE 			19			// Ghosts show up under lighting, HUD etc.
+
+	#define GHOST_LAYER 			1
+
+#define LIGHTING_PLANE 			20
 
 	#define LIGHTBULB_LAYER 		0
 	#define POINTER_LAYER 			1
-	#define GHOST_LAYER 			2
-	#define LIGHTING_LAYER 			3
-	#define ABOVE_LIGHTING_LAYER 	4
-	#define SUPERMATTER_WALL_LAYER 	5
-	#define SUPER_PORTAL_LAYER		6
-	#define NARSIE_GLOW 			7
+	#define LIGHTING_LAYER 			2
+	#define ABOVE_LIGHTING_LAYER 	3
+	#define SUPERMATTER_WALL_LAYER 	4
+	#define SUPER_PORTAL_LAYER		5
+	#define NARSIE_GLOW 			6
 
-#define ABOVE_LIGHTING_PLANE		20
+#define ABOVE_LIGHTING_PLANE		21
 	#define MAPPING_AREA_LAYER	999
 
-#define STATIC_PLANE 			21		// For AI's static.
+#define STATIC_PLANE 			22		// For AI's static.
 
-#define FULLSCREEN_PLANE		22		// for fullscreen overlays that do not cover the hud.
+	#define STATIC_LAYER			1
+	#define REACTIVATE_CAMERA_LAYER	2
+
+#define FULLSCREEN_PLANE		23		// for fullscreen overlays that do not cover the hud.
 
 	#define FULLSCREEN_LAYER	 	0
 	#define DAMAGE_HUD_LAYER 			1
@@ -221,12 +224,16 @@ What is the naming convention for planes or layers?
 	#define CRIT_LAYER 				4
 	#define HALLUCINATION_LAYER 	5
 
-#define HUD_PLANE 				23		// For the Head-Up Display
+#define HUD_PLANE 				24		// For the Head-Up Display
 
 	#define UNDER_HUD_LAYER 		0
 	#define HUD_BASE_LAYER		 	1
 	#define HUD_ITEM_LAYER 			2
 	#define HUD_ABOVE_ITEM_LAYER 	3
+	#define ABOVE_HUD_LAYER 		4
+
+#define ABOVE_HUD_PLANE 				25		// For being above the Head-Up Display
+
 
 /atom/proc/hud_layerise()
 	plane = HUD_PLANE
@@ -235,20 +242,6 @@ What is the naming convention for planes or layers?
 /atom/proc/reset_plane_and_layer()
 	plane = initial(plane)
 	layer = initial(layer)
-
-/obj/abstract/screen/plane_master/clickmaster
-	plane = BASE_PLANE
-	mouse_opacity = 0
-
-var/obj/abstract/screen/plane_master/clickmaster/clickmaster = new()
-
-/obj/abstract/screen/plane_master/clickmaster_dummy
-	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
-	alpha = 0
-	appearance_flags = 0
-	plane = BASE_PLANE
-
-var/obj/abstract/screen/plane_master/clickmaster_dummy/clickmaster_dummy = new()
 
 // returns a list with the objects sorted depending on their layer, with the lowest objects being the first in the list and the highest objects being last
 /proc/plane_layer_sort(var/list/to_sort)
@@ -263,3 +256,71 @@ var/obj/abstract/screen/plane_master/clickmaster_dummy/clickmaster_dummy = new()
 				break
 		sorted.Insert(compare_index+1, current_atom) // insert it just above the atom it was higher than - or at the bottom if it was higher than nothing.
 	return sorted // return the sorted list.
+
+
+/obj/abstract/screen/plane_master
+	appearance_flags = PLANE_MASTER
+	screen_loc = "CENTER,CENTER"
+	icon_state = "blank"
+	globalscreen = 1
+
+// CLICKMASTER
+// Singleton implementation
+// One planemaster for everybody, everybody always has it, they gain it during mob/login()
+/obj/abstract/screen/plane_master/clickmaster
+	plane = BASE_PLANE
+	mouse_opacity = 0
+
+var/obj/abstract/screen/plane_master/clickmaster/clickmaster = new()
+
+/obj/abstract/screen/plane_master/clickmaster_dummy
+	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
+	alpha = 0
+	appearance_flags = 0
+	plane = BASE_PLANE
+
+var/obj/abstract/screen/plane_master/clickmaster_dummy/clickmaster_dummy = new()
+
+// NOIR
+// Immutable, so we use a singleton implementation
+// (only one planemaster for everybody, they gain or lose the unique planemaster depending on whether they want the effect or not)
+/obj/abstract/screen/plane_master/noir_master
+	plane = NOIR_BLOOD_PLANE
+	color = list(1,0,0,0,
+				 0,1,0,0,
+				 0,0,1,0,
+				 0,0,0,1)
+	appearance_flags = NO_CLIENT_COLOR|PLANE_MASTER
+
+/obj/abstract/screen/plane_master/noir_dummy
+	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
+	alpha = 0
+	appearance_flags = 0
+	plane = NOIR_BLOOD_PLANE
+
+var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /obj/abstract/screen/plane_master/noir_dummy())
+
+// GHOST PLANEMASTER
+// One planemaster for each client, which they gain during mob/login()
+// By default their planemaster has no changes, if we modify a person's planemaster, it will affect only them
+/obj/abstract/screen/plane_master/ghost_planemaster
+	plane = GHOST_PLANE
+
+/obj/abstract/screen/plane_master/ghost_planemaster_dummy
+	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
+	alpha = 0
+	appearance_flags = 0
+	plane = GHOST_PLANE
+
+/client/proc/initialize_ghost_planemaster()
+	//We want to explicitly reset the planemaster's visibility on login() so if you toggle ghosts while dead you can still see cultghosts if revived etc.
+	if(ghost_planemaster)
+		screen -= ghost_planemaster
+		qdel(ghost_planemaster)
+	if(ghost_planemaster_dummy)
+		screen -= ghost_planemaster_dummy
+		qdel(ghost_planemaster_dummy)
+	ghost_planemaster = getFromPool(/obj/abstract/screen/plane_master/ghost_planemaster)
+	screen |= ghost_planemaster
+	ghost_planemaster_dummy = getFromPool(/obj/abstract/screen/plane_master/ghost_planemaster_dummy)
+	screen |= ghost_planemaster_dummy

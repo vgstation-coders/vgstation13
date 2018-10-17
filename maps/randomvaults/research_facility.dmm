@@ -250,6 +250,7 @@
 "eP" = (/obj/structure/flora/pottedplant,/obj/machinery/light,/turf/simulated/floor/wood,/area/vault/research)
 "eQ" = (/turf/simulated/floor{tag = "icon-warning"; icon_state = "warning"},/area/vault/research)
 "eR" = (/obj/structure/toilet{tag = "icon-toilet00 (NORTH)"; icon_state = "toilet00"; dir = 1},/turf/simulated/floor{icon_state = "freezerfloor"},/area/vault/research)
+"eS" = (/mob/living/simple_animal/hostile/humanoid/surgeon/boss,/turf/simulated/floor{icon_state = "white"},/area/vault/research)
 
 (1,1,1) = {"
 aaaaabacacacacacacacacacacacacacacacacacacacacacacacacacacacacacabaaaa
@@ -258,7 +259,7 @@ aaacacadaeafacagahaiajajacacakalamamamamananamaoacacapaqaqaqarasacacaa
 aaacacatamatacamauavawaxacayazazaAazazazazazaAazaBacaqaqaCaqaqaDacacaa
 aaacacaEayaFacaGaHatamaIacatacacacacacacacaJacacatacaKaLaqaqaqaMacacaa
 abacacacaNaOacacacaNacacacaPacaQaRaSacaTaUaVaWacaXaYaZaqaqaqaqbaacacaa
-acacbbambcaAazbdbebfbgazazbhbibjbkblbmbnbobpbqacamacaqaqbaaqbaaqacacaa
+acacbbambcaAazbdbebfbgazazbhbibjbkblbmbnboeSbqacamacaqaqbaaqbaaqacacaa
 acacbracacacbsacacacacacacacacacacacacbtbubvbwacbxacacacacacacacacacaa
 acacamacbybzbAbBbBacbCbDacbEbFacbGbDacbmbHbIbJacamambKamauambKamacacaa
 acacamacbLbMbNbNbOacbGbPacbQbRacbSbTacbUbVbWbXacacacacaIaIaIacamacacaa

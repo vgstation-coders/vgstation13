@@ -25,6 +25,7 @@
 /obj/item/clothing/mask/stone/equipped(mob/M as mob, wear_mask)
 	if(!istype(M, /mob/living/carbon/human)) //just in case a non-human somehow manages to equip it
 		forceMove(M.loc)
+	spikes()
 
 /obj/item/clothing/mask/stone/proc/spikes()
 	icon_state = "stone_spikes"
@@ -41,19 +42,14 @@
 					H.hallucination+=rand(100,500)
 					H.u_equip(src, 1)
 					return
-				if(!isvampire(H)) //They are not already a vampire
+				var/datum/role/vampire/V = isvampire(H)
+				if(!V) //They are not already a vampire
 					to_chat(H, "<span class='danger'>The mask's stone spikes pierce your skull and enter your brain!</span>")
-					M.make_new_vampire()
-					log_admin("[H] has become a vampire using a stone mask.")
-					spawn(10)	//Unlocking their abilities produces a lot of text, I want to give them a chance to see that they have objectives
-						H.mind.vampire.bloodtotal = blood_to_give
-						H.mind.vampire.bloodusable = blood_to_give
-						to_chat(H, "<span class='notice'>You have accumulated [H.mind.vampire.bloodtotal] [H.mind.vampire.bloodtotal > 1 ? "units" : "unit"] of blood and have [H.mind.vampire.bloodusable] left to use.</span>")
-						H.check_vampire_upgrade(H.mind)
-					if(!infinite)
-						crumble()
-						return
-
+					if (makeLateVampire(H, blood_to_give)) // If we could create them
+						log_admin("[H] has become a vampire using a stone mask.")
+						if (!infinite)
+							crumble()
+					return
 				else
 					to_chat(H, "<span class='notice'>The stone spikes pierce your skull, but nothing happens. Perhaps vampires cannot benefit further from use of the mask.</span>")
 	else
@@ -79,3 +75,21 @@
 
 /obj/item/clothing/mask/stone/infinite //this mask can be used any number of times
 	infinite = 1
+
+/proc/makeLateVampire(var/mob/living/carbon/human/H, var/blood_to_give)
+	var/datum/faction/vampire/Fac_vamp = new
+	var/datum/role/vampire/vamp =  new(H.mind, Fac_vamp, override = TRUE)
+	if (!vamp || !Fac_vamp)
+		return FALSE
+	ticker.mode.factions += Fac_vamp
+	vamp.OnPostSetup()
+	vamp.Greet(GREET_ROUNDSTART)
+	vamp.AnnounceObjectives()
+	update_faction_icons()
+	spawn(10)	//Unlocking their abilities produces a lot of text, I want to give them a chance to see that they have objectives
+		vamp.blood_total = blood_to_give
+		vamp.blood_usable = blood_to_give
+		to_chat(H, "<span class='notice'>You have accumulated [vamp.blood_total] [vamp.blood_total > 1 ? "units" : "unit"] of blood and have [vamp.blood_usable] left to use.</span>")
+		vamp.check_vampire_upgrade()
+		vamp.update_vamp_hud()
+	return TRUE

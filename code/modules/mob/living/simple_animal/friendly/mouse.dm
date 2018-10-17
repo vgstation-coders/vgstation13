@@ -2,8 +2,8 @@
 #define MOUSEFAT 600
 #define MOUSESTARVE 25
 #define MOUSEHUNGRY 100
-#define MOVECOST 1
-#define STANDCOST 0.5
+#define MOUSEMOVECOST 1
+#define MOUSESTANDCOST 0.5
 
 /mob/living/simple_animal/mouse
 	name = "mouse"
@@ -67,7 +67,7 @@
 			wander = 1
 			speak_chance = initial(speak_chance)
 		else if(prob(5))
-			emote("snuffles")
+			emote("me", EMOTE_AUDIBLE, "snuffles")
 
 	if(nutrition >= MOUSETFAT)
 		visible_message("<span class = 'warning'>\The [src] explodes!</span>")
@@ -132,14 +132,14 @@
 					spread_disease_to(src,M, "Airborne") //Spreads it to humans, mice, and monkeys
 
 
-		nutrition = max(0, nutrition - STANDCOST)
+		nutrition = max(0, nutrition - MOUSESTANDCOST)
 
 /mob/living/simple_animal/mouse/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	var/multiplier = 1
 	if(nutrition >= MOUSEFAT) //Fat mice lose nutrition faster through movement
 		multiplier = 2.5
-	nutrition = max(0, nutrition - MOVECOST*multiplier)
+	nutrition = max(0, nutrition - MOUSEMOVECOST*multiplier)
 
 /mob/living/simple_animal/mouse/New()
 	..()

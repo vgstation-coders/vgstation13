@@ -43,7 +43,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/maturation = 0              // Time taken before the plant is mature.
 	var/production = 0              // Time before harvesting can be undertaken again.
 	var/growth_stages = 6           // Number of stages the plant passes through before it is mature.
-	var/harvest_repeat = 0          // If 1, this plant will fruit repeatedly.
+	var/harvest_repeat = 0          // If 1, this plant will fruit repeatedly. If 2, the plant will self-harvest.
 	var/potency = 1                 // General purpose plant strength value.
 	var/spread = 0                  // 0 limits plant to tray, 1 = creepers, 2 = vines.
 	var/immutable = 0               // If set, plant will never mutate. If -1, plant is  highly mutable.
@@ -89,12 +89,12 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 	if(prob(5))
 		consume_gasses = list()
-		var/gas = pick("oxygen","nitrogen","plasma","carbon_dioxide")
+		var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 		consume_gasses[gas] = rand(3,9)
 
 	if(prob(5))
 		exude_gasses = list()
-		var/gas = pick("oxygen","nitrogen","plasma","carbon_dioxide")
+		var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 		exude_gasses[gas] = rand(3,9)
 
 	chems = list()
@@ -537,53 +537,61 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	else
 		to_chat(user, "You harvest from the [display_name].")
 
-		add_newline_to_controller()
+		generate_product(get_turf(user), yield_mod)
 
-		var/total_yield = 0
-		if(yield > -1)
-			if(isnull(yield_mod) || yield_mod < 0)
-				yield_mod = 1
-				total_yield = yield
-			else
-				total_yield = yield * yield_mod
-			total_yield = round(max(1,total_yield))
+/datum/seed/proc/generate_product(var/turf/T, yield_mod)
+	add_newline_to_controller()
 
-		currently_querying = list()
-		for(var/i = 0;i<total_yield;i++)
-			var/product_type = pick(products)
+	var/total_yield = 0
+	if(yield > -1)
+		if(isnull(yield_mod) || yield_mod < 0)
+			yield_mod = 1
+			total_yield = yield
+		else
+			total_yield = yield * yield_mod
+		total_yield = round(max(1,total_yield))
 
-			var/obj/item/product
+	currently_querying = list()
+	for(var/i = 0;i<total_yield;i++)
+		var/product_type = pick(products)
 
-			if(ispath(product_type, /obj/item/stack))
-				product = drop_stack(product_type, get_turf(user), 1, user)
-			else
-				product = new product_type(get_turf(user))
+		var/obj/item/product
 
-			score["stuffharvested"] += 1 //One point per product unit
+		if(ispath(product_type, /obj/item/stack))
+			product = drop_stack(product_type, T, 1, null)
+		else
+			product = new product_type(T)
 
-			if(mysterious)
-				product.name += "?"
-				product.desc += " On second thought, something about this one looks strange."
+		score["stuffharvested"] += 1 //One point per product unit
 
-			if(biolum)
-				if(biolum_colour)
-					product.light_color = biolum_colour
-				//product.set_light(1+round(potency/50))
-				product.set_light(2)
+		if(mysterious)
+			product.name += "?"
+			product.desc += " On second thought, something about this one looks strange."
 
-			//Handle spawning in living, mobile products (like dionaea).
-			if(istype(product,/mob/living))
+		if(biolum)
+			if(biolum_colour)
+				product.light_color = biolum_colour
+			//product.set_light(1+round(potency/50))
+			product.set_light(2)
 
-				product.visible_message("<span class='notice'>The pod disgorges [product]!</span>")
-				handle_living_product(product)
+		//Handle spawning in living, mobile products (like dionaea).
+		if(istype(product,/mob/living))
 
-			// Make sure the product is inheriting the correct seed type reference.
-			else if(istype(product,/obj/item/weapon/reagent_containers/food/snacks/grown))
-				var/obj/item/weapon/reagent_containers/food/snacks/grown/current_product = product
-				current_product.plantname = name
-			else if(istype(product,/obj/item/weapon/grown))
-				var/obj/item/weapon/grown/current_product = product
-				current_product.plantname = name
+			product.visible_message("<span class='notice'>The pod disgorges [product]!</span>")
+			handle_living_product(product)
+
+		// Make sure the product is inheriting the correct seed type reference.
+		else if(istype(product,/obj/item/weapon/reagent_containers/food/snacks/grown))
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/current_product = product
+			current_product.plantname = name
+		else if(istype(product,/obj/item/weapon/grown))
+			var/obj/item/weapon/grown/current_product = product
+			current_product.plantname = name
+
+//Harvest without concern for the user
+/datum/seed/proc/autoharvest(var/turf/T, var/yield_mod = 1)
+	if(T && (!isnull(products)) && products.len && (yield > 0))
+		generate_product(T, yield_mod)
 
 /datum/seed/proc/check_harvest(var/mob/user, var/obj/machinery/portable_atmospherics/hydroponics/tray)
 	var/success = 1
@@ -618,6 +626,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 										H.vessel.remove_reagent(BLOOD, drawing)
 										tray.reagents.add_reagent(BLOOD, drawing)
 	if(ligneous && success)
+		success = 0
 		if(istype(user, /mob/living/carbon))
 			var/mob/living/carbon/M = user
 			for(var/obj/item/I in M.held_items)

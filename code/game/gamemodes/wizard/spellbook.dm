@@ -75,7 +75,7 @@
 
 /obj/item/weapon/spellbook/proc/get_available_potions()
 	return available_potions
-
+/*
 /obj/item/weapon/spellbook/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/antag_spawner/contract))
 		var/obj/item/weapon/antag_spawner/contract/contract = O
@@ -86,13 +86,12 @@
 			src.uses += APPRENTICE_PRICE
 			qdel (O)
 			O = null
-
-
+*/
 #define buy_href_link(obj, price, txt) ((price > uses) ? "Price: [price] point\s" : "<a href='?src=\ref[src];spell=[obj];buy=1'>[txt]</a>")
 #define book_background_color "#F1F1D4"
 #define book_window_size "550x600"
 
-/obj/item/weapon/spellbook/attack_self(mob/user = usr)
+/obj/item/weapon/spellbook/attack_self(var/mob/user)
 	if(!user)
 		return
 
@@ -183,7 +182,7 @@
 	dat += "<hr><strong>ARTIFACTS AND BUNDLES<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
 
 	for(var/datum/spellbook_artifact/A in available_artifacts)
-		if(!A.can_buy())
+		if(!A.can_buy(user))
 			continue
 
 		var/artifact_name = A.name
@@ -314,7 +313,7 @@
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
 
 			if(istype(SA) && (SA in get_available_artifacts()))
-				if(SA.can_buy() && use(SA.price))
+				if(SA.can_buy(usr) && use(SA.price))
 					SA.purchased(usr)
 					feedback_add_details("wizard_spell_learned", SA.abbreviation)
 
@@ -804,8 +803,17 @@
 	desc = "This book seems like it moves away as you get closer to it."
 
 /obj/item/weapon/spellbook/oneuse/push/recoil(mob/living/carbon/user)
+	user.drop_item(src, force_drop = 1)	//no taking the transportation device with you
 	to_chat(user, "<span class = 'warning'>You are pushed away by \the [src]!</span>")
-	var/area/thearea = pick(areas)
+	var/area/thearea
+	var/area/prospective = pick(areas)
+	while(!thearea)
+		if(prospective.type != /area)
+			var/turf/T = pick(get_area_turfs(prospective.type))
+			if(T.z != 2)
+				thearea = prospective
+				break
+		prospective = pick(areas)
 	var/list/L = list()
 	for(var/turf/T in get_area_turfs(thearea.type))
 		if(!T.density)

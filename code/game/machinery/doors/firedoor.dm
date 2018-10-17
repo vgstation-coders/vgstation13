@@ -200,21 +200,28 @@ var/global/list/alert_overlays_global = list()
 		stat |= NOPOWER
 	return
 
-/obj/machinery/door/firedoor/attack_ai(mob/user)
-	if(isobserver(user) || user.stat)
+/obj/machinery/door/firedoor/attack_ai(mob/user,var/override=FALSE)
+	if(!isAdminGhost(user) && (isobserver(user) || user.stat))
 		return
 	spawn()
 		var/area/A = get_area(src)
 		ASSERT(istype(A)) // This worries me.
 		var/alarmed = A.doors_down || A.fire
 		var/old_density = src.density
-		if(old_density && alert("Override the [alarmed ? "alarming " : ""]firelock's safeties and open \the [src]?" ,,"Yes", "No") == "Yes")
-			open()
+		if(old_density)
+			if(override || alert("Override the [alarmed ? "alarming " : ""]firelock's safeties and open \the [src]?" ,,"Yes", "No") == "Yes")
+				open()
 		else if(!old_density)
 			close()
 		else
 			return
 		investigation_log(I_ATMOS, "[density ? "closed" : "opened"] [alarmed ? "while alarming" : ""] by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
+
+/obj/machinery/door/firedoor/CtrlClick(mob/user)
+	if(isAdminGhost(user))
+		attack_ai(user,TRUE)
+	else
+		..()
 
 /obj/machinery/door/firedoor/attack_hand(mob/user as mob)
 	return attackby(null, user)
@@ -222,11 +229,23 @@ var/global/list/alert_overlays_global = list()
 /obj/machinery/door/firedoor/attack_alien(mob/living/carbon/alien/humanoid/user)
 	force_open(user)
 
+/obj/machinery/door/firedoor/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		shake(1, 3)
+		playsound(user, 'sound/weapons/heavysmash.ogg', 75, 1)
+		to_chat(user, "<span class = 'warning'>You smash with all your strength but \the [src] doesn't budge. If only your arms were sharp enough to pry the door open.</span>")
+	if(istype(user,/mob/living/simple_animal/construct/wraith))
+		force_open(user)
+		return 1
+	return 0
+
 /obj/machinery/door/firedoor/attackby(obj/item/weapon/C as obj, mob/user as mob)
 	add_fingerprint(user)
 	if(operating)
 		return//Already doing something.
-	if(istype(C, /obj/item/weapon/weldingtool))
+	if(iswelder(C))
 		var/obj/item/weapon/weldingtool/W = C
 		if(W.remove_fuel(0, user))
 			blocked = !blocked

@@ -15,8 +15,8 @@
 /obj/item/device/radio/intercom/supports_holomap()
 	return TRUE
 
-/obj/item/device/radio/intercom/universe/New()
-	return ..()
+/obj/item/device/radio/intercom/universe/GhostsAlwaysHear()
+	return TRUE
 
 /obj/item/device/radio/intercom/initialize()
 	..()
@@ -137,11 +137,7 @@
 				return 1
 			if(iswelder(W))
 				var/obj/item/weapon/weldingtool/WT=W
-				playsound(src, 'sound/items/Welder.ogg', 50, 1)
-				if(!WT.remove_fuel(3, user))
-					to_chat(user, "<span class='warning'>You're out of welding fuel.</span>")
-					return 1
-				if(do_after(user, src, 10))
+				if(WT.do_weld(user, src, 10, 5))
 					to_chat(user, "<span class='notice'>You cut the intercom frame from the wall!</span>")
 					new /obj/item/mounted/frame/intercom(get_turf(src))
 					qdel(src)

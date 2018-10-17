@@ -15,14 +15,15 @@
 	var/defence_deflect = 35
 	wreckage = /obj/effect/decal/mecha_wreckage/durand
 
-/*
 /obj/mecha/combat/durand/New()
 	..()
+	intrinsic_spells = list(new /spell/mech/durand/defence_mode(src))
+/*
 	weapons += new /datum/mecha_weapon/ballistic/lmg(src)
 	weapons += new /datum/mecha_weapon/ballistic/scattershot(src)
 	selected_weapon = weapons[1]
-	return
 */
+	return
 
 /obj/mecha/combat/durand/relaymove(mob/user,direction)
 	if(defence)
@@ -30,52 +31,37 @@
 		return 0
 	. = ..()
 
-/obj/mecha/combat/durand/verb/defence_mode()
-	set category = "Exosuit Interface"
-	set name = "Toggle defence mode"
-	set src = usr.loc
-	set popup_menu = 0
-	if(usr!=src.occupant)
-		return
-	defence = !defence
-	if(defence)
-		icon_state = 0
-		if(!istype(src,/obj/mecha/combat/durand/old))
-			flick("durand-lockdown-a",src)
-			icon_state = "durand-lockdown"
-		deflect_chance = defence_deflect
-		src.occupant_message("<font color='blue'>You enable [src] defence mode.</font>")
-		playsound(src, 'sound/mecha/mechlockdown.ogg', 60, 1)
-	else
-		deflect_chance = initial(deflect_chance)
-		if(!istype(src,/obj/mecha/combat/durand/old))
-			icon_state = reset_icon()
-		src.occupant_message("<font color='red'>You disable [src] defence mode.</font>")
-	src.log_message("Toggled defence mode.")
-	return
+/spell/mech/durand/defence_mode
+	name = "Defence Mode"
+	desc = "Reduce incoming damage in exchange for preventing movement."
+	hud_state = "durand-lockdown"
+	override_icon = 'icons/mecha/mecha.dmi'
+	charge_max = 10
+	charge_counter = 10
 
+/spell/mech/durand/defence_mode/cast(list/targets, mob/user)
+	var/obj/mecha/combat/durand/Durand = linked_mech
+	Durand.defence = !Durand.defence
+	if(Durand.defence)
+		Durand.icon_state = 0
+		if(!istype(Durand,/obj/mecha/combat/durand/old))
+			flick("durand-lockdown-a",Durand)
+			Durand.icon_state = "durand-lockdown"
+		Durand.deflect_chance = Durand.defence_deflect
+		Durand.occupant_message("<font color='blue'>You enable [Durand] defence mode.</font>")
+		playsound(src.linked_mech, 'sound/mecha/mechlockdown.ogg', 60, 1)
+	else
+		Durand.deflect_chance = initial(Durand.deflect_chance)
+		if(!istype(Durand,/obj/mecha/combat/durand/old))
+			Durand.icon_state = Durand.reset_icon()
+		Durand.occupant_message("<font color='red'>You disable [Durand] defence mode.</font>")
+	Durand.log_message("Toggled defence mode.")
+	return
 
 /obj/mecha/combat/durand/get_stats_part()
 	var/output = ..()
 	output += "<b>Defence mode: [defence?"on":"off"]</b>"
 	return output
-
-/obj/mecha/combat/durand/get_commands()
-	var/output = {"<div class='wr'>
-						<div class='header'>Special</div>
-						<div class='links'>
-						<a href='?src=\ref[src];toggle_defence_mode=1'>Toggle defence mode</a>
-						</div>
-						</div>
-						"}
-	output += ..()
-	return output
-
-/obj/mecha/combat/durand/Topic(href, href_list)
-	..()
-	if (href_list["toggle_defence_mode"])
-		src.defence_mode()
-	return
 
 /obj/mecha/combat/durand/old
 	desc = "A retired, third-generation combat exosuit utilized by the Nanotrasen corporation. Originally developed to combat hostile alien lifeforms."

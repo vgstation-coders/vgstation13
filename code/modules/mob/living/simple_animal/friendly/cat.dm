@@ -92,7 +92,7 @@
 	if(!stat && !resting && !locked_to)
 		turns_since_scan++
 		if(turns_since_scan > 5)
-			walk_to(src,0)
+			start_walk_to(0)
 			turns_since_scan = 0
 			if((movement_target) && !(isturf(movement_target.loc) || ishuman(movement_target.loc) ))
 				movement_target = null
@@ -106,7 +106,7 @@
 						break
 			if(movement_target)
 				stop_automated_movement = 1
-				walk_to(src,movement_target,0,3)
+				start_walk_to(movement_target,0,3)
 
 
 /mob/living/simple_animal/cat/snek

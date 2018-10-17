@@ -47,3 +47,4 @@
 	new /obj/item/clothing/mask/gas(src)
 	new /obj/item/device/flash(src)
 	new /obj/item/weapon/switchtool/holo(src)
+	new /obj/item/weapon/card/debit/preferred/department(src, "Science")

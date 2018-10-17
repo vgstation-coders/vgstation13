@@ -12,7 +12,8 @@
 		/obj/item/weapon/gun/mahoguny,
 		/obj/item/weapon/gun/grenadelauncher,
 		/obj/item/weapon/bikehorn/baton,
-		/obj/item/weapon/blunderbuss
+		/obj/item/weapon/blunderbuss,
+		/obj/item/weapon/legcuffs/bolas,
 		)
 	body_parts_covered = FULL_TORSO
 	flags = FPRINT
@@ -67,7 +68,7 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 40, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
-	goliath_reinforce = TRUE
+	clothing_flags = GOLIATHREINFORCE
 
 
 /obj/item/clothing/suit/armor/knight/yellow

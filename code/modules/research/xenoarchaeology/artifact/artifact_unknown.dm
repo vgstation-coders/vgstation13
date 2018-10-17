@@ -1,8 +1,3 @@
-
-#define EFFECT_TOUCH 0
-#define EFFECT_AURA 1
-#define EFFECT_PULSE 2
-
 /obj/machinery/artifact
 	name = "alien artifact"
 	desc = "A large alien device."
@@ -50,7 +45,7 @@
 			spawn(1)
 				if(secondary_effect)	//incase admin tools or something deleted the secondary
 					src.investigation_log(I_ARTIFACT, "|| spawned with a secondary effect [secondary_effect.artifact_id]: [secondary_effect] || range: [secondary_effect.effectrange] || charge time: [secondary_effect.chargelevelmax] || trigger: [secondary_effect.trigger].")
-					if(prob(75) && secondary_effect.effect != EFFECT_TOUCH)
+					if(prob(75) && secondary_effect.effect != ARTIFACT_EFFECT_TOUCH)
 						src.investigation_log(I_ARTIFACT, "|| secondary effect [secondary_effect.artifact_id] starts triggered by default.")
 						secondary_effect.ToggleActivate(2)
 
