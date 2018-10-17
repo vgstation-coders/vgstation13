@@ -194,12 +194,17 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			return 0
 		user.remove_spell_channeling() //In case we're swapping from an older spell to this new one
 		user.spell_channeling = user.on_uattack.Add(src, "channeled_spell")
+		if(spell_flags & CAN_CHANNEL_RESTRAINED)
+			user.spell_channeling = user.on_ruattack.Add(src, "channeled_spell")
 		connected_button.name = "(Ready) [name]"
 		currently_channeled = 1
 		connected_button.add_channeling()
 	else
 		var/event/E = user.on_uattack
 		E.handlers.Remove(user.spell_channeling)
+		var/event/ER = user.on_ruattack
+		if(ER)
+			ER.handlers.Remove(user.spell_channeling)
 		user.spell_channeling = null
 		currently_channeled = 0
 		connected_button.remove_channeling()
