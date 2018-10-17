@@ -238,10 +238,10 @@
 		if(E.len > 1)
 			var/extracted_image
 			var/choice_icon = E[2]
-			if(isimage(choice_icon)) //prefab image
-				extracted_image = extract_image(choice_icon)
-			else //a string representing an icon_state from our icon_file
+			if(istext(choice_icon)) //a string representing an icon_state from our icon_file
 				extracted_image = extract_image(image(icon = icon_file, icon_state = choice_icon))
+			else
+				extracted_image = extract_image(choice_icon)
 			if(extracted_image)
 				choices_icons[id] = extracted_image
 
