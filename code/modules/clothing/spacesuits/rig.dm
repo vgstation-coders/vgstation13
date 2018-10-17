@@ -547,7 +547,7 @@
 	heat_conductivity = 0
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
-	eyeprot = 0
+	eyeprot = 1
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/suit/space/ghettorig
