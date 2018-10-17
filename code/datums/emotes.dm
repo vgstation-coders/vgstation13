@@ -56,7 +56,7 @@
 			continue
 		var/T = get_turf(user)
 		if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(T, null)))
-			M.show_message(msg)
+			M.show_message("<a href='?src=\ref[M];follow=\ref[user]'>(Follow)</a> " + msg)
 
 	if (emote_type == EMOTE_VISIBLE)
 		user.visible_message(msg)
