@@ -8,35 +8,35 @@ import os
 import travis_utils
 
 MAP_INCLUDE_RE = re.compile(r"#include \"maps\\[a-zA-Z0-9][a-zA-Z0-9_]*\.dm\"")
+dme = "vgstation13.dme"
+
+def append_unit_tests_macros_to_compile_options_file():
+    with open("__DEFINES/__compile_options.dm", "a") as file:
+        file.write("#define UNIT_TESTS_ENABLED 1\n")
+        file.write("#define UNIT_TESTS_AUTORUN 1\n")
+        file.write("#define UNIT_TESTS_STOP_SERVER_WHEN_DONE 1\n")
+        file.write("#define MAP_OVERRIDE 6\n")
+        file.write("#define GAMETICKER_LOBBY_DURATION 2 SECONDS\n")
+
+def append_maps_to_dme(maps):
+    with open(dme, "r+") as f:
+        content = f.read()
+        includes = ""
+        for arg in maps:
+            includes += "#include \"maps\\\\{}.dm\"\n".format(arg)
+        content = MAP_INCLUDE_RE.sub(includes, content, count=1)
+        f.seek(0, 0)
+        f.write(content)
 
 def main():
-    dme = os.environ.get("PROJECT_NAME") # The DME file to compile.
-    if not dme:
-        print("No project name specified.")
-        exit(1)
-    dme += ".dme"
     mapfiles = os.environ.get("ALL_MAPS") # Extra map files to replace the regular map file in the DME with.
     build_tests = os.environ.get("DM_UNIT_TESTS") == "1" # Whether to build unit tests or not.
 
-    if build_tests is True and mapfiles is not None:
-        print("Cannot run tests AND change maps at the same time, overriding ALL_MAPS.") # Because BYOND will cry "corrupt map data in world file"
-        mapfiles = "test_tiny"
-
     if build_tests is True:
-        with open(dme, "r+") as f:
-            content = f.read()
-            f.seek(0, 0)
-            f.write("#define UNIT_TESTS\n" + content)
+        append_unit_tests_macros_to_compile_options_file()
 
-    if mapfiles is not None:
-        with open(dme, "r+") as f:
-            content = f.read()
-            includes = ""
-            for arg in mapfiles.split():
-                includes += "#include \"maps\\\\{}.dm\"\n".format(arg)
-            content = MAP_INCLUDE_RE.sub(includes, content, count=1)
-            f.seek(0, 0)
-            f.write(content)
+    elif mapfiles is not None:
+        append_maps_to_dme(mapfiles.split())
 
     compiler = "DreamMaker"
     if sys.platform == "win32" or sys.platform == "cygwin":

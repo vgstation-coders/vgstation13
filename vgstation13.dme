@@ -10,6 +10,7 @@
 #define DEBUG
 // END_PREFERENCES
 // BEGIN_INCLUDE
+#include "__DEFINES\__compile_options.dm"
 #include "__DEFINES\_macros.dm"
 #include "__DEFINES\accessories.dm"
 #include "__DEFINES\archaeo_defines.dm"
@@ -2332,7 +2333,7 @@
 #include "code\modules\telesci\telepad.dm"
 #include "code\modules\telesci\telesci_computer.dm"
 #include "code\modules\tooltip\tooltip.dm"
-#include "code\modules\unit_tests\_unit_tests.dm"
+#include "code\modules\unit_tests\__unit_test_includes.dm"
 #include "code\modules\virus2\analyser.dm"
 #include "code\modules\virus2\antibodies.dm"
 #include "code\modules\virus2\centrifuge.dm"
@@ -2413,6 +2414,7 @@
 #include "interface\web\info.dms"
 #include "interface\web\interface.dms"
 #include "maprendering\maprendering.dm"
+#include "maps\_map_override.dm"
 #include "maps\_map.dm"
 #include "maps\tgstation.dm"
 #include "maps\defficiency\areas.dm"

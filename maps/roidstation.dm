@@ -1,4 +1,4 @@
-
+#ifndef MAP_OVERRIDE
 //**************************************************************
 // Map Datum -- Roidstation
 //**************************************************************
@@ -37,3 +37,4 @@
 #include "roidstation/areas.dm"
 #include "roidstation/pipes.dm" // More atmos layered pipes
 #include "roidstation.dmm"
+#endif

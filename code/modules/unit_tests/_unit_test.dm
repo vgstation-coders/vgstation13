@@ -1,17 +1,15 @@
 /*
 Usage:
-	Override /run() to run your test code.
+	Override /start() to run your test code.
 	Call fail() to fail the test (You should specify a reason).
 	Use /New() and Destroy() for setup/teardown, respectively.
 	You can use the run_loc_bottom_left and run_loc_top_right if your tests require turfs.
 */
 
 var/datum/unit_test/current_test
-var/failed_any_test = FALSE
+var/unit_test_report = "Unit tests haven't been run yet."
 
 /datum/unit_test
-	var/list/procs_tested
-
 	//usable vars
 	var/turf/run_loc_bottom_left
 	var/turf/run_loc_top_right
@@ -46,6 +44,8 @@ var/failed_any_test = FALSE
 /proc/run_unit_tests()
 	CHECK_TICK
 
+	var/list/log_entries = list()
+
 	for(var/I in subtypesof(/datum/unit_test))
 		var/datum/unit_test/test = new I
 
@@ -56,7 +56,6 @@ var/failed_any_test = FALSE
 
 		duration = world.timeofday - duration
 		global.current_test = null
-		global.failed_any_test |= !test.succeeded
 
 		var/list/log_entry = list("UNIT TEST [test.succeeded ? "PASS" : "FAIL"]: [I] [duration / 10]s")
 		var/list/fail_reasons = test.fail_reasons
@@ -65,10 +64,25 @@ var/failed_any_test = FALSE
 
 		for(var/J in 1 to length(fail_reasons))
 			log_entry.Add("\tREASON #[J]: [fail_reasons[J]]")
+
+		log_entries += log_entry
 		world.log << log_entry.Join("\n")
 
 		CHECK_TICK
 
+	global.unit_test_report = "<pre>[html_encode(log_entries.Join("\n"))]</pre>"
+
+	#if UNIT_TESTS_STOP_SERVER_WHEN_DONE == 1
 	del(world)
+	#endif
+
+/client/proc/unit_test_panel()
+	set category = "Debug"
+	set name = "Unit test report"
+	set desc = "Shows the log of unit tests."
+
+	var/datum/browser/popup = new(usr, "\ref[global.unit_test_report]", "Unit test report", 800, 800)
+	popup.set_content(global.unit_test_report)
+	popup.open()
 
 #define assert_eq(a, b) (a == b || (fail("[__FILE__]:[__LINE__]: assert_eq failed. Expected [b], got [a].")))
