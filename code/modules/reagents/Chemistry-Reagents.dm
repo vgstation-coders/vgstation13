@@ -7109,3 +7109,39 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(T)
 		T.color = pick(random_color_list)
 	..()
+
+/datum/reagent/degeneratecalcium
+	name = "Degenerate calcium"
+	id = DEGENERATECALCIUM
+	description = "A highly radical chemical derived from calcium that aggressively attempts to regenerate osseus tissues it comes in contact with. In the presence of micro-fractures caused by extensive brute damage it rapidly heals the surrounding tissues, but in healthy limbs the new tissue quickly causes the osseal structure to lose shape and shatter rather graphically."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#ccffb3" //rgb: 204, 255, 179
+	density = 3.9
+	specheatcap = 128.12
+	custom_metabolism = 0.1
+
+/datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.anatomy_flags & NO_BONES)
+			return
+
+		//if you have 30 or more brute damage: rapidly heals, makes your bones stronk
+		//if you have less than 30 brute damage: rapidly heals, breaks all your bones one by one
+		//(the rapid healing is likely to land you in that "less than 30" club real quick if you're not careful...)
+		H.heal_organ_damage(3 * REM, 0)
+
+		if(H.getBruteLoss() >= 30)
+			for(var/datum/organ/external/E in H.organs) //"organs" list only contains external organs aka limbs
+				if((E.status & ORGAN_BROKEN) || (E.min_broken_damage >= E.max_damage))
+					continue
+				E.min_broken_damage += rand(4,8) * REM
+				if(E.min_broken_damage >= E.max_damage)
+					E.min_broken_damage = E.max_damage
+					to_chat(H, "Your [E.display_name] feels [pick("sturdy", "hardy")] as it can be!") //todo unfunny skeleton jokes (someone will probably comment them in the PR)
+		else if(prob((100 - H.getBruteLoss() * 100 / 30)/3)) //33% at 0 damage, 16.6% at 15 damage, 1.1% at 29 damage etc
+			var/datum/organ/external/E = pick(H.organs) //"organs" list only contains external organs aka limbs
+			E.fracture()
