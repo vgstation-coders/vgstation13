@@ -162,6 +162,14 @@
 			if(src.allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["killbot"])
 				if(R)
+					if(istype(usr, /mob/living/silicon/ai))
+						if (R.connected_ai != usr)
+							return
+					if(istype(usr, /mob/living/silicon/robot))
+						if (R != usr)
+							return
+					if(R.scrambledcodes)
+						return
 					var/choice = input("Are you certain you wish to detonate [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R && istype(R))
@@ -174,6 +182,14 @@
 			if(src.allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["lockbot"])
 				if(R && istype(R))
+					if(istype(usr, /mob/living/silicon/ai))
+						if (R.connected_ai != usr)
+							return
+					if(istype(usr, /mob/living/silicon/robot))
+						if (R != usr)
+							return
+					if(R.scrambledcodes)
+						return
 					var/choice = input("Are you certain you wish to [R.modulelock ? "module-unlock" : "module-lock"] [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R && istype(R))
@@ -191,6 +207,14 @@
 			if(src.allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["stopbot"])
 				if(R && istype(R)) // Extra sancheck because of input var references
+					if(istype(usr, /mob/living/silicon/ai))
+						if (R.connected_ai != usr)
+							return
+					if(istype(usr, /mob/living/silicon/robot))
+						if (R != usr)
+							return
+					if(R.scrambledcodes)
+						return
 					var/choice = input("Are you certain you wish to [R.canmove ? "lock down" : "release"] [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R && istype(R))
@@ -212,7 +236,14 @@
 		else if (href_list["magbot"])
 			if(src.allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["magbot"])
-
+				if(istype(usr, /mob/living/silicon/ai))
+					if (R.connected_ai != usr)
+						return
+				if(istype(usr, /mob/living/silicon/robot))
+					if (R != usr)
+						return
+				if(R.scrambledcodes)
+					return
 				// whatever weirdness this is supposed to be, but that is how the href gets added, so here it is again
 				if(istype(R) && istype(usr, /mob/living/silicon) && usr.mind.special_role && (usr.mind.original == usr) && R.emagged != 1)
 					var/choice = input("Are you certain you wish to hack [R.name]?") in list("Confirm", "Abort")
