@@ -3411,7 +3411,7 @@
 		if(0.1 to 5)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
-				if(H.species.name != "Diona")
+				if(H.species.name == "Diona")
 					return
 				for(var/datum/organ/external/E in H.organs)
 					for(var/datum/wound/internal_bleeding/W in E.wounds)
@@ -3448,7 +3448,7 @@
 		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
-				if(H.species.name != "Diona")
+				if(H.species.name == "Diona")
 					return
 			if(M.getOxyLoss()>0 || M.getBruteLoss()>0 || M.getToxLoss()>0 || M.getFireLoss()>0 || M.getCloneLoss()>0)
 				if(holder.has_reagent("mednanobots"))
