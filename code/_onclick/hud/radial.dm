@@ -291,8 +291,6 @@
 		stoplag(1)
 
 /datum/radial_menu/Destroy()
-	if(current_user)
-		current_user.radial_menus -= anchor
 	Reset()
 	hide()
 	if(istype(custom_check))
@@ -325,4 +323,5 @@
 	if(!menu.gcDestroyed)
 		var/answer = menu.selected_choice
 		qdel(menu)
+		current_user.radial_menus -= anchor
 		return answer
