@@ -65,7 +65,7 @@
 	for(var/mob/M in dead_mob_list)
 		if (!M.client)
 			continue //skip leavers
-		if(M.client.prefs && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(src,null)))
+		if(isobserver(M) && M.client.prefs && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(src,null)))
 			M.show_message("<a href='?src=\ref[M];follow=\ref[user]'>(Follow)</a> " + msg)
 
 	if (emote_type == EMOTE_VISIBLE)
