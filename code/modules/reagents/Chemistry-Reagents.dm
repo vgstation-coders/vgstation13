@@ -3416,14 +3416,14 @@
 				for(var/datum/organ/external/E in H.organs)
 					for(var/datum/wound/internal_bleeding/W in E.wounds)
 						W.heal_damage(0.8, TRUE)
-						holder.remove_reagent(MEDNANOBOTS, 10/40)
+						holder.remove_reagent(MEDNANOBOTS, 1/4)
 			if(M.getOxyLoss()>0 || M.getBruteLoss(ignore_inorganic = TRUE)>0 || M.getToxLoss()>0 || M.getFireLoss(ignore_inorganic = TRUE)>0 || M.getCloneLoss()>0)
 				if(holder.has_reagent("mednanobots"))
 					M.adjustOxyLoss(-5)
 					M.heal_organ_damage(5, 5)
 					M.adjustToxLoss(-5)
 					M.adjustCloneLoss(-5)
-					holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
+					holder.remove_reagent("mednanobots", 1/4)  //This line of code will remove 1/4 of 1u whenever the nanobots heal any of the 5 different damage types along with internal bleeding. In short whenever you are healed it will remove 0.25u making each unit capable of healing a maximum of 20 per damage type.
 			if(percent_machine>5)
 				if(holder.has_reagent("mednanobots"))
 					percent_machine-=1
