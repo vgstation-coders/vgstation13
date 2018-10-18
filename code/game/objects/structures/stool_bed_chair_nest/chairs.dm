@@ -624,7 +624,7 @@
 				return
 			var/obj/structure/bed/chair/C = new (loc)
 			C.dir = dir
-			drop_stack(/obj/item/stack/sheet/plasteel, loc, 5, user)
+			drop_stack(/obj/item/stack/sheet/plasteel, loc, 2, user)
 			user.visible_message(\
 				"<span class='warning'>\The [src] has been welded apart, leaving \a [C] behind.</span>",\
 				"You finish removing the seat components from the chair frame.",\
