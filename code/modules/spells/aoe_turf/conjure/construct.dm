@@ -23,13 +23,23 @@
 	summon_type = list(/obj/structure/constructshell/cult)
 	hud_state = "const_shell"
 	override_base = "cult"
+	cast_delay = 40
+
+/spell/aoe_turf/conjure/construct/lesser/alt
+	summon_type = list(/obj/structure/constructshell/cult/alt)
+	hud_state = "const_shell_alt"
+
+/spell/aoe_turf/conjure/construct/lesser/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
+	delay_animation = new /obj/effect/artificer_underlay(get_turf(user))
+	playsound(user, 'sound/items/welder.ogg', 100, 1)
+	..()
 
 /spell/aoe_turf/conjure/floor
 	name = "Floor Construction"
 	desc = "This spell constructs a cult floor"
 	user_type = USER_TYPE_CULT
 
-	charge_max = 20
+	charge_max = 50
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
 	invocation = "none"
 	invocation_type = SpI_NONE
@@ -42,6 +52,18 @@
 
 /spell/aoe_turf/conjure/floor/choose_targets(mob/user = usr)
 	return list(get_turf(user))
+
+/spell/aoe_turf/conjure/floor/cast(list/targets, mob/user)//if we convert a floor instead of building one from scratch, the charge time for the next cast is lowered.
+	var/turf/spawn_place = pick(targets)
+	var/convert_floor = 0
+	if (istype(spawn_place,/turf/simulated/floor))
+		convert_wall = 1
+	. = ..()
+	if (!.)
+		if (convert_floor)
+			charge_max = 10
+		else
+			charge_max = 50
 
 /spell/aoe_turf/conjure/floor/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
 	animation.icon_state = "cultfloor"
@@ -69,6 +91,18 @@
 
 /spell/aoe_turf/conjure/wall/choose_targets(mob/user = usr)
 	return list(get_turf(user))
+
+/spell/aoe_turf/conjure/wall/cast(list/targets, mob/user)//if we convert a wall instead of building one from scratch, the charge time for the next cast is lowered.
+	var/turf/spawn_place = pick(targets)
+	var/convert_wall = 0
+	if (istype(spawn_place,/turf/simulated/wall))
+		convert_wall = 1
+	. = ..()
+	if (!.)
+		if (convert_wall)
+			charge_max = 20
+		else
+			charge_max = 100
 
 /spell/aoe_turf/conjure/wall/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
 	animation.icon_state = "cultwall"
@@ -103,11 +137,17 @@
 	invocation = "none"
 	invocation_type = SpI_NONE
 	range = 0
+	cast_delay = 30
 
 	summon_type = list(/obj/item/device/soulstone)
 
 	hud_state = "const_stone"
 	override_base = "cult"
+
+/spell/aoe_turf/conjure/soulstone/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
+	delay_animation = new /obj/effect/artificer_underlay(get_turf(user))
+	playsound(user, 'sound/items/welder.ogg', 100, 1)
+	..()
 
 /spell/aoe_turf/conjure/pylon
 	name = "Red Pylon"
@@ -119,12 +159,18 @@
 	invocation = "none"
 	invocation_type = SpI_NONE
 	range = 0
+	cast_delay = 20
 
 	summon_type = list(/obj/structure/cult_legacy/pylon)
 
 	cast_sound = 'sound/items/welder.ogg'
 	hud_state = "const_pylon"
 	override_base = "cult"
+
+/spell/aoe_turf/conjure/pylon/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
+	delay_animation = new /obj/effect/artificer_underlay(get_turf(user))
+	playsound(user, 'sound/items/welder.ogg', 100, 1)
+	..()
 
 /spell/aoe_turf/conjure/pylon/cast(list/targets)
 	..()
@@ -296,6 +342,7 @@
 	invocation = "none"
 	invocation_type = SpI_NONE
 	range = 0
+	cast_delay = 60
 	summon_type = list(/mob/living/simple_animal/hostile/hex)
 
 	override_base = "cult"
@@ -304,6 +351,11 @@
 
 /spell/aoe_turf/conjure/hex/choose_targets(mob/user = usr)
 	return list(get_turf(user))
+
+/spell/aoe_turf/conjure/hex/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
+	delay_animation = new /obj/effect/artificer_underlay(get_turf(user))
+	playsound(user, 'sound/items/welder.ogg', 100, 1)
+	..()
 
 /spell/aoe_turf/conjure/hex/before_channel(var/mob/user)
 	var/mob/living/simple_animal/construct/builder/perfect/artificer = user
@@ -326,6 +378,7 @@
 	invocation = "none"
 	invocation_type = SpI_NONE
 	range = 0
+	cast_delay = 60
 	summon_type = list(/obj/structure/cult/altar)
 
 	override_base = "cult"
@@ -334,6 +387,12 @@
 
 /spell/aoe_turf/conjure/struct/choose_targets(mob/user = usr)
 	return list(get_turf(user))
+
+
+/spell/aoe_turf/conjure/struct/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
+	delay_animation = new /obj/effect/artificer_underlay(get_turf(user))
+	playsound(user, 'sound/items/welder.ogg', 100, 1)
+	..()
 
 /spell/aoe_turf/conjure/struct/before_channel(var/mob/user)
 	if (locate(/obj/structure/cult) in range(user,1))
@@ -358,3 +417,26 @@
 		if("Forge")
 			summon_type = list(/obj/structure/cult/forge)
 	return 0
+
+/obj/effect/artificer_underlay
+	icon = 'icons/obj/cult.dmi'
+	icon_state = "build"
+	mouse_opacity = 0
+	density = 0
+	anchored = 1
+	mouse_opacity = 0
+
+/obj/effect/artificer_underlay/cultify()
+	return
+
+/obj/effect/artificer_underlay/ex_act()
+	return
+
+/obj/effect/artificer_underlay/emp_act()
+	return
+
+/obj/effect/artificer_underlay/blob_act()
+	return
+
+/obj/effect/artificer_underlay/singularity_act()
+	return

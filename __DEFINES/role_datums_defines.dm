@@ -63,6 +63,7 @@
 #define GREET_CONVERTED		"converted"
 #define GREET_PAMPHLET		"pamphlet"
 #define GREET_SOULSTONE		"soulstone"
+#define GREET_SOULBLADE		"soulblade"
 #define GREET_RESURRECT		"resurrect"
 
 

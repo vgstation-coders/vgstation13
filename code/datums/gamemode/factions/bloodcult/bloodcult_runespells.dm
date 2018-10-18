@@ -950,6 +950,7 @@
 	cult.HandleRecruitedRole(newCultist)
 	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_CONVERTED)
+	newCultist.conversion["converted"] = activator
 
 /datum/rune_spell/conversion/Removed(var/mob/M)
 	if (victim==M)
@@ -2393,6 +2394,7 @@ var/list/bloodcult_exitportals = list()
 		cult.HandleRecruitedRole(newCultist)
 		newCultist.OnPostSetup()
 		newCultist.Greet(GREET_RESURRECT)
+		newCultist.conversion["resurrected"] = user
 	else
 		for(var/mob/living/L in contributors)
 			to_chat(activator, "<span class='warning'>Something went wrong with the ritual, the soul of the ghost appears to have vanished.</span>")

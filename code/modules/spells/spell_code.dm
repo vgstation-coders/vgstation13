@@ -97,6 +97,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/list/holiday_required = list() // The holiday this spell is restricted to ! Leave empty if none.
 	var/block = 0//prevents some spells from being spamed
+	var/obj/delay_animation = null
 
 ///////////////////////
 ///SETUP AND PROCESS///
@@ -158,8 +159,14 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
 		block = 0
+		if (delay_animation)
+			qdel(delay_animation)
+		delay_animation = null
 		return
 	block = 0
+	if (delay_animation)
+		qdel(delay_animation)
+	delay_animation = null
 	if(before_target(user))
 		return
 
