@@ -956,7 +956,7 @@ var/list/datum/dna/hivemind_bank = list()
 
 //Handles the general sting code to reduce on copypasta (seeming as somebody decided to make SO MANY dumb abilities)
 // allow_self=TRUE lets you sting yourself.
-/mob/proc/changeling_sting(var/required_chems=0, var/verb_path, var/allow_self=FALSE)
+/mob/proc/changeling_sting(var/required_chems=0, var/verb_path, var/allow_self=FALSE, var/type_to_sting = /mob/living/carbon/)
 	var/datum/role/changeling/changeling = changeling_power(required_chems)
 	if(!changeling)
 		return
@@ -964,8 +964,9 @@ var/list/datum/dna/hivemind_bank = list()
 	var/list/victims = list()
 	if(allow_self)
 		victims += "(YOU)"
-	for(var/mob/living/carbon/C in oview(changeling.sting_range))
-		victims += C
+	for(var/mob/living/L in oview(changeling.sting_range))
+		if (istype(L, type_to_sting))
+			victims += L
 	var/mob/living/carbon/T
 	if (victims.len)
 		T = victims[1]
@@ -1033,6 +1034,26 @@ var/list/datum/dna/hivemind_bank = list()
 
 	feedback_add_details("changeling_powers", "SS")
 	target.silent += 30
+
+	return 1
+
+/obj/item/verbs/changeling/proc/changeling_plasma_sting()
+	set category = "Changeling"
+	set name = "Plasma Sting (40)"
+	set desc = "Destroys mechanical lifeforms after a short time."
+
+	var/mob/M = loc
+	if(!istype(M))
+		return
+
+	var/mob/living/silicon/target = M.changeling_sting(40, /obj/item/verbs/changeling/proc/changeling_plasma_sting, type_to_sting = /mob/living/silicon)
+	if(!target)
+		return
+
+	feedback_add_details("changeling_powers", "PS")
+	to_chat(target, "<span class='userdanger'>Critical power overload detected. Shuting down primary systems in 3...2.. ERROR.</span>")
+	sleep(rand(20,50))
+	target.gib()
 
 	return 1
 
