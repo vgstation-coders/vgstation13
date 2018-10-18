@@ -12,7 +12,7 @@
 	if(reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
 		return // Hyperzine ignores base slowdown
 	if(istype(loc, /turf/space))
-		return // Space ignores slowdown
+		return // Space ignores
 
 	if (species && species.move_speed_mod)
 		. += species.move_speed_mod
@@ -112,7 +112,7 @@
 		prob_slip = 0 // Changing this to zero to make it line up with the comment, and also, make more sense.
 
 	//Do we have magboots or such on if so no slip
-	if(CheckSlip() < 0)
+	if(CheckSlip() == SLIP_HAS_MAGBOOTIES)
 		prob_slip = 0
 
 	//Check hands and mod slip
@@ -152,8 +152,22 @@
 			if(dispenser.spam_bomb)
 				dispenser.attack_self(src)
 
-/mob/living/carbon/human/CheckSlip()
+/mob/living/carbon/human/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
+	var/shoes_slip_factor
+	switch (overlay_type)
+		if (TURF_WET_WATER, TURF_WET_ICE)
+			shoes_slip_factor = shoes && (shoes.clothing_flags & NOSLIP)
+		if (TURF_WET_LUBE)
+			shoes_slip_factor = shoes && (shoes.clothing_flags & IGNORE_LUBE)
+		else
+			shoes_slip_factor = TRUE // Shoes are of no interest for this. 
+
+	var/magboots_slip_factor = (!slip_on_magbooties && istype(shoes, /obj/item/clothing/shoes/magboots))
+
 	. = ..()
-	if(. && shoes && shoes.clothing_flags & NOSLIP)
-		. = (istype(shoes, /obj/item/clothing/shoes/magboots) ? -1 : 0)
-	return .
+
+	// We have magboots, and magboots can protect us
+	if (. && magboots_slip_factor)
+		return SLIP_HAS_MAGBOOTIES
+	// We don't have magbboots, or magboots can't protect us
+	return (. && !shoes_slip_factor)

@@ -1081,6 +1081,9 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /mob/living/carbon/slime/IgniteMob()
 	return 0
 
+/mob/living/carbon/slime/ApplySlip(var/obj/effect/overlay/puddle/P)
+	return FALSE
+
 //////////////////////////////Old shit from metroids/RoRos, and the old cores, would not take much work to re-add them////////////////////////
 
 /*

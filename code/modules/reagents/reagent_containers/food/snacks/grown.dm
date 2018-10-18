@@ -865,7 +865,7 @@ var/list/special_fruits = list()
 	if(popper)
 		popper.visible_message("<span class='warning'>[popper] pops the \the [src]!</span>","<span class='warning'>You pop \the [src]!</span>")
 	for(var/mob/living/carbon/C in view(1))
-		if(C.CheckSlip() < 1)
+		if(C.CheckSlip() != TRUE)
 			continue
 		C.Knockdown(5)
 	playsound(src, 'sound/effects/bang.ogg', 10, 1)

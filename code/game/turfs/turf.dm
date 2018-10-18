@@ -687,7 +687,7 @@
 	return base_slowdown
 
 /turf/proc/has_gravity(mob/M)
-	if(istype(M) && M.CheckSlip() == -1) //Wearing magboots - good enough
+	if(istype(M) && M.CheckSlip() == SLIP_HAS_MAGBOOTIES) //Wearing magboots - good enough
 		return 1
 
 	var/area/A = loc

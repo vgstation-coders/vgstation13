@@ -3,8 +3,8 @@
 		return FALSE
 	..()
 
-/mob/living/silicon/robot/CheckSlip()
-	return ((HAS_MODULE_QUIRK(src, MODULE_HAS_MAGPULSE))? -1 : 0)
+/mob/living/silicon/robot/CheckSlip(slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, slip_on_magbooties = FALSE)
+	return ((HAS_MODULE_QUIRK(src, MODULE_HAS_MAGPULSE))? SLIP_HAS_MAGBOOTIES : FALSE)
 
 /mob/living/silicon/robot/Process_Spacemove(var/check_drift = FALSE)
 	if(module)
