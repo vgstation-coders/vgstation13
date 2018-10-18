@@ -11,10 +11,12 @@
 */
 
 proc/initialize_materials()
-	for(var/matdata in typesof(/datum/material) - /datum/material)
+	for(var/matdata in subtypesof(/datum/material))
 		var/datum/material/mat = new matdata
 		material_list += list(mat.id = mat)
-		initial_materials += list(mat.id = 0)
+		if (!mat.sheettype)
+			continue
+		initial_materials += list(mat.id = 0) // This is for machines in r&d who have a material holder. If you can't make sheets of the material, you can't put in an r_n_d machine to begin with.
 
 var/global/list/material_list		//Stores an instance of all the datums as an assoc with their matids
 var/global/list/initial_materials	//Stores all the matids = 0 in helping New
