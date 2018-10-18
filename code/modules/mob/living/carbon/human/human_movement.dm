@@ -160,10 +160,9 @@
 		if (TURF_WET_LUBE)
 			shoes_slip_factor = shoes && (shoes.clothing_flags & IGNORE_LUBE)
 		else
-			shoes_slip_factor = TRUE // Shoes are of no interest for this. 
+			shoes_slip_factor = TRUE // Shoes are of no interest for this.
 
-	var/magboots_slip_factor = (!slip_on_magbooties && istype(shoes, /obj/item/clothing/shoes/magboots))
-
+	var/magboots_slip_factor = (!slip_on_magbooties && shoes_slip_factor && istype(shoes, /obj/item/clothing/shoes/magboots))
 	. = ..()
 
 	// We have magboots, and magboots can protect us

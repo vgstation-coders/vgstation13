@@ -83,7 +83,7 @@
 
 /obj/effect/overlay/puddle/Crossed(atom/movable/AM)
 
-	if (isliving(AM))
+	if (!isliving(AM))
 		return ..()
 	var/mob/living/L = AM
 	if (!L.ApplySlip(src))
