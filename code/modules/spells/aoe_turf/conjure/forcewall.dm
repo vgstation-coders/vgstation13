@@ -53,7 +53,7 @@
 	invisibility = 0
 
 /obj/effect/forcefield/mime
-	icon_state = "empty"
+	icon_state = "fuel"
 	name = "invisible wall"
 	desc = "You have a bad feeling about this."
 	invisibility = 0

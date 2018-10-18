@@ -195,7 +195,7 @@
 	range = 1
 	max_targets = 1
 	selection_type = "view"
-	spell_flags = WAIT_FOR_CLICK
+	spell_flags = WAIT_FOR_CLICK | CAN_CHANNEL_RESTRAINED
 
 	override_base = "genetic"
 	hud_state = "gen_eat"

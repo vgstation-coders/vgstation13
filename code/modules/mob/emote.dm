@@ -57,15 +57,16 @@
 	if (user.stat)
 		return
 
-	var/msg = "<b>[user]</b> " + params
+	var/message = params
+	var/msg = "<b>[user]</b> " + message
 
 	var/turf/T = get_turf(user) // for pAIs
-	
+
 	for(var/mob/M in dead_mob_list)
 		if (!M.client)
 			continue //skip leavers
 		if(M.client.prefs && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(src,null)))
-			M.show_message(message)
+			M.show_message("<a href='?src=\ref[M];follow=\ref[user]'>(Follow)</a> " + msg)
 
 	if (emote_type == EMOTE_VISIBLE)
 		user.visible_message(msg)

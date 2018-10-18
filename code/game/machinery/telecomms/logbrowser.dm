@@ -236,5 +236,5 @@
 		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
 		if(user)
-			to_chat(user, "<span class='notice'>You you disable the security protocols</span>")
+			to_chat(user, "<span class='notice'>You disable the security protocols</span>")
 		return 1

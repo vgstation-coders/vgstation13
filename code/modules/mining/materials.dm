@@ -367,6 +367,14 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	value = 0
 	oretype = /obj/item/ice_crystal
 
+/datum/material/telecrystal
+	name="Telecrystal"
+	id="telecrystal"
+	value=30
+	oretype=/obj/item/weapon/ore/telecrystal
+	sheettype=null
+	cointype=null
+
 /* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium
 	name="Pharosium"
@@ -375,7 +383,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/weapon/ore/pharosium
 	sheettype=/obj/item/stack/sheet/mineral/pharosium
 	cointype=null
-
 
 /datum/material/char
 	name="Char"

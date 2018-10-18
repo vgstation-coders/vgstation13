@@ -2581,10 +2581,19 @@
 	)
 
  result = /obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/
- 
+
 /datum/recipe/butteredtoast
 	reagents = list(LIQUIDBUTTER = 2)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 	)
 
  result = /obj/item/weapon/reagent_containers/food/snacks/butteredtoast
+
+/datum/recipe/pierogi
+	reagents = list(FLOUR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
+		)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/pierogi

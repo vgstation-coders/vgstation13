@@ -11,7 +11,6 @@ var/global/list/disease2_list = list()
 	var/list/datum/disease2/effect/effects = list()
 	var/antigen = 0 // 16 bits describing the antigens, when one bit is set, a cure with that bit can dock here
 	var/max_stage = 4
-	var/patient_zero = FALSE // Bypasses the roll for natural antibodies if true
 
 	var/log = ""
 	var/logged_virusfood=0
@@ -33,7 +32,7 @@ var/global/list/disease2_list = list()
 	e.chance = rand(1, e.max_chance)
 	return e
 
-/datum/disease2/disease/proc/makerandom(var/greater = FALSE, var/pz)
+/datum/disease2/disease/proc/makerandom(var/greater = FALSE)
 	log_debug("Randomizing virus [uniqueID] with greater=[greater]")
 	for(var/i = 1; i <= max_stage; i++)
 		if(greater)
@@ -50,7 +49,6 @@ var/global/list/disease2_list = list()
 	antigen |= text2num(pick(ANTIGENS))
 	antigen |= text2num(pick(ANTIGENS))
 	spreadtype = prob(70) ? "Airborne" : prob(20) ? "Blood" :"Contact" //Try for airborne then try for blood.
-	patient_zero = pz
 
 /proc/virus2_make_custom(client/C)
 	if(!C.holder || !istype(C))
@@ -83,8 +81,6 @@ var/global/list/disease2_list = list()
 	//pick random antigens for the disease to have
 	D.antigen |= text2num(pick(ANTIGENS))
 	D.antigen |= text2num(pick(ANTIGENS))
-	D.patient_zero = TRUE
-
 	D.spreadtype = input(C, "Select spread type", "Spread Type") as null | anything in list("Airborne", "Contact", "Blood") // select how the disease is spread
 	if (!D.spreadtype)
 		return 0
@@ -99,12 +95,8 @@ var/global/list/disease2_list = list()
 		return
 
 
-	if(mob.stat == 2)
+	if(mob.stat == 2) //Dead, brown bread
 		return
-	if(stage <= 1 && clicks == 0 && !patient_zero) 	// with a certain chance, the mob may become immune to the disease before it starts properly. Not if they're patient zero though.
-		if(prob(5))
-			log_debug("[key_name(mob)] rolled for starting immunity against virus [uniqueID] and received antigens [antigens2string(antigen)].")
-			mob.antibodies |= antigen // 20% immunity is a good chance IMO, because it allows finding an immune person easily
 /*
 	if(mob.radiation > 50)
 		if(prob(1))
@@ -127,17 +119,10 @@ var/global/list/disease2_list = list()
 		logged_virusfood=0
 
 	//Moving to the next stage
-	if(clicks > stage*100 && prob(stageprob))
-		if(stage == max_stage)
-			log_debug("Virus [uniqueID] in [key_name(mob)] has advanced past its last stage, giving them antigens [antigens2string(antigen)].")
-			src.cure(mob)
-			mob.antibodies |= src.antigen
-			log += "<br />[timestamp()] STAGEMAX ([stage])"
-			return
-		else
-			stage++
-			log += "<br />[timestamp()] NEXT STAGE ([stage])"
-			clicks = 0
+	if(clicks > stage*100 && prob(stageprob) && stage < max_stage)
+		stage++
+		log += "<br />[timestamp()] NEXT STAGE ([stage])"
+		clicks = 0
 
 	// This makes it so that <mob> only ever gets affected by the equivalent of one virus so antags don't just stack a bunch
 	if(prob(100 - (100 / mob.virus2.len)))

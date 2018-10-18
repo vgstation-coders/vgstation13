@@ -29,6 +29,7 @@
 		if(new_overmind)
 			flick("core_spawn",src)
 		else
+			icon_state = "cerebrate"
 			flick("morph_core",src)
 	playsound(src, get_sfx("gib"),50,1)
 	if(!overmind)
@@ -73,9 +74,7 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 
-	if(!overmind)
-		create_overmind()
-	else
+	if(overmind)
 		var/points_to_collect = Clamp(point_rate*round((world.time-last_resource_collection)/10), 0, 10)
 		overmind.add_points(points_to_collect)
 		last_resource_collection = world.time
@@ -111,74 +110,92 @@
 /obj/effect/blob/core/run_action()
 	return 0
 
+/obj/effect/blob/core/proc/recruit_overmind()
+	var/list/possible_candidates = get_candidates(ROLE_BLOB)
+	var/icon/logo_icon = icon('icons/logos.dmi', "blob-logo")
+	for(var/client/candidate in possible_candidates)
+		if(istype(candidate.eye,/obj/item/projectile/meteor/blob/core))
+			continue
+		to_chat(candidate.mob, "[bicon(logo_icon)]<span class='recruit'>A blob core is looking for someone to become its overmind. (<a href='?src=\ref[src];blob_recruit=\ref[candidate.mob]'>Apply now!</a>)</span>[bicon(logo_icon)]")
 
-/obj/effect/blob/core/proc/create_overmind(var/client/new_overmind)
-	if(overmind_get_delay > world.time)
+/obj/effect/blob/core/Topic(href, href_list)
+	if(usr.stat != DEAD)
 		return
 
-	overmind_get_delay = world.time + 300 // 30 seconds
+	if(href_list["blob_recruit"])//We don't have time to wait for the recruiter, just grab whoever applied first!
+		if(!overmind)
+			create_overmind(usr.client)
+		else
+			to_chat(usr, "<span class='warning'>Looks like someone applied first. First arrived, first served. Better luck next time.</span>")
+
+/obj/effect/blob/core/attack_ghost(var/mob/user)
+	if (!overmind)
+		create_overmind(user.client)
+
+/obj/effect/blob/core/proc/create_overmind(var/client/new_overmind)
+	if(!new_overmind)
+		return 0
+
+	if (jobban_isbanned(new_overmind.mob, ROLE_BLOB))
+		to_chat(usr, "<span class='warning'>You are banned from this role.</span>")
+		return 0
 
 	if(overmind)
 		qdel(overmind)
 		overmind = null
 
-	var/client/C = null
-	var/list/candidates = list()
+	var/mob/camera/blob/B = new(src.loc)
+	B.key = new_overmind.key
+	B.blob_core = src
+	src.overmind = B
 
-	if(!new_overmind)
-		candidates = get_candidates(ROLE_BLOB)
-
-		for(var/client/candidate in candidates)
-			if(istype(candidate.eye,/obj/item/projectile/meteor/blob/core))
-				candidates -= candidate
-
-		if(candidates.len)
-			C = pick(candidates)
+	var/datum/faction/blob_conglomerate/conglomerate = find_active_faction_by_type(/datum/faction/blob_conglomerate)
+	if(conglomerate)
+		conglomerate.HandleRecruitedMind(B.mind)
 	else
-		C = new_overmind
+		conglomerate = ticker.mode.CreateFaction(/datum/faction/blob_conglomerate)
+		if(conglomerate)
+			conglomerate.HandleNewMind(B.mind)
 
-	if(C)
-		var/mob/camera/blob/B = new(src.loc)
-		B.key = C.key
-		B.blob_core = src
-		src.overmind = B
+	if (icon_state == "cerebrate")
+		icon_state = "core"
+		flick("morph_cerebrate",src)
+		var/datum/role/blob_overmind/BO = B.mind.GetRole(BLOBOVERMIND)
+		BO.logo_state = "cerebrate-logo"
 
-		B.special_blobs += src
-		B.hud_used.blob_hud()
-		B.update_specialblobs()
+	B.special_blobs += src
+	B.hud_used.blob_hud()
+	B.update_specialblobs()
 
-		if(!B.blob_core.creator)//If this core is the first of its lineage (created by game mode/event/admins, instead of another overmind) it gets to choose its looks.
-			var/new_name = "Blob Overmind ([rand(1, 999)])"
-			B.name = new_name
-			B.real_name = new_name
-			for(var/mob/camera/blob/O in blob_overminds)
-				if(O != B)
-					to_chat(O,"<span class='notice'>[B] has appeared and just started a new blob! <a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></span>")
+	if(!B.blob_core.creator)//If this core is the first of its lineage (created by game mode/event/admins, instead of another overmind) it gets to choose its looks.
+		var/new_name = "Blob Overmind ([rand(1, 999)])"
+		B.name = new_name
+		B.real_name = new_name
+		for(var/mob/camera/blob/O in blob_overminds)
+			if(O != B)
+				to_chat(O,"<span class='notice'>[B] has appeared and just started a new blob! <a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></span>")
 
-			B.verbs += /mob/camera/blob/proc/create_core
-			spawn()
-				var/can_choose_from = blob_looks_player
-				var/chosen = input(B,"Select a blob looks", "Blob Looks", blob_looks_player[1]) as null|anything in can_choose_from
-				if(chosen)
-					for(var/obj/effect/blob/nearby_blob in range(src,5))
-						nearby_blob.looks = chosen
-						nearby_blob.update_looks(1)
-		else
-			var/new_name = "Blob Cerebrate ([rand(1, 999)])"
-			B.name = new_name
-			B.real_name = new_name
-			B.gui_icons.blob_spawncore.icon_state = ""
-			B.gui_icons.blob_spawncore.name = ""
-			for(var/mob/camera/blob/O in blob_overminds)
-				if(O != B)
-					to_chat(O,"<span class='notice'>A new blob cerebrate has started thinking inside a blob core! [B] joins the blob! <a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></span>")
+		B.verbs += /mob/camera/blob/proc/create_core
+		spawn()
+			var/can_choose_from = blob_looks_player
+			var/chosen = input(B,"Select a blob looks", "Blob Looks", blob_looks_player[1]) as null|anything in can_choose_from
+			if(chosen)
+				for(var/obj/effect/blob/nearby_blob in range(src,5))
+					nearby_blob.looks = chosen
+					nearby_blob.update_looks(1)
+	else
+		var/new_name = "Blob Cerebrate ([rand(1, 999)])"
+		B.name = new_name
+		B.real_name = new_name
+		B.gui_icons.blob_spawncore.icon_state = ""
+		B.gui_icons.blob_spawncore.name = ""
+		for(var/mob/camera/blob/O in blob_overminds)
+			if(O != B)
+				to_chat(O,"<span class='notice'>A new blob cerebrate has started thinking inside a blob core! [B] joins the blob! <a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></span>")
 
+	stat_collection.blob_spawned_blob_players++
 
-
-		stat_collection.blob_spawned_blob_players++
-
-		return 1
-	return 0
+	return 1
 
 /obj/effect/blob/core/update_icon(var/spawnend = 0)
 	if(icon_size == 64)

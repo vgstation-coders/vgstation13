@@ -154,7 +154,7 @@
 
 	spell_flags = Z2NOCAST | INCLUDEUSER
 
-	charge_max = 5 MINUTES
+	charge_max = 1 MINUTES
 	invocation_type = SpI_NONE
 	range = SELFCAST
 	duration = 50 //in deciseconds
@@ -176,8 +176,11 @@
 		return FALSE
 
 /spell/targeted/ethereal_jaunt/vamp/cast(list/targets, var/mob/user)
-	..()
 	var/datum/role/vampire/V = isvampire(user)
+	var/mob/living/simple_animal/hostile/scarybat/SB = new(get_turf(user))
+	SB.vamp_fac = V.faction
+	V.faction.members += SB
+	..()
 	if (!V)
 		return FALSE
 	V.remove_blood(blood_cost)
