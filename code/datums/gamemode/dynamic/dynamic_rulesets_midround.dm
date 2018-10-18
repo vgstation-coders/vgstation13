@@ -12,7 +12,7 @@
 	restricted_from_jobs = list("Cyborg","Mobile MMI")
 	required_candidates = 1
 	weight = 7
-	cost = 5
+	cost = 20
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
 
 /datum/dynamic_ruleset/midround/autotraitor/acceptable(var/population=0,var/threat=0)

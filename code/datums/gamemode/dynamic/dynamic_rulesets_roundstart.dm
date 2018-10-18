@@ -15,7 +15,7 @@
 	weight = 7
 	cost = 10
 	requirements = list(40,30,20,10,10,10,10,10,10,10)
-	var/autotraitor_cooldown = 900//15 minutes
+	var/autotraitor_cooldown = 900 //30 minutes
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
 	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
@@ -33,7 +33,7 @@
 	if (autotraitor_cooldown)
 		autotraitor_cooldown--
 	else
-		autotraitor_cooldown = 900//15 minutes
+		autotraitor_cooldown = 900 //30 minutes
 		message_admins("Dynamic Mode: Checking if we can turn someone into a traitor...")
 		mode.picking_specific_rule(/datum/dynamic_ruleset/midround/autotraitor)
 
@@ -82,7 +82,7 @@
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = 3
-	cost = 18
+	cost = 30
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
 
 /datum/dynamic_ruleset/roundstart/vampire/execute()
