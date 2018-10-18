@@ -180,7 +180,7 @@
 	var/mob/M = usr
 	if(!ishigherbeing(usr) || usr.incapacitated())
 		return
-	if(Adjacent(usr))
+	if(Adjacent(usr) || is_holder_of(usr, src))
 		if(over_object == M)
 			M.put_in_hands(src)
 			to_chat(usr, "<span class = 'notice'>You pick up the deck.</span>")
