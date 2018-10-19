@@ -93,6 +93,10 @@
 		if(/obj/item/clothing/under/chameleon/proc/Change_Color in verbs)
 			verbs &= ~/obj/item/clothing/under/chameleon/proc/Change_Color
 			return
+
 /obj/item/clothing/under/chameleon/cold/attackby(obj/item/clothing/under/U as obj, mob/user as mob)
-	if(registered_user == user)
+	if(istype(U))
+		if(registered_user == user)
+			..()
+	else
 		..()
