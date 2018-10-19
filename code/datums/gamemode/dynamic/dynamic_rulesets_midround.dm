@@ -54,8 +54,8 @@
 //                                          //
 //              RAGIN' MAGES                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
-//////////////////////////////////////////////
-
+//////////////////////////////////////////////1.01 - Disabled because it caused a bit too many wizards in rounds
+/*
 /datum/dynamic_ruleset/midround/raginmages
 	name = "Ragin' Mages"
 	role_category = ROLE_WIZARD
@@ -121,7 +121,7 @@
 		newWizard.Greet(GREET_MIDROUND)
 		newWizard.ForgeObjectives()
 		newWizard.AnnounceObjectives()
-
+*/
 
 //////////////////////////////////////////////
 //                                          //
