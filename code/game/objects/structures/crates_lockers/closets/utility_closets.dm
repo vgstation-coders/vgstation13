@@ -19,27 +19,26 @@
 	icon_closed = "emergency"
 	icon_opened = "emergencyopen"
 
-/obj/structure/closet/emcloset/spawn_contents()
-	..()
-	var/list/small = list(
+/obj/structure/closet/emcloset/atoms_to_spawn()
+	var/static/list/small = list(
 		/obj/item/weapon/tank/emergency_oxygen = 2,
 		/obj/item/clothing/mask/breath = 2,
 		/obj/item/weapon/storage/toolbox/emergency,
 	)
-	var/list/aid = list(
+	var/static/list/aid = list(
 		/obj/item/weapon/tank/emergency_oxygen,
 		/obj/item/weapon/storage/toolbox/emergency,
 		/obj/item/clothing/mask/breath,
 		/obj/item/weapon/storage/firstaid/o2,
 	)
-	var/list/tank = list(
+	var/static/list/tank = list(
 		/obj/item/weapon/tank/emergency_oxygen/engi,
 		/obj/item/clothing/mask/breath,
 		/obj/item/weapon/tank/emergency_oxygen/engi,
 		/obj/item/clothing/mask/breath,
 		/obj/item/weapon/storage/firstaid/o2,
 	)
-	var/list/both = list(
+	var/static/list/both = list(
 		/obj/item/weapon/storage/toolbox/emergency,
 		/obj/item/weapon/tank/emergency_oxygen/engi,
 		/obj/item/clothing/mask/breath,
