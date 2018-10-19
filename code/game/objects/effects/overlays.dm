@@ -1,4 +1,3 @@
-
 /obj/effect/overlay
 	name = "overlay"
 	w_type=NOT_RECYCLABLE
@@ -89,15 +88,6 @@
 	if (!L.ApplySlip(src))
 		return ..()
 
-	/*
-
-	if(isrobot(AM) && wet == 1) //Only exactly water makes borgs glitch
-		var/mob/living/silicon/robot/R = AM
-		if(R.Slip(5,3))
-			//Don't step forward as a robot, we're not slipping just glitching.
-			R.visible_message("<span class='warning'>[R] short circuits on the water!</span>", \
-					"<span class='warning'>You short circuit on the water!</span>")
-	*/
 /obj/effect/overlay/wallrot
 	name = "Wallrot"
 	desc = "Ick..."

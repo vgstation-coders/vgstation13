@@ -714,7 +714,7 @@
 
 		if(TURF_WET_LUBE)
 			step(src, dir)
-			if (!Slip(stun_amount = 10, weaken_amount = 10, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
+			if (!Slip(stun_amount = 10, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
 				return FALSE
 			for (var/i = 1 to 4)
 				spawn(i)
@@ -729,3 +729,4 @@
 				step(src, dir)
 				visible_message("<span class='warning'>[src] slips on the icy floor!</span>", \
 				"<span class='warning'>You slip on the icy floor!</span>")
+	return TRUE
