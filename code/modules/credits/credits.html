@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<style>
+		body {
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+			background-color: black;
+		}
+		#marquee {
+			position: absolute;
+			bottom: -20px;
+			right: 50%;
+			color: white;
+		}
+		#splash {
+			display: none;
+			position: absolute;
+			right: 50%;
+			bottom: 50%;
+			color: white;
+		}
+	</style>
+</head>
+<body>
+	<div id="marquee">
+		MARQUEE TEST
+		MARQUEE TEST
+		MARQUEE TEST
+	</div>
+	
+	<script type="text/javascript">
+	function rollMarquee(speed) {
+		if (speed === undefined) {
+			speed = 1;
+			alert("bad speed alart!");
+		}
+		var div = document.getElementById("marquee");
+		var bottom = -20;
+		setInterval(function () {
+			bottom = bottom + speed;
+			div.style.bottom = bottom + "px";
+		}, 50);
+	};
+	rollMarquee();
+	</script>
+</body>
+</html>

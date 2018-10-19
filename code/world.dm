@@ -269,24 +269,7 @@ var/savefile/panicfile
 	Master.Shutdown()
 	paperwork_stop()
 
-	spawn()
-		world << sound(pick(
-			'sound/AI/newroundsexy.ogg',
-			'sound/misc/RoundEndSounds/apcdestroyed.ogg',
-			'sound/misc/RoundEndSounds/bangindonk.ogg',
-			'sound/misc/RoundEndSounds/slugmissioncomplete.ogg',
-			'sound/misc/RoundEndSounds/bayojingle.ogg',
-			'sound/misc/RoundEndSounds/gameoveryeah.ogg',
-			'sound/misc/RoundEndSounds/rayman.ogg',
-			'sound/misc/RoundEndSounds/marioworld.ogg',
-			'sound/misc/RoundEndSounds/soniclevelcomplete.ogg',
-			'sound/misc/RoundEndSounds/calamitytrigger.ogg',
-			'sound/misc/RoundEndSounds/duckgame.ogg',
-			'sound/misc/RoundEndSounds/FTLvictory.ogg',
-			'sound/misc/RoundEndSounds/tfvictory.ogg',
-			'sound/misc/RoundEndSounds/megamanX.ogg',
-			'sound/misc/RoundEndSounds/castlevania.ogg',
-			)) // random end sounds!! - LastyBatsy
+	end_credits.rollem()
 
 	sleep(5)//should fix the issue of players not hearing the restart sound.
 
