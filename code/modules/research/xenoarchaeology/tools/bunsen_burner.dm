@@ -90,12 +90,20 @@
 				overlays += I2
 				add_fingerprint(user)
 				return 1 // avoid afterattack() being called
-	if(iswrench(W))
+	else if(iswrench(W))
 		user.visible_message("<span class = 'warning'>[user] starts to deconstruct \the [src]!</span>","<span class = 'notice'>You start to deconstruct \the [src].</span>")
 		if(do_after(user, src, 5 SECONDS))
 			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
 			drop_stack(sheet_type, loc, rand(3,4), user)
 			qdel(src)
+	else if (W.is_heatable() && heating == BUNSEN_ON)
+		user.visible_message("<span class='notice'>[user] begins heating \the [W] on \the [src].</span>",
+				"<span class='notice'>You begin heating \the [W] on \the [src].</span>")
+		if (do_after(user, src, 5 SECONDS))
+			to_chat(user, "<span class='notice'>\The [W] is now incredibly hot.</span>")
+			W.is_hot = TRUE
+			if (W.spicy_keychain(user))
+				user.u_equip(W)
 	else
 		..()
 
