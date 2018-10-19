@@ -78,14 +78,11 @@
 	name = "Kitchen Cabinet"
 	req_access = list(access_kitchen)
 
-	New()
-		..()
-		sleep(2)
-		for(var/i = 0, i < 3, i++)
-			new /obj/item/weapon/reagent_containers/food/drinks/flour(src)
-		new /obj/item/weapon/reagent_containers/food/condiment/sugar(src)
-		return
-
+/obj/structure/closet/secure_closet/freezer/kitchen/atoms_to_spawn()
+	return list(
+		/obj/item/weapon/reagent_containers/food/drinks/flour = 3,
+		/obj/item/weapon/reagent_containers/food/condiment/sugar,
+	)
 
 /obj/structure/closet/secure_closet/freezer/kitchen/mining
 	req_access = list()
@@ -102,13 +99,10 @@
 	icon_off = "fridge1"
 
 
-	New()
-		..()
-		sleep(2)
-		for(var/i = 0, i < 4, i++)
-			new /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey(src)
-		return
-
+/obj/structure/closet/secure_closet/freezer/meat/atoms_to_spawn()
+	return list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey = 4,
+	)
 
 
 /obj/structure/closet/secure_closet/freezer/fridge
@@ -120,17 +114,12 @@
 	icon_broken = "fridgebroken"
 	icon_off = "fridge1"
 
-
-	New()
-		..()
-		sleep(2)
-		for(var/i = 0, i < 5, i++)
-			new /obj/item/weapon/reagent_containers/food/drinks/milk(src)
-		for(var/i = 0, i < 5, i++)
-			new /obj/item/weapon/reagent_containers/food/drinks/soymilk(src)
-		for(var/i = 0, i < 2, i++)
-			new /obj/item/weapon/storage/fancy/egg_box(src)
-		return
+/obj/structure/closet/secure_closet/freezer/fridge/atoms_to_spawn()
+	return list(
+		/obj/item/weapon/reagent_containers/food/drinks/milk = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/soymilk = 5,
+		/obj/item/weapon/storage/fancy/egg_box = 2
+	)
 
 
 
@@ -145,11 +134,9 @@
 	req_access = list(access_heads_vault)
 
 
-	New()
-		..()
-		sleep(2)
-		dispense_cash(6700,src)
-		return
+/obj/structure/closet/secure_closet/freezer/money/spawn_contents()
+	dispense_cash(6700, src)
+
 
 
 

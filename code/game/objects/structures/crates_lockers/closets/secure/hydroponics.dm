@@ -9,23 +9,19 @@
 	icon_off = "hydrosecureoff"
 
 
-	New()
-		..()
-		sleep(2)
-		switch(rand(1,2))
-			if(1)
-				new /obj/item/clothing/suit/apron(src)
-			if(2)
-				new /obj/item/clothing/suit/apron/overalls(src)
-		new /obj/item/weapon/storage/bag/plants(src)
-		switch(rand(1,2))
-			if(1)
-				new /obj/item/clothing/under/rank/hydroponics(src)
-			if(2)
-				new /obj/item/clothing/under/rank/botany(src)
-		new /obj/item/device/analyzer/plant_analyzer(src)
-		new /obj/item/clothing/head/greenbandana(src)
-		new /obj/item/weapon/minihoe(src)
-		new /obj/item/weapon/hatchet(src)
-		new /obj/item/weapon/bee_net(src)
-		return
+/obj/structure/closet/secure_closet/hydroponics/atoms_to_spawn()
+	return list(
+		pick(
+			/obj/item/clothing/suit/apron,
+			/obj/item/clothing/suit/apron/overalls),
+		/obj/item/weapon/storage/bag/plants,
+		pick(
+			/obj/item/clothing/under/rank/hydroponics,
+			/obj/item/clothing/under/rank/botany,
+		),
+		/obj/item/device/analyzer/plant_analyzer,
+		/obj/item/clothing/head/greenbandana,
+		/obj/item/weapon/minihoe,
+		/obj/item/weapon/hatchet,
+		/obj/item/weapon/bee_net,
+	)

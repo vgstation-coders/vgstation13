@@ -4,26 +4,21 @@
 	req_access = list(access_all_personal_lockers)
 	var/registered_name = null
 
-/obj/structure/closet/secure_closet/personal/New()
-	..()
-	spawn(2)
-		var/B = pick(/obj/item/weapon/storage/backpack, /obj/item/weapon/storage/backpack/satchel_norm, /obj/item/weapon/storage/backpack/messenger)
-		new B(src)
-		new /obj/item/device/radio/headset( src )
-	return
+/obj/structure/closet/secure_closet/personal/atoms_to_spawn()
+	return list(
+		pick(/obj/item/weapon/storage/backpack, /obj/item/weapon/storage/backpack/satchel_norm, /obj/item/weapon/storage/backpack/messenger),
+		/obj/item/device/radio/headset,
+	)
 
 
 /obj/structure/closet/secure_closet/personal/patient
 	name = "patient's closet"
 
-/obj/structure/closet/secure_closet/personal/patient/New()
-	..()
-	spawn(4)
-		contents = list()
-		new /obj/item/clothing/under/color/white( src )
-		new /obj/item/clothing/shoes/white( src )
-	return
-
+/obj/structure/closet/secure_closet/personal/patient/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/under/color/white,
+		/obj/item/clothing/shoes/white,
+	)
 
 
 /obj/structure/closet/secure_closet/personal/cabinet
@@ -46,13 +41,11 @@
 		else
 			icon_state = icon_opened
 
-/obj/structure/closet/secure_closet/personal/cabinet/New()
-	..()
-	spawn(4)
-		contents = list()
-		new /obj/item/weapon/storage/backpack/satchel/withwallet( src )
-		new /obj/item/device/radio/headset( src )
-	return
+/obj/structure/closet/secure_closet/personal/cabinet/atoms_to_spawn()
+	return list(
+		/obj/item/weapon/storage/backpack/satchel/withwallet,
+		/obj/item/device/radio/headset,
+	)
 
 /obj/structure/closet/secure_closet/personal/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/card/id))
