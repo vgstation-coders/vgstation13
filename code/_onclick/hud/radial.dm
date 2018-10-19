@@ -199,13 +199,15 @@
 		if(choices_tooltips[choice_id])
 			E.tooltip_desc = choices_tooltips[choice_id]
 
-/datum/radial_menu/New(var/icon_file, var/tooltip_theme, var/radius)
+/datum/radial_menu/New(var/icon_file, var/tooltip_theme, var/radius, var/min_angle)
 	if(icon_file)
 		src.icon_file = icon_file
 	if(tooltip_theme)
 		src.tooltip_theme = tooltip_theme
 	if(radius)
 		src.radius = radius
+	if(min_angle)
+		src.min_angle = min_angle
 
 	close_button = new
 	close_button.parent = src
@@ -234,10 +236,14 @@
 		choices_values[id] = choice_name
 
 		if(E.len > 1)
-			var/choice_iconstate = E[2]
-			var/I = extract_image(image(icon = icon_file, icon_state = choice_iconstate))
-			if(I)
-				choices_icons[id] = I
+			var/extracted_image
+			var/choice_icon = E[2]
+			if(istext(choice_icon)) //a string representing an icon_state from our icon_file
+				extracted_image = extract_image(image(icon = icon_file, icon_state = choice_icon))
+			else
+				extracted_image = extract_image(choice_icon)
+			if(extracted_image)
+				choices_icons[id] = extracted_image
 
 		if(E.len > 2)
 			var/choice_tooltip = E[3]
@@ -250,6 +256,7 @@
 	var/mutable_appearance/MA = new /mutable_appearance(E)
 	if(MA)
 		MA.layer = ABOVE_HUD_LAYER
+		MA.plane = ABOVE_HUD_PLANE
 		MA.appearance_flags |= RESET_TRANSFORM
 	return MA
 
@@ -285,8 +292,6 @@
 		stoplag(1)
 
 /datum/radial_menu/Destroy()
-	if(current_user)
-		current_user.radial_menus -= anchor
 	Reset()
 	hide()
 	if(istype(custom_check))
@@ -298,7 +303,7 @@
 	Choices should be a list where list keys are movables or text used for element names and return value
 	and list values are movables/icons/images used for element icons
 */
-/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/event/custom_check,var/uniqueid,var/radius)
+/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/event/custom_check,var/uniqueid,var/radius,var/min_angle)
 	if(!user || !anchor || !length(choices))
 		return
 
@@ -307,7 +312,7 @@
 		return
 	current_user.radial_menus += anchor //This should probably be done in the menu's New()
 
-	var/datum/radial_menu/menu = new(icon_file, tooltip_theme, radius)
+	var/datum/radial_menu/menu = new(icon_file, tooltip_theme, radius, min_angle)
 
 	if(istype(custom_check))
 		menu.custom_check = custom_check
@@ -319,4 +324,5 @@
 	if(!menu.gcDestroyed)
 		var/answer = menu.selected_choice
 		qdel(menu)
+		current_user.radial_menus -= anchor
 		return answer
