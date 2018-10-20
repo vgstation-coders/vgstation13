@@ -1,41 +1,43 @@
 /mob/verb/creditstest()
-  set category = "IC"
-  set name = "credits test"
+	set category = "IC"
+	set name = "credits test"
 
-  end_credits.rollem()
-
-#define CREDIT_ROLL_SPEED 370
-#define CREDIT_SPAWN_SPEED 20
-#define CREDIT_WIDTH (14 * world.icon_size)
-#define CREDIT_HEIGHT 2*CREDIT_WIDTH
+	end_credits.generate_credits()
+	end_credits.rollem()
 
 var/global/datum/credits/end_credits = new
 
 /datum/credits
 	var/director = "Pomf Chicken Productions"
-	var/list/producers = list()
 	var/mob/living/carbon/human/star
-	var/time_wait = 8 SECONDS
+	var/starting_delay = 8 SECONDS
 	var/scrollingtext = ""
 	var/episode_name = ""
+	var/list/producers = list()
 	var/control = "mapwindow.credits"
 	var/file = 'code/modules/credits/credits.html'
 
 /datum/credits/proc/rollem()
-	world << sound('sound/music/Frolic_Luciano_Michelini.ogg')
-	//todo delay here
+	world << sound('sound/music/Frolic_Luciano_Michelini_short.ogg')
+
+
+	var/producers_string = "" //the only reason why I do this is because I couldn't find a way of passing a nested list in a JS call via byond output
+	for(var/producer in end_credits.producers)
+		producers_string += "[producer]%n" //%n being an arbitrary "new producer" char we use to split this string back in the javascript
+	var/list/js_args = list(scrollingtext, producers_string, 30, 2000)
 
 	for(var/client/C in clients)
-		C.show_credits()
+		C.show_credits(js_args)
 
-/client/proc/show_credits()
+/client/proc/show_credits(var/list/js_args)
 	set waitfor = FALSE
 
   verbs += /client/proc/clear_credits
 
-	winset(src, end_credits.control, "is-visible=true")
 	src << output(end_credits.file, end_credits.control)
-	src << output(list2params(list("3")), "[end_credits.control]:rollMarquee")
+	sleep(end_credits.starting_delay)
+	src << output(list2params(js_args), "[end_credits.control]:makeCredits")
+	winset(src, end_credits.control, "is-visible=true")
 
 /client/proc/clear_credits()
 	set name = "Skip Credits"
@@ -69,7 +71,8 @@ var/global/datum/credits/end_credits = new
 	producers = list("<center><h2>Directed by</h2><h1>[uppertext(director)]","<center>[jointext(staff,"")]")
 	for(var/head in data_core.get_manifest_json()["heads"])
 		producers += "<center><h2>[head["rank"]]</h2><h1>[uppertext(head["name"])]"
-	producers += "<center><h2>Starring</h2><h1>[gender_credits(star," as ",FALSE)]"
+	if(!isnull(star))
+		producers += "<center><h2>Starring</h2><h1>[gender_credits(star," as ",FALSE)]"
 
 /datum/credits/proc/generate_episode_name()
   var/list/possible_episode_names = list()

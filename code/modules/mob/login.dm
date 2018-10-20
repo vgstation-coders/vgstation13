@@ -121,3 +121,6 @@
 
 	if(client)
 		client.CAN_MOVE_DIAGONALLY = 0
+
+	if(client)
+		client.clear_credits()

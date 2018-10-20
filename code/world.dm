@@ -271,7 +271,7 @@ var/savefile/panicfile
 
 	end_credits.rollem()
 
-	sleep(5)//should fix the issue of players not hearing the restart sound.
+	sleep(end_credits.starting_delay + 10)
 
 	for(var/client/C in clients)
 		if(config.server)	//if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite

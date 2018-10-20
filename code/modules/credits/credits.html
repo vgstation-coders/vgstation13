@@ -9,43 +9,91 @@
 			height: 100%;
 			overflow: hidden;
 			background-color: black;
-		}
-		#marquee {
-			position: absolute;
-			bottom: -20px;
-			right: 50%;
 			color: white;
+			text-align: center;
+			vertical-align: center;
+		}
+		#container {
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			bottom: 0;
+			left: 0;
+			overflow: hidden;
+
 		}
 		#splash {
-			display: none;
-			position: absolute;
-			right: 50%;
-			bottom: 50%;
-			color: white;
+			height: 100%;
 		}
+		#marquee {
+		}
+
 	</style>
 </head>
 <body>
-	<div id="marquee">
-		MARQUEE TEST
-		MARQUEE TEST
-		MARQUEE TEST
-	</div>
-	
+	<table id="container">
+		<tr>
+			<td id="splash">
+				SPLASH PLACEHOLDER
+			</td>
+		</tr>
+		<tr>
+			<td id="marquee">
+				MARQUEE PLACEHOLDER
+			</td>
+		</tr>
+	</table>
+
 	<script type="text/javascript">
-	function rollMarquee(speed) {
-		if (speed === undefined) {
-			speed = 1;
-			alert("bad speed alart!");
+	var producers = [];
+	var lastinterval;
+	
+	function setScrollingText(text){
+		document.getElementById("marquee").innerHTML = text;
+	}
+	function setProducers(text){
+		producers = text.split("%n");
+		producers = producers.slice(0, -1); //get rid of the last %n
+		//alert(JSON.stringify(producers));
+	}
+	function makeCredits(scrollyString, producersString, scrollSpeed, splashTime){
+		if (splashTime === undefined) {
+			splashTime = 2000;
 		}
-		var div = document.getElementById("marquee");
-		var bottom = -20;
-		setInterval(function () {
-			bottom = bottom + speed;
+		splashTime = parseInt(splashTime); //Just in case
+		
+		if (scrollSpeed === undefined) {
+			scrollSpeed = 30;
+		}
+		scrollSpeed = parseInt(scrollSpeed); //Just in case
+		
+		setScrollingText(scrollyString);
+		setProducers(producersString);
+		
+		splashLoop(producers, 0, splashTime);
+		setTimeout(rollMarquee, producers.length*splashTime, scrollSpeed);
+	}
+	
+	function splashLoop(arr, index, time) {
+		if (index === arr.length){
+			return;
+		}
+		document.getElementById("splash").innerHTML = arr[index];
+		setTimeout(splashLoop, time, arr, index+1, time)
+	}
+
+	function rollMarquee(speed){
+		var div = document.getElementById("container");
+		var bottom = 0;
+		lastinterval = setInterval(function () {
+			bottom = bottom + 1;
 			div.style.bottom = bottom + "px";
-		}, 50);
+			if(bottom > 1500){ //RUNAWAY CREDIT ALART - no seriously this will keep going if the player doesn't close the game between rounds
+				clearInterval(lastinterval);
+				return;
+			}
+		}, speed);
 	};
-	rollMarquee();
 	</script>
 </body>
 </html>
