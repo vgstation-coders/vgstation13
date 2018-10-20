@@ -63,7 +63,6 @@
 	var/restraint_apply_sound = null
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
-	var/is_hot = FALSE
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
@@ -194,7 +193,7 @@
 		to_chat(user, "You read '[price] space bucks' on the tag.")
 	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
 		to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
-	if(is_hot)
+	if(flags & SPICY_KEYCHAIN)
 		to_chat(user, "<span class='warning'>It appears to have a faint, red glow.</span>")
 
 
@@ -815,12 +814,13 @@
 // Returns true if the user took damage and feels pain (ie. they couldn't pick it up)
 // Returns false otherwise
 /obj/item/proc/spicy_keychain(mob/living/user)
+	if (!is_spicy() || !user || !istype(user))
+		return FALSE
 	var/obj/item/clothing/gloves = user.get_item_by_slot(slot_gloves)
 	// Only the most protective gloves will let you hold this without burning yourself
-	if (!is_hot || !user || !istype(user) || gloves && \
-			gloves.max_heat_protection_temperature >= GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE)
+	if (gloves && gloves.max_heat_protection_temperature >= GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE)
 		return FALSE
-	is_hot = FALSE
+	set_spicy(FALSE)
 	var/hand_used = user.get_active_hand_organ()
 	var/damage_applied = 0
 	if (!(M_RESIST_HEAT in user.mutations || M_UNBURNABLE in user.mutations))
@@ -830,20 +830,20 @@
 			user.audible_scream()
 			user.visible_message(
 					"<span class='warning'>[user] cries out in pain and jerks \his [hand_used] \
-					back! Looks like someone gave \him the old spicy " + src.name + "!</span>",
-					"<span class='danger'>Ouch!! \The [src] is red hot! Looks like someone gave \
-					you the old spicy " + src.name + "!</span>")
+					back! Looks like someone gave \him the ol' spicy " + src.name + "!</span>",
+					"<span class='danger'>AAAAAUUUGGGHHH!!! \The [src] is red hot! Looks like someone gave \
+					you the ol' spicy " + src.name + "!</span>")
 			return TRUE
 		else
 			user.visible_message(
 					"<span class='notice'>\The [user] burns \his [hand_used] grabbing \the [src]. \
-					Looks like someone gave \him the old spicy " + src.name + "!</span>",
+					Looks like someone gave \him the ol' spicy " + src.name + "!</span>",
 					"<span class='danger'>\The [src] is red hot! Looks like someone gave \
-					you the old spicy " + src.name + "!</span>")
+					you the ol' spicy " + src.name + "!</span>")
 	else
 		user.visible_message(
-				"<span class='notice'>\The [src] was incredibly hot, but has no effect on [user].</span>",
-				"<span class='notice'>\The [src] was incredibly hot, but it has no effect on you.</span>")
+				"<span class='notice'>\The [src] was red hot, but has no effect on [user].</span>",
+				"<span class='notice'>\The [src] was red hot, but it has no effect on you.</span>")
 	return FALSE
 
 /obj/item/can_pickup(mob/living/user)
@@ -859,8 +859,6 @@
 		return FALSE
 	if(!istype(loc, /turf) && !is_holder_of(user, src)) //Object is not on a turf
 		to_chat(user, "<span class='warning'>You can't pick that up!</span>")
-		return FALSE
-	if(spicy_keychain(user))
 		return FALSE
 	return TRUE
 
@@ -1185,8 +1183,17 @@ var/global/list/image/blood_overlays = list()
 			if(M.get_item_by_flag(bit) == src)
 				return TRUE
 
-/obj/item/proc/is_heatable()
-	return !is_hot
+/obj/item/proc/set_spicy(set_on)
+	if (set_on && is_spicyable())
+		flags |= SPICY_KEYCHAIN
+		return
+	flags &= ~SPICY_KEYCHAIN
+
+/obj/item/proc/is_spicy()
+	return flags & SPICY_KEYCHAIN
+
+/obj/item/proc/is_spicyable()
+	return TRUE
 
 /obj/item/proc/get_shrapnel_projectile()
 	if(shrapnel_type)

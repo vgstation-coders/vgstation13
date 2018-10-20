@@ -198,6 +198,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define	NOREACT 		16384 // Reagents don't react inside this container.
 
 #define TIMELESS		32768 // Immune to time manipulation.
+#define SPICY_KEYCHAIN	65536 // This item is one hot, spicy boy
 
 #define ALL ~0
 #define NONE 0

@@ -225,6 +225,9 @@
 		if(I)
 			to_chat(src, "You can't pry \the [W] out of your [get_index_limb_name(I)]!")
 			return 0
+	
+	if(W.spicy_keychain(src))
+		return 0
 
 	return 1
 
