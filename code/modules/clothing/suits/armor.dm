@@ -14,6 +14,7 @@
 		/obj/item/weapon/bikehorn/baton,
 		/obj/item/weapon/blunderbuss,
 		/obj/item/weapon/legcuffs/bolas,
+		/obj/item/device/hailer,
 		)
 	body_parts_covered = FULL_TORSO
 	flags = FPRINT
