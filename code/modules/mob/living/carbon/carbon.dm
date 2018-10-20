@@ -200,7 +200,7 @@
 					num_injuries++
 
 			if(num_injuries == 0)
-				to_chat(src, "My limbs are okay.")
+				to_chat(src, "My [prob(5)?"legs":"limbs"] are [pick("okay","OK")].")
 
 			if((M_SKELETON in H.mutations) && (!H.w_uniform) && (!H.wear_suit))
 				H.play_xylophone()
