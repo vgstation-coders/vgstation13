@@ -1,3 +1,22 @@
+/datum/design/bruise_pack
+	name = "Roll of gauze"
+	desc = "Some sterile gauze to wrap around bloody stumps."
+	id = "bruise_pack"
+	req_tech = list(Tc_BIOTECH = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 400, MAT_GLASS = 125)
+	category = "Medical"
+	build_path = /obj/item/stack/medical/bruise_pack
+
+/datum/design/ointment
+	name = "Ointment"
+	desc = "Used to treat those nasty burns."
+	id = "ointment"
+	req_tech = list(Tc_BIOTECH = 1)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 400, MAT_GLASS = 125)
+	category = "Medical"
+	build_path = /obj/item/stack/medical/ointment
 
 /datum/design/adv_bruise_pack
 	name = "Advanced trauma kit"
