@@ -617,8 +617,6 @@
 		else
 			if (istype(user, /mob/living/silicon))
 				return src.attack_hand(user)
-			if (!opened && wiresexposed && (istype(W, /obj/item/device/assembly/signaler)))
-				return wires.Interact()
 			/*user.visible_message("<span class='warning'>The [src.name] has been hit with the [W.name] by [user.name]!</span>", \
 				"<span class='warning'>You hit the [src.name] with your [W.name]!</span>", \
 				"You hear bang")*/
