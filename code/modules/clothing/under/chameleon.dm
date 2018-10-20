@@ -88,10 +88,10 @@
 			to_chat(usr, "You are registered as the user of this suit")
 			registered_user = user
 		if(!(/obj/item/clothing/under/chameleon/proc/Change_Color in verbs))
-			verbs |= /obj/item/clothing/under/chameleon/proc/Change_Color
+			verbs += /obj/item/clothing/under/chameleon/proc/Change_Color
 			return
 		if(/obj/item/clothing/under/chameleon/proc/Change_Color in verbs)
-			verbs &= ~/obj/item/clothing/under/chameleon/proc/Change_Color
+			verbs -= /obj/item/clothing/under/chameleon/proc/Change_Color
 			return
 
 /obj/item/clothing/under/chameleon/cold/attackby(obj/item/clothing/under/U, mob/user)
