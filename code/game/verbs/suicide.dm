@@ -38,16 +38,16 @@
 					return
 
 			//Do 175 damage divided by the number of damage types applied.
-			if(damagetype & BRUTELOSS)
+			if(damagetype & SUICIDE_ACT_BRUTELOSS)
 				adjustBruteLoss(175/damage_mod)
 
-			if(damagetype & FIRELOSS)
+			if(damagetype & SUICIDE_ACT_FIRELOSS)
 				adjustFireLoss(175/damage_mod)
 
-			if(damagetype & TOXLOSS)
+			if(damagetype & SUICIDE_ACT_TOXLOSS)
 				adjustToxLoss(175/damage_mod)
 
-			if(damagetype & OXYLOSS)
+			if(damagetype & SUICIDE_ACT_OXYLOSS)
 				adjustOxyLoss(175/damage_mod)
 
 			updatehealth()

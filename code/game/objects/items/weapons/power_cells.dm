@@ -24,7 +24,7 @@
 
 /obj/item/weapon/cell/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return (FIRELOSS)
+	return (SUICIDE_ACT_FIRELOSS)
 
 /obj/item/weapon/cell/empty/New()
 	..()

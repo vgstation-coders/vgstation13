@@ -26,7 +26,7 @@
 		user.fire_stacks += 5
 		user.IgniteMob()
 		user.audible_scream()
-		return FIRELOSS //Set ablaze and burned to crisps
+		return SUICIDE_ACT_FIRELOSS //Set ablaze and burned to crisps
 
 //"Special" Bible with a little gift on introduction
 /obj/item/weapon/storage/bible/booze

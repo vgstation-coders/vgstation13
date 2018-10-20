@@ -126,7 +126,7 @@
 
 /obj/item/toy/spinningtoy/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into \the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
-	return (BRUTELOSS|TOXLOSS|OXYLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 
 /*
@@ -455,7 +455,7 @@
 
 /obj/item/toy/crayon/suicide_act(mob/user)
 	user.visible_message("<span class = 'danger'><b>[user] is jamming \the [src.name] up \his nose and into \his brain. It looks like \he's trying to commit suicide.</b></span>")
-	return (BRUTELOSS|OXYLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_OXYLOSS)
 
 /*
  * Snap pops
@@ -684,7 +684,7 @@
 
 /obj/item/toy/gooncode/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
-	return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 
 /obj/item/toy/minimeteor

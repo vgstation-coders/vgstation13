@@ -21,7 +21,7 @@
 
 /obj/item/weapon/storage/briefcase/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'><b>[user] is smashing \his head inside the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/storage/briefcase/centcomm/New()
 	..()
