@@ -181,6 +181,7 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 
 /spell/targeted/genetic/headcannon
 	name = "Free the Brain"
+	desc = "Relieve the tension in the back of your head."
 	panel = "Mutant Powers"
 	user_type = USER_TYPE_GENETIC
 	range = SELFCAST
@@ -193,10 +194,6 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 
 	override_base = "genetic"
 	hud_state = "headcannon"
-
-/spell/targeted/genetic/headcannon/New()
-	desc = "Relieve the tension in the back of your head."
-	..()
 
 /spell/targeted/genetic/headcannon/cast(list/targets, mob/user)
 	if(istype(user.loc, /mob))
@@ -213,8 +210,6 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 
 	var/datum/organ/external/head/head_organ = M.get_organ(LIMB_HEAD)
 	var/obj/item/organ/internal/brain/B = M.remove_internal_organ(M, M.internal_organs_by_name["brain"], head_organ)
-	M.death(0)
-	M.ghostize(0) // set so they can't come back
 	head_organ.explode()
 	fire(M)
 	qdel(B) // make sure the actual brain doesn't drop
@@ -223,17 +218,7 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 
 /spell/targeted/genetic/headcannon/proc/fire(var/mob/living/carbon/human/user)
 	// stolen/adapted from the wheelchair cannon
-	var/obj/item/projectile/brain/cannonbrain = new()
-	var/target = null
-	switch(user.dir)
-		if(1)
-			target = locate(user.x, user.y+20, user.z)
-		if(2)
-			target = locate(user.x, user.y-20, user.z)
-		if(4)
-			target = locate(user.x+20, user.y, user.z)
-		if(8)
-			target = locate(user.x-20, user.y, user.z)
+	var/target = get_ranged_target_turf(user, user.dir, 20)
 
 	var/turf/curloc = get_turf(user)
 	var/turf/targloc = get_turf(target)
@@ -247,44 +232,8 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	var/movementdirection = get_dir(target,user)
 	spawn()
 		shake_camera(user, 6, 5)
-	if(user.locked_to && isobj(user.locked_to) && !user.locked_to.anchored)
-		spawn()
-			var/obj/B = user.locked_to
-			B.Move(get_step(user,movementdirection), movementdirection)
-			sleep(1)
-			B.Move(get_step(user,movementdirection), movementdirection)
-			sleep(1)
-			B.Move(get_step(user,movementdirection), movementdirection)
-			sleep(1)
-			B.Move(get_step(user,movementdirection), movementdirection)
-			sleep(2)
-			B.Move(get_step(user,movementdirection), movementdirection)
-			sleep(2)
-			B.Move(get_step(user,movementdirection), movementdirection)
-			sleep(3)
-			B.Move(get_step(user,movementdirection), movementdirection)
-			sleep(3)
-			B.Move(get_step(user,movementdirection), movementdirection)
-			sleep(3)
-			B.Move(get_step(user,movementdirection), movementdirection)
-	else
-		user.Move(get_step(user,movementdirection), movementdirection)
-		sleep(1)
-		user.Move(get_step(user,movementdirection), movementdirection)
+	user.throw_at(get_ranged_target_turf(user, movementdirection, 20), 20, 20)
 	user.apply_inertia(movementdirection)
 
 	// projectile stuff
-	cannonbrain.def_zone = LIMB_CHEST // always target chest
-	cannonbrain.original = target
-	cannonbrain.forceMove(curloc)
-	cannonbrain.starting = curloc
-	cannonbrain.shot_from = user
-	cannonbrain.firer = user
-	cannonbrain.current = curloc
-	cannonbrain.OnFired()
-	cannonbrain.yo = targloc.y - curloc.y
-	cannonbrain.xo = targloc.x - curloc.x
-	playsound(user, cannonbrain.fire_sound, 50, 1)
-	spawn()
-		cannonbrain.process()
-	sleep(1)
+	generic_projectile_fire(targloc, user, /obj/item/projectile/brain, 'sound/weapons/rocket.ogg')
