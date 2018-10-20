@@ -394,7 +394,7 @@
 		explode()
 		return
 	if(istype(AM, /obj/item/supermatter_splinter))
-		AM.visible_message("<span class='sinister'>As \the [AM] collides with \the [src], </span><span class = 'warning'>rather than exploding, \the [AM] fuses to \the [src]</span>")
+		AM.visible_message("<span class='sinister'>As \the [AM] collides with \the [src], </span><span class = 'warning'>rather than exploding, \the [AM] fuses to \the [src].</span>")
 		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
 		power_loss_modifier *= 1.5
 		playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
