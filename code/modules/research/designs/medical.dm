@@ -1,22 +1,3 @@
-/datum/design/bruise_pack
-	name = "Roll of gauze"
-	desc = "Some sterile gauze to wrap around bloody stumps."
-	id = "bruise_pack"
-	req_tech = list(Tc_BIOTECH = 1)
-	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 400, MAT_GLASS = 125)
-	category = "Medical"
-	build_path = /obj/item/stack/medical/bruise_pack
-
-/datum/design/ointment
-	name = "Ointment"
-	desc = "Used to treat those nasty burns."
-	id = "ointment"
-	req_tech = list(Tc_BIOTECH = 1)
-	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 400, MAT_GLASS = 125)
-	category = "Medical"
-	build_path = /obj/item/stack/medical/ointment
 
 /datum/design/adv_bruise_pack
 	name = "Advanced trauma kit"
@@ -37,17 +18,6 @@
 	materials = list(MAT_IRON = 600, MAT_GLASS = 250)
 	category = "Medical"
 	build_path = /obj/item/stack/medical/advanced/ointment
-
-/datum/design/mass_spectrometer
-	name = "Mass-Spectrometer"
-	desc = "A device for analyzing chemicals in the blood."
-	id = "mass_spectrometer"
-	req_tech = list(Tc_BIOTECH = 2, Tc_MAGNETS = 2)
-	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 30, MAT_GLASS = 20)
-	reliability_base = 76
-	category = "Medical"
-	build_path = /obj/item/device/mass_spectrometer
 
 /datum/design/adv_mass_spectrometer
 	name = "Advanced Mass-Spectrometer"

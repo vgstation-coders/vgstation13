@@ -1,12 +1,3 @@
-/datum/design/jackhammer
-	name = "Sonic Jackhammer"
-	desc = "Cracks rocks with sonic blasts, perfect for killing cave lizards."
-	id = "jackhammer"
-	req_tech = list(Tc_MATERIALS = 3, Tc_POWERSTORAGE = 2, Tc_ENGINEERING = 2)
-	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 2000, MAT_GLASS = 500, MAT_SILVER = 500)
-	category = "Mining"
-	build_path = /obj/item/weapon/pickaxe/jackhammer
 
 /datum/design/drill
 	name = "Mining Drill"
@@ -28,16 +19,6 @@
 	reliability_base = 79
 	category = "Mining"
 	build_path = /obj/item/weapon/pickaxe/plasmacutter
-
-/datum/design/pick_diamond
-	name = "Diamond Pickaxe"
-	desc = "A pickaxe with a diamond pick head, this is just like minecraft."
-	id = "pick_diamond"
-	req_tech = list(Tc_MATERIALS = 6)
-	build_type = PROTOLATHE
-	materials = list(MAT_DIAMOND = 3000)
-	category = "Mining"
-	build_path = /obj/item/weapon/pickaxe/diamond
 
 /datum/design/drill_diamond
 	name = "Diamond Mining Drill"
