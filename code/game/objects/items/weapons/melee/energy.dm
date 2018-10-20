@@ -9,7 +9,7 @@
 /obj/item/weapon/melee/energy/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>", \
 						"<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>"))
-	return (BRUTELOSS|FIRELOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
 /obj/item/weapon/melee/energy/is_hot()
 	if(active)
@@ -39,7 +39,7 @@
 
 /obj/item/weapon/melee/energy/axe/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] swings the [src.name] towards /his head! It looks like \he's trying to commit suicide.</span>")
-	return (BRUTELOSS|FIRELOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
 /obj/item/weapon/melee/energy/axe/rusty
 	name = "rusty energy axe"

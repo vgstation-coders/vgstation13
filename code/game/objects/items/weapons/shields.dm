@@ -22,7 +22,7 @@
 
 /obj/item/weapon/shield/riot/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his face into the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/shield/riot/IsShield()
 	return 1
@@ -100,7 +100,7 @@
 
 /obj/item/weapon/shield/energy/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is putting the [src.name] to their head and activating it! It looks like \he's  trying to commit suicide!</span>")
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/shield/energy/IsShield()
 	if(active)
