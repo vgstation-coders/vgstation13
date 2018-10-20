@@ -5,7 +5,7 @@
 //	If he accepts there is a random chance he will be accepted, rejected, or rejected and killed
 //	Bringing certain items can help improve the chance to become a traitor
 
-
+/*
 /obj/machinery/syndicate_beacon
 	name = "ominous beacon"
 	desc = "This looks suspicious..."
@@ -102,6 +102,7 @@
 	selfdestructing = 1
 	spawn()
 		explosion(src.loc, 1, rand(1,3), rand(3,8), 10)
+*/
 
 //Not the best place for it but it's a hack job anyway -- Urist
 /obj/machinery/singularity_beacon
@@ -125,6 +126,9 @@
 	var/active = 0 //It doesn't use APCs, so use_power wouldn't really suit it
 	var/icontype = "beacon"
 	var/obj/structure/cable/attached = null
+
+/obj/machinery/singularity_beacon/get_cell()
+	return cell
 
 /obj/machinery/singularity_beacon/New()
 

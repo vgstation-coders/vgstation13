@@ -42,6 +42,10 @@
 		/datum/action/spacepod/fire_weapons,\
 		/datum/action/spacepod/passenger/assume_control) //Actions to create when a passenger boards, deleted upon leaving
 	var/list/actions = list()
+
+/obj/spacepod/get_cell()
+	return battery
+
 /obj/spacepod/New()
 	. = ..()
 	if(!pod_overlays)
@@ -295,8 +299,9 @@
 	cabin_air = new
 	cabin_air.temperature = T20C
 	cabin_air.volume = 200
-	cabin_air.oxygen = O2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature)
-	cabin_air.nitrogen = N2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature)
+	cabin_air.adjust_multi(
+		GAS_OXYGEN, O2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature),
+		GAS_NITROGEN, N2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature))
 	return cabin_air
 
 /obj/spacepod/proc/add_airtank()

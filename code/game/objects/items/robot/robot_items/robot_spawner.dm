@@ -104,9 +104,13 @@
 
 /obj/item/weapon/robot_spawner/syndicate/post_recruited(mob/living/silicon/robot/R)
 	..()
-	ticker.mode.syndicates += R.mind
-	ticker.mode.update_synd_icons_added(R.mind)
-	R.mind.special_role = "syndicate"
+	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
+	if(nuclear)
+		var/datum/role/nuclear_operative/newCop = new
+		newCop.AssignToRole(R.mind,1)
+		nuclear.HandleRecruitedRole(newCop)
+		newCop.Greet(GREET_MIDROUND)
+
 
 //Strange spawner, a xenoarchaeology find.
 /obj/item/weapon/robot_spawner/strange

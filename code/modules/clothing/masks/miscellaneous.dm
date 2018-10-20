@@ -37,9 +37,7 @@
 	icon_state = "fake-moustache"
 	flags = FPRINT
 	body_parts_covered = BEARD
-
-/obj/item/clothing/mask/fakemoustache/is_hidden_identity()
-	return TRUE
+	hides_identity = HIDES_IDENTITY_ALWAYS
 
 //scarves (fit in in mask slot)
 /obj/item/clothing/mask/scarf
@@ -79,9 +77,7 @@
 	body_parts_covered = HEAD|MOUTH|EARS
 	w_class = W_CLASS_SMALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-
-/obj/item/clothing/mask/balaclava/is_hidden_identity()
-	return TRUE
+	hides_identity = HIDES_IDENTITY_ALWAYS
 
 /obj/item/clothing/mask/balaclava/skimask
 	heat_conductivity = INS_MASK_HEAT_CONDUCTIVITY

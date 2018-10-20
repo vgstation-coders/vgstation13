@@ -112,7 +112,7 @@
 		var/turf/T=A
 		for(var/atom/O in T)
 			// Blood splatters, runes.
-			if (istype(O, /obj/effect/decal/cleanable/blood) || istype(O, /obj/effect/rune))
+			if (istype(O, /obj/effect/decal/cleanable/blood) || istype(O, /obj/effect/rune_legacy))
 				blood_DNA_found    += extract_blood(O)
 				//fingerprints_found += extract_fingerprints(O)
 				//fibers_found       += extract_fibers(O)
@@ -294,7 +294,7 @@
 		var/turf/T=A
 		for(var/atom/O in T)
 			// Blood splatters, runes.
-			if (istype(O, /obj/effect/decal/cleanable/blood) || istype(O, /obj/effect/rune))
+			if (istype(O, /obj/effect/decal/cleanable/blood) || istype(O, /obj/effect/rune_legacy))
 				blood_DNA_found    += extract_blood(O)
 				//fingerprints_found += extract_fingerprints(O)
 				//fibers_found       += extract_fibers(O)

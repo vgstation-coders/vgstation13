@@ -238,6 +238,7 @@ var/list/score=list(
 	"deadaipenalty" = 0, //AIs who died during the round
 	"foodeaten"     = 0, //How much food was consumed
 	"clownabuse"    = 0, //How many times a clown was punched, struck or otherwise maligned
+	"slips"			= 0, //How many people have slipped during this round
 	"richestname"   = null, //This is all stuff to show who was the richest alive on the shuttle
 	"richestjob"    = null,  //Kinda pointless if you dont have a money system i guess
 	"richestcash"   = 0,
@@ -431,3 +432,6 @@ var/list/bank_security_text2num_associative = list(
 	"Two" = 2
 ) // Can't use a zero. Throws a fit about out of bounds indices if you do.
 // Also if you add more security levels, please also update the above BANK_SECURITY_EXPLANATION
+
+//Radial menus currently existing in the world.
+var/global/list/radial_menus = list()

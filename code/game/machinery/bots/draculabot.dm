@@ -70,7 +70,7 @@
 	dat += "<TT><B>Acula-class Blood Donation Bot v1.0</B></TT><BR><BR>"
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		var/datum/reagent/blood/B = H.get_blood(H.vessel)
+		var/datum/reagent/blood/B = get_blood(H.vessel)
 		if(B && B.data && B.data["virus2"])
 			dat += "WARNING: Viral agent detected. Ineligible for blood donation.<BR>"
 		else if(!B)
@@ -222,7 +222,7 @@
 			return
 		//look for our last used bag and see if it's still valid.
 		var/obj/item/weapon/reagent_containers/blood/B = null
-		var/datum/reagent/blood/target_blood = H.get_blood(H.vessel)
+		var/datum/reagent/blood/target_blood = get_blood(H.vessel)
 		if(last_bag && !last_bag.reagents.is_full() && last_bag.blood_type == target_blood.data["blood_type"])
 			B = last_bag
 		else

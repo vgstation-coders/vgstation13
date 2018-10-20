@@ -50,7 +50,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/mutantrace											// Safeguard due to old code.
 	var/myhuman												// mob reference
 
-	var/breath_type = "oxygen"   // Non-oxygen gas breathed, if any.
+	var/breath_type = GAS_OXYGEN   // Non-oxygen gas breathed, if any.
 	var/survival_gear = /obj/item/weapon/storage/box/survival // For spawnin'.
 
 	var/cold_level_1 = 220  // Cold damage level 1 below this point.
@@ -143,7 +143,6 @@ var/global/list/whitelisted_species = list("Human")
 	var/list/inventory_offsets
 
 	var/species_intro //What intro you're given when you become this species.
-
 
 /datum/species/New()
 	..()
@@ -253,6 +252,8 @@ var/global/list/whitelisted_species = list("Human")
 		H.oxygen_alert = 1
 		return moles*ratio/GAS_CONSUME_TO_WASTE_DENOMINATOR
 
+/datum/species/proc/handle_environment(var/datum/gas_mixture/environment, var/mob/living/carbon/human/host)
+
 // Used for species-specific names (Vox, etc)
 /datum/species/proc/makeName(var/gender,var/mob/living/carbon/C=null)
 	if(gender==FEMALE)
@@ -287,6 +288,9 @@ var/global/list/whitelisted_species = list("Human")
 		)
 	return offsets
 
+/datum/species/proc/conditional_whitelist()
+	return 0
+
 /datum/species/human
 	name = "Human"
 	known_languages = list(LANGUAGE_HUMAN)
@@ -309,6 +313,8 @@ var/global/list/whitelisted_species = list("Human")
 		"appendix" = /datum/organ/internal/appendix,
 		"eyes" =     /datum/organ/internal/eyes
 		)
+
+	flags = NO_PAIN
 	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | NO_BLOOD
 
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
@@ -341,9 +347,11 @@ var/global/list/whitelisted_species = list("Human")
 
 	flesh_color = "#34AF10"
 
+
 /datum/species/unathi/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.
 	speech.message = replacetext(speech.message, "s-ss-s", "ss-ss") //asshole shows up as ass-sshole
+
 
 /datum/species/skellington // /vg/
 	name = "Skellington"
@@ -355,7 +363,7 @@ var/global/list/whitelisted_species = list("Human")
 	meat_type = /obj/item/stack/sheet/bone
 	chem_flags = NO_EAT | NO_INJECT
 
-	default_mutations=list(SKELETON)
+	default_mutations=list(M_SKELETON)
 	brute_mod = 2.0
 
 	has_organ = list(
@@ -370,6 +378,11 @@ var/global/list/whitelisted_species = list("Human")
 					You have no skin, no blood, no lips, and only just enough brain to function.<br>\
 					You can not eat normally, as your necrotic state only permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe.<br>\
 					You are also incredibly weak to brute damage and are rather slow, but you don't need to breathe, so that's going for you."
+
+/datum/species/skellington/conditional_whitelist()
+	var/MM = text2num(time2text(world.timeofday, "MM"))
+	return MM == 10 //October
+
 
 /datum/species/skellington/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if (prob(25))
@@ -623,7 +636,7 @@ var/global/list/whitelisted_species = list("Human")
 	cold_level_3 = 0
 
 	eyes = "vox_eyes_s"
-	breath_type = "nitrogen"
+	breath_type = GAS_NITROGEN
 
 	default_mutations = list(M_BEAK, M_TALONS)
 	flags = IS_WHITELISTED | NO_SCAN
@@ -1184,7 +1197,6 @@ var/list/has_died_as_golem = list()
 					You have a resistance to burn and toxin, but a weakness to brute damage. You are adept at seeing in the dark, moreso with your light inversion ability.<br>\
 					However, you lack a mouth with which to talk. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
-
 
 /datum/species/lich
 	name = "Undead"

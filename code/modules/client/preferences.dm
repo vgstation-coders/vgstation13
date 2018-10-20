@@ -6,40 +6,42 @@
 var/list/preferences_datums = list()
 
 var/global/list/special_roles = list(
-	ROLE_ALIEN        = 1, //always show
-	ROLE_BLOB         = 1,
-	ROLE_BORER        = 1,
-	ROLE_CHANGELING   = IS_MODE_COMPILED("changeling"),
-	ROLE_CULTIST      = IS_MODE_COMPILED("cult"),
-	ROLE_PLANT        = 1,
-//	"infested monkey" = IS_MODE_COMPILED("monkey"),
-	ROLE_MALF         = IS_MODE_COMPILED("malfunction"),
+	ROLE_ALIEN        	= 1, //always show
+	ROLE_BLOB         	= 1,
+	ROLE_BORER        	= 1,
+	ROLE_CHANGELING   	= 1,
+	ROLE_CULTIST      	= 1,
+	ROLE_LEGACY_CULTIST = 1,
+	ROLE_PLANT        	= 1,
+//	"infested monkey" 	= IS_MODE_COMPILED("monkey"),
+	ROLE_MALF         	= 1,
 	//ROLE_NINJA        = 1,
-	ROLE_OPERATIVE    = IS_MODE_COMPILED("nuclear"),
-	ROLE_PAI          = 1, // -- TLE
-	ROLE_POSIBRAIN    = 1,
-	ROLE_REV          = IS_MODE_COMPILED("revolution"),
-	ROLE_TRAITOR      = IS_MODE_COMPILED("traitor"),
-	ROLE_VAMPIRE      = IS_MODE_COMPILED("vampire"),
-	ROLE_VOXRAIDER    = IS_MODE_COMPILED("heist"),
-	ROLE_WIZARD       = 1,
-	ROLE_COMMANDO	  = 1,
+	ROLE_OPERATIVE    	= 1,
+	ROLE_PAI          	= 1, // -- TLE
+	ROLE_POSIBRAIN    	= 1,
+	ROLE_REV          	= 1,
+	ROLE_TRAITOR      	= 1,
+	ROLE_VAMPIRE      	= 1,
+	ROLE_VOXRAIDER    	= 1,
+	ROLE_WIZARD       	= 1,
+	ROLE_COMMANDO	  	= 1,
 )
 
 var/list/antag_roles = list(
-	ROLE_ALIEN        = 1,
-	ROLE_BLOB         = 1,
-	ROLE_CHANGELING   = IS_MODE_COMPILED("changeling"),
-	ROLE_CULTIST      = IS_MODE_COMPILED("cult"),
-	ROLE_MALF         = IS_MODE_COMPILED("malfunction"),
-	ROLE_OPERATIVE    = IS_MODE_COMPILED("nuclear"),
-	ROLE_REV          = IS_MODE_COMPILED("revolution"),
-	ROLE_TRAITOR      = IS_MODE_COMPILED("traitor"),
-	ROLE_VAMPIRE      = IS_MODE_COMPILED("vampire"),
-	ROLE_VOXRAIDER    = IS_MODE_COMPILED("heist"),
-	ROLE_WIZARD       = 1,
-	ROLE_COMMANDO	  = 1,
-//	"infested monkey" = IS_MODE_COMPILED("monkey"),
+	ROLE_ALIEN        	= 1,
+	ROLE_BLOB         	= 1,
+	ROLE_CHANGELING   	= 1,
+	ROLE_CULTIST      	= 1,
+	ROLE_LEGACY_CULTIST = 1,
+	ROLE_MALF         	= 1,
+	ROLE_OPERATIVE    	= 1,
+	ROLE_REV          	= 1,
+	ROLE_TRAITOR      	= 1,
+	ROLE_VAMPIRE      	= 1,
+	ROLE_VOXRAIDER    	= 1,
+	ROLE_WIZARD       	= 1,
+	ROLE_COMMANDO	  	= 1,
+//	"infested monkey" 	= IS_MODE_COMPILED("monkey"),
 )
 
 var/list/nonantag_roles = list(
@@ -50,29 +52,26 @@ var/list/nonantag_roles = list(
 )
 
 var/list/role_wiki=list(
-	ROLE_ALIEN		= "Xenomorph",
-	ROLE_BLOB		= "Blob",
-	ROLE_BORER		= "Cortical_Borer",
-	ROLE_CHANGELING	= "Changeling",
-	ROLE_CULTIST	= "Cult",
-	ROLE_PLANT		= "Dionaea",
-	ROLE_MALF		= "Guide_to_Malfunction",
-	ROLE_OPERATIVE	= "Nuclear_Agent",
-	ROLE_PAI		= "Personal_AI",
-	ROLE_POSIBRAIN	= "Guide_to_Silicon_Laws",
-	ROLE_REV		= "Revolution",
-	ROLE_TRAITOR	= "Traitor",
-	ROLE_VAMPIRE	= "Vampire",
-	ROLE_VOXRAIDER	= "Vox_Raider",
-	ROLE_WIZARD		= "Wizard",
+	ROLE_ALIEN			= "Xenomorph",
+	ROLE_BLOB			= "Blob",
+	ROLE_BORER			= "Cortical_Borer",
+	ROLE_CHANGELING		= "Changeling",
+	ROLE_CULTIST		= "Cult 3.0",
+	ROLE_LEGACY_CULTIST = "Cult", // To change ! In the future we'll have a new page for Cult 3, and this one will go down in history
+	ROLE_PLANT			= "Dionaea",
+	ROLE_MALF			= "Guide_to_Malfunction",
+	ROLE_OPERATIVE		= "Nuclear_Agent",
+	ROLE_PAI			= "Personal_AI",
+	ROLE_POSIBRAIN		= "Guide_to_Silicon_Laws",
+	ROLE_REV			= "Revolution",
+	ROLE_TRAITOR		= "Traitor",
+	ROLE_VAMPIRE		= "Vampire",
+	ROLE_VOXRAIDER		= "Vox_Raider",
+	ROLE_WIZARD			= "Wizard",
 )
 
 var/const/MAX_SAVE_SLOTS = 8
 
-//used for alternate_option
-#define GET_RANDOM_JOB 0
-#define BE_ASSISTANT 1
-#define RETURN_TO_LOBBY 2
 #define POLLED_LIMIT	300
 
 /datum/preferences
@@ -168,7 +167,7 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	var/nanotrasen_relation = "Neutral"
 	var/bank_security = 1			//for bank accounts, 0-2, no-pin,pin,pin&card
-	
+
 
 	// 0 = character settings, 1 = game preferences
 	var/current_tab = 0
@@ -1259,7 +1258,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					var/new_bank_security = input(user, BANK_SECURITY_EXPLANATION, "Character Preference")  as null|anything in bank_security_text2num_associative
 					if(!isnull(new_bank_security))
 						bank_security = bank_security_text2num_associative[new_bank_security]
-						
+
 				if("flavor_text")
 					flavor_text = input(user,"Set the flavor text in your 'examine' verb. This can also be used for OOC notes and preferences!","Flavor Text",html_decode(flavor_text)) as message
 
@@ -1382,8 +1381,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						gender = FEMALE
 					else
 						gender = MALE
-					f_style = random_facial_hair_style(gender)
-					h_style = random_hair_style(gender)
+					f_style = random_facial_hair_style(gender, species)
+					h_style = random_hair_style(gender, species)
 
 				if("hear_adminhelps")
 					toggles ^= SOUND_ADMINHELP

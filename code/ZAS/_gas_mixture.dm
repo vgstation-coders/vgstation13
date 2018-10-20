@@ -1,54 +1,15 @@
-#define SPECIFIC_HEAT_TOXIN		200
-#define SPECIFIC_HEAT_AIR		20
-#define SPECIFIC_HEAT_CDO		30
-#define HEAT_CAPACITY_CALCULATION(oxygen,carbon_dioxide,nitrogen,toxins) \
-	max(0, carbon_dioxide * SPECIFIC_HEAT_CDO + (oxygen + nitrogen) * SPECIFIC_HEAT_AIR + toxins * SPECIFIC_HEAT_TOXIN)
-
 #define MINIMUM_HEAT_CAPACITY	0.0003
 #define TRANSFER_FRACTION 5 //What fraction (1/#) of the air difference to try and transfer
 
 // /vg/ SHIT
 #define TEMPERATURE_ICE_FORMATION 273.15 // 273 kelvin is the freezing point of water.
 #define MIN_PRESSURE_ICE_FORMATION 10    // 10kPa should be okay
-
-#define GRAPHICS_PLASMA   1
-#define GRAPHICS_N2O      2
-#define GRAPHICS_REAGENTS 4 //Not used. Yet.
-#define GRAPHICS_COLD     8
 // END /vg/SHIT
 
-/hook/startup/proc/createGasOverlays()
-	plmaster = new /obj/effect/overlay()
-	plmaster.icon = 'icons/effects/tile_effects.dmi'
-	plmaster.icon_state = "plasma"
-	plmaster.layer = FLY_LAYER
-	plmaster.plane = EFFECTS_PLANE
-	plmaster.mouse_opacity = 0
-
-	slmaster = new /obj/effect/overlay()
-	slmaster.icon = 'icons/effects/tile_effects.dmi'
-	slmaster.icon_state = "sleeping_agent"
-	slmaster.layer = FLY_LAYER
-	slmaster.plane = EFFECTS_PLANE
-	slmaster.mouse_opacity = 0
-	return 1
-
-/datum/gas/sleeping_agent/specific_heat = 40 //These are used for the "Trace Gases" stuff, but is buggy.
-
-/datum/gas/oxygen_agent_b/specific_heat = 300
-
-/datum/gas/volatile_fuel/specific_heat = 30
-
-/datum/gas
-	var/moles = 0
-
-	var/specific_heat = 0
-
 /datum/gas_mixture
-	var/oxygen = 0		//Holds the "moles" of each of the four gases.
-	var/carbon_dioxide = 0
-	var/nitrogen = 0
-	var/toxins = 0
+	//Associative list of gas moles.
+	//Gases with 0 moles are not tracked and are pruned by update_values()
+	var/list/gas = list()
 
 	var/total_moles = 0	//Updated when a reaction occurs.
 
@@ -56,11 +17,10 @@
 
 	var/temperature = 0 //in Kelvin
 
-	var/graphics=0
+	//List of active tile overlays for this gas_mixture.  Updated by check_tile_graphic()
+	var/list/graphic = list()
 
-	var/pressure=0
-
-	var/list/datum/gas/trace_gases = list() //Seemed to be a good idea that was abandoned
+	var/pressure = 0
 
 	var/tmp/fuel_burnt = 0
 
@@ -70,45 +30,22 @@
 		volume = to_copy.volume
 		copy_from(to_copy)
 
-//Turns out that most of the time, people only want to adjust a single gas at a time, and using a proc set up like this just encourages bad behavior.
-//To be purged along with the trace gas system later.
-/datum/gas_mixture/proc/adjust(o2 = 0, co2 = 0, n2 = 0, tx = 0, list/datum/gas/traces = list())
-	//Purpose: Adjusting the gases within a airmix
-	//Called by: Fucking everything!
-	//Inputs: The values of the gases to adjust
-	//Outputs: null
 
-	oxygen = max(0, oxygen + o2)
-	carbon_dioxide = max(0, carbon_dioxide + co2)
-	nitrogen = max(0, nitrogen + n2)
-	toxins = max(0, toxins + tx)
+//Since gases not present in the mix are culled from the list, we use this to make sure a number is returned for any valid gas.
+/datum/gas_mixture/proc/operator[](idx)
+	return gas[idx] || (XGM.gases[idx] ? 0 : null)
 
-	//handle trace gasses
-	for(var/datum/gas/G in traces)
-		var/datum/gas/T = locate(G.type) in trace_gases
-		if(T)
-			T.moles = max(G.moles + T.moles, 0)
-		else if(G.moles > 0)
-			trace_gases |= G
-	update_values()
-	return
+//This just allows the [] operator to be used for writes as well as reads. The above proc means this WILL work with +=, etc., for any valid gas.
+/datum/gas_mixture/proc/operator[]=(idx, val)
+	gas[idx] = val
 
 
 //Takes a gas string, and the number of moles to adjust by. Calls update_values() if update isn't 0.
 /datum/gas_mixture/proc/adjust_gas(gasid, moles, update = TRUE)
 	if(!moles)
 		return
-	switch(gasid)
-		if("oxygen")
-			oxygen += moles
-		if("plasma")
-			toxins += moles
-		if("carbon_dioxide")
-			carbon_dioxide += moles
-		if("nitrogen")
-			nitrogen += moles
-		else
-			CRASH("Invalid gasid!")
+
+	src[gasid] += moles
 
 	if(update)
 		update_values()
@@ -118,19 +55,9 @@
 /datum/gas_mixture/proc/adjust_gas_temp(gasid, moles, temp, update = TRUE)
 	if(moles > 0 && abs(temperature - temp) > MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
 		var/self_heat_capacity = heat_capacity()
-
-		var/giver_heat_capacity = moles
-		switch(gasid)
-			if("oxygen", "nitrogen")
-				giver_heat_capacity *= SPECIFIC_HEAT_AIR
-			if("plasma")
-				giver_heat_capacity *= SPECIFIC_HEAT_TOXIN
-			if("carbon_dioxide")
-				giver_heat_capacity *= SPECIFIC_HEAT_CDO
-			else
-				CRASH("Invalid gasid!")
-
+		var/giver_heat_capacity = XGM.specific_heat[gasid] * moles
 		var/combined_heat_capacity = giver_heat_capacity + self_heat_capacity
+
 		temperature = (temp * giver_heat_capacity + temperature * self_heat_capacity) / combined_heat_capacity
 
 	adjust_gas(gasid, moles, update)
@@ -147,7 +74,8 @@
 
 
 //Variadic version of adjust_gas_temp(). Takes any number of gas, mole and temperature associations and applies them.
-//This proc is evil. Temperature will not behave how you expect it to. You have been warned.
+//This proc is evil. Temperature will not behave how you expect it to unless this mixture starts off empty.
+//Honestly, just make a new gas_mixture and merge it into this one instead.
 /datum/gas_mixture/proc/adjust_multi_temp()
 	ASSERT(!(args.len % 3))
 
@@ -159,27 +87,18 @@
 
 //Merges all the gas from another mixture into this one. Adjusts temperature correctly.
 //Does not modify giver in any way.
-/datum/gas_mixture/proc/merge(datum/gas_mixture/giver)
+/datum/gas_mixture/proc/merge(datum/gas_mixture/giver, update = TRUE)
 	if(!giver)
 		return 0
 
 	var/self_heat_capacity = heat_capacity()
 	var/giver_heat_capacity = giver.heat_capacity()
-
 	temperature = (temperature * self_heat_capacity + giver.temperature * giver_heat_capacity) / (self_heat_capacity + giver_heat_capacity)
-	adjust_multi(\
-		"oxygen", giver.oxygen,\
-		"nitrogen", giver.nitrogen,\
-		"plasma", giver.toxins,\
-		"carbon_dioxide", giver.carbon_dioxide)
 
-	if(giver.trace_gases.len) //This really should use adjust(), but I think it would break things, and I don't care enough to fix a system I'm removing soon anyway.
-		for(var/datum/gas/trace_gas in giver.trace_gases)
-			var/datum/gas/corresponding = locate(trace_gas.type) in trace_gases
-			if(!corresponding)
-				corresponding = new trace_gas.type()
-				trace_gases += corresponding
-			corresponding.moles += trace_gas.moles
+	for(var/g in giver.gas)
+		adjust_gas(g, giver.gas[g], FALSE)
+
+	if(update)
 		update_values()
 
 	return 1
@@ -206,46 +125,44 @@
 	return temperature * heat_capacity()
 
 
-/datum/gas_mixture/proc/molar_density(gas) //Per liter. You should probably be using pressure instead, but considering this had to be made, you wouldn't be the first not to.
-	return (gas ? vars[gas] : total_moles) / volume //Should verify if gas is actually a valid gas, but this shouldn't be in use for long anyway.
+/datum/gas_mixture/proc/molar_density(g) //Per liter. You should probably be using pressure instead, but considering this had to be made, you wouldn't be the first not to.
+	return (g ? src[g] : total_moles) / volume
+
+
+/datum/gas_mixture/proc/partial_pressure(g)
+	return total_moles && (src[g] / total_moles * pressure) //&& short circuits if total_moles is 0, and returns the second expression if it is not.
 
 ///////////////////////////////
 //PV=nRT - related procedures//
 ///////////////////////////////
 
 /datum/gas_mixture/proc/heat_capacity()
-	//Purpose: Returning the heat capacity of the gas mix
-	//Called by: UNKNOWN
-	//Inputs: None
-	//Outputs: Heat capacity
+	var/heat_capacity = 0
 
-	var/heat_capacity = HEAT_CAPACITY_CALCULATION(oxygen,carbon_dioxide,nitrogen,toxins)
+	for(var/g in gas)
+		heat_capacity += XGM.specific_heat[g] * gas[g]
 
-	if(trace_gases && trace_gases.len) //sanity check because somehow the tracegases gets nulled?
-		for(var/datum/gas/trace_gas in trace_gases)
-			heat_capacity += trace_gas.moles*trace_gas.specific_heat
-
-	return max(MINIMUM_HEAT_CAPACITY,heat_capacity)
+	return max(MINIMUM_HEAT_CAPACITY, heat_capacity)
 
 
 //Adds or removes thermal energy. Returns the actual thermal energy change, as in the case of removing energy we can't go below TCMB.
 /datum/gas_mixture/proc/add_thermal_energy(var/thermal_energy)
-	if (total_moles == 0)
+	if(total_moles == 0)
 		return 0
 
 	var/heat_capacity = heat_capacity()
-	if (thermal_energy < 0)
-		if (temperature < TCMB)
+	if(thermal_energy < 0)
+		if(temperature < TCMB)
 			return 0
-		var/thermal_energy_limit = -(temperature - TCMB)*heat_capacity	//ensure temperature does not go below TCMB
-		thermal_energy = max( thermal_energy, thermal_energy_limit )	//thermal_energy and thermal_energy_limit are negative here.
+		var/thermal_energy_limit = -(temperature - TCMB) * heat_capacity	//ensure temperature does not go below TCMB
+		thermal_energy = max(thermal_energy, thermal_energy_limit)	//thermal_energy and thermal_energy_limit are negative here.
 	temperature += thermal_energy/heat_capacity
 	return thermal_energy
 
 
 //Returns the thermal energy change required to get to a new temperature
 /datum/gas_mixture/proc/get_thermal_energy_change(var/new_temperature)
-	return heat_capacity()*(max(new_temperature, 0) - temperature)
+	return heat_capacity() * (max(new_temperature, 0) - temperature)
 
 
 //The below wasn't even implemented yet in the big XGM PR. Just saving it here for later.
@@ -274,37 +191,34 @@
 //	which is bit more realistic (natural log), and returns a fairly accurate entropy around room temperatures and pressures.
 //*/
 ///datum/gas_mixture/proc/specific_entropy_gas(var/gasid)
-//	if (!(gasid in gas) || gas[gasid] == 0)
+//	if (src[gasid] == 0)
 //		return SPECIFIC_ENTROPY_VACUUM	//that gas isn't here
 //
 //	//V/(m*T) = R/(partial pressure)
 //	var/molar_mass = XGM.molar_mass[gasid]
 //	var/specific_heat = XGM.specific_heat[gasid]
-//	return R_IDEAL_GAS_EQUATION * ( log( (IDEAL_GAS_ENTROPY_CONSTANT*volume/(gas[gasid] * temperature)) * (molar_mass*specific_heat*temperature)**(2/3) + 1 ) +  15 )
+//	return R_IDEAL_GAS_EQUATION * ( log( (IDEAL_GAS_ENTROPY_CONSTANT*volume/(src[gasid] * temperature)) * (molar_mass*specific_heat*temperature)**(2/3) + 1 ) +  15 )
 //
 //	//alternative, simpler equation
-//	//var/partial_pressure = gas[gasid] * R_IDEAL_GAS_EQUATION * temperature / volume
+//	//var/partial_pressure = src[gasid] * R_IDEAL_GAS_EQUATION * temperature / volume
 //	//return R_IDEAL_GAS_EQUATION * ( log (1 + IDEAL_GAS_ENTROPY_CONSTANT/partial_pressure) + 20 )
 
 
+//Updates the calculated vars (total_moles, pressure, etc.) (actually currently only those two), and culls empty gases from the mix.
+//Called by default by all methods that alter a gas_mixture, and should be called if you manually alter it.
 /datum/gas_mixture/proc/update_values()
-	//Purpose: Calculating and storing values which were normally called CONSTANTLY
-	//Called by: Anything that changes values within a gas mix.
-	//Inputs: None
-	//Outputs: None
+	total_moles = 0
+	for(var/g in gas)
+		var/moles = gas[g]
+		if(moles)
+			total_moles += gas[g]
+		else
+			gas -= g
 
-	total_moles = oxygen + carbon_dioxide + nitrogen + toxins
-
-	if(trace_gases.len)
-		for(var/datum/gas/trace_gas in trace_gases)
-			total_moles += trace_gas.moles
-
-	if(volume>0)
-		pressure = total_moles()*R_IDEAL_GAS_EQUATION*temperature/volume
+	if(volume > 0)
+		pressure = total_moles * R_IDEAL_GAS_EQUATION * temperature / volume
 	else
 		pressure = 0
-
-	return
 
 
 /datum/gas_mixture/proc/total_moles()
@@ -312,100 +226,49 @@
 
 
 /datum/gas_mixture/proc/return_pressure()
-	//Purpose: Calculating Current Pressure
-	//Called by:
-	//Inputs: None
-	//Outputs: Gas pressure.
 	return pressure
 
 
-/datum/gas_mixture/proc/remove(amount)
-	//Purpose: Removes a certain number of moles from the air.
-	//Called by: ?
-	//Inputs: How many moles to remove.
-	//Outputs: Removed air.
-
-	var/sum = total_moles()
-	amount = min(amount,sum) //Can not take more air than tile has!
-	if(amount <= 0)
-		return null
-
-	var/datum/gas_mixture/removed = new
+//Removes the given number of moles from src, and returns a new gas_mixture containing the removed gas.
+/datum/gas_mixture/proc/remove(moles, update = TRUE, update_removed = TRUE)
+	var/sum = total_moles
+	if(!sum)
+		return
+	moles = min(moles, sum) //Cannot take more air than tile has!
+	return remove_ratio(moles / sum, update, update_removed)
 
 
-	removed.oxygen = QUANTIZE((oxygen/sum)*amount)
-	removed.nitrogen = QUANTIZE((nitrogen/sum)*amount)
-	removed.carbon_dioxide = QUANTIZE((carbon_dioxide/sum)*amount)
-	removed.toxins = QUANTIZE((toxins/sum)*amount)
-
-	oxygen -= removed.oxygen
-	nitrogen -= removed.nitrogen
-	carbon_dioxide -= removed.carbon_dioxide
-	toxins -= removed.toxins
-
-	if(trace_gases.len)
-		for(var/datum/gas/trace_gas in trace_gases)
-			var/datum/gas/corresponding = new trace_gas.type()
-			removed.trace_gases += corresponding
-
-			corresponding.moles = (trace_gas.moles/sum)*amount
-			trace_gas.moles -= corresponding.moles
-/*
-	if(aerosols.total_volume > 1)
-		removed.aerosols.trans_to_atmos(src,(aerosols.total_volume/sum)*amount)
-*/
-
-	removed.temperature = temperature
-	update_values()
-	removed.update_values()
-
-	return removed
-
-
-/datum/gas_mixture/proc/remove_ratio(ratio)
-	//Purpose: Removes a certain ratio of the air.
-	//Called by: ?
-	//Inputs: Percentage to remove.
-	//Outputs: Removed air.
-
+//Removes the given proportion of the gas in src, and returns a new gas_mixture containing the removed gas.
+/datum/gas_mixture/proc/remove_ratio(ratio, update = TRUE, update_removed = TRUE)
 	if(ratio <= 0 || total_moles <= 0)
-		return null
+		return
 
 	ratio = min(ratio, 1)
 
-	var/datum/gas_mixture/removed = new
+	var/datum/gas_mixture/removed = new()
 
-	removed.oxygen = QUANTIZE(oxygen*ratio)
-	removed.nitrogen = QUANTIZE(nitrogen*ratio)
-	removed.carbon_dioxide = QUANTIZE(carbon_dioxide*ratio)
-	removed.toxins = QUANTIZE(toxins*ratio)
-
-	oxygen -= removed.oxygen
-	nitrogen -= removed.nitrogen
-	carbon_dioxide -= removed.carbon_dioxide
-	toxins -= removed.toxins
-
-	if(trace_gases.len)
-		for(var/datum/gas/trace_gas in trace_gases)
-			var/datum/gas/corresponding = new trace_gas.type()
-			removed.trace_gases += corresponding
-
-			corresponding.moles = trace_gas.moles*ratio
-			trace_gas.moles -= corresponding.moles
+	for(var/g in gas)
+		var/moles = gas[g] * ratio
+		gas[g] -= moles
+		removed[g] += moles
 
 	removed.temperature = temperature
-	update_values()
-	removed.update_values()
+
+	if(update)
+		update_values()
+	if(update_removed)
+		removed.update_values()
 
 	return removed
 
 
-//Removes a volume of gas from the mixture and returns a gas_mixture containing the removed air with the given volume.
-/datum/gas_mixture/proc/remove_volume(removed_volume)
-	var/datum/gas_mixture/removed = remove_ratio(removed_volume/volume)
+//Removes the given volume of gas from src, and returns a new gas_mixture containing the removed gas, with the given volume.
+/datum/gas_mixture/proc/remove_volume(removed_volume, update = TRUE, update_removed = TRUE)
+	var/datum/gas_mixture/removed = remove_ratio(removed_volume / volume, update, FALSE)
 	if(removed)
 		removed.volume = removed_volume
-		removed.update_values()
+		if(update_removed)
+			removed.update_values()
 	return removed
 
 
@@ -413,37 +276,31 @@
 //Procedures used for very specific events//
 ////////////////////////////////////////////
 
-/datum/gas_mixture/proc/check_tile_graphic()
-	//Purpose: Calculating the graphic for a tile
-	//Called by: Turfs updating
-	//Inputs: None
-	//Outputs: 1 if graphic changed, 0 if unchanged
+//Rechecks the gas_mixture and adjusts the graphic list if needed.
+//Two lists can be passed by reference if you need know specifically which graphics were added and removed.
+/datum/gas_mixture/proc/check_tile_graphic(list/graphic_add = null, list/graphic_remove = null)
+	for(var/g in XGM.overlay_limit)
+		if(graphic.Find(XGM.tile_overlay[g]))
+			//Overlay is already applied for this gas, check if it's still valid.
+			if(molar_density(g) <= XGM.overlay_limit[g])
+				if(!graphic_remove)
+					graphic_remove = list()
+				graphic_remove += XGM.tile_overlay[g]
+		else
+			//Overlay isn't applied for this gas, check if it's valid and needs to be added.
+			if(molar_density(g) > XGM.overlay_limit[g])
+				if(!graphic_add)
+					graphic_add = list()
+				graphic_add += XGM.tile_overlay[g]
 
-	var/old_graphics = graphics
-
-	graphics = 0
-
-	// If configured and cold, maek ice
-	if(zas_settings.Get(/datum/ZAS_Setting/ice_formation))
-		if(temperature <= TEMPERATURE_ICE_FORMATION && return_pressure()>MIN_PRESSURE_ICE_FORMATION)
-			// If we're just forming, do a probability check. Otherwise, KEEP IT ON~
-			// This ordering will hopefully keep it from sampling random noise every damn tick.
-			//if(was_icy || (!was_icy && prob(25)))
-			graphics |= GRAPHICS_COLD
-
-	if((toxins / volume * CELL_VOLUME) > MOLES_PLASMA_VISIBLE)
-		graphics |= GRAPHICS_PLASMA
-
-	if(length(trace_gases))
-		var/datum/gas/sleeping_agent = locate(/datum/gas/sleeping_agent) in trace_gases
-		if(sleeping_agent && ((sleeping_agent.moles / volume * CELL_VOLUME) > 1))
-			graphics |= GRAPHICS_N2O
-/*
-	if(aerosols && aerosols.total_volume >= 1)
-		graphics |= GRAPHICS_REAGENTS
-*/
-
-	return graphics != old_graphics
+	. = 0
+	//Apply changes
+	if(graphic_add && graphic_add.len)
+		graphic += graphic_add
+		. = 1
+	if(graphic_remove && graphic_remove.len)
+		graphic -= graphic_remove
+		. = 1
 
 /datum/gas_mixture/proc/react(atom/dump_location)
 	//Purpose: Calculating if it is possible for a fire to occur in the airmix
@@ -461,26 +318,13 @@
 //////////////////////////////////////////////
 
 
+//Copies the gases from sample to src, per unit volume.
 /datum/gas_mixture/proc/copy_from(datum/gas_mixture/sample)
-	//Purpose: Copies the per unit volume properties of sample.
-	//Called by: airgroups splitting, ?
-	//Inputs: Gas to copy
-	//Outputs: 1
-
-	oxygen = sample.oxygen
-	carbon_dioxide = sample.carbon_dioxide
-	nitrogen = sample.nitrogen
-	toxins = sample.toxins
+	gas.len = 0
+	for(var/g in sample.gas)
+		src[g] = sample.gas[g]
 
 	temperature = sample.temperature
-
-	trace_gases.len = 0
-	if(sample.trace_gases.len > 0)
-		for(var/datum/gas/trace_gas in sample.trace_gases)
-			var/datum/gas/corresponding = new trace_gas.type()
-			trace_gases += corresponding
-
-			corresponding.moles = trace_gas.moles
 
 	multiply(volume / sample.volume)
 	return 1
@@ -493,122 +337,63 @@
 //The above except for gases specifically.
 #define FAIL_AIR_SIMILARITY_CHECK(ownvar, samplevar) (FAIL_SIMILARITY_CHECK((ownvar), (samplevar), MINIMUM_AIR_TO_SUSPEND, MINIMUM_AIR_RATIO_TO_SUSPEND))
 
+//Compares src's gas to sample's gas, per unit volume.
+//Returns TRUE if they are close enough to equal to equalize or merge (in the case of zones), FALSE otherwise.
 /datum/gas_mixture/proc/compare(datum/gas_mixture/sample)
-	//Purpose: Compares sample to self to see if within acceptable ranges that group processing may be enabled
-	//Called by: Airgroups trying to rebuild
-	//Inputs: Gas mix to compare
-	//Outputs: 1 if can rebuild, 0 if not.
 	if(!istype(sample))
-		return 0
+		return FALSE
 
 	if(FAIL_SIMILARITY_CHECK(temperature, sample.temperature, MINIMUM_TEMPERATURE_DELTA_TO_SUSPEND, MINIMUM_TEMPERATURE_RATIO_TO_SUSPEND))
-		return 0
+		return FALSE
 	if(FAIL_SIMILARITY_CHECK(pressure, sample.pressure, MINIMUM_PRESSURE_DELTA_TO_SUSPEND, MINIMUM_PRESSURE_RATIO_TO_SUSPEND))
-		return 0
+		return FALSE
 
-	var/volume_ratio = volume / sample.volume //We want to compare the number of moles per unit volume, not total.
+	for(var/g in gas | sample.gas)
+		if(FAIL_AIR_SIMILARITY_CHECK(molar_density(g), sample.molar_density(g)))
+			return FALSE
 
-	if(FAIL_AIR_SIMILARITY_CHECK(oxygen, sample.oxygen * volume_ratio))
-		return 0
-	if(FAIL_AIR_SIMILARITY_CHECK(nitrogen, sample.nitrogen * volume_ratio))
-		return 0
-	if(FAIL_AIR_SIMILARITY_CHECK(carbon_dioxide, sample.carbon_dioxide * volume_ratio))
-		return 0
-	if(FAIL_AIR_SIMILARITY_CHECK(toxins, sample.toxins * volume_ratio))
-		return 0
-
-	var/check_moles
-	if(sample.trace_gases.len)
-		for(var/datum/gas/trace_gas in sample.trace_gases)
-			var/datum/gas/corresponding = locate(trace_gas.type) in trace_gases
-			if(corresponding)
-				check_moles = corresponding.moles / volume_ratio
-			else
-				check_moles = 0
-
-			if(FAIL_AIR_SIMILARITY_CHECK(check_moles, trace_gas.moles))
-				return 0
-
-	if(trace_gases.len)
-		for(var/datum/gas/trace_gas in trace_gases)
-			var/datum/gas/corresponding = locate(trace_gas.type) in sample.trace_gases
-			if(corresponding)
-				check_moles = corresponding.moles * volume_ratio
-			else
-				check_moles = 0
-
-			if(FAIL_AIR_SIMILARITY_CHECK(trace_gas.moles, check_moles))
-				return 0
-
-	return 1
+	return TRUE
 
 #undef FAIL_AIR_SIMILARITY_CHECK
 #undef FAIL_SIMILARITY_CHECK
 
-/datum/gas_mixture/proc/add(datum/gas_mixture/right_side)
-	if(!right_side)
-		return 0
-	oxygen += right_side.oxygen
-	carbon_dioxide += right_side.carbon_dioxide
-	nitrogen += right_side.nitrogen
-	toxins += right_side.toxins
 
-	if(trace_gases.len || right_side.trace_gases.len)
-		for(var/datum/gas/trace_gas in right_side.trace_gases)
-			var/datum/gas/corresponding = locate(trace_gas.type) in trace_gases
-			if(!corresponding)
-				corresponding = new trace_gas.type()
-				trace_gases += corresponding
-			corresponding.moles += trace_gas.moles
+/datum/gas_mixture/proc/add(datum/gas_mixture/right_side)
+	if(!istype(right_side))
+		return FALSE
+
+	for(var/g in right_side.gas)
+		src[g] += right_side.gas[g]
 
 	update_values()
-	return 1
+	return TRUE
+
 
 /datum/gas_mixture/proc/subtract(datum/gas_mixture/right_side)
-	//Purpose: Subtracts right_side from air_mixture. Used to help turfs mingle
-	//Called by: Pipelines ending in a break (or something)
-	//Inputs: Gas mix to remove
-	//Outputs: 1
+	if(!istype(right_side))
+		return FALSE
 
-	oxygen = max(0, oxygen - right_side.oxygen)
-	carbon_dioxide = max(0, carbon_dioxide - right_side.carbon_dioxide)
-	nitrogen = max(0, nitrogen - right_side.nitrogen)
-	toxins = max(0, toxins - right_side.toxins)
-
-	if(trace_gases.len || right_side.trace_gases.len)
-		for(var/datum/gas/trace_gas in right_side.trace_gases)
-			var/datum/gas/corresponding = locate(trace_gas.type) in trace_gases
-			if(corresponding)
-				corresponding.moles = max(0, corresponding.moles - trace_gas.moles)
+	for(var/g in right_side.gas)
+		src[g] -= right_side.gas[g]
 
 	update_values()
-	return 1
+	return TRUE
+
 
 /datum/gas_mixture/proc/multiply(factor)
-	oxygen *= factor
-	carbon_dioxide *= factor
-	nitrogen *= factor
-	toxins *= factor
-
-	if(trace_gases && trace_gases.len)
-		for(var/datum/gas/trace_gas in trace_gases)
-			trace_gas.moles *= factor
+	for(var/g in gas)
+		gas[g] *= factor
 
 	update_values()
-	return 1
+	return TRUE
+
 
 /datum/gas_mixture/proc/divide(factor)
-	oxygen /= factor
-	carbon_dioxide /= factor
-	nitrogen /= factor
-	toxins /= factor
-
-	if(trace_gases && trace_gases.len)
-		for(var/datum/gas/trace_gas in trace_gases)
-			trace_gas.moles /= factor
+	for(var/g in gas)
+		gas[g] /= factor
 
 	update_values()
-	return 1
+	return TRUE
 
 
 //Mixes the given ratio of the two gas_mixtures.
@@ -632,6 +417,7 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 	share_ratio(other, ratio)
 	return compare(other)
 
+
 /datum/gas_mixture/proc/share_space(datum/gas_mixture/unsim_air, connecting_tiles)
 	var/datum/gas_mixture/sharer = new() //Make a new gas_mixture to copy unsim_air into so it doesn't get changed.
 	sharer.volume = unsim_air.volume + volume + 3 * CELL_VOLUME //Then increase the copy's volume so larger rooms don't drain slowly as fuck.
@@ -639,38 +425,28 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 	sharer.copy_from(unsim_air) //Finally, perform the actual copy
 	return share_tiles(sharer, connecting_tiles)
 
+
 /datum/gas_mixture/proc/english_contents_list()
-	var/all_contents = list()
-	if(oxygen)
-		all_contents += "Oxygen"
-	if(nitrogen)
-		all_contents += "Nitrogen"
-	if(carbon_dioxide)
-		all_contents += "CO<sub>2</sub>"
-	if(toxins)
-		all_contents += "Plasma"
-	if(locate(/datum/gas/sleeping_agent) in trace_gases)
-		all_contents += "N<sub>2</sub>O"
+	var/list/all_contents = list()
+
+	for(var/g in gas)
+		all_contents += XGM.name[g]
+
 	return english_list(all_contents)
+
 
 /datum/gas_mixture/proc/loggable_contents()
 	var/naughty_stuff = list()
-	if(toxins)
-		naughty_stuff += "<b><font color='red'>Plasma</font></b>"
-	if(carbon_dioxide)
-		naughty_stuff += "<b><font color='red'>CO<sub>2</sub></font></b>"
-	if(locate(/datum/gas/sleeping_agent) in trace_gases)
-		naughty_stuff += "<b><font color='red'>N<sub>2</sub>O</font>"
+
+	for(var/g in gas)
+		if(XGM.flags[g] & XGM_GAS_LOGGED)
+			naughty_stuff += "<span class='bold red'>[XGM.short_name[g]]</span>"
 	return english_list(naughty_stuff, nothing_text = "")
 
 
 
 //Unsimulated gas_mixture
 //Acts like a gas_mixture, except none of the procs actually change it.
-
-/datum/gas_mixture/unsimulated/adjust(o2 = 0, co2 = 0, n2 = 0, tx = 0, list/datum/gas/traces)
-	return
-
 
 /datum/gas_mixture/unsimulated/adjust_gas(gasid, moles, update = TRUE)
 	return
@@ -704,52 +480,21 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 	return 0 //Real answer would be infinity, but that would be virtually guaranteed to cause problems.
 
 
-/datum/gas_mixture/unsimulated/remove(amount)
-	var/sum = total_moles()
-	amount = min(amount, sum) //Can not take more air than tile has!
-	if(amount <= 0)
-		return null
-
-	var/datum/gas_mixture/removed = new
-
-	removed.oxygen = QUANTIZE((oxygen / sum) * amount)
-	removed.nitrogen = QUANTIZE((nitrogen / sum) * amount)
-	removed.carbon_dioxide = QUANTIZE((carbon_dioxide / sum) * amount)
-	removed.toxins = QUANTIZE((toxins / sum) * amount)
-
-	if(trace_gases.len)
-		for(var/datum/gas/trace_gas in trace_gases)
-			var/datum/gas/corresponding = new trace_gas.type()
-			removed.trace_gases += corresponding
-			corresponding.moles = (trace_gas.moles / sum) * amount
-
-	removed.temperature = temperature
-	removed.update_values()
-
-	return removed
-
-
-/datum/gas_mixture/unsimulated/remove_ratio(ratio)
+/datum/gas_mixture/unsimulated/remove_ratio(ratio, update, update_removed = TRUE)
 	if(ratio <= 0 || total_moles <= 0)
 		return null
 
 	ratio = min(ratio, 1)
 
-	var/datum/gas_mixture/removed = new
+	var/datum/gas_mixture/removed = new()
 
-	removed.oxygen = QUANTIZE(oxygen * ratio)
-	removed.nitrogen = QUANTIZE(nitrogen * ratio)
-	removed.carbon_dioxide = QUANTIZE(carbon_dioxide * ratio)
-	removed.toxins = QUANTIZE(toxins * ratio)
-
-	if(trace_gases.len)
-		for(var/datum/gas/trace_gas in trace_gases)
-			var/datum/gas/corresponding = new trace_gas.type()
-			removed.trace_gases += corresponding
-			corresponding.moles = trace_gas.moles * ratio
+	for(var/g in gas)
+		removed[g] += gas[g] * ratio
 
 	removed.temperature = temperature
-	removed.update_values()
+
+	if(update_removed)
+		removed.update_values()
 
 	return removed
 

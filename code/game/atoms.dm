@@ -924,3 +924,14 @@ its easier to just keep the beam vertical.
 
 /atom/proc/initialize()
 	return
+
+/atom/proc/get_cell()
+	return
+
+/atom/proc/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	if(!reagents)
+		return INJECTION_RESULT_FAIL
+	if(reagents.is_full())
+		to_chat(user, "<span class='warning'>\The [src] is full.</span>")
+		return INJECTION_RESULT_FAIL
+	return INJECTION_RESULT_SUCCESS

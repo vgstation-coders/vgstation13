@@ -67,9 +67,9 @@ var/list/sent_strike_teams = list()
 
 	searching = TRUE
 
-	var/icon/team_logo = icon('icons/mob/mob.dmi', logo)
+	var/icon/team_logo = icon('icons/logos.dmi', logo)
 	for(var/mob/dead/observer/O in dead_mob_list)
-		if(!O.client || jobban_isbanned(O, "Strike Team") || O.client.is_afk())
+		if(!O.client || jobban_isbanned(O, ROLE_STRIKE) || O.client.is_afk())
 			continue
 
 		to_chat(O, "[bicon(team_logo)]<span class='recruit'>[faction_name] needs YOU to become part of its upcoming [striketeam_name]. (<a href='?src=\ref[src];signup=\ref[O]'>Apply now!</a>)</span>[bicon(team_logo)]")
@@ -78,7 +78,7 @@ var/list/sent_strike_teams = list()
 		searching = FALSE
 
 		for(var/mob/dead/observer/O in dead_mob_list)
-			if(!O.client || jobban_isbanned(O, "Strike Team") || O.client.is_afk())
+			if(!O.client || jobban_isbanned(O, ROLE_STRIKE) || O.client.is_afk())
 				continue
 			to_chat(O, "[bicon(team_logo)]<span class='recruit'>Applications for [faction_name]'s [striketeam_name] are now closed.</span>[bicon(team_logo)]")
 
@@ -175,7 +175,7 @@ var/list/sent_strike_teams = list()
 	if(!searching || !istype(O))
 		return
 
-	if(jobban_isbanned(O, "Strike Team"))
+	if(jobban_isbanned(O, ROLE_STRIKE))
 		to_chat(O, "<span class='danger'>Banned from Strike Teams.</span>")
 		to_chat(O, "<span class='warning'>Your application to the [striketeam_name] has been discarded due to past conduct..</span>")
 		return
@@ -343,6 +343,13 @@ var/list/sent_strike_teams = list()
 	if(!(new_commando.mind in ticker.minds))
 		ticker.minds += new_commando.mind//Adds them to regular mind list.
 
-	ticker.mode.custom_team |= new_commando.mind
+	var/datum/faction/customsquad = find_active_faction_by_type(/datum/faction/strike_team/custom)
+	if(customsquad)
+		customsquad.HandleRecruitedMind(new_commando.mind)
+	else
+		customsquad = ticker.mode.CreateFaction(/datum/faction/strike_team/custom)
+		if(customsquad)
+			customsquad.HandleNewMind(new_commando.mind) //First come, first served
+	new_commando.equip_death_commando(leader_selected)
 
 	return new_commando

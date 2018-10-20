@@ -78,8 +78,8 @@
 
 	var/killswitch = FALSE
 	var/killswitch_time = 60
-	var/weapon_lock = FALSE
-	var/weaponlock_time = 120
+	var/modulelock = FALSE
+	var/modulelock_time = 120
 	var/lawupdate = TRUE //Cyborgs will sync their laws with their AI by default
 	var/lockcharge //Used when locking down a borg to preserve cell charge
 	var/scrambledcodes = FALSE // Used to determine if a borg shows up on the robotics console.  Setting to one hides them.
@@ -125,6 +125,7 @@
 		camera.c_tag = real_name
 		if(!scrambledcodes)
 			camera.network = list(CAMERANET_SS13,CAMERANET_ROBOTS)
+			cyborg_cams[CAMERANET_ROBOTS] += camera
 		if(wires.IsCameraCut()) // 5 = BORG CAMERA
 			camera.status = 0
 
@@ -184,20 +185,6 @@
 				qdel(C.wrapped)
 				C.wrapped = I
 				C.vulnerability = I.vulnerability
-
-//If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
-//Improved /N
-/mob/living/silicon/robot/Destroy()
-	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
-		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
-		if(T)
-			mmi.forceMove(T)
-		if(mind)
-			mind.transfer_to(mmi.brainmob)
-		if(mmi.brainmob)
-			mmi.brainmob.locked_to_z = locked_to_z
-		mmi = null
-	..()
 
 /mob/living/silicon/robot/remove_screen_objs()
 	..()
@@ -375,15 +362,15 @@
 // this function shows information about the malf_ai gameplay type in the status screen
 /mob/living/silicon/robot/show_malf_ai()
 	..()
-	if(ticker.mode.name == "AI malfunction")
-		var/datum/game_mode/malfunction/malf = ticker.mode
-		for (var/datum/mind/malfai in malf.malf_ai)
-			if(connected_ai)
-				if(connected_ai.mind == malfai)
-					if(malf.apcs >= 3)
-						stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
-			else if(ticker.mode:malf_mode_declared)
-				stat(null, "Time left: [max(ticker.mode:AI_win_timeleft/(ticker.mode:apcs/3), 0)]")
+	if(connected_ai && connected_ai.mind)
+		var/datum/faction/malf/malf = find_active_faction_by_member(connected_ai.mind.GetRole(MALF))
+		if(!malf)
+			malf = find_active_faction_by_type(/datum/faction/malf) //Let's see if there is anything to print at least
+			var/malf_stat = malf.get_statpanel_addition()
+			if(malf_stat && malf_stat != null)
+				stat(null, malf_stat)
+		if(malf.apcs >= 3)
+			stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
 	return FALSE
 
 // this function displays jetpack pressure in the stat panel
@@ -476,6 +463,13 @@
 		spark(src, 5, FALSE)
 	return 2
 
+	
+/mob/living/silicon/robot/emp_act(severity)
+	..()
+	if(prob(50/severity))
+		modulelock_time = rand(10,60)
+		modulelock = TRUE
+	
 
 /mob/living/silicon/robot/triggerAlarm(var/class, area/A, var/O, var/alarmsource)
 	if(isDead())
@@ -999,10 +993,6 @@
 		overlays += target_locked
 
 /mob/living/silicon/robot/proc/installed_modules()
-	if(weapon_lock)
-		to_chat(src, "<span class='attack'>Weapon lock active, unable to use modules! Count:[weaponlock_time]</span>")
-		return
-
 	if(!module)
 		pick_module()
 		return
@@ -1318,3 +1308,10 @@
 
 /mob/living/silicon/robot/hasFullAccess()
 	return FALSE
+
+/mob/living/silicon/robot/get_cell()
+	return cell
+	
+/mob/living/silicon/robot/proc/toggle_modulelock()
+	modulelock = !modulelock
+	return modulelock

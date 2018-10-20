@@ -1162,7 +1162,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /obj/item/weapon/reagent_containers/food/snacks/egg/slime/process()
 	var/turf/location = get_turf(src)
 	var/datum/gas_mixture/environment = location.return_air()
-	if (environment.molar_density("toxins") > MOLES_PLASMA_VISIBLE / CELL_VOLUME)//plasma exposure causes the egg to hatch
+	if (environment.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)//plasma exposure causes the egg to hatch
 		src.Hatch()
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/slime/attackby(obj/item/weapon/W as obj, mob/user as mob)

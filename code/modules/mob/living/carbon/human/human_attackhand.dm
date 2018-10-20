@@ -6,21 +6,27 @@
 	if(M == src)
 		return //Can't bite yourself
 
-//Vampire code
+	//Vampire code
 	if(M.zone_sel && M.zone_sel.selecting == LIMB_HEAD && src != M)
-		if(M.mind && isvampire(M) && !M.mind.vampire.draining)
-			if(!M.can_suck(src))
+		var/datum/role/vampire/V = isvampire(M)
+		if(V)
+			if (V.draining)
 				return 0
-			if(mind && mind.vampire && (mind in ticker.mode.vampires))
-				to_chat(M, "<span class='warning'>Your fangs fail to pierce [src.name]'s cold flesh.</span>")
+			if(!V.can_suck(src))
 				return 0
+
+			if(mind)
+				var/datum/role/vampire/V_target = src.mind.GetRole(VAMPIRE)
+				if (V_target)
+					to_chat(M, "<span class='warning'>Your fangs fail to pierce [src.name]'s cold flesh.</span>")
+					return 0
 			//we're good to suck the blood, blaah
 
 			playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 			src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
-			M.handle_bloodsucking(src)
+			V.handle_bloodsucking(src)
 			return
-//end vampire codes
+	//end vampire code
 
 	var/armor_modifier = 30
 	var/damage = rand(1, 5)*dam_check

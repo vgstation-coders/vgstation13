@@ -97,7 +97,7 @@
 /obj/item/weapon/screwdriver/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is stabbing the [src.name] into \his temple! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is stabbing the [src.name] into \his heart! It looks like \he's trying to commit suicide.</span>"))
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/screwdriver/New()
 	. = ..()
@@ -244,7 +244,7 @@
 
 /obj/item/weapon/weldingtool/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] is burning \his face off with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-	return (FIRELOSS|OXYLOSS)
+	return (SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/weldingtool/New()
 	. = ..()
@@ -630,7 +630,7 @@
 
 /obj/item/weapon/crowbar/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/crowbar/red
 	desc = "Rise and shine."
@@ -640,7 +640,7 @@
 
 /obj/item/weapon/crowbar/red/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 
 /obj/item/weapon/weldingtool/attack(mob/M as mob, mob/user as mob)

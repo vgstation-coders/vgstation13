@@ -321,6 +321,9 @@
 	if (src.ear_damage < 25)
 		src.ear_damage = 0
 
+	if(say_mute)
+		say_mute = 0
+
 	src.setDensity(!src.lying)
 
 	if (src.sdisabilities & BLIND)

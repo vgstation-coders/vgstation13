@@ -86,7 +86,7 @@ var/global/ingredientLimit = 10
 	var/cks_max_volume = 50
 
 /obj/machinery/cooking/cultify()
-	new /obj/structure/cult/talisman(loc)
+	new /obj/structure/cult_legacy/talisman(loc)
 	..()
 
 /obj/machinery/cooking/New()
@@ -631,8 +631,6 @@ var/global/ingredientLimit = 10
 			H.stored_mob.death()
 			qdel(H.stored_mob)
 
-	for(var/obj/item/embedded  in src.ingredient.contents)
-		embedded.forceMove(src.loc)
 	src.ingredient = null
 	return
 

@@ -1189,7 +1189,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 		H.adjustToxLoss(15*multiplier)
 
 /datum/disease2/effect/organs/vampire
-	stage = 3 //For use with vampires?
+	stage = 1 //For use with vampires?
 
 /datum/disease2/effect/organs/deactivate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
@@ -1378,12 +1378,12 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 		return
 	var/datum/gas_mixture/GM = new
 	if(prob(10))
-		GM.toxins += 100
+		GM.adjust_gas(GAS_PLASMA, 100)
 		//GM.temperature = 1500+T0C //should be enough to start a fire
 		to_chat(mob, "<span class='warning'>You exhale a large plume of toxic gas!</span>")
 	else
-		GM.toxins += 10
 		GM.temperature = istype(T) ? T.air.temperature : T20C
+		GM.adjust_gas(GAS_PLASMA, 100)
 		to_chat(mob, "<span class = 'warning'> A toxic gas emanates from your pores!</span>")
 	T.assume_air(GM)
 	return

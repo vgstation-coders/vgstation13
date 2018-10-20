@@ -866,10 +866,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dat += "Air Pressure: [round(pressure,0.1)] kPa<br>"
 
 						if (total_moles)
-							var/o2_level = environment.oxygen/total_moles
-							var/n2_level = environment.nitrogen/total_moles
-							var/co2_level = environment.carbon_dioxide/total_moles
-							var/plasma_level = environment.toxins/total_moles
+							var/o2_level = environment[GAS_OXYGEN]/total_moles
+							var/n2_level = environment[GAS_NITROGEN]/total_moles
+							var/co2_level = environment[GAS_CARBON]/total_moles
+							var/plasma_level = environment[GAS_PLASMA]/total_moles
 							var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
 
 							dat += {"Nitrogen: [round(n2_level*100)]%<br>
@@ -1480,21 +1480,21 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					to_chat(user, "[bicon(src)]<span class='notice'>The PDA's screen flashes, 'Maximum single withdrawl limit reached, defaulting to 10,000.'</span>")
 					amount = 10000
 
-				id.virtual_wallet.money -= amount
-				withdraw_arbitrary_sum(user,amount)
-				if(prob(50))
-					playsound(src, 'sound/items/polaroid1.ogg', 50, 1)
-				else
-					playsound(src, 'sound/items/polaroid2.ogg', 50, 1)
+				if(withdraw_arbitrary_sum(user,amount))
+					id.virtual_wallet.money -= amount
+					if(prob(50))
+						playsound(src, 'sound/items/polaroid1.ogg', 50, 1)
+					else
+						playsound(src, 'sound/items/polaroid2.ogg', 50, 1)
 
-				var/datum/transaction/T = new()
-				T.target_name = user.name
-				T.purpose = "Currency printed"
-				T.amount = "-[amount]"
-				T.source_terminal = src.name
-				T.date = current_date_string
-				T.time = worldtime2text()
-				id.virtual_wallet.transaction_log.Add(T)
+					var/datum/transaction/T = new()
+					T.target_name = user.name
+					T.purpose = "Currency printed"
+					T.amount = "-[amount]"
+					T.source_terminal = src.name
+					T.date = current_date_string
+					T.time = worldtime2text()
+					id.virtual_wallet.transaction_log.Add(T)
 
 			if(PDA_APP_STATIONMAP)
 				mode = PDA_APP_STATIONMAP
@@ -2015,16 +2015,28 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 //Convert money from the virtual wallet into physical bills
 /obj/item/device/pda/proc/withdraw_arbitrary_sum(var/mob/user,var/arbitrary_sum)
+	var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in applications
+	if(!app.linked_db)
+		app.reconnect_database() //Make one attempt to reconnect
+	if(!app.linked_db || !app.linked_db.activated || app.linked_db.stat & (BROKEN|NOPOWER))
+		to_chat(user, "[bicon(src)] <span class='warning'>No connection to account database.</span>")
+		return 0
 	if(istype(user,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = user
 		if(istype(H.wear_id,/obj/item/weapon/storage/wallet))
 			dispense_cash(arbitrary_sum,H.wear_id)
 			to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your physical wallet!</span>")
-			return
+			return 1
 	dispense_cash(arbitrary_sum,get_turf(src))
+	return 1
 
 //Receive money transferred from another PDA
 /obj/item/device/pda/proc/receive_funds(var/creditor_name,var/arbitrary_sum,var/other_pda)
+	var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in applications
+	if(!app.linked_db)
+		app.reconnect_database()
+	if(!app.linked_db || !app.linked_db.activated || app.linked_db.stat & (BROKEN|NOPOWER))
+		return 0 //This sends its own error message
 	var/turf/U = get_turf(src)
 	if(!silent)
 		playsound(U, 'sound/machines/twobeep.ogg', 50, 1)

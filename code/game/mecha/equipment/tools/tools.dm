@@ -530,6 +530,7 @@
 	RPD = new(src)
 	RCD = new(src)
 	sock = new(src)
+	red_tool_list += src
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/Destroy()
 	qdel(RPD)
@@ -538,6 +539,7 @@
 	RCD = null
 	qdel(sock)
 	sock = null
+	red_tool_list -= src
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/action(atom/target)
@@ -1215,13 +1217,13 @@
 		return
 	var/datum/gas_mixture/GM = new
 	if(prob(10))
-		GM.toxins += 100
 		GM.temperature = 1500+T0C //should be enough to start a fire
+		GM.adjust_gas(GAS_PLASMA, 100)
 		T.visible_message("The [src] suddenly disgorges a cloud of heated plasma.")
 		destroy()
 	else
-		GM.toxins += 5
 		GM.temperature = istype(T) ? T.air.temperature : T20C
+		GM.adjust_gas(GAS_PLASMA, 5)
 		T.visible_message("The [src] suddenly disgorges a cloud of plasma.")
 	T.assume_air(GM)
 	return
@@ -1559,7 +1561,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/collector/get_equip_info()
 	if(!collector.P)
 		return "[..()] No tank loaded."
-	if(collector.P.air_contents.toxins <= 0)
+	if(collector.P.air_contents[GAS_PLASMA] <= 0)
 		return "[..()] ERROR: Tank empty. \[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
 	return "[..()] \[<a href='?src=\ref[src];toggle=0'>[collector.active ? "Deactivate" : "Activate"] radiation collector array</a>\]\[<a href='?src=\ref[src];eject=0'>eject tank</a>\]"
 

@@ -145,6 +145,7 @@
 
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
+	hud_list[RECORD_HUD]      = image('icons/mob/hud.dmi', src, "hudactive")
 	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
 	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
@@ -230,9 +231,10 @@
 	if(statpanel("Status"))
 		stat(null, "Intent: [a_intent]")
 		stat(null, "Move Mode: [m_intent]")
-		if(ticker && ticker.mode && ticker.mode.name == "AI malfunction")
-			if(ticker.mode:malf_mode_declared)
-				stat(null, "Time left: [max(ticker.mode:AI_win_timeleft/(ticker.mode:apcs/3), 0)]")
+		for(var/datum/faction/F in ticker.mode.factions)
+			var/F_stat = F.get_statpanel_addition()
+			if(F_stat && F_stat != null)
+				stat(null, "[F_stat]")
 		if(emergency_shuttle)
 			if(emergency_shuttle.online && emergency_shuttle.location < 2)
 				var/timeleft = emergency_shuttle.timeleft()
@@ -248,10 +250,10 @@
 				stat("Internal Atmosphere Info", internal.name)
 				stat("Tank Pressure", internal.air_contents.return_pressure())
 				stat("Distribution Pressure", internal.distribute_pressure)
-		if(mind)
+		/*if(mind)
 			if(mind.changeling)
 				stat("Chemical Storage", mind.changeling.chem_charges)
-				stat("Genetic Damage Time", mind.changeling.geneticdamage)
+				stat("Genetic Damage Time", mind.changeling.geneticdamage)*/
 
 		if(istype(loc, /obj/spacepod)) // Spacdpods!
 			var/obj/spacepod/S = loc
@@ -350,7 +352,8 @@
 		return get_id_name("Unknown")
 	if( head && head.is_hidden_identity())
 		return get_id_name("Unknown")	//Likewise for hats
-	if(mind && mind.vampire && (VAMP_SHADOW in mind.vampire.powers) && mind.vampire.ismenacing)
+	var/datum/role/vampire/V = isvampire(src)
+	if(V && (VAMP_SHADOW in V.powers) && V.ismenacing)
 		return get_id_name("Unknown")
 	var/face_name = get_face_name()
 	var/id_name = get_id_name("")
@@ -595,7 +598,7 @@
 	else if (href_list["show_flavor_text"])
 		if(can_show_flavor_text())
 			var/datum/browser/popup = new(usr, "\ref[src]", name, 500, 200)
-			popup.set_content(strip_html(flavor_text))
+			popup.set_content(utf8_sanitize(flavor_text))
 			popup.open()
 	/*else if (href_list["lookmob"])
 		var/mob/M = locate(href_list["lookmob"])
@@ -1505,9 +1508,8 @@
 
 	//Need at least two teeth or a beak to bite
 
-	if(check_body_part_coverage(MOUTH))
-		if(!isvampire(src)) //Vampires can bite through masks
-			return 0
+	if(check_body_part_coverage(MOUTH) && !isvampire(src))
+		return 0
 
 	if(M_BEAK in mutations)
 		return 1
@@ -1673,7 +1675,7 @@ mob/living/carbon/human/isincrit()
 		species.punch_damage = rand(1,5)
 	species.max_hurt_damage = rand(1,10)
 	if(prob(10))
-		species.breath_type = pick("oxygen","toxins","nitrogen","carbon_dioxide")
+		species.breath_type = pick(GAS_OXYGEN, GAS_PLASMA, GAS_NITROGEN, GAS_CARBON)
 
 	species.heat_level_3 = rand(800, 1200)
 	species.heat_level_2 = round(species.heat_level_3 / 2.5)
@@ -1696,12 +1698,17 @@ mob/living/carbon/human/isincrit()
 	species.burn_mod *= rand(5,20)/10
 	species.tox_mod *= rand(5,20)/10
 
+	var/can_be_fat = species.anatomy_flags & CAN_BE_FAT	//removing this flag causes gamebreaking things like invisible fat aliens to happen
+
 	if(prob(5))
 		species.flags = rand(0,65535)
 	if(prob(5))
 		species.anatomy_flags = rand(0,65535)
 	if(prob(5))
 		species.chem_flags = rand(0,65535)
+
+	if(!can_be_fat)
+		species.anatomy_flags &= ~CAN_BE_FAT
 
 /mob/living/carbon/human/send_to_past(var/duration)
 	..()
@@ -1829,3 +1836,12 @@ mob/living/carbon/human/isincrit()
 				return S.full_access
 			return is_type_in_list(glasses, list(/obj/item/clothing/glasses/hud/security, /obj/item/clothing/glasses/sunglasses/sechud))
 	return FALSE
+
+/mob/living/carbon/human/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	ASSERT(species)
+	if(species.chem_flags & NO_INJECT)
+		user.visible_message(
+			"<span class='warning'>\The [user] tries to pierce [src] with \the [tool] but it won't go in!</span>",
+			"<span class='warning'>You try to pierce [src] with \the [tool] but it won't go in!</span>")
+		return INJECTION_RESULT_FAIL
+	return ..()

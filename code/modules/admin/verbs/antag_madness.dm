@@ -249,7 +249,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 					//I.dropped(M)
 					I.forceMove(pack)
 
-			var/obj/item/weapon/tome/T = new/obj/item/weapon/tome(M)
+			var/obj/item/weapon/tome_legacy/T = new/obj/item/weapon/tome_legacy(M)
 			var/obj/item/weapon/paper/talisman/supply/A = new/obj/item/weapon/paper/talisman/supply(M)
 
 			if (istype(M, /mob/living/carbon/human))

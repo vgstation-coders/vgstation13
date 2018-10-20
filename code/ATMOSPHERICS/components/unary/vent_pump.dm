@@ -91,7 +91,7 @@
 /obj/machinery/atmospherics/unary/vent_pump/process()
 	. = ..()
 	CHECK_DISABLED(vents)
-	if (!node)
+	if (!node1)
 		return // Turning off the vent is a PITA. - N3X
 	if(stat & (NOPOWER|BROKEN))
 		return

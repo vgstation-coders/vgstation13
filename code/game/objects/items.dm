@@ -62,7 +62,7 @@
 	var/restraint_apply_time = 3 SECONDS
 	var/restraint_apply_sound = null
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
-
+	var/hides_identity = HIDES_IDENTITY_DEFAULT
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
 
@@ -94,7 +94,11 @@
 	icon = 'icons/obj/device.dmi'
 
 /obj/item/proc/is_hidden_identity()
-	return is_slot_hidden(body_parts_covered,HIDEFACE)
+	switch(hides_identity)
+		if(HIDES_IDENTITY_ALWAYS)
+			return TRUE
+		if(HIDES_IDENTITY_DEFAULT)
+			return is_slot_hidden(body_parts_covered, HIDEFACE)
 
 /obj/item/ex_act(severity)
 	switch(severity)
@@ -141,10 +145,10 @@
 
 //user: The mob that is suiciding
 //damagetype: The type of damage the item will inflict on the user
-//BRUTELOSS = 1
-//FIRELOSS = 2
-//TOXLOSS = 4
-//OXYLOSS = 8
+//SUICIDE_ACT_BRUTELOSS = 1
+//SUICIDE_ACT_FIRELOSS = 2
+//SUICIDE_ACT_TOXLOSS = 4
+//SUICIDE_ACT_OXYLOSS = 8
 //Output a creative message and then return the damagetype done
 /obj/item/proc/suicide_act(mob/user)
 	return
@@ -1290,3 +1294,6 @@ var/global/list/image/blood_overlays = list()
 		usr.u_equip(src, TRUE)
 		usr.put_in_hand(OI.hand_index, src)
 		add_fingerprint(usr)
+
+/obj/item/proc/pre_throw()
+	return

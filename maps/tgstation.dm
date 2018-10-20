@@ -1,4 +1,4 @@
-
+#ifndef MAP_OVERRIDE
 //**************************************************************
 // Map Datum -- Boxstation
 //**************************************************************
@@ -34,5 +34,5 @@
 	holomap_offset_y = list(0,0,0,94,10,0,0,)
 
 ////////////////////////////////////////////////////////////////
-#include "defficiency/pipes.dm" // Atmos layered pipes.
 #include "tgstation.dmm"
+#endif

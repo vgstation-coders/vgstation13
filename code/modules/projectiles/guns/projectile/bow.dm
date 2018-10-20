@@ -57,6 +57,9 @@
 	var/obj/item/weapon/arrow = null      // Nocked arrow.
 	var/obj/item/weapon/cell/cell = null  // Used for firing special projectiles like rods.
 
+/obj/item/weapon/crossbow/get_cell()
+	return cell
+
 /obj/item/weapon/crossbow/attackby(obj/item/W as obj, mob/user as mob)
 	if(!arrow)
 		if (istype(W,/obj/item/weapon/arrow))

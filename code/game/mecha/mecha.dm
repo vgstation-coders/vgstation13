@@ -93,6 +93,9 @@
 	var/lock_controls = 0
 	var/list/intrinsic_spells = null
 
+/obj/mecha/get_cell()
+	return cell
+
 /obj/mecha/New()
 	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
 	hud_list[DIAG_CELL_HUD] = image('icons/mob/hud.dmi', src, "hudbattmax")
@@ -186,8 +189,9 @@
 	cabin_air = new
 	cabin_air.temperature = T20C
 	cabin_air.volume = 200
-	cabin_air.oxygen = O2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature)
-	cabin_air.nitrogen = N2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature)
+	cabin_air.adjust_multi(
+		GAS_OXYGEN, O2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature),
+		GAS_NITROGEN, N2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature))
 	return cabin_air
 
 /obj/mecha/proc/add_radio()
@@ -571,8 +575,11 @@
 		src.destroy()
 	return
 
-/obj/mecha/attack_hand(mob/living/user as mob)
-	src.log_message("Attack by hand/paw. Attacker - [user].",1)
+/obj/mecha/attack_hand(mob/living/user as mob, monkey = FALSE)
+	if(monkey)
+		src.log_message("Attack by paw. Attacker - [user].",1)
+	else
+		src.log_message("Attack by hand. Attacker - [user].",1)
 	user.do_attack_animation(src, user)
 	if ((M_HULK in user.mutations) && !prob(src.deflect_chance))
 		src.take_damage(15)
@@ -585,7 +592,7 @@
 	user.delayNextAttack(10)
 
 /obj/mecha/attack_paw(mob/user as mob)
-	return src.attack_hand(user)
+	return src.attack_hand(user, TRUE)
 
 
 /obj/mecha/attack_alien(mob/living/user as mob)
@@ -1227,8 +1234,7 @@
 		//change the cursor
 		if(H.client && cursor_enabled)
 			H.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
-
-		// -- Mode/mind specific stuff goes here
+		/* -- Mode/mind specific stuff goes here
 		if(H.mind)
 			if(isrev(H) || isrevhead(H))
 				ticker.mode.update_all_rev_icons()
@@ -1239,6 +1245,7 @@
 			if(iswizard(H) || isapprentice(H))
 				ticker.mode.update_all_wizard_icons()
 		// -- End mode specific stuff
+		*/
 
 		return 1
 	else
@@ -1350,6 +1357,8 @@
 /obj/mecha/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(usr != src.occupant || usr.incapacitated())
 		return
+	if(istype(occupant, /mob/living/carbon/brain))
+		return
 	if(!istype(over_location) || over_location.density)
 		return
 	if(!Adjacent(over_location))
@@ -1436,7 +1445,7 @@
 		if(src.occupant && src.occupant.client)
 			src.occupant.client.mouse_pointer_icon = initial(src.occupant.client.mouse_pointer_icon)
 
-		// -- Mode/mind specific stuff goes here
+		/* -- Mode/mind specific stuff goes here
 		if(src.occupant.mind)
 			if(isrev(src.occupant) || isrevhead(src.occupant))
 				ticker.mode.update_all_rev_icons()
@@ -1447,6 +1456,7 @@
 			if(iswizard(src.occupant) || isapprentice(src.occupant))
 				ticker.mode.update_all_wizard_icons()
 		// -- End mode specific stuff
+		*/
 
 		src.occupant = null
 		src.icon_state = src.reset_icon()+"-open"
@@ -1850,7 +1860,7 @@
 	if (href_list["change_name"])
 		if(usr != src.occupant)
 			return
-		var/newname = strip_html_simple(input(occupant,"Choose new exosuit name","Rename exosuit",initial(name)) as text, MAX_NAME_LEN)
+		var/newname = stripped_input(occupant,"Choose new exosuit name","Rename exosuit",initial(name),MAX_NAME_LEN)
 		if(newname && trim(newname))
 			name = newname
 		else

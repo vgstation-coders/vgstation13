@@ -1,4 +1,4 @@
-
+#ifndef MAP_OVERRIDE
 //**************************************************************
 // Map Datum -- Roidstation
 //**************************************************************
@@ -34,6 +34,7 @@
 	holomap_offset_y = list(0,0,0,94,10,0,0,)
 
 ////////////////////////////////////////////////////////////////
-#include "defficiency/pipes.dm" // Atmos layered pipes.
 #include "roidstation/areas.dm"
+#include "roidstation/pipes.dm" // More atmos layered pipes
 #include "roidstation.dmm"
+#endif

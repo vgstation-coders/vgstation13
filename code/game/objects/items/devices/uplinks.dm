@@ -2,7 +2,7 @@
 
 /*
 
-A list of items and costs is stored under the datum of every game mode, alongside the number of crystals, and the welcoming message.
+A list of items and costs is stored under the datum of every game mode, alongside the number of crystals, and the welcoming message. //WHY
 
 */
 
@@ -23,8 +23,8 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 
 /obj/item/device/uplink/initialize()
 	if(ticker.mode)
-		welcome = ticker.mode.uplink_welcome
-		uses = ticker.mode.uplink_uses
+		welcome = "Syndicate Uplink Console"
+		uses = 20
 	else
 		welcome = "THANKS FOR MAPPING IN THIS THING AND NOT CHECKING FOR RUNTIMES BUDDY"
 		uses = 90 // Because this is only happening on centcomm's snowflake uplink

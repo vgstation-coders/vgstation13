@@ -112,6 +112,10 @@
 	water_level = 500
 	food_level = MAX_FOOD
 
+/obj/machinery/fishtank/wall/full
+	water_level = 500
+	food_level = MAX_FOOD
+
 /obj/machinery/fishtank/wall/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0) // Prevents airflow. Copied from windows.
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return TRUE

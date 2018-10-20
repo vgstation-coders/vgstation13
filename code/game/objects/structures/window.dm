@@ -628,6 +628,9 @@ var/list/one_way_windows
 		healthcheck(sound = 0)
 	..()
 
+/obj/structure/window/clockworkify()
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/window/reinforced/clockwork, BRASS_WINDOW_GLOW)
+
 /obj/structure/window/reinforced
 	name = "reinforced window"
 	desc = "A window with a rod matrice. It looks more solid than the average window."
@@ -701,6 +704,9 @@ var/list/one_way_windows
 	health = 80
 
 /obj/structure/window/reinforced/clockwork/cultify()
+	return
+
+/obj/structure/window/reinforced/clockwork/clockworkify()
 	return
 
 /obj/structure/window/send_to_past(var/duration)

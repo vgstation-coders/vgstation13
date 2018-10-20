@@ -61,25 +61,6 @@
 	to_chat(user, "<span class='notice'>You successfully apply \the [src] to [R].</span>")
 	user.drop_item(src, R)
 
-// Medical Cyborg Stuff
-
-/obj/item/borg/upgrade/medical/surgery
-	name = "medical cyborg MK-2 upgrade board"
-	desc = "Used to give a medical cyborg advanced care tools and upgrade their chemistry gripper to be able to handle pills and pill bottles."
-	icon_state = "cyborg_upgrade"
-	required_module = list(/obj/item/weapon/robot_module/medical, /obj/item/weapon/robot_module/syndicate/crisis)
-	modules_to_add = list(/obj/item/weapon/melee/defibrillator,/obj/item/weapon/reagent_containers/borghypo/upgraded)
-
-/obj/item/borg/upgrade/medical/surgery/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	if(..())
-		return FAILED_TO_ADD
-
-	var/obj/item/weapon/gripper/chemistry/G = locate_component(/obj/item/weapon/gripper/chemistry, R, user)
-	if(!G)
-		return FAILED_TO_ADD
-
-	G.can_hold.Add(/obj/item/weapon/reagent_containers/pill, /obj/item/weapon/storage/pill_bottle)
-
 /obj/item/borg/upgrade/reset
 	name = "cyborg reset board"
 	desc = "Used to reset a cyborg's module. Destroys any other upgrades applied to the robot."
@@ -194,30 +175,6 @@
 
 	R.movement_speed_modifier += SILICON_VTEC_SPEED_BONUS
 
-
-/obj/item/borg/upgrade/tasercooler
-	name = "security cyborg rapid taser cooling upgrade board"
-	desc = "Used to cool a mounted taser, increasing the potential current in it and thus its recharge rate."
-	icon_state = "cyborg_upgrade3"
-	required_module = list(/obj/item/weapon/robot_module/security)
-	multi_upgrades = TRUE
-
-
-/obj/item/borg/upgrade/tasercooler/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	var/obj/item/weapon/gun/energy/taser/cyborg/T = locate_component(/obj/item/weapon/gun/energy/taser/cyborg, R, user)
-	if(!T)
-		return FAILED_TO_ADD
-
-	if(T.recharge_time <= 2)
-		to_chat(R, "Maximum cooling achieved for this hardpoint!")
-		to_chat(user, "There's no room for another cooling unit!")
-		return FAILED_TO_ADD
-
-	if(..())
-		return FAILED_TO_ADD
-	else
-		T.recharge_time = max(2 , T.recharge_time - 4)
-
 /obj/item/borg/upgrade/jetpack
 	name = "cyborg jetpack module board"
 	desc = "A carbon dioxide jetpack suitable for low-gravity operations."
@@ -250,7 +207,23 @@
 	R.illegal_weapons = TRUE
 	R.SetEmagged()
 
-/obj/item/borg/upgrade/engineering/
+//Medical Stuff
+/obj/item/borg/upgrade/medical
+	name = "medical cyborg MK-2 upgrade board"
+	desc = "Used to give a medical cyborg advanced care tools."
+	icon_state = "cyborg_upgrade"
+	required_module = list(/obj/item/weapon/robot_module/medical, /obj/item/weapon/robot_module/syndicate/crisis)
+	modules_to_add = list(/obj/item/weapon/melee/defibrillator,/obj/item/weapon/reagent_containers/borghypo/upgraded)
+
+/obj/item/borg/upgrade/medical/organ_gripper
+	name = "medical cyborg organ gripper upgrade"
+	desc = "Used to give a medical cyborg a organ gripper."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "gripper-medical"
+	modules_to_add = list(/obj/item/weapon/gripper/organ)
+
+//Engineering stuff
+/obj/item/borg/upgrade/engineering
 	name = "engineering cyborg MK-2 upgrade board"
 	desc = "Adds several tools and materials for the robot to use."
 	icon_state = "cyborg_upgrade3"
@@ -269,23 +242,6 @@
 								"reinforced plasma glass" = /obj/item/stack/sheet/glass/plasmarglass,
 								"carpet tiles" = /obj/item/stack/tile/carpet)
 
-/obj/item/borg/upgrade/service
-	name = "service cyborg cooking upgrade board"
-	desc = "Used to give a service cyborg cooking tools and upgrade their service gripper to be able to handle food."
-	icon_state = "cyborg_upgrade2"
-	required_module = list(/obj/item/weapon/robot_module/butler)
-	modules_to_add = list(/obj/item/weapon/kitchen/utensil/knife/large, /obj/item/weapon/kitchen/rollingpin, /obj/item/weapon/storage/bag/food/borg)
-
-/obj/item/borg/upgrade/service/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	if(..())
-		return FAILED_TO_ADD
-
-	var/obj/item/weapon/gripper/service/G = locate_component(/obj/item/weapon/gripper/service, R, user)
-	if(!G)
-		return FAILED_TO_ADD
-
-	G.can_hold.Add(/obj/item/weapon/reagent_containers/food)
-
 /obj/item/borg/upgrade/magnetic_gripper
 	name = "engineering cyborg magnetic gripper upgrade"
 	desc = "Used to give a engineering cyborg a magnetic gripper."
@@ -294,13 +250,23 @@
 	required_module = list(/obj/item/weapon/robot_module/engineering)
 	modules_to_add = list(/obj/item/weapon/gripper/magnetic)
 
-/obj/item/borg/upgrade/organ_gripper
-	name = "medical cyborg organ gripper upgrade"
-	desc = "Used to give a medical cyborg a organ gripper."
-	icon = 'icons/obj/device.dmi'
-	icon_state = "gripper-medical"
-	required_module = list(/obj/item/weapon/robot_module/medical)
-	modules_to_add = list(/obj/item/weapon/gripper/organ)
+//Service Stuff
+/obj/item/borg/upgrade/cook
+	name = "service cyborg cooking upgrade board"
+	desc = "Used to give a service cyborg cooking tools and upgrade their service gripper to be able to handle food."
+	icon_state = "cyborg_upgrade2"
+	required_module = list(/obj/item/weapon/robot_module/butler)
+	modules_to_add = list(/obj/item/weapon/kitchen/utensil/knife/large, /obj/item/weapon/kitchen/rollingpin, /obj/item/weapon/storage/bag/food/borg)
+
+/obj/item/borg/upgrade/cook/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+
+	var/obj/item/weapon/gripper/service/G = locate_component(/obj/item/weapon/gripper/service, R, user)
+	if(!G)
+		return FAILED_TO_ADD
+
+	G.can_hold.Add(/obj/item/weapon/reagent_containers/food)
 
 /obj/item/borg/upgrade/hydro
 	name = "service cyborg H.U.E.Y. upgrade board"
@@ -343,6 +309,30 @@
 	playsound(R, 'sound/items/AirHorn.ogg', 50, 1)
 
 	R.module.quirk_flags |= MODULE_IS_A_CLOWN
+
+//Security Stuff
+/obj/item/borg/upgrade/tasercooler
+	name = "security cyborg rapid taser cooling upgrade board"
+	desc = "Used to cool a mounted taser, increasing the potential current in it and thus its recharge rate."
+	icon_state = "cyborg_upgrade3"
+	required_module = list(/obj/item/weapon/robot_module/security)
+	multi_upgrades = TRUE
+
+
+/obj/item/borg/upgrade/tasercooler/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
+	var/obj/item/weapon/gun/energy/taser/cyborg/T = locate_component(/obj/item/weapon/gun/energy/taser/cyborg, R, user)
+	if(!T)
+		return FAILED_TO_ADD
+
+	if(T.recharge_time <= 2)
+		to_chat(R, "Maximum cooling achieved for this hardpoint!")
+		to_chat(user, "There's no room for another cooling unit!")
+		return FAILED_TO_ADD
+
+	if(..())
+		return FAILED_TO_ADD
+	else
+		T.recharge_time = max(2 , T.recharge_time - 4)
 
 /obj/item/borg/upgrade/noir
 	name = "security cyborg N.O.I.R. upgrade board"
@@ -398,6 +388,7 @@
 	if(C)
 		C.Lawize()
 
+//Supply Stuff
 /obj/item/borg/upgrade/hook
 	name = "supply cyborg hookshot upgrade"
 	desc = "Used to give a supply cyborg a hookshot."

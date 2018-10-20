@@ -160,11 +160,11 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 	var/t = ""
 
-	t += {"Nitrogen : [env.nitrogen]
-Oxygen : [env.oxygen]
-Plasma : [env.toxins]
-CO2: [env.carbon_dioxide]
-Pressure: [env.return_pressure()]"}
+	t += {"Nitrogen : [env[GAS_NITROGEN]]
+Oxygen : [env[GAS_OXYGEN]]
+Plasma : [env[GAS_PLASMA]]
+CO2: [env[GAS_CARBON]]
+Pressure: [env.pressure]"}
 	usr.show_message(t, 1)
 	feedback_add_details("admin_verb","ASL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -343,7 +343,7 @@ Pressure: [env.return_pressure()]"}
 		else
 			if(alert("Spawn that person a tome?",,"Yes","No")=="Yes")
 				to_chat(M, "<span class='warning'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie. A tome, a message from your new master, appears on the ground.</span>")
-				new /obj/item/weapon/tome(M.loc)
+				new /obj/item/weapon/tome_legacy(M.loc)
 			else
 				to_chat(M, "<span class='warning'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 			var/glimpse=pick("1","2","3","4","5","6","7","8")
@@ -573,11 +573,11 @@ Pressure: [env.return_pressure()]"}
 		if(Rad.anchored)
 			if(!Rad.P)
 				var/obj/item/weapon/tank/plasma/Plasma = new/obj/item/weapon/tank/plasma(Rad)
-				Plasma.air_contents.toxins = 100 //Don't need to explain, space magic
+				Plasma.air_contents[GAS_PLASMA] = 100 //Don't need to explain, space magic
 				Plasma.air_contents.temperature = 73.15 //Perfect freezer cooling
+				Plasma.air_contents.update_values()
 				Rad.drain_ratio = 0
 				Rad.P = Plasma
-				Plasma.forceMove(Rad)
 
 			if(!Rad.active)
 				Rad.toggle_power()
@@ -1188,22 +1188,22 @@ client/proc/cure_disease()
 	message_admins("[src]/([ckey(src.key)] Cured all mobs of [disease_name == "-Cure All-" ? "all diseases." : "[disease_name]"]")
 
 client/proc/check_convertables()
-	set name = "Check Convertables"
+	set name = "Check Convertables (Cult v2.0)"
 	set category = "Debug"
 	if(!holder || !ticker || !ticker.mode)
 		return
-
+	var/datum/faction/cult/narsie = find_active_faction_by_type(/datum/faction/cult/narsie)
 	var/dat = ""
 	for(var/mob/M in player_list)
 		if(!M.mind)
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=grey><b>NO MIND</b></font></br>"
 		else if(!istype(M,/mob/living/carbon/human))
 			dat += "[M.real_name]/([ckey(M.key)]): <b>NOT HUMAN</b></br>"
-		else if(!is_convertable_to_cult(M.mind))
+		else if(!is_convertable_to_cult_legacy(M.mind))
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=red><b>UNCONVERTABLE</b></font></br>"
 		else if(jobban_isbanned(M, "cultist"))
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=red><b>JOBBANNED</b></font></br>"
-		else if(M.mind in ticker.mode.cult)
+		else if(M.mind in narsie.members)
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=blue><b>CULTIST</b></font></br>"
 		else
 			dat += "[M.real_name]/([ckey(M.key)]): <font color=green><b>CONVERTABLE</b></font></br>"

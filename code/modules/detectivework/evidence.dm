@@ -8,7 +8,7 @@
 	item_state = ""
 	w_class = W_CLASS_TINY
 
-/obj/item/weapon/evidencebag/afterattack(obj/item/I, mob/user, proximity_flag, click_parameters)
+/obj/item/weapon/evidencebag/preattack(obj/item/I, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag == 0) // not adjacent
 		return
 
@@ -56,7 +56,7 @@
 	desc = "An evidence bag containing [I]. [I.desc]"
 	I.forceMove(src)
 	w_class = I.w_class
-	return
+	return TRUE
 
 
 /obj/item/weapon/evidencebag/attack_self(mob/user as mob)

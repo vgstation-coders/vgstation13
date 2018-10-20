@@ -3,6 +3,7 @@
 		return
 	if(!gibbed)
 		emote("deathgasp")
+		playsound(src, 'sound/machines/WXP_shutdown.ogg', 75, FALSE)
 	stat = DEAD
 	update_icon()
 

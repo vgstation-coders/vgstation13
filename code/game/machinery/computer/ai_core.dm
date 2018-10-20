@@ -112,9 +112,9 @@
 					user << "<span class='warning'>You can't let go of \the [P]!</span>"
 					return
 
-				if(P:brainmob.mind)
+				/*if(P:brainmob.mind)
 					ticker.mode.remove_cultist(P:brainmob.mind, 1)
-					ticker.mode.remove_revolutionary(P:brainmob.mind, 1)
+					ticker.mode.remove_revolutionary(P:brainmob.mind, 1)*/
 
 				if (!brain)
 					if (user.drop_item(P, src))
@@ -173,13 +173,9 @@ That prevents a few funky behaviors.
 						if(C.contents.len)//If there is an AI on card.
 							to_chat(U, "<span class='danger'>Transfer failed:</span> Existing AI found on this terminal. Remove existing AI to install a new one.")
 						else
-							if (ticker.mode.name == "AI malfunction")
-								var/datum/game_mode/malfunction/malf = ticker.mode
-								for (var/datum/mind/malfai in malf.malf_ai)
-									if (T.mind == malfai && malf.malf_mode_declared)
-										to_chat(U, "<span class='danger'>ERROR:</span> Remote transfer interface disabled.")//Do ho ho ho~
-
-										return
+							if(T.mind.GetRole(MALF))
+								to_chat(U, "<span class='danger'>ERROR:</span> Remote transfer interface disabled.")//Do ho ho ho~
+								return
 							new /obj/structure/AIcore/deactivated(T.loc)//Spawns a deactivated terminal at AI location.
 							//T.aiRestorePowerRoutine = 0//So the AI initially has power.
 							T.control_disabled = 1//Can't control things remotely if you're stuck in a card!

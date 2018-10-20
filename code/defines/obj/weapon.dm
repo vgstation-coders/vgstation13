@@ -15,7 +15,7 @@
 
 /obj/item/weapon/phone/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] wraps the cord of the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 /*/obj/item/weapon/syndicate_uplink
 	name = "station bounced radio"
@@ -62,7 +62,7 @@
 
 /obj/item/weapon/bananapeel/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] drops the [src.name] on the ground and steps on it causing \him to crash to the floor, bashing \his head wide open. </span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/corncob
 	name = "corn cob"
@@ -201,7 +201,7 @@
 
 /obj/item/weapon/legcuffs/bolas/suicide_act(mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is wrapping the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/legcuffs/bolas/throw_at(var/atom/A, throw_range, throw_speed)
 	if(!throw_range)
@@ -407,7 +407,7 @@
 
 /obj/item/weapon/legcuffs/beartrap/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is putting the [src.name] on \his head! It looks like \he's trying to commit suicide.</span>")
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/legcuffs/beartrap/update_icon()
 	icon_state = "beartrap[armed]"
@@ -702,7 +702,7 @@
 
 /obj/item/weapon/wire/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return (OXYLOSS)
+	return (SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/module
 	icon = 'icons/obj/module.dmi'

@@ -42,7 +42,7 @@
 	if(.)
 		return !noghostspin
 
-/obj/structure/bed/chair/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/bed/chair/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W, /obj/item/assembly/shock_kit))
 		var/obj/item/assembly/shock_kit/SK = W
 		if(user.drop_item(W))
@@ -61,6 +61,58 @@
 		qdel(src)
 		return
 
+	if(istype(W, /obj/item/stack/sheet/plasteel))
+		if(type in subtypesof(/obj/structure/bed/chair))//only default chairs can be upgraded into seats
+			to_chat(user, "<span class='warning'>You Can only upgrade basic chairs.</span>")
+			return
+		else if (locked_atoms && locked_atoms.len > 0)
+			to_chat(user, "<span class='warning'>You cannot upgrade a chair with someone buckled on it.</span>")
+			return
+		var/obj/item/stack/ST = W
+		if (ST.amount < 5)
+			to_chat(user, "<span class='warning'>You need 5 plasteel sheets to improve this chair.</span>")
+			return
+
+		var/list/ok_types = list(
+			"neutral" = /obj/structure/bed/chair/shuttle,
+			"red" = /obj/structure/bed/chair/shuttle/red,
+			"blue" = /obj/structure/bed/chair/shuttle/blue,
+			"yellow" = /obj/structure/bed/chair/shuttle/yellow,
+			"white" = /obj/structure/bed/chair/shuttle/white,
+			"custom" = /obj/structure/bed/chair/shuttle/white/custom,
+			)
+
+		var/seat_color = null
+		var/seat_type = input(user,"What colour for the seat's cushions?","Upgrading chair to seat") as null|anything in ok_types
+
+
+		if (!seat_type)
+			return
+
+		if (seat_type == "custom")
+			seat_color = input(user, "Please select cushion color.", "Seat color") as color
+
+		var/new_type = ok_types[seat_type]
+
+		user.visible_message("<span class='notice'>\The [user] starts upgrading \the [src] using some plasteel.</span>", \
+		"<span class='notice'>You begin upgrading \the [src].</span>")
+		if(do_after(user, src, 50))
+			if (ST.use(5))
+				if (locked_atoms && locked_atoms.len > 0)
+					to_chat(user, "<span class='warning'>You cannot upgrade a chair with someone buckled on it.</span>")
+					return
+				var/obj/structure/bed/chair/shuttle/S = new new_type(loc,seat_color)
+				S.dir = dir
+				playsound(S, 'sound/items/Deconstruct.ogg', 50, 1)
+				user.visible_message("<span class='notice'>\The [user] upgrades \the [src] into \a [S].</span>", \
+				"<span class='notice'>You finishing upgrading \the [src] into \a [S].</span>")
+				qdel(src)
+				return
+			else
+				to_chat(user, "<span class='warning'>You need 5 plasteel sheets to improve this chair.</span>")
+				return
+		return
+
 	. = ..()
 
 /obj/structure/bed/chair/update_dir()
@@ -74,7 +126,7 @@
 	else
 		plane = OBJ_PLANE
 
-/obj/structure/bed/chair/proc/spin()
+/obj/structure/bed/chair/proc/spin(var/mob/M)
 	change_dir(turn(dir, 90))
 
 /obj/structure/bed/chair/verb/rotate()
@@ -95,7 +147,7 @@
 			investigation_log(I_GHOST, "|| was rotated by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 		ghost.lastchairspin = world.time
 
-	spin()
+	spin(usr)
 
 /obj/structure/bed/chair/relayface(var/mob/living/user, direction) //ALSO for vehicles!
 	if(!config.ghost_interaction || !can_spook())
@@ -540,3 +592,85 @@
 
 		folded.forceMove(get_turf(src))
 		forceMove(folded)
+
+//Shuttle seats
+/obj/structure/bed/chair/shuttle
+	name = "seat"
+	desc = "A reinforced chair that's firmly secured to the ground."
+	icon_state = "shuttleseat_neutral"
+	anchored = 1
+
+/obj/structure/bed/chair/shuttle/attackby(var/obj/item/W, var/mob/user)
+	var/mob/M = locate() in loc//so attacking people isn't made harder by the seats' bulkiness
+	if (M)
+		return M.attackby(W,user)
+	if(istype(W, /obj/item/assembly/shock_kit))
+		to_chat(user,"<span class='warning'>\The [W] cannot be rigged onto \the [src].</span>")
+		return
+	if(iswrench(W))
+		to_chat(user,"<span class='warning'>You cannot find any bolts to unwrench on \the [src].</span>")
+		return
+	if (iswelder(W))
+		if (locked_atoms && locked_atoms.len > 0)
+			to_chat(user,"<span class='warning'>You cannot downgrade a seat with someone buckled on it.</span>")
+			return
+		var/obj/item/weapon/weldingtool/WT = W
+		to_chat(user, "You start welding the plasteel off \the [src]")
+		if (WT.do_weld(user, src, 50, 3))
+			if(gcDestroyed)
+				return
+			if (locked_atoms && locked_atoms.len > 0)
+				to_chat(user,"<span class='warning'>You cannot downgrade a seat with someone buckled on it.</span>")
+				return
+			var/obj/structure/bed/chair/C = new (loc)
+			C.dir = dir
+			drop_stack(/obj/item/stack/sheet/plasteel, loc, 5, user)
+			user.visible_message(\
+				"<span class='warning'>\The [src] has been welded apart, leaving \a [C] behind.</span>",\
+				"You finish removing the seat components from the chair frame.",\
+				"<span class='warning'>You hear welding.</span>")
+			qdel(src)
+		return
+	..()
+
+/obj/structure/bed/chair/shuttle/spin(var/mob/M)
+	to_chat(M,"<span class='warning'>\The [src] is firmly secured to \the [loc], you cannot spin it.</span>")
+
+/obj/structure/bed/chair/shuttle/New()
+	..()
+	buckle_overlay = image("icons/obj/stools-chairs-beds.dmi", "[icon_state]_buckle", CHAIR_ARMREST_LAYER)
+	buckle_overlay.plane = ABOVE_HUMAN_PLANE
+
+/obj/structure/bed/chair/shuttle/red
+	icon_state = "shuttleseat_red"
+
+/obj/structure/bed/chair/shuttle/blue
+	icon_state = "shuttleseat_blue"
+
+/obj/structure/bed/chair/shuttle/yellow
+	icon_state = "shuttleseat_yellow"
+
+/obj/structure/bed/chair/shuttle/white
+	icon_state = "shuttleseat_white"
+
+/obj/structure/bed/chair/shuttle/white/custom
+
+/obj/structure/bed/chair/shuttle/white/custom/New(var/turf/loc, var/seat_color = null)
+	..()
+	if (seat_color)
+		var/image/I1 = image("icons/obj/stools-chairs-beds.dmi", "shuttleseat_color", layer)
+		I1.plane = plane
+		I1.color = seat_color
+		overlays += I1
+
+		var/image/I2 = image("icons/obj/stools-chairs-beds.dmi", "shuttleseat_color_buckle", CHAIR_ARMREST_LAYER)
+		I2.color = seat_color
+		secondary_buckle_overlay = I2
+		secondary_buckle_overlay.plane = ABOVE_HUMAN_PLANE
+
+/obj/structure/bed/chair/shuttle/gamer
+	desc = "Ain't got nothing to compensate."
+	icon_state = "shuttleseat_GAMER"
+
+/obj/structure/bed/chair/shuttle/gamer/spin(var/mob/M)
+	change_dir(turn(dir, 90))

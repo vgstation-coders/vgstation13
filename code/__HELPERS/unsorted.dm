@@ -230,7 +230,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 					search_pda = FALSE
 
-		for (var/datum/mind/themind in ticker.minds)
+		/*for (var/datum/mind/themind in ticker.minds)
 			if (themind)
 				var/found = 0
 				for (var/datum/objective/objective in themind.objectives)
@@ -244,7 +244,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 					to_chat(themind.current, "<span class='notice'>Your current objectives:</span>")
 					for(var/datum/objective/objective in themind.objectives)
 						to_chat(themind.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
-						obj_count++
+						obj_count++*/
 	return 1
 
 //Generalised helper proc for letting mobs rename themselves. Used to be clname() and ainame()
@@ -1602,18 +1602,41 @@ Game Mode config tags:
 "raginmages""
 */
 
-/proc/find_active_mode(var/mode_ctag)
-	var/found_mode = null
-	if(ticker && ticker.mode)
-		if(ticker.mode.config_tag == mode_ctag)
-			found_mode = ticker.mode
-		else if(ticker.mode.name == "mixed")
-			var/datum/game_mode/mixed/mixed_mode = ticker.mode
-			for(var/datum/game_mode/GM in mixed_mode.modes)
-				if(GM.config_tag == mode_ctag)
-					found_mode = GM
+/proc/find_active_faction_by_type(var/faction_type)
+	if(!ticker || !ticker.mode)
+		return null
+	return locate(faction_type) in ticker.mode.factions
+
+/proc/find_active_faction_by_member(var/datum/role/R, var/datum/mind/M)
+	if(!R)
+		return null
+	var/found_faction = null
+	if(R.GetFaction())
+		return R.GetFaction()
+	if(ticker && ticker.mode && ticker.mode.factions.len)
+		var/success = FALSE
+		for(var/datum/faction/F in ticker.mode.factions)
+			for(var/datum/role/RR in F.members)
+				if(RR == R || RR.antag == M)
+					found_faction = F
+					success = TRUE
 					break
-	return found_mode
+			if(success)
+				break
+	return found_faction
+
+/proc/find_active_factions_by_member(var/datum/role/R, var/datum/mind/M)
+	var/list/found_factions = list()
+	for(var/datum/faction/F in ticker.mode.factions)
+		for(var/datum/role/RR in F.members)
+			if(RR == R || RR.antag == M)
+				found_factions.Add(F)
+				break
+	return found_factions
+
+/proc/find_active_faction_by_typeandmember(var/fac_type, var/datum/role/R, var/datum/mind/M)
+	var/list/found_factions = find_active_factions_by_member(R, M)
+	return locate(fac_type) in found_factions
 
 /proc/clients_in_moblist(var/list/mob/mobs)
 	. = list()
@@ -1653,9 +1676,9 @@ Game Mode config tags:
 	A.starting = T
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
-	playsound(T, fire_sound, 50, 1)
-	A.OnFired()
+	playsound(T, fire_sound, 75, 1)
 	spawn()
+		A.OnFired()
 		A.process()
 
 
@@ -1705,6 +1728,9 @@ Game Mode config tags:
 		max_seeds = extractor.max_seeds
 
 	var/produce = rand(min_seeds,max_seeds)
+
+	if(user)
+		user.drop_item(O, force_drop = TRUE)
 
 	if(istype(O, /obj/item/weapon/grown))
 		var/obj/item/weapon/grown/F = O

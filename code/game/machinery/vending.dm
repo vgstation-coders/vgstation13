@@ -104,7 +104,7 @@ var/global/num_vending_terminals = 1
 */
 
 /obj/machinery/vending/cultify()
-	new /obj/structure/cult/forge(loc)
+	new /obj/structure/cult_legacy/forge(loc)
 	..()
 
 /obj/machinery/vending/New()
@@ -480,6 +480,9 @@ var/global/num_vending_terminals = 1
 			to_chat(user, "<span class='info'>Nothing happens.</span>")
 
 	else if(istype(W, /obj/item/weapon/card))
+		if(!linked_db)
+			reconnect_database()
+
 		if(currently_vending) //We're trying to pay, not set the account
 			connect_account(user, W)
 			src.updateUsrDialog()
@@ -672,15 +675,15 @@ var/global/num_vending_terminals = 1
 	else
 		src.icon_state = "[initial(icon_state)]"
 
-/obj/machinery/vending/proc/damaged()
-	src.health -= 4
+/obj/machinery/vending/proc/damaged(var/coef=1)
+	src.health -= 4*coef
 	if(src.health <= 0)
 		stat |= BROKEN
 		src.update_vicon()
 		return
-	if(prob(2)) //Jackpot!
+	if(prob(2*coef)) //Jackpot!
 		malfunction()
-	if(prob(2))
+	if(prob(2*coef))
 		src.TurnOff(600) //A whole minute
 	/*if(prob(1))
 		to_chat(usr, "<span class='warning'>You fall down and break your leg!</span>")
@@ -691,6 +694,16 @@ var/global/num_vending_terminals = 1
 	..()
 
 	damaged()
+
+/obj/machinery/vending/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		shake(1, 3)
+		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+		damaged(4)
+		return 1
+	return 0
 
 /obj/machinery/vending/attack_hand(mob/living/user as mob)
 	if(stat & (BROKEN))
@@ -2073,6 +2086,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/staff/broom = 5,
 		/obj/item/clothing/glasses/monocle = 5,
 		/obj/item/weapon/storage/bag/wiz_cards/full = 1,
+		/obj/item/weapon/storage/bag/potion = 5
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/glass/bottle/wizarditis = 1,
@@ -3079,6 +3093,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/toy/foamblade = 2,
 		/obj/item/weapon/capsule = 20,
 		/obj/item/toy/cards = 2,
+		/obj/item/toy/cards/une = 2
 	)
 	contraband = list(
 		/obj/item/toy/gun = 2,
@@ -3106,7 +3121,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/toy/foamblade = 50,
 		/obj/item/toy/syndicateballoon/ntballoon = 100,
 		/obj/item/weapon/capsule = 10,
-		/obj/item/toy/cards = 35
+		/obj/item/toy/cards = 35,
+		/obj/item/toy/cards/une = 35
 	)
 	pack = /obj/structure/vendomatpack/circus
 
@@ -3130,7 +3146,8 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/toggleSecuredPanelOpen(var/obj/toggleitem, var/mob/user)
 	if(!is_custom_machine)
 		return ..()
-	if(!account_first_linked || (user.get_visible_id() && user.get_visible_id().get_owner_name_from_ID() == linked_account.owner_name))
+	var/obj/item/weapon/card/C = user.get_card() //Looks for a debit card first
+	if(!account_first_linked || (C && C.associated_account_number == linked_account.account_number))
 		togglePanelOpen(toggleitem, user)
 		return 1
 	to_chat(user, "<span class='warning'>The machine requires an ID to unlock it.</span>")

@@ -7,6 +7,7 @@
 	opened = 0
 	large = 1
 	locked = 1
+	has_electronics = 1
 	icon_closed = "secure"
 	var/icon_locked = "secure1"
 	icon_opened = "secureopen"
@@ -14,6 +15,9 @@
 	var/icon_off = "secureoff"
 	wall_mounted = 0 //never solid (You can always pass over it)
 	health = 200
+
+/obj/structure/closet/secure_closet/basic
+	has_lockless_type = /obj/structure/closet/basic
 
 /obj/structure/closet/secure_closet/can_open()
 	if(!..())
@@ -92,6 +96,9 @@
 			src.update_icon()
 			for(var/mob/M in viewers(src))
 				M.show_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
+		if(istype(W, /obj/item/weapon/screwdriver) && !src.locked && src.has_lockless_type)
+			remove_lock(user)
+			return
 		else
 			togglelock(user)
 

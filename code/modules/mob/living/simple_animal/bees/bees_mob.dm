@@ -8,7 +8,6 @@
 #define BOREDOM_TO_RETURN	30//once reached, the bee will head back to its hive
 
 #define EXHAUSTION_TO_DIE	300//once reached, the bee will begin to die
-
 #define MAX_BEES_PER_SWARM	20//explicit
 
 /*

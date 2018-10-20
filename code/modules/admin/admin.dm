@@ -59,7 +59,7 @@ var/global/floorIsLava = 0
 	body += {"
 		<br><br>\[
 		<a href='?_src_=vars;Vars=\ref[M]'>VV</a> -
-		<a href='?src=\ref[src];traitor=\ref[M]'>TP</a> -
+		<a href='?src=\ref[src];traitor=\ref[M]'>RP</a> -
 		<a href='?src=\ref[src];rapsheet=1;rsckey=[M.ckey]'>Bans</a> -
 		<a href='?src=\ref[usr];priv_msg=\ref[M]'>PM</a> -
 		<a href='?src=\ref[src];subtlemessage=\ref[M]'>SM</a> -
@@ -92,7 +92,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];getmob=\ref[M]'>Get</A> |
 		<A href='?src=\ref[src];sendmob=\ref[M]'>Send To</A>
 		<br><br>
-		<A href='?src=\ref[src];traitor=\ref[M]'>Traitor panel</A> |
+		<A href='?src=\ref[src];traitor=\ref[M]'>Role panel</A> |
 		<A href='?src=\ref[src];narrateto=\ref[M]'>Narrate to</A> |
 		<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A>
 	"}
@@ -203,10 +203,11 @@ var/global/floorIsLava = 0
 				<A href='?src=\ref[src];simplemake=larva;mob=\ref[M]'>Larva</A> \]
 				<br>\[ Slime: <A href='?src=\ref[src];simplemake=slime;mob=\ref[M]'>Baby</A>,
 				<A href='?src=\ref[src];simplemake=adultslime;mob=\ref[M]'>Adult</A> \]
-				<br>\[ Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Armoured</A>,
-				<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Builder</A>,
+				<br>\[ Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Juggernaut</A>,
+				<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Artificer</A>,
 				<A href='?src=\ref[src];simplemake=constructwraith;mob=\ref[M]'>Wraith</A>,
-				<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A> \]
+				<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A>,
+				<A href='?src=\ref[src];simplemake=soulblade;mob=\ref[M]'>Soul Blade</A> \]
 				<br>
 			"}
 
@@ -679,6 +680,21 @@ var/global/floorIsLava = 0
 		"}
 	if(master_mode == "secret")
 		dat += "<A href='?src=\ref[src];f_secret=1'>(Force Secret Mode)</A><br>"
+	if(master_mode == "Dynamic Mode")
+		if(ticker.current_state == GAME_STATE_PREGAME)
+			dat += "<A href='?src=\ref[src];f_dynamic_roundstart=1'>(Force Roundstart Rulesets)</A><br>"
+			if (forced_roundstart_ruleset.len > 0)
+				for(var/datum/dynamic_ruleset/roundstart/rule in forced_roundstart_ruleset)
+					dat += {"<A href='?src=\ref[src];f_dynamic_roundstart_remove=\ref[rule]'>-> [rule.name] <-</A><br>"}
+				dat += "<A href='?src=\ref[src];f_dynamic_roundstart_clear=1'>(Clear Rulesets)</A><br>"
+		else
+			dat += "<A href='?src=\ref[src];f_dynamic_latejoin=1'>(Force Next Latejoin Ruleset)</A><br>"
+			if (ticker && ticker.mode && istype(ticker.mode,/datum/gamemode/dynamic))
+				var/datum/gamemode/dynamic/mode = ticker.mode
+				if (mode.forced_latejoin_rule)
+					dat += {"<A href='?src=\ref[src];f_dynamic_latejoin_clear=1'>-> [mode.forced_latejoin_rule.name] <-</A><br>"}
+			dat += "<A href='?src=\ref[src];f_dynamic_midround=1'>(Execute Midround Ruleset!)</A><br>"
+
 
 	dat += {"
 		<hr />
@@ -698,6 +714,8 @@ var/global/floorIsLava = 0
 		<hr />
 		<A href='?src=\ref[src];vsc=airflow'>Edit ZAS Settings</A><br>
 		<A href='?src=\ref[src];vsc=default'>Choose a default ZAS setting</A><br>
+		<A href='?src=\ref[src];xgm_panel=1'>XGM Panel</A><br>
+		<hr />
 		"}
 
 	if(wages_enabled)
@@ -1214,49 +1232,44 @@ var/global/floorIsLava = 0
 
 ////////////////////////////////////////////////////////////////////////////////////////////////ADMIN HELPER PROCS
 
-/proc/is_special_character(mob/M as mob) // returns 1 for specail characters and 2 for heroes of gamemode
+/proc/is_special_character(mob/M as mob) // returns 1 for special characters
 	if(!ticker || !ticker.mode)
 		return 0
 	if (!istype(M))
 		return 0
 	if(isrev(M) || isrevhead(M))
-		if (ticker.mode.config_tag == "revolution")
-			return 2
 		return 1
-	if(iscult(M))
-		if (ticker.mode.config_tag == "cult")
-			return 2
+	if(isanycultist(M))
 		return 1
 	if(ismalf(M))
-		if (ticker.mode.config_tag == "malfunction")
-			return 2
 		return 1
 	if(isnukeop(M))
-		if (ticker.mode.config_tag == "nuclear")
-			return 2
 		return 1
 	if(iswizard(M) || isapprentice(M))
-		if (ticker.mode.config_tag == "wizard")
-			return 2
 		return 1
 	if(ischangeling(M))
-		if (ticker.mode.config_tag == "changeling")
-			return 2
 		return 1
 	/*if(isborer(M)) //They ain't antags anymore
 		if (ticker.mode.config_tag == "borer")
 			return 2
 		return 1*/
 	if(isbadmonkey(M))
-		if (ticker.mode.config_tag == "monkey")
-			return 2
 		return 1
 	if(isrobot(M))
 		var/mob/living/silicon/robot/R = M
 		if(R.emagged)
 			return 1
+	if(isdeathsquad(M))
+		return 1
 	if(M.mind&&M.mind.special_role)//If they have a mind and special role, they are some type of traitor or antagonist.
 		return 1
+	if (M.mind && M.mind.GetRole(CRUSADER))
+		return 1
+	if (M.mind && M.mind.GetRole(SURVIVOR))
+		return 1
+	if (M.mind && M.mind.GetRole(MAGICIAN))
+		return 1
+
 
 	return 0
 
@@ -1326,10 +1339,10 @@ var/global/floorIsLava = 0
 	log_admin("[key_name(usr)] spawned [chosen] at ([usr.x],[usr.y],[usr.z])")
 	feedback_add_details("admin_verb","SA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/datum/admins/proc/show_traitor_panel(var/mob/M in mob_list)
+/datum/admins/proc/show_role_panel(var/mob/M in mob_list)
 	set category = "Admin"
-	set desc = "Edit mobs's memory and role"
-	set name = "Show Traitor Panel"
+	set desc = "Edit mobs's Job, Roles, and Factions"
+	set name = "Show Role Panel"
 
 	if(!istype(M))
 		to_chat(usr, "This can only be used on instances of type /mob")
@@ -1338,7 +1351,7 @@ var/global/floorIsLava = 0
 		to_chat(usr, "This mob has no mind!")
 		return
 
-	M.mind.edit_memory()
+	M.mind.role_panel()
 	feedback_add_details("admin_verb","STP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 

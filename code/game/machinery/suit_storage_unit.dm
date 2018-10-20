@@ -88,6 +88,14 @@
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
 
+/obj/machinery/suit_storage_unit/excavation
+	name = "Survivor's Suit Storage Unit"
+	department = "sci"
+	suit_type = /obj/item/clothing/suit/space/rig/ror
+	helmet_type = /obj/item/clothing/head/helmet/space/rig/ror
+	mask_type = /obj/item/clothing/mask/breath
+	boot_type = /obj/item/clothing/shoes/magboots
+
 /obj/machinery/suit_storage_unit/security
 	name = "Security Suit Storage Unit"
 	department = "sec"
@@ -95,6 +103,14 @@
 	helmet_type = /obj/item/clothing/head/helmet/space/rig/security
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
+
+/obj/machinery/suit_storage_unit/captain
+	name = "Command Suit Storage Unit"
+	department = "sec"
+	suit_type = /obj/item/clothing/suit/armor/captain
+	helmet_type = /obj/item/clothing/head/helmet/space/capspace
+	mask_type = /obj/item/clothing/mask/gas
+	boot_type = /obj/item/clothing/shoes/magboots/captain
 
 /obj/machinery/suit_storage_unit/medical
 	name = "Medical Suit Storage Unit"

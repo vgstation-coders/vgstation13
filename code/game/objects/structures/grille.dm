@@ -142,6 +142,7 @@
 	return 0
 
 /obj/structure/grille/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	visible_message("<span class='danger'>[user] hits [src] with [W].</span>")
 	user.delayNextAttack(8)
 	if(iswirecutter(W))
 		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
@@ -251,6 +252,10 @@
 		healthcheck() //Note : This healthcheck is silent, and it's going to stay that way
 	..()
 
+/obj/structure/grille/clockworkify()
+	var/our_glow = broken ? BROKEN_REPLICANT_GRILLE_GLOW : REPLICANT_GRILLE_GLOW
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/grille/replicant, our_glow)
+
 /obj/structure/grille/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
@@ -269,6 +274,7 @@
 	density = 0 //Not blocking anything anymore
 
 /obj/structure/grille/broken/New()
+	..()
 	health -= rand(initial(health)*0.8, initial(health)*0.9) //Largely under broken threshold, this is used to adjust the health, NOT to break it
 	healthcheck() //Send this to healthcheck just in case we want to do something else with it
 
@@ -312,4 +318,7 @@
 	grille_material = /obj/item/stack/sheet/ralloy
 
 /obj/structure/grille/replicant/cultify()
+	return
+
+/obj/structure/grille/replicant/clockworkify()
 	return

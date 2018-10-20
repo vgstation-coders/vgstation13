@@ -15,10 +15,6 @@
 	scrubber = json["scrubber"]
 	mode = text2num(json["mode"])
 
-/datum/automation/set_scrubber_mode/New(var/obj/machinery/computer/general_air_control/atmos_automation/aa)
-	..(aa)
-	children = list(null)
-
 /datum/automation/set_scrubber_mode/process()
 	if(scrubber)
 		parent.send_signal(list ("tag" = scrubber, "sigtype"="command", "scrubbing" = mode), RADIO_FROM_AIRALARM)

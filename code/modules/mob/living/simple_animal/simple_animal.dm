@@ -204,6 +204,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	confused = max(0, confused - 1)
 
+	if(say_mute)
+		say_mute = max(say_mute-1, 0)
+
 	if(purge)
 		purge -= 1
 
@@ -238,41 +241,41 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				bodytemperature += ((Environment.temperature - bodytemperature) / 5)
 
 			if(min_oxy)
-				if(Environment.molar_density("oxygen") < min_oxy / CELL_VOLUME)
+				if(Environment.molar_density(GAS_OXYGEN) < min_oxy / CELL_VOLUME)
 					atmos_suitable = 0
 					oxygen_alert = 1
 				else
 					oxygen_alert = 0
 
 			if(max_oxy)
-				if(Environment.molar_density("oxygen") > max_oxy / CELL_VOLUME)
+				if(Environment.molar_density(GAS_OXYGEN) > max_oxy / CELL_VOLUME)
 					atmos_suitable = 0
 
 			if(min_tox)
-				if(Environment.molar_density("toxins") < min_tox / CELL_VOLUME)
+				if(Environment.molar_density(GAS_PLASMA) < min_tox / CELL_VOLUME)
 					atmos_suitable = 0
 
 			if(max_tox)
-				if(Environment.molar_density("toxins") > max_tox / CELL_VOLUME)
+				if(Environment.molar_density(GAS_PLASMA) > max_tox / CELL_VOLUME)
 					atmos_suitable = 0
 					toxins_alert = 1
 				else
 					toxins_alert = 0
 
 			if(min_n2)
-				if(Environment.molar_density("nitrogen") < min_n2 / CELL_VOLUME)
+				if(Environment.molar_density(GAS_NITROGEN) < min_n2 / CELL_VOLUME)
 					atmos_suitable = 0
 
 			if(max_n2)
-				if(Environment.molar_density("nitrogen") > max_n2 / CELL_VOLUME)
+				if(Environment.molar_density(GAS_NITROGEN) > max_n2 / CELL_VOLUME)
 					atmos_suitable = 0
 
 			if(min_co2)
-				if(Environment.molar_density("carbon_dioxide") < min_co2 / CELL_VOLUME)
+				if(Environment.molar_density(GAS_CARBON) < min_co2 / CELL_VOLUME)
 					atmos_suitable = 0
 
 			if(max_co2)
-				if(Environment.molar_density("carbon_dioxide") > max_co2 / CELL_VOLUME)
+				if(Environment.molar_density(GAS_CARBON) > max_co2 / CELL_VOLUME)
 					atmos_suitable = 0
 
 	//Atmos effect
@@ -723,6 +726,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	src.resurrect()
 	src.revive()
 	visible_message("<span class='warning'>[src] appears to wake from the dead, having healed all wounds.</span>")
+	isRegenerating = 0
 
 /mob/living/simple_animal/proc/pointed_at(var/mob/pointer)
 	return

@@ -192,7 +192,7 @@ var/global/list/damage_icon_parts = list()
 	var/husk = (M_HUSK in src.mutations)  //100% unnecessary -Agouri	//nope, do you really want to iterate through src.mutations repeatedly? -Pete
 	var/fat = (M_FAT in src.mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
 	var/hulk = (M_HULK in src.mutations) && !ishorrorform(src) && !isgrue(src) && mind.special_role != HIGHLANDER // Part of the species.
-	var/skeleton = (SKELETON in src.mutations)
+	var/skeleton = (M_SKELETON in src.mutations)
 
 	var/g = "m"
 	if(gender == FEMALE)
@@ -405,6 +405,17 @@ var/global/list/damage_icon_parts = list()
 		O.underlays	-= "fire[fat]_s"
 		O.underlays	+= "coldfire[fat]_s"
 
+	//Cultist tattoos
+	if (mind && mind.GetRole(CULTIST))
+		var/datum/role/cultist/C = mind.GetRole(CULTIST)
+		add_image = 1
+		for (var/T in C.tattoos)
+			var/datum/cult_tattoo/tattoo = C.tattoos[T]
+			if (tattoo)
+				var/image/I = image(icon = 'icons/mob/cult_tattoos.dmi', icon_state = tattoo.icon_state)
+				I.blend_mode = BLEND_MULTIPLY
+				O.overlays += I
+
 	if(add_image)
 		O.icon = standing
 		O.icon_state = standing.icon_state
@@ -425,7 +436,7 @@ var/global/list/damage_icon_parts = list()
 //	var/g = "m"
 //	if (gender == FEMALE)	g = "f"
 //BS12 EDIT
-	var/skeleton = (SKELETON in src.mutations)
+	var/skeleton = (M_SKELETON in src.mutations)
 	if(skeleton)
 		race_icon = 'icons/mob/human_races/r_skeleton.dmi'
 	else
@@ -828,8 +839,8 @@ var/global/list/damage_icon_parts = list()
 			if(s_store.dynamic_overlay["[SUIT_STORE_LAYER]"])
 				var/image/dyn_overlay = s_store.dynamic_overlay["[SUIT_STORE_LAYER]"]
 				O.overlays += dyn_overlay
-		O.pixel_x = species.inventory_offsets["[slot_s_store]"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["[slot_s_store]"]["pixel_y"] * PIXEL_MULTIPLIER
+		O.pixel_x = (species.inventory_offsets["[slot_s_store]"]["pixel_x"] - initial(s_store.pixel_x)) * PIXEL_MULTIPLIER
+		O.pixel_y = (species.inventory_offsets["[slot_s_store]"]["pixel_y"] - initial(s_store.pixel_y)) * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,SUIT_STORE_LAYER)
 		//overlays_standing[SUIT_STORE_LAYER]	= image("icon" = 'icons/mob/belt_mirror.dmi', "icon_state" = "[t_state]")
 		s_store.screen_loc = ui_sstore1		//TODO
@@ -1154,7 +1165,7 @@ var/global/list/damage_icon_parts = list()
 		if(I.dynamic_overlay && I.dynamic_overlay["[HAND_LAYER]-[index]"])
 			var/image/dyn_overlay = I.dynamic_overlay["[HAND_LAYER]-[index]"]
 			O.overlays.Add(dyn_overlay)
-		I.screen_loc = get_held_item_ui_location(index)
+		I.screen_loc = get_held_item_ui_location(index,I)
 
 		if(handcuffed) //why is this here AUGH
 			drop_item(I)

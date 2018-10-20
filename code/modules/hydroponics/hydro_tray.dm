@@ -316,6 +316,7 @@
 
 		// Bookkeeping.
 		check_level_sanity()
+		skip_aging++ //We're about to force a cycle, so one age hasn't passed. Add a single skip counter.
 		force_update = 1
 		process()
 

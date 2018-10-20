@@ -2569,14 +2569,12 @@
 	)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/ambrosia_brownies
-
 /datum/recipe/butterfingers_r
 	items = list(/obj/item/organ/external/r_hand,
 	/obj/item/weapon/reagent_containers/food/snacks/butter,
 	)
 
  result = /obj/item/weapon/reagent_containers/food/snacks/butterfingers_r/
-
 /datum/recipe/butterfingers_l
 	items = list(/obj/item/organ/external/l_hand,
 	/obj/item/weapon/reagent_containers/food/snacks/butter,
@@ -2590,3 +2588,12 @@
 	)
 
  result = /obj/item/weapon/reagent_containers/food/snacks/butteredtoast
+
+/datum/recipe/pierogi
+	reagents = list(FLOUR = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
+		)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/pierogi

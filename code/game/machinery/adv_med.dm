@@ -7,7 +7,7 @@
 	idle_power_usage = 125
 	active_power_usage = 250
 	var/scanning = 1
-	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL
+	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/fullbodyscanner,
 		/obj/item/weapon/stock_parts/scanning_module,

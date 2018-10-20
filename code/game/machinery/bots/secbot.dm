@@ -28,13 +28,6 @@
 	var/next_harm_time = 0
 
 	var/mode = 0
-#define SECBOT_IDLE 		0		// idle
-#define SECBOT_HUNT 		1		// found target, hunting
-#define SECBOT_PREP_ARREST 	2		// at target, preparing to arrest
-#define SECBOT_ARREST		3		// arresting target
-#define SECBOT_START_PATROL	4		// start patrol
-#define SECBOT_PATROL		5		// patrolling
-#define SECBOT_SUMMON		6		// summoned by PDA
 
 	var/auto_patrol = 0		// set to make bot automatically patrol
 
@@ -63,6 +56,11 @@
 		/obj/item/weapon/melee/defibrillator
 		)
 
+	var/list/cannot_open = list(
+		/obj/machinery/door/firedoor,
+		/obj/machinery/door/mineral/resin,
+		/obj/machinery/door/mineral/cult,
+		)
 	light_color = LIGHT_COLOR_RED
 	power_change()
 		..()
@@ -758,7 +756,7 @@ Auto Patrol: []"},
 /obj/machinery/bot/secbot/to_bump(M as mob|obj) //Leave no door unopened!
 	if((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
 		var/obj/machinery/door/D = M
-		if(!istype(D, /obj/machinery/door/firedoor) && D.check_access(src.botcard))
+		if(!is_type_in_list(D, cannot_open) && D.check_access(src.botcard))
 			D.open()
 			src.frustration = 0
 	else if((istype(M, /mob/living/)) && (!src.anchored))

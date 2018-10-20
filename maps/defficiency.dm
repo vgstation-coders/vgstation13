@@ -1,4 +1,4 @@
-
+#ifndef MAP_OVERRIDE
 //**************************************************************
 // Map Datum -- Defficiency
 //**************************************************************
@@ -88,11 +88,10 @@
 	wires = new /datum/wires/airlock/secure(src)
 
 ////////////////////////////////////////////////////////////////
-#include "defficiency/pipes.dm" // Atmos layered pipes.
 
 #include "defficiency/areas.dm" // Areas
 
 #include "defficiency/jobs.dm"
 
 #include "defficiency.dmm"
-
+#endif

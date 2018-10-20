@@ -478,7 +478,7 @@
 	name = "Nitroglycerin Explosion"
 	id = NITROGLYCERIN
 	result = NITROGLYCERIN
-	required_reagents = list(GLYCEROL = 1, PACID = 1, SACID = 1)
+	required_reagents = list(GLYCEROL = 1, PHENOL = 1, FORMIC_ACID = 1)
 	result_amount = 2
 	alert_admins = ALERT_AMOUNT_ONLY
 
@@ -548,10 +548,8 @@
 		var/turf/location = get_turf(holder.my_atom.loc)
 
 		for(var/turf/simulated/floor/target_tile in range(0,location))
-			var/datum/gas_mixture/napalm = new
-			var/datum/gas/volatile_fuel/fuel = new
-			fuel.moles = created_volume
-			napalm.trace_gases += fuel
+			var/datum/gas_mixture/napalm = new()
+			napalm.adjust_gas(GAS_VOLATILE, created_volume, FALSE)
 			napalm.temperature = 400+T0C
 			napalm.update_values()
 			target_tile.assume_air(napalm)
@@ -676,7 +674,7 @@
 	required_reagents = list(VAPORSALT = 1, OXYGEN = 1)
 
 /datum/chemical_reaction/vaporize/oxygen/disperse(turf/T,datum/gas_mixture/G,var/vol)
-	G.adjust(vol,0,0,0)
+	G.adjust_gas(GAS_OXYGEN, vol)
 	..()
 
 /datum/chemical_reaction/vaporize/nitrogen
@@ -685,7 +683,7 @@
 	required_reagents = list(VAPORSALT = 1, NITROGEN = 1)
 
 /datum/chemical_reaction/vaporize/nitrogen/disperse(turf/T,datum/gas_mixture/G,var/vol)
-	G.adjust(0,0,vol,0)
+	G.adjust_gas(GAS_NITROGEN, vol)
 	..()
 
 /datum/chemical_reaction/vaporize/plasma
@@ -695,7 +693,7 @@
 	required_reagents = list(VAPORSALT = 1, PLASMA = 1)
 
 /datum/chemical_reaction/vaporize/plasma/disperse(turf/T,datum/gas_mixture/G,var/vol)
-	G.adjust(0,0,0,vol)
+	G.adjust_gas(GAS_PLASMA, vol)
 	..()
 
 /datum/chemical_reaction/solidification
@@ -786,6 +784,13 @@
 	result = METHYLIN
 	required_reagents = list(HYDROGEN = 1, CHLORINE = 1, ETHANOL = 1)
 	required_catalysts = list(FLUORINE = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/piccolyn
+	name = "Piccolyn"
+	id = PICCOLYN
+	result = PICCOLYN
+	required_reagents = list(COPPER = 1, TUNGSTEN = 1, FLUORINE = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/explosion_bicarodyne
@@ -1360,7 +1365,14 @@
 		else if(ismob(location)) //Copy the mob! Owwwwwwwwwww this is going to be fun
 			var/mob/M = location
 
-			var/mob/mimic = new /mob/living/simple_animal/hostile/mimic/crate(get_turf(location), location)
+			var/mimictype = /obj/item/stack/sheet/wood/bigstack
+			if(ishuman(M))
+				mimictype = /obj/structure/mannequin/wood
+				if(isvox(M))
+					mimictype = /obj/structure/mannequin/wood/vox
+			else if(ismonkey(M))
+				mimictype = /obj/structure/mannequin/wood/monkey
+			var/mob/mimic = new /mob/living/simple_animal/hostile/mimic/crate(get_turf(location), mimictype)
 			mimic.appearance = M.appearance //Because mimics copy appearances from paths, not actual existing objects.
 			to_chat(M, "<span class='sinister'>You feel something thoroughly analyzing you from inside...</span>")
 
@@ -1585,8 +1597,8 @@
 	for(var/turf/simulated/floor/target_tile in range(0, location))
 
 		var/datum/gas_mixture/napalm = new
-		napalm.toxins = 25
 		napalm.temperature = 1400
+		napalm.adjust_gas(GAS_PLASMA, 25)
 		target_tile.assume_air(napalm)
 		spawn(0)
 			target_tile.hotspot_expose(700, 400,surfaces = 1)
@@ -3234,92 +3246,16 @@
 	id = COLORFUL_REAGENT
 	result = COLORFUL_REAGENT
 	required_reagents = list(MESCALINE = 1, PSILOCYBIN = 1, AMATOXIN = 1)
-
-//Karmotrine Drinks
-
-/datum/chemical_reaction/smokyroom
-	name = "Smoky Room"
-	id = SMOKYROOM
-	result = SMOKYROOM
-	required_reagents = list(MANHATTAN = 1, ICE = 1, KARMOTRINE = 2)
-	result_amount = 4
-
-/datum/chemical_reaction/ragstoriches
-	name = "Rags to Riches"
-	id = RAGSTORICHES
-	result = RAGSTORICHES
-	required_reagents = list(VODKA = 1, COGNAC = 1, KARMOTRINE = 3)
-	result_amount = 5
-
-/datum/chemical_reaction/badtouch
-	name = "Bad Touch"
-	id = BAD_TOUCH
-	result = BAD_TOUCH
-	required_reagents = list(RUM = 2, KAHLUA = 1, ICE = 1, KARMOTRINE = 1)
-	result_amount = 5
-
-/datum/chemical_reaction/electricsheep
-	name = "Electric Sheep"
-	id = ELECTRIC_SHEEP
-	result = ELECTRIC_SHEEP
-	required_reagents = list(WINE = 1, SILICON = 1, KARMOTRINE = 3)
-	result_amount = 5
-
-/datum/chemical_reaction/suicide
-	name = "Suicide"
-	id = SUICIDE
-	result = SUICIDE
-	required_reagents = list(SPACEMOUNTAINWIND = 1, DR_GIBB = 1, COLA = 1, LEMON_LIME = 1, KARMOTRINE = 1)
-	result_amount = 5
-
-/datum/chemical_reaction/scientistsserendipity
-	name = "Scientist's Serendipity"
-	id = SCIENTISTS_SERENDIPITY
-	result = SCIENTISTS_SERENDIPITY
-	required_reagents = list(MOONROCKS = 1, KARMOTRINE = 1)
-	result_amount = 2
-
-/datum/chemical_reaction/metabuddy
-	name = "Metabuddy"
-	id = METABUDDY
-	result = METABUDDY
-	required_reagents = list(TONIC = 2, KARMOTRINE = 3)
-	result_amount = 5
-
-/datum/chemical_reaction/waifu
-	name = "Waifu"
-	id = WAIFU
-	result = WAIFU
-	required_reagents = list(SAKE = 1, KARMOTRINE = 4)
-	result_amount = 5
-
-/datum/chemical_reaction/beepskyclassic
-	name = "Beepsky Classic"
-	id = BEEPSKY_CLASSIC
-	result = BEEPSKY_CLASSIC
-	required_reagents = list(BEEPSKY_SMASH = 2, KARMOTRINE = 3)
-	result_amount = 5
-
-/datum/chemical_reaction/spider
-	name = "Spiders"
-	id = SPIDERS
-	result = SPIDERS
-	required_reagents = list(CLONEXADONE = 3, KARMOTRINE = 2)
-	result_amount = 5
-
-/datum/chemical_reaction/weedeater
-	name = "Weed Eater"
-	id = WEED_EATER
-	result = WEED_EATER
-	required_reagents = list(SPACE_DRUGS = 1, AMATOXIN = 1, PSILOCYBIN = 1, KARMOTRINE = 2)
-	result_amount = 5
-
-/datum/chemical_reaction/lemonlime
-	name = "Lemon Lime"
-	id = LEMON_LIME
-	result = LEMON_LIME
-	required_reagents = list(LIMEJUICE = 1, LEMONJUICE = 1, SODAWATER = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/degeneratecalcium
+	name = "Degenerate Calcium"
+	id = DEGENERATECALCIUM
+	result = DEGENERATECALCIUM
+	required_reagents = list(MILK = 1, MUTAGEN = 1)
+	required_temp = T0C + 88 //Mutagen is very hard to heat up, so I don't recommend making more than 10u of this at a time
+	result_amount = 1
+
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

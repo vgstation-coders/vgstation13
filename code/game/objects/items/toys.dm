@@ -126,7 +126,7 @@
 
 /obj/item/toy/spinningtoy/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into \the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
-	return (BRUTELOSS|TOXLOSS|OXYLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 
 /*
@@ -455,7 +455,7 @@
 
 /obj/item/toy/crayon/suicide_act(mob/user)
 	user.visible_message("<span class = 'danger'><b>[user] is jamming \the [src.name] up \his nose and into \his brain. It looks like \he's trying to commit suicide.</b></span>")
-	return (BRUTELOSS|OXYLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_OXYLOSS)
 
 /*
  * Snap pops
@@ -684,7 +684,7 @@
 
 /obj/item/toy/gooncode/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
-	return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 
 /obj/item/toy/minimeteor
@@ -1169,22 +1169,9 @@
 			for(var/i in L.gasses)
 				if(istype(i, /datum/lung_gas/waste))
 					var/datum/lung_gas/waste/W = i
-					switch(W.id)
-						if("oxygen")
-							B.air_contents.adjust(o2 = 0.5)
-						if("carbon_dioxide")
-							B.air_contents.adjust(co2 = 0.5)
-						if("nitrogen")
-							B.air_contents.adjust(n2 = 0.5)
-						if("toxins")
-							B.air_contents.adjust(tx = 0.5)
-						if("/datum/gas/sleeping_agent")
-							var/datum/gas/sleeping_agent/S = new()
-							S.moles = 0.5
-							B.air_contents.adjust(traces = list(S))
+					B.air_contents.adjust_gas(W.id, 0.5)
 		else
-			B.air_contents.adjust(co2 = 0.5)
-		B.air_contents.update_values()
+			B.air_contents.adjust_gas(GAS_CARBON, 0.5)
 	else
 		var/moles = ONE_ATMOSPHERE*volume/(R_IDEAL_GAS_EQUATION*G.temperature)
 		B.air_contents = G.remove(moles)

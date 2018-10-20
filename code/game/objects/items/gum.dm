@@ -203,3 +203,12 @@
 	. = ..()
 	forceMove(null)
 	target = H
+
+/obj/item/gum/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+	if(replacement_chem_volume <= 0)
+		to_chat(user, "<span class='warning'>\The [src] is full.</span>")
+		return INJECTION_RESULT_FAIL
+	var/tx_amount = min(tool.amount_per_transfer_from_this, tool.reagents.total_volume)
+	tx_amount = transfer_some_reagents(tool, tx_amount, TRUE, user)
+	to_chat(user, "<span class='notice'>You inject [tx_amount] units of the solution. \The [tool] now contains [tool.reagents.total_volume] units.</span>")
+	return INJECTION_RESULT_SUCCESS_BUT_SKIP_REAGENT_TRANSFER

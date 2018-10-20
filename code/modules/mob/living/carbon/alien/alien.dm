@@ -1,7 +1,3 @@
-#define HEAT_DAMAGE_LEVEL_1 2 //Amount of damage applied when your body temperature just passes the 360.15k safety point
-#define HEAT_DAMAGE_LEVEL_2 4 //Amount of damage applied when your body temperature passes the 400K point
-#define HEAT_DAMAGE_LEVEL_3 8 //Amount of damage applied when your body temperature passes the 460K point and you are on fire
-
 #define LARVA_GROW_TIME 100
 
 /mob/living/carbon/alien
@@ -300,7 +296,3 @@ Des: Removes all infected images from the alien.
 
 /mob/living/carbon/alien/has_eyes()
 	return 0
-
-#undef HEAT_DAMAGE_LEVEL_1
-#undef HEAT_DAMAGE_LEVEL_2
-#undef HEAT_DAMAGE_LEVEL_3

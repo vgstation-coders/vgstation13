@@ -60,6 +60,9 @@
 	user.drop_item(src, force_drop = 1)
 	qdel(src)
 
+/obj/item/weapon/table_parts/clockworkify()
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/item/weapon/table_parts/clockwork, CLOCKWORK_GENERIC_GLOW)
+
 /obj/item/weapon/table_parts/reinforced
 	name = "reinforced table parts"
 	desc = "Hard table parts. Well...harder..."
@@ -144,6 +147,9 @@
 	sheet_amount = 4
 
 /obj/item/weapon/table_parts/clockwork/cultify()
+	return
+
+/obj/item/weapon/table_parts/clockwork/clockworkify()
 	return
 
 /obj/item/weapon/rack_parts

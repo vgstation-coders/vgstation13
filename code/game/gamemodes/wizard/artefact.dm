@@ -161,20 +161,19 @@
 		to_chat(user, "<span class = 'notice'>You prime the glow-stone, it will transform in [prime_time/10] seconds.</span>")
 		activate()
 		return
+	if (clumsy_check(user) && prob(50))
+		to_chat(user, "<span class = 'notice'>Ooh, shiny!</span>")
+		failure()
+		return
+	if(prob(65))
+		to_chat(user, "<span class = 'notice'>You find what appears to be an on button, and press it.</span>")
+		activate()
 	else
-		if (clumsy_check(user) && prob(50))
-			to_chat(user, "<span class = 'notice'>Ooh, shiny!</span>")
-			failure()
-			return
-		else if(prob(65))
-			to_chat(user, "<span class = 'notice'>You find what appears to be an on button, and press it.</span>")
-			activate()
-		else
-			if(prob(5))
-				visible_message("<span class = 'warning'>\The [src] ticks [pick("ominously","forebodingly", "harshly")].</span>")
-				if(prob(50))
-					failure()
-			to_chat(user, "<span class = 'notice'>You fiddle with \the [src], but find nothing of interest.</span>")
+		if(prob(5))
+			visible_message("<span class = 'warning'>\The [src] ticks [pick("ominously","forebodingly", "harshly")].</span>")
+			if(prob(50))
+				failure()
+		to_chat(user, "<span class = 'notice'>You fiddle with \the [src], but find nothing of interest.</span>")
 
 /obj/item/weapon/glow_orb/proc/activate()
 	activating = 1

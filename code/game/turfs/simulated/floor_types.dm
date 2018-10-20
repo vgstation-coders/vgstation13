@@ -158,11 +158,7 @@
 /turf/simulated/floor/engine/n20/New()
 	..()
 	if(src.air)
-		// EXACTLY the same code as fucking roomfillers.  If this doesn't work, something's fucked.
-		var/datum/gas/sleeping_agent/trace_gas = new
-		air.trace_gases += trace_gas
-		trace_gas.moles = 9*4000
-		air.update_values()
+		air.adjust_gas(GAS_SLEEPING, 9 * 4000) //NO goddamn idea what those numbers mean, but it's what they were before
 
 /turf/simulated/floor/engine/nitrogen
 	name = "nitrogen floor"

@@ -216,14 +216,6 @@ var/MAX_EXPLOSION_RANGE = 14
 #define INSULATED_EDGE 	16 // One of the edges of this thing is insulated, even though the rest of it isn't.
 #define HOT_EDGE 		32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
 
-//clothing flags
-#define MASKINTERNALS		1 // mask allows internals
-#define NOSLIP				2 //prevents from slipping on wet floors, in space etc
-#define BLOCK_GAS_SMOKE_EFFECT 4 //blocks the effect that chemical clouds would have on a mob
-#define ONESIZEFITSALL		8
-#define PLASMAGUARD 		16 //Does not get contaminated by plasma.
-#define BLOCK_BREATHING 	32 //When worn, prevents breathing!
-
 //flags for pass_flags
 #define PASSTABLE	1
 #define PASSGLASS	2
@@ -418,9 +410,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 //#define SHOCKWAVE		21 	// (Not implemented) attack a nearby tile and cause a massive shockwave, knocking most people on their asses (25%)
 //#define ELECTRICITY	22 	// (Not implemented) ability to shoot electric attacks (15%)
 
-	//2spooky
-#define SKELETON 29
-#define PLANT 30
+//2spooky
+#define M_SKELETON 29
 
 // Other Mutations:
 #define M_NO_BREATH		100 	// no need to breathe
@@ -530,7 +521,7 @@ var/global/list/bad_changing_colour_ckeys = list()
 #define INV_SLOT_SIGHT "sight_slot"
 #define INV_SLOT_TOOL "tool_slot"
 
-#define IS_MODE_COMPILED(MODE) (ispath(text2path("/datum/game_mode/"+(MODE))))
+//#define IS_MODE_COMPILED(MODE) (ispath(text2path("/datum/gamemode/"+(MODE))))
 
 
 var/list/global_mutations = list() // list of hidden mutation things
@@ -568,10 +559,11 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define I_HURT		"hurt"
 
 //I hate adding defines like this but I'd much rather deal with bitflags than lists and string searches
-#define BRUTELOSS 1
-#define FIRELOSS 2
-#define TOXLOSS 4
-#define OXYLOSS 8
+#define SUICIDE_ACT_BRUTELOSS 1
+#define SUICIDE_ACT_FIRELOSS 2
+#define SUICIDE_ACT_TOXLOSS 4
+#define SUICIDE_ACT_OXYLOSS 8
+#define SUICIDE_ACT_CUSTOM 16
 
 //Bitflags defining which status effects could be or are inflicted on a mob
 #define CANSTUN		1
@@ -659,6 +651,9 @@ var/list/liftable_structures = list(\
 #define SEE_INVISIBLE_LEVEL_TWO 45	//Used by mobs under certain conditions.
 #define INVISIBILITY_LEVEL_TWO 45	//Used by turrets inside their covers.
 
+#define INVISIBILITY_CULTJAUNT 50	//Used by cult
+#define SEE_INVISIBLE_CULTJAUNT 50	//Used by cult
+
 #define INVISIBILITY_OBSERVER 60	//Used by Ghosts.
 #define SEE_INVISIBLE_OBSERVER 60	//Used by Ghosts.
 
@@ -702,7 +697,6 @@ SEE_PIXELS	256
 #define BEE_HEADING_HOME 3
 #define BEE_SWARM 4
 #define BEE_BUILDING 5
-
 
 //for infestation events
 #define LOC_KITCHEN 0
@@ -784,6 +778,7 @@ SEE_PIXELS	256
 #define MAT_WOOD		"$wood"
 #define MAT_BRASS   	"$brass"
 #define MAT_RALLOY   	"$ralloy"
+#define MAT_ICE			"$ice"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -851,23 +846,25 @@ SEE_PIXELS	256
 #define ROLEPREF_VALMASK  3 // 0b00000011 - Used to get ROLEPREF flags without the ROLEPREF_POLLED and ROLEPREF_SAVE bits
 
 // Should correspond to jobbans, too.
-#define ROLE_ALIEN      "alien"
-#define ROLE_BLOB       "blob"      // New!
-#define ROLE_BORER      "borer"     // New!
-#define ROLE_CHANGELING "changeling"
-#define ROLE_COMMANDO   "commando"  // New!
-#define ROLE_CULTIST    "cultist"
-#define ROLE_MALF       "malf AI"
-#define ROLE_NINJA      "ninja"
-#define ROLE_OPERATIVE  "operative" // New!
-#define ROLE_PAI        "pAI"
-#define ROLE_PLANT      "Dionaea"
-#define ROLE_POSIBRAIN  "posibrain"
-#define ROLE_REV        "revolutionary"
-#define ROLE_TRAITOR    "traitor"
-#define ROLE_VAMPIRE    "vampire"
-#define ROLE_VOXRAIDER  "vox raider"
-#define ROLE_WIZARD     "wizard"
+#define ROLE_ALIEN      	"alien"
+#define ROLE_BLOB       	"blob"      // New!
+#define ROLE_BORER      	"borer"     // New!
+#define ROLE_CHANGELING 	"changeling"
+#define ROLE_COMMANDO   	"commando"  // New!
+#define ROLE_CULTIST    	"cultist"
+#define ROLE_LEGACY_CULTIST "legacy_cultist"
+#define ROLE_MALF       	"malf AI"
+#define ROLE_NINJA      	"ninja"
+#define ROLE_OPERATIVE  	"operative" // New!
+#define ROLE_PAI        	"pAI"
+#define ROLE_PLANT      	"Dionaea"
+#define ROLE_POSIBRAIN  	"posibrain"
+#define ROLE_REV        	"revolutionary"
+#define ROLE_STRIKE     	"Strike Team"
+#define ROLE_TRAITOR    	"traitor"
+#define ROLE_VAMPIRE    	"vampire"
+#define ROLE_VOXRAIDER  	"vox raider"
+#define ROLE_WIZARD     	"wizard"
 
 
 #define AGE_MIN 17			//youngest a character can be
@@ -890,6 +887,7 @@ SEE_PIXELS	256
 // for secHUDs and medHUDs and variants. The number is the location of the image on the list hud_list of humans.
 #define HEALTH_HUD          "health" // a simple line rounding the mob's number health
 #define STATUS_HUD          "status" // alive, dead, diseased, etc.
+#define RECORD_HUD			"record" // what medbay has set your records to
 #define ID_HUD              "id" // the job asigned to your ID
 #define WANTED_HUD          "wanted" // wanted, released, parroled, security status
 #define IMPLOYAL_HUD		"imployal" // loyality implant
@@ -899,6 +897,7 @@ SEE_PIXELS	256
 #define STATUS_HUD_OOC		"status_ooc" // STATUS_HUD without virus db check for someone being ill.
 #define DIAG_HEALTH_HUD		"diag_health" // Diagnostic HUD - health bar
 #define DIAG_CELL_HUD		"diag_cell" // Diagnostic HUD - power cell status for cyborgs, mechs
+#define CONSTRUCT_HUD		"const_health" // Artificer HUD
 
 // Hypothermia - using the swiss staging system. - called by the proc undergoing_hypothermia() in handle_hypothermia.dm
 #define NO_HYPOTHERMIA			0	// >35C   - Fine
@@ -1013,7 +1012,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define VAMP_SHADOW   15
 #define VAMP_CHARISMA 16
 #define VAMP_UNDYING  17
-
+#define VAMP_CAPE	  18
 #define STARTING_BLOOD 10
 
 // Moved from machine_interactions.dm
@@ -1259,7 +1258,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
-	#warning SOME ASSHOLE FORGOT TO COMMENT SAY_DEBUG BEFORE COMMITTING
+	#warn SOME ASSHOLE FORGOT TO COMMENT SAY_DEBUG BEFORE COMMITTING
 	#define say_testing(a,x) to_chat(a, ("([__FILE__]:[__LINE__] say_testing) [x]"))
 #else
 	#define say_testing(a,x)
@@ -1269,7 +1268,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 //#define JUSTFUCKMYSHITUP 1
 #ifdef JUSTFUCKMYSHITUP
 #define writepanic(a) if(ticker && ticker.current_state >= 3 && world.cpu > 100) write_panic(a)
-#warning IMA FUCK YOUR SHIT UP
+#warn IMA FUCK YOUR SHIT UP
 var/proccalls = 1
 //keep a list of last 10 proccalls maybe?
 /proc/write_panic(a)
@@ -1481,8 +1480,6 @@ var/proccalls = 1
 
 #define BLOB_CORE_PROPORTION 20
 
-#define DEFAULT FONT SIZE 4
-
 //Holomap filters
 #define HOLOMAP_FILTER_DEATHSQUAD				1
 #define HOLOMAP_FILTER_ERT						2
@@ -1567,3 +1564,8 @@ var/proccalls = 1
 #define COMPUTER "computer"
 #define EMBEDDED_CONTROLLER "embedded controller"
 #define OTHER "other"
+
+//used in /datum/preferences/var/alternate_option
+#define GET_RANDOM_JOB 0
+#define BE_ASSISTANT 1
+#define RETURN_TO_LOBBY 2

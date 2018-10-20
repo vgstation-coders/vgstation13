@@ -33,6 +33,7 @@
 		BrainContainer.SendSignal(COMSIG_ATTACKEDBY, list("assailant"=user,"damage"=I.force))
 
 
+
 // Proximity_flag is 1 if this afterattack was called on something adjacent, in your square, or on your person.
 // Click parameters is the params string from byond Click() code, see that documentation.
 /obj/item/proc/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
@@ -242,8 +243,9 @@ obj/item/proc/get_clamped_volume()
 
 
 /obj/item/proc/on_attack(var/atom/attacked, var/mob/user)
-	user.do_attack_animation(attacked, src)
-	user.delayNextAttack(attack_delay)
+	if (!user.gcDestroyed)
+		user.do_attack_animation(attacked, src)
+		user.delayNextAttack(attack_delay)
 	if(hitsound)
 		playsound(attacked.loc, hitsound, 50, 1, -1)
 	if(material_type)

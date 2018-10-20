@@ -304,9 +304,9 @@
 	cabin_air = new /datum/gas_mixture()
 	cabin_air.volume = CELL_VOLUME / 3
 	cabin_air.temperature = T20C+20 //Nice and toasty to avoid Celthermia
-	cabin_air.oxygen = MOLES_O2STANDARD
-	cabin_air.nitrogen = MOLES_N2STANDARD
-	cabin_air.update_values()
+	cabin_air.adjust_multi(
+		GAS_OXYGEN, MOLES_O2STANDARD,
+		GAS_NITROGEN, MOLES_N2STANDARD)
 
 /obj/structure/inflatable/shelter/examine(mob/user)
 	..()

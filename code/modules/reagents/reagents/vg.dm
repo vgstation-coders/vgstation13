@@ -10,7 +10,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	//data must contain virus type
 	name = "Activated Charcoal"
 	id = CHARCOAL
-	reagent_state = LIQUID
+	reagent_state = REAGENT_STATE_LIQUID
 	color = "#333333" // rgb: 51, 51, 51
 	custom_metabolism = 0.06
 

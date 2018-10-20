@@ -104,7 +104,7 @@
 	if(!emagged && istype(I,/obj/item/weapon/card/emag))
 		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
-		to_chat(user, "<span class='notice'>You you disable the safety features.</span>")
+		to_chat(user, "<span class='notice'>You disable the safety features.</span>")
 		return
 	..()
 

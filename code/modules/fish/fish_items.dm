@@ -41,7 +41,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/fishtools/fish_net/suicide_act(mob/user)			//"A tiny net is a death sentence: it's a net and it's tiny!" https://www.youtube.com/watch?v=FCI9Y4VGCVw
 	visible_message("<span class='warning'>\The [user] places \the [src] on top of \his head, \his fingers tangled in the netting! It looks like \he's trying to commit suicide.</span>")
-	return(OXYLOSS)
+	return(SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/fishtools/fish_food
 	name = "fish food can"
@@ -67,7 +67,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 
 /obj/item/weapon/fishtools/fish_tank_brush/suicide_act(mob/user)
 	visible_message("<span class='warning'>\The [user] is vigorously scrubbing \himself raw with \the [src]! It looks like \he's trying to commit suicide.</span>")
-	return(BRUTELOSS|FIRELOSS)
+	return(SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
 //////////////////////////////////////////////
 //				Fish Items					//

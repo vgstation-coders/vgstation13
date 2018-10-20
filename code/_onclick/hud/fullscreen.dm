@@ -32,6 +32,16 @@
 		client.screen += screen
 	return screen
 
+/mob/proc/update_fullscreen_alpha(category, a = 255, t = 10)
+	var/obj/abstract/screen/fullscreen/screen = screens[category]
+	if(!screen)
+		screens -= category
+		return
+	if (client)
+		client.screen -= screen
+		animate(screen, alpha = a, time = t)
+		client.screen += screen
+
 /mob/proc/clear_fullscreen(category, animate = 10)
 	set waitfor = 0
 	var/obj/abstract/screen/fullscreen/screen = screens[category]
@@ -131,3 +141,28 @@
 	icon = 'icons/mob/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	icon_state = "druggy"
+
+/obj/abstract/screen/fullscreen/conversion_border
+	icon_state = "conversionoverlay"
+	layer = HALLUCINATION_LAYER
+	alpha = 0
+
+/obj/abstract/screen/fullscreen/conversion_red
+	icon = 'icons/mob/screen1.dmi'
+	screen_loc = "WEST,SOUTH to EAST,NORTH"
+	icon_state = "redoverlay"
+	layer = DAMAGE_HUD_LAYER
+
+/obj/abstract/screen/fullscreen/black
+	icon = 'icons/mob/screen1.dmi'
+	screen_loc = "WEST,SOUTH to EAST,NORTH"
+	icon_state = "black"
+	layer = BLIND_LAYER
+	alpha = 0
+
+/obj/abstract/screen/fullscreen/white
+	icon = 'icons/mob/screen1.dmi'
+	screen_loc = "WEST,SOUTH to EAST,NORTH"
+	icon_state = "white"
+	layer = BLIND_LAYER
+	alpha = 0

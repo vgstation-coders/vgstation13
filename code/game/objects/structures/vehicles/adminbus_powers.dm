@@ -859,7 +859,7 @@
 		var/turf/T2 = get_turf(M)
 		if(T2)
 			T2.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = EFFECTS_PLANE)
-
+/*
 /obj/structure/bed/chair/vehicle/adminbus/proc/Make_Antag(mob/bususer)
 
 
@@ -920,7 +920,7 @@
 	sleep(20)
 
 	antag_madness_adminbus(M)
-
+*/
 /obj/structure/bed/chair/vehicle/adminbus/proc/Mounted_Jukebox(mob/bususer)
 
 

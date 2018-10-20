@@ -22,7 +22,7 @@
 	req_access = list(access_security)
 
 	flags = FPRINT | PROXMOVE
-	machine_flags = WRENCHMOVE | FIXED2WORK
+	machine_flags = WRENCHMOVE | FIXED2WORK | EMAGGABLE
 
 	//List of weapons that metaldetector will not flash for, also copypasted in secbot.dm and ed209bot.dm
 	var/safe_weapons = list(
@@ -50,11 +50,11 @@
 				if(check_for_weapons(I))
 					threatcount += PERP_LEVEL_ARREST/2
 
-				if (perp.back && istype(perp.back, /obj/item/weapon/storage/backpack))
-					var/obj/item/weapon/storage/backpack/B = perp.back
-					for(var/obj/item/weapon/thing in B.contents)
-						if(check_for_weapons(I))
-							threatcount += PERP_LEVEL_ARREST/2
+			if(perp.back && istype(perp.back, /obj/item/weapon/storage/backpack))
+				var/obj/item/weapon/storage/backpack/B = perp.back
+				for(var/obj/item/weapon/thing in B.contents)
+					if(check_for_weapons(thing))
+						threatcount += PERP_LEVEL_ARREST/2
 
 		if(idmode)
 			if(!perp.wear_id)
@@ -170,8 +170,6 @@
 		return
 
 	else
-		:
-
 		src.visible_message("<span class = 'warning'>ACCESS DENIED!</span>")
 
 
@@ -185,20 +183,16 @@
 
 	var/maxthreat = 0
 	var/sndstr = ""
-	for (var/mob/O in viewers(src, null))
-		if(isobserver(O))
-			continue
-		if (get_dist(src, O) > src.range)
-			continue
+	for(var/mob/living/O in view(src, range))
 		var/list/ourretlist = src.assess_perp(O)
-		if(!istype(ourretlist) || !ourretlist.len)
-			return
+		if(!islist(ourretlist) || !ourretlist.len)
+			continue
 		var/dudesthreat = ourretlist[1]
 		var/dudesname = ourretlist[2]
 
 
 
-		if (dudesthreat >= PERP_LEVEL_ARREST)
+		if(dudesthreat >= PERP_LEVEL_ARREST)
 
 			if(maxthreat < 2)
 				sndstr = "sound/machines/alert.ogg"
@@ -211,7 +205,7 @@
 			src.visible_message("<span class = 'warning'>Threat Detected! Subject: [dudesname]</span>")////
 
 
-		else if(dudesthreat <= PERP_LEVEL_ARREST*0.75 && dudesthreat != 0 && senset)
+		else if(dudesthreat && senset)
 
 			if(maxthreat < 1)
 				sndstr = "sound/machines/domore.ogg"
@@ -253,6 +247,10 @@
 	if(prob(75/severity))
 		flash()
 	..(severity)
+
+/obj/machinery/detector/emag(mob/user)
+	..()
+	emagged = TRUE
 
 /obj/machinery/detector/HasProximity(atom/movable/AM as mob|obj)
 	if ((src.disable) || (src.last_read && world.time < src.last_read + 30))

@@ -2,6 +2,9 @@
 // charge from 0 to 100%
 // fits in APC to provide backup power
 
+/obj/item/weapon/cell/get_cell()
+	return src //No John, you're the cell.
+
 /obj/item/weapon/cell/New()
 	..()
 	charge = maxcharge

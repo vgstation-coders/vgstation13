@@ -19,7 +19,7 @@
 #define BEAM_DEL(x) del(x)
 
 #ifdef BEAM_DEBUG
-# warning SOME ASSHOLE FORGOT TO COMMENT BEAM_DEBUG BEFORE COMMITTING
+# warn SOME ASSHOLE FORGOT TO COMMENT BEAM_DEBUG BEFORE COMMITTING
 # define beam_testing(x) to_chat(world, "(Line: [__LINE__]) [x]")
 #else
 # define beam_testing(x)

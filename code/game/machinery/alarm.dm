@@ -31,6 +31,9 @@
 #define MAX_TEMPERATURE 90
 #define MIN_TEMPERATURE -40
 
+//All gases that do not fall under "other"
+#define CHECKED_GAS GAS_OXYGEN, GAS_NITROGEN, GAS_CARBON, GAS_PLASMA, GAS_SLEEPING
+
 //all air alarms in area are connected via magic
 /area
 	var/obj/machinery/alarm/master_air_alarm
@@ -278,24 +281,23 @@
 	if (isnull(environment))
 		return 0
 
-	var/partial_pressure = R_IDEAL_GAS_EQUATION*environment.temperature/environment.volume
-	var/environment_pressure = environment.return_pressure()
-	var/n2o_moles = 0.0
-	var/other_moles = 0.0
-	for(var/datum/gas/G in environment.trace_gases)
-		if(istype(G, /datum/gas/sleeping_agent))
-			n2o_moles+=G.moles
-		else
-			other_moles+=G.moles
+	var/other_moles
+	for(var/g in environment.gas)
+		switch(g)
+			if(CHECKED_GAS)
+				//Do nothing
+			else
+				other_moles += environment[g]
 
-	var/pressure_dangerlevel = get_danger_level(environment_pressure, TLV["pressure"])
-	var/oxygen_dangerlevel = get_danger_level(environment.oxygen*partial_pressure, TLV["oxygen"])
-	var/nitrogen_dangerlevel = get_danger_level(environment.nitrogen*partial_pressure, TLV["nitrogen"])
-	var/co2_dangerlevel = get_danger_level(environment.carbon_dioxide*partial_pressure, TLV["carbon_dioxide"])
-	var/plasma_dangerlevel = get_danger_level(environment.toxins*partial_pressure, TLV["plasma"])
+
+	var/pressure_dangerlevel = get_danger_level(environment.pressure, TLV["pressure"])
+	var/oxygen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_OXYGEN), TLV["oxygen"])
+	var/nitrogen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_NITROGEN), TLV["nitrogen"])
+	var/co2_dangerlevel = get_danger_level(environment.partial_pressure(GAS_CARBON), TLV["carbon_dioxide"])
+	var/plasma_dangerlevel = get_danger_level(environment.partial_pressure(GAS_PLASMA), TLV["plasma"])
 	var/temperature_dangerlevel = get_danger_level(environment.temperature, TLV["temperature"])
-	var/n2o_dangerlevel = get_danger_level(n2o_moles*partial_pressure, TLV["n2o"])
-	var/other_dangerlevel = get_danger_level(other_moles*partial_pressure, TLV["other"])
+	var/n2o_dangerlevel = get_danger_level(environment.partial_pressure(GAS_SLEEPING), TLV["n2o"])
+	var/other_dangerlevel = get_danger_level(other_moles / environment.total_moles * environment.pressure, TLV["other"])
 
 	return max(
 		pressure_dangerlevel,
@@ -526,54 +528,50 @@
 		return null
 
 	var/datum/gas_mixture/environment = location.return_air()
-	var/total = environment.total_moles()
+	var/total = environment.total_moles
 	if(total==0)
 		return null
 
-	var/partial_pressure = R_IDEAL_GAS_EQUATION*environment.temperature/environment.volume
-
 	var/list/current_settings = TLV["pressure"]
-	var/environment_pressure = environment.return_pressure()
-	var/pressure_dangerlevel = get_danger_level(environment_pressure, current_settings)
+	var/pressure_dangerlevel = get_danger_level(environment.pressure, current_settings)
 
 	current_settings = TLV["oxygen"]
-	var/oxygen_dangerlevel = get_danger_level(environment.oxygen*partial_pressure, current_settings)
-	var/oxygen_percent = round(environment.oxygen / total * 100, 2)
+	var/oxygen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_OXYGEN), current_settings)
+	var/oxygen_percent = round(environment[GAS_OXYGEN] / total * 100, 2)
 
 	current_settings = TLV["nitrogen"]
-	var/nitrogen_dangerlevel = get_danger_level(environment.nitrogen*partial_pressure, current_settings)
-	var/nitrogen_percent = round(environment.nitrogen / total * 100, 2)
+	var/nitrogen_dangerlevel = get_danger_level(environment.partial_pressure(GAS_NITROGEN), current_settings)
+	var/nitrogen_percent = round(environment[GAS_NITROGEN] / total * 100, 2)
 
 	current_settings = TLV["carbon_dioxide"]
-	var/co2_dangerlevel = get_danger_level(environment.carbon_dioxide*partial_pressure, current_settings)
-	var/co2_percent = round(environment.carbon_dioxide / total * 100, 2)
+	var/co2_dangerlevel = get_danger_level(environment.partial_pressure(GAS_CARBON), current_settings)
+	var/co2_percent = round(environment[GAS_CARBON] / total * 100, 2)
 
 	current_settings = TLV["plasma"]
-	var/plasma_dangerlevel = get_danger_level(environment.toxins*partial_pressure, current_settings)
-	var/plasma_percent = round(environment.toxins / total * 100, 2)
+	var/plasma_dangerlevel = get_danger_level(environment.partial_pressure(GAS_PLASMA), current_settings)
+	var/plasma_percent = round(environment[GAS_PLASMA] / total * 100, 2)
+
+	current_settings = TLV["n2o"]
+	var/n2o_dangerlevel = get_danger_level(environment.partial_pressure(GAS_SLEEPING), current_settings)
+	var/n2o_percent = round(environment[GAS_SLEEPING] / total * 100, 2)
 
 	current_settings = TLV["other"]
-	var/n2o_moles = 0.0
-	var/other_moles = 0.0
-	for(var/datum/gas/G in environment.trace_gases)
-		if(istype(G, /datum/gas/sleeping_agent))
-			n2o_moles+=G.moles
-		else
-			other_moles+=G.moles
-
-	var/n2o_percent = round(n2o_moles / total * 100, 2)
+	var/other_moles
+	for(var/g in environment.gas)
+		switch(g)
+			if(CHECKED_GAS)
+				//Do nothing
+			else
+				other_moles += environment[g]
+	var/other_dangerlevel = get_danger_level(other_moles / total * environment.pressure, current_settings)
 	var/other_percent = round(other_moles / total * 100, 2)
-
-	var/other_dangerlevel = get_danger_level(other_moles*partial_pressure, current_settings)
-	current_settings = TLV["n2o"]
-	var/n2o_dangerlevel = get_danger_level(n2o_moles*partial_pressure, current_settings)
 
 	current_settings = TLV["temperature"]
 	var/temperature_dangerlevel = get_danger_level(environment.temperature, current_settings)
 
 
 	var/data[0]
-	data["pressure"]=environment_pressure
+	data["pressure"]=environment.pressure
 	data["temperature"]=environment.temperature
 	data["temperature_c"]=round(environment.temperature - T0C, 0.1)
 
@@ -1065,7 +1063,7 @@ FIRE ALARM
 	var/turf/simulated/location = loc
 	if(shelter && istype(location)) //If simulated turf and we have a shelter to drop
 		var/datum/gas_mixture/environment = location.return_air()
-		if(environment.toxins*(R_IDEAL_GAS_EQUATION*environment.temperature/environment.volume)>0.5) //Partial Pressure of 0.5%
+		if(environment.partial_pressure(GAS_PLASMA) > 0.5) //Partial Pressure of 0.5kPa
 			var/obj/item/inflatable/shelter/S = new /obj/item/inflatable/shelter(loc)
 			S.inflate()
 			shelter = FALSE
@@ -1321,3 +1319,7 @@ var/global/list/firealarms = list() //shrug
 /obj/machinery/alarm/npc_tamper_act(mob/living/L)
 	if(wires)
 		wires.npc_tamper(L)
+
+
+
+#undef CHECKED_GAS

@@ -30,7 +30,7 @@
 
 #define QUANTIZE(variable)		(round(variable, 0.0001))
 
-#define INFINITY 1e31 //closer than enough
+#define INFINITY 1.#INF
 
 #define SPEED_OF_LIGHT 3e8 //not exact but hey!
 #define SPEED_OF_LIGHT_SQ 9e+16

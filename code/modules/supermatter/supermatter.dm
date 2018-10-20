@@ -12,7 +12,7 @@
 #define AUDIO_WARNING_DELAY 30
 
 /obj/machinery/power/supermatter
-	name = "Supermatter Crystal"
+	name = "\improper Supermatter Crystal"
 	desc = "A strangely translucent and iridescent crystal. <span class='warning'>You get headaches just from looking at it.</span>"
 	icon = 'icons/obj/engine.dmi'
 	icon_state = "darkmatter"
@@ -67,11 +67,11 @@
 	var/datum/radio_frequency/radio_connection
 
 	//Add types to this list so it doesn't make a message or get desroyed by the Supermatter on touch.
-	var/list/message_exclusions = list(/obj/effect/effect/sparks)
+	var/list/message_exclusions = list(/obj/effect/effect/sparks,/obj/effect/overlay/hologram)
 	machine_flags = MULTITOOL_MENU
 
 /obj/machinery/power/supermatter/shard //Small subtype, less efficient and more sensitive, but less boom.
-	name = "Supermatter Shard"
+	name = "\improper Supermatter Shard"
 	short_name = "Shard"
 	desc = "A strangely translucent and iridescent crystal that looks like it used to be part of a larger structure. <span class='warning'>You get headaches just from looking at it.</span>"
 	icon_state = "darkmatter_shard"
@@ -245,7 +245,7 @@
 	damage = max( damage + ( (removed.temperature - 800) / 150 ) , 0 )
 	//Ok, 100% oxygen atmosphere = best reaction
 	//Maxes out at 100% oxygen pressure
-	oxygen = Clamp((removed.oxygen - removed.nitrogen*NITROGEN_RETARDATION_FACTOR) / MOLES_CELLSTANDARD, 0, 1) //0 unless O2>80%. At 99%, ~0.6
+	oxygen = Clamp((removed[GAS_OXYGEN] - removed[GAS_NITROGEN] * NITROGEN_RETARDATION_FACTOR) / MOLES_CELLSTANDARD, 0, 1) //0 unless O2>80%. At 99%, ~0.6
 
 	var/temp_factor = 100
 
@@ -278,11 +278,9 @@
 	removed.temperature = max(0, min(removed.temperature, 2500))
 
 	//Calculate how much gas to release
-	removed.toxins += max(device_energy / PLASMA_RELEASE_MODIFIER, 0)
-
-	removed.oxygen += max((device_energy + removed.temperature - T0C) / OXYGEN_RELEASE_MODIFIER, 0)
-
-	removed.update_values()
+	removed.adjust_multi(
+		GAS_PLASMA, max(device_energy / PLASMA_RELEASE_MODIFIER, 0),
+		GAS_OXYGEN, max((device_energy + removed.temperature - T0C) / OXYGEN_RELEASE_MODIFIER, 0))
 
 	env.merge(removed)
 
@@ -403,7 +401,7 @@
 		qdel(AM)
 		return
 	if(istype(AM, /mob/living))
-		AM.visible_message("<span class=\"warning\">\The [AM] slams into \the [src] inducing a resonance... \his body starts to glow and catch flame before flashing into ash.</span>",\
+		AM.visible_message("<span class=\"warning\">\The [src] is slammed into by \the [AM], inducing a resonance... \his body begins to glow and catch aflame before flashing into ash.</span>",\
 		"<span class=\"danger\">You slam into \the [src] as your ears are filled with unearthly ringing. Your last thought is \"Oh, fuck.\"</span>",\
 		"<span class=\"warning\">You hear an unearthly noise as a wave of heat washes over you.</span>")
 	else if(!is_type_in_list(AM, message_exclusions))

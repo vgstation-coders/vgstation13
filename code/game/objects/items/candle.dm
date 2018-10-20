@@ -41,7 +41,7 @@
 	wax--
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
-	if(env.molar_density("oxygen") < (5 / CELL_VOLUME))
+	if(env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
 		src.lit = 0
 		set_light(0)
 		processing_objects.Remove(src)
