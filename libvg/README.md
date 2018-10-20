@@ -25,5 +25,5 @@ The binary will then be placed in `target/$target/release/`, which you can copy 
 
 # Troubleshooting
 
-## I get this error when compiling: `/usr/bin/ld: cannot find crti.o: No such file or directory`
+#### I get this error when compiling: `/usr/bin/ld: cannot find crti.o: No such file or directory`
 You likely only have the 64bit version of gcc installed.  Install `gcc-multilib` so you can build for other architectures.
