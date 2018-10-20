@@ -217,7 +217,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 /datum/power/changeling/DeathSting
 	name = "Death Sting"
-	desc = "We silently sting a human, filling him with potent chemicals. His rapid death is all but assured."
+	desc = "We silently sting a human, filling him with potent chemicals. His death is all but assured."
 	genomecost = 8
 	verbpath = /obj/item/verbs/changeling/proc/changeling_DEATHsting
 
