@@ -52,7 +52,7 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 
 /mob/virtualhearer/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(attached)
-		attached.Hear(args)
+		attached.Hear(arglist(args))
 	else
 		returnToPool(src)
 

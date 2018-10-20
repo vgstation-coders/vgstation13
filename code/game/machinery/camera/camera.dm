@@ -425,10 +425,9 @@ var/list/camera_messages = list()
 		return 1
 	return 0
 
-/obj/machinery/camera/proc/tv_message(var/atom/movable/hearer, var/datum/speech/speech)
+/obj/machinery/camera/proc/tv_message(var/datum/speech/speech)
 	speech.wrapper_classes.Add("tv")
-	hearer.Hear(speech)
-
+	return speech
 	/*
 	var/namepart =  "[speaker.GetVoice()][speaker.get_alt_name()] "
 	var/messagepart = "<span class='message'>[hearer.lang_treat(speaker, speaking, raw_message)]</span>"
@@ -437,14 +436,15 @@ var/list/camera_messages = list()
 
 /obj/machinery/camera/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(isHearing())
+		var/datum/speech/copy = speech.clone()
+		copy = tv_message(copy)
 		for(var/obj/machinery/computer/security/S in tv_monitors)
 			if(S.current == src)
-				if(istype(S, /obj/machinery/computer/security/telescreen))
-					for(var/mob/M in viewers(world.view,S))
-						to_chat(M, "<span style='color:grey'>[bicon(S)][tv_message(M, speech)]</span>")
-				else
-					for(var/mob/M in viewers(1,S))
-						to_chat(M, "<span style='color:grey'>[bicon(S)][tv_message(M, speech)]</span>")
+				var/range = (istype(S, /obj/machinery/computer/security/telescreen) ? world.view : 1)
+				for (var/mob/virtualhearer/VH in viewers(range, S))
+					if (!ismob(VH.attached))
+						continue
+					VH.Hear(copy, "[bicon(S)] [rendered_speech]")
 
 /obj/machinery/camera/arena
 	name = "arena camera"
