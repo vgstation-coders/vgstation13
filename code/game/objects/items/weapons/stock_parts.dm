@@ -182,6 +182,14 @@
 	rating = 3
 	starting_materials = list(MAT_PLASTIC = 300)
 
+/obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace
+	name = "bluespace matter bin"
+	desc = "A container linked to a small local subspace pocket that holds raw materials. Any machine equipped with this shares its materials pool."
+	icon_state = "bluespace_matter_bin"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=4"
+	rating = 4
+	starting_materials = list(MAT_IRON = 80, MAT_SILVER = 20, MAT_GOLD = 20)
+	
 // Subspace stock parts
 
 /obj/item/weapon/stock_parts/subspace/ansible
