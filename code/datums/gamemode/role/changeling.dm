@@ -276,7 +276,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 /datum/power/changeling/DigitalCamoflague
 	name = "Digital Camouflage"
 	desc = "We evolve the ability to distort our form and proportions, defeating common algorithms used to detect lifeforms on cameras."
-	helptext = "We cannot be tracked by camera while using this skill.  However, humans looking at us will find us... uncanny.  We must constantly expend chemicals to maintain our form like this."
+	helptext = "We cannot be tracked by camera while using this skill. We must constantly expend chemicals to maintain our form like this."
 	genomecost = 3
 	allowduringlesserform = 1
 	verbpath = /obj/item/verbs/changeling/proc/changeling_digitalcamo
