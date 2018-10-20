@@ -77,6 +77,17 @@
 					open()
 					sleep(50)
 					close()
+		else if (istype(AM, /obj/structure/bed/chair/vehicle))
+			var/obj/structure/bed/chair/vehicle/vehicle = AM
+			if (density)
+				if (vehicle.is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && !operating && allowed(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
+					if(istype(vehicle, /obj/structure/bed/chair/vehicle/wizmobile))
+						vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
+					open()
+					sleep(50)
+					close()
+				else if(!operating)
+					denied()
 		return
 	if (!( ticker ))
 		return
