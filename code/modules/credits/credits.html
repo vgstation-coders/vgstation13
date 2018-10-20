@@ -90,6 +90,7 @@
 			div.style.bottom = bottom + "px";
 			if(bottom > 1500){ //RUNAWAY CREDIT ALART - no seriously this will keep going if the player doesn't close the game between rounds
 				clearInterval(lastinterval);
+				window.location = 'byond://winset?id=mapwindow.credits;is-visible=false';
 				return;
 			}
 		}, speed);
