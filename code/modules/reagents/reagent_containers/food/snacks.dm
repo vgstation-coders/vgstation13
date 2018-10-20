@@ -5707,4 +5707,13 @@ obj/item/weapon/reagent_containers/food/snacks/butteredtoast
 	reagents.add_reagent(NUTRIMENT, 2)
 
 
+/obj/item/weapon/reagent_containers/food/snacks/sauerkraut
+	name = "sauerkraut"
+	desc = "Cabbage that has feremented in salty brine."
+	icon_state = "sauerkraut"
+	trash = /obj/item/trash/snack_bowl
 
+/obj/item/weapon/reagent_containers/food/snacks/sauerkraut/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 1)
+	reagents.del_reagent(WATER)
