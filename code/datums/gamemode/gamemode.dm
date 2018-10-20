@@ -33,6 +33,10 @@
 //For when you need to set factions and factions_allowed not on compile
 /datum/gamemode/proc/SetupFactions()
 
+// Infos on the mode.
+/datum/gamemode/proc/AdminPanelEntry()
+	return
+
 /datum/gamemode/proc/Setup()
 	if(minimum_player_count && minimum_player_count < get_player_count())
 		TearDown()

@@ -28,6 +28,26 @@ var/list/forced_roundstart_ruleset = list()
 	var/datum/stat/dynamic_mode/dynamic_stats = null
 	var/pop_last_updated = 0
 
+/datum/gamemode/dynamic/AdminPanelEntry()
+	var/dat = list()
+	dat += "Threat : <b>[threat_level]</b><br/>"
+	dat += "Threat availaible : <b>[threat]</b><br/>"
+	dat += "Executed rulesets : "
+	if (executed_rules.len > 0)
+		dat += "<br/>"
+		for (var/datum/dynamic_ruleset/DR in executed_rules)
+			var/ruletype = ""
+			if (istype (DR, /datum/dynamic_ruleset/roundstart))
+				ruletype = "Roundstart"
+			if (istype (DR, /datum/dynamic_ruleset/latejoin))
+				ruletype = "Latejoin"
+			if (istype (DR, /datum/dynamic_ruleset/midround))
+				ruletype = "Midround"
+			dat += "[ruletype] - <b>[DR.name]</b><br>"
+	else
+		dat += "none."
+	return jointext(dat, "")
+
 /datum/gamemode/dynamic/GetScoreboard()
 	dat += "<h2>Dynamic Mode v1.0 - Threat Level = <font color='red'>[threat_level]%</font></h2>"
 	var/rules = list()
@@ -41,7 +61,7 @@ var/list/forced_roundstart_ruleset = list()
 			if (istype (DR, /datum/dynamic_ruleset/midround))
 				ruletype = "midround"
 			dat += "([ruletype]) - <b>[DR.name]</b><br>"
-			rules += "[ruletype] - **[DR.name]**]"
+			rules += "[ruletype] - **[DR.name]**"
 	else
 		dat += "(extended)"
 	dat += "<HR>"

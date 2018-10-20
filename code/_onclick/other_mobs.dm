@@ -77,7 +77,7 @@
 	return 0
 
 /mob/living/carbon/human/RestrainedClickOn(var/atom/A)
-	return
+	..()
 
 /mob/living/carbon/human/RangedAttack(var/atom/A)
 	if(!gloves && !mutations.len)
@@ -115,7 +115,7 @@
 /atom/proc/attack_animal(mob/user as mob)
 	return
 /mob/living/RestrainedClickOn(var/atom/A)
-	return
+	..()
 
 /*
 	Monkeys

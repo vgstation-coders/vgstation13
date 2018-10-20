@@ -202,6 +202,81 @@
 		holder.reagent_list -= src
 		holder = null
 
+/datum/reagent/piccolyn
+	name = "Piccolyn"
+	id = PICCOLYN
+	description = "Prescribed daily."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#00FF00"
+	custom_metabolism = 0.01
+
+/datum/reagent/piccolyn/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(M.stat || M.health < 90 || M.getBrainLoss() >= 10)
+		return 1
+
+	var/list/nearest_doctor = null
+	for(var/mob/living/L in view(M))
+		if(L == M)
+			continue
+		if(L.stat)
+			continue
+		if(nearest_doctor && get_dist(L,M)>=get_dist(nearest_doctor,M))
+			continue //We already have a closer living target
+		if(ishuman(L))
+			var/mob/living/carbon/human/H = L
+			var/list/medical_uniforms_list = list(/obj/item/clothing/under/rank/chief_medical_officer,
+													/obj/item/clothing/under/rank/medical,
+													/obj/item/clothing/under/rank/nursesuit,
+													/obj/item/clothing/under/rank/nurse,
+													/obj/item/clothing/under/rank/chemist,
+													/obj/item/clothing/under/rank/pharma,
+													/obj/item/clothing/under/rank/geneticist,
+													/obj/item/clothing/under/rank/virologist)
+			if(H.is_wearing_any(medical_uniforms_list,slot_w_uniform))
+				//Check to see if it's wearing the right stuff
+				nearest_doctor = H
+		else if(isrobot(L))
+			var/mob/living/silicon/robot/R = L
+			if(HAS_MODULE_QUIRK(R, MODULE_CAN_HANDLE_MEDICAL))
+				nearest_doctor = R
+	if(!nearest_doctor)
+		return 1
+	var/D = "doctor"
+	if(ishuman(nearest_doctor))
+		var/mob/living/carbon/human/H = nearest_doctor
+		D = get_first_word(H.name)
+	else
+		D = pick("bot","borg","borgo","autodoc","roboticist","cyborg","robot")
+	var/list/thanks = list("Thanks, doc.",
+							"You're alright, doc.",
+							"'Preciate it, doc.",
+							"Cheers, doctor.",
+							"Thank you, doctor.",
+							"Much appreciated, doctor.",
+							"Thanks, mate!",
+							"Thanks, doc!",
+							"Zank you, Herr Doktor!",
+							"Danke, Herr Doktor!",
+							"Thank you doctor!",
+							"You are great doctor!",
+							"I love this doctor!",
+							"Aye, thanks doc!",
+							"Thank ye, doctor!",
+							"You deserve a medal, doc.",
+							"Thanks for the aid.",
+							"Yeah, thanks doc!",
+							"All right, [D], I feel good!",
+							"Thanks, [D].",
+							"Thank you, [D].",
+							"'Preciate it, [D].",
+							"Thanks for the aid, [D]."
+							)
+	M.say(pick(thanks))
+	holder.del_reagent(PICCOLYN)
+
 /datum/reagent/muhhardcores
 	name = "Hardcores"
 	id = BUSTANUT
@@ -1628,12 +1703,12 @@
 		return
 
 	if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)))
-		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
+		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(get_turf(O))
 		I.desc = "Looks like this was \an [O] some time ago."
 		O.visible_message("<span class='warning'>\The [O] melts.</span>")
 		qdel(O)
 	else if(istype(O,/obj/effect/plantsegment))
-		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
+		var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(get_turf(O))
 		I.desc = "Looks like these were some [O.name] some time ago."
 		var/obj/effect/plantsegment/K = O
 		K.die_off()
@@ -3336,15 +3411,19 @@
 		if(0.1 to 5)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
-				if(H.species.name != "Diona")
+				if(H.species.name == "Diona")
 					return
+				for(var/datum/organ/external/E in H.organs)
+					for(var/datum/wound/internal_bleeding/W in E.wounds)
+						W.heal_damage(0.8, TRUE)
+						holder.remove_reagent(MEDNANOBOTS, 1/4)
 			if(M.getOxyLoss()>0 || M.getBruteLoss(ignore_inorganic = TRUE)>0 || M.getToxLoss()>0 || M.getFireLoss(ignore_inorganic = TRUE)>0 || M.getCloneLoss()>0)
 				if(holder.has_reagent("mednanobots"))
 					M.adjustOxyLoss(-5)
 					M.heal_organ_damage(5, 5)
 					M.adjustToxLoss(-5)
 					M.adjustCloneLoss(-5)
-					holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
+					holder.remove_reagent("mednanobots", 1/4)  //This line of code will remove 1/4 of 1u whenever the nanobots heal any of the 5 different damage types along with internal bleeding. In short whenever you are healed it will remove 0.25u making each unit capable of healing a maximum of 20 per damage type.
 			if(percent_machine>5)
 				if(holder.has_reagent("mednanobots"))
 					percent_machine-=1
@@ -3369,7 +3448,7 @@
 		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
-				if(H.species.name != "Diona")
+				if(H.species.name == "Diona")
 					return
 			if(M.getOxyLoss()>0 || M.getBruteLoss()>0 || M.getToxLoss()>0 || M.getFireLoss()>0 || M.getCloneLoss()>0)
 				if(holder.has_reagent("mednanobots"))
@@ -5420,10 +5499,10 @@
 				if(istype(M.current.loc,/obj/mecha))
 					imageloc = M.current.loc
 					imagelocB = M.current.loc
-				var/image/I = image('icons/logos.dmi', loc = imageloc, icon_state = "metaclub")
+				var/image/I = image('icons/mob/HUD.dmi', loc = imageloc, icon_state = "metaclub")
 				I.plane = METABUDDY_HUD_PLANE
 				M.current.client.images += I
-				var/image/J = image('icons/logos.dmi', loc = imagelocB, icon_state = "metaclub")
+				var/image/J = image('icons/mob/HUD.dmi', loc = imagelocB, icon_state = "metaclub")
 				J.plane = METABUDDY_HUD_PLANE
 				new_buddy.current.client.images += J
 
@@ -7030,3 +7109,39 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(T)
 		T.color = pick(random_color_list)
 	..()
+
+/datum/reagent/degeneratecalcium
+	name = "Degenerate calcium"
+	id = DEGENERATECALCIUM
+	description = "A highly radical chemical derived from calcium that aggressively attempts to regenerate osseus tissues it comes in contact with. In the presence of micro-fractures caused by extensive brute damage it rapidly heals the surrounding tissues, but in healthy limbs the new tissue quickly causes the osseal structure to lose shape and shatter rather graphically."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#ccffb3" //rgb: 204, 255, 179
+	density = 3.9
+	specheatcap = 128.12
+	custom_metabolism = 0.1
+
+/datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.anatomy_flags & NO_BONES)
+			return
+
+		//if you have 30 or more brute damage: rapidly heals, makes your bones stronk
+		//if you have less than 30 brute damage: rapidly heals, breaks all your bones one by one
+		//(the rapid healing is likely to land you in that "less than 30" club real quick if you're not careful...)
+		H.heal_organ_damage(3 * REM, 0)
+
+		if(H.getBruteLoss() >= 30)
+			for(var/datum/organ/external/E in H.organs) //"organs" list only contains external organs aka limbs
+				if((E.status & ORGAN_BROKEN) || (E.min_broken_damage >= E.max_damage))
+					continue
+				E.min_broken_damage += rand(4,8) * REM
+				if(E.min_broken_damage >= E.max_damage)
+					E.min_broken_damage = E.max_damage
+					to_chat(H, "Your [E.display_name] feels [pick("sturdy", "hardy")] as it can be!") //todo unfunny skeleton jokes (someone will probably comment them in the PR)
+		else if(prob((100 - H.getBruteLoss() * 100 / 30)/3)) //33% at 0 damage, 16.6% at 15 damage, 1.1% at 29 damage etc
+			var/datum/organ/external/E = pick(H.organs) //"organs" list only contains external organs aka limbs
+			E.fracture()

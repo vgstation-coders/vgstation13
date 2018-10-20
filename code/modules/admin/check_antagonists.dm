@@ -11,7 +11,7 @@
 
 	dat += "<a href='?src=\ref[src];delay_round_end=1'>[ticker.delay_end ? "End Round Normally" : "Delay Round End"]</a><br>"
 
-	//dat += ticker.mode.AdminPanelEntry()
+	dat += ticker.mode.AdminPanelEntry()
 
 	dat += "<h3><b>Factions</b></h3>"
 	if(ticker.mode.factions.len)

@@ -127,6 +127,8 @@ var/global/list/rnd_machines = list()
 	if(..() == 1)
 		if (materials)
 			for(var/matID in materials.storage)
+				if (materials.storage[matID] == 0) // No materials of this type
+					continue
 				var/datum/material/M = materials.getMaterial(matID)
 				var/obj/item/stack/sheet/sheet = new M.sheettype(src.loc)
 				if(sheet)

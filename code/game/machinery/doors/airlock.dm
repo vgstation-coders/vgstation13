@@ -395,7 +395,7 @@ About the new airlock wires panel:
 	return ((src.aiControlDisabled!=1) && (!src.isAllPowerCut()));
 
 /obj/machinery/door/airlock/proc/canAIHack()
-	return ((src.aiControlDisabled==1) && (!hackProof) && (!src.isAllPowerCut()));
+	return ((src.aiControlDisabled==1) && (!hackProof) && (!src.isAllPowerCut()))
 
 /obj/machinery/door/airlock/proc/arePowerSystemsOn()
 	return (src.secondsMainPowerLost==0 || src.secondsBackupPowerLost==0)
@@ -520,7 +520,7 @@ About the new airlock wires panel:
 	if(isAI(user))
 		if(!src.canAIControl())
 			if(src.canAIHack())
-				src.hack(user)
+				src.attempt_hack(user)
 				return
 			else
 				to_chat(user, "Airlock AI control has been blocked with a firewall. Unable to hack.")
@@ -627,12 +627,25 @@ About the new airlock wires panel:
 //aiEnable - 1 idscan, 4 raise door bolts, 5 electrify door for 30 seconds, 6 electrify door indefinitely, 7 open door
 
 
+/obj/machinery/door/airlock/proc/attempt_hack(mob/user)
+	if (!isAI(user))
+		return FALSE
+	if (user.mind && !(user.mind.GetRole(TRAITOR) || user.mind.GetRole(MALF)))
+		to_chat(user, "Airlock AI control has been blocked. Dispatch a cyborg, or a carbon engineer, for maintenance.")
+		return FALSE
+	if (aiHacking)
+		return FALSE
+	else
+		to_chat(user, "Airlock AI control has been blocked. <a href='?src=\ref[src]&hack=1'>Hack it.</a>")
+
+
 /obj/machinery/door/airlock/proc/hack(mob/user as mob)
+
 	if(src.aiHacking==0)
 		src.aiHacking=1
 		spawn(20)
 			//TODO: Make this take a minute
-			to_chat(user, "Airlock AI control has been blocked. Beginning fault-detection.")
+			to_chat(user, "Beginning fault-detection.")
 			sleep(50)
 			if(src.canAIControl())
 				to_chat(user, "Alert cancelled. Airlock control has been restored without our assistance.")
@@ -696,6 +709,11 @@ About the new airlock wires panel:
 			//testing("Returning: Not adminghost, stat=[usr.stat], restrained=[usr.restrained()], small=[usr.small]")
 			return
 	add_fingerprint(usr)
+
+	if(href_list["hack"])
+		hack(usr)
+		return
+
 	if(href_list["close"])
 		usr << browse(null, "window=airlock")
 		if(usr.machine==src)

@@ -948,6 +948,19 @@
 	corpseshoes = /obj/item/clothing/shoes/combat
 	corpsebelt = /obj/item/weapon/storage/belt/security
 
+/obj/effect/landmark/corpse/wizard
+	name = "Wizard"
+	corpseuniform = /obj/item/clothing/under/lightpurple
+	corpsesuit = /obj/item/clothing/suit/wizrobe
+	corpseback = /obj/item/weapon/storage/backpack
+	corpsehelmet = /obj/item/clothing/head/wizard
+	corpseshoes = /obj/item/clothing/shoes/sandal
+
+/obj/effect/landmark/corpse/wizard/rig
+	corpsesuit = /obj/item/clothing/suit/space/rig/wizard
+	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/wizard
+	corpseback = /obj/item/weapon/tank/oxygen
+	corpsemask = /obj/item/clothing/mask/breath
 
 //////////////////Misc Corpses///////////////////////////
 

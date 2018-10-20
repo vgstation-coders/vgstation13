@@ -29,6 +29,8 @@
 		on_spellcast.holder = null
 	if(on_uattack)
 		on_uattack.holder = null
+	if(on_ruattack)
+		on_ruattack.holder = null
 	if(on_damaged)
 		on_damaged.holder = null
 	if(on_irradiate)
@@ -76,6 +78,7 @@
 	on_moved = null
 	qdel(on_spellcast)
 	qdel(on_uattack)
+	qdel(on_ruattack)
 	qdel(on_damaged)
 	qdel(on_clickon)
 	qdel(on_irradiate)
@@ -83,6 +86,7 @@
 
 	on_spellcast = null
 	on_uattack = null
+	on_ruattack = null
 	on_damaged = null
 	on_clickon = null
 	on_irradiate = null
@@ -298,6 +302,7 @@
 	store_position()
 	on_spellcast = new(owner = src)
 	on_uattack = new(owner = src)
+	on_ruattack = new(owner = src)
 	on_logout = new(owner = src)
 	on_damaged = new(owner = src)
 	on_clickon = new(owner = src)
@@ -1234,7 +1239,7 @@ var/list/slot_equipment_priority = list( \
 		return
 	if(!can_show_flavor_text())
 		return
-	var/msg = strip_html(flavor_text)
+	var/msg = utf8_sanitize(flavor_text)
 	if(findtext(msg, "http:") || findtext(msg, "https:") || findtext(msg, "www."))
 		return "<font color='#ffa000'><b><a href='?src=\ref[src];show_flavor_text=1'>Show flavor text</a></b></font>"
 	if(length(msg) <= 32)

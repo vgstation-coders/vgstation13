@@ -13,7 +13,7 @@
 
 
 
-#### Steps to reproduce 
+#### Steps to reproduce
 
 
 
@@ -34,15 +34,60 @@
 #### Server revision
 <!-- Found with the "Show server revision" verb in the OOC tab in game. -->
 
+<!-- SELF LABEL YOUR ISSUE TODAY!
 
+You can now self-label your issue! The syntax is simple. Just put [<labeltag>] anywhere in your issue,
+where <labeltag> is to be replaced by one of the following (allowing with the resultant tag)
+just ctrl+f the list or something. I know it's long.
 
-#### Issue bingo
-
-Please check whatever applies. More checkboxes checked increase your chances of not being yelled at by every contributor.
-
-<!-- Check these by writing an x inside the [ ] (like this: [x])-->
-- [ ] Issue could be reproduced at least once
-- [ ] Issue could be reproduced by different players
-- [ ] Issue could be reproduced in multiple rounds
-- [ ] Issue happened in a recent (less than 7 days ago) round
-- [ ] [Couldn't find an existing issue about this](https://github.com/d3athrow/vgstation13/issues)
+administration = "Logging / Administration"
+away = "Mapping (Away Mission :earth_africa:)"
+bagel = "Mapping (Bagel :o:)"
+box = "Mapping (Box :baby:)"
+bugfix = "Bug / Fix"
+bus = "Mapping (Bus :bus:)"
+byond = "T-Thanks BYOND"
+consistency = "Consistency Issue"
+controversial = "Controversial"
+deff = "Mapping (Deff :wastebasket:)"
+discussion = "Discussion"
+dnm = "✋ Do Not Merge ✋"
+easy = "Easy Fix"
+exploitable = "Exploitable"
+featureloss = "Feature Loss"
+featurerequest = "Feature Request"
+first = "good first issue"
+formatting = "Grammar / Formatting"
+gamemode = "Gameplay / Gamemode"
+gameplay = "Gameplay / Gamemode"
+general = "Mapping (General :world_map:)"
+goonchat = "Goonchat"
+grammar = "Grammar / Formatting"
+help = "help wanted"
+hotfix = "Hotfix"
+libvg = "libvg"
+logging = "Logging / Administration"
+meta = "Mapping (Meta :no_mobile_phones:)"
+needspritework = "Needs Spritework"
+oversight = "Oversight"
+packed = "Mapping (Packed :package:)"
+parallax = "Parallax"
+qol = "❤️ Quality of Life ❤️"
+roid = "Mapping (Roidstation :pick:)"
+role = "Role Datums"
+roleissue = "Role Datums Issue"
+runtime = "Runtime Log"
+sanity = "Sanity / Ghosthands"
+snowmap = "Mapping (Snowmap ❄)"
+sound = "Sound"
+sprites = "Sprites"
+spriteworkdone = "Spritework Done Needs Coder"
+system = "System"
+taxi = "Mapping (Taxi :taxi:)"
+tested = "100%  tested"
+tweak = "Tweak"
+ui = "UI"
+vault = "Mapping (Vault :question:)"
+vote = "⛔ Requires Server Vote ⛔"
+wip = "WiP"
+-->

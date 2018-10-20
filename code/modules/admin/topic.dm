@@ -3890,7 +3890,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_set_channel_name"])
-		src.admincaster_feed_channel.channel_name = strip_html_simple(input(usr, "Provide a Feed Channel Name", "Network Channel Handler", ""))
+		src.admincaster_feed_channel.channel_name = utf8_sanitize(input(usr, "Provide a Feed Channel Name", "Network Channel Handler", ""))
 		while (findtext(src.admincaster_feed_channel.channel_name," ") == 1)
 			src.admincaster_feed_channel.channel_name = copytext(src.admincaster_feed_channel.channel_name,2,length(src.admincaster_feed_channel.channel_name)+1)
 		src.access_news_network()
@@ -4836,6 +4836,15 @@
 			error_viewer.show_to(owner, locate(href_list["viewruntime_backto"]), href_list["viewruntime_linear"])
 		else
 			error_viewer.show_to(owner, null, href_list["viewruntime_linear"])
+
+	else if (href_list["role_panel"])
+		var/mob/M = locate(href_list["role_panel"])
+		if (!istype(M))
+			return
+		var/datum/mind/mind = M.mind
+		if (!istype(mind))
+			return
+		mind.role_panel()
 
 	// ----- Religion and stuff
 	if (href_list["religions"])

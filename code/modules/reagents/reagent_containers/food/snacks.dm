@@ -5696,6 +5696,15 @@ obj/item/weapon/reagent_containers/food/snacks/butteredtoast
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
+/obj/item/weapon/reagent_containers/food/snacks/pierogi
+	name = "pierogi"
+	desc = "Dumplings with potatoes and curd inside."
+	icon_state = "pierogi"
+	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
+
+/obj/item/weapon/reagent_containers/food/snacks/pierogi/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 2)
 
 
 

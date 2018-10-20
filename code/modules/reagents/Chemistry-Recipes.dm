@@ -786,6 +786,13 @@
 	required_catalysts = list(FLUORINE = 5)
 	result_amount = 1
 
+/datum/chemical_reaction/piccolyn
+	name = "Piccolyn"
+	id = PICCOLYN
+	result = PICCOLYN
+	required_reagents = list(COPPER = 1, TUNGSTEN = 1, FLUORINE = 1)
+	result_amount = 1
+
 /datum/chemical_reaction/explosion_bicarodyne
 	name = "Explosion"
 	id = "explosion_bicarodyne"
@@ -3240,6 +3247,15 @@
 	result = COLORFUL_REAGENT
 	required_reagents = list(MESCALINE = 1, PSILOCYBIN = 1, AMATOXIN = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/degeneratecalcium
+	name = "Degenerate Calcium"
+	id = DEGENERATECALCIUM
+	result = DEGENERATECALCIUM
+	required_reagents = list(MILK = 1, MUTAGEN = 1)
+	required_temp = T0C + 88 //Mutagen is very hard to heat up, so I don't recommend making more than 10u of this at a time
+	result_amount = 1
+
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

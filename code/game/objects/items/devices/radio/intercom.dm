@@ -15,8 +15,8 @@
 /obj/item/device/radio/intercom/supports_holomap()
 	return TRUE
 
-/obj/item/device/radio/intercom/universe/New()
-	return ..()
+/obj/item/device/radio/intercom/universe/GhostsAlwaysHear()
+	return TRUE
 
 /obj/item/device/radio/intercom/initialize()
 	..()

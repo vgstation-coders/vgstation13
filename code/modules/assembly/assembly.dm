@@ -179,7 +179,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 		if(!istext(new_value))  //Attempted to write a non-string to a string var - convert the non-string into a string and continue
 			new_value = "[new_value]"
 
-		new_value = strip_html(new_value, MAX_TEXT_VALUE_LEN)
+		new_value = utf8_sanitize(new_value, MAX_TEXT_VALUE_LEN)
 
 	//text values can accept either numbers or text, so don't check for that
 

@@ -10,10 +10,10 @@
 	idtype = /obj/item/weapon/card/id/cmo
 	req_admin_notify = 1
 	access = list(access_medical, access_morgue, access_genetics, access_heads,
-			access_chemistry, access_virology, access_cmo, access_surgery, access_RC_announce,
+			access_chemistry, access_virology, access_biohazard, access_cmo, access_surgery, access_RC_announce,
 			access_keycard_auth, access_sec_doors, access_paramedic, access_eva)
 	minimal_access = list(access_medical, access_morgue, access_genetics, access_heads,
-			access_chemistry, access_virology, access_cmo, access_surgery, access_RC_announce,
+			access_chemistry, access_virology, access_biohazard, access_cmo, access_surgery, access_RC_announce,
 			access_keycard_auth, access_sec_doors, access_paramedic)
 	minimal_player_age = 7
 
@@ -213,8 +213,8 @@
 	spawn_positions = 1
 	supervisors = "the chief medical officer"
 	selection_color = "#ffeef0"
-	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva)
-	minimal_access = list(access_medical, access_virology)
+	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_biohazard, access_genetics, access_eva)
+	minimal_access = list(access_medical, access_virology, access_biohazard)
 	alt_titles = list("Pathologist", "Microbiologist")
 
 	pdaslot=slot_belt

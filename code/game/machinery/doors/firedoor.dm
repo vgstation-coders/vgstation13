@@ -559,8 +559,6 @@ var/global/list/alert_overlays_global = list()
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 0
 
-	if(!user.is_holding_item(src))
-		return 1
 	var/current_turf = get_turf(src)
 	var/turf_face = get_step(current_turf,user.dir)
 	if(SSair.air_blocked(current_turf, turf_face))
@@ -570,7 +568,7 @@ var/global/list/alert_overlays_global = list()
 	if(F && F.dir == user.dir)
 		to_chat(user, "<span class = 'warning'>There is already a firedoor facing that direction.</span>")
 		return 1
-	if(do_after(user, src, 5 SECONDS))
+	if(do_after(user, user, 5 SECONDS))
 		var/obj/machinery/door/firedoor/border_only/B = new(get_turf(src))
 		B.change_dir(user.dir)
 		qdel(src)

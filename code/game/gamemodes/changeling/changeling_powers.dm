@@ -745,7 +745,7 @@
 /obj/item/verbs/changeling/proc/changeling_digitalcamo()
 	set category = "Changeling"
 	set name = "Toggle Digital Camouflage"
-	set desc = "The AI can no longer track us, but we will look different if examined. Has a constant cost while active."
+	set desc = "The AI can no longer track us. Has a constant cost while active."
 
 	var/mob/M = loc
 	if(!istype(M))

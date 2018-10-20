@@ -68,6 +68,7 @@
 /var/const/access_weapons = 66 //Weapon authorization for secbots
 /var/const/access_taxi = 67 // Taxi drivers
 /var/const/access_shop = 68
+/var/const/access_biohazard = 69 // Virology crates
 	//BEGIN CENTCOM ACCESS
 	/*Should leave plenty of room if we need to add more access levels.
 /var/const/Mostly for admin fun times.*/
@@ -235,7 +236,7 @@
 	            access_hydroponics, access_library, access_lawyer, access_virology, access_psychiatrist, access_cmo, access_qm, access_clown, access_mime, access_surgery,
 	            access_theatre, access_science, access_mining, access_mailsorting,access_weapons,
 	            access_heads_vault, access_mining_station, access_xenobiology, access_ce, access_hop, access_hos, access_RC_announce,
-	            access_keycard_auth, access_tcomsat, access_gateway, /*vg paramedic*/, access_paramedic, access_mechanic, access_taxi)
+	            access_keycard_auth, access_tcomsat, access_gateway, /*vg paramedic*/, access_paramedic, access_mechanic, access_taxi, access_biohazard)
 
 /proc/get_absolutely_all_accesses()
 	return ((get_all_accesses() | get_all_centcom_access() | get_all_syndicate_access()) + access_salvage_captain + access_trade)
@@ -264,7 +265,7 @@
 		if(1) //security
 			return list(access_sec_doors, access_weapons, access_security, access_brig, access_armory, access_forensics_lockers, access_court, access_hos)
 		if(2) //medbay
-			return list(access_medical, access_genetics, access_morgue, access_chemistry, access_paramedic, access_virology, access_surgery, access_cmo)
+			return list(access_medical, access_genetics, access_morgue, access_chemistry, access_paramedic, access_virology, access_surgery, access_biohazard, access_cmo)
 		if(3) //research
 			return list(access_science, access_rnd, access_tox_storage, access_robotics, access_mechanic, access_xenobiology, access_rd)
 		if(4) //engineering and maintenance
@@ -378,6 +379,8 @@
 			return "Robotics"
 		if(access_virology)
 			return "Virology"
+		if(access_biohazard)
+			return "Biohazard"
 		if(access_psychiatrist)
 			return "Psychiatrist's Office"
 		if(access_cmo)

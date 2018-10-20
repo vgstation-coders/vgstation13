@@ -277,6 +277,7 @@
 	var/list/languages[0]
 	var/event/on_spellcast
 	var/event/on_uattack
+	var/event/on_ruattack	//on restrained unarmed attack
 	var/event/on_logout
 	var/event/on_damaged
 	var/event/on_irradiate

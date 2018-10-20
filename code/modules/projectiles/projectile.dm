@@ -547,6 +547,8 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/reset()
 	starting = get_turf(src)
+	if(isnull(starting))
+		return
 	override_starting_X = starting.x
 	override_starting_Y = starting.y
 	override_target_X = override_starting_X+dist_x
