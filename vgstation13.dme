@@ -2251,6 +2251,7 @@
 #include "code\modules\spells\aoe_turf\fall.dm"
 #include "code\modules\spells\aoe_turf\glare.dm"
 #include "code\modules\spells\aoe_turf\knock.dm"
+#include "code\modules\spells\aoe_turf\lightbulb.dm"
 #include "code\modules\spells\aoe_turf\screech.dm"
 #include "code\modules\spells\aoe_turf\smoke.dm"
 #include "code\modules\spells\aoe_turf\summons.dm"
