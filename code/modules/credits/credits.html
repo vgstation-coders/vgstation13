@@ -5,25 +5,21 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<style>
 		body {
-			width: 100%;
-			height: 100%;
 			overflow: hidden;
 			background-color: black;
 			color: white;
-			text-align: center;
-			vertical-align: center;
 		}
 		#container {
-			position: fixed;
-			width: 100%;
-			height: 100%;
-			bottom: 0;
-			left: 0;
-			overflow: hidden;
-
+			position: relative;
+			width: 100vw;
+			text-align: center;
 		}
 		#splash {
-			height: 100%;
+			display: table-cell;
+			height: 100vh;
+		}
+		.letterboxer {
+			width: 10%;
 		}
 		#marquee {
 		}
@@ -31,16 +27,20 @@
 	</style>
 </head>
 <body>
-	<table id="container">
+	<table id="container"> <!-- Yes we use a table to center ourselves. StackOverflow says this is not acceptable practice past 2012 but we're operating with 2009 tech so... !-->
 		<tr>
+			<td class="letterboxer"></td>
 			<td id="splash">
 				SPLASH PLACEHOLDER
 			</td>
+			<td class="letterboxer"></td>
 		</tr>
 		<tr>
+			<td class="letterboxer"></td>
 			<td id="marquee">
 				MARQUEE PLACEHOLDER
 			</td>
+			<td class="letterboxer"></td>
 		</tr>
 	</table>
 
@@ -88,7 +88,7 @@
 		lastinterval = setInterval(function () {
 			bottom = bottom + 1;
 			div.style.bottom = bottom + "px";
-			if(bottom > 1500){ //RUNAWAY CREDIT ALART - no seriously this will keep going if the player doesn't close the game between rounds
+			if(bottom > 2000){ //RUNAWAY CREDIT ALART - no seriously this will keep going if the player doesn't close the game between rounds
 				clearInterval(lastinterval);
 				window.location = 'byond://winset?id=mapwindow.credits;is-visible=false';
 				return;
