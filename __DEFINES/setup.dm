@@ -563,6 +563,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define SUICIDE_ACT_FIRELOSS 2
 #define SUICIDE_ACT_TOXLOSS 4
 #define SUICIDE_ACT_OXYLOSS 8
+#define SUICIDE_ACT_CUSTOM 16
 
 //Bitflags defining which status effects could be or are inflicted on a mob
 #define CANSTUN		1
