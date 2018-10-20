@@ -84,5 +84,3 @@ var/unit_test_report = "Unit tests haven't been run yet."
 	var/datum/browser/popup = new(usr, "\ref[global.unit_test_report]", "Unit test report", 800, 800)
 	popup.set_content(global.unit_test_report)
 	popup.open()
-
-#define assert_eq(a, b) (a == b || (fail("[__FILE__]:[__LINE__]: assert_eq failed. Expected [b], got [a].")))
