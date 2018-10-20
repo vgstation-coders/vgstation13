@@ -59,7 +59,6 @@
 
 /datum/role/vampire/OnPostSetup()
 	. = ..()
-
 	update_vamp_hud()
 	ForgeObjectives()
 	for(var/type_VP in roundstart_powers)
@@ -161,7 +160,7 @@
 	log_attack("[key_name(assailant)] bit [key_name(target)] in the neck")
 
 	to_chat(antag.current, "<span class='danger'>You latch on firmly to \the [target]'s neck.</span>")
-	to_chat(target, "<span class='userdanger'>\The [assailant] latches on to your neck!</span>")
+	target.show_message("<span class='userdanger'>\The [assailant] latches on to your neck!</span>")
 
 	if(!iscarbon(assailant))
 		target.LAssailant = null
