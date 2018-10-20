@@ -232,7 +232,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	item_state = "vector"
 	w_class = W_CLASS_MEDIUM
-	recoil = 0 //Super V tech
+	recoil = 0 //Super V tech.
 	max_shells = 25
 	caliber = POINT380 // Change to list(POINT380AUTO = 1) later when I figure things out.
 	ammo_type = "/obj/item/ammo_casing/c380auto"
@@ -255,11 +255,10 @@
 	if(receiver)
 		var/MS = FALSE
 		if(stored_magazine)
-			if(stored_magazine.max_ammo)
-				if(stored_magazine.max_ammo > 10)
-					MS = "L"
-				else
-					MS = "S"
+			if(stored_magazine.max_ammo > 10)
+				MS = "L"
+			else
+				MS = "S"
 		icon_state = "[initial(icon_state)][stored_magazine ? "-[MS]" : ""][chambered ? "" : "-e"]"
 		item_state = "[initial(icon_state)][stored_magazine ? "-[MS]" : ""][chambered ? "" : "-e"]"
 		name = "\improper Vector"
