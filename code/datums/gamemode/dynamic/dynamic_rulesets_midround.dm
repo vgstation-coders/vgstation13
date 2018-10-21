@@ -54,7 +54,7 @@
 //                                          //
 //              RAGIN' MAGES                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
-//////////////////////////////////////////////
+//////////////////////////////////////////////1.01 - Disabled because it caused a bit too many wizards in rounds
 
 /datum/dynamic_ruleset/midround/raginmages
 	name = "Ragin' Mages"
@@ -63,7 +63,7 @@
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
 	weight = 3
-	cost = 30
+	cost = 20
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	logo = "raginmages-logo"
 
@@ -72,8 +72,8 @@
 		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		return 0
-	if (locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
-		weight = initial(weight) * 5
+	if (!(locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules))
+		cost = ARBITRARILY_LARGE_NUMBER
 
 	return ..()
 
