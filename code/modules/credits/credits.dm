@@ -1,10 +1,3 @@
-/mob/verb/creditstest()
-	set category = "IC"
-	set name = "credits test"
-
-	end_credits.generate_credits()
-	end_credits.rollem()
-
 var/global/datum/credits/end_credits = new
 
 /datum/credits
@@ -145,3 +138,10 @@ var/global/datum/credits/end_credits = new
 		else if(H.gender == FEMALE)
 			t_him = "Her"
 		return "[uppertext(H.real_name)] as [t_him]self"
+
+/*/mob/verb/creditstest()
+	set category = "IC"
+	set name = "credits test"
+
+	end_credits.generate_credits()
+	end_credits.rollem()*/
