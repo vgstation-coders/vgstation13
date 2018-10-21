@@ -5709,7 +5709,7 @@ obj/item/weapon/reagent_containers/food/snacks/butteredtoast
 
 /obj/item/weapon/reagent_containers/food/snacks/sauerkraut
 	name = "sauerkraut"
-	desc = "Cabbage that has feremented in salty brine."
+	desc = "Cabbage that has fermented in salty brine."
 	icon_state = "sauerkraut"
 	trash = /obj/item/trash/snack_bowl
 
