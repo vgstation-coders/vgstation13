@@ -185,6 +185,8 @@
 	prefs.client = src
 	prefs.initialize_preferences(client_login = 1)
 
+	clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
+
 	. = ..()	//calls mob.Login()
 	chatOutput.start()
 

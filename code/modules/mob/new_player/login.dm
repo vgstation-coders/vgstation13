@@ -31,7 +31,6 @@
 #if SHOW_CHANGELOG_ON_NEW_PLAYER_LOGIN
 	spawn(0)
 		if(client)
-			client.clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
 			//If the changelog has changed, show it to them
 			if(client.prefs.lastchangelog != changelog_hash)
 				// Need to send them the CSS and images :V

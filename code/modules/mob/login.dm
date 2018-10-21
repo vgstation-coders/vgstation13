@@ -121,6 +121,3 @@
 
 	if(client)
 		client.CAN_MOVE_DIAGONALLY = 0
-
-	if(client)
-		client.clear_credits() //Otherwise these persist if the client doesn't close the game between rounds
