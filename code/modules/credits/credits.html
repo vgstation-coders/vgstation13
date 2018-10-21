@@ -8,6 +8,7 @@
 			overflow: hidden;
 			background-color: black;
 			color: white;
+			font-family: Georgia, serif
 		}
 		#container {
 			position: relative;
@@ -18,11 +19,40 @@
 			display: table-cell;
 			height: 100vh;
 		}
+		.crewtable{
+			width: 100%;
+			table-layout: fixed;
+			white-space: nowrap;
+		}
+		.crewtable td{
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			font-size: 1.17em;
+		}
+		.actorname {
+			text-align: right;
+			float: right;
+		}
+		.actorsegue {
+			text-align: center;
+			width: 40px;
+		}
+		.actorrole {
+			float: left;
+			text-align: left;
+		}
 		.letterboxer {
 			width: 10%;
 		}
-		#marquee {
+		.disclaimers {
+			font-family: Arial, Helvetica, sans-serif
 		}
+		h1, h2, h3 {
+			display: inline;
+			font-weight:normal;
+		}
+		
 
 	</style>
 </head>
@@ -54,7 +84,6 @@
 	function setProducers(text){
 		producers = text.split("%n");
 		producers = producers.slice(0, -1); //get rid of the last %n
-		//alert(JSON.stringify(producers));
 	}
 	function makeCredits(scrollyString, producersString, scrollSpeed, splashTime){
 		if (splashTime === undefined) {
@@ -63,7 +92,7 @@
 		splashTime = parseInt(splashTime); //Just in case
 		
 		if (scrollSpeed === undefined) {
-			scrollSpeed = 30;
+			scrollSpeed = 25;
 		}
 		scrollSpeed = parseInt(scrollSpeed); //Just in case
 		
@@ -88,7 +117,8 @@
 		lastinterval = setInterval(function () {
 			bottom = bottom + 1;
 			div.style.bottom = bottom + "px";
-			if(bottom > 2000){ //RUNAWAY CREDIT ALART - no seriously this will keep going if the player doesn't close the game between rounds
+			if(bottom > 3000){ //RUNAWAY CREDIT ALART - no seriously this will keep going if the player doesn't close the game between rounds
+				//document.documentElement.innerHTML = "<textarea rows='4' cols='50'>" + document.documentElement.innerHTML + "</textarea>"; clearInterval(lastinterval); return; //debugging
 				clearInterval(lastinterval);
 				window.location = 'byond://winset?id=mapwindow.credits;is-visible=false';
 				return;
