@@ -135,7 +135,6 @@ var/global/ports_open = TRUE
 								feedback_inc("alert_comms_blue",1)
 					tmp_alertlevel = 0
 				else
-					:
 					to_chat(usr, "You are not authorized to do this.")
 					tmp_alertlevel = 0
 				setMenuState(usr,COMM_SCREEN_MAIN)
