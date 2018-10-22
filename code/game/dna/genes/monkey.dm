@@ -46,7 +46,7 @@
 		animation.master = null
 		qdel(animation)
 
-	var/mob/living/carbon/human/O = new( src )
+	var/mob/living/carbon/human/O = new(src)
 	if(Mo.greaterform)
 		O.set_species(Mo.greaterform)
 	Mo.transferImplantsTo(O)
@@ -58,7 +58,7 @@
 
 	if (M)
 		if (M.dna)
-			O.dna = M.dna.Clone()
+			O.dna = M.dna
 			M.dna = null
 
 		if (M.suiciding)
