@@ -346,6 +346,7 @@
 #include "code\datums\gamemode\objectives\minimize_casualties.dm"
 #include "code\datums\gamemode\objectives\nuclear.dm"
 #include "code\datums\gamemode\objectives\objective.dm"
+#include "code\datums\gamemode\objectives\sample.dm"
 #include "code\datums\gamemode\objectives\silence.dm"
 #include "code\datums\gamemode\objectives\spray_blood.dm"
 #include "code\datums\gamemode\objectives\summon_narsie.dm"
