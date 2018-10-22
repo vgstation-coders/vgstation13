@@ -69,7 +69,7 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 	if (has_enough_adepts())
 		getNewObjective()
 
-/datum/faction/cult/narsie/HandleRecruitedMind(var/datum/mind/M)
+/datum/faction/cult/narsie/HandleRecruitedMind(var/datum/mind/M, var/override = FALSE)
 	if (!..())
 		return
 	if (has_enough_adepts())

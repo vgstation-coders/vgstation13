@@ -27,6 +27,8 @@
 
 	var/datum/gamemode/dynamic/mode = null
 
+	var/role_category_override = null // If a role is to be considered another for the purpose of bannig.
+
 /datum/dynamic_ruleset/New()
 	..()
 	if (config.protect_roles_from_antagonist)
@@ -79,7 +81,8 @@
 	searching = 1
 	var/icon/logo_icon = icon('icons/logos.dmi', logo)
 	for(var/mob/M in possible_volunteers)
-		if(!M.client || jobban_isbanned(M, role_category) || M.client.is_afk())
+		var/banned_factor = (jobban_isbanned(M, role_category) || (role_category_override && jobban_isbanned(M, role_category_override)))
+		if(!M.client || banned_factor || M.client.is_afk())
 			continue
 
 		to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>The mode is looking for volunteers to become [role_category]. (<a href='?src=\ref[src];signup=\ref[M]'>Apply now!</a>)</span>[logo ? "[bicon(logo_icon)]" : ""]")

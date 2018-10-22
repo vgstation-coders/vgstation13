@@ -85,7 +85,8 @@ var/list/factions_with_hud_icons = list()
 		WARNING("Mind already had a role of [late_role]!")
 		return 0
 	var/datum/role/R = new roletype(null,src,initial_role) // Add him to our roles
-	if(!R.AssignToRole(M) || override)
+	if(!R.AssignToRole(M, override))
+		to_chat(world, "uh oh")
 		R.Drop()
 		return 0
 	R.OnPostSetup()
