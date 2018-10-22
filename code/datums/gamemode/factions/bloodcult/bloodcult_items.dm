@@ -464,14 +464,18 @@ var/list/arcane_tomes = list()
 	return
 
 /obj/item/weapon/melee/cultblade/attack(var/mob/living/target, var/mob/living/carbon/human/user)
-	if(!checkcult || iscultist(user))
+	if(!checkcult)
 		return ..()
-	if (checkcult && ishuman(target) && target.resting)
-		var/obj/structure/cult/altar/altar = locate() in target.loc
-		if (altar)
-			altar.attackby(src,user)
-			return
-	..()
+	if (iscultist(user))
+		if (ishuman(target) && target.resting)
+			var/obj/structure/cult/altar/altar = locate() in target.loc
+			if (altar)
+				altar.attackby(src,user)
+				return
+			else
+				return ..()
+		else
+			return ..()
 	else
 		user.Paralyse(5)
 		to_chat(user, "<span class='warning'>An unexplicable force powerfully repels the sword from [target]!</span>")

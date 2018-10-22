@@ -406,7 +406,7 @@
 						cult.HandleRecruitedRole(newCultist)
 						newCultist.OnPostSetup()
 						newCultist.Greet(GREET_SOULSTONE)
-						newCultist.conversion["soulstone"] = user
+						newCultist.conversion["soulstone"] = U
 		if("CONSTRUCT")
 			var/obj/structure/constructshell/T = target
 			var/obj/item/device/soulstone/C = src

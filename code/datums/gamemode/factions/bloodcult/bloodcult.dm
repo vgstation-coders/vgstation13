@@ -13,6 +13,9 @@ var/veil_thickness = CULT_EPILOGUE//REMEMBER TO SET IT BACK TO CULT_PROLOGUE WHE
 
 	veil_thickness = input(usr, "Enter a value (default = [CULT_PROLOGUE])", "Debug Veil Thickness", veil_thickness) as num
 
+	if (veil_thickness == CULT_ACT_III)
+		spawn_bloodstones()
+
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (cult)
 		for (var/datum/role/cultist/C in cult.members)
@@ -20,6 +23,17 @@ var/veil_thickness = CULT_EPILOGUE//REMEMBER TO SET IT BACK TO CULT_PROLOGUE WHE
 
 	for (var/obj/structure/cult/spire/S in cult_spires)
 		S.upgrade()
+
+/proc/spawn_bloodstones(var/turf/source = null)
+	var/list/places_to_spawn = list()
+	places_to_spawn.Add(pick(range(30,locate(map.center_x+40,map.center_y+40,map.zMainStation))))
+	places_to_spawn.Add(pick(range(30,locate(map.center_x+40,map.center_y-40,map.zMainStation))))
+	places_to_spawn.Add(pick(range(30,locate(map.center_x-40,map.center_y+40,map.zMainStation))))
+	places_to_spawn.Add(pick(range(30,locate(map.center_x-40,map.center_y-40,map.zMainStation))))
+	if (source && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<128)
+		places_to_spawn.Add(source)
+	for (var/turf/T in places_to_spawn)
+		new /obj/structure/cult/bloodstone(T)
 
 //CULT_PROLOGUE		Default thickness, only communication and raise structure runes enabled
 //CULT_ACT_I		Altar raised. cultists can now convert.

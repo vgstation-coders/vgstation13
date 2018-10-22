@@ -1,6 +1,4 @@
 
-/datum/cult_ritual//placeholder, this will serve with cult building rituals, and stuff like the new Nar-Sie summoning
-
 /obj/structure/cult
 	density = 1
 	anchored = 1
@@ -156,7 +154,7 @@
 	layer = TABLE_LAYER
 	var/obj/item/weapon/melee/soulblade/blade = null
 	var/lock_type = /datum/locking_category/buckle/bed
-	var/task = ALTARTASK_NONE
+	var/altar_task = ALTARTASK_NONE
 	var/gem_delay = 300
 
 
@@ -181,7 +179,7 @@
 	..()
 
 /obj/structure/cult/altar/attackby(var/obj/item/I, var/mob/user)
-	if (task)
+	if (altar_task)
 		return ..()
 	if(istype(I,/obj/item/weapon/melee/soulblade) || (istype(I,/obj/item/weapon/melee/cultblade) && !istype(I,/obj/item/weapon/melee/cultblade/nocult)))
 		if (blade)
@@ -207,7 +205,7 @@
 			for(var/mob/M in observers)
 				if(!M.client || jobban_isbanned(M, ROLE_CULTIST) || M.client.is_afk())
 					continue
-				to_chat(M, "[logo ? "[bicon(logo_icon)]" : ""]<span class='recruit'>\The [user] has planted a Soul Blade on an altar, opening a small crack in the veil that allows you to become the blade's resident shade. (<a href='?src=\ref[src];signup=\ref[M]'>Possess now!</a>)</span>[logo ? "[bicon(logo_icon)]" : ""]")
+				to_chat(M, "[bicon(logo_icon)]<span class='recruit'>\The [user] has planted a Soul Blade on an altar, opening a small crack in the veil that allows you to become the blade's resident shade. (<a href='?src=\ref[src];signup=\ref[M]'>Possess now!</a>)</span>[bicon(logo_icon)]")
 		return 1
 	if (istype(I, /obj/item/weapon/grab))
 		if (blade)
@@ -273,7 +271,7 @@
 		return 0
 
 /obj/structure/cult/altar/MouseDropTo(var/atom/movable/O, var/mob/user)
-	if (task)
+	if (altar_task)
 		return
 	if (!O.anchored && (istype(O, /obj/item) || user.get_active_hand() == O))
 		if(!user.drop_item(O))
@@ -310,7 +308,7 @@
 	to_chat(user, "<span class='warning'>You move \the [O] on top of \the [src]</span>")
 
 /obj/structure/cult/altar/conceal()
-	if (blade || task)
+	if (blade || altar_task)
 		return
 	anim(location = loc,target = loc,a_icon = icon, flick_anim = "[icon_state]-conceal")
 	for (var/mob/living/carbon/C in loc)
@@ -327,7 +325,7 @@
 	.=..()
 	if (!.)
 		return
-	if (task)
+	if (altar_task)
 		return
 	if(is_locking(lock_type))
 		var/choices = list(
@@ -352,6 +350,7 @@
 							playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 							update_icon()
 			if ("Sacrifice")
+				update_icon()
 	else if (blade)
 		blade.forceMove(loc)
 		blade.attack_hand(user)
@@ -377,7 +376,9 @@
 				var/dat = {"<body style="color:#FFFFFF" bgcolor="#110000"><ul>"}
 				for (var/datum/role/cultist/C in cult.members)
 					var/datum/mind/M = C.antag
-					var/conversion = pick(C.conversion)
+					var/conversion = ""
+					if (C.conversion.len > 0)
+						conversion = pick(C.conversion)
 					var/origin_text = ""
 					switch (conversion)
 						if ("converted")
@@ -394,12 +395,12 @@
 					var/extra = ""
 					if (H && istype(H))
 						if (H.isInCrit())
-							extra = {" - <style="color:#FF0000">CRITICAL</style>"}
+							extra = " - <span style='color:#FF0000'>CRITICAL</span>"
 						else if (H.isDead())
-							extra = {" - <style="color:#FF0000">DEAD</style>"}
+							extra = " - <span style='color:#FF0000'>DEAD</span>"
 					dat += "<li><b>[M.name]</b></li> - [origin_text][extra]"
 				dat += {"</ul></body>"}
-				user << browse("<TITLE>Cult Roster</TITLE>[dat]", "window=cultroster;size=300x600")
+				user << browse("<TITLE>Cult Roster</TITLE>[dat]", "window=cultroster;size=500x300")
 				onclose(user, "cultroster")
 			if ("Commune with Nar-Sie")
 				var/dat = {"<body style="color:#FFFFFF" bgcolor="#110000"><ul>"}
@@ -407,14 +408,23 @@
 
 
 				dat += {"</ul></body>"}
-				user << browse("<TITLE>Cult Roster</TITLE>[dat]", "window=cultroster;size=300x600")
+				user << browse("<TITLE>Cult Roster</TITLE>[dat]", "window=cultroster;size=500x300")
 				onclose(user, "cultroster")
 			if ("Conjure Soul Gem")
-				task = ALTARTASK_GEM
-				spawn (gem_delay)
-					task = ALTARTASK_NONE
-					var/obj/item/device/soulstone/gem = new (loc)
-					get.pixel_y = 4
+				altar_task = ALTARTASK_GEM
+				update_icon()
+				overlays += "altar-soulstone1"
+				spawn (gem_delay/3)
+					update_icon()
+					overlays += "altar-soulstone2"
+					sleep (gem_delay/3)
+					update_icon()
+					overlays += "altar-soulstone3"
+					sleep (gem_delay/3)
+					altar_task = ALTARTASK_NONE
+					update_icon()
+					var/obj/item/device/soulstone/gem/gem = new (loc)
+					gem.pixel_y = 4
 
 
 
@@ -509,6 +519,8 @@
 			shadeMob.real_name = pick(shade_names)
 			shadeMob.real_name = copytext(sanitize(input(shadeMob, "You have no memories of your previous life, if you even had one. What name will you give yourself?", "Give yourself a new name", "[shadeMob.real_name]") as null|text),1,MAX_NAME_LEN)
 			shadeMob.name = "[shadeMob.real_name] the Shade"
+			if (shadeMob.mind)
+				shadeMob.mind.name = shadeMob.real_name
 		shadeMob.cancel_camera()
 		shadeMob.give_blade_powers()
 		blade.dir = NORTH
@@ -523,7 +535,7 @@
 		cult.HandleRecruitedRole(newCultist)
 		newCultist.OnPostSetup()
 		newCultist.Greet(GREET_SOULBLADE)
-		newCultist.conversion["altar"] = user
+		newCultist.conversion.Add("altar")
 
 	else if (href_list["altar"])
 		switch (href_list["altar"])
@@ -973,3 +985,191 @@ var/list/cult_spires = list()
 	I.layer = NARSIE_GLOW
 	I.blend_mode = BLEND_ADD
 	overlays += I
+
+
+/obj/structure/cult/pillar
+	name = "obsidian pillar"
+	icon_state = "pillar-enter"
+	icon = 'icons/obj/cult_64x64.dmi'
+	pixel_x = -16 * PIXEL_MULTIPLIER
+	health = 300
+	maxHealth = 300
+	sound_damaged = 'sound/effects/stone_hit.ogg'
+	sound_destroyed = 'sound/effects/stone_crumble.ogg'
+	plane = EFFECTS_PLANE
+	layer = BELOW_PROJECTILE_LAYER
+	var/alt = 0
+
+/obj/structure/cult/pillar/New()
+	..()
+	var/turf/T = loc
+	for (var/obj/O in loc)
+		if (O != src)
+			O.ex_act(2)
+	T.ChangeTurf(/turf/simulated/floor/engine/cult)
+	T.turf_animation('icons/effects/effects.dmi',"cultfloor", 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
+	for (var/obj/structure/S in T)
+		if (S != src)
+			qdel(S)
+	for (var/obj/machinery/M in T)
+		qdel(M)
+
+/obj/structure/cult/pillar/Destroy()
+	new /obj/effect/decal/cleanable/ash(loc)
+	..()
+
+
+/obj/structure/cult/pillar/alt
+	icon_state = "pillaralt-enter"
+	alt = 1
+
+/obj/structure/cult/pillar/update_icon()
+	icon_state = "pillar[alt ? "alt": ""]2"
+	overlays.len = 0
+	if (health < maxHealth/3)
+		icon_state = "pillar[alt ? "alt": ""]0"
+	else if (health < 2*maxHealth/3)
+		icon_state = "pillar[alt ? "alt": ""]1"
+
+/obj/structure/cult/pillar/conceal()
+	return
+
+/obj/structure/cult/pillar/ex_act(var/severity)
+	switch(severity)
+		if (1)
+			takeDamage(300)
+		if (2)
+			takeDamage(100)
+		if (3)
+			takeDamage(20)
+
+/obj/structure/cult/bloodstone
+	name = "blood stone"
+	icon_state = "bloodstone-enter1"
+	icon = 'icons/obj/cult_64x64.dmi'
+	pixel_x = -16 * PIXEL_MULTIPLIER
+	health = 1000
+	maxHealth = 1000
+	sound_damaged = 'sound/effects/stone_hit.ogg'
+	sound_destroyed = 'sound/effects/stone_crumble.ogg'
+	plane = EFFECTS_PLANE
+	layer = BELOW_PROJECTILE_LAYER
+	light_color = "#FF0000"
+
+/obj/structure/cult/bloodstone/New()
+	..()
+	for (var/obj/O in loc)
+		if (O != src)
+			O.ex_act(2)
+	for(var/turf/T in range(5,src))
+		var/dist = cheap_pythag(T.x - src.x, T.y - src.y)
+		if (dist <= 2.5)
+			T.ChangeTurf(/turf/simulated/floor/engine/cult)
+			T.turf_animation('icons/effects/effects.dmi',"cultfloor", 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
+			for (var/obj/structure/S in T)
+				if (!istype(S,/obj/structure/cult))
+					qdel(S)
+			for (var/obj/machinery/M in T)
+				qdel(M)
+		else if (dist <= 4.5)
+			if (istype(T,/turf/space))
+				T.ChangeTurf(/turf/simulated/floor/engine/cult)
+				T.turf_animation('icons/effects/effects.dmi',"cultfloor", 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
+			else
+				T.cultify()
+		else if (dist <= 5.5)
+			if (istype(T,/turf/space))
+				T.ChangeTurf(/turf/simulated/wall/cult)
+				T.turf_animation('icons/effects/effects.dmi',"cultwall", 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
+			else
+				T.cultify()
+	set_light(3)
+	for(var/mob/M in range(20,src))
+		if (M.client)
+			M.playsound_local(src, get_sfx("explosion"), 50, 1)
+			shake_camera(M, 4, 1)
+	spawn(10)
+		var/list/pillars = list()
+		icon_state = "bloodstone-enter2"
+		for(var/mob/M in range(20,src))
+			if (M.client)
+				M.playsound_local(src, get_sfx("explosion"), 50, 1)
+				shake_camera(M, 4, 1)
+		var/turf/T1 = locate(x-2,y-2,z)
+		pillars += new /obj/structure/cult/pillar(T1)
+		var/turf/T2 = locate(x+2,y-2,z)
+		pillars += new /obj/structure/cult/pillar/alt(T2)
+		var/turf/T3 = locate(x-2,y+2,z)
+		pillars += new /obj/structure/cult/pillar(T3)
+		var/turf/T4 = locate(x+2,y+2,z)
+		pillars += new /obj/structure/cult/pillar/alt(T4)
+		sleep(10)
+		icon_state = "bloodstone-enter3"
+		for(var/mob/M in range(20,src))
+			if (M.client)
+				M.playsound_local(src, get_sfx("explosion"), 50, 1)
+				shake_camera(M, 4, 1)
+		for (var/obj/structure/cult/pillar/P in pillars)
+			P.update_icon()
+
+/obj/structure/cult/bloodstone/Destroy()
+	new /obj/effect/decal/cleanable/ash(loc)
+	new /obj/item/weapon/ectoplasm(loc)
+	..()
+
+/obj/structure/cult/bloodstone/update_icon()
+	//icon_state = "bloodstone-[checkBloodspill()]"
+	icon_state = "bloodstone-0"
+	overlays.len = 0
+	var/image/I_base = image('icons/obj/cult_64x64.dmi',"bloodstone-base")
+	I_base.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
+	overlays += I_base
+	if (health < maxHealth/3)
+		overlays.Add("bloodstone_damage2")
+	else if (health < 2*maxHealth/3)
+		overlays.Add("bloodstone_damage1")
+
+/obj/structure/cult/bloodstone/proc/set_animate()
+	animate(src, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)
+	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)
+	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1.5)
+	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 5)
+	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)
+	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)
+	update_icon()
+
+/obj/structure/cult/bloodstone/conceal()
+	return
+
+/obj/structure/cult/bloodstone/takeDamage(var/damage)
+	var/backup = (health > 666) + (health > 333)
+	health -= damage
+	if (health <= 0)
+		if (sound_destroyed)
+			playsound(get_turf(src), sound_destroyed, 100, 1)
+		qdel(src)
+	else
+		if (backup > (health > 666) + (health > 333))
+			summon_backup()
+		update_icon()
+
+/obj/structure/cult/bloodstone/proc/summon_backup()
+	var/list/possible_floors = list()
+	for (var/turf/simulated/floor/F in orange(1,src))
+		possible_floors.Add(F)
+	for (var/i = 1 to 2)
+		var/turf/T = pick(possible_floors)
+		if (T)
+			possible_floors.Remove(T)
+			new /obj/effect/cult_ritual/backup_spawn(T)
+
+/obj/structure/cult/bloodstone/ex_act(var/severity)
+	switch(severity)
+		if (1)
+			takeDamage(250)
+		if (2)
+			takeDamage(50)
+		if (3)
+			takeDamage(10)
