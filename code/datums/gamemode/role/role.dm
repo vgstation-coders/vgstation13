@@ -123,6 +123,7 @@
 	return 1
 
 /datum/role/proc/AssignToRole(var/datum/mind/M, var/override = 0)
+	to_chat(world, "override is [override]")
 	if(!istype(M) && !override)
 		stack_trace("M is [M.type]!")
 		return 0

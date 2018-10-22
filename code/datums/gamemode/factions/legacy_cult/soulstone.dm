@@ -294,7 +294,7 @@
 	playsound(get_turf(src), get_sfx("soulstone"), 50,1)
 
 	//Are we capturing a cult-banned player as a cultist? Sucks for them!
-	if (iscultist(user) && (jobban_isbanned(body, ROLE_CULTIST) || jobban_isbanned(body, ROLE_LEGACY_CULTIST)))
+	if (iscultist(user) && jobban_isbanned(body, ROLE_CULTIST))
 		to_chat(body, "<span class='danger'>A cultist tried to capture your soul, but due to past behaviour you have been banned from the role. Your body will instead dust away.</span>")
 		to_chat(user, "<span class='notice'>Their soul wasn't fit for our cult, and wasn't accepted by \the [src].</span>")
 
@@ -448,8 +448,8 @@
 						deleteafter = 1
 				if(islegacycultist(U))
 					var/datum/faction/cult/narsie/cult_round = find_active_faction_by_member(U.mind.GetRole(LEGACY_CULTIST))
-					if(cult_round && istype(cult_round))
-						cult_round.HandleRecruitedMind(Z.mind)
+					if(istype(cult_round))
+						cult_round.HandleRecruitedMind(Z.mind, TRUE)
 				Z.real_name = A.real_name
 				Z.name = "[Z.real_name] the [construct_class]"
 				name = "Soul Stone Shard"
@@ -501,8 +501,8 @@
 						deleteafter = 1
 				if(islegacycultist(U))
 					var/datum/faction/cult/narsie/cult_round = find_active_faction_by_member(U.mind.GetRole(LEGACY_CULTIST))
-					if(cult_round && istype(cult_round))
-						cult_round.HandleRecruitedMind(Z.mind)
+					if(istype(cult_round))
+						cult_round.HandleRecruitedMind(Z.mind, TRUE)
 				Z.real_name = A.real_name
 				Z.name = "[Z.real_name] the [construct_class]"
 				name = "Soul Stone Shard"

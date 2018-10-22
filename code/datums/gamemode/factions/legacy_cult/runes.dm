@@ -199,7 +199,7 @@
 		"<span class='danger'>AAAAAAHHHH!.</span>", \
 		"<span class='warning'>You hear an anguished scream.</span>")
 		if(is_convertable_to_cult_legacy(M.mind) && !jobban_isbanned(M, "cultist"))//putting jobban check here because is_convertable uses mind as argument
-			my_cult.HandleRecruitedMind(M.mind)
+			my_cult.HandleRecruitedMind(M.mind, TRUE)
 			to_chat(M, "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>")
 			to_chat(M, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 			to_chat(M, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
@@ -671,7 +671,7 @@
 
 	var/datum/faction/cult/my_cult = find_active_faction_by_member(usr.mind.GetRole(LEGACY_CULT))
 	if(my_cult)
-		my_cult.HandleRecruitedMind(D.mind)
+		my_cult.HandleRecruitedMind(D.mind, TRUE)
 	/*else
 		ticker.mode.cult += D.mind*/
 
