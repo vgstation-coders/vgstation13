@@ -7,7 +7,7 @@
 
 	var/flags = 0 // Objective flags.
 
-/datum/objective/target/New(var/text,var/auto_target = TRUE)
+/datum/objective/target/New(var/text,var/auto_target = TRUE, var/mob/user = null)
 	if(text)
 		explanation_text = text
 
@@ -73,4 +73,5 @@
 		else if (faction)
 			dat += "<a href='?src=\ref[M];obj_add=1;obj_holder=\ref[src]'>(add faction objective)</a>"
 		dat += "<br><a href='?src=\ref[M];obj_gen=1;obj_holder=\ref[src];[faction?"obj_owner=\ref[faction]":"obj_owner=\ref[R]"]'>(generate objectives)</a>"
+		dat += "<br><a href='?src=\ref[M];obj_announce=1'>(annouce objectives)</a>"
 	return dat

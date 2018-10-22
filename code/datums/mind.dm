@@ -145,7 +145,7 @@
 	else
 		for(var/role in antag_roles)
 			var/datum/role/R = antag_roles[role]
-			out += R.GetMemory(src,TRUE)//allowing edits
+			out += R.GetMemory(src, TRUE)//allowing edits
 
 	out += "<br><a href='?src=\ref[src];add_role=1'>(add a new role)</a>"
 
@@ -591,7 +591,7 @@
 			return
 		var/obj_type = available_objectives[new_obj]
 
-		var/datum/objective/new_objective = new obj_type(null,FALSE)
+		var/datum/objective/new_objective = new obj_type(null,FALSE, usr)
 
 		if (new_objective.flags & FACTION_OBJECTIVE)
 			var/datum/faction/fac = input("To which faction shall we give this?", "Faction-wide objective", null) as null|anything in ticker.mode.factions
@@ -656,6 +656,11 @@
 		var/datum/role/R = locate(href_list["role"])
 		R.Topic(href, href_list)
 
+	else if (href_list["obj_announce"])
+		to_chat(src.current, "<span class='notice'>Your objectives are:</span>")
+		for (var/role in antag_roles)
+			var/datum/role/R = antag_roles[role]
+			R.AnnounceObjectives()
 	role_panel()
 /*
 	else if (href_list["obj_edit"] || href_list["obj_add"])

@@ -337,6 +337,7 @@
 #include "code\datums\gamemode\objectives\acquire_blood.dm"
 #include "code\datums\gamemode\objectives\block.dm"
 #include "code\datums\gamemode\objectives\convert_people.dm"
+#include "code\datums\gamemode\objectives\custom.dm"
 #include "code\datums\gamemode\objectives\die.dm"
 #include "code\datums\gamemode\objectives\escape.dm"
 #include "code\datums\gamemode\objectives\harvest.dm"
