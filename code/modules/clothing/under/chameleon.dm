@@ -57,7 +57,7 @@
 
 	var/obj/item/clothing/under/A
 	A = input("Select the jumpsuit's new appearance.", "BOOYEA", A) in null|clothing_choices
-	if(!A || usr.incapacitated() || !Adjacent(usr)))
+	if(!A || usr.incapacitated() || !Adjacent(usr))
 		return
 	to_chat(usr, "<span class='notice'>You turn the dial and \the [src] changes its color.</span>")
 
