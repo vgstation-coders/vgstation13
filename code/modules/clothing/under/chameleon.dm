@@ -55,9 +55,10 @@
 		return
 
 	var/obj/item/clothing/under/A
-	A = input("Select the jumpsuit's new appearance.", "BOOYEA", A) in clothing_choices
-	if(!A)
+	A = input("Select the jumpsuit's new appearance.", "BOOYEA", A) in null|clothing_choices
+	if(!A || usr.incapacitated() || !Adjacent(usr)))
 		return
+	to_chat(usr, "<span class='notice'>You turn the dial and \the [src] changes its color.</span>")
 
 	desc = null
 	permeability_coefficient = 0.90
@@ -85,13 +86,15 @@
 /obj/item/clothing/under/chameleon/cold/attack_self(mob/user)
 	if(!registered_user || registered_user == user)
 		if(!registered_user)
-			to_chat(usr, "You are registered as the user of this suit")
+			to_chat(usr, "You are registered as the user of this suit.")
 			registered_user = user
 		if(!(/obj/item/clothing/under/chameleon/proc/Change_Color in verbs))
 			verbs += /obj/item/clothing/under/chameleon/proc/Change_Color
+			to_chat(user, "<span class='notice'>You reveal the hidden dial on \the [src].</span>")
 			return
 		if(/obj/item/clothing/under/chameleon/proc/Change_Color in verbs)
 			verbs -= /obj/item/clothing/under/chameleon/proc/Change_Color
+			to_chat(user, "<span class='notice'>You hide \the [src]'s dial.</span>")
 			return
 
 /obj/item/clothing/under/chameleon/cold/attackby(obj/item/clothing/under/U, mob/user)
