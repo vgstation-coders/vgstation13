@@ -227,14 +227,14 @@
 
 /obj/item/weapon/gun/projectile/automatic/vector
 	name = "\improper Vector"
-	desc = "A lightweight and compact gun, it has detachable receiver contains a recoil mitigation system."
+	desc = "A lightweight and compact gun, it has a detachable receiver that contains a recoil mitigation system."
 	icon_state = "vector"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	item_state = "vector"
 	w_class = W_CLASS_MEDIUM
 	recoil = 0 //Super V tech.
-	max_shells = 25
-	caliber = POINT380 // Change to list(POINT380AUTO = 1) later when I figure things out.
+	/*max_shells = 25  I'm sure someone will put a mag larger than 25 in here some day so lets leave this open ended.*/
+	caliber = POINT380 //Its not a list but IT WORKS ON MY MACHINE.
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	mag_type = "/obj/item/ammo_storage/magazine/m380auto"
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
@@ -262,7 +262,7 @@
 		icon_state = "[initial(icon_state)][stored_magazine ? "-[MS]" : ""][chambered ? "" : "-e"]"
 		item_state = "[initial(icon_state)][stored_magazine ? "-[MS]" : ""][chambered ? "" : "-e"]"
 		name = "\improper Vector"
-		desc = "A lightweight and compact gun, it has detachable receiver contains a recoil mitigation system. It currently accepts [caliber] ammo."
+		desc = "A lightweight and compact gun, it has a detachable receiver that contains a recoil mitigation system. It currently accepts [caliber] ammo."
 	else
 		icon_state = "vector_assembly"
 		item_state = "vector_assembly"
@@ -273,9 +273,9 @@
 		M.update_inv_hands()
 
 /obj/item/weapon/gun/projectile/automatic/vector/can_discharge()
-	..()
+	.=..()
 	if(!receiver)
-		to_chat(loc, "<span class='notice'>[src] lacks a receiver to fire with!</span>")
+		to_chat(loc, "<span class='notice'>\The [src] lacks a receiver to fire with!</span>")
 		return FALSE
 
 /obj/item/weapon/gun/projectile/automatic/vector/attackby(obj/item/used_item, mob/user)
@@ -287,7 +287,7 @@
 			R.add_fingerprint(user)
 			R.forceMove(get_turf(src))
 			receiver = null
-			to_chat(user, "<span class='notice'>You push the bolts out of \the [R] and remove it from the [src].</span>")
+			to_chat(user, "<span class='notice'>You push the bolts out of \the [R] and remove it from \the [src].</span>")
 			playsound(src, "sound/machines/click.ogg", 10, 1)
 			if(chambered)
 				var/obj/item/ammo_casing/AC = chambered
@@ -297,14 +297,14 @@
 			update_receiver()
 	else if(istype(used_item, /obj/item/weapon/vectorreceiver))
 		if(receiver)
-			to_chat(user, "<span class='notice'>The [src] already has a receiver.</span>")
+			to_chat(user, "<span class='notice'>\The [src] already has a receiver.</span>")
 		else if(!receiver && user.drop_item(used_item, src))
-			to_chat(user, "<span class='notice'>You attach and bolt \the [used_item] to the [src].</span>")
+			to_chat(user, "<span class='notice'>You attach and bolt \the [used_item] to \the [src].</span>")
 			playsound(src, "sound/machines/click.ogg", 10, 1)
 			receiver = used_item
 			update_receiver()
 		else
-			to_chat(user, "<span class='warning'>You're unable to apply \the [used_item] to the [src]!</span>")
+			to_chat(user, "<span class='warning'>You're unable to apply \the [used_item] to \the [src]!</span>")
 	else
 		..()
 
@@ -327,7 +327,8 @@
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "vector_receiver"
 	w_class = W_CLASS_TINY
-	var/caliber = ".380AUTO" //IT WORKS ON MY MACHINE. Change this to list(POINT380AUTO = 1) when I figure out how to make a list from the caliber copy thing.
+	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=1"
+	var/caliber = ".380AUTO" //Its not a list but IT WORKS ON MY MACHINE.
 	var/ammo_type = "/obj/item/ammo_casing/c380auto"
 	var/mag_type = "/obj/item/ammo_storage/magazine/m380auto"
 
@@ -350,15 +351,13 @@
 				playsound(src, "sound/items/crank.ogg", 10, 1)
 				var/obj/item/ammo_storage/magazine/M = used_item
 				var/AT = text2path(M.ammo_type)
-				var/obj/item/ammo_casing/A
-				A = new AT(src)
-				caliber = A.caliber
-				qdel(A)
+				var/obj/item/ammo_casing/A = AT
+				caliber = initial(A.caliber)
 				ammo_type = M.ammo_type
 				mag_type = "[M.type]"
 				do_desc()
 		else
-			to_chat(user, "<span class='warning'>You're unable to insert \the [used_item] into the [src]!</span>")
+			to_chat(user, "<span class='warning'>You're unable to insert \the [used_item] into \the [src]!</span>")
 
 
 /* The thing I found with guns in ss13 is that they don't seem to simulate the rounds in the magazine in the gun.
