@@ -117,8 +117,9 @@ var/list/sent_strike_teams = list()
 				if(M.key == selected_key)
 					applicant = M
 
-			if(!applicant || !applicant.key)
+			if(!applicant)
 				i++
+				applicants -= selected_key
 				continue
 
 			applicants -= applicant.key
