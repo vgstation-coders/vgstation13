@@ -10,43 +10,43 @@
 	species_fit = list(GREY_SHAPED)
 	var/list/clothing_choices = list()
 
-	New()
-		..()
-		verbs += /obj/item/clothing/under/chameleon/proc/Change_Color
-		for(var/U in typesof(/obj/item/clothing/under/color)-(/obj/item/clothing/under/color))
-			var/obj/item/clothing/under/V = new U
-			src.clothing_choices += V
+/obj/item/clothing/under/chameleon/New()
+	..()
+	verbs += /obj/item/clothing/under/chameleon/proc/Change_Color
+	for(var/U in typesof(/obj/item/clothing/under/color)-(/obj/item/clothing/under/color))
+		var/obj/item/clothing/under/V = new U
+		src.clothing_choices += V
 
-		for(var/U in typesof(/obj/item/clothing/under/rank)-(/obj/item/clothing/under/rank))
-			var/obj/item/clothing/under/V = new U
-			src.clothing_choices += V
+	for(var/U in typesof(/obj/item/clothing/under/rank)-(/obj/item/clothing/under/rank))
+		var/obj/item/clothing/under/V = new U
+		src.clothing_choices += V
+	return
+
+
+/obj/item/clothing/under/chameleon/attackby(obj/item/clothing/under/U as obj, mob/user as mob)
+	..()
+	if(istype(U, /obj/item/clothing/under/chameleon))
+		to_chat(user, "<span class='warning'>Nothing happens.</span>")
 		return
-
-
-	attackby(obj/item/clothing/under/U as obj, mob/user as mob)
-		..()
-		if(istype(U, /obj/item/clothing/under/chameleon))
-			to_chat(user, "<span class='warning'>Nothing happens.</span>")
+	if(istype(U, /obj/item/clothing/under))
+		if(src.clothing_choices.Find(U))
+			to_chat(user, "<span class='warning'>Pattern is already recognised by the suit.</span>")
 			return
-		if(istype(U, /obj/item/clothing/under))
-			if(src.clothing_choices.Find(U))
-				to_chat(user, "<span class='warning'>Pattern is already recognised by the suit.</span>")
-				return
-			src.clothing_choices += U
-			to_chat(user, "<span class='warning'>Pattern absorbed by the suit.</span>")
+		src.clothing_choices += U
+		to_chat(user, "<span class='warning'>Pattern absorbed by the suit.</span>")
 
 
-	emp_act(severity)
-		name = "psychedelic"
-		desc = "Groovy!"
-		icon_state = "psyche"
-		_color = "psyche"
-		spawn(200)
-			name = "Black Jumpsuit"
-			icon_state = "bl_suit"
-			_color = "black"
-			desc = null
-		..()
+/obj/item/clothing/under/chameleon/emp_act(severity)
+	name = "psychedelic"
+	desc = "Groovy!"
+	icon_state = "psyche"
+	_color = "psyche"
+	spawn(200)
+		name = "Black Jumpsuit"
+		icon_state = "bl_suit"
+		_color = "black"
+		desc = null
+	..()
 
 
 /obj/item/clothing/under/chameleon/proc/Change_Color()
