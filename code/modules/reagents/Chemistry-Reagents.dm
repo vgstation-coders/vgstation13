@@ -1100,7 +1100,7 @@
 				H.take_organ_damage(0, 5) //FIRE, MAGIC FIRE THAT BURNS ROBOTIC LIMBS TOO!
 				V.smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
 			else
-				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. You're still too human to be smited!.</span>")
+				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. You're still too human to be smited!</span>")
 				V.smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
 		var/datum/role/thrall/T = isthrall(H)
 		if(T)
