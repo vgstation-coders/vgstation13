@@ -338,6 +338,11 @@
 		"spesspets_sleep.png"		= 'icons/pda_icons/spesspets_icons/spesspets_sleep.png'
 	)
 
+/datum/asset/simple/nanoui_maps/New()
+	for(var/z in 1 to world.maxz)
+		if(z == CENTCOMM_Z)
+			continue
+		assets["[map.nameShort][z].png"] = file("[getMinimapFile(z)].png")
 
 //Registers HTML I assets.
 /datum/asset/HTML_interface/register()
