@@ -448,8 +448,8 @@
 						deleteafter = 1
 				if(islegacycultist(U))
 					var/datum/faction/cult/narsie/cult_round = find_active_faction_by_member(U.mind.GetRole(LEGACY_CULTIST))
-					if(cult_round && istype(cult_round))
-						cult_round.HandleRecruitedMind(Z.mind)
+					if(istype(cult_round))
+						cult_round.HandleRecruitedMind(Z.mind, TRUE)
 				Z.real_name = A.real_name
 				Z.name = "[Z.real_name] the [construct_class]"
 				name = "Soul Stone Shard"
@@ -501,8 +501,8 @@
 						deleteafter = 1
 				if(islegacycultist(U))
 					var/datum/faction/cult/narsie/cult_round = find_active_faction_by_member(U.mind.GetRole(LEGACY_CULTIST))
-					if(cult_round && istype(cult_round))
-						cult_round.HandleRecruitedMind(Z.mind)
+					if(istype(cult_round))
+						cult_round.HandleRecruitedMind(Z.mind, TRUE)
 				Z.real_name = A.real_name
 				Z.name = "[Z.real_name] the [construct_class]"
 				name = "Soul Stone Shard"

@@ -147,6 +147,7 @@
 /datum/dynamic_ruleset/roundstart/cult_legacy
 	name = "Cult (Legacy)"
 	role_category = ROLE_LEGACY_CULTIST
+	role_category_override = ROLE_CULTIST // H-ha
 	protected_from_jobs = list("Merchant")
 	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Chaplain")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Chaplain")

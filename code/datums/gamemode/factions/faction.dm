@@ -76,7 +76,7 @@ var/list/factions_with_hud_icons = list()
 		return 0
 	return 1
 
-/datum/faction/proc/HandleRecruitedMind(var/datum/mind/M)
+/datum/faction/proc/HandleRecruitedMind(var/datum/mind/M, var/override = FALSE)
 	for(var/datum/role/R in members)
 		if(R.antag == M)
 			WARNING("Mind was already a role in this faction")
@@ -84,8 +84,8 @@ var/list/factions_with_hud_icons = list()
 	if(M.GetRole(late_role))
 		WARNING("Mind already had a role of [late_role]!")
 		return 0
-	var/datum/role/R = new roletype(null,src, initial_role) // Add him to our roles
-	if(!R.AssignToRole(M))
+	var/datum/role/R = new roletype(null,src,initial_role) // Add him to our roles
+	if(!R.AssignToRole(M, override))
 		R.Drop()
 		return 0
 	R.OnPostSetup()

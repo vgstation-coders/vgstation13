@@ -63,6 +63,18 @@ var/global/list/rnwords = list("ire","ego","nahlizet","certum","veri","jatkaa","
 		cult_words[word] = pick(runewords)
 		runewords -= cult_words[word]
 
+/datum/faction/cult/narsie/HandleNewMind(var/datum/mind/M)
+	if (!..())
+		return
+	if (has_enough_adepts())
+		getNewObjective()
+
+/datum/faction/cult/narsie/HandleRecruitedMind(var/datum/mind/M, var/override = FALSE)
+	if (!..())
+		return
+	if (has_enough_adepts())
+		getNewObjective()
+
 // Urist-runes naming & recognition procs.
 // Those procs are a mess
 
