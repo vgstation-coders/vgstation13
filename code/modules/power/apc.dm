@@ -422,6 +422,8 @@
 		if(coverlocked && !(stat & MAINT))
 			to_chat(user, "<span class='warning'>The cover is locked and cannot be opened.</span>")
 			return
+		else if (wiresexposed)
+			to_chat(user, "<span class='warning'>Unexpose the wires first!</span>")
 		else
 			opened = 1
 			update_icon()
@@ -469,13 +471,14 @@
 					to_chat(user, "<span class='warning'>There is nothing to secure.</span>")
 					return
 				update_icon()
-		else if(has_electronics == 2)
-			wiresexposed = !wiresexposed
-			to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
-			update_icon()
 		else
-			to_chat(user, "<span class='warning'>You open the panel and find nothing inside.</span>")
-			return
+			if(has_electronics == 2 && !(stat & BROKEN))
+				wiresexposed = !wiresexposed
+				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
+				update_icon()
+			else
+				to_chat(user, "<span class='warning'>You open the panel and find nothing inside.</span>")
+				return
 
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))			// trying to unlock the interface with an ID card
 		if(emagged)
@@ -612,10 +615,6 @@
 		else
 			if (istype(user, /mob/living/silicon))
 				return src.attack_hand(user)
-			if (!opened && wiresexposed && \
-				(istype(W, /obj/item/device/multitool) || \
-				iswirecutter(W) || istype(W, /obj/item/device/assembly/signaler)))
-				return src.attack_hand(user)
 			/*user.visible_message("<span class='warning'>The [src.name] has been hit with the [W.name] by [user.name]!</span>", \
 				"<span class='warning'>You hit the [src.name] with your [W.name]!</span>", \
 				"You hear bang")*/
@@ -624,12 +623,7 @@
 // attack with hand - remove cell (if cover open) or interact with the APC
 
 /obj/machinery/power/apc/attack_hand(mob/user)
-//	if (!can_use(user)) This already gets called in interact() and in topic()
-//		return
-	if(!user)
-		return
-	if(wiresexposed && !issilicon(user))
-		to_chat(user, "Unexpose the wires first!")
+	if (!can_use(user))
 		return
 	if(!isobserver(user))
 		src.add_fingerprint(user)
@@ -667,12 +661,13 @@
 
 	var/allcut = wires.IsAllCut()
 
-	if(beenhit >= pick(3, 4) && wiresexposed != 1)
+	if(beenhit >= pick(3, 4) && (!wiresexposed && !opened))
+		beenhit = 0
 		wiresexposed = 1
 		src.update_icon()
 		src.visible_message("<span class='warning'>The [src.name]'s cover flies open, exposing the wires!</span>")
 
-	else if(wiresexposed == 1 && allcut == 0)
+	else if((wiresexposed || opened) && allcut == 0)
 		wires.CutAll()
 		src.update_icon()
 		src.visible_message("<span class='warning'>The [src.name]'s wires are shredded!</span>")
@@ -808,6 +803,8 @@
 
 
 /obj/machinery/power/apc/proc/can_use(mob/user as mob, var/loud = 0) //used by attack_hand() and Topic()
+	if(!user)
+		return 0
 	if (user.stat && !isobserver(user))
 		to_chat(user, "<span class='warning'>You must be conscious to use this [src]!</span>")
 		return 0
@@ -1303,6 +1300,8 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 			M.apcs--
 	stat |= BROKEN
 	operating = 0
+	wiresexposed = 0
+	opened = 0
 	if(occupant)
 		malfvacate(1)
 	update_icon()
