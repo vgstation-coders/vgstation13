@@ -1,6 +1,6 @@
 /obj/item/mecha_parts/mecha_equipment/tool/jail
 	name = "\improper Mounted Jail Cell"
-	desc = "A Mounted Jail Cell, capable of holding up to two prisoners. (Can be attached to Gygax)"
+	desc = "A Mounted Jail Cell, capable of holding up to two prisoners. (Can be attached to Combat Mechs)"
 	icon_state = "mecha_jail"
 	origin_tech = Tc_BIOTECH + "=2;" + Tc_COMBAT + "=4"
 	energy_drain = 20
@@ -11,7 +11,7 @@
 	var/datum/global_iterator/pr_mech_jail
 	salvageable = 0
 
-/obj/item/mecha_parts/mecha_equipment/tool/jail/can_attach(obj/mecha/combat/gygax/G)
+/obj/item/mecha_parts/mecha_equipment/tool/jail/can_attach(obj/mecha/combat/G)
 	if(..())
 		if(istype(G))
 			return 1
