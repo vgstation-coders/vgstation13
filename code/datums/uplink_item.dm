@@ -571,6 +571,12 @@ var/list/uplink_items = list()
 	cost = 2
 	excludefrom = list("nuclear emergency")
 
+datum/uplink_item/stealthy_tools/cold_jumpsuit
+	name = "Quick Vent Jumpsuit"
+	desc = "A variant of the Chameleon Jumpsuit that quickly vents the wearer's body heat, causing them to suffer latent hypothermia"
+	item = /obj/item/clothing/under/chameleon/cold
+	cost = 2
+
 /datum/uplink_item/stealthy_tools/syndigaloshes
 	name = "No-Slip Syndicate Shoes"
 	desc = "Allows you to run on wet floors. They do not work on lubricated surfaces and are distinguishable by their extra grip when examined closely."
