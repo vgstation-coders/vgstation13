@@ -621,3 +621,8 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 		call(M.current, Thepower.verbpath)()
 	else if(remake_verbs)
 		M.current.make_changeling()
+
+/datum/role/changeling/handle_mind_transfer(var/mob/living/new_character)
+	if (!power_holder) // This is for when you spawn as a new_player
+		return
+	new_character.make_changeling() // Will also restore any & all genomes/powers we have
