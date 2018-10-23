@@ -5686,13 +5686,13 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
-obj/item/weapon/reagent_containers/food/snacks/butteredtoast
+/obj/item/weapon/reagent_containers/food/snacks/butteredtoast
 	name = "buttered toast"
 	desc = "Toasted bread with butter on it."
 	icon_state = "butteredtoast"
 	food_flags = FOOD_ANIMAL
 
-/obj/item/weapon/reagent_containers/food/snacks/butterfedtoast/New()
+/obj/item/weapon/reagent_containers/food/snacks/butteredtoast/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 
