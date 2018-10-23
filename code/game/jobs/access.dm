@@ -85,6 +85,7 @@
 
 	//The Syndicate
 /var/const/access_syndicate = 150//General Syndicate Access
+/var/const/access_pirate = 151 //Yarr
 
 	//Vox are Pox
 /var/const/access_trade = 140//Vox Trader Access

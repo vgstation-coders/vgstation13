@@ -282,3 +282,10 @@ var/global/datum/shuttle/admin/admin_shuttle = new(starting_area = /area/shuttle
 
 /obj/machinery/computer/shuttle_control/admin_shuttle/emag() //Can't be emagged to hijack the centcom ferry
 	return
+
+/obj/machinery/computer/shuttle_control/pirate
+	icon_state = "syndishuttle"
+	req_access = list(access_pirate)
+	machine_flags = 0
+	allow_silicons = 0
+	light_color = LIGHT_COLOR_RED

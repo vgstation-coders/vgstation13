@@ -28,6 +28,7 @@ var/global/list/special_roles = list(
 	ROLE_GRINCH			= 1,
 	ROLE_WEEABOO		= 1,
 	ROLE_MINOR			= 1,
+	ROLE_PIRATE			= 1,
 )
 
 var/list/antag_roles = list(
@@ -48,6 +49,7 @@ var/list/antag_roles = list(
 	ROLE_GRINCH			= 1,
 	ROLE_WEEABOO		= 1,
 	ROLE_MINOR			= 1,
+	ROLE_PIRATE			= 1,
 )
 
 var/list/nonantag_roles = list(

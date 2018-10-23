@@ -317,7 +317,7 @@
 	if(wielded)
 		event_key = user.on_moved.Add(src, "mob_moved")
 		user.visible_message("\The [user] holds \the [src] up to \his eyes.","You hold \the [src] up to your eyes.")
-		item_state = "binoculars_wielded"
+		item_state = "[initial(item_state)]_wielded"
 		user.regenerate_icons()
 		if(user && user.client)
 			user.regenerate_icons()
@@ -326,7 +326,7 @@
 	else
 		user.on_moved.Remove(event_key)
 		user.visible_message("\The [user] lowers \the [src].","You lower \the [src].")
-		item_state = "binoculars"
+		item_state = initial(item_state)
 		user.regenerate_icons()
 		if(user && user.client)
 			user.regenerate_icons()

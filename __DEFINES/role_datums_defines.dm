@@ -17,7 +17,7 @@
 #define VOXSHOAL "vox Shoal"
 #define BLOBCONGLOMERATE "blob conglomerate"
 #define CLOCKWORK "clockwork"
-//-------
+#define PIRATES "pirates"
 #define HIVEMIND "changeling hivemind"
 #define WIZFEDERATION "wizard federation"
 #define VAMPIRELORDS "vampire lords"
@@ -55,6 +55,8 @@
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
 #define CATBEAST "loose catbeast"
+#define PIRATE	"pirate"
+#define PIRATECAPTAIN "pirate captain"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"

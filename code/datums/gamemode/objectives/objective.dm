@@ -27,6 +27,9 @@
 
 /datum/objective/proc/feedbackText()
 
+/datum/objective/proc/format_explanation()
+	return "Somebody didn't override the format explanation text here. Objective type is [type].Have fun."
+
 /datum/objective_holder
 	var/list/datum/objective/objectives = list()
 	var/datum/mind/owner = null

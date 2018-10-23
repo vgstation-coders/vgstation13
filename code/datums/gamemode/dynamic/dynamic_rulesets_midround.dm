@@ -277,6 +277,28 @@
 		return 0
 
 /datum/dynamic_ruleset/midround/from_ghosts/weeaboo/ready(var/forced = 0)
+	assigned += new_character
+	if (i == required_candidates)
+		var/datum/role/nuclear_operative/leader/newCop = new
+		newCop.AssignToRole(new_character.mind,1)
+		nuclear.HandleRecruitedRole(newCop)
+		newCop.Greet(GREET_MIDROUND)
+	else
+		var/datum/role/nuclear_operative/newCop = new
+		newCop.AssignToRole(new_character.mind,1)
+		nuclear.HandleRecruitedRole(newCop)
+		newCop.Greet(GREET_MIDROUND)
+
+/datum/dynamic_ruleset/midround/pirates
+	name = "Pirate raid"
+	role_category = ROLE_PIRATE
+	required_candidates = 5
+	weight = 5
+	cost = 15
+	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	logo = "pirate-logo"
+
+/datum/dynamic_ruleset/midround/pirates/ready(var/forced = 0)
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return 0
 	return ..()
@@ -333,3 +355,15 @@
 		message_admins("Rejected catbeast ruleset. Not enough threat somehow??")
 		return FALSE
 	return TRUE
+
+/datum/dynamic_ruleset/midround/pirates/execute()
+	var/list/possible_candidates = list()
+	possible_candidates.Add(dead_players)
+	possible_candidates.Add(list_observers)
+	send_applications(possible_candidates)
+	return 1
+
+/datum/dynamic_ruleset/midround/pirates/review_applications()
+	var/datum/faction/pirate_raiders/pirates = ticker.mode.CreateFaction(/datum/faction/pirate_raiders, null, 1)
+	load_dungeon(/datum/map_element/dungeon/pirateship)
+

@@ -1,0 +1,56 @@
+"a" = (/turf/space,/area)
+"b" = (/obj/effect/forcefield{alpha = 0; invisibility = 0; name = "invisible force wall"},/turf/space,/area)
+"c" = (/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 9},/area/vault/automap)
+"d" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/space,/area/vault/automap)
+"e" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/turf/space,/area/vault/automap)
+"f" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4; one_way = 1},/obj/structure/grille,/turf/space,/area/vault/automap)
+"g" = (/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 5},/area/vault/automap)
+"h" = (/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 1},/area/vault/automap)
+"i" = (/turf/simulated/floor/engine,/area/vault/automap)
+"j" = (/obj/structure/table/holotable/wood,/obj/item/weapon/skull,/turf/simulated/floor/engine,/area/vault/automap)
+"k" = (/obj/machinery/computer/fluff/shuttle_control/syndicate,/turf/simulated/floor/engine,/area/vault/automap)
+"l" = (/mob/living/simple_animal/parrot,/turf/simulated/floor/engine,/area/vault/automap)
+"m" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 9},/area/vault/automap)
+"n" = (/obj/machinery/door/window{dir = 8},/turf/simulated/floor/engine,/area/vault/automap)
+"o" = (/obj/machinery/door/window{base_state = "right"; dir = 4; icon_state = "right"; req_one_access_txt = "25;28;35"},/turf/simulated/floor/engine,/area/vault/automap)
+"p" = (/obj/machinery/door/window{dir = 2; base_state = "right"},/turf/simulated/floor/engine,/area/vault/automap)
+"q" = (/obj/structure/table/woodentable,/obj/item/weapon/melee/energy/sword/pirate,/obj/item/weapon/melee/energy/sword/pirate,/obj/item/weapon/gun/flintlock,/turf/simulated/floor/engine,/area/vault/automap)
+"r" = (/obj/structure/table/woodentable,/obj/item/weapon/melee/energy/sword/pirate,/obj/item/weapon/gun/flintlock,/turf/simulated/floor/engine,/area/vault/automap)
+"s" = (/obj/structure/table/woodentable,/obj/item/binoculars/telescope,/turf/simulated/floor/engine,/area/vault/automap)
+"t" = (/obj/structure/table/woodentable,/turf/simulated/floor/engine,/area/vault/automap)
+"u" = (/obj/structure/closet/crate/chest{anchored = 1; storage_capacity = 300},/obj/item/weapon/coin/gold,/turf/simulated/floor/engine,/area/vault/automap)
+"v" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor/engine,/area/vault/automap)
+"w" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/electrical,/turf/simulated/floor/engine,/area/vault/automap)
+"x" = (/obj/machinery/vending/cigarette,/turf/simulated/floor/engine,/area/vault/automap)
+"y" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/syndicate,/turf/simulated/floor/engine,/area/vault/automap)
+"z" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/engine,/area/vault/automap)
+"A" = (/obj/structure/window/reinforced/plasma,/turf/simulated/floor/engine,/area/vault/automap)
+"B" = (/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor/engine,/area/vault/automap)
+"C" = (/obj/structure/shuttle/engine/heater,/turf/simulated/floor/engine,/area/vault/automap)
+"D" = (/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/floor/engine,/area/vault/automap)
+"E" = (/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor/engine,/area/vault/automap)
+"F" = (/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/floor/engine,/area/vault/automap)
+"G" = (/turf/simulated/shuttle/wall{icon_state = "diagonalWall3"},/area/vault/automap)
+"H" = (/obj/structure/shuttle/engine/propulsion,/turf/space,/area/vault/automap)
+"I" = (/turf/simulated/shuttle/wall{dir = 4; icon_state = "diagonalWall3"},/area/vault/automap)
+
+(1,1,1) = {"
+abbbbbbbbba
+abcdeeefgba
+bbhijklihbb
+bmhiiiiihgb
+bhiniiioihb
+bhphhhhhphb
+bhiqqrqqihb
+bhiiiiiiihb
+bhiiiiiiihb
+bhiiiiiiihb
+bhistuttihb
+bhphhhhhphb
+bhivwxyvihb
+bziiiiiiizb
+bhiAiAiAihb
+bhBCDCECFhb
+bGhHhHhHhIb
+bbbbbbbbbbb
+"}

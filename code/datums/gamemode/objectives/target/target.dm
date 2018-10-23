@@ -54,6 +54,3 @@
 		explanation_text = format_explanation()
 		return TRUE
 	return FALSE
-
-/datum/objective/target/proc/format_explanation()
-	return "Somebody didn't override the format explanation text here. Objective type is [type]. Target is [target.name], have fun."
