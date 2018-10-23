@@ -469,8 +469,6 @@
 					to_chat(user, "<span class='warning'>There is nothing to secure.</span>")
 					return
 				update_icon()
-		else if(emagged)
-			to_chat(user, "The interface is broken.")
 		else if(has_electronics == 2)
 			wiresexposed = !wiresexposed
 			to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
@@ -481,7 +479,7 @@
 
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))			// trying to unlock the interface with an ID card
 		if(emagged)
-			to_chat(user, "The interface is broken.")
+			to_chat(user, "The lock seems broken.")
 		else if(opened)
 			to_chat(user, "You must close the cover to swipe an ID card.")
 		else if(wiresexposed)
