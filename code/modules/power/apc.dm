@@ -625,9 +625,9 @@
 // attack with hand - remove cell (if cover open) or interact with the APC
 
 /obj/machinery/power/apc/attack_hand(mob/user)
-	if (!can_use(user))
-		return
 	if(!user)
+		return
+	if(!can_use(user))
 		return
 	if(!isobserver(user))
 		src.add_fingerprint(user)
@@ -666,6 +666,7 @@
 	var/allcut = wires.IsAllCut()
 
 	if(beenhit >= pick(3, 4) && (!wiresexposed && !opened))
+		beenhit = 0
 		wiresexposed = 1
 		src.update_icon()
 		src.visible_message("<span class='warning'>The [src.name]'s cover flies open, exposing the wires!</span>")
@@ -806,6 +807,8 @@
 
 
 /obj/machinery/power/apc/proc/can_use(mob/user as mob, var/loud = 0) //used by attack_hand() and Topic()
+	if (!user)
+		return 0
 	if (user.stat && !isobserver(user))
 		to_chat(user, "<span class='warning'>You must be conscious to use this [src]!</span>")
 		return 0
