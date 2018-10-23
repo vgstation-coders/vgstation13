@@ -65,7 +65,7 @@
 	icon_broken = "secureengweldbroken"
 	icon_off = "secureengweldoff"
 
-/obj/structure/closet/secure_closet/engineering_welding/New()
+/obj/structure/closet/secure_closet/engineering_welding/atoms_to_spawn()
 	return list(
 		/obj/item/clothing/head/welding = 3,
 		/obj/item/weapon/weldingtool/largetank = 3,
@@ -81,7 +81,7 @@
 	icon_broken = "secureengbroken"
 	icon_off = "secureengoff"
 
-/obj/structure/closet/secure_closet/engineering_personal/New()
+/obj/structure/closet/secure_closet/engineering_personal/atoms_to_spawn()
 	return list(
 		pick(
 			/obj/item/weapon/storage/backpack/industrial,
@@ -146,7 +146,7 @@
 	icon_broken = "securemechnibroken"
 	icon_off = "securemechnioff"
 
-/obj/structure/closet/secure_closet/engineering_mechanic/New()
+/obj/structure/closet/secure_closet/engineering_mechanic/atoms_to_spawn()
 	return list(
 		pick(
 			/obj/item/weapon/storage/backpack/industrial,
