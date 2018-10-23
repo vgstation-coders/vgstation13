@@ -3,6 +3,9 @@
 #define CAT_COIN   3
 #define CAT_VOUCH  4
 
+//Maximum price you can assign to an item
+#define MAX_ITEM_PRICE 1000000000
+
 var/global/num_vending_terminals = 1
 
 /obj/machinery/vending
@@ -915,6 +918,8 @@ var/global/num_vending_terminals = 1
 		var/new_price = input("Enter a price", "Change price", R.price) as null|num
 		if(new_price == null || new_price < 0)
 			new_price = R.price
+		new_price = min(new_price, MAX_ITEM_PRICE)
+		
 		R.price = new_price
 
 	else if (href_list["delete_entry"] && src.vend_ready && !currently_vending && edit_mode)
