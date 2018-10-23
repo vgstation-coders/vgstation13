@@ -7,6 +7,7 @@
 	desc = "It's a plain jumpsuit. It seems to have a small dial on the wrist."
 	origin_tech = Tc_SYNDICATE + "=3"
 	siemens_coefficient = 0.8
+	permeability_coefficient = 0.90
 	species_fit = list(GREY_SHAPED)
 	var/list/clothing_choices = list()
 
@@ -59,9 +60,6 @@
 	if(!A || usr.incapacitated() || !Adjacent(usr)))
 		return
 	to_chat(usr, "<span class='notice'>You turn the dial and \the [src] changes its color.</span>")
-
-	desc = null
-	permeability_coefficient = 0.90
 
 	desc = A.desc
 	name = A.name
