@@ -74,16 +74,16 @@
 	name = "old cabinet"
 	desc = "This cabinet has been gathering dust, and hasn't been disturbed in some years."
 
-/obj/structure/closet/cabinet/medivault/New()
-	..()
-	sleep(2)
-	new /obj/item/weapon/storage/box/masks(src)
-	new /obj/item/weapon/storage/backpack/satchel_med(src)
-	new /obj/item/clothing/under/rank/medical(src)
-	new /obj/item/clothing/head/bio_hood/virology(src)
-	new /obj/item/clothing/suit/bio_suit/virology(src)
-	new /obj/item/clothing/shoes/white(src)
-	new /obj/item/weapon/paper/pamphlet/medivault(src)
+/obj/structure/closet/cabinet/medivault/atoms_to_spawn()
+	return list(
+		/obj/item/weapon/storage/box/masks,
+		/obj/item/weapon/storage/backpack/satchel_med,
+		/obj/item/clothing/under/rank/medical,
+		/obj/item/clothing/head/bio_hood/virology,
+		/obj/item/clothing/suit/bio_suit/virology,
+		/obj/item/clothing/shoes/white,
+		/obj/item/weapon/paper/pamphlet/medivault,
+	)
 
 /obj/structure/closet/acloset
 	name = "strange closet"
@@ -108,19 +108,11 @@
 	icon_closed = "syndicate1"
 	icon_opened = "syndicate1open"
 
-/obj/structure/closet/gimmick/russian/New()
-	..()
-	sleep(2)
-	new /obj/item/clothing/head/ushanka(src)
-	new /obj/item/clothing/head/ushanka(src)
-	new /obj/item/clothing/head/ushanka(src)
-	new /obj/item/clothing/head/ushanka(src)
-	new /obj/item/clothing/head/ushanka(src)
-	new /obj/item/clothing/under/soviet(src)
-	new /obj/item/clothing/under/soviet(src)
-	new /obj/item/clothing/under/soviet(src)
-	new /obj/item/clothing/under/soviet(src)
-	new /obj/item/clothing/under/soviet(src)
+/obj/structure/closet/gimmick/russian/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/head/ushanka = 5,
+		/obj/item/clothing/under/soviet = 5,
+	)
 
 
 /obj/structure/closet/gimmick/tacticool
@@ -130,25 +122,18 @@
 	icon_closed = "syndicate1"
 	icon_opened = "syndicate1open"
 
-/obj/structure/closet/gimmick/tacticool/New()
-	..()
-	sleep(2)
-	new /obj/item/clothing/glasses/eyepatch(src)
-	new /obj/item/clothing/glasses/sunglasses(src)
-	new /obj/item/clothing/gloves/swat(src)
-	new /obj/item/clothing/gloves/swat(src)
-	new /obj/item/clothing/head/helmet/tactical/swat(src)
-	new /obj/item/clothing/head/helmet/tactical/swat(src)
-	new /obj/item/device/flashlight/tactical(src)
-	new /obj/item/device/flashlight/tactical(src)
-	new /obj/item/clothing/mask/gas(src)
-	new /obj/item/clothing/mask/gas(src)
-	new /obj/item/clothing/shoes/swat(src)
-	new /obj/item/clothing/shoes/swat(src)
-	new /obj/item/clothing/suit/armor/swat(src)
-	new /obj/item/clothing/suit/armor/swat(src)
-	new /obj/item/clothing/under/syndicate/tacticool(src)
-	new /obj/item/clothing/under/syndicate/tacticool(src)
+/obj/structure/closet/gimmick/tacticool/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/glasses/eyepatch,
+		/obj/item/clothing/glasses/sunglasses,
+		/obj/item/clothing/gloves/swat = 2,
+		/obj/item/clothing/head/helmet/tactical/swat = 2,
+		/obj/item/device/flashlight/tactical = 2,
+		/obj/item/clothing/mask/gas = 2,
+		/obj/item/clothing/shoes/swat = 2,
+		/obj/item/clothing/suit/armor/swat = 2,
+		/obj/item/clothing/under/syndicate/tacticool = 2,
+	)
 
 
 /obj/structure/closet/thunderdome
@@ -159,34 +144,18 @@
 	icon_opened = "syndicateopen"
 	anchored = 1
 
-/obj/structure/closet/thunderdome/New()
-	..()
-	sleep(2)
-
 /obj/structure/closet/thunderdome/tdred
 	name = "red-team Thunderdome closet"
 
-/obj/structure/closet/thunderdome/tdred/New()
-	..()
-	sleep(2)
-	new /obj/item/clothing/suit/armor/tdome/red(src)
-	new /obj/item/clothing/suit/armor/tdome/red(src)
-	new /obj/item/clothing/suit/armor/tdome/red(src)
-	new /obj/item/weapon/melee/energy/sword(src)
-	new /obj/item/weapon/melee/energy/sword(src)
-	new /obj/item/weapon/melee/energy/sword(src)
-	new /obj/item/weapon/gun/energy/laser(src)
-	new /obj/item/weapon/gun/energy/laser(src)
-	new /obj/item/weapon/gun/energy/laser(src)
-	new /obj/item/weapon/melee/baton/loaded(src)
-	new /obj/item/weapon/melee/baton/loaded(src)
-	new /obj/item/weapon/melee/baton/loaded(src)
-	new /obj/item/weapon/storage/box/flashbangs(src)
-	new /obj/item/weapon/storage/box/flashbangs(src)
-	new /obj/item/weapon/storage/box/flashbangs(src)
-	new /obj/item/clothing/head/helmet/thunderdome(src)
-	new /obj/item/clothing/head/helmet/thunderdome(src)
-	new /obj/item/clothing/head/helmet/thunderdome(src)
+/obj/structure/closet/thunderdome/tdred/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/suit/armor/tdome/red = 3,
+		/obj/item/weapon/melee/energy/sword = 3,
+		/obj/item/weapon/gun/energy/laser = 3,
+		/obj/item/weapon/melee/baton/loaded = 3,
+		/obj/item/weapon/storage/box/flashbangs = 3,
+		/obj/item/clothing/head/helmet/thunderdome = 3,
+	)
 
 /obj/structure/closet/thunderdome/tdgreen
 	name = "green-team Thunderdome closet"
@@ -194,24 +163,13 @@
 	icon_closed = "syndicate1"
 	icon_opened = "syndicate1open"
 
-/obj/structure/closet/thunderdome/tdgreen/New()
-	..()
-	sleep(2)
-	new /obj/item/clothing/suit/armor/tdome/green(src)
-	new /obj/item/clothing/suit/armor/tdome/green(src)
-	new /obj/item/clothing/suit/armor/tdome/green(src)
-	new /obj/item/weapon/melee/energy/sword(src)
-	new /obj/item/weapon/melee/energy/sword(src)
-	new /obj/item/weapon/melee/energy/sword(src)
-	new /obj/item/weapon/gun/energy/laser(src)
-	new /obj/item/weapon/gun/energy/laser(src)
-	new /obj/item/weapon/gun/energy/laser(src)
-	new /obj/item/weapon/melee/baton/loaded(src)
-	new /obj/item/weapon/melee/baton/loaded(src)
-	new /obj/item/weapon/melee/baton/loaded(src)
-	new /obj/item/weapon/storage/box/flashbangs(src)
-	new /obj/item/weapon/storage/box/flashbangs(src)
-	new /obj/item/weapon/storage/box/flashbangs(src)
-	new /obj/item/clothing/head/helmet/thunderdome(src)
-	new /obj/item/clothing/head/helmet/thunderdome(src)
-	new /obj/item/clothing/head/helmet/thunderdome(src)
+/obj/structure/closet/thunderdome/tdgreen/atoms_to_spawn()
+	return list(
+		/obj/item/clothing/suit/armor/tdome/green = 3,
+		/obj/item/weapon/melee/energy/sword = 3,
+		/obj/item/weapon/gun/energy/laser = 3,
+		/obj/item/weapon/melee/baton/loaded = 3,
+		/obj/item/weapon/storage/box/flashbangs = 3,
+		/obj/item/clothing/head/helmet/thunderdome = 3,
+	)
+

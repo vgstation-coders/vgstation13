@@ -8,34 +8,33 @@
 	icon_broken = "securecebroken"
 	icon_off = "secureceoff"
 
-/obj/structure/closet/secure_closet/engineering_chief/New()
-	..()
-	sleep(2)
-	if(prob(50))
-		new /obj/item/weapon/storage/backpack/industrial(src)
-	else
-		new /obj/item/weapon/storage/backpack/satchel_eng(src)
-	new /obj/item/blueprints(src)
-	new /obj/item/clothing/under/rank/chief_engineer(src)
-	new /obj/item/clothing/head/hardhat/white(src)
-	new /obj/item/clothing/head/welding(src)
-	new /obj/item/clothing/gloves/yellow(src)
-	new /obj/item/clothing/shoes/workboots(src)
-	new /obj/item/weapon/cartridge/ce(src)
-	new /obj/item/device/radio/headset/heads/ce(src)
-	new /obj/item/weapon/storage/box/inflatables(src)
-	new /obj/item/weapon/inflatable_dispenser(src)
-	new /obj/item/weapon/storage/toolbox/mechanical(src)
-	new /obj/item/device/t_scanner/advanced(src)
-	new /obj/item/device/device_analyser/advanced(src)
-	new /obj/item/clothing/suit/storage/hazardvest(src)
-	new /obj/item/clothing/mask/gas(src)
-	new /obj/item/device/multitool(src)
-	new /obj/item/device/flash(src)
-	new /obj/item/device/gps/engineering(src)
-	new /obj/item/weapon/storage/belt/utility/chief(src)
-	new /obj/item/clothing/glasses/scanner/material(src)
-	new /obj/item/weapon/card/debit/preferred/department(src, "Engineering")
+/obj/structure/closet/secure_closet/engineering_chief/atoms_to_spawn()
+	return list(
+		pick(
+			/obj/item/weapon/storage/backpack/industrial,
+			/obj/item/weapon/storage/backpack/satchel_eng),
+		/obj/item/blueprints,
+		/obj/item/clothing/under/rank/chief_engineer,
+		/obj/item/clothing/head/hardhat/white,
+		/obj/item/clothing/head/welding,
+		/obj/item/clothing/gloves/yellow,
+		/obj/item/clothing/shoes/workboots,
+		/obj/item/weapon/cartridge/ce,
+		/obj/item/device/radio/headset/heads/ce,
+		/obj/item/weapon/storage/box/inflatables,
+		/obj/item/weapon/inflatable_dispenser,
+		/obj/item/weapon/storage/toolbox/mechanical,
+		/obj/item/device/t_scanner/advanced,
+		/obj/item/device/device_analyser/advanced,
+		/obj/item/clothing/suit/storage/hazardvest,
+		/obj/item/clothing/mask/gas,
+		/obj/item/device/multitool,
+		/obj/item/device/flash,
+		/obj/item/device/gps/engineering,
+		/obj/item/weapon/storage/belt/utility/chief,
+		/obj/item/clothing/glasses/scanner/material,
+		/obj/item/weapon/card/debit/preferred/department/engineering,
+	)
 
 /obj/structure/closet/secure_closet/engineering_electrical
 	name = "electrical supplies locker"
@@ -47,21 +46,14 @@
 	icon_broken = "secureengelecbroken"
 	icon_off = "secureengelecoff"
 
-/obj/structure/closet/secure_closet/engineering_electrical/New()
-	..()
-	sleep(2)
-	new /obj/item/weapon/storage/toolbox/electrical(src)
-	new /obj/item/weapon/storage/toolbox/electrical(src)
-	new /obj/item/weapon/storage/toolbox/electrical(src)
-	new /obj/item/weapon/rcl(src)
-	new /obj/item/weapon/circuitboard/power_control(src)
-	new /obj/item/weapon/circuitboard/power_control(src)
-	new /obj/item/weapon/circuitboard/power_control(src)
-	new /obj/item/clothing/gloves/yellow(src)
-	new /obj/item/clothing/gloves/yellow(src)
-	new /obj/item/device/multitool(src)
-	new /obj/item/device/multitool(src)
-	new /obj/item/device/multitool(src)
+/obj/structure/closet/secure_closet/engineering_electrical/atoms_to_spawn()
+	return list(
+		/obj/item/weapon/storage/toolbox/electrical = 3,
+		/obj/item/weapon/rcl,
+		/obj/item/weapon/circuitboard/power_control = 3,
+		/obj/item/clothing/gloves/yellow = 2,
+		/obj/item/device/multitool = 3,
+	)
 
 /obj/structure/closet/secure_closet/engineering_welding
 	name = "welding supplies locker"
@@ -74,14 +66,10 @@
 	icon_off = "secureengweldoff"
 
 /obj/structure/closet/secure_closet/engineering_welding/New()
-	..()
-	sleep(2)
-	new /obj/item/clothing/head/welding(src)
-	new /obj/item/clothing/head/welding(src)
-	new /obj/item/clothing/head/welding(src)
-	new /obj/item/weapon/weldingtool/largetank(src)
-	new /obj/item/weapon/weldingtool/largetank(src)
-	new /obj/item/weapon/weldingtool/largetank(src)
+	return list(
+		/obj/item/clothing/head/welding = 3,
+		/obj/item/weapon/weldingtool/largetank = 3,
+	)
 
 /obj/structure/closet/secure_closet/engineering_personal
 	name = "\improper Engineer's locker"
@@ -94,28 +82,25 @@
 	icon_off = "secureengoff"
 
 /obj/structure/closet/secure_closet/engineering_personal/New()
-	..()
-	sleep(2)
-	if(prob(50))
-		new /obj/item/weapon/storage/backpack/industrial(src)
-	else
-		new /obj/item/weapon/storage/backpack/satchel_eng(src)
-	new /obj/item/clothing/under/rank/engineer(src)
-	new /obj/item/clothing/shoes/workboots(src)
-	new /obj/item/weapon/storage/box/inflatables(src)
-	new /obj/item/weapon/storage/toolbox/mechanical(src)
-//		new /obj/item/weapon/cartridge/engineering(src)
-	new /obj/item/device/radio/headset/headset_eng(src)
-	new /obj/item/clothing/suit/storage/hazardvest(src)
-	new /obj/item/clothing/mask/gas(src)
-	if(prob(50))
-		new /obj/item/clothing/glasses/scanner/meson/prescription(src)
-	else
-		new /obj/item/clothing/glasses/scanner/meson(src)
-	new /obj/item/taperoll/engineering(src)
-	new /obj/item/taperoll/engineering(src)
-	new /obj/item/device/gps/engineering(src)
-	new /obj/item/clothing/glasses/scanner/material(src)
+	return list(
+		pick(
+			/obj/item/weapon/storage/backpack/industrial,
+			/obj/item/weapon/storage/backpack/satchel_eng),
+		/obj/item/clothing/under/rank/engineer,
+		/obj/item/clothing/shoes/workboots,
+		/obj/item/weapon/storage/box/inflatables,
+		/obj/item/weapon/storage/toolbox/mechanical,
+		/obj/item/device/radio/headset/headset_eng,
+		/obj/item/clothing/suit/storage/hazardvest,
+		/obj/item/clothing/mask/gas,
+		pick(
+			/obj/item/clothing/glasses/scanner/meson/prescription,
+			/obj/item/clothing/glasses/scanner/meson),
+		/obj/item/taperoll/engineering,
+		/obj/item/taperoll/engineering,
+		/obj/item/device/gps/engineering,
+		/obj/item/clothing/glasses/scanner/material,
+	)
 
 /obj/structure/closet/secure_closet/engineering_atmos
 	name = "\improper Atmospheric Technician's locker"
@@ -127,31 +112,29 @@
 	icon_broken = "secureatmosbroken"
 	icon_off = "secureatmosoff"
 
-/obj/structure/closet/secure_closet/engineering_atmos/New()
-	..()
-	sleep(2)
-	if(prob(50))
-		new /obj/item/weapon/storage/backpack(src)
-	else
-		new /obj/item/weapon/storage/backpack/satchel_norm(src)
-	new /obj/item/clothing/under/rank/atmospheric_technician(src)
-	new /obj/item/clothing/shoes/workboots(src)
-	new /obj/item/weapon/storage/box/inflatables(src)
-	new /obj/item/weapon/storage/toolbox/mechanical(src)
-	new /obj/item/weapon/extinguisher/foam(src)
-	// new /obj/item/weapon/cartridge/engineering(src)
-	new /obj/item/device/radio/headset/headset_eng(src)
-	new /obj/item/clothing/suit/storage/hazardvest(src)
-	new /obj/item/clothing/mask/gas(src)
-	new /obj/item/taperoll/atmos(src)
-	new /obj/item/pipe_planner(src)
-	new /obj/item/weapon/wrench/socket(src)
-	new /obj/item/weapon/gun/projectile/flare(src) //yay for emergency lighting
-	new /obj/item/ammo_storage/box/flare(src)
-	new /obj/item/device/rcd/rpd(src)
-	new /obj/item/device/analyzer(src)
-	new /obj/item/clothing/glasses/scanner/material(src)
-	new /obj/item/device/gps/engineering(src)
+/obj/structure/closet/secure_closet/engineering_atmos/atoms_to_spawn()
+	return list(
+		pick(
+			/obj/item/weapon/storage/backpack,
+			/obj/item/weapon/storage/backpack/satchel_norm),
+		/obj/item/clothing/under/rank/atmospheric_technician,
+		/obj/item/clothing/shoes/workboots,
+		/obj/item/weapon/storage/box/inflatables,
+		/obj/item/weapon/storage/toolbox/mechanical,
+		/obj/item/weapon/extinguisher/foam,
+		/obj/item/device/radio/headset/headset_eng,
+		/obj/item/clothing/suit/storage/hazardvest,
+		/obj/item/clothing/mask/gas,
+		/obj/item/taperoll/atmos,
+		/obj/item/pipe_planner,
+		/obj/item/weapon/wrench/socket,
+		/obj/item/weapon/gun/projectile/flare,
+		/obj/item/ammo_storage/box/flare,
+		/obj/item/device/rcd/rpd,
+		/obj/item/device/analyzer,
+		/obj/item/clothing/glasses/scanner/material,
+		/obj/item/device/gps/engineering,
+	)
 
 /obj/structure/closet/secure_closet/engineering_mechanic
 	name = "\improper Mechanic's locker"
@@ -164,28 +147,23 @@
 	icon_off = "securemechnioff"
 
 /obj/structure/closet/secure_closet/engineering_mechanic/New()
-	..()
-	sleep(2)
-	if(prob(50))
-		new /obj/item/weapon/storage/backpack/industrial(src)
-	else
-		new /obj/item/weapon/storage/backpack/satchel_eng(src)
-	new /obj/item/clothing/under/rank/mechanic(src)
-	new /obj/item/clothing/shoes/workboots(src)
-	new /obj/item/weapon/storage/toolbox/mechanical(src)
-	//new /obj/item/device/component_exchanger(src)
-	new /obj/item/device/radio/headset/headset_engsci(src)
-	new /obj/item/clothing/suit/storage/hazardvest(src)
-	new /obj/item/device/device_analyser(src)
-	new /obj/item/weapon/soap/nanotrasen(src)
-	new /obj/item/clothing/gloves/black(src)
-	new /obj/item/device/assembly_frame(src)
-	new /obj/item/device/assembly_frame(src)
-
-	if(prob(50))
-		new /obj/item/clothing/head/welding(src)
-	else
-		new /obj/item/clothing/glasses/welding(src)
+	return list(
+		pick(
+			/obj/item/weapon/storage/backpack/industrial,
+			/obj/item/weapon/storage/backpack/satchel_eng),
+		/obj/item/clothing/under/rank/mechanic,
+		/obj/item/clothing/shoes/workboots,
+		/obj/item/weapon/storage/toolbox/mechanical,
+		/obj/item/device/radio/headset/headset_engsci,
+		/obj/item/clothing/suit/storage/hazardvest,
+		/obj/item/device/device_analyser,
+		/obj/item/weapon/soap/nanotrasen,
+		/obj/item/clothing/gloves/black,
+		/obj/item/device/assembly_frame = 2,
+		pick(
+			/obj/item/clothing/head/welding,
+			/obj/item/clothing/glasses/welding),
+	)
 
 /obj/structure/closet/secure_closet/engineering_general
 	name = "engineering locker"
@@ -203,9 +181,7 @@
 	var/payload = /obj/machinery/power/supermatter/shard
 	var/mapping_idtag
 
-/obj/structure/closet/crate/secure/large/reinforced/shard/New()
-	..()
-	sleep(2)
+/obj/structure/closet/crate/secure/large/reinforced/shard/spawn_contents()
 	if(payload)
 		var/obj/machinery/power/supermatter/S = new payload(src)
 		if(mapping_idtag && istype(S))

@@ -76,7 +76,8 @@
 	list(/obj/item/clothing/shoes/clockwork_boots, /obj/item/clothing/head/clockwork_hood, /obj/item/clothing/suit/clockwork_robes),
 	/obj/item/clothing/mask/necklace/xeno_claw
 	)
-/obj/structure/closet/secure_closet/wonderful/New()
+
+/obj/structure/closet/secure_closet/wonderful/spawn_contents()
 	..()
 	for(var/amount = 1 to 10)
 		var/wonder_clothing = pick_n_take(wonder_whitelist)

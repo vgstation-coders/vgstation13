@@ -37,6 +37,21 @@
 		desc += " It has a slot for locking circuitry."
 	else if (has_lockless_type)
 		desc += " The locking circuitry could be unmounted if unlocked."
+	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
+		initialize()
+
+// Returns null or a list of items to spawn
+/obj/structure/closet/proc/atoms_to_spawn()
+	return null
+
+// Creates the items this closet is supposed to contain and places them inside
+// Override this if you need custom logic
+/obj/structure/closet/proc/spawn_contents()
+	var/list/to_spawn = atoms_to_spawn()
+	for(var/path in to_spawn)
+		var/amount = to_spawn[path] || 1
+		for(var/i in 1 to amount)
+			new path(src)
 
 /obj/structure/closet/basic
 	has_lock_type = /obj/structure/closet/secure_closet/basic
@@ -46,6 +61,7 @@
 
 /obj/structure/closet/initialize()
 	..()
+	spawn_contents()
 	if(!opened)		// if closed, any item at the crate's loc is put in the contents
 		take_contents()
 	else

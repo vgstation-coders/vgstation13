@@ -215,6 +215,10 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	if(hidden_uplink)
 		hidden_uplink.trigger(user)
 
+/obj/item/device/radio/uplink/nukeops/New()
+	..()
+	hidden_uplink.uses = 80
+
 /obj/item/device/multitool/uplink/New()
 	hidden_uplink = new(src)
 

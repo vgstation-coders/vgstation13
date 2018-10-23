@@ -129,4 +129,25 @@
 	to_cut = 1.5
 	examine_held = "<span class='notice'>You feel <b>incredibly</b> important just by holding it</span>"
 
+/obj/item/weapon/card/debit/preferred/department/cargo/New(var/new_loc, var/desired_department = "Cargo", var/desired_authorized_name)
+	..()
+
+/obj/item/weapon/card/debit/preferred/department/engineering/New(var/new_loc, var/desired_department = "Engineering", var/desired_authorized_name)
+	..()
+
+/obj/item/weapon/card/debit/preferred/department/medical/New(var/new_loc, var/desired_department = "Medical", var/desired_authorized_name)
+	..()
+
+/obj/item/weapon/card/debit/preferred/department/science/New(var/new_loc, var/desired_department = "Science", var/desired_authorized_name)
+	..()
+
+/obj/item/weapon/card/debit/preferred/department/elite/command/New(var/new_loc, var/desired_department = "Command", var/desired_authorized_name)
+	..()
+
+/obj/item/weapon/card/debit/preferred/department/civilian/New(var/new_loc, var/desired_department = "Civilian", var/desired_authorized_name)
+	..()
+
+/obj/item/weapon/card/debit/preferred/department/security/New(var/new_loc, var/desired_department = "Security", var/desired_authorized_name)
+	..()
+
 #undef DEBIT_MAX_AUTHORIZED_NAME_LENGTH
