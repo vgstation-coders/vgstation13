@@ -277,7 +277,6 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		else if(href_list["eject"])
 			if(beaker)
 				detach()
-			src.updateUsrDialog()
 			return 1
 
 		else if(href_list["createpill"] || href_list["createpill_multiple"])
@@ -379,6 +378,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		beaker = null
 		reagents.clear_reagents()
 		update_icon()
+		updateUsrDialog()
 
 /obj/machinery/chem_master/AltClick()
 	if(!usr.incapacitated() && Adjacent(usr) && beaker && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))

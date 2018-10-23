@@ -27,7 +27,7 @@
 	..()
 
 /obj/item/weapon/plastique/suicide_act(var/mob/user)
-	. = (BRUTELOSS)
+	. = (SUICIDE_ACT_BRUTELOSS)
 	to_chat(viewers(user), "<span class='danger'>[user] activates the C4 and holds it above \his head! It looks like \he's going out with a bang!</span>")
 	var/message_say = "FOR NO RAISIN!"
 	if(user.mind)

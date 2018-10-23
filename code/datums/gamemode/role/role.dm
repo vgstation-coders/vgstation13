@@ -355,7 +355,7 @@
 			text += "<a href='?src=\ref[M];role_edit=\ref[src];add_to_faction=1'>(add)</a>"
 	text += "<br>"
 	if (objectives.objectives.len)
-		text += "<b>personnal objectives</b><ul>"
+		text += "<b>personal objectives</b><ul>"
 	text += objectives.GetObjectiveString(0,admin_edit,M, src)
 	if (objectives.objectives.len)
 		text += "</ul>"

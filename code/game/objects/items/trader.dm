@@ -148,3 +148,41 @@
 	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/collector,100)
 	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/tiler,100)
 	add_salvagable_equipment(new /obj/item/mecha_parts/mecha_equipment/tool/switchtool,100)
+
+/obj/item/crackerbox
+	name = "crackerbox"
+	desc = "The greatest invention known to birdkind. Converts unwanted, unneeded cash, into useful, beautiful crackers!"
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "fingerbox"
+	var/status //if true, is in use.
+
+/obj/item/crackerbox/examine(mob/user)
+	..()
+	to_chat(user, "<span class = 'notice'>Currently the conversion rate reads at [get_cash2cracker_rate()] per cracker.</span>")
+
+/obj/item/crackerbox/proc/get_cash2cracker_rate()
+	return round(10, nanocoins_rates)
+
+/obj/item/crackerbox/attackby(obj/item/I, mob/user)
+	if(!status && istype(I, /obj/item/weapon/spacecash) && user.drop_item(I, src))
+		status = TRUE
+		var/obj/item/weapon/spacecash/S = I
+		var/crackers_to_dispense = round((S.worth*S.amount)/get_cash2cracker_rate())
+		playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
+		if(!crackers_to_dispense)
+			say("Not enough! Never enough!")
+		spawn(3 SECONDS)
+			say("That is enough for [crackers_to_dispense] crackers!")
+			if(crackers_to_dispense > 100)
+				visible_message("<span class = 'warning'>\The [src]'s matter fabrication unit overloads!</span>")
+				explosion(loc, 0, prob(15), 2, 0)
+				qdel(src)
+				return
+			for(var/x = 1 to crackers_to_dispense)
+				var/obj/II = new /obj/item/weapon/reagent_containers/food/snacks/cracker(get_turf(src))
+				II.throw_at(get_turf(pick(orange(7,src))), 1*crackers_to_dispense, 1*crackers_to_dispense)
+				sleep(1)
+			status = FALSE
+		qdel(S)
+		return
+	..()

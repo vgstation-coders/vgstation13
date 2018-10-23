@@ -19,6 +19,7 @@
 	name = "Staff of Change"
 	desc = "An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself."
 	abbreviation = "ST"
+	price = 2 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/change)
 
 /datum/spellbook_artifact/mental_focus
@@ -77,6 +78,19 @@
 	abbreviation = "SB"
 	price = 5 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/weapon/storage/box/spellbook/random)
+
+/datum/spellbook_artifact/potion_bundle
+	name = "Potion bundle"
+	desc = "As a dead wizard once said, life is a bag of potions. You never know what you're gonna get."
+	abbreviation = "PB"
+	price = 5 * Sp_BASE_PRICE
+	spawned_items = list(/obj/item/weapon/storage/bag/potion/bundle)
+
+/datum/spellbook_artifact/lesser_potion_bundle
+	name = "Lesser potion bundle"
+	desc = "Contains 10 unknown potions. For wizards that are unwilling to go all-in."
+	abbreviation = "LPB"
+	spawned_items = list(/obj/item/weapon/storage/bag/potion/lesser_bundle)
 
 /datum/spellbook_artifact/scrying
 	name = "Scrying Orb"
@@ -226,5 +240,6 @@
 /datum/spellbook_artifact/phylactery
 	name = "phylactery"
 	desc = "Creates a soulbinding artifact that, upon the death of the user, resurrects them as best it can. You must bind yourself to this through making an incision on your palm, holding the phylactery in that hand, and squeezing it."
-	price = 2 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/phylactery)
+
+

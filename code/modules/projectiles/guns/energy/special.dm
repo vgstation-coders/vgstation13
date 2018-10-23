@@ -644,7 +644,7 @@ obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/l
 
 /obj/item/weapon/gun/energy/bison
 	name = "\improper Righteous Bison"
-	desc = "A replica of Lord Cockswain's very own personnal ray gun."
+	desc = "A replica of Lord Cockswain's very own personal ray gun."
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "bison"
 	item_state = null

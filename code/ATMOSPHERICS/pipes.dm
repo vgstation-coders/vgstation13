@@ -937,7 +937,7 @@
 
 	var/list/layer_nodes = list()
 	var/obj/machinery/atmospherics/other_node = null
-	var/static/image/centre_image = image('icons/obj/atmospherics/pipe_manifold.dmi', "layer_center")
+	var/static/image/centre_image = image(icon = 'icons/obj/atmospherics/pipe_manifold.dmi', icon_state = "layer_center")
 
 /obj/machinery/atmospherics/pipe/layer_manifold/New()
 	for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)

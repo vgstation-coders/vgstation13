@@ -38,7 +38,7 @@
 //                                          //
 //        RAGIN' MAGES (LATEJOIN)           ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
-//////////////////////////////////////////////
+//////////////////////////////////////////////1.01 - Lowered weight from 3 to 2
 
 /datum/dynamic_ruleset/latejoin/raginmages
 	name = "Ragin' Mages"
@@ -46,8 +46,8 @@
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
 	required_candidates = 1
-	weight = 3
-	cost = 10
+	weight = 1
+	cost = 20
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 
 /datum/dynamic_ruleset/latejoin/raginmages/acceptable(var/population=0,var/threat=0)
@@ -56,7 +56,7 @@
 		message_admins("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
 		return 0
 	if (locate(/datum/dynamic_ruleset/roundstart/wizard) in mode.executed_rules)
-		weight = initial(weight) * 5
+		weight = 10
 
 	return ..()
 

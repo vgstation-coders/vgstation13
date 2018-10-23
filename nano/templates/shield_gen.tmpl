@@ -35,11 +35,13 @@ Used In File(s): /code/WorkInProgress/Cael_Aislinn/ShieldGen/shield_gen.dm
         <div class="itemContents">
             {{:helper.displayBar(data.field_radius, data.min_field_radius, data.max_field_radius)}}
             <div style="clear: both; padding-top: 4px;">
-                {{:helper.link('-', null, {'adjust_field_radius' : -5}, (data.field_radius > data.min_field_radius) ? null : 'disabled')}}
+                {{:helper.link('min', null, {'adjust_field_radius' : -data.max_field_radius}, (data.field_radius > data.min_field_radius) ? null : 'disabled')}}
+				{{:helper.link('--', null, {'adjust_field_radius' : -5}, (data.field_radius > data.min_field_radius) ? null : 'disabled')}}
                 {{:helper.link('-', null, {'adjust_field_radius' : -1}, (data.field_radius > data.min_field_radius) ? null : 'disabled')}}
                 <div style="float: left; text-align: center;">&nbsp;{{:data.field_radius}} meters&nbsp;</div>
                 {{:helper.link('+', null, {'adjust_field_radius' : 1}, (data.field_radius < data.max_field_radius) ? null : 'disabled')}}
-                {{:helper.link('+', null, {'adjust_field_radius' : 5}, (data.field_radius < data.max_field_radius) ? null : 'disabled')}}
+                {{:helper.link('++', null, {'adjust_field_radius' : 5}, (data.field_radius < data.max_field_radius) ? null : 'disabled')}}
+				{{:helper.link('max', null, {'adjust_field_radius' : data.max_field_radius}, (data.field_radius < data.max_field_radius) ? null : 'disabled')}}
             </div>
         </div>
     </div>
@@ -57,11 +59,13 @@ Used In File(s): /code/WorkInProgress/Cael_Aislinn/ShieldGen/shield_gen.dm
         <div class="itemContents">
                 {{:helper.displayBar(data.strengthen_rate, data.min_strengthen_rate, data.max_strengthen_rate)}}
                 <div style="clear: both; padding-top: 4px;">
-                    {{:helper.link('-', null, {'adjust_strengthen_rate' : -0.1}, (data.strengthen_rate > data.min_strengthen_rate) ? null : 'disabled')}}
+                    {{:helper.link('min', null, {'adjust_strengthen_rate' : -data.max_strengthen_rate}, (data.strengthen_rate > data.min_strengthen_rate) ? null : 'disabled')}}
+					{{:helper.link('--', null, {'adjust_strengthen_rate' : -0.1}, (data.strengthen_rate > data.min_strengthen_rate) ? null : 'disabled')}}
                     {{:helper.link('-', null, {'adjust_strengthen_rate' : -0.01}, (data.strengthen_rate > data.min_strengthen_rate) ? null : 'disabled')}}
                     <div style="float: left; text-align: center;">&nbsp;{{:helper.precisionRound(data.strengthen_rate, 2)}} Renwicks/sec&nbsp;</div>
                     {{:helper.link('+', null, {'adjust_strengthen_rate' : 0.01}, (data.strengthen_rate < data.max_strengthen_rate) ? null : 'disabled')}}
-                    {{:helper.link('+', null, {'adjust_strengthen_rate' : 0.1}, (data.strengthen_rate < data.max_strengthen_rate) ? null : 'disabled')}}
+                    {{:helper.link('++', null, {'adjust_strengthen_rate' : 0.1}, (data.strengthen_rate < data.max_strengthen_rate) ? null : 'disabled')}}
+					{{:helper.link('max', null, {'adjust_strengthen_rate' : data.max_strengthen_rate}, (data.strengthen_rate < data.max_strengthen_rate) ? null : 'disabled')}}
                 </div>
             </div>
     </div>
@@ -78,13 +82,15 @@ Used In File(s): /code/WorkInProgress/Cael_Aislinn/ShieldGen/shield_gen.dm
         <div class="itemContents">
                 {{:helper.displayBar(data.field_strength_cap, data.min_field_strength_cap, data.max_field_strength_cap)}}
                 <div style="clear: both; padding-top: 4px;">
-                    {{:helper.link('-', null, {'adjust_field_strength_cap' : -100}, (data.field_strength_cap > data.min_field_strength_cap) ? null : 'disabled')}}
-                    {{:helper.link('-', null, {'adjust_field_strength_cap' : -10}, (data.field_strength_cap > data.min_field_strength_cap) ? null : 'disabled')}}
+                    {{:helper.link('min', null, {'adjust_field_strength_cap' : -data.max_field_strength_cap}, (data.field_strength_cap > data.min_field_strength_cap) ? null : 'disabled')}}
+					{{:helper.link('---', null, {'adjust_field_strength_cap' : -100}, (data.field_strength_cap > data.min_field_strength_cap) ? null : 'disabled')}}
+                    {{:helper.link('--', null, {'adjust_field_strength_cap' : -10}, (data.field_strength_cap > data.min_field_strength_cap) ? null : 'disabled')}}
                     {{:helper.link('-', null, {'adjust_field_strength_cap' : -1}, (data.field_strength_cap > data.min_field_strength_cap) ? null : 'disabled')}}
                     <div style="float: left; text-align: center;">&nbsp;{{:data.field_strength_cap}} Renwicks&nbsp;</div>
-                    {{:helper.link('+', null, {'adjust_field_strength_cap' : 1}, (data.field_strength_cap < data.max_field_strength_cap) ? null : 'disabled')}}
-                    {{:helper.link('+', null, {'adjust_field_strength_cap' : 10}, (data.field_strength_cap < data.max_field_strength_cap) ? null : 'disabled')}}
-                    {{:helper.link('+', null, {'adjust_field_strength_cap' : 100}, (data.field_strength_cap < data.max_field_strength_cap) ? null : 'disabled')}}
+					{{:helper.link('+', null, {'adjust_field_strength_cap' : 1}, (data.field_strength_cap < data.max_field_strength_cap) ? null : 'disabled')}}
+                    {{:helper.link('++', null, {'adjust_field_strength_cap' : 10}, (data.field_strength_cap < data.max_field_strength_cap) ? null : 'disabled')}}
+                    {{:helper.link('+++', null, {'adjust_field_strength_cap' : 100}, (data.field_strength_cap < data.max_field_strength_cap) ? null : 'disabled')}}
+					{{:helper.link('max', null, {'adjust_field_strength_cap' : data.max_field_strength_cap}, (data.field_strength_cap < data.max_field_strength_cap) ? null : 'disabled')}}
                 </div>
             </div>
     </div>

@@ -14,7 +14,7 @@
 
 /obj/item/weapon/banhammer/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>")
-	return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 /obj/item/weapon/sord
 	name = "\improper SORD"
@@ -31,7 +31,7 @@
 
 /obj/item/weapon/sord/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/sord/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(src, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
@@ -61,7 +61,7 @@
 
 /obj/item/weapon/claymore/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/claymore/cultify()
 	new /obj/item/weapon/melee/legacy_cultblade(loc)
@@ -86,7 +86,7 @@
 
 /obj/item/weapon/katana/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>")
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/katana/IsShield()
 		return 1
@@ -244,7 +244,7 @@ obj/item/weapon/banhammer/admin
 
 /obj/item/weapon/melee/bone_hammer/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing his face with \the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/melee/bone_hammer/afterattack(null, mob/living/user as mob|obj, null, null, null)
 	user.delayNextAttack(50) //five times the regular attack delay

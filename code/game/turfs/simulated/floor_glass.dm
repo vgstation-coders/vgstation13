@@ -9,6 +9,7 @@
 	plane = SPACE_BACKGROUND_PLANE
 	dynamic_lighting = 0
 	luminosity = 1
+	intact = 0 // make pipes appear above space
 
 	var/health=40 // same as rwindow.
 	var/sheetamount = 1 //Number of sheets needed to build this floor (determines how much shit is spawned via Destroy())

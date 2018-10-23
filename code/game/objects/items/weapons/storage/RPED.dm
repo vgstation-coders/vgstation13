@@ -36,6 +36,9 @@
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/pre_loaded/New() //Comes preloaded with loads of parts for testing
 	..()
+	new /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace(src)
+	new /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace(src)
+	new /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace(src)
 	new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)
 	new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)
 	new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)

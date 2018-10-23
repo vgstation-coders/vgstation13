@@ -4837,6 +4837,15 @@
 		else
 			error_viewer.show_to(owner, null, href_list["viewruntime_linear"])
 
+	else if (href_list["role_panel"])
+		var/mob/M = locate(href_list["role_panel"])
+		if (!istype(M))
+			return
+		var/datum/mind/mind = M.mind
+		if (!istype(mind))
+			return
+		mind.role_panel()
+
 	// ----- Religion and stuff
 	if (href_list["religions"])
 		#define MAX_MSG_LENGTH 200
