@@ -135,13 +135,13 @@ Obviously, requires DNA2.
 
 /datum/dna/gene/basic/noir/activate(var/mob/M)
 	..()
-	M.update_colour(time = NOIR_ANIM_TIME)
+	M.update_colour(NOIR_ANIM_TIME)
 	if(M.client) // wow it's almost like non-client mobs can get mutations!
 		M.client.screen += noir_master
 		M << sound('sound/misc/noirdarkcoffee.ogg')
 
 /datum/dna/gene/basic/noir/deactivate(var/mob/M,var/connected,var/flags)
 	if(..())
-		M.update_colour(time = NOIR_ANIM_TIME)
+		M.update_colour(NOIR_ANIM_TIME)
 		if(M.client)
 			M.client.screen -= noir_master
