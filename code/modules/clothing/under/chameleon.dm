@@ -23,7 +23,7 @@
 	return
 
 
-/obj/item/clothing/under/chameleon/attackby(obj/item/clothing/under/U as obj, mob/user as mob)
+/obj/item/clothing/under/chameleon/attackby(obj/item/clothing/under/U, mob/user)
 	..()
 	if(istype(U, /obj/item/clothing/under/chameleon))
 		to_chat(user, "<span class='warning'>Nothing happens.</span>")
@@ -82,7 +82,7 @@
 	heat_conductivity = 1000
 	var/registered_user = null
 
-/obj/item/clothing/under/chameleon/cold/attack_self(mob/user as mob)
+/obj/item/clothing/under/chameleon/cold/attack_self(mob/user)
 	if(!registered_user || registered_user == user)
 		if(!registered_user)
 			to_chat(usr, "You are registered as the user of this suit")
