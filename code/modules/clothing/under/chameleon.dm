@@ -41,11 +41,11 @@
 	desc = "Groovy!"
 	icon_state = "psyche"
 	_color = "psyche"
-	spawn(200)
-		name = "Black Jumpsuit"
-		icon_state = "bl_suit"
-		_color = "black"
-		desc = null
+	spawn(20 SECONDS)
+		name = initial(name)
+		icon_state = initial(icon_state)
+		_color = initial(_color)
+		desc = initial(desc)
 	..()
 
 
