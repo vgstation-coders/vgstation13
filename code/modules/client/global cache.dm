@@ -160,7 +160,6 @@
 		"pda_minimap_box.png"	= 'icons/pda_icons/pda_minimap_box.png',
 		"pda_minimap_bg_notfound.png"	= 'icons/pda_icons/pda_minimap_bg_notfound.png',
 		"pda_minimap_deff.png"					= 'icons/pda_icons/pda_minimap_deff.png',
-		"pda_minimap_taxi.png"					= 'icons/pda_icons/pda_minimap_taxi.png',
 		"pda_minimap_meta.png"				= 'icons/pda_icons/pda_minimap_meta.png',
 		"pda_minimap_loc.gif"					= 'icons/pda_icons/pda_minimap_loc.gif',
 		"pda_minimap_mkr.gif"					= 'icons/pda_icons/pda_minimap_mkr.gif'
