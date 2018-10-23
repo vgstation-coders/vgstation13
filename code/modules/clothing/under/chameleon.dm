@@ -84,7 +84,7 @@
 /obj/item/clothing/under/chameleon/cold/attack_self(mob/user)
 	if(!registered_user || registered_user == user)
 		if(!registered_user)
-			to_chat(usr, "You are registered as the user of this suit.")
+			to_chat(user, "You are registered as the user of this suit.")
 			registered_user = user
 		if(!(/obj/item/clothing/under/chameleon/proc/Change_Color in verbs))
 			verbs += /obj/item/clothing/under/chameleon/proc/Change_Color
