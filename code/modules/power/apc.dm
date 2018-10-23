@@ -472,8 +472,6 @@
 					return
 				update_icon()
 		else
-			if(emagged)
-				to_chat(user, "The interface is broken.")
 			else if(has_electronics == 2 && !(stat & BROKEN))
 				wiresexposed = !wiresexposed
 				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
