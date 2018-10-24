@@ -28,7 +28,6 @@
 
 /obj/effect/rend/New()
 	processing_objects.Add(src)
-	return
 
 /obj/effect/rend/Destroy()
 	processing_objects.Remove(src)
