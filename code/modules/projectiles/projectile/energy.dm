@@ -25,9 +25,13 @@
 		X.apply_effects(stun, weaken, blocked = blocked)
 	X.apply_effects(stutter = stutter, blocked = blocked, agony = agony)
 	X.audible_scream()
-	X.movement_speed_modifier -= 0.75
+	if(X.tazed == 0)
+		X.movement_speed_modifier -= 0.75
+		spawn(30)
+			X.movement_speed_modifier += 0.75
+	X.tazed = 1
 	spawn(30)
-		X.movement_speed_modifier += 0.75
+		X.tazed = 0
 
 
 /*/vg/ EDIT
