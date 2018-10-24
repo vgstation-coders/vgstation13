@@ -5716,4 +5716,3 @@ obj/item/weapon/reagent_containers/food/snacks/butteredtoast
 /obj/item/weapon/reagent_containers/food/snacks/sauerkraut/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 1)
-	reagents.del_reagent(WATER)
