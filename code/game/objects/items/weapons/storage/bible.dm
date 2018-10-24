@@ -110,6 +110,7 @@
 
 	if(ishuman(M)) //Only humans can be vampires or cultists. isChaplain() checks are here to ensure only the proper chaplain has the gameplay-related interactions.
 		var/mob/living/carbon/human/H = M
+		V = isvampire(M)
 		if(V && (VAMP_MATURE in V.powers) && isChaplain(user)) //The user is a "mature" Vampire, fuck up his vampiric powers and hurt his head
 			to_chat(H, "<span class='warning'>[my_rel.deity_name]'s power nullifies your own!</span>")
 			if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
