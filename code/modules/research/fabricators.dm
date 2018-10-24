@@ -331,6 +331,7 @@
 			being_built = L //Building the lockbox now, with the thing in it
 		var/turf/output = get_output()
 		being_built.forceMove(get_turf(output))
+		being_built.anchored = 0
 		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
 		src.being_built = null
 		last_made = part
