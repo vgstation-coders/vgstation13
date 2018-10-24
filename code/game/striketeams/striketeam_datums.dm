@@ -117,11 +117,7 @@ var/list/sent_strike_teams = list()
 				if(M.key == selected_key)
 					applicant = M
 
-			if(!applicant || !applicant.key)
-				i++
-				continue
-
-			applicants -= applicant.key
+			applicants -= selected_key
 
 			if(!isobserver(applicant))
 				//Making sure we don't recruit people who got back into the game since they applied
