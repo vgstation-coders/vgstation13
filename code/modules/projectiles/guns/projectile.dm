@@ -241,7 +241,7 @@
 	if(!chambered && stored_magazine && !stored_magazine.ammo_count() && gun_flags &AUTOMAGDROP) //auto_mag_drop decides whether or not the mag is dropped once it empties
 		var/drop_me = stored_magazine // prevents dropping a fresh/different mag.
 		spawn(automagdrop_delay_time)
-			if(stored_magazine == drop_me)
+			if((stored_magazine == drop_me) && (loc == user))	//prevent dropping the magazine if we're no longer holding the gun
 				RemoveMag(user)
 				if(mag_drop_sound)
 					playsound(user, mag_drop_sound, 40, 1)
