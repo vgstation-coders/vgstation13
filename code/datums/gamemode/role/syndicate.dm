@@ -68,7 +68,7 @@
 	if(href_list["telecrystalsSet"])
 		var/obj/item/device/uplink/hidden/guplink = M.find_syndicate_uplink()
 		var/amount = input("What would you like to set their crystal count to?", "Their current count is [guplink.uses]") as null|num
-		if(isnum(amount) && amount <= 0)
+		if(isnum(amount) && amount >= 0)
 			to_chat(usr, "<span class = 'notice'>You have set [M]'s uplink telecrystals to [amount].</span>")
 			guplink.uses = amount
 
