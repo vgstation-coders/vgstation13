@@ -151,11 +151,17 @@
 /obj/item/device/mmi/posibrain/attack_ghost(var/mob/dead/observer/O)
 	if(searching)
 		recruiter.volunteer(O)
-		to_chat(O, "<span class='notice'>Click again to unvolunteer.</span>")
+		if(O in recruiter.currently_querying)
+			to_chat(O, "<span class='notice'>Click again to unvolunteer.</span>")
+			investigation_log(I_GHOST, "|| had a ghost sign up to become its personality: [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""]")
+		else
+			to_chat(O, "<span class='notice'>Click again to volunteer.</span>")
+			investigation_log(I_GHOST, "|| had a ghost abandon an attempt to become its personality: [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""]")
 	else
 		if(!brainmob.ckey && last_ping_time + ping_cooldown <= world.time)
 			last_ping_time = world.time
 			visible_message(message = "<span class='notice'>\The [src] pings softly.</span>", blind_message = "<span class='danger'>You hear what you think is a microwave finishing.</span>")
+			investigation_log(I_GHOST, "|| was pinged by [key_name(O)][O.locked_to ? ", who was haunting [O.locked_to]" : ""]")
 		else
 			to_chat(O, "[src] is recharging. Try again in a few moments.")
 
