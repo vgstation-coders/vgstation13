@@ -41,7 +41,7 @@ var/global/list/banned_sandbox_types=list(
 	// /obj/item/weapon/cloaking_device,
 	// /obj/item/weapon/dummy,
 	// /obj/item/weapon/melee/energy/sword,
-	/obj/item/weapon/veilrender,
+	// /obj/item/weapon/veilrender,
 	/obj/item/weapon/reagent_containers/glass/bottle/wizarditis,
 	// /obj/item/weapon/spellbook,
 	/obj/machinery/singularity,

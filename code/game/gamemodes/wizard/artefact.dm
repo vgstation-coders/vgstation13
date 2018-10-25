@@ -14,6 +14,7 @@
 	w_class = W_CLASS_MEDIUM
 	var/charged = 1
 	hitsound = 'sound/weapons/bladeslice.ogg'
+	var/rendtype = /obj/effect/rend
 
 /obj/effect/rend
 	name = "tear in the fabric of reality"
@@ -22,60 +23,55 @@
 	icon_state = "rift"
 	density = 1
 	anchored = 1.0
+	var/mobsleft = 20
+	var/mobtype = /mob/living/simple_animal/hostile/creature
 
 /obj/effect/rend/New()
-	spawn(50)
-		new /obj/machinery/singularity/narsie/wizard(get_turf(src))
+	processing_objects.Add(src)
+
+/obj/effect/rend/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+/obj/effect/rend/process()
+	for(var/mob/M in loc)
+		if(M.stat != DEAD)
+		return
+	new mobtype(loc)
+	mobsleft--
+	if(mobsleft <= 0)
+		qdel(src)
+
+/obj/effect/rend/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/weapon/nullrod))
+		visible_message("<span class='danger'>[I] strikes a blow against \the [src], banishing it!</span>")
 		qdel(src)
 		return
-	return
+	..()
 
-/obj/item/weapon/veilrender/attack_self(mob/user as mob)
-	if(charged == 1)
-		new /obj/effect/rend(get_turf(usr))
-		charged = 0
-		visible_message("<span class='danger'>[src] hums with power as [usr] deals a blow to reality itself!</span>")
+/obj/item/weapon/veilrender/attack_self(mob/user)
+	if(charged > 0)
+		create_rend(user)
+		charged--
 	else
 		to_chat(user, "<span class='warning'>The unearthly energies that powered the blade are now dormant.</span>")
 
-
+/obj/item/weapon/veilrender/proc/create_rend(mob/user)
+	new rendtype(get_turf(user))
+	visible_message("<span class='danger'>[src] hums with power as \the [user] deals a blow to reality itself!</span>")
 
 /obj/item/weapon/veilrender/vealrender
 	name = "veal render"
 	desc = "A wicked curved blade of alien origin, recovered from the ruins of a vast farm."
+	rendtype = /obj/effect/rend/cow
 
-/obj/item/weapon/veilrender/vealrender/attack_self(mob/user as mob)
-	if(charged)
-		new /obj/effect/rend/cow(get_turf(usr))
-		charged = 0
-		visible_message("<span class='danger'>[src] hums with power as [usr] deals a blow to hunger itself!</span>")
-	else
-		to_chat(user, "<span class='warning'>The unearthly energies that powered the blade are now dormant.</span>")
+/obj/item/weapon/veilrender/vealrender/create_rend(mob/user)
+	new rendtype(get_turf(user))
+	visible_message("<span class='danger'>[src] hums with power as \the [user] deals a blow to hunger itself!</span>")
 
 /obj/effect/rend/cow
 	desc = "Reverberates with the sound of ten thousand moos."
-	var/cowsleft = 20
-
-/obj/effect/rend/cow/New()
-	processing_objects.Add(src)
-	return
-
-/obj/effect/rend/cow/process()
-	if(locate(/mob) in loc)
-		return
-	new /mob/living/simple_animal/cow(loc)
-	cowsleft--
-	if(cowsleft <= 0)
-		qdel (src)
-
-/obj/effect/rend/cow/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I, /obj/item/weapon/nullrod))
-		visible_message("<span class='danger'>[I] strikes a blow against \the [src], banishing it!</span>")
-		spawn(1)
-			qdel (src)
-		return
-	..()
-
+	mobtype = /mob/living/simple_animal/cow
 
 /////////////////////////////////////////Scrying///////////////////
 
