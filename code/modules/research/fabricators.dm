@@ -470,13 +470,13 @@
 				files.AddDesign2Known(D)
 		files.RefreshResearch()
 		var/i = src.convert_designs()
-		var/tech_output = update_tech()
+		//var/tech_output = update_tech() //apparently this has never worked
 		if(!silent)
 			temp = "Processed [i] equipment designs.<br>"
-			temp += tech_output
+			//temp += tech_output
 			temp += "<a href='?src=\ref[src];clear_temp=1'>Return</a>"
 			src.updateUsrDialog()
-		if(i || tech_output)
+		if(i)
 			new_data=1
 	if(new_data)
 		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Successfully synchronized with R&D server. New data processed.\"")
