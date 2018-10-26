@@ -36,7 +36,7 @@
 /obj/effect/rend/process()
 	for(var/mob/M in loc)
 		if(M.stat != DEAD)
-		return
+			return
 	new mobtype(loc)
 	mobsleft--
 	if(mobsleft <= 0)
