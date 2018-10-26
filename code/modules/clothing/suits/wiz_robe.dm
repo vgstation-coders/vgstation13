@@ -83,6 +83,12 @@
 	icon_state = "lichcrown"
 	item_state = "lichcrown"
 	siemens_coefficient = 0.8
+	
+/obj/item/clothing/head/wizard/hallowiz
+	name = "orange wizard hat"
+	desc = "Pumpkins scream in the dead of night!"
+	icon_state = "hallowiz"
+	item_state = "hallowiz"
 
 /obj/item/clothing/suit/wizrobe
 	name = "wizard robe"
@@ -188,3 +194,8 @@
 	icon_state = "lichrobe"
 	item_state = "lichrobe"
 
+/obj/item/clothing/suit/wizrobe/hallowiz
+	name = "orange wizard robe"
+	desc = "Boys and girls of every age, wouldn't you like to see something strange?"
+	icon_state = "hallowiz"
+	item_state = "hallowiz"
