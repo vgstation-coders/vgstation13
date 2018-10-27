@@ -86,7 +86,7 @@
 	add_fingerprint(user)
 
 	if(normaldoorcontrol)
-		for(var/obj/machinery/door/airlock/D in range(range))
+		for(var/obj/machinery/door/airlock/D in range(range, src))
 			if(D.id_tag == src.id_tag)
 				spawn(0)
 				if(D)
