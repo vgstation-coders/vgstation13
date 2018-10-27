@@ -2,9 +2,9 @@
 // Don't commit the changes you apply to this file unless
 // you're adding/removing entries, or changing the defaults for everyone.
 // * You can teach git to ignore this file with the following:
-// `git update-index --assume-unchanged __DEFINES/__compile_options.dm`
+// `git update-index --skip-worktree __DEFINES/__compile_options.dm`
 // and undo it with the following:
-// `git update-index --no-assume-unchanged __DEFINES/__compile_options.dm`
+// `git update-index --no-skip-worktree __DEFINES/__compile_options.dm`
 
 // Uncomment one of these to choose which map will be compiled,
 // without having to touch the .dme file itself.
