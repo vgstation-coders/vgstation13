@@ -193,7 +193,7 @@
 		to_chat(user, "You read '[price] space bucks' on the tag.")
 	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
 		to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
-	if(flags & SPICY_KEYCHAIN)
+	if(is_spicy())
 		to_chat(user, "<span class='warning'>It appears to have a faint, red glow.</span>")
 
 
