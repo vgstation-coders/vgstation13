@@ -1199,6 +1199,8 @@
 		if(M.Victim == usr)
 			to_chat(usr, "You're too busy getting your life sucked out of you.")
 			return
+	if(ismonkey(usr))
+		return
 
 	visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
 
