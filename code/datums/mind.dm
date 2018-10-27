@@ -385,20 +385,6 @@
 		return F.HandleNewMind(src)
 	return F.HandleRecruitedMind(src)
 
-/datum/mind/proc/make_Changling()
-
-
-/datum/mind/proc/make_Wizard()
-
-
-
-/datum/mind/proc/make_Cultist()
-
-
-/datum/mind/proc/make_Rev()
-
-
-
 // check whether this mind's mob has been brigged for the given duration
 // have to call this periodically for the duration to work properly
 /datum/mind/proc/is_brigged(duration)
