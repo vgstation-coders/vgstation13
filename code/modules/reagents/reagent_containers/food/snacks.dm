@@ -1674,18 +1674,6 @@
 		reagents.add_reagent(NUTRIMENT, 3)
 		bitesize = 4
 
-/obj/item/weapon/reagent_containers/food/snacks/poppypretzel
-	name = "Poppy pretzel"
-	desc = "It's all twisted up!"
-	icon_state = "poppypretzel"
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/poppypretzel/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 5)
-	bitesize = 2
-
-
 /obj/item/weapon/reagent_containers/food/snacks/meatballsoup
 	name = "Meatball soup"
 	desc = "You've got balls kid, BALLS!"
@@ -2243,14 +2231,14 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/poppypretzel
-	name = "Poppy Pretzel"
-	desc = "A large soft pretzel full of POP!"
+	name = "poppy pretzel"
+	desc = "A large, soft, all-twisted-up pretzel full of POP!"
 	icon_state = "poppypretzel"
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/poppypretzel/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
-	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/carrotfries
 	name = "Carrot Fries"
