@@ -445,12 +445,22 @@
 	if(!istype(M))
 		return
 
+	if(!M.changeling_can_lesser_form())
+		to_chat(M, "<span class='warning'>We cannot perform this ability in this location!</span>")
+		return
 	if(ishuman(M))
 		M.changeling_lesser_form()
 	else if(ismonkey(M))
 		M.changeling_lesser_transform()
 	else
 		to_chat(M, "<span class='warning'>We cannot perform this ability in this form!</span>")
+
+/mob/proc/changeling_can_lesser_form()
+	if(istype(loc, /obj/mecha))
+		return FALSE
+	if(istype(loc, /obj/machinery/atmospherics))
+		return FALSE
+	return TRUE
 
 //Transform into a monkey. 	//TODO replace with monkeyize proc
 /mob/proc/changeling_lesser_form()

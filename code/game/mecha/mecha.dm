@@ -1490,17 +1490,19 @@
 /////////////////////////
 
 /obj/mecha/proc/operation_allowed(mob/living/carbon/human/H)
-	for(var/ID in list(H.get_active_hand(), H.wear_id, H.belt))
-		if(src.check_access(ID,src.operation_req_access))
-			return 1
-	return 0
+	if(istype(H))
+		for(var/ID in list(H.get_active_hand(), H.wear_id, H.belt))
+			if(src.check_access(ID,src.operation_req_access))
+				return 1
+		return 0
 
 
 /obj/mecha/proc/internals_access_allowed(mob/living/carbon/human/H)
-	for(var/atom/ID in list(H.get_active_hand(), H.wear_id, H.belt))
-		if(src.check_access(ID,src.internals_req_access))
-			return 1
-	return 0
+	if(istype(H))
+		for(var/atom/ID in list(H.get_active_hand(), H.wear_id, H.belt))
+			if(src.check_access(ID,src.internals_req_access))
+				return 1
+		return 0
 
 
 /obj/mecha/check_access(obj/item/weapon/card/id/I, list/access_list)
