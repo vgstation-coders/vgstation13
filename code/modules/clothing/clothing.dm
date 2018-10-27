@@ -309,6 +309,12 @@
 			cell.reliability -= 10 / severity
 	..()
 
+/obj/item/clothing/gloves/unequipped(mob/living/user, var/from_slot = null)
+	// burn a user still holding a spicy item
+	if (user && istype(user) && from_slot == slot_gloves)
+		for (var/obj/item/I in user.held_items)
+			I.spicy_keychain(user)
+
 /obj/item/clothing/gloves/proc/dexterity_check(mob/user) //Set wearer's dexterity to the value returned by this proc. Doesn't override death or brain damage, and should always return 1 (unless intended otherwise)
 	return 1 //Setting this to 0 will make user NOT dexterious when wearing these gloves
 
