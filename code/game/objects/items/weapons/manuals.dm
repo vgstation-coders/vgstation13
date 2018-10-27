@@ -135,7 +135,7 @@
 				Dionae can fertilze your crop, eat weeds and help around if they are willing.<br>
 				Among the Dionae nymphs needs is blood collection. They are likely to flick out their feelers at new people around itself nicking a sample of their blood. <br>
 				This blood sample is used by Dionae biology to gather the biological symbols from its source to garnish itself with new memories. They tend to mimic anything from their vocal patterns, languages, attitudes and opinons.<br>
-				However this does not mean that they necissarily need to follow your every whim. They tend to form their own wants and needs, and your green children do grow up fast. With enough collected memory they will evolve into adult Dionae.<br>
+				However this does not mean that they necessarily need to follow your every whim. They tend to form their own wants and needs, and your green children do grow up fast. With enough collected memory they will evolve into adult Dionae.<br>
 				The Adult Dionae is not as capable a garden helper but they can apply to be a member of the station and to help you further as a normal botanist!<br>
 				Its important to keep track of all your green creations as they tend to get into trouble if left to their own devices. They choose weather they want to help around the plants but encourage it!
 				<p>
