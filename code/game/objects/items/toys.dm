@@ -397,6 +397,11 @@
 	attack_verb = list("pricked", "absorbed", "gored", "stung")
 	w_class = W_CLASS_MEDIUM
 
+/obj/item/toy/foamblade/suicide_act(mob/user)
+	user.visible_message("<span class='danger'>[user] is absorbing \himself! It looks like \he's trying to commit suicide.</span>")
+	playsound(src, 'sound/effects/lingabsorbs.ogg', 50, 1)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
+
 /*
  * Clock bomb
  */
