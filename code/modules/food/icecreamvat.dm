@@ -31,6 +31,9 @@
 
 // Processing //////////////////////////////////////////////////
 
+/obj/machinery/cooking/icemachine/can_spicyify()
+	return FALSE
+
 /obj/machinery/cooking/icemachine/takeIngredient(var/obj/item/I,mob/user)
 	if(istype(I,/obj/item/weapon/reagent_containers/glass))
 		if(src.beaker)

@@ -85,6 +85,12 @@
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 
+/obj/item/clothing/gloves/black/unequipped(mob/living/user, var/from_slot = null)
+	// burn a user still holding a spicy item
+	if (user && istype(user) && from_slot == slot_gloves)
+		for (var/obj/item/I in user.held_items)
+			I.spicy_keychain(user)
+
 /obj/item/clothing/gloves/black/hos
 	_color = "hosred"			//Exists for washing machines. Is not different from black gloves in any way.
 

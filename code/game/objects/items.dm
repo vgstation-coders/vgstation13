@@ -821,12 +821,23 @@
 	if (gloves && gloves.max_heat_protection_temperature >= GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE)
 		return FALSE
 	set_spicy(FALSE)
-	var/hand_used = user.get_active_hand_organ()
+	// Check if they're holding the item.  If they're holding it we want to burn that hand, not the grabby hand
+	var/hand_index = user.is_holding_item(src)
+	var/hand_used = 0
+	if (hand_index)
+		hand_used = user.find_organ_by_grasp_index(hand_index)
+	else
+		hand_used = user.get_active_hand_organ()
+	// Apply the damage.
 	var/damage_applied = 0
 	if (!(M_RESIST_HEAT in user.mutations || M_UNBURNABLE in user.mutations))
 		damage_applied = user.apply_damage(5, BURN, hand_used)
+	// Spit out message based on if they were burned and/or they feel pain.
+	// Also makes them drop the item if they're holding it and feel pain
 	if(damage_applied)
 		if(user.feels_pain())
+			if (hand_index) // they're holding the item, make them drop it
+				user.u_equip(src, 1)
 			user.audible_scream()
 			user.visible_message(
 					"<span class='warning'>[user] cries out in pain and jerks \his [hand_used] \

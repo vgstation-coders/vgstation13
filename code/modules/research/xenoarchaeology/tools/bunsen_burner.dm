@@ -102,8 +102,7 @@
 		if (do_after(user, src, 5 SECONDS))
 			to_chat(user, "<span class='notice'>\The [W] is now red hot.</span>")
 			W.set_spicy(TRUE)
-			if (W.spicy_keychain(user))
-				user.u_equip(W)
+			W.spicy_keychain(user)
 	else
 		..()
 

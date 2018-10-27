@@ -11,6 +11,8 @@
 
 // Globals /////////////////////////////////////////////////////
 
+#define OVEN_COOKTIME 25
+
 var/global/deepFriedEverything = 0
 var/global/deepFriedNutriment = 0
 var/global/foodNesting = 0
@@ -95,6 +97,9 @@ var/global/ingredientLimit = 10
 
 	return ..()
 
+/obj/machinery/cooking/proc/can_spicyify()
+	return TRUE
+
 /obj/machinery/cooking/initialize()
 	if (foodChoices)
 		var/obj/item/food
@@ -133,8 +138,7 @@ var/global/ingredientLimit = 10
 		if(alert(user,"Remove \the [src.ingredient.name]?",,"Yes","No") == "Yes")
 			if(src.ingredient && (get_turf(src.ingredient)==get_turf(src)))
 				if(Adjacent(user))
-					src.active = 0
-					src.icon_state = initial(src.icon_state)
+					set_inactive()
 					src.ingredient.mouse_opacity = 1
 					user.put_in_hands(src.ingredient)
 					to_chat(user, "<span class='notice'>You remove \the [src.ingredient.name] from \the [src.name].</span>")
@@ -142,7 +146,7 @@ var/global/ingredientLimit = 10
 				else
 					to_chat(user, "You are too far away from [src.name].")
 			else
-				src.active = 0
+				set_inactive()
 		else
 			to_chat(user, "You leave \the [src.name] alone.")
 	else
@@ -198,6 +202,11 @@ var/global/ingredientLimit = 10
 			. = "That's a prosthetic. It wouldn't taste very good."
 		else
 			. = "valid"
+	else if(istype(I) && I.is_spicyable() && can_spicyify())
+		if(I.is_spicy())
+			. = "That item is already red hot."
+		else
+			. = "spicy"
 	else
 		. = "It's not edible food."
 	return
@@ -209,14 +218,20 @@ var/global/ingredientLimit = 10
 	if(. == "valid")
 		if(src.foodChoices)
 			. = src.foodChoices[(input("Select production.") in src.foodChoices)]
-		if (!Adjacent(user) || user.stat || ((user.get_active_hand() != (I) && !isgripper(user.get_active_hand())) && !force_cook))
+		if (!user || !Adjacent(user) || user.stat || ((user.get_active_hand() != (I) && !isgripper(user.get_active_hand())) && !force_cook))
 			return FALSE
 
-		if(user.drop_item(I, src))
-			src.ingredient = I
-			spawn() src.cook(.)
-			to_chat(user, "<span class='notice'>You add \the [I.name] to \the [src.name].</span>")
+		if (accept_ingredient(I, user, .))
 			return TRUE
+	else if(. == "spicy")
+		switch (alert("Heat [I] in [src]?",, "Yes", "No"))
+			if ("Yes")
+				if (!user || !Adjacent(user) || user.stat || ((user.get_active_hand() != (I) && !isgripper(user.get_active_hand()))))
+					return FALSE
+				if (accept_ingredient(I, user, null))
+					return TRUE
+			if ("No")
+				to_chat(user, "You decide against putting [I] in [src].")
 	else
 		to_chat(user, "<span class='warning'>You can't put that in \the [src.name]. \n[.]</span>")
 	return FALSE
@@ -244,15 +259,42 @@ var/global/ingredientLimit = 10
 			return FALSE
 	return TRUE
 
+/obj/machinery/cooking/proc/accept_ingredient(var/obj/item/I, var/mob/user, var/food_choice)
+	if(user.drop_item(I, src))
+		ingredient = I
+		if (food_choice)
+			spawn()
+				cook(food_choice)
+		else
+			spawn()
+				make_spicy()
+		to_chat(user, "<span class='notice'>You add [I] to [src].</span>")
+		return TRUE
+	return FALSE
+
+/obj/machinery/cooking/proc/set_active()
+	active = 1
+	icon_state = icon_state_on
+
+/obj/machinery/cooking/proc/set_inactive()
+	active = 0
+	icon_state = initial(icon_state)
+
+/obj/machinery/cooking/proc/make_spicy()
+	set_active()
+	if (cook_after(cookTime, OVEN_COOKTIME))
+		ingredient.set_spicy(TRUE)
+		ingredient.forceMove(loc)
+		ingredient = null
+		playsound(src,cookSound,100,1)
+	set_inactive()
+
 /obj/machinery/cooking/proc/cook(var/foodType)
-	src.active = 1
-	src.icon_state = src.icon_state_on
-	if (cook_after(src.cookTime, 25))
-		src.makeFood(foodType)
-		playsound(src,src.cookSound,100,1)
-	src.active = 0
-	src.icon_state = initial(src.icon_state)
-	return
+	set_active()
+	if (cook_after(cookTime, OVEN_COOKTIME))
+		makeFood(foodType)
+		playsound(src,cookSound,100,1)
+	set_inactive()
 
 /obj/machinery/cooking/proc/makeFood(var/foodType)
 	if(istype(src.ingredient, /obj/item/weapon/holder))
@@ -296,6 +338,8 @@ var/global/ingredientLimit = 10
 	icon_state_on = "mixer_on"
 	cookSound = 'sound/machines/juicer.ogg'
 
+/obj/machinery/cooking/candy/can_spicyify()
+	return FALSE
 
 /obj/machinery/cooking/candy/validateIngredient(var/obj/item/I)
 	. = ..()
@@ -324,6 +368,9 @@ var/global/ingredientLimit = 10
 	icon_state_on = "still_on"
 	cookSound = 'sound/machines/juicer.ogg'
 
+/obj/machinery/cooking/still/can_spicyify()
+	return FALSE
+
 /obj/machinery/cooking/still/validateIngredient(var/obj/item/I)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/grown))
 		. = "valid"
@@ -342,6 +389,9 @@ var/global/ingredientLimit = 10
 	icon_state = "cereal_off"
 	icon_state_on = "cereal_on"
 	foodChoices = null
+
+/obj/machinery/cooking/cerealmaker/can_spicyify()
+	return FALSE
 
 /obj/machinery/cooking/cerealmaker/validateIngredient(var/obj/item/I)
 	. = ..()
@@ -510,6 +560,9 @@ var/global/ingredientLimit = 10
 
 	RefreshParts()
 
+/obj/machinery/cooking/deepfryer/confectionator/can_spicyify()
+	return FALSE
+
 /obj/machinery/cooking/deepfryer/confectionator/validateIngredient(var/obj/item/I, var/force_cook)
 	if(I.w_class < W_CLASS_LARGE)
 		. = "valid"
@@ -580,6 +633,9 @@ var/global/ingredientLimit = 10
 
 	cooks_in_reagents = 1
 
+/obj/machinery/cooking/grill/can_spicyify()
+	return FALSE // yes grills are hot, but I cbf refactoring them so that an item being heated is shown on the grill without colour changes
+
 /obj/machinery/cooking/grill/validateIngredient(var/obj/item/I)
 	. = ..()
 	if((. == "valid") && (!foodNesting))
@@ -593,8 +649,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/grill/cook()
 	var/foodname = "rotisserie [src.ingredient.name]"
-	src.active = 1
-	src.icon_state = src.icon_state_on
+	set_active()
 	src.ingredient.pixel_y += 5 * PIXEL_MULTIPLIER
 	src.ingredient.forceMove(src.loc)
 	src.ingredient.mouse_opacity = 0
@@ -608,8 +663,7 @@ var/global/ingredientLimit = 10
 					playsound(src,src.cookSound,100,1)
 				else
 					src.visible_message("<span class='notice'>\the [foodname] looks ready to eat!</span>")
-	src.icon_state = initial(src.icon_state)
-	src.active = 0
+	set_inactive()
 	return
 
 /obj/machinery/cooking/grill/makeFood()
