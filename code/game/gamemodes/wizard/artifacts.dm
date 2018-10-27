@@ -101,7 +101,7 @@
 
 /datum/spellbook_artifact/lesser_predicted_potion_bundle
 	name = "Lesser predicted potion bundle"
-	desc = "Contains 5  potions. Don't go using them all in one place!."
+	desc = "Contains 5  potions. Don't go using them all in one place!"
 	abbreviation = "LPB"
 	spawned_items = list(/obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle)
 
