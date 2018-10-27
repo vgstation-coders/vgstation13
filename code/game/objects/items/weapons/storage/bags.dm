@@ -513,7 +513,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 
 /obj/item/weapon/storage/bag/potion/predicted_potion_bundle/New()
 	..()
-	for(var/i = 1 to 25)
+	for(var/i = 1 to 40)
 		var/potiontype = pick(existing_typesof(/obj/item/potion))
 		new potiontype(src)
 
@@ -523,6 +523,6 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 
 /obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle/New()
 	..()
-	for(var/i = 1 to 5)
+	for(var/i = 1 to 8)
 		var/potiontype = pick(existing_typesof(/obj/item/potion))
 		new potiontype(src)
