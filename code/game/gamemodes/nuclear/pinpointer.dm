@@ -319,6 +319,7 @@ var/list/pinpointerpinpointer_list = list()
 
 
 /obj/item/weapon/pinpointer/pinpointerpinpointer/New()
+	..()
 	overlays += "pinpointerpinpointer"
 
 /obj/item/weapon/pinpointer/pinpointerpinpointer/process()
