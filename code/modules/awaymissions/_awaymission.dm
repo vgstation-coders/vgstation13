@@ -79,39 +79,39 @@ Example of the second method:
 	desc = "A tiny unbreachable room full of angry turrets and loot."
 	generate_randomly = 0
 
-/datum/map_element/away_mission/challenge
-	name = "emitter hell"
-	file_path = "maps/RandomZLevels/unused/challenge.dmm"
-	desc = "A long hallway featuring emitters, turrets and syndicate agents. Features loot and a gateway."
+///datum/map_element/away_mission/challenge
+//	name = "emitter hell"
+//	file_path = "maps/RandomZLevels/broken/challenge.dmm"
+//	desc = "A long hallway featuring emitters, turrets and syndicate agents. Features loot and a gateway."
 
 /datum/map_element/away_mission/spaceship
 	name = "stranded spaceship"
-	file_path = "maps/RandomZLevels/unused/blackmarketpackers.dmm"
+	file_path = "maps/RandomZLevels/blackmarketpackers.dmm"
 	desc = "A mysteriously empty shuttle crashed into the asteroid."
 
 /datum/map_element/away_mission/academy
 	name = "academy"
-	file_path = "maps/RandomZLevels/unused/Academy.dmm"
+	file_path = "maps/RandomZLevels/Academy.dmm"
 
 /datum/map_element/away_mission/beach
 	name = "beach"
-	file_path = "maps/RandomZLevels/unused/beach.dmm"
+	file_path = "maps/RandomZLevels/beach.dmm"
 	desc = "A small, comfy seaside area with a bar."
 	generate_randomly = 0
 
 /datum/map_element/away_mission/listeningpost
 	name = "listening post"
-	file_path = "maps/RandomZLevels/unused/listeningpost.dmm"
+	file_path = "maps/RandomZLevels/listeningpost.dmm"
 	desc = "A large asteroid with a hidden syndicate listening post. Don't forget to bring pickaxes!"
 
 /datum/map_element/away_mission/stationcollision
 	name = "station collision"
-	file_path = "maps/RandomZLevels/unused/stationCollision.dmm"
+	file_path = "maps/RandomZLevels/stationCollision.dmm"
 	desc = "A shuttlecraft crashed into a small space station, bringing aboard aliens and cultists. Features the Lord Nar-Sie himself."
 
 /datum/map_element/away_mission/wildwest
 	name = "wild west"
-	file_path = "maps/RandomZLevels/unused/wildwest.dmm"
+	file_path = "maps/RandomZLevels/wildwest.dmm"
 	desc = "An exciting adventure for the toughest adventures your station can offer. Those who defeat all of the final area's guardians will find a wish granter."
 
 /datum/map_element/away_mission/tomb
@@ -122,9 +122,18 @@ Example of the second method:
 /datum/map_element/away_mission/snowplanet
 	name = "Snow Planet"
 	file_path = "maps/RandomZLevels/snowplanet.dmm"
-	desc = "A small little planetoid with a cold atmosphere and a wooden cabin with a gateway. Be sure to pack some sweaters!"	
-	
+	desc = "A small little planetoid with a cold atmosphere and a wooden cabin with a gateway. Be sure to pack some sweaters!"
+
 var/static/list/away_mission_subtypes = typesof(/datum/map_element/away_mission) - /datum/map_element/away_mission
+
+#if UNIT_TESTS_ENABLED
+/datum/unit_test/away_missions/start()
+	for(var/M in away_mission_subtypes)
+		var/datum/map_element/away_mission/mission = M
+		var/file_path = initial(mission.file_path)
+		if(!fexists(file_path))
+			fail("[mission] points to an invalid file_path: [file_path]")
+#endif
 
 //Returns a list containing /datum/map_element/away_mission objects.
 /proc/getRandomZlevels(include_unrandom = 0)
