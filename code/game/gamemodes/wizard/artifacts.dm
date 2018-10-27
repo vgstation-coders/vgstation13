@@ -92,6 +92,19 @@
 	abbreviation = "LPB"
 	spawned_items = list(/obj/item/weapon/storage/bag/potion/lesser_bundle)
 
+/datum/spellbook_artifact/predicted_potion_bundle
+	name = "Predicted potion bundle"
+	desc = "Contains 25 potions. I like the blue ones myself."
+	abbreviation = "LPB"
+	price = 5 * Sp_BASE_PRICE
+	spawned_items = list(/obj/item/weapon/storage/bag/potion/predicted_potion_bundle)
+
+/datum/spellbook_artifact/lesser_predicted_potion_bundle
+	name = "Lesser predicted potion bundle"
+	desc = "Contains 5  potions. Don't go using them all in one place!."
+	abbreviation = "LPB"
+	spawned_items = list(/obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle)
+
 /datum/spellbook_artifact/scrying
 	name = "Scrying Orb"
 	desc = "An incandescent orb of crackling energy, using it will allow you to ghost while alive, allowing you to spy upon the station with ease. In addition, buying it will permanently grant you x-ray vision."
