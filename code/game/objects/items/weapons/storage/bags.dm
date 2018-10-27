@@ -519,7 +519,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 
 /obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle
 	name = "Lesser predicted potion bundle"
-	desc = "What could potionly go slightly more right?."
+	desc = "What could potionly go slightly more right?"
 
 /obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle/New()
 	..()
