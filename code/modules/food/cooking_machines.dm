@@ -224,7 +224,7 @@ var/global/ingredientLimit = 10
 		if (accept_ingredient(I, user, .))
 			return TRUE
 	else if(. == "spicy")
-		switch (alert("Heat [I] in [src]?",, "Yes", "No"))
+		switch (alert(user, "Heat [I] in [src]?",, "Yes", "No"))
 			if ("Yes")
 				if (!user || !Adjacent(user) || user.stat || ((user.get_active_hand() != (I) && !isgripper(user.get_active_hand()))))
 					return FALSE
