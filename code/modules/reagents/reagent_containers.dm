@@ -242,27 +242,21 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		return -1
 
 	var/success
-	var/obj/structure/reagent_dispensers/S
-	if(istype(target, /obj/structure/reagent_dispensers))
-		S = target
-		if(!S.accepting_reagents())
-			S = null
 	// Transfer from dispenser
-	if (can_receive && S)
-		var/tx_amount = transfer_sub(target, src, S.amount_per_transfer_from_this, user)
-		if (tx_amount > 0)
-			to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
-
-		return tx_amount
+	if (can_receive && istype(target, /obj/structure/reagent_dispensers))
+		var/obj/structure/reagent_dispensers/S = target
+		if(S.can_transfer(src, user))
+			var/tx_amount = transfer_sub(target, src, S.amount_per_transfer_from_this, user)
+			if (tx_amount > 0)
+				to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
+				return tx_amount
 	// Transfer to container
-	else if (can_send /*&& target.reagents**/)
+	if (can_send /*&& target.reagents**/)
 		var/obj/container = target
 		if (!container.is_open_container() && istype(container,/obj/item/weapon/reagent_containers) && !istype(container,/obj/item/weapon/reagent_containers/food/snacks))
-			to_chat(world, "[container] is not an open container, or is a type of reagent container, or is not a type of snack")
 			return -1
 
 		if(target.is_open_container())
-			to_chat(world, "Checking if [target] is open container")
 			success = transfer_sub(src, target, amount_per_transfer_from_this, user, log_transfer = TRUE)
 
 		if(success)
@@ -270,7 +264,6 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 				to_chat(user, "<span class='notice'>You transfer [success] units of the solution to \the [target].</span>")
 
 			return (success)
-		to_chat(world, "Not a success")
 	if(!success)
 		// Mob splashing
 		if(splashable_units != 0)

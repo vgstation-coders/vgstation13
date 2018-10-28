@@ -39,9 +39,6 @@
 	new /obj/structure/reagent_dispensers/bloodkeg(get_turf(src))
 	..()
 
-/obj/structure/reagent_dispensers/proc/accepting_reagents(var/obj/item/weapon/reagent_containers/RC)
-	return FALSE
-
 /obj/structure/reagent_dispensers/verb/set_APTFT() //set amount_per_transfer_from_this
 	set name = "Set transfer amount"
 	set category = "Object"
@@ -82,6 +79,9 @@
 
 /obj/structure/reagent_dispensers/proc/is_empty()
 	return reagents.total_volume <= 0
+
+/obj/structure/reagent_dispensers/proc/can_transfer()
+	return TRUE
 
 //Dispensers
 /obj/structure/reagent_dispensers/watertank
@@ -366,21 +366,6 @@
 	name = "cauldron"
 	icon_state = "cauldron"
 	desc = "Double, double, toil and trouble. Fire burn, and cauldron bubble."
-	var/accepting = FALSE
-
-/obj/structure/reagent_dispensers/cauldron/verb/toggle_accepting()
-	set name = "Toggle Taking"
-	set desc = "Whether we give it reagents, or take from it."
-	set category = "Object"
-	set src in view(1)
-
-	if(isjustobserver(usr))
-		return
-
-	accepting = !accepting
-
-	to_chat(usr, "<span class = 'notice'>You now [accepting?"give to":"take from"] \the [src].</span>")
-
 
 /obj/structure/reagent_dispensers/cauldron/update_icon()
 	overlays.len = 0
@@ -405,5 +390,7 @@
 /obj/structure/reagent_dispensers/cauldron/hide_own_reagents()
 	return TRUE
 
-/obj/structure/reagent_dispensers/cauldron/accepting_reagents(var/obj/item/weapon/reagent_containers/RC)
-	return accepting
+/obj/structure/reagent_dispensers/cauldron/can_transfer(var/obj/item/reagent_containers/R, var/mob/user)
+	if(user.a_intent != I_HELP)
+		return TRUE
+	return FALSE
