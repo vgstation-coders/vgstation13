@@ -102,7 +102,6 @@ var/list/admin_verbs_fun = list(
 	// FUUUUCKED /client/proc/zombie_event, // ZOMBB-B-BIES
 	/client/proc/cmd_admin_add_freeform_ai_law,
 	/client/proc/cmd_admin_add_random_ai_law,
-	/client/proc/make_sound,
 	/client/proc/toggle_random_events,
 	/client/proc/set_ooc,
 	/client/proc/editappear,
@@ -155,13 +154,11 @@ var/list/admin_verbs_debug = list(
 	/proc/getbrokeninhands,
 	/client/proc/Debug2,
 	/client/proc/cmd_debug_make_powernets,
-	/client/proc/kill_airgroup,
 	/client/proc/debug_controller,
 	/client/proc/cmd_debug_mob_lists,
 	/client/proc/cmd_admin_delete,
 	/client/proc/cmd_debug_del_all,
 	/client/proc/cmd_debug_tog_aliens,
-	/client/proc/air_report,
 	/client/proc/reload_admins,
 	/client/proc/restart_controller,
 	/client/proc/enable_debug_verbs,
@@ -241,7 +238,6 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/cmd_admin_add_freeform_ai_law,
 	/client/proc/cmd_admin_add_random_ai_law,
 	/client/proc/cmd_admin_create_centcom_report,
-	/client/proc/make_sound,
 	/client/proc/toggle_random_events,
 	/client/proc/cmd_admin_add_random_ai_law,
 	/client/proc/Set_Holiday,
@@ -264,7 +260,6 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/Debug2,
 	/client/proc/reload_admins,
 	/client/proc/cmd_debug_make_powernets,
-	/client/proc/kill_airgroup,
 	/client/proc/debug_controller,
 	/client/proc/startSinglo,
 	/client/proc/cheat_power,
@@ -272,7 +267,6 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/cmd_debug_mob_lists,
 	/client/proc/cmd_debug_del_all,
 	/client/proc/cmd_debug_tog_aliens,
-	/client/proc/air_report,
 	/client/proc/enable_debug_verbs,
 	/client/proc/mob_list,
 	/proc/possess,
@@ -351,13 +345,11 @@ var/list/admin_verbs_mod = list(
 		/client/proc/camera_view,
 		/client/proc/sec_camera_report,
 		/client/proc/intercom_view,
-		/client/proc/air_status,
 		/client/proc/atmosscan,
 		/client/proc/powerdebug,
 		/client/proc/count_objects_on_z_level,
 		/client/proc/count_objects_all,
 		/client/proc/cmd_assume_direct_control,
-		/client/proc/jump_to_dead_group,
 		/client/proc/startSinglo,
 		/client/proc/cheat_power,
 		/client/proc/setup_atmos,
@@ -398,10 +390,6 @@ var/list/admin_verbs_mod = list(
 	add_admin_verbs()
 	to_chat(src, "<span class='interface'>All of your adminverbs are now visible.</span>")
 	feedback_add_details("admin_verb","TAVVS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-
-
-
 
 /client/proc/admin_ghost()
 	set category = "Admin"
