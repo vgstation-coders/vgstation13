@@ -39,6 +39,9 @@
 	new /obj/structure/reagent_dispensers/bloodkeg(get_turf(src))
 	..()
 
+/obj/structure/reagent_dispensers/proc/accepting_reagents(var/obj/item/weapon/reagent_containers/RC)
+	return FALSE
+
 /obj/structure/reagent_dispensers/verb/set_APTFT() //set amount_per_transfer_from_this
 	set name = "Set transfer amount"
 	set category = "Object"
@@ -358,3 +361,49 @@
 /obj/structure/reagent_dispensers/degreaser/New()
 	. = ..()
 	reagents.add_reagent(ETHANOL, 1000)
+
+/obj/structure/reagent_dispensers/cauldron
+	name = "cauldron"
+	icon_state = "cauldron"
+	desc = "Double, double, toil and trouble. Fire burn, and cauldron bubble."
+	var/accepting = FALSE
+
+/obj/structure/reagent_dispensers/cauldron/verb/toggle_accepting()
+	set name = "Toggle Taking"
+	set desc = "Whether we give it reagents, or take from it."
+	set category = "Object"
+	set src in view(1)
+
+	if(isjustobserver(usr))
+		return
+
+	accepting = !accepting
+
+	to_chat(usr, "<span class = 'notice'>You now [accepting?"give to":"take from"] \the [src].</span>")
+
+
+/obj/structure/reagent_dispensers/cauldron/update_icon()
+	overlays.len = 0
+
+	if(reagents.total_volume)
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]")
+
+		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+
+		overlays += filling
+
+/obj/structure/reagent_dispensers/cauldron/on_reagent_change()
+	update_icon()
+
+/obj/structure/reagent_dispensers/cauldron/wrenchable()
+	return TRUE
+
+/obj/structure/reagent_dispensers/cauldron/is_open_container()
+	return TRUE
+
+/obj/structure/reagent_dispensers/cauldron/hide_own_reagents()
+	return TRUE
+
+/obj/structure/reagent_dispensers/cauldron/accepting_reagents(var/obj/item/weapon/reagent_containers/RC)
+	return accepting
