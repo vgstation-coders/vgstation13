@@ -335,4 +335,5 @@
 	return
 
 /obj/machinery/recharge_station/get_cell()
-	return occupant.get_cell()
+	if(occupant)
+		return occupant.get_cell()
