@@ -296,20 +296,20 @@ Turf and target are seperate in case you want to teleport some distance from a t
 /proc/ionnum()
 	return "[pick("!","@","#","$","%","^","&","*")][pick("!","@","#","$","%","^","&","*")][pick("!","@","#","$","%","^","&","*")][pick("!","@","#","$","%","^","&","*")]"
 
-//When an AI is activated, it can choose from a list of non-slaved borgs to have as a slave.
+//When an AI is activated, it can choose from a list of non-slaved borgs to have as a slave. //Nah.
 /proc/free_borgs()
 	var/list/borgs = list()
 
-	for(var/mob/living/silicon/robot/A in player_list)
+	for(var/mob/living/silicon/robot/A in player_list) //robot_list when
 		if(!A.CanChangeLaws())
 			continue
 		borgs += A
 	return borgs
 
-//When a borg is activated, it can choose which AI it wants to be slaved to //WHAT A FUCKING LIE
+//When a borg is activated, it can choose which AI it wants to be slaved to //Nope.
 /proc/active_ais()
 	var/list/active_ais = list()
-	for(var/mob/living/silicon/ai/A in living_mob_list)
+	for(var/mob/living/silicon/ai/A in ai_list)
 		if(!A.CanChangeLaws())
 			continue
 		active_ais += A

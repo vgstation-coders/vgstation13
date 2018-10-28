@@ -103,11 +103,23 @@
 /obj/machinery/computer/lawupload/attack_hand(var/mob/user)
 	if(!validate_use(user))
 		return
+	var/list/silicon_targets = null
+	var/picked_silicon = null
 
-	var/list/silicon_targets = get_active_ais_and_free_cyborgs()
-	to_chat(user, "[english_list(silicon_targets)]")
-	current = input(user,"Silicon signals detected:", "Target selection") in silicon_targets
-	to_chat(user, "[current ? "[current.name] selected for law changes." : "No target detected." ]")
+	for(var/mob/living/silicon/S in get_active_ais_and_free_cyborgs())
+		var/name = null
+		if(isrobot(S))
+			var/mob/living/silicon/robot/R = S
+			name = "[R.real_name] ([R.modtype]) - [R.braintype]"
+		if(isAI(S))
+			name = "[S.real_name] - AI"
+
+		if(name)
+			silicon_targets[name] = S
+
+	picked_silicon = input(user,"Silicon signals detected:", "Target selection") in silicon_targets
+	current = silicon_targets[picked_silicon]
+	to_chat(user, "[current ? "[picked_silicon] selected for law changes." : "No target detected." ]")
 		
 
 /obj/machinery/computer/lawupload/longrange
