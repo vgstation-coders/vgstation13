@@ -708,28 +708,6 @@ var/list/admin_verbs_mod = list(
 	log_admin("[key_name(usr)] gave [key_name(T)] the disease [D].")
 	message_admins("<span class='notice'>[key_name_admin(usr)] gave [key_name(T)] the disease [D].</span>", 1)
 
-/client/proc/make_sound(var/obj/O in world) // -- TLE
-	set category = "Special Verbs"
-	set name = "Make Sound"
-	set desc = "Display a message to everyone who can hear the target"
-	if(istype(O))
-		var/message = input("What do you want the message to be?", "Make Sound") as text|null
-		if(!message)
-			return
-		var/mob/living/M
-		var/olduniv
-		if(ismob(O))
-			M = O
-			olduniv = M.universal_speak
-			M.universal_speak = 1
-		O.say(message)
-		if(M)
-			M.universal_speak = olduniv
-		log_admin("[key_name(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound")
-		message_admins("<span class='notice'>[key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound</span>", 1)
-		feedback_add_details("admin_verb","MS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-
 /client/proc/togglebuildmodeself()
 	set name = "Toggle Build Mode Self"
 	set category = "Special Verbs"
