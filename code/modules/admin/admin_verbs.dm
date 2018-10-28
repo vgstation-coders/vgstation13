@@ -102,7 +102,6 @@ var/list/admin_verbs_fun = list(
 	// FUUUUCKED /client/proc/zombie_event, // ZOMBB-B-BIES
 	/client/proc/cmd_admin_add_freeform_ai_law,
 	/client/proc/cmd_admin_add_random_ai_law,
-	/client/proc/make_sound,
 	/client/proc/toggle_random_events,
 	/client/proc/set_ooc,
 	/client/proc/editappear,
@@ -155,13 +154,11 @@ var/list/admin_verbs_debug = list(
 	/proc/getbrokeninhands,
 	/client/proc/Debug2,
 	/client/proc/cmd_debug_make_powernets,
-	/client/proc/kill_airgroup,
 	/client/proc/debug_controller,
 	/client/proc/cmd_debug_mob_lists,
 	/client/proc/cmd_admin_delete,
 	/client/proc/cmd_debug_del_all,
 	/client/proc/cmd_debug_tog_aliens,
-	/client/proc/air_report,
 	/client/proc/reload_admins,
 	/client/proc/restart_controller,
 	/client/proc/enable_debug_verbs,
@@ -241,7 +238,6 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/cmd_admin_add_freeform_ai_law,
 	/client/proc/cmd_admin_add_random_ai_law,
 	/client/proc/cmd_admin_create_centcom_report,
-	/client/proc/make_sound,
 	/client/proc/toggle_random_events,
 	/client/proc/cmd_admin_add_random_ai_law,
 	/client/proc/Set_Holiday,
@@ -264,7 +260,6 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/Debug2,
 	/client/proc/reload_admins,
 	/client/proc/cmd_debug_make_powernets,
-	/client/proc/kill_airgroup,
 	/client/proc/debug_controller,
 	/client/proc/startSinglo,
 	/client/proc/cheat_power,
@@ -272,7 +267,6 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/cmd_debug_mob_lists,
 	/client/proc/cmd_debug_del_all,
 	/client/proc/cmd_debug_tog_aliens,
-	/client/proc/air_report,
 	/client/proc/enable_debug_verbs,
 	/client/proc/mob_list,
 	/proc/possess,
@@ -351,13 +345,11 @@ var/list/admin_verbs_mod = list(
 		/client/proc/camera_view,
 		/client/proc/sec_camera_report,
 		/client/proc/intercom_view,
-		/client/proc/air_status,
 		/client/proc/atmosscan,
 		/client/proc/powerdebug,
 		/client/proc/count_objects_on_z_level,
 		/client/proc/count_objects_all,
 		/client/proc/cmd_assume_direct_control,
-		/client/proc/jump_to_dead_group,
 		/client/proc/startSinglo,
 		/client/proc/cheat_power,
 		/client/proc/setup_atmos,
@@ -398,10 +390,6 @@ var/list/admin_verbs_mod = list(
 	add_admin_verbs()
 	to_chat(src, "<span class='interface'>All of your adminverbs are now visible.</span>")
 	feedback_add_details("admin_verb","TAVVS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-
-
-
 
 /client/proc/admin_ghost()
 	set category = "Admin"
@@ -708,28 +696,6 @@ var/list/admin_verbs_mod = list(
 	log_admin("[key_name(usr)] gave [key_name(T)] the disease [D].")
 	message_admins("<span class='notice'>[key_name_admin(usr)] gave [key_name(T)] the disease [D].</span>", 1)
 
-/client/proc/make_sound(var/obj/O in world) // -- TLE
-	set category = "Special Verbs"
-	set name = "Make Sound"
-	set desc = "Display a message to everyone who can hear the target"
-	if(istype(O))
-		var/message = input("What do you want the message to be?", "Make Sound") as text|null
-		if(!message)
-			return
-		var/mob/living/M
-		var/olduniv
-		if(ismob(O))
-			M = O
-			olduniv = M.universal_speak
-			M.universal_speak = 1
-		O.say(message)
-		if(M)
-			M.universal_speak = olduniv
-		log_admin("[key_name(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound")
-		message_admins("<span class='notice'>[key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. make a sound</span>", 1)
-		feedback_add_details("admin_verb","MS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-
 /client/proc/togglebuildmodeself()
 	set name = "Toggle Build Mode Self"
 	set category = "Special Verbs"
@@ -791,18 +757,6 @@ var/list/admin_verbs_mod = list(
 	if(holder)
 		log_admin("[key_name(usr)] checked silicon laws.")
 		src.holder.output_ai_laws()
-
-
-//---- bs12 verbs ----
-
-/client/proc/mod_panel()
-	set name = "Moderator Panel"
-	set category = "Admin"
-
-/*	if(holder)
-		holder.mod_panel()*/
-//	feedback_add_details("admin_verb","MP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	return
 
 /client/proc/editappear(mob/living/carbon/human/M as mob in mob_list)
 	set name = "Edit Appearance"
@@ -902,19 +856,6 @@ var/list/admin_verbs_mod = list(
 
 	log_admin("[key_name(usr)] told [key_name(T)] to man up and deal with it.")
 	message_admins("<span class='notice'>[key_name_admin(usr)] told [key_name(T)] to man up and deal with it.</span>", 1)
-
-/client/proc/global_man_up()
-	set category = "Fun"
-	set name = "Man Up Global"
-	set desc = "Tells everyone to man up and deal with it."
-
-	for (var/mob/T as mob in mob_list)
-		to_chat(T, "<br><center><span class='notice'><b><font size=4>Man up.<br> Deal with it.</font></b><br>Move on.</span></center><br>")
-		T << 'sound/voice/ManUp1.ogg'
-
-	log_admin("[key_name(usr)] told everyone to man up and deal with it.")
-	message_admins("<span class='notice'>[key_name_admin(usr)] told everyone to man up and deal with it.</span>", 1)
-
 
 /client/proc/readmin()
 	set name = "Re-admin self"
