@@ -872,3 +872,8 @@ var/list/ai_list = list()
 			icon_state = "ai-crash"
 		return
 	icon_state = chosen_core_icon_state
+
+/mob/living/silicon/ai/CanChangeLaws()
+	if(stat == DEAD || control_disabled || aiRestorePowerRoutine)
+		return FALSE
+	return TRUE

@@ -477,9 +477,9 @@
 	min = 1
 	max = 1
 
-/datum/theft_objective/number/heist_hard/borgupload
-	name = "cyborg upload console circuit board"
-	typepath = /obj/item/weapon/circuitboard/borgupload
+/datum/theft_objective/number/heist_hard/lawupload
+	name = "law upload console circuit board"
+	typepath = /obj/item/weapon/circuitboard/lawupload
 	min = 1
 	max = 1
 

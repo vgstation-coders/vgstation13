@@ -56,21 +56,16 @@
 	desc = "A circuit board that allows the intelligence in an AI core to interface with the world around it."
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_BIOTECH + "=2"
 	board_type = OTHER
-/obj/item/weapon/circuitboard/aiupload
-	name = "Circuit board (AI Upload)"
+/obj/item/weapon/circuitboard/lawupload
+	name = "Circuit board (Law Upload)"
 	desc = "A circuit board for running a computer used for modifying AI laws."
-	build_path = /obj/machinery/computer/aiupload
+	build_path = /obj/machinery/computer/lawupload
 	origin_tech = Tc_PROGRAMMING + "=4"
-/obj/item/weapon/circuitboard/aiupload/longrange
-	name = "Circuit board (Long Range AI Upload)"
+/obj/item/weapon/circuitboard/lawupload/longrange
+	name = "Circuit board (Long Range Law Upload)"
 	desc = "A circuit board for running a computer used for modifying AI laws."
-	build_path = /obj/machinery/computer/aiupload/longrange
+	build_path = /obj/machinery/computer/lawupload/longrange
 	origin_tech = Tc_PROGRAMMING + "=4" + Tc_MATERIALS + "=9" + Tc_BLUESPACE + "=3" + Tc_MAGNETS + "=5"
-/obj/item/weapon/circuitboard/borgupload
-	name = "Circuit board (Cyborg Upload)"
-	desc = "A circuit board for running a computer used for modifying cyborg laws."
-	build_path = /obj/machinery/computer/borgupload
-	origin_tech = Tc_PROGRAMMING + "=4"
 /obj/item/weapon/circuitboard/med_data
 	name = "Circuit board (Medical Records)"
 	desc = "A circuit board for running a computer used for viewing medical records."

@@ -1,70 +1,69 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
-
-/obj/machinery/computer/aiupload
-	name = "AI Upload"
-	desc = "Used to upload laws to the AI using a cheap radio transceiver."
+/obj/machinery/computer/lawupload
+	name = "Law Upload"
+	desc = "Used to upload laws to the silicons using a cheap radio transceiver."
 	icon_state = "command"
-	circuit = "/obj/item/weapon/circuitboard/aiupload"
-	var/mob/living/silicon/ai/current = null
-	var/opened = 0
-
+	circuit = "/obj/item/weapon/circuitboard/lawupload"
 	light_color = "#555555"
+	var/mob/living/silicon/current = null
 
-
-/obj/machinery/computer/aiupload/verb/AccessInternals()
-	set category = "Object"
-	set name = "Access Computer's Internals"
-	set src in oview(1)
-	if(get_dist(src, usr) > 1 || usr.restrained() || usr.lying || usr.isUnconscious() || istype(usr, /mob/living/silicon))
-		return
-	
-	opened = !opened
-	if(opened)
-		to_chat(usr, "<span class='notice'>The access panel is now open.</span>")
-	else
-		to_chat(usr, "<span class='notice'>The access panel is now closed.</span>")
-
-/obj/machinery/computer/aiupload/proc/install_module(var/obj/item/weapon/aiModule/O, var/mob/user)
+/obj/machinery/computer/lawupload/proc/validate_use(var/mob/user, var/ignore_target=TRUE)
 	if(stat & NOPOWER)
-		to_chat(usr, "The upload computer has no power!")
-		return 0
+		to_chat(user, "\The [name] has no power!")
+		return FALSE
 	if(stat & BROKEN)
-		to_chat(usr, "The upload computer is broken!")
-		return 0
-	if(!current)
-		to_chat(usr, "You haven't selected an AI to transmit laws to!")
-		return 0
+		to_chat(user, "\The [name] is broken!")
+		return FALSE
+	if(isobserver(user))
+		to_chat(user, "<span class='rose'>Your ghostly hand goes right through \the [name]!</span>")
+		return
+	if(!ignore_target)
+		if(!current)
+			to_chat(user, "You haven't selected a target silicon to transmit laws to!")
+			return FALSE
+		if(!same_zlevel())
+			to_chat(user, "<span class='danger'>Unable to establish a connection</span>: \The [name] too far away from [current.name]!")
+			return FALSE
+		if(!current.CanChangeLaws()) //THE FOLLOWING CODE HAS SO MUCH SNOWFLAKE YOU CAN BASICALLY MAP SNOWMAP ON TOP OF IT
+			if(isAI(current))
+				var/mob/living/silicon/ai/current_ai = current
+				if(current_ai.aiRestorePowerRoutine)
+					to_chat(user, "Upload failed. Only a faint signal is being detected from [current_ai.name], and it is not responding to our requests. It may be low on power.")
+					return FALSE
+			to_chat(user, "Upload failed. No signal is being detected from [current.name]")
+			return FALSE
 
-	if(ticker && ticker.mode && ticker.mode.name == "blob")
-		to_chat(usr, "Law uploads have been disabled by Nanotrasen!")
-		return 0
+ 	//commented out until someone adds the nuke event to blob meteors
+	//var/datum/faction/blob_conglomerate/conglomerate = find_active_faction_by_type(/datum/faction/blob_conglomerate)
+	//if(conglomerate)
+	//	to_chat(usr, "Law uploads have been disabled by Nanotrasen!")
+	//	return FALSE
 
-	if(current.stat == 2 || current.control_disabled == 1)
-		to_chat(usr, "Upload failed. No signal is being detected from the AI.")
-	else if(current.aiRestorePowerRoutine)
-		to_chat(usr, "Upload failed. Only a faint signal is being detected from the AI, and it is not responding to our requests. It may be low on power.")
-	else
-		// Modules should throw their own errors.
-		// Our responsibility is to prevent success messages.
-		var/obj/item/weapon/aiModule/M = O
-		if(!M.validate(current.laws,current,user))
-			return 0
-		if(!M.upload(current.laws,current,user))
-			return 0
-		return 1
+	return TRUE
 
-/obj/machinery/computer/aiupload/proc/announce_law_changes(var/mob/user)
-	to_chat(current, "These are your laws now:")
-	current.show_laws()
-	current << sound('sound/machines/lawsync.ogg')
-	for(var/mob/living/silicon/robot/R in mob_list)
-		if(R.lawupdate && (R.connected_ai == current))
-			to_chat(R, "These are your laws now:")
-			R.show_laws()
-			R << sound('sound/machines/lawsync.ogg')
-	to_chat(user, "<span class='notice'>Upload complete. The AI's laws have been modified.</span>")
+/obj/machinery/computer/lawupload/proc/install_module(var/obj/item/weapon/aiModule/M,var/mob/user)
+	if(!validate_use(user, FALSE))
+		return FALSE
+	if(!M.validate(current.laws,current,user))
+		return FALSE
+	if(!M.upload(current.laws,current,user))
+		return FALSE
+	return TRUE
 
-/obj/machinery/computer/aiupload/proc/same_zlevel()
+/obj/machinery/computer/lawupload/proc/announce_law_changes(var/mob/user)
+	var/list/announce_targets = list()
+	announce_targets += current
+	if(isAI(current)) //Why isn't this handled in AI code?
+		var/mob/living/silicon/ai/current_ai = current
+		for(var/mob/living/silicon/robot/R in current_ai.connected_robots)
+			announce_targets += R
+
+	for(var/mob/living/silicon/S in announce_targets)
+		S << sound('sound/machines/lawsync.ogg')	
+		to_chat(S, "These are your laws now:")
+		S.show_laws()
+	to_chat(user, "<span class='notice'>Upload complete. [current.name]'s laws have been modified.</span>")
+
+/obj/machinery/computer/lawupload/proc/same_zlevel()
 	if(!current)
 		return FALSE
 	var/turf/T = get_turf(current)
@@ -72,203 +71,49 @@
 		return FALSE
 	return TRUE
 
-/obj/machinery/computer/aiupload/attackby(obj/item/weapon/O as obj, mob/user as mob)
+/obj/machinery/computer/lawupload/attackby(obj/item/weapon/O, mob/user)
+	if(!validate_use(user, FALSE))
+		return
+
 	if(istype(O, /obj/item/weapon/aiModule))
-		if(!same_zlevel())
-			to_chat(user, "<span class='danger'>Unable to establish a connection</span>: You're too far away from the target AI!")
-			return
 		if(install_module(O,user))
 			announce_law_changes(user)
-	else if(istype(O, /obj/item/weapon/planning_frame))
-		if(!same_zlevel())
-			to_chat(user, "<span class='danger'>Unable to establish a connection</span>: You're too far away from the target AI!")
-			return
-		if(stat & NOPOWER)
-			to_chat(usr, "The upload computer has no power!")
-			return
-		if(stat & BROKEN)
-			to_chat(usr, "The upload computer is broken!")
-			return
-		if(!current)
-			to_chat(usr, "You haven't selected an AI to transmit laws to!")
-			return
-
-		if(ticker && ticker.mode && ticker.mode.name == "blob")
-			to_chat(usr, "Law uploads have been disabled by Nanotrasen!")
-			return
-
-		if(current.stat == 2 || current.control_disabled == 1)
-			to_chat(usr, "Upload failed. No signal is being detected from the AI.")
-		else if(current.aiRestorePowerRoutine)
-			to_chat(usr, "Upload failed. Only a faint signal is being detected from the AI, and it is not responding to our requests. It may be low on power.")
-		else
-			var/obj/item/weapon/planning_frame/frame=O
-			if(frame.modules.len>0)
-				to_chat(user, "<span class='notice'>You begin to load \the [frame] into \the [src]...</span>")
-				if(do_after(user, src,50))
-					var/failed=0
-					for(var/i=1;i<=frame.modules.len;i++)
-						var/obj/item/weapon/aiModule/M = frame.modules[i]
-						to_chat(user, "<span class='notice'>Running [M]...</span>")
-						if(!install_module(M,user))
-							failed=1
-							break
+		return
+	
+	if(istype(O, /obj/item/weapon/planning_frame))
+		var/obj/item/weapon/planning_frame/frame = O
+		if(frame.modules.len > 0)
+			to_chat(user, "<span class='notice'>You begin to load \the [frame] into \the [name]...</span>")
+			if(do_after(user, src, 50))
+				var/failed = FALSE
+				for(var/i=1;i<=frame.modules.len;i++)
+					var/obj/item/weapon/aiModule/M = frame.modules[i]
+					to_chat(user, "<span class='notice'>Running [M]...</span>")
+					if(!install_module(M,user))
+						failed = TRUE
+						break
 					if(!failed)
 						announce_law_changes(user)
-			else
-				to_chat(user, "<span class='warning'>It's empty, doofus.</span>")
-	else
-		..()
-
-/obj/machinery/computer/aiupload/attack_hand(var/mob/user as mob)
-	if(istype(user,/mob/dead))
-		to_chat(usr, "<span class='rose'>Your ghostly hand goes right through!</span>")
-		return
-	if(stat & NOPOWER)
-		to_chat(usr, "The upload computer has no power!")
-		return
-	if(stat & BROKEN)
-		to_chat(usr, "The upload computer is broken!")
-		return
-
-	current = select_active_ai(user)
-
-	if(!current)
-		to_chat(usr, "No active AIs detected.")
-	else
-		to_chat(usr, "[current.name] selected for law changes.")
-
-/obj/machinery/computer/borgupload
-	name = "Cyborg Upload"
-	desc = "Used to upload laws to Cyborgs."
-	icon_state = "command"
-	circuit = "/obj/item/weapon/circuitboard/borgupload"
-	var/mob/living/silicon/robot/current = null
-	light_color = "#555555"
-
-/obj/machinery/computer/borgupload/proc/announce_law_changes()
-	to_chat(current, "These are your laws now:")
-	current.show_laws()
-	current << sound('sound/machines/lawsync.ogg')
-	to_chat(usr, "<span class='notice'>Upload complete. The robot's laws have been modified.</span>")
-
-/obj/machinery/computer/borgupload/proc/install_module(var/obj/item/weapon/aiModule/M,var/mob/user)
-	if(stat & NOPOWER)
-		to_chat(usr, "The upload computer has no power!")
-		return 0
-	if(stat & BROKEN)
-		to_chat(usr, "The upload computer is broken!")
-		return 0
-	if(!current)
-		to_chat(usr, "You haven't selected a robot to transmit laws to!")
-		return 0
-
-	if(current.stat == 2 || current.emagged)
-		to_chat(usr, "Upload failed. No signal is being detected from the robot.")
-		return 0
-	if(istype(current, /mob/living/silicon/robot/mommi))
-		var/mob/living/silicon/robot/mommi/mommi = current
-		if(mommi.keeper)
-			to_chat(usr, "Upload failed. No signal is being detected from the cyborg.")
-			return 0
-	else if(current.connected_ai)
-		to_chat(usr, "Upload failed. The robot is slaved to an AI.")
-		return 0
-	else
-		// Modules should throw their own errors.
-		// Our responsibility is to prevent success messages.
-		if(!M.validate(current.laws,current,user))
-			return 0
-		if(!M.upload(current.laws,current,user))
-			return 0
-		announce_law_changes()
-	return 1
-
-/obj/machinery/computer/borgupload/proc/same_zlevel()
-	if(!current)
-		return FALSE
-	var/turf/T = get_turf(current)
-	if(!atoms_share_level(T, src))
-		return FALSE
-	return TRUE
-
-/obj/machinery/computer/borgupload/attackby(var/obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/aiModule))
-		if(!same_zlevel())
-			to_chat(user, "<span class='danger'>Unable to establish a connection</span>: You're too far away from the target silicon!")
-			return
-		if(isMoMMI(current))
-			var/mob/living/silicon/robot/mommi/mommi = current
-			if(mommi.keeper)
-				to_chat(user, "<span class='warning'>[current] is operating in KEEPER mode and cannot be accessed via control signals.</span>")
-				return ..()
-		install_module(W,user)
-	else if(istype(W, /obj/item/weapon/planning_frame))
-		if(!same_zlevel())
-			to_chat(user, "<span class='danger'>Unable to establish a connection</span>: You're too far away from the target silicon!")
-			return
-		if(stat & NOPOWER)
-			to_chat(user, "The upload computer has no power!")
-			return
-		if(stat & BROKEN)
-			to_chat(user, "The upload computer is broken!")
-			return
-		if(!current)
-			to_chat(user, "You haven't selected a robot to transmit laws to!")
-			return
-
-		if(current.stat == 2 || current.emagged)
-			to_chat(user, "Upload failed. No signal is being detected from the robot.")
-			return
-		if(istype(current, /mob/living/silicon/robot/mommi))
-			var/mob/living/silicon/robot/mommi/mommi = current
-			if(mommi.keeper)
-				to_chat(user, "Upload failed. No signal is being detected from the cyborg.")
-				return
-		else if(current.connected_ai)
-			to_chat(user, "Upload failed. The robot is slaved to an AI.")
+						return
 		else
-			var/obj/item/weapon/planning_frame/frame=W
-			if(frame.modules.len>0)
-				to_chat(user, "<span class='notice'>You begin to load \the [frame] into \the [src]...</span>")
-				if(do_after(user, src,50))
-					var/failed=0
-					for(var/i=1;i<=frame.modules.len;i++)
-						var/obj/item/weapon/aiModule/M = frame.modules[i]
-						to_chat(user, "<span class='notice'>Running [M]...</span>")
-						if(!install_module(M,user))
-							failed=1
-							break
-					if(!failed)
-						announce_law_changes()
-			else
-				to_chat(user, "<span class='warning'>It's empty, doofus.</span>")
-	else
-		return ..()
+			to_chat(user, "<span class='warning'>It's empty, doofus.</span>")
+			return
+	..()
 
-/obj/machinery/computer/borgupload/attack_hand(var/mob/user as mob)
-	if(istype(user,/mob/dead))
-		to_chat(usr, "<span class='rose'>Your ghostly hand goes right through!</span>")
-		return
-	if(stat & NOPOWER)
-		to_chat(usr, "The upload computer has no power!")
-		return
-	if(stat & BROKEN)
-		to_chat(usr, "The upload computer is broken!")
+/obj/machinery/computer/lawupload/attack_hand(var/mob/user)
+	if(!validate_use(user))
 		return
 
-	current = freeborg()
+	var/list/silicon_targets = get_active_ais_and_free_cyborgs()
+	to_chat(user, "[english_list(silicon_targets)]")
+	current = input(user,"Silicon signals detected:", "Target selection") in silicon_targets
+	to_chat(user, "[current ? "[current.name] selected for law changes." : "No target detected." ]")
+		
 
-	if(!current)
-		to_chat(usr, "No free cyborgs detected.")
-	else
-		to_chat(usr, "[current.name] selected for law changes.")
+/obj/machinery/computer/lawupload/longrange
+	name = "Long Range Law Upload"
+	desc = "Used to upload laws to the silicons using a powerful subspace transceiver."
+	circuit = "/obj/item/weapon/circuitboard/lawupload/longrange"
 
-
-/obj/machinery/computer/aiupload/longrange
-	name = "Long Range AI Upload"
-	desc = "Used to upload laws to the AI using a powerful subspace transceiver."
-	circuit = "/obj/item/weapon/circuitboard/aiupload/longrange"
-
-/obj/machinery/computer/aiupload/longrange/same_zlevel()
+/obj/machinery/computer/lawupload/longrange/same_zlevel()
 	return TRUE

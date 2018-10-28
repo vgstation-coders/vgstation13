@@ -268,6 +268,6 @@
 		/obj/item/weapon/cell/infinite,
 		/obj/item/weapon/circuitboard/communications,
 		/obj/item/weapon/circuitboard/card,
-		/obj/item/weapon/circuitboard/aiupload,
-		/obj/item/weapon/circuitboard/borgupload
+		/obj/item/weapon/circuitboard/lawupload,
+		/obj/item/weapon/circuitboard/lawupload
 		)

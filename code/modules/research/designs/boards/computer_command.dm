@@ -1,36 +1,24 @@
 //Command related computers & consoles.
 
-/datum/design/aiupload
-	name = "Circuit Design (AI Upload)"
-	desc = "Allows for the construction of circuit boards used to build an AI Upload Console."
-	id = "aiupload"
+/datum/design/lawupload
+	name = "Circuit Design (Law Upload)"
+	desc = "Allows for the construction of circuit boards used to build an Law Upload Console."
+	id = "lawupload"
 	req_tech = list(Tc_PROGRAMMING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/aiupload
+	build_path = /obj/item/weapon/circuitboard/lawupload
 	locked = 1
 	req_lock_access = list(access_rnd, access_robotics, access_rd)
 
-/datum/design/aiupload/longrange
-	name = "Circuit Design (Long Range AI Upload)"
-	desc = "Allows for the construction of circuit boards used to build a Long Range AI Upload Console."
-	id = "aiuploadlongrange"
+/datum/design/lawupload/longrange
+	name = "Circuit Design (Long Range Law Upload)"
+	desc = "Allows for the construction of circuit boards used to build a Long Range Law Upload Console."
+	id = "lawuploadlongrange"
 	req_tech = list(Tc_PROGRAMMING = 4, Tc_MATERIALS = 9, Tc_BLUESPACE = 3, Tc_MAGNETS = 5)
 	materials = list(MAT_GLASS = 2000, SACID = 20)
-	build_path = /obj/item/weapon/circuitboard/aiupload/longrange
-
-/datum/design/borgupload
-	name = "Circuit Design (Cyborg Upload)"
-	desc = "Allows for the construction of circuit boards used to build a Cyborg Upload Console."
-	id = "borgupload"
-	req_tech = list(Tc_PROGRAMMING = 4)
-	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 2000, SACID = 20)
-	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/borgupload
-	locked = 1
-	req_lock_access = list(access_rnd, access_robotics, access_rd)
+	build_path = /obj/item/weapon/circuitboard/lawupload/longrange
 
 /datum/design/comconsole
 	name = "Circuit Design (Communications)"

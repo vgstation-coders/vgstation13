@@ -297,31 +297,28 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	return "[pick("!","@","#","$","%","^","&","*")][pick("!","@","#","$","%","^","&","*")][pick("!","@","#","$","%","^","&","*")][pick("!","@","#","$","%","^","&","*")]"
 
 //When an AI is activated, it can choose from a list of non-slaved borgs to have as a slave.
-/proc/freeborg()
-	var/select = null
+/proc/free_borgs()
 	var/list/borgs = list()
 
 	for(var/mob/living/silicon/robot/A in player_list)
-		if(DEAD == A.stat || A.connected_ai || A.scrambledcodes)
+		if(!A.CanChangeLaws())
 			continue
+		borgs += A
+	return borgs
 
-		var/name = "[A.real_name] ([A.modtype] [A.braintype])"
-		borgs[name] = A
-
-	if(borgs.len)
-		select = input("Unshackled borg signals detected:", "Borg selection", null, null) as null|anything in borgs
-		return borgs[select]
-
-//When a borg is activated, it can choose which AI it wants to be slaved to
+//When a borg is activated, it can choose which AI it wants to be slaved to //WHAT A FUCKING LIE
 /proc/active_ais()
-	. = list()
+	var/list/active_ais = list()
 	for(var/mob/living/silicon/ai/A in living_mob_list)
-		if(A.stat == DEAD)
+		if(!A.CanChangeLaws())
 			continue
-		if(A.control_disabled == 1)
-			continue
-		. += A
-	return .
+		active_ais += A
+	return active_ais
+
+//"What if i don't want to run two procs"
+/proc/get_active_ais_and_free_cyborgs()
+	var/list/all_active_silicons = active_ais() + free_borgs()
+	return all_active_silicons
 
 //Find an active ai with the least borgs. VERBOSE PROCNAME HUH!
 /proc/select_active_ai_with_fewest_borgs()

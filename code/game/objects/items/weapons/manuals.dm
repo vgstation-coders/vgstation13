@@ -475,8 +475,8 @@
           <li>Expose the cyborg's internal wiring</li>
           <li>Check to make sure the LawSync and AI Sync lights are lit</li>
           <li>If they are not lit, pulse the LawSync wire using a multitool to enable the cyborg's Law Sync</li>
-          <li>Proceed to a cyborg upload console. Nanotrasen usually places these in the same location as AI uplaod consoles.</li>
-          <li>Use a "Reset" upload moduleto reset the cyborg's laws</li>
+          <li>Proceed to a law upload console.</li>
+          <li>Use a "Reset" upload module to reset the cyborg's laws</li>
           <li>Proceed to a Robotics Control console</li>
           <li>Remove the lockdown on the cyborg</li>
         </ol>

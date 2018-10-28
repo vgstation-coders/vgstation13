@@ -1315,3 +1315,8 @@
 /mob/living/silicon/robot/proc/toggle_modulelock()
 	modulelock = !modulelock
 	return modulelock
+
+/mob/living/silicon/robot/CanChangeLaws()
+	if(stat == DEAD || emagged || connected_ai || scrambledcodes)
+		return FALSE
+	return TRUE

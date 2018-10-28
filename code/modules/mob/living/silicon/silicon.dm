@@ -349,3 +349,6 @@
 
 /mob/living/silicon/get_survive_objective()
 	return new /datum/objective/siliconsurvive
+
+/mob/living/silicon/proc/CanChangeLaws()
+	return FALSE
