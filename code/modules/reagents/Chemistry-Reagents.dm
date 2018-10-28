@@ -147,7 +147,7 @@
 			var/datum/role/changeling/C = M.mind.GetRole(CHANGELING)
 			if(!C.absorbed_chems.Find(id))
 				C.absorbed_chems.Add(id)
-				to_chat(M, "<span class = 'notice'>We have learned [src]</span>")
+				to_chat(M, "<span class = 'notice'>We have learned [src].</span>")
 
 	if((overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)) //Too much chems, or been in your system too long
 		on_overdose(M)
