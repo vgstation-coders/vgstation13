@@ -482,11 +482,8 @@ Subject's pulse: ??? BPM"})
 	var/details = 0
 	var/recent_fail = 0
 
-/obj/item/device/reagent_scanner/afterattack(obj/O, mob/user as mob)
-	. = ..()
-	if(.)
-		return
-	if(!istype(O)) //Wrong type sent
+/obj/item/device/reagent_scanner/preattack(atom/O, mob/user)
+	if(!O.Adjacent(user))
 		return
 	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
@@ -501,8 +498,9 @@ Subject's pulse: ??? BPM"})
 			to_chat(user, "<span class='notice'>Chemicals found in \the [O]:[dat]</span>")
 		else
 			to_chat(user, "<span class='notice'>No active chemical agents found in \the [O].</span>")
-
-	return
+		return TRUE
+	else
+		..()
 
 /obj/item/device/reagent_scanner/adv
 	name = "advanced reagent scanner"
