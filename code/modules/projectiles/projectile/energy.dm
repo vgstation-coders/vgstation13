@@ -75,6 +75,7 @@
 	damage_type = CLONE
 	irradiate = 40
 	fire_sound = 'sound/weapons/pulse3.ogg'
+	linear_movement = 0
 
 /obj/item/projectile/energy/bolt
 	name = "bolt"
