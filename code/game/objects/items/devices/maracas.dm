@@ -1,6 +1,6 @@
 /obj/item/device/maracas
 	name = "maracas"
-	desc = "Rather than using beads in a hollow shell, these space maracas use a long-life WATT potassium battery and a sensor to detect when they're shaken."
+	desc = "Rather than using beads in a hollow shell, these space maracas use a long-life WATT potassium battery and a sensor to detect when they're shaken. Chick-chicky-boom, chick-chicky boom."
 	icon = 'icons/obj/maracas.dmi'
 	icon_state = "maracas"
 	item_state = "maracas"
