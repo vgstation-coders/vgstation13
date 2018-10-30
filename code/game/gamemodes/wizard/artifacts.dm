@@ -119,6 +119,14 @@
 	if (!ticker || !ticker.mode || !istype(ticker.mode,/datum/gamemode/dynamic))//if mode isn't Dynamic Mode, who cares
 		return TRUE
 
+	if (!user.mind)
+		return FALSE
+
+	var/datum/role/wizard/myWizard = user.mind.GetRole(WIZARD)
+
+	if (!myWizard)//ain't gonna let non-wizards use those.
+		return FALSE
+
 	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 
 	var/datum/dynamic_ruleset/roundstart/wizard/wiz_rule = locate() in dynamic_mode.executed_rules
@@ -126,7 +134,7 @@
 	if (!wiz_rule)
 		return FALSE
 
-	if (locate(user) in wiz_rule.assigned)
+	if (myWizard in wiz_rule.roundstart_wizards)
 		return TRUE
 
 	return FALSE
