@@ -82,6 +82,8 @@
 	..()
 	header = initial(header)
 
+/obj/docking_port/destination/coord //Specific subtype to hunt for when doing cleanup
+
 /obj/item/weapon/card/shuttle_pass
 	name = "shuttle pass"
 	desc = "A one-use shuttle activation pass, for limited access to high-security transportation."
@@ -406,11 +408,13 @@
 			shuttle.linked_port.z + custom_z
 			)
 
-			if(!dest)
+			if(!dest || dest.z == CENTCOMM_Z || (!istype(dest, /turf/space) && !shuttle.destroy_everything))
 				to_chat(usr, "Error! Bad coordinates.")
 				return
-
-			disk.destination = new /obj/docking_port/destination(dest)
+			if(disk.destination && istype(disk.destination, /obj/docking_port/destination/coord))
+				qdel(disk.destination)
+				disk.destination = null
+			disk.destination = new /obj/docking_port/destination/coord(dest)
 			disk.destination.dir = angle2dir( dir2angle(shuttle.linked_port.dir) + custom_rot + 180)
 			//For instance, COURSE:06:06:2600:12:00
 			disk.destination.areaname = "COURSE:[time2text(world.timeofday, "MM:DD")]:[game_year]:[worldtime2text()]"
