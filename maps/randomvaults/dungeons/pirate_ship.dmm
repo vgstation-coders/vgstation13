@@ -1,56 +1,79 @@
-"a" = (/turf/space,/area)
-"b" = (/obj/effect/forcefield{alpha = 0; invisibility = 0; name = "invisible force wall"},/turf/space,/area)
-"c" = (/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 9},/area/vault/automap)
-"d" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/space,/area/vault/automap)
-"e" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/turf/space,/area/vault/automap)
-"f" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4; one_way = 1},/obj/structure/grille,/turf/space,/area/vault/automap)
-"g" = (/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 5},/area/vault/automap)
-"h" = (/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 1},/area/vault/automap)
-"i" = (/turf/simulated/floor/engine,/area/vault/automap)
-"j" = (/obj/structure/table/holotable/wood,/obj/item/weapon/skull,/turf/simulated/floor/engine,/area/vault/automap)
-"k" = (/obj/machinery/computer/fluff/shuttle_control/syndicate,/turf/simulated/floor/engine,/area/vault/automap)
-"l" = (/mob/living/simple_animal/parrot,/turf/simulated/floor/engine,/area/vault/automap)
-"m" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 9},/area/vault/automap)
-"n" = (/obj/machinery/door/window{dir = 8},/turf/simulated/floor/engine,/area/vault/automap)
-"o" = (/obj/machinery/door/window{base_state = "right"; dir = 4; icon_state = "right"; req_one_access_txt = "25;28;35"},/turf/simulated/floor/engine,/area/vault/automap)
-"p" = (/obj/machinery/door/window{dir = 2; base_state = "right"},/turf/simulated/floor/engine,/area/vault/automap)
-"q" = (/obj/structure/table/woodentable,/obj/item/weapon/melee/energy/sword/pirate,/obj/item/weapon/melee/energy/sword/pirate,/obj/item/weapon/gun/flintlock,/turf/simulated/floor/engine,/area/vault/automap)
-"r" = (/obj/structure/table/woodentable,/obj/item/weapon/melee/energy/sword/pirate,/obj/item/weapon/gun/flintlock,/turf/simulated/floor/engine,/area/vault/automap)
-"s" = (/obj/structure/table/woodentable,/obj/item/binoculars/telescope,/turf/simulated/floor/engine,/area/vault/automap)
-"t" = (/obj/structure/table/woodentable,/turf/simulated/floor/engine,/area/vault/automap)
-"u" = (/obj/structure/closet/crate/chest{anchored = 1; storage_capacity = 300},/obj/item/weapon/coin/gold,/turf/simulated/floor/engine,/area/vault/automap)
-"v" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor/engine,/area/vault/automap)
-"w" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/electrical,/turf/simulated/floor/engine,/area/vault/automap)
-"x" = (/obj/machinery/vending/cigarette,/turf/simulated/floor/engine,/area/vault/automap)
-"y" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/syndicate,/turf/simulated/floor/engine,/area/vault/automap)
-"z" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/engine,/area/vault/automap)
-"A" = (/obj/structure/window/reinforced/plasma,/turf/simulated/floor/engine,/area/vault/automap)
-"B" = (/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor/engine,/area/vault/automap)
-"C" = (/obj/structure/shuttle/engine/heater,/turf/simulated/floor/engine,/area/vault/automap)
-"D" = (/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/floor/engine,/area/vault/automap)
-"E" = (/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor/engine,/area/vault/automap)
-"F" = (/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/floor/engine,/area/vault/automap)
-"G" = (/turf/simulated/shuttle/wall{icon_state = "diagonalWall3"},/area/vault/automap)
-"H" = (/obj/structure/shuttle/engine/propulsion,/turf/space,/area/vault/automap)
-"I" = (/turf/simulated/shuttle/wall{dir = 4; icon_state = "diagonalWall3"},/area/vault/automap)
+"aa" = (/turf/space,/area)
+"ab" = (/obj/effect/forcefield{alpha = 0; invisibility = 0; name = "invisible force wall"},/turf/space,/area)
+"ac" = (/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 9},/area/vault/automap)
+"ad" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/space,/area/vault/automap)
+"ae" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/turf/space,/area/vault/automap)
+"af" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4; one_way = 1},/obj/structure/grille,/turf/space,/area/vault/automap)
+"ag" = (/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 5},/area/vault/automap)
+"ah" = (/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 1},/area/vault/automap)
+"ai" = (/turf/simulated/floor/engine,/area/vault/automap)
+"aj" = (/obj/structure/table/holotable/wood,/obj/item/weapon/skull,/obj/effect/decal/cleanable/bee,/turf/simulated/floor/engine,/area/vault/automap)
+"ak" = (/obj/machinery/computer/fluff/shuttle_control/syndicate,/turf/simulated/floor/engine,/area/vault/automap)
+"al" = (/obj/structure/coatrack,/mob/living/simple_animal/parrot,/turf/simulated/floor/engine,/area/vault/automap)
+"am" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 9},/area/vault/automap)
+"an" = (/obj/machinery/light/small{dir = 8},/turf/simulated/floor/engine,/area/vault/automap)
+"ao" = (/turf/simulated/floor/carpet,/area/vault/automap)
+"ap" = (/obj/structure/bed/chair/wood/throne{icon_state = "throne"; dir = 1},/turf/simulated/floor/carpet,/area/vault/automap)
+"aq" = (/obj/structure/table/woodentable,/obj/item/weapon/melee/energy/sword/pirate,/obj/item/weapon/melee/energy/sword/pirate,/obj/item/weapon/gun/flintlock,/turf/simulated/floor/engine,/area/vault/automap)
+"ar" = (/obj/structure/table/woodentable,/obj/item/weapon/melee/energy/sword/pirate,/obj/item/weapon/gun/flintlock,/turf/simulated/floor/engine,/area/vault/automap)
+"as" = (/obj/machinery/light/small{dir = 4},/turf/simulated/floor/engine,/area/vault/automap)
+"at" = (/obj/structure/table/woodentable,/turf/simulated/floor/engine,/area/vault/automap)
+"au" = (/obj/machinery/light/small,/turf/simulated/floor/carpet,/area/vault/automap)
+"av" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor/engine,/area/vault/automap)
+"aw" = (/obj/machinery/door/airlock/glass,/turf/simulated/floor/engine,/area/vault/automap)
+"ax" = (/obj/machinery/vending/cigarette,/turf/simulated/floor/engine,/area/vault/automap)
+"ay" = (/obj/structure/table/woodentable,/obj/item/weapon/melee/energy/sword/pirate,/obj/item/weapon/melee/energy/sword/pirate,/obj/item/weapon/gun/flintlock,/obj/machinery/light/small{dir = 1},/turf/simulated/floor/engine,/area/vault/automap)
+"az" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/engine,/area/vault/automap)
+"aA" = (/obj/structure/window/reinforced/plasma,/turf/simulated/floor/engine,/area/vault/automap)
+"aB" = (/obj/machinery/light/small{dir = 8},/turf/simulated/floor/carpet,/area/vault/automap)
+"aC" = (/obj/structure/shuttle/engine/heater,/turf/simulated/floor/engine,/area/vault/automap)
+"aD" = (/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma{dir = 8},/turf/simulated/floor/engine,/area/vault/automap)
+"aE" = (/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor/engine,/area/vault/automap)
+"aF" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 5},/area/vault/automap)
+"aG" = (/turf/simulated/shuttle/wall{icon_state = "diagonalWall3"},/area/vault/automap)
+"aH" = (/obj/structure/shuttle/engine/propulsion,/turf/space,/area/vault/automap)
+"aI" = (/turf/simulated/shuttle/wall{dir = 4; icon_state = "diagonalWall3"},/area/vault/automap)
+"aJ" = (/turf/simulated/floor/carpet,/turf/simulated/shuttle/wall{dir = 4; icon_state = "diagonalWall3"},/area/vault/automap)
+"aK" = (/turf/simulated/floor/carpet,/turf/simulated/shuttle/wall{icon_state = "diagonalWall3"},/area/vault/automap)
+"aL" = (/obj/machinery/door/window{base_state = "left"; dir = 2},/turf/simulated/floor/engine,/area/vault/automap)
+"aM" = (/obj/machinery/light/small{dir = 4},/turf/simulated/floor/carpet,/area/vault/automap)
+"aN" = (/obj/structure/table/woodentable,/obj/item/binoculars/telescope,/obj/machinery/light/small,/turf/simulated/floor/engine,/area/vault/automap)
+"aO" = (/obj/structure/closet/crate/chest{anchored = 1; storage_capacity = 300},/obj/item/weapon/coin/gold,/turf/simulated/floor/carpet,/area/vault/automap)
+"aP" = (/obj/structure/table/woodentable,/obj/machinery/light/small,/turf/simulated/floor/engine,/area/vault/automap)
+"aQ" = (/obj/machinery/door/window{dir = 2; base_state = "right"},/turf/simulated/floor/carpet,/area/vault/automap)
+"aR" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/electrical,/obj/machinery/light/small{dir = 1},/turf/simulated/floor/engine,/area/vault/automap)
+"aS" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/syndicate,/obj/machinery/light/small{dir = 1},/turf/simulated/floor/engine,/area/vault/automap)
+"aT" = (/obj/machinery/door/window{dir = 2; base_state = "right"},/turf/simulated/floor/engine,/area/vault/automap)
+"aU" = (/turf/simulated/floor/engine,/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 5},/area/vault/automap)
+"aV" = (/turf/simulated/floor/engine,/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 9},/area/vault/automap)
+"aW" = (/turf/space,/turf/simulated/shuttle/wall{dir = 4; icon_state = "diagonalWall3"},/area/vault/automap)
+"aX" = (/obj/effect/decal/cleanable/fruit_smudge,/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 1},/area/vault/automap)
+"aY" = (/obj/effect/decal/cleanable/greenglow,/turf/simulated/floor/engine,/area/vault/automap)
+"aZ" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/point,/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 1},/area/vault/automap)
+"ba" = (/obj/effect/decal/point,/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 1},/area/vault/automap)
+"bb" = (/obj/effect/decal/cleanable/cockroach_remains,/turf/simulated/floor/engine,/area/vault/automap)
+"bc" = (/obj/machinery/suit_storage_unit/pirate,/turf/simulated/floor/engine,/area/vault/automap)
+"bd" = (/obj/effect/decal/cleanable/blood/oil/streak,/turf/simulated/floor/engine,/area/vault/automap)
+"be" = (/obj/effect/decal/cleanable/vomit,/turf/simulated/floor/engine,/area/vault/automap)
 
 (1,1,1) = {"
-abbbbbbbbba
-abcdeeefgba
-bbhijklihbb
-bmhiiiiihgb
-bhiniiioihb
-bhphhhhhphb
-bhiqqrqqihb
-bhiiiiiiihb
-bhiiiiiiihb
-bhiiiiiiihb
-bhistuttihb
-bhphhhhhphb
-bhivwxyvihb
-bziiiiiiizb
-bhiAiAiAihb
-bhBCDCECFhb
-bGhHhHhHhIb
-bbbbbbbbbbb
+aaaaaaabababababababababaaaaaa
+aaaaaaabacadaeaeaeafagabaaaaaa
+aaaaababahalajakaiaiahababaaaa
+aaaaabamahanaoapaoasahagabaaaa
+aaababaXaYaoaoauaoaoaiahababaa
+ababamahawahahahahahawahaFabab
+abacaZahaoayaqaraqayaoahbaagab
+abazaiazaoaoaoaoaoaoaoazbbazab
+abazaiazaBaoaoaoaoaoaMazaiazab
+abaGbcaJaoaoaoaoaoaoaoaKbcaIab
+ababahaoaoaNataOataPaoaoahabab
+aaabahaLaQahahahahahaQaTahabaa
+aaabahaiaiavaRaxaSavaiaiahabaa
+aaabahaibdaiaiaiaiaiaiaiahabaa
+aaabahazaUaiaiaibdbdaVazahabaa
+aaabazaiahaAaiaAbdaAahbeazabaa
+aaabaGahahaCaDaCaEaCahahaIabaa
+aaabababaGaHahaHahaHaWabababaa
+aaaaaaabababababababababaaaaaa
 "}

@@ -366,4 +366,35 @@
 /datum/dynamic_ruleset/midround/pirates/review_applications()
 	var/datum/faction/pirate_raiders/pirates = ticker.mode.CreateFaction(/datum/faction/pirate_raiders, null, 1)
 	load_dungeon(/datum/map_element/dungeon/pirateship)
+	for (var/i = required_candidates, i > 0, i--)
+		if(applicants.len <= 0)
+			break
+		var/mob/applicant = null
+		var/selected_key = pick(applicants)
+		for(var/mob/M in player_list)
+			if(M.key == selected_key)
+				applicant = M
+		if(!applicant || !applicant.key)
+			i++
+			continue
+		applicants -= applicant.key
+		if(!isobserver(applicant))
+			//Making sure we don't recruit people who got back into the game since they applied
+			i++
+			continue
 
+		var/mob/living/carbon/human/new_character= makeBody(applicant)
+		new_character.dna.ResetSE()
+
+		assigned += new_character
+		if (i == required_candidates)
+			var/datum/role/pirate/captain/capn = new
+			capn.AssignToRole(new_character.mind,1)
+			pirates.HandleRecruitedRole(capn)
+			capn.Greet(GREET_MIDROUND)
+		else
+			var/datum/role/pirate/yarr = new
+			yarr.AssignToRole(new_character.mind,1)
+			pirates.HandleRecruitedRole(yarr)
+			yarr.Greet(GREET_MIDROUND)
+	pirates.OnPostSetup()
