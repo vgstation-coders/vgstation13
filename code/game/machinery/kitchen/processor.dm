@@ -117,10 +117,10 @@
 			process(loc, what)
 				var/mob/living/carbon/monkey/O = what
 				if (O.client) //grief-proof
-					O.forceMove(loc)
-					O.visible_message("<span class='notice'>[O] suddenly jumps out of [src]!</span>", \
+					O.visible_message("<span class='notice'>[O] suddenly jumps out of \the [O.loc]!</span>", \
 							"You jump out from the processor", \
 							"You hear a slimy sound")
+					O.forceMove(loc)
 					return
 				var/obj/item/weapon/reagent_containers/glass/bucket/bucket_of_blood = new(loc)
 				O.take_blood(bucket_of_blood, 70)
