@@ -80,6 +80,9 @@
 /obj/structure/reagent_dispensers/proc/is_empty()
 	return reagents.total_volume <= 0
 
+/obj/structure/reagent_dispensers/proc/can_transfer()
+	return TRUE
+
 //Dispensers
 /obj/structure/reagent_dispensers/watertank
 	name = "watertank"
@@ -358,3 +361,36 @@
 /obj/structure/reagent_dispensers/degreaser/New()
 	. = ..()
 	reagents.add_reagent(ETHANOL, 1000)
+
+/obj/structure/reagent_dispensers/cauldron
+	name = "cauldron"
+	icon_state = "cauldron"
+	desc = "Double, double, toil and trouble. Fire burn, and cauldron bubble."
+
+/obj/structure/reagent_dispensers/cauldron/update_icon()
+	overlays.len = 0
+
+	if(reagents.total_volume)
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]")
+
+		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+
+		overlays += filling
+
+/obj/structure/reagent_dispensers/cauldron/on_reagent_change()
+	update_icon()
+
+/obj/structure/reagent_dispensers/cauldron/wrenchable()
+	return TRUE
+
+/obj/structure/reagent_dispensers/cauldron/is_open_container()
+	return TRUE
+
+/obj/structure/reagent_dispensers/cauldron/hide_own_reagents()
+	return TRUE
+
+/obj/structure/reagent_dispensers/cauldron/can_transfer(var/obj/item/reagent_containers/R, var/mob/user)
+	if(user.a_intent != I_HELP)
+		return TRUE
+	return FALSE
