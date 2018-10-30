@@ -109,6 +109,9 @@
 		. += "<br/>"
 
 /datum/role/vampire/ForgeObjectives()
+	if(!SOLO_ANTAG_OBJECTIVES)
+		AppendObjective(/datum/objective/freeform/vampire)
+		return
 
 	AppendObjective(/datum/objective/acquire_blood)
 
