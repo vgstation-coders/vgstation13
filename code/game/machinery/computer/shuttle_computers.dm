@@ -411,7 +411,9 @@
 			if(!dest || dest.z == CENTCOMM_Z || (!istype(dest, /turf/space) && !shuttle.destroy_everything))
 				to_chat(usr, "Error! Bad coordinates.")
 				return
-			if(disk.destination && istype(disk.destination, /obj/docking_port/destination/coord))
+			if(istype(disk.destination, /obj/docking_port/destination/coord))
+				if(shuttle.current_port == disk.destination)
+					shuttle.current_port = null
 				qdel(disk.destination)
 				disk.destination = null
 			disk.destination = new /obj/docking_port/destination/coord(dest)
