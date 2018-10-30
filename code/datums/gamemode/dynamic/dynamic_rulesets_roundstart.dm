@@ -50,7 +50,7 @@
 	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = 3
-	cost = 15
+	cost = 21
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
 
 /datum/dynamic_ruleset/roundstart/changeling/execute()
