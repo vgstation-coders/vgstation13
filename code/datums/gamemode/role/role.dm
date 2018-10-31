@@ -268,10 +268,10 @@
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <B>You are \a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
 
 /datum/role/proc/PreMindTransfer(var/mob/living/old_character)
-	return TRUE
+	return
 
 /datum/role/proc/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
-	return TRUE
+	return
 
 /datum/role/proc/GetFaction()
 	return faction
