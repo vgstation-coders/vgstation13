@@ -215,12 +215,6 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	genomecost = 3
 	verbpath = /obj/item/verbs/changeling/proc/changeling_lsdsting
 
-/datum/power/changeling/DeathSting
-	name = "Death Sting"
-	desc = "We silently sting a human, filling him with potent chemicals. His rapid death is all but assured."
-	genomecost = 8
-	verbpath = /obj/item/verbs/changeling/proc/changeling_DEATHsting
-
 /datum/power/changeling/unfat_sting
 	name = "Unfat Sting"
 	desc = "We silently sting a human or ourselves, forcing them to rapidly metabolize their fat."

@@ -1203,31 +1203,6 @@ var/list/datum/dna/hivemind_bank = list()
 	feedback_add_details("changeling_powers", "FS")
 	return 1
 
-
-
-/obj/item/verbs/changeling/proc/changeling_DEATHsting()
-	set category = "Changeling"
-	set name = "Death Sting (40)"
-	set desc = "Causes spasms onto death."
-
-	var/mob/M = loc
-	if(!istype(M))
-		return
-
-	var/mob/living/carbon/target = M.changeling_sting(40, /obj/item/verbs/changeling/proc/changeling_DEATHsting)
-	if(!target)
-		return
-
-	to_chat(target, "<span class='userdanger'>You feel a tiny prick. Your chest starts tightening.</span>")
-	target.silent = 10
-	target.Paralyse(10)
-	target.Jitter(1000)
-	if(target.reagents)
-		target.reagents.add_reagent(CYANIDE, 20)
-
-	feedback_add_details("changeling_powers", "DTHS")
-	return 1
-
 /obj/item/verbs/changeling/proc/changeling_extract_dna_sting()
 	set category = "Changeling"
 	set name = "Extract DNA Sting (40)"
