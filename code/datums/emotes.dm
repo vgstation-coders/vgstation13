@@ -33,7 +33,7 @@
 
 /datum/emote/proc/run_emote(mob/user, params, type_override, ignore_status = FALSE)
 	. = TRUE
-	if(!can_run_emote(user, !ignore_status)) // ignore_status == TRUE means that status_check should be FALSE and vise-versa
+	if(!(type_override) && !(can_run_emote(user, !ignore_status))) // ignore_status == TRUE means that status_check should be FALSE and vise-versa
 		return FALSE
 	var/msg = select_message_type(user)
 	if(params && message_param)
