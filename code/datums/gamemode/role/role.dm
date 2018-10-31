@@ -27,7 +27,10 @@
 		Drops the antag mind from the parent role, informs the gamemode the mind now doesn't have a role, and deletes the role datum.
 	@CanBeAssigned(Mind)
 		General sanity checks before assigning the person to the role, such as checking if they're part of the protected jobs or antags.
-
+	@PreMindTransfer(Old_character, Mob/Living)
+		Things to do to the *old* body prior to the mind transfer.
+	@PostMindTransfer(New_character, Mob/Living, Old_character, Mob/Living)
+		Things to do to the *new* body after the mind transfer is completed.
 */
 
 #define ROLE_MIXABLE   1 // Can be used in mixed mode
@@ -264,10 +267,10 @@
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <B>You are \a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
 
-/datum/role/proc/PreMindTransfer(var/datum/mind/M)
+/datum/role/proc/PreMindTransfer(var/mob/living/old_character)
 	return
 
-/datum/role/proc/PostMindTransfer(var/datum/mind/M)
+/datum/role/proc/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	return
 
 /datum/role/proc/GetFaction()
@@ -452,9 +455,6 @@
 /datum/role/proc/GetMemoryHeader()
 	return name
 
-/datum/role/proc/handle_mind_transfer(var/mob/living/new_character, var/mob/living/old_character)
-	return TRUE
-
 // -- Custom reagent reaction for your antag - now in a (somewhat) maintable fashion
 
 /datum/role/proc/handle_reagent(var/reagent_id)
@@ -579,7 +579,7 @@
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
 
-/datum/role/wizard/handle_mind_transfer(var/mob/living/new_character, var/mob/living/old_character)
+/datum/role/wizard/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	. = ..()
 	for (var/spell/S in old_character.spell_list)
 		if (S.user_type == USER_TYPE_WIZARD)

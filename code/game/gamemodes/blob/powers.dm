@@ -314,7 +314,9 @@
 	set category = "Blob"
 	set name = "Psionic Message"
 	set desc = "Give a psionic message to all creatures on and around your 'local' vicinity."
-	telepathy()
+	var/text = input(src, "What message should we send?", "Message") as null|text
+	if (text)
+		telepathy(text)
 
 /mob/camera/blob/proc/telepathy(message as text)
 

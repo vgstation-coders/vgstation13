@@ -90,7 +90,7 @@
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
-			R.handle_splashed_reagent(id)
+			R.handle_splashed_reagent(self.id)
 
 /datum/reagent/proc/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
 	set waitfor = 0
