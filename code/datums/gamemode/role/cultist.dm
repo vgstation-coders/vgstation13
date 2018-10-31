@@ -150,7 +150,7 @@
 	switch (reagent_id)
 		if (HOLYWATER)
 			var/mob/living/carbon/human/H = antag.current
-			if (istype(H))
+			if (!istype(H))
 				return
 			var/unholy = H.checkTattoo(TATTOO_HOLY)
 			var/current_act = max(-1,min(5,veil_thickness))
