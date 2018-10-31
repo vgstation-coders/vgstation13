@@ -13,7 +13,7 @@
 		pick(
 			/obj/item/weapon/storage/backpack/industrial,
 			/obj/item/weapon/storage/backpack/satchel_eng),
-		/obj/item/blueprints,
+		/obj/item/blueprints/primary,
 		/obj/item/clothing/under/rank/chief_engineer,
 		/obj/item/clothing/head/hardhat/white,
 		/obj/item/clothing/head/welding,
