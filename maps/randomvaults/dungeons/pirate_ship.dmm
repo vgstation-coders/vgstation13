@@ -8,12 +8,12 @@
 "ah" = (/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 1},/area/vault/automap)
 "ai" = (/turf/simulated/floor/engine,/area/vault/automap)
 "aj" = (/obj/structure/table/holotable/wood,/obj/item/weapon/skull,/obj/effect/decal/cleanable/bee,/turf/simulated/floor/engine,/area/vault/automap)
-"ak" = (/obj/machinery/computer/fluff/shuttle_control/syndicate,/turf/simulated/floor/engine,/area/vault/automap)
+"ak" = (/obj/machinery/computer/shuttle_control/pirate,/turf/simulated/floor/engine,/area/vault/automap)
 "al" = (/obj/structure/coatrack,/mob/living/simple_animal/parrot,/turf/simulated/floor/engine,/area/vault/automap)
 "am" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "wall3"; dir = 9},/area/vault/automap)
 "an" = (/obj/machinery/light/small{dir = 8},/turf/simulated/floor/engine,/area/vault/automap)
 "ao" = (/turf/simulated/floor/carpet,/area/vault/automap)
-"ap" = (/obj/structure/bed/chair/wood/throne{icon_state = "throne"; dir = 1},/turf/simulated/floor/carpet,/area/vault/automap)
+"ap" = (/obj/structure/bed/chair/wood/throne{icon_state = "throne"; dir = 1},/obj/effect/landmark{name = "pirate_captain_spawn"},/turf/simulated/floor/carpet,/area/vault/automap)
 "aq" = (/obj/structure/table/woodentable,/obj/item/weapon/melee/energy/sword/pirate,/obj/item/weapon/melee/energy/sword/pirate,/obj/item/weapon/gun/flintlock,/turf/simulated/floor/engine,/area/vault/automap)
 "ar" = (/obj/structure/table/woodentable,/obj/item/weapon/melee/energy/sword/pirate,/obj/item/weapon/gun/flintlock,/turf/simulated/floor/engine,/area/vault/automap)
 "as" = (/obj/machinery/light/small{dir = 4},/turf/simulated/floor/engine,/area/vault/automap)
@@ -55,6 +55,8 @@
 "bc" = (/obj/machinery/suit_storage_unit/pirate,/turf/simulated/floor/engine,/area/vault/automap)
 "bd" = (/obj/effect/decal/cleanable/blood/oil/streak,/turf/simulated/floor/engine,/area/vault/automap)
 "be" = (/obj/effect/decal/cleanable/vomit,/turf/simulated/floor/engine,/area/vault/automap)
+"bf" = (/obj/machinery/door/airlock/external,/obj/docking_port/shuttle{dir = 8},/turf/simulated/floor/engine,/area/vault/automap)
+"bg" = (/obj/effect/landmark{name = "pirate_spawn"},/turf/simulated/floor/carpet,/area/vault/automap)
 
 (1,1,1) = {"
 aaaaaaabababababababababaaaaaa
@@ -64,8 +66,8 @@ aaaaabamahanaoapaoasahagabaaaa
 aaababaXaYaoaoauaoaoaiahababaa
 ababamahawahahahahahawahaFabab
 abacaZahaoayaqaraqayaoahbaagab
-abazaiazaoaoaoaoaoaoaoazbbazab
-abazaiazaBaoaoaoaoaoaMazaiazab
+abbfaiazaoaoaoaoaoaoaoazbbazab
+abazaiazaBbgbgbgbgbgaMazaiazab
 abaGbcaJaoaoaoaoaoaoaoaKbcaIab
 ababahaoaoaNataOataPaoaoahabab
 aaabahaLaQahahahahahaQaTahabaa
