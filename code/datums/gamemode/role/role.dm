@@ -455,6 +455,14 @@
 /datum/role/proc/handle_mind_transfer(var/mob/living/new_character, var/mob/living/old_character)
 	return TRUE
 
+// -- Custom reagent reaction for your antag - now in a (somewhat) maintable fashion
+
+/datum/role/proc/handle_reagent(var/reagent_id)
+	return
+
+/datum/role/proc/handle_splashed_reagent(var/reagent_id)
+	return
+
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
 
