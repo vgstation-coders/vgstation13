@@ -274,7 +274,7 @@ proc/name_wizard(mob/living/carbon/human/wizard_mob)
 	if(!istype(H))
 		return 0
 	H.drop_all(TRUE)
-	H.put_in_hands(new /obj/item/weapon/katana)
+	H.put_in_hands(new /obj/item/weapon/katana/hesfast)
 	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
 	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
 	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)

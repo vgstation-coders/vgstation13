@@ -91,6 +91,51 @@
 /obj/item/weapon/katana/IsShield()
 		return 1
 
+/obj/item/weapon/katana/hesfast //it's a normal katana, except alt clicking lets you teleport behind someone for epic slice and dice time
+	var/teleportcooldown = 600 //one minute cooldown
+	var/active = FALSE
+
+/obj/item/weapon/katana/hesfast/examine(mob/user)
+	..()
+	if(!isweeaboo(user))
+		return
+	to_chat(user, "<span class='notice'>This katana has an ancient power dwelling inside of it!</span>")
+	var/message = "<span class='notice'>"
+	if(teleportcooldown < world.time)
+		message += "Oh yeah, the ancient power stirs. This is the katana that will pierce the heavens!"
+	else
+		var/cooldowncalculated = (teleportcooldown - world.time)/10
+		message += "Your steel has unleashed it's dark and unwholesome power, so it's tapped out right now. It'll be ready again in [cooldowncalculated] seconds."
+	if(active)
+		message += " alt-click to enable your teleport power!</span>"
+	else
+		message += " alt-click to disable your teleport power level from those who wish to Kill la Kill you!</span>"
+	to_chat(user, "[message]")
+
+/obj/item/weapon/katana/hesfast/AltClick(mob/user)
+	if(!isweeaboo(user))
+		return
+	if(!active)
+		active = TRUE
+		to_chat(user, "<span class='notice'>You will teleport on attacks if you can.</span>")
+	else//i could return on the above but this is much more readable or something
+		to_chat(user, "<span class='notice'>You will not teleport for now. \"Not today, katana-san.\"</span>")
+		active = FALSE
+
+/obj/item/weapon/katana/hesfast/afterattack(var/atom/A, mob/user)
+	if(!(active || isweeaboo(user) || isliving(A))) //sword not active, user not a weeb, or target not a mob
+		return
+	if(teleportcooldown > world.time)//you're trying to teleport when it's on cooldown.
+		return
+	var/mob/living/L = A
+	var/turf/SHHHHIIIING = get_step(L.loc, turn(L.dir, 180))
+	if(!SHHHHIIIING) //sanity for avoiding banishing our weebs into the shadow realm, if they teleport behind someone whose back is to the end of the z-level
+		return
+	teleportcooldown = initial(teleportcooldown) + world.time
+	user.forceMove(SHHHHIIIING)
+	user.dir = L.dir
+	..()
+
 /obj/item/weapon/katana/magic
 	name = "enchanted sword"
 	desc = "Capable of cutting through anything except the things it can't cut through."
