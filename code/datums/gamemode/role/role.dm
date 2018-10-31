@@ -529,11 +529,6 @@
 	..()
 	wikiroute = role_wiki[BLOBOVERMIND]
 
-/datum/role/blob_overmind/OnPostSetup()
-	. = ..()
-	if(!.)
-		return
-
 /datum/role/blob_overmind/process()
 	if(!antag || istype(antag.current,/mob/camera/blob))
 		return
