@@ -267,7 +267,8 @@
 	instrumentObj.interact(user)
 /datum/song/handheld/shouldStopPlaying(mob/user)
 	if(instrumentObj)
-		if(user.isUnconscious()) return 1
+		if(user.isUnconscious()) 
+		return 1
 //////////////////////////////////////////////////////////////////////////
 /obj/structure/piano
 	name = "space piano"
