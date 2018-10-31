@@ -2191,6 +2191,7 @@
 #include "code\modules\research\xenoarchaeology\finds\finds_guitar.dm"
 #include "code\modules\research\xenoarchaeology\finds\finds_misc.dm"
 #include "code\modules\research\xenoarchaeology\finds\finds_special.dm"
+#include "code\modules\research\xenoarchaeology\finds\finds_splinter.dm"
 #include "code\modules\research\xenoarchaeology\finds\finds_talkingitem.dm"
 #include "code\modules\research\xenoarchaeology\machinery\analysis_accelerator.dm"
 #include "code\modules\research\xenoarchaeology\machinery\analysis_base.dm"

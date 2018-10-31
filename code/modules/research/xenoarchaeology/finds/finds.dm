@@ -632,6 +632,13 @@
 			apply_material_decorations = FALSE
 			apply_image_decorations = FALSE
 			anomaly_factor = 3
+		if(ARCHAEO_SUPERSHARD)
+			item_type = "shard fragment"
+			new_item = new /obj/item/supermatter_splinter(loc)
+			apply_prefix = FALSE
+			apply_material_decorations = FALSE
+			apply_image_decorations = FALSE
+			anomaly_factor = 0
 
 	var/decorations = ""
 	if(apply_material_decorations)

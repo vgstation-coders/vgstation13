@@ -1249,6 +1249,9 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/on_mousedrop_to_inventory_slot()
 	return
 
+/obj/item/proc/can_be_stored(var/obj/item/weapon/storage/S)
+	return TRUE
+
 /obj/item/MouseDropFrom(var/obj/over_object)
 	if(istype(loc, /obj/item/weapon/storage) && !usr.incapacitated()) //This is the code for re-ordering items inside a storage item via mouse drag and drop.
 		if(loc == over_object.loc) //Swapping to another object in the same storage item
