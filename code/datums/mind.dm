@@ -79,6 +79,10 @@
 	if(!istype(new_character))
 		error("transfer_to(): Some idiot has tried to transfer_to() a non mob/living mob. Please inform Carn")
 
+	for (var/role in antag_roles)
+		var/datum/role/R = antag_roles[role]
+		R.PreMindTransfer(new_character)
+
 	if(current)					//remove ourself from our old body's mind variable
 		current.mind = null
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
@@ -94,7 +98,7 @@
 
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
-		R.handle_mind_transfer(new_character)
+		R.PostMindTransfer(new_character)
 
 /datum/mind/proc/store_memory(new_text)
 	if(new_text)

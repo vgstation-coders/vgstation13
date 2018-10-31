@@ -27,7 +27,10 @@
 		Drops the antag mind from the parent role, informs the gamemode the mind now doesn't have a role, and deletes the role datum.
 	@CanBeAssigned(Mind)
 		General sanity checks before assigning the person to the role, such as checking if they're part of the protected jobs or antags.
-
+	@PreMindTransfer(Mob/Living)
+		Things to do to the *old* body prior to the mind transfer.
+	@PostMindTransfer(Mob/Living)
+		Things to do to the *new* body after the mind transfer is completed.
 */
 
 #define ROLE_MIXABLE   1 // Can be used in mixed mode
@@ -264,11 +267,11 @@
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <B>You are \a [name][faction ? ", a member of the [faction.GetObjectivesMenuHeader()]":"."]</B>")
 
-/datum/role/proc/PreMindTransfer(var/datum/mind/M)
-	return
+/datum/role/proc/PreMindTransfer(var/mob/living/old_character)
+	return TRUE
 
-/datum/role/proc/PostMindTransfer(var/datum/mind/M)
-	return
+/datum/role/proc/PostMindTransfer(var/mob/living/new_character)
+	return TRUE
 
 /datum/role/proc/GetFaction()
 	return faction
@@ -451,9 +454,6 @@
 
 /datum/role/proc/GetMemoryHeader()
 	return name
-
-/datum/role/proc/handle_mind_transfer(var/mob/living/new_character)
-	return TRUE
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
