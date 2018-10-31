@@ -26,8 +26,8 @@
 	blob_cores += src
 	processing_objects.Add(src)
 	creator = C
-	if((icon_size == 64) && !no_morph)
-		if(new_overmind)
+	if(icon_size == 64)
+		if(!no_morph && new_overmind)
 			flick("core_spawn",src)
 		else
 			icon_state = "cerebrate"
