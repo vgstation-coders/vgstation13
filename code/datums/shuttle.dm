@@ -303,8 +303,8 @@
 			for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
 				spawn()
 					P.shoot_exhaust()
-
-	current_port.start_warning_lights()
+	if(current_port)
+		current_port.start_warning_lights()
 	destination_port.start_warning_lights()
 
 	spawn(get_pre_flight_delay())
