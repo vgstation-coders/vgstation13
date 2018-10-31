@@ -677,6 +677,8 @@
 		holder.remove_reagent(PLASMA, REM)
 	if(holder.has_any_reagents(list(SACID, FORMIC_ACID)))
 		holder.remove_reagents(list(SACID, FORMIC_ACID), REM)
+	if(holder.has_reagent(POTASSIUM_HYDROXIDE))
+		holder.remove_reagent(POTASSIUM_HYDROXIDE, 2 * REM)
 	if(holder.has_reagent(CYANIDE))
 		holder.remove_reagent(CYANIDE, REM)
 	if(holder.has_reagent(AMATOXIN))
@@ -765,6 +767,24 @@
 	M.adjustToxLoss(4)
 	M.adjustOxyLoss(4)
 	M.sleeping += 1
+
+/datum/reagent/potassium_hydroxide
+	name = "Potassium Hydroxide"
+	id = POTASSIUM_HYDROXIDE
+	description = "A corrosive chemical used in making soap and batteries."
+	reagent_state = REAGENT_STATE_SOLID
+	overdose_am = REAGENTS_OVERDOSE
+	custom_metabolism = 0.1
+	color = "#ffffff" //rgb: 255, 255, 255
+	density = 2.12
+	specheatcap = 65.87 //how much energy in joules it takes to heat this thing up by 1 degree (J/g). round to 2dp
+
+/datum/reagent/potassium_hydroxide/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.adjustFireLoss(REM)
 
 //Quiet and lethal, needs at least 4 units in the person before they'll die
 /datum/reagent/chefspecial

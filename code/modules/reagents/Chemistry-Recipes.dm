@@ -68,6 +68,7 @@
 	required_reagents = list(WATER = 1, POTASSIUM = 1)
 	result_amount = 2
 	alert_admins = ALERT_AMOUNT_ONLY
+	secondary = 1
 
 /datum/chemical_reaction/explosion_potassium/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/datum/effect/effect/system/reagents_explosion/e = new()
@@ -82,8 +83,24 @@
 	if(!holder.my_atom.is_open_container() || ismob(holder.my_atom))
 		holder.del_reagent(POTASSIUM)
 		holder.del_reagent(WATER)
+		holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
+		holder.add_reagent(HYDROGEN, created_volume * REM)
 	else
 		holder.clear_reagents()
+		holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
+		holder.add_reagent(HYDROGEN, created_volume * REM)
+
+/datum/chemical_reaction/soap //Potassium Hydroxide is used in making liquid soap not bar soap but that will not stop me
+	name = "Soap"
+	id = "soap"
+	result = null
+	required_reagents = list(POTASSIUM_HYDROXIDE = 20, NUTRIMENT = 5)
+	required_temp = T0C + 50
+	result_amount = 1
+
+/datum/chemical_reaction/soap/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/weapon/soap(location)
 
 /datum/chemical_reaction/creatine
 	name = "Creatine"
