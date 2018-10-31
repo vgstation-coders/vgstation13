@@ -81,7 +81,7 @@
 
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
-		R.PreMindTransfer(old_character)
+		R.PreMindTransfer(current)
 
 	if(current)					//remove ourself from our old body's mind variable
 		current.mind = null
@@ -95,7 +95,7 @@
 
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
-		R.PostMindTransfer(new_character, old_character)
+		R.PostMindTransfer(new_character, current)
 
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
