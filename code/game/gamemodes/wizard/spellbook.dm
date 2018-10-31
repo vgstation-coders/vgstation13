@@ -315,6 +315,8 @@
 			if(istype(SA) && (SA in get_available_artifacts()))
 				if(SA.can_buy(usr) && use(SA.price))
 					SA.purchased(usr)
+					if(SA.one_use)
+						available_artifacts.Remove(SA)
 					feedback_add_details("wizard_spell_learned", SA.abbreviation)
 
 		attack_self(usr)
