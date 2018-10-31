@@ -86,15 +86,15 @@
 
 	nanomanager.user_transferred(current, new_character)
 
-	current = new_character		//link ourself to our new body
-	new_character.mind = src	//and link our new body to ourself
-
 	if(active)
 		new_character.key = key		//now transfer the key to link the client to our new body
 
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
-		R.handle_mind_transfer(new_character)
+		R.handle_mind_transfer(new_character, current)
+
+	current = new_character		//link ourself to our new body
+	new_character.mind = src	//and link our new body to ourself
 
 /datum/mind/proc/store_memory(new_text)
 	if(new_text)

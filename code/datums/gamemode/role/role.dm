@@ -452,7 +452,7 @@
 /datum/role/proc/GetMemoryHeader()
 	return name
 
-/datum/role/proc/handle_mind_transfer(var/mob/living/new_character)
+/datum/role/proc/handle_mind_transfer(var/mob/living/new_character, var/mob/living/old_character)
 	return TRUE
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
@@ -570,6 +570,12 @@
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
+
+/datum/role/wizard/handle_mind_transfer(var/mob/living/new_character, var/mob/living/old_character)
+	. = ..()
+	for (var/spell/S in old_character.spell_list)
+		if (S.user_type == USER_TYPE_WIZARD)
+			new_character.add_spell(S)
 
 /datum/role/wizard/summon_magic
 	disallow_job = FALSE
