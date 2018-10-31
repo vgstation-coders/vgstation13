@@ -263,14 +263,11 @@
 	new_tempo = abs(new_tempo)
 	return max(round(new_tempo, world.tick_lag), world.tick_lag)
 // subclass for handheld instruments, like violin
-/datum/song/handheld
 /datum/song/handheld/updateDialog(mob/user)
 	instrumentObj.interact(user)
-/datum/song/handheld/shouldStopPlaying()
+/datum/song/handheld/shouldStopPlaying(mob/user)
 	if(instrumentObj)
-		return !isliving(instrumentObj.loc)
-	else
-		return 1
+		if(user.isUnconscious()) return 1
 //////////////////////////////////////////////////////////////////////////
 /obj/structure/piano
 	name = "space piano"
