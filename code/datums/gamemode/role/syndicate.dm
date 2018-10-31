@@ -54,15 +54,24 @@
 
 /datum/role/traitor/extraPanelButtons()
 	var/dat = ""
-	if(antag.find_syndicate_uplink())
-		dat = " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];removeuplink=1;'>(Remove uplink)</a>"
+	var/obj/item/device/uplink/hidden/guplink = antag.find_syndicate_uplink()
+	if(guplink)
+		dat += " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];telecrystalsSet=1;'>Telecrystals: [guplink.uses](Set telecrystals)</a><br>"
+		dat += " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];removeuplink=1;'>(Remove uplink)</a><br>"
 	else
-		dat = " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];giveuplink=1;'>(Give uplink)</a>"
+		dat = " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];giveuplink=1;'>(Give uplink)</a><br>"
 	return dat
 
 /datum/role/traitor/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
 	if(href_list["giveuplink"])
 		equip_traitor(antag.current, 20)
+	if(href_list["telecrystalsSet"])
+		var/obj/item/device/uplink/hidden/guplink = M.find_syndicate_uplink()
+		var/amount = input("What would you like to set their crystal count to?", "Their current count is [guplink.uses]") as null|num
+		if(isnum(amount) && amount >= 0)
+			to_chat(usr, "<span class = 'notice'>You have set [M]'s uplink telecrystals to [amount].</span>")
+			guplink.uses = amount
+
 	if(href_list["removeuplink"])
 		M.take_uplink()
 		to_chat(M.current, "<span class='warning'>You have been stripped of your uplink.</span>")

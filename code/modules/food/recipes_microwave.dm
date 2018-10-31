@@ -2597,3 +2597,9 @@
 		)
 
 	result = /obj/item/weapon/reagent_containers/food/snacks/pierogi
+
+/datum/recipe/sauerkraut
+	reagents = list(SODIUMCHLORIDE = 2, WATER = 15)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage)
+
+	result = /obj/item/weapon/reagent_containers/food/snacks/sauerkraut

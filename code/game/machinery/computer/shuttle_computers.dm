@@ -73,6 +73,17 @@
 	destination = null
 	header = "ERROR"
 
+/obj/item/weapon/disk/shuttle_coords/free_move
+	name = "shuttle free-movement driver"
+	desc = "This disk contains a piece of software which converts coordinates into subspace trajectories, which shuttle computers are able to use."
+	header = "FREE-MOVE DRIVER"
+
+/obj/item/weapon/disk/shuttle_coords/free_move/initialize()
+	..()
+	header = initial(header)
+
+/obj/docking_port/destination/coord //Specific subtype to hunt for when doing cleanup
+
 /obj/item/weapon/card/shuttle_pass
 	name = "shuttle pass"
 	desc = "A one-use shuttle activation pass, for limited access to high-security transportation."
@@ -123,6 +134,12 @@
 								//used for admin-only shuttles so that borgs cant hijack 'em
 
 	var/obj/item/weapon/disk/shuttle_coords/disk
+
+	//Variables used for custom destinations
+	var/custom_x = 0
+	var/custom_y = 0
+	var/custom_z = 0
+	var/custom_rot = 0
 
 /obj/machinery/computer/shuttle_control/New()
 	if(shuttle)
@@ -235,6 +252,14 @@
 			dat += " |<BR>"
 			dat += "<center>[shuttle_name]:<br> <b><A href='?src=\ref[src];move=[1]'>Send[selected_port ? " to [selected_port.areaname]" : ""]</A></b></center><BR>"
 			dat += "<div align=\"right\"><a href='?src=\ref[src];disk=1'>Disk: [disk ? disk.header : "--------"]</a></div>"
+
+			if(istype(disk, /obj/item/weapon/disk/shuttle_coords/free_move))
+				dat += {"<div align=\"left\"><b>COORDINATE INPUTS</b>:<br>
+				<a href='?src=\ref[src];custom_coord=x'>X Offset:</a> [custom_x]</a><br>
+				<a href='?src=\ref[src];custom_coord=y'>Y Offset:</a> [custom_y]</a><br>
+				<a href='?src=\ref[src];custom_coord=z'>Z Destination:</a> [custom_z]</a><br>
+				<a href='?src=\ref[src];custom_coord=a'>Rotate by:</a> [custom_rot]<br><br>
+				<a href='?src=\ref[src];process_custom_coord=1'><b>Calculate Course</b></a></div>"}
 	else //No shuttle
 		dat = "<h1>NO SHUTTLE LINKED</h1><br>"
 		dat += "<a href='?src=\ref[src];link_to_shuttle=1'>Link to a shuttle</a>"
@@ -362,6 +387,43 @@
 			to_chat(usr, "Successfully linked [src] to [capitalize(S.name)]!")
 			src.updateUsrDialog()
 
+	if(href_list["custom_coord"])
+		switch(href_list["custom_coord"])
+			if("x")
+				custom_x = input("Enter new X drift", "Course Plotting", custom_x) as num
+			if("y")
+				custom_y = input("Enter new Y drift", "Course Plotting", custom_y) as num
+			if("z")
+				custom_z = input("Enter new Z drift", "Course Plotting", custom_z) as num
+			if("a")
+				custom_rot=input("Enter rotation angle", "Course Plotting", custom_rot) as num
+
+		src.updateUsrDialog()
+
+	if(href_list["process_custom_coord"])
+		if(istype(disk, /obj/item/weapon/disk/shuttle_coords/free_move))
+			var/turf/dest = locate(\
+			shuttle.linked_port.x + custom_x,\
+			shuttle.linked_port.y + custom_y,\
+			shuttle.linked_port.z + custom_z
+			)
+
+			if(!dest || dest.z == CENTCOMM_Z || (!istype(dest, /turf/space) && !shuttle.destroy_everything))
+				to_chat(usr, "Error! Bad coordinates.")
+				return
+			if(istype(disk.destination, /obj/docking_port/destination/coord))
+				if(shuttle.current_port == disk.destination)
+					shuttle.current_port = null
+				qdel(disk.destination)
+				disk.destination = null
+			disk.destination = new /obj/docking_port/destination/coord(dest)
+			disk.destination.dir = angle2dir( dir2angle(shuttle.linked_port.dir) + custom_rot + 180)
+			//For instance, COURSE:06:06:2600:12:00
+			disk.destination.areaname = "COURSE:[time2text(world.timeofday, "MM:DD")]:[game_year]:[worldtime2text()]"
+
+			to_chat(usr, "Destination calculated!")
+
+		src.updateUsrDialog()
 
 	if(href_list["admin_link_to_shuttle"])
 		if(!isAdminGhost(usr))

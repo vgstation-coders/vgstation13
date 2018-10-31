@@ -42,7 +42,7 @@
 //               CHANGELINGS                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
-
+/*
 /datum/dynamic_ruleset/roundstart/changeling
 	name = "Changelings"
 	role_category = ROLE_CHANGELING
@@ -66,7 +66,7 @@
 		newChangeling.Greet(GREET_ROUNDSTART)
 	return 1
 
-
+*/
 //////////////////////////////////////////////
 //                                          //
 //               VAMPIRES                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,6 +115,7 @@
 	weight = 3
 	cost = 30
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	var/list/roundstart_wizards = list()
 
 /datum/dynamic_ruleset/roundstart/wizard/acceptable(var/population=0,var/threat=0)
 	if(wizardstart.len == 0)
@@ -130,6 +131,7 @@
 		candidates -= M
 		var/datum/role/wizard/newWizard = new
 		newWizard.AssignToRole(M.mind,1)
+		roundstart_wizards += newWizard
 		var/datum/faction/wizard/federation = find_active_faction_by_type(/datum/faction/wizard)
 		if (!federation)
 			federation = ticker.mode.CreateFaction(/datum/faction/wizard, null, 1)

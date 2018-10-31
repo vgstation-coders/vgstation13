@@ -56,7 +56,7 @@
 					rel.religiousLeader = H.mind
 					J = (H.gender == FEMALE ? rel.female_adept : rel.male_adept)
 					rel.convert(H, null)
-					to_chat(H, "A great, intense revelation go through your spirit. You are now the religious leader of [rel.name]. Convert people by [rel.convert_method]")
+					to_chat(H, "A great, intense revelation goes through your spirit. You are now the religious leader of [rel.name]. Convert people by [rel.convert_method]")
 					chap_religion = rel
 					choice = TRUE
 					break // We got our religion ! Abort, abort.

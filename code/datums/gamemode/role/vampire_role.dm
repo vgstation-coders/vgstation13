@@ -306,7 +306,7 @@
 		if(prob(35))
 			to_chat(H, "<span class='danger'>This ground is blessed. Get away, or splatter it with blood to make it safe for you.</span>")
 
-	if(!(VAMP_MATURE in powers) && (istype(get_area(H), /area/chapel))) //stay out of the chapel unless you want to turn into a pile of ashes
+	if((VAMP_MATURE in powers) && (istype(get_area(H), /area/chapel))) //stay out of the chapel unless you want to turn into a pile of ashes
 		nullified = max(5, nullified + 2)
 		if(prob(35))
 			to_chat(H, "<span class='sinister'>You feel yourself growing weaker.</span>")
@@ -316,14 +316,14 @@
 		*/
 
 	if(!nullified) //Checks to see if you can benefit from your vamp powers here
-		if(VAMP_MATURE in powers)
+		if(!(VAMP_MATURE in powers))
 			smitetemp -= 1
-		if(VAMP_SHADOW in powers)
+		if(!(VAMP_SHADOW in powers))
 			var/turf/T = get_turf(H)
 			if((T.get_lumcount() * 10) < 2)
 				smitetemp -= 1
 
-		if(VAMP_UNDYING in powers)
+		if(!(VAMP_UNDYING in powers))
 			smitetemp -= 1
 
 	if(smitetemp <= 0) //if you weren't smote by the tile you're on, remove a little holy

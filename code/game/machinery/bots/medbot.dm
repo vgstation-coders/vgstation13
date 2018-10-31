@@ -257,7 +257,7 @@
 
 	else
 		. = ..()
-		if (.)
+		if (. && isturf(loc))
 			step_away(src,user)
 
 /obj/machinery/bot/medbot/Emag(mob/user as mob)
@@ -367,7 +367,7 @@
 				last_found = world.time
 		return
 
-	if(path.len > 0 && patient)
+	if(path.len > 0 && patient && isturf(loc))
 		step_to(src, path[1])
 		path -= path[1]
 		spawn(3)
@@ -727,6 +727,8 @@
 	if(!on)
 		return
 	if(!..())
+		return
+	if(!isturf(loc))
 		return
 	step(src, dir)
 

@@ -27,9 +27,9 @@
 		Drops the antag mind from the parent role, informs the gamemode the mind now doesn't have a role, and deletes the role datum.
 	@CanBeAssigned(Mind)
 		General sanity checks before assigning the person to the role, such as checking if they're part of the protected jobs or antags.
-	@PreMindTransfer(Mob/Living)
+	@PreMindTransfer(Old_character, Mob/Living)
 		Things to do to the *old* body prior to the mind transfer.
-	@PostMindTransfer(Mob/Living)
+	@PostMindTransfer(New_character, Mob/Living, Old_character, Mob/Living)
 		Things to do to the *new* body after the mind transfer is completed.
 */
 
@@ -270,7 +270,7 @@
 /datum/role/proc/PreMindTransfer(var/mob/living/old_character)
 	return TRUE
 
-/datum/role/proc/PostMindTransfer(var/mob/living/new_character)
+/datum/role/proc/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	return TRUE
 
 /datum/role/proc/GetFaction()
@@ -570,6 +570,12 @@
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
+
+/datum/role/wizard/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
+	. = ..()
+	for (var/spell/S in old_character.spell_list)
+		if (S.user_type == USER_TYPE_WIZARD)
+			new_character.add_spell(S)
 
 /datum/role/wizard/summon_magic
 	disallow_job = FALSE

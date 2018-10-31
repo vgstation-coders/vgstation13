@@ -253,13 +253,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	else
 		return null
 
-/obj/proc/handle_internal_lifeform(mob/lifeform_inside_me, breath_request)
-	//Return: (NONSTANDARD)
-	//		null if object handles breathing logic for lifeform
-	//		datum/air_group to tell lifeform to process using that breath return
-	//DEFAULT: Take air from turf to give to have mob process
-	if(breath_request>0)
-		return remove_air(breath_request)
+/obj/proc/handle_internal_lifeform(mob/lifeform_inside_me, breath_vol)
+	if(breath_vol > 0)
+		var/datum/gas_mixture/G = return_air()
+		return G.remove_volume(breath_vol)
 	else
 		return null
 

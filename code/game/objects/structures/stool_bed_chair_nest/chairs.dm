@@ -29,8 +29,10 @@
 /obj/structure/bed/chair/update_icon()
 	..()
 	if(is_locking(lock_type))
-		overlays += buckle_overlay
-		overlays += secondary_buckle_overlay
+		if (buckle_overlay)
+			overlays += buckle_overlay
+		if (secondary_buckle_overlay)
+			overlays += secondary_buckle_overlay
 	else
 		overlays -= buckle_overlay
 		overlays -= secondary_buckle_overlay

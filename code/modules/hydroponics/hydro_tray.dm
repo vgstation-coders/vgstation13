@@ -254,7 +254,11 @@
 		if(!C)
 			to_chat(user, "<span class='warning'>You need an empty clay pot next to you.</span>")
 			return
+		if(C.being_potted)
+			to_chat(user, "<span class='warning'>You must finish transplanting your current plant before starting another.</span>")
+			return
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
+		C.being_potted = TRUE
 		if(do_after(user, src, 50))
 			user.visible_message(	"<span class='notice'>[user] transplants \the [seed.display_name] into \the [C].</span>",
 									"<span class='notice'>[bicon(src)] You transplant \the [seed.display_name] into \the [C].</span>",
@@ -289,7 +293,8 @@
 
 			check_level_sanity()
 			update_icon()
-
+		else
+			C.being_potted = FALSE
 		return
 
 	else if(is_type_in_list(O, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))

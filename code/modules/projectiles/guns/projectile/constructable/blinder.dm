@@ -92,7 +92,7 @@
 	if(M.blinded)
 		return
 
-	M.flash_eyes(visual = 1)
+	M.flash_eyes(visual = 1, affect_silicon = 1)
 
 	if(issilicon(M))
 		M.Knockdown(rand(5, 10))
