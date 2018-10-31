@@ -322,7 +322,7 @@
 				qdel(src) //No scraps
 			return
 		if(2.0)
-			if(prob(30))
+			if(prob(50))
 				if(state == 2)
 					state = 1
 					update_icon()
