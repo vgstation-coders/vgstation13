@@ -12,7 +12,8 @@
 	icon_new = "strong"
 	icon_classic = "blob_idle"
 
-/obj/effect/blob/shield/New(loc,newlook = "new")
+//obj/effect/blob/shield/New(loc,newlook = "new")
+/obj/effect/blob/shield/New(loc,newlook = "skelleton")
 	..()
 	flick("morph_strong",src)
 
