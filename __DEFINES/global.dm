@@ -249,6 +249,7 @@ var/list/score=list(
 	"dmgestdamage"  = 0,
 	"dmgestkey"     = null,
 	"explosions"	= 0, //How many explosions happened total
+	"deadpets"		= 0, //Only counts 'special' simple_mobs, like Ian, Poly, Runtime, Sasha etc
 
 	"arenafights"   = 0,
 	"arenabest"		= null,

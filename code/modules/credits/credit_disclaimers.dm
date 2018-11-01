@@ -2,7 +2,7 @@
 	var/inline_images = ""
 	for(var/filename in flist("icons/credits/"))
 		var/icon/I = icon("icons/credits/[filename]")
-		inline_images += "<img style='display: inline-block, vertical-align: top, margin: 0px 20px;' src='data:image/png;base64,[icon2base64(I)]'>"
+		inline_images += "<span style='display: inline-block, vertical-align: middle, margin: 0px 20px;'><img style='display: inline-block,' src='data:image/png;base64,[icon2base64(I)]'></span>"
 
 	disclaimers += "Filmed on Location at [station_name()]."
 	disclaimers += "Filmed with BYOND&#169; cameras and lenses. Outer space footage provided by NASA."
@@ -11,6 +11,12 @@
 	disclaimers += "All rights reserved."
 	disclaimers += "<br>"
 	disclaimers += pick("All stunts were performed by underpaid and expendable interns. Do NOT try at home.", "[director] do not endorse behaviour depicted. Attempt at your own risk.")
+	if(score["deadpets"] == 0)
+		disclaimers += "No animals were harmed in the making of this film.[(score["clownabuse"] > 50) ? " However, many clowns were." : ""]"
+	else if(score["clownabuse"] == 0)
+		disclaimers += "No clowns were harmed in the making of this film."
+	else if(score["clownabuse"] > 50)
+		disclaimers += "All clowns were harmed in the making of this film."
 	disclaimers += "<br>"
 	disclaimers += inline_images
 	disclaimers += "<br>"
