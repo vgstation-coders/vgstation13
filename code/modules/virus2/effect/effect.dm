@@ -1190,6 +1190,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 
 /datum/disease2/effect/organs/vampire
 	stage = 1 //For use with vampires?
+	badness = 3
 
 /datum/disease2/effect/organs/deactivate(var/mob/living/carbon/mob)
 	if(istype(mob, /mob/living/carbon/human))
