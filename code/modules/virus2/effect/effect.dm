@@ -64,7 +64,7 @@
 /datum/disease2/effect/proc/minormutate()
 	switch(pick(1,2,3,4,5))
 		if(1)
-			chance = rand(0, max_chance)
+			chance = rand(initial(chance), max_chance)
 		if(2)
 			multiplier = rand(1, max_multiplier)
 
