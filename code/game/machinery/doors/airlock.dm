@@ -353,6 +353,8 @@ About the new airlock wires panel:
 		..()
 
 /obj/machinery/door/airlock/bump_open(mob/living/user as mob) //Airlocks now zap you when you 'bump' them open when they're electrified. --NeoFite
+	if(user.loc == loc)	//no bumping an airlock from within the airlock
+		return
 	if(!istype(user))
 		return
 	if(!issilicon(usr))
@@ -1272,6 +1274,12 @@ About the new airlock wires panel:
 	// </worry>
 	return ..()
 
+/obj/machinery/door/airlock/Uncross(atom/movable/mover)
+	if(density && ismob(mover) && !(mover.checkpass(PASSGLASS) && !opacity) && !(mover.checkpass(PASSDOOR)))
+		to_chat(mover, "You are pinned inside the closed airlock; you can't move!")
+		return 0
+	return ..()
+
 /obj/machinery/door/airlock/close(var/forced = 0 as num)
 	if (operating || locked || welded)
 		return
@@ -1307,13 +1315,6 @@ About the new airlock wires panel:
 
 				L.SetStunned(5)
 				L.SetKnockdown(5)
-				var/obj/effect/stop/S = new()
-				S.forceMove(loc)
-				S.victim = L
-
-				spawn (20)
-					qdel(S)
-					S = null
 
 				L.audible_scream()
 
