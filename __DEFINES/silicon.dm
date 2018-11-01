@@ -105,3 +105,9 @@ var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency
 #define SILICON_MOBILITY_MODULE_SPEED_MODIFIER 0.75 //Silicon's speed var is multiplied by the mobility module modifier
 #define SILICON_VTEC_SPEED_BONUS 0.25 //But the VTEC Bonus is ADDED to their movement_speed_modifier
 
+#define SILICON_TASER_SLOWDOWN_DURATION 18 SECONDS
+#define SILICON_TASER_SLOWDOWN_MULTIPLIER 4
+
+#define SILICON_HIGH_DAMAGE_SLOWDOWN_THRESHOLD 30
+#define SILICON_HIGH_DAMAGE_SLOWDOWN_DURATION 3 SECONDS
+#define SILICON_HIGH_DAMAGE_SLOWDOWN_MULTIPLIER SILICON_TASER_SLOWDOWN_MULTIPLIER
