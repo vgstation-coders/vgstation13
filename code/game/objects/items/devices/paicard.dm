@@ -135,49 +135,38 @@
 	src.overlays += image(icon=icon, icon_state = "pai-off")
 
 /obj/item/device/paicard/proc/setEmotion(var/emotion)
-	if(pai)
-		var/face = "pai-happy"
-		src.overlays.len = 0
-		pai.overlays.len = 0
-		switch(emotion)
-			if(1)
-				face = "pai-happy"
-			if(2)
-				face = "pai-cat"
-			if(3)
-				face = "pai-extremely-happy"
-			if(4)
-				face = "pai-face"
-			if(5)
-				face = "pai-laugh"
-			if(6)
-				face = "pai-off"
-			if(7)
-				face = "pai-sad"
-			if(8)
-				face = "pai-angry"
-			if(9)
-				face = "pai-what"
-			if(10)
-				face = "pai-longface"
-			if(11)
-				face = "pai-sick"
-			if(12)
-				face = "pai-high"
-			if(13)
-				face = "pai-love"
-			if(14)
-				face = "pai-electric"
-			if(15)
-				face = "pai-pissed"
-			if(16)
-				face = "pai-nose"
-			if(17)
-				face = "pai-kawaii"
-			if(18)
-				face = "pai-cry"
-		src.overlays += image(icon=icon, icon_state = "[face]")
-		pai.overlays += image(icon=icon, icon_state = "[face]")//we also update the mob's overlay so it appears properly on the scoreboard.
+	var/static/list/possible_choices = list(
+		"Happy" = "pai-happy",
+		"Cat" = "pai-cat",
+		"Extremely happy" = "pai-extremely-happy",
+		"Face" = "pai-face",
+		"Off" = "pai-off",
+		"Sad" = "pai-sad",
+		"Angry" = "pai-angry",
+		"What" = "pai-what",
+		"Longface" = "pai-longface",
+		"Sick" = "pai-sick",
+		"High" = "pai-high",
+		"Love" = "pai-love",
+		"Electric" = "pai-electric",
+		"Pissed" = "pai-pissed",
+		"Nose" = "pai-nose",
+		"Kawaii" = "pai-kawaii",
+		"Cry" = "pai-cry",
+		"Thinking" = "pai-thinking",
+	)
+	var/selected = input(pai, "Select your new display image:", "Display image", "Happy") in null|possible_choices
+	if(!selected)
+		return
+	var/chosen_icon_state = possible_choices[selected]
+	ASSERT(chosen_icon_state)
+
+	var/image/new_overlay = image(icon = icon, icon_state = chosen_icon_state)
+	src.overlays.len = 0
+	src.overlays += new_overlay
+	//we also update the mob's overlay so it appears properly on the scoreboard.
+	pai.overlays.len = 0
+	pai.overlays += new_overlay
 
 /obj/item/device/paicard/proc/alertUpdate()
 	var/turf/T = get_turf(src.loc)
