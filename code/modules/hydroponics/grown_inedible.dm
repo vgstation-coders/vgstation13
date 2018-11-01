@@ -265,7 +265,7 @@
 /obj/item/weapon/carnivorous_pumpkin
 	name = "carnivorous pumpkin"
 	desc = "It hungers. For heads."
-	icon = 'icons/obj//clothing/hats.dmi'
+	icon = 'icons/obj/clothing/hats.dmi'
 	icon_state = "hardhat1_pumpkin"
 	cant_drop = 1
 
