@@ -425,7 +425,7 @@ var/datum/controller/gameticker/ticker
 
 		spawn
 			declare_completion()
-			end_credits.generate_credits() // roundend grief not included in the credits
+			end_credits.on_roundend()
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
 				vote.initiate_vote("map","The Server", popup = 1, weighted_vote = config.weighted_votes)

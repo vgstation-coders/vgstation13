@@ -269,8 +269,8 @@ var/savefile/panicfile
 	Master.Shutdown()
 	paperwork_stop()
 
-	if(end_credits.scrollingtext == "")
-		end_credits.generate_credits()
+	if(!end_credits.generated)
+		end_credits.on_roundend()
 	end_credits.rollem()
 
 	sleep(end_credits.starting_delay + 10)
