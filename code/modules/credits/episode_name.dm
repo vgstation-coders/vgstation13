@@ -34,6 +34,12 @@
 	if(score["deadaipenalty"] > 2)
 		episode_names += new /datum/episode_name("THE ONE WHERE [score["deadaipenalty"]] AIS DIE", "That's a lot of dead AIs.", max(100, score["deadaipenalty"]*50))
 	if(score["deadcrew"] == 0)
-		episode_names += new /datum/episode_name("[pick("EMPLOYEE TRANSFER", "PEACE AND QUIET IN [uppertext(station_name())]", "THE CREW TRIES TO KILL A FLY FOR [score["time"]/60] MINUTES")]", "No-one died this round.", 200)
+		episode_names += new /datum/episode_name("[pick("EMPLOYEE TRANSFER", "PEACE AND QUIET IN [uppertext(station_name())]", "THE CREW TRIES TO KILL A FLY FOR [round(score["time"]/60)] MINUTES")]", "No-one died this round.", 200)
+	if(score["escapees"] == 0 && emergency_shuttle.location == CENTCOMM_Z)
+		episode_names += new /datum/episode_name("[pick("DEAD SPACE", "THE CREW GOES MISSING", "A ONE-WAY TICKET TO FLAVORTOWN")]", "There were no escapees on the shuttle.", 200)
 	if(score["slips"] > 100)
 		episode_names += new /datum/episode_name("THE CREW GOES BANANAS", "[score["slips"]] people slipped this round.", min(200, score["slips"]/2))
+	for(var/mob/living/simple_animal/corgi/C in living_mob_list)
+		if(C.spell_list.len > 0)
+			episode_names += new /datum/episode_name("[pick("A VERY MAGICAL DAY", "IAN SAYS", "IAN'S DAY OUT", "CORGI MAGIC")]", "You know what you did.", 300)
+			break
