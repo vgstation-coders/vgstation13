@@ -142,6 +142,7 @@
 		if("bulletstorm")
 			new /obj/item/weapon/gun/bulletstorm(get_turf(src))
 	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
+	score["gunsspawned"]++
 
 /mob/living/carbon/human/proc/equip_swords()
 	var/randomizeswords = pick("unlucky", "misc", "throw", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "medieval", "katana", "axe", "boot", "saw", "scalpel", "switchtool", "shitcurity")

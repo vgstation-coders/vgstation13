@@ -4883,7 +4883,7 @@
 					qdel(N)
 
 			if("newdisclaimer")
-				var/newdisclaimer = input(usr,"Write a new rolling disclaimer. Probably something stupid like 'Sponsored by Toxins-R-Us'. This will show up at the top, right after the crew names. Add '\<br>' at the end if you want extra spacing.","New Disclaimer") as text|null
+				var/newdisclaimer = input(usr,"Write a new rolling disclaimer. Probably something stupid like 'Sponsored by Toxins-R-Us'. This will show up at the top, right after the crew names. Add '\<br>' at the end if you want extra spacing.","New Disclaimer") as message|null
 				if(newdisclaimer)
 					end_credits.disclaimers.Insert(1,newdisclaimer)
 					log_admin("[key_name(usr)] added a new disclaimer to the current round's credits: '[newdisclaimer]'")

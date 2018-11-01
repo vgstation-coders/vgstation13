@@ -1566,6 +1566,7 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 	dat += "<div id='disclaimers'>"
 	dat += "<a href='?src=\ref[src];credits=newdisclaimer'>(Add New)</a></br>"
 	for(var/i = 1; i <= end_credits.disclaimers.len; i++)
+		var/disclaimer = end_credits.disclaimers[i]
 		if(i > 1)
 			dat += "<a href='?src=\ref[src];credits=disclaimerup;disclaimerindex=[i]'>&#8743;</a>"
 		else
@@ -1574,8 +1575,12 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 			dat += "<a href='?src=\ref[src];credits=disclaimerdown;disclaimerindex=[i]'>&#8744;</a>"
 		else
 			dat += "&nbsp"
-		dat += "<a href='?src=\ref[src];credits=editdisclaimer;disclaimerindex=[i]'> (Edit)</a>"
-		dat += " [html_encode(end_credits.disclaimers[i])]<br>"
+		dat += "<a href='?src=\ref[src];credits=editdisclaimer;disclaimerindex=[i]'> (Edit) </a>"
+		if(findtext(disclaimer, "<img"))
+			dat += "[disclaimer]"
+		else
+			dat += "[html_encode(disclaimer)]"
+		dat += "<br>"
 	dat += "</div>"
 
 	dat += "<hr><br><center>ADVANCED: <a href='?_src_=vars;Vars=\ref[end_credits]'>Debug Credits Datum</A></center>"
