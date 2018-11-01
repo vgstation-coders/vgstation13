@@ -649,6 +649,11 @@
 		if(. > 1 && reagents.has_any_reagents(list(HYPERZINE,COCAINE)))
 			. = max(1, .*0.4)//we don't hyperzine to make us move faster than the base speed, unless we were already faster.
 
+/mob/living/carbon/proc/health_deficiency_movement_tally()
+	var/health_deficiency = (maxHealth - health - halloss)
+	if(health_deficiency >= (maxHealth * 0.4))
+		return (health_deficiency / (maxHealth * 0.25))
+
 /mob/living/carbon/base_movement_tally()
 	. = ..()
 	if(flying)
@@ -659,9 +664,7 @@
 		return // Space ignores slowdown
 
 	if(feels_pain() && !has_painkillers())
-		var/health_deficiency = (maxHealth - health - halloss)
-		if(health_deficiency >= (maxHealth * 0.4))
-			. += (health_deficiency / (maxHealth * 0.25))
+		. += health_deficiency_movement_tally()
 
 
 /mob/living/carbon/proc/can_mind_interact(var/mob/M)

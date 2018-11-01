@@ -4,6 +4,9 @@
 			return min(..(), 1)
 	return ..()
 
+/mob/living/carbon/human/health_deficiency_movement_tally()
+
+
 /mob/living/carbon/human/base_movement_tally()
 	. = ..()
 
@@ -28,8 +31,7 @@
 		. += 2*undergoing_hypothermia()
 
 	if(feels_pain() && !has_painkillers())
-		if(pain_shock_stage >= 50)
-			. += 3
+		. += pain_shock_stage/50
 		var/list/limbs_to_check
 		var/multiplier = 1
 		if(!lying)
