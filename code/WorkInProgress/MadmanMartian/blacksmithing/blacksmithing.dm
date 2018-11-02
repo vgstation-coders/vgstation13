@@ -31,6 +31,7 @@
 	R.forceMove(null)
 	var/obj/item/stack/sheet/mineral/M = material_type.sheettype
 	appearance = initial(M.appearance)
+	desc = initial(desc)
 	strikes_required = required_strikes
 
 /obj/item/smithing_placeholder/examine(mob/user)

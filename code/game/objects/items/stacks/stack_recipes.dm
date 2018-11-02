@@ -102,7 +102,7 @@
 /datum/stack_recipe/blacksmithing/finish_building(mob/usr, var/obj/item/stack/S, var/obj/R)
 	//Yeah nah let's put you in a blacksmith_placeholder
 	var/obj/item/I = new /obj/item/smithing_placeholder(usr.loc,S, R, req_strikes)
-	I.name = "unforged /improper [R]"
+	I.name = "unforged [R.name]"
 	return 0
 
 

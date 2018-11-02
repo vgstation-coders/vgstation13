@@ -161,5 +161,6 @@
 	..()
 
 var/list/datum/stack_recipe/chain_recipes = list (
-	new/datum/stack_recipe/blacksmithing("Chainmail",		/obj/item/clothing/suit/armor/vest/chainmail,					10,	time = 100,required_strikes = 15),
+	new/datum/stack_recipe/blacksmithing("Suit of Chainmail",		/obj/item/clothing/suit/armor/vest/chainmail,					10,	time = 100,required_strikes = 15),
+	new/datum/stack_recipe/blacksmithing("Chainmail Coif",		/obj/item/clothing/head/helmet/chainmail,					5,	time = 100,required_strikes = 15),
 	)
