@@ -226,6 +226,9 @@
 	var/atom/A = linked_area.contains_atom_from_list(cant_leave_zlevel) //code/game/atoms.dm, 243
 	if(A)
 		return A
+	for(var/mob/living/M in get_contents_in_object(linked_area, /mob/living))
+		if(M.locked_to_z && M.locked_to_z != destination_port.z)
+			return M
 	return 0
 
 //This is the proc you generally want to use when moving a shuttle. Runs all sorts of checks (cooldown, if already moving, etc)
