@@ -8,7 +8,7 @@
 
 /obj/item/smithing_placeholder
 	name = "placeholder"
-	desc = "You should not be able to see this"
+	desc = "An incomplete object, that requires forging and striking."
 	var/obj/result
 	var/malleable = FALSE
 	var/strikes_required
@@ -34,7 +34,7 @@
 	strikes_required = required_strikes
 
 /obj/item/smithing_placeholder/examine(mob/user)
-	to_chat(user, "This is an unforged <span class = 'notice'>[result]</span>")
+	..()
 	to_chat(user, "<span class = 'notice'>[strikes?"It looks like it has been struck [strikes] times.":"It has not been struck yet."]<br>It is [malleable?"malleable":"not malleable"].[strikes_required<strikes?"<br>It looks to be finished, and just needs quenching.":""]")
 
 
@@ -117,8 +117,8 @@
 		return 0
 	playsound(loc, 'sound/machines/hiss.ogg', 50, 1)
 	O.reagents.remove_reagent(WATER, 20)
+	var/datum/material/mat = material_type
+	if(mat)
+		result.dorfify(mat)
 	result.forceMove(get_turf(src))
-	result.gen_quality(strikes/strikes_required)
-	if(result.quality > SUPERIOR)
-		result.gen_description()
 	qdel(src)

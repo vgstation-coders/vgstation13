@@ -88,29 +88,7 @@
 			mat = materials_list.getMaterial(SS.mat_type)
 		else if(S.material_type)
 			mat = S.material_type
-		if(mat)
-			var/icon/original = icon(R.icon, R.icon_state)
-			if(mat.color)
-				original.ColorTone(mat.color)
-				var/obj/item/I = R
-				if(istype(I))
-					var/icon/t_state
-					for(var/hand in list("left_hand", "right_hand"))
-						t_state = icon(I.inhand_states[hand], I.item_state)
-						t_state.ColorTone(mat.color)
-						I.inhand_states[hand] = t_state
-			else if(mat.color_matrix)
-				R.color = mat.color_matrix
-			R.icon = original
-			R.alpha = mat.alpha
-			R.material_type = mat
-			R.sheet_type = mat.sheettype
-			if(gen_quality)
-				R.gen_quality()
-				if(R.quality > SUPERIOR)
-					R.gen_description()
-		if(!findtext(lowertext(R.name), lowertext(mat.name)))
-			R.name = "[R.quality == NORMAL ? "": "[lowertext(qualityByString[R.quality])] "][lowertext(mat.name)] [R.name]"
+		R.dorfify(mat)
 	return 1
 
 
@@ -123,7 +101,8 @@
 
 /datum/stack_recipe/blacksmithing/finish_building(mob/usr, var/obj/item/stack/S, var/obj/R)
 	//Yeah nah let's put you in a blacksmith_placeholder
-	new /obj/item/smithing_placeholder(usr.loc,S, R, req_strikes)
+	var/obj/item/I = new /obj/item/smithing_placeholder(usr.loc,S, R, req_strikes)
+	I.name = "unforged /improper [R]"
 	return 0
 
 

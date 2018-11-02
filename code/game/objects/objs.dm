@@ -670,5 +670,29 @@ a {
 	if(additional_description)
 		desc = "[initial(desc)] \n [additional_description]"
 
+/obj/proc/dorfify(var/datum/material/mat)
+	if(mat)
+		var/icon/original = icon(icon, icon_state)
+		if(mat.color)
+			original.ColorTone(mat.color)
+			var/obj/item/I = src
+			if(istype(I))
+				var/icon/t_state
+				for(var/hand in list("left_hand", "right_hand"))
+					t_state = icon(I.inhand_states[hand], I.item_state)
+					t_state.ColorTone(mat.color)
+					I.inhand_states[hand] = t_state
+		else if(mat.color_matrix)
+			color = mat.color_matrix
+		icon = original
+		alpha = mat.alpha
+		material_type = mat
+		sheet_type = mat.sheettype
+	gen_quality()
+	if(quality > SUPERIOR)
+		gen_description()
+	if(!findtext(lowertext(name), lowertext(mat.name)))
+		name = "[quality == NORMAL ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
+
 /obj/proc/check_uplink_validity()
 	return TRUE

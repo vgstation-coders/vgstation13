@@ -1,6 +1,6 @@
 /obj/item/item_head
 	icon = 'icons/obj/misc_components.dmi'
-	var/obj/result
+	var/obj/item/result
 
 /obj/item/item_head/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/item_handle))
@@ -8,9 +8,13 @@
 		if(do_after(user, src, 4 SECONDS))
 			user.drop_item(I)
 			user.drop_item(src)
+			result = new result
+			var/datum/material/mat = material_type
+			if(mat)
+				result.dorfify(mat)
 			qdel(I)
 			qdel(src)
-			user.put_in_hands(new result)
+			user.put_in_hands(result)
 			return
 	..()
 
