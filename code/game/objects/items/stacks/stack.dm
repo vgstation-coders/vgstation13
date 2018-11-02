@@ -210,7 +210,8 @@
 			var/obj/item/stack/S = O
 			S.update_materials()
 		else
-			O = new R.result_type( usr.loc )
+			for(var/i = 1 to (R.max_res_amount>1 ? R.res_amount*multiplier : 1))
+				O = new R.result_type( usr.loc )
 
 		O.dir = usr.dir
 		if(R.start_unanchored)
