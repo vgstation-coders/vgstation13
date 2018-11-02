@@ -265,3 +265,12 @@
 	icon_state = "police_helmet"
 	item_state = "police_helmet"
 	body_parts_covered = HEAD
+
+/obj/item/clothing/head/helmet/chainmail
+	name = "chainmail coif"
+	desc = "chains fashioned together to be a hood to wear over your head"
+	icon_state = "chainmail_head"
+	item_state = "chainmail_head"
+	armor = list(melee = 10, bullet = 15, laser = 2,energy = 2, bomb = 2, bio = 2, rad = 0)
+	flags = FPRINT
+	siemens_coefficient = 1

@@ -223,10 +223,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/is_sharp()
 	return sharpness
 
-/obj/proc/is_hot() //This returns the temperature of the object if possible
+/obj/is_hot() //This returns the temperature of the object if possible
 	return source_temperature
 
-/obj/proc/thermal_energy_transfer()
+/obj/thermal_energy_transfer()
 	if(is_hot())
 		return heat_production
 	return 0
@@ -634,7 +634,7 @@ a {
 				var/mob/M = loc
 				M.regenerate_icons()
 
-/obj/proc/gen_quality()
+/obj/proc/gen_quality(var/modifier = 0)
 	var/material_mod = material_type ? material_type.quality_mod : 1
 	var/turf/T = get_turf(src)
 	var/surrounding_mod = 1
@@ -642,7 +642,7 @@ a {
 		for(var/obj/I in get_step(T, dir))
 			if(I.quality > NORMAL || I.quality < NORMAL)
 				surrounding_mod *= I.quality/rand(1,3)
-	var/initial_quality = round((rand(1,3)*surrounding_mod)*material_mod)
+	var/initial_quality = round(((rand(1,3)*surrounding_mod)*material_mod)+modifier)
 	quality = Clamp(initial_quality, AWFUL, LEGENDARY)
 
 /obj/proc/gen_description(mob/user)
@@ -669,6 +669,30 @@ a {
 		additional_description += "It is accented in hues of [pick("red","orange","yellow","green","blue","indigo","violet","white","black","cinnamon")]. "
 	if(additional_description)
 		desc = "[initial(desc)] \n [additional_description]"
+
+/obj/proc/dorfify(var/datum/material/mat)
+	if(mat)
+		var/icon/original = icon(icon, icon_state)
+		if(mat.color)
+			original.ColorTone(mat.color)
+			var/obj/item/I = src
+			if(istype(I))
+				var/icon/t_state
+				for(var/hand in list("left_hand", "right_hand"))
+					t_state = icon(I.inhand_states[hand], I.item_state)
+					t_state.ColorTone(mat.color)
+					I.inhand_states[hand] = t_state
+		else if(mat.color_matrix)
+			color = mat.color_matrix
+		icon = original
+		alpha = mat.alpha
+		material_type = mat
+		sheet_type = mat.sheettype
+	gen_quality()
+	if(quality > SUPERIOR)
+		gen_description()
+	if(!findtext(lowertext(name), lowertext(mat.name)))
+		name = "[quality == NORMAL ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
 
 /obj/proc/check_uplink_validity()
 	return TRUE

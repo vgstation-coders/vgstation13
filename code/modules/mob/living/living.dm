@@ -1321,7 +1321,7 @@ Thanks.
 			if (!now_pushing)
 				now_pushing = 1
 
-				if (!AM.anchored)
+				if (!AM.anchored && AM.can_be_pushed(src))
 					var/t = get_dir(src, AM)
 					if(AM.flow_flags & ON_BORDER && !t)
 						t = AM.dir

@@ -1,6 +1,6 @@
 /** Anvil
-	Is treated as an item that can not be picked up, unless you are incredibly strong.
-
+	Is treated as an item that can not be picked up, pushed, or pulled, unless you are incredibly strong.
+	Can place blacksmithing placeholders onto it like a table. Necessary to actually hammer them into shape.
 **/
 
 /obj/item/anvil
@@ -10,6 +10,7 @@
 	icon = 'icons/obj/blacksmithing.dmi'
 	icon_state = "anvil"
 	impactsound = 'sound/misc/clang.ogg'
+	layer = TABLE_LAYER
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND
 	density = 1
 	throwforce = 40
@@ -31,3 +32,12 @@
 	if(n > 1000)
 		return TRUE
 	return FALSE
+
+/obj/item/anvil/can_be_pushed(mob/living/user)
+	return user.get_strength() >= 2
+
+/obj/item/anvil/attackby(obj/item/W, mob/user, params)
+	if(user.drop_item(W, src.loc))
+		if(W.loc == src.loc && params)
+			W.setPixelOffsetsFromParams(params, user)
+			return 1

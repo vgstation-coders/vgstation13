@@ -938,3 +938,9 @@ its easier to just keep the beam vertical.
 		to_chat(user, "<span class='warning'>\The [src] is full.</span>")
 		return INJECTION_RESULT_FAIL
 	return INJECTION_RESULT_SUCCESS
+
+/atom/proc/is_hot()
+	return
+
+/atom/proc/thermal_energy_transfer()
+	return
