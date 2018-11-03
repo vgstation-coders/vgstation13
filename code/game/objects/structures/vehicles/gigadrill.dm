@@ -13,7 +13,7 @@
 	var/turf/drilling_turf
 	var/obj/structure/ore_box/OB //The orebox contained within
 
-/obj/structure/bed/chair/vehicle/gigadrill/destroy()
+/obj/structure/bed/chair/vehicle/gigadrill/Destroy()
 	if(OB)
 		OB.forceMove(get_turf(src))
 		OB = null
