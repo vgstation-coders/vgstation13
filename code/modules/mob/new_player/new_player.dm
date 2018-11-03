@@ -354,12 +354,13 @@
 
 	EquipCustomItems(character)
 
+	var/atom/movable/what_to_move = character.locked_to || character
+
 	if(J.spawns_from_edge)
-		character.Meteortype_Latejoin(rank)
+		Meteortype_Latejoin(what_to_move, rank)
 	else
 		// TODO:  Job-specific latejoin overrides.
-		character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
-
+		what_to_move.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
 
 	character.store_position()
 
@@ -405,7 +406,7 @@
 			character.Robotize()
 	qdel(src)
 
-/mob/living/carbon/human/proc/Meteortype_Latejoin(rank)
+/proc/Meteortype_Latejoin(var/atom/movable/target, var/rank)
 	var/obj/effect/landmark/start/endpoint = null
 	for(var/obj/effect/landmark/start/S in landmarks_list)
 		if(S.name == rank)
@@ -416,8 +417,8 @@
 		//Error! We have no targetable spawn!
 		return
 	var/turf/start_point = locate(TRANSITIONEDGE + 2, rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2)), endpoint.z)
-	forceMove(start_point)
-	throw_at(endpoint)
+	target.forceMove(start_point)
+	target.throw_at(endpoint)
 
 
 /proc/AnnounceArrival(var/mob/living/carbon/human/character, var/rank)
