@@ -16,23 +16,7 @@
 	stun = 10
 	weaken = 10
 	stutter = 10
-	jittery = 20
-	agony = 10
 	hitsound = 'sound/weapons/taserhit.ogg'
-
-/obj/item/projectile/energy/electrode/hit_apply(var/mob/living/X, var/blocked)
-	spawn(13)
-		X.apply_effects(stun, weaken, blocked = blocked)
-	X.apply_effects(stutter = stutter, blocked = blocked, agony = agony)
-	X.audible_scream()
-	if(X.tazed == 0)
-		X.movement_speed_modifier -= 0.75
-		spawn(30)
-			X.movement_speed_modifier += 0.75
-	X.tazed = 1
-	spawn(30)
-		X.tazed = 0
-
 
 /*/vg/ EDIT
 	agony = 40
