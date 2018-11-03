@@ -176,7 +176,7 @@
 		if (!P.client || !P.mind || !P.mind.assigned_role)//are they connected?
 			candidates.Remove(P)
 			continue
-		if (!P.client.desires_role(role_category) || jobban_isbanned(P, role_category))//are they willing and not antag-banned?
+		if (!P.client.desires_role(role_category) || jobban_isbanned(P, role_category)|| (role_category_override && jobban_isbanned(P, role_category_override))//are they willing and not antag-banned?
 			candidates.Remove(P)
 			continue
 		if (P.mind.assigned_role in protected_from_jobs)
