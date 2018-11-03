@@ -11,7 +11,6 @@
 
 /datum/artifact_effect/cultify/proc/make_culty(var/range)
 	if(holder)
-		playsound(holder, 'sound/misc/timesuit_activate.ogg', 50)
 		for(var/turf/T in spiral_block(get_turf(holder), range))
 			T.cultify()
 			for(var/obj/structure/grille/G in T)
