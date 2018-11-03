@@ -346,7 +346,7 @@
 	if (faction)
 		text += faction.name
 	else
-		text += "<i>none</i>"
+		text += "<i>none</i> <br/>"
 	if (admin_edit)
 		text += " - "
 		if (faction)
@@ -355,7 +355,7 @@
 			text += "<a href='?src=\ref[M];role_edit=\ref[src];add_to_faction=1'>(add)</a>"
 	text += "<br>"
 	if (objectives.objectives.len)
-		text += "<b>personal objectives</b><ul>"
+		text += "<b>personal objectives</b><br><ul>"
 	text += objectives.GetObjectiveString(0,admin_edit,M, src)
 	if (objectives.objectives.len)
 		text += "</ul>"
@@ -364,6 +364,7 @@
 			if (objectives.objectives.len)
 				text += "<br>"
 			text += "<b>faction objectives</b><ul>"
+			text += "<br/>"
 		text += faction.objective_holder.GetObjectiveString(0,admin_edit,M)
 		if (faction.objective_holder.objectives.len)
 			text += "</ul>"

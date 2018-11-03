@@ -339,9 +339,11 @@
 
 		if (objective.faction)
 			objective.faction.handleForcedCompletedObjective(objective)
-
-		objective.force_success = !objective.force_success
+		else
+			objective.force_success = !objective.force_success
 		log_admin("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
+		message_admins("[usr.key]/([usr.name]) toggled [key]/([name]) [objective.explanation_text] to [objective.force_success ? "completed" : "incomplete"]")
+
 
 	else if(href_list["obj_gen"])
 		var/owner = locate(href_list["obj_owner"])
