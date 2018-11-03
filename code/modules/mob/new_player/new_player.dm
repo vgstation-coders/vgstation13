@@ -337,6 +337,10 @@
 	if(character.mind.assigned_role != "MODE")
 		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
 
+	var/obj/structure/bed/B = null
+	if (character.locked_to)
+		B = character.locked_to
+
 	var/turf/T = character.loc
 	for(var/role in character.mind.antag_roles)
 		var/datum/role/R = character.mind.antag_roles[role]
@@ -360,6 +364,9 @@
 		// TODO:  Job-specific latejoin overrides.
 		character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
 
+	if (istype(B))
+		B.forceMove(character)
+		B.buckle_mob(character,character)
 
 	character.store_position()
 
