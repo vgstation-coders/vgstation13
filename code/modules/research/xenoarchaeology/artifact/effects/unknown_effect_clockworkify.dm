@@ -11,7 +11,7 @@
 
 /datum/artifact_effect/clockwork/proc/make_clockworky(var/range)
 	if(holder)
-        playsound(holder, 'sound/misc/timesuit_activate.ogg', 50)
+    playsound(holder, 'sound/misc/timesuit_activate.ogg', 50)
 		for(var/turf/T in spiral_block(get_turf(holder), range))
 			T.clockworkify()
 			for(var/obj/O in T)
