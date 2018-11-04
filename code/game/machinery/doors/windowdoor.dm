@@ -279,14 +279,13 @@
 	return ..()
 
 /obj/machinery/door/window/emag(mob/user)
-	if(user)
-		var/used_emag = (/obj/item/weapon/card/emag in user.contents) //TODO: Find a better way of checking this
-		return hackOpen(used_emag, user)
+	..()
+	hackOpen(user)
 
 /obj/machinery/door/window/door_animate(var/animation)
 	flick("[base_state][animation]", src)
 
-/obj/machinery/door/window/proc/hackOpen(obj/item/I, mob/user)
+/obj/machinery/door/window/proc/hackOpen(mob/user)
 	operating = -1
 
 	if(electronics)
@@ -295,10 +294,11 @@
 	door_animate("spark")
 	sleep(6)
 	open()
-	return 1
+	add_fingerprint(user)
+	return TRUE
 
 /obj/machinery/door/window/npc_tamper_act(mob/living/L)
-	hackOpen(null, L)
+	hackOpen(L)
 
 /**
  * Returns whether the door opens to the left. This is counter-clockwise

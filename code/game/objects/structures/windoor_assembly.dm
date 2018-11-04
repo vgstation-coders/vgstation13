@@ -119,7 +119,7 @@ obj/structure/windoor_assembly/Destroy()
 	if(istype(W, /obj/item/stack/cable_coil) && (anchored && !wired))
 		var/obj/item/stack/cable_coil/CC = W
 		if(CC.amount < 2)
-			to_chat(user, "<span class='rose'>You need more [W.name] for this!</span>")
+			to_chat(user, "<span class='rose'>You need more wire for this!</span>")
 			return
 		user.visible_message("[user] is wiring [src].", "You start to wire [src].")
 
@@ -149,6 +149,7 @@ obj/structure/windoor_assembly/Destroy()
 	if(istype(W, /obj/item/weapon/circuitboard/airlock) && anchored)
 		var/obj/item/weapon/circuitboard/airlock/AE = W
 		if(AE.icon_state =="door_electronics_smoked")
+			to_chat(user, "<span class='notice'>\The [AE.name] is too damaged to work.</span>")
 			return
 		if(user.drop_item(AE, src)) // To prevent you using the airlock electronics on 2 windoors at once.
 			playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
@@ -182,10 +183,10 @@ obj/structure/windoor_assembly/Destroy()
 	//Crowbar to complete the assembly, Step 7 complete.
 	if(iscrowbar(W) && anchored)
 		if(!wired)
-			to_chat(usr, "<span class='rose'>The assembly is missing wires.</span>")
+			to_chat(usr, "<span class='rose'>\The [name] is missing wires.</span>")
 			return
 		if(!electronics)
-			to_chat(usr, "<span class='rose'>The assembly is missing electronics.</span>")
+			to_chat(usr, "<span class='rose'>\The [name] is missing electronics.</span>")
 			return
 		usr << browse(null, "window=windoor_access")
 		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
