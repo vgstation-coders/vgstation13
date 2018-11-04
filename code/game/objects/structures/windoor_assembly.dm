@@ -56,7 +56,7 @@ obj/structure/windoor_assembly/Destroy()
 	else
 		return TRUE
 
-/obj/structure/windoor_assembly/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
+/obj/structure/windoor_assembly/Uncross(atom/movable/mover, turf/target)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return TRUE
 	if(flow_flags & ON_BORDER)
@@ -70,7 +70,7 @@ obj/structure/windoor_assembly/Destroy()
 	return TRUE
 
 
-/obj/structure/windoor_assembly/attackby(obj/item/W as obj, mob/user as mob)
+/obj/structure/windoor_assembly/attackby(obj/item/W, mob/user)
 	if(iswelder(W) && (!anchored && !wired && !electronics))
 		var/obj/item/weapon/weldingtool/WT = W
 		user.visible_message("[user] dissassembles [src].", "You start to dissassemble [src].")

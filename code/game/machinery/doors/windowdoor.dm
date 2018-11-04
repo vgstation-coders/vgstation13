@@ -49,14 +49,14 @@
 		window_is_opaque = !window_is_opaque //We pass on that we've been toggled.
 	return opacity
 
-/obj/machinery/door/window/examine(mob/user as mob)
+/obj/machinery/door/window/examine(mob/user)
 	..()
 	if(smartwindow)
 		to_chat(user, "It's NT-15925 SmartGlass™ compliant.")
 	if(secure)
 		to_chat(user, "It is a secure windoor, it is stronger and closes more quickly.")
 
-/obj/machinery/door/window/Bumped(atom/movable/AM as mob|obj)
+/obj/machinery/door/window/Bumped(atom/movable/AM)
 	if(!ismob(AM))
 		var/obj/machinery/bot/bot = AM
 		if(istype(bot))
@@ -110,7 +110,7 @@
 /obj/machinery/door/window/CanAStarPass(var/obj/item/weapon/card/id/ID, var/to_dir)
 	return !density || (dir != to_dir) || check_access(ID)
 
-/obj/machinery/door/window/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
+/obj/machinery/door/window/Uncross(atom/movable/mover, turf/target)
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return TRUE
 	if(flow_flags & ON_BORDER) //but it will always be on border tho
@@ -181,7 +181,7 @@
 	..()
 
 //When an object is thrown at the window
-/obj/machinery/door/window/hitby(AM as mob|obj)
+/obj/machinery/door/window/hitby(atom/movable/AM)
 	. = ..()
 	if(.)
 		return
@@ -194,11 +194,11 @@
 	playsound(src, 'sound/effects/Glasshit.ogg', 100, 1)
 	take_damage(tforce)
 
-/obj/machinery/door/window/attack_ai(mob/user as mob)
+/obj/machinery/door/window/attack_ai(mob/user)
 	add_hiddenprint(user)
 	return attack_hand(user)
 
-/obj/machinery/door/window/attack_paw(mob/living/user as mob)
+/obj/machinery/door/window/attack_paw(mob/living/user)
 	if(istype(user, /mob/living/carbon/alien/humanoid) || istype(user, /mob/living/carbon/slime/adult))
 		if(operating)
 			return
@@ -210,7 +210,7 @@
 	else
 		return attack_hand(user)
 
-/obj/machinery/door/window/attack_animal(mob/living/user as mob)
+/obj/machinery/door/window/attack_animal(mob/living/user)
 	if(operating)
 		return
 	var/mob/living/simple_animal/M = user
@@ -219,16 +219,16 @@
 	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)
 	playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
-	visible_message("<span class='warning'>\The [M] [M.attacktext] against \the [name].</span>", 1)
+	visible_message("<span class='warning'>\The [M.name] [M.attacktext] against \the [name].</span>", 1)
 	take_damage(M.melee_damage_upper)
 
-/obj/machinery/door/window/attackby(obj/item/weapon/I as obj, mob/living/user as mob)
+/obj/machinery/door/window/attackby(obj/item/weapon/I, mob/living/user)
 	// Make emagged/open doors able to be deconstructed
 	if(!density && operating != 1 && iscrowbar(I))
-		user.visible_message("[user] removes [electronics] from [src].", "You start to remove [electronics] from [src].")
+		user.visible_message("[user] removes \the [electronics.name] from \the [name].", "You start to remove [electronics] from \the [name].")
 		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
 		if(do_after(user, src, 40) && src && !density && operating != 1)
-			to_chat(user, "<span class='notice'>You removed [electronics]!</span>")
+			to_chat(user, "<span class='notice'>You removed \the [electronics.name]!</span>")
 			make_assembly(user)
 			if(smartwindow)
 				qdel(smartwindow)
@@ -251,7 +251,7 @@
 			to_chat(user, "<span class='notice'>This [name] already has electronics in it.</span>")
 			return FALSE
 		LT.use(1)
-		to_chat(user, "<span class='notice'>You add some electronics to [src].</span>")
+		to_chat(user, "<span class='notice'>You add some electronics to \the [name].</span>")
 		smartwindow = new /obj/machinery/smartglass_electronics(src)
 		return smartwindow
 
@@ -266,7 +266,7 @@
 		user.do_attack_animation(src, I)
 		user.delayNextAttack(8)
 		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
-		visible_message("<span class='danger'>[src] was hit by [I].</span>")
+		visible_message("<span class='danger'>\The [name] was hit by [I].</span>")
 		if(I.damtype == BRUTE || I.damtype == BURN)
 			take_damage(aforce)
 		return
@@ -312,13 +312,13 @@
  * the windoor after calling this.
  * @return The new /obj/structure/windoor_assembly created.
  */
-/obj/machinery/door/window/proc/make_assembly(mob/user as mob)
+/obj/machinery/door/window/proc/make_assembly(mob/user)
 	// Windoor assembly
 	var/obj/structure/windoor_assembly/WA = new assembly_type(loc)
 	set_assembly(user, WA)
 	return WA
 
-/obj/machinery/door/window/proc/set_assembly(mob/user as mob, var/obj/structure/windoor_assembly/WA)
+/obj/machinery/door/window/proc/set_assembly(mob/user, var/obj/structure/windoor_assembly/WA)
 	WA.dir = dir
 	WA.anchored = TRUE
 	WA.wired = TRUE
