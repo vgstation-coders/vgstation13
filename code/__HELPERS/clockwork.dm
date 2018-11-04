@@ -1,5 +1,5 @@
 #define CLOCKWORK_GENERIC_GLOW "clockwork_generic_glow"
-//#define CLOCKWORK_DOOR_GLOW "clockwork_door_glow"
+#define CLOCKWORK_DOOR_GLOW "clockwork_door_glow"
 #define BRASS_WINDOOR_GLOW "clockwork_windoor_glow"
 #define BRASS_WINDOW_GLOW "clockwork_window_glow_s"
 #define BRASS_FULL_WINDOW_GLOW "clockwork_window_glow"
