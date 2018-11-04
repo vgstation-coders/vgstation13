@@ -326,9 +326,7 @@
 	WA.update_name()
 	WA.update_icon()
 
-	WA.fingerprints += fingerprints
-	WA.fingerprintshidden += fingerprints
-	WA.fingerprintslast = user.ckey
+	transfer_fingerprints_to(WA)
 
 	// Pop out electronics
 	eject_electronics()
