@@ -636,12 +636,14 @@ a {
 
 /obj/proc/gen_quality(var/modifier = 0)
 	var/material_mod = material_type ? material_type.quality_mod : 1
-	var/turf/T = get_turf(src)
 	var/surrounding_mod = 1
+	/* - Probably better we find a better way of checking the quality of a room, like an area-level variable for room quality, and cleanliness
+	var/turf/T = get_turf(src)
 	for(var/dir in alldirs)
 		for(var/obj/I in get_step(T, dir))
 			if(I.quality > NORMAL || I.quality < NORMAL)
 				surrounding_mod *= I.quality/rand(1,3)
+	*/
 	var/initial_quality = round(((rand(1,3)*surrounding_mod)*material_mod)+modifier)
 	quality = Clamp(initial_quality, AWFUL, LEGENDARY)
 
