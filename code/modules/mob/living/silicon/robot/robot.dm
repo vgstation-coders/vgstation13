@@ -462,7 +462,7 @@
 /mob/living/silicon/robot/bullet_act(var/obj/item/projectile/Proj)
 	..(Proj)
 	updatehealth()
-	if(!HAS_MODULE_QUIRK(MODULE_HAS_PROJ_RES))
+	if(!HAS_MODULE_QUIRK(src, MODULE_HAS_PROJ_RES))
 		if(istype(Proj, /obj/item/projectile/energy/electrode))
 			last_tase_timeofday = world.timeofday
 			if(can_diagnose())
