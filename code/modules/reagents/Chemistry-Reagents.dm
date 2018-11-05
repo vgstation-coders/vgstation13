@@ -1125,7 +1125,7 @@
 		var/datum/role/thrall/T = isthrall(H)
 		if(T)
 			if (prob(35)) // 35% chance of dethralling
-				T.Drop()
+				T.Drop(TRUE)
 
 /datum/reagent/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
 
