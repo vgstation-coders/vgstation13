@@ -447,6 +447,12 @@
 		var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
 		if(gen_record)
 			medical = gen_record.fields["p_stat"]
+		
+		var/dam1 = round(getOxyLoss(),1)
+		var/dam2 = round(getToxLoss(),1)
+		var/dam3 = round(getFireLoss(),1)
+		var/dam4 = round(getBruteLoss(),1)
+		msg += "<span class = 'deptradio'>Vitals:</span> Oxy:<font color = blue>[dam1]</font> Toxins:<font color = green>[dam2]</font> Burn:<font color = '#FFA500'>[dam3]</font> Brute:<font color = red>[dam4]</font> \n"
 
 		msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n
 			<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]\n</a>"}
