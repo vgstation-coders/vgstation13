@@ -2827,7 +2827,7 @@
 	name = "caramel cake"
 	desc = "A cake with added caramel"
 	icon_state = "caramelcake"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/chocolatecakeslice
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/caramelcakeslice
 	slices_num = 5
 	storage_slots = 3
 	w_class = W_CLASS_MEDIUM
@@ -2838,7 +2838,7 @@
 	reagents.add_reagent(NUTRIMENT, 15)
 	reagents.add_reagent(CARAMEL, 5)
 
-/obj/item/weapon/reagent_containers/food/snacks/chocolatecakeslice
+/obj/item/weapon/reagent_containers/food/snacks/caramelcakeslice
 	name = "caramel cake slice"
 	desc = "Just a slice of cake, it is enough for everyone."
 	icon_state = "caramelcake_slice"
