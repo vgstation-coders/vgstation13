@@ -109,6 +109,9 @@
 		. += "<br/>"
 
 /datum/role/vampire/ForgeObjectives()
+	if(!SOLO_ANTAG_OBJECTIVES)
+		AppendObjective(/datum/objective/freeform/vampire)
+		return
 
 	AppendObjective(/datum/objective/acquire_blood)
 
@@ -375,7 +378,7 @@
 	blood_usable = max(0, blood_usable - amount)
 	update_vamp_hud()
 
-/datum/role/vampire/handle_mind_transfer(var/mob/living/new_character,var/mob/living/old_character)
+/datum/role/vampire/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	. = ..()
 	powers.Cut()
 	if (issilicon(new_character) || isbrain(new_character)) // No, borgs shouldn't be able to spawn bats

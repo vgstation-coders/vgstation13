@@ -146,49 +146,7 @@
 			radio.attack_self(src)
 
 		if("image")
-			var/newImage = input("Select your new display image.", "Display Image", "Happy") in list("Happy", "Cat", "Extremely Happy",
-								 "Face", "Laugh", "Off", "Sad", "Angry", "What", "longface", "sick", "high", "love", "electric", "pissed",
-								 "nose", "kawaii", "cry")
-			var/pID = 1
-
-			switch(newImage)
-				if("Happy")
-					pID = 1
-				if("Cat")
-					pID = 2
-				if("Extremely Happy")
-					pID = 3
-				if("Face")
-					pID = 4
-				if("Laugh")
-					pID = 5
-				if("Off")
-					pID = 6
-				if("Sad")
-					pID = 7
-				if("Angry")
-					pID = 8
-				if("What")
-					pID = 9
-				if("longface")
-					pID = 10
-				if("sick")
-					pID = 11
-				if("high")
-					pID = 12
-				if("love")
-					pID = 13
-				if("electric")
-					pID = 14
-				if("pissed")
-					pID = 15
-				if("nose")
-					pID = 16
-				if("kawaii")
-					pID = 17
-				if("cry")
-					pID = 18
-			card.setEmotion(pID)
+			card.setEmotion()
 
 		if("signaller")
 

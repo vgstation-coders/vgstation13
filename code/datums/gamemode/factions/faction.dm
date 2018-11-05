@@ -283,7 +283,7 @@ var/list/factions_with_hud_icons = list()
 	if (!(O in objective_holder.objectives))
 		WARNING("Trying to force completion of an objective ([O]) to faction ([src]) who never had it.")
 		return FALSE
-	O.force_success = TRUE
+	O.force_success = !O.force_success
 
 /datum/faction/proc/Declare()
 	var/dat = GetObjectivesMenuHeader()

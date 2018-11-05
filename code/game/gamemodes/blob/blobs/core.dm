@@ -20,13 +20,14 @@
 	icon_classic = "blob_core"
 
 
-/obj/effect/blob/core/New(loc, var/h = 200, var/client/new_overmind = null, var/new_rate = 2, var/mob/camera/blob/C = null,newlook = "new",no_morph = 0)
+//obj/effect/blob/core/New(loc, var/h = 200, var/client/new_overmind = null, var/new_rate = 2, var/mob/camera/blob/C = null,newlook = "new",no_morph = 0) HALLOWEEN
+/obj/effect/blob/core/New(loc, var/h = 200, var/client/new_overmind = null, var/new_rate = 2, var/mob/camera/blob/C = null,newlook = "skelleton",no_morph = 0)
 	looks = newlook
 	blob_cores += src
 	processing_objects.Add(src)
 	creator = C
-	if((icon_size == 64) && !no_morph)
-		if(new_overmind)
+	if(icon_size == 64)
+		if(!no_morph && new_overmind)
 			flick("core_spawn",src)
 		else
 			icon_state = "cerebrate"
@@ -176,6 +177,7 @@
 				to_chat(O,"<span class='notice'>[B] has appeared and just started a new blob! <a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></span>")
 
 		B.verbs += /mob/camera/blob/proc/create_core
+		/*HALLOWEEN
 		spawn()
 			var/can_choose_from = blob_looks_player
 			var/chosen = input(B,"Select a blob looks", "Blob Looks", blob_looks_player[1]) as null|anything in can_choose_from
@@ -183,6 +185,7 @@
 				for(var/obj/effect/blob/nearby_blob in range(src,5))
 					nearby_blob.looks = chosen
 					nearby_blob.update_looks(1)
+		*/
 	else
 		var/new_name = "Blob Cerebrate ([rand(1, 999)])"
 		B.name = new_name

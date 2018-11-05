@@ -466,3 +466,11 @@ obj/item/weapon/banhammer/admin
 //		base_overlay.appearance = appearance
 //		base_overlay.plane = FLOAT_PLANE
 //		overlays += base_overlay
+
+
+/obj/item/weapon/hammer
+	name = "smithing hammer"
+	desc = "for those with a predeliction for applying concussive maintenance"
+	icon_state = "hammer"
+	force = 8
+	hitsound = 'sound/weapons/toolbox.ogg'
