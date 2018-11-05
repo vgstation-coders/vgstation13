@@ -1133,6 +1133,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/caramelpie/New()
 	..()
+	reagents.clear_reagents()
 	reagents.add_reagent(NUTRIMENT, 4)
 	reagents.add_reagent(CARAMEL, 3)
 	bitesize = 3
