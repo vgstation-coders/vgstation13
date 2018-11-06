@@ -282,9 +282,7 @@ var/runedec = 0 // Rune cap ?
 		return ..()
 	return FALSE
 
-/obj/item/weapon/tome_legacy/format_words()
-
-/obj/item/weapon/tome/proc/format_words()
+/obj/item/weapon/tome_legacy/proc/format_words()
 	if(legacycult_spawn_allwords)
 		//Let's do their research
 		var/list/cwords = cultwords.Copy()
