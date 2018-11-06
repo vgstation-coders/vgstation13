@@ -13,10 +13,11 @@
 			break
 	if(!server)
 		return
-	for(var/datum/tech/T in tech_list)
+	for(var/ID in tech_list)
+		var/datum/tech/T = tech_list[ID]
 		if(T.goal_level==0) // Ignore illegal tech, etc
 			continue
-		var/datum/tech/KT  = locate(T.type, server.files.known_tech)
+		var/datum/tech/KT = server.files.GetKTechByID(ID)
 		tech_level_total += KT.level
 	return tech_level_total
 

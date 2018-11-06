@@ -110,7 +110,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 /obj/machinery/computer/rdconsole/proc/Maximize()
 	files.known_tech = tech_list.Copy()
-	for(var/datum/tech/KT in files.known_tech)
+	for(var/ID in files.known_tech)
+		var/datum/tech/KT = files.known_tech[ID]
 		if(KT.level < KT.max_level)
 			KT.level=KT.max_level
 
@@ -175,7 +176,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 //Have it automatically push research to the centcomm server so wild griffins can't fuck up R&D's work --NEO
 /obj/machinery/computer/rdconsole/proc/griefProtection()
 	for(var/obj/machinery/r_n_d/server/centcom/C in machines)
-		for(var/datum/tech/T in files.known_tech)
+		for(var/ID in files.known_tech)
+			var/datum/tech/T = files.known_tech[ID]
 			C.files.AddTech2Known(T)
 		for(var/datum/design/D in files.known_designs)
 			C.files.AddDesign2Known(D)
@@ -332,7 +334,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		screen = 1.0
 
 	else if(href_list["copy_tech"]) //Copys some technology data from the research holder to the disk.
-		for(var/datum/tech/T in files.known_tech)
+		for(var/ID in files.known_tech)
+			var/datum/tech/T = files.known_tech[ID]
 			if(href_list["copy_tech_ID"] == T.id)
 				t_disk.stored = T
 				break
@@ -402,14 +405,16 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						if(S.disabled)
 							continue
 						if((id in S.id_with_upload) || istype(S, /obj/machinery/r_n_d/server/centcom))
-							for(var/datum/tech/T in files.known_tech)
+							for(var/ID in files.known_tech)
+								var/datum/tech/T = files.known_tech[ID]
 								S.files.AddTech2Known(T)
 							for(var/datum/design/D in files.known_designs)
 								S.files.AddDesign2Known(D)
 							S.files.RefreshResearch()
 							server_processed = 1
 						if(((id in S.id_with_download) && !istype(S, /obj/machinery/r_n_d/server/centcom)) || S.hacked)
-							for(var/datum/tech/T in S.files.known_tech)
+							for(var/ID in S.files.known_tech)
+								var/datum/tech/T = S.files.known_tech[ID]
 								files.AddTech2Known(T)
 							for(var/datum/design/D in S.files.known_designs)
 								files.AddDesign2Known(D)
@@ -718,8 +723,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 		if(1.1) //Research viewer
 			dat += "Current Research Levels:<BR><BR>"
-			for(var/datum/tech/T in files.known_tech)
-
+			for(var/ID in files.known_tech)
+				var/datum/tech/T = files.known_tech[ID]
 				dat += {"[T.name]<BR>
 					* Level: [T.level]<BR>
 					* Summary: [T.desc]<HR>"}
@@ -750,8 +755,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += {"<BR><A href='?src=\ref[src];menu=1.0'>Main Menu</A> ||
 				<A href='?src=\ref[src];menu=1.2'>Return to Disk Operations</A><HR>
 				Load Technology to Disk:<BR><BR>"}
-			for(var/datum/tech/T in files.known_tech)
-
+			for(var/ID in files.known_tech)
+				var/datum/tech/T = files.known_tech[ID]
 				dat += {"[T.name]
 					<A href='?src=\ref[src];copy_tech=1;copy_tech_ID=[T.id]'>(Copy to Disk)</A><BR>"}
 		if(1.4) //Design Disk menu.
