@@ -169,7 +169,7 @@
 		if(do_after_cooldown(target, 1/MECHDRILL_ROCK_SPEED) && C == chassis.loc && src == chassis.selected)
 			for(var/turf/unsimulated/mineral/M in range(chassis,1))
 				if(get_dir(chassis,M)&chassis.dir)
-					M.GetDrilled()
+					M.GetDrilled(safety_override = TRUE, driller = src)
 			log_message("Drilled through [target]")
 			if(istype(chassis, /obj/mecha/working))
 				var/obj/mecha/working/W = chassis
