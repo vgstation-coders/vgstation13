@@ -66,8 +66,11 @@
 
 /datum/preferences_subsection/organs/process_link(var/mob/user, var/list/href_list)
 	var/task = href_list["task"]
-	if(task == "menu")
-		. = show_menu(arglist(args))
-	else if(task == "input")
-		. = handle_input(arglist(args))
-		show_menu(arglist(args))
+	switch(task)
+		if("menu")
+			return show_menu(arglist(args))
+		if("input")
+			. = handle_input(arglist(args))
+			show_menu(arglist(args))
+		else
+			CRASH("Unknown task: [task]")
