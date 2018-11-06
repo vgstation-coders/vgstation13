@@ -22,7 +22,7 @@
 	. = ..()
 	if (!.) // No need to go further.
 		return FALSE
-	if (!user.vampire_power(blood_cost, CONSCIOUS))
+	if (!user.vampire_power(blood_cost, UNCONSCIOUS))
 		return FALSE
 
 /spell/rejuvenate/choose_targets(var/mob/user = usr)

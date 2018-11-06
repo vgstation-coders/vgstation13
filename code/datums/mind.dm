@@ -93,12 +93,13 @@
 	if(active)
 		new_character.key = key		//now transfer the key to link the client to our new body
 
-	for (var/role in antag_roles)
-		var/datum/role/R = antag_roles[role]
-		R.PostMindTransfer(new_character, current)
-
+	var/mob/old_character = current
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
+	
+	for (var/role in antag_roles)
+		var/datum/role/R = antag_roles[role]
+		R.PostMindTransfer(new_character, old_character)
 
 /datum/mind/proc/store_memory(new_text)
 	if(new_text)
