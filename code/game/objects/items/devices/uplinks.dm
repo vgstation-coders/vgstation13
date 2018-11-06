@@ -111,6 +111,11 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 
 /obj/item/device/uplink/Topic(href, href_list)
 	..()
+
+	if (!is_holder_of(usr, src))
+		message_admins("[usr] tried to access [src], an unlocked PDA, despite not being its holder.")
+		return FALSE
+
 	if(!active)
 		return
 
