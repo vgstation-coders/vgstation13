@@ -2225,12 +2225,20 @@
 	reagents = list(VOMIT = 5, ANTI_TOXIN = 1)
 	result = /obj/item/weapon/reagent_containers/food/snacks/reclaimed
 
+/datum/recipe/reclaimedallicin
+	reagents = list(VOMIT = 5, ALLICIN = 1)
+	result = /obj/item/weapon/reagent_containers/food/snacks/reclaimed
+
 /datum/recipe/bruisepack
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/aloe)
 	result = /obj/item/stack/medical/bruise_pack
 
 /datum/recipe/ointment
 	reagents = list(DERMALINE = 5)
+	result = /obj/item/stack/medical/ointment
+
+/datum/recipe/ointmentkathalai
+	reagents = list(KATHALAI = 5)
 	result = /obj/item/stack/medical/ointment
 
 /datum/recipe/poachedaloe
