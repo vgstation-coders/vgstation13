@@ -429,8 +429,8 @@
 	var/datum/tech/T = files.known_tech["materials"]
 	if(T && T.level > 1)
 		var/pmat = 0//Calculations to make up for the fact that these parts and tech modify the same thing
-		for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
-			pmat += Ml.rating - 1
+		for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
+			pmat += Ma.rating - 1
 		diff = round(initial(resource_coeff) - (initial(resource_coeff)*(T.level+(pmat*3)))/25,0.01)
 		if(resource_coeff!=diff)
 			resource_coeff = diff
@@ -438,8 +438,8 @@
 	T = files.known_tech["programming"]
 	if(T && T.level > 1)
 		var/ptime = 0
-		for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
-			ptime += Ma.rating - 1
+		for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
+			ptime += Ml.rating - 1
 		diff = round(initial(time_coeff) - (initial(time_coeff)*(T.level+(ptime*5)))/25,0.1)
 		if(time_coeff!=diff)
 			time_coeff = diff
@@ -468,7 +468,7 @@
 				files.AddDesign2Known(D)
 		files.RefreshResearch()
 		var/i = src.convert_designs()
-		var/tech_output = update_tech() //apparently this has never worked
+		var/tech_output = update_tech()
 		if(!silent)
 			temp = "Processed [i] equipment designs.<br>"
 			temp += tech_output
