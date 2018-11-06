@@ -75,6 +75,7 @@ var/const/MAX_SAVE_SLOTS = 8
 #define POLLED_LIMIT	300
 
 /datum/preferences
+	var/list/subsections
 	//doohickeys for savefiles
 	var/database/db = ("players2.sqlite")
 	var/path
@@ -199,6 +200,7 @@ var/const/MAX_SAVE_SLOTS = 8
 /datum/preferences/New(client/C)
 	client=C
 	if(istype(C))
+		init_subsections()
 		var/theckey = C.ckey
 		var/thekey = C.key
 		spawn()
@@ -216,6 +218,14 @@ var/const/MAX_SAVE_SLOTS = 8
 			real_name = random_name(gender, species)
 			save_character_sqlite(theckey, C, default_slot)
 			saveloaded = 1
+
+/datum/preferences/Destroy()
+	for(var/entry in subsections)
+		var/datum/preferences_subsection/prefs_ss = subsections[entry]
+		if(prefs_ss && !prefs_ss.gcDestroyed)
+			qdel(prefs_ss)
+	subsections = null
+	..()
 
 /datum/preferences/proc/try_load_save_sqlite(var/theckey, var/theclient, var/theslot)
 	var/attempts = 0
@@ -256,7 +266,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<b>Skin Tone:</b> <a href='?_src_=prefs;preference=s_tone;task=input'>[species == "Human" ? "[-s_tone + 35]/220" : "[s_tone]"]</a><br><BR>
 	<b>Handicaps:</b> <a href='byond://?src=\ref[user];task=input;preference=disabilities'>Set</a><br>
 	<b>Limbs:</b> <a href='byond://?src=\ref[user];preference=limbs;task=input'>Set</a><br>
-	<b>Organs:</b> <a href='byond://?src=\ref[user];preference=organs;task=input'>Set</a><br>
+	<b>Organs:</b> <a href='byond://?_src_=prefs;subsection=organs;task=menu'>Set</a><br>
 	<b>Underwear:</b> [gender == MALE ? "<a href ='?_src_=prefs;preference=underwear;task=input'>[underwear_m[underwear]]</a>" : "<a href ='?_src_=prefs;preference=underwear;task=input'>[underwear_f[underwear]]</a>"]<br>
 	<b>Backpack:</b> <a href ='?_src_=prefs;preference=bag;task=input'>[backbaglist[backbag]]</a><br>
 	<b>Nanotrasen Relation</b>:<br><a href ='?_src_=prefs;preference=nt_relation;task=input'>[nanotrasen_relation]</a><br>
@@ -949,6 +959,11 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 /datum/preferences/proc/process_link(mob/user, list/href_list)
 	if(!user)
 		return
+	var/datum/preferences_subsection/subsection = subsections[href_list["subsection"]]
+	if(subsection)
+		var/result = subsection.process_link(user, href_list)
+		if(result)
+			return result
 	//testing("preference=[href_list["preference"]]")
 	if(href_list["preference"] == "job")
 		switch(href_list["task"])
@@ -1338,36 +1353,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 									organ_data[second_limb] = "peg"
 								else
 									organ_data[second_limb] = "amputated"
-
-				if("organs")
-					var/organ_name = input(user, "Which internal function do you want to change?") as null|anything in list("Heart", "Eyes", "Lungs", "Liver", "Kidneys")
-					if(!organ_name)
-						return
-
-					var/organ = null
-					switch(organ_name)
-						if("Heart")
-							organ = "heart"
-						if("Eyes")
-							organ = "eyes"
-						if("Lungs")
-							organ = "lungs"
-						if("Liver")
-							organ = "liver"
-						if("Kidneys")
-							organ = "kidneys"
-
-					var/new_state = input(user, "What state do you wish the organ to be in?") as null|anything in list("Normal","Assisted","Mechanical")
-					if(!new_state)
-						return
-
-					switch(new_state)
-						if("Normal")
-							organ_data[organ] = null
-						if("Assisted")
-							organ_data[organ] = "assisted"
-						if("Mechanical")
-							organ_data[organ] = "mechanical"
 
 				if("skin_style")
 					var/skin_style_name = input(user, "Select a new skin style") as null|anything in list("default1", "default2", "default3")
