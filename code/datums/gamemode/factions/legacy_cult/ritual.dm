@@ -1,5 +1,16 @@
 var/runedec = 0 // Rune cap ?
 
+/client/proc/toggle_cult_research()
+	set category = "Special Verbs"
+	set desc="If yes, cult have to research words, if no, their books are autofilled"
+	set name="Toggle cult word research"
+
+	legacycult_spawn_allwords = !legacycult_spawn_allwords
+	log_admin("[key_name(usr)] toggled cult word research [legacycult_spawn_allwords?"un-necessary":"required"].")
+	message_admins("<span class='notice'>[key_name_admin(usr)] toggled cult word research [legacycult_spawn_allwords?"un-necessary":"required"].</span>", 1)
+	feedback_add_details("admin_verb","TCWR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+
 /obj/effect/rune_legacy
 	desc = "A strange collection of symbols drawn in blood."
 	anchored = 1
@@ -271,6 +282,31 @@ var/runedec = 0 // Rune cap ?
 		return ..()
 	return FALSE
 
+/obj/item/weapon/tome_legacy/format_words()
+
+/obj/item/weapon/tome/proc/format_words()
+	if(legacycult_spawn_allwords)
+		//Let's do their research
+		var/list/cwords = cultwords.Copy()
+		for(var/i in words)
+			for(var/ii in cwords)
+				if(cwords[ii] == i)
+					cwords.Remove(ii)
+					words[i] = ii
+	return {"
+			<br><b>Word translation notes</b> <br>
+			[words[1]] is <a href='byond://?src=\ref[src];number=1;action=change'>[words[words[1]]]</A> <A href='byond://?src=\ref[src];number=1;action=clear'>Clear</A><BR>
+			[words[2]] is <A href='byond://?src=\ref[src];number=2;action=change'>[words[words[2]]]</A> <A href='byond://?src=\ref[src];number=2;action=clear'>Clear</A><BR>
+			[words[3]] is <a href='byond://?src=\ref[src];number=3;action=change'>[words[words[3]]]</A> <A href='byond://?src=\ref[src];number=3;action=clear'>Clear</A><BR>
+			[words[4]] is <a href='byond://?src=\ref[src];number=4;action=change'>[words[words[4]]]</A> <A href='byond://?src=\ref[src];number=4;action=clear'>Clear</A><BR>
+			[words[5]] is <a href='byond://?src=\ref[src];number=5;action=change'>[words[words[5]]]</A> <A href='byond://?src=\ref[src];number=5;action=clear'>Clear</A><BR>
+			[words[6]] is <a href='byond://?src=\ref[src];number=6;action=change'>[words[words[6]]]</A> <A href='byond://?src=\ref[src];number=6;action=clear'>Clear</A><BR>
+			[words[7]] is <a href='byond://?src=\ref[src];number=7;action=change'>[words[words[7]]]</A> <A href='byond://?src=\ref[src];number=7;action=clear'>Clear</A><BR>
+			[words[8]] is <a href='byond://?src=\ref[src];number=8;action=change'>[words[words[8]]]</A> <A href='byond://?src=\ref[src];number=8;action=clear'>Clear</A><BR>
+			[words[9]] is <a href='byond://?src=\ref[src];number=9;action=change'>[words[words[9]]]</A> <A href='byond://?src=\ref[src];number=9;action=clear'>Clear</A><BR>
+			[words[10]] is <a href='byond://?src=\ref[src];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=\ref[src];number=10;action=clear'>Clear</A><BR>
+			"}
+
 /obj/item/weapon/tome_legacy/Topic(href,href_list[])
 	if (src.loc == usr)
 		var/number = text2num(href_list["number"])
@@ -284,19 +320,7 @@ var/runedec = 0 // Rune cap ?
 				for (var/w in words)
 					if ((words[w] == words[words[number]]) && (w != words[number]))
 						words[w] = w
-		notedat = {"
-					<br><b>Word translation notes</b> <br>
-					[words[1]] is <a href='byond://?src=\ref[src];number=1;action=change'>[words[words[1]]]</A> <A href='byond://?src=\ref[src];number=1;action=clear'>Clear</A><BR>
-					[words[2]] is <A href='byond://?src=\ref[src];number=2;action=change'>[words[words[2]]]</A> <A href='byond://?src=\ref[src];number=2;action=clear'>Clear</A><BR>
-					[words[3]] is <a href='byond://?src=\ref[src];number=3;action=change'>[words[words[3]]]</A> <A href='byond://?src=\ref[src];number=3;action=clear'>Clear</A><BR>
-					[words[4]] is <a href='byond://?src=\ref[src];number=4;action=change'>[words[words[4]]]</A> <A href='byond://?src=\ref[src];number=4;action=clear'>Clear</A><BR>
-					[words[5]] is <a href='byond://?src=\ref[src];number=5;action=change'>[words[words[5]]]</A> <A href='byond://?src=\ref[src];number=5;action=clear'>Clear</A><BR>
-					[words[6]] is <a href='byond://?src=\ref[src];number=6;action=change'>[words[words[6]]]</A> <A href='byond://?src=\ref[src];number=6;action=clear'>Clear</A><BR>
-					[words[7]] is <a href='byond://?src=\ref[src];number=7;action=change'>[words[words[7]]]</A> <A href='byond://?src=\ref[src];number=7;action=clear'>Clear</A><BR>
-					[words[8]] is <a href='byond://?src=\ref[src];number=8;action=change'>[words[words[8]]]</A> <A href='byond://?src=\ref[src];number=8;action=clear'>Clear</A><BR>
-					[words[9]] is <a href='byond://?src=\ref[src];number=9;action=change'>[words[words[9]]]</A> <A href='byond://?src=\ref[src];number=9;action=clear'>Clear</A><BR>
-					[words[10]] is <a href='byond://?src=\ref[src];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=\ref[src];number=10;action=clear'>Clear</A><BR>
-					"}
+		notedat = format_words()
 		usr << browse("[notedat]", "window=notes")
 //		call(/obj/item/weapon/tome_legacy/proc/edit_notes)()
 	else

@@ -132,6 +132,7 @@ var/list/ninjastart = list()
 var/list/cardinal = list( NORTH, SOUTH, EAST, WEST )
 var/list/diagonal = list(NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
 var/list/alldirs = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
+var/legacycult_spawn_allwords = TRUE
 
 var/global/universal_cult_chat = 0 //if set to 1, even human cultists can use cultchat
 
