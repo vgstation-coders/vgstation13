@@ -19,7 +19,7 @@
 		cell = new /obj/item/weapon/cell/empty()
 
 /datum/organ/internal/heart/cell/Life()
-	if(owner && owner.nutrition > 50)
+	if(owner && owner.nutrition > 5)
 		if(cell.charge < cell.maxcharge)
 			cell.give(15)
-			owner.nutrition -= 50
+			owner.nutrition -= 5
