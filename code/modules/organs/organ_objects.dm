@@ -139,7 +139,7 @@
 
 /obj/item/organ/internal/heart/cell
 	name = "biocharger"
-	icon_state = "heart=cell"
+	icon_state = "heart-cell"
 	prosthetic_name = null
 	prosthetic_icon = null
 	organ_type = /datum/organ/internal/heart/cell
