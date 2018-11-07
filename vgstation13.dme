@@ -71,6 +71,7 @@
 #include "code\hub.dm"
 #include "code\names.dm"
 #include "code\world.dm"
+#include "code\modules\organs\internal\heart\heart.dm"
 #include "code\__HELPERS\angles_dirs.dm"
 #include "code\__HELPERS\clockwork.dm"
 #include "code\__HELPERS\cmp.dm"
