@@ -19,7 +19,8 @@
 		// This was just used for testing.
 //		to_chat(world, "UNABLE TO FIND A GODDAMN RND SERVER. FUCK.")
 		return
-	for(var/datum/tech/T in tech_list)
+	for(var/ID in tech_list)
+		var/datum/tech/T = tech_list[ID]
 		if(T.goal_level==0) // Ignore illegal tech, etc
 			continue
 		var/datum/tech/KT  = locate(T.type, server.files.known_tech)
