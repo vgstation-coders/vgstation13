@@ -15,6 +15,9 @@
 		antag.current << sound('sound/voice/syndicate_intro.ogg')
 
 /datum/role/traitor/ForgeObjectives()
+	if(!SOLO_ANTAG_OBJECTIVES)
+		AppendObjective(/datum/objective/freeform/syndicate)
+		return
 	if(istype(antag.current, /mob/living/silicon))
 		AppendObjective(/datum/objective/target/assassinate)
 

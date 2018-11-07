@@ -62,14 +62,16 @@
 	max_material_storage = (initial(max_material_storage)+(T * 187500))
 
 	T = 0
+	var/datum/tech/Tech = files.known_tech["materials"]
 	for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
 		T += Ma.rating - 1
-	resource_coeff = round(initial(resource_coeff) - (initial(resource_coeff)*(T * 3))/25,0.01)
+	resource_coeff = round(initial(resource_coeff) - (initial(resource_coeff)*(Tech.level+(T * 3)))/25,0.01)
 
 	T = 0
+	Tech = files.known_tech["programming"]
 	for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
 		T += Ml.rating - 1
-	time_coeff = round(initial(time_coeff) - (initial(time_coeff)*(T * 5))/25,0.01)
+	time_coeff = round(initial(time_coeff) - (initial(time_coeff)*(Tech.level+(T * 5)))/25,0.01)
 
 /obj/machinery/r_n_d/fabricator/emag()
 	sleep()
@@ -242,7 +244,7 @@
 			update_buffer_size()
 
 	return 1
-	
+
 /obj/machinery/r_n_d/fabricator/proc/has_bluespace_bin()
 	var/I = /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace/
 	//return (I in component_parts)
@@ -252,10 +254,10 @@
 /obj/machinery/r_n_d/fabricator/proc/bluespace_materials(var/datum/design/part)
 	if(!has_bluespace_bin())
 		return 0
-		
+
 	for (var/obj/machinery/r_n_d/fabricator/gibmats in machines)
 		if(gibmats.has_bluespace_bin())
-			for(var/gib in part.materials)	
+			for(var/gib in part.materials)
 				if (gibmats.check_mat(part,gib) && !src.check_mat(part,gib))//they have what we need && we don't need more
 					if(copytext(gib,1,2) == "$" && !(research_flags & IGNORE_MATS))
 						var/bluespaceamount = src.get_resource_cost_w_coeff(part, gib)
@@ -263,7 +265,7 @@
 						src.materials.addAmount(gib,bluespaceamount)
 	return remove_materials(part)
 
-	
+
 /obj/machinery/r_n_d/fabricator/proc/check_mat(var/datum/design/being_built, var/M)
 	if(copytext(M,1,2) == "$")
 		if(src.research_flags & IGNORE_MATS)
@@ -423,30 +425,25 @@
 	if(!files)
 		return
 	var/output
-	for(var/datum/tech/T in files.known_tech)
-		if(T && T.level > 1)
-			var/diff
-			switch(T.id) //bad, bad formulas
-				if("materials")
-					var/pmat = 0//Calculations to make up for the fact that these parts and tech modify the same thing
-					for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
-						pmat += Ml.rating
-					if(pmat >= 1)
-						pmat -= 1//So the equations don't have to be reworked, upgrading a single part from T1 to T2 is == to 1 tech level
-					diff = round(initial(resource_coeff) - (initial(resource_coeff)*(T.level+pmat))/25,0.01)
-					if(resource_coeff!=diff)
-						resource_coeff = diff
-						output+="Production efficiency increased.<br>"
-				if("programming")
-					var/ptime = 0
-					for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
-						ptime += Ma.rating
-					if(ptime >= 2)
-						ptime -= 2
-					diff = round(initial(time_coeff) - (initial(time_coeff)*(T.level+ptime))/25,0.1)
-					if(time_coeff!=diff)
-						time_coeff = diff
-						output+="Production routines updated.<br>"
+	var/diff
+	var/datum/tech/T = files.known_tech["materials"]
+	if(T && T.level > 1)
+		var/pmat = 0//Calculations to make up for the fact that these parts and tech modify the same thing
+		for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
+			pmat += Ma.rating - 1
+		diff = round(initial(resource_coeff) - (initial(resource_coeff)*(T.level+(pmat*3)))/25,0.01)
+		if(resource_coeff!=diff)
+			resource_coeff = diff
+			output+="Production efficiency increased.<br>"
+	T = files.known_tech["programming"]
+	if(T && T.level > 1)
+		var/ptime = 0
+		for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
+			ptime += Ml.rating - 1
+		diff = round(initial(time_coeff) - (initial(time_coeff)*(T.level+(ptime*5)))/25,0.1)
+		if(time_coeff!=diff)
+			time_coeff = diff
+			output+="Production routines updated.<br>"
 	return output
 
 
@@ -462,7 +459,8 @@
 	else
 		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Not connected to a server. Please connect from a local console first.\"")
 	if(console)
-		for(var/datum/tech/T in console.files.known_tech)
+		for(var/ID in console.files.known_tech)
+			var/datum/tech/T = console.files.known_tech[ID]
 			if(T)
 				files.AddTech2Known(T)
 		for(var/datum/design/D in console.files.known_designs)
@@ -470,13 +468,13 @@
 				files.AddDesign2Known(D)
 		files.RefreshResearch()
 		var/i = src.convert_designs()
-		//var/tech_output = update_tech() //apparently this has never worked
+		var/tech_output = update_tech()
 		if(!silent)
 			temp = "Processed [i] equipment designs.<br>"
-			//temp += tech_output
+			temp += tech_output
 			temp += "<a href='?src=\ref[src];clear_temp=1'>Return</a>"
 			src.updateUsrDialog()
-		if(i)
+		if(i || tech_output)
 			new_data=1
 	if(new_data)
 		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Successfully synchronized with R&D server. New data processed.\"")

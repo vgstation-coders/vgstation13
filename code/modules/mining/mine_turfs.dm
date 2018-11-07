@@ -426,7 +426,14 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		O.geologic_data = geologic_data
 	return O
 
-/turf/unsimulated/mineral/proc/GetDrilled(var/artifact_fail = 0)
+/**
+* artifact_fail: If true, negative effects will be applied to mobs in range when artifacts inside
+*                this turf are destroyed.
+* safety_override: If true, dangerous side effects of the turf being drilled will be immediately
+*                  disabled after drilling (ie. gibtonite will be immediately disarmed).
+* driller: Whatever is doing the drilling.  Used for some messages.
+*/
+/turf/unsimulated/mineral/proc/GetDrilled(var/artifact_fail = FALSE, var/safety_override = FALSE, var/atom/driller)
 	if (mineral && mineral.result_amount)
 		for (var/i = 1 to mineral.result_amount - mined_ore)
 			DropMineral()
@@ -994,12 +1001,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		else if(istype(R.module_active, /obj/item/device/mining_scanner))
 			attackby(R.module_active, R) //let's bump to disable. This is kinder, because borgs need some love
 
-	else if(istype(AM,/obj/mecha))
-		var/obj/mecha/M = AM
-		if(istype(M.selected, /obj/item/mecha_parts/mecha_equipment/tool/drill))
-			M.occupant_message("<span class='warning'>Safety features prevent this action.</span>")
-			bump_reject = 1
-
 	if(!bump_reject) //if we haven't been pushed off, we do the drilling bit
 		return ..()
 
@@ -1046,10 +1047,14 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			det_time = 0
 		visible_message("<span class='notice'>The chain reaction was stopped! The gibtonite had [src.det_time] reactions left till the explosion!</span>")
 
-/turf/unsimulated/mineral/gibtonite/GetDrilled()
+/turf/unsimulated/mineral/gibtonite/GetDrilled(var/artifact_fail = FALSE, var/safety_override = FALSE, var/atom/driller)
 	if(stage == 0 && mineral.result_amount >= 1) //Gibtonite deposit is activated
 		playsound(src,'sound/effects/hit_on_shattered_glass.ogg',50,1)
 		explosive_reaction()
+		if (safety_override)
+			if (driller && istype(driller))
+				driller.visible_message("<span class='notice'>\The [driller] safely defuses the [src].</span>")
+			defuse()
 		return
 	if(stage == 1 && mineral.result_amount >= 1) //Gibtonite deposit goes kaboom
 		var/turf/bombturf = get_turf(src)

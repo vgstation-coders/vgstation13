@@ -605,6 +605,9 @@
 	logo_state = "wizard-logo"
 
 /datum/role/wizard/ForgeObjectives()
+	if(!SOLO_ANTAG_OBJECTIVES)
+		AppendObjective(/datum/objective/freeform/wizard)
+		return
 	switch(rand(1,100))
 		if(1 to 30)
 			AppendObjective(/datum/objective/target/assassinate)
