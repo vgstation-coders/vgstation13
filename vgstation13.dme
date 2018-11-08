@@ -1224,6 +1224,7 @@
 #include "code\modules\client\edge_sliding\keystate\1definitions.dm"
 #include "code\modules\client\edge_sliding\keystate\KeyState.dm"
 #include "code\modules\client\preferences\subsections.dm"
+#include "code\modules\client\preferences\subsections\limbs.dm"
 #include "code\modules\client\preferences\subsections\organs.dm"
 #include "code\modules\clothing\clothing.dm"
 #include "code\modules\clothing\accessories\accessory.dm"
