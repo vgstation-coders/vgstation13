@@ -102,11 +102,8 @@
 // -- Not sure if this is meant to work like that.
 // I just put what I expect to see in the "The vampires were..."
 /datum/role/vampire/GetScoreboard()
-	. = ..() // Who he was, his objectives...
-	. += "Total blood collected: <b>[blood_total]</b><br/>"
-	for (var/datum/role/thrall/T in faction.members)
-		. += T.GetScoreboard()
-		. += "<br/>"
+	. = "Total blood collected: <b>[blood_total]</b><br/>"
+	. += ..() // Who he was, his objectives...
 
 /datum/role/vampire/ForgeObjectives()
 	if(!SOLO_ANTAG_OBJECTIVES)
@@ -226,10 +223,10 @@
 		H.change_sight(adding = SEE_MOBS)
 
 
-/datum/role/vampire/proc/handle_enthrall(var/datum/mind/M)
-	if (!istype(M))
+/datum/role/vampire/proc/handle_enthrall(var/datum/mind/enthralled)
+	if (!istype(enthralled))
 		return FALSE
-	return new/datum/role/thrall(thrall = M, master = src) // Creating a new thrall
+	return new/datum/role/thrall(M = enthralled, fac = src.faction, master = src) // Creating a new thrall
 /*
 -- Life() related procs --
 */
@@ -458,14 +455,11 @@
 
 	var/datum/role/vampire/master
 
-/datum/role/thrall/New(var/datum/mind/thrall, var/datum/faction/fac=null, var/new_id, var/override = FALSE, var/datum/role/vampire/master)
+/datum/role/thrall/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE, var/datum/role/vampire/master)
 	. = ..()
 	if(!istype(master))
 		return FALSE
 	src.master = master
-	master.faction.members += src
-	faction = master.faction
-	antag = thrall
 	update_faction_icons()
 	Greet(TRUE)
 	ForgeObjectives()
@@ -486,10 +480,10 @@
 	P.set_target(master.antag)
 	AppendObjective(P)
 
-
 /datum/role/thrall/Drop(var/deconverted = FALSE)
 	var/mob/M = antag.current
-	M.visible_message("<span class='big danger'>[M] suddenly becomes calm and collected again, \his eyes clear up.</span>",
-	"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
+	if (deconverted)
+		M.visible_message("<span class='big danger'>[M] suddenly becomes calm and collected again, \his eyes clear up.</span>",
+		"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 	update_faction_icons()
 	return ..()
