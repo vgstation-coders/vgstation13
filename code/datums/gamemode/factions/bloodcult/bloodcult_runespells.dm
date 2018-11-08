@@ -280,7 +280,7 @@
 /datum/rune_spell/raisestructure/midcast(var/mob/add_cultist)
 	if (add_cultist in contributors)
 		return
-	add_cultist.say(invocation,"C")
+	invoke(add_cultist, invocation)
 	contributors.Add(add_cultist)
 	if (add_cultist.client)
 		add_cultist.client.images |= progbar
@@ -351,6 +351,12 @@
 
 /datum/rune_spell/raisestructure/proc/success()
 	new spawntype(spell_holder.loc)
+	if (spawntype == /obj/structure/cult/altar)
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (cult)
+			cult.progress(CULT_ACT_I)
+		else
+			message_admins("Blood Cult: An altar was raised...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 	qdel(spell_holder)//this will cause this datum to del as well
 
 //RUNE II
@@ -1784,7 +1790,7 @@ var/list/blind_victims = list()
 /datum/rune_spell/summoncultist/midcast(var/mob/add_cultist)
 	if (add_cultist in contributors)
 		return
-	add_cultist.say(invocation,"C")
+	invoke(add_cultist, invocation)
 	contributors.Add(add_cultist)
 	if (add_cultist.client)
 		add_cultist.client.images |= progbar
@@ -1955,7 +1961,7 @@ var/list/blind_victims = list()
 
 	var/datum/cultword/W = cultwords[network]
 
-	activator.say("[W.rune]","C")
+	invoke(activator, "[W.rune]")
 	var/image/I_crystals = image('icons/obj/cult.dmi',"path_pad")
 	I_crystals.plane = OBJ_PLANE
 	I_crystals.layer = BELOW_TABLE_LAYER
@@ -2061,7 +2067,7 @@ var/list/bloodcult_exitportals = list()
 
 	var/datum/cultword/W = cultwords[network]
 
-	activator.say("[W.rune]","C")
+	invoke(activator, "[W.rune]")
 	var/image/I_crystals = image('icons/obj/cult.dmi',"path_crystals")
 	I_crystals.plane = OBJ_PLANE
 	I_crystals.layer = BELOW_TABLE_LAYER
@@ -2307,7 +2313,7 @@ var/list/bloodcult_exitportals = list()
 /datum/rune_spell/resurrect/midcast(var/mob/add_cultist)
 	if (add_cultist in contributors)
 		return
-	add_cultist.say(invocation,"C")
+	invoke(add_cultist, invocation)
 	contributors.Add(add_cultist)
 	if (add_cultist.client)
 		add_cultist.client.images |= progbar

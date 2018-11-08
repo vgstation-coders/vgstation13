@@ -1,7 +1,7 @@
 //CULT 3.0 BY DEITY LINK (2018)
 //BASED ON THE ORIGINAL GAME MODE BY URIST MCDORF
 
-var/veil_thickness = CULT_EPILOGUE//REMEMBER TO SET IT BACK TO CULT_PROLOGUE WHEN DONE TESTING
+var/veil_thickness = CULT_PROLOGUE
 
 /client/proc/set_veil_thickness()
 	set category = "Special Verbs"
@@ -26,15 +26,52 @@ var/veil_thickness = CULT_EPILOGUE//REMEMBER TO SET IT BACK TO CULT_PROLOGUE WHE
 
 /proc/spawn_bloodstones(var/turf/source = null)
 	var/list/places_to_spawn = list()
+	for (var/i = 1 to 4)
+		for (var/j = 10; j > 0; j--)
+			var/turf/T = get_turf(pick(range(j*3,locate(map.center_x+j*4*(((round(i/2) % 2) == 0) ? -1 : 1 ),map.center_y+j*4*(((i % 2) == 0) ? -1 : 1 ),map.zMainStation))))
+			if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated,/turf/simulated/shuttle)))
+				places_to_spawn += T
+				break
+	if (source && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<128)
+		places_to_spawn.Add(source)
+	for (var/T in places_to_spawn)
+		new /obj/structure/cult/bloodstone(T)
+
+	var/i = 1
+	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
+		var/datum/holomap_marker/newMarker = new()
+		newMarker.id = HOLOMAP_MARKER_BLOODSTONE
+		newMarker.filter = HOLOMAP_FILTER_CULT
+		newMarker.x = B.x
+		newMarker.y = B.y
+		newMarker.z = B.z
+		holomap_markers[HOLOMAP_MARKER_BLOODSTONE+"_[i]"] = newMarker
+		i++
+
+	var/icon/canvas = icon('icons/480x480.dmi', "cultmap")
+	var/icon/map_base = icon(holoMiniMaps[map.zMainStation])
+	map_base.Blend("#E30000",ICON_MULTIPLY)
+	canvas.Blend(map_base,ICON_OVERLAY)
+	for(var/marker in holomap_markers)
+		var/datum/holomap_marker/holomarker = holomap_markers[marker]
+		if(holomarker.z == map.zMainStation && holomarker.filter & HOLOMAP_FILTER_CULT)
+			if(map.holomap_offset_x.len >= map.zMainStation)
+				canvas.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[map.zMainStation]	, holomarker.y-8+map.holomap_offset_y[map.zMainStation])
+			else
+				canvas.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8, holomarker.y-8)
+
+	extraMiniMaps |= HOLOMAP_EXTRA_CULTMAP
+	extraMiniMaps[HOLOMAP_EXTRA_CULTMAP] = canvas
+
+	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
+		B.holomap_datum = new /datum/station_holomap/cult()
+		B.holomap_datum.initialize_holomap(B.loc)
+		/*
 	places_to_spawn.Add(pick(range(30,locate(map.center_x+40,map.center_y+40,map.zMainStation))))
 	places_to_spawn.Add(pick(range(30,locate(map.center_x+40,map.center_y-40,map.zMainStation))))
 	places_to_spawn.Add(pick(range(30,locate(map.center_x-40,map.center_y+40,map.zMainStation))))
 	places_to_spawn.Add(pick(range(30,locate(map.center_x-40,map.center_y-40,map.zMainStation))))
-	if (source && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<128)
-		places_to_spawn.Add(source)
-	for (var/turf/T in places_to_spawn)
-		new /obj/structure/cult/bloodstone(T)
-
+*/
 //CULT_PROLOGUE		Default thickness, only communication and raise structure runes enabled
 //CULT_ACT_I		Altar raised. cultists can now convert.
 //CULT_ACT_II		Cultist amount reached. cultists are now looking for the sacrifice
@@ -68,14 +105,38 @@ var/veil_thickness = CULT_EPILOGUE//REMEMBER TO SET IT BACK TO CULT_PROLOGUE WHE
 /datum/faction/bloodcult/OnPostSetup()
 	initialize_cultwords()
 
-//to recode later on
-/datum/faction/bloodcult/proc/is_sacrifice_target(var/datum/mind/M)
-/*
-	for(var/datum/objective/target/sacrifice/S in GetObjectives())
-		if(S.target == M)
-			return TRUE
-			*/
-	return FALSE
+/datum/faction/bloodcult/proc/progress(var/new_act,var/A)
+	if (veil_thickness == CULT_MENDED)
+		return//it's over, you lost
+
+	if (new_act == CULT_MENDED)
+		veil_thickness = CULT_MENDED
+		for (var/datum/role/cultist/C in members)
+			//TODO: blood curse
+			C.update_cult_hud()
+		return
+
+	if (new_act <= veil_thickness)
+		return
+
+	switch(new_act)
+		if (CULT_ACT_I)
+			veil_thickness = CULT_ACT_I
+		if (CULT_ACT_II)
+			veil_thickness = CULT_ACT_II
+		if (CULT_ACT_III)
+			veil_thickness = CULT_ACT_III
+			spawn_bloodstones(A)
+		if (CULT_ACT_IV)
+			veil_thickness = CULT_ACT_IV
+		if (CULT_EPILOGUE)
+			veil_thickness = CULT_EPILOGUE
+
+	for (var/datum/role/cultist/C in members)
+		C.update_cult_hud()
+
+	for (var/obj/structure/cult/spire/S in cult_spires)
+		S.upgrade()
 
 /proc/is_convertable_to_cult(datum/mind/mind)
 	if(!istype(mind))

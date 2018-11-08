@@ -1,5 +1,5 @@
 #define HOLOMAP_OBSTACLE	"#FFFFFFDD"
-#define HOLOMAP_PATH		"#66666699"
+#define HOLOMAP_PATH		"#	"
 
 /datum/holomap_marker
 	var/x
