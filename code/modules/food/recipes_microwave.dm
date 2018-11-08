@@ -1596,7 +1596,7 @@
 
 /datum/recipe/bruschetta
 	reagents = list(SODIUMCHLORIDE = 2, FLOUR = 10)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
 				/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
 				/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)
 	result = /obj/item/weapon/reagent_containers/food/snacks/bruschetta
