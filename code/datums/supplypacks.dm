@@ -1612,6 +1612,24 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "blood donation drive crate"
 	group = "Medical"
 
+/datum/supply_packs/chemkit
+	name = "Basic chemistry kit"
+	contains = list(/obj/item/weapon/reagent_containers/glass/beaker,
+					/obj/item/weapon/reagent_containers/glass/beaker,
+					/obj/item/weapon/reagent_containers/glass/bottle/carbon,
+					/obj/item/weapon/reagent_containers/glass/bottle/silicon,
+					/obj/item/weapon/reagent_containers/glass/bottle/sugar,
+					/obj/item/weapon/reagent_containers/glass/bottle/oxygen,
+					/obj/item/weapon/reagent_containers/glass/bottle/hydrogen,
+					/obj/item/weapon/reagent_containers/glass/bottle/nitrogen,
+					/obj/item/weapon/reagent_containers/glass/bottle/potassium,
+					/obj/item/weapon/reagent_containers/dropper)
+	cost = 80
+	containertype = /obj/structure/closet/crate/medical
+	containername = "basic chemistry kit"
+	group = "Medical"
+
+
 /datum/supply_packs/wheelchair
 	name = "Wheelchair"
 	contains = list(/obj/structure/bed/chair/vehicle/wheelchair)
