@@ -69,7 +69,7 @@
 	hud_state = "coin"
 
 /spell/targeted/create_trinket/cast(var/list/targets, mob/user)
-	var/static/list/available_trinkets = existing_typesof(/obj/item/weapon/coin)-list(/obj/item/weapon/trader, /obj/item/weapon/coin/adamantine)
+	var/static/list/available_trinkets = existing_typesof(/obj/item/weapon/coin)-list(/obj/item/weapon/coin/trader, /obj/item/weapon/coin/adamantine)
 	var/choice = pick(available_trinkets)
 	var/obj/item/I = new choice
 	user.put_in_hands(I)
