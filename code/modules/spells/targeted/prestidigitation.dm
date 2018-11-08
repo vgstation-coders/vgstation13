@@ -1,5 +1,5 @@
 /spell/targeted/spark
-	name = "spark"
+	name = "Spark"
 	desc = "Creates a spark in the targeted location."
 	abbreviation = "SP"
 
@@ -18,7 +18,7 @@
 		S.start()
 
 /spell/targeted/clean
-	name = "clean item"
+	name = "Clean item"
 	desc = "Applies magic soap to a piece of clothing."
 	abbreviation = "CI"
 
@@ -39,7 +39,7 @@
 
 
 /spell/targeted/unclean
-	name = "bloody item"
+	name = "Bloody item"
 	desc = "Drops an item into the realm of blood for just a moment, covering it in ichor."
 	abbreviation = "BI"
 
@@ -56,8 +56,8 @@
 		A.add_blood(user)
 
 /spell/targeted/create_trinket
-	name = "create mundane temporary trinket"
-	desc = "Creates a small trinket for a duration"
+	name = "Create mundane temporary trinket"
+	desc = "Creates a small trinket for a duration."
 	abbreviation = "CT"
 
 	school = "evocation"
@@ -80,7 +80,7 @@
 		qdel(I)
 
 /spell/targeted/warm_object
-	name = "warm object"
+	name = "Warm object"
 	desc = "Warms an object."
 	abbreviation = "WO"
 
@@ -108,7 +108,7 @@
 	return 3500
 
 /spell/targeted/cool_object
-	name = "cool object"
+	name = "Cool object"
 	desc = "Cools an object."
 	abbreviation = "WO"
 
@@ -120,7 +120,7 @@
 	level_max = list()
 	hud_state = "gen_ice"
 
-/spell/targeted/warm_object/cast(var/list/targets, mob/user)
+/spell/targeted/cool_object/cast(var/list/targets, mob/user)
 	for(var/obj/item/I in targets)
 		var/atom/fake_cooler/FH = new /atom/fake_cooler()
 		I.attempt_heating(FH, user)
@@ -136,7 +136,7 @@
 	return -1500
 
 /spell/targeted/extinguish
-	name = "extinguish"
+	name = "Extinguish"
 	desc = "Extinguishes an object."
 	abbreviation = "EO"
 
