@@ -474,7 +474,7 @@
 					subscreen = 0
 					return dat
 				dat += healthanalyze(M, src, TRUE)
-		dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Return to Records</a><br>"
+		dat += "<br/><a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Return to Records</a><br>"
 	return dat
 
 // Security Records
