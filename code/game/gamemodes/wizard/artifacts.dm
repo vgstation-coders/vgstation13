@@ -277,3 +277,20 @@
 	for(var/obj/machinery/power/apc/apc in power_machines)
 		if(apc.z == STATION_Z)
 			apc.overload_lighting()
+
+
+/datum/spellbook_artifact/prestidigitation
+	name = "Prestidigitation Bundle"
+	abbreviation = "PTDB"
+	desc = "A group of spells for general utility."
+	price = Sp_BASE_PRICE
+
+/datum/spellbook_artifact/prestidigitation/purchased(mob/living/carbon/human/H)
+	..()
+	H.add_spell(new/spell/targeted/spark)
+	H.add_spell(new/spell/targeted/extinguish)
+	H.add_spell(new/spell/targeted/clean)
+	H.add_spell(new/spell/targeted/unclean)
+	H.add_spell(new/spell/targeted/create_trinket)
+	H.add_spell(new/spell/targeted/cool_object)
+	H.add_spell(new/spell/targeted/warm_object)
