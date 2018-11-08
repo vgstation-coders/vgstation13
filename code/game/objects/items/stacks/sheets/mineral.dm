@@ -46,6 +46,7 @@ var/list/datum/stack_recipe/sandstone_recipes = list ( \
 	new/datum/stack_recipe("sandstone door", /obj/machinery/door/mineral/sandstone, 10, one_per_turf = 1, on_floor = 1), \
 /*	new/datum/stack_recipe("sandstone wall", ???), \
 		new/datum/stack_recipe("sandstone floor", ???),\ */
+	new/datum/stack_recipe("forge", /obj/structure/forge, 20, time = 10 SECONDS, one_per_turf = 1, on_floor = 1)
 	)
 
 /obj/item/stack/sheet/mineral/sandstone/New(var/loc, var/amount=null)
