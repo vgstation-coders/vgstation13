@@ -52,3 +52,8 @@
 		brainmob = null
 		return 1
 	return ..()
+
+/obj/item/organ/internal/brain/mami/with_posibrain/New()
+	..()
+	posibrain = new /obj/item/device/mmi/posibrain
+	icon_state = "mami_full"

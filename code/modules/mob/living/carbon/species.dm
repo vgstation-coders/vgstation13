@@ -1223,3 +1223,32 @@ var/list/has_died_as_golem = list()
 					A more refined version of the skellington, you're not as brittle, but not quite as fast.<br>\
 					You have no skin, no blood, and only a brain to guide you.<br>\
 					You can not eat normally, as your necrotic state permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe."
+
+/datum/species/android
+	name = "Android"
+	icobase = 'icons/mob/human_races/o_robot.dmi'
+	deform = 'icons/mob/human_races/robotic.dmi'
+	flags = IS_WHITELISTED|NO_BREATHE
+	anatomy_flags = NO_SKIN|NO_BLOOD
+	meat_type = null
+	chem_flags = NO_INJECT
+
+	primitive = null
+
+	has_organ = list(
+		"brain" = /datum/organ/internal/brain/mami,
+		"heart" = /datum/organ/internal/heart/cell,
+		"eyes" = /datum/organ/internal/eyes/adv_1,
+	)
+
+	move_speed_mod = 4
+	has_mutant_race = 0
+
+	species_intro = "You are an Android<br>\
+					Having ascended the flesh, you no longer need to breathe, and have no skin nor blood.<br>\
+					You move rather slowly, as you are a first-generation android.<br>\
+					You do not require nutrition, but you run off of an internal cell held within your heart. Should it run out of charge, you will cease function and die."
+
+/datum/species/android/handle_post_spawn(var/mob/living/carbon/human/H)
+	for(var/datum/organ/external/E in H.organs)
+		E.status |= ORGAN_ROBOT
