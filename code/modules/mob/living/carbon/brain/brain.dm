@@ -74,3 +74,9 @@
 
 /mob/living/carbon/brain/dexterity_check()
 	return 1 //This is so certain mech tools work for MMIs and posibrains.
+
+/mob/living/carbon/brain/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	if(isposibrain(src))
+		to_chat(src, "<span class = 'siliconsay'>Your posibrain firmware prevent you from doing harm.</span>")
+		return 1
+	return ..()

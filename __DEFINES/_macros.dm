@@ -245,6 +245,8 @@
 
 #define hasanvil(H) (isturf(H) && (locate(/obj/item/anvil) in H))
 
+#define isposibrain(H) (isbrain(H) && (H:container && istype(container, /obj/item/device/mmi/posibrain)))
+
 
 
 
