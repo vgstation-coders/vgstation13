@@ -344,3 +344,9 @@
 
 	radio.listening = !radio.listening
 	to_chat(src, "<span class='notice'>Radio is [radio.listening ? "" : "no longer "]receiving broadcasts.</span>")
+
+/mob/living/simple_animal/spiderbot/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	if(istype(mmi, /obj/item/device/mmi/posibrain))
+		to_chat(src, "<span class = 'siliconsay'>Your posibrain firmware prevent you from doing harm.</span>")
+		return 1
+	return ..()

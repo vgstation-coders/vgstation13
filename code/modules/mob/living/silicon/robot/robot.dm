@@ -1325,6 +1325,6 @@
 
 /mob/living/silicon/robot/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
 	if(istype(mmi, /obj/item/device/mmi/posibrain))
-		to_chat(src, "<span class = 'siliconsay'>Your internal laws prevent you from doing harm.</span>")
+		to_chat(src, "<span class = 'siliconsay'>Your posibrain firmware prevent you from doing harm.</span>")
 		return 1
 	return ..()

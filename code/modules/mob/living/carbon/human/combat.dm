@@ -236,3 +236,10 @@
 		to_chat(target, "<span class='notice'>You feel a breath of fresh air enter your lungs. It feels good.</span>")
 		to_chat(src, "<span class='warning'>Repeat at least every 7 seconds.</span>")
 	target.cpr_time = 1
+
+/mob/living/carbon/human/is_pacified(var/message = VIOLENCE_SILENT,var/target,var/weapon)
+	var/datum/organ/internal/brain/B = internal_organs_by_name["brain"]
+	if(B && (ispath(B.removed_type, /obj/item/organ/internal/brain/mami) || istype(B.removed_type, /obj/item/organ/internal/brain/mami)))
+		to_chat(src, "<span class = 'siliconsay'>Your posibrain firmware prevent you from doing harm.</span>")
+		return 1
+	return ..()
