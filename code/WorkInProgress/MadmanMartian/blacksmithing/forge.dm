@@ -24,8 +24,9 @@
 
 /obj/structure/forge/Destroy()
 	processing_objects.Remove(src)
-	heating.forceMove(get_turf(src))
-	heating = null
+	if(heating)
+		heating.forceMove(get_turf(src))
+		heating = null
 	for(var/obj/I in contents)
 		qdel(I)
 	..()
@@ -59,6 +60,8 @@
 			to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src].</span>")
 			heating = I
 			return
+	else if(iscrowbar(I) && do_after(user, src, 5 SECONDS))
+		drop_stack(/obj/item/stack/sheet/mineral/sandstone, get_turf(src), rand(5, 20))
 	..()
 
 /obj/structure/forge/proc/toggle_lit()
