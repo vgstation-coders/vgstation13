@@ -21,7 +21,7 @@
 	update_icon()
 
 /obj/machinery/artifact_analyser/update_icon()
-	icon_state = initial(icon_state)+scan_in_progress
+	icon_state = "[initial(icon_state)][scan_in_progress]"
 	if(owned_scanner)
 		owned_scanner.update_icon()
 
