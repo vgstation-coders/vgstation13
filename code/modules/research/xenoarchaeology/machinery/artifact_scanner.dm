@@ -13,7 +13,4 @@
 	update_icon()
 
 /obj/machinery/artifact_scanpad/update_icon()
-	if(owner_console)
-		icon_state = initial(icon_state)+owner_console.scan_in_progress
-		return
-	icon_state = "[initial(icon_state)]0"
+	icon_state = "[initial(icon_state)][owner_console ? owner_console.scan_in_progress : 0]"

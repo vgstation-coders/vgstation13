@@ -70,7 +70,7 @@
 /obj/machinery/artifact_analyser/process()
 	if(scan_in_progress && world.time > scan_completion_time)
 		//finish scanning
-		scan_in_progress = TRUE
+		scan_in_progress = FALSE
 		update_icon()
 		updateDialog()
 
