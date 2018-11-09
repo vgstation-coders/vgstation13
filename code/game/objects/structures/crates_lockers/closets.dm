@@ -63,7 +63,8 @@
 	..()
 	spawn_contents()
 	if(!opened)		// if closed, any item at the crate's loc is put in the contents
-		take_contents()
+		if(!ticker || ticker.current_state < GAME_STATE_PLAYING)
+			take_contents()
 	else
 		setDensity(FALSE)
 
