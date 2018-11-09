@@ -6,6 +6,7 @@
 	icon_state = "xenoarch_scanner"
 	anchored = TRUE
 	density = FALSE
+	plane = ABOVE_OBJ_LAYER
 	var/obj/machinery/artifact_analyser/owner_console = null
 
 /obj/machinery/artifact_scanpad/New()
