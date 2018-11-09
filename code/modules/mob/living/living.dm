@@ -1205,12 +1205,13 @@ Thanks.
 	return
 
 //same as above
-/mob/living/pointed(atom/A as mob|obj|turf in view())
+/mob/living/pointed(atom/A as mob|obj|turf in view(get_turf(src)))
 	if(src.incapacitated())
 		return 0
 	if(!..())
 		return 0
-	usr.visible_message("<b>[src]</b> points to [A]")
+	var/turf/T = get_turf(src)
+	T.visible_message("<b>[src]</b> points to [A].")
 	return 1
 
 
