@@ -1228,10 +1228,10 @@ var/list/has_died_as_golem = list()
 	name = "Android"
 	icobase = 'icons/mob/human_races/o_robot.dmi'
 	deform = 'icons/mob/human_races/robotic.dmi'
-	flags = IS_WHITELISTED|NO_BREATHE
+	flags = IS_WHITELISTED|NO_BREATHE|NO_PAIN|NO_HUNGER|ELECTRIC_HEAL|PLASMA_IMMUNE|HYPOTHERMIA_IMMUNE
 	anatomy_flags = NO_SKIN|NO_BLOOD
 	meat_type = null
-	chem_flags = NO_INJECT
+	chem_flags = NO_INJECT|NO_CRYO|NO_CLONE
 
 	primitive = null
 

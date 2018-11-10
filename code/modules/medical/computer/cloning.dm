@@ -474,7 +474,9 @@
 	if(!isnull(find_record(subject.ckey)))
 		scantemp = "Subject already in database." //duh
 		return
-
+	if(subject.species && (subject.species.chem_flags & NO_CLONE))
+		scantemp = "Error: Subject species not fit for cloning"
+		return
 
 	subject.dna.check_integrity()
 	var/datum/organ/internal/brain/Brain = subject.internal_organs_by_name["brain"]

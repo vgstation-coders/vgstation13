@@ -17,9 +17,10 @@
 	if (species && species.move_speed_mod)
 		. += species.move_speed_mod
 
-	var/hungry = (500 - nutrition)/5 // So overeat would be 100 and default level would be 80
-	if (hungry >= 70)
-		. += hungry/50
+	if(!(species && species.flags & NO_HUNGER))
+		var/hungry = (500 - nutrition)/5 // So overeat would be 100 and default level would be 80
+		if (hungry >= 70)
+			. += hungry/50
 
 	if (isslimeperson(src))
 		if (bodytemperature < 183.222)

@@ -37,6 +37,11 @@
 /mob/living/carbon/alien/burn_calories(var/amount,var/forceburn = 0)
 	return 1	// figure this out later
 
+/mob/living/carbon/human/burn_calories(var/amount, var/forceburn = 0)
+	if(species && species.flags & NO_HUNGER)
+		return 1
+	return ..()
+
 /mob/living/proc/sweat(var/amount,var/forcesweat = 0)
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
 		return 1

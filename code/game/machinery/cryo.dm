@@ -585,6 +585,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		return*/
 	if(M.locked_to)
 		M.unlock_from()
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species && (H.species.chem_flags & NO_CRYO))
+			to_chat(usr, "<span class = 'warning'>\The [src] refuses \the [M]</span>")
+			return
 	if(!node1)
 		to_chat(usr, "<span class='warning'>The cell is not correctly connected to its pipe network!</span>")
 		return

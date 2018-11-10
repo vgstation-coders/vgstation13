@@ -258,6 +258,12 @@
 	voxemote = TRUE
 	voxrestrictedemote = TRUE
 
+/datum/emote/living/carbon/sound/scream/run_emote(mob/user, params)
+	var/mob/living/carbon/human/H = user
+	if(istype(H) && (H.species.flags & NO_PAIN))
+		return
+	return ..()
+
 /datum/emote/living/carbon/sound/cough
 	key = "cough"
 	key_third_person = "coughs"

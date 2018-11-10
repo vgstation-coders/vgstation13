@@ -985,9 +985,9 @@
 		eyes.damage += rand(3,4)
 		if(eyes.damage >= eyes.min_bruised_damage)
 			if(M.stat != 2)
-				if(eyes.robotic <= 1) //robot eyes bleeding might be a bit silly
+				if(eyes.robotic >= 1) //robot eyes bleeding might be a bit silly
 					to_chat(M, "<span class='warning'>Your eyes start to bleed profusely!</span>")
-			if(prob(50))
+			if(prob(50) && (!istype(H) || !(H.species.flags & NO_PAIN)))
 				if(M.stat != 2)
 					to_chat(M, "<span class='warning'>You drop what you're holding and clutch at your eyes!</span>")
 					M.drop_item()
