@@ -1104,3 +1104,72 @@ Auto Patrol: []"},
 		if(!in_range(src, usr) && src.loc != usr)
 			return
 		src.created_name = t
+
+
+//Britsky
+
+/obj/machinery/bot/secbot/beepsky/britsky
+	name = "Officer Britsky"
+	desc = "Ready to check your license."
+	icon = 'icons/obj/aibots.dmi'
+	icon_state = "bsecbot0"
+	icon_initial = "bsecbot"
+
+//Britsky Construction
+
+/obj/item/weapon/secbot_assembly/britsky
+	name = "custodian signaler assembly"
+	desc = "some sort of british assembly."
+	icon = 'icons/obj/aibots.dmi'
+	icon_state = "bhelmet_signaler"
+	build_step = 0
+	created_name = "Officer Britsky of the Yard"
+
+/obj/item/clothing/head/helmet/police/attackby(var/obj/item/device/assembly/signaler/S, mob/user)
+	..()
+	if(!issignaler(S))
+		return
+
+	if(S.secured)
+		qdel(S)
+		var/obj/item/weapon/secbot_assembly/britsky/A = new /obj/item/weapon/secbot_assembly/britsky
+		user.put_in_hands(A)
+		to_chat(user, "You add the signaler to \the [src]!")
+		user.drop_from_inventory(src)
+		qdel(src)
+
+/obj/item/weapon/secbot_assembly/britsky/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	..()
+	if((iswelder(W)) && (!src.build_step))
+		var/obj/item/weapon/weldingtool/WT = W
+		if(WT.remove_fuel(0,user))
+			src.build_step++
+			src.overlays += image('icons/obj/aibots.dmi', "bhs_hole")
+			to_chat(user, "You weld a hole in [src]!")
+
+	else if(isprox(W) && (src.build_step == 1))
+		if(user.drop_item(W))
+			src.build_step++
+			to_chat(user, "You add the prox sensor to [src]!")
+			src.overlays += image('icons/obj/aibots.dmi', "bhs_eye")
+			src.name = "helmet/signaler/prox sensor assembly"
+			qdel(W)
+
+	else if(((istype(W, /obj/item/robot_parts/l_arm)) || (istype(W, /obj/item/robot_parts/r_arm))) && (src.build_step == 2))
+		if(user.drop_item(W))
+			src.build_step++
+			to_chat(user, "You add the robot arm to [src]!")
+			src.name = "helmet/signaler/prox sensor/robot arm assembly"
+			src.overlays += image('icons/obj/aibots.dmi', "bhs_arm")
+			qdel(W)
+
+	else if((istype(W, /obj/item/weapon/melee/classic_baton)) && (src.build_step >= 3))
+		if(user.drop_item(W))
+			src.build_step++
+			to_chat(user, "You complete the Securitron! Beep boop.")
+			var/obj/machinery/bot/secbot/beepsky/britsky/S = new /obj/machinery/bot/secbot/beepsky/britsky
+			S.forceMove(get_turf(src))
+			S.name = src.created_name
+			W.forceMove(S)
+			S.baton = W
+			qdel(src)
