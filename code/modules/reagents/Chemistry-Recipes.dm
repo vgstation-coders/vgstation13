@@ -719,7 +719,7 @@
 	id = "metalsolid"
 	result = null
 	required_reagents = list(SILICATE = 10, FROSTOIL = 10, IRON = 20)
-	result_amount = 1
+	result_amount = 1 //amount of sheets created per the above reagents ^
 
 /datum/chemical_reaction/solidification/proc/product_to_spawn()
 	return /obj/item/stack/sheet/metal
@@ -727,7 +727,7 @@
 /datum/chemical_reaction/solidification/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
 	var/to_spawn = product_to_spawn()
-	new to_spawn(location, result_amount)
+	new to_spawn(location, created_volume)
 
 /datum/chemical_reaction/solidification/plasma
 	name = "Solid Plasma"
@@ -2279,7 +2279,8 @@
 
 /datum/chemical_reaction/cheesewheel/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel(location)
+	for(var/i=1 to created_volume)
+		new /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel(location)
 
 /datum/chemical_reaction/butter
 	name = "Butter"
@@ -2291,7 +2292,8 @@
 
 /datum/chemical_reaction/butter/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/reagent_containers/food/snacks/butter(location)
+	for(var/i=1 to created_volume)
+		new /obj/item/weapon/reagent_containers/food/snacks/butter(location)
 
 //Jesus christ how horrible
 /datum/chemical_reaction/cream
@@ -2310,7 +2312,8 @@
 
 /datum/chemical_reaction/syntiflesh/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh(location)
+	for(var/i=1 to created_volume)
+		new /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh(location)
 
 /datum/chemical_reaction/hot_ramen
 	name = "Hot Ramen"
@@ -3284,6 +3287,40 @@
 	required_temp = T0C + 88 //Mutagen is very hard to heat up, so I don't recommend making more than 10u of this at a time
 	result_amount = 1
 
+/datum/chemical_reaction/aminomicin
+	name = "Aminomicin"
+	id = AMINOMICIN
+	result = AMINOMICIN
+	required_reagents = list(CLONEXADONE = 1, MUTAGEN = 1, ENZYME = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/synthmouse
+	name = "Synthmouse"
+	id = "synthmouse"
+	result = null
+	required_reagents = list(NUTRIMENT = 5, AMINOMICIN = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/synthmouse/on_reaction(var/datum/reagents/holder, var/created_volume)
+	set waitfor = FALSE //makes sleep() work like spawn()
+	if(ishuman(holder.my_atom))
+		//This is intended to be an appendicitis fake-out using the same messages. And I guess an alien embryo message at the end.
+		var/mob/living/carbon/human/H = holder.my_atom
+		sleep(rand(5 SECONDS, 10 SECONDS))
+		to_chat(H, "<span class='warning'>You feel a stinging pain in your abdomen!</span>")
+		H.emote("me",1,"winces slightly.")
+		sleep(rand(10 SECONDS, 20 SECONDS))
+		to_chat(H, "<span class='warning'>You feel a stabbing pain in your abdomen!</span>")
+		H.emote("me",1,"winces painfully.")
+		H.adjustToxLoss(1)
+		sleep(rand(5 SECONDS, 10 SECONDS))
+		to_chat(H, "<span class='danger'>You feel something tearing its way out of your stomach...</span>")
+		H.apply_damage(2*created_volume, BRUTE, LIMB_CHEST)
+		sleep(rand(5 SECONDS, 10 SECONDS))
+		H.vomit(instant = TRUE) //mouse spawning continues below
+	var/location = get_turf(holder.my_atom)
+	for(var/i=1 to created_volume)
+		new /mob/living/simple_animal/mouse(location)
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
