@@ -94,7 +94,9 @@
 			pai.master = M.real_name
 			pai.master_dna = dna.unique_enzymes
 			to_chat(pai, "<font color = red><h3>You have been bound to a new master: [pai.master].</h3></font>")
+		attack_self(usr)
 	if(href_list["request"])
+		usr << browse(null, "window=paicard")
 		src.looking_for_personality = 1
 		paiController.findPAI(src, usr)
 	if(href_list["wipe"])
@@ -107,10 +109,12 @@
 				to_chat(M, "<font color = #ffc4c4><h5>oblivion... </h5></font>")
 				M.death(0)
 			removePersonality()
+		attack_self(usr)
 	if(href_list["wires"])
 		var/t1 = text2num(href_list["wires"])
 		if(pai.radio)
 			pai.radio.wires.CutWireIndex(t1)
+		attack_self(usr)
 	if(href_list["setlaws"])
 		var/newlaws = copytext(sanitize(input("Enter any additional directives you would like your pAI personality to follow. Note that these directives will not override the personality's allegiance to its imprinted master. Conflicting directives will be ignored.", "pAI Directive Configuration", pai.pai_laws) as message),1,MAX_MESSAGE_LEN)
 		if(newlaws)
@@ -118,7 +122,7 @@
 			to_chat(pai, "Your supplemental directives have been updated. Your new directives are:")
 			to_chat(pai, "Prime Directive : <br>[pai.pai_law0]")
 			to_chat(pai, "Supplemental Directives: <br>[pai.pai_laws]")
-	attack_self(usr)
+		attack_self(usr)
 
 // 		WIRE_SIGNAL = 1
 //		WIRE_RECEIVE = 2
