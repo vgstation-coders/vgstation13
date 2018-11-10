@@ -1125,7 +1125,7 @@
 		var/datum/role/thrall/T = isthrall(H)
 		if(T)
 			if (prob(35)) // 35% chance of dethralling
-				T.Drop()
+				T.Drop(TRUE)
 
 /datum/reagent/holywater/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)//Splashing people with water can help put them out!
 
@@ -7165,3 +7165,13 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		else if(prob((100 - H.getBruteLoss() * 100 / 30)/3)) //33% at 0 damage, 16.6% at 15 damage, 1.1% at 29 damage etc
 			var/datum/organ/external/E = pick(H.organs) //"organs" list only contains external organs aka limbs
 			E.fracture()
+
+/datum/reagent/aminomicin
+	name = "Aminomicin"
+	id = AMINOMICIN
+	description = "An experimental and unstable chemical, said to be able to create life. Potential reaction detected if mixed with pure nutriment."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#634848" //rgb: 99, 72, 72
+	density = 13.49 //our ingredients are pretty dense
+	specheatcap = 208.4
+	custom_metabolism = 0.01 //oh shit what are you doin

@@ -173,6 +173,10 @@
 				name = SUGAR
 				desc = "Tasty space sugar!"
 				icon_state = SUGAR
+			if(CARAMEL)
+				name = CARAMEL
+				desc = "Tasty caramel cubes!"
+				icon_state = CARAMEL
 			if(CHEFSPECIAL)
 				name = "\improper Chef Excellence's Special Sauce"
 				desc = "A potent sauce distilled from the toxin glands of 1000 Space Carp with an extra touch of LSD, because why not?"
@@ -240,7 +244,7 @@
 /obj/item/weapon/reagent_containers/food/condiment/ketchup/New()
 	..()
 	reagents.add_reagent(KETCHUP, 50)
-	
+
 /obj/item/weapon/reagent_containers/food/condiment/mustard
 	name = "mustard"
 	desc = "A spicy yellow paste."
@@ -248,7 +252,7 @@
 /obj/item/weapon/reagent_containers/food/condiment/mustard/New()
 	..()
 	reagents.add_reagent(MUSTARD, 50)
-	
+
 /obj/item/weapon/reagent_containers/food/condiment/relish
 	name = "relish"
 	desc = "A pickled cucumber jam. Tasty!"
@@ -328,6 +332,14 @@
 /obj/item/weapon/reagent_containers/food/condiment/sugar/New()
 	..()
 	reagents.add_reagent(SUGAR, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/caramel
+	name = "caramel"
+	desc = "Tasty caramel cubes!"
+
+/obj/item/weapon/reagent_containers/food/condiment/caramel/New()
+	..()
+	reagents.add_reagent(CARAMEL, 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/honey
 	name = "honey pot"

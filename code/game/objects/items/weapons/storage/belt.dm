@@ -339,12 +339,8 @@
 	icon_state = "lazarusbelt"
 
 /obj/item/weapon/storage/belt/lazarus/antag/New(loc, mob/user)
-	var/blocked = list(
-	/mob/living/simple_animal/hostile/hivebot/tele,
-	/mob/living/simple_animal/hostile/wendigo/evolved,
-	/mob/living/simple_animal/hostile/wendigo/alpha,
-	)
-	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
+
+	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - (existing_typesof_list(blacklisted_mobs) + existing_typesof_list(boss_mobs)) // list of possible hostile mobs
 	critters = shuffle(critters)
 	while(contents.len < 6)
 		var/obj/item/device/mobcapsule/MC = new /obj/item/device/mobcapsule(src)
