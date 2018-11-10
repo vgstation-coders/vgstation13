@@ -100,7 +100,8 @@
 
 /datum/chemical_reaction/soap/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/soap(location)
+	for(var/i=1 to created_volume)
+		new /obj/item/weapon/soap(location)
 
 /datum/chemical_reaction/nt_soap
 	name = "NT Soap"
@@ -112,8 +113,8 @@
 
 /datum/chemical_reaction/nt_soap/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/soap/nanotrasen(location)
-
+	for(var/i=1 to created_volume)
+		new /obj/item/weapon/soap/nanotrasen(location)
 
 /datum/chemical_reaction/deluxe_soap
 	name = "Deluxe Soap"
@@ -125,7 +126,8 @@
 
 /datum/chemical_reaction/deluxe_soap/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/soap/deluxe(location)
+	for(var/i=1 to created_volume)
+		new /obj/item/weapon/soap/deluxe(location)
 
 /datum/chemical_reaction/syndie_soap
 	name = "Syndie Soap"
@@ -137,7 +139,8 @@
 
 /datum/chemical_reaction/syndie_soap/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/soap/syndie(location)
+	for(var/i=1 to created_volume)
+		new /obj/item/weapon/soap/syndie(location)
 
 /datum/chemical_reaction/creatine
 	name = "Creatine"
