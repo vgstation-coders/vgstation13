@@ -102,6 +102,43 @@
 	var/location = get_turf(holder.my_atom)
 	new /obj/item/weapon/soap(location)
 
+/datum/chemical_reaction/nt_soap
+	name = "NT Soap"
+	id = "nt_soap"
+	result = null
+	required_reagents = list(POTASSIUM_HYDROXIDE = 15, NUTRIMENT = 5, PLASMA = 5)
+	required_temp = T0C + 50
+	result_amount = 1
+
+/datum/chemical_reaction/nt_soap/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/weapon/soap/nanotrasen(location)
+
+
+/datum/chemical_reaction/deluxe_soap
+	name = "Deluxe Soap"
+	id = "deluxe_soap"
+	result = null
+	required_reagents = list(POTASSIUM_HYDROXIDE = 20, CORNOIL = 5)
+	required_temp = T0C + 50
+	result_amount = 1
+
+/datum/chemical_reaction/deluxe_soap/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/weapon/soap/deluxe(location)
+
+/datum/chemical_reaction/syndie_soap
+	name = "Syndie Soap"
+	id = "syndie_soap"
+	result = null
+	required_reagents = list(POTASSIUM_HYDROXIDE = 20, GLYCEROL = 10, BLOOD = 50)
+	required_temp = T0C + 50
+	result_amount = 1
+
+/datum/chemical_reaction/syndie_soap/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/weapon/soap/syndie(location)
+
 /datum/chemical_reaction/creatine
 	name = "Creatine"
 	id = CREATINE
