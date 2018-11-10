@@ -107,7 +107,7 @@
 	name = "NT Soap"
 	id = "nt_soap"
 	result = null
-	required_reagents = list(POTASSIUM_HYDROXIDE = 15, NUTRIMENT = 5, PLASMA = 5)
+	required_reagents = list(POTASSIUM_HYDROXIDE = 20, PLASMA = 5)
 	required_temp = T0C + 50
 	result_amount = 1
 
