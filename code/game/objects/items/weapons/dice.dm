@@ -302,6 +302,7 @@
 									new /obj/item/clothing/under/officeruniform(user.loc, user)
 									new /obj/item/clothing/suit/officercoat(user.loc, user)
 									new /obj/item/clothing/head/naziofficer(user.loc, user)
+									new /obj/item/clothing/shoes/jackboots(user.loc, user)
 								if(3)
 									new /obj/item/clothing/head/helmet/richard(user.loc, user)
 									new /obj/item/clothing/under/jacketsuit(user.loc, user)
