@@ -199,6 +199,6 @@
 		if(user.drop_item(I, src))
 			materials.removeFrom(I.materials)
 			user.visible_message("[user] puts \the [I] into \the [src]'s recycling unit.",
-								"You put \the [I] in \the [src]'s recyling unit.")
+								"You put \the [I] in \the [src]'s recycling unit.")
 			qdel(I)
 		return 1
