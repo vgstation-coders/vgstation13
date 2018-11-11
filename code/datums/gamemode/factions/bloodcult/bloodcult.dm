@@ -99,7 +99,7 @@ var/veil_thickness = CULT_PROLOGUE
 /datum/faction/bloodcult/check_win()
 	return cult_win
 
-/datum/faction/bloodcult/fail()
+/datum/faction/bloodcult/proc/fail()
 	if (cult_win || veil_thickness == CULT_MENDED)
 		return
 	progress(CULT_MENDED)
@@ -146,6 +146,7 @@ var/veil_thickness = CULT_PROLOGUE
 	if (new_act == CULT_MENDED)
 		veil_thickness = CULT_MENDED
 		emergency_shuttle.shutdown = 0//The shuttle can be called once again.
+		ticker.StopThematic()
 		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 			B.takeDamage(1500)
 		for (var/datum/role/cultist/C in members)
@@ -178,6 +179,7 @@ var/veil_thickness = CULT_PROLOGUE
 				O.target_sacrificed = TRUE
 				veil_thickness = CULT_ACT_III
 				emergency_shuttle.force_shutdown()//No shuttle calls until the cult either wins or fails.
+				ticker.StartThematic("endgame")
 				spawn_bloodstones(A)
 				new_obj = new /datum/objective/bloodcult_bloodbath
 		if (CULT_ACT_IV)

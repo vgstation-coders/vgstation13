@@ -32,7 +32,7 @@
 		blood_communion.Remove(src)
 	..()
 
-/datum/role/cultist/handle_mind_transfer(var/mob/living/new_character)
+/datum/role/cultist/PostMindTransfer(var/mob/living/new_character)
 	. = ..()
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
