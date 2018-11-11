@@ -32,6 +32,14 @@
 		blood_communion.Remove(src)
 	..()
 
+/datum/role/cultist/handle_mind_transfer(var/mob/living/new_character)
+	. = ..()
+	update_cult_hud()
+	antag.current.add_language(LANGUAGE_CULT)
+	if(ishuman(antag.current) && !(locate(/spell/cult) in antag.current.spell_list))
+		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+
 /datum/role/cultist/process()
 	if (holywarning_cooldown > 0)
 		holywarning_cooldown--
