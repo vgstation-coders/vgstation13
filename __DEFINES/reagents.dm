@@ -414,6 +414,7 @@ var/list/heartstopper = list(/*"potassium_phorochloride",*/ ZOMBIEPOWDER) //this
 var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stops the heart when overdose is met -- c = conditional
 
 //Lists of defines
+//Preferably have the synthetic (chemist-made) versions first, and alternatives after that. This helps with electrolyzing.
 
 #define ANTI_TOXINS list(ANTI_TOXIN, ALLICIN)
 #define KELOTANES list(KELOTANE, TANNIC_ACID)
