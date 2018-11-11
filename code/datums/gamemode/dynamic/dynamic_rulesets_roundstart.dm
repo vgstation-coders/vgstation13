@@ -86,6 +86,8 @@
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
 
 /datum/dynamic_ruleset/roundstart/vampire/execute()
+	new /datum/bomberman_arena(locate(250, 250, 2), pick("15x13 (2 players)","15x15 (4 players)","39x23 (10 players)"))
+
 	var/num_vampires = min(round(mode.candidates.len / 10) + 1, candidates.len)
 	for (var/i = 1 to num_vampires)
 		var/mob/M = pick(candidates)

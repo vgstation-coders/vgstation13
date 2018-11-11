@@ -759,8 +759,6 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		return
 	if(!size)
 		return
-	if(!user)
-		return
 	center = a_center
 	name += " #[rand(1,999)]"
 	open(size,user)
@@ -1303,6 +1301,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		countin()
 
 /datum/bomberman_arena/proc/planner(var/size,mob/user)
+	if(!user)
+		return TRUE
 	var/choice = 0
 	switch(size)
 		if("15x13 (2 players)")
