@@ -199,9 +199,7 @@ obj/structure/windoor_assembly/Destroy()
 			var/obj/machinery/door/window/windoor = new spawn_type(loc)
 			to_chat(user, "<span class='notice'>You finish the [windoor.name]!</span>")
 			windoor.dir = dir
-			windoor.fingerprints += fingerprints
-			windoor.fingerprintshidden += fingerprintshidden
-			windoor.fingerprintslast = user.ckey
+			transfer_fingerprints_to(windoor)
 			if(electronics.one_access)
 				windoor.req_access = null
 				windoor.req_one_access = electronics.conf_access
