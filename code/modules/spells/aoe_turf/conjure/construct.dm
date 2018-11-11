@@ -112,6 +112,33 @@
 		qdel(animation)
 		animation = null
 
+/spell/aoe_turf/conjure/door
+	name = "Cult Door"
+	desc = "This spell constructs a cult wall"
+	user_type = USER_TYPE_CULT
+
+	charge_max = 100
+	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
+	invocation = "none"
+	invocation_type = SpI_NONE
+	range = 3
+	summon_type = list(/obj/machinery/door/mineral/cult)
+
+	override_base = "cult"
+	hud_state = "const_door"
+	cast_sound = 'sound/items/welder.ogg'
+
+/spell/aoe_turf/conjure/door/choose_targets(mob/user = usr)
+	return list(get_turf(user))
+
+/spell/aoe_turf/conjure/door/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
+	animation.icon_state = ""
+	flick("",animation)
+	shadow(target,holder.loc,"artificer_convert")
+	spawn(10)
+		qdel(animation)
+		animation = null
+
 /spell/aoe_turf/conjure/wall/reinforced
 	name = "Greater Construction"
 	desc = "This spell constructs a reinforced metal wall"

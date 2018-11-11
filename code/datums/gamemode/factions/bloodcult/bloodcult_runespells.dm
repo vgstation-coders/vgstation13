@@ -2164,7 +2164,8 @@ var/list/bloodcult_exitportals = list()
 //RUNE XIX
 /datum/rune_spell/astraljourney
 	name = "Astral Journey"
-	desc = "Leave your body so you can converse with the dead and observe your targets."
+	desc = "Leave your body so you can go spy on your enemies."
+	desc_talisman = "Leave your body so you can go spy on your enemies."
 	Act_restriction = CULT_ACT_II
 	invocation = "Fwe'sh mah erl nyag r'ya!"
 	word1 = /datum/cultword/hell
@@ -2257,6 +2258,7 @@ var/list/bloodcult_exitportals = list()
 /datum/rune_spell/resurrect
 	name = "Resurrect"
 	desc = "Create a strong body for your fallen allies to inhabit."
+	desc_talisman = "Create a strong body for your fallen allies to inhabit."
 	Act_restriction = CULT_ACT_III
 	invocation = "Pasnar val'keriam usinar. Savrae ines amutan. Yam'toth remium il'tarat!"
 	word1 = /datum/cultword/blood

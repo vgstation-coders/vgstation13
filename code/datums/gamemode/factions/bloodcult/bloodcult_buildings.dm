@@ -223,6 +223,8 @@
 		if(iscarbon(G.affecting))
 			var/mob/living/carbon/C = G.affecting
 			C.unlock_from()
+			if (!do_after(user,C,15))
+				return
 			if (ishuman(C))
 				C.resting = 1
 				C.update_canmove()
@@ -304,6 +306,9 @@
 			to_chat(user,"<span class='warning'>You must remove the blade planted on \the [src] first.</span>")
 			return 1
 		var/mob/living/carbon/C = O
+
+		if (!do_after(user,C,15))
+			return
 		C.unlock_from()
 
 		if (ishuman(C))
@@ -585,8 +590,8 @@
 			blade = null
 			new_shade.status_flags |= GODMODE
 			new_shade.canmove = 0
-			new_shade.name = "Shade of [M.real_name]"
-			new_shade.real_name = "Shade of [M.real_name]"
+			new_shade.name = "[M.real_name] the Shade"
+			new_shade.real_name = "[M.real_name]"
 			new_shade.give_blade_powers()
 			playsound(get_turf(src), get_sfx("soulstone"), 50,1)
 		else
