@@ -88,11 +88,11 @@ var/list/uristrune_cache = list()//icon cache, so the whole blending process is 
 	//cultists can read the words, and be informed if it calls a spell
 	if (iscultist(user))
 		to_chat(user, "<span class='info'>It reads: <i>[word1 ? "[word1.rune]" : ""] [word2 ? "[word2.rune]" : ""] [word3 ? "[word3.rune]" : ""]</i>.[rune_name ? " That's a <b>[initial(rune_name.name)]</b> rune." : "It doesn't match any rune spells."]</span>")
-	if (rune_name)
-		if (initial(rune_name.Act_restriction) <= veil_thickness)
-			to_chat(user, initial(rune_name.desc))
-		else
-			to_chat(user, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
+		if (rune_name)
+			if (initial(rune_name.Act_restriction) <= veil_thickness)
+				to_chat(user, initial(rune_name.desc))
+			else
+				to_chat(user, "<span class='danger'>The veil is still too thick for you to draw power from this rune.</span>")
 
 	//so do observers
 	else if (isobserver(user))

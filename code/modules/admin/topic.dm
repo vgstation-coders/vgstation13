@@ -551,8 +551,8 @@
 				blade.update_icon()
 				new_shade.status_flags |= GODMODE
 				new_shade.canmove = 0
-				new_shade.name = "Shade of [M.real_name]"
-				new_shade.real_name = "Shade of [M.real_name]"
+				new_shade.name = "[M.real_name] the Shade"
+				new_shade.real_name = "[M.real_name]"
 				new_shade.give_blade_powers()
 			if("blob")
 				var/obj/effect/blob/core/core = new(loc = get_turf(M), new_overmind = M.client)

@@ -464,8 +464,18 @@ var/list/arcane_tomes = list()
 	return
 
 /obj/item/weapon/melee/cultblade/attack(var/mob/living/target, var/mob/living/carbon/human/user)
-	if(!checkcult || iscultist(user))
+	if(!checkcult)
 		return ..()
+	if (iscultist(user))
+		if (ishuman(target) && target.resting)
+			var/obj/structure/cult/altar/altar = locate() in target.loc
+			if (altar)
+				altar.attackby(src,user)
+				return
+			else
+				return ..()
+		else
+			return ..()
 	else
 		user.Paralyse(5)
 		to_chat(user, "<span class='warning'>An unexplicable force powerfully repels the sword from [target]!</span>")
@@ -588,14 +598,15 @@ var/list/arcane_tomes = list()
 
 
 /obj/item/weapon/melee/soulblade/attack_self(var/mob/user)
-	if (!iscultist(user))
-		to_chat(user,"<span class='warning'>There is a crimson gem encrusted into the blade, but you're not exactly sure how you could remove it.</span>")
-		return
-
 	var/choices = list(
-		list("Give Blood", "radial_giveblood", "Deity please add details"),
-		list("Remove Gem", "radial_removegem", "Deity please add details"),
+		list("Give Blood", "radial_giveblood", "Transfer some of your blood to the blade to repair it and refuel its blood level, or you could just slash someone."),
+		list("Remove Gem", "radial_removegem", "Remove the soul gem from the blade."),
 		)
+
+	if (!iscultist(user))
+		choices = list(
+			list("Remove Gem", "radial_removegem", "Remove the soul gem from the blade."),
+			)
 
 	var/task = show_radial_menu(user,user,choices,'icons/obj/cult_radial.dmi',"radial-cult")//spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
 	if (user.get_active_hand() != src)
@@ -636,6 +647,11 @@ var/list/arcane_tomes = list()
 		if(affecting && affecting.take_damage(rand(force/2, force))) //random amount of damage between half of the blade's force and the full force of the blade.
 			user.UpdateDamageIcon()
 		return
+	if (ishuman(target) && target.resting)
+		var/obj/structure/cult/altar/altar = locate() in target.loc
+		if (altar)
+			altar.attackby(src,user)
+			return
 	..()
 	if (!shade && istype(target, /mob/living/carbon))
 		transfer_soul("VICTIM", target, user,1)
@@ -1123,6 +1139,7 @@ var/list/arcane_tomes = list()
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (!cult)
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+		cult.OnPostSetup()
 	cult.HandleRecruitedRole(newCultist)
 	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_PAMPHLET)

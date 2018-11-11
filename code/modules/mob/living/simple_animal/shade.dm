@@ -31,6 +31,10 @@
 	meat_type = /obj/item/weapon/ectoplasm
 	mob_property_flags = MOB_SUPERNATURAL
 
+/mob/living/simple_animal/construct/New()
+	..()
+	add_language(LANGUAGE_CULT)
+
 /mob/living/simple_animal/shade/Login()
 	..()
 	hud_used.shade_hud()

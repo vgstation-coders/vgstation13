@@ -239,7 +239,10 @@
 		/spell/aoe_turf/conjure/struct,
 		/spell/aoe_turf/conjure/wall,
 		/spell/aoe_turf/conjure/floor,
+		/spell/aoe_turf/conjure/door,
 		/spell/aoe_turf/conjure/pylon,
+		/spell/aoe_turf/conjure/construct/lesser/alt,
+		/spell/aoe_turf/conjure/soulstone,
 		/spell/aoe_turf/conjure/hex,
 		)
 	var/mob/living/simple_animal/construct/heal_target = null

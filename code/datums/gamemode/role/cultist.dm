@@ -6,6 +6,7 @@
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_ADMINTOGGLE)
 	var/list/tattoos = list()
 	var/holywarning_cooldown = 0
+	var/list/conversion = list()
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
@@ -30,6 +31,14 @@
 	if (src in blood_communion)
 		blood_communion.Remove(src)
 	..()
+
+/datum/role/cultist/PostMindTransfer(var/mob/living/new_character)
+	. = ..()
+	update_cult_hud()
+	antag.current.add_language(LANGUAGE_CULT)
+	if(ishuman(antag.current) && !(locate(/spell/cult) in antag.current.spell_list))
+		antag.current.add_spell(new /spell/cult/trace_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 /datum/role/cultist/process()
 	if (holywarning_cooldown > 0)
@@ -62,6 +71,8 @@
 			to_chat(antag.current, "<span class='sinister'>Wow, that pamphlet was very convincing, in fact you're like totally a cultist now, hail Nar-Sie!</span>")//remember, debug item
 		if (GREET_SOULSTONE)
 			to_chat(antag.current, "<span class='sinister'>Dark energies corrupt your soul, as the blood stone grants you a window to peer through the veil, you have become a cultist!</span>")
+		if (GREET_SOULBLADE)
+			to_chat(antag.current, "<span class='sinister'>Your soul has made its way into the blade's soul gem! The dark energies of the altar forge your mind into an instrument of the cult of Nar-Sie, be of assistance to your fellow cultists.</span>")
 		if (GREET_RESURRECT)
 			to_chat(antag.current, "<span class='sinister'>You were resurrected from beyond the veil by the followers of Nar-Sie, and are already familiar with their rituals! You have now joined their ranks as a cultist.</span>")
 		else
@@ -73,6 +84,13 @@
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
 
+	spawn(1)
+		if (faction)
+			var/datum/objective_holder/OH = faction.objective_holder
+			var/datum/objective/O = null
+			for (var/datum/objective/OB in OH.objectives)
+				O = OB//Gives us the most recent objective
+			to_chat(antag.current,"<span class='danger'>[O.name]</span><b>: [O.explanation_text]</b>")
 /datum/role/cultist/update_antag_hud()
 	update_cult_hud()
 
