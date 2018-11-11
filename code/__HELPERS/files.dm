@@ -38,8 +38,10 @@
 				for(var/line in lines)
 					if(findtext(line,"max"))
 						max = text2num(copytext(line,5,0))
+						testing("[path] maximum players is [line] found [max]")
 					else if(findtext(line,"min"))
 						min = text2num(copytext(line,5,0))
+						testing("[path] minimum players is [line] found [min]")
 					else
 						warning("Our file had excessive lines, skipping.")
 				if(!isnull(min) && !isnull(max))
