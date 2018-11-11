@@ -29,7 +29,7 @@
 		to_chat(user, "<span class='warning'>You need to be dead to do that. Well, you're already dead; undead to be precise, but you need to be DEAD dead to use it.</span>")
 		return FALSE
 	if(user.on_fire || V && V.smitecounter)
-		to_chat(user, "span class='warning'>Your corpse has been sanctified!</span>")
+		to_chat(user, "<span class='warning'>Your corpse has been sanctified!</span>")
 		return FALSE
 
 /spell/undeath/choose_targets(var/mob/user = usr)
