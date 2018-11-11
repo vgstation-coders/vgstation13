@@ -1518,6 +1518,7 @@ var/proccalls = 1
 #define HOLOMAP_MARKER_SYNDISHUTTLE		"syndishuttle"
 #define HOLOMAP_MARKER_BLOODSTONE		"bloodstone"
 #define HOLOMAP_MARKER_BLOODSTONE_BROKEN	"bloodstone-broken"
+#define HOLOMAP_MARKER_BLOODSTONE_ANCHOR	"bloodstone-narsie"
 
 
 #define DEFAULT_BLOOD "#A10808"

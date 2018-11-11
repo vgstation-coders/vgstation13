@@ -137,7 +137,7 @@ var/list/factions_with_hud_icons = list()
 			if(!successful) //If one objective fails, then you did not win.
 				win = 0
 			count++
-			if (count < objective_holder.objectives.len)
+			if (count <= objective_holder.objectives.len)
 				score_results += "<br>"
 	if (count>1)
 		if (win)

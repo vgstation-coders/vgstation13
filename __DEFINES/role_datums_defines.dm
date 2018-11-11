@@ -132,6 +132,8 @@
 
 #define	MAX_TALISMAN_PER_TOME	5
 
+#define SACRIFICE_CHANGE_COOLDOWN	30 MINUTES
+
 ////////////////////////////////////////////////////////////////////////////////
 
 // -- Objectives flags

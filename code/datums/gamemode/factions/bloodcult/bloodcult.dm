@@ -25,6 +25,9 @@ var/veil_thickness = CULT_PROLOGUE
 		S.upgrade()
 
 /proc/spawn_bloodstones(var/turf/source = null)
+	//Called at the beginning of ACT III, this is basically the cult's declaration of war on the crew
+	//Spawns 4 structures, one in each quarters of the station
+	//When spawning, those structures break and convert stuff around them, and add a wall layer in case of space exposure.
 	var/list/places_to_spawn = list()
 	for (var/i = 1 to 4)
 		for (var/j = 10; j > 0; j--)
@@ -32,11 +35,13 @@ var/veil_thickness = CULT_PROLOGUE
 			if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated,/turf/simulated/shuttle)))
 				places_to_spawn += T
 				break
-	if (source && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<128)
+	//A 5th bloodstone will spawn if a proper turf was given as arg (up to 100 tiles from the station center, and not in space
+	if (source && !isspace(source.loc) && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<100)
 		places_to_spawn.Add(source)
 	for (var/T in places_to_spawn)
 		new /obj/structure/cult/bloodstone(T)
 
+	//Cultists can use those bloodstones to locate the rest of them, they work just like station holomaps
 	var/i = 1
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
 		var/datum/holomap_marker/newMarker = new()
@@ -66,12 +71,7 @@ var/veil_thickness = CULT_PROLOGUE
 	for(var/obj/structure/cult/bloodstone/B in bloodstone_list)
 		B.holomap_datum = new /datum/station_holomap/cult()
 		B.holomap_datum.initialize_holomap(B.loc)
-		/*
-	places_to_spawn.Add(pick(range(30,locate(map.center_x+40,map.center_y+40,map.zMainStation))))
-	places_to_spawn.Add(pick(range(30,locate(map.center_x+40,map.center_y-40,map.zMainStation))))
-	places_to_spawn.Add(pick(range(30,locate(map.center_x-40,map.center_y+40,map.zMainStation))))
-	places_to_spawn.Add(pick(range(30,locate(map.center_x-40,map.center_y-40,map.zMainStation))))
-*/
+
 //CULT_PROLOGUE		Default thickness, only communication and raise structure runes enabled
 //CULT_ACT_I		Altar raised. cultists can now convert.
 //CULT_ACT_II		Cultist amount reached. cultists are now looking for the sacrifice
@@ -90,8 +90,19 @@ var/veil_thickness = CULT_PROLOGUE
 	Nar-Sie's goal is to tear open a breach through reality so he can pull the station into his realm and feast on the crew's blood and souls."
 	roletype = /datum/role/cultist
 	logo_state = "cult-logo"
-	var/list/bloody_floors = list()//to replace later on
 	hud_icons = list("cult-logo")
+	var/list/bloody_floors = list()
+	var/target_change = FALSE
+	var/change_cooldown = 0
+	var/cult_win = FALSE
+
+/datum/faction/bloodcult/check_win()
+	return cult_win
+
+/datum/faction/bloodcult/fail()
+	if (cult_win || veil_thickness == CULT_MENDED)
+		return
+	progress(CULT_MENDED)
 
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
@@ -104,13 +115,39 @@ var/veil_thickness = CULT_PROLOGUE
 
 /datum/faction/bloodcult/OnPostSetup()
 	initialize_cultwords()
+	AppendObjective(/datum/objective/bloodcult_reunion)
+
+/datum/faction/bloodcult/process()
+	..()
+	if (change_cooldown)
+		change_cooldown--
+		if (change_cooldown <= 0)
+			var/datum/objective/bloodcult_sacrifice/O = locate() in objective_holder.objectives
+			if (!O.IsFulfilled())
+				O.failed_targets += O.sacrifice_target
+				spawn()
+					if (O.replace_target())
+						for(var/datum/role/cultist/C in members)
+							var/mob/M = C.antag.current
+							if (M)
+								to_chat(M,"<span class='danger'>The sacrifice wasn't performed in time.</span><b> A new target has been assigned. [O.explanation_text]</b>")
+								if (M == O.sacrifice_target)
+									to_chat(M,"<b>There is no greater honor than purposefuly relinquishing your body for the coming of Nar-Sie, but you may wait for another target to be selected should you be afraid of death.</b>")
+								else if (iscultist(O.sacrifice_target))
+									to_chat(M,"<b>Chance has rolled its dice, and one of ours was selected. If for whatever reasons you do not want to take their life, you will have to wait for a new selection.</b>")
+	if (target_change)
+		change_cooldown = SACRIFICE_CHANGE_COOLDOWN
 
 /datum/faction/bloodcult/proc/progress(var/new_act,var/A)
+	//This proc is called to update the faction's current objectives, and veil thickness
 	if (veil_thickness == CULT_MENDED)
 		return//it's over, you lost
 
 	if (new_act == CULT_MENDED)
 		veil_thickness = CULT_MENDED
+		emergency_shuttle.shutdown = 0//The shuttle can be called once again.
+		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
+			B.takeDamage(1500)
 		for (var/datum/role/cultist/C in members)
 			//TODO: blood curse
 			C.update_cult_hud()
@@ -119,24 +156,89 @@ var/veil_thickness = CULT_PROLOGUE
 	if (new_act <= veil_thickness)
 		return
 
+	var/datum/objective/new_obj = null
+
 	switch(new_act)
 		if (CULT_ACT_I)
-			veil_thickness = CULT_ACT_I
+			var/datum/objective/bloodcult_reunion/O = locate() in objective_holder.objectives
+			if (O)
+				O.altar_built = TRUE
+				veil_thickness = CULT_ACT_I
+				new_obj = new /datum/objective/bloodcult_followers
 		if (CULT_ACT_II)
-			veil_thickness = CULT_ACT_II
+			var/datum/objective/bloodcult_followers/O = locate() in objective_holder.objectives
+			if (O)
+				O.conversions++
+				if (O.conversions >= O.convert_target)
+					veil_thickness = CULT_ACT_II
+					new_obj = new /datum/objective/bloodcult_sacrifice
 		if (CULT_ACT_III)
-			veil_thickness = CULT_ACT_III
-			spawn_bloodstones(A)
+			var/datum/objective/bloodcult_sacrifice/O = locate() in objective_holder.objectives
+			if (O)
+				O.target_sacrificed = TRUE
+				veil_thickness = CULT_ACT_III
+				emergency_shuttle.force_shutdown()//No shuttle calls until the cult either wins or fails.
+				spawn_bloodstones(A)
+				new_obj = new /datum/objective/bloodcult_bloodbath
 		if (CULT_ACT_IV)
-			veil_thickness = CULT_ACT_IV
+			var/datum/objective/bloodcult_bloodbath/O = locate() in objective_holder.objectives
+			if (O)
+				veil_thickness = CULT_ACT_IV
+				new_obj = new /datum/objective/bloodcult_tearinreality
 		if (CULT_EPILOGUE)
-			veil_thickness = CULT_EPILOGUE
+			var/datum/objective/bloodcult_tearinreality/O = locate() in objective_holder.objectives
+			if (O)
+				O.NARSIE_HAS_RISEN = TRUE
+				veil_thickness = CULT_EPILOGUE
+				new_obj = new /datum/objective/bloodcult_feast
 
-	for (var/datum/role/cultist/C in members)
-		C.update_cult_hud()
+	if (new_obj)
+		AppendObjective(new_obj)
+		for(var/datum/role/cultist/C in members)
+			var/mob/M = C.antag.current
+			if (M)
+				to_chat(M,"<span class='danger'>[new_obj.name]</span><b>: [new_obj.explanation_text]</b>")
+				if (istype(new_obj,/datum/objective/bloodcult_sacrifice))
+					var/datum/objective/bloodcult_sacrifice/O = new_obj
+					if (M == O.sacrifice_target)
+						to_chat(M,"<b>There is no greater honor than purposefuly relinquishing your body for the coming of Nar-Sie, but you may wait for another target to be selected should you be afraid of death.</b>")
+					else if (iscultist(O.sacrifice_target))
+						to_chat(M,"<b>Chance has rolled its dice, and one of ours was selected. If for whatever reasons you do not want to take their life, you will have to wait for a new selection.</b>")
 
-	for (var/obj/structure/cult/spire/S in cult_spires)
-		S.upgrade()
+		for (var/datum/role/cultist/C in members)
+			C.update_cult_hud()
+
+		for (var/obj/structure/cult/spire/S in cult_spires)
+			S.upgrade()
+
+		if (istype(new_obj,/datum/objective/bloodcult_bloodbath))
+			var/datum/objective/bloodcult_bloodbath/O = new_obj
+			O.max_bloodspill = max(O.max_bloodspill,bloody_floors.len)
+			if (O.IsFulfilled())
+				progress(CULT_ACT_IV)
+
+/datum/faction/bloodcult/proc/add_bloody_floor(var/turf/T)
+	if (!istype(T))
+		return
+	if(T && (T.z == map.zMainStation))//F I V E   T I L E S
+		if(!(locate("\ref[T]") in bloody_floors))
+			bloody_floors += T
+			bloody_floors[T] = T
+			for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
+				B.update_icon()
+			var/datum/objective/bloodcult_bloodbath/O = locate() in objective_holder.objectives
+			if (O && !O.IsFulfilled())
+				O.max_bloodspill = max(O.max_bloodspill,bloody_floors.len)
+				if (O.IsFulfilled())
+					progress(CULT_ACT_IV)
+
+
+/datum/faction/bloodcult/proc/remove_bloody_floor(var/turf/T)
+	if (!istype(T))
+		return
+	for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
+		B.update_icon()
+	bloody_floors -= T
 
 /proc/is_convertable_to_cult(datum/mind/mind)
 	if(!istype(mind))

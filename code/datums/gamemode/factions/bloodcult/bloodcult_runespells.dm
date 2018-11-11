@@ -716,7 +716,6 @@
 	//first lets check for a victim above
 	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons.
 		if (!iscultist(C))
-			//TODO: MOB NEEDS A MIND, leaving as is for now, so I can convert dummies to test stuff
 			targets.Add(C)
 	if (targets.len > 0)
 		victim = pick(targets)
@@ -891,6 +890,14 @@
 			abort(RITUALABORT_REMOVED)
 			return
 
+		//No matter the end result, counts as progress toward the cult's goals, as long as the victim was an actual player
+		if (victim.mind)
+			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+			if (cult)
+				cult.progress(CULT_ACT_II)
+			else
+				message_admins("Blood Cult: A conversion ritual occured...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
+
 		switch (success)
 			if (1)
 				conversion.layer = BELOW_OBJ_LAYER
@@ -1030,7 +1037,7 @@
 
 	playsound(spell_holder, 'sound/effects/stun_talisman.ogg', 25, 0, -5)
 	if (prob(15))//for old times' sake
-		invoke(activator,"Dream sign ''Evil sealing talisman'[pick("'","`")]!",1)
+		invoke(activator,"Dream sign ''Evil sealing talisman''!",1)
 	else
 		invoke(activator,invocation,1)
 

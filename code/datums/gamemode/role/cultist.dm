@@ -76,6 +76,13 @@
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
 
+	spawn(1)
+		if (faction)
+			var/datum/objective_holder/OH = faction.objective_holder
+			var/datum/objective/O = null
+			for (var/datum/objective/OB in OH.objectives)
+				O = OB//Gives us the most recent objective
+			to_chat(antag.current,"<span class='danger'>[O.name]</span><b>: [O.explanation_text]</b>")
 /datum/role/cultist/update_antag_hud()
 	update_cult_hud()
 
