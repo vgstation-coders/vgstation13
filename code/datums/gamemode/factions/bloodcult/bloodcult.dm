@@ -123,7 +123,7 @@ var/veil_thickness = CULT_PROLOGUE
 		change_cooldown--
 		if (change_cooldown <= 0)
 			var/datum/objective/bloodcult_sacrifice/O = locate() in objective_holder.objectives
-			if (!O.IsFulfilled())
+			if (O && !O.IsFulfilled())
 				O.failed_targets += O.sacrifice_target
 				spawn()
 					if (O.replace_target())

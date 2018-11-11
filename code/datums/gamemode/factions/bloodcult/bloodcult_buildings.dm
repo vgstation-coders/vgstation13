@@ -502,8 +502,6 @@
 					gem.pixel_y = 4
 
 /obj/structure/cult/altar/noncultist_act(var/mob/user)//Non-cultists can still remove blades planted on altars.
-	if(iscultist(user))
-		return 0
 	if(is_locking(lock_type))
 		var/mob/M = get_locked(lock_type)[1]
 		if(M != user)
@@ -1068,13 +1066,10 @@ var/list/cult_spires = list()
 	for (var/obj/O in loc)
 		if (O != src)
 			O.ex_act(2)
+		if(!O.gcDestroyed && (istype(O, /obj/structure) || istype(O, /obj/machinery)))
+			qdel(O)
 	T.ChangeTurf(/turf/simulated/floor/engine/cult)
 	T.turf_animation('icons/effects/effects.dmi',"cultfloor", 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
-	for (var/obj/structure/S in T)
-		if (S != src)
-			qdel(S)
-	for (var/obj/machinery/M in T)
-		qdel(M)
 
 /obj/structure/cult/pillar/Destroy()
 	new /obj/effect/decal/cleanable/ash(loc)
