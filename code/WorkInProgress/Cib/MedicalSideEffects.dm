@@ -94,7 +94,7 @@
 			H.vomit()
 
 /datum/medical_effect/bad_stomach/cure(mob/living/carbon/human/H)
-	if(H.reagents.has_reagent(ANTI_TOXIN))
+	if(H.reagents.has_any_reagents(ANTI_TOXINS))
 		to_chat(H, "<span class='warning'>Your stomach feels a little better now..</span>")
 		return 1
 	return 0

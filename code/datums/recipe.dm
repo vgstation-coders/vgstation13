@@ -99,6 +99,10 @@
 	for(var/obj/O in (container.contents - result_obj)) //Find all objects (for instance, raw food or beakers) in our machine, excluding the result we just created
 		if(O.reagents) //Little sanity, can't hurt
 			for(var/r_r in reagents_forbidden) //Check forbidden reagents
+				if(islist(r_r))
+					var/list/L = r_r
+					for(var/I in L)
+						O.reagents.del_reagent(I) //If we find any, remove
 				O.reagents.del_reagent("[r_r]") //If we find any, remove
 			O.reagents.update_total() //Make sure we're set
 			O.reagents.trans_to(result_obj, O.reagents.total_volume) //If we have reagents in here, squeeze them into the end product

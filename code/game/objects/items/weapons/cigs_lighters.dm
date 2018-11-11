@@ -374,7 +374,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	//Oddly specific and snowflakey reagent transfer system below
 	if(reagents && reagents.total_volume)	//Check if it has any reagents at all
 		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask))) //If it's in the human/monkey mouth, transfer reagents to the mob
-			if(M.reagents.has_reagent(LEXORIN) || M_NO_BREATH in M.mutations || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
+			if(M.reagents.has_any_reagents(LEXORINS) || M_NO_BREATH in M.mutations || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
 				reagents.remove_any(REAGENTS_METABOLISM)
 			else
 				if(prob(25)) //So it's not an instarape in case of acid
