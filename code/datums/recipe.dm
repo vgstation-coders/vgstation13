@@ -53,13 +53,26 @@
 	//Scan the reagents in our recipe machine thingie one by one for shit we need in our recipe (water, hotsauce, salt, etc...)
 	for(var/r_r in reagents)
 		//Get the amount of said reagent we'll need in our recipe and assign it to that variable
-		var/reagent_amount = avail_reagents.get_reagent_amount(r_r)
-		//And now, the fun begins. Let's put this in plain words because holy crap
-		if(!(abs(reagent_amount - reagents[r_r]) < 0.5)) //If the absolute value of the amount of our reagent minus the needed amount of reagents for the recipe is NOT under 0.5 (rounding sanity)
-			if(reagent_amount > reagents[r_r]) //Let's check if the amount of our reagent is above the needed amount
-				. = -1 //If so, then we can say that we have more of this reagent that needed
-			else //Else
-				return 0 //We don't have what we need, abort, ABORT
+		if(islist(r_r))
+			var/list/L = r_r
+			var/found = FALSE
+			for(var/I in L)
+				var/reagent_amount = avail_reagents.get_reagent_amount(I)
+				if(!(abs(reagent_amount - reagents[r_r]) < 0.5))
+					found = TRUE
+					if(reagent_amount > reagents[r_r])
+						. = -1
+					break
+			if(!found)
+				return 0//We don't have what we need.
+		else
+			var/reagent_amount = avail_reagents.get_reagent_amount(r_r)
+			//And now, the fun begins. Let's put this in plain words because holy crap
+			if(!(abs(reagent_amount - reagents[r_r]) < 0.5)) //If the absolute value of the amount of our reagent minus the needed amount of reagents for the recipe is NOT under 0.5 (rounding sanity)
+				if(reagent_amount > reagents[r_r]) //Let's check if the amount of our reagent is above the needed amount
+					. = -1 //If so, then we can say that we have more of this reagent that needed
+				else //Else
+					return 0 //We don't have what we need, abort, ABORT
 		//Remember that this is a for loop, so we do this for every reagent listed in our recipe
 	//Now, that check was fun, but we need to check for reagents we have not included per se (things not used in our recipe)
 	if((reagents ? (reagents.len) : (0)) < avail_reagents.reagent_list.len) //Given we have reagents in our recipe, are there more reagents in our machine than reagents needed in our recipe ?
