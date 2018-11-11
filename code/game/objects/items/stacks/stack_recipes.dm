@@ -336,6 +336,7 @@ var/list/datum/stack_recipe/leather_recipes = list (
 ======================================================================== */
 
 var/list/datum/stack_recipe/brass_recipes = list (
+	new/datum/stack_recipe("brass window door", /obj/structure/windoor_assembly/clockwork, 5, time = 10, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 1)),
 	new/datum/stack_recipe("brass window", /obj/structure/window/reinforced/clockwork, 2, time = 10, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 1)),
 	new/datum/stack_recipe("brass full window", /obj/structure/window/full/reinforced/clockwork, 4, time = 20, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 1)),
 	new/datum/stack_recipe("brass table parts", /obj/item/weapon/table_parts/clockwork, 4),
