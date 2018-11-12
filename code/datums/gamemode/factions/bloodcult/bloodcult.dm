@@ -106,8 +106,20 @@ var/veil_thickness = CULT_PROLOGUE
 
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
-	dat += "<br><a href='?src=\ref[A];cult_mindspeak=\ref[src]'>Voice of Nar-Sie</a>"
+	dat += "<br><a href='?src=\ref[src];cult_mindspeak_global=1'>Voice of Nar-Sie</a>"
 	return dat
+
+/datum/faction/bloodcult/Topic(href, href_list)
+	..()
+	if (href_list["cult_mindspeak_global"])
+		var/message = input("What message shall we send?",
+                    "Voice of Nar-Sie",
+                    "")
+		for (var/datum/role/R in members)
+			var/mob/M = R.antag.current
+			if (M)
+				to_chat(M, "<span class='danger'>Nar-Sie</span> murmurs... <span class='sinister'>[message]</span>")
+
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
 	..()
