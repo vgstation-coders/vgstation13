@@ -295,7 +295,7 @@
 /obj/structure/grille/cult/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || !broken)
 		return 0 //Make sure air doesn't drain
-	..()
+	return ..()
 
 
 /obj/structure/grille/invulnerable
