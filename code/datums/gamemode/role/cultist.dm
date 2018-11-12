@@ -44,6 +44,42 @@
 	if (holywarning_cooldown > 0)
 		holywarning_cooldown--
 
+	if (veil_thickness == CULT_MENDED && antag.current)
+		if (ishuman(antag.current))
+			var/mob/living/carbon/human/H = antag.current
+			if(H.get_heart() && prob(10))
+				H.visible_message("<span class='danger'>\The [H]'s heart bursts out of \his chest!</span>","<span class='danger'>Your heart bursts out of your chest!</span>")
+				var/obj/item/organ/internal/blown_heart = H.remove_internal_organ(H,H.get_heart(),H.get_organ(LIMB_CHEST))
+				var/list/spawn_turfs = list()
+				for(var/turf/T in orange(1, H))
+					if(!T.density)
+						spawn_turfs.Add(T)
+				if(!spawn_turfs.len)
+					spawn_turfs.Add(get_turf(H))
+				var/mob/living/simple_animal/hostile/heart_attack = new(pick(spawn_turfs))
+				heart_attack.appearance = blown_heart.appearance
+				heart_attack.icon_dead = "heart-off"
+				heart_attack.environment_smash_flags = 0
+				heart_attack.melee_damage_lower = 15
+				heart_attack.melee_damage_upper = 15
+				heart_attack.health = 50
+				heart_attack.maxHealth = 50
+				heart_attack.stat_attack = 1
+				qdel(blown_heart)
+			else
+				H.eye_blurry = max(H.eye_blurry, 30)
+				H.Dizzy(30)
+				H.stuttering = max(H.stuttering, 30)
+				H.Jitter(30)
+				if (prob(70))
+					H.Knockdown(4)
+				else if (prob(70))
+					H.confused = 6
+				H.adjustOxyLoss(20)
+				H.adjustToxLoss(10)
+		else
+			antag.current.adjustBruteLoss(rand(20,50))
+
 /datum/role/cultist/Greet(var/greeting,var/custom)
 	if(!greeting)
 		return

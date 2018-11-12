@@ -36,7 +36,7 @@ var/veil_thickness = CULT_PROLOGUE
 				places_to_spawn += T
 				break
 	//A 5th bloodstone will spawn if a proper turf was given as arg (up to 100 tiles from the station center, and not in space
-	if (source && !isspace(source.loc) && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<100)
+	if (source && (source.z == map.zMainStation) && !isspace(source.loc) && get_dist(locate(map.center_x,map.center_y,map.zMainStation),source)<100)
 		places_to_spawn.Add(source)
 	for (var/T in places_to_spawn)
 		new /obj/structure/cult/bloodstone(T)
@@ -158,11 +158,12 @@ var/veil_thickness = CULT_PROLOGUE
 	if (new_act == CULT_MENDED)
 		veil_thickness = CULT_MENDED
 		emergency_shuttle.shutdown = 0//The shuttle can be called once again.
+		set_security_level("blue")
 		ticker.StopThematic()
+		command_alert(/datum/command_alert/bloodstones_broken)
 		for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 			B.takeDamage(B.maxHealth+1)
 		for (var/datum/role/cultist/C in members)
-			//TODO: blood curse
 			C.update_cult_hud()
 		return
 
@@ -191,13 +192,18 @@ var/veil_thickness = CULT_PROLOGUE
 				O.target_sacrificed = TRUE
 				veil_thickness = CULT_ACT_III
 				emergency_shuttle.force_shutdown()//No shuttle calls until the cult either wins or fails.
-				ticker.StartThematic("endgame")
 				spawn_bloodstones(A)
+				spawn(5 SECONDS)
+					command_alert(/datum/command_alert/bloodstones_raised)
+					ticker.StartThematic("endgame")
+					sleep(2 SECONDS)
+					set_security_level("red")
 				new_obj = new /datum/objective/bloodcult_bloodbath
 		if (CULT_ACT_IV)
 			var/datum/objective/bloodcult_bloodbath/O = locate() in objective_holder.objectives
 			if (O)
 				veil_thickness = CULT_ACT_IV
+				command_alert(/datum/command_alert/bloodstones_anchor)
 				new_obj = new /datum/objective/bloodcult_tearinreality
 		if (CULT_EPILOGUE)
 			var/datum/objective/bloodcult_tearinreality/O = locate() in objective_holder.objectives
