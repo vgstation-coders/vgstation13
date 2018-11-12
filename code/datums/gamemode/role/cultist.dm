@@ -159,5 +159,14 @@
 
 /datum/role/cultist/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
 	var/dat = ..()
-	dat += " - <a href='?src=\ref[A];cult_privatespeak=\ref[antag.current]'>(Nar-Sie whispers)</a>"
+	dat += " - <a href='?src=\ref[src]&mind=\ref[antag]&cult_privatespeak=\ref[antag.current]'>(Nar-Sie whispers)</a>"
 	return dat
+
+/datum/role/cultist/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
+	if (href_list["cult_privatespeak"])
+		var/message = input("What message shall we send?",
+                    "Voice of Nar-Sie",
+                    "")
+		var/mob/mob = M.current
+		if (mob)
+			to_chat(mob, "<span class='danger'>Nar-Sie</span> murmurs to you... <span class='sinister'>[message]</span>")
