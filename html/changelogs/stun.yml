@@ -1,4 +1,0 @@
-author: Kyunny
-delete-after: True
-changes: 
-- experiment: Getting hit by taser or egun projectiles now stuns after a 1.3 second delay instead of immediately. It slows you down between being hit and being stunned.
