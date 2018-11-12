@@ -48,6 +48,22 @@
 			current_temp = MELTPOINT_STEEL
 		fuel_time += 20 SECONDS
 		return
+	else if(istype(I, /obj/item/stack/sheet/wood))
+		var/obj/item/stack/sheet/wood/W = I
+		if(W.use(1))
+			to_chat(user, "<span class = 'notice'>You toss a sheet of \the [I] into \the [src].</span>")
+			if(current_temp < MELTPOINT_GOLD)
+				current_temp = MELTPOINT_GOLD
+			fuel_time+= 30 SECONDS
+			return
+	else if(istype(I, /obj/item/weapon/grown/log))
+		to_chat(user, "<span class = 'notice'>You toss \the [I] into \the [src].</span>")
+		user.drop_item(I)
+		qdel(I)
+		if(current_temp < MELTPOINT_STEEL)
+			current_temp = MELTPOINT_STEEL
+		fuel_time += 20 SECONDS
+		return
 	else if(I.is_hot() && status == FALSE)
 		to_chat(user, "<span class = 'notice'>You attempt to light \the [src] with \the [I].</span>")
 		if(do_after(user, I, 3 SECONDS))
