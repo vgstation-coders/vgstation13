@@ -63,7 +63,7 @@
 	rockets.pixel_y = -64 * PIXEL_MULTIPLIER
 	intrinsic_spells = list(
 							new /spell/mech/marauder/thrusters(src),
-							new /spell/mech/marauder/dash(src),
+							//new /spell/mech/marauder/dash(src),
 							new /spell/mech/marauder/smoke(src),
 							new /spell/mech/marauder/zoom(src)
 						)
