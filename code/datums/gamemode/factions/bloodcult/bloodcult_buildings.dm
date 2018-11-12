@@ -1058,8 +1058,9 @@ var/list/cult_spires = list()
 	..()
 	var/turf/T = loc
 	for (var/obj/O in loc)
-		if (O != src)
-			O.ex_act(2)
+		if(O == src)
+			continue
+		O.ex_act(2)
 		if(!O.gcDestroyed && (istype(O, /obj/structure) || istype(O, /obj/machinery)))
 			qdel(O)
 	T.ChangeTurf(/turf/simulated/floor/engine/cult)
