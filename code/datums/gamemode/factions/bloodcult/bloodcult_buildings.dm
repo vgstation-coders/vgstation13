@@ -1046,8 +1046,8 @@ var/list/cult_spires = list()
 	icon_state = "pillar-enter"
 	icon = 'icons/obj/cult_64x64.dmi'
 	pixel_x = -16 * PIXEL_MULTIPLIER
-	health = 300
-	maxHealth = 300
+	health = 200
+	maxHealth = 200
 	sound_damaged = 'sound/effects/stone_hit.ogg'
 	sound_destroyed = 'sound/effects/stone_crumble.ogg'
 	plane = EFFECTS_PLANE
@@ -1089,7 +1089,7 @@ var/list/cult_spires = list()
 /obj/structure/cult/pillar/ex_act(var/severity)
 	switch(severity)
 		if (1)
-			takeDamage(300)
+			takeDamage(200)
 		if (2)
 			takeDamage(100)
 		if (3)
@@ -1102,8 +1102,8 @@ var/list/bloodstone_list = list()
 	icon_state = "bloodstone-enter1"
 	icon = 'icons/obj/cult_64x64.dmi'
 	pixel_x = -16 * PIXEL_MULTIPLIER
-	health = 900
-	maxHealth = 900
+	health = 600
+	maxHealth = 600
 	sound_damaged = 'sound/effects/stone_hit.ogg'
 	sound_destroyed = 'sound/effects/stone_crumble.ogg'
 	plane = EFFECTS_PLANE
@@ -1296,14 +1296,14 @@ var/list/bloodstone_list = list()
 	return
 
 /obj/structure/cult/bloodstone/takeDamage(var/damage)
-	var/backup = (health > 666) + (health > 333)
+	var/backup = (health > (2*maxHealth/3)) + (health > (maxHealth/3))
 	health -= damage
 	if (health <= 0)
 		if (sound_destroyed)
 			playsound(get_turf(src), sound_destroyed, 100, 1)
 		qdel(src)
 	else
-		if (backup > (health > 666) + (health > 333))
+		if (backup > (health > (2*maxHealth/3)) + (health > (maxHealth/3)))
 			summon_backup()
 		update_icon()
 
@@ -1311,7 +1311,10 @@ var/list/bloodstone_list = list()
 	var/list/possible_floors = list()
 	for (var/turf/simulated/floor/F in orange(1,src))
 		possible_floors.Add(F)
-	for (var/i = 1 to 2)
+	var/monsters_to_spawn = 1
+	if (health < (maxHealth / 2))
+		monsters_to_spawn++
+	for (var/i = 1 to monsters_to_spawn)
 		var/turf/T = pick(possible_floors)
 		if (T)
 			possible_floors.Remove(T)

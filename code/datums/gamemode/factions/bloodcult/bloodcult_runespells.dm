@@ -741,6 +741,10 @@
 	flick("rune_convert_start",conversion)
 	playsound(R, 'sound/effects/convert_start.ogg', 75, 0, -4)
 
+	var/obj/item/device/gps/secure/SPS = locate() in victim
+	if (SPS)//Think carefully before converting a sec officer
+		SPS.OnMobDeath(victim)
+
 	if (victim.mind)
 		if (victim.mind.assigned_role in impede_medium)
 			to_chat(victim, "<span class='warning'>Your sense of duty impedes down the ritual.</span>")
@@ -795,7 +799,7 @@
 				for(var/obj/item/weapon/implant/loyalty/I in victim)
 					if(I.implanted)
 						delay = 1
-						progress = progress/3
+						progress = progress/4
 						break
 				if (victim.mind)
 					if (victim.mind.assigned_role in impede_medium)
